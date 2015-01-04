@@ -14,7 +14,7 @@ from Bio.Align.Applications import TCoffeeCommandline
 os.environ['LANG'] = 'C'
 
 t_coffee_exe = None
-if sys.platform=="win32":
+if sys.platform == "win32":
     raise MissingExternalDependencyError(
         "Testing TCOFFEE on Windows not supported yet")
 else:

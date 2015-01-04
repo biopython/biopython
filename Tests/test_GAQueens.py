@@ -82,7 +82,7 @@ def display_board(genome):
     Inspired by the display function in the queens.py solution to the N-queens
     problem in the Python demo scripts.
     """
-    print('+-' + '--'*len(genome) + '+')
+    print('+-' + '--' * len(genome) + '+')
 
     for row in range(len(genome)):
         elements = []
@@ -93,7 +93,7 @@ def display_board(genome):
                 elements.append('.')
         print('|' + ''.join(elements) + '|')
 
-    print('+-' + '--'*len(genome) + '+')
+    print('+-' + '--' * len(genome) + '+')
 
 
 def queens_solved(organisms):

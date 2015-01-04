@@ -198,8 +198,8 @@ class StringMethodTests(unittest.TestCase):
             if not hasattr(example1, "startswith"):
                 # e.g. MutableSeq does not support this
                 continue
-            subs = tuple([example1[start:start+2] for start
-                          in range(0, len(example1)-2, 3)])
+            subs = tuple([example1[start:start + 2] for start
+                          in range(0, len(example1) - 2, 3)])
             subs_str = tuple([str(s) for s in subs])
 
             self.assertEqual(str(example1).startswith(subs_str),
@@ -221,8 +221,8 @@ class StringMethodTests(unittest.TestCase):
             if not hasattr(example1, "endswith"):
                 # e.g. MutableSeq does not support this
                 continue
-            subs = tuple([example1[start:start+2] for start
-                          in range(0, len(example1)-2, 3)])
+            subs = tuple([example1[start:start + 2] for start
+                          in range(0, len(example1) - 2, 3)])
             subs_str = tuple([str(s) for s in subs])
 
             self.assertEqual(str(example1).endswith(subs_str),
@@ -380,11 +380,11 @@ class StringMethodTests(unittest.TestCase):
             str1 = str(example1)
             # This only does the unambiguous cases
             if "U" in str1 or "u" in str1 \
-            or example1.alphabet==generic_rna:
+            or example1.alphabet == generic_rna:
                 mapping = maketrans("ACGUacgu", "UGCAugca")
             elif "T" in str1 or "t" in str1 \
-            or example1.alphabet==generic_dna \
-            or example1.alphabet==generic_nucleotide:
+            or example1.alphabet == generic_dna \
+            or example1.alphabet == generic_nucleotide:
                 mapping = maketrans("ACGTacgt", "TGCAtgca")
             elif "A" not in str1 and "a" not in str1:
                 mapping = maketrans("CGcg", "GCgc")
@@ -408,11 +408,11 @@ class StringMethodTests(unittest.TestCase):
             str1 = str(example1)
             # This only does the unambiguous cases
             if "U" in str1 or "u" in str1 \
-            or example1.alphabet==generic_rna:
+            or example1.alphabet == generic_rna:
                 mapping = maketrans("ACGUacgu", "UGCAugca")
             elif "T" in str1 or "t" in str1 \
-            or example1.alphabet==generic_dna \
-            or example1.alphabet==generic_nucleotide:
+            or example1.alphabet == generic_dna \
+            or example1.alphabet == generic_nucleotide:
                 mapping = maketrans("ACGTacgt", "TGCAtgca")
             elif "A" not in str1 and "a" not in str1:
                 mapping = maketrans("CGcg", "GCgc")
@@ -545,22 +545,22 @@ class StringMethodTests(unittest.TestCase):
             for c1 in ambig:
                 for c2 in ambig:
                     for c3 in ambig:
-                        values = set([str(Seq(a+b+c).translate())
+                        values = set([str(Seq(a + b + c).translate())
                                       for a in ambig_values[c1]
                                       for b in ambig_values[c2]
                                       for c in ambig_values[c3]])
-                        t = str(Seq(c1+c2+c3).translate())
-                        if t=="*":
+                        t = str(Seq(c1 + c2 + c3).translate())
+                        if t == "*":
                             self.assertEqual(values, set("*"))
-                        elif t=="X":
+                        elif t == "X":
                             self.assertTrue(len(values) > 1,
                                 "translate('%s') = '%s' not '%s'"
-                                % (c1+c2+c3, t, ",".join(values)))
-                        elif t=="Z":
+                                % (c1 + c2 + c3, t, ",".join(values)))
+                        elif t == "Z":
                             self.assertEqual(values, set("EQ"))
-                        elif t=="B":
+                        elif t == "B":
                             self.assertEqual(values, set("DN"))
-                        elif t=="J":
+                        elif t == "J":
                             self.assertEqual(values, set("LI"))
                         else:
                             self.assertEqual(values, set(t))

@@ -23,7 +23,7 @@ from Bio import AlignIO
 os.environ['LANG'] = 'C'
 
 muscle_exe = None
-if sys.platform=="win32":
+if sys.platform == "win32":
     try:
         # This can vary depending on the Windows language.
         prog_files = os.environ["PROGRAMFILES"]
@@ -197,7 +197,7 @@ class SimpleAlignTest(unittest.TestCase):
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
                                  universal_newlines=True,
-                                 shell=(sys.platform!="win32"))
+                                 shell=(sys.platform != "win32"))
         # Didn't use -quiet so there should be progress reports on stderr,
         align = AlignIO.read(child.stdout, "clustal")
         align.sort()  # by record.id
@@ -230,7 +230,7 @@ class SimpleAlignTest(unittest.TestCase):
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
                                  universal_newlines=True,
-                                 shell=(sys.platform!="win32"))
+                                 shell=(sys.platform != "win32"))
         # Didn't use -quiet so there should be progress reports on stderr,
         align = AlignIO.read(child.stdout, "clustal")
         align.sort()
@@ -271,7 +271,7 @@ class SimpleAlignTest(unittest.TestCase):
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
                                  universal_newlines=True,
-                                 shell=(sys.platform!="win32"))
+                                 shell=(sys.platform != "win32"))
         align = AlignIO.read(child.stdout, "clustal")
         align.sort()
         records.sort(key=lambda rec: rec.id)
@@ -303,7 +303,7 @@ class SimpleAlignTest(unittest.TestCase):
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
                                  universal_newlines=True,
-                                 shell=(sys.platform!="win32"))
+                                 shell=(sys.platform != "win32"))
         SeqIO.write(records, child.stdin, "fasta")
         child.stdin.close()
         # Alignment will now run...
@@ -339,7 +339,7 @@ class SimpleAlignTest(unittest.TestCase):
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
                                  universal_newlines=True,
-                                 shell=(sys.platform!="win32"))
+                                 shell=(sys.platform != "win32"))
         # Clustalw on stdout:
         align = AlignIO.read(child.stdout, "clustal")
         align.sort()

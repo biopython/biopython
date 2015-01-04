@@ -30,7 +30,7 @@ def title_to_ids(title):
     # now extract the ids from the id block
     # gi|5690369|gb|AF158246.1|AF158246
     id_info_items = id_info.split("|")
-    if len(id_info_items) >=4:
+    if len(id_info_items) >= 4:
         assert id_info_items[2] in ["gb", "emb", "dbj", "pdb"], title
         id = id_info_items[3]  # the id with version info
         name = id_info_items[4]  # the id without version info

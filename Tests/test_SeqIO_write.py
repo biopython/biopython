@@ -116,7 +116,7 @@ class WriterTests(unittest.TestCase):
             if format == "nexus":
                 # The nexus parser will dis-ambiguate repeated record ids.
                 self.assertTrue(record.id == new_record.id or
-                                new_record.id.startswith(record.id+".copy"))
+                                new_record.id.startswith(record.id + ".copy"))
             else:
                 self.assertEqual(record.id, new_record.id)
             self.assertEqual(str(record.seq), str(new_record.seq))

@@ -315,11 +315,11 @@ class ModTest(unittest.TestCase):
             self.assertTrue("parameters" in model, version_msg)
             params = model["parameters"]
             # Branch Site A results lack a "branches" parameter
-            self.assertEqual(len(params), SITECLASS_PARAMS[2]-1, version_msg)
+            self.assertEqual(len(params), SITECLASS_PARAMS[2] - 1, version_msg)
             self.assertTrue("site classes" in params, version_msg)
             site_classes = params["site classes"]
             # Branch Site A adds another site class
-            self.assertEqual(len(site_classes), SITECLASSES[2]+1,
+            self.assertEqual(len(site_classes), SITECLASSES[2] + 1,
                 version)
             for class_num in [0, 1, 2, 3]:
                 self.assertTrue(class_num in site_classes, version_msg)

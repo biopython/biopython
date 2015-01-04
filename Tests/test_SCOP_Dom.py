@@ -24,7 +24,7 @@ class DomTests(unittest.TestCase):
         try:
             count = 0
             for record in Dom.parse(f):
-                count +=1
+                count += 1
             self.assertEqual(count, 10)
         finally:
             f.close()

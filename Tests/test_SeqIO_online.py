@@ -61,7 +61,7 @@ class EntrezTests(unittest.TestCase):
             self.assertTrue((entry in record.name) or
                          (entry in record.id) or
                          ("gi" in record.annotations
-                          and record.annotations["gi"]==entry),
+                          and record.annotations["gi"] == entry),
                          "%s got %s, %s" % (entry, record.name, record.id))
             self.assertEqual(len(record), length)
             self.assertEqual(seguid(record.seq), checksum)

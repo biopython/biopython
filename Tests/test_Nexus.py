@@ -38,7 +38,7 @@ class NexusTest1(unittest.TestCase):
     def test_NexusTest1(self):
         """Test Nexus module"""
         # check data of main nexus file
-        n=Nexus.Nexus(self.handle)
+        n = Nexus.Nexus(self.handle)
         self.assertEqual(os.path.normpath(n.filename),
                          os.path.normpath("Nexus/test_Nexus_input.nex"))
         self.assertEqual(n.ntax, 9)
@@ -132,12 +132,12 @@ class NexusTest1(unittest.TestCase):
 
         # now we check excluding characters, deleting taxa,
         # and exporting adjusted sets
-        f1=tempfile.NamedTemporaryFile("w+")
+        f1 = tempfile.NamedTemporaryFile("w+")
         n.write_nexus_data(f1,
                            delete=['t1', 't7'],
                            exclude=n.invert(n.charsets['big']))
         f1.seek(0)
-        nf1=Nexus.Nexus(f1)
+        nf1 = Nexus.Nexus(f1)
         self.assertEqual(os.path.normpath(nf1.filename),
                          os.path.normpath(f1.name))
         self.assertEqual(nf1.ntax, 7)
@@ -204,12 +204,12 @@ class NexusTest1(unittest.TestCase):
              "goodnames": ['t5', 't6', 't8', 't9'],
             })
 
-        f2=tempfile.NamedTemporaryFile("w+")
+        f2 = tempfile.NamedTemporaryFile("w+")
         n.write_nexus_data(f2,
                            delete=['t2_the_name'],
                            exclude=list(range(3, 40, 4)))
         f2.seek(0)
-        nf2=Nexus.Nexus(f2)
+        nf2 = Nexus.Nexus(f2)
         self.assertEqual(os.path.normpath(nf2.filename),
                          os.path.normpath(f2.name))
         self.assertEqual(nf2.ntax, 9)
@@ -314,9 +314,9 @@ usertype matrix_test stepmatrix=5
 
     def test_TreeTest1(self):
         """Test Tree module."""
-        n=Nexus.Nexus(self.handle)
-        t3=n.trees[2]
-        t2=n.trees[2]
+        n = Nexus.Nexus(self.handle)
+        t3 = n.trees[2]
+        t2 = n.trees[2]
         t3.root_with_outgroup(['t1', 't5'])
         self.assertEqual(str(t3), "tree tree1 = (((((('one should be punished, for (that)!','isn''that [a] strange name?'),'t2 the name'),t8,t9),t6),t7),(t5,t1));")
         self.assertEqual(t3.is_monophyletic(['t8', 't9', 't6', 't7']), -1)

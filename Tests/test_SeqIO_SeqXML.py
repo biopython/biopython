@@ -53,7 +53,7 @@ class TestDetailedRead(unittest.TestCase):
         self.assertEqual(self.records["dna"][2].description, u'some special characters in the description\n<tag> "quoted string"')
 
     # TODO - Fix this failure under Windows with Python 3.1 and 3.2
-    if not (sys.platform=="win32" and sys.version_info[0] >= 3):
+    if not (sys.platform == "win32" and sys.version_info[0] >= 3):
         def test_unicode_characters_desc(self):
             """Test special unicode characters in the description."""
             self.assertEqual(self.records["rna"][2].description, u"\u00E5\u00C5\u00FC\u00F6\u00D6\u00DF\u00F8\u00E4\u00A2\u00A3$\u20AC\u9999\u80A0")

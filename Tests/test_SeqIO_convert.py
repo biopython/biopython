@@ -89,7 +89,7 @@ def compare_record(old, new, truncate=None):
     if old.id != new.id:
         raise ValueError("'%s' vs '%s' " % (old.id, new.id))
     if old.description != new.description \
-    and (old.id+" "+old.description).strip() != new.description \
+    and (old.id + " " + old.description).strip() != new.description \
     and new.description != "<unknown description>" \
     and new.description != "":  # e.g. tab format
         raise ValueError("'%s' vs '%s' " % (old.description, new.description))

@@ -823,10 +823,10 @@ class Exposure(unittest.TestCase):
         pdb_filename = "PDB/a_structure.pdb"
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", PDBConstructionWarning)
-            structure=PDBParser(PERMISSIVE=True).get_structure('X', pdb_filename)
-        self.model=structure[1]
+            structure = PDBParser(PERMISSIVE=True).get_structure('X', pdb_filename)
+        self.model = structure[1]
         # Look at first chain only
-        a_residues=list(self.model["A"].child_list)
+        a_residues = list(self.model["A"].child_list)
         self.assertEqual(86, len(a_residues))
         self.assertEqual(a_residues[0].get_resname(), "CYS")
         self.assertEqual(a_residues[1].get_resname(), "ARG")
@@ -907,7 +907,7 @@ class Atom_Element(unittest.TestCase):
         pdb_filename = "PDB/a_structure.pdb"
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", PDBConstructionWarning)
-            structure=PDBParser(PERMISSIVE=True).get_structure('X', pdb_filename)
+            structure = PDBParser(PERMISSIVE=True).get_structure('X', pdb_filename)
         self.residue = structure[0]['A'][('H_PCA', 1, ' ')]
 
     def test_AtomElement(self):
@@ -920,7 +920,7 @@ class Atom_Element(unittest.TestCase):
     def test_ions(self):
         """Element for magnesium is assigned correctly."""
         pdb_filename = "PDB/ions.pdb"
-        structure=PDBParser(PERMISSIVE=True).get_structure('X', pdb_filename)
+        structure = PDBParser(PERMISSIVE=True).get_structure('X', pdb_filename)
         # check magnesium atom
         atoms = structure[0]['A'][('H_ MG', 1, ' ')].child_list
         self.assertEqual('MG', atoms[0].element)
@@ -1022,13 +1022,13 @@ class TransformTests(unittest.TestCase):
         Returns the average atom position in an entity.
         """
         pos, count = self.get_total_pos(o)
-        return 1.0*pos/count
+        return 1.0 * pos / count
 
     def test_transform(self):
         """Transform entities (rotation and translation)."""
         for o in (self.s, self.m, self.c, self.r, self.a):
             rotation = rotmat(Vector(1, 3, 5), Vector(1, 0, 0))
-            translation=numpy.array((2.4, 0, 1), 'f')
+            translation = numpy.array((2.4, 0, 1), 'f')
             oldpos = self.get_pos(o)
             o.transform(rotation, translation)
             newpos = self.get_pos(o)

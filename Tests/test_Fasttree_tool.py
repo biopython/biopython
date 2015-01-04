@@ -92,7 +92,7 @@ print("")
 print("Single sequence")
 input_file = "Fasta/f001"
 assert os.path.isfile(input_file)
-assert len(list(SeqIO.parse(input_file, "fasta")))==1
+assert len(list(SeqIO.parse(input_file, "fasta"))) == 1
 cline = FastTreeCommandline(fasttree_exe, input=input_file)
 try:
     stdout, stderr = cline()
@@ -145,7 +145,7 @@ for input_file in ["Quality/example.fasta", "Clustalw/temp horses.fasta"]:
     # Any filesnames with spaces should get escaped with quotes automatically.
     # Using keyword arguments here.
     cline = _Fasttree.FastTreeCommandline(fasttree_exe, input=input_file, nt=True)
-    assert str(eval(repr(cline)))==str(cline)
+    assert str(eval(repr(cline))) == str(cline)
 
     out, err = cline()
     assert err.strip().startswith("FastTree")

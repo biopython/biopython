@@ -21,7 +21,7 @@ from Bio.Application import ApplicationError
 os.environ['LANG'] = 'C'
 
 clustalo_exe = None
-if sys.platform=="win32":
+if sys.platform == "win32":
     # TODO
     raise MissingExternalDependencyError("Testing this on Windows not implemented yet")
 else:

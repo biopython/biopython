@@ -174,12 +174,12 @@ def compare_features(old_list, new_list, ignore_sub_features=False):
 
 def make_join_feature(f_list, ftype="misc_feature"):
     # NOTE - Does NOT reorder the sub-features
-    if len(set(f.strand for f in f_list))==1:
+    if len(set(f.strand for f in f_list)) == 1:
         strand = f_list[0].strand
     else:
         strand = None
     for f in f_list:
-        f.type=ftype
+        f.type = ftype
     if strand == -1:
         # All reverse strand.
         # Historical accident from GenBank parser means sub_features reversed
@@ -209,7 +209,7 @@ gbk_template = gbk_template.replace('     intron          385..617\n'
 gbk_template = gbk_template.replace('     exon            618..756\n'
                                     '                     /gene="FTCD"\n'
                                     '                     /number=2\n', '')
-assert len(gbk_template)==4445
+assert len(gbk_template) == 4445
 assert gbk_template.count("%") == 1, gbk_template
 
 
@@ -275,7 +275,7 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
         self.assertTrue(compare_feature(feature, new_f))
 
         # Some feature method tests
-        parent = "ACGT"*250
+        parent = "ACGT" * 250
         s = feature.extract(parent)
         self.assertEqual(len(feature), len(s))
         for i in feature:
@@ -286,7 +286,7 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
             self.assertEqual(s, "".join(parent[i] for i in feature))
         if len(feature):
             self.assertEqual(feature.location.start, min(feature.location))
-            self.assertEqual(feature.location.end, max(feature.location)+1)
+            self.assertEqual(feature.location.end, max(feature.location) + 1)
         self.assertTrue(len(feature) <= feature.location.end - feature.location.start)
 
     def test_simple_rna(self):
@@ -363,7 +363,7 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
         f1 = SeqFeature(FeatureLocation(5, 10), strand=-1)
         f2 = SeqFeature(FeatureLocation(12, 15), strand=-1)
         f = make_join_feature([f1, f2])
-        self.check(s, f, reverse_complement("CCCCC"+"TTT"),
+        self.check(s, f, reverse_complement("CCCCC" + "TTT"),
                    "complement(join(6..10,13..15))")
 
     def test_simple_dna_join(self):
@@ -372,7 +372,7 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
         f1 = SeqFeature(FeatureLocation(BeforePosition(5), 10), strand=-1)
         f2 = SeqFeature(FeatureLocation(12, 15), strand=-1)
         f = make_join_feature([f1, f2])
-        self.check(s, f, reverse_complement("CCCCC"+"TTT"),
+        self.check(s, f, reverse_complement("CCCCC" + "TTT"),
                    "complement(join(<6..10,13..15))")
 
     def test_simple_dna_join_after(self):
@@ -381,7 +381,7 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
         f1 = SeqFeature(FeatureLocation(5, 10), strand=-1)
         f2 = SeqFeature(FeatureLocation(12, AfterPosition(15)), strand=-1)
         f = make_join_feature([f1, f2])
-        self.check(s, f, reverse_complement("CCCCC"+"TTT"),
+        self.check(s, f, reverse_complement("CCCCC" + "TTT"),
                    "complement(join(6..10,13..>15))")
 
     def test_mixed_strand_dna_join(self):
@@ -390,7 +390,7 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
         f1 = SeqFeature(FeatureLocation(5, 10), strand=+1)
         f2 = SeqFeature(FeatureLocation(12, 15), strand=-1)
         f = make_join_feature([f1, f2])
-        self.check(s, f, "CCCCC"+reverse_complement("TTT"),
+        self.check(s, f, "CCCCC" + reverse_complement("TTT"),
                    "join(6..10,complement(13..15))")
 
     def test_mixed_strand_dna_multi_join(self):
@@ -400,7 +400,7 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
         f2 = SeqFeature(FeatureLocation(12, 15), strand=-1)
         f3 = SeqFeature(FeatureLocation(BeforePosition(0), 5), strand=+1)
         f = make_join_feature([f1, f2, f3])
-        self.check(s, f, "CCCCC"+reverse_complement("TTT")+"AAAAA",
+        self.check(s, f, "CCCCC" + reverse_complement("TTT") + "AAAAA",
                    "join(6..10,complement(13..15),<1..5)")
 
     def test_protein_simple(self):
@@ -415,7 +415,7 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
         f1 = SeqFeature(FeatureLocation(5, 10))
         f2 = SeqFeature(FeatureLocation(15, 20))
         f = make_join_feature([f1, f2])
-        self.check(s, f, "FGHIJ"+"PQRST", "join(6..10,16..20)")
+        self.check(s, f, "FGHIJ" + "PQRST", "join(6..10,16..20)")
 
     def test_protein_join_fuzzy(self):
         """Feature on protein (fuzzy join)"""
@@ -425,7 +425,7 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
                                                            ExactPosition(16))),
                                         AfterPosition(20)))
         f = make_join_feature([f1, f2])
-        self.check(s, f, "FGHIJ"+"PQRST", "join(<6..10,one-of(16,17)..>20)")
+        self.check(s, f, "FGHIJ" + "PQRST", "join(<6..10,one-of(16,17)..>20)")
 
     def test_protein_multi_join(self):
         """Feature on protein (multi-join)"""
@@ -476,7 +476,7 @@ class SeqFeatureCreation(unittest.TestCase):
 
 class FeatureWriting(unittest.TestCase):
     def setUp(self):
-        self.record = SeqRecord(Seq("ACGT"*100, generic_dna),
+        self.record = SeqRecord(Seq("ACGT" * 100, generic_dna),
                                 id="Test", name="Test", description="Test")
 
     def write_read_check(self, format):
@@ -616,7 +616,7 @@ class FeatureWriting(unittest.TestCase):
 
     def test_fuzzy_join(self):
         """Features: write/read fuzzy join locations."""
-        s = "N"*500
+        s = "N" * 500
         f1 = SeqFeature(FeatureLocation(BeforePosition(10), 20), strand=+1)
         f2 = SeqFeature(FeatureLocation(25, AfterPosition(40)), strand=+1)
         f = make_join_feature([f1, f2])
@@ -702,7 +702,7 @@ class FeatureWriting(unittest.TestCase):
 
     def test_before(self):
         """Features: write/read simple before locations."""
-        s = "N"*200
+        s = "N" * 200
         f = SeqFeature(FeatureLocation(BeforePosition(5), 10),
                        strand=+1, type="CDS")
         self.assertEqual(_insdc_feature_location_string(f, 100),
@@ -1001,12 +1001,12 @@ class NC_000932(unittest.TestCase):
     # TODO - neat way to change the docstrings...
 
     def setUp(self):
-        self.gb_filename = os.path.join("GenBank", self.basename+".gb")
-        self.ffn_filename = os.path.join("GenBank", self.basename+".ffn")
-        self.faa_filename = os.path.join("GenBank", self.basename+".faa")
-        self.fna_filename = os.path.join("GenBank", self.basename+".fna")
+        self.gb_filename = os.path.join("GenBank", self.basename + ".gb")
+        self.ffn_filename = os.path.join("GenBank", self.basename + ".ffn")
+        self.faa_filename = os.path.join("GenBank", self.basename + ".faa")
+        self.fna_filename = os.path.join("GenBank", self.basename + ".fna")
         if self.emblname:
-            self.embl_filename = os.path.join("EMBL", self.emblname+".embl")
+            self.embl_filename = os.path.join("EMBL", self.emblname + ".embl")
 
     # These tests only need the GenBank file and the FAA file:
     def test_CDS(self):
@@ -1015,7 +1015,7 @@ class NC_000932(unittest.TestCase):
         gb_cds = list(SeqIO.parse(self.gb_filename, "genbank-cds"))
         fasta = list(SeqIO.parse(self.faa_filename, "fasta"))
         compare_records(gb_cds, fasta)
-        cds_features = [f for f in gb_record.features if f.type=="CDS"]
+        cds_features = [f for f in gb_record.features if f.type == "CDS"]
         self.assertEqual(len(cds_features), len(fasta))
         for f, r in zip(cds_features, fasta):
             if r.id in self.skip_trans_test:
@@ -1067,7 +1067,7 @@ class NC_005816(NC_000932):
             if faa.id in self.skip_trans_test:
                 continue
             if (str(translation) != str(faa.seq)) \
-            and (str(translation) != str(faa.seq)+"*"):
+            and (str(translation) != str(faa.seq) + "*"):
                 t = SeqRecord(translation, id="Translation",
                               description="Table %s" % self.table)
                 raise ValueError("FAA vs FNA translation problem:\n%s\n%s\n%s\n"
@@ -1094,7 +1094,7 @@ class NC_005816(NC_000932):
     def test_Features(self):
         """Checking GenBank features sequences vs FASTA ffn file."""
         gb_record = SeqIO.read(self.gb_filename, "genbank")
-        features = [f for f in gb_record.features if f.type=="CDS"]
+        features = [f for f in gb_record.features if f.type == "CDS"]
         fa_records = list(SeqIO.parse(self.ffn_filename, "fasta"))
         self.assertEqual(len(fa_records), len(features))
         # This assumes they are in the same order...

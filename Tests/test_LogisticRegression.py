@@ -87,19 +87,19 @@ class TestLogisticRegression(unittest.TestCase):
         for i in range(len(predictions)):
             prediction = LogisticRegression.classify(model, xs[i])
             self.assertEqual(prediction, predictions[i])
-            if prediction==ys[i]:
-                correct+=1
+            if prediction == ys[i]:
+                correct += 1
         self.assertEqual(correct, 16)
 
     def test_leave_one_out(self):
         correct = 0
         predictions = [1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0]
         for i in range(len(predictions)):
-            model = LogisticRegression.train(xs[:i]+xs[i+1:], ys[:i]+ys[i+1:])
+            model = LogisticRegression.train(xs[:i] + xs[i + 1:], ys[:i] + ys[i + 1:])
             prediction = LogisticRegression.classify(model, xs[i])
             self.assertEqual(prediction, predictions[i])
-            if prediction==ys[i]:
-                correct+=1
+            if prediction == ys[i]:
+                correct += 1
         self.assertEqual(correct, 15)
 
 if __name__ == "__main__":

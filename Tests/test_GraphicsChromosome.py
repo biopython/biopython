@@ -295,7 +295,7 @@ class OrganismSubAnnotationsTest(unittest.TestCase):
                 from Bio import SeqIO
                 record = SeqIO.read(filename, "gb")
                 assert length == len(record)
-                features = [f for f in record.features if f.type=="tRNA"]
+                features = [f for f in record.features if f.type == "tRNA"]
                 print(name)
                 # Strip of the first three chars, AT# where # is the chr
                 print([(int(f.location.start), int(f.location.end),
@@ -327,7 +327,7 @@ class OrganismSubAnnotationsTest(unittest.TestCase):
                 cytobands.append((start, end, 0, None, colors.black, color))
             # Draw these with black borders, and a brown fill:
             cytobands.append((0, 1000000, 0, "First 1 Mbp", colors.black, colors.brown))
-            cytobands.append((length-1000000, length, 0, "Last 1 Mbp", colors.black, colors.brown))
+            cytobands.append((length - 1000000, length, 0, "Last 1 Mbp", colors.black, colors.brown))
             # Additional dummy entry to check fill colour on both strands,
             if name == "Chr III":
                 cytobands.append((11000000, 13000000, -1, "Reverse", "red", "yellow"))

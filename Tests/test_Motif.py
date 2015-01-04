@@ -24,7 +24,7 @@ class MotifTestsBasic(unittest.TestCase):
         self.TFout = "Motif/tf.out"
         self.FAout = "Motif/fa.out"
         self.PFMout = "Motif/fa.out"
-        self.m=Motif.Motif()
+        self.m = Motif.Motif()
         self.m.add_instance(Seq("ATATA", self.m.alphabet))
 
     def tearDown(self):
@@ -401,13 +401,13 @@ class MotifTestsBasic(unittest.TestCase):
     def test_pfm_parsing(self):
         """Test to be sure that Motif can parse pfm  files.
         """
-        motif= Motif.read(self.PFMin, "jaspar-pfm")
+        motif = Motif.read(self.PFMin, "jaspar-pfm")
         self.assertEqual(motif.length, 12)
 
     def test_sites_parsing(self):
         """Test to be sure that Motif can parse sites files.
         """
-        motif= Motif.read(self.SITESin, "jaspar-sites")
+        motif = Motif.read(self.SITESin, "jaspar-sites")
         self.assertEqual(motif.length, 6)
 
     def test_FAoutput(self):

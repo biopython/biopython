@@ -353,7 +353,7 @@ class TestCluster(unittest.TestCase):
         # Pairwise average-linkage clustering"
         tree = treecluster(data=data1, mask=mask1, weight=weight1,
                            transpose=0, method='a', dist='e')
-        self.assertEqual(len(tree), len(data1)-1)
+        self.assertEqual(len(tree), len(data1) - 1)
         self.assertEqual(tree[0].left, 2)
         self.assertEqual(tree[0].right, 1)
         self.assertAlmostEqual(tree[0].distance, 2.600, places=3)
@@ -367,7 +367,7 @@ class TestCluster(unittest.TestCase):
         # Pairwise single-linkage clustering
         tree = treecluster(data=data1, mask=mask1, weight=weight1,
                            transpose=0, method='s', dist='e')
-        self.assertEqual(len(tree), len(data1)-1)
+        self.assertEqual(len(tree), len(data1) - 1)
         self.assertEqual(tree[0].left, 1)
         self.assertEqual(tree[0].right, 2)
         self.assertAlmostEqual(tree[0].distance, 2.600, places=3)
@@ -381,7 +381,7 @@ class TestCluster(unittest.TestCase):
         # Pairwise centroid-linkage clustering
         tree = treecluster(data=data1, mask=mask1, weight=weight1,
                            transpose=0, method='c', dist='e')
-        self.assertEqual(len(tree), len(data1)-1)
+        self.assertEqual(len(tree), len(data1) - 1)
         self.assertEqual(tree[0].left, 1)
         self.assertEqual(tree[0].right, 2)
         self.assertAlmostEqual(tree[0].distance, 2.600, places=3)
@@ -395,7 +395,7 @@ class TestCluster(unittest.TestCase):
         # Pairwise maximum-linkage clustering
         tree = treecluster(data=data1, mask=mask1, weight=weight1,
                            transpose=0, method='m', dist='e')
-        self.assertEqual(len(tree), len(data1)-1)
+        self.assertEqual(len(tree), len(data1) - 1)
         self.assertEqual(tree[0].left, 2)
         self.assertEqual(tree[0].right, 1)
         self.assertAlmostEqual(tree[0].distance, 2.600, places=3)
@@ -439,7 +439,7 @@ class TestCluster(unittest.TestCase):
         # Pairwise average-linkage clustering
         tree = treecluster(data=data2, mask=mask2, weight=weight2,
                            transpose=0, method='a', dist='e')
-        self.assertEqual(len(tree), len(data2)-1)
+        self.assertEqual(len(tree), len(data2) - 1)
         self.assertEqual(tree[0].left, 5)
         self.assertEqual(tree[0].right, 4)
         self.assertAlmostEqual(tree[0].distance, 0.003, places=3)
@@ -480,7 +480,7 @@ class TestCluster(unittest.TestCase):
         # Pairwise single-linkage clustering
         tree = treecluster(data=data2, mask=mask2, weight=weight2,
                            transpose=0, method='s', dist='e')
-        self.assertEqual(len(tree), len(data2)-1)
+        self.assertEqual(len(tree), len(data2) - 1)
         self.assertEqual(tree[0].left, 4)
         self.assertEqual(tree[0].right, 5)
         self.assertAlmostEqual(tree[0].distance, 0.003, places=3)
@@ -521,7 +521,7 @@ class TestCluster(unittest.TestCase):
         # Pairwise centroid-linkage clustering
         tree = treecluster(data=data2, mask=mask2, weight=weight2,
                            transpose=0, method='c', dist='e')
-        self.assertEqual(len(tree), len(data2)-1)
+        self.assertEqual(len(tree), len(data2) - 1)
         self.assertEqual(tree[0].left, 4)
         self.assertEqual(tree[0].right, 5)
         self.assertAlmostEqual(tree[0].distance, 0.003, places=3)
@@ -562,7 +562,7 @@ class TestCluster(unittest.TestCase):
         # Pairwise maximum-linkage clustering
         tree = treecluster(data=data2, mask=mask2, weight=weight2,
                            transpose=0, method='m', dist='e')
-        self.assertEqual(len(tree), len(data2)-1)
+        self.assertEqual(len(tree), len(data2) - 1)
         self.assertEqual(tree[0].left, 5)
         self.assertEqual(tree[0].right, 4)
         self.assertAlmostEqual(tree[0].distance, 0.003, places=3)

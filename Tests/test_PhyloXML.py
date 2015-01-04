@@ -247,7 +247,7 @@ class TreeTests(unittest.TestCase):
                 ('present', 2, ['Cofilin_ADF', 'Gelsolin']),
                 ('absent',  None, []),
                 ):
-            self.assertEqual(getattr(bchars, name+'_count'), count)
+            self.assertEqual(getattr(bchars, name + '_count'), count)
             self.assertEqual(getattr(bchars, name), value)
 
     # TODO: BranchColor -- see made_up.xml

@@ -217,7 +217,7 @@ def compare_sequence(old, new):
         indices = list(range(-ln, ln))
     else:
         # A selection of end cases, and the mid point
-        indices = [-ln, -ln+1, -(ln//2), -1, 0, 1, ln//2, ln-2, ln-1]
+        indices = [-ln, -ln + 1, -(ln // 2), -1, 0, 1, ln // 2, ln - 2, ln - 1]
 
     # Test element access,
     for i in indices:
