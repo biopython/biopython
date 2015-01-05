@@ -14,7 +14,7 @@ import getopt
 import traceback
 
 from Bio import ParserSupport
-from Bio.Blast import NCBIStandalone, NCBIWWW
+from Bio.Blast import NCBIStandalone
 
 CONTEXT = 5   # show 5 lines of context around the error in the format file
 
@@ -68,7 +68,7 @@ def choose_parser(outfile):
     data = open(outfile).read()
     ldata = data.lower()
     if "<html>" in ldata or "<pre>" in ldata:
-        return NCBIWWW.BlastParser
+        raise NotImplementedError("Biopython no longer has an HTML BLAST parser.")
     if "results from round)" in ldata or "converged!" in ldata:
         return NCBIStandalone.PSIBlastParser
     return NCBIStandalone.BlastParser
@@ -87,8 +87,7 @@ def test_blast_output(outfile):
               (parser_class.__module__, parser_class.__name__))
         print("on the command line of this script (NOT IMPLEMENTED YET).")
     else:
-        raise NotImplementedError
-        parser_class = NCBIWWW.BlastParser
+        raise NotImplementedError("Biopython no longer has an HTML BLAST parser.")
         print("Using %s to parse the file." % parser_class.__name__)
     print("")
 
