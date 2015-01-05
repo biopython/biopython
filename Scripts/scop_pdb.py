@@ -13,7 +13,7 @@ import sys
 
 from Bio._py3k import urlretrieve as _urlretrieve
 
-from Bio.SCOP import *
+from Bio.SCOP import Raf
 
 
 def usage():
