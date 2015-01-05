@@ -83,7 +83,7 @@ def test_blast_output(outfile):
 
         parser_class = choose_parser(outfile)
         print("It looks like you have given output that should be parsed")
-        print("with %s.%s.  If I'm wrong, you can select the correct parser" %\
+        print("with %s.%s.  If I'm wrong, you can select the correct parser" %
               (parser_class.__module__, parser_class.__name__))
         print("on the command line of this script (NOT IMPLEMENTED YET).")
     else:
@@ -135,7 +135,7 @@ def test_blast_output(outfile):
         traceback.print_exception(etype, value, tb)
         return 1
     else:
-        print("I found the problem in %s.%s.%s, line %d:" % \
+        print("I found the problem in %s.%s.%s, line %d:" %
               (class_found.__module__, class_found.__name__,
                err_function, err_line))
         print("    %s" % err_text)
@@ -175,9 +175,9 @@ def test_blast_output(outfile):
     print("")
 
     if class_found == scanner_class:
-        print("Problems in %s are most likely caused by changed formats." % \
+        print("Problems in %s are most likely caused by changed formats." %
               class_found.__name__)
-        print("You can start to fix this by going to line %d in module %s." % \
+        print("You can start to fix this by going to line %d in module %s." %
               (err_line, class_found.__module__))
         print("Perhaps the scanner needs to be made more lenient by accepting")
         print("the changed format?")
@@ -200,17 +200,17 @@ def test_blast_output(outfile):
         print("")
 
     elif class_found == consumer_class:
-        print("Problems in %s can be caused by two things:" % \
+        print("Problems in %s can be caused by two things:" %
               class_found.__name__)
-        print("    - The format of the line parsed by '%s' changed." % \
+        print("    - The format of the line parsed by '%s' changed." %
               err_function)
         print("    - The scanner misidentified the line.")
-        print("Check to make sure '%s' should parse the line:" % \
+        print("Check to make sure '%s' should parse the line:" %
               err_function)
         s = "    %s" % chomp(lines[consumer.linenum])
         s = s[:80]
         print(s)
-        print("If so, debug %s.%s.  Otherwise, debug %s." % \
+        print("If so, debug %s.%s.  Otherwise, debug %s." %
               (class_found.__name__, err_function, scanner_class.__name__))
 
 
