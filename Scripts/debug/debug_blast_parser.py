@@ -88,7 +88,6 @@ def test_blast_output(outfile):
         print("on the command line of this script (NOT IMPLEMENTED YET).")
     else:
         raise NotImplementedError("Biopython no longer has an HTML BLAST parser.")
-        print("Using %s to parse the file." % parser_class.__name__)
     print("")
 
     scanner_class = parser_class()._scanner.__class__
