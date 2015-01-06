@@ -7,8 +7,8 @@
 
 from Bio._py3k import basestring
 
-from Bio.PDB.StructureBuilder import StructureBuilder # To allow saving of chains, residues, etc..
-from Bio.Data.IUPACData import atom_weights # Allowed Elements
+from Bio.PDB.StructureBuilder import StructureBuilder  # To allow saving of chains, residues, etc..
+from Bio.Data.IUPACData import atom_weights  # Allowed Elements
 
 __docformat__ = "restructuredtext en"
 

@@ -34,7 +34,7 @@ def _build_dnal_cmdline(match, mismatch, gap, extension):
     res = _CMDLINE_DNAL[:]
     res.extend(["-match", str(match)])
     res.extend(["-mis", str(mismatch)])
-    res.extend(["-gap", str(-gap)]) # negative: convert score to penalty
+    res.extend(["-gap", str(-gap)])  # negative: convert score to penalty
     res.extend(["-ext", str(-extension)])  # negative: convert score to penalty
 
     return res
@@ -49,7 +49,7 @@ _re_alb_line2coords = re.compile(r"^\[([^:]+):[^\[]+\[([^:]+):")
 
 
 def _alb_line2coords(line):
-    return tuple([int(coord)+1 # one-based -> zero-based
+    return tuple([int(coord)+1  # one-based -> zero-based
                   for coord
                   in _re_alb_line2coords.match(line).groups()])
 
@@ -63,14 +63,14 @@ def _get_coords(filename):
     for line in alb:
         if line.startswith("["):
             if not start_line:
-                start_line = line # rstrip not needed
+                start_line = line  # rstrip not needed
             else:
                 end_line = line
 
-    if end_line is None: # sequence is too short
+    if end_line is None:  # sequence is too short
         return [(0, 0), (0, 0)]
 
-    return list(zip(*map(_alb_line2coords, [start_line, end_line]))) # returns [(start0, end0), (start1, end1)]
+    return list(zip(*map(_alb_line2coords, [start_line, end_line])))  # returns [(start0, end0), (start1, end1)]
 
 
 class Statistics(object):

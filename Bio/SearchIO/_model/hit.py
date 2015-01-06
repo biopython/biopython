@@ -382,7 +382,7 @@ class Hit(_BaseSearchObject):
 
         """
         if func is not None:
-            hsps = [func(x) for x in self.hsps[:]] # this creates a shallow copy
+            hsps = [func(x) for x in self.hsps[:]]  # this creates a shallow copy
         else:
             hsps = self.hsps[:]
         if hsps:

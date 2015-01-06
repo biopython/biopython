@@ -102,7 +102,7 @@ class SeqMapIndex(dict):
         pdbid = residues.pdbid
         frags = residues.fragments
         if not frags:
-            frags = (('_', '', ''),) # All residues of unnamed chain
+            frags = (('_', '', ''),)  # All residues of unnamed chain
 
         seqMap = None
         for frag in frags:

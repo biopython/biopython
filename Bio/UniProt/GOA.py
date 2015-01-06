@@ -134,8 +134,8 @@ def _gpi10iterator(handle):
         inrec = inline.rstrip('\n').split('\t')
         if len(inrec) == 1:
             continue
-        inrec[5] = inrec[5].split('|') # DB_Object_Synonym(s)
-        inrec[8] = inrec[8].split('|') # Annotation_Target_Set
+        inrec[5] = inrec[5].split('|')  # DB_Object_Synonym(s)
+        inrec[8] = inrec[8].split('|')  # Annotation_Target_Set
         yield dict(zip(GPI10FIELDS, inrec))
 
 
@@ -151,10 +151,10 @@ def _gpi11iterator(handle):
         inrec = inline.rstrip('\n').split('\t')
         if len(inrec) == 1:
             continue
-        inrec[2] = inrec[2].split('|') # DB_Object_Name
-        inrec[3] = inrec[3].split('|') # DB_Object_Synonym(s)
-        inrec[7] = inrec[7].split('|') # DB_Xref(s)
-        inrec[8] = inrec[8].split('|') # Properties
+        inrec[2] = inrec[2].split('|')  # DB_Object_Name
+        inrec[3] = inrec[3].split('|')  # DB_Object_Synonym(s)
+        inrec[7] = inrec[7].split('|')  # DB_Xref(s)
+        inrec[8] = inrec[8].split('|')  # Properties
         yield dict(zip(GPI11FIELDS, inrec))
 
 
@@ -189,10 +189,10 @@ def _gpa10iterator(handle):
         inrec = inline.rstrip('\n').split('\t')
         if len(inrec) == 1:
             continue
-        inrec[2] = inrec[2].split('|') # Qualifier
-        inrec[4] = inrec[4].split('|') # DB:Reference(s)
-        inrec[6] = inrec[6].split('|') # With
-        inrec[10] = inrec[10].split('|') # Annotation extension
+        inrec[2] = inrec[2].split('|')  # Qualifier
+        inrec[4] = inrec[4].split('|')  # DB:Reference(s)
+        inrec[6] = inrec[6].split('|')  # With
+        inrec[10] = inrec[10].split('|')  # Annotation extension
         yield dict(zip(GPA10FIELDS, inrec))
 
 
@@ -209,10 +209,10 @@ def _gpa11iterator(handle):
         inrec = inline.rstrip('\n').split('\t')
         if len(inrec) == 1:
             continue
-        inrec[2] = inrec[2].split('|') # Qualifier
-        inrec[4] = inrec[4].split('|') # DB:Reference(s)
-        inrec[6] = inrec[6].split('|') # With
-        inrec[10] = inrec[10].split('|') # Annotation extension
+        inrec[2] = inrec[2].split('|')  # Qualifier
+        inrec[4] = inrec[4].split('|')  # DB:Reference(s)
+        inrec[6] = inrec[6].split('|')  # With
+        inrec[10] = inrec[10].split('|')  # Annotation extension
         yield dict(zip(GPA11FIELDS, inrec))
 
 

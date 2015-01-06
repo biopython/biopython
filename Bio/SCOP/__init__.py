@@ -242,7 +242,7 @@ class Scop(object):
 
                     n = sunidDict[record.sunid]
 
-                    if record.parent != '': # Not root node
+                    if record.parent != '':  # Not root node
 
                         if record.parent not in sunidDict:
                             raise ValueError("Incomplete data?")
@@ -585,7 +585,7 @@ class Node(object):
             return self.scop.getDescendentsFromSQL(self, node_type)
         while nodes[0].type != node_type:
             if nodes[0].type == 'px':
-                return [] # Fell of the bottom of the hierarchy
+                return []  # Fell of the bottom of the hierarchy
             child_list = []
             for n in nodes:
                 for child in n.getChildren():
@@ -609,7 +609,7 @@ class Node(object):
 
             while n.type != node_type:
                 if n.type == 'ro':
-                    return None # Fell of the top of the hierarchy
+                    return None  # Fell of the top of the hierarchy
                 n = n.getParent()
 
             return n

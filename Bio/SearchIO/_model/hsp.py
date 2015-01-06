@@ -804,7 +804,7 @@ class HSPFragment(_BaseHSP):
         """
         assert seq_type in ('hit', 'query')
         if seq is None:
-            return seq # return immediately if seq is None
+            return seq  # return immediately if seq is None
         else:
             if not isinstance(seq, (basestring, SeqRecord)):
                 raise TypeError("%s sequence must be a string or a SeqRecord"

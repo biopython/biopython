@@ -485,7 +485,7 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
                 sxx += p*logodds*logodds
             sxx -= sx*sx
             variance += sxx
-        variance = max(variance, 0) # to avoid roundoff problems
+        variance = max(variance, 0)  # to avoid roundoff problems
         return math.sqrt(variance)
 
     def dist_pearson(self, other):

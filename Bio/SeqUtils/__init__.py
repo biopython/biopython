@@ -114,9 +114,9 @@ def xGC_skew(seq, window=1000, zoom=100,
                          r=300, px=100, py=100):
     """Calculates and plots normal and accumulated GC skew (GRAPHICS !!!)."""
     try:
-        import Tkinter as tkinter # Python 2
+        import Tkinter as tkinter  # Python 2
     except ImportError:
-        import tkinter # Python 3
+        import tkinter  # Python 3
 
     yscroll = tkinter.Scrollbar(orient=tkinter.VERTICAL)
     xscroll = tkinter.Scrollbar(orient=tkinter.HORIZONTAL)
@@ -392,18 +392,18 @@ def molecular_weight(seq, seq_type=None, double_stranded=False, circular=False,
             raise TypeError("%s is not a valid alphabet for mass calculations"
                              % base_alphabet)
         else:
-            tmp_type = "DNA" # backward compatibity
+            tmp_type = "DNA"  # backward compatibity
         if seq_type and tmp_type and tmp_type != seq_type:
             raise ValueError("seq_type=%r contradicts %s from seq alphabet"
                              % (seq_type, tmp_type))
         seq_type = tmp_type
     elif isinstance(seq, str):
         if seq_type is None:
-            seq_type = "DNA" # backward compatibity
+            seq_type = "DNA"  # backward compatibity
     else:
         raise TypeError("Expected a string or Seq object, not seq=%r" % seq)
 
-    seq = ''.join(str(seq).split()).upper() # Do the minimum formatting
+    seq = ''.join(str(seq).split()).upper()  # Do the minimum formatting
 
     if seq_type == 'DNA':
         if monoisotopic:

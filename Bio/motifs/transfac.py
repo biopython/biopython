@@ -94,7 +94,7 @@ def read(handle):
         key, value = line[:2], line[4:]
         if key=='VV':
             record.version = value
-        elif key in ('P0', 'PO'): # Old TRANSFAC files use PO instead of P0
+        elif key in ('P0', 'PO'):  # Old TRANSFAC files use PO instead of P0
             counts = {}
             assert value.split()[:4]==['A', 'C', 'G', 'T']
             length = 0
@@ -157,21 +157,21 @@ XX
 """ % version
             blocks.append(block)
     multiple_value_keys = Motif.multiple_value_keys
-    sections = (('AC', 'AS',), # Accession
-                ('ID',),       # ID
-                ('DT', 'CO'),  # Date, copyright
-                ('NA',),       # Name
-                ('DE',),       # Short factor description
-                ('TY',),       # Type
-                ('OS', 'OC'),  # Organism
-                ('HP', 'HC'),  # Superfamilies, subfamilies
-                ('BF',),       # Binding factors
-                ('P0',),       # Frequency matrix
-                ('BA',),       # Statistical basis
-                ('BS',),       # Factor binding sites
-                ('CC',),       # Comments
-                ('DR',),       # External databases
-                ('OV', 'PV',), # Versions
+    sections = (('AC', 'AS',),  # Accession
+                ('ID',),        # ID
+                ('DT', 'CO'),   # Date, copyright
+                ('NA',),        # Name
+                ('DE',),        # Short factor description
+                ('TY',),        # Type
+                ('OS', 'OC'),   # Organism
+                ('HP', 'HC'),   # Superfamilies, subfamilies
+                ('BF',),        # Binding factors
+                ('P0',),        # Frequency matrix
+                ('BA',),        # Statistical basis
+                ('BS',),        # Factor binding sites
+                ('CC',),        # Comments
+                ('DR',),        # External databases
+                ('OV', 'PV',),  # Versions
                )
     for motif in motifs:
         lines = []

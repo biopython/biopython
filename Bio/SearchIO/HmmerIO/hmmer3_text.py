@@ -118,7 +118,7 @@ class Hmmer3TextParser(object):
             }
 
             # get description and accession, if they exist
-            qdesc = '<unknown description>' # placeholder
+            qdesc = '<unknown description>'  # placeholder
             while not self.line.startswith('Scores for '):
                 self.line = read_forward(self.handle)
 

@@ -105,7 +105,7 @@ class ds(object):
             tagpos = dict(zip(poss, tags))
             if -1 in tagpos:
                 del tagpos[-1]
-            ps = sorted(tagpos) # the keys
+            ps = sorted(tagpos)  # the keys
             for (p1, p2) in zip(ps, ps[1:]+[len(line)+1]):
                 setattr(self, tagpos[p1].lower(), line[p1+len(tagpos[p1])+1:p2].strip())
 

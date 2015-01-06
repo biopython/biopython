@@ -1871,7 +1871,7 @@ class RestrictionBatch(set):
     def __contains__(self, other):
         try:
             other = self.format(other)
-        except ValueError: # other is not a restriction enzyme
+        except ValueError:  # other is not a restriction enzyme
             return False
         return set.__contains__(self, other)
 

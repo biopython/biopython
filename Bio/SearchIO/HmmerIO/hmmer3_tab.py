@@ -264,7 +264,7 @@ class Hmmer3TabWriter(object):
         # adapted from HMMER's source: src/p7_tophits.c#L1083
         if first_qresult is not None:
             # qnamew = max(20, len(first_qresult.id))
-            qnamew = 20 # why doesn't the above work?
+            qnamew = 20  # why doesn't the above work?
             tnamew = max(20, len(first_qresult[0].id))
             qaccw = max(10, len(first_qresult.accession))
             taccw = max(10, len(first_qresult[0].accession))
