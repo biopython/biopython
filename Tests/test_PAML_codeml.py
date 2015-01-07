@@ -1,4 +1,4 @@
-# Copyright (C) 2011 by Brandon Invergo (b.invergo@gmail.com)
+# Copyright (C) 2011, 2015 by Brandon Invergo (b.invergo@gmail.com)
 # This code is part of the Biopython distribution and governed by its
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
@@ -510,6 +510,19 @@ class ModTest(unittest.TestCase):
             # Pairwise AA analysis has ML & raw distances
             self.assertEqual(len(distances), 2, version_msg)
 
+    def testTreeParseVersatility(self):
+        """Test finding trees in the results, in response to bug #453, where
+        trees like (A, (B, C)); weren't being caught"""
+        res_file = os.path.join(self.results_dir, "codeml",
+                                "tree_regexp_versatility.out")
+        results = codeml.read(res_file)
+        self.assertIn("NSsites", results)
+        nssites = results["NSsites"]
+        self.assertIn(0, nssites)
+        m0 = nssites[0]
+        self.assertIn("tree", m0)
+        self.assertIsNot(m0["tree"], None)
+        self.assertNotEqual(len(m0["tree"]), 0)
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
