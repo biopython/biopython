@@ -459,7 +459,7 @@ class TestWriteRead(unittest.TestCase):
         """Write and read back odd SeqRecord objects"""
         record1 = SeqRecord(Seq("ACGT" * 500, generic_dna), id="Test", description="Long " * 500,
                            letter_annotations={"phred_quality": [40, 30, 20, 10] * 500})
-        record2 = SeqRecord(MutableSeq("NGGC" * 1000),  id="Mut", description="very " * 1000 + "long",
+        record2 = SeqRecord(MutableSeq("NGGC" * 1000), id="Mut", description="very " * 1000 + "long",
                            letter_annotations={"phred_quality": [0, 5, 5, 10] * 1000})
         record3 = SeqRecord(UnknownSeq(2000, character="N"), id="Unk", description="l" + ("o" * 1000) + "ng",
                            letter_annotations={"phred_quality": [0, 1] * 1000})

@@ -534,7 +534,7 @@ class MysqlConnectorAdaptor(Adaptor):
 
 _interface_specific_adaptors = {
     # If SQL interfaces require a specific adaptor, use this to map the adaptor
-    "mysql.connector":  MysqlConnectorAdaptor
+    "mysql.connector": MysqlConnectorAdaptor
     }
 
 _allowed_lookups = {

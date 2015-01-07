@@ -60,9 +60,9 @@ class TestLogisticRegression(unittest.TestCase):
     def test_calculate_model(self):
         model = LogisticRegression.train(xs, ys)
         beta = model.beta
-        self.assertAlmostEqual(beta[0],  8.9830, places=4)
+        self.assertAlmostEqual(beta[0], 8.9830, places=4)
         self.assertAlmostEqual(beta[1], -0.0360, places=4)
-        self.assertAlmostEqual(beta[2],  0.0218, places=4)
+        self.assertAlmostEqual(beta[2], 0.0218, places=4)
 
     def test_classify(self):
         model = LogisticRegression.train(xs, ys)
