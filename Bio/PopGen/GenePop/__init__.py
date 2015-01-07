@@ -23,6 +23,7 @@ from copy import deepcopy
 
 __docformat__ = "restructuredtext en"
 
+
 def get_indiv(line):
     def int_no_zero(val):
         v = int(val)

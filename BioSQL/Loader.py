@@ -32,6 +32,7 @@ from Bio._py3k import basestring
 
 __docformat__ = "restructuredtext en"
 
+
 class DatabaseLoader:
     """Object used to load SeqRecord objects into a BioSQL database."""
 

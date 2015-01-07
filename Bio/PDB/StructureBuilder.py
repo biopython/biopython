@@ -22,6 +22,7 @@ from Bio.PDB.PDBExceptions import PDBConstructionWarning
 
 __docformat__ = "restructuredtext en"
 
+
 class StructureBuilder(object):
     """
     Deals with contructing the Structure object. The StructureBuilder class is used

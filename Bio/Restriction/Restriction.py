@@ -102,6 +102,8 @@ __docformat__ = "restructuredtext en"
 
 # Used to use Bio.Restriction.DNAUtils.check_bases (and expose it under this
 # namespace), but have deprecated that module.
+
+
 def _check_bases(seq_string):
     """Check characters in a string (PRIVATE).
 

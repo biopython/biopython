@@ -53,6 +53,7 @@ except ImportError:
 
 __docformat__ = "restructuredtext en"
 
+
 class AbstractParser(object):
     """Base class for other parsers.
 

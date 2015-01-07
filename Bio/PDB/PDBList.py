@@ -33,6 +33,7 @@ from Bio._py3k import urlretrieve as _urlretrieve
 
 __docformat__ = "restructuredtext en"
 
+
 class PDBList(object):
     """
     This class provides quick access to the structure lists on the

@@ -17,6 +17,7 @@ from Bio.PDB.Vector import rotaxis
 
 __docformat__ = "restructuredtext en"
 
+
 class _AbstractHSExposure(AbstractPropertyMap):
     """
     Abstract class to calculate Half-Sphere Exposure (HSE).

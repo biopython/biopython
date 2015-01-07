@@ -11,6 +11,7 @@ from math import log, exp
 
 __docformat__ = "restructuredtext en"
 
+
 def cdf_chi2(df, stat):
     if df < 1:
         raise ValueError("df must be at least 1")

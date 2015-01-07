@@ -11,6 +11,7 @@ from Bio.Alphabet import IUPAC
 
 __docformat__ = "restructuredtext en"
 
+
 class Motif(motifs.Motif, dict):
     """A Bio.motifs.transfac.Motif stores the information in one TRANSFAC
 motif. This class inherits from the Bio.motifs.Motif base class, as well

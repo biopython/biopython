@@ -18,6 +18,7 @@ import random
 
 __docformat__ = "restructuredtext en"
 
+
 class Motif(object):
     """
     A class representing sequence motifs.

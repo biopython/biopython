@@ -21,6 +21,7 @@ from time import strftime, clock
 
 __docformat__ = "restructuredtext en"
 
+
 def my_float(f):
     # Because of Jython, mostly
     if f == "-nan":

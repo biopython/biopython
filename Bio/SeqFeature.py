@@ -59,6 +59,7 @@ from Bio.Seq import MutableSeq, reverse_complement
 
 __docformat__ = "restructuredtext en"
 
+
 class SeqFeature(object):
     """Represent a Sequence Feature on an object.
 

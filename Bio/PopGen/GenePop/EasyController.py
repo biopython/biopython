@@ -15,6 +15,7 @@ from Bio.PopGen import GenePop
 
 __docformat__ = "restructuredtext en"
 
+
 class EasyController(object):
     def __init__(self, fname, genepop_dir=None):
         """Initializes the controller.

@@ -29,6 +29,7 @@ from Bio.Alphabet import Gapped
 
 __docformat__ = "restructuredtext en"
 
+
 def _extract_alignment_region(alignment_seq_with_flanking, annotation):
     """Helper function for the main parsing code (PRIVATE).
 

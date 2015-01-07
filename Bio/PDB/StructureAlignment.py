@@ -16,6 +16,7 @@ from Bio.PDB.Polypeptide import is_aa
 
 __docformat__ = "restructuredtext en"
 
+
 class StructureAlignment(object):
     """
     This class aligns two structures based on an alignment of their
