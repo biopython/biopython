@@ -28,7 +28,7 @@ def test_fitness(genome):
     return int(str(seq_genome))
 
 
-class MutationHelper:
+class MutationHelper(object):
     """Mixin class which provides useful functions for testing mutations.
     """
     num_trials = 1000
@@ -119,9 +119,9 @@ class SinglePositionTest(unittest.TestCase, MutationHelper):
         self._never_mutate(mutator)
 
 
-class TestMutator:
-    """Provide basic mutator ability.
-    """
+class TestMutator(object):
+    """Provide basic mutator ability."""
+
     def __init__(self):
         self.type = "lower"
 

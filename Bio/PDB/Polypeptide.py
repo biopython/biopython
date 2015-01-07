@@ -298,7 +298,7 @@ class Polypeptide(list):
         return s
 
 
-class _PPBuilder:
+class _PPBuilder(object):
     """Base class to extract polypeptides.
 
     It checks if two consecutive residues in a chain are connected.

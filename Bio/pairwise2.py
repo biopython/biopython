@@ -780,7 +780,7 @@ def rint(x, precision=_PRECISION):
     return int(x * precision + 0.5)
 
 
-class identity_match:
+class identity_match(object):
     """identity_match([match][, mismatch]) -> match_fn
 
     Create a match function for use in an alignment.  match and
@@ -798,7 +798,7 @@ class identity_match:
         return self.mismatch
 
 
-class dictionary_match:
+class dictionary_match(object):
     """dictionary_match(score_dict[, symmetric]) -> match_fn
 
     Create a match function for use in an alignment.  score_dict is a
@@ -821,7 +821,7 @@ class dictionary_match:
         return self.score_dict[(charA, charB)]
 
 
-class affine_penalty:
+class affine_penalty(object):
     """affine_penalty(open, extend[, penalize_extend_when_opening]) -> gap_fn
 
     Create a gap function for use in an alignment.

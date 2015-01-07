@@ -137,7 +137,7 @@ def _hw_func(stream, is_locus, has_fisher=False):
     raise StopIteration
 
 
-class _FileIterator:
+class _FileIterator(object):
     """Iterator which crawls over a stream of lines with a function (PRIVATE).
 
     The generator function is expected to yield a tuple, while

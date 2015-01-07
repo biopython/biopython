@@ -519,7 +519,7 @@ class AbstractCommandline(object):
         return stdout_str, stderr_str
 
 
-class _AbstractParameter:
+class _AbstractParameter(object):
     """A class to hold information about a parameter for a commandline.
 
     Do not use this directly, instead use one of the subclasses.

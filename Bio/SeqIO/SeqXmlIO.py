@@ -29,7 +29,7 @@ from Bio.SeqRecord import SeqRecord
 from .Interfaces import SequentialSequenceWriter
 
 
-class XMLRecordIterator:
+class XMLRecordIterator(object):
     """Base class for building iterators for record style XML formats.
 
     It is assumed that all information for one record can be found within a
