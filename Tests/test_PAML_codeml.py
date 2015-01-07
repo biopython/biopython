@@ -516,11 +516,11 @@ class ModTest(unittest.TestCase):
         res_file = os.path.join(self.results_dir, "codeml",
                                 "tree_regexp_versatility.out")
         results = codeml.read(res_file)
-        self.assertIn("NSsites", results)
+        self.assertTrue("NSsites" in results)
         nssites = results["NSsites"]
-        self.assertIn(0, nssites)
+        self.assertTrue(0 in nssites)
         m0 = nssites[0]
-        self.assertIn("tree", m0)
+        self.assertTrue("tree" in m0)
         self.assertIsNot(m0["tree"], None)
         self.assertNotEqual(len(m0["tree"]), 0)
 
