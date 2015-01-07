@@ -89,11 +89,11 @@ class TestConcatenated(unittest.TestCase):
     def test_parses_gzipped_stream(self):
         import gzip
         count = 0
-        fh = gzip.open("Roche/E3MFGYR02_random_10_reads.sff.gz",'rb')
+        fh = gzip.open("Roche/E3MFGYR02_random_10_reads.sff.gz", 'rb')
         for record in SeqIO.parse(fh, 'sff'):
             count += 1
         self.assertEqual(10, count)
-        
+
     def test_parse1(self):
         count = 0
         caught = False
