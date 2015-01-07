@@ -299,7 +299,7 @@ class HSP(_BaseHSP):
         return bool(self._items)
 
     # Python 2:
-    __nonzero__= __bool__
+    __nonzero__ = __bool__
 
     def __str__(self):
 
@@ -319,10 +319,10 @@ class HSP(_BaseHSP):
                     self.fragments[0]._str_aln()])
         else:
             lines.append('  Fragments: %s  %s  %s  %s' %
-                    ('-'*3, '-'*14, '-'*22, '-'*22))
+                    ('-' * 3, '-' * 14, '-' * 22, '-' * 22))
             pattern = '%16s  %14s  %22s  %22s'
             lines.append(pattern % ('#', 'Span', 'Query range', 'Hit range'))
-            lines.append(pattern % ('-'*3, '-'*14, '-'*22, '-'*22))
+            lines.append(pattern % ('-' * 3, '-' * 14, '-' * 22, '-' * 22))
             for idx, block in enumerate(self.fragments):
                 # set hsp line and table
                 # alignment span
@@ -481,7 +481,7 @@ class HSP(_BaseHSP):
         inter_coords = []
         for idx, coord in enumerate(coords[:-1]):
             start = startfunc(coords[idx])
-            end = endfunc(coords[idx+1])
+            end = endfunc(coords[idx + 1])
             inter_coords.append((min(start, end), max(start, end)))
 
         return inter_coords

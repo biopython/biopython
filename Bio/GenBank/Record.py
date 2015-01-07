@@ -192,7 +192,7 @@ class Record(object):
         self.origin = ''
         self.sequence = ''
         self.contig = ''
-        self.primary=[]
+        self.primary = []
         self.wgs = ''
         self.wgs_scafld = []
 

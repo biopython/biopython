@@ -276,14 +276,14 @@ class Hmmer3TabWriter(object):
                 "--- full sequence ----", "--- best 1 domain ----",
                 "--- domain number estimation ----")
         header += "#%-*s %-*s %-*s %-*s %9s %6s %5s %9s %6s %5s %5s %3s " \
-                "%3s %3s %3s %3s %3s %3s %s\n" % (tnamew-1, " target name",
+                "%3s %3s %3s %3s %3s %3s %s\n" % (tnamew - 1, " target name",
                         taccw, "accession", qnamew, "query name", qaccw,
                         "accession", "  E-value", " score", " bias",
                         "  E-value", " score", " bias", "exp",
                         "reg", "clu", " ov", "env", "dom", "rep",
                         "inc", "description of target")
         header += "#%*s %*s %*s %*s %9s %6s %5s %9s %6s %5s %5s %3s %3s " \
-                "%3s %3s %3s %3s %3s %s\n" % (tnamew-1, "-------------------",
+                "%3s %3s %3s %3s %3s %s\n" % (tnamew - 1, "-------------------",
                 taccw, "----------", qnamew, "--------------------", qaccw,
                 "----------", "---------", "------", "-----", "---------",
                 "------", "-----", "---", "---", "---", "---", "---", "---",

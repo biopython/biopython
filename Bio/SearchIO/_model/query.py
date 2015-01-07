@@ -299,7 +299,7 @@ class QueryResult(_BaseSearchObject):
         return bool(self._items)
 
     # Python 2:
-    __nonzero__= __bool__
+    __nonzero__ = __bool__
 
     def __repr__(self):
         return "QueryResult(id=%r, %r hits)" % (self.id, len(self))
@@ -325,10 +325,10 @@ class QueryResult(_BaseSearchObject):
         if not self.hits:
             lines.append('   Hits: 0')
         else:
-            lines.append('   Hits: %s  %s  %s' % ('-'*4, '-'*5, '-'*58))
+            lines.append('   Hits: %s  %s  %s' % ('-' * 4, '-' * 5, '-' * 58))
             pattern = '%13s  %5s  %s'
             lines.append(pattern % ('#', '# HSP', 'ID + description'))
-            lines.append(pattern % ('-'*4, '-'*5, '-'*58))
+            lines.append(pattern % ('-' * 4, '-' * 5, '-' * 58))
             for idx, hit in enumerate(self.hits):
                 if idx < 30:
                     hid_line = '%s  %s' % (hit.id, hit.description)

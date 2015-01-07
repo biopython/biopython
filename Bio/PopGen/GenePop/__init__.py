@@ -31,7 +31,7 @@ def get_indiv(line):
         return v
     indiv_name, marker_line = line.split(',')
     markers = marker_line.replace('\t', ' ').split(' ')
-    markers = [marker for marker in markers if marker!='']
+    markers = [marker for marker in markers if marker != '']
     if len(markers[0]) in [2, 4]:  # 2 digits per allele
         marker_len = 2
     else:
@@ -61,7 +61,7 @@ def read(handle):
     record.loci_list.extend(all_loci)
     for line in handle:
         line = line.rstrip()
-        if line.upper()=='POP':
+        if line.upper() == 'POP':
             break
         record.loci_list.append(line)
     else:
@@ -69,7 +69,7 @@ def read(handle):
     record.populations.append([])
     for line in handle:
         line = line.rstrip()
-        if line.upper()=='POP':
+        if line.upper() == 'POP':
             record.populations.append([])
         else:
             indiv_name, allele_list, record.marker_len = get_indiv(line)
@@ -148,7 +148,7 @@ class Record(object):
                         if al is None:
                             al = '0'
                         aStr = str(al)
-                        while len(aStr)<self.marker_len:
+                        while len(aStr) < self.marker_len:
                             aStr = "".join(['0', aStr])
                         rep.append(aStr)
                 rep.append('\n')

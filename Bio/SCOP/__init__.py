@@ -66,8 +66,8 @@ nodeCodeDict = {'cl': 'class', 'cf': 'fold', 'sf': 'superfamily',
                 'fa': 'family', 'dm': 'protein', 'sp': 'species', 'px': 'domain'}
 
 
-_nodetype_to_code= {'class': 'cl', 'fold': 'cf', 'superfamily': 'sf',
-                    'family': 'fa', 'protein': 'dm', 'species': 'sp', 'domain': 'px'}
+_nodetype_to_code = {'class': 'cl', 'fold': 'cf', 'superfamily': 'sf',
+                     'family': 'fa', 'protein': 'dm', 'species': 'sp', 'domain': 'px'}
 
 nodeCodeOrder = ['ro', 'cl', 'cf', 'sf', 'fa', 'dm', 'sp', 'px']
 
@@ -142,14 +142,14 @@ def parse_domain(str):
 
     m = _domain_re.match(str)
     if (not m):
-        raise ValueError("Domain: "+ str)
+        raise ValueError("Domain: " + str)
 
     dom = Domain()
     dom.sid = m.group(1)
     dom.sccs = m.group(2)
     dom.residues = Residues.Residues(m.group(3))
     if not dom.residues.pdbid:
-        dom.residues.pdbid= dom.sid[1:5]
+        dom.residues.pdbid = dom.sid[1:5]
     dom.description = m.group(4).strip()
 
     return dom
@@ -366,7 +366,7 @@ class Scop(object):
 
                 [n.sid, n.residues, pdbid] = cur.fetchone()
                 n.residues = Residues.Residues(n.residues)
-                n.residues.pdbid=pdbid
+                n.residues.pdbid = pdbid
                 self._sidDict[n.sid] = n
 
             [n.sunid, n.type, n.sccs, n.description] = data
@@ -385,7 +385,7 @@ class Scop(object):
             return None
 
         cur = self.db_handle.cursor()
-        cur.execute("SELECT "+type+" from cla WHERE "+node.type+"=%s", (node.sunid))
+        cur.execute("SELECT " + type + " from cla WHERE " + node.type + "=%s", (node.sunid))
         result = cur.fetchone()
         if result is not None:
             return self.getNodeBySunid(result[0])
@@ -413,13 +413,13 @@ class Scop(object):
 
         if type != 'px':
             cur.execute("SELECT DISTINCT des.sunid,des.type,des.sccs,description FROM \
-            cla,des WHERE cla."+node.type+"=%s AND cla."+type+"=des.sunid", (node.sunid))
+            cla,des WHERE cla." + node.type + "=%s AND cla." + type + "=des.sunid", (node.sunid))
             data = cur.fetchall()
             for d in data:
                 if int(d[0]) not in self._sunidDict:
                     n = Node(scop=self)
                     [n.sunid, n.type, n.sccs, n.description] = d
-                    n.sunid=int(n.sunid)
+                    n.sunid = int(n.sunid)
                     self._sunidDict[n.sunid] = n
 
                     cur.execute("SELECT parent FROM hie WHERE child=%s", n.sunid)
@@ -435,7 +435,7 @@ class Scop(object):
 
         else:
             cur.execute("SELECT cla.sunid,sid,pdbid,residues,cla.sccs,type,description,sp\
-             FROM cla,des where cla.sunid=des.sunid and cla."+node.type+"=%s",
+             FROM cla,des where cla.sunid=des.sunid and cla." + node.type + "=%s",
                         node.sunid)
 
             data = cur.fetchall()
@@ -632,7 +632,7 @@ class Domain(Node):
         s = []
         s.append(self.sid)
         s.append(self.sccs)
-        s.append("("+str(self.residues)+")")
+        s.append("(" + str(self.residues) + ")")
 
         if not self.getParent():
             s.append(self.description)
@@ -640,7 +640,7 @@ class Domain(Node):
             sp = self.getParent()
             dm = sp.getParent()
             s.append(dm.description)
-            s.append("{"+sp.description+"}")
+            s.append("{" + sp.description + "}")
 
         return " ".join(s)
 
@@ -746,7 +746,7 @@ class Astral(object):
         """get domains clustered by percent id"""
         if id not in self.IdDatasets:
             if self.db_handle:
-                self.IdDatasets[id] = self.getAstralDomainsFromSQL("id"+str(id))
+                self.IdDatasets[id] = self.getAstralDomainsFromSQL("id" + str(id))
             else:
                 if not self.path:
                     raise RuntimeError("No scopseq directory specified")
@@ -773,7 +773,7 @@ class Astral(object):
         if filename:
             file_handle.close()
 
-        doms = [a for a in doms if a[0]=='d']
+        doms = [a for a in doms if a[0] == 'd']
         doms = [self.scop.getDomainBySid(x) for x in doms]
         return doms
 
@@ -781,7 +781,7 @@ class Astral(object):
         """Load a set of astral domains from a column in the astral table of a MYSQL
         database (which can be created with writeToSQL(...)"""
         cur = self.db_handle.cursor()
-        cur.execute("SELECT sid FROM astral WHERE "+column+"=1")
+        cur.execute("SELECT sid FROM astral WHERE " + column + "=1")
         data = cur.fetchall()
         data = [self.scop.getDomainBySid(x[0]) for x in data]
 
@@ -836,17 +836,17 @@ class Astral(object):
                         (dom, self.fasta_dict[dom].seq.data))
 
         for i in astralBibIds:
-            cur.execute("ALTER TABLE astral ADD (id"+str(i)+" TINYINT)")
+            cur.execute("ALTER TABLE astral ADD (id" + str(i) + " TINYINT)")
 
             for d in self.domainsClusteredById(i):
-                cur.execute("UPDATE astral SET id"+str(i)+"=1  WHERE sid=%s",
+                cur.execute("UPDATE astral SET id" + str(i) + "=1  WHERE sid=%s",
                             d.sid)
 
         for ev in astralEvs:
-            cur.execute("ALTER TABLE astral ADD ("+astralEv_to_sql[ev]+" TINYINT)")
+            cur.execute("ALTER TABLE astral ADD (" + astralEv_to_sql[ev] + " TINYINT)")
 
             for d in self.domainsClusteredByEv(ev):
-                cur.execute("UPDATE astral SET "+astralEv_to_sql[ev]+"=1  WHERE sid=%s",
+                cur.execute("UPDATE astral SET " + astralEv_to_sql[ev] + "=1  WHERE sid=%s",
                             d.sid)
 
 

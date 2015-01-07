@@ -50,17 +50,17 @@ class Record(object):
 
         sunid, parent, children = columns
 
-        if sunid =='-':
+        if sunid == '-':
             self.sunid = ''
         else:
             self.sunid = int(sunid)
 
-        if parent=='-':
+        if parent == '-':
             self.parent = ''
         else:
             self.parent = int(parent)
 
-        if children=='-':
+        if children == '-':
             self.children = ()
         else:
             children = children.split(',')

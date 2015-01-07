@@ -11,7 +11,7 @@ __docformat__ = "restructuredtext en"
 
 class Chain(Entity):
     def __init__(self, id):
-        self.level="C"
+        self.level = "C"
         Entity.__init__(self, id)
 
     # Private methods
@@ -29,11 +29,11 @@ class Chain(Entity):
 
             - r1, r2 - Residue objects
         """
-        hetflag1, resseq1, icode1=r1.id
-        hetflag2, resseq2, icode2=r2.id
-        if hetflag1!=hetflag2:
+        hetflag1, resseq1, icode1 = r1.id
+        hetflag2, resseq2, icode2 = r2.id
+        if hetflag1 != hetflag2:
             return cmp(hetflag1[0], hetflag2[0])
-        elif resseq1!=resseq2:
+        elif resseq1 != resseq2:
             return cmp(resseq1, resseq2)
         return cmp(icode1, icode2)
 
@@ -50,7 +50,7 @@ class Chain(Entity):
         o id - int, residue resseq
         """
         if isinstance(id, int):
-            id=(' ', id, ' ')
+            id = (' ', id, ' ')
         return id
 
     # Special methods
@@ -65,7 +65,7 @@ class Chain(Entity):
         Arguments:
         o id - (string, int, string) or int
         """
-        id=self._translate_id(id)
+        id = self._translate_id(id)
         return Entity.__getitem__(self, id)
 
     def __contains__(self, id):
@@ -74,7 +74,7 @@ class Chain(Entity):
         Arguments:
         o id - (string, int, string) or int
         """
-        id=self._translate_id(id)
+        id = self._translate_id(id)
         return Entity.__contains__(self, id)
 
     def __delitem__(self, id):
@@ -82,7 +82,7 @@ class Chain(Entity):
         Arguments:
         o id - (string, int, string) or int
         """
-        id=self._translate_id(id)
+        id = self._translate_id(id)
         return Entity.__delitem__(self, id)
 
     def __repr__(self):
@@ -97,9 +97,9 @@ class Chain(Entity):
         (DisorderedResidue objects). This method unpacks them,
         ie. it returns a list of simple Residue objects.
         """
-        unpacked_list=[]
+        unpacked_list = []
         for residue in self.get_list():
-            if residue.is_disordered()==2:
+            if residue.is_disordered() == 2:
                 for dresidue in residue.disordered_get_list():
                     unpacked_list.append(dresidue)
             else:
@@ -118,7 +118,7 @@ class Chain(Entity):
         
             - id - (string, int, string) or int
         """
-        id=self._translate_id(id)
+        id = self._translate_id(id)
         return Entity.has_id(self, id)
 
     # Public

@@ -116,9 +116,9 @@ def parse(handle):
             primer = Primers()
             primer.size = int(line[19:])
             record.primers.append(primer)
-        elif line[5:19]=="FORWARD PRIMER":
+        elif line[5:19] == "FORWARD PRIMER":
             words = line.split()
-            if not primer or primer.size==0:
+            if not primer or primer.size == 0:
                 primer = Primers()
                 record.primers.append(primer)
             primer.forward_start = int(words[2])
@@ -126,9 +126,9 @@ def parse(handle):
             primer.forward_tm = float(words[4])
             primer.forward_gc = float(words[5])
             primer.forward_seq = words[6]
-        elif line[5:19]=="REVERSE PRIMER":
+        elif line[5:19] == "REVERSE PRIMER":
             words = line.split()
-            if not primer or primer.size==0:
+            if not primer or primer.size == 0:
                 primer = Primers()
                 record.primers.append(primer)
             primer.reverse_start = int(words[2])
@@ -136,9 +136,9 @@ def parse(handle):
             primer.reverse_tm = float(words[4])
             primer.reverse_gc = float(words[5])
             primer.reverse_seq = words[6]
-        elif line[5:19]=="INTERNAL OLIGO":
+        elif line[5:19] == "INTERNAL OLIGO":
             words = line.split()
-            if not primer or primer.size==0:
+            if not primer or primer.size == 0:
                 primer = Primers()
                 record.primers.append(primer)
             primer.internal_start = int(words[2])

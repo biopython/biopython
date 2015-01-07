@@ -120,16 +120,16 @@ class SequenceLine(object):
         self.seqtype = ''
         self.trace = ''
         if text is not None:
-            self.text=text
+            self.text = text
             self._init_from_text(text)
 
     def _init_from_text(self, text):
         parts = text.split('; ')
         for part in parts:
             key, val = part.split("=")
-            if key=='CLONE':
-                if val[:5]=='IMAGE':
-                    self.is_image=True
+            if key == 'CLONE':
+                if val[:5] == 'IMAGE':
+                    self.is_image = True
                     self.image = val[6:]
             setattr(self, key.lower(), val)
 
@@ -157,7 +157,7 @@ class ProtsimLine(object):
         self.pct = ''
         self.aln = ''
         if text is not None:
-            self.text=text
+            self.text = text
             self._init_from_text(text)
 
     def _init_from_text(self, text):
@@ -186,7 +186,7 @@ class STSLine(object):
         self.acc = ''
         self.unists = ''
         if text is not None:
-            self.text=text
+            self.text = text
             self._init_from_text(text)
 
     def _init_from_text(self, text):
@@ -228,22 +228,22 @@ class Record(object):
     """
 
     def __init__(self):
-        self.ID           = ''  # ID line
-        self.species      = ''  # Hs, Bt, etc.
-        self.title        = ''  # TITLE line
-        self.symbol       = ''  # GENE line
-        self.cytoband     = ''  # CYTOBAND line
-        self.express      = []  # EXPRESS line, parsed on ';'
-        self.restr_expr   = ''  # RESTR_EXPR line
+        self.ID = ''  # ID line
+        self.species = ''  # Hs, Bt, etc.
+        self.title = ''  # TITLE line
+        self.symbol = ''  # GENE line
+        self.cytoband = ''  # CYTOBAND line
+        self.express = []  # EXPRESS line, parsed on ';'
+        self.restr_expr = ''  # RESTR_EXPR line
         self.gnm_terminus = ''  # GNM_TERMINUS line
-        self.gene_id      = ''  # GENE_ID line
-        self.locuslink    = ''  # LOCUSLINK line
-        self.homol        = ''  # HOMOL line
-        self.chromosome   = ''  # CHROMOSOME line
-        self.protsim      = []  # PROTSIM entries, array of Protsims
-        self.sequence     = []  # SEQUENCE entries, array of Sequence entries
-        self.sts          = []  # STS entries, array of STS entries
-        self.txmap        = []  # TXMAP entries, array of TXMap entries
+        self.gene_id = ''  # GENE_ID line
+        self.locuslink = ''  # LOCUSLINK line
+        self.homol = ''  # HOMOL line
+        self.chromosome = ''  # CHROMOSOME line
+        self.protsim = []  # PROTSIM entries, array of Protsims
+        self.sequence = []  # SEQUENCE entries, array of Sequence entries
+        self.sts = []  # STS entries, array of STS entries
+        self.txmap = []  # TXMAP entries, array of TXMap entries
 
     def __repr__(self):
         return "<%s> %s %s\n%s" % (self.__class__.__name__,
@@ -278,46 +278,46 @@ def _read(handle):
     for line in handle:
         tag, value = line[:UG_INDENT].rstrip(), line[UG_INDENT:].rstrip()
         line = line.rstrip()
-        if tag=="ID":
+        if tag == "ID":
             record = Record()
             record.ID = value
             record.species = record.ID.split('.')[0]
-        elif tag=="TITLE":
+        elif tag == "TITLE":
             record.title = value
-        elif tag=="GENE":
+        elif tag == "GENE":
             record.symbol = value
-        elif tag=="GENE_ID":
+        elif tag == "GENE_ID":
             record.gene_id = value
-        elif tag=="LOCUSLINK":
+        elif tag == "LOCUSLINK":
             record.locuslink = value
-        elif tag=="HOMOL":
-            if value=="YES":
+        elif tag == "HOMOL":
+            if value == "YES":
                 record.homol = True
-            elif value=="NO":
+            elif value == "NO":
                 record.homol = True
             else:
                 raise ValueError("Cannot parse HOMOL line %s" % line)
-        elif tag=="EXPRESS":
+        elif tag == "EXPRESS":
             record.express = [word.strip() for word in value.split("|")]
-        elif tag=="RESTR_EXPR":
+        elif tag == "RESTR_EXPR":
             record.restr_expr = [word.strip() for word in value.split("|")]
-        elif tag=="CHROMOSOME":
+        elif tag == "CHROMOSOME":
             record.chromosome = value
-        elif tag=="CYTOBAND":
+        elif tag == "CYTOBAND":
             record.cytoband = value
-        elif tag=="PROTSIM":
+        elif tag == "PROTSIM":
             protsim = ProtsimLine(value)
             record.protsim.append(protsim)
-        elif tag=="SCOUNT":
+        elif tag == "SCOUNT":
             scount = int(value)
-        elif tag=="SEQUENCE":
+        elif tag == "SEQUENCE":
             sequence = SequenceLine(value)
             record.sequence.append(sequence)
-        elif tag=="STS":
+        elif tag == "STS":
             sts = STSLine(value)
             record.sts.append(sts)
-        elif tag=='//':
-            if len(record.sequence)!=scount:
+        elif tag == '//':
+            if len(record.sequence) != scount:
                 raise ValueError("The number of sequences specified in the record"
                                  " (%d) does not agree with the number of sequences found (%d)" % (scount, len(record.sequence)))
             return record

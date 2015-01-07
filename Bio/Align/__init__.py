@@ -387,7 +387,7 @@ class MultipleSeqAlignment(_Alignment):
             raise ValueError("When adding two alignments they must have the same length"
                              " (i.e. same number or rows)")
         alpha = Alphabet._consensus_alphabet([self._alphabet, other._alphabet])
-        merged = (left+right for left, right in zip(self, other))
+        merged = (left + right for left, right in zip(self, other))
         # Take any common annotation:
         annotations = dict()
         for k, v in self.annotations.items():
@@ -514,7 +514,7 @@ class MultipleSeqAlignment(_Alignment):
         elif isinstance(index, slice):
             # e.g. sub_align = align[i:j:k]
             return MultipleSeqAlignment(self._records[index], self._alphabet)
-        elif len(index)!=2:
+        elif len(index) != 2:
             raise TypeError("Invalid index type.")
 
         # Handle double indexing

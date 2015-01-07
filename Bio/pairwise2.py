@@ -261,23 +261,23 @@ alignment occurs.
                     keywds[self.param_names[i]] = args[i]
                     i += 1
                 elif self.param_names[i] == 'match':
-                    assert self.param_names[i+1] == 'mismatch'
-                    match, mismatch = args[i], args[i+1]
+                    assert self.param_names[i + 1] == 'mismatch'
+                    match, mismatch = args[i], args[i + 1]
                     keywds['match_fn'] = identity_match(match, mismatch)
                     i += 2
                 elif self.param_names[i] == 'match_dict':
                     keywds['match_fn'] = dictionary_match(args[i])
                     i += 1
                 elif self.param_names[i] == 'open':
-                    assert self.param_names[i+1] == 'extend'
-                    open, extend = args[i], args[i+1]
+                    assert self.param_names[i + 1] == 'extend'
+                    open, extend = args[i], args[i + 1]
                     pe = keywds.get('penalize_extend_when_opening', 0)
                     keywds['gap_A_fn'] = affine_penalty(open, extend, pe)
                     keywds['gap_B_fn'] = affine_penalty(open, extend, pe)
                     i += 2
                 elif self.param_names[i] == 'openA':
-                    assert self.param_names[i+3] == 'extendB'
-                    openA, extendA, openB, extendB = args[i:i+4]
+                    assert self.param_names[i + 3] == 'extendB'
+                    openA, extendA, openB, extendB = args[i:i + 4]
                     pe = keywds.get('penalize_extend_when_opening', 0)
                     keywds['gap_A_fn'] = affine_penalty(openA, extendA, pe)
                     keywds['gap_B_fn'] = affine_penalty(openB, extendB, pe)
@@ -307,9 +307,9 @@ alignment occurs.
             try:
                 n = len(value)
             except TypeError:
-                keywds['penalize_end_gaps'] = tuple([value]*2)
+                keywds['penalize_end_gaps'] = tuple([value] * 2)
             else:
-                assert n==2
+                assert n == 2
             return keywds
 
         def __call__(self, *args, **keywds):
@@ -364,7 +364,7 @@ def _align(sequenceA, sequenceB, match_fn, gap_A_fn, gap_B_fn,
     i = 0
     while i < len(starts):
         score, pos = starts[i]
-        if rint(abs(score-best_score)) > rint(tolerance):
+        if rint(abs(score - best_score)) > rint(tolerance):
             del starts[i]
         else:
             i += 1
@@ -420,35 +420,35 @@ def _make_score_matrix_generic(
         for col in range(1, lenB):
             # First, calculate the score that would occur by extending
             # the alignment without gaps.
-            best_score = score_matrix[row-1][col-1]
+            best_score = score_matrix[row - 1][col - 1]
             best_score_rint = rint(best_score)
-            best_indexes = [(row-1, col-1)]
+            best_indexes = [(row - 1, col - 1)]
 
             # Try to find a better score by opening gaps in sequenceA.
             # Do this by checking alignments from each column in the
             # previous row.  Each column represents a different
             # character to align from, and thus a different length
             # gap.
-            for i in range(0, col-1):
-                score = score_matrix[row-1][i] + gap_A_fn(row, col-1-i)
+            for i in range(0, col - 1):
+                score = score_matrix[row - 1][i] + gap_A_fn(row, col - 1 - i)
                 score_rint = rint(score)
                 if score_rint == best_score_rint:
                     best_score, best_score_rint = score, score_rint
-                    best_indexes.append((row-1, i))
+                    best_indexes.append((row - 1, i))
                 elif score_rint > best_score_rint:
                     best_score, best_score_rint = score, score_rint
-                    best_indexes = [(row-1, i)]
+                    best_indexes = [(row - 1, i)]
 
             # Try to find a better score by opening gaps in sequenceB.
-            for i in range(0, row-1):
-                score = score_matrix[i][col-1] + gap_B_fn(col, row-1-i)
+            for i in range(0, row - 1):
+                score = score_matrix[i][col - 1] + gap_B_fn(col, row - 1 - i)
                 score_rint = rint(score)
                 if score_rint == best_score_rint:
                     best_score, best_score_rint = score, score_rint
-                    best_indexes.append((i, col-1))
+                    best_indexes.append((i, col - 1))
                 elif score_rint > best_score_rint:
                     best_score, best_score_rint = score, score_rint
-                    best_indexes = [(i, col-1)]
+                    best_indexes = [(i, col - 1)]
 
             score_matrix[row][col] = best_score + \
                                      match_fn(sequenceA[row], sequenceB[col])
@@ -507,16 +507,16 @@ def _make_score_matrix_fast(
     # The best score and indexes for each row (goes down all columns).
     # I don't need to store the last row because it's the end of the
     # sequence.
-    row_cache_score, row_cache_index = [None]*(lenA-1), [None]*(lenA-1)
+    row_cache_score, row_cache_index = [None] * (lenA - 1), [None] * (lenA - 1)
     # The best score and indexes for each column (goes across rows).
-    col_cache_score, col_cache_index = [None]*(lenB-1), [None]*(lenB-1)
+    col_cache_score, col_cache_index = [None] * (lenB - 1), [None] * (lenB - 1)
 
-    for i in range(lenA-1):
+    for i in range(lenA - 1):
         # Initialize each row to be the alignment of sequenceA[i] to
         # sequenceB[0], plus opening a gap in sequenceA.
         row_cache_score[i] = score_matrix[i][0] + first_A_gap
         row_cache_index[i] = [(i, 0)]
-    for i in range(lenB-1):
+    for i in range(lenB - 1):
         col_cache_score[i] = score_matrix[0][i] + first_B_gap
         col_cache_index[i] = [(0, i)]
 
@@ -525,18 +525,18 @@ def _make_score_matrix_fast(
         for col in range(1, lenB):
             # Calculate the score that would occur by extending the
             # alignment without gaps.
-            nogap_score = score_matrix[row-1][col-1]
+            nogap_score = score_matrix[row - 1][col - 1]
 
             # Check the score that would occur if there were a gap in
             # sequence A.
             if col > 1:
-                row_score = row_cache_score[row-1]
+                row_score = row_cache_score[row - 1]
             else:
                 row_score = nogap_score - 1   # Make sure it's not the best.
             # Check the score that would occur if there were a gap in
             # sequence B.
             if row > 1:
-                col_score = col_cache_score[col-1]
+                col_score = col_cache_score[col - 1]
             else:
                 col_score = nogap_score - 1
 
@@ -544,11 +544,11 @@ def _make_score_matrix_fast(
             best_score_rint = rint(best_score)
             best_index = []
             if best_score_rint == rint(nogap_score):
-                best_index.append((row-1, col-1))
+                best_index.append((row - 1, col - 1))
             if best_score_rint == rint(row_score):
-                best_index.extend(row_cache_index[row-1])
+                best_index.extend(row_cache_index[row - 1])
             if best_score_rint == rint(col_score):
-                best_index.extend(col_cache_index[col-1])
+                best_index.extend(col_cache_index[col - 1])
 
             # Set the score and traceback matrices.
             score = best_score + match_fn(sequenceA[row], sequenceB[col])
@@ -563,36 +563,36 @@ def _make_score_matrix_fast(
             # previous cached score, or opening a new gap from the
             # most previously seen character.  Compare the two scores
             # and keep the best one.
-            open_score = score_matrix[row-1][col-1] + first_B_gap
-            extend_score = col_cache_score[col-1] + extend_B
+            open_score = score_matrix[row - 1][col - 1] + first_B_gap
+            extend_score = col_cache_score[col - 1] + extend_B
             open_score_rint, extend_score_rint = \
                              rint(open_score), rint(extend_score)
             if open_score_rint > extend_score_rint:
-                col_cache_score[col-1] = open_score
-                col_cache_index[col-1] = [(row-1, col-1)]
+                col_cache_score[col - 1] = open_score
+                col_cache_index[col - 1] = [(row - 1, col - 1)]
             elif extend_score_rint > open_score_rint:
-                col_cache_score[col-1] = extend_score
+                col_cache_score[col - 1] = extend_score
             else:
-                col_cache_score[col-1] = open_score
-                if (row-1, col-1) not in col_cache_index[col-1]:
-                    col_cache_index[col-1] = col_cache_index[col-1] + \
-                                             [(row-1, col-1)]
+                col_cache_score[col - 1] = open_score
+                if (row - 1, col - 1) not in col_cache_index[col - 1]:
+                    col_cache_index[col - 1] = col_cache_index[col - 1] + \
+                                             [(row - 1, col - 1)]
 
             # Update the cached row scores.
-            open_score = score_matrix[row-1][col-1] + first_A_gap
-            extend_score = row_cache_score[row-1] + extend_A
+            open_score = score_matrix[row - 1][col - 1] + first_A_gap
+            extend_score = row_cache_score[row - 1] + extend_A
             open_score_rint, extend_score_rint = \
                              rint(open_score), rint(extend_score)
             if open_score_rint > extend_score_rint:
-                row_cache_score[row-1] = open_score
-                row_cache_index[row-1] = [(row-1, col-1)]
+                row_cache_score[row - 1] = open_score
+                row_cache_index[row - 1] = [(row - 1, col - 1)]
             elif extend_score_rint > open_score_rint:
-                row_cache_score[row-1] = extend_score
+                row_cache_score[row - 1] = extend_score
             else:
-                row_cache_score[row-1] = open_score
-                if (row-1, col-1) not in row_cache_index[row-1]:
-                    row_cache_index[row-1] = row_cache_index[row-1] + \
-                                             [(row-1, col-1)]
+                row_cache_score[row - 1] = open_score
+                if (row - 1, col - 1) not in row_cache_index[row - 1]:
+                    row_cache_index[row - 1] = row_cache_index[row - 1] + \
+                                             [(row - 1, col - 1)]
 
     return score_matrix, trace_matrix
 
@@ -621,7 +621,7 @@ def _recover_alignments(sequenceA, sequenceB, starts,
         if align_globally:
             begin, end = None, None
         else:
-            begin, end = None, -max(lenA-row, lenB-col)+1
+            begin, end = None, -max(lenA - row, lenB - col) + 1
             if not end:
                 end = None
         # Initialize the in_process list with empty sequences of the
@@ -652,11 +652,11 @@ def _recover_alignments(sequenceA, sequenceB, starts,
             tracebacks.append((seqA, seqB, score, begin, end))
         else:
             nextA, nextB = next_pos
-            nseqA, nseqB = prevA-nextA, prevB-nextB
+            nseqA, nseqB = prevA - nextA, prevB - nextB
             maxseq = max(nseqA, nseqB)
-            ngapA, ngapB = maxseq-nseqA, maxseq-nseqB
-            seqA = sequenceA[nextA:nextA+nseqA] + gap_char*ngapA + seqA
-            seqB = sequenceB[nextB:nextB+nseqB] + gap_char*ngapB + seqB
+            ngapA, ngapB = maxseq - nseqA, maxseq - nseqB
+            seqA = sequenceA[nextA:nextA + nseqA] + gap_char * ngapA + seqA
+            seqB = sequenceB[nextB:nextB + nseqB] + gap_char * ngapB + seqB
             prev_pos = next_pos
             # local alignment stops early if score falls < 0
             if not align_globally and score_matrix[nextA][nextB] <= 0:
@@ -694,16 +694,16 @@ def _find_global_start(sequenceA, sequenceB,
     # Search all rows in the last column.
     for row in range(nrows):
         # Find the score, penalizing end gaps if necessary.
-        score = score_matrix[row][ncols-1]
+        score = score_matrix[row][ncols - 1]
         if penalize_end_gaps[1]:
-            score += gap_B_fn(ncols, nrows-row-1)
-        positions.append((score, (row, ncols-1)))
+            score += gap_B_fn(ncols, nrows - row - 1)
+        positions.append((score, (row, ncols - 1)))
     # Search all columns in the last row.
-    for col in range(ncols-1):
-        score = score_matrix[nrows-1][col]
+    for col in range(ncols - 1):
+        score = score_matrix[nrows - 1][col]
         if penalize_end_gaps[0]:
-            score += gap_A_fn(nrows, ncols-col-1)
-        positions.append((score, (nrows-1, col)))
+            score += gap_A_fn(nrows, ncols - col - 1)
+        positions.append((score, (nrows - 1, col)))
     return positions
 
 
@@ -747,9 +747,9 @@ def _pad_until_equal(s1, s2, char):
     # Add char to the end of s1 or s2 until they are equal length.
     ls1, ls2 = len(s1), len(s2)
     if ls1 < ls2:
-        s1 = _pad(s1, char, ls2-ls1)
+        s1 = _pad(s1, char, ls2 - ls1)
     elif ls2 < ls1:
-        s2 = _pad(s2, char, ls1-ls2)
+        s2 = _pad(s2, char, ls1 - ls2)
     return s1, s2
 
 
@@ -758,20 +758,20 @@ def _lpad_until_equal(s1, s2, char):
     # length.
     ls1, ls2 = len(s1), len(s2)
     if ls1 < ls2:
-        s1 = _lpad(s1, char, ls2-ls1)
+        s1 = _lpad(s1, char, ls2 - ls1)
     elif ls2 < ls1:
-        s2 = _lpad(s2, char, ls1-ls2)
+        s2 = _lpad(s2, char, ls1 - ls2)
     return s1, s2
 
 
 def _pad(s, char, n):
     # Append n chars to the end of s.
-    return s + char*n
+    return s + char * n
 
 
 def _lpad(s, char, n):
     # Prepend n chars to the beginning of s.
-    return char*n + s
+    return char * n + s
 
 _PRECISION = 1000
 
@@ -873,7 +873,7 @@ def format_alignment(align1, align2, score, begin, end):
     """
     s = []
     s.append("%s\n" % align1)
-    s.append("%s%s\n" % (" "*begin, "|"*(end-begin)))
+    s.append("%s%s\n" % (" " * begin, "|" * (end - begin)))
     s.append("%s\n" % align2)
     s.append("  Score=%g\n" % score)
     return ''.join(s)

@@ -36,32 +36,32 @@ from Bio.PDB.PDBParser import PDBParser
 
 
 # Match C in DSSP
-_dssp_cys=re.compile('[a-z]')
+_dssp_cys = re.compile('[a-z]')
 
 # Maximal ASA of amino acids
 # Values from Sander & Rost, (1994), Proteins, 20:216-226
 # Used for relative accessibility
-MAX_ACC={}
-MAX_ACC["ALA"]=106.0
-MAX_ACC["CYS"]=135.0
-MAX_ACC["ASP"]=163.0
-MAX_ACC["GLU"]=194.0
-MAX_ACC["PHE"]=197.0
-MAX_ACC["GLY"]=84.0
-MAX_ACC["HIS"]=184.0
-MAX_ACC["ILE"]=169.0
-MAX_ACC["LYS"]=205.0
-MAX_ACC["LEU"]=164.0
-MAX_ACC["MET"]=188.0
-MAX_ACC["ASN"]=157.0
-MAX_ACC["PRO"]=136.0
-MAX_ACC["GLN"]=198.0
-MAX_ACC["ARG"]=248.0
-MAX_ACC["SER"]=130.0
-MAX_ACC["THR"]=142.0
-MAX_ACC["VAL"]=142.0
-MAX_ACC["TRP"]=227.0
-MAX_ACC["TYR"]=222.0
+MAX_ACC = {}
+MAX_ACC["ALA"] = 106.0
+MAX_ACC["CYS"] = 135.0
+MAX_ACC["ASP"] = 163.0
+MAX_ACC["GLU"] = 194.0
+MAX_ACC["PHE"] = 197.0
+MAX_ACC["GLY"] = 84.0
+MAX_ACC["HIS"] = 184.0
+MAX_ACC["ILE"] = 169.0
+MAX_ACC["LYS"] = 205.0
+MAX_ACC["LEU"] = 164.0
+MAX_ACC["MET"] = 188.0
+MAX_ACC["ASN"] = 157.0
+MAX_ACC["PRO"] = 136.0
+MAX_ACC["GLN"] = 198.0
+MAX_ACC["ARG"] = 248.0
+MAX_ACC["SER"] = 130.0
+MAX_ACC["THR"] = 142.0
+MAX_ACC["VAL"] = 142.0
+MAX_ACC["TRP"] = 227.0
+MAX_ACC["TYR"] = 222.0
 
 
 def ss_to_index(ss):
@@ -71,11 +71,11 @@ def ss_to_index(ss):
     E=1
     C=2
     """
-    if ss=='H':
+    if ss == 'H':
         return 0
-    if ss=='E':
+    if ss == 'E':
         return 1
-    if ss=='C':
+    if ss == 'C':
         return 2
     assert 0
 
@@ -166,9 +166,9 @@ def _make_dssp_dict(handle):
             # digits, and shift parsing the rest of the line by that amount.
             if l[34] != ' ':
                 shift = l[34:].find(' ')
-                acc = int((l[34+shift:38+shift]))
-                phi = float(l[103+shift:109+shift])
-                psi = float(l[109+shift:115+shift])
+                acc = int((l[34 + shift:38 + shift]))
+                phi = float(l[103 + shift:109 + shift])
+                psi = float(l[109 + shift:115 + shift])
             else:
                 raise ValueError(exc)
         res_id = (" ", resseq, icode)
@@ -300,7 +300,7 @@ class DSSP(AbstractResiduePropertyMap):
             # Relative accessibility
             resname = res.get_resname()
             try:
-                rel_acc = acc/MAX_ACC[resname]
+                rel_acc = acc / MAX_ACC[resname]
             except KeyError:
                 # Invalid value for resname
                 rel_acc = 'NA'

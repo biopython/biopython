@@ -57,9 +57,9 @@ ftp_proxy = ''
 #   Do not modify the addresses.
 #
 ftp_Rebase = 'ftp://ftp.neb.com/'
-ftp_emb_e = ftp_Rebase+'pub/rebase/emboss_e.###'
-ftp_emb_s = ftp_Rebase+'pub/rebase/emboss_s.###'
-ftp_emb_r = ftp_Rebase+'pub/rebase/emboss_r.###'
+ftp_emb_e = ftp_Rebase + 'pub/rebase/emboss_e.###'
+ftp_emb_s = ftp_Rebase + 'pub/rebase/emboss_s.###'
+ftp_emb_r = ftp_Rebase + 'pub/rebase/emboss_r.###'
 ###############################################################################
 #                   ftp rebase account.
 #

@@ -22,11 +22,11 @@ class Model(Entity):
         o id - int
         o serial_num - int
         """
-        self.level="M"
+        self.level = "M"
         if serial_num is None:
-            self.serial_num=id
+            self.serial_num = id
         else:
-            self.serial_num=serial_num
+            self.serial_num = serial_num
 
         Entity.__init__(self, id)
 
@@ -42,12 +42,12 @@ class Model(Entity):
         Arguments:
         o c1, c2 - Chain objects
         """
-        id1=c1.get_id()
-        id2= c2.get_id()
+        id1 = c1.get_id()
+        id2 = c2.get_id()
         # make sure blank chains come last (often waters)
-        if id1==" " and not id2==" ":
+        if id1 == " " and not id2 == " ":
             return 1
-        elif id2==" " and not id1==" ":
+        elif id2 == " " and not id1 == " ":
             return -1
         return cmp(id1, id2)
 

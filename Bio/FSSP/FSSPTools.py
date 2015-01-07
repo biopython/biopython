@@ -30,7 +30,7 @@ def mult_align(sum_dict, align_dict):
     for j in align_dict.abs(1).pos_align_dict:
         mult_align_dict[j] = ''
 
-    for i in range(1, len(align_dict)+1):
+    for i in range(1, len(align_dict) + 1):
         # loop on positions
         for j in align_dict.abs(i).pos_align_dict:
             # loop within a position
@@ -39,7 +39,7 @@ def mult_align(sum_dict, align_dict):
     fssp_align = MultipleSeqAlignment([], alphabet=alpha)
     for i in sorted(mult_align_dict):
         fssp_align.append(SeqRecord(Seq(mult_align_dict[i], alpha),
-                                    sum_dict[i].pdb2+sum_dict[i].chain2))
+                                    sum_dict[i].pdb2 + sum_dict[i].chain2))
     return fssp_align
 
 
@@ -85,7 +85,7 @@ def name_filter(sum_dict, align_dict, name_list):
     new_align_dict = copy.deepcopy(align_dict)
     for cur_pdb_name in name_list:
         for prot_num in sum_dict:
-            if sum_dict[prot_num].pdb2+sum_dict[prot_num].chain2 == cur_pdb_name:
+            if sum_dict[prot_num].pdb2 + sum_dict[prot_num].chain2 == cur_pdb_name:
                 new_sum_dict[prot_num] = sum_dict[prot_num]
     prot_numbers = sorted(new_sum_dict)
     for pos_num in new_align_dict.abs_res_dict:

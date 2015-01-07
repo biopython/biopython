@@ -124,7 +124,7 @@ def read(results_file):
         elif "(C) LWL85, LPB93 & LWLm methods" in line:
             results = _parse_yn00.parse_yn00(lines[yn00_start:line_num], results,
                     sequences)
-            results = _parse_yn00.parse_others(lines[line_num+1:], results,
+            results = _parse_yn00.parse_others(lines[line_num + 1:], results,
                     sequences)
     if len(results) == 0:
         raise ValueError("Invalid results file.")

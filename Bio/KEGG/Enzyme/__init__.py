@@ -217,23 +217,23 @@ def parse(handle):
     """
     record = Record()
     for line in handle:
-        if line[:3]=="///":
+        if line[:3] == "///":
             yield record
             record = Record()
             continue
-        if line[:12]!="            ":
+        if line[:12] != "            ":
             keyword = line[:12]
         data = line[12:].strip()
-        if keyword=="ENTRY       ":
+        if keyword == "ENTRY       ":
             words = data.split()
             record.entry = words[1]
-        elif keyword=="CLASS       ":
+        elif keyword == "CLASS       ":
             record.classname.append(data)
-        elif keyword=="COFACTOR    ":
+        elif keyword == "COFACTOR    ":
             record.cofactor.append(data)
-        elif keyword=="COMMENT     ":
+        elif keyword == "COMMENT     ":
             record.comment.append(data)
-        elif keyword=="DBLINKS     ":
+        elif keyword == "DBLINKS     ":
             if ":" in data:
                 key, values = data.split(":")
                 values = values.split()
@@ -245,7 +245,7 @@ def parse(handle):
                 values.extend(data.split())
                 row = key, values
                 record.dblinks[-1] = row
-        elif keyword=="DISEASE     ":
+        elif keyword == "DISEASE     ":
             if ":" in data:
                 database, data = data.split(":")
                 number, name = data.split(None, 1)
@@ -257,10 +257,10 @@ def parse(handle):
                 name = name + " " + data
                 row = database, number, name
                 record.disease[-1] = row
-        elif keyword=="EFFECTOR    ":
+        elif keyword == "EFFECTOR    ":
             record.effector.append(data.strip(";"))
-        elif keyword=="GENES       ":
-            if data[3:5]==': ':
+        elif keyword == "GENES       ":
+            if data[3:5] == ': ':
                 key, values = data.split(":", 1)
                 values = [value.split("(")[0] for value in values.split()]
                 row = (key, values)
@@ -273,12 +273,12 @@ def parse(handle):
                     values.append(value)
                 row = key, values
                 record.genes[-1] = row
-        elif keyword=="INHIBITOR   ":
+        elif keyword == "INHIBITOR   ":
             record.inhibitor.append(data.strip(";"))
-        elif keyword=="NAME        ":
+        elif keyword == "NAME        ":
             record.name.append(data.strip(";"))
-        elif keyword=="PATHWAY     ":
-            if data[:5]=='PATH:':
+        elif keyword == "PATHWAY     ":
+            if data[:5] == 'PATH:':
                 _, map_num, name = data.split(None, 2)
                 pathway = ('PATH', map_num, name)
                 record.pathway.append(pathway)
@@ -286,12 +286,12 @@ def parse(handle):
                 ec_num, name = data.split(None, 1)
                 pathway = 'PATH', ec_num, name
                 record.pathway.append(pathway)
-        elif keyword=="PRODUCT     ":
+        elif keyword == "PRODUCT     ":
             record.product.append(data.strip(";"))
-        elif keyword=="REACTION    ":
+        elif keyword == "REACTION    ":
             record.reaction.append(data.strip(";"))
-        elif keyword=="STRUCTURES  ":
-            if data[:4]=='PDB:':
+        elif keyword == "STRUCTURES  ":
+            if data[:4] == 'PDB:':
                 database = data[:3]
                 accessions = data[4:].split()
                 row = (database, accessions)
@@ -302,9 +302,9 @@ def parse(handle):
                 accessions.extend(data.split())
                 row = (database, accessions)
                 record.structures[-1] = row
-        elif keyword=="SUBSTRATE   ":
+        elif keyword == "SUBSTRATE   ":
             record.substrate.append(data.strip(";"))
-        elif keyword=="SYSNAME     ":
+        elif keyword == "SYSNAME     ":
             record.sysname.append(data.strip(";"))
 
 

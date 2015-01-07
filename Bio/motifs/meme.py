@@ -118,7 +118,7 @@ class Record(list):
     def __getitem__(self, key):
         if isinstance(key, str):
             for motif in self:
-                if motif.name==key:
+                if motif.name == key:
                     return motif
         else:
             return list.__getitem__(self, key)
@@ -264,7 +264,7 @@ def __read_motif_sequences(handle, motif_name, alphabet, length, revcomp):
         else:
             strand = '+'
         sequence = words[4]
-        assert len(sequence)==length
+        assert len(sequence) == length
         instance = Instance(sequence, alphabet)
         instance.motif_name = motif_name
         instance.sequence_name = words[0]

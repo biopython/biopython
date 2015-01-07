@@ -216,7 +216,7 @@ def FastaM10Iterator(handle, alphabet=single_letter_alphabet):
                 # query >>><<< marker line.
                 yield build_hsp()
             state = state_NONE
-            query_descr = line[line.find(">>>")+3:].strip()
+            query_descr = line[line.find(">>>") + 3:].strip()
             query_id = query_descr.split(None, 1)[0]
             match_id = None
             header_tags = {}
@@ -616,7 +616,7 @@ Function used was FASTA [version 34.26 January 12, 2007]
             print(filename)
             print("=" * len(filename))
             for i, a in enumerate(FastaM10Iterator(open(os.path.join(path, filename)))):
-                print("#%i, %s" % (i+1, a))
+                print("#%i, %s" % (i + 1, a))
                 for r in a:
                     if "-" in r.seq:
                         assert r.seq.alphabet.gap_char == "-"

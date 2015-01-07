@@ -42,7 +42,7 @@ class Graph(object):
     def __str__(self):
         """Returns a concise string description of this graph."""
         nodenum = len(self._adjacency_list)
-        edgenum = reduce(lambda x, y: x+y,
+        edgenum = reduce(lambda x, y: x + y,
                          [len(v) for v in self._adjacency_list.values()])
         labelnum = len(self._label_map)
         return "<Graph: " + \

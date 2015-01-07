@@ -161,7 +161,7 @@ class Hit(_BaseSearchObject):
         return bool(self.hsps)
 
     # Python 2:
-    __nonzero__= __bool__
+    __nonzero__ = __bool__
 
     def __contains__(self, hsp):
         return hsp in self._items
@@ -190,11 +190,11 @@ class Hit(_BaseSearchObject):
             lines.append(' HSPs: ?')
         else:
             lines.append(' HSPs: %s  %s  %s  %s  %s  %s' %
-                    ('-'*4, '-'*8, '-'*9, '-'*6, '-'*15, '-'*21))
+                    ('-' * 4, '-' * 8, '-' * 9, '-' * 6, '-' * 15, '-' * 21))
             pattern = '%11s  %8s  %9s  %6s  %15s  %21s'
             lines.append(pattern % ('#', 'E-value', 'Bit score', 'Span',
                     'Query range', 'Hit range'))
-            lines.append(pattern % ('-'*4, '-'*8, '-'*9, '-'*6, '-'*15, '-'*21))
+            lines.append(pattern % ('-' * 4, '-' * 8, '-' * 9, '-' * 6, '-' * 15, '-' * 21))
             for idx, hsp in enumerate(self.hsps):
                 # evalue
                 evalue = getattr_str(hsp, 'evalue', fmt='%.2g')

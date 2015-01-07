@@ -37,14 +37,14 @@ class NeighborSearch(object):
          - bucket_size - bucket size of KD tree. You can play around
            with this to optimize speed if you feel like it.
         """
-        self.atom_list=atom_list
+        self.atom_list = atom_list
         # get the coordinates
         coord_list = [a.get_coord() for a in atom_list]
         # to Nx3 array of type float
-        self.coords=numpy.array(coord_list).astype("f")
-        assert(bucket_size>1)
-        assert(self.coords.shape[1]==3)
-        self.kdt=KDTree(3, bucket_size)
+        self.coords = numpy.array(coord_list).astype("f")
+        assert(bucket_size > 1)
+        assert(self.coords.shape[1] == 3)
+        self.kdt = KDTree(3, bucket_size)
         self.kdt.set_coords(self.coords)
 
     # Private
@@ -55,13 +55,13 @@ class NeighborSearch(object):
         # thereby removing duplicate (parent entity, parent entity)
         # pairs.
         # o pair_list - a list of (entity, entity) tuples
-        parent_pair_list=[]
+        parent_pair_list = []
         for (e1, e2) in pair_list:
-            p1=e1.get_parent()
-            p2=e2.get_parent()
-            if p1==p2:
+            p1 = e1.get_parent()
+            p2 = e2.get_parent()
+            if p1 == p2:
                 continue
-            elif p1<p2:
+            elif p1 < p2:
                 parent_pair_list.append((p1, p2))
             else:
                 parent_pair_list.append((p2, p1))
@@ -87,13 +87,13 @@ class NeighborSearch(object):
         if level not in entity_levels:
             raise PDBException("%s: Unknown level" % level)
         self.kdt.search(center, radius)
-        indices=self.kdt.get_indices()
-        n_atom_list=[]
-        atom_list=self.atom_list
+        indices = self.kdt.get_indices()
+        n_atom_list = []
+        atom_list = self.atom_list
         for i in indices:
-            a=atom_list[i]
+            a = atom_list[i]
             n_atom_list.append(a)
-        if level=="A":
+        if level == "A":
             return n_atom_list
         else:
             return unfold_entities(n_atom_list, level)
@@ -112,29 +112,29 @@ class NeighborSearch(object):
         if level not in entity_levels:
             raise PDBException("%s: Unknown level" % level)
         self.kdt.all_search(radius)
-        indices=self.kdt.all_get_indices()
-        atom_list=self.atom_list
-        atom_pair_list=[]
+        indices = self.kdt.all_get_indices()
+        atom_list = self.atom_list
+        atom_pair_list = []
         for i1, i2 in indices:
-            a1=atom_list[i1]
-            a2=atom_list[i2]
+            a1 = atom_list[i1]
+            a2 = atom_list[i2]
             atom_pair_list.append((a1, a2))
-        if level=="A":
+        if level == "A":
             # return atoms
             return atom_pair_list
-        next_level_pair_list=atom_pair_list
+        next_level_pair_list = atom_pair_list
         for l in ["R", "C", "M", "S"]:
-            next_level_pair_list=self._get_unique_parent_pairs(next_level_pair_list)
-            if level==l:
+            next_level_pair_list = self._get_unique_parent_pairs(next_level_pair_list)
+            if level == l:
                 return next_level_pair_list
 
-if __name__=="__main__":
+if __name__ == "__main__":
 
     from numpy.random import random
 
     class Atom(object):
         def __init__(self):
-            self.coord=(100*random(3))
+            self.coord = (100 * random(3))
 
         def get_coord(self):
             return self.coord

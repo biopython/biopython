@@ -39,15 +39,15 @@ except AttributeError:
         elif logx - logy > 100:
             return logx
         minxy = min(logx, logy)
-        return minxy + numpy.log(numpy.exp(logx-minxy) + numpy.exp(logy-minxy))
+        return minxy + numpy.log(numpy.exp(logx - minxy) + numpy.exp(logy - minxy))
 
 
 def itemindex(values):
     d = {}
     entries = enumerate(values[::-1])
-    n = len(values)-1
+    n = len(values) - 1
     for index, key in entries:
-        d[key] = n-index
+        d[key] = n - index
     return d
 
 numpy.random.seed()
@@ -251,7 +251,7 @@ def _baum_welch(N, M, training_outputs,
             llik += x
         if update_fn is not None:
             update_fn(i, llik)
-        if prev_llik is not None and numpy.fabs(prev_llik-llik) < 0.1:
+        if prev_llik is not None and numpy.fabs(prev_llik - llik) < 0.1:
             break
         prev_llik = llik
     else:
@@ -287,7 +287,7 @@ def _baum_welch_one(N, M, outputs,
                 lp = fmat[i][t] + \
                      lp_transition[i][j] + \
                      lp_emission[i][k] + \
-                     bmat[j][t+1]
+                     bmat[j][t + 1]
                 lp_traverse[i][j] = lp
         # Normalize the probability for this time step.
         lp_arc[:, :, t] = lp_traverse - _logsum(lp_traverse)
@@ -323,7 +323,7 @@ def _baum_welch_one(N, M, outputs,
     # transitions out of i when k is observed, divided by the sum of
     # the transitions out of i.
     for i in range(N):
-        ksum = numpy.zeros(M)+LOG0    # ksum[k] is the sum of all i with k.
+        ksum = numpy.zeros(M) + LOG0    # ksum[k] is the sum of all i with k.
         for t in range(T):
             k = outputs[t]
             for j in range(N):
@@ -349,18 +349,18 @@ def _forward(N, T, lp_initial, lp_transition, lp_emission, outputs):
     # Nx(T+1) matrix, where the last column is the total probability
     # of the output.
 
-    matrix = numpy.zeros((N, T+1))
+    matrix = numpy.zeros((N, T + 1))
 
     # Initialize the first column to be the initial values.
     matrix[:, 0] = lp_initial
-    for t in range(1, T+1):
-        k = outputs[t-1]
+    for t in range(1, T + 1):
+        k = outputs[t - 1]
         for j in range(N):
             # The probability of the state is the sum of the
             # transitions from all the states from time t-1.
             lprob = LOG0
             for i in range(N):
-                lp = matrix[i][t-1] + \
+                lp = matrix[i][t - 1] + \
                      lp_transition[i][j] + \
                      lp_emission[i][k]
                 lprob = logaddexp(lprob, lp)
@@ -369,15 +369,15 @@ def _forward(N, T, lp_initial, lp_transition, lp_emission, outputs):
 
 
 def _backward(N, T, lp_transition, lp_emission, outputs):
-    matrix = numpy.zeros((N, T+1))
-    for t in range(T-1, -1, -1):
+    matrix = numpy.zeros((N, T + 1))
+    for t in range(T - 1, -1, -1):
         k = outputs[t]
         for i in range(N):
             # The probability of the state is the sum of the
             # transitions from all the states from time t+1.
             lprob = LOG0
             for j in range(N):
-                lp = matrix[j][t+1] + \
+                lp = matrix[j][t + 1] + \
                      lp_transition[i][j] + \
                      lp_emission[i][k]
                 lprob = logaddexp(lprob, lp)
@@ -457,8 +457,8 @@ def _mle(N, M, training_outputs, training_states, pseudo_initial,
     if pseudo_transition:
         p_transition = p_transition + pseudo_transition
     for states in training_states:
-        for n in range(len(states)-1):
-            i, j = states[n], states[n+1]
+        for n in range(len(states) - 1):
+            i, j = states[n], states[n + 1]
             p_transition[i, j] += 1
     for i in range(len(p_transition)):
         p_transition[i, :] = p_transition[i, :] / sum(p_transition[i, :])
@@ -522,7 +522,7 @@ def _viterbi(N, lp_initial, lp_transition, lp_emission, output):
         k = output[t]
         for j in range(N):
             # Find the most likely place it came from.
-            i_scores = scores[:, t-1] + \
+            i_scores = scores[:, t - 1] + \
                        lp_transition[:, j] + \
                        lp_emission[j, k]
             indexes = _argmaxes(i_scores)
@@ -536,9 +536,9 @@ def _viterbi(N, lp_initial, lp_transition, lp_emission, output):
     # it by keeping our own stack.
     in_process = []    # list of (t, states, score)
     results = []       # return values.  list of (states, score)
-    indexes = _argmaxes(scores[:, T-1])      # pick the first place
+    indexes = _argmaxes(scores[:, T - 1])      # pick the first place
     for i in indexes:
-        in_process.append((T-1, [i], scores[i][T-1]))
+        in_process.append((T - 1, [i], scores[i][T - 1]))
     while in_process:
         t, states, score = in_process.pop()
         if t == 0:
@@ -546,7 +546,7 @@ def _viterbi(N, lp_initial, lp_transition, lp_emission, output):
         else:
             indexes = backtrace[states[0]][t]
             for i in indexes:
-                in_process.append((t-1, [i]+states, score))
+                in_process.append((t - 1, [i] + states, score))
     return results
 
 
@@ -581,11 +581,11 @@ def _copy_and_check(matrix, desired_shape):
         raise ValueError("Incorrect dimension")
     # Make sure it's normalized.
     if len(matrix.shape) == 1:
-        if numpy.fabs(sum(matrix)-1.0) > 0.01:
+        if numpy.fabs(sum(matrix) - 1.0) > 0.01:
             raise ValueError("matrix not normalized to 1.0")
     elif len(matrix.shape) == 2:
         for i in range(len(matrix)):
-            if numpy.fabs(sum(matrix[i])-1.0) > 0.01:
+            if numpy.fabs(sum(matrix[i]) - 1.0) > 0.01:
                 raise ValueError("matrix %d not normalized to 1.0" % i)
     else:
         raise ValueError("I don't handle matrices > 2 dimensions")

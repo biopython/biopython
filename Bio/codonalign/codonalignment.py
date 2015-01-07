@@ -123,7 +123,7 @@ class CodonAlignment(MultipleSeqAlignment):
         for i in range(size):
             dn_matrix.append([])
             ds_matrix.append([])
-            for j in range(i+1):
+            for j in range(i + 1):
                 if i != j:
                     dn, ds = cal_dn_ds(self._records[i], self._records[j],
                                        method=method)
@@ -188,7 +188,7 @@ def mktest(codon_alns, codon_table=default_codon_table, alpha=0.05):
     if len(set(codon_aln_len)) != 1:
         raise RuntimeError("CodonAlignment object for mktest should be of"
                            " equal length.")
-    codon_num = codon_aln_len[0]//3
+    codon_num = codon_aln_len[0] // 3
     # prepare codon_dict (taking stop codon as an extra amino acid)
     codon_dict = copy.deepcopy(codon_table.forward_table)
     for stop in codon_table.stop_codons:
@@ -260,7 +260,7 @@ def _get_codon2codon_matrix(codon_table=default_codon_table):
         graph_nonsyn[codon] = {}
         for p, b in enumerate(codon):
             for j in base_tuple:
-                tmp_codon = codon[0:p] + j + codon[p+1:]
+                tmp_codon = codon[0:p] + j + codon[p + 1:]
                 if codon_dict[codon] != codon_dict[tmp_codon]:
                     graph_nonsyn[codon][tmp_codon] = 1
                     graph[codon][tmp_codon] = 1
@@ -345,8 +345,8 @@ def _dijkstra(graph, start, end):
         else:
             break
     path.insert(0, start)  # Finally, insert the start vertex
-    for i in range(len(path)-1):
-        distance += graph[path[i]][path[i+1]]
+    for i in range(len(path) - 1):
+        distance += graph[path[i]][path[i + 1]]
     return distance
 
 
@@ -432,10 +432,10 @@ def _G_test(site_counts):
     tot_non = site_counts[1] + site_counts[3]
     tot_fix = sum(site_counts[:2])
     tot_poly = sum(site_counts[2:])
-    exp = [tot_fix*tot_syn/tot, tot_fix*tot_non/tot,
-           tot_poly*tot_syn/tot, tot_poly*tot_non/tot]
+    exp = [tot_fix * tot_syn / tot, tot_fix * tot_non / tot,
+           tot_poly * tot_syn / tot, tot_poly * tot_non / tot]
     for obs, ex in zip(site_counts, exp):
-        G += obs*log(obs/ex)
+        G += obs * log(obs / ex)
     G *= 2
     # return 1-chi2.cdf(G, 1) # only 1 dof for 2x2 table
     return chisqprob(G, 1)

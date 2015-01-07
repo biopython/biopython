@@ -213,9 +213,9 @@ def _pos(pos_str, offset=0):
 
     """
     if pos_str.startswith("<"):
-        return SeqFeature.BeforePosition(int(pos_str[1:])+offset)
+        return SeqFeature.BeforePosition(int(pos_str[1:]) + offset)
     elif pos_str.startswith(">"):
-        return SeqFeature.AfterPosition(int(pos_str[1:])+offset)
+        return SeqFeature.AfterPosition(int(pos_str[1:]) + offset)
     elif _re_within_position.match(pos_str):
         s, e = pos_str[1:-1].split(".")
         s = int(s) + offset
@@ -227,8 +227,8 @@ def _pos(pos_str, offset=0):
         return SeqFeature.WithinPosition(default, left=s, right=e)
     elif _re_oneof_position.match(pos_str):
         assert pos_str.startswith("one-of(")
-        assert pos_str[-1]==")"
-        parts = [SeqFeature.ExactPosition(int(pos)+offset)
+        assert pos_str[-1] == ")"
+        parts = [SeqFeature.ExactPosition(int(pos) + offset)
                  for pos in pos_str[7:-1].split(",")]
         if offset == -1:
             default = min(int(pos) for pos in parts)
@@ -236,7 +236,7 @@ def _pos(pos_str, offset=0):
             default = max(int(pos) for pos in parts)
         return SeqFeature.OneOfPosition(default, choices=parts)
     else:
-        return SeqFeature.ExactPosition(int(pos_str)+offset)
+        return SeqFeature.ExactPosition(int(pos_str) + offset)
 
 
 def _loc(loc_str, expected_seq_length, strand):
@@ -287,9 +287,9 @@ def _loc(loc_str, expected_seq_length, strand):
             # NOTE - We can imagine between locations like "2^4", but this
             # is just "3".  Similarly, "2^5" is just "3..4"
             s, e = loc_str.split("^")
-            if int(s)+1==int(e):
+            if int(s) + 1 == int(e):
                 pos = _pos(s)
-            elif int(s)==expected_seq_length and e=="1":
+            elif int(s) == expected_seq_length and e == "1":
                 pos = _pos(s)
             else:
                 raise ValueError("Invalid between location %s" % repr(loc_str))
@@ -336,11 +336,11 @@ def _split_compound_loc(compound_loc):
             while part.count("(") > part.count(")"):
                 assert "one-of(" in part, (part, compound_loc)
                 i = compound_loc.find(")")
-                part += compound_loc[:i+1]
-                compound_loc = compound_loc[i+1:]
+                part += compound_loc[:i + 1]
+                compound_loc = compound_loc[i + 1:]
             if compound_loc.startswith(".."):
                 i = compound_loc.find(",")
-                if i==-1:
+                if i == -1:
                     part += compound_loc
                     compound_loc = ""
                 else:
@@ -349,8 +349,8 @@ def _split_compound_loc(compound_loc):
             while part.count("(") > part.count(")"):
                 assert part.count("one-of(") == 2
                 i = compound_loc.find(")")
-                part += compound_loc[:i+1]
-                compound_loc = compound_loc[i+1:]
+                part += compound_loc[:i + 1]
+                compound_loc = compound_loc[i + 1:]
             if compound_loc.startswith(","):
                 compound_loc = compound_loc[1:]
             assert part
@@ -538,7 +538,7 @@ class _BaseGenBankConsumer(object):
     def _split_taxonomy(self, taxonomy_string):
         """Split a string with taxonomy info into a list.
         """
-        if not taxonomy_string or taxonomy_string==".":
+        if not taxonomy_string or taxonomy_string == ".":
             # Missing data, no taxonomy
             return []
 
@@ -707,7 +707,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         # obsolete SV line in EMBL.  For the new EMBL files we need
         # both the version suffix from the ID line and the accession
         # from the AC line.
-        if version_id.count(".")==1 and version_id.split(".")[1].isdigit():
+        if version_id.count(".") == 1 and version_id.split(".")[1].isdigit():
             self.accession(version_id.split(".")[0])
             self.version_suffix(version_id.split(".")[1])
         elif version_id:
@@ -1004,7 +1004,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         if _re_simple_location.match(location_line):
             # e.g. "123..456"
             s, e = location_line.split("..")
-            cur_feature.location = SeqFeature.FeatureLocation(int(s)-1,
+            cur_feature.location = SeqFeature.FeatureLocation(int(s) - 1,
                                                               int(e),
                                                               strand)
             return
@@ -1026,9 +1026,9 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             # cur_feature.location_operator = location_line[:i]
             # we can split on the comma because these are simple locations
             sub_features = cur_feature.sub_features
-            for part in location_line[i+1:-1].split(","):
+            for part in location_line[i + 1:-1].split(","):
                 s, e = part.split("..")
-                f = SeqFeature.SeqFeature(SeqFeature.FeatureLocation(int(s)-1,
+                f = SeqFeature.SeqFeature(SeqFeature.FeatureLocation(int(s) - 1,
                                                                      int(e),
                                                                      strand),
                         location_operator=cur_feature.location_operator,
@@ -1062,9 +1062,9 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             # cur_feature.location_operator = location_line[:i]
             # Can't split on the comma because of positions like one-of(1,2,3)
             sub_features = cur_feature.sub_features
-            for part in _split_compound_loc(location_line[i+1:-1]):
+            for part in _split_compound_loc(location_line[i + 1:-1]):
                 if part.startswith("complement("):
-                    assert part[-1]==")"
+                    assert part[-1] == ")"
                     part = part[11:-1]
                     assert strand != -1, "Double complement?"
                     part_strand = -1
@@ -1093,7 +1093,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             #
             # TODO - Remove use of sub_features
             strands = set(sf.strand for sf in sub_features)
-            if len(strands)==1:
+            if len(strands) == 1:
                 strand = sub_features[0].strand
             else:
                 strand = None  # i.e. mixed strands
@@ -1203,7 +1203,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             self.data.id = self.data.name  # Good fall back?
         elif self.data.id.count('.') == 0:
             try:
-                self.data.id+='.%i' % self.data.annotations['sequence_version']
+                self.data.id += '.%i' % self.data.annotations['sequence_version']
             except KeyError:
                 pass
 

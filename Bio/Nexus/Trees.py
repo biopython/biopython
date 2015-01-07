@@ -18,10 +18,10 @@ import random
 import sys
 from . import Nodes
 
-PRECISION_BRANCHLENGTH=6
-PRECISION_SUPPORT=6
-NODECOMMENT_START='[&'
-NODECOMMENT_END=']'
+PRECISION_BRANCHLENGTH = 6
+PRECISION_SUPPORT = 6
+NODECOMMENT_START = '[&'
+NODECOMMENT_END = ']'
 
 
 class TreeError(Exception):
@@ -31,10 +31,10 @@ class TreeError(Exception):
 class NodeData(object):
     """Stores tree-relevant data associated with nodes (e.g. branches or otus)."""
     def __init__(self, taxon=None, branchlength=0.0, support=None, comment=None):
-        self.taxon=taxon
-        self.branchlength=branchlength
-        self.support=support
-        self.comment=comment
+        self.taxon = taxon
+        self.branchlength = branchlength
+        self.support = support
+        self.comment = comment
 
 
 class Tree(Nodes.Chain):
@@ -53,19 +53,19 @@ class Tree(Nodes.Chain):
     def __init__(self, tree=None, weight=1.0, rooted=False, name='', data=NodeData, values_are_support=False, max_support=1.0):
         """Ntree(self,tree)."""
         Nodes.Chain.__init__(self)
-        self.dataclass=data
-        self.__values_are_support=values_are_support
-        self.max_support=max_support
-        self.weight=weight
-        self.rooted=rooted
-        self.name=name
-        root=Nodes.Node(data())
+        self.dataclass = data
+        self.__values_are_support = values_are_support
+        self.max_support = max_support
+        self.weight = weight
+        self.rooted = rooted
+        self.name = name
+        root = Nodes.Node(data())
         self.root = self.add(root)
         if tree:    # use the tree we have
             # if Tree is called from outside Nexus parser, we need to get rid of linebreaks, etc
-            tree=tree.strip().replace('\n', '').replace('\r', '')
+            tree = tree.strip().replace('\n', '').replace('\r', '')
             # there's discrepancy whether newick allows semicolons et the end
-            tree=tree.rstrip(';')
+            tree = tree.rstrip(';')
             subtree_info, base_info = self._parse(tree)
             root.data = self._add_nodedata(root.data, [[], base_info])
             self._add_subtree(parent_id=root.id, tree=subtree_info)
@@ -75,40 +75,40 @@ class Tree(Nodes.Chain):
         # Remove any leading/trailing white space - want any string starting
         # with " (..." should be recognised as a leaf, "(..."
         tree = tree.strip()
-        if tree.count('(')!=tree.count(')'):
-            raise TreeError('Parentheses do not match in (sub)tree: '+tree)
-        if tree.count('(')==0:  # a leaf
+        if tree.count('(') != tree.count(')'):
+            raise TreeError('Parentheses do not match in (sub)tree: ' + tree)
+        if tree.count('(') == 0:  # a leaf
             # check if there's a colon, or a special comment, or both  after the taxon name
-            nodecomment=tree.find(NODECOMMENT_START)
-            colon=tree.find(':')
-            if colon==-1 and nodecomment==-1:  # none
+            nodecomment = tree.find(NODECOMMENT_START)
+            colon = tree.find(':')
+            if colon == -1 and nodecomment == -1:  # none
                 return [tree, [None]]
-            elif colon==-1 and nodecomment>-1:  # only special comment
+            elif colon == -1 and nodecomment > -1:  # only special comment
                 return [tree[:nodecomment], self._get_values(tree[nodecomment:])]
-            elif colon>-1 and nodecomment==-1:  # only numerical values
-                return [tree[:colon], self._get_values(tree[colon+1:])]
+            elif colon > -1 and nodecomment == -1:  # only numerical values
+                return [tree[:colon], self._get_values(tree[colon + 1:])]
             elif colon < nodecomment:  # taxon name ends at first colon or with special comment
-                return [tree[:colon], self._get_values(tree[colon+1:])]
+                return [tree[:colon], self._get_values(tree[colon + 1:])]
             else:
                 return [tree[:nodecomment], self._get_values(tree[nodecomment:])]
         else:
-            closing=tree.rfind(')')
-            val=self._get_values(tree[closing+1:])
+            closing = tree.rfind(')')
+            val = self._get_values(tree[closing + 1:])
             if not val:
-                val=[None]
-            subtrees=[]
-            plevel=0
-            prev=1
+                val = [None]
+            subtrees = []
+            plevel = 0
+            prev = 1
             for p in range(1, closing):
-                if tree[p]=='(':
-                    plevel+=1
-                elif tree[p]==')':
-                    plevel-=1
-                elif tree[p]==',' and plevel==0:
+                if tree[p] == '(':
+                    plevel += 1
+                elif tree[p] == ')':
+                    plevel -= 1
+                elif tree[p] == ',' and plevel == 0:
                     subtrees.append(tree[prev:p])
-                    prev=p+1
+                    prev = p + 1
             subtrees.append(tree[prev:closing])
-            subclades=[self._parse(subtree) for subtree in subtrees]
+            subclades = [self._parse(subtree) for subtree in subtrees]
             return [subclades, val]
 
     def _add_subtree(self, parent_id=None, tree=None):
@@ -116,53 +116,53 @@ class Tree(Nodes.Chain):
         if parent_id is None:
             raise TreeError('Need node_id to connect to.')
         for st in tree:
-            nd=self.dataclass()
+            nd = self.dataclass()
             nd = self._add_nodedata(nd, st)
             if isinstance(st[0], list):  # it's a subtree
-                sn=Nodes.Node(nd)
+                sn = Nodes.Node(nd)
                 self.add(sn, parent_id)
                 self._add_subtree(sn.id, st[0])
             else:  # it's a leaf
-                nd.taxon=st[0]
-                leaf=Nodes.Node(nd)
+                nd.taxon = st[0]
+                leaf = Nodes.Node(nd)
                 self.add(leaf, parent_id)
 
     def _add_nodedata(self, nd, st):
         """Add data to the node parsed from the comments, taxon and support.
         """
         if isinstance(st[1][-1], str) and st[1][-1].startswith(NODECOMMENT_START):
-            nd.comment=st[1].pop(-1)
+            nd.comment = st[1].pop(-1)
         # if the first element is a string, it's the subtree node taxon
         elif isinstance(st[1][0], str):
             nd.taxon = st[1][0]
             st[1] = st[1][1:]
-        if len(st)>1:
-            if len(st[1])>=2:  # if there's two values, support comes first. Is that always so?
-                nd.support=st[1][0]
+        if len(st) > 1:
+            if len(st[1]) >= 2:  # if there's two values, support comes first. Is that always so?
+                nd.support = st[1][0]
                 if st[1][1] is not None:
-                    nd.branchlength=st[1][1]
-            elif len(st[1])==1:  # otherwise it could be real branchlengths or support as branchlengths
+                    nd.branchlength = st[1][1]
+            elif len(st[1]) == 1:  # otherwise it could be real branchlengths or support as branchlengths
                 if not self.__values_are_support:  # default
                     if st[1][0] is not None:
-                        nd.branchlength=st[1][0]
+                        nd.branchlength = st[1][0]
                 else:
-                    nd.support=st[1][0]
+                    nd.support = st[1][0]
         return nd
 
     def _get_values(self, text):
         """Extracts values (support/branchlength) from xx[:yyy], xx."""
 
-        if text=='':
+        if text == '':
             return None
         nodecomment = None
         if NODECOMMENT_START in text:  # if there's a [&....] comment, cut it out
-            nc_start=text.find(NODECOMMENT_START)
-            nc_end=text.find(NODECOMMENT_END)
-            if nc_end==-1:
+            nc_start = text.find(NODECOMMENT_START)
+            nc_end = text.find(NODECOMMENT_END)
+            if nc_end == -1:
                 raise TreeError('Error in tree description: Found %s without matching %s'
                                 % (NODECOMMENT_START, NODECOMMENT_END))
-            nodecomment=text[nc_start:nc_end+1]
-            text=text[:nc_start]+text[nc_end+1:]
+            nodecomment = text[nc_start:nc_end + 1]
+            text = text[:nc_start] + text[nc_end + 1:]
 
         # pase out supports and branchlengths, with internal node taxa info
         values = []
@@ -184,7 +184,7 @@ class Tree(Nodes.Chain):
         """Return all node_ids downwards from a node."""
 
         if node is None:
-            node=self.root
+            node = self.root
         for n in self.node(node).succ:
             yield n
             for sn in self._walk(n):
@@ -206,16 +206,16 @@ class Tree(Nodes.Chain):
         """
         if parent_id is None:
             raise TreeError('Missing node_id.')
-        ids=[]
-        parent_data=self.chain[parent_id].data
+        ids = []
+        parent_data = self.chain[parent_id].data
         for i in range(n):
-            node=Nodes.Node()
+            node = Nodes.Node()
             if parent_data:
-                node.data=self.dataclass()
+                node.data = self.dataclass()
                 # each node has taxon and branchlength attribute
                 if parent_data.taxon:
-                    node.data.taxon=parent_data.taxon+str(i)
-                node.data.branchlength=branchlength
+                    node.data.taxon = parent_data.taxon + str(i)
+                node.data.branchlength = branchlength
             ids.append(self.add(node, parent_id))
         return ids
 
@@ -225,7 +225,7 @@ class Tree(Nodes.Chain):
         node_id = search_taxon(self,taxon)
         """
         for id, node in self.chain.items():
-            if node.data.taxon==taxon:
+            if node.data.taxon == taxon:
                 return id
         return None
 
@@ -238,24 +238,24 @@ class Tree(Nodes.Chain):
         longer a meaningful value'
         """
 
-        id=self.search_taxon(taxon)
+        id = self.search_taxon(taxon)
         if id is None:
             raise TreeError('Taxon not found: %s' % taxon)
         elif id not in self.get_terminals():
             raise TreeError('Not a terminal taxon: %s' % taxon)
         else:
-            prev=self.unlink(id)
+            prev = self.unlink(id)
             self.kill(id)
-            if len(self.node(prev).succ)==1:
-                if prev==self.root:  # we deleted one branch of a bifurcating root, then we have to move the root upwards
-                    self.root=self.node(self.root).succ[0]
-                    self.node(self.root).branchlength=0.0
+            if len(self.node(prev).succ) == 1:
+                if prev == self.root:  # we deleted one branch of a bifurcating root, then we have to move the root upwards
+                    self.root = self.node(self.root).succ[0]
+                    self.node(self.root).branchlength = 0.0
                     self.kill(prev)
                 else:
-                    succ=self.node(prev).succ[0]
-                    new_bl=self.node(prev).data.branchlength+self.node(succ).data.branchlength
+                    succ = self.node(prev).succ[0]
+                    new_bl = self.node(prev).data.branchlength + self.node(succ).data.branchlength
                     self.collapse(prev)
-                    self.node(succ).data.branchlength=new_bl
+                    self.node(succ).data.branchlength = new_bl
             return prev
 
     def get_taxa(self, node_id=None):
@@ -265,31 +265,31 @@ class Tree(Nodes.Chain):
         """
 
         if node_id is None:
-            node_id=self.root
+            node_id = self.root
         if node_id not in self.chain:
             raise TreeError('Unknown node_id: %d.' % node_id)
-        if self.chain[node_id].succ==[]:
+        if self.chain[node_id].succ == []:
             if self.chain[node_id].data:
                 return [self.chain[node_id].data.taxon]
             else:
                 return None
         else:
-            list=[]
+            list = []
             for succ in self.chain[node_id].succ:
                 list.extend(self.get_taxa(succ))
             return list
 
     def get_terminals(self):
         """Return a list of all terminal nodes."""
-        return [i for i in self.all_ids() if self.node(i).succ==[]]
+        return [i for i in self.all_ids() if self.node(i).succ == []]
 
     def is_terminal(self, node):
         """Returns True if node is a terminal node."""
-        return self.node(node).succ==[]
+        return self.node(node).succ == []
 
     def is_internal(self, node):
         """Returns True if node is an internal node."""
-        return len(self.node(node).succ)>0
+        return len(self.node(node).succ) > 0
 
     def is_preterminal(self, node):
         """Returns True if all successors of a node are terminal ones."""
@@ -301,7 +301,7 @@ class Tree(Nodes.Chain):
     def count_terminals(self, node=None):
         """Counts the number of terminal nodes that are attached to a node."""
         if node is None:
-            node=self.root
+            node = self.root
         return len([n for n in self._walk(node) if self.is_terminal(n)])
 
     def collapse_genera(self, space_equals_underscore=True):
@@ -311,24 +311,24 @@ class Tree(Nodes.Chain):
             for n in self._walk():
                 if self.is_terminal(n):
                     continue
-                taxa=self.get_taxa(n)
-                genera=[]
+                taxa = self.get_taxa(n)
+                genera = []
                 for t in taxa:
                     if space_equals_underscore:
-                        t=t.replace(' ', '_')
+                        t = t.replace(' ', '_')
                     try:
-                        genus=t.split('_', 1)[0]
+                        genus = t.split('_', 1)[0]
                     except:
-                        genus='None'
+                        genus = 'None'
                     if genus not in genera:
                         genera.append(genus)
-                if len(genera)==1:
-                    self.node(n).data.taxon=genera[0]+' <collapsed>'
+                if len(genera) == 1:
+                    self.node(n).data.taxon = genera[0] + ' <collapsed>'
                     # now we kill all nodes downstream
-                    nodes2kill=[kn for kn in self._walk(node=n)]
+                    nodes2kill = [kn for kn in self._walk(node=n)]
                     for kn in nodes2kill:
                         self.kill(kn)
-                    self.node(n).succ=[]
+                    self.node(n).succ = []
                     break  # break out of for loop because node list from _walk will be inconsistent
             else:  # for loop exhausted: no genera to collapse left
                 break  # while
@@ -340,13 +340,13 @@ class Tree(Nodes.Chain):
         """
 
         if root is None:
-            root=self.root
+            root = self.root
         if node is None:
             raise TreeError('Missing node id.')
-        blen=0.0
+        blen = 0.0
         while node is not None and node is not root:
-            blen+=self.node(node).data.branchlength
-            node=self.node(node).prev
+            blen += self.node(node).data.branchlength
+            node = self.node(node).prev
         return blen
 
     def set_subtree(self, node):
@@ -355,7 +355,7 @@ class Tree(Nodes.Chain):
         sets = set_subtree(self,node)
         """
 
-        if self.node(node).succ==[]:
+        if self.node(node).succ == []:
             return self.node(node).data.taxon
         else:
             try:
@@ -373,7 +373,7 @@ class Tree(Nodes.Chain):
 
         result = is_identical(self,tree2)
         """
-        return self.set_subtree(self.root)==tree2.set_subtree(tree2.root)
+        return self.set_subtree(self.root) == tree2.set_subtree(tree2.root)
 
     def is_compatible(self, tree2, threshold, strict=True):
         """Compares branches with support>threshold for compatibility.
@@ -382,25 +382,25 @@ class Tree(Nodes.Chain):
         """
 
         # check if both trees have the same set of taxa. strict=True enforces this.
-        missing2=set(self.get_taxa())-set(tree2.get_taxa())
-        missing1=set(tree2.get_taxa())-set(self.get_taxa())
+        missing2 = set(self.get_taxa()) - set(tree2.get_taxa())
+        missing1 = set(tree2.get_taxa()) - set(self.get_taxa())
         if strict and (missing1 or missing2):
             if missing1:
                 print('Taxon/taxa %s is/are missing in tree %s' % (','.join(missing1), self.name))
             if missing2:
                 print('Taxon/taxa %s is/are missing in tree %s' % (','.join(missing2), tree2.name))
             raise TreeError('Can\'t compare trees with different taxon compositions.')
-        t1=[(set(self.get_taxa(n)), self.node(n).data.support) for n in self.all_ids() if
+        t1 = [(set(self.get_taxa(n)), self.node(n).data.support) for n in self.all_ids() if
             self.node(n).succ and
-            (self.node(n).data and self.node(n).data.support and self.node(n).data.support>=threshold)]
-        t2=[(set(tree2.get_taxa(n)), tree2.node(n).data.support) for n in tree2.all_ids() if
+            (self.node(n).data and self.node(n).data.support and self.node(n).data.support >= threshold)]
+        t2 = [(set(tree2.get_taxa(n)), tree2.node(n).data.support) for n in tree2.all_ids() if
             tree2.node(n).succ and
-            (tree2.node(n).data and tree2.node(n).data.support and tree2.node(n).data.support>=threshold)]
-        conflict=[]
+            (tree2.node(n).data and tree2.node(n).data.support and tree2.node(n).data.support >= threshold)]
+        conflict = []
         for (st1, sup1) in t1:
             for (st2, sup2) in t2:
                 if not st1.issubset(st2) and not st2.issubset(st1):                     # don't hiccup on upstream nodes
-                    intersect, notin1, notin2=st1 & st2, st2-st1, st1-st2                 # all three are non-empty sets
+                    intersect, notin1, notin2 = st1 & st2, st2 - st1, st1 - st2                 # all three are non-empty sets
                     # if notin1==missing1 or notin2==missing2  <==> st1.issubset(st2) or st2.issubset(st1) ???
                     if intersect and not (notin1.issubset(missing1) or notin2.issubset(missing2)):         # omit conflicts due to missing taxa
                         conflict.append((st1, sup1, st2, sup2, intersect, notin1, notin2))
@@ -412,8 +412,8 @@ class Tree(Nodes.Chain):
         node_id = common_ancestor(self,node1,node2)
         """
 
-        l1=[self.root]+self.trace(self.root, node1)
-        l2=[self.root]+self.trace(self.root, node2)
+        l1 = [self.root] + self.trace(self.root, node1)
+        l2 = [self.root] + self.trace(self.root, node2)
         return [n for n in l1 if n in l2][-1]
 
     def distance(self, node1, node2):
@@ -421,8 +421,8 @@ class Tree(Nodes.Chain):
         dist = distance(self,node1,node2)
         """
 
-        ca=self.common_ancestor(node1, node2)
-        return self.sum_branchlength(ca, node1)+self.sum_branchlength(ca, node2)
+        ca = self.common_ancestor(node1, node2)
+        return self.sum_branchlength(ca, node1) + self.sum_branchlength(ca, node2)
 
     def is_monophyletic(self, taxon_list):
         """Return node_id of common ancestor if taxon_list is monophyletic, -1 otherwise.
@@ -430,18 +430,18 @@ class Tree(Nodes.Chain):
         result = is_monophyletic(self,taxon_list)
         """
         if isinstance(taxon_list, str):
-            taxon_set=set([taxon_list])
+            taxon_set = set([taxon_list])
         else:
-            taxon_set=set(taxon_list)
-        node_id=self.root
+            taxon_set = set(taxon_list)
+        node_id = self.root
         while True:
-            subclade_taxa=set(self.get_taxa(node_id))
-            if subclade_taxa==taxon_set:                                        # are we there?
+            subclade_taxa = set(self.get_taxa(node_id))
+            if subclade_taxa == taxon_set:                                        # are we there?
                 return node_id
             else:                                                               # check subnodes
                 for subnode in self.chain[node_id].succ:
                     if set(self.get_taxa(subnode)).issuperset(taxon_set):  # taxon_set is downstream
-                        node_id=subnode
+                        node_id = subnode
                         break   # out of for loop
                 else:
                     return -1   # taxon set was not with successors, for loop exhausted
@@ -449,14 +449,14 @@ class Tree(Nodes.Chain):
     def is_bifurcating(self, node=None):
         """Return True if tree downstream of node is strictly bifurcating."""
         if node is None:
-            node=self.root
-        if node==self.root and len(self.node(node).succ)==3:  # root can be trifurcating, because it has no ancestor
+            node = self.root
+        if node == self.root and len(self.node(node).succ) == 3:  # root can be trifurcating, because it has no ancestor
             return self.is_bifurcating(self.node(node).succ[0]) and \
                     self.is_bifurcating(self.node(node).succ[1]) and \
                     self.is_bifurcating(self.node(node).succ[2])
-        if len(self.node(node).succ)==2:
+        if len(self.node(node).succ) == 2:
             return self.is_bifurcating(self.node(node).succ[0]) and self.is_bifurcating(self.node(node).succ[1])
-        elif len(self.node(node).succ)==0:
+        elif len(self.node(node).succ) == 0:
             return True
         else:
             return False
@@ -469,8 +469,8 @@ class Tree(Nodes.Chain):
         """
 
         for n in self.chain:
-            self.node(n).data.support=self.node(n).data.branchlength
-            self.node(n).data.branchlength=0.0
+            self.node(n).data.support = self.node(n).data.branchlength
+            self.node(n).data.branchlength = 0.0
 
     def convert_absolute_support(self, nrep):
         """Convert absolute support (clade-count) to rel. frequencies.
@@ -480,7 +480,7 @@ class Tree(Nodes.Chain):
 
         for n in self._walk():
             if self.node(n).data.support:
-                self.node(n).data.support/=float(nrep)
+                self.node(n).data.support /= float(nrep)
 
     def has_support(self, node=None):
         """Returns True if any of the nodes has data.support != None."""
@@ -498,60 +498,60 @@ class Tree(Nodes.Chain):
         """
 
         if not ntax and taxon_list:
-            ntax=len(taxon_list)
+            ntax = len(taxon_list)
         elif not taxon_list and ntax:
-            taxon_list=['taxon'+str(i+1) for i in range(ntax)]
+            taxon_list = ['taxon' + str(i + 1) for i in range(ntax)]
         elif not ntax and not taxon_list:
             raise TreeError('Either numer of taxa or list of taxa must be specified.')
         elif ntax != len(taxon_list):
             raise TreeError('Length of taxon list must correspond to ntax.')
         # initiate self with empty root
         self.__init__()
-        terminals=self.get_terminals()
+        terminals = self.get_terminals()
         # bifurcate randomly at terminal nodes until ntax is reached
-        while len(terminals)<ntax:
-            newsplit=random.choice(terminals)
-            new_terminals=self.split(parent_id=newsplit, branchlength=branchlength)
+        while len(terminals) < ntax:
+            newsplit = random.choice(terminals)
+            new_terminals = self.split(parent_id=newsplit, branchlength=branchlength)
             # if desired, give some variation to the branch length
             if branchlength_sd:
                 for nt in new_terminals:
-                    bl=random.gauss(branchlength, branchlength_sd)
-                    if bl<0:
-                        bl=0
-                    self.node(nt).data.branchlength=bl
+                    bl = random.gauss(branchlength, branchlength_sd)
+                    if bl < 0:
+                        bl = 0
+                    self.node(nt).data.branchlength = bl
             terminals.extend(new_terminals)
             terminals.remove(newsplit)
         # distribute taxon labels randomly
         random.shuffle(taxon_list)
         for (node, name) in zip(terminals, taxon_list):
-            self.node(node).data.taxon=name
+            self.node(node).data.taxon = name
 
     def display(self):
         """Quick and dirty lists of all nodes."""
-        table=[('#', 'taxon', 'prev', 'succ', 'brlen', 'blen (sum)', 'support', 'comment')]
+        table = [('#', 'taxon', 'prev', 'succ', 'brlen', 'blen (sum)', 'support', 'comment')]
         # Sort this to be consistent across CPython, Jython, etc
         for i in sorted(self.all_ids()):
-            n=self.node(i)
+            n = self.node(i)
             if not n.data:
                 table.append((str(i), '-', str(n.prev), str(n.succ), '-', '-', '-', '-'))
             else:
-                tx=n.data.taxon
+                tx = n.data.taxon
                 if not tx:
-                    tx='-'
-                blength="%0.2f" % n.data.branchlength
+                    tx = '-'
+                blength = "%0.2f" % n.data.branchlength
                 if blength is None:
-                    blength='-'
-                    sum_blength='-'
+                    blength = '-'
+                    sum_blength = '-'
                 else:
-                    sum_blength="%0.2f" % self.sum_branchlength(node=i)
-                support=n.data.support
+                    sum_blength = "%0.2f" % self.sum_branchlength(node=i)
+                support = n.data.support
                 if support is None:
-                    support='-'
+                    support = '-'
                 else:
-                    support="%0.2f" % support
-                comment=n.data.comment
+                    support = "%0.2f" % support
+                comment = n.data.comment
                 if comment is None:
-                    comment='-'
+                    comment = '-'
                 table.append((str(i), tx, str(n.prev), str(n.succ),
                              blength, sum_blength, support, comment))
         print('\n'.join('%3s %32s %15s %15s %8s %10s %8s %20s' % l for l in table))
@@ -561,67 +561,67 @@ class Tree(Nodes.Chain):
         """Return a paup compatible tree line."""
         # if there's a conflict in the arguments, we override plain=True
         if support_as_branchlengths or branchlengths_only:
-            plain=False
-        self.support_as_branchlengths=support_as_branchlengths
-        self.branchlengths_only=branchlengths_only
-        self.ignore_comments=ignore_comments
-        self.plain=plain
+            plain = False
+        self.support_as_branchlengths = support_as_branchlengths
+        self.branchlengths_only = branchlengths_only
+        self.ignore_comments = ignore_comments
+        self.plain = plain
 
         def make_info_string(data, terminal=False):
             """Creates nicely formatted support/branchlengths."""
             # CHECK FORMATTING
             if self.plain:  # plain tree only. That's easy.
-                info_string= ''
+                info_string = ''
             elif self.support_as_branchlengths:  # support as branchlengths (eg. PAUP), ignore actual branchlengths
                 if terminal:    # terminal branches have 100% support
-                    info_string= ':%1.2f' % self.max_support
+                    info_string = ':%1.2f' % self.max_support
                 elif data.support:
-                    info_string= ':%1.2f' % (data.support)
+                    info_string = ':%1.2f' % (data.support)
                 else:
-                    info_string=':0.00'
+                    info_string = ':0.00'
             elif self.branchlengths_only:  # write only branchlengths, ignore support
-                info_string= ':%1.5f' % (data.branchlength)
+                info_string = ':%1.5f' % (data.branchlength)
             else:   # write suport and branchlengths (e.g. .con tree of mrbayes)
                 if terminal:
-                    info_string= ':%1.5f' % (data.branchlength)
+                    info_string = ':%1.5f' % (data.branchlength)
                 else:
                     if data.branchlength is not None and data.support is not None:  # we have blen and suppport
-                        info_string= '%1.2f:%1.5f' % (data.support, data.branchlength)
+                        info_string = '%1.2f:%1.5f' % (data.support, data.branchlength)
                     elif data.branchlength is not None:                             # we have only blen
-                        info_string= '0.00000:%1.5f' % (data.branchlength)
+                        info_string = '0.00000:%1.5f' % (data.branchlength)
                     elif data.support is not None:                                  # we have only support
-                        info_string= '%1.2f:0.00000' % (data.support)
+                        info_string = '%1.2f:0.00000' % (data.support)
                     else:
-                        info_string= '0.00:0.00000'
+                        info_string = '0.00:0.00000'
             if not ignore_comments and hasattr(data, 'nodecomment'):
-                info_string=str(data.nodecomment)+info_string
+                info_string = str(data.nodecomment) + info_string
             return info_string
 
         def ladderize_nodes(nodes, ladderize=None):
             """Sorts node numbers according to the number of terminal nodes."""
             if ladderize in ['left', 'LEFT', 'right', 'RIGHT']:
                 succnode_terminals = sorted((self.count_terminals(node=n), n) for n in nodes)
-                if (ladderize=='right' or ladderize=='RIGHT'):
+                if (ladderize == 'right' or ladderize == 'RIGHT'):
                     succnode_terminals.reverse()
                 if succnode_terminals:
-                    succnodes=zip(*succnode_terminals)[1]
+                    succnodes = zip(*succnode_terminals)[1]
                 else:
-                    succnodes=[]
+                    succnodes = []
             else:
-                succnodes=nodes
+                succnodes = nodes
             return succnodes
 
         def newickize(node, ladderize=None):
             """Convert a node tree to a newick tree recursively."""
 
             if not self.node(node).succ:    # terminal
-                return self.node(node).data.taxon+make_info_string(self.node(node).data, terminal=True)
+                return self.node(node).data.taxon + make_info_string(self.node(node).data, terminal=True)
             else:
-                succnodes=ladderize_nodes(self.node(node).succ, ladderize=ladderize)
-                subtrees=[newickize(sn, ladderize=ladderize) for sn in succnodes]
+                succnodes = ladderize_nodes(self.node(node).succ, ladderize=ladderize)
+                subtrees = [newickize(sn, ladderize=ladderize) for sn in succnodes]
                 return '(%s)%s' % (','.join(subtrees), make_info_string(self.node(node).data))
 
-        treeline=['tree']
+        treeline = ['tree']
         if self.name:
             treeline.append(self.name)
         else:
@@ -631,13 +631,13 @@ class Tree(Nodes.Chain):
             treeline.append('[&W%s]' % str(round(float(self.weight), 3)))
         if self.rooted:
             treeline.append('[&R]')
-        succnodes=ladderize_nodes(self.node(self.root).succ)
-        subtrees=[newickize(sn, ladderize=ladderize) for sn in succnodes]
+        succnodes = ladderize_nodes(self.node(self.root).succ)
+        subtrees = [newickize(sn, ladderize=ladderize) for sn in succnodes]
         treeline.append('(%s)' % ','.join(subtrees))
         if plain_newick:
             return treeline[-1]
         else:
-            return ' '.join(treeline)+';'
+            return ' '.join(treeline) + ';'
 
     def __str__(self):
         """Short version of to_string(), gives plain tree"""
@@ -649,30 +649,30 @@ class Tree(Nodes.Chain):
         # travel down the rooted tree structure and save all branches and the nodes they connect
 
         def _get_branches(node):
-            branches=[]
+            branches = []
             for b in self.node(node).succ:
                 branches.append([node, b, self.node(b).data.branchlength, self.node(b).data.support])
                 branches.extend(_get_branches(b))
             return branches
 
-        self.unrooted=_get_branches(self.root)
+        self.unrooted = _get_branches(self.root)
         # if root is bifurcating, then it is eliminated
-        if len(self.node(self.root).succ)==2:
+        if len(self.node(self.root).succ) == 2:
             # find the two branches that connect to root
-            rootbranches=[b for b in self.unrooted if self.root in b[:2]]
-            b1=self.unrooted.pop(self.unrooted.index(rootbranches[0]))
-            b2=self.unrooted.pop(self.unrooted.index(rootbranches[1]))
+            rootbranches = [b for b in self.unrooted if self.root in b[:2]]
+            b1 = self.unrooted.pop(self.unrooted.index(rootbranches[0]))
+            b2 = self.unrooted.pop(self.unrooted.index(rootbranches[1]))
             # Connect them two each other. If both have support, it should be identical (or one set to None?).
             # If both have branchlengths, they will be added
-            newbranch=[b1[1], b2[1], b1[2]+b2[2]]
+            newbranch = [b1[1], b2[1], b1[2] + b2[2]]
             if b1[3] is None:
                 newbranch.append(b2[3])  # either None (both rootbranches are unsupported) or some support
             elif b2[3] is None:
                 newbranch.append(b1[3])  # dito
-            elif b1[3]==b2[3]:
+            elif b1[3] == b2[3]:
                 newbranch.append(b1[3])  # identical support
-            elif b1[3]==0 or b2[3]==0:
-                newbranch.append(b1[3]+b2[3])  # one is 0, take the other
+            elif b1[3] == 0 or b2[3] == 0:
+                newbranch.append(b1[3] + b2[3])  # one is 0, take the other
             else:
                 raise TreeError('Support mismatch in bifurcating root: %f, %f'
                                 % (float(b1[3]), float(b2[3])))
@@ -684,32 +684,32 @@ class Tree(Nodes.Chain):
             """Hook subtree starting with node child to parent."""
             for i, branch in enumerate(self.unrooted):
                 if parent in branch[:2] and child in branch[:2]:
-                    branch=self.unrooted.pop(i)
+                    branch = self.unrooted.pop(i)
                     break
             else:
                 raise TreeError('Unable to connect nodes for rooting: nodes %d and %d are not connected'
                                 % (parent, child))
             self.link(parent, child)
-            self.node(child).data.branchlength=branch[2]
-            self.node(child).data.support=branch[3]
+            self.node(child).data.branchlength = branch[2]
+            self.node(child).data.support = branch[3]
             # now check if there are more branches connected to the child, and if so, connect them
-            child_branches=[b for b in self.unrooted if child in b[:2]]
+            child_branches = [b for b in self.unrooted if child in b[:2]]
             for b in child_branches:
-                if child==b[0]:
-                    succ=b[1]
+                if child == b[0]:
+                    succ = b[1]
                 else:
-                    succ=b[0]
+                    succ = b[0]
                 _connect_subtree(child, succ)
 
         # check the outgroup we're supposed to root with
         if outgroup is None:
             return self.root
-        outgroup_node=self.is_monophyletic(outgroup)
-        if outgroup_node==-1:
+        outgroup_node = self.is_monophyletic(outgroup)
+        if outgroup_node == -1:
             return -1
         # if tree is already rooted with outgroup on a bifurcating root,
         # or the outgroup includes all taxa on the tree, then we're fine
-        if (len(self.node(self.root).succ)==2 and outgroup_node in self.node(self.root).succ) or outgroup_node==self.root:
+        if (len(self.node(self.root).succ) == 2 and outgroup_node in self.node(self.root).succ) or outgroup_node == self.root:
             return self.root
 
         self.unroot()
@@ -717,32 +717,32 @@ class Tree(Nodes.Chain):
         # print(self.node(outgroup_node).prev)
         for i, b in enumerate(self.unrooted):
             if outgroup_node in b[:2] and self.node(outgroup_node).prev in b[:2]:
-                root_branch=self.unrooted.pop(i)
+                root_branch = self.unrooted.pop(i)
                 break
         else:
             raise TreeError('Unrooted and rooted Tree do not match')
-        if outgroup_node==root_branch[1]:
-            ingroup_node=root_branch[0]
+        if outgroup_node == root_branch[1]:
+            ingroup_node = root_branch[0]
         else:
-            ingroup_node=root_branch[1]
+            ingroup_node = root_branch[1]
         # now we destroy the old tree structure, but keep node data. Nodes will be reconnected according to new outgroup
         for n in self.all_ids():
-            self.node(n).prev=None
-            self.node(n).succ=[]
+            self.node(n).prev = None
+            self.node(n).succ = []
         # now we just add both subtrees (outgroup and ingroup) branch for branch
-        root=Nodes.Node(data=NodeData())            # new root
+        root = Nodes.Node(data=NodeData())            # new root
         self.add(root)                              # add to tree description
-        self.root=root.id                           # set as root
+        self.root = root.id                           # set as root
         self.unrooted.append([root.id, ingroup_node, root_branch[2], root_branch[3]])  # add branch to ingroup to unrooted tree
         self.unrooted.append([root.id, outgroup_node, 0.0, 0.0])   # add branch to outgroup to unrooted tree
         _connect_subtree(root.id, ingroup_node)      # add ingroup
         _connect_subtree(root.id, outgroup_node)     # add outgroup
         # if theres still a lonely node in self.chain, then it's the old root, and we delete it
-        oldroot=[i for i in self.all_ids() if self.node(i).prev is None and i!=self.root]
-        if len(oldroot)>1:
+        oldroot = [i for i in self.all_ids() if self.node(i).prev is None and i != self.root]
+        if len(oldroot) > 1:
             raise TreeError('Isolated nodes in tree description: %s'
                             % ','.join(oldroot))
-        elif len(oldroot)==1:
+        elif len(oldroot) == 1:
             self.kill(oldroot[0])
         return self.root
 
@@ -770,89 +770,89 @@ class Tree(Nodes.Chain):
             self.root_with_outgroup(outgroup)
 
         if bstrees:  # calculate consensus
-            constree=consensus(bstrees, threshold=threshold, outgroup=outgroup)
+            constree = consensus(bstrees, threshold=threshold, outgroup=outgroup)
         else:
             if not constree.has_support():
                 constree.branchlength2support()
             constree.root_with_outgroup(outgroup)
         # now we travel all nodes, and add support from consensus, if the clade is present in both
         for pnode in self._walk():
-            cnode=constree.is_monophyletic(self.get_taxa(pnode))
-            if cnode>-1:
-                self.node(pnode).data.support=constree.node(cnode).data.support
+            cnode = constree.is_monophyletic(self.get_taxa(pnode))
+            if cnode > -1:
+                self.node(pnode).data.support = constree.node(cnode).data.support
 
 
 def consensus(trees, threshold=0.5, outgroup=None):
     """Compute a majority rule consensus tree of all clades with relative frequency>=threshold from a list of trees."""
 
-    total=len(trees)
-    if total==0:
+    total = len(trees)
+    if total == 0:
         return None
     # shouldn't we make sure that it's NodeData or subclass??
-    dataclass=trees[0].dataclass
-    max_support=trees[0].max_support
-    clades={}
+    dataclass = trees[0].dataclass
+    max_support = trees[0].max_support
+    clades = {}
     # countclades={}
-    alltaxa=set(trees[0].get_taxa())
+    alltaxa = set(trees[0].get_taxa())
     # calculate calde frequencies
-    c=0
+    c = 0
     for t in trees:
-        c+=1
+        c += 1
         # if c%100==0:
         #    print(c)
-        if alltaxa!=set(t.get_taxa()):
+        if alltaxa != set(t.get_taxa()):
             raise TreeError('Trees for consensus must contain the same taxa')
         t.root_with_outgroup(outgroup=outgroup)
         for st_node in t._walk(t.root):
-            subclade_taxa=sorted(t.get_taxa(st_node))
-            subclade_taxa=str(subclade_taxa)  # lists are not hashable
+            subclade_taxa = sorted(t.get_taxa(st_node))
+            subclade_taxa = str(subclade_taxa)  # lists are not hashable
             if subclade_taxa in clades:
-                clades[subclade_taxa]+=float(t.weight)/total
+                clades[subclade_taxa] += float(t.weight) / total
             else:
-                clades[subclade_taxa]=float(t.weight)/total
+                clades[subclade_taxa] = float(t.weight) / total
             # if subclade_taxa in countclades:
             #    countclades[subclade_taxa]+=t.weight
             # else:
             #    countclades[subclade_taxa]=t.weight
     # weed out clades below threshold
-    delclades=[c for c, p in clades.items() if round(p, 3)<threshold]  # round can be necessary
+    delclades = [c for c, p in clades.items() if round(p, 3) < threshold]  # round can be necessary
     for c in delclades:
         del clades[c]
     # create a tree with a root node
-    consensus=Tree(name='consensus_%2.1f' % float(threshold), data=dataclass)
+    consensus = Tree(name='consensus_%2.1f' % float(threshold), data=dataclass)
     # each clade needs a node in the new tree, add them as isolated nodes
     for c, s in clades.items():
-        node=Nodes.Node(data=dataclass())
-        node.data.support=s
-        node.data.taxon=set(eval(c))
+        node = Nodes.Node(data=dataclass())
+        node.data.support = s
+        node.data.taxon = set(eval(c))
         consensus.add(node)
     # set root node data
-    consensus.node(consensus.root).data.support=None
-    consensus.node(consensus.root).data.taxon=alltaxa
+    consensus.node(consensus.root).data.support = None
+    consensus.node(consensus.root).data.taxon = alltaxa
     # we sort the nodes by no. of taxa in the clade, so root will be the last
-    consensus_ids=consensus.all_ids()
-    consensus_ids.sort(lambda x, y: len(consensus.node(x).data.taxon)-len(consensus.node(y).data.taxon))
+    consensus_ids = consensus.all_ids()
+    consensus_ids.sort(lambda x, y: len(consensus.node(x).data.taxon) - len(consensus.node(y).data.taxon))
     # now we just have to hook each node to the next smallest node that includes all taxa of the current
     for i, current in enumerate(consensus_ids[:-1]):  # skip the last one which is the root
         # print('----')
         # print('current: %s' % consensus.node(current).data.taxon)
         # search remaining nodes
-        for parent in consensus_ids[i+1:]:
+        for parent in consensus_ids[i + 1:]:
             # print('parent: %s' % consensus.node(parent).data.taxon)
             if consensus.node(parent).data.taxon.issuperset(consensus.node(current).data.taxon):
                 break
         else:
             sys.exit('corrupt tree structure?')
         # internal nodes don't have taxa
-        if len(consensus.node(current).data.taxon)==1:
-            consensus.node(current).data.taxon=consensus.node(current).data.taxon.pop()
+        if len(consensus.node(current).data.taxon) == 1:
+            consensus.node(current).data.taxon = consensus.node(current).data.taxon.pop()
             # reset the support for terminal nodes to maximum
             # consensus.node(current).data.support=max_support
         else:
-            consensus.node(current).data.taxon=None
+            consensus.node(current).data.taxon = None
         consensus.link(parent, current)
     # eliminate root taxon name
-    consensus.node(consensus_ids[-1]).data.taxon=None
+    consensus.node(consensus_ids[-1]).data.taxon = None
     if alltaxa != set(consensus.get_taxa()):
         raise TreeError('FATAL ERROR: consensus tree is corrupt')
     return consensus

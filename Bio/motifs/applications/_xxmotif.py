@@ -85,7 +85,7 @@ class XXmotifCommandline(AbstractCommandline):
                    equate=False),
           _Option(["-g", "--gaps", "GAPS", "gaps"],
                    "maximum number of gaps used for start seeds [0-3] (DEFAULT: 0)",
-                   checker_function=lambda x: x in [0-3],
+                   checker_function=lambda x: x in [0 - 3],
                    equate=False),
           _Option(["--type", "TYPE", "type"],
                    "defines what kind of start seeds are used (DEFAULT: ALL)"

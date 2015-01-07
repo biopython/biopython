@@ -795,7 +795,7 @@ class BlastXmlWriter(object):
 
         for num, qresult in enumerate(qresults):
             xml.startParent('Iteration')
-            xml.simpleElement('Iteration_iter-num', str(num+1))
+            xml.simpleElement('Iteration_iter-num', str(num + 1))
             opt_dict = {}
             # use custom Iteration_query-ID and Iteration_query-def mapping
             # if the query has a BLAST-generated ID
@@ -830,7 +830,7 @@ class BlastXmlWriter(object):
 
         for num, hit in enumerate(hits):
             xml.startParent('Hit')
-            xml.simpleElement('Hit_num', str(num+1))
+            xml.simpleElement('Hit_num', str(num + 1))
             # use custom hit_id and hit_def mapping if the hit has a
             # BLAST-generated ID
             opt_dict = {}
@@ -850,7 +850,7 @@ class BlastXmlWriter(object):
         xml = self.xml
         for num, hsp in enumerate(hsps):
             xml.startParent('Hsp')
-            xml.simpleElement('Hsp_num', str(num+1))
+            xml.simpleElement('Hsp_num', str(num + 1))
             for elem, attr in _WRITE_MAPS['hsp']:
                 elem = 'Hsp_' + elem
                 try:

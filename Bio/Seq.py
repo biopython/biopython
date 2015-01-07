@@ -186,7 +186,7 @@ class Seq(object):
 
         """
         if hasattr(other, "alphabet"):
-            #other could be a Seq or a MutableSeq
+            # other could be a Seq or a MutableSeq
             if not Alphabet._check_type_compatible([self.alphabet,
                                                     other.alphabet]):
                 warnings.warn("Incompatible alphabets %s and %s"
@@ -836,9 +836,9 @@ class Seq(object):
         if isinstance(base, Alphabet.RNAAlphabet):
             raise ValueError("RNA cannot be transcribed!")
 
-        if self.alphabet==IUPAC.unambiguous_dna:
+        if self.alphabet == IUPAC.unambiguous_dna:
             alphabet = IUPAC.unambiguous_rna
-        elif self.alphabet==IUPAC.ambiguous_dna:
+        elif self.alphabet == IUPAC.ambiguous_dna:
             alphabet = IUPAC.ambiguous_rna
         else:
             alphabet = Alphabet.generic_rna
@@ -871,9 +871,9 @@ class Seq(object):
         if isinstance(base, Alphabet.DNAAlphabet):
             raise ValueError("DNA cannot be back transcribed!")
 
-        if self.alphabet==IUPAC.unambiguous_rna:
+        if self.alphabet == IUPAC.unambiguous_rna:
             alphabet = IUPAC.unambiguous_dna
-        elif self.alphabet==IUPAC.ambiguous_rna:
+        elif self.alphabet == IUPAC.ambiguous_rna:
             alphabet = IUPAC.ambiguous_dna
         else:
             alphabet = Alphabet.generic_dna
@@ -957,7 +957,7 @@ class Seq(object):
         NOTE - This does NOT behave like the python string's translate
         method.  For that use str(my_seq).translate(...) instead.
         """
-        if isinstance(table, str) and len(table)==256:
+        if isinstance(table, str) and len(table) == 256:
             raise ValueError("The Seq object translate method DOES NOT take "
                              + "a 256 character string mapping table like "
                              + "the python string object's translate method. "
@@ -969,10 +969,10 @@ class Seq(object):
             table_id = int(table)
         except ValueError:
             # Assume its a table name
-            if self.alphabet==IUPAC.unambiguous_dna:
+            if self.alphabet == IUPAC.unambiguous_dna:
                 # Will use standard IUPAC protein alphabet, no need for X
                 codon_table = CodonTable.unambiguous_dna_by_name[table]
-            elif self.alphabet==IUPAC.unambiguous_rna:
+            elif self.alphabet == IUPAC.unambiguous_rna:
                 # Will use standard IUPAC protein alphabet, no need for X
                 codon_table = CodonTable.unambiguous_rna_by_name[table]
             else:
@@ -988,10 +988,10 @@ class Seq(object):
                 raise ValueError('Bad table argument')
         else:
             # Assume its a table ID
-            if self.alphabet==IUPAC.unambiguous_dna:
+            if self.alphabet == IUPAC.unambiguous_dna:
                 # Will use standard IUPAC protein alphabet, no need for X
                 codon_table = CodonTable.unambiguous_dna_by_id[table_id]
-            elif self.alphabet==IUPAC.unambiguous_rna:
+            elif self.alphabet == IUPAC.unambiguous_rna:
                 # Will use standard IUPAC protein alphabet, no need for X
                 codon_table = CodonTable.unambiguous_rna_by_id[table_id]
             else:
@@ -1087,7 +1087,7 @@ class Seq(object):
             raise ValueError("Gap character not given and not defined in alphabet")
         else:
             alpha = self.alphabet  # modify!
-        if len(gap)!=1 or not isinstance(gap, str):
+        if len(gap) != 1 or not isinstance(gap, str):
             raise ValueError("Unexpected gap character, %s" % repr(gap))
         return Seq(str(self).replace(gap, ""), alpha)
 
@@ -1212,7 +1212,7 @@ class UnknownSeq(Seq):
         if isinstance(other, UnknownSeq) \
         and other._character == self._character:
             # TODO - Check the alphabets match
-            return UnknownSeq(len(self)+len(other),
+            return UnknownSeq(len(self) + len(other),
                               self.alphabet, self._character)
         # Offload to the base class...
         return Seq(str(self), self.alphabet) + other
@@ -1256,12 +1256,12 @@ class UnknownSeq(Seq):
                 end = max(0, old_length + end)
             elif end > old_length:
                 end = old_length
-            new_length = max(0, end-start)
+            new_length = max(0, end - start)
         elif step == 0:
             raise ValueError("slice step cannot be zero")
         else:
             # TODO - handle step efficiently
-            new_length = len(("X"*old_length)[index])
+            new_length = len(("X" * old_length)[index])
         # assert new_length == len(("X"*old_length)[index]), \
         #       (index, start, end, step, old_length,
         #        new_length, len(("X"*old_length)[index]))
@@ -1306,7 +1306,7 @@ class UnknownSeq(Seq):
         sub_str = self._get_seq_str_and_check_alphabet(sub)
         if len(sub_str) == 1:
             if str(sub_str) == self._character:
-                if start==0 and end >= self._length:
+                if start == 0 and end >= self._length:
                     return self._length
                 else:
                     # This could be done more cleverly...
@@ -1315,7 +1315,7 @@ class UnknownSeq(Seq):
                 return 0
         else:
             if set(sub_str) == set(self._character):
-                if start==0 and end >= self._length:
+                if start == 0 and end >= self._length:
                     return self._length // len(sub_str)
                 else:
                     # This could be done more cleverly...
@@ -1464,7 +1464,7 @@ class UnknownSeq(Seq):
         if isinstance(Alphabet._get_base_alphabet(self.alphabet),
                       Alphabet.ProteinAlphabet):
             raise ValueError("Proteins cannot be translated!")
-        return UnknownSeq(self._length//3, Alphabet.generic_protein, "X")
+        return UnknownSeq(self._length // 3, Alphabet.generic_protein, "X")
 
     def ungap(self, gap=None):
         """Return a copy of the sequence without the gap character(s).
@@ -2038,8 +2038,8 @@ def _translate_str(sequence, table, stop_symbol="*", to_stop=False,
                       "Explicitly trim the sequence or add trailing N before "
                       "translation. This may become an error in future.",
                       BiopythonWarning)
-    for i in range(0, n - n%3, 3):
-        codon = sequence[i:i+3]
+    for i in range(0, n - n % 3, 3):
+        codon = sequence[i:i + 3]
         try:
             amino_acids.append(forward_table[codon])
         except (KeyError, CodonTable.TranslationError):

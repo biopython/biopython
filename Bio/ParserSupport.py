@@ -117,12 +117,12 @@ class TaggingConsumer(AbstractConsumer):
     def _print_name(self, name, data=None):
         if data is None:
             # Write the name of a section.
-            self._handle.write("%s %s\n" % ("*"*self._colwidth, name))
+            self._handle.write("%s %s\n" % ("*" * self._colwidth, name))
         else:
             # Write the tag and line.
             self._handle.write("%-*s: %s\n" % (
                 self._colwidth, name[:self._colwidth],
-                data[:self._maxwidth-self._colwidth-2].rstrip()))
+                data[:self._maxwidth - self._colwidth - 2].rstrip()))
 
     def __getattr__(self, attr):
         if attr[:6] == 'start_' or attr[:4] == 'end_':

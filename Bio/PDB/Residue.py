@@ -11,11 +11,11 @@ from Bio.PDB.Entity import Entity, DisorderedEntityWrapper
 """Residue class, used by Structure objects."""
 
 
-_atom_name_dict={}
-_atom_name_dict["N"]=1
-_atom_name_dict["CA"]=2
-_atom_name_dict["C"]=3
-_atom_name_dict["O"]=4
+_atom_name_dict = {}
+_atom_name_dict["N"] = 1
+_atom_name_dict["CA"] = 2
+_atom_name_dict["C"] = 3
+_atom_name_dict["O"] = 4
 
 
 class Residue(Entity):
@@ -23,18 +23,18 @@ class Residue(Entity):
     Represents a residue. A Residue object stores atoms.
     """
     def __init__(self, id, resname, segid):
-        self.level="R"
-        self.disordered=0
-        self.resname=resname
-        self.segid=segid
+        self.level = "R"
+        self.disordered = 0
+        self.resname = resname
+        self.segid = segid
         Entity.__init__(self, id)
 
     # Special methods
 
     def __repr__(self):
-        resname=self.get_resname()
-        hetflag, resseq, icode=self.get_id()
-        full_id=(resname, hetflag, resseq, icode)
+        resname = self.get_resname()
+        hetflag, resseq, icode = self.get_id()
+        full_id = (resname, hetflag, resseq, icode)
         return "<Residue %s het=%s resseq=%s icode=%s>" % full_id
 
     # Private methods
@@ -48,18 +48,18 @@ class Residue(Entity):
         Arguments:
         o a1, a2 - Atom objects
         """
-        name1=a1.get_name()
-        name2=a2.get_name()
-        if name1==name2:
+        name1 = a1.get_name()
+        name2 = a2.get_name()
+        if name1 == name2:
             return(cmp(a1.get_altloc(), a2.get_altloc()))
         if name1 in _atom_name_dict:
-            index1=_atom_name_dict[name1]
+            index1 = _atom_name_dict[name1]
         else:
-            index1=None
+            index1 = None
         if name2 in _atom_name_dict:
-            index2=_atom_name_dict[name2]
+            index2 = _atom_name_dict[name2]
         else:
-            index2=None
+            index2 = None
         if index1 and index2:
             return cmp(index1, index2)
         if index1:
@@ -76,7 +76,7 @@ class Residue(Entity):
         Checks for adding duplicate atoms, and raises a
         PDBConstructionException if so.
         """
-        atom_id=atom.get_id()
+        atom_id = atom.get_id()
         if self.has_id(atom_id):
             raise PDBConstructionException(
                 "Atom %s defined twice in residue %s" % (atom_id, self))
@@ -87,7 +87,7 @@ class Residue(Entity):
 
     def flag_disordered(self):
         "Set the disordered flag."
-        self.disordered=1
+        self.disordered = 1
 
     def is_disordered(self):
         "Return 1 if the residue contains disordered atoms."
@@ -100,11 +100,11 @@ class Residue(Entity):
         """
         Returns the list of all atoms, unpack DisorderedAtoms."
         """
-        atom_list=self.get_list()
-        undisordered_atom_list=[]
+        atom_list = self.get_list()
+        undisordered_atom_list = []
         for atom in atom_list:
             if atom.is_disordered():
-                undisordered_atom_list=(undisordered_atom_list+ atom.disordered_get_list())
+                undisordered_atom_list = (undisordered_atom_list + atom.disordered_get_list())
             else:
                 undisordered_atom_list.append(atom)
         return undisordered_atom_list
@@ -123,18 +123,18 @@ class DisorderedResidue(DisorderedEntityWrapper):
         DisorderedEntityWrapper.__init__(self, id)
 
     def __repr__(self):
-        resname=self.get_resname()
-        hetflag, resseq, icode=self.get_id()
-        full_id=(resname, hetflag, resseq, icode)
+        resname = self.get_resname()
+        hetflag, resseq, icode = self.get_id()
+        full_id = (resname, hetflag, resseq, icode)
         return "<DisorderedResidue %s het=%s resseq=%i icode=%s>" % full_id
 
     def add(self, atom):
-        residue=self.disordered_get()
-        if not atom.is_disordered()==2:
+        residue = self.disordered_get()
+        if not atom.is_disordered() == 2:
             # Atoms in disordered residues should have non-blank
             # altlocs, and are thus represented by DisorderedAtom objects.
-            resname=residue.get_resname()
-            het, resseq, icode=residue.get_id()
+            resname = residue.get_resname()
+            het, resseq, icode = residue.get_id()
             # add atom anyway, if PDBParser ignores exception the atom will be part of the residue
             residue.add(atom)
             raise PDBConstructionException(
@@ -153,10 +153,10 @@ class DisorderedResidue(DisorderedEntityWrapper):
         Arguments:
         o residue - Residue object
         """
-        resname=residue.get_resname()
+        resname = residue.get_resname()
         # add chain parent to residue
-        chain=self.get_parent()
+        chain = self.get_parent()
         residue.set_parent(chain)
         assert(not self.disordered_has_id(resname))
-        self[resname]=residue
+        self[resname] = residue
         self.disordered_select(resname)
