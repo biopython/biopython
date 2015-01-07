@@ -171,7 +171,7 @@ def parse_model(lines, results):
     dN_tree_flag = False
     w_tree_flag = False
     num_params = None
-    tree_re = re.compile("\(\(+")
+    tree_re = re.compile("^\([\w #:',.()]*\);\s*$")
     branch_re = re.compile("\s+(\d+\.\.\d+)[\s+\d+\.\d+]+")
     model_params_re = re.compile("(?<!\S)([a-z]\d?)\s*=\s+(\d+\.\d+)")
     for line in lines:
