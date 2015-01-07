@@ -261,14 +261,14 @@ def _read_jaspar(handle):
 
     head_pat = re.compile(r"^>\s*(\S+)(\s+(\S+))?")
     row_pat_long = re.compile(r"\s*([ACGT])\s*\[\s*(.*)\s*\]")
-    row_pat_short = re.compile(r"\s*(.*)\s*")
+    row_pat_short = re.compile(r"\s*(.+)\s*")
 
     identifier = None
     name = None
     row_count = 0
     nucleotides = ['A', 'C', 'G', 'T']
     for line in handle:
-        line.rstrip('\r\n')
+        line = line.strip()
 
         head_match = head_pat.match(line)
         row_match_long = row_pat_long.match(line)
