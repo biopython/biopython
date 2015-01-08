@@ -29,20 +29,39 @@ from Bio.KEGG.KGML.KGML_pathway import Pathway
 def darken(color, factor=0.7):
     """Returns darkened color as a ReportLab RGB color.
 
-    Take a passed color (hex or RGB) and returns an RGB color that is
-    slightly darker (if possible). If not, returns the originally
-    passed color.
+    Take a passed color and returns a Reportlab color that is darker by the
+    factor indicated in the parameter.
     """
-    # We've got an RGB tuple
-    if not isinstance(color, str):
-        return tuple([factor * i for i in color])
-    elif color.startswith('#'):  # We have hex colour
-        c = colors.HexColor(color)
-        for a in ['red', 'green', 'blue']:
-            setattr(c, a, factor * getattr(c, a))
-        return c
-    return color
+    newcol = color_to_reportlab(color)
+    for a in ['red', 'green', 'blue']:
+        setattr(newcol, a, factor * getattr(newcol, a))
+    return newcol
 
+def color_to_reportlab(color):
+    """Returns the passed color in Reportlab Color format.
+
+    We allow colors to be specified as hex values, tuples, or Reportlab Color
+    objects, and with or without an alpha channel. This function acts as a 
+    Rosetta stone for conversion of those formats to a Reportlab Color
+    object, with alpha value.
+
+    Any other color specification is returned directly
+    """
+    # Reportlab Color objects are in the format we want already
+    if isinstance(color, colors.Color):
+        return color
+    elif isinstance(color, str):  # String implies hex color
+        if color.startswith("0x"):  # Standardise to octothorpe
+            color.replace("0x", "#")
+        if len(color) == 7:
+            return colors.HexColor(color)
+        else:
+            return colors.HexColor(color, hasAlpha=True)
+    elif isinstance(color, tuple):  # Tuple implies RGB(alpha) tuple
+        return colors.Color(*color)
+    return color
+        
+    
 
 def get_temp_imagefilename(url):
     """Returns filename of temporary file containing downloaded image.
@@ -241,8 +260,8 @@ class KGMLCanvas(object):
         """
         for ortholog in self.pathway.orthologs:
             for g in ortholog.graphics:
-                self.drawing.setStrokeColor(g.fgcolor)
-                self.drawing.setFillColor(g.bgcolor)
+                self.drawing.setStrokeColor(color_to_reportlab(g.fgcolor))
+                self.drawing.setFillColor(color_to_reportlab(g.bgcolor))
                 self.__add_graphics(g)
                 if self.label_orthologs:
                     # We want the label color to be slightly darker
@@ -258,8 +277,8 @@ class KGMLCanvas(object):
         """
         for reaction in self.pathway.reaction_entries:
             for g in reaction.graphics:
-                self.drawing.setStrokeColor(g.fgcolor)
-                self.drawing.setFillColor(g.bgcolor)
+                self.drawing.setStrokeColor(color_to_reportlab(g.fgcolor))
+                self.drawing.setFillColor(color_to_reportlab(g.bgcolor))
                 self.__add_graphics(g)
                 if self.label_reaction_entries:
                     # We want the label color to be slightly darker
@@ -273,10 +292,10 @@ class KGMLCanvas(object):
             for g in compound.graphics:
                 # Modify transparency of compounds that don't participate
                 # in reactions
-                fillcolor = colors.HexColor(g.bgcolor)
+                fillcolor = color_to_reportlab(g.bgcolor)
                 if not compound.is_reactant:
                     fillcolor.alpha *= self.non_reactant_transparency
-                self.drawing.setStrokeColor(g.fgcolor)
+                self.drawing.setStrokeColor(color_to_reportlab(g.fgcolor))
                 self.drawing.setFillColor(fillcolor)
                 self.__add_graphics(g)
                 if self.label_compounds:
@@ -291,9 +310,8 @@ class KGMLCanvas(object):
         """Adds gene elements to the drawing of the map (PRIVATE)."""
         for gene in self.pathway.genes:
             for g in gene.graphics:
-                fillcolor = colors.HexColor(g.bgcolor)
-                self.drawing.setStrokeColor(g.fgcolor)
-                self.drawing.setFillColor(fillcolor)
+                self.drawing.setStrokeColor(color_to_reportlab(g.fgcolor))
+                self.drawing.setFillColor(color_to_reportlab(g.bgcolor))
                 self.__add_graphics(g)
                 if self.label_compounds:
                     self.drawing.setFillColor(darken(g.fgcolor))

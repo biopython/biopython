@@ -135,6 +135,43 @@ class KGMLPathwayTest(unittest.TestCase):
             kgml_map.import_imagemap = p[1].show_pathway_image
             kgml_map.draw(p[1].output_stem + '_colors.pdf')
 
+    def test_render_KGML_transparency(self):
+        """Rendering of KGML to PDF, with color alpha channel."""
+        # We test rendering of the original KGML for KO01100,
+        # modifying alpha channel for the lipid pathway
+        p = self.data
+        with open(p[0].infilename) as f:
+            pathway = read(f)
+            mod_rs = [e for e in pathway.orthologs if
+                      len(set(e.name.split()).intersection(self.ko_ids))]
+            for r in mod_rs:
+                for g in r.graphics:
+                    # Modify hex colour directly by appending alpha channel
+                    # to hex string
+                    g.fgcolor = g.fgcolor + "77"
+                    g.width = 20
+            kgml_map = KGMLCanvas(pathway)
+            kgml_map.draw(p[0].output_stem + '_transparency.pdf')
+        # We test rendering of the original KGML for KO3070,
+        # modifying the alpha channel for each ortholog entry
+        with open(p[1].infilename) as f:
+            pathway = read(f)
+            orthologs = [e for e in pathway.orthologs]
+            # Use Biopython's ColorSpiral to generate colours
+            cs = ColorSpiral(a=2, b=0.2, v_init=0.85, v_final=0.5,
+                             jitter=0.03)
+            colors = cs.get_colors(len(orthologs))
+            for o, c in zip(orthologs, colors):
+                # Modify color tuples to add alpha channel
+                c = c + (0.5, )
+                for g in o.graphics:
+                    g.bgcolor = c
+            kgml_map = KGMLCanvas(pathway)
+            pathway.image = p[1].pathway_image
+            kgml_map.import_imagemap = p[1].show_pathway_image
+            kgml_map.draw(p[1].output_stem + '_transparency.pdf')
+
+
 
 if __name__ == '__main__':
     runner = unittest.TextTestRunner(verbosity=2)
