@@ -521,7 +521,7 @@ class ModTest(unittest.TestCase):
         self.assertTrue(0 in nssites)
         m0 = nssites[0]
         self.assertTrue("tree" in m0)
-        self.assertIsNot(m0["tree"], None)
+        self.assertTrue(m0["tree"] is not None)
         self.assertNotEqual(len(m0["tree"]), 0)
 
 if __name__ == "__main__":
