@@ -251,7 +251,7 @@ class KGMLCanvas(object):
                     self.__add_labels(g)
 
     def __add_reaction_entries(self):
-        """Adds Entry elements corresponding to Reactions to the map drawing (PRIVATE).
+        """Adds Entry elements for Reactions to the map drawing (PRIVATE).
 
         In KGML, these are typically line objects, so we render them
         before the compound circles to cover the unsightly ends/junctions
