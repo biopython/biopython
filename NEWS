@@ -12,12 +12,21 @@ The latest news is at the top of this file.
 
 (In progress, not yet released) Biopython 1.66
 
-Nothing major to report so far...
+Further work on the Bio.KEGG and Bio.Graphics modules now allows drawing KGML
+pathways with transparency.
+
+Additionally, a number of small bugs have been fixed with further additions
+to the test suite, and there has been further work on conforming to the
+Python PEP8 standard coding style.
 
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+Anthony Mathelier (first contribution)
+Brandon Invergo
+David Arenillas (first contribution)
 Leighton Pritchard
+Michiel de Hoon
 Peter Cock
 Vincent Davis
 
