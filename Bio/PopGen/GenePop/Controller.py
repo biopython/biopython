@@ -531,7 +531,7 @@ class GenePopController(object):
             (Allele1, Allele2, observed, expected)
             (expected homozygotes, observed hm,
             expected heterozygotes, observed ht)
-          - Allele frequency/Fis dictionary with allele as key and
+            Allele frequency/Fis dictionary with allele as key and
             (count, frequency, Fis Weir & Cockerham)
           - Totals as a pair
           - count
