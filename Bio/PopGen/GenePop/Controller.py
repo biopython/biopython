@@ -578,7 +578,7 @@ class GenePopController(object):
                     return self.curr_pop, loci_content
                 match = re.match(".*Pop: (.+) Locus: (.+)", l)
                 if match is not None:
-                    pop = match.group(1)
+                    pop = match.group(1).rstrip()
                     locus = match.group(2)
                     if not hasattr(self, "first_locus"):
                         self.first_locus = locus
