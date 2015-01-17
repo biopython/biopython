@@ -37,11 +37,12 @@ def darken(color, factor=0.7):
         setattr(newcol, a, factor * getattr(newcol, a))
     return newcol
 
+
 def color_to_reportlab(color):
     """Returns the passed color in Reportlab Color format.
 
     We allow colors to be specified as hex values, tuples, or Reportlab Color
-    objects, and with or without an alpha channel. This function acts as a 
+    objects, and with or without an alpha channel. This function acts as a
     Rosetta stone for conversion of those formats to a Reportlab Color
     object, with alpha value.
 
@@ -58,13 +59,12 @@ def color_to_reportlab(color):
         else:
             try:
                 return colors.HexColor(color, hasAlpha=True)
-            except:  # Catch pre-2.7 Reportlab
+            except TypeError:  # Catch pre-2.7 Reportlab
                 return colors.HexColor(color, alpha=True)
     elif isinstance(color, tuple):  # Tuple implies RGB(alpha) tuple
         return colors.Color(*color)
     return color
-        
-    
+
 
 def get_temp_imagefilename(url):
     """Returns filename of temporary file containing downloaded image.
