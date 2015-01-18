@@ -66,7 +66,7 @@ class TestQblast(unittest.TestCase):
                         AGCCATGGATTTCTCAGAAGAAAATGATTATACTTCTTAATCAGGCAACTGATATTATCAATTTATGGCA
                         GCAGAGTGGTGGCTCCTTGTCCCAGCAGCAGTAATTACTTTTTTTTCTCTTTTTGTTTCCAAATTAAGAA
                         ACATTAGTATCATATGGCTATTTGCTCAATTGCAGATTTCTTTCTTTTGTGAATG""",
-                        0.0000001, None, ["21554275", "18409071", "296087288"])
+                        0.0000001, None, ["21554275", "18409071", "296087288", "566183510"])
 
     def run_qblast(self, program, database, query, e_value, entrez_filter, expected_hits):
         try:
@@ -120,9 +120,10 @@ class TestQblast(unittest.TestCase):
                 print("Update this test to have some redundancy...")
                 for alignment in record.alignments:
                     print(alignment.hit_id)
-            assert found_result, "Missing all of %s in alignments" \
-                % ", ".join(expected_hits)
-            self.assertTrue(found_result)
+            self.assertTrue(found_result,
+                            "Missing all expected hits (%s), instead have: %s"
+                            % (", ".join(expected_hits),
+                               ", ".join(a.hit_id for a in record.alignments)))
 
         # Check the expected result(s) are found in the descriptions
         if expected_hits is None:
