@@ -1074,6 +1074,26 @@ class DsspTests(unittest.TestCase):
         dssp, keys = make_dssp_dict("PDB/2BEG_noheader.dssp")
         self.assertEqual(len(dssp), 130)
 
+    def test_DSSP_hbonds(self):
+        """Test parsing of DSSP hydrogen bond information."""
+        dssp, keys = make_dssp_dict("PDB/2BEG.dssp")
+
+        dssp_indices = set(v[5] for v in dssp.itervalues())
+        hb_indices = set()
+
+        # The integers preceding each hydrogen bond energy (kcal/mol) in the
+        # "N-H-->O    O-->H-N    N-H-->O    O-->H-N" dssp output columns are
+        # relative dssp indices. Therefore, "hb_indices" contains the absolute
+        # dssp indices of residues participating in (provisional) h-bonds. Note
+        # that actual h-bonds are typically determined by an energetic
+        # threshold.
+        for val in dssp.itervalues():
+            hb_indices |= set(
+                (val[5] + x) for x in (val[6], val[8], val[10], val[12]))
+
+        # Check if all h-bond partner indices were successfully parsed.
+        self.assertTrue((dssp_indices & hb_indices) == hb_indices)
+
 
 class NACCESSTests(unittest.TestCase):
     """Tests for NACCESS parsing etc which don't need the binary tool.
