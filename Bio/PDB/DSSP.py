@@ -133,8 +133,10 @@ def make_dssp_dict(filename):
 
 def _make_dssp_dict(handle):
     """
-    Return a DSSP dictionary that maps (chainid, resid) to
-    aa, ss and accessibility, from an open DSSP file object. ::
+    Return a DSSP dictionary that maps (chainid, resid) to an amino acid,
+    secondary structure symbol, solvent accessibility value, and hydrogen bond
+    information (relative dssp indices and hydrogen bond energies) from an open
+    DSSP file object. ::
 
     @param handle: the open DSSP output file handle
     @type handle: file
@@ -155,6 +157,8 @@ def _make_dssp_dict(handle):
         if l[9] == " ":
             # Skip -- missing residue
             continue
+
+        dssp_index = int(l[:5])
         resseq = int(l[5:10])
         icode = l[10]
         chainid = l[11]
@@ -163,6 +167,15 @@ def _make_dssp_dict(handle):
         if ss == " ":
             ss = "-"
         try:
+            NH_O_1_relidx = int(l[38:45])
+            NH_O_1_energy = float(l[46:50])
+            O_NH_1_relidx = int(l[50:56])
+            O_NH_1_energy = float(l[57:61])
+            NH_O_2_relidx = int(l[61:67])
+            NH_O_2_energy = float(l[68:72])
+            O_NH_2_relidx = int(l[72:78])
+            O_NH_2_energy = float(l[79:83])
+
             acc = int(l[34:38])
             phi = float(l[103:109])
             psi = float(l[109:115])
@@ -174,13 +187,25 @@ def _make_dssp_dict(handle):
             # digits, and shift parsing the rest of the line by that amount.
             if l[34] != ' ':
                 shift = l[34:].find(' ')
+
+                NH_O_1_relidx = int(l[38 + shift:45 + shift])
+                NH_O_1_energy = float(l[46 + shift:50 + shift])
+                O_NH_1_relidx = int(l[50 + shift:56 + shift])
+                O_NH_1_energy = float(l[57 + shift:61 + shift])
+                NH_O_2_relidx = int(l[61 + shift:67 + shift])
+                NH_O_2_energy = float(l[68 + shift:72 + shift])
+                O_NH_2_relidx = int(l[72 + shift:78 + shift])
+                O_NH_2_energy = float(l[79 + shift:83 + shift])
+
                 acc = int((l[34 + shift:38 + shift]))
                 phi = float(l[103 + shift:109 + shift])
                 psi = float(l[109 + shift:115 + shift])
             else:
                 raise ValueError(exc)
         res_id = (" ", resseq, icode)
-        dssp[(chainid, res_id)] = (aa, ss, acc, phi, psi)
+        dssp[(chainid, res_id)] = (aa, ss, acc, phi, psi, dssp_index,
+                NH_O_1_relidx, NH_O_1_energy, O_NH_1_relidx, O_NH_1_energy,
+                NH_O_2_relidx, NH_O_2_energy, O_NH_2_relidx, O_NH_2_energy)
         keys.append((chainid, res_id))
     return dssp, keys
 
@@ -300,11 +325,26 @@ class DSSP(AbstractResiduePropertyMap):
                                 res = r
                                 break
 
-            aa, ss, acc, phi, psi = dssp_dict[key]
+            (dssp_index, aa, ss, acc, phi, psi,
+                NH_O_1_relidx, NH_O_1_energy,
+                O_NH_1_relidx, O_NH_1_energy,
+                NH_O_2_relidx, NH_O_2_energy,
+                O_NH_2_relidx, O_NH_2_energy) = dssp_dict[key]
+
             res.xtra["SS_DSSP"] = ss
             res.xtra["EXP_DSSP_ASA"] = acc
             res.xtra["PHI_DSSP"] = phi
             res.xtra["PSI_DSSP"] = psi
+            res.xtra["DSSP_INDEX"] = dssp_index
+            res.xtra["NH_O_1_RELIDX_DSSP"] = NH_O_1_relidx
+            res.xtra["NH_O_1_ENERGY_DSSP"] = NH_O_1_energy
+            res.xtra["O_NH_1_RELIDX_DSSP"] = O_NH_1_relidx
+            res.xtra["O_NH_1_ENERGY_DSSP"] = O_NH_1_energy
+            res.xtra["NH_O_2_RELIDX_DSSP"] = NH_O_2_relidx
+            res.xtra["NH_O_2_ENERGY_DSSP"] = NH_O_2_energy
+            res.xtra["O_NH_2_RELIDX_DSSP"] = O_NH_2_relidx
+            res.xtra["O_NH_2_ENERGY_DSSP"] = O_NH_2_energy
+
             # Relative accessibility
             resname = res.get_resname()
             try:
@@ -328,8 +368,15 @@ class DSSP(AbstractResiduePropertyMap):
             # Take care of HETATM again
             if (resname != aa) and (res.id[0] == ' ' or aa != 'X'):
                 raise PDBException("Structure/DSSP mismatch at %s" % res)
-            dssp_map[key] = ((res, ss, acc, rel_acc, phi, psi))
-            dssp_list.append((res, ss, acc, rel_acc, phi, psi))
+
+            dssp_vals = (dssp_index, aa, ss, rel_acc, phi, psi,
+                            NH_O_1_relidx, NH_O_1_energy,
+                            O_NH_1_relidx, O_NH_1_energy,
+                            NH_O_2_relidx, NH_O_2_energy,
+                            O_NH_2_relidx, O_NH_2_energy)
+
+            dssp_map[key] = dssp_vals
+            dssp_list.append(dssp_vals)
 
         AbstractResiduePropertyMap.__init__(self, dssp_map, dssp_keys,
                 dssp_list)
