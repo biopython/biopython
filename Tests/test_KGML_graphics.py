@@ -39,7 +39,7 @@ try:
     from PIL import Image
 except ImportError:
     raise MissingExternalDependencyError(
-        "Install Pillow or its predecessorPIL (Python Imaging Library) "
+        "Install Pillow or its predecessor PIL (Python Imaging Library) "
         "if you want to use bitmaps from KGML.")
 
 
