@@ -20,16 +20,26 @@ from Bio import MissingExternalDependencyError
 try:
     from reportlab.pdfgen.canvas import Canvas
     from reportlab.lib.pagesizes import A4
+    from reportlab.lib.colors import HexColor
 except ImportError:
     raise MissingExternalDependencyError(
         "Install reportlab if you want to use Bio.Graphics.")
+
+try:
+   c = HexColor('#8080F780')
+except TypeError:
+    # Known to fail under ReportLab 2.6 with:
+    # unsupported operand type(s) for &: 'int' and 'float'
+    # ReportLab 2.7+ also offers hasAlpha=True rather than alpha=True
+    raise MissingExternalDependencyError(
+        "Install at least reportlab 2.7 for transparency support.")
 
 # Do we have PIL?
 try:
     from PIL import Image
 except ImportError:
     raise MissingExternalDependencyError(
-        "Install Pillow or its predecessorPIL (Python Imaging Library) "
+        "Install Pillow or its predecessor PIL (Python Imaging Library) "
         "if you want to use bitmaps from KGML.")
 
 

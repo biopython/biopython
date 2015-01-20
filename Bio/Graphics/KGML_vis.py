@@ -60,7 +60,7 @@ def color_to_reportlab(color):
             try:
                 return colors.HexColor(color, hasAlpha=True)
             except TypeError:  # Catch pre-2.7 Reportlab
-                return colors.HexColor(color, alpha=True)
+                raise RuntimeError("Your reportlab seems to be too old, try 2.7 onwards")
     elif isinstance(color, tuple):  # Tuple implies RGB(alpha) tuple
         return colors.Color(*color)
     return color
