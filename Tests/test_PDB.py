@@ -1078,7 +1078,7 @@ class DsspTests(unittest.TestCase):
         """Test parsing of DSSP hydrogen bond information."""
         dssp, keys = make_dssp_dict("PDB/2BEG.dssp")
 
-        dssp_indices = set(v[5] for v in dssp.itervalues())
+        dssp_indices = set(v[5] for v in dssp.values())
         hb_indices = set()
 
         # The integers preceding each hydrogen bond energy (kcal/mol) in the
