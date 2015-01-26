@@ -181,7 +181,8 @@ def draw_graphviz(tree, label_func=str, prog='twopi', args='',
                            for e in G.edges(data=True)]
 
     posn = dict((n, posi[int_labels[n]]) for n in G)
-    networkx.draw(G, posn, labels=labels, node_color=node_color, **kwargs)
+    networkx.draw(G, posn, labels=labels, with_labels=True,
+                  node_color=node_color, **kwargs)
 
 
 def draw_ascii(tree, file=None, column_width=80):
