@@ -7,6 +7,10 @@ import unittest
 from Bio._py3k import StringIO
 
 from Bio import SeqIO
+from Bio.Alphabet import generic_dna
+from Bio.Seq import Seq
+from Bio.SeqFeature import SeqFeature, FeatureLocation
+from Bio.SeqRecord import SeqRecord
 
 from seq_tests_common import compare_record
 
@@ -29,8 +33,24 @@ class TestEmbl(unittest.TestCase):
                           'lot and lots of keywords for this example',
                           'multi-line keywords'])
 
+    def test_writing_empty_qualifiers(self):
+        f = SeqFeature(FeatureLocation(5, 20, strand=+1),
+                       type="region",
+                       qualifiers={"empty": None,
+                                   "zero": 0,
+                                   "one": 1,
+                                   "text": "blah"})
+        record = SeqRecord(Seq("A" * 100, generic_dna), "dummy",
+                           features=[f])
+        gbk = record.format("gb")
+        self.assertTrue(' /empty\n' in gbk, gbk)
+        self.assertTrue(' /zero=0\n' in gbk, gbk)
+        self.assertTrue(' /one=1\n' in gbk, gbk)
+        self.assertTrue(' /text="blah"\n' in gbk, gbk)
+
 
 class TestEmblRewrite(unittest.TestCase):
+
     def check_rewrite(self, filename):
         old = SeqIO.read(filename, "embl")
 
