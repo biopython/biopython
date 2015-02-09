@@ -317,7 +317,7 @@ class DSSP(AbstractResiduePropertyMap):
                                 res = r
                                 break
 
-            (dssp_index, aa, ss, acc, phi, psi,
+            (aa, ss, acc, phi, psi, dssp_index,
                 NH_O_1_relidx, NH_O_1_energy,
                 O_NH_1_relidx, O_NH_1_energy,
                 NH_O_2_relidx, NH_O_2_energy,
