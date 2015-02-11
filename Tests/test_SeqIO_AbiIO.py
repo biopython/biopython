@@ -120,7 +120,9 @@ class TestAbi(unittest.TestCase):
             self.assertEqual(test_data[trace]['machine_model'], record.annotations['machine_model'])
             self.assertEqual(test_data[trace]['run_start'], record.annotations['run_start'])
             self.assertEqual(test_data[trace]['run_finish'], record.annotations['run_finish'])
-            self.assertEqual(test_data[trace]['abif_raw_keys'], set(record.annotations['abif_raw']))
+
+            for key in test_data[trace]['abif_raw_keys']:
+                self.assertTrue(key in record.annotations['abif_raw'])
 
     def test_trim(self):
         """Test if trim works."""
@@ -138,9 +140,11 @@ class TestAbi(unittest.TestCase):
         self.assertEqual(set(record.annotations),
                          set(["polymer", "run_finish", "sample_well", "run_start",
                               "machine_model", "dye", "abif_raw"]))
-        self.assertEqual(set(record.annotations["abif_raw"]),
-                         set(["RUND2", "RUND1", "DySN1", "SMPL1", "GTyp1", "PCON2",
-                              "RUNT2", "PBAS2", "RUNT1", "MODL1", "TUBE1"]))
+
+        for key in ["RUND2", "RUND1", "DySN1", "SMPL1", "GTyp1", "PCON2",
+                    "RUNT2", "PBAS2", "RUNT1", "MODL1", "TUBE1"]:
+            self.assertTrue(key in record.annotations['abif_raw'])
+
         self.assertEqual(record.annotations["abif_raw"]['RUND2'], '2014-06-04')
         self.assertEqual(record.annotations["abif_raw"]['RUND1'], '2014-06-04')
         self.assertEqual(record.annotations["abif_raw"]['DySN1'], 'Z-BigDyeV3')
