@@ -71,7 +71,6 @@ _INSTRUMENT_SPECIFIC_TAGS = {
         'CTTL1': 'Comment Title',
         'CpEP1': 'Capillary type electrophoresis. 1 for a capillary based machine. 0 for a slab gel based machine.',
         'DATA1': 'Channel 1 raw data',
-        'DATA1': 'Channel 1 raw data',
         'DATA2': 'Channel 2 raw data',
         'DATA2': 'Channel 2 raw data',
         'DATA3': 'Channel 3 raw data',
