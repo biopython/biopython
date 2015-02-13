@@ -303,6 +303,10 @@ _HEADFMT = '>H4sI2H3I'
 # directory data structure
 _DIRFMT = '>4sI2H4I'
 
+__global_tag_listing = []
+for tag in _INSTRUMENT_SPECIFIC_TAGS.values():
+    __global_tag_listing += tag.keys()
+
 
 def AbiIterator(handle, alphabet=None, trim=False):
     """Iterator for the Abi file format.
@@ -423,10 +427,7 @@ def _abi_parse_header(header, handle):
         key = _bytes_to_string(dir_entry[0])
         key += str(dir_entry[1])
 
-        global_tag_listing = []
-        for x in _INSTRUMENT_SPECIFIC_TAGS:
-            global_tag_listing += _INSTRUMENT_SPECIFIC_TAGS[x].keys()
-        if key in global_tag_listing:
+        if key in __global_tag_listing:
             tag_name = _bytes_to_string(dir_entry[0])
             tag_number = dir_entry[1]
             elem_code = dir_entry[2]
