@@ -38,7 +38,7 @@ def read(handle):
     alphabet = record.alphabet
     revcomp = 'revcomp' in record.command
     while True:
-        length, num_occurrences, evalue = __read_motif_statistics(line)
+        motif_number, length, num_occurrences, evalue = __read_motif_statistics(line)
         name = __read_motif_name(handle)
         instances = __read_motif_sequences(handle, name, alphabet, length, revcomp)
         motif = Motif(alphabet, instances)
@@ -47,6 +47,7 @@ def read(handle):
         motif.evalue = evalue
         motif.name = name
         record.append(motif)
+        assert len(record)==motif_number
         __skip_unused_lines(handle)
         try:
             line = next(handle)
@@ -214,12 +215,27 @@ def __read_command(record, handle):
 
 
 def __read_motif_statistics(line):
-    line = line[5:].strip()
-    ls = line.split()
-    length = int(ls[3])
-    num_occurrences = int(ls[6])
-    evalue = float(ls[12])
-    return length, num_occurrences, evalue
+    # Depending on the version of MEME, this line either like like
+    #    MOTIF  1        width =  19  sites =   3  llr = 43  E-value = 6.9e-002
+    # or like
+    #    MOTIF  1 MEME    width =  19  sites =   3  llr = 43  E-value = 6.9e-002
+    words = line.split()
+    assert words[0]=='MOTIF'
+    motif_number = int(words[1])
+    if words[2]=='MEME':
+        key_values = words[3:]
+    else:
+        key_values = words[2:]
+    keys = key_values[::3]
+    equal_signs = key_values[1::3]
+    values = key_values[2::3]
+    assert keys==['width', 'sites', 'llr', 'E-value']
+    for equal_sign in equal_signs:
+        assert equal_sign=='='
+    length = int(values[0])
+    num_occurrences = int(values[1])
+    evalue = float(values[3])
+    return motif_number, length, num_occurrences, evalue
 
 
 def __read_motif_name(handle):
