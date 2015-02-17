@@ -15,6 +15,9 @@ The latest news is at the top of this file.
 Further work on the Bio.KEGG and Bio.Graphics modules now allows drawing KGML
 pathways with transparency.
 
+The Bio.SeqIO "abi" parser now decodes almost all the documented fields used
+by the ABIF instruments - including the individual color channels.
+
 Additionally, a number of small bugs have been fixed with further additions
 to the test suite, and there has been further work on conforming to the
 Python PEP8 standard coding style.
@@ -25,6 +28,7 @@ possible, especially the following contributors:
 Anthony Mathelier (first contribution)
 Brandon Invergo
 David Arenillas (first contribution)
+Eric Rasche (first contribution)
 Gleb Kuznetsov (first contribution)
 Leighton Pritchard
 Michiel de Hoon
