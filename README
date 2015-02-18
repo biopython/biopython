@@ -1,3 +1,19 @@
+Warning
+=======
+
+This is my fork of Biopython, started from the official master branch on the
+17/02/2015. I created a alignio_maf branch where I added code from
+https://github.com/polyatail/biopython/tree/alignio-maf
+
+A year ago, I had taken the MafIO.py module from there, and for a reason I do
+not remember, I had changed a few things.
+
+I will try to figure out what I had done on the code.
+
+
+Blaise Li (blaise dot li arrobase igh dot cnrs dot fr)
+
+
 Biopython README file
 =====================
 
