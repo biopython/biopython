@@ -429,9 +429,9 @@ class TestMotifSearch(unittest.TestCase):
         result_sensitive = self.m.instances.search(myseq, case_sensitive=True)
         result_insensitive = self.m.instances.search(myseq, case_sensitive=False)
 
-        self.assertEqual(1, len(result_sensitive))
-        self.assertEqual(1, len(result_default))
-        self.assertEqual(2, len(result_insensitive))
+        self.assertEqual(1, len(list(result_default)))
+        self.assertEqual(1, len(list(result_sensitive)))
+        self.assertEqual(2, len(list(result_insensitive)))
 
 
 class TestMEME(unittest.TestCase):
