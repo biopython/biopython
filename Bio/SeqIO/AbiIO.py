@@ -59,6 +59,7 @@ _EXTRACT = {
 # Key definitions are retained in case end users want "nice" labels pre-made
 # for them for all of the available fields.
 _INSTRUMENT_SPECIFIC_TAGS = {}
+
 _INSTRUMENT_SPECIFIC_TAGS['general'] = {
     'APFN2': 'Sequencing Analysis parameters file name',
     'APXV1': 'Analysis Protocol XML schema version',
@@ -72,10 +73,7 @@ _INSTRUMENT_SPECIFIC_TAGS['general'] = {
     'CpEP1': 'Capillary type electrophoresis. 1 for a capillary based machine. 0 for a slab gel based machine.',
     'DATA1': 'Channel 1 raw data',
     'DATA2': 'Channel 2 raw data',
-    'DATA2': 'Channel 2 raw data',
     'DATA3': 'Channel 3 raw data',
-    'DATA3': 'Channel 3 raw data',
-    'DATA4': 'Channel 4 raw data',
     'DATA4': 'Channel 4 raw data',
     'DATA5': 'Short Array holding measured volts/10 (EP voltage) during run',
     'DATA6': 'Short Array holding measured milliAmps trace (EP current) during run',
@@ -151,8 +149,12 @@ _INSTRUMENT_SPECIFIC_TAGS['abi_prism_3100/3100-Avant'] = {
 }
 
 _INSTRUMENT_SPECIFIC_TAGS['abi_3130/3130xl'] = {
-    #'OvrI1-N':'One value for each dye. List of scan number indices for scans with color data values >32767. Values cannot be greater than 32000. (optional)',
-    #'OvrV1-N':'One value for each dye. List of color data values for the locations listed in the OvrI tag. Number of OvrV tags must be equal to the number of OvrI tags. (optional)',
+    # 'OvrI1-N':'One value for each dye. List of scan number indices for scans
+    # with color data values >32767. Values cannot be greater than 32000.
+    # (optional)',
+    # 'OvrV1-N':'One value for each dye. List of color data values for the
+    # locations listed in the OvrI tag. Number of OvrV tags must be equal to
+    # the number of OvrI tags. (optional)',
     'CTOw1': 'Container owner',
     'DATA105': 'Raw data for dye 5 (optional)',
     'HCFG1': 'Instrument Class',
@@ -165,7 +167,8 @@ _INSTRUMENT_SPECIFIC_TAGS['abi_3130/3130xl'] = {
 _INSTRUMENT_SPECIFIC_TAGS['abi_3530/3530xl'] = {
     'DATA105-199': 'Short Array holding raw color data',
     'DATA9-12,205-299': 'Short Array holding analyzed color data',
-    'AAct1': 'Primary Analysis Audit Active indication. True if system auditing was enabled during the last write of this file, false if system auditing was disabled.',
+    'AAct1': 'Primary Analysis Audit Active indication. True if system auditing was enabled during the last write of this file, '
+             + 'false if system auditing was disabled.',
     'ABED1': 'Anode buffer expiration date using ISO 8601 format using the patterns YYYY-MM-DDTHH:MM:SS.ss+/-HH:MM. Hundredths of a second are optional.',
     'ABID1': 'Anode buffer tray first installed date',
     'ABLt1': 'Anode buffer lot number',
@@ -208,8 +211,8 @@ _INSTRUMENT_SPECIFIC_TAGS['abi_3530/3530xl'] = {
     'DCEv1': 'A list of door-close events, separated by semicolon. Door open events are generally paired with door close events.',
     'DCHT1': 'Reserved for backward compatibility. The detection cell heater temperature setting from the Run Module. Not used for 3500.',
     'DOEv1': 'A list of door-open events, separated by semicolon. Door close events are generally paired with door open events.',
-    #'DyeN5-N': 'Dye 5-N Name',
-    #'DyeW5-N': 'Dye 5-N Wavelength',
+    # 'DyeN5-N': 'Dye 5-N Name',
+    # 'DyeW5-N': 'Dye 5-N Wavelength',
     'ESig2': 'Electronic signature record used across 3500 software',
     'FTab1': 'Feature table. Can be created by Nibbler for Clear Range.',
     'FVoc1': 'Feature table vocabulary. Can be created by Nibbler for Clear Range.',
@@ -217,15 +220,27 @@ _INSTRUMENT_SPECIFIC_TAGS['abi_3530/3530xl'] = {
     'HCFG1': 'The Instrument Class. All upper case, no spaces. Initial valid value: CE',
     'HCFG2': 'The Instrument Family. All upper case, no spaces. Valid values: 31XX or 37XX for UDC, 35XX (for 3500)',
     'HCFG3': 'The official instrument name. Mixed case, minus any special formatting. Initial valid values: 3130, 3130xl, 3730, 3730xl, 3500, 3500xl.',
-    'HCFG4': 'Instrument parameters. Contains key-value pairs of instrument configuration information, separated by semicolons. Four parameters are included initially: UnitID=<UNITD number>, CPUBoard=<board type>, ArraySize=<# of capillaries>, SerialNumber=<Instrument Serial#>.',
+    'HCFG4': 'Instrument parameters. Contains key-value pairs of instrument configuration information, separated by semicolons. '
+             + 'Four parameters are included initially: UnitID=<UNITD number>, CPUBoard=<board type>, '
+             + 'ArraySize=<# of capillaries>, SerialNumber=<Instrument Serial#>.',
     'InjN1': 'Injection name',
     'LAST1': 'Parameter settings information',
-    'NOIS1': 'The estimate of rms baseline noise (S/N ratio) for each dye for a successfully analyzed sample. Corresponds in order to the raw data in tags DATA 1-4. KB basecaller only.',
-    #'OvrI1-N': 'One for each dye (unanalyzed and/or analyzed data). List of scan number indexes that have values greater than 32767 but did not saturate the camera. In Genemapper samples, this can have indexes with values greater than 32000. In sequencing samples, this cannot have indexes with values greater than 32000.',
-    #'OvrV1-N': 'One for each dye (unanalyzed and/or analyzed data). List of color data values found at the locations listed in the OvrI tag. Optional. There must be exactly as many numbers in this array as in the OvrI array.',
+    'NOIS1': 'The estimate of rms baseline noise (S/N ratio) for each dye for a successfully analyzed sample. '
+             + 'Corresponds in order to the raw data in tags DATA 1-4. KB basecaller only.',
+    # 'OvrI1-N': 'One for each dye (unanalyzed and/or analyzed data). List of
+    # scan number indexes that have values greater than 32767 but did not
+    # saturate the camera. In Genemapper samples, this can have indexes with
+    # values greater than 32000. In sequencing samples, this cannot have
+    # indexes with values greater than 32000.',
+    #
+    # 'OvrV1-N': 'One for each dye (unanalyzed and/or analyzed data). List of
+    # color data values found at the locations listed in the OvrI tag.
+    # Optional. There must be exactly as many numbers in this array as in the
+    # OvrI array.',
     'P1AM1': 'Amplitude of primary peak, which is not necessarily equal to corresponding signal strength at that position',
     'P1RL1': 'Deviation of primary peak position from (PLoc,2), times 100, rounded to integer',
-    'P1WD1': 'Full-width Half-max of primary peak, times 100, rounded to integer. Corresponding signal intensity is not necessarily equal to one half of primary peak amplitude',
+    'P1WD1': 'Full-width Half-max of primary peak, times 100, rounded to integer. '
+             + 'Corresponding signal intensity is not necessarily equal to one half of primary peak amplitude',
     'P2AM1': 'Amplitude of secondary peak, which is not necessarily equal to corresponding signal strength at that position',
     'P2BA1': 'Base of secondary peak',
     'P2RL1': 'Deviation of secondary peak position from (PLoc,2), times 100, rounded to integer',
@@ -277,7 +292,9 @@ _INSTRUMENT_SPECIFIC_TAGS['abi_3530/3530xl'] = {
 
 _INSTRUMENT_SPECIFIC_TAGS['abi_3730/3730xl'] = {
     'BufT1': 'Buffer tray heater temperature (degrees C)',
-    #'OvrI1-N': 'One value for each dye. List of scan number indices for scans with color data values >32767. Values cannot be greater than 32000. (optional)',
+    # 'OvrI1-N': 'One value for each dye. List of scan number indices for scans
+    # with color data values >32767. Values cannot be greater than 32000.
+    # (optional)',
 }
 
 # dictionary for data unpacking format
