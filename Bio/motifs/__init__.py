@@ -199,17 +199,17 @@ class Instances(list):
                 counts[letter][position] += 1
         return counts
 
-    def search(self, sequence, ignoreCase=False):
+    def search(self, sequence, case_sensitive=True):
         """
         a generator function, returning found positions of motif instances in a given sequence
         """
         for pos in range(0, len(sequence) - self.length + 1):
             for instance in self:
-                instance_str    = str(instance)
-                seq_str         = str(sequence[pos:pos + self.length])
-                if ignoreCase is True:
+                instance_str = str(instance)
+                seq_str = str(sequence[pos:pos + self.length])
+                if case_sensitive is False:
                     instance_str = instance_str.lower()
-                    seq_str      = seq_str.lower()
+                    seq_str = seq_str.lower()
 
                 if instance_str == seq_str:
                     yield (pos, instance)
