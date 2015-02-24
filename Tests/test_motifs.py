@@ -414,6 +414,26 @@ class MotifTestsBasic(unittest.TestCase):
         output_handle.close()
 
 
+class TestMotifSearch(unittest.TestCase):
+    def setUp(self):
+        instance = Seq("CTG")
+        instances = [instance]
+        self.m = motifs.create(instances)
+
+    def test_instance_search_mixed_case(self):
+        """Test the case_sensitive option in motifs.instances.search."""
+        myseq = Seq('AAAACTGAAActg')  
+
+        # we expect two matches with case insensitive, and one with case sensitive
+        result_default = self.m.instances.search(myseq)
+        result_sensitive = self.m.instances.search(myseq, case_sensitive=True)
+        result_insensitive = self.m.instances.search(myseq, case_sensitive=False)
+
+        self.assertEqual(1, len(result_sensitive))
+        self.assertEqual(1, len(result_default))
+        self.assertEqual(2, len(result_insensitive))
+
+
 class TestMEME(unittest.TestCase):
 
     def test_meme_parser_1(self):
