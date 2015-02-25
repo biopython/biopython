@@ -445,8 +445,9 @@ class TestMotifSearch(unittest.TestCase):
 
         result_insensitive = self.m.instances.search(myseq, case_sensitive=False)
         
-        result_minratio05_sensitive = self.m.instances.search(myseq, case_sensitive=True, minratio=0.5)
-        result_minratio05_insensitive = self.m.instances.search(myseq, case_sensitive=False, minratio=0.5)
+        # minratio = 0.7 means two out of three bases matching
+        result_minratio07_sensitive = self.m.instances.search(myseq, case_sensitive=True, minratio=0.7)
+        result_minratio07_insensitive = self.m.instances.search(myseq, case_sensitive=False, minratio=0.7)
 
         result_minratio0 = self.m.instances.search(myseq, minratio=0)
         result_minratio04_insensitive = self.m.instances.search(myseq, minratio=0.4)
@@ -456,8 +457,8 @@ class TestMotifSearch(unittest.TestCase):
 
         self.assertEqual(2, len(list(result_insensitive)))
 
-        self.assertEqual(2, len(list(result_minratio05_sensitive)))
-        self.assertEqual(3, len(list(result_minratio05_insensitive)))
+        self.assertEqual(1, len(list(result_minratio07_sensitive)))
+        self.assertEqual(3, len(list(result_minratio07_insensitive)))
 
         self.assertEqual(16, len(list(result_minratio0)))
         self.assertEqual(7, len(list(result_minratio04_insensitive)))
