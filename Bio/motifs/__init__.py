@@ -18,6 +18,7 @@ from __future__ import print_function
 from Bio._py3k import range
 
 import math
+import difflib
 
 __docformat__ = "restructuredtext en"
 
@@ -199,22 +200,35 @@ class Instances(list):
                 counts[letter][position] += 1
         return counts
 
-    def search(self, sequence, case_sensitive=True):
+    def search(self, sequence, case_sensitive=True, mismatches=0, junk=None):
         """
         a generator function, returning found positions of motif instances in a given sequence
+
+            - case_sensitive: ignore case of both motif instance and sequence
+            - mismatches: number of mismatches allowed
+            - junk: list of character to be ignored (e.g. 'Nn'.split())
         """
         seq_str = str(sequence)
         if case_sensitive is False:
             seq_str = seq_str.lower()
-        for pos in range(0, len(sequence) - self.length + 1):
-            for instance in self:
-                instance_str = str(instance)
-                current_seq = seq_str[pos:pos + self.length]
-                if case_sensitive is False:
-                    instance_str = instance_str.lower()
 
-                if instance_str == current_seq:
-                    yield (pos, instance)
+        for instance in self:
+            instance_str = str(instance)
+            minimum_matches = len(instance_str) - mismatches
+            if case_sensitive is False:
+                instance_str = instance_str.lower()
+            junk_characters = None  # This could be a list of characters to ignore. e.g. [N, n]
+
+            sm = difflib.SequenceMatcher(
+                isjunk = junk_characters,  
+                a = instance_str,
+                b = seq_str
+                )
+            allmatches = sm.get_matching_blocks()
+            print(allmatches)
+            for match in allmatches:
+                if match[2] <= minimum_matches:
+                    yield(match[0], instance)
                     break  # no other instance will fit (we don't want to return multiple hits)
 
     def reverse_complement(self):
