@@ -434,6 +434,35 @@ class TestMotifSearch(unittest.TestCase):
         self.assertEqual(2, len(list(result_insensitive)))
 
 
+    def test_minratio_cutoff(self):
+        """Test the minratio option in motifs.instances.search."""
+        myseq = Seq('aaaCTGaaaCGGaaaCtG')  
+
+        # we expect two matches with case insensitive, and one with case sensitive,
+        # plus one additional match with minratio 0.5 and case insensitive
+        result_default = self.m.instances.search(myseq)
+        result_sensitive = self.m.instances.search(myseq, case_sensitive=True)
+
+        result_insensitive = self.m.instances.search(myseq, case_sensitive=False)
+        
+        result_minratio05_sensitive = self.m.instances.search(myseq, case_sensitive=True, minratio=0.5)
+        result_minratio05_insensitive = self.m.instances.search(myseq, case_sensitive=False, minratio=0.5)
+
+        result_minratio0 = self.m.instances.search(myseq, minratio=0)
+        result_minratio04_insensitive = self.m.instances.search(myseq, minratio=0.4)
+
+        self.assertEqual(1, len(list(result_default)))
+        self.assertEqual(1, len(list(result_sensitive)))
+
+        self.assertEqual(2, len(list(result_insensitive)))
+
+        self.assertEqual(2, len(list(result_minratio05_sensitive)))
+        self.assertEqual(3, len(list(result_minratio05_insensitive)))
+
+        self.assertEqual(16, len(list(result_minratio0)))
+        self.assertEqual(7, len(list(result_minratio04_insensitive)))
+
+
 class TestMEME(unittest.TestCase):
 
     def test_meme_parser_1(self):
