@@ -200,35 +200,37 @@ class Instances(list):
                 counts[letter][position] += 1
         return counts
 
-    def search(self, sequence, case_sensitive=True, mismatches=0, junk=None):
+    def search(self, sequence, case_sensitive=True, minratio=1, junk=None):
         """
         a generator function, returning found positions of motif instances in a given sequence
 
             - case_sensitive: ignore case of both motif instance and sequence
-            - mismatches: number of mismatches allowed
+            - minratio: minimum ratio of sequence match to consider (from 0 to 1)
             - junk: list of character to be ignored (e.g. 'Nn'.split())
         """
+        def isjunk(x):
+            if junk is None:
+                return None
+            else:
+                return x in junk
+        sm = difflib.SequenceMatcher(isjunk)
+
         seq_str = str(sequence)
         if case_sensitive is False:
             seq_str = seq_str.lower()
 
-        for instance in self:
-            instance_str = str(instance)
-            minimum_matches = len(instance_str) - mismatches
-            if case_sensitive is False:
-                instance_str = instance_str.lower()
-            junk_characters = None  # This could be a list of characters to ignore. e.g. [N, n]
+        for pos in range(0, len(seq_str) - self.length + 1):
+            current_seq = str(seq_str[pos:pos + self.length])
+            sm.set_seq2(current_seq)
 
-            sm = difflib.SequenceMatcher(
-                isjunk = junk_characters,  
-                a = instance_str,
-                b = seq_str
-                )
-            allmatches = sm.get_matching_blocks()
-            print(allmatches)
-            for match in allmatches:
-                if match[2] <= minimum_matches:
-                    yield(match[0], instance)
+            for instance in self:
+                instance_str = str(instance)
+                if case_sensitive is False:
+                    instance_str = instance_str.lower()
+                sm.set_seq1(instance_str)
+
+                if sm.ratio() >= minratio:
+                    yield (pos, instance)
                     break  # no other instance will fit (we don't want to return multiple hits)
 
     def reverse_complement(self):
