@@ -203,15 +203,17 @@ class Instances(list):
         """
         a generator function, returning found positions of motif instances in a given sequence
         """
+        seq_str = str(sequence)
+        if case_sensitive is False:
+            seq_str = seq_str.lower()
         for pos in range(0, len(sequence) - self.length + 1):
             for instance in self:
                 instance_str = str(instance)
-                seq_str = str(sequence[pos:pos + self.length])
+                current_seq = seq_str[pos:pos + self.length]
                 if case_sensitive is False:
                     instance_str = instance_str.lower()
-                    seq_str = seq_str.lower()
 
-                if instance_str == seq_str:
+                if instance_str == current_seq:
                     yield (pos, instance)
                     break  # no other instance will fit (we don't want to return multiple hits)
 
