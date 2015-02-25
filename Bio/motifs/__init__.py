@@ -200,20 +200,14 @@ class Instances(list):
                 counts[letter][position] += 1
         return counts
 
-    def search(self, sequence, case_sensitive=True, minratio=1, junk=None):
+    def search(self, sequence, case_sensitive=True, minratio=1):
         """
         a generator function, returning found positions of motif instances in a given sequence
 
             - case_sensitive: ignore case of both motif instance and sequence
             - minratio: minimum ratio of sequence match to consider (from 0 to 1)
-            - junk: list of character to be ignored (e.g. 'Nn'.split())
         """
-        def isjunk(x):
-            if junk is None:
-                return None
-            else:
-                return x in junk
-        sm = difflib.SequenceMatcher(isjunk)
+        sm = difflib.SequenceMatcher(None)
 
         seq_str = str(sequence)
         if case_sensitive is False:
@@ -221,7 +215,7 @@ class Instances(list):
 
         for pos in range(0, len(seq_str) - self.length + 1):
             current_seq = str(seq_str[pos:pos + self.length])
-            sm.set_seq2(current_seq)
+            sm.set_seq2(current_seq)  # better to set seq2 before seq1
 
             for instance in self:
                 instance_str = str(instance)
