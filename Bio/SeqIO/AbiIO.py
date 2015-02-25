@@ -140,11 +140,11 @@ _INSTRUMENT_SPECIFIC_TAGS['general'] = {
 }
 
 _INSTRUMENT_SPECIFIC_TAGS['abi_prism_3100/3100-Avant'] = {
-    #'OvrI1-': 'One value for each dye. List of scan number indices for scans with color      '
-    #          'data values >32767. Values cannot be greater than 32000. (optional)           '
-    #'OvrV1-N': #One value for each dye. List of color data values for the locations listed in
-    #the OvrI tag. Number of OvrV tags must be equal to the number of OvrI
-    #tags. (optional)
+    # 'OvrI1-': 'One value for each dye. List of scan number indices for scans with color      '
+    #           'data values >32767. Values cannot be greater than 32000. (optional)           '
+    # 'OvrV1-N': #One value for each dye. List of color data values for the locations listed in
+    # the OvrI tag. Number of OvrV tags must be equal to the number of OvrI
+    # tags. (optional)
     'DATA105': 'Raw data for dye 5 (optional)',
 }
 
@@ -161,14 +161,14 @@ _INSTRUMENT_SPECIFIC_TAGS['abi_3130/3130xl'] = {
     'HCFG2': 'Instrument Family',
     'HCFG3': 'Official Instrument Name',
     'HCFG4': 'Instrument Parameters',
-    'RMdVa1':'Run Module version',
+    'RMdVa1': 'Run Module version',
 }
 
 _INSTRUMENT_SPECIFIC_TAGS['abi_3530/3530xl'] = {
     'DATA105-199': 'Short Array holding raw color data',
     'DATA9-12,205-299': 'Short Array holding analyzed color data',
     'AAct1': 'Primary Analysis Audit Active indication. True if system auditing was enabled during the last write of this file, '
-             + 'false if system auditing was disabled.',
+             'false if system auditing was disabled.',
     'ABED1': 'Anode buffer expiration date using ISO 8601 format using the patterns YYYY-MM-DDTHH:MM:SS.ss+/-HH:MM. Hundredths of a second are optional.',
     'ABID1': 'Anode buffer tray first installed date',
     'ABLt1': 'Anode buffer lot number',
@@ -221,12 +221,12 @@ _INSTRUMENT_SPECIFIC_TAGS['abi_3530/3530xl'] = {
     'HCFG2': 'The Instrument Family. All upper case, no spaces. Valid values: 31XX or 37XX for UDC, 35XX (for 3500)',
     'HCFG3': 'The official instrument name. Mixed case, minus any special formatting. Initial valid values: 3130, 3130xl, 3730, 3730xl, 3500, 3500xl.',
     'HCFG4': 'Instrument parameters. Contains key-value pairs of instrument configuration information, separated by semicolons. '
-             + 'Four parameters are included initially: UnitID=<UNITD number>, CPUBoard=<board type>, '
-             + 'ArraySize=<# of capillaries>, SerialNumber=<Instrument Serial#>.',
+             'Four parameters are included initially: UnitID=<UNITD number>, CPUBoard=<board type>, '
+             'ArraySize=<# of capillaries>, SerialNumber=<Instrument Serial#>.',
     'InjN1': 'Injection name',
     'LAST1': 'Parameter settings information',
     'NOIS1': 'The estimate of rms baseline noise (S/N ratio) for each dye for a successfully analyzed sample. '
-             + 'Corresponds in order to the raw data in tags DATA 1-4. KB basecaller only.',
+             'Corresponds in order to the raw data in tags DATA 1-4. KB basecaller only.',
     # 'OvrI1-N': 'One for each dye (unanalyzed and/or analyzed data). List of
     # scan number indexes that have values greater than 32767 but did not
     # saturate the camera. In Genemapper samples, this can have indexes with
@@ -240,7 +240,7 @@ _INSTRUMENT_SPECIFIC_TAGS['abi_3530/3530xl'] = {
     'P1AM1': 'Amplitude of primary peak, which is not necessarily equal to corresponding signal strength at that position',
     'P1RL1': 'Deviation of primary peak position from (PLoc,2), times 100, rounded to integer',
     'P1WD1': 'Full-width Half-max of primary peak, times 100, rounded to integer. '
-             + 'Corresponding signal intensity is not necessarily equal to one half of primary peak amplitude',
+             'Corresponding signal intensity is not necessarily equal to one half of primary peak amplitude',
     'P2AM1': 'Amplitude of secondary peak, which is not necessarily equal to corresponding signal strength at that position',
     'P2BA1': 'Base of secondary peak',
     'P2RL1': 'Deviation of secondary peak position from (PLoc,2), times 100, rounded to integer',
@@ -392,7 +392,6 @@ def AbiIterator(handle, alphabet=None, trim=False):
         else:
             if key in _EXTRACT:
                 annot[_EXTRACT[key]] = tag_data
-
 
     # set time annotations
     annot['run_start'] = '%s %s' % (times['RUND1'], times['RUNT1'])
