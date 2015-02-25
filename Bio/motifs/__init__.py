@@ -18,7 +18,6 @@ from __future__ import print_function
 from Bio._py3k import range
 
 import math
-import difflib
 
 __docformat__ = "restructuredtext en"
 
@@ -206,8 +205,9 @@ class Instances(list):
 
             - case_sensitive: ignore case of both motif instance and sequence
             - minratio: minimum ratio of sequence match to consider (from 0 to 1)
+
+        See also pairwise2.align.globalxx for aligning each instance to a sequence.
         """
-        sm = difflib.SequenceMatcher(None)
 
         seq_str = str(sequence)
         if case_sensitive is False:
@@ -215,15 +215,15 @@ class Instances(list):
 
         for pos in range(0, len(seq_str) - self.length + 1):
             current_seq = str(seq_str[pos:pos + self.length])
-            sm.set_seq2(current_seq)  # better to set seq2 before seq1
 
             for instance in self:
                 instance_str = str(instance)
                 if case_sensitive is False:
                     instance_str = instance_str.lower()
-                sm.set_seq1(instance_str)
 
-                if sm.ratio() >= minratio:
+                totmatches = sum(c1==c2 for c1,c2 in zip(current_seq,instance_str))
+                ratio = 1. * totmatches / len(current_seq)
+                if ratio >= minratio:
                     yield (pos, instance)
                     break  # no other instance will fit (we don't want to return multiple hits)
 
