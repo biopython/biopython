@@ -3,13 +3,18 @@
 # as part of this package.
 #
 
-"""
-A whole bunch of substitution matrices for use in alignments, etc.
+"""Substitution matrices for use in alignments, etc.
 
-The info on this page was obtained from:
-    http://www.embl-heidelberg.de/~vogt/matrices/mlist1.html
-and was extracted using the code in 'get_matrices.py.'
+The information on this page was originally obtained from Dr. Gerhard Vogt's
+page http://www.embl-heidelberg.de/~vogt/matrices/mlist1.html (dead link),
+and was extracted using a script.
+
+You can view an archive copy of this webpage from 1999 here;
+https://web.archive.org/web/19991014010917/http://www.embl-heidelberg.de/%7Evogt/matrices/mlist1.html
 """
+
+__docformat__ = "restructuredtext en"
+
 # a list of all available substitution matrices
 available_matrices = ['benner6', 'benner22', 'benner74', 'blosum100',
                       'blosum30', 'blosum35', 'blosum40', 'blosum45',

@@ -47,17 +47,17 @@ class RafTests(unittest.TestCase):
         self.assertEqual(len(r2.res), l)
 
         r2.extend(r2)
-        self.assertEqual(len(r2.res), l*2)
+        self.assertEqual(len(r2.res), l * 2)
 
         r4 = r2 + r2
-        self.assertEqual(len(r4.res), l*4)
+        self.assertEqual(len(r4.res), l * 4)
 
         r4.append(Raf.Res())
-        self.assertEqual(len(r4.res), (l*4)+1)
+        self.assertEqual(len(r4.res), (l * 4) + 1)
 
     def testSeqMapSlice(self):
         r = Raf.SeqMap(self.rafLine)
-        r = r[ r.index("124"): r.index("135")+1]
+        r = r[r.index("124"): r.index("135") + 1]
         self.assertEqual(len(r.res), 12)
 
     def testSeqMapIndex(self):
@@ -88,6 +88,6 @@ class RafTests(unittest.TestCase):
         self.assertEqual(len(r.res), 5)
 
 
-if __name__=='__main__':
-    runner = unittest.TextTestRunner(verbosity = 2)
+if __name__ == '__main__':
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

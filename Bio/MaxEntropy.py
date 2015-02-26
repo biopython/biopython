@@ -7,7 +7,7 @@
 
 Uses Improved Iterative Scaling.
 """
-#TODO Define terminology
+# TODO Define terminology
 
 from __future__ import print_function
 from functools import reduce
@@ -126,7 +126,7 @@ def _calc_model_expects(xs, classes, features, alphas):
         sum = 0.0
         for (i, j), f in feature.items():
             sum += p_yx[i][j] * f
-        expects.append(sum/len(xs))
+        expects.append(sum / len(xs))
     return expects
 
 
@@ -150,20 +150,6 @@ def _calc_p_class_given_x(xs, classes, features, alphas):
     for i in range(len(xs)):
         z = sum(prob_yx[i])
         prob_yx[i] = prob_yx[i] / z
-
-    #prob_yx = []
-    #for i in range(len(xs)):
-    #    z = 0.0   # Normalization factor for this x, over all classes.
-    #    probs = [0.0] * len(classes)
-    #    for j in range(len(classes)):
-    #        log_p = 0.0   # log of the probability of f(x, y)
-    #        for k in range(len(features)):
-    #            log_p += alphas[k] * features[k].get((i, j), 0.0)
-    #        probs[j] = numpy.exp(log_p)
-    #        z += probs[j]
-    #    # Normalize the probabilities for this x.
-    #    probs = map(lambda x, z=z: x/z, probs)
-    #    prob_yx.append(probs)
     return prob_yx
 
 
@@ -183,8 +169,8 @@ def _iis_solve_delta(N, feature, f_sharp, empirical, prob_yx,
     # SUM_x P(x) * SUM_c P(c|x) f_i(x, c) e^[delta_i * f#(x, c)] = 0
     delta = 0.0
     iters = 0
-    while iters < max_newton_iterations: # iterate for Newton's method
-        f_newton = df_newton = 0.0       # evaluate the function and derivative
+    while iters < max_newton_iterations:  # iterate for Newton's method
+        f_newton = df_newton = 0.0  # evaluate the function and derivative
         for (i, j), f in feature.items():
             prod = prob_yx[i][j] * f * numpy.exp(delta * f_sharp[i][j])
             f_newton += prod
@@ -264,8 +250,8 @@ def train(training_set, results, feature_fns, update_fn=None,
         nalphas = _train_iis(xs, classes, features, f_sharp,
                              alphas, e_empirical,
                              max_newton_iterations, newton_converge)
-        diff = map(lambda x, y: numpy.fabs(x-y), alphas, nalphas)
-        diff = reduce(lambda x, y: x+y, diff, 0)
+        diff = map(lambda x, y: numpy.fabs(x - y), alphas, nalphas)
+        diff = reduce(lambda x, y: x + y, diff, 0)
         alphas = nalphas
 
         me = MaxEntropy()
@@ -282,23 +268,23 @@ def train(training_set, results, feature_fns, update_fn=None,
 
 
 if __name__ == "__main__":
-    #Car data from example Naive Bayes Classifier example by Eric Meisner November 22, 2003
-    #http://www.inf.u-szeged.hu/~ormandi/teaching/mi2/02-naiveBayes-example.pdf
+    # Car data from example Naive Bayes Classifier example by Eric Meisner November 22, 2003
+    # http://www.inf.u-szeged.hu/~ormandi/teaching/mi2/02-naiveBayes-example.pdf
 
-    xcar=[
-        ['Red',    'Sports', 'Domestic'],
-        ['Red',    'Sports', 'Domestic'],
-        ['Red',    'Sports', 'Domestic'],
+    xcar = [
+        ['Red', 'Sports', 'Domestic'],
+        ['Red', 'Sports', 'Domestic'],
+        ['Red', 'Sports', 'Domestic'],
         ['Yellow', 'Sports', 'Domestic'],
         ['Yellow', 'Sports', 'Imported'],
-        ['Yellow', 'SUV',    'Imported'],
-        ['Yellow', 'SUV',    'Imported'],
-        ['Yellow', 'SUV',    'Domestic'],
-        ['Red',    'SUV',    'Imported'],
-        ['Red',    'Sports', 'Imported']
+        ['Yellow', 'SUV', 'Imported'],
+        ['Yellow', 'SUV', 'Imported'],
+        ['Yellow', 'SUV', 'Domestic'],
+        ['Red', 'SUV', 'Imported'],
+        ['Red', 'Sports', 'Imported']
     ]
 
-    ycar=[
+    ycar = [
         'Yes',
         'No',
         'Yes',
@@ -311,28 +297,28 @@ if __name__ == "__main__":
         'Yes'
     ]
 
-    #Requires some rules or features
+    # Requires some rules or features
     def udf1(ts, cl):
-        if ts[0] =='Red':
+        if ts[0] == 'Red':
             return 0
         else:
             return 1
 
     def udf2(ts, cl):
-        if ts[1] =='Sports':
+        if ts[1] == 'Sports':
             return 0
         else:
             return 1
 
     def udf3(ts, cl):
-        if ts[2] =='Domestic':
+        if ts[2] == 'Domestic':
             return 0
         else:
             return 1
 
-    user_functions=[udf1, udf2, udf3] # must be an iterable type
+    user_functions = [udf1, udf2, udf3]  # must be an iterable type
 
-    xe=train(xcar, ycar, user_functions)
+    xe = train(xcar, ycar, user_functions)
     for xv, yv in zip(xcar, ycar):
-        xc=classify(xe, xv)
+        xc = classify(xe, xv)
         print('Pred: %s gives %s y is %s' % (xv, xc, yv))

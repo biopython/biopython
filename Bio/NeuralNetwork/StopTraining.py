@@ -17,8 +17,8 @@ in this module should be instaniated, and then the stop_training function
 of the classes passed to the network.
 """
 
-
 from __future__ import print_function
+
 
 class ValidationIncreaseStop(object):
     """Class to stop training on a network when the validation error increases.
@@ -58,7 +58,7 @@ class ValidationIncreaseStop(object):
         """
         if num_iterations % 10 == 0:
             if self.verbose:
-                print("%s; Training Error:%s; Validation Error:%s"\
+                print("%s; Training Error:%s; Validation Error:%s"
                       % (num_iterations, training_error, validation_error))
 
         if num_iterations > self.min_iterations:

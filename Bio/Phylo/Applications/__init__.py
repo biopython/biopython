@@ -9,7 +9,7 @@ from ._Phyml import PhymlCommandline
 from ._Raxml import RaxmlCommandline
 from ._Fasttree import FastTreeCommandline
 
-#Make this explicit, then they show up in the API docs
+# Make this explicit, then they show up in the API docs
 __all__ = ["PhymlCommandline",
            "RaxmlCommandline",
            "FastTreeCommandline",

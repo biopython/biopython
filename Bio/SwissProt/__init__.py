@@ -11,12 +11,14 @@ Release 56.9, 03-March-2009.
 
 
 Classes:
-Record             Holds SwissProt data.
-Reference          Holds reference data from a SwissProt record.
+
+    - Record             Holds SwissProt data.
+    - Reference          Holds reference data from a SwissProt record.
 
 Functions:
-read               Read one SwissProt record
-parse              Read multiple SwissProt records
+
+    - read               Read one SwissProt record
+    - parse              Read multiple SwissProt records
 
 """
 
@@ -24,40 +26,43 @@ from __future__ import print_function
 
 from Bio._py3k import _as_string
 
+__docformat__ = "restructuredtext en"
+
 
 class Record(object):
     """Holds information from a SwissProt record.
 
     Members:
-    entry_name        Name of this entry, e.g. RL1_ECOLI.
-    data_class        Either 'STANDARD' or 'PRELIMINARY'.
-    molecule_type     Type of molecule, 'PRT',
-    sequence_length   Number of residues.
 
-    accessions        List of the accession numbers, e.g. ['P00321']
-    created           A tuple of (date, release).
-    sequence_update   A tuple of (date, release).
-    annotation_update A tuple of (date, release).
+        - entry_name        Name of this entry, e.g. RL1_ECOLI.
+        - data_class        Either 'STANDARD' or 'PRELIMINARY'.
+        - molecule_type     Type of molecule, 'PRT',
+        - sequence_length   Number of residues.
 
-    description       Free-format description.
-    gene_name         Gene name.  See userman.txt for description.
-    organism          The source of the sequence.
-    organelle         The origin of the sequence.
-    organism_classification  The taxonomy classification.  List of strings.
-                             (http://www.ncbi.nlm.nih.gov/Taxonomy/)
-    taxonomy_id       A list of NCBI taxonomy id's.
-    host_organism     A list of names of the hosts of a virus, if any.
-    host_taxonomy_id  A list of NCBI taxonomy id's of the hosts, if any.
-    references        List of Reference objects.
-    comments          List of strings.
-    cross_references  List of tuples (db, id1[, id2][, id3]).  See the docs.
-    keywords          List of the keywords.
-    features          List of tuples (key name, from, to, description).
-                      from and to can be either integers for the residue
-                      numbers, '<', '>', or '?'
+        - accessions        List of the accession numbers, e.g. ['P00321']
+        - created           A tuple of (date, release).
+        - sequence_update   A tuple of (date, release).
+        - annotation_update A tuple of (date, release).
 
-    seqinfo           tuple of (length, molecular weight, CRC32 value)
-    sequence          The sequence.
+        - description       Free-format description.
+        - gene_name         Gene name.  See userman.txt for description.
+        - organism          The source of the sequence.
+        - organelle         The origin of the sequence.
+        - organism_classification  The taxonomy classification.  List of strings.
+          (http://www.ncbi.nlm.nih.gov/Taxonomy/)
+        - taxonomy_id       A list of NCBI taxonomy id's.
+        - host_organism     A list of names of the hosts of a virus, if any.
+        - host_taxonomy_id  A list of NCBI taxonomy id's of the hosts, if any.
+        - references        List of Reference objects.
+        - comments          List of strings.
+        - cross_references  List of tuples (db, id1[, id2][, id3]).  See the docs.
+        - keywords          List of the keywords.
+        - features          List of tuples (key name, from, to, description).
+          from and to can be either integers for the residue
+          numbers, '<', '>', or '?'
+
+        - seqinfo           tuple of (length, molecular weight, CRC32 value)
+        - sequence          The sequence.
 
     """
     def __init__(self):
@@ -138,20 +143,20 @@ def _read(handle):
     record = None
     unread = ""
     for line in handle:
-        #This is for Python 3 to cope with a binary handle (byte strings),
-        #or a text handle (unicode strings):
+        # This is for Python 3 to cope with a binary handle (byte strings),
+        # or a text handle (unicode strings):
         line = _as_string(line)
         key, value = line[:2], line[5:].rstrip()
         if unread:
             value = unread + " " + value
             unread = ""
         if key == '**':
-            #See Bug 2353, some files from the EBI have extra lines
-            #starting "**" (two asterisks/stars).  They appear
-            #to be unofficial automated annotations. e.g.
-            #**
-            #**   #################    INTERNAL SECTION    ##################
-            #**HA SAM; Annotated by PicoHamap 1.88; MF_01138.1; 09-NOV-2003.
+            # See Bug 2353, some files from the EBI have extra lines
+            # starting "**" (two asterisks/stars).  They appear
+            # to be unofficial automated annotations. e.g.
+            # **
+            # **   #################    INTERNAL SECTION    ##################
+            # **HA SAM; Annotated by PicoHamap 1.88; MF_01138.1; 09-NOV-2003.
             pass
         elif key == 'ID':
             record = Record()
@@ -218,11 +223,10 @@ def _read(handle):
         elif key == 'DR':
             _read_dr(record, value)
         elif key == 'PE':
-            #TODO - Record this information?
+            # TODO - Record this information?
             pass
         elif key == 'KW':
-            cols = value.rstrip(";.").split('; ')
-            record.keywords.extend(cols)
+            _read_kw(record, value)
         elif key == 'FT':
             _read_ft(record, line)
         elif key == 'SQ':
@@ -253,11 +257,11 @@ def _read(handle):
 
 def _read_id(record, line):
     cols = line[5:].split()
-    #Prior to release 51, included with MoleculeType:
-    #ID   EntryName DataClass; MoleculeType; SequenceLength AA.
+    # Prior to release 51, included with MoleculeType:
+    # ID   EntryName DataClass; MoleculeType; SequenceLength AA.
     #
-    #Newer files lack the MoleculeType:
-    #ID   EntryName DataClass; SequenceLength AA.
+    # Newer files lack the MoleculeType:
+    # ID   EntryName DataClass; SequenceLength AA.
     if len(cols) == 5:
         record.entry_name = cols[0]
         record.data_class = cols[1].rstrip(";")
@@ -351,7 +355,7 @@ def _read_dt(record, line):
         # DT   15-OCT-2001, sequence version 3.
         # DT   01-APR-2004, entry version 14.
         #
-        #This is a new style DT line...
+        # This is a new style DT line...
 
         # The date should be in string cols[1]
         # Get the version number if there is one.
@@ -377,7 +381,7 @@ def _read_dt(record, line):
 
 
 def _read_ox(record, line):
-    # The OX line is in the format:
+    # The OX line used to be in the simple format:
     # OX   DESCRIPTION=ID[, ID]...;
     # If there are too many id's to fit onto a line, then the ID's
     # continue directly onto the next line, e.g.
@@ -387,6 +391,11 @@ def _read_ox(record, line):
     # To parse this, I need to check to see whether I'm at the
     # first line.  If I am, grab the description and make sure
     # it's an NCBI ID.  Then, grab all the id's.
+    #
+    # As of the 2014-10-01 release, there may be an evidence code, e.g.
+    # OX   NCBI_TaxID=418404 {ECO:0000313|EMBL:AEX14553.1};
+    # In the short term, we will ignore any evidence codes:
+    line = line.split('{')[0]
     if record.taxonomy_id:
         ids = line[5:].rstrip().rstrip(";")
     else:
@@ -406,6 +415,12 @@ def _read_oh(record, line):
 
 
 def _read_rn(reference, rn):
+    # This used to be a very simple line with a reference number, e.g.
+    # RN   [1]
+    # As of the 2014-10-01 release, there may be an evidence code, e.g.
+    # RN   [1] {ECO:0000313|EMBL:AEX14553.1}
+    # We will for now ignore this
+    rn = rn.split()[0]
     assert rn[0] == '[' and rn[-1] == ']', "Missing brackets %s" % rn
     reference.number = int(rn[1:-1])
 
@@ -422,7 +437,7 @@ def _read_rc(reference, value):
         # The token is everything before the first '=' character.
         i = col.find("=")
         if i >= 0:
-            token, text = col[:i], col[i+1:]
+            token, text = col[:i], col[i + 1:]
             comment = token.lstrip(), text
             reference.comments.append(comment)
         else:
@@ -494,6 +509,24 @@ def _read_dr(record, value):
     record.cross_references.append(tuple(cols))
 
 
+def _read_kw(record, value):
+    # Old style - semi-colon separated, multi-line. e.g. Q13639.txt
+    # KW   Alternative splicing; Cell membrane; Complete proteome;
+    # KW   Disulfide bond; Endosome; G-protein coupled receptor; Glycoprotein;
+    # KW   Lipoprotein; Membrane; Palmitate; Polymorphism; Receptor; Transducer;
+    # KW   Transmembrane.
+    #
+    # New style as of 2014-10-01 release with evidence codes, e.g. H2CNN8.txt
+    # KW   Monooxygenase {ECO:0000313|EMBL:AEX14553.1};
+    # KW   Oxidoreductase {ECO:0000313|EMBL:AEX14553.1}.
+    # For now to match the XML parser, drop the evidence codes.
+    for value in value.rstrip(";.").split('; '):
+        if value.endswith("}"):
+            # Discard the evidence code
+            value = value.rsplit("{", 1)[0]
+        record.keywords.append(value.strip())
+
+
 def _read_ft(record, line):
     line = line[5:]    # get rid of junk in front
     name = line[0:8].rstrip()
@@ -505,7 +538,7 @@ def _read_ft(record, line):
         to_res = int(line[16:22])
     except ValueError:
         to_res = line[16:22].lstrip()
-    #if there is a feature_id (FTId), store it away
+    # if there is a feature_id (FTId), store it away
     if line[29:35] == r"/FTId=":
         ft_id = line[35:70].rstrip()[:-1]
         description = ""
@@ -552,7 +585,7 @@ if __name__ == "__main__":
     if not os.path.isfile(example_filename):
         print("Missing test file %s" % example_filename)
     else:
-        #Try parsing it!
+        # Try parsing it!
 
         with open(example_filename) as handle:
             records = parse(handle)

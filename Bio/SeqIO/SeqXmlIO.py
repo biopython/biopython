@@ -29,7 +29,7 @@ from Bio.SeqRecord import SeqRecord
 from .Interfaces import SequentialSequenceWriter
 
 
-class XMLRecordIterator:
+class XMLRecordIterator(object):
     """Base class for building iterators for record style XML formats.
 
     It is assumed that all information for one record can be found within a
@@ -59,17 +59,17 @@ class XMLRecordIterator:
                 if event == "START_ELEMENT" and node.namespaceURI == self._namespace:
 
                     if node.localName == self._recordTag:
-                        #create an empty SeqRecord
+                        # create an empty SeqRecord
                         record = SeqRecord('', id='')
 
-                    #call matching methods with attributes only
+                    # call matching methods with attributes only
                     if hasattr(self, "_attr_" + node.localName):
                         getattr(self, "_attr_" + node.localName)(
                             self._attributes(node), record)
 
-                    #call matching methods with DOM tree
+                    # call matching methods with DOM tree
                     if hasattr(self, "_elem_" + node.localName):
-                        #read the element and all nested elements into a DOM tree
+                        # read the element and all nested elements into a DOM tree
                         self._events.expandNode(node)
                         node.normalize()
 
@@ -81,13 +81,13 @@ class XMLRecordIterator:
         except SAXParseException as e:
 
             if e.getLineNumber() == 1 and e.getColumnNumber() == 0:
-                #empty file
+                # empty file
                 pass
             else:
                 import os
                 if e.getLineNumber() == 1 and e.getColumnNumber() == 1 \
                         and os.name == "java":
-                    #empty file, see http://bugs.jython.org/issue1774
+                    # empty file, see http://bugs.jython.org/issue1774
                     pass
                 else:
                     raise
@@ -150,9 +150,9 @@ class SeqXmlIterator(XMLRecordIterator):
         if "name" not in attr_dict or "ncbiTaxID" not in attr_dict:
             raise ValueError("Malformed species element!")
 
-        #the keywords for the species annotation are taken from SwissIO
+        # the keywords for the species annotation are taken from SwissIO
         record.annotations["organism"] = attr_dict["name"]
-        #TODO - Should have been a list to match SwissProt parser:
+        # TODO - Should have been a list to match SwissProt parser:
         record.annotations["ncbi_taxid"] = attr_dict["ncbiTaxID"]
 
     def _attr_entry(self, attr_dict, record):
@@ -167,8 +167,8 @@ class SeqXmlIterator(XMLRecordIterator):
         elif self._source is not None:
             record.annotations["source"] = self._source
 
-        #initialize entry with global species definition
-        #the keywords for the species annotation are taken from SwissIO
+        # initialize entry with global species definition
+        # the keywords for the species annotation are taken from SwissIO
         if self._ncbiTaxId is not None:
             record.annotations["ncbi_taxid"] = self._ncbiTaxId
         if self._speciesName is not None:
@@ -298,7 +298,7 @@ class SeqXmlWriter(SequentialSequenceWriter):
         if "ncbi_taxid" in record.annotations:
             local_ncbi_taxid = record.annotations["ncbi_taxid"]
             if isinstance(local_ncbi_taxid, list):
-                #SwissProt parser uses a list (which could cope with chimeras)
+                # SwissProt parser uses a list (which could cope with chimeras)
                 if len(local_ncbi_taxid) == 1:
                     local_ncbi_taxid = local_ncbi_taxid[0]
                 elif len(local_ncbi_taxid) == 0:
@@ -315,7 +315,7 @@ class SeqXmlWriter(SequentialSequenceWriter):
             if not isinstance(local_ncbi_taxid, (basestring, int)):
                 raise TypeError("ncbiTaxID should be of type string or int")
 
-            #The local species definition is only written if it differs from the global species definition
+            # The local species definition is only written if it differs from the global species definition
             if local_org != self.species or local_ncbi_taxid != self.ncbiTaxId:
 
                 attr = {"name": local_org,
@@ -357,7 +357,7 @@ class SeqXmlWriter(SequentialSequenceWriter):
         if not len(seq) > 0:
             raise ValueError("The sequence length should be greater than 0")
 
-        #Get the base alphabet (underneath any Gapped or StopCodon encoding)
+        # Get the base alphabet (underneath any Gapped or StopCodon encoding)
         alpha = Alphabet._get_base_alphabet(record.seq.alphabet)
         if isinstance(alpha, Alphabet.RNAAlphabet):
             seqElem = "RNAseq"

@@ -25,7 +25,7 @@ from Bio._py3k import unicode
 
 from Bio.Phylo import PhyloXML as PX
 
-#For speed try to use cElementTree rather than ElementTree
+# For speed try to use cElementTree rather than ElementTree
 try:
     if (3, 0) <= sys.version_info[:2] <= (3, 1):
         # Workaround for bug in python 3.0 and 3.1,
@@ -39,8 +39,8 @@ except ImportError:
 # Recognize the phyloXML namespace when parsing
 # See http://effbot.org/zone/element-namespaces.htm
 NAMESPACES = {
-        'phy':  'http://www.phyloxml.org',
-        }
+    'phy': 'http://www.phyloxml.org',
+}
 
 try:
     register_namespace = ElementTree.register_namespace
@@ -55,6 +55,9 @@ except AttributeError:
 
 for prefix, uri in NAMESPACES.items():
     register_namespace(prefix, uri)
+
+# Tell ElementTree how to write to text handles
+DEFAULT_ENCODING = ("unicode" if sys.version_info[0] >= 3 else "utf-8")
 
 
 class PhyloXMLError(Exception):
@@ -92,7 +95,7 @@ def parse(file):
     return Parser(file).parse()
 
 
-def write(obj, file, encoding='utf-8', indent=True):
+def write(obj, file, encoding=DEFAULT_ENCODING, indent=True):
     """Write a phyloXML file.
 
     :Parameters:
@@ -124,7 +127,7 @@ def write(obj, file, encoding='utf-8', indent=True):
         obj = PX.Phyloxml({}, phylogenies=(fix_single(t) for t in obj))
     else:
         raise ValueError("First argument must be a Phyloxml, Phylogeny, "
-                "Tree, or iterable of Trees or Phylogenies.")
+                         "Tree, or iterable of Trees or Phylogenies.")
     return Writer(obj).write(file, encoding=encoding, indent=indent)
 
 
@@ -134,7 +137,7 @@ def write(obj, file, encoding='utf-8', indent=True):
 def _local(tag):
     """Extract the local tag from a namespaced tag name."""
     if tag[0] == '{':
-        return tag[tag.index('}')+1:]
+        return tag[tag.index('}') + 1:]
     return tag
 
 
@@ -198,12 +201,12 @@ def _indent(elem, level=0):
     - http://effbot.org/zone/element-lib.htm#prettyprint
     - http://infix.se/2007/02/06/gentlemen-indent-your-xml
     """
-    i = "\n" + level*"  "
+    i = "\n" + level * "  "
     if len(elem):
         if not elem.text or not elem.text.strip():
             elem.text = i + "  "
         for e in elem:
-            _indent(e, level+1)
+            _indent(e, level + 1)
             if not e.tail or not e.tail.strip():
                 e.tail = i + "  "
         if not e.tail or not e.tail.strip():
@@ -218,9 +221,9 @@ def _indent(elem, level=0):
 
 
 def _str2bool(text):
-    if text == 'true' or text=='1':
+    if text == 'true' or text == '1':
         return True
-    if text == 'false' or text=='0':
+    if text == 'false' or text == '0':
         return False
     raise ValueError('String could not be converted to boolean: ' + text)
 
@@ -294,7 +297,7 @@ class Parser(object):
     def read(self):
         """Parse the phyloXML file and create a single Phyloxml object."""
         phyloxml = PX.Phyloxml(dict((_local(key), val)
-                                for key, val in self.root.items()))
+                                    for key, val in self.root.items()))
         other_depth = 0
         for event, elem in self.context:
             namespace, localtag = _split_namespace(elem.tag)
@@ -332,19 +335,19 @@ class Parser(object):
         control to the top-level parsing function.
         """
         phylogeny = PX.Phylogeny(**_dict_str2bool(parent.attrib,
-                                                   ['rooted', 'rerootable']))
+                                                  ['rooted', 'rerootable']))
         list_types = {
-                # XML tag, plural attribute
-                'confidence':   'confidences',
-                'property':     'properties',
-                'clade_relation': 'clade_relations',
-                'sequence_relation': 'sequence_relations',
-                }
+            # XML tag, plural attribute
+            'confidence': 'confidences',
+            'property': 'properties',
+            'clade_relation': 'clade_relations',
+            'sequence_relation': 'sequence_relations',
+        }
         for event, elem in self.context:
             namespace, tag = _split_namespace(elem.tag)
             if event == 'start' and tag == 'clade':
                 assert phylogeny.root is None, \
-                        "Phylogeny object should only have 1 clade"
+                    "Phylogeny object should only have 1 clade"
                 phylogeny.root = self._parse_clade(elem)
                 continue
             if event == 'end':
@@ -354,7 +357,7 @@ class Parser(object):
                 # Handle the other non-recursive children
                 if tag in list_types:
                     getattr(phylogeny, list_types[tag]).append(
-                            getattr(self, tag)(elem))
+                        getattr(self, tag)(elem))
                 # Complex types
                 elif tag in ('date', 'id'):
                     setattr(phylogeny, tag, getattr(self, tag)(elem))
@@ -372,13 +375,13 @@ class Parser(object):
 
     _clade_complex_types = ['color', 'events', 'binary_characters', 'date']
     _clade_list_types = {
-            'confidence':   'confidences',
-            'distribution': 'distributions',
-            'reference':    'references',
-            'property':     'properties',
-            }
+        'confidence': 'confidences',
+        'distribution': 'distributions',
+        'reference': 'references',
+        'property': 'properties',
+    }
     _clade_tracked_tags = set(_clade_complex_types).union(_clade_list_types.keys()).union(
-                                             ['branch_length', 'name', 'node_id', 'width'])
+        ['branch_length', 'name', 'node_id', 'width'])
 
     def _parse_clade(self, parent):
         """Parse a Clade node and its children, recursively."""
@@ -411,15 +414,15 @@ class Parser(object):
                 # Handle the other non-recursive children
                 if tag in self._clade_list_types:
                     getattr(clade, self._clade_list_types[tag]).append(
-                            getattr(self, tag)(elem))
+                        getattr(self, tag)(elem))
                 elif tag in self._clade_complex_types:
                     setattr(clade, tag, getattr(self, tag)(elem))
                 elif tag == 'branch_length':
                     # NB: possible collision with the attribute
                     if clade.branch_length is not None:
                         raise PhyloXMLError(
-                                'Attribute branch_length was already set '
-                                'for this Clade.')
+                            'Attribute branch_length was already set '
+                            'for this Clade.')
                     clade.branch_length = _float(elem.text)
                 elif tag == 'width':
                     clade.width = _float(elem.text)
@@ -444,7 +447,7 @@ class Parser(object):
                     parent.clear()
                     break
                 if tag in ('accession', 'mol_seq', 'uri',
-                        'domain_architecture'):
+                           'domain_architecture'):
                     setattr(sequence, tag, getattr(self, tag)(elem))
                 elif tag == 'annotation':
                     sequence.annotations.append(self.annotation(elem))
@@ -481,9 +484,9 @@ class Parser(object):
 
     def other(self, elem, namespace, localtag):
         return PX.Other(localtag, namespace, elem.attrib,
-                  value=elem.text and elem.text.strip() or None,
-                  children=[self.other(child, *_split_namespace(child.tag))
-                            for child in elem])
+                        value=elem.text and elem.text.strip() or None,
+                        children=[self.other(child, *_split_namespace(child.tag))
+                                  for child in elem])
 
     # Complex types
 
@@ -492,32 +495,32 @@ class Parser(object):
 
     def annotation(self, elem):
         return PX.Annotation(
-                desc=_collapse_wspace(_get_child_text(elem, 'desc')),
-                confidence=_get_child_as(elem, 'confidence', self.confidence),
-                properties=_get_children_as(elem, 'property', self.property),
-                uri=_get_child_as(elem, 'uri', self.uri),
-                **elem.attrib)
+            desc=_collapse_wspace(_get_child_text(elem, 'desc')),
+            confidence=_get_child_as(elem, 'confidence', self.confidence),
+            properties=_get_children_as(elem, 'property', self.property),
+            uri=_get_child_as(elem, 'uri', self.uri),
+            **elem.attrib)
 
     def binary_characters(self, elem):
         def bc_getter(elem):
             return _get_children_text(elem, 'bc')
         return PX.BinaryCharacters(
-                type=elem.get('type'),
-                gained_count=_int(elem.get('gained_count')),
-                lost_count=_int(elem.get('lost_count')),
-                present_count=_int(elem.get('present_count')),
-                absent_count=_int(elem.get('absent_count')),
-                # Flatten BinaryCharacterList sub-nodes into lists of strings
-                gained=_get_child_as(elem, 'gained', bc_getter),
-                lost=_get_child_as(elem, 'lost', bc_getter),
-                present=_get_child_as(elem, 'present', bc_getter),
-                absent=_get_child_as(elem, 'absent', bc_getter))
+            type=elem.get('type'),
+            gained_count=_int(elem.get('gained_count')),
+            lost_count=_int(elem.get('lost_count')),
+            present_count=_int(elem.get('present_count')),
+            absent_count=_int(elem.get('absent_count')),
+            # Flatten BinaryCharacterList sub-nodes into lists of strings
+            gained=_get_child_as(elem, 'gained', bc_getter),
+            lost=_get_child_as(elem, 'lost', bc_getter),
+            present=_get_child_as(elem, 'present', bc_getter),
+            absent=_get_child_as(elem, 'absent', bc_getter))
 
     def clade_relation(self, elem):
         return PX.CladeRelation(
-                elem.get('type'), elem.get('id_ref_0'), elem.get('id_ref_1'),
-                distance=elem.get('distance'),
-                confidence=_get_child_as(elem, 'confidence', self.confidence))
+            elem.get('type'), elem.get('id_ref_0'), elem.get('id_ref_1'),
+            distance=elem.get('distance'),
+            confidence=_get_child_as(elem, 'confidence', self.confidence))
 
     def color(self, elem):
         red, green, blue = (_get_child_text(elem, color, int) for color in
@@ -526,43 +529,43 @@ class Parser(object):
 
     def confidence(self, elem):
         return PX.Confidence(
-                _float(elem.text),
-                elem.get('type'))
+            _float(elem.text),
+            elem.get('type'))
 
     def date(self, elem):
         return PX.Date(
-                unit=elem.get('unit'),
-                desc=_collapse_wspace(_get_child_text(elem, 'desc')),
-                value=_get_child_text(elem, 'value', float),
-                minimum=_get_child_text(elem, 'minimum', float),
-                maximum=_get_child_text(elem, 'maximum', float),
-                )
+            unit=elem.get('unit'),
+            desc=_collapse_wspace(_get_child_text(elem, 'desc')),
+            value=_get_child_text(elem, 'value', float),
+            minimum=_get_child_text(elem, 'minimum', float),
+            maximum=_get_child_text(elem, 'maximum', float),
+        )
 
     def distribution(self, elem):
         return PX.Distribution(
-                desc=_collapse_wspace(_get_child_text(elem, 'desc')),
-                points=_get_children_as(elem, 'point', self.point),
-                polygons=_get_children_as(elem, 'polygon', self.polygon))
+            desc=_collapse_wspace(_get_child_text(elem, 'desc')),
+            points=_get_children_as(elem, 'point', self.point),
+            polygons=_get_children_as(elem, 'polygon', self.polygon))
 
     def domain(self, elem):
         return PX.ProteinDomain(elem.text.strip(),
-                int(elem.get('from')) - 1,
-                int(elem.get('to')),
-                confidence=_float(elem.get('confidence')),
-                id=elem.get('id'))
+                                int(elem.get('from')) - 1,
+                                int(elem.get('to')),
+                                confidence=_float(elem.get('confidence')),
+                                id=elem.get('id'))
 
     def domain_architecture(self, elem):
         return PX.DomainArchitecture(
-                length=int(elem.get('length')),
-                domains=_get_children_as(elem, 'domain', self.domain))
+            length=int(elem.get('length')),
+            domains=_get_children_as(elem, 'domain', self.domain))
 
     def events(self, elem):
         return PX.Events(
-                type=_get_child_text(elem, 'type'),
-                duplications=_get_child_text(elem, 'duplications', int),
-                speciations=_get_child_text(elem, 'speciations', int),
-                losses=_get_child_text(elem, 'losses', int),
-                confidence=_get_child_as(elem, 'confidence', self.confidence))
+            type=_get_child_text(elem, 'type'),
+            duplications=_get_child_text(elem, 'duplications', int),
+            speciations=_get_child_text(elem, 'speciations', int),
+            losses=_get_child_text(elem, 'losses', int),
+            confidence=_get_child_as(elem, 'confidence', self.confidence))
 
     def id(self, elem):
         provider = elem.get('provider') or elem.get('type')
@@ -576,37 +579,39 @@ class Parser(object):
 
     def point(self, elem):
         return PX.Point(
-                elem.get('geodetic_datum'),
-                _get_child_text(elem, 'lat', float),
-                _get_child_text(elem, 'long', float),
-                alt=_get_child_text(elem, 'alt', float),
-                alt_unit=elem.get('alt_unit'))
+            elem.get('geodetic_datum'),
+            _get_child_text(elem, 'lat', float),
+            _get_child_text(elem, 'long', float),
+            alt=_get_child_text(elem, 'alt', float),
+            alt_unit=elem.get('alt_unit'))
 
     def polygon(self, elem):
         return PX.Polygon(
-                points=_get_children_as(elem, 'point', self.point))
+            points=_get_children_as(elem, 'point', self.point))
 
     def property(self, elem):
         return PX.Property(elem.text.strip(),
-                elem.get('ref'), elem.get('applies_to'), elem.get('datatype'),
-                unit=elem.get('unit'),
-                id_ref=elem.get('id_ref'))
+                           elem.get('ref'),
+                           elem.get('applies_to'),
+                           elem.get('datatype'),
+                           unit=elem.get('unit'),
+                           id_ref=elem.get('id_ref'))
 
     def reference(self, elem):
         return PX.Reference(
-                doi=elem.get('doi'),
-                desc=_get_child_text(elem, 'desc'))
+            doi=elem.get('doi'),
+            desc=_get_child_text(elem, 'desc'))
 
     def sequence_relation(self, elem):
         return PX.SequenceRelation(
-                elem.get('type'), elem.get('id_ref_0'), elem.get('id_ref_1'),
-                distance=_float(elem.get('distance')),
-                confidence=_get_child_as(elem, 'confidence', self.confidence))
+            elem.get('type'), elem.get('id_ref_0'), elem.get('id_ref_1'),
+            distance=_float(elem.get('distance')),
+            confidence=_get_child_as(elem, 'confidence', self.confidence))
 
     def uri(self, elem):
         return PX.Uri(elem.text.strip(),
-                desc=_collapse_wspace(elem.get('desc')),
-                type=elem.get('type'))
+                      desc=_collapse_wspace(elem.get('desc')),
+                      type=elem.get('type'))
 
 
 # ---------------------------------------------------------
@@ -669,7 +674,7 @@ class Writer(object):
         assert isinstance(phyloxml, PX.Phyloxml), "Not a Phyloxml object"
         self._tree = ElementTree.ElementTree(self.phyloxml(phyloxml))
 
-    def write(self, file, encoding='utf-8', indent=True):
+    def write(self, file, encoding=DEFAULT_ENCODING, indent=True):
         if indent:
             _indent(self._tree.getroot())
         self._tree.write(file, encoding)
@@ -678,7 +683,7 @@ class Writer(object):
     # Convert classes to ETree elements
 
     def phyloxml(self, obj):
-        elem = ElementTree.Element('phyloxml', obj.attributes) # Namespaces
+        elem = ElementTree.Element('phyloxml', obj.attributes)  # Namespaces
         for tree in obj.phylogenies:
             elem.append(self.phylogeny(tree))
         for otr in obj.other:
@@ -693,55 +698,57 @@ class Writer(object):
         return elem
 
     phylogeny = _handle_complex('phylogeny',
-            ('rooted', 'rerootable', 'branch_length_unit', 'type'),
-            ( 'name',
-              'id',
-              'description',
-              'date',
-              ('confidence',        'confidences'),
-              'clade',
-              ('clade_relation',    'clade_relations'),
-              ('sequence_relation', 'sequence_relations'),
-              ('property',          'properties'),
-              ('other',             'other'),
-              ))
+                                ('rooted', 'rerootable',
+                                 'branch_length_unit', 'type'),
+                                ('name',
+                                 'id',
+                                 'description',
+                                 'date',
+                                 ('confidence', 'confidences'),
+                                 'clade',
+                                 ('clade_relation', 'clade_relations'),
+                                 ('sequence_relation',
+                                  'sequence_relations'),
+                                 ('property', 'properties'),
+                                 ('other', 'other'),
+                                 ))
 
     clade = _handle_complex('clade', ('id_source',),
-            ( 'name',
-              'branch_length',
-              ('confidence',    'confidences'),
-              'width',
-              'color',
-              'node_id',
-              ('taxonomy',      'taxonomies'),
-              ('sequence',      'sequences'),
-              'events',
-              'binary_characters',
-              ('distribution',  'distributions'),
-              'date',
-              ('reference',     'references'),
-              ('property',      'properties'),
-              ('clade',         'clades'),
-              ('other',         'other'),
-              ))
+                            ('name',
+                             'branch_length',
+                             ('confidence', 'confidences'),
+                             'width',
+                             'color',
+                             'node_id',
+                             ('taxonomy', 'taxonomies'),
+                             ('sequence', 'sequences'),
+                             'events',
+                             'binary_characters',
+                             ('distribution', 'distributions'),
+                             'date',
+                             ('reference', 'references'),
+                             ('property', 'properties'),
+                             ('clade', 'clades'),
+                             ('other', 'other'),
+                             ))
 
     accession = _handle_complex('accession', ('source',),
-            (), has_text=True)
+                                (), has_text=True)
 
     annotation = _handle_complex('annotation',
-            ('ref', 'source', 'evidence', 'type'),
-            ( 'desc',
-              'confidence',
-              ('property',   'properties'),
-              'uri',
-              ))
+                                 ('ref', 'source', 'evidence', 'type'),
+                                 ('desc',
+                                  'confidence',
+                                  ('property', 'properties'),
+                                  'uri',
+                                  ))
 
     def binary_characters(self, obj):
         """Serialize a binary_characters node and its subnodes."""
         elem = ElementTree.Element('binary_characters',
-                _clean_attrib(obj,
-                    ('type', 'gained_count', 'lost_count',
-                        'present_count', 'absent_count')))
+                                   _clean_attrib(obj,
+                                                 ('type', 'gained_count', 'lost_count',
+                                                  'present_count', 'absent_count')))
         for subn in ('gained', 'lost', 'present', 'absent'):
             subelem = ElementTree.Element(subn)
             for token in getattr(obj, subn):
@@ -750,27 +757,28 @@ class Writer(object):
         return elem
 
     clade_relation = _handle_complex('clade_relation',
-            ('id_ref_0', 'id_ref_1', 'distance', 'type'),
-            ('confidence',))
+                                     ('id_ref_0', 'id_ref_1',
+                                      'distance', 'type'),
+                                     ('confidence',))
 
     color = _handle_complex('color', (), ('red', 'green', 'blue'))
 
     confidence = _handle_complex('confidence', ('type',),
-            (), has_text=True)
+                                 (), has_text=True)
 
     date = _handle_complex('date', ('unit',),
-            ('desc', 'value', 'minimum', 'maximum'))
+                           ('desc', 'value', 'minimum', 'maximum'))
 
     distribution = _handle_complex('distribution', (),
-            ( 'desc',
-              ('point',     'points'),
-              ('polygon',   'polygons'),
-              ))
+                                   ('desc',
+                                    ('point', 'points'),
+                                    ('polygon', 'polygons'),
+                                    ))
 
     def domain(self, obj):
         """Serialize a domain node."""
         elem = ElementTree.Element('domain',
-                {'from': str(obj.start + 1), 'to': str(obj.end)})
+                                   {'from': str(obj.start + 1), 'to': str(obj.end)})
         if obj.confidence is not None:
             elem.set('confidence', _serialize(obj.confidence))
         if obj.id is not None:
@@ -779,64 +787,66 @@ class Writer(object):
         return elem
 
     domain_architecture = _handle_complex('domain_architecture',
-            ('length',),
-            (('domain', 'domains'),))
+                                          ('length',),
+                                          (('domain', 'domains'),))
 
     events = _handle_complex('events', (),
-            ( 'type',
-              'duplications',
-              'speciations',
-              'losses',
-              'confidence',
-              ))
+                             ('type',
+                              'duplications',
+                              'speciations',
+                              'losses',
+                              'confidence',
+                              ))
 
     id = _handle_complex('id', ('provider',), (), has_text=True)
 
     mol_seq = _handle_complex('mol_seq', ('is_aligned',),
-            (), has_text=True)
+                              (), has_text=True)
 
     node_id = _handle_complex('node_id', ('provider',), (), has_text=True)
 
     point = _handle_complex('point', ('geodetic_datum', 'alt_unit'),
-            ('lat', 'long', 'alt'))
+                            ('lat', 'long', 'alt'))
 
     polygon = _handle_complex('polygon', (), (('point', 'points'),))
 
     property = _handle_complex('property',
-            ('ref', 'unit', 'datatype', 'applies_to', 'id_ref'),
-            (), has_text=True)
+                               ('ref', 'unit', 'datatype',
+                                'applies_to', 'id_ref'),
+                               (), has_text=True)
 
     reference = _handle_complex('reference', ('doi',), ('desc',))
 
     sequence = _handle_complex('sequence',
-            ('type', 'id_ref', 'id_source'),
-            ( 'symbol',
-              'accession',
-              'name',
-              'location',
-              'mol_seq',
-              'uri',
-              ('annotation', 'annotations'),
-              'domain_architecture',
-              ('other',      'other'),
-              ))
+                               ('type', 'id_ref', 'id_source'),
+                               ('symbol',
+                                'accession',
+                                'name',
+                                'location',
+                                'mol_seq',
+                                'uri',
+                                ('annotation', 'annotations'),
+                                'domain_architecture',
+                                ('other', 'other'),
+                                ))
 
     sequence_relation = _handle_complex('sequence_relation',
-            ('id_ref_0', 'id_ref_1', 'distance', 'type'),
-            ('confidence',))
+                                        ('id_ref_0', 'id_ref_1',
+                                         'distance', 'type'),
+                                        ('confidence',))
 
     taxonomy = _handle_complex('taxonomy',
-            ('id_source',),
-            ( 'id',
-              'code',
-              'scientific_name',
-              'authority',
-              ('common_name',   'common_names'),
-              ('synonym',       'synonyms'),
-              'rank',
-              'uri',
-              ('other',         'other'),
-              ))
+                               ('id_source',),
+                               ('id',
+                                'code',
+                                'scientific_name',
+                                'authority',
+                                ('common_name', 'common_names'),
+                                ('synonym', 'synonyms'),
+                                'rank',
+                                'uri',
+                                ('other', 'other'),
+                                ))
 
     uri = _handle_complex('uri', ('desc', 'type'), (), has_text=True)
 

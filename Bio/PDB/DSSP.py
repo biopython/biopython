@@ -22,7 +22,7 @@ The DSSP codes for secondary structure used here are:
 
 from __future__ import print_function
 
-__docformat__ = "epytext en"
+__docformat__ = "restructuredtext en"
 
 import re
 from Bio._py3k import StringIO
@@ -36,32 +36,32 @@ from Bio.PDB.PDBParser import PDBParser
 
 
 # Match C in DSSP
-_dssp_cys=re.compile('[a-z]')
+_dssp_cys = re.compile('[a-z]')
 
 # Maximal ASA of amino acids
 # Values from Sander & Rost, (1994), Proteins, 20:216-226
 # Used for relative accessibility
-MAX_ACC={}
-MAX_ACC["ALA"]=106.0
-MAX_ACC["CYS"]=135.0
-MAX_ACC["ASP"]=163.0
-MAX_ACC["GLU"]=194.0
-MAX_ACC["PHE"]=197.0
-MAX_ACC["GLY"]=84.0
-MAX_ACC["HIS"]=184.0
-MAX_ACC["ILE"]=169.0
-MAX_ACC["LYS"]=205.0
-MAX_ACC["LEU"]=164.0
-MAX_ACC["MET"]=188.0
-MAX_ACC["ASN"]=157.0
-MAX_ACC["PRO"]=136.0
-MAX_ACC["GLN"]=198.0
-MAX_ACC["ARG"]=248.0
-MAX_ACC["SER"]=130.0
-MAX_ACC["THR"]=142.0
-MAX_ACC["VAL"]=142.0
-MAX_ACC["TRP"]=227.0
-MAX_ACC["TYR"]=222.0
+MAX_ACC = {}
+MAX_ACC["ALA"] = 106.0
+MAX_ACC["CYS"] = 135.0
+MAX_ACC["ASP"] = 163.0
+MAX_ACC["GLU"] = 194.0
+MAX_ACC["PHE"] = 197.0
+MAX_ACC["GLY"] = 84.0
+MAX_ACC["HIS"] = 184.0
+MAX_ACC["ILE"] = 169.0
+MAX_ACC["LYS"] = 205.0
+MAX_ACC["LEU"] = 164.0
+MAX_ACC["MET"] = 188.0
+MAX_ACC["ASN"] = 157.0
+MAX_ACC["PRO"] = 136.0
+MAX_ACC["GLN"] = 198.0
+MAX_ACC["ARG"] = 248.0
+MAX_ACC["SER"] = 130.0
+MAX_ACC["THR"] = 142.0
+MAX_ACC["VAL"] = 142.0
+MAX_ACC["TRP"] = 227.0
+MAX_ACC["TYR"] = 222.0
 
 
 def ss_to_index(ss):
@@ -71,11 +71,11 @@ def ss_to_index(ss):
     E=1
     C=2
     """
-    if ss=='H':
+    if ss == 'H':
         return 0
-    if ss=='E':
+    if ss == 'E':
         return 1
-    if ss=='C':
+    if ss == 'C':
         return 2
     assert 0
 
@@ -85,22 +85,25 @@ def dssp_dict_from_pdb_file(in_file, DSSP="dssp"):
     Create a DSSP dictionary from a PDB file.
 
     Example:
-        >>> dssp_dict=dssp_dict_from_pdb_file("1fat.pdb")
-        >>> aa, ss, acc=dssp_dict[('A', 1)]
+    --------
+    >>> dssp_dict=dssp_dict_from_pdb_file("1fat.pdb")
+    >>> aa, ss, acc=dssp_dict[('A', 1)]
 
-    @param in_file: pdb file
-    @type in_file: string
+    ::
 
-    @param DSSP: DSSP executable (argument to os.system)
-    @type DSSP: string
+        @param in_file: pdb file
+        @type in_file: string ::
 
-    @return: a dictionary that maps (chainid, resid) to
-        amino acid type, secondary structure code and
-        accessibility.
-    @rtype: {}
+        @param DSSP: DSSP executable (argument to os.system)
+        @type DSSP: string ::
+
+        @return: a dictionary that maps (chainid, resid) to
+            amino acid type, secondary structure code and
+            accessibility.
+        @rtype: {}
     """
-    #Using universal newlines is important on Python 3, this
-    #gives unicode handles rather than bytes handles.
+    # Using universal newlines is important on Python 3, this
+    # gives unicode handles rather than bytes handles.
     p = subprocess.Popen([DSSP, in_file], universal_newlines=True,
                          stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out, err = p.communicate()
@@ -111,7 +114,7 @@ def dssp_dict_from_pdb_file(in_file, DSSP="dssp"):
 def make_dssp_dict(filename):
     """
     Return a DSSP dictionary that maps (chainid, resid) to
-    aa, ss and accessibility, from a DSSP file.
+    aa, ss and accessibility, from a DSSP file. ::
 
     @param filename: the DSSP output file
     @type filename: string
@@ -119,10 +122,11 @@ def make_dssp_dict(filename):
     with open(filename, "r") as handle:
         return _make_dssp_dict(handle)
 
+
 def _make_dssp_dict(handle):
     """
     Return a DSSP dictionary that maps (chainid, resid) to
-    aa, ss and accessibility, from an open DSSP file object.
+    aa, ss and accessibility, from an open DSSP file object. ::
 
     @param handle: the open DSSP output file handle
     @type handle: file
@@ -162,9 +166,9 @@ def _make_dssp_dict(handle):
             # digits, and shift parsing the rest of the line by that amount.
             if l[34] != ' ':
                 shift = l[34:].find(' ')
-                acc = int((l[34+shift:38+shift]))
-                phi = float(l[103+shift:109+shift])
-                psi = float(l[109+shift:115+shift])
+                acc = int((l[34 + shift:38 + shift]))
+                phi = float(l[103 + shift:109 + shift])
+                psi = float(l[109 + shift:115 + shift])
             else:
                 raise ValueError(exc)
         res_id = (" ", resseq, icode)
@@ -178,34 +182,37 @@ class DSSP(AbstractResiduePropertyMap):
     Run DSSP on a pdb file, and provide a handle to the
     DSSP secondary structure and accessibility.
 
-    Note that DSSP can only handle one model.
+    **Note** that DSSP can only handle one model.
 
     Example:
+    --------
 
-        >>> p = PDBParser()
-        >>> structure = p.get_structure("1MOT", "1MOT.pdb")
-        >>> model = structure[0]
-        >>> dssp = DSSP(model, "1MOT.pdb")
-        >>> # DSSP data is accessed by a tuple (chain_id, res_id)
-        >>> a_key = list(dssp)[2]
-        >>> # residue object, secondary structure, solvent accessibility,
-        >>> # relative accessiblity, phi, psi
-        >>> dssp[a_key]
-        (<Residue ALA het=  resseq=251 icode= >,
-        'H',
-        72,
-        0.67924528301886788,
-        -61.200000000000003,
-        -42.399999999999999)
+    >>> p = PDBParser()
+    >>> structure = p.get_structure("1MOT", "1MOT.pdb")
+    >>> model = structure[0]
+    >>> dssp = DSSP(model, "1MOT.pdb")
+    >>> # DSSP data is accessed by a tuple (chain_id, res_id)
+    >>> a_key = list(dssp)[2]
+    >>> # residue object, secondary structure, solvent accessibility,
+    >>> # relative accessiblity, phi, psi
+    >>> dssp[a_key]
+    (<Residue ALA het=  resseq=251 icode= >,
+    'H',
+    72,
+    0.67924528301886788,
+    -61.200000000000003,
+    -42.399999999999999)
     """
 
     def __init__(self, model, pdb_file, dssp="dssp"):
         """
+        ::
+
         @param model: the first model of the structure
-        @type model: L{Model}
+        @type model: L{Model} ::
 
         @param pdb_file: a PDB file
-        @type pdb_file: string
+        @type pdb_file: string ::
 
         @param dssp: the dssp executable (ie. the argument to os.system)
         @type dssp: string
@@ -293,7 +300,7 @@ class DSSP(AbstractResiduePropertyMap):
             # Relative accessibility
             resname = res.get_resname()
             try:
-                rel_acc = acc/MAX_ACC[resname]
+                rel_acc = acc / MAX_ACC[resname]
             except KeyError:
                 # Invalid value for resname
                 rel_acc = 'NA'

@@ -66,7 +66,7 @@ def parse_parameter_list(lines, parameters, num_params):
     """
     for line_num in range(len(lines)):
         line = lines[line_num]
-         # Find all floating point numbers in this line
+        # Find all floating point numbers in this line
         line_floats_res = line_floats_re.findall(line)
         line_floats = [float(val) for val in line_floats_res]
         # Get parameter list. This can be useful for specifying starting
@@ -118,8 +118,8 @@ def parse_kappas(lines, parameters):
                 branch = branch_res.group(1)
                 if len(line_floats) > 0:
                     parameters["branches"][branch] = \
-                        {"t":line_floats[0], "kappa":line_floats[1],
-                        "TS":line_floats[2], "TV":line_floats[3]}
+                        {"t": line_floats[0], "kappa": line_floats[1],
+                        "TS": line_floats[2], "TV": line_floats[3]}
         # Find kappa under REV
         # Example match:
         # kappa under REV: 999.00000 145.76453  0.00001  0.00001  0.00001
@@ -158,7 +158,7 @@ def parse_rates(lines, parameters):
         #   0.335015    0.000000   -0.338059    0.003044
         #   0.000000    0.000000    0.004241   -0.004241
         elif "matrix Q" in line:
-            parameters["Q matrix"] = {"matrix":[]}
+            parameters["Q matrix"] = {"matrix": []}
             if len(line_floats) > 0:
                 parameters["Q matrix"]["average Ts/Tv"] = \
                     line_floats[0]
@@ -242,13 +242,13 @@ def parse_freqs(lines, parameters):
             if len(line_floats) > 0:
                 node_res = re.match("Node \#(\d+)", line)
                 node_num = int(node_res.group(1))
-                node = {"root":False}
+                node = {"root": False}
                 node["frequency parameters"] = line_floats[:4]
                 if len(line_floats) > 4:
-                    node["base frequencies"] = {"T":line_floats[4],
-                                                "C":line_floats[5],
-                                                "A":line_floats[6],
-                                                "G":line_floats[7]}
+                    node["base frequencies"] = {"T": line_floats[4],
+                                                "C": line_floats[5],
+                                                "A": line_floats[6],
+                                                "G": line_floats[7]}
                 parameters["nodes"][node_num] = node
             else:
                 root_res = root_re.match(line)

@@ -29,7 +29,7 @@ def match(string, trie):
     """
     longest = None
     for i in range(len(string)):
-        substr = string[:i+1]
+        substr = string[:i + 1]
         if not trie.has_prefix(substr):
             break
         if substr in trie:
@@ -46,7 +46,7 @@ def match_all(string, trie):
     """
     matches = []
     for i in range(len(string)):
-        substr = string[:i+1]
+        substr = string[:i + 1]
         if not trie.has_prefix(substr):
             break
         if substr in trie:
@@ -66,7 +66,7 @@ def find(string, trie):
         # Look for a match.
         keys = match_all(string[start:], trie)
         for key in keys:
-            results.append((key, start, start+len(key)))
+            results.append((key, start, start + len(key)))
         start += 1
     return results
 
@@ -90,9 +90,9 @@ def find_words(string, trie):
         for key in keys:
             l = len(key)
             # Make sure it ends at a boundary.
-            if start+l == len(string) or \
-               _boundary_re.match(string[start+l]):
-                results.append((key, start, start+l))
+            if start + l == len(string) or \
+               _boundary_re.match(string[start + l]):
+                results.append((key, start, start + l))
         # Move forward to the next boundary.
         m = _boundary_re.search(string, start)
         if m is None:

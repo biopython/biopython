@@ -24,7 +24,7 @@ class DomTests(unittest.TestCase):
         try:
             count = 0
             for record in Dom.parse(f):
-                count +=1
+                count += 1
             self.assertEqual(count, 10)
         finally:
             f.close()
@@ -35,7 +35,7 @@ class DomTests(unittest.TestCase):
         try:
             for line in f:
                 record = Dom.Record(line)
-                #End of line is platform dependent. Strip it off
+                # End of line is platform dependent. Strip it off
                 self.assertEqual(str(record).rstrip(), line.rstrip())
         finally:
             f.close()
@@ -52,10 +52,10 @@ class DomTests(unittest.TestCase):
         rec = Dom.Record(recLine)
         self.assertEqual(rec.sid, 'd7hbib_')
         self.assertEqual(rec.residues.pdbid, '7hbi')
-        self.assertEqual(rec.residues.fragments, (('b', '', ''),) )
+        self.assertEqual(rec.residues.fragments, (('b', '', ''),))
         self.assertEqual(rec.hierarchy, '1.001.001.001.001.001')
 
 
 if __name__ == '__main__':
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

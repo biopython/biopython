@@ -50,7 +50,7 @@ def unfold_entities(entity_list, target_level):
     []
 
     """
-    if not target_level in entity_levels:
+    if target_level not in entity_levels:
         raise PDBException("%s: Not an entity level." % target_level)
     if entity_list == []:
         return []
@@ -69,8 +69,7 @@ def unfold_entities(entity_list, target_level):
 
     if level_index > target_index:  # we're going down, e.g. S->A
         for i in range(target_index, level_index):
-            #entity_list = itertools.chain.from_iterable(entity_list)  # 2.6+
-            entity_list = itertools.chain(*entity_list)
+            entity_list = itertools.chain.from_iterable(entity_list)
     else:  # we're going up, e.g. A->S
         for i in range(level_index, target_index):
             # find unique parents

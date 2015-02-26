@@ -13,8 +13,9 @@ from Bio.PopGen import FDist
 from Bio.PopGen.FDist import Controller
 from Bio import MissingExternalDependencyError
 
-#Tests FDist2 related code. Note: this case requires fdist2 (four binaries)
-#test_PopGen_FDist_nodepend tests code that does not require fdist2 or Dfdist
+# Tests FDist2 related code. Note: this case requires fdist2 (four binaries)
+# test_PopGen_FDist_nodepend tests code that does not require fdist2 or Dfdist
+
 
 def is_pypy():
     import platform
@@ -22,7 +23,7 @@ def is_pypy():
         if platform.python_implementation() == 'PyPy':
             return True
     except AttributeError:
-        #New in Python 2.6, not in Jython yet either
+        # New in Python 2.6, not in Jython yet either
         pass
     return False
 
@@ -32,7 +33,7 @@ for path in os.environ['PATH'].split(os.pathsep):
         list = os.listdir(path)
         for file in os.listdir(path):
             for f in ['fdist2', 'datacal', 'pv', 'cplot']:
-                if file == f or file.lower() == f.lower()+".exe":
+                if file == f or file.lower() == f.lower() + ".exe":
                     wanted[f] = file
     except os.error:
         pass  # Path doesn't exist - correct to pass
@@ -64,8 +65,8 @@ class AppTest(unittest.TestCase):
         self._copyfile('out.cpl', 'out.cpl')
 
     def tearDown(self):
-        #Not sure how exactly, but its possible the temp directory
-        #may not (still) exist.
+        # Not sure how exactly, but its possible the temp directory
+        # may not (still) exist.
         if os.path.isdir(self.dirname):
             for file in os.listdir(self.dirname):
                 os.remove(self.dirname + os.sep + file)
@@ -74,47 +75,47 @@ class AppTest(unittest.TestCase):
     def test_datacal(self):
         """Test datacal execution.
         """
-        fst, samp_size = self.ctrl.run_datacal(data_dir = self.dirname)
+        fst, samp_size = self.ctrl.run_datacal(data_dir=self.dirname)
         self.assertTrue(fst - 0.44 < 0.01)
         self.assertEqual(samp_size, 11)
 
     def test_fdist(self):
         """Test fdist execution.
         """
-        #The number of simulations in real life should be at least 10000,
-        #see the fdist2 documentation.
-        fst = self.ctrl.run_fdist(npops = 15, nsamples = 10, fst = 0.1,
-                sample_size = 20, mut = 0, num_sims = 100,
-                data_dir = self.dirname)
+        # The number of simulations in real life should be at least 10000,
+        # see the fdist2 documentation.
+        fst = self.ctrl.run_fdist(npops=15, nsamples=10, fst=0.1,
+                sample_size=20, mut=0, num_sims=100,
+                data_dir=self.dirname)
         self.assertTrue(abs(fst - 0.1) < 0.03,
                         "Stochastic result, expected %f close to 0.1" % fst)
 
     def test_fdist_force_fst(self):
         """Test fdist execution approximating Fst.
         """
-        #The number of simulations in real life should be at least 10000,
-        #see the fdist2 documentation.
-        fst = self.ctrl.run_fdist_force_fst(npops = 15, nsamples = 10,
-                fst = 0.1,
-                sample_size = 20, mut = 0, num_sims = 100,
-                data_dir = self.dirname)
+        # The number of simulations in real life should be at least 10000,
+        # see the fdist2 documentation.
+        fst = self.ctrl.run_fdist_force_fst(npops=15, nsamples=10,
+                fst=0.1,
+                sample_size=20, mut=0, num_sims=100,
+                data_dir=self.dirname)
         self.assertTrue(abs(fst - 0.09) < 0.05,
                         "Stochastic result, expected %f close to 0.09" % fst)
 
     def test_cplot(self):
         """Test cplot execution.
         """
-        cpl_interval =self.ctrl.run_cplot(data_dir = self.dirname)
+        cpl_interval = self.ctrl.run_cplot(data_dir=self.dirname)
         self.assertEqual(len(cpl_interval), 8)
 
     def test_pv(self):
         """Test pv execution.
         """
-        pv_data = self.ctrl.run_pv(data_dir = self.dirname)
+        pv_data = self.ctrl.run_pv(data_dir=self.dirname)
         self.assertEqual(len(pv_data), 4)
 
 
 if __name__ == "__main__":
     print("Running fdist tests, which might take some time, please wait")
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

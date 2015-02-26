@@ -42,7 +42,7 @@ def _build_align_cmdline(cmdline, pair, output_filename, kbyte=None, force_type=
     """
     cmdline = cmdline[:]
 
-    ### XXX: force_type ignored
+    # XXX: force_type ignored
 
     if kbyte is None:
         try:
@@ -106,7 +106,7 @@ def align(cmdline, pair, kbyte=None, force_type=None, dry_run=False, quiet=False
     status = os.system(cmdline_str) >> 8
 
     if status > 1:
-        if kbyte != 0: # possible memory problem; could be None
+        if kbyte != 0:  # possible memory problem; could be None
             sys.stderr.write("INFO trying again with the linear model\n")
             return align(cmdline, pair, 0, force_type, dry_run, quiet, debug)
         else:
@@ -126,7 +126,7 @@ def all_pairs(singles):
 
     singles = list(singles)
     while singles:
-        suitor = singles.pop(0) # if sorted, stay sorted
+        suitor = singles.pop(0)  # if sorted, stay sorted
         pairs.extend((suitor, single) for single in singles)
 
     return pairs

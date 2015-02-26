@@ -55,7 +55,7 @@ def train(xs, ys, update_fn=None, typecode=None):
     # Dimensionality of the data is the dimensionality of the
     # observations plus a constant dimension.
     N, ndims = len(xs), len(xs[0]) + 1
-    if N==0 or ndims==1:
+    if N == 0 or ndims == 1:
         raise ValueError("No observations or observation of 0 dimension.")
 
     # Make an X array, with a constant first dimension.
@@ -77,10 +77,10 @@ def train(xs, ys, update_fn=None, typecode=None):
     while i < MAX_ITERATIONS:
         # Calculate the probabilities.  p = e^(beta X) / (1+e^(beta X))
         ebetaX = numpy.exp(numpy.dot(beta, Xt))
-        p = ebetaX / (1+ebetaX)
+        p = ebetaX / (1 + ebetaX)
 
         # Find the log likelihood score and see if I've converged.
-        logp = y*numpy.log(p) + (1-y)*numpy.log(1-p)
+        logp = y * numpy.log(p) + (1 - y) * numpy.log(1 - p)
         llik = sum(logp)
         if update_fn is not None:
             update_fn(iter, llik)
@@ -91,26 +91,26 @@ def train(xs, ys, update_fn=None, typecode=None):
                 stepsize = stepsize / 2.0
                 beta = old_beta
             # If I've converged, then stop.
-            if numpy.fabs(llik-old_llik) <= CONVERGE_THRESHOLD:
+            if numpy.fabs(llik - old_llik) <= CONVERGE_THRESHOLD:
                 break
         old_llik, old_beta = llik, beta
         i += 1
 
         W = numpy.identity(N) * p
-        Xtyp = numpy.dot(Xt, y-p)         # Calculate the first derivative.
-        XtWX = numpy.dot(numpy.dot(Xt, W), X)   # Calculate the second derivative.
-        #u, s, vt = singular_value_decomposition(XtWX)
-        #print("U %s" % u)
-        #print("S %s" % s)
+        Xtyp = numpy.dot(Xt, y - p)  # Calculate the first derivative.
+        XtWX = numpy.dot(numpy.dot(Xt, W), X)  # Calculate the second derivative.
+        # u, s, vt = singular_value_decomposition(XtWX)
+        # print("U %s" % u)
+        # print("S %s" % s)
         delta = numpy.linalg.solve(XtWX, Xtyp)
-        if numpy.fabs(stepsize-1.0) > 0.001:
+        if numpy.fabs(stepsize - 1.0) > 0.001:
             delta = delta * stepsize
         beta = beta + delta                 # Update beta.
     else:
         raise RuntimeError("Didn't converge.")
 
     lr = LogisticRegression()
-    lr.beta = [float(x) for x in beta]   # Convert back to regular array.
+    lr.beta = [float(x) for x in beta]  # Convert back to regular array.
     return lr
 
 
@@ -126,8 +126,8 @@ def calculate(lr, x):
     x = numpy.asarray([1.0] + x)
     # Calculate the probability.  p = e^(beta X) / (1+e^(beta X))
     ebetaX = numpy.exp(numpy.dot(lr.beta, x))
-    p = ebetaX / (1+ebetaX)
-    return [1-p, p]
+    p = ebetaX / (1 + ebetaX)
+    return [1 - p, p]
 
 
 def classify(lr, x):

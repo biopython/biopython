@@ -16,6 +16,7 @@ with warnings.catch_warnings():
 from Bio.Alphabet import IUPAC
 from Bio.Seq import Seq
 
+
 class MotifTestsBasic(unittest.TestCase):
     def setUp(self):
         self.PFMin = open("Motif/SRF.pfm")
@@ -23,9 +24,9 @@ class MotifTestsBasic(unittest.TestCase):
         self.TFout = "Motif/tf.out"
         self.FAout = "Motif/fa.out"
         self.PFMout = "Motif/fa.out"
-        self.m=Motif.Motif()
+        self.m = Motif.Motif()
         self.m.add_instance(Seq("ATATA", self.m.alphabet))
-        
+
     def tearDown(self):
         self.PFMin.close()
         self.SITESin.close()
@@ -396,17 +397,17 @@ class MotifTestsBasic(unittest.TestCase):
         self.assertEqual(str(record.motifs[15].instances[20]), "AGCCTCCAGGTCGCATGG")
         self.assertEqual(record.motifs[15].mask, [1, 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1])
         self.assertAlmostEqual(record.motifs[15].score, 1.0395)
- 
+
     def test_pfm_parsing(self):
         """Test to be sure that Motif can parse pfm  files.
         """
-        motif= Motif.read(self.PFMin, "jaspar-pfm")
+        motif = Motif.read(self.PFMin, "jaspar-pfm")
         self.assertEqual(motif.length, 12)
 
     def test_sites_parsing(self):
         """Test to be sure that Motif can parse sites files.
         """
-        motif= Motif.read(self.SITESin, "jaspar-sites")
+        motif = Motif.read(self.SITESin, "jaspar-sites")
         self.assertEqual(motif.length, 6)
 
     def test_FAoutput(self):
@@ -429,10 +430,10 @@ class MotifTestsBasic(unittest.TestCase):
         output_handle = open(self.PFMout, "w")
         output_handle.write(self.m.format("jaspar-pfm"))
         output_handle.close()
-        
-        
+
+
 class TestMEME(unittest.TestCase):
-        
+
     def test_meme_parser_1(self):
         """Test if Motif can parse MEME output files (first test)
         """
@@ -597,8 +598,8 @@ class TestMEME(unittest.TestCase):
         self.assertEqual(motif.instances[5].length, 12)
         self.assertEqual(motif.instances[6].length, 12)
         self.assertEqual(motif.instances[0].start, 620)
-        self.assertEqual(motif.instances[1].start,  95)
-        self.assertEqual(motif.instances[2].start,  83)
+        self.assertEqual(motif.instances[1].start, 95)
+        self.assertEqual(motif.instances[2].start, 83)
         self.assertEqual(motif.instances[3].start, 354)
         self.assertEqual(motif.instances[4].start, 611)
         self.assertEqual(motif.instances[5].start, 567)
@@ -648,7 +649,7 @@ class TestMEME(unittest.TestCase):
         self.assertEqual(motif.instances[1].start, 232)
         self.assertEqual(motif.instances[2].start, 559)
         self.assertEqual(motif.instances[3].start, 283)
-        self.assertEqual(motif.instances[4].start,  44)
+        self.assertEqual(motif.instances[4].start, 44)
         self.assertEqual(motif.instances[5].start, 185)
         self.assertEqual(motif.instances[6].start, 413)
         self.assertEqual(str(motif.instances[0]), "TCTGGCACAG")
@@ -870,11 +871,11 @@ class TestMEME(unittest.TestCase):
         self.assertEqual(motif.instances[24].start, 165)
         self.assertEqual(motif.instances[25].start, 154)
         self.assertEqual(motif.instances[26].start, 153)
-        self.assertEqual(motif.instances[27].start,  88)
+        self.assertEqual(motif.instances[27].start, 88)
         self.assertEqual(motif.instances[28].start, 159)
         self.assertEqual(motif.instances[29].start, 152)
         self.assertEqual(motif.instances[30].start, 193)
-        self.assertEqual(motif.instances[31].start,  26)
+        self.assertEqual(motif.instances[31].start, 26)
         self.assertEqual(motif.instances[32].start, 349)
         self.assertEqual(str(motif.instances[0]), "YSASKFAVLGLTESLMQEVRKHNIRVSAL")
         self.assertEqual(str(motif.instances[1]), "YSSTKGAMTMLTKAMAMELGPHKIRVNSV")
@@ -1309,10 +1310,10 @@ class TestMEME(unittest.TestCase):
         self.assertEqual(motif.instances[0].start, 254)
         self.assertEqual(motif.instances[1].start, 258)
         self.assertEqual(motif.instances[2].start, 162)
-        self.assertEqual(motif.instances[3].start,  66)
+        self.assertEqual(motif.instances[3].start, 66)
         self.assertEqual(motif.instances[4].start, 278)
         self.assertEqual(motif.instances[5].start, 190)
-        self.assertEqual(motif.instances[6].start,  55)
+        self.assertEqual(motif.instances[6].start, 55)
         self.assertEqual(motif.instances[7].start, 114)
         self.assertEqual(motif.instances[8].start, 172)
         self.assertEqual(motif.instances[9].start, 330)
@@ -1350,7 +1351,7 @@ class TestMEME(unittest.TestCase):
         self.assertEqual(str(motif.instances[20]), "IDRKGIYQWLISLK")
         handle.close()
 
- 
+
 class TestMAST(unittest.TestCase):
 
     def test_mast_parser_1(self):
@@ -1531,5 +1532,5 @@ class MotifTestPWM(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

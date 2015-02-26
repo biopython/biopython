@@ -15,7 +15,7 @@ try:
     import numpy
     from numpy import dot  # Missing on old PyPy's micronumpy
     del dot
-    from numpy.linalg import svd, det # Missing in PyPy 2.0 numpypy
+    from numpy.linalg import svd, det  # Missing in PyPy 2.0 numpypy
 except ImportError:
     from Bio import MissingPythonDependencyError
     raise MissingPythonDependencyError(
@@ -39,10 +39,10 @@ class ParseReal(unittest.TestCase):
         structure = parser.get_structure("example", "PDB/1A8O.cif")
         self.assertEqual(len(structure), 1)
         for ppbuild in [PPBuilder(), CaPPBuilder()]:
-            #==========================================================
+            # ==========================================================
             # Check that serial_num (model column) is stored properly
             self.assertEqual(structure[0].serial_num, 1)
-            #First try allowing non-standard amino acids,
+            # First try allowing non-standard amino acids,
             polypeptides = ppbuild.build_peptides(structure[0], False)
             self.assertEqual(len(polypeptides), 1)
             pp = polypeptides[0]
@@ -53,16 +53,16 @@ class ParseReal(unittest.TestCase):
             s = pp.get_sequence()
             self.assertTrue(isinstance(s, Seq))
             self.assertEqual(s.alphabet, generic_protein)
-            #Here non-standard MSE are shown as M
+            # Here non-standard MSE are shown as M
             self.assertEqual("MDIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNWMTETLLVQ"
                              "NANPDCKTILKALGPGATLEEMMTACQG", str(s))
-            #==========================================================
-            #Now try strict version with only standard amino acids
-            #Should ignore MSE 151 at start, and then break the chain
-            #at MSE 185, and MSE 214,215
+            # ==========================================================
+            # Now try strict version with only standard amino acids
+            # Should ignore MSE 151 at start, and then break the chain
+            # at MSE 185, and MSE 214,215
             polypeptides = ppbuild.build_peptides(structure[0], True)
             self.assertEqual(len(polypeptides), 3)
-            #First fragment
+            # First fragment
             pp = polypeptides[0]
             self.assertEqual(pp[0].get_id()[1], 152)
             self.assertEqual(pp[-1].get_id()[1], 184)
@@ -70,7 +70,7 @@ class ParseReal(unittest.TestCase):
             self.assertTrue(isinstance(s, Seq))
             self.assertEqual(s.alphabet, generic_protein)
             self.assertEqual("DIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNW", str(s))
-            #Second fragment
+            # Second fragment
             pp = polypeptides[1]
             self.assertEqual(pp[0].get_id()[1], 186)
             self.assertEqual(pp[-1].get_id()[1], 213)
@@ -78,7 +78,7 @@ class ParseReal(unittest.TestCase):
             self.assertTrue(isinstance(s, Seq))
             self.assertEqual(s.alphabet, generic_protein)
             self.assertEqual("TETLLVQNANPDCKTILKALGPGATLEE", str(s))
-            #Third fragment
+            # Third fragment
             pp = polypeptides[2]
             self.assertEqual(pp[0].get_id()[1], 216)
             self.assertEqual(pp[-1].get_id()[1], 220)
@@ -93,12 +93,12 @@ class ParseReal(unittest.TestCase):
         structure = parser.get_structure("example", "PDB/1LCD.cif")
         self.assertEqual(len(structure), 3)
         for ppbuild in [PPBuilder(), CaPPBuilder()]:
-                #==========================================================
+                # ==========================================================
                 # Check that serial_num (model column) is stored properly
                 self.assertEqual(structure[0].serial_num, 1)
                 self.assertEqual(structure[1].serial_num, 2)
                 self.assertEqual(structure[2].serial_num, 3)
-                #First try allowing non-standard amino acids,
+                # First try allowing non-standard amino acids,
                 polypeptides = ppbuild.build_peptides(structure[0], False)
                 self.assertEqual(len(polypeptides), 1)
                 pp = polypeptides[0]
@@ -109,11 +109,11 @@ class ParseReal(unittest.TestCase):
                 s = pp.get_sequence()
                 self.assertTrue(isinstance(s, Seq))
                 self.assertEqual(s.alphabet, generic_protein)
-                #Here non-standard MSE are shown as M
+                # Here non-standard MSE are shown as M
                 self.assertEqual("MKPVTLYDVAEYAGVSYQTVSRVVNQASHVSAKTREKVEAAMAELNYIPNR",
                                  str(s))
-                #==========================================================
-                #Now try strict version with only standard amino acids
+                # ==========================================================
+                # Now try strict version with only standard amino acids
                 polypeptides = ppbuild.build_peptides(structure[0], True)
                 self.assertEqual(len(polypeptides), 1)
                 pp = polypeptides[0]

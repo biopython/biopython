@@ -12,6 +12,8 @@ Support for asynchronous execution.
 import os
 import threading
 
+__docformat__ = "restructuredtext en"
+
 
 class Async(object):
     '''Abstract Asynchronous execution class.
@@ -23,9 +25,9 @@ class Async(object):
     def __init__(self):
         '''Async constructor.
 
-           Initializes the queues, among other things.
-           Of notice, is the access_ds lock for controlling exclusive
-               access to this object.
+       Initializes the queues, among other things.
+       Of notice, is the access_ds lock for controlling exclusive
+       access to this object.
         '''
         self.running = {}
         self.waiting = []

@@ -27,31 +27,79 @@
 /* -- Helper routines ------------------------------------------------------- */
 /* ========================================================================== */
 
+#if PY_MAJOR_VERSION < 3
+static char
+extract_single_character(PyObject* object, const char variable[],
+                         const char allowed[])
+{   char c = '\0';
+    const char* data;
+    Py_ssize_t n;
+    if (PyString_Check(object))
+    {   n = PyString_GET_SIZE(object);
+        if (n==1) {
+            data = PyString_AS_STRING(object);
+            c = data[0];
+        }
+    }
+    else if (PyUnicode_Check(object))
+    {   n = PyUnicode_GET_SIZE(object);
+        if (n==1) {
+            Py_UNICODE* u = PyUnicode_AS_UNICODE(object);
+            Py_UNICODE ch = u[0];
+            if (ch < 128) c = ch;
+        }
+    }
+    else
+    {   PyErr_Format(PyExc_ValueError, "%s should be a string", variable);
+        return 0;
+    }
+    if (!c)
+    {   PyErr_Format(PyExc_ValueError,
+                     "%s should be a single character", variable);
+        return 0;
+    }
+    else if (!strchr(allowed, c))
+    {   PyErr_Format(PyExc_ValueError,
+                     "unknown %s function specified (should be one of '%s')",
+                     variable, allowed);
+        return 0;
+    }
+    return c;
+}
+#else
+static char
+extract_single_character(PyObject* object, const char variable[],
+                         const char allowed[])
+{   Py_UCS4 ch;
+    Py_ssize_t n;
+    if (!PyUnicode_Check(object))
+    {   PyErr_Format(PyExc_ValueError, "%s should be a string", variable);
+        return 0;
+    }
+    if (PyUnicode_READY(object)==-1) return 0;
+    n = PyUnicode_GET_LENGTH(object);
+    if (n!=1)
+    {   PyErr_Format(PyExc_ValueError,
+                     "%s should be a single character", variable);
+        return 0;
+    }
+    ch = PyUnicode_READ_CHAR(object, 0);
+    if (ch < 128)
+    {   const char c = ch;
+        if (strchr(allowed, c)) return c;
+    }
+    PyErr_Format(PyExc_ValueError,
+                 "unknown %s function specified (should be one of '%s')",
+                 variable, allowed);
+    return 0;
+}
+#endif
+
 static int
 distance_converter(PyObject* object, void* pointer)
 { char c;
-  const char* data;
-  const char known_distances[] = "ebcauxsk";
-#if PY_MAJOR_VERSION < 3
-  if (PyString_Check(object))
-      data = PyString_AsString(object);
-  else
-#endif
-  if (PyUnicode_Check(object))
-      data = PyUnicode_AS_DATA(object);
-  else
-  { PyErr_SetString(PyExc_ValueError, "distance should be a string");
-    return 0;
-  }
-  if (strlen(data)!=1)
-  { PyErr_SetString(PyExc_ValueError, "distance should be a single character");
-    return 0;
-  }
-  c = data[0];
-  if (!strchr(known_distances, c))
-  { PyErr_Format(PyExc_ValueError, "unknown distance function specified (should be one of '%s')", known_distances);
-    return 0;
-  }
+  c = extract_single_character(object, "dist", "ebcauxsk");
+  if (c==0) return 0;
   *((char*)pointer) = c;
   return 1;
 }
@@ -59,28 +107,8 @@ distance_converter(PyObject* object, void* pointer)
 static int
 method_treecluster_converter(PyObject* object, void* pointer)
 { char c;
-  const char* data;
-  const char known_methods[] = "csma";
-#if PY_MAJOR_VERSION < 3
-  if (PyString_Check(object))
-      data = PyString_AsString(object);
-  else
-#endif
-  if (PyUnicode_Check(object))
-      data = PyUnicode_AS_DATA(object);
-  else
-  { PyErr_SetString(PyExc_ValueError, "method should be a string");
-    return 0;
-  }
-  if (strlen(data)!=1)
-  { PyErr_SetString(PyExc_ValueError, "method should be a single character");
-    return 0;
-  }
-  c = data[0];
-  if (!strchr(known_methods, c))
-  { PyErr_Format(PyExc_ValueError, "unknown method function specified (should be one of '%s')", known_methods);
-    return 0;
-  }
+  c = extract_single_character(object, "method", "csma");
+  if (c==0) return 0;
   *((char*)pointer) = c;
   return 1;
 }
@@ -88,28 +116,8 @@ method_treecluster_converter(PyObject* object, void* pointer)
 static int
 method_kcluster_converter(PyObject* object, void* pointer)
 { char c;
-  const char* data;
-  const char known_methods[] = "am";
-#if PY_MAJOR_VERSION < 3
-  if (PyString_Check(object))
-      data = PyString_AsString(object);
-  else
-#endif
-  if (PyUnicode_Check(object))
-      data = PyUnicode_AS_DATA(object);
-  else
-  { PyErr_SetString(PyExc_ValueError, "method should be a string");
-    return 0;
-  }
-  if (strlen(data)!=1)
-  { PyErr_SetString(PyExc_ValueError, "method should be a single character");
-    return 0;
-  }
-  c = data[0];
-  if (!strchr(known_methods, c))
-  { PyErr_Format(PyExc_ValueError, "unknown method function specified (should be one of '%s')", known_methods);
-    return 0;
-  }
+  c = extract_single_character(object, "method", "am");
+  if (c==0) return 0;
   *((char*)pointer) = c;
   return 1;
 }
@@ -117,31 +125,12 @@ method_kcluster_converter(PyObject* object, void* pointer)
 static int
 method_clusterdistance_converter(PyObject* object, void* pointer)
 { char c;
-  const char* data;
-  const char known_methods[] = "amsxv";
-#if PY_MAJOR_VERSION < 3
-  if (PyString_Check(object))
-      data = PyString_AsString(object);
-  else
-#endif
-  if (PyUnicode_Check(object))
-      data = PyUnicode_AS_DATA(object);
-  else
-  { PyErr_SetString(PyExc_ValueError, "method should be a string");
-    return 0;
-  }
-  if (strlen(data)!=1)
-  { PyErr_SetString(PyExc_ValueError, "method should be a single character");
-    return 0;
-  }
-  c = data[0];
-  if (!strchr(known_methods, c))
-  { PyErr_Format(PyExc_ValueError, "unknown method function specified (should be one of '%s')", known_methods);
-    return 0;
-  }
+  c = extract_single_character(object, "method", "amsxv");
+  if (c==0) return 0;
   *((char*)pointer) = c;
   return 1;
 }
+
 /* -- data ------------------------------------------------------------------ */
 
 static double**
@@ -1457,45 +1446,54 @@ static char kcluster__doc__[] =
 "         initialid=None) -> clusterid, error, nfound\n"
 "\n"
 "This function implements k-means clustering.\n"
-"data     : nrows x ncolumns array containing the expression data\n"
-"nclusters: number of clusters (the 'k' in k-means)\n"
-"mask     : nrows x ncolumns array of integers, showing which data are\n"
-"           missing. If mask[i][j]==0, then data[i][j] is missing.\n"
-"weight   : the weights to be used when calculating distances\n"
-"transpose: if equal to 0, genes (rows) are clustered;\n"
-"           if equal to 1, microarrays (columns) are clustered.\n"
-"npass    : number of times the k-means clustering algorithm is\n"
-"           performed, each time with a different (random) initial\n"
-"           condition.\n"
-"method   : specifies how the center of a cluster is found:\n"
-"           method=='a': arithmetic mean\n"
-"           method=='m': median\n"
-"dist     : specifies the distance function to be used:\n"
-"           dist=='e': Euclidean distance\n"
-"           dist=='b': City Block distance\n"
-"           dist=='c': Pearson correlation\n"
-"           dist=='a': absolute value of the correlation\n"
-"           dist=='u': uncentered correlation\n"
-"           dist=='x': absolute uncentered correlation\n"
-"           dist=='s': Spearman's rank correlation\n"
-"           dist=='k': Kendall's tau\n"
-"initialid: the initial clustering from which the algorithm should start.\n"
-"           If initialid is None, the routine carries out npass\n"
-"           repetitions of the EM algorithm, each time starting from a\n"
-"           different random initial clustering. If initialid is given,\n"
-"           the routine carries out the EM algorithm only once, starting\n"
-"           from the given initial clustering and without randomizing the\n"
-"           order in which items are assigned to clusters (i.e., using\n"
-"           the same order as in the data matrix). In that case, the\n"
-"           k-means algorithm is fully deterministic.\n"
+"\n"
+"Arguments:\n"
+" - data: nrows x ncolumns array containing the expression data\n"
+" - nclusters: number of clusters (the 'k' in k-means)\n"
+" - mask: nrows x ncolumns array of integers, showing which data are\n"
+"   missing. If mask[i][j]==0, then data[i][j] is missing.\n"
+" - weight: the weights to be used when calculating distances\n"
+" - transpose:\n"
+"\n"
+"   - if equal to 0, genes (rows) are clustered;\n"
+"   - if equal to 1, microarrays (columns) are clustered.\n"
+"\n"
+" - npass: number of times the k-means clustering algorithm is\n"
+"   performed, each time with a different (random) initial\n"
+"   condition.\n"
+" - method: specifies how the center of a cluster is found:\n"
+"\n"
+"   - method=='a': arithmetic mean\n"
+"   - method=='m': median\n"
+"\n"
+" - dist: specifies the distance function to be used:\n"
+"\n"
+"   - dist=='e': Euclidean distance\n"
+"   - dist=='b': City Block distance\n"
+"   - dist=='c': Pearson correlation\n"
+"   - dist=='a': absolute value of the correlation\n"
+"   - dist=='u': uncentered correlation\n"
+"   - dist=='x': absolute uncentered correlation\n"
+"   - dist=='s': Spearman's rank correlation\n"
+"   - dist=='k': Kendall's tau\n"
+"\n"
+" - initialid: the initial clustering from which the algorithm should start.\n"
+"   If initialid is None, the routine carries out npass\n"
+"   repetitions of the EM algorithm, each time starting from a\n"
+"   different random initial clustering. If initialid is given,\n"
+"   the routine carries out the EM algorithm only once, starting\n"
+"   from the given initial clustering and without randomizing the\n"
+"   order in which items are assigned to clusters (i.e., using\n"
+"   the same order as in the data matrix). In that case, the\n"
+"   k-means algorithm is fully deterministic.\n"
 "\n"
 "Return values:\n"
-"clusterid: array containing the number of the cluster to which each\n"
-"           gene/microarray was assigned in the best k-means clustering\n"
-"           solution that was found in the npass runs;\n"
-"error:     the within-cluster sum of distances for the returned k-means\n"
-"           clustering solution;\n"
-"nfound:    the number of times this solution was found.\n";
+" - clusterid: array containing the number of the cluster to which each\n"
+"   gene/microarray was assigned in the best k-means clustering\n"
+"   solution that was found in the npass runs;\n"
+" - error: the within-cluster sum of distances for the returned k-means\n"
+"   clustering solution;\n"
+" - nfound: the number of times this solution was found.\n";
 
 static PyObject*
 py_kcluster(PyObject* self, PyObject* args, PyObject* keywords)
@@ -1635,48 +1633,53 @@ static char kmedoids__doc__[] =
 "         initialid=None) -> clusterid, error, nfound.\n"
 "\n"
 "This function implements k-medoids clustering.\n"
-"distance:  The distance matrix between the elements. There are three\n"
-"           ways in which you can pass a distance matrix:\n"
-"           #1: a 2D Numerical Python array (in which only the left-lower\n"
-"               part of the array will be accessed);\n"
-"           #2: a 1D Numerical Python array containing the distances\n"
-"               consecutively;\n"
-"           #3: a list of rows containing the lower-triangular part of\n"
-"               the distance matrix.\n"
-"           Examples are:\n"
-"           >>> distance = array([[0.0, 1.1, 2.3],\n"
-"                                 [1.1, 0.0, 4.5],\n"
-"                                 [2.3, 4.5, 0.0]])\n"
-"           (option #1)\n"
-"           >>> distance = array([1.1, 2.3, 4.5])\n"
-"           (option #2)\n"
-"           >>> distance = [array([]),\n"
-"                           array([1.1]),\n"
-"                           array([2.3, 4.5])\n"
-"                          ]\n"
-"           (option #3)\n"
-"           These three correspond to the same distance matrix.\n"
-"nclusters: number of clusters (the 'k' in k-medoids)\n"
-"npass    : the number of times the k-medoids clustering algorithm is\n"
-"           performed, each time with a different (random) initial\n"
-"           condition.\n"
-"initialid: the initial clustering from which the algorithm should start.\n"
-"           If initialid is not given, the routine carries out npass\n"
-"           repetitions of the EM algorithm, each time starting from a\n"
-"           different random initial clustering. If initialid is given,\n"
-"           the routine carries out the EM algorithm only once, starting\n"
-"           from the initial clustering specified by initialid and\n"
-"           without randomizing the order in which items are assigned to\n"
-"           clusters (i.e., using the same order as in the data matrix).\n"
-"           In that case, the k-means algorithm is fully deterministic.\n"
+"\n"
+"Arguments:\n"
+" - distance: The distance matrix between the elements. There are three\n"
+"   ways in which you can pass a distance matrix:\n"
+"\n"
+"   1. a 2D Numerical Python array (in which only the left-lower\n"
+"      part of the array will be accessed);\n"
+"   2. a 1D Numerical Python array containing the distances\n"
+"      consecutively;\n"
+"   3. a list of rows containing the lower-triangular part of\n"
+"      the distance matrix.\n"
+"\n"
+"   Examples are:\n"
+"\n"
+"       >>> distance = array([[0.0, 1.1, 2.3],\n"
+"       ...                   [1.1, 0.0, 4.5],\n"
+"       ...                   [2.3, 4.5, 0.0]])\n"
+"       (option #1)\n"
+"       >>> distance = array([1.1, 2.3, 4.5])\n"
+"       (option #2)\n"
+"       >>> distance = [array([]),\n"
+"       ...             array([1.1]),\n"
+"       ...             array([2.3, 4.5])]\n"
+"       (option #3)\n"
+"\n"
+"   These three correspond to the same distance matrix.\n"
+" - nclusters: number of clusters (the 'k' in k-medoids)\n"
+" - npass: the number of times the k-medoids clustering algorithm is\n"
+"   performed, each time with a different (random) initial\n"
+"   condition.\n"
+" - initialid: the initial clustering from which the algorithm should start.\n"
+"   If initialid is not given, the routine carries out npass\n"
+"   repetitions of the EM algorithm, each time starting from a\n"
+"   different random initial clustering. If initialid is given,\n"
+"   the routine carries out the EM algorithm only once, starting\n"
+"   from the initial clustering specified by initialid and\n"
+"   without randomizing the order in which items are assigned to\n"
+"   clusters (i.e., using the same order as in the data matrix).\n"
+"   In that case, the k-means algorithm is fully deterministic.\n"
 "\n"
 "Return values:\n"
-"clusterid: array containing the number of the cluster to which each\n"
-"           gene/microarray was assigned in the best k-means clustering\n"
-"           solution that was found in the npass runs;\n"
-"error:     the within-cluster sum of distances for the returned k-means\n"
-"           clustering solution;\n"
-"nfound:    the number of times this solution was found.\n";
+" - clusterid: array containing the number of the cluster to which each\n"
+"   gene/microarray was assigned in the best k-means clustering\n"
+"   solution that was found in the npass runs;\n"
+" - error: the within-cluster sum of distances for the returned k-means\n"
+"   clustering solution;\n"
+" - nfound: the number of times this solution was found.\n";
 
 static PyObject*
 py_kmedoids(PyObject* self, PyObject* args, PyObject* keywords)
@@ -1765,52 +1768,65 @@ static char treecluster__doc__[] =
 "\n"
 "This function implements the pairwise single, complete, centroid, and\n"
 "average linkage hierarchical clustering methods.\n"
-"data     : nrows x ncolumns array containing the gene expression data.\n"
-"mask     : nrows x ncolumns array of integers, showing which data are\n"
-"           missing. If mask[i][j]==0, then data[i][j] is missing.\n"
-"weight   : the weights to be used when calculating distances.\n"
-"transpose: if equal to 0, genes (rows) are clustered;\n"
-"           if equal to 1, microarrays (columns) are clustered.\n"
-"dist     : specifies the distance function to be used:\n"
-"           dist=='e': Euclidean distance\n"
-"           dist=='b': City Block distance\n"
-"           dist=='c': Pearson correlation\n"
-"           dist=='a': absolute value of the correlation\n"
-"           dist=='u': uncentered correlation\n"
-"           dist=='x': absolute uncentered correlation\n"
-"           dist=='s': Spearman's rank correlation\n"
-"           dist=='k': Kendall's tau\n"
-"method   : specifies which linkage method is used:\n"
-"           method=='s': Single pairwise linkage\n"
-"           method=='m': Complete (maximum) pairwise linkage (default)\n"
-"           method=='c': Centroid linkage\n"
-"           method=='a': Average pairwise linkage\n"
-"distancematrix:  The distance matrix between the elements. There are\n"
-"           three ways in which you can pass a distance matrix:\n"
-"           #1: a 2D Numerical Python array (in which only the left-lower\n"
-"               part of the array will be accessed);\n"
-"           #2: a 1D Numerical Python array containing the distances\n"
-"               consecutively;\n"
-"           #3: a list of rows containing the lower-triangular part of\n"
-"               the distance matrix.\n"
-"           Examples are:\n"
-"           >>> distance = array([[0.0, 1.1, 2.3],\n"
-"                                 [1.1, 0.0, 4.5],\n"
-"                                 [2.3, 4.5, 0.0]])\n"
-"           (option #1)\n"
-"           >>> distance = array([1.1, 2.3, 4.5])\n"
-"           (option #2)\n"
-"           >>> distance = [array([]),\n"
-"                           array([1.1]),\n"
-"                           array([2.3, 4.5])\n"
-"                          ]\n"
-"           (option #3)\n"
-"           These three correspond to the same distance matrix.\n"
-"           PLEASE NOTE:\n"
-"           As the treecluster routine may shuffle the values in the\n"
-"           distance matrix as part of the clustering algorithm, be sure\n"
-"           to save this array in a different variable before calling\n"
-"           treecluster if you need it later.\n"
+"\n"
+"Arguments:\n"
+" - data: nrows x ncolumns array containing the gene expression data.\n"
+" - mask: nrows x ncolumns array of integers, showing which data are\n"
+"   missing. If mask[i][j]==0, then data[i][j] is missing.\n"
+" - weight: the weights to be used when calculating distances.\n"
+" - transpose:\n"
+"\n"
+"   - if equal to 0, genes (rows) are clustered;\n"
+"   - if equal to 1, microarrays (columns) are clustered.\n"
+"\n"
+" - dist: specifies the distance function to be used:\n"
+"\n"
+"   - dist=='e': Euclidean distance\n"
+"   - dist=='b': City Block distance\n"
+"   - dist=='c': Pearson correlation\n"
+"   - dist=='a': absolute value of the correlation\n"
+"   - dist=='u': uncentered correlation\n"
+"   - dist=='x': absolute uncentered correlation\n"
+"   - dist=='s': Spearman's rank correlation\n"
+"   - dist=='k': Kendall's tau\n"
+"\n"
+" - method: specifies which linkage method is used:\n"
+"\n"
+"   - method=='s': Single pairwise linkage\n"
+"   - method=='m': Complete (maximum) pairwise linkage (default)\n"
+"   - method=='c': Centroid linkage\n"
+"   - method=='a': Average pairwise linkage\n"
+"\n"
+" - distancematrix:  The distance matrix between the elements. There are\n"
+"   three ways in which you can pass a distance matrix:\n"
+"\n"
+"   1. a 2D Numerical Python array (in which only the left-lower\n"
+"      part of the array will be accessed);\n"
+"   2. a 1D Numerical Python array containing the distances\n"
+"      consecutively;\n"
+"   3. a list of rows containing the lower-triangular part of\n"
+"      the distance matrix.\n"
+"\n"
+"   Examples are:\n"
+"\n"
+"       >>> distance = array([[0.0, 1.1, 2.3],\n"
+"       ...                   [1.1, 0.0, 4.5],\n"
+"       ...                   [2.3, 4.5, 0.0]])\n"
+"       (option #1)\n"
+"       >>> distance = array([1.1, 2.3, 4.5])\n"
+"       (option #2)\n"
+"       >>> distance = [array([]),\n"
+"       ...             array([1.1]),\n"
+"       ...             array([2.3, 4.5])]\n"
+"       (option #3)\n"
+"\n"
+"   These three correspond to the same distance matrix.\n"
+"\n"
+"   PLEASE NOTE:\n"
+"   As the treecluster routine may shuffle the values in the\n"
+"   distance matrix as part of the clustering algorithm, be sure\n"
+"   to save this array in a different variable before calling\n"
+"   treecluster if you need it later.\n"
 "\n"
 "Either data or distancematrix should be None. If distancematrix==None,\n"
 "the hierarchical clustering solution is calculated from the gene\n"
@@ -1972,39 +1988,45 @@ static char somcluster__doc__[] =
 "           dist='e') -> clusterid, celldata\n"
 "\n"
 "This function implements a self-organizing map on a rectangular grid.\n"
-"data     : nrows x ncolumns array containing the gene expression data\n"
-"mask     : nrows x ncolumns array of integers, showing which data are\n"
-"           missing. If mask[i][j]==0, then data[i][j] is missing.\n"
-"weight   : the weights to be used when calculating distances\n"
-"transpose: if equal to 0, genes (rows) are clustered;\n"
-"           if equal to 1, microarrays (columns) are clustered.\n"
-"nxgrid   : the horizontal dimension of the rectangular SOM map\n"
-"nygrid   : the vertical dimension of the rectangular SOM map\n"
-"inittau  : the initial value of tau (the neighborbood function)\n"
-"niter    : the number of iterations\n"
-"dist     : specifies the distance function to be used:\n"
-"           dist=='e': Euclidean distance\n"
-"           dist=='b': City Block distance\n"
-"           dist=='c': Pearson correlation\n"
-"           dist=='a': absolute value of the correlation\n"
-"           dist=='u': uncentered correlation\n"
-"           dist=='x': absolute uncentered correlation\n"
-"           dist=='s': Spearman's rank correlation\n"
-"           dist=='k': Kendall's tau\n"
+"\n"
+"Arguments:\n"
+" - data: nrows x ncolumns array containing the gene expression data\n"
+" - mask: nrows x ncolumns array of integers, showing which data are\n"
+"   missing. If mask[i][j]==0, then data[i][j] is missing.\n"
+" - weight: the weights to be used when calculating distances\n"
+" - transpose:\n"
+"\n"
+"   - if equal to 0, genes (rows) are clustered;\n"
+"   - if equal to 1, microarrays (columns) are clustered.\n"
+"\n"
+" - nxgrid: the horizontal dimension of the rectangular SOM map\n"
+" - nygrid: the vertical dimension of the rectangular SOM map\n"
+" - inittau: the initial value of tau (the neighborbood function)\n"
+" - niter: the number of iterations\n"
+" - dist: specifies the distance function to be used:\n"
+"\n"
+"   - dist=='e': Euclidean distance\n"
+"   - dist=='b': City Block distance\n"
+"   - dist=='c': Pearson correlation\n"
+"   - dist=='a': absolute value of the correlation\n"
+"   - dist=='u': uncentered correlation\n"
+"   - dist=='x': absolute uncentered correlation\n"
+"   - dist=='s': Spearman's rank correlation\n"
+"   - dist=='k': Kendall's tau\n"
 "\n"
 "Return values:\n"
-"clusterid: array with two columns, while the number of rows is equal to\n"
-"           the number of genes or the number of microarrays depending on\n"
-"           whether genes or microarrays are being clustered. Each row in\n"
-"           the array contains the x and y coordinates of the cell in the\n"
-"           rectangular SOM grid to which the gene or microarray was\n"
-"           assigned.\n"
-"celldata:  an array with dimensions (nxgrid, nygrid, number of\n"
-"           microarrays) if genes are being clustered, or (nxgrid,\n"
-"           nygrid, number of genes) if microarrays are being clustered.\n"
-"           Each element [ix][iy] of this array is a 1D vector containing\n"
-"           the gene expression data for the centroid of the cluster in\n"
-"           the SOM grid cell with coordinates (ix, iy).\n";
+" - clusterid: array with two columns, while the number of rows is equal to\n"
+"   the number of genes or the number of microarrays depending on\n"
+"   whether genes or microarrays are being clustered. Each row in\n"
+"   the array contains the x and y coordinates of the cell in the\n"
+"   rectangular SOM grid to which the gene or microarray was\n"
+"   assigned.\n"
+" - celldata:  an array with dimensions (nxgrid, nygrid, number of\n"
+"   microarrays) if genes are being clustered, or (nxgrid,\n"
+"   nygrid, number of genes) if microarrays are being clustered.\n"
+"   Each element [ix][iy] of this array is a 1D vector containing\n"
+"   the gene expression data for the centroid of the cluster in\n"
+"   the SOM grid cell with coordinates (ix, iy).\n";
 
 static PyObject*
 py_somcluster(PyObject* self, PyObject* args, PyObject* keywords)
@@ -2284,44 +2306,53 @@ py_mean(PyObject* unused, PyObject* args)
 /* clusterdistance */
 static char clusterdistance__doc__[] =
 "clusterdistance(data, mask=None, weight=None, index1, index2, dist='e',\n"
-"                method='a', transpose=0) -> the distance between the\n"
-"                                            two clusters\n"
+"                method='a', transpose=0) -> distance between two clusters\n"
 "\n"
-"data     : nrows x ncolumns array containing the expression data\n"
-"mask     : nrows x ncolumns array of integers, showing which data are\n"
-"           missing. If mask[i][j]==0, then data[i][j] is missing.\n"
-"weight   : the weights to be used when calculating distances\n"
-"index1   : 1D array identifying which genes/microarrays belong to the\n"
-"           first cluster. If the cluster contains only one gene, then\n"
-"           index1 can also be written as a single integer.\n"
-"index2   : 1D array identifying which genes/microarrays belong to the\n"
-"           second cluster. If the cluster contains only one gene, then\n"
-"           index2 can also be written as a single integer.\n"
-"transpose: if equal to 0, genes (rows) are clustered;\n"
-"           if equal to 1, microarrays (columns) are clustered.\n"
-"dist     : specifies the distance function to be used:\n"
-"           dist=='e': Euclidean distance\n"
-"           dist=='b': City Block distance\n"
-"           dist=='c': Pearson correlation\n"
-"           dist=='a': absolute value of the correlation\n"
-"           dist=='u': uncentered correlation\n"
-"           dist=='x': absolute uncentered correlation\n"
-"           dist=='s': Spearman's rank correlation\n"
-"           dist=='k': Kendall's tau\n"
-"method   : specifies how the distance between two clusters is defined:\n"
-"           method=='a': the distance between the arithmetic means of the\n"
-"                        two clusters\n"
-"           method=='m': the distance between the medians of the two\n"
-"                        clusters\n"
-"           method=='s': the smallest pairwise distance between members\n"
-"                        of the two clusters\n"
-"           method=='x': the largest pairwise distance between members of\n"
-"                        the two clusters\n"
-"           method=='v': average of the pairwise distances between\n"
-"                        members of the clusters\n"
-"transpose: if equal to 0: clusters of genes (rows) are considered;\n"
-"           if equal to 1: clusters of microarrays (columns) are\n"
-"                          considered.\n";
+"Arguments:\n"
+" - data: nrows x ncolumns array containing the expression data\n"
+" - mask: nrows x ncolumns array of integers, showing which data are\n"
+"   missing. If mask[i][j]==0, then data[i][j] is missing.\n"
+" - weight: the weights to be used when calculating distances\n"
+" - index1: 1D array identifying which genes/microarrays belong to the\n"
+"   first cluster. If the cluster contains only one gene, then\n"
+"   index1 can also be written as a single integer.\n"
+" - index2: 1D array identifying which genes/microarrays belong to the\n"
+"   second cluster. If the cluster contains only one gene, then\n"
+"   index2 can also be written as a single integer.\n"
+" - transpose:\n"
+"\n"
+"   - if equal to 0, genes (rows) are clustered;\n"
+"   - if equal to 1, microarrays (columns) are clustered.\n"
+"\n"
+" - dist: specifies the distance function to be used:\n"
+"\n"
+"   - dist=='e': Euclidean distance\n"
+"   - dist=='b': City Block distance\n"
+"   - dist=='c': Pearson correlation\n"
+"   - dist=='a': absolute value of the correlation\n"
+"   - dist=='u': uncentered correlation\n"
+"   - dist=='x': absolute uncentered correlation\n"
+"   - dist=='s': Spearman's rank correlation\n"
+"   - dist=='k': Kendall's tau\n"
+"\n"
+" - method: specifies how the distance between two clusters is defined:\n"
+"\n"
+"   - method=='a': the distance between the arithmetic means of the\n"
+"     two clusters\n"
+"   - method=='m': the distance between the medians of the two\n"
+"     clusters\n"
+"   - method=='s': the smallest pairwise distance between members\n"
+"     of the two clusters\n"
+"   - method=='x': the largest pairwise distance between members of\n"
+"     the two clusters\n"
+"   - method=='v': average of the pairwise distances between\n"
+"     members of the clusters\n"
+"\n"
+" - transpose:\n"
+"\n"
+"   - if equal to 0: clusters of genes (rows) are considered;\n"
+"   - if equal to 1: clusters of microarrays (columns) are considered.\n"
+"\n";
 
 static PyObject*
 py_clusterdistance(PyObject* self, PyObject* args, PyObject* keywords)
@@ -2452,25 +2483,26 @@ static char clustercentroids__doc__[] =
 "The clustercentroids routine calculates the cluster centroids, given to\n"
 "which cluster each element belongs. The centroid is defined as either\n"
 "the mean or the median over all elements for each dimension.\n"
-
-"data     : nrows x ncolumns array containing the expression data\n"
-"mask     : nrows x ncolumns array of integers, showing which data are\n"
-"           missing. If mask[i][j]==0, then data[i][j] is missing.\n"
-"transpose: if equal to 0, gene (row) clusters are considered;\n"
-"           if equal to 1, microarray (column) clusters are considered.\n"
-"clusterid: array containing the cluster number for each gene or\n"
-"           microarray. The cluster number should be non-negative.\n"
-"method   : specifies whether the centroid is calculated from the\n"
-"           arithmetic mean (method=='a', default) or the median\n"
-"           (method=='m') over each dimension.\n"
+"\n"
+"Arguments:\n"
+" - data: nrows x ncolumns array containing the expression data\n"
+" - mask: nrows x ncolumns array of integers, showing which data are\n"
+"   missing. If mask[i][j]==0, then data[i][j] is missing.\n"
+" - transpose: if equal to 0, gene (row) clusters are considered;\n"
+"   if equal to 1, microarray (column) clusters are considered.\n"
+" - clusterid: array containing the cluster number for each gene or\n"
+"   microarray. The cluster number should be non-negative.\n"
+" - method: specifies whether the centroid is calculated from the\n"
+"   arithmetic mean (method=='a', default) or the median\n"
+"   (method=='m') over each dimension.\n"
 "\n"
 "Return values:\n"
-"cdata    : 2D array containing the cluster centroids. If transpose==0,\n"
-"           then the dimensions of cdata are nclusters x ncolumns. If\n"
-"           transpose==1, then the dimensions of cdata are\n"
-"           nrows x nclusters.\n"
-"cmask    : 2D array of integers describing which elements in cdata,\n"
-"           if any, are missing.\n";
+" - cdata: 2D array containing the cluster centroids. If transpose==0,\n"
+"   then the dimensions of cdata are nclusters x ncolumns. If\n"
+"   transpose==1, then the dimensions of cdata are\n"
+"   nrows x nclusters.\n"
+" - cmask: 2D array of integers describing which elements in cdata,\n"
+"   if any, are missing.\n";
 
 static PyObject*
 py_clustercentroids(PyObject* self, PyObject* args, PyObject* keywords)
@@ -2597,38 +2629,44 @@ static char distancematrix__doc__[] =
 "               dist='e') -> distance matrix as a list of arrays\n"
 "\n"
 "This function returns the distance matrix between gene expression data.\n"
-"data     : nrows x ncolumns array containing the expression data\n"
-"mask     : nrows x ncolumns array of integers, showing which data are\n"
-"           missing. If mask[i][j]==0, then data[i][j] is missing.\n"
-"weight   : the weights to be used when calculating distances.\n"
-"transpose: if equal to 0: the distances between genes (rows) are\n"
-"                          calculated;\n"
-"           if equal to 1, the distances beteeen microarrays (columns)\n"
-"                          are calculated.\n"
-"dist     : specifies the distance function to be used:\n"
-"           dist=='e': Euclidean distance\n"
-"           dist=='b': City Block distance\n"
-"           dist=='c': Pearson correlation\n"
-"           dist=='a': absolute value of the correlation\n"
-"           dist=='u': uncentered correlation\n"
-"           dist=='x': absolute uncentered correlation\n"
-"           dist=='s': Spearman's rank correlation\n"
-"           dist=='k': Kendall's tau\n"
+"\n"
+"Arguments:\n"
+" - data: nrows x ncolumns array containing the expression data\n"
+" - mask: nrows x ncolumns array of integers, showing which data are\n"
+"   missing. If mask[i][j]==0, then data[i][j] is missing.\n"
+" - weight: the weights to be used when calculating distances.\n"
+" - transpose: if equal to 0: the distances between genes (rows) are\n"
+"   calculated;\n"
+"   if equal to 1, the distances beteeen microarrays (columns)\n"
+"   are calculated.\n"
+" - dist: specifies the distance function to be used:\n"
+"\n"
+"   - dist=='e': Euclidean distance\n"
+"   - dist=='b': City Block distance\n"
+"   - dist=='c': Pearson correlation\n"
+"   - dist=='a': absolute value of the correlation\n"
+"   - dist=='u': uncentered correlation\n"
+"   - dist=='x': absolute uncentered correlation\n"
+"   - dist=='s': Spearman's rank correlation\n"
+"   - dist=='k': Kendall's tau\n"
 "\n"
 "Return value:\n"
 "The distance matrix is returned as a list of 1D arrays containing the\n"
 "distance matrix between the gene expression data. The number of columns\n"
 "in each row is equal to the row number. Hence, the first row has zero\n"
-"elements. An example of the return value is\n"
-"matrix = [[],\n"
-"          array([1.]),\n"
-"          array([7., 3.]),\n"
-"          array([4., 2., 6.])]\n"
-"This corresponds to the distance matrix\n"
-" [0., 1., 7., 4.]\n"
-" [1., 0., 3., 2.]\n"
-" [7., 3., 0., 6.]\n"
-" [4., 2., 6., 0.]\n";
+"elements. An example of the return value is::\n"
+"\n"
+"    matrix = [[],\n"
+"              array([1.]),\n"
+"              array([7., 3.]),\n"
+"              array([4., 2., 6.])]\n"
+"\n"
+"This corresponds to the distance matrix::\n"
+"\n"
+"    [0., 1., 7., 4.]\n"
+"    [1., 0., 3., 2.]\n"
+"    [7., 3., 0., 6.]\n"
+"    [4., 2., 6., 0.]\n";
 
 static PyObject*
 py_distancematrix(PyObject* self, PyObject* args, PyObject* keywords)
@@ -2751,7 +2789,9 @@ static char pca__doc__[] =
 "\n"
 "This function returns the principal component decomposition of the gene\n"
 "expression data.\n"
-"data     : nrows x ncolumns array containing the expression data\n"
+"\n"
+"Arguments:\n"
+" - data: nrows x ncolumns array containing the expression data\n"
 "\n"
 "Return value:\n"
 "This function returns an array containing the mean of each column, the\n"
@@ -2763,7 +2803,9 @@ static char pca__doc__[] =
 "the smaller of nrows and ncolumns.\n"
 "Adding the column means to the dot product of the coordinates and the\n"
 "principal components,\n"
-">>> columnmean + dot(coordinates, pc)\n"
+"\n"
+"    >>> columnmean + dot(coordinates, pc)\n"
+"\n"
 "recreates the data matrix.\n";
 
 static PyObject*

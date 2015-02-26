@@ -35,7 +35,7 @@ header_records = {
 
 summary_title = re.compile('## +SUMMARY')
 summary_rec = re.compile(' *[0-9]+: +[1-9][0-9a-z]{3,3}')
-alignments_title= re.compile('## +ALIGNMENTS')
+alignments_title = re.compile('## +ALIGNMENTS')
 alignments_rec = re.compile(' *[0-9]+ +-{0,1}[0-9]+')
 equiv_title = re.compile('## +EQUIVALENCES')
 
@@ -59,7 +59,7 @@ class FSSPHeader(object):
                 elif i == 'compnd' or i == 'author':
                     setattr(self, i, inline.split()[1:])
                 elif i == 'source' or i == 'header':
-                    attr = inline[inline.find(' ')+1:].strip()
+                    attr = inline[inline.find(' ') + 1:].strip()
                     setattr(self, i, attr)
                 else:
                     setattr(self, i, inline.split()[1])
@@ -87,7 +87,7 @@ class PosAlign(object):
         if self.gap:
             outstring = '..'
         else:
-            outstring = self.aa+self.ss.lower()
+            outstring = self.aa + self.ss.lower()
         return outstring
 
     __str__ = __repr__
@@ -102,16 +102,16 @@ class FSSPSumRec(object):
         self.nr = int(in_rec[0][:-1])
         self.pdb1 = in_rec[1][:4]
         if len(in_rec[1]) == 4:
-            self.chain1='0'
+            self.chain1 = '0'
         elif len(in_rec[1]) == 5:
-            self.chain1=in_rec[1][4]
+            self.chain1 = in_rec[1][4]
         else:
             raise ValueError('Bad PDB ID 1')
         self.pdb2 = in_rec[2][:4]
         if len(in_rec[2]) == 4:
-            self.chain2='0'
+            self.chain2 = '0'
         elif len(in_rec[2]) == 5:
-            self.chain2=in_rec[2][4]
+            self.chain2 = in_rec[2][4]
         else:
             raise ValueError('Bad PDB ID 2')
         self.zscore = float(in_rec[3])

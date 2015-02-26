@@ -89,7 +89,7 @@ class BlastWorker(threading.Thread):
 
     def shutdown(self):
         # GRRRR How do I explicitely kill a thread ???????
-        #self.queue.put(None)
+        # self.queue.put(None)
         del self.queue
 
     def run(self):

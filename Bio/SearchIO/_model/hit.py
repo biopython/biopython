@@ -156,12 +156,12 @@ class Hit(_BaseSearchObject):
     def __len__(self):
         return len(self.hsps)
 
-    #Python 3:
+    # Python 3:
     def __bool__(self):
         return bool(self.hsps)
 
-    #Python 2:
-    __nonzero__= __bool__
+    # Python 2:
+    __nonzero__ = __bool__
 
     def __contains__(self, hsp):
         return hsp in self._items
@@ -190,11 +190,11 @@ class Hit(_BaseSearchObject):
             lines.append(' HSPs: ?')
         else:
             lines.append(' HSPs: %s  %s  %s  %s  %s  %s' %
-                    ('-'*4, '-'*8, '-'*9, '-'*6, '-'*15, '-'*21))
+                    ('-' * 4, '-' * 8, '-' * 9, '-' * 6, '-' * 15, '-' * 21))
             pattern = '%11s  %8s  %9s  %6s  %15s  %21s'
             lines.append(pattern % ('#', 'E-value', 'Bit score', 'Span',
                     'Query range', 'Hit range'))
-            lines.append(pattern % ('-'*4, '-'*8, '-'*9, '-'*6, '-'*15, '-'*21))
+            lines.append(pattern % ('-' * 4, '-' * 8, '-' * 9, '-' * 6, '-' * 15, '-' * 21))
             for idx, hsp in enumerate(self.hsps):
                 # evalue
                 evalue = getattr_str(hsp, 'evalue', fmt='%.2g')
@@ -240,7 +240,7 @@ class Hit(_BaseSearchObject):
     def __delitem__(self, idx):
         del self._items[idx]
 
-    ## hsp properties ##
+    # hsp properties #
     def _validate_hsp(self, hsp):
         """Validates an HSP object.
 
@@ -282,7 +282,7 @@ class Hit(_BaseSearchObject):
             else:
                 self.query_description = hsp.query_description
 
-    ## properties ##
+    # properties #
     description = optionalcascade('_description', 'hit_description',
             """Hit description""")
     query_description = optionalcascade('_query_description',
@@ -309,7 +309,7 @@ class Hit(_BaseSearchObject):
         """HSPFragment objects contained in the Hit"""
         return [frag for frag in chain(*self._items)]
 
-    ## public methods ##
+    # public methods #
     def append(self, hsp):
         """Adds a HSP object to the end of Hit.
 
@@ -382,7 +382,7 @@ class Hit(_BaseSearchObject):
 
         """
         if func is not None:
-            hsps = [func(x) for x in self.hsps[:]] # this creates a shallow copy
+            hsps = [func(x) for x in self.hsps[:]]  # this creates a shallow copy
         else:
             hsps = self.hsps[:]
         if hsps:

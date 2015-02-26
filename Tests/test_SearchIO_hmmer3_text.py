@@ -12,9 +12,11 @@ import unittest
 from Bio import BiopythonExperimentalWarning
 
 import warnings
+
+
 with warnings.catch_warnings():
-   warnings.simplefilter('ignore', BiopythonExperimentalWarning)
-   from Bio.SearchIO import parse
+    warnings.simplefilter('ignore', BiopythonExperimentalWarning)
+    from Bio.SearchIO import parse
 
 # test case files are in the Blast directory
 TEST_DIR = 'Hmmer'
@@ -1518,7 +1520,6 @@ class HmmscanCases(unittest.TestCase):
         self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(1, counter)
 
-
     def test_30_hmmscan_009(self):
         "Test parsing hmmscan 3.0 (text_30_hmmscan_009)"
         hmmer_file = get_file('text_30_hmmscan_009.out')
@@ -1781,8 +1782,8 @@ class HmmersearchCases(unittest.TestCase):
                 hsp.aln_annotation['PP'])
 
         # test if we've properly finished iteration
-        #self.assertRaises(StopIteration, next, qresults)
-        #self.assertEqual(1, counter)
+        # self.assertRaises(StopIteration, next, qresults)
+        # self.assertEqual(1, counter)
 
     def test_30_hmmsearch_003(self):
         "Test parsing hmmersearch 3.0 (text_30_hmmsearch_003)"
@@ -1898,8 +1899,8 @@ class HmmersearchCases(unittest.TestCase):
         self.assertEqual(0.97, hsp.acc_avg)
 
         # test if we've properly finished iteration
-        #self.assertRaises(StopIteration, next, qresults)
-        #self.assertEqual(1, counter)
+        # self.assertRaises(StopIteration, next, qresults)
+        # self.assertEqual(1, counter)
 
     def test_30_hmmsearch_004(self):
         "Test parsing hmmersearch 3.0 (text_30_hmmsearch_004)"
@@ -2047,8 +2048,8 @@ class HmmersearchCases(unittest.TestCase):
                 hsp.aln_annotation['PP'])
 
         # test if we've properly finished iteration
-        #self.assertRaises(StopIteration, next, qresults)
-        #self.assertEqual(1, counter)
+        # self.assertRaises(StopIteration, next, qresults)
+        # self.assertEqual(1, counter)
 
     def test_30_hmmsearch_005(self):
         "Test parsing hmmersearch 3.0 (text_30_hmmsearch_005)"
@@ -2213,5 +2214,5 @@ class HmmersearchCases(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

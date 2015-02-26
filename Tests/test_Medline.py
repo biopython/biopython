@@ -11,9 +11,8 @@ from Bio import Medline
 class TestMedline(unittest.TestCase):
 
     def test_read(self):
-        handle = open("Medline/pubmed_result1.txt")
-        record = Medline.read(handle)
-        handle.close()
+        with open("Medline/pubmed_result1.txt") as handle:
+            record = Medline.read(handle)
         self.assertEqual(record["PMID"], "12230038")
         self.assertEqual(record["OWN"], "NLM")
         self.assertEqual(record["STAT"], "MEDLINE")
@@ -131,7 +130,7 @@ class TestMedline(unittest.TestCase):
         self.assertEqual(record["FAU"], ["de Hoon, M J L", "Imoto, S", "Nolan, J", "Miyano, S"])
         self.assertEqual(record["AU"], ["de Hoon MJ", "Imoto S", "Nolan J", "Miyano S"])
         self.assertEqual(record["LA"], ["eng"])
-        self.assertEqual(record["PT"], ["Comparative Study", "Evaluation Studies",  "Journal Article", "Validation Studies"])
+        self.assertEqual(record["PT"], ["Comparative Study", "Evaluation Studies", "Journal Article", "Validation Studies"])
         self.assertEqual(record["DEP"], "20040210")
         self.assertEqual(record["PL"], "England")
         self.assertEqual(record["TA"], "Bioinformatics")
@@ -179,7 +178,20 @@ class TestMedline(unittest.TestCase):
         self.assertRaises(StopIteration, next, records)
         handle.close()
 
+    def test_multiline_mesh(self):
+        with open("Medline/pubmed_result3.txt") as handle:
+            record = Medline.read(handle)
+            self.assertEqual(record["PMID"], "23039619")
+        self.assertEqual(record["MH"], ["Blood Circulation",
+                                        "High-Intensity Focused Ultrasound Ablation/adverse effects/instrumentation/*methods",
+                                        "Humans",
+                                        "Models, Biological",
+                                        "Sonication",
+                                        "Temperature",
+                                        "Time Factors",
+                                        "Transducers"])
+
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

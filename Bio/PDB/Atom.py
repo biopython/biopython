@@ -18,8 +18,7 @@ from Bio.Data import IUPACData
 class Atom(object):
     def __init__(self, name, coord, bfactor, occupancy, altloc, fullname, serial_number,
                  element=None):
-        """
-        Atom object.
+        """Create Atom object.
 
         The Atom object stores atom name (both with and without spaces),
         coordinates, B factor, occupancy, alternative location specifier
@@ -46,27 +45,27 @@ class Atom(object):
         @type fullname: string
 
         @param element: atom element, e.g. "C" for Carbon, "HG" for mercury,
-        @type fullname: uppercase string (or None if unknown)
+        @type element: uppercase string (or None if unknown)
         """
-        self.level="A"
+        self.level = "A"
         # Reference to the residue
-        self.parent=None
+        self.parent = None
         # the atomic data
-        self.name=name      # eg. CA, spaces are removed from atom name
-        self.fullname=fullname  # e.g. " CA ", spaces included
-        self.coord=coord
-        self.bfactor=bfactor
-        self.occupancy=occupancy
-        self.altloc=altloc
-        self.full_id=None   # (structure id, model id, chain id, residue id, atom id)
-        self.id=name        # id of atom is the atom name (e.g. "CA")
-        self.disordered_flag=0
-        self.anisou_array=None
-        self.siguij_array=None
-        self.sigatm_array=None
-        self.serial_number=serial_number
+        self.name = name  # eg. CA, spaces are removed from atom name
+        self.fullname = fullname  # e.g. " CA ", spaces included
+        self.coord = coord
+        self.bfactor = bfactor
+        self.occupancy = occupancy
+        self.altloc = altloc
+        self.full_id = None  # (structure id, model id, chain id, residue id, atom id)
+        self.id = name  # id of atom is the atom name (e.g. "CA")
+        self.disordered_flag = 0
+        self.anisou_array = None
+        self.siguij_array = None
+        self.sigatm_array = None
+        self.serial_number = serial_number
         # Dictionary that keeps additional properties
-        self.xtra={}
+        self.xtra = {}
         assert not element or element == element.upper(), element
         self.element = self._assign_element(element)
         self.mass = self._assign_atom_mass()
@@ -110,12 +109,11 @@ class Atom(object):
     # Special methods
 
     def __repr__(self):
-        "Print Atom object as <Atom atom_name>."
+        """Print Atom object as <Atom atom_name>."""
         return "<Atom %s>" % self.get_id()
 
     def __sub__(self, other):
-        """
-        Calculate distance between two atoms.
+        """Calculate distance between two atoms.
 
         Example:
             >>> distance=atom1-atom2
@@ -123,29 +121,28 @@ class Atom(object):
         @param other: the other atom
         @type other: L{Atom}
         """
-        diff=self.coord-other.coord
+        diff = self.coord - other.coord
         return numpy.sqrt(numpy.dot(diff, diff))
 
     # set methods
 
     def set_serial_number(self, n):
-        self.serial_number=n
+        self.serial_number = n
 
     def set_bfactor(self, bfactor):
-        self.bfactor=bfactor
+        self.bfactor = bfactor
 
     def set_coord(self, coord):
-        self.coord=coord
+        self.coord = coord
 
     def set_altloc(self, altloc):
-        self.altloc=altloc
+        self.altloc = altloc
 
     def set_occupancy(self, occupancy):
-        self.occupancy=occupancy
+        self.occupancy = occupancy
 
     def set_sigatm(self, sigatm_array):
-        """
-        Set standard deviation of atomic parameters.
+        """Set standard deviation of atomic parameters.
 
         The standard deviation of atomic parameters consists
         of 3 positional, 1 B factor and 1 occupancy standard
@@ -154,25 +151,23 @@ class Atom(object):
         @param sigatm_array: standard deviations of atomic parameters.
         @type sigatm_array: Numeric array (length 5)
         """
-        self.sigatm_array=sigatm_array
+        self.sigatm_array = sigatm_array
 
     def set_siguij(self, siguij_array):
-        """
-        Set standard deviations of anisotropic temperature factors.
+        """Set standard deviations of anisotropic temperature factors.
 
         @param siguij_array: standard deviations of anisotropic temperature factors.
         @type siguij_array: Numeric array (length 6)
         """
-        self.siguij_array=siguij_array
+        self.siguij_array = siguij_array
 
     def set_anisou(self, anisou_array):
-        """
-        Set anisotropic B factor.
+        """Set anisotropic B factor.
 
         @param anisou_array: anisotropic B factor.
         @type anisou_array: Numeric array (length 6)
         """
-        self.anisou_array=anisou_array
+        self.anisou_array = anisou_array
 
     # Public methods
 
@@ -181,49 +176,49 @@ class Atom(object):
 
         The disordered flag indicates whether the atom is disordered or not.
         """
-        self.disordered_flag=1
+        self.disordered_flag = 1
 
     def is_disordered(self):
-        "Return the disordered flag (1 if disordered, 0 otherwise)."
+        """Return the disordered flag (1 if disordered, 0 otherwise)."""
         return self.disordered_flag
 
     def set_parent(self, parent):
         """Set the parent residue.
 
         Arguments:
-        o parent - Residue object
+         - parent - Residue object
         """
-        self.parent=parent
+        self.parent = parent
 
     def detach_parent(self):
-        "Remove reference to parent."
-        self.parent=None
+        """Remove reference to parent."""
+        self.parent = None
 
     def get_sigatm(self):
-        "Return standard deviation of atomic parameters."
+        """Return standard deviation of atomic parameters."""
         return self.sigatm_array
 
     def get_siguij(self):
-        "Return standard deviations of anisotropic temperature factors."
+        """Return standard deviations of anisotropic temperature factors."""
         return self.siguij_array
 
     def get_anisou(self):
-        "Return anisotropic B factor."
+        """Return anisotropic B factor."""
         return self.anisou_array
 
     def get_parent(self):
-        "Return parent residue."
+        """Return parent residue."""
         return self.parent
 
     def get_serial_number(self):
         return self.serial_number
 
     def get_name(self):
-        "Return atom name."
+        """Return atom name."""
         return self.name
 
     def get_id(self):
-        "Return the id of the atom (which is its atom name)."
+        """Return the id of the atom (which is its atom name)."""
         return self.id
 
     def get_full_id(self):
@@ -232,34 +227,33 @@ class Atom(object):
         The full id of an atom is the tuple
         (structure id, model id, chain id, residue id, atom name, altloc).
         """
-        return self.parent.get_full_id()+((self.name, self.altloc),)
+        return self.parent.get_full_id() + ((self.name, self.altloc),)
 
     def get_coord(self):
-        "Return atomic coordinates."
+        """Return atomic coordinates."""
         return self.coord
 
     def get_bfactor(self):
-        "Return B factor."
+        """Return B factor."""
         return self.bfactor
 
     def get_occupancy(self):
-        "Return occupancy."
+        """Return occupancy."""
         return self.occupancy
 
     def get_fullname(self):
-        "Return the atom name, including leading and trailing spaces."
+        """Return the atom name, including leading and trailing spaces."""
         return self.fullname
 
     def get_altloc(self):
-        "Return alternative location specifier."
+        """Return alternative location specifier."""
         return self.altloc
 
     def get_level(self):
         return self.level
 
     def transform(self, rot, tran):
-        """
-        Apply rotation and translation to the atomic coordinates.
+        """Apply rotation and translation to the atomic coordinates.
 
         Example:
                 >>> rotation=rotmat(pi, Vector(1, 0, 0))
@@ -272,21 +266,20 @@ class Atom(object):
         @param tran: the translation vector
         @type tran: size 3 Numeric array
         """
-        self.coord=numpy.dot(self.coord, rot)+tran
+        self.coord = numpy.dot(self.coord, rot) + tran
 
     def get_vector(self):
-        """
-        Return coordinates as Vector.
+        """Return coordinates as Vector.
 
         @return: coordinates as 3D vector
         @rtype: Vector
         """
-        x, y, z=self.coord
+        x, y, z = self.coord
         return Vector(x, y, z)
 
     def copy(self):
-        """
-        Create a copy of the Atom.
+        """Create a copy of the Atom.
+
         Parent information is lost.
         """
         # Do a shallow copy then explicitly copy what needs to be deeper.
@@ -298,9 +291,9 @@ class Atom(object):
 
 
 class DisorderedAtom(DisorderedEntityWrapper):
-    """
-    This class contains all Atom objects that represent the same disordered
-    atom. One of these atoms is "selected" and all method calls not caught
+    """Contains all Atom objects that represent the same disordered atom.
+
+    One of these atoms is "selected" and all method calls not caught
     by DisorderedAtom are forwarded to the selected Atom object. In that way, a
     DisorderedAtom behaves exactly like a normal Atom. By default, the selected
     Atom object represents the Atom object with the highest occupancy, but a
@@ -308,11 +301,13 @@ class DisorderedAtom(DisorderedEntityWrapper):
     method.
     """
     def __init__(self, id):
-        """
+        """Create DisorderedAtom.
+
         Arguments:
-        o id - string, atom name
+         - id - string, atom name
         """
-        self.last_occupancy=-1
+        # TODO - make this a private attribute?
+        self.last_occupancy = -999999
         DisorderedEntityWrapper.__init__(self, id)
 
     # Special methods
@@ -321,16 +316,15 @@ class DisorderedAtom(DisorderedEntityWrapper):
         return "<Disordered Atom %s>" % self.get_id()
 
     def disordered_add(self, atom):
-        "Add a disordered atom."
+        """Add a disordered atom."""
         # Add atom to dict, use altloc as key
         atom.flag_disorder()
         # set the residue parent of the added atom
-        residue=self.get_parent()
+        residue = self.get_parent()
         atom.set_parent(residue)
-        altloc=atom.get_altloc()
-        occupancy=atom.get_occupancy()
-        self[altloc]=atom
-        if occupancy>self.last_occupancy:
-            self.last_occupancy=occupancy
+        altloc = atom.get_altloc()
+        occupancy = atom.get_occupancy()
+        self[altloc] = atom
+        if occupancy > self.last_occupancy:
+            self.last_occupancy = occupancy
             self.disordered_select(altloc)
-

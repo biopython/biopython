@@ -2,13 +2,13 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-#TODO - Don't use "from XXX import *"
+# TODO - Don't use "from XXX import *"
 from __future__ import print_function
 
 try:
     from numpy import *
     from numpy import dot  # missing in old PyPy's micronumpy
-    from numpy.linalg import svd, det # Missing in PyPy 2.0 numpypy
+    from numpy.linalg import svd, det  # Missing in PyPy 2.0 numpypy
 except ImportError:
     from Bio import MissingPythonDependencyError
     raise MissingPythonDependencyError(
@@ -18,17 +18,17 @@ from Bio.SVDSuperimposer import SVDSuperimposer
 
 # start with two coordinate sets (Nx3 arrays - Float0)
 
-x=array([[51.65, -1.90, 50.07],
+x = array([[51.65, -1.90, 50.07],
          [50.40, -1.23, 50.65],
          [50.68, -0.04, 51.54],
          [50.22, -0.02, 52.85]], 'f')
 
-y=array([[51.30, -2.99, 46.54],
+y = array([[51.30, -2.99, 46.54],
          [51.09, -1.88, 47.58],
          [52.36, -1.20, 48.03],
          [52.71, -1.18, 49.38]], 'f')
 
-sup=SVDSuperimposer()
+sup = SVDSuperimposer()
 
 # set the coords
 # y will be rotated and translated on x
@@ -38,16 +38,16 @@ sup.set(x, y)
 sup.run()
 
 # get the rmsd
-rms=sup.get_rms()
+rms = sup.get_rms()
 
 # get rotation (right multiplying!) and the translation
-rot, tran=sup.get_rotran()
+rot, tran = sup.get_rotran()
 
 # rotate y on x manually
-y_on_x1=dot(y, rot)+tran
+y_on_x1 = dot(y, rot) + tran
 
 # same thing
-y_on_x2=sup.get_transformed()
+y_on_x2 = sup.get_transformed()
 
 
 def simple_matrix_print(matrix):

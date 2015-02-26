@@ -7,7 +7,7 @@
 
 from __future__ import print_function
 
-__docformat__ = "epytext en"  # Don't just use plain text in epydoc API pages!
+__docformat__ = "restructuredtext en"  # Don't just use plain text in epydoc API pages!
 
 from Bio.Application import _Option, _Switch, AbstractCommandline
 
@@ -18,6 +18,7 @@ class MuscleCommandline(AbstractCommandline):
     http://www.drive5.com/muscle/
 
     Example:
+    --------
 
     >>> from Bio.Align.Applications import MuscleCommandline
     >>> muscle_exe = r"C:\Program Files\Aligments\muscle3.8.31_i86win32.exe"
@@ -31,6 +32,7 @@ class MuscleCommandline(AbstractCommandline):
     the Python subprocess module, as described in the Biopython tutorial.
 
     Citations:
+    ----------
 
     Edgar, Robert C. (2004), MUSCLE: multiple sequence alignment with high
     accuracy and high throughput, Nucleic Acids Research 32(5), 1792-97.
@@ -41,19 +43,18 @@ class MuscleCommandline(AbstractCommandline):
     Last checked against version: 3.7, briefly against 3.8
     """
     def __init__(self, cmd="muscle", **kwargs):
-        CLUSTERING_ALGORITHMS   = ["upgma", "upgmb", "neighborjoining"]
+        CLUSTERING_ALGORITHMS = ["upgma", "upgmb", "neighborjoining"]
         DISTANCE_MEASURES_ITER1 = ["kmer6_6", "kmer20_3", "kmer20_4", "kbit20_3",
                                    "kmer4_6"]
         DISTANCE_MEASURES_ITER2 = DISTANCE_MEASURES_ITER1 + \
                                   ["pctid_kimura", "pctid_log"]
-        OBJECTIVE_SCORES        = ["sp", "ps", "dp", "xp", "spf", "spm"]
-        TREE_ROOT_METHODS       = ["pseudo", "midlongestspan", "minavgleafdist"]
-        SEQUENCE_TYPES          = ["protein", "nucleo", "auto"]
-        WEIGHTING_SCHEMES       = ["none", "clustalw", "henikoff", "henikoffpb",
-                                   "gsc", "threeway"]
+        OBJECTIVE_SCORES = ["sp", "ps", "dp", "xp", "spf", "spm"]
+        TREE_ROOT_METHODS = ["pseudo", "midlongestspan", "minavgleafdist"]
+        SEQUENCE_TYPES = ["protein", "nucleo", "auto"]
+        WEIGHTING_SCHEMES = ["none", "clustalw", "henikoff", "henikoffpb", "gsc", "threeway"]
         self.parameters = \
            [
-            #Can't use "in" as the final alias as this is a reserved word in python:
+            # Can't use "in" as the final alias as this is a reserved word in python:
             _Option(["-in", "in", "input"],
                     "Input filename",
                     filename=True,
@@ -74,23 +75,23 @@ class MuscleCommandline(AbstractCommandline):
                     "Second input filename for a profile alignment",
                     filename=True,
                     equate=False),
-            #anchorspacing   Integer              32                 Minimum spacing between
+            # anchorspacing   Integer              32                 Minimum spacing between
             _Option(["-anchorspacing", "anchorspacing"],
                     "Minimum spacing between anchor columns",
                     checker_function=lambda x: isinstance(x, int),
                     equate=False),
-            #center          Floating point       [1]                Center parameter.
+            # center          Floating point       [1]                Center parameter.
             #                                                        Should be negative.
             _Option(["-center", "center"],
                     "Center parameter - should be negative",
                     checker_function=lambda x: isinstance(x, float),
                     equate=False),
-            #cluster1        upgma                upgmb              Clustering method.
+            # cluster1        upgma                upgmb              Clustering method.
             _Option(["-cluster1", "cluster1"],
                     "Clustering method used in iteration 1",
                     checker_function=lambda x: x in CLUSTERING_ALGORITHMS,
                     equate=False),
-            #cluster2        upgmb                                   cluster1 is used in
+            # cluster2        upgmb                                   cluster1 is used in
             #                neighborjoining                         iteration 1 and 2,
             #                                                        cluster2 in later
             #                                                        iterations.
@@ -98,20 +99,20 @@ class MuscleCommandline(AbstractCommandline):
                     "Clustering method used in iteration 2",
                     checker_function=lambda x: x in CLUSTERING_ALGORITHMS,
                     equate=False),
-            #diaglength      Integer              24                 Minimum length of
+            # diaglength      Integer              24                 Minimum length of
             #                                                        diagonal.
             _Option(["-diaglength", "diaglength"],
                     "Minimum length of diagonal",
                     checker_function=lambda x: isinstance(x, int),
                     equate=True),
-            #diagmargin      Integer              5                  Discard this many
+            # diagmargin      Integer              5                  Discard this many
             #                                                        positions at ends of
             #                                                        diagonal.
             _Option(["-diagmargin", "diagmargin"],
                     "Discard this many positions at ends of diagonal",
                     checker_function=lambda x: isinstance(x, int),
                     equate=False),
-            #distance1       kmer6_6              Kmer6_6 (amino) or Distance measure for
+            # distance1       kmer6_6              Kmer6_6 (amino) or Distance measure for
             #                kmer20_3             Kmer4_6 (nucleo)   iteration 1.
             #                kmer20_4
             #                kbit20_3
@@ -120,7 +121,7 @@ class MuscleCommandline(AbstractCommandline):
                     "Distance measure for iteration 1",
                     checker_function=lambda x: x in DISTANCE_MEASURES_ITER1,
                     equate=False),
-            #distance2       kmer6_6              pctid_kimura       Distance measure for
+            # distance2       kmer6_6              pctid_kimura       Distance measure for
             #                kmer20_3                                iterations 2, 3 ...
             #                kmer20_4
             #                kbit20_3
@@ -130,39 +131,39 @@ class MuscleCommandline(AbstractCommandline):
                     "Distance measure for iteration 2",
                     checker_function=lambda x: x in DISTANCE_MEASURES_ITER2,
                     equate=False),
-            #gapopen         Floating point       [1]                The gap open score.
+            # gapopen         Floating point       [1]                The gap open score.
             #                                                        Must be negative.
             _Option(["-gapopen", "gapopen"],
                     "Gap open score - negative number",
                     checker_function=lambda x: isinstance(x, float),
                     equate=False),
-            #hydro           Integer              5                  Window size for
+            # hydro           Integer              5                  Window size for
             #                                                        determining whether a
             #                                                        region is hydrophobic.
             _Option(["-hydro", "hydro"],
                     "Window size for hydrophobic region",
                     checker_function=lambda x: isinstance(x, int),
                     equate=False),
-            #hydrofactor     Floating point       1.2                Multiplier for gap
+            # hydrofactor     Floating point       1.2                Multiplier for gap
             #                                                        open/close penalties in
             #                                                        hydrophobic regions.
             _Option(["-hydrofactor", "hydrofactor"],
                     "Multiplier for gap penalties in hydrophobic regions",
                     checker_function=lambda x: isinstance(x, float),
                     equate=False),
-            #log             File name            None.              Log file name (delete
+            # log             File name            None.              Log file name (delete
             #                                                        existing file).
             _Option(["-log", "log"],
                     "Log file name",
                     filename=True,
                     equate=False),
-            #loga            File name            None.              Log file name (append
+            # loga            File name            None.              Log file name (append
             #                                                        to existing file).
             _Option(["-loga", "loga"],
                     "Log file name (append to existing file)",
                     filename=True,
                     equate=False),
-            #maxdiagbreak    Integer              1                  Maximum distance
+            # maxdiagbreak    Integer              1                  Maximum distance
             #                                                        between two diagonals
             #                                                        that allows them to
             #                                                        merge into one
@@ -172,7 +173,7 @@ class MuscleCommandline(AbstractCommandline):
                     "them to merge into one diagonal",
                     checker_function=lambda x: isinstance(x, int),
                     equate=False),
-            #maxhours        Floating point       None.              Maximum time to run in
+            # maxhours        Floating point       None.              Maximum time to run in
             #                                                        hours. The actual time
             #                                                        may exceed the
             #                                                        requested limit by a
@@ -184,27 +185,27 @@ class MuscleCommandline(AbstractCommandline):
                     "Maximum time to run in hours",
                     checker_function=lambda x: isinstance(x, float),
                     equate=False),
-            #maxiters        Integer 1, 2 ...     16                 Maximum number of
+            # maxiters        Integer 1, 2 ...     16                 Maximum number of
             #                                                        iterations.
             _Option(["-maxiters", "maxiters"],
                     "Maximum number of iterations",
                     checker_function=lambda x: isinstance(x, int),
                     equate=False),
-            #maxtrees        Integer              1                  Maximum number of new
+            # maxtrees        Integer              1                  Maximum number of new
             #                                                        trees to build in
             #                                                        iteration 2.
             _Option(["-maxtrees", "maxtrees"],
                     "Maximum number of trees to build in iteration 2",
                     checker_function=lambda x: isinstance(x, int),
                     equate=False),
-            #minbestcolscore Floating point       [1]                Minimum score a column
+            # minbestcolscore Floating point       [1]                Minimum score a column
             #                                                        must have to be an
             #                                                        anchor.
             _Option(["-minbestcolscore", "minbestcolscore"],
                     "Minimum score a column must have to be an anchor",
                     checker_function=lambda x: isinstance(x, float),
                     equate=False),
-            #minsmoothscore  Floating point       [1]                Minimum smoothed score
+            # minsmoothscore  Floating point       [1]                Minimum smoothed score
             #                                                        a column must have to
             #                                                        be an anchor.
             _Option(["-minsmoothscore", "minsmoothscore"],
@@ -212,7 +213,7 @@ class MuscleCommandline(AbstractCommandline):
                     "be an anchor",
                     checker_function=lambda x: isinstance(x, float),
                     equate=False),
-            #objscore        sp                   spm                Objective score used by
+            # objscore        sp                   spm                Objective score used by
             #                ps                                      tree dependent
             #                dp                                      refinement.
             #                xp                                      sp=sum-of-pairs score.
@@ -229,12 +230,12 @@ class MuscleCommandline(AbstractCommandline):
                     "Objective score used by tree dependent refinement",
                     checker_function=lambda x: x in OBJECTIVE_SCORES,
                     equate=False),
-            #root1           pseudo               pseudo             Method used to root
+            # root1           pseudo               pseudo             Method used to root
             _Option(["-root1", "root1"],
                     "Method used to root tree in iteration 1",
                     checker_function=lambda x: x in TREE_ROOT_METHODS,
                     equate=False),
-            #root2           midlongestspan                          tree; root1 is used in
+            # root2           midlongestspan                          tree; root1 is used in
             #                minavgleafdist                          iteration 1 and 2,
             #                                                        root2 in later
             #                                                        iterations.
@@ -242,27 +243,27 @@ class MuscleCommandline(AbstractCommandline):
                     "Method used to root tree in iteration 2",
                     checker_function=lambda x: x in TREE_ROOT_METHODS,
                     equate=False),
-            #seqtype         protein              auto               Sequence type.
+            # seqtype         protein              auto               Sequence type.
             #                nucleo
             #                auto
             _Option(["-seqtype", "seqtype"],
                     "Sequence type",
                     checker_function=lambda x: x in SEQUENCE_TYPES,
                     equate=False),
-            #smoothscoreceil Floating point       [1]                Maximum value of column
+            # smoothscoreceil Floating point       [1]                Maximum value of column
             #                                                        score for smoothing
             #                                                        purposes.
             _Option(["-smoothscoreceil", "smoothscoreceil"],
                     "Maximum value of column score for smoothing",
                     checker_function=lambda x: isinstance(x, float),
                     equate=False),
-            #smoothwindow    Integer              7                  Window used for anchor
+            # smoothwindow    Integer              7                  Window used for anchor
             #                                                        column smoothing.
             _Option(["-smoothwindow", "smoothwindow"],
                     "Window used for anchor column smoothing",
                     checker_function=lambda x: isinstance(x, int),
                     equate=False),
-            #SUEFF           Floating point value 0.1                Constant used in UPGMB
+            # SUEFF           Floating point value 0.1                Constant used in UPGMB
             #                between 0 and 1.                        clustering. Determines
             #                                                        the relative fraction
             #                                                        of average linkage
@@ -273,23 +274,23 @@ class MuscleCommandline(AbstractCommandline):
                     "Constant used in UPGMB clustering",
                     checker_function=lambda x: isinstance(x, float),
                     equate=False),
-            #tree1           File name            None               Save tree produced in
+            # tree1           File name            None               Save tree produced in
             _Option(["-tree1", "tree1"],
                     "Save Newick tree from iteration 1",
                     equate=False),
-            #tree2                                                   first or second
+            # tree2                                                   first or second
             #                                                        iteration to given file
             #                                                        in Newick (Phylip-
             #                                                        compatible) format.
             _Option(["-tree2", "tree2"],
                     "Save Newick tree from iteration 2",
                     equate=False),
-            #weight1         none                 clustalw           Sequence weighting
+            # weight1         none                 clustalw           Sequence weighting
             _Option(["-weight1", "weight1"],
                     "Weighting scheme used in iteration 1",
                     checker_function=lambda x: x in WEIGHTING_SCHEMES,
                     equate=False),
-            #weight2         henikoff                                scheme.
+            # weight2         henikoff                                scheme.
             #                henikoffpb                              weight1 is used in
             #                gsc                                     iterations 1 and 2.
             #                clustalw                                weight2 is used for
@@ -311,7 +312,7 @@ class MuscleCommandline(AbstractCommandline):
                     "Weighting scheme used in iteration 2",
                     checker_function=lambda x: x in WEIGHTING_SCHEMES,
                     equate=False),
-            #################### FORMATS #######################################
+            # ################### FORMATS #######################################
             # Multiple formats can be specified on the command line
             # If -msf appears it will be used regardless of other formats
             # specified. If -clw appears (and not -msf), clustalw format will be
@@ -321,37 +322,37 @@ class MuscleCommandline(AbstractCommandline):
             # -clw, or clwstrict, fasta will be used. If -fasta and -html are
             # specified -fasta will be used. Only if -html is specified alone
             # will html be used. I kid ye not.
-            #clw                no              Write output in CLUSTALW format (default is
+            # clw                no              Write output in CLUSTALW format (default is
             #                                   FASTA).
             _Switch(["-clw", "clw"],
                     "Write output in CLUSTALW format (with a MUSCLE header)"),
-            #clwstrict          no              Write output in CLUSTALW format with the
+            # clwstrict          no              Write output in CLUSTALW format with the
             #                                   "CLUSTAL W (1.81)" header rather than the
             #                                   MUSCLE version. This is useful when a post-
             #                                   processing step is picky about the file
             #                                   header.
             _Switch(["-clwstrict", "clwstrict"],
                     "Write output in CLUSTALW format with version 1.81 header"),
-            #fasta              yes             Write output in FASTA format. Alternatives
+            # fasta              yes             Write output in FASTA format. Alternatives
             #                                   include clw,
             #                                   clwstrict, msf and html.
             _Switch(["-fasta", "fasta"],
                     "Write output in FASTA format"),
-            #html               no              Write output in HTML format (default is
+            # html               no              Write output in HTML format (default is
             #                                   FASTA).
             _Switch(["-html", "html"],
                     "Write output in HTML format"),
-            #msf                no              Write output in MSF format (default is
+            # msf                no              Write output in MSF format (default is
             #                                   FASTA).
             _Switch(["-msf", "msf"],
                     "Write output in MSF format"),
-            #Phylip interleaved - undocumented as of 3.7
+            # Phylip interleaved - undocumented as of 3.7
             _Switch(["-phyi", "phyi"],
                     "Write output in PHYLIP interleaved format"),
-            #Phylip sequential - undocumented as of 3.7
+            # Phylip sequential - undocumented as of 3.7
             _Switch(["-phys", "phys"],
                     "Write output in PHYLIP sequential format"),
-            ################## Additional specified output files #########
+            # ################# Additional specified output files #########
             _Option(["-phyiout", "phyiout"],
                     "Write PHYLIP interleaved output to specified filename",
                     filename=True,
@@ -380,87 +381,87 @@ class MuscleCommandline(AbstractCommandline):
                     "Write FASTA format output to specified filename",
                     filename=True,
                     equate=False),
-            ############## END FORMATS ###################################
-            #anchors            yes             Use anchor optimization in tree dependent
+            # ############# END FORMATS ###################################
+            # anchors            yes             Use anchor optimization in tree dependent
             #                                   refinement iterations.
             _Switch(["-anchors", "anchors"],
                     "Use anchor optimisation in tree dependent "
                     "refinement iterations"),
-            #noanchors          no              Disable anchor optimization. Default is
+            # noanchors          no              Disable anchor optimization. Default is
             #                                   anchors.
             _Switch(["-noanchors", "noanchors"],
                     "Do not use anchor optimisation in tree dependent "
                     "refinement iterations"),
-            #group              yes             Group similar sequences together in the
+            # group              yes             Group similar sequences together in the
             #                                   output. This is the default. See also
             #                                   stable.
             _Switch(["-group", "group"],
                     "Group similar sequences in output"),
-            #stable             no              Preserve input order of sequences in output
+            # stable             no              Preserve input order of sequences in output
             #                                   file. Default is to group sequences by
             #                                   similarity (group).
             _Switch(["-stable", "stable"],
                     "Do not group similar sequences in output (not supported in v3.8)"),
-            ############## log-expectation profile score ######################
+            # ############# log-expectation profile score ######################
             # One of either -le, -sp, or -sv
             #
             # According to the doc, spn is default and the only option for
             # nucleotides: this doesnt appear to be true. -le, -sp, and -sv can
             # be used and produce numerically different logs (what is going on?)
             #
-            #spn fails on proteins
-            #le                 maybe           Use log-expectation profile score (VTML240).
+            # spn fails on proteins
+            # le                 maybe           Use log-expectation profile score (VTML240).
             #                                    Alternatives are to use sp or sv. This is
             #                                    the default for amino acid sequences.
             _Switch(["-le", "le"],
                     "Use log-expectation profile score (VTML240)"),
-            #sv                 no              Use sum-of-pairs profile score (VTML240).
+            # sv                 no              Use sum-of-pairs profile score (VTML240).
             #                                   Default is le.
             _Switch(["-sv", "sv"],
                     "Use sum-of-pairs profile score (VTML240)"),
-            #sp                 no              Use sum-of-pairs protein profile score
+            # sp                 no              Use sum-of-pairs protein profile score
             #                                   (PAM200). Default is le.
             _Switch(["-sp", "sp"],
                     "Use sum-of-pairs protein profile score (PAM200)"),
-            #spn                maybe           Use sum-of-pairs nucleotide profile score
+            # spn                maybe           Use sum-of-pairs nucleotide profile score
             #                                   (BLASTZ parameters). This is the only option
             #                                   for nucleotides, and is therefore the
             #                                   default.
             _Switch(["-spn", "spn"],
                     "Use sum-of-pairs protein nucleotide profile score"),
-            ############## END log-expectation profile score ######################
-            #quiet              no              Do not display progress messages.
+            # ############# END log-expectation profile score ######################
+            # quiet              no              Do not display progress messages.
             _Switch(["-quiet", "quiet"],
                     "Use sum-of-pairs protein nucleotide profile score"),
-            #refine             no              Input file is already aligned, skip first
+            # refine             no              Input file is already aligned, skip first
             #                                   two iterations and begin tree dependent
             #                                   refinement.
             _Switch(["-refine", "refine"],
                     "Only do tree dependent refinement"),
-            #core               yes in muscle,  Do not catch exceptions.
+            # core               yes in muscle,  Do not catch exceptions.
             #                   no in muscled.
             _Switch(["-core", "core"],
                     "Catch exceptions"),
-            #nocore             no in muscle,   Catch exceptions and give an error message
+            # nocore             no in muscle,   Catch exceptions and give an error message
             #                   yes in muscled. if possible.
             _Switch(["-nocore", "nocore"],
                     "Do not catch exceptions"),
-            #termgapsfull       no              Terminal gaps penalized with full penalty.
+            # termgapsfull       no              Terminal gaps penalized with full penalty.
             #                                   [1] Not fully supported in this version.
             #
-            #termgapshalf       yes             Terminal gaps penalized with half penalty.
+            # termgapshalf       yes             Terminal gaps penalized with half penalty.
             #                                   [1] Not fully supported in this version.
             #
-            #termgapshalflonger no              Terminal gaps penalized with half penalty if
+            # termgapshalflonger no              Terminal gaps penalized with half penalty if
             #                                   gap relative to
             #                                   longer sequence, otherwise with full
             #                                   penalty.
             #                                   [1] Not fully supported in this version.
-            #verbose            no              Write parameter settings and progress
+            # verbose            no              Write parameter settings and progress
             #                                   messages to log file.
             _Switch(["-verbose", "verbose"],
                     "Write parameter settings and progress"),
-            #version            no              Write version string to stdout and exit.
+            # version            no              Write version string to stdout and exit.
             _Switch(["-version", "version"],
                     "Write version string to stdout and exit"),
            ]

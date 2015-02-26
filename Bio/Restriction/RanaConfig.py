@@ -33,10 +33,10 @@
 #                     <-->
 #                       Indent
 #
-ConsoleWidth        =     80
-NameWidth           =     10
-Indent              =     4
-MaxSize             =     6
+ConsoleWidth = 80
+NameWidth = 10
+Indent = 4
+MaxSize = 6
 ###############################################################################
 #                   Proxies
 #
@@ -50,16 +50,16 @@ MaxSize             =     6
 #                   -> www.somewhere.something is the address of the proxy.
 #                      one_number is the port number.
 #
-ftp_proxy           =   ''
+ftp_proxy = ''
 ###############################################################################
 #                   Rebase ftp location
 #
 #   Do not modify the addresses.
 #
-ftp_Rebase          =   'ftp://ftp.neb.com/'
-ftp_emb_e           =   ftp_Rebase+'pub/rebase/emboss_e.###'
-ftp_emb_s           =   ftp_Rebase+'pub/rebase/emboss_s.###'
-ftp_emb_r           =   ftp_Rebase+'pub/rebase/emboss_r.###'
+ftp_Rebase = 'ftp://ftp.neb.com/'
+ftp_emb_e = ftp_Rebase + 'pub/rebase/emboss_e.###'
+ftp_emb_s = ftp_Rebase + 'pub/rebase/emboss_s.###'
+ftp_emb_r = ftp_Rebase + 'pub/rebase/emboss_r.###'
 ###############################################################################
 #                   ftp rebase account.
 #
@@ -76,6 +76,6 @@ ftp_emb_r           =   ftp_Rebase+'pub/rebase/emboss_r.###'
 #
 #   Do not forget to enclose the address between "'".
 #
-Rebase_name         =   'anonymous'
-Rebase_password     =   ''
-#Rebase_password     =   'your_address@somewhere.something'
+Rebase_name = 'anonymous'
+Rebase_password = ''
+# Rebase_password = 'your_address@somewhere.something'

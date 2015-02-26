@@ -113,7 +113,7 @@ class GraphData(object):
 
         """
 
-        #Let the UK spelling (colour) override the USA spelling (color)
+        # Let the UK spelling (colour) override the USA spelling (color)
         if colour is not None:
             color = colour
         if altcolour is not None:
@@ -172,8 +172,8 @@ class GraphData(object):
         """
         data = sorted(self.data.values())
         datalen = len(data)
-        return(data[0], data[datalen//4], data[datalen//2],
-               data[3*datalen//4], data[-1])
+        return(data[0], data[datalen // 4], data[datalen // 2],
+               data[3 * datalen // 4], data[-1])
 
     def range(self):
         """ range(self) -> (int, int)
@@ -181,9 +181,9 @@ class GraphData(object):
             Returns the range of the data, i.e. its start and end points on
             the genome as a (start, end) tuple
         """
-        positions = sorted(self.data) # i.e. dict keys
+        positions = sorted(self.data)  # i.e. dict keys
         # Return first and last positions in graph
-        #print len(self.data)
+        # print len(self.data)
         return (positions[0], positions[-1])
 
     def mean(self):
@@ -195,7 +195,7 @@ class GraphData(object):
         sum = 0.
         for item in data:
             sum += float(item)
-        return sum/len(data)
+        return sum / len(data)
 
     def stdev(self):
         """ stdev(self) -> Float
@@ -206,10 +206,10 @@ class GraphData(object):
         m = self.mean()
         runtotal = 0.
         for entry in data:
-            runtotal += float((entry - m)**2)
+            runtotal += float((entry - m) ** 2)
         # This is sample standard deviation; population stdev would involve
         # division by len(data), rather than len(data)-1
-        return sqrt(runtotal/(len(data)-1))
+        return sqrt(runtotal / (len(data) - 1))
 
     def __len__(self):
         """ __len__(self) -> Int
@@ -232,15 +232,15 @@ class GraphData(object):
         if isinstance(index, int):
             return self.data[index]
         elif isinstance(index, slice):
-            #TODO - Why does it treat the end points both as inclusive?
-            #This doesn't match Python norms does it?
+            # TODO - Why does it treat the end points both as inclusive?
+            # This doesn't match Python norms does it?
             low = index.start
             high = index.stop
             if index.step is not None and index.step != 1:
                 raise ValueError
             outlist = []
             for pos in sorted(self.data):
-                if pos >= low and pos <=high:
+                if pos >= low and pos <= high:
                     outlist.append((pos, self.data[pos]))
             return outlist
         else:

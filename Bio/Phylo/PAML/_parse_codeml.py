@@ -11,12 +11,12 @@ try:
     float("nan")
     _nan_float = float
 except ValueError:
-    #Happens prior to Python 2.6 depending on C library, e.g. breaks on WinXP
+    # Happens prior to Python 2.6 depending on C library, e.g. breaks on WinXP
     def _nan_float(text):
         try:
             return float(text)
         except ValueError:
-            if text.lower()=="nan":
+            if text.lower() == "nan":
                 import struct
                 return struct.unpack('d', struct.pack('Q', 0xfff8000000000000))[0]
             else:
@@ -94,16 +94,16 @@ def parse_nssites(lines, results, multi_models, multi_genes):
     gene_re = re.compile("Gene\s+([0-9]+)\s+.+")
     siteclass_model = results.get("site-class model")
     if not multi_models:
-    # If there's only one model in the results, find out
-    # which one it is and then parse it.
+        # If there's only one model in the results, find out
+        # which one it is and then parse it.
         if siteclass_model is None:
             siteclass_model = "one-ratio"
-        current_model = {"one-ratio" : 0,
-                        "NearlyNeutral" : 1,
-                        "PositiveSelection" : 2,
-                        "discrete" : 3,
-                        "beta" : 7,
-                        "beta&w>1" : 8}[siteclass_model]
+        current_model = {"one-ratio": 0,
+                        "NearlyNeutral": 1,
+                        "PositiveSelection": 2,
+                        "discrete": 3,
+                        "beta": 7,
+                        "beta&w>1": 8}[siteclass_model]
         if multi_genes:
             genes = results["genes"]
             current_gene = None
@@ -113,20 +113,20 @@ def parse_nssites(lines, results, multi_models, multi_genes):
                 if gene_res:
                     if current_gene is not None:
                         parse_model(lines[gene_start:line_num], model_results)
-                        genes[current_gene-1] = model_results
+                        genes[current_gene - 1] = model_results
                     gene_start = line_num
                     current_gene = int(gene_res.group(1))
                     model_results = {"description": siteclass_model}
-            if len(genes[current_gene-1]) == 0:
+            if len(genes[current_gene - 1]) == 0:
                 model_results = parse_model(lines[gene_start:], model_results)
-                genes[current_gene-1] = model_results
+                genes[current_gene - 1] = model_results
         else:
-            model_results = {"description" : siteclass_model}
+            model_results = {"description": siteclass_model}
             model_results = parse_model(lines, model_results)
             ns_sites[current_model] = model_results
     else:
-    # If there are multiple models in the results, scan through
-    # the file and send each model's text to be parsed individually.
+        # If there are multiple models in the results, scan through
+        # the file and send each model's text to be parsed individually.
         current_model = None
         model_start = None
         for line_num, line in enumerate(lines):
@@ -137,17 +137,17 @@ def parse_nssites(lines, results, multi_models, multi_genes):
             model_res = model_re.match(line)
             if model_res:
                 if current_model is not None:
-                # We've already been tracking a model, so it's time
-                # to send those lines off for parsing before beginning
-                # a new one.
+                    # We've already been tracking a model, so it's time
+                    # to send those lines off for parsing before beginning
+                    # a new one.
                     parse_model(lines[model_start:line_num], model_results)
                     ns_sites[current_model] = model_results
                 model_start = line_num
                 current_model = int(model_res.group(1))
-                model_results = {"description":model_res.group(2)}
+                model_results = {"description": model_res.group(2)}
         if ns_sites.get(current_model) is None:
-        # When we reach the end of the file, we'll still have one more
-        # model to parse.
+            # When we reach the end of the file, we'll still have one more
+            # model to parse.
             model_results = parse_model(lines[model_start:], model_results)
             ns_sites[current_model] = model_results
     # Only add the ns_sites dict to the results if we really have results.
@@ -171,7 +171,7 @@ def parse_model(lines, results):
     dN_tree_flag = False
     w_tree_flag = False
     num_params = None
-    tree_re = re.compile("\(\(+")
+    tree_re = re.compile("^\([\w #:',.()]*\);\s*$")
     branch_re = re.compile("\s+(\d+\.\.\d+)[\s+\d+\.\d+]+")
     model_params_re = re.compile("(?<!\S)([a-z]\d?)\s*=\s+(\d+\.\d+)")
     for line in lines:
@@ -255,8 +255,8 @@ def parse_model(lines, results):
             gene_num = int(re.match("gene # (\d+)", line).group(1))
             if parameters.get("genes") is None:
                 parameters["genes"] = {}
-            parameters["genes"][gene_num] = {"kappa":line_floats[0],
-                                            "omega":line_floats[1]}
+            parameters["genes"][gene_num] = {"kappa": line_floats[0],
+                                            "omega": line_floats[1]}
         # Find dN values.
         # Example match: "tree length for dN:       0.2990"
         elif "tree length for dN" in line and len(line_floats) > 0:
@@ -316,23 +316,23 @@ def parse_model(lines, results):
             branch = branch_res.group(1)
             if parameters.get("branches") is None:
                 parameters["branches"] = {}
-            #Hack for Jython http://bugs.jython.org/issue1762 float("-nan")
+            # Hack for Jython http://bugs.jython.org/issue1762 float("-nan")
             line = line.replace(" -nan", " nan")
             params = line.strip().split()[1:]
-            parameters["branches"][branch]= {
-                "t" : _nan_float(params[0].strip()),
-                "N" : _nan_float(params[1].strip()),
-                "S" : _nan_float(params[2].strip()),
-                "omega" :_nan_float(params[3].strip()),
-                "dN" : _nan_float(params[4].strip()),
-                "dS" : _nan_float(params[5].strip()),
-                "N*dN" : _nan_float(params[6].strip()),
-                "S*dS" : _nan_float(params[7].strip())}
+            parameters["branches"][branch] = {
+                "t": _nan_float(params[0].strip()),
+                "N": _nan_float(params[1].strip()),
+                "S": _nan_float(params[2].strip()),
+                "omega": _nan_float(params[3].strip()),
+                "dN": _nan_float(params[4].strip()),
+                "dS": _nan_float(params[5].strip()),
+                "N*dN": _nan_float(params[6].strip()),
+                "S*dS": _nan_float(params[7].strip())}
         # Find model parameters, which can be spread across multiple
         # lines.
         # Example matches:
         # "  p0=  0.99043  p=  0.36657 q=  1.04445
-        #"  (p1=  0.00957) w=  3.25530"
+        # "  (p1=  0.00957) w=  3.25530"
         elif len(model_params) > 0:
             float_model_params = []
             for param in model_params:
@@ -349,7 +349,7 @@ def parse_siteclass_proportions(line_floats):
     site_classes = {}
     if len(line_floats) > 0:
         for n in range(len(line_floats)):
-            site_classes[n] = {"proportion" : line_floats[n]}
+            site_classes[n] = {"proportion": line_floats[n]}
     return site_classes
 
 
@@ -423,15 +423,15 @@ def parse_pairwise(lines, results):
             if pairwise.get(seq2) is None:
                 pairwise[seq2] = {}
             if len(line_floats) == 1:
-                pairwise[seq1][seq2] = {"lnL" : line_floats[0]}
+                pairwise[seq1][seq2] = {"lnL": line_floats[0]}
                 pairwise[seq2][seq1] = pairwise[seq1][seq2]
             elif len(line_floats) == 6:
-                pairwise[seq1][seq2] = {"t" : line_floats[0],
-                        "S" : line_floats[1],
-                        "N" : line_floats[2],
-                        "omega" : line_floats[3],
-                        "dN" : line_floats[4],
-                        "dS" : line_floats[5]}
+                pairwise[seq1][seq2] = {"t": line_floats[0],
+                        "S": line_floats[1],
+                        "N": line_floats[2],
+                        "omega": line_floats[3],
+                        "dN": line_floats[4],
+                        "dS": line_floats[5]}
                 pairwise[seq2][seq1] = pairwise[seq1][seq2]
     if len(pairwise) > 0:
         results["pairwise"] = pairwise

@@ -7,13 +7,13 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 #
-"""
-Usage:
-=====
+"""Restriction Digest Enzymes.
+
+Example:
 
     >>> from Rana.fts import fts    #
     >>> from Rana.Vector import *   # Just a way to get a sequence.
-    >>> from Bio.Seq import Seq     # Use your prefer method here.
+    >>> from Bio.Seq import Seq     # Use your prefered method here.
     >>> pbr = fts(pBR322)           #
     >>> seq = Seq(str(pbr))         #
     >>>
@@ -25,13 +25,10 @@ Usage:
     AatII      :  4289.
     Acc16I     :  263, 1359, 1457, 3589.
     ...
-        More enzymes here.
+    More enzymes here.
     ...
     >>> b = a.without_site()
-    >>> a.print_that(b, '', '\n Enzymes which do not cut pBR322.\n\n')
-
-     Enzymes which do not cut pBR322.
-
+    >>> a.print_that(b)  # Enzymes which do not cut pBR322
     AarI      AatI      Acc65I    AcsI      AcvI      AdeI      AflII     AgeI
     AhlI      AleI      AloI      ApaI      ApoI      AscI      AsiAI     AsiSI
     Asp718I   AspA2I    AsuII     AvaIII    AvrII     AxyI      BaeI      BbrPI
@@ -55,10 +52,12 @@ Usage:
     Vha464I   XapI      XbaI      XcmI      XhoI      XmaCI     XmaI      XmaJI
     Zsp2I
 
-    >>>
-    """
+"""
 
 from Bio.Restriction.Restriction import *
+
+__docformat__ = "restructuredtext en"
+
 #
 #   OK can't put the following code in Bio.Restriction.__init__ unless
 #   I put everything from Restriction in here.
@@ -112,84 +111,84 @@ from Bio.Restriction.Restriction import *
 #   from Bio.Restriction import * works as before.
 #
 
-###
-###   The restriction enzyme classes are created dynamically when the module is
-###   imported. Here is the magic which allow the creation of the
-###   restriction-enzyme classes.
-###
-###   The reason for the two dictionaries in Restriction_Dictionary
-###   one for the types (which will be called pseudo-type as they really
-###   correspond to the values that instances of RestrictionType can take)
-###   and one for the enzymes is efficiency as the bases are evaluated
-###   once per pseudo-type.
-###
-###   However Restriction is still a very inefficient module at import. But
-###   remember that around 660 classes (which is more or less the size of Rebase)
-###   have to be created dynamically. However, this processing take place only
-###   once.
-###   This inefficiency is however largely compensated by the use of metaclass
-###   which provide a very efficient layout for the class themselves mostly
-###   alleviating the need of if/else loops in the class methods.
-###
-###   It is essential to run Restriction with doc string optimisation (-OO switch)
-###   as the doc string of 660 classes take a lot of processing.
-###
-##CommOnly    = RestrictionBatch()    # commercial enzymes
-##NonComm     = RestrictionBatch()    # not available commercially
-##for TYPE, (bases, enzymes) in typedict.items():
-##    #
-##    #   The keys are the pseudo-types TYPE (stored as type1, type2...)
-##    #   The names are not important and are only present to differentiate
-##    #   the keys in the dict. All the pseudo-types are in fact RestrictionType.
-##    #   These names will not be used after and the pseudo-types are not
-##    #   kept in the locals() dictionary. It is therefore impossible to
-##    #   import them.
-##    #   Now, if you have look at the dictionary, you will see that not all the
-##    #   types are present as those without corresponding enzymes have been
-##    #   removed by Dictionary_Builder().
-##    #
-##    #   The values are tuples which contain
-##    #   as first element a tuple of bases (as string) and
-##    #   as second element the names of the enzymes.
-##    #
-##    #   First eval the bases.
-##    #
-##    bases = tuple(eval(x) for x in bases)
-##    #
-##    #   now create the particular value of RestrictionType for the classes
-##    #   in enzymes.
-##    #
-##    T = type.__new__(RestrictionType, 'RestrictionType', bases, {})
-##    for k in enzymes:
-##        #
-##        #   Now, we go through all the enzymes and assign them their type.
-##        #   enzymedict[k] contains the values of the attributes for this
-##        #   particular class (self.site, self.ovhg,....).
-##        #
-##        newenz = T(k, bases, enzymedict[k])
-##        #
-##        #   we add the enzymes to the corresponding batch.
-##        #
-##        #   No need to verify the enzyme is a RestrictionType -> add_nocheck
-##        #
-##        if newenz.is_comm() : CommOnly.add_nocheck(newenz)
-##        else : NonComm.add_nocheck(newenz)
-###
-###   AllEnzymes is a RestrictionBatch with all the enzymes from Rebase.
-###
-##AllEnzymes = CommOnly | NonComm
-###
-###   Now, place the enzymes in locals so they can be imported.
-###
-##names = [str(x) for x in AllEnzymes]
-##locals().update(dict(map(None, names, AllEnzymes)))
-###
-###   Limit what can be imported by from Restriction import *
-###   Most of the classes here will never be used outside this module
-###   (Defined,Palindromic...). It is still possible to request them specifically
-###
-###   also delete the variable that are no longer needed.
-###
-###
-##__all__=['Analysis', 'RestrictionBatch','AllEnzymes','CommOnly','NonComm']+names
-##del k, x, enzymes, TYPE, bases, names
+# ##
+# ##   The restriction enzyme classes are created dynamically when the module is
+# ##   imported. Here is the magic which allow the creation of the
+# ##   restriction-enzyme classes.
+# ##
+# ##   The reason for the two dictionaries in Restriction_Dictionary
+# ##   one for the types (which will be called pseudo-type as they really
+# ##   correspond to the values that instances of RestrictionType can take)
+# ##   and one for the enzymes is efficiency as the bases are evaluated
+# ##   once per pseudo-type.
+# ##
+# ##   However Restriction is still a very inefficient module at import. But
+# ##   remember that around 660 classes (which is more or less the size of Rebase)
+# ##   have to be created dynamically. However, this processing take place only
+# ##   once.
+# ##   This inefficiency is however largely compensated by the use of metaclass
+# ##   which provide a very efficient layout for the class themselves mostly
+# ##   alleviating the need of if/else loops in the class methods.
+# ##
+# ##   It is essential to run Restriction with doc string optimisation (-OO switch)
+# ##   as the doc string of 660 classes take a lot of processing.
+# ##
+# # CommOnly    = RestrictionBatch()    # commercial enzymes
+# # NonComm     = RestrictionBatch()    # not available commercially
+# # for TYPE, (bases, enzymes) in typedict.items():
+# #    #
+# #    #   The keys are the pseudo-types TYPE (stored as type1, type2...)
+# #    #   The names are not important and are only present to differentiate
+# #    #   the keys in the dict. All the pseudo-types are in fact RestrictionType.
+# #    #   These names will not be used after and the pseudo-types are not
+# #    #   kept in the locals() dictionary. It is therefore impossible to
+# #    #   import them.
+# #    #   Now, if you have look at the dictionary, you will see that not all the
+# #    #   types are present as those without corresponding enzymes have been
+# #    #   removed by Dictionary_Builder().
+# #    #
+# #    #   The values are tuples which contain
+# #    #   as first element a tuple of bases (as string) and
+# #    #   as second element the names of the enzymes.
+# #    #
+# #    #   First eval the bases.
+# #    #
+# #    bases = tuple(eval(x) for x in bases)
+# #    #
+# #    #   now create the particular value of RestrictionType for the classes
+# #    #   in enzymes.
+# #    #
+# #    T = type.__new__(RestrictionType, 'RestrictionType', bases, {})
+# #    for k in enzymes:
+# #        #
+# #        #   Now, we go through all the enzymes and assign them their type.
+# #        #   enzymedict[k] contains the values of the attributes for this
+# #        #   particular class (self.site, self.ovhg,....).
+# #        #
+# #        newenz = T(k, bases, enzymedict[k])
+# #        #
+# #        #   we add the enzymes to the corresponding batch.
+# #        #
+# #        #   No need to verify the enzyme is a RestrictionType -> add_nocheck
+# #        #
+# #        if newenz.is_comm() : CommOnly.add_nocheck(newenz)
+# #        else : NonComm.add_nocheck(newenz)
+# ##
+# ##   AllEnzymes is a RestrictionBatch with all the enzymes from Rebase.
+# ##
+# # AllEnzymes = CommOnly | NonComm
+# ##
+# ##   Now, place the enzymes in locals so they can be imported.
+# ##
+# # names = [str(x) for x in AllEnzymes]
+# # locals().update(dict(map(None, names, AllEnzymes)))
+# ##
+# ##   Limit what can be imported by from Restriction import *
+# ##   Most of the classes here will never be used outside this module
+# ##   (Defined,Palindromic...). It is still possible to request them specifically
+# ##
+# ##   also delete the variable that are no longer needed.
+# ##
+# ##
+# # __all__=['Analysis', 'RestrictionBatch','AllEnzymes','CommOnly','NonComm']+names
+# # del k, x, enzymes, TYPE, bases, names

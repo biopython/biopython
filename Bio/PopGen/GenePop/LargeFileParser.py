@@ -21,7 +21,7 @@ read             Parses a GenePop record (file) into a Record object.
 def get_indiv(line):
     indiv_name, marker_line = line.split(',')
     markers = marker_line.replace('\t', ' ').split(' ')
-    markers = [marker for marker in markers if marker!='']
+    markers = [marker for marker in markers if marker != '']
     if len(markers[0]) in [2, 4]:  # 2 digits per allele
         marker_len = 2
     else:
@@ -43,16 +43,16 @@ def read(handle):
     """
     record = Record(handle)
     record.comment_line = str(handle.readline()).rstrip()
-    #We can now have one loci per line or all loci in a single line
-    #separated by either space or comma+space...
-    #We will remove all commas on loci... that should not be a problem
+    # We can now have one loci per line or all loci in a single line
+    # separated by either space or comma+space...
+    # We will remove all commas on loci... that should not be a problem
     sample_loci_line = str(handle.readline()).rstrip().replace(',', '')
     all_loci = sample_loci_line.split(' ')
     record.loci_list.extend(all_loci)
     line = handle.readline()
-    while line!="":
+    while line != "":
         line = line.rstrip()
-        if line.upper()=="POP":
+        if line.upper() == "POP":
             record.stack.append("POP")
             break
         record.loci_list.append(line)
@@ -98,7 +98,7 @@ class Record(object):
         for handle in [self.stack, self.handle]:
             for line in handle:
                 line = line.rstrip()
-                if line.upper()=='POP':
+                if line.upper() == 'POP':
                     yield ()
                 else:
                     indiv_name, allele_list, marker_len = get_indiv(line)
@@ -106,7 +106,7 @@ class Record(object):
                     for locus in allele_list:
                         mk_real = []
                         for al in locus:
-                            if al==0:
+                            if al == 0:
                                 mk_real.append(None)
                             else:
                                 mk_real.append(al)

@@ -15,18 +15,18 @@ from Bio.Phylo import NeXML, NeXMLIO
 
 # Example NeXML files
 nexml_files = (
-               'characters.xml', 
-               'edgelabels.xml', 
-               'meta_taxa.xml', 
-               'meta_types.xml', 
-               'nexml.xml', 
-               'phenoscape.xml', 
-               'sets.xml', 
-               'taxa.xml', 
-               'timetree.xml', 
-               'tolweb.xml', 
-               'treebase-record.xml', 
-               'trees-uris.xml', 
+               'characters.xml',
+               'edgelabels.xml',
+               'meta_taxa.xml',
+               'meta_types.xml',
+               'nexml.xml',
+               'phenoscape.xml',
+               'sets.xml',
+               'taxa.xml',
+               'timetree.xml',
+               'tolweb.xml',
+               'treebase-record.xml',
+               'trees-uris.xml',
                'trees.xml',
                )
 tree_counts = {
@@ -65,7 +65,8 @@ def _test_parse_factory(source):
 
     test_parse.__doc__ = "Parse the phylogenies in %s." % source
     return test_parse
-    
+
+
 def _test_write_factory(source):
     """Tests for serialization of objects to NeXML format.
 
@@ -84,15 +85,15 @@ def _test_write_factory(source):
             t1 = next(NeXMLIO.Parser(infile).parse())
         with open(DUMMY, 'w+b') as outfile:
             NeXMLIO.write([t1], outfile)
-        
+
         with open(DUMMY, 'rb') as infile:
             t2 = next(NeXMLIO.Parser(infile).parse())
-        
+
         def assert_property(prop_name):
             p1 = sorted([getattr(n, prop_name) for n in t1.get_terminals() if getattr(n, prop_name)])
             p2 = sorted([getattr(n, prop_name) for n in t2.get_terminals() if getattr(n, prop_name)])
             self.assertEqual(p1, p2)
-        
+
         for prop_name in ('name', 'branch_length', 'confidence'):
             assert_property(prop_name)
 
@@ -107,11 +108,11 @@ for n, ex in enumerate(nexml_files):
     parse_test = _test_parse_factory(ex)
     parse_test.__name__ = 'test_parse_%s' % n
     setattr(ParseTests, parse_test.__name__, parse_test)
-    
+
 
 class WriterTests(unittest.TestCase):
     pass
-        
+
 for n, ex in enumerate(nexml_files):
     count = 1
     if ex in tree_counts:

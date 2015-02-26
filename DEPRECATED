@@ -22,6 +22,25 @@ Python 3.0, 3.1, 3.2
 Never officially supported, these trigger a warning in Release 1.62
 recommending Python 3.3 or later if you wish to use Python 3.
 
+Bio.CodonAlign
+==============
+This new experimental module included in Biopython 1.64 was renamed to
+Bio.codonalign in Biopython 1.65 to follow PEP8 module naming rules.
+
+Bio.Seq sequence equality
+=========================
+As of Release 1.65, the Seq and MutableSeq objects (and their subclasses)
+use string-like equality testing and hashing (ingoring any difference in
+alphabet except to issue warnings).
+
+Prior releases used Python's object comparison. Warnings of this change
+were first added in Release 1.54 (May 2010), with hash warnings added in
+Release 1.62 (August 2013).
+
+For backward compatibility and/or to silence the warnings, please use
+explicit string comparision, str(seq1) == str(seq2), or object comparison,
+id(seq1) == id(seq2), as required.
+
 Bio.Seq.Seq.tostring() and Bio.Seq.MutableSeq.tostring()
 ========================================================
 Deprecated as of Release 1.64. You should now use str(Bio.Seq.Seq) or
@@ -286,8 +305,41 @@ Declared obsolete in Release 1.48, deprecated in Release 1.51, and removed
 in Release 1.55 final. Please use the "fasta" support in Bio.SeqIO or
 Bio.AlignIO instead.
 
+Note that ``Bio.Fasta`` could be used with a ``RecordParser`` which gave
+``FastaRecord`` objects, for example:
+
+    # Old code which won't work	any more
+    from Bio import Fasta
+    handle = open("example.fas")
+    for record in Fasta.Iterator(handle, Fasta.RecordParser()) :
+        # Here record was a Bio.Fasta.Record object
+        print record.title # The full title line as a string
+        print record.sequence # The sequence as a string
+    handle.close()
+
+Alternatively using the old ``SequenceParser`` would give ``SeqRecord``
+objects like those from the new ``Bio.SeqIO`` code, for example:
+
+    # Old code which won't work any more
+    from Bio import Fasta
+    handle = open("example.fas")
+    for seq_record in Fasta.Iterator(handle, Fasta.SequenceParser()) :
+        print seq_record.description # The full title line as a string
+        print str(seq_record.seq) # The sequence as a string
+    handle.close()
+
+Either of those examples using ``Bio.SeqIO`` becomes just:
+
+    # Updated versions of above examples using Bio.SeqIO instead
+    from Bio import SeqIO
+    for seq_record in SeqIO.parse("example.fas", "fasta") :
+        print seq_record.description # The full title line as a string
+        print str(seq_record.seq) # The sequence as a string
+
+You can also continue to use handles with ``Bio.SeqIO`` if you want to.
+
 Bio.Align.FormatConvert
-======================
+=======================
 Declared obsolete in Release 1.48, deprecated in Release 1.51, and
 removed in Release 1.55 final. Please use Bio.AlignIO or the Alignment
 object's format method instead.
@@ -494,7 +546,7 @@ Use Bio.SeqUtils instead.
 Bio.SVM
 =======
 Deprecated as of Release 1.30, removed in Release 1.42.
-The Support Vector Machine code in Biopython has been superseded by a 
+The Support Vector Machine code in Biopython has been superseded by a
 more robust (and maintained) SVM library, which includes a python
 interface. We recommend using LIBSVM:
 
@@ -521,6 +573,11 @@ Bio.SCOP
 The module Bio.SCOP.FileIndex was deprecated in Release 1.46, and removed in
 Release 1.53. The class Parser in Bio.SCOP.Dom was removed in Release 1.55
 final. The class Iterator in Bio.SCOP.Dom was removed in Release 1.56.
+
+Dictionary to_one_letter_code in module Bio.SCOP.three_to_one_dict was moved
+to protein_letters_3to1 in module Bio.Data.SCOPData in Release 1.62. The old
+alias was preserved with a deprecation warning, until it was removed in
+Release 1.66.
 
 Bio.utils
 =========

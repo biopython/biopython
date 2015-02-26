@@ -41,27 +41,27 @@ def compare_reference(old_r, new_r):
 
     if old_r.pubmed_id and new_r.pubmed_id:
         assert old_r.pubmed_id == new_r.pubmed_id
-        #Looking at BioSQL/BioSeq.py function _retrieve_reference
-        #it seems that it will get either the MEDLINE or PUBMED,
-        #but not both.  I *think* the current schema does not allow
-        #us to store both... must confirm this.
+        # Looking at BioSQL/BioSeq.py function _retrieve_reference
+        # it seems that it will get either the MEDLINE or PUBMED,
+        # but not both.  I *think* the current schema does not allow
+        # us to store both... must confirm this.
 
-    #TODO - assert old_r.comment == new_r.comment
-    #Looking at the tables, I *think* the current schema does not
-    #allow us to store a reference comment.  Must confirm this.
+    # TODO - assert old_r.comment == new_r.comment
+    # Looking at the tables, I *think* the current schema does not
+    # allow us to store a reference comment.  Must confirm this.
     assert old_r.comment == new_r.comment or new_r.comment == "", \
                           "%r vs %r" % (old_r.comment, new_r.comment)
 
-    #TODO - assert old_r.consrtm == new_r.consrtm
-    #Looking at the tables, I *think* the current schema does not
-    #allow us to store a consortium.
+    # TODO - assert old_r.consrtm == new_r.consrtm
+    # Looking at the tables, I *think* the current schema does not
+    # allow us to store a consortium.
     assert old_r.consrtm == new_r.consrtm or new_r.consrtm == ""
 
     if len(old_r.location) == 0:
         assert len(new_r.location) == 0
     else:
-        #BioSQL can only store ONE location!
-        #TODO - Check BioPerl with a GenBank file with multiple ref locations
+        # BioSQL can only store ONE location!
+        # TODO - Check BioPerl with a GenBank file with multiple ref locations
         assert isinstance(old_r.location[0], FeatureLocation)
         assert isinstance(new_r.location[0], FeatureLocation)
         assert old_r.location[0].start == new_r.location[0].start and \
@@ -87,51 +87,51 @@ def compare_feature(old_f, new_f):
     assert old_f.ref_db == new_f.ref_db, \
         "%s -> %s" % (old_f.ref_db, new_f.ref_db)
 
-    #TODO - BioSQL does not store/retrieve feature's id (Bug 2526)
+    # TODO - BioSQL does not store/retrieve feature's id (Bug 2526)
     assert old_f.id == new_f.id or new_f.id == "<unknown id>"
 
-    #TODO - Work out how the location_qualifier_value table should
-    #be used, given BioPerl seems to ignore it (Bug 2766)
-    #assert old_f.location_operator == new_f.location_operator, \
+    # TODO - Work out how the location_qualifier_value table should
+    # be used, given BioPerl seems to ignore it (Bug 2766)
+    # assert old_f.location_operator == new_f.location_operator, \
     #        "%s -> %s" % (old_f.location_operator, new_f.location_operator)
 
     # We dont store fuzzy locations:
     assert old_f.location.start == new_f.location.start \
-    or (isinstance(old_f.location.start, UnknownPosition) and \
+    or (isinstance(old_f.location.start, UnknownPosition) and
         isinstance(new_f.location.start, UnknownPosition)), \
-               "%s -> %s" % (old_f.location.start, \
+               "%s -> %s" % (old_f.location.start,
                              new_f.location.start)
     assert old_f.location.end == new_f.location.end \
-    or (isinstance(old_f.location.end, UnknownPosition) and \
+    or (isinstance(old_f.location.end, UnknownPosition) and
         isinstance(new_f.location.end, UnknownPosition)), \
-               "%s -> %s" % (old_f.location.end, \
+               "%s -> %s" % (old_f.location.end,
                              new_f.location.end)
 
     assert isinstance(old_f.location, CompoundLocation) == \
            isinstance(new_f.location, CompoundLocation)
     if isinstance(old_f.location, CompoundLocation):
-         assert len(old_f.location.parts) == len(new_f.location.parts)
-         for old_l, new_l in zip(old_f.location.parts, new_f.location.parts):
-             assert old_l.start == new_l.start
-             assert old_l.end == new_l.end
-             assert old_l.strand == new_l.strand
-             assert old_l.ref == new_l.ref
-             assert old_l.ref_db == new_l.ref_db
+        assert len(old_f.location.parts) == len(new_f.location.parts)
+        for old_l, new_l in zip(old_f.location.parts, new_f.location.parts):
+            assert old_l.start == new_l.start
+            assert old_l.end == new_l.end
+            assert old_l.strand == new_l.strand
+            assert old_l.ref == new_l.ref
+            assert old_l.ref_db == new_l.ref_db
 
     assert len(old_f.location.parts) == len(new_f.location.parts)
     for old_sub, new_sub in zip(old_f.location.parts, new_f.location.parts):
-        #These are FeatureLocation objects
+        # These are FeatureLocation objects
         assert old_sub.nofuzzy_start == new_sub.nofuzzy_start
         assert old_sub.nofuzzy_end == new_sub.nofuzzy_end
         assert old_sub.strand == new_sub.strand
 
-    #Using private variable to avoid deprecation warnings
+    # Using private variable to avoid deprecation warnings
     assert len(old_f._sub_features) == len(new_f._sub_features), \
         "number of sub_features: %s -> %s" % \
         (len(old_f._sub_features), len(new_f._sub_features))
-    
+
     for old_sub, new_sub in zip(old_f._sub_features, new_f._sub_features):
-        #These are SeqFeature objects
+        # These are SeqFeature objects
         assert old_sub.type == new_sub.type, \
             "%s -> %s" % (old_sub.type, new_sub.type)
 
@@ -144,9 +144,9 @@ def compare_feature(old_f, new_f):
         assert old_sub.ref_db == new_sub.ref_db, \
             "%s -> %s" % (old_sub.ref_db, new_sub.ref_db)
 
-        #TODO - Work out how the location_qualifier_value table should
-        #be used, given BioPerl seems to ignore it (Bug 2766)
-        #assert old_sub.location_operator == new_sub.location_operator, \
+        # TODO - Work out how the location_qualifier_value table should
+        # be used, given BioPerl seems to ignore it (Bug 2766)
+        # assert old_sub.location_operator == new_sub.location_operator, \
         #    "%s -> %s" % (old_sub.location_operator, new_sub.location_operator)
 
         # Compare sub-feature Locations:
@@ -165,7 +165,7 @@ def compare_feature(old_f, new_f):
                 # Its not a problem with fuzzy locations, re-raise
                 raise e
             else:
-                #At least one of the locations is fuzzy
+                # At least one of the locations is fuzzy
                 assert old_sub.location.nofuzzy_start == \
                        new_sub.location.nofuzzy_start, \
                        "%s -> %s" % (old_sub.location.nofuzzy_start,
@@ -182,7 +182,7 @@ def compare_feature(old_f, new_f):
             if isinstance(new_f.qualifiers[key], str):
                 assert old_f.qualifiers[key] == new_f.qualifiers[key]
             elif isinstance(new_f.qualifiers[key], list):
-                #Maybe a string turning into a list of strings?
+                # Maybe a string turning into a list of strings?
                 assert [old_f.qualifiers[key]] == new_f.qualifiers[key], \
                         "%s -> %s" \
                         % (repr(old_f.qualifiers[key]),
@@ -190,7 +190,7 @@ def compare_feature(old_f, new_f):
             else:
                 assert False, "Problem with feature's '%s' qualifier" & key
         else:
-            #Should both be lists of strings...
+            # Should both be lists of strings...
             assert old_f.qualifiers[key] == new_f.qualifiers[key], \
                 "%s -> %s" % (old_f.qualifiers[key], new_f.qualifiers[key])
     return True
@@ -210,22 +210,22 @@ def compare_sequence(old, new):
     s = str(old)
     assert isinstance(s, str)
 
-    #Don't check every single element; for long sequences
-    #this takes far far far too long to run!
-    #Test both positive and negative indices
+    # Don't check every single element; for long sequences
+    # this takes far far far too long to run!
+    # Test both positive and negative indices
     if ln < 50:
         indices = list(range(-ln, ln))
     else:
-        #A selection of end cases, and the mid point
-        indices = [-ln, -ln+1, -(ln//2), -1, 0, 1, ln//2, ln-2, ln-1]
+        # A selection of end cases, and the mid point
+        indices = [-ln, -ln + 1, -(ln // 2), -1, 0, 1, ln // 2, ln - 2, ln - 1]
 
-    #Test element access,
+    # Test element access,
     for i in indices:
         expected = s[i]
         assert expected == old[i]
         assert expected == new[i]
 
-    #Test slices
+    # Test slices
     indices.append(ln)  # check copes with overflows
     indices.append(ln + 1000)  # check copes with overflows
     for i in indices:
@@ -235,14 +235,14 @@ def compare_sequence(old, new):
                    "Slice %s vs %s" % (repr(expected), repr(old[i:j]))
             assert expected == str(new[i:j]), \
                    "Slice %s vs %s" % (repr(expected), repr(new[i:j]))
-            #Slicing with step of 1 should make no difference.
-            #Slicing with step 3 might be useful for codons.
+            # Slicing with step of 1 should make no difference.
+            # Slicing with step 3 might be useful for codons.
             for step in [1, 3]:
                 expected = s[i:j:step]
                 assert expected == str(old[i:j:step])
                 assert expected == str(new[i:j:step])
 
-        #Check automatic end points
+        # Check automatic end points
         expected = s[i:]
         assert expected == str(old[i:])
         assert expected == str(new[i:])
@@ -251,7 +251,7 @@ def compare_sequence(old, new):
         assert expected == str(old[:i])
         assert expected == str(new[:i])
 
-    #Check "copy" splice
+    # Check "copy" splice
     assert s == str(old[:])
     assert s == str(new[:])
     return True
@@ -271,45 +271,45 @@ def compare_record(old, new):
     """Compare two SeqRecord or DBSeqRecord objects"""
     assert isinstance(old, SeqRecord)
     assert isinstance(new, SeqRecord)
-    #Sequence:
+    # Sequence:
     compare_sequence(old.seq, new.seq)
-    #Basics:
+    # Basics:
     assert old.id == new.id
     assert old.name == new.name
     assert old.description == new.description
     assert old.dbxrefs == new.dbxrefs, \
            "dbxrefs mismatch\nOld: %s\nNew: %s" \
            % (old.dbxrefs, new.dbxrefs)
-    #Features:
+    # Features:
     if not compare_features(old.features, new.features):
         return False
 
-    #Annotation:
-    #We are expecting to see some "extra" annotations appearing,
-    #such as 'cross_references', 'dates', 'data_file_division',
-    #'ncbi_taxon' and 'gi'.
-    #TODO - address these, see Bug 2681?
+    # Annotation:
+    # We are expecting to see some "extra" annotations appearing,
+    # such as 'cross_references', 'dates', 'data_file_division',
+    # 'ncbi_taxon' and 'gi'.
+    # TODO - address these, see Bug 2681?
     new_keys = set(new.annotations).difference(old.annotations)
     new_keys = new_keys.difference(['cross_references', 'date',
                                     'data_file_division', 'ncbi_taxid', 'gi'])
     assert not new_keys, "Unexpected new annotation keys: %s" \
            % ", ".join(new_keys)
     missing_keys = set(old.annotations).difference(new.annotations)
-    missing_keys = missing_keys.difference(['ncbi_taxid', # Can't store chimeras
+    missing_keys = missing_keys.difference(['ncbi_taxid',  # Can't store chimeras
                                             ])
     assert not missing_keys, "Unexpectedly missing annotation keys: %s" \
            % ", ".join(missing_keys)
 
-    #In the short term, just compare any shared keys:
+    # In the short term, just compare any shared keys:
     for key in set(old.annotations).intersection(new.annotations):
         if key == "references":
             assert len(old.annotations[key]) == len(new.annotations[key])
             for old_r, new_r in zip(old.annotations[key], new.annotations[key]):
                 compare_reference(old_r, new_r)
         elif key == "comment":
-            #Turn them both into containing strings for comparison - due to
-            #line wrapping in GenBank etc we don't really expect the white
-            #space to be 100% the same.
+            # Turn them both into containing strings for comparison - due to
+            # line wrapping in GenBank etc we don't really expect the white
+            # space to be 100% the same.
             if isinstance(old.annotations[key], list):
                 old_comment = " ".join(old.annotations[key])
             else:
@@ -325,9 +325,9 @@ def compare_record(old, new):
                 "Was:%s\nNow:%s" \
                 % (repr(old_comment), repr(new_comment))
         elif key in ["taxonomy", "organism", "source"]:
-            #If there is a taxon id recorded, these fields get overwritten
-            #by data from the taxon/taxon_name tables.  There is no
-            #guarantee that they will be identical after a load/retrieve.
+            # If there is a taxon id recorded, these fields get overwritten
+            # by data from the taxon/taxon_name tables.  There is no
+            # guarantee that they will be identical after a load/retrieve.
             assert isinstance(new.annotations[key], basestring) \
                 or isinstance(new.annotations[key], list)
         elif type(old.annotations[key]) == type(new.annotations[key]):
@@ -336,8 +336,8 @@ def compare_record(old, new):
                 % (key, old.annotations[key], new.annotations[key])
         elif isinstance(old.annotations[key], str) \
         and isinstance(new.annotations[key], list):
-            #Any annotation which is a single string gets turned into
-            #a list containing one string by BioSQL at the moment.
+            # Any annotation which is a single string gets turned into
+            # a list containing one string by BioSQL at the moment.
             assert [old.annotations[key]] == new.annotations[key], \
                 "Annotation '%s' changed by load/retrieve\nWas:%s\nNow:%s" \
                 % (key, old.annotations[key], new.annotations[key])

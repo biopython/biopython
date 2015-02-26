@@ -1,4 +1,11 @@
-# Information about the IUPAC alphabets
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+
+"""Information about the IUPAC alphabets."""
+
+__docformat__ = "restructuredtext en"
+
 
 protein_letters = "ACDEFGHIKLMNPQRSTVWY"
 extended_protein_letters = "ACDEFGHIKLMNPQRSTVWYBXZJUO"
@@ -24,7 +31,7 @@ extended_protein_letters = "ACDEFGHIKLMNPQRSTVWYBXZJUO"
 #   O = "Pyl";  pyrrolysine
 #   http://www.chem.qmul.ac.uk/iubmb/newsletter/2009.html#item35
 
-protein_letters_1to3  = {
+protein_letters_1to3 = {
     'A': 'Ala', 'C': 'Cys', 'D': 'Asp',
     'E': 'Glu', 'F': 'Phe', 'G': 'Gly', 'H': 'His',
     'I': 'Ile', 'K': 'Lys', 'L': 'Leu', 'M': 'Met',
@@ -54,7 +61,7 @@ unambiguous_rna_letters = "GAUC"
 extended_dna_letters = "GATCBDSW"
 
 # are there extended forms?
-#extended_rna_letters = "GAUCBDSW"
+# extended_rna_letters = "GAUCBDSW"
 
 ambiguous_dna_values = {
     "A": "A",
@@ -179,7 +186,7 @@ def _make_ambiguous_ranges(mydict, weight_table):
     range_d = {}
     avg_d = {}
     for letter, values in mydict.items():
-        #Following line is a quick hack to skip undefined weights for U and O
+        # Following line is a quick hack to skip undefined weights for U and O
         if len(values) == 1 and values[0] not in weight_table:
             continue
 
@@ -212,7 +219,7 @@ protein_weights = {
     "L": 131.1729,
     "M": 149.2113,
     "N": 132.1179,
-    "O": 255.3134, 
+    "O": 255.3134,
     "P": 115.1305,
     "Q": 146.1445,
     "R": 174.201,
@@ -274,9 +281,9 @@ extended_protein_values = {
     "V": "V",
     "W": "W",
     "X": "ACDEFGHIKLMNPQRSTVWY",
-    #TODO - Include U and O in the possible values of X?
-    #This could alter the extended_protein_weight_ranges ...
-    #by MP: Won't do this, because they are so rare.
+    # TODO - Include U and O in the possible values of X?
+    # This could alter the extended_protein_weight_ranges ...
+    # by MP: Won't do this, because they are so rare.
     "Y": "Y",
     "Z": "QE",
 }
@@ -291,49 +298,49 @@ extended_protein_weight_ranges, avg_extended_protein_weights = \
 # For Center of Mass Calculation.
 # Taken from http://www.chem.qmul.ac.uk/iupac/AtWt/ & PyMol
 atom_weights = {
-    'H':   1.00794,
-    'He':   4.002602,
-    'Li':   6.941,
-    'Be':   9.012182,
-    'B':  10.811,
-    'C':  12.0107,
-    'N':  14.0067,
-    'O':  15.9994,
-    'F':  18.9984032,
-    'Ne':  20.1797,
-    'Na':  22.989770,
-    'Mg':  24.3050,
-    'Al':  26.981538,
-    'Si':  28.0855,
-    'P':  30.973761,
-    'S':  32.065,
-    'Cl':  35.453,
-    'Ar':  39.948,
-    'K':  39.0983,
-    'Ca':  40.078,
-    'Sc':  44.955910,
-    'Ti':  47.867,
-    'V':  50.9415,
-    'Cr':  51.9961,
-    'Mn':  54.938049,
-    'Fe':  55.845,
-    'Co':  58.933200,
-    'Ni':  58.6934,
-    'Cu':  63.546,
-    'Zn':  65.39,
-    'Ga':  69.723,
-    'Ge':  72.64,
-    'As':  74.92160,
-    'Se':  78.96,
-    'Br':  79.904,
-    'Kr':  83.80,
-    'Rb':  85.4678,
-    'Sr':  87.62,
-    'Y':  88.90585,
-    'Zr':  91.224,
-    'Nb':  92.90638,
-    'Mo':  95.94,
-    'Tc':  98.0,
+    'H': 1.00794,
+    'He': 4.002602,
+    'Li': 6.941,
+    'Be': 9.012182,
+    'B': 10.811,
+    'C': 12.0107,
+    'N': 14.0067,
+    'O': 15.9994,
+    'F': 18.9984032,
+    'Ne': 20.1797,
+    'Na': 22.989770,
+    'Mg': 24.3050,
+    'Al': 26.981538,
+    'Si': 28.0855,
+    'P': 30.973761,
+    'S': 32.065,
+    'Cl': 35.453,
+    'Ar': 39.948,
+    'K': 39.0983,
+    'Ca': 40.078,
+    'Sc': 44.955910,
+    'Ti': 47.867,
+    'V': 50.9415,
+    'Cr': 51.9961,
+    'Mn': 54.938049,
+    'Fe': 55.845,
+    'Co': 58.933200,
+    'Ni': 58.6934,
+    'Cu': 63.546,
+    'Zn': 65.39,
+    'Ga': 69.723,
+    'Ge': 72.64,
+    'As': 74.92160,
+    'Se': 78.96,
+    'Br': 79.904,
+    'Kr': 83.80,
+    'Rb': 85.4678,
+    'Sr': 87.62,
+    'Y': 88.90585,
+    'Zr': 91.224,
+    'Nb': 92.90638,
+    'Mo': 95.94,
+    'Tc': 98.0,
     'Ru': 101.07,
     'Rh': 102.90550,
     'Pd': 106.42,

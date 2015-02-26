@@ -55,7 +55,7 @@ def parse_vulgar_comp(hsp, vulgar_comp):
         if label in 'MCGS':
             # if the previous comp is not an MCGS block, it's the
             # start of a new block
-            if vcomps[idx-1][0] not in 'MCGS':
+            if vcomps[idx - 1][0] not in 'MCGS':
                 qstarts.append(qpos)
                 hstarts.append(hpos)
         # other labels
@@ -84,8 +84,8 @@ def parse_vulgar_comp(hsp, vulgar_comp):
 
         # append to ends if the next comp is not an MCGS block or
         # if it's the last comp
-        if idx == len(vcomps)-1 or \
-                (label in 'MCGS' and vcomps[idx+1][0] not in 'MCGS'):
+        if idx == len(vcomps) - 1 or \
+                (label in 'MCGS' and vcomps[idx + 1][0] not in 'MCGS'):
                 qends.append(qpos)
                 hends.append(hpos)
 

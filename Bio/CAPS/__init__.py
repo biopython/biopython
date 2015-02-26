@@ -7,25 +7,27 @@
 
 A CAPS marker is a location a DifferentialCutsite as described below and a
 set of primers that can be used to visualize this.  More information can
-be found in the paper located at:
+be found in the paper `Konieczny and Ausubel (1993)`_ (PMID 8106085).
 
-http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&list_uids=8106085&dopt=Abstract
-
-Copyright Jonathan Taylor 2005
+.. _`Konieczny and Ausubel (1993)`: http://dx.doi.org/10.1046/j.1365-313X.1993.04020403.x
 """
+
+__docformat__ = "restructuredtext en"
 
 
 class DifferentialCutsite(object):
-    """A differential cutsite is a location in an alignment where an enzyme cuts
+    """Differential enzyme cutsite in an alignment.
+
+    A differential cutsite is a location in an alignment where an enzyme cuts
     at least one sequence and also cannot cut at least one other sequence.
 
     Members:
-    start       Where it lives in the alignment.
-    enzyme      The enzyme that causes this.
-    cuts_in     A list of sequences (as indexes into the alignment) the
-                enzyme cuts in.
-    blocked_in  A list of sequences (as indexes into the alignment) the
-                enzyme is blocked in.
+     - start - Where it lives in the alignment.
+     - enzyme - The enzyme that causes this.
+     - cuts_in - A list of sequences (as indexes into the alignment) the
+       enzyme cuts in.
+     - blocked_in - A list of sequences (as indexes into the alignment) the
+       enzyme is blocked in.
 
     """
 
@@ -50,21 +52,23 @@ class CAPSMap(object):
     """A map of an alignment showing all possible dcuts.
 
     Members:
-    alignment  The alignment that is mapped.
-    dcuts      A list of possible CAPS markers in the form of
-                         DifferentialCutsites.
+     - alignment - The alignment that is mapped.
+     - dcuts - A list of possible CAPS markers in the form of
+       DifferentialCutsites.
     """
 
-    def __init__(self, alignment, enzymes = []):
-        """Initialize the CAPSMap
+    def __init__(self, alignment, enzymes=None):
+        """Initialize the CAPSMap.
 
         Required:
-        alignment    The alignment to be mapped.
+         - alignment - The alignment to be mapped.
 
         Optional:
-        enzymes      The enzymes to be used to create the map.
+         - enzymes - List of enzymes to be used to create the map.
+           Defaults to an empty list.
         """
-
+        if enzymes is None:
+            enzymes = []
         self.sequences = [rec.seq for rec in alignment]
         self.size = len(self.sequences)
         self.length = len(self.sequences[0])
@@ -79,7 +83,7 @@ class CAPSMap(object):
         self._digest()
 
     def _digest_with(self, enzyme):
-        cuts = [] # list of lists, one per sequence
+        cuts = []  # list of lists, one per sequence
         all = []
 
         # go through each sequence
@@ -116,7 +120,10 @@ class CAPSMap(object):
                     blocked_in.append(i)
 
             if cuts_in != [] and blocked_in != []:
-                self.dcuts.append(DifferentialCutsite(start = cut, enzyme = enzyme, cuts_in = cuts_in, blocked_in = blocked_in))
+                self.dcuts.append(DifferentialCutsite(start=cut,
+                                                      enzyme=enzyme,
+                                                      cuts_in=cuts_in,
+                                                      blocked_in=blocked_in))
 
     def _digest(self):
         self.dcuts = []

@@ -26,14 +26,14 @@ class SimCoalController(object):
         self.simcoal_dir = simcoal_dir
         self.os_name = os.name  # remove this?
         dir_contents = os.listdir(self.simcoal_dir)
-        #We expect the tool to be installed as simcoal2(.exe)
-        #without any trailing version number.
+        # We expect the tool to be installed as simcoal2(.exe)
+        # without any trailing version number.
         self.bin_name = "simcoal2"
         if self.bin_name not in dir_contents:
-            #Try case insensitive,
+            # Try case insensitive,
             dir_contents = [x.lower() for x in dir_contents]
         if self.bin_name not in dir_contents:
-            #Try with .exe
+            # Try with .exe
             self.bin_name += '.exe'
         if self.bin_name not in dir_contents:
             raise IOError("SimCoal not available")
@@ -47,15 +47,15 @@ class SimCoalController(object):
         if par_dir is None:
             par_dir = os.sep.join([".", 'SimCoal', 'runs'])
         curr_dir = os.getcwd()
-        #TODO - Make sure we change drive on Windows as well?
+        # TODO - Make sure we change drive on Windows as well?
         os.chdir(par_dir)
         exe = os.path.join(self.simcoal_dir, self.bin_name)
         if " " in exe:
             exe = '"' + exe + '"'
         cmd = exe + ' ' + par_file + ' ' + str(num_sims) + ' ' + ploydi
-        #TODO - Better way to spot if on Jython on Windows?
+        # TODO - Better way to spot if on Jython on Windows?
         if sys.platform == "win32" or self.bin_name.endswith(".exe"):
-            #There is no /dev/nul on Windows
+            # There is no /dev/nul on Windows
             cmd += ' > nul 2>nul'
         else:
             cmd += ' >/dev/null 2>&1'
@@ -171,18 +171,18 @@ class _FastSimCoalCommandLine(AbstractCommandline):
 
 
 class FastSimCoalController(object):
-    def __init__(self, fastsimcoal_dir=None, bin_name="fastsimcoal21"):
+    def __init__(self, fastsimcoal_dir=None, bin_name="fsc251"):
         """Initializes the controller.
 
         fastsimcoal_dir is the directory where fastsimcoal is.
-        By default the binary should be called fastsimcoal21.
+        By default the binary should be called fsc251.
         bin_name specifies a different name for the binary.
 
         The initializer checks for existence and executability of binaries
         and sets up the command line controller.
 
         Fastsimcoal2 is available here: http://cmpg.unibe.ch/software/fastsimcoal2/.
-        This wrapper was written and tested for fastsimcoal version 2.01.
+        This wrapper was written and tested for fastsimcoal version 2.51.
         """
         self.bin_name = bin_name
         self.fastsimcoal_dir = fastsimcoal_dir

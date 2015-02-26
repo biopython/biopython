@@ -11,18 +11,20 @@ from functools import reduce
 
 from Bio.PopGen.SimCoal import builtin_tpl_dir
 
+__docformat__ = "restructuredtext en"
+
 
 def exec_template(template):
     executed_template = template
     match = re.search('!!!(.*?)!!!', executed_template, re.MULTILINE)
-    #while len(match.groups())>0:
+    # while len(match.groups())>0:
     while match:
         exec_result = str(eval(match.groups()[0]))
         executed_template = executed_template.replace(
                '!!!' + match.groups()[0] + '!!!',
                exec_result, 1)
         match = re.search('!!!(.*?)!!!', executed_template, re.MULTILINE)
-        #match = patt.matcher(String(executed_template))
+        # match = patt.matcher(String(executed_template))
     return executed_template
 
 
@@ -30,15 +32,15 @@ def process_para(in_string, out_file_prefix, para_list, curr_values):
     if (para_list == []):
         template = in_string
         f_name = out_file_prefix
-        #f_name += '_' + str(total_size)
+        # f_name += '_' + str(total_size)
         for tup in curr_values:
             name, val = tup
             f_name += '_' + str(val)
-            #reg = re.compile('\?' + name, re.MULTILINE)
-            #template = re.sub(reg, str(val), template)
-            template = template.replace('?'+name, str(val))
+            # reg = re.compile('\?' + name, re.MULTILINE)
+            # template = re.sub(reg, str(val), template)
+            template = template.replace('?' + name, str(val))
         with open(f_name + '.par', 'w') as f:
-            #executed_template = template
+            # executed_template = template
             executed_template = exec_template(template)
             clean_template = executed_template.replace('\r\n', '\n').replace('\n\n', '\n')
             f.write(clean_template)
@@ -62,16 +64,16 @@ def dupe(motif, times):
 
 
 def get_xy_from_matrix(x_max, y_max, pos):
-    y = (pos-1) / x_max
-    x = (pos-1) % x_max
+    y = (pos - 1) / x_max
+    x = (pos - 1) % x_max
     return x, y
 
 
 def get_step_2d(x_max, y_max, x, y, mig):
-    my_x,    my_y    = get_xy_from_matrix(x_max, y_max, y)
+    my_x, my_y = get_xy_from_matrix(x_max, y_max, y)
     other_x, other_y = get_xy_from_matrix(x_max, y_max, x)
 
-    if (my_x-other_x)**2 + (my_y-other_y)**2 == 1:
+    if (my_x - other_x) ** 2 + (my_y - other_y) ** 2 == 1:
         return str(mig) + ' '
     else:
         return '0 '
@@ -79,8 +81,8 @@ def get_step_2d(x_max, y_max, x, y, mig):
 
 def generate_ssm2d_mat(x_max, y_max, mig):
     mig_mat = ''
-    for x in range(1, x_max*y_max + 1):
-        for y in range(1, x_max*y_max + 1):
+    for x in range(1, x_max * y_max + 1):
+        for y in range(1, x_max * y_max + 1):
             mig_mat += get_step_2d(x_max, y_max, x, y, mig)
         mig_mat += "\r\n"
     return mig_mat
@@ -109,9 +111,9 @@ def generate_null_mat(total_size):
 
 def generate_join_events(t, total_size, join_size, orig_size):
     events = ''
-    for i in range(1, total_size-1):
+    for i in range(1, total_size - 1):
         events += str(t) + ' ' + str(i) + ' 0 1 1 0 1\r\n'
-    events += str(t) + ' ' + str(total_size-1) + ' 0 1 ' + str(1.0*total_size*join_size/orig_size) + ' 0 1\r\n'
+    events += str(t) + ' ' + str(total_size - 1) + ' 0 1 ' + str(1.0 * total_size * join_size / orig_size) + ' 0 1\r\n'
     return events
 
 
@@ -125,46 +127,46 @@ def process_text(in_string, out_file_prefix, para_list, curr_values,
     return process_para(text, out_file_prefix, para_list, [])
 
 
-#def prepare_dir():
+# def prepare_dir():
 #    try:
-#        mkdir(sep.join([Config.dataDir, 'SimCoal'])) #Should exist, but...
+#        mkdir(sep.join([Config.dataDir, 'SimCoal'])) # Should exist, but...
 #    except OSError:
-#        pass #Its ok if already exists
+#        pass # Its ok if already exists
 #    try:
 #        mkdir(sep.join([Config.dataDir, 'SimCoal', 'runs']))
 #    except OSError:
-#        pass #Its ok if already exists
+#        pass # Its ok if already exists
 
 
-#sep is because of jython
+# sep is because of jython
 def generate_model(par_stream, out_prefix, params,
-                   specific_processor = no_processor, out_dir = '.'):
-    #prepare_dir()
+                   specific_processor=no_processor, out_dir='.'):
+    # prepare_dir()
     text = par_stream.read()
     out_file_prefix = sep.join([out_dir, out_prefix])
     return process_text(text, out_file_prefix, params, [], specific_processor)
 
 
-def get_demography_template(stream, model, tp_dir = None):
+def get_demography_template(stream, model, tp_dir=None):
     '''
         Gets a demograpy template.
 
         Most probably this model needs to be sent to GenCases.
 
-        stream - Writable stream.
-        param  - Template file.
-        tp_dir - Directory where to find the template, if None
-                 use an internal template
+            - stream - Writable stream.
+            - param  - Template file.
+            - tp_dir - Directory where to find the template, if None
+              use an internal template
     '''
     if tp_dir is None:
-        #Internal Template
+        # Internal Template
         filename = sep.join([builtin_tpl_dir, model + '.par'])
     else:
-        #External template
+        # External template
         filename = sep.join([tp_dir, model + '.par'])
     with open(filename, 'r') as f:
         l = f.readline()
-        while l!='':
+        while l != '':
             stream.write(l)
             l = f.readline()
 
@@ -186,11 +188,13 @@ def get_chr_template(stream, chrs):
         chr    - Chromosome list.
 
         Current loci list:
-          [(chr_repeats,[(marker, (params))])]
-          chr_repeats --> Number of chromosome repeats
-          marker  --> 'SNP', 'DNA', 'RFLP', 'MICROSAT'
-          params  --> Simcoal2 parameters for markers (list of floats
-            or ints - if to be processed by generate_model)
+
+          - [(chr_repeats,[(marker, (params))])]
+
+              - chr_repeats --> Number of chromosome repeats
+              - marker  --> 'SNP', 'DNA', 'RFLP', 'MICROSAT'
+              - params  --> Simcoal2 parameters for markers (list of floats
+                or ints - if to be processed by generate_model)
     '''
     num_chrs = reduce(lambda x, y: x + y[0], chrs, 0)
     stream.write('//Number of independent (unlinked) chromosomes, and "chromosome structure" flag:  0 for identical structure across chromosomes, and  1 for different structures on different chromosomes.\n')
@@ -208,20 +212,20 @@ def get_chr_template(stream, chrs):
                 _gen_loci(stream, loci)
 
 
-def generate_simcoal_from_template(model, chrs, params, out_dir = '.', tp_dir=None):
+def generate_simcoal_from_template(model, chrs, params, out_dir='.', tp_dir=None):
     '''
        Writes a complete SimCoal2 template file.
 
        This joins together get_demography_template and get_chr_template,
        which are feed into generate_model
        Please check the three functions for parameters (model from
-         get_demography_template, chrs from get_chr_template and
-         params from generate_model).
+       get_demography_template, chrs from get_chr_template and
+       params from generate_model).
     '''
     with open(out_dir + sep + 'tmp.par', 'w') as stream:
         get_demography_template(stream, model, tp_dir)
         get_chr_template(stream, chrs)
-    #with open(out_dir + sep + 'tmp.par', 'r') as par_stream:
-        #print par_stream.read()
+    # with open(out_dir + sep + 'tmp.par', 'r') as par_stream:
+        # print par_stream.read()
     with open(out_dir + sep + 'tmp.par', 'r') as par_stream:
-        generate_model(par_stream, model, params, out_dir = out_dir)
+        generate_model(par_stream, model, params, out_dir=out_dir)

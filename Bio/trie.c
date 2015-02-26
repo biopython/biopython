@@ -756,7 +756,7 @@ int _deserialize_transition(Transition* transition,
     if(!(*read)(&suffixlen, sizeof(suffixlen), data))
 	goto _deserialize_transition_error;
     if(suffixlen < 0 || suffixlen >= MAX_KEY_LENGTH) {
-        printf("MAX_KEY_LENGTH too short [%d:%d]\n", 
+        printf("MAX_KEY_LENGTH too short [%d:%d]\n",
                MAX_KEY_LENGTH, suffixlen);
 	goto _deserialize_transition_error;
     }

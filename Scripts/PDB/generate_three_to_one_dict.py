@@ -18,7 +18,7 @@ import inspect
 import os
 import warnings
 
-from Bio._py3k import urlopen as _urlopen
+from Bio._py3k import urlopen
 
 url = "ftp://ftp.wwpdb.org/pub/pdb/data/monomers/components.cif.gz"
 
@@ -45,9 +45,9 @@ if os.path.getsize(gzname) < 29944258:
 fh = gzip.open(gzname, 'rb')
 
 # write extracted file to disk (not necessary)
-#with open(cifname, 'wb') as cifh:
-    #print("Extracting file...")
-    #cifh.write(fh.read())
+# with open(cifname, 'wb') as cifh:
+#     print("Extracting file...")
+#     cifh.write(fh.read())
 
 # The following code written by Hongbo Zhu
 # generate three_to_one_dict
@@ -118,7 +118,7 @@ _rafPath = os.path.normpath(os.path.join(_scriptPath, "..", "..", "Bio", "SCOP")
 _threeAllPath = os.path.join(_rafPath, 'three_to_one_all.py')
 _threePath = os.path.join(_rafPath, 'three_to_one_dict.py')
 
-#with open(_threeAllPath, 'w') as fh:
-    #fh.writelines(three_to_one_buf)
+# with open(_threeAllPath, 'w') as fh:
+#     fh.writelines(three_to_one_buf)
 with open(_threePath, 'w') as fh:
     fh.writelines(three_to_one_buf_noq)

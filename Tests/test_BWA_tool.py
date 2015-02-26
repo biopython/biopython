@@ -9,7 +9,7 @@ from Bio import MissingExternalDependencyError
 import sys
 import os
 import unittest
-#TODO from Bio.Sequencing.Applications import BwaBwaswCommandline
+# TODO from Bio.Sequencing.Applications import BwaBwaswCommandline
 from Bio.Sequencing.Applications import BwaIndexCommandline
 from Bio.Sequencing.Applications import BwaAlignCommandline
 from Bio.Sequencing.Applications import BwaSamseCommandline
@@ -18,14 +18,14 @@ from Bio.Sequencing.Applications import BwaSampeCommandline
 
 #################################################################
 
-#Try to avoid problems when the OS is in another language
+# Try to avoid problems when the OS is in another language
 os.environ['LANG'] = 'C'
 
 bwa_exe = None
 if sys.platform == "win32":
-    #TODO - Check the path?
+    # TODO - Check the path?
     try:
-        #This can vary depending on the Windows language.
+        # This can vary depending on the Windows language.
         prog_files = os.environ["PROGRAMFILES"]
     except KeyError:
         prog_files = r"C:\Program Files"
@@ -43,8 +43,8 @@ else:
     from Bio._py3k import getoutput
     output = getoutput("bwa")
 
-    #Since "not found" may be in another language, try and be sure this is
-    #really the bwa tool's output
+    # Since "not found" may be in another language, try and be sure this is
+    # really the bwa tool's output
     bwa_found = False
     if "not found" not in output and "bwa" in output \
             and "alignment via Burrows-Wheeler transformation" in output:
@@ -147,7 +147,7 @@ class BwaTestCase(unittest.TestCase):
             """Test for generating samfile by paired end sequencing"""
             self.create_fasta_index()
 
-            ##Generate sai files from paired end data
+            # Generate sai files from paired end data
             self.do_aln(self.infile1, self.saifile1)
             self.do_aln(self.infile2, self.saifile2)
 

@@ -14,7 +14,7 @@ from Bio.Phylo.Applications import RaxmlCommandline
 from Bio import MissingExternalDependencyError
 
 raxml_exe = None
-if sys.platform=="win32":
+if sys.platform == "win32":
     raise MissingExternalDependencyError(
           "Testing RAxML on Windows not supported yet")
 else:

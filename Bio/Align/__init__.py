@@ -11,13 +11,13 @@ class, used in the Bio.AlignIO module.
 """
 from __future__ import print_function
 
-__docformat__ = "epytext en"  # Don't just use plain text in epydoc API pages!
+__docformat__ = "restructuredtext en"  # Don't just use plain text in epydoc API pages!
 
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio import Alphabet
 
-#We only import this and subclass it for some limited backward compatibility.
+# We only import this and subclass it for some limited backward compatibility.
 from Bio.Align.Generic import Alignment as _Alignment
 
 
@@ -148,7 +148,7 @@ class MultipleSeqAlignment(_Alignment):
         if isinstance(records, Alphabet.Alphabet) \
         or isinstance(records, Alphabet.AlphabetEncoder):
             if alphabet is None:
-                #TODO - Remove this backwards compatible mode!
+                # TODO - Remove this backwards compatible mode!
                 alphabet = records
                 records = []
                 import warnings
@@ -160,31 +160,31 @@ class MultipleSeqAlignment(_Alignment):
                               "expects a list/iterator of SeqRecord objects "
                               "(which can be an empty list) and an optional "
                               "alphabet argument", BiopythonDeprecationWarning)
-            else :
+            else:
                 raise ValueError("Invalid records argument")
-        if alphabet is not None :
+        if alphabet is not None:
             if not (isinstance(alphabet, Alphabet.Alphabet)
             or isinstance(alphabet, Alphabet.AlphabetEncoder)):
                 raise ValueError("Invalid alphabet argument")
             self._alphabet = alphabet
-        else :
-            #Default while we add sequences, will take a consensus later
+        else:
+            # Default while we add sequences, will take a consensus later
             self._alphabet = Alphabet.single_letter_alphabet
 
         self._records = []
         if records:
             self.extend(records)
             if alphabet is None:
-                #No alphabet was given, take a consensus alphabet
+                # No alphabet was given, take a consensus alphabet
                 self._alphabet = Alphabet._consensus_alphabet(rec.seq.alphabet for
                                                               rec in self._records
                                                               if rec.seq is not None)
 
         # Annotations about the whole alignment
-        if annotations is None: 
-            annotations = {} 
-        elif not isinstance(annotations, dict): 
-            raise TypeError("annotations argument should be a dict") 
+        if annotations is None:
+            annotations = {}
+        elif not isinstance(annotations, dict):
+            raise TypeError("annotations argument should be a dict")
         self.annotations = annotations
 
     def extend(self, records):
@@ -228,19 +228,19 @@ class MultipleSeqAlignment(_Alignment):
         (provided its sequences have the same length as the original alignment).
         """
         if len(self):
-            #Use the standard method to get the length
+            # Use the standard method to get the length
             expected_length = self.get_alignment_length()
         else:
-            #Take the first record's length
+            # Take the first record's length
             records = iter(records)  # records arg could be list or iterator
             try:
                 rec = next(records)
             except StopIteration:
-                #Special case, no records
+                # Special case, no records
                 return
             expected_length = len(rec)
             self._append(rec, expected_length)
-            #Now continue to the rest of the records as usual
+            # Now continue to the rest of the records as usual
 
         for rec in records:
             self._append(rec, expected_length)
@@ -299,17 +299,17 @@ class MultipleSeqAlignment(_Alignment):
         if not isinstance(record, SeqRecord):
             raise TypeError("New sequence is not a SeqRecord object")
 
-        #Currently the get_alignment_length() call is expensive, so we need
-        #to avoid calling it repeatedly for __init__ and extend, hence this
-        #private _append method
+        # Currently the get_alignment_length() call is expensive, so we need
+        # to avoid calling it repeatedly for __init__ and extend, hence this
+        # private _append method
         if expected_length is not None and len(record) != expected_length:
-            #TODO - Use the following more helpful error, but update unit tests
-            #raise ValueError("New sequence is not of length %i" \
+            # TODO - Use the following more helpful error, but update unit tests
+            # raise ValueError("New sequence is not of length %i" \
             #                 % self.get_alignment_length())
             raise ValueError("Sequences must all be the same length")
 
-        #Using not self.alphabet.contains(record.seq.alphabet) needs fixing
-        #for AlphabetEncoders (e.g. gapped versus ungapped).
+        # Using not self.alphabet.contains(record.seq.alphabet) needs fixing
+        # for AlphabetEncoders (e.g. gapped versus ungapped).
         if not Alphabet._check_type_compatible([self._alphabet, record.seq.alphabet]):
             raise ValueError("New sequence's alphabet is incompatible")
         self._records.append(record)
@@ -387,7 +387,7 @@ class MultipleSeqAlignment(_Alignment):
             raise ValueError("When adding two alignments they must have the same length"
                              " (i.e. same number or rows)")
         alpha = Alphabet._consensus_alphabet([self._alphabet, other._alphabet])
-        merged = (left+right for left, right in zip(self, other))
+        merged = (left + right for left, right in zip(self, other))
         # Take any common annotation:
         annotations = dict()
         for k, v in self.annotations.items():
@@ -508,25 +508,25 @@ class MultipleSeqAlignment(_Alignment):
         array or matrix objects.
         """
         if isinstance(index, int):
-            #e.g. result = align[x]
-            #Return a SeqRecord
+            # e.g. result = align[x]
+            # Return a SeqRecord
             return self._records[index]
         elif isinstance(index, slice):
-            #e.g. sub_align = align[i:j:k]
+            # e.g. sub_align = align[i:j:k]
             return MultipleSeqAlignment(self._records[index], self._alphabet)
-        elif len(index)!=2:
+        elif len(index) != 2:
             raise TypeError("Invalid index type.")
 
-        #Handle double indexing
+        # Handle double indexing
         row_index, col_index = index
         if isinstance(row_index, int):
-            #e.g. row_or_part_row = align[6, 1:4], gives a SeqRecord
+            # e.g. row_or_part_row = align[6, 1:4], gives a SeqRecord
             return self._records[row_index][col_index]
         elif isinstance(col_index, int):
-            #e.g. col_or_part_col = align[1:5, 6], gives a string
+            # e.g. col_or_part_col = align[1:5, 6], gives a string
             return "".join(rec[col_index] for rec in self._records[row_index])
         else:
-            #e.g. sub_align = align[1:4, 5:7], gives another alignment
+            # e.g. sub_align = align[1:4, 5:7], gives another alignment
             return MultipleSeqAlignment((rec[col_index] for rec in self._records[row_index]),
                                         self._alphabet)
 
@@ -604,9 +604,9 @@ class MultipleSeqAlignment(_Alignment):
 
         """
         if key is None:
-            self._records.sort(key = lambda r: r.id, reverse = reverse)
+            self._records.sort(key=lambda r: r.id, reverse=reverse)
         else:
-            self._records.sort(key = key, reverse = reverse)
+            self._records.sort(key=key, reverse=reverse)
 
     def get_column(self, col):
         """Returns a string containing a given column (DEPRECATED).
@@ -621,8 +621,8 @@ class MultipleSeqAlignment(_Alignment):
         warnings.warn("This method is deprecated and is provided for backwards compatibility with the old Bio.Align.Generic.Alignment object. Please use the slice notation instead, as get_column is likely to be removed in a future release of Biopython.", Bio.BiopythonDeprecationWarning)
         return _Alignment.get_column(self, col)
 
-    def add_sequence(self, descriptor, sequence, start = None, end = None,
-                     weight = 1.0):
+    def add_sequence(self, descriptor, sequence, start=None, end=None,
+                     weight=1.0):
         """Add a sequence to the alignment (DEPRECATED).
 
         The start, end, and weight arguments are not supported! This method
@@ -634,19 +634,17 @@ class MultipleSeqAlignment(_Alignment):
         import warnings
         import Bio
         warnings.warn("The start, end, and weight arguments are not supported! This method only provides limited backwards compatibility with the old Bio.Align.Generic.Alignment object. Please use the append method with a SeqRecord instead, as the add_sequence method is likely to be removed in a future release of Biopython.", Bio.BiopythonDeprecationWarning)
-        #Should we handle start/end/strand information somehow? What for?
-        #TODO - Should we handle weights somehow? See also AlignInfo code...
+        # Should we handle start/end/strand information somehow? What for?
+        # TODO - Should we handle weights somehow? See also AlignInfo code...
         if start is not None or end is not None or weight != 1.0:
             raise ValueError("The add_Sequence method is obsolete, and only "
                              "provides limited backwards compatibily. The"
                              "start, end and weight arguments are not "
                              "supported.")
         self.append(SeqRecord(Seq(sequence, self._alphabet),
-                              id = descriptor, description = descriptor))
+                              id=descriptor, description=descriptor))
 
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest
     run_doctest()
-
-

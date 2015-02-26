@@ -14,7 +14,7 @@ import getopt
 import traceback
 
 from Bio import ParserSupport
-from Bio.Blast import NCBIStandalone, NCBIWWW
+from Bio.Blast import NCBIStandalone
 
 CONTEXT = 5   # show 5 lines of context around the error in the format file
 
@@ -68,7 +68,7 @@ def choose_parser(outfile):
     data = open(outfile).read()
     ldata = data.lower()
     if "<html>" in ldata or "<pre>" in ldata:
-        return NCBIWWW.BlastParser
+        raise NotImplementedError("Biopython no longer has an HTML BLAST parser.")
     if "results from round)" in ldata or "converged!" in ldata:
         return NCBIStandalone.PSIBlastParser
     return NCBIStandalone.BlastParser
@@ -83,19 +83,17 @@ def test_blast_output(outfile):
 
         parser_class = choose_parser(outfile)
         print("It looks like you have given output that should be parsed")
-        print("with %s.%s.  If I'm wrong, you can select the correct parser" %\
+        print("with %s.%s.  If I'm wrong, you can select the correct parser" %
               (parser_class.__module__, parser_class.__name__))
         print("on the command line of this script (NOT IMPLEMENTED YET).")
     else:
-        raise NotImplementedError
-        parser_class = NCBIWWW.BlastParser
-        print("Using %s to parse the file." % parser_class.__name__)
+        raise NotImplementedError("Biopython no longer has an HTML BLAST parser.")
     print("")
 
     scanner_class = parser_class()._scanner.__class__
     consumer_class = parser_class()._consumer.__class__
 
-    #parser_class()._scanner.feed(
+    # parser_class()._scanner.feed(
     #    open(outfile), ParserSupport.TaggingConsumer())
     print("I'm going to run the data through the parser to see what happens...")
     parser = parser_class()
@@ -136,7 +134,7 @@ def test_blast_output(outfile):
         traceback.print_exception(etype, value, tb)
         return 1
     else:
-        print("I found the problem in %s.%s.%s, line %d:" % \
+        print("I found the problem in %s.%s.%s, line %d:" %
               (class_found.__module__, class_found.__name__,
                err_function, err_line))
         print("    %s" % err_text)
@@ -176,9 +174,9 @@ def test_blast_output(outfile):
     print("")
 
     if class_found == scanner_class:
-        print("Problems in %s are most likely caused by changed formats." % \
+        print("Problems in %s are most likely caused by changed formats." %
               class_found.__name__)
-        print("You can start to fix this by going to line %d in module %s." % \
+        print("You can start to fix this by going to line %d in module %s." %
               (err_line, class_found.__module__))
         print("Perhaps the scanner needs to be made more lenient by accepting")
         print("the changed format?")
@@ -201,17 +199,17 @@ def test_blast_output(outfile):
         print("")
 
     elif class_found == consumer_class:
-        print("Problems in %s can be caused by two things:" % \
+        print("Problems in %s can be caused by two things:" %
               class_found.__name__)
-        print("    - The format of the line parsed by '%s' changed." % \
+        print("    - The format of the line parsed by '%s' changed." %
               err_function)
         print("    - The scanner misidentified the line.")
-        print("Check to make sure '%s' should parse the line:" % \
+        print("Check to make sure '%s' should parse the line:" %
               err_function)
         s = "    %s" % chomp(lines[consumer.linenum])
         s = s[:80]
         print(s)
-        print("If so, debug %s.%s.  Otherwise, debug %s." % \
+        print("If so, debug %s.%s.  Otherwise, debug %s." %
               (class_found.__name__, err_function, scanner_class.__name__))
 
 
@@ -246,8 +244,8 @@ if __name__ == '__main__':
 
     if len([x for x in (PROTEIN, NUCLEOTIDE, OUTPUT) if x is not None]) != 1:
         OUTPUT = 1
-        #sys.stderr.write("Exactly one of -p, -n, or -o should be specified.\n")
-        #sys.exit(-1)
+        # sys.stderr.write("Exactly one of -p, -n, or -o should be specified.\n")
+        # sys.exit(-1)
     if PROTEIN or NUCLEOTIDE:
         sys.stderr.write("-p and -n not implemented yet\n")
         sys.exit(-1)

@@ -14,6 +14,8 @@ from Bio.Data import SCOPData
 from Bio.PDB import Selection
 from Bio.PDB.Polypeptide import is_aa
 
+__docformat__ = "restructuredtext en"
+
 
 class StructureAlignment(object):
     """
@@ -22,66 +24,68 @@ class StructureAlignment(object):
     """
     def __init__(self, fasta_align, m1, m2, si=0, sj=1):
         """
-        fasta_align --- Alignment object
-        m1, m2 --- two models
-        si, sj --- the sequences in the Alignment object that
-                correspond to the structures
+        Attributes:
+    
+            - fasta_align --- Alignment object
+            - m1, m2 --- two models
+            - si, sj --- the sequences in the Alignment object that
+              correspond to the structures
         """
-        l=fasta_align.get_alignment_length()
+        l = fasta_align.get_alignment_length()
         # Get the residues in the models
-        rl1=Selection.unfold_entities(m1, 'R')
-        rl2=Selection.unfold_entities(m2, 'R')
+        rl1 = Selection.unfold_entities(m1, 'R')
+        rl2 = Selection.unfold_entities(m2, 'R')
         # Residue positions
-        p1=0
-        p2=0
+        p1 = 0
+        p2 = 0
         # Map equivalent residues to each other
-        map12={}
-        map21={}
+        map12 = {}
+        map21 = {}
         # List of residue pairs (None if -)
-        duos=[]
+        duos = []
         for i in range(0, l):
-            column=fasta_align.get_column(i)
-            aa1=column[si]
-            aa2=column[sj]
-            if aa1!="-":
+            column = fasta_align.get_column(i)
+            aa1 = column[si]
+            aa2 = column[sj]
+            if aa1 != "-":
                 # Position in seq1 is not -
                 while True:
                     # Loop until an aa is found
-                    r1=rl1[p1]
-                    p1=p1+1
+                    r1 = rl1[p1]
+                    p1 = p1 + 1
                     if is_aa(r1):
                         break
                 self._test_equivalence(r1, aa1)
             else:
-                r1=None
-            if aa2!="-":
+                r1 = None
+            if aa2 != "-":
                 # Position in seq2 is not -
                 while True:
                     # Loop until an aa is found
-                    r2=rl2[p2]
-                    p2=p2+1
+                    r2 = rl2[p2]
+                    p2 = p2 + 1
                     if is_aa(r2):
                         break
                 self._test_equivalence(r2, aa2)
             else:
-                r2=None
+                r2 = None
             if r1:
                 # Map residue in seq1 to its equivalent in seq2
-                map12[r1]=r2
+                map12[r1] = r2
             if r2:
                 # Map residue in seq2 to its equivalent in seq1
-                map21[r2]=r1
+                map21[r2] = r1
             # Append aligned pair (r is None if gap)
             duos.append((r1, r2))
-        self.map12=map12
-        self.map21=map21
-        self.duos=duos
+        self.map12 = map12
+        self.map21 = map21
+        self.duos = duos
 
     def _test_equivalence(self, r1, aa1):
         "Test if aa in sequence fits aa in structure."
-        resname=r1.get_resname()
-        resname=SCOPData.protein_letters_3to1[resname]
-        assert(aa1==resname)
+        resname = r1.get_resname()
+        resname = SCOPData.protein_letters_3to1[resname]
+        assert(aa1 == resname)
 
     def get_maps(self):
         """
@@ -98,7 +102,7 @@ class StructureAlignment(object):
             yield self.duos[i]
 
 
-if __name__=="__main__":
+if __name__ == "__main__":
     import sys
     from Bio.Alphabet import generic_protein
     from Bio import AlignIO
@@ -112,22 +116,22 @@ if __name__=="__main__":
         sys.exit()
 
     # The alignment
-    fa=AlignIO.read(open(sys.argv[1]), "fasta", generic_protein)
+    fa = AlignIO.read(open(sys.argv[1]), "fasta", generic_protein)
 
-    pdb_file1=sys.argv[2]
-    pdb_file2=sys.argv[3]
+    pdb_file1 = sys.argv[2]
+    pdb_file2 = sys.argv[3]
 
     # The structures
-    p=PDBParser()
-    s1=p.get_structure('1', pdb_file1)
-    p=PDBParser()
-    s2=p.get_structure('2', pdb_file2)
+    p = PDBParser()
+    s1 = p.get_structure('1', pdb_file1)
+    p = PDBParser()
+    s2 = p.get_structure('2', pdb_file2)
 
     # Get the models
-    m1=s1[0]
-    m2=s2[0]
+    m1 = s1[0]
+    m2 = s2[0]
 
-    al=StructureAlignment(fa, m1, m2)
+    al = StructureAlignment(fa, m1, m2)
 
     # Print aligned pairs (r is None if gap)
     for (r1, r2) in al.get_iterator():
