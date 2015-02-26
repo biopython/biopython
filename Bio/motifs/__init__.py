@@ -219,7 +219,7 @@ class Instances(list):
         [(5, Seq('ACT', Alphabet())), (12, Seq('ATT', Alphabet()))]
 
         Use the case_sensitive option to ignore the case of both sequences:
-        >>> print(list(mymot.instances.search(Seq('ggggAcTggggaTtt'), 
+        >>> print(list(mymot.instances.search(Seq('gggggAcTggggaTtt'), 
         ... case_sensitive=False)))
         [(5, Seq('ACT', Alphabet())), (12, Seq('ATT', Alphabet()))]
 
