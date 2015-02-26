@@ -171,7 +171,7 @@ if sqlite3:
                                 description="",
                                 annotations={"start": 3009319,
                                              "srcSize": 129993255,
-                                             "strand": "+1", 
+                                             "strand": 1,
                                              "size": 162})
 
             recs[1] = SeqRecord(Seq("TCACAGATATTTACTATTAAATATGGTTTGTTATATGGTTACGG"
@@ -183,7 +183,7 @@ if sqlite3:
                                 description="",
                                 annotations={"start": 11087,
                                              "srcSize": 13221,
-                                             "strand": "+1",
+                                             "strand": 1,
                                              "size": 164})
 
             fetched_recs = self.idx._get_record(34)
@@ -200,7 +200,7 @@ if sqlite3:
                                 description="",
                                 annotations={"start": 3021494,
                                              "srcSize": 129993255,
-                                             "strand": "+1", 
+                                             "strand": 1,
                                              "size": 42})
 
             recs[1] = SeqRecord(Seq("TGTTGCATGTCCTTTATTCTTTGGCGTGATAGGCTCACCCAATCTT"),
@@ -209,7 +209,7 @@ if sqlite3:
                                 description="",
                                 annotations={"start": 16173516,
                                              "srcSize": 174210431,
-                                             "strand": "-1",
+                                             "strand": -1,
                                              "size": 46})
 
             recs[2] = SeqRecord(Seq("TGTTGCATATCCTTTATTCTTTGGCGTGATAGGCTCACCCAATCTT"),
@@ -218,7 +218,7 @@ if sqlite3:
                                 description="",
                                 annotations={"start": 16393864,
                                              "srcSize": 173908612,
-                                             "strand": "-1",
+                                             "strand": -1,
                                              "size": 46})
 
             recs[3] = SeqRecord(Seq("TGTTGCATGTCGTTTATTCTTTGGCGTGATAGGCTCACCCAATCTT"),
@@ -227,7 +227,7 @@ if sqlite3:
                                 description="",
                                 annotations={"start": 15875298,
                                              "srcSize": 170899992,
-                                             "strand": "-1",
+                                             "strand": -1,
                                              "size": 46})
 
             recs[4] = SeqRecord(Seq("TGTTAAGTCTCACTTGCTGTTCAAAGTGATAGCTTCACTCCATCAT"),
@@ -236,7 +236,7 @@ if sqlite3:
                                 description="",
                                 annotations={"start": 78072287,
                                              "srcSize": 125616256,
-                                             "strand": "-1",
+                                             "strand": -1,
                                              "size": 46})
 
             recs[5] = SeqRecord(Seq("TGTTTAAAATG----ATTGCTAGAACTTCTA--CTCACTGGA----"),
@@ -245,7 +245,7 @@ if sqlite3:
                                 description="",
                                 annotations={"start": 14757144,
                                              "srcSize": 54797317,
-                                             "strand": "-1",
+                                             "strand": -1,
                                              "size": 36})
 
             fetched_recs = self.idx._get_record(99228)
@@ -347,7 +347,7 @@ if sqlite3:
                               (0, 1000), (500, 1500), ".")
 
         def test_no_alignment(self):
-            result = self.idx.get_spliced((0, 1000), (500, 1500), "+1")
+            result = self.idx.get_spliced((0, 1000), (500, 1500), 1)
             
             self.assertEqual(len(result), 1)
             self.assertEqual(len(result[0].seq), 1000)
@@ -367,7 +367,7 @@ if sqlite3:
                                           (3134909, 3185897, 3192258, 3193677,
                                            3203580, 3206222, 3208186, 3211493,
                                            3212019, 3217518, 3219906, 3220446,
-                                           3227479), "+1")
+                                           3227479), 1)
 
             cnksr3 = str(SeqIO.read("MAF/cnksr3.fa", "fasta").seq).upper()
             mm9_seq = "".join([str(x.seq) for x in result if x.id.startswith("mm9")]).replace("-", "")
@@ -384,12 +384,12 @@ if sqlite3:
         def test_inconsistent_strand(self):
             self.assertRaises(ValueError,
                               self.idx.get_spliced,
-                              (0, 3021421), (1000, 3022000), "+1")
+                              (0, 3021421), (1000, 3022000), 1)
 
         def test_bundle_without_target(self):
             self.assertRaises(ValueError,
                               self.idx.get_spliced,
-                              (3009319,), (3009900,), "+1")
+                              (3009319,), (3009900,), 1)
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
