@@ -423,8 +423,8 @@ class MafIndex(object):
                                 (rec_start, rec_end, offset, start, end))
                             
                 yield fetched
-            
-    def get_spliced(self, starts, ends, strand="+1"):
+
+    def get_spliced(self, starts, ends, strand=1):
         """Returns a multiple alignment of the exact sequence range provided.
 
         Accepts two lists of start and end positions on target_seqname, representing
