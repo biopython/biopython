@@ -201,10 +201,11 @@ class Instances(list):
 
     def search(self, sequence, case_sensitive=True, minratio=1):
         """
-        a generator function, returning found positions of motif instances in a given sequence
+        A generator function, returning found positions of 
+        motif instances in a given sequence.
 
-            - case_sensitive: ignore case of both motif instance and sequence
-            - minratio: minimum ratio of sequence match to consider (from 0 to 1)
+            - case_sensitive: ignore case of instances and sequence
+            - minratio: minimum ratio of sequence match (from 0 to 1)
 
         >>> from Bio import motifs
         >>> from Bio.Seq import Seq
@@ -212,21 +213,24 @@ class Instances(list):
         Let's create a motif with two instances:
         >>> mymot = motifs.create([Seq('ACT'), Seq('ATT')])
         
-        A search with the default options will give a match for each instance:
+        A search with default options will give a match for each instance:
         >>> matches = mymot.instances.search(Seq('gggggACTggggATTggggact'))
         >>> print(list(matches))
         [(5, Seq('ACT', Alphabet())), (12, Seq('ATT', Alphabet()))]
 
         Use the case_sensitive option to ignore the case of both sequences:
-        >>> print(list(mymot.instances.search(Seq('gggggACTggggATTggggact'), case_sensitive=False)))
-        [(5, Seq('ACT', Alphabet())), (12, Seq('ATT', Alphabet())), (19, Seq('ACT', Alphabet()))]
+        >>> print(list(mymot.instances.search(Seq('ggggAcTggggaTtt'), 
+        ... case_sensitive=False)))
+        [(5, Seq('ACT', Alphabet())), (12, Seq('ATT', Alphabet()))]
 
         Use minratio to get imperfect matches:
-        >>> print(list(mymot.instances.search(Seq('gggggACTggggATTggggact'), minratio=0.3)))
-        [(5, Seq('ACT', Alphabet())), (6, Seq('ATT', Alphabet())), (11, Seq('ACT', Alphabet())), (12, Seq('ACT', Alphabet())), (13, Seq('ATT', Alphabet()))]
+        >>> print(list(mymot.instances.search(Seq('gggggACTgggg'), 
+        ... minratio=0.3)))
+        [(5, Seq('ACT', Alphabet())), (6, Seq('ATT', Alphabet()))]
 
 
-        See also pairwise2.align.globalxx for aligning each instance to a sequence.
+        See also pairwise2.align.globalxx for aligning each instance to 
+        a sequence.
         """
 
         seq_str = str(sequence)
