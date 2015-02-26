@@ -140,7 +140,7 @@ def FastaM10Iterator(handle, alphabet=single_letter_alphabet):
         alignment = MultipleSeqAlignment([], alphabet)
 
         #TODO - Introduce an annotated alignment class?
-        #See also Bio/AlignIO/MafIO.py for same requirement.        
+        #See also Bio/AlignIO/MafIO.py for same requirement.
         #For now, store the annotation a new private property:
         alignment._annotations = {}
 

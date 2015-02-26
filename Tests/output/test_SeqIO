@@ -1741,6 +1741,7 @@ Testing reading uniprot-xml format file SwissProt/H2CNN8.xml
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Checking can write/read as 'phylip-sequential' format
 Testing reading swiss format file SwissProt/H2CNN8.txt
@@ -1768,6 +1769,7 @@ Testing reading swiss format file SwissProt/H2CNN8.txt
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Checking can write/read as 'phylip-sequential' format
 Testing reading genbank format file GenBank/noref.gb
