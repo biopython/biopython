@@ -361,13 +361,10 @@ def _align(sequenceA, sequenceB, match_fn, gap_A_fn, gap_B_fn,
     tolerance = 0  # XXX do anything with this?
     # Now find all the positions within some tolerance of the best
     # score.
-    i = 0
-    while i < len(starts):
-        score, pos = starts[i]
-        if rint(abs(score - best_score)) > rint(tolerance):
-            del starts[i]
-        else:
-            i += 1
+    starts = [
+        (score, pos) for score, pos in starts
+        if rint(abs(score - best_score)) <= rint(tolerance)
+    ]
 
     # Recover the alignments and return them.
     x = _recover_alignments(
