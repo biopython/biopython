@@ -17,6 +17,10 @@ from Bio.Align.Generic import Alignment
 from Bio.Align import MultipleSeqAlignment
 from Bio.AlignIO.Interfaces import SequentialAlignmentWriter
 import shlex
+# To avoid method lookup
+STARTSWITH = str.startswith
+STRIP = str.strip
+SPLIT = str.split
 
 MAFINDEX_VERSION = 1
 
@@ -107,11 +111,11 @@ def MafIterator(handle, seq_count = None, alphabet = single_letter_alphabet):
             line = ""
         
         if in_a_bundle:
-            if line.startswith("s"):
+            if STARTSWITH(line, "s"):
                 # add a SeqRecord to the bundle
-                line_split = line.strip().split()
+                line_split = SPLIT(STRIP(line))
 
-                if len(line_split) <> 7:
+                if len(line_split) != 7:
                     raise ValueError("Error parsing alignment - 's' line must have 7 fields")
 
                 # convert MAF-style +/- strand to biopython-stype +1/-1
@@ -148,12 +152,12 @@ def MafIterator(handle, seq_count = None, alphabet = single_letter_alphabet):
                                name = line_split[1],
                                description = "",
                                annotations = anno))
-            elif line.startswith("e") or \
-                 line.startswith("i") or \
-                 line.startswith("q"):
+            elif STARTSWITH(line, "e") or \
+                 STARTSWITH(line, "i") or \
+                 STARTSWITH(line, "q"):
                 # not implemented
                 pass
-            elif not line.strip():
+            elif not STRIP(line):
                 # end a bundle of records
                 if seq_count is not None:
                     assert len(records) == seq_count
@@ -172,15 +176,15 @@ def MafIterator(handle, seq_count = None, alphabet = single_letter_alphabet):
                 records = []
             else:
                 raise ValueError("Error parsing alignment - unexpected line:\n%s" % (line,))
-        elif line.startswith("a"):
+        elif STARTSWITH(line, "a"):
             # start a bundle of records
             in_a_bundle = True
-            
-            if len(line.strip().split()[1:]) != line.count("="):
+            annot_strings = SPLIT(STRIP(line))[1:]
+            if len(annot_strings) != line.count("="):
                 raise ValueError("Error parsing alignment - invalid key in 'a' line")
 
-            annotations = dict([x.split("=") for x in line.strip().split()[1:]])
-        elif line.startswith("#"):
+            annotations = dict([SPLIT(a_string, "=") for a_string in annot_strings])
+        elif STARTSWITH(line, "#"):
             # ignore comments
             pass
         elif not line:
@@ -244,7 +248,7 @@ class MafIndex():
                 raise ValueError("Unfinished/partial database provided")
                 
             records_found = int(self._con.execute("SELECT COUNT(*) FROM offset_data").fetchone()[0])
-            if records_found <> record_count:
+            if records_found != record_count:
                 raise ValueError("Expected %s records, found %s.  Corrupt index?" % (record_count, records_found))
 
             return records_found
@@ -295,7 +299,7 @@ class MafIndex():
         line = self._maf_fp.readline()
 
         while line:
-            if line.startswith("a"):
+            if STARTSWITH(line, "a"):
                 # note the offset
                 offset = self._maf_fp.tell() - len(line)
                 
@@ -303,20 +307,23 @@ class MafIndex():
                 while True:
                     line = self._maf_fp.readline()
                     
-                    if not line.strip() or line.startswith("a"):
+                    if not STRIP(line) or STARTSWITH(line, "a"):
+                        # Empty line or new alignment record
                         raise ValueError("Target for indexing (%s) not found in this bundle" % (self._target_seqname,))
-                    elif line.startswith("s"):
+                    elif STARTSWITH(line, "s"):
                         # s (literal), src (ID), start, size, strand, srcSize, text (sequence)
-                        line_split = line.strip().split()
+                        line_split = SPLIT(STRIP(line))
                         
                         if line_split[1] == self._target_seqname:
                             start = int(line_split[2])
-                            end = int(line_split[2]) + int(line_split[3])
+                            size = int(line_split[3])
                             
-                            if end - start <> len(line_split[6].replace("-", "")):
+                            if size != len(line_split[6].replace("-", "")):
                                 raise ValueError("Invalid length for target coordinates (expected %s, found %s)" % \
-                                                (end - start, len(line_split[6].replace("-", ""))))
+                                                (size, len(line_split[6].replace("-", ""))))
 
+                            # "inclusive" end position is start + length - 1
+                            end = start + size - 1 
                             yield (self._ucscbin(start, end), start, end, offset)
                             
                             break                    
@@ -377,7 +384,7 @@ class MafIndex():
         """Searches index database for MAF records overlapping ranges provided."""
         
         # verify the provided exon coordinates
-        if len(starts) <> len(ends):
+        if len(starts) != len(ends):
             raise ValueError("Every position in starts must have a match in ends")
         
         for exonstart, exonend in zip(starts, ends):
@@ -415,7 +422,8 @@ class MafIndex():
             for record in fetched:
                 if record.id == self._target_seqname:
                     start = record.annotations["start"]
-                    end = record.annotations["start"] + record.annotations["size"]
+                    # "inclusive" end is start + length - 1
+                    end = record.annotations["start"] + record.annotations["size"] - 1
                     
                     if not (start == rec_start and end == rec_end):
                         raise ValueError("Expected %s-%s @ offset %s, found %s-%s" % \
@@ -436,10 +444,14 @@ class MafIndex():
             raise ValueError("Strand must be +1 or -1")
                 
         # pull all alignments that span the desired intervals
-        fetched = [x for x in self.search(starts, ends)]
+        fetched = [multiseq for multiseq in self.search(starts, ends)]
         
         # keep track of the expected letter count
-        expected_letters = sum([y - x + 1 for x, y in zip(starts,ends)])
+        #expected_letters = sum([y - x for x, y in zip(starts,ends)])
+        # Coordinates are interpreted by MafIndex.search as zero-based
+        # (by MAF format specification https://cgwb.nci.nih.gov/FAQ/FAQformat.html#format5),
+        # and inclusive
+        expected_letters = sum([(y + 1) - x for x, y in zip(starts, ends)])
         
         # if there's no alignment, return filler for the assembly of the length given
         if len(fetched) == 0:
@@ -447,10 +459,16 @@ class MafIndex():
                                                    id=self._target_seqname)])
         
         # find the union of all IDs in these alignments
-        all_seqnames = set([x.id for y in fetched for x in y])
+        all_seqnames = set([sequence.id for multiseq in fetched for sequence in multiseq])
 
         # split every record by base position
-        split_by_position = dict([(x, {}) for x in all_seqnames])
+        # key: sequence name
+        # value: dictionary
+        #        key: position in the reference sequence
+        #        value: letter(s) (including letters
+        #               aligned to the "-" preceding the letter
+        #               at the position in the reference, if any)
+        split_by_position = dict([(seq_name, {}) for seq_name in all_seqnames])
         
         # keep track of what the total number of (unspliced) letters should be
         total_rec_length = 0
@@ -475,43 +493,65 @@ class MafIndex():
                     except KeyError:
                         raise ValueError("No strand information for target seqname (%s)" % \
                         (self._target_seqname,))
-                        
+                    
+                    # length including gaps (i.e. alignment length)
                     rec_length = len(seqrec)
                     rec_start = seqrec.annotations["start"]
-                    rec_end = seqrec.annotations["start"] + seqrec.annotations["size"] - 1
+                    #rec_end = seqrec.annotations["start"] + seqrec.annotations["size"]
+                    ungapped_length = seqrec.annotations["size"]
+                    # Inclusive end in zero-based coordinates of the reference
+                    rec_end = rec_start + ungapped_length - 1
 
-                    total_rec_length += rec_end - rec_start + 1
+                    #total_rec_length += rec_end - rec_start
+                    # This is length in terms of actual letters in the reference
+                    total_rec_length += ungapped_length
+                    # This would be total alignment length (with gaps)
+                    #total_rec_length += rec_length
                     
                     # blank out these positions for every seqname
                     for seqrec in multiseq:
-                        for pos in range(rec_start, rec_end + 1):
+                        #for pos in range(rec_start, rec_end):
+                        # pos needs to reach rec_end, because rec_end is inclusive
+                        for pos in xrange(rec_start, rec_end + 1):
                             split_by_position[seqrec.id][pos] = ""
                     
                     break
+            # http://psung.blogspot.fr/2007/12/for-else-in-python.html
+            # https://docs.python.org/2/tutorial/controlflow.html#break-and-continue-statements-and-else-clauses-on-loops
             else:
                 raise ValueError("Did not find %s in alignment bundle" % (self._target_seqname,))
                 
             # the true, chromosome/contig/etc position in the target seqname
             real_pos = rec_start
             
+            # loop over the alignment to fill split_by_position
             for gapped_pos in range(0, rec_length):
                 for seqrec in multiseq:
                     # keep track of this position's value for the target seqname
-                    if seqrec.id == self._target_seqname: track_val = seqrec.seq[gapped_pos]
-                    
+                    if seqrec.id == self._target_seqname:
+                        track_val = seqrec.seq[gapped_pos]
+                        # We shouldn't reach the end of the reference sequence
+                        # before the end of the alignment
+                        if real_pos == rec_end and gapped_pos < rec_length - 1:
+                            assert all([letter == "-" for letter in seqrec.seq[gapped_pos + 1:]])
+                    # Here, a real_pos that corresponds to just after a series of "-"
+                    # in the reference will "accumulate" the letters found in other sequences
+                    # in front of the "-"s
                     split_by_position[seqrec.id][real_pos] += seqrec.seq[gapped_pos]
                     
                 # increment the real_pos counter only when non-gaps are found in
                 # the target_seqname, and we haven't reached the end of the record
-                if track_val != "-" and real_pos < rec_end: real_pos += 1
+                if track_val != "-" and real_pos < rec_end:
+                    real_pos += 1
                 
         # make sure the number of bp entries equals the sum of the record lengths
-        if len(split_by_position[self._target_seqname]) <> total_rec_length:
+        if len(split_by_position[self._target_seqname]) != total_rec_length:
             raise ValueError("Target seqname (%s) has %s records, expected %s" % \
             (self._target_seqname, len(split_by_position[self._target_seqname]), total_rec_length))
 
         # translates a position in the target_seqname sequence to its gapped length        
-        realpos_to_len = dict([(x, len(y)) for x, y in split_by_position[self._target_seqname].items() if len(y) > 1])
+        realpos_to_len = dict(
+            [(pos, len(gapped_fragment)) for pos, gapped_fragment in split_by_position[self._target_seqname].iteritems() if len(gapped_fragment) > 1])
 
         # splice together the exons            
         subseq = {}
@@ -519,7 +559,7 @@ class MafIndex():
         for seqid in all_seqnames:
             seq_split = split_by_position[seqid]
             seq_splice = []
-            
+            # Why not use the same filler_char?
             filler_char = "N" if seqid == self._target_seqname else "-"
 
             # iterate from start to end, taking bases from split_by_position when
@@ -527,13 +567,21 @@ class MafIndex():
             append = seq_splice.append
             
             for exonstart, exonend in zip(starts, ends):
-                for real_pos in range(exonstart, exonend + 1):
+                #for real_pos in range(exonstart, exonend):
+                # exonend is inclusive
+                for real_pos in xrange(exonstart, exonend + 1):
                     # if this seqname has this position, add it
                     if real_pos in seq_split:
                         append(seq_split[real_pos])
                     # if not, but it's in the target_seqname, add length-matched filler
+                    # Can this happen? Aren't all positions in realpos_to_len also in seq_split?
+                    # realpos_to_len has its keys from split_by_position[self._target_seqname]
+                    # The keys in split_by_position.tems() are all from xrange(rec_start, rec_end + 1)
                     elif real_pos in realpos_to_len:
                         append(filler_char * realpos_to_len[real_pos])
+                        ##debug
+                        print "%d not in seq_split but in realpos_to_len" % real_pos
+                        ##
                     # it's not in either, so add a single filler character
                     else:
                         append(filler_char)
@@ -548,15 +596,15 @@ class MafIndex():
         # check to make sure all sequences are the same length as the target seqname
         ref_subseq_len = len(subseq[self._target_seqname])
         
-        for seqid, seq in subseq.items():
-            if len(seq) <> ref_subseq_len:
+        for seqid, seq in subseq.iteritems():
+            if len(seq) != ref_subseq_len:
                 raise ValueError("Returning length %s for %s, expected %s" % \
                 (len(seq), seqid, ref_subseq_len))
                 
         # finally, build a MultipleSeqAlignment object for our final sequences
         result_multiseq = []
         
-        for seqid, seq in subseq.items():
+        for seqid, seq in subseq.iteritems():
             seq = Seq(seq)
             
             seq = seq if strand == ref_first_strand else seq.reverse_complement()
