@@ -17,6 +17,9 @@ from Bio.Align.Generic import Alignment
 from Bio.Align import MultipleSeqAlignment
 from Bio.AlignIO.Interfaces import SequentialAlignmentWriter
 import shlex
+
+import gzip
+
 # To avoid method lookup
 STARTSWITH = str.startswith
 STRIP = str.strip
@@ -209,6 +212,8 @@ class MafIndex():
         # make sure maf_file exists, then open it up
         if os.path.isfile(self._maf_file):
             self._maf_fp = open(self._maf_file, "r")
+        elif os.path.isfile("%s.gz" % self._maf_file):
+            sefl._maf_fp = gzip.open(self._maf_file, "rb")
         else:
             raise ValueError("Error opening %s -- file not found" % (self._maf_file,))
         
@@ -576,12 +581,11 @@ class MafIndex():
                     # if not, but it's in the target_seqname, add length-matched filler
                     # Can this happen? Aren't all positions in realpos_to_len also in seq_split?
                     # realpos_to_len has its keys from split_by_position[self._target_seqname]
-                    # The keys in split_by_position.tems() are all from xrange(rec_start, rec_end + 1)
+                    # The keys in split_by_position.items() are all from xrange(rec_start, rec_end + 1)
+                    # Yes, but this is for a given aligment block in the maf file.
+                    # split_by_position.items() may have missing entries if the sequence was not that block.
                     elif real_pos in realpos_to_len:
                         append(filler_char * realpos_to_len[real_pos])
-                        ##debug
-                        print "%d not in seq_split but in realpos_to_len" % real_pos
-                        ##
                     # it's not in either, so add a single filler character
                     else:
                         append(filler_char)
