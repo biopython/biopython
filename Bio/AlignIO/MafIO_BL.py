@@ -213,7 +213,7 @@ class MafIndex():
         if os.path.isfile(self._maf_file):
             self._maf_fp = open(self._maf_file, "r")
         elif os.path.isfile("%s.gz" % self._maf_file):
-            sefl._maf_fp = gzip.open(self._maf_file, "rb")
+            sefl._maf_fp = gzip.open("%s.gz" % self._maf_file, "rb")
         else:
             raise ValueError("Error opening %s -- file not found" % (self._maf_file,))
         
