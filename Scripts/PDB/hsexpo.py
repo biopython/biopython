@@ -88,9 +88,9 @@ elif args.exp[0] == "H" and args.exp[3] == "B":
     hse = HSExposureCB(m, RADIUS)
     # hse.write_pymol_script()
     if args.exp[-1] == "D":
-        k = "EXP_HSE_B_U"
-    else:
         k = "EXP_HSE_B_D"
+    else:
+        k = "EXP_HSE_B_U"
 elif args.exp == "CN":
     hse = ExposureCN(m, RADIUS)
     k = "EXP_CN"
