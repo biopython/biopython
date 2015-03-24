@@ -47,10 +47,6 @@ _EXTRACT = {
 # represents the part of the API that's common to ALL instruments, whereas the
 # instrument specific sections are labelled as they are in the ABIF spec
 #
-# The 2%:
-#  - on some fields, there are repeated fields (e.g DYEN1-100), and those are not supported
-#  - OvrI1-N containing color data of some sort
-#
 # Keys don't seem to clash from machine to machine, so when we parse, we look
 # for ANY key, and store that in the raw ABIF data structure attached to the
 # annotations, with the assumption that anyone parsing the data can look up the
@@ -79,6 +75,13 @@ _INSTRUMENT_SPECIFIC_TAGS['general'] = {
     'DATA6': 'Short Array holding measured milliAmps trace (EP current) during run',
     'DATA7': 'Short Array holding measured milliWatts trace (Laser EP Power) during run',
     'DATA8': 'Short Array holding measured oven Temperature (polymer temperature) trace during run',
+    'DATA9': 'Channel 9 processed data',
+    'DATA10': 'Channel 10 processed data',
+    'DATA11': 'Channel 11 processed data',
+    'DATA12': 'Channel 12 processed data',
+    # Prism 3100/3100-Avant may provide DATA105
+    #          3130/3130-XL may provide DATA105
+    # 3530/3530-XL may provide DATA105-199, 9-12, 205-299
     'DSam1': 'Downsampling factor',
     'DySN1': 'Dye set name',
     'Dye#1': 'Number of dyes',
@@ -90,6 +93,8 @@ _INSTRUMENT_SPECIFIC_TAGS['general'] = {
     'DyeW2': 'Dye 2 wavelength',
     'DyeW3': 'Dye 3 wavelength',
     'DyeW4': 'Dye 4 wavelength',
+    # 'DyeN5-N': 'Dye 5-N Name',
+    # 'DyeW5-N': 'Dye 5-N Wavelength',
     'EPVt1': 'Electrophoresis voltage setting (volts)',
     'EVNT1': 'Start Run event',
     'EVNT2': 'Stop Run event',
@@ -109,6 +114,32 @@ _INSTRUMENT_SPECIFIC_TAGS['general'] = {
     'NAVG1': 'Pixels averaged per lane',
     'NLNE1': 'Number of capillaries',
     'OfSc1': 'List of scans that are marked off scale in Collection. (optional)',
+    # OvrI and OrvV are listed as "1-N", and "One for each dye (unanalyzed
+    # and/or analyzed data)"
+    'OvrI1': 'List of scan number indexes that have values greater than 32767 but did not '
+             'saturate the camera. In Genemapper samples, this can have indexes with '
+             'values greater than 32000. In sequencing samples, this cannot have '
+             'indexes with values greater than 32000.',
+    'OvrI2': 'List of scan number indexes that have values greater than 32767 but did not '
+             'saturate the camera. In Genemapper samples, this can have indexes with '
+             'values greater than 32000. In sequencing samples, this cannot have '
+             'indexes with values greater than 32000.',
+    'OvrI3': 'List of scan number indexes that have values greater than 32767 but did not '
+             'saturate the camera. In Genemapper samples, this can have indexes with '
+             'values greater than 32000. In sequencing samples, this cannot have '
+             'indexes with values greater than 32000.',
+    'OvrI4': 'List of scan number indexes that have values greater than 32767 but did not '
+             'saturate the camera. In Genemapper samples, this can have indexes with '
+             'values greater than 32000. In sequencing samples, this cannot have '
+             'indexes with values greater than 32000.',
+    'OvrV1': 'List of color data values found at the locations listed in the OvrI tag. '
+             'There must be exactly as many numbers in this array as in the OvrI array.',
+    'OvrV2': 'List of color data values found at the locations listed in the OvrI tag. '
+             'There must be exactly as many numbers in this array as in the OvrI array.',
+    'OvrV3': 'List of color data values found at the locations listed in the OvrI tag. '
+             'There must be exactly as many numbers in this array as in the OvrI array.',
+    'OvrV4': 'List of color data values found at the locations listed in the OvrI tag. '
+             'There must be exactly as many numbers in this array as in the OvrI array.',
     'PDMF1': 'Sequencing Analysis Mobility file name chosen in collection',
     'RMXV1': 'Run Module XML schema version',
     'RMdN1': 'Run Module name (same as MODF)',
@@ -123,7 +154,7 @@ _INSTRUMENT_SPECIFIC_TAGS['general'] = {
     'RUNT2': 'Run Stopped Time',
     'RUNT3': 'Data Collection Started Time',
     'RUNT4': 'Data Collection Stopped Time',
-    'Rate1': 'type    Scanning Rate. Milliseconds per frame.',
+    'Rate1': 'Scanning Rate. Milliseconds per frame.',
     'RunN1': 'Run Name',
     'SCAN1': 'Number of scans',
     'SMED1': 'Polymer lot expiration date',
@@ -139,24 +170,12 @@ _INSTRUMENT_SPECIFIC_TAGS['general'] = {
     'User1': 'Name of user who created the plate (optional)',
 }
 
-_INSTRUMENT_SPECIFIC_TAGS['abi_prism_3100/3100-Avant'] = {
-    # 'OvrI1-': 'One value for each dye. List of scan number indices for scans with color      '
-    #           'data values >32767. Values cannot be greater than 32000. (optional)           '
-    # 'OvrV1-N': #One value for each dye. List of color data values for the locations listed in
-    # the OvrI tag. Number of OvrV tags must be equal to the number of OvrI
-    # tags. (optional)
-    'DATA105': 'Raw data for dye 5 (optional)',
-}
+# No instrument specific tags
+#_INSTRUMENT_SPECIFIC_TAGS['abi_prism_3100/3100-Avant'] = {
+#}
 
 _INSTRUMENT_SPECIFIC_TAGS['abi_3130/3130xl'] = {
-    # 'OvrI1-N':'One value for each dye. List of scan number indices for scans
-    # with color data values >32767. Values cannot be greater than 32000.
-    # (optional)',
-    # 'OvrV1-N':'One value for each dye. List of color data values for the
-    # locations listed in the OvrI tag. Number of OvrV tags must be equal to
-    # the number of OvrI tags. (optional)',
     'CTOw1': 'Container owner',
-    'DATA105': 'Raw data for dye 5 (optional)',
     'HCFG1': 'Instrument Class',
     'HCFG2': 'Instrument Family',
     'HCFG3': 'Official Instrument Name',
@@ -165,8 +184,6 @@ _INSTRUMENT_SPECIFIC_TAGS['abi_3130/3130xl'] = {
 }
 
 _INSTRUMENT_SPECIFIC_TAGS['abi_3530/3530xl'] = {
-    'DATA105-199': 'Short Array holding raw color data',
-    'DATA9-12,205-299': 'Short Array holding analyzed color data',
     'AAct1': 'Primary Analysis Audit Active indication. True if system auditing was enabled during the last write of this file, '
              'false if system auditing was disabled.',
     'ABED1': 'Anode buffer expiration date using ISO 8601 format using the patterns YYYY-MM-DDTHH:MM:SS.ss+/-HH:MM. Hundredths of a second are optional.',
@@ -211,8 +228,6 @@ _INSTRUMENT_SPECIFIC_TAGS['abi_3530/3530xl'] = {
     'DCEv1': 'A list of door-close events, separated by semicolon. Door open events are generally paired with door close events.',
     'DCHT1': 'Reserved for backward compatibility. The detection cell heater temperature setting from the Run Module. Not used for 3500.',
     'DOEv1': 'A list of door-open events, separated by semicolon. Door close events are generally paired with door open events.',
-    # 'DyeN5-N': 'Dye 5-N Name',
-    # 'DyeW5-N': 'Dye 5-N Wavelength',
     'ESig2': 'Electronic signature record used across 3500 software',
     'FTab1': 'Feature table. Can be created by Nibbler for Clear Range.',
     'FVoc1': 'Feature table vocabulary. Can be created by Nibbler for Clear Range.',
@@ -227,16 +242,6 @@ _INSTRUMENT_SPECIFIC_TAGS['abi_3530/3530xl'] = {
     'LAST1': 'Parameter settings information',
     'NOIS1': 'The estimate of rms baseline noise (S/N ratio) for each dye for a successfully analyzed sample. '
              'Corresponds in order to the raw data in tags DATA 1-4. KB basecaller only.',
-    # 'OvrI1-N': 'One for each dye (unanalyzed and/or analyzed data). List of
-    # scan number indexes that have values greater than 32767 but did not
-    # saturate the camera. In Genemapper samples, this can have indexes with
-    # values greater than 32000. In sequencing samples, this cannot have
-    # indexes with values greater than 32000.',
-    #
-    # 'OvrV1-N': 'One for each dye (unanalyzed and/or analyzed data). List of
-    # color data values found at the locations listed in the OvrI tag.
-    # Optional. There must be exactly as many numbers in this array as in the
-    # OvrI array.',
     'P1AM1': 'Amplitude of primary peak, which is not necessarily equal to corresponding signal strength at that position',
     'P1RL1': 'Deviation of primary peak position from (PLoc,2), times 100, rounded to integer',
     'P1WD1': 'Full-width Half-max of primary peak, times 100, rounded to integer. '
@@ -292,9 +297,6 @@ _INSTRUMENT_SPECIFIC_TAGS['abi_3530/3530xl'] = {
 
 _INSTRUMENT_SPECIFIC_TAGS['abi_3730/3730xl'] = {
     'BufT1': 'Buffer tray heater temperature (degrees C)',
-    # 'OvrI1-N': 'One value for each dye. List of scan number indices for scans
-    # with color data values >32767. Values cannot be greater than 32000.
-    # (optional)',
 }
 
 # dictionary for data unpacking format
@@ -447,22 +449,21 @@ def _abi_parse_header(header, handle):
         key = _bytes_to_string(dir_entry[0])
         key += str(dir_entry[1])
 
-        if key in __global_tag_listing:
-            tag_name = _bytes_to_string(dir_entry[0])
-            tag_number = dir_entry[1]
-            elem_code = dir_entry[2]
-            elem_num = dir_entry[4]
-            data_size = dir_entry[5]
-            data_offset = dir_entry[6]
-            tag_offset = dir_entry[8]
-            # if data size <= 4 bytes, data is stored inside tag
-            # so offset needs to be changed
-            if data_size <= 4:
-                data_offset = tag_offset + 20
-            handle.seek(data_offset)
-            data = handle.read(data_size)
-            yield tag_name, tag_number, \
-                _parse_tag_data(elem_code, elem_num, data)
+        tag_name = _bytes_to_string(dir_entry[0])
+        tag_number = dir_entry[1]
+        elem_code = dir_entry[2]
+        elem_num = dir_entry[4]
+        data_size = dir_entry[5]
+        data_offset = dir_entry[6]
+        tag_offset = dir_entry[8]
+        # if data size <= 4 bytes, data is stored inside tag
+        # so offset needs to be changed
+        if data_size <= 4:
+            data_offset = tag_offset + 20
+        handle.seek(data_offset)
+        data = handle.read(data_size)
+        yield tag_name, tag_number, \
+            _parse_tag_data(elem_code, elem_num, data)
 
 
 def _abi_trim(seq_record):
