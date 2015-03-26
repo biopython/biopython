@@ -286,7 +286,8 @@ class Vector(object):
 
     def normalize(self):
         """Normalize the Vector."""
-        self._ar = self._ar / self.norm()
+        if self.norm():
+            self._ar = self._ar / self.norm()
 
     def normalized(self):
         """Return a normalized copy of the Vector."""
