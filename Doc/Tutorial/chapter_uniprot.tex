@@ -7,7 +7,7 @@ Swiss-Prot (\url{http://www.expasy.org/sprot}) is a hand-curated database of pro
 
 \subsection{Parsing Swiss-Prot records}
 
-In Section~\ref{sec:SeqIO_ExPASy_and_SwissProt}, we described how to extract the sequence of a Swiss-Prot record as a \verb|SeqRecord| object. Alternatively, you can store the Swiss-Prot record in a \verb|Bio.SwissProt.Record| object, which in fact stores the complete information contained in the Swiss-Prot record. In this Section, we describe how to extract \verb|Bio.SwissProt.Record| objects from a Swiss-Prot file.
+In Section~\ref{sec:SeqIO_ExPASy_and_SwissProt}, we described how to extract the sequence of a Swiss-Prot record as a \verb|SeqRecord| object. Alternatively, you can store the Swiss-Prot record in a \verb|Bio.SwissProt.Record| object, which in fact stores the complete information contained in the Swiss-Prot record. In this section, we describe how to extract \verb|Bio.SwissProt.Record| objects from a Swiss-Prot file.
 
 To parse a Swiss-Prot record, we first get a handle to a Swiss-Prot record. There are several ways to do so, depending on where and how the Swiss-Prot record is stored:
 \begin{itemize}
@@ -329,7 +329,7 @@ Let's say we are looking at chalcone synthases for Orchids (see section~\ref{sec
 
 If you do a search on Swiss-Prot, you can find three orchid proteins for Chalcone Synthase, id numbers O23729, O23730, O23731. Now, let's write a script which grabs these, and parses out some interesting information.
 
-First, we grab the records, using the \verb|get_sprot_raw()| function of \verb|Bio.ExPASy|. This function is very nice since you can feed it an id and get back a handle to a raw text record (no html to mess with!). We can the use \verb|Bio.SwissProt.read| to pull out the Swiss-Prot record, or \verb|Bio.SeqIO.read| to get a SeqRecord. The following code accomplishes what I just wrote:
+First, we grab the records, using the \verb|get_sprot_raw()| function of \verb|Bio.ExPASy|. This function is very nice since you can feed it an id and get back a handle to a raw text record (no HTML to mess with!). We can the use \verb|Bio.SwissProt.read| to pull out the Swiss-Prot record, or \verb|Bio.SeqIO.read| to get a SeqRecord. The following code accomplishes what I just wrote:
 
 \begin{verbatim}
 >>> from Bio import ExPASy
@@ -370,7 +370,7 @@ are detailed on
 \url{http://www.expasy.org/cgi-bin/sprot-search-de} and
 \url{http://www.expasy.org/cgi-bin/sprot-search-ful}
 respectively. Note that they don't search in TrEMBL by default
-(argument \verb|trembl|). Note also that they return html pages;
+(argument \verb|trembl|). Note also that they return HTML pages;
 however, accession numbers are quite easily extractable:
 
 \begin{verbatim}
