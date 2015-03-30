@@ -15,8 +15,8 @@ found = False
 for path in os.environ['PATH'].split(os.pathsep):
     try:
         for filename in os.listdir(path):
-            if filename == "fsc251" \
-                    or (filename.lower() == "fsc251.exe"):
+            if filename == "fsc252" \
+                    or (filename.lower() == "fsc252.exe"):
                 found = True
                 fastsimcoal_dir = path
     except os.error:
