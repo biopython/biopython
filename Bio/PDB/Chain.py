@@ -129,6 +129,6 @@ class Chain(Entity):
             yield r
 
     def get_atoms(self):
-        for r in self:
+        for r in self.get_residues():
             for a in r:
                 yield a

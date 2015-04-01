@@ -156,9 +156,8 @@ class StructureBuilder(object):
                     disordered_residue.disordered_add(new_residue)
                     self.residue = disordered_residue
                     return
-        residue = Residue(res_id, resname, self.segid)
-        self.chain.add(residue)
-        self.residue = residue
+        self.residue = Residue(res_id, resname, self.segid)
+        self.chain.add(self.residue)
 
     def init_atom(self, name, coord, b_factor, occupancy, altloc, fullname,
                   serial_number=None, element=None):
@@ -196,15 +195,15 @@ class StructureBuilder(object):
                                   % (duplicate_fullname, fullname,
                                      self.line_counter),
                                   PDBConstructionWarning)
-        atom = self.atom = Atom(name, coord, b_factor, occupancy, altloc,
-                                fullname, serial_number, element)
+        self.atom = Atom(name, coord, b_factor, occupancy, altloc,
+                         fullname, serial_number, element)
         if altloc != " ":
             # The atom is disordered
             if residue.has_id(name):
                 # Residue already contains this atom
                 duplicate_atom = residue[name]
                 if duplicate_atom.is_disordered() == 2:
-                    duplicate_atom.disordered_add(atom)
+                    duplicate_atom.disordered_add(self.atom)
                 else:
                     # This is an error in the PDB file:
                     # a disordered atom is found with a blank altloc
@@ -214,7 +213,7 @@ class StructureBuilder(object):
                     residue.detach_child(name)
                     disordered_atom = DisorderedAtom(name)
                     residue.add(disordered_atom)
-                    disordered_atom.disordered_add(atom)
+                    disordered_atom.disordered_add(self.atom)
                     disordered_atom.disordered_add(duplicate_atom)
                     residue.flag_disordered()
                     warnings.warn("WARNING: disordered atom found "
@@ -228,11 +227,11 @@ class StructureBuilder(object):
                 residue.add(disordered_atom)
                 # Add the real atom to the disordered atom, and the
                 # disordered atom to the residue
-                disordered_atom.disordered_add(atom)
+                disordered_atom.disordered_add(self.atom)
                 residue.flag_disordered()
         else:
             # The atom is not disordered
-            residue.add(atom)
+            residue.add(self.atom)
 
     def set_anisou(self, anisou_array):
         "Set anisotropic B factor of current Atom."
