@@ -18,6 +18,8 @@ from Bio.Align import MultipleSeqAlignment
 from Bio.AlignIO.Interfaces import SequentialAlignmentWriter
 import shlex
 
+# Doesn't work. Probably when bgzf block boundary splits a "a" maf line.
+#from Bio import bgzf
 import gzip
 
 # To avoid method lookup
@@ -45,6 +47,7 @@ class MafWriter(SequentialAlignmentWriter):
         elif record.annotations.get("strand") == "-1":
             strand = "-"
         else:
+            # TODO: issue warning?
             strand = "+"
 
         fields = ["s",
@@ -127,6 +130,7 @@ def MafIterator(handle, seq_count = None, alphabet = single_letter_alphabet):
                 elif line_split[4] == "-":
                     strand = "-1"
                 else:
+                    # TODO: issue warning?
                     strand = "+1"
 
                 # s (literal), src (ID), start, size, strand, srcSize, text (sequence)
@@ -159,6 +163,10 @@ def MafIterator(handle, seq_count = None, alphabet = single_letter_alphabet):
                  STARTSWITH(line, "i") or \
                  STARTSWITH(line, "q"):
                 # not implemented
+                # TODO: issue warning?
+                pass
+            elif STARTSWITH(line, "#"):
+                # ignore comments
                 pass
             elif not STRIP(line):
                 # end a bundle of records
@@ -212,6 +220,10 @@ class MafIndex():
         # make sure maf_file exists, then open it up
         if os.path.isfile(self._maf_file):
             self._maf_fp = open(self._maf_file, "r")
+            # Prefer uncompressed over compressed
+        #elif os.path.isfile("%s.bgz" % self._maf_file):
+        #    self._maf_fp = bgzf.open("%s.bgz" % self._maf_file, "rb")
+        #    # Prefer .bgz over .gz
         elif os.path.isfile("%s.gz" % self._maf_file):
             self._maf_fp = gzip.open("%s.gz" % self._maf_file, "rb")
         else:
@@ -306,6 +318,9 @@ class MafIndex():
         while line:
             if STARTSWITH(line, "a"):
                 # note the offset
+                # Not sure this is correct with bgzf
+                # Indeed I got problems:
+                # ValueError: A BGZF (e.g. a BAM file) block should start with '\x1f\x8b\x08\x04', not '\x00\x1f\x8b\x08'; handle.tell() now says 232464275
                 offset = self._maf_fp.tell() - len(line)
                 
                 # search the following lines for a match to target_seqname
@@ -535,10 +550,11 @@ class MafIndex():
                     # keep track of this position's value for the target seqname
                     if seqrec.id == self._target_seqname:
                         track_val = seqrec.seq[gapped_pos]
-                        # We shouldn't reach the end of the reference sequence
-                        # before the end of the alignment
-                        if real_pos == rec_end and gapped_pos < rec_length - 1:
-                            assert all([letter == "-" for letter in seqrec.seq[gapped_pos + 1:]])
+                        # TODO: check this
+                        ## We shouldn't reach the end of the reference sequence
+                        ## before the end of the alignment
+                        #if real_pos == rec_end and gapped_pos < rec_length - 1:
+                        #    assert all([letter == "-" for letter in seqrec.seq[gapped_pos + 1:]])
                     # Here, a real_pos that corresponds to just after a series of "-"
                     # in the reference will "accumulate" the letters found in other sequences
                     # in front of the "-"s
