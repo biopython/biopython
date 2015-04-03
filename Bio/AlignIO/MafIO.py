@@ -1,5 +1,6 @@
 # Copyright 2011 by Andrew Sczesnak.  All rights reserved.
 # Revisions Copyright 2011 by Peter Cock.  All rights reserved.
+# More revisions by Blaise Li in 2015.
 #
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -20,7 +21,9 @@ import shlex
 
 # Doesn't work. Probably when bgzf block boundary splits a "a" maf line.
 #from Bio import bgzf
-import gzip
+# Does this work properly ?
+# It worked for small tests, but better comment it for the moment.
+#import gzip
 
 # To avoid method lookup
 STARTSWITH = str.startswith
@@ -224,8 +227,8 @@ class MafIndex():
         #elif os.path.isfile("%s.bgz" % self._maf_file):
         #    self._maf_fp = bgzf.open("%s.bgz" % self._maf_file, "rb")
         #    # Prefer .bgz over .gz
-        elif os.path.isfile("%s.gz" % self._maf_file):
-            self._maf_fp = gzip.open("%s.gz" % self._maf_file, "rb")
+        #elif os.path.isfile("%s.gz" % self._maf_file):
+        #    self._maf_fp = gzip.open("%s.gz" % self._maf_file, "rb")
         else:
             raise ValueError("Error opening %s -- file not found" % (self._maf_file,))
         
