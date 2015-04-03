@@ -21,6 +21,8 @@ class MMCIF2Dict(dict):
             tokens = self._tokenize(handle)
             token = next(tokens)
             self[token[0:5]] = token[5:]
+            i = 0
+            n = 0
             for token in tokens:
                 if token == "loop_":
                     loop_flag = True
@@ -46,6 +48,8 @@ class MMCIF2Dict(dict):
                 else:
                     self[key] = token
                     key = None
+
+    # Private methods
 
     def _tokenize(self, handle):
         for line in handle:

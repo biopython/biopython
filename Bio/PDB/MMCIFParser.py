@@ -10,20 +10,52 @@ from __future__ import print_function
 from string import ascii_letters
 
 import numpy
+import warnings
 
 from Bio._py3k import range
 
 from Bio.PDB.MMCIF2Dict import MMCIF2Dict
 from Bio.PDB.StructureBuilder import StructureBuilder
 from Bio.PDB.PDBExceptions import PDBConstructionException
+from Bio.PDB.PDBExceptions import PDBConstructionWarning
 
 
 class MMCIFParser(object):
+    """Parse a PDB file and return a Structure object."""
+
+    def __init__(self, structure_builder=None, QUIET=False):
+        """Create a PDBParser object.
+        The PDB parser call a number of standard methods in an aggregated
+        StructureBuilder object. Normally this object is instanciated by the
+        MMCIParser object itself, but if the user provides his/her own
+        StructureBuilder object, the latter is used instead.
+        Arguments:
+         - structure_builder - an optional user implemented StructureBuilder class.
+         - QUIET - Evaluated as a Boolean. If true, warnings issued in constructing
+           the SMCRA data will be suppressed. If false (DEFAULT), they will be shown.
+           These warnings might be indicative of problems in the PDB file!
+        """
+        if structure_builder is not None:
+            self._structure_builder = structure_builder
+        else:
+            self._structure_builder = StructureBuilder()
+        # self.header = None
+        # self.trailer = None
+        self.line_counter = 0
+        self.build_structure = None
+        self.QUIET = bool(QUIET)
+
+    # Public methods
+
     def get_structure(self, structure_id, filename):
+        with warnings.catch_warnings():
+            if self.QUIET:
+                warnings.filterwarnings("ignore", category=PDBConstructionWarning)
         self._mmcif_dict = MMCIF2Dict(filename)
-        self._structure_builder = StructureBuilder()
         self._build_structure(structure_id)
         return self._structure_builder.get_structure()
+
+    # Private methods
 
     def _build_structure(self, structure_id):
         mmcif_dict = self._mmcif_dict
@@ -39,6 +71,7 @@ class MMCIFParser(object):
         y_list = [float(x) for x in mmcif_dict["_atom_site.Cartn_y"]]
         z_list = [float(x) for x in mmcif_dict["_atom_site.Cartn_z"]]
         alt_list = mmcif_dict["_atom_site.label_alt_id"]
+        icode_list = mmcif_dict["_atom_site.pdbx_PDB_ins_code"]
         b_factor_list = mmcif_dict["_atom_site.B_iso_or_equiv"]
         occupancy_list = mmcif_dict["_atom_site.occupancy"]
         fieldname_list = mmcif_dict["_atom_site.group_PDB"]
@@ -75,9 +108,15 @@ class MMCIFParser(object):
         structure_builder.init_seg(" ")
         # Historically, Biopython PDB parser uses model_id to mean array index
         # so serial_id means the Model ID specified in the file
-        current_model_id = 0
+        current_model_id = -1
         current_serial_id = 0
         for i in range(0, len(atom_id_list)):
+
+            # set the line_counter for 'ATOM' lines only and not
+            # as a global line counter found in the PDBParser()
+            # this number should match the '_atom_site.id' index in the MMCIF
+            structure_builder.set_line_counter(i)
+
             x = x_list[i]
             y = y_list[i]
             z = z_list[i]
@@ -87,6 +126,9 @@ class MMCIFParser(object):
             if altloc == ".":
                 altloc = " "
             resseq = seq_id_list[i]
+            icode = icode_list[i]
+            if icode == "?":
+                icode = " "
             name = atom_id_list[i]
             # occupancy & B factor
             try:
@@ -108,23 +150,23 @@ class MMCIFParser(object):
                 if current_serial_id != serial_id:
                     # if serial changes, update it and start new model
                     current_serial_id = serial_id
-                    structure_builder.init_model(current_model_id, current_serial_id)
                     current_model_id += 1
+                    structure_builder.init_model(current_model_id, current_serial_id)
+                    current_chain_id = None
+                    current_residue_id = None
             else:
                 # no explicit model column; initialize single model
                 structure_builder.init_model(current_model_id)
+
             if current_chain_id != chainid:
                 current_chain_id = chainid
                 structure_builder.init_chain(current_chain_id)
+
+            if current_residue_id != resseq:
                 current_residue_id = resseq
-                icode, int_resseq = self._get_icode(resseq)
-                structure_builder.init_residue(resname, hetatm_flag, int_resseq,
-                    icode)
-            elif current_residue_id != resseq:
-                current_residue_id = resseq
-                icode, int_resseq = self._get_icode(resseq)
-                structure_builder.init_residue(resname, hetatm_flag, int_resseq,
-                    icode)
+                int_resseq = int(resseq)
+                structure_builder.init_residue(resname, hetatm_flag, int_resseq, icode)
+
             coord = numpy.array((x, y, z), 'f')
             element = element_list[i] if element_list else None
             structure_builder.init_atom(name, coord, tempfactor, occupancy, altloc,
@@ -151,18 +193,6 @@ class MMCIFParser(object):
             structure_builder.set_symmetry(spacegroup, cell)
         except:
             pass    # no cell found, so just ignore
-
-    def _get_icode(self, resseq):
-        """Tries to return the icode. In MMCIF files this is just part of
-        resseq! In PDB files, it's a separate field."""
-        last_resseq_char = resseq[-1]
-        if last_resseq_char in ascii_letters:
-            icode = last_resseq_char
-            int_resseq = int(resseq[0:-1])
-        else:
-            icode = " "
-            int_resseq = int(resseq)
-        return icode, int_resseq
 
 
 if __name__ == "__main__":

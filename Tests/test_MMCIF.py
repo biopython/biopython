@@ -127,6 +127,13 @@ class ParseReal(unittest.TestCase):
                 self.assertEqual("MKPVTLYDVAEYAGVSYQTVSRVVNQASHVSAKTREKVEAAMAELNYIPNR",
                                  str(s))
 
+        parser = MMCIFParser()
+        # This structure contains several models with multiple lengths.
+        # The tests were failing.
+        structure = parser.get_structure("example", "PDB/2OFG.cif")
+        self.assertEqual(len(structure), 3)
+
+
 if __name__ == '__main__':
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)
