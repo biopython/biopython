@@ -587,7 +587,7 @@ def _get_sanger_quality_str(record):
     'SI?5+!'
 
     If there are no PHRED scores, but there are Solexa scores, these are used
-    instead (after the approriate conversion):
+    instead (after the appropriate conversion):
 
     >>> r5 = SeqRecord(Seq("ACGTAN"), id="Test5",
     ...      letter_annotations = {"solexa_quality":[40, 30, 20, 10, 0, -5]})
@@ -843,7 +843,7 @@ def FastqGeneralIterator(handle):
         @-7.%<&+/$/%4(++(%
 
     This is four PHRED encoded FASTQ entries originally from an NCBI source
-    (given the read length of 36, these are probably Solexa Illumna reads where
+    (given the read length of 36, these are probably Solexa Illumina reads where
     the quality has been mapped onto the PHRED values).
 
     This example has been edited to illustrate some of the nasty things allowed
@@ -991,7 +991,7 @@ def FastqPhredIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
         ;;;;;;;;;;;9;7;;.7;393333
 
     For each sequence (e.g. "CCCTTCTTGTCTTCAGCGTTTCTCC") there is a matching
-    string encoding the PHRED qualities using a ASCI values with an offset of
+    string encoding the PHRED qualities using a ASCII values with an offset of
     33 (e.g. ";;3;;;;;;;;;;;;7;;;;;;;88").
 
     Using this module directly you might run:
