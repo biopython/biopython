@@ -18,6 +18,10 @@ pathways with transparency.
 The Bio.SeqIO "abi" parser now decodes almost all the documented fields used
 by the ABIF instruments - including the individual color channels.
 
+Bio.PDB now has a QCPSuperimposer module using the Quaternion Characteristic
+Polynomial algorithm for superimposing structures. This is a fast alternative
+to the existing SVDSuperimposer code using singular value decomposition.
+
 Additionally, a number of small bugs have been fixed with further additions
 to the test suite, and there has been further work on conforming to the
 Python PEP8 standard coding style.
@@ -26,6 +30,7 @@ Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
 Anthony Mathelier (first contribution)
+Anuj Sharma (first contribution)
 Brandon Invergo
 Christian Brueffer
 David Arenillas (first contribution)
