@@ -47,9 +47,6 @@ static PyObject* py_FastCalcRMSDAndRotation(PyObject* self, PyObject* args) {
 	double E0;
 	double len;
 	double minScore;
-        /* parse the arguments	*/
-	PyArg_ParseTuple(args, "dddddddddddd", &Sxx, &Sxy, &Sxz, &Syx, &Syy, &Syz, &Szx, &Szy, &Szz, &E0, &len, &minScore);	
-
 	double Szz2, Syy2, Sxx2, Sxy2, Syz2, Sxz2, Syx2, Szy2, Szx2, SyzSzymSyySzz2,
 			Sxx2Syy2Szz2Syz2Szy2, Sxy2Sxz2Syx2Szx2, SxzpSzx, SyzpSzy, SxypSyx,
 			SyzmSzy, SxzmSzx, SxymSyx, SxxpSyy, SxxmSyy;
@@ -67,6 +64,9 @@ static PyObject* py_FastCalcRMSDAndRotation(PyObject* self, PyObject* args) {
 			a3142_4132;
 	double evecprec = 1e-6;
 	double evalprec = 1e-11;
+
+	/* parse the arguments  */
+	PyArg_ParseTuple(args, "dddddddddddd", &Sxx, &Sxy, &Sxz, &Syx, &Syy, &Syz, &Szx, &Szy, &Szz, &E0, &len, &minScore);
 
 	Sxx2 = Sxx * Sxx;
 	Syy2 = Syy * Syy;
