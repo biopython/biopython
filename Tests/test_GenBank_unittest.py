@@ -31,6 +31,10 @@ class GenBankTests(unittest.TestCase):
         with open(path.join("GenBank", "NC_000932.faa")) as handle:
             self.assertRaises(ValueError, GenBank.read, handle)
 
+    def test_genbank_read_no_origin_no_end(self):
+        with open(path.join("GenBank", "no_origin_no_end.gb")) as handle:
+            self.assertRaises(ValueError, GenBank.read, handle)
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
