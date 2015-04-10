@@ -31,8 +31,9 @@ from Bio._py3k import _bytes_to_string, _as_bytes
 
 from Bio import SeqIO
 from Bio import Alphabet
-from Bio import bgzf
 from Bio.File import _IndexedSeqFileProxy, _open_for_random_access
+
+__docformat__ = "restructuredtext en"
 
 
 class SeqFileRandomAccess(_IndexedSeqFileProxy):
@@ -40,17 +41,17 @@ class SeqFileRandomAccess(_IndexedSeqFileProxy):
         self._handle = _open_for_random_access(filename)
         self._alphabet = alphabet
         self._format = format
-        #Load the parser class/function once an avoid the dict lookup in each
-        #__getitem__ call:
+        # Load the parser class/function once an avoid the dict lookup in each
+        # __getitem__ call:
         i = SeqIO._FormatToIterator[format]
-        #The following alphabet code is a bit nasty... duplicates logic in
-        #Bio.SeqIO.parse()
+        # The following alphabet code is a bit nasty... duplicates logic in
+        # Bio.SeqIO.parse()
         if alphabet is None:
             def _parse(handle):
                 """Dynamically generated parser function (PRIVATE)."""
                 return next(i(handle))
         else:
-            #TODO - Detect alphabet support ONCE at __init__
+            # TODO - Detect alphabet support ONCE at __init__
             def _parse(handle):
                 """Dynamically generated parser function (PRIVATE)."""
                 try:
@@ -61,7 +62,7 @@ class SeqFileRandomAccess(_IndexedSeqFileProxy):
 
     def get(self, offset):
         """Returns SeqRecord."""
-        #Should be overridden for binary file formats etc:
+        # Should be overridden for binary file formats etc:
         return self._parse(StringIO(_bytes_to_string(self.get_raw(offset))))
 
 
@@ -86,12 +87,12 @@ class SffRandomAccess(SeqFileRandomAccess):
             self._alphabet = Alphabet.generic_dna
         handle = self._handle
         handle.seek(0)
-        #Alread did this in __init__ but need handle in right place
+        # Alread did this in __init__ but need handle in right place
         header_length, index_offset, index_length, number_of_reads, \
             self._flows_per_read, self._flow_chars, self._key_sequence \
             = SeqIO.SffIO._sff_file_header(handle)
         if index_offset and index_length:
-            #There is an index provided, try this the fast way:
+            # There is an index provided, try this the fast way:
             count = 0
             max_offset = 0
             try:
@@ -121,9 +122,9 @@ class SffRandomAccess(SeqFileRandomAccess):
                     # Should now be at the end of the file!
                 SeqIO.SffIO._check_eof(handle, index_offset, index_length)
                 return
-        #We used to give a warning in this case, but Ion Torrent's
-        #SFF files don't have an index so that would be annoying.
-        #Fall back on the slow way!
+        # We used to give a warning in this case, but Ion Torrent's
+        # SFF files don't have an index so that would be annoying.
+        # Fall back on the slow way!
         count = 0
         for name, offset in SeqIO.SffIO._sff_do_slow_index(handle):
             yield name, offset, 0
@@ -131,7 +132,6 @@ class SffRandomAccess(SeqFileRandomAccess):
         assert count == number_of_reads, \
             "Indexed %i records, expected %i" % (count, number_of_reads)
         SeqIO.SffIO._check_eof(handle, index_offset, index_length)
-
 
     def get(self, offset):
         handle = self._handle
@@ -189,16 +189,16 @@ class SequentialSeqFileRandomAccess(SeqFileRandomAccess):
         marker_re = self._marker_re
         handle = self._handle
         handle.seek(0)
-        #Skip and header before first record
+        # Skip and header before first record
         while True:
             start_offset = handle.tell()
             line = handle.readline()
             if marker_re.match(line) or not line:
                 break
-        #Should now be at the start of a record, or end of the file
+        # Should now be at the start of a record, or end of the file
         while marker_re.match(line):
-            #Here we can assume the record.id is the first word after the
-            #marker. This is generally fine... but not for GenBank, EMBL, Swiss
+            # Here we can assume the record.id is the first word after the
+            # marker. This is generally fine... but not for GenBank, EMBL, Swiss
             id = line[marker_offset:].strip().split(None, 1)[0]
             length = len(line)
             while True:
@@ -209,13 +209,13 @@ class SequentialSeqFileRandomAccess(SeqFileRandomAccess):
                     start_offset = end_offset
                     break
                 else:
-                    #Track this explicitly as can't do file offset difference on BGZF
+                    # Track this explicitly as can't do file offset difference on BGZF
                     length += len(line)
         assert not line, repr(line)
 
     def get_raw(self, offset):
         """Similar to the get method, but returns the record as a raw string."""
-        #For non-trivial file formats this must be over-ridden in the subclass
+        # For non-trivial file formats this must be over-ridden in the subclass
         handle = self._handle
         marker_re = self._marker_re
         handle.seek(offset)
@@ -223,7 +223,7 @@ class SequentialSeqFileRandomAccess(SeqFileRandomAccess):
         while True:
             line = handle.readline()
             if marker_re.match(line) or not line:
-                #End of file, or start of next record => end of this record
+                # End of file, or start of next record => end of this record
                 break
             lines.append(line)
         return _as_bytes("").join(lines)
@@ -242,16 +242,16 @@ class GenBankRandomAccess(SequentialSeqFileRandomAccess):
         dot_char = _as_bytes(".")
         accession_marker = _as_bytes("ACCESSION ")
         version_marker = _as_bytes("VERSION ")
-        #Skip and header before first record
+        # Skip and header before first record
         while True:
             start_offset = handle.tell()
             line = handle.readline()
             if marker_re.match(line) or not line:
                 break
-        #Should now be at the start of a record, or end of the file
+        # Should now be at the start of a record, or end of the file
         while marker_re.match(line):
-            #We cannot assume the record.id is the first word after LOCUS,
-            #normally the first entry on the VERSION or ACCESSION line is used.
+            # We cannot assume the record.id is the first word after LOCUS,
+            # normally the first entry on the VERSION or ACCESSION line is used.
             key = None
             length = len(line)
             while True:
@@ -269,7 +269,7 @@ class GenBankRandomAccess(SequentialSeqFileRandomAccess):
                 elif line.startswith(version_marker):
                     version_id = line.rstrip().split()[1]
                     if version_id.count(dot_char) == 1 and version_id.split(dot_char)[1].isdigit():
-                        #This should mimic the GenBank parser...
+                        # This should mimic the GenBank parser...
                         key = version_id
                 length += len(line)
         assert not line, repr(line)
@@ -284,29 +284,34 @@ class EmblRandomAccess(SequentialSeqFileRandomAccess):
         semi_char = _as_bytes(";")
         dot_char = _as_bytes(".")
         sv_marker = _as_bytes("SV ")
-        #Skip any header before first record
+        ac_marker = _as_bytes("AC ")
+        # Skip any header before first record
         while True:
             start_offset = handle.tell()
             line = handle.readline()
             if marker_re.match(line) or not line:
                 break
-        #Should now be at the start of a record, or end of the file
+        # Should now be at the start of a record, or end of the file
         while marker_re.match(line):
-            #We cannot assume the record.id is the first word after ID,
-            #normally the SV line is used.
+            # We cannot assume the record.id is the first word after ID,
+            # normally the SV line is used.
+            setbysv = False  # resets sv as false
             length = len(line)
             if line[2:].count(semi_char) == 6:
-                #Looks like the semi colon separated style introduced in 2006
+                # Looks like the semi colon separated style introduced in 2006
                 parts = line[3:].rstrip().split(semi_char)
                 if parts[1].strip().startswith(sv_marker):
-                    #The SV bit gives the version
+                    # The SV bit gives the version
                     key = parts[0].strip() + dot_char + \
                         parts[1].strip().split()[1]
+                    setbysv = True
                 else:
                     key = parts[0].strip()
             elif line[2:].count(semi_char) == 3:
-                #Looks like the pre 2006 style, take first word only
+                # Looks like the pre 2006 style, take first word only
                 key = line[3:].strip().split(None, 1)[0]
+                if key.endswith(semi_char):
+                    key = key[:-1]
             else:
                 raise ValueError(
                     'Did not recognise the ID line layout:\n' + line)
@@ -318,8 +323,13 @@ class EmblRandomAccess(SequentialSeqFileRandomAccess):
                     yield _bytes_to_string(key), start_offset, length
                     start_offset = end_offset
                     break
+                elif line.startswith(ac_marker) and not setbysv:
+                    key = line.rstrip().split()[1]
+                    if key.endswith(semi_char):
+                        key = key[:-1]
                 elif line.startswith(sv_marker):
                     key = line.rstrip().split()[1]
+                    setbysv = True
                 length += len(line)
         assert not line, repr(line)
 
@@ -331,17 +341,17 @@ class SwissRandomAccess(SequentialSeqFileRandomAccess):
         handle.seek(0)
         marker_re = self._marker_re
         semi_char = _as_bytes(";")
-        #Skip any header before first record
+        # Skip any header before first record
         while True:
             start_offset = handle.tell()
             line = handle.readline()
             if marker_re.match(line) or not line:
                 break
-        #Should now be at the start of a record, or end of the file
+        # Should now be at the start of a record, or end of the file
         while marker_re.match(line):
             length = len(line)
-            #We cannot assume the record.id is the first word after ID,
-            #normally the following AC line is used.
+            # We cannot assume the record.id is the first word after ID,
+            # normally the following AC line is used.
             line = handle.readline()
             length += len(line)
             assert line.startswith(_as_bytes("AC "))
@@ -367,18 +377,18 @@ class UniprotRandomAccess(SequentialSeqFileRandomAccess):
         end_acc_marker = _as_bytes("</accession>")
         end_entry_marker = _as_bytes("</entry>")
         less_than = _as_bytes("<")
-        #Skip any header before first record
+        # Skip any header before first record
         while True:
             start_offset = handle.tell()
             line = handle.readline()
             if marker_re.match(line) or not line:
                 break
-        #Should now be at the start of a record, or end of the file
+        # Should now be at the start of a record, or end of the file
         while marker_re.match(line):
             length = len(line)
-            #We expect the next line to be <accession>xxx</accession>
-            #(possibly with leading spaces)
-            #but allow it to be later on within the <entry>
+            # We expect the next line to be <accession>xxx</accession>
+            # (possibly with leading spaces)
+            # but allow it to be later on within the <entry>
             key = None
             while True:
                 line = handle.readline()
@@ -392,7 +402,7 @@ class UniprotRandomAccess(SequentialSeqFileRandomAccess):
                         + line.find(end_entry_marker) + 8
                     break
                 elif marker_re.match(line) or not line:
-                    #Start of next record or end of file
+                    # Start of next record or end of file
                     raise ValueError("Didn't find end of record")
                 else:
                     length += len(line)
@@ -400,7 +410,7 @@ class UniprotRandomAccess(SequentialSeqFileRandomAccess):
                 raise ValueError("Did not find <accession> line in bytes %i to %i"
                                  % (start_offset, end_offset))
             yield _bytes_to_string(key), start_offset, length
-            #Find start of next record
+            # Find start of next record
             while not marker_re.match(line) and line:
                 start_offset = handle.tell()
                 line = handle.readline()
@@ -420,15 +430,15 @@ class UniprotRandomAccess(SequentialSeqFileRandomAccess):
                 data.append(line[:i + 8])
                 break
             if marker_re.match(line) or not line:
-                #End of file, or start of next record
+                # End of file, or start of next record
                 raise ValueError("Didn't find end of record")
             data.append(line)
         return _as_bytes("").join(data)
 
     def get(self, offset):
-        #TODO - Can we handle this directly in the parser?
-        #This is a hack - use get_raw for <entry>...</entry> and wrap it with
-        #the apparently required XML header and footer.
+        # TODO - Can we handle this directly in the parser?
+        # This is a hack - use get_raw for <entry>...</entry> and wrap it with
+        # the apparently required XML header and footer.
         data = """<?xml version='1.0' encoding='UTF-8'?>
         <uniprot xmlns="http://uniprot.org/uniprot"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -437,7 +447,7 @@ class UniprotRandomAccess(SequentialSeqFileRandomAccess):
         %s
         </uniprot>
         """ % _bytes_to_string(self.get_raw(offset))
-        #TODO - For consistency, this function should not accept a string:
+        # TODO - For consistency, this function should not accept a string:
         return next(SeqIO.UniprotIO.UniprotIterator(data))
 
 
@@ -457,7 +467,7 @@ class IntelliGeneticsRandomAccess(SeqFileRandomAccess):
             line = handle.readline()
             length = len(line)
             if marker_re.match(line):
-                #Now look for the first line which doesn't start ";"
+                # Now look for the first line which doesn't start ";"
                 while True:
                     line = handle.readline()
                     if line[0:1] != semi_char and line.strip():
@@ -468,7 +478,7 @@ class IntelliGeneticsRandomAccess(SeqFileRandomAccess):
                         raise ValueError("Premature end of file?")
                     length += len(line)
             elif not line:
-                #End of file
+                # End of file
                 break
 
     def get_raw(self, offset):
@@ -502,7 +512,7 @@ class TabRandomAccess(SeqFileRandomAccess):
                 key = line.split(tab_char)[0]
             except ValueError as err:
                 if not line.strip():
-                    #Ignore blank lines
+                    # Ignore blank lines
                     continue
                 else:
                     raise err
@@ -533,17 +543,17 @@ class FastqRandomAccess(SeqFileRandomAccess):
         start_offset = handle.tell()
         line = handle.readline()
         if not line:
-            #Empty file!
+            # Empty file!
             return
         at_char = _as_bytes("@")
         plus_char = _as_bytes("+")
         if line[0:1] != at_char:
             raise ValueError("Problem with FASTQ @ line:\n%r" % line)
         while line:
-            #assert line[0]=="@"
-            #This record seems OK (so far)
+            # assert line[0]=="@"
+            # This record seems OK (so far)
             id = line[1:].rstrip().split(None, 1)[0]
-            #Find the seq line(s)
+            # Find the seq line(s)
             seq_len = 0
             length = len(line)
             while line:
@@ -554,17 +564,17 @@ class FastqRandomAccess(SeqFileRandomAccess):
                 seq_len += len(line.strip())
             if not line:
                 raise ValueError("Premature end of file in seq section")
-            #assert line[0]=="+"
-            #Find the qual line(s)
+            # assert line[0]=="+"
+            # Find the qual line(s)
             qual_len = 0
             while line:
                 if seq_len == qual_len:
                     if seq_len == 0:
-                        #Special case, quality line should be just "\n"
+                        # Special case, quality line should be just "\n"
                         line = handle.readline()
                         if line.strip():
                             raise ValueError("Expected blank quality line, not %r" % line)
-                    #Should be end of record...
+                    # Should be end of record...
                     end_offset = handle.tell()
                     line = handle.readline()
                     if line and line[0:1] != at_char:
@@ -578,11 +588,11 @@ class FastqRandomAccess(SeqFileRandomAccess):
                 raise ValueError("Problem with quality section")
             yield _bytes_to_string(id), start_offset, length
             start_offset = end_offset
-        #print("EOF")
+        # print("EOF")
 
     def get_raw(self, offset):
         """Similar to the get method, but returns the record as a raw string."""
-        #TODO - Refactor this and the __init__ method to reduce code duplication?
+        # TODO - Refactor this and the __init__ method to reduce code duplication?
         handle = self._handle
         handle.seek(offset)
         line = handle.readline()
@@ -591,7 +601,7 @@ class FastqRandomAccess(SeqFileRandomAccess):
         plus_char = _as_bytes("+")
         if line[0:1] != at_char:
             raise ValueError("Problem with FASTQ @ line:\n%r" % line)
-        #Find the seq line(s)
+        # Find the seq line(s)
         seq_len = 0
         while line:
             line = handle.readline()
@@ -602,17 +612,17 @@ class FastqRandomAccess(SeqFileRandomAccess):
         if not line:
             raise ValueError("Premature end of file in seq section")
         assert line[0:1] == plus_char
-        #Find the qual line(s)
+        # Find the qual line(s)
         qual_len = 0
         while line:
             if seq_len == qual_len:
                 if seq_len == 0:
-                    #Special case, quality line should be just "\n"                                                                                                                      
+                    # Special case, quality line should be just "\n"
                     line = handle.readline()
                     if line.strip():
                         raise ValueError("Expected blank quality line, not %r" % line)
                     data += line
-                #Should be end of record...
+                # Should be end of record...
                 line = handle.readline()
                 if line and line[0:1] != at_char:
                     raise ValueError("Problem with line %r" % line)

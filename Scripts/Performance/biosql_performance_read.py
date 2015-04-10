@@ -1,4 +1,4 @@
-#/usr/bin/env python
+#!/usr/bin/env python
 """Small script to test timing of getting records from a BioSQL database.
 """
 from __future__ import print_function

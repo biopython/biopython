@@ -11,8 +11,8 @@ import unittest
 from Bio import MissingExternalDependencyError
 from Bio.PopGen.GenePop.Controller import GenePopController
 
-#Tests genepop related code. Note: this case requires genepop
-#test_PopGen_GenePop_nodepend tests code that does not require genepop
+# Tests genepop related code. Note: this case requires genepop
+# test_PopGen_GenePop_nodepend tests code that does not require genepop
 
 found = False
 for path in os.environ['PATH'].split(os.pathsep):
@@ -36,8 +36,8 @@ class AppTest(unittest.TestCase):
         """
         ctrl = GenePopController()
         pop_iter, locus_iter = ctrl.calc_allele_genotype_freqs("PopGen" + os.sep + "big.gen")
-        #print("%s %s" % (pop, loci))
-        #for popc in pop_iter:
+        # print("%s %s" % (pop, loci))
+        # for popc in pop_iter:
         #    pop_name, loci_content = popc
         #    print(pop_name)
         #    for locus in loci_content:
@@ -57,8 +57,8 @@ class AppTest(unittest.TestCase):
         liter = list(iter)
         assert len(liter) == 37
         assert liter[0][0] == "Locus1"
-        assert len(avg_fis)==10
-        assert len(avg_Qintra)==10
+        assert len(avg_fis) == 10
+        assert len(avg_Qintra) == 10
 
     def test_estimate_nm(self):
         """Test Nm estimation.
@@ -90,5 +90,5 @@ class AppTest(unittest.TestCase):
         assert litr[36][0] == "Locus37"
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

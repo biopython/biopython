@@ -18,18 +18,15 @@ The latest DES file can be found
 class Record(object):
     """Holds information for one node in the SCOP hierarchy.
 
-    sunid       -- SCOP unique identifiers
+    Attributes:
 
-    nodetype    -- One of 'cl' (class), 'cf' (fold), 'sf' (superfamily),
-                   'fa' (family), 'dm' (protein), 'sp' (species),
-                   'px' (domain). Additional node types may be added.
-
-    sccs        -- SCOP concise classification strings. e.g. b.1.2.1
-
-    name        -- The SCOP ID (sid) for domains (e.g. d1anu1),
-                   currently empty for other node types
-
-    description --  e.g. "All beta proteins","Fibronectin type III",
+     - sunid - SCOP unique identifiers
+     - nodetype - One of 'cl' (class), 'cf' (fold), 'sf' (superfamily),
+       'fa' (family), 'dm' (protein), 'sp' (species), 'px' (domain).
+       Additional node types may be added.
+     - sccs - SCOP concise classification strings. e.g. b.1.2.1
+     - name - The SCOP ID (sid) for domains (e.g. d1anu1), currently empty for other node types
+     - description - e.g. "All beta proteins","Fibronectin type III",
 
     """
     def __init__(self, line=None):
@@ -37,7 +34,7 @@ class Record(object):
         self.nodetype = ''
         self.sccs = ''
         self.name = ''
-        self.description =''
+        self.description = ''
         if line:
             self._process(line)
 
@@ -47,13 +44,13 @@ class Record(object):
         Records consist of 5 tab deliminated fields,
         sunid, node type, sccs, node name, node description.
         """
-        #For example ::
+        # For example ::
         #
-        #21953   px      b.1.2.1 d1dan.1 1dan T:,U:91-106
-        #48724   cl      b       -       All beta proteins
-        #48725   cf      b.1     -       Immunoglobulin-like beta-sandwich
-        #49265   sf      b.1.2   -       Fibronectin type III
-        #49266   fa      b.1.2.1 -       Fibronectin type III
+        # 21953   px      b.1.2.1 d1dan.1 1dan T:,U:91-106
+        # 48724   cl      b       -       All beta proteins
+        # 48725   cf      b.1     -       Immunoglobulin-like beta-sandwich
+        # 49265   sf      b.1.2   -       Fibronectin type III
+        # 49266   fa      b.1.2.1 -       Fibronectin type III
 
         line = line.rstrip()  # no trailing whitespace
         columns = line.split("\t")  # separate the tab-delineated cols
@@ -79,11 +76,11 @@ class Record(object):
 
 
 def parse(handle):
-    """Iterates over a DES file, returning a Des record for each line
-    in the file.
+    """Iterates over a DES file as a Des record for each line
 
     Arguments:
-        handle -- file-like object
+
+     - handle - file-like object
     """
     for line in handle:
         if line.startswith('#'):

@@ -27,40 +27,40 @@ from Bio._py3k import zip
 #
 # GAF version 2.0
 
-GAF20FIELDS = ['DB', 
-        'DB_Object_ID', 
-        'DB_Object_Symbol', 
-        'Qualifier', 
-        'GO_ID', 
-        'DB:Reference', 
-        'Evidence', 
-        'With', 
+GAF20FIELDS = ['DB',
+        'DB_Object_ID',
+        'DB_Object_Symbol',
+        'Qualifier',
+        'GO_ID',
+        'DB:Reference',
+        'Evidence',
+        'With',
         'Aspect',
-        'DB_Object_Name', 
-        'Synonym', 
-        'DB_Object_Type', 
-        'Taxon_ID', 
-        'Date', 
-        'Assigned_By', 
-        'Annotation_Extension', 
+        'DB_Object_Name',
+        'Synonym',
+        'DB_Object_Type',
+        'Taxon_ID',
+        'Date',
+        'Assigned_By',
+        'Annotation_Extension',
         'Gene_Product_Form_ID']
 
 # GAF version 1.0
-GAF10FIELDS = ['DB', 
-        'DB_Object_ID', 
-        'DB_Object_Symbol', 
-        'Qualifier', 
-        'GO_ID', 
-        'DB:Reference', 
-        'Evidence', 
-        'With', 
+GAF10FIELDS = ['DB',
+        'DB_Object_ID',
+        'DB_Object_Symbol',
+        'Qualifier',
+        'GO_ID',
+        'DB:Reference',
+        'Evidence',
+        'With',
         'Aspect',
-        'DB_Object_Name', 
-        'Synonym', 
-        'DB_Object_Type', 
-        'Taxon_ID', 
-        'Date', 
-        'Assigned_By'] 
+        'DB_Object_Name',
+        'Synonym',
+        'DB_Object_Type',
+        'Taxon_ID',
+        'Date',
+        'Assigned_By']
 
 
 # GPA version 1.0
@@ -121,6 +121,7 @@ GPI11FIELDS = [
       'Annotation_Target_Set',
       'GO_Annotation_Complete']
 
+
 def _gpi10iterator(handle):
     """Read GPI 1.0 format files (PRIVATE).
 
@@ -133,9 +134,10 @@ def _gpi10iterator(handle):
         inrec = inline.rstrip('\n').split('\t')
         if len(inrec) == 1:
             continue
-        inrec[5] = inrec[5].split('|') # DB_Object_Synonym(s)
-        inrec[8] = inrec[8].split('|') # Annotation_Target_Set
+        inrec[5] = inrec[5].split('|')  # DB_Object_Synonym(s)
+        inrec[8] = inrec[8].split('|')  # Annotation_Target_Set
         yield dict(zip(GPI10FIELDS, inrec))
+
 
 def _gpi11iterator(handle):
     """Read GPI 1.0 format files (PRIVATE).
@@ -149,18 +151,19 @@ def _gpi11iterator(handle):
         inrec = inline.rstrip('\n').split('\t')
         if len(inrec) == 1:
             continue
-        inrec[2] = inrec[2].split('|') # DB_Object_Name
-        inrec[3] = inrec[3].split('|') # DB_Object_Synonym(s)
-        inrec[7] = inrec[7].split('|') # DB_Xref(s)
-        inrec[8] = inrec[8].split('|') # Properties
+        inrec[2] = inrec[2].split('|')  # DB_Object_Name
+        inrec[3] = inrec[3].split('|')  # DB_Object_Synonym(s)
+        inrec[7] = inrec[7].split('|')  # DB_Xref(s)
+        inrec[8] = inrec[8].split('|')  # Properties
         yield dict(zip(GPI11FIELDS, inrec))
+
 
 def gpi_iterator(handle):
     """Read GPI format files.
 
     This function should be called to read a
     gp_information.goa_uniprot file. At the moment, there is
-    only one format, but this may change, so 
+    only one format, but this may change, so
     this function is a placeholder a future wrapper.
     """
     inline = handle.readline()
@@ -186,10 +189,10 @@ def _gpa10iterator(handle):
         inrec = inline.rstrip('\n').split('\t')
         if len(inrec) == 1:
             continue
-        inrec[2] = inrec[2].split('|') # Qualifier
-        inrec[4] = inrec[4].split('|') # DB:Reference(s)
-        inrec[6] = inrec[6].split('|') # With
-        inrec[10] = inrec[10].split('|') # Annotation extension
+        inrec[2] = inrec[2].split('|')  # Qualifier
+        inrec[4] = inrec[4].split('|')  # DB:Reference(s)
+        inrec[6] = inrec[6].split('|')  # With
+        inrec[10] = inrec[10].split('|')  # Annotation extension
         yield dict(zip(GPA10FIELDS, inrec))
 
 
@@ -206,10 +209,10 @@ def _gpa11iterator(handle):
         inrec = inline.rstrip('\n').split('\t')
         if len(inrec) == 1:
             continue
-        inrec[2] = inrec[2].split('|') # Qualifier
-        inrec[4] = inrec[4].split('|') # DB:Reference(s)
-        inrec[6] = inrec[6].split('|') # With
-        inrec[10] = inrec[10].split('|') # Annotation extension
+        inrec[2] = inrec[2].split('|')  # Qualifier
+        inrec[4] = inrec[4].split('|')  # DB:Reference(s)
+        inrec[6] = inrec[6].split('|')  # With
+        inrec[10] = inrec[10].split('|')  # Annotation extension
         yield dict(zip(GPA11FIELDS, inrec))
 
 
@@ -236,11 +239,11 @@ def _gaf20iterator(handle):
         inrec = inline.rstrip('\n').split('\t')
         if len(inrec) == 1:
             continue
-        inrec[3] = inrec[3].split('|') #Qualifier
-        inrec[5] = inrec[5].split('|') # DB:reference(s)
-        inrec[7] = inrec[7].split('|') # With || From
-        inrec[10] = inrec[10].split('|') # Synonym
-        inrec[12] = inrec[12].split('|') # Taxon
+        inrec[3] = inrec[3].split('|')  # Qualifier
+        inrec[5] = inrec[5].split('|')  # DB:reference(s)
+        inrec[7] = inrec[7].split('|')  # With || From
+        inrec[10] = inrec[10].split('|')  # Synonym
+        inrec[12] = inrec[12].split('|')  # Taxon
         yield dict(zip(GAF20FIELDS, inrec))
 
 
@@ -251,11 +254,11 @@ def _gaf10iterator(handle):
         inrec = inline.rstrip('\n').split('\t')
         if len(inrec) == 1:
             continue
-        inrec[3] = inrec[3].split('|') #Qualifier
-        inrec[5] = inrec[5].split('|') # DB:reference(s)
-        inrec[7] = inrec[7].split('|') # With || From
-        inrec[10] = inrec[10].split('|') # Synonym
-        inrec[12] = inrec[12].split('|') # Taxon
+        inrec[3] = inrec[3].split('|')  # Qualifier
+        inrec[5] = inrec[5].split('|')  # DB:reference(s)
+        inrec[7] = inrec[7].split('|')  # With || From
+        inrec[10] = inrec[10].split('|')  # Synonym
+        inrec[12] = inrec[12].split('|')  # Taxon
         yield dict(zip(GAF10FIELDS, inrec))
 
 
@@ -268,11 +271,11 @@ def _gaf10byproteiniterator(handle):
         inrec = inline.rstrip('\n').split('\t')
         if len(inrec) == 1:
             continue
-        inrec[3] = inrec[3].split('|') #Qualifier
-        inrec[5] = inrec[5].split('|') # DB:reference(s)
-        inrec[7] = inrec[7].split('|') # With || From
-        inrec[10] = inrec[10].split('|') # Synonym
-        inrec[12] = inrec[12].split('|') # Taxon
+        inrec[3] = inrec[3].split('|')  # Qualifier
+        inrec[5] = inrec[5].split('|')  # DB:reference(s)
+        inrec[7] = inrec[7].split('|')  # With || From
+        inrec[10] = inrec[10].split('|')  # Synonym
+        inrec[12] = inrec[12].split('|')  # Taxon
         cur_rec = dict(zip(GAF10FIELDS, inrec))
         if cur_rec['DB_Object_ID'] != cur_id and cur_id:
             ret_list = copy.copy(id_rec_list)
@@ -283,7 +286,7 @@ def _gaf10byproteiniterator(handle):
             cur_id = cur_rec['DB_Object_ID']
             id_rec_list.append(cur_rec)
 
-            
+
 def _gaf20byproteiniterator(handle):
     cur_id = None
     id_rec_list = []
@@ -293,11 +296,11 @@ def _gaf20byproteiniterator(handle):
         inrec = inline.rstrip('\n').split('\t')
         if len(inrec) == 1:
             continue
-        inrec[3] = inrec[3].split('|') #Qualifier
-        inrec[5] = inrec[5].split('|') # DB:reference(s)
-        inrec[7] = inrec[7].split('|') # With || From
-        inrec[10] = inrec[10].split('|') # Synonym
-        inrec[12] = inrec[12].split('|') # Taxon
+        inrec[3] = inrec[3].split('|')  # Qualifier
+        inrec[5] = inrec[5].split('|')  # DB:reference(s)
+        inrec[7] = inrec[7].split('|')  # With || From
+        inrec[10] = inrec[10].split('|')  # Synonym
+        inrec[12] = inrec[12].split('|')  # Taxon
         cur_rec = dict(zip(GAF20FIELDS, inrec))
         if cur_rec['DB_Object_ID'] != cur_id and cur_id:
             ret_list = copy.copy(id_rec_list)
@@ -308,10 +311,10 @@ def _gaf20byproteiniterator(handle):
             cur_id = cur_rec['DB_Object_ID']
             id_rec_list.append(cur_rec)
 
-                
+
 def gafbyproteiniterator(handle):
-    """Iterates over records in a gene association file. 
-    
+    """Iterates over records in a gene association file.
+
     Returns a list of all consecutive records with the same DB_Object_ID
     This function should be called to read a
     gene_association.goa_uniprot file. Reads the first record and
@@ -341,9 +344,9 @@ def gafiterator(handle):
         sys.stderr.write("gaf 1.0\n")
         return _gaf10iterator(handle)
 
-    
-def writerec(outrec,handle,fields=GAF20FIELDS):
-    """Write a single UniProt-GOA record to an output stream. 
+
+def writerec(outrec, handle, fields=GAF20FIELDS):
+    """Write a single UniProt-GOA record to an output stream.
 
     Caller should know the  format version. Default: gaf-2.0
     If header has a value, then it is assumed this is the first record,
@@ -361,8 +364,8 @@ def writerec(outrec,handle,fields=GAF20FIELDS):
     handle.write("%s" % outstr)
 
 
-def writebyproteinrec(outprotrec,handle,fields=GAF20FIELDS):
-    """Write a list of GAF records to an output stream. 
+def writebyproteinrec(outprotrec, handle, fields=GAF20FIELDS):
+    """Write a list of GAF records to an output stream.
 
     Caller should know the  format version. Default: gaf-2.0
     If header has a value, then it is assumed this is the first record,
@@ -372,10 +375,10 @@ def writebyproteinrec(outprotrec,handle,fields=GAF20FIELDS):
     for outrec in outprotrec:
         writerec(outrec, handle, fields=fields)
 
-    
+
 def record_has(inrec, fieldvals):
-    """Accepts a record, and a dictionary of field values. 
-    
+    """Accepts a record, and a dictionary of field values.
+
     The format is {'field_name': set([val1, val2])}.
     If any field in the record has  a matching value, the function returns
     True. Otherwise, returns False.
@@ -393,8 +396,8 @@ def record_has(inrec, fieldvals):
 
 
 if __name__ == '__main__':
-    """Example: read and filter a GAF file. 
-    
+    """Example: read and filter a GAF file.
+
     Write only S. cerevisiae records, but remove all
     records with IEA evidence
     """

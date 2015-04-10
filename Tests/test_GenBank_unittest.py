@@ -6,17 +6,34 @@
 import unittest
 from os import path
 
+from Bio import GenBank
 from Bio import SeqIO
 
 
 class GenBankTests(unittest.TestCase):
     def test_invalid_product_line_raises_value_error(self):
-        "Test GenBank parsing invalid product line raises ValueError"
+        """Test GenBank parsing invalid product line raises ValueError"""
         def parse_invalid_product_line():
             rec = SeqIO.read(path.join('GenBank', 'invalid_product.gb'),
                              'genbank')
         self.assertRaises(ValueError, parse_invalid_product_line)
 
+    def test_genbank_read(self):
+        with open(path.join("GenBank", "NC_000932.gb")) as handle:
+            record = GenBank.read(handle)
+        self.assertEqual(['NC_000932'], record.accession)
+
+    def test_genbank_read_multirecord(self):
+        with open(path.join("GenBank", "cor6_6.gb")) as handle:
+            self.assertRaises(ValueError, GenBank.read, handle)
+
+    def test_genbank_read_invalid(self):
+        with open(path.join("GenBank", "NC_000932.faa")) as handle:
+            self.assertRaises(ValueError, GenBank.read, handle)
+
+    def test_genbank_read_no_origin_no_end(self):
+        with open(path.join("GenBank", "no_origin_no_end.gb")) as handle:
+            self.assertRaises(ValueError, GenBank.read, handle)
 
 
 if __name__ == "__main__":

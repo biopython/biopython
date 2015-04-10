@@ -18,11 +18,11 @@ import unittest
 import requires_internet
 requires_internet.check()
 
-#We want to test these:
+# We want to test these:
 from Bio import Entrez
 from Bio import ExPASy
 
-#In order to check any sequences returned
+# In order to check any sequences returned
 from Bio import SeqIO
 from Bio._py3k import StringIO
 from Bio.SeqUtils.CheckSum import seguid
@@ -30,7 +30,7 @@ from Bio.SeqUtils.CheckSum import seguid
 from Bio.File import UndoHandle
 from Bio._py3k import _as_string
 
-#This lets us set the email address to be sent to NCBI Entrez:
+# This lets us set the email address to be sent to NCBI Entrez:
 Entrez.email = "biopython-dev@biopython.org"
 
 
@@ -39,7 +39,7 @@ class ExPASyTests(unittest.TestCase):
     def test_get_sprot_raw(self):
         """Bio.ExPASy.get_sprot_raw("O23729")"""
         identifier = "O23729"
-        #This is to catch an error page from our proxy:
+        # This is to catch an error page from our proxy:
         handle = UndoHandle(ExPASy.get_sprot_raw(identifier))
         if _as_string(handle.peekline()).startswith("<!DOCTYPE HTML"):
             raise IOError
@@ -61,7 +61,7 @@ class EntrezTests(unittest.TestCase):
             self.assertTrue((entry in record.name) or
                          (entry in record.id) or
                          ("gi" in record.annotations
-                          and record.annotations["gi"]==entry),
+                          and record.annotations["gi"] == entry),
                          "%s got %s, %s" % (entry, record.name, record.id))
             self.assertEqual(len(record), length)
             self.assertEqual(seguid(record.seq), checksum)
@@ -76,7 +76,7 @@ for database, formats, entry, length, checksum in [
         ]:
 
     def funct(d, f, e, l, c):
-        method = lambda x : x.simple(d, f, e, l, c)
+        method = lambda x: x.simple(d, f, e, l, c)
         method.__doc__ = "Bio.Entrez.efetch(%r, id=%r, ...)" % (d, e)
         return method
 
@@ -86,5 +86,5 @@ for database, formats, entry, length, checksum in [
 del database, formats, entry, length, checksum
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

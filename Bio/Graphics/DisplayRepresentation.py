@@ -18,13 +18,13 @@ from Bio.Graphics.BasicChromosome import TelomereSegment
 # --- constants
 # This is a default color scheme based on the light spectrum.
 # Based on my vague recollections from biology, this is our friend ROY G. BIV
-RAINBOW_COLORS = {(1, 1)  : colors.violet,
-                  (2, 2)  : colors.indigo,
-                  (3, 3)  : colors.blue,
-                  (4, 4)  : colors.green,
-                  (5, 5)  : colors.yellow,
-                  (6, 6)  : colors.orange,
-                  (7, 20) : colors.red}
+RAINBOW_COLORS = {(1, 1): colors.violet,
+                  (2, 2): colors.indigo,
+                  (3, 3): colors.blue,
+                  (4, 4): colors.green,
+                  (5, 5): colors.yellow,
+                  (6, 6): colors.orange,
+                  (7, 20): colors.red}
 
 
 class ChromosomeCounts(object):
@@ -38,7 +38,7 @@ class ChromosomeCounts(object):
     the chromosome will be especially abundant in the counts, and you
     want to pick those out.
     """
-    def __init__(self, segment_names, color_scheme = RAINBOW_COLORS):
+    def __init__(self, segment_names, color_scheme=RAINBOW_COLORS):
         """Initialize a representation of chromosome counts.
 
         Arguments:
@@ -62,7 +62,7 @@ class ChromosomeCounts(object):
 
         self._color_scheme = color_scheme
 
-    def add_count(self, segment_name, count = 1):
+    def add_count(self, segment_name, count=1):
         """Add counts to the given segment name.
 
         Arguments:
@@ -78,7 +78,7 @@ class ChromosomeCounts(object):
         except KeyError:
             raise KeyError("Segment name %s not found." % segment_name)
 
-    def scale_segment_value(self, segment_name, scale_value = None):
+    def scale_segment_value(self, segment_name, scale_value=None):
         """Divide the counts for a segment by some kind of scale value.
 
         This is useful if segments aren't represented by raw counts, but

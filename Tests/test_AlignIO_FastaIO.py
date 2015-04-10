@@ -31,16 +31,17 @@ test_files = [
     ("fasta-m10", 2, 12, 'Fasta/output008.m10'),
     ]
 
-#Main tests...
+# Main tests...
 for (t_format, t_per, t_count, t_filename) in test_files:
     assert t_format == "fasta-m10" and t_per == 2
 
-    print("Testing reading %s format file %s with %i alignments" \
+    print("Testing reading %s format file %s with %i alignments"
           % (t_format, t_filename, t_count))
     assert os.path.isfile(t_filename), t_filename
 
-    #Try as an iterator using handle
-    alignments = list(AlignIO.parse(handle=open(t_filename, "r"), format=t_format))
+    # Try as an iterator using handle
+    with open(t_filename, "r") as handle:
+        alignments = list(AlignIO.parse(handle, format=t_format))
     assert len(alignments) == t_count, \
          "Found %i alignments but expected %i" % (len(alignments), t_count)
     for alignment in alignments:
@@ -48,10 +49,10 @@ for (t_format, t_per, t_count, t_filename) in test_files:
             "Expected %i records per alignment, got %i" \
             % (t_per, len(alignment))
 
-    #Print the alignment
+    # Print the alignment
     for i, alignment in enumerate(alignments):
-        print("="*78)
-        print("Alignment %i, with %i sequences of length %i" \
+        print("=" * 78)
+        print("Alignment %i, with %i sequences of length %i"
               % (i,
                  len(alignment),
                  alignment.get_alignment_length()))
@@ -59,9 +60,9 @@ for (t_format, t_per, t_count, t_filename) in test_files:
             print(" - %s: %r" % (k, alignment._annotations[k]))
         assert alignment[0].name == "query"
         assert alignment[1].name == "match"
-        #Show each sequence row horizontally
+        # Show each sequence row horizontally
         for record in alignment:
-            print("-"*78)
+            print("-" * 78)
             print(record.id)
             print(record.description)
             print(repr(record.seq))
@@ -69,5 +70,5 @@ for (t_format, t_per, t_count, t_filename) in test_files:
             assert not record.letter_annotations
             for k in sorted(record.annotations):
                 print(" - %s: %r" % (k, record.annotations[k]))
-    print("="*78)
+    print("=" * 78)
 print("Finished tested reading files")

@@ -11,7 +11,7 @@ from Bio.Data.CodonTable import ambiguous_rna_by_id, ambiguous_dna_by_id
 from Bio.Data.CodonTable import unambiguous_rna_by_id
 from Bio.Data.CodonTable import list_ambiguous_codons, TranslationError
 
-#Check the extension of stop codons to include well defined ambiguous ones
+# Check the extension of stop codons to include well defined ambiguous ones
 assert list_ambiguous_codons(['TGA', 'TAA'], IUPACData.ambiguous_dna_values) == ['TGA', 'TAA', 'TRA']
 assert list_ambiguous_codons(['TAG', 'TGA'], IUPACData.ambiguous_dna_values) == ['TAG', 'TGA']
 assert list_ambiguous_codons(['TAG', 'TAA'], IUPACData.ambiguous_dna_values) == ['TAG', 'TAA', 'TAR']
@@ -19,35 +19,35 @@ assert list_ambiguous_codons(['UAG', 'UAA'], IUPACData.ambiguous_rna_values) == 
 assert list_ambiguous_codons(['TGA', 'TAA', 'TAG'], IUPACData.ambiguous_dna_values) == ['TGA', 'TAA', 'TAG', 'TAR', 'TRA']
 
 
-#Basic sanity test,
+# Basic sanity test,
 for n in ambiguous_generic_by_id:
     assert ambiguous_rna_by_id[n].forward_table["GUU"] == "V"
     assert ambiguous_rna_by_id[n].forward_table["GUN"] == "V"
-    if n != 23 :
+    if n != 23:
         assert ambiguous_rna_by_id[n].forward_table["UUN"] == "X"  # F or L
 
     assert ambiguous_dna_by_id[n].forward_table["GTT"] == "V"
-    if n != 23 :
+    if n != 23:
         assert ambiguous_dna_by_id[n].forward_table["TTN"] == "X"  # F or L
     assert ambiguous_dna_by_id[n].forward_table["GTN"] == "V"
 
-    if n != 23 :
+    if n != 23:
         assert ambiguous_generic_by_id[n].forward_table.get("TTN") == "X"
     assert ambiguous_generic_by_id[n].forward_table["ACN"] == "T"
     assert ambiguous_generic_by_id[n].forward_table["GUU"] == "V"
     assert ambiguous_generic_by_id[n].forward_table["GUN"] == "V"
-    if n != 23 :
+    if n != 23:
         assert ambiguous_generic_by_id[n].forward_table["UUN"] == "X"  # F or L
     assert ambiguous_generic_by_id[n].forward_table["GTT"] == "V"
-    if n != 23 :
+    if n != 23:
         assert ambiguous_generic_by_id[n].forward_table["TTN"] == "X"  # F or L
     assert ambiguous_generic_by_id[n].forward_table["GTN"] == "V"
-    #And finally something evil, an RNA-DNA mixture:
-    if n != 23 :
+    # And finally something evil, an RNA-DNA mixture:
+    if n != 23:
         assert ambiguous_generic_by_id[n].forward_table["UTN"] == "X"  # F or L
     assert ambiguous_generic_by_id[n].forward_table["UTU"] == "F"
 
-    #R = A or G, so URR = UAA or UGA / TRA = TAA or TGA = stop codons
+    # R = A or G, so URR = UAA or UGA / TRA = TAA or TGA = stop codons
     if "UAA" in unambiguous_rna_by_id[n].stop_codons \
     and "UGA" in unambiguous_rna_by_id[n].stop_codons:
         try:
@@ -114,8 +114,8 @@ for n in ambiguous_generic_by_id:
         assert "DUG" not in ambiguous_dna_by_id[n].start_codons
 del n
 
-#Table 2 Vertebrate Mitochondrial has
-#TAA and TAG -> TAR, plus AGA and AGG -> AGR
+# Table 2 Vertebrate Mitochondrial has
+# TAA and TAG -> TAR, plus AGA and AGG -> AGR
 assert "AGR" in ambiguous_dna_by_id[2].stop_codons
 assert "TAR" in ambiguous_dna_by_id[2].stop_codons
 assert "AGR" in ambiguous_rna_by_id[2].stop_codons
@@ -126,5 +126,6 @@ assert "TAR" in ambiguous_generic_by_id[2].stop_codons
 assert ambiguous_generic_by_id[1].stop_codons == ambiguous_generic_by_name["Standard"].stop_codons
 assert ambiguous_generic_by_id[4].stop_codons == ambiguous_generic_by_name["SGC3"].stop_codons
 assert ambiguous_generic_by_id[15].stop_codons == ambiguous_generic_by_name['Blepharisma Macronuclear'].stop_codons
+assert ambiguous_generic_by_id[24].stop_codons == ambiguous_generic_by_name["Pterobranchia Mitochondrial"].stop_codons
 
 print("Done")

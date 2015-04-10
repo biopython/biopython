@@ -15,6 +15,8 @@ from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 
 __all__ = ['Hmmer3TabParser', 'Hmmer3TabIndexer', 'Hmmer3TabWriter']
 
+__docformat__ = "restructuredtext en"
+
 
 class Hmmer3TabParser(object):
 
@@ -50,10 +52,10 @@ class Hmmer3TabParser(object):
         # assign parsed column data into qresult, hit, and hsp dicts
         qresult = {}
         qresult['id'] = cols[2]                     # query name
-        qresult['acc'] = cols[3]                    # query accession
+        qresult['accession'] = cols[3]              # query accession
         hit = {}
         hit['id'] = cols[0]                         # target name
-        hit['acc'] = cols[1]                        # target accession
+        hit['accession'] = cols[1]                  # target accession
         hit['evalue'] = float(cols[4])              # evalue (full sequence)
         hit['bitscore'] = float(cols[5])            # score (full sequence)
         hit['bias'] = float(cols[6])                # bias (full sequence)
@@ -97,7 +99,10 @@ class Hmmer3TabParser(object):
                 prev = cur
                 prev_qid = cur_qid
             # only parse the result row if it's not EOF
-            if self.line:
+            # NOTE: we are not parsing the extra '#' lines appended to the end
+            # of hmmer31b1 tabular results since storing them in qresult
+            # objects means we can not do a single-pass parsing
+            if self.line and not self.line.startswith('#'):
                 cur = self._parse_row()
                 cur_qid = cur['qresult']['id']
             else:
@@ -258,11 +263,11 @@ class Hmmer3TabWriter(object):
         # calculate whitespace required
         # adapted from HMMER's source: src/p7_tophits.c#L1083
         if first_qresult is not None:
-            #qnamew = max(20, len(first_qresult.id))
-            qnamew = 20 # why doesn't the above work?
+            # qnamew = max(20, len(first_qresult.id))
+            qnamew = 20  # why doesn't the above work?
             tnamew = max(20, len(first_qresult[0].id))
-            qaccw = max(10, len(first_qresult.acc))
-            taccw = max(10, len(first_qresult[0].acc))
+            qaccw = max(10, len(first_qresult.accession))
+            taccw = max(10, len(first_qresult[0].accession))
         else:
             qnamew, tnamew, qaccw, taccw = 20, 20, 10, 10
 
@@ -271,14 +276,14 @@ class Hmmer3TabWriter(object):
                 "--- full sequence ----", "--- best 1 domain ----",
                 "--- domain number estimation ----")
         header += "#%-*s %-*s %-*s %-*s %9s %6s %5s %9s %6s %5s %5s %3s " \
-                "%3s %3s %3s %3s %3s %3s %s\n" % (tnamew-1, " target name",
-                        taccw, "accession",  qnamew, "query name", qaccw,
-                        "accession",  "  E-value", " score", " bias",
+                "%3s %3s %3s %3s %3s %3s %s\n" % (tnamew - 1, " target name",
+                        taccw, "accession", qnamew, "query name", qaccw,
+                        "accession", "  E-value", " score", " bias",
                         "  E-value", " score", " bias", "exp",
                         "reg", "clu", " ov", "env", "dom", "rep",
                         "inc", "description of target")
         header += "#%*s %*s %*s %*s %9s %6s %5s %9s %6s %5s %5s %3s %3s " \
-                "%3s %3s %3s %3s %3s %s\n" % (tnamew-1, "-------------------",
+                "%3s %3s %3s %3s %3s %s\n" % (tnamew - 1, "-------------------",
                 taccw, "----------", qnamew, "--------------------", qaccw,
                 "----------", "---------", "------", "-----", "---------",
                 "------", "-----", "---", "---", "---", "---", "---", "---",
@@ -294,13 +299,13 @@ class Hmmer3TabWriter(object):
         # adapted from HMMER's source: src/p7_tophits.c#L1083
         qnamew = max(20, len(qresult.id))
         tnamew = max(20, len(qresult[0].id))
-        qaccw = max(10, len(qresult.acc))
-        taccw = max(10, len(qresult[0].acc))
+        qaccw = max(10, len(qresult.accession))
+        taccw = max(10, len(qresult[0].accession))
 
         for hit in qresult:
             rows += "%-*s %-*s %-*s %-*s %9.2g %6.1f %5.1f %9.2g %6.1f %5.1f " \
             "%5.1f %3d %3d %3d %3d %3d %3d %3d %s\n" % (tnamew, hit.id, taccw,
-            hit.acc, qnamew, qresult.id, qaccw, qresult.acc, hit.evalue,
+            hit.accession, qnamew, qresult.id, qaccw, qresult.accession, hit.evalue,
             hit.bitscore, hit.bias, hit.hsps[0].evalue, hit.hsps[0].bitscore,
             hit.hsps[0].bias, hit.domain_exp_num, hit.region_num, hit.cluster_num,
             hit.overlap_num, hit.env_num, hit.domain_obs_num,

@@ -23,7 +23,7 @@ class DesTests(unittest.TestCase):
             count = 0
             records = Des.parse(f)
             for record in records:
-                count +=1
+                count += 1
             self.assertEqual(count, 20)
         finally:
             f.close()
@@ -34,7 +34,7 @@ class DesTests(unittest.TestCase):
         try:
             for line in f:
                 record = Des.Record(line)
-                #End of line is platform dependent. Strip it off
+                # End of line is platform dependent. Strip it off
                 self.assertEqual(str(record).rstrip(), line.rstrip())
         finally:
             f.close()
@@ -57,6 +57,6 @@ class DesTests(unittest.TestCase):
         self.assertEqual(record.description, recFields[4])
 
 
-if __name__=='__main__':
-    runner = unittest.TextTestRunner(verbosity = 2)
+if __name__ == '__main__':
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

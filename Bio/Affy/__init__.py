@@ -5,3 +5,5 @@
 
 """Deal with Affymetrix related data such as cel files.
 """
+
+__docformat__ = "restructuredtext en"

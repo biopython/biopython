@@ -12,3 +12,9 @@ Tests/GenBank/NC_000932.gb binary
 Tests/Quality/example.fastq binary
 Tests/Quality/example_dos.fastq binary
 Tests/Blast/wnts.xml binary
+
+# This pickle file has to be using Unix new lines otherwise at
+# least Python 3.4's C pickle parser fails with exception:
+# _pickle.UnpicklingError: the STRING opcode argument must be quoted
+
+Tests/SubsMat/acc_rep_mat.pik binary

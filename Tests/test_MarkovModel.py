@@ -13,11 +13,12 @@ except ImportError:
 import unittest
 
 import warnings
-#Silence this warning:
-#For optimal speed, please update to Numpy version 1.3 or later
-warnings.filterwarnings("ignore", category=UserWarning)
-from Bio import MarkovModel
-warnings.filters.pop()
+
+with warnings.catch_warnings():
+    # Silence this warning:
+    # For optimal speed, please update to Numpy version 1.3 or later
+    warnings.simplefilter("ignore", UserWarning)
+    from Bio import MarkovModel
 
 
 class TestMarkovModel(unittest.TestCase):
@@ -235,5 +236,5 @@ class TestMarkovModel(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

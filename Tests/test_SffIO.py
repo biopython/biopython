@@ -84,7 +84,16 @@ class TestUAN(unittest.TestCase):
         for record in self.records:
             self.assertEqual(record.annotations["coords"], self.test_annotations[record.name]["coords"])
 
+
 class TestConcatenated(unittest.TestCase):
+    def test_parses_gzipped_stream(self):
+        import gzip
+        count = 0
+        fh = gzip.open("Roche/E3MFGYR02_random_10_reads.sff.gz", 'rb')
+        for record in SeqIO.parse(fh, 'sff'):
+            count += 1
+        self.assertEqual(10, count)
+
     def test_parse1(self):
         count = 0
         caught = False
@@ -98,7 +107,7 @@ class TestConcatenated(unittest.TestCase):
             caught = True
         self.assertTrue(caught, "Didn't spot concatenation")
         self.assertEqual(count, 24)
-    
+
     def test_index1(self):
         try:
             d = SeqIO.index("Roche/invalid_greek_E3MFGYR02.sff", "sff")
@@ -137,5 +146,5 @@ class TestConcatenated(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

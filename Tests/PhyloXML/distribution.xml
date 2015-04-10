@@ -1,0 +1,53 @@
+<phyloxml xmlns="http://www.phyloxml.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.phyloxml.org http://www.phyloxml.org/1.10/phyloxml.xsd">
+  <phylogeny rooted="true">
+    <name>A tree with phylogeographic information</name>
+    <clade>
+      <clade>
+        <clade>
+          <name>A</name>
+          <distribution>
+            <desc>Hirschweg, Winterthur, Switzerland</desc>
+            <point geodetic_datum="WGS84">
+              <lat>47.481277</lat>
+              <long>8.769303</long>
+              <alt>472.0</alt>
+            </point>
+          </distribution>
+        </clade>
+        <clade>
+          <name>B</name>
+          <distribution>
+            <desc>Nagoya, Aichi, Japan</desc>
+            <point geodetic_datum="WGS84">
+              <lat>35.155904</lat>
+              <long>136.915863</long>
+              <alt>10.0</alt>
+            </point>
+          </distribution>
+        </clade>
+        <clade>
+          <name>C</name>
+          <distribution>
+            <desc>ETH Zürich</desc>
+            <point geodetic_datum="WGS84">
+              <lat>47.376334</lat>
+              <long>8.548108</long>
+              <alt>452.0</alt>
+            </point>
+          </distribution>
+        </clade>
+      </clade>
+      <clade>
+        <name>D</name>
+        <distribution>
+          <desc>San Diego</desc>
+          <point geodetic_datum="WGS84">
+            <lat>32.880933</lat>
+            <long>-117.217543</long>
+            <alt>104.0</alt>
+          </point>
+        </distribution>
+      </clade>
+    </clade>
+  </phylogeny>
+</phyloxml>

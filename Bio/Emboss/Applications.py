@@ -16,6 +16,8 @@ from __future__ import print_function
 
 from Bio.Application import _Option, _Switch, AbstractCommandline
 
+__docformat__ = "restructuredtext en"
+
 
 class _EmbossMinimalCommandLine(AbstractCommandline):
     """Base Commandline object for EMBOSS wrappers (PRIVATE).
@@ -75,11 +77,11 @@ class _EmbossMinimalCommandLine(AbstractCommandline):
                    "Report dying program messages."),
             ]
         try:
-            #Insert extra parameters - at the start just in case there
-            #are any arguments which must come last:
+            # Insert extra parameters - at the start just in case there
+            # are any arguments which must come last:
             self.parameters = extra_parameters + self.parameters
         except AttributeError:
-            #Should we raise an error?  The subclass should have set this up!
+            # Should we raise an error?  The subclass should have set this up!
             self.parameters = extra_parameters
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
@@ -101,18 +103,18 @@ class _EmbossCommandLine(_EmbossMinimalCommandLine):
                     filename=True),
             ]
         try:
-            #Insert extra parameters - at the start just in case there
-            #are any arguments which must come last:
+            # Insert extra parameters - at the start just in case there
+            # are any arguments which must come last:
             self.parameters = extra_parameters + self.parameters
         except AttributeError:
-            #Should we raise an error?  The subclass should have set this up!
+            # Should we raise an error?  The subclass should have set this up!
             self.parameters = extra_parameters
         _EmbossMinimalCommandLine.__init__(self, cmd, **kwargs)
 
     def _validate(self):
-        #Check the outfile, filter, or stdout option has been set.
-        #We can't simply do this via the required flag for the outfile
-        #output - this seems the simplest solution.
+        # Check the outfile, filter, or stdout option has been set.
+        # We can't simply do this via the required flag for the outfile
+        # output - this seems the simplest solution.
         if not (self.outfile or self.filter or self.stdout):
             raise ValueError("You must either set outfile (output filename), "
                              "or enable filter or stdout (output to stdout).")
@@ -209,7 +211,7 @@ class Primer3Commandline(_EmbossCommandLine):
                    "Nanomolar concentration of annealing oligos in the PCR."),
            _Option(["-maxpolyx", "maxpolyx"],
                    "Maximum allowable mononucleotide repeat length in a primer."),
-           #Primer length:
+           # Primer length:
            _Option(["-productosize", "productosize"],
                    """Optimum size for the PCR product (OBSOLETE).
 
@@ -230,7 +232,7 @@ class Primer3Commandline(_EmbossCommandLine):
 
                    Option added in EMBOSS 6.1.0, replacing -productsizerange
                    """),
-           #Primer temperature:
+           # Primer temperature:
            _Option(["-productotm", "productotm"],
                    """Optimum melting temperature for the PCR product (OBSOLETE).
 
@@ -261,7 +263,7 @@ class Primer3Commandline(_EmbossCommandLine):
 
                    Option added in EMBOSS 6.1.0, replacing -productmaxtm
                    """),
-           #Note to self, should be -oexcludedregion not -oexcluderegion
+           # Note to self, should be -oexcludedregion not -oexcluderegion
            _Option(["-oexcludedregion", "oexcludedregion"],
                    """Do not pick internal oligos in this region."),
 
@@ -274,7 +276,7 @@ class Primer3Commandline(_EmbossCommandLine):
                    """),
            _Option(["-oligoinput", "oligoinput"],
                    "Sequence of the internal oligo."),
-           #Oligo length:
+           # Oligo length:
            _Option(["-oligosize", "oligosize"],
                    """Optimum length of internal oligo (OBSOLETE).
 
@@ -305,7 +307,7 @@ class Primer3Commandline(_EmbossCommandLine):
 
                    Option added in EMBOSS 6.1.0, replaces -oligomaxsize
                    """),
-           #Oligo GC temperature:
+           # Oligo GC temperature:
            _Option(["-oligotm", "oligotm"],
                    """Optimum melting temperature of internal oligo (OBSOLETE).
 
@@ -336,7 +338,7 @@ class Primer3Commandline(_EmbossCommandLine):
 
                    Option added in EMBOSS 6.1.0, replacing -oligomaxtm
                    """),
-           #Oligo GC percent:
+           # Oligo GC percent:
            _Option(["-oligoogcpercent", "oligoogcpercent"],
                    """Optimum GC% for internal oligo (OBSOLETE).
 
@@ -367,7 +369,7 @@ class Primer3Commandline(_EmbossCommandLine):
 
                    Option added in EMBOSS 6.1.0, replacing -oligomaxgc
                    """),
-           #Oligo salt concentration:
+           # Oligo salt concentration:
            _Option(["-oligosaltconc", "oligosaltconc"],
                    """Millimolar concentration of salt in the hybridisation."),
 
@@ -388,7 +390,7 @@ class Primer3Commandline(_EmbossCommandLine):
 
                    Option added in EMBOSS 6.1.0, replacing -oligodnaconc
                    """),
-           #Oligo self complementarity
+           # Oligo self complementarity
            _Option(["-oligoselfany", "oligoselfany"],
                    """Maximum allowable alignment score for self-complementarity (OBSOLETE).
 
@@ -462,16 +464,16 @@ class PrimerSearchCommandline(_EmbossCommandLine):
           _Option(["-seqall", "-sequences", "sequences", "seqall"],
                   "Sequence to look for the primer pairs in.",
                   is_required=True),
-                  #When this wrapper was written primersearch used -sequences
-                  #as the argument name. Since at least EMBOSS 5.0 (and
-                  #perhaps earlier) this has been -seqall instead.
+                  # When this wrapper was written primersearch used -sequences
+                  # as the argument name. Since at least EMBOSS 5.0 (and
+                  # perhaps earlier) this has been -seqall instead.
           _Option(["-infile", "-primers", "primers", "infile"],
                   "File containing the primer pairs to search for.",
                   filename=True,
                   is_required=True),
-                  #When this wrapper was written primersearch used -primers
-                  #as the argument name. Since at least EMBOSS 5.0 (and
-                  #perhaps earlier) this has been -infile instead.
+                  # When this wrapper was written primersearch used -primers
+                  # as the argument name. Since at least EMBOSS 5.0 (and
+                  # perhaps earlier) this has been -infile instead.
           _Option(["-mismatchpercent", "mismatchpercent"],
                   "Allowed percentage mismatch (any integer value, default 0).",
                   is_required=True),
@@ -489,7 +491,7 @@ class FDNADistCommandline(_EmbossCommandLine):
     fdnadist is an EMBOSS wrapper for the PHYLIP program dnadist for
     calulating distance matrices from DNA sequence files.
     """
-    def __init__(self, cmd = "fdnadist", **kwargs):
+    def __init__(self, cmd="fdnadist", **kwargs):
         self.parameters = [
         _Option(["-sequence", "sequence"],
                 "seq file to use (phylip)",
@@ -529,7 +531,7 @@ class FTreeDistCommandline(_EmbossCommandLine):
     ftreedist is an EMBOSS wrapper for the PHYLIP program treedist used for
     calulating distance measures between phylogentic trees.
     """
-    def __init__(self, cmd = "ftreedist", **kwargs):
+    def __init__(self, cmd="ftreedist", **kwargs):
         self.parameters = [
         _Option(["-intreefile", "intreefile"],
                 "tree file to score (phylip)",
@@ -554,7 +556,7 @@ class FNeighborCommandline(_EmbossCommandLine):
     fneighbor is an EMBOSS wrapper for the PHYLIP program neighbor used for
     calulating neighbor-joining or UPGMA trees from distance matrices.
     """
-    def __init__(self, cmd = "fneighbor", **kwargs):
+    def __init__(self, cmd="fneighbor", **kwargs):
         self.parameters = [
         _Option(["-datafile", "datafile"],
                 "dist file to use (phylip)",
@@ -564,7 +566,7 @@ class FNeighborCommandline(_EmbossCommandLine):
                  "is martrix [S]quare pr [u]pper or [l]ower"),
         _Option(["-treetype", "treetype"],
                  "nj or UPGMA tree (n/u)"),
-        _Option(["-outgrno", "outgrno" ],
+        _Option(["-outgrno", "outgrno"],
                  "taxon to use as OG"),
         _Option(["-jumble", "jumble"],
                  "randommise input order (Y/n)"),
@@ -587,7 +589,7 @@ class FSeqBootCommandline(_EmbossCommandLine):
     fseqboot is an EMBOSS wrapper for the PHYLIP program seqboot used to
     pseudo-sample alignment files.
     """
-    def __init__(self, cmd = "fseqboot", **kwargs):
+    def __init__(self, cmd="fseqboot", **kwargs):
         self.parameters = [
         _Option(["-sequence", "sequence"],
                 "seq file to sample (phylip)",
@@ -616,7 +618,7 @@ class FSeqBootCommandline(_EmbossCommandLine):
         _Option(["-seed", "seed"],
                  "specify random seed"),
         _Option(["-dotdiff", "dotdiff"],
-                 "Use dot-differencing? [Y/n]"),]
+                 "Use dot-differencing? [Y/n]"), ]
         _EmbossCommandLine.__init__(self, cmd, **kwargs)
 
 
@@ -629,7 +631,7 @@ class FDNAParsCommandline(_EmbossCommandLine):
     "interactive mode" (and as a result fail if called with subprocess) if
     "-auto" is not set to true.
     """
-    def __init__(self, cmd = "fdnapars", **kwargs):
+    def __init__(self, cmd="fdnapars", **kwargs):
         self.parameters = [
         _Option(["-sequence", "sequence"],
                 "seq file to use (phylip)",
@@ -675,7 +677,7 @@ class FProtParsCommandline(_EmbossCommandLine):
     "interactive mode" (and as a result fail if called with subprocess) if
     "-auto" is not set to true.
     """
-    def __init__(self, cmd = "fprotpars", **kwargs):
+    def __init__(self, cmd="fprotpars", **kwargs):
         self.parameters = [
         _Option(["-sequence", "sequence"],
                 "seq file to use (phylip)",
@@ -714,7 +716,7 @@ class FProtDistCommandline(_EmbossCommandLine):
     fprotdist is an EMBOSS wrapper for the PHYLIP program protdist used to
     estimate trees from protein sequences using parsimony
     """
-    def __init__(self, cmd = "fprotdist", **kwargs):
+    def __init__(self, cmd="fprotdist", **kwargs):
         self.parameters = [
         _Option(["-sequence", "sequence"],
                 "seq file to use (phylip)",
@@ -755,7 +757,7 @@ class FConsenseCommandline(_EmbossCommandLine):
     fconsense is an EMBOSS wrapper for the PHYLIP program consense used to
     calculate consensus trees.
     """
-    def __init__(self, cmd = "fconsense", **kwargs):
+    def __init__(self, cmd="fconsense", **kwargs):
         self.parameters = [
         _Option(["-intreefile", "intreefile"],
                 "file with phylip trees to make consensus from",
@@ -1181,14 +1183,14 @@ class IepCommandline(_EmbossCommandLine):
 
                  Integer 0 (default) or more.
                  """),
-         #Should we implement the -termini switch as well?
+         # Should we implement the -termini switch as well?
          _Option(["-notermini", "notermini"],
                  "Exclude (True) or include (False) charge at N and C terminus."),
          ]
         _EmbossCommandLine.__init__(self, cmd, **kwargs)
 
 
-#seqret uses -outseq, not -outfile, so use the base class:
+# seqret uses -outseq, not -outfile, so use the base class:
 class SeqretCommandline(_EmbossMinimalCommandLine):
     """Commandline object for the seqret program from EMBOSS.
 
@@ -1216,9 +1218,9 @@ class SeqretCommandline(_EmbossMinimalCommandLine):
         _EmbossMinimalCommandLine.__init__(self, cmd, **kwargs)
 
     def _validate(self):
-        #Check the outfile, filter, or stdout option has been set.
-        #We can't simply do this via the required flag for the outfile
-        #output - this seems the simplest solution.
+        # Check the outfile, filter, or stdout option has been set.
+        # We can't simply do this via the required flag for the outfile
+        # output - this seems the simplest solution.
         if not (self.outseq or self.filter or self.stdout):
             raise ValueError("You must either set outfile (output filename), "
                              "or enable filter or stdout (output to stdout).")
@@ -1260,6 +1262,5 @@ def _test():
     doctest.testmod()
 
 if __name__ == "__main__":
-    #Run the doctests
+    # Run the doctests
     _test()
-

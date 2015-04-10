@@ -19,27 +19,6 @@ if os.name == 'java':
                                   "Jython, see http://bugs.jython.org/issue1447")
 
 
-try:
-    from xml.parsers.expat import model
-    del model
-except ImportError:
-    from Bio import MissingExternalDependencyError
-    raise MissingExternalDependencyError("Not supported on PyPy 1.6, see "
-                                         "https://bugs.pypy.org/issue914")
-
-
-from xml.parsers import expat
-p = expat.ParserCreate(namespace_separator=" ")
-try:
-    p.StartElementHandler is None
-except AttributeError:
-    from Bio import MissingExternalDependencyError
-    raise MissingExternalDependencyError("Not supported on PyPy 1.7, see "
-                                         "https://bugs.pypy.org/issue933")
-del p
-del expat
-
-
 from Bio import Entrez
 
 
@@ -1284,7 +1263,7 @@ class EPostTest(unittest.TestCase):
         handle = open('Entrez/epost1.xml', "rb")
         record = Entrez.read(handle)
         handle.close()
-        self.assertEqual(record["QueryKey"],  '1')
+        self.assertEqual(record["QueryKey"], '1')
         self.assertEqual(record["WebEnv"], '0zYsuLk3zG_lRMkblPBEqnT8nIENUGw4HAy8xXChTnoVm7GEnWY71jv3nz@1FC077F3806DE010_0042SID')
 
     def test_wrong(self):
@@ -1498,7 +1477,7 @@ class ESummaryTest(unittest.TestCase):
         self.assertEqual(record[1]["Caption"], "AAO49381")
         self.assertEqual(record[1]["Title"], "erythroid associated factor [Homo sapiens]")
         self.assertEqual(record[1]["Extra"], "gi|28628843|gb|AAO49381.1|AF485325_1[28628843]")
-        self.assertEqual(record[1]["Gi"],  28628843)
+        self.assertEqual(record[1]["Gi"], 28628843)
         self.assertEqual(record[1]["CreateDate"], "2003/03/02")
         self.assertEqual(record[1]["UpdateDate"], "2003/03/02")
         self.assertEqual(record[1]["Flags"], 0)
@@ -1698,100 +1677,100 @@ class ELinkTest(unittest.TestCase):
         self.assertEqual(record[0]["LinkSetDb"][0]["DbTo"], "pubmed")
         self.assertEqual(record[0]["LinkSetDb"][0]["LinkName"], "pubmed_pubmed")
         self.assertEqual(len(record[0]["LinkSetDb"][0]["Link"]), 97)
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][0]["Id"], "9298984"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][1]["Id"], "8794856"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][2]["Id"], "9700164"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][3]["Id"], "7914521"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][4]["Id"], "9914369"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][5]["Id"], "1339459"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][6]["Id"], "11590237"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][7]["Id"], "12686595"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][8]["Id"], "20980244"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][9]["Id"], "11146659"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][10]["Id"], "8978614"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][11]["Id"], "9074495"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][12]["Id"], "10893249"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][13]["Id"], "2211822"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][14]["Id"], "15371539"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][15]["Id"], "10402457"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][16]["Id"], "10806105"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][17]["Id"], "10545493"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][18]["Id"], "15915585"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][19]["Id"], "10523511"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][20]["Id"], "12515822"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][21]["Id"], "9869638"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][22]["Id"], "11483958"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][23]["Id"], "11685532"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][24]["Id"], "9490715"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][25]["Id"], "1691829"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][26]["Id"], "9425896"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][27]["Id"], "12080088"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][28]["Id"], "12034769"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][29]["Id"], "9852156"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][30]["Id"], "8923204"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][31]["Id"], "7690762"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][32]["Id"], "17895365"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][33]["Id"], "9378750"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][34]["Id"], "11146661"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][35]["Id"], "18202360"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][36]["Id"], "10985388"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][37]["Id"], "11266459"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][38]["Id"], "2022189"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][39]["Id"], "8056842"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][40]["Id"], "11914278"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][41]["Id"], "15616189"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][42]["Id"], "18936247"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][43]["Id"], "17222555"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][44]["Id"], "7585942"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][45]["Id"], "9735366"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][46]["Id"], "11179694"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][47]["Id"], "21118145"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][48]["Id"], "16732327"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][49]["Id"], "14522947"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][50]["Id"], "11352945"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][51]["Id"], "16839185"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][52]["Id"], "11267866"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][53]["Id"], "10898791"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][54]["Id"], "12388768"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][55]["Id"], "16741559"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][56]["Id"], "11252055"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][57]["Id"], "7904902"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][58]["Id"], "17182852"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][59]["Id"], "9606208"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][60]["Id"], "15268859"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][61]["Id"], "18460473"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][62]["Id"], "11266451"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][63]["Id"], "10398680"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][64]["Id"], "16516834"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][65]["Id"], "12235289"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][66]["Id"], "16585270"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][67]["Id"], "1541637"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][68]["Id"], "18923084"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][69]["Id"], "16510521"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][70]["Id"], "8175879"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][71]["Id"], "11715021"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][72]["Id"], "8548823"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][73]["Id"], "15485811"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][74]["Id"], "11092768"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][75]["Id"], "7790358"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][76]["Id"], "11102811"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][77]["Id"], "15824131"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][78]["Id"], "16802858"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][79]["Id"], "17333235"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][80]["Id"], "9258677"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][81]["Id"], "17525528"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][82]["Id"], "9396743"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][83]["Id"], "12514103"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][84]["Id"], "16219694"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][85]["Id"], "10428958"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][86]["Id"], "14699129"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][87]["Id"], "2211824"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][88]["Id"], "11369198"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][89]["Id"], "15075237"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][90]["Id"], "14972679"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][91]["Id"], "7730407"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][92]["Id"], "9009204"), 
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][93]["Id"], "11402064"), 
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][0]["Id"], "9298984")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][1]["Id"], "8794856")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][2]["Id"], "9700164")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][3]["Id"], "7914521")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][4]["Id"], "9914369")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][5]["Id"], "1339459")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][6]["Id"], "11590237")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][7]["Id"], "12686595")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][8]["Id"], "20980244")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][9]["Id"], "11146659")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][10]["Id"], "8978614")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][11]["Id"], "9074495")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][12]["Id"], "10893249")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][13]["Id"], "2211822")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][14]["Id"], "15371539")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][15]["Id"], "10402457")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][16]["Id"], "10806105")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][17]["Id"], "10545493")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][18]["Id"], "15915585")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][19]["Id"], "10523511")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][20]["Id"], "12515822")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][21]["Id"], "9869638")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][22]["Id"], "11483958")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][23]["Id"], "11685532")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][24]["Id"], "9490715")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][25]["Id"], "1691829")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][26]["Id"], "9425896")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][27]["Id"], "12080088")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][28]["Id"], "12034769")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][29]["Id"], "9852156")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][30]["Id"], "8923204")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][31]["Id"], "7690762")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][32]["Id"], "17895365")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][33]["Id"], "9378750")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][34]["Id"], "11146661")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][35]["Id"], "18202360")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][36]["Id"], "10985388")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][37]["Id"], "11266459")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][38]["Id"], "2022189")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][39]["Id"], "8056842")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][40]["Id"], "11914278")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][41]["Id"], "15616189")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][42]["Id"], "18936247")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][43]["Id"], "17222555")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][44]["Id"], "7585942")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][45]["Id"], "9735366")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][46]["Id"], "11179694")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][47]["Id"], "21118145")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][48]["Id"], "16732327")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][49]["Id"], "14522947")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][50]["Id"], "11352945")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][51]["Id"], "16839185")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][52]["Id"], "11267866")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][53]["Id"], "10898791")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][54]["Id"], "12388768")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][55]["Id"], "16741559")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][56]["Id"], "11252055")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][57]["Id"], "7904902")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][58]["Id"], "17182852")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][59]["Id"], "9606208")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][60]["Id"], "15268859")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][61]["Id"], "18460473")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][62]["Id"], "11266451")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][63]["Id"], "10398680")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][64]["Id"], "16516834")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][65]["Id"], "12235289")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][66]["Id"], "16585270")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][67]["Id"], "1541637")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][68]["Id"], "18923084")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][69]["Id"], "16510521")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][70]["Id"], "8175879")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][71]["Id"], "11715021")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][72]["Id"], "8548823")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][73]["Id"], "15485811")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][74]["Id"], "11092768")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][75]["Id"], "7790358")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][76]["Id"], "11102811")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][77]["Id"], "15824131")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][78]["Id"], "16802858")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][79]["Id"], "17333235")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][80]["Id"], "9258677")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][81]["Id"], "17525528")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][82]["Id"], "9396743")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][83]["Id"], "12514103")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][84]["Id"], "16219694")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][85]["Id"], "10428958")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][86]["Id"], "14699129")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][87]["Id"], "2211824")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][88]["Id"], "11369198")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][89]["Id"], "15075237")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][90]["Id"], "14972679")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][91]["Id"], "7730407")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][92]["Id"], "9009204")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][93]["Id"], "11402064")
         self.assertEqual(record[0]["LinkSetDb"][0]["Link"][94]["Id"], "22685323")
         self.assertEqual(record[0]["LinkSetDb"][0]["Link"][95]["Id"], "24038651")
         self.assertEqual(record[0]["LinkSetDb"][0]["Link"][96]["Id"], "23746972")
@@ -2888,6 +2867,7 @@ class ELinkTest(unittest.TestCase):
         self.assertEqual(len(record[0]["IdCheckList"]["Id"][0].attributes), 1)
         self.assertEqual(record[0]["IdCheckList"]["Id"][0].attributes["HasNeighbor"], "Y")
         self.assertEqual(len(record[0]["IdCheckList"]["IdLinkSet"]), 0)
+
 
 class EGQueryTest(unittest.TestCase):
     '''Tests for parsing XML output returned by EGQuery
@@ -4228,5 +4208,5 @@ class EFetchTest(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

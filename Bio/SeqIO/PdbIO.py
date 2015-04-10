@@ -10,6 +10,8 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Data.SCOPData import protein_letters_3to1
 
+__docformat__ = "restructuredtext en"
+
 
 def PdbSeqresIterator(handle):
     """Returns SeqRecord objects for each chain in a PDB file.
@@ -155,18 +157,18 @@ def PdbAtomIterator(handle):
         gaps = []
         rnumbers = [r.id[1] for r in residues]
         for i, rnum in enumerate(rnumbers[:-1]):
-            if rnumbers[i+1] != rnum + 1:
+            if rnumbers[i + 1] != rnum + 1:
                 # It's a gap!
-                gaps.append((i+1, rnum, rnumbers[i+1]))
+                gaps.append((i + 1, rnum, rnumbers[i + 1]))
         if gaps:
             res_out = []
             prev_idx = 0
             for i, pregap, postgap in gaps:
                 if postgap > pregap:
                     gapsize = postgap - pregap - 1
-                    res_out.extend(restype(x) for x in  residues[prev_idx:i])
+                    res_out.extend(restype(x) for x in residues[prev_idx:i])
                     prev_idx = i
-                    res_out.append('X'*gapsize)
+                    res_out.append('X' * gapsize)
                 else:
                     warnings.warn("Ignoring out-of-order residues after a gap",
                                   UserWarning)

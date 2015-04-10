@@ -10,6 +10,7 @@ Returns a BlastTableRec instance
 
 import sys
 
+
 class BlastTableEntry(object):
     def __init__(self, in_rec):
         bt_fields = in_rec.split()

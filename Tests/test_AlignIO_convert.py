@@ -11,16 +11,16 @@ from Bio import AlignIO
 from Bio.Alphabet import generic_protein, generic_nucleotide, generic_dna
 
 
-#Top level function as this makes it easier to use for debugging:
+# Top level function as this makes it easier to use for debugging:
 def check_convert(in_filename, in_format, out_format, alphabet=None):
-    #Write it out using parse/write
+    # Write it out using parse/write
     handle = StringIO()
-    aligns = list(AlignIO.parse(open(in_filename), in_format, None, alphabet))
+    aligns = list(AlignIO.parse(in_filename, in_format, None, alphabet))
     try:
         count = AlignIO.write(aligns, handle, out_format)
     except ValueError:
         count = 0
-    #Write it out using convert passing filename and handle
+    # Write it out using convert passing filename and handle
     handle2 = StringIO()
     try:
         count2 = AlignIO.convert(in_filename, in_format, handle2, out_format, alphabet)
@@ -28,15 +28,16 @@ def check_convert(in_filename, in_format, out_format, alphabet=None):
         count2 = 0
     assert count == count2
     assert handle.getvalue() == handle2.getvalue()
-    #Write it out using convert passing handle and handle
+    # Write it out using convert passing handle and handle
     handle2 = StringIO()
     try:
-        count2 = AlignIO.convert(open(in_filename), in_format, handle2, out_format, alphabet)
+        with open(in_filename) as handle1:
+            count2 = AlignIO.convert(handle1, in_format, handle2, out_format, alphabet)
     except ValueError:
         count2 = 0
     assert count == count2
     assert handle.getvalue() == handle2.getvalue()
-    #TODO - convert passing an output filename?
+    # TODO - convert passing an output filename?
 
 
 class ConvertTests(unittest.TestCase):
@@ -60,7 +61,7 @@ output_formats = ["fasta"] + sorted(AlignIO._FormatToWriter)
 for filename, in_format, alphabet in tests:
     for out_format in output_formats:
         def funct(fn, fmt1, fmt2, alpha):
-            f = lambda x : x.simple_check(fn, fmt1, fmt2, alpha)
+            f = lambda x: x.simple_check(fn, fmt1, fmt2, alpha)
             f.__doc__ = "Convert %s from %s to %s" % (fn, fmt1, fmt2)
             return f
         setattr(ConvertTests, "test_%s_%s_to_%s"
@@ -69,5 +70,5 @@ for filename, in_format, alphabet in tests:
     del funct
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

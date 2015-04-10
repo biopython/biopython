@@ -13,9 +13,11 @@ This interface is less efficient than the standard GenePopControler
 from .Controller import GenePopController
 from Bio.PopGen import GenePop
 
+__docformat__ = "restructuredtext en"
+
 
 class EasyController(object):
-    def __init__(self, fname, genepop_dir = None):
+    def __init__(self, fname, genepop_dir=None):
         """Initializes the controller.
 
         genepop_dir is the directory where GenePop is.
@@ -32,20 +34,20 @@ class EasyController(object):
             rec = GenePop.read(f)
         return rec.pop_list, rec.loci_list
 
-    def test_hw_pop(self, pop_pos, test_type = "probability"):
-        if test_type=="deficiency":
+    def test_hw_pop(self, pop_pos, test_type="probability"):
+        if test_type == "deficiency":
             hw_res = self._controller.test_pop_hz_deficiency(self._fname)
-        elif test_type=="excess":
+        elif test_type == "excess":
             hw_res = self._controller.test_pop_hz_excess(self._fname)
         else:
             loci_res, hw_res, fisher_full = self._controller.test_pop_hz_prob(self._fname, ".P")
-        for i in range(pop_pos-1):
+        for i in range(pop_pos - 1):
             next(hw_res)
         return next(hw_res)
 
-    def test_hw_global(self, test_type = "deficiency", enum_test = True,
-                       dememorization = 10000, batches = 20, iterations = 5000):
-        if test_type=="deficiency":
+    def test_hw_global(self, test_type="deficiency", enum_test=True,
+                       dememorization=10000, batches=20, iterations=5000):
+        if test_type == "deficiency":
             pop_res, loc_res, all = self._controller.test_global_hz_deficiency(self._fname,
                 enum_test, dememorization, batches, iterations)
         else:
@@ -53,12 +55,12 @@ class EasyController(object):
                 enum_test, dememorization, batches, iterations)
         return list(pop_res), list(loc_res), all
 
-    def test_ld_all_pair(self, locus1, locus2, dememorization = 10000,
-                         batches = 20, iterations = 5000):
+    def test_ld_all_pair(self, locus1, locus2, dememorization=10000,
+                         batches=20, iterations=5000):
         all_ld = self._controller.test_ld(self._fname, dememorization, batches, iterations)[1]
         for ld_case in all_ld:
             (l1, l2), result = ld_case
-            if (l1==locus1 and l2==locus2) or (l1==locus2 and l2==locus1):
+            if (l1 == locus1 and l2 == locus2) or (l1 == locus2 and l2 == locus1):
                 return result
 
     def estimate_nm(self):
@@ -92,9 +94,10 @@ class EasyController(object):
            Below CW means Cockerham and Weir and RH means Robertson and Hill.
 
            Returns a pair:
-           dictionary [allele] = (repetition count, frequency, Fis CW )
-               with information for each allele
-           a triple with total number of alleles, Fis CW, Fis RH
+
+                - dictionary [allele] = (repetition count, frequency, Fis CW )
+                  with information for each allele
+                - a triple with total number of alleles, Fis CW, Fis RH
 
 
         """
@@ -170,7 +173,7 @@ class EasyController(object):
                 self.__fst_pair_locus[locus_info[0]] = locus_info[1]
         return self.__fst_pair_locus[locus]
 
-    def calc_ibd(self, is_diplo = True, stat="a", scale="Log", min_dist=0.00001):
+    def calc_ibd(self, is_diplo=True, stat="a", scale="Log", min_dist=0.00001):
         if is_diplo:
             return self._controller.calc_ibd_diplo(self._fname, stat, scale, min_dist)
         else:

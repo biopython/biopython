@@ -11,7 +11,7 @@ from functools import reduce
 class Graph(object):
     """A directed graph abstraction with labeled edges."""
 
-    def __init__(self, nodes = []):
+    def __init__(self, nodes=[]):
         """Initializes a new Graph object."""
         self._adjacency_list = {}    # maps parent -> set of child objects
         for n in nodes:
@@ -42,7 +42,7 @@ class Graph(object):
     def __str__(self):
         """Returns a concise string description of this graph."""
         nodenum = len(self._adjacency_list)
-        edgenum = reduce(lambda x, y: x+y,
+        edgenum = reduce(lambda x, y: x + y,
                          [len(v) for v in self._adjacency_list.values()])
         labelnum = len(self._label_map)
         return "<Graph: " + \
@@ -55,7 +55,7 @@ class Graph(object):
         if node not in self._adjacency_list:
             self._adjacency_list[node] = set()
 
-    def add_edge(self, source, to, label = None):
+    def add_edge(self, source, to, label=None):
         """Adds an edge to this graph."""
         if source not in self._adjacency_list:
             raise ValueError("Unknown <from> node: " + str(source))
@@ -101,7 +101,7 @@ class Graph(object):
         parents = []
         for parent, children in self._adjacency_list.items():
             for x in children:
-                if x is child:
+                if x == child:
                     parents.append((parent, self._edge_map[(parent, child)]))
         return sorted(parents)
 
@@ -118,19 +118,19 @@ class Graph(object):
         # remove all in-edges from adjacency list
         for n in self._adjacency_list.keys():
             self._adjacency_list[n] = set(x for x in self._adjacency_list[n]
-                                          if x is not node)
+                                          if x != node)
         # remove all refering pairs in label map
-        for label in list(self._label_map.keys()): # we're editing this!
+        for label in list(self._label_map.keys()):  # we're editing this!
             lm = set(x for x in self._label_map[label]
-                     if (x[0] is not node) and (x[1] is not node))
+                     if (x[0] != node) and (x[1] != node))
             # remove the entry completely if the label is now unused
             if lm:
                 self._label_map[label] = lm
             else:
                 del self._label_map[label]
         # remove all refering entries in edge map
-        for edge in list(self._edge_map.keys()): # we're editing this!
-            if edge[0] is node or edge[1] is node:
+        for edge in list(self._edge_map.keys()):  # we're editing this!
+            if edge[0] == node or edge[1] == node:
                 del self._edge_map[edge]
 
     def remove_edge(self, parent, child, label):

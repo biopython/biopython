@@ -12,8 +12,8 @@ o Record - All of the information in an GEO record.
 See http://www.ncbi.nlm.nih.gov/geo/
 """
 
-
 from __future__ import print_function
+
 
 class Record(object):
     """Hold GEO information in a format similar to the original record.
@@ -36,7 +36,7 @@ class Record(object):
         self.col_defs = {}
         self.table_rows = []
 
-    def __str__( self ):
+    def __str__(self):
         output = ''
         output += 'GEO Type: %s\n' % self.entity_type
         output += 'GEO Id: %s\n' % self.entity_id
@@ -46,7 +46,7 @@ class Record(object):
             if isinstance(contents, list):
                 for item in contents:
                     try:
-                        output += '%s: %s\n' % ( key, item[:40])
+                        output += '%s: %s\n' % (key, item[:40])
                         output += out_block(item[40:])
                     except:
                         pass
@@ -55,17 +55,17 @@ class Record(object):
                 output += out_block(contents[40:])
             else:
                 print(contents)
-                output += '%s: %s\n' % (key, val[:40])
-                output += out_block(val[40:])
-        col_keys = sorted(self.col_defs.keys())
+                output += '%s: %s\n' % (key, contents[:40])
+                output += out_block(contents[40:])
+        col_keys = sorted(self.col_defs)
         output += 'Column Header Definitions\n'
         for key in col_keys:
             val = self.col_defs[key]
             output += '    %s: %s\n' % (key, val[:40])
             output += out_block(val[40:], '    ')
-        #May have to display VERY large tables,
-        #so only show the first 20 lines of data
-        MAX_ROWS = 20 + 1 # include header in count
+        # May have to display VERY large tables,
+        # so only show the first 20 lines of data
+        MAX_ROWS = 20 + 1  # include header in count
         for row in self.table_rows[0:MAX_ROWS]:
             output += '%s: ' % self.table_rows.index(row)
             for col in row:
@@ -82,9 +82,9 @@ class Record(object):
         return output
 
 
-def out_block( text, prefix = '' ):
+def out_block(text, prefix=''):
     output = ''
     for j in range(0, len(text), 80):
-        output += '%s%s\n' % (prefix, text[j:j+80])
+        output += '%s%s\n' % (prefix, text[j:j + 80])
     output += '\n'
     return output

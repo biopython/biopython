@@ -316,7 +316,7 @@ class TwoPointTest(unittest.TestCase):
                             "Returned an exact copy of the original organism.")
 
 
-class TestCrossover:
+class TestCrossover(object):
     """Provide basic crossover functionality for testing SafeFitness.
     """
     def __init__(self):
@@ -427,5 +427,5 @@ class SafeFitnessTest(unittest.TestCase):
                      "Did not get new organism under higher fitness conditions.")
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

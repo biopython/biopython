@@ -11,6 +11,7 @@ from Bio._py3k import input as _input
 
 import shlex
 
+
 class MMCIF2Dict(dict):
 
     def __init__(self, filename):
@@ -19,9 +20,11 @@ class MMCIF2Dict(dict):
             key = None
             tokens = self._tokenize(handle)
             token = next(tokens)
-            self[token[0:5]]=token[5:]
+            self[token[0:5]] = token[5:]
+            i = 0
+            n = 0
             for token in tokens:
-                if token=="loop_":
+                if token == "loop_":
                     loop_flag = True
                     keys = []
                     i = 0
@@ -37,14 +40,16 @@ class MMCIF2Dict(dict):
                             n += 1
                             continue
                     else:
-                        self[keys[i%n]].append(token)
-                        i+=1
+                        self[keys[i % n]].append(token)
+                        i += 1
                         continue
                 if key is None:
                     key = token
                 else:
                     self[key] = token
                     key = None
+
+    # Private methods
 
     def _tokenize(self, handle):
         for line in handle:
@@ -54,7 +59,7 @@ class MMCIF2Dict(dict):
                 token = line[1:].strip()
                 for line in handle:
                     line = line.strip()
-                    if line==';':
+                    if line == ';':
                         break
                     token += line
                 yield token
@@ -64,14 +69,14 @@ class MMCIF2Dict(dict):
                     yield token
 
 
-if __name__=="__main__":
+if __name__ == "__main__":
 
     import sys
 
-    if len(sys.argv)!=2:
+    if len(sys.argv) != 2:
         print("Usage: python MMCIF2Dict filename.")
 
-    filename=sys.argv[1]
+    filename = sys.argv[1]
 
     mmcif_dict = MMCIF2Dict(filename)
 
@@ -86,7 +91,7 @@ if __name__=="__main__":
                 print(key)
             continue
         try:
-            value=mmcif_dict[entry]
+            value = mmcif_dict[entry]
             if isinstance(value, list):
                 for item in value:
                     print(item)

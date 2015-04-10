@@ -5,8 +5,8 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-#TODO - Clean up the extra files created by clustalw?  e.g. *.dnd
-#and *.aln where we have not requested an explicit name?
+# TODO - Clean up the extra files created by clustalw?  e.g. *.dnd
+# and *.aln where we have not requested an explicit name?
 from __future__ import print_function
 
 from Bio import MissingExternalDependencyError
@@ -21,31 +21,31 @@ from Bio.Application import ApplicationError
 
 #################################################################
 
-#Try to avoid problems when the OS is in another language
+# Try to avoid problems when the OS is in another language
 os.environ['LANG'] = 'C'
 
 clustalw_exe = None
 if sys.platform == "win32":
-    #TODO - Check the path?
+    # TODO - Check the path?
     try:
-        #This can vary depending on the Windows language.
+        # This can vary depending on the Windows language.
         prog_files = os.environ["PROGRAMFILES"]
     except KeyError:
         prog_files = r"C:\Program Files"
 
-    #Note that EBI's clustalw2 installer, e.g. clustalw-2.0.10-win.msi
-    #uses C:\Program Files\ClustalW2\clustalw2.exe so we should check
-    #for that.
+    # Note that EBI's clustalw2 installer, e.g. clustalw-2.0.10-win.msi
+    # uses C:\Program Files\ClustalW2\clustalw2.exe so we should check
+    # for that.
     #
-    #Some users doing a manual install have reported using
-    #C:\Program Files\clustalw.exe
+    # Some users doing a manual install have reported using
+    # C:\Program Files\clustalw.exe
     #
-    #Older installers might use something like this,
-    #C:\Program Files\Clustalw\clustalw.exe
+    # Older installers might use something like this,
+    # C:\Program Files\Clustalw\clustalw.exe
     #
-    #One particular case is www.tc.cornell.edu currently provide a
-    #clustalw1.83 installer which uses the following long location:
-    #C:\Program Files\CTCBioApps\clustalw\v1.83\clustalw1.83.exe
+    # One particular case is www.tc.cornell.edu currently provide a
+    # clustalw1.83 installer which uses the following long location:
+    # C:\Program Files\CTCBioApps\clustalw\v1.83\clustalw1.83.exe
     likely_dirs = ["ClustalW2", "",
                    "Clustal", "Clustalw", "Clustalw183", "Clustalw1.83",
                    r"CTCBioApps\clustalw\v1.83"]
@@ -61,12 +61,12 @@ if sys.platform == "win32":
                 break
 else:
     from Bio._py3k import getoutput
-    #Note that clustalw 1.83 and clustalw 2.1 don't obey the --version
-    #command, but this does cause them to quit cleanly.  Otherwise they prompt
-    #the user for input (causing a lock up).
+    # Note that clustalw 1.83 and clustalw 2.1 don't obey the --version
+    # command, but this does cause them to quit cleanly.  Otherwise they prompt
+    # the user for input (causing a lock up).
     output = getoutput("clustalw2 --version")
-    #Since "not found" may be in another language, try and be sure this is
-    #really the clustalw tool's output
+    # Since "not found" may be in another language, try and be sure this is
+    # really the clustalw tool's output
     if "not found" not in output and "CLUSTAL" in output \
     and "Multiple Sequence Alignments" in output:
         clustalw_exe = "clustalw2"
@@ -96,13 +96,13 @@ class ClustalWTestCase(unittest.TestCase):
         """Standard testing procedure used by all tests."""
         self.assertTrue(str(eval(repr(cline))) == str(cline))
         input_records = SeqIO.to_dict(SeqIO.parse(cline.infile, "fasta"),
-                                      lambda rec : rec.id.replace(":", "_"))
+                                      lambda rec: rec.id.replace(":", "_"))
 
-        #Determine name of tree file
+        # Determine name of tree file
         if cline.newtree:
             tree_file = cline.newtree
         else:
-            #Clustalw will name it based on the input file
+            # Clustalw will name it based on the input file
             tree_file = os.path.splitext(cline.infile)[0] + ".dnd"
 
         # Mark generated files for later removal
@@ -113,10 +113,10 @@ class ClustalWTestCase(unittest.TestCase):
         self.assertTrue(output.strip().startswith("CLUSTAL"))
         self.assertTrue(error.strip() == "")
 
-        #Check the output...
+        # Check the output...
         align = AlignIO.read(cline.outfile, "clustal")
-        #The length of the alignment will depend on the version of clustalw
-        #(clustalw 2.1 and clustalw 1.83 are certainly different).
+        # The length of the alignment will depend on the version of clustalw
+        # (clustalw 2.1 and clustalw 1.83 are certainly different).
         output_records = SeqIO.to_dict(SeqIO.parse(cline.outfile, "clustal"))
         self.assertTrue(set(input_records.keys()) == set(output_records.keys()))
         for record in align:
@@ -124,8 +124,8 @@ class ClustalWTestCase(unittest.TestCase):
             self.assertTrue(str(record.seq).replace("-", "") ==
                    str(input_records[record.id].seq))
 
-        #Check the DND file was created.
-        #TODO - Try and parse this with Bio.Nexus?
+        # Check the DND file was created.
+        # TODO - Try and parse this with Bio.Nexus?
         self.assertTrue(os.path.isfile(tree_file))
 
     def add_file_to_clean(self, filename):
@@ -147,7 +147,7 @@ class ClustalWTestErrorConditions(ClustalWTestCase):
         except ApplicationError as err:
             self.assertTrue("Cannot open sequence file" in str(err) or
                             "Cannot open input file" in str(err) or
-                            "non-zero exit status" in str(err))
+                            "Non-zero return code " in str(err), str(err))
         else:
             self.fail("expected an ApplicationError")
 
@@ -160,16 +160,16 @@ class ClustalWTestErrorConditions(ClustalWTestCase):
 
         try:
             stdout, stderr = cline()
-            #Zero return code is a possible bug in clustalw 2.1?
+            # Zero return code is a possible bug in clustalw 2.1?
             self.assertTrue("cannot do multiple alignment" in (stdout + stderr))
         except ApplicationError as err:
-            #Good, non-zero return code indicating an error in clustalw
-            #e.g. Using clustalw 1.83 get:
-            #Command 'clustalw -infile=Fasta/f001' returned non-zero exit status 4
+            # Good, non-zero return code indicating an error in clustalw
+            # e.g. Using clustalw 1.83 get:
+            # Command 'clustalw -infile=Fasta/f001' returned non-zero exit status 4
             pass
 
         if os.path.isfile(input_file + ".aln"):
-            #Clustalw 2.1 made an emtpy aln file, clustalw 1.83 did not
+            # Clustalw 2.1 made an emtpy aln file, clustalw 1.83 did not
             self.add_file_to_clean(input_file + ".aln")
 
     def test_invalid_sequence(self):
@@ -181,16 +181,16 @@ class ClustalWTestErrorConditions(ClustalWTestCase):
         try:
             stdout, stderr = cline()
         except ApplicationError as err:
-            #Ideally we'd catch the return code and raise the specific
-            #error for "invalid format", rather than just notice there
-            #is not output file.
-            #Note:
-            #Python 2.3 on Windows gave (0, 'Error')
-            #Python 2.5 on Windows gives [Errno 0] Error
+            # Ideally we'd catch the return code and raise the specific
+            # error for "invalid format", rather than just notice there
+            # is not output file.
+            # Note:
+            # Python 2.3 on Windows gave (0, 'Error')
+            # Python 2.5 on Windows gives [Errno 0] Error
             self.assertTrue("invalid format" in str(err) or
                             "not produced" in str(err) or
                             "No sequences in file" in str(err) or
-                            "non-zero exit status " in str(err))
+                            "Non-zero return code " in str(err))
         else:
             self.fail("expected an ApplicationError")
 
@@ -235,11 +235,11 @@ class ClustalWTestNormalConditions(ClustalWTestCase):
     def test_large_input_file(self):
         """Test a large input file."""
 
-        #Create a large input file by converting another example file
-        #(See Bug 2804, this will produce so much output on stdout that
-        #subprocess could suffer a deadlock and hang).  Using all the
-        #records should show the deadlock but is very slow - just thirty
-        #seems to lockup on Mac OS X, even 20 on Linux (without the fix).
+        # Create a large input file by converting another example file
+        # (See Bug 2804, this will produce so much output on stdout that
+        # subprocess could suffer a deadlock and hang).  Using all the
+        # records should show the deadlock but is very slow - just thirty
+        # seems to lockup on Mac OS X, even 20 on Linux (without the fix).
         input_file = "temp_cw_prot.fasta"
         handle = open(input_file, "w")
         records = list(SeqIO.parse("NBRF/Cw_prot.pir", "pir"))[:40]
@@ -303,5 +303,5 @@ class ClustalWTestVersionTwoSpecific(ClustalWTestCase):
 
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

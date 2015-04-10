@@ -27,6 +27,8 @@ from Bio.Align import MultipleSeqAlignment
 from Bio.Alphabet import single_letter_alphabet, generic_dna, generic_protein
 from Bio.Alphabet import Gapped
 
+__docformat__ = "restructuredtext en"
+
 
 def _extract_alignment_region(alignment_seq_with_flanking, annotation):
     """Helper function for the main parsing code (PRIVATE).
@@ -49,7 +51,7 @@ def _extract_alignment_region(alignment_seq_with_flanking, annotation):
         end = int(annotation['al_stop']) \
               - display_start + 1
     else:
-        #FASTA has flipped this sequence...
+        # FASTA has flipped this sequence...
         start = display_start \
               - int(annotation['al_start'])
         end = display_start \
@@ -72,15 +74,15 @@ def FastaM10Iterator(handle, alphabet=single_letter_alphabet):
          W.R. Pearson & D.J. Lipman PNAS (1988) 85:2444-2448
 
     This class is intended to be used via the Bio.AlignIO.parse() function
-    by specifying the format as "fasta-m10" as shown in the following code:
+    by specifying the format as "fasta-m10" as shown in the following code::
 
         from Bio import AlignIO
         handle = ...
         for a in AlignIO.parse(handle, "fasta-m10"):
-            assert len(a) == 2, "Should be pairwise!"
-            print("Alignment length %i" % a.get_alignment_length())
-            for record in a:
-                print("%s %s %s" % (record.seq, record.name, record.id))
+          assert len(a) == 2, "Should be pairwise!"
+          print("Alignment length %i" % a.get_alignment_length())
+          for record in a:
+            print("%s %s %s" % (record.seq, record.name, record.id))
 
     Note that this is not a full blown parser for all the information
     in the FASTA output - for example, most of the header and all of the
@@ -117,8 +119,8 @@ def FastaM10Iterator(handle, alphabet=single_letter_alphabet):
             q = _extract_alignment_region(query_seq, query_tags)
             if tool in ["TFASTX"] and len(match_seq) == len(q):
                 m = match_seq
-                #Quick hack until I can work out how -, * and / characters
-                #and the apparent mix of aa and bp coordinates works.
+                # Quick hack until I can work out how -, * and / characters
+                # and the apparent mix of aa and bp coordinates works.
             else:
                 m = _extract_alignment_region(match_seq, match_tags)
             assert len(q) == len(m)
@@ -137,31 +139,31 @@ def FastaM10Iterator(handle, alphabet=single_letter_alphabet):
         assert alphabet is not None
         alignment = MultipleSeqAlignment([], alphabet)
 
-        #TODO - Introduce an annotated alignment class?
-        #For now, store the annotation a new private property:
+        # TODO - Introduce an annotated alignment class?
+        # For now, store the annotation a new private property:
         alignment._annotations = {}
 
-        #Want to record both the query header tags, and the alignment tags.
+        # Want to record both the query header tags, and the alignment tags.
         for key, value in header_tags.items():
             alignment._annotations[key] = value
         for key, value in align_tags.items():
             alignment._annotations[key] = value
 
-        #Query
-        #=====
+        # Query
+        # =====
         record = SeqRecord(Seq(q, alphabet),
                            id=query_id,
                            name="query",
                            description=query_descr,
                            annotations={"original_length": int(query_tags["sq_len"])})
-        #TODO - handle start/end coordinates properly. Short term hack for now:
+        # TODO - handle start/end coordinates properly. Short term hack for now:
         record._al_start = int(query_tags["al_start"])
         record._al_stop = int(query_tags["al_stop"])
         alignment.append(record)
 
-        #TODO - What if a specific alphabet has been requested?
-        #TODO - Use an IUPAC alphabet?
-        #TODO - Can FASTA output RNA?
+        # TODO - What if a specific alphabet has been requested?
+        # TODO - Use an IUPAC alphabet?
+        # TODO - Can FASTA output RNA?
         if alphabet == single_letter_alphabet and "sq_type" in query_tags:
             if query_tags["sq_type"] == "D":
                 record.seq.alphabet = generic_dna
@@ -171,19 +173,19 @@ def FastaM10Iterator(handle, alphabet=single_letter_alphabet):
             if not hasattr(record.seq.alphabet, "gap_char"):
                 record.seq.alphabet = Gapped(record.seq.alphabet, "-")
 
-        #Match
-        #=====
+        # Match
+        # =====
         record = SeqRecord(Seq(m, alphabet),
                            id=match_id,
                            name="match",
                            description=match_descr,
                            annotations={"original_length": int(match_tags["sq_len"])})
-        #TODO - handle start/end coordinates properly. Short term hack for now:
+        # TODO - handle start/end coordinates properly. Short term hack for now:
         record._al_start = int(match_tags["al_start"])
         record._al_stop = int(match_tags["al_stop"])
         alignment.append(record)
 
-        #This is still a very crude way of dealing with the alphabet:
+        # This is still a very crude way of dealing with the alphabet:
         if alphabet == single_letter_alphabet and "sq_type" in match_tags:
             if match_tags["sq_type"] == "D":
                 record.seq.alphabet = generic_dna
@@ -211,11 +213,11 @@ def FastaM10Iterator(handle, alphabet=single_letter_alphabet):
     for line in handle:
         if ">>>" in line and not line.startswith(">>>"):
             if query_id and match_id:
-                #This happens on old FASTA output which lacked an end of
-                #query >>><<< marker line.
+                # This happens on old FASTA output which lacked an end of
+                # query >>><<< marker line.
                 yield build_hsp()
             state = state_NONE
-            query_descr = line[line.find(">>>")+3:].strip()
+            query_descr = line[line.find(">>>") + 3:].strip()
             query_id = query_descr.split(None, 1)[0]
             match_id = None
             header_tags = {}
@@ -226,10 +228,10 @@ def FastaM10Iterator(handle, alphabet=single_letter_alphabet):
             match_seq = ""
             cons_seq = ""
         elif line.startswith("!! No "):
-            #e.g.
-            #!! No library sequences with E() < 0.5
-            #or on more recent versions,
-            #No sequences with E() < 0.05
+            # e.g.
+            # !! No library sequences with E() < 0.5
+            # or on more recent versions,
+            # No sequences with E() < 0.05
             assert state == state_NONE
             assert not header_tags
             assert not align_tags
@@ -241,7 +243,7 @@ def FastaM10Iterator(handle, alphabet=single_letter_alphabet):
             assert not cons_seq
             query_id = None
         elif line.strip() in [">>><<<", ">>>///"]:
-            #End of query, possible end of all queries
+            # End of query, possible end of all queries
             if query_id and match_id:
                 yield build_hsp()
             state = state_NONE
@@ -255,7 +257,7 @@ def FastaM10Iterator(handle, alphabet=single_letter_alphabet):
             match_seq = ""
             cons_seq = ""
         elif line.startswith(">>>"):
-            #Should be start of a match!
+            # Should be start of a match!
             assert query_id is not None
             assert line[3:].split(", ", 1)[0] == query_id, line
             assert match_id is None
@@ -268,7 +270,7 @@ def FastaM10Iterator(handle, alphabet=single_letter_alphabet):
             assert not cons_seq
             state = state_QUERY_HEADER
         elif line.startswith(">>"):
-            #Should now be at start of a match alignment!
+            # Should now be at start of a match alignment!
             if query_id and match_id:
                 yield build_hsp()
             align_tags = {}
@@ -281,11 +283,11 @@ def FastaM10Iterator(handle, alphabet=single_letter_alphabet):
             match_id = match_descr.split(None, 1)[0]
             state = state_ALIGN_HEADER
         elif line.startswith(">--"):
-            #End of one HSP
+            # End of one HSP
             assert query_id and match_id, line
             yield build_hsp()
-            #Clean up read for next HSP
-            #but reuse header_tags
+            # Clean up read for next HSP
+            # but reuse header_tags
             align_tags = {}
             query_tags = {}
             match_tags = {}
@@ -295,33 +297,33 @@ def FastaM10Iterator(handle, alphabet=single_letter_alphabet):
             state = state_ALIGN_HEADER
         elif line.startswith(">"):
             if state == state_ALIGN_HEADER:
-                #Should be start of query alignment seq...
+                # Should be start of query alignment seq...
                 assert query_id is not None, line
                 assert match_id is not None, line
                 assert query_id.startswith(line[1:].split(None, 1)[0]), line
                 state = state_ALIGN_QUERY
             elif state == state_ALIGN_QUERY:
-                #Should be start of match alignment seq
+                # Should be start of match alignment seq
                 assert query_id is not None, line
                 assert match_id is not None, line
                 assert match_id.startswith(line[1:].split(None, 1)[0]), line
                 state = state_ALIGN_MATCH
             elif state == state_NONE:
-                #Can get > as the last line of a histogram
+                # Can get > as the last line of a histogram
                 pass
             else:
                 assert False, "state %i got %r" % (state, line)
         elif line.startswith("; al_cons"):
             assert state == state_ALIGN_MATCH, line
             state = state_ALIGN_CONS
-            #Next line(s) should be consensus seq...
+            # Next line(s) should be consensus seq...
         elif line.startswith("; "):
             if ": " in line:
                 key, value = [s.strip() for s in line[2:].split(": ", 1)]
             else:
                 import warnings
-                #Seen in lalign36, specifically version 36.3.4 Apr, 2011
-                #Fixed in version 36.3.5b Oct, 2011(preload8)
+                # Seen in lalign36, specifically version 36.3.4 Apr, 2011
+                # Fixed in version 36.3.5b Oct, 2011(preload8)
                 warnings.warn("Missing colon in line: %r" % line)
                 try:
                     key, value = [s.strip() for s in line[2:].split(" ", 1)]
@@ -359,7 +361,7 @@ def FastaM10Iterator(handle, alphabet=single_letter_alphabet):
 if __name__ == "__main__":
     print("Running a quick self-test")
 
-    #http://emboss.sourceforge.net/docs/themes/alnformats/align.simple
+    # http://emboss.sourceforge.net/docs/themes/alnformats/align.simple
     simple_example = \
 """# /opt/fasta/fasta34 -Q -H -E 1 -m 10 NC_002127.faa NC_009649.faa
 FASTA searches a protein or DNA sequence data bank
@@ -599,11 +601,11 @@ Function used was FASTA [version 34.26 January 12, 2007]
     assert len(alignments) == 4, len(alignments)
     assert len(alignments[0]) == 2
     for a in alignments:
-        print("Alignment %i sequences of length %i" \
+        print("Alignment %i sequences of length %i"
               % (len(a), a.get_alignment_length()))
         for r in a:
             print("%s %s %i" % (r.seq, r.id, r.annotations["original_length"]))
-        #print(a.annotations)
+        # print(a.annotations)
     print("Done")
 
     import os
@@ -615,7 +617,7 @@ Function used was FASTA [version 34.26 January 12, 2007]
             print(filename)
             print("=" * len(filename))
             for i, a in enumerate(FastaM10Iterator(open(os.path.join(path, filename)))):
-                print("#%i, %s" % (i+1, a))
+                print("#%i, %s" % (i + 1, a))
                 for r in a:
                     if "-" in r.seq:
                         assert r.seq.alphabet.gap_char == "-"

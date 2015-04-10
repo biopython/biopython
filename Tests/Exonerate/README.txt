@@ -13,6 +13,7 @@ exn_22_m_cdna2genome.exn            cdna2genome model alignment
 exn_22_m_coding2coding.exn          coding2coding model alignment
 exn_22_m_coding2coding_fshifts.exn  coding2coding model alignment, with frameshifts
 exn_22_m_coding2genome.exn          coding2genome model alignment
+exn_22_m_dna2protein.exn            dna2protein model alignment
 exn_22_m_est2genome.exn             est2genome model alignment
 exn_22_m_genome2genome.exn          genome2genome model alignment
 exn_22_m_ner.exn                    ner model alignment

@@ -34,6 +34,7 @@ from xbb_help import xbbtools_help
 from Bio.Data import CodonTable
 from Bio.SeqIO.FastaIO import SimpleFastaParser
 
+
 class xbb_widget:
     def __init__(self, parent=None):
         self.is_a_master = (parent is None)
@@ -290,21 +291,21 @@ class xbb_widget:
 
     def get_selection(self):
         w = self.sequence_id
-        #print(w.selection_own())
-        #w.selection_own()
+        # print(w.selection_own())
+        # w.selection_own()
         try:
             return w.selection_get()
-            #return string.upper(w.get(sel.first, sel.last))
+            # return string.upper(w.get(sel.first, sel.last))
         except:
             return ''
 
     def get_self_selection(self):
         w = self.sequence_id
-        #w.selection_own()
+        # w.selection_own()
         try:
             return w.selection_get()
-            #return string.upper(w.get(sel.first, sel.last))
-            #return string.upper(w.selection_own_get())
+            # return string.upper(w.get(sel.first, sel.last))
+            # return string.upper(w.selection_own_get())
         except:
             return ''
 
@@ -453,7 +454,7 @@ GC=%f
         seq = w.get(start, stop)
         seq = re.sub('[^A-Z]', '', seq)
 
-        #print('seq >%s<' % seq)
+        # print('seq >%s<' % seq)
         complementary = self.translator.complement(seq)
         w.delete(start, stop)
         w.insert(start, complementary)

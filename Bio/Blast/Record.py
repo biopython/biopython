@@ -20,7 +20,11 @@ Parameters         Holds information from the parameters.
 """
 # XXX finish printable BLAST output
 
-from Bio.Align import Generic
+from Bio.Seq import Seq
+from Bio.SeqRecord import SeqRecord
+from Bio.Align import MultipleSeqAlignment
+
+__docformat__ = "restructuredtext en"
 
 
 class Header(object):
@@ -103,38 +107,39 @@ class HSP(object):
     """Stores information about one hsp in an alignment hit.
 
     Members:
-    score           BLAST score of hit.  (float)
-    bits            Number of bits for that score.  (float)
-    expect          Expect value.  (float)
-    num_alignments  Number of alignments for same subject.  (int)
-    identities      Number of identities (int) if using the XML parser.
-                    Tuple of numer of identities/total aligned (int, int)
-                    if using the (obsolete) plain text parser.
-    positives       Number of positives (int) if using the XML parser.
-                    Tuple of numer of positives/total aligned (int, int)
-                    if using the (obsolete) plain text parser.
-    gaps            Number of gaps (int) if using the XML parser.
-                    Tuple of numer of gaps/total aligned (int, int) if
-                    using the (obsolete) plain text parser.
-    align_length    Length of the alignment. (int)
-    strand          Tuple of (query, target) strand.
-    frame           Tuple of 1 or 2 frame shifts, depending on the flavor.
+        - score           BLAST score of hit.  (float)
+        - bits            Number of bits for that score.  (float)
+        - expect          Expect value.  (float)
+        - num_alignments  Number of alignments for same subject.  (int)
+        - identities      Number of identities (int) if using the XML parser.
+          Tuple of numer of identities/total aligned (int, int)
+          if using the (obsolete) plain text parser.
+        - positives       Number of positives (int) if using the XML parser.
+          Tuple of numer of positives/total aligned (int, int)
+          if using the (obsolete) plain text parser.
+        - gaps            Number of gaps (int) if using the XML parser.
+          Tuple of numer of gaps/total aligned (int, int) if
+          using the (obsolete) plain text parser.
+        - align_length    Length of the alignment. (int)
+        - strand          Tuple of (query, target) strand.
+        - frame           Tuple of 1 or 2 frame shifts, depending on the flavor.
 
-    query           The query sequence.
-    query_start     The start residue for the query sequence.  (1-based)
-    query_end       The end residue for the query sequence.  (1-based)
-    match           The match sequence.
-    sbjct           The sbjct sequence.
-    sbjct_start     The start residue for the sbjct sequence.  (1-based)
-    sbjct_end       The end residue for the sbjct sequence.  (1-based)
+        - query           The query sequence.
+        - query_start     The start residue for the query sequence.  (1-based)
+        - query_end       The end residue for the query sequence.  (1-based)
+        - match           The match sequence.
+        - sbjct           The sbjct sequence.
+        - sbjct_start     The start residue for the sbjct sequence.  (1-based)
+        - sbjct_end       The end residue for the sbjct sequence.  (1-based)
 
-    Not all flavors of BLAST return values for every attribute:
-              score     expect     identities   positives    strand  frame
-    BLASTP     X          X            X            X
-    BLASTN     X          X            X            X          X
-    BLASTX     X          X            X            X                  X
-    TBLASTN    X          X            X            X                  X
-    TBLASTX    X          X            X            X                 X/X
+    Not all flavors of BLAST return values for every attribute::
+    
+                  score     expect     identities   positives    strand  frame
+        BLASTP     X          X            X            X
+        BLASTN     X          X            X            X          X
+        BLASTX     X          X            X            X                  X
+        TBLASTN    X          X            X            X                  X
+        TBLASTX    X          X            X            X                 X/X
 
     Note: for BLASTX, the query sequence is shown as a protein sequence,
     but the numbering is based on the nucleotides.  Thus, the numbering
@@ -211,16 +216,16 @@ class MultipleAlignment(object):
     def to_generic(self, alphabet):
         """Retrieve generic alignment object for the given alignment.
 
-        Instead of the tuples, this returns an Alignment object from
-        Bio.Align.Generic, through which you can manipulate and query
+        Instead of the tuples, this returns a MultipleSeqAlignment object
+        from Bio.Align, through which you can manipulate and query
         the object.
 
         alphabet is the specified alphabet for the sequences in the code (for
-        example IUPAC.IUPACProtein.
+        example IUPAC.IUPACProtein).
 
         Thanks to James Casbon for the code.
         """
-        #TODO - Switch to new Bio.Align.MultipleSeqAlignment class?
+        # TODO - Switch to new Bio.Align.MultipleSeqAlignment class?
         seq_parts = []
         seq_names = []
         parse_number = 0
@@ -237,9 +242,9 @@ class MultipleAlignment(object):
                 seq_parts[n] += seq
                 n += 1
 
-        generic = Generic.Alignment(alphabet)
+        generic = MultipleSeqAlignment([], alphabet)
         for (name, seq) in zip(seq_names, seq_parts):
-            generic.add_sequence(name, seq)
+            generic.append(SeqRecord(Seq(seq, alphabet), name))
 
         return generic
 
@@ -349,7 +354,7 @@ class Parameters(object):
         self.blast_cutoff = (None, None)
 
 
-#TODO - Add a friendly __str__ method to BLAST results
+# TODO - Add a friendly __str__ method to BLAST results
 class Blast(Header, DatabaseReport, Parameters):
     """Saves the results from a blast search.
 

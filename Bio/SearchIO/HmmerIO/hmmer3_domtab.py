@@ -13,6 +13,9 @@ from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 from .hmmer3_tab import Hmmer3TabParser, Hmmer3TabIndexer
 
 
+__docformat__ = "restructuredtext en"
+
+
 class Hmmer3DomtabParser(Hmmer3TabParser):
 
     """Base hmmer3-domtab iterator."""
@@ -97,7 +100,7 @@ class Hmmer3DomtabParser(Hmmer3TabParser):
                 prev_qid = cur_qid
                 prev_hid = cur_hid
             # only parse the line if it's not EOF
-            if self.line:
+            if self.line and not self.line.startswith('#'):
                 cur = self._parse_row()
                 cur_qid = cur['qresult']['id']
                 cur_hid = cur['hit']['id']
@@ -228,7 +231,7 @@ class Hmmer3DomtabHmmhitWriter(object):
         # calculate whitespace required
         # adapted from HMMER's source: src/p7_tophits.c#L1157
         if first_qresult:
-            #qnamew = max(20, len(first_qresult.id))
+            # qnamew = max(20, len(first_qresult.id))
             qnamew = 20
             tnamew = max(20, len(first_qresult[0].id))
             try:
@@ -240,18 +243,18 @@ class Hmmer3DomtabHmmhitWriter(object):
             qnamew, tnamew, qaccw, taccw = 20, 20, 10, 10
 
         header = "#%*s %22s %40s %11s %11s %11s\n" % \
-                (tnamew+qnamew-1+15+taccw+qaccw, "", "--- full sequence ---",
+                (tnamew + qnamew - 1 + 15 + taccw + qaccw, "", "--- full sequence ---",
                 "-------------- this domain -------------", "hmm coord",
                 "ali coord", "env coord")
         header += "#%-*s %-*s %5s %-*s %-*s %5s %9s %6s %5s %3s %3s %9s " \
-                "%9s %6s %5s %5s %5s %5s %5s %5s %5s %4s %s\n" % (tnamew-1,
+                "%9s %6s %5s %5s %5s %5s %5s %5s %5s %4s %s\n" % (tnamew - 1,
                 " target name", taccw, "accession", "tlen", qnamew,
                 "query name", qaccw, "accession", "qlen", "E-value", "score",
                 "bias", "#", "of", "c-Evalue", "i-Evalue", "score", "bias",
                 "from", "to", "from", "to", "from", "to", "acc",
                 "description of target")
         header += "#%*s %*s %5s %*s %*s %5s %9s %6s %5s %3s %3s %9s %9s " \
-                "%6s %5s %5s %5s %5s %5s %5s %5s %4s %s\n" % (tnamew-1,
+                "%6s %5s %5s %5s %5s %5s %5s %5s %4s %s\n" % (tnamew - 1,
                 "-------------------", taccw, "----------", "-----",
                 qnamew, "--------------------", qaccw, "----------",
                 "-----", "---------", "------", "-----", "---", "---",

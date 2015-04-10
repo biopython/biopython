@@ -9,14 +9,14 @@ This just collects general functions which you might like to use in
 dealing with HMMs.
 """
 
-
 from __future__ import print_function
 
+
 def pretty_print_prediction(emissions, real_state, predicted_state,
-                            emission_title = "Emissions",
-                            real_title = "Real State",
-                            predicted_title = "Predicted State",
-                            line_width = 75):
+                            emission_title="Emissions",
+                            real_title="Real State",
+                            predicted_title="Predicted State",
+                            line_width=75):
     """Print out a state sequence prediction in a nice manner.
 
     Arguments:

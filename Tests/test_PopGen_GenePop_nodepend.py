@@ -121,7 +121,7 @@ class FileParserTest(unittest.TestCase):
 
 class UtilsTest(unittest.TestCase):
     def setUp(self):
-        #All files have to have at least 3 loci and 2 pops
+        # All files have to have at least 3 loci and 2 pops
         files = ["c2line.gen"]
         self.handles = []
         for filename in files:
@@ -149,5 +149,5 @@ class UtilsTest(unittest.TestCase):
         assert len(rec.loci_list) == initial_loci - 2
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

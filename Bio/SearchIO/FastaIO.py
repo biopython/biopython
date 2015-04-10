@@ -21,8 +21,9 @@ Other flavors and/or versions may introduce some bugs. Please file a bug report
 if you see such problems to Biopython's bug tracker.
 
 More information on FASTA are available through these links:
-  - Website: http://fasta.bioch.virginia.edu/fasta_www2/fasta_list2.shtml
-  - User guide: http://fasta.bioch.virginia.edu/fasta_www2/fasta_guide.pdf
+
+    - Website: http://fasta.bioch.virginia.edu/fasta_www2/fasta_list2.shtml
+    - User guide: http://fasta.bioch.virginia.edu/fasta_www2/fasta_guide.pdf
 
 
 Supported Formats
@@ -65,23 +66,23 @@ The following object attributes are provided:
 +-----------------+-------------------------+----------------------------------+
 | Hit             | seq_len                 | full length of the hit sequence  |
 +-----------------+-------------------------+----------------------------------+
-| HSP             | bitscore                | *_bits line                      |
+| HSP             | bitscore                | \*_bits line                     |
 |                 +-------------------------+----------------------------------+
-|                 | evalue                  | *_expect line                    |
+|                 | evalue                  | \*_expect line                   |
 |                 +-------------------------+----------------------------------+
-|                 | ident_pct               | *_ident line                     |
+|                 | ident_pct               | \*_ident line                    |
 |                 +-------------------------+----------------------------------+
-|                 | init1_score             | *_init1 line                     |
+|                 | init1_score             | \*_init1 line                    |
 |                 +-------------------------+----------------------------------+
-|                 | initn_score             | *_initn line                     |
+|                 | initn_score             | \*_initn line                    |
 |                 +-------------------------+----------------------------------+
-|                 | opt_score               | *_opt line, *_s-w opt line       |
+|                 | opt_score               | \*_opt line, \*_s-w opt line     |
 |                 +-------------------------+----------------------------------+
-|                 | pos_pct                 | *_sim line                       |
+|                 | pos_pct                 | \*_sim line                      |
 |                 +-------------------------+----------------------------------+
-|                 | sw_score                | *_score line                     |
+|                 | sw_score                | \*_score line                    |
 |                 +-------------------------+----------------------------------+
-|                 | z_score                 | *_z-score line                   |
+|                 | z_score                 | \*_z-score line                  |
 +-----------------+-------------------------+----------------------------------+
 | HSPFragment     | aln_annotation          | al_cons block, if present        |
 | (also via HSP)  +-------------------------+----------------------------------+
@@ -114,6 +115,8 @@ from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 
 
 __all__ = ['FastaM10Parser', 'FastaM10Indexer']
+
+__docformat__ = "restructuredtext en"
 
 
 # precompile regex patterns
@@ -172,10 +175,12 @@ def _set_qresult_hits(qresult, hit_rows=[]):
 def _set_hsp_seqs(hsp, parsed, program):
     """Helper function for the main parsing code.
 
-    Arguments:
-    hsp -- HSP object whose properties are to be set.
-    parsed -- Dictionary containing parsed values for HSP attributes.
-    program -- String of program name.
+    :param hsp: HSP whose properties will be set
+    :type hsp: HSP
+    :param parsed: parsed values of the HSP attributes
+    :type parsed: dictionary {string: object}
+    :param program: program name
+    :type program: string
 
     """
     # get aligned sequences and check if they have equal lengths
@@ -193,16 +198,16 @@ def _set_hsp_seqs(hsp, parsed, program):
             parsed[seq_type]['seq'] = pseq['seq'][start:stop]
     assert len(parsed['query']['seq']) == len(parsed['hit']['seq']), "%r %r" \
             % (len(parsed['query']['seq']), len(parsed['hit']['seq']))
-    if 'homology' in hsp.aln_annotation:
+    if 'similarity' in hsp.aln_annotation:
         # only using 'start' since FASTA seems to have trimmed the 'excess'
         # end part
-        hsp.aln_annotation['homology'] = hsp.aln_annotation['homology'][start:]
+        hsp.aln_annotation['similarity'] = hsp.aln_annotation['similarity'][start:]
         # hit or query works equally well here
-        assert len(hsp.aln_annotation['homology']) == len(parsed['hit']['seq'])
+        assert len(hsp.aln_annotation['similarity']) == len(parsed['hit']['seq'])
 
     # query and hit sequence types must be the same
     assert parsed['query']['_type'] == parsed['hit']['_type']
-    type_val = parsed['query']['_type'] # hit works fine too
+    type_val = parsed['query']['_type']  # hit works fine too
     alphabet = generic_dna if type_val == 'D' else generic_protein
     setattr(hsp.fragment, 'alphabet', alphabet)
 
@@ -384,6 +389,7 @@ class FastaM10Parser(object):
             if self.line.startswith('>>'):
                 break
 
+        state = _STATE_NONE
         strand = None
         hsp_list = []
         while True:
@@ -396,7 +402,7 @@ class FastaM10Parser(object):
                 if state == _STATE_HIT_BLOCK:
                     parsed_hsp['hit']['seq'] += self.line.strip()
                 elif state == _STATE_CONS_BLOCK:
-                    hsp.aln_annotation['homology'] += \
+                    hsp.aln_annotation['similarity'] += \
                             self.line.strip('\r\n')
                 # process HSP alignment and coordinates
                 _set_hsp_seqs(hsp, parsed_hsp, self._preamble['program'])
@@ -428,7 +434,7 @@ class FastaM10Parser(object):
                 hsp_list.append(hsp)
                 # set or reset the state to none
                 state = _STATE_NONE
-                parsed_hsp = {'query':{}, 'hit': {}}
+                parsed_hsp = {'query': {}, 'hit': {}}
             # create and append a new HSP if line starts with '>--'
             elif self.line.startswith('>--'):
                 # set seq attributes of previous hsp
@@ -439,7 +445,7 @@ class FastaM10Parser(object):
                 hsp_list.append(hsp)
                 # set the state ~ none yet
                 state = _STATE_NONE
-                parsed_hsp = {'query':{}, 'hit': {}}
+                parsed_hsp = {'query': {}, 'hit': {}}
             # this is either query or hit data in the HSP, depending on the state
             elif self.line.startswith('>'):
                 if state == _STATE_NONE:
@@ -456,7 +462,7 @@ class FastaM10Parser(object):
             # check for conservation block
             elif self.line.startswith('; al_cons'):
                 state = _STATE_CONS_BLOCK
-                hsp.fragment.aln_annotation['homology'] = ''
+                hsp.fragment.aln_annotation['similarity'] = ''
             elif self.line.startswith(';'):
                 # Fasta outputs do not make a clear distinction between Hit
                 # and HSPs, so we check the attribute names to determine
@@ -494,7 +500,7 @@ class FastaM10Parser(object):
                 elif state == _STATE_QUERY_BLOCK:
                     parsed_hsp['query']['seq'] += self.line.strip()
                 elif state == _STATE_CONS_BLOCK:
-                    hsp.fragment.aln_annotation['homology'] += \
+                    hsp.fragment.aln_annotation['similarity'] += \
                             self.line.strip('\r\n')
                 # we should not get here!
                 else:

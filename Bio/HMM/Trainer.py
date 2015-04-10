@@ -11,17 +11,19 @@ to work from, these classes will estimate parameters of the model.
 
 This aims to estimate two parameters:
 
-* a_{kl} -- the number of times there is a transition from k to l in the
-training data.
+    - a_{kl} -- the number of times there is a transition from k to l in the
+      training data.
 
-* e_{k}(b) -- the number of emissions of the state b from the letter k
-in the training data.
+    - e_{k}(b) -- the number of emissions of the state b from the letter k
+      in the training data.
 """
 # standard modules
 import math
 
 # local stuff
 from .DynamicProgramming import ScaledDPAlgorithms
+
+__docformat__ = "restructuredtext en"
 
 
 class TrainingSequence(object):
@@ -173,7 +175,7 @@ class BaumWelchTrainer(AbstractTrainer):
         AbstractTrainer.__init__(self, markov_model)
 
     def train(self, training_seqs, stopping_criteria,
-              dp_method = ScaledDPAlgorithms):
+              dp_method=ScaledDPAlgorithms):
         """Estimate the parameters using training sequences.
 
         The algorithm for this is taken from Durbin et al. p64, so this

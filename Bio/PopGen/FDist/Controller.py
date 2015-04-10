@@ -17,11 +17,13 @@ import subprocess
 import sys
 from random import randint
 from time import strftime, clock
-#from logging import debug
+# from logging import debug
+
+__docformat__ = "restructuredtext en"
 
 
 def my_float(f):
-    #Because of Jython, mostly
+    # Because of Jython, mostly
     if f == "-nan":
         f = "nan"
     return float(f)
@@ -33,7 +35,7 @@ class FDistController(object):
 
         fdist_dir is the directory where fdist2 is.
         ext is the extension of binaries (.exe on windows,
-          none on Unix)
+        none on Unix)
 
         """
         self.tmp_idx = 0
@@ -112,10 +114,11 @@ class FDistController(object):
            Parameter:
            data_dir - data directory
         """
-        with open(data_dir + os.sep + 'INTFILE', 'w') as inf:
-            for i in range(98):
-                inf.write(str(randint(-sys.maxsize + 1, sys.maxsize - 1)) + '\n')
-            inf.write('8\n')
+        inf = open(data_dir + os.sep + 'INTFILE', 'w')
+        for i in range(98):
+            inf.write(str(randint(-2 ** 31 + 1, 2 ** 31 - 1)) + '\n')
+        inf.write('8\n')
+        inf.close()
 
     def run_fdist(self, npops, nsamples, fst, sample_size,
                   mut=0, num_sims=50000, data_dir='.',
@@ -124,48 +127,51 @@ class FDistController(object):
         """Executes (d)fdist.
 
         Parameters:
-        npops - Number of populations
-        nsamples - Number of populations sampled
-        fst - expected Fst
-        sample_size - Sample size per population
-                For dfdist: if zero a sample size file has to be provided
-        mut - 1=Stepwise, 0=Infinite allele
-        num_sims - number of simulations
-        data_dir - Where the data is found
-        is_dominant - If true executes dfdist
-        theta - Theta (=2Nmu)
-        beta - Parameters for the beta prior
-        max_freq - Maximum allowed frequency of the commonest allele
+
+            - npops - Number of populations
+            - nsamples - Number of populations sampled
+            - fst - expected Fst
+            - sample_size - Sample size per population
+              For dfdist: if zero a sample size file has to be provided
+            - mut - 1=Stepwise, 0=Infinite allele
+            - num_sims - number of simulations
+            - data_dir - Where the data is found
+            - is_dominant - If true executes dfdist
+            - theta - Theta (=2Nmu)
+            - beta - Parameters for the beta prior
+            - max_freq - Maximum allowed frequency of the commonest allele
 
         Returns:
-        fst - Average Fst
+
+        - fst - Average Fst
 
         Important Note: This can take quite a while to run!
         """
         if fst >= 0.9:
-            #Lets not joke
+            # Lets not joke
             fst = 0.899
         if fst <= 0.0:
-            #0  will make fdist run forever
+            # 0  will make fdist run forever
             fst = 0.001
         if is_dominant:
             config_name = "Dfdist_params"
         else:
             config_name = "fdist_params2.dat"
 
-        with open(data_dir + os.sep + config_name, 'w') as f:
-            f.write(str(npops) + '\n')
-            f.write(str(nsamples) + '\n')
-            f.write(str(fst) + '\n')
-            f.write(str(sample_size) + '\n')
-            if is_dominant:
-                f.write(str(theta) + '\n')
-            else:
-                f.write(str(mut) + '\n')
-            f.write(str(num_sims) + '\n')
-            if is_dominant:
-                f.write("%f %f\n" % beta)
-                f.write("%f\n" % max_freq)
+        f = open(data_dir + os.sep + config_name, 'w')
+        f.write(str(npops) + '\n')
+        f.write(str(nsamples) + '\n')
+        f.write(str(fst) + '\n')
+        f.write(str(sample_size) + '\n')
+        if is_dominant:
+            f.write(str(theta) + '\n')
+        else:
+            f.write(str(mut) + '\n')
+        f.write(str(num_sims) + '\n')
+        if is_dominant:
+            f.write("%f %f\n" % beta)
+            f.write("%f\n" % max_freq)
+        f.close()
 
         self._generate_intfile(data_dir)
 
@@ -192,9 +198,11 @@ class FDistController(object):
         """Executes fdist trying to force Fst.
 
         Parameters:
-        try_runs - Number of simulations on the part trying to get
-                   Fst correct
-        limit - Interval limit
+
+            - try_runs - Number of simulations on the part trying to get
+                       Fst correct
+            - limit - Interval limit
+            
         Other parameters can be seen on run_fdist.
         """
         max_run_fst = 1
@@ -211,8 +219,8 @@ class FDistController(object):
             if real_fst > fst:
                 max_run_fst = current_run_fst
                 if current_run_fst < min_run_fst + limit:
-                    #we can do no better
-                    #debug('Lower limit is ' + str(min_run_fst))
+                    # we can do no better
+                    # debug('Lower limit is ' + str(min_run_fst))
                     return self.run_fdist(npops, nsamples, current_run_fst,
                                           sample_size, mut, num_sims,
                                           data_dir)
@@ -249,16 +257,18 @@ class FDistController(object):
                 "data_fst_outfile out.cpl out.dat",
                 str(ci), str(smooth)]))
 
-        with open(data_dir + os.sep + 'out.cpl') as f:
-            conf_lines = []
-            l = f.readline()
-            try:
-                while l != '':
-                    conf_lines.append(
-                        tuple(my_float(x) for x in l.rstrip().split(' ')))
-                    l = f.readline()
-            except ValueError:
-                return []
+        f = open(data_dir + os.sep + 'out.cpl')
+        conf_lines = []
+        l = f.readline()
+        try:
+            while l != '':
+                conf_lines.append(
+                    tuple(my_float(x) for x in l.rstrip().split(' ')))
+                l = f.readline()
+        except ValueError:
+            f.close()
+            return []
+        f.close()
         return conf_lines
 
     def run_pv(self, out_file='probs.dat', data_dir='.',
@@ -283,6 +293,7 @@ class FDistController(object):
                                 universal_newlines=True)
         proc.communicate('data_fst_outfile ' + out_file +
                          ' out.dat\n' + str(smooth) + '\n')
-        with open(data_dir + os.sep + out_file, 'r') as pvf:
-            result = [tuple(my_float(y) for y in x.rstrip().split(' ')) for x in pvf.readlines()]
+        pvf = open(data_dir + os.sep + out_file, 'r')
+        result = [tuple(my_float(y) for y in x.rstrip().split(' ')) for x in pvf.readlines()]
+        pvf.close()
         return result

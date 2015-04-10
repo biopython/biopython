@@ -8,10 +8,6 @@
 In order to try and avoid huge alignment objects with tons of functions,
 functions which return summary type information about alignments should
 be put into classes in this module.
-
-classes:
-o SummaryInfo
-o PSSM
 """
 
 from __future__ import print_function
@@ -23,6 +19,8 @@ from Bio import Alphabet
 from Bio.Alphabet import IUPAC
 from Bio.Seq import Seq
 from Bio.SubsMat import FreqTable
+
+__docformat__ = "restructuredtext en"
 
 # Expected random distributions for 20-letter protein, and
 # for 4-letter nucleotide alphabets
@@ -39,13 +37,14 @@ class SummaryInfo(object):
     """
     def __init__(self, alignment):
         """Initialize with the alignment to calculate information on.
-           ic_vector attribute. A dictionary. Keys: column numbers. Values:
+
+        ic_vector attribute. A dictionary. Keys: column numbers. Values:
         """
         self.alignment = alignment
         self.ic_vector = {}
 
-    def dumb_consensus(self, threshold = .7, ambiguous = "X",
-                       consensus_alpha = None, require_multiple = 0):
+    def dumb_consensus(self, threshold=.7, ambiguous="X",
+                       consensus_alpha=None, require_multiple=0):
         """Output a fast consensus sequence of the alignment.
 
         This doesn't do anything fancy at all. It will just go through the
@@ -59,15 +58,15 @@ class SummaryInfo(object):
         into account), but it just meant for a quick and dirty consensus.
 
         Arguments:
-        o threshold - The threshold value that is required to add a particular
-        atom.
-        o ambiguous - The ambiguous character to be added when the threshold is
-        not reached.
-        o consensus_alpha - The alphabet to return for the consensus sequence.
-        If this is None, then we will try to guess the alphabet.
-        o require_multiple - If set as 1, this will require that more than
-        1 sequence be part of an alignment to put it in the consensus (ie.
-        not just 1 sequence and gaps).
+            - threshold - The threshold value that is required to add a particular
+              atom.
+            - ambiguous - The ambiguous character to be added when the threshold is
+              not reached.
+            - consensus_alpha - The alphabet to return for the consensus sequence.
+              If this is None, then we will try to guess the alphabet.
+            - require_multiple - If set as 1, this will require that more than
+              1 sequence be part of an alignment to put it in the consensus (ie.
+              not just 1 sequence and gaps).
         """
         # Iddo Friedberg, 1-JUL-2004: changed ambiguous default to "X"
         consensus = ''
@@ -81,7 +80,7 @@ class SummaryInfo(object):
             atom_dict = {}
             num_atoms = 0
 
-            for record in self.alignment._records:
+            for record in self.alignment:
                 # make sure we haven't run past the end of any sequences
                 # if they are of different lengths
                 if n < len(record.seq):
@@ -105,8 +104,8 @@ class SummaryInfo(object):
 
             if require_multiple and num_atoms == 1:
                 consensus += ambiguous
-            elif (len(max_atoms) == 1) and ((float(max_size)/float(num_atoms))
-                                         >= threshold):
+            elif (len(max_atoms) == 1) and ((float(max_size) / float(num_atoms))
+                                            >= threshold):
                 consensus += max_atoms[0]
             else:
                 consensus += ambiguous
@@ -117,13 +116,15 @@ class SummaryInfo(object):
 
         return Seq(consensus, consensus_alpha)
 
-    def gap_consensus(self, threshold = .7, ambiguous = "X",
-                       consensus_alpha = None, require_multiple = 0):
+    def gap_consensus(self, threshold=.7, ambiguous="X",
+                       consensus_alpha=None, require_multiple=0):
         """Same as dumb_consensus(), but allows gap on the output.
 
-        Things to do: Let the user define that with only one gap, the result
-        character in consensus is gap. Let the user select gap character, now
-        it takes the same is input.
+        Things to do:
+            - Let the user define that with only one gap, the result
+              character in consensus is gap.
+            - Let the user select gap character, now
+              it takes the same as input.
         """
         # Iddo Friedberg, 1-JUL-2004: changed ambiguous default to "X"
         consensus = ''
@@ -137,7 +138,7 @@ class SummaryInfo(object):
             atom_dict = {}
             num_atoms = 0
 
-            for record in self.alignment._records:
+            for record in self.alignment:
                 # make sure we haven't run past the end of any sequences
                 # if they are of different lengths
                 if n < len(record.seq):
@@ -160,15 +161,15 @@ class SummaryInfo(object):
 
             if require_multiple and num_atoms == 1:
                 consensus += ambiguous
-            elif (len(max_atoms) == 1) and ((float(max_size)/float(num_atoms))
-                                         >= threshold):
+            elif (len(max_atoms) == 1) and ((float(max_size) / float(num_atoms))
+                                            >= threshold):
                 consensus += max_atoms[0]
             else:
                 consensus += ambiguous
 
         # we need to guess a consensus alphabet if one isn't specified
         if consensus_alpha is None:
-            #TODO - Should we make this into a Gapped alphabet?
+            # TODO - Should we make this into a Gapped alphabet?
             consensus_alpha = self._guess_consensus_alphabet(ambiguous)
 
         return Seq(consensus, consensus_alpha)
@@ -180,22 +181,22 @@ class SummaryInfo(object):
         returns as appropriate type which seems to make sense with the
         sequences we've got.
         """
-        #Start with the (un-gapped version of) the alignment alphabet
+        # Start with the (un-gapped version of) the alignment alphabet
         a = Alphabet._get_base_alphabet(self.alignment._alphabet)
 
-        #Now check its compatible with all the rest of the sequences
+        # Now check its compatible with all the rest of the sequences
         for record in self.alignment:
-            #Get the (un-gapped version of) the sequence's alphabet
+            # Get the (un-gapped version of) the sequence's alphabet
             alt = Alphabet._get_base_alphabet(record.seq.alphabet)
             if not isinstance(alt, a.__class__):
                 raise ValueError("Alignment contains a sequence with \
                                 an incompatible alphabet.")
 
-        #Check the ambiguous character we are going to use in the consensus
-        #is in the alphabet's list of valid letters (if defined).
+        # Check the ambiguous character we are going to use in the consensus
+        # is in the alphabet's list of valid letters (if defined).
         if hasattr(a, "letters") and a.letters is not None \
         and ambiguous not in a.letters:
-            #We'll need to pick a more generic alphabet...
+            # We'll need to pick a more generic alphabet...
             if isinstance(a, IUPAC.IUPACUnambiguousDNA):
                 if ambiguous in IUPAC.IUPACUnambiguousDNA().letters:
                     a = IUPAC.IUPACUnambiguousDNA()
@@ -215,35 +216,39 @@ class SummaryInfo(object):
                 a = Alphabet.single_letter_alphabet
         return a
 
-    def replacement_dictionary(self, skip_chars = []):
+    def replacement_dictionary(self, skip_chars=None):
         """Generate a replacement dictionary to plug into a substitution matrix
 
         This should look at an alignment, and be able to generate the number
         of substitutions of different residues for each other in the
         aligned object.
 
-        Will then return a dictionary with this information:
-        {('A', 'C') : 10, ('C', 'A') : 12, ('G', 'C') : 15 ....}
+        Will then return a dictionary with this information::
+
+            {('A', 'C') : 10, ('C', 'A') : 12, ('G', 'C') : 15 ....}
 
         This also treats weighted sequences. The following example shows how
         we calculate the replacement dictionary. Given the following
-        multiple sequence alignments:
+        multiple sequence alignment::
 
-        GTATC  0.5
-        AT--C  0.8
-        CTGTC  1.0
+            GTATC  0.5
+            AT--C  0.8
+            CTGTC  1.0
 
-        For the first column we have:
-        ('A', 'G') : 0.5 * 0.8 = 0.4
-        ('C', 'G') : 0.5 * 1.0 = 0.5
-        ('A', 'C') : 0.8 * 1.0 = 0.8
+        For the first column we have::
+
+            ('A', 'G') : 0.5 * 0.8 = 0.4
+            ('C', 'G') : 0.5 * 1.0 = 0.5
+            ('A', 'C') : 0.8 * 1.0 = 0.8
 
         We then continue this for all of the columns in the alignment, summing
         the information for each substitution in each column, until we end
         up with the replacement dictionary.
 
         Arguments:
-        o skip_chars - A list of characters to skip when creating the dictionary.
+         - skip_chars - A list of characters to skip when creating the dictionary.
+           This defaults to an empty list.
+
         For instance, you might have Xs (screened stuff) or Ns, and not want
         to include the ambiguity characters in the dictionary.
         """
@@ -251,17 +256,17 @@ class SummaryInfo(object):
         rep_dict, skip_items = self._get_base_replacements(skip_chars)
 
         # iterate through each record
-        for rec_num1 in range(len(self.alignment._records)):
+        for rec_num1 in range(len(self.alignment)):
             # iterate through each record from one beyond the current record
             # to the end of the list of records
-            for rec_num2 in range(rec_num1 + 1, len(self.alignment._records)):
+            for rec_num2 in range(rec_num1 + 1, len(self.alignment)):
                 # for each pair of records, compare the sequences and add
                 # the pertinent info to the dictionary
                 rep_dict = self._pair_replacement(
-                    self.alignment._records[rec_num1].seq,
-                    self.alignment._records[rec_num2].seq,
-                    self.alignment._records[rec_num1].annotations.get('weight', 1.0),
-                    self.alignment._records[rec_num2].annotations.get('weight', 1.0),
+                    self.alignment[rec_num1].seq,
+                    self.alignment[rec_num2].seq,
+                    self.alignment[rec_num1].annotations.get('weight', 1.0),
+                    self.alignment[rec_num2].annotations.get('weight', 1.0),
                     rep_dict, skip_items)
 
         return rep_dict
@@ -271,16 +276,16 @@ class SummaryInfo(object):
         """Compare two sequences and generate info on the replacements seen.
 
         Arguments:
-        o seq1, seq2 - The two sequences to compare.
-        o weight1, weight2 - The relative weights of seq1 and seq2.
-        o start_dict - The dictionary containing the starting replacement
-        info that we will modify.
-        o ignore_chars - A list of characters to ignore when calculating
-        replacements (ie. '-').
+            - seq1, seq2 - The two sequences to compare.
+            - weight1, weight2 - The relative weights of seq1 and seq2.
+            - start_dict - The dictionary containing the starting replacement
+              info that we will modify.
+            - ignore_chars - A list of characters to ignore when calculating
+              replacements (ie. '-').
 
         Returns:
-        o A replacment dictionary which is modified from initial_dict with
-        the information from the sequence comparison.
+            - A replacment dictionary which is modified from initial_dict with
+              the information from the sequence comparison.
         """
         # loop through each residue in the sequences
         for residue_num in range(len(seq1)):
@@ -313,19 +318,19 @@ class SummaryInfo(object):
         if all_letters is None \
         or (isinstance(self.alignment._alphabet, Alphabet.Gapped)
         and all_letters == self.alignment._alphabet.gap_char):
-            #We are dealing with a generic alphabet class where the
-            #letters are not defined!  We must build a list of the
-            #letters used...
+            # We are dealing with a generic alphabet class where the
+            # letters are not defined!  We must build a list of the
+            # letters used...
             set_letters = set()
             for record in self.alignment:
-                #Note the built in set does not have a union_update
-                #which was provided by the sets module's Set
+                # Note the built in set does not have a union_update
+                # which was provided by the sets module's Set
                 set_letters = set_letters.union(record.seq)
             list_letters = sorted(set_letters)
             all_letters = "".join(list_letters)
         return all_letters
 
-    def _get_base_replacements(self, skip_items = []):
+    def _get_base_replacements(self, skip_items=None):
         """Get a zeroed dictionary of all possible letter combinations.
 
         This looks at the type of alphabet and gets the letters for it.
@@ -333,12 +338,15 @@ class SummaryInfo(object):
         letters as keys (ie. ('A', 'G')) and sets the values as zero.
 
         Returns:
-        o The base dictionary created
-        o A list of alphabet items to skip when filling the dictionary.Right
-        now the only thing I can imagine in this list is gap characters, but
-        maybe X's or something else might be useful later. This will also
-        include any characters that are specified to be skipped.
+            - The base dictionary created
+            - A list of alphabet items to skip when filling the dictionary.
+              (Right now the only thing I can imagine in this list is gap
+              characters, but maybe X's or something else might be useful later.
+              This will also include any characters that are specified to be
+              skipped.) Defaults to an empty list.
         """
+        if skip_items is None:
+            skip_items = []
         base_dictionary = {}
         all_letters = self._get_all_letters()
 
@@ -357,29 +365,31 @@ class SummaryInfo(object):
 
         return base_dictionary, skip_items
 
-    def pos_specific_score_matrix(self, axis_seq = None,
-                                  chars_to_ignore = []):
+    def pos_specific_score_matrix(self, axis_seq=None,
+                                  chars_to_ignore=None):
         """Create a position specific score matrix object for the alignment.
 
         This creates a position specific score matrix (pssm) which is an
         alternative method to look at a consensus sequence.
 
         Arguments:
-        o chars_to_ignore - A listing of all characters not to include in
-        the pssm.  If the alignment alphabet declares a gap character,
-        then it will be excluded automatically.
-        o axis_seq - An optional argument specifying the sequence to
-        put on the axis of the PSSM. This should be a Seq object. If nothing
-        is specified, the consensus sequence, calculated with default
-        parameters, will be used.
+            - chars_to_ignore - A list of all characters not to include in
+              the pssm.  If the alignment alphabet declares a gap character,
+              then it will be excluded automatically.
+            - axis_seq - An optional argument specifying the sequence to
+              put on the axis of the PSSM. This should be a Seq object. If nothing
+              is specified, the consensus sequence, calculated with default
+              parameters, will be used.
 
         Returns:
-        o A PSSM (position specific score matrix) object.
+            - A PSSM (position specific score matrix) object.
         """
         # determine all of the letters we have to deal with
         all_letters = self._get_all_letters()
         assert all_letters
 
+        if chars_to_ignore is None:
+            chars_to_ignore = []
         if not isinstance(chars_to_ignore, list):
             raise TypeError("chars_to_ignore should be a list.")
 
@@ -400,7 +410,7 @@ class SummaryInfo(object):
         # now start looping through all of the sequences and getting info
         for residue_num in range(len(left_seq)):
             score_dict = self._get_base_letters(all_letters)
-            for record in self.alignment._records:
+            for record in self.alignment:
                 try:
                     this_residue = record.seq[residue_num]
                 # if we hit an index error we've run out of sequence and
@@ -432,46 +442,48 @@ class SummaryInfo(object):
 
         return base_info
 
-    def information_content(self, start = 0,
-                            end = None,
-                            e_freq_table = None, log_base = 2,
-                            chars_to_ignore = []):
+    def information_content(self, start=0,
+                            end=None,
+                            e_freq_table=None, log_base=2,
+                            chars_to_ignore=None):
         """Calculate the information content for each residue along an alignment.
 
         Arguments:
-        o start, end - The starting an ending points to calculate the
-        information content. These points should be relative to the first
-        sequence in the alignment, starting at zero (ie. even if the 'real'
-        first position in the seq is 203 in the initial sequence, for
-        the info content, we need to use zero). This defaults to the entire
-        length of the first sequence.
-        o e_freq_table - A FreqTable object specifying the expected frequencies
-        for each letter in the alphabet we are using (e.g. {'G' : 0.4,
-        'C' : 0.4, 'T' : 0.1, 'A' : 0.1}). Gap characters should not be
-        included, since these should not have expected frequencies.
-        o log_base - The base of the logathrim to use in calculating the
-        information content. This defaults to 2 so the info is in bits.
-        o chars_to_ignore - A listing of characterw which should be ignored
-        in calculating the info content.
+            - start, end - The starting an ending points to calculate the
+              information content. These points should be relative to the first
+              sequence in the alignment, starting at zero (ie. even if the 'real'
+              first position in the seq is 203 in the initial sequence, for
+              the info content, we need to use zero). This defaults to the entire
+              length of the first sequence.
+            - e_freq_table - A FreqTable object specifying the expected frequencies
+              for each letter in the alphabet we are using (e.g. {'G' : 0.4,
+              'C' : 0.4, 'T' : 0.1, 'A' : 0.1}). Gap characters should not be
+              included, since these should not have expected frequencies.
+            - log_base - The base of the logathrim to use in calculating the
+              information content. This defaults to 2 so the info is in bits.
+            - chars_to_ignore - A listing of characters which should be ignored
+              in calculating the info content. Defaults to none.
 
         Returns:
-        o A number representing the info content for the specified region.
+            - A number representing the info content for the specified region.
 
         Please see the Biopython manual for more information on how information
         content is calculated.
         """
         # if no end was specified, then we default to the end of the sequence
         if end is None:
-            end = len(self.alignment._records[0].seq)
+            end = len(self.alignment[0].seq)
+        if chars_to_ignore is None:
+            chars_to_ignore = []
 
-        if start < 0 or end > len(self.alignment._records[0].seq):
+        if start < 0 or end > len(self.alignment[0].seq):
             raise ValueError("Start (%s) and end (%s) are not in the \
                     range %s to %s"
-                    % (start, end, 0, len(self.alignment._records[0].seq)))
+                    % (start, end, 0, len(self.alignment[0].seq)))
         # determine random expected frequencies, if necessary
         random_expected = None
         if not e_freq_table:
-            #TODO - What about ambiguous alphabets?
+            # TODO - What about ambiguous alphabets?
             base_alpha = Alphabet._get_base_alphabet(self.alignment._alphabet)
             if isinstance(base_alpha, Alphabet.ProteinAlphabet):
                 random_expected = Protein20Random
@@ -493,7 +505,7 @@ class SummaryInfo(object):
         info_content = {}
         for residue_num in range(start, end):
             freq_dict = self._get_letter_freqs(residue_num,
-                                               self.alignment._records,
+                                               self.alignment,
                                                all_letters, chars_to_ignore)
             # print freq_dict,
             column_score = self._get_column_info_content(freq_dict,
@@ -513,12 +525,12 @@ class SummaryInfo(object):
         """Determine the frequency of specific letters in the alignment.
 
         Arguments:
-        o residue_num - The number of the column we are getting frequencies
-        from.
-        o all_records - All of the SeqRecords in the alignment.
-        o letters - The letters we are interested in getting the frequency
-        for.
-        o to_ignore - Letters we are specifically supposed to ignore.
+            - residue_num - The number of the column we are getting frequencies
+              from.
+            - all_records - All of the SeqRecords in the alignment.
+            - letters - The letters we are interested in getting the frequency
+              for.
+            - to_ignore - Letters we are specifically supposed to ignore.
 
         This will calculate the frequencies of each of the specified letters
         in the alignment at the given frequency, and return this as a
@@ -545,7 +557,7 @@ class SummaryInfo(object):
             # This column must be entirely ignored characters
             for letter in freq_info:
                 assert freq_info[letter] == 0
-                #TODO - Map this to NA or NaN?
+                # TODO - Map this to NA or NaN?
         else:
             # now convert the counts into frequencies
             for letter in freq_info:
@@ -558,17 +570,17 @@ class SummaryInfo(object):
         """Calculate the information content for a column.
 
         Arguments:
-        o obs_freq - The frequencies observed for each letter in the column.
-        o e_freq_table - An optional argument specifying the expected
-        frequencies for each letter. This is a SubsMat.FreqTable instance.
-        o log_base - The base of the logathrim to use in calculating the
-        info content.
+            - obs_freq - The frequencies observed for each letter in the column.
+            - e_freq_table - An optional argument specifying the expected
+              frequencies for each letter. This is a SubsMat.FreqTable instance.
+            - log_base - The base of the logathrim to use in calculating the
+              info content.
         """
         try:
             gap_char = self.alignment._alphabet.gap_char
         except AttributeError:
-            #The alphabet doesn't declare a gap - there could be none
-            #in the sequence... or just a vague alphabet.
+            # The alphabet doesn't declare a gap - there could be none
+            # in the sequence... or just a vague alphabet.
             gap_char = "-"  # Safe?
 
         if e_freq_table:
@@ -579,8 +591,8 @@ class SummaryInfo(object):
                 if (key != gap_char and key not in e_freq_table):
                     raise ValueError("Expected frequency letters %s "
                                      "do not match observed %s"
-                                     % (list(e_freq_table.keys()),
-                                        list(obs_freq.keys()) - [gap_char]))
+                                     % (list(e_freq_table),
+                                        list(obs_freq) - [gap_char]))
 
         total_info = 0.0
 
@@ -603,7 +615,8 @@ class SummaryInfo(object):
         return total_info
 
     def get_column(self, col):
-        return self.alignment.get_column(col)
+        # TODO - Deprecate this and implement slicing?
+        return self.alignment[:, col]
 
 
 class PSSM(object):
@@ -612,23 +625,24 @@ class PSSM(object):
     This class is meant to make it easy to access the info within a PSSM
     and also make it easy to print out the information in a nice table.
 
-    Let's say you had an alignment like this:
-    GTATC
-    AT--C
-    CTGTC
+    Let's say you had an alignment like this::
 
-    The position specific score matrix (when printed) looks like:
+        GTATC
+        AT--C
+        CTGTC
 
-      G A T C
-    G 1 1 0 1
-    T 0 0 3 0
-    A 1 1 0 0
-    T 0 0 2 0
-    C 0 0 0 3
+    The position specific score matrix (when printed) looks like::
 
-    You can access a single element of the PSSM using the following:
+          G A T C
+        G 1 1 0 1
+        T 0 0 3 0
+        A 1 1 0 0
+        T 0 0 2 0
+        C 0 0 0 3
 
-    your_pssm[sequence_number][residue_count_name]
+    You can access a single element of the PSSM using the following::
+
+        your_pssm[sequence_number][residue_count_name]
 
     For instance, to get the 'T' residue for the second element in the
     above alignment you would need to do:
@@ -673,13 +687,13 @@ class PSSM(object):
         return self.pssm[pos][0]
 
 
-def print_info_content(summary_info,fout=None,rep_record=0):
+def print_info_content(summary_info, fout=None, rep_record=0):
     """ Three column output: position, aa in representative sequence,
         ic_vector value"""
     fout = fout or sys.stdout
     if not summary_info.ic_vector:
         summary_info.information_content()
-    rep_sequence = summary_info.alignment._records[rep_record].seq
+    rep_sequence = summary_info.alignment[rep_record].seq
     for pos in sorted(summary_info.ic_vector):
         fout.write("%d %s %.3f\n" % (pos, rep_sequence[pos],
                    summary_info.ic_vector[pos]))
@@ -691,14 +705,14 @@ if __name__ == "__main__":
 
     filename = "../../Tests/GFF/multi.fna"
     format = "fasta"
-    expected = FreqTable.FreqTable({"A":0.25,"G":0.25,"T":0.25,"C":0.25},
+    expected = FreqTable.FreqTable({"A": 0.25, "G": 0.25, "T": 0.25, "C": 0.25},
                                    FreqTable.FREQ,
                                    IUPAC.unambiguous_dna)
 
     alignment = AlignIO.read(open(filename), format)
     for record in alignment:
-        print(str(record.seq))
-    print("="*alignment.get_alignment_length())
+        print(record.seq)
+    print("=" * alignment.get_alignment_length())
 
     summary = SummaryInfo(alignment)
     consensus = summary.dumb_consensus(ambiguous="N")
@@ -709,8 +723,8 @@ if __name__ == "__main__":
     print(summary.pos_specific_score_matrix(chars_to_ignore=['-'],
                                             axis_seq=consensus))
     print("")
-    #Have a generic alphabet, without a declared gap char, so must tell
-    #provide the frequencies and chars to ignore explicitly.
+    # Have a generic alphabet, without a declared gap char, so must tell
+    # provide the frequencies and chars to ignore explicitly.
     print(summary.information_content(e_freq_table=expected,
                                       chars_to_ignore=['-']))
     print("")
@@ -722,7 +736,7 @@ if __name__ == "__main__":
     a.add_sequence("ID002", "MH--IFIYQIGYAYLKSGYIQSIRSPEY-NW*")
     a.add_sequence("ID003", "MHQAIFIYQIGYPYLKSGYIQSIRSPEYDNW*")
     print(a)
-    print("="*a.get_alignment_length())
+    print("=" * a.get_alignment_length())
 
     s = SummaryInfo(a)
     c = s.dumb_consensus(ambiguous="X")

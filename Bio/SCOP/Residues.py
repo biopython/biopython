@@ -43,13 +43,13 @@ class Residues(object):
     def _parse(self, str):
         str = str.strip()
 
-        #Is there a pdbid at the front? e.g. 1bba A:1-100
+        # Is there a pdbid at the front? e.g. 1bba A:1-100
         m = _pdbid_re.match(str)
         if m is not None:
             self.pdbid = m.group(1)
-            str = m.group(2) # Everything else
+            str = m.group(2)  # Everything else
 
-        if str=='' or str == '-' or str=='(-)':  # no fragments, whole sequence
+        if str == '' or str == '-' or str == '(-)':  # no fragments, whole sequence
             return
 
         fragments = []
@@ -67,18 +67,18 @@ class Residues(object):
                     raise ValueError("I don't understand the chain in %s" % l)
                 chain = chain[:-1]   # chop off the ':'
             else:
-                chain =""
+                chain = ""
 
             fragments.append((chain, start, end))
         self.fragments = tuple(fragments)
 
     def __str__(self):
-        prefix =""
+        prefix = ""
         if self.pdbid:
-            prefix =self.pdbid +' '
+            prefix = self.pdbid + ' '
 
         if not self.fragments:
-            return prefix+'-'
+            return prefix + '-'
         strs = []
         for chain, start, end in self.fragments:
             s = []
@@ -87,4 +87,4 @@ class Residues(object):
             if start:
                 s.append("%s-%s" % (start, end))
             strs.append("".join(s))
-        return prefix+ ",".join(strs)
+        return prefix + ",".join(strs)

@@ -52,16 +52,16 @@ class TestDetailedRead(unittest.TestCase):
         """Read special XML characters in description."""
         self.assertEqual(self.records["dna"][2].description, u'some special characters in the description\n<tag> "quoted string"')
 
-    #TODO - Fix this failure under Windows with Python 3.1 and 3.2
-    if not (sys.platform=="win32" and sys.version_info[0] >= 3):
+    # TODO - Fix this failure under Windows with Python 3.1 and 3.2
+    if not (sys.platform == "win32" and sys.version_info[0] >= 3):
         def test_unicode_characters_desc(self):
             """Test special unicode characters in the description."""
             self.assertEqual(self.records["rna"][2].description, u"\u00E5\u00C5\u00FC\u00F6\u00D6\u00DF\u00F8\u00E4\u00A2\u00A3$\u20AC\u9999\u80A0")
 
     def test_full_characters_set_read(self):
         """Read full characters set for each type"""
-        self.assertEqual(str(self.records["dna"][1].seq), "ACGTMRWSYKVHDBXN.-" )
-        self.assertEqual(str(self.records["rna"][1].seq), "ACGUMRWSYKVHDBXN.-" )
+        self.assertEqual(str(self.records["dna"][1].seq), "ACGTMRWSYKVHDBXN.-")
+        self.assertEqual(str(self.records["rna"][1].seq), "ACGUMRWSYKVHDBXN.-")
         self.assertEqual(str(self.records["protein"][1].seq), "ABCDEFGHIJKLMNOPQRSTUVWXYZ.-*")
 
     def test_duplicated_property(self):
@@ -164,7 +164,7 @@ class TestReadAndWrite(unittest.TestCase):
             # Jython uses a different order
             pass
         elif '<species ncbiTaxID="9606" name="Homo sapiens (Human)"/>' in output:
-            #This would be fine too, but don't get this (do we?)
+            # This would be fine too, but don't get this (do we?)
             pass
         else:
             raise ValueError("Mising expected <species> tag: %r" % output)
@@ -180,5 +180,5 @@ class TestReadCorruptFiles(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

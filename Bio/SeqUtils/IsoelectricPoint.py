@@ -3,22 +3,24 @@
 
 """Calculate isoelectric points of polypeptides using methods of Bjellqvist.
 
-pK values and the methos are taken from:
+pK values and the methos are taken from::
 
-* Bjellqvist, B.,Hughes, G.J., Pasquali, Ch., Paquet, N., Ravier, F., Sanchez,
-J.-Ch., Frutiger, S. & Hochstrasser, D.F.
-The focusing positions of polypeptides in immobilized pH gradients can be predicted
-from their amino acid sequences. Electrophoresis 1993, 14, 1023-1031.
+    * Bjellqvist, B.,Hughes, G.J., Pasquali, Ch., Paquet, N., Ravier, F., Sanchez,
+    J.-Ch., Frutiger, S. & Hochstrasser, D.F.
+    The focusing positions of polypeptides in immobilized pH gradients can be predicted
+    from their amino acid sequences. Electrophoresis 1993, 14, 1023-1031.
 
-* Bjellqvist, B., Basse, B., Olsen, E. and Celis, J.E.
-Reference points for comparisons of two-dimensional maps of proteins from
-different human cell types defined in a pH scale where isoelectric points correlate
-with polypeptide compositions. Electrophoresis 1994, 15, 529-539.
+    * Bjellqvist, B., Basse, B., Olsen, E. and Celis, J.E.
+    Reference points for comparisons of two-dimensional maps of proteins from
+    different human cell types defined in a pH scale where isoelectric points correlate
+    with polypeptide compositions. Electrophoresis 1994, 15, 529-539.
 
 I designed the algorithm according to a note by David L. Tabb, available at:
 http://fields.scripps.edu/DTASelect/20010710-pI-Algorithm.pdf
 
 """
+
+__docformat__ = "restructuredtext en"
 
 positive_pKs = {'Nterm': 7.5, 'K': 10.0, 'R': 12.0, 'H': 5.98}
 negative_pKs = {'Cterm': 3.55, 'D': 4.05, 'E': 4.45, 'C': 9.0, 'Y': 10.0}
@@ -44,18 +46,18 @@ class IsoelectricPoint(object):
         charged['Cterm'] = 1.0
         return charged
 
-    #This function calculates the total charge of the protein at a given pH.
+    # This function calculates the total charge of the protein at a given pH.
     def _chargeR(self, pH, pos_pKs, neg_pKs):
         PositiveCharge = 0.0
         for aa, pK in pos_pKs.items():
-            CR = 10**(pK-pH)
-            partial_charge = CR/(CR+1.0)
+            CR = 10 ** (pK - pH)
+            partial_charge = CR / (CR + 1.0)
             PositiveCharge += self.charged_aas_content[aa] * partial_charge
 
         NegativeCharge = 0.0
         for aa, pK in neg_pKs.items():
-            CR = 10**(pH-pK)
-            partial_charge = CR/(CR+1.0)
+            CR = 10 ** (pH - pK)
+            partial_charge = CR / (CR + 1.0)
             NegativeCharge += self.charged_aas_content[aa] * partial_charge
 
         return PositiveCharge - NegativeCharge

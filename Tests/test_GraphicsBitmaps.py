@@ -35,12 +35,16 @@ except:
         "bitmaps with Bio.Graphics.")
 try:
     # Skip the test if PIL is not installed
-    import Image as i
+    # The preferred PIL import has changed over time:
+    try:
+        from PIL import Image as i
+    except ImportError:
+        import Image as i
     del i
 except:
     raise MissingPythonDependencyError(
-        "Install PIL (Python Imaging Library) if you want to create "
-        "bitmaps with Bio.Graphics.")
+        "Install Pillow or its predecessor PIL (Python Imaging Library) "
+        "if you want to create bitmaps with Bio.Graphics.")
 
 from reportlab.graphics.renderPM import RenderPMError
 
@@ -91,18 +95,18 @@ def real_test():
         else:
             raise err
     except RenderPMError as err:
-        if str(err).startswith("Can't setFont(") :
-            #TODO - can we raise the error BEFORE the unit test function
-            #is run? That way it can be skipped in run_tests.py
+        if str(err).startswith("Can't setFont("):
+            # TODO - can we raise the error BEFORE the unit test function
+            # is run? That way it can be skipped in run_tests.py
             raise MissingExternalDependencyError(
                 "Check the fonts needed by ReportLab if you want "
                 "bitmaps from Bio.Graphics\n" + str(err))
-        else :
+        else:
             raise err
 
     return True
 
-#Run the actual test BEFORE the unittest stuff gets called
+# Run the actual test BEFORE the unittest stuff gets called
 real_test()
 
 
@@ -110,9 +114,9 @@ class ComparativeTest(unittest.TestCase):
     """Do tests for modules involved with comparing data."""
     def test_simple_scatter_plot(self):
         """Test creation of a simple PNG scatter plot."""
-        #Dummy method to show up via run_tests.py
+        # Dummy method to show up via run_tests.py
         pass
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

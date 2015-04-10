@@ -278,9 +278,9 @@ class TestPairwiseSeparateGapPenaltiesWithExtension(unittest.TestCase):
 class TestPairwiseMatchDictionary(unittest.TestCase):
 
     match_dict = {
-        ("A", "A") : 1.5,
-        ("A", "T") : 0.5,
-        ("T", "T") : 1.0
+        ("A", "A"): 1.5,
+        ("A", "T"): 0.5,
+        ("T", "T"): 1.0
         }
 
     def test_match_dictionary1(self):
@@ -391,7 +391,7 @@ class TestPersiteGapPenalties(unittest.TestCase):
         # Very expensive to open a gap in seq1:
         nogaps = lambda x, y: -2000 - y
         # Very expensive to open a gap in seq2 unless it is in one of the allowed positions
-        specificgaps = lambda x, y: (-2 -y) if x in breaks else (-2000 - y)
+        specificgaps = lambda x, y: (-2 - y) if x in breaks else (-2000 - y)
         alignments = pairwise2.align.globalmc(seq1, seq2, 1, -1, nogaps, specificgaps)
         self.assertEqual(len(alignments), 1)
         formatted = pairwise2.format_alignment(*alignments[0])
@@ -401,7 +401,6 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
 --AABBBAAAACC----------CCAAAABBBAA--
   Score=2
 """)
-
 
     def test_gap_here_only_2(self):
         """Force a bad alignment.
@@ -413,9 +412,9 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
         seq1 = "AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA"
         seq2 = "AABBBAAAACCCCAAAABBBAA"
         breaks = [0, 3, len(seq2)]
-        #Very expensive to open a gap in seq1:
+        # Very expensive to open a gap in seq1:
         nogaps = lambda x, y: -2000 - y
-        #Very expensive to open a gap in seq2 unless it is in one of the allowed positions:
+        # Very expensive to open a gap in seq2 unless it is in one of the allowed positions:
         specificgaps = lambda x, y: (-2 - y) if x in breaks else (-2000 - y)
         alignments = pairwise2.align.globalmc(seq1, seq2, 1, -1, nogaps, specificgaps)
         self.assertEqual(len(alignments), 1)
@@ -429,5 +428,5 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
 
 
 if __name__ == '__main__':
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

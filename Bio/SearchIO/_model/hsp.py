@@ -24,6 +24,9 @@ from Bio.SearchIO._utils import singleitem, allitems, fullcascade, \
 from ._base import _BaseHSP
 
 
+__docformat__ = "restructuredtext en"
+
+
 class HSP(_BaseHSP):
 
     """Class representing high-scoring region(s) between query and hit.
@@ -41,82 +44,82 @@ class HSP(_BaseHSP):
     are called 'blocks' while in Exonerate they are called exons or NER.
 
     Here are examples from each type of HSP. The first one comes from a BLAST
-    search:
+    search::
 
-    >>> from Bio import SearchIO
-    >>> blast_qresult = next(SearchIO.parse('Blast/mirna.xml', 'blast-xml'))
-    >>> blast_hsp = blast_qresult[1][0]     # the first HSP from the second hit
-    >>> blast_hsp
-    HSP(hit_id='gi|301171311|ref|NR_035856.1|', query_id='33211', 1 fragments)
-    >>> print(blast_hsp)
-          Query: 33211 mir_1
-            Hit: gi|301171311|ref|NR_035856.1| Pan troglodytes microRNA mir-520b ...
-    Query range: [1:61] (1)
-      Hit range: [0:60] (1)
-    Quick stats: evalue 1.7e-22; bitscore 109.49
-      Fragments: 1 (60 columns)
-         Query - CCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTTTAGAGGG
-                 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
-           Hit - CCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTTTAGAGGG
+        >>> from Bio import SearchIO
+        >>> blast_qresult = next(SearchIO.parse('Blast/mirna.xml', 'blast-xml'))
+        >>> blast_hsp = blast_qresult[1][0]     # the first HSP from the second hit
+        >>> blast_hsp
+        HSP(hit_id='gi|301171311|ref|NR_035856.1|', query_id='33211', 1 fragments)
+        >>> print(blast_hsp)
+              Query: 33211 mir_1
+                Hit: gi|301171311|ref|NR_035856.1| Pan troglodytes microRNA mir-520b ...
+        Query range: [1:61] (1)
+          Hit range: [0:60] (1)
+        Quick stats: evalue 1.7e-22; bitscore 109.49
+          Fragments: 1 (60 columns)
+             Query - CCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTTTAGAGGG
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+               Hit - CCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTTTAGAGGG
 
-    For HSPs with a single HSPFragment, you can invoke `print` on it and see the
+    For HSPs with a single HSPFragment, you can invoke ``print`` on it and see the
     underlying sequence alignment, if it exists. This is not the case for HSPs
     with more than one HSPFragment. Below is an example, using an HSP from a
-    BLAT search. Invoking `print` on these HSPs will instead show a table of the
-    HSPFragment objects it contains:
+    BLAT search. Invoking ``print`` on these HSPs will instead show a table of the
+    HSPFragment objects it contains::
 
-    >>> blat_qresult = SearchIO.read('Blat/mirna.pslx', 'blat-psl', pslx=True)
-    >>> blat_hsp = blat_qresult[1][0]       # the first HSP from the second hit
-    >>> blat_hsp
-    HSP(hit_id='chr11', query_id='blat_1', 2 fragments)
-    >>> print(blat_hsp)
-          Query: blat_1 <unknown description>
-            Hit: chr11 <unknown description>
-    Query range: [42:67] (-1)
-      Hit range: [59018929:59018955] (1)
-    Quick stats: evalue ?; bitscore ?
-      Fragments: ---  --------------  ----------------------  ----------------------
-                   #            Span             Query range               Hit range
-                 ---  --------------  ----------------------  ----------------------
-                   0               6                 [61:67]     [59018929:59018935]
-                   1              16                 [42:58]     [59018939:59018955]
+        >>> blat_qresult = SearchIO.read('Blat/mirna.pslx', 'blat-psl', pslx=True)
+        >>> blat_hsp = blat_qresult[1][0]       # the first HSP from the second hit
+        >>> blat_hsp
+        HSP(hit_id='chr11', query_id='blat_1', 2 fragments)
+        >>> print(blat_hsp)
+              Query: blat_1 <unknown description>
+                Hit: chr11 <unknown description>
+        Query range: [42:67] (-1)
+          Hit range: [59018929:59018955] (1)
+        Quick stats: evalue ?; bitscore ?
+          Fragments: ---  --------------  ----------------------  ----------------------
+                       #            Span             Query range               Hit range
+                     ---  --------------  ----------------------  ----------------------
+                       0               6                 [61:67]     [59018929:59018935]
+                       1              16                 [42:58]     [59018939:59018955]
 
-    Notice that in HSPs with more than one HSPFragments, the HSP's `query_range`
-    `hit_range` properties encompasses all fragments it contains.
+    Notice that in HSPs with more than one HSPFragments, the HSP's ``query_range``
+    ``hit_range`` properties encompasses all fragments it contains.
 
     You can check whether an HSP has more than one HSPFragments or not using the
-    `is_fragmented` property:
+    ``is_fragmented`` property::
 
-    >>> blast_hsp.is_fragmented
-    False
-    >>> blat_hsp.is_fragmented
-    True
+        >>> blast_hsp.is_fragmented
+        False
+        >>> blat_hsp.is_fragmented
+        True
 
     Since HSP objects are also containers similar to Python lists, you can
-    access a single fragment in an HSP using its integer index:
+    access a single fragment in an HSP using its integer index::
 
-    >>> blat_fragment = blat_hsp[0]
-    >>> print(blat_fragment)
-          Query: blat_1 <unknown description>
-            Hit: chr11 <unknown description>
-    Query range: [61:67] (-1)
-      Hit range: [59018929:59018935] (1)
-      Fragments: 1 (6 columns)
-         Query - tatagt
-           Hit - tatagt
+        >>> blat_fragment = blat_hsp[0]
+        >>> print(blat_fragment)
+              Query: blat_1 <unknown description>
+                Hit: chr11 <unknown description>
+        Query range: [61:67] (-1)
+          Hit range: [59018929:59018935] (1)
+          Fragments: 1 (6 columns)
+             Query - tatagt
+               Hit - tatagt
 
-    This applies to HSPs objects with a single fragment as well:
+    This applies to HSPs objects with a single fragment as well::
 
-    >>> blast_fragment = blast_hsp[0]
-    >>> print(blast_fragment)
-          Query: 33211 mir_1
-            Hit: gi|301171311|ref|NR_035856.1| Pan troglodytes microRNA mir-520b ...
-    Query range: [1:61] (1)
-      Hit range: [0:60] (1)
-      Fragments: 1 (60 columns)
-         Query - CCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTTTAGAGGG
-                 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
-           Hit - CCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTTTAGAGGG
+        >>> blast_fragment = blast_hsp[0]
+        >>> print(blast_fragment)
+              Query: 33211 mir_1
+                Hit: gi|301171311|ref|NR_035856.1| Pan troglodytes microRNA mir-520b ...
+        Query range: [1:61] (1)
+          Hit range: [0:60] (1)
+          Fragments: 1 (60 columns)
+             Query - CCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTTTAGAGGG
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+               Hit - CCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTTTAGAGGG
 
     Regardless of the search output file format, HSP objects provide the
     properties listed below. These properties always return values in a list,
@@ -184,7 +187,6 @@ class HSP(_BaseHSP):
     |                      |                     | coordinates of each query   |
     |                      |                     | fragment                    |
     +----------------------+---------------------+-----------------------------+
-    * may be used in HSPs with multiple fragments
 
     For all types of HSP objects, the property will return the values in a list.
     Shorcuts are only applicable for HSPs with one fragment. Except the ones
@@ -192,7 +194,7 @@ class HSP(_BaseHSP):
     will be raised.
 
     For properties that may be used in HSPs with multiple or single fragments
-    (`*_start`, `*_end`, and `*_span` properties), their interpretation depends
+    (``*_start``, ``*_end``, and ``*_span`` properties), their interpretation depends
     on how many fragment the HSP has:
 
     +------------+---------------------------------------------------+
@@ -202,13 +204,14 @@ class HSP(_BaseHSP):
     +------------+---------------------------------------------------+
     | hit_end    | largest coordinate value of all hit fragments     |
     +------------+---------------------------------------------------+
-    | hit_span   | difference between `hit_start` and `hit_end`      |
+    | hit_span   | difference between ``hit_start`` and ``hit_end``  |
     +------------+---------------------------------------------------+
     | query_start| smallest coordinate value of all query fragments  |
     +------------+---------------------------------------------------+
     | query_end  | largest coordinate value of all query fragments   |
     +------------+---------------------------------------------------+
-    | query_span | difference between `query_start` and `query_end`  |
+    | query_span | difference between ``query_start`` and            |
+    |            | ``query_end``                                     |
     +------------+---------------------------------------------------+
 
     In addition to the objects listed above, HSP objects also provide the
@@ -240,8 +243,10 @@ class HSP(_BaseHSP):
     |                    | between fragments                                    |
     +--------------------+------------------------------------------------------+
     | query_inter_spans  | list of lengths of the regions between query         |
-    |                    |fragments                                             |
+    |                    | fragments                                            |
     +--------------------+------------------------------------------------------+
+
+    .. [1] may be used in HSPs with multiple fragments
 
     """
     # attributes we don't want to transfer when creating a new Hit class
@@ -251,13 +256,13 @@ class HSP(_BaseHSP):
     def __init__(self, fragments=[]):
         """Initializes an HSP object.
 
-        Arguments:
-        fragments -- List of HSPFragment objects.
+        :param fragments: fragments contained in the HSP object
+        :type fragments: iterable yielding HSPFragment
 
         HSP objects must be initialized with a list containing at least one
         HSPFragment object. If multiple HSPFragment objects are used for
-        initialization, they must all have the same `query_id`,
-        `query_description`, `hit_id`, `hit_description`, and alphabet
+        initialization, they must all have the same ``query_id``,
+        ``query_description``, ``hit_id``, ``hit_description``, and alphabet
         properties.
 
         """
@@ -289,12 +294,12 @@ class HSP(_BaseHSP):
     def __len__(self):
         return len(self._items)
 
-    #Python 3:
+    # Python 3:
     def __bool__(self):
         return bool(self._items)
 
-    #Python 2:
-    __nonzero__= __bool__
+    # Python 2:
+    __nonzero__ = __bool__
 
     def __str__(self):
 
@@ -314,10 +319,10 @@ class HSP(_BaseHSP):
                     self.fragments[0]._str_aln()])
         else:
             lines.append('  Fragments: %s  %s  %s  %s' %
-                    ('-'*3, '-'*14, '-'*22, '-'*22))
+                    ('-' * 3, '-' * 14, '-' * 22, '-' * 22))
             pattern = '%16s  %14s  %22s  %22s'
             lines.append(pattern % ('#', 'Span', 'Query range', 'Hit range'))
-            lines.append(pattern % ('-'*3, '-'*14, '-'*22, '-'*22))
+            lines.append(pattern % ('-' * 3, '-' * 14, '-' * 22, '-' * 22))
             for idx, block in enumerate(self.fragments):
                 # set hsp line and table
                 # alignment span
@@ -373,7 +378,7 @@ class HSP(_BaseHSP):
 
             if fragment.hit_description != self.hit_description:
                 raise ValueError("Expected HSPFragment with hit "
-                        "description %r, found %r instead." % \
+                        "description %r, found %r instead." %
                         (self.description, fragment.hit_description))
 
             if fragment.query_id != self.query_id:
@@ -386,7 +391,6 @@ class HSP(_BaseHSP):
                         "found %r instead." % (self.query_description,
                         fragment.query_description))
 
-
     def _aln_span_get(self):
         # length of all alignments
         # alignment span can be its own attribute, or computed from
@@ -396,7 +400,7 @@ class HSP(_BaseHSP):
     aln_span = property(fget=_aln_span_get,
             doc="""Total number of columns in all HSPFragment objects.""")
 
-    ## coordinate properties ##
+    # coordinate properties #
     def _get_coords(self, seq_type, coord_type):
         assert seq_type in ('hit', 'query')
         assert coord_type in ('start', 'end')
@@ -431,7 +435,7 @@ class HSP(_BaseHSP):
     query_end = property(fget=_query_end_get,
             doc="""Largest coordinate value of all hit fragments""")
 
-    ## coordinate-dependent properties ##
+    # coordinate-dependent properties #
     def _hit_span_get(self):
         try:
             return self.hit_end - self.hit_start
@@ -477,7 +481,7 @@ class HSP(_BaseHSP):
         inter_coords = []
         for idx, coord in enumerate(coords[:-1]):
             start = startfunc(coords[idx])
-            end = endfunc(coords[idx+1])
+            end = endfunc(coords[idx + 1])
             inter_coords.append((min(start, end), max(start, end)))
 
         return inter_coords
@@ -511,7 +515,7 @@ class HSP(_BaseHSP):
     query_inter_spans = property(fget=_query_inter_spans_get,
         doc="""Lengths of regions between query fragments""")
 
-    ## shortcuts for fragments' properties ##
+    # shortcuts for fragments' properties #
 
     # bool check if there's more than one fragments
     is_fragmented = property(lambda self: len(self) > 1,
@@ -603,13 +607,13 @@ class HSP(_BaseHSP):
     hit_start_all = allitems('hit_start',
             doc="""List of all fragments' hit start coordinates""")
 
-    query_start_all = allitems('query_starts',
+    query_start_all = allitems('query_start',
             doc="""List of all fragments' query start coordinates""")
 
-    hit_end_all = allitems('hit_ends',
+    hit_end_all = allitems('hit_end',
             doc="""List of all fragments' hit end coordinates""")
 
-    query_end_all = allitems('query_ends',
+    query_end_all = allitems('query_end',
             doc="""List of all fragments' query end coordinates""")
 
     hit_span_all = allitems('hit_span',
@@ -760,15 +764,16 @@ class HSPFragment(_BaseHSP):
             except AttributeError:  # hit is None
                 hseq = '?'
 
-            # homology line
-            homol = ''
-            if 'homology' in self.aln_annotation:
-                homol = self.aln_annotation['homology']
+            # similarity line
+            simil = ''
+            if 'similarity' in self.aln_annotation and \
+                    isinstance(self.aln_annotation.get('similarity'), basestring):
+                simil = self.aln_annotation['similarity']
 
             if self.aln_span <= 67:
                 lines.append("%10s - %s" % ('Query', qseq))
-                if homol:
-                    lines.append("             %s" % homol)
+                if simil:
+                    lines.append("             %s" % simil)
                 lines.append("%10s - %s" % ('Hit', hseq))
             else:
                 # adjust continuation character length, so we don't display
@@ -779,26 +784,27 @@ class HSPFragment(_BaseHSP):
                     cont = '~' * (self.aln_span - 66)
                 lines.append("%10s - %s%s%s" % ('Query',
                                 qseq[:59], cont, qseq[-5:]))
-                if homol:
+                if simil:
                     lines.append("             %s%s%s" %
-                            (homol[:59], cont, homol[-5:]))
+                            (simil[:59], cont, simil[-5:]))
                 lines.append("%10s - %s%s%s" % ('Hit',
                                 hseq[:59], cont, hseq[-5:]))
 
         return '\n'.join(lines)
 
-    ## sequence properties ##
+    # sequence properties #
     def _set_seq(self, seq, seq_type):
         """Checks the given sequence for attribute setting
 
-        Arguments:
-        seq -- String or SeqRecord to check
-        seq_type -- String of sequence type, must be 'hit' or 'query'
+        :param seq: sequence to check
+        :type seq: string or SeqRecord
+        :param seq_type: sequence type
+        :type seq_type: string, choice of 'hit' or 'query'
 
         """
         assert seq_type in ('hit', 'query')
         if seq is None:
-            return seq # return immediately if seq is None
+            return seq  # return immediately if seq is None
         else:
             if not isinstance(seq, (basestring, SeqRecord)):
                 raise TypeError("%s sequence must be a string or a SeqRecord"
@@ -897,7 +903,7 @@ class HSPFragment(_BaseHSP):
     aln_span = property(fget=_aln_span_get, fset=_aln_span_set,
             doc="""The number of alignment columns covered by the fragment""")
 
-    ## id, description, and features properties ##
+    # id, description, and features properties #
     hit_description = fragcascade('description', 'hit',
             doc="""Hit sequence description""")
 
@@ -916,10 +922,10 @@ class HSPFragment(_BaseHSP):
     query_features = fragcascade('features', 'query',
             doc="""Query sequence features""")
 
-    ## strand properties ##
+    # strand properties #
     def _prep_strand(self, strand):
         # follow SeqFeature's convention
-        if not strand in (-1, 0, 1, None):
+        if strand not in (-1, 0, 1, None):
             raise ValueError("Strand should be -1, 0, 1, or None; not %r" %
                     strand)
         return strand
@@ -958,9 +964,9 @@ class HSPFragment(_BaseHSP):
     query_strand = property(fget=_query_strand_get, fset=_query_strand_set,
             doc="""Query sequence strand, defaults to None""")
 
-    ## frame properties ##
+    # frame properties #
     def _prep_frame(self, frame):
-        if not frame in (-3, -2, -1, 0, 1, 2, 3, None):
+        if frame not in (-3, -2, -1, 0, 1, 2, 3, None):
             raise ValueError("Strand should be an integer between -3 and 3, "
                     "or None; not %r" % frame)
         return frame
@@ -983,7 +989,7 @@ class HSPFragment(_BaseHSP):
     query_frame = property(fget=_query_frame_get, fset=_query_frame_set,
             doc="""Query sequence reading frame, defaults to None""")
 
-    ## coordinate properties ##
+    # coordinate properties #
     def _prep_coord(self, coord, opp_coord_name, op):
         # coord must either be None or int
         if coord is None:
@@ -1038,7 +1044,7 @@ class HSPFragment(_BaseHSP):
     query_end = property(fget=_query_end_get, fset=_query_end_set,
             doc="""Query sequence end coordinate, defaults to None""")
 
-    ## coordinate-dependent properties ##
+    # coordinate-dependent properties #
     def _hit_span_get(self):
         try:
             return self.hit_end - self.hit_start

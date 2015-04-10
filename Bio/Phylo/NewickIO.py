@@ -9,6 +9,7 @@
 
 See: http://evolution.genetics.washington.edu/phylip/newick_doc.html
 """
+
 __docformat__ = "restructuredtext en"
 
 import re
@@ -23,15 +24,15 @@ class NewickError(Exception):
 
 
 tokens = [
-    (r"\(",                         'open parens'),
-    (r"\)",                         'close parens'),
-    (r"[^\s\(\)\[\]\'\:\;\,]+",     'unquoted node label'),
+    (r"\(",                                  'open parens'),
+    (r"\)",                                  'close parens'),
+    (r"[^\s\(\)\[\]\'\:\;\,]+",              'unquoted node label'),
     (r"\:[0-9]*\.?[0-9]+([eE][+-]?[0-9]+)?", 'edge length'),
-    (r"\,",                         'comma'),
-    (r"\[(\\.|[^\]])*\]",           'comment'),
-    (r"\'(\\.|[^\'])*\'",           'quoted node label'),
-    (r"\;",                         'semicolon'),
-    (r"\n",                         'newline'),
+    (r"\,",                                  'comma'),
+    (r"\[(\\.|[^\]])*\]",                    'comment'),
+    (r"\'(\\.|[^\'])*\'",                    'quoted node label'),
+    (r"\;",                                  'semicolon'),
+    (r"\n",                                  'newline'),
 ]
 tokenizer = re.compile('(%s)' % '|'.join(token[0] for token in tokens))
 token_dict = dict((name, re.compile(token)) for (token, name) in tokens)
@@ -75,6 +76,7 @@ def _parse_confidence(text):
 def _format_comment(text):
     return '[%s]' % (text.replace('[', '\\[').replace(']', '\\]'))
 
+
 def _get_comment(clade):
     if hasattr(clade, 'comment') and clade.comment:
         return _format_comment(str(clade.comment))
@@ -102,7 +104,17 @@ class Parser(object):
         self.comments_are_confidence = comments_are_confidence
         self.rooted = rooted
         buf = ''
+        unicodeChecked = False
+        unicodeLines = ("\xef", "\xff", "\xfe", "\x00")
         for line in self.handle:
+            if not unicodeChecked:
+                # check for unicode byte order marks on first line only,
+                # these lead to parsing errors (on Python 2)
+                if line.startswith(unicodeLines):
+                    raise NewickError("The file or stream you attempted to parse includes "
+                                      "unicode byte order marks.  You must convert it to "
+                                      "ASCII before it can be parsed.")
+                unicodeChecked = True
             buf += line.rstrip()
             if buf.endswith(';'):
                 yield self._parse_tree(buf)
@@ -144,8 +156,8 @@ class Parser(object):
                 lp_count += 1
 
             elif token == ',':
-                # if the current clade is the root, then the external parentheses are missing
-                # and a new root should be created
+                # if the current clade is the root, then the external parentheses
+                # are missing and a new root should be created
                 if current_clade is root_clade:
                     root_clade = new_clade()
                     current_clade.parent = root_clade
@@ -207,11 +219,12 @@ class Parser(object):
     def process_clade(self, clade):
         """Final processing of a parsed clade. Removes the node's parent and
         returns it."""
-        if (clade.name and not (self.values_are_confidence or
-                                self.comments_are_confidence)
-            and clade.confidence is None):
+        if ((clade.name) and not
+                (self.values_are_confidence or self.comments_are_confidence) and
+                (clade.confidence is None) and
+                (clade.clades)):
             clade.confidence = _parse_confidence(clade.name)
-            if not clade.confidence is None:
+            if clade.confidence is not None:
                 clade.name = None
 
         if hasattr(clade, 'parent'):
@@ -239,16 +252,16 @@ class Writer(object):
         return count
 
     def to_strings(self, confidence_as_branch_length=False,
-            branch_length_only=False, plain=False,
-            plain_newick=True, ladderize=None, max_confidence=1.0,
-            format_confidence='%1.2f', format_branch_length='%1.5f'):
+                   branch_length_only=False, plain=False,
+                   plain_newick=True, ladderize=None, max_confidence=1.0,
+                   format_confidence='%1.2f', format_branch_length='%1.5f'):
         """Return an iterable of PAUP-compatible tree lines."""
         # If there's a conflict in the arguments, we override plain=True
         if confidence_as_branch_length or branch_length_only:
             plain = False
         make_info_string = self._info_factory(plain,
-                confidence_as_branch_length, branch_length_only, max_confidence,
-                format_confidence, format_branch_length)
+                                              confidence_as_branch_length, branch_length_only, max_confidence,
+                                              format_confidence, format_branch_length)
 
         def newickize(clade):
             """Convert a node tree to a Newick tree string, recursively."""
@@ -256,7 +269,8 @@ class Writer(object):
             if label:
                 unquoted_label = re.match(token_dict['unquoted node label'], label)
                 if (not unquoted_label) or (unquoted_label.end() < len(label)):
-                    label = "'%s'" % label.replace('\\', '\\\\').replace("'", "\\'")
+                    label = "'%s'" % label.replace(
+                        '\\', '\\\\').replace("'", "\\'")
 
             if clade.is_terminal():    # terminal
                 return (label
@@ -264,7 +278,7 @@ class Writer(object):
             else:
                 subtrees = (newickize(sub) for sub in clade)
                 return '(%s)%s' % (','.join(subtrees),
-                        label + make_info_string(clade))
+                                   label + make_info_string(clade))
 
         # Convert each tree to a string
         for tree in self.trees:
@@ -285,8 +299,8 @@ class Writer(object):
             yield ' '.join(treeline)
 
     def _info_factory(self, plain, confidence_as_branch_length,
-            branch_length_only, max_confidence, format_confidence,
-            format_branch_length):
+                      branch_length_only, max_confidence, format_confidence,
+                      format_branch_length):
         """Return a function that creates a nicely formatted node tag."""
         if plain:
             # Plain tree only. That's easy.

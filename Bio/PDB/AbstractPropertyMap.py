@@ -5,15 +5,14 @@
 
 """Class that maps (chain_id, residue_id) to a residue property."""
 
-
-
 from __future__ import print_function
+
 
 class AbstractPropertyMap(object):
     def __init__(self, property_dict, property_keys, property_list):
-        self.property_dict=property_dict
-        self.property_keys=property_keys
-        self.property_list=property_list
+        self.property_dict = property_dict
+        self.property_keys = property_keys
+        self.property_list = property_list
 
     def _translate_id(self, entity_id):
         return entity_id
@@ -47,7 +46,7 @@ class AbstractPropertyMap(object):
         @return: some residue property
         @rtype: anything (can be a tuple)
         """
-        translated_id=self._translate_id(key)
+        translated_id = self._translate_id(key)
         return self.property_dict[translated_id]
 
     def __len__(self):
@@ -115,9 +114,9 @@ class AbstractResiduePropertyMap(AbstractPropertyMap):
                 property_list)
 
     def _translate_id(self, ent_id):
-        chain_id, res_id=ent_id
+        chain_id, res_id = ent_id
         if isinstance(res_id, int):
-            ent_id=(chain_id, (' ', res_id, ' '))
+            ent_id = (chain_id, (' ', res_id, ' '))
         return ent_id
 
 
@@ -127,12 +126,11 @@ class AbstractAtomPropertyMap(AbstractPropertyMap):
                 property_list)
 
     def _translate_id(self, ent_id):
-        if len(ent_id)==4:
-            chain_id, res_id, atom_name, icode=ent_id
+        if len(ent_id) == 4:
+            chain_id, res_id, atom_name, icode = ent_id
         else:
-            chain_id, res_id, atom_name=ent_id
-            icode=None
+            chain_id, res_id, atom_name = ent_id
+            icode = None
         if isinstance(res_id, int):
-            ent_id=(chain_id, (' ', res_id, ' '), atom_name, icode)
+            ent_id = (chain_id, (' ', res_id, ' '), atom_name, icode)
         return ent_id
-

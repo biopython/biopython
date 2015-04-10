@@ -32,7 +32,7 @@ import numpy
 
 
 def _contents(items):
-    term = 1.0/len(items)
+    term = 1.0 / len(items)
     counts = {}
     for item in items:
         counts[item] = counts.get(item, 0) + term
@@ -94,7 +94,7 @@ def calculate(nb, observation, scale=0):
     lp_observation = 0.0          # P(observation)
     if scale:   # Only calculate this if requested.
         # log P(observation) = log SUM_i P(observation|class_i)P(class_i)
-        obs = numpy.exp(numpy.clip(lp_prior+lp_observation_class, -700, +700))
+        obs = numpy.exp(numpy.clip(lp_prior + lp_observation_class, -700, +700))
         lp_observation = numpy.log(sum(obs))
 
     # Calculate log P(class|observation).
@@ -195,7 +195,7 @@ def train(training_set, results, priors=None, typecode=None):
             values = class_observations[:, j]
 
             # Add pseudocounts here.  This needs to be parameterized.
-            #values = list(values) + range(len(nb.classes))  # XXX add 1
+            # values = list(values) + range(len(nb.classes))  # XXX add 1
 
             # Estimate P(value|class,dim)
             nb.p_conditional[i][j] = _contents(values)
@@ -204,7 +204,7 @@ def train(training_set, results, priors=None, typecode=None):
 if __name__ == "__main__":
     # Car data from example 'Naive Bayes Classifier example' by Eric Meisner November 22, 2003
     # http://www.inf.u-szeged.hu/~ormandi/teaching/mi2/02-naiveBayes-example.pdf
-    xcar=[
+    xcar = [
         ['Red',    'Sports', 'Domestic'],
         ['Red',    'Sports', 'Domestic'],
         ['Red',    'Sports', 'Domestic'],
@@ -217,7 +217,7 @@ if __name__ == "__main__":
         ['Red',    'Sports', 'Imported']
     ]
 
-    ycar=[
+    ycar = [
         'Yes',
         'No',
         'Yes',

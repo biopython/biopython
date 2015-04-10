@@ -6,7 +6,7 @@
 """Bio.SearchIO parser for BLAT output formats.
 
 This module adds support for parsing BLAT outputs. BLAT (BLAST-Like Alignment
-Tool) is a sequence homology search program initially built for annotating
+Tool) is a sequence similarity search program initially built for annotating
 the human genome.
 
 Bio.SearchIO.BlastIO was tested using standalone BLAT version 34, psLayout
@@ -14,11 +14,11 @@ version 3. It should be able to parse psLayout version 4 without problems.
 
 More information on BLAT is available from these sites:
 
-  - Publication: http://genome.cshlp.org/content/12/4/656
-  - User guide: http://genome.ucsc.edu/goldenPath/help/blatSpec.html
-  - Source download: http://www.soe.ucsc.edu/~kent/src
-  - Executable download: http://hgdownload.cse.ucsc.edu/admin/exe/
-  - Blat score calculation: http://genome.ucsc.edu/FAQ/FAQblat.html#blat4
+    - Publication: http://genome.cshlp.org/content/12/4/656
+    - User guide: http://genome.ucsc.edu/goldenPath/help/blatSpec.html
+    - Source download: http://www.soe.ucsc.edu/~kent/src
+    - Executable download: http://hgdownload.cse.ucsc.edu/admin/exe/
+    - Blat score calculation: http://genome.ucsc.edu/FAQ/FAQblat.html#blat4
 
 
 Supported Formats
@@ -137,7 +137,7 @@ BlatIO provides the following attribute-column mapping:
 |                | query_start_all         | qStarts, start coordinate of each |
 |                |                         | query fragment                    |
 |                +-------------------------+-----------------------------------+
-|                | `len`*                  | block count, the number of blocks |
+|                | len [1]                 | block count, the number of blocks |
 |                |                         | in the alignment                  |
 +----------------+-------------------------+-----------------------------------+
 | HSPFragment    | hit                     | hit sequence, if present          |
@@ -148,8 +148,6 @@ BlatIO provides the following attribute-column mapping:
 |                +-------------------------+-----------------------------------+
 |                | query_strand            | strand, query sequence strand     |
 +----------------+-------------------------+-----------------------------------+
-* You can obtain the number of blocks / fragments in the HSP by invoking `len`
-  on the HSP
 
 In addition to the column mappings above, BlatIO also provides the following
 object attributes:
@@ -176,6 +174,10 @@ object attributes:
 Finally, the default HSP and HSPFragment properties are also provided. See the
 HSP and HSPFragment documentation for more details on these properties.
 
+
+.. [1] You can obtain the number of blocks / fragments in the HSP by invoking
+   ``len`` on the HSP
+
 """
 import re
 from math import log
@@ -190,6 +192,8 @@ from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 
 __all__ = ['BlatPslParser', 'BlatPslIndexer', 'BlatPslWriter']
 
+__docformat__ = "restructuredtext en"
+
 
 # precompile regex patterns
 _PTR_ROW_CHECK = r'^\d+\s+\d+\s+\d+\s+\d+'
@@ -200,9 +204,11 @@ _RE_ROW_CHECK_IDX = re.compile(_as_bytes(_PTR_ROW_CHECK))
 def _list_from_csv(csv_string, caster=None):
     """Transforms the given comma-separated string into a list.
 
-    Arguments:
-    csv_string -- Comma-separated string to transform.
-    caster -- Cast function to use on each list item.
+    :param csv_string: comma-separated input string
+    :type csv_string: string
+    :param caster: function used to cast each item in the input string
+                   to its intended type
+    :type caster: callable, accepts string, returns object
 
     """
     if caster is None:
@@ -214,12 +220,14 @@ def _list_from_csv(csv_string, caster=None):
 def _reorient_starts(starts, blksizes, seqlen, strand):
     """Reorients block starts into the opposite strand's coordinates.
 
-    Arguments:
-    starts -- List of integers, start coordinates.
-    start -- Integer, 'Q start' or 'T start' column
-    blksizes -- List of integers, block sizes.
-    seqlen -- Integer of total sequence length.
-    strand -- Integer denoting sequence strand.
+    :param starts: start coordinates
+    :type starts: list [int]
+    :param blksizes: block sizes
+    :type blksizes: list [int]
+    :param seqlen: sequence length
+    :type seqlen: int
+    :param strand: sequence strand
+    :type strand: int, choice of -1, 0, or 1
 
     """
     assert len(starts) == len(blksizes), \
@@ -285,7 +293,7 @@ def _create_hsp(hid, qid, psl):
     # protein flag
     is_protein = _is_protein(psl)
     # strand
-    #if query is protein, strand is 0
+    # if query is protein, strand is 0
     if is_protein:
         qstrand = 0
     else:
@@ -403,27 +411,27 @@ class BlatPslParser(object):
         self._validate_cols(cols)
 
         psl = {}
-        psl['qname'] = cols[9]                            # qName
-        psl['qsize'] = int(cols[10])                      # qSize
-        psl['tname'] = cols[13]                           # tName
-        psl['tsize'] = int(cols[14])                      # tSize
-        psl['matches'] = int(cols[0])                     # matches
-        psl['mismatches'] = int(cols[1])                  # misMatches
-        psl['repmatches'] = int(cols[2])                  # repMatches
-        psl['ncount'] = int(cols[3])                      # nCount
-        psl['qnuminsert'] = int(cols[4])                  # qNumInsert
-        psl['qbaseinsert'] = int(cols[5])                 # qBaseInsert
-        psl['tnuminsert'] = int(cols[6])                  # tNumInsert
-        psl['tbaseinsert'] = int(cols[7])                 # tBaseInsert
-        psl['strand'] = cols[8]                           # strand
-        psl['qstart'] = int(cols[11])                     # qStart
-        psl['qend'] = int(cols[12])                       # qEnd
-        psl['tstart'] = int(cols[15])                     # tStart
-        psl['tend'] = int(cols[16])                       # tEnd
-        psl['blockcount'] = int(cols[17])                 # blockCount
-        psl['blocksizes'] = _list_from_csv(cols[18], int) # blockSizes
-        psl['qstarts'] = _list_from_csv(cols[19], int)    # qStarts
-        psl['tstarts'] = _list_from_csv(cols[20], int)    # tStarts
+        psl['qname'] = cols[9]                             # qName
+        psl['qsize'] = int(cols[10])                       # qSize
+        psl['tname'] = cols[13]                            # tName
+        psl['tsize'] = int(cols[14])                       # tSize
+        psl['matches'] = int(cols[0])                      # matches
+        psl['mismatches'] = int(cols[1])                   # misMatches
+        psl['repmatches'] = int(cols[2])                   # repMatches
+        psl['ncount'] = int(cols[3])                       # nCount
+        psl['qnuminsert'] = int(cols[4])                   # qNumInsert
+        psl['qbaseinsert'] = int(cols[5])                  # qBaseInsert
+        psl['tnuminsert'] = int(cols[6])                   # tNumInsert
+        psl['tbaseinsert'] = int(cols[7])                  # tBaseInsert
+        psl['strand'] = cols[8]                            # strand
+        psl['qstart'] = int(cols[11])                      # qStart
+        psl['qend'] = int(cols[12])                        # qEnd
+        psl['tstart'] = int(cols[15])                      # tStart
+        psl['tend'] = int(cols[16])                        # tEnd
+        psl['blockcount'] = int(cols[17])                  # blockCount
+        psl['blocksizes'] = _list_from_csv(cols[18], int)  # blockSizes
+        psl['qstarts'] = _list_from_csv(cols[19], int)     # qStarts
+        psl['tstarts'] = _list_from_csv(cols[20], int)     # tStarts
         if self.pslx:
             psl['qseqs'] = _list_from_csv(cols[21])       # query sequence
             psl['tseqs'] = _list_from_csv(cols[22])       # hit sequence
@@ -449,6 +457,7 @@ class BlatPslParser(object):
         # initial dummy values
         qres_state = None
         file_state = None
+        cur_qid, cur_hid = None, None
         prev_qid, prev_hid = None, None
         cur, prev = None, None
         hit_list, hsp_list = [], []
@@ -650,7 +659,7 @@ class BlatPslWriter(object):
                 block_sizes = hsp.query_span_all
 
                 # set strand and starts
-                if hsp[0].query_strand >= 0: # since it may be a protein seq
+                if hsp[0].query_strand >= 0:  # since it may be a protein seq
                     strand = '+'
                 else:
                     strand = '-'

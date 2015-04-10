@@ -19,8 +19,8 @@ class StopTrainingTest(unittest.TestCase):
     def test_validation_increase_stop(self):
         """Stop training when the ValidationExamples increase.
         """
-        stopper = ValidationIncreaseStop(max_iterations = 20,
-                                         min_iterations = 2)
+        stopper = ValidationIncreaseStop(max_iterations=20,
+                                         min_iterations=2)
 
         stopper.last_error = 1.0
         do_stop = stopper.stopping_criteria(5, 1.0, 1.5)
@@ -93,5 +93,5 @@ class ExampleManagerTest(unittest.TestCase):
                "Did not partition correctly to validation_examples."
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

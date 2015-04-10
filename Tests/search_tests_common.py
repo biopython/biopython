@@ -14,14 +14,20 @@ try:
 except ImportError:
     sqlite3 = None
 
-from Bio import SearchIO
 from Bio._py3k import _as_bytes
 from Bio.SeqRecord import SeqRecord
 
+from Bio import BiopythonExperimentalWarning
+
+import warnings
+with warnings.catch_warnings():
+    warnings.simplefilter('ignore', BiopythonExperimentalWarning)
+    from Bio import SearchIO
+
 
 class CheckRaw(unittest.TestCase):
-
     """Base class for testing index's get_raw method."""
+    fmt = None  # define this in subclasses!
 
     def check_raw(self, filename, id, raw, **kwargs):
         """Index filename using **kwargs, check get_raw(id)==raw."""
@@ -33,7 +39,7 @@ class CheckRaw(unittest.TestCase):
                 idx.get_raw(id).replace(b'\r\n', b'\n'))
         idx.close()
 
-        #Now again, but using SQLite backend
+        # Now again, but using SQLite backend
         if sqlite3:
             idx = SearchIO.index_db(":memory:", filename, self.fmt, **kwargs)
             self.assertEqual(raw.replace(b'\r\n', b'\n'),
@@ -41,13 +47,12 @@ class CheckRaw(unittest.TestCase):
             idx.close()
 
         if os.path.isfile(filename + ".bgz"):
-            #Do the tests again with the BGZF compressed file
+            # Do the tests again with the BGZF compressed file
             print("[BONUS %s.bgz]" % filename)
             self.check_raw(filename + ".bgz", id, raw, **kwargs)
 
 
 class CheckIndex(unittest.TestCase):
-
     """Base class for testing indexing."""
 
     def check_index(self, filename, format, **kwargs):
@@ -66,13 +71,13 @@ class CheckIndex(unittest.TestCase):
         # compare values by index
         indexed = SearchIO.index(filename, format, **kwargs)
         self.assertEqual(len(parsed), len(indexed),
-                         "Should be %i records in %s, index says %i" \
+                         "Should be %i records in %s, index says %i"
                          % (len(parsed), filename, len(indexed)))
         # compare values by index_db, only if sqlite3 is present
         if sqlite3 is not None:
             db_indexed = SearchIO.index_db(':memory:', [filename], format, **kwargs)
             self.assertEqual(len(parsed), len(db_indexed),
-                             "Should be %i records in %s, index_db says %i" \
+                             "Should be %i records in %s, index_db says %i"
                              % (len(parsed), filename, len(db_indexed)))
 
         for qres in parsed:
@@ -93,14 +98,15 @@ class CheckIndex(unittest.TestCase):
             db_indexed._con.close()
 
         if os.path.isfile(filename + ".bgz"):
-            #Do the tests again with the BGZF compressed file
+            # Do the tests again with the BGZF compressed file
             print("[BONUS %s.bgz]" % filename)
             self.check_index(filename + ".bgz", format, **kwargs)
 
+
 def _num_difference(obj_a, obj_b):
     """Returns the number of instance attributes presence only in one object."""
-    attrs_a = set(obj_a.__dict__.keys())
-    attrs_b = set(obj_b.__dict__.keys())
+    attrs_a = set(obj_a.__dict__)
+    attrs_b = set(obj_b.__dict__)
     diff = attrs_a.symmetric_difference(attrs_b)
     privates = len([x for x in diff if x.startswith('_')])
     return len(diff) - privates
@@ -114,12 +120,12 @@ def compare_search_obj(obj_a, obj_b):
 
     # compare qresult attributes
     # if the above assertion pass, doesn't matter if we use a or be here
-    compare_attrs(obj_a, obj_b, obj_a.__dict__.keys())
+    compare_attrs(obj_a, obj_b, list(obj_a.__dict__))
 
     # compare objects recursively if it's not an HSPFragment
     if not isinstance(obj_a, SearchIO.HSPFragment):
         # check the number of hits contained
-        assert len(obj_a) == len(obj_b), "length: %r vs %r" % (len(obj_a),
+        assert len(obj_a) == len(obj_b), "length: %i vs %i for %r vs %r" % (len(obj_a),
                 len(obj_b), obj_a, obj_b)
         for item_a, item_b in zip(obj_a, obj_b):
             assert compare_search_obj(item_a, item_b)
@@ -153,9 +159,9 @@ def compare_attrs(obj_a, obj_b, attrs):
         # if it's a dictionary, compare values and keys
         elif isinstance(val_a, dict):
             assert isinstance(val_b, dict)
-            keys_a = sorted(val_a.keys())
+            keys_a = sorted(val_a)
             values_a = sorted(val_a.values())
-            keys_b = sorted(val_b.keys())
+            keys_b = sorted(val_b)
             values_b = sorted(val_b.values())
             assert keys_a == keys_b, "%s: %r vs %r" % (attr, keys_a, keys_b)
             assert values_a == values_b, "%s: %r vs %r" % (attr, values_a,

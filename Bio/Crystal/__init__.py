@@ -17,6 +17,8 @@ from functools import reduce
 from Bio._py3k import map
 from Bio._py3k import basestring
 
+__docformat__ = "restructuredtext en"
+
 
 class CrystalError(Exception):
     pass
@@ -25,7 +27,7 @@ class CrystalError(Exception):
 def wrap_line(line):
     output = ''
     for i in range(0, len(line), 80):
-        output = output + '%s\n' % line[ i: i + 80 ]
+        output += '%s\n' % line[i: i + 80]
     return output
 
 
@@ -37,8 +39,7 @@ def validate_key(key):
 
 
 class Hetero(object):
-    """
-    This class exists to support the PDB hetero codes.
+    """This class exists to support the PDB hetero codes.
 
     Supports only the 3 alphameric code.
     The annotation is available from http://alpha2.bmc.uu.se/hicup/
@@ -76,7 +77,7 @@ class Hetero(object):
 class Chain(object):
     """This class represents a sequence of Hetero elements."""
 
-    def __init__(self, residues = ''):
+    def __init__(self, residues=''):
         self.data = []
         if isinstance(residues, str):
             residues = residues.replace('*', ' ')
@@ -220,14 +221,16 @@ class Chain(object):
 
 
 class Crystal(object):
-    """This class represents a dictionary of labeled chains from the
-       same structure"""
+    """Represents a dictionary of labeled chains from the same structure."""
 
-    def __init__(self, data = {}):
+    def __init__(self, data=None):
         # Enforcestorage
         if not isinstance(data, dict):
             raise CrystalError('Crystal must be a dictionary')
-        self.data = data
+        if data is None:
+            self.data = {}
+        else:
+            self.data = data
         self.fix()
 
     def fix(self):

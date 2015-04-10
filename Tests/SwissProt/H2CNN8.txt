@@ -1,0 +1,44 @@
+ID   H2CNN8_9ARCH            Unreviewed;       196 AA.
+AC   H2CNN8;
+DT   21-MAR-2012, integrated into UniProtKB/TrEMBL.
+DT   21-MAR-2012, sequence version 1.
+DT   29-OCT-2014, entry version 13.
+DE   SubName: Full=Ammonia monooxygenase subunit A {ECO:0000313|EMBL:AEX14553.1};
+DE   Flags: Fragment;
+GN   Name=amoA {ECO:0000313|EMBL:AEX14553.1};
+OS   uncultured ammonia-oxidizing archaeon.
+OC   Archaea; environmental samples.
+OX   NCBI_TaxID=418404 {ECO:0000313|EMBL:AEX14553.1};
+RN   [1] {ECO:0000313|EMBL:AEX14553.1}
+RP   NUCLEOTIDE SEQUENCE.
+RC   STRAIN=DGGE gel band AOASY-10 {ECO:0000313|EMBL:AEX14553.1},
+RC   DGGE gel band AOASY-11 {ECO:0000313|EMBL:AEX14554.1}, and
+RC   DGGE gel band AOASY-9 {ECO:0000313|EMBL:AEX14552.1};
+RA   Xu Y.G., Yu W.T., Ma Q., Zhou H.;
+RT   "Responses of bacterial and archaeal ammonia oxidisers of an acidic
+RT   luvisols soil to different nitrogen fertilization rates after 9
+RT   years.";
+RL   Biol. Fertil. Soils 48:827-837(2012).
+CC   -----------------------------------------------------------------------
+CC   Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
+CC   Distributed under the Creative Commons Attribution-NoDerivs License
+CC   -----------------------------------------------------------------------
+DR   EMBL; JN040443; AEX14552.1; -; Genomic_DNA.
+DR   EMBL; JN040444; AEX14553.1; -; Genomic_DNA.
+DR   EMBL; JN040445; AEX14554.1; -; Genomic_DNA.
+DR   GO; GO:0004497; F:monooxygenase activity; IEA:UniProtKB-KW.
+DR   Gene3D; 1.20.1450.10; -; 1.
+DR   InterPro; IPR024656; AmoA_arc.
+DR   InterPro; IPR003393; NH3_CH4_mOase_A.
+DR   Pfam; PF12942; Archaeal_AmoA; 1.
+PE   4: Predicted;
+KW   Monooxygenase {ECO:0000313|EMBL:AEX14553.1};
+KW   Oxidoreductase {ECO:0000313|EMBL:AEX14553.1}.
+FT   NON_TER       1      1       {ECO:0000313|EMBL:AEX14553.1}.
+FT   NON_TER     196    196       {ECO:0000313|EMBL:AEX14553.1}.
+SQ   SEQUENCE   196 AA;  21641 MW;  1E4E6A76ECF7AAA4 CRC64;
+     FIVVVAVNST LLTINAGDYI FYTDWAWTSF VVFSISQSTM LVVGAIYYML FTGVPGTATY
+     YATIMTIYTW VAKGAWFALG YPYDFIVTPV WIPSAMLLDL TYWATRRNKH AAIIIGGTLV
+     GLSLPIFNMI NLLLVRDPLE VAFKYPRPTL PPYMTPIEPQ VGKFYNSPVA LGSGAGAVLS
+     VPIAALGAKL NTWTYR
+//

@@ -92,7 +92,7 @@ class ScopTests(unittest.TestCase):
         self.assertEqual(cmp_sccs("b.1.2.2", "b.1.2"), 1)
 
     def testParseDomain(self):
-        s=">d1tpt_1 a.46.2.1 (1-70) Thymidine phosphorylase {Escherichia coli}"
+        s = ">d1tpt_1 a.46.2.1 (1-70) Thymidine phosphorylase {Escherichia coli}"
         dom = parse_domain(s)
 
         self.assertEqual(dom.sid, 'd1tpt_1')
@@ -100,19 +100,19 @@ class ScopTests(unittest.TestCase):
         self.assertEqual(dom.residues.pdbid, '1tpt')
         self.assertEqual(dom.description, 'Thymidine phosphorylase {Escherichia coli}')
 
-        s2="d1tpt_1 a.46.2.1 (1tpt 1-70) Thymidine phosphorylase {E. coli}"
+        s2 = "d1tpt_1 a.46.2.1 (1tpt 1-70) Thymidine phosphorylase {E. coli}"
         self.assertEqual(s2, str(parse_domain(s2)))
 
-        #Genetic domains (See Astral release notes)
-        s3="g1cph.1 g.1.1.1 (1cph B:,A:) Insulin {Cow (Bos taurus)}"
+        # Genetic domains (See Astral release notes)
+        s3 = "g1cph.1 g.1.1.1 (1cph B:,A:) Insulin {Cow (Bos taurus)}"
         self.assertEqual(s3, str(parse_domain(s3)))
 
-        s4="e1cph.1a g.1.1.1 (1cph A:) Insulin {Cow (Bos taurus)}"
+        s4 = "e1cph.1a g.1.1.1 (1cph A:) Insulin {Cow (Bos taurus)}"
         self.assertEqual(s4, str(parse_domain(s4)))
 
-        #Raw Astral header
-        s5=">e1cph.1a g.1.1.1 (A:) Insulin {Cow (Bos taurus)}"
-        self.assertEqual(s4,  str(parse_domain(s5)))
+        # Raw Astral header
+        s5 = ">e1cph.1a g.1.1.1 (A:) Insulin {Cow (Bos taurus)}"
+        self.assertEqual(s4, str(parse_domain(s5)))
 
         self.assertRaises(ValueError, parse_domain, "Totally wrong")
 
@@ -131,7 +131,7 @@ class ScopTests(unittest.TestCase):
         fold = domain.getAscendent('cf')
         self.assertEqual(fold.sunid, 46457)
 
-        #get the superfamily
+        # get the superfamily
         sf = domain.getAscendent('superfamily')
         self.assertEqual(sf.sunid, 46458)
 
@@ -164,6 +164,6 @@ class ScopTests(unittest.TestCase):
         self.assertEqual(cl, [])
 
 
-if __name__=='__main__':
-    runner = unittest.TextTestRunner(verbosity = 2)
+if __name__ == '__main__':
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

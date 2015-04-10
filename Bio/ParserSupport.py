@@ -6,20 +6,22 @@
 """Code to support writing parsers (DEPRECATED).
 
 Classes:
-AbstractParser         Base class for parsers.
-AbstractConsumer       Base class of all Consumers.
-TaggingConsumer        Consumer that tags output with its event.  For debugging
-EventGenerator         Generate Biopython Events from Martel XML output
-                       (note that Martel has been removed)
+
+    - AbstractParser         Base class for parsers.
+    - AbstractConsumer       Base class of all Consumers.
+    - TaggingConsumer        Consumer that tags output with its event.  For debugging
+    - EventGenerator         Generate Biopython Events from Martel XML output
+      (note that Martel has been removed)
 
 Functions:
-safe_readline          Read a line from a handle, with check for EOF.
-safe_peekline          Peek at next line, with check for EOF.
-read_and_call          Read a line from a handle and pass it to a method.
-read_and_call_while    Read many lines, as long as a condition is met.
-read_and_call_until    Read many lines, until a condition is met.
-attempt_read_and_call  Like read_and_call, but forgiving of errors.
-is_blank_line          Test whether a line is blank.
+
+    - safe_readline          Read a line from a handle, with check for EOF.
+    - safe_peekline          Peek at next line, with check for EOF.
+    - read_and_call          Read a line from a handle and pass it to a method.
+    - read_and_call_while    Read many lines, as long as a condition is met.
+    - read_and_call_until    Read many lines, until a condition is met.
+    - attempt_read_and_call  Like read_and_call, but forgiving of errors.
+    - is_blank_line          Test whether a line is blank.
 
 """
 
@@ -32,7 +34,7 @@ import sys
 try:
     from types import InstanceType
 except ImportError:
-    #Python 3, see http://bugs.python.org/issue8206
+    # Python 3, see http://bugs.python.org/issue8206
     InstanceType = object
 from types import MethodType
 
@@ -48,6 +50,8 @@ except ImportError:
     sys.stderr.write("Warning: Could not import SAX for dealing with XML.\n" +
                      "This causes problems with some ParserSupport modules\n")
     xml_support = 0
+
+__docformat__ = "restructuredtext en"
 
 
 class AbstractParser(object):
@@ -114,12 +118,12 @@ class TaggingConsumer(AbstractConsumer):
     def _print_name(self, name, data=None):
         if data is None:
             # Write the name of a section.
-            self._handle.write("%s %s\n" % ("*"*self._colwidth, name))
+            self._handle.write("%s %s\n" % ("*" * self._colwidth, name))
         else:
             # Write the tag and line.
             self._handle.write("%-*s: %s\n" % (
                 self._colwidth, name[:self._colwidth],
-                data[:self._maxwidth-self._colwidth-2].rstrip()))
+                data[:self._maxwidth - self._colwidth - 2].rstrip()))
 
     def __getattr__(self, attr):
         if attr[:6] == 'start_' or attr[:4] == 'end_':
@@ -141,8 +145,8 @@ if xml_support:
 
         Note that Martel is now DEPRECATED.
         """
-        def __init__(self, consumer, interest_tags, callback_finalizer = None,
-                     exempt_tags = []):
+        def __init__(self, consumer, interest_tags, callback_finalizer=None,
+                     exempt_tags=[]):
             """Initialize to begin catching and firing off events.
 
             Arguments:

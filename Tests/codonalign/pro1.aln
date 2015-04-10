@@ -1,0 +1,21 @@
+CLUSTAL W (1.81) multiple sequence alignment
+
+isotig69710                          RGDQRSNFQLSPSTMQISTGLLCLLLVATGFTSQVLAHPGSI--PSTYCFVMTSKKIPKS
+ENSG00000108691:ENST00000580907      --------------MKVSAALLCLLLIAATFIPQGLAQPDAINAPVTCCYNFTNRKISVQ
+ENSG00000108691:ENST00000225831      --------------MKVSAALLCLLLIAATFIPQGLAQPDAINAPVTCCYNFTNRKISVQ
+                                                   *::*:.******:*: * .* **:*.:*  * * *: :*..**. .
+
+isotig69710                          LLKSYKRISNSRCTLKAILFKTKSGKEICADPKKKWVQDATKHLDQILQTPKPTIPSFET
+ENSG00000108691:ENST00000580907      RLASYRRITSSKCPKEAVM-----------------------------------------
+ENSG00000108691:ENST00000225831      RLASYRRITSSKCPKEAVIFKTIVAKEICADPKQKWVQDSMDHLDKQTQTPKT-------
+                                      * **.**:.*.*. :*::                                         
+
+isotig69710                          HPETKKCFIHSPFLRRAPRSTQHHSPRTWLHLVMDRTESHYVQNKPDLKRLCNFLNMQNL
+ENSG00000108691:ENST00000580907      ------------------------------------------------------------
+ENSG00000108691:ENST00000225831      ------------------------------------------------------------
+                                                                                                 
+
+isotig69710                          KRGAC
+ENSG00000108691:ENST00000580907      -----
+ENSG00000108691:ENST00000225831      -----
+                                          

@@ -18,7 +18,7 @@ class PhdTestOne(unittest.TestCase):
     def test_check_SeqIO(self):
         """Test phd1 using parser via SeqIO."""
         records = SeqIO.parse(self.handle, "phd")
-        #Contig 1
+        # Contig 1
         record = next(records)
         self.assertEqual(record.id, "34_222_(80-A03-19).b.ab1")
         self.assertEqual(record.name, "34_222_(80-A03-19).b.ab1")
@@ -42,13 +42,13 @@ class PhdTestOne(unittest.TestCase):
                          "ctccgtcgga\n"
                          "+\n"
                          "IIJSVe\\\\XV\n")
-        #Contig 2
+        # Contig 2
         record = next(records)
         self.assertEqual(record.id, "425_103_(81-A03-19).g.ab1")
         self.assertEqual(record.name, "425_103_(81-A03-19).g.ab1")
         self.assertEqual(record.letter_annotations["phred_quality"][:10],
                          [14, 17, 22, 10, 10, 10, 15, 8, 8, 9])
-        #Contig 3
+        # Contig 3
         record = next(records)
         self.assertEqual(record.id, '425_7_(71-A03-19).b.ab1')
         self.assertEqual(record.name, '425_7_(71-A03-19).b.ab1')
@@ -77,7 +77,7 @@ class PhdTestOne(unittest.TestCase):
         self.assertEqual(record.comments['trim'][0], 3)
         self.assertEqual(record.comments['trim'][1], 391)
         self.assertAlmostEqual(record.comments['trim'][2], 0.05)
-        center = len(record.sites)//2
+        center = len(record.sites) // 2
         self.assertEqual(record.sites[0], ('c', '9', '6'))
         self.assertEqual(record.sites[1], ('t', '9', '18'))
         self.assertEqual(record.sites[2], ('c', '10', '26'))
@@ -88,16 +88,16 @@ class PhdTestOne(unittest.TestCase):
         self.assertEqual(record.sites[7], ('g', '28', '87'))
         self.assertEqual(record.sites[8], ('g', '24', '100'))
         self.assertEqual(record.sites[9], ('a', '22', '108'))
-        self.assertEqual(record.sites[center-5], ('c', '11', '5259'))
-        self.assertEqual(record.sites[center-4], ('c', '11', '5273'))
-        self.assertEqual(record.sites[center-3], ('t', '9', '5286'))
-        self.assertEqual(record.sites[center-2], ('g', '10', '5300'))
-        self.assertEqual(record.sites[center-1], ('a', '10', '5316'))
+        self.assertEqual(record.sites[center - 5], ('c', '11', '5259'))
+        self.assertEqual(record.sites[center - 4], ('c', '11', '5273'))
+        self.assertEqual(record.sites[center - 3], ('t', '9', '5286'))
+        self.assertEqual(record.sites[center - 2], ('g', '10', '5300'))
+        self.assertEqual(record.sites[center - 1], ('a', '10', '5316'))
         self.assertEqual(record.sites[center], ('t', '8', '5323'))
-        self.assertEqual(record.sites[center+1], ('c', '8', '5343'))
-        self.assertEqual(record.sites[center+2], ('g', '8', '5352'))
-        self.assertEqual(record.sites[center+3], ('c', '8', '5366'))
-        self.assertEqual(record.sites[center+4], ('c', '8', '5378'))
+        self.assertEqual(record.sites[center + 1], ('c', '8', '5343'))
+        self.assertEqual(record.sites[center + 2], ('g', '8', '5352'))
+        self.assertEqual(record.sites[center + 3], ('c', '8', '5366'))
+        self.assertEqual(record.sites[center + 4], ('c', '8', '5378'))
         self.assertEqual(record.sites[-10], ('c', '8', '10756'))
         self.assertEqual(record.sites[-9], ('c', '8', '10764'))
         self.assertEqual(record.sites[-8], ('a', '8', '10769'))
@@ -114,7 +114,7 @@ class PhdTestOne(unittest.TestCase):
         self.assertEqual(str(record.seq_trimmed)[-10:], 'tatttcggag')
         # Record 2
         record = next(records)
-        center = len(record.sites)//2
+        center = len(record.sites) // 2
         self.assertEqual(record.file_name, "425_103_(81-A03-19).g.ab1")
         self.assertEqual(record.comments['abi_thumbprint'], 0)
         self.assertEqual(record.comments['call_method'], 'phred')
@@ -140,16 +140,16 @@ class PhdTestOne(unittest.TestCase):
         self.assertEqual(record.sites[7], ('c', '8', '85'))
         self.assertEqual(record.sites[8], ('c', '8', '94'))
         self.assertEqual(record.sites[9], ('a', '9', '115'))
-        self.assertEqual(record.sites[center-5], ('c', '33', '5140'))
-        self.assertEqual(record.sites[center-4], ('c', '28', '5156'))
-        self.assertEqual(record.sites[center-3], ('g', '25', '5167'))
-        self.assertEqual(record.sites[center-2], ('c', '28', '5178'))
-        self.assertEqual(record.sites[center-1], ('c', '18', '5193'))
+        self.assertEqual(record.sites[center - 5], ('c', '33', '5140'))
+        self.assertEqual(record.sites[center - 4], ('c', '28', '5156'))
+        self.assertEqual(record.sites[center - 3], ('g', '25', '5167'))
+        self.assertEqual(record.sites[center - 2], ('c', '28', '5178'))
+        self.assertEqual(record.sites[center - 1], ('c', '18', '5193'))
         self.assertEqual(record.sites[center], ('a', '16', '5204'))
-        self.assertEqual(record.sites[center+1], ('a', '15', '5213'))
-        self.assertEqual(record.sites[center+2], ('a', '10', '5230'))
-        self.assertEqual(record.sites[center+3], ('a', '10', '5242'))
-        self.assertEqual(record.sites[center+4], ('t', '8', '5249'))
+        self.assertEqual(record.sites[center + 1], ('a', '15', '5213'))
+        self.assertEqual(record.sites[center + 2], ('a', '10', '5230'))
+        self.assertEqual(record.sites[center + 3], ('a', '10', '5242'))
+        self.assertEqual(record.sites[center + 4], ('t', '8', '5249'))
         self.assertEqual(record.sites[-10], ('c', '8', '10489'))
         self.assertEqual(record.sites[-9], ('c', '8', '10503'))
         self.assertEqual(record.sites[-8], ('c', '8', '10514'))
@@ -166,7 +166,7 @@ class PhdTestOne(unittest.TestCase):
         self.assertEqual(str(record.seq_trimmed)[-10:], 'ggggccgcca')
         # Record 3
         record = next(records)
-        center = len(record.sites)//2
+        center = len(record.sites) // 2
         self.assertEqual(record.file_name, '425_7_(71-A03-19).b.ab1')
         self.assertEqual(record.comments['abi_thumbprint'], 0)
         self.assertEqual(record.comments['call_method'], 'phred')
@@ -192,16 +192,16 @@ class PhdTestOne(unittest.TestCase):
         self.assertEqual(record.sites[7], ('t', '6', '53'))
         self.assertEqual(record.sites[8], ('c', '6', '66'))
         self.assertEqual(record.sites[9], ('a', '6', '68'))
-        self.assertEqual(record.sites[center-5], ('a', '6', '4728'))
-        self.assertEqual(record.sites[center-4], ('t', '10', '4737'))
-        self.assertEqual(record.sites[center-3], ('a', '10', '4746'))
-        self.assertEqual(record.sites[center-2], ('a', '8', '4756'))
-        self.assertEqual(record.sites[center-1], ('t', '8', '4759'))
+        self.assertEqual(record.sites[center - 5], ('a', '6', '4728'))
+        self.assertEqual(record.sites[center - 4], ('t', '10', '4737'))
+        self.assertEqual(record.sites[center - 3], ('a', '10', '4746'))
+        self.assertEqual(record.sites[center - 2], ('a', '8', '4756'))
+        self.assertEqual(record.sites[center - 1], ('t', '8', '4759'))
         self.assertEqual(record.sites[center], ('t', '8', '4768'))
-        self.assertEqual(record.sites[center+1], ('a', '8', '4775'))
-        self.assertEqual(record.sites[center+2], ('g', '10', '4783'))
-        self.assertEqual(record.sites[center+3], ('t', '8', '4788'))
-        self.assertEqual(record.sites[center+4], ('g', '8', '4794'))
+        self.assertEqual(record.sites[center + 1], ('a', '8', '4775'))
+        self.assertEqual(record.sites[center + 2], ('g', '10', '4783'))
+        self.assertEqual(record.sites[center + 3], ('t', '8', '4788'))
+        self.assertEqual(record.sites[center + 4], ('g', '8', '4794'))
         self.assertEqual(record.sites[-10], ('a', '8', '9445'))
         self.assertEqual(record.sites[-9], ('t', '6', '9453'))
         self.assertEqual(record.sites[-8], ('c', '6', '9462'))
@@ -228,7 +228,7 @@ class PhdTestTwo(unittest.TestCase):
     def test_check_SeqIO(self):
         """Test phd2 using parser via SeqIO."""
         records = SeqIO.parse(self.handle, "phd")
-        #Contig 1
+        # Contig 1
         record = next(records)
         self.assertEqual(record.id, "ML4924R")
         self.assertEqual(record.name, "ML4924R")
@@ -259,7 +259,7 @@ class PhdTest454(unittest.TestCase):
     def test_check_SeqIO(self):
         """Test phd_454 using parser via SeqIO."""
         records = SeqIO.parse(self.handle, "phd")
-        #Contig 1
+        # Contig 1
         record = next(records)
         self.assertEqual(record.id, "EBE03TV04IHLTF.77-243")
         self.assertEqual(record.name, "EBE03TV04IHLTF.77-243")
@@ -299,7 +299,7 @@ class PhdTestSolexa(unittest.TestCase):
     def test_check_SeqIO(self):
         """Test phd2 using parser via SeqIO."""
         records = SeqIO.parse(self.handle, "phd")
-        #Contig 1
+        # Contig 1
         record = next(records)
         self.assertEqual(record.id, "HWI-EAS94_4_1_1_537_446")
         self.assertEqual(record.name, "HWI-EAS94_4_1_1_537_446")
@@ -330,7 +330,7 @@ class PhdTestSolexa(unittest.TestCase):
                          "gccaatcaggtttctctgcaagcccctttagcagctgagc\n"
                          "+\n"
                          "^^^^^^^^^^^^^^^^^^^^\\W^^^^^^\\VHVGOOOJJKO\n")
-        #Contig 2
+        # Contig 2
         record = next(records)
         self.assertEqual(record.id, "HWI-EAS94_4_1_1_602_99")
         self.assertEqual(record.name, "HWI-EAS94_4_1_1_602_99")
@@ -365,5 +365,5 @@ class PhdTestSolexa(unittest.TestCase):
         self.assertRaises(StopIteration, next, records)
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

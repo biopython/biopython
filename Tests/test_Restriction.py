@@ -40,9 +40,9 @@ class SimpleEnzyme(unittest.TestCase):
     def test_circular_sequences(self):
         """Deal with cutting circular sequences.
         """
-        parts = EcoRI.catalyse(self.ecosite_seq, linear = False)
+        parts = EcoRI.catalyse(self.ecosite_seq, linear=False)
         self.assertEqual(len(parts), 1)
-        locations = EcoRI.search(parts[0], linear = False)
+        locations = EcoRI.search(parts[0], linear=False)
         self.assertEqual(locations, [1])
 
 
@@ -116,5 +116,5 @@ class RestrictionBatches(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

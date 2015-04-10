@@ -1,0 +1,23 @@
+Command line: [exonerate --showvulgar no --showalignment yes nuc2.fa pro.fa]
+Hostname: [blackbriar]
+
+C4 Alignment:
+------------
+         Query: dna 
+        Target: protein
+         Model: ungapped:dna2protein
+     Raw score: 105
+   Query range: 0 -> 93
+  Target range: 313 -> 344
+
+   1 : AACAGTCCGTTCCNAAAAGGCCCGCTGGCTTCTGTGCAGAATCCTGTCTATCACAAGCAGCCTC :  64
+       AsnSerProPheUnkLysGlyProLeuAlaSerValGlnAsnProValTyrHisLysGlnProL
+       |||... !! !!! !||| !!|||  !!.!||||||||||||||||||||||||!!.|||||||
+ 314 : AsnGlnSerValProLysArgProAlaGlySerValGlnAsnProValTyrHisAsnGlnProL : 335
+
+  65 : TGAACCCCGCGCCCAATGCAGAGACCCAC :  93
+       euAsnProAlaProAsnAlaGluThrHis
+       ||||||||||||||!:!  !!!: !!|||
+ 336 : euAsnProAlaProSerArgAspProHis : 344
+
+-- completed exonerate analysis

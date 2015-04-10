@@ -3,19 +3,23 @@
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
 
-#Importing these functions with leading underscore as not intended for reuse
+# Importing these functions with leading underscore as not intended for reuse
 from Bio._py3k import urlopen as _urlopen
 from Bio._py3k import urlencode as _urlencode
 
 from xml.sax import handler
 from xml.sax.expatreader import ExpatParser
 
+__docformat__ = "restructuredtext en"
+
 
 class Record(list):
-    """\
-This record is a list containing the search results returned by
-ScanProsite. The record also contains the data members n_match, n_seq,
-capped, and warning."""
+    """Represents search results returned by ScanProsite.
+
+    This record is a list containing the search results returned by
+    ScanProsite. The record also contains the data members n_match,
+    n_seq, capped, and warning.
+    """
 
     def __init__(self):
         self.n_match = None
@@ -27,11 +31,12 @@ capped, and warning."""
 def scan(seq="", mirror='http://www.expasy.org', output='xml', **keywords):
     """Execute a ScanProsite search.
 
-    mirror:      The ScanProsite mirror to be used
+    Arguments:
+     - mirror:   The ScanProsite mirror to be used
                  (default: http://www.expasy.org).
-    seq:         The query sequence, or UniProtKB (Swiss-Prot,
+     - seq:      The query sequence, or UniProtKB (Swiss-Prot,
                  TrEMBL) accession
-    output:      Format of the search results
+     - output:   Format of the search results
                  (default: xml)
 
     Further search parameters can be passed as keywords; see the
@@ -55,7 +60,7 @@ def scan(seq="", mirror='http://www.expasy.org', output='xml', **keywords):
 
 
 def read(handle):
-    "Parse search results returned by ScanProsite into a Python object"
+    """Parse search results returned by ScanProsite into a Python object"""
     content_handler = ContentHandler()
     saxparser = Parser()
     saxparser.setContentHandler(content_handler)
@@ -72,7 +77,7 @@ class Parser(ExpatParser):
         ExpatParser.__init__(self)
         self.firsttime = True
 
-    def feed(self, data, isFinal = 0):
+    def feed(self, data, isFinal=0):
         # Error messages returned by the ScanProsite server are formatted as
         # as plain text instead of an XML document. To catch such error
         # messages, we override the feed method of the Expat parser.
@@ -100,18 +105,18 @@ class ContentHandler(handler.ContentHandler):
     def startElement(self, name, attrs):
         self.element.append(name)
         self.content = ""
-        if self.element==["matchset"]:
+        if self.element == ["matchset"]:
             self.record = Record()
             self.record.n_match = int(attrs["n_match"])
             self.record.n_seq = int(attrs["n_seq"])
-        elif self.element==["matchset", "match"]:
+        elif self.element == ["matchset", "match"]:
             match = {}
             self.record.append(match)
 
     def endElement(self, name):
-        assert name==self.element.pop()
+        assert name == self.element.pop()
         name = str(name)
-        if self.element==["matchset", "match"]:
+        if self.element == ["matchset", "match"]:
             match = self.record[-1]
             if name in ContentHandler.integers:
                 match[name] = int(self.content)

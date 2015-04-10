@@ -35,15 +35,16 @@ from __future__ import print_function
 import time
 from Bio._py3k import _binary_to_string_handle, _as_bytes
 
-#Importing these functions with leading underscore as not intended for reuse
+# Importing these functions with leading underscore as not intended for reuse
 from Bio._py3k import urlopen as _urlopen
-from Bio._py3k import urlencode as _urlencode
 from Bio._py3k import quote as _quote
 
-#Constant
+__docformat__ = "restructuredtext en"
+
+# Constant
 _BASE_URL = "http://togows.dbcls.jp"
 
-#Caches:
+# Caches:
 _search_db_names = None
 _entry_db_names = None
 _entry_db_fields = {}
@@ -79,22 +80,22 @@ def _get_convert_formats():
 def entry(db, id, format=None, field=None):
     """TogoWS fetch entry (returns a handle).
 
-    db - database (string), see list below.
-    id - identier (string) or a list of identifiers (either as a list of
-         strings or a single string with comma separators).
-    format - return data file format (string), options depend on the database
-             e.g. "xml", "json", "gff", "fasta", "ttl" (RDF Turtle)
-    field - specific field from within the database record (string)
-            e.g. "au" or "authors" for pubmed.
+        - db - database (string), see list below.
+        - id - identier (string) or a list of identifiers (either as a list of
+          strings or a single string with comma separators).
+        - format - return data file format (string), options depend on the database
+          e.g. "xml", "json", "gff", "fasta", "ttl" (RDF Turtle)
+        - field - specific field from within the database record (string)
+          e.g. "au" or "authors" for pubmed.
 
-    At the time of writing, this includes the following:
+    At the time of writing, this includes the following::
 
-    KEGG: compound, drug, enzyme, genes, glycan, orthology, reaction,
-          module, pathway
-    DDBj: ddbj, dad, pdb
-    NCBI: nuccore, nucest, nucgss, nucleotide, protein, gene, onim,
-          homologue, snp, mesh, pubmed
-    EBI:  embl, uniprot, uniparc, uniref100, uniref90, uniref50
+        KEGG: compound, drug, enzyme, genes, glycan, orthology, reaction,
+              module, pathway
+        DDBj: ddbj, dad, pdb
+        NCBI: nuccore, nucest, nucgss, nucleotide, protein, gene, onim,
+              homologue, snp, mesh, pubmed
+        EBI:  embl, uniprot, uniparc, uniref100, uniref90, uniref50
 
     For the current list, please see http://togows.dbcls.jp/entry/
 
@@ -115,7 +116,7 @@ def entry(db, id, format=None, field=None):
             fields = _get_entry_fields(db)
             _entry_db_fields[db] = fields
         if db == "pubmed" and field == "ti" and "title" in fields:
-            #Backwards compatibility fix for TogoWS change Nov/Dec 2013
+            # Backwards compatibility fix for TogoWS change Nov/Dec 2013
             field = "title"
             import warnings
             warnings.warn("TogoWS dropped 'pubmed' field alias 'ti', please use 'title' instead.")
@@ -158,31 +159,35 @@ def search_count(db, query):
     if _search_db_names is None:
         _search_db_names = _get_fields(_BASE_URL + "/search")
     if db not in _search_db_names:
-        #TODO - Make this a ValueError? Right now despite the HTML website
-        #claiming to, the "gene" or "ncbi-gene" don't work and are not listed.
+        # TODO - Make this a ValueError? Right now despite the HTML website
+        # claiming to, the "gene" or "ncbi-gene" don't work and are not listed.
         import warnings
         warnings.warn("TogoWS search does not officially support database '%s'. "
                       "See %s/search/ for options." % (db, _BASE_URL))
-    handle = _open(_BASE_URL + "/search/%s/%s/count"
-                   % (db, _quote(query)))
-    count = int(handle.read().strip())
+    url = _BASE_URL + "/search/%s/%s/count" % (db, _quote(query))
+    handle = _open(url)
+    data = handle.read()
     handle.close()
+    try:
+        count = int(data.strip())
+    except ValueError:
+        raise ValueError("Expected an integer from URL %s, got: %r" % (url, data))
     return count
 
 
 def search_iter(db, query, limit=None, batch=100):
     """TogoWS search iteratating over the results (generator function).
 
-    db - database (string), see http://togows.dbcls.jp/search
-    query - search term (string)
-    limit - optional upper bound on number of search results
-    batch - number of search results to pull back each time talk to
-            TogoWS (currently limited to 100).
+        - db - database (string), see http://togows.dbcls.jp/search
+        - query - search term (string)
+        - limit - optional upper bound on number of search results
+        - batch - number of search results to pull back each time talk to
+          TogoWS (currently limited to 100).
 
     You would use this function within a for loop, e.g.
 
     >>> for id in search_iter("pubmed", "lung+cancer+drug", limit=10):
-    ...     print(id) #maybe fetch data with entry?
+    ...     print(id) # maybe fetch data with entry?
 
     Internally this first calls the Bio.TogoWS.search_count() and then
     uses Bio.TogoWS.search() to get the results in batches.
@@ -190,8 +195,8 @@ def search_iter(db, query, limit=None, batch=100):
     count = search_count(db, query)
     if not count:
         raise StopIteration
-    #NOTE - We leave it to TogoWS to enforce any upper bound on each
-    #batch, they currently return an HTTP 400 Bad Request if above 100.
+    # NOTE - We leave it to TogoWS to enforce any upper bound on each
+    # batch, they currently return an HTTP 400 Bad Request if above 100.
     remain = count
     if limit is not None:
         remain = min(remain, limit)
@@ -199,10 +204,10 @@ def search_iter(db, query, limit=None, batch=100):
     prev_ids = []  # Just cache the last batch for error checking
     while remain:
         batch = min(batch, remain)
-        #print("%r left, asking for %r" % (remain, batch))
+        # print("%r left, asking for %r" % (remain, batch))
         ids = search(db, query, offset, batch).read().strip().split()
         assert len(ids) == batch, "Got %i, expected %i" % (len(ids), batch)
-        #print("offset %i, %s ... %s" % (offset, ids[0], ids[-1]))
+        # print("offset %i, %s ... %s" % (offset, ids[0], ids[-1]))
         if ids == prev_ids:
             raise RuntimeError("Same search results for previous offset")
         for identifier in ids:
@@ -222,12 +227,12 @@ def search(db, query, offset=None, limit=None, format=None):
     can return results in a several formats. In general, the search_iter
     function is more suitable for end users.
 
-    db - database (string), see http://togows.dbcls.jp/search/
-    query - search term (string)
-    offset, limit - optional integers specifying which result to start from
-            (1 based) and the number of results to return.
-    format - return data file format (string), e.g. "json", "ttl" (RDF)
-             By default plain text is returned, one result per line.
+        - db - database (string), see http://togows.dbcls.jp/search/
+        - query - search term (string)
+        - offset, limit - optional integers specifying which result to start from
+          (1 based) and the number of results to return.
+        - format - return data file format (string), e.g. "json", "ttl" (RDF)
+          By default plain text is returned, one result per line.
 
     At the time of writing, TogoWS applies a default count limit of 100
     search results, and this is an upper bound. To access more results,
@@ -250,8 +255,8 @@ def search(db, query, offset=None, limit=None, format=None):
     if _search_db_names is None:
         _search_db_names = _get_fields(_BASE_URL + "/search")
     if db not in _search_db_names:
-        #TODO - Make this a ValueError? Right now despite the HTML website
-        #claiming to, the "gene" or "ncbi-gene" don't work and are not listed.
+        # TODO - Make this a ValueError? Right now despite the HTML website
+        # claiming to, the "gene" or "ncbi-gene" don't work and are not listed.
         import warnings
         warnings.warn("TogoWS search does not explicitly support database '%s'. "
                       "See %s/search/ for options." % (db, _BASE_URL))
@@ -274,7 +279,7 @@ def search(db, query, offset=None, limit=None, format=None):
         raise ValueError("Expect BOTH offset AND limit to be provided (or neither)")
     if format:
         url += "." + format
-    #print(url)
+    # print(url)
     return _open(url)
 
 
@@ -298,13 +303,13 @@ def convert(data, in_format, out_format):
         msg = "\n".join("%s -> %s" % tuple(pair) for pair in _convert_formats)
         raise ValueError("Unsupported conversion. Choose from:\n%s" % msg)
     url = _BASE_URL + "/convert/%s.%s" % (in_format, out_format)
-    #TODO - Should we just accept a string not a handle? What about a filename?
+    # TODO - Should we just accept a string not a handle? What about a filename?
     if hasattr(data, "read"):
-        #Handle
-        return _open(url, post={"data": data.read()})
+        # Handle
+        return _open(url, post=data.read())
     else:
-        #String
-        return _open(url, post={"data": data})
+        # String
+        return _open(url, post=data)
 
 
 def _open(url, post=None):
@@ -324,15 +329,15 @@ def _open(url, post=None):
     else:
         _open.previous = current
 
-    #print(url)
+    # print(url)
     if post:
-        handle = _urlopen(url, _as_bytes(_urlencode(post)))
+        handle = _urlopen(url, _as_bytes(post))
     else:
         handle = _urlopen(url)
 
-    #We now trust TogoWS to have set an HTTP error code, that
-    #suffices for my current unit tests. Previously we would
-    #examine the start of the data returned back.
+    # We now trust TogoWS to have set an HTTP error code, that
+    # suffices for my current unit tests. Previously we would
+    # examine the start of the data returned back.
     return _binary_to_string_handle(handle)
 
 _open.previous = 0

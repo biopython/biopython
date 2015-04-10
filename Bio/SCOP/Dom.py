@@ -21,11 +21,11 @@ from .Residues import Residues
 class Record(object):
     """Holds information for one SCOP domain.
 
-    sid -- The SCOP ID of the entry, e.g. d1anu1
+    Attribues:
 
-    residues -- The domain definition as a Residues object
-
-    hierarchy -- A string specifying where this domain is in the hierarchy.
+     - sid - The SCOP ID of the entry, e.g. d1anu1
+     - residues - The domain definition as a Residues object
+     - hierarchy - A string specifying where this domain is in the hierarchy.
     """
     def __init__(self, line=None):
         self.sid = ''
@@ -40,12 +40,12 @@ class Record(object):
         Records consist of 4 tab deliminated fields;
         sid, pdbid, residues, hierarchy
         """
-        #For example ::
+        # For example ::
         #
-        #d1sctg_ 1sct    g:      1.001.001.001.001.001
-        #d1scth_ 1sct    h:      1.001.001.001.001.001
-        #d1flp__ 1flp    -       1.001.001.001.001.002
-        #d1moh__ 1moh    -       1.001.001.001.001.002
+        # d1sctg_ 1sct    g:      1.001.001.001.001.001
+        # d1scth_ 1sct    h:      1.001.001.001.001.001
+        # d1flp__ 1flp    -       1.001.001.001.001.002
+        # d1moh__ 1moh    -       1.001.001.001.001.002
 
         line = line.rstrip()  # no trailing whitespace
         columns = line.split("\t")  # separate the tab-delineated cols
@@ -53,23 +53,22 @@ class Record(object):
             raise ValueError("I don't understand the format of %s" % line)
         self.sid, pdbid, res, self.hierarchy = columns
         self.residues = Residues(res)
-        self.residues.pdbid =pdbid
+        self.residues.pdbid = pdbid
 
     def __str__(self):
         s = []
         s.append(self.sid)
-        s.append(str(self.residues).replace(" ", "\t") )
+        s.append(str(self.residues).replace(" ", "\t"))
         s.append(self.hierarchy)
         return "\t".join(s) + "\n"
 
 
 def parse(handle):
-    """Iterates over a DOM file, returning a Dom record for each line
-    in the file.
+    """Iterates over a DOM file as a Dom record for each line.
 
     Arguments:
 
-        handle -- file-like object.
+     - handle -- file-like object.
     """
     for line in handle:
         if line.startswith('#'):

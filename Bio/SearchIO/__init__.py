@@ -41,7 +41,7 @@ that yields one QueryResult object per iteration.
     >>> from Bio import SearchIO
     >>> for qresult in SearchIO.parse('Blast/mirna.xml', 'blast-xml'):
     ...     print("%s %s" % (qresult.id, qresult.description))
-    ... 
+    ...
     33211 mir_1
     33212 mir_2
     33213 mir_3
@@ -53,7 +53,7 @@ than one queries:
 
     >>> qresult = SearchIO.read('Blast/xml_2226_blastp_004.xml', 'blast-xml')
     >>> print("%s %s" % (qresult.id, qresult.description))
-    ... 
+    ...
     gi|11464971:4-101 pleckstrin [Mus musculus]
 
     >>> SearchIO.read('Blast/mirna.xml', 'blast-xml')
@@ -197,8 +197,6 @@ of the format's documentation.
 from __future__ import print_function
 from Bio._py3k import basestring
 
-__docformat__ = 'epytext en'
-
 import sys
 import warnings
 
@@ -214,6 +212,8 @@ warnings.warn('Bio.SearchIO is an experimental submodule which may undergo '
 
 
 __all__ = ['read', 'parse', 'to_dict', 'index', 'index_db', 'write', 'convert']
+
+__docformat__ = "restructuredtext en"
 
 
 # dictionary of supported formats for parse() and read()
@@ -282,7 +282,7 @@ def parse(handle, format=None, **kwargs):
     <generator object ...>
     >>> for qresult in qresults:
     ...     print("Search %s has %i hits" % (qresult.id, len(qresult)))
-    ... 
+    ...
     Search 33211 has 100 hits
     Search 33212 has 44 hits
     Search 33213 has 95 hits
@@ -295,7 +295,7 @@ def parse(handle, format=None, **kwargs):
     >>> from Bio import SearchIO
     >>> for qresult in SearchIO.parse('Blast/mirna.tab', 'blast-tab', comments=True):
     ...     print("Search %s has %i hits" % (qresult.id, len(qresult)))
-    ... 
+    ...
     Search 33211 has 100 hits
     Search 33212 has 44 hits
     Search 33213 has 95 hits
@@ -329,7 +329,7 @@ def read(handle, format=None, **kwargs):
     >>> from Bio import SearchIO
     >>> qresult = SearchIO.read('Blast/xml_2226_blastp_004.xml', 'blast-xml')
     >>> print("%s %s" % (qresult.id, qresult.description))
-    ... 
+    ...
     gi|11464971:4-101 pleckstrin [Mus musculus]
 
     If the given handle has no results, an exception will be raised:
@@ -514,23 +514,27 @@ def index_db(index_filename, filenames=None, format=None,
     indexing overhead, provided it has been indexed at least once.
 
     >>> from Bio import SearchIO
-    >>> db_idx = SearchIO.index_db(':memory:', 'Blast/mirna.xml', 'blast-xml')
+    >>> idx_filename = ":memory:" # Use a real filename, this is in RAM only!
+    >>> db_idx = SearchIO.index_db(idx_filename, 'Blast/mirna.xml', 'blast-xml')
     >>> sorted(db_idx)
     ['33211', '33212', '33213']
     >>> db_idx['33212']
     QueryResult(id='33212', 44 hits)
+    >>> db_idx.close()
 
     `index_db` can also index multiple files and store them in the same
     database, making it easier to group multiple search files and access them
     from a single interface.
 
     >>> from Bio import SearchIO
+    >>> idx_filename = ":memory:" # Use a real filename, this is in RAM only!
     >>> files = ['Blast/mirna.xml', 'Blast/wnts.xml']
-    >>> db_idx = SearchIO.index_db(':memory:', files, 'blast-xml')
+    >>> db_idx = SearchIO.index_db(idx_filename, files, 'blast-xml')
     >>> sorted(db_idx)
     ['33211', '33212', '33213', 'gi|156630997:105-1160', ..., 'gi|53729353:216-1313']
     >>> db_idx['33212']
     QueryResult(id='33212', 44 hits)
+    >>> db_idx.close()
 
     One common example where this is helpful is if you had a large set of
     query sequences (say ten thousand) which you split into ten query files
@@ -546,7 +550,7 @@ def index_db(index_filename, filenames=None, format=None,
     GZIP compressed files are not supported.
 
     See also Bio.SearchIO.index(), Bio.SearchIO.to_dict(), and the Python module
-    glob which is useful for building lists of files.  
+    glob which is useful for building lists of files.
     """
     # cast filenames to list if it's a string
     # (can we check if it's a string or a generator?)
@@ -677,4 +681,3 @@ def convert(in_file, in_format, out_file, out_format, in_kwargs=None,
 if __name__ == "__main__":
     from Bio._utils import run_doctest
     run_doctest()
-

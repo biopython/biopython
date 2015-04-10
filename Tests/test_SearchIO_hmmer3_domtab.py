@@ -9,7 +9,12 @@
 import os
 import unittest
 
-from Bio.SearchIO import parse
+from Bio import BiopythonExperimentalWarning
+
+import warnings
+with warnings.catch_warnings():
+   warnings.simplefilter('ignore', BiopythonExperimentalWarning)
+   from Bio.SearchIO import parse
 
 # test case files are in the Blast directory
 TEST_DIR = 'Hmmer'
@@ -20,9 +25,80 @@ def get_file(filename):
     return os.path.join(TEST_DIR, filename)
 
 
-class HmmerscanCases(unittest.TestCase):
+class HmmscanCases(unittest.TestCase):
 
     fmt = 'hmmscan3-domtab'
+
+    def test_domtab_31b1_hmmscan_001(self):
+        "Test parsing hmmscan-domtab, hmmscan 3.1b1, multiple queries (domtab_31b1_hmmscan_001)"
+
+        tab_file = get_file('domtab_31b1_hmmscan_001.out')
+        qresults = list(parse(tab_file, self.fmt))
+        self.assertEqual(4, len(qresults))
+
+        # first qresult, first hit, first hsp
+        qresult = qresults[0]
+        self.assertEqual(1, len(qresult))
+        self.assertEqual('gi|4885477|ref|NP_005359.1|', qresult.id)
+        self.assertEqual('-', qresult.accession)
+        self.assertEqual(154, qresult.seq_len)
+        hit = qresult[0]
+        self.assertEqual(1, len(hit))
+        self.assertEqual('Globin', hit.id)
+        self.assertEqual('gi|4885477|ref|NP_005359.1|', hit.query_id)
+        self.assertEqual('PF00042.17', hit.accession)
+        self.assertEqual(110, hit.seq_len)
+        self.assertEqual(1e-22, hit.evalue)
+        self.assertEqual(80.5, hit.bitscore)
+        self.assertEqual(0.3, hit.bias)
+        self.assertEqual('Globin', hit.description)
+        hsp = hit.hsps[0]
+        self.assertEqual('Globin', hsp.hit_id)
+        self.assertEqual('gi|4885477|ref|NP_005359.1|', hsp.query_id)
+        self.assertEqual(1, hsp.domain_index)
+        self.assertEqual(1.1e-26, hsp.evalue_cond)
+        self.assertEqual(1.6e-22, hsp.evalue)
+        self.assertEqual(79.8, hsp.bitscore)
+        self.assertEqual(0.3, hsp.bias)
+        self.assertEqual(0, hsp.hit_start)
+        self.assertEqual(109, hsp.hit_end)
+        self.assertEqual(6, hsp.query_start)
+        self.assertEqual(112, hsp.query_end)
+        self.assertEqual(6, hsp.env_start)
+        self.assertEqual(113, hsp.env_end)
+        self.assertEqual(0.97, hsp.acc_avg)
+
+        # last qresult, last hit, last hsp
+        qresult = qresults[-1]
+        self.assertEqual(5, len(qresult))
+        self.assertEqual('gi|125490392|ref|NP_038661.2|', qresult.id)
+        self.assertEqual('-', qresult.accession)
+        self.assertEqual(352, qresult.seq_len)
+        hit = qresult[-1]
+        self.assertEqual(1, len(hit))
+        self.assertEqual('DUF521', hit.id)
+        self.assertEqual('gi|125490392|ref|NP_038661.2|', hit.query_id)
+        self.assertEqual('PF04412.8', hit.accession)
+        self.assertEqual(400, hit.seq_len)
+        self.assertEqual(0.15, hit.evalue)
+        self.assertEqual(10.5, hit.bitscore)
+        self.assertEqual(0.1, hit.bias)
+        self.assertEqual('Protein of unknown function (DUF521)', hit.description)
+        hsp = hit.hsps[0]
+        self.assertEqual('DUF521', hsp.hit_id)
+        self.assertEqual('gi|125490392|ref|NP_038661.2|', hsp.query_id)
+        self.assertEqual(1, hsp.domain_index)
+        self.assertEqual(9.4e-05, hsp.evalue_cond)
+        self.assertEqual(0.28, hsp.evalue)
+        self.assertEqual(9.6, hsp.bitscore)
+        self.assertEqual(0.1, hsp.bias)
+        self.assertEqual(272, hsp.hit_start)
+        self.assertEqual(334, hsp.hit_end)
+        self.assertEqual(220, hsp.query_start)
+        self.assertEqual(280, hsp.query_end)
+        self.assertEqual(196, hsp.env_start)
+        self.assertEqual(294, hsp.env_end)
+        self.assertEqual(0.77, hsp.acc_avg)
 
     def test_domtab_30_hmmscan_001(self):
         "Test parsing hmmscan-domtab, hmmscan 3.0, multiple queries (domtab_30_hmmscan_001)"
@@ -492,6 +568,44 @@ class HmmersearchCases(unittest.TestCase):
 
     fmt = 'hmmsearch3-domtab'
 
+    def test_domtab_31b1_hmmsearch_001(self):
+        "Test parsing hmmsearch-domtab, hmmsearch 3.1b1, single query (domtab_31b1_hmmsearch_001)"
+
+        tab_file = get_file('domtab_31b1_hmmsearch_001.out')
+        qresults = list(parse(tab_file, self.fmt))
+
+        self.assertEqual(1, len(qresults))
+
+        qresult = qresults[0]
+        self.assertEqual('Pkinase', qresult.id)
+        self.assertEqual('PF00069.17', qresult.accession)
+        self.assertEqual(260, qresult.seq_len)
+        hit = qresult[0]
+        self.assertEqual(2, len(hit))
+        self.assertEqual('sp|Q9WUT3|KS6A2_MOUSE', hit.id)
+        self.assertEqual('Pkinase', hit.query_id)
+        self.assertEqual('-', hit.accession)
+        self.assertEqual(733, hit.seq_len)
+        self.assertEqual(8.5e-147, hit.evalue)
+        self.assertEqual(492.3, hit.bitscore)
+        self.assertEqual(0.0, hit.bias)
+        self.assertEqual('Ribosomal protein S6 kinase alpha-2 OS=Mus musculus GN=Rps6ka2 PE=1 SV=1', hit.description)
+        hsp = hit.hsps[0]
+        self.assertEqual('sp|Q9WUT3|KS6A2_MOUSE', hsp.hit_id)
+        self.assertEqual('Pkinase', hsp.query_id)
+        self.assertEqual(1, hsp.domain_index)
+        self.assertEqual(2.6e-75, hsp.evalue_cond)
+        self.assertEqual(3.6e-70, hsp.evalue)
+        self.assertEqual(241.2, hsp.bitscore)
+        self.assertEqual(0.0, hsp.bias)
+        self.assertEqual(58, hsp.hit_start)
+        self.assertEqual(318, hsp.hit_end)
+        self.assertEqual(0, hsp.query_start)
+        self.assertEqual(260, hsp.query_end)
+        self.assertEqual(58, hsp.env_start)
+        self.assertEqual(318, hsp.env_end)
+        self.assertEqual(0.95, hsp.acc_avg)
+
     def test_domtab_30_hmmsearch_001(self):
         "Test parsing hmmsearch-domtab, hmmsearch 3.0, multiple queries (domtab_30_hmmsearch_001)"
 
@@ -533,5 +647,5 @@ class HmmersearchCases(unittest.TestCase):
         self.assertEqual(0.95, hsp.acc_avg)
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

@@ -24,13 +24,13 @@ from Bio.Application import ApplicationError
 
 #################################################################
 
-#Try to avoid problems when the OS is in another language
+# Try to avoid problems when the OS is in another language
 os.environ['LANG'] = 'C'
 
 fasttree_exe = None
 if sys.platform == "win32":
     try:
-        #This can vary depending on the Windows language.
+        # This can vary depending on the Windows language.
         prog_files = os.environ["PROGRAMFILES"]
     except KeyError:
         prog_files = r"C:\Program Files (x86)"
@@ -39,8 +39,8 @@ if sys.platform == "win32":
     # was chosen here but users can alter the path according to where
     # fasttree is located on their systems
 
-    likely_dirs = ["Fasttree", "fasttree", "FastTree"]
-    likely_exes = ["Fasttree.exe", "fasttree.exe", "FastTree.exe"]
+    likely_dirs = ["", "FastTree"]
+    likely_exes = ["FastTree.exe"]
     for folder in likely_dirs:
         if os.path.isdir(os.path.join(prog_files, folder)):
             for filename in likely_exes:
@@ -51,18 +51,21 @@ if sys.platform == "win32":
                 break
 else:
     from Bio._py3k import getoutput
-    # Checking the -help argument
-    output = getoutput("fasttree -help")
-    # Since "is not recognized" may be in another language, try and be sure this
-    # is really the fasttree tool's output
-    fasttree_found = False
-    if "is not recognized" not in output and "protein_alignment" in output \
-    and "nucleotide_alignment" in output:
-        fasttree_exe = "fasttree"
+    # Website uses 'FastTree', Nate's system had 'fasttree'
+    likely_exes = ["FastTree", "fasttree"]
+    for filename in likely_exes:
+        # Checking the -help argument
+        output = getoutput("%s -help" % filename)
+        # Since "is not recognized" may be in another language, try and be sure this
+        # is really the fasttree tool's output
+        if "is not recognized" not in output and "protein_alignment" in output \
+        and "nucleotide_alignment" in output:
+            fasttree_exe = filename
+            break
 
 if not fasttree_exe:
     raise MissingExternalDependencyError(
-        "Install fasttree and correctly set the file path to the program "
+        "Install FastTree and correctly set the file path to the program "
         "if you want to use it from Biopython.")
 
 #################################################################
@@ -79,17 +82,17 @@ try:
     assert False, "Should have failed, returned:\n%s\n%s" % (stdout, stderr)
 except ApplicationError as err:
     print("Failed (good)")
-    #Python 2.3 on Windows gave (0, 'Error')
-    #Python 2.5 on Windows gives [Errno 0] Error
+    # Python 2.3 on Windows gave (0, 'Error')
+    # Python 2.5 on Windows gives [Errno 0] Error
     assert "Cannot open sequence file" in str(err) or \
            "Cannot open input file" in str(err) or \
-           "non-zero exit status" in str(err), str(err)
+           "Non-zero return code " in str(err), str(err)
 
 print("")
 print("Single sequence")
 input_file = "Fasta/f001"
 assert os.path.isfile(input_file)
-assert len(list(SeqIO.parse(input_file, "fasta")))==1
+assert len(list(SeqIO.parse(input_file, "fasta"))) == 1
 cline = FastTreeCommandline(fasttree_exe, input=input_file)
 try:
     stdout, stderr = cline()
@@ -99,7 +102,7 @@ try:
         assert False, "Should have failed, returned:\n%s\n%s" % (stdout, stderr)
 except ApplicationError as err:
     print("Failed (good)")
-    #assert str(err) == "No records found in handle", str(err)
+    # assert str(err) == "No records found in handle", str(err)
 
 print("")
 print("Invalid sequence")
@@ -111,23 +114,23 @@ try:
     assert False, "Should have failed, returned:\n%s\n%s" % (stdout, stderr)
 except ApplicationError as err:
     print("Failed (good)")
-    #Ideally we'd catch the return code and raise the specific
-    #error for "invalid format", rather than just notice there
-    #is not output file.
-    #Note:
-    #Python 2.3 on Windows gave (0, 'Error')
-    #Python 2.5 on Windows gives [Errno 0] Error
+    # Ideally we'd catch the return code and raise the specific
+    # error for "invalid format", rather than just notice there
+    # is not output file.
+    # Note:
+    # Python 2.3 on Windows gave (0, 'Error')
+    # Python 2.5 on Windows gives [Errno 0] Error
     assert "invalid format" in str(err) \
            or "not produced" in str(err) \
            or "No sequences in file" in str(err) \
-           or "non-zero exit status " in str(err), str(err)
+           or "Non-zero return code " in str(err), str(err)
 
 #################################################################
 print("")
 print("Checking normal situations")
 print("==========================")
 
-#Create a temp fasta file with a space in the name
+# Create a temp fasta file with a space in the name
 temp_filename_with_spaces = "Clustalw/temp horses.fasta"
 handle = open(temp_filename_with_spaces, "w")
 SeqIO.write(SeqIO.parse("Phylip/hennigian.phy", "phylip"), handle, "fasta")
@@ -136,13 +139,13 @@ handle.close()
 for input_file in ["Quality/example.fasta", "Clustalw/temp horses.fasta"]:
     input_records = SeqIO.to_dict(SeqIO.parse(input_file, "fasta"))
     print("")
-    print("Calling fasttree on %s (with %i records)" \
+    print("Calling fasttree on %s (with %i records)"
           % (repr(input_file), len(input_records)))
 
-    #Any filesnames with spaces should get escaped with quotes automatically.
-    #Using keyword arguments here.
-    cline = _Fasttree.FastTreeCommandline(fasttree_exe, input=input_file)
-    assert str(eval(repr(cline)))==str(cline)
+    # Any filesnames with spaces should get escaped with quotes automatically.
+    # Using keyword arguments here.
+    cline = _Fasttree.FastTreeCommandline(fasttree_exe, input=input_file, nt=True)
+    assert str(eval(repr(cline))) == str(cline)
 
     out, err = cline()
     assert err.strip().startswith("FastTree")
@@ -167,11 +170,12 @@ for input_file in ["Quality/example.fasta", "Clustalw/temp horses.fasta"]:
 
     print("")
     print("Checking distances between tree terminals")
+
     def terminal_neighbor_dists(self):
         """Return a list of distances between adjacent terminals."""
         def generate_pairs(self):
             pairs = itertools.tee(self)
-            next(pairs[1]) # Advance second iterator one step
+            next(pairs[1])  # Advance second iterator one step
             return zip(pairs[0], pairs[1])
         return [self.distance(*i) for i in
                 generate_pairs(self.find_clades(terminal=True))]

@@ -10,21 +10,21 @@ from Bio import SeqIO
 from Bio.Alphabet import single_letter_alphabet
 from Bio.Seq import Seq, MutableSeq
 from Bio.SeqRecord import SeqRecord
-from Bio.SeqUtils import GC, quick_FASTA_reader, seq1, seq3
+from Bio.SeqUtils import GC, seq1, seq3
 from Bio.SeqUtils.lcc import lcc_simp, lcc_mult
 from Bio.SeqUtils.CheckSum import crc32, crc64, gcg, seguid
 from Bio.SeqUtils.CodonUsage import CodonAdaptationIndex
 
 
 def u_crc32(seq):
-    #NOTE - On Python 2 crc32 could return a signed int, but on Python 3 it is
-    #always unsigned
-    #Docs suggest should use crc32(x) & 0xffffffff for consistency.
+    # NOTE - On Python 2 crc32 could return a signed int, but on Python 3 it is
+    # always unsigned
+    # Docs suggest should use crc32(x) & 0xffffffff for consistency.
     return crc32(seq) & 0xffffffff
 
 
 def simple_LCC(s):
-    #Avoid cross platforms with printing floats by doing conversion explicitly
+    # Avoid cross platforms with printing floats by doing conversion explicitly
     return "%0.2f" % lcc_simp(s)
 
 
@@ -45,16 +45,6 @@ class SeqUtilsTests(unittest.TestCase):
                         + "APKLMIYEGSKRPSGVSNRFSGSKSGNTASLTISGLQAEDEADY" \
                         + "YCCSYAGSSTWVFGGGTKLTVL"
 
-    def test_quick_fasta_reader(self):
-        dna_fasta_filename = "Fasta/f002"
-
-        tuple_records = quick_FASTA_reader(dna_fasta_filename)
-        self.assertEqual(len(tuple_records), 3)
-        seq_records = list(SeqIO.parse(dna_fasta_filename, "fasta"))
-        self.assertEqual(len(seq_records), 3)
-        for tuple_record, seq_record in zip(tuple_records, seq_records):
-            self.assertEqual(tuple_record, (seq_record.description, str(seq_record.seq)))
-
     def test_codon_usage_ecoli(self):
         """Test Codon Adaptation Index (CAI) using default E. coli data."""
         CAI = CodonAdaptationIndex()
@@ -63,7 +53,7 @@ class SeqUtilsTests(unittest.TestCase):
 
     def test_codon_usage_custom(self):
         """Test Codon Adaptation Index (CAI) using FASTA file for background."""
-        #We need a FASTA file of CDS sequences to count the codon usage...
+        # We need a FASTA file of CDS sequences to count the codon usage...
         dna_fasta_filename = "fasta.tmp"
         dna_genbank_filename = "GenBank/NC_005816.gb"
         record = SeqIO.read(dna_genbank_filename, "genbank")
@@ -77,8 +67,8 @@ class SeqUtilsTests(unittest.TestCase):
                     seq = record.seq[start:end].reverse_complement()
                 else:
                     seq = record.seq[start:end]
-                #Double check we have the CDS sequence expected
-                #TODO - Use any cds_start option if/when added to deal with the met
+                # Double check we have the CDS sequence expected
+                # TODO - Use any cds_start option if/when added to deal with the met
                 a = "M" + str(seq[3:].translate(table))
                 b = feature.qualifiers["translation"][0] + "*"
                 self.assertEqual(a, b, "%r vs %r" % (a, b))
@@ -100,7 +90,7 @@ class SeqUtilsTests(unittest.TestCase):
         os.remove(dna_fasta_filename)
 
     def test_crc_checksum_collision(self):
-        #Explicit testing of crc64 collision:
+        # Explicit testing of crc64 collision:
         self.assertNotEqual(self.str_light_chain_one, self.str_light_chain_two)
         self.assertNotEqual(crc32(self.str_light_chain_one), crc32(self.str_light_chain_two))
         self.assertEqual(crc64(self.str_light_chain_one), crc64(self.str_light_chain_two))

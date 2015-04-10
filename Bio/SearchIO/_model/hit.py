@@ -18,6 +18,9 @@ from ._base import _BaseSearchObject
 from .hsp import HSP
 
 
+__docformat__ = "restructuredtext en"
+
+
 class Hit(_BaseSearchObject):
 
     """Class representing a single database hit of a search result.
@@ -27,75 +30,75 @@ class Hit(_BaseSearchObject):
     themselves are container for HSP objects and will contain at least one
     HSP.
 
-    To have a quick look at a Hit and its contents, invoke `print` on it:
+    To have a quick look at a Hit and its contents, invoke ``print`` on it::
 
-    >>> from Bio import SearchIO
-    >>> qresult = next(SearchIO.parse('Blast/mirna.xml', 'blast-xml'))
-    >>> hit = qresult[3]
-    >>> print(hit)
-    Query: 33211
-           mir_1
-      Hit: gi|301171322|ref|NR_035857.1| (86)
-           Pan troglodytes microRNA mir-520c (MIR520C), microRNA
-     HSPs: ----  --------  ---------  ------  ---------------  ---------------------
-              #   E-value  Bit score    Span      Query range              Hit range
-           ----  --------  ---------  ------  ---------------  ---------------------
-              0   8.9e-20     100.47      60           [1:61]                [13:73]
-              1   3.3e-06      55.39      60           [0:60]                [13:73]
+        >>> from Bio import SearchIO
+        >>> qresult = next(SearchIO.parse('Blast/mirna.xml', 'blast-xml'))
+        >>> hit = qresult[3]
+        >>> print(hit)
+        Query: 33211
+               mir_1
+          Hit: gi|301171322|ref|NR_035857.1| (86)
+               Pan troglodytes microRNA mir-520c (MIR520C), microRNA
+         HSPs: ----  --------  ---------  ------  ---------------  ---------------------
+                  #   E-value  Bit score    Span      Query range              Hit range
+               ----  --------  ---------  ------  ---------------  ---------------------
+                  0   8.9e-20     100.47      60           [1:61]                [13:73]
+                  1   3.3e-06      55.39      60           [0:60]                [13:73]
 
-    You can invoke `len` on a Hit object to see how many HSP objects it contains:
+    You can invoke ``len`` on a Hit object to see how many HSP objects it contains::
 
-    >>> len(hit)
-    2
+        >>> len(hit)
+        2
 
     Hit objects behave very similar to Python lists. You can retrieve the HSP
     object inside a Hit using the HSP's integer index. Hit objects can also be
-    sliced, which will return a new Hit objects containing only the sliced HSPs:
+    sliced, which will return a new Hit objects containing only the sliced HSPs::
 
-    # HSP items inside the Hit can be retrieved using its integer index
-    >>> hit[0]
-    HSP(hit_id='gi|301171322|ref|NR_035857.1|', query_id='33211', 1 fragments)
+        # HSP items inside the Hit can be retrieved using its integer index
+        >>> hit[0]
+        HSP(hit_id='gi|301171322|ref|NR_035857.1|', query_id='33211', 1 fragments)
 
-    # slicing returns a new Hit
-    >>> hit
-    Hit(id='gi|301171322|ref|NR_035857.1|', query_id='33211', 2 hsps)
-    >>> hit[:1]
-    Hit(id='gi|301171322|ref|NR_035857.1|', query_id='33211', 1 hsps)
-    >>> print(hit[1:])
-    Query: 33211
-           mir_1
-      Hit: gi|301171322|ref|NR_035857.1| (86)
-           Pan troglodytes microRNA mir-520c (MIR520C), microRNA
-     HSPs: ----  --------  ---------  ------  ---------------  ---------------------
-              #   E-value  Bit score    Span      Query range              Hit range
-           ----  --------  ---------  ------  ---------------  ---------------------
-              0   3.3e-06      55.39      60           [0:60]                [13:73]
+        # slicing returns a new Hit
+        >>> hit
+        Hit(id='gi|301171322|ref|NR_035857.1|', query_id='33211', 2 hsps)
+        >>> hit[:1]
+        Hit(id='gi|301171322|ref|NR_035857.1|', query_id='33211', 1 hsps)
+        >>> print(hit[1:])
+        Query: 33211
+               mir_1
+          Hit: gi|301171322|ref|NR_035857.1| (86)
+               Pan troglodytes microRNA mir-520c (MIR520C), microRNA
+         HSPs: ----  --------  ---------  ------  ---------------  ---------------------
+                  #   E-value  Bit score    Span      Query range              Hit range
+               ----  --------  ---------  ------  ---------------  ---------------------
+                  0   3.3e-06      55.39      60           [0:60]                [13:73]
 
-    Hit objects provide `filter` and `map` methods, which are analogous to
-    Python's built-in `filter` and `map` except that they return a new Hit
+    Hit objects provide ``filter`` and ``map`` methods, which are analogous to
+    Python's built-in ``filter`` and ``map`` except that they return a new Hit
     object instead of a list.
 
-    Here is an example of using `filter` to select for HSPs whose e-value is
-    less than 1e-10:
+    Here is an example of using ``filter`` to select for HSPs whose e-value is
+    less than 1e-10::
 
-    >>> evalue_filter = lambda hsp: hsp.evalue < 1e-10
-    >>> filtered_hit = hit.filter(evalue_filter)
-    >>> len(hit)
-    2
-    >>> len(filtered_hit)
-    1
-    >>> print(filtered_hit)
-    Query: 33211
-           mir_1
-      Hit: gi|301171322|ref|NR_035857.1| (86)
-           Pan troglodytes microRNA mir-520c (MIR520C), microRNA
-     HSPs: ----  --------  ---------  ------  ---------------  ---------------------
-              #   E-value  Bit score    Span      Query range              Hit range
-           ----  --------  ---------  ------  ---------------  ---------------------
-              0   8.9e-20     100.47      60           [1:61]                [13:73]
+        >>> evalue_filter = lambda hsp: hsp.evalue < 1e-10
+        >>> filtered_hit = hit.filter(evalue_filter)
+        >>> len(hit)
+        2
+        >>> len(filtered_hit)
+        1
+        >>> print(filtered_hit)
+        Query: 33211
+               mir_1
+          Hit: gi|301171322|ref|NR_035857.1| (86)
+               Pan troglodytes microRNA mir-520c (MIR520C), microRNA
+         HSPs: ----  --------  ---------  ------  ---------------  ---------------------
+                  #   E-value  Bit score    Span      Query range              Hit range
+               ----  --------  ---------  ------  ---------------  ---------------------
+                  0   8.9e-20     100.47      60           [1:61]                [13:73]
 
     There are also other methods which are counterparts of Python lists' methods
-    with the same names: `append`, `index`, `pop`, and `sort`. Consult their
+    with the same names: ``append``, ``index``, ``pop``, and ``sort``. Consult their
     respective documentations for more details and examples of their usage.
 
     """
@@ -107,19 +110,23 @@ class Hit(_BaseSearchObject):
     def __init__(self, hsps=[], id=None, query_id=None):
         """Initializes a Hit object.
 
-        Arguments:
-        hsps -- List containing HSP objects.
-        id -- String of the Hit ID
-        query_id -- String of the Hit's query ID
+        :param hsps: HSP objects contained in the Hit object
+        :type hsps: iterable yielding HSP
+        :param id: hit ID
+        :type id: string
+        :param query_id: query ID
+        :type query_id: string
 
         If multiple HSP objects are used for initialization, they must all
-        have the same `query_id`, `query_description`, `hit_id`, and
-        `hit_description` properties.
+        have the same ``query_id``, ``query_description``, ``hit_id``, and
+        ``hit_description`` properties.
         """
         # default attribute values
         self._id = id
+        self._id_alt = []
         self._query_id = query_id
         self._description = None
+        self._description_alt = []
         self._query_description = None
 
         for attr in ('query_id', 'query_description', 'hit_id',
@@ -149,12 +156,12 @@ class Hit(_BaseSearchObject):
     def __len__(self):
         return len(self.hsps)
 
-    #Python 3:
+    # Python 3:
     def __bool__(self):
         return bool(self.hsps)
 
-    #Python 2:
-    __nonzero__= __bool__
+    # Python 2:
+    __nonzero__ = __bool__
 
     def __contains__(self, hsp):
         return hsp in self._items
@@ -183,11 +190,11 @@ class Hit(_BaseSearchObject):
             lines.append(' HSPs: ?')
         else:
             lines.append(' HSPs: %s  %s  %s  %s  %s  %s' %
-                    ('-'*4, '-'*8, '-'*9, '-'*6, '-'*15, '-'*21))
+                    ('-' * 4, '-' * 8, '-' * 9, '-' * 6, '-' * 15, '-' * 21))
             pattern = '%11s  %8s  %9s  %6s  %15s  %21s'
             lines.append(pattern % ('#', 'E-value', 'Bit score', 'Span',
                     'Query range', 'Hit range'))
-            lines.append(pattern % ('-'*4, '-'*8, '-'*9, '-'*6, '-'*15, '-'*21))
+            lines.append(pattern % ('-' * 4, '-' * 8, '-' * 9, '-' * 6, '-' * 15, '-' * 21))
             for idx, hsp in enumerate(self.hsps):
                 # evalue
                 evalue = getattr_str(hsp, 'evalue', fmt='%.2g')
@@ -233,7 +240,7 @@ class Hit(_BaseSearchObject):
     def __delitem__(self, idx):
         del self._items[idx]
 
-    ## hsp properties ##
+    # hsp properties #
     def _validate_hsp(self, hsp):
         """Validates an HSP object.
 
@@ -275,7 +282,7 @@ class Hit(_BaseSearchObject):
             else:
                 self.query_description = hsp.query_description
 
-    ## properties ##
+    # properties #
     description = optionalcascade('_description', 'hit_description',
             """Hit description""")
     query_description = optionalcascade('_query_description',
@@ -288,20 +295,30 @@ class Hit(_BaseSearchObject):
     hsps = allitems(doc="""HSP objects contained in the Hit""")
 
     @property
+    def id_all(self):
+        """Alternative ID(s) of the Hit"""
+        return [self.id] + self._id_alt
+
+    @property
+    def description_all(self):
+        """Alternative descriptions of the Hit"""
+        return [self.description] + self._description_alt
+
+    @property
     def fragments(self):
         """HSPFragment objects contained in the Hit"""
         return [frag for frag in chain(*self._items)]
 
-    ## public methods ##
+    # public methods #
     def append(self, hsp):
         """Adds a HSP object to the end of Hit.
 
         Parameters
         hsp -- HSP object to append.
 
-        Any HSP object appended must have the same `hit_id` property as the
-        Hit object's `id` property and the same `query_id` property as the
-        Hit object's `query_id` property.
+        Any HSP object appended must have the same ``hit_id`` property as the
+        Hit object's ``id`` property and the same ``query_id`` property as the
+        Hit object's ``query_id`` property.
 
         """
         self._validate_hsp(hsp)
@@ -311,33 +328,32 @@ class Hit(_BaseSearchObject):
         """Creates a new Hit object whose HSP objects pass the filter
         function.
 
-        Arguments:
-        func -- Callback function that accepts a HSP object as its parameter,
-                does a boolean check, and returns True or False.
+        :param func: function for filtering
+        :type func: callable, accepts HSP, returns bool
 
-        `filter` is analogous to Python's built-in `filter` function, except
-        that instead of returning a list it returns a `Hit` object. Here is an
-        example of using `filter` to select for HSPs having bitscores bigger
-        than 60:
+        ``filter`` is analogous to Python's built-in ``filter`` function, except
+        that instead of returning a list it returns a ``Hit`` object. Here is an
+        example of using ``filter`` to select for HSPs having bitscores bigger
+        than 60::
 
-        >>> from Bio import SearchIO
-        >>> qresult = next(SearchIO.parse('Blast/mirna.xml', 'blast-xml'))
-        >>> hit = qresult[3]
-        >>> evalue_filter = lambda hsp: hsp.bitscore > 60
-        >>> filtered_hit = hit.filter(evalue_filter)
-        >>> len(hit)
-        2
-        >>> len(filtered_hit)
-        1
-        >>> print(filtered_hit)
-        Query: 33211
-               mir_1
-          Hit: gi|301171322|ref|NR_035857.1| (86)
-               Pan troglodytes microRNA mir-520c (MIR520C), microRNA
-         HSPs: ----  --------  ---------  ------  ---------------  ---------------------
-                  #   E-value  Bit score    Span      Query range              Hit range
-               ----  --------  ---------  ------  ---------------  ---------------------
-                  0   8.9e-20     100.47      60           [1:61]                [13:73]
+            >>> from Bio import SearchIO
+            >>> qresult = next(SearchIO.parse('Blast/mirna.xml', 'blast-xml'))
+            >>> hit = qresult[3]
+            >>> evalue_filter = lambda hsp: hsp.bitscore > 60
+            >>> filtered_hit = hit.filter(evalue_filter)
+            >>> len(hit)
+            2
+            >>> len(filtered_hit)
+            1
+            >>> print(filtered_hit)
+            Query: 33211
+                   mir_1
+              Hit: gi|301171322|ref|NR_035857.1| (86)
+                   Pan troglodytes microRNA mir-520c (MIR520C), microRNA
+             HSPs: ----  --------  ---------  ------  ---------------  ---------------------
+                      #   E-value  Bit score    Span      Query range              Hit range
+                   ----  --------  ---------  ------  ---------------  ---------------------
+                      0   8.9e-20     100.47      60           [1:61]                [13:73]
 
         """
         hsps = list(filter(func, self.hsps))
@@ -349,8 +365,8 @@ class Hit(_BaseSearchObject):
     def index(self, hsp):
         """Returns the index of a given HSP object, zero-based.
 
-        Arguments:
-        hsp -- HSP object to be looked up.
+        :param hsp: object to look up
+        :type hsp: HSP
 
         """
         return self._items.index(hsp)
@@ -358,16 +374,15 @@ class Hit(_BaseSearchObject):
     def map(self, func=None):
         """Creates a new Hit object, mapping the given function to its HSPs.
 
-        Arguments:
-        func -- Callback function that accepts a HSP object as its parameter and
-                also returns a HSP object.
+        :param func: function for mapping
+        :type func: callable, accepts HSP, returns HSP
 
-        `map` is analogous to Python's built-in `map` function. It is applied to
+        ``map`` is analogous to Python's built-in ``map`` function. It is applied to
         all HSPs contained in the Hit object and returns a new Hit object.
 
         """
         if func is not None:
-            hsps = [func(x) for x in self.hsps[:]] # this creates a shallow copy
+            hsps = [func(x) for x in self.hsps[:]]  # this creates a shallow copy
         else:
             hsps = self.hsps[:]
         if hsps:
@@ -378,8 +393,8 @@ class Hit(_BaseSearchObject):
     def pop(self, index=-1):
         """Removes and returns the HSP object at the specified index.
 
-        Arguments:
-        index -- Integer denoting the index of the HSP object to remove.
+        :param index: index of HSP object to pop
+        :type index: int
 
         """
         return self._items.pop(index)
@@ -387,14 +402,15 @@ class Hit(_BaseSearchObject):
     def sort(self, key=None, reverse=False, in_place=True):
         """Sorts the HSP objects.
 
-        Arguments:
-        key -- Function used to sort the HSP objects.
-        reverse -- Boolean, whether to reverse the sorting or not.
-        in_place -- Boolean, whether to perform sorting in place (in the same
-                    object) or not (creating a new object).
+        :param key: sorting function
+        :type key: callable, accepts HSP, returns key for sorting
+        :param reverse: whether to reverse sorting results or no
+        :type reverse: bool
+        :param in_place: whether to do in-place sorting or no
+        :type in_place: bool
 
-        `sort` defaults to sorting in-place, to mimick Python's `list.sort`
-        method. If you set the `in_place` argument to False, it will treat
+        ``sort`` defaults to sorting in-place, to mimick Python's ``list.sort``
+        method. If you set the ``in_place`` argument to False, it will treat
         return a new, sorted Hit object and keep the initial one unsorted
 
         """
