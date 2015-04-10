@@ -8,7 +8,7 @@
 """Substitution matrices, log odds matrices, and operations on them.
 
 General:
--------
+--------
 
 This module provides a class and a few routines for generating
 substitution matrices, similar ot BLOSUM or PAM matrices, but based on
@@ -23,14 +23,14 @@ Pij: frequency of substitution of letter (residue/nucleotide) i by j
 Pi, Pj: expected frequencies of i and j, respectively.
 
 Usage:
------
+------
 The following section is laid out in the order by which most people wish
 to generate a log-odds matrix. Of course, interim matrices can be
 generated and investigated. Most people just want a log-odds matrix,
 that's all.
 
 Generating an Accepted Replacement Matrix:
------------------------------------------
+------------------------------------------
 Initially, you should generate an accepted replacement matrix (ARM)
 from your data. The values in ARM are the _counted_ number of
 replacements according to your data. The data could be a set of pairs
@@ -51,33 +51,34 @@ Full matrix size:N*N
 Half matrix size: N(N+1)/2
 
 If you provide a full matrix, the constructor will create a half-matrix
-automatically, unless the non_synon parameter is set to True.
-If you provide a half-matrix, the keys will be sorted into a (low, high)
-order; i.e., ('A','C'), not ('C','A').
+automatically.
+If you provide a half-matrix, make sure of a (low, high) sorted order in
+the keys: there should only be
+a ('A','C') not a ('C','A').
 
 Internal functions:
 
 Generating the observed frequency matrix (OFM):
-----------------------------------------------
+-----------------------------------------------
 Use: OFM = _build_obs_freq_mat(ARM)
 The OFM is generated from the ARM, only instead of replacement counts, it
 contains replacement frequencies.
 
 Generating an expected frequency matrix (EFM):
----------------------------------------------
+----------------------------------------------
 Use: EFM = _build_exp_freq_mat(OFM,exp_freq_table)
 exp_freq_table: should be a freqTableC instantiation. See freqTable.py for
 detailed information. Briefly, the expected frequency table has the
 frequencies of appearance for each member of the alphabet
 
 Generating a substitution frequency matrix (SFM):
-------------------------------------------------
+-------------------------------------------------
 Use: SFM = _build_subs_mat(OFM,EFM)
 Accepts an OFM, EFM. Provides the division product of the corresponding
 values.
 
 Generating a log-odds matrix (LOM):
-----------------------------------
+-----------------------------------
 Use: LOM=_build_log_odds_mat(SFM[,logbase=10,factor=10.0,roundit=1])
 Accepts an SFM. logbase: base of the logarithm used to generate the
 log-odds values. factor: factor used to multiply the log-odds values.
@@ -121,6 +122,8 @@ import Bio
 from Bio import Alphabet
 from Bio.SubsMat import FreqTable
 
+__docformat__ = "restructuredtext en"
+
 log = math.log
 # Matrix types
 NOTYPE = 0
@@ -133,10 +136,10 @@ EPSILON = 0.00000000000001
 
 
 class SeqMat(dict):
-    """A Generic sequence matrix class.
-    The key is a 2-tuple containing the letter indices of the matrix. 
-    These will be sorted in the tuple (low, high), if dealing
-    with a half-matrix."""
+    """A Generic sequence matrix class
+    The key is a 2-tuple containing the letter indices of the matrix. Those
+    should be sorted in the tuple (low, high). Because each matrix is dealt
+    with as a half-matrix."""
 
     def _alphabet_from_matrix(self):
         ab_dict = {}
@@ -148,7 +151,7 @@ class SeqMat(dict):
             s += i
         self.alphabet.letters = s
 
-    def __init__(self, data=None, alphabet=None, mat_name='', build_later=0, non_synon=0):
+    def __init__(self, data=None, alphabet=None, mat_name='', build_later=0):
         # User may supply:
         # data: matrix itself
         # mat_name: its name. See below.
@@ -157,8 +160,6 @@ class SeqMat(dict):
         # build_later: skip the matrix size assertion. User will build the
         # matrix after creating the instance. Constructor builds a half matrix
         # filled with zeroes.
-        # non_synon: if the substitution scores for AA pairs are not the same
-        # as their reverse, a full 20x20 matrix is necessary
 
         assert isinstance(mat_name, str)
 
@@ -185,28 +186,17 @@ class SeqMat(dict):
         # Assert matrix size: half or full
         if not build_later:
             N = len(self.alphabet.letters)
-            assert len(self) == N**2 or len(self) == N*(N+1)/2
+            assert len(self) == N ** 2 or len(self) == N * (N + 1) / 2
         self.ab_list = list(self.alphabet.letters)
         self.ab_list.sort()
         # Names: a string like "BLOSUM62" or "PAM250"
         self.mat_name = mat_name
-        
-        if build_later and not non_synon:
-            self.non_synon = False
-            self._init_zero()    
-        elif build_later and non_synon:
-            self.non_synon = True
+        if build_later:
             self._init_zero()
-            self.make_full_mat()
-        elif not build_later and non_synon:
-            self.non_synon = True
-            self.make_full_mat()
-        else: #not build_later and not non_synon. i.e., default
+        else:
             # Convert full to half
-            self.non_synon = False
             self._full_to_half()
             self._correct_matrix()
-            
         self.sum_letters = {}
         self.relative_entropy = 0
 
@@ -226,25 +216,24 @@ class SeqMat(dict):
 
         N = len(self.alphabet.letters)
         # Do nothing if this is already a half-matrix
-        if len(self) == N*(N+1)/2:
+        if len(self) == N * (N + 1) / 2:
             return
         for i in self.ab_list:
-            for j in self.ab_list[:self.ab_list.index(i)+1]:
+            for j in self.ab_list[:self.ab_list.index(i) + 1]:
                 if i != j:
                     self[j, i] = self[j, i] + self[i, j]
                     del self[i, j]
 
     def _init_zero(self):
         for i in self.ab_list:
-            j_range = self.ab_list if (self.non_synon == True) else self.ab_list[:self.ab_list.index(i)+1]
-            for j in j_range:
+            for j in self.ab_list[:self.ab_list.index(i) + 1]:
                 self[j, i] = 0.
 
     def make_entropy(self):
         self.entropy = 0
         for i in self:
             if self[i] > EPSILON:
-                self.entropy += self[i]*log(self[i])/log(2)
+                self.entropy += self[i] * log(self[i]) / log(2)
         self.entropy = -self.entropy
 
     def sum(self):
@@ -260,18 +249,6 @@ class SeqMat(dict):
                 result[i2] += value / 2
         return result
 
-    #Fill in both key pair orders
-    def make_full_mat(self):
-        self.non_synon = True
-        temp_copy = copy.copy(self)
-        for key in temp_copy:
-            try:
-                #don't over-write the reverse keys if they are already initialized
-                test_key = self[(key[1],key[0])]
-            except KeyError:
-                self[(key[1],key[0])] = self[key]
-        
-
     def print_full_mat(self, f=None, format="%4d", topformat="%4s",
                 alphabet=None, factor=1, non_sym=None):
         f = f or sys.stdout
@@ -280,10 +257,9 @@ class SeqMat(dict):
         assert non_sym is None or isinstance(non_sym, float) or \
         isinstance(non_sym, int)
         full_mat = copy.copy(self)
-        if self.non_synon == False:
-            for i in self:
-                full_mat[(i[1],i[0])] = full_mat[i]
-                
+        for i in self:
+            if i[0] != i[1]:
+                full_mat[(i[1], i[0])] = full_mat[i]
         if not alphabet:
             alphabet = self.ab_list
         topline = ''
@@ -304,7 +280,7 @@ class SeqMat(dict):
                 else:
                     cur_str = format % val
 
-                outline = outline+cur_str
+                outline = outline + cur_str
             outline = outline + '\n'
             f.write(outline)
 
@@ -314,48 +290,41 @@ class SeqMat(dict):
         User may pass own alphabet, which should contain all letters in the
         alphabet of the matrix, but may be in a different order. This
         order will be the order of the letters on the axes"""
-        if self.non_synon == False:           
-            f = f or sys.stdout
-            if not alphabet:
-                alphabet = self.ab_list
-            bottomline = ''
-            for i in alphabet:
-                bottomline = bottomline + bottomformat % i
-            bottomline = bottomline + '\n'
-            for i in alphabet:
-                outline = i
-                for j in alphabet[:alphabet.index(i)+1]:
-                    try:
-                        val = self[j, i]
-                    except KeyError:
-                        val = self[i, j]
-                    val *= factor
-                    if val == -999:
-                        cur_str = '  ND'
-                    else:
-                        cur_str = format % val
-    
-                    outline = outline + cur_str
-                outline = outline + '\n'
-                f.write(outline)
-            f.write(bottomline)
-        else:
-            self.print_full_mat()
+
+        f = f or sys.stdout
+        if not alphabet:
+            alphabet = self.ab_list
+        bottomline = ''
+        for i in alphabet:
+            bottomline = bottomline + bottomformat % i
+        bottomline = bottomline + '\n'
+        for i in alphabet:
+            outline = i
+            for j in alphabet[:alphabet.index(i) + 1]:
+                try:
+                    val = self[j, i]
+                except KeyError:
+                    val = self[i, j]
+                val *= factor
+                if val == -999:
+                    cur_str = '  ND'
+                else:
+                    cur_str = format % val
+
+                outline = outline + cur_str
+            outline = outline + '\n'
+            f.write(outline)
+        f.write(bottomline)
 
     def __str__(self):
         """Print a nice half-matrix."""
         output = ""
         alphabet = self.ab_list
         n = len(alphabet)
-        
-        if self.non_synon == True:
-            output += '%4s' * n % tuple(alphabet) + "\n"
-      
         for i in range(n):
             c1 = alphabet[i]
             output += c1
-            j_range = n if (self.non_synon == True) else (i+1)
-            for j in range(j_range):
+            for j in range(i + 1):
                 c2 = alphabet[j]
                 try:
                     val = self[c2, c1]
@@ -366,9 +335,7 @@ class SeqMat(dict):
                 else:
                     output += "%4d" % val
             output += '\n'
-        
-        if self.non_synon == False:
-            output += '%4s' * n % tuple(alphabet) + "\n"
+        output += '%4s' * n % tuple(alphabet) + "\n"
         return output
 
     def __sub__(self, other):
@@ -467,9 +434,9 @@ def _build_exp_freq_mat(exp_freq_table):
                                           build_later=1)
     for i in exp_freq_mat:
         if i[0] == i[1]:
-            exp_freq_mat[i] = exp_freq_table[i[0]]**2
+            exp_freq_mat[i] = exp_freq_table[i[0]] ** 2
         else:
-            exp_freq_mat[i] = 2.0*exp_freq_table[i[0]]*exp_freq_table[i[1]]
+            exp_freq_mat[i] = 2.0 * exp_freq_table[i[0]] * exp_freq_table[i[1]]
     return exp_freq_mat
 
 
@@ -482,7 +449,7 @@ def _build_subs_mat(obs_freq_mat, exp_freq_mat):
         raise ValueError("Alphabet mismatch in passed matrices")
     subs_mat = SubstitutionMatrix(obs_freq_mat)
     for i in obs_freq_mat:
-        subs_mat[i] = obs_freq_mat[i]/exp_freq_mat[i]
+        subs_mat[i] = obs_freq_mat[i] / exp_freq_mat[i]
     return subs_mat
 
 
@@ -504,7 +471,7 @@ def _build_log_odds_mat(subs_mat, logbase=2, factor=10.0, round_digit=0, keep_nd
         if value < EPSILON:
             lo_mat[key] = -999
         else:
-            lo_mat[key] = round(factor*log(value)/log(logbase), round_digit)
+            lo_mat[key] = round(factor * log(value) / log(logbase), round_digit)
     mat_min = min(lo_mat.values())
     if not keep_nd:
         for i in lo_mat:
@@ -540,7 +507,7 @@ def observed_frequency_to_substitution_matrix(obs_freq_mat):
 def read_text_matrix(data_file):
     matrix = {}
     tmp = data_file.read().split("\n")
-    table=[]
+    table = []
     for i in tmp:
         table.append(i.split())
     # remove records beginning with ``#''
@@ -612,11 +579,11 @@ def two_mat_relative_entropy(mat_1, mat_2, logbase=2, diag=diagALL):
             val_1 = mat_1[key] / sum_ent_1
             val_2 = mat_2[key] / sum_ent_2
 #            rel_ent += mat_1[key] * log(mat_1[key]/mat_2[key])/log(logbase)
-            rel_ent += val_1 * log(val_1/val_2)/log(logbase)
+            rel_ent += val_1 * log(val_1 / val_2) / log(logbase)
     return rel_ent
 
 
-## Gives the linear correlation coefficient between two matrices
+# Gives the linear correlation coefficient between two matrices
 def two_mat_correlation(mat_1, mat_2):
     try:
         import numpy
@@ -638,7 +605,7 @@ def two_mat_correlation(mat_1, mat_2):
 # Need to input observed frequency matrices
 def two_mat_DJS(mat_1, mat_2, pi_1=0.5, pi_2=0.5):
     assert mat_1.ab_list == mat_2.ab_list
-    assert pi_1 > 0 and pi_2 > 0 and pi_1< 1 and pi_2 <1
+    assert pi_1 > 0 and pi_2 > 0 and pi_1 < 1 and pi_2 < 1
     assert not (pi_1 + pi_2 - 1.0 > EPSILON)
     sum_mat = SeqMat(build_later=1)
     sum_mat.ab_list = mat_1.ab_list
