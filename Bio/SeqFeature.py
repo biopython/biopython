@@ -1227,7 +1227,10 @@ class CompoundLocation(object):
     def extract(self, parent_sequence):
         """Extract feature sequence from the supplied parent sequence."""
         # This copes with mixed strand features & all on reverse:
-        parts = [loc.extract(parent_sequence) for loc in self.parts]
+        if self.strand == -1:
+                parts = [loc.extract(parent_sequence) for loc in reversed(self.parts)]
+        else:
+                parts = [loc.extract(parent_sequence) for loc in self.parts]
         # We use addition rather than a join to avoid alphabet issues:
         f_seq = parts[0]
         for part in parts[1:]:
