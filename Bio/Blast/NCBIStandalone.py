@@ -40,6 +40,7 @@ from Bio.Application import _escape_filename
 
 __docformat__ = "restructuredtext en"
 
+_score_e_re = re.compile(r'Score +E')
 
 class LowQualityBlastError(Exception):
     """Error caused by running a low quality sequence through BLAST.
@@ -211,7 +212,7 @@ class _Scanner(object):
             read_and_call_until(uhandle, consumer.query_info, start='Length=')
             while True:
                 line = uhandle.peekline()
-                if not line.strip() or "Score     E" in line:
+                if not line.strip() or _score_e_re.search(line) is not None:
                     break
                 # It is more of the query (and its length)
                 read_and_call(uhandle, consumer.query_info)
@@ -233,7 +234,7 @@ class _Scanner(object):
             line = safe_peekline(uhandle)
             if not line.startswith('Searching') and \
                not line.startswith('Results from round') and \
-               re.search(r"Score +E", line) is None and \
+               _score_e_re.search(line) is None and \
                'No hits found' not in line:
                 break
             self._scan_descriptions(uhandle, consumer)
@@ -313,7 +314,7 @@ class _Scanner(object):
         # to the alignments.
         if not attempt_read_and_call(
            uhandle, consumer.description_header,
-           has_re=re.compile(r'Score +E')):
+           has_re=_score_e_re):
             # Either case 2 or 3.  Look for "No hits found".
             attempt_read_and_call(uhandle, consumer.no_hits,
                                   contains='No hits found')
