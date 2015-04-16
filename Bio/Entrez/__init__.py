@@ -39,6 +39,8 @@ Functions:
     - egquery      Provides Entrez database counts in XML for a single search
       using Global Query.
     - espell       Retrieves spelling suggestions.
+    - ecitmatch    Retrieves PubMed IDs (PMIDs) that correspond to a set of
+      input citation strings.
 
     - read         Parses the XML results returned by any of the above functions.
       Typical usage is:
@@ -348,6 +350,49 @@ def espell(**keywds):
     cgi = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/espell.fcgi'
     variables = {}
     variables.update(keywds)
+    return _open(cgi, variables)
+
+
+def ecitmatch(**keywds):
+    """ECitMatch retrieves PMIDs-Citation linking
+
+    ECitMatch retrieves PubMed IDs (PMIDs) that correspond to a set of input citation strings.
+
+    See the online documentation for an explanation of the parameters:
+    http://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.ECitMatch
+
+    Return a handle to the results, by default in plain text
+
+    Raises an IOError exception if there's a network error.
+
+    Short example:
+
+    >>> from Bio import Entrez
+    >>> Entrez.email = "Your.Name.Here@example.org"
+    >>> citation_1 = {
+    >>>    "journal_title": "proc natl acad sci u s a",
+    >>>    "year": "1991", "volume": "88", "first_page": "3248",
+    >>>     "author_name": "mann bj", "key": "citation_1"}
+    >>> record = Entrez.ECitMatch(db="pubmed", bdata=[citation_1])
+    >>> print(record["Query"])
+    """
+    cgi = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/ecitmatch.cgi'
+    # XML is the only supported value, and it actually returns TXT.
+    variables = {'rettype': 'xml'}
+    citation_keys = ('journal_title', 'year', 'volume', 'first_page', 'author_name', 'key')
+
+    # Accept pre-formatted strings
+    if isinstance(keywds['bdata'], str):
+        variables.update(keywds)
+    else:
+        # Alternatively accept a nicer interface
+        variables['db'] = keywds['db']
+        bdata = []
+        for citation in keywds['bdata']:
+            formatted_citation = '|'.join([citation.get(key, "") for key in citation_keys])
+            bdata.append(formatted_citation)
+        variables['bdata'] = '\r'.join(bdata)
+
     return _open(cgi, variables)
 
 
