@@ -1,3 +1,4 @@
+test_SubsMat
 Check differences between derived and true frequencies for each
 letter. Differences should be very small
 A 0.000009
