@@ -1,5 +1,6 @@
 # Copyright 1999-2000 by Jeffrey Chang.  All rights reserved.
-# Copyright 2008 by Michiel de Hoon.  All rights reserved.
+# Copyright 2008-2013 by Michiel de Hoon.  All rights reserved.
+# Copyright 2008-2015 by Peter Cock. All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -83,10 +84,23 @@ from Bio._py3k import HTTPError as _HTTPError
 
 from Bio._py3k import _binary_to_string_handle, _as_bytes
 
+from Bio.File import UndoHandle as _UndoHandle
+
 __docformat__ = "restructuredtext en"
 
 email = None
 tool = "biopython"
+
+_error_patterns = [
+    "Error reading from remote server",
+    "Bad gateway",
+    "Cannot process ID list",
+    "server is temporarily unable to service your request",
+    "Service unavailable",
+    "Server Error",
+    "ID list is empty",
+    "Resource temporarily unavailable",
+]
 
 
 # XXX retmode?
@@ -133,6 +147,18 @@ def efetch(db, **keywords):
 
     **Warning:** The NCBI changed the default retmode in Feb 2012, so many
     databases which previously returned text output now give XML.
+
+    **Warning:** The EFetch API has been known to sometimes appear to work,
+    but include error messages within the data.
+
+    As of Biopython 1.66, rather than the plain network handle, Biopython
+    will return a Bio.File.UndoHandle which is used to peek at the data
+    before returning it, in order to spot some NCBI error conditions
+    (errors which ought really to have been explicit as an HTTP Error code).
+
+    However, this will *NOT* spot all possible NCBI errors. For example we
+    have seen warning messages like "Resource temporarily unavailable" appear
+    midway though a GenBank file.
     """
     cgi = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi'
     variables = {'db': db}
@@ -150,7 +176,7 @@ def efetch(db, **keywords):
             # NCBI prefers an HTTP POST instead of an HTTP GET if there are
             # more than about 200 IDs
             post = True
-    return _open(cgi, variables, post)
+    return _error_sniff(_open(cgi, variables, post))
 
 
 def esearch(db, term, **keywds):
@@ -472,6 +498,51 @@ E-utilities.""", UserWarning)
     return _binary_to_string_handle(handle)
 
 _open.previous = 0
+
+
+def _error_sniff(handle):
+    """Check for errors in the NCBI returned data.
+
+    The handle argument should be a text mode handle.
+
+    The NCBI Entrez Utilities (specifically efetch) have a track record
+    of returning error messages with an HTTP 200 OK status. This can
+    take the form of plain text error messages, or warning messages
+    within otherwise valid data.
+
+    If such a problem is recognised, a ValueError is thrown.
+
+    WARNING: This function is not expected to spot all possible NCBI
+    failure modes! It is merely a defensive measure to hopefully catch
+    the more common problems as early as possible (i.e. before the user
+    saves the file to disk or attempts to parse it).
+
+    Returns the handle wrapped in the Biopython UndoHandle, ready to
+    read from the original position.
+    """
+    # TODO - Make format (or at least if XML) an option?
+    # TODO - Make number of lines to sniff an option?
+
+    # Wrap the handle inside an UndoHandle.
+    uhandle = _UndoHandle(handle)
+
+    # This is kind of ugly, but peeks at the first few lines:
+    lines = []
+    for i in range(7):
+        lines.append(uhandle.readline())
+    for line in lines[::-1]:
+        uhandle.saveline(line)
+    data = "".join(lines)
+
+    for error in _error_patterns:
+        if error in data:
+            if hasattr(handle, "url"):
+                raise IOError("Apparent NCBI error detected (%r) from URL %s" % (error, handle.url))
+            else:
+                # e.g. unit tests with StringIO
+                raise IOError("Apparent NCBI error detected (%r)" % error)
+
+    return uhandle
 
 
 def _test():
