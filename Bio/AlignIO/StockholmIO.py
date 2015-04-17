@@ -71,11 +71,12 @@ strings, with one character for each letter in the associated sequence:
 
 Any general annotation for each row is recorded in the SeqRecord's annotations
 dictionary.  Any per-column annotation for the entire alignment in in the
-alignment's column annotations dictionary:
+alignment's column annotations dictionary, such as the secondary structure
+consensus in this example:
 
     >>> sorted(align.column_annotations.keys())
-    ['SS_cons']
-    >>> align.column_annotations["SS_cons"]
+    ['secondary_structure']
+    >>> align.column_annotations["secondary_structure"]
     '.................<<<<<<<<...<<<<<<<........>>>>>>>........<<<<<<<.......>>>>>>>..>>>>>>>>...............'
 
 You can output this alignment in many different file formats
@@ -104,10 +105,9 @@ Stockholm file:
     #=GS AE007476.1 AC AE007476.1
     #=GS AE007476.1 DE AE007476.1
     #=GR AE007476.1 SS -----------------<<<<<<<<-----<<.<<-------->>.>>----------.<<<<<--------->>>>>.-->>>>>>>>---------------
+    #=GC SS_cons .................<<<<<<<<...<<<<<<<........>>>>>>>........<<<<<<<.......>>>>>>>..>>>>>>>>...............
     //
     <BLANKLINE>
-
-TODO - Write the per-column annotation in Stockholm format...
 
 Note that when writing Stockholm files, AlignIO does not break long sequences
 up and interleave them (as in the input file shown above).  The standard
@@ -164,7 +164,9 @@ class StockholmWriter(SequentialAlignmentWriter):
                        "ligand_binding": "LI",
                        "active_site": "AS",
                        "intron": "IN"}
-    # TODO - pfam_gc_mapping = ...?
+    # These GC mappings are in addition to *_cons in GR mapping:
+    pfam_gc_mapping = {"reference_annotation": "RF",
+                       "model_mask": "MM"}
     # Following dictionary deliberately does not cover AC, DE or DR
     pfam_gs_mapping = {"organism": "OS",
                        "organism_classification": "OC",
@@ -182,9 +184,6 @@ class StockholmWriter(SequentialAlignmentWriter):
         self._length_of_sequences = alignment.get_alignment_length()
         self._ids_written = []
 
-        # NOTE - For now, the alignment object does not hold any per column
-        # or per alignment annotation - only per sequence.
-
         if count == 0:
             raise ValueError("Must have at least one sequence")
         if self._length_of_sequences == 0:
@@ -194,6 +193,17 @@ class StockholmWriter(SequentialAlignmentWriter):
         self.handle.write("#=GF SQ %i\n" % count)
         for record in alignment:
             self._write_record(record)
+        # This shouldn't be None... but just in case,
+        if alignment.column_annotations:
+            for k, v in sorted(alignment.column_annotations.items()):
+                if k in self.pfam_gc_mapping:
+                    self.handle.write("#=GC %s %s\n" % (self.pfam_gc_mapping[k], v))
+                elif k in self.pfam_gr_mapping:
+                    self.handle.write("#=GC %s %s\n" % (self.pfam_gr_mapping[k] + "_cons", v))
+                else:
+                    # It doesn't follow the PFAM standards, but should we record
+                    # this data anyway?
+                    pass
         self.handle.write("//\n")
 
     def _write_record(self, record):
@@ -324,7 +334,9 @@ class StockholmIterator(AlignmentIterator):
                        "LI": "ligand_binding",
                        "AS": "active_site",
                        "IN": "intron"}
-    # TODO - pfam_gc_mapping = ... ?
+    # These GC mappings are in addition to *_cons in GR mapping:
+    pfam_gc_mapping = {"RF": "reference_annotation",
+                       "MM": "model_mask"}
     # Following dictionary deliberately does not cover AC, DE or DR
     pfam_gs_mapping = {"OS": "organism",
                        "OC": "organism_classification",
@@ -479,8 +491,16 @@ class StockholmIterator(AlignmentIterator):
                 if len(v) != alignment_length:
                     raise ValueError("%s length %i, expected %i"
                                      % (k, len(v), alignment_length))
-            alignment = MultipleSeqAlignment(records, self.alphabet,
-                                             column_annotations=gc)
+            alignment = MultipleSeqAlignment(records, self.alphabet)
+
+            for k, v in sorted(gc.items()):
+                if k in self.pfam_gc_mapping:
+                    alignment.column_annotations[self.pfam_gc_mapping[k]] = v
+                elif k.endswith("_cons") and k[:-5] in self.pfam_gr_mapping:
+                    alignment.column_annotations[self.pfam_gr_mapping[k[:-5]]] = v
+                else:
+                    # Ignore it?
+                    alignment.column_annotations["GC:" + k] = v
 
             # TODO - Introduce an annotated alignment class?
             # For now, store the annotation a new private property:
