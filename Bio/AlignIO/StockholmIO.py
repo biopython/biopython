@@ -70,7 +70,15 @@ strings, with one character for each letter in the associated sequence:
     -----------------<<<<<<<<-----<<.<<-------->>.>>----------.<<<<<--------->>>>>.-->>>>>>>>---------------
 
 Any general annotation for each row is recorded in the SeqRecord's annotations
-dictionary.  You can output this alignment in many different file formats
+dictionary.  Any per-column annotation for the entire alignment in in the
+alignment's column annotations dictionary:
+
+    >>> sorted(align.column_annotations.keys())
+    ['SS_cons']
+    >>> align.column_annotations["SS_cons"]
+    '.................<<<<<<<<...<<<<<<<........>>>>>>>........<<<<<<<.......>>>>>>>..>>>>>>>>...............'
+
+You can output this alignment in many different file formats
 using Bio.AlignIO.write(), or the MultipleSeqAlignment object's format method:
 
     >>> print(align.format("fasta"))
@@ -98,6 +106,8 @@ Stockholm file:
     #=GR AE007476.1 SS -----------------<<<<<<<<-----<<.<<-------->>.>>----------.<<<<<--------->>>>>.-->>>>>>>>---------------
     //
     <BLANKLINE>
+
+TODO - Write the per-column annotation in Stockholm format...
 
 Note that when writing Stockholm files, AlignIO does not break long sequences
 up and interleave them (as in the input file shown above).  The standard
@@ -154,6 +164,7 @@ class StockholmWriter(SequentialAlignmentWriter):
                        "ligand_binding": "LI",
                        "active_site": "AS",
                        "intron": "IN"}
+    # TODO - pfam_gc_mapping = ...?
     # Following dictionary deliberately does not cover AC, DE or DR
     pfam_gs_mapping = {"organism": "OS",
                        "organism_classification": "OC",
@@ -313,6 +324,7 @@ class StockholmIterator(AlignmentIterator):
                        "LI": "ligand_binding",
                        "AS": "active_site",
                        "IN": "intron"}
+    # TODO - pfam_gc_mapping = ... ?
     # Following dictionary deliberately does not cover AC, DE or DR
     pfam_gs_mapping = {"OS": "organism",
                        "OC": "organism_classification",
@@ -348,6 +360,7 @@ class StockholmIterator(AlignmentIterator):
         gs = {}
         gr = {}
         gf = {}
+        gc = {}
         passed_end_alignment = False
         while True:
             line = handle.readline()
@@ -394,7 +407,11 @@ class StockholmIterator(AlignmentIterator):
                 elif line[:5] == '#=GC ':
                     # Generic per-Column annotation, exactly 1 char per column
                     # Format: "#=GC <feature> <exactly 1 char per column>"
-                    pass
+                    feature, text = line[5:].strip().split(None, 2)
+                    if feature not in gc:
+                        gc[feature] = ""
+                    gc[feature] += text.strip()  # append to any previous entry
+                    # Might be interleaved blocks, so can't check length yet
                 elif line[:5] == '#=GS ':
                     # Generic per-Sequence annotation, free text
                     # Format: "#=GS <seqname> <feature> <free text>"
@@ -418,9 +435,7 @@ class StockholmIterator(AlignmentIterator):
                     if feature not in gr[seq_id]:
                         gr[seq_id][feature] = ""
                     gr[seq_id][feature] += text.strip()  # append to any previous entry
-                    # TODO - Should we check the length matches the alignment length?
-                    #       For iterlaced sequences the GR data can be split over
-                    #       multiple lines
+                    # Might be interleaved blocks, so can't check length yet
             # Next line...
 
         assert len(seqs) <= len(ids)
@@ -460,7 +475,12 @@ class StockholmIterator(AlignmentIterator):
 
                 self._populate_meta_data(seq_id, record)
                 records.append(record)
-            alignment = MultipleSeqAlignment(records, self.alphabet)
+            for k, v in gc.items():
+                if len(v) != alignment_length:
+                    raise ValueError("%s length %i, expected %i"
+                                     % (k, len(v), alignment_length))
+            alignment = MultipleSeqAlignment(records, self.alphabet,
+                                             column_annotations=gc)
 
             # TODO - Introduce an annotated alignment class?
             # For now, store the annotation a new private property:
