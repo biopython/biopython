@@ -1,5 +1,5 @@
 # Copyright 1999 by Jeffrey Chang.  All rights reserved.
-# Copyright 2009-2013 by Peter Cock. All rights reserved.
+# Copyright 2009-2015 by Peter Cock. All rights reserved.
 #
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -96,7 +96,7 @@ def as_handle(handleish, mode='r', **kwargs):
 def _open_for_random_access(filename):
     """Open a file in binary mode, spot if it is BGZF format etc (PRIVATE).
 
-    This funcationality is used by the Bio.SeqIO and Bio.SearchIO index
+    This functionality is used by the Bio.SeqIO and Bio.SearchIO index
     and index_db functions.
     """
     handle = open(filename, "rb")
@@ -124,6 +124,11 @@ class UndoHandle(object):
     def __init__(self, handle):
         self._handle = handle
         self._saved = []
+        try:
+            # If wrapping an online handle, this this is nice to have:
+            self.url = handle.url
+        except AttributeError:
+            pass
 
     def __iter__(self):
         return self
