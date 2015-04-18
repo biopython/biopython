@@ -211,7 +211,7 @@ class Polypeptide(list):
                 n = res['N'].get_vector()
                 ca = res['CA'].get_vector()
                 c = res['C'].get_vector()
-            except:
+            except Exception:
                 # Some atoms are missing
                 # Phi/Psi cannot be calculated for this residue
                 ppl.append((None, None))
@@ -224,7 +224,7 @@ class Polypeptide(list):
                 try:
                     cp = rp['C'].get_vector()
                     phi = calc_dihedral(cp, n, ca, c)
-                except:
+                except Exception:
                     phi = None
             else:
                 # No phi for residue 0!
@@ -235,7 +235,7 @@ class Polypeptide(list):
                 try:
                     nn = rn['N'].get_vector()
                     psi = calc_dihedral(n, ca, c, nn)
-                except:
+                except Exception:
                     psi = None
             else:
                 # No psi for last residue!

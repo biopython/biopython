@@ -94,7 +94,7 @@ class PDBIO(object):
             else:
                 raise TypeError("Invalid occupancy %r in atom %r"
                                 % (occupancy, atom.get_full_id()))
-            pass
+
         args = (record_type, atom_number, name, altloc, resname, chain_id,
                 resseq, icode, x, y, z, occupancy_str, bfactor, segid,
                 element, charge)

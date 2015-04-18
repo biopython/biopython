@@ -3,15 +3,15 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-from copy import copy
-
-from Bio.PDB.PDBExceptions import PDBConstructionException
-
-"""Base class for Residue, Chain, Model and Structure classes.
+"""
+Base class for Residue, Chain, Model and Structure classes.
 
 It is a simple container class, with list and dictionary like properties.
 """
 
+from copy import copy
+
+from Bio.PDB.PDBExceptions import PDBConstructionException
 
 class Entity(object):
     """
