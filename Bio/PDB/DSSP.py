@@ -112,6 +112,8 @@ def dssp_dict_from_pdb_file(in_file, DSSP="dssp"):
     # Alert user for errors
     if err.strip():
         warnings.warn(err)
+        if not out.strip():
+            raise Exception('DSSP failed to produce an output')
     
     out_dict, keys = _make_dssp_dict(StringIO(out))
     return out_dict, keys
