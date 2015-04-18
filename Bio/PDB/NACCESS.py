@@ -5,15 +5,6 @@
 
 # NACCESS interface adapted from Bio/PDB/DSSP.py
 
-from __future__ import print_function
-
-import os
-import tempfile
-import shutil
-import subprocess
-from Bio.PDB.PDBIO import PDBIO
-from Bio.PDB.AbstractPropertyMap import AbstractResiduePropertyMap, AbstractAtomPropertyMap
-
 """Interface for the program NACCESS.
 
 See: http://wolf.bms.umist.ac.uk/naccess/
@@ -25,6 +16,14 @@ default values are often due to low default settings in accall.pars
 use naccess -y, naccess -h or naccess -w to include HETATM records
 """
 
+from __future__ import print_function
+
+import os
+import tempfile
+import shutil
+import subprocess
+from Bio.PDB.PDBIO import PDBIO
+from Bio.PDB.AbstractPropertyMap import AbstractResiduePropertyMap, AbstractAtomPropertyMap
 
 def run_naccess(model, pdb_file, probe_size=None, z_slice=None,
                 naccess='naccess', temp_path='/tmp/'):
@@ -62,15 +61,22 @@ def run_naccess(model, pdb_file, probe_size=None, z_slice=None,
     out, err = p.communicate()
     os.chdir(old_dir)
 
-    # get the output, then delete the temp directory
     rsa_file = tmp_pdb_file[:-4] + '.rsa'
+    asa_file = tmp_pdb_file[:-4] + '.asa'
+    # Alert user for errors
+    if err.strip():
+        warnings.warn(err)
+
+    if (not os.path.exists(rsa_file)) or (not os.path.exists(asa_file)):
+        raise Exception('NACCESS did not execute or finish properly.')
+
+    # get the output, then delete the temp directory
     with open(rsa_file) as rf:
         rsa_data = rf.readlines()
-    asa_file = tmp_pdb_file[:-4] + '.asa'
     with open(asa_file) as af:
         asa_data = af.readlines()
 
-    shutil.rmtree(tmp_path, ignore_errors=True)
+    # shutil.rmtree(tmp_path, ignore_errors=True)
     return rsa_data, asa_data
 
 
