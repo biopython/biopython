@@ -191,7 +191,7 @@ class MMCIFParser(object):
             if spacegroup is None:
                 raise Exception
             structure_builder.set_symmetry(spacegroup, cell)
-        except:
+        except Exception:
             pass    # no cell found, so just ignore
 
 

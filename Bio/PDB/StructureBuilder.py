@@ -184,17 +184,17 @@ class StructureBuilder(object):
         # where the dots are spaces). If that is so, use all spaces
         # in the atom name of the current atom.
         if residue.has_id(name):
-                duplicate_atom = residue[name]
-                # atom name with spaces of duplicate atom
-                duplicate_fullname = duplicate_atom.get_fullname()
-                if duplicate_fullname != fullname:
-                    # name of current atom now includes spaces
-                    name = fullname
-                    warnings.warn("Atom names %r and %r differ "
-                                  "only in spaces at line %i."
-                                  % (duplicate_fullname, fullname,
-                                     self.line_counter),
-                                  PDBConstructionWarning)
+            duplicate_atom = residue[name]
+            # atom name with spaces of duplicate atom
+            duplicate_fullname = duplicate_atom.get_fullname()
+            if duplicate_fullname != fullname:
+                # name of current atom now includes spaces
+                name = fullname
+                warnings.warn("Atom names %r and %r differ "
+                              "only in spaces at line %i."
+                              % (duplicate_fullname, fullname,
+                                 self.line_counter),
+                              PDBConstructionWarning)
         self.atom = Atom(name, coord, b_factor, occupancy, altloc,
                          fullname, serial_number, element)
         if altloc != " ":

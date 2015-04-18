@@ -11,7 +11,7 @@ import warnings
 
 try:
     import numpy
-except:
+except ImportError:
     from Bio import MissingPythonDependencyError
     raise MissingPythonDependencyError(
         "Install NumPy if you want to use the PDB parser.")
@@ -158,7 +158,7 @@ class PDBParser(object):
                 chainid = line[21]
                 try:
                     serial_number = int(line[6:11])
-                except:
+                except Exception:
                     serial_number = 0
                 resseq = int(line[22:26].split()[0])  # sequence identifier
                 icode = line[26]  # insertion code
@@ -175,7 +175,7 @@ class PDBParser(object):
                     x = float(line[30:38])
                     y = float(line[38:46])
                     z = float(line[46:54])
-                except:
+                except Exception:
                     # Should we allow parsing to continue in permissive mode?
                     # If so, what coordinates should we default to?  Easier to abort!
                     raise PDBConstructionException("Invalid or missing coordinate(s) at line %i."
@@ -184,7 +184,7 @@ class PDBParser(object):
                 # occupancy & B factor
                 try:
                     occupancy = float(line[54:60])
-                except:
+                except Exception:
                     self._handle_PDB_exception("Invalid or missing occupancy",
                                                global_line_counter)
                     occupancy = None  # Rather than arbitrary zero or one
@@ -196,7 +196,7 @@ class PDBParser(object):
                     warnings.warn("Negative occupancy in one or more atoms", PDBConstructionWarning)
                 try:
                     bfactor = float(line[60:66])
-                except:
+                except Exception:
                     self._handle_PDB_exception("Invalid or missing B factor",
                                                global_line_counter)
                     bfactor = 0.0  # The PDB use a default of zero if the data is missing
@@ -236,7 +236,7 @@ class PDBParser(object):
             elif record_type == "MODEL ":
                 try:
                     serial_num = int(line[10:14])
-                except:
+                except Exception:
                     self._handle_PDB_exception("Invalid or missing model serial number",
                                                global_line_counter)
                     serial_num = 0

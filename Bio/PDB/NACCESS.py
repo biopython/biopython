@@ -109,18 +109,14 @@ def process_asa_data(rsa_data):
     # process the .asa output file: atomic level SASA data
     naccess_atom_dict = {}
     for line in rsa_data:
-        atom_serial = line[6:11]
         full_atom_id = line[12:16]
         atom_id = full_atom_id.strip()
-        altloc = line[16]
-        resname = line[17:20]
         chainid = line[21]
         resseq = int(line[22:26])
         icode = line[26]
         res_id = (' ', resseq, icode)
         id = (chainid, res_id, atom_id)
         asa = line[54:62]               # solvent accessibility in Angstrom^2
-        vdw = line[62:68]               # van der waal radius
         naccess_atom_dict[id] = asa
     return naccess_atom_dict
 
@@ -133,7 +129,6 @@ class NACCESS(AbstractResiduePropertyMap):
                                          naccess=naccess_binary,
                                          temp_path=tmp_directory)
         naccess_dict = process_rsa_data(res_data)
-        res_list = []
         property_dict = {}
         property_keys = []
         property_list = []
