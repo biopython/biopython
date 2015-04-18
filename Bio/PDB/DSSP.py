@@ -27,6 +27,7 @@ __docformat__ = "restructuredtext en"
 import re
 from Bio._py3k import StringIO
 import subprocess
+import warnings
 
 from Bio.Data import SCOPData
 
@@ -107,6 +108,11 @@ def dssp_dict_from_pdb_file(in_file, DSSP="dssp"):
     p = subprocess.Popen([DSSP, in_file], universal_newlines=True,
                          stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out, err = p.communicate()
+    
+    # Alert user for errors
+    if err.strip():
+        warnings.warn(err)
+    
     out_dict, keys = _make_dssp_dict(StringIO(out))
     return out_dict, keys
 
