@@ -23,19 +23,17 @@ from . import Residues
 class Record(object):
     """Holds information for one SCOP domain.
 
-    sid         --  SCOP identifier. e.g. d1danl2
+    Attributes:
 
-    residues    --  The domain definition as a Residues object
-
-    sccs        --  SCOP concise classification strings.  e.g. b.1.2.1
-
-    sunid       --  SCOP unique identifier for this domain
-
-    hierarchy   --  A dictionary, keys are nodetype, values are sunid,
-                    describing the location of this domain in the SCOP
-                    hierarchy. See the Scop module for a description of
-                    nodetypes. This used to be a list of (key,value) tuples
-                    in older versions of Biopython (see Bug 3109).
+     - sid - SCOP identifier. e.g. d1danl2
+     - residues - The domain definition as a Residues object
+     - sccs - SCOP concise classification strings.  e.g. b.1.2.1
+     - sunid - SCOP unique identifier for this domain
+     - hierarchy - A dictionary, keys are nodetype, values are sunid,
+       describing the location of this domain in the SCOP hierarchy. See
+       the Scop module for a description of nodetypes. This used to be a
+       list of (key,value) tuples in older versions of Biopython (see
+       Bug 3109).
     """
     def __init__(self, line=None):
         self.sid = ''
@@ -75,12 +73,11 @@ class Record(object):
 
 
 def parse(handle):
-    """Iterates over a CLA file, returning a Cla record for each line
-    in the file.
+    """Iterates over a CLA file as Cla records for each line.
 
     Arguments:
 
-        handle -- file-like object.
+     - handle - file-like object.
     """
     for line in handle:
         if line.startswith('#'):
@@ -89,13 +86,13 @@ def parse(handle):
 
 
 class Index(dict):
-    """A CLA file indexed by SCOP identifiers, allowing rapid
-       random access into a file."""
+    """A CLA file indexed by SCOP identifiers for rapid random access."""
     def __init__(self, filename):
-        """
+        """Create CLA index.
+
         Arguments:
 
-          filename  -- The file to index
+         - filename - The file to index
         """
         dict.__init__(self)
         self.filename = filename

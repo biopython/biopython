@@ -28,69 +28,69 @@ class Chain(object):
 
     def __init__(self):
         """Initiates a node chain."""
-        self.chain={}
-        self.id=-1
+        self.chain = {}
+        self.id = -1
 
     def _get_id(self):
         """Gets a new id for a node in the chain."""
-        self.id+=1
+        self.id += 1
         return self.id
 
     def all_ids(self):
         """Return a list of all node ids."""
         return list(self.chain.keys())
 
-    def add(self,node,prev=None):
+    def add(self, node, prev=None):
         """Attaches node to another."""
         if prev is not None and prev not in self.chain:
-            raise ChainException('Unknown predecessor: '+str(prev))
+            raise ChainException('Unknown predecessor: ' + str(prev))
         else:
-            id=self._get_id()
+            id = self._get_id()
             node.set_id(id)
             node.set_prev(prev)
             if prev is not None:
                 self.chain[prev].add_succ(id)
-            self.chain[id]=node
+            self.chain[id] = node
         return id
 
     def collapse(self, id):
         """Deletes node from chain and relinks successors to predecessor."""
         if id not in self.chain:
-            raise ChainException('Unknown ID: '+str(id))
-        prev_id=self.chain[id].get_prev()
+            raise ChainException('Unknown ID: ' + str(id))
+        prev_id = self.chain[id].get_prev()
         self.chain[prev_id].remove_succ(id)
-        succ_ids=self.chain[id].get_succ()
+        succ_ids = self.chain[id].get_succ()
         for i in succ_ids:
             self.chain[i].set_prev(prev_id)
         self.chain[prev_id].add_succ(succ_ids)
-        node=self.chain[id]
+        node = self.chain[id]
         self.kill(id)
         return node
 
     def kill(self, id):
         """Kills a node from chain without caring to what it is connected."""
         if id not in self.chain:
-            raise ChainException('Unknown ID: '+str(id))
+            raise ChainException('Unknown ID: ' + str(id))
         else:
             del self.chain[id]
 
     def unlink(self, id):
         """Disconnects node from his predecessor."""
         if id not in self.chain:
-            raise ChainException('Unknown ID: '+str(id))
+            raise ChainException('Unknown ID: ' + str(id))
         else:
-            prev_id=self.chain[id].prev
+            prev_id = self.chain[id].prev
             if prev_id is not None:
                 self.chain[prev_id].succ.pop(self.chain[prev_id].succ.index(id))
-            self.chain[id].prev=None
+            self.chain[id].prev = None
             return prev_id
 
     def link(self, parent, child):
         """Connects son to parent."""
         if child not in self.chain:
-            raise ChainException('Unknown ID: '+str(child))
+            raise ChainException('Unknown ID: ' + str(child))
         elif parent not in self.chain:
-            raise ChainException('Unknown ID: '+str(parent))
+            raise ChainException('Unknown ID: ' + str(parent))
         else:
             self.unlink(child)
             self.chain[parent].succ.append(child)
@@ -98,7 +98,7 @@ class Chain(object):
 
     def is_parent_of(self, parent, grandchild):
         """Check if grandchild is a subnode of parent."""
-        if grandchild==parent or grandchild in self.chain[parent].get_succ():
+        if grandchild == parent or grandchild in self.chain[parent].get_succ():
             return True
         else:
             for sn in self.chain[parent].get_succ():
@@ -111,28 +111,28 @@ class Chain(object):
         """Returns a list of all node_ids between two nodes (excluding start, including end)."""
         if start not in self.chain or finish not in self.chain:
             raise NodeException('Unknown node.')
-        if not self.is_parent_of(start, finish) or start==finish:
+        if not self.is_parent_of(start, finish) or start == finish:
             return []
         for sn in self.chain[start].get_succ():
             if self.is_parent_of(sn, finish):
-                return [sn]+self.trace(sn, finish)
+                return [sn] + self.trace(sn, finish)
 
 
 class Node(object):
     """A single node."""
 
-    def __init__(self,data=None):
+    def __init__(self, data=None):
         """Represents a node with one predecessor and multiple successors."""
-        self.id=None
-        self.data=data
-        self.prev=None
-        self.succ=[]
+        self.id = None
+        self.data = data
+        self.prev = None
+        self.succ = []
 
     def set_id(self, id):
         """Sets the id of a node, if not set yet."""
         if self.id is not None:
             raise NodeException('Node id cannot be changed.')
-        self.id=id
+        self.id = id
 
     def get_id(self):
         """Returns the node's id."""
@@ -161,11 +161,11 @@ class Node(object):
         """Sets the node's successors."""
         if not isinstance(new_succ, type([])):
             raise NodeException('Node successor must be of list type.')
-        self.succ=new_succ
+        self.succ = new_succ
 
     def set_prev(self, id):
         """Sets the node's predecessor."""
-        self.prev=id
+        self.prev = id
 
     def get_data(self):
         """Returns a node's data."""
@@ -173,4 +173,4 @@ class Node(object):
 
     def set_data(self, data):
         """Sets a node's data."""
-        self.data=data
+        self.data = data

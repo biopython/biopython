@@ -25,15 +25,15 @@
     objects - namely SeqRecord ojbects containing SeqFeature objects.
 """
 
-#------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # IMPORTS
 
 # ReportLab
 try:
     from reportlab.graphics import renderPM
 except ImportError:
-    #This is an optional part of ReportLab, so may not be installed.
-    renderPM=None
+    # This is an optional part of ReportLab, so may not be installed.
+    renderPM = None
 
 # GenomeDiagram
 from ._LinearDrawer import LinearDrawer
@@ -42,10 +42,10 @@ from ._Track import Track
 
 from Bio.Graphics import _write
 
-#------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # CLASSES
 
-#------------------------------------------------------------
+# -----------------------------------------------------------
 # Diagram
 
 
@@ -311,13 +311,13 @@ class Diagram(object):
 
             Return the completed drawing as a bytes string in a prescribed format
         """
-        #The ReportLab drawToString method, which this function used to call,
-        #just used a cStringIO or StringIO handle with the drawToFile method.
-        #In order to put all our complicated file format specific code in one
-        #place we just used a StringIO handle here, later a BytesIO handle
-        #for Python 3 compatibility.
+        # The ReportLab drawToString method, which this function used to call,
+        # just used a cStringIO or StringIO handle with the drawToFile method.
+        # In order to put all our complicated file format specific code in one
+        # place we just used a StringIO handle here, later a BytesIO handle
+        # for Python 3 compatibility.
         #
-        #TODO - Rename this method to include keyword bytes?
+        # TODO - Rename this method to include keyword bytes?
         from io import BytesIO
         handle = BytesIO()
         self.write(handle, output, dpi)
@@ -338,12 +338,12 @@ class Diagram(object):
         if track_level not in self.tracks:     # No track at that level
             self.tracks[track_level] = track   # so just add it
         else:       # Already a track there, so shunt all higher tracks up one
-            occupied_levels = sorted(self.get_levels()) # Get list of occupied levels...
+            occupied_levels = sorted(self.get_levels())  # Get list of occupied levels...
             occupied_levels.reverse()           # ...reverse it (highest first)
             for val in occupied_levels:
                 # If track value >= that to be added
                 if val >= track.track_level:
-                    self.tracks[val+1] = self.tracks[val] # ...increment by 1
+                    self.tracks[val + 1] = self.tracks[val]  # ...increment by 1
             self.tracks[track_level] = track   # And put the new track in
         self.tracks[track_level].track_level = track_level
 
@@ -362,11 +362,11 @@ class Diagram(object):
         if track_level not in self.tracks:        # No track at that level
             self.tracks[track_level] = newtrack   # so just add it
         else:       # Already a track there, so shunt all higher tracks up one
-            occupied_levels = sorted(self.get_levels()) # Get list of occupied levels...
+            occupied_levels = sorted(self.get_levels())  # Get list of occupied levels...
             occupied_levels.reverse()           # ...reverse (highest first)...
             for val in occupied_levels:
                 if val >= track_level:        # Track value >= that to be added
-                    self.tracks[val+1] = self.tracks[val] # ..increment by 1
+                    self.tracks[val + 1] = self.tracks[val]  # ..increment by 1
             self.tracks[track_level] = newtrack   # And put the new track in
         self.tracks[track_level].track_level = track_level
         return newtrack
@@ -443,7 +443,7 @@ class Diagram(object):
             track features as a tuple
         """
         lows, highs = [], []
-        for track in self.tracks.values(): # Get ranges for each track
+        for track in self.tracks.values():  # Get ranges for each track
             low, high = track.range()
             lows.append(low)
             highs.append(high)

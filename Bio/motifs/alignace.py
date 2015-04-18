@@ -25,26 +25,26 @@ def read(handle):
     record.command = line.strip()
     for line in handle:
         line = line.strip()
-        if line=="":
+        if line == "":
             pass
-        elif line[:4]=="Para":
-            record.parameters={}
-        elif line[0]=="#":
+        elif line[:4] == "Para":
+            record.parameters = {}
+        elif line[0] == "#":
             seq_name = line.split("\t")[1]
             record.sequences.append(seq_name)
         elif "=" in line:
             par_name, par_value = line.split("=")
             par_name = par_name.strip()
             par_value = par_value.strip()
-            record.parameters[par_name]=par_value
-        elif line[:5]=="Input":
-            record.sequences=[]
-        elif line[:5]=="Motif":
+            record.parameters[par_name] = par_value
+        elif line[:5] == "Input":
+            record.sequences = []
+        elif line[:5] == "Motif":
             words = line.split()
-            assert words[0]=="Motif"
+            assert words[0] == "Motif"
             number = int(words[1])
             instances = []
-        elif line[:3]=="MAP":
+        elif line[:3] == "MAP":
             alphabet = IUPAC.unambiguous_dna
             instances = Instances(instances, alphabet)
             motif = Motif(alphabet, instances)
@@ -52,7 +52,7 @@ def read(handle):
             motif.number = number
             motif.mask = mask
             record.append(motif)
-        elif len(line.split("\t"))==4:
+        elif len(line.split("\t")) == 4:
             seq = Seq(line.split("\t")[0], IUPAC.unambiguous_dna)
             instances.append(seq)
         elif "*" in line:

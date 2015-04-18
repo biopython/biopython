@@ -20,24 +20,6 @@ files rather than handles, for which the wrappers in Bio.Blast.Applications are
 preferred. Furthermore, the NCBI themselves regard these command line tools as
 "legacy", and encourage using the new BLAST+ tools instead. Biopython has
 wrappers for these under Bio.Blast.Applications (see the tutorial).
-
-Classes:
-LowQualityBlastError     Except that indicates low quality query sequences.
-BlastParser              Parses output from blast.
-BlastErrorParser         Parses output and tries to diagnose possible errors.
-PSIBlastParser           Parses output from psi-blast.
-Iterator                 Iterates over a file of blast results.
-
-_Scanner                 Scans output from standalone BLAST.
-_BlastConsumer           Consumes output from blast.
-_PSIBlastConsumer        Consumes output from psi-blast.
-_HeaderConsumer          Consumes header information.
-_DescriptionConsumer     Consumes description information.
-_AlignmentConsumer       Consumes alignment information.
-_HSPConsumer             Consumes hsp information.
-_DatabaseReportConsumer  Consumes database report information.
-_ParametersConsumer      Consumes parameters information.
-
 """
 
 from __future__ import print_function
@@ -56,6 +38,8 @@ from Bio.ParserSupport import *
 from Bio.Blast import Record
 from Bio.Application import _escape_filename
 
+__docformat__ = "restructuredtext en"
+
 
 class LowQualityBlastError(Exception):
     """Error caused by running a low quality sequence through BLAST.
@@ -72,14 +56,14 @@ class LowQualityBlastError(Exception):
 class ShortQueryBlastError(Exception):
     """Error caused by running a short query sequence through BLAST.
 
-    If the query sequence is too short, BLAST outputs warnings and errors:
-    Searching[blastall] WARNING:  [000.000]  AT1G08320: SetUpBlastSearch failed.
-    [blastall] ERROR:  [000.000]  AT1G08320: Blast: 
-    [blastall] ERROR:  [000.000]  AT1G08320: Blast: Query must be at least wordsize
-    done
+    If the query sequence is too short, BLAST outputs warnings and errors::
+
+        Searching[blastall] WARNING:  [000.000]  AT1G08320: SetUpBlastSearch failed.
+        [blastall] ERROR:  [000.000]  AT1G08320: Blast:
+        [blastall] ERROR:  [000.000]  AT1G08320: Blast: Query must be at least wordsize
+        done
 
     This exception is raised when that condition is detected.
-
     """
     pass
 
@@ -90,7 +74,7 @@ class _Scanner(object):
     Tested with blastall and blastpgp v2.0.10, v2.0.11
 
     Methods:
-    feed     Feed data into the scanner.
+     - feed     Feed data into the scanner.
     """
     def feed(self, handle, consumer):
         """S.feed(handle, consumer)
@@ -98,7 +82,6 @@ class _Scanner(object):
         Feed in a BLAST report for scanning.  handle is a file-like
         object that contains the BLAST report.  consumer is a Consumer
         object that will receive events as the report is scanned.
-
         """
         if isinstance(handle, File.UndoHandle):
             uhandle = handle
@@ -178,10 +161,10 @@ class _Scanner(object):
                 elif line.startswith("RID"):
                     break
                 else:
-                    #More of the reference
+                    # More of the reference
                     consumer.reference(line)
 
-        #Deal with the optional RID: ...
+        # Deal with the optional RID: ...
         read_and_call_while(uhandle, consumer.noevent, blank=1)
         attempt_read_and_call(uhandle, consumer.reference, start="RID:")
         read_and_call_while(uhandle, consumer.noevent, blank=1)
@@ -203,7 +186,7 @@ class _Scanner(object):
         assert line.strip() != ""
         assert not line.startswith("RID:")
         if line.startswith("Query="):
-            #This is an old style query then database...
+            # This is an old style query then database...
 
             # Read the Query lines and the following blank line.
             read_and_call(uhandle, consumer.query_info, start='Query=')
@@ -215,7 +198,7 @@ class _Scanner(object):
             read_and_call(uhandle, consumer.database_info, contains='sequences')
             read_and_call_while(uhandle, consumer.noevent, blank=1)
         elif line.startswith("Database:"):
-            #This is a new style database then query...
+            # This is a new style database then query...
             read_and_call_until(uhandle, consumer.database_info, end='total letters')
             read_and_call(uhandle, consumer.database_info, contains='sequences')
             read_and_call_while(uhandle, consumer.noevent, blank=1)
@@ -230,7 +213,7 @@ class _Scanner(object):
                 line = uhandle.peekline()
                 if not line.strip() or "Score     E" in line:
                     break
-                #It is more of the query (and its length)
+                # It is more of the query (and its length)
                 read_and_call(uhandle, consumer.query_info)
             read_and_call_while(uhandle, consumer.noevent, blank=1)
         else:
@@ -259,20 +242,20 @@ class _Scanner(object):
     def _scan_descriptions(self, uhandle, consumer):
         # Searching..................................................done
         # Results from round 2
-        # 
-        # 
+        #
+        #
         #                                                                    Sc
         # Sequences producing significant alignments:                        (b
         # Sequences used in model and found again:
-        # 
-        # d1tde_2 3.4.1.4.4 (119-244) Thioredoxin reductase [Escherichia ...   
-        # d1tcob_ 1.31.1.5.16 Calcineurin regulatory subunit (B-chain) [B...   
-        # d1symb_ 1.31.1.2.2 Calcyclin (S100) [RAT (RATTUS NORVEGICUS)]        
-        # 
+        #
+        # d1tde_2 3.4.1.4.4 (119-244) Thioredoxin reductase [Escherichia ...
+        # d1tcob_ 1.31.1.5.16 Calcineurin regulatory subunit (B-chain) [B...
+        # d1symb_ 1.31.1.2.2 Calcyclin (S100) [RAT (RATTUS NORVEGICUS)]
+        #
         # Sequences not found previously or not previously below threshold:
-        # 
-        # d1osa__ 1.31.1.5.11 Calmodulin [Paramecium tetraurelia]              
-        # d1aoza3 2.5.1.3.3 (339-552) Ascorbate oxidase [zucchini (Cucurb...   
+        #
+        # d1osa__ 1.31.1.5.11 Calmodulin [Paramecium tetraurelia]
+        # d1aoza3 2.5.1.3.3 (339-552) Ascorbate oxidase [zucchini (Cucurb...
         #
 
         # If PSI-BLAST, may also have:
@@ -400,7 +383,7 @@ class _Scanner(object):
         # First, check to see if I'm at the database report.
         line = safe_peekline(uhandle)
         if not line:
-            #EOF
+            # EOF
             return
         elif line.startswith('  Database') or line.startswith("Lambda"):
             return
@@ -430,7 +413,7 @@ class _Scanner(object):
         # Scan a bunch of score/alignment pairs.
         while True:
             if self._eof(uhandle):
-                #Shouldn't have issued that _scan_alignment_header event...
+                # Shouldn't have issued that _scan_alignment_header event...
                 break
             line = safe_peekline(uhandle)
             if not line.startswith(' Score'):
@@ -483,18 +466,18 @@ class _Scanner(object):
         read_and_call(uhandle, consumer.score, start=' Score')
         read_and_call(uhandle, consumer.identities, start=' Identities')
         # BLASTN
-        attempt_read_and_call(uhandle, consumer.strand, start = ' Strand')
+        attempt_read_and_call(uhandle, consumer.strand, start=' Strand')
         # BLASTX, TBLASTN, TBLASTX
-        attempt_read_and_call(uhandle, consumer.frame, start = ' Frame')
+        attempt_read_and_call(uhandle, consumer.frame, start=' Frame')
         read_and_call(uhandle, consumer.noevent, blank=1)
 
     def _scan_hsp_alignment(self, uhandle, consumer):
         # Query: 11 GRGVSACA-------TCDGFFYRNQKVAVIGGGNTAVEEALYLSNIASEVHLIHRRDGF
         #           GRGVS+         TC    Y  + + V GGG+ + EE   L     +   I R+
         # Sbjct: 12 GRGVSSVVRRCIHKPTCKE--YAVKIIDVTGGGSFSAEEVQELREATLKEVDILRKVSG
-        # 
+        #
         # Query: 64 AEKILIKR 71
-        #              I +K 
+        #              I +K
         # Sbjct: 70 PNIIQLKD 77
         #
 
@@ -555,24 +538,24 @@ class _Scanner(object):
         #     Posted date:  Nov 1, 1999  4:25 PM
         #   Number of letters in database: 223,339
         #   Number of sequences in database:  1323
-        #   
+        #
         # Lambda     K      H
-        #    0.322    0.133    0.369 
+        #    0.322    0.133    0.369
         #
         # Gapped
         # Lambda     K      H
-        #    0.270   0.0470    0.230 
+        #    0.270   0.0470    0.230
         #
         ##########################################
         # Or, more recently Blast 2.2.15 gives less blank lines
         ##########################################
-        #   Database: All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding 
+        #   Database: All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding
         # environmental samples
         #     Posted date:  Dec 12, 2006  5:51 PM
         #   Number of letters in database: 667,088,753
         #   Number of sequences in database:  2,094,974
         # Lambda     K      H
-        #    0.319    0.136    0.395 
+        #    0.319    0.136    0.395
         # Gapped
         # Lambda     K      H
         #    0.267   0.0410    0.140
@@ -609,7 +592,7 @@ class _Scanner(object):
                        start='  Number of letters')
             read_and_call(uhandle, consumer.num_sequences_in_database,
                        start='  Number of sequences')
-            #There may not be a line starting with spaces...
+            # There may not be a line starting with spaces...
             attempt_read_and_call(uhandle, consumer.noevent, start='  ')
 
             line = safe_readline(uhandle)
@@ -623,7 +606,7 @@ class _Scanner(object):
         except:
             pass
 
-        #This blank line is optional:
+        # This blank line is optional:
         attempt_read_and_call(uhandle, consumer.noevent, blank=1)
 
         # not BLASTP
@@ -733,7 +716,7 @@ class _Scanner(object):
                                      start="Number of HSP's gapped:"):
                 read_and_call(uhandle, consumer.noevent,
                               start="Number of HSP's successfully")
-                #This is omitted in 2.2.15
+                # This is omitted in 2.2.15
                 attempt_read_and_call(uhandle, consumer.noevent,
                               start="Number of extra gapped extensions")
             else:
@@ -743,7 +726,7 @@ class _Scanner(object):
                               start="Number of HSP's that")
                 read_and_call(uhandle, consumer.hsps_gapped,
                               start="Number of HSP's gapped")
-        #e.g. BLASTX 2.2.15 where the "better" line is missing
+        # e.g. BLASTX 2.2.15 where the "better" line is missing
         elif attempt_read_and_call(uhandle, consumer.noevent,
                                      start="Number of HSP's gapped"):
             read_and_call(uhandle, consumer.noevent,
@@ -852,8 +835,8 @@ class _HeaderConsumer(object):
         self._header.application = c[0]
         self._header.version = c[1]
         if len(c) > 2:
-            #The date is missing in the new C++ output from blastx 2.2.22+
-            #Just get "BLASTX 2.2.22+\n" and that's all.
+            # The date is missing in the new C++ output from blastx 2.2.22+
+            # Just get "BLASTX 2.2.22+\n" and that's all.
             self._header.date = c[2][1:-1]
 
     def reference(self, line):
@@ -866,12 +849,12 @@ class _HeaderConsumer(object):
         if line.startswith('Query= '):
             self._header.query = line[7:].lstrip()
         elif line.startswith('Length='):
-            #New style way to give the query length in BLAST 2.2.22+ (the C++ code)
+            # New style way to give the query length in BLAST 2.2.22+ (the C++ code)
             self._header.query_letters = _safe_int(line[7:].strip())
         elif not line.startswith('       '):  # continuation of query_info
             self._header.query = "%s%s" % (self._header.query, line)
         else:
-            #Hope it is the old style way to give the query length:
+            # Hope it is the old style way to give the query length:
             letters, = _re_search(
                 r"([0-9,]+) letters", line,
                 "I could not find the number of letters in line\n%s" % line)
@@ -883,14 +866,14 @@ class _HeaderConsumer(object):
             self._header.database = line[10:]
         elif not line.endswith('total letters'):
             if self._header.database:
-                #Need to include a space when merging multi line datase descr
+                # Need to include a space when merging multi line datase descr
                 self._header.database = self._header.database + " " + line.strip()
             else:
                 self._header.database = line.strip()
         else:
             sequences, letters = _re_search(
                 r"([0-9,]+) sequences; ([0-9,-]+) total letters", line,
-                "I could not find the sequences and letters in line\n%s" %line)
+                "I could not find the sequences and letters in line\n%s" % line)
             self._header.database_sequences = _safe_int(sequences)
             self._header.database_letters = _safe_int(letters)
 
@@ -995,9 +978,9 @@ class _AlignmentConsumer(object):
         self._alignment.title += line.strip()
 
     def length(self, line):
-        #e.g. "Length = 81" or more recently, "Length=428"
+        # e.g. "Length = 81" or more recently, "Length=428"
         parts = line.replace(" ", "").split("=")
-        assert len(parts)==2, "Unrecognised format length line"
+        assert len(parts) == 2, "Unrecognised format length line"
         self._alignment.length = parts[1]
         self._alignment.length = _safe_int(self._alignment.length)
 
@@ -1015,33 +998,33 @@ class _AlignmentConsumer(object):
                 raise ValueError("I do not understand the line\n%s" % line)
             self._start_index = line.index(start, len(name))
             self._seq_index = line.index(seq,
-                                         self._start_index+len(start))
+                                         self._start_index + len(start))
             # subtract 1 for the space
             self._name_length = self._start_index - 1
             self._start_length = self._seq_index - self._start_index - 1
             self._seq_length = line.rfind(end) - self._seq_index - 1
 
-            #self._seq_index = line.index(seq)
-            ## subtract 1 for the space
-            #self._seq_length = line.rfind(end) - self._seq_index - 1
-            #self._start_index = line.index(start)
-            #self._start_length = self._seq_index - self._start_index - 1
-            #self._name_length = self._start_index
+            # self._seq_index = line.index(seq)
+            # # subtract 1 for the space
+            # self._seq_length = line.rfind(end) - self._seq_index - 1
+            # self._start_index = line.index(start)
+            # self._start_length = self._seq_index - self._start_index - 1
+            # self._name_length = self._start_index
 
         # Extract the information from the line
         name = line[:self._name_length]
         name = name.rstrip()
-        start = line[self._start_index:self._start_index+self._start_length]
+        start = line[self._start_index:self._start_index + self._start_length]
         start = start.rstrip()
         if start:
             start = _safe_int(start)
-        end = line[self._seq_index+self._seq_length:].rstrip()
+        end = line[self._seq_index + self._seq_length:].rstrip()
         if end:
             end = _safe_int(end)
-        seq = line[self._seq_index:self._seq_index+self._seq_length].rstrip()
+        seq = line[self._seq_index:self._seq_index + self._seq_length].rstrip()
         # right pad the sequence with spaces if necessary
         if len(seq) < self._seq_length:
-            seq = seq + ' '*(self._seq_length-len(seq))
+            seq += ' ' * (self._seq_length - len(seq))
 
         # I need to make sure the sequence is aligned correctly with the query.
         # First, I will find the length of the query.  Then, if necessary,
@@ -1227,7 +1210,7 @@ class _HSPConsumer(object):
         # added the end attribute for the query
         self._hsp.query_end = _safe_int(end)
 
-        #Get index for sequence start (regular expression element 3)
+        # Get index for sequence start (regular expression element 3)
         self._query_start_index = m.start(3)
         self._query_len = len(seq)
 
@@ -1235,7 +1218,7 @@ class _HSPConsumer(object):
         seq = line[self._query_start_index:].rstrip()
         if len(seq) < self._query_len:
             # Make sure the alignment is the same length as the query
-            seq = seq + ' ' * (self._query_len-len(seq))
+            seq += ' ' * (self._query_len - len(seq))
         elif len(seq) < self._query_len:
             raise ValueError("Match is longer than the query in line\n%s"
                              % line)
@@ -1250,10 +1233,10 @@ class _HSPConsumer(object):
         if m is None:
             raise ValueError("I could not find the sbjct in line\n%s" % line)
         colon, start, seq, end = m.groups()
-        #mikep 26/9/00
-        #On occasion, there is a blast hit with no subject match
-        #so far, it only occurs with 1-line short "matches"
-        #I have decided to let these pass as they appear
+        # mikep 26/9/00
+        # On occasion, there is a blast hit with no subject match
+        # so far, it only occurs with 1-line short "matches"
+        # I have decided to let these pass as they appear
         if not seq.strip():
             seq = ' ' * self._query_len
         self._hsp.sbjct = self._hsp.sbjct + seq
@@ -1294,12 +1277,12 @@ class _DatabaseReportConsumer(object):
 
     def num_letters_in_database(self, line):
         letters, = _get_cols(
-            line, (-1,), ncols=6, expected={2:"letters", 4:"database:"})
+            line, (-1,), ncols=6, expected={2: "letters", 4: "database:"})
         self._dr.num_letters_in_database.append(_safe_int(letters))
 
     def num_sequences_in_database(self, line):
         sequences, = _get_cols(
-            line, (-1,), ncols=6, expected={2:"sequences", 4:"database:"})
+            line, (-1,), ncols=6, expected={2: "sequences", 4: "database:"})
         self._dr.num_sequences_in_database.append(_safe_int(sequences))
 
     def ka_params(self, line):
@@ -1324,120 +1307,120 @@ class _ParametersConsumer(object):
 
     def gap_penalties(self, line):
         self._params.gap_penalties = [_safe_float(x) for x in _get_cols(
-            line, (3, 5), ncols=6, expected={2:"Existence:", 4:"Extension:"})]
+            line, (3, 5), ncols=6, expected={2: "Existence:", 4: "Extension:"})]
 
     def num_hits(self, line):
         if '1st pass' in line:
-            x, = _get_cols(line, (-4,), ncols=11, expected={2:"Hits"})
+            x, = _get_cols(line, (-4,), ncols=11, expected={2: "Hits"})
             self._params.num_hits = _safe_int(x)
         else:
-            x, = _get_cols(line, (-1,), ncols=6, expected={2:"Hits"})
+            x, = _get_cols(line, (-1,), ncols=6, expected={2: "Hits"})
             self._params.num_hits = _safe_int(x)
 
     def num_sequences(self, line):
         if '1st pass' in line:
-            x, = _get_cols(line, (-4,), ncols=9, expected={2:"Sequences:"})
+            x, = _get_cols(line, (-4,), ncols=9, expected={2: "Sequences:"})
             self._params.num_sequences = _safe_int(x)
         else:
-            x, = _get_cols(line, (-1,), ncols=4, expected={2:"Sequences:"})
+            x, = _get_cols(line, (-1,), ncols=4, expected={2: "Sequences:"})
             self._params.num_sequences = _safe_int(x)
 
     def num_extends(self, line):
         if '1st pass' in line:
-            x, = _get_cols(line, (-4,), ncols=9, expected={2:"extensions:"})
+            x, = _get_cols(line, (-4,), ncols=9, expected={2: "extensions:"})
             self._params.num_extends = _safe_int(x)
         else:
-            x, = _get_cols(line, (-1,), ncols=4, expected={2:"extensions:"})
+            x, = _get_cols(line, (-1,), ncols=4, expected={2: "extensions:"})
             self._params.num_extends = _safe_int(x)
 
     def num_good_extends(self, line):
         if '1st pass' in line:
-            x, = _get_cols(line, (-4,), ncols=10, expected={3:"extensions:"})
+            x, = _get_cols(line, (-4,), ncols=10, expected={3: "extensions:"})
             self._params.num_good_extends = _safe_int(x)
         else:
-            x, = _get_cols(line, (-1,), ncols=5, expected={3:"extensions:"})
+            x, = _get_cols(line, (-1,), ncols=5, expected={3: "extensions:"})
             self._params.num_good_extends = _safe_int(x)
 
     def num_seqs_better_e(self, line):
         self._params.num_seqs_better_e, = _get_cols(
-            line, (-1,), ncols=7, expected={2:"sequences"})
+            line, (-1,), ncols=7, expected={2: "sequences"})
         self._params.num_seqs_better_e = _safe_int(
             self._params.num_seqs_better_e)
 
     def hsps_no_gap(self, line):
         self._params.hsps_no_gap, = _get_cols(
-            line, (-1,), ncols=9, expected={3:"better", 7:"gapping:"})
+            line, (-1,), ncols=9, expected={3: "better", 7: "gapping:"})
         self._params.hsps_no_gap = _safe_int(self._params.hsps_no_gap)
 
     def hsps_prelim_gapped(self, line):
         self._params.hsps_prelim_gapped, = _get_cols(
-            line, (-1,), ncols=9, expected={4:"gapped", 6:"prelim"})
+            line, (-1,), ncols=9, expected={4: "gapped", 6: "prelim"})
         self._params.hsps_prelim_gapped = _safe_int(
             self._params.hsps_prelim_gapped)
 
     def hsps_prelim_gapped_attempted(self, line):
         self._params.hsps_prelim_gapped_attempted, = _get_cols(
-            line, (-1,), ncols=10, expected={4:"attempted", 7:"prelim"})
+            line, (-1,), ncols=10, expected={4: "attempted", 7: "prelim"})
         self._params.hsps_prelim_gapped_attempted = _safe_int(
             self._params.hsps_prelim_gapped_attempted)
 
     def hsps_gapped(self, line):
         self._params.hsps_gapped, = _get_cols(
-            line, (-1,), ncols=6, expected={3:"gapped"})
+            line, (-1,), ncols=6, expected={3: "gapped"})
         self._params.hsps_gapped = _safe_int(self._params.hsps_gapped)
 
     def query_length(self, line):
         self._params.query_length, = _get_cols(
-            line.lower(), (-1,), ncols=4, expected={0:"length", 2:"query:"})
+            line.lower(), (-1,), ncols=4, expected={0: "length", 2: "query:"})
         self._params.query_length = _safe_int(self._params.query_length)
 
     def database_length(self, line):
         self._params.database_length, = _get_cols(
-            line.lower(), (-1,), ncols=4, expected={0:"length", 2:"database:"})
+            line.lower(), (-1,), ncols=4, expected={0: "length", 2: "database:"})
         self._params.database_length = _safe_int(self._params.database_length)
 
     def effective_hsp_length(self, line):
         self._params.effective_hsp_length, = _get_cols(
-            line, (-1,), ncols=4, expected={1:"HSP", 2:"length:"})
+            line, (-1,), ncols=4, expected={1: "HSP", 2: "length:"})
         self._params.effective_hsp_length = _safe_int(
             self._params.effective_hsp_length)
 
     def effective_query_length(self, line):
         self._params.effective_query_length, = _get_cols(
-            line, (-1,), ncols=5, expected={1:"length", 3:"query:"})
+            line, (-1,), ncols=5, expected={1: "length", 3: "query:"})
         self._params.effective_query_length = _safe_int(
             self._params.effective_query_length)
 
     def effective_database_length(self, line):
         self._params.effective_database_length, = _get_cols(
-            line.lower(), (-1,), ncols=5, expected={1:"length", 3:"database:"})
+            line.lower(), (-1,), ncols=5, expected={1: "length", 3: "database:"})
         self._params.effective_database_length = _safe_int(
             self._params.effective_database_length)
 
     def effective_search_space(self, line):
         self._params.effective_search_space, = _get_cols(
-            line, (-1,), ncols=4, expected={1:"search"})
+            line, (-1,), ncols=4, expected={1: "search"})
         self._params.effective_search_space = _safe_int(
             self._params.effective_search_space)
 
     def effective_search_space_used(self, line):
         self._params.effective_search_space_used, = _get_cols(
-            line, (-1,), ncols=5, expected={1:"search", 3:"used:"})
+            line, (-1,), ncols=5, expected={1: "search", 3: "used:"})
         self._params.effective_search_space_used = _safe_int(
             self._params.effective_search_space_used)
 
     def frameshift(self, line):
         self._params.frameshift = _get_cols(
-           line, (4, 5), ncols=6, expected={0:"frameshift", 2:"decay"})
+           line, (4, 5), ncols=6, expected={0: "frameshift", 2: "decay"})
 
     def threshold(self, line):
         if line[:2] == "T:":
-            #Assume its an old stlye line like "T: 123"
+            # Assume its an old stlye line like "T: 123"
             self._params.threshold, = _get_cols(
-                line, (1,), ncols=2, expected={0:"T:"})
+                line, (1,), ncols=2, expected={0: "T:"})
         elif line[:28] == "Neighboring words threshold:":
             self._params.threshold, = _get_cols(
-                line, (3,), ncols=4, expected={0:"Neighboring", 1:"words", 2:"threshold:"})
+                line, (3,), ncols=4, expected={0: "Neighboring", 1: "words", 2: "threshold:"})
         else:
             raise ValueError("Unrecognised threshold line:\n%s" % line)
         self._params.threshold = _safe_int(self._params.threshold)
@@ -1445,10 +1428,10 @@ class _ParametersConsumer(object):
     def window_size(self, line):
         if line[:2] == "A:":
             self._params.window_size, = _get_cols(
-                line, (1,), ncols=2, expected={0:"A:"})
+                line, (1,), ncols=2, expected={0: "A:"})
         elif line[:25] == "Window for multiple hits:":
             self._params.window_size, = _get_cols(
-                line, (4,), ncols=5, expected={0:"Window", 2:"multiple", 3:"hits:"})
+                line, (4,), ncols=5, expected={0: "Window", 2: "multiple", 3: "hits:"})
         else:
             raise ValueError("Unrecognised window size line:\n%s" % line)
         self._params.window_size = _safe_int(self._params.window_size)
@@ -1653,18 +1636,18 @@ class Iterator(object):
                         self._header = lines[:]
                     query = True
                 else:
-                    #Start of another record
+                    # Start of another record
                     self._uhandle.saveline(line)
                     break
             lines.append(line)
 
         if query and "BLAST" not in lines[0]:
-            #Cheat and re-insert the header
-            #print "-"*50
-            #print "".join(self._header)
-            #print "-"*50
-            #print "".join(lines)
-            #print "-"*50
+            # Cheat and re-insert the header
+            # print "-"*50
+            # print "".join(self._header)
+            # print "-"*50
+            # print "".join(lines)
+            # print "-"*50
             lines = self._header + lines
 
         if not lines:
@@ -1691,7 +1674,9 @@ def _re_search(regex, line, error_msg):
     return m.groups()
 
 
-def _get_cols(line, cols_to_get, ncols=None, expected={}):
+def _get_cols(line, cols_to_get, ncols=None, expected=None):
+    if expected is None:
+        expected = {}
     cols = line.split()
 
     # Check to make sure number of columns is correct
@@ -1779,7 +1764,7 @@ class BlastErrorParser(AbstractParser):
     ValueError to a LowQualityBlastError and attempt to provide useful
     information.
     """
-    def __init__(self, bad_report_handle = None):
+    def __init__(self, bad_report_handle=None):
         """Initialize a parser that tries to catch BlastErrors.
 
         Arguments:
@@ -1790,7 +1775,7 @@ class BlastErrorParser(AbstractParser):
         """
         self._bad_report_handle = bad_report_handle
 
-        #self._b_parser = BlastParser()
+        # self._b_parser = BlastParser()
         self._scanner = _Scanner()
         self._consumer = _BlastErrorConsumer()
 

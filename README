@@ -1,6 +1,6 @@
 Biopython README file
 =====================
- 
+
 The Biopython Project is an international association of developers of freely
 available Python tools for computational molecular biology.
 
@@ -55,7 +55,7 @@ Biopython is currently supported and tested on the following Python versions:
 
   This is currently the primary development platform for Biopython.
 
-- PyPy 2.0, 2.1, 2.2, 2.3 -- see http://www.pypy.org
+- PyPy 2.0, 2.1, 2.2, 2.3, 2.4 and also PyPy3 2.4 -- see http://www.pypy.org
 
   Aside from modules with C code or dependent on NumPy, everything should
   work. PyPy's NumPy reimplementation NumPyPy is still in progress.
@@ -83,7 +83,7 @@ be installed after Biopython.
   installing Biopython. The older Numeric library is no longer supported in
   Biopython.
 
-- ReportLab, see http://www.reportlab.com/software/opensource/ (optional)
+- ReportLab, see http://www.reportlab.com/opensource/ (optional)
   This package is only used in Bio.Graphics, so if you do not need this
   functionality, you will not need to install this package.  You can install
   it later if needed.

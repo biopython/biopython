@@ -20,21 +20,21 @@ from Bio.Sequencing.Applications import SamtoolsIndexCommandline
 from Bio.Sequencing.Applications import SamtoolsMergeCommandline
 from Bio.Sequencing.Applications import SamtoolsMpileupCommandline
 from Bio.Sequencing.Applications import SamtoolsSortCommandline
-#TODO from Bio.Sequencing.Applications import SamtoolsPhaseCommandline
-#TODO from Bio.Sequencing.Applications import SamtoolsReheaderCommandline
-#TODO from Bio.Sequencing.Applications import SamtoolsRmdupCommandline
-#TODO from Bio.Sequencing.Applications import SamtoolsTargetcutCommandline
-#TODO from Bio.Sequencing.Applications import SamtoolsFixmateCommandline
+# TODO from Bio.Sequencing.Applications import SamtoolsPhaseCommandline
+# TODO from Bio.Sequencing.Applications import SamtoolsReheaderCommandline
+# TODO from Bio.Sequencing.Applications import SamtoolsRmdupCommandline
+# TODO from Bio.Sequencing.Applications import SamtoolsTargetcutCommandline
+# TODO from Bio.Sequencing.Applications import SamtoolsFixmateCommandline
 #################################################################
 
-#Try to avoid problems when the OS is in another language
+# Try to avoid problems when the OS is in another language
 os.environ['LANG'] = 'C'
 
 samtools_exe = None
 if sys.platform == "win32":
-    #TODO - Check the path?
+    # TODO - Check the path?
     try:
-        #This can vary depending on the Windows language.
+        # This can vary depending on the Windows language.
         prog_files = os.environ["PROGRAMFILES"]
     except KeyError:
         prog_files = r"C:\Program Files"
@@ -54,8 +54,8 @@ else:
     from Bio._py3k import getoutput
     output = getoutput("samtools")
 
-    #Since "not found" may be in another language, try and be sure this is
-    #really the samtools tool's output
+    # Since "not found" may be in another language, try and be sure this is
+    # really the samtools tool's output
     if ("not found" not in output and
        "samtools (Tools for alignments in the SAM format)" in output):
         samtools_exe = "samtools"
@@ -149,14 +149,14 @@ class SamtoolsTestCase(unittest.TestCase):
         cmdline = SamtoolsCalmdCommandline(samtools_exe)
         cmdline.set_parameter("reference", self.reference)
         cmdline.set_parameter("input_bam", self.bamfile1)
-        ## If there is no index file for the reference
-        ## samtools calmd creates one at the time of calling
+        # If there is no index file for the reference
+        # samtools calmd creates one at the time of calling
 
         if os.path.exists(self.referenceindexfile):
-            #print("exists")
+            # print("exists")
             stderr_calmd_expected = ""
         else:
-            #print("doesnt exist")
+            # print("doesnt exist")
             stderr_calmd_expected = "[fai_load] build FASTA index.\n"
         stdout, stderr = cmdline()
         self.assertEqual(stderr, stderr_calmd_expected)
@@ -168,7 +168,7 @@ class SamtoolsTestCase(unittest.TestCase):
         stdout, stderr = cmdline()
         self.assertEqual(stderr, "")
 
-    #TODO: def test_fixmate(self):
+    # TODO: def test_fixmate(self):
 
     def test_sort(self):
         cmdline = SamtoolsSortCommandline(samtools_exe)
@@ -220,10 +220,10 @@ class SamtoolsTestCase(unittest.TestCase):
         stdout, stderr = cmdline()
         self.assertFalse("[bam_pileup_core]" in stdout)
 
-    #TODO: def test_phase(self):
-    #TODO: def test_reheader(self):
-    #TODO: def test_rmdup(self):
-    #TODO: def test_targetcut(self):
+    # TODO: def test_phase(self):
+    # TODO: def test_reheader(self):
+    # TODO: def test_rmdup(self):
+    # TODO: def test_targetcut(self):
 
 
 if __name__ == "__main__":

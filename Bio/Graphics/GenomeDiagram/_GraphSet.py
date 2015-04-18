@@ -113,7 +113,7 @@ class GraphSet(object):
             Add a GraphData object to the diagram (will be stored
             internally
         """
-        #Let the UK spelling (colour) override the USA spelling (color)
+        # Let the UK spelling (colour) override the USA spelling (color)
         if colour is not None:
             color = colour
         if altcolour is not None:
@@ -175,8 +175,8 @@ class GraphSet(object):
             data += list(graph.data.values())
         data.sort()
         datalen = len(data)
-        return(data[0], data[datalen/4], data[datalen/2],
-               data[3*datalen/4], data[-1])
+        return(data[0], data[datalen / 4], data[datalen / 2],
+               data[3 * datalen / 4], data[-1])
 
     def to_string(self, verbose=0):
         """ to_string(self, verbose=0) -> ""

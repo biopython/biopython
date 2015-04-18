@@ -11,7 +11,7 @@ import subprocess
 try:
     from os.path import relpath as _relpath
 except ImportError:
-    #New in Python 2.6
+    # New in Python 2.6
     def _relpath(path, start=None):
         """Return a relative version of a path.
 
@@ -34,7 +34,7 @@ except ImportError:
         path_list = posixpath.abspath(path).split(posixpath.sep)
         # Work out how much of the filepath is shared by start and path.
         i = len(posixpath.commonprefix([start_list, path_list]))
-        rel_list = [posixpath.pardir] * (len(start_list)-i) + path_list[i:]
+        rel_list = [posixpath.pardir] * (len(start_list) - i) + path_list[i:]
         if not rel_list:
             return posixpath.curdir.replace(posixpath.sep, os.path.sep)
         return posixpath.join(*rel_list).replace(posixpath.sep, os.path.sep)
@@ -46,9 +46,10 @@ message"""
 
 
 class Paml(object):
+    """Base class for wrapping PAML commands."""
 
-    def __init__(self, alignment = None, working_dir = None,
-                out_file = None):
+    def __init__(self, alignment=None, working_dir=None,
+                out_file=None):
         if working_dir is None:
             self.working_dir = os.getcwd()
         else:
@@ -58,6 +59,7 @@ class Paml(object):
                 raise IOError("The specified alignment file does not exist.")
         self.alignment = alignment
         self.out_file = out_file
+        self._options = {}  # will be set in subclasses
 
     def write_ctl_file(self):
         pass
@@ -77,14 +79,14 @@ class Paml(object):
         adding options that do not exist or mispelling options.
         """
         for option, value in kwargs.items():
-            if not option in self._options:
+            if option not in self._options:
                 raise KeyError("Invalid option: " + option)
             else:
                 self._options[option] = value
 
     def get_option(self, option):
         """Return the value of an option."""
-        if not option in self._options:
+        if option not in self._options:
             raise KeyError("Invalid option: " + option)
         else:
             return self._options.get(option)

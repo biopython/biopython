@@ -118,7 +118,7 @@ class Hmmer3TextParser(object):
             }
 
             # get description and accession, if they exist
-            qdesc = '<unknown description>' # placeholder
+            qdesc = '<unknown description>'  # placeholder
             while not self.line.startswith('Scores for '):
                 self.line = read_forward(self.handle)
 
@@ -229,7 +229,7 @@ class Hmmer3TextParser(object):
 
             # read through the hsp table header and move one more line
             self._read_until(lambda line:
-                    line.startswith(' ---   ------ ----- --------') or \
+                    line.startswith(' ---   ------ ----- --------') or
                     line.startswith('   [No individual domains'))
             self.line = read_forward(self.handle)
 
@@ -322,9 +322,9 @@ class Hmmer3TextParser(object):
             # hsp inside the qresult as we're not creating a copy
             frag = hsp_list[dom_counter][0]
             # XXX: should we validate again here? regex is expensive..
-            #regx = re.search(_HRE_VALIDATE, self.line)
-            #assert hsp.bitscore == float(regx.group(1))
-            #assert hsp.evalue_cond == float(regx.group(2))
+            # regx = re.search(_HRE_VALIDATE, self.line)
+            # assert hsp.bitscore == float(regx.group(1))
+            # assert hsp.evalue_cond == float(regx.group(2))
             hmmseq = ''
             aliseq = ''
             annot = {}

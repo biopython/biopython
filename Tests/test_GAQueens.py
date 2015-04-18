@@ -51,9 +51,9 @@ def main(num_queens):
 
     print("Evolving the population and searching for a solution...")
 
-    mutator = QueensMutation(mutation_rate = 0.05)
-    crossover = QueensCrossover(queens_fitness, crossover_prob = .2,
-                                max_crossover_size = 4)
+    mutator = QueensMutation(mutation_rate=0.05)
+    crossover = QueensCrossover(queens_fitness, crossover_prob=.2,
+                                max_crossover_size=4)
     repair = QueensRepair()
     # rw_selector = RouletteWheelSelection(mutator, crossover, repair)
     t_selector = TournamentSelection(mutator, crossover, repair, 5)
@@ -82,7 +82,7 @@ def display_board(genome):
     Inspired by the display function in the queens.py solution to the N-queens
     problem in the Python demo scripts.
     """
-    print('+-' + '--'*len(genome) + '+')
+    print('+-' + '--' * len(genome) + '+')
 
     for row in range(len(genome)):
         elements = []
@@ -93,7 +93,7 @@ def display_board(genome):
                 elements.append('.')
         print('|' + ''.join(elements) + '|')
 
-    print('+-' + '--'*len(genome) + '+')
+    print('+-' + '--' * len(genome) + '+')
 
 
 def queens_solved(organisms):
@@ -159,7 +159,7 @@ class QueensAlphabet(Alphabet.Alphabet):
 
 
 # --- Problem specific crossover, mutation and repair operations
-class QueensRepair:
+class QueensRepair(object):
     """A repair function to help create correct N-Queens solutions.
 
     This attempts to help generate correct solutions by offering some
@@ -171,7 +171,7 @@ class QueensRepair:
     like (1, 2, 5, 3, 6, 4). This should greatly reduce the number of
     individuals that need to be searched through in a population.
     """
-    def __init__(self, repair_prob = 1):
+    def __init__(self, repair_prob=1):
         """Initialize the repairer.
 
         Arguments:
@@ -239,7 +239,7 @@ class QueensRepair:
         return organism
 
 
-class QueensCrossover:
+class QueensCrossover(object):
     """Crossover operation to help in solving the N-Queens problem.
 
     This tries to perform smarter crossovers by picking out regions of
@@ -250,8 +250,8 @@ class QueensCrossover:
     both genomes. It then recombines these high fitness windows to form
     the new genome that is returned.
     """
-    def __init__(self, fitness_func, crossover_prob = .1,
-                 max_crossover_size = 4):
+    def __init__(self, fitness_func, crossover_prob=.1,
+                 max_crossover_size=4):
         """Initialize to do N-Queens optimized crossover.
 
         Arguments:
@@ -280,9 +280,9 @@ class QueensCrossover:
         if crossover_chance <= self._crossover_prob:
             # find the region of highest probability in both orgs
             best_1, rest_1 = self._find_best_region(new_org_1.genome,
-                                                    make_best_larger = 1)
+                                                    make_best_larger=1)
             best_2, rest_2 = self._find_best_region(new_org_2.genome,
-                                                    make_best_larger = 0)
+                                                    make_best_larger=0)
 
             assert len(best_1) + len(best_2) == len(rest_1) + len(rest_2), \
                    "Did not preserve genome length!"
@@ -292,7 +292,7 @@ class QueensCrossover:
 
         return new_org_1, new_org_2
 
-    def _find_best_region(self, genome, make_best_larger = 1):
+    def _find_best_region(self, genome, make_best_larger=1):
         """Find the best region in the given genome.
 
         Arguments:
@@ -340,7 +340,7 @@ class QueensCrossover:
         return best_region, rest_region
 
 
-class QueensMutation:
+class QueensMutation(object):
     """Mutation operation to help in the N-Queens problem.
 
     This performs mutation, but instead of randomly mutating a single
@@ -348,7 +348,7 @@ class QueensMutation:
     taken at some other position in the genome. This thus tries to
     generate more 'correct' mutations that will help achieve the solution.
     """
-    def __init__(self, mutation_rate = 0.001):
+    def __init__(self, mutation_rate=0.001):
         """Inititialize a mutator.
 
         Arguments:
@@ -390,7 +390,7 @@ class QueensMutation:
 num_queens = 5
 
 
-#Class defined for use via run_tests.py
+# Class defined for use via run_tests.py
 class QueensTest(unittest.TestCase):
     def test_queens(self):
         """Place five queens with a GA"""
@@ -398,7 +398,7 @@ class QueensTest(unittest.TestCase):
 
 if __name__ == "__main__":
     if len(sys.argv) == 1:
-        #Run with defaults, for use as a unit test
+        # Run with defaults, for use as a unit test
         main(num_queens)
     elif len(sys.argv) == 2:
         num_queens = int(sys.argv[1])

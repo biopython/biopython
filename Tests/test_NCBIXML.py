@@ -1591,7 +1591,7 @@ class TestNCBIXML(unittest.TestCase):
 
     def test_xml_2222_blastx_001(self):
         "Parsing BLASTX 2.2.22+, multiple queries against NR (xml_2222_blastx_001)"
-        #See also plain text file bt081.txt (matching output from blastx tool)
+        # See also plain text file bt081.txt (matching output from blastx tool)
 
         filename = 'xml_2222_blastx_001.xml'
         datafile = os.path.join("Blast", filename)
@@ -1608,7 +1608,7 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(record.database, "nr")
         self.assertEqual(record.num_sequences_in_database, 8994603)
         self.assertEqual(record.database_sequences, 8994603)
-        #self.assertEqual(record.database_length, 3078807967)
+        # self.assertEqual(record.database_length, 3078807967)
         self.assertEqual(record.database_length, -1216159329)  # NCBI bug!
         self.assertEqual(len(record.descriptions), 1)
         self.assertEqual(len(record.alignments), 1)
@@ -1623,7 +1623,7 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(record.database, "nr")
         self.assertEqual(record.num_sequences_in_database, 8994603)
         self.assertEqual(record.database_sequences, 8994603)
-        #self.assertEqual(record.database_length, 3078807967)
+        # self.assertEqual(record.database_length, 3078807967)
         self.assertEqual(record.database_length, -1216159329)  # NCBI bug!
         # I used -num_descriptions 10 and -num_alignments 1
         self.assertEqual(len(record.descriptions), 10)
@@ -1641,7 +1641,7 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(record.database, "nr")
         self.assertEqual(record.num_sequences_in_database, 8994603)
         self.assertEqual(record.database_sequences, 8994603)
-        #self.assertEqual(record.database_length, 3078807967)
+        # self.assertEqual(record.database_length, 3078807967)
         self.assertEqual(record.database_length, -1216159329)  # NCBI bug!
         self.assertEqual(len(record.descriptions), 0)
         self.assertEqual(len(record.alignments), 0)
@@ -1655,7 +1655,7 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(record.database, "nr")
         self.assertEqual(record.num_sequences_in_database, 8994603)
         self.assertEqual(record.database_sequences, 8994603)
-        #self.assertEqual(record.database_length, 3078807967)
+        # self.assertEqual(record.database_length, 3078807967)
         self.assertEqual(record.database_length, -1216159329)  # NCBI bug!
         self.assertEqual(len(record.descriptions), 10)
         self.assertEqual(len(record.alignments), 10)
@@ -1671,7 +1671,7 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(record.database, "nr")
         self.assertEqual(record.num_sequences_in_database, 8994603)
         self.assertEqual(record.database_sequences, 8994603)
-        #self.assertEqual(record.database_length, 3078807967)
+        # self.assertEqual(record.database_length, 3078807967)
         self.assertEqual(record.database_length, -1216159329)  # NCBI bug!
         self.assertEqual(len(record.descriptions), 10)
         self.assertEqual(len(record.alignments), 10)
@@ -1687,7 +1687,7 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(record.database, "nr")
         self.assertEqual(record.num_sequences_in_database, 8994603)
         self.assertEqual(record.database_sequences, 8994603)
-        #self.assertEqual(record.database_length, 3078807967)
+        # self.assertEqual(record.database_length, 3078807967)
         self.assertEqual(record.database_length, -1216159329)  # NCBI bug!
         self.assertEqual(len(record.descriptions), 10)
         self.assertEqual(len(record.alignments), 10)
@@ -1715,7 +1715,7 @@ class TestNCBIXML(unittest.TestCase):
 
     def test_xml_2222_blastp_001(self):
         "Parsing BLASTP 2.2.22+, multiple queries against NR (xml_2222_blastp_001)"
-        #This is from blastp NOT blastall
+        # This is from blastp NOT blastall
 
         filename = 'xml_2222_blastp_001.xml'
         datafile = os.path.join("Blast", filename)
@@ -1732,7 +1732,7 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(record.database, "nr")
         self.assertEqual(record.num_sequences_in_database, 8994603)
         self.assertEqual(record.database_sequences, 8994603)
-        #self.assertEqual(record.database_length, 3078807967)
+        # self.assertEqual(record.database_length, 3078807967)
         self.assertEqual(record.database_length, -1216159329)  # NCBI bug!
         self.assertEqual(len(record.descriptions), 10)
         self.assertEqual(len(record.alignments), 10)
@@ -1755,10 +1755,10 @@ class TestNCBIXML(unittest.TestCase):
 
     def test_xml_2218L_rpsblast_001(self):
         "Parsing PSI-BLASTP 2.2.18, single query which converges in 3 iterations (xml_2218L_rpsblast_001)"
-        #This is from old pgpblast command line tool, NOT new psiblast
-        #NOTE - The parser currently returns three BLAST record objects.
-        #The old text parser would return a single PSI BLAST record object with three rounds.
-        #This may change... although it may require a PSI BLAST specific XML parser.
+        # This is from old pgpblast command line tool, NOT new psiblast
+        # NOTE - The parser currently returns three BLAST record objects.
+        # The old text parser would return a single PSI BLAST record object with three rounds.
+        # This may change... although it may require a PSI BLAST specific XML parser.
 
         filename = 'xml_2218L_rpsblast_001.xml'
         datafile = os.path.join("Blast", filename)
@@ -1861,12 +1861,12 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(hsp.sbjct_start, 1)
         self.assertEqual(hsp.sbjct_end, 131)
 
-        #TODO - Can we detect the convergence status:
-        #<Iteration_message>CONVERGED</Iteration_message>
+        # TODO - Can we detect the convergence status:
+        # <Iteration_message>CONVERGED</Iteration_message>
         self.assertRaises(StopIteration, next, records)
         handle.close()
 
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

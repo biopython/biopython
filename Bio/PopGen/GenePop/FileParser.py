@@ -23,6 +23,8 @@ Functions:
 """
 from Bio.PopGen.GenePop import get_indiv
 
+__docformat__ = "restructuredtext en"
+
 
 def read(fname):
     """Parses a file containing a GenePop file.
@@ -37,16 +39,18 @@ class FileRecord(object):
     """Holds information from a GenePop record.
 
     Members:
-    marker_len         The marker length (2 or 3 digit code per allele).
 
-    comment_line       Comment line.
+    - marker_len         The marker length (2 or 3 digit code per allele).
 
-    loci_list          List of loci names.
+    - comment_line       Comment line.
+
+    - loci_list          List of loci names.
 
     Functions:
-    get_individual     Returns the next individual of the current population.
 
-    skip_population    Skips the current population.
+    - get_individual     Returns the next individual of the current population.
+
+    - skip_population    Skips the current population.
 
     skip_population skips the individuals of the current population, returns
     True if there are more populations.
@@ -55,10 +59,11 @@ class FileRecord(object):
     if the list ended).
     Each individual is a pair composed by individual
     name and a list of alleles (2 per marker or 1 for haploid data).
-    Examples
-            ('Ind1', [(1,2),    (3,3), (200,201)]
-            ('Ind2', [(2,None), (3,3), (None,None)]
-            ('Other1', [(1,1),  (4,3), (200,200)]
+    Examples::
+
+        ('Ind1', [(1,2),    (3,3), (200,201)]
+        ('Ind2', [(2,None), (3,3), (None,None)]
+        ('Other1', [(1,1),  (4,3), (200,200)]
 
 
     """
@@ -67,12 +72,6 @@ class FileRecord(object):
         self.loci_list = []
         self.fname = fname
         self.start_read()
-
-    def __del__(self):
-        try:
-            self._handle.close()
-        except AttributeError:
-            pass
 
     def __str__(self):
         """Returns (reconstructs) a GenePop textual representation.
@@ -105,7 +104,7 @@ class FileRecord(object):
                         if al is None:
                             al = '0'
                         aStr = str(al)
-                        while len(aStr)<marker_len:
+                        while len(aStr) < marker_len:
                             aStr = "".join(['0', aStr])
                         rep.append(aStr)
                 rep.append('\n')
@@ -117,20 +116,20 @@ class FileRecord(object):
         """
         self._handle = open(self.fname)
         self.comment_line = self._handle.readline().rstrip()
-        #We can now have one loci per line or all loci in a single line
-        #separated by either space or comma+space...
-        #We will remove all commas on loci... that should not be a problem
+        # We can now have one loci per line or all loci in a single line
+        # separated by either space or comma+space...
+        # We will remove all commas on loci... that should not be a problem
         sample_loci_line = self._handle.readline().rstrip().replace(',', '')
         all_loci = sample_loci_line.split(' ')
         self.loci_list.extend(all_loci)
         for line in self._handle:
             line = line.rstrip()
-            if line.upper()=='POP':
+            if line.upper() == 'POP':
                 break
             self.loci_list.append(line)
         else:
             raise ValueError('No population data found, file probably not GenePop related')
-        #self._after_pop = True
+        # self._after_pop = True
         self.current_pop = 0
         self.current_ind = 0
 
@@ -139,7 +138,7 @@ class FileRecord(object):
         self.current_pop = 0
         self.current_ind = 0
         for line in self._handle:
-            if line.rstrip().upper()=="POP":
+            if line.rstrip().upper() == "POP":
                 return
 
     def seek_position(self, pop, indiv):
@@ -150,20 +149,20 @@ class FileRecord(object):
         """
         self._handle.seek(0)
         self.skip_header()
-        while pop>0:
+        while pop > 0:
             self.skip_population()
             pop -= 1
-        while indiv>0:
+        while indiv > 0:
             self.get_individual()
             indiv -= 1
 
     def skip_population(self):
         "Skips the current population. Returns true if there is another pop."
         for line in self._handle:
-            if line=="":
+            if line == "":
                 return False
             line = line.rstrip()
-            if line.upper()=='POP':
+            if line.upper() == 'POP':
                 self.current_pop += 1
                 self.current_ind = 0
                 return True
@@ -180,7 +179,7 @@ class FileRecord(object):
         """
         for line in self._handle:
             line = line.rstrip()
-            if line.upper()=='POP':
+            if line.upper() == 'POP':
                 self.current_pop += 1
                 self.current_ind = 0
                 return True
@@ -197,39 +196,40 @@ class FileRecord(object):
            fname - file to be created with population removed
         """
         old_rec = read(self.fname)
-        with open(fname, "w") as f:
-            f.write(self.comment_line + "\n")
-            for locus in old_rec.loci_list:
-                f.write(locus + "\n")
-            curr_pop = 0
-            l_parser = old_rec.get_individual()
-            start_pop = True
-            while l_parser:
-                if curr_pop == pos:
-                    old_rec.skip_population()
+        f = open(fname, "w")
+        f.write(self.comment_line + "\n")
+        for locus in old_rec.loci_list:
+            f.write(locus + "\n")
+        curr_pop = 0
+        l_parser = old_rec.get_individual()
+        start_pop = True
+        while l_parser:
+            if curr_pop == pos:
+                old_rec.skip_population()
+                curr_pop += 1
+            else:
+                if l_parser is True:
                     curr_pop += 1
+                    start_pop = True
                 else:
-                    if l_parser is True:
-                        curr_pop += 1
-                        start_pop = True
-                    else:
-                        if start_pop:
-                            f.write("POP\n")
-                            start_pop = False
-                        name, markers = l_parser
-                        f.write(name + ",")
-                        for marker in markers:
-                            f.write(' ')
-                            for al in marker:
-                                if al is None:
-                                    al = '0'
-                                aStr = str(al)
-                                while len(aStr)<3:
-                                    aStr = "".join(['0', aStr])
-                                f.write(aStr)
-                        f.write('\n')
+                    if start_pop:
+                        f.write("POP\n")
+                        start_pop = False
+                    name, markers = l_parser
+                    f.write(name + ",")
+                    for marker in markers:
+                        f.write(' ')
+                        for al in marker:
+                            if al is None:
+                                al = '0'
+                            aStr = str(al)
+                            while len(aStr) < 3:
+                                aStr = "".join(['0', aStr])
+                            f.write(aStr)
+                    f.write('\n')
 
-                l_parser = old_rec.get_individual()
+            l_parser = old_rec.get_individual()
+        f.close()
 
     def remove_locus_by_position(self, pos, fname):
         """Removes a locus by position.
@@ -238,37 +238,38 @@ class FileRecord(object):
            fname - file to be created with locus removed
         """
         old_rec = read(self.fname)
-        with open(fname, "w") as f:
-            f.write(self.comment_line + "\n")
-            loci_list = old_rec.loci_list
-            del loci_list[pos]
-            for locus in loci_list:
-                f.write(locus + "\n")
-            l_parser = old_rec.get_individual()
-            f.write("POP\n")
-            while l_parser:
-                if l_parser is True:
-                    f.write("POP\n")
-                else:
-                    name, markers = l_parser
-                    f.write(name + ",")
-                    marker_pos = 0
-                    for marker in markers:
-                        if marker_pos == pos:
-                            marker_pos += 1
-                            continue
+        f = open(fname, "w")
+        f.write(self.comment_line + "\n")
+        loci_list = old_rec.loci_list
+        del loci_list[pos]
+        for locus in loci_list:
+            f.write(locus + "\n")
+        l_parser = old_rec.get_individual()
+        f.write("POP\n")
+        while l_parser:
+            if l_parser is True:
+                f.write("POP\n")
+            else:
+                name, markers = l_parser
+                f.write(name + ",")
+                marker_pos = 0
+                for marker in markers:
+                    if marker_pos == pos:
                         marker_pos += 1
-                        f.write(' ')
-                        for al in marker:
-                            if al is None:
-                                al = '0'
-                            aStr = str(al)
-                            while len(aStr)<3:
-                                aStr = "".join(['0', aStr])
-                            f.write(aStr)
-                    f.write('\n')
+                        continue
+                    marker_pos += 1
+                    f.write(' ')
+                    for al in marker:
+                        if al is None:
+                            al = '0'
+                        aStr = str(al)
+                        while len(aStr) < 3:
+                            aStr = "".join(['0', aStr])
+                        f.write(aStr)
+                f.write('\n')
 
-                l_parser = old_rec.get_individual()
+            l_parser = old_rec.get_individual()
+        f.close()
 
     def remove_loci_by_position(self, positions, fname):
         """Removes a set of loci by position.
@@ -277,42 +278,43 @@ class FileRecord(object):
            fname - file to be created with locus removed
         """
         old_rec = read(self.fname)
-        with open(fname, "w") as f:
-            f.write(self.comment_line + "\n")
-            loci_list = old_rec.loci_list
-            positions.sort()
-            positions.reverse()
-            posSet = set()
-            for pos in positions:
-                del loci_list[pos]
-                posSet.add(pos)
-            for locus in loci_list:
-                f.write(locus + "\n")
-            l_parser = old_rec.get_individual()
-            f.write("POP\n")
-            while l_parser:
-                if l_parser is True:
-                    f.write("POP\n")
-                else:
-                    name, markers = l_parser
-                    f.write(name + ",")
-                    marker_pos = 0
-                    for marker in markers:
-                        if marker_pos in posSet:
-                            marker_pos += 1
-                            continue
+        f = open(fname, "w")
+        f.write(self.comment_line + "\n")
+        loci_list = old_rec.loci_list
+        positions.sort()
+        positions.reverse()
+        posSet = set()
+        for pos in positions:
+            del loci_list[pos]
+            posSet.add(pos)
+        for locus in loci_list:
+            f.write(locus + "\n")
+        l_parser = old_rec.get_individual()
+        f.write("POP\n")
+        while l_parser:
+            if l_parser is True:
+                f.write("POP\n")
+            else:
+                name, markers = l_parser
+                f.write(name + ",")
+                marker_pos = 0
+                for marker in markers:
+                    if marker_pos in posSet:
                         marker_pos += 1
-                        f.write(' ')
-                        for al in marker:
-                            if al is None:
-                                al = '0'
-                            aStr = str(al)
-                            while len(aStr)<3:
-                                aStr = "".join(['0', aStr])
-                            f.write(aStr)
-                    f.write('\n')
+                        continue
+                    marker_pos += 1
+                    f.write(' ')
+                    for al in marker:
+                        if al is None:
+                            al = '0'
+                        aStr = str(al)
+                        while len(aStr) < 3:
+                            aStr = "".join(['0', aStr])
+                        f.write(aStr)
+                f.write('\n')
 
-                l_parser = old_rec.get_individual()
+            l_parser = old_rec.get_individual()
+        f.close()
 
     def remove_locus_by_name(self, name, fname):
         """Removes a locus by name.
@@ -324,7 +326,7 @@ class FileRecord(object):
             if self.loci_list[i] == name:
                 self.remove_locus_by_position(i, fname)
                 return
-        #If here than locus not existent... Maybe raise exception?
+        # If here than locus not existent... Maybe raise exception?
         #   Although it should be Ok... Just a boolean return, maybe?
 
     def remove_loci_by_name(self, names, fname):
@@ -338,5 +340,5 @@ class FileRecord(object):
             if self.loci_list[i] in names:
                 positions.append(i)
         self.remove_loci_by_position(positions, fname)
-        #If here than locus not existent... Maybe raise exception?
+        # If here than locus not existent... Maybe raise exception?
         #   Although it should be Ok... Just a boolean return, maybe?

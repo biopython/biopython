@@ -1,5 +1,5 @@
 # A superclass for reading [f]ixed-column type [f]lat-[f]ile records. (e.g.
-class fff_rec:
+class fff_rec(object):
     def __init__(self, inrec=''):
         self.data = inrec
 
@@ -15,7 +15,7 @@ class fff_rec:
             return self.data[index]
         elif (isinstance(index, tuple) or isinstance(index, list)) \
         and len(index) == 2:
-            #Not sure if this is needed anymore:
+            # Not sure if this is needed anymore:
             return self.data[index[0]:index[1]]
         else:
             return self.data[index]

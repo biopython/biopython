@@ -17,6 +17,8 @@ function. If you ran eprimer3 with multiple targets, use the parse
 function to iterate over the retsults.
 """
 
+__docformat__ = "restructuredtext en"
+
 # --- primer3
 
 
@@ -25,9 +27,10 @@ class Record(object):
 
     Members:
 
-    primers  - list of Primer objects describing primer pairs for
-               this target sequence.
-    comments - the comment line(s) for the record
+        - primers  - list of Primer objects describing primer pairs for
+          this target sequence.
+        - comments - the comment line(s) for the record
+
     """
     def __init__(self):
         self.comments = ""
@@ -39,26 +42,27 @@ class Primers(object):
 
     Members:
 
-    size - length of product, note you can use len(primer) as an
-           alternative to primer.size
+        - size - length of product, note you can use len(primer) as an
+          alternative to primer.size
 
-    forward_seq
-    forward_start
-    forward_length
-    forward_tm
-    forward_gc
+        - forward_seq
+        - forward_start
+        - forward_length
+        - forward_tm
+        - forward_gc
 
-    reverse_seq
-    reverse_start
-    reverse_length
-    reverse_tm
-    reverse_gc
+        - reverse_seq
+        - reverse_start
+        - reverse_length
+        - reverse_tm
+        - reverse_gc
 
-    internal_seq
-    internal_start
-    internal_length
-    internal_tm
-    internal_gc
+        - internal_seq
+        - internal_start
+        - internal_length
+        - internal_tm
+        - internal_gc
+    
     """
     def __init__(self):
         self.size = 0
@@ -90,7 +94,7 @@ def parse(handle):
     while True:
         line = handle.readline()
         if line.strip():
-            break # Starting a record
+            break  # Starting a record
 
     # Read each record
     record = None
@@ -108,13 +112,13 @@ def parse(handle):
                 record.comments += line
         elif not line.strip():
             pass
-        elif line[5:19]=="PRODUCT SIZE: ":
+        elif line[5:19] == "PRODUCT SIZE: ":
             primer = Primers()
             primer.size = int(line[19:])
             record.primers.append(primer)
-        elif line[5:19]=="FORWARD PRIMER":
+        elif line[5:19] == "FORWARD PRIMER":
             words = line.split()
-            if not primer or primer.size==0:
+            if not primer or primer.size == 0:
                 primer = Primers()
                 record.primers.append(primer)
             primer.forward_start = int(words[2])
@@ -122,9 +126,9 @@ def parse(handle):
             primer.forward_tm = float(words[4])
             primer.forward_gc = float(words[5])
             primer.forward_seq = words[6]
-        elif line[5:19]=="REVERSE PRIMER":
+        elif line[5:19] == "REVERSE PRIMER":
             words = line.split()
-            if not primer or primer.size==0:
+            if not primer or primer.size == 0:
                 primer = Primers()
                 record.primers.append(primer)
             primer.reverse_start = int(words[2])
@@ -132,9 +136,9 @@ def parse(handle):
             primer.reverse_tm = float(words[4])
             primer.reverse_gc = float(words[5])
             primer.reverse_seq = words[6]
-        elif line[5:19]=="INTERNAL OLIGO":
+        elif line[5:19] == "INTERNAL OLIGO":
             words = line.split()
-            if not primer or primer.size==0:
+            if not primer or primer.size == 0:
                 primer = Primers()
                 record.primers.append(primer)
             primer.internal_start = int(words[2])
@@ -143,7 +147,7 @@ def parse(handle):
             primer.internal_gc = float(words[5])
             try:
                 primer.internal_seq = words[6]
-            except IndexError: # eprimer3 reports oligo without sequence
+            except IndexError:  # eprimer3 reports oligo without sequence
                 primer.internal_seq = ''
         try:
             line = next(handle)

@@ -7,18 +7,18 @@
 
 CodonAlignment class is interited from MultipleSeqAlignment class. This is
 the core class to deal with codon alignment in biopython.
-
 """
 from __future__ import division, print_function
 
-__docformat__ = "epytext en"  # Don't just use plain text in epydoc API pages!
+__docformat__ = "restructuredtext en"  # Don't just use plain text in epydoc API pages!
 
 from Bio.Align import MultipleSeqAlignment
 from Bio.SeqRecord import SeqRecord
 
-from Bio.CodonAlign.CodonAlphabet import default_codon_table, default_codon_alphabet
-from Bio.CodonAlign.CodonSeq import _get_codon_list, CodonSeq, cal_dn_ds
-from Bio.CodonAlign.chisq import chisqprob
+from Bio.codonalign.codonalphabet import default_codon_table, default_codon_alphabet
+from Bio.codonalign.codonseq import _get_codon_list, CodonSeq, cal_dn_ds
+from Bio.codonalign.chisq import chisqprob
+
 
 class CodonAlignment(MultipleSeqAlignment):
     """Codon Alignment class that inherits from MultipleSeqAlignment.
@@ -52,7 +52,7 @@ class CodonAlignment(MultipleSeqAlignment):
     def __str__(self):
         """Return a multi-line string summary of the alignment.
 
-        This output is indicated to be readable, but large alignment 
+        This output is indicated to be readable, but large alignment
         is shown truncated. A maximum of 20 rows (sequences) and
         60 columns (20 codons) are shown, with the record identifiers.
         This should fit nicely on a single screen. e.g.
@@ -60,14 +60,14 @@ class CodonAlignment(MultipleSeqAlignment):
         """
         rows = len(self._records)
         lines = ["%s CodonAlignment with %i rows and %i columns (%i codons)"
-                 % (str(self._alphabet), rows, \
+                 % (str(self._alphabet), rows,
                     self.get_alignment_length(), self.get_aln_length())]
-        
+
         if rows <= 60:
-            lines.extend([self._str_line(rec, length=60) \
+            lines.extend([self._str_line(rec, length=60)
                     for rec in self._records])
         else:
-            lines.extend([self._str_line(rec, length=60) \
+            lines.extend([self._str_line(rec, length=60)
                     for rec in self._records[:18]])
             lines.append("...")
             lines.append(self._str_line(self._records[-1], length=60))
@@ -87,16 +87,16 @@ class CodonAlignment(MultipleSeqAlignment):
         if isinstance(row_index, int):
             return self._records[row_index][col_index]
         elif isinstance(col_index, int):
-            return "".join(str(rec[col_index]) for rec in \
+            return "".join(str(rec[col_index]) for rec in
                                                     self._records[row_index])
         else:
             if alphabet is None:
                 from Bio.Alphabet import generic_nucleotide
-                return MultipleSeqAlignment((rec[col_index] for rec in \
+                return MultipleSeqAlignment((rec[col_index] for rec in
                                                     self._records[row_index]),
                                              generic_nucleotide)
             else:
-                return MultipleSeqAlignment((rec[col_index] for rec in \
+                return MultipleSeqAlignment((rec[col_index] for rec in
                                                     self._records[row_index]),
                                              generic_nucleotide)
 
@@ -105,10 +105,10 @@ class CodonAlignment(MultipleSeqAlignment):
 
     def toMultipleSeqAlignment(self):
         """Return a MultipleSeqAlignment containing all the
-        SeqRecord in the CodonAlignment using Seq to store 
+        SeqRecord in the CodonAlignment using Seq to store
         sequences
         """
-        alignments = [SeqRecord(rec.seq.toSeq(), id=rec.id) for \
+        alignments = [SeqRecord(rec.seq.toSeq(), id=rec.id) for
                 rec in self._records]
         return MultipleSeqAlignment(alignments)
 
@@ -123,7 +123,7 @@ class CodonAlignment(MultipleSeqAlignment):
         for i in range(size):
             dn_matrix.append([])
             ds_matrix.append([])
-            for j in range(i+1):
+            for j in range(i + 1):
                 if i != j:
                     dn, ds = cal_dn_ds(self._records[i], self._records[j],
                                        method=method)
@@ -138,10 +138,11 @@ class CodonAlignment(MultipleSeqAlignment):
 
     def get_dn_ds_tree(self, dn_ds_method="NG86", tree_method="UPGMA"):
         """Method for constructing dn tree and ds tree.
+
         Argument:
-            -   dn_ds_method - Available methods include NG86, LWL85, YN00
-                               and ML.
-            -   tree_method  - Available methods include UPGMA and NJ.
+
+            - dn_ds_method - Available methods include NG86, LWL85, YN00 and ML.
+            - tree_method  - Available methods include UPGMA and NJ.
         """
         from Bio.Phylo.TreeConstruction import DistanceTreeConstructor
         dn_dm, ds_dm = self.get_dn_ds_matrix(method=dn_ds_method)
@@ -164,7 +165,7 @@ class CodonAlignment(MultipleSeqAlignment):
         It is the user's responsibility to ensure all the requirement
         needed by CodonAlignment is met.
         """
-        rec = [SeqRecord(CodonSeq(str(i.seq), alphabet=alphabet), id=i.id) \
+        rec = [SeqRecord(CodonSeq(str(i.seq), alphabet=alphabet), id=i.id)
                  for i in align._records]
         return cls(rec, alphabet=alphabet)
 
@@ -173,9 +174,10 @@ def mktest(codon_alns, codon_table=default_codon_table, alpha=0.05):
     """McDonald-Kreitman test for neutrality (PMID: 1904993) This method
     counts changes rather than sites (http://mkt.uab.es/mkt/help_mkt.asp).
     Arguments:
-        -   codon_alns  - list of CodonAlignment to compare (each
-                          CodonAlignment object corresponds to gene
-                          sampled from a species)
+
+        - codon_alns  - list of CodonAlignment to compare (each
+          CodonAlignment object corresponds to gene
+          sampled from a species)
 
     Return the p-value of test result
     """
@@ -186,7 +188,7 @@ def mktest(codon_alns, codon_table=default_codon_table, alpha=0.05):
     if len(set(codon_aln_len)) != 1:
         raise RuntimeError("CodonAlignment object for mktest should be of"
                            " equal length.")
-    codon_num = codon_aln_len[0]//3
+    codon_num = codon_aln_len[0] // 3
     # prepare codon_dict (taking stop codon as an extra amino acid)
     codon_dict = copy.deepcopy(codon_table.forward_table)
     for stop in codon_table.stop_codons:
@@ -241,7 +243,7 @@ def _get_codon2codon_matrix(codon_table=default_codon_table):
     else:
         import numpy as np
     base_tuple = ('A', 'T', 'C', 'G')
-    codons = [i for i in list(codon_table.forward_table.keys()) + \
+    codons = [i for i in list(codon_table.forward_table.keys()) +
               codon_table.stop_codons if 'U' not in i]
     # set up codon_dict considering stop codons
     codon_dict = codon_table.forward_table
@@ -249,8 +251,8 @@ def _get_codon2codon_matrix(codon_table=default_codon_table):
         codon_dict[stop] = 'stop'
     # count site
     num = len(codons)
-    G = {} # graph for substitution
-    nonsyn_G = {} # graph for nonsynonymous substitution
+    G = {}  # graph for substitution
+    nonsyn_G = {}  # graph for nonsynonymous substitution
     graph = {}
     graph_nonsyn = {}
     for i, codon in enumerate(codons):
@@ -258,7 +260,7 @@ def _get_codon2codon_matrix(codon_table=default_codon_table):
         graph_nonsyn[codon] = {}
         for p, b in enumerate(codon):
             for j in base_tuple:
-                tmp_codon = codon[0:p] + j + codon[p+1:]
+                tmp_codon = codon[0:p] + j + codon[p + 1:]
                 if codon_dict[codon] != codon_dict[tmp_codon]:
                     graph_nonsyn[codon][tmp_codon] = 1
                     graph[codon][tmp_codon] = 1
@@ -285,32 +287,36 @@ def _dijkstra(graph, start, end):
     Dijkstra's algorithm Python implementation.
     Algorithm adapted from
     http://thomas.pelletier.im/2010/02/dijkstras-algorithm-python-implementation/.
-    However, an abvious bug in
+    However, an abvious bug in::
+
         if D[child_node] >(<) D[node] + child_value:
+
     is fixed.
     This function will return the distance between start and end.
 
     Arguments:
-        graph: Dictionnary of dictionnary (keys are vertices).
-        start: Start vertex.
-        end: End vertex.
+
+        - graph: Dictionnary of dictionnary (keys are vertices).
+        - start: Start vertex.
+        - end: End vertex.
+
     Output:
         List of vertices from the beggining to the end.
     """
-    D = {} # Final distances dict
-    P = {} # Predecessor dict
+    D = {}  # Final distances dict
+    P = {}  # Predecessor dict
     # Fill the dicts with default values
     for node in graph.keys():
-        D[node] = 100 # Vertices are unreachable
-        P[node] = "" # Vertices have no predecessors
-    D[start] = 0 # The start vertex needs no move
-    unseen_nodes = list(graph.keys()) # All nodes are unseen
+        D[node] = 100  # Vertices are unreachable
+        P[node] = ""  # Vertices have no predecessors
+    D[start] = 0  # The start vertex needs no move
+    unseen_nodes = list(graph.keys())  # All nodes are unseen
     while len(unseen_nodes) > 0:
         # Select the node with the lowest value in D (final distance)
         shortest = None
         node = ''
         for temp_node in unseen_nodes:
-            if shortest == None:
+            if shortest is None:
                 shortest = D[temp_node]
                 node = temp_node
             elif D[temp_node] < shortest:
@@ -324,7 +330,8 @@ def _dijkstra(graph, start, end):
                 D[child_node] = D[node] + child_value
                 # To go to child_node, you have to go through node
                 P[child_node] = node
-        if node == end: break
+        if node == end:
+            break
     # Set a clean path
     path = []
     # We begin from the end
@@ -333,13 +340,13 @@ def _dijkstra(graph, start, end):
     # While we are not arrived at the beginning
     while not (node == start):
         if path.count(node) == 0:
-            path.insert(0, node) # Insert the predecessor of the current node
-            node = P[node] # The current node becomes its predecessor
+            path.insert(0, node)  # Insert the predecessor of the current node
+            node = P[node]  # The current node becomes its predecessor
         else:
             break
-    path.insert(0, start) # Finally, insert the start vertex
-    for i in range(len(path)-1):
-        distance += graph[path[i]][path[i+1]]
+    path.insert(0, start)  # Finally, insert the start vertex
+    for i in range(len(path) - 1):
+        distance += graph[path[i]][path[i + 1]]
     return distance
 
 
@@ -358,9 +365,8 @@ def _count_replacement(codon_set, G):
 
 
 def _prim(G):
-    """Prim's algorithm to find minimum spanning tree. Code is adapted
-    from
-      http://programmingpraxis.com/2010/04/09/minimum-spanning-tree-prims-algorithm/
+    """Prim's algorithm to find minimum spanning tree. Code is adapted from
+    http://programmingpraxis.com/2010/04/09/minimum-spanning-tree-prims-algorithm/
     (PRIVATE).
     """
     from math import floor
@@ -377,7 +383,7 @@ def _prim(G):
     for n1, n2, c in edges:
         conn[n1].append((c, n1, n2))
         conn[n2].append((c, n2, n1))
-    mst = [] # minimum spanning tree
+    mst = []  # minimum spanning tree
     used = set(nodes[0])
     usable_edges = conn[nodes[0]][:]
     heapify(usable_edges)
@@ -402,14 +408,16 @@ def _get_subgraph(codons, G):
     for i in codons:
         subgraph[i] = {}
         for j in codons:
-            if i != j: subgraph[i][j] = G[i][j]
+            if i != j:
+                subgraph[i][j] = G[i][j]
     return subgraph
 
 
 def _G_test(site_counts):
     """G test for 2x2 contingency table (PRIVATE).
     Argument:
-        -   site_counts - [syn_fix, nonsyn_fix, syn_poly, nonsyn_poly]
+
+        - site_counts - [syn_fix, nonsyn_fix, syn_poly, nonsyn_poly]
 
     >>> round(_G_test([17, 7, 42, 2]), 7)
     0.004924
@@ -417,23 +425,22 @@ def _G_test(site_counts):
     # TODO:
     #   Apply continuity correction for Chi-square test.
     from math import log
-    #from scipy.stats import chi2
+    # from scipy.stats import chi2
     G = 0
     tot = sum(site_counts)
     tot_syn = site_counts[0] + site_counts[2]
     tot_non = site_counts[1] + site_counts[3]
     tot_fix = sum(site_counts[:2])
     tot_poly = sum(site_counts[2:])
-    exp = [tot_fix*tot_syn/tot, tot_fix*tot_non/tot,
-           tot_poly*tot_syn/tot, tot_poly*tot_non/tot]
+    exp = [tot_fix * tot_syn / tot, tot_fix * tot_non / tot,
+           tot_poly * tot_syn / tot, tot_poly * tot_non / tot]
     for obs, ex in zip(site_counts, exp):
-        G += obs*log(obs/ex)
+        G += obs * log(obs / ex)
     G *= 2
-    #return 1-chi2.cdf(G, 1) # only 1 dof for 2x2 table
+    # return 1-chi2.cdf(G, 1) # only 1 dof for 2x2 table
     return chisqprob(G, 1)
 
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest
     run_doctest()
- 

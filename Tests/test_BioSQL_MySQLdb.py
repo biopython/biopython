@@ -26,14 +26,14 @@ TESTDB = 'biosql_test'
 DBDRIVER = 'MySQLdb'
 DBTYPE = 'mysql'
 
-#This will abort if driver not installed etc:
+# This will abort if driver not installed etc:
 check_config(DBDRIVER, DBTYPE, DBHOST, DBUSER, DBPASSWD, TESTDB)
 
-#Some of the unit tests don't create their own database,
-#so just in case there is no database already:
+# Some of the unit tests don't create their own database,
+# so just in case there is no database already:
 create_database()
 
 if __name__ == "__main__":
-    #Run the test cases
-    runner = unittest.TextTestRunner(verbosity = 2)
+    # Run the test cases
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

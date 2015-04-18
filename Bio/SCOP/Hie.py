@@ -19,11 +19,11 @@ The latest HIE file can be found
 class Record(object):
     """Holds information for one node in the SCOP hierarchy.
 
-    sunid      -- SCOP unique identifiers of this node
+    Attributes:
 
-    parent     -- Parents sunid
-
-    children   -- Sequence of childrens sunids
+     - sunid - SCOP unique identifiers of this node
+     - parent - Parents sunid
+     - children - Sequence of childrens sunids
     """
     def __init__(self, line=None):
         self.sunid = ''
@@ -38,11 +38,11 @@ class Record(object):
         Records consist of 3 tab deliminated fields; node's sunid,
         parent's sunid, and a list of children's sunids.
         """
-        #For example ::
+        # For example ::
         #
-        #0       -       46456,48724,51349,53931,56572,56835,56992,57942
-        #21953   49268   -
-        #49267   49266   49268,49269
+        # 0       -       46456,48724,51349,53931,56572,56835,56992,57942
+        # 21953   49268   -
+        # 49267   49266   49268,49269
         line = line.rstrip()        # no trailing whitespace
         columns = line.split('\t')   # separate the tab-delineated cols
         if len(columns) != 3:
@@ -50,17 +50,17 @@ class Record(object):
 
         sunid, parent, children = columns
 
-        if sunid =='-':
+        if sunid == '-':
             self.sunid = ''
         else:
             self.sunid = int(sunid)
 
-        if parent=='-':
+        if parent == '-':
             self.parent = ''
         else:
             self.parent = int(parent)
 
-        if children=='-':
+        if children == '-':
             self.children = ()
         else:
             children = children.split(',')
@@ -87,12 +87,11 @@ class Record(object):
 
 
 def parse(handle):
-    """Iterates over a HIE file, returning a Hie record for each line
-    in the file.
+    """Iterates over a HIE file as Hie records for each line.
 
     Arguments:
 
-        handle -- file-like object.
+     - handle - file-like object.
     """
     for line in handle:
         if line.startswith('#'):

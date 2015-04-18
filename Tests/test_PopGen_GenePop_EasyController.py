@@ -9,8 +9,8 @@ import unittest
 from Bio import MissingExternalDependencyError
 from Bio.PopGen.GenePop.EasyController import EasyController
 
-#Tests genepop related code for easy contorller. Note: this requires genepop
-#test_PopGen_GenePop_nodepend tests code that does not require genepop
+# Tests genepop related code for easy contorller. Note: this requires genepop
+# test_PopGen_GenePop_nodepend tests code that does not require genepop
 
 found = False
 for path in os.environ['PATH'].split(os.pathsep):
@@ -33,7 +33,7 @@ class AppTest(unittest.TestCase):
     """
 
     def setUp(self):
-        #Genepop likes to be on the directory where the file is.
+        # Genepop likes to be on the directory where the file is.
         os.chdir("PopGen")
         self.ctrl = EasyController("big.gen")
 
@@ -57,7 +57,7 @@ class AppTest(unittest.TestCase):
     def test_get_alleles(self):
         """Test get alleles.
         """
-        #Returns keys of a dict, so order is Python implementation dependent
+        # Returns keys of a dict, so order is Python implementation dependent
         self.assertEqual(set(self.ctrl.get_alleles(0, "Locus3")), set([3, 20]))
 
     def test_get_alleles_all_pops(self):
@@ -90,7 +90,7 @@ class AppTest(unittest.TestCase):
         nms = self.ctrl.estimate_nm()
         self.assertEqual(nms[0], 28.0)
 
-#These tests are frequently failing, possibly due to a Genepop problem.
+# These tests are frequently failing, possibly due to a Genepop problem.
 #    def test_get_avg_fst_pair_locus(self):
 #        """Test get average Fst for pairwise pops on a locus.
 #        """
@@ -112,15 +112,15 @@ class AppTest(unittest.TestCase):
         """
         mf = self.ctrl.get_multilocus_f_stats()
         self.assertEqual(len(mf), 3)
-        self.assertTrue(mf[0]<0.1)
+        self.assertTrue(mf[0] < 0.1)
 
     def test_get_f_stats(self):
         """Test F stats.
         """
         fs = self.ctrl.get_f_stats("Locus2")
         self.assertEqual(len(fs), 5)
-        self.assertTrue(fs[0]<0)
+        self.assertTrue(fs[0] < 0)
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

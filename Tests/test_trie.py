@@ -12,11 +12,12 @@ try:
 except ImportError:
     import os
     from Bio import MissingPythonDependencyError
-    if os.name=="java":
+    if os.name == "java":
         message = "Not available on Jython, Bio.trie requires compiled C code."
     else:
         message = "Could not import Bio.trie, check C code was compiled."
     raise MissingPythonDependencyError(message)
+
 
 class TestTrie(unittest.TestCase):
 
@@ -154,5 +155,5 @@ class TestTrieFind(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

@@ -21,11 +21,13 @@ from Bio.Align import MultipleSeqAlignment
 from .Interfaces import AlignmentWriter
 from Bio import Alphabet
 
-#You can get a couple of example files here:
-#http://www.molecularevolution.org/resources/fileformats/
+__docformat__ = "restructuredtext en"
+
+# You can get a couple of example files here:
+# http://www.molecularevolution.org/resources/fileformats/
 
 
-#This is a generator function!
+# This is a generator function!
 def NexusIterator(handle, seq_count=None):
     """Returns SeqRecord objects from a Nexus file.
 
@@ -39,23 +41,23 @@ def NexusIterator(handle, seq_count=None):
     """
     n = Nexus.Nexus(handle)
     if not n.matrix:
-        #No alignment found
+        # No alignment found
         raise StopIteration
 
-    #Bio.Nexus deals with duplicated names by adding a '.copy' suffix.
-    #The original names and the modified names are kept in these two lists:
+    # Bio.Nexus deals with duplicated names by adding a '.copy' suffix.
+    # The original names and the modified names are kept in these two lists:
     assert len(n.unaltered_taxlabels) == len(n.taxlabels)
 
     if seq_count and seq_count != len(n.unaltered_taxlabels):
         raise ValueError("Found %i sequences, but seq_count=%i"
                % (len(n.unaltered_taxlabels), seq_count))
 
-    #ToDo - Can we extract any annotation too?
+    # TODO - Can we extract any annotation too?
     records = (SeqRecord(n.matrix[new_name], id=new_name,
                          name=old_name, description="")
                for old_name, new_name
                in zip(n.unaltered_taxlabels, n.taxlabels))
-    #All done
+    # All done
     yield MultipleSeqAlignment(records, n.alphabet)
 
 
@@ -71,8 +73,10 @@ class NexusWriter(AlignmentWriter):
     def write_file(self, alignments):
         """Use this to write an entire file containing the given alignments.
 
-        alignments - A list or iterator returning MultipleSeqAlignment objects.
-                     This should hold ONE and only one alignment.
+        Arguments:
+
+         - alignments - A list or iterator returning MultipleSeqAlignment objects.
+           This should hold ONE and only one alignment.
         """
         align_iter = iter(alignments)  # Could have been a list
         try:
@@ -80,10 +84,10 @@ class NexusWriter(AlignmentWriter):
         except StopIteration:
             first_alignment = None
         if first_alignment is None:
-            #Nothing to write!
+            # Nothing to write!
             return 0
 
-        #Check there is only one alignment...
+        # Check there is only one alignment...
         try:
             second_alignment = next(align_iter)
         except StopIteration:
@@ -91,13 +95,13 @@ class NexusWriter(AlignmentWriter):
         if second_alignment is not None:
             raise ValueError("We can only write one Alignment to a Nexus file.")
 
-        #Good.  Actually write the single alignment,
+        # Good.  Actually write the single alignment,
         self.write_alignment(first_alignment)
         return 1  # we only support writing one alignment!
 
     def write_alignment(self, alignment):
-        #Creates an empty Nexus object, adds the sequences,
-        #and then gets Nexus to prepare the output.
+        # Creates an empty Nexus object, adds the sequences,
+        # and then gets Nexus to prepare the output.
         if len(alignment) == 0:
             raise ValueError("Must have at least one sequence")
         columns = alignment.get_alignment_length()
@@ -110,17 +114,17 @@ class NexusWriter(AlignmentWriter):
         n.alphabet = alignment._alphabet
         for record in alignment:
             n.add_sequence(record.id, str(record.seq))
-        #For smaller alignments, don't bother to interleave.
-        #For larger alginments, interleave to avoid very long lines
-        #in the output - something MrBayes can't handle.
-        #TODO - Default to always interleaving?
+        # For smaller alignments, don't bother to interleave.
+        # For larger alginments, interleave to avoid very long lines
+        # in the output - something MrBayes can't handle.
+        # TODO - Default to always interleaving?
         n.write_nexus_data(self.handle, interleave=(columns > 1000))
 
     def _classify_alphabet_for_nexus(self, alphabet):
         """Returns 'protein', 'dna', 'rna' based on the alphabet (PRIVATE).
 
         Raises an exception if this is not possible."""
-        #Get the base alphabet (underneath any Gapped or StopCodon encoding)
+        # Get the base alphabet (underneath any Gapped or StopCodon encoding)
         a = Alphabet._get_base_alphabet(alphabet)
 
         if not isinstance(a, Alphabet.Alphabet):
@@ -132,8 +136,8 @@ class NexusWriter(AlignmentWriter):
         elif isinstance(a, Alphabet.RNAAlphabet):
             return "rna"
         else:
-            #Must be something like NucleotideAlphabet or
-            #just the generic Alphabet (default for fasta files)
+            # Must be something like NucleotideAlphabet or
+            # just the generic Alphabet (default for fasta files)
             raise ValueError("Need a DNA, RNA or Protein alphabet")
 
 if __name__ == "__main__":

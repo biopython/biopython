@@ -12,6 +12,7 @@ Official specification:
 Journal article:
     Han and Zmasek (2009), doi:10.1186/1471-2105-10-356
 """
+
 __docformat__ = "restructuredtext en"
 
 import re
@@ -61,12 +62,14 @@ class Phyloxml(PhyloElement):
         other : list
             Arbitrary non-phyloXML elements, if any
     """
+
     def __init__(self, attributes, phylogenies=None, other=None):
         self.attributes = {
-                "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance", # standard
-                "xmlns": "http://www.phyloxml.org",
-                "xsi:schemaLocation": "http://www.phyloxml.org http://www.phyloxml.org/1.10/phyloxml.xsd",
-                }
+            # standard
+            "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
+            "xmlns": "http://www.phyloxml.org",
+            "xsi:schemaLocation": "http://www.phyloxml.org http://www.phyloxml.org/1.10/phyloxml.xsd",
+        }
         if attributes:
             self.attributes.update(attributes)
         self.phylogenies = phylogenies or []
@@ -116,8 +119,9 @@ class Other(PhyloElement):
         children : list
             child nodes, if any (also `Other` instances)
     """
+
     def __init__(self, tag, namespace=None, attributes=None, value=None,
-            children=None):
+                 children=None):
         self.tag = tag
         self.namespace = namespace
         self.attributes = attributes or {}
@@ -160,14 +164,15 @@ class Phylogeny(PhyloElement, BaseTree.Tree):
         other : list
             non-phyloXML elements (type `Other`)
     """
+
     def __init__(self, root=None, rooted=True,
-            rerootable=None, branch_length_unit=None, type=None,
-            # Child nodes
-            name=None, id=None, description=None, date=None,
-            # Collections
-            confidences=None, clade_relations=None, sequence_relations=None,
-            properties=None, other=None,
-            ):
+                 rerootable=None, branch_length_unit=None, type=None,
+                 # Child nodes
+                 name=None, id=None, description=None, date=None,
+                 # Collections
+                 confidences=None, clade_relations=None, sequence_relations=None,
+                 properties=None, other=None,
+                 ):
         assert isinstance(rooted, bool)
         self.root = root
         self.rooted = rooted
@@ -191,10 +196,10 @@ class Phylogeny(PhyloElement, BaseTree.Tree):
         Keyword arguments are the usual `Phylogeny` constructor parameters.
         """
         phy = cls(
-                root=Clade.from_clade(tree.root),
-                rooted=tree.rooted,
-                name=tree.name,
-                id=(tree.id is not None) and Id(str(tree.id)) or None)
+            root=Clade.from_clade(tree.root),
+            rooted=tree.rooted,
+            name=tree.name,
+            id=(tree.id is not None) and Id(str(tree.id)) or None)
         phy.__dict__.update(kwargs)
         return phy
 
@@ -317,17 +322,18 @@ class Clade(PhyloElement, BaseTree.Clade):
         other : list of Other objects
             non-phyloXML objects
     """
+
     def __init__(self,
-            # Attributes
-            branch_length=None, id_source=None,
-            # Child nodes
-            name=None, width=None, color=None, node_id=None, events=None,
-            binary_characters=None, date=None,
-            # Collections
-            confidences=None, taxonomies=None, sequences=None,
-            distributions=None, references=None, properties=None, clades=None,
-            other=None,
-            ):
+                 # Attributes
+                 branch_length=None, id_source=None,
+                 # Child nodes
+                 name=None, width=None, color=None, node_id=None, events=None,
+                 binary_characters=None, date=None,
+                 # Collections
+                 confidences=None, taxonomies=None, sequences=None,
+                 distributions=None, references=None, properties=None, clades=None,
+                 other=None,
+                 ):
         self.branch_length = branch_length
         self.id_source = id_source
         self.name = name
@@ -353,13 +359,13 @@ class Clade(PhyloElement, BaseTree.Clade):
         Keyword arguments are the usual PhyloXML Clade constructor parameters.
         """
         new_clade = cls(branch_length=clade.branch_length,
-                    name=clade.name)
+                        name=clade.name)
         new_clade.clades = [cls.from_clade(c) for c in clade]
         new_clade.confidence = clade.confidence
         new_clade.width = clade.width
         new_clade.color = (BranchColor(
-                clade.color.red, clade.color.green, clade.color.blue)
-                if clade.color else None)
+            clade.color.red, clade.color.green, clade.color.blue)
+            if clade.color else None)
         new_clade.__dict__.update(kwargs)
         return new_clade
 
@@ -426,6 +432,7 @@ class Clade(PhyloElement, BaseTree.Clade):
 # PhyloXML wrapper for a special BaseTree attribute
 
 class BranchColor(PhyloElement, BaseTree.BranchColor):
+
     def __init__(self, *args, **kwargs):
         BaseTree.BranchColor.__init__(self, *args, **kwargs)
 
@@ -438,6 +445,7 @@ class Accession(PhyloElement):
     Example: In ``UniProtKB:P17304``, the Accession instance attribute ``value``
     is 'P17304' and the ``source`` attribute is 'UniProtKB'.
     """
+
     def __init__(self, value, source):
         self.value = value
         self.source = source
@@ -472,12 +480,12 @@ class Annotation(PhyloElement):
     re_ref = re.compile(r'[a-zA-Z0-9_]+:[a-zA-Z0-9_\.\-\s]+')
 
     def __init__(self,
-            # Attributes
-            ref=None, source=None, evidence=None, type=None,
-            # Child nodes
-            desc=None, confidence=None, uri=None,
-            # Collection
-            properties=None):
+                 # Attributes
+                 ref=None, source=None, evidence=None, type=None,
+                 # Child nodes
+                 desc=None, confidence=None, uri=None,
+                 # Collection
+                 properties=None):
         _check_str(ref, self.re_ref.match)
         self.ref = ref
         self.source = source
@@ -490,24 +498,27 @@ class Annotation(PhyloElement):
 
 
 class BinaryCharacters(PhyloElement):
-    """The names and/or counts of binary characters present, gained, and lost
+    """Binary characters at the root of a clade.
+
+    The names and/or counts of binary characters present, gained, and lost
     at the root of a clade.
     """
+
     def __init__(self,
-            # Attributes
-            type=None, gained_count=None, lost_count=None, present_count=None,
-            absent_count=None,
-            # Child nodes (flattened into collections)
-            gained=None, lost=None, present=None, absent=None):
-        self.type=type
-        self.gained_count=gained_count
-        self.lost_count=lost_count
-        self.present_count=present_count
-        self.absent_count=absent_count
-        self.gained=gained or []
-        self.lost=lost or []
-        self.present=present or []
-        self.absent=absent or []
+                 # Attributes
+                 type=None, gained_count=None, lost_count=None, present_count=None,
+                 absent_count=None,
+                 # Child nodes (flattened into collections)
+                 gained=None, lost=None, present=None, absent=None):
+        self.type = type
+        self.gained_count = gained_count
+        self.lost_count = lost_count
+        self.present_count = present_count
+        self.absent_count = absent_count
+        self.gained = gained or []
+        self.lost = lost or []
+        self.present = present or []
+        self.absent = absent or []
 
 
 class CladeRelation(PhyloElement):
@@ -522,8 +533,9 @@ class CladeRelation(PhyloElement):
 
     @type confidence: Confidence
     """
+
     def __init__(self, type, id_ref_0, id_ref_1,
-            distance=None, confidence=None):
+                 distance=None, confidence=None):
         self.distance = distance
         self.type = type
         self.id_ref_0 = id_ref_0
@@ -543,6 +555,7 @@ class Confidence(PhyloElement):
         type : string
             label for the type of confidence, e.g. 'bootstrap'
     """
+
     def __init__(self, value, type='unknown'):
         self.value = value
         self.type = type
@@ -693,8 +706,9 @@ class Date(PhyloElement):
         maximum : float
             upper bound on the date value
     """
+
     def __init__(self, value=None, unit=None, desc=None,
-            minimum=None, maximum=None):
+                 minimum=None, maximum=None):
         self.value = value
         self.unit = unit
         self.desc = desc
@@ -723,6 +737,7 @@ class Distribution(PhyloElement):
         polygons : list of `Polygon` objects
             coordinate sets defining geographic regions
     """
+
     def __init__(self, desc=None, points=None, polygons=None):
         self.desc = desc
         self.points = points or []
@@ -738,6 +753,7 @@ class DomainArchitecture(PhyloElement):
         domains : list ProteinDomain objects
             the domains within this protein
     """
+
     def __init__(self, length=None, domains=None):
         self.length = length
         self.domains = domains
@@ -751,10 +767,10 @@ class Events(PhyloElement):
     keys and deleting a key resets that attribute's value back to None.
     """
     ok_type = set(('transfer', 'fusion', 'speciation_or_duplication', 'other',
-                    'mixed', 'unassigned'))
+                   'mixed', 'unassigned'))
 
     def __init__(self, type=None, duplications=None, speciations=None,
-            losses=None, confidence=None):
+                 losses=None, confidence=None):
         _check_str(type, self.ok_type.__contains__)
         self.type = type
         self.duplications = duplications
@@ -772,7 +788,7 @@ class Events(PhyloElement):
         return [v for v in self.__dict__.values() if v is not None]
 
     def __len__(self):
-        #TODO - Better way to do this?
+        # TODO - Better way to do this?
         return len(self.values())
 
     def __getitem__(self, key):
@@ -802,6 +818,7 @@ class Id(PhyloElement):
     Allows to indicate the provider (or authority) of an identifier, e.g. NCBI,
     along with the value itself.
     """
+
     def __init__(self, value, provider=None):
         self.value = value
         self.provider = provider
@@ -851,6 +868,7 @@ class Point(PhyloElement):
         alt_unit : string
             unit for the altitude (e.g. 'meter')
     """
+
     def __init__(self, geodetic_datum, lat, long, alt=None, alt_unit=None):
         self.geodetic_datum = geodetic_datum
         self.lat = lat
@@ -864,6 +882,7 @@ class Polygon(PhyloElement):
 
     :param points: list of 3 or more points representing vertices.
     """
+
     def __init__(self, points=None):
         self.points = points or []
 
@@ -900,17 +919,17 @@ class Property(PhyloElement):
     ok_applies_to = set(('phylogeny', 'clade', 'node', 'annotation',
                          'parent_branch', 'other'))
     ok_datatype = set(('xsd:string', 'xsd:boolean', 'xsd:decimal', 'xsd:float',
-        'xsd:double', 'xsd:duration', 'xsd:dateTime', 'xsd:time', 'xsd:date',
-        'xsd:gYearMonth', 'xsd:gYear', 'xsd:gMonthDay', 'xsd:gDay',
-        'xsd:gMonth', 'xsd:hexBinary', 'xsd:base64Binary', 'xsd:anyURI',
-        'xsd:normalizedString', 'xsd:token', 'xsd:integer',
-        'xsd:nonPositiveInteger', 'xsd:negativeInteger', 'xsd:long', 'xsd:int',
-        'xsd:short', 'xsd:byte', 'xsd:nonNegativeInteger', 'xsd:unsignedLong',
-        'xsd:unsignedInt', 'xsd:unsignedShort', 'xsd:unsignedByte',
-        'xsd:positiveInteger'))
+                       'xsd:double', 'xsd:duration', 'xsd:dateTime', 'xsd:time', 'xsd:date',
+                       'xsd:gYearMonth', 'xsd:gYear', 'xsd:gMonthDay', 'xsd:gDay',
+                       'xsd:gMonth', 'xsd:hexBinary', 'xsd:base64Binary', 'xsd:anyURI',
+                       'xsd:normalizedString', 'xsd:token', 'xsd:integer',
+                       'xsd:nonPositiveInteger', 'xsd:negativeInteger', 'xsd:long', 'xsd:int',
+                       'xsd:short', 'xsd:byte', 'xsd:nonNegativeInteger', 'xsd:unsignedLong',
+                       'xsd:unsignedInt', 'xsd:unsignedShort', 'xsd:unsignedByte',
+                       'xsd:positiveInteger'))
 
     def __init__(self, value, ref, applies_to, datatype,
-            unit=None, id_ref=None):
+                 unit=None, id_ref=None):
         _check_str(ref, self.re_ref.match)
         _check_str(applies_to, self.ok_applies_to.__contains__)
         _check_str(datatype, self.ok_datatype.__contains__)
@@ -952,9 +971,9 @@ class ProteinDomain(PhyloElement):
     @classmethod
     def from_seqfeature(cls, feat):
         return ProteinDomain(feat.id,
-                feat.location.nofuzzy_start,
-                feat.location.nofuzzy_end,
-                confidence=feat.qualifiers.get('confidence'))
+                             feat.location.nofuzzy_start,
+                             feat.location.nofuzzy_end,
+                             confidence=feat.qualifiers.get('confidence'))
 
     def to_seqfeature(self):
         feat = SeqFeature(location=FeatureLocation(self.start, self.end),
@@ -1011,20 +1030,20 @@ class Sequence(PhyloElement):
         other : list of Other objects
             non-phyloXML elements
     """
-    alphabets = {'dna':     Alphabet.generic_dna,
-                 'rna':     Alphabet.generic_rna,
+    alphabets = {'dna': Alphabet.generic_dna,
+                 'rna': Alphabet.generic_rna,
                  'protein': Alphabet.generic_protein}
     re_symbol = re.compile(r'\S{1,10}')
 
     def __init__(self,
-            # Attributes
-            type=None, id_ref=None, id_source=None,
-            # Child nodes
-            symbol=None, accession=None, name=None, location=None,
-            mol_seq=None, uri=None, domain_architecture=None,
-            # Collections
-            annotations=None, other=None,
-            ):
+                 # Attributes
+                 type=None, id_ref=None, id_source=None,
+                 # Child nodes
+                 symbol=None, accession=None, name=None, location=None,
+                 mol_seq=None, uri=None, domain_architecture=None,
+                 # Collections
+                 annotations=None, other=None,
+                 ):
         _check_str(type, self.alphabets.__contains__)
         _check_str(symbol, self.re_symbol.match)
         self.type = type
@@ -1046,11 +1065,11 @@ class Sequence(PhyloElement):
         if is_aligned is None:
             is_aligned = isinstance(record.seq.alphabet, Alphabet.Gapped)
         params = {
-                'accession': Accession(record.id, ''),
-                'symbol': record.name,
-                'name': record.description,
-                'mol_seq': MolSeq(str(record.seq), is_aligned),
-                }
+            'accession': Accession(record.id, ''),
+            'symbol': record.name,
+            'name': record.description,
+            'mol_seq': MolSeq(str(record.seq), is_aligned),
+        }
         if isinstance(record.seq.alphabet, Alphabet.DNAAlphabet):
             params['type'] = 'dna'
         elif isinstance(record.seq.alphabet, Alphabet.RNAAlphabet):
@@ -1074,19 +1093,19 @@ class Sequence(PhyloElement):
                         ann_args[key] = annot[key]
                 if isinstance(annot.get('confidence'), list):
                     ann_args['confidence'] = Confidence(
-                                        *annot['confidence'])
+                        *annot['confidence'])
                 if isinstance(annot.get('properties'), list):
                     ann_args['properties'] = [Property(**prop)
-                                        for prop in annot['properties']
-                                        if isinstance(prop, dict)]
+                                              for prop in annot['properties']
+                                              if isinstance(prop, dict)]
                 params['annotations'].append(Annotation(**ann_args))
 
         # Unpack record.features
         if record.features:
             params['domain_architecture'] = DomainArchitecture(
-                    length=len(record.seq),
-                    domains=[ProteinDomain.from_seqfeature(feat)
-                             for feat in record.features])
+                length=len(record.seq),
+                domains=[ProteinDomain.from_seqfeature(feat)
+                         for feat in record.features])
 
         return Sequence(**params)
 
@@ -1096,25 +1115,25 @@ class Sequence(PhyloElement):
         The seqrecord.annotations dictionary is packed like so::
 
             { # Sequence attributes with no SeqRecord equivalent:
-              'id_ref':     self.id_ref,
-              'id_source':  self.id_source,
-              'location':   self.location,
-              'uri':        { 'value': self.uri.value,
+              'id_ref': self.id_ref,
+              'id_source': self.id_source,
+              'location': self.location,
+              'uri': { 'value': self.uri.value,
                               'desc': self.uri.desc,
                               'type': self.uri.type },
               # Sequence.annotations attribute (list of Annotations)
-              'annotations': [{ 'ref':      ann.ref,
-                                'source':   ann.source,
-                                'evidence': ann.evidence,
-                                'type':     ann.type,
-                                'confidence': [ ann.confidence.value,
-                                                ann.confidence.type ],
-                                'properties': [{ 'value': prop.value,
-                                                 'ref': prop.ref,
-                                                 'applies_to': prop.applies_to,
-                                                 'datatype':   prop.datatype,
-                                                 'unit':       prop.unit,
-                                                 'id_ref':     prop.id_ref }
+              'annotations': [{'ref': ann.ref,
+                               'source': ann.source,
+                               'evidence': ann.evidence,
+                               'type': ann.type,
+                               'confidence': [ann.confidence.value,
+                                              ann.confidence.type],
+                               'properties': [{'value': prop.value,
+                                                'ref': prop.ref,
+                                                'applies_to': prop.applies_to,
+                                                'datatype': prop.datatype,
+                                                'unit': prop.unit,
+                                                'id_ref': prop.id_ref}
                                                for prop in ann.properties],
                               } for ann in self.annotations],
             }
@@ -1126,43 +1145,43 @@ class Sequence(PhyloElement):
 
         seqrec = SeqRecord(Seq(self.mol_seq.value, self.get_alphabet()),
                            **clean_dict({
-                               'id':    str(self.accession),
-                               'name':  self.symbol,
+                               'id': str(self.accession),
+                               'name': self.symbol,
                                'description': self.name,
                                # 'dbxrefs': None,
-                               }))
+                           }))
         if self.domain_architecture:
             seqrec.features = [dom.to_seqfeature()
                                for dom in self.domain_architecture.domains]
         # Sequence attributes with no SeqRecord equivalent
         seqrec.annotations = clean_dict({
-                'id_ref':       self.id_ref,
-                'id_source':    self.id_source,
-                'location':     self.location,
-                'uri':          self.uri and clean_dict({
-                                    'value': self.uri.value,
-                                    'desc': self.uri.desc,
-                                    'type': self.uri.type,
-                                    }),
-                'annotations':  self.annotations and [
-                    clean_dict({
-                        'ref':          ann.ref,
-                        'source':       ann.source,
-                        'evidence':     ann.evidence,
-                        'type':         ann.type,
-                        'confidence':   ann.confidence and [
-                                            ann.confidence.value,
-                                            ann.confidence.type],
-                        'properties':   [clean_dict({
-                                            'value':      prop.value,
-                                            'ref':        prop.ref,
-                                            'applies_to': prop.applies_to,
-                                            'datatype':   prop.datatype,
-                                            'unit':       prop.unit,
-                                            'id_ref':     prop.id_ref })
-                                         for prop in ann.properties],
-                        }) for ann in self.annotations],
-                })
+            'id_ref': self.id_ref,
+            'id_source': self.id_source,
+            'location': self.location,
+            'uri': self.uri and clean_dict({
+                'value': self.uri.value,
+                'desc': self.uri.desc,
+                'type': self.uri.type,
+            }),
+            'annotations': self.annotations and [
+                clean_dict({
+                    'ref': ann.ref,
+                    'source': ann.source,
+                    'evidence': ann.evidence,
+                    'type': ann.type,
+                    'confidence': ann.confidence and [
+                        ann.confidence.value,
+                        ann.confidence.type],
+                    'properties': [clean_dict({
+                        'value': prop.value,
+                        'ref': prop.ref,
+                        'applies_to': prop.applies_to,
+                        'datatype': prop.datatype,
+                        'unit': prop.unit,
+                        'id_ref': prop.id_ref})
+                        for prop in ann.properties],
+                }) for ann in self.annotations],
+        })
         return seqrec
 
     def get_alphabet(self):
@@ -1191,10 +1210,10 @@ class SequenceRelation(PhyloElement):
             confidence value for this relation
     """
     ok_type = set(('orthology', 'one_to_one_orthology', 'super_orthology',
-        'paralogy', 'ultra_paralogy', 'xenology', 'unknown', 'other'))
+                   'paralogy', 'ultra_paralogy', 'xenology', 'unknown', 'other'))
 
     def __init__(self, type, id_ref_0, id_ref_1,
-            distance=None, confidence=None):
+                 distance=None, confidence=None):
         _check_str(type, self.ok_type.__contains__)
         self.distance = distance
         self.type = type
@@ -1234,25 +1253,25 @@ class Taxonomy(PhyloElement):
     """
     re_code = re.compile(r'[a-zA-Z0-9_]{2,10}')
     ok_rank = set(('domain', 'kingdom', 'subkingdom', 'branch', 'infrakingdom',
-        'superphylum', 'phylum', 'subphylum', 'infraphylum', 'microphylum',
-        'superdivision', 'division', 'subdivision', 'infradivision',
-        'superclass', 'class', 'subclass', 'infraclass', 'superlegion',
-        'legion', 'sublegion', 'infralegion', 'supercohort', 'cohort',
-        'subcohort', 'infracohort', 'superorder', 'order', 'suborder',
-        'superfamily', 'family', 'subfamily', 'supertribe', 'tribe', 'subtribe',
-        'infratribe', 'genus', 'subgenus', 'superspecies', 'species',
-        'subspecies', 'variety', 'subvariety', 'form', 'subform', 'cultivar',
-        'unknown', 'other'))
+                   'superphylum', 'phylum', 'subphylum', 'infraphylum', 'microphylum',
+                   'superdivision', 'division', 'subdivision', 'infradivision',
+                   'superclass', 'class', 'subclass', 'infraclass', 'superlegion',
+                   'legion', 'sublegion', 'infralegion', 'supercohort', 'cohort',
+                   'subcohort', 'infracohort', 'superorder', 'order', 'suborder',
+                   'superfamily', 'family', 'subfamily', 'supertribe', 'tribe', 'subtribe',
+                   'infratribe', 'genus', 'subgenus', 'superspecies', 'species',
+                   'subspecies', 'variety', 'subvariety', 'form', 'subform', 'cultivar',
+                   'unknown', 'other'))
 
     def __init__(self,
-            # Attributes
-            id_source=None,
-            # Child nodes
-            id=None, code=None, scientific_name=None, authority=None,
-            rank=None, uri=None,
-            # Collections
-            common_names=None, synonyms=None, other=None,
-            ):
+                 # Attributes
+                 id_source=None,
+                 # Child nodes
+                 id=None, code=None, scientific_name=None, authority=None,
+                 rank=None, uri=None,
+                 # Collections
+                 common_names=None, synonyms=None, other=None,
+                 ):
         _check_str(code, self.re_code.match)
         _check_str(rank, self.ok_rank.__contains__)
         self.id_source = id_source
@@ -1286,6 +1305,7 @@ class Uri(PhyloElement):
     on a website, in which case the ``type`` attribute might be 'image' and
     ``desc`` might be 'image of a California sea hare').
     """
+
     def __init__(self, value, desc=None, type=None):
         self.value = value
         self.desc = desc

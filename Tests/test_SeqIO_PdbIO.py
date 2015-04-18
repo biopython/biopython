@@ -11,7 +11,7 @@ try:
     from numpy import dot  # Missing on PyPy's micronumpy
     del dot
     # We don't need this (?) but Bio.PDB imports it automatically :(
-    from numpy.linalg import svd, det # Missing in PyPy 2.0 numpypy
+    from numpy.linalg import svd, det  # Missing in PyPy 2.0 numpypy
 except ImportError:
     from Bio import MissingPythonDependencyError
     raise MissingPythonDependencyError(
@@ -19,6 +19,7 @@ except ImportError:
 
 from Bio import SeqIO
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
+
 
 class TestPdbSeqres(unittest.TestCase):
     def test_seqres_parse(self):
@@ -79,7 +80,6 @@ class TestPdbAtom(unittest.TestCase):
                      'XXXXXXXXNEIRDRHKDIQQLERSLLELHEMFTDMSTLVASQGEMIDRIE'\
                      'FSVEQSHNYV'
         self.assertEqual(str(chains[1].seq), actual_seq)
-
 
     def test_atom_read(self):
         """Read a single-chain PDB by ATOM entries.

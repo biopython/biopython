@@ -13,6 +13,8 @@ from Bio.PopGen.Async import Async
 
 import threading
 
+__docformat__ = "restructuredtext en"
+
 
 class Local(Async):
     '''Execution on Local machine.
@@ -22,7 +24,8 @@ class Local(Async):
         '''Constructor.
 
            parameters:
-           num_cores - Number of cores (for multiprocessor machines,
+
+             - num_cores - Number of cores (for multiprocessor machines,
                multiply accordingly)
         '''
         Async.__init__(self)

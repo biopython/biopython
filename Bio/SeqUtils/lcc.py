@@ -3,8 +3,11 @@
 # distribution and governed by its license.
 # Please see the LICENSE file that should have been included as part
 # of this package.
+"""Local Composition Complexity."""
 
 import math
+
+__docformat__ = "restructuredtext en"
 
 
 def lcc_mult(seq, wsize):
@@ -22,16 +25,16 @@ def lcc_mult(seq, wsize):
     l2 = math.log(2)
     tamseq = len(seq)
     try:
-        #Assume its a string
+        # Assume its a string
         upper = seq.upper()
     except AttributeError:
-        #Should be a Seq object then
+        # Should be a Seq object then
         upper = str(seq).upper()
     compone = [0]
     lccsal = [0]
     for i in range(wsize):
-        compone.append(((i+1)/float(wsize))*
-                       ((math.log((i+1)/float(wsize)))/l2))
+        compone.append(((i + 1) / float(wsize)) *
+                       ((math.log((i + 1) / float(wsize))) / l2))
     window = seq[0:wsize]
     cant_a = window.count('A')
     cant_c = window.count('C')
@@ -41,10 +44,10 @@ def lcc_mult(seq, wsize):
     term_c = compone[cant_c]
     term_t = compone[cant_t]
     term_g = compone[cant_g]
-    lccsal.append(-(term_a+term_c+term_t+term_g))
+    lccsal.append(-(term_a + term_c + term_t + term_g))
     tail = seq[0]
-    for x in range(tamseq-wsize):
-        window = upper[x+1:wsize+x+1]
+    for x in range(tamseq - wsize):
+        window = upper[x + 1:wsize + x + 1]
         if tail == window[-1]:
             lccsal.append(lccsal[-1])
         elif tail == 'A':
@@ -53,68 +56,68 @@ def lcc_mult(seq, wsize):
                 cant_c += 1
                 term_a = compone[cant_a]
                 term_c = compone[cant_c]
-                lccsal.append(-(term_a+term_c+term_t+term_g))
+                lccsal.append(-(term_a + term_c + term_t + term_g))
             elif window.endswith('T'):
                 cant_t += 1
                 term_a = compone[cant_a]
                 term_t = compone[cant_t]
-                lccsal.append(-(term_a+term_c+term_t+term_g))
+                lccsal.append(-(term_a + term_c + term_t + term_g))
             elif window.endswith('G'):
                 cant_g += 1
                 term_a = compone[cant_a]
                 term_g = compone[cant_g]
-                lccsal.append(-(term_a+term_c+term_t+term_g))
+                lccsal.append(-(term_a + term_c + term_t + term_g))
         elif tail == 'C':
             cant_c -= 1
             if window.endswith('A'):
                 cant_a += 1
                 term_a = compone[cant_a]
                 term_c = compone[cant_c]
-                lccsal.append(-(term_a+term_c+term_t+term_g))
+                lccsal.append(-(term_a + term_c + term_t + term_g))
             elif window.endswith('T'):
                 cant_t += 1
                 term_c = compone[cant_c]
                 term_t = compone[cant_t]
-                lccsal.append(-(term_a+term_c+term_t+term_g))
+                lccsal.append(-(term_a + term_c + term_t + term_g))
             elif window.endswith('G'):
                 cant_g += 1
                 term_c = compone[cant_c]
                 term_g = compone[cant_g]
-                lccsal.append(-(term_a+term_c+term_t+term_g))
+                lccsal.append(-(term_a + term_c + term_t + term_g))
         elif tail == 'T':
             cant_t -= 1
             if window.endswith('A'):
                 cant_a += 1
                 term_a = compone[cant_a]
                 term_t = compone[cant_t]
-                lccsal.append(-(term_a+term_c+term_t+term_g))
+                lccsal.append(-(term_a + term_c + term_t + term_g))
             elif window.endswith('C'):
                 cant_c += 1
                 term_c = compone[cant_c]
                 term_t = compone[cant_t]
-                lccsal.append(-(term_a+term_c+term_t+term_g))
+                lccsal.append(-(term_a + term_c + term_t + term_g))
             elif window.endswith('G'):
                 cant_g += 1
                 term_t = compone[cant_t]
                 term_g = compone[cant_g]
-                lccsal.append(-(term_a+term_c+term_t+term_g))
+                lccsal.append(-(term_a + term_c + term_t + term_g))
         elif tail == 'G':
             cant_g -= 1
             if window.endswith('A'):
                 cant_a += 1
                 term_a = compone[cant_a]
                 term_g = compone[cant_g]
-                lccsal.append(-(term_a+term_c+term_t+term_g))
+                lccsal.append(-(term_a + term_c + term_t + term_g))
             elif window.endswith('C'):
                 cant_c += 1
                 term_c = compone[cant_c]
                 term_g = compone[cant_g]
-                lccsal.append(-(term_a+term_c+term_t+term_g))
+                lccsal.append(-(term_a + term_c + term_t + term_g))
             elif window.endswith('T'):
                 cant_t += 1
                 term_t = compone[cant_t]
                 term_g = compone[cant_g]
-                lccsal.append(-(term_a+term_c+term_t+term_g))
+                lccsal.append(-(term_a + term_c + term_t + term_g))
         tail = window[0]
     return lccsal
 
@@ -133,31 +136,31 @@ def lcc_simp(seq):
     """
     wsize = len(seq)
     try:
-        #Assume its a string
+        # Assume its a string
         upper = seq.upper()
     except AttributeError:
-        #Should be a Seq object then
+        # Should be a Seq object then
         upper = str(seq).upper()
     l2 = math.log(2)
     if 'A' not in seq:
         term_a = 0
         # Check to avoid calculating the log of 0.
     else:
-        term_a = ((upper.count('A'))/float(wsize))*((math.log((upper.count('A'))
-                                                          /float(wsize)))/l2)
+        term_a = ((upper.count('A')) / float(wsize)) * ((math.log((upper.count('A'))
+                                                                  / float(wsize))) / l2)
     if 'C' not in seq:
         term_c = 0
     else:
-        term_c = ((upper.count('C'))/float(wsize))*((math.log((upper.count('C'))
-                                                          /float(wsize)))/l2)
+        term_c = ((upper.count('C')) / float(wsize)) * ((math.log((upper.count('C'))
+                                                                  / float(wsize))) / l2)
     if 'T' not in seq:
         term_t = 0
     else:
-        term_t = ((upper.count('T'))/float(wsize))*((math.log((upper.count('T'))
-                                                          /float(wsize)))/l2)
+        term_t = ((upper.count('T')) / float(wsize)) * ((math.log((upper.count('T'))
+                                                                  / float(wsize))) / l2)
     if 'G' not in seq:
         term_g = 0
     else:
-        term_g = ((upper.count('G'))/float(wsize))*((math.log((upper.count('G'))
-                                                          /float(wsize)))/l2)
-    return -(term_a+term_c+term_t+term_g)
+        term_g = ((upper.count('G')) / float(wsize)) * ((math.log((upper.count('G'))
+                                                                  / float(wsize))) / l2)
+    return -(term_a + term_c + term_t + term_g)

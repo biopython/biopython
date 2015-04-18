@@ -47,7 +47,7 @@ class SVDSuperimposer(object):
         "Return rms deviations between coords1 and coords2."
         diff = coords1 - coords2
         l = coords1.shape[0]
-        return sqrt(sum(sum(diff*diff))/l)
+        return sqrt(sum(sum(diff * diff)) / l)
 
     # Public methods
 

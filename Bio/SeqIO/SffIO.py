@@ -251,6 +251,32 @@ _srt = b".srt"
 _mft = b".mft"
 _flag = b"\xff"
 
+__docformat__ = "restructuredtext en"
+
+
+def _check_mode(handle):
+    """Ensure handle not opened in text mode.
+
+    Ensures mode is not set for Universal new line
+    and ensures mode is binary for Windows
+    """
+    # TODO - Does this need to be stricter under Python 3?
+    mode = ""
+    if hasattr(handle, "mode"):
+        mode = handle.mode
+        if mode == 1:
+            # gzip.open(...) does this, fine
+            return
+        mode = str(mode)
+
+    if mode and "U" in mode.upper():
+        raise ValueError("SFF files must NOT be opened in universal new "
+                         "lines mode. Binary mode is recommended (although "
+                         "on Unix the default mode is also fine).")
+    elif mode and "B" not in mode.upper() \
+            and sys.platform == "win32":
+        raise ValueError("SFF files must be opened in binary mode on Windows")
+
 
 def _sff_file_header(handle):
     """Read in an SFF file header (PRIVATE).
@@ -277,25 +303,19 @@ def _sff_file_header(handle):
     'TCAG'
 
     """
-    if hasattr(handle, "mode") and "U" in handle.mode.upper():
-        raise ValueError("SFF files must NOT be opened in universal new "
-                         "lines mode. Binary mode is recommended (although "
-                         "on Unix the default mode is also fine).")
-    elif hasattr(handle, "mode") and "B" not in handle.mode.upper() \
-            and sys.platform == "win32":
-        raise ValueError("SFF files must be opened in binary mode on Windows")
-    #file header (part one)
-    #use big endiean encdoing   >
-    #magic_number               I
-    #version                    4B
-    #index_offset               Q
-    #index_length               I
-    #number_of_reads            I
-    #header_length              H
-    #key_length                 H
-    #number_of_flows_per_read   H
-    #flowgram_format_code       B
-    #[rest of file header depends on the number of flows and how many keys]
+    _check_mode(handle)
+    # file header (part one)
+    # use big endiean encdoing   >
+    # magic_number               I
+    # version                    4B
+    # index_offset               Q
+    # index_length               I
+    # number_of_reads            I
+    # header_length              H
+    # key_length                 H
+    # number_of_flows_per_read   H
+    # flowgram_format_code       B
+    # [rest of file header depends on the number of flows and how many keys]
     fmt = '>4s4BQIIHHHB'
     assert 31 == struct.calcsize(fmt)
     data = handle.read(31)
@@ -307,7 +327,7 @@ def _sff_file_header(handle):
         number_of_reads, header_length, key_length, number_of_flows_per_read, \
         flowgram_format = struct.unpack(fmt, data)
     if magic_number in [_hsh, _srt, _mft]:
-        #Probably user error, calling Bio.SeqIO.parse() twice!
+        # Probably user error, calling Bio.SeqIO.parse() twice!
         raise ValueError("Handle seems to be at SFF index block, not start")
     if magic_number != _sff:  # 779314790
         raise ValueError("SFF file did not start '.sff', but %s"
@@ -323,10 +343,10 @@ def _sff_file_header(handle):
                          % (index_offset, index_length))
     flow_chars = _bytes_to_string(handle.read(number_of_flows_per_read))
     key_sequence = _bytes_to_string(handle.read(key_length))
-    #According to the spec, the header_length field should be the total number
-    #of bytes required by this set of header fields, and should be equal to
-    #"31 + number_of_flows_per_read + key_length" rounded up to the next value
-    #divisible by 8.
+    # According to the spec, the header_length field should be the total number
+    # of bytes required by this set of header fields, and should be equal to
+    # "31 + number_of_flows_per_read + key_length" rounded up to the next value
+    # divisible by 8.
     assert header_length % 8 == 0
     padding = header_length - number_of_flows_per_read - key_length - 31
     assert 0 <= padding < 8, padding
@@ -353,10 +373,10 @@ def _sff_do_slow_index(handle):
     header_length, index_offset, index_length, number_of_reads, \
         number_of_flows_per_read, flow_chars, key_sequence \
         = _sff_file_header(handle)
-    #Now on to the reads...
+    # Now on to the reads...
     read_header_fmt = '>2HI4H'
     read_header_size = struct.calcsize(read_header_fmt)
-    #NOTE - assuming flowgram_format==1, which means struct type H
+    # NOTE - assuming flowgram_format==1, which means struct type H
     read_flow_fmt = ">%iH" % number_of_flows_per_read
     read_flow_size = struct.calcsize(read_flow_fmt)
     assert 1 == struct.calcsize(">B")
@@ -366,15 +386,15 @@ def _sff_do_slow_index(handle):
     for read in range(number_of_reads):
         record_offset = handle.tell()
         if record_offset == index_offset:
-            #Found index block within reads, ignore it:
+            # Found index block within reads, ignore it:
             offset = index_offset + index_length
             if offset % 8:
                 offset += 8 - (offset % 8)
             assert offset % 8 == 0
             handle.seek(offset)
             record_offset = offset
-        #assert record_offset%8 == 0 #Worth checking, but slow
-        #First the fixed header
+        # assert record_offset%8 == 0 # Worth checking, but slow
+        # First the fixed header
         data = handle.read(read_header_size)
         read_header_length, name_length, seq_len, clip_qual_left, \
             clip_qual_right, clip_adapter_left, clip_adapter_right \
@@ -382,7 +402,7 @@ def _sff_do_slow_index(handle):
         if read_header_length < 10 or read_header_length % 8 != 0:
             raise ValueError("Malformed read header, says length is %i:\n%s"
                              % (read_header_length, repr(data)))
-        #now the name and any padding (remainder of header)
+        # now the name and any padding (remainder of header)
         name = _bytes_to_string(handle.read(name_length))
         padding = read_header_length - read_header_size - name_length
         if handle.read(padding).count(_null) != padding:
@@ -392,10 +412,10 @@ def _sff_do_slow_index(handle):
                           "padding region contained data" % padding,
                           BiopythonParserWarning)
         assert record_offset + read_header_length == handle.tell()
-        #now the flowgram values, flowgram index, bases and qualities
+        # now the flowgram values, flowgram index, bases and qualities
         size = read_flow_size + 3 * seq_len
         handle.seek(size, 1)
-        #now any padding...
+        # now any padding...
         padding = size % 8
         if padding:
             padding = 8 - padding
@@ -405,7 +425,7 @@ def _sff_do_slow_index(handle):
                 warnings.warn("Your SFF file is invalid, post quality %i "
                               "byte padding region contained data" % padding,
                               BiopythonParserWarning)
-        #print("%s %s %i" % (read, name, record_offset))
+        # print("%s %s %i" % (read, name, record_offset))
         yield name, record_offset
     if handle.tell() % 8 != 0:
         raise ValueError(
@@ -430,7 +450,7 @@ def _sff_find_roche_index(handle):
     assert handle.tell() == header_length
     if not index_offset or not index_offset:
         raise ValueError("No index present in this SFF file")
-    #Now jump to the header...
+    # Now jump to the header...
     handle.seek(index_offset)
     fmt = ">4s4B"
     fmt_size = struct.calcsize(fmt)
@@ -443,11 +463,11 @@ def _sff_find_roche_index(handle):
                          % (index_length, index_offset, repr(data)))
     magic_number, ver0, ver1, ver2, ver3 = struct.unpack(fmt, data)
     if magic_number == _mft:  # 778921588
-        #Roche 454 manifest index
-        #This is typical from raw Roche 454 SFF files (2009), and includes
-        #both an XML manifest and the sorted index.
+        # Roche 454 manifest index
+        # This is typical from raw Roche 454 SFF files (2009), and includes
+        # both an XML manifest and the sorted index.
         if (ver0, ver1, ver2, ver3) != (49, 46, 48, 48):
-            #This is "1.00" as a string
+            # This is "1.00" as a string
             raise ValueError("Unsupported version in .mft index header, %i.%i.%i.%i"
                              % (ver0, ver1, ver2, ver3))
         fmt2 = ">LL"
@@ -461,11 +481,11 @@ def _sff_find_roche_index(handle):
             index_offset + fmt_size + fmt2_size, xml_size, \
             index_offset + fmt_size + fmt2_size + xml_size, data_size
     elif magic_number == _srt:  # 779317876
-        #Roche 454 sorted index
-        #I've had this from Roche tool sfffile when the read identifiers
-        #had nonstandard lengths and there was no XML manifest.
+        # Roche 454 sorted index
+        # I've had this from Roche tool sfffile when the read identifiers
+        # had nonstandard lengths and there was no XML manifest.
         if (ver0, ver1, ver2, ver3) != (49, 46, 48, 48):
-            #This is "1.00" as a string
+            # This is "1.00" as a string
             raise ValueError("Unsupported version in .srt index header, %i.%i.%i.%i"
                              % (ver0, ver1, ver2, ver3))
         data = handle.read(4)
@@ -512,7 +532,7 @@ def ReadRocheXmlManifest(handle):
     return _bytes_to_string(handle.read(xml_size))
 
 
-#This is a generator function!
+# This is a generator function!
 def _sff_read_roche_index(handle):
     """Reads any existing Roche style read index provided in the SFF file (PRIVATE).
 
@@ -533,11 +553,11 @@ def _sff_read_roche_index(handle):
     number_of_reads, header_length, index_offset, index_length, xml_offset, \
         xml_size, read_index_offset, read_index_size = _sff_find_roche_index(
             handle)
-    #Now parse the read index...
+    # Now parse the read index...
     handle.seek(read_index_offset)
     fmt = ">5B"
     for read in range(number_of_reads):
-        #TODO - Be more aware of when the index should end?
+        # TODO - Be more aware of when the index should end?
         data = handle.read(6)
         while True:
             more = handle.read(1)
@@ -551,9 +571,9 @@ def _sff_read_roche_index(handle):
         off4, off3, off2, off1, off0 = struct.unpack(fmt, data[-6:-1])
         offset = off0 + 255 * off1 + 65025 * off2 + 16581375 * off3
         if off4:
-            #Could in theory be used as a fifth piece of offset information,
-            #i.e. offset =+ 4228250625L*off4, but testing the Roche tools this
-            #is not the case. They simple don't support such large indexes.
+            # Could in theory be used as a fifth piece of offset information,
+            # i.e. offset =+ 4228250625L*off4, but testing the Roche tools this
+            # is not the case. They simple don't support such large indexes.
             raise ValueError("Expected a null terminator to the read name.")
         yield name, offset
     if handle.tell() != read_index_offset + read_index_size:
@@ -566,16 +586,16 @@ _valid_UAN_read_name = re.compile(r'^[a-zA-Z0-9]{14}$')
 def _sff_read_seq_record(handle, number_of_flows_per_read, flow_chars,
                          key_sequence, alphabet, trim=False):
     """Parse the next read in the file, return data as a SeqRecord (PRIVATE)."""
-    #Now on to the reads...
-    #the read header format (fixed part):
-    #read_header_length     H
-    #name_length            H
-    #seq_len                I
-    #clip_qual_left         H
-    #clip_qual_right        H
-    #clip_adapter_left      H
-    #clip_adapter_right     H
-    #[rest of read header depends on the name length etc]
+    # Now on to the reads...
+    # the read header format (fixed part):
+    # read_header_length     H
+    # name_length            H
+    # seq_len                I
+    # clip_qual_left         H
+    # clip_qual_right        H
+    # clip_adapter_left      H
+    # clip_adapter_right     H
+    # [rest of read header depends on the name length etc]
     read_header_fmt = '>2HI4H'
     read_header_size = struct.calcsize(read_header_fmt)
     read_flow_fmt = ">%iH" % number_of_flows_per_read
@@ -591,7 +611,7 @@ def _sff_read_seq_record(handle, number_of_flows_per_read, flow_chars,
     if read_header_length < 10 or read_header_length % 8 != 0:
         raise ValueError("Malformed read header, says length is %i"
                          % read_header_length)
-    #now the name and any padding (remainder of header)
+    # now the name and any padding (remainder of header)
     name = _bytes_to_string(handle.read(name_length))
     padding = read_header_length - read_header_size - name_length
     if handle.read(padding).count(_null) != padding:
@@ -600,14 +620,14 @@ def _sff_read_seq_record(handle, number_of_flows_per_read, flow_chars,
         warnings.warn("Your SFF file is invalid, post name %i "
                       "byte padding region contained data" % padding,
                       BiopythonParserWarning)
-    #now the flowgram values, flowgram index, bases and qualities
-    #NOTE - assuming flowgram_format==1, which means struct type H
+    # now the flowgram values, flowgram index, bases and qualities
+    # NOTE - assuming flowgram_format==1, which means struct type H
     flow_values = handle.read(read_flow_size)  # unpack later if needed
     temp_fmt = ">%iB" % seq_len  # used for flow index and quals
     flow_index = handle.read(seq_len)  # unpack later if needed
     seq = _bytes_to_string(handle.read(seq_len))  # TODO - Use bytes in Seq?
     quals = list(struct.unpack(temp_fmt, handle.read(seq_len)))
-    #now any padding...
+    # now any padding...
     padding = (read_flow_size + seq_len * 3) % 8
     if padding:
         padding = 8 - padding
@@ -617,22 +637,22 @@ def _sff_read_seq_record(handle, number_of_flows_per_read, flow_chars,
             warnings.warn("Your SFF file is invalid, post quality %i "
                           "byte padding region contained data" % padding,
                           BiopythonParserWarning)
-    #Follow Roche and apply most aggressive of qual and adapter clipping.
-    #Note Roche seems to ignore adapter clip fields when writing SFF,
-    #and uses just the quality clipping values for any clipping.
+    # Follow Roche and apply most aggressive of qual and adapter clipping.
+    # Note Roche seems to ignore adapter clip fields when writing SFF,
+    # and uses just the quality clipping values for any clipping.
     clip_left = max(clip_qual_left, clip_adapter_left)
-    #Right clipping of zero means no clipping
+    # Right clipping of zero means no clipping
     if clip_qual_right:
         if clip_adapter_right:
             clip_right = min(clip_qual_right, clip_adapter_right)
         else:
-            #Typical case with Roche SFF files
+            # Typical case with Roche SFF files
             clip_right = clip_qual_right
     elif clip_adapter_right:
         clip_right = clip_adapter_right
     else:
         clip_right = seq_len
-    #Now build a SeqRecord
+    # Now build a SeqRecord
     if trim:
         if clip_left >= clip_right:
             # Raise an error?
@@ -645,7 +665,7 @@ def _sff_read_seq_record(handle, number_of_flows_per_read, flow_chars,
         else:
             seq = seq[clip_left:clip_right].upper()
             quals = quals[clip_left:clip_right]
-        #Don't record the clipping values, flow etc, they make no sense now:
+        # Don't record the clipping values, flow etc, they make no sense now:
         annotations = {}
     else:
         if clip_left >= clip_right:
@@ -654,7 +674,7 @@ def _sff_read_seq_record(handle, number_of_flows_per_read, flow_chars,
             warnings.warn("Overlapping clip values in SFF record", BiopythonParserWarning)
             seq = seq.lower()
         else:
-            #This use of mixed case mimics the Roche SFF tool's FASTA output
+            # This use of mixed case mimics the Roche SFF tool's FASTA output
             seq = seq[:clip_left].lower() + \
                 seq[clip_left:clip_right].upper() + \
                 seq[clip_right:].lower()
@@ -675,11 +695,11 @@ def _sff_read_seq_record(handle, number_of_flows_per_read, flow_chars,
                        name=name,
                        description="",
                        annotations=annotations)
-    #Dirty trick to speed up this line:
-    #record.letter_annotations["phred_quality"] = quals
+    # Dirty trick to speed up this line:
+    # record.letter_annotations["phred_quality"] = quals
     dict.__setitem__(record._per_letter_annotations,
                      "phred_quality", quals)
-    #Return the record and then continue...
+    # Return the record and then continue...
     return record
 
 _powers_of_36 = [36 ** i for i in range(6)]
@@ -747,9 +767,9 @@ def _sff_read_raw_record(handle, number_of_flows_per_read):
     if read_header_length < 10 or read_header_length % 8 != 0:
         raise ValueError("Malformed read header, says length is %i"
                          % read_header_length)
-    #now the four clip values (4H = 8 bytes), and read name
+    # now the four clip values (4H = 8 bytes), and read name
     raw += handle.read(8 + name_length)
-    #and any padding (remainder of header)
+    # and any padding (remainder of header)
     padding = read_header_length - read_header_size - 8 - name_length
     pad = handle.read(padding)
     if pad.count(_null) != padding:
@@ -759,10 +779,10 @@ def _sff_read_raw_record(handle, number_of_flows_per_read):
                       "byte padding region contained data" % padding,
                       BiopythonParserWarning)
     raw += pad
-    #now the flowgram values, flowgram index, bases and qualities
+    # now the flowgram values, flowgram index, bases and qualities
     raw += handle.read(read_flow_size + seq_len * 3)
     padding = (read_flow_size + seq_len * 3) % 8
-    #now any padding...
+    # now any padding...
     if padding:
         padding = 8 - padding
         pad = handle.read(padding)
@@ -773,7 +793,7 @@ def _sff_read_raw_record(handle, number_of_flows_per_read):
                           "byte padding region contained data" % padding,
                           BiopythonParserWarning)
         raw += pad
-    #Return the raw bytes
+    # Return the raw bytes
     return raw
 
 
@@ -798,21 +818,21 @@ class _AddTellHandle(object):
 
     def seek(self, offset):
         if offset < self._offset:
-            raise RunTimeError("Can't seek backwards")
+            raise RuntimeError("Can't seek backwards")
         self._handle.read(offset - self._offset)
 
     def close(self):
         return self._handle.close()
 
 
-#This is a generator function!
+# This is a generator function!
 def SffIterator(handle, alphabet=Alphabet.generic_dna, trim=False):
     """Iterate over Standard Flowgram Format (SFF) reads (as SeqRecord objects).
 
-    handle - input file, an SFF file, e.g. from Roche 454 sequencing.
-             This must NOT be opened in universal read lines mode!
-    alphabet - optional alphabet, defaults to generic DNA.
-    trim - should the sequences be trimmed?
+        - handle - input file, an SFF file, e.g. from Roche 454 sequencing.
+          This must NOT be opened in universal read lines mode!
+        - alphabet - optional alphabet, defaults to generic DNA.
+        - trim - should the sequences be trimmed?
 
     The resulting SeqRecord objects should match those from a paired FASTA
     and QUAL file converted from the SFF file using the Roche 454 tool
@@ -880,21 +900,21 @@ def SffIterator(handle, alphabet=Alphabet.generic_dna, trim=False):
     try:
         assert 0 == handle.tell(), "Not at start of file, offset %i" % handle.tell()
     except AttributeError:
-        #Probably a network handle or something like that
+        # Probably a network handle or something like that
         handle = _AddTellHandle(handle)
     header_length, index_offset, index_length, number_of_reads, \
         number_of_flows_per_read, flow_chars, key_sequence \
         = _sff_file_header(handle)
-    #Now on to the reads...
-    #the read header format (fixed part):
-    #read_header_length     H
-    #name_length            H
-    #seq_len                I
-    #clip_qual_left         H
-    #clip_qual_right        H
-    #clip_adapter_left      H
-    #clip_adapter_right     H
-    #[rest of read header depends on the name length etc]
+    # Now on to the reads...
+    # the read header format (fixed part):
+    # read_header_length     H
+    # name_length            H
+    # seq_len                I
+    # clip_qual_left         H
+    # clip_qual_right        H
+    # clip_adapter_left      H
+    # clip_adapter_right     H
+    # [rest of read header depends on the name length etc]
     read_header_fmt = '>2HI4H'
     read_header_size = struct.calcsize(read_header_fmt)
     read_flow_fmt = ">%iH" % number_of_flows_per_read
@@ -903,9 +923,9 @@ def SffIterator(handle, alphabet=Alphabet.generic_dna, trim=False):
     assert 1 == struct.calcsize(">s")
     assert 1 == struct.calcsize(">c")
     assert read_header_size % 8 == 0  # Important for padding calc later!
-    #The spec allows for the index block to be before or even in the middle
-    #of the reads. We can check that if we keep track of our position
-    #in the file...
+    # The spec allows for the index block to be before or even in the middle
+    # of the reads. We can check that if we keep track of our position
+    # in the file...
     for read in range(number_of_reads):
         if index_offset and handle.tell() == index_offset:
             offset = index_offset + index_length
@@ -913,8 +933,8 @@ def SffIterator(handle, alphabet=Alphabet.generic_dna, trim=False):
                 offset += 8 - (offset % 8)
             assert offset % 8 == 0
             handle.seek(offset)
-            #Now that we've done this, we don't need to do it again. Clear
-            #the index_offset so we can skip extra handle.tell() calls:
+            # Now that we've done this, we don't need to do it again. Clear
+            # the index_offset so we can skip extra handle.tell() calls:
             index_offset = 0
         yield _sff_read_seq_record(handle,
                                    number_of_flows_per_read,
@@ -943,7 +963,7 @@ def _check_eof(handle, index_offset, index_length):
                              "before %i where index starts?"
                              % (index_offset - offset, offset, index_offset))
         # Doing read to jump the index rather than a seek
-        # in case this is a network handle or similar 
+        # in case this is a network handle or similar
         handle.read(index_offset + index_length - offset)
         offset = index_offset + index_length
         assert offset == handle.tell(), \
@@ -955,15 +975,15 @@ def _check_eof(handle, index_offset, index_length):
         extra = handle.read(padding)
 
     if padding >= 4 and extra[-4:] == _sff:
-        #Seen this in one user supplied file, should have been
-        #four bytes of null padding but was actually .sff and
-        #the start of a new concatenated SFF file!
+        # Seen this in one user supplied file, should have been
+        # four bytes of null padding but was actually .sff and
+        # the start of a new concatenated SFF file!
         raise ValueError("Your SFF file is invalid, post index %i byte "
                          "null padding region ended '.sff' which could "
                          "be the start of a concatenated SFF file? "
                          "See offset %i" % (padding, offset))
     if padding and not extra:
-        #TODO - Is this error harmless enough to just ignore?
+        # TODO - Is this error harmless enough to just ignore?
         import warnings
         from Bio import BiopythonParserWarning
         warnings.warn("Your SFF file is technically invalid as it is missing "
@@ -991,7 +1011,7 @@ def _check_eof(handle, index_offset, index_length):
                          "see offset %i" % offset)
 
 
-#This is a generator function!
+# This is a generator function!
 def _SffTrimIterator(handle, alphabet=Alphabet.generic_dna):
     """Iterate over SFF reads (as SeqRecord objects) with trimming (PRIVATE)."""
     return SffIterator(handle, alphabet, trim=True)
@@ -1003,16 +1023,12 @@ class SffWriter(SequenceWriter):
     def __init__(self, handle, index=True, xml=None):
         """Creates the writer object.
 
-        handle - Output handle, ideally in binary write mode.
-        index - Boolean argument, should we try and write an index?
-        xml - Optional string argument, xml manifest to be recorded in the index
+            - handle - Output handle, ideally in binary write mode.
+            - index - Boolean argument, should we try and write an index?
+            - xml - Optional string argument, xml manifest to be recorded in the index
               block (see function ReadRocheXmlManifest for reading this data).
         """
-        if hasattr(handle, "mode") and "U" in handle.mode.upper():
-            raise ValueError("SFF files must NOT be opened in universal new "
-                             "lines mode. Binary mode is required")
-        elif hasattr(handle, "mode") and "B" not in handle.mode.upper():
-            raise ValueError("SFF files must be opened in binary mode")
+        _check_mode(handle)
         self.handle = handle
         self._xml = xml
         if index:
@@ -1042,16 +1058,16 @@ class SffWriter(SequenceWriter):
         self._index_length = 0
         if not hasattr(records, "next"):
             records = iter(records)
-        #Get the first record in order to find the flow information
-        #we will need for the header.
+        # Get the first record in order to find the flow information
+        # we will need for the header.
         try:
             record = next(records)
         except StopIteration:
             record = None
         if record is None:
-            #No records -> empty SFF file (or an error)?
-            #We can't write a header without the flow information.
-            #return 0
+            # No records -> empty SFF file (or an error)?
+            # We can't write a header without the flow information.
+            # return 0
             raise ValueError("Must have at least one sequence")
         try:
             self._key_sequence = _as_bytes(record.annotations["flow_key"])
@@ -1066,7 +1082,7 @@ class SffWriter(SequenceWriter):
             self.write_record(record)
             count += 1
         if self._number_of_reads == 0:
-            #Must go back and record the record count...
+            # Must go back and record the record count...
             offset = self.handle.tell()
             self.handle.seek(0)
             self._number_of_reads = count
@@ -1083,7 +1099,7 @@ class SffWriter(SequenceWriter):
         handle = self.handle
         self._index.sort()
         self._index_start = handle.tell()  # need for header
-        #XML...
+        # XML...
         if self._xml is not None:
             xml = _as_bytes(self._xml)
         else:
@@ -1093,7 +1109,7 @@ class SffWriter(SequenceWriter):
             xml += "<!-- This file may be a combination of multiple SFF files etc -->\n"
             xml = _as_bytes(xml)
         xml_len = len(xml)
-        #Write to the file...
+        # Write to the file...
         fmt = ">I4BLL"
         fmt_size = struct.calcsize(fmt)
         handle.write(_null * fmt_size + xml)  # fill this later
@@ -1102,9 +1118,9 @@ class SffWriter(SequenceWriter):
         self._index.sort()
         index_len = 0  # don't know yet!
         for name, offset in self._index:
-            #Roche files record the offsets using base 255 not 256.
-            #See comments for parsing the index block. There may be a faster
-            #way to code this, but we can't easily use shifts due to odd base
+            # Roche files record the offsets using base 255 not 256.
+            # See comments for parsing the index block. There may be a faster
+            # way to code this, but we can't easily use shifts due to odd base
             off3 = offset
             off0 = off3 % 255
             off3 -= off0
@@ -1121,11 +1137,11 @@ class SffWriter(SequenceWriter):
             handle.write(name + struct.pack(fmt2, 0,
                                             off3, off2, off1, off0, 255))
             index_len += len(name) + 6
-        #Note any padding in not included:
+        # Note any padding in not included:
         self._index_length = fmt_size + xml_len + index_len  # need for header
-        #Pad out to an 8 byte boundary (although I have noticed some
-        #real Roche SFF files neglect to do this depsite their manual
-        #suggesting this padding should be there):
+        # Pad out to an 8 byte boundary (although I have noticed some
+        # real Roche SFF files neglect to do this depsite their manual
+        # suggesting this padding should be there):
         if self._index_length % 8:
             padding = 8 - (self._index_length % 8)
             handle.write(_null * padding)
@@ -1135,37 +1151,37 @@ class SffWriter(SequenceWriter):
         assert offset == self._index_start + self._index_length + padding, \
             "%i vs %i + %i + %i" % (offset, self._index_start,
                                     self._index_length, padding)
-        #Must now go back and update the index header with index size...
+        # Must now go back and update the index header with index size...
         handle.seek(self._index_start)
         handle.write(struct.pack(fmt, 778921588,  # magic number
                                  49, 46, 48, 48,  # Roche index version, "1.00"
                                  xml_len, index_len) + xml)
-        #Must now go back and update the header...
+        # Must now go back and update the header...
         handle.seek(0)
         self.write_header()
         handle.seek(offset)  # not essential?
 
     def write_header(self):
-        #Do header...
+        # Do header...
         key_length = len(self._key_sequence)
-        #file header (part one)
-        #use big endiean encdoing   >
-        #magic_number               I
-        #version                    4B
-        #index_offset               Q
-        #index_length               I
-        #number_of_reads            I
-        #header_length              H
-        #key_length                 H
-        #number_of_flows_per_read   H
-        #flowgram_format_code       B
-        #[rest of file header depends on the number of flows and how many keys]
+        # file header (part one)
+        # use big endiean encdoing   >
+        # magic_number               I
+        # version                    4B
+        # index_offset               Q
+        # index_length               I
+        # number_of_reads            I
+        # header_length              H
+        # key_length                 H
+        # number_of_flows_per_read   H
+        # flowgram_format_code       B
+        # [rest of file header depends on the number of flows and how many keys]
         fmt = '>I4BQIIHHHB%is%is' % (
             self._number_of_flows_per_read, key_length)
-        #According to the spec, the header_length field should be the total
-        #number of bytes required by this set of header fields, and should be
-        #equal to "31 + number_of_flows_per_read + key_length" rounded up to
-        #the next value divisible by 8.
+        # According to the spec, the header_length field should be the total
+        # number of bytes required by this set of header fields, and should be
+        # equal to "31 + number_of_flows_per_read + key_length" rounded up to
+        # the next value divisible by 8.
         if struct.calcsize(fmt) % 8 == 0:
             padding = 0
         else:
@@ -1187,17 +1203,17 @@ class SffWriter(SequenceWriter):
 
         This assumes the header has been done.
         """
-        #Basics
+        # Basics
         name = _as_bytes(record.id)
         name_len = len(name)
         seq = _as_bytes(str(record.seq).upper())
         seq_len = len(seq)
-        #Qualities
+        # Qualities
         try:
             quals = record.letter_annotations["phred_quality"]
         except KeyError:
             raise ValueError("Missing PHRED qualities information for %s" % record.id)
-        #Flow
+        # Flow
         try:
             flow_values = record.annotations["flow_values"]
             flow_index = record.annotations["flow_index"]
@@ -1208,7 +1224,7 @@ class SffWriter(SequenceWriter):
             raise ValueError("Missing SFF flow information for %s" % record.id)
         except AttributeError:
             raise ValueError("Header not written yet?")
-        #Clipping
+        # Clipping
         try:
             clip_qual_left = record.annotations["clip_qual_left"]
             if clip_qual_left < 0:
@@ -1229,37 +1245,37 @@ class SffWriter(SequenceWriter):
         except KeyError:
             raise ValueError("Missing SFF clipping information for %s" % record.id)
 
-        #Capture information for index
+        # Capture information for index
         if self._index is not None:
             offset = self.handle.tell()
-            #Check the position of the final record (before sort by name)
-            #Using a four-digit base 255 number, so the upper bound is
-            #254*(1)+254*(255)+254*(255**2)+254*(255**3) = 4228250624
-            #or equivalently it overflows at 255**4 = 4228250625
+            # Check the position of the final record (before sort by name)
+            # Using a four-digit base 255 number, so the upper bound is
+            # 254*(1)+254*(255)+254*(255**2)+254*(255**3) = 4228250624
+            # or equivalently it overflows at 255**4 = 4228250625
             if offset > 4228250624:
                 import warnings
                 warnings.warn("Read %s has file offset %i, which is too large "
                               "to store in the Roche SFF index structure. No "
                               "index block will be recorded." % (name, offset))
-                #No point recoring the offsets now
+                # No point recoring the offsets now
                 self._index = None
             else:
                 self._index.append((name, self.handle.tell()))
 
-        #the read header format (fixed part):
-        #read_header_length     H
-        #name_length            H
-        #seq_len                I
-        #clip_qual_left         H
-        #clip_qual_right        H
-        #clip_adapter_left      H
-        #clip_adapter_right     H
-        #[rest of read header depends on the name length etc]
-        #name
-        #flow values
-        #flow index
-        #sequence
-        #padding
+        # the read header format (fixed part):
+        # read_header_length     H
+        # name_length            H
+        # seq_len                I
+        # clip_qual_left         H
+        # clip_qual_right        H
+        # clip_adapter_left      H
+        # clip_adapter_right     H
+        # [rest of read header depends on the name length etc]
+        # name
+        # flow values
+        # flow index
+        # sequence
+        # padding
         read_header_fmt = '>2HI4H%is' % name_len
         if struct.calcsize(read_header_fmt) % 8 == 0:
             padding = 0
@@ -1274,8 +1290,8 @@ class SffWriter(SequenceWriter):
                            clip_adapter_left, clip_adapter_right,
                            name) + _null * padding
         assert len(data) == read_header_length
-        #now the flowgram values, flowgram index, bases and qualities
-        #NOTE - assuming flowgram_format==1, which means struct type H
+        # now the flowgram values, flowgram index, bases and qualities
+        # NOTE - assuming flowgram_format==1, which means struct type H
         read_flow_fmt = ">%iH" % self._number_of_flows_per_read
         read_flow_size = struct.calcsize(read_flow_fmt)
         temp_fmt = ">%iB" % seq_len  # used for flow index and quals
@@ -1283,7 +1299,7 @@ class SffWriter(SequenceWriter):
             + struct.pack(temp_fmt, *flow_index) \
             + seq \
             + struct.pack(temp_fmt, *quals)
-        #now any final padding...
+        # now any final padding...
         padding = (read_flow_size + seq_len * 3) % 8
         if padding:
             padding = 8 - padding
@@ -1308,7 +1324,7 @@ if __name__ == "__main__":
         assert len(index1) == len(list(SffIterator(BytesIO(handle.read()))))
 
     if sys.platform != "win32" and sys.version_info[0] < 3:
-        #Can be lazy and treat as binary...
+        # Can be lazy and treat as binary...
         with open(filename, "r") as handle:
             assert len(index1) == len(list(SffIterator(handle)))
         with open(filename) as handle:
@@ -1379,10 +1395,10 @@ if __name__ == "__main__":
 
     for s, sT, f, q, fT, qT in zip(sff, sff_trim, fasta_no_trim,
                                    qual_no_trim, fasta_trim, qual_trim):
-        #print("")
+        # print("")
         print(s.id)
-        #print(s.seq)
-        #print(s.letter_annotations["phred_quality"])
+        # print(s.seq)
+        # print(s.letter_annotations["phred_quality"])
 
         assert s.id == f.id == q.id
         assert str(s.seq) == str(f.seq)
@@ -1404,7 +1420,7 @@ if __name__ == "__main__":
     w = SffWriter(handle, xml=metadata)
     w.write_file(iter(sff))
     assert data == handle.getvalue()
-    #Check 100% identical to the original:
+    # Check 100% identical to the original:
     filename = "../../Tests/Roche/E3MFGYR02_random_10_reads.sff"
     with open(filename, "rb") as handle:
         original = handle.read()
@@ -1441,7 +1457,7 @@ if __name__ == "__main__":
             print(err)
 
     """
-    #Ugly code to make test files...
+    # Ugly code to make test files...
     index = ".diy1.00This is a fake index block (DIY = Do It Yourself), which is allowed under the SFF standard.\0"
     padding = len(index)%8
     if padding:
@@ -1449,7 +1465,7 @@ if __name__ == "__main__":
     index += chr(0)*padding
     assert len(index)%8 == 0
 
-    #Ugly bit of code to make a fake index at start
+    # Ugly bit of code to make a fake index at start
     records = list(SffIterator(
         open("../../Tests/Roche/E3MFGYR02_random_10_reads.sff", "rb")))
     out_handle = open(
@@ -1460,7 +1476,7 @@ if __name__ == "__main__":
         padding = 8 - padding
     index += chr(0)*padding
     w = SffWriter(out_handle, index=False, xml=None)
-    #Fake the header...
+    # Fake the header...
     w._number_of_reads = len(records)
     w._index_start = 0
     w._index_length = 0
@@ -1471,7 +1487,7 @@ if __name__ == "__main__":
     w._index_start = out_handle.tell()
     w._index_length = len(index)
     out_handle.seek(0)
-    w.write_header() #this time with index info
+    w.write_header() # this time with index info
     w.handle.write(index)
     for record in records:
         w.write_record(record)
@@ -1483,7 +1499,7 @@ if __name__ == "__main__":
     i = list(_sff_do_slow_index(
         open("../../Tests/Roche/E3MFGYR02_alt_index_at_start.sff", "rb")))
 
-    #Ugly bit of code to make a fake index in middle
+    # Ugly bit of code to make a fake index in middle
     records = list(SffIterator(
         open("../../Tests/Roche/E3MFGYR02_random_10_reads.sff", "rb")))
     out_handle = open(
@@ -1494,7 +1510,7 @@ if __name__ == "__main__":
         padding = 8 - padding
     index += chr(0)*padding
     w = SffWriter(out_handle, index=False, xml=None)
-    #Fake the header...
+    # Fake the header...
     w._number_of_reads = len(records)
     w._index_start = 0
     w._index_length = 0
@@ -1510,7 +1526,7 @@ if __name__ == "__main__":
     for record in records[5:]:
         w.write_record(record)
     out_handle.seek(0)
-    w.write_header() #this time with index info
+    w.write_header() # this time with index info
     out_handle.close()
     records2 = list(SffIterator(
         open("../../Tests/Roche/E3MFGYR02_alt_index_in_middle.sff", "rb")))
@@ -1519,12 +1535,12 @@ if __name__ == "__main__":
     j = list(_sff_do_slow_index(
         open("../../Tests/Roche/E3MFGYR02_alt_index_in_middle.sff", "rb")))
 
-    #Ugly bit of code to make a fake index at end
+    # Ugly bit of code to make a fake index at end
     records = list(SffIterator(
         open("../../Tests/Roche/E3MFGYR02_random_10_reads.sff", "rb")))
     with open("../../Tests/Roche/E3MFGYR02_alt_index_at_end.sff", "w") as out_handle:
         w = SffWriter(out_handle, index=False, xml=None)
-        #Fake the header...
+        # Fake the header...
         w._number_of_reads = len(records)
         w._index_start = 0
         w._index_length = 0
@@ -1538,7 +1554,7 @@ if __name__ == "__main__":
         w._index_length = len(index)
         out_handle.write(index)
         out_handle.seek(0)
-        w.write_header() #this time with index info
+        w.write_header() # this time with index info
     records2 = list(SffIterator(
         open("../../Tests/Roche/E3MFGYR02_alt_index_at_end.sff", "rb")))
     for old, new in zip(records, records2):
@@ -1554,5 +1570,3 @@ if __name__ == "__main__":
     """
 
     print("Done")
-
-

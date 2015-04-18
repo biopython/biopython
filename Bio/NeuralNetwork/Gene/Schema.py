@@ -6,7 +6,7 @@
 """Deal with Motifs or Signatures allowing ambiguity in the sequences.
 
 This class contains Schema which deal with Motifs and Signatures at
-a higher level, by introducing `don't care` (ambiguity) symbols into
+a higher level, by introducing \`don't care\` (ambiguity) symbols into
 the sequences. For instance, you could combine the following Motifs:
 
 'GATC', 'GATG', 'GATG', 'GATT'
@@ -37,6 +37,8 @@ from Bio.GA.Crossover.Point import SinglePointCrossover
 from Bio.GA.Repair.Stabilizing import AmbiguousRepair
 from Bio.GA.Selection.Tournament import TournamentSelection
 from Bio.GA.Selection.Diversity import DiversitySelection
+
+__docformat__ = "restructuredtext en"
 
 
 class Schema(object):

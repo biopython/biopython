@@ -3,23 +3,25 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""
-This module provides code to access resources at ExPASy over the WWW.
-http://www.expasy.ch/
+"""Code to access resources at ExPASy over the WWW.
+
+See http://www.expasy.ch/
 
 
 Functions:
-get_prodoc_entry  Interface to the get-prodoc-entry CGI script.
-get_prosite_entry Interface to the get-prosite-entry CGI script.
-get_prosite_raw   Interface to the get-prosite-raw CGI script.
-get_sprot_raw     Interface to the get-sprot-raw CGI script.
-sprot_search_ful  Interface to the sprot-search-ful CGI script.
-sprot_search_de   Interface to the sprot-search-de CGI script.
+ - get_prodoc_entry  Interface to the get-prodoc-entry CGI script.
+ - get_prosite_entry Interface to the get-prosite-entry CGI script.
+ - get_prosite_raw   Interface to the get-prosite-raw CGI script.
+ - get_sprot_raw     Interface to the get-sprot-raw CGI script.
+ - sprot_search_ful  Interface to the sprot-search-ful CGI script.
+ - sprot_search_de   Interface to the sprot-search-de CGI script.
 """
 
-#Importing these functions with leading underscore as not intended for reuse
+# Importing these functions with leading underscore as not intended for reuse
 from Bio._py3k import urlopen as _urlopen
 from Bio._py3k import urlencode as _urlencode
+
+__docformat__ = "restructuredtext en"
 
 
 def get_prodoc_entry(id, cgi='http://www.expasy.ch/cgi-bin/get-prodoc-entry'):

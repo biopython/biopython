@@ -7,7 +7,7 @@
 
 from __future__ import print_function
 
-__docformat__ = "epytext en"  # Don't just use plain text in epydoc API pages!
+__docformat__ = "restructuredtext en"  # Don't just use plain text in epydoc API pages!
 
 from Bio.Application import _Option, _Switch, _Argument, AbstractCommandline
 
@@ -18,6 +18,7 @@ class ProbconsCommandline(AbstractCommandline):
     http://probcons.stanford.edu/
 
     Example:
+    --------
 
     To align a FASTA file (unaligned.fasta) with the output in ClustalW
     format, and otherwise default settings, use:
@@ -48,6 +49,7 @@ class ProbconsCommandline(AbstractCommandline):
         align = AlignIO.read(StringIO(stdout), "clustalw")
 
     Citations:
+    ----------
 
     Do, C.B., Mahabhashyam, M.S.P., Brudno, M., and Batzoglou, S. 2005.
     PROBCONS: Probabilistic Consistency-based Multiple Sequence Alignment.
@@ -58,14 +60,14 @@ class ProbconsCommandline(AbstractCommandline):
     def __init__(self, cmd="probcons", **kwargs):
         self.parameters = \
             [
-            #Note that some options cannot be assigned via properties using the
-            #original documented option (because hyphens are not valid for names in
-            #python), e.g cmdline.pre-training = 3 will not work
-            #In these cases the shortened option name should be used
-            #cmdline.pre = 3
+            # Note that some options cannot be assigned via properties using the
+            # original documented option (because hyphens are not valid for names in
+            # python), e.g cmdline.pre-training = 3 will not work
+            # In these cases the shortened option name should be used
+            # cmdline.pre = 3
             _Switch(["-clustalw", "clustalw"],
                     "Use CLUSTALW output format instead of MFA"),
-            _Option(["-c", "c", "--consistency", "consistency" ],
+            _Option(["-c", "c", "--consistency", "consistency"],
                     "Use 0 <= REPS <= 5 (default: 2) passes of consistency transformation",
                     checker_function=lambda x: x in range(0, 6),
                     equate=False),
@@ -100,9 +102,9 @@ class ProbconsCommandline(AbstractCommandline):
             _Switch(["-a", "--alignment-order", "alignment-order", "a"],
                     "Print sequences in alignment order rather than input "
                     "order (default: off)"),
-            #Input file name
+            # Input file name
             _Argument(["input"],
-                      "Input file name. Must be multiple FASTA alignment "+
+                      "Input file name. Must be multiple FASTA alignment "
                       "(MFA) format",
                       filename=True,
                       is_required=True),

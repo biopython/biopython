@@ -11,18 +11,20 @@ import os
 import tarfile
 from .Controller import SimCoalController
 
+__docformat__ = "restructuredtext en"
+
 
 class SimCoalCache(object):
     def __init__(self, data_dir, simcoal_dir):
         """Initializes the cache.
 
-        data_dir - Where the cache can be found
-        simcoal_dir - where the binaries are
+            - data_dir - Where the cache can be found
+            - simcoal_dir - where the binaries are
 
         IMPORTANT: The cache only makes sense if the file name univocally
         identifies the model.
-          For now use use the model name as key,
-          and it will probably stay like that.
+        For now use use the model name as key,
+        and it will probably stay like that.
         """
         self.dataDir = data_dir
         self.cacheDir = os.sep.join([data_dir, 'SimCoal', 'cache'])
@@ -82,7 +84,7 @@ class SimCoalCache(object):
         tf.close()
 
 
-#if __name__ == '__main__':
+# if __name__ == '__main__':
 #  cache = Cache('/home/work/werk/consolidator/sc_cache',
 #      '/home/work/software/simcoal')
 #  cache.run_simcoal('.', 'island_snp-50_0.0025_10_0.083_100_60.par', 102)

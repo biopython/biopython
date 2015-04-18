@@ -16,12 +16,12 @@ from Bio._py3k import getoutput
 
 #################################################################
 
-#Try to avoid problems when the OS is in another language
+# Try to avoid problems when the OS is in another language
 os.environ['LANG'] = 'C'
 
 msaprobs_exe = None
 if sys.platform == "win32":
-    #TODO
+    # TODO
     raise MissingExternalDependencyError("Testing this on Windows is not implemented yet")
 else:
     output = getoutput("msaprobs -version")

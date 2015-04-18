@@ -98,8 +98,8 @@ class TestKNN(unittest.TestCase):
         for i in range(len(predictions)):
             prediction = kNN.classify(model, xs[i])
             self.assertEqual(prediction, predictions[i])
-            if prediction==ys[i]:
-                correct+=1
+            if prediction == ys[i]:
+                correct += 1
         self.assertEqual(correct, 15)
 
     def test_leave_one_out(self):
@@ -108,13 +108,13 @@ class TestKNN(unittest.TestCase):
         model = kNN.train(xs, ys, k)
         predictions = [1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1]
         for i in range(len(predictions)):
-            model = kNN.train(xs[:i]+xs[i+1:], ys[:i]+ys[i+1:], k)
+            model = kNN.train(xs[:i] + xs[i + 1:], ys[:i] + ys[i + 1:], k)
             prediction = kNN.classify(model, xs[i])
             self.assertEqual(prediction, predictions[i])
-            if prediction==ys[i]:
-                correct+=1
+            if prediction == ys[i]:
+                correct += 1
         self.assertEqual(correct, 13)
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

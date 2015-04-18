@@ -12,17 +12,17 @@ from Bio.Alphabet import IUPAC
 s = "ATA"
 dna = Seq.Seq(s, IUPAC.unambiguous_dna)
 rna = dna.transcribe()
-assert str(rna)=="AUA"
+assert str(rna) == "AUA"
 
 s = "GAAAATTCATTTTCTTTGGACTTTCTCTGAAATCCGAGTCCTAGGAAAGATGCGTGAGATTCTTCATATT"
 dna = Seq.Seq(s, IUPAC.unambiguous_dna)
 rna = dna.transcribe()
-assert str(rna)=='GAAAAUUCAUUUUCUUUGGACUUUCUCUGAAAUCCGAGUCCUAGGAAAGAUGCGUGAGAUUCUUCAUAUU'
+assert str(rna) == 'GAAAAUUCAUUUUCUUUGGACUUUCUCUGAAAUCCGAGUCCUAGGAAAGAUGCGUGAGAUUCUUCAUAUU'
 
 s = "GAAAAUUCAUUUUCUUUGGACUUUCUCUGAAAUCCGAGUCCUAGGAAAGAUGCGUGAGAUUCUUCAUAUU"
 rna = Seq.Seq(s, IUPAC.unambiguous_rna)
 dna = rna.back_transcribe()
-assert str(dna)=='GAAAATTCATTTTCTTTGGACTTTCTCTGAAATCCGAGTCCTAGGAAAGATGCGTGAGATTCTTCATATT'
+assert str(dna) == 'GAAAATTCATTTTCTTTGGACTTTCTCTGAAATCCGAGTCCTAGGAAAGATGCGTGAGATTCTTCATATT'
 
 
 # use the standard table
@@ -31,32 +31,32 @@ assert str(dna)=='GAAAATTCATTTTCTTTGGACTTTCTCTGAAATCCGAGTCCTAGGAAAGATGCGTGAGATTC
 s = ""
 dna = Seq.Seq(s, IUPAC.unambiguous_dna)
 protein = dna.translate(to_stop=True)
-assert  str(protein)==""
+assert str(protein) == ""
 
 s = "TAA"
 dna = Seq.Seq(s, IUPAC.unambiguous_dna)
 protein = dna.translate(to_stop=True)
-assert str(protein)==""
+assert str(protein) == ""
 
 s = "GAAAATTCATTTTCTTTGGACTTTCTCTGAAATCCGAGTCCTAGGAAAGATGCGTGAGATTCTTCA"
 dna = Seq.Seq(s, IUPAC.unambiguous_dna)
 protein = dna.translate(to_stop=True)
-assert str(protein)=='ENSFSLDFL'
+assert str(protein) == 'ENSFSLDFL'
 
 s = "GAA"
 dna = Seq.Seq(s, IUPAC.unambiguous_dna)
 protein = dna.translate(15, to_stop=True)
-assert str(protein)=="E"
+assert str(protein) == "E"
 
 s = "ATA"
 dna = Seq.Seq(s, IUPAC.unambiguous_dna)
 protein = dna.translate('Vertebrate Mitochondrial', to_stop=True)
-assert str(protein)=="M"
+assert str(protein) == "M"
 
 s = "GAAAATTCATTTTCTTTGGACTTTCTCTGAAATCCGAGTCCTAGGAAAGATGCGTGAGATTCTTCATAT"
 dna = Seq.Seq(s, IUPAC.unambiguous_dna)
 protein = dna.translate('SGC8', to_stop=True)
-assert str(protein)=='ENSFSLDFLWNPSPSNDAWDSSY'
+assert str(protein) == 'ENSFSLDFLWNPSPSNDAWDSSY'
 
 # use the standard table
 

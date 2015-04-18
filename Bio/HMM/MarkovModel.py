@@ -10,8 +10,8 @@ import copy
 import math
 import random
 
-#TODO - Take advantage of defaultdict once Python 2.4 is dead?
-#from collections import defaultdict
+# TODO - Take advantage of defaultdict once Python 2.4 is dead?
+# from collections import defaultdict
 
 from Bio._py3k import range
 
@@ -23,7 +23,7 @@ def _gen_random_array(n):
     to 1.0"""
     randArray = [random.random() for i in range(n)]
     total = sum(randArray)
-    normalizedRandArray = [x/total for x in randArray]
+    normalizedRandArray = [x / total for x in randArray]
 
     return normalizedRandArray
 
@@ -212,7 +212,7 @@ class MarkovModelBuilder(object):
         if num_states_not_set > 0:
             prob = (1.0 - prob_sum) / num_states_not_set
             for state in self._state_alphabet.letters:
-                if not state in self.initial_prob:
+                if state not in self.initial_prob:
                     self.initial_prob[state] = prob
 
     def set_equal_probabilities(self):
@@ -333,8 +333,8 @@ class MarkovModelBuilder(object):
         self.transition_prob = all_probs
         self.transition_pseudo = all_pseudo
 
-    def allow_transition(self, from_state, to_state, probability = None,
-                         pseudocount = None):
+    def allow_transition(self, from_state, to_state, probability=None,
+                         pseudocount=None):
         """Set a transition as being possible between the two states.
 
         probability and pseudocount are optional arguments
@@ -653,8 +653,8 @@ class HiddenMarkovModel(object):
         try:
             neg_inf = float("-inf")
         except ValueError:
-            #On Python 2.5 or older that was handled in C code,
-            #and failed on Windows XP 32bit
+            # On Python 2.5 or older that was handled in C code,
+            # and failed on Windows XP 32bit
             neg_inf = - 1E400
         for key in log_prob:
             prob = log_prob[key]

@@ -10,8 +10,8 @@ from Bio.PopGen import FDist
 from Bio.PopGen.GenePop import FileParser
 from Bio.PopGen.FDist.Utils import convert_genepop_to_fdist
 
-#Tests fdist related code. Note: this case doesn't require fdist
-#test_PopGen_FDist tests code that requires fdist
+# Tests fdist related code. Note: this case doesn't require fdist
+# test_PopGen_FDist tests code that requires fdist
 
 
 class RecordTest(unittest.TestCase):
@@ -39,7 +39,7 @@ class ParserTest(unittest.TestCase):
         self.num_markers = [
             [2, 3, 4, 2]
         ]
-        #format is locus, pop, position, value
+        # format is locus, pop, position, value
         self.test_pos = [
             [
                 (0, 0, 0, 5),
@@ -104,5 +104,5 @@ class ConversionTest(unittest.TestCase):
             handle.close()
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

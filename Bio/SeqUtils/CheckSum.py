@@ -15,17 +15,19 @@ from __future__ import print_function
 from binascii import crc32 as _crc32
 from Bio._py3k import _as_bytes
 
+__docformat__ = "restructuredtext en"
+
 
 def crc32(seq):
     """Returns the crc32 checksum for a sequence (string or Seq object)."""
-    #NOTE - On Python 2 returns a signed int, on Python 3 it is unsigned
-    #Docs suggest should use crc32(x) & 0xffffffff for consistency.
-    #TODO - Should we return crc32(x) & 0xffffffff here?
+    # NOTE - On Python 2 returns a signed int, on Python 3 it is unsigned
+    # Docs suggest should use crc32(x) & 0xffffffff for consistency.
+    # TODO - Should we return crc32(x) & 0xffffffff here?
     try:
-        #Assume its a Seq object
+        # Assume its a Seq object
         return _crc32(_as_bytes(str(seq)))
     except AttributeError:
-        #Assume its a string/unicode
+        # Assume its a string/unicode
         return _crc32(_as_bytes(seq))
 
 
@@ -70,14 +72,17 @@ def gcg(seq):
     Given a nucleotide or amino-acid secuence (or any string),
     returns the GCG checksum (int). Checksum used by GCG program.
     seq type = str.
+
     Based on BioPerl GCG_checksum. Adapted by Sebastian Bassi
     with the help of John Lenton, Pablo Ziliani, and Gabriel Genellina.
-    All sequences are converted to uppercase """
+
+    All sequences are converted to uppercase.
+    """
     try:
-        #Assume its a Seq object
+        # Assume its a Seq object
         seq = str(seq)
     except AttributeError:
-        #Assume its a string
+        # Assume its a string
         pass
     index = checksum = 0
     for char in seq:
@@ -94,21 +99,23 @@ def seguid(seq):
     Given a nucleotide or amino-acid secuence (or any string),
     returns the SEGUID string (A SEquence Globally Unique IDentifier).
     seq type = str.
+
     For more information about SEGUID, see:
     http://bioinformatics.anl.gov/seguid/
-    DOI: 10.1002/pmic.200600032 """
+    DOI: 10.1002/pmic.200600032
+    """
     import hashlib
     import base64
     m = hashlib.sha1()
     try:
-        #Assume it's a Seq object
+        # Assume it's a Seq object
         seq = str(seq)
     except AttributeError:
-        #Assume it's a string
+        # Assume it's a string
         pass
     m.update(_as_bytes(seq.upper()))
     try:
-        #For Python 3+
+        # For Python 3+
         return base64.encodebytes(m.digest()).decode().replace("\n", "").rstrip("=")
     except AttributeError:
         pass

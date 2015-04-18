@@ -11,14 +11,14 @@ SplitFDist splits a single Fdist execution in several, taking advantage
 of multi-core architectures.
 """
 
-from __future__ import print_function
-
 import os
 import shutil
 import threading
 from time import sleep
 from Bio.PopGen.Async import Local
 from Bio.PopGen.FDist.Controller import FDistController
+
+__docformat__ = "restructuredtext en"
 
 
 class FDistAsync(FDistController):
@@ -29,10 +29,11 @@ class FDistAsync(FDistController):
         """Constructor.
 
         Parameters:
-        fdist_dir - Where fdist can be found, if = "", then it
-            should be on the path.
-        ext - Extension of binary names (e.g. nothing on Unix,
-              ".exe" on Windows
+        
+          - fdist_dir - Where fdist can be found, if = "", then it
+              should be on the path.
+          - ext - Extension of binary names (e.g. nothing on Unix,
+                ".exe" on Windows
         """
         FDistController.__init__(self, fdist_dir, ext)
 
@@ -79,12 +80,13 @@ class SplitFDist(object):
         """Constructor.
 
            Parameters:
-           report_fun - Function that is called when a single packet is
+           
+             - report_fun - Function that is called when a single packet is
                run, it should have a single parameter: Fst.
-           num_thr - Number of desired threads, typically the number
+             - num_thr - Number of desired threads, typically the number
                of cores.
-           split_size - Size that a full simulation will be split in.
-           ext - Binary extension name (e.g. nothing on Unix, '.exe' on
+             - split_size - Size that a full simulation will be split in.
+             - ext - Binary extension name (e.g. nothing on Unix, '.exe' on
                Windows).
         """
         self.async = Local.Local(num_thr)
@@ -92,7 +94,7 @@ class SplitFDist(object):
         self.report_fun = report_fun
         self.split_size = split_size
 
-    #There might be races when reporting...
+    # There might be races when reporting...
     def monitor(self):
         """Monitors and reports (using report_fun) execution.
 
@@ -106,15 +108,16 @@ class SplitFDist(object):
         while(True):
             sleep(1)
             self.async.access_ds.acquire()
-            keys = list(self.async.done.keys()) #copy it
+            keys = list(self.async.done.keys())  # copy it
             self.async.access_ds.release()
             for done in keys:
                 self.async.access_ds.acquire()
                 fst, files = self.async.done[done]
                 del self.async.done[done]
                 out_dat = files['out.dat']
-                with open(self.data_dir + os.sep + 'out.dat', 'a') as f:
-                    f.writelines(out_dat.readlines())
+                f = open(self.data_dir + os.sep + 'out.dat', 'a')
+                f.writelines(out_dat.readlines())
+                f.close()
                 out_dat.close()
                 self.async.access_ds.release()
                 for file in os.listdir(self.parts[done]):
@@ -138,7 +141,7 @@ class SplitFDist(object):
         """
         self.async.access_ds.release()
 
-    #You can only run a fdist case at a time
+    # You can only run a fdist case at a time
     def run_fdist(self, npops, nsamples, fst, sample_size,
                   mut=0, num_sims=20000, data_dir='.',
                   is_dominant=False, theta=0.06, beta=(0.25, 0.25),
@@ -162,17 +165,17 @@ class SplitFDist(object):
             if "ss_file" in os.listdir(data_dir):
                 shutil.copy(data_dir + os.sep + "ss_file", full_path)
             id = self.async.run_program('fdist', {
-                'npops'       : npops,
-                'nsamples'    : nsamples,
-                'fst'         : fst,
-                'sample_size' : sample_size,
-                'mut'         : mut,
-                'num_sims'    : self.split_size,
-                'data_dir'    : full_path,
-                'is_dominant' : is_dominant,
-                'theta'       : theta,
-                'beta'        : beta,
-                'max_freq'    : max_freq
+                'npops': npops,
+                'nsamples': nsamples,
+                'fst': fst,
+                'sample_size': sample_size,
+                'mut': mut,
+                'num_sims': self.split_size,
+                'data_dir': full_path,
+                'is_dominant': is_dominant,
+                'theta': theta,
+                'beta': beta,
+                'max_freq': max_freq
             }, {})
             self.parts[id] = full_path
         threading.Thread(target=self.monitor).run()

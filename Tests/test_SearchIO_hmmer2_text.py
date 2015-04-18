@@ -10,9 +10,11 @@ from os import path
 from Bio import BiopythonExperimentalWarning
 
 import warnings
+
+
 with warnings.catch_warnings():
-   warnings.simplefilter('ignore', BiopythonExperimentalWarning)
-   from Bio.SearchIO import parse, read
+    warnings.simplefilter('ignore', BiopythonExperimentalWarning)
+    from Bio.SearchIO import parse, read
 
 
 class HmmpfamTests(unittest.TestCase):
@@ -108,7 +110,6 @@ class HmmpfamTests(unittest.TestCase):
                          str(hsp.aln_annotation['similarity']))
         self.assertEqual('NTSELDKKKFAVLLMNR--------------LIFIKFLEDK------GIV---------PRDLLRRTYEDY---KKSNVLI-NYYDAY-L----KPLFYEVLNTPEDER--KENIRT-NPYYKDIPYL---N-G-------GLFRSNNV--PNELSFTIKDNEIIGEVINFLERYKFTLSTSEGsEEVELNP-DILGYVYEKLINILAEKGQKGLGAYYTPDEITSYIAKNT-IEPIVVE----------------RFKEIIK--NWKINDINF----ST',
                          str(hsp.query.seq))
-
 
     def test_hmmpfam_23(self):
         """Test parsing hmmpfam 2.3 file (text_23_hmmpfam_001.out)"""

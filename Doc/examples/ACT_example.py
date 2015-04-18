@@ -16,7 +16,7 @@ from Bio.Graphics.GenomeDiagram import Diagram, CrossLink
 from Bio.SeqFeature import SeqFeature, FeatureLocation
 from Bio import SeqIO
 
-#Modify this line to point at the Artemis/ACT example data which is online at:
+# Modify this line to point at the Artemis/ACT example data which is online at:
 # https://github.com/sanger-pathogens/Artemis/tree/master/etc
 input_folder = "/Applications/Artemis/Artemis.app/Contents/artemis/etc"
 
@@ -32,14 +32,14 @@ for f in [file_a, file_b, file_a_vs_b]:
         print("Missing input file %s.fna" % f)
         sys.exit(1)
 
-#Only doing a_vs_b here, could also have b_vs_c and c_vs_d etc
+# Only doing a_vs_b here, could also have b_vs_c and c_vs_d etc
 genomes = [
     (os.path.join(input_folder, file_a), format_a),
     (os.path.join(input_folder, file_b), format_b),
 ]
 comparisons = [os.path.join(input_folder, file_a_vs_b)]
 
-#Create diagram with tracks, each with a feature set
+# Create diagram with tracks, each with a feature set
 assert len(genomes) >= 2 and len(genomes) == len(comparisons)+1
 gd_diagram = Diagram(name, track_size=0.35, circular=False)
 tracks = dict()
@@ -64,14 +64,14 @@ for i, crunch_file in enumerate(comparisons):
         if line[0]=="#":
             continue
         parts = line.rstrip("\n").split(None, 7)
-        #0 = score
-        #1 = id
-        #2 = S1
-        #3 = E1
-        #4 = seq1
-        #5 = S2
-        #6 = E2
-        #7 = seq2
+        # 0 = score
+        # 1 = id
+        # 2 = S1
+        # 3 = E1
+        # 4 = seq1
+        # 5 = S2
+        # 6 = E2
+        # 7 = seq2
         try:
             q_start, q_end = int(parts[2]), int(parts[3])
             s_start, s_end = int(parts[5]), int(parts[6])
@@ -97,17 +97,17 @@ for i, crunch_file in enumerate(comparisons):
         s_feature = s_set.add_feature(SeqFeature(FeatureLocation(s_start-1, s_end)),
                                                  color=c, border=b)
         gd_diagram.cross_track_links.append(CrossLink(q_feature, s_feature, c, b))
-        #NOTE: We are using the same colour for all the matches,
-        #with transparency. This means overlayed matches will appear darker.
-        #It also means the drawing order not very important.
-        #Note ACT puts long hits at the back, and colours by hit score
+        # NOTE: We are using the same colour for all the matches,
+        # with transparency. This means overlayed matches will appear darker.
+        # It also means the drawing order not very important.
+        # Note ACT puts long hits at the back, and colours by hit score
     handle.close()
 
 print("Drawing CDS features...")
 for f, format in genomes:
     record = records[f]
     feature_set = feature_sets[f]
-    #Mark the CDS features
+    # Mark the CDS features
     for cds in record.features:
         if cds.type != "CDS":
             continue

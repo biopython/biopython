@@ -36,6 +36,8 @@ from Bio.Data.SCOPData import protein_letters_3to1
 
 from Bio.SCOP.Residues import Residues
 
+__docformat__ = "restructuredtext en"
+
 
 def normalize_letters(one_letter_code):
     """Convert RAF one-letter amino acid codes into IUPAC standard codes.
@@ -55,7 +57,7 @@ class SeqMapIndex(dict):
     access of RAF records without having to load the entire file into memory.
 
     The index key is a concatenation of the  PDB ID and chain ID. e.g
-    "2drcA", "155c_". RAF uses an underscore to indicate blank
+    "2drcA", ``"155c_"``. RAF uses an underscore to indicate blank
     chain IDs.
     """
 
@@ -76,7 +78,7 @@ class SeqMapIndex(dict):
                     break
                 key = line[0:5]
                 if key is not None:
-                    self[key]=position
+                    self[key] = position
                 position = f.tell()
 
     def __getitem__(self, key):
@@ -101,7 +103,7 @@ class SeqMapIndex(dict):
         pdbid = residues.pdbid
         frags = residues.fragments
         if not frags:
-            frags = (('_', '', ''),) # All residues of unnamed chain
+            frags = (('_', '', ''),)  # All residues of unnamed chain
 
         seqMap = None
         for frag in frags:
@@ -112,7 +114,7 @@ class SeqMapIndex(dict):
 
             sm = self[id]
 
-            #Cut out fragment of interest
+            # Cut out fragment of interest
             start = 0
             end = len(sm.res)
             if frag[1]:
@@ -165,14 +167,14 @@ class SeqMap(object):
         line = line.rstrip()  # no trailing whitespace
 
         if len(line) < header_len:
-            raise ValueError("Incomplete header: "+line)
+            raise ValueError("Incomplete header: " + line)
 
         self.pdbid = line[0:4]
         chainid = line[4:5]
 
         self.version = line[6:10]
 
-        #Raf format versions 0.01 and 0.02 are identical for practical purposes
+        # Raf format versions 0.01 and 0.02 are identical for practical purposes
         if(self.version != "0.01" and self.version != "0.02"):
             raise ValueError("Incompatible RAF version: " + self.version)
 
@@ -180,9 +182,9 @@ class SeqMap(object):
         self.flags = line[21:27]
 
         for i in range(header_len, len(line), 7):
-            f = line[i : i+7]
-            if len(f)!=7:
-                raise ValueError("Corrupt Field: ("+f+")")
+            f = line[i:i + 7]
+            if len(f) != 7:
+                raise ValueError("Corrupt Field: (" + f + ")")
             r = Res()
             r.chainid = chainid
             r.resid = f[0:5].strip()
@@ -251,9 +253,9 @@ class SeqMap(object):
 
         out_handle -- All output is written to this file like object.
         """
-        #This code should be refactored when (if?) biopython gets a PDB parser
+        # This code should be refactored when (if?) biopython gets a PDB parser
 
-        #The set of residues that I have to find records for.
+        # The set of residues that I have to find records for.
         resSet = {}
         for r in self.res:
             if r.atom == 'X':  # Unknown residue type
@@ -280,12 +282,12 @@ class SeqMap(object):
                             resFound[key] = res
 
         if len(resSet) != len(resFound):
-            #for k in resFound:
+            # for k in resFound:
             #    del resSet[k]
-            #print(resSet)
+            # print(resSet)
 
             raise RuntimeError('I could not find at least one ATOM or HETATM'
-                   +' record for each and every residue in this sequence map.')
+                   + ' record for each and every residue in this sequence map.')
 
 
 class Res(object):

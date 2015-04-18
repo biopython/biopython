@@ -1,4 +1,4 @@
-# Copyright (C) 2011 by Brandon Invergo (b.invergo@gmail.com)
+# Copyright (C) 2011, 2015 by Brandon Invergo (b.invergo@gmail.com)
 # This code is part of the Biopython distribution and governed by its
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
@@ -55,7 +55,7 @@ class ModTest(unittest.TestCase):
 
     def testAlignmentFileIsValid(self):
         self.assertRaises((AttributeError, TypeError, OSError),
-            codeml.Codeml, alignment = list())
+            codeml.Codeml, alignment=list())
         self.cml.alignment = list()
         self.cml.tree = self.tree_file
         self.cml.out_file = self.out_file
@@ -64,7 +64,7 @@ class ModTest(unittest.TestCase):
 
     def testAlignmentExists(self):
         self.assertRaises((EnvironmentError, IOError), codeml.Codeml,
-            alignment = "nonexistent")
+            alignment="nonexistent")
         self.cml.alignment = "nonexistent"
         self.cml.tree = self.tree_file
         self.cml.out_file = self.out_file
@@ -72,7 +72,7 @@ class ModTest(unittest.TestCase):
 
     def testTreeFileValid(self):
         self.assertRaises((AttributeError, TypeError, OSError),
-            codeml.Codeml, tree = list())
+            codeml.Codeml, tree=list())
         self.cml.alignment = self.align_file
         self.cml.tree = list()
         self.cml.out_file = self.out_file
@@ -81,7 +81,7 @@ class ModTest(unittest.TestCase):
 
     def testTreeExists(self):
         self.assertRaises((EnvironmentError, IOError), codeml.Codeml,
-            tree = "nonexistent")
+            tree="nonexistent")
         self.cml.alignment = self.align_file
         self.cml.tree = "nonexistent"
         self.cml.out_file = self.out_file
@@ -138,14 +138,14 @@ class ModTest(unittest.TestCase):
         self.cml.tree = self.tree_file
         self.cml.out_file = self.out_file
         self.assertRaises((AttributeError, TypeError, OSError),
-            self.cml.run, ctl_file = list())
+            self.cml.run, ctl_file=list())
 
     def testCtlFileExistsOnRun(self):
         self.cml.alignment = self.align_file
         self.cml.tree = self.tree_file
         self.cml.out_file = self.out_file
         self.assertRaises((EnvironmentError, IOError),
-            self.cml.run, ctl_file = "nonexistent")
+            self.cml.run, ctl_file="nonexistent")
 
     def testCtlFileValidOnRead(self):
         self.assertRaises((AttributeError, TypeError, OSError),
@@ -186,7 +186,7 @@ class ModTest(unittest.TestCase):
                         "rho": None,
                         "fix_rho": None}
         self.cml.read_ctl_file(self.ctl_file)
-        #Compare the dictionary keys:
+        # Compare the dictionary keys:
         self.assertEqual(sorted(self.cml._options), sorted(target_options))
         for key in target_options:
             self.assertEqual(self.cml._options[key], target_options[key],
@@ -195,7 +195,7 @@ class ModTest(unittest.TestCase):
 
     def testCtlFileExistsOnRead(self):
         self.assertRaises((EnvironmentError, IOError),
-            self.cml.read_ctl_file, ctl_file = "nonexistent")
+            self.cml.read_ctl_file, ctl_file="nonexistent")
 
     def testResultsValid(self):
         self.assertRaises((AttributeError, TypeError, OSError),
@@ -315,11 +315,11 @@ class ModTest(unittest.TestCase):
             self.assertTrue("parameters" in model, version_msg)
             params = model["parameters"]
             # Branch Site A results lack a "branches" parameter
-            self.assertEqual(len(params), SITECLASS_PARAMS[2]-1, version_msg)
+            self.assertEqual(len(params), SITECLASS_PARAMS[2] - 1, version_msg)
             self.assertTrue("site classes" in params, version_msg)
             site_classes = params["site classes"]
             # Branch Site A adds another site class
-            self.assertEqual(len(site_classes), SITECLASSES[2]+1,
+            self.assertEqual(len(site_classes), SITECLASSES[2] + 1,
                 version)
             for class_num in [0, 1, 2, 3]:
                 self.assertTrue(class_num in site_classes, version_msg)
@@ -510,7 +510,20 @@ class ModTest(unittest.TestCase):
             # Pairwise AA analysis has ML & raw distances
             self.assertEqual(len(distances), 2, version_msg)
 
+    def testTreeParseVersatility(self):
+        """Test finding trees in the results, in response to bug #453, where
+        trees like (A, (B, C)); weren't being caught"""
+        res_file = os.path.join(self.results_dir, "codeml",
+                                "tree_regexp_versatility.out")
+        results = codeml.read(res_file)
+        self.assertTrue("NSsites" in results)
+        nssites = results["NSsites"]
+        self.assertTrue(0 in nssites)
+        m0 = nssites[0]
+        self.assertTrue("tree" in m0)
+        self.assertTrue(m0["tree"] is not None)
+        self.assertNotEqual(len(m0["tree"]), 0)
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

@@ -233,8 +233,8 @@ class TreeTests(unittest.TestCase):
 
     def test_BinaryCharacters(self):
         """Instantiation of BinaryCharacters objects."""
-        #Because we short circult interation, must close handle explicitly
-        #to avoid a ResourceWarning
+        # Because we short circult interation, must close handle explicitly
+        # to avoid a ResourceWarning
         handle = open(EX_DOLLO)
         tree = next(PhyloXMLIO.parse(handle))
         handle.close()
@@ -247,7 +247,7 @@ class TreeTests(unittest.TestCase):
                 ('present', 2, ['Cofilin_ADF', 'Gelsolin']),
                 ('absent',  None, []),
                 ):
-            self.assertEqual(getattr(bchars, name+'_count'), count)
+            self.assertEqual(getattr(bchars, name + '_count'), count)
             self.assertEqual(getattr(bchars, name), value)
 
     # TODO: BranchColor -- see made_up.xml
@@ -263,7 +263,7 @@ class TreeTests(unittest.TestCase):
 
     def test_Confidence(self):
         """Instantiation of Confidence objects."""
-        #Because we short circult interation, must close handle explicitly
+        # Because we short circult interation, must close handle explicitly
         handle = open(EX_MADE)
         tree = next(PhyloXMLIO.parse(handle))
         handle.close()
@@ -332,7 +332,7 @@ class TreeTests(unittest.TestCase):
 
         Also checks ProteinDomain type.
         """
-        #Because we short circult interation, must close handle explicitly
+        # Because we short circult interation, must close handle explicitly
         handle = open(EX_APAF)
         tree = next(PhyloXMLIO.parse(handle))
         handle.close()
@@ -398,13 +398,13 @@ class TreeTests(unittest.TestCase):
             self.assertEqual(prop.datatype, "xsd:integer")
             self.assertEqual(prop.ref, "NOAA:depth")
             self.assertEqual(prop.applies_to, "node")
-            self.assertEqual(prop.unit, "METRIC:m" )
+            self.assertEqual(prop.unit, "METRIC:m")
             self.assertEqual(prop.value, value)
 
     def test_Reference(self):
         """Instantiation of Reference objects."""
-        #Because we short circult interation, must close handle explicitly
-        #to avoid a ResourceWarning
+        # Because we short circult interation, must close handle explicitly
+        # to avoid a ResourceWarning
         handle = open(EX_DOLLO)
         tree = next(PhyloXMLIO.parse(handle))
         handle.close()
@@ -512,10 +512,10 @@ class WriterTests(unittest.TestCase):
 
     def _rewrite_and_call(self, orig_fname, test_cases):
         """Parse, rewrite and retest a phyloXML example file."""
-        infile = open(orig_fname, 'rb')
+        infile = open(orig_fname, 'r')
         phx = PhyloXMLIO.read(infile)
         infile.close()
-        outfile = open(DUMMY, 'w+b')
+        outfile = open(DUMMY, 'w')
         PhyloXMLIO.write(phx, outfile)
         outfile.close()
         for cls, tests in test_cases:
@@ -677,7 +677,7 @@ class MethodTests(unittest.TestCase):
         self.assertEqual(tree.clade[0, 1], tree.clade.clades[0].clades[1])
         self.assertEqual(tree.clade[1], tree.clade.clades[1])
         self.assertEqual(len(tree.clade[:]), len(tree.clade.clades))
-        self.assertEqual(len(tree.clade[0,:]),
+        self.assertEqual(len(tree.clade[0, :]),
                          len(tree.clade.clades[0].clades))
 
     def test_phyloxml_getitem(self):

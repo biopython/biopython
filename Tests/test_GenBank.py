@@ -55,8 +55,8 @@ for file in test_files:
 # files_to_parse += [os.path.join(os.getcwd(), 'GenBank', 'biojava_test.gb')]
 
 # test the parsers
-feature_parser = GenBank.FeatureParser(debug_level = 0)
-record_parser = GenBank.RecordParser(debug_level = 0)
+feature_parser = GenBank.FeatureParser(debug_level=0)
+record_parser = GenBank.RecordParser(debug_level=0)
 
 all_parsers = [feature_parser, record_parser]
 print("Testing parsers...")
@@ -72,14 +72,14 @@ for parser in all_parsers:
         while True:
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore", BiopythonParserWarning)
-                #e.g. BiopythonParserWarning: Premature end of file in sequence data
+                # e.g. BiopythonParserWarning: Premature end of file in sequence data
                 cur_record = next(iterator)
 
             if cur_record is None:
                 break
 
             if isinstance(parser, GenBank.FeatureParser):
-                print("***Record from %s with the FeatureParser" \
+                print("***Record from %s with the FeatureParser"
                       % filename.split(os.path.sep)[-1])
                 print("Seq: %r" % cur_record.seq)
                 print("Id: %s" % cur_record.id)
@@ -90,7 +90,7 @@ for parser in all_parsers:
                 for ann_key in ann_keys:
                     if ann_key != 'references':
                         print("Key: %s" % ann_key)
-                        print("Value: %s" % \
+                        print("Value: %s" %
                               cur_record.annotations[ann_key])
                     else:
                         print("References*")
@@ -103,11 +103,11 @@ for parser in all_parsers:
                                   ProteinAlphabet):
                         assert feature.strand is None
                     else:
-                        #Assuming no mixed strand examples...
+                        # Assuming no mixed strand examples...
                         assert feature.strand is not None
                 print("DB cross refs %s" % cur_record.dbxrefs)
             elif isinstance(parser, GenBank.RecordParser):
-                print("***Record from %s with the RecordParser" \
+                print("***Record from %s with the RecordParser"
                       % filename.split(os.path.sep)[-1])
                 print("sequence length: %i" % len(cur_record.sequence))
                 print("locus: %s" % cur_record.locus)
@@ -156,7 +156,7 @@ def do_comparison(good_record, test_record):
 
 
 def t_write_format():
-    record_parser = GenBank.RecordParser(debug_level = 0)
+    record_parser = GenBank.RecordParser(debug_level=0)
 
     for file in write_format_files:
         print("Testing GenBank writing for %s..." % os.path.basename(file))
@@ -187,8 +187,7 @@ t_write_format()
 def t_cleaning_features():
     """Test the ability to clean up feature values.
     """
-    parser = GenBank.FeatureParser(feature_cleaner =
-                                   utils.FeatureValueCleaner())
+    parser = GenBank.FeatureParser(feature_cleaner=utils.FeatureValueCleaner())
     handle = open(os.path.join("GenBank", "arab1.gb"))
     iterator = GenBank.Iterator(handle, parser)
 

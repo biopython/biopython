@@ -38,19 +38,19 @@ class ResiduesTests(unittest.TestCase):
     def testAstralParse(self):
         """Test if we can parse residue subsets enclosed in brackets"""
         for loc in self.res:
-            r = Residues("("+loc[0]+")")
+            r = Residues("(" + loc[0] + ")")
             self.assertEqual(r.fragments, loc[1])
 
     def testPdbId(self):
-        pdbid ="1ddf"
+        pdbid = "1ddf"
         for loc in self.res:
-            r = Residues("\t 1ddf \t"+loc[0]+"\t\n\n\n")
+            r = Residues("\t 1ddf \t" + loc[0] + "\t\n\n\n")
             self.assertEqual(r.pdbid, pdbid)
-            self.assertEqual(str(r), pdbid+" "+loc[0])
+            self.assertEqual(str(r), pdbid + " " + loc[0])
 
-            r = Residues(pdbid+" "+loc[0])
+            r = Residues(pdbid + " " + loc[0])
             self.assertEqual(r.pdbid, pdbid)
-            self.assertEqual(str(r), pdbid+" "+loc[0])
+            self.assertEqual(str(r), pdbid + " " + loc[0])
 
             r = Residues("104l A:112-113")
             self.assertEqual(r.pdbid, "104l")
@@ -65,6 +65,6 @@ class ResiduesTests(unittest.TestCase):
         self.assertRaises(ValueError, Residues, "09324923423hh./;,.389")
 
 
-if __name__=='__main__':
-    runner = unittest.TextTestRunner(verbosity = 2)
+if __name__ == '__main__':
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)
