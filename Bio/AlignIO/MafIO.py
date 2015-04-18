@@ -62,10 +62,8 @@ class MafWriter(SequentialAlignmentWriter):
         if len(set([len(x) for x in alignment])) > 1:
             raise ValueError("Sequences must all be the same length")
 
-        all_ids = [x.id for x in alignment]
-
-        if len(all_ids) != len(set(all_ids)):
-            raise ValueError("Identifiers in each MultipleSeqAlignment must be unique")
+        # We allow multiple sequences with the same IDs; for example, there may
+        # be a MAF aligning the + and - strands of the same sequence together.
 
         # for now, use ._annotations private property, but restrict keys to those
         # specifically supported by the MAF format, according to spec
