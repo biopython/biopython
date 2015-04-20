@@ -152,6 +152,18 @@ class EntrezOnlineCase(unittest.TestCase):
         self.assertEqual(URL_HEAD + "epost.fcgi", handle.url)
         handle.close()
 
+    def test_ecitmatch(self):
+        citation = {
+            "journal_title": "proc natl acad sci u s a",
+            "year": "1991", "volume": "88", "first_page": "3248",
+            "author_name": "mann bj", "key": "citation_1"
+        }
+        handle = Entrez.ecitmatch(db="pubmed", bdata=[citation])
+        self.assertTrue("retmode=xml" in handle.url, handle.url)
+        result = handle.read()
+        expected_result = "proc natl acad sci u s a|1991|88|3248|mann bj|citation_1|2014248\n"
+        self.assertEquals(result, expected_result)
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
