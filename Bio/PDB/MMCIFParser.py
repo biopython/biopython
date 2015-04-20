@@ -7,9 +7,13 @@
 
 from __future__ import print_function
 
-from string import ascii_letters
+try:
+    import numpy
+except:
+    from Bio import MissingPythonDependencyError
+    raise MissingPythonDependencyError(
+        "Install NumPy if you want to use the mmCIF parser.")
 
-import numpy
 import warnings
 
 from Bio._py3k import range
@@ -39,8 +43,6 @@ class MMCIFParser(object):
             self._structure_builder = structure_builder
         else:
             self._structure_builder = StructureBuilder()
-        # self.header = None
-        # self.trailer = None
         self.line_counter = 0
         self.build_structure = None
         self.QUIET = bool(QUIET)
@@ -66,6 +68,7 @@ class MMCIFParser(object):
         except KeyError:
             element_list = None
         seq_id_list = mmcif_dict["_atom_site.label_seq_id"]
+        auth_seq_id_list = mmcif_dict["_atom_site.auth_seq_id"]
         chain_id_list = mmcif_dict["_atom_site.label_asym_id"]
         x_list = [float(x) for x in mmcif_dict["_atom_site.Cartn_x"]]
         y_list = [float(x) for x in mmcif_dict["_atom_site.Cartn_y"]]
@@ -101,15 +104,16 @@ class MMCIFParser(object):
         else:
             seq_id_list = mmcif_dict["_atom_site.label_seq_id"]
         # Now loop over atoms and build the structure
-        current_chain_id = None
-        current_residue_id = None
         structure_builder = self._structure_builder
         structure_builder.init_structure(structure_id)
         structure_builder.init_seg(" ")
         # Historically, Biopython PDB parser uses model_id to mean array index
         # so serial_id means the Model ID specified in the file
         current_model_id = -1
-        current_serial_id = 0
+        current_serial_id = None
+        current_chain_id = None
+        current_residue_id = None
+        current_icode = None
         for i in range(0, len(atom_id_list)):
 
             # set the line_counter for 'ATOM' lines only and not
@@ -125,7 +129,10 @@ class MMCIFParser(object):
             altloc = alt_list[i]
             if altloc == ".":
                 altloc = " "
-            resseq = seq_id_list[i]
+            try:
+                resseq = int(seq_id_list[i])
+            except ValueError:
+                resseq = seq_id_list[i]
             icode = icode_list[i]
             if icode == "?":
                 icode = " "
@@ -151,21 +158,31 @@ class MMCIFParser(object):
                     # if serial changes, update it and start new model
                     current_serial_id = serial_id
                     current_model_id += 1
-                    structure_builder.init_model(current_model_id, current_serial_id)
                     current_chain_id = None
                     current_residue_id = None
+                    current_icode = None
+                    structure_builder.init_model(current_model_id, current_serial_id)
             else:
                 # no explicit model column; initialize single model
+                current_model_id = 0
                 structure_builder.init_model(current_model_id)
 
             if current_chain_id != chainid:
                 current_chain_id = chainid
+                current_residue_id = None
+                current_icode = None
                 structure_builder.init_chain(current_chain_id)
 
             if current_residue_id != resseq:
                 current_residue_id = resseq
-                int_resseq = int(resseq)
-                structure_builder.init_residue(resname, hetatm_flag, int_resseq, icode)
+                current_icode = None
+                if current_icode != icode:
+                    current_icode = icode
+                structure_builder.init_residue(resname, hetatm_flag, resseq, icode)
+            else:
+                if current_icode != icode:
+                    current_icode = icode
+                    structure_builder.init_residue(resname, hetatm_flag, resseq, icode)
 
             coord = numpy.array((x, y, z), 'f')
             element = element_list[i] if element_list else None
