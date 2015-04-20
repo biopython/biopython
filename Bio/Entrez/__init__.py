@@ -370,15 +370,15 @@ def ecitmatch(**keywds):
     >>> from Bio import Entrez
     >>> Entrez.email = "Your.Name.Here@example.org"
     >>> citation_1 = {
-    >>>    "journal_title": "proc natl acad sci u s a",
-    >>>    "year": "1991", "volume": "88", "first_page": "3248",
-    >>>     "author_name": "mann bj", "key": "citation_1"}
+    ...    "journal_title": "proc natl acad sci u s a",
+    ...    "year": "1991", "volume": "88", "first_page": "3248",
+    ...    "author_name": "mann bj", "key": "citation_1"}
     >>> record = Entrez.ECitMatch(db="pubmed", bdata=[citation_1])
     >>> print(record["Query"])
     """
     cgi = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/ecitmatch.cgi'
     # XML is the only supported value, and it actually returns TXT.
-    variables = {'rettype': 'xml'}
+    variables = {'retmode': 'xml'}
     citation_keys = ('journal_title', 'year', 'volume', 'first_page', 'author_name', 'key')
 
     # Accept pre-formatted strings
@@ -393,7 +393,7 @@ def ecitmatch(**keywds):
             bdata.append(formatted_citation)
         variables['bdata'] = '\r'.join(bdata)
 
-    return _open(cgi, variables)
+    return _open(cgi, variables, ecitmatch=True)
 
 
 def read(handle, validate=True):
@@ -454,7 +454,7 @@ def parse(handle, validate=True):
     return records
 
 
-def _open(cgi, params=None, post=False):
+def _open(cgi, params=None, post=False, ecitmatch=False):
     """Helper function to build the URL and open a handle to it (PRIVATE).
 
     Open a handle to Entrez.  cgi is the URL for the cgi script to access.
@@ -502,6 +502,9 @@ a user at the email address provided before blocking access to the
 E-utilities.""", UserWarning)
     # Open a handle to Entrez.
     options = _urlencode(params, doseq=True)
+    # _urlencode encodes pipes, which NCBI expects in ECitMatch
+    if ecitmatch:
+        options = options.replace('%7C', '|')
     # print cgi + "?" + options
     try:
         if post:
