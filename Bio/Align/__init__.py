@@ -802,8 +802,13 @@ class MultipleSeqAlignment(object):
             return self._records[index]
         elif isinstance(index, slice):
             # e.g. sub_align = align[i:j:k]
-            # TODO - Should this drop the annotations and column_annotations?
-            return MultipleSeqAlignment(self._records[index], self._alphabet)
+            new = MultipleSeqAlignment(self._records[index], self._alphabet)
+            if self.column_annotations and len(new) == len(self):
+                # All rows kept (although could have been reversed)
+                # Perserve the column annotations too,
+                for k, v in self.column_annotations.items():
+                    new.column_annotations[k] = v
+            return new
         elif len(index) != 2:
             raise TypeError("Invalid index type.")
 
@@ -817,9 +822,14 @@ class MultipleSeqAlignment(object):
             return "".join(rec[col_index] for rec in self._records[row_index])
         else:
             # e.g. sub_align = align[1:4, 5:7], gives another alignment
-            # TODO - If all the rows are kept, want to slice column_annotations
-            return MultipleSeqAlignment((rec[col_index] for rec in self._records[row_index]),
-                                        self._alphabet)
+            new = MultipleSeqAlignment((rec[col_index] for rec in self._records[row_index]),
+                                       self._alphabet)
+            if self.column_annotations and len(new) == len(self):
+                # All rows kept (although could have been reversed)
+                # Perserve the column annotations too,
+                for k, v in self.column_annotations.items():
+                    new.column_annotations[k] = v[col_index]
+            return new
 
     def sort(self, key=None, reverse=False):
         """Sort the rows (SeqRecord objects) of the alignment in place.
