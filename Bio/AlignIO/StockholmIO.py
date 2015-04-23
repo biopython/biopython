@@ -141,6 +141,32 @@ secondary structure string here, are also sliced:
     >>> print(sub_record.letter_annotations['secondary_structure'])
     -------<<<
 
+Likewise with the alignment object, as long as you are not dropping any rows,
+slicing specific columns of an alignment will slice any per-column-annotations:
+
+    >>> align.column_annotations["secondary_structure"]
+    '.................<<<<<<<<...<<<<<<<........>>>>>>>........<<<<<<<.......>>>>>>>..>>>>>>>>...............'
+    >>> part_align = align[:,10:20]
+    >>> part_align.column_annotations["secondary_structure"]
+    '.......<<<'
+
+You can also see this in the Stockholm output of this partial-alignment:
+
+    >>> print(part_align.format("stockholm"))
+    # STOCKHOLM 1.0
+    #=GF SQ 2
+    AP001509.1 UCAACACUCU
+    #=GS AP001509.1 AC AP001509.1
+    #=GS AP001509.1 DE AP001509.1
+    #=GR AP001509.1 SS -------<<<
+    AE007476.1 AUCGUUUUAC
+    #=GS AE007476.1 AC AE007476.1
+    #=GS AE007476.1 DE AE007476.1
+    #=GR AE007476.1 SS -------<<<
+    #=GC SS_cons .......<<<
+    //
+    <BLANKLINE>
+
 """
 from __future__ import print_function
 
