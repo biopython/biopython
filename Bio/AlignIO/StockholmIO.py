@@ -1,4 +1,4 @@
-# Copyright 2006-2013 by Peter Cock.  All rights reserved.
+# Copyright 2006-2015 by Peter Cock.  All rights reserved.
 #
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -120,7 +120,7 @@ with Alignnment objects. Again, if you want to you can specify this is RNA:
     AAAAUUGAAUAUCGUUUUACUUGUUUAU-GUCGUGAAU-UGG-CACGA-CGUUUCUACAAGGUG-CCGG-AA-CACCUAACAAUAAGUAAGUCAGCAGUGAGAU
     -----------------<<<<<<<<-----<<.<<-------->>.>>----------.<<<<<--------->>>>>.-->>>>>>>>---------------
 
-Remember that if you slice a SeqRecord, the per-letter-annotions like the
+Remember that if you slice a SeqRecord, the per-letter-annotations like the
 secondary structure string here, are also sliced:
 
     >>> sub_record = record[10:20]
