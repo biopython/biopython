@@ -1,0 +1,186 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<uniprot xmlns="http://uniprot.org/uniprot" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://uniprot.org/uniprot http://www.uniprot.org/support/docs/uniprot.xsd">
+<entry dataset="TrEMBL" created="2011-05-31" modified="2015-01-07" version="17">
+<accession>F2CXE6</accession>
+<name>F2CXE6_HORVD</name>
+<protein>
+<submittedName>
+<fullName evidence="3">Plasma membrane intrinsic protein</fullName>
+</submittedName>
+<submittedName>
+<fullName evidence="2">Predicted protein</fullName>
+</submittedName>
+</protein>
+<gene>
+<name type="primary" evidence="3">HvPIP2;8</name>
+</gene>
+<organism evidence="2">
+<name type="scientific">Hordeum vulgare var. distichum</name>
+<name type="common">Domesticated barley</name>
+<dbReference type="NCBI Taxonomy" id="112509"/>
+<lineage>
+<taxon>Eukaryota</taxon>
+<taxon>Viridiplantae</taxon>
+<taxon>Streptophyta</taxon>
+<taxon>Embryophyta</taxon>
+<taxon>Tracheophyta</taxon>
+<taxon>Spermatophyta</taxon>
+<taxon>Magnoliophyta</taxon>
+<taxon>Liliopsida</taxon>
+<taxon>Poales</taxon>
+<taxon>Poaceae</taxon>
+<taxon>BEP clade</taxon>
+<taxon>Pooideae</taxon>
+<taxon>Triticeae</taxon>
+<taxon>Hordeum</taxon>
+</lineage>
+</organism>
+<reference key="1" evidence="2">
+<citation type="journal article" date="2010" name="Plant Physiol." volume="156" first="20" last="28">
+<title>Comprehensive sequence analysis of 24,783 barley full-length cDNAs derived from 12 clone libraries.</title>
+<authorList>
+<person name="Matsumoto T."/>
+<person name="Tanaka T."/>
+<person name="Sakai H."/>
+<person name="Amano N."/>
+<person name="Kanamori H."/>
+<person name="Kurita K."/>
+<person name="Kikuta A."/>
+<person name="Kamiya K."/>
+<person name="Yamamoto M."/>
+<person name="Ikawa H."/>
+<person name="Fujii N."/>
+<person name="Hori K."/>
+<person name="Itoh T."/>
+<person name="Sato K."/>
+</authorList>
+<dbReference type="PubMed" id="21415278"/>
+<dbReference type="DOI" id="10.1104/pp.110.171579"/>
+</citation>
+<scope>NUCLEOTIDE SEQUENCE</scope>
+<source>
+<tissue evidence="2">Shoot</tissue>
+</source>
+</reference>
+<reference key="2" evidence="3">
+<citation type="journal article" date="2011" name="Plant Signal. Behav." volume="7" first="1648" last="1652">
+<title>Functional characterization of a novel plasma membrane intrinsic protein2 in barley.</title>
+<authorList>
+<person name="Shibasaka M."/>
+<person name="Sasano S."/>
+<person name="Utsugi S."/>
+<person name="Katsuhara M."/>
+</authorList>
+</citation>
+<scope>NUCLEOTIDE SEQUENCE</scope>
+<source>
+<tissue evidence="3">Shoot</tissue>
+</source>
+</reference>
+<reference key="3" evidence="3">
+<citation type="submission" date="2013-02" db="EMBL/GenBank/DDBJ databases">
+<authorList>
+<person name="Shibasaka M."/>
+<person name="Katsuhara M."/>
+<person name="Sasano S."/>
+</authorList>
+</citation>
+<scope>NUCLEOTIDE SEQUENCE</scope>
+<source>
+<tissue evidence="3">Shoot</tissue>
+</source>
+</reference>
+<comment type="similarity">
+<text evidence="1">Belongs to the MIP/aquaporin family.</text>
+</comment>
+<dbReference type="EMBL" id="AK356299">
+<property type="protein sequence ID" value="BAJ87517.1"/>
+<property type="molecule type" value="mRNA"/>
+</dbReference>
+<dbReference type="EMBL" id="AK359199">
+<property type="protein sequence ID" value="BAJ90410.1"/>
+<property type="molecule type" value="mRNA"/>
+</dbReference>
+<dbReference type="EMBL" id="AB808658">
+<property type="protein sequence ID" value="BAN04711.1"/>
+<property type="molecule type" value="mRNA"/>
+</dbReference>
+<dbReference type="ProteinModelPortal" id="F2CXE6"/>
+<dbReference type="ExpressionAtlas" id="F2CXE6">
+<property type="expression patterns" value="baseline"/>
+</dbReference>
+<dbReference type="GO" id="GO:0016021">
+<property type="term" value="C:integral component of membrane"/>
+<property type="evidence" value="IEA:UniProtKB-KW"/>
+</dbReference>
+<dbReference type="GO" id="GO:0005215">
+<property type="term" value="F:transporter activity"/>
+<property type="evidence" value="IEA:InterPro"/>
+</dbReference>
+<dbReference type="Gene3D" id="1.20.1080.10">
+<property type="match status" value="1"/>
+</dbReference>
+<dbReference type="InterPro" id="IPR023271">
+<property type="entry name" value="Aquaporin-like"/>
+</dbReference>
+<dbReference type="InterPro" id="IPR000425">
+<property type="entry name" value="MIP"/>
+</dbReference>
+<dbReference type="InterPro" id="IPR022357">
+<property type="entry name" value="MIP_CS"/>
+</dbReference>
+<dbReference type="PANTHER" id="PTHR19139">
+<property type="entry name" value="PTHR19139"/>
+<property type="match status" value="1"/>
+</dbReference>
+<dbReference type="Pfam" id="PF00230">
+<property type="entry name" value="MIP"/>
+<property type="match status" value="1"/>
+</dbReference>
+<dbReference type="PRINTS" id="PR00783">
+<property type="entry name" value="MINTRINSICP"/>
+</dbReference>
+<dbReference type="SUPFAM" id="SSF81338">
+<property type="entry name" value="SSF81338"/>
+<property type="match status" value="1"/>
+</dbReference>
+<dbReference type="TIGRFAMs" id="TIGR00861">
+<property type="entry name" value="MIP"/>
+<property type="match status" value="1"/>
+</dbReference>
+<dbReference type="PROSITE" id="PS00221">
+<property type="entry name" value="MIP"/>
+<property type="match status" value="1"/>
+</dbReference>
+<proteinExistence type="evidence at transcript level"/>
+<keyword id="KW-0472" evidence="1">Membrane</keyword>
+<keyword id="KW-0812" evidence="1">Transmembrane</keyword>
+<keyword id="KW-0813" evidence="1">Transport</keyword>
+<evidence key="1" type="ECO:0000256">
+<source>
+<dbReference type="RuleBase" id="RU000477"/>
+</source>
+</evidence>
+<evidence key="2" type="ECO:0000313">
+<source>
+<dbReference type="EMBL" id="BAJ87517.1"/>
+</source>
+</evidence>
+<evidence key="3" type="ECO:0000313">
+<source>
+<dbReference type="EMBL" id="BAN04711.1"/>
+</source>
+</evidence>
+<sequence length="291" mass="30495" checksum="07E95E632BD020E9" modified="2011-05-31" version="1">
+MTMAAAQGKLSPDAIDNEVISNGSAKDYLDPPPAPLVDAGELGKWSLYRAVIAEFTATLL
+FVYVAVATVVGHKRQTDAQACSGAGVLGIAWAFGGTIAVLVYCTAGISGGHINPAVTFGL
+LLARKVSLPRAFLYMVAQCVGAICGAALVRAVHGGHHYALYGGGANELAPGYSRMAGLIA
+EIAGTFVLVYTVFSATDPKRIARDPHVPVLAPLLIGFSVLMAHLATIPVTGTGINPARSF
+GAAVVYNNKKAWGDQWIFWVGPFIGSAVAMVYHQYVLRNSAIFRSNYDAAV
+</sequence>
+</entry>
+<copyright>
+Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
+Distributed under the Creative Commons Attribution-NoDerivs License
+</copyright>
+</uniprot>
