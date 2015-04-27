@@ -15,6 +15,7 @@ from Bio.Seq import Seq
 
 class MotifTestsBasic(unittest.TestCase):
     def setUp(self):
+        self.CONSENSUSin = open("motifs/consensus.txt")
         self.PFMin = open("motifs/SRF.pfm")
         self.SITESin = open("motifs/Arnt.sites")
         self.TFout = "motifs/tf.out"
@@ -25,6 +26,7 @@ class MotifTestsBasic(unittest.TestCase):
         self.m = motifs.create(instances)
 
     def tearDown(self):
+        self.CONSENSUSin.close()
         self.PFMin.close()
         self.SITESin.close()
         if os.path.exists(self.TFout):
@@ -393,6 +395,82 @@ class MotifTestsBasic(unittest.TestCase):
         self.assertEqual(str(record[15].instances[20]), "AGCCTCCAGGTCGCATGG")
         self.assertEqual(record[15].mask, (1, 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1))
         self.assertAlmostEqual(record[15].score, 1.0395)
+
+    def test_consensus_parsing(self):
+        """Test if Bio.motifs can convert degenerate consensus sequences to motifs.
+        """
+        record = motifs.parse(self.CONSENSUSin, "consensus")
+        self.assertEqual(len(record), 3)
+        motif = record[0]
+        self.assertEqual(motif.name, "consensus-motifID1")
+        self.assertEqual(motif.counts['A', 0], 12)
+        self.assertEqual(motif.counts['A', 1], 0)
+        self.assertEqual(motif.counts['A', 2], 0)
+        self.assertEqual(motif.counts['A', 3], 0)
+        self.assertEqual(motif.counts['A', 4], 6)
+        self.assertEqual(motif.counts['A', 5], 0)
+        self.assertEqual(motif.counts['A', 6], 0)
+        self.assertEqual(motif.counts['A', 7], 6)
+        self.assertEqual(motif.counts['A', 8], 0)
+        self.assertEqual(motif.counts['A', 9], 6)
+        self.assertEqual(motif.counts['A', 10], 0)
+        self.assertEqual(motif.counts['A', 11], 4)
+        self.assertEqual(motif.counts['A', 12], 4)
+        self.assertEqual(motif.counts['A', 13], 4)
+        self.assertEqual(motif.counts['A', 14], 3)
+        self.assertEqual(motif.counts['C', 0], 0)
+        self.assertEqual(motif.counts['C', 1], 12)
+        self.assertEqual(motif.counts['C', 2], 0)
+        self.assertEqual(motif.counts['C', 3], 0)
+        self.assertEqual(motif.counts['C', 4], 0)
+        self.assertEqual(motif.counts['C', 5], 6)
+        self.assertEqual(motif.counts['C', 6], 6)
+        self.assertEqual(motif.counts['C', 7], 0)
+        self.assertEqual(motif.counts['C', 8], 0)
+        self.assertEqual(motif.counts['C', 9], 6)
+        self.assertEqual(motif.counts['C', 10], 4)
+        self.assertEqual(motif.counts['C', 11], 0)
+        self.assertEqual(motif.counts['C', 12], 4)
+        self.assertEqual(motif.counts['C', 13], 4)
+        self.assertEqual(motif.counts['C', 14], 3)
+        self.assertEqual(motif.counts['G', 0], 0)
+        self.assertEqual(motif.counts['G', 1], 0)
+        self.assertEqual(motif.counts['G', 2], 12)
+        self.assertEqual(motif.counts['G', 3], 0)
+        self.assertEqual(motif.counts['G', 4], 6)
+        self.assertEqual(motif.counts['G', 5], 0)
+        self.assertEqual(motif.counts['G', 6], 6)
+        self.assertEqual(motif.counts['G', 7], 0)
+        self.assertEqual(motif.counts['G', 8], 6)
+        self.assertEqual(motif.counts['G', 9], 0)
+        self.assertEqual(motif.counts['G', 10], 4)
+        self.assertEqual(motif.counts['G', 11], 4)
+        self.assertEqual(motif.counts['G', 12], 0)
+        self.assertEqual(motif.counts['G', 13], 4)
+        self.assertEqual(motif.counts['G', 14], 3)
+        self.assertEqual(motif.counts['T', 0], 0)
+        self.assertEqual(motif.counts['T', 1], 0)
+        self.assertEqual(motif.counts['T', 2], 0)
+        self.assertEqual(motif.counts['T', 3], 12)
+        self.assertEqual(motif.counts['T', 4], 0)
+        self.assertEqual(motif.counts['T', 5], 6)
+        self.assertEqual(motif.counts['T', 6], 0)
+        self.assertEqual(motif.counts['T', 7], 6)
+        self.assertEqual(motif.counts['T', 8], 6)
+        self.assertEqual(motif.counts['T', 9], 0)
+        self.assertEqual(motif.counts['T', 10], 4)
+        self.assertEqual(motif.counts['T', 11], 4)
+        self.assertEqual(motif.counts['T', 12], 4)
+        self.assertEqual(motif.counts['T', 13], 0)
+        self.assertEqual(motif.counts['T', 14], 3)
+        self.assertEqual(motif.degenerate_consensus, "ACGTRYSWKMBDHVN")
+        motif = record[1]
+        self.assertEqual(motif.name, "consensus-motifID2")
+        self.assertEqual(motif.degenerate_consensus, "AAAAAAAAACCCCCCCCCC")
+        motif = record[2]
+        self.assertEqual(motif.name, "consensus-motifID3")
+        self.assertEqual(motif.degenerate_consensus, "GCGAAGGAAGCAGCGCGTGTG")
+
 
     def test_pfm_parsing(self):
         """Test if Bio.motifs can parse JASPAR-style pfm files.
