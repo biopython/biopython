@@ -276,8 +276,8 @@ def _read_jaspar(handle):
 
         if head_match:
             identifier = head_match.group(1)
-            if head_match.group(2):
-                name = head_match.group(2)
+            if head_match.group(3):
+                name = head_match.group(3)
             else:
                 name = identifier
         elif row_match_long:
