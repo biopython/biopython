@@ -1087,7 +1087,7 @@ class DsspTests(unittest.TestCase):
         # dssp indices of residues participating in (provisional) h-bonds. Note
         # that actual h-bonds are typically determined by an energetic
         # threshold.
-        for val in dssp.itervalues():
+        for val in dssp.values():
             hb_indices |= set(
                 (val[5] + x) for x in (val[6], val[8], val[10], val[12]))
 
