@@ -1092,7 +1092,7 @@ class DsspTests(unittest.TestCase):
                 (val[5] + x) for x in (val[6], val[8], val[10], val[12]))
 
         # Check if all h-bond partner indices were successfully parsed.
-        self.assertTrue((dssp_indices & hb_indices) == hb_indices)
+        self.assertEquals((dssp_indices & hb_indices), hb_indices)
 
 
 class NACCESSTests(unittest.TestCase):
