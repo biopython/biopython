@@ -286,7 +286,8 @@ class _InsdcWriter(SequentialSequenceWriter):
                        "transl_except", "transl_table")
 
     def _write_feature_qualifier(self, key, value=None, quote=None):
-        if not value:
+        if value is None:
+            # Value-less entry like /pseudo
             self.handle.write("%s/%s\n" % (self.QUALIFIER_INDENT_STR, key))
             return
         # Quick hack with no line wrapping, may be useful for testing:
@@ -345,16 +346,14 @@ class _InsdcWriter(SequentialSequenceWriter):
                + self._wrap_location(location) + "\n"
         self.handle.write(line)
         # Now the qualifiers...
-        for key, values in feature.qualifiers.items():
+        for key in sorted(feature.qualifiers.keys()):
+            values = feature.qualifiers[key]
             if isinstance(values, list) or isinstance(values, tuple):
                 for value in values:
                     self._write_feature_qualifier(key, value)
-            elif values:
-                # String, int, etc
-                self._write_feature_qualifier(key, values)
             else:
-                # e.g. a /pseudo entry
-                self._write_feature_qualifier(key)
+                # String, int, etc - or None for a /pseudo tpy entry
+                self._write_feature_qualifier(key, values)
 
     def _get_annotation_str(self, record, key, default=".", just_first=False):
         """Get an annotation dictionary entry (as a string).

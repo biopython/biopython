@@ -22,7 +22,7 @@ class ChainSelector(object):
         self.chain_id = chain_id
         self.start = start
         self.end = end
-        self.model_id = 0
+        self.model_id = model_id
 
     def accept_model(self, model):
         # model - only keep model 0

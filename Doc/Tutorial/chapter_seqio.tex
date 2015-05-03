@@ -530,7 +530,8 @@ generator giving \verb|SeqRecord| objects. Here we have just used the output
 from the \verb|SeqIO.parse| function. As the name suggests, this returns a
 Python dictionary.
 
-Since this variable \verb|orchid_dict| is an ordinary Python dictionary, we can look at all of the keys we have available:
+Since this variable \verb|orchid_dict| is an ordinary Python dictionary,
+we can look at all of the keys we have available:
 
 %cont-doctest
 \begin{verbatim}
@@ -539,13 +540,17 @@ Since this variable \verb|orchid_dict| is an ordinary Python dictionary, we can 
 \end{verbatim}
 %Can't use following for doctest due to abbreviation
 \begin{verbatim}
->>> orchid_dict.keys()
+>>> list(orchid_dict.keys())
 ['Z78484.1', 'Z78464.1', 'Z78455.1', 'Z78442.1', 'Z78532.1', 'Z78453.1', ..., 'Z78471.1']
 \end{verbatim}
 
+You can leave out the ``list(...)`` bit if you are still using Python 2.
+Under Python 3 the dictionary methods like ``.keys()`` and ``.values()``
+are iterators rather than lists.
+
 If you really want to, you can even look at all the records at once:
 \begin{verbatim}
->>> orchid_dict.values() #lots of output!
+>>> list(orchid_dict.values()) #lots of output!
 ...
 \end{verbatim}
 

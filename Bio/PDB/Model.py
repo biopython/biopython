@@ -58,8 +58,12 @@ class Model(Entity):
 
     # Public
 
-    def get_residues(self):
+    def get_chains(self):
         for c in self:
+            yield c
+
+    def get_residues(self):
+        for c in self.get_chains():
             for r in c:
                 yield r
 

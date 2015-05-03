@@ -143,7 +143,7 @@ CCCTTTTGGGTTTNTTNTTGGTAAANNNTTCCCGGGTGGGGGNGGTNNNGAAA
 Here the original file and what Biopython would output differ in the line
 wrapping. Also note that under Python 3, the get_raw method will return a
 bytes string, hence the use of decode to turn it into a (unicode) string.
-This is uncessary on Python 2.
+This is unnecessary on Python 2.
 
 Also note that the get_raw method will preserve the newline endings. This
 example FASTQ file uses Unix style endings (b"\n" only),
@@ -229,7 +229,7 @@ depending on the file format, and is best avoided unless you have a strong
 reason to do so.
 
 If you give a filename, then each time you call write() the existing file
-will be overwriten. For sequential files formats (e.g. fasta, genbank) each
+will be overwritten. For sequential files formats (e.g. fasta, genbank) each
 "record block" holds a single sequence.  For these files it would probably
 be safe to call write() multiple times by re-using the same handle.
 
@@ -301,7 +301,7 @@ Note that while Bio.SeqIO can read all the above file formats, it cannot
 write to all of them.
 
 You can also use any file format supported by Bio.AlignIO, such as "nexus",
-"phlip" and "stockholm", which gives you access to the individual sequences
+"phylip" and "stockholm", which gives you access to the individual sequences
 making up each alignment as SeqRecords.
 """
 
@@ -327,7 +327,7 @@ FAO BioPython Developers
 The way I envision this SeqIO system working as that for any sequence file
 format we have an iterator that returns SeqRecord objects.
 
-This also applies to interlaced fileformats (like clustal - although that
+This also applies to interlaced file formats (like clustal - although that
 is now handled via Bio.AlignIO instead) where the file cannot be read record
 by record.  You should still return an iterator, even if the implementation
 could just as easily return a list.
@@ -340,7 +340,7 @@ These file format specific sequence iterators may be implemented as:
 It is then trivial to turn this iterator into a list of SeqRecord objects,
 an in memory dictionary, or a multiple sequence alignment object.
 
-For building the dictionary by default the id propery of each SeqRecord is
+For building the dictionary by default the id property of each SeqRecord is
 used as the key.  You should always populate the id property, and it should
 be unique in most cases. For some file formats the accession number is a good
 choice.  If the file itself contains ambiguous identifiers, don't try and

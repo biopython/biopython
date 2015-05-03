@@ -370,6 +370,7 @@ PACKAGES = [
     'Bio.Statistics',
     'Bio.SubsMat',
     'Bio.SVDSuperimposer',
+    'Bio.PDB.QCPSuperimposer',
     'Bio.SwissProt',
     'Bio.TogoWS',
     'Bio.Phylo',
@@ -435,6 +436,11 @@ if is_Numpy_installed():
     EXTENSIONS.append(
         Extension('Bio.motifs._pwm',
                   ["Bio/motifs/_pwm.c"],
+                  include_dirs=[numpy_include_dir],
+                  ))
+    EXTENSIONS.append(
+        Extension('Bio.PDB.QCPSuperimposer.qcprotmodule',
+                  ["Bio/PDB/QCPSuperimposer/qcprotmodule.c"],
                   include_dirs=[numpy_include_dir],
                   ))
 

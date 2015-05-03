@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # Copyright 2010 by Andrea Pierleoni
-# Revisions copyright 2010-2013 by Peter Cock.  All rights reserved.
+# Revisions copyright 2010-2015 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -315,6 +315,21 @@ class TestUniprot(unittest.TestCase):
         old = SeqIO.read("SwissProt/H2CNN8.txt", "swiss")
         new = SeqIO.read("SwissProt/H2CNN8.xml", "uniprot-xml")
         self.compare_txt_xml(old, new)
+
+    def test_F2CXE6(self):
+        """Compare SwissProt text and uniprot XML versions of F2CXE6."""
+        # This evil record has a semi-colon in the genem name,
+        # GN   Name=HvPIP2;8 {ECO:0000313|EMBL:BAN04711.1};
+        # <gene><name type="primary" evidence="3">HvPIP2;8</name></gene>
+        old = SeqIO.read("SwissProt/F2CXE6.txt", "swiss")
+        new = SeqIO.read("SwissProt/F2CXE6.xml", "uniprot-xml")
+        self.compare_txt_xml(old, new)
+        # TODO - Why the mismatch gene_name vs gene_name_primary?
+        # TODO - Handle evidence codes on GN line (see GitHub isse #416)
+        self.assertEqual(old.annotations["gene_name"], 'Name=HvPIP2;8 {ECO:0000313|EMBL:BAN04711.1};')
+        self.assertEqual(new.annotations["gene_name_primary"], 'HvPIP2;8')
+        self.assertEqual(old.name, 'F2CXE6_HORVD')
+        self.assertEqual(new.name, 'F2CXE6_HORVD')
 
     def test_multi_ex(self):
         """Compare SwissProt text and uniprot XML versions of several examples."""

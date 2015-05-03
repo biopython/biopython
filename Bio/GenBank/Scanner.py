@@ -201,7 +201,7 @@ class InsdcScanner(object):
                     feature_lines = [line[self.FEATURE_QUALIFIER_INDENT:]]
                 line = self.handle.readline()
                 while line[:self.FEATURE_QUALIFIER_INDENT] == self.FEATURE_QUALIFIER_SPACER \
-                        or line.rstrip() == "":  # cope with blank lines in the midst of a feature
+                        or (line != '' and line.rstrip() == ""):  # cope with blank lines in the midst of a feature
                     # Use strip to remove any harmless trailing white space AND and leading
                     # white space (e.g. out of spec files with too much indentation)
                     feature_lines.append(line[self.FEATURE_QUALIFIER_INDENT:].strip())

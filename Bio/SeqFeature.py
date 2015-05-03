@@ -1,6 +1,6 @@
 # Copyright 2000-2003 Jeff Chang.
 # Copyright 2001-2008 Brad Chapman.
-# Copyright 2005-2012 by Peter Cock.
+# Copyright 2005-2015 by Peter Cock.
 # Copyright 2006-2009 Michiel de Hoon.
 # All rights reserved.
 # This code is part of the Biopython distribution and governed by its
@@ -34,10 +34,9 @@ classes:
 Specify locations of a feature on a Sequence
 --------------------------------------------
 
-This aims to handle, in Ewan's words, 'the dreaded fuzziness issue' in
-much the same way as Biocorba. This has the advantages of allowing us
-to handle fuzzy stuff in case anyone needs it, and also be compatible
-with Biocorba.
+This aims to handle, in Ewan Birney's words, 'the dreaded fuzziness issue'.
+This has the advantages of allowing us to handle fuzzy stuff in case anyone
+needs it, and also be compatible with BioPerl etc and BioSQL.
 
 classes:
 

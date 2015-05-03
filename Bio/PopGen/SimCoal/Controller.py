@@ -171,11 +171,11 @@ class _FastSimCoalCommandLine(AbstractCommandline):
 
 
 class FastSimCoalController(object):
-    def __init__(self, fastsimcoal_dir=None, bin_name="fsc251"):
+    def __init__(self, fastsimcoal_dir=None, bin_name="fsc252"):
         """Initializes the controller.
 
         fastsimcoal_dir is the directory where fastsimcoal is.
-        By default the binary should be called fsc251.
+        By default the binary should be called fsc252.
         bin_name specifies a different name for the binary.
 
         The initializer checks for existence and executability of binaries

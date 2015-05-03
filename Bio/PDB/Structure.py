@@ -37,8 +37,12 @@ class Structure(Entity):
 
     # Public
 
-    def get_chains(self):
+    def get_models(self):
         for m in self:
+            yield m
+
+    def get_chains(self):
+        for m in self.get_models():
             for c in m:
                 yield c
 

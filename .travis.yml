@@ -24,7 +24,8 @@ before_install:
 #Misc command line tools we can call
   - "sudo apt-get install clustalw clustalo"
   - "sudo apt-get install muscle mafft probcons wise emboss"
-  - "sudo apt-get install --no-install-recommends t-coffee"
+#Suspect an update of t-coffee is causing the test run to stall...
+#  - "sudo apt-get install --no-install-recommends t-coffee"
   - "sudo apt-get install samtools bwa"
 #Misc python modules we can use as soft dependencies
   - "if [[ $PYPY != 'yes' ]]; then pip install reportlab; fi"

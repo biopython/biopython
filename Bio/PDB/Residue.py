@@ -3,13 +3,11 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+"""Residue class, used by Structure objects."""
+
 # My Stuff
 from Bio.PDB.PDBExceptions import PDBConstructionException
 from Bio.PDB.Entity import Entity, DisorderedEntityWrapper
-
-
-"""Residue class, used by Structure objects."""
-
 
 _atom_name_dict = {}
 _atom_name_dict["N"] = 1
@@ -111,6 +109,10 @@ class Residue(Entity):
 
     def get_segid(self):
         return self.segid
+
+    def get_atom(self):
+        for a in self:
+            yield a
 
 
 class DisorderedResidue(DisorderedEntityWrapper):
