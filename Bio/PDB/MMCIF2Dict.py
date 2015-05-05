@@ -7,6 +7,7 @@
 
 from __future__ import print_function
 
+from Bio.File import as_handle
 from Bio._py3k import input as _input
 
 import shlex
@@ -15,7 +16,7 @@ import shlex
 class MMCIF2Dict(dict):
 
     def __init__(self, filename):
-        with open(filename) as handle:
+        with as_handle(filename) as handle:
             loop_flag = False
             key = None
             tokens = self._tokenize(handle)
