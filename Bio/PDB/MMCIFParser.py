@@ -48,6 +48,12 @@ class MMCIFParser(object):
     # Public methods
 
     def get_structure(self, structure_id, filename):
+        """Return the structure.
+
+        Arguments:
+         - structure_id - string, the id that will be used for the structure
+         - filename - name of the mmCIF file OR an open filehandle
+        """
         with warnings.catch_warnings():
             if self.QUIET:
                 warnings.filterwarnings("ignore", category=PDBConstructionWarning)
