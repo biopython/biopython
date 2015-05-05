@@ -14,8 +14,14 @@ import shlex
 
 
 class MMCIF2Dict(dict):
+    """Parse a mmCIF file and return a dictionary."""
 
     def __init__(self, filename):
+        """Parse a mmCIF file and return a dictionary.
+
+        Arguments:
+         - file - name of the PDB file OR an open filehandle
+        """
         with as_handle(filename) as handle:
             loop_flag = False
             key = None
