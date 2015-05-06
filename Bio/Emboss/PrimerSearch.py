@@ -48,6 +48,9 @@ class Amplifier(object):
     def __init__(self):
         self.hit_info = ""
         self.length = 0
+        self.seq_id = ""
+        self.seq_description = ""
+        self.binding_sites = {}
 
 
 def read(handle):
@@ -65,11 +68,29 @@ def read(handle):
             amplifier = Amplifier()
             record.amplifiers[name].append(amplifier)
         elif line.startswith("\tSequence: "):
-            amplifier.hit_info = line.replace("\tSequence: ", "")
+            seq_id = line.replace("\tSequence: ", "")
+            amplifier.seq_id = seq_id.strip()
+            amplifier.hit_info = seq_id
         elif line.startswith("\tAmplimer length: "):
             length = line.split()[-2]
             amplifier.length = int(length)
+        elif line.endswith("mismatches\n"):
+            words = line.strip().split()
+            misses = int(words[-2])
+            location = words[-4]
+            # PrimerSearch notation for distance from end is [<index>]
+            if location.startswith("["):
+                # PrimerSearch is 1-indexed
+                location = -int(location[1:-1]) + 1
+            else:
+                location = int(location) - 1
+            seq = words[0]
+            amplifier.binding_sites[seq] = (location, misses)
+            amplifier.hit_info += line
+
+
         else:
+            amplifier.seq_description = line.strip()
             amplifier.hit_info += line
 
     for name in record.amplifiers:
