@@ -22,6 +22,10 @@ Bio.PDB now has a QCPSuperimposer module using the Quaternion Characteristic
 Polynomial algorithm for superimposing structures. This is a fast alternative
 to the existing SVDSuperimposer code using singular value decomposition.
 
+Bio.Entrez now implements the NCBI Entrez Citation Matching function
+(ECitMatch), which retrieves PubMed IDs (PMIDs) that correspond to a set of
+input citation strings.
+
 Additionally, a number of small bugs have been fixed with further additions
 to the test suite, and there has been further work on conforming to the
 Python PEP8 standard coding style.
