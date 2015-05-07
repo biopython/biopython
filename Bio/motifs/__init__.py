@@ -205,7 +205,6 @@ class Instances(list):
         motif instances in a given sequence.
 
             - case_sensitive: ignore case of instances and sequence
-            - minratio: minimum ratio of sequence match (from 0 to 1)
 
         >>> from Bio import motifs
         >>> from Bio.Seq import Seq
