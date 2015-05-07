@@ -199,7 +199,7 @@ class Instances(list):
                 counts[letter][position] += 1
         return counts
 
-    def search(self, sequence, case_sensitive=True, minratio=1):
+    def search(self, sequence, case_sensitive=True):
         """
         A generator function, returning found positions of 
         motif instances in a given sequence.
@@ -233,21 +233,13 @@ class Instances(list):
         a sequence.
         """
 
-        seq_str = str(sequence)
+        sequence = str(sequence)
         if case_sensitive is False:
-            seq_str = seq_str.lower()
+            sequence = sequence.lower()
 
-        for pos in range(0, len(seq_str) - self.length + 1):
-            current_seq = str(seq_str[pos:pos + self.length])
-
+        for pos in range(0, len(sequence) - self.length + 1):
             for instance in self:
-                instance_str = str(instance)
-                if case_sensitive is False:
-                    instance_str = instance_str.lower()
-
-                totmatches = sum(c1==c2 for c1,c2 in zip(current_seq,instance_str))
-                ratio = 1. * totmatches / len(current_seq)
-                if ratio >= minratio:
+                if str(instance) == str(sequence[pos:pos + self.length]):
                     yield (pos, instance)
                     break  # no other instance will fit (we don't want to return multiple hits)
 
