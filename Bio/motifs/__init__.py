@@ -210,7 +210,7 @@ class Instances(list):
         >>> from Bio.Seq import Seq
 
         Let's create a motif with two instances:
-        >>> mymot = motifs.create([Seq('ACT'), Seq('aTT')])
+        >>> mymot = motifs.create([Seq('ACT'), Seq('ATT')])
         
         A search with default options will give a match for each instance:
         >>> matches = mymot.instances.search(Seq('gggggACTggggaTTggggact'))
@@ -233,9 +233,6 @@ class Instances(list):
 
         for pos in range(0, len(sequence) - self.length + 1):
             for instance in self:
-                instance_str = str(instance)
-                if case_sensitive is False:
-                    instance_str = str(instance).lower()
                 if str(instance) == str(sequence[pos:pos + self.length]):
                     yield (pos, instance)
                     break  # no other instance will fit (we don't want to return multiple hits)
