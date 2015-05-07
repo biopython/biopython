@@ -287,7 +287,6 @@ class ProteinAnalysis(object):
         and Cystines-residues (Cys-Cys-bond)
         """
         num_aa = self.count_amino_acids()
-        print("Cys:" + str(num_aa['C']))
         mec_reduced = num_aa['W']*5500+num_aa['Y']*1490
         if num_aa['C']%2 != 0:
             even_cys = num_aa['C']//2
