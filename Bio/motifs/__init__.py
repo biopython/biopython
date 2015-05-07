@@ -210,22 +210,17 @@ class Instances(list):
         >>> from Bio.Seq import Seq
 
         Let's create a motif with two instances:
-        >>> mymot = motifs.create([Seq('ACT'), Seq('ATT')])
+        >>> mymot = motifs.create([Seq('ACT'), Seq('aTT')])
         
         A search with default options will give a match for each instance:
-        >>> matches = mymot.instances.search(Seq('gggggACTggggATTggggact'))
+        >>> matches = mymot.instances.search(Seq('gggggACTggggaTTggggact'))
         >>> print(list(matches))
-        [(5, Seq('ACT', Alphabet())), (12, Seq('ATT', Alphabet()))]
+        [(5, Seq('ACT', Alphabet())), (12, Seq('aTT', Alphabet()))]
 
         Use the case_sensitive option to ignore the case of both sequences:
         >>> print(list(mymot.instances.search(Seq('gggggAcTggggaTtt'), 
         ... case_sensitive=False)))
-        [(5, Seq('ACT', Alphabet())), (12, Seq('ATT', Alphabet()))]
-
-        Use minratio to get imperfect matches:
-        >>> print(list(mymot.instances.search(Seq('gggggACTgggg'), 
-        ... minratio=0.3)))
-        [(5, Seq('ACT', Alphabet())), (6, Seq('ATT', Alphabet()))]
+        [(5, Seq('ACT', Alphabet())), (12, Seq('aTT', Alphabet()))]
 
 
         See also pairwise2.align.globalxx for aligning each instance to 
@@ -238,6 +233,9 @@ class Instances(list):
 
         for pos in range(0, len(sequence) - self.length + 1):
             for instance in self:
+                instance_str = str(instance)
+                if case_sensitive is False:
+                    instance_str = str(instance).lower()
                 if str(instance) == str(sequence[pos:pos + self.length]):
                     yield (pos, instance)
                     break  # no other instance will fit (we don't want to return multiple hits)
