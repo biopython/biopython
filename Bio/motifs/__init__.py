@@ -215,12 +215,12 @@ class Instances(list):
         A search with default options will give a match for each instance:
         >>> matches = mymot.instances.search(Seq('gggggACTggggaTTggggact'))
         >>> print(list(matches))
-        [(5, Seq('ACT', Alphabet())), (12, Seq('aTT', Alphabet()))]
+        [(5, Seq('ACT', Alphabet())), (12, Seq('ATT', Alphabet()))]
 
         Use the case_sensitive option to ignore the case of both sequences:
         >>> print(list(mymot.instances.search(Seq('gggggAcTggggaTtt'), 
         ... case_sensitive=False)))
-        [(5, Seq('ACT', Alphabet())), (12, Seq('aTT', Alphabet()))]
+        [(5, Seq('ACT', Alphabet())), (12, Seq('ATT', Alphabet()))]
 
 
         See also pairwise2.align.globalxx for aligning each instance to 
