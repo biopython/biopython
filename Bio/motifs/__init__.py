@@ -213,12 +213,12 @@ class Instances(list):
         >>> mymot = motifs.create([Seq('ACT'), Seq('ATT')])
         
         A search with default options will give a match for each instance:
-        >>> matches = mymot.instances.search(Seq('gggggACTggggaTTggggact'))
+        >>> matches = mymot.instances.search(Seq('gggggACTggggATTggggact'))
         >>> print(list(matches))
         [(5, Seq('ACT', Alphabet())), (12, Seq('ATT', Alphabet()))]
 
         Use the case_sensitive option to ignore the case of both sequences:
-        >>> print(list(mymot.instances.search(Seq('gggggAcTggggaTtt'), 
+        >>> print(list(mymot.instances.search(Seq('gggggAcTggggATtt'), 
         ... case_sensitive=False)))
         [(5, Seq('ACT', Alphabet())), (12, Seq('ATT', Alphabet()))]
 
@@ -229,7 +229,7 @@ class Instances(list):
 
         sequence = str(sequence)
         if case_sensitive is False:
-            sequence = sequence.lower()
+            sequence = sequence.upper()
 
         for pos in range(0, len(sequence) - self.length + 1):
             for instance in self:
