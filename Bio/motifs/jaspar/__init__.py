@@ -238,19 +238,21 @@ def _read_jaspar(handle):
 
     Format is one or more records of the form, e.g.::
 
-        >MA0001.1 AGL3
-        A  [ 0  3 79 40 66 48 65 11 65  0 ]
-        C  [94 75  4  3  1  2  5  2  3  3 ]
-        G  [ 1  0  3  4  1  0  5  3 28 88 ]
-        T  [ 2 19 11 50 29 47 22 81  1  6 ]
+      - JASPAR 2010 matrix_only format::
 
-    or::
+                >MA0001.1 AGL3
+                A  [ 0  3 79 40 66 48 65 11 65  0 ]
+                C  [94 75  4  3  1  2  5  2  3  3 ]
+                G  [ 1  0  3  4  1  0  5  3 28 88 ]
+                T  [ 2 19 11 50 29 47 22 81  1  6 ]
 
-        >MA0001.1 AGL3
-        0  3 79 40 66 48 65 11 65  0
-        4 75  4  3  1  2  5  2  3  3
-        1  0  3  4  1  0  5  3 28 88
-        2 19 11 50 29 47 22 81  1  6
+      - JASPAR 2010-2014 PFMs format::
+
+                >MA0001.1 AGL3
+                0	3	79	40	66	48	65	11	65	0
+                94	75	4	3	1	2	5	2	3	3
+                1	0	3	4	1	0	5	3	28	88
+                2	19	11	50	29	47	22	81	1	6
 
     """
 
@@ -276,8 +278,8 @@ def _read_jaspar(handle):
 
         if head_match:
             identifier = head_match.group(1)
-            if head_match.group(2):
-                name = head_match.group(2)
+            if head_match.group(3):
+                name = head_match.group(3)
             else:
                 name = identifier
         elif row_match_long:
