@@ -169,7 +169,7 @@ class EntrezOnlineCase(unittest.TestCase):
         records = list(Entrez.parse(handle))
         handle.close()
         self.assertEqual(len(records), 1)
-        self.assertTrue("'Product" in records[0])
+        self.assertTrue("Product" in records[0])
         self.assertTrue("Statistics" in records[0])
         self.assertTrue("RedundantGiList" in records[0])
 
