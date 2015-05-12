@@ -26,6 +26,9 @@ Bio.Entrez now implements the NCBI Entrez Citation Matching function
 (ECitMatch), which retrieves PubMed IDs (PMIDs) that correspond to a set of
 input citation strings.
 
+Bio.Entrez.parse(...) now supports NCBI XML files using XSD schemas, which
+will be downloaded and cached like NCBI DTD files.
+
 Additionally, a number of small bugs have been fixed with further additions
 to the test suite, and there has been further work on conforming to the
 Python PEP8 standard coding style.
@@ -38,6 +41,7 @@ Anuj Sharma (first contribution)
 Brandon Invergo
 Christian Brueffer
 David Arenillas (first contribution)
+David Nicholson (first contribution)
 Eric Rasche (first contribution)
 Fábio Madeir a(first contribution)
 Gert Hulselmans (first contribution)
