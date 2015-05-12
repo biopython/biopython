@@ -1,4 +1,5 @@
-# Copyright 2008 by Michiel de Hoon.  All rights reserved.
+# Copyright 2008-2014 by Michiel de Hoon.  All rights reserved.
+# Revisions copyright 2008-2015 by Peter Cock. All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -568,22 +569,24 @@ class DataHandler(object):
         urlinfo = _urlparse(systemId)
         # Following attribute requires Python 2.5+
         # if urlinfo.scheme=='http':
-        if urlinfo[0] == 'http':
+        if urlinfo[0] in ['http', 'https', 'ftp']:
             # Then this is an absolute path to the DTD.
             url = systemId
         elif urlinfo[0] == '':
             # Then this is a relative path to the DTD.
             # Look at the parent URL to find the full path.
             try:
-                url = self.dtd_urls[-1]
+                source = self.dtd_urls[-1]
             except IndexError:
                 # Assume the default URL for DTDs if the top parent
                 # does not contain an absolute path
                 source = "http://www.ncbi.nlm.nih.gov/dtd/"
             else:
-                source = os.path.dirname(url)
+                source = os.path.dirname(source)
             # urls always have a forward slash, don't use os.path.join
             url = source.rstrip("/") + "/" + systemId
+        else:
+            raise ValueError("Unexpected URL scheme %r" % (urlinfo[0]))
         self.dtd_urls.append(url)
         # First, try to load the local version of the DTD file
         location, filename = os.path.split(systemId)

@@ -123,6 +123,14 @@ class EntrezOnlineCase(unittest.TestCase):
         self.assertEqual('19304878', record['PMID'])
         self.assertEqual('10.1093/bioinformatics/btp163 [doi]', record['LID'])
 
+    def test_efetch_biosystems_xml(self):
+        """Test Entrez parser with XML from biosystems"""
+        handle = Entrez.efetch(id="1134002", db="biosystems", retmode="xml")
+        records = list(Entrez.parse(handle))
+        handle.close()
+        self.assertEqual(len(records), 1)
+        self.assertEqual(records[0]['System_sysid']['Sys-id']['Sys-id_bsid'], '1134002')
+
     def test_elink(self):
         # Commas: Link from protein to gene
         handle = Entrez.elink(db="gene", dbfrom="protein",
