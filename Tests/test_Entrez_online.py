@@ -152,6 +152,15 @@ class EntrezOnlineCase(unittest.TestCase):
         self.assertEqual(URL_HEAD + "epost.fcgi", handle.url)
         handle.close()
 
+    def test_fetch_xml_schemas(self):
+        handle = Entrez.efetch("protein", id="783730874", rettype="ipg", retmode="xml")
+        records = list(Entrez.parse(handle))
+        handle.close()
+        self.assertEqual(len(records), 1)
+        self.assertTrue("'Product" in records[0])
+        self.assertTrue("Statistics" in records[0])
+        self.assertTrue("RedundantGiList" in records[0])
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)

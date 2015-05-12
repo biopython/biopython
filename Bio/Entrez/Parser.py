@@ -34,7 +34,6 @@ written solution, since the number of DTDs is rather large and their
 contents may change over time. About half the code in this parser deals
 wih parsing the DTD, and the other half with the XML itself.
 """
-import pdb
 import re
 import os
 import warnings
@@ -238,7 +237,6 @@ class DataHandler(object):
             text = handle.read(BLOCK)
             if not text:
                 # We have reached the end of the XML file
-               # print self.stack
                 if self.stack:
                     # No more XML data, but there is still some unfinished
                     # business
@@ -302,13 +300,13 @@ class DataHandler(object):
     def startElementHandler(self, name, attrs):
         #preprocessing the xml schema
         if self.is_schema:
-            if len(attrs) > 0 and "http" in attrs.keys()[0]:
-                handle = self.open_xsd_file(os.path.basename(attrs.values()[0]))
+            if len(attrs) == 1:
+                handle = self.open_xsd_file(os.path.basename(list(attrs.values())[0]))
                 #if there is no local xsd file grab the url and parse the file
                 if not handle:
                     handle = _urlopen(attrs.values()[0])
                     text = handle.read()
-                    self.save_xsd_file(os.path.basename(attrs.values()[0]), text)
+                    self.save_xsd_file(os.path.basename(list(attrs.values())[0]), text)
                     handle.close()
                     self.parse_xsd(ET.fromstring(text))
                 else:
@@ -408,8 +406,9 @@ class DataHandler(object):
 
     def parse_xsd(self, root):
         is_dictionary = False
+        name = ""
         for child in root:
-            for element in list(child.iter()):
+            for element in child.getiterator():
                 if "element" in element.tag:
                     if "name" in element.attrib:
                         name = element.attrib['name']
