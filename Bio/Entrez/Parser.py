@@ -162,7 +162,7 @@ class DataHandler(object):
         directory = os.path.join(home, '.config', 'biopython')
         del home
     local_dtd_dir = os.path.join(directory, 'Bio', 'Entrez', 'DTDs')
-    local_xsd_dir = os.path.join(directory,'Bio', 'Entrez', 'XSDs')
+    local_xsd_dir = os.path.join(directory, 'Bio', 'Entrez', 'XSDs')
     del directory
     del platform
     try:
@@ -291,22 +291,23 @@ class DataHandler(object):
         self.parser.StartNamespaceDeclHandler = self.startNamespaceDeclHandler
 
     def startNamespaceDeclHandler(self, prefix, un):
-        #This is an xml schema
+        # This is an xml schema
         if "Schema" in un:
             self.is_schema = True
         else:
             raise NotImplementedError("The Bio.Entrez parser cannot handle XML data that make use of XML namespaces")
 
     def startElementHandler(self, name, attrs):
-        #preprocessing the xml schema
+        # preprocessing the xml schema
         if self.is_schema:
             if len(attrs) == 1:
-                handle = self.open_xsd_file(os.path.basename(list(attrs.values())[0]))
-                #if there is no local xsd file grab the url and parse the file
+                schema = list(attrs.values())[0]
+                handle = self.open_xsd_file(os.path.basename(schema))
+                # if there is no local xsd file grab the url and parse the file
                 if not handle:
-                    handle = _urlopen(attrs.values()[0])
+                    handle = _urlopen(schema)
                     text = handle.read()
-                    self.save_xsd_file(os.path.basename(list(attrs.values())[0]), text)
+                    self.save_xsd_file(os.path.basename(schema), text)
                     handle.close()
                     self.parse_xsd(ET.fromstring(text))
                 else:
@@ -386,9 +387,9 @@ class DataHandler(object):
             name = self.object.itemname
         else:
             self.object = self.stack.pop()
-            value = re.sub(r"[\s]+", "",value)
+            value = re.sub(r"[\s]+", "", value)
             if self.is_schema and value:
-                self.object.update({'data':value})
+                self.object.update({'data': value})
             return
         value.tag = name
         if self.attributes:
@@ -419,7 +420,6 @@ class DataHandler(object):
                 is_dictionary = False
             else:
                 self.lists.append(name)
-            
 
     def elementDecl(self, name, model):
         """This callback function is called for each element declaration:
