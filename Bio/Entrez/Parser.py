@@ -173,6 +173,11 @@ class DataHandler(object):
         # a race condition.
         if not os.path.isdir(local_dtd_dir):
             raise exception
+    try:
+        os.makedirs(local_xsd_dir)  # use exist_ok=True on Python >= 3.2
+    except OSError as exception:
+        if not os.path.isdir(local_xsd_dir):
+            raise exception
 
     from Bio import Entrez
     global_dtd_dir = os.path.join(str(Entrez.__path__[0]), "DTDs")
