@@ -1,0 +1,29 @@
+#FormatVersion Mauve1
+#Sequence1File	unknown.fa
+#Sequence1Entry	1
+#Sequence1Format	FastA
+#Sequence2File	unknown.fa
+#Sequence2Entry	2
+#Sequence2Format	FastA
+#Sequence3File	unknown.fa
+#Sequence3Entry	3
+#Sequence3Format	FastA
+#BackboneFile	3_genome_data.xmfa.bbcols
+> 1:0-0 + unknown.fa
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+> 2:5417-5968 + unknown.fa
+TTTAAACATCCCTCGGCCCGTCGCCCTTTTATAATAGCAGTACGTGAGAGGAGCGCCCTAAGCTTTGGGAAATTCAAGC-
+--------------------------------------------------------------------------------
+CTGGAACGTACTTGCTGGTTTCGCTACTATTTCAAACAAGTTAGAGGCCGTTACCTCGGGCGAACGTATAAACCATTCTG
+> 3:9476-10076 - unknown.fa
+TTTAAACACCTTTTTGGATG--GCCCAGTTCGTTCAGTTGTG-GGGAGGAGATCGCCCCAAACGTATGGTGAGTCGGGCG
+TTTCCTATAGCTATAGGACCAATCCACTTACCATACGCCCGGCGTCGCCCAGTCCGGTTCGGTACCCTCCATGACCCACG
+---------------------------------------------------------AAATGAGGGCCCAGGGTATGCTT
+=
+> 2:5969-6015 + unknown.fa
+-----------------------GGGCGAACGTATAAACCATTCTG
+> 3:9429-9476 - unknown.fa
+TTCGGTACCCTCCATGACCCACGAAATGAGGGCCCAGGGTATGCTT
+=
