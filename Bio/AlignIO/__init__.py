@@ -114,6 +114,7 @@ names are also used in Bio.SeqIO and include the following:
   - phylip-sequential - Sequential PHYLIP.
   - phylip-relaxed - PHYLIP like format allowing longer names.
   - stockholm - A richly annotated alignment file format used by PFAM.
+  - mauve - XMFA output from progressiveMauve/Mauve
 
 Note that while Bio.AlignIO can read all the above file formats, it cannot
 write to all of them.
@@ -152,6 +153,7 @@ from . import PhylipIO
 from . import EmbossIO
 from . import FastaIO
 from . import MafIO
+from . import MauveIO
 
 # Convention for format names is "mainname-subtype" in lower case.
 # Please use the same names as BioPerl and EMBOSS where possible.
@@ -161,6 +163,7 @@ _FormatToIterator = {  # "fasta" is done via Bio.SeqIO
                      "emboss": EmbossIO.EmbossIterator,
                      "fasta-m10": FastaIO.FastaM10Iterator,
                      "maf": MafIO.MafIterator,
+                     "mauve": MauveIO.MauveIterator,
                      "nexus": NexusIO.NexusIterator,
                      "phylip": PhylipIO.PhylipIterator,
                      "phylip-sequential": PhylipIO.SequentialPhylipIterator,
