@@ -114,7 +114,7 @@ names are also used in Bio.SeqIO and include the following:
   - phylip-sequential - Sequential PHYLIP.
   - phylip-relaxed - PHYLIP like format allowing longer names.
   - stockholm - A richly annotated alignment file format used by PFAM.
-  - mauve - XMFA output from progressiveMauve/Mauve
+  - mauve - Output from progressiveMauve/Mauve
 
 Note that while Bio.AlignIO can read all the above file formats, it cannot
 write to all of them.
@@ -180,6 +180,7 @@ _FormatToWriter = {  # "fasta" is done via Bio.SeqIO
                    "phylip-relaxed": PhylipIO.RelaxedPhylipWriter,
                    "stockholm": StockholmIO.StockholmWriter,
                    "clustal": ClustalIO.ClustalWriter,
+                   "mauve": MauveIO.MauveWriter,
                    }
 
 
