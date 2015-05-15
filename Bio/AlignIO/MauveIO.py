@@ -142,6 +142,8 @@ class MauveWriter(SequentialAlignmentWriter):
                 record.annotations["end"],
                 "+" if record.annotations["strand"] == 1 else "-"
             )
+        else:
+            id_line = "> %s:0-0 + unknown.fa\n\n" % seq_name
 
         # If the sequence is an empty one, skip writing it out
         if ':0-0 ' in id_line or ':1-0 ' in id_line:
