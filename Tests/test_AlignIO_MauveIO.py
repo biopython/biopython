@@ -7,6 +7,7 @@
 """Tests for Bio.AlignIO.MauveIO"""
 
 import unittest
+import os
 
 from Bio._py3k import StringIO
 
@@ -15,13 +16,18 @@ from Bio import SeqIO
 
 
 class TestMauveIO(unittest.TestCase):
+    MAUVE_TEST_DATA_DIR = os.path.join(os.path.dirname(
+        os.path.realpath(__file__)), 'Mauve')
+    SIMPLE_XMFA = os.path.join(MAUVE_TEST_DATA_DIR, 'simple.xmfa')
+    SIMPLE_FA = os.path.join(MAUVE_TEST_DATA_DIR, 'simple.fa')
 
     def test_one(self):
-        handle = open('Mauve/simple.xmfa')
+        handle = open(self.SIMPLE_XMFA, 'r')
         ids = []
         for alignment in MauveIterator(handle):
             for record in alignment:
                 ids.append(record.id)
+        handle.close()
         self.assertEqual(ids, ['1', '2', '1', '2', '1', '2', '1', '2', '1',
                                '2'])
 
@@ -54,11 +60,11 @@ class TestMauveIO(unittest.TestCase):
                          expected.replace(' ', '').replace('\n', ''))
 
     def test_sequence_positions(self):
-        handle = open('Mauve/simple.fa', 'r')
+        handle = open(self.SIMPLE_FA, 'r')
         seqs = list(SeqIO.parse(handle, 'fasta'))
         handle.close()
 
-        handle = open('Mauve/simple.xmfa')
+        handle = open(self.SIMPLE_XMFA, 'r')
         aln_list = list(MauveIterator(handle))
         handle.close()
 
@@ -77,10 +83,14 @@ class TestMauveIO(unittest.TestCase):
                     # Slice first 10 chars for comparison, don't want to
                     # get any '-'s by accident
                     actual = actual[0:10]
+                    if len(actual) == 0:
+                        # We can't test sequences which don't provide
+                        # proper annotation start/end/strand information
+                        continue
                     self.assertEqual(expected, actual)
 
     def test_write_read(self):
-        handle = open('Mauve/simple.xmfa')
+        handle = open(self.SIMPLE_XMFA, 'r')
         aln_list = list(MauveIterator(handle))
         handle.close()
 
