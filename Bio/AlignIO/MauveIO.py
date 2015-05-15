@@ -80,11 +80,17 @@ from .Interfaces import SequentialAlignmentWriter
 __docformat__ = "restructuredtext en"
 
 
+def _identifier_split(identifier):
+    """Returns (name, start, end) string tuple from an identifier"""
+    id, loc, strand = identifier.split(':')
+    start, end = map(int, loc.split('-'))
+    return id, start, end, strand
+
+
 class MauveWriter(SequentialAlignmentWriter):
     """Mauve/XMFA alignment writer."""
     _wrote_header = False
     _wrote_first = False
-
 
     def write_alignment(self, alignment):
         """Use this to write (another) single alignment to an open file.
@@ -179,12 +185,13 @@ class MauveIterator(AlignmentIterator):
                 break
             elif line.startswith('>'):
                 parts = line.split()
-                id, start, end = self._identifier_split(parts[1])
+                id = parts[1] + ':' + parts[2]
+                parsed_id, start, end, strand = _identifier_split(id)
 
                 if id not in self._ids:
                     self._ids.append(id)
 
-                seq_regions[id] = (start, end, parts[2])
+                seq_regions[id] = (start, end, strand)
 
                 seqs.setdefault(id, '')
                 latest_id = id
@@ -223,10 +230,3 @@ class MauveIterator(AlignmentIterator):
             return alignment
         else:
             raise StopIteration
-
-    def _identifier_split(self, identifier):
-        """Returns (name, start, end) string tuple from an identifier"""
-        id, loc = identifier.split(':')
-        start, end = map(int, loc.split('-'))
-        start -= 1
-        return id, start, end
