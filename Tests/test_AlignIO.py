@@ -27,7 +27,6 @@ test_write_read_align_with_seq_count = test_write_read_alignment_formats \
 # and by other additional tests as noted below.
 test_files = [
 # Following examples are also used in test_Clustalw.py
-    ("mauve", 2, 5, 'Mauve/simple.xmfa'),
     ("clustal", 2, 1, 'Clustalw/cw02.aln'),
     ("clustal", 7, 1, 'Clustalw/opuntia.aln'),
     ("clustal", 5, 1, 'Clustalw/hedgehog.aln'),
@@ -72,6 +71,7 @@ test_files = [
     ("maf", None, 3, "MAF/bug2453.maf"),  # Have 5, 5, 4 sequences
     ("maf", None, 3, "MAF/ucsc_test.maf"),  # Have 5, 5, 4 sequences
     ("maf", None, 48, "MAF/ucsc_mm9_chr10.maf"),
+    ("mauve", None, 5, 'Mauve/simple.xmfa'),
     ]
 
 
