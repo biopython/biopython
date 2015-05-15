@@ -28,8 +28,11 @@ class TestMauveIO(unittest.TestCase):
             for record in alignment:
                 ids.append(record.id)
         handle.close()
-        self.assertEqual(ids, ['1', '2', '1', '2', '1', '2', '1', '2', '1',
-                               '2'])
+        self.assertEqual(ids, ['1:1-5670:+', '2:1-5670:+',
+                               '1:5671-9940:-', '2:7141-11410:+',
+                               '1:9941-14910:+', '2:0-0:+',
+                               '1:0-0:+', '2:5671-7140:+',
+                               '1:0-0:+', '2:11411-12880:+'])
 
         expected = """ATTCGCACAT AAGAATGTAC CTTGCTGTAA TTTATACTCA
             GCAGGTGGTG CAGACATCAT AACAAAAGAA GACTCTTGTT GTACTAGATA TTGTGTAGCA
@@ -73,7 +76,7 @@ class TestMauveIO(unittest.TestCase):
                 if not str(record.seq).startswith('-'):
                     expected = str(record.seq)[0:10]
                     # seqs 0, 1 are ids 1, 2
-                    actual = seqs[int(record.id) - 1].seq
+                    actual = seqs[int(record.name) - 1].seq
                     # Slice out portion mentioned in file
                     actual = actual[record.annotations['start']:
                                     record.annotations['end']]
@@ -97,6 +100,7 @@ class TestMauveIO(unittest.TestCase):
         handle = StringIO()
         MauveWriter(handle).write_file(aln_list)
         handle.seek(0)
+        print handle.getvalue()
         aln_list_out = list(MauveIterator(handle))
 
         for a1, a2 in zip(aln_list, aln_list_out):
