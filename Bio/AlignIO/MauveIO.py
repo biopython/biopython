@@ -129,10 +129,12 @@ class MauveWriter(SequentialAlignmentWriter):
                 record.annotations["end"],
                 "+" if record.annotations["strand"] == 1 else "-"
             )
+        else:
+            id_line = "> %s:0-0 + unknown.fa\n" % seq_name
 
-            self.handle.write(id_line)
-            for i in range(0, len(record.seq), 80):
-                self.handle.write("%s\n" % str(record.seq[i:i + 80]))
+        self.handle.write(id_line)
+        for i in range(0, len(record.seq), 80):
+            self.handle.write("%s\n" % str(record.seq[i:i + 80]))
         else:
             if not self._wrote_first:
                 self._wrote_first = True
