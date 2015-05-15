@@ -100,7 +100,6 @@ class TestMauveIO(unittest.TestCase):
         handle = StringIO()
         MauveWriter(handle).write_file(aln_list)
         handle.seek(0)
-        print handle.getvalue()
         aln_list_out = list(MauveIterator(handle))
 
         for a1, a2 in zip(aln_list, aln_list_out):

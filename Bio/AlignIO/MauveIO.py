@@ -218,13 +218,15 @@ class MauveIterator(AlignmentIterator):
         self.sequences = seqs
 
         if self._ids and seqs:
-            alignment_length = len(list(seqs.values())[0])
+            alignment_length = max(map(len, list(seqs.values())))
             records = []
             for id in self._ids:
-                if id not in seqs or len(seqs[id]) == 0:
+                if id not in seqs or len(seqs[id]) == 0 \
+                        or len(seqs[id]) == 0:
                     seq = '-' * alignment_length
                 else:
                     seq = seqs[id]
+
                 if alignment_length != len(seq):
                     raise ValueError("Sequences have different lengths, or repeated identifier")
 
