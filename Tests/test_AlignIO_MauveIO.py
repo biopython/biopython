@@ -11,6 +11,7 @@ import unittest
 from Bio._py3k import StringIO
 
 from Bio.AlignIO.MauveIO import MauveIterator, MauveWriter
+from Bio import SeqIO
 
 
 class TestMauveIO(unittest.TestCase):
@@ -21,10 +22,62 @@ class TestMauveIO(unittest.TestCase):
         for alignment in MauveIterator(handle):
             for record in alignment:
                 ids.append(record.id)
-        self.assertEqual(ids, ['1', '2', '3', '1', '2', '3'])
+        self.assertEqual(ids, ['1', '2', '1', '2', '1', '2', '1', '2', '1',
+                               '2'])
 
-        expected = """TTCGGTACCCTCCATGACCCACGAAATGAGGGCCCAGGGTATGCTT"""
-        self.assertEqual(str(record.seq).replace("-", ""), expected)
+        expected = """ATTCGCACAT AAGAATGTAC CTTGCTGTAA TTTATACTCA
+            GCAGGTGGTG CAGACATCAT AACAAAAGAA GACTCTTGTT GTACTAGATA TTGTGTAGCA
+            TCACGACCAC ACACACATGG AATGGAAACA CCTGTCTTAA GATTATCATA AGATAGAGTA
+            CCCATATACA TCACAGCTTC TACACCCGTT AAGGTAGTAG TTTTCTGACC ACAATGTTTA
+            CACACCACAT TAAGAACTCG CTTTGCAGAT TCCAAATTAG CATGCTGTAG AAGATGGGTC
+            ATAGTTTCTC TGACATCACC AAGCTCGCCA ACAGTTTTAT TACTGTAAGC GAGTATGAGT
+            GCACAAAAGT TAGCAGCATC ACCAGCACGG GCTCTATAAT AAGCCTCTTG AAGTGCTGGT
+            GCATTGAATT TGACTTCAAG CTGTTGAAGT GCTAATAAAA CACTAGACAA ATAACAATTG
+            TTATCAGCCC ATTTAATTGA AGTTAAACCA CCAACTTGAG GAAATTTCCA TTTCTTTGTG
+            TGGTTTAAAG CAGACATGTA CCTACCAAGA AAACTCTCAT CAAGAGTATG GTAGTACTCG
+            AAAGCTTCAC TACGTAGTGT GTCATCACTA GGTAGTACAA AGAAAGTCTT ACCCTCATGA
+            TTTACATGAG GTTTAATTTT TGTAACATCA GCACCATCCA AGTATGTTGG ACCAAACTGC
+            TGTCCATATG TCATAGACAT ATCCACAAGC TGTGTGTGGA GATTAGTGTT GTCCACAGTT
+            GTGAACACTT TTATAGTCTT AACCTCCCGC AGGGATAAGA GACTCTTTAG TTTGTCAAGT
+            GAAAGAACCT CACCGTCAAG ATGAAACTCG ACGGGGCTCT CCAGAGTGTG GTACACAATT
+            TTGTCACCAC GCTTAAGAAA TTCAACACCT AACTCTGTAC GCTGTCCTGA ATAGGACCAA
+            TCTCTGTAAG AGCCAGCCAA AGAAACTGTT TCTACAAAGT GCTCCTCAGA TGTCTTTGAT
+            GACGAAGTGA GGTATCCATT ATATGTAGTA ACAGCATCTG GTGATGATAC TGACACTACG
+            GCAGGAGCTT TAAGAGAACG CATACAGCGC GCAGCCTCTT CAAGATTAAA ACCATGTGTC
+            ACATAACCAA TTGGCATTGT GACAAGCGGC TCATTTAGAG AGTTCAGCTT CGTAATAATA
+            GAAGCTACAG GCTCTTTACT AGTATAAAAG AAGAATCGGA CACCATAGTC AACGATGCCC
+            TCTTGAATTT TAATTCCTTT ATACTTACGT TGGATGGTTG CCATTATGGC TCTAACATCC
+            ATGCATATAG GCATTAATTT TCTTGTCTCT TCAGCATGAG CAAGCATTTC TCTCAAATTC
+            CAGGATACAG TTCCTAGAAT CTCTTCCTTA GCATTAGGTG CTTCTGAAGG TAGTACATAA
+            AATGCAGATT TGCATTTCTT AAGAGCAGTC TTAGCTTCCT CAAGTGTATA """
+        self.assertEqual(str(record.seq).replace("-", ""),
+                         expected.replace(' ', '').replace('\n', ''))
+
+    def test_sequence_positions(self):
+        handle = open('Mauve/simple.fa', 'r')
+        seqs = list(SeqIO.parse(handle, 'fasta'))
+        handle.close()
+
+        handle = open('Mauve/simple.xmfa')
+        aln_list = list(MauveIterator(handle))
+        handle.close()
+
+        for aln in aln_list:
+            for record in aln:
+                if not str(record.seq).startswith('-'):
+                    expected = str(record.seq)[0:10]
+                    # seqs 0, 1 are ids 1, 2
+                    actual = seqs[int(record.id) - 1].seq
+                    # Slice out portion mentioned in file
+                    actual = actual[record.annotations['start']:
+                                    record.annotations['end']]
+
+                    if record.annotations['strand'] < 0:
+                        actual = actual.reverse_complement()
+                    # Slice first 10 chars for comparison, don't want to
+                    # get any '-'s by accident
+                    actual = actual[0:10]
+                    self.assertEqual(expected, actual)
 
     def test_write_read(self):
         handle = open('Mauve/simple.xmfa')
