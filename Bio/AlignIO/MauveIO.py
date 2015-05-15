@@ -122,16 +122,20 @@ class MauveWriter(SequentialAlignmentWriter):
             for i in range(1, count + 1):
                 self.handle.write('#Sequence%sEntry\t%s\n' % (i, i))
 
-        for record in alignment:
-            self._write_record(record)
+        for idx, record in enumerate(alignment):
+            self._write_record(record, record_idx=idx)
         self.handle.write('=\n')
 
-    def _write_record(self, record):
+    def _write_record(self, record, record_idx=0):
         """Write a single SeqRecord to the file"""
         if self._length_of_sequences != len(record.seq):
             raise ValueError("Sequences must all be the same length")
 
         seq_name = record.name
+        try:
+            seq_name = int(record.name)
+        except ValueError:
+            seq_name = record_idx + 1
 
         if "start" in record.annotations \
                 and "end" in record.annotations \
