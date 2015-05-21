@@ -179,6 +179,7 @@ def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X',
             codon_rec = _get_codon_rec(pair[0], pair[1], corr_span,
                                        alphabet=alphabet,
                                        complete_protein=False,
+                                       codon_table=codon_table,
                                        max_score=max_score)
             codon_aln.append(codon_rec)
             if corr_span[1] == 2:
