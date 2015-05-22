@@ -653,7 +653,7 @@ def _get_codon_rec(pro, nucl, span_mode, alphabet, gap_char="-",
                     start = rf_table[aa_num]
                     end = start + 3
                     this_codon = nucl_seq._data[start:end]
-                    if not str(Seq(this_codon.upper()).translate(codon_table)) == aa:
+                    if not str(Seq(this_codon.upper()).translate(table=codon_table)) == aa:
                         max_score -= 1
                         warnings.warn("Codon of {0}({1} {2}) does not "
                                       "correspond to {3}({4})".format(
