@@ -288,12 +288,6 @@ class ProteinAnalysis(object):
         """
         num_aa = self.count_amino_acids()
         mec_reduced = num_aa['W']*5500+num_aa['Y']*1490
-        if num_aa['C']%2 != 0:
-            even_cys = num_aa['C']//2
-            mec_cystines = mec_reduced + even_cys*125
-        else:
-            mec_cystines = mec_reduced
-            
-        
+        mec_cystines = mec_reduced + (num_aa['C']//2)*125
         return(mec_reduced, mec_cystines)
 
