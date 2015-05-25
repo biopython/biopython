@@ -33,6 +33,9 @@ http://www.ebi.ac.uk/imgt/hla/docs/manual.html
 
 from __future__ import print_function
 
+import warnings
+from Bio import BiopythonWarning
+
 from Bio.Seq import UnknownSeq
 from Bio.GenBank.Scanner import GenBankScanner, EmblScanner, _ImgtScanner
 from Bio import Alphabet
@@ -167,8 +170,7 @@ def _insdc_location_string_ignoring_strand_and_subfeatures(location, rec_length)
         # Special case for features from SwissProt/UniProt files
         if isinstance(location.start, SeqFeature.UnknownPosition) \
                 and isinstance(location.end, SeqFeature.UnknownPosition):
-            # import warnings
-            # warnings.warn("Feature with unknown location")
+            # warnings.warn("Feature with unknown location", BiopythonWarning)
             # return "?"
             raise ValueError("Feature with unknown location")
         elif isinstance(location.start, SeqFeature.UnknownPosition):
@@ -330,8 +332,8 @@ class _InsdcWriter(SequentialSequenceWriter):
         index = location[:length].rfind(",")
         if index == -1:
             # No good place to split (!)
-            import warnings
-            warnings.warn("Couldn't split location:\n%s" % location)
+            warnings.warn("Couldn't split location:\n%s" % location,
+                          BiopythonWarning)
             return location
         return location[:index + 1] + "\n" + \
             self.QUALIFIER_INDENT_STR + \
@@ -431,8 +433,6 @@ class GenBankWriter(_InsdcWriter):
         """Used in the 'header' of each GenBank record."""
         assert len(tag) < self.HEADER_WIDTH
         if len(text) > self.MAX_WIDTH - self.HEADER_WIDTH:
-            import warnings
-            from Bio import BiopythonWarning
             warnings.warn("Annotation %r too long for %r line" % (text, tag),
                           BiopythonWarning)
         self.handle.write("%s%s\n" % (tag.ljust(self.HEADER_WIDTH),
@@ -885,8 +885,7 @@ class EmblWriter(_InsdcWriter):
         assert len(tag) == 2
         line = tag + "   " + text
         if len(text) > self.MAX_WIDTH:
-            import warnings
-            warnings.warn("Line %r too long" % line)
+            warnings.warn("Line %r too long" % line, BiopythonWarning)
         self.handle.write(line + "\n")
 
     def _write_multi_line(self, tag, text):
