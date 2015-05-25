@@ -4,8 +4,10 @@
 # as part of this package.
 
 import unittest
+import warnings
 from os import path
 
+from Bio import BiopythonParserWarning
 from Bio import GenBank
 from Bio import SeqIO
 
@@ -34,6 +36,29 @@ class GenBankTests(unittest.TestCase):
     def test_genbank_read_no_origin_no_end(self):
         with open(path.join("GenBank", "no_origin_no_end.gb")) as handle:
             self.assertRaises(ValueError, GenBank.read, handle)
+
+    # Evil hack with 000 to manipulate sort order to ensure this is tested
+    # first (otherwise something silences the warning)
+    def test_000_genbank_bad_loc_wrap_warning(self):
+        with warnings.catch_warnings():
+            warnings.simplefilter("error", BiopythonParserWarning)
+            with open(path.join("GenBank", "bad_loc_wrap.gb")) as handle:
+                # self.assertRaises(BiopythonParserWarning, GenBank.read, handle)
+                try:
+                    record = GenBank.read(handle)
+                except BiopythonParserWarning as e:
+                    self.assertEqual(str(e), "Non-standard feature line wrapping (didn't break on comma)?")
+                else:
+                    self.assertTrue(False, "Expected specified BiopythonParserWarning here.")
+
+    def test_genbank_bad_loc_wrap_parsing(self):
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", BiopythonParserWarning)
+            with open(path.join("GenBank", "bad_loc_wrap.gb")) as handle:
+                record = GenBank.read(handle)
+                self.assertEqual(1, len(record.features))
+                loc = record.features[0].location
+                self.assertEqual(loc, "join(3462..3615,3698..3978,4077..4307,4408..4797,4876..5028,5141..5332)")
 
 
 if __name__ == "__main__":
