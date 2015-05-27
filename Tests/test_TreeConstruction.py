@@ -6,7 +6,7 @@
 """Unit tests for the Bio.Phylo.TreeConstruction module."""
 
 import unittest
-# from Bio._py3k import StringIO
+from Bio._py3k import StringIO
 from Bio import AlignIO
 from Bio import Phylo
 from Bio.Phylo import BaseTree
@@ -94,7 +94,7 @@ class DistanceMatrixTest(unittest.TestCase):
 class DistanceCalculatorTest(unittest.TestCase):
     """Test DistanceCalculator"""
 
-    def test_distance_calculator(self):
+    def test_known_matrices(self):
         aln = AlignIO.read('TreeConstruction/msa.phy', 'phylip')
 
         calculator = DistanceCalculator('identity')
@@ -112,6 +112,21 @@ class DistanceCalculatorTest(unittest.TestCase):
         calculator = DistanceCalculator('blosum62')
         dm = calculator.get_distance(aln)
         self.assertEqual(dm['Alpha', 'Beta'], 1 - (53 * 1.0 / 84))
+
+    def test_nonmatching_seqs(self):
+        aln = AlignIO.read(
+                StringIO('\n'.join(
+                    [">Alpha", "A-A--",
+                     ">Gamma", "-Y-Y-"])),
+                "fasta")
+        # With a proper scoring matrix -- no matches
+        dmat = DistanceCalculator('blosum62').get_distance(aln)
+        self.assertEqual(dmat['Alpha', 'Alpha'], 0.)
+        self.assertEqual(dmat['Alpha', 'Gamma'], 1.)
+        # Comparing characters only -- 4 misses, 1 match
+        dmat = DistanceCalculator().get_distance(aln)
+        self.assertEqual(dmat['Alpha', 'Alpha'], 0.)
+        self.assertAlmostEqual(dmat['Alpha', 'Gamma'], 4./5.)
 
 
 class DistanceTreeConstructorTest(unittest.TestCase):
