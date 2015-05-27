@@ -415,7 +415,11 @@ class DistanceCalculator(object):
                              + ", ".join(self.models))
 
     def _pairwise(self, seq1, seq2):
-        """Calculate pairwise distance from two sequences"""
+        """Calculate pairwise distance from two sequences.
+
+        Returns a value between 0 (identical sequences) and 1 (completely
+        different, or seq1 is an empty string.)
+        """
         score = 0
         max_score = 0
         if self.scoring_matrix:
@@ -436,9 +440,10 @@ class DistanceCalculator(object):
                 max_score1 += self.scoring_matrix[l1, l1]
                 max_score2 += self.scoring_matrix[l2, l2]
                 score += self.scoring_matrix[l1, l2]
-
-            max_score = max_score1 > max_score2 and max_score1 or max_score2
+            # Take the higher score if the matrix is asymmetrical
+            max_score = max(max_score1, max_score2)
         else:
+            # Score by character identity, not skipping any special letters
             for i in range(0, len(seq1)):
                 l1 = seq1[i]
                 l2 = seq2[i]
@@ -446,6 +451,8 @@ class DistanceCalculator(object):
                     score += 1
             max_score = len(seq1)
 
+        if max_score == 0:
+            return 1  # max possible scaled distance
         return 1 - (score * 1.0 / max_score)
 
     def get_distance(self, msa):
