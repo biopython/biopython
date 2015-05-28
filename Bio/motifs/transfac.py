@@ -92,7 +92,7 @@ def read(handle):
     record = Record()
     for line in handle:
         line = line.strip()
-        key, value = line[:2], line[4:]
+        key, value = line[:2], line[3:].lstrip()
         if key == 'VV':
             record.version = value
         elif key in ('P0', 'PO'):  # Old TRANSFAC files use PO instead of P0
@@ -102,7 +102,7 @@ def read(handle):
             for c in "ACGT":
                 counts[c] = []
             for line in handle:
-                key, value = line[:2], line[4:]
+                key, value = line[:2], line[2:]
                 try:
                     i = int(key)
                 except ValueError:
