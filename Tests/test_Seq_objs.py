@@ -533,7 +533,7 @@ class StringMethodTests(unittest.TestCase):
                         Seq(codon, unambiguous_dna)]:
                 try:
                     print(nuc.translate())
-                    self.fail("Transating %s should fail" % codon)
+                    self.fail("Translating %s should fail" % codon)
                 except TranslationError:
                     pass
 
