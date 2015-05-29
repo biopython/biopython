@@ -319,7 +319,7 @@ class Writer(object):
         elif branch_length_only:
             # write only branchlengths, ignore support
             def make_info_string(clade, terminal=False):
-                return (':' + format_branch_length % clade.branch_length) + _get_comment(clade)
+                return (':' + format_branch_length % (clade.branch_length or 0.0)) + _get_comment(clade)
 
         else:
             # write support and branchlengths (e.g. .con tree of mrbayes)
