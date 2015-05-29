@@ -151,10 +151,9 @@ class IOTests(unittest.TestCase):
         try :
             Phylo.write(trees, tmp_filename, "newick", branch_length_only=True)
             os.remove(tmp_filename)
-            self.assertTrue(True)
 
         except TypeError:
-            self.assertTrue(False)
+            self.fail()
 
     def test_int_labels(self):
         """Read newick formatted tree with numeric labels."""
