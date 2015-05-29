@@ -164,6 +164,18 @@ class IOTests(unittest.TestCase):
             os.remove(tmp_filename)
         self.assertEqual(14, count)
 
+    def test_convert_phyloxml_to_newick_branch_length_only(self):
+        """Write phyloxml with bootstrap values to newick format using branch_length_only=True"""
+        trees = Phylo.parse(EX_APAF, "phyloxml")
+        tmp_filename = tempfile.mktemp()
+
+        try:
+            Phylo.write(trees, tmp_filename, "newick", branch_length_only=True)
+            os.remove(tmp_filename)
+
+        except TypeError:
+            self.fail()
+
     def test_int_labels(self):
         """Read newick formatted tree with numeric labels."""
         tree = Phylo.read(

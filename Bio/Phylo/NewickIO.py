@@ -357,7 +357,7 @@ class Writer:
             # write only branchlengths, ignore support
             def make_info_string(clade, terminal=False):
                 return (
-                    ":" + format_branch_length % clade.branch_length
+                    ":" + format_branch_length % (clade.branch_length or 0.0)
                 ) + _get_comment(clade)
 
         else:
