@@ -26,6 +26,9 @@ Bio.Entrez now implements the NCBI Entrez Citation Matching function
 (ECitMatch), which retrieves PubMed IDs (PMIDs) that correspond to a set of
 input citation strings.
 
+Bio.Entrez.parse(...) now supports NCBI XML files using XSD schemas, which
+will be downloaded and cached like NCBI DTD files.
+
 Additionally, a number of small bugs have been fixed with further additions
 to the test suite, and there has been further work on conforming to the
 Python PEP8 standard coding style.
@@ -33,13 +36,17 @@ Python PEP8 standard coding style.
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+Alan Medlar (first contribution)
 Anthony Mathelier (first contribution)
 Anuj Sharma (first contribution)
 Brandon Invergo
 Christian Brueffer
 David Arenillas (first contribution)
+David Nicholson (first contribution)
+Emmanuel Noutahi (first contribution)
 Eric Rasche (first contribution)
-Fábio Madeira(first contribution)
+Fábio Madeir a(first contribution)
+Gert Hulselmans (first contribution)
 Gleb Kuznetsov (first contribution)
 João Rodrigues
 Kai Blin
@@ -48,6 +55,7 @@ Kuan-Yi Li (first contribution)
 Leighton Pritchard
 Michiel de Hoon
 Peter Cock
+Sunhwan Jo (first contribution)
 Tarcisio Fedrizzi (first contribution)
 Tiago Antao
 Vincent Davis

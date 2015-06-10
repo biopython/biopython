@@ -479,7 +479,7 @@ class StringMethodTests(unittest.TestCase):
                 # This is based on the limited example not having stop codons:
                 if tran.alphabet not in [extended_protein, protein, generic_protein]:
                     print(tran.alphabet)
-                    self.assertTrue(False)
+                    self.fail()
                 # TODO - check the actual translation, and all the optional args
 
     def test_the_translation_of_stops(self):
@@ -533,7 +533,7 @@ class StringMethodTests(unittest.TestCase):
                         Seq(codon, unambiguous_dna)]:
                 try:
                     print(nuc.translate())
-                    self.assertTrue(False, "Transating %s should fail" % codon)
+                    self.fail("Translating %s should fail" % codon)
                 except TranslationError:
                     pass
 

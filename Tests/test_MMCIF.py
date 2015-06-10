@@ -133,6 +133,14 @@ class ParseReal(unittest.TestCase):
         structure = parser.get_structure("example", "PDB/2OFG.cif")
         self.assertEqual(len(structure), 3)
 
+    def test_filehandle(self):
+        """Test if the parser can handle file handle as well as filename"""
+        parser = MMCIFParser()
+        structure = parser.get_structure("example", "PDB/1A8O.cif")
+        self.assertEqual(len(structure), 1)
+
+        structure = parser.get_structure("example", open("PDB/1A8O.cif"))
+        self.assertEqual(len(structure), 1)
 
 if __name__ == '__main__':
     runner = unittest.TextTestRunner(verbosity=2)

@@ -7,15 +7,22 @@
 
 from __future__ import print_function
 
+from Bio.File import as_handle
 from Bio._py3k import input as _input
 
 import shlex
 
 
 class MMCIF2Dict(dict):
+    """Parse a mmCIF file and return a dictionary."""
 
     def __init__(self, filename):
-        with open(filename) as handle:
+        """Parse a mmCIF file and return a dictionary.
+
+        Arguments:
+         - file - name of the PDB file OR an open filehandle
+        """
+        with as_handle(filename) as handle:
             loop_flag = False
             key = None
             tokens = self._tokenize(handle)

@@ -55,7 +55,7 @@ class TestWise(unittest.TestCase):
             pass
         else:
             # Bad!
-            self.assertTrue(False, line)
+            self.fail(line)
 
 
 if __name__ == "__main__":

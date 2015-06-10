@@ -273,6 +273,14 @@ class InsdcScanner(object):
                 # Multiline location, still more to come!
                 line = next(iterator)
                 feature_location += line.strip()
+            if feature_location.count("(") >  feature_location.count(")"):
+                # Including the prev line in warning would be more explicit,
+                # but this way get one-and-only-one warning shown by default:
+                warnings.warn("Non-standard feature line wrapping (didn't break on comma)?",
+                              BiopythonParserWarning)
+                while feature_location[-1:] == "," or feature_location.count("(") >  feature_location.count(")"):
+                    line = next(iterator)
+                    feature_location += line.strip()
 
             qualifiers = []
 

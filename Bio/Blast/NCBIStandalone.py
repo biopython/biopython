@@ -42,6 +42,7 @@ __docformat__ = "restructuredtext en"
 
 _score_e_re = re.compile(r'Score +E')
 
+
 class LowQualityBlastError(Exception):
     """Error caused by running a low quality sequence through BLAST.
 
@@ -1198,12 +1199,20 @@ class _HSPConsumer(object):
     def query(self, line):
         m = self._query_re.search(line)
         if m is None:
+            if line.strip() == "Query        ------------------------------------------------------------":
+                # Special case - long gap relative to the subject,
+                # note there is no start/end present, cannot update those
+                self._hsp.query += "-" * 60
+                self._query_len = 60  # number of dashes
+                self._query_start_index = 13  # offset of first dash
+                return
             raise ValueError("I could not find the query in line\n%s" % line)
 
         # line below modified by Yair Benita, Sep 2004.
         # added the end attribute for the query
         colon, start, seq, end = m.groups()
-        self._hsp.query = self._hsp.query + seq
+        seq = seq.strip()
+        self._hsp.query += seq
         if self._hsp.query_start is None:
             self._hsp.query_start = _safe_int(start)
 
@@ -1240,15 +1249,17 @@ class _HSPConsumer(object):
         # I have decided to let these pass as they appear
         if not seq.strip():
             seq = ' ' * self._query_len
-        self._hsp.sbjct = self._hsp.sbjct + seq
+        else:
+            seq = seq.strip()
+        self._hsp.sbjct += seq
         if self._hsp.sbjct_start is None:
             self._hsp.sbjct_start = _safe_int(start)
 
         self._hsp.sbjct_end = _safe_int(end)
         if len(seq) != self._query_len:
             raise ValueError(
-                  "QUERY and SBJCT sequence lengths don't match in line\n%s"
-                  % line)
+                  "QUERY and SBJCT sequence lengths don't match (%i %r vs %i) in line\n%s"
+                  % (self._query_len, self._hsp.query, len(seq), line))
 
         del self._query_start_index   # clean up unused variables
         del self._query_len
