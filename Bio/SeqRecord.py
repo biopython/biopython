@@ -710,6 +710,13 @@ class SeqRecord(object):
         """
         return len(self.seq)
 
+    def __eq__(self, other):
+        raise NotImplementedError("SeqRecord equality not implemented because "
+                                  "of object complexity.")
+    def __ne__(self, other):
+        raise NotImplementedError("SeqRecord equality not implemented because "
+                                  "of object complexity.")
+
     # Python 3:
     def __bool__(self):
         """Boolean value of an instance of this class (True).
