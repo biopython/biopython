@@ -1105,6 +1105,7 @@ class EmblWriter(_InsdcWriter):
         rec_length = len(record)
         for feature in record.features:
             self._write_feature(feature, rec_length)
+        handle.write("XX\n")
 
         self._write_sequence(record)
         handle.write("//\n")
