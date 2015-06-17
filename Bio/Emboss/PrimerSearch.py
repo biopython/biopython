@@ -81,7 +81,7 @@ def read(handle):
             # PrimerSearch notation for distance from end is [<index>]
             if location.startswith("["):
                 # PrimerSearch is 1-indexed
-                location = -int(location[1:-1]) + 1
+                location = -int(location[1:-1])
             else:
                 location = int(location) - 1
             seq = words[0]

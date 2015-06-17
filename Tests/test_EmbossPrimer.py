@@ -224,7 +224,7 @@ class PrimersearchParseTest(unittest.TestCase):
           "0 mismatches")
         self.assertEqual(amp_info.amplifiers["Test"][0].binding_sites,
           {"CCGGTTTCTCTGGTTGAAAA": (113, 0),
-           "TCACATTCCCAAATGTAGATCG": (-113, 0)})
+           "TCACATTCCCAAATGTAGATCG": (-114, 0)})
         self.assertEqual(amp_info.amplifiers["Test"][0].seq_description,
           "Telomere associated sequence for Arabidopsis thaliana TEL1N from chromosome I, complete sequence.")
         self.assertEqual(amp_info.amplifiers["Test"][0].seq_id,
