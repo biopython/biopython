@@ -157,8 +157,13 @@ for record, gene_colors in zip([A_rec, B_rec, C_rec], [A_colors, B_colors, C_col
         if feature.type != "gene":
             # Exclude this feature
             continue
+        try:
+            g_color = gene_colors[i]
+        except IndexError:
+            print("Don't have color for %s gene %i" % (record.name, i))
+            g_color = grey
         gd_feature_set.add_feature(feature, sigil="BIGARROW",
-                                   color=gene_colors[i], label=True,
+                                   color=g_color, label=True,
                                    name=str(i + 1),
                                    label_position="start",
                                    label_size=6, label_angle=0)
