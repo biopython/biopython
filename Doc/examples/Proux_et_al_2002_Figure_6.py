@@ -102,7 +102,7 @@ B_vs_C = [
 ]
 
 
-def get_feature(features, id, tags=["locus_tag", "gene"]):
+def get_feature(features, id, tags=["locus_tag", "gene", "old_locus_tag"]):
     """Search list of SeqFeature objects for an identifier under the given tags."""
     for f in features:
         for key in tags:
@@ -118,7 +118,7 @@ max_len = 0
 for i, record in enumerate([A_rec, B_rec, C_rec]):
     max_len = max(max_len, len(record))
     # Allocate tracks 5 (top), 3, 1 (bottom) for A, B, C
-    #(empty tracks 2 and 4 add useful white space to emphasise the cross links
+    # (empty tracks 2 and 4 add useful white space to emphasise the cross links
     # and also serve to make the tracks vertically more compressed)
     gd_track_for_features = gd_diagram.new_track(5-2*i,
                             name=record.name,
