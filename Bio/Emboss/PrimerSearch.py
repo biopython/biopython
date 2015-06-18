@@ -78,12 +78,6 @@ def read(handle):
             words = line.strip().split()
             misses = int(words[-2])
             location = words[-4]
-            # PrimerSearch notation for distance from end is [<index>]
-            if location.startswith("["):
-                # PrimerSearch is 1-indexed
-                location = -int(location[1:-1])
-            else:
-                location = int(location) - 1
             seq = words[0]
             amplifier.binding_sites[seq] = (location, misses)
             amplifier.hit_info += line
