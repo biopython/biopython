@@ -30,6 +30,8 @@ from Bio.Seq import Seq
 from Bio.Nexus.StandardData import StandardData
 from Bio.Nexus.Trees import Tree
 
+__docformat__ = "restructuredtext en"
+
 INTERLEAVE = 70
 SPECIAL_COMMANDS = ['charstatelabels', 'charlabels', 'taxlabels', 'taxset',
                     'charset', 'charpartition', 'taxpartition', 'matrix',
@@ -137,7 +139,7 @@ class CharBuffer(object):
             if c == quoted:                                 # a quote?
                 word.append(next(self))                     # store quote
                 if self.peek() == quoted:                   # double quote
-                    skip = next(self)                       # skip second quote
+                    next(self)                              # skip second quote
                 elif quoted:                                # second single quote ends word
                     break
             elif quoted:
@@ -245,11 +247,13 @@ def quotestrip(word):
     return word
 
 
-def get_start_end(sequence, skiplist=['-', '?']):
+def get_start_end(sequence, skiplist=None):
     """Return position of first and last character which is not in skiplist.
 
     Skiplist defaults to ['-','?'])."""
-
+    if skiplist is None:
+        skiplist = ['-', '?']
+    
     length = len(sequence)
     if length == 0:
         return None, None
@@ -267,7 +271,7 @@ def get_start_end(sequence, skiplist=['-', '?']):
 
 def _sort_keys_by_values(p):
     """Returns a sorted list of keys of p sorted by values of p."""
-    return sorted((pn for pn in p if p[pn]), key= lambda pn: p[pn])
+    return sorted((pn for pn in p if p[pn]), key=lambda pn: p[pn])
 
 
 def _make_unique(l):
@@ -357,7 +361,7 @@ def combine(matrices):
         del combined.taxsets[tn]
     # previous partitions usually don't make much sense in combined matrix
     # just initiate one new partition parted by single matrices
-    combined.charpartitions = {'combined':{name:list(range(combined.nchar))}}
+    combined.charpartitions = {'combined': {name: list(range(combined.nchar))}}
     for n, m in matrices[1:]:    # add all other matrices
         both = [t for t in combined.taxlabels if t in m.taxlabels]
         combined_only = [t for t in combined.taxlabels if t not in both]
@@ -703,9 +707,9 @@ class Nexus(object):
             self.respectcase = True
         # adjust symbols to for respectcase
         if 'symbols' in options:
-            self.symbols = options['symbols'].replace(' ', '')
+            self.symbols = ''.join(options['symbols'].split())
             if (self.symbols.startswith('"') and self.symbols.endswith('"')) or\
-            (self.symbold.startswith("'") and self.symbols.endswith("'")):
+            (self.symbols.startswith("'") and self.symbols.endswith("'")):
                 self.symbols = self.symbols[1:-1]
             if not self.respectcase:
                 self.symbols = list(self.symbols.upper())
@@ -733,6 +737,9 @@ class Nexus(object):
                 self.ambiguous_values = {}
                 
                 if not self.symbols:
+					## PARSER BUG ##
+					# This error arises when symbols are absent or when whitespace is located within the SYMBOLS command values. The Nexus
+					#    parser quits reading the SYMBOLS line upon finding a whitespace character.
                     raise NexusError('Symbols must be defined when using standard datatype. Please remove any whitespace (spaces, tabs, etc.) between values for symbols as this confuses the Nexus parser.')
                 
                 self.unambiguous_letters = ''.join(self.symbols)
@@ -1035,14 +1042,14 @@ class Nexus(object):
         rooted = False
         weight = 1.0
         while opts.peek_nonwhitespace() == '[':
-            open = opts.next_nonwhitespace()
+            opts.next_nonwhitespace()
             symbol = next(opts)
             if symbol != '&':
                 raise NexusError('Illegal special comment [%s...] in tree description: %s'
                                  % (symbol, options[:50]))
             special = next(opts)
             value = opts.next_until(']')
-            closing = next(opts)
+            next(opts)
             if special == 'R':
                 rooted = True
             elif special == 'U':
@@ -1331,7 +1338,7 @@ class Nexus(object):
                                       comment=pcomment, append_sets=False, mrbayes=mrbayes)
             return pfilenames
         else:
-            fn=self.filename + '.data'
+            fn = self.filename + '.data'
             self.write_nexus_data(filename=fn, matrix=matrix, blocksize=blocksize,
                                   interleave=interleave, exclude=exclude, delete=delete,
                                   comment=comment, append_sets=False, mrbayes=mrbayes)
@@ -1367,7 +1374,7 @@ class Nexus(object):
             raise NexusError('Unknown taxa: %s'
                              % ', '.join(set(delete).difference(set(self.taxlabels))))
         if interleave_by_partition:
-            if not interleave_by_partition in self.charpartitions:
+            if interleave_by_partition not in self.charpartitions:
                 raise NexusError('Unknown partition: %r' % interleave_by_partition)
             else:
                 partition = self.charpartitions[interleave_by_partition]
@@ -1843,76 +1850,74 @@ else:
 
 # Test code from command line (python Nexus.py)
 if __name__ == '__main__':
-    print('')
-    print('')
+    print()
+    print()
     print('=== NEXUS PARSING TEST ===')
-    print('')
-    
-    from Bio.Nexus import Nexus
+    print()
     
     # 1. Check basic tree file with TREES and TAXA block
     print('Testing file "bats.nex": TREES and TAXA')
     
-    nexus1 = Nexus.Nexus()
+    nexus1 = Nexus()
     
     try:
         nexus1.read('../../Tests/Nexus/bats.nex')
     except Exception as nexus_error:
-        raise nexus_error.message
+        raise Exception(nexus_error.message)
     
     # 2. Check simple sequence data file with DATA and CODONS block
     print('Testing file "codonposset.nex": DATA and CODONS')
     
-    nexus2 = Nexus.Nexus()
+    nexus2 = Nexus()
     
     try:
         nexus2.read('../../Tests/Nexus/codonposset.nex')
     except Exception as nexus_error:
-        raise nexus_error.message
+        raise Exception(nexus_error.message)
     
     # 3. Check sequence data file with DATA, SETS, TREES and an unknown block
     print('Testing file "test_Nexus_input.nex": DATA, SETS, TREES and unknown')
     
-    nexus3 = Nexus.Nexus()
+    nexus3 = Nexus()
     
     try:
         nexus3.read('../../Tests/Nexus/test_Nexus_input.nex')
     except Exception as nexus_error:
-        raise nexus_error.message
+        raise Exception(nexus_error.message)
     
     # 4. Check simple multi-state character data file with TAXA and CHARACTERS block
     print('Testing file "vSysLab_Ganaspidium_multistate.nex": TAXA, CHARACTERS (multi-state)')
     
-    nexus4 = Nexus.Nexus()
+    nexus4 = Nexus()
     
     try:
         nexus4.read('../../Tests/Nexus/vSysLab_Ganaspidium_multistate.nex')
     except Exception as nexus_error:
-        raise nexus_error.message
+        raise Exception(nexus_error.message)
     
     # 5. Check character data file with TAXA and CHARACTERS block with more than 9 codings and a character without states
     print('Testing file "vSysLab_Heptascelio_no-states_10+chars.nex": TAXA, CHARACTERS (stateless and 10+ codings)')
     
-    nexus5 = Nexus.Nexus()
+    nexus5 = Nexus()
     
     try:
         nexus5.read('../../Tests/Nexus/vSysLab_Heptascelio_no-states_10+chars.nex')
     except Exception as nexus_error:
-        raise nexus_error.message
+        raise Exception(nexus_error.message)
     
-	# TODO: Not supported
+    # TODO: Not supported
     # 6. Check character data file with TAXA and two CHARACTERS blocks (one with continuous characters)
     #print('Testing file "vSysLab_Oreiscelio_discrete+continuous.nex": TAXA, 2 CHARACTERS (discrete and continuous)')
     #
-    #nexus6 = Nexus.Nexus()
+    #nexus6 = Nexus()
     #
     #try:
     #    nexus6.read('../../Tests/Nexus/vSysLab_Oreiscelio_discrete+continuous.nex')
     #except Exception as nexus_error:
-    #    raise nexus_error.message
+    #    raise Exception(nexus_error.message)
     
     # Made it here, so success
-    print('')
+    print()
     print('Successfully completed test suite.')
-    print('')
-    print('')
+    print()
+    print()
