@@ -29,8 +29,8 @@ __docformat__ = "restructuredtext en"
 # {{{
 
 
-def GC(seq):
-    """Calculates G+C content, returns the percentage (float between 0 and 100).
+def GC(seq, percentage=True):
+    """Calculates G+C content, returns the percentage (float between 0 and 100). Returns G+C ratio if percentage=False.
 
     Copes mixed case sequences, and with the ambiguous nucleotide S (G or C)
     when counting the G and C content.  The percentage is calculated against
@@ -39,12 +39,17 @@ def GC(seq):
     >>> from Bio.SeqUtils import GC
     >>> GC("ACTGN")
     40.0
+    >>> GC("ACTGN", False)
+    .400
 
     Note that this will return zero for an empty sequence.
     """
     try:
         gc = sum(seq.count(x) for x in ['G', 'C', 'g', 'c', 'S', 's'])
-        return gc * 100.0 / len(seq)
+        if percentage==True:
+            return gc * 100.0 / len(seq)
+        else:
+            return gc / len(seq)
     except ZeroDivisionError:
         return 0.0
 
