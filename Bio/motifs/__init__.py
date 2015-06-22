@@ -479,16 +479,13 @@ class Motif(object):
                   'color3': '',
                   'color4': '',
                   }
-        for k, v in kwds.items():
-            if isinstance(values[k], bool):
-                if not v:
-                    v = ""
-            values[k] = str(v)
 
-        data = urlencode(values)
+        values.update(
+            dict((k, "" if v is False else str(v)) for k, v in kwds.items()))
+        data = urlencode(values).encode("utf-8")
         req = Request(url, data)
         response = urlopen(req)
-        with open(fname, "w") as f:
+        with open(fname, "wb") as f:
             im = response.read()
             f.write(im)
 
