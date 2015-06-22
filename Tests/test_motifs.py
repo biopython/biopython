@@ -1660,6 +1660,16 @@ class MotifTestPWM(unittest.TestCase):
         self.assertTrue(_isnan(result[6]), "Expected nan, not %r" % result[6])
 
 
+class TestMotifWeblogo(unittest.TestCase):
+    def setUp(self):
+        self.m = motifs.create([
+            Seq("TACAA"), Seq("TACGC"), Seq("TACAC"), Seq("TACCC"),
+            Seq("AACCC"), Seq("AATGC"), Seq("AATGC")])
+
+    def test_weblogo(self):
+        self.m.weblogo(os.devnull)
+
+
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)
