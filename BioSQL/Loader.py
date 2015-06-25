@@ -759,7 +759,7 @@ class DatabaseLoader(object):
         """
         # records loaded from a gff file using BCBio.GFF will contain the value
         # of the 2nd column of the gff as a feature qualifier. The BioSQL wiki
-        # suggests that the source should not go in with the other feature 
+        # suggests that the source should not go in with the other feature
         # mappings but instead be put in the term table
         # (http://www.biosql.org/wiki/Annotation_Mapping)
         try:
