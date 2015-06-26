@@ -42,8 +42,8 @@ def GC(seq):
 
     Note that this will return zero for an empty sequence.
     """
+    gc = sum(seq.count(x) for x in ['G', 'C', 'g', 'c', 'S', 's'])
     try:
-        gc = sum(seq.count(x) for x in ['G', 'C', 'g', 'c', 'S', 's'])
         return gc * 100.0 / len(seq)
     except ZeroDivisionError:
         return 0.0
