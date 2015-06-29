@@ -456,6 +456,12 @@ def write(sequences, handle, format):
     if format != format.lower():
         raise ValueError("Format string '%s' should be lower case" % format)
 
+    if isinstance(handle, SeqRecord):
+        raise TypeError("Check arguments, handle should NOT be a SeqRecord")
+    if isinstance(handle, list):
+        # e.g. list of SeqRecord objects
+        raise TypeError("Check arguments, handle should NOT be a list")
+
     if isinstance(sequences, SeqRecord):
         # This raised an exception in order version of Biopython
         sequences = [sequences]

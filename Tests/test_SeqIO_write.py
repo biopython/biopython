@@ -136,6 +136,17 @@ class WriterTests(unittest.TestCase):
             self.assertRaises(err_type, SeqIO.write, records, handle, format)
         handle.close()
 
+    def test_bad_handle(self):
+        handle = os.devnull
+        record = SeqRecord(Seq("CHSMAIKLSSEHNIPSGIANAL", Alphabet.generic_protein), id="Alpha")
+        records = [record]
+        format = "fasta"
+        # These deliberately mix up the handle and record order:
+        self.assertRaises(TypeError, SeqIO.write, handle, record, format)
+        self.assertRaises(TypeError, SeqIO.write, handle, records, format)
+        self.assertEqual(1, SeqIO.write(records, handle, format))
+
+
 for (records, descr, errs) in test_records:
     for format in test_write_read_alignment_formats:
         # Assume no errors expected...
