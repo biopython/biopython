@@ -1253,8 +1253,7 @@ PyTree_slice(PyTree* self, int i, int j)
   PyObject* item;
   PyObject* result;
   if (i < 0) i = 0;
-  if (j < 0) j = 0; /* Avoid signed/unsigned bug in next line */
-  if (j > n) j = n;
+  if (j < 0 || j > n) j = n;
   if (j < i) j = i;
   result = PyList_New(j-i);
   if(!result)
