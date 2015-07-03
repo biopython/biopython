@@ -1229,6 +1229,8 @@ class CompoundLocation(object):
         # This copes with mixed strand features & all on reverse:
         parts = [loc.extract(parent_sequence) for loc in self.parts]
         # We use addition rather than a join to avoid alphabet issues:
+        if self.strand == -1:
+            parts.reverse()
         f_seq = parts[0]
         for part in parts[1:]:
             f_seq += part
