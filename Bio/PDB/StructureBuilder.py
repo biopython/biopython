@@ -138,6 +138,13 @@ class StructureBuilder(object):
                         self.residue = duplicate_residue
                         return
                 else:
+                    if resname == duplicate_residue.resname:
+                        warnings.warn("WARNING: Residue ('%s', %i, '%s','%s')"
+                                      " already defined with the same name at line  %i."
+                              % (field, resseq, icode, resname, self.line_counter),
+                              PDBConstructionWarning)
+                        self.residue = duplicate_residue
+                        return
                     # Make a new DisorderedResidue object and put all
                     # the Residue objects with the id (field, resseq, icode) in it.
                     # These residues each should have non-blank altlocs for all their atoms.
