@@ -184,7 +184,27 @@ _DTD_OPT = (
 )
 
 # compile RE patterns
+# for capturing BLAST version
 _RE_VERSION = re.compile(r'\d+\.\d+\.\d+\+?')
+# for splitting ID-description pairs
+_RE_ID_DESC_PAIRS_PATTERN = re.compile(" +>")
+# for splitting ID and description (must be used with maxsplit = 1)
+_RE_ID_DESC_PATTERN = re.compile(" +")
+
+
+def _extract_ids_and_descs(concat_str):
+    # Given a string space-separate string of IDs and descriptions,
+    # return a list of tuples, each tuple containing an ID and
+    # a description string (which may be empty)
+
+    # create a list of lists, each list containing an ID and description
+    # or just an ID, if description is not present
+    id_desc_pairs = [re.split(_RE_ID_DESC_PATTERN, x, 1) \
+            for x in re.split(_RE_ID_DESC_PAIRS_PATTERN, concat_str)]
+    # make sure empty descriptions are added as empty strings
+    # also, we return lists for compatibility reasons between Py2 and Py3
+    add_descs = lambda x: x if len(x) == 2 else x + [""]
+    return [pair for pair in map(add_descs, id_desc_pairs)]
 
 
 class BlastXmlParser(object):
@@ -389,10 +409,10 @@ class BlastXmlParser(object):
             else:
                 blast_hit_id = ''
 
+
             # combine primary ID and defline first before splitting
             full_id_desc = hit_id + ' ' + hit_desc
-            id_descs = [(x.strip(), y.strip()) for x, y in
-                    [a.split(' ', 1) for a in full_id_desc.split(' >')]]
+            id_descs = _extract_ids_and_descs(full_id_desc)
             hit_id, hit_desc = id_descs[0]
 
             hsps = [hsp for hsp in
