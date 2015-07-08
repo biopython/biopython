@@ -226,6 +226,7 @@ class Hmmer3TextParser(object):
                 return hit_list
             assert self.line.startswith('>>')
             hid, hdesc = self.line[len('>> '):].split('  ', 1)
+            hdesc = hdesc.strip()
 
             # read through the hsp table header and move one more line
             self._read_until(lambda line:
@@ -260,6 +261,11 @@ class Hmmer3TextParser(object):
                 # hmmfrom, hmmto, query_ends, hit_ends, alifrom, alito,
                 # envfrom, envto, acc_avg
                 frag = HSPFragment(hid, qid)
+                # set query and hit descriptions if they are defined / nonempty string
+                if qdesc:
+                    frag.query_description = qdesc
+                if hdesc:
+                    frag.hit_description = hdesc
                 # HMMER3 alphabets are always protein alphabets
                 frag.alphabet = generic_protein
                 # depending on whether the program is hmmsearch, hmmscan, or phmmer
