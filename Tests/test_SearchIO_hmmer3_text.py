@@ -1555,6 +1555,28 @@ class HmmscanCases(unittest.TestCase):
 
 class HmmersearchCases(unittest.TestCase):
 
+    def test_31b2_hmmscan_001(self):
+        """Test parsing hmmscan 3.1b2 (text_31b2_hmmscan_001)"""
+
+        txt_file = get_file('text_31b2_hmmscan_001.out')
+        qresults = list(parse(txt_file, FMT))
+
+        # expects only 1 query result
+        self.assertEqual(1, len(qresults))
+
+        # in that query result, there are 108 hits
+        qresult = qresults[0]
+        self.assertEqual(108, len(qresult))
+
+        # making sure all query IDs are equal
+        self.assertEqual("Protein-arginine kinase activator protein "
+                         "OS=Bacillus subtilis (strain 168) GN=mcsA "
+                         "PE=1 SV=1", qresult.description)
+
+        # and all hits have no descriptions
+        for hit in qresult:
+            self.assertEqual("", hit.description)
+
     def test_31b1_hmmsearch_001(self):
         """Test parsing hmmsearch 3.1b1 (text_31b1_hmmsearch_001)"""
 

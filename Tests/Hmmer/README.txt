@@ -7,6 +7,7 @@ HMMER-related code in Biopython.
 
 HMMER3 OUTPUT FILES (plain text)
 -------------------------------
+text_31b2_hmmscan_001.out    single query, multiple hits, some hits have no hsps (issue #525)
 text_31b1_hmmscan_001.out    multiple queries
 text_30_hmmscan_001.out      multiple queries
 text_30_hmmscan_002.out      single query, no match
