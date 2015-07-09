@@ -595,7 +595,7 @@ class EmblScanner(InsdcScanner):
             self.line = self.line.rstrip()
 
         assert self.line[:self.HEADER_WIDTH] == " " * self.HEADER_WIDTH \
-            or self.line.strip() == '//', repr(self.line)
+            or self.line.strip() == '//', "Unexpected content after SQ or CO line: %r" % self.line
 
         seq_lines = []
         line = self.line
