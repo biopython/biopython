@@ -171,10 +171,11 @@ Support for parsing, indexing, and writing:
  - hmmer3-tab       - HMMER3 table output.
  - hmmer3-domtab    - HMMER3 domain table output. When using this format, the
                       program name has to be specified. For example, for parsing
-                      hmmscan output, the name would be 'hmmscan-domtab'.
+                      hmmscan output, the name would be 'hmmscan3-domtab'.
  - hmmer3-pfamtab   - HMMER3 pfam table output. This format also requires the
                       program name to be specified. So the valid format names
-                      are, for example, 'hmmscan-pfamtab' or 'hmmsearch-pfamtab'.
+                      are, for example, 'hmmscan3-pfamtab' or
+                      'hmmsearch3-pfamtab'.
 
 Support for parsing and indexing:
 
