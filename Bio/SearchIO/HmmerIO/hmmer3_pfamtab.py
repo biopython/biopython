@@ -125,7 +125,7 @@ class Hmmer3PfamtabParser(object):
                         setattr(frag, attr, value)
                     hsp = HSP([frag])
                     for attr, value in cur['hsp'].items():
-                        setattr(frag, attr, value)
+                        setattr(hsp, attr, value)
                     if hsp.hit_id in hsps:
                         hsps[hsp.hit_id].append(hsp)
                     else:
@@ -137,7 +137,7 @@ class Hmmer3PfamtabParser(object):
                 for hit_id, raw_hit in hits.items():
                     hit = Hit(hsps[hit_id])
                     for attr, value in raw_hit.items():
-                        setattr(frag, attr, value)
+                        setattr(hit, attr, value)
                     hit_list.append(hit)
                 yield QueryResult(hit_list)
                 idx += 1
