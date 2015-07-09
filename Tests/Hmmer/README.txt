@@ -42,6 +42,9 @@ domtab_30_hmmscan_004.out       single query, multiple matches, one hsp per matc
 domtab_31b1_hmmsearch_001.out   
 domtab_30_hmmsearch_001.out     single query, multiple matches, hmm as query
 
+pfamtab_hmmsearch_31b2_001.out  multiple queries
+pfamtab_hmmscan_31b2_001.out    multiple queries
+
 
 HMMER2 OUTPUT FILES (plain text)
 --------------------------------

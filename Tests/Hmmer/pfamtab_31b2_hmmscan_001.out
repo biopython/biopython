@@ -1,0 +1,91 @@
+# Sequence scores
+# ---------------
+#
+# name                  bits   E-value   n   exp  bias    description
+# ------------------- ------ --------- --- ----- -----    ---------------------
+
+# Domain scores
+# -------------
+#
+#  name                 bits   E-value   hit  bias env-st env-en ali-st ali-en hmm-st hmm-en     description
+# ------------------- ------ --------- ----- ----- ------ ------ ------ ------ ------ ------      ---------------------
+# Sequence scores
+# ---------------
+#
+# name                  bits   E-value   n   exp  bias    description
+# ------------------- ------ --------- --- ----- -----    ---------------------
+Globin                  80.5     1e-22   1   1.3   0.3    Globin
+
+# Domain scores
+# -------------
+#
+#  name                 bits   E-value   hit  bias env-st env-en ali-st ali-en hmm-st hmm-en     description
+# ------------------- ------ --------- ----- ----- ------ ------ ------ ------ ------ ------      ---------------------
+Globin                  79.8   1.6e-22     1   0.3      7    113      7    112      1    109     Globin
+# Sequence scores
+# ---------------
+#
+# name                  bits   E-value   n   exp  bias    description
+# ------------------- ------ --------- --- ----- -----    ---------------------
+Ig_3                    38.8   9.3e-10   1   1.3   0.4    Immunoglobulin domain
+Ig_2                    28.1   1.6e-06   1   1.1   0.1    Immunoglobulin domain
+
+# Domain scores
+# -------------
+#
+#  name                 bits   E-value   hit  bias env-st env-en ali-st ali-en hmm-st hmm-en     description
+# ------------------- ------ --------- ----- ----- ------ ------ ------ ------ ------ ------      ---------------------
+Ig_3                    38.3   1.4e-09     1   0.4      8     87      8     83      1     73     Immunoglobulin domain
+Ig_2                    27.8     2e-06     1   0.1      8    103      8    103      1     80     Immunoglobulin domain
+# Sequence scores
+# ---------------
+#
+# name                  bits   E-value   n   exp  bias    description
+# ------------------- ------ --------- --- ----- -----    ---------------------
+Xpo1                   116.6   8.5e-34   2   2.8   7.8    Exportin 1-like protein
+IBN_N                   16.9    0.0044   2   2.7   0.0    Importin-beta N-terminal domain
+Rac1                    11.7     0.095   2   2.3   0.3    Rac1-binding domain
+
+# Domain scores
+# -------------
+#
+#  name                 bits   E-value   hit  bias env-st env-en ali-st ali-en hmm-st hmm-en     description
+# ------------------- ------ --------- ----- ----- ------ ------ ------ ------ ------ ------      ---------------------
+Xpo1                   116.1   1.2e-33     1   4.9    109    271    110    271      2    148     Exportin 1-like protein
+IBN_N                   13.9     0.036     1   0.0     33    100     36     98      4     75     Importin-beta N-terminal domain
+Rac1                     8.0       1.3     1   0.3     82    254     89    169     94    171     Rac1-binding domain
+Rac1                     0.8     2e+02     2   0.0    296    354    310    341    150    181     Rac1-binding domain
+Xpo1                    -1.8   2.6e+03     2   0.0    496    529    499    525    112    139     Exportin 1-like protein
+IBN_N                   -3.5     1e+04     2   0.0    165    186    168    185     57     74     Importin-beta N-terminal domain
+# Sequence scores
+# ---------------
+#
+# name                  bits   E-value   n   exp  bias    description
+# ------------------- ------ --------- --- ----- -----    ---------------------
+Pou                    124.8   7.6e-37   1   1.5   0.5    Pou domain - N-terminal to homeobox domain
+Homeobox                65.8   1.8e-18   1   1.5   1.1    Homeobox domain
+HTH_31                  15.6     0.013   2   2.2   0.0    Helix-turn-helix domain
+Homeobox_KN             13.5     0.043   1   1.6   0.0    Homeobox KN domain
+DUF521                  10.5      0.15   1   1.4   0.1    Protein of unknown function (DUF521)
+
+# Domain scores
+# -------------
+#
+#  name                 bits   E-value   hit  bias env-st env-en ali-st ali-en hmm-st hmm-en     description
+# ------------------- ------ --------- ----- ----- ------ ------ ------ ------ ------ ------      ---------------------
+Pou                    123.9   1.5e-36     1   0.5    131    205    133    205      3     75     Pou domain - N-terminal to homeobox domain
+Homeobox                64.9   3.4e-18     1   1.1    224    280    224    280      1     57     Homeobox domain
+Homeobox_KN             12.2       0.1     1   0.0    241    277    244    276      7     39     Homeobox KN domain
+HTH_31                  12.0      0.18     1   0.0    141    185    141    181      1     35     Helix-turn-helix domain
+DUF521                   9.6      0.28     1   0.1    197    294    221    280    273    334     Protein of unknown function (DUF521)
+HTH_31                   0.9   5.3e+02     2   0.0    243    270    245    268     39     62     Helix-turn-helix domain
+#
+# Program:         hmmscan
+# Version:         3.1b2 (February 2015)
+# Pipeline mode:   SEARCH
+# Query file:      inputs/prot_multi.fa
+# Target file:     /home/bow/devel/sandbox/biopython-sandbox/db/hmmer/protdb/Pfam-A.hmm
+# Option settings: /usr/bin/hmmscan -o outputs/text_31b2_hmmscan_001.out --tblout outputs/tab_31b2_hmmscan_001.out --domtblout outputs/domtab_31b2_hmmscan_001.out --pfamtblout outputs/pfamtab_31b2_hmmscan_001.out --cpu 2 /home/bow/devel/sandbox/biopython-sandbox/db/hmmer/protdb/Pfam-A.hmm inputs/prot_multi.fa 
+# Current dir:     /home/bow/devel/sandbox/biopython-sandbox/test-cases
+# Date:            Thu Jul  9 15:38:26 2015
+# [ok]
