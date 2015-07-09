@@ -41,11 +41,11 @@ class Hmmer3PfamtabParser(object):
         # assign values per column
         hit = {}
         hit['id'] = cols[0]
-        hit['bitscore'] = cols[1]
-        hit['evalue'] = cols[2]
-        hit['__n'] = cols[3]
-        hit['domain_exp_num'] = cols[4]
-        hit['bias'] = cols[5]
+        hit['bitscore'] = float(cols[1])
+        hit['evalue'] = float(cols[2])
+        hit['__n'] = int(cols[3])
+        hit['domain_exp_num'] = float(cols[4])
+        hit['bias'] = float(cols[5])
         hit['description'] = cols[6]
 
         return hit
@@ -60,10 +60,10 @@ class Hmmer3PfamtabParser(object):
         assert len(cols) == 12
         hsp, frag = {}, {}
         hsp['hit_id'] = cols[0]
-        hsp['bitscore'] = cols[1]
-        hsp['evalue'] = cols[2]
-        hsp['domain_index'] = cols[3]
-        hsp['bias'] = cols[4]
+        hsp['bitscore'] = float(cols[1])
+        hsp['evalue'] = float(cols[2])
+        hsp['domain_index'] = int(cols[3])
+        hsp['bias'] = float(cols[4])
         hsp['env_start'] = int(cols[5]) - 1
         hsp['env_end'] = int(cols[6])
         hsp['hit_description'] = cols[11]
