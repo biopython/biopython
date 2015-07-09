@@ -81,6 +81,11 @@ class PDBIO(object):
         altloc = atom.get_altloc()
         x, y, z = atom.get_coord()
         bfactor = atom.get_bfactor()
+
+        # Assert chain is single character only
+        assert len(chain_id) == 1, \
+                "The PDB format is restricted to one-character chain identifiers"
+
         occupancy = atom.get_occupancy()
         try:
             occupancy_str = "%6.2f" % occupancy
@@ -156,7 +161,7 @@ class PDBIO(object):
          - accept_chain(chain)
          - accept_residue(residue)
          - accept_atom(atom)
-                
+
         These methods should return 1 if the entity is to be
         written out, 0 otherwise.
 
