@@ -83,7 +83,7 @@ class Hmmer3PfamtabParser(object):
 
         return {'hsp': hsp, 'frag': frag}
 
-    def _parse_qresult(self):
+    def _parse_qresult(self, base_id='query_'):
         # counter for query IDs
         # NOTE: this is because pfamtab does not contain query IDs
         idx = 0
@@ -99,7 +99,7 @@ class Hmmer3PfamtabParser(object):
                 # finish through the domain scores header
                 for _ in range(6):
                     self.line = self.handle.readline()
-                yield QueryResult(id='query_' + str(idx))
+                yield QueryResult(id=base_id + str(idx))
                 idx += 1
             elif not self.line:
                 break
@@ -120,7 +120,7 @@ class Hmmer3PfamtabParser(object):
                     self.line = self.handle.readline()
                 while not self.line.startswith('#'):
                     cur = self._parse_domain_row()
-                    frag = HSPFragment(cur['hsp']['hit_id'], 'query_' + str(idx))
+                    frag = HSPFragment(cur['hsp']['hit_id'], base_id + str(idx))
                     for attr, value in cur['frag'].items():
                         setattr(frag, attr, value)
                     hsp = HSP([frag])
