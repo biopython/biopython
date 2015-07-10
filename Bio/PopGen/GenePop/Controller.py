@@ -122,7 +122,7 @@ def _hw_func(stream, is_locus, has_fisher=False):
             # loci might mean pop if hook="Locus "
             loci = {}
             for entry in table:
-                if len(entry) < 3:
+                if len(entry) < 4:
                     loci[entry[0]] = None
                 else:
                     locus, p, se, fis_wc, fis_rh, steps = entry[:-1]
