@@ -99,6 +99,7 @@ class Reference(object):
 
     Members:
     number      Number of reference in an entry.
+    evidence    Evidence code.  List of strings.
     positions   Describes extent of work.  List of strings.
     comments    Comments.  List of (token, text).
     references  References.  List of (dbname, identifier).
@@ -419,11 +420,14 @@ def _read_rn(reference, rn):
     # RN   [1]
     # As of the 2014-10-01 release, there may be an evidence code, e.g.
     # RN   [1] {ECO:0000313|EMBL:AEX14553.1}
-    # We will for now ignore this
-    rn = rn.split()[0]
-    assert rn[0] == '[' and rn[-1] == ']', "Missing brackets %s" % rn
-    reference.number = int(rn[1:-1])
-
+    words = rn.rsplit(None, 1)
+    number = words[0]
+    assert number.startswith('[') and number.endswith(']'), "Missing brackets %s" % number
+    reference.number = int(number[1:-1])
+    if len(words) > 1:
+        evidence = words[1]
+        assert evidence.startswith('{') and evidence.endswith('}'), "Missing braces %s" % evidence
+        reference.evidence = evidence[1:-1].split('|')
 
 def _read_rc(reference, value):
     cols = value.split(';')
