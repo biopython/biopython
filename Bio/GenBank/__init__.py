@@ -722,7 +722,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             PROJECT     GenomeProject:28471
 
         or::
-            
+
             PROJECT     GenomeProject:13543  GenomeProject:99999
 
         This is stored as dbxrefs in the SeqRecord to be consistent with the
