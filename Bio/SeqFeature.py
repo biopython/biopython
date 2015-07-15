@@ -1169,9 +1169,76 @@ class CompoundLocation(object):
     def _flip(self, length):
         """Returns a copy of the location after the parent is reversed (PRIVATE).
 
-        Note that the order of the parts is reversed too.
+        Note that the order of the parts is NOT reversed too. Consider a CDS
+        on the forward strand with exons small, medium and large (in length).
+        Once we change the frame of reference to the reverse complement strand,
+        the start codon is still part of the small exon, and the stop codon
+        still part of the large exon - so the part order remains the same!
+
+        Here is an artificial example, were the features map to the two upper
+        case regions and the lower case runs of n are not used:
+
+        >>> from Bio.Seq import Seq
+        >>> from Bio.SeqFeature import FeatureLocation
+        >>> dna = Seq("nnnnnAGCATCCTGCTGTACnnnnnnnnGAGAMTGCCATGCCCCTGGAGTGAnnnnn")
+        >>> small = FeatureLocation(5, 20, strand=1)
+        >>> large = FeatureLocation(28, 52, strand=1)
+        >>> location = small + large
+        >>> print(small)
+        [5:20](+)
+        >>> print(large)
+        [28:52](+)
+        >>> print(location)
+        join{[5:20](+), [28:52](+)}
+        >>> for part in location.parts:
+        ...     print(len(part))
+        ...
+        15
+        24
+
+        As you can see, this is a silly example where each "exon" is a word:
+
+        >>> print(small.extract(dna).translate())
+        SILLY
+        >>> print(large.extract(dna).translate())
+        EXAMPLE*
+        >>> print(location.extract(dna).translate())
+        SILLYEXAMPLE*
+        >>> for part in location.parts:
+        ...     print(part.extract(dna).translate())
+        ...
+        SILLY
+        EXAMPLE*
+
+        Now, let's look at this from the reverse strand frame of reference:
+
+        >>> flipped_dna = dna.reverse_complement()
+        >>> flipped_location = location._flip(len(dna))
+        >>> print(flipped_location.extract(flipped_dna).translate())
+        SILLYEXAMPLE*
+        >>> for part in flipped_location.parts:
+        ...     print(part.extract(flipped_dna).translate())
+        ...
+        SILLY
+        EXAMPLE*
+
+        The key point here is the first part of the CompoundFeature is still the
+        small exon, while the second part is still the large exon:
+
+        >>> for part in flipped_location.parts:
+        ...     print(len(part))
+        ...
+        15
+        24
+        >>> print(flipped_location)
+        join{[37:52](-), [5:29](-)}
+
+        Notice the parts are not reversed. However, there was a bug here in older
+        versions of Biopython which would have given join{[5:29](-), [37:52](-)}
+        and the translation would have wrongly been "EXAMPLE*SILLY" instead.
+
         """
-        return CompoundLocation([loc._flip(length) for loc in self.parts[::-1]],
+        return CompoundLocation([loc._flip(length) for loc in self.parts],
                                 self.operator)
 
     @property
