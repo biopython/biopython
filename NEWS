@@ -29,6 +29,13 @@ input citation strings.
 Bio.Entrez.parse(...) now supports NCBI XML files using XSD schemas, which
 will be downloaded and cached like NCBI DTD files.
 
+A subtle bug in how multi-part GenBank/EMBL locations on the reverse strand
+were parsed into CompoundLocations was fixed: complement(join(...)) as used
+by NCBI worked, but join(complement(...),complement(...),...) as used by
+EMBL/ENSEMBL gave the CompoundLocation parts in the wrong order. A related
+bug when taking the reverse complement of a SeqRecord containing features
+with CompoundLocations was also fixed.
+
 Additionally, a number of small bugs have been fixed with further additions
 to the test suite, and there has been further work on conforming to the
 Python PEP8 standard coding style.

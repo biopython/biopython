@@ -1093,12 +1093,12 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             #
             # TODO - Remove use of sub_features
             strands = set(sf.strand for sf in sub_features)
-            if len(strands) == 1:
-                strand = sub_features[0].strand
-            else:
-                strand = None  # i.e. mixed strands
             if strand == -1:
+                # Whole thing was wrapped in complement(...)
+                for sf in sub_features:
+                    assert sf.strand == -1
                 # Reverse the backwards order used in GenBank files
+                # with complement(join(...))
                 cur_feature.location = SeqFeature.CompoundLocation([f.location for f in sub_features[::-1]],
                                                                    operator=location_line[:i])
             else:
