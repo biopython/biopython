@@ -202,7 +202,7 @@ def make_join_feature(f_list, ftype="misc_feature"):
 
 
 # Prepare a single GenBank record with one feature with a %s place holder for
-# the feature location
+# the feature location [leaves the source feature in place]
 with open("GenBank/iro.gb", _universal_read_mode) as handle:
     gbk_template = handle.read()
 gbk_template = gbk_template.replace('     gene            341..756\n'
@@ -220,6 +220,31 @@ gbk_template = gbk_template.replace('     exon            618..756\n'
                                     '                     /number=2\n', '')
 assert len(gbk_template) == 4445
 assert gbk_template.count("%") == 1, gbk_template
+
+
+class GenBankLocations(unittest.TestCase):
+    """Tests for parsing GenBank feature locations."""
+
+    def check_loc(self, expected_location_obj, input_location_str, round_trip=True):
+        rec = SeqIO.read(StringIO(gbk_template % input_location_str), "gb")
+        self.assertEqual(len(rec.features), 2)
+        self.assertEqual(rec.features[0].type, "source")
+        self.assertEqual(rec.features[1].type, "misc_feature")
+        # TODO - Do we have object equality defined?
+        self.assertEqual(str(expected_location_obj), str(rec.features[1].location))
+        if round_trip:
+            self.assertEqual(input_location_str, _get_location_string(rec.features[1], 99999))
+
+    def test_rev_comp_styles(self):
+        # These two are equivalent locations
+        ncbi_str = "complement(join(84..283,1149..1188))"
+        embl_str = "join(complement(1149..1188),complement(84..283))"
+        exon1 = FeatureLocation(1148, 1188, strand=-1)
+        exon2 = FeatureLocation(83, 283, strand=-1)
+        expected_loc = exon1 + exon2
+        self.check_loc(expected_loc, ncbi_str)
+        self.check_loc(expected_loc, embl_str, round_trip=False)
+        # TODO self.assertEqual(ncbi_str, _get_location_string(loc, ...))
 
 
 class SeqFeatureExtractionWritingReading(unittest.TestCase):
