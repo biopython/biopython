@@ -246,6 +246,36 @@ class GenBankLocations(unittest.TestCase):
         self.check_loc(expected_loc, embl_str, round_trip=False)
         # TODO self.assertEqual(ncbi_str, _get_location_string(loc, ...))
 
+    def test_mixed_strand(self):
+        # Trans-spliced example from NC_000932
+        loc_str = "join(complement(69611..69724),139856..140087,140625..140650)"
+        exon1 = FeatureLocation(69610, 69724, strand=-1)
+        exon2 = FeatureLocation(139855, 140087, strand=+1)
+        exon3 = FeatureLocation(140624, 140650, strand=+1)
+        expected_loc = exon1 + exon2 + exon3
+        self.check_loc(expected_loc, loc_str)
+        # Made up example putting reverse-complement exon in middle,
+        loc_str = "join(69611..69724,complement(139856..140087),140625..140650)"
+        exon1 = FeatureLocation(69610, 69724, strand=+1)
+        exon2 = FeatureLocation(139855, 140087, strand=-1)
+        exon3 = FeatureLocation(140624, 140650, strand=+1)
+        expected_loc = exon1 + exon2 + exon3
+        self.check_loc(expected_loc, loc_str)
+        # Made up example putting reverse-complement exon at end,
+        loc_str = "join(69611..69724,139856..140087,complement(140625..140650))"
+        exon1 = FeatureLocation(69610, 69724, strand=+1)
+        exon2 = FeatureLocation(139855, 140087, strand=+1)
+        exon3 = FeatureLocation(140624, 140650, strand=-1)
+        expected_loc = exon1 + exon2 + exon3
+        self.check_loc(expected_loc, loc_str)
+        # Another made up example
+        loc_str = "join(complement(69611..69724),139856..140087,complement(140625..140650))"
+        exon1 = FeatureLocation(69610, 69724, strand=-1)
+        exon2 = FeatureLocation(139855, 140087, strand=+1)
+        exon3 = FeatureLocation(140624, 140650, strand=-1)
+        expected_loc = exon1 + exon2 + exon3
+        self.check_loc(expected_loc, loc_str)
+
 
 class SeqFeatureExtractionWritingReading(unittest.TestCase):
     """Tests for SeqFeature sequence extract method, writing, and reading."""
