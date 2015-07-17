@@ -75,7 +75,7 @@ class GenBankTests(unittest.TestCase):
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", BiopythonParserWarning)
             rec = SeqIO.read(path.join("GenBank", "negative_location.gb"), "genbank")
-            self.assertIsNone(rec.features[-1].location)
+            self.assertEqual(None, rec.features[-1].location)
 
 
 if __name__ == "__main__":
