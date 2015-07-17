@@ -349,8 +349,23 @@ class SeqFeature(object):
         >>> f.extract(seq)
         Seq('VALIVIC', ProteinAlphabet())
 
+        If the FeatureLocation is None, e.g. when parsing invalid locus
+        locations in the GenBank parser, extract() will raise a ValueError.
+
+        >>> from Bio.Seq import Seq
+        >>> from Bio.SeqFeature import SeqFeature
+        >>> seq = Seq("MKQHKAMIVALIVICITAVVAAL", generic_protein)
+        >>> f = SeqFeature(None, type="domain")
+        >>> f.extract(seq)
+        Traceback (most recent call last):
+           ...
+        ValueError: FeatureLocation is None. Check the sequence file for a valid location.
+
         Note - currently only sub-features of type "join" are supported.
         """
+        if self.location is None:
+            raise ValueError("FeatureLocation is None. Check the sequence "
+                             "file for a valid location.")
         return self.location.extract(parent_sequence)
 
     # Python 3:
