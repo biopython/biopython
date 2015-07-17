@@ -51,6 +51,17 @@ class GenBankTests(unittest.TestCase):
                 else:
                     self.assertTrue(False, "Expected specified BiopythonParserWarning here.")
 
+    # Similar hack as we also want to catch that warning here
+    def test_001_negative_location_warning(self):
+        with warnings.catch_warnings():
+            warnings.simplefilter("error", BiopythonParserWarning)
+            try:
+                SeqIO.read(path.join("GenBank", "negative_location.gb"), "genbank")
+            except BiopythonParserWarning as e:
+                self.assertEqual(str(e), "Couldn't parse feature location: '-2..492'")
+            else:
+                self.assertTrue(False, "Expected specified BiopythonParserWarning here.")
+
     def test_genbank_bad_loc_wrap_parsing(self):
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", BiopythonParserWarning)
@@ -59,6 +70,12 @@ class GenBankTests(unittest.TestCase):
                 self.assertEqual(1, len(record.features))
                 loc = record.features[0].location
                 self.assertEqual(loc, "join(3462..3615,3698..3978,4077..4307,4408..4797,4876..5028,5141..5332)")
+
+    def test_negative_location(self):
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", BiopythonParserWarning)
+            rec = SeqIO.read(path.join("GenBank", "negative_location.gb"), "genbank")
+            self.assertIsNone(rec.features[-1].location)
 
 
 if __name__ == "__main__":
