@@ -359,13 +359,13 @@ class SeqFeature(object):
         >>> f.extract(seq)
         Traceback (most recent call last):
            ...
-        ValueError: FeatureLocation is None. Check the sequence file for a valid location.
+        ValueError: The feature's .location is None. Check the sequence file for a valid location.
 
         Note - currently only sub-features of type "join" are supported.
         """
         if self.location is None:
-            raise ValueError("FeatureLocation is None. Check the sequence "
-                             "file for a valid location.")
+            raise ValueError("The feature's location is None. Check the "
+                             "sequence file for a valid location.")
         return self.location.extract(parent_sequence)
 
     # Python 3:
