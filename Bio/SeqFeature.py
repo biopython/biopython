@@ -364,7 +364,7 @@ class SeqFeature(object):
         Note - currently only sub-features of type "join" are supported.
         """
         if self.location is None:
-            raise ValueError("The feature's location is None. Check the "
+            raise ValueError("The feature's .location is None. Check the "
                              "sequence file for a valid location.")
         return self.location.extract(parent_sequence)
 
