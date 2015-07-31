@@ -1,10 +1,11 @@
-#Sasankh BC Modified Kegg to add more new features
 # Copyright 2014 by Kevin Wu.
 # Revisions copyright 2014 by Peter Cock.
 # All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
+
+#contributor: Sasankh BC
 
 """Provides code to access the REST-style KEGG online API.
 
