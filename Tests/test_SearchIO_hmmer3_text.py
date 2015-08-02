@@ -1602,7 +1602,8 @@ class HmmersearchCases(unittest.TestCase):
         # first hit, first hsp
         hit = qresult[0]
         self.assertEqual('sp|Q9WUT3|KS6A2_MOUSE', hit.id)
-        self.assertEqual('Ribosomal protein S6 kinase alpha-2 OS', hit.description)
+        self.assertEqual('Ribosomal protein S6 kinase alpha-2 OS=Mus musculus GN=Rps6ka2 PE=1 SV=1',
+                         hit.description)
         self.assertTrue(hit.is_included)
         self.assertEqual(8.5e-147, hit.evalue)
         self.assertEqual(492.3, hit.bitscore)
@@ -1679,7 +1680,8 @@ class HmmersearchCases(unittest.TestCase):
 
         hit = qresult[0]
         self.assertEqual('sp|Q9WUT3|KS6A2_MOUSE', hit.id)
-        self.assertEqual('Ribosomal protein S6 kinase alpha-2 OS', hit.description)
+        self.assertEqual('Ribosomal protein S6 kinase alpha-2 OS=Mus musculus GN=Rps6ka2 PE=2 SV=1',
+                         hit.description)
         self.assertTrue(hit.is_included)
         self.assertEqual(8.4e-147, hit.evalue)
         self.assertEqual(492.3, hit.bitscore)
@@ -1742,7 +1744,8 @@ class HmmersearchCases(unittest.TestCase):
 
         hit = qresult[-1]
         self.assertEqual('sp|P18654|KS6A3_MOUSE', hit.id)
-        self.assertEqual('Ribosomal protein S6 kinase alpha-3 OS', hit.description)
+        self.assertEqual('Ribosomal protein S6 kinase alpha-3 OS=Mus musculus GN=Rps6ka3 PE=1 SV=2',
+                         hit.description)
         self.assertTrue(hit.is_included)
         self.assertEqual(5e-144, hit.evalue)
         self.assertEqual(483.2, hit.bitscore)
@@ -1828,7 +1831,8 @@ class HmmersearchCases(unittest.TestCase):
 
         hit = qresult[0]
         self.assertEqual('sp|Q9WUT3|KS6A2_MOUSE', hit.id)
-        self.assertEqual('Ribosomal protein S6 kinase alpha-2 OS', hit.description)
+        self.assertEqual('Ribosomal protein S6 kinase alpha-2 OS=Mus musculus GN=Rps6ka2 PE=2 SV=1',
+                         hit.description)
         self.assertTrue(hit.is_included)
         self.assertEqual(8.4e-147, hit.evalue)
         self.assertEqual(492.3, hit.bitscore)
@@ -1875,7 +1879,8 @@ class HmmersearchCases(unittest.TestCase):
 
         hit = qresult[-1]
         self.assertEqual('sp|P18654|KS6A3_MOUSE', hit.id)
-        self.assertEqual('Ribosomal protein S6 kinase alpha-3 OS', hit.description)
+        self.assertEqual('Ribosomal protein S6 kinase alpha-3 OS=Mus musculus GN=Rps6ka3 PE=1 SV=2',
+                         hit.description)
         self.assertTrue(hit.is_included)
         self.assertEqual(5e-144, hit.evalue)
         self.assertEqual(483.2, hit.bitscore)
@@ -1945,7 +1950,8 @@ class HmmersearchCases(unittest.TestCase):
 
         hit = qresult[0]
         self.assertEqual('sp|Q9WUT3|KS6A2_MOUSE', hit.id)
-        self.assertEqual('Ribosomal protein S6 kinase alpha-2 OS=Mus musculus GN=Rps6ka2 PE=2 SV=1', hit.description)
+        self.assertEqual('Ribosomal protein S6 kinase alpha-2 OS=Mus musculus GN=Rps6ka2 PE=2 SV=1',
+                         hit.description)
         self.assertTrue(hit.is_included)
         self.assertEqual(8.4e-147, hit.evalue)
         self.assertEqual(492.3, hit.bitscore)
@@ -2008,7 +2014,8 @@ class HmmersearchCases(unittest.TestCase):
 
         hit = qresult[-1]
         self.assertEqual('sp|P18654|KS6A3_MOUSE', hit.id)
-        self.assertEqual('Ribosomal protein S6 kinase alpha-3 OS=Mus musculus GN=Rps6ka3 PE=1 SV=2', hit.description)
+        self.assertEqual('Ribosomal protein S6 kinase alpha-3 OS=Mus musculus GN=Rps6ka3 PE=1 SV=2',
+                         hit.description)
         self.assertTrue(hit.is_included)
         self.assertEqual(5e-144, hit.evalue)
         self.assertEqual(483.2, hit.bitscore)
@@ -2106,7 +2113,8 @@ class HmmersearchCases(unittest.TestCase):
 
         hit = qresult[0]
         self.assertEqual('sp|Q9WUT3|KS6A2_MOUSE', hit.id)
-        self.assertEqual('Ribosomal protein S6 kinase alpha-2 OS', hit.description)
+        self.assertEqual('Ribosomal protein S6 kinase alpha-2 OS=Mus musculus GN=Rps6ka2 PE=2 SV=1',
+                         hit.description)
         self.assertTrue(hit.is_included)
         self.assertEqual(8.4e-147, hit.evalue)
         self.assertEqual(492.3, hit.bitscore)
@@ -2169,7 +2177,8 @@ class HmmersearchCases(unittest.TestCase):
 
         hit = qresult[-1]
         self.assertEqual('sp|P18654|KS6A3_MOUSE', hit.id)
-        self.assertEqual('Ribosomal protein S6 kinase alpha-3 OS', hit.description)
+        self.assertEqual('Ribosomal protein S6 kinase alpha-3 OS=Mus musculus GN=Rps6ka3 PE=1 SV=2',
+                         hit.description)
         self.assertTrue(hit.is_included)
         self.assertEqual(5e-144, hit.evalue)
         self.assertEqual(483.2, hit.bitscore)

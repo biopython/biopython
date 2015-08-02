@@ -248,6 +248,10 @@ class Hmmer3TextParser(object):
                     hit_attr = hit_attrs.pop(0)
                     hit = Hit(hsp_list)
                     for attr, value in hit_attr.items():
+                        if attr == "description":
+                            cur_val = getattr(hit, attr)
+                            if cur_val and value and cur_val.startswith(value):
+                                continue
                         setattr(hit, attr, value)
                     if not hit:
                         hit.query_description = qdesc
