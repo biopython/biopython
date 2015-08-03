@@ -1,0 +1,385 @@
+# phmmer :: search a protein sequence against a protein database
+# HMMER 3.1b2 (February 2015); http://hmmer.org/
+# Copyright (C) 2015 Howard Hughes Medical Institute.
+# Freely distributed under the GNU General Public License (GPLv3).
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# query sequence file:             inputs/prot_multi_2.fa
+# target sequence database:        /home/bow/devel/sandbox/biopython-sandbox/db/hmmer/protdb/uniprot_sprot.fasta
+# MSA of hits saved to file:       /dev/null
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+Query:       sp|Q6GZX4|001R_FRG3G  [L=256]
+Description: Putative transcription factor 001R OS=Frog virus 3 (isolate Goorha) GN=FV3-001R PE=4 SV=1
+Scores for complete sequences (score includes all domains):
+   --- full sequence ---   --- best 1 domain ---    -#dom-
+    E-value  score  bias    E-value  score  bias    exp  N  Sequence             Description
+    ------- ------ -----    ------- ------ -----   ---- --  --------             -----------
+   1.1e-176  590.0   1.4   1.3e-176  589.9   1.4    1.0  1  sp|Q6GZX4|001R_FRG3G  Putative transcription factor 001R OS=F
+    5.8e-24   89.6   0.8    1.6e-23   88.2   0.8    1.7  1  sp|Q91FP2|VF282_IIV6  Putative transcription factor 282R OS=I
+    1.5e-16   65.3   3.0    4.9e-16   63.7   0.9    2.3  2  sp|Q196Y1|VF282_IIV3  Putative transcription factor 079L OS=I
+  ------ inclusion threshold ------
+        0.1   16.7   0.2       0.25   15.5   0.2    1.6  1  sp|A4XL64|PNP_CALS8   Polyribonucleotide nucleotidyltransfera
+       0.79   13.8   0.2        1.5   12.9   0.0    1.5  2  sp|A4G0R3|PYRB_METM5  Aspartate carbamoyltransferase OS=Metha
+        1.6   12.9   0.0        4.6   11.3   0.0    1.8  2  sp|P42271|TBG2_DROME  Tubulin gamma-2 chain OS=Drosophila mel
+        2.6   12.1   0.0        3.9   11.6   0.0    1.2  1  sp|A6Q2V7|TRMA_NITSB  tRNA/tmRNA (uracil-C(5))-methyltransfer
+        2.7   12.1   0.0        2.7   12.1   0.0    1.0  1  sp|B1KT52|EX7S_CLOBM  Exodeoxyribonuclease 7 small subunit OS
+        2.7   12.1   0.0        2.8   12.0   0.0    1.1  1  sp|A9KCX4|COAD_COXBN  Phosphopantetheine adenylyltransferase 
+        2.7   12.1   0.0        2.8   12.0   0.0    1.1  1  sp|A9NB23|COAD_COXBR  Phosphopantetheine adenylyltransferase 
+        2.7   12.1   0.0        2.8   12.0   0.0    1.1  1  sp|B6J216|COAD_COXB2  Phosphopantetheine adenylyltransferase 
+        2.7   12.1   0.0        2.8   12.0   0.0    1.1  1  sp|B6J5S3|COAD_COXB1  Phosphopantetheine adenylyltransferase 
+        2.7   12.1   0.0        2.8   12.0   0.0    1.1  1  sp|Q83EM7|COAD_COXBU  Phosphopantetheine adenylyltransferase 
+
+
+Domain annotation for each sequence (and alignments):
+>> sp|Q6GZX4|001R_FRG3G  Putative transcription factor 001R OS=Frog virus 3 (isolate Goorha) GN=FV3-001R PE=4 SV=1
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !  589.9   1.4    3e-181  1.3e-176       1     256 []       1     256 []       1     256 [] 1.00
+
+  Alignments for each domain:
+  == domain 1  score: 589.9 bits;  conditional E-value: 3e-181
+  sp|Q6GZX4|001R_FRG3G   1 mafsaedvlkeydrrrrmealllslyypndrklldykewspprvqvecpkapvewnnppsekglivghfsgikykgekaqasevdvnkm 89 
+                           mafsaedvlkeydrrrrmealllslyypndrklldykewspprvqvecpkapvewnnppsekglivghfsgikykgekaqasevdvnkm
+  sp|Q6GZX4|001R_FRG3G   1 MAFSAEDVLKEYDRRRRMEALLLSLYYPNDRKLLDYKEWSPPRVQVECPKAPVEWNNPPSEKGLIVGHFSGIKYKGEKAQASEVDVNKM 89 
+                           89*************************************************************************************** PP
+
+  sp|Q6GZX4|001R_FRG3G  90 ccwvskfkdamrryqgiqtckipgkvlsdldakikaynltvegvegfvrysrvtkqhvaaflkelrhskqyenvnlihyiltdkrvdiq 178
+                           ccwvskfkdamrryqgiqtckipgkvlsdldakikaynltvegvegfvrysrvtkqhvaaflkelrhskqyenvnlihyiltdkrvdiq
+  sp|Q6GZX4|001R_FRG3G  90 CCWVSKFKDAMRRYQGIQTCKIPGKVLSDLDAKIKAYNLTVEGVEGFVRYSRVTKQHVAAFLKELRHSKQYENVNLIHYILTDKRVDIQ 178
+                           ***************************************************************************************** PP
+
+  sp|Q6GZX4|001R_FRG3G 179 hlekdlvkdfkalvesahrmrqghminvkyilyqllkkhghgpdgpdiltvktgskgvlyddsfrkiytdlgwkftpl 256
+                           hlekdlvkdfkalvesahrmrqghminvkyilyqllkkhghgpdgpdiltvktgskgvlyddsfrkiytdlgwkftpl
+  sp|Q6GZX4|001R_FRG3G 179 HLEKDLVKDFKALVESAHRMRQGHMINVKYILYQLLKKHGHGPDGPDILTVKTGSKGVLYDDSFRKIYTDLGWKFTPL 256
+                           *****************************************************************************7 PP
+
+>> sp|Q91FP2|VF282_IIV6  Putative transcription factor 282R OS=Invertebrate iridescent virus 6 PE=3 SV=1
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !   88.2   0.8   3.7e-28   1.6e-23      95     253 ..     207     379 ..     196     382 .. 0.86
+
+  Alignments for each domain:
+  == domain 1  score: 88.2 bits;  conditional E-value: 3.7e-28
+  sp|Q6GZX4|001R_FRG3G  95 kfkdamrryqgiqtckipgkvlsdldakikaynltveg.........vegfvrysrvtkqhvaaflkelrhskqyenvnlihyiltdkr 174
+                            fkd +++yqg q   i  ++  +l+ ++  + +   +         +    r+  vt+ h+  flkel ++k ye+  lihy lt kr
+  sp|Q91FP2|VF282_IIV6 207 HFKDCINQYQGKQNTNINPRIYDELEEQLVNHQIIEPAnkkdkfgnpISQSKRFKIVTRAHILFFLKELGYTKHYEDTILIHYTLTGKR 295
+                           59************************998877764322111111122455679999********************************* PP
+
+  sp|Q6GZX4|001R_FRG3G 175 vd.iqhlekdlvkdfkalvesahrm....rqghminvkyilyqllkkhghgpdgpdiltvktgskgvlyddsfrkiytdlgwkf 253
+                            d i+hle+ l+ df  l e    +    ++ ++in +y+l+qll+khg++ +  d+  +kt  +   +dd  + ++  lgwk+
+  sp|Q91FP2|VF282_IIV6 296 PDnIEHLEEKLMADFDKLTEQYDLLfkdiERKNFINTQYVLFQLLRKHGYNCNKDDFAVLKTTERKACHDDICKTLFDALGWKY 379
+                           9779****************8765422226789**************************************************8 PP
+
+>> sp|Q196Y1|VF282_IIV3  Putative transcription factor 079L OS=Invertebrate iridescent virus 3 GN=IIV3-079L PE=3 SV=1
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 ?   -3.9   0.0       4.7     2e+05     192     205 ..      83      96 ..      64     103 .. 0.62
+   2 !   63.7   0.9   1.2e-20   4.9e-16      95     254 ..     212     391 ..     183     392 .. 0.83
+
+  Alignments for each domain:
+  == domain 1  score: -3.9 bits;  conditional E-value: 4.7
+  sp|Q6GZX4|001R_FRG3G 192 vesahrmrqghmin 205
+                           ++ ah +++ hm+n
+  sp|Q196Y1|VF282_IIV3  83 IDVAHLIEEYHMLN 96 
+                           45566666666666 PP
+
+  == domain 2  score: 63.7 bits;  conditional E-value: 1.2e-20
+  sp|Q6GZX4|001R_FRG3G  95 kfkdamrryqgiqtckipgkvlsdldakikaynl..tvegvegfvrysrvtkqhvaaflkelrh...skqyenvnlihyiltdkrvd.i 177
+                            f+d + +yqg q   ip ++ + l+ k+   nl  t  g+    ry +vt+  v  +lkel      k y+++ lih+ lt +  d i
+  sp|Q196Y1|VF282_IIV3 212 HFRDCITQYQGKQKTHIPEEIYTILETKLLEKNLlnTEPGLTVEKRYEKVTRAMVLDILKELGSkdvKKFYDDIVLIHHTLTKQPCDnI 300
+                           59***************************9999855667999999*****************752225789***********9998769 PP
+
+  sp|Q6GZX4|001R_FRG3G 178 qhlekdlvkdfkalvesahrm..............rqghminvkyilyqllkkhghgpdgpdiltvktgskgvlyddsfrkiytdlgwk 252
+                           ++le  l+ df  l e+  ++              ++ ++in +++lyqll+kh+h  ++ d+lt+k + +  ++    +k+++ l wk
+  sp|Q196Y1|VF282_IIV3 301 EYLEDSLLDDFDKLTETYDNLyvnqdspdderggtKRKNFINAQFVLYQLLRKHNHPCNSMDFLTLKKSERKRFHHTICKKLFSILEWK 389
+                           **************99765432222222222111134579************************************************* PP
+
+  sp|Q6GZX4|001R_FRG3G 253 ft 254
+                           ++
+  sp|Q196Y1|VF282_IIV3 390 YS 391
+                           95 PP
+
+>> sp|A4XL64|PNP_CALS8  Polyribonucleotide nucleotidyltransferase OS=Caldicellulosiruptor saccharolyticus (strain ATCC 4
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 ?   15.5   0.2     6e-06      0.25      80     225 ..     165     318 ..     139     332 .. 0.73
+
+  Alignments for each domain:
+  == domain 1  score: 15.5 bits;  conditional E-value: 6e-06
+  sp|Q6GZX4|001R_FRG3G  80 qasevdvnkmccwvskfkdamrryq.giqtckipgkvlsd.ldakikaynltvegvegfvr........y.srvtkqhvaaflkelrhs 157
+                            a e +v+k+   vs  kd +   + g q  +ip  ++ + +    +     ve +eg+v+        y  rv  +++   ++el + 
+   sp|A4XL64|PNP_CALS8 165 TAKEREVSKLHLVVSGTKDKVMMIEaGAQ--EIPEDIMLEaIMTAQEEIKKIVEFIEGIVKevgkpkmqYeKRVVPEEIKQKVRELAYE 251
+                           46677788888888888887666541444..56766654312222233344455555555322222222435899999999******** PP
+
+  sp|Q6GZX4|001R_FRG3G 158 kqyenvnlihyiltdkrvdiqhlekdlvkdfkalvesahrmrqghminv.kyilyqllkkhghgpdgpd 225
+                           k y+ v +   i  dk++d  +l+++++k f+   e    +    + n+ k i+ +++ ++g  pdg  
+   sp|A4XL64|PNP_CALS8 252 KAYQYVQIPDKIERDKKLD--ELKEEVLKAFEGETEDTLLLVDDALYNLeKEIVRKMIAEEGKRPDGRK 318
+                           ****************988..7999*********************9984689999**********965 PP
+
+>> sp|A4G0R3|PYRB_METM5  Aspartate carbamoyltransferase OS=Methanococcus maripaludis (strain C5 / ATCC BAA-1333) GN=pyrB
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 ?   -3.1   0.0       2.8   1.2e+05       5      22 ..      12      29 ..      10      33 .. 0.86
+   2 ?   12.9   0.0   3.5e-05       1.5      84     146 ..     164     228 ..     143     278 .. 0.74
+
+  Alignments for each domain:
+  == domain 1  score: -3.1 bits;  conditional E-value: 2.8
+  sp|Q6GZX4|001R_FRG3G  5 aedvlkeydrrrrmeall 22
+                           e++l   d+ +rmea+l
+  sp|A4G0R3|PYRB_METM5 12 REEILNILDESERMEAIL 29
+                          58999999999****997 PP
+
+  == domain 2  score: 12.9 bits;  conditional E-value: 3.5e-05
+  sp|Q6GZX4|001R_FRG3G  84 vdvnkmccwvskfkdamrryqgiqtckipgkvlsdldakikaynltvegveg..fvrysrvtkqh 146
+                             v+ +c  +s fk    +  + +  k+p +v+ d+d kik   +t   +e    v  +r+ k++
+  sp|A4G0R3|PYRB_METM5 164 RTVHSLCQALSLFKGVEIKLISPEELKMPREVIEDIDGKIKLSEMTDVEIEDvdVVYMTRIQKER 228
+                           457899***********9************************99996666641135556777765 PP
+
+>> sp|P42271|TBG2_DROME  Tubulin gamma-2 chain OS=Drosophila melanogaster GN=gammaTub37C PE=2 SV=3
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 ?   11.3   0.0   0.00011       4.6      25      97 ..     338     410 ..     332     440 .. 0.86
+   2 ?   -1.9   0.0       1.2   4.9e+04       9      42 ..     419     450 ..     413     456 .. 0.60
+
+  Alignments for each domain:
+  == domain 1  score: 11.3 bits;  conditional E-value: 0.00011
+  sp|Q6GZX4|001R_FRG3G  25 lyypndrklldykewspprvqvecpkapvewnnppsekglivghfsgikykgekaqasevdvnkmccwvskfk 97 
+                           l    +rkl ++  w p  +qv  p++     +     gl++++ +gi    ++a a    + k  +++  f+
+  sp|P42271|TBG2_DROME 338 LQRIRERKLANFIPWGPASIQVALPRSSPYVQSAHKVSGLMMANHTGISSLFKRALAQYDKLRKRNAFLDNFR 410
+                           566689********************99999999999***********9999999888777788777777765 PP
+
+  == domain 2  score: -1.9 bits;  conditional E-value: 1.2
+  sp|Q6GZX4|001R_FRG3G   9 lkeydrrrrmealllslyypndrklldykewspp 42 
+                           l e d  r     l+  y       +dy +wsp 
+  sp|P42271|TBG2_DROME 419 LTELDIARDTVDCLVQEYEA--ATQIDYPQWSPA 450
+                           55555555544444444433..3458*****985 PP
+
+>> sp|A6Q2V7|TRMA_NITSB  tRNA/tmRNA (uracil-C(5))-methyltransferase OS=Nitratiruptor sp. (strain SB155-2) GN=trmA PE=3 S
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 ?   11.6   0.0   9.4e-05       3.9      72     176 ..     195     294 ..     189     325 .. 0.72
+
+  Alignments for each domain:
+  == domain 1  score: 11.6 bits;  conditional E-value: 9.4e-05
+  sp|Q6GZX4|001R_FRG3G  72 ikykgekaqasevdvnkmccwvskfkdamrryqgiqtckipgkvlsdldakikaynltvegvegfvrysrvtkqhvaaflkelrhskqy 160
+                           i++ g  a+  + d+ ++ c    f   + ry      k+ +  ++    k    n+ + g+e+ v++ r++ q+v   l+ +r  ++ 
+  sp|A6Q2V7|TRMA_NITSB 195 IEWAGRIAKDLQGDLLELYCGAGNFTLPLSRYFE----KVLATEVNKSSIKAAKENVALNGIEN-VEFVRLSSQEVTQALRGVRDFRRL 278
+                           5667777777788888888888888888877743....444444455566777789*******7.8999******************** PP
+
+  sp|Q6GZX4|001R_FRG3G 161 envnlihyiltdkrvd 176
+                           en++l  y +    vd
+  sp|A6Q2V7|TRMA_NITSB 279 ENIDLHSYNFQTVFVD 294
+                           ****998865544444 PP
+
+>> sp|B1KT52|EX7S_CLOBM  Exodeoxyribonuclease 7 small subunit OS=Clostridium botulinum (strain Loch Maree / Type A3) GN=
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 ?   12.1   0.0   6.4e-05       2.7      82     126 ..      15      60 ..       4      69 .. 0.85
+
+  Alignments for each domain:
+  == domain 1  score: 12.1 bits;  conditional E-value: 6.4e-05
+  sp|Q6GZX4|001R_FRG3G  82 sevdvnkmccwvskfkdamrry.qgiqtckipgkvlsdldakikay 126
+                            e  vn m      ++d+m+ y +gi+ c    kvl d + kik  
+  sp|B1KT52|EX7S_CLOBM  15 LETIVNSMDNGEITLEDSMKSYeEGIKLCNKLYKVLKDAEGKIKIL 60 
+                           567788888888899******945*******************975 PP
+
+>> sp|A9KCX4|COAD_COXBN  Phosphopantetheine adenylyltransferase OS=Coxiella burnetii (strain Dugway 5J108-111) GN=coaD P
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 ?   12.0   0.0   6.8e-05       2.8     155     201 ..      44      88 ..      26     143 .. 0.71
+
+  Alignments for each domain:
+  == domain 1  score: 12.0 bits;  conditional E-value: 6.8e-05
+  sp|Q6GZX4|001R_FRG3G 155 rhskqyenvnlihyiltdkrvdiqhlekdlvkdfkalvesahrmrqg 201
+                            h k  e vnli  +ltd+rv++  l   l+ df      a+ + +g
+  sp|A9KCX4|COAD_COXBN  44 PHLKLEERVNLIADVLTDERVEVLPLTG-LLVDFAKT-HQANFILRG 88 
+                           699999*****************99975.56688554.344444444 PP
+
+>> sp|A9NB23|COAD_COXBR  Phosphopantetheine adenylyltransferase OS=Coxiella burnetii (strain RSA 331 / Henzerling II) GN
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 ?   12.0   0.0   6.8e-05       2.8     155     201 ..      44      88 ..      26     143 .. 0.71
+
+  Alignments for each domain:
+  == domain 1  score: 12.0 bits;  conditional E-value: 6.8e-05
+  sp|Q6GZX4|001R_FRG3G 155 rhskqyenvnlihyiltdkrvdiqhlekdlvkdfkalvesahrmrqg 201
+                            h k  e vnli  +ltd+rv++  l   l+ df      a+ + +g
+  sp|A9NB23|COAD_COXBR  44 PHLKLEERVNLIADVLTDERVEVLPLTG-LLVDFAKT-HQANFILRG 88 
+                           699999*****************99975.56688554.344444444 PP
+
+>> sp|B6J216|COAD_COXB2  Phosphopantetheine adenylyltransferase OS=Coxiella burnetii (strain CbuG_Q212) GN=coaD PE=3 SV=
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 ?   12.0   0.0   6.8e-05       2.8     155     201 ..      44      88 ..      26     143 .. 0.71
+
+  Alignments for each domain:
+  == domain 1  score: 12.0 bits;  conditional E-value: 6.8e-05
+  sp|Q6GZX4|001R_FRG3G 155 rhskqyenvnlihyiltdkrvdiqhlekdlvkdfkalvesahrmrqg 201
+                            h k  e vnli  +ltd+rv++  l   l+ df      a+ + +g
+  sp|B6J216|COAD_COXB2  44 PHLKLEERVNLIADVLTDERVEVLPLTG-LLVDFAKT-HQANFILRG 88 
+                           699999*****************99975.56688554.344444444 PP
+
+>> sp|B6J5S3|COAD_COXB1  Phosphopantetheine adenylyltransferase OS=Coxiella burnetii (strain CbuK_Q154) GN=coaD PE=3 SV=
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 ?   12.0   0.0   6.8e-05       2.8     155     201 ..      44      88 ..      26     143 .. 0.71
+
+  Alignments for each domain:
+  == domain 1  score: 12.0 bits;  conditional E-value: 6.8e-05
+  sp|Q6GZX4|001R_FRG3G 155 rhskqyenvnlihyiltdkrvdiqhlekdlvkdfkalvesahrmrqg 201
+                            h k  e vnli  +ltd+rv++  l   l+ df      a+ + +g
+  sp|B6J5S3|COAD_COXB1  44 PHLKLEERVNLIADVLTDERVEVLPLTG-LLVDFAKT-HQANFILRG 88 
+                           699999*****************99975.56688554.344444444 PP
+
+>> sp|Q83EM7|COAD_COXBU  Phosphopantetheine adenylyltransferase OS=Coxiella burnetii (strain RSA 493 / Nine Mile phase I
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 ?   12.0   0.0   6.8e-05       2.8     155     201 ..      44      88 ..      26     143 .. 0.71
+
+  Alignments for each domain:
+  == domain 1  score: 12.0 bits;  conditional E-value: 6.8e-05
+  sp|Q6GZX4|001R_FRG3G 155 rhskqyenvnlihyiltdkrvdiqhlekdlvkdfkalvesahrmrqg 201
+                            h k  e vnli  +ltd+rv++  l   l+ df      a+ + +g
+  sp|Q83EM7|COAD_COXBU  44 PHLKLEERVNLIADVLTDERVEVLPLTG-LLVDFAKT-HQANFILRG 88 
+                           699999*****************99975.56688554.344444444 PP
+
+
+
+Internal pipeline statistics summary:
+-------------------------------------
+Query model(s):                              1  (256 nodes)
+Target sequences:                       544996  (193815432 residues searched)
+Passed MSV filter:                     14809  (0.0271727); expected 10899.9 (0.02)
+Passed bias filter:                    12098  (0.0221983); expected 10899.9 (0.02)
+Passed Vit filter:                       826  (0.00151561); expected 545.0 (0.001)
+Passed Fwd filter:                        14  (2.56883e-05); expected 5.4 (1e-05)
+Initial search space (Z):             544996  [actual number of targets]
+Domain search space  (domZ):              13  [number of targets reported over threshold]
+# CPU time: 9.44u 0.14s 00:00:09.58 Elapsed: 00:00:03.39
+# Mc/sec: 14636.21
+//
+# Alignment of 3 hits satisfying inclusion thresholds saved to: /dev/null
+Query:       sp|Q197F7|003L_IIV3  [L=156]
+Description: Uncharacterized protein 003L OS=Invertebrate iridescent virus 3 GN=IIV3-003L PE=4 SV=1
+Scores for complete sequences (score includes all domains):
+   --- full sequence ---   --- best 1 domain ---    -#dom-
+    E-value  score  bias    E-value  score  bias    exp  N  Sequence              Description
+    ------- ------ -----    ------- ------ -----   ---- --  --------              -----------
+   2.4e-107  360.9  13.7   2.7e-107  360.8  13.7    1.0  1  sp|Q197F7|003L_IIV3    Uncharacterized protein 003L OS=Invert
+  ------ inclusion threshold ------
+      0.082   17.7   0.7       0.16   16.8   0.7    1.4  1  sp|Q9C968|CCA24_ARATH  Cyclin-A2-4 OS=Arabidopsis thaliana GN
+       0.21   16.4   1.1       0.42   15.4   1.1    1.4  1  sp|Q06215|PPO_VICFA    Polyphenol oxidase A1, chloroplastic O
+       0.34   15.7   0.1       0.56   15.0   0.1    1.3  1  sp|Q5M8J0|BABA1_XENTR  BRISC and BRCA1-A complex member 1 OS=
+          2   13.2   4.0    1.3e+02    7.3   0.0    2.4  2  sp|Q86ZL5|ATG4_PODAS   Probable cysteine protease ATG4 OS=Pod
+        2.1   13.1   0.7        4.2   12.1   0.1    1.8  2  sp|P04060|RNAS1_HYSCR  Ribonuclease pancreatic OS=Hystrix cri
+
+
+Domain annotation for each sequence (and alignments):
+>> sp|Q197F7|003L_IIV3  Uncharacterized protein 003L OS=Invertebrate iridescent virus 3 GN=IIV3-003L PE=4 SV=1
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !  360.8  13.7  2.9e-112  2.7e-107       1     156 []       1     156 []       1     156 [] 1.00
+
+  Alignments for each domain:
+  == domain 1  score: 360.8 bits;  conditional E-value: 2.9e-112
+  sp|Q197F7|003L_IIV3   1 myqainpcpqswygspqlereivckmsgaphypnyypvhpnalggawfdtslnarsltttpslttctppslaactpptslgmvdspphin 90 
+                          myqainpcpqswygspqlereivckmsgaphypnyypvhpnalggawfdtslnarsltttpslttctppslaactpptslgmvdspphin
+  sp|Q197F7|003L_IIV3   1 MYQAINPCPQSWYGSPQLEREIVCKMSGAPHYPNYYPVHPNALGGAWFDTSLNARSLTTTPSLTTCTPPSLAACTPPTSLGMVDSPPHIN 90 
+                          8***************************************************************************************** PP
+
+  sp|Q197F7|003L_IIV3  91 pprrigtlcfdfgsakspqrcecvasdrpsttsntapdtyrllitnsktrknnygtcrlepltygi 156
+                          pprrigtlcfdfgsakspqrcecvasdrpsttsntapdtyrllitnsktrknnygtcrlepltygi
+  sp|Q197F7|003L_IIV3  91 PPRRIGTLCFDFGSAKSPQRCECVASDRPSTTSNTAPDTYRLLITNSKTRKNNYGTCRLEPLTYGI 156
+                          *****************************************************************7 PP
+
+>> sp|Q9C968|CCA24_ARATH  Cyclin-A2-4 OS=Arabidopsis thaliana GN=CYCA2-4 PE=2 SV=1
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 ?   16.8   0.7   1.7e-06      0.16      56     136 ..     129     209 ..     111     216 .. 0.81
+
+  Alignments for each domain:
+  == domain 1  score: 16.8 bits;  conditional E-value: 1.7e-06
+    sp|Q197F7|003L_IIV3  56 sltttpslttctppslaactpptslgmvdspphinpprrigtlcfdfgsakspqrcecvasdr.psttsntapdtyr.llitn 136
+                            s +   sl+  t  sl   t  ts +++  p   +ppr +gt+    g a sp+  +  + d+ p   s  apd y  l +  
+  sp|Q9C968|CCA24_ARATH 129 SNSAGASLSVFTDTSLG--TNETSYSIIAKPSSRSPPRPFGTVERSCGGASSPKFVDIDSDDKdPLLCSLYAPDIYYnLRVAE 209
+                            55566788888888876..7899**********************************99999857788999***975144544 PP
+
+>> sp|Q06215|PPO_VICFA  Polyphenol oxidase A1, chloroplastic OS=Vicia faba PE=1 SV=1
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 ?   15.4   1.1   4.6e-06      0.42      56     103 ..      83     132 ..      34     149 .. 0.77
+
+  Alignments for each domain:
+  == domain 1  score: 15.4 bits;  conditional E-value: 4.6e-06
+  sp|Q197F7|003L_IIV3  56 sltttpsl..ttctppslaactpptslgmvdspphin..pprrigtlcfdfg 103
+                          +l t ps   +  +pp l+ c pp+ l    +pp+in  pp   +t   df 
+  sp|Q06215|PPO_VICFA  83 TLATNPSAlaSPISPPDLSKCVPPSDLPSGTTPPNINccPP--YSTKITDFK 132
+                          46677764124579***********************4455..455555543 PP
+
+>> sp|Q5M8J0|BABA1_XENTR  BRISC and BRCA1-A complex member 1 OS=Xenopus tropicalis GN=babam1 PE=2 SV=1
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 ?   15.0   0.1   6.2e-06      0.56      63     122 ..      56     112 ..      37     135 .. 0.78
+
+  Alignments for each domain:
+  == domain 1  score: 15.0 bits;  conditional E-value: 6.2e-06
+    sp|Q197F7|003L_IIV3  63 lttctppslaactpptslgmvdspphinpprrigtlcfdfgsakspqrcecvasdrpstt 122
+                             tt   p    ctpp +l +    p++n p+++  +c+d++   s q+ e     + +  
+  sp|Q5M8J0|BABA1_XENTR  56 PTTTAVP--TNCTPPPTLEFQLKTPRVNCPEKV-IICLDLSEEMSTQKLESFNGSKANAL 112
+                            3444444..46********************99.79*************99877665544 PP
+
+>> sp|Q86ZL5|ATG4_PODAS  Probable cysteine protease ATG4 OS=Podospora anserina GN=ATG4 PE=3 SV=1
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 ?    5.3   2.2     0.006   5.5e+02      52      86 ..      71     108 ..      61     152 .. 0.77
+   2 ?    7.3   0.0    0.0015   1.3e+02      14      58 ..     254     305 ..     241     320 .. 0.66
+
+  Alignments for each domain:
+  == domain 1  score: 5.3 bits;  conditional E-value: 0.006
+   sp|Q197F7|003L_IIV3  52 lnarsltttpslttctpps...laactpptslgmvdsp 86 
+                           l+ +   t p+ltt tpp+   l a  p    g+   p
+  sp|Q86ZL5|ATG4_PODAS  71 LDTKEYGTPPTLTTSTPPAdatLTAIVPEPGAGVESEP 108
+                           667788899*********72224455566666654444 PP
+
+  == domain 2  score: 7.3 bits;  conditional E-value: 0.0015
+   sp|Q197F7|003L_IIV3  14 gspqlereivckmsgaphyp...nyypvhpna.lg...gawfdtslnarslt 58 
+                            +p +ereivc ++  p+ p     +  h  a  g   g wf  s  ar + 
+  sp|Q86ZL5|ATG4_PODAS 254 TNPDIEREIVCLFADDPRAPysiQNFVNHGAAaCGkypGEWFGPSATARCIH 305
+                           479**********998877622222333433313333378999999988775 PP
+
+>> sp|P04060|RNAS1_HYSCR  Ribonuclease pancreatic OS=Hystrix cristata GN=RNASE1 PE=1 SV=1
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 ?   -1.7   0.0      0.85   7.7e+04     113     131 ..      13      31 ..       3      52 .. 0.59
+   2 ?   12.1   0.1   4.7e-05       4.2       8      37 ..      92     121 ..      85     127 .. 0.84
+
+  Alignments for each domain:
+  == domain 1  score: -1.7 bits;  conditional E-value: 0.85
+    sp|Q197F7|003L_IIV3 113 cvasdrpsttsntapdtyr 131
+                              +s  ps+ sn   +  r
+  sp|P04060|RNAS1_HYSCR  13 MDSSGSPSSNSNYCNEMMR 31 
+                            4556666666665555443 PP
+
+  == domain 2  score: 12.1 bits;  conditional E-value: 4.7e-05
+    sp|Q197F7|003L_IIV3   8 cpqswygspqlereivckmsgaphypnyyp 37 
+                             p   yg  qler iv    g+p+ p ++ 
+  sp|P04060|RNAS1_HYSCR  92 YPDCSYGMSQLERSIVVACEGSPYVPVHFD 121
+                            68889******************9887764 PP
+
+
+
+Internal pipeline statistics summary:
+-------------------------------------
+Query model(s):                              1  (156 nodes)
+Target sequences:                       544996  (193815432 residues searched)
+Passed MSV filter:                     14122  (0.0259121); expected 10899.9 (0.02)
+Passed bias filter:                     8756  (0.0160662); expected 10899.9 (0.02)
+Passed Vit filter:                       676  (0.00124038); expected 545.0 (0.001)
+Passed Fwd filter:                         6  (1.10093e-05); expected 5.4 (1e-05)
+Initial search space (Z):             544996  [actual number of targets]
+Domain search space  (domZ):               6  [number of targets reported over threshold]
+# CPU time: 6.10u 0.12s 00:00:06.22 Elapsed: 00:00:02.50
+# Mc/sec: 12045.90
+//
+# Alignment of 1 hits satisfying inclusion thresholds saved to: /dev/null
+[ok]
