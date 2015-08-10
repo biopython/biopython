@@ -4209,8 +4209,7 @@ class EFetchTest(unittest.TestCase):
     def test_truncated_xml(self):
         """Test error handling for a truncated XML declaration"""
         from Bio.Entrez.Parser import CorruptedXMLError
-        try: from Bio.Entrez from StringIO import StringIO # Python 2
-        except ImportError: from io import StringIO  # Python 3
+        from Bio._py3k import StringIO
         truncated_xml = """<?xml version="1.0"?>
         <!DOCTYPE GBSet PUBLIC "-//NCBI//NCBI GBSeq/EN" "http://www.ncbi.nlm.nih.gov/dtd/NCBI_GBSeq.dtd">
         <GBSet><GBSeq><GBSeq_locus>
