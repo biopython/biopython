@@ -168,9 +168,9 @@ def write(motifs, format):
     elif format == 'jaspar':
         for m in motifs:
             counts = m.counts
-            if hasattr(m, 'matrix_id'):
+            try:
                 matrix_id = m.matrix_id
-            else:
+            except AttributeError:
                 matrix_id = None
             line = ">{0} {1}\n".format(matrix_id, m.name)
             lines.append(line)
