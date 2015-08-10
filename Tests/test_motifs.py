@@ -440,7 +440,7 @@ XX
 //
 """
         self.assertEqual(s3, expected_transfac)
-        self.assertRaisesRegexp(ValueError,  "Unknown format type foo_bar", self.m.format, 'foo_bar')
+        self.assertRaises(ValueError, self.m.format, 'foo_bar')
 
 
 
