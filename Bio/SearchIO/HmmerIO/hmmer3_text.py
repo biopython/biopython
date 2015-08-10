@@ -147,6 +147,11 @@ class Hmmer3TextParser(object):
             yield qresult
             self.line = read_forward(self.handle)
 
+            # Skip line beginning with '# Alignment of', which are output
+            # when running phmmer with the '-A' flag.
+            if self.line.startswith('# Alignment of'):
+                self.line = self.handle.readline()
+
             # HMMER >= 3.1 outputs '[ok]' at the end of all results file,
             # which means we can break the main loop when we see the line
             if '[ok]' in self.line:
@@ -248,6 +253,10 @@ class Hmmer3TextParser(object):
                     hit_attr = hit_attrs.pop(0)
                     hit = Hit(hsp_list)
                     for attr, value in hit_attr.items():
+                        if attr == "description":
+                            cur_val = getattr(hit, attr)
+                            if cur_val and value and cur_val.startswith(value):
+                                continue
                         setattr(hit, attr, value)
                     if not hit:
                         hit.query_description = qdesc

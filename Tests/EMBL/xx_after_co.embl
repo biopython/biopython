@@ -1,0 +1,16 @@
+ID   Tester  Unannotated; unspecified; UNC; 120 BP.
+XX
+AC   Test;
+XX
+CO   This will break
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   CDS             1..110
+FT                   /protein_id="Test"
+FT                   /db_xref="PEDANT:PE04150000123"
+XX
+SQ   Sequence 120 BP;
+     CGACTTTCCA CTGCCCTCTA CGCCCGCGCA ATGGGTCGTA CGCGGTTGTG GTTGGTATAG        60
+     CTGGTTAGGG TTTTTCGAGA GCTTTCGATT GGTGGTTGTT TTGGGCGTTT TGCCTACGTT       120
+//
