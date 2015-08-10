@@ -168,7 +168,11 @@ def write(motifs, format):
     elif format == 'jaspar':
         for m in motifs:
             counts = m.counts
-            line = ">{0} {1}\n".format(m.matrix_id, m.name)
+            if hasattr(m, 'matrix_id'):
+                matrix_id = m.matrix_id
+            else:
+                matrix_id = None
+            line = ">{0} {1}\n".format(matrix_id, m.name)
             lines.append(line)
             for letter in letters:
                 terms = ["{0:6.2f}".format(value) for value in counts[letter]]
