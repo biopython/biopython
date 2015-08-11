@@ -413,6 +413,36 @@ class MotifTestsBasic(unittest.TestCase):
         output_handle.write(self.m.format("transfac"))
         output_handle.close()
 
+    def test_format(self):
+        self.m.name = 'Foo'
+        s1 = self.m.format('pfm')
+        expected_pfm = """  1.00   0.00   1.00   0.00  1.00
+  0.00   0.00   0.00   0.00  0.00
+  0.00   0.00   0.00   0.00  0.00
+  0.00   1.00   0.00   1.00  0.00
+"""
+        s2 = self.m.format('jaspar')
+        expected_jaspar = """>None Foo
+A [  1.00   0.00   1.00   0.00   1.00]
+C [  0.00   0.00   0.00   0.00   0.00]
+G [  0.00   0.00   0.00   0.00   0.00]
+T [  0.00   1.00   0.00   1.00   0.00]
+"""
+        self.assertEqual(s2, expected_jaspar)
+        s3 = self.m.format('transfac')
+        expected_transfac = """P0      A      C      G      T
+01      1      0      0      0      A
+02      0      0      0      1      T
+03      1      0      0      0      A
+04      0      0      0      1      T
+05      1      0      0      0      A
+XX
+//
+"""
+        self.assertEqual(s3, expected_transfac)
+        self.assertRaises(ValueError, self.m.format, 'foo_bar')
+
+
 
 class TestMEME(unittest.TestCase):
 
