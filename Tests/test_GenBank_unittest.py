@@ -77,6 +77,10 @@ class GenBankTests(unittest.TestCase):
             rec = SeqIO.read(path.join("GenBank", "negative_location.gb"), "genbank")
             self.assertEqual(None, rec.features[-1].location)
 
+    def test_dot_lineage(self):
+        rec = SeqIO.read("GenBank/long_locus.gb", "genbank")
+        self.assertEqual(rec.annotations["organism"], ".")
+        self.assertEqual(rec.annotations["taxonomy"], [])
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
