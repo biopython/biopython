@@ -658,8 +658,8 @@ class WellRecord(object):
 
             time = np.arange(start, stop, time.step)
             return list(self._interpolate(time))
-
-        elif _is_int_or_long(time) or isinstance(time, float):
+            
+        elif _is_int_or_long(time) or isinstance(time, float): 
             return self._interpolate(time)
 
         raise ValueError('Invalid index')
@@ -699,9 +699,9 @@ class WellRecord(object):
         times = set(self._signals.keys()).union(set(well._signals.keys()))
         for t in sorted(times):
             signals[t] = self[t] + well[t]
-
+                            
         neww = WellRecord(self.id, signals=signals)
-
+        
         return neww
 
     def __sub__(self, well):
@@ -865,7 +865,7 @@ def JsonIterator(handle):
     # we need to discriminate
     if hasattr(data, 'keys'):
         data = [data]
-
+    
     for pobj in data:
         try:
             plateID = pobj[_csvData][_plate]
@@ -875,9 +875,9 @@ def JsonIterator(handle):
             raise KeyError('Could not retrieve plate id')
 
         # Parse also non-standard plate IDs
-        if not plateID.startswith(_platesPrefix) and not plateID.startswith(_platesPrefixMammalian):
-            warnings.warn('Non-standard plate ID found (%s)' % plateID,
-                          BiopythonParserWarning)
+        if not plateID.startswith(_platesPrefix):
+            warnings.warn('Non-standard plate ID found (%s)'%plateID,
+                           BiopythonParserWarning)
         else:
             # Simplify the plates IDs, removing letters, as opm does
             if plateID.startswith(_platesPrefixMammalian):
@@ -893,8 +893,8 @@ def JsonIterator(handle):
 
             # No luck
             if len(pID) == 0:
-                warnings.warn('Non-standard plate ID found (%s)' % plateID,
-                             BiopythonParserWarning)
+                warning.warn('Non-standard plate ID found (%s)'%plateID,
+                            BiopythonParserWarning)
             elif int(pID) < 0:
                 warnings.warn('Non-standard plate ID found (%s), using %s' %
                              (plateID, _platesPrefix + abs(int(pID))))
@@ -967,8 +967,8 @@ def CsvIterator(handle):
             qualifiers[_csvData][_plate] = plateID
 
             # Parse also non-standard plate IDs
-            if not plateID.startswith(_platesPrefix) and not plateID.startswith(_platesPrefixMammalian):
-                warnings.warn('Non-standard plate ID found (%s)' % plateID,
+            if not plateID.startswith(_platesPrefix):
+                warnings.warn('Non-standard plate ID found (%s)'%plateID,
                               BiopythonParserWarning)
             else:
                 # Simplify the plates IDs, removing letters, as opm does
@@ -985,7 +985,7 @@ def CsvIterator(handle):
 
                 # No luck
                 if len(pID) == 0:
-                    warnings.warn('Non-standard plate ID found (%s)' % plateID,
+                    warning.warn('Non-standard plate ID found (%s)'%plateID,
                                  BiopythonParserWarning)
                 elif int(pID) < 0:
                     warnings.warn('Non-standard plate ID found (%s), using %s' %
@@ -1084,6 +1084,8 @@ def CsvIterator(handle):
 def _toOPM(plate):
     """Helper function to transform a PlateRecord object into a dictionary
     """
+    d={}
+    
     d = dict(plate.qualifiers.items())
 
     d[_measurements] = {}
