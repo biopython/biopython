@@ -25,6 +25,8 @@ import csv
 import numpy as np
 
 from Bio._py3k import basestring
+from Bio._py3k import _is_int_or_long
+from Bio import BiopythonParserWarning
 
 # Private csv headers - hardcoded because this are supposedly never changed
 _datafile = 'Data File'
@@ -58,7 +60,7 @@ class PlateRecord(object):
     >>> plate = phenotype.read("plate.csv", "pm-csv")
     >>> well = plate['A05']
     >>> for well in plate:
-    ...    print("%s"%well.id)
+    ...    print("%s" % well.id)
     A01
     A02
     ...
@@ -633,7 +635,7 @@ class WellRecord(object):
     def __getitem__(self, time):
         """Returns a subset of signals or a single signal.
         """
-        if isinstance( time, slice ):
+        if isinstance(time, slice):
             # Fix the missing values in the slice
             if time.start is None:
                 start = 0
@@ -648,7 +650,7 @@ class WellRecord(object):
             time = np.arange(start, stop, time.step)
             return list(self._interpolate(time))
             
-        elif isinstance( time, int ) or isinstance( time, float ): 
+        elif _is_int_or_long(time) or isinstance(time, float): 
             return self._interpolate(time)
             
         raise ValueError('Invalid index')
@@ -659,7 +661,7 @@ class WellRecord(object):
     
     def __eq__(self, other):
         if isinstance(other, self.__class__):
-            if self._signals.keys() != other._signals.keys():
+            if list(self._signals.keys()) != list(other._signals.keys()):
                 return False
             # Account for the presence of NaNs
             for k in self._signals:
@@ -689,7 +691,7 @@ class WellRecord(object):
         for t in sorted(times):
             signals[t] = self[t] + well[t]
                             
-        neww = WellRecord(self.id, signals = signals)
+        neww = WellRecord(self.id, signals=signals)
         
         return neww
             
@@ -845,10 +847,8 @@ def JsonIterator(handle):
 
     # We can have one single plate or several
     # we need to discriminate
-    try:
-        data.keys()
+    if hasattr(data, 'keys'):
         data = [data]
-    except:pass
     
     for pobj in data:
         try:
@@ -861,7 +861,7 @@ def JsonIterator(handle):
         # Parse also non-standard plate IDs
         if not plateID.startswith(_platesPrefix):
             warnings.warn('Non-standard plate ID found (%s)'%plateID,
-                           RuntimeWarning)
+                           BiopythonParserWarning)
         else:
             # Simplify the plates IDs, removing letters, as opm does
             pID = plateID[2:]
@@ -875,7 +875,7 @@ def JsonIterator(handle):
             # No luck
             if len(pID) == 0:
                 warning.warn('Non-standard plate ID found (%s)'%plateID,
-                            RuntimeWarning)
+                            BiopythonParserWarning)
             elif int(pID) < 0:
                 warning.warn('Non-standard plate ID found (%s), using %s'%
                             (plateID, _platesPrefix + abs(int(pID))))
@@ -947,7 +947,7 @@ def CsvIterator(handle):
             # Parse also non-standard plate IDs
             if not plateID.startswith(_platesPrefix):
                 warnings.warn('Non-standard plate ID found (%s)'%plateID,
-                               RuntimeWarning)
+                              BiopythonParserWarning)
             else:
                 # Simplify the plates IDs, removing letters, as opm does
                 pID = plateID[2:]
@@ -961,7 +961,7 @@ def CsvIterator(handle):
                 # No luck
                 if len(pID) == 0:
                     warning.warn('Non-standard plate ID found (%s)'%plateID,
-                                RuntimeWarning)
+                                 BiopythonParserWarning)
                 elif int(pID) < 0:
                     warning.warn('Non-standard plate ID found (%s), using %s'%
                                 (plateID, _platesPrefix + abs(int(pID))))
@@ -1029,7 +1029,7 @@ def CsvIterator(handle):
             # Workaround for bad-formatted files
             try:
                 float(line[0])
-            except:
+            except ValueError:
                 continue
             
             time = float(line[0])
@@ -1058,9 +1058,8 @@ def _toOPM(plate):
     """
     d={}
     
-    for k, v in plate.qualifiers.items():
-        d[k] = v
-    
+    d = dict(plate.qualifiers.items())
+
     d[_measurements] = {}
     d[_measurements][_hour] = []
     times = set()
