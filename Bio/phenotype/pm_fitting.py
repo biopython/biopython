@@ -2,7 +2,9 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""This module provides functions to perform sigmoid functions fitting to
+"""Growth curves fitting and parameters extraction for phenotype data
+
+This module provides functions to perform sigmoid functions fitting to
 Phenotype Microarray data. This module depends on scipy curve_fit function.
 If not available, a warning is raised.
 
