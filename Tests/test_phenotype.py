@@ -9,7 +9,7 @@ try:
 except ImportError:
     from Bio import MissingExternalDependencyError
     raise MissingExternalDependencyError(
-        "Install NumPy if you want to use Bio.Phenotype.")
+        "Install NumPy if you want to use Bio.phenotype.")
 
 import os
 import json
@@ -17,40 +17,40 @@ import unittest
 
 from Bio._py3k import StringIO
 
-from Bio import Phenotype
+from Bio import phenotype
 
 # Example plate files
-JSON_PLATE = 'Phenotype/Plate.json'
-JSON_PLATE_2 = 'Phenotype/Plate_2.json'
-JSON_PLATE_3 = 'Phenotype/Plate_3.json'
-JSON_BAD = 'Phenotype/BadPlate.json'
+JSON_PLATE = 'phenotype/Plate.json'
+JSON_PLATE_2 = 'phenotype/Plate_2.json'
+JSON_PLATE_3 = 'phenotype/Plate_3.json'
+JSON_BAD = 'phenotype/BadPlate.json'
 
-CSV_PLATES = 'Phenotype/Plates.csv'
+CSV_PLATES = 'phenotype/Plates.csv'
 
 class TestPhenoMicro(unittest.TestCase):
     
     def test_PhenMicroIO(self):
-        '''Test basic functionalities of Phenotype IO methods'''
-        self.assertRaises(ValueError, Phenotype.read, CSV_PLATES, 'pm-csv')
-        self.assertRaises(ValueError, Phenotype.read, CSV_PLATES, 'pm-json')
-        self.assertRaises(ValueError, Phenotype.read, CSV_PLATES, 'pm-noformat')
-        self.assertRaises(ValueError, Phenotype.read, CSV_PLATES, 'PM-CSV')
-        self.assertRaises(TypeError, Phenotype.read, CSV_PLATES, 1)
-        self.assertRaises(KeyError, Phenotype.read, JSON_BAD, 'pm-json')
+        '''Test basic functionalities of phenotype IO methods'''
+        self.assertRaises(ValueError, phenotype.read, CSV_PLATES, 'pm-csv')
+        self.assertRaises(ValueError, phenotype.read, CSV_PLATES, 'pm-json')
+        self.assertRaises(ValueError, phenotype.read, CSV_PLATES, 'pm-noformat')
+        self.assertRaises(ValueError, phenotype.read, CSV_PLATES, 'PM-CSV')
+        self.assertRaises(TypeError, phenotype.read, CSV_PLATES, 1)
+        self.assertRaises(KeyError, phenotype.read, JSON_BAD, 'pm-json')
         
-        p1 = Phenotype.read(JSON_PLATE_3, 'pm-json')
-        p2 = next(Phenotype.parse(CSV_PLATES, 'pm-csv'))
+        p1 = phenotype.read(JSON_PLATE_3, 'pm-json')
+        p2 = next(phenotype.parse(CSV_PLATES, 'pm-csv'))
         
         handle = StringIO()
         
-        c = Phenotype.write([p1, p2], handle, 'pm-json')
+        c = phenotype.write([p1, p2], handle, 'pm-json')
         self.assertEqual(c, 2)
         
         handle.flush()
         handle.seek(0)
         #Now ready to read back from the handle...
         try:
-            records = list(Phenotype.parse(handle, 'pm-json'))
+            records = list(phenotype.parse(handle, 'pm-json'))
         except ValueError as e:
             #This is BAD.  We can't read our own output.
             #I want to see the output when called from the test harness,
@@ -63,28 +63,28 @@ class TestPhenoMicro(unittest.TestCase):
 
         handle.close()
         handle = StringIO()
-        self.assertRaises(TypeError, Phenotype.write, p1, handle, 1)
-        self.assertRaises(ValueError, Phenotype.write, p1, handle, 'PM-JSON')
-        self.assertRaises(ValueError, Phenotype.write, p1, handle, 'pm-csv')
+        self.assertRaises(TypeError, phenotype.write, p1, handle, 1)
+        self.assertRaises(ValueError, phenotype.write, p1, handle, 'PM-JSON')
+        self.assertRaises(ValueError, phenotype.write, p1, handle, 'pm-csv')
         handle.close()
     
     def test_PlateRecord(self):
         '''Test basic functionalities of PlateRecord objects'''
         self.assertRaises(ValueError,
-                Phenotype.PhenMicro.PlateRecord, 'test', [1,2,3])
+                phenotype.PhenMicro.PlateRecord, 'test', [1,2,3])
         self.assertRaises(TypeError, 
-                Phenotype.PhenMicro.PlateRecord, 'test', 1)
+                phenotype.PhenMicro.PlateRecord, 'test', 1)
         
         handle = open(JSON_PLATE)
         j = json.load(handle)
         handle.close()
         
-        p = Phenotype.PhenMicro.PlateRecord(j['csv_data']['Plate Type'])
+        p = phenotype.PhenMicro.PlateRecord(j['csv_data']['Plate Type'])
 
         times = j['measurements']['Hour']
         for k in j['measurements']:
             if k == 'Hour':continue
-            p[k] = Phenotype.PhenMicro.WellRecord(k, signals=
+            p[k] = phenotype.PhenMicro.WellRecord(k, signals=
                         {times[i]:j['measurements'][k][i]
                         for i in range(len(times))})
         
@@ -131,12 +131,12 @@ class TestPhenoMicro(unittest.TestCase):
         j = json.load(handle)
         handle.close()
         
-        p1 = Phenotype.PhenMicro.PlateRecord(j['csv_data']['Plate Type'])
+        p1 = phenotype.PhenMicro.PlateRecord(j['csv_data']['Plate Type'])
 
         times = j['measurements']['Hour']
         for k in j['measurements']:
             if k == 'Hour':continue
-            p1[k] = Phenotype.PhenMicro.WellRecord(k, signals=
+            p1[k] = phenotype.PhenMicro.WellRecord(k, signals=
                         {times[i]:j['measurements'][k][i]
                         for i in range(len(times))})              
         
@@ -163,16 +163,16 @@ class TestPhenoMicro(unittest.TestCase):
         handle.close()
         
         times = p['measurements']['Hour']
-        w = Phenotype.PhenMicro.WellRecord('A10', signals=
+        w = phenotype.PhenMicro.WellRecord('A10', signals=
                         {times[i]:p['measurements']['A10'][i]
                             for i in range(len(times))})
         
-        w1 = Phenotype.PhenMicro.WellRecord('H12', signals=
+        w1 = phenotype.PhenMicro.WellRecord('H12', signals=
                         {times[i]:p['measurements']['H12'][i]
                             for i in range(len(times))})
                             
         self.assertIsInstance(w.plate,
-                    Phenotype.PhenMicro.PlateRecord)    
+                    phenotype.PhenMicro.PlateRecord)    
         self.assertEqual(w.id, 'A10')
         self.assertEqual(len(w), len(times))
         self.assertEqual(len(w), 384)

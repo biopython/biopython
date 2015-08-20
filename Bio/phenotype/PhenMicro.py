@@ -50,12 +50,12 @@ _measurements = 'measurements'
 class PlateRecord(object):
     """PlateRecord object for storing Phenotype Microarray plates data.
     
-    A PlateRecord stores all the wells of a particular Phenotype
+    A PlateRecord stores all the wells of a particular phenotype
     Microarray plate, along with metadata (if any). The single wells can be
     accessed calling their id as an index or iterating on the PlateRecord:
     
-    >>> from Bio import Phenotype
-    >>> plate = Phenotype.read("plate.csv", "pm-csv")
+    >>> from Bio import phenotype
+    >>> plate = phenotype.read("plate.csv", "pm-csv")
     >>> well = plate['A05']
     >>> for well in plate:
     ...    print("%s"%well.id)
@@ -104,7 +104,7 @@ class PlateRecord(object):
     Two PlateRecord objects can be compared: if all their wells are equal the 
     two plates are considered equal:
     
-    >>> plate2 = Phenotype.read("plate.json", "pm-json")
+    >>> plate2 = phenotype.read("plate.json", "pm-json")
     >>> plate == plate2
     True
     
@@ -177,8 +177,8 @@ class PlateRecord(object):
         plate[:,1:3] uses only columns 1 and 2
         plate[0:2,1:3] uses only rows 0 & 1 and only cols 1 & 2
 
-        >>> from Bio import Phenotype
-        >>> plate = Phenotype.read("plate.csv", "pm-csv")
+        >>> from Bio import phenotype
+        >>> plate = phenotype.read("plate.csv", "pm-csv")
 
         You can access a well of the plate, using its id.
         
@@ -489,8 +489,8 @@ class PlateRecord(object):
         The python built in function str works by calling the object's ___str__
         method.  e.g.
 
-        >>> from Bio import Phenotype
-        >>> record = Phenotype.read("plates.csv", "pm-csv")
+        >>> from Bio import phenotype
+        >>> record = phenotype.read("plates.csv", "pm-csv")
         >>> print(record)
         Plate ID: PM09
         Well: 96
@@ -514,14 +514,14 @@ class PlateRecord(object):
         return "\n".join(lines)
 
 class WellRecord(object):
-    """WellRecord object stores all the time course signals of a Phenotype
+    """WellRecord object stores all the time course signals of a phenotype
     Microarray well.
     
     The single time points and signals can be
     accessed iterating on the WellRecord or using lists indeces or slices:
     
-    >>> from Bio import Phenotype
-    >>> plate = Phenotype.read("plate.csv", "pm-csv")
+    >>> from Bio import phenotype
+    >>> plate = phenotype.read("plate.csv", "pm-csv")
     >>> well = plate['A05']
     >>> for time, signal in well:
     ...    print("Time: %f, Signal: %f" % (time, signal))
@@ -734,8 +734,8 @@ class WellRecord(object):
         The python built in function str works by calling the object's ___str__
         method.  e.g.
 
-        >>> from Bio import Phenotype
-        >>> plate = Phenotype.read("plates.csv", "pm-csv")
+        >>> from Bio import phenotype
+        >>> plate = phenotype.read("plates.csv", "pm-csv")
         >>> record = plate['A05']
         >>> print(record)
         Plate ID: PM09
@@ -814,9 +814,9 @@ class WellRecord(object):
         else:
             sigmoid = (function, )
         
-        mod = __import__ ('Bio.Phenotype.pm_fitting')
+        mod = __import__ ('Bio.phenotype.pm_fitting')
         for sigmoid_func in sigmoid:
-            func = getattr(mod.Phenotype.pm_fitting, sigmoid_func)
+            func = getattr(mod.phenotype.pm_fitting, sigmoid_func)
             try:
                 (self.plateau, self.slope,
                  self.lag, self.v, self.y0), pcov = fit(func,
