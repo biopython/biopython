@@ -78,7 +78,9 @@ class GenBankTests(unittest.TestCase):
             self.assertEqual(None, rec.features[-1].location)
 
     def test_dot_lineage(self):
-        rec = SeqIO.read("GenBank/long_locus.gb", "genbank")
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", BiopythonParserWarning)
+            rec = SeqIO.read("GenBank/bad_loc_wrap.gb", "genbank")
         self.assertEqual(rec.annotations["organism"], ".")
         self.assertEqual(rec.annotations["taxonomy"], [])
 
