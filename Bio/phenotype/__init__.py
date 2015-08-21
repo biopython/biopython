@@ -78,7 +78,7 @@ File Formats
 When specifying the file format, use lowercase strings.
 
  - pm-json - Phenotype Microarray plates in JSON format.
- - pm-csv  - Phenotype Microarray plates in CSV format, which is the 
+ - pm-csv  - Phenotype Microarray plates in CSV format, which is the
              machine vendor format
 
 Note that while Bio.phenotype can read the above file formats, it can only
@@ -88,11 +88,10 @@ write in JSON format.
 from __future__ import print_function
 from Bio._py3k import basestring
 
-__docformat__ = "epytext en"  # not just plaintext
-
 from Bio.File import as_handle
-
 from . import PhenMicro
+
+__docformat__ = "epytext en"  # not just plaintext
 
 # Convention for format names is "mainname-format" in lower case.
 
@@ -102,7 +101,8 @@ _FormatToIterator = {"pm-csv": PhenMicro.CsvIterator,
 
 _FormatToWriter = {"pm-json": PhenMicro.JsonWriter,
                    }
-                   
+
+
 def write(plates, handle, format):
     """Write complete set of PlateRecords to a file.
 
@@ -115,7 +115,7 @@ def write(plates, handle, format):
 
     Returns the number of records written (as an integer).
     """
-    #Try and give helpful error messages:
+    # Try and give helpful error messages:
     if not isinstance(format, basestring):
         raise TypeError("Need a string for the file format (lower case)")
     if not format:
@@ -127,7 +127,7 @@ def write(plates, handle, format):
         plates = [plates]
 
     with as_handle(handle, 'w') as fp:
-        #Map the file format to a writer class
+        # Map the file format to a writer class
         if format in _FormatToWriter:
             writer_class = _FormatToWriter[format]
             count = writer_class(plates).write(fp)
@@ -139,6 +139,7 @@ def write(plates, handle, format):
             % (format, repr(count))
 
     return count
+
 
 def parse(handle, format):
     """Turns a phenotype file into an iterator returning PlateRecords.
@@ -160,7 +161,7 @@ def parse(handle, format):
     Use the Bio.phenotype.read(...) function when you expect a single record
     only.
     """
-    #Try and give helpful error messages:
+    # Try and give helpful error messages:
     if not isinstance(format, basestring):
         raise TypeError("Need a string for the file format (lower case)")
     if not format:
@@ -169,15 +170,16 @@ def parse(handle, format):
         raise ValueError("Format string '%s' should be lower case" % format)
 
     with as_handle(handle, 'rU') as fp:
-        #Map the file format to a sequence iterator:
+        # Map the file format to a sequence iterator:
         if format in _FormatToIterator:
             iterator_generator = _FormatToIterator[format]
             i = iterator_generator(fp)
         else:
             raise ValueError("Unknown format '%s'" % format)
-        #This imposes some overhead... wait until we drop Python 2.4 to fix it
+        # This imposes some overhead... wait until we drop Python 2.4 to fix it
         for r in i:
             yield r
+
 
 def read(handle, format):
     """Turns a phenotype file into a single PlateRecord.
@@ -231,4 +233,3 @@ def read(handle, format):
     if second is not None:
         raise ValueError("More than one record found in handle")
     return first
-
