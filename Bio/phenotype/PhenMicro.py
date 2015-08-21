@@ -809,6 +809,10 @@ class WellRecord(object):
         # Parameters that depend on scipy curve_fit
         try:
             from pm_fitting import fit, get_area
+            from pm_fitting import logistic, gompertz, richards
+            functions = {'logistic':logistic,
+                         'gompertz':gompertz,
+                         'richards':richards}
         except ImportError:
             warnings.warn('SciPy not installed, could not calculate area, '+
                           'plateau, slope, lag, v and y0',
@@ -818,13 +822,11 @@ class WellRecord(object):
         self.area = get_area(self.get_signals(), self.get_times())
         
         if function is None:
-            sigmoid = avail_func
+            sigmoid = functions
         else:
-            sigmoid = (function, )
+            sigmoid = {function:functions[function]}
         
-        mod = __import__ ('Bio.phenotype.pm_fitting')
-        for sigmoid_func in sigmoid:
-            func = getattr(mod.phenotype.pm_fitting, sigmoid_func)
+        for sigmoid_func, func in sigmoid.items():
             try:
                 (self.plateau, self.slope,
                  self.lag, self.v, self.y0), pcov = fit(func,
