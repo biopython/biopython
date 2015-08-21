@@ -88,12 +88,12 @@ class TestPhenoMicro(unittest.TestCase):
 
         times = j['measurements']['Hour']
         for k in j['measurements']:
-            if k == 'Hour':
-                continue
-            p[k] = phenotype.PhenMicro.WellRecord(k,
-                                                  signals=dict([(times[i], j['measurements'][k][i])
-                                                           for i in range(len(times))]))
 
+            if k == 'Hour':continue
+            p[k] = phenotype.PhenMicro.WellRecord(k,
+                        signals={times[i]:j['measurements'][k][i]
+                        for i in range(len(times))})
+        
         del j['measurements']
         p.qualifiers=j
 
@@ -141,12 +141,12 @@ class TestPhenoMicro(unittest.TestCase):
 
         times=j['measurements']['Hour']
         for k in j['measurements']:
-            if k == 'Hour':
-                continue
-            p1[k]=phenotype.PhenMicro.WellRecord(k,
-                                                   signals=dict([(times[i], j['measurements'][k][i])
-                                                           for i in range(len(times))]))
 
+            if k == 'Hour':continue
+            p1[k] = phenotype.PhenMicro.WellRecord(k,
+                        signals={times[i]:j['measurements'][k][i]
+                        for i in range(len(times))})              
+        
         del j['measurements']
         p1.qualifiers=j
 
@@ -168,19 +168,18 @@ class TestPhenoMicro(unittest.TestCase):
         handle=open(JSON_PLATE)
         p=json.load(handle)
         handle.close()
-
-        times=p['measurements']['Hour']
-        w=phenotype.PhenMicro.WellRecord('A10',
-                                           signals=dict([(times[i], p['measurements']['A10'][i])
-                                                           for i in range(len(times))]))
-
-        w1=phenotype.PhenMicro.WellRecord('H12',
-                                            signals=dict([(times[i], p['measurements']['H12'][i])
-                                                           for i in range(len(times))]))
-
-        #self.assertIsInstance(w.plate,
-        #                      phenotype.PhenMicro.PlateRecord)
-        self.assertTrue(isintance(w.plate, phenotype.PhenMicro.PlateRecord))
+        
+        times = p['measurements']['Hour']
+        w = phenotype.PhenMicro.WellRecord('A10',
+                            signals={times[i]:p['measurements']['A10'][i]
+                            for i in range(len(times))})
+        
+        w1 = phenotype.PhenMicro.WellRecord('H12',
+                        signals={times[i]:p['measurements']['H12'][i]
+                            for i in range(len(times))})
+                            
+        self.assertIsInstance(w.plate,
+                    phenotype.PhenMicro.PlateRecord)    
         self.assertEqual(w.id, 'A10')
         self.assertEqual(len(w), len(times))
         self.assertEqual(len(w), 384)
