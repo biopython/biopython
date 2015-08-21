@@ -88,14 +88,14 @@ class TestPhenoMicro(unittest.TestCase):
 
         times = j['measurements']['Hour']
         for k in j['measurements']:
-
-            if k == 'Hour':continue
+            if k == 'Hour':
+                continue
             p[k] = phenotype.PhenMicro.WellRecord(k,
-                        signals={times[i]:j['measurements'][k][i]
-                        for i in range(len(times))})
-        
+                                                  signals={times[i]: j['measurements'][k][i]
+                                                           for i in range(len(times))})
+
         del j['measurements']
-        p.qualifiers=j
+        p.qualifiers = j
 
         self.assertEqual(p.id, 'PM01')
         self.assertEqual(len(p), 96)
@@ -133,30 +133,32 @@ class TestPhenoMicro(unittest.TestCase):
                          "12\nPlateRecord('WellRecord['A01'], WellRecord['A02'], WellRecord" +
                          "['A03'], WellRecord['A04']...WellRecord['H12']')")
 
-        handle=open(JSON_PLATE_2)
-        j=json.load(handle)
+        handle = open(JSON_PLATE_2)
+        j = json.load(handle)
         handle.close()
+
+        p1 = phenotype.PhenMicro.PlateRecord(j['csv_data']['Plate Type'])
 
         p1=phenotype.PhenMicro.PlateRecord(j['csv_data']['Plate Type'])
 
         times=j['measurements']['Hour']
         for k in j['measurements']:
-
-            if k == 'Hour':continue
+            if k == 'Hour':
+                continue
             p1[k] = phenotype.PhenMicro.WellRecord(k,
-                        signals={times[i]:j['measurements'][k][i]
-                        for i in range(len(times))})              
-        
+                                                   signals={times[i]: j['measurements'][k][i]
+                                                            for i in range(len(times))})
+
         del j['measurements']
-        p1.qualifiers=j
+        p1.qualifiers = j
 
         self.assertRaises(TypeError, p.__add__, 'a')
         self.assertRaises(TypeError, p.__sub__, 'a')
 
-        p3=p + p1
+        p3 = p + p1
         self.assertEqual(p3['A02'], p['A02'] + p1['A02'])
 
-        p3=p - p1
+        p3 = p - p1
         self.assertEqual(p3['A02'], p['A02'] - p1['A02'])
 
         del p['A02']
@@ -168,18 +170,18 @@ class TestPhenoMicro(unittest.TestCase):
         handle=open(JSON_PLATE)
         p=json.load(handle)
         handle.close()
-        
+
         times = p['measurements']['Hour']
         w = phenotype.PhenMicro.WellRecord('A10',
-                            signals={times[i]:p['measurements']['A10'][i]
-                            for i in range(len(times))})
-        
+                                           signals={times[i]: p['measurements']['A10'][i]
+                                                    for i in range(len(times))})
+
         w1 = phenotype.PhenMicro.WellRecord('H12',
-                        signals={times[i]:p['measurements']['H12'][i]
-                            for i in range(len(times))})
-                            
+                                            signals={times[i]: p['measurements']['H12'][i]
+                                                     for i in range(len(times))})
+
         self.assertIsInstance(w.plate,
-                    phenotype.PhenMicro.PlateRecord)    
+                              phenotype.PhenMicro.PlateRecord)
         self.assertEqual(w.id, 'A10')
         self.assertEqual(len(w), len(times))
         self.assertEqual(len(w), 384)
@@ -282,8 +284,8 @@ class TestPhenoMicro(unittest.TestCase):
         self.assertEqual(w2.get_signals()[0], 11.0)
         self.assertEqual(w2.get_signals()[-1], 107.0)
 
-        w[1]=1
+        w[1] = 1
 
 if __name__ == "__main__":
-    runner=unittest.TextTestRunner(verbosity=2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

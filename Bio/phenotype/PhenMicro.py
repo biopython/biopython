@@ -586,13 +586,13 @@ class WellRecord(object):
     If no function can be fitted, the parameters are left as None, except for
     the max, min, average_height and area.
     """
-    
+
     def __init__(self, wellid, plate=None, signals=None):
         if plate is None:
             self.plate = PlateRecord(None)
         else:
             self.plate = plate
-        
+
         self.id = wellid
 
         # Curve parameters (to be calculated with the "fit" function)
@@ -615,7 +615,7 @@ class WellRecord(object):
             self._signals = {}
         else:
             self._signals = signals
-    
+
     def _interpolate(self, time):
         """Private method to get a linear interpolation of the signals
         at certain time points.
@@ -658,8 +658,8 @@ class WellRecord(object):
 
             time = np.arange(start, stop, time.step)
             return list(self._interpolate(time))
-            
-        elif _is_int_or_long(time) or isinstance(time, float): 
+
+        elif _is_int_or_long(time) or isinstance(time, float):
             return self._interpolate(time)
 
         raise ValueError('Invalid index')
@@ -699,9 +699,9 @@ class WellRecord(object):
         times = set(self._signals.keys()).union(set(well._signals.keys()))
         for t in sorted(times):
             signals[t] = self[t] + well[t]
-                            
+
         neww = WellRecord(self.id, signals=signals)
-        
+
         return neww
 
     def __sub__(self, well):
@@ -813,9 +813,9 @@ class WellRecord(object):
         try:
             from pm_fitting import fit, get_area
             from pm_fitting import logistic, gompertz, richards
-            functions = {'logistic':logistic,
-                         'gompertz':gompertz,
-                         'richards':richards}
+            functions = {'logistic': logistic,
+                         'gompertz': gompertz,
+                         'richards': richards}
         except ImportError:
             warnings.warn('SciPy not installed, could not calculate area, ' +
                           'plateau, slope, lag, v and y0',
@@ -827,9 +827,13 @@ class WellRecord(object):
         if function is None:
             sigmoid = functions
         else:
-            sigmoid = {function:functions[function]}
-        
-        for sigmoid_func, func in sigmoid.items():
+            sigmoid = {function: functions[function]}
+
+        for sigmoid_func in avail_func:
+            if sigmoid_func in sigmoid:
+                func = sigmoid[sigmoid_func]
+            else:
+                continue
             try:
                 (self.plateau, self.slope,
                  self.lag, self.v, self.y0), pcov = fit(func,
@@ -861,7 +865,7 @@ def JsonIterator(handle):
     # we need to discriminate
     if hasattr(data, 'keys'):
         data = [data]
-    
+
     for pobj in data:
         try:
             plateID = pobj[_csvData][_plate]
@@ -872,8 +876,8 @@ def JsonIterator(handle):
 
         # Parse also non-standard plate IDs
         if not plateID.startswith(_platesPrefix):
-            warnings.warn('Non-standard plate ID found (%s)'%plateID,
-                           BiopythonParserWarning)
+            warnings.warn('Non-standard plate ID found (%s)' % plateID,
+                          BiopythonParserWarning)
         else:
             # Simplify the plates IDs, removing letters, as opm does
             if plateID.startswith(_platesPrefixMammalian):
@@ -889,17 +893,14 @@ def JsonIterator(handle):
 
             # No luck
             if len(pID) == 0:
-                warning.warn('Non-standard plate ID found (%s)'%plateID,
-                            BiopythonParserWarning)
+                warning.warn('Non-standard plate ID found (%s)' % plateID,
+                             BiopythonParserWarning)
             elif int(pID) < 0:
-                warnings.warn('Non-standard plate ID found (%s), using %s' %
+                warning.warn('Non-standard plate ID found (%s), using %s' %
                              (plateID, _platesPrefix + abs(int(pID))))
                 plateID = _platesPrefix + abs(int(pID))
             else:
-                if plateID.startswith(_platesPrefixMammalian):
-                    plateID = _platesPrefixMammalian + '%02d' % int(pID)
-                else:
-                    plateID = _platesPrefix + '%02d' % int(pID)
+                plateID = _platesPrefix + '%02d' % int(pID)
 
         try:
             times = pobj[_measurements][_hour]
@@ -914,8 +915,8 @@ def JsonIterator(handle):
                 continue
 
             plate[k] = WellRecord(k, plate=plate,
-                                  signals=dict([(times[i], pobj[_measurements][k][i])
-                                                for i in range(len(times))]))
+                                  signals={times[i]: pobj[_measurements][k][i]
+                                           for i in range(len(times))})
 
         # Remove the measurements and assign the other qualifiers
         del pobj['measurements']
@@ -964,7 +965,7 @@ def CsvIterator(handle):
 
             # Parse also non-standard plate IDs
             if not plateID.startswith(_platesPrefix):
-                warnings.warn('Non-standard plate ID found (%s)'%plateID,
+                warnings.warn('Non-standard plate ID found (%s)' % plateID,
                               BiopythonParserWarning)
             else:
                 # Simplify the plates IDs, removing letters, as opm does
@@ -981,17 +982,14 @@ def CsvIterator(handle):
 
                 # No luck
                 if len(pID) == 0:
-                    warning.warn('Non-standard plate ID found (%s)'%plateID,
+                    warning.warn('Non-standard plate ID found (%s)' % plateID,
                                  BiopythonParserWarning)
                 elif int(pID) < 0:
-                    warnings.warn('Non-standard plate ID found (%s), using %s' %
+                    warning.warn('Non-standard plate ID found (%s), using %s' %
                                  (plateID, _platesPrefix + abs(int(pID))))
                     plateID = _platesPrefix + abs(int(pID))
                 else:
-                    if plateID.startswith(_platesPrefixMammalian):
-                        plateID = _platesPrefixMammalian + '%02d' % int(pID)
-                    else:
-                        plateID = _platesPrefix + '%02d' % int(pID)
+                    plateID = _platesPrefix + '%02d' % int(pID)
 
             plate.id = plateID
 
@@ -1069,7 +1067,8 @@ def CsvIterator(handle):
                 well = idx[i]
                 wells[well][time] = signal
 
-    if plate is not None and plate.id is not None:
+    if plate is not None:
+        qualifiers[_csvData][_datafile] = line[1].strip()
         plate = PlateRecord(plate.id)
         for k, v in wells.items():
             plate[k] = WellRecord(k, plate, v)
@@ -1080,8 +1079,8 @@ def CsvIterator(handle):
 def _toOPM(plate):
     """Helper function to transform a PlateRecord object into a dictionary
     """
-    d={}
-    
+    d = {}
+
     d = dict(plate.qualifiers.items())
 
     d[_measurements] = {}
