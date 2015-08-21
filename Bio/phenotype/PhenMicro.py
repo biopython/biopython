@@ -586,13 +586,13 @@ class WellRecord(object):
     If no function can be fitted, the parameters are left as None, except for
     the max, min, average_height and area.
     """
-
+    
     def __init__(self, wellid, plate=None, signals=None):
         if plate is None:
             self.plate = PlateRecord(None)
         else:
             self.plate = plate
-
+        
         self.id = wellid
 
         # Curve parameters (to be calculated with the "fit" function)
@@ -615,7 +615,7 @@ class WellRecord(object):
             self._signals = {}
         else:
             self._signals = signals
-
+    
     def _interpolate(self, time):
         """Private method to get a linear interpolation of the signals
         at certain time points.
