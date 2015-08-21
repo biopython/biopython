@@ -84,8 +84,8 @@ class TestPhenoMicro(unittest.TestCase):
         times = j['measurements']['Hour']
         for k in j['measurements']:
             if k == 'Hour':continue
-            p[k] = phenotype.PhenMicro.WellRecord(k, signals=
-                        {times[i]:j['measurements'][k][i]
+            p[k] = phenotype.PhenMicro.WellRecord(k,
+                        signals={times[i]:j['measurements'][k][i]
                         for i in range(len(times))})
         
         del j['measurements']
@@ -136,8 +136,8 @@ class TestPhenoMicro(unittest.TestCase):
         times = j['measurements']['Hour']
         for k in j['measurements']:
             if k == 'Hour':continue
-            p1[k] = phenotype.PhenMicro.WellRecord(k, signals=
-                        {times[i]:j['measurements'][k][i]
+            p1[k] = phenotype.PhenMicro.WellRecord(k,
+                        signals={times[i]:j['measurements'][k][i]
                         for i in range(len(times))})              
         
         del j['measurements']
@@ -163,12 +163,12 @@ class TestPhenoMicro(unittest.TestCase):
         handle.close()
         
         times = p['measurements']['Hour']
-        w = phenotype.PhenMicro.WellRecord('A10', signals=
-                        {times[i]:p['measurements']['A10'][i]
+        w = phenotype.PhenMicro.WellRecord('A10',
+                            signals={times[i]:p['measurements']['A10'][i]
                             for i in range(len(times))})
         
-        w1 = phenotype.PhenMicro.WellRecord('H12', signals=
-                        {times[i]:p['measurements']['H12'][i]
+        w1 = phenotype.PhenMicro.WellRecord('H12',
+                        signals={times[i]:p['measurements']['H12'][i]
                             for i in range(len(times))})
                             
         self.assertIsInstance(w.plate,
@@ -209,20 +209,20 @@ class TestPhenoMicro(unittest.TestCase):
         try:
             import scipy
             self.assertAlmostEqual(w.area, 20879.5)
-            self.assertAlmostEqual(w.model, 'gompertz')
+            self.assertEqual(w.model, 'gompertz')
             self.assertAlmostEqual(w.lag, 6.0425868725090357)
             self.assertAlmostEqual(w.plateau, 188.51404344898586)
             self.assertAlmostEqual(w.slope, 48.190618284831132)
             self.assertAlmostEqual(w.v, 0.10000000000000001)
             self.assertAlmostEqual(w.y0, 45.879770069807989)
         except ImportError:
-            self.assertAlmostEqual(w.area, None)
-            self.assertAlmostEqual(w.model, None)
-            self.assertAlmostEqual(w.lag, None)
-            self.assertAlmostEqual(w.plateau, None)
-            self.assertAlmostEqual(w.slope, None)
-            self.assertAlmostEqual(w.v, None)
-            self.assertAlmostEqual(w.y0, None)
+            self.assertEqual(w.area, None)
+            self.assertEqual(w.model, None)
+            self.assertEqual(w.lag, None)
+            self.assertEqual(w.plateau, None)
+            self.assertEqual(w.slope, None)
+            self.assertEqual(w.v, None)
+            self.assertEqual(w.y0, None)
         self.assertEqual(w.max, 313.0)
         self.assertEqual(w.min, 29.0)
         self.assertEqual(w.average_height, 217.82552083333334)
