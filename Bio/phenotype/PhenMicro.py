@@ -584,8 +584,11 @@ class WellRecord(object):
     the max, min, average_height and area. 
     """
     
-    def __init__(self, wellid, plate=PlateRecord(None), signals={}):
-        self.plate = plate
+    def __init__(self, wellid, plate=None, signals=None):
+        if plate is None:
+            self.plate = PlateRecord(None)
+        else:
+            self.plate = plate
         
         self.id = wellid
     
@@ -605,7 +608,10 @@ class WellRecord(object):
         self.model = None
     
         # Original signals (private)
-        self._signals = signals
+        if signals is None:
+            self._signals = {}
+        else:
+            self._signals = signals
     
     def _interpolate(self, time):
         """Private method to get a linear interpolation of the signals
