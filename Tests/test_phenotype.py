@@ -178,8 +178,8 @@ class TestPhenoMicro(unittest.TestCase):
                                             signals=dict([(times[i], p['measurements']['H12'][i])
                                                            for i in range(len(times))]))
 
-        self.assertIsInstance(w.plate,
-                              phenotype.PhenMicro.PlateRecord)
+        #self.assertIsInstance(w.plate,
+        #                      phenotype.PhenMicro.PlateRecord)
         self.assertEqual(w.id, 'A10')
         self.assertEqual(len(w), len(times))
         self.assertEqual(len(w), 384)
