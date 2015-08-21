@@ -911,8 +911,8 @@ def JsonIterator(handle):
                 continue
 
             plate[k] = WellRecord(k, plate=plate,
-                                  signals={times[i]: pobj[_measurements][k][i]
-                                           for i in range(len(times))})
+                                  signals=dict([(times[i], pobj[_measurements][k][i])
+                                                for i in range(len(times))]))
 
         # Remove the measurements and assign the other qualifiers
         del pobj['measurements']
