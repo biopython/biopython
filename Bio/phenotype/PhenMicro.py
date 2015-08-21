@@ -813,9 +813,9 @@ class WellRecord(object):
         try:
             from pm_fitting import fit, get_area
             from pm_fitting import logistic, gompertz, richards
-            functions = {'logistic': logistic,
-                         'gompertz': gompertz,
-                         'richards': richards}
+            functions = {'logistic':logistic,
+                         'gompertz':gompertz,
+                         'richards':richards}
         except ImportError:
             warnings.warn('SciPy not installed, could not calculate area, ' +
                           'plateau, slope, lag, v and y0',
@@ -827,13 +827,9 @@ class WellRecord(object):
         if function is None:
             sigmoid = functions
         else:
-            sigmoid = {function: functions[function]}
-
-        for sigmoid_func in avail_func:
-            if sigmoid_func in sigmoid:
-                func = sigmoid[sigmoid_func]
-            else:
-                continue
+            sigmoid = {function:functions[function]}
+        
+        for sigmoid_func, func in sigmoid.items():
             try:
                 (self.plateau, self.slope,
                  self.lag, self.v, self.y0), pcov = fit(func,
