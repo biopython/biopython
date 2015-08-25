@@ -1072,8 +1072,6 @@ def CsvIterator(handle):
 def _toOPM(plate):
     """Helper function to transform a PlateRecord object into a dictionary
     """
-    d = {}
-
     d = dict(plate.qualifiers.items())
 
     d[_measurements] = {}
