@@ -547,6 +547,20 @@ class Reference(object):
         return "%s(title=%s, ...)" % (self.__class__.__name__,
                                       repr(self.title))
 
+    def __eq__(self, other):
+        """Check if two Reference objects should be considered equal
+
+        Note that the location is not compared, as __eq__ for the
+        FeatureLocation class is not defined.
+        """
+        return self.authors == other.authors and \
+            self.consrtm == other.consrtm and \
+            self.title == other.title and \
+            self.journal == other.journal and \
+            self.medline_id == other.medline_id and \
+            self.pubmed_id == other.pubmed_id and \
+            self.comment == other.comment
+
 
 # --- Handling feature locations
 
