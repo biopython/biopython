@@ -155,7 +155,7 @@ def efetch(db, **keywords):
     return _open(cgi, variables, post)
 
 
-def esearch(db, term, **keywds):
+def esearch(db, term, post=False, **keywds):
     """ESearch runs an Entrez search and returns a handle to the results.
 
     ESearch searches and retrieves primary IDs (for use in EFetch, ELink
@@ -188,7 +188,7 @@ def esearch(db, term, **keywds):
     variables = {'db': db,
                  'term': term}
     variables.update(keywds)
-    return _open(cgi, variables)
+    return _open(cgi, variables, post=post)
 
 
 def elink(**keywds):
