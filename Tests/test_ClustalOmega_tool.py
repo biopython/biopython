@@ -26,7 +26,8 @@ try:
     output = getoutput("clustalo --help")
     if output.startswith("Clustal Omega"):
         clustalo_exe = "clustalo"
-except FileNotFoundError:   # getoutput raises FileNotFound on Windows if the exe doesn't exist
+except OSError:
+    # TODO: Use FileNotFoundError once we drop Python 2
     pass
 
 if not clustalo_exe:
