@@ -950,6 +950,9 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         except KeyError:
             self.data.annotations['comment'] = "\n".join(content)
 
+    def structured_comment(self, content):
+        self.data.annotations['structured_comment'] = content
+
     def features_line(self, content):
         """Get ready for the feature table when we reach the FEATURE line.
         """
@@ -1384,6 +1387,9 @@ class _RecordConsumer(_BaseGenBankConsumer):
 
     def comment(self, content):
         self.data.comment += "\n".join(content)
+
+    def structured_comment(self, content):
+        self.data.structured_comment = content
 
     def primary_ref_line(self, content):
         """Data for the PRIMARY line"""
