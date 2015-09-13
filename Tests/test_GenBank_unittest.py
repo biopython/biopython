@@ -60,6 +60,27 @@ class GenBankTests(unittest.TestCase):
                 loc = record.features[0].location
                 self.assertEqual(loc, "join(3462..3615,3698..3978,4077..4307,4408..4797,4876..5028,5141..5332)")
 
+    def test_structured_comment_parsing(self):
+        # GISAID_EpiFlu(TM)Data, should yield both 'comment' and 'structured_comment'
+        record = SeqIO.read(path.join('GenBank', 'HM138502.gbk'),'genbank')
+        self.assertEqual(record.annotations['comment'], 
+            "Swine influenza A (H1N1) virus isolated during human swine flu\noutbreak of 2009.")        
+        self.assertEqual(record.annotations['structured_comment']['GISAID_EpiFlu(TM)Data']['Lineage'], 'swl')
+        self.assertEqual(len(record.annotations['structured_comment']['GISAID_EpiFlu(TM)Data']), 3)
+        # FluData
+        record = SeqIO.read(path.join('GenBank', 'EU851978.gbk'),'genbank')
+        self.assertEqual(record.annotations['structured_comment']['FluData']['LabID'], '2008704957')
+        self.assertEqual(len(record.annotations['structured_comment']['FluData']), 5)
+        # Assembly-Data
+        record = SeqIO.read(path.join('GenBank', 'KF527485.gbk'),'genbank')
+        self.assertEqual(record.annotations['structured_comment']['Assembly-Data']['Assembly Method'], 'Lasergene v. 10')
+        self.assertEqual(len(record.annotations['structured_comment']['Assembly-Data']), 2)
+        # No structured comment, just comment
+        record = SeqIO.read(path.join('GenBank', 'NC_000932.gb'),'genbank')
+        self.assertEqual(record.annotations['structured_comment'], {})
+        self.assertEqual(record.annotations['comment'], 'REVIEWED REFSEQ: This record has been curated by NCBI staff. ' \
+            'The\nreference sequence was derived from AP000423.\nCOMPLETENESS: full length.')
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)

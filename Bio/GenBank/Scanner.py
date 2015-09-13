@@ -30,6 +30,7 @@ from __future__ import print_function
 
 import warnings
 import re
+from collections import defaultdict
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Alphabet import generic_protein
@@ -1246,6 +1247,9 @@ class GenBankScanner(InsdcScanner):
         # handled individually.
         GENBANK_INDENT = self.HEADER_WIDTH
         GENBANK_SPACER = " " * GENBANK_INDENT
+        STRUCTURED_COMMENT_START = "-START##"
+        STRUCTURED_COMMENT_END = "-END##"
+        STRUCTURED_COMMENT_DELIM = " :: "
         consumer_dict = {
             'DEFINITION': 'definition',
             'ACCESSION': 'accession',
@@ -1363,26 +1367,49 @@ class GenBankScanner(InsdcScanner):
                     consumer.taxonomy(lineage_data.strip())
                     del organism_data, lineage_data
                 elif line_type == 'COMMENT':
+                    # This has to parse both plain text and GenBank Structured
+                    # Comments, which are tabular.
+                    data = line[GENBANK_INDENT:]
                     if self.debug > 1:
                         print("Found comment")
-                    # This can be multiline, and should call consumer.comment() once
-                    # with a list where each entry is a line.
+                    # COMMENT can be multiline, and should call consumer.comment() once
+                    # with a list where each entry is a line, or if there's a structured
+                    # comment call consumer.structured_comment() once with a dict of dicts 
+                    # where the tag/value pairs are the same as those in the structured comment.
                     comment_list = []
-                    comment_list.append(data)
+                    structured_comment_dict = defaultdict(dict)
+                    structured_comment_key = ''
+
+                    if STRUCTURED_COMMENT_START in data:
+                        structured_comment_key = re.search(r"([^#]+){}$".format(STRUCTURED_COMMENT_START), data).group(1)
+                        if self.debug > 1:
+                            print("Found Structured Comment")
+                    else:   
+                        comment_list.append(data)
+
                     while True:
                         line = next(line_iter)
+                        data = line[GENBANK_INDENT:]
                         if line[0:GENBANK_INDENT] == GENBANK_SPACER:
-                            data = line[GENBANK_INDENT:]
-                            comment_list.append(data)
-                            if self.debug > 2:
-                                print("Comment continuation [" + data + "]")
+                            if STRUCTURED_COMMENT_START in data:
+                                structured_comment_key = re.search(r"([^#]+){}$".format(STRUCTURED_COMMENT_START), data).group(1)
+                            elif structured_comment_key is not None and STRUCTURED_COMMENT_DELIM in data:
+                                match = re.search(r"(.+?)\s*{}\s*(.+)".format(STRUCTURED_COMMENT_DELIM), data)
+                                structured_comment_dict[structured_comment_key][match.group(1)] = match.group(2)
+                                if self.debug > 2:  
+                                    print("Structured Comment continuation [" + data + "]")
+                            elif STRUCTURED_COMMENT_END not in data:    
+                                comment_list.append(data)
+                                if self.debug > 2:
+                                    print("Comment continuation [" + data + "]")
                         else:
                             # End of the comment
                             break
                     consumer.comment(comment_list)
-                    del comment_list
+                    consumer.structured_comment(structured_comment_dict)
+                    del comment_list, structured_comment_key, structured_comment_dict
                 elif line_type in consumer_dict:
-                    # Its a semi-automatic entry!
+                    # It's a semi-automatic entry!
                     # Now, this may be a multi line entry...
                     while True:
                         line = next(line_iter)
