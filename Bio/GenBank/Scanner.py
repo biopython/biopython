@@ -1372,7 +1372,9 @@ class GenBankScanner(InsdcScanner):
                     # The code calls consumer.comment() once with a list where each entry 
                     # is a line. If there's a structured comment consumer.structured_comment() 
                     # is called with a dict of dicts where the tag/value pairs are the same as 
-                    # those in the structured comment table.
+                    # those in the structured comment table. See:
+                    # http://www.ncbi.nlm.nih.gov/genbank/structuredcomment
+                    # for more information on Structured Comments
                     data = line[GENBANK_INDENT:]
                     if self.debug > 1:
                         print("Found comment")
