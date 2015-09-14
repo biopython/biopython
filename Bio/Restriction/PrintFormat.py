@@ -317,14 +317,14 @@ class PrintFormat(object):
         for x in range(60, length, 60):
             counter = x - 60
             l = []
+            cutloc[counter] = l
+            remaining = []
             for key in mapping:
                 if key <= x:
                     l.append(key)
                 else:
-                    cutloc[counter] = l
-                    mapping = mapping[mapping.index(key):]
-                    break
-            cutloc[x] = l
+                    remaining.append(key)
+            mapping = remaining 
         cutloc[x] = mapping
         sequence = str(self.sequence)
         revsequence = str(self.sequence.complement())
