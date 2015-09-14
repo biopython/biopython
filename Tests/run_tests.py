@@ -404,7 +404,24 @@ class TestRunner(unittest.TextTestRunner):
             if name.startswith("test_"):
                 sys.stderr.write("%s ... " % name)
                 # It's either a unittest or a print-and-compare test
-                suite = unittest.TestLoader().loadTestsFromName(name)
+                loader = unittest.TestLoader()
+                suite = loader.loadTestsFromName(name)
+                if hasattr(loader, "errors") and loader.errors:
+                    # New in Python 3.5, don't always get an exception anymore
+                    # Instead this is a list of error messages as strings
+                    for msg in loader.errors:
+                        if "Bio.MissingExternalDependencyError: " in msg or \
+                                "Bio.MissingPythonDependencyError: " in msg:
+                            # Remove the traceback etc
+                            msg = msg[msg.find("Bio.Missing"):]
+                            msg = msg[msg.find("Error: "):]
+                            sys.stderr.write("skipping. %s\n" % msg)
+                            return True
+                    # Looks like a real failure
+                    sys.stderr.write("loading tests failed:\n")
+                    for msg in loader.errors:
+                        sys.stderr.write("%s\n" % msg)
+                    return False
                 if suite.countTestCases() == 0:
                     # This is a print-and-compare test instead of a
                     # unittest-type test.
@@ -439,6 +456,8 @@ class TestRunner(unittest.TextTestRunner):
                 result.printErrors()
             return False
         except MissingExternalDependencyError as msg:
+            # Seems this isn't always triggered on Python 3.5,
+            # exception messages can be in loader.errors instead.
             sys.stderr.write("skipping. %s\n" % msg)
             return True
         except Exception as msg:
