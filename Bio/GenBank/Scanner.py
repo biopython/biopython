@@ -1368,13 +1368,14 @@ class GenBankScanner(InsdcScanner):
                     del organism_data, lineage_data
                 elif line_type == 'COMMENT':
                     # A COMMENT can either be plain text or tabular (Structured Comment),
-                    # or contain both. Multiline comments are common.
-                    # The code calls consumer.comment() once with a list where each entry 
+                    # or contain both. Multiline comments are common. The code calls 
+                    # consumer.comment() once with a list where each entry 
                     # is a line. If there's a structured comment consumer.structured_comment() 
-                    # is called with a dict of dicts where the tag/value pairs are the same as 
-                    # those in the structured comment table. See:
+                    # is called with a dict of dicts where the secondary key/value pairs are 
+                    # the same as those in the structured comment table. The primary key is
+                    # the title or header of the table (e.g. Assembly-Data, FluData). See
                     # http://www.ncbi.nlm.nih.gov/genbank/structuredcomment
-                    # for more information on Structured Comments
+                    # for more information on Structured Comments.
                     data = line[GENBANK_INDENT:]
                     if self.debug > 1:
                         print("Found comment")
