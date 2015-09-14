@@ -25,6 +25,8 @@ Key: sequence_version
 Value: 1
 Key: source
 Value: human
+Key: structured_comment
+Value: defaultdict(<class 'dict'>, {})
 Key: taxonomy
 Value: ['Eukaryota', 'Metazoa', 'Chordata', 'Craniata', 'Vertebrata', 'Euteleostomi', 'Mammalia', 'Eutheria', 'Primates', 'Catarrhini', 'Hominidae', 'Homo']
 Feaures
@@ -96,6 +98,8 @@ Key: sequence_version
 Value: 1
 Key: source
 Value: thale cress
+Key: structured_comment
+Value: defaultdict(<class 'dict'>, {})
 Key: taxonomy
 Value: ['Eukaryota', 'Viridiplantae', 'Streptophyta', 'Embryophyta', 'Tracheophyta', 'euphyllophytes', 'Spermatophyta', 'Magnoliophyta', 'eudicotyledons', 'Rosidae', 'Capparales', 'Brassicaceae', 'Arabidopsis']
 Feaures
@@ -661,6 +665,8 @@ Key: sequence_version
 Value: 1
 Key: source
 Value: human
+Key: structured_comment
+Value: defaultdict(<class 'dict'>, {})
 Key: taxonomy
 Value: ['Eukaryota', 'Metazoa', 'Chordata', 'Craniata', 'Vertebrata', 'Mammalia', 'Eutheria', 'Primates', 'Catarrhini', 'Hominidae', 'Homo']
 Feaures
@@ -839,6 +845,8 @@ Key: sequence_version
 Value: 5
 Key: source
 Value: thale cress
+Key: structured_comment
+Value: defaultdict(<class 'dict'>, {})
 Key: taxonomy
 Value: ['Eukaryota', 'Viridiplantae', 'Embryophyta', 'Tracheophyta', 'Spermatophyta', 'Magnoliophyta', 'eudicotyledons', 'core eudicots', 'Rosidae', 'eurosids II', 'Brassicales', 'Brassicaceae', 'Arabidopsis']
 Feaures
@@ -1503,6 +1511,8 @@ Key: sequence_version
 Value: 1
 Key: source
 Value: house mouse
+Key: structured_comment
+Value: defaultdict(<class 'dict'>, {})
 Key: taxonomy
 Value: ['Eukaryota', 'Metazoa', 'Chordata', 'Craniata', 'Vertebrata', 'Euteleostomi', 'Mammalia', 'Eutheria', 'Rodentia', 'Sciurognathi', 'Muridae', 'Murinae', 'Mus']
 Feaures
@@ -1613,6 +1623,8 @@ Key: sequence_version
 Value: 1
 Key: source
 Value: fruit fly
+Key: structured_comment
+Value: defaultdict(<class 'dict'>, {})
 Key: taxonomy
 Value: ['Eukaryota', 'Metazoa', 'Arthropoda', 'Tracheata', 'Hexapoda', 'Insecta', 'Pterygota', 'Neoptera', 'Endopterygota', 'Diptera', 'Brachycera', 'Muscomorpha', 'Ephydroidea', 'Drosophilidae', 'Drosophila']
 Feaures
@@ -2340,6 +2352,8 @@ Key: sequence_version
 Value: 6
 Key: source
 Value: human
+Key: structured_comment
+Value: defaultdict(<class 'dict'>, {})
 Key: taxonomy
 Value: ['Eukaryota', 'Metazoa', 'Chordata', 'Craniata', 'Vertebrata', 'Euteleostomi', 'Mammalia', 'Eutheria', 'Primates', 'Catarrhini', 'Hominidae', 'Homo']
 Feaures
@@ -2559,6 +2573,8 @@ Key: sequence_version
 Value: 1
 Key: source
 Value: human
+Key: structured_comment
+Value: defaultdict(<class 'dict'>, {})
 Key: taxonomy
 Value: ['Eukaryota', 'Metazoa', 'Chordata', 'Craniata', 'Vertebrata', 'Euteleostomi', 'Mammalia', 'Eutheria', 'Primates', 'Catarrhini', 'Hominidae', 'Homo']
 Feaures
@@ -2630,6 +2646,8 @@ comment: SEQUENCE.
 
 Key: source
 Value: Tunisian scorpion
+Key: structured_comment
+Value: defaultdict(<class 'dict'>, {})
 Key: taxonomy
 Value: ['Eukaryota', 'Metazoa', 'Arthropoda', 'Chelicerata', 'Arachnida', 'Scorpiones', 'Buthoidea', 'Buthidae', 'Buthus']
 Feaures
@@ -2953,6 +2971,8 @@ Key: sequence_version
 Value: 1
 Key: source
 Value: Yersinia pestis biovar Microtus str. 91001
+Key: structured_comment
+Value: defaultdict(<class 'dict'>, {})
 Key: taxonomy
 Value: ['Bacteria', 'Proteobacteria', 'Gammaproteobacteria', 'Enterobacteriales', 'Enterobacteriaceae', 'Yersinia']
 Feaures
@@ -3515,6 +3535,8 @@ comment:
 
 Key: source
 Value: Escherichia coli
+Key: structured_comment
+Value: defaultdict(<class 'dict'>, {})
 Key: taxonomy
 Value: ['Bacteria', 'Proteobacteria', 'Gammaproteobacteria', 'Enterobacteriales', 'Enterobacteriaceae', 'Escherichia']
 Feaures

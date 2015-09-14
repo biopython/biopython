@@ -61,7 +61,7 @@ class GenBankTests(unittest.TestCase):
                 self.assertEqual(loc, "join(3462..3615,3698..3978,4077..4307,4408..4797,4876..5028,5141..5332)")
 
     def test_structured_comment_parsing(self):
-        # GISAID_EpiFlu(TM)Data, should yield both 'comment' and 'structured_comment'
+        # GISAID_EpiFlu(TM)Data, HM138502.gbk has both 'comment' and 'structured_comment'
         record = SeqIO.read(path.join('GenBank', 'HM138502.gbk'),'genbank')
         self.assertEqual(record.annotations['comment'], 
             "Swine influenza A (H1N1) virus isolated during human swine flu\noutbreak of 2009.")        
@@ -75,7 +75,7 @@ class GenBankTests(unittest.TestCase):
         record = SeqIO.read(path.join('GenBank', 'KF527485.gbk'),'genbank')
         self.assertEqual(record.annotations['structured_comment']['Assembly-Data']['Assembly Method'], 'Lasergene v. 10')
         self.assertEqual(len(record.annotations['structured_comment']['Assembly-Data']), 2)
-        # No structured comment, just comment
+        # No structured comment in NC_000932.gb, just comment
         record = SeqIO.read(path.join('GenBank', 'NC_000932.gb'),'genbank')
         self.assertEqual(record.annotations['structured_comment'], {})
         self.assertEqual(record.annotations['comment'], 'REVIEWED REFSEQ: This record has been curated by NCBI staff. ' \

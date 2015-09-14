@@ -1367,15 +1367,15 @@ class GenBankScanner(InsdcScanner):
                     consumer.taxonomy(lineage_data.strip())
                     del organism_data, lineage_data
                 elif line_type == 'COMMENT':
-                    # This has to parse both plain text and GenBank Structured
-                    # Comments, which are tabular.
+                    # A COMMENT can either be plain text or tabular (Structured Comment),
+                    # or contain both. Multiline comments are common.
+                    # The code calls consumer.comment() once with a list where each entry 
+                    # is a line. If there's a structured comment consumer.structured_comment() 
+                    # is called with a dict of dicts where the tag/value pairs are the same as 
+                    # those in the structured comment table.
                     data = line[GENBANK_INDENT:]
                     if self.debug > 1:
                         print("Found comment")
-                    # COMMENT can be multiline, and should call consumer.comment() once
-                    # with a list where each entry is a line, or if there's a structured
-                    # comment call consumer.structured_comment() once with a dict of dicts 
-                    # where the tag/value pairs are the same as those in the structured comment.
                     comment_list = []
                     structured_comment_dict = defaultdict(dict)
                     structured_comment_key = ''
