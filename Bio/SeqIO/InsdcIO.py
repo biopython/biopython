@@ -745,6 +745,9 @@ class GenBankWriter(_InsdcWriter):
         descr = record.description
         if descr == "<unknown description>":
             descr = "."
+        else:
+            if not descr.endswith("."):
+                descr += '.'
         self._write_multi_line("DEFINITION", descr)
 
         self._write_single_line("ACCESSION", accession)
