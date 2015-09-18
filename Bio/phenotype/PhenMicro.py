@@ -1060,7 +1060,7 @@ def CsvIterator(handle):
                 well = idx[i]
                 wells[well][time] = signal
 
-    if plate is not None:
+    if plate is not None and data is True:
         qualifiers[_csvData][_datafile] = line[1].strip()
         plate = PlateRecord(plate.id)
         for k, v in wells.items():
