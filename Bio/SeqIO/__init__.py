@@ -700,7 +700,7 @@ def to_dict(sequences, key_function=None):
     >>> print(sorted(id_dict))
     ['AF297471.1', 'AJ237582.1', 'L31939.1', 'M81224.1', 'X55053.1', 'X62281.1']
     >>> print(id_dict["L31939.1"].description)
-    Brassica rapa (clone bif72) kin mRNA, complete cds.
+    Brassica rapa (clone bif72) kin mRNA, complete cds
 
     A more complex example, using the key_function argument in order to
     use a sequence checksum as the dictionary key:
