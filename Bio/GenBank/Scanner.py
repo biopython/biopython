@@ -1390,6 +1390,14 @@ class GenBankScanner(InsdcScanner):
                             data += ' ' + line[GENBANK_INDENT:]
                         else:
                             # We now have all the data for this entry:
+
+                            # The DEFINITION field must ends with a period
+                            # # see ftp://ftp.ncbi.nih.gov/genbank/gbrel.txt [3.4.5]
+                            # and discussion https://github.com/biopython/biopython/pull/616
+                            # We consider this period belong to the syntax, not to the data
+                            # So remove it if it exist
+                            if line_type == 'DEFINITION' and data.endswith('.'):
+                                data = data.rstrip('.')
                             getattr(consumer, consumer_dict[line_type])(data)
                             # End of continuation - return to top of loop!
                             break
