@@ -145,6 +145,13 @@ AT3G20900.1-CDS      GCTGGGGATGGAGAGGGAACAGAGTAG
                      *************************  
 """
 
+aln_example4 = \
+"""Kalign (2.0) alignment in ClustalW format
+
+Test1seq             GCTGGGGATGGAGAGGGAACAGAGTT-
+AT3G20900.1-SEQ      GCTGGGGATGGAGAGGGAACAGAGTAG
+
+"""
 
 class TestClustalIO(unittest.TestCase):
 
@@ -213,6 +220,11 @@ class TestClustalIO(unittest.TestCase):
         alignments = list(ClustalIterator(StringIO(aln_example3)))
         self.assertEqual(1, len(alignments))
         self.assertEqual(alignments[0]._version, "2.0.9")
+
+    def test_kalign_header(self):
+        """Make sure we can parse the Kalign header."""
+        alignments = next(ClustalIterator(StringIO(aln_example4)))
+        self.assertEqual(2, len(alignments))
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)

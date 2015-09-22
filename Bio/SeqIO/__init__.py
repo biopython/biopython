@@ -279,6 +279,11 @@ names are also used in Bio.AlignIO and include the following:
       MASE alignment format.
     - imgt    - An EMBL like format from IMGT where the feature tables are more
       indented to allow for longer feature types.
+    - pdb-seqres -  Reads a Protein Data Bank (PDB) file to determine the
+      complete protein sequence as it appears in the header (no dependencies).
+    - pdb-atom - Uses Bio.PDB to determine the (partial) protein sequence as
+      it appears in the structure based on the atom coordinate section of the
+      file (requires NumPy for Bio.PDB).
     - phd     - Output from PHRED, used by PHRAP and CONSED for input.
     - pir     - A "FASTA like" format introduced by the National Biomedical
       Research Foundation (NBRF) for the Protein Information Resource

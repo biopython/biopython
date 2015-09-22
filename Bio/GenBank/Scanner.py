@@ -273,12 +273,12 @@ class InsdcScanner(object):
                 # Multiline location, still more to come!
                 line = next(iterator)
                 feature_location += line.strip()
-            if feature_location.count("(") >  feature_location.count(")"):
+            if feature_location.count("(") > feature_location.count(")"):
                 # Including the prev line in warning would be more explicit,
                 # but this way get one-and-only-one warning shown by default:
                 warnings.warn("Non-standard feature line wrapping (didn't break on comma)?",
                               BiopythonParserWarning)
-                while feature_location[-1:] == "," or feature_location.count("(") >  feature_location.count(")"):
+                while feature_location[-1:] == "," or feature_location.count("(") > feature_location.count(")"):
                     line = next(iterator)
                     feature_location += line.strip()
 
@@ -1352,6 +1352,9 @@ class GenBankScanner(InsdcScanner):
                         if line[0:GENBANK_INDENT] == GENBANK_SPACER:
                             if lineage_data or ";" in line:
                                 lineage_data += " " + line[GENBANK_INDENT:]
+                            elif line[GENBANK_INDENT:].strip() == ".":
+                                # No lineage data, just . place holder
+                                pass
                             else:
                                 organism_data += " " + line[GENBANK_INDENT:].strip()
                         else:

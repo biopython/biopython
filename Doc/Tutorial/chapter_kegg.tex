@@ -27,9 +27,9 @@ Biopython has full support for the querying of the KEGG api. Querying all KEGG e
 First, here is how to extend the above example by downloading the relevant enzyme and passing it through the Enzyme parser.
 
 \begin{verbatim}
->>> from Bio import KEGG
+>>> from Bio.KEGG import REST
 >>> from Bio.KEGG import Enzyme
->>> request = KEGG.get("ec:5.4.2.2")
+>>> request = REST.kegg_get("ec:5.4.2.2")
 >>> open("ec:5.4.2.2.txt", 'w').write(request.read())
 >>> records = Enzyme.parse(open("ec:5.4.2.2.txt"))
 >>> record = list(records)[0]
