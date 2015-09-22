@@ -6,7 +6,8 @@ KEGG (\url{http://www.kegg.jp/}) is a database resource for understanding high-l
 Please note that the KEGG parser implementation in Biopython is incomplete. While the KEGG website indicates many flat file formats, only parsers and writers for compound, enzyme, and map are currently implemented. However, a generic parser is implemented to handle the other formats.
 
 \section{Parsing KEGG records}
-Parsing a KEGG record is as simple as using any other file format parser in Biopython. 
+Parsing a KEGG record is as simple as using any other file format parser in Biopython.
+(Before running the following codes, please open http://rest.kegg.jp/get/ec:5.4.2.2 with your web browser and save it as ec:5.4.2.2.txt.)
 
 \begin{verbatim}
 >>> from Bio.KEGG import Enzyme
