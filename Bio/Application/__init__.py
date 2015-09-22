@@ -479,14 +479,13 @@ class AbstractCommandline(object):
         # Using universal newlines is important on Python 3, this
         # gives unicode handles rather than bytes handles.
 
-        # Windows 7 and 8 want shell = True
-        # platform is easier to understand that sys to determine
-        # windows version
+        # Windows 7, 8 and 8.1 want shell = True
+        # TODO: Test under Windows 10 and revisit platform detection.
         if sys.platform != "win32":
             use_shell = True
         else:
             win_ver = platform.win32_ver()[0]
-            if win_ver in ["7", "8"]:
+            if win_ver in ["7", "8", "post2012Server"]:
                 use_shell = True
             else:
                 use_shell = False

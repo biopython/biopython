@@ -21,14 +21,14 @@ from Bio.Application import ApplicationError
 os.environ['LANG'] = 'C'
 
 clustalo_exe = None
-if sys.platform == "win32":
-    # TODO
-    raise MissingExternalDependencyError("Testing this on Windows not implemented yet")
-else:
-    from Bio._py3k import getoutput
+from Bio._py3k import getoutput
+try:
     output = getoutput("clustalo --help")
     if output.startswith("Clustal Omega"):
         clustalo_exe = "clustalo"
+except OSError:
+    # TODO: Use FileNotFoundError once we drop Python 2
+    pass
 
 if not clustalo_exe:
     raise MissingExternalDependencyError(

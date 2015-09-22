@@ -246,7 +246,7 @@ class DataHandler(object):
                 if self.stack:
                     # No more XML data, but there is still some unfinished
                     # business
-                    raise CorruptedXMLError
+                    raise CorruptedXMLError("Premature end of XML stream")
                 try:
                     for record in self.object:
                         yield record

@@ -77,6 +77,12 @@ class GenBankTests(unittest.TestCase):
             rec = SeqIO.read(path.join("GenBank", "negative_location.gb"), "genbank")
             self.assertEqual(None, rec.features[-1].location)
 
+    def test_dot_lineage(self):
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", BiopythonParserWarning)
+            rec = SeqIO.read("GenBank/bad_loc_wrap.gb", "genbank")
+        self.assertEqual(rec.annotations["organism"], ".")
+        self.assertEqual(rec.annotations["taxonomy"], [])
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)

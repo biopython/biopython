@@ -4206,6 +4206,19 @@ class EFetchTest(unittest.TestCase):
         self.assertRaises(Parser.NotXMLError, next, records)
         handle.close()
 
+    def test_truncated_xml(self):
+        """Test error handling for a truncated XML declaration"""
+        from Bio.Entrez.Parser import CorruptedXMLError
+        from Bio._py3k import StringIO
+        truncated_xml = """<?xml version="1.0"?>
+        <!DOCTYPE GBSet PUBLIC "-//NCBI//NCBI GBSeq/EN" "http://www.ncbi.nlm.nih.gov/dtd/NCBI_GBSeq.dtd">
+        <GBSet><GBSeq><GBSeq_locus>
+        """
+        handle = StringIO()
+        handle.write(truncated_xml)
+        handle.seek(0)
+        records = Entrez.parse(handle)
+        self.assertRaises(CorruptedXMLError, next, records)
 
 if __name__ == '__main__':
     runner = unittest.TextTestRunner(verbosity=2)
