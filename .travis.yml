@@ -14,6 +14,10 @@ python:
   - "pypy"
   - "pypy3"
 
+branches:
+  except:
+    - master
+    
 before_install:
   - "export PY3=yes"
   - "if [[ $TRAVIS_PYTHON_VERSION == '2.6' ]]; then export PY3=no; fi"
