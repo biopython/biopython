@@ -83,7 +83,10 @@ class MafftApplication(unittest.TestCase):
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         stdoutdata, stderrdata = cmdline()
         self.assertTrue(stdoutdata.startswith(">gi|1348912|gb|G26680|G26680"))
-        self.assertTrue("Progressive alignment ..." in stderrdata, stderrdata)
+        # Used to get "Progressive alignment ..." but in v7.245
+        # became "Progressive alignment 1/2..." and "Progressive alignment 2/2..."
+        self.assertTrue(("Progressive alignment ..." in stderrdata) or
+                        ("Progressive alignment 1/" in stderrdata), stderrdata)
         self.assertTrue("$#=0" not in stderrdata)
 
     def test_Mafft_with_options(self):
