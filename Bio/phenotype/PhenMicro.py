@@ -42,6 +42,7 @@ _position = 'Position'
 _setupTime = 'Setup Time'
 
 _platesPrefix = 'PM'
+_platesPrefixMammalian = 'PM-M'
 #
 
 # Json identifiers - hardcoded as they are set by the creators of opm
@@ -874,12 +875,15 @@ def JsonIterator(handle):
             raise KeyError('Could not retrieve plate id')
 
         # Parse also non-standard plate IDs
-        if not plateID.startswith(_platesPrefix):
+        if not plateID.startswith(_platesPrefix) and not plateID.startswith(_platesPrefixMammalian):
             warnings.warn('Non-standard plate ID found (%s)' % plateID,
                           BiopythonParserWarning)
         else:
             # Simplify the plates IDs, removing letters, as opm does
-            pID = plateID[2:]
+            if plateID.startswith(_platesPrefixMammalian):
+                pID = plateID[len(_platesPrefixMammalian):]
+            else:
+                pID = plateID[len(_platesPrefix):]
             while len(pID) > 0:
                 try:
                     int(pID)
@@ -896,7 +900,10 @@ def JsonIterator(handle):
                              (plateID, _platesPrefix + abs(int(pID))))
                 plateID = _platesPrefix + abs(int(pID))
             else:
-                plateID = _platesPrefix + '%02d' % int(pID)
+                if plateID.startswith(_platesPrefixMammalian):
+                    plateID = _platesPrefixMammalian + '%02d' % int(pID)
+                else:
+                    plateID = _platesPrefix + '%02d' % int(pID)
 
         try:
             times = pobj[_measurements][_hour]
@@ -960,12 +967,15 @@ def CsvIterator(handle):
             qualifiers[_csvData][_plate] = plateID
 
             # Parse also non-standard plate IDs
-            if not plateID.startswith(_platesPrefix):
+            if not plateID.startswith(_platesPrefix) and not plateID.startswith(_platesPrefixMammalian):
                 warnings.warn('Non-standard plate ID found (%s)' % plateID,
                               BiopythonParserWarning)
             else:
                 # Simplify the plates IDs, removing letters, as opm does
-                pID = plateID[2:]
+                if plateID.startswith(_platesPrefixMammalian):
+                    pID = plateID[len(_platesPrefixMammalian):]
+                else:
+                    pID = plateID[len(_platesPrefix):]
                 while len(pID) > 0:
                     try:
                         int(pID)
@@ -982,7 +992,10 @@ def CsvIterator(handle):
                                  (plateID, _platesPrefix + abs(int(pID))))
                     plateID = _platesPrefix + abs(int(pID))
                 else:
-                    plateID = _platesPrefix + '%02d' % int(pID)
+                    if plateID.startswith(_platesPrefixMammalian):
+                        plateID = _platesPrefixMammalian + '%02d' % int(pID)
+                    else:
+                        plateID = _platesPrefix + '%02d' % int(pID)
 
             plate.id = plateID
 
