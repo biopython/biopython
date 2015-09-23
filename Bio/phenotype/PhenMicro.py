@@ -893,10 +893,10 @@ def JsonIterator(handle):
 
             # No luck
             if len(pID) == 0:
-                warning.warn('Non-standard plate ID found (%s)' % plateID,
+                warnings.warn('Non-standard plate ID found (%s)' % plateID,
                              BiopythonParserWarning)
             elif int(pID) < 0:
-                warning.warn('Non-standard plate ID found (%s), using %s' %
+                warnings.warn('Non-standard plate ID found (%s), using %s' %
                              (plateID, _platesPrefix + abs(int(pID))))
                 plateID = _platesPrefix + abs(int(pID))
             else:
@@ -985,10 +985,10 @@ def CsvIterator(handle):
 
                 # No luck
                 if len(pID) == 0:
-                    warning.warn('Non-standard plate ID found (%s)' % plateID,
+                    warnings.warn('Non-standard plate ID found (%s)' % plateID,
                                  BiopythonParserWarning)
                 elif int(pID) < 0:
-                    warning.warn('Non-standard plate ID found (%s), using %s' %
+                    warnings.warn('Non-standard plate ID found (%s), using %s' %
                                  (plateID, _platesPrefix + abs(int(pID))))
                     plateID = _platesPrefix + abs(int(pID))
                 else:
