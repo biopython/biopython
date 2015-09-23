@@ -82,7 +82,7 @@ print ", ".join(repair_genes)
 The KEGG API wrapper is compatible with all endpoints. Usage is essentially replacing all slashes in the url with commas and using that list as arguments to the corresponding method in the KEGG module. Here are a few examples from the api documentation (\url{http://www.kegg.jp/kegg/docs/keggapi.html}).
 
 \begin{verbatim}
-/list/hsa:10458+ece:Z5100	         -> KEGG.list(["hsa:10458", "ece:Z510"])
-/find/compound/300-310/mol_weight	 -> KEGG.find("compound", "300-310", "mol_weight")
-/get/hsa:10458+ece:Z5100/aaseq	    -> KEGG.get(["hsa:10458", "ece:Z5100"], "aaseq")
+/list/hsa:10458+ece:Z5100	         -> REST.kegg_list(["hsa:10458", "ece:Z5100"])
+/find/compound/300-310/mol_weight	 -> REST.kegg_find("compound", "300-310", "mol_weight")
+/get/hsa:10458+ece:Z5100/aaseq	    -> REST.kegg_get(["hsa:10458", "ece:Z5100"], "aaseq")
 \end{verbatim}
