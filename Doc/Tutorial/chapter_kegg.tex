@@ -43,9 +43,9 @@ First, here is how to extend the above example by downloading the relevant enzym
 Now, here's a more realistic example which shows a combination of querying the KEGG API. This will demonstrate how to extract a unique set of all human pathway gene symbols which relate to DNA repair. The steps that need to be taken to do so are as follows. First, we need to get a list of all human pathways. Secondly, we need to filter those for ones which relate to "repair". Lastly, we need to get a list of all the gene symbols in all repair pathways.
 
 \begin{verbatim}
-from Bio import KEGG
+from Bio.KEGG import REST
 
-human_pathways = KEGG.list_("pathway", "hsa").read()
+human_pathways = REST.kegg_list("pathway", "hsa").read()
 
 # Filter all human pathways for repair pathways
 repair_pathways = []
@@ -57,7 +57,7 @@ for line in human_pathways.rstrip().split("\n"):
 # Get the genes for pathways and add them to a list
 repair_genes = [] 
 for pathway in repair_pathways:
-    pathway_file = KEGG.get(pathway).read()  # query and read each pathway
+    pathway_file = REST.kegg_get(pathway).read()  # query and read each pathway
 
     # iterate through each KEGG pathway file, keeping track of which section
     # of the file we're in, only read the gene in each pathway
