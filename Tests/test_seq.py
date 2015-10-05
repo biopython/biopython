@@ -3,6 +3,7 @@
 # as part of this package.
 
 from __future__ import print_function
+import unittest
 
 import sys
 from Bio import Seq
@@ -18,51 +19,89 @@ if sys.version_info[0] == 3:
 else:
     array_indicator = "c"
 
-print("")
-print("Testing Seq")
-print("===========")
 
-s = Seq.Seq("TCAAAAGGATGCATCATG", IUPAC.unambiguous_dna)
+class SeqTest(unittest.TestCase):
+    def setUp(self):
+        self.s = Seq.Seq("TCAAAAGGATGCATCATG", IUPAC.unambiguous_dna)
 
-print(str(s))
-print(len(s))
-print(s[0])
-print(s[-1])
-print(str(s[3:5]))
+    def test_as_string(self):
+        """Test converting Seq to string"""
+        self.assertEqual("TCAAAAGGATGCATCATG", str(self.s))
 
-print("Reverse using -1 stride: %r" % s[::-1])
+    def test_length(self):
+        """Test len method on Seq object"""
+        self.assertEqual(18, len(self.s))
 
-print("Extract every third nucleotide (slicing with stride 3):")
-print(repr(s[0::3]))
-print(repr(s[1::3]))
-print(repr(s[2::3]))
+    def test_first_nucleotide(self):
+        """Test getting first nucleotide of Seq"""
+        self.assertEqual("T", self.s[0])
 
-print(s.alphabet.letters)
+    def test_last_nucleotide(self):
+        """Test getting last nucleotide of Seq"""
+        self.assertEqual("G", self.s[-1])
 
-t = Seq.Seq("T", IUPAC.unambiguous_dna)
-u = s + t
-print(str(u.alphabet))
-print(len(u))
-assert str(s) + "T" == str(u)
+    def test_slicing(self):
+        """Test slicing of Seq"""
+        self.assertEqual("AA", str(self.s[3:5]))
 
-t = Seq.Seq("T", IUPAC.protein)
-try:
-    u = s + t
-except TypeError:
-    print("expected error, and got it")
-else:
-    print("huh?  ERROR")
+    def test_reverse(self):
+        """Test reverse using -1 stride"""
+        self.assertEqual("GTACTACGTAGGAAAACT", self.s[::-1])
 
-t = Seq.Seq("T", IUPAC.ambiguous_dna)
-u = s + t
-print(str(u.alphabet))
+    def test_extract_third_nucleotide(self):
+        """Test extracting every third nucleotide (slicing with stride 3)"""
+        self.assertEqual("TAGTAA", str(self.s[0::3]))
+        self.assertEqual("CAGGTT", str(self.s[1::3]))
+        self.assertEqual("AAACCG", str(self.s[2::3]))
+
+    def test_alphabet_letters(self):
+        """Test nucleotides in DNA Seq"""
+        self.assertEqual("GATC", self.s.alphabet.letters)
+
+    def test_alphabet(self):
+        """Test alphabet of derived Seq object"""
+        t = Seq.Seq("T", IUPAC.unambiguous_dna)
+        u = self.s + t
+        self.assertEqual("IUPACUnambiguousDNA()", str(u.alphabet))
+
+    def test_length_concatenated_unambiguous_seq(self):
+        """Test length of concatenated Seq object with unambiguous DNA"""
+        t = Seq.Seq("T", IUPAC.unambiguous_dna)
+        u = self.s + t
+        self.assertEqual(19, len(u))
+
+    def test_concatenation_of_seq(self):
+        t = Seq.Seq("T", IUPAC.unambiguous_dna)
+        u = self.s + t
+        self.assertEqual(str(self.s) + "T", str(u))
+
+    def test_concatenation_error(self):
+        """Test DNA Seq objects cannot be concatenated with Protein Seq
+        objects"""
+        with self.assertRaises(TypeError):
+            self.s + Seq.Seq("T", IUPAC.protein)
+
+    def test_concatenation_of_ambiguous_and_unambiguous_dna(self):
+        """Test concatenated Seq object with ambiguous and unambiguous DNA
+        returns ambiguous Seq"""
+        t = Seq.Seq("T", IUPAC.ambiguous_dna)
+        u = self.s + t
+        self.assertEqual("IUPACAmbiguousDNA()", str(u.alphabet))
+
 
 from Bio.Seq import MutableSeq
 import array
 
-print("")
-print("Testing MutableSeq")
-print("==================")
+
+class MutableSeqTest(unittest.TestCase):
+    def setUp(self):
+        pass
+
+
+s = Seq.Seq("TCAAAAGGATGCATCATG", IUPAC.unambiguous_dna)
+t = Seq.Seq("T", IUPAC.ambiguous_dna)
+u = s + t
+
 
 print("Testing creating MutableSeqs in multiple ways")
 string_seq = MutableSeq("TCAAAAGGATGCATCATG", IUPAC.ambiguous_dna)
