@@ -95,84 +95,142 @@ import array
 
 class MutableSeqTest(unittest.TestCase):
     def setUp(self):
-        pass
+        self.s = Seq.Seq("TCAAAAGGATGCATCATG", IUPAC.unambiguous_dna)
+        self.mutable_s = MutableSeq("TCAAAAGGATGCATCATG", IUPAC.ambiguous_dna)
+
+    def test_mutableseq_creation(self):
+        """Test creating MutableSeqs in multiple ways"""
+        mutable_s = MutableSeq("TCAAAAGGATGCATCATG", IUPAC.ambiguous_dna)
+        self.assertIsInstance(mutable_s, MutableSeq, "Creating MutableSeq")
+
+        mutable_s = self.s.tomutable()
+        self.assertIsInstance(mutable_s, MutableSeq, "Converting Seq to mutable")
+
+        array_seq = MutableSeq(array.array(array_indicator, "TCAAAAGGATGCATCATG"),
+                               IUPAC.ambiguous_dna)
+        self.assertIsInstance(array_seq, MutableSeq, "Creating MutableSeq using array")
+
+    def test_repr(self):
+        self.assertEqual("MutableSeq('TCAAAAGGATGCATCATG', IUPACAmbiguousDNA())",
+                         repr(self.mutable_s))
+
+    def test_as_string(self):
+        self.assertEqual("TCAAAAGGATGCATCATG", str(self.mutable_s))
+
+    def test_length(self):
+        self.assertEqual(18, len(self.mutable_s))
+
+    def test_converting_to_immutable(self):
+        self.assertIsInstance(self.mutable_s.toseq(), Seq.Seq)
+
+    def test_first_nucleotide(self):
+        self.assertEqual('T', self.mutable_s[0])
+
+    def test_setting_slices(self):
+        self.assertEqual(MutableSeq('CAAA', IUPAC.ambiguous_dna),
+                         self.mutable_s[1:5], "Slice mutable seq")
+
+        self.mutable_s[1:3] = "GAT"
+        self.assertEqual(MutableSeq("TGATAAAGGATGCATCATG", IUPAC.ambiguous_dna),
+                         self.mutable_s,
+                         "Set slice with string and adding extra nucleotide")
+
+        self.mutable_s[1:3] = self.mutable_s[5:7]
+        self.assertEqual(MutableSeq("TAATAAAGGATGCATCATG", IUPAC.ambiguous_dna),
+                         self.mutable_s, "Set slice with MutableSeq")
+
+        self.mutable_s[1:3] = array.array(array_indicator, "GAT")
+        self.assertEqual(MutableSeq("TGATTAAAGGATGCATCATG", IUPAC.ambiguous_dna),
+                         self.mutable_s, "Set slice with array")
+
+    def test_setting_item(self):
+        self.mutable_s[3] = "G"
+        self.assertEqual(MutableSeq("TCAGAAGGATGCATCATG", IUPAC.ambiguous_dna),
+                         self.mutable_s)
+
+    def test_deleting_slice(self):
+        del self.mutable_s[4:5]
+        self.assertEqual(MutableSeq("TCAAAGGATGCATCATG", IUPAC.ambiguous_dna),
+                         self.mutable_s)
+
+    def test_deleting_item(self):
+        del self.mutable_s[3]
+        self.assertEqual(MutableSeq("TCAAAGGATGCATCATG", IUPAC.ambiguous_dna),
+                         self.mutable_s)
+
+    def test_appending(self):
+        self.mutable_s.append("C")
+        self.assertEqual(MutableSeq("TCAAAAGGATGCATCATGC", IUPAC.ambiguous_dna),
+                         self.mutable_s)
+
+    def test_inserting(self):
+        self.mutable_s.insert(4, "G")
+        self.assertEqual(MutableSeq("TCAAGAAGGATGCATCATG", IUPAC.ambiguous_dna),
+                         self.mutable_s)
+
+    def test_popping_last_item(self):
+        self.assertEqual("G", self.mutable_s.pop())
+
+    def test_remove_items(self):
+        self.mutable_s.remove("G")
+        self.assertEqual(MutableSeq("TCAAAAGATGCATCATG", IUPAC.ambiguous_dna),
+                         self.mutable_s, "Remove first G")
+
+        self.assertRaises(ValueError, self.mutable_s.remove, 'Z')
+
+    def test_count(self):
+        self.assertEqual(7, self.mutable_s.count("A"))
+
+    def test_index(self):
+        self.assertEqual(2, self.mutable_s.index("A"))
+
+    def test_reverse(self):
+        """Test using reverse method"""
+        self.mutable_s.reverse()
+        self.assertEqual(MutableSeq("GTACTACGTAGGAAAACT", IUPAC.ambiguous_dna),
+                         self.mutable_s)
+
+    def test_reverse_with_stride(self):
+        """Test reverse using -1 stride"""
+        self.assertEqual(MutableSeq("GTACTACGTAGGAAAACT", IUPAC.ambiguous_dna),
+                         self.mutable_s[::-1])
+
+    def test_extend_method(self):
+        self.mutable_s.extend("GAT")
+        self.assertEqual(MutableSeq("TCAAAAGGATGCATCATGGAT", IUPAC.ambiguous_dna),
+                         self.mutable_s)
+
+    def test_extend_with_mutable_seq(self):
+        self.mutable_s.extend(MutableSeq("TTT", IUPAC.ambiguous_dna))
+        self.assertEqual(MutableSeq("TCAAAAGGATGCATCATGTTT", IUPAC.ambiguous_dna),
+                         self.mutable_s)
+
+    def test_delete_stride_slice(self):
+        del self.mutable_s[4:6-1]
+        self.assertEqual(MutableSeq("TCAAAGGATGCATCATG", IUPAC.ambiguous_dna),
+                         self.mutable_s)
+
+    def test_extract_third_nucleotide(self):
+        """Test extracting every third nucleotide (slicing with stride 3)"""
+        self.assertEqual(MutableSeq("TAGTAA", IUPAC.ambiguous_dna), self.mutable_s[0::3])
+        self.assertEqual(MutableSeq("CAGGTT", IUPAC.ambiguous_dna), self.mutable_s[1::3])
+        self.assertEqual(MutableSeq("AAACCG", IUPAC.ambiguous_dna), self.mutable_s[2::3])
+
+    def test_set_wobble_codon_to_n(self):
+        """Test setting wobble codon to N (set slice with stride 3)"""
+        self.mutable_s[2::3] = "N" * len(self.mutable_s[2::3])
+        self.assertEqual(MutableSeq("TCNAANGGNTGNATNATN", IUPAC.ambiguous_dna),
+                         self.mutable_s)
 
 
+###########################################################################
 s = Seq.Seq("TCAAAAGGATGCATCATG", IUPAC.unambiguous_dna)
 t = Seq.Seq("T", IUPAC.ambiguous_dna)
 u = s + t
-
-
-print("Testing creating MutableSeqs in multiple ways")
 string_seq = MutableSeq("TCAAAAGGATGCATCATG", IUPAC.ambiguous_dna)
 array_seq = MutableSeq(array.array(array_indicator, "TCAAAAGGATGCATCATG"),
                        IUPAC.ambiguous_dna)
 converted_seq = s.tomutable()
-
-for test_seq in [string_seq]:
-    print(repr(test_seq))
-    print(str(test_seq))
-    print(len(test_seq))
-    print("%r" % test_seq.toseq())
-
-    print(test_seq[0])
-    print("%r" % test_seq[1:5])
-
-    test_seq[1:3] = "GAT"
-    print("Set slice with string: %r" % test_seq)
-    test_seq[1:3] = test_seq[5:7]
-    print("Set slice with MutableSeq: %r" % test_seq)
-    test_seq[1:3] = array.array(array_indicator, "GAT")
-    print("Set slice with array: %r" % test_seq)
-
-    test_seq[3] = "G"
-    print("Set item: %r" % test_seq)
-
-    del test_seq[4:5]
-    print("Delete slice: %r" % test_seq)
-    del test_seq[3]
-    print("Delete item: %r" % test_seq)
-
-    test_seq.append("C")
-    print("Append: %r" % test_seq)
-    test_seq.insert(4, "G")
-    print("Insert: %r" % test_seq)
-
-    print("Pop off the last item: %s" % test_seq.pop())
-
-    test_seq.remove("G")
-    print("Removed Gs: %r" % test_seq)
-
-    try:
-        test_seq.remove("Z")
-        raise AssertionError("Did not get expected value error.")
-    except ValueError:
-        print("Expected value error and got it")
-
-    print("A count: %i" % test_seq.count("A"))
-    print("A index: %i" % test_seq.index("A"))
-
-    test_seq.reverse()
-    print("Reversed Seq: %r" % test_seq)
-
-    print("Reverse using -1 stride: %r" % test_seq[::-1])
-
-    test_seq.extend("GAT")
-    test_seq.extend(MutableSeq("TTT", IUPAC.ambiguous_dna))
-    print("Extended Seq: %r" % test_seq)
-
-    del test_seq[4:6:-1]
-    print("Delete stride slice: %r" % test_seq)
-
-    print("Extract every third nucleotide (slicing with stride 3):")
-    print(repr(test_seq[0::3]))
-    print(repr(test_seq[1::3]))
-    print(repr(test_seq[2::3]))
-
-    print("Setting wobble codon to N (set slice with stride 3):")
-    test_seq[2::3] = "N" * len(test_seq[2::3])
-    print(repr(test_seq))
-
 ###########################################################################
 print("")
 print("Testing Seq addition")
