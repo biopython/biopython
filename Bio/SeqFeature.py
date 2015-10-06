@@ -1,6 +1,6 @@
 # Copyright 2000-2003 Jeff Chang.
 # Copyright 2001-2008 Brad Chapman.
-# Copyright 2005-2012 by Peter Cock.
+# Copyright 2005-2015 by Peter Cock.
 # Copyright 2006-2009 Michiel de Hoon.
 # All rights reserved.
 # This code is part of the Biopython distribution and governed by its
@@ -34,10 +34,9 @@ classes:
 Specify locations of a feature on a Sequence
 --------------------------------------------
 
-This aims to handle, in Ewan's words, 'the dreaded fuzziness issue' in
-much the same way as Biocorba. This has the advantages of allowing us
-to handle fuzzy stuff in case anyone needs it, and also be compatible
-with Biocorba.
+This aims to handle, in Ewan Birney's words, 'the dreaded fuzziness issue'.
+This has the advantages of allowing us to handle fuzzy stuff in case anyone
+needs it, and also be compatible with BioPerl etc and BioSQL.
 
 classes:
 
@@ -58,6 +57,7 @@ from __future__ import print_function
 from Bio.Seq import MutableSeq, reverse_complement
 
 __docformat__ = "restructuredtext en"
+
 
 class SeqFeature(object):
     """Represent a Sequence Feature on an object.
@@ -349,8 +349,23 @@ class SeqFeature(object):
         >>> f.extract(seq)
         Seq('VALIVIC', ProteinAlphabet())
 
+        If the FeatureLocation is None, e.g. when parsing invalid locus
+        locations in the GenBank parser, extract() will raise a ValueError.
+
+        >>> from Bio.Seq import Seq
+        >>> from Bio.SeqFeature import SeqFeature
+        >>> seq = Seq("MKQHKAMIVALIVICITAVVAAL", generic_protein)
+        >>> f = SeqFeature(None, type="domain")
+        >>> f.extract(seq)
+        Traceback (most recent call last):
+           ...
+        ValueError: The feature's .location is None. Check the sequence file for a valid location.
+
         Note - currently only sub-features of type "join" are supported.
         """
+        if self.location is None:
+            raise ValueError("The feature's .location is None. Check the "
+                             "sequence file for a valid location.")
         return self.location.extract(parent_sequence)
 
     # Python 3:
@@ -1169,9 +1184,76 @@ class CompoundLocation(object):
     def _flip(self, length):
         """Returns a copy of the location after the parent is reversed (PRIVATE).
 
-        Note that the order of the parts is reversed too.
+        Note that the order of the parts is NOT reversed too. Consider a CDS
+        on the forward strand with exons small, medium and large (in length).
+        Once we change the frame of reference to the reverse complement strand,
+        the start codon is still part of the small exon, and the stop codon
+        still part of the large exon - so the part order remains the same!
+
+        Here is an artificial example, were the features map to the two upper
+        case regions and the lower case runs of n are not used:
+
+        >>> from Bio.Seq import Seq
+        >>> from Bio.SeqFeature import FeatureLocation
+        >>> dna = Seq("nnnnnAGCATCCTGCTGTACnnnnnnnnGAGAMTGCCATGCCCCTGGAGTGAnnnnn")
+        >>> small = FeatureLocation(5, 20, strand=1)
+        >>> large = FeatureLocation(28, 52, strand=1)
+        >>> location = small + large
+        >>> print(small)
+        [5:20](+)
+        >>> print(large)
+        [28:52](+)
+        >>> print(location)
+        join{[5:20](+), [28:52](+)}
+        >>> for part in location.parts:
+        ...     print(len(part))
+        ...
+        15
+        24
+
+        As you can see, this is a silly example where each "exon" is a word:
+
+        >>> print(small.extract(dna).translate())
+        SILLY
+        >>> print(large.extract(dna).translate())
+        EXAMPLE*
+        >>> print(location.extract(dna).translate())
+        SILLYEXAMPLE*
+        >>> for part in location.parts:
+        ...     print(part.extract(dna).translate())
+        ...
+        SILLY
+        EXAMPLE*
+
+        Now, let's look at this from the reverse strand frame of reference:
+
+        >>> flipped_dna = dna.reverse_complement()
+        >>> flipped_location = location._flip(len(dna))
+        >>> print(flipped_location.extract(flipped_dna).translate())
+        SILLYEXAMPLE*
+        >>> for part in flipped_location.parts:
+        ...     print(part.extract(flipped_dna).translate())
+        ...
+        SILLY
+        EXAMPLE*
+
+        The key point here is the first part of the CompoundFeature is still the
+        small exon, while the second part is still the large exon:
+
+        >>> for part in flipped_location.parts:
+        ...     print(len(part))
+        ...
+        15
+        24
+        >>> print(flipped_location)
+        join{[37:52](-), [5:29](-)}
+
+        Notice the parts are not reversed. However, there was a bug here in older
+        versions of Biopython which would have given join{[5:29](-), [37:52](-)}
+        and the translation would have wrongly been "EXAMPLE*SILLY" instead.
+
         """
-        return CompoundLocation([loc._flip(length) for loc in self.parts[::-1]],
+        return CompoundLocation([loc._flip(length) for loc in self.parts],
                                 self.operator)
 
     @property

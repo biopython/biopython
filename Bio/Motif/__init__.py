@@ -33,9 +33,9 @@ from Bio.Motif.Thresholds import ScoreDistribution
 
 __docformat__ = "restructuredtext en"
 
-_parsers={"AlignAce": _AlignAce_read,
-          "MEME": _MEME_read,
-          }
+_parsers = {"AlignAce": _AlignAce_read,
+            "MEME": _MEME_read,
+            }
 
 
 def _from_pfm(handle):
@@ -45,9 +45,9 @@ def _from_pfm(handle):
 def _from_sites(handle):
     return Motif()._from_jaspar_sites(handle)
 
-_readers={"jaspar-pfm": _from_pfm,
-          "jaspar-sites": _from_sites
-          }
+_readers = {"jaspar-pfm": _from_pfm,
+            "jaspar-sites": _from_sites
+            }
 
 
 def parse(handle, format):
@@ -89,11 +89,11 @@ def parse(handle, format):
     CGACTCGCGCTTACAAGG
     """
     try:
-        parser=_parsers[format]
+        parser = _parsers[format]
 
     except KeyError:
         try:  # not a true parser, try reader formats
-            reader=_readers[format]
+            reader = _readers[format]
         except:
             raise ValueError("Wrong parser format")
         else:  # we have a proper reader

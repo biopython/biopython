@@ -19,8 +19,8 @@ class Superimposer(object):
     thereby minimizing the RMSD.
     """
     def __init__(self):
-        self.rotran=None
-        self.rms=None
+        self.rotran = None
+        self.rms = None
 
     def set_atoms(self, fixed, moving):
         """
@@ -31,19 +31,19 @@ class Superimposer(object):
         @param moving: list of (moving) atoms
         @type fixed,moving: [L{Atom}, L{Atom},...]
         """
-        if not (len(fixed)==len(moving)):
+        if not (len(fixed) == len(moving)):
             raise PDBException("Fixed and moving atom lists differ in size")
-        l=len(fixed)
-        fixed_coord=numpy.zeros((l, 3))
-        moving_coord=numpy.zeros((l, 3))
+        l = len(fixed)
+        fixed_coord = numpy.zeros((l, 3))
+        moving_coord = numpy.zeros((l, 3))
         for i in range(0, len(fixed)):
-            fixed_coord[i]=fixed[i].get_coord()
-            moving_coord[i]=moving[i].get_coord()
-        sup=SVDSuperimposer()
+            fixed_coord[i] = fixed[i].get_coord()
+            moving_coord[i] = moving[i].get_coord()
+        sup = SVDSuperimposer()
         sup.set(fixed_coord, moving_coord)
         sup.run()
-        self.rms=sup.get_rms()
-        self.rotran=sup.get_rotran()
+        self.rms = sup.get_rms()
+        self.rotran = sup.get_rotran()
 
     def apply(self, atom_list):
         """
@@ -51,32 +51,32 @@ class Superimposer(object):
         """
         if self.rotran is None:
             raise PDBException("No transformation has been calculated yet")
-        rot, tran=self.rotran
-        rot=rot.astype('f')
-        tran=tran.astype('f')
+        rot, tran = self.rotran
+        rot = rot.astype('f')
+        tran = tran.astype('f')
         for atom in atom_list:
             atom.transform(rot, tran)
 
 
-if __name__=="__main__":
+if __name__ == "__main__":
     import sys
 
     from Bio.PDB import PDBParser, Selection
 
-    p=PDBParser()
-    s1=p.get_structure("FIXED", sys.argv[1])
-    fixed=Selection.unfold_entities(s1, "A")
+    p = PDBParser()
+    s1 = p.get_structure("FIXED", sys.argv[1])
+    fixed = Selection.unfold_entities(s1, "A")
 
-    s2=p.get_structure("MOVING", sys.argv[1])
-    moving=Selection.unfold_entities(s2, "A")
+    s2 = p.get_structure("MOVING", sys.argv[1])
+    moving = Selection.unfold_entities(s2, "A")
 
-    rot=numpy.identity(3).astype('f')
-    tran=numpy.array((1.0, 2.0, 3.0), 'f')
+    rot = numpy.identity(3).astype('f')
+    tran = numpy.array((1.0, 2.0, 3.0), 'f')
 
     for atom in moving:
         atom.transform(rot, tran)
 
-    sup=Superimposer()
+    sup = Superimposer()
 
     sup.set_atoms(fixed, moving)
 

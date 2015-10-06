@@ -18,6 +18,7 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Alphabet import IUPAC
 from Bio.Align import MultipleSeqAlignment
+from Bio.Data import CodonTable
 
 with warnings.catch_warnings():
     warnings.simplefilter('ignore', BiopythonExperimentalWarning)
@@ -137,9 +138,23 @@ class Test_build(unittest.TestCase):
         self.aln2 = aln2
         self.seqlist2 = [seq3, seq4, seq5]
 
+        # Test set 3
+        # use Yeast mitochondrial codon table
+        seq6 = SeqRecord(Seq('ATGGCAAGGGACCACCCAGTTGGGCACTGATATGATCGGGTGTATTTGCAGAGTAGTAACCTTTCTTTTCTCAAGACCATCCAG', alphabet=IUPAC.IUPACUnambiguousDNA()), id='pro6')
+        seq7 = SeqRecord(Seq('ATGGCAAGGCACCATCCAGTTGAGCACTGATATGATCGGGTGTATTTGCAGAGTAGTAACGTGTCTCTGCTCAAGACCATCCAG', alphabet=IUPAC.IUPACUnambiguousDNA()), id='pro7')
+        seq8 = SeqRecord(Seq('ATGGCAGGGGACCACCCAGTTGGGCACTGATATGATCGTGTGTATCTGCAGAGTAGTAACCACTCTTTTCTCATGACCATCCAG', alphabet=IUPAC.IUPACUnambiguousDNA()), id='pro8')
+        pro6 = SeqRecord(Seq('MARDHPVGHWYDRVYLQSSNTSFTKTIQ', alphabet=IUPAC.protein), id='pro6')
+        pro7 = SeqRecord(Seq('MARHHPVEHWYDRVYLQSSNVSTTKTIQ', alphabet=IUPAC.protein), id='pro7')
+        pro8 = SeqRecord(Seq('MAGDHPVGHWYDRVYTQSSNHSFTMTIQ', alphabet=IUPAC.protein), id='pro8')
+        aln3 = MultipleSeqAlignment([pro6, pro7, pro8])
+        self.aln3 = aln3
+        self.seqlist3 = [seq6, seq7, seq8]
+        self.codontable3 = CodonTable.unambiguous_dna_by_id[3]
+
     def test_build(self):
         codon_aln1 = codonalign.build(self.aln1, self.seqlist1)
         codon_aln2 = codonalign.build(self.aln2, self.seqlist2)
+        codon_aln3 = codonalign.build(self.aln3, self.seqlist3, codon_table=self.codontable3)
 
 
 class Test_dn_ds(unittest.TestCase):

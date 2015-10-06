@@ -40,7 +40,7 @@ class MultiGraph(object):
     def __str__(self):
         """Returns a concise string description of this graph."""
         nodenum = len(self._adjacency_list)
-        edgenum = reduce(lambda x, y: x+y,
+        edgenum = reduce(lambda x, y: x + y,
                          [len(v) for v in self._adjacency_list.values()])
         labelnum = len(self._label_map)
         return "<MultiGraph: " + \
@@ -115,7 +115,7 @@ class MultiGraph(object):
             self._adjacency_list[n] = set(x for x in self._adjacency_list[n]
                                           if x[0] != node)
         # remove all refering pairs in label map
-        for label in list(self._label_map.keys()): # we're editing this!
+        for label in list(self._label_map.keys()):  # we're editing this!
             lm = set(x for x in self._label_map[label]
                      if (x[0] != node) and (x[1] != node))
             # remove the entry completely if the label is now unused

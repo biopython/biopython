@@ -16,7 +16,7 @@ except ValueError:
         try:
             return float(text)
         except ValueError:
-            if text.lower()=="nan":
+            if text.lower() == "nan":
                 import struct
                 return struct.unpack('d', struct.pack('Q', 0xfff8000000000000))[0]
             else:
@@ -113,13 +113,13 @@ def parse_nssites(lines, results, multi_models, multi_genes):
                 if gene_res:
                     if current_gene is not None:
                         parse_model(lines[gene_start:line_num], model_results)
-                        genes[current_gene-1] = model_results
+                        genes[current_gene - 1] = model_results
                     gene_start = line_num
                     current_gene = int(gene_res.group(1))
                     model_results = {"description": siteclass_model}
-            if len(genes[current_gene-1]) == 0:
+            if len(genes[current_gene - 1]) == 0:
                 model_results = parse_model(lines[gene_start:], model_results)
-                genes[current_gene-1] = model_results
+                genes[current_gene - 1] = model_results
         else:
             model_results = {"description": siteclass_model}
             model_results = parse_model(lines, model_results)
@@ -171,7 +171,7 @@ def parse_model(lines, results):
     dN_tree_flag = False
     w_tree_flag = False
     num_params = None
-    tree_re = re.compile("\(\(+")
+    tree_re = re.compile("^\([\w #:',.()]*\);\s*$")
     branch_re = re.compile("\s+(\d+\.\.\d+)[\s+\d+\.\d+]+")
     model_params_re = re.compile("(?<!\S)([a-z]\d?)\s*=\s+(\d+\.\d+)")
     for line in lines:
@@ -319,7 +319,7 @@ def parse_model(lines, results):
             # Hack for Jython http://bugs.jython.org/issue1762 float("-nan")
             line = line.replace(" -nan", " nan")
             params = line.strip().split()[1:]
-            parameters["branches"][branch]= {
+            parameters["branches"][branch] = {
                 "t": _nan_float(params[0].strip()),
                 "N": _nan_float(params[1].strip()),
                 "S": _nan_float(params[2].strip()),

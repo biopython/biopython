@@ -424,7 +424,11 @@ class DistanceCalculator(object):
         self.verbose = verbose
 
     def _pairwise(self, seq1, seq2):
-        """Calculate pairwise distance from two sequences"""
+        """Calculate pairwise distance from two sequences.
+
+        Returns a value between 0 (identical sequences) and 1 (completely
+        different, or seq1 is an empty string.)
+        """
         score = 0
         max_score = 0
         if self.scoring_matrix:
@@ -446,18 +450,19 @@ class DistanceCalculator(object):
                 max_score2 += self.scoring_matrix[l2, l2]
                 score += self.scoring_matrix[l1, l2]
 
-            max_score = max_score1 > max_score2 and max_score1 or max_score2
-        else: #identity
+        else:
+            # Score by character identity, not skipping any special letters
             for i in range(0, len(seq1)):
                 l1 = seq1[i]
                 l2 = seq2[i]
                 if l1 == l2:
                     score += 1
             max_score = len(seq1)
-
+        if max_score == 0:
+            return 1  # max possible scaled distance
         return 1 - (score * 1.0 / max_score)
 
-    
+
     def _pairwise_multi(self,msa_combos):
         """Calculate pairwise distance for multiple sequence tuples, used for MP"""
         for pairwise in msa_combos:
@@ -481,7 +486,7 @@ class DistanceCalculator(object):
 
         verbose_name = ""
         names = [s.id for s in msa]
-        
+
         '''Create DistanceMatrix Object filled with all possible names'''
         self.dm = _DistanceMatrix(names)
 

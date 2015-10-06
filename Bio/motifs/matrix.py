@@ -44,7 +44,7 @@ class GenericPositionMatrix(dict):
         for letter in alphabet.letters:
             if self.length is None:
                 self.length = len(values[letter])
-            elif self.length!=len(values[letter]):
+            elif self.length != len(values[letter]):
                 raise Exception("data has inconsistent lengths")
             self[letter] = list(values[letter])
         self.alphabet = alphabet
@@ -63,7 +63,7 @@ class GenericPositionMatrix(dict):
 
     def __getitem__(self, key):
         if isinstance(key, tuple):
-            if len(key)==2:
+            if len(key) == 2:
                 key1, key2 = key
                 if isinstance(key1, slice):
                     start1, stop1, stride1 = key1.indices(len(self._letters))
@@ -77,7 +77,7 @@ class GenericPositionMatrix(dict):
                     letters1 = [self._letters[i] for i in key1]
                     dim1 = 2
                 elif isinstance(key1, str):
-                    if len(key1)==1:
+                    if len(key1) == 1:
                         letter1 = key1
                         dim1 = 1
                     else:
@@ -93,12 +93,12 @@ class GenericPositionMatrix(dict):
                     dim2 = 1
                 else:
                     raise KeyError("Cannot understand key %s", str(key2))
-                if dim1==1 and dim2==1:
+                if dim1 == 1 and dim2 == 1:
                     return dict.__getitem__(self, letter1)[index2]
-                elif dim1==1 and dim2==2:
+                elif dim1 == 1 and dim2 == 2:
                     values = dict.__getitem__(self, letter1)
                     return tuple(values[index2] for index2 in indices2)
-                elif dim1==2 and dim2==1:
+                elif dim1 == 2 and dim2 == 1:
                     d = {}
                     for letter1 in letters1:
                         d[letter1] = dict.__getitem__(self, letter1)[index2]
@@ -108,11 +108,11 @@ class GenericPositionMatrix(dict):
                     for letter1 in letters1:
                         values = dict.__getitem__(self, letter1)
                         d[letter1] = [values[index2] for index2 in indices2]
-                    if sorted(letters1)==self._letters:
+                    if sorted(letters1) == self._letters:
                         return self.__class__(self.alphabet, d)
                     else:
                         return d
-            elif len(key)==1:
+            elif len(key) == 1:
                 key = key[0]
             else:
                 raise KeyError("keys should be 1- or 2-dimensional")
@@ -128,16 +128,16 @@ class GenericPositionMatrix(dict):
             letters = [self._letters[i] for i in key]
             dim = 2
         elif isinstance(key, str):
-            if len(key)==1:
+            if len(key) == 1:
                 letter = key
                 dim = 1
             else:
                 raise KeyError(key)
         else:
             raise KeyError("Cannot understand key %s", str(key))
-        if dim==1:
+        if dim == 1:
             return dict.__getitem__(self, letter)
-        elif dim==2:
+        elif dim == 2:
             d = {}
             for letter in letters:
                 d[letter] = dict.__getitem__(self, letter)
@@ -213,11 +213,11 @@ class GenericPositionMatrix(dict):
             nucleotides = sorted(self, key=get, reverse=True)
             counts = [self[c][i] for c in nucleotides]
             # Follow the Cavener rules:
-            if counts[0] >= sum(counts[1:]) and counts[0] >= 2*counts[1]:
+            if counts[0] >= sum(counts[1:]) and counts[0] >= 2 * counts[1]:
                 key = nucleotides[0]
-            elif 4*sum(counts[:2]) > 3*sum(counts):
+            elif 4 * sum(counts[:2]) > 3 * sum(counts):
                 key = "".join(sorted(nucleotides[:2]))
-            elif counts[3]==0:
+            elif counts[3] == 0:
                 key = "".join(sorted(nucleotides[:3]))
             else:
                 key = "ACGT"
@@ -314,7 +314,7 @@ class PositionWeightMatrix(GenericPositionMatrix):
                 if b > 0:
                     p = self[letter][i]
                     if p > 0:
-                        logodds = math.log(p/b, 2)
+                        logodds = math.log(p / b, 2)
                     else:
                         # TODO - Ensure this has unittest coverage!
                         try:
@@ -369,10 +369,10 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
             # use the slower Python code otherwise
             # The C code handles mixed case so Python version must too:
             sequence = sequence.upper()
-            for i in range(n-m+1):
+            for i in range(n - m + 1):
                 score = 0.0
                 for position in range(m):
-                    letter = sequence[i+position]
+                    letter = sequence[i + position]
                     try:
                         score += self[letter][position]
                     except KeyError:
@@ -384,7 +384,7 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
             # (each row contains sorted (ACGT) log-odds values)
             logodds = [[self[letter][i] for letter in "ACGT"] for i in range(m)]
             scores = _pwm.calculate(sequence, logodds)
-        if len(scores)==1:
+        if len(scores) == 1:
             return scores[0]
         else:
             return scores
@@ -400,15 +400,15 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
         m = self.length
         if both:
             rc = self.reverse_complement()
-        for position in range(0, n-m+1):
-            s = sequence[position:position+m]
+        for position in range(0, n - m + 1):
+            s = sequence[position:position + m]
             score = self.calculate(s)
             if score > threshold:
                 yield (position, score)
             if both:
                 score = rc.calculate(s)
                 if score > threshold:
-                    yield (position-n, score)
+                    yield (position - n, score)
 
     @property
     def max(self):
@@ -481,11 +481,11 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
                     continue
                 b = background[letter]
                 p = b * math.pow(2, logodds)
-                sx += p*logodds
-                sxx += p*logodds*logodds
-            sxx -= sx*sx
+                sx += p * logodds
+                sxx += p * logodds * logodds
+            sxx -= sx * sx
             variance += sxx
-        variance = max(variance, 0) # to avoid roundoff problems
+        variance = max(variance, 0)  # to avoid roundoff problems
         return math.sqrt(variance)
 
     def dist_pearson(self, other):
@@ -496,16 +496,16 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
         if self.alphabet != other.alphabet:
             raise ValueError("Cannot compare motifs with different alphabets")
 
-        max_p=-2
-        for offset in range(-self.length+1, other.length):
-            if offset<0:
+        max_p = -2
+        for offset in range(-self.length + 1, other.length):
+            if offset < 0:
                 p = self.dist_pearson_at(other, -offset)
             else:  # offset>=0
                 p = other.dist_pearson_at(self, offset)
-            if max_p<p:
-                max_p=p
-                max_o=-offset
-        return 1-max_p, max_o
+            if max_p < p:
+                max_p = p
+                max_o = -offset
+        return 1 - max_p, max_o
 
     def dist_pearson_at(self, other, offset):
         letters = self._letters
@@ -514,25 +514,25 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
         sxx = 0.0  # \sum x^2
         sxy = 0.0  # \sum x \cdot y
         syy = 0.0  # \sum y^2
-        norm=max(self.length, offset+other.length)*len(letters)
-        for pos in range(min(self.length-offset, other.length)):
-            xi = [self[letter, pos+offset] for letter in letters]
+        norm = max(self.length, offset + other.length) * len(letters)
+        for pos in range(min(self.length - offset, other.length)):
+            xi = [self[letter, pos + offset] for letter in letters]
             yi = [other[letter, pos] for letter in letters]
             sx += sum(xi)
             sy += sum(yi)
-            sxx += sum(x*x for x in xi)
-            sxy += sum(x*y for x, y in zip(xi, yi))
-            syy += sum(y*y for y in yi)
+            sxx += sum(x * x for x in xi)
+            sxy += sum(x * y for x, y in zip(xi, yi))
+            syy += sum(y * y for y in yi)
         sx /= norm
         sy /= norm
         sxx /= norm
         sxy /= norm
         syy /= norm
-        numerator = sxy - sx*sy
-        denominator = math.sqrt((sxx-sx*sx)*(syy-sy*sy))
-        return numerator/denominator
+        numerator = sxy - sx * sy
+        denominator = math.sqrt((sxx - sx * sx) * (syy - sy * sy))
+        return numerator / denominator
 
-    def distribution(self, background=None, precision=10**3):
+    def distribution(self, background=None, precision=10 ** 3):
         """calculate the distribution of the scores at the given precision."""
         from .thresholds import ScoreDistribution
         if background is None:

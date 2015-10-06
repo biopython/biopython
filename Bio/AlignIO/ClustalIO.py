@@ -87,20 +87,24 @@ class ClustalWriter(SequentialAlignmentWriter):
 class ClustalIterator(AlignmentIterator):
     """Clustalw alignment iterator."""
 
+    _header = None  # for caching lines between __next__ calls
+
     def __next__(self):
         handle = self.handle
-        try:
+
+        if self._header is None:
+            line = handle.readline()
+        else:
             # Header we saved from when we were parsing
             # the previous alignment.
             line = self._header
-            del self._header
-        except AttributeError:
-            line = handle.readline()
+            self._header = None
+
         if not line:
             raise StopIteration
 
         # Whitelisted headers we know about
-        known_headers = ['CLUSTAL', 'PROBCONS', 'MUSCLE', 'MSAPROBS']
+        known_headers = ['CLUSTAL', 'PROBCONS', 'MUSCLE', 'MSAPROBS','Kalign']
         if line.strip().split()[0] not in known_headers:
             raise ValueError("%s is not a known CLUSTAL header: %s" %
                              (line.strip().split()[0],

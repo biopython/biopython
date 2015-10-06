@@ -160,33 +160,33 @@ protein = [Seq.Seq("ATCGPK", IUPAC.protein),
            Seq.Seq("ME-KR@", Alphabet.HasStopCodon(Alphabet.Gapped(IUPAC.protein, "-"), "@")),
            Seq.Seq("MEDG.KRXR@", Alphabet.Gapped(Alphabet.HasStopCodon(IUPAC.extended_protein, "@"), ".")),
            "TEDDF"]
-for a in dna+rna:
+for a in dna + rna:
     for b in nuc:
-        c=a+b
+        c = a + b
         assert str(c) == str(a) + str(b)
 for a in rna:
     for b in rna:
         try:
-            c=a+b
+            c = a + b
             assert str(c) == str(a) + str(b)
         except ValueError as e:
             print("%s + %s\n-> %s" % (repr(a.alphabet), repr(b.alphabet), str(e)))
 for a in dna:
     for b in dna:
         try:
-            c=a+b
+            c = a + b
             assert str(c) == str(a) + str(b)
         except ValueError as e:
             print("%s + %s\n-> %s" % (repr(a.alphabet), repr(b.alphabet), str(e)))
     for b in rna:
         try:
-            c=a+b
+            c = a + b
             assert (isinstance(a, str) or isinstance(b, str)), \
                    "DNA+RNA addition should fail!"
         except TypeError:
             pass
         try:
-            c=b+a
+            c = b + a
             assert (isinstance(a, str) or isinstance(b, str)), \
                    "RNA+DNA addition should fail!"
         except TypeError:
@@ -194,25 +194,25 @@ for a in dna:
 for a in protein:
     for b in protein:
         try:
-            c=a+b
+            c = a + b
             assert str(c) == str(a) + str(b)
         except ValueError as e:
             print("%s + %s\n-> %s" % (repr(a.alphabet), repr(b.alphabet), str(e)))
-    for b in nuc+dna+rna:
+    for b in nuc + dna + rna:
         try:
-            c=a+b
+            c = a + b
             assert (isinstance(a, str) or isinstance(b, str)), \
                    "Protein+Nucleotide addition should fail!"
         except TypeError:
             pass
 for a in nuc:
-    for b in dna+rna+nuc:
-        c=a+b
+    for b in dna + rna + nuc:
+        c = a + b
         assert str(c) == str(a) + str(b)
-for a in dna+rna+nuc:
+for a in dna + rna + nuc:
     for b in protein:
         try:
-            c=a+b
+            c = a + b
             assert (isinstance(a, str) or isinstance(b, str)), \
                    "Nucleotide+Protein addition should fail!"
         except TypeError:
@@ -555,20 +555,20 @@ for s in protein_seqs:
     except ValueError:
         pass
 
-assert Seq.translate("TAT")=="Y"
-assert Seq.translate("TAR")=="*"
-assert Seq.translate("TAN")=="X"
-assert Seq.translate("NNN")=="X"
+assert Seq.translate("TAT") == "Y"
+assert Seq.translate("TAR") == "*"
+assert Seq.translate("TAN") == "X"
+assert Seq.translate("NNN") == "X"
 
-assert Seq.translate("TAt")=="Y"
-assert Seq.translate("TaR")=="*"
-assert Seq.translate("TaN")=="X"
-assert Seq.translate("nnN")=="X"
+assert Seq.translate("TAt") == "Y"
+assert Seq.translate("TaR") == "*"
+assert Seq.translate("TaN") == "X"
+assert Seq.translate("nnN") == "X"
 
-assert Seq.translate("tat")=="Y"
-assert Seq.translate("tar")=="*"
-assert Seq.translate("tan")=="X"
-assert Seq.translate("nnn")=="X"
+assert Seq.translate("tat") == "Y"
+assert Seq.translate("tar") == "*"
+assert Seq.translate("tan") == "X"
+assert Seq.translate("nnn") == "X"
 
 for codon in ["TA?", "N-N", "AC_", "Ac_"]:
     try:
@@ -581,22 +581,22 @@ ambig = set(IUPAC.IUPACAmbiguousDNA.letters)
 for c1 in ambig:
     for c2 in ambig:
         for c3 in ambig:
-            values = set([Seq.translate(a+b+c, table=1)
+            values = set([Seq.translate(a + b + c, table=1)
                           for a in ambiguous_dna_values[c1]
                           for b in ambiguous_dna_values[c2]
                           for c in ambiguous_dna_values[c3]])
-            t = Seq.translate(c1+c2+c3)
-            if t=="*":
+            t = Seq.translate(c1 + c2 + c3)
+            if t == "*":
                 assert values == set("*")
-            elif t=="X":
+            elif t == "X":
                 assert len(values) > 1, \
                     "translate('%s') = '%s' not '%s'" \
-                    % (c1+c2+c3, t, ",".join(values))
-            elif t=="Z":
+                    % (c1 + c2 + c3, t, ",".join(values))
+            elif t == "Z":
                 assert values == set("EQ")
-            elif t=="B":
+            elif t == "B":
                 assert values == set("DN")
-            elif t=="J":
+            elif t == "J":
                 assert values == set("LI")
             else:
                 assert values == set(t)

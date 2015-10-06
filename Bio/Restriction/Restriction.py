@@ -102,6 +102,8 @@ __docformat__ = "restructuredtext en"
 
 # Used to use Bio.Restriction.DNAUtils.check_bases (and expose it under this
 # namespace), but have deprecated that module.
+
+
 def _check_bases(seq_string):
     """Check characters in a string (PRIVATE).
 
@@ -176,7 +178,7 @@ class FormattedSeq(object):
         return len(self.data) - 1
 
     def __repr__(self):
-        return 'FormattedSeq(%s, linear=%s)' %(repr(self[1:]), repr(self.linear))
+        return 'FormattedSeq(%s, linear=%s)' % (repr(self[1:]), repr(self.linear))
 
     def __eq__(self, other):
         if isinstance(other, FormattedSeq):
@@ -344,7 +346,7 @@ class RestrictionType(type):
         Specifically this checks they are the same Python object.
         """
         # assert (id(cls)==id(other)) == (other is cls) == (cls is other)
-        return id(cls)==id(other)
+        return id(cls) == id(other)
 
     def __ne__(cls, other):
         """RE != other -> bool.
@@ -1007,7 +1009,7 @@ class Blunt(AbstractCut):
         if not r:
             return d[1:],
         fragments = []
-        length = len(r)-1
+        length = len(r) - 1
         if d.is_linear():
             #
             #   START of the sequence to FIRST site.
@@ -1017,7 +1019,7 @@ class Blunt(AbstractCut):
                 #
                 #   if more than one site add them.
                 #
-                fragments += [d[r[x]:r[x+1]] for x in range(length)]
+                fragments += [d[r[x]:r[x + 1]] for x in range(length)]
             #
             #   LAST site to END of the sequence.
             #
@@ -1026,7 +1028,7 @@ class Blunt(AbstractCut):
             #
             #   circular : bridge LAST site to FIRST site.
             #
-            fragments.append(d[r[-1]:]+d[1:r[0]])
+            fragments.append(d[r[-1]:] + d[1:r[0]])
             if not length:
                 #
                 #   one site we finish here.
@@ -1035,7 +1037,7 @@ class Blunt(AbstractCut):
             #
             #   add the others.
             #
-            fragments += [d[r[x]:r[x+1]] for x in range(length)]
+            fragments += [d[r[x]:r[x + 1]] for x in range(length)]
         return tuple(fragments)
     catalyze = catalyse
 
@@ -1126,7 +1128,7 @@ class Ov5(AbstractCut):
         d = self.dna
         if not r:
             return d[1:],
-        length = len(r)-1
+        length = len(r) - 1
         fragments = []
         if d.is_linear():
             #
@@ -1137,7 +1139,7 @@ class Ov5(AbstractCut):
                 #
                 #   if more than one site add them.
                 #
-                fragments += [d[r[x]:r[x+1]] for x in range(length)]
+                fragments += [d[r[x]:r[x + 1]] for x in range(length)]
             #
             #   LAST site to END of the sequence.
             #
@@ -1146,7 +1148,7 @@ class Ov5(AbstractCut):
             #
             #   circular : bridge LAST site to FIRST site.
             #
-            fragments.append(d[r[-1]:]+d[1:r[0]])
+            fragments.append(d[r[-1]:] + d[1:r[0]])
             if not length:
                 #
                 #   one site we finish here.
@@ -1155,7 +1157,7 @@ class Ov5(AbstractCut):
             #
             #   add the others.
             #
-            fragments += [d[r[x]:r[x+1]] for x in range(length)]
+            fragments += [d[r[x]:r[x + 1]] for x in range(length)]
         return tuple(fragments)
     catalyze = catalyse
 
@@ -1250,7 +1252,7 @@ class Ov3(AbstractCut):
         if not r:
             return d[1:],
         fragments = []
-        length = len(r)-1
+        length = len(r) - 1
         if d.is_linear():
             #
             #   START of the sequence to FIRST site.
@@ -1260,7 +1262,7 @@ class Ov3(AbstractCut):
                 #
                 #   if more than one site add them.
                 #
-                fragments += [d[r[x]:r[x+1]] for x in range(length)]
+                fragments += [d[r[x]:r[x + 1]] for x in range(length)]
             #
             #   LAST site to END of the sequence.
             #
@@ -1269,7 +1271,7 @@ class Ov3(AbstractCut):
             #
             #   circular : bridge LAST site to FIRST site.
             #
-            fragments.append(d[r[-1]:]+d[1:r[0]])
+            fragments.append(d[r[-1]:] + d[1:r[0]])
             if not length:
                 #
                 #   one site we finish here.
@@ -1278,7 +1280,7 @@ class Ov3(AbstractCut):
             #
             #   add the others.
             #
-            fragments += [d[r[x]:r[x+1]] for x in range(length)]
+            fragments += [d[r[x]:r[x + 1]] for x in range(length)]
         return tuple(fragments)
     catalyze = catalyse
 
@@ -1383,8 +1385,8 @@ class Defined(AbstractCut):
         drop = itertools.dropwhile
         take = itertools.takewhile
         if self.dna.is_linear():
-            self.results = [x for x in drop(lambda x:x<1, self.results)]
-            self.results = [x for x in take(lambda x:x<length, self.results)]
+            self.results = [x for x in drop(lambda x:x < 1, self.results)]
+            self.results = [x for x in take(lambda x:x < length, self.results)]
         else:
             for index, location in enumerate(self.results):
                 if location < 1:
@@ -1393,7 +1395,7 @@ class Defined(AbstractCut):
                     break
             for index, location in enumerate(self.results[::-1]):
                 if location > length:
-                    self.results[-(index+1)] -= length
+                    self.results[-(index + 1)] -= length
                 else:
                     break
         return
@@ -1460,7 +1462,7 @@ class Defined(AbstractCut):
             re = 'cut twice, not yet implemented sorry.'
         elif self.is_5overhang():
             if f5 == f3 == 0:
-                re = 'N^'+ self.site + '_N'
+                re = 'N^' + self.site + '_N'
             elif f3 == 0:
                 re = site[:f5] + '^' + site[f5:] + '_N'
             else:
@@ -1469,9 +1471,9 @@ class Defined(AbstractCut):
             re = site[:f5] + '^_' + site[f5:]
         else:
             if f5 == f3 == 0:
-                re = 'N_'+ site + '^N'
+                re = 'N_' + site + '^N'
             else:
-                re = site[:f3] + '_' + site[f3:f5] +'^'+ site[f5:]
+                re = site[:f3] + '_' + site[f3:f5] + '^' + site[f5:]
         return re
 
     @classmethod
@@ -1517,7 +1519,7 @@ class Ambiguous(AbstractCut):
         take = itertools.takewhile
         if self.dna.is_linear():
             self.results = [x for x in drop(lambda x: x < 1, self.results)]
-            self.results = [x for x in take(lambda x: x <length, self.results)]
+            self.results = [x for x in take(lambda x: x < length, self.results)]
         else:
             for index, location in enumerate(self.results):
                 if location < 1:
@@ -1526,7 +1528,7 @@ class Ambiguous(AbstractCut):
                     break
             for index, location in enumerate(self.results[::-1]):
                 if location > length:
-                    self.results[-(index+1)] -= length
+                    self.results[-(index + 1)] -= length
                 else:
                     break
         return
@@ -1589,7 +1591,7 @@ class Ambiguous(AbstractCut):
                 if base in 'N':
                     se = '.'.join(se.split('N'))
                 if base in 'RYWMSKHDBV':
-                    expand = '['+ matching[base] + ']'
+                    expand = '[' + matching[base] + ']'
                     se = expand.join(se.split(base))
             if re.match(se, other.ovhgseq):
                 return True
@@ -1621,24 +1623,24 @@ class Ambiguous(AbstractCut):
             re = 'cut twice, not yet implemented sorry.'
         elif self.is_5overhang():
             if f3 == f5 == 0:
-                re = 'N^' + site +'_N'
-            elif 0 <= f5 <= length and 0 <= f3+length <= length:
+                re = 'N^' + site + '_N'
+            elif 0 <= f5 <= length and 0 <= f3 + length <= length:
                 re = site[:f5] + '^' + site[f5:f3] + '_' + site[f3:]
             elif 0 <= f5 <= length:
-                re = site[:f5] + '^' + site[f5:] + f3*'N' + '_N'
-            elif 0 <= f3+length <= length:
+                re = site[:f5] + '^' + site[f5:] + f3 * 'N' + '_N'
+            elif 0 <= f3 + length <= length:
                 re = 'N^' + abs(f5) * 'N' + site[:f3] + '_' + site[f3:]
-            elif f3+length < 0:
-                re = 'N^'*abs(f5)*'N' + '_' + abs(length+f3)*'N' + site
+            elif f3 + length < 0:
+                re = 'N^' * abs(f5) * 'N' + '_' + abs(length + f3) * 'N' + site
             elif f5 > length:
-                re = site + (f5-length)*'N'+'^'+(length+f3-f5)*'N'+'_N'
+                re = site + (f5 - length) * 'N' + '^' + (length + f3 - f5) * 'N' + '_N'
             else:
-                re = 'N^' + abs(f5) * 'N' + site + f3*'N' + '_N'
+                re = 'N^' + abs(f5) * 'N' + site + f3 * 'N' + '_N'
         elif self.is_blunt():
             if f5 < 0:
-                re = 'N^_' + abs(f5)*'N' + site
+                re = 'N^_' + abs(f5) * 'N' + site
             elif f5 > length:
-                re = site + (f5-length)*'N' + '^_N'
+                re = site + (f5 - length) * 'N' + '^_N'
             else:
                 raise ValueError('%s.easyrepr() : error f5=%i'
                                  % (self.name, f5))
@@ -1647,19 +1649,19 @@ class Ambiguous(AbstractCut):
                 if f5 == 0:
                     re = 'N_' + site + '^N'
                 else:
-                    re = site + '_' + (f5-length)*'N' + '^N'
-            elif 0 < f3+length <= length and 0 <= f5 <= length:
+                    re = site + '_' + (f5 - length) * 'N' + '^N'
+            elif 0 < f3 + length <= length and 0 <= f5 <= length:
                 re = site[:f3] + '_' + site[f3:f5] + '^' + site[f5:]
-            elif 0 < f3+length <= length:
-                re = site[:f3] + '_' + site[f3:] + (f5-length)*'N' + '^N'
+            elif 0 < f3 + length <= length:
+                re = site[:f3] + '_' + site[f3:] + (f5 - length) * 'N' + '^N'
             elif 0 <= f5 <= length:
-                re = 'N_' +'N'*(f3+length) + site[:f5] + '^' + site[f5:]
+                re = 'N_' + 'N' * (f3 + length) + site[:f5] + '^' + site[f5:]
             elif f3 > 0:
-                re = site + f3*'N' + '_' + (f5-f3-length)*'N' + '^N'
+                re = site + f3 * 'N' + '_' + (f5 - f3 - length) * 'N' + '^N'
             elif f5 < 0:
-                re = 'N_' + abs(f3-f5+length)*'N' + '^' + abs(f5)*'N' + site
+                re = 'N_' + abs(f3 - f5 + length) * 'N' + '^' + abs(f5) * 'N' + site
             else:
-                re = 'N_' + abs(f3+length)*'N' + site + (f5-length)*'N' + '^N'
+                re = 'N_' + abs(f3 + length) * 'N' + site + (f5 - length) * 'N' + '^N'
         return re
 
 
@@ -1690,7 +1692,7 @@ class NotDefined(AbstractCut):
                     break
             for index, location in enumerate(self.results[:-1]):
                 if location > length:
-                    self.results[-(index+1)] -= length
+                    self.results[-(index + 1)] -= length
                 else:
                     break
         return
@@ -1871,7 +1873,7 @@ class RestrictionBatch(set):
     def __contains__(self, other):
         try:
             other = self.format(other)
-        except ValueError: # other is not a restriction enzyme
+        except ValueError:  # other is not a restriction enzyme
             return False
         return set.__contains__(self, other)
 
@@ -1905,7 +1907,7 @@ class RestrictionBatch(set):
         func return True."""
         d = [x for x in filter(func, self)]
         new = RestrictionBatch()
-        new._data = dict(zip(d, [True]*len(d)))
+        new._data = dict(zip(d, [True] * len(d)))
         return new
 
     def add_supplier(self, letter):
@@ -2007,7 +2009,7 @@ class RestrictionBatch(set):
             return True
         d = [k for k in filter(splittest, self)]
         new = RestrictionBatch()
-        new._data = dict(zip(d, [True]*len(d)))
+        new._data = dict(zip(d, [True] * len(d)))
         return new
 
     def elements(self):
@@ -2068,7 +2070,7 @@ class RestrictionBatch(set):
                 self.mapping = dict((x, x.search(dna)) for x in self)
                 return self.mapping
         raise TypeError("Expected Seq or MutableSeq instance, got %s instead"
-                        %type(dna))
+                        % type(dna))
 
 ###############################################################################
 #                                                                             #
@@ -2095,7 +2097,7 @@ class Analysis(RestrictionBatch, PrintFormat):
             self.search(self.sequence, self.linear)
 
     def __repr__(self):
-        return 'Analysis(%s,%s,%s)'%\
+        return 'Analysis(%s,%s,%s)' %\
                (repr(self.rb), repr(self.sequence), self.linear)
 
     def _sub_set(self, wanted):
@@ -2326,10 +2328,10 @@ class Analysis(RestrictionBatch, PrintFormat):
         in between start and end but do not cut inside."""
         d = []
         if start <= end:
-            d = [(k, [vv for vv in v if start<=vv<=end])
+            d = [(k, [vv for vv in v if start <= vv <= end])
                  for v in self.between(start, end, dct)]
         else:
-            d = [(k, [vv for vv in v if start<=vv or vv <= end])
+            d = [(k, [vv for vv in v if start <= vv or vv <= end])
                  for v in self.between(start, end, dct)]
         return dict(d)
 
@@ -2460,5 +2462,5 @@ except NameError:
     # Scoping changed in Python 3, the variable isn't leaked
     pass
 locals().update(dict(zip(names, AllEnzymes)))
-__all__=['FormattedSeq', 'Analysis', 'RestrictionBatch', 'AllEnzymes', 'CommOnly', 'NonComm']+names
+__all__ = ['FormattedSeq', 'Analysis', 'RestrictionBatch', 'AllEnzymes', 'CommOnly', 'NonComm'] + names
 del k, enzymes, TYPE, bases, names

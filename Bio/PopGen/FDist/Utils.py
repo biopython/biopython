@@ -104,7 +104,7 @@ def _convert_genepop_to_fdist_big(gp_rec, report_pops=None):
                 for al in lParser[1][loci_pos]:
                     if al is not None:
                         loci[loci_pos].add(al)
-                        curr_pop[loci_pos][al]= curr_pop[loci_pos].get(al, 0)+1
+                        curr_pop[loci_pos][al] = curr_pop[loci_pos].get(al, 0) + 1
         else:
             pops.append(curr_pop)
             num_pops += 1
@@ -179,14 +179,14 @@ def _convert_genepop_to_fdist_big_old(gp_rec, report_loci=None):
         allele_counts = {}
         for allele in alleles:
             allele_counts[allele] = 0
-        allele_counts[None]=0
+        allele_counts[None] = 0
         while lParser:
             if lParser is True:
                 process_pop(pop_data, alleles, allele_counts)
                 allele_counts = {}
                 for allele in alleles:
                     allele_counts[allele] = 0
-                allele_counts[None]=0
+                allele_counts[None] = 0
             else:
                 for al in lParser[1][lc_i]:
                     allele_counts[al] += 1
@@ -205,8 +205,8 @@ def approximate_fst(desired_fst, simulated_fst, parameter_fst,
         return parameter_fst, max_run_fst, min_run_fst
     if simulated_fst > desired_fst:
         max_run_fst = parameter_fst
-        next_parameter_fst = (min_run_fst + parameter_fst)/2
+        next_parameter_fst = (min_run_fst + parameter_fst) / 2
     else:
         min_run_fst = parameter_fst
-        next_parameter_fst = (max_run_fst + parameter_fst)/2
+        next_parameter_fst = (max_run_fst + parameter_fst) / 2
     return next_parameter_fst, max_run_fst, min_run_fst

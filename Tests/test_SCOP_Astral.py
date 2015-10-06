@@ -52,6 +52,6 @@ class AstralTests(unittest.TestCase):
         # self.assertEqual(d1.isIn(astral.getHashedDomainsClusteredByEv(-15))
 
 
-if __name__=='__main__':
+if __name__ == '__main__':
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

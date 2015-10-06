@@ -123,6 +123,14 @@ class EntrezOnlineCase(unittest.TestCase):
         self.assertEqual('19304878', record['PMID'])
         self.assertEqual('10.1093/bioinformatics/btp163 [doi]', record['LID'])
 
+    def test_efetch_biosystems_xml(self):
+        """Test Entrez parser with XML from biosystems"""
+        handle = Entrez.efetch(id="1134002", db="biosystems", retmode="xml")
+        records = list(Entrez.parse(handle))
+        handle.close()
+        self.assertEqual(len(records), 1)
+        self.assertEqual(records[0]['System_sysid']['Sys-id']['Sys-id_bsid'], '1134002')
+
     def test_elink(self):
         # Commas: Link from protein to gene
         handle = Entrez.elink(db="gene", dbfrom="protein",
@@ -151,6 +159,27 @@ class EntrezOnlineCase(unittest.TestCase):
         handle = Entrez.epost("nuccore", id=["160418", "160351"])
         self.assertEqual(URL_HEAD + "epost.fcgi", handle.url)
         handle.close()
+
+    def test_ecitmatch(self):
+        citation = {
+            "journal_title": "proc natl acad sci u s a",
+            "year": "1991", "volume": "88", "first_page": "3248",
+            "author_name": "mann bj", "key": "citation_1"
+        }
+        handle = Entrez.ecitmatch(db="pubmed", bdata=[citation])
+        self.assertTrue("retmode=xml" in handle.url, handle.url)
+        result = handle.read()
+        expected_result = "proc natl acad sci u s a|1991|88|3248|mann bj|citation_1|2014248\n"
+        self.assertEquals(result, expected_result)
+
+    def test_fetch_xml_schemas(self):
+        handle = Entrez.efetch("protein", id="783730874", rettype="ipg", retmode="xml")
+        records = list(Entrez.parse(handle))
+        handle.close()
+        self.assertEqual(len(records), 1)
+        self.assertTrue("Product" in records[0])
+        self.assertTrue("Statistics" in records[0])
+        self.assertTrue("RedundantGiList" in records[0])
 
 
 if __name__ == "__main__":

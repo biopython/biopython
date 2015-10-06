@@ -49,7 +49,7 @@ class XpkEntry(object):
 
         i = 0
         for i in range(len(datlist) - 1):
-            self.fields[headlist[i]] = datlist[i+1]
+            self.fields[headlist[i]] = datlist[i + 1]
         i = i + 1
 
         try:
@@ -208,7 +208,7 @@ def replace_entry(line, fieldn, newentry):
 
     start = _find_start_entry(line, fieldn)
     leng = len(line[start:].split()[0])
-    newline = line[:start] + str(newentry) + line[(start+leng):]
+    newline = line[:start] + str(newentry) + line[(start + leng):]
     return newline
 
 
@@ -245,7 +245,7 @@ def _find_start_entry(line, n):
 
     while (c < leng and field < n):
         if (infield):
-            if (line[c] == " " and not (line[c-1] == " ")):
+            if (line[c] == " " and not (line[c - 1] == " ")):
                 infield = 0
             else:
                 if (not line[c] == " "):

@@ -207,7 +207,7 @@ def _set_hsp_seqs(hsp, parsed, program):
 
     # query and hit sequence types must be the same
     assert parsed['query']['_type'] == parsed['hit']['_type']
-    type_val = parsed['query']['_type'] # hit works fine too
+    type_val = parsed['query']['_type']  # hit works fine too
     alphabet = generic_dna if type_val == 'D' else generic_protein
     setattr(hsp.fragment, 'alphabet', alphabet)
 
@@ -389,6 +389,7 @@ class FastaM10Parser(object):
             if self.line.startswith('>>'):
                 break
 
+        state = _STATE_NONE
         strand = None
         hsp_list = []
         while True:

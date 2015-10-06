@@ -15,6 +15,7 @@ from Bio.PopGen import GenePop
 
 __docformat__ = "restructuredtext en"
 
+
 class EasyController(object):
     def __init__(self, fname, genepop_dir=None):
         """Initializes the controller.
@@ -34,19 +35,19 @@ class EasyController(object):
         return rec.pop_list, rec.loci_list
 
     def test_hw_pop(self, pop_pos, test_type="probability"):
-        if test_type=="deficiency":
+        if test_type == "deficiency":
             hw_res = self._controller.test_pop_hz_deficiency(self._fname)
-        elif test_type=="excess":
+        elif test_type == "excess":
             hw_res = self._controller.test_pop_hz_excess(self._fname)
         else:
             loci_res, hw_res, fisher_full = self._controller.test_pop_hz_prob(self._fname, ".P")
-        for i in range(pop_pos-1):
+        for i in range(pop_pos - 1):
             next(hw_res)
         return next(hw_res)
 
     def test_hw_global(self, test_type="deficiency", enum_test=True,
                        dememorization=10000, batches=20, iterations=5000):
-        if test_type=="deficiency":
+        if test_type == "deficiency":
             pop_res, loc_res, all = self._controller.test_global_hz_deficiency(self._fname,
                 enum_test, dememorization, batches, iterations)
         else:
@@ -59,7 +60,7 @@ class EasyController(object):
         all_ld = self._controller.test_ld(self._fname, dememorization, batches, iterations)[1]
         for ld_case in all_ld:
             (l1, l2), result = ld_case
-            if (l1==locus1 and l2==locus2) or (l1==locus2 and l2==locus1):
+            if (l1 == locus1 and l2 == locus2) or (l1 == locus2 and l2 == locus1):
                 return result
 
     def estimate_nm(self):

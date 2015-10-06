@@ -40,13 +40,15 @@ records = dict((rec.name, rec) for rec in [A_rec, B_rec, C_rec])
 # In practice you might have an automatic mapping based on the gene annotation
 # or some other classification:
 
-A_colors = [red]*5 + [grey]*7 + [orange]*2 + [grey]*2 + [orange] + [grey]*11 + [green]*4 \
-            + [grey] + [green]*2 + [grey, green] + [brown]*5 + [blue]*4 + [lightblue]*5 \
-            + [grey, lightblue] + [purple]*2 + [grey]
-B_colors = [red]*6 + [grey]*8 + [orange]*2 + [grey] + [orange] + [grey]*21 + [green]*5 \
-            + [grey] + [brown]*4 + [blue]*3 + [lightblue]*3 + [grey]*5 + [purple]*2
-C_colors = [grey]*30 + [green]*5 + [brown]*4 + [blue]*2 + [grey, blue] + [lightblue]*2 \
-            + [grey]*5
+A_colors = [red] * 5 + [grey] * 7 + [orange] * 2 + [grey] * 2 + [orange] \
+    + [grey] * 11 + [green] * 4 + [grey] + [green] * 2 + [grey, green] \
+    + [brown] * 5 + [blue] * 4 + [lightblue] * 5 + [grey, lightblue] \
+    + [purple] * 2 + [grey]
+B_colors = [red] * 6 + [grey] * 8 + [orange] * 2 + [grey] + [orange] \
+    + [grey] * 21 + [green] * 5 + [grey] + [brown] * 4 + [blue] * 3 \
+    + [lightblue] * 3 + [grey] * 5 + [purple] * 2
+C_colors = [grey] * 30 + [green] * 5 + [brown] * 4 + [blue] * 2 \
+    + [grey, blue] + [lightblue] * 2 + [grey] * 5
 
 # Here we hard code a list of cross-links with percentage identity scores, based
 # on a manual inspection of the target image (there could be mistakes here).
@@ -102,7 +104,7 @@ B_vs_C = [
 ]
 
 
-def get_feature(features, id, tags=["locus_tag", "gene"]):
+def get_feature(features, id, tags=["locus_tag", "gene", "old_locus_tag"]):
     """Search list of SeqFeature objects for an identifier under the given tags."""
     for f in features:
         for key in tags:
@@ -118,9 +120,9 @@ max_len = 0
 for i, record in enumerate([A_rec, B_rec, C_rec]):
     max_len = max(max_len, len(record))
     # Allocate tracks 5 (top), 3, 1 (bottom) for A, B, C
-    #(empty tracks 2 and 4 add useful white space to emphasise the cross links
+    # (empty tracks 2 and 4 add useful white space to emphasise the cross links
     # and also serve to make the tracks vertically more compressed)
-    gd_track_for_features = gd_diagram.new_track(5-2*i,
+    gd_track_for_features = gd_diagram.new_track(5 - 2 * i,
                             name=record.name,
                             greytrack=True, height=0.5,
                             start=0, end=len(record))
@@ -155,9 +157,14 @@ for record, gene_colors in zip([A_rec, B_rec, C_rec], [A_colors, B_colors, C_col
         if feature.type != "gene":
             # Exclude this feature
             continue
+        try:
+            g_color = gene_colors[i]
+        except IndexError:
+            print("Don't have color for %s gene %i" % (record.name, i))
+            g_color = grey
         gd_feature_set.add_feature(feature, sigil="BIGARROW",
-                                   color=gene_colors[i], label=True,
-                                   name=str(i+1),
+                                   color=g_color, label=True,
+                                   name=str(i + 1),
                                    label_position="start",
                                    label_size=6, label_angle=0)
         i += 1

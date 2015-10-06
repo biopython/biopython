@@ -116,7 +116,7 @@ class WriterTests(unittest.TestCase):
             if format == "nexus":
                 # The nexus parser will dis-ambiguate repeated record ids.
                 self.assertTrue(record.id == new_record.id or
-                                new_record.id.startswith(record.id+".copy"))
+                                new_record.id.startswith(record.id + ".copy"))
             else:
                 self.assertEqual(record.id, new_record.id)
             self.assertEqual(str(record.seq), str(new_record.seq))
@@ -135,6 +135,17 @@ class WriterTests(unittest.TestCase):
         else:
             self.assertRaises(err_type, SeqIO.write, records, handle, format)
         handle.close()
+
+    def test_bad_handle(self):
+        handle = os.devnull
+        record = SeqRecord(Seq("CHSMAIKLSSEHNIPSGIANAL", Alphabet.generic_protein), id="Alpha")
+        records = [record]
+        format = "fasta"
+        # These deliberately mix up the handle and record order:
+        self.assertRaises(TypeError, SeqIO.write, handle, record, format)
+        self.assertRaises(TypeError, SeqIO.write, handle, records, format)
+        self.assertEqual(1, SeqIO.write(records, handle, format))
+
 
 for (records, descr, errs) in test_records:
     for format in test_write_read_alignment_formats:

@@ -153,9 +153,9 @@ class KDTree(object):
            array should be NxD dimensional.
         """
         if coords.min() <= -1e6 or coords.max() >= 1e6:
-                raise Exception("Points should lie between -1e6 and 1e6")
+            raise Exception("Points should lie between -1e6 and 1e6")
         if len(coords.shape) != 2 or coords.shape[1] != self.dim:
-                raise Exception("Expected a Nx%i NumPy array" % self.dim)
+            raise Exception("Expected a Nx%i NumPy array" % self.dim)
         self.kdt.set_data(coords)
         self.built = 1
 
@@ -170,10 +170,10 @@ class KDTree(object):
          - radius: float>0
         """
         if not self.built:
-                raise Exception("No point set specified")
+            raise Exception("No point set specified")
         if center.shape != (self.dim,):
-                raise Exception("Expected a %i-dimensional NumPy array"
-                                % self.dim)
+            raise Exception("Expected a %i-dimensional NumPy array"
+                            % self.dim)
         self.kdt.search_center_radius(center, radius)
 
     def get_radii(self):
@@ -212,7 +212,7 @@ class KDTree(object):
          - radius: float (>0)
         """
         if not self.built:
-                raise Exception("No point set specified")
+            raise Exception("No point set specified")
         self.neighbors = self.kdt.neighbor_search(radius)
 
     def all_get_indices(self):

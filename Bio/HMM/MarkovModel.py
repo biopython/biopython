@@ -23,7 +23,7 @@ def _gen_random_array(n):
     to 1.0"""
     randArray = [random.random() for i in range(n)]
     total = sum(randArray)
-    normalizedRandArray = [x/total for x in randArray]
+    normalizedRandArray = [x / total for x in randArray]
 
     return normalizedRandArray
 

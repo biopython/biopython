@@ -51,7 +51,7 @@ for (t_format, t_per, t_count, t_filename) in test_files:
 
     # Print the alignment
     for i, alignment in enumerate(alignments):
-        print("="*78)
+        print("=" * 78)
         print("Alignment %i, with %i sequences of length %i"
               % (i,
                  len(alignment),
@@ -62,7 +62,7 @@ for (t_format, t_per, t_count, t_filename) in test_files:
         assert alignment[1].name == "match"
         # Show each sequence row horizontally
         for record in alignment:
-            print("-"*78)
+            print("-" * 78)
             print(record.id)
             print(record.description)
             print(repr(record.seq))
@@ -70,5 +70,5 @@ for (t_format, t_per, t_count, t_filename) in test_files:
             assert not record.letter_annotations
             for k in sorted(record.annotations):
                 print(" - %s: %r" % (k, record.annotations[k]))
-    print("="*78)
+    print("=" * 78)
 print("Finished tested reading files")

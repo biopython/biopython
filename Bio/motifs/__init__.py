@@ -21,6 +21,7 @@ import math
 
 __docformat__ = "restructuredtext en"
 
+
 def create(instances, alphabet=None):
     instances = Instances(instances, alphabet)
     return Motif(instances=instances, alphabet=alphabet)
@@ -38,7 +39,7 @@ def parse(handle, format):
         - pfm:           JASPAR-style position-frequency matrix
         - jaspar:        JASPAR-style multiple PFM format
         - sites:         JASPAR-style sites file
-     
+
     As files in the pfm and sites formats contain only a single motif,
     it is easier to use Bio.motifs.read() instead of Bio.motifs.parse()
     for those.
@@ -68,19 +69,19 @@ def parse(handle, format):
     CGACTCGTGCTTAGAAGG
     """
     format = format.lower()
-    if format=="alignace":
+    if format == "alignace":
         from Bio.motifs import alignace
         record = alignace.read(handle)
         return record
-    elif format=="meme":
+    elif format == "meme":
         from Bio.motifs import meme
         record = meme.read(handle)
         return record
-    elif format=="mast":
+    elif format == "mast":
         from Bio.motifs import mast
         record = mast.read(handle)
         return record
-    elif format=="transfac":
+    elif format == "transfac":
         from Bio.motifs import transfac
         record = transfac.read(handle)
         return record
@@ -139,7 +140,7 @@ def read(handle, format):
     """
     format = format.lower()
     motifs = parse(handle, format)
-    if len(motifs)==0:
+    if len(motifs) == 0:
         raise ValueError("No motifs found in handle")
     if len(motifs) > 1:
         raise ValueError("More than one motif found in handle")
@@ -151,9 +152,11 @@ class Instances(list):
     """
     A class representing instances of sequence motifs.
     """
-    def __init__(self, instances=[], alphabet=None):
+    def __init__(self, instances=None, alphabet=None):
         from Bio.Alphabet import IUPAC
         from Bio.Seq import Seq
+        if instances is None:
+            instances = []
         self.length = None
         for instance in instances:
             if self.length is None:
@@ -200,11 +203,11 @@ class Instances(list):
         """
         a generator function, returning found positions of motif instances in a given sequence
         """
-        for pos in range(0, len(sequence)-self.length+1):
+        for pos in range(0, len(sequence) - self.length + 1):
             for instance in self:
-                if str(instance) == str(sequence[pos:pos+self.length]):
-                    yield(pos, instance)
-                    break # no other instance will fit (we don't want to return multiple hits)
+                if str(instance) == str(sequence[pos:pos + self.length]):
+                    yield (pos, instance)
+                    break  # no other instance will fit (we don't want to return multiple hits)
 
     def reverse_complement(self):
         instances = Instances(alphabet=self.alphabet)
@@ -222,7 +225,7 @@ class Motif(object):
     def __init__(self, alphabet=None, instances=None, counts=None):
         from . import matrix
         from Bio.Alphabet import IUPAC
-        self.name=""
+        self.name = ""
         if counts is not None and instances is not None:
             raise Exception(ValueError,
                 "Specify either instances or counts, don't specify both")
@@ -257,17 +260,17 @@ class Motif(object):
             self.__mask = ()
         elif mask is None:
             self.__mask = (1,) * self.length
-        elif len(mask)!=self.length:
+        elif len(mask) != self.length:
             raise ValueError("The length (%d) of the mask is inconsistent with the length (%d) of the motif", (len(mask), self.length))
         elif isinstance(mask, str):
-            self.__mask=[]
+            self.__mask = []
             for char in mask:
-                if char=="*":
+                if char == "*":
                     self.__mask.append(1)
-                elif char==" ":
+                elif char == " ":
                     self.__mask.append(0)
                 else:
-                    raise ValueError("Mask should contain only '*' or ' ' and not a '%s'"%char)
+                    raise ValueError("Mask should contain only '*' or ' ' and not a '%s'" % char)
             self.__mask = tuple(self.__mask)
         else:
             self.__mask = tuple(int(bool(c)) for c in mask)
@@ -301,12 +304,12 @@ class Motif(object):
         elif value is None:
             self._background = dict.fromkeys(self.alphabet.letters, 1.0)
         else:
-            if sorted(self.alphabet.letters)!=["A", "C", "G", "T"]:
+            if sorted(self.alphabet.letters) != ["A", "C", "G", "T"]:
                 raise Exception("Setting the background to a single value only works for DNA motifs (in which case the value is interpreted as the GC content")
-            self._background['A'] = (1.0-value)/2.0
-            self._background['C'] = value/2.0
-            self._background['G'] = value/2.0
-            self._background['T'] = (1.0-value)/2.0
+            self._background['A'] = (1.0 - value) / 2.0
+            self._background['C'] = value / 2.0
+            self._background['G'] = value / 2.0
+            self._background['T'] = (1.0 - value) / 2.0
         total = sum(self._background.values())
         for letter in self.alphabet.letters:
             self._background[letter] /= total
@@ -350,57 +353,56 @@ class Motif(object):
             return self.length
 
     def reverse_complement(self):
-        """
-        Gives the reverse complement of the motif
-        """
+        """Gives the reverse complement of the motif."""
         alphabet = self.alphabet
         if self.instances is not None:
             instances = self.instances.reverse_complement()
             res = Motif(instances=instances, alphabet=alphabet)
         else:  # has counts
             res = Motif(alphabet)
-            res.counts={}
-            res.counts["A"]=self.counts["T"][::-1]
-            res.counts["T"]=self.counts["A"][::-1]
-            res.counts["G"]=self.counts["C"][::-1]
-            res.counts["C"]=self.counts["G"][::-1]
-            res.length=self.length
+            res.counts = {}
+            res.counts["A"] = self.counts["T"][::-1]
+            res.counts["T"] = self.counts["A"][::-1]
+            res.counts["G"] = self.counts["C"][::-1]
+            res.counts["C"] = self.counts["G"][::-1]
+            res.length = self.length
         res.__mask = self.__mask[::-1]
         return res
 
     @property
     def consensus(self):
-        """Returns the consensus sequence.
-        """
+        """Returns the consensus sequence."""
         return self.counts.consensus
 
     @property
     def anticonsensus(self):
-        """returns the least probable pattern to be generated from this motif.
-        """
+        """Returns the least probable pattern to be generated from this motif."""
         return self.counts.anticonsensus
 
     @property
     def degenerate_consensus(self):
-        """Following the rules adapted from
-D. R. Cavener: "Comparison of the consensus sequence flanking
-translational start sites in Drosophila and vertebrates."
-Nucleic Acids Research 15(4): 1353-1361. (1987).
-The same rules are used by TRANSFAC."""
+        """Generate degenerate consesnsus sequence.
+
+        Following the rules adapted from
+        D. R. Cavener: "Comparison of the consensus sequence flanking
+        translational start sites in Drosophila and vertebrates."
+        Nucleic Acids Research 15(4): 1353-1361. (1987).
+
+        The same rules are used by TRANSFAC.
+        """
         return self.counts.degenerate_consensus
 
     def weblogo(self, fname, format="PNG", version="2.8.2", **kwds):
-        """
-        uses the Berkeley weblogo service to download and save a weblogo of
-        itself
+        """Uses the Berkeley weblogo service to download and save a weblogo of itself.
 
-        requires an internet connection.
+        Requires an internet connection.
+
         The parameters from ``**kwds`` are passed directly to the weblogo server.
 
         Currently, this method uses WebLogo version 3.3.
         These are the arguments and their default values passed to
         WebLogo 3.3; see their website at http://weblogo.threeplusone.com
-        for more information:
+        for more information::
 
             'stack_width' : 'medium',
             'stack_per_line' : '40',
@@ -477,16 +479,13 @@ The same rules are used by TRANSFAC."""
                   'color3': '',
                   'color4': '',
                   }
-        for k, v in kwds.items():
-            if isinstance(values[k], bool):
-                if not v:
-                    v = ""
-            values[k]=str(v)
 
-        data = urlencode(values)
+        values.update(
+            dict((k, "" if v is False else str(v)) for k, v in kwds.items()))
+        data = urlencode(values).encode("utf-8")
         req = Request(url, data)
         response = urlopen(req)
-        with open(fname, "w") as f:
+        with open(fname, "wb") as f:
             im = response.read()
             f.write(im)
 
@@ -503,7 +502,7 @@ The same rules are used by TRANSFAC."""
             from Bio.motifs import jaspar
             motifs = [self]
             return jaspar.write(motifs, format)
-        elif format=="transfac":
+        elif format == "transfac":
             from Bio.motifs import transfac
             motifs = [self]
             return transfac.write(motifs)
@@ -524,7 +523,7 @@ def write(motifs, format):
     if format in ("pfm", "jaspar"):
         from Bio.motifs import jaspar
         return jaspar.write(motifs, format)
-    elif format=="transfac":
+    elif format == "transfac":
         from Bio.motifs import transfac
         return transfac.write(motifs)
     else:

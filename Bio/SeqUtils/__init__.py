@@ -42,9 +42,9 @@ def GC(seq):
 
     Note that this will return zero for an empty sequence.
     """
+    gc = sum(seq.count(x) for x in ['G', 'C', 'g', 'c', 'S', 's'])
     try:
-        gc = sum(seq.count(x) for x in ['G', 'C', 'g', 'c', 'S', 's'])
-        return gc*100.0/len(seq)
+        return gc * 100.0 / len(seq)
     except ZeroDivisionError:
         return 0.0
 
@@ -62,12 +62,12 @@ def GC123(seq):
     Copes with mixed case sequences, but does NOT deal with ambiguous
     nucleotides.
     """
-    d= {}
+    d = {}
     for nt in ['A', 'T', 'G', 'C']:
         d[nt] = [0, 0, 0]
 
     for i in range(0, len(seq), 3):
-        codon = seq[i:i+3]
+        codon = seq[i:i + 3]
         if len(codon) < 3:
             codon += '  '
         for pos in range(0, 3):
@@ -79,15 +79,15 @@ def GC123(seq):
     nall = 0
     for i in range(0, 3):
         try:
-            n = d['G'][i] + d['C'][i] +d['T'][i] + d['A'][i]
-            gc[i] = (d['G'][i] + d['C'][i])*100.0/n
+            n = d['G'][i] + d['C'][i] + d['T'][i] + d['A'][i]
+            gc[i] = (d['G'][i] + d['C'][i]) * 100.0 / n
         except:
             gc[i] = 0
 
         gcall = gcall + d['G'][i] + d['C'][i]
         nall = nall + n
 
-    gcall = 100.0*gcall/nall
+    gcall = 100.0 * gcall / nall
     return gcall, gc[0], gc[1], gc[2]
 
 
@@ -105,7 +105,7 @@ def GC_skew(seq, window=100):
         s = seq[i: i + window]
         g = s.count('G') + s.count('g')
         c = s.count('C') + s.count('c')
-        skew = (g-c)/float(g+c)
+        skew = (g - c) / float(g + c)
         values.append(skew)
     return values
 
@@ -114,9 +114,9 @@ def xGC_skew(seq, window=1000, zoom=100,
                          r=300, px=100, py=100):
     """Calculates and plots normal and accumulated GC skew (GRAPHICS !!!)."""
     try:
-        import Tkinter as tkinter # Python 2
+        import Tkinter as tkinter  # Python 2
     except ImportError:
-        import tkinter # Python 3
+        import tkinter  # Python 3
 
     yscroll = tkinter.Scrollbar(orient=tkinter.VERTICAL)
     xscroll = tkinter.Scrollbar(orient=tkinter.HORIZONTAL)
@@ -152,8 +152,8 @@ def xGC_skew(seq, window=1000, zoom=100,
         r1 = r
         acc += gc
         # GC skew
-        alpha = pi - (2*pi*start)/len(seq)
-        r2 = r1 - gc*zoom
+        alpha = pi - (2 * pi * start) / len(seq)
+        r2 = r1 - gc * zoom
         x1 = X0 + r1 * sin(alpha)
         y1 = Y0 + r1 * cos(alpha)
         x2 = X0 + r2 * sin(alpha)
@@ -305,7 +305,7 @@ def seq1(seq, custom_map={'Ter': '*'}, undef_code='X'):
                    IUPACData.protein_letters_3to1_extended.items())
     # add the given termination codon code and custom maps
     onecode.update((k.upper(), v) for (k, v) in custom_map.items())
-    seqlist = [seq[3*i:3*(i+1)] for i in range(len(seq) // 3)]
+    seqlist = [seq[3 * i:3 * (i + 1)] for i in range(len(seq) // 3)]
     return ''.join(onecode.get(aa.upper(), undef_code) for aa in seqlist)
 
 
@@ -392,18 +392,18 @@ def molecular_weight(seq, seq_type=None, double_stranded=False, circular=False,
             raise TypeError("%s is not a valid alphabet for mass calculations"
                              % base_alphabet)
         else:
-            tmp_type = "DNA" # backward compatibity
+            tmp_type = "DNA"  # backward compatibity
         if seq_type and tmp_type and tmp_type != seq_type:
             raise ValueError("seq_type=%r contradicts %s from seq alphabet"
                              % (seq_type, tmp_type))
         seq_type = tmp_type
     elif isinstance(seq, str):
         if seq_type is None:
-            seq_type = "DNA" # backward compatibity
+            seq_type = "DNA"  # backward compatibity
     else:
         raise TypeError("Expected a string or Seq object, not seq=%r" % seq)
 
-    seq = ''.join(str(seq).split()).upper() # Do the minimum formatting
+    seq = ''.join(str(seq).split()).upper()  # Do the minimum formatting
 
     if seq_type == 'DNA':
         if monoisotopic:
@@ -430,18 +430,18 @@ def molecular_weight(seq, seq_type=None, double_stranded=False, circular=False,
         water = 18.0153
 
     try:
-        weight = sum(weight_table[x] for x in seq) - (len(seq)-1) * water
+        weight = sum(weight_table[x] for x in seq) - (len(seq) - 1) * water
         if circular:
             weight -= water
     except KeyError as e:
         raise ValueError('%s is not a valid unambiguous letter for %s'
-                         %(e, seq_type))
+                         % (e, seq_type))
     except:
         raise
 
     if seq_type in ('DNA', 'RNA') and double_stranded:
         seq = str(Seq(seq).complement())
-        weight += sum(weight_table[x] for x in seq) - (len(seq)-1) * water
+        weight += sum(weight_table[x] for x in seq) - (len(seq) - 1) * water
         if circular:
             weight -= water
     elif seq_type == 'protein' and double_stranded:
@@ -481,9 +481,9 @@ def six_frame_translations(seq, genetic_code=1):
     length = len(seq)
     frames = {}
     for i in range(0, 3):
-        fragment_length = 3 * ((length-i) // 3)
-        frames[i+1] = translate(seq[i:i+fragment_length], genetic_code)
-        frames[-(i+1)] = translate(anti[i:i+fragment_length], genetic_code)[::-1]
+        fragment_length = 3 * ((length - i) // 3)
+        frames[i + 1] = translate(seq[i:i + fragment_length], genetic_code)
+        frames[-(i + 1)] = translate(anti[i:i + fragment_length], genetic_code)[::-1]
 
     # create header
     if length > 20:
@@ -498,20 +498,20 @@ def six_frame_translations(seq, genetic_code=1):
     res = header
 
     for i in range(0, length, 60):
-        subseq = seq[i:i+60]
-        csubseq = comp[i:i+60]
-        p = i//3
-        res += '%d/%d\n' % (i+1, i/3+1)
-        res += '  ' + '  '.join(frames[3][p:p+20]) + '\n'
-        res += ' ' + '  '.join(frames[2][p:p+20]) + '\n'
-        res += '  '.join(frames[1][p:p+20]) + '\n'
+        subseq = seq[i:i + 60]
+        csubseq = comp[i:i + 60]
+        p = i // 3
+        res += '%d/%d\n' % (i + 1, i / 3 + 1)
+        res += '  ' + '  '.join(frames[3][p:p + 20]) + '\n'
+        res += ' ' + '  '.join(frames[2][p:p + 20]) + '\n'
+        res += '  '.join(frames[1][p:p + 20]) + '\n'
         # seq
         res += subseq.lower() + '%5d %%\n' % int(GC(subseq))
         res += csubseq.lower() + '\n'
         # - frames
-        res += '  '.join(frames[-2][p:p+20]) +' \n'
-        res += ' ' + '  '.join(frames[-1][p:p+20]) + '\n'
-        res += '  ' + '  '.join(frames[-3][p:p+20]) + '\n\n'
+        res += '  '.join(frames[-2][p:p + 20]) + ' \n'
+        res += ' ' + '  '.join(frames[-1][p:p + 20]) + '\n'
+        res += '  ' + '  '.join(frames[-3][p:p + 20]) + '\n\n'
     return res
 
 # }}}

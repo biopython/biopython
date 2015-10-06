@@ -38,6 +38,7 @@ from Bio.SCOP.Residues import Residues
 
 __docformat__ = "restructuredtext en"
 
+
 def normalize_letters(one_letter_code):
     """Convert RAF one-letter amino acid codes into IUPAC standard codes.
 
@@ -77,7 +78,7 @@ class SeqMapIndex(dict):
                     break
                 key = line[0:5]
                 if key is not None:
-                    self[key]=position
+                    self[key] = position
                 position = f.tell()
 
     def __getitem__(self, key):
@@ -102,7 +103,7 @@ class SeqMapIndex(dict):
         pdbid = residues.pdbid
         frags = residues.fragments
         if not frags:
-            frags = (('_', '', ''),) # All residues of unnamed chain
+            frags = (('_', '', ''),)  # All residues of unnamed chain
 
         seqMap = None
         for frag in frags:
@@ -166,7 +167,7 @@ class SeqMap(object):
         line = line.rstrip()  # no trailing whitespace
 
         if len(line) < header_len:
-            raise ValueError("Incomplete header: "+line)
+            raise ValueError("Incomplete header: " + line)
 
         self.pdbid = line[0:4]
         chainid = line[4:5]
@@ -181,9 +182,9 @@ class SeqMap(object):
         self.flags = line[21:27]
 
         for i in range(header_len, len(line), 7):
-            f = line[i:i+7]
-            if len(f)!=7:
-                raise ValueError("Corrupt Field: ("+f+")")
+            f = line[i:i + 7]
+            if len(f) != 7:
+                raise ValueError("Corrupt Field: (" + f + ")")
             r = Res()
             r.chainid = chainid
             r.resid = f[0:5].strip()
@@ -286,7 +287,7 @@ class SeqMap(object):
             # print(resSet)
 
             raise RuntimeError('I could not find at least one ATOM or HETATM'
-                   +' record for each and every residue in this sequence map.')
+                   + ' record for each and every residue in this sequence map.')
 
 
 class Res(object):

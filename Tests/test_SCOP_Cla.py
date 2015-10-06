@@ -20,12 +20,12 @@ class ClaTests(unittest.TestCase):
 
     def testParse(self):
         """Test if all records in a CLA file are being read"""
-        f=open(self.filename)
+        f = open(self.filename)
         try:
             count = 0
             records = Cla.parse(f)
             for record in records:
-                count +=1
+                count += 1
             self.assertEqual(count, 14)
         finally:
             f.close()
@@ -89,6 +89,6 @@ class ClaTests(unittest.TestCase):
         self.assertEqual(rec.sunid, 14996)
 
 
-if __name__=='__main__':
+if __name__ == '__main__':
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

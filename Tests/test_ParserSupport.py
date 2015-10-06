@@ -28,7 +28,7 @@ def pb(b):
 print("Running tests on TaggingConsumer")
 
 
-class TestHandle:
+class TestHandle(object):
     def write(self, s):
         print(s)
 

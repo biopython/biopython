@@ -357,7 +357,7 @@ class Chromosome(_ChromosomeComponent):
                     w = stringWidth(name, label_string.fontName, label_string.fontSize)
                     if x1 > x2:
                         w = w * -1.0
-                    cur_drawing.add(Rect(x2, y2 - 0.1*h, w, h,
+                    cur_drawing.add(Rect(x2, y2 - 0.1 * h, w, h,
                                          strokeColor=back_color,
                                          fillColor=back_color))
                 cur_drawing.add(label_string)
@@ -528,7 +528,7 @@ def _spring_layout(desired, minimum, maximum, gap=0):
         from Bio import BiopythonWarning
         warnings.warn("Too many labels to avoid overlap", BiopythonWarning)
         # Crudest solution
-        return [minimum+i*equal_step for i in range(count)]
+        return [minimum + i * equal_step for i in range(count)]
 
     good = True
     if gap:
@@ -541,44 +541,44 @@ def _spring_layout(desired, minimum, maximum, gap=0):
         return desired
 
     span = maximum - minimum
-    for split in [0.5*span, span/3.0, 2*span/3.0, 0.25*span, 0.75*span]:
+    for split in [0.5 * span, span / 3.0, 2 * span / 3.0, 0.25 * span, 0.75 * span]:
         midpoint = minimum + split
-        low = [x for x in desired if x <= midpoint - 0.5*gap]
-        high = [x for x in desired if x > midpoint + 0.5*gap]
-        if len(low)+len(high) < count:
+        low = [x for x in desired if x <= midpoint - 0.5 * gap]
+        high = [x for x in desired if x > midpoint + 0.5 * gap]
+        if len(low) + len(high) < count:
             # Bad split point, points right on boundary
             continue
-        elif not low and len(high)*gap <= (span-split) + 0.5*gap:
+        elif not low and len(high) * gap <= (span - split) + 0.5 * gap:
             # Give a little of the unused low space to the high points
-            return _spring_layout(high, midpoint + 0.5*gap, maximum, gap)
-        elif not high and len(low)*gap <= split + 0.5*gap:
+            return _spring_layout(high, midpoint + 0.5 * gap, maximum, gap)
+        elif not high and len(low) * gap <= split + 0.5 * gap:
             # Give a little of the unused highspace to the low points
-            return _spring_layout(low, minimum, midpoint - 0.5*gap, gap)
-        elif len(low)*gap <= split - 0.5*gap \
-        and len(high)*gap <= (span-split) - 0.5*gap:
-            return _spring_layout(low, minimum, midpoint - 0.5*gap, gap) + \
-                   _spring_layout(high, midpoint+ 0.5*gap, maximum, gap)
+            return _spring_layout(low, minimum, midpoint - 0.5 * gap, gap)
+        elif len(low) * gap <= split - 0.5 * gap \
+        and len(high) * gap <= (span - split) - 0.5 * gap:
+            return _spring_layout(low, minimum, midpoint - 0.5 * gap, gap) + \
+                   _spring_layout(high, midpoint + 0.5 * gap, maximum, gap)
 
     # This can be count-productive now we can split out into the telomere or
     # spacer-segment's vertical space...
     # Try not to spread out as far as the min/max unless needed
     low = min(desired)
     high = max(desired)
-    if (high-low) / (count-1) >= gap:
+    if (high - low) / (count - 1) >= gap:
         # Good, we don't need the full range, and can position the
         # min and max exactly as well :)
-        equal_step = (high-low) / (count-1)
-        return [low+i*equal_step for i in range(count)]
+        equal_step = (high - low) / (count - 1)
+        return [low + i * equal_step for i in range(count)]
 
     low = 0.5 * (minimum + min(desired))
     high = 0.5 * (max(desired) + maximum)
-    if (high-low) / (count-1) >= gap:
+    if (high - low) / (count - 1) >= gap:
         # Good, we don't need the full range
-        equal_step = (high-low) / (count-1)
-        return [low+i*equal_step for i in range(count)]
+        equal_step = (high - low) / (count - 1)
+        return [low + i * equal_step for i in range(count)]
 
     # Crudest solution
-    return [minimum+i*equal_step for i in range(count)]
+    return [minimum + i * equal_step for i in range(count)]
 
 # assert False, _spring_layout([0.10,0.12,0.13,0.14,0.5,0.75, 1.0], 0, 1, 0.1)
 # assert _spring_layout([0.10,0.12,0.13,0.14,0.5,0.75, 1.0], 0, 1, 0.1) == [0.0, 0.125, 0.25, 0.375, 0.5, 0.75, 1.0]
@@ -691,8 +691,8 @@ class AnnotatedChromosomeSegment(ChromosomeSegment):
                 x = segment_x
                 w = segment_width
             local_scale = segment_height / self.bp_length
-            fill_rectangle = Rect(x, segment_y + segment_height - local_scale*start,
-                                  w, local_scale*(start-end))
+            fill_rectangle = Rect(x, segment_y + segment_height - local_scale * start,
+                                  w, local_scale * (start - end))
             fill_rectangle.fillColor = fill_color
             fill_rectangle.strokeColor = color
             cur_drawing.add(fill_rectangle)
@@ -701,7 +701,7 @@ class AnnotatedChromosomeSegment(ChromosomeSegment):
                     back_color = None
                 else:
                     back_color = fill_color
-                value = (segment_y + segment_height - local_scale*start, color, back_color, name)
+                value = (segment_y + segment_height - local_scale * start, color, back_color, name)
                 if strand == -1:
                     self._left_labels.append(value)
                 else:

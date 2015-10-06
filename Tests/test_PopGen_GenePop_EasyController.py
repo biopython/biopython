@@ -112,14 +112,14 @@ class AppTest(unittest.TestCase):
         """
         mf = self.ctrl.get_multilocus_f_stats()
         self.assertEqual(len(mf), 3)
-        self.assertTrue(mf[0]<0.1)
+        self.assertTrue(mf[0] < 0.1)
 
     def test_get_f_stats(self):
         """Test F stats.
         """
         fs = self.ctrl.get_f_stats("Locus2")
         self.assertEqual(len(fs), 5)
-        self.assertTrue(fs[0]<0)
+        self.assertTrue(fs[0] < 0)
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)

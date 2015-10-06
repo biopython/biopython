@@ -14,7 +14,6 @@ try:
 except ImportError:
     sqlite3 = None
 
-from Bio import SearchIO
 from Bio._py3k import _as_bytes
 from Bio.SeqRecord import SeqRecord
 
@@ -27,8 +26,8 @@ with warnings.catch_warnings():
 
 
 class CheckRaw(unittest.TestCase):
-
     """Base class for testing index's get_raw method."""
+    fmt = None  # define this in subclasses!
 
     def check_raw(self, filename, id, raw, **kwargs):
         """Index filename using **kwargs, check get_raw(id)==raw."""
@@ -54,7 +53,6 @@ class CheckRaw(unittest.TestCase):
 
 
 class CheckIndex(unittest.TestCase):
-
     """Base class for testing indexing."""
 
     def check_index(self, filename, format, **kwargs):
@@ -127,7 +125,7 @@ def compare_search_obj(obj_a, obj_b):
     # compare objects recursively if it's not an HSPFragment
     if not isinstance(obj_a, SearchIO.HSPFragment):
         # check the number of hits contained
-        assert len(obj_a) == len(obj_b), "length: %r vs %r" % (len(obj_a),
+        assert len(obj_a) == len(obj_b), "length: %i vs %i for %r vs %r" % (len(obj_a),
                 len(obj_b), obj_a, obj_b)
         for item_a, item_b in zip(obj_a, obj_b):
             assert compare_search_obj(item_a, item_b)

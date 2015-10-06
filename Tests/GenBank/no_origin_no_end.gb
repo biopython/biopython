@@ -1,0 +1,14 @@
+LOCUS       AB070938                6497 bp    DNA     linear   BCT 11-OCT-2001
+DEFINITION  Streptomyces avermitilis melanin biosynthetic gene cluster.
+ACCESSION   AB070938
+VERSION     AB070938.1  GI:15823953
+KEYWORDS    .
+SOURCE      Streptomyces avermitilis
+  ORGANISM  Streptomyces avermitilis
+            Bacteria; Actinobacteria; Actinobacteridae; Actinomycetales;
+            Streptomycineae; Streptomycetaceae; Streptomyces.
+FEATURES             Location/Qualifiers
+     source          1..6497
+                     /organism="Streptomyces avermitilis"
+                     /mol_type="genomic DNA"
+                     /db_xref="taxon:33903"

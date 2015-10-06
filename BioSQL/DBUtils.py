@@ -13,7 +13,7 @@ import os
 _dbutils = {}
 
 
-class Generic_dbutils:
+class Generic_dbutils(object):
     """Default database utilities."""
 
     def __init__(self):

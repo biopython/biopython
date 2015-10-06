@@ -168,7 +168,11 @@ def write(motifs, format):
     elif format == 'jaspar':
         for m in motifs:
             counts = m.counts
-            line = ">{0} {1}\n".format(m.matrix_id, m.name)
+            try:
+                matrix_id = m.matrix_id
+            except AttributeError:
+                matrix_id = None
+            line = ">{0} {1}\n".format(matrix_id, m.name)
             lines.append(line)
             for letter in letters:
                 terms = ["{0:6.2f}".format(value) for value in counts[letter]]
@@ -238,19 +242,21 @@ def _read_jaspar(handle):
 
     Format is one or more records of the form, e.g.::
 
-        >MA0001.1 AGL3
-        A  [ 0  3 79 40 66 48 65 11 65  0 ]
-        C  [94 75  4  3  1  2  5  2  3  3 ]
-        G  [ 1  0  3  4  1  0  5  3 28 88 ]
-        T  [ 2 19 11 50 29 47 22 81  1  6 ]
+      - JASPAR 2010 matrix_only format::
 
-    or::
+                >MA0001.1 AGL3
+                A  [ 0  3 79 40 66 48 65 11 65  0 ]
+                C  [94 75  4  3  1  2  5  2  3  3 ]
+                G  [ 1  0  3  4  1  0  5  3 28 88 ]
+                T  [ 2 19 11 50 29 47 22 81  1  6 ]
 
-        >MA0001.1 AGL3
-        0  3 79 40 66 48 65 11 65  0
-        4 75  4  3  1  2  5  2  3  3
-        1  0  3  4  1  0  5  3 28 88
-        2 19 11 50 29 47 22 81  1  6
+      - JASPAR 2010-2014 PFMs format::
+
+                >MA0001.1 AGL3
+                0	3	79	40	66	48	65	11	65	0
+                94	75	4	3	1	2	5	2	3	3
+                1	0	3	4	1	0	5	3	28	88
+                2	19	11	50	29	47	22	81	1	6
 
     """
 
@@ -261,14 +267,14 @@ def _read_jaspar(handle):
 
     head_pat = re.compile(r"^>\s*(\S+)(\s+(\S+))?")
     row_pat_long = re.compile(r"\s*([ACGT])\s*\[\s*(.*)\s*\]")
-    row_pat_short = re.compile(r"\s*(.*)\s*")
+    row_pat_short = re.compile(r"\s*(.+)\s*")
 
     identifier = None
     name = None
     row_count = 0
     nucleotides = ['A', 'C', 'G', 'T']
     for line in handle:
-        line.rstrip('\r\n')
+        line = line.strip()
 
         head_match = head_pat.match(line)
         row_match_long = row_pat_long.match(line)
@@ -276,8 +282,8 @@ def _read_jaspar(handle):
 
         if head_match:
             identifier = head_match.group(1)
-            if head_match.group(2):
-                name = head_match.group(2)
+            if head_match.group(3):
+                name = head_match.group(3)
             else:
                 name = identifier
         elif row_match_long:

@@ -22,7 +22,7 @@ class HieTests(unittest.TestCase):
         try:
             count = 0
             for record in Hie.parse(f):
-                count +=1
+                count += 1
             self.assertEqual(count, 21)
         finally:
             f.close()

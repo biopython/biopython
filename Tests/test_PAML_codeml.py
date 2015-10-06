@@ -1,4 +1,4 @@
-# Copyright (C) 2011 by Brandon Invergo (b.invergo@gmail.com)
+# Copyright (C) 2011, 2015 by Brandon Invergo (b.invergo@gmail.com)
 # This code is part of the Biopython distribution and governed by its
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
@@ -315,11 +315,11 @@ class ModTest(unittest.TestCase):
             self.assertTrue("parameters" in model, version_msg)
             params = model["parameters"]
             # Branch Site A results lack a "branches" parameter
-            self.assertEqual(len(params), SITECLASS_PARAMS[2]-1, version_msg)
+            self.assertEqual(len(params), SITECLASS_PARAMS[2] - 1, version_msg)
             self.assertTrue("site classes" in params, version_msg)
             site_classes = params["site classes"]
             # Branch Site A adds another site class
-            self.assertEqual(len(site_classes), SITECLASSES[2]+1,
+            self.assertEqual(len(site_classes), SITECLASSES[2] + 1,
                 version)
             for class_num in [0, 1, 2, 3]:
                 self.assertTrue(class_num in site_classes, version_msg)
@@ -510,6 +510,19 @@ class ModTest(unittest.TestCase):
             # Pairwise AA analysis has ML & raw distances
             self.assertEqual(len(distances), 2, version_msg)
 
+    def testTreeParseVersatility(self):
+        """Test finding trees in the results, in response to bug #453, where
+        trees like (A, (B, C)); weren't being caught"""
+        res_file = os.path.join(self.results_dir, "codeml",
+                                "tree_regexp_versatility.out")
+        results = codeml.read(res_file)
+        self.assertTrue("NSsites" in results)
+        nssites = results["NSsites"]
+        self.assertTrue(0 in nssites)
+        m0 = nssites[0]
+        self.assertTrue("tree" in m0)
+        self.assertTrue(m0["tree"] is not None)
+        self.assertNotEqual(len(m0["tree"]), 0)
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)

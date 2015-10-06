@@ -1948,6 +1948,31 @@ class TblastxCases(BaseBlastCases):
         self.assertEqual('FRI KKKFNH  C*', hsp.aln_annotation['similarity'])
         self.assertEqual('FRI*KKKFNH*TC*', str(hsp.hit.seq))
 
+    def test_text_2230_blastp_001(self):
+        """Test parsing blastp output (text_2230_blastp_001.txt)"""
+
+        blast_file = get_file('text_2230_blastp_001.txt')
+        qresults = list(parse(blast_file, FMT))
+        self.assertEqual(1, len(qresults))
+        self.check_common_attrs(qresults)
+
+        # test first qresult
+        qresult = qresults[0]
+        self.assertEqual('TR11080zzzc0_g2_i2_0', qresult.id)
+        self.assertEqual('', qresult.description)
+        self.assertEqual(1691, qresult.seq_len)
+        self.assertEqual('subject.fasta', qresult.target)
+        self.assertEqual('blastp', qresult.program)
+        self.assertEqual('2.2.30+', qresult.version)
+        self.assertEqual(1, len(qresult))
+        self.assertEqual(3, len(qresult.hsps))
+        hsp = qresult.hsps[0]
+        self.assertTrue("PTSP" + ("-" * 79) + "AYSP" in hsp.query)
+        hsp = qresult.hsps[1]
+        self.assertTrue(hsp.query.seq.startswith("AYSPTSPAYSPTSPAYSPTSPAYSPTSPAYS----------PTSPAYSPTSPAYSPTSPA"))
+        hsp = qresult.hsps[2]
+        self.assertTrue(hsp.query.seq.startswith("YSPTSPAYSPTSPAYSPTSPAYSPTSPAYS----------PTSPAYSPTSPAYSPTSPAY"))
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)

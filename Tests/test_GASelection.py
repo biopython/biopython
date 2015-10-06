@@ -23,49 +23,49 @@ from Bio.GA.Selection.RouletteWheel import RouletteWheelSelection
 # --- helper classes and functions
 
 class TestAlphabet(SingleLetterAlphabet):
-    """Simple test alphabet.
-    """
+    """Simple test alphabet."""
+
     letters = ["0", "1", "2", "3"]
 
 
 def test_fitness(genome):
-    """Simple class for calculating fitnesses.
-    """
+    """Simple class for calculating fitnesses."""
+
     genome_seq = genome.toseq()
     return int(str(genome_seq))
 
 
-class NoSelection:
-    """A simple 'selection' class that just returns the generated population.
-    """
+class NoSelection(object):
+    """A simple 'selection' class that just returns the generated population."""
+
     def select(self, population):
         return population
 
 
-class NoMutation:
-    """Simple 'mutation' class that doesn't do anything.
-    """
+class NoMutation(object):
+    """Simple 'mutation' class that doesn't do anything."""
+
     def mutate(self, org):
         return org.copy()
 
 
-class NoCrossover:
-    """Simple 'crossover' class that doesn't do anything.
-    """
+class NoCrossover(object):
+    """Simple 'crossover' class that doesn't do anything."""
+
     def do_crossover(self, org_1, org_2):
         return org_1.copy(), org_2.copy()
 
 
-class NoRepair:
-    """Simple 'repair' class that doesn't do anything.
-    """
+class NoRepair(object):
+    """Simple 'repair' class that doesn't do anything."""
+
     def repair(self, org):
         return org.copy()
 
 
 def random_genome():
-    """Return a random genome string.
-    """
+    """Return a random genome string."""
+
     alphabet = TestAlphabet()
 
     new_genome = ""
@@ -76,8 +76,8 @@ def random_genome():
 
 
 def random_organism():
-    """Generate a random organism.
-    """
+    """Generate a random organism."""
+
     genome = random_genome()
     return Organism(genome, test_fitness)
 
@@ -85,14 +85,14 @@ def random_organism():
 # --- the actual test classes
 
 class DiversitySelectionTest(unittest.TestCase):
-    """Test selection trying to maximize diversity.
-    """
+    """Test selection trying to maximize diversity."""
+
     def setUp(self):
         self.selector = DiversitySelection(NoSelection(), random_genome)
 
     def test_get_new_organism(self):
-        """Getting a new organism not in the new population.
-        """
+        """Getting a new organism not in the new population."""
+
         org = random_organism()
         old_pop = [org]
         new_pop = []
@@ -102,8 +102,8 @@ class DiversitySelectionTest(unittest.TestCase):
                          "Got an unexpected organism %s" % new_org)
 
     def test_no_retrieve_organism(self):
-        """Test not getting an organism already in the new population.
-        """
+        """Test not getting an organism already in the new population."""
+
         org = random_organism()
         old_pop = [org]
         new_pop = [org]
@@ -113,8 +113,8 @@ class DiversitySelectionTest(unittest.TestCase):
         # TODO - Why was the above commented out?
 
     def test_selection(self):
-        """Test basic selection on a small population.
-        """
+        """Test basic selection on a small population."""
+
         pop = [random_organism() for org_num in range(50)]
 
         new_pop = self.selector.select(pop)
@@ -124,15 +124,15 @@ class DiversitySelectionTest(unittest.TestCase):
 
 
 class TournamentSelectionTest(unittest.TestCase):
-    """Test selection based on a tournament style scheme.
-    """
+    """Test selection based on a tournament style scheme."""
+
     def setUp(self):
         self.selector = TournamentSelection(NoMutation(), NoCrossover(),
                                             NoRepair(), 2)
 
     def test_select_best(self):
-        """Ensure selection of the best organism in a population of 2.
-        """
+        """Ensure selection of the best organism in a population of 2."""
+
         # Create any two non equal organisms
         org_1 = random_organism()
         while True:
@@ -159,8 +159,8 @@ class TournamentSelectionTest(unittest.TestCase):
                              "Got a worse organism selected.")
 
     def test_selection(self):
-        """Test basic selection on a small population.
-        """
+        """Test basic selection on a small population."""
+
         pop = [random_organism() for org_num in range(50)]
         new_pop = self.selector.select(pop)
 
@@ -169,15 +169,15 @@ class TournamentSelectionTest(unittest.TestCase):
 
 
 class RouletteWheelSelectionTest(unittest.TestCase):
-    """Test selection using a roulette wheel selection scheme.
-    """
+    """Test selection using a roulette wheel selection scheme."""
+
     def setUp(self):
         self.selector = RouletteWheelSelection(NoMutation(), NoCrossover(),
                                                NoRepair())
 
     def test_select_best(self):
-        """Ensure selection of a best organism in a population of 2.
-        """
+        """Ensure selection of a best organism in a population of 2."""
+
         worst_genome = MutableSeq("0", TestAlphabet())
         worst_org = Organism(worst_genome, test_fitness)
 
@@ -190,8 +190,8 @@ class RouletteWheelSelectionTest(unittest.TestCase):
                              "Worse organism unexpectly selected.")
 
     def test_selection(self):
-        """Test basic selection on a small population.
-        """
+        """Test basic selection on a small population."""
+
         pop = [random_organism() for org_num in range(50)]
         new_pop = self.selector.select(pop)
 

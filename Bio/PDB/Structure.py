@@ -13,7 +13,7 @@ class Structure(Entity):
     The Structure class contains a collection of Model instances.
     """
     def __init__(self, id):
-        self.level="S"
+        self.level = "S"
         Entity.__init__(self, id)
 
     # Special methods
@@ -37,8 +37,12 @@ class Structure(Entity):
 
     # Public
 
-    def get_chains(self):
+    def get_models(self):
         for m in self:
+            yield m
+
+    def get_chains(self):
+        for m in self.get_models():
             for c in m:
                 yield c
 

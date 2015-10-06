@@ -25,6 +25,7 @@ from Bio.PopGen.GenePop import get_indiv
 
 __docformat__ = "restructuredtext en"
 
+
 def read(fname):
     """Parses a file containing a GenePop file.
 
@@ -103,7 +104,7 @@ class FileRecord(object):
                         if al is None:
                             al = '0'
                         aStr = str(al)
-                        while len(aStr)<marker_len:
+                        while len(aStr) < marker_len:
                             aStr = "".join(['0', aStr])
                         rep.append(aStr)
                 rep.append('\n')
@@ -123,7 +124,7 @@ class FileRecord(object):
         self.loci_list.extend(all_loci)
         for line in self._handle:
             line = line.rstrip()
-            if line.upper()=='POP':
+            if line.upper() == 'POP':
                 break
             self.loci_list.append(line)
         else:
@@ -137,7 +138,7 @@ class FileRecord(object):
         self.current_pop = 0
         self.current_ind = 0
         for line in self._handle:
-            if line.rstrip().upper()=="POP":
+            if line.rstrip().upper() == "POP":
                 return
 
     def seek_position(self, pop, indiv):
@@ -148,20 +149,20 @@ class FileRecord(object):
         """
         self._handle.seek(0)
         self.skip_header()
-        while pop>0:
+        while pop > 0:
             self.skip_population()
             pop -= 1
-        while indiv>0:
+        while indiv > 0:
             self.get_individual()
             indiv -= 1
 
     def skip_population(self):
         "Skips the current population. Returns true if there is another pop."
         for line in self._handle:
-            if line=="":
+            if line == "":
                 return False
             line = line.rstrip()
-            if line.upper()=='POP':
+            if line.upper() == 'POP':
                 self.current_pop += 1
                 self.current_ind = 0
                 return True
@@ -178,7 +179,7 @@ class FileRecord(object):
         """
         for line in self._handle:
             line = line.rstrip()
-            if line.upper()=='POP':
+            if line.upper() == 'POP':
                 self.current_pop += 1
                 self.current_ind = 0
                 return True
@@ -222,7 +223,7 @@ class FileRecord(object):
                             if al is None:
                                 al = '0'
                             aStr = str(al)
-                            while len(aStr)<3:
+                            while len(aStr) < 3:
                                 aStr = "".join(['0', aStr])
                             f.write(aStr)
                     f.write('\n')
@@ -262,7 +263,7 @@ class FileRecord(object):
                         if al is None:
                             al = '0'
                         aStr = str(al)
-                        while len(aStr)<3:
+                        while len(aStr) < 3:
                             aStr = "".join(['0', aStr])
                         f.write(aStr)
                 f.write('\n')
@@ -307,7 +308,7 @@ class FileRecord(object):
                         if al is None:
                             al = '0'
                         aStr = str(al)
-                        while len(aStr)<3:
+                        while len(aStr) < 3:
                             aStr = "".join(['0', aStr])
                         f.write(aStr)
                 f.write('\n')

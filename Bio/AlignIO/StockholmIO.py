@@ -1,4 +1,4 @@
-# Copyright 2006-2013 by Peter Cock.  All rights reserved.
+# Copyright 2006-2015 by Peter Cock.  All rights reserved.
 #
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -120,7 +120,7 @@ with Alignnment objects. Again, if you want to you can specify this is RNA:
     AAAAUUGAAUAUCGUUUUACUUGUUUAU-GUCGUGAAU-UGG-CACGA-CGUUUCUACAAGGUG-CCGG-AA-CACCUAACAAUAAGUAAGUCAGCAGUGAGAU
     -----------------<<<<<<<<-----<<.<<-------->>.>>----------.<<<<<--------->>>>>.-->>>>>>>>---------------
 
-Remember that if you slice a SeqRecord, the per-letter-annotions like the
+Remember that if you slice a SeqRecord, the per-letter-annotations like the
 secondary structure string here, are also sliced:
 
     >>> sub_record = record[10:20]
@@ -312,12 +312,19 @@ class StockholmIterator(AlignmentIterator):
                        "OC": "organism_classification",
                        "LO": "look"}
 
+    _header = None  # for caching lines between __next__ calls
+
     def __next__(self):
-        try:
+        handle = self.handle
+
+        if self._header is None:
+            line = handle.readline()
+        else:
+            # Header we saved from when we were parsing
+            # the previous alignment.
             line = self._header
-            del self._header
-        except AttributeError:
-            line = self.handle.readline()
+            self._header = None
+
         if not line:
             # Empty file - just give up.
             raise StopIteration
@@ -336,7 +343,7 @@ class StockholmIterator(AlignmentIterator):
         gf = {}
         passed_end_alignment = False
         while True:
-            line = self.handle.readline()
+            line = handle.readline()
             if not line:
                 break  # end of file
             line = line.strip()  # remove trailing \n

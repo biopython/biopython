@@ -9,6 +9,7 @@ from Bio.Cluster.cluster import *
 
 __docformat__ = "restructuredtext en"
 
+
 def _treesort(order, nodeorder, nodecounts, tree):
     # Find the order of the nodes consistent with the hierarchical clustering
     # tree, taking into account the preferred order of nodes.
@@ -20,14 +21,14 @@ def _treesort(order, nodeorder, nodecounts, tree):
         i1 = tree[i].left
         i2 = tree[i].right
         if i1 < 0:
-            order1 = nodeorder[-i1-1]
-            count1 = nodecounts[-i1-1]
+            order1 = nodeorder[-i1 - 1]
+            count1 = nodecounts[-i1 - 1]
         else:
             order1 = order[i1]
             count1 = 1
         if i2 < 0:
-            order2 = nodeorder[-i2-1]
-            count2 = nodecounts[-i2-1]
+            order2 = nodeorder[-i2 - 1]
+            count2 = nodecounts[-i2 - 1]
         else:
             order2 = order[i2]
             count2 = 1
@@ -45,7 +46,7 @@ def _treesort(order, nodeorder, nodecounts, tree):
                 if clusterid == i2 and order1 < order2:
                     neworder[j] += increase
                 if clusterid == i1 or clusterid == i2:
-                    clusterids[j] = -i-1
+                    clusterids[j] = -i - 1
         else:
             if order1 <= order2:
                 increase = count1
@@ -58,7 +59,7 @@ def _treesort(order, nodeorder, nodecounts, tree):
                 if clusterid == i2 and order1 <= order2:
                     neworder[j] += increase
                 if clusterid == i1 or clusterid == i2:
-                    clusterids[j] = -i-1
+                    clusterids[j] = -i - 1
     return numpy.argsort(neworder)
 
 
@@ -72,7 +73,7 @@ def _savetree(jobname, tree, order, transpose):
         extension = ".atr"
         keyword = "ARRY"
     nnodes = len(tree)
-    with open(jobname+extension, "w") as outputfile:
+    with open(jobname + extension, "w") as outputfile:
         nodeindex = 0
         nodeID = [''] * nnodes
         nodecounts = numpy.zeros(nnodes, int)
@@ -81,34 +82,34 @@ def _savetree(jobname, tree, order, transpose):
         for nodeindex in range(nnodes):
             min1 = tree[nodeindex].left
             min2 = tree[nodeindex].right
-            nodeID[nodeindex] = "NODE%dX" % (nodeindex+1)
+            nodeID[nodeindex] = "NODE%dX" % (nodeindex + 1)
             outputfile.write(nodeID[nodeindex])
             outputfile.write("\t")
             if min1 < 0:
-                index1 = -min1-1
+                index1 = -min1 - 1
                 order1 = nodeorder[index1]
                 counts1 = nodecounts[index1]
-                outputfile.write(nodeID[index1]+"\t")
+                outputfile.write(nodeID[index1] + "\t")
                 nodedist[nodeindex] = max(nodedist[nodeindex], nodedist[index1])
             else:
                 order1 = order[min1]
                 counts1 = 1
                 outputfile.write("%s%dX\t" % (keyword, min1))
             if min2 < 0:
-                index2 = -min2-1
+                index2 = -min2 - 1
                 order2 = nodeorder[index2]
                 counts2 = nodecounts[index2]
-                outputfile.write(nodeID[index2]+"\t")
+                outputfile.write(nodeID[index2] + "\t")
                 nodedist[nodeindex] = max(nodedist[nodeindex], nodedist[index2])
             else:
                 order2 = order[min2]
                 counts2 = 1
                 outputfile.write("%s%dX\t" % (keyword, min2))
-            outputfile.write(str(1.0-nodedist[nodeindex]))
+            outputfile.write(str(1.0 - nodedist[nodeindex]))
             outputfile.write("\n")
             counts = counts1 + counts2
             nodecounts[nodeindex] = counts
-            nodeorder[nodeindex] = (counts1*order1+counts2*order2) / counts
+            nodeorder[nodeindex] = (counts1 * order1 + counts2 * order2) / counts
     # Now set up order based on the tree structure
     index = _treesort(order, nodeorder, nodecounts, tree)
     return index
@@ -174,7 +175,7 @@ Cluster/TreeView program.
             elif word == "GWEIGHT":
                 cols[line.index(word)] = word
                 self.gweight = []
-            elif word=="GORDER":
+            elif word == "GORDER":
                 cols[line.index(word)] = word
                 self.gorder = []
             else:
@@ -591,7 +592,7 @@ Arguments:
         else:
             genename = self.genename
         (ngenes, nexps) = numpy.shape(self.data)
-        with open(jobname+'.cdt', 'w') as outputfile:
+        with open(jobname + '.cdt', 'w') as outputfile:
             if self.mask is not None:
                 mask = self.mask
             else:

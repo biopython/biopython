@@ -80,7 +80,7 @@ class SummaryInfo(object):
             atom_dict = {}
             num_atoms = 0
 
-            for record in self.alignment._records:
+            for record in self.alignment:
                 # make sure we haven't run past the end of any sequences
                 # if they are of different lengths
                 if n < len(record.seq):
@@ -138,7 +138,7 @@ class SummaryInfo(object):
             atom_dict = {}
             num_atoms = 0
 
-            for record in self.alignment._records:
+            for record in self.alignment:
                 # make sure we haven't run past the end of any sequences
                 # if they are of different lengths
                 if n < len(record.seq):
@@ -216,7 +216,7 @@ class SummaryInfo(object):
                 a = Alphabet.single_letter_alphabet
         return a
 
-    def replacement_dictionary(self, skip_chars=[]):
+    def replacement_dictionary(self, skip_chars=None):
         """Generate a replacement dictionary to plug into a substitution matrix
 
         This should look at an alignment, and be able to generate the number
@@ -246,7 +246,8 @@ class SummaryInfo(object):
         up with the replacement dictionary.
 
         Arguments:
-            - skip_chars - A list of characters to skip when creating the dictionary.
+         - skip_chars - A list of characters to skip when creating the dictionary.
+           This defaults to an empty list.
 
         For instance, you might have Xs (screened stuff) or Ns, and not want
         to include the ambiguity characters in the dictionary.
@@ -255,17 +256,17 @@ class SummaryInfo(object):
         rep_dict, skip_items = self._get_base_replacements(skip_chars)
 
         # iterate through each record
-        for rec_num1 in range(len(self.alignment._records)):
+        for rec_num1 in range(len(self.alignment)):
             # iterate through each record from one beyond the current record
             # to the end of the list of records
-            for rec_num2 in range(rec_num1 + 1, len(self.alignment._records)):
+            for rec_num2 in range(rec_num1 + 1, len(self.alignment)):
                 # for each pair of records, compare the sequences and add
                 # the pertinent info to the dictionary
                 rep_dict = self._pair_replacement(
-                    self.alignment._records[rec_num1].seq,
-                    self.alignment._records[rec_num2].seq,
-                    self.alignment._records[rec_num1].annotations.get('weight', 1.0),
-                    self.alignment._records[rec_num2].annotations.get('weight', 1.0),
+                    self.alignment[rec_num1].seq,
+                    self.alignment[rec_num2].seq,
+                    self.alignment[rec_num1].annotations.get('weight', 1.0),
+                    self.alignment[rec_num2].annotations.get('weight', 1.0),
                     rep_dict, skip_items)
 
         return rep_dict
@@ -329,7 +330,7 @@ class SummaryInfo(object):
             all_letters = "".join(list_letters)
         return all_letters
 
-    def _get_base_replacements(self, skip_items=[]):
+    def _get_base_replacements(self, skip_items=None):
         """Get a zeroed dictionary of all possible letter combinations.
 
         This looks at the type of alphabet and gets the letters for it.
@@ -342,8 +343,10 @@ class SummaryInfo(object):
               (Right now the only thing I can imagine in this list is gap
               characters, but maybe X's or something else might be useful later.
               This will also include any characters that are specified to be
-              skipped.)
+              skipped.) Defaults to an empty list.
         """
+        if skip_items is None:
+            skip_items = []
         base_dictionary = {}
         all_letters = self._get_all_letters()
 
@@ -363,14 +366,14 @@ class SummaryInfo(object):
         return base_dictionary, skip_items
 
     def pos_specific_score_matrix(self, axis_seq=None,
-                                  chars_to_ignore=[]):
+                                  chars_to_ignore=None):
         """Create a position specific score matrix object for the alignment.
 
         This creates a position specific score matrix (pssm) which is an
         alternative method to look at a consensus sequence.
 
         Arguments:
-            - chars_to_ignore - A listing of all characters not to include in
+            - chars_to_ignore - A list of all characters not to include in
               the pssm.  If the alignment alphabet declares a gap character,
               then it will be excluded automatically.
             - axis_seq - An optional argument specifying the sequence to
@@ -385,6 +388,8 @@ class SummaryInfo(object):
         all_letters = self._get_all_letters()
         assert all_letters
 
+        if chars_to_ignore is None:
+            chars_to_ignore = []
         if not isinstance(chars_to_ignore, list):
             raise TypeError("chars_to_ignore should be a list.")
 
@@ -405,7 +410,7 @@ class SummaryInfo(object):
         # now start looping through all of the sequences and getting info
         for residue_num in range(len(left_seq)):
             score_dict = self._get_base_letters(all_letters)
-            for record in self.alignment._records:
+            for record in self.alignment:
                 try:
                     this_residue = record.seq[residue_num]
                 # if we hit an index error we've run out of sequence and
@@ -440,7 +445,7 @@ class SummaryInfo(object):
     def information_content(self, start=0,
                             end=None,
                             e_freq_table=None, log_base=2,
-                            chars_to_ignore=[]):
+                            chars_to_ignore=None):
         """Calculate the information content for each residue along an alignment.
 
         Arguments:
@@ -456,8 +461,8 @@ class SummaryInfo(object):
               included, since these should not have expected frequencies.
             - log_base - The base of the logathrim to use in calculating the
               information content. This defaults to 2 so the info is in bits.
-            - chars_to_ignore - A listing of characterw which should be ignored
-              in calculating the info content.
+            - chars_to_ignore - A listing of characters which should be ignored
+              in calculating the info content. Defaults to none.
 
         Returns:
             - A number representing the info content for the specified region.
@@ -467,12 +472,14 @@ class SummaryInfo(object):
         """
         # if no end was specified, then we default to the end of the sequence
         if end is None:
-            end = len(self.alignment._records[0].seq)
+            end = len(self.alignment[0].seq)
+        if chars_to_ignore is None:
+            chars_to_ignore = []
 
-        if start < 0 or end > len(self.alignment._records[0].seq):
+        if start < 0 or end > len(self.alignment[0].seq):
             raise ValueError("Start (%s) and end (%s) are not in the \
                     range %s to %s"
-                    % (start, end, 0, len(self.alignment._records[0].seq)))
+                    % (start, end, 0, len(self.alignment[0].seq)))
         # determine random expected frequencies, if necessary
         random_expected = None
         if not e_freq_table:
@@ -498,7 +505,7 @@ class SummaryInfo(object):
         info_content = {}
         for residue_num in range(start, end):
             freq_dict = self._get_letter_freqs(residue_num,
-                                               self.alignment._records,
+                                               self.alignment,
                                                all_letters, chars_to_ignore)
             # print freq_dict,
             column_score = self._get_column_info_content(freq_dict,
@@ -686,7 +693,7 @@ def print_info_content(summary_info, fout=None, rep_record=0):
     fout = fout or sys.stdout
     if not summary_info.ic_vector:
         summary_info.information_content()
-    rep_sequence = summary_info.alignment._records[rep_record].seq
+    rep_sequence = summary_info.alignment[rep_record].seq
     for pos in sorted(summary_info.ic_vector):
         fout.write("%d %s %.3f\n" % (pos, rep_sequence[pos],
                    summary_info.ic_vector[pos]))

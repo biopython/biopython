@@ -10,10 +10,7 @@ classes in order to use the common methods defined on them.
 """
 __docformat__ = "restructuredtext en"
 
-from Bio._py3k import zip
-from Bio._py3k import filter
-from Bio._py3k import basestring
-from Bio._py3k import unicode
+from Bio._py3k import basestring, filter, unicode, zip
 
 import collections
 import copy
@@ -22,6 +19,18 @@ import random
 import re
 
 from Bio import _utils
+
+
+# NB: On Python 2, repr() and str() are specified to return byte strings, not
+# unicode. On Python 3, it's the opposite. Horrible.
+import sys
+if sys.version_info[0] < 3:
+    def as_string(s):
+        if isinstance(s, unicode):
+            return s.encode('utf-8')
+        return str(s)
+else:
+    as_string = str
 
 
 # General tree-traversal algorithms
@@ -92,7 +101,10 @@ def _class_matcher(target_cls):
 
 def _string_matcher(target):
     def match(node):
-        return unicode(node) == target
+        if isinstance(node, (Clade, Tree)):
+            # Avoid triggering specialized or recursive magic methods
+            return node.name == target
+        return as_string(node) == target
     return match
 
 
@@ -231,16 +243,15 @@ class TreeElement(object):
         """Show this object's constructor with its primitive arguments."""
         def pair_as_kwarg_string(key, val):
             if isinstance(val, basestring):
-                return "%s='%s'" % (key, _utils.trim_str(unicode(val), 60,
-                                                         u'...'))
+                return ("%s='%s'"
+                        % (key, _utils.trim_str(as_string(val), 60, '...')))
             return "%s=%s" % (key, val)
-        return u'%s(%s)' % (self.__class__.__name__,
-                            ', '.join(pair_as_kwarg_string(key, val)
-                                      for key, val in sorted(self.__dict__.items())
-                                      if val is not None and
-                                      type(val) in (
-                                          str, int, float, bool, unicode)
-                                      ))
+        return ('%s(%s)'
+                % (self.__class__.__name__,
+                   ', '.join(pair_as_kwarg_string(key, val)
+                             for key, val in sorted(self.__dict__.items())
+                             if val is not None and
+                             type(val) in (str, int, float, bool, unicode))))
 
     __str__ = __repr__
 
@@ -952,7 +963,12 @@ class Tree(TreeElement, TreeMixin):
 
             This closes over textlines and modifies it in-place.
             """
-            textlines.append(TAB * indent + repr(obj))
+            if isinstance(obj, (Tree, Clade)):
+                # Avoid infinite recursion or special formatting from str()
+                objstr = repr(obj)
+            else:
+                objstr = as_string(obj)
+            textlines.append(TAB * indent + objstr)
             indent += 1
             for attr in obj.__dict__:
                 child = getattr(obj, attr)
@@ -1169,7 +1185,7 @@ class BranchColor(object):
 
     def __repr__(self):
         """Preserve the standard RGB order when representing this object."""
-        return (u'%s(red=%d, green=%d, blue=%d)'
+        return ('%s(red=%d, green=%d, blue=%d)'
                 % (self.__class__.__name__, self.red, self.green, self.blue))
 
     def __str__(self):

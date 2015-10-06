@@ -126,6 +126,10 @@ if sys.version_info[:2] < (2, 6):
     print("Biopython requires Python 2.6 or 2.7 (or Python 3.3 or later). "
           "Python %d.%d detected" % sys.version_info[:2])
     sys.exit(1)
+elif is_pypy() and sys.version_info[0] == 3 and sys.version_info[:2] == (3, 2):
+    # PyPy3 2.4.0 is compatibile with Python 3.2.5 plus unicode literals
+    # so ought to work with Biopython
+    pass
 elif sys.version_info[0] == 3 and sys.version_info[:2] < (3, 3):
     print("Biopython requires Python 3.3 or later (or Python 2.6 or 2.7). "
           "Python %d.%d detected" % sys.version_info[:2])
@@ -366,6 +370,7 @@ PACKAGES = [
     'Bio.Statistics',
     'Bio.SubsMat',
     'Bio.SVDSuperimposer',
+    'Bio.PDB.QCPSuperimposer',
     'Bio.SwissProt',
     'Bio.TogoWS',
     'Bio.Phylo',
@@ -431,6 +436,11 @@ if is_Numpy_installed():
     EXTENSIONS.append(
         Extension('Bio.motifs._pwm',
                   ["Bio/motifs/_pwm.c"],
+                  include_dirs=[numpy_include_dir],
+                  ))
+    EXTENSIONS.append(
+        Extension('Bio.PDB.QCPSuperimposer.qcprotmodule',
+                  ["Bio/PDB/QCPSuperimposer/qcprotmodule.c"],
                   include_dirs=[numpy_include_dir],
                   ))
 

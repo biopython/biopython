@@ -39,6 +39,8 @@ Functions:
     - egquery      Provides Entrez database counts in XML for a single search
       using Global Query.
     - espell       Retrieves spelling suggestions.
+    - ecitmatch    Retrieves PubMed IDs (PMIDs) that correspond to a set of
+      input citation strings.
 
     - read         Parses the XML results returned by any of the above functions.
       Typical usage is:
@@ -351,6 +353,49 @@ def espell(**keywds):
     return _open(cgi, variables)
 
 
+def ecitmatch(**keywds):
+    """ECitMatch retrieves PMIDs-Citation linking
+
+    ECitMatch retrieves PubMed IDs (PMIDs) that correspond to a set of input citation strings.
+
+    See the online documentation for an explanation of the parameters:
+    http://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.ECitMatch
+
+    Return a handle to the results, by default in plain text
+
+    Raises an IOError exception if there's a network error.
+
+    Short example:
+
+    >>> from Bio import Entrez
+    >>> Entrez.email = "Your.Name.Here@example.org"
+    >>> citation_1 = {
+    ...    "journal_title": "proc natl acad sci u s a",
+    ...    "year": "1991", "volume": "88", "first_page": "3248",
+    ...    "author_name": "mann bj", "key": "citation_1"}
+    >>> record = Entrez.ecitmatch(db="pubmed", bdata=[citation_1])
+    >>> print(record["Query"])
+    """
+    cgi = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/ecitmatch.cgi'
+    # XML is the only supported value, and it actually returns TXT.
+    variables = {'retmode': 'xml'}
+    citation_keys = ('journal_title', 'year', 'volume', 'first_page', 'author_name', 'key')
+
+    # Accept pre-formatted strings
+    if isinstance(keywds['bdata'], str):
+        variables.update(keywds)
+    else:
+        # Alternatively accept a nicer interface
+        variables['db'] = keywds['db']
+        bdata = []
+        for citation in keywds['bdata']:
+            formatted_citation = '|'.join([citation.get(key, "") for key in citation_keys])
+            bdata.append(formatted_citation)
+        variables['bdata'] = '\r'.join(bdata)
+
+    return _open(cgi, variables, ecitmatch=True)
+
+
 def read(handle, validate=True):
     """Parses an XML file from the NCBI Entrez Utilities into python objects.
 
@@ -409,7 +454,7 @@ def parse(handle, validate=True):
     return records
 
 
-def _open(cgi, params={}, post=False):
+def _open(cgi, params=None, post=False, ecitmatch=False):
     """Helper function to build the URL and open a handle to it (PRIVATE).
 
     Open a handle to Entrez.  cgi is the URL for the cgi script to access.
@@ -419,6 +464,8 @@ def _open(cgi, params={}, post=False):
     This function also enforces the "up to three queries per second rule"
     to avoid abusing the NCBI servers.
     """
+    if params is None:
+        params = {}
     # NCBI requirement: At most three queries per second.
     # Equivalently, at least a third of second between queries
     delay = 0.333333334
@@ -455,6 +502,9 @@ a user at the email address provided before blocking access to the
 E-utilities.""", UserWarning)
     # Open a handle to Entrez.
     options = _urlencode(params, doseq=True)
+    # _urlencode encodes pipes, which NCBI expects in ECitMatch
+    if ecitmatch:
+        options = options.replace('%7C', '|')
     # print cgi + "?" + options
     try:
         if post:

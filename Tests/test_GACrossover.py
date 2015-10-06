@@ -316,7 +316,7 @@ class TwoPointTest(unittest.TestCase):
                             "Returned an exact copy of the original organism.")
 
 
-class TestCrossover:
+class TestCrossover(object):
     """Provide basic crossover functionality for testing SafeFitness.
     """
     def __init__(self):

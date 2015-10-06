@@ -11,6 +11,7 @@ from Bio.Alphabet import IUPAC
 
 __docformat__ = "restructuredtext en"
 
+
 class Motif(motifs.Motif, dict):
     """A Bio.motifs.transfac.Motif stores the information in one TRANSFAC
 motif. This class inherits from the Bio.motifs.Motif base class, as well
@@ -92,11 +93,11 @@ def read(handle):
     for line in handle:
         line = line.strip()
         key, value = line[:2], line[4:]
-        if key=='VV':
+        if key == 'VV':
             record.version = value
-        elif key in ('P0', 'PO'): # Old TRANSFAC files use PO instead of P0
+        elif key in ('P0', 'PO'):  # Old TRANSFAC files use PO instead of P0
             counts = {}
-            assert value.split()[:4]==['A', 'C', 'G', 'T']
+            assert value.split()[:4] == ['A', 'C', 'G', 'T']
             length = 0
             for c in "ACGT":
                 counts[c] = []
@@ -106,22 +107,22 @@ def read(handle):
                     i = int(key)
                 except ValueError:
                     break
-                length+=1
-                assert i==length
+                length += 1
+                assert i == length
                 values = value.split()
                 for c, v in zip("ACGT", values):
                     counts[c].append(float(v))
-        if line=='XX':
+        if line == 'XX':
             pass
-        elif key=='RN':
+        elif key == 'RN':
             index, separator, accession = value.partition(";")
-            assert index[0]=='['
-            assert index[-1]==']'
+            assert index[0] == '['
+            assert index[-1] == ']'
             index = int(index[1:-1])
-            assert len(references)==index-1
+            assert len(references) == index - 1
             reference = {key: value}
             references.append(reference)
-        elif key=='//':
+        elif key == '//':
             if counts is not None:
                 motif = Motif(alphabet=IUPAC.unambiguous_dna, counts=counts)
                 motif.update(annotations)
@@ -157,38 +158,38 @@ XX
 """ % version
             blocks.append(block)
     multiple_value_keys = Motif.multiple_value_keys
-    sections = (('AC', 'AS',), # Accession
-                ('ID',),       # ID
-                ('DT', 'CO'),  # Date, copyright
-                ('NA',),       # Name
-                ('DE',),       # Short factor description
-                ('TY',),       # Type
-                ('OS', 'OC'),  # Organism
-                ('HP', 'HC'),  # Superfamilies, subfamilies
-                ('BF',),       # Binding factors
-                ('P0',),       # Frequency matrix
-                ('BA',),       # Statistical basis
-                ('BS',),       # Factor binding sites
-                ('CC',),       # Comments
-                ('DR',),       # External databases
-                ('OV', 'PV',), # Versions
+    sections = (('AC', 'AS',),  # Accession
+                ('ID',),        # ID
+                ('DT', 'CO'),   # Date, copyright
+                ('NA',),        # Name
+                ('DE',),        # Short factor description
+                ('TY',),        # Type
+                ('OS', 'OC'),   # Organism
+                ('HP', 'HC'),   # Superfamilies, subfamilies
+                ('BF',),        # Binding factors
+                ('P0',),        # Frequency matrix
+                ('BA',),        # Statistical basis
+                ('BS',),        # Factor binding sites
+                ('CC',),        # Comments
+                ('DR',),        # External databases
+                ('OV', 'PV',),  # Versions
                )
     for motif in motifs:
         lines = []
         for section in sections:
             blank = False
             for key in section:
-                if key=='P0':
+                if key == 'P0':
                     # Frequency matrix
                     length = motif.length
-                    if length==0:
+                    if length == 0:
                         continue
                     sequence = motif.degenerate_consensus
                     line = "P0      A      C      G      T"
                     lines.append(line)
                     for i in range(length):
                         line = "%02.d %6.20g %6.20g %6.20g %6.20g      %s" % (
-                                             i+1,
+                                             i + 1,
                                              motif.counts['A'][i],
                                              motif.counts['C'][i],
                                              motif.counts['G'][i],
@@ -211,7 +212,7 @@ XX
                             line = "%s  %s" % (key, value)
                             lines.append(line)
                         blank = True
-                if key=='PV':
+                if key == 'PV':
                     # References
                     try:
                         references = motif.references

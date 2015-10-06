@@ -20,7 +20,7 @@ from Bio.Align.Applications import MafftCommandline
 os.environ['LANG'] = 'C'
 
 mafft_exe = None
-if sys.platform=="win32":
+if sys.platform == "win32":
     raise MissingExternalDependencyError("Testing with MAFFT not implemented on Windows yet")
 else:
     from Bio._py3k import getoutput
@@ -37,7 +37,7 @@ def check_mafft_version(mafft_exe):
                              stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE,
                              universal_newlines=True,
-                             shell=(sys.platform!="win32"))
+                             shell=(sys.platform != "win32"))
     stdoutdata, stderrdata = child.communicate()
     output = stdoutdata + "\n" + stderrdata
     return_code = child.returncode
@@ -53,7 +53,7 @@ def check_mafft_version(mafft_exe):
         index = output.find(marker)
         if index == -1:
             continue
-        version = output[index+len(marker):].strip().split(None, 1)[0]
+        version = output[index + len(marker):].strip().split(None, 1)[0]
         major = int(version.split(".", 1)[0])
         if major < 6:
             raise MissingExternalDependencyError("Test requires MAFFT v6 or "
@@ -83,7 +83,10 @@ class MafftApplication(unittest.TestCase):
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         stdoutdata, stderrdata = cmdline()
         self.assertTrue(stdoutdata.startswith(">gi|1348912|gb|G26680|G26680"))
-        self.assertTrue("Progressive alignment ..." in stderrdata, stderrdata)
+        # Used to get "Progressive alignment ..." but in v7.245
+        # became "Progressive alignment 1/2..." and "Progressive alignment 2/2..."
+        self.assertTrue(("Progressive alignment ..." in stderrdata) or
+                        ("Progressive alignment 1/" in stderrdata), stderrdata)
         self.assertTrue("$#=0" not in stderrdata)
 
     def test_Mafft_with_options(self):

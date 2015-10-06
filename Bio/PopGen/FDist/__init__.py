@@ -22,6 +22,7 @@ read             Parses a FDist record (file) into a Record object.
 
 __docformat__ = "restructuredtext en"
 
+
 def read(handle):
     """Parses FDist data into a Record object.
 
@@ -35,7 +36,7 @@ def read(handle):
         next(handle)
         num_alleles = int(str(next(handle)).rstrip())
         pops_data = []
-        if record.data_org==0:
+        if record.data_org == 0:
             for j in range(record.num_pops):
                 line_comp = str(next(handle)).rstrip().split(' ')
                 pop_dist = [int(x) for x in line_comp]

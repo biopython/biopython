@@ -173,9 +173,12 @@ class AbstractCommandline(object):
     """
     # TODO - Replace the above example since EMBOSS doesn't work properly
     # if installed into a folder with a space like "C:\Program Files\EMBOSS"
-
+    #
     # Note the call example above is not a doctest as we can't handle EMBOSS
     # (or any other tool) being missing in the unit tests.
+
+    parameters = None  # will be a list defined in subclasses
+
     def __init__(self, cmd, **kwargs):
         """Create a new instance of a command line wrapper object."""
         # Init method - should be subclassed!
@@ -476,14 +479,13 @@ class AbstractCommandline(object):
         # Using universal newlines is important on Python 3, this
         # gives unicode handles rather than bytes handles.
 
-        # Windows 7 and 8 want shell = True
-        # platform is easier to understand that sys to determine
-        # windows version
+        # Windows 7, 8 and 8.1 want shell = True
+        # TODO: Test under Windows 10 and revisit platform detection.
         if sys.platform != "win32":
             use_shell = True
         else:
             win_ver = platform.win32_ver()[0]
-            if win_ver in ["7", "8"]:
+            if win_ver in ["7", "8", "post2012Server"]:
                 use_shell = True
             else:
                 use_shell = False
@@ -516,7 +518,7 @@ class AbstractCommandline(object):
         return stdout_str, stderr_str
 
 
-class _AbstractParameter:
+class _AbstractParameter(object):
     """A class to hold information about a parameter for a commandline.
 
     Do not use this directly, instead use one of the subclasses.

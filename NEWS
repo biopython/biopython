@@ -10,7 +10,74 @@ The latest news is at the top of this file.
 
 ===================================================================
 
-(In progress, not yet released) Biopython 1.65
+(In progress, not yet released) Biopython 1.66
+
+Further work on the Bio.KEGG and Bio.Graphics modules now allows drawing KGML
+pathways with transparency.
+
+The Bio.SeqIO "abi" parser now decodes almost all the documented fields used
+by the ABIF instruments - including the individual color channels.
+
+Bio.PDB now has a QCPSuperimposer module using the Quaternion Characteristic
+Polynomial algorithm for superimposing structures. This is a fast alternative
+to the existing SVDSuperimposer code using singular value decomposition.
+
+Bio.Entrez now implements the NCBI Entrez Citation Matching function
+(ECitMatch), which retrieves PubMed IDs (PMIDs) that correspond to a set of
+input citation strings.
+
+Bio.Entrez.parse(...) now supports NCBI XML files using XSD schemas, which
+will be downloaded and cached like NCBI DTD files.
+
+A subtle bug in how multi-part GenBank/EMBL locations on the reverse strand
+were parsed into CompoundLocations was fixed: complement(join(...)) as used
+by NCBI worked, but join(complement(...),complement(...),...) as used by
+EMBL/ENSEMBL gave the CompoundLocation parts in the wrong order. A related
+bug when taking the reverse complement of a SeqRecord containing features
+with CompoundLocations was also fixed.
+
+Additionally, a number of small bugs have been fixed with further additions
+to the test suite, and there has been further work on conforming to the
+Python PEP8 standard coding style.
+
+Many thanks to the Biopython developers and community for making this release
+possible, especially the following contributors:
+
+Alan Medlar (first contribution)
+Anthony Mathelier (first contribution)
+Antony Lee (first contribution)
+Anuj Sharma (first contribution)
+Ben Fulton (first contribution)
+Bertrand Néron (first contribution)
+Brandon Invergo
+Christian Brueffer
+Connor T. Skennerton (first contribution)
+David Arenillas (first contribution)
+David Nicholson (first contribution)
+Emmanuel Noutahi (first contribution)
+Eric Rasche (first contribution)
+Fabio Madeira (first contribution)
+Franco Caramia (first contribution)
+Gert Hulselmans (first contribution)
+Gleb Kuznetsov (first contribution)
+João Rodrigues
+John Bradley (first contribution)
+Kai Blin
+Kian Ho (first contribution)
+Kozo Nishida (first contribution)
+Kuan-Yi Li (first contribution)
+Leighton Pritchard
+Lucas Sinclair
+Michiel de Hoon
+Peter Cock
+Sunhwan Jo (first contribution)
+Tarcisio Fedrizzi (first contribution)
+Tiago Antao
+Vincent Davis
+
+===================================================================
+
+17 December 2014: Biopython 1.65 released.
 
 The Biopython sequence objects now use string comparison, rather than Python's
 object comparison. This has been planned for a long time with warning messages
@@ -45,6 +112,9 @@ less fragile, so that they can be used from other working directories. NOTE:
 This change is backward compatible (old index files work as before), however
 relative paths in new indexes will not work on older versions of Biopython!
 
+Biopython also seems to work fine under PyPy3 2.4 which implements Python 3.2
+plus unicode string literals.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
@@ -55,6 +125,7 @@ Christian Brueffer
 David Bulger (first contribution)
 Eric Talevich
 Evan Parker (first contribution)
+Hongbo Zhu
 Kai Blin
 Kevin Wu (first contribution)
 Leighton Pritchard
@@ -66,6 +137,7 @@ Peter Cock
 Seth Sims (first contribution)
 Tiago Antao
 Travis Wrightsman (first contribution)
+Tyghe Vallard (first contribution)
 Vincent Davis
 Wibowo 'Bow' Arindrarto
 Zheng Ruan

@@ -85,7 +85,7 @@ class SquareTest(unittest.TestCase):
             x1 = boxedge * (i % boxes_per_row)
             y1 = rows * boxedge
             self.c.rect(x1, y1, boxedge, boxedge, fill=1, stroke=0)
-            if not (i+1) % boxes_per_row:
+            if not (i + 1) % boxes_per_row:
                 rows += 1
         self.finish()
 

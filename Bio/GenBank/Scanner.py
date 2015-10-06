@@ -201,7 +201,7 @@ class InsdcScanner(object):
                     feature_lines = [line[self.FEATURE_QUALIFIER_INDENT:]]
                 line = self.handle.readline()
                 while line[:self.FEATURE_QUALIFIER_INDENT] == self.FEATURE_QUALIFIER_SPACER \
-                        or line.rstrip() == "":  # cope with blank lines in the midst of a feature
+                        or (line != '' and line.rstrip() == ""):  # cope with blank lines in the midst of a feature
                     # Use strip to remove any harmless trailing white space AND and leading
                     # white space (e.g. out of spec files with too much indentation)
                     feature_lines.append(line[self.FEATURE_QUALIFIER_INDENT:].strip())
@@ -273,6 +273,14 @@ class InsdcScanner(object):
                 # Multiline location, still more to come!
                 line = next(iterator)
                 feature_location += line.strip()
+            if feature_location.count("(") > feature_location.count(")"):
+                # Including the prev line in warning would be more explicit,
+                # but this way get one-and-only-one warning shown by default:
+                warnings.warn("Non-standard feature line wrapping (didn't break on comma)?",
+                              BiopythonParserWarning)
+                while feature_location[-1:] == "," or feature_location.count("(") > feature_location.count(")"):
+                    line = next(iterator)
+                    feature_location += line.strip()
 
             qualifiers = []
 
@@ -587,7 +595,7 @@ class EmblScanner(InsdcScanner):
             self.line = self.line.rstrip()
 
         assert self.line[:self.HEADER_WIDTH] == " " * self.HEADER_WIDTH \
-            or self.line.strip() == '//', repr(self.line)
+            or self.line.strip() == '//', "Unexpected content after SQ or CO line: %r" % self.line
 
         seq_lines = []
         line = self.line
@@ -1344,6 +1352,9 @@ class GenBankScanner(InsdcScanner):
                         if line[0:GENBANK_INDENT] == GENBANK_SPACER:
                             if lineage_data or ";" in line:
                                 lineage_data += " " + line[GENBANK_INDENT:]
+                            elif line[GENBANK_INDENT:].strip() == ".":
+                                # No lineage data, just . place holder
+                                pass
                             else:
                                 organism_data += " " + line[GENBANK_INDENT:].strip()
                         else:

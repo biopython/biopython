@@ -33,7 +33,7 @@ try:
     from reportlab.graphics import renderPM
 except ImportError:
     # This is an optional part of ReportLab, so may not be installed.
-    renderPM=None
+    renderPM = None
 
 # GenomeDiagram
 from ._LinearDrawer import LinearDrawer
@@ -343,7 +343,7 @@ class Diagram(object):
             for val in occupied_levels:
                 # If track value >= that to be added
                 if val >= track.track_level:
-                    self.tracks[val+1] = self.tracks[val]  # ...increment by 1
+                    self.tracks[val + 1] = self.tracks[val]  # ...increment by 1
             self.tracks[track_level] = track   # And put the new track in
         self.tracks[track_level].track_level = track_level
 
@@ -366,7 +366,7 @@ class Diagram(object):
             occupied_levels.reverse()           # ...reverse (highest first)...
             for val in occupied_levels:
                 if val >= track_level:        # Track value >= that to be added
-                    self.tracks[val+1] = self.tracks[val]  # ..increment by 1
+                    self.tracks[val + 1] = self.tracks[val]  # ..increment by 1
             self.tracks[track_level] = newtrack   # And put the new track in
         self.tracks[track_level].track_level = track_level
         return newtrack

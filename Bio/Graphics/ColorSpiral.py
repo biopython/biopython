@@ -25,6 +25,7 @@ import random      # for jitter values
 
 __docformat__ = "restructuredtext en"
 
+
 class ColorSpiral(object):
     """Implement a spiral path through HSV colour space.
 
@@ -90,17 +91,17 @@ class ColorSpiral(object):
         v_rate = (self._v_final - self._v_init) / float(k)
         # Generator for colours: we have divided the arc length into sections
         # of equal length, and step along them
-        for n in range(1, k+1):
+        for n in range(1, k + 1):
             # For each value of n, t indicates the angle through which the
             # spiral has turned, to this point
-            t = (1./self._b) * (log(n + (k * offset)) -
+            t = (1. / self._b) * (log(n + (k * offset)) -
                                     log((1 + offset) * k * self._a))
             # Put 0 <= h <= 2*pi, where h is the angular part of the polar
             # co-ordinates for this point on the spiral
             h = t
             while h < 0:
                 h += 2 * pi
-            h = (h - (floor(h/(2 * pi)) * pi))
+            h = (h - (floor(h / (2 * pi)) * pi))
             # Now put h in [0, 1] for colorsys conversion
             h = h / (2 * pi)
             # r is the radial distance of this point from the centre

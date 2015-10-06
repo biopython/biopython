@@ -257,16 +257,34 @@ if sqlite3:
                        expt_sff_files)
 
         def test_some_abs(self):
-            """Check absolute filenames in index."""
+            """Check absolute filenames in index.
+
+            Unless the repository and tests themselves are under the temp
+            directory (as detected by ``tempfile``), we expect the index to
+            use absolute filenames.
+            """
             h, t = tempfile.mkstemp(prefix="index_test_", suffix=".idx")
             os.close(h)
             os.remove(t)
 
-            expt_sff_files = [os.path.abspath("Roche/E3MFGYR02_no_manifest.sff"),
-                              os.path.abspath("Roche/greek.sff"),
-                              os.path.abspath(os.path.join("Roche", "paired.sff"))]
-            # All absolute paths...
-            self.check(t, expt_sff_files, expt_sff_files)
+            abs_sff_files = [os.path.abspath("Roche/E3MFGYR02_no_manifest.sff"),
+                             os.path.abspath("Roche/greek.sff"),
+                             os.path.abspath(os.path.join("Roche", "paired.sff"))]
+
+            if os.getcwd().startswith(os.path.dirname(t)):
+                # The tests are being run from within the temp directory,
+                # e.g. index filename /tmp/index_test_XYZ.idx
+                # and working directory of /tmp/biopython/Tests/
+                # This means the indexing will use a RELATIVE path
+                # e.g. biopython/Tests/Roche/E3MFGYR02_no_manifest.sff
+                # not /tmp/biopython/Tests/Roche/E3MFGYR02_no_manifest.sff
+                expt_sff_files = [os.path.relpath(f, os.path.dirname(t))
+                                  for f in abs_sff_files]
+            else:
+                expt_sff_files = abs_sff_files
+
+            # Providing absolute paths...
+            self.check(t, abs_sff_files, expt_sff_files)
             # Now try with mix of abs and relative paths...
             self.check(t,
                        [os.path.abspath("Roche/E3MFGYR02_no_manifest.sff"),

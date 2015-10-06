@@ -17,7 +17,7 @@ from Bio import MissingExternalDependencyError
 os.environ['LANG'] = 'C'
 
 phyml_exe = None
-if sys.platform=="win32":
+if sys.platform == "win32":
     raise MissingExternalDependencyError(
         "Testing PhyML on Windows not supported yet")
 else:

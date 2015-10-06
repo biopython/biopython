@@ -69,17 +69,20 @@ class EmbossIterator(AlignmentIterator):
     call the "pairs" and "simple" formats.
     """
 
+    _header = None  # for caching lines between __next__ calls
+
     def __next__(self):
 
         handle = self.handle
 
-        try:
+        if self._header is None:
+            line = handle.readline()
+        else:
             # Header we saved from when we were parsing
             # the previous alignment.
             line = self._header
-            del self._header
-        except AttributeError:
-            line = handle.readline()
+            self._header = None
+
         if not line:
             raise StopIteration
 

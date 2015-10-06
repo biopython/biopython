@@ -27,6 +27,7 @@ __docformat__ = "restructuredtext en"
 import re
 from Bio._py3k import StringIO
 import subprocess
+import warnings
 
 from Bio.Data import SCOPData
 
@@ -36,32 +37,32 @@ from Bio.PDB.PDBParser import PDBParser
 
 
 # Match C in DSSP
-_dssp_cys=re.compile('[a-z]')
+_dssp_cys = re.compile('[a-z]')
 
 # Maximal ASA of amino acids
 # Values from Sander & Rost, (1994), Proteins, 20:216-226
 # Used for relative accessibility
-MAX_ACC={}
-MAX_ACC["ALA"]=106.0
-MAX_ACC["CYS"]=135.0
-MAX_ACC["ASP"]=163.0
-MAX_ACC["GLU"]=194.0
-MAX_ACC["PHE"]=197.0
-MAX_ACC["GLY"]=84.0
-MAX_ACC["HIS"]=184.0
-MAX_ACC["ILE"]=169.0
-MAX_ACC["LYS"]=205.0
-MAX_ACC["LEU"]=164.0
-MAX_ACC["MET"]=188.0
-MAX_ACC["ASN"]=157.0
-MAX_ACC["PRO"]=136.0
-MAX_ACC["GLN"]=198.0
-MAX_ACC["ARG"]=248.0
-MAX_ACC["SER"]=130.0
-MAX_ACC["THR"]=142.0
-MAX_ACC["VAL"]=142.0
-MAX_ACC["TRP"]=227.0
-MAX_ACC["TYR"]=222.0
+MAX_ACC = {}
+MAX_ACC["ALA"] = 106.0
+MAX_ACC["CYS"] = 135.0
+MAX_ACC["ASP"] = 163.0
+MAX_ACC["GLU"] = 194.0
+MAX_ACC["PHE"] = 197.0
+MAX_ACC["GLY"] = 84.0
+MAX_ACC["HIS"] = 184.0
+MAX_ACC["ILE"] = 169.0
+MAX_ACC["LYS"] = 205.0
+MAX_ACC["LEU"] = 164.0
+MAX_ACC["MET"] = 188.0
+MAX_ACC["ASN"] = 157.0
+MAX_ACC["PRO"] = 136.0
+MAX_ACC["GLN"] = 198.0
+MAX_ACC["ARG"] = 248.0
+MAX_ACC["SER"] = 130.0
+MAX_ACC["THR"] = 142.0
+MAX_ACC["VAL"] = 142.0
+MAX_ACC["TRP"] = 227.0
+MAX_ACC["TYR"] = 222.0
 
 
 def ss_to_index(ss):
@@ -71,11 +72,11 @@ def ss_to_index(ss):
     E=1
     C=2
     """
-    if ss=='H':
+    if ss == 'H':
         return 0
-    if ss=='E':
+    if ss == 'E':
         return 1
-    if ss=='C':
+    if ss == 'C':
         return 2
     assert 0
 
@@ -107,6 +108,13 @@ def dssp_dict_from_pdb_file(in_file, DSSP="dssp"):
     p = subprocess.Popen([DSSP, in_file], universal_newlines=True,
                          stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out, err = p.communicate()
+    
+    # Alert user for errors
+    if err.strip():
+        warnings.warn(err)
+        if not out.strip():
+            raise Exception('DSSP failed to produce an output')
+    
     out_dict, keys = _make_dssp_dict(StringIO(out))
     return out_dict, keys
 
@@ -125,8 +133,10 @@ def make_dssp_dict(filename):
 
 def _make_dssp_dict(handle):
     """
-    Return a DSSP dictionary that maps (chainid, resid) to
-    aa, ss and accessibility, from an open DSSP file object. ::
+    Return a DSSP dictionary that maps (chainid, resid) to an amino acid,
+    secondary structure symbol, solvent accessibility value, and hydrogen bond
+    information (relative dssp indices and hydrogen bond energies) from an open
+    DSSP file object. ::
 
     @param handle: the open DSSP output file handle
     @type handle: file
@@ -147,6 +157,8 @@ def _make_dssp_dict(handle):
         if l[9] == " ":
             # Skip -- missing residue
             continue
+
+        dssp_index = int(l[:5])
         resseq = int(l[5:10])
         icode = l[10]
         chainid = l[11]
@@ -155,6 +167,15 @@ def _make_dssp_dict(handle):
         if ss == " ":
             ss = "-"
         try:
+            NH_O_1_relidx = int(l[38:45])
+            NH_O_1_energy = float(l[46:50])
+            O_NH_1_relidx = int(l[50:56])
+            O_NH_1_energy = float(l[57:61])
+            NH_O_2_relidx = int(l[61:67])
+            NH_O_2_energy = float(l[68:72])
+            O_NH_2_relidx = int(l[72:78])
+            O_NH_2_energy = float(l[79:83])
+
             acc = int(l[34:38])
             phi = float(l[103:109])
             psi = float(l[109:115])
@@ -166,13 +187,25 @@ def _make_dssp_dict(handle):
             # digits, and shift parsing the rest of the line by that amount.
             if l[34] != ' ':
                 shift = l[34:].find(' ')
-                acc = int((l[34+shift:38+shift]))
-                phi = float(l[103+shift:109+shift])
-                psi = float(l[109+shift:115+shift])
+
+                NH_O_1_relidx = int(l[38 + shift:45 + shift])
+                NH_O_1_energy = float(l[46 + shift:50 + shift])
+                O_NH_1_relidx = int(l[50 + shift:56 + shift])
+                O_NH_1_energy = float(l[57 + shift:61 + shift])
+                NH_O_2_relidx = int(l[61 + shift:67 + shift])
+                NH_O_2_energy = float(l[68 + shift:72 + shift])
+                O_NH_2_relidx = int(l[72 + shift:78 + shift])
+                O_NH_2_energy = float(l[79 + shift:83 + shift])
+
+                acc = int((l[34 + shift:38 + shift]))
+                phi = float(l[103 + shift:109 + shift])
+                psi = float(l[109 + shift:115 + shift])
             else:
                 raise ValueError(exc)
         res_id = (" ", resseq, icode)
-        dssp[(chainid, res_id)] = (aa, ss, acc, phi, psi)
+        dssp[(chainid, res_id)] = (aa, ss, acc, phi, psi, dssp_index,
+                NH_O_1_relidx, NH_O_1_energy, O_NH_1_relidx, O_NH_1_energy,
+                NH_O_2_relidx, NH_O_2_energy, O_NH_2_relidx, O_NH_2_energy)
         keys.append((chainid, res_id))
     return dssp, keys
 
@@ -292,15 +325,30 @@ class DSSP(AbstractResiduePropertyMap):
                                 res = r
                                 break
 
-            aa, ss, acc, phi, psi = dssp_dict[key]
+            (aa, ss, acc, phi, psi, dssp_index,
+                NH_O_1_relidx, NH_O_1_energy,
+                O_NH_1_relidx, O_NH_1_energy,
+                NH_O_2_relidx, NH_O_2_energy,
+                O_NH_2_relidx, O_NH_2_energy) = dssp_dict[key]
+
             res.xtra["SS_DSSP"] = ss
             res.xtra["EXP_DSSP_ASA"] = acc
             res.xtra["PHI_DSSP"] = phi
             res.xtra["PSI_DSSP"] = psi
+            res.xtra["DSSP_INDEX"] = dssp_index
+            res.xtra["NH_O_1_RELIDX_DSSP"] = NH_O_1_relidx
+            res.xtra["NH_O_1_ENERGY_DSSP"] = NH_O_1_energy
+            res.xtra["O_NH_1_RELIDX_DSSP"] = O_NH_1_relidx
+            res.xtra["O_NH_1_ENERGY_DSSP"] = O_NH_1_energy
+            res.xtra["NH_O_2_RELIDX_DSSP"] = NH_O_2_relidx
+            res.xtra["NH_O_2_ENERGY_DSSP"] = NH_O_2_energy
+            res.xtra["O_NH_2_RELIDX_DSSP"] = O_NH_2_relidx
+            res.xtra["O_NH_2_ENERGY_DSSP"] = O_NH_2_energy
+
             # Relative accessibility
             resname = res.get_resname()
             try:
-                rel_acc = acc/MAX_ACC[resname]
+                rel_acc = acc / MAX_ACC[resname]
             except KeyError:
                 # Invalid value for resname
                 rel_acc = 'NA'
@@ -320,8 +368,15 @@ class DSSP(AbstractResiduePropertyMap):
             # Take care of HETATM again
             if (resname != aa) and (res.id[0] == ' ' or aa != 'X'):
                 raise PDBException("Structure/DSSP mismatch at %s" % res)
-            dssp_map[key] = ((res, ss, acc, rel_acc, phi, psi))
-            dssp_list.append((res, ss, acc, rel_acc, phi, psi))
+
+            dssp_vals = (dssp_index, aa, ss, rel_acc, phi, psi,
+                            NH_O_1_relidx, NH_O_1_energy,
+                            O_NH_1_relidx, O_NH_1_energy,
+                            NH_O_2_relidx, NH_O_2_energy,
+                            O_NH_2_relidx, O_NH_2_energy)
+
+            dssp_map[key] = dssp_vals
+            dssp_list.append(dssp_vals)
 
         AbstractResiduePropertyMap.__init__(self, dssp_map, dssp_keys,
                 dssp_list)

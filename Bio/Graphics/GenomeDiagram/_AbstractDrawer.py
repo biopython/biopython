@@ -42,15 +42,17 @@ from Bio._py3k import range
 
 from reportlab.lib import pagesizes
 from reportlab.lib import colors
-from reportlab.graphics.shapes import *
+from reportlab.graphics.shapes import Polygon
 
-from math import pi
+from math import pi, sin, cos
 
 __docformat__ = "restructuredtext en"
 
 ################################################################################
 # METHODS
 ################################################################################
+
+
 # Utility method to translate strings to ISO page sizes
 def page_sizes(size):
     """Convert size string into a Reportlab pagesize.
@@ -150,18 +152,18 @@ def draw_cut_corner_box(point1, point2, corner=0.5,
 
     strokecolor, color = _stroke_and_fill_colors(color, border)
 
-    boxheight = y2-y1
-    boxwidth = x2-x1
-    corner = min(boxheight*0.5, boxheight*0.5*corner)
+    boxheight = y2 - y1
+    boxwidth = x2 - x1
+    corner = min(boxheight * 0.5, boxheight * 0.5 * corner)
 
-    return Polygon([x1, y1+corner,
-                    x1, y2-corner,
-                    x1+corner, y2,
-                    x2-corner, y2,
-                    x2, y2-corner,
-                    x2, y1+corner,
-                    x2-corner, y1,
-                    x1+corner, y1],
+    return Polygon([x1, y1 + corner,
+                    x1, y2 - corner,
+                    x1 + corner, y2,
+                    x2 - corner, y2,
+                    x2, y2 - corner,
+                    x2, y1 + corner,
+                    x2 - corner, y1,
+                    x1 + corner, y1],
                    strokeColor=strokecolor,
                    strokeWidth=1,
                    strokeLineJoin=1,  # 1=round
@@ -243,24 +245,24 @@ def draw_arrow(point1, point2, color=colors.lightgreen, border=None,
     # We define boxheight and boxwidth accordingly, and calculate the shaft
     # height from these.  We also ensure that the maximum head length is
     # the width of the box enclosure
-    boxheight = y2-y1
-    boxwidth = x2-x1
-    shaftheight = boxheight*shaft_height_ratio
-    headlength = min(abs(boxheight)*head_length_ratio, abs(boxwidth))
+    boxheight = y2 - y1
+    boxwidth = x2 - x1
+    shaftheight = boxheight * shaft_height_ratio
+    headlength = min(abs(boxheight) * head_length_ratio, abs(boxwidth))
     if boxwidth < 0:
         headlength *= -1  # reverse it
 
-    shafttop = 0.5*(boxheight+shaftheight)
-    shaftbase = boxheight-shafttop
-    headbase = boxwidth-headlength
-    midheight = 0.5*boxheight
-    return Polygon([x1, y1+shafttop,
-                    x1+headbase, y1+shafttop,
-                    x1+headbase, y2,
-                    x2, y1+midheight,
-                    x1+headbase, y1,
-                    x1+headbase, y1+shaftbase,
-                    x1, y1+shaftbase],
+    shafttop = 0.5 * (boxheight + shaftheight)
+    shaftbase = boxheight - shafttop
+    headbase = boxwidth - headlength
+    midheight = 0.5 * boxheight
+    return Polygon([x1, y1 + shafttop,
+                    x1 + headbase, y1 + shafttop,
+                    x1 + headbase, y2,
+                    x2, y1 + midheight,
+                    x1 + headbase, y1,
+                    x1 + headbase, y1 + shaftbase,
+                    x1, y1 + shaftbase],
                    strokeColor=strokecolor,
                    # strokeWidth=max(1, int(boxheight/40.)),
                    strokeWidth=1,
@@ -295,18 +297,19 @@ def intermediate_points(start, end, graph_data):
     # print start, end, len(graph_data)
     newdata = []    # data in form (X0, X1, val)
     # add first block
-    newdata.append((start, graph_data[0][0]+(graph_data[1][0]-graph_data[0][0])/2.,
+    newdata.append((start,
+                    graph_data[0][0] + (graph_data[1][0] - graph_data[0][0]) / 2.,
                     graph_data[0][1]))
     # add middle set
-    for index in range(1, len(graph_data)-1):
-        lastxval, lastyval = graph_data[index-1]
+    for index in range(1, len(graph_data) - 1):
+        lastxval, lastyval = graph_data[index - 1]
         xval, yval = graph_data[index]
-        nextxval, nextyval = graph_data[index+1]
-        newdata.append((lastxval+(xval-lastxval)/2.,
-                        xval+(nextxval-xval)/2., yval))
+        nextxval, nextyval = graph_data[index + 1]
+        newdata.append((lastxval + (xval - lastxval) / 2.,
+                        xval + (nextxval - xval) / 2., yval))
     # add last block
-    newdata.append((xval+(nextxval-xval)/2.,
-                         end, graph_data[-1][1]))
+    newdata.append((xval + (nextxval - xval) / 2.,
+                    end, graph_data[-1][1]))
     # print newdata[-1]
     # print newdata
     return newdata
@@ -481,11 +484,11 @@ class AbstractDrawer(object):
         ymargin_btm = yb or y
 
         # Set page limits, center and height/width
-        self.x0, self.y0 = self.pagesize[0]*xmargin_l, self.pagesize[1]*ymargin_btm
-        self.xlim, self.ylim = self.pagesize[0]*(1-xmargin_r), self.pagesize[1]*(1-ymargin_top)
-        self.pagewidth = self.xlim-self.x0
-        self.pageheight = self.ylim-self.y0
-        self.xcenter, self.ycenter = self.x0+self.pagewidth/2., self.y0+self.pageheight/2.
+        self.x0, self.y0 = self.pagesize[0] * xmargin_l, self.pagesize[1] * ymargin_btm
+        self.xlim, self.ylim = self.pagesize[0] * (1 - xmargin_r), self.pagesize[1] * (1 - ymargin_top)
+        self.pagewidth = self.xlim - self.x0
+        self.pageheight = self.ylim - self.y0
+        self.xcenter, self.ycenter = self.x0 + self.pagewidth / 2., self.y0 + self.pageheight / 2.
 
     def set_bounds(self, start, end):
         """Set start and end points for the drawing as a whole.

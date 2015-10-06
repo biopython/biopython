@@ -37,7 +37,7 @@ except ImportError:
     # This is an optional part of ReportLab, so may not be installed.
     # We'll raise a missing dependency error if rendering to a
     # bitmap format is attempted.
-    renderPM=None
+    renderPM = None
 
 # Biopython core
 from Bio import SeqIO
@@ -88,7 +88,7 @@ def apply_to_window(sequence, window_size, function, step=None):
     """
     seqlen = len(sequence)      # Total length of sequence to be used
     if step is None:    # No step specified, so use half window-width or 1 if larger
-        step = max(window_size//2, 1)
+        step = max(window_size // 2, 1)
     else:               # Use specified step, or 1 if greater
         step = max(step, 1)
 
@@ -97,9 +97,9 @@ def apply_to_window(sequence, window_size, function, step=None):
     # Perform the passed function on as many windows as possible, short of
     # overrunning the sequence
     pos = 0
-    while pos < seqlen-window_size+1:
+    while pos < seqlen - window_size + 1:
         # Obtain sequence fragment
-        start, middle, end = pos, (pos+window_size+pos)//2, pos+window_size
+        start, middle, end = pos, (pos + window_size + pos) // 2, pos + window_size
         fragment = sequence[start:end]
         # Apply function to the sequence fragment
         value = function(fragment)
@@ -112,7 +112,7 @@ def apply_to_window(sequence, window_size, function, step=None):
     if pos != seqlen - window_size:
         # Obtain sequence fragment
         pos = seqlen - window_size
-        start, middle, end = pos, (pos+window_size+pos)//2, pos+window_size
+        start, middle, end = pos, (pos + window_size + pos) // 2, pos + window_size
         fragment = sequence[start:end]
         # Apply function to sequence fragment
         value = function(fragment)
@@ -139,7 +139,7 @@ def calc_gc_content(sequence):
     if gc == 0:
         return 0
     # print(gc*100.0/(d['A'] +d['T'] + gc))
-    return gc*1./(d['A'] +d['T'] + gc)
+    return gc * 1. / (d['A'] + d['T'] + gc)
 
 
 def calc_at_content(sequence):
@@ -156,7 +156,7 @@ def calc_at_content(sequence):
 
     if at == 0:
         return 0
-    return at*1./(d['G'] +d['G'] + at)
+    return at * 1. / (d['G'] + d['G'] + at)
 
 
 def calc_gc_skew(sequence):
@@ -168,10 +168,10 @@ def calc_gc_skew(sequence):
     """
     g = sequence.count('G') + sequence.count('g')
     c = sequence.count('C') + sequence.count('c')
-    if g+c == 0:
+    if g + c == 0:
         return 0.0  # TODO - return NaN or None here?
     else:
-        return (g-c)/float(g+c)
+        return (g - c) / float(g + c)
 
 
 def calc_at_skew(sequence):
@@ -183,10 +183,10 @@ def calc_at_skew(sequence):
     """
     a = sequence.count('A') + sequence.count('a')
     t = sequence.count('T') + sequence.count('t')
-    if a+t == 0:
+    if a + t == 0:
         return 0.0  # TODO - return NaN or None here?
     else:
-        return (a-t)/float(a+t)
+        return (a - t) / float(a + t)
 
 
 def calc_dinucleotide_counts(sequence):
@@ -200,7 +200,7 @@ def calc_dinucleotide_counts(sequence):
     """
     total = 0
     for letter in "ACTGUactgu":
-        total += sequence.count(letter+letter)
+        total += sequence.count(letter + letter)
     return total
 
 ###############################################################################
@@ -237,9 +237,9 @@ class GraphTest(unittest.TestCase):
         # TODO - Fix GD so that the same min/max is used for all three lines?
         points = 1000
         scale = math.pi * 2.0 / points
-        data1 = [math.sin(x*scale) for x in range(points)]
-        data2 = [math.cos(x*scale) for x in range(points)]
-        data3 = [2*math.sin(2*x*scale) for x in range(points)]
+        data1 = [math.sin(x * scale) for x in range(points)]
+        data2 = [math.cos(x * scale) for x in range(points)]
+        data3 = [2 * math.sin(2 * x * scale) for x in range(points)]
 
         gdd = Diagram('Test Diagram', circular=False,
                       y=0.01, yt=0.01, yb=0.01,
@@ -256,13 +256,13 @@ class GraphTest(unittest.TestCase):
 
         gdd.draw(format='linear',
                  tracklines=False,
-                 pagesize=(15*cm, 15*cm),
+                 pagesize=(15 * cm, 15 * cm),
                  fragments=1,
                  start=0, end=points)
         gdd.write(os.path.join('Graphics', "line_graph.pdf"), "pdf")
         # Circular diagram
         gdd.draw(tracklines=False,
-                 pagesize=(15*cm, 15*cm),
+                 pagesize=(15 * cm, 15 * cm),
                  circular=True,  # Data designed to be periodic
                  start=0, end=points, circle_core=0.5)
         gdd.write(os.path.join('Graphics', "line_graph_c.pdf"), "pdf")
@@ -295,15 +295,15 @@ class LabelTest(unittest.TestCase):
             orient = "portrait"
         self.gdd.draw(format='linear', orientation=orient,
                       tracklines=False,
-                      pagesize=(15*cm, 5*cm*tracks),
+                      pagesize=(15 * cm, 5 * cm * tracks),
                       fragments=1,
                       start=0, end=400)
-        self.gdd.write(os.path.join('Graphics', name+".pdf"), "pdf")
+        self.gdd.write(os.path.join('Graphics', name + ".pdf"), "pdf")
         global renderPM
         if renderPM:
             try:
                 # For the tutorial this is useful:
-                self.gdd.write(os.path.join('Graphics', name+".png"), "png")
+                self.gdd.write(os.path.join('Graphics', name + ".png"), "png")
             except renderPM.RenderPMError:
                 # Probably a font problem, e.g.
                 # RenderPMError: Can't setFont(Times-Roman) missing the T1 files?
@@ -316,30 +316,30 @@ class LabelTest(unittest.TestCase):
         if circular:
             # Circular diagram
             self.gdd.draw(tracklines=False,
-                          pagesize=(15*cm, 15*cm),
+                          pagesize=(15 * cm, 15 * cm),
                           fragments=1,
                           circle_core=0.5,
                           start=0, end=400)
-            self.gdd.write(os.path.join('Graphics', name+"_c.pdf"), "pdf")
+            self.gdd.write(os.path.join('Graphics', name + "_c.pdf"), "pdf")
 
     def add_track_with_sigils(self, **kwargs):
         self.gdt_features = self.gdd.new_track(1, greytrack=False)
         self.gds_features = self.gdt_features.new_set()
         for i in range(18):
-            start = int((400 * i)/18.0)
+            start = int((400 * i) / 18.0)
             end = start + 17
             if i % 3 == 0:
-                strand=None
+                strand = None
                 name = "Strandless"
-                color=colors.orange
+                color = colors.orange
             elif i % 3 == 1:
-                strand=+1
-                name="Forward"
-                color=colors.red
+                strand = +1
+                name = "Forward"
+                color = colors.red
             else:
                 strand = -1
-                name="Reverse"
-                color=colors.blue
+                name = "Reverse"
+                color = colors.blue
             feature = SeqFeature(FeatureLocation(start, end), strand=strand)
             self.gds_features.add_feature(feature, name=name,
                                           color=color, label=True, **kwargs)
@@ -362,7 +362,7 @@ class SigilsTest(unittest.TestCase):
     def add_track_with_sigils(self, track_caption="", **kwargs):
         # Add a track of features,
         self.gdt_features = self.gdd.new_track(1,
-                                               greytrack=(track_caption!=""),
+                                               greytrack=(track_caption != ""),
                                                name=track_caption,
                                                greytrack_labels=1)
         # We'll just use one feature set for these features,
@@ -386,26 +386,26 @@ class SigilsTest(unittest.TestCase):
             orient = "portrait"
         self.gdd.draw(format='linear', orientation=orient,
                       tracklines=False,
-                      pagesize=(15*cm, 5*cm*tracks),
+                      pagesize=(15 * cm, 5 * cm * tracks),
                       fragments=1,
                       start=0, end=400)
-        self.gdd.write(os.path.join('Graphics', name+".pdf"), "pdf")
+        self.gdd.write(os.path.join('Graphics', name + ".pdf"), "pdf")
         global renderPM
         if renderPM:
             # For the tutorial this might be useful:
             try:
-                self.gdd.write(os.path.join('Graphics', name+".png"), "png")
+                self.gdd.write(os.path.join('Graphics', name + ".png"), "png")
             except renderPM.RenderPMError:
                 # Probably a font problem
                 renderPM = None
         if circular:
             # Circular diagram
             self.gdd.draw(tracklines=False,
-                          pagesize=(15*cm, 15*cm),
+                          pagesize=(15 * cm, 15 * cm),
                           fragments=1,
                           circle_core=0.5,
                           start=0, end=400)
-            self.gdd.write(os.path.join('Graphics', name+"_c.pdf"), "pdf")
+            self.gdd.write(os.path.join('Graphics', name + "_c.pdf"), "pdf")
 
     def test_all_sigils(self):
         """All sigils."""
@@ -633,7 +633,7 @@ class DiagramTest(unittest.TestCase):
             # This URL should work in SVG output from recent versions
             # of ReportLab.  You need ReportLab 2.4 or later
             try:
-                url = "http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi"+\
+                url = "http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi" +\
                       "?db=protein&id=%s" % feature.qualifiers["protein_id"][0]
             except KeyError:
                 url = None
@@ -656,7 +656,7 @@ class DiagramTest(unittest.TestCase):
 
         # And draw it...
         gdd.draw(format='linear', orientation='landscape',
-                 tracklines=False, pagesize=(10*cm, 6*cm), fragments=1,
+                 tracklines=False, pagesize=(10 * cm, 6 * cm), fragments=1,
                  start=start, end=end)
         output_filename = os.path.join('Graphics', 'GD_region_linear.pdf')
         gdd.write(output_filename, 'PDF')
@@ -672,7 +672,7 @@ class DiagramTest(unittest.TestCase):
         # Circular with a particular start/end is a bit odd, but by setting
         # circular=False (above) a sweep of 90% is used (a wedge is left out)
         gdd.draw(format='circular',
-                 tracklines=False, pagesize=(10*cm, 10*cm),
+                 tracklines=False, pagesize=(10 * cm, 10 * cm),
                  start=start, end=end)
         output_filename = os.path.join('Graphics', 'GD_region_circular.pdf')
         gdd.write(output_filename, 'PDF')
@@ -716,12 +716,12 @@ class DiagramTest(unittest.TestCase):
                 index = genbank_entry.seq.find(site, start=index)
                 if index == -1:
                     break
-                feature = SeqFeature(FeatureLocation(index, index+6), strand=None)
+                feature = SeqFeature(FeatureLocation(index, index + 6), strand=None)
 
                 # This URL should work in SVG output from recent versions
                 # of ReportLab.  You need ReportLab 2.4 or later
                 try:
-                    url = "http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi"+\
+                    url = "http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi" +\
                           "?db=protein&id=%s" % feature.qualifiers["protein_id"][0]
                 except KeyError:
                     url = None
@@ -743,7 +743,7 @@ class DiagramTest(unittest.TestCase):
                                   greytrack_labels=True)
         gds_at_gc = gdt_at_gc.new_set(type="graph")
 
-        step = len(genbank_entry)//200
+        step = len(genbank_entry) // 200
         gds_at_gc.new_graph(apply_to_window(genbank_entry.seq, step, calc_gc_content, step),
                         'GC content', style='line',
                         color=colors.lightgreen,
@@ -760,7 +760,7 @@ class DiagramTest(unittest.TestCase):
         gdd.write(output_filename, 'PDF')
 
         gdd.draw(format='circular', tracklines=False, circle_core=0.8,
-                 pagesize=(20*cm, 20*cm), circular=True)
+                 pagesize=(20 * cm, 20 * cm), circular=True)
         output_filename = os.path.join('Graphics', 'GD_by_meth_circular.pdf')
         gdd.write(output_filename, 'PDF')
 
@@ -902,7 +902,7 @@ class DiagramTest(unittest.TestCase):
 
         # Use a fairly large step so we can easily tell the difference
         # between the bar and line graphs.
-        step = len(genbank_entry)//200
+        step = len(genbank_entry) // 200
         gdgs1 = GraphSet('GC skew')
 
         graphdata1 = apply_to_window(genbank_entry.seq, step, calc_gc_skew, step)
@@ -956,7 +956,7 @@ class DiagramTest(unittest.TestCase):
         output_filename = os.path.join('Graphics', 'GD_by_obj_circular.pdf')
         gdd.write(output_filename, 'PDF')
 
-        gdd.circular=False
+        gdd.circular = False
         gdd.draw(format='circular', orientation='landscape',
              tracklines=0, pagesize='A0', start=3000, end=6300)
         output_filename = os.path.join('Graphics', 'GD_by_obj_frag_circular.pdf')
@@ -969,7 +969,7 @@ class DiagramTest(unittest.TestCase):
 
         gdd.set_all_tracks("greytrack_labels", 2)
         gdd.draw(format='linear', orientation='landscape',
-             tracklines=0, pagesize=(30*cm, 10*cm), fragments=1,
+             tracklines=0, pagesize=(30 * cm, 10 * cm), fragments=1,
              start=3000, end=6300)
         output_filename = os.path.join('Graphics', 'GD_by_obj_frag_linear.pdf')
         gdd.write(output_filename, 'PDF')

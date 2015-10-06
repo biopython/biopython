@@ -13,6 +13,7 @@ from Bio.PopGen.SimCoal import builtin_tpl_dir
 
 __docformat__ = "restructuredtext en"
 
+
 def exec_template(template):
     executed_template = template
     match = re.search('!!!(.*?)!!!', executed_template, re.MULTILINE)
@@ -37,7 +38,7 @@ def process_para(in_string, out_file_prefix, para_list, curr_values):
             f_name += '_' + str(val)
             # reg = re.compile('\?' + name, re.MULTILINE)
             # template = re.sub(reg, str(val), template)
-            template = template.replace('?'+name, str(val))
+            template = template.replace('?' + name, str(val))
         with open(f_name + '.par', 'w') as f:
             # executed_template = template
             executed_template = exec_template(template)
@@ -63,8 +64,8 @@ def dupe(motif, times):
 
 
 def get_xy_from_matrix(x_max, y_max, pos):
-    y = (pos-1) / x_max
-    x = (pos-1) % x_max
+    y = (pos - 1) / x_max
+    x = (pos - 1) % x_max
     return x, y
 
 
@@ -72,7 +73,7 @@ def get_step_2d(x_max, y_max, x, y, mig):
     my_x, my_y = get_xy_from_matrix(x_max, y_max, y)
     other_x, other_y = get_xy_from_matrix(x_max, y_max, x)
 
-    if (my_x-other_x)**2 + (my_y-other_y)**2 == 1:
+    if (my_x - other_x) ** 2 + (my_y - other_y) ** 2 == 1:
         return str(mig) + ' '
     else:
         return '0 '
@@ -80,8 +81,8 @@ def get_step_2d(x_max, y_max, x, y, mig):
 
 def generate_ssm2d_mat(x_max, y_max, mig):
     mig_mat = ''
-    for x in range(1, x_max*y_max + 1):
-        for y in range(1, x_max*y_max + 1):
+    for x in range(1, x_max * y_max + 1):
+        for y in range(1, x_max * y_max + 1):
             mig_mat += get_step_2d(x_max, y_max, x, y, mig)
         mig_mat += "\r\n"
     return mig_mat
@@ -110,9 +111,9 @@ def generate_null_mat(total_size):
 
 def generate_join_events(t, total_size, join_size, orig_size):
     events = ''
-    for i in range(1, total_size-1):
+    for i in range(1, total_size - 1):
         events += str(t) + ' ' + str(i) + ' 0 1 1 0 1\r\n'
-    events += str(t) + ' ' + str(total_size-1) + ' 0 1 ' + str(1.0*total_size*join_size/orig_size) + ' 0 1\r\n'
+    events += str(t) + ' ' + str(total_size - 1) + ' 0 1 ' + str(1.0 * total_size * join_size / orig_size) + ' 0 1\r\n'
     return events
 
 
@@ -165,7 +166,7 @@ def get_demography_template(stream, model, tp_dir=None):
         filename = sep.join([tp_dir, model + '.par'])
     with open(filename, 'r') as f:
         l = f.readline()
-        while l!='':
+        while l != '':
             stream.write(l)
             l = f.readline()
 

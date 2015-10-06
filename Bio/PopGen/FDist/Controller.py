@@ -21,6 +21,7 @@ from time import strftime, clock
 
 __docformat__ = "restructuredtext en"
 
+
 def my_float(f):
     # Because of Jython, mostly
     if f == "-nan":
@@ -115,7 +116,7 @@ class FDistController(object):
         """
         inf = open(data_dir + os.sep + 'INTFILE', 'w')
         for i in range(98):
-            inf.write(str(randint(-2**31 + 1, 2**31 - 1)) + '\n')
+            inf.write(str(randint(-2 ** 31 + 1, 2 ** 31 - 1)) + '\n')
         inf.write('8\n')
         inf.close()
 

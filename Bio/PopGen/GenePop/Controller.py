@@ -18,6 +18,7 @@ from Bio.Application import AbstractCommandline, _Argument
 
 __docformat__ = "restructuredtext en"
 
+
 def _gp_float(tok):
     """Gets a float from a token, if it fails, returns the string (PRIVATE)."""
     try:
@@ -136,7 +137,7 @@ def _hw_func(stream, is_locus, has_fisher=False):
     raise StopIteration
 
 
-class _FileIterator:
+class _FileIterator(object):
     """Iterator which crawls over a stream of lines with a function (PRIVATE).
 
     The generator function is expected to yield a tuple, while
@@ -530,7 +531,7 @@ class GenePopController(object):
             (Allele1, Allele2, observed, expected)
             (expected homozygotes, observed hm,
             expected heterozygotes, observed ht)
-          - Allele frequency/Fis dictionary with allele as key and
+            Allele frequency/Fis dictionary with allele as key and
             (count, frequency, Fis Weir & Cockerham)
           - Totals as a pair
           - count
@@ -577,7 +578,7 @@ class GenePopController(object):
                     return self.curr_pop, loci_content
                 match = re.match(".*Pop: (.+) Locus: (.+)", l)
                 if match is not None:
-                    pop = match.group(1)
+                    pop = match.group(1).rstrip()
                     locus = match.group(2)
                     if not hasattr(self, "first_locus"):
                         self.first_locus = locus

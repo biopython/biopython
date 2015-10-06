@@ -274,7 +274,7 @@ def __read_motif_name(motif, handle):
     line = line.strip()
     ls = line.split()
     name = " ".join(ls[0:2])
-    motif.name=name
+    motif.name = name
 
 
 def __read_motif_sequences(motif, handle, rv):

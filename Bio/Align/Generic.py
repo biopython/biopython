@@ -70,13 +70,13 @@ class Alignment(object):
                 return "%s %s" % (record.seq, record.id)
             else:
                 return "%s...%s %s" \
-                       % (record.seq[:length-3], record.seq[-3:], record.id)
+                       % (record.seq[:length - 3], record.seq[-3:], record.id)
         else:
             if len(record.seq) <= length:
                 return "%s %s" % (record.seq, record.id)
             else:
                 return "%s...%s %s" \
-                       % (record.seq[:length-6], record.seq[-3:], record.id)
+                       % (record.seq[:length - 6], record.seq[-3:], record.id)
 
     def __str__(self):
         """Returns a multi-line string summary of the alignment.
@@ -428,9 +428,9 @@ class Alignment(object):
             sub_align = Alignment(self._alphabet)
             sub_align._records = self._records[index]
             return sub_align
-        elif len(index)==2:
+        elif len(index) == 2:
             raise TypeError("Row and Column indexing is not currently supported,"
-                            +"but may be in future.")
+                            "but may be in future.")
         else:
             raise TypeError("Invalid index type.")
 

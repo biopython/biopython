@@ -549,7 +549,7 @@ class ClosedLoopTest(unittest.TestCase):
     """Test file -> BioSQL -> file."""
 
     # NOTE - For speed I don't bother to create a new database each time,
-    # simple a new unique namespace is used for each test.
+    # simply a new unique namespace is used for each test.
 
     def test_NC_005816(self):
         """GenBank file to BioSQL and back to a GenBank file, NC_005816."""
@@ -622,7 +622,7 @@ class TransferTest(unittest.TestCase):
     """Test file -> BioSQL, BioSQL -> BioSQL."""
 
     # NOTE - For speed I don't bother to create a new database each time,
-    # simple a new unique namespace is used for each test.
+    # simply a new unique namespace is used for each test.
 
     def setUp(self):
         create_database()

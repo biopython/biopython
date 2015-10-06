@@ -30,7 +30,7 @@ def title_to_ids(title):
     # now extract the ids from the id block
     # gi|5690369|gb|AF158246.1|AF158246
     id_info_items = id_info.split("|")
-    if len(id_info_items) >=4:
+    if len(id_info_items) >= 4:
         assert id_info_items[2] in ["gb", "emb", "dbj", "pdb"], title
         id = id_info_items[3]  # the id with version info
         name = id_info_items[4]  # the id without version info
@@ -140,7 +140,7 @@ for filename in single_nucleic_files:
         f.__doc__ = "Checking nucleotide file %s" % fn
         return f
 
-    setattr(TitleFunctions, "test_nuc_%s"%name, funct(filename))
+    setattr(TitleFunctions, "test_nuc_%s" % name, funct(filename))
     del funct
 
 for filename in multi_dna_files:
@@ -151,7 +151,7 @@ for filename in multi_dna_files:
         f.__doc__ = "Checking multi DNA file %s" % fn
         return f
 
-    setattr(TitleFunctions, "test_mutli_dna_%s"%name, funct(filename))
+    setattr(TitleFunctions, "test_mutli_dna_%s" % name, funct(filename))
     del funct
 
 for filename in single_amino_files:
@@ -162,7 +162,7 @@ for filename in single_amino_files:
         f.__doc__ = "Checking protein file %s" % fn
         return f
 
-    setattr(TitleFunctions, "test_pro_%s"%name, funct(filename))
+    setattr(TitleFunctions, "test_pro_%s" % name, funct(filename))
     del funct
 
 for filename in multi_amino_files:
@@ -173,7 +173,7 @@ for filename in multi_amino_files:
         f.__doc__ = "Checking multi protein file %s" % fn
         return f
 
-    setattr(TitleFunctions, "test_mutli_pro_%s"%name, funct(filename))
+    setattr(TitleFunctions, "test_mutli_pro_%s" % name, funct(filename))
     del funct
 
 if __name__ == "__main__":

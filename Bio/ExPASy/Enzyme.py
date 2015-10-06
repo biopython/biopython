@@ -24,6 +24,7 @@ Classes:
 
 __docformat__ = "restructuredtext en"
 
+
 def parse(handle):
     """Parse ENZYME records.
 
@@ -112,40 +113,40 @@ def __read(handle):
     record = None
     for line in handle:
         key, value = line[:2], line[5:].rstrip()
-        if key=="ID":
+        if key == "ID":
             record = Record()
             record["ID"] = value
-        elif key=="DE":
-            record["DE"]+=value
-        elif key=="AN":
+        elif key == "DE":
+            record["DE"] += value
+        elif key == "AN":
             if record["AN"] and not record["AN"][-1].endswith("."):
                 record["AN"][-1] += " " + value
             else:
                 record["AN"].append(value)
-        elif key=="CA":
+        elif key == "CA":
             record["CA"] += value
-        elif key=="DR":
+        elif key == "DR":
             pair_data = value.rstrip(";").split(';')
             for pair in pair_data:
                 t1, t2 = pair.split(',')
                 row = [t1.strip(), t2.strip()]
                 record["DR"].append(row)
-        elif key=="CF":
+        elif key == "CF":
             if record["CF"]:
                 record["CF"] += " " + value
             else:
                 record["CF"] = value
-        elif key=="PR":
+        elif key == "PR":
             assert value.startswith("PROSITE; ")
             value = value[9:].rstrip(";")
             record["PR"].append(value)
-        elif key=='CC':
+        elif key == 'CC':
             if value.startswith("-!- "):
                 record["CC"].append(value[4:])
             elif value.startswith("    ") and record["CC"]:
                 record["CC"][-1] += value[3:]
             # copyright notice is silently skipped
-        elif key=="//":
+        elif key == "//":
             if record:
                 return record
             else:  # This was the copyright notice

@@ -82,7 +82,7 @@ def display_board(genome):
     Inspired by the display function in the queens.py solution to the N-queens
     problem in the Python demo scripts.
     """
-    print('+-' + '--'*len(genome) + '+')
+    print('+-' + '--' * len(genome) + '+')
 
     for row in range(len(genome)):
         elements = []
@@ -93,7 +93,7 @@ def display_board(genome):
                 elements.append('.')
         print('|' + ''.join(elements) + '|')
 
-    print('+-' + '--'*len(genome) + '+')
+    print('+-' + '--' * len(genome) + '+')
 
 
 def queens_solved(organisms):
@@ -159,7 +159,7 @@ class QueensAlphabet(Alphabet.Alphabet):
 
 
 # --- Problem specific crossover, mutation and repair operations
-class QueensRepair:
+class QueensRepair(object):
     """A repair function to help create correct N-Queens solutions.
 
     This attempts to help generate correct solutions by offering some
@@ -239,7 +239,7 @@ class QueensRepair:
         return organism
 
 
-class QueensCrossover:
+class QueensCrossover(object):
     """Crossover operation to help in solving the N-Queens problem.
 
     This tries to perform smarter crossovers by picking out regions of
@@ -340,7 +340,7 @@ class QueensCrossover:
         return best_region, rest_region
 
 
-class QueensMutation:
+class QueensMutation(object):
     """Mutation operation to help in the N-Queens problem.
 
     This performs mutation, but instead of randomly mutating a single

@@ -41,7 +41,7 @@ class Record(list):
     def __getitem__(self, key):
         if isinstance(key, str):
             for motif in self:
-                if motif.name==key:
+                if motif.name == key:
                     return motif
         else:
             return list.__getitem__(self, key)

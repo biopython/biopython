@@ -29,7 +29,7 @@ def _set_frame(frag):
 def _make_triplets(seq):
     """Splits a string into a list containing triplets of the original
     string."""
-    return [seq[3*i:3*(i+1)] for i in range(len(seq) // 3)]
+    return [seq[3 * i:3 * (i + 1)] for i in range(len(seq) // 3)]
 
 
 def _adjust_aa_seq(fraglist):
@@ -100,8 +100,8 @@ def _split_fragment(frag):
             shifts = re.search(_RE_SHIFTS, simil).group(1)
             s_start = simil.find(shifts)
             s_stop = s_start + len(shifts)
-            split = frag[abs_pos:abs_pos+s_start]
-        except AttributeError: # no '#' in simil, i.e. last frag
+            split = frag[abs_pos:abs_pos + s_start]
+        except AttributeError:  # no '#' in simil, i.e. last frag
             shifts = ''
             s_start = 0
             s_stop = len(simil)
@@ -120,7 +120,7 @@ def _split_fragment(frag):
         split.query_end = max(qstart, qpos)
 
         # account for frameshift length
-        abs_slice = slice(abs_pos+s_start, abs_pos+s_stop)
+        abs_slice = slice(abs_pos + s_start, abs_pos + s_stop)
         if len(frag.aln_annotation) == 2:
             seqs = (str(frag[abs_slice].query.seq),
                     str(frag[abs_slice].hit.seq))
@@ -184,7 +184,7 @@ def _create_hsp(hid, qid, hspd):
     # if the query is protein, we need to change the hit and query sequences
     # from three-letter amino acid codes to one letter, and adjust their
     # coordinates accordingly
-    if len(frags[0].aln_annotation) == 2: # 2 annotations == protein query
+    if len(frags[0].aln_annotation) == 2:  # 2 annotations == protein query
         frags = _adjust_aa_seq(frags)
 
     hsp = HSP(frags)
@@ -201,7 +201,7 @@ def _parse_hit_or_query_line(line):
     """Parse the 'Query:' line of exonerate alignment outputs."""
     try:
         mark, id, desc = line.split(' ', 2)
-    except ValueError: # no desc
+    except ValueError:  # no desc
         mark, id = line.split(' ', 1)
         desc = ''
 
@@ -318,6 +318,7 @@ class _BaseExonerateParser(object):
         # initial dummies
         qres_state, hit_state = None, None
         file_state = None
+        cur_qid, cur_hid = None, None
         prev_qid, prev_hid = None, None
         cur, prev = None, None
         hit_list, hsp_list = [], []
@@ -395,8 +396,8 @@ class _BaseExonerateIndexer(SearchIndexer):
 
     """Indexer class for Exonerate plain text."""
 
-    _parser = None # should be defined by subclass
-    _query_mark = None # this one too
+    _parser = None  # should be defined by subclass
+    _query_mark = None  # this one too
 
     def get_qresult_id(self, pos):
         raise NotImplementedError("Should be defined by subclass")

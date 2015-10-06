@@ -14238,7 +14238,7 @@ class TestNCBITextParser(unittest.TestCase):
         for (a, b) in zip(record.alignments, descrs):
             self.assertEqual(a.title[0], ">")
             if b[0].endswith("..."):
-                self.assertTrue(a.title.startswith(">"+b[0][:-3]))
+                self.assertTrue(a.title.startswith(">" + b[0][:-3]))
             else:
                 self.assertEqual(a.title, ">" + b[0])
 
@@ -14957,6 +14957,26 @@ class TestNCBITextParser(unittest.TestCase):
 
         self.assertEqual(None, next(records))
         handle.close()
+
+    def test_text_2230_blastp_001(self):
+        """Test parsing BLASTP 2.2.30+ output with line of dashes."""
+        with open("Blast/text_2230_blastp_001.txt") as handle:
+            records = NCBIStandalone.Iterator(handle, self.parser)
+            record = next(records)
+            self.assertEqual(record.application, 'BLASTP')
+            self.assertEqual(record.version, '2.2.30+')
+            self.assertEqual(record.query, "TR11080zzzc0_g2_i2_0")
+            self.assertEqual(record.query_letters, 1691)
+            self.assertEqual(len(record.descriptions), 1)
+            self.assertEqual(len(record.alignments), 1)
+            self.assertEqual(len(record.alignments[0].hsps), 3)
+            h = record.alignments[0].hsps[0]
+            self.assertTrue("PTSP" + ("-" * 79) + "AYSP" in h.query)
+            h = record.alignments[0].hsps[1]
+            self.assertTrue(h.query.startswith("AYSPTSPAYSPTSPAYSPTSPAYSPTSPAYS----------PTSPAYSPTSPAYSPTSPA"))
+            h = record.alignments[0].hsps[2]
+            self.assertTrue(h.query.startswith("YSPTSPAYSPTSPAYSPTSPAYSPTSPAYS----------PTSPAYSPTSPAYSPTSPAY"))
+            self.assertEqual(None, next(records))
 
 
 if __name__ == "__main__":

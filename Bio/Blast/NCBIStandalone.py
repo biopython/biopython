@@ -40,6 +40,8 @@ from Bio.Application import _escape_filename
 
 __docformat__ = "restructuredtext en"
 
+_score_e_re = re.compile(r'Score +E')
+
 
 class LowQualityBlastError(Exception):
     """Error caused by running a low quality sequence through BLAST.
@@ -211,7 +213,7 @@ class _Scanner(object):
             read_and_call_until(uhandle, consumer.query_info, start='Length=')
             while True:
                 line = uhandle.peekline()
-                if not line.strip() or "Score     E" in line:
+                if not line.strip() or _score_e_re.search(line) is not None:
                     break
                 # It is more of the query (and its length)
                 read_and_call(uhandle, consumer.query_info)
@@ -233,7 +235,7 @@ class _Scanner(object):
             line = safe_peekline(uhandle)
             if not line.startswith('Searching') and \
                not line.startswith('Results from round') and \
-               re.search(r"Score +E", line) is None and \
+               _score_e_re.search(line) is None and \
                'No hits found' not in line:
                 break
             self._scan_descriptions(uhandle, consumer)
@@ -313,7 +315,7 @@ class _Scanner(object):
         # to the alignments.
         if not attempt_read_and_call(
            uhandle, consumer.description_header,
-           has_re=re.compile(r'Score +E')):
+           has_re=_score_e_re):
             # Either case 2 or 3.  Look for "No hits found".
             attempt_read_and_call(uhandle, consumer.no_hits,
                                   contains='No hits found')
@@ -1197,12 +1199,20 @@ class _HSPConsumer(object):
     def query(self, line):
         m = self._query_re.search(line)
         if m is None:
+            if line.strip() == "Query        ------------------------------------------------------------":
+                # Special case - long gap relative to the subject,
+                # note there is no start/end present, cannot update those
+                self._hsp.query += "-" * 60
+                self._query_len = 60  # number of dashes
+                self._query_start_index = 13  # offset of first dash
+                return
             raise ValueError("I could not find the query in line\n%s" % line)
 
         # line below modified by Yair Benita, Sep 2004.
         # added the end attribute for the query
         colon, start, seq, end = m.groups()
-        self._hsp.query = self._hsp.query + seq
+        seq = seq.strip()
+        self._hsp.query += seq
         if self._hsp.query_start is None:
             self._hsp.query_start = _safe_int(start)
 
@@ -1239,15 +1249,17 @@ class _HSPConsumer(object):
         # I have decided to let these pass as they appear
         if not seq.strip():
             seq = ' ' * self._query_len
-        self._hsp.sbjct = self._hsp.sbjct + seq
+        else:
+            seq = seq.strip()
+        self._hsp.sbjct += seq
         if self._hsp.sbjct_start is None:
             self._hsp.sbjct_start = _safe_int(start)
 
         self._hsp.sbjct_end = _safe_int(end)
         if len(seq) != self._query_len:
             raise ValueError(
-                  "QUERY and SBJCT sequence lengths don't match in line\n%s"
-                  % line)
+                  "QUERY and SBJCT sequence lengths don't match (%i %r vs %i) in line\n%s"
+                  % (self._query_len, self._hsp.query, len(seq), line))
 
         del self._query_start_index   # clean up unused variables
         del self._query_len
@@ -1674,7 +1686,9 @@ def _re_search(regex, line, error_msg):
     return m.groups()
 
 
-def _get_cols(line, cols_to_get, ncols=None, expected={}):
+def _get_cols(line, cols_to_get, ncols=None, expected=None):
+    if expected is None:
+        expected = {}
     cols = line.split()
 
     # Check to make sure number of columns is correct

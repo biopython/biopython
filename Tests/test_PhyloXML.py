@@ -247,7 +247,7 @@ class TreeTests(unittest.TestCase):
                 ('present', 2, ['Cofilin_ADF', 'Gelsolin']),
                 ('absent',  None, []),
                 ):
-            self.assertEqual(getattr(bchars, name+'_count'), count)
+            self.assertEqual(getattr(bchars, name + '_count'), count)
             self.assertEqual(getattr(bchars, name), value)
 
     # TODO: BranchColor -- see made_up.xml
@@ -512,10 +512,10 @@ class WriterTests(unittest.TestCase):
 
     def _rewrite_and_call(self, orig_fname, test_cases):
         """Parse, rewrite and retest a phyloXML example file."""
-        infile = open(orig_fname, 'rb')
+        infile = open(orig_fname, 'r')
         phx = PhyloXMLIO.read(infile)
         infile.close()
-        outfile = open(DUMMY, 'w+b')
+        outfile = open(DUMMY, 'w')
         PhyloXMLIO.write(phx, outfile)
         outfile.close()
         for cls, tests in test_cases:

@@ -186,7 +186,7 @@ class SeqMat(dict):
         # Assert matrix size: half or full
         if not build_later:
             N = len(self.alphabet.letters)
-            assert len(self) == N**2 or len(self) == N*(N+1)/2
+            assert len(self) == N ** 2 or len(self) == N * (N + 1) / 2
         self.ab_list = list(self.alphabet.letters)
         self.ab_list.sort()
         # Names: a string like "BLOSUM62" or "PAM250"
@@ -216,24 +216,24 @@ class SeqMat(dict):
 
         N = len(self.alphabet.letters)
         # Do nothing if this is already a half-matrix
-        if len(self) == N*(N+1)/2:
+        if len(self) == N * (N + 1) / 2:
             return
         for i in self.ab_list:
-            for j in self.ab_list[:self.ab_list.index(i)+1]:
+            for j in self.ab_list[:self.ab_list.index(i) + 1]:
                 if i != j:
                     self[j, i] = self[j, i] + self[i, j]
                     del self[i, j]
 
     def _init_zero(self):
         for i in self.ab_list:
-            for j in self.ab_list[:self.ab_list.index(i)+1]:
+            for j in self.ab_list[:self.ab_list.index(i) + 1]:
                 self[j, i] = 0.
 
     def make_entropy(self):
         self.entropy = 0
         for i in self:
             if self[i] > EPSILON:
-                self.entropy += self[i]*log(self[i])/log(2)
+                self.entropy += self[i] * log(self[i]) / log(2)
         self.entropy = -self.entropy
 
     def sum(self):
@@ -280,7 +280,7 @@ class SeqMat(dict):
                 else:
                     cur_str = format % val
 
-                outline = outline+cur_str
+                outline = outline + cur_str
             outline = outline + '\n'
             f.write(outline)
 
@@ -300,7 +300,7 @@ class SeqMat(dict):
         bottomline = bottomline + '\n'
         for i in alphabet:
             outline = i
-            for j in alphabet[:alphabet.index(i)+1]:
+            for j in alphabet[:alphabet.index(i) + 1]:
                 try:
                     val = self[j, i]
                 except KeyError:
@@ -324,7 +324,7 @@ class SeqMat(dict):
         for i in range(n):
             c1 = alphabet[i]
             output += c1
-            for j in range(i+1):
+            for j in range(i + 1):
                 c2 = alphabet[j]
                 try:
                     val = self[c2, c1]
@@ -434,9 +434,9 @@ def _build_exp_freq_mat(exp_freq_table):
                                           build_later=1)
     for i in exp_freq_mat:
         if i[0] == i[1]:
-            exp_freq_mat[i] = exp_freq_table[i[0]]**2
+            exp_freq_mat[i] = exp_freq_table[i[0]] ** 2
         else:
-            exp_freq_mat[i] = 2.0*exp_freq_table[i[0]]*exp_freq_table[i[1]]
+            exp_freq_mat[i] = 2.0 * exp_freq_table[i[0]] * exp_freq_table[i[1]]
     return exp_freq_mat
 
 
@@ -449,7 +449,7 @@ def _build_subs_mat(obs_freq_mat, exp_freq_mat):
         raise ValueError("Alphabet mismatch in passed matrices")
     subs_mat = SubstitutionMatrix(obs_freq_mat)
     for i in obs_freq_mat:
-        subs_mat[i] = obs_freq_mat[i]/exp_freq_mat[i]
+        subs_mat[i] = obs_freq_mat[i] / exp_freq_mat[i]
     return subs_mat
 
 
@@ -471,7 +471,7 @@ def _build_log_odds_mat(subs_mat, logbase=2, factor=10.0, round_digit=0, keep_nd
         if value < EPSILON:
             lo_mat[key] = -999
         else:
-            lo_mat[key] = round(factor*log(value)/log(logbase), round_digit)
+            lo_mat[key] = round(factor * log(value) / log(logbase), round_digit)
     mat_min = min(lo_mat.values())
     if not keep_nd:
         for i in lo_mat:
@@ -507,7 +507,7 @@ def observed_frequency_to_substitution_matrix(obs_freq_mat):
 def read_text_matrix(data_file):
     matrix = {}
     tmp = data_file.read().split("\n")
-    table=[]
+    table = []
     for i in tmp:
         table.append(i.split())
     # remove records beginning with ``#''
@@ -579,7 +579,7 @@ def two_mat_relative_entropy(mat_1, mat_2, logbase=2, diag=diagALL):
             val_1 = mat_1[key] / sum_ent_1
             val_2 = mat_2[key] / sum_ent_2
 #            rel_ent += mat_1[key] * log(mat_1[key]/mat_2[key])/log(logbase)
-            rel_ent += val_1 * log(val_1/val_2)/log(logbase)
+            rel_ent += val_1 * log(val_1 / val_2) / log(logbase)
     return rel_ent
 
 
@@ -605,7 +605,7 @@ def two_mat_correlation(mat_1, mat_2):
 # Need to input observed frequency matrices
 def two_mat_DJS(mat_1, mat_2, pi_1=0.5, pi_2=0.5):
     assert mat_1.ab_list == mat_2.ab_list
-    assert pi_1 > 0 and pi_2 > 0 and pi_1< 1 and pi_2 <1
+    assert pi_1 > 0 and pi_2 > 0 and pi_1 < 1 and pi_2 < 1
     assert not (pi_1 + pi_2 - 1.0 > EPSILON)
     sum_mat = SeqMat(build_later=1)
     sum_mat.ab_list = mat_1.ab_list

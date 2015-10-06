@@ -26,6 +26,7 @@ Classes:
 
 __docformat__ = "restructuredtext en"
 
+
 def parse(handle):
     """Parse Prosite records.
 
@@ -157,7 +158,7 @@ def __read(handle):
     record = None
     for line in handle:
         keyword, value = line[:2], line[5:].rstrip()
-        if keyword=='ID':
+        if keyword == 'ID':
             record = Record()
             cols = value.split("; ")
             if len(cols) != 2:
@@ -165,9 +166,9 @@ def __read(handle):
                          % line)
             record.name = cols[0]
             record.type = cols[1].rstrip('.')    # don't want '.'
-        elif keyword=='AC':
+        elif keyword == 'AC':
             record.accession = value.rstrip(';')
-        elif keyword=='DT':
+        elif keyword == 'DT':
             dates = value.rstrip('.').split("; ")
             if (not dates[0].endswith('(CREATED)')) or \
                (not dates[1].endswith('(DATA UPDATE)')) or \
@@ -176,17 +177,17 @@ def __read(handle):
             record.created = dates[0].rstrip(' (CREATED)')
             record.data_update = dates[1].rstrip(' (DATA UPDATE)')
             record.info_update = dates[2].rstrip(' (INFO UPDATE)')
-        elif keyword=='DE':
+        elif keyword == 'DE':
             record.description = value
-        elif keyword=='PA':
+        elif keyword == 'PA':
             record.pattern += value
-        elif keyword=='MA':
+        elif keyword == 'MA':
             record.matrix.append(value)
-        elif keyword=='PP':
+        elif keyword == 'PP':
             record.postprocessing.extend(value.split(";"))
-        elif keyword=='RU':
+        elif keyword == 'RU':
             record.rules.append(value)
-        elif keyword=='NR':
+        elif keyword == 'NR':
             cols = value.split(";")
             for col in cols:
                 if not col:
@@ -217,7 +218,7 @@ def __read(handle):
                 else:
                     raise ValueError("Unknown qual %s in comment line\n%s"
                                      % (repr(qual), line))
-        elif keyword=='CC':
+        elif keyword == 'CC':
             # Expect CC lines like this:
             # CC   /TAXO-RANGE=??EPV; /MAX-REPEAT=2;
             # Can (normally) split on ";" and then on "="
@@ -258,7 +259,7 @@ def __read(handle):
                 else:
                     raise ValueError("Unknown qual %s in comment line\n%s"
                                      % (repr(qual), line))
-        elif keyword=='DR':
+        elif keyword == 'DR':
             refs = value.split(";")
             for ref in refs:
                 if not ref:
@@ -276,18 +277,18 @@ def __read(handle):
                     record.dr_unknown.append((acc, name))
                 else:
                     raise ValueError("I don't understand type flag %s" % type)
-        elif keyword=='3D':
+        elif keyword == '3D':
             cols = value.split()
             for id in cols:
                 record.pdb_structs.append(id.rstrip(';'))
-        elif keyword=='PR':
+        elif keyword == 'PR':
             rules = value.split(";")
             record.prorules.extend(rules)
-        elif keyword=='DO':
+        elif keyword == 'DO':
             record.pdoc = value.rstrip(';')
-        elif keyword=='CC':
+        elif keyword == 'CC':
             continue
-        elif keyword=='//':
+        elif keyword == '//':
             if not record:
                 # Then this was the copyright statement
                 continue

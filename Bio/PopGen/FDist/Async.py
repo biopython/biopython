@@ -20,6 +20,7 @@ from Bio.PopGen.FDist.Controller import FDistController
 
 __docformat__ = "restructuredtext en"
 
+
 class FDistAsync(FDistController):
     """Asynchronous FDist execution.
     """

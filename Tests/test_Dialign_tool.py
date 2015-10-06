@@ -15,7 +15,7 @@ from Bio.Align.Applications import DialignCommandline
 os.environ['LANG'] = 'C'
 
 dialign_exe = None
-if sys.platform=="win32":
+if sys.platform == "win32":
     raise MissingExternalDependencyError("DIALIGN2-2 not available on Windows")
 else:
     from Bio._py3k import getoutput

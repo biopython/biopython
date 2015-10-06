@@ -15,7 +15,7 @@ from Bio.Align.Applications import ProbconsCommandline
 os.environ['LANG'] = 'C'
 
 probcons_exe = None
-if sys.platform=="win32":
+if sys.platform == "win32":
     raise MissingExternalDependencyError("PROBCONS not available on Windows")
 else:
     from Bio._py3k import getoutput

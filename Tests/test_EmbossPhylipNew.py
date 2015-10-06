@@ -29,10 +29,10 @@ if "EMBOSS_ROOT" in os.environ:
     path = os.environ["EMBOSS_ROOT"]
     if os.path.isdir(path):
         for name in exes_wanted:
-            if os.path.isfile(os.path.join(path, name+".exe")):
-                exes[name] = os.path.join(path, name+".exe")
+            if os.path.isfile(os.path.join(path, name + ".exe")):
+                exes[name] = os.path.join(path, name + ".exe")
     del path, name
-if sys.platform!="win32":
+if sys.platform != "win32":
     from Bio._py3k import getoutput
     for name in exes_wanted:
         # This will "just work" if installed on the path as normal on Unix
@@ -44,7 +44,7 @@ if sys.platform!="win32":
 
 if len(exes) < len(exes_wanted):
     raise MissingExternalDependencyError(
-          "Install the Emboss package 'PhylipNew' if you want to use the "+
+          "Install the Emboss package 'PhylipNew' if you want to use the " +
           "Bio.Emboss.Applications wrappers for phylogenetic tools.")
 
 # #########################################################################
@@ -75,7 +75,7 @@ def parse_trees(filename):
     data = open("test_file", "r").read()
     for tree_str in data.split(";\n"):
         if tree_str:
-            yield Trees.Tree(tree_str+";")
+            yield Trees.Tree(tree_str + ";")
 
 
 class DistanceTests(unittest.TestCase):

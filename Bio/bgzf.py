@@ -314,7 +314,7 @@ def split_virtual_offset(virtual_offset):
     True
 
     """
-    start = virtual_offset >>16
+    start = virtual_offset >> 16
     return start, virtual_offset ^ (start << 16)
 
 
@@ -613,7 +613,7 @@ class BgzfReader(object):
             self._load_block(start_offset)
             assert start_offset == self._block_start_offset
         if within_block > len(self._buffer) \
-        and not (within_block == 0 and len(self._buffer)==0):
+        and not (within_block == 0 and len(self._buffer) == 0):
             raise ValueError("Within offset %i but block size only %i"
                              % (within_block, len(self._buffer)))
         self._within_block_offset = within_block
@@ -656,7 +656,7 @@ class BgzfReader(object):
     def readline(self):
         i = self._buffer.find(self._newline, self._within_block_offset)
         # Three cases to consider,
-        if i==-1:
+        if i == -1:
             # No newline, need to read in more data
             data = self._buffer[self._within_block_offset:]
             self._load_block()  # will reset offsets

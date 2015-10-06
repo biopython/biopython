@@ -1,4 +1,4 @@
-# Copyright 2007-2010 by Peter Cock.  All rights reserved.
+# Copyright 2007-2015 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -128,6 +128,8 @@ test_files = [
     ("swiss", False, 'SwissProt/Q13639.txt', 1),
     ("uniprot-xml", False, 'SwissProt/H2CNN8.xml', 1),
     ("swiss", False, "SwissProt/H2CNN8.txt", 1),
+    ("uniprot-xml", False, 'SwissProt/F2CXE6.xml', 1),
+    ("swiss", False, "SwissProt/F2CXE6.txt", 1),
     # Following examples are also used in test_GenBank.py
     ("genbank", False, 'GenBank/noref.gb', 1),
     ("genbank", False, 'GenBank/cor6_6.gb', 6),

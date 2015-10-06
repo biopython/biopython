@@ -34,7 +34,7 @@ except ImportError:
         path_list = posixpath.abspath(path).split(posixpath.sep)
         # Work out how much of the filepath is shared by start and path.
         i = len(posixpath.commonprefix([start_list, path_list]))
-        rel_list = [posixpath.pardir] * (len(start_list)-i) + path_list[i:]
+        rel_list = [posixpath.pardir] * (len(start_list) - i) + path_list[i:]
         if not rel_list:
             return posixpath.curdir.replace(posixpath.sep, os.path.sep)
         return posixpath.join(*rel_list).replace(posixpath.sep, os.path.sep)
@@ -46,6 +46,7 @@ message"""
 
 
 class Paml(object):
+    """Base class for wrapping PAML commands."""
 
     def __init__(self, alignment=None, working_dir=None,
                 out_file=None):
@@ -58,6 +59,7 @@ class Paml(object):
                 raise IOError("The specified alignment file does not exist.")
         self.alignment = alignment
         self.out_file = out_file
+        self._options = {}  # will be set in subclasses
 
     def write_ctl_file(self):
         pass
