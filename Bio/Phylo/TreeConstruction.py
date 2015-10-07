@@ -90,11 +90,14 @@ class _Matrix(object):
         """Initialize matrix by a list of names and a list of
         lower triangular matrix data"""
         # check names
-        if isinstance(names, list) and all(isinstance(s, str) for s in names):
+        if isinstance(names, list) and \
+            (all(isinstance(s, str)) for s in names \
+            or all(isinstance(s, unicode)) for s in names):
             if len(set(names)) == len(names):
                 self.names = names
             else:
-                raise ValueError("Duplicate names found")
+                duplicate_names = set([x for x in names if names.count(x) > 1])
+                raise ValueError("Duplicate names found {}".format(duplicate_names))
         else:
             raise TypeError("'names' should be a list of strings")
 
@@ -155,7 +158,7 @@ class _Matrix(object):
             col_index = None
             if all(isinstance(i, int) for i in item):
                 row_index, col_index = item
-            elif all(isinstance(i, str) for i in item):
+            elif all(isinstance(i, str) for i in item) or all(isinstance(i, unicode) for i in item):
                 row_name, col_name = item
                 if row_name in self.names and col_name in self.names:
                     row_index = self.names.index(row_name)
@@ -216,7 +219,7 @@ class _Matrix(object):
             col_index = None
             if all(isinstance(i, int) for i in item):
                 row_index, col_index = item
-            elif all(isinstance(i, str) for i in item):
+            elif all(isinstance(i, str) for i in item) or all(isinstance(i, unicode) for i in item):
                 row_name, col_name = item
                 if row_name in self.names and col_name in self.names:
                     row_index = self.names.index(row_name)
@@ -301,8 +304,8 @@ class _Matrix(object):
 
 class _DistanceMatrix(_Matrix):
     """
-	Distance matrix class that can be used for distance based tree algorithms.
-    	All diagonal elements will be zero no matter what the users provide.
+    Distance matrix class that can be used for distance based tree algorithms.
+        All diagonal elements will be zero no matter what the users provide.
     """
 
     def __init__(self, names, matrix=None):
@@ -429,11 +432,11 @@ class DistanceCalculator(object):
         Returns a value between 0 (identical sequences) and 1 (completely
         different, or seq1 is an empty string.)
         """
-        score = 0
-        max_score = 0
+        score = 0.0
+        max_score = 0.0
         if self.scoring_matrix:
-            max_score1 = 0
-            max_score2 = 0
+            max_score1 = 0.0
+            max_score2 = 0.0
             skip_letters = ['-', '*']
             for i in range(0, len(seq1)):
                 l1 = seq1[i]
@@ -449,6 +452,7 @@ class DistanceCalculator(object):
                 max_score1 += self.scoring_matrix[l1, l1]
                 max_score2 += self.scoring_matrix[l2, l2]
                 score += self.scoring_matrix[l1, l2]
+            max_score = max(max_score1,max_score2)
 
         else:
             # Score by character identity, not skipping any special letters
@@ -456,21 +460,14 @@ class DistanceCalculator(object):
                 l1 = seq1[i]
                 l2 = seq2[i]
                 if l1 == l2:
-                    score += 1
+                    score += 1.0
             max_score = len(seq1)
         if max_score == 0:
-            return 1  # max possible scaled distance
-        return 1 - (score * 1.0 / max_score)
+            return 1.0  # max possible scaled distance
+        return float(1.0 - (score * 1.0 / max_score))
 
 
-    def _pairwise_multi(self,msa_combos):
-        """Calculate pairwise distance for multiple sequence tuples, used for MP"""
-        for pairwise in msa_combos:
-            seq1 = pairwise[0]
-            seq2 = pairwise[1]
-            self.dm[seq1.id,seq2.id] = self._pairwise(seq1,seq1)
-
-    def get_distance(self, msa, multi=False):
+    def get_distance(self, msa):
         """Return a _DistanceMatrix for MSA object, additionally,
         output distance matrix to a phylip input distance matrix
         to use with phylip programs
@@ -478,7 +475,6 @@ class DistanceCalculator(object):
         :Parameters:
             msa : MultipleSeqAlignment
                 DNA or Protein multiple sequence alignment.
-            multi - MultiProcess DistanceMatrix calculation, Defaults to False
         """
 
         if not isinstance(msa, MultipleSeqAlignment):
@@ -489,34 +485,18 @@ class DistanceCalculator(object):
 
         '''Create DistanceMatrix Object filled with all possible names'''
         self.dm = _DistanceMatrix(names)
-
-        for seq1,seq2 in itertools.combinations(msa,2):
-            '''If multi is selected, store combinations in memory to give to multiple processors'''
-            if multi:
-                multiprocess_list.append((seq1,seq2))
-            else:
-              if self.verbose:
-                print("Getting distance from {0} and {1}".format(seq1.id,seq2.id)
-              self.dm[seq1.id, seq2.id] = self._pairwise(seq1,seq2)
-
-        if multi:
-            multiprocess_list = []
-            jobs = []
-            from multiprocessing import Process, cpu_count
-            multiprocess_list = self.slice_list(multiprocess_list,cpu_count())
-            for seq_list in multiprocess_list:
-                p = Process(target=self._pairwise_multi,args=(seq_list,))
-                p.start()
-                jobs.append(p)
-            for job in jobs:
-                job.join()
-
+        for seq1, seq2 in itertools.permutations(msa,2):
+            if self.verbose:
+                print("Getting distance from {} and {}".format(str(seq1.id), str(seq2.id)))
+            _pw = self._pairwise(seq1, seq2)
+            self.dm[seq1.id, seq2.id] = _pw
+            self.dm[seq2.id, seq2.id] = _pw
         return self.dm
 
     def convert_distance_matrix(self, dm):
         """
         Output distance matrix object to a string that is the input distance matrix
-        to use with phylip programs, i.e. neighbor 
+        to use with phylip programs, i.e. neighbor
 
         :Parameters:
             dm : distance matrix to convert
@@ -823,11 +803,11 @@ class TreeSearcher(object):
 
 class NNITreeSearcher(TreeSearcher):
     """
-	Tree searching with Nearest Neighbor Interchanges (NNI) algorithm.
-    	:Parameters:
-        	scorer : ParsimonyScorer
-            	parsimony scorer to calculate the parsimony score of
-            	different trees during NNI algorithm.
+    Tree searching with Nearest Neighbor Interchanges (NNI) algorithm.
+        :Parameters:
+            scorer : ParsimonyScorer
+                parsimony scorer to calculate the parsimony score of
+                different trees during NNI algorithm.
     """
 
     def __init__(self, scorer):
