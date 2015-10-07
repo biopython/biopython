@@ -154,6 +154,7 @@ type help(pairwise2.align.localds) at the Python prompt.
 #   Only recover one alignment.
 
 from __future__ import print_function
+import numpy as np
 
 __docformat__ = "restructuredtext en"
 
@@ -384,10 +385,10 @@ def _make_score_matrix_generic(
     # shape:
     # sequenceA (down) x sequenceB (across)
     lenA, lenB = len(sequenceA), len(sequenceB)
-    score_matrix, trace_matrix = [], []
+    trace_matrix = _TraceMatrix(lenA, lenB)
+    score_matrix = []
     for i in range(lenA):
         score_matrix.append([None] * lenB)
-        trace_matrix.append([[None]] * lenB)
 
     # The top and left borders of the matrices are special cases
     # because there are no previously aligned characters.  To simplify
@@ -414,6 +415,7 @@ def _make_score_matrix_generic(
     #    2) adding a gap in sequenceA
     #    3) adding a gap in sequenceB
     for row in range(1, lenA):
+        trace_row = trace_matrix.create_row(row)
         for col in range(1, lenB):
             # First, calculate the score that would occur by extending
             # the alignment without gaps.
@@ -451,7 +453,8 @@ def _make_score_matrix_generic(
                                      match_fn(sequenceA[row], sequenceB[col])
             if not align_globally and score_matrix[row][col] < 0:
                 score_matrix[row][col] = 0
-            trace_matrix[row][col] = best_indexes
+            trace_row.set(col, best_indexes)
+        trace_row.save_to_matrix()
     return score_matrix, trace_matrix
 
 
@@ -468,10 +471,10 @@ def _make_score_matrix_fast(
     # shape:
     # sequenceA (down) x sequenceB (across)
     lenA, lenB = len(sequenceA), len(sequenceB)
-    score_matrix, trace_matrix = [], []
+    score_matrix = []
+    trace_matrix = _TraceMatrix(lenA, lenB)
     for i in range(lenA):
         score_matrix.append([None] * lenB)
-        trace_matrix.append([[None]] * lenB)
 
     # The top and left borders of the matrices are special cases
     # because there are no previously aligned characters.  To simplify
@@ -519,6 +522,7 @@ def _make_score_matrix_fast(
 
     # Fill in the score_matrix.
     for row in range(1, lenA):
+        trace_row = trace_matrix.create_row(row)
         for col in range(1, lenB):
             # Calculate the score that would occur by extending the
             # alignment without gaps.
@@ -553,7 +557,7 @@ def _make_score_matrix_fast(
                 score_matrix[row][col] = 0
             else:
                 score_matrix[row][col] = score
-            trace_matrix[row][col] = best_index
+            trace_row.set(col, best_index)
 
             # Update the cached column scores.  The best score for
             # this can come from either extending the gap in the
@@ -590,6 +594,11 @@ def _make_score_matrix_fast(
                 if (row - 1, col - 1) not in row_cache_index[row - 1]:
                     row_cache_index[row - 1] = row_cache_index[row - 1] + \
                                              [(row - 1, col - 1)]
+
+        #free up memory for no longer used row_cache_index
+        if row > 0:
+            row_cache_index[row - 1] = None
+        trace_row.save_to_matrix()
 
     return score_matrix, trace_matrix
 
@@ -874,6 +883,82 @@ def format_alignment(align1, align2, score, begin, end):
     s.append("%s\n" % align2)
     s.append("  Score=%g\n" % score)
     return ''.join(s)
+
+
+class _TraceMatrix(object):
+    """Represents a 2D array containing coordinate arrays 
+    using numpy arrays in order to reduce memory usage.
+    """
+    def __init__(self, num_rows, num_cols):
+        self.num_rows = num_rows
+        self.num_cols = num_cols
+        self.trace_matrix = []
+        self.rows = {}
+        self.lookup = np.zeros((num_rows,num_cols), dtype='uint32,uint16')
+
+    def create_row(self, row_num):
+        """Create a row object that we can call set() and save_to_matrix 
+        when done.
+        """
+        return _TraceMatrixRow(self, row_num, self.num_cols)
+
+    def save_row(self, row):
+        """Fill in internal storage for a row."""
+        size = len(row.raw_data)
+        row_num = row.row_num
+        self.rows[row_num] = np.empty((size), dtype='int16,int16')
+        self.lookup[row_num][:] = row.trace_idx_len
+        self.rows[row_num][:size] = row.raw_data
+
+    def get(self, row, col):
+        """Return coordinate list at point or [None] if not set."""
+        col_idx, col_len = self.lookup[row, col]
+        result = []
+        if col_len == 0:
+            result.append(None)
+        else:
+            for i in range(col_len):
+                val = self.rows[row][col_idx + i]
+                if val[0] == -1:
+                    val = None
+                result.append(val)
+        return result
+
+    def __getitem__(self, row):
+        return _TraceMatrixIndex(self, row)
+
+class _TraceMatrixIndex(object):
+    """Allows TraceMatrix to pretend its a 2d array."""
+    def __init__(self, trace_matrix, row):
+        self.row = row
+        self.trace_matrix = trace_matrix
+
+    def __getitem__(self, col):
+        return self.trace_matrix.get(self.row, col) 
+
+class _TraceMatrixRow(object):
+    """Helper class for _TraceMatrix that allows batching additions.
+    Stores data in fast python lists and TraceMatrix loads them into 
+    compact numpy arrays. 
+    """
+    def __init__(self, trace_matrix, row_num, num_cols):
+        self.row_num = row_num
+        self.num_cols = num_cols
+        self.trace_matrix = trace_matrix
+        self.trace_idx = 0
+        self.trace_idx_len = [(0,0)]*self.num_cols
+        self.raw_data = []
+
+    def set(self, col, best_indexes):
+        """Fill in coordinate list at col."""
+        trace_len = len(best_indexes)
+        self.trace_idx_len[col] = (self.trace_idx, trace_len)
+        self.trace_idx += trace_len
+        self.raw_data.extend(best_indexes)
+
+    def save_to_matrix(self):
+        """Save this row back to its parent matrix."""
+        self.trace_matrix.save_row(self)
 
 
 # Try and load C implementations of functions.  If I can't,
