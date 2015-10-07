@@ -231,10 +231,106 @@ string_seq = MutableSeq("TCAAAAGGATGCATCATG", IUPAC.ambiguous_dna)
 array_seq = MutableSeq(array.array(array_indicator, "TCAAAAGGATGCATCATG"),
                        IUPAC.ambiguous_dna)
 converted_seq = s.tomutable()
-###########################################################################
-print("")
-print("Testing Seq addition")
-print("====================")
+
+
+class SeqAdditionTest(unittest.TestCase):
+    def setUp(self):
+        self.dna = [
+            Seq.Seq("ATCG", IUPAC.ambiguous_dna),
+            Seq.Seq("gtca", Alphabet.generic_dna),
+            Seq.MutableSeq("GGTCA", Alphabet.generic_dna),
+            Seq.Seq("CTG-CA", Alphabet.Gapped(IUPAC.unambiguous_dna, "-")),
+            "TGGTCA",
+        ]
+        self.rna = [
+            Seq.Seq("AUUUCG", IUPAC.ambiguous_rna),
+            Seq.MutableSeq("AUUCG", IUPAC.ambiguous_rna),
+            Seq.Seq("uCAg", Alphabet.generic_rna),
+            Seq.MutableSeq("UC-AG", Alphabet.Gapped(Alphabet.generic_rna, "-")),
+            Seq.Seq("U.CAG", Alphabet.Gapped(Alphabet.generic_rna, ".")),
+            "UGCAU",
+        ]
+        self.nuc = [
+            Seq.Seq("ATCG", Alphabet.generic_nucleotide),
+            "UUUTTTACG",
+        ]
+        self.protein = [
+            Seq.Seq("ATCGPK", IUPAC.protein),
+            Seq.Seq("atcGPK", Alphabet.generic_protein),
+            Seq.Seq("T.CGPK", Alphabet.Gapped(IUPAC.protein, ".")),
+            Seq.Seq("T-CGPK", Alphabet.Gapped(IUPAC.protein, "-")),
+            Seq.Seq("MEDG-KRXR*", Alphabet.Gapped(Alphabet.HasStopCodon(IUPAC.extended_protein, "*"), "-")),
+            Seq.MutableSeq("ME-K-DRXR*XU", Alphabet.Gapped(Alphabet.HasStopCodon(IUPAC.extended_protein, "*"), "-")),
+            "TEDDF",
+        ]
+
+    def test_addition_dna_rna_with_generic_nucleotides(self):
+        for a in self.dna + self.rna:
+            for b in self.nuc:
+                c = a + b
+                self.assertEqual(str(c), str(a) + str(b))
+
+    def test_addition_rna_with_rna(self):
+        self.rna.pop(3)
+        for a in self.rna:
+            for b in self.rna:
+                c = a + b
+                self.assertEqual(str(c), str(a) + str(b))
+
+    def test_exception_when_added_rna_has_more_than_one_gap_type(self):
+        """Test resulting sequence has gap types '-' and '.'"""
+        with self.assertRaises(ValueError):
+            c = self.rna[3] + self.rna[4]
+
+    def test_addition_dna_with_dna(self):
+        for a in self.dna:
+            for b in self.dna:
+                c = a + b
+                self.assertEqual(str(c), str(a) + str(b))
+
+    def test_addition_dna_with_rna(self):
+        self.dna.pop(4)
+        self.rna.pop(5)
+        for a in self.dna:
+            for b in self.rna:
+                with self.assertRaises(TypeError):
+                    c = a + b
+                with self.assertRaises(TypeError):
+                    c = b + a
+
+    def test_addition_proteins(self):
+        self.protein.pop(2)
+        for a in self.protein:
+            for b in self.protein:
+                c = a + b
+                self.assertEqual(str(c), str(a) + str(b))
+
+    def test_exception_when_added_protein_has_more_than_one_gap_type(self):
+        """Test resulting protein has gap types '-' and '.'"""
+        a = Seq.Seq("T.CGPK", Alphabet.Gapped(IUPAC.protein, "."))
+        b = Seq.Seq("T-CGPK", Alphabet.Gapped(IUPAC.protein, "-"))
+        with self.assertRaises(ValueError):
+            c = a + b
+
+    def test_exception_when_added_protein_has_more_than_one_stop_codon_type(self):
+        """Test resulting protein has stop codon types '*' and '@'"""
+        a = Seq.Seq("MEDG-KRXR@", Alphabet.HasStopCodon(Alphabet.Gapped(IUPAC.extended_protein, "-"), "@"))
+        b = Seq.Seq("MEDG-KRXR*", Alphabet.Gapped(Alphabet.HasStopCodon(IUPAC.extended_protein, "*"), "-"))
+        with self.assertRaises(ValueError):
+            c = a + b
+
+    def test_exception_when_adding_protein_with_nucletides(self):
+        for a in self.protein[0:5]:
+            for b in self.dna[0:3] + self.rna[0:4]:
+                with self.assertRaises(TypeError):
+                    c = a + b
+
+    def test_adding_generic_nucleotide_with_other_nucleotides(self):
+        for a in self.nuc:
+            for b in self.dna + self.rna + self.nuc:
+                c = a + b
+                self.assertEqual(str(c), str(a) + str(b))
+
 dna = [Seq.Seq("ATCG", IUPAC.ambiguous_dna),
        Seq.Seq("gtca", Alphabet.generic_dna),
        Seq.MutableSeq("GGTCA", Alphabet.generic_dna),
@@ -257,63 +353,6 @@ protein = [Seq.Seq("ATCGPK", IUPAC.protein),
            Seq.Seq("ME-KR@", Alphabet.HasStopCodon(Alphabet.Gapped(IUPAC.protein, "-"), "@")),
            Seq.Seq("MEDG.KRXR@", Alphabet.Gapped(Alphabet.HasStopCodon(IUPAC.extended_protein, "@"), ".")),
            "TEDDF"]
-for a in dna + rna:
-    for b in nuc:
-        c = a + b
-        assert str(c) == str(a) + str(b)
-for a in rna:
-    for b in rna:
-        try:
-            c = a + b
-            assert str(c) == str(a) + str(b)
-        except ValueError as e:
-            print("%s + %s\n-> %s" % (repr(a.alphabet), repr(b.alphabet), str(e)))
-for a in dna:
-    for b in dna:
-        try:
-            c = a + b
-            assert str(c) == str(a) + str(b)
-        except ValueError as e:
-            print("%s + %s\n-> %s" % (repr(a.alphabet), repr(b.alphabet), str(e)))
-    for b in rna:
-        try:
-            c = a + b
-            assert (isinstance(a, str) or isinstance(b, str)), \
-                   "DNA+RNA addition should fail!"
-        except TypeError:
-            pass
-        try:
-            c = b + a
-            assert (isinstance(a, str) or isinstance(b, str)), \
-                   "RNA+DNA addition should fail!"
-        except TypeError:
-            pass
-for a in protein:
-    for b in protein:
-        try:
-            c = a + b
-            assert str(c) == str(a) + str(b)
-        except ValueError as e:
-            print("%s + %s\n-> %s" % (repr(a.alphabet), repr(b.alphabet), str(e)))
-    for b in nuc + dna + rna:
-        try:
-            c = a + b
-            assert (isinstance(a, str) or isinstance(b, str)), \
-                   "Protein+Nucleotide addition should fail!"
-        except TypeError:
-            pass
-for a in nuc:
-    for b in dna + rna + nuc:
-        c = a + b
-        assert str(c) == str(a) + str(b)
-for a in dna + rna + nuc:
-    for b in protein:
-        try:
-            c = a + b
-            assert (isinstance(a, str) or isinstance(b, str)), \
-                   "Nucleotide+Protein addition should fail!"
-        except TypeError:
-            pass
 
 ###########################################################################
 print("")
