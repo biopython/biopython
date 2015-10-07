@@ -452,7 +452,7 @@ class DistanceCalculator(object):
                 max_score1 += self.scoring_matrix[l1, l1]
                 max_score2 += self.scoring_matrix[l2, l2]
                 score += self.scoring_matrix[l1, l2]
-            max_score = max(max_score1,max_score2)
+            max_score = max(max_score1, max_score2)
 
         else:
             # Score by character identity, not skipping any special letters
@@ -518,22 +518,6 @@ class DistanceCalculator(object):
             protein_matrix[aa1, aa2] = v
         return protein_matrix
 
-
-    def slice_list(self, input, size):
-        '''Slice list into equal sizes to spread accross processors'''
-        input_size = len(input)
-        slice_size = input_size / size
-        remain = input_size % size
-        result = []
-        iterator = iter(input)
-        for i in range(size):
-            result.append([])
-            for j in range(slice_size):
-                result[i].append(iterator.next())
-            if remain:
-                result[i].append(iterator.next())
-                remain -= 1
-        return result
 
 class TreeConstructor(object):
 
