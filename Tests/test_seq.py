@@ -431,19 +431,23 @@ class TestSeqStringMethods(unittest.TestCase):
                         self.assertEqual([str(x) for x in a.split(char, max_sep)],
                                          str(a).split(str_char, max_sep))
 
-###########################################################################
-print("")
-print("Checking ambiguous complements")
-print("==============================")
 
-# See bug 2380, Bio.Nexus was polluting the dictionary.
-assert "-" not in ambiguous_dna_values
-assert "?" not in ambiguous_dna_values
+class TestAmbiguousComplements(unittest.TestCase):
+    def test_ambiguous_values(self):
+        """Test that other tests do not introduce characters to our values"""
+        self.assertFalse("-" in ambiguous_dna_values)
+        self.assertFalse("?" in ambiguous_dna_values)
+
+
+class TestComplement(unittest.TestCase):
+    def test_complement_ambiguous_dna_values(self):
+        for ambig_char, values in sorted(ambiguous_dna_values.items()):
+            compl_values = str(Seq.Seq(values, alphabet=IUPAC.ambiguous_dna).complement())
+            self.assertEqual(set(compl_values),
+                             set(ambiguous_dna_values[ambiguous_dna_complement[ambig_char]]))
 
 
 def complement(sequence):
-    # TODO - Add a complement function to Bio/Seq.py?
-    # There is already a complement method on the Seq and MutableSeq objects.
     return Seq.reverse_complement(sequence)[::-1]
 
 
@@ -451,15 +455,6 @@ def sorted_dict(d):
     """A sorted repr of a dictionary."""
     return "{%s}" % ", ".join("%s: %s" % (repr(k), repr(v))
                               for k, v in sorted(d.items()))
-
-print("")
-print("DNA Ambiguity mapping: %s" % sorted_dict(ambiguous_dna_values))
-print("DNA Complement mapping: %s" % sorted_dict(ambiguous_dna_complement))
-for ambig_char, values in sorted(ambiguous_dna_values.items()):
-    compl_values = complement(values)
-    print("%s={%s} --> {%s}=%s" %
-        (ambig_char, values, compl_values, ambiguous_dna_complement[ambig_char]))
-    assert set(compl_values) == set(ambiguous_dna_values[ambiguous_dna_complement[ambig_char]])
 
 print("")
 print("RNA Ambiguity mapping: %s" % sorted_dict(ambiguous_rna_values))
