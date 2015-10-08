@@ -446,6 +446,12 @@ class TestComplement(unittest.TestCase):
             self.assertEqual(set(compl_values),
                              set(ambiguous_dna_values[ambiguous_dna_complement[ambig_char]]))
 
+    def test_complement_ambiguous_rna_values(self):
+        for ambig_char, values in sorted(ambiguous_rna_values.items()):
+            compl_values = str(Seq.Seq(values, alphabet=IUPAC.ambiguous_rna).complement())
+            self.assertEqual(set(compl_values),
+                             set(ambiguous_rna_values[ambiguous_rna_complement[ambig_char]]))
+
 
 def complement(sequence):
     return Seq.reverse_complement(sequence)[::-1]
@@ -456,14 +462,6 @@ def sorted_dict(d):
     return "{%s}" % ", ".join("%s: %s" % (repr(k), repr(v))
                               for k, v in sorted(d.items()))
 
-print("")
-print("RNA Ambiguity mapping: %s" % sorted_dict(ambiguous_rna_values))
-print("RNA Complement mapping: %s" % sorted_dict(ambiguous_rna_complement))
-for ambig_char, values in sorted(ambiguous_rna_values.items()):
-    compl_values = complement(values).replace("T", "U")  # need to help as no alphabet
-    print("%s={%s} --> {%s}=%s" %
-        (ambig_char, values, compl_values, ambiguous_rna_complement[ambig_char]))
-    assert set(compl_values) == set(ambiguous_rna_values[ambiguous_rna_complement[ambig_char]])
 
 print("")
 print("Reverse complements:")
