@@ -6,6 +6,7 @@ from __future__ import print_function
 import unittest
 import sys
 import array
+import copy
 
 from Bio import Alphabet
 from Bio import Seq
@@ -453,7 +454,7 @@ class TestComplement(unittest.TestCase):
                              set(ambiguous_rna_values[ambiguous_rna_complement[ambig_char]]))
 
 
-class TestReverseComplement(unittest.TestCase):
+class TestDoubleReverseComplement(unittest.TestCase):
     def test_reverse_complements(self):
         """Test double reverse complement preserves the sequence"""
         for sequence in [Seq.Seq("".join(sorted(ambiguous_rna_values))),
@@ -576,44 +577,33 @@ class TestTranscription(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     s.back_transcribe()
 
-print("")
-print("Reverse Complement")
-print("==================")
-for nucleotide_seq in test_seqs:
-    try:
-        expected = Seq.reverse_complement(nucleotide_seq)
-        print("%s\n-> %s"
-        % (repr(nucleotide_seq), repr(expected)))
-    except ValueError as e:
-        expected = None
-        print("%s\n-> %s"
-        % (repr(nucleotide_seq), str(e)))
-    # Now test the Seq object's method
-    # (The MutualSeq object acts in place)
-    if isinstance(nucleotide_seq, Seq.Seq):
-        try:
-            assert repr(expected) == repr(nucleotide_seq.reverse_complement())
-            assert repr(expected[::-1]) == repr(nucleotide_seq.complement())
-        except ValueError:
-            assert expected is None
 
-for s in protein_seqs:
-    try:
-        print(Seq.reverse_complement(s))
-        assert False, "Reverse complement shouldn't work on a protein!"
-    except ValueError:
-        pass
-    # Note that these methods are "in place" for the MutableSeq:
-    try:
-        print(s.complement())
-        assert False, "Complement shouldn't work on a protein!"
-    except ValueError:
-        pass
-    try:
-        print(s.reverse_complement())
-        assert False, "Reverse complement shouldn't work on a protein!"
-    except ValueError:
-        pass
+class TestReverseComplement(unittest.TestCase):
+    def test_reverse_complement(self):
+        test_seqs_copy = copy.copy(test_seqs)
+        test_seqs_copy.pop(21)
+
+        for nucleotide_seq in test_seqs_copy:
+            if not isinstance(nucleotide_seq.alphabet, Alphabet.ProteinAlphabet) and \
+                    isinstance(nucleotide_seq, Seq.Seq):
+                expected = Seq.reverse_complement(nucleotide_seq)
+                self.assertEqual(repr(expected), repr(nucleotide_seq.reverse_complement()))
+                self.assertEqual(repr(expected[::-1]), repr(nucleotide_seq.complement()))
+
+    def test_reverse_complement_on_proteins(self):
+        """Test reverse complement shouldn't work on a protein!"""
+        for s in protein_seqs:
+            with self.assertRaises(ValueError):
+                Seq.reverse_complement(s)
+
+            with self.assertRaises(ValueError):
+                s.reverse_complement()
+
+    def test_complement_on_proteins(self):
+        """Test complement shouldn't work on a protein!"""
+        for s in protein_seqs:
+            with self.assertRaises(ValueError):
+                s.complement()
 
 print("")
 print("Translating")
