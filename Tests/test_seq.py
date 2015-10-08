@@ -477,48 +477,56 @@ def sorted_dict(d):
     return "{%s}" % ", ".join("%s: %s" % (repr(k), repr(v))
                               for k, v in sorted(d.items()))
 
-test_seqs = [s, t, u,
-             Seq.Seq("ATGAAACTG"),
-             "ATGAAACtg",
-             # TODO - Fix ambiguous translation
-             # Seq.Seq("ATGAARCTG"),
-             # Seq.Seq("AWGAARCKG"),  # Note no U or T
-             # Seq.Seq("".join(ambiguous_rna_values)),
-             # Seq.Seq("".join(ambiguous_dna_values)),
-             # Seq.Seq("".join(ambiguous_rna_values), Alphabet.generic_rna),
-             # Seq.Seq("".join(ambiguous_dna_values), Alphabet.generic_dna),
-             # Seq.Seq("".join(ambiguous_rna_values), IUPAC.IUPACAmbiguousDNA()),
-             # Seq.Seq("".join(ambiguous_dna_values), IUPAC.IUPACAmbiguousRNA()),
-             # Seq.Seq("AWGAARCKG", Alphabet.generic_dna),
-             Seq.Seq("AUGAAACUG", Alphabet.generic_rna),
-             Seq.Seq("ATGAAACTG", IUPAC.unambiguous_dna),
-             Seq.Seq("ATGAAA-CTG", Alphabet.Gapped(IUPAC.unambiguous_dna)),
-             Seq.Seq("ATGAAACTGWN", IUPAC.ambiguous_dna),
-             Seq.Seq("AUGAAACUG", Alphabet.generic_rna),
-             Seq.Seq("AUGAAA==CUG", Alphabet.Gapped(Alphabet.generic_rna, "=")),
-             Seq.Seq("AUGAAACUG", IUPAC.unambiguous_rna),
-             Seq.Seq("AUGAAACUGWN", IUPAC.ambiguous_rna),
-             Seq.Seq("ATGAAACTG", Alphabet.generic_nucleotide),
-             Seq.Seq("AUGAAACTG", Alphabet.generic_nucleotide),  # U and T
-             Seq.MutableSeq("ATGAAACTG", Alphabet.generic_dna),
-             Seq.MutableSeq("AUGaaaCUG", IUPAC.unambiguous_rna),
-             Seq.Seq("ACTGTCGTCT", Alphabet.generic_protein)]
-protein_seqs = [Seq.Seq("ATCGPK", IUPAC.protein),
-                Seq.Seq("T.CGPK", Alphabet.Gapped(IUPAC.protein, ".")),
-                Seq.Seq("T-CGPK", Alphabet.Gapped(IUPAC.protein, "-")),
-                Seq.Seq("MEDG-KRXR*", Alphabet.Gapped(Alphabet.HasStopCodon(IUPAC.extended_protein, "*"), "-")),
-                Seq.MutableSeq("ME-K-DRXR*XU", Alphabet.Gapped(Alphabet.HasStopCodon(IUPAC.extended_protein, "*"), "-")),
-                Seq.Seq("MEDG-KRXR@", Alphabet.HasStopCodon(Alphabet.Gapped(IUPAC.extended_protein, "-"), "@")),
-                Seq.Seq("ME-KR@", Alphabet.HasStopCodon(Alphabet.Gapped(IUPAC.protein, "-"), "@")),
-                Seq.Seq("MEDG.KRXR@", Alphabet.Gapped(Alphabet.HasStopCodon(IUPAC.extended_protein, "@"), "."))]
+test_seqs = [
+    Seq.Seq("TCAAAAGGATGCATCATG", IUPAC.unambiguous_dna),
+    Seq.Seq("T", IUPAC.ambiguous_dna),
+    Seq.Seq("ATGAAACTG"),
+    "ATGAAACtg",
+    Seq.Seq("ATGAARCTG"),
+    Seq.Seq("AWGAARCKG"),  # Note no U or T
+    Seq.Seq("".join(ambiguous_rna_values)),
+    Seq.Seq("".join(ambiguous_dna_values)),
+    Seq.Seq("".join(ambiguous_rna_values), Alphabet.generic_rna),
+    Seq.Seq("".join(ambiguous_dna_values), Alphabet.generic_dna),
+    Seq.Seq("".join(ambiguous_rna_values), IUPAC.IUPACAmbiguousRNA()),
+    Seq.Seq("".join(ambiguous_dna_values), IUPAC.IUPACAmbiguousDNA()),
+    Seq.Seq("AWGAARCKG", Alphabet.generic_dna),
+    Seq.Seq("AUGAAACUG", Alphabet.generic_rna),
+    Seq.Seq("ATGAAACTG", IUPAC.unambiguous_dna),
+    Seq.Seq("ATGAAA-CTG", Alphabet.Gapped(IUPAC.unambiguous_dna)),
+    Seq.Seq("ATGAAACTGWN", IUPAC.ambiguous_dna),
+    Seq.Seq("AUGAAACUG", Alphabet.generic_rna),
+    Seq.Seq("AUGAAA==CUG", Alphabet.Gapped(Alphabet.generic_rna, "=")),
+    Seq.Seq("AUGAAACUG", IUPAC.unambiguous_rna),
+    Seq.Seq("AUGAAACUGWN", IUPAC.ambiguous_rna),
+    Seq.Seq("ATGAAACTG", Alphabet.generic_nucleotide),
+    Seq.Seq("AUGAAACTG", Alphabet.generic_nucleotide),  # U and T
+    Seq.MutableSeq("ATGAAACTG", Alphabet.generic_dna),
+    Seq.MutableSeq("AUGaaaCUG", IUPAC.unambiguous_rna),
+    Seq.Seq("ACTGTCGTCT", Alphabet.generic_protein),
+]
+protein_seqs = [
+    Seq.Seq("ATCGPK", IUPAC.protein),
+    Seq.Seq("T.CGPK", Alphabet.Gapped(IUPAC.protein, ".")),
+    Seq.Seq("T-CGPK", Alphabet.Gapped(IUPAC.protein, "-")),
+    Seq.Seq("MEDG-KRXR*", Alphabet.Gapped(Alphabet.HasStopCodon(IUPAC.extended_protein, "*"), "-")),
+    Seq.MutableSeq("ME-K-DRXR*XU", Alphabet.Gapped(Alphabet.HasStopCodon(IUPAC.extended_protein, "*"), "-")),
+    Seq.Seq("MEDG-KRXR@", Alphabet.HasStopCodon(Alphabet.Gapped(IUPAC.extended_protein, "-"), "@")),
+    Seq.Seq("ME-KR@", Alphabet.HasStopCodon(Alphabet.Gapped(IUPAC.protein, "-"), "@")),
+    Seq.Seq("MEDG.KRXR@", Alphabet.Gapped(Alphabet.HasStopCodon(IUPAC.extended_protein, "@"), ".")),
+]
 
-# Sanity test on the test sequence alphabets (see also enhancement bug 2597)
-for nucleotide_seq in test_seqs:
-    if hasattr(nucleotide_seq, "alphabet"):
-        if "U" in str(nucleotide_seq).upper():
-            assert not isinstance(nucleotide_seq.alphabet, Alphabet.DNAAlphabet)
-        if "T" in str(nucleotide_seq).upper():
-            assert not isinstance(nucleotide_seq.alphabet, Alphabet.RNAAlphabet)
+
+class TestSequenceAlphabets(unittest.TestCase):
+    def test_sequence_alphabets(self):
+        """Sanity test on the test sequence alphabets (see also enhancement
+        bug 2597)"""
+        for nucleotide_seq in test_seqs:
+            if hasattr(nucleotide_seq, "alphabet"):
+                if "U" in str(nucleotide_seq).upper():
+                    self.assertNotIsInstance(nucleotide_seq.alphabet, Alphabet.DNAAlphabet)
+                if "T" in str(nucleotide_seq).upper():
+                    self.assertNotIsInstance(nucleotide_seq.alphabet, Alphabet.RNAAlphabet)
 
 print("")
 print("Transcribe DNA into RNA")
