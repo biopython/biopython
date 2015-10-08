@@ -605,51 +605,58 @@ class TestReverseComplement(unittest.TestCase):
             with self.assertRaises(ValueError):
                 s.complement()
 
-print("")
-print("Translating")
-print("===========")
-for nucleotide_seq in test_seqs:
-    # Truncate to a whole number of codons to avoid translation warning
-    nucleotide_seq = nucleotide_seq[:3 * (len(nucleotide_seq) // 3)]
-    try:
-        expected = Seq.translate(nucleotide_seq)
-        print("%s\n-> %s" % (repr(nucleotide_seq), repr(expected)))
-    except (ValueError, TranslationError) as e:
-        expected = None
-        print("%s\n-> %s" % (repr(nucleotide_seq), str(e)))
-    # Now test the Seq object's method
-    if isinstance(nucleotide_seq, Seq.Seq):
-        try:
-            assert repr(expected) == repr(nucleotide_seq.translate())
-        except (ValueError, TranslationError):
-            assert expected is None
-    # Now check translate(..., to_stop=True)
-    try:
-        short = Seq.translate(nucleotide_seq, to_stop=True)
-    except (ValueError, TranslationError) as e:
-        short = None
-    if expected is not None:
-        assert short is not None
-        assert str(short) == str(expected.split("*")[0])
-    if isinstance(nucleotide_seq, Seq.Seq):
-        try:
-            assert repr(short) == repr(nucleotide_seq.translate(to_stop=True))
-        except (ValueError, TranslationError):
-            assert short is None
 
-for s in protein_seqs:
-    try:
-        print(Seq.translate(s))
-        assert False, "Translation shouldn't work on a protein!"
-    except ValueError:
-        pass
-    if not isinstance(s, Seq.Seq):
-        continue  # Only Seq has this method
-    try:
-        print(s.translate())
-        assert False, "Translation shouldn't work on a protein!"
-    except ValueError:
-        pass
+class TestTranslating(unittest.TestCase):
+    def setUp(self):
+        self.test_seqs = [
+            Seq.Seq("TCAAAAGGATGCATCATG", IUPAC.unambiguous_dna),
+            Seq.Seq("T", IUPAC.ambiguous_dna),
+            Seq.Seq("ATGAAACTG"),
+            Seq.Seq("ATGAARCTG"),
+            Seq.Seq("AWGAARCKG"),  # Note no U or T
+            Seq.Seq("".join(ambiguous_rna_values)),
+            Seq.Seq("".join(ambiguous_dna_values)),
+            Seq.Seq("".join(ambiguous_rna_values), Alphabet.generic_rna),
+            Seq.Seq("".join(ambiguous_dna_values), Alphabet.generic_dna),
+            Seq.Seq("".join(ambiguous_rna_values), IUPAC.IUPACAmbiguousRNA()),
+            Seq.Seq("".join(ambiguous_dna_values), IUPAC.IUPACAmbiguousDNA()),
+            Seq.Seq("AWGAARCKG", Alphabet.generic_dna),
+            Seq.Seq("AUGAAACUG", Alphabet.generic_rna),
+            Seq.Seq("ATGAAACTG", IUPAC.unambiguous_dna),
+            Seq.Seq("ATGAAACTGWN", IUPAC.ambiguous_dna),
+            Seq.Seq("AUGAAACUG", Alphabet.generic_rna),
+            Seq.Seq("AUGAAACUG", IUPAC.unambiguous_rna),
+            Seq.Seq("AUGAAACUGWN", IUPAC.ambiguous_rna),
+            Seq.Seq("ATGAAACTG", Alphabet.generic_nucleotide),
+            Seq.MutableSeq("ATGAAACTG", Alphabet.generic_dna),
+            Seq.MutableSeq("AUGaaaCUG", IUPAC.unambiguous_rna),
+        ]
+
+    def test_translate(self):
+        for nucleotide_seq in self.test_seqs:
+            nucleotide_seq = nucleotide_seq[:3 * (len(nucleotide_seq) // 3)]
+            expected = Seq.translate(nucleotide_seq)
+
+            if isinstance(nucleotide_seq, Seq.Seq):
+                self.assertEqual(repr(expected), repr(nucleotide_seq.translate()))
+
+    def test_translate_to_stop(self):
+        for nucleotide_seq in self.test_seqs:
+            nucleotide_seq = nucleotide_seq[:3 * (len(nucleotide_seq) // 3)]
+            short = Seq.translate(nucleotide_seq, to_stop=True)
+
+            if isinstance(nucleotide_seq, Seq.Seq):
+                self.assertEqual(str(short), str(Seq.translate(nucleotide_seq).split('*')[0]))
+
+    def test_translate_on_proteins(self):
+        """Test translation shouldn't work on a protein!"""
+        for s in protein_seqs:
+            with self.assertRaises(ValueError):
+                Seq.translate(s)
+
+            if isinstance(s, Seq.Seq):
+                with self.assertRaises(ValueError):
+                    s.translate()
 
 
 misc_stops = "TAATAGTGAAGAAGG"
