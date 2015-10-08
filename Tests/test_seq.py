@@ -481,7 +481,6 @@ test_seqs = [
     Seq.Seq("TCAAAAGGATGCATCATG", IUPAC.unambiguous_dna),
     Seq.Seq("T", IUPAC.ambiguous_dna),
     Seq.Seq("ATGAAACTG"),
-    "ATGAAACtg",
     Seq.Seq("ATGAARCTG"),
     Seq.Seq("AWGAARCKG"),  # Note no U or T
     Seq.Seq("".join(ambiguous_rna_values)),
@@ -522,45 +521,35 @@ class TestSequenceAlphabets(unittest.TestCase):
         """Sanity test on the test sequence alphabets (see also enhancement
         bug 2597)"""
         for nucleotide_seq in test_seqs:
-            if hasattr(nucleotide_seq, "alphabet"):
-                if "U" in str(nucleotide_seq).upper():
-                    self.assertNotIsInstance(nucleotide_seq.alphabet, Alphabet.DNAAlphabet)
-                if "T" in str(nucleotide_seq).upper():
-                    self.assertNotIsInstance(nucleotide_seq.alphabet, Alphabet.RNAAlphabet)
+            if "U" in str(nucleotide_seq).upper():
+                self.assertNotIsInstance(nucleotide_seq.alphabet, Alphabet.DNAAlphabet)
+            if "T" in str(nucleotide_seq).upper():
+                self.assertNotIsInstance(nucleotide_seq.alphabet, Alphabet.RNAAlphabet)
 
-print("")
-print("Transcribe DNA into RNA")
-print("=======================")
-for nucleotide_seq in test_seqs:
-    try:
-        expected = Seq.transcribe(nucleotide_seq)
-        assert str(nucleotide_seq).replace("t", "u").replace("T", "U") == str(expected)
-        print("%s -> %s"
-        % (repr(nucleotide_seq), repr(expected)))
-    except ValueError as e:
-        expected = None
-        print("%s -> %s"
-        % (repr(nucleotide_seq), str(e)))
-    # Now test the Seq object's method
-    if isinstance(nucleotide_seq, Seq.Seq):
-        try:
-            assert repr(expected) == repr(nucleotide_seq.transcribe())
-        except ValueError:
-            assert expected is None
 
-for s in protein_seqs:
-    try:
-        print(Seq.transcribe(s))
-        assert False, "Transcription shouldn't work on a protein!"
-    except ValueError:
-        pass
-    if not isinstance(s, Seq.Seq):
-        continue  # Only Seq has this method
-    try:
-        print(s.transcribe())
-        assert False, "Transcription shouldn't work on a protein!"
-    except ValueError:
-        pass
+class TestTranscription(unittest.TestCase):
+    def test_transcription_dna_into_rna(self):
+        for nucleotide_seq in test_seqs:
+            if isinstance(nucleotide_seq.alphabet, Alphabet.DNAAlphabet):
+                self.assertEqual(str(nucleotide_seq).replace("t", "u").replace("T", "U"),
+                                 str(Seq.transcribe(nucleotide_seq)))
+
+    def test_seq_object_transcription_method(self):
+        for nucleotide_seq in test_seqs:
+            if isinstance(nucleotide_seq.alphabet, Alphabet.DNAAlphabet) and \
+                    isinstance(nucleotide_seq, Seq.Seq):
+                self.assertEqual(repr(Seq.transcribe(nucleotide_seq)),
+                                 repr(nucleotide_seq.transcribe()))
+
+    def test_transcription_of_proteins(self):
+        """Transcription shouldn't work on a protein!"""
+        for s in protein_seqs:
+            with self.assertRaises(ValueError):
+                Seq.transcribe(s)
+
+            if isinstance(s, Seq.Seq):
+                with self.assertRaises(ValueError):
+                    s.transcribe()
 
 print("")
 print("Back-transcribe RNA into DNA")
