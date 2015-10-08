@@ -658,54 +658,50 @@ class TestTranslating(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     s.translate()
 
+    def test_translation_of_invalid_codon(self):
+        for codon in ["TA?", "N-N", "AC_", "Ac_"]:
+            with self.assertRaises(TranslationError):
+                Seq.translate(codon)
 
-misc_stops = "TAATAGTGAAGAAGG"
-for nucleotide_seq in [misc_stops, Seq.Seq(misc_stops),
-                       Seq.Seq(misc_stops, Alphabet.generic_nucleotide),
-                       Seq.Seq(misc_stops, Alphabet.DNAAlphabet()),
-                       Seq.Seq(misc_stops, IUPAC.unambiguous_dna)]:
-    assert "***RR" == str(Seq.translate(nucleotide_seq))
-    assert "***RR" == str(Seq.translate(nucleotide_seq, table=1))
-    assert "***RR" == str(Seq.translate(nucleotide_seq, table="SGC0"))
-    assert "**W**" == str(Seq.translate(nucleotide_seq, table=2))
-    assert "**WRR" == str(Seq.translate(nucleotide_seq,
-                                        table='Yeast Mitochondrial'))
-    assert "**WSS" == str(Seq.translate(nucleotide_seq, table=5))
-    assert "**WSS" == str(Seq.translate(nucleotide_seq, table=9))
-    assert "**CRR" == str(Seq.translate(nucleotide_seq,
-                                        table='Euplotid Nuclear'))
-    assert "***RR" == str(Seq.translate(nucleotide_seq, table=11))
-    assert "***RR" == str(Seq.translate(nucleotide_seq, table='Bacterial'))
-del misc_stops
 
-for s in protein_seqs:
-    try:
-        print(Seq.translate(s))
-        assert False, "Shouldn't work on a protein!"
-    except ValueError:
-        pass
+class TestStopCodons(unittest.TestCase):
+    def setUp(self):
+        self.misc_stops = "TAATAGTGAAGAAGG"
 
-assert Seq.translate("TAT") == "Y"
-assert Seq.translate("TAR") == "*"
-assert Seq.translate("TAN") == "X"
-assert Seq.translate("NNN") == "X"
+    def test_stops(self):
+        for nucleotide_seq in [self.misc_stops, Seq.Seq(self.misc_stops),
+                               Seq.Seq(self.misc_stops, Alphabet.generic_nucleotide),
+                               Seq.Seq(self.misc_stops, Alphabet.DNAAlphabet()),
+                               Seq.Seq(self.misc_stops, IUPAC.unambiguous_dna)]:
+            self.assertEqual("***RR", str(Seq.translate(nucleotide_seq)))
+            self.assertEqual("***RR", str(Seq.translate(nucleotide_seq, table=1)))
+            self.assertEqual("***RR", str(Seq.translate(nucleotide_seq, table="SGC0")))
+            self.assertEqual("**W**", str(Seq.translate(nucleotide_seq, table=2)))
+            self.assertEqual("**WRR", str(Seq.translate(nucleotide_seq,
+                                              table='Yeast Mitochondrial')))
+            self.assertEqual("**WSS", str(Seq.translate(nucleotide_seq, table=5)))
+            self.assertEqual("**WSS", str(Seq.translate(nucleotide_seq, table=9)))
+            self.assertEqual("**CRR", str(Seq.translate(nucleotide_seq,
+                                              table='Euplotid Nuclear')))
+            self.assertEqual("***RR", str(Seq.translate(nucleotide_seq, table=11)))
+            self.assertEqual("***RR", str(Seq.translate(nucleotide_seq, table='Bacterial')))
 
-assert Seq.translate("TAt") == "Y"
-assert Seq.translate("TaR") == "*"
-assert Seq.translate("TaN") == "X"
-assert Seq.translate("nnN") == "X"
+    def test_translation_of_stops(self):
+        self.assertEqual(Seq.translate("TAT"), "Y")
+        self.assertEqual(Seq.translate("TAR"), "*")
+        self.assertEqual(Seq.translate("TAN"), "X")
+        self.assertEqual(Seq.translate("NNN"), "X")
 
-assert Seq.translate("tat") == "Y"
-assert Seq.translate("tar") == "*"
-assert Seq.translate("tan") == "X"
-assert Seq.translate("nnn") == "X"
+        self.assertEqual(Seq.translate("TAt"), "Y")
+        self.assertEqual(Seq.translate("TaR"), "*")
+        self.assertEqual(Seq.translate("TaN"), "X")
+        self.assertEqual(Seq.translate("nnN"), "X")
 
-for codon in ["TA?", "N-N", "AC_", "Ac_"]:
-    try:
-        print(Seq.translate(codon))
-        assert "Translating %s should have failed" % repr(codon)
-    except TranslationError:
-        pass
+        self.assertEqual(Seq.translate("tat"), "Y")
+        self.assertEqual(Seq.translate("tar"), "*")
+        self.assertEqual(Seq.translate("tan"), "X")
+        self.assertEqual(Seq.translate("nnn"), "X")
+
 
 ambig = set(IUPAC.IUPACAmbiguousDNA.letters)
 for c1 in ambig:
