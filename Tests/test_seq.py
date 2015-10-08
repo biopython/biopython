@@ -453,6 +453,21 @@ class TestComplement(unittest.TestCase):
                              set(ambiguous_rna_values[ambiguous_rna_complement[ambig_char]]))
 
 
+class TestReverseComplement(unittest.TestCase):
+    def test_reverse_complements(self):
+        """Test double reverse complement preserves the sequence"""
+        for sequence in [Seq.Seq("".join(sorted(ambiguous_rna_values))),
+                         Seq.Seq("".join(sorted(ambiguous_dna_values))),
+                         Seq.Seq("".join(sorted(ambiguous_rna_values)), Alphabet.generic_rna),
+                         Seq.Seq("".join(sorted(ambiguous_dna_values)), Alphabet.generic_dna),
+                         Seq.Seq("".join(sorted(ambiguous_rna_values)).replace("X", ""), IUPAC.IUPACAmbiguousRNA()),
+                         Seq.Seq("".join(sorted(ambiguous_dna_values)).replace("X", ""), IUPAC.IUPACAmbiguousDNA()),
+                         Seq.Seq("AWGAARCKG")]:  # Note no U or T
+            reversed_sequence = sequence.reverse_complement()
+            self.assertEqual(str(sequence),
+                             str(reversed_sequence.reverse_complement()))
+
+
 def complement(sequence):
     return Seq.reverse_complement(sequence)[::-1]
 
@@ -461,25 +476,6 @@ def sorted_dict(d):
     """A sorted repr of a dictionary."""
     return "{%s}" % ", ".join("%s: %s" % (repr(k), repr(v))
                               for k, v in sorted(d.items()))
-
-
-print("")
-print("Reverse complements:")
-for sequence in [Seq.Seq("".join(sorted(ambiguous_rna_values))),
-            Seq.Seq("".join(sorted(ambiguous_dna_values))),
-            Seq.Seq("".join(sorted(ambiguous_rna_values)), Alphabet.generic_rna),
-            Seq.Seq("".join(sorted(ambiguous_dna_values)), Alphabet.generic_dna),
-            Seq.Seq("".join(sorted(ambiguous_rna_values)).replace("X", ""), IUPAC.IUPACAmbiguousRNA()),
-            Seq.Seq("".join(sorted(ambiguous_dna_values)).replace("X", ""), IUPAC.IUPACAmbiguousDNA()),
-            Seq.Seq("AWGAARCKG")]:  # Note no U or T
-        print("%s -> %s"
-              % (repr(sequence), repr(Seq.reverse_complement(sequence))))
-        assert str(sequence) \
-           == str(Seq.reverse_complement(Seq.reverse_complement(sequence))), \
-           "Dobule reverse complement didn't preserve the sequence!"
-print("")
-
-###########################################################################
 
 test_seqs = [s, t, u,
              Seq.Seq("ATGAAACTG"),
