@@ -531,8 +531,9 @@ class TestTranscription(unittest.TestCase):
     def test_transcription_dna_into_rna(self):
         for nucleotide_seq in test_seqs:
             if isinstance(nucleotide_seq.alphabet, Alphabet.DNAAlphabet):
+                expected = Seq.transcribe(nucleotide_seq)
                 self.assertEqual(str(nucleotide_seq).replace("t", "u").replace("T", "U"),
-                                 str(Seq.transcribe(nucleotide_seq)))
+                                 str(expected))
 
     def test_seq_object_transcription_method(self):
         for nucleotide_seq in test_seqs:
@@ -542,7 +543,7 @@ class TestTranscription(unittest.TestCase):
                                  repr(nucleotide_seq.transcribe()))
 
     def test_transcription_of_proteins(self):
-        """Transcription shouldn't work on a protein!"""
+        """Test transcription shouldn't work on a protein!"""
         for s in protein_seqs:
             with self.assertRaises(ValueError):
                 Seq.transcribe(s)
@@ -551,39 +552,29 @@ class TestTranscription(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     s.transcribe()
 
-print("")
-print("Back-transcribe RNA into DNA")
-print("============================")
-for nucleotide_seq in test_seqs:
-    try:
-        expected = Seq.back_transcribe(nucleotide_seq)
-        assert str(nucleotide_seq).replace("u", "t").replace("U", "T") == str(expected)
-        print("%s -> %s"
-        % (repr(nucleotide_seq), repr(expected)))
-    except ValueError as e:
-        expected = None
-        print("%s -> %s"
-        % (repr(nucleotide_seq), str(e)))
-    # Now test the Seq object's method
-    if isinstance(nucleotide_seq, Seq.Seq):
-        try:
-            assert repr(expected) == repr(nucleotide_seq.back_transcribe())
-        except ValueError:
-            assert expected is None
+    def test_back_transcribe_rna_into_dna(self):
+        for nucleotide_seq in test_seqs:
+            if isinstance(nucleotide_seq.alphabet, Alphabet.RNAAlphabet):
+                expected = Seq.back_transcribe(nucleotide_seq)
+                self.assertEqual(str(nucleotide_seq).replace("u", "t").replace("U", "T"),
+                                 str(expected))
 
-for s in protein_seqs:
-    try:
-        print(Seq.back_transcribe(s))
-        assert False, "Back transcription shouldn't work on a protein!"
-    except ValueError:
-        pass
-    if not isinstance(s, Seq.Seq):
-        continue  # Only Seq has this method
-    try:
-        print(s.back_transcribe())
-        assert False, "Back transcription shouldn't work on a protein!"
-    except ValueError:
-        pass
+    def test_seq_object_back_transcription_method(self):
+        for nucleotide_seq in test_seqs:
+            if isinstance(nucleotide_seq.alphabet, Alphabet.RNAAlphabet) and \
+                    isinstance(nucleotide_seq, Seq.Seq):
+                expected = Seq.back_transcribe(nucleotide_seq)
+                self.assertEqual(repr(nucleotide_seq.back_transcribe()), repr(expected))
+
+    def test_back_transcription_of_proteins(self):
+        """Test back-transcription shouldn't work on a protein!"""
+        for s in protein_seqs:
+            with self.assertRaises(ValueError):
+                Seq.back_transcribe(s)
+
+            if isinstance(s, Seq.Seq):
+                with self.assertRaises(ValueError):
+                    s.back_transcribe()
 
 print("")
 print("Reverse Complement")
