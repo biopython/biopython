@@ -589,6 +589,10 @@ class TestReverseComplement(unittest.TestCase):
                 expected = Seq.reverse_complement(nucleotide_seq)
                 self.assertEqual(repr(expected), repr(nucleotide_seq.reverse_complement()))
                 self.assertEqual(repr(expected[::-1]), repr(nucleotide_seq.complement()))
+                self.assertEqual(str(nucleotide_seq.complement()),
+                                 str(Seq.reverse_complement(nucleotide_seq))[::-1])
+                self.assertEqual(str(nucleotide_seq.reverse_complement()),
+                                 str(Seq.reverse_complement(nucleotide_seq)))
 
     def test_reverse_complement_on_proteins(self):
         """Test reverse complement shouldn't work on a protein!"""
@@ -610,7 +614,6 @@ class TestTranslating(unittest.TestCase):
     def setUp(self):
         self.test_seqs = [
             Seq.Seq("TCAAAAGGATGCATCATG", IUPAC.unambiguous_dna),
-            Seq.Seq("T", IUPAC.ambiguous_dna),
             Seq.Seq("ATGAAACTG"),
             Seq.Seq("ATGAARCTG"),
             Seq.Seq("AWGAARCKG"),  # Note no U or T
@@ -635,17 +638,15 @@ class TestTranslating(unittest.TestCase):
     def test_translation(self):
         for nucleotide_seq in self.test_seqs:
             nucleotide_seq = nucleotide_seq[:3 * (len(nucleotide_seq) // 3)]
-            expected = Seq.translate(nucleotide_seq)
-
-            if isinstance(nucleotide_seq, Seq.Seq):
+            if isinstance(nucleotide_seq, Seq.Seq) and 'X' not in str(nucleotide_seq):
+                expected = Seq.translate(nucleotide_seq)
                 self.assertEqual(repr(expected), repr(nucleotide_seq.translate()))
 
     def test_translation_to_stop(self):
         for nucleotide_seq in self.test_seqs:
             nucleotide_seq = nucleotide_seq[:3 * (len(nucleotide_seq) // 3)]
-            short = Seq.translate(nucleotide_seq, to_stop=True)
-
-            if isinstance(nucleotide_seq, Seq.Seq):
+            if isinstance(nucleotide_seq, Seq.Seq) and 'X' not in str(nucleotide_seq):
+                short = Seq.translate(nucleotide_seq, to_stop=True)
                 self.assertEqual(str(short), str(Seq.translate(nucleotide_seq).split('*')[0]))
 
     def test_translation_on_proteins(self):
@@ -713,33 +714,3 @@ class TestStopCodons(unittest.TestCase):
         self.assertEqual(Seq.translate("tar"), "*")
         self.assertEqual(Seq.translate("tan"), "X")
         self.assertEqual(Seq.translate("nnn"), "X")
-
-print("")
-print("Seq's .complement() method")
-print("==========================")
-for nucleotide_seq in test_seqs:
-    if isinstance(nucleotide_seq, Seq.Seq):
-        try:
-            print("%s -> %s"
-            % (repr(nucleotide_seq), repr(nucleotide_seq.complement())))
-            assert str(nucleotide_seq.complement()) \
-                == str(Seq.reverse_complement(nucleotide_seq))[::-1], \
-                "Bio.Seq function and method disagree!"
-        except ValueError as e:
-            print("%s -> %s"
-            % (repr(nucleotide_seq), str(e)))
-
-print("")
-print("Seq's .reverse_complement() method")
-print("==================================")
-for nucleotide_seq in test_seqs:
-    if isinstance(nucleotide_seq, Seq.Seq):
-        try:
-            print("%s -> %s"
-            % (repr(nucleotide_seq), repr(nucleotide_seq.reverse_complement())))
-            assert str(nucleotide_seq.reverse_complement()) \
-                == str(Seq.reverse_complement(nucleotide_seq)), \
-                "Bio.Seq function and method disagree!"
-        except ValueError as e:
-            print("%s -> %s"
-            % (repr(nucleotide_seq), str(e)))
