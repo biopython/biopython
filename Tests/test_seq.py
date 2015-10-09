@@ -632,7 +632,7 @@ class TestTranslating(unittest.TestCase):
             Seq.MutableSeq("AUGaaaCUG", IUPAC.unambiguous_rna),
         ]
 
-    def test_translate(self):
+    def test_translation(self):
         for nucleotide_seq in self.test_seqs:
             nucleotide_seq = nucleotide_seq[:3 * (len(nucleotide_seq) // 3)]
             expected = Seq.translate(nucleotide_seq)
@@ -640,7 +640,7 @@ class TestTranslating(unittest.TestCase):
             if isinstance(nucleotide_seq, Seq.Seq):
                 self.assertEqual(repr(expected), repr(nucleotide_seq.translate()))
 
-    def test_translate_to_stop(self):
+    def test_translation_to_stop(self):
         for nucleotide_seq in self.test_seqs:
             nucleotide_seq = nucleotide_seq[:3 * (len(nucleotide_seq) // 3)]
             short = Seq.translate(nucleotide_seq, to_stop=True)
@@ -648,7 +648,7 @@ class TestTranslating(unittest.TestCase):
             if isinstance(nucleotide_seq, Seq.Seq):
                 self.assertEqual(str(short), str(Seq.translate(nucleotide_seq).split('*')[0]))
 
-    def test_translate_on_proteins(self):
+    def test_translation_on_proteins(self):
         """Test translation shouldn't work on a protein!"""
         for s in protein_seqs:
             with self.assertRaises(ValueError):
@@ -662,6 +662,18 @@ class TestTranslating(unittest.TestCase):
         for codon in ["TA?", "N-N", "AC_", "Ac_"]:
             with self.assertRaises(TranslationError):
                 Seq.translate(codon)
+
+    def test_translation_of_glutamine(self):
+        for codon in ['SAR', 'SAG', 'SAA']:
+            self.assertEqual('Z', Seq.translate(codon))
+
+    def test_translation_of_asparagine(self):
+        for codon in ['RAY', 'RAT', 'RAC']:
+            self.assertEqual('B', Seq.translate(codon))
+
+    def test_translation_of_leucine(self):
+        for codon in ['WTA', 'MTY', 'MTT', 'MTW', 'MTM', 'MTH', 'MTA', 'MTC', 'HTA']:
+            self.assertEqual('J', Seq.translate(codon))
 
 
 class TestStopCodons(unittest.TestCase):
@@ -701,34 +713,6 @@ class TestStopCodons(unittest.TestCase):
         self.assertEqual(Seq.translate("tar"), "*")
         self.assertEqual(Seq.translate("tan"), "X")
         self.assertEqual(Seq.translate("nnn"), "X")
-
-
-ambig = set(IUPAC.IUPACAmbiguousDNA.letters)
-for c1 in ambig:
-    for c2 in ambig:
-        for c3 in ambig:
-            values = set([Seq.translate(a + b + c, table=1)
-                          for a in ambiguous_dna_values[c1]
-                          for b in ambiguous_dna_values[c2]
-                          for c in ambiguous_dna_values[c3]])
-            t = Seq.translate(c1 + c2 + c3)
-            if t == "*":
-                assert values == set("*")
-            elif t == "X":
-                assert len(values) > 1, \
-                    "translate('%s') = '%s' not '%s'" \
-                    % (c1 + c2 + c3, t, ",".join(values))
-            elif t == "Z":
-                assert values == set("EQ")
-            elif t == "B":
-                assert values == set("DN")
-            elif t == "J":
-                assert values == set("LI")
-            else:
-                assert values == set(t)
-            # TODO - Use the Bio.Data.IUPACData module for the
-            # ambiguous protein mappings?
-del t, c1, c2, c3, ambig
 
 print("")
 print("Seq's .complement() method")
