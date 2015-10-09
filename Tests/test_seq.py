@@ -10,10 +10,12 @@ import copy
 
 from Bio import Alphabet
 from Bio import Seq
+from Bio import BiopythonWarning
 from Bio.Alphabet import IUPAC
 from Bio.Data.IUPACData import ambiguous_dna_complement, ambiguous_rna_complement
 from Bio.Data.IUPACData import ambiguous_dna_values, ambiguous_rna_values
 from Bio.Data.CodonTable import TranslationError
+from Bio.Data.CodonTable import standard_dna_table
 from Bio.Seq import MutableSeq
 
 
@@ -536,6 +538,10 @@ class TestTranscription(unittest.TestCase):
                 self.assertEqual(str(nucleotide_seq).replace("t", "u").replace("T", "U"),
                                  str(expected))
 
+    def test_transcription_dna_string_into_rna(self):
+        seq = "ATGAAACTG"
+        self.assertEqual("AUGAAACUG", Seq.transcribe(seq))
+
     def test_seq_object_transcription_method(self):
         for nucleotide_seq in test_seqs:
             if isinstance(nucleotide_seq.alphabet, Alphabet.DNAAlphabet) and \
@@ -559,6 +565,10 @@ class TestTranscription(unittest.TestCase):
                 expected = Seq.back_transcribe(nucleotide_seq)
                 self.assertEqual(str(nucleotide_seq).replace("u", "t").replace("U", "T"),
                                  str(expected))
+
+    def test_back_transcribe_rna_string_into_dna(self):
+        seq = "AUGAAACUG"
+        self.assertEqual("ATGAAACTG", Seq.back_transcribe(seq))
 
     def test_seq_object_back_transcription_method(self):
         for nucleotide_seq in test_seqs:
@@ -593,6 +603,18 @@ class TestReverseComplement(unittest.TestCase):
                                  str(Seq.reverse_complement(nucleotide_seq))[::-1])
                 self.assertEqual(str(nucleotide_seq.reverse_complement()),
                                  str(Seq.reverse_complement(nucleotide_seq)))
+
+    def test_reverse_complement_of_mixed_dna_rna(self):
+        seq = "AUGAAACTG"  # U and T
+        self.assertRaises(ValueError, Seq.reverse_complement, seq)
+
+    def test_reverse_complement_of_rna(self):
+        seq = "AUGAAACUG"
+        self.assertEqual("CAGUUUCAU", Seq.reverse_complement(seq))
+
+    def test_reverse_complement_of_dna(self):
+        seq = "ATGAAACTG"
+        self.assertEqual("CAGTTTCAT", Seq.reverse_complement(seq))
 
     def test_reverse_complement_on_proteins(self):
         """Test reverse complement shouldn't work on a protein!"""
@@ -642,12 +664,19 @@ class TestTranslating(unittest.TestCase):
                 expected = Seq.translate(nucleotide_seq)
                 self.assertEqual(repr(expected), repr(nucleotide_seq.translate()))
 
+    def test_translation_of_string(self):
+        seq = "GTGGCCATTGTAATGGGCCGC"
+        self.assertEqual("VAIVMGR", Seq.translate(seq))
+
     def test_translation_to_stop(self):
         for nucleotide_seq in self.test_seqs:
             nucleotide_seq = nucleotide_seq[:3 * (len(nucleotide_seq) // 3)]
             if isinstance(nucleotide_seq, Seq.Seq) and 'X' not in str(nucleotide_seq):
                 short = Seq.translate(nucleotide_seq, to_stop=True)
                 self.assertEqual(str(short), str(Seq.translate(nucleotide_seq).split('*')[0]))
+
+        seq = "GTGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG"
+        self.assertEqual("VAIVMGRWKGAR", Seq.translate(seq, table=2, to_stop=True))
 
     def test_translation_on_proteins(self):
         """Test translation shouldn't work on a protein!"""
@@ -675,6 +704,40 @@ class TestTranslating(unittest.TestCase):
     def test_translation_of_leucine(self):
         for codon in ['WTA', 'MTY', 'MTT', 'MTW', 'MTM', 'MTH', 'MTA', 'MTC', 'HTA']:
             self.assertEqual('J', Seq.translate(codon))
+
+    def test_translation_with_bad_table_argument(self):
+        table = dict()
+        with self.assertRaises(ValueError):
+            Seq.translate("GTGGCCATTGTAATGGGCCGC", table=table)
+
+    def test_translation_with_codon_table_as_table_argument(self):
+        table = standard_dna_table
+        self.assertEqual("VAIVMGR", Seq.translate("GTGGCCATTGTAATGGGCCGC", table=table))
+
+    def test_translation_incomplete_codon(self):
+        with self.assertWarns(BiopythonWarning):
+            Seq.translate("GTGGCCATTGTAATGGGCCG")
+
+    def test_translation_extra_stop_codon(self):
+        seq = "GTGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAGTAG"
+        with self.assertRaises(TranslationError):
+            Seq.translate(seq, table=2, cds=True)
+
+    def test_translation_using_cds(self):
+        seq = "GTGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG"
+        self.assertEqual("MAIVMGRWKGAR", Seq.translate(seq, table=2, cds=True))
+
+        seq = "GTGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCG"  # not multiple of three
+        with self.assertRaises(TranslationError):
+            Seq.translate(seq, table=2, cds=True)
+
+        seq = "GTGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGA"  # no stop codon
+        with self.assertRaises(TranslationError):
+            Seq.translate(seq, table=2, cds=True)
+
+        seq = "GCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG"  # no start codon
+        with self.assertRaises(TranslationError):
+            Seq.translate(seq, table=2, cds=True)
 
 
 class TestStopCodons(unittest.TestCase):
