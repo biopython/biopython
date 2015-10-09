@@ -11,6 +11,7 @@ import copy
 from Bio import Alphabet
 from Bio import Seq
 from Bio import BiopythonWarning
+from Bio import BiopythonDeprecationWarning
 from Bio.Alphabet import IUPAC
 from Bio.Data.IUPACData import ambiguous_dna_complement, ambiguous_rna_complement
 from Bio.Data.IUPACData import ambiguous_dna_values, ambiguous_rna_values
@@ -115,6 +116,66 @@ class TestMutableSeq(unittest.TestCase):
         self.assertEqual("MutableSeq('TCAAAAGGATGCATCATG', IUPACAmbiguousDNA())",
                          repr(self.mutable_s))
 
+    def test_truncated_repr(self):
+        seq = "TCAAAAGGATGCATCATGTCAAAAGGATGCATCATGTCAAAAGGATGCATCATGTCAAAAGGA"
+        expected = "MutableSeq('TCAAAAGGATGCATCATGTCAAAAGGATGCATCATGTCAAAAGGATGCATCATG...GGA', IUPACAmbiguousDNA())"
+        self.assertEqual(expected, repr(MutableSeq(seq, IUPAC.ambiguous_dna)))
+
+    def test_equal_comparison(self):
+        """Test __eq__ comparison method"""
+        self.assertEqual(self.mutable_s, "TCAAAAGGATGCATCATG")
+
+    def test_equal_comparison_of_incompatible_alphabets(self):
+        with self.assertWarns(BiopythonWarning):
+            self.mutable_s == MutableSeq('UCAAAAGGA', IUPAC.ambiguous_rna)
+
+    def test_not_equal_comparison(self):
+        """Test __ne__ comparison method"""
+        self.assertNotEqual(self.mutable_s, "other thing")
+
+    def test_less_than_comparison(self):
+        """Test __lt__ comparison method"""
+        self.assertTrue(self.mutable_s[:-1] < self.mutable_s)
+
+    def test_less_than_comparison_of_incompatible_alphabets(self):
+        with self.assertWarns(BiopythonWarning):
+            self.mutable_s[:-1] < MutableSeq("UCAAAAGGAUGCAUCAUG", IUPAC.ambiguous_rna)
+
+    def test_less_than_comparison_without_alphabet(self):
+        self.assertTrue(self.mutable_s[:-1] < "TCAAAAGGATGCATCATG")
+
+    def test_less_than_or_equal_comparison(self):
+        """Test __le__ comparison method"""
+        self.assertTrue(self.mutable_s[:-1] <= self.mutable_s)
+
+    def test_less_than_or_equal_comparison_of_incompatible_alphabets(self):
+        with self.assertWarns(BiopythonWarning):
+            self.mutable_s[:-1] <= MutableSeq("UCAAAAGGAUGCAUCAUG", IUPAC.ambiguous_rna)
+
+    def test_less_than_or_equal_comparison_without_alphabet(self):
+        self.assertTrue(self.mutable_s[:-1] <= "TCAAAAGGATGCATCATG")
+
+    def test_add_method(self):
+        """Test adding wrong type to MutableSeq"""
+        with self.assertRaises(TypeError):
+            c = self.mutable_s + 1234
+
+    def test_radd_method(self):
+        self.assertEqual("TCAAAAGGATGCATCATGTCAAAAGGATGCATCATG",
+                         self.mutable_s.__radd__(self.mutable_s))
+
+    def test_radd_method_incompatible_alphabets(self):
+        with self.assertRaises(TypeError):
+            self.mutable_s.__radd__(MutableSeq("UCAAAAGGA", IUPAC.ambiguous_rna))
+
+    def test_radd_method_using_seq_object(self):
+        self.assertEqual("TCAAAAGGATGCATCATGTCAAAAGGATGCATCATG",
+                         self.mutable_s.__radd__(self.s))
+
+    def test_radd_method_wrong_type(self):
+        with self.assertRaises(TypeError):
+            c = self.mutable_s.__radd__(1234)
+
     def test_as_string(self):
         self.assertEqual("TCAAAAGGATGCATCATG", str(self.mutable_s))
 
@@ -181,9 +242,11 @@ class TestMutableSeq(unittest.TestCase):
 
     def test_count(self):
         self.assertEqual(7, self.mutable_s.count("A"))
+        self.assertEqual(2, self.mutable_s.count("AA"))
 
     def test_index(self):
         self.assertEqual(2, self.mutable_s.index("A"))
+        self.assertRaises(ValueError, self.mutable_s.index, "8888")
 
     def test_reverse(self):
         """Test using reverse method"""
@@ -195,6 +258,44 @@ class TestMutableSeq(unittest.TestCase):
         """Test reverse using -1 stride"""
         self.assertEqual(MutableSeq("GTACTACGTAGGAAAACT", IUPAC.ambiguous_dna),
                          self.mutable_s[::-1])
+
+    def test_complement(self):
+        self.mutable_s.complement()
+        self.assertEqual(str("AGTTTTCCTACGTAGTAC"), str(self.mutable_s))
+
+    def test_complement_rna(self):
+        seq = Seq.MutableSeq("AUGaaaCUG", IUPAC.unambiguous_rna)
+        seq.complement()
+        self.assertEqual(str("UACuuuGAC"), str(seq))
+
+    def test_complement_mixed_aphabets(self):
+        seq = Seq.MutableSeq("AUGaaaCTG")
+        with self.assertRaises(ValueError):
+            seq.complement()
+
+    def test_complement_rna_string(self):
+        seq = Seq.MutableSeq("AUGaaaCUG")
+        seq.complement()
+        self.assertEqual('UACuuuGAC', str(seq))
+
+    def test_complement_dna_string(self):
+        seq = Seq.MutableSeq("ATGaaaCTG")
+        seq.complement()
+        self.assertEqual('TACtttGAC', str(seq))
+
+    def test_reverse_complement(self):
+        self.mutable_s.reverse_complement()
+        self.assertEqual("CATGATGCATCCTTTTGA", str(self.mutable_s))
+
+    def test_reverse_complement_of_protein(self):
+        seq = Seq.MutableSeq("ACTGTCGTCT", Alphabet.generic_protein)
+        with self.assertRaises(ValueError):
+            seq.reverse_complement()
+
+    def test_to_string_method(self):
+        """This method is currently deprecated, probably will need to remove this test soon"""
+        with self.assertWarns(BiopythonDeprecationWarning):
+            self.mutable_s.tostring()
 
     def test_extend_method(self):
         self.mutable_s.extend("GAT")
