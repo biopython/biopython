@@ -3,21 +3,21 @@
 # as part of this package.
 
 from __future__ import print_function
-import unittest
-import sys
 import array
 import copy
+import sys
+import unittest
+import warnings
 
 from Bio import Alphabet
 from Bio import Seq
-from Bio import BiopythonWarning
-from Bio import BiopythonDeprecationWarning
 from Bio.Alphabet import IUPAC
 from Bio.Data.IUPACData import ambiguous_dna_complement, ambiguous_rna_complement
 from Bio.Data.IUPACData import ambiguous_dna_values, ambiguous_rna_values
 from Bio.Data.CodonTable import TranslationError
 from Bio.Data.CodonTable import standard_dna_table
 from Bio.Seq import MutableSeq
+from Bio.SeqIO import SeqRecord
 
 
 if sys.version_info[0] == 3:
@@ -25,6 +25,52 @@ if sys.version_info[0] == 3:
 else:
     array_indicator = "c"
 
+###########################################################################
+s = Seq.Seq("TCAAAAGGATGCATCATG", IUPAC.unambiguous_dna)
+t = Seq.Seq("T", IUPAC.ambiguous_dna)
+u = s + t
+string_seq = MutableSeq("TCAAAAGGATGCATCATG", IUPAC.ambiguous_dna)
+array_seq = MutableSeq(array.array(array_indicator, "TCAAAAGGATGCATCATG"),
+                       IUPAC.ambiguous_dna)
+converted_seq = s.tomutable()
+
+test_seqs = [
+    Seq.Seq("TCAAAAGGATGCATCATG", IUPAC.unambiguous_dna),
+    Seq.Seq("T", IUPAC.ambiguous_dna),
+    Seq.Seq("ATGAAACTG"),
+    Seq.Seq("ATGAARCTG"),
+    Seq.Seq("AWGAARCKG"),  # Note no U or T
+    Seq.Seq("".join(ambiguous_rna_values)),
+    Seq.Seq("".join(ambiguous_dna_values)),
+    Seq.Seq("".join(ambiguous_rna_values), Alphabet.generic_rna),
+    Seq.Seq("".join(ambiguous_dna_values), Alphabet.generic_dna),
+    Seq.Seq("".join(ambiguous_rna_values), IUPAC.IUPACAmbiguousRNA()),
+    Seq.Seq("".join(ambiguous_dna_values), IUPAC.IUPACAmbiguousDNA()),
+    Seq.Seq("AWGAARCKG", Alphabet.generic_dna),
+    Seq.Seq("AUGAAACUG", Alphabet.generic_rna),
+    Seq.Seq("ATGAAACTG", IUPAC.unambiguous_dna),
+    Seq.Seq("ATGAAA-CTG", Alphabet.Gapped(IUPAC.unambiguous_dna)),
+    Seq.Seq("ATGAAACTGWN", IUPAC.ambiguous_dna),
+    Seq.Seq("AUGAAACUG", Alphabet.generic_rna),
+    Seq.Seq("AUGAAA==CUG", Alphabet.Gapped(Alphabet.generic_rna, "=")),
+    Seq.Seq("AUGAAACUG", IUPAC.unambiguous_rna),
+    Seq.Seq("AUGAAACUGWN", IUPAC.ambiguous_rna),
+    Seq.Seq("ATGAAACTG", Alphabet.generic_nucleotide),
+    Seq.Seq("AUGAAACTG", Alphabet.generic_nucleotide),  # U and T
+    Seq.MutableSeq("ATGAAACTG", Alphabet.generic_dna),
+    Seq.MutableSeq("AUGaaaCUG", IUPAC.unambiguous_rna),
+    Seq.Seq("ACTGTCGTCT", Alphabet.generic_protein),
+]
+protein_seqs = [
+    Seq.Seq("ATCGPK", IUPAC.protein),
+    Seq.Seq("T.CGPK", Alphabet.Gapped(IUPAC.protein, ".")),
+    Seq.Seq("T-CGPK", Alphabet.Gapped(IUPAC.protein, "-")),
+    Seq.Seq("MEDG-KRXR*", Alphabet.Gapped(Alphabet.HasStopCodon(IUPAC.extended_protein, "*"), "-")),
+    Seq.MutableSeq("ME-K-DRXR*XU", Alphabet.Gapped(Alphabet.HasStopCodon(IUPAC.extended_protein, "*"), "-")),
+    Seq.Seq("MEDG-KRXR@", Alphabet.HasStopCodon(Alphabet.Gapped(IUPAC.extended_protein, "-"), "@")),
+    Seq.Seq("ME-KR@", Alphabet.HasStopCodon(Alphabet.Gapped(IUPAC.protein, "-"), "@")),
+    Seq.Seq("MEDG.KRXR@", Alphabet.Gapped(Alphabet.HasStopCodon(IUPAC.extended_protein, "@"), ".")),
+]
 
 class TestSeq(unittest.TestCase):
     def setUp(self):
@@ -33,6 +79,17 @@ class TestSeq(unittest.TestCase):
     def test_as_string(self):
         """Test converting Seq to string"""
         self.assertEqual("TCAAAAGGATGCATCATG", str(self.s))
+
+    def test_construction_using_a_seq_object(self):
+        """Test using a Seq object to initialize another Seq object"""
+        with self.assertRaises(TypeError):
+            Seq.Seq(self.s)
+
+    def test_truncated_repr(self):
+        seq = "TCAAAAGGATGCATCATGTCAAAAGGATGCATCATGTCAAAAGGATGCATCATGTCAAAAGGA"
+        expected = "Seq('TCAAAAGGATGCATCATGTCAAAAGGATGCATCATGTCAAAAGGATGCATCATG...GGA', IUPACAmbiguousDNA())"
+        self.assertEqual(expected, repr(Seq.Seq(seq, IUPAC.ambiguous_dna)))
+
 
     def test_length(self):
         """Test len method on Seq object"""
@@ -95,6 +152,260 @@ class TestSeq(unittest.TestCase):
         self.assertEqual("IUPACAmbiguousDNA()", str(u.alphabet))
 
 
+class TestSeqStringMethods(unittest.TestCase):
+    def setUp(self):
+        self.s = Seq.Seq("TCAAAAGGATGCATCATG", IUPAC.unambiguous_dna)
+        self.dna = [
+            Seq.Seq("ATCG", IUPAC.ambiguous_dna),
+            Seq.Seq("gtca", Alphabet.generic_dna),
+            Seq.MutableSeq("GGTCA", Alphabet.generic_dna),
+            Seq.Seq("CTG-CA", Alphabet.Gapped(IUPAC.unambiguous_dna, "-")),
+        ]
+        self.rna = [
+            Seq.Seq("AUUUCG", IUPAC.ambiguous_rna),
+            Seq.MutableSeq("AUUCG", IUPAC.ambiguous_rna),
+            Seq.Seq("uCAg", Alphabet.generic_rna),
+            Seq.MutableSeq("UC-AG", Alphabet.Gapped(Alphabet.generic_rna, "-")),
+            Seq.Seq("U.CAG", Alphabet.Gapped(Alphabet.generic_rna, ".")),
+        ]
+        self.nuc = [Seq.Seq("ATCG", Alphabet.generic_nucleotide)]
+        self.protein = [
+            Seq.Seq("ATCGPK", IUPAC.protein),
+            Seq.Seq("atcGPK", Alphabet.generic_protein),
+            Seq.Seq("T.CGPK", Alphabet.Gapped(IUPAC.protein, ".")),
+            Seq.Seq("T-CGPK", Alphabet.Gapped(IUPAC.protein, "-")),
+            Seq.Seq("MEDG-KRXR*", Alphabet.Gapped(Alphabet.HasStopCodon(IUPAC.extended_protein, "*"), "-")),
+            Seq.MutableSeq("ME-K-DRXR*XU", Alphabet.Gapped(Alphabet.HasStopCodon(IUPAC.extended_protein, "*"), "-")),
+            Seq.Seq("MEDG-KRXR@", Alphabet.HasStopCodon(Alphabet.Gapped(IUPAC.extended_protein, "-"), "@")),
+            Seq.Seq("ME-KR@", Alphabet.HasStopCodon(Alphabet.Gapped(IUPAC.protein, "-"), "@")),
+            Seq.Seq("MEDG.KRXR@", Alphabet.Gapped(Alphabet.HasStopCodon(IUPAC.extended_protein, "@"), ".")),
+        ]
+        self.test_chars = ["-", Seq.Seq("-"), Seq.Seq("*"), "-X@"]
+
+    def test_string_methods(self):
+        for a in self.dna + self.rna + self.nuc + self.protein:
+            if isinstance(a, Seq.Seq):
+                self.assertEqual(str(a.strip()), str(a).strip())
+                self.assertEqual(str(a.lstrip()), str(a).lstrip())
+                self.assertEqual(str(a.rstrip()), str(a).rstrip())
+                self.assertEqual(str(a.lower()), str(a).lower())
+                self.assertEqual(str(a.upper()), str(a).upper())
+
+    def test_hash(self):
+        with warnings.catch_warnings(record=True):
+            hash(self.s)
+
+    def test_equal_comparison_of_incompatible_alphabets(self):
+        """Test __eq__ comparison method"""
+        with warnings.catch_warnings(record=True):
+            Seq.Seq("TCAAAA", IUPAC.ambiguous_dna) == Seq.Seq("TCAAAA", IUPAC.ambiguous_rna)
+
+    def test_not_equal_comparsion(self):
+        """Test __ne__ comparison method"""
+        self.assertNotEqual(Seq.Seq("TCAAA", IUPAC.ambiguous_dna),
+                            Seq.Seq("TCAAAA", IUPAC.ambiguous_dna))
+
+    def test_less_than_comparison_of_incompatible_alphabets(self):
+        """Test __lt__ comparison method"""
+        seq1 = Seq.Seq("TCAAA", IUPAC.ambiguous_dna)
+        seq2 = Seq.Seq("UCAAAA", IUPAC.ambiguous_rna)
+        with warnings.catch_warnings(record=True):
+            self.assertTrue(seq1 < seq2)
+
+    def test_less_than_or_equal_comparison_of_incompatible_alphabets(self):
+        """Test __lt__ comparison method"""
+        seq1 = Seq.Seq("TCAAA", IUPAC.ambiguous_dna)
+        seq2 = Seq.Seq("UCAAAA", IUPAC.ambiguous_rna)
+        with warnings.catch_warnings(record=True):
+            self.assertTrue(seq1 <= seq2)
+
+    def test_add_method_using_wrong_object(self):
+        with self.assertRaises(TypeError):
+            c = self.s + dict()
+
+    def test_radd_method(self):
+        self.assertEqual("TCAAAAGGATGCATCATGTCAAAAGGATGCATCATG", str(self.s.__radd__(self.s)))
+
+    def test_radd_method_using_incompatible_alphabets(self):
+        rna_seq = Seq.Seq("UCAAAA", IUPAC.ambiguous_rna)
+        with self.assertRaises(TypeError):
+            self.s.__radd__(rna_seq)
+
+    def test_radd_method_using_wrong_object(self):
+        with self.assertRaises(TypeError):
+            self.s.__radd__(dict())
+
+    def test_to_string_deprecated_method(self):
+        with warnings.catch_warnings(record=True):
+            self.s.tostring()
+
+    def test_contains_method(self):
+        self.assertTrue("AAAA" in self.s)
+
+    def test_append_nucleotides(self):
+        self.test_chars.append(Seq.Seq("A", IUPAC.ambiguous_dna))
+        self.test_chars.append(Seq.Seq("A", IUPAC.ambiguous_rna))
+        self.test_chars.append(Seq.Seq("A", Alphabet.generic_nucleotide))
+
+        self.assertEqual(7, len(self.test_chars))
+
+    def test_append_proteins(self):
+        self.test_chars.append(Seq.Seq("K", Alphabet.generic_protein))
+        self.test_chars.append(Seq.Seq("K-", Alphabet.Gapped(Alphabet.generic_protein, "-")))
+        self.test_chars.append(Seq.Seq("K@", Alphabet.Gapped(IUPAC.protein, "@")))
+
+        self.assertEqual(7, len(self.test_chars))
+
+    def test_exception_when_clashing_alphabets(self):
+        """Test by setting up clashing alphabet sequences"""
+        b = Seq.Seq("-", Alphabet.generic_nucleotide)
+        self.assertRaises(TypeError, self.protein[0].strip, b)
+
+        b = Seq.Seq("-", Alphabet.generic_protein)
+        self.assertRaises(TypeError, self.dna[0].strip, b)
+
+    def test_stripping_characters(self):
+        for a in self.dna + self.rna + self.nuc + self.protein:
+            for char in self.test_chars:
+                str_char = str(char)
+                if isinstance(a, Seq.Seq):
+                    self.assertEqual(str(a.strip(char)), str(a).strip(str_char))
+                    self.assertEqual(str(a.lstrip(char)), str(a).lstrip(str_char))
+                    self.assertEqual(str(a.rstrip(char)), str(a).rstrip(str_char))
+
+    def test_finding_characters(self):
+        for a in self.dna + self.rna + self.nuc + self.protein:
+            for char in self.test_chars:
+                str_char = str(char)
+                if isinstance(a, Seq.Seq):
+                    self.assertEqual(a.find(char), str(a).find(str_char))
+                    self.assertEqual(a.find(char, 2, -2), str(a).find(str_char, 2, -2))
+                    self.assertEqual(a.rfind(char), str(a).rfind(str_char))
+                    self.assertEqual(a.rfind(char, 2, -2), str(a).rfind(str_char, 2, -2))
+
+    def test_counting_characters(self):
+        for a in self.dna + self.rna + self.nuc + self.protein:
+            for char in self.test_chars:
+                str_char = str(char)
+                if isinstance(a, Seq.Seq):
+                    self.assertEqual(a.count(char), str(a).count(str_char))
+                    self.assertEqual(a.count(char, 2, -2), str(a).count(str_char, 2, -2))
+
+    def test_splits(self):
+        for a in self.dna + self.rna + self.nuc + self.protein:
+            for char in self.test_chars:
+                str_char = str(char)
+                if isinstance(a, Seq.Seq):
+                    self.assertEqual([str(x) for x in a.split(char)],
+                                     str(a).split(str_char))
+                    self.assertEqual([str(x) for x in a.rsplit(char)],
+                                     str(a).rsplit(str_char))
+
+                    for max_sep in [0, 1, 2, 999]:
+                        self.assertEqual([str(x) for x in a.split(char, max_sep)],
+                                         str(a).split(str_char, max_sep))
+
+
+class TestSeqAddition(unittest.TestCase):
+    def setUp(self):
+        self.dna = [
+            Seq.Seq("ATCG", IUPAC.ambiguous_dna),
+            Seq.Seq("gtca", Alphabet.generic_dna),
+            Seq.MutableSeq("GGTCA", Alphabet.generic_dna),
+            Seq.Seq("CTG-CA", Alphabet.Gapped(IUPAC.unambiguous_dna, "-")),
+            "TGGTCA",
+        ]
+        self.rna = [
+            Seq.Seq("AUUUCG", IUPAC.ambiguous_rna),
+            Seq.MutableSeq("AUUCG", IUPAC.ambiguous_rna),
+            Seq.Seq("uCAg", Alphabet.generic_rna),
+            Seq.MutableSeq("UC-AG", Alphabet.Gapped(Alphabet.generic_rna, "-")),
+            Seq.Seq("U.CAG", Alphabet.Gapped(Alphabet.generic_rna, ".")),
+            "UGCAU",
+        ]
+        self.nuc = [
+            Seq.Seq("ATCG", Alphabet.generic_nucleotide),
+            "UUUTTTACG",
+        ]
+        self.protein = [
+            Seq.Seq("ATCGPK", IUPAC.protein),
+            Seq.Seq("atcGPK", Alphabet.generic_protein),
+            Seq.Seq("T.CGPK", Alphabet.Gapped(IUPAC.protein, ".")),
+            Seq.Seq("T-CGPK", Alphabet.Gapped(IUPAC.protein, "-")),
+            Seq.Seq("MEDG-KRXR*", Alphabet.Gapped(Alphabet.HasStopCodon(IUPAC.extended_protein, "*"), "-")),
+            Seq.MutableSeq("ME-K-DRXR*XU", Alphabet.Gapped(Alphabet.HasStopCodon(IUPAC.extended_protein, "*"), "-")),
+            "TEDDF",
+        ]
+
+    def test_addition_dna_rna_with_generic_nucleotides(self):
+        for a in self.dna + self.rna:
+            for b in self.nuc:
+                c = a + b
+                self.assertEqual(str(c), str(a) + str(b))
+
+    def test_addition_rna_with_rna(self):
+        self.rna.pop(3)
+        for a in self.rna:
+            for b in self.rna:
+                c = a + b
+                self.assertEqual(str(c), str(a) + str(b))
+
+    def test_exception_when_added_rna_has_more_than_one_gap_type(self):
+        """Test resulting sequence has gap types '-' and '.'"""
+        with self.assertRaises(ValueError):
+            c = self.rna[3] + self.rna[4]
+
+    def test_addition_dna_with_dna(self):
+        for a in self.dna:
+            for b in self.dna:
+                c = a + b
+                self.assertEqual(str(c), str(a) + str(b))
+
+    def test_addition_dna_with_rna(self):
+        self.dna.pop(4)
+        self.rna.pop(5)
+        for a in self.dna:
+            for b in self.rna:
+                with self.assertRaises(TypeError):
+                    c = a + b
+                with self.assertRaises(TypeError):
+                    c = b + a
+
+    def test_addition_proteins(self):
+        self.protein.pop(2)
+        for a in self.protein:
+            for b in self.protein:
+                c = a + b
+                self.assertEqual(str(c), str(a) + str(b))
+
+    def test_exception_when_added_protein_has_more_than_one_gap_type(self):
+        """Test resulting protein has gap types '-' and '.'"""
+        a = Seq.Seq("T.CGPK", Alphabet.Gapped(IUPAC.protein, "."))
+        b = Seq.Seq("T-CGPK", Alphabet.Gapped(IUPAC.protein, "-"))
+        with self.assertRaises(ValueError):
+            c = a + b
+
+    def test_exception_when_added_protein_has_more_than_one_stop_codon_type(self):
+        """Test resulting protein has stop codon types '*' and '@'"""
+        a = Seq.Seq("MEDG-KRXR@", Alphabet.HasStopCodon(Alphabet.Gapped(IUPAC.extended_protein, "-"), "@"))
+        b = Seq.Seq("MEDG-KRXR*", Alphabet.Gapped(Alphabet.HasStopCodon(IUPAC.extended_protein, "*"), "-"))
+        with self.assertRaises(ValueError):
+            c = a + b
+
+    def test_exception_when_adding_protein_with_nucletides(self):
+        for a in self.protein[0:5]:
+            for b in self.dna[0:3] + self.rna[0:4]:
+                with self.assertRaises(TypeError):
+                    c = a + b
+
+    def test_adding_generic_nucleotide_with_other_nucleotides(self):
+        for a in self.nuc:
+            for b in self.dna + self.rna + self.nuc:
+                c = a + b
+                self.assertEqual(str(c), str(a) + str(b))
+
+
+
 class TestMutableSeq(unittest.TestCase):
     def setUp(self):
         self.s = Seq.Seq("TCAAAAGGATGCATCATG", IUPAC.unambiguous_dna)
@@ -126,7 +437,7 @@ class TestMutableSeq(unittest.TestCase):
         self.assertEqual(self.mutable_s, "TCAAAAGGATGCATCATG")
 
     def test_equal_comparison_of_incompatible_alphabets(self):
-        with self.assertWarns(BiopythonWarning):
+        with warnings.catch_warnings(record=True):
             self.mutable_s == MutableSeq('UCAAAAGGA', IUPAC.ambiguous_rna)
 
     def test_not_equal_comparison(self):
@@ -138,7 +449,7 @@ class TestMutableSeq(unittest.TestCase):
         self.assertTrue(self.mutable_s[:-1] < self.mutable_s)
 
     def test_less_than_comparison_of_incompatible_alphabets(self):
-        with self.assertWarns(BiopythonWarning):
+        with warnings.catch_warnings(record=True):
             self.mutable_s[:-1] < MutableSeq("UCAAAAGGAUGCAUCAUG", IUPAC.ambiguous_rna)
 
     def test_less_than_comparison_without_alphabet(self):
@@ -149,7 +460,7 @@ class TestMutableSeq(unittest.TestCase):
         self.assertTrue(self.mutable_s[:-1] <= self.mutable_s)
 
     def test_less_than_or_equal_comparison_of_incompatible_alphabets(self):
-        with self.assertWarns(BiopythonWarning):
+        with warnings.catch_warnings(record=True):
             self.mutable_s[:-1] <= MutableSeq("UCAAAAGGAUGCAUCAUG", IUPAC.ambiguous_rna)
 
     def test_less_than_or_equal_comparison_without_alphabet(self):
@@ -294,7 +605,7 @@ class TestMutableSeq(unittest.TestCase):
 
     def test_to_string_method(self):
         """This method is currently deprecated, probably will need to remove this test soon"""
-        with self.assertWarns(BiopythonDeprecationWarning):
+        with warnings.catch_warnings(record=True):
             self.mutable_s.tostring()
 
     def test_extend_method(self):
@@ -325,216 +636,6 @@ class TestMutableSeq(unittest.TestCase):
                          self.mutable_s)
 
 
-###########################################################################
-s = Seq.Seq("TCAAAAGGATGCATCATG", IUPAC.unambiguous_dna)
-t = Seq.Seq("T", IUPAC.ambiguous_dna)
-u = s + t
-string_seq = MutableSeq("TCAAAAGGATGCATCATG", IUPAC.ambiguous_dna)
-array_seq = MutableSeq(array.array(array_indicator, "TCAAAAGGATGCATCATG"),
-                       IUPAC.ambiguous_dna)
-converted_seq = s.tomutable()
-
-
-class TestSeqAddition(unittest.TestCase):
-    def setUp(self):
-        self.dna = [
-            Seq.Seq("ATCG", IUPAC.ambiguous_dna),
-            Seq.Seq("gtca", Alphabet.generic_dna),
-            Seq.MutableSeq("GGTCA", Alphabet.generic_dna),
-            Seq.Seq("CTG-CA", Alphabet.Gapped(IUPAC.unambiguous_dna, "-")),
-            "TGGTCA",
-        ]
-        self.rna = [
-            Seq.Seq("AUUUCG", IUPAC.ambiguous_rna),
-            Seq.MutableSeq("AUUCG", IUPAC.ambiguous_rna),
-            Seq.Seq("uCAg", Alphabet.generic_rna),
-            Seq.MutableSeq("UC-AG", Alphabet.Gapped(Alphabet.generic_rna, "-")),
-            Seq.Seq("U.CAG", Alphabet.Gapped(Alphabet.generic_rna, ".")),
-            "UGCAU",
-        ]
-        self.nuc = [
-            Seq.Seq("ATCG", Alphabet.generic_nucleotide),
-            "UUUTTTACG",
-        ]
-        self.protein = [
-            Seq.Seq("ATCGPK", IUPAC.protein),
-            Seq.Seq("atcGPK", Alphabet.generic_protein),
-            Seq.Seq("T.CGPK", Alphabet.Gapped(IUPAC.protein, ".")),
-            Seq.Seq("T-CGPK", Alphabet.Gapped(IUPAC.protein, "-")),
-            Seq.Seq("MEDG-KRXR*", Alphabet.Gapped(Alphabet.HasStopCodon(IUPAC.extended_protein, "*"), "-")),
-            Seq.MutableSeq("ME-K-DRXR*XU", Alphabet.Gapped(Alphabet.HasStopCodon(IUPAC.extended_protein, "*"), "-")),
-            "TEDDF",
-        ]
-
-    def test_addition_dna_rna_with_generic_nucleotides(self):
-        for a in self.dna + self.rna:
-            for b in self.nuc:
-                c = a + b
-                self.assertEqual(str(c), str(a) + str(b))
-
-    def test_addition_rna_with_rna(self):
-        self.rna.pop(3)
-        for a in self.rna:
-            for b in self.rna:
-                c = a + b
-                self.assertEqual(str(c), str(a) + str(b))
-
-    def test_exception_when_added_rna_has_more_than_one_gap_type(self):
-        """Test resulting sequence has gap types '-' and '.'"""
-        with self.assertRaises(ValueError):
-            c = self.rna[3] + self.rna[4]
-
-    def test_addition_dna_with_dna(self):
-        for a in self.dna:
-            for b in self.dna:
-                c = a + b
-                self.assertEqual(str(c), str(a) + str(b))
-
-    def test_addition_dna_with_rna(self):
-        self.dna.pop(4)
-        self.rna.pop(5)
-        for a in self.dna:
-            for b in self.rna:
-                with self.assertRaises(TypeError):
-                    c = a + b
-                with self.assertRaises(TypeError):
-                    c = b + a
-
-    def test_addition_proteins(self):
-        self.protein.pop(2)
-        for a in self.protein:
-            for b in self.protein:
-                c = a + b
-                self.assertEqual(str(c), str(a) + str(b))
-
-    def test_exception_when_added_protein_has_more_than_one_gap_type(self):
-        """Test resulting protein has gap types '-' and '.'"""
-        a = Seq.Seq("T.CGPK", Alphabet.Gapped(IUPAC.protein, "."))
-        b = Seq.Seq("T-CGPK", Alphabet.Gapped(IUPAC.protein, "-"))
-        with self.assertRaises(ValueError):
-            c = a + b
-
-    def test_exception_when_added_protein_has_more_than_one_stop_codon_type(self):
-        """Test resulting protein has stop codon types '*' and '@'"""
-        a = Seq.Seq("MEDG-KRXR@", Alphabet.HasStopCodon(Alphabet.Gapped(IUPAC.extended_protein, "-"), "@"))
-        b = Seq.Seq("MEDG-KRXR*", Alphabet.Gapped(Alphabet.HasStopCodon(IUPAC.extended_protein, "*"), "-"))
-        with self.assertRaises(ValueError):
-            c = a + b
-
-    def test_exception_when_adding_protein_with_nucletides(self):
-        for a in self.protein[0:5]:
-            for b in self.dna[0:3] + self.rna[0:4]:
-                with self.assertRaises(TypeError):
-                    c = a + b
-
-    def test_adding_generic_nucleotide_with_other_nucleotides(self):
-        for a in self.nuc:
-            for b in self.dna + self.rna + self.nuc:
-                c = a + b
-                self.assertEqual(str(c), str(a) + str(b))
-
-
-class TestSeqStringMethods(unittest.TestCase):
-    def setUp(self):
-        self.dna = [
-            Seq.Seq("ATCG", IUPAC.ambiguous_dna),
-            Seq.Seq("gtca", Alphabet.generic_dna),
-            Seq.MutableSeq("GGTCA", Alphabet.generic_dna),
-            Seq.Seq("CTG-CA", Alphabet.Gapped(IUPAC.unambiguous_dna, "-")),
-        ]
-        self.rna = [
-            Seq.Seq("AUUUCG", IUPAC.ambiguous_rna),
-            Seq.MutableSeq("AUUCG", IUPAC.ambiguous_rna),
-            Seq.Seq("uCAg", Alphabet.generic_rna),
-            Seq.MutableSeq("UC-AG", Alphabet.Gapped(Alphabet.generic_rna, "-")),
-            Seq.Seq("U.CAG", Alphabet.Gapped(Alphabet.generic_rna, ".")),
-        ]
-        self.nuc = [Seq.Seq("ATCG", Alphabet.generic_nucleotide)]
-        self.protein = [
-            Seq.Seq("ATCGPK", IUPAC.protein),
-            Seq.Seq("atcGPK", Alphabet.generic_protein),
-            Seq.Seq("T.CGPK", Alphabet.Gapped(IUPAC.protein, ".")),
-            Seq.Seq("T-CGPK", Alphabet.Gapped(IUPAC.protein, "-")),
-            Seq.Seq("MEDG-KRXR*", Alphabet.Gapped(Alphabet.HasStopCodon(IUPAC.extended_protein, "*"), "-")),
-            Seq.MutableSeq("ME-K-DRXR*XU", Alphabet.Gapped(Alphabet.HasStopCodon(IUPAC.extended_protein, "*"), "-")),
-            Seq.Seq("MEDG-KRXR@", Alphabet.HasStopCodon(Alphabet.Gapped(IUPAC.extended_protein, "-"), "@")),
-            Seq.Seq("ME-KR@", Alphabet.HasStopCodon(Alphabet.Gapped(IUPAC.protein, "-"), "@")),
-            Seq.Seq("MEDG.KRXR@", Alphabet.Gapped(Alphabet.HasStopCodon(IUPAC.extended_protein, "@"), ".")),
-        ]
-        self.test_chars = ["-", Seq.Seq("-"), Seq.Seq("*"), "-X@"]
-
-    def test_string_methods(self):
-        for a in self.dna + self.rna + self.nuc + self.protein:
-            if isinstance(a, Seq.Seq):
-                self.assertEqual(str(a.strip()), str(a).strip())
-                self.assertEqual(str(a.lstrip()), str(a).lstrip())
-                self.assertEqual(str(a.rstrip()), str(a).rstrip())
-                self.assertEqual(str(a.lower()), str(a).lower())
-                self.assertEqual(str(a.upper()), str(a).upper())
-
-    def test_append_nucleotides(self):
-        self.test_chars.append(Seq.Seq("A", IUPAC.ambiguous_dna))
-        self.test_chars.append(Seq.Seq("A", IUPAC.ambiguous_rna))
-        self.test_chars.append(Seq.Seq("A", Alphabet.generic_nucleotide))
-
-        self.assertEqual(7, len(self.test_chars))
-
-    def test_append_proteins(self):
-        self.test_chars.append(Seq.Seq("K", Alphabet.generic_protein))
-        self.test_chars.append(Seq.Seq("K-", Alphabet.Gapped(Alphabet.generic_protein, "-")))
-        self.test_chars.append(Seq.Seq("K@", Alphabet.Gapped(IUPAC.protein, "@")))
-
-        self.assertEqual(7, len(self.test_chars))
-
-    def test_exception_when_clashing_alphabets(self):
-        """Test by setting up clashing alphabet sequences"""
-        b = Seq.Seq("-", Alphabet.generic_nucleotide)
-        self.assertRaises(TypeError, self.protein[0].strip, b)
-
-        b = Seq.Seq("-", Alphabet.generic_protein)
-        self.assertRaises(TypeError, self.dna[0].strip, b)
-
-    def test_stripping_characters(self):
-        for a in self.dna + self.rna + self.nuc + self.protein:
-            for char in self.test_chars:
-                str_char = str(char)
-                if isinstance(a, Seq.Seq):
-                    self.assertEqual(str(a.strip(char)), str(a).strip(str_char))
-                    self.assertEqual(str(a.lstrip(char)), str(a).lstrip(str_char))
-                    self.assertEqual(str(a.rstrip(char)), str(a).rstrip(str_char))
-
-    def test_finding_characters(self):
-        for a in self.dna + self.rna + self.nuc + self.protein:
-            for char in self.test_chars:
-                str_char = str(char)
-                if isinstance(a, Seq.Seq):
-                    self.assertEqual(a.find(char), str(a).find(str_char))
-                    self.assertEqual(a.find(char, 2, -2), str(a).find(str_char, 2, -2))
-                    self.assertEqual(a.rfind(char), str(a).rfind(str_char))
-                    self.assertEqual(a.rfind(char, 2, -2), str(a).rfind(str_char, 2, -2))
-
-    def test_counting_characters(self):
-        for a in self.dna + self.rna + self.nuc + self.protein:
-            for char in self.test_chars:
-                str_char = str(char)
-                if isinstance(a, Seq.Seq):
-                    self.assertEqual(a.count(char), str(a).count(str_char))
-                    self.assertEqual(a.count(char, 2, -2), str(a).count(str_char, 2, -2))
-
-    def test_splits(self):
-        for a in self.dna + self.rna + self.nuc + self.protein:
-            for char in self.test_chars:
-                str_char = str(char)
-                if isinstance(a, Seq.Seq):
-                    self.assertEqual([str(x) for x in a.split(char)],
-                                     str(a).split(str_char))
-                    self.assertEqual([str(x) for x in a.rsplit(char)],
-                                     str(a).rsplit(str_char))
-
-                    for max_sep in [0, 1, 2, 999]:
-                        self.assertEqual([str(x) for x in a.split(char, max_sep)],
-                                         str(a).split(str_char, max_sep))
-
 
 class TestAmbiguousComplements(unittest.TestCase):
     def test_ambiguous_values(self):
@@ -556,6 +657,50 @@ class TestComplement(unittest.TestCase):
             self.assertEqual(set(compl_values),
                              set(ambiguous_rna_values[ambiguous_rna_complement[ambig_char]]))
 
+class TestReverseComplement(unittest.TestCase):
+    def test_reverse_complement(self):
+        test_seqs_copy = copy.copy(test_seqs)
+        test_seqs_copy.pop(21)
+
+        for nucleotide_seq in test_seqs_copy:
+            if not isinstance(nucleotide_seq.alphabet, Alphabet.ProteinAlphabet) and \
+                    isinstance(nucleotide_seq, Seq.Seq):
+                expected = Seq.reverse_complement(nucleotide_seq)
+                self.assertEqual(repr(expected), repr(nucleotide_seq.reverse_complement()))
+                self.assertEqual(repr(expected[::-1]), repr(nucleotide_seq.complement()))
+                self.assertEqual(str(nucleotide_seq.complement()),
+                                 str(Seq.reverse_complement(nucleotide_seq))[::-1])
+                self.assertEqual(str(nucleotide_seq.reverse_complement()),
+                                 str(Seq.reverse_complement(nucleotide_seq)))
+
+    def test_reverse_complement_of_mixed_dna_rna(self):
+        seq = "AUGAAACTG"  # U and T
+        self.assertRaises(ValueError, Seq.reverse_complement, seq)
+
+    def test_reverse_complement_of_rna(self):
+        seq = "AUGAAACUG"
+        self.assertEqual("CAGUUUCAU", Seq.reverse_complement(seq))
+
+    def test_reverse_complement_of_dna(self):
+        seq = "ATGAAACTG"
+        self.assertEqual("CAGTTTCAT", Seq.reverse_complement(seq))
+
+    def test_reverse_complement_on_proteins(self):
+        """Test reverse complement shouldn't work on a protein!"""
+        for s in protein_seqs:
+            with self.assertRaises(ValueError):
+                Seq.reverse_complement(s)
+
+            with self.assertRaises(ValueError):
+                s.reverse_complement()
+
+    def test_complement_on_proteins(self):
+        """Test complement shouldn't work on a protein!"""
+        for s in protein_seqs:
+            with self.assertRaises(ValueError):
+                s.complement()
+
+
 
 class TestDoubleReverseComplement(unittest.TestCase):
     def test_reverse_complements(self):
@@ -571,53 +716,6 @@ class TestDoubleReverseComplement(unittest.TestCase):
             self.assertEqual(str(sequence),
                              str(reversed_sequence.reverse_complement()))
 
-
-def complement(sequence):
-    return Seq.reverse_complement(sequence)[::-1]
-
-
-def sorted_dict(d):
-    """A sorted repr of a dictionary."""
-    return "{%s}" % ", ".join("%s: %s" % (repr(k), repr(v))
-                              for k, v in sorted(d.items()))
-
-test_seqs = [
-    Seq.Seq("TCAAAAGGATGCATCATG", IUPAC.unambiguous_dna),
-    Seq.Seq("T", IUPAC.ambiguous_dna),
-    Seq.Seq("ATGAAACTG"),
-    Seq.Seq("ATGAARCTG"),
-    Seq.Seq("AWGAARCKG"),  # Note no U or T
-    Seq.Seq("".join(ambiguous_rna_values)),
-    Seq.Seq("".join(ambiguous_dna_values)),
-    Seq.Seq("".join(ambiguous_rna_values), Alphabet.generic_rna),
-    Seq.Seq("".join(ambiguous_dna_values), Alphabet.generic_dna),
-    Seq.Seq("".join(ambiguous_rna_values), IUPAC.IUPACAmbiguousRNA()),
-    Seq.Seq("".join(ambiguous_dna_values), IUPAC.IUPACAmbiguousDNA()),
-    Seq.Seq("AWGAARCKG", Alphabet.generic_dna),
-    Seq.Seq("AUGAAACUG", Alphabet.generic_rna),
-    Seq.Seq("ATGAAACTG", IUPAC.unambiguous_dna),
-    Seq.Seq("ATGAAA-CTG", Alphabet.Gapped(IUPAC.unambiguous_dna)),
-    Seq.Seq("ATGAAACTGWN", IUPAC.ambiguous_dna),
-    Seq.Seq("AUGAAACUG", Alphabet.generic_rna),
-    Seq.Seq("AUGAAA==CUG", Alphabet.Gapped(Alphabet.generic_rna, "=")),
-    Seq.Seq("AUGAAACUG", IUPAC.unambiguous_rna),
-    Seq.Seq("AUGAAACUGWN", IUPAC.ambiguous_rna),
-    Seq.Seq("ATGAAACTG", Alphabet.generic_nucleotide),
-    Seq.Seq("AUGAAACTG", Alphabet.generic_nucleotide),  # U and T
-    Seq.MutableSeq("ATGAAACTG", Alphabet.generic_dna),
-    Seq.MutableSeq("AUGaaaCUG", IUPAC.unambiguous_rna),
-    Seq.Seq("ACTGTCGTCT", Alphabet.generic_protein),
-]
-protein_seqs = [
-    Seq.Seq("ATCGPK", IUPAC.protein),
-    Seq.Seq("T.CGPK", Alphabet.Gapped(IUPAC.protein, ".")),
-    Seq.Seq("T-CGPK", Alphabet.Gapped(IUPAC.protein, "-")),
-    Seq.Seq("MEDG-KRXR*", Alphabet.Gapped(Alphabet.HasStopCodon(IUPAC.extended_protein, "*"), "-")),
-    Seq.MutableSeq("ME-K-DRXR*XU", Alphabet.Gapped(Alphabet.HasStopCodon(IUPAC.extended_protein, "*"), "-")),
-    Seq.Seq("MEDG-KRXR@", Alphabet.HasStopCodon(Alphabet.Gapped(IUPAC.extended_protein, "-"), "@")),
-    Seq.Seq("ME-KR@", Alphabet.HasStopCodon(Alphabet.Gapped(IUPAC.protein, "-"), "@")),
-    Seq.Seq("MEDG.KRXR@", Alphabet.Gapped(Alphabet.HasStopCodon(IUPAC.extended_protein, "@"), ".")),
-]
 
 
 class TestSequenceAlphabets(unittest.TestCase):
@@ -687,50 +785,6 @@ class TestTranscription(unittest.TestCase):
             if isinstance(s, Seq.Seq):
                 with self.assertRaises(ValueError):
                     s.back_transcribe()
-
-
-class TestReverseComplement(unittest.TestCase):
-    def test_reverse_complement(self):
-        test_seqs_copy = copy.copy(test_seqs)
-        test_seqs_copy.pop(21)
-
-        for nucleotide_seq in test_seqs_copy:
-            if not isinstance(nucleotide_seq.alphabet, Alphabet.ProteinAlphabet) and \
-                    isinstance(nucleotide_seq, Seq.Seq):
-                expected = Seq.reverse_complement(nucleotide_seq)
-                self.assertEqual(repr(expected), repr(nucleotide_seq.reverse_complement()))
-                self.assertEqual(repr(expected[::-1]), repr(nucleotide_seq.complement()))
-                self.assertEqual(str(nucleotide_seq.complement()),
-                                 str(Seq.reverse_complement(nucleotide_seq))[::-1])
-                self.assertEqual(str(nucleotide_seq.reverse_complement()),
-                                 str(Seq.reverse_complement(nucleotide_seq)))
-
-    def test_reverse_complement_of_mixed_dna_rna(self):
-        seq = "AUGAAACTG"  # U and T
-        self.assertRaises(ValueError, Seq.reverse_complement, seq)
-
-    def test_reverse_complement_of_rna(self):
-        seq = "AUGAAACUG"
-        self.assertEqual("CAGUUUCAU", Seq.reverse_complement(seq))
-
-    def test_reverse_complement_of_dna(self):
-        seq = "ATGAAACTG"
-        self.assertEqual("CAGTTTCAT", Seq.reverse_complement(seq))
-
-    def test_reverse_complement_on_proteins(self):
-        """Test reverse complement shouldn't work on a protein!"""
-        for s in protein_seqs:
-            with self.assertRaises(ValueError):
-                Seq.reverse_complement(s)
-
-            with self.assertRaises(ValueError):
-                s.reverse_complement()
-
-    def test_complement_on_proteins(self):
-        """Test complement shouldn't work on a protein!"""
-        for s in protein_seqs:
-            with self.assertRaises(ValueError):
-                s.complement()
 
 
 class TestTranslating(unittest.TestCase):
@@ -816,7 +870,7 @@ class TestTranslating(unittest.TestCase):
         self.assertEqual("VAIVMGR", Seq.translate("GTGGCCATTGTAATGGGCCGC", table=table))
 
     def test_translation_incomplete_codon(self):
-        with self.assertWarns(BiopythonWarning):
+        with warnings.catch_warnings(record=True):
             Seq.translate("GTGGCCATTGTAATGGGCCG")
 
     def test_translation_extra_stop_codon(self):
