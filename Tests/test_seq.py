@@ -17,7 +17,6 @@ from Bio.Data.IUPACData import ambiguous_dna_values, ambiguous_rna_values
 from Bio.Data.CodonTable import TranslationError
 from Bio.Data.CodonTable import standard_dna_table
 from Bio.Seq import MutableSeq
-from Bio.SeqIO import SeqRecord
 
 
 if sys.version_info[0] == 3:
@@ -151,6 +150,15 @@ class TestSeq(unittest.TestCase):
         u = self.s + t
         self.assertEqual("IUPACAmbiguousDNA()", str(u.alphabet))
 
+    def test_ungap(self):
+        self.assertEqual("ATCCCA", str(Seq.Seq("ATC-CCA").ungap("-")))
+
+        with self.assertRaises(ValueError):
+            Seq.Seq("ATC-CCA").ungap("--")
+
+        with self.assertRaises(ValueError):
+            Seq.Seq("ATC-CCA").ungap()
+
 
 class TestSeqStringMethods(unittest.TestCase):
     def setUp(self):
@@ -241,6 +249,14 @@ class TestSeqStringMethods(unittest.TestCase):
 
     def test_contains_method(self):
         self.assertTrue("AAAA" in self.s)
+
+    def test_startswith(self):
+        self.assertTrue(self.s.startswith("TCA"))
+        self.assertTrue(self.s.startswith(("CAA", "CTA"), 1))
+
+    def test_endswith(self):
+        self.assertTrue(self.s.endswith("ATG"))
+        self.assertTrue(self.s.endswith(("ATG", "CTA")))
 
     def test_append_nucleotides(self):
         self.test_chars.append(Seq.Seq("A", IUPAC.ambiguous_dna))
@@ -636,7 +652,6 @@ class TestMutableSeq(unittest.TestCase):
                          self.mutable_s)
 
 
-
 class TestAmbiguousComplements(unittest.TestCase):
     def test_ambiguous_values(self):
         """Test that other tests do not introduce characters to our values"""
@@ -656,6 +671,12 @@ class TestComplement(unittest.TestCase):
             compl_values = str(Seq.Seq(values, alphabet=IUPAC.ambiguous_rna).complement())
             self.assertEqual(set(compl_values),
                              set(ambiguous_rna_values[ambiguous_rna_complement[ambig_char]]))
+
+    def test_complement_incompatible_alphabets(self):
+        seq = Seq.Seq("CAGGTU")
+        with self.assertRaises(ValueError):
+            seq.complement()
+
 
 class TestReverseComplement(unittest.TestCase):
     def test_reverse_complement(self):
@@ -748,6 +769,12 @@ class TestTranscription(unittest.TestCase):
                 self.assertEqual(repr(Seq.transcribe(nucleotide_seq)),
                                  repr(nucleotide_seq.transcribe()))
 
+    def test_transcription_of_rna(self):
+        """Test transcription shouldn't work on RNA!"""
+        seq = Seq.Seq("AUGAAACUG", IUPAC.ambiguous_rna)
+        with self.assertRaises(ValueError):
+            seq.transcribe()
+
     def test_transcription_of_proteins(self):
         """Test transcription shouldn't work on a protein!"""
         for s in protein_seqs:
@@ -786,6 +813,12 @@ class TestTranscription(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     s.back_transcribe()
 
+    def test_back_transcription_of_dna(self):
+        """Test back-transcription shouldn't work on DNA!"""
+        seq = Seq.Seq("ATGAAACTG", IUPAC.ambiguous_dna)
+        with self.assertRaises(ValueError):
+            seq.back_transcribe()
+
 
 class TestTranslating(unittest.TestCase):
     def setUp(self):
@@ -818,6 +851,12 @@ class TestTranslating(unittest.TestCase):
             if isinstance(nucleotide_seq, Seq.Seq) and 'X' not in str(nucleotide_seq):
                 expected = Seq.translate(nucleotide_seq)
                 self.assertEqual(repr(expected), repr(nucleotide_seq.translate()))
+
+    def test_translation_wrong_type(self):
+        """Test translation table cannot be CodonTable"""
+        seq = Seq.Seq("ATCGTA")
+        with self.assertRaises(ValueError):
+            seq.translate(table=ambiguous_dna_complement)
 
     def test_translation_of_string(self):
         seq = "GTGGCCATTGTAATGGGCCGC"
