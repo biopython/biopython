@@ -24,15 +24,6 @@ if sys.version_info[0] == 3:
 else:
     array_indicator = "c"
 
-###########################################################################
-s = Seq.Seq("TCAAAAGGATGCATCATG", IUPAC.unambiguous_dna)
-t = Seq.Seq("T", IUPAC.ambiguous_dna)
-u = s + t
-string_seq = MutableSeq("TCAAAAGGATGCATCATG", IUPAC.ambiguous_dna)
-array_seq = MutableSeq(array.array(array_indicator, "TCAAAAGGATGCATCATG"),
-                       IUPAC.ambiguous_dna)
-converted_seq = s.tomutable()
-
 test_seqs = [
     Seq.Seq("TCAAAAGGATGCATCATG", IUPAC.unambiguous_dna),
     Seq.Seq("T", IUPAC.ambiguous_dna),
@@ -89,7 +80,6 @@ class TestSeq(unittest.TestCase):
         seq = "TCAAAAGGATGCATCATGTCAAAAGGATGCATCATGTCAAAAGGATGCATCATGTCAAAAGGA"
         expected = "Seq('TCAAAAGGATGCATCATGTCAAAAGGATGCATCATGTCAAAAGGATGCATCATG...GGA', IUPACAmbiguousDNA())"
         self.assertEqual(expected, repr(Seq.Seq(seq, IUPAC.ambiguous_dna)))
-
 
     def test_length(self):
         """Test len method on Seq object"""
@@ -230,7 +220,7 @@ class TestSeqStringMethods(unittest.TestCase):
 
     def test_add_method_using_wrong_object(self):
         with self.assertRaises(TypeError):
-            c = self.s + dict()
+            self.s + dict()
 
     def test_radd_method(self):
         self.assertEqual("TCAAAAGGATGCATCATGTCAAAAGGATGCATCATG", str(self.s.__radd__(self.s)))
@@ -370,7 +360,7 @@ class TestSeqAddition(unittest.TestCase):
     def test_exception_when_added_rna_has_more_than_one_gap_type(self):
         """Test resulting sequence has gap types '-' and '.'"""
         with self.assertRaises(ValueError):
-            c = self.rna[3] + self.rna[4]
+            self.rna[3] + self.rna[4]
 
     def test_addition_dna_with_dna(self):
         for a in self.dna:
@@ -384,9 +374,9 @@ class TestSeqAddition(unittest.TestCase):
         for a in self.dna:
             for b in self.rna:
                 with self.assertRaises(TypeError):
-                    c = a + b
+                    a + b
                 with self.assertRaises(TypeError):
-                    c = b + a
+                    b + a
 
     def test_addition_proteins(self):
         self.protein.pop(2)
@@ -400,20 +390,20 @@ class TestSeqAddition(unittest.TestCase):
         a = Seq.Seq("T.CGPK", Alphabet.Gapped(IUPAC.protein, "."))
         b = Seq.Seq("T-CGPK", Alphabet.Gapped(IUPAC.protein, "-"))
         with self.assertRaises(ValueError):
-            c = a + b
+            a + b
 
     def test_exception_when_added_protein_has_more_than_one_stop_codon_type(self):
         """Test resulting protein has stop codon types '*' and '@'"""
         a = Seq.Seq("MEDG-KRXR@", Alphabet.HasStopCodon(Alphabet.Gapped(IUPAC.extended_protein, "-"), "@"))
         b = Seq.Seq("MEDG-KRXR*", Alphabet.Gapped(Alphabet.HasStopCodon(IUPAC.extended_protein, "*"), "-"))
         with self.assertRaises(ValueError):
-            c = a + b
+            a + b
 
     def test_exception_when_adding_protein_with_nucletides(self):
         for a in self.protein[0:5]:
             for b in self.dna[0:3] + self.rna[0:4]:
                 with self.assertRaises(TypeError):
-                    c = a + b
+                    a + b
 
     def test_adding_generic_nucleotide_with_other_nucleotides(self):
         for a in self.nuc:
@@ -485,7 +475,7 @@ class TestMutableSeq(unittest.TestCase):
     def test_add_method(self):
         """Test adding wrong type to MutableSeq"""
         with self.assertRaises(TypeError):
-            c = self.mutable_s + 1234
+            self.mutable_s + 1234
 
     def test_radd_method(self):
         self.assertEqual("TCAAAAGGATGCATCATGTCAAAAGGATGCATCATG",
@@ -501,7 +491,7 @@ class TestMutableSeq(unittest.TestCase):
 
     def test_radd_method_wrong_type(self):
         with self.assertRaises(TypeError):
-            c = self.mutable_s.__radd__(1234)
+            self.mutable_s.__radd__(1234)
 
     def test_as_string(self):
         self.assertEqual("TCAAAAGGATGCATCATG", str(self.mutable_s))
@@ -691,7 +681,7 @@ class TestUnknownSeq(unittest.TestCase):
         self.assertEqual("???", self.s[1:6:2])
         self.assertEqual("????", self.s[1:-1])
         with self.assertRaises(ValueError):
-            c = self.s[1:6:0]
+            self.s[1:6:0]
 
     def test_count(self):
         self.assertEqual(6, self.s.count("?"))
@@ -740,7 +730,7 @@ class TestUnknownSeq(unittest.TestCase):
     def test_translation_of_proteins(self):
         seq = Seq.UnknownSeq(6, IUPAC.protein)
         with self.assertRaises(ValueError):
-            c = seq.translate()
+            seq.translate()
 
     def test_ungap(self):
         seq = Seq.UnknownSeq(7, alphabet=Alphabet.Gapped(Alphabet.DNAAlphabet(), "-"))
@@ -820,7 +810,6 @@ class TestReverseComplement(unittest.TestCase):
                 s.complement()
 
 
-
 class TestDoubleReverseComplement(unittest.TestCase):
     def test_reverse_complements(self):
         """Test double reverse complement preserves the sequence"""
@@ -834,7 +823,6 @@ class TestDoubleReverseComplement(unittest.TestCase):
             reversed_sequence = sequence.reverse_complement()
             self.assertEqual(str(sequence),
                              str(reversed_sequence.reverse_complement()))
-
 
 
 class TestSequenceAlphabets(unittest.TestCase):
@@ -1046,11 +1034,11 @@ class TestStopCodons(unittest.TestCase):
             self.assertEqual("***RR", str(Seq.translate(nucleotide_seq, table="SGC0")))
             self.assertEqual("**W**", str(Seq.translate(nucleotide_seq, table=2)))
             self.assertEqual("**WRR", str(Seq.translate(nucleotide_seq,
-                                              table='Yeast Mitochondrial')))
+                                          table='Yeast Mitochondrial')))
             self.assertEqual("**WSS", str(Seq.translate(nucleotide_seq, table=5)))
             self.assertEqual("**WSS", str(Seq.translate(nucleotide_seq, table=9)))
             self.assertEqual("**CRR", str(Seq.translate(nucleotide_seq,
-                                              table='Euplotid Nuclear')))
+                                          table='Euplotid Nuclear')))
             self.assertEqual("***RR", str(Seq.translate(nucleotide_seq, table=11)))
             self.assertEqual("***RR", str(Seq.translate(nucleotide_seq, table='Bacterial')))
 
