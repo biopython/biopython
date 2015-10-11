@@ -19,6 +19,8 @@ from Bio.Seq import Seq
 # local modules
 from .Pattern import PatternRepository
 
+__docformat__ = "restructuredtext en"
+
 
 class MotifFinder(object):
     """Find motifs in a set of Sequence Records.

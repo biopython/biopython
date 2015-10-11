@@ -13,6 +13,8 @@ import array
 # Sequence objects from Biopython
 from Bio.Seq import MutableSeq
 
+__docformat__ = "restructuredtext en"
+
 
 def function_population(new_genome, num_organisms, fitness_calculator):
     """Generate a population given a function to create genomes

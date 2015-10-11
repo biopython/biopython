@@ -19,7 +19,6 @@ http://www.reportlab.com
 For dealing with biological information, the package expects BioPython
 objects - namely SeqRecord objects containing SeqFeature objects.
 """
-__docformat__ = "restructuredtext en"
 
 try:
     from reportlab.graphics import renderPM
@@ -32,6 +31,8 @@ from ._CircularDrawer import CircularDrawer
 from ._Track import Track
 
 from Bio.Graphics import _write
+
+__docformat__ = "restructuredtext en"
 
 
 class Diagram(object):

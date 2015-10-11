@@ -3,16 +3,18 @@
 # as part of this package.
 #
 
-"""Provide classes for dealing with Training Neural Networks.
+"""
+Provide classes for dealing with Training Neural Networks.
 """
 # standard modules
 import random
+
+__docformat__ = "restructuredtext en"
 
 
 class TrainingExample(object):
     """Hold inputs and outputs of a training example.
 
-    XXX Do I really need this?
     """
     def __init__(self, inputs, outputs, name=""):
         self.name = name

@@ -23,6 +23,8 @@ MarkovModel     Holds the description of a markov model
 
 import numpy
 
+__docformat__ = "restructuredtext en"
+
 try:
     logaddexp = numpy.logaddexp
 except AttributeError:

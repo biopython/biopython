@@ -29,6 +29,8 @@ from ._GraphSet import GraphSet
 
 from math import ceil, pi, cos, sin, asin
 
+__docformat__ = "restructuredtext en"
+
 
 class CircularDrawer(AbstractDrawer):
     """Object for drawing circular diagrams.

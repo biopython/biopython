@@ -14,6 +14,7 @@ from __future__ import print_function
 from numpy import dot, transpose, sqrt, array
 from numpy.linalg import svd, det
 
+__docformat__ = "restructuredtext en"
 
 class SVDSuperimposer(object):
     """

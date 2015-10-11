@@ -2,6 +2,17 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 #
+'''
+Several routines used to extract information from FSSP sections
+
+filter: filters a passed summary section and alignment section according to a numeric
+        attribute in the summary section. Returns new summary and alignment sections
+
+For example, to filter in only  those records which have a zscore greater than
+4.0 and lesser than 7.5:
+
+new_sum, new_align = filter(sum, align, 'zscore', 4, 7.5)
+'''
 
 from Bio import FSSP
 import copy
@@ -9,6 +20,8 @@ from Bio.Align import MultipleSeqAlignment
 from Bio import Alphabet
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
+
+__docformat__ = "restructuredtext en"
 
 
 class FSSPAlign(MultipleSeqAlignment):
@@ -42,14 +55,6 @@ def mult_align(sum_dict, align_dict):
                                     sum_dict[i].pdb2 + sum_dict[i].chain2))
     return fssp_align
 
-
-# Several routines used to extract information from FSSP sections
-# filter:
-# filters a passed summary section and alignment section according to a numeric
-# attribute in the summary section. Returns new summary and alignment sections
-# For example, to filter in only  those records which have a zscore greater than
-# 4.0 and lesser than 7.5:
-# new_sum, new_align = filter(sum, align, 'zscore', 4, 7.5)
 #
 # Warning: this function really slows down when filtering large FSSP files.
 # The reason is the use of copy.deepcopy() to copy align_dict into

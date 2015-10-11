@@ -5,6 +5,8 @@
 
 import re
 
+__docformat__ = "restructuredtext en"
+
 
 def parse_ng86(lines, results):
     """ Parse the Nei & Gojobori (1986) section of the results.

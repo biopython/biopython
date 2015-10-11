@@ -30,6 +30,8 @@ from __future__ import print_function
 
 import numpy
 
+__docformat__ = "restructuredtext en"
+
 
 def _contents(items):
     term = 1.0 / len(items)

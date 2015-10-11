@@ -5,6 +5,8 @@
 
 import re
 
+__docformat__ = "restructuredtext en"
+
 line_floats_re = re.compile("-*\d+\.\d+")
 
 

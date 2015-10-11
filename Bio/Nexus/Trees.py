@@ -18,6 +18,9 @@ import random
 import sys
 from . import Nodes
 
+__docformat__ = "restructuredtext en"
+
+
 PRECISION_BRANCHLENGTH = 6
 PRECISION_SUPPORT = 6
 NODECOMMENT_START = '[&'

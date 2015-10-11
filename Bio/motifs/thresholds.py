@@ -6,6 +6,8 @@
 """Approximate calculation of appropriate thresholds for motif finding
 """
 
+__docformat__ = "restructuredtext en"
+
 
 class ScoreDistribution(object):
     """ Class representing approximate score distribution for a given motif.

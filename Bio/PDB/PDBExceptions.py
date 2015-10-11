@@ -7,6 +7,8 @@
 
 from Bio import BiopythonWarning
 
+__docformat__ = "restructuredtext en"
+
 
 # General error
 class PDBException(Exception):

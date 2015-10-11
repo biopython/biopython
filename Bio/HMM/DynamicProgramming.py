@@ -11,6 +11,8 @@ algorithms that can be used generally.
 
 from Bio._py3k import range
 
+__docformat__ = "restructuredtext en"
+
 
 class AbstractDPAlgorithms(object):
     """An abstract class to calculate forward and backward probabilities.

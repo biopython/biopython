@@ -15,6 +15,9 @@ from reportlab.lib import colors
 from Bio.Graphics.BasicChromosome import ChromosomeSegment
 from Bio.Graphics.BasicChromosome import TelomereSegment
 
+__docformat__ = "restructuredtext en"
+
+
 # --- constants
 # This is a default color scheme based on the light spectrum.
 # Based on my vague recollections from biology, this is our friend ROY G. BIV

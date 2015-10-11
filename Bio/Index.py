@@ -14,9 +14,12 @@ _ShelveIndex    An Index class based on the shelve module.
 _InMemoryIndex  An in-memory Index class.
 
 """
+
 import os
 import array
 import shelve
+
+__docformat__ = "restructuredtext en"
 
 try:
     import cPickle as pickle  # Only available under Python 2

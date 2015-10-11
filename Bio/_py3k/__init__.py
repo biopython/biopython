@@ -15,7 +15,7 @@ There is no similar option for range yet, other than::
     range = xrange
     input = raw_input
 
-or::
+or:
 
     from __builtin__ import xrange as range
     from __builtin__ import raw_input as input
@@ -25,11 +25,11 @@ importing of built in functions like open changes from Python 2::
 
     from __builtin__ import open
 
-to this under Python 3::
+To do this under Python 3:
 
     from builtins import open
 
-Instead, we can do this under either Python 2 or 3::
+Instead, we can do this under either Python 2 or 3:
 
     from Bio._py3k import open
     from Bio._py3k import zip
@@ -38,6 +38,9 @@ Once we drop support for Python 2, the whole of Bio._py3k will
 go away.
 """
 import sys
+
+__docformat__ = "restructuredtext en"
+
 
 if sys.version_info[0] >= 3:
     # Code for Python 3

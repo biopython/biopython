@@ -7,6 +7,9 @@
 from Bio.PopGen.GenePop import FileParser
 import Bio.PopGen.FDist
 
+__docformat__ = "restructuredtext en"
+
+
 # Quite a few utility functions could be done (like remove pop,
 # add locus, etc...). The recommended strategy is convert back
 # and forth from/to GenePop and use GenePop Utils

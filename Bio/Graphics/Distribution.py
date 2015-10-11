@@ -27,6 +27,8 @@ from reportlab.graphics.widgetbase import TypedPropertyCollection
 
 from Bio.Graphics import _write
 
+__docformat__ = "restructuredtext en"
+
 
 class DistributionPage(object):
     """Display a grouping of distributions on a page.

@@ -23,6 +23,8 @@ import sys
 
 from Bio._py3k import zip
 
+__docformat__ = "restructuredtext en"
+
 # GAF: GO Annotation Format
 #
 # GAF version 2.0

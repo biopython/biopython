@@ -11,6 +11,8 @@ http://www.ncbi.nlm.nih.gov/geo/
 
 from . import Record
 
+__docformat__ = "restructuredtext en"
+
 
 def _read_key_value(line):
     words = line[1:].split("=", 1)

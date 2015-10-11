@@ -12,6 +12,8 @@ import numpy
 from Bio.SVDSuperimposer import SVDSuperimposer
 from Bio.PDB.PDBExceptions import PDBException
 
+__docformat__ = "restructuredtext en"
+
 
 class Superimposer(object):
     """

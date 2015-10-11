@@ -5,3 +5,5 @@
 # as part of this package.
 """Motif command line tool wrappers."""
 from ._xxmotif import XXmotifCommandline
+
+__docformat__ = "restructuredtext en"
