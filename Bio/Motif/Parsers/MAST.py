@@ -7,6 +7,8 @@
 from Bio.Alphabet import IUPAC
 from Bio.Motif.Parsers.MEME import MEMEMotif
 
+__docformat__ = "restructuredtext en"
+
 
 class Record(object):
     """The class for holding the results from a MAST run.

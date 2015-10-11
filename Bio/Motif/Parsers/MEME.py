@@ -13,6 +13,8 @@ from math import sqrt
 import sys
 from Bio.Motif import Motif
 
+__docformat__ = "restructuredtext en"
+
 
 def read(handle):
     """Parses the text output of the MEME program into MEME.Record object.

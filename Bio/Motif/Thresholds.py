@@ -8,6 +8,8 @@
 import math
 import random
 
+__docformat__ = "restructuredtext en"
+
 
 class ScoreDistribution(object):
     """ Class representing approximate score distribution for a given motif.

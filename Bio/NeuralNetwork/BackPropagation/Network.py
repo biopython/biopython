@@ -19,6 +19,8 @@ and my apologies for anything I mangled.
 # standard library
 import math
 
+__docformat__ = "restructuredtext en"
+
 
 class BasicNetwork(object):
     """Represent a Basic Neural Network with three layers.

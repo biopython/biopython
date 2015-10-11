@@ -26,6 +26,8 @@ from Bio._py3k import basestring
 
 from reportlab.lib import colors
 
+__docformat__ = "restructuredtext en"
+
 
 class ColorTranslator(object):
     """ Class providing methods for translating representations of color into

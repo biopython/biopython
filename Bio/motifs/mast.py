@@ -9,6 +9,8 @@ from __future__ import print_function
 from Bio.Alphabet import IUPAC
 from Bio.motifs import meme
 
+__docformat__ = "restructuredtext en"
+
 
 class Record(list):
     """The class for holding the results from a MAST run.

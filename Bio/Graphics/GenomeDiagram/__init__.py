@@ -9,14 +9,18 @@
 #                L.Pritchard@scri.ac.uk
 # #############################################################################
 
-# Local imports, to make these classes available directly under the
-# Bio.Graphics.GenomeDiagram namespace:
+'''
+Local imports, to make these classes available directly under the
+Bio.Graphics.GenomeDiagram namespace:
+'''
 
 from ._Diagram import Diagram
 from ._Track import Track
 from ._FeatureSet import FeatureSet
 from ._GraphSet import GraphSet
 from ._CrossLink import CrossLink
+
+__docformat__ = "restructuredtext en"
 
 # Not (currently) made public,
 # from _Colors import ColorTranslator

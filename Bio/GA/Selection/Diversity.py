@@ -19,6 +19,8 @@ from Bio.Seq import MutableSeq
 from .Abstract import AbstractSelection
 from .Tournament import TournamentSelection
 
+__docformat__ = "restructuredtext en"
+
 
 class DiversitySelection(AbstractSelection):
     """Implement diversity selection.

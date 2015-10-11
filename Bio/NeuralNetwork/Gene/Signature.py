@@ -18,6 +18,8 @@ from Bio.Seq import Seq
 # local stuff
 from .Pattern import PatternRepository
 
+__docformat__ = "restructuredtext en"
+
 
 class SignatureFinder(object):
     """Find Signatures in a group of sequence records.

@@ -30,6 +30,8 @@ from Bio.Application import AbstractCommandline, _Option, _Argument
 import warnings
 from Bio import BiopythonDeprecationWarning
 
+__docformat__ = "restructuredtext en"
+
 
 class AlignAceCommandline(AbstractCommandline):
     """Create a commandline for the AlignAce program (DEPRECATED).

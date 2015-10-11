@@ -10,6 +10,8 @@ from __future__ import print_function
 
 import os
 
+__docformat__ = "restructuredtext en"
+
 
 def iterlen(items):
     """Count the number of items in an iterable.

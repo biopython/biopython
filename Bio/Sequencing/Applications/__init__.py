@@ -16,6 +16,8 @@ from ._samtools import SamtoolsMpileupCommandline, SamtoolsPhaseCommandline
 from ._samtools import SamtoolsReheaderCommandline, SamtoolsRmdupCommandline
 from ._samtools import SamtoolsSortCommandline, SamtoolsTargetcutCommandline
 
+__docformat__ = "restructuredtext en"
+
 # Make this explicit, then they show up in the API docs
 __all__ = ["BwaIndexCommandline",
            "BwaAlignCommandline",

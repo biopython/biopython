@@ -7,6 +7,8 @@
 
 from functools import reduce
 
+__docformat__ = "restructuredtext en"
+
 
 class Graph(object):
     """A directed graph abstraction with labeled edges."""

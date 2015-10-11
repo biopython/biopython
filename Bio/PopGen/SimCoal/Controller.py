@@ -14,6 +14,8 @@ import os
 import sys
 from Bio.Application import AbstractCommandline, _Option, _Switch
 
+__docformat__ = "restructuredtext en"
+
 
 class SimCoalController(object):
     def __init__(self, simcoal_dir):

@@ -7,6 +7,8 @@ import os.path
 from ._paml import Paml
 from . import _parse_yn00
 
+__docformat__ = "restructuredtext en"
+
 # TODO - Restore use of with statement for closing handles automatically
 # after dropping Python 2.4
 

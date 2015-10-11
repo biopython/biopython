@@ -10,6 +10,8 @@ from Bio.Motif import Motif
 from Bio.Alphabet import IUPAC
 from Bio.Seq import Seq
 
+__docformat__ = "restructuredtext en"
+
 
 class Record(object):
     def __init__(self):

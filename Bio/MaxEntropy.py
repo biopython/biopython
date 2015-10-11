@@ -16,6 +16,8 @@ from Bio._py3k import map
 
 import numpy
 
+__docformat__ = "restructuredtext en"
+
 
 class MaxEntropy(object):
     """Holds information for a Maximum Entropy classifier.

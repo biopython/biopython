@@ -6,6 +6,8 @@
 
 from Bio._py3k import basestring
 
+__docformat__ = "restructuredtext en"
+
 
 def get_processor(format, mapping):
     """Returns the object to process the given format according to the mapping.

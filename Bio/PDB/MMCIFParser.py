@@ -19,6 +19,8 @@ from Bio.PDB.StructureBuilder import StructureBuilder
 from Bio.PDB.PDBExceptions import PDBConstructionException
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
 
+__docformat__ = "restructuredtext en"
+
 
 class MMCIFParser(object):
     """Parse a PDB file and return a Structure object."""

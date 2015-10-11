@@ -6,3 +6,5 @@
 """
   PopGen: Population Genetics and Genomics library in Python
 """
+
+__docformat__ = "restructuredtext en"

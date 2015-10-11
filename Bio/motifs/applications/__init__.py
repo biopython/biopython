@@ -7,3 +7,5 @@
 from ._alignace import AlignAceCommandline
 from ._alignace import CompareAceCommandline
 from ._xxmotif import XXmotifCommandline
+
+__docformat__ = "restructuredtext en"

@@ -15,7 +15,6 @@ from Bio.Alphabet import IUPAC
 import math
 import random
 
-
 __docformat__ = "restructuredtext en"
 
 

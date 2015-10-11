@@ -29,6 +29,8 @@ import re
 
 from Bio import File
 
+__docformat__ = "restructuredtext en"
+
 
 def _get_journal(inl):
     # JRNL        AUTH   L.CHEN,M.DOI,F.S.MATHEWS,A.Y.CHISTOSERDOV,           2BBK   7

@@ -14,6 +14,8 @@ from Bio._py3k import range
 
 from Bio import motifs
 
+__docformat__ = "restructuredtext en"
+
 
 class Motif(motifs.Motif):
     """A subclass of Bio.motifs.Motif used to represent a JASPAR profile.

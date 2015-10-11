@@ -13,6 +13,9 @@ from Bio._py3k import range
 from Bio.Seq import Seq
 from Bio.Alphabet import IUPAC
 
+__docformat__ = "restructuredtext en"
+
+
 # Hack for Python 2.5, isnan and isinf were new in Python 2.6
 try:
     from math import isnan as _isnan
