@@ -10,7 +10,11 @@ import warnings
 
 # Remove unittest2 import after dropping support for Python2.6
 if sys.version_info < (2, 7):
-    import unittest2 as unittest
+    try:
+        import unittest2 as unittest
+    except ImportError:
+        from Bio import MissingPythonDependencyError
+        raise MissingPythonDependencyError("Under Python 2.6 this test needs the unittest2 library")
 else:
     import unittest
 
