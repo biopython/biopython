@@ -6,8 +6,13 @@ from __future__ import print_function
 import array
 import copy
 import sys
-import unittest
 import warnings
+
+# Remove unittest2 import after dropping support for Python2.6
+if sys.version_info < (2, 7):
+    import unittest2 as unittest
+else:
+    import unittest
 
 from Bio import Alphabet
 from Bio import Seq
@@ -707,8 +712,7 @@ class TestUnknownSeq(unittest.TestCase):
 
     def test_reverse_complement_of_protein(self):
         seq = Seq.UnknownSeq(6, Alphabet.generic_protein)
-        with self.assertRaises(ValueError):
-            seq.reverse_complement()
+        self.assertRaises(ValueError, seq.reverse_complement)
 
     def test_transcribe(self):
         self.assertEqual("??????", self.s.transcribe())
@@ -729,8 +733,7 @@ class TestUnknownSeq(unittest.TestCase):
 
     def test_translation_of_proteins(self):
         seq = Seq.UnknownSeq(6, IUPAC.protein)
-        with self.assertRaises(ValueError):
-            seq.translate()
+        self.assertRaises(ValueError, seq.translate)
 
     def test_ungap(self):
         seq = Seq.UnknownSeq(7, alphabet=Alphabet.Gapped(Alphabet.DNAAlphabet(), "-"))
