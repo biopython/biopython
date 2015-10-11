@@ -10,6 +10,9 @@ from optparse import OptionParser
 from Bio.PDB import *
 import sys
 
+__docformat__ = "restructuredtext en"
+
+
 __doc__ = """
 This program calculates solvent exposure for all amino
 acids in a PDB file using 5 different methods:

@@ -7,6 +7,9 @@ import time
 # set up the connection
 from Bio import GenBank
 from BioSQL import BioSeqDatabase
+
+__docformat__ = "restructuredtext en"
+
 server = BioSeqDatabase.open_database(host="192.168.0.192", user="root",
                                        passwd="", db="pythonloadtest")
 

@@ -16,6 +16,8 @@ import traceback
 from Bio import ParserSupport
 from Bio.Blast import NCBIStandalone
 
+__docformat__ = "restructuredtext en"
+
 CONTEXT = 5   # show 5 lines of context around the error in the format file
 
 USAGE = """%s [-h] [-v] [-p] [-n] [-o] <testfile>

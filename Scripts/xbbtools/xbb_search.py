@@ -7,6 +7,7 @@
 import os
 import re
 import sys
+
 sys.path.insert(0, '.')
 
 try:
@@ -21,6 +22,8 @@ except ImportError:
 
 from Bio.Data.IUPACData import ambiguous_dna_values
 from Bio.Seq import reverse_complement
+
+__docformat__ = "restructuredtext en"
 
 
 class DNAsearch:

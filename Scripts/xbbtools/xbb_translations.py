@@ -20,6 +20,8 @@ except ImportError:
 from Bio.Seq import reverse_complement, translate
 from Bio.SeqUtils import GC
 
+__docformat__ = "restructuredtext en"
+
 
 class xbb_translations:
     def __init__(self):

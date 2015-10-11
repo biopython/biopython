@@ -23,6 +23,7 @@ from Bio.Seq import Seq, UnknownSeq
 from Bio.SeqRecord import SeqRecord, _RestrictedDict
 from Bio import SeqFeature
 
+__docformat__ = "restructuredtext en"
 
 class DBSeq(Seq):
     """BioSQL equivalent of the Biopython Seq object."""
