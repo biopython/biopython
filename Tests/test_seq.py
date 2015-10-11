@@ -71,6 +71,7 @@ protein_seqs = [
     Seq.Seq("MEDG.KRXR@", Alphabet.Gapped(Alphabet.HasStopCodon(IUPAC.extended_protein, "@"), ".")),
 ]
 
+
 class TestSeq(unittest.TestCase):
     def setUp(self):
         self.s = Seq.Seq("TCAAAAGGATGCATCATG", IUPAC.unambiguous_dna)
@@ -421,7 +422,6 @@ class TestSeqAddition(unittest.TestCase):
                 self.assertEqual(str(c), str(a) + str(b))
 
 
-
 class TestMutableSeq(unittest.TestCase):
     def setUp(self):
         self.s = Seq.Seq("TCAAAAGGATGCATCATG", IUPAC.unambiguous_dna)
@@ -650,6 +650,104 @@ class TestMutableSeq(unittest.TestCase):
         self.mutable_s[2::3] = "N" * len(self.mutable_s[2::3])
         self.assertEqual(MutableSeq("TCNAANGGNTGNATNATN", IUPAC.ambiguous_dna),
                          self.mutable_s)
+
+
+class TestUnknownSeq(unittest.TestCase):
+    def setUp(self):
+        self.s = Seq.UnknownSeq(6)
+
+    def test_construction(self):
+        self.assertEqual("??????", str(Seq.UnknownSeq(6)))
+        self.assertEqual("NNNNNN", str(Seq.UnknownSeq(6, Alphabet.generic_dna)))
+        self.assertEqual("XXXXXX", str(Seq.UnknownSeq(6, Alphabet.generic_protein)))
+        self.assertEqual("??????", str(Seq.UnknownSeq(6, character="?")))
+
+        with self.assertRaises(ValueError):
+            Seq.UnknownSeq(-10)
+
+        with self.assertRaises(ValueError):
+            Seq.UnknownSeq(6, character='??')
+
+    def test_length(self):
+        self.assertEqual(6, len(self.s))
+
+    def test_repr(self):
+        self.assertEqual("UnknownSeq(6, alphabet = Alphabet(), character = '?')",
+                         repr(self.s))
+
+    def test_add_method(self):
+        seq1 = Seq.UnknownSeq(3, Alphabet.generic_dna)
+        self.assertEqual("??????NNN", str(self.s + seq1))
+
+        seq2 = Seq.UnknownSeq(3, Alphabet.generic_dna)
+        self.assertEqual("NNNNNN", str(seq1 + seq2))
+
+    def test_getitem_method(self):
+        self.assertEqual("", self.s[-1:-1])
+        self.assertEqual("?", self.s[1])
+        self.assertEqual("?", self.s[5:])
+        self.assertEqual("?", self.s[:1])
+        self.assertEqual("??", self.s[1:3])
+        self.assertEqual("???", self.s[1:6:2])
+        self.assertEqual("????", self.s[1:-1])
+        with self.assertRaises(ValueError):
+            c = self.s[1:6:0]
+
+    def test_count(self):
+        self.assertEqual(6, self.s.count("?"))
+        self.assertEqual(3, self.s.count("??"))
+        self.assertEqual(0, Seq.UnknownSeq(6, character="N").count("?"))
+        self.assertEqual(0, Seq.UnknownSeq(6, character="N").count("??"))
+        self.assertEqual(4, Seq.UnknownSeq(6, character="?").count("?", start=2))
+        self.assertEqual(2, Seq.UnknownSeq(6, character="?").count("??", start=2))
+
+    def test_complement(self):
+        self.s.complement()
+        self.assertEqual(str("??????"), str(self.s))
+
+    def test_complement_of_protein(self):
+        """Test reverse complement shouldn't work on a protein!"""
+        seq = Seq.UnknownSeq(6, Alphabet.generic_protein)
+        with self.assertRaises(ValueError):
+            seq.complement()
+
+    def test_reverse_complement(self):
+        self.s.reverse_complement()
+        self.assertEqual("??????", str(self.s))
+
+    def test_reverse_complement_of_protein(self):
+        seq = Seq.UnknownSeq(6, Alphabet.generic_protein)
+        with self.assertRaises(ValueError):
+            seq.reverse_complement()
+
+    def test_transcribe(self):
+        self.assertEqual("??????", self.s.transcribe())
+
+    def test_back_transcribe(self):
+        self.assertEqual("??????", self.s.back_transcribe())
+
+    def test_upper(self):
+        seq = Seq.UnknownSeq(6, Alphabet.generic_dna)
+        self.assertEqual("NNNNNN", str(seq.upper()))
+
+    def test_lower(self):
+        seq = Seq.UnknownSeq(6, Alphabet.generic_dna)
+        self.assertEqual("nnnnnn", str(seq.lower()))
+
+    def test_translation(self):
+        self.assertEqual("XX", str(self.s.translate()))
+
+    def test_translation_of_proteins(self):
+        seq = Seq.UnknownSeq(6, IUPAC.protein)
+        with self.assertRaises(ValueError):
+            c = seq.translate()
+
+    def test_ungap(self):
+        seq = Seq.UnknownSeq(7, alphabet=Alphabet.Gapped(Alphabet.DNAAlphabet(), "-"))
+        self.assertEqual("NNNNNNN", str(seq.ungap("-")))
+
+        seq = Seq.UnknownSeq(20, alphabet=Alphabet.Gapped(Alphabet.DNAAlphabet(), "-"), character='-')
+        self.assertEqual("", seq.ungap("-"))
 
 
 class TestAmbiguousComplements(unittest.TestCase):
