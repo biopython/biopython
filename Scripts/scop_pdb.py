@@ -15,6 +15,8 @@ from Bio._py3k import urlretrieve as _urlretrieve
 
 from Bio.SCOP import Raf, Cla
 
+__docformat__ = "restructuredtext en"
+
 
 def usage():
     print("""Extract a SCOP domain's ATOM and HETATOM records from the relevant PDB file.

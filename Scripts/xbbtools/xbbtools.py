@@ -10,6 +10,10 @@
 # as part of this package.
 
 import sys
+
+__docformat__ = "restructuredtext en"
+
+
 sys.path.insert(0, '.')
 
 try:

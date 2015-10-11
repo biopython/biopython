@@ -34,6 +34,8 @@ from xbb_help import xbbtools_help
 from Bio.Data import CodonTable
 from Bio.SeqIO.FastaIO import SimpleFastaParser
 
+__docformat__ = "restructuredtext en"
+
 
 class xbb_widget(object):
     def __init__(self, parent=None):

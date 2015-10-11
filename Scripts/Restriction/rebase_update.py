@@ -18,6 +18,9 @@ import sys
 import time
 import optparse
 
+__docformat__ = "restructuredtext en"
+
+
 try:
     from urllib import FancyURLopener
 except ImportError:
