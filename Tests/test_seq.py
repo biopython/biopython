@@ -630,7 +630,7 @@ class TestMutableSeq(unittest.TestCase):
                          self.mutable_s)
 
     def test_delete_stride_slice(self):
-        del self.mutable_s[4:6-1]
+        del self.mutable_s[4:6 - 1]
         self.assertEqual(MutableSeq("TCAAAGGATGCATCATG", IUPAC.ambiguous_dna),
                          self.mutable_s)
 
@@ -1060,3 +1060,8 @@ class TestStopCodons(unittest.TestCase):
         self.assertEqual(Seq.translate("tar"), "*")
         self.assertEqual(Seq.translate("tan"), "X")
         self.assertEqual(Seq.translate("nnn"), "X")
+
+
+if __name__ == "__main__":
+    runner = unittest.TextTestRunner(verbosity=2)
+    unittest.main(testRunner=runner)
