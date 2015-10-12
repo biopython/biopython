@@ -765,7 +765,7 @@ class Seq(object):
         elif isinstance(base, Alphabet.RNAAlphabet):
             ttable = _rna_complement_table
         elif ('U' in self._data or 'u' in self._data) \
-        and ('T' in self._data or 't' in self._data):
+                and ('T' in self._data or 't' in self._data):
             # TODO - Handle this cleanly?
             raise ValueError("Mixed RNA/DNA found")
         elif 'U' in self._data or 'u' in self._data:
@@ -960,9 +960,9 @@ class Seq(object):
         """
         if isinstance(table, str) and len(table) == 256:
             raise ValueError("The Seq object translate method DOES NOT take "
-                             + "a 256 character string mapping table like "
-                             + "the python string object's translate method. "
-                             + "Use str(my_seq).translate(...) instead.")
+                             "a 256 character string mapping table like "
+                             "the python string object's translate method. "
+                             "Use str(my_seq).translate(...) instead.")
         if isinstance(Alphabet._get_base_alphabet(self.alphabet),
                       Alphabet.ProteinAlphabet):
             raise ValueError("Proteins cannot be translated!")
@@ -1210,8 +1210,7 @@ class UnknownSeq(Seq):
         >>> UnknownSeq(5, generic_protein) + "LV"
         Seq('XXXXXLV', ProteinAlphabet())
         """
-        if isinstance(other, UnknownSeq) \
-        and other._character == self._character:
+        if isinstance(other, UnknownSeq) and other._character == self._character:
             # TODO - Check the alphabets match
             return UnknownSeq(len(self) + len(other),
                               self.alphabet, self._character)
@@ -2045,7 +2044,7 @@ def _translate_str(sequence, table, stop_symbol="*", to_stop=False,
         try:
             amino_acids.append(forward_table[codon])
         except (KeyError, CodonTable.TranslationError):
-            # Todo? Treat "---" as a special case (gapped translation)
+            # TODO? Treat "---" as a special case (gapped translation)
             if codon in table.stop_codons:
                 if cds:
                     raise CodonTable.TranslationError(
@@ -2176,7 +2175,7 @@ def reverse_complement(sequence):
     # into a Seq, use the reverse_complement method, and convert back to a string.
     # This worked, but is over five times slower on short sequences!
     if ('U' in sequence or 'u' in sequence) \
-    and ('T' in sequence or 't' in sequence):
+            and ('T' in sequence or 't' in sequence):
         raise ValueError("Mixed RNA/DNA found")
     elif 'U' in sequence or 'u' in sequence:
         ttable = _rna_complement_table
