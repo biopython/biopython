@@ -98,6 +98,12 @@ class SamtoolsTestCase(unittest.TestCase):
         self.bamindexfile1 = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                                           "SamBam",
                                           "bam1.bam.bai")
+        self.sortedbamfile1 = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                          "SamBam",
+                                          "bam1_sorted.bam")
+        self.sortedbamfile2 = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                          "SamBam",
+                                          "bam2_sorted.bam")
         self.files_to_clean = [self.referenceindexfile, self.bamindexfile1, self.outbamfile]
 
     def tearDown(self):
@@ -118,7 +124,7 @@ class SamtoolsTestCase(unittest.TestCase):
         cmdline.set_parameter("S", True)
         stdout_sam, stderr_sam = cmdline()
         self.assertTrue(
-            stderr_sam.startswith("[samopen] SAM header is present:"),
+            stdout_sam.startswith("HWI-1KL120:88:D0LRBACXX:1:1101:1780:2146"),
             "SAM file  viewing failed:\n%s\nStderr:%s"
             % (cmdline, stderr_sam))
 
@@ -216,7 +222,7 @@ class SamtoolsTestCase(unittest.TestCase):
 
     def test_mpileup_list(self):
         cmdline = SamtoolsMpileupCommandline(samtools_exe)
-        cmdline.set_parameter("input_file", [self.bamfile1, self.bamfile2])
+        cmdline.set_parameter("input_file", [self.sortedbamfile1, self.sortedbamfile2])
         stdout, stderr = cmdline()
         self.assertFalse("[bam_pileup_core]" in stdout)
 

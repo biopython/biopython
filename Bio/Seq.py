@@ -1508,7 +1508,7 @@ class MutableSeq(object):
     """An editable sequence object (with an alphabet).
 
     Unlike normal python strings and our basic sequence object (the Seq class)
-    which are immuatable, the MutableSeq lets you edit the sequence in place.
+    which are immutable, the MutableSeq lets you edit the sequence in place.
     However, this means you cannot use a MutableSeq object as a dictionary key.
 
     >>> from Bio.Seq import MutableSeq

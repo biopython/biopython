@@ -44,18 +44,16 @@ on our website, http://biopython.org -- further instructions are given below.
 Python Requirements
 ===================
 
-We currently recommend using Python 2.7 from http://www.python.org which
-is the final version of Python 2.  Early adopters are encouraged to try
-Biopython under Python 3.3, 3.4, or 3.5 but not all the optional dependencies
-are available yet.
+We currently recommend using Python 3.5 from http://www.python.org
 
-Biopython is currently supported and tested on the following Python versions:
+Biopython is currently supported and tested on the following Python
+implementations:
 
 - Python 2.6, 2.7, 3.3, 3.4, 3.5 -- see http://www.python.org
 
-  This is currently the primary development platform for Biopython.
+  This is the primary development platform for Biopython.
 
-- PyPy 2.0, 2.1, 2.2, 2.3, 2.4 and also PyPy3 2.4 -- see http://www.pypy.org
+- PyPy 2.4, 2.5, 2.6 and also PyPy3 2.4 -- see http://www.pypy.org
 
   Aside from modules with C code or dependent on NumPy, everything should
   work. PyPy's NumPy reimplementation NumPyPy is still in progress.
@@ -65,8 +63,8 @@ Biopython is currently supported and tested on the following Python versions:
   Aside from modules with C code, or dependent on SQLite3 or NumPy,
   everything should work.
 
-Please note that Biopython 1.62 was our final release to support Python 2.5
-and Jython 2.5.
+Please note that support for Python 2.6 is deprecated as of Biopython 1.66.
+Biopython 1.62 was our final release to support Python 2.5 and Jython 2.5.
 
 
 Dependencies

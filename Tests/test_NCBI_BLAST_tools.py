@@ -260,6 +260,8 @@ class CheckCompleteArgList(unittest.TestCase):
         if exe_name == "deltablast":
             # New in BLAST+ 2.2.29 so will look like extra args on BLAST+ 2.2.28
             extra = extra.difference(["-entrez_query", "-max_hsps", "-sum_statistics"])
+            # New in BLAST+ 2.2.27 so looks like extra arg on BLAST+ 2.2.26
+            extra = extra.difference(["-remote"])
         if exe_name in ["blastx", "tblastn"]:
             # New in BLAST+ 2.2.30 so will look like extra args on BLAST+ 2.2.29 etc
             extra = extra.difference(["-task"])
