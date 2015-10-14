@@ -37,7 +37,7 @@ Exceptions:
 
     - ParserFailureError    Exception indicating a failure in the parser (ie.
       scanner or consumer)
-    - LocationParserError   Exception indiciating a problem with the spark based
+    - LocationParserError   Exception indicating a problem with the spark based
       location parser.
 
 """
@@ -769,7 +769,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
     def version_suffix(self, version):
         """Set the version to overwrite the id.
 
-        Since the verison provides the same information as the accession
+        Since the version provides the same information as the accession
         number, plus some extra info, we set this as the id if we have
         a version.
         """
