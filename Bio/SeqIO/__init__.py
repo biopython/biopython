@@ -559,7 +559,7 @@ def parse(handle, format, alphabet=None):
     only.
     """
     # NOTE - The above docstring has some raw \n characters needed
-    # for the StringIO example, hense the whole docstring is in raw
+    # for the StringIO example, hence the whole docstring is in raw
     # string mode (see the leading r before the opening quote).
     from Bio import AlignIO
 
@@ -835,7 +835,7 @@ def index(filename, format, alphabet=None, key_function=None):
     >>> records.close()
 
     Another common use case would be indexing an NCBI style FASTA file,
-    where you might want to extract the GI number from the FASTA identifer
+    where you might want to extract the GI number from the FASTA identifier
     to use as the dictionary key.
 
     Notice that unlike the to_dict() function, here the key_function does
