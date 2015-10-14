@@ -80,7 +80,7 @@ class _RestrictedDict(dict):
         if not hasattr(value, "__len__") or not hasattr(value, "__getitem__") \
                 or (hasattr(self, "_length") and len(value) != self._length):
             raise TypeError("We only allow python sequences (lists, tuples or "
-                            "strings) of length %i." % self._length)
+                            "strings) of length {0}.".format(self._length))
         dict.__setitem__(self, key, value)
 
     def update(self, new_dict):
@@ -586,20 +586,18 @@ class SeqRecord(object):
         """
         lines = []
         if self.id:
-            lines.append("ID: %s" % self.id)
+            lines.append("ID: {0}".format(self.id))
         if self.name:
-            lines.append("Name: %s" % self.name)
+            lines.append("Name: {0}".format(self.name))
         if self.description:
-            lines.append("Description: %s" % self.description)
+            lines.append("Description: {0}".format(self.description))
         if self.dbxrefs:
-            lines.append("Database cross-references: "
-                         + ", ".join(self.dbxrefs))
-        lines.append("Number of features: %i" % len(self.features))
+            lines.append("Database cross-references: " + ", ".join(self.dbxrefs))
+        lines.append("Number of features: {0}".format(len(self.features)))
         for a in self.annotations:
-            lines.append("/%s=%s" % (a, str(self.annotations[a])))
+            lines.append("/{0}={1}".format(a, str(self.annotations[a])))
         if self.letter_annotations:
-            lines.append("Per letter annotation for: "
-                         + ", ".join(self.letter_annotations))
+            lines.append("Per letter annotation for: " + ", ".join(self.letter_annotations))
         # Don't want to include the entire sequence,
         # and showing the alphabet is useful:
         lines.append(repr(self.seq))
@@ -634,10 +632,10 @@ class SeqRecord(object):
         annotations, letter_annotations and features are not shown (as they
         would lead to a very long string).
         """
-        return self.__class__.__name__ \
-            + "(seq=%s, id=%s, name=%s, description=%s, dbxrefs=%s)" \
-            % tuple(map(repr, (self.seq, self.id, self.name,
-                               self.description, self.dbxrefs)))
+        return "{0}(seq={1!r}, id={2!r}, name={3!r}, description={4!r}, dbxrefs={5!r})".format(
+               self.__class__.__name__,
+               self.seq, self.id, self.name,
+               self.description, self.dbxrefs)
 
     def format(self, format):
         r"""Returns the record as a string in the specified file format.
