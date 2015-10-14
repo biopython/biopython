@@ -10,7 +10,7 @@ and confirms they are consistent using our different parsers.
 """
 import unittest
 from Bio import SeqIO
-from Bio.Alphabet import generic_dna, generic_rna, generic_protein
+from Bio.Alphabet import generic_dna, generic_protein
 from Bio.Seq import Seq, MutableSeq
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqFeature import SeqFeature, FeatureLocation, ExactPosition
