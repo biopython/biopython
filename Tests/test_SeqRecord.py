@@ -8,7 +8,17 @@
 Initially this takes matched tests of GenBank and FASTA files from the NCBI
 and confirms they are consistent using our different parsers.
 """
-import unittest
+import sys
+# Remove unittest2 import after dropping support for Python2.6
+if sys.version_info < (2, 7):
+    try:
+        import unittest2 as unittest
+    except ImportError:
+        from Bio import MissingPythonDependencyError
+        raise MissingPythonDependencyError("Under Python 2.6 this test needs the unittest2 library")
+else:
+    import unittest
+
 from Bio import SeqIO
 from Bio.Alphabet import generic_dna, generic_protein
 from Bio.Seq import Seq, MutableSeq
@@ -19,6 +29,7 @@ from Bio.SeqFeature import WithinPosition, BeforePosition, AfterPosition, OneOfP
 
 class SeqRecordCreation(unittest.TestCase):
     """Test basic creation of SeqRecords."""
+
     def test_annotations(self):
         """Pass in annotations to SeqRecords"""
         rec = SeqRecord(Seq("ACGT", generic_dna),
@@ -288,9 +299,11 @@ Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX', ProteinAlphabet())"""
         s = SeqRecord(Seq("ACTG"), id="TestID", name="TestName",
                       description="TestDescription", dbxrefs=["TestDbxrefs"],
                       features=[SeqFeature(FeatureLocation(0, 3), type="Site")],
-                      annotations={'organism': 'bombyx'}, letter_annotations={'test': 'abcd'})
+                      annotations={'organism': 'bombyx'},
+                      letter_annotations={'test': 'abcd'})
         rc = s.reverse_complement(id=True, name=True, description=True,
-                                  dbxrefs=True, features=True, annotations=True, letter_annotations=True)
+                                  dbxrefs=True, features=True, annotations=True,
+                                  letter_annotations=True)
 
         self.assertEqual("CAGT", str(rc.seq))
         self.assertEqual("TestID", rc.id)
@@ -324,6 +337,7 @@ Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX', ProteinAlphabet())"""
     def test_reverse_complement_mutable_seq(self):
         s = SeqRecord(MutableSeq("ACTG"))
         self.assertEqual("CAGT", str(s.reverse_complement().seq))
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
