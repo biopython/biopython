@@ -14,7 +14,19 @@ except ImportError:
     raise MissingExternalDependencyError(
         "Install NumPy if you want to use Bio.LogisticRegression.")
 
-import unittest
+# Remove unittest2 import after dropping support for Python2.6
+import sys
+if sys.version_info < (2, 7):
+    try:
+        import unittest2 as unittest
+    except ImportError:
+        from Bio import MissingPythonDependencyError
+        raise MissingPythonDependencyError("Under Python 2.6 this test needs the unittest2 library")
+else:
+    import unittest
+
+import copy
+
 from Bio import LogisticRegression
 
 
@@ -63,20 +75,20 @@ def show_progress(iteration, loglikelihood):
 class TestLogisticRegression(unittest.TestCase):
 
     def test_xs_and_ys_input_parameter_lengths(self):
-        modified_xs = xs.copy()
+        modified_xs = copy.copy(xs)
         modified_xs.pop()
         with self.assertRaises(ValueError):
             LogisticRegression.train(modified_xs, ys)
 
     def test_ys_input_class_assignments(self):
-        modified_ys = ys.copy()
+        modified_ys = copy.copy(ys)
         modified_ys.pop()
         modified_ys.append(2)
         with self.assertRaises(ValueError):
             LogisticRegression.train(xs, modified_ys)
 
     def test_dimensionality_of_input_xs(self):
-        modified_xs = xs.copy()
+        modified_xs = copy.copy(xs)
         modified_xs[0] = []
         with self.assertRaises(ValueError):
             LogisticRegression.train(modified_xs, ys)
