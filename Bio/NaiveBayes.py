@@ -56,7 +56,7 @@ class NaiveBayes(object):
         self.dimensionality = None
 
 
-def calculate(nb, observation, scale=0):
+def calculate(nb, observation, scale=False):
     """calculate(nb, observation[, scale]) -> probability dict
 
     Calculate log P(class|observation) for each class.  nb is a NaiveBayes
@@ -73,8 +73,8 @@ def calculate(nb, observation, scale=0):
 
     # Make sure the observation has the right dimensionality.
     if len(observation) != nb.dimensionality:
-        raise ValueError("observation in %d dimension, but classifier in %d"
-                         % (len(observation), nb.dimensionality))
+        raise ValueError("observation in {0} dimension, but classifier in {1}".format(len(observation),
+                                                                                      nb.dimensionality))
 
     # Calculate log P(observation|class) for every class.
     n = len(nb.classes)
@@ -113,7 +113,7 @@ def classify(nb, observation):
 
     """
     # The class is the one with the highest probability.
-    probs = calculate(nb, observation, scale=0)
+    probs = calculate(nb, observation, scale=False)
     max_prob = max_class = None
     for klass in nb.classes:
         if max_prob is None or probs[klass] > max_prob:
