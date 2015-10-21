@@ -10,7 +10,7 @@ The latest news is at the top of this file.
 
 ===================================================================
 
-(In progress, not yet released) Biopython 1.66
+21 October 2015: Biopython 1.66
 
 Further work on the Bio.KEGG and Bio.Graphics modules now allows drawing KGML
 pathways with transparency.
