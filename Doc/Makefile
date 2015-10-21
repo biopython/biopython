@@ -4,7 +4,7 @@ subdirs := install
 all:  Tutorial.html Tutorial.txt pdf $(subdirs)
 pdf:  Tutorial.pdf biopdb_faq.pdf
 
-Tutorial.pdf: Tutorial.tex
+Tutorial.pdf: Tutorial.tex Tutorial/chapter_*.tex
 	pdflatex Tutorial.tex
 	pdflatex Tutorial.tex
 	pdflatex Tutorial.tex
@@ -14,10 +14,10 @@ biopdb_faq.pdf: biopdb_faq.tex
 	pdflatex biopdb_faq.tex
 	pdflatex biopdb_faq.tex
 
-Tutorial.html: Tutorial.tex
+Tutorial.html: Tutorial.tex Tutorial/chapter_*.tex
 	hevea -fix Tutorial.tex
 
-Tutorial.txt: Tutorial.tex
+Tutorial.txt: Tutorial.tex Tutorial/chapter_*.tex
 	hevea -fix -text Tutorial.tex
 
 clean-subdirs: $(subdirs)
