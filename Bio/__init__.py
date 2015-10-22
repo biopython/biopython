@@ -12,7 +12,7 @@ http://biopython.org
 
 __docformat__ = "restructuredtext en"  # not just plaintext
 
-__version__ = "1.66"
+__version__ = "1.66+"
 
 
 class MissingExternalDependencyError(Exception):
