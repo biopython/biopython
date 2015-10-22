@@ -57,15 +57,16 @@ class NaiveBayes(object):
 
 
 def calculate(nb, observation, scale=False):
-    """calculate(nb, observation[, scale]) -> probability dict
+    """Calculate ``log P(class|observation)`` for each class.
 
-    Calculate log P(class|observation) for each class.  nb is a NaiveBayes
-    classifier that has been trained.  observation is a list representing
-    the observed data.  scale is whether the probability should be
-    scaled by P(observation).  By default, no scaling is done.  The return
-    value is a dictionary where the keys is the class and the value is the
-    log probability of the class.
+        - nb          - A NaiveBayes classifier that has been trained.
+        - observation - A list representing the observed data.
+        - scale       - Boolean to indicate whether the probability should be
+        scaled by ``P(observation)``.  By default, no scaling is done.
 
+    Returns:
+        A dictionary where the keys is the class and the value is the log
+        probability of the class.
     """
     # P(class|observation) = P(observation|class)*P(class)/P(observation)
     # Taking the log:
