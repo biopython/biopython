@@ -1,16 +1,13 @@
 # coding=utf-8
 import copy
+import unittest
 
-import sys
-# Remove unittest2 import after dropping support for Python2.6
-if sys.version_info < (2, 7):
-    try:
-        import unittest2 as unittest
-    except ImportError:
-        from Bio import MissingPythonDependencyError
-        raise MissingPythonDependencyError("Under Python 2.6 this test needs the unittest2 library")
-else:
-    import unittest
+try:
+    import numpy
+except ImportError:
+    from Bio import MissingPythonDependencyError
+    raise MissingPythonDependencyError(
+        "Install NumPy if you want to use Bio.NaiveBayes.")
 
 from Bio import NaiveBayes
 
@@ -43,20 +40,17 @@ class NaiveBayesTest(unittest.TestCase):
         self.test = [6, 130, 8]
 
     def test_train_function_no_training_set(self):
-        with self.assertRaises(ValueError):
-            NaiveBayes.train([], self.ys)
+        self.assertRaises(ValueError, NaiveBayes.train, [], self.ys)
 
     def test_train_function_input_lengths(self):
         ys = copy.copy(self.ys)
         ys.pop()
-        with self.assertRaises(ValueError):
-            NaiveBayes.train(self.xs, ys)
+        self.assertRaises(ValueError, NaiveBayes.train, self.xs, ys)
 
     def test_train_function_uneven_dimension_of_training_set(self):
         xs = copy.copy(self.xs)
         xs[0] = [1]
-        with self.assertRaises(ValueError):
-            NaiveBayes.train(xs, self.ys)
+        self.assertRaises(ValueError, NaiveBayes.train, xs, self.ys)
 
     def test_train_function_with_priors(self):
         model = NaiveBayes.train(self.xs, self.ys, priors={'male': 0.1, 'female': 0.9})
@@ -72,11 +66,9 @@ class NaiveBayesTest(unittest.TestCase):
     def test_calculate_function_wrong_dimensionality(self):
         xs = self.xs[0]
         xs.append(100)
-        with self.assertRaises(ValueError):
-            c = NaiveBayes.calculate(self.model, xs)
+        self.assertRaises(ValueError, NaiveBayes.calculate, self.model, xs)
 
     def test_calculate_function_with_scale(self):
         result = NaiveBayes.calculate(self.model, self.test, scale=True)
         expected = -689.0
         self.assertEqual(expected, round(result['male']))
-
