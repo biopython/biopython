@@ -185,7 +185,7 @@ def train(training_set, results, priors=None, typecode=None):
     for i in range(len(results)):
         klass, obs = results[i], training_set[i]
         observations[c2i[klass]].append(obs)
-    # Now make the observations Numeric matrics.
+    # Now make the observations Numeric matrix.
     for i in range(len(observations)):
         # XXX typecode must be specified!
         observations[i] = numpy.asarray(observations[i], typecode)
