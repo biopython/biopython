@@ -78,7 +78,7 @@ def parse_parameter_list(lines, parameters, num_params):
         if len(line_floats) == num_params:
             parameters["parameter list"] = line.strip()
         # Find SEs. The same format as parameters above is maintained
-        # since there is a correspondance between the SE format and
+        # since there is a correspondence between the SE format and
         # the parameter format.
         # Example match:
         # "SEs for parameters:
