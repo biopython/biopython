@@ -201,7 +201,7 @@ def parse_model(lines, results):
         elif len(line_floats) == num_params and not SEs_flag:
             parameters["parameter list"] = line.strip()
         # Find SEs. The same format as parameters above is maintained
-        # since there is a correspondance between the SE format and
+        # since there is a correspondence between the SE format and
         # the parameter format.
         # Example match:
         # "SEs for parameters:
