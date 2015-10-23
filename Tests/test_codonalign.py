@@ -5,10 +5,8 @@
 
 """Unit tests for the Bio.codonalign modules.
 """
-import sys
 import warnings
 import tempfile
-import platform
 import unittest
 
 from Bio import BiopythonExperimentalWarning
