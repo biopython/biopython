@@ -93,7 +93,7 @@ def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X',
             nucl_seqs = tuple(nucl_seqs)
         nucl_num = len(nucl_seqs)
         if pro_num > nucl_num:
-            raise ValueError("More Number of SeqRecords in Protein Alignment "
+            raise ValueError("Higher Number of SeqRecords in Protein Alignment "
                              "({0}) than the Number of Nucleotide SeqRecords "
                              "({1}) are found!".format(pro_num, nucl_num))
 
@@ -246,7 +246,7 @@ def _check_corr(pro, nucl, gap_char='-', codon_table=default_codon_table,
     from Bio.Alphabet import NucleotideAlphabet
 
     if not all([isinstance(pro, SeqRecord), isinstance(nucl, SeqRecord)]):
-        raise TypeError("_check_corr accept two SeqRecord object. Please "
+        raise TypeError("_check_corr accepts two SeqRecord object. Please "
                         "check your input.")
 
     def get_alpha(alpha):

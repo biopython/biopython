@@ -114,7 +114,7 @@ class CodonSeq(Seq):
             raise RuntimeError("frameshift detected. "
                                "CodonSeq object is not able to deal "
                                "with codon sequence with frameshift. "
-                               "Plase use normal slice option.")
+                               "Please use normal slice option.")
         if isinstance(index, int):
             if index != -1:
                 return self._data[index * 3:(index + 1) * 3]
@@ -186,8 +186,8 @@ class CodonSeq(Seq):
             try:
                 amino_acids.append(codon_table.forward_table[codon])
             except KeyError:
-                raise RuntimeError("Unknown codon detected ({0}). Do you "
-                                   "forget to speficy ungap_seq "
+                raise RuntimeError("Unknown codon detected ({0}). Did you "
+                                   "forget to specify the ungap_seq "
                                    "argument?".format(codon))
         return "".join(amino_acids)
 
@@ -288,7 +288,7 @@ def _get_codon_list(codonseq):
         elif str(codonseq[int(k):int(k) + 3]) == "---":
             codon_lst.append("---")
         else:
-            # this may be problematic, as normally no codon shoud
+            # this may be problematic, as normally no codon should
             # fall into this condition
             codon_lst.append(codonseq[int(k):int(k) + 3])
     return codon_lst
@@ -458,7 +458,7 @@ def _count_diff_NG86(codon1, codon2, codon_table=default_codon_table):
     into account.
     """
     if not all([isinstance(codon1, str), isinstance(codon2, str)]):
-        raise TypeError("_count_diff_NG86 accept string object to represent "
+        raise TypeError("_count_diff_NG86 accepts string object to represent "
                         "codon ({0}, {1} detected)".format(
                                                         type(codon1),
                                                         type(codon2))
@@ -472,11 +472,11 @@ def _count_diff_NG86(codon1, codon2, codon_table=default_codon_table):
     base_tuple = ('A', 'C', 'G', 'T')
     if not all([i in base_tuple for i in codon1]):
         raise RuntimeError("Unrecognized character detected in codon1 {0} "
-                           "(Codon is consist of "
+                           "(Codons consist of "
                            "A, T, C or G)".format(codon1))
     if not all([i in base_tuple for i in codon2]):
         raise RuntimeError("Unrecognized character detected in codon2 {0} "
-                           "(Codon is consist of "
+                           "(Codons consist of "
                            "A, T, C or G)".format(codon2))
     if codon1 == codon2:
         return SN
@@ -898,7 +898,7 @@ def _count_diff_YN00(codon1, codon2, P, codon_lst,
     the function.
     """
     if not all([isinstance(codon1, str), isinstance(codon2, str)]):
-        raise TypeError("_count_diff_YN00 accept string object to represent "
+        raise TypeError("_count_diff_YN00 accepts string object to represent "
                         "codon ({0}, {1} detected)".format(
                                                         type(codon1),
                                                         type(codon2))
@@ -913,11 +913,11 @@ def _count_diff_YN00(codon1, codon2, P, codon_lst,
     base_tuple = ('A', 'C', 'G', 'T')
     if not all([i in base_tuple for i in codon1]):
         raise RuntimeError("Unrecognized character detected in codon1 {0} "
-                           "(Codon is consist of "
+                           "(Codons consist of "
                            "A, T, C or G)".format(codon1))
     if not all([i in base_tuple for i in codon2]):
         raise RuntimeError("Unrecognized character detected in codon2 {0} "
-                           "(Codon is consist of "
+                           "(Codons consist of "
                            "A, T, C or G)".format(codon2))
     if codon1 == codon2:
         return TV

@@ -43,7 +43,7 @@ class CodonAlignment(MultipleSeqAlignment):
         # check the type of the alignment to be nucleotide
         for rec in self:
             if not isinstance(rec.seq, CodonSeq):
-                raise TypeError("CodonSeq object are expected in each "
+                raise TypeError("CodonSeq objects are expected in each "
                                 "SeqRecord in CodonAlignment")
 
         assert self.get_alignment_length() % 3 == 0, \
@@ -183,7 +183,7 @@ def mktest(codon_alns, codon_table=default_codon_table, alpha=0.05):
     """
     import copy
     if not all([isinstance(i, CodonAlignment) for i in codon_alns]):
-        raise TypeError("mktest accept CodonAlignment list.")
+        raise TypeError("mktest accepts CodonAlignment list.")
     codon_aln_len = [i.get_alignment_length() for i in codon_alns]
     if len(set(codon_aln_len)) != 1:
         raise RuntimeError("CodonAlignment object for mktest should be of"
