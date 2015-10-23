@@ -1,4 +1,4 @@
-# Copyright 2013 by Zheng Ruan (zruan1991@gmai.com).
+# Copyright 2013 by Zheng Ruan (zruan1991@gmail.com).
 # All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
