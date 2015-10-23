@@ -164,7 +164,7 @@ def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X',
             pro_nucl_pair.append((pro_rec, nucl_seqs[nucl_id]))
 
     codon_aln = []
-    shift = None
+    shift = False
     for pair in pro_nucl_pair:
         # Beware that the following span corresponds to an ungapped
         # nucleotide sequence.
@@ -184,7 +184,7 @@ def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X',
             codon_aln.append(codon_rec)
             if corr_span[1] == 2:
                 shift = True
-    if shift is True:
+    if shift:
         return CodonAlignment(_align_shift_recs(codon_aln), alphabet=alphabet)
     else:
         return CodonAlignment(codon_aln, alphabet=alphabet)
