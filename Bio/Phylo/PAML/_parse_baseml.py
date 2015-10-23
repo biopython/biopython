@@ -240,7 +240,7 @@ def parse_freqs(lines, parameters):
         elif "(frequency parameters for branches)" in line:
             parameters["nodes"] = {}
             branch_freqs_found = True
-        elif branch_freqs_found is True:
+        elif branch_freqs_found:
             if len(line_floats) > 0:
                 node_res = re.match("Node \#(\d+)", line)
                 node_num = int(node_res.group(1))
