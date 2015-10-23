@@ -154,7 +154,7 @@ class CodonSeq(Seq):
         purpose.
         """
         amino_acids = []
-        if ungap_seq is True:
+        if ungap_seq:
             tr_seq = self._data.replace(self.gap_char, "")
         else:
             tr_seq = self._data

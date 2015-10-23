@@ -299,7 +299,7 @@ def _check_corr(pro, nucl, gap_char='-', codon_table=default_codon_table,
             # pro_re
             if this_anchor_len == anchor_len:
                 for aa in anchor:
-                    if complete_protein is True and i == 0:
+                    if complete_protein and i == 0:
                         qcodon += _codons2re(codon_table.start_codons)
                         fncodon += aa2re['X']
                         continue
@@ -336,7 +336,7 @@ def _check_corr(pro, nucl, gap_char='-', codon_table=default_codon_table,
             first_anchor = True
             shift_id_pos = 0
             # check the first anchor
-            if first_anchor is True and anchor_pos[0][2] != 0:
+            if first_anchor and anchor_pos[0][2] != 0:
                 shift_val_lst = [1, 2, 3 * anchor_len - 2, 3 * anchor_len - 1, 0]
                 sh_anc = anchors[0]
                 for shift_val in shift_val_lst:
@@ -561,7 +561,7 @@ def _get_codon_rec(pro, nucl, span_mode, alphabet, gap_char="-",
         for aa in pro.seq:
             if aa == "-":
                 codon_seq += "---"
-            elif complete_protein is True and aa_num == 0:
+            elif complete_protein and aa_num == 0:
                 this_codon = nucl_seq._data[span[0]:span[0] + 3]
                 if not re.search(_codons2re[codon_table.start_codons],
                                  this_codon.upper()):
@@ -623,7 +623,7 @@ def _get_codon_rec(pro, nucl, span_mode, alphabet, gap_char="-",
         for aa in pro.seq:
             if aa == "-":
                 codon_seq += "---"
-            elif complete_protein is True and aa_num == 0:
+            elif complete_protein and aa_num == 0:
                 this_codon = nucl_seq._data[rf_table[0]:rf_table[0] + 3]
                 if not re.search(_codons2re[codon_table.start_codons],
                                  this_codon.upper()):
