@@ -40,7 +40,7 @@ class ModTest(unittest.TestCase):
     def tearDown(self):
         """Just in case CODEML creates some junk files, do a clean-up."""
         del_files = [self.out_file, "2NG.dN", "2NG.dS", "2NG.t", "codeml.ctl",
-                "lnf", "rst", "rst1", "rub"]
+                     "lnf", "rst", "rst1", "rub"]
         for filename in del_files:
             if os.path.exists(filename):
                 os.remove(filename)
@@ -55,16 +55,16 @@ class ModTest(unittest.TestCase):
 
     def testAlignmentFileIsValid(self):
         self.assertRaises((AttributeError, TypeError, OSError),
-            codeml.Codeml, alignment=list())
+                          codeml.Codeml, alignment=list())
         self.cml.alignment = list()
         self.cml.tree = self.tree_file
         self.cml.out_file = self.out_file
         self.assertRaises((AttributeError, TypeError, OSError),
-            self.cml.run)
+                          self.cml.run)
 
     def testAlignmentExists(self):
         self.assertRaises((EnvironmentError, IOError), codeml.Codeml,
-            alignment="nonexistent")
+                          alignment="nonexistent")
         self.cml.alignment = "nonexistent"
         self.cml.tree = self.tree_file
         self.cml.out_file = self.out_file
@@ -72,16 +72,16 @@ class ModTest(unittest.TestCase):
 
     def testTreeFileValid(self):
         self.assertRaises((AttributeError, TypeError, OSError),
-            codeml.Codeml, tree=list())
+                          codeml.Codeml, tree=list())
         self.cml.alignment = self.align_file
         self.cml.tree = list()
         self.cml.out_file = self.out_file
         self.assertRaises((AttributeError, TypeError, OSError),
-            self.cml.run)
+                          self.cml.run)
 
     def testTreeExists(self):
         self.assertRaises((EnvironmentError, IOError), codeml.Codeml,
-            tree="nonexistent")
+                          tree="nonexistent")
         self.cml.alignment = self.align_file
         self.cml.tree = "nonexistent"
         self.cml.out_file = self.out_file
@@ -93,14 +93,14 @@ class ModTest(unittest.TestCase):
         self.cml.out_file = self.out_file
         self.cml.working_dir = list()
         self.assertRaises((AttributeError, TypeError, OSError),
-            self.cml.run)
+                          self.cml.run)
 
     def testOutputFileValid(self):
         self.cml.tree = self.tree_file
         self.cml.alignment = self.align_file
         self.cml.out_file = list()
         self.assertRaises((AttributeError, ValueError, OSError),
-            self.cml.run)
+                          self.cml.run)
 
     def testOptionExists(self):
         self.assertRaises((AttributeError, KeyError),
@@ -112,26 +112,26 @@ class ModTest(unittest.TestCase):
         self.cml.tree = self.tree_file
         self.cml.out_file = self.out_file
         self.assertRaises((AttributeError, ValueError),
-            self.cml.run)
+                          self.cml.run)
 
     def testTreeSpecified(self):
         self.cml.alignment = self.align_file
         self.cml.out_file = self.out_file
         self.assertRaises((AttributeError, ValueError),
-            self.cml.run)
+                          self.cml.run)
 
     def testOutputFileSpecified(self):
         self.cml.alignment = self.align_file
         self.cml.tree = self.tree_file
         self.assertRaises((AttributeError, ValueError),
-            self.cml.run)
+                          self.cml.run)
 
     def testPamlErrorsCaught(self):
         self.cml.alignment = self.align_file
         self.cml.tree = self.bad_tree_file
         self.cml.out_file = self.out_file
         self.assertRaises((EnvironmentError, PamlError),
-            self.cml.run)
+                          self.cml.run)
 
     def testCtlFileValidOnRun(self):
         self.cml.alignment = self.align_file
