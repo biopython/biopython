@@ -40,12 +40,12 @@ def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X',
     Arguments:
         - pro_align  - a protein MultipleSeqAlignment object
         - nucl_align - an object returned by SeqIO.parse or SeqIO.index
-          or a colloction of SeqRecord.
+          or a collection of SeqRecord.
         - alphabet   - alphabet for the returned codon alignment
         - corr_dict  - a dict that maps protein id to nucleotide id
         - complete_protein - whether the sequence begins with a start
           codon
-        - frameshift - whether to appply frameshift detection
+        - frameshift - whether to apply frameshift detection
 
     Return a CodonAlignment object
 
@@ -98,7 +98,7 @@ def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X',
                              "({1}) are found!".format(pro_num, nucl_num))
 
         # Determine the protein sequences and nucl sequences
-        # correspondance. If nucl_seqs is a list, tuple or read by
+        # correspondence. If nucl_seqs is a list, tuple or read by
         # SeqIO.parse(), we assume the order of sequences in pro_align
         # and nucl_seqs are the same. If nucl_seqs is a dict or read by
         # SeqIO.index(), we match seqs in pro_align and those in
@@ -109,7 +109,7 @@ def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X',
             corr_method = 0
         else:
             raise TypeError("Nucl Sequences Error, Unknown type to assign "
-                            "correspondance method")
+                            "correspondence method")
     else:
         if not isinstance(corr_dict, dict):
             raise TypeError("corr_dict should be a dict that corresponds "
@@ -134,7 +134,7 @@ def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X',
                                "than number of protein records "
                                "({1})".format(len(corr_dict), pro_num))
 
-    # set up pro-nucl correspondance based on corr_method
+    # set up pro-nucl correspondence based on corr_method
     # corr_method = 0, consecutive pairing
     if corr_method == 0:
         pro_nucl_pair = izip(pro_align, nucl_seqs)
@@ -166,7 +166,7 @@ def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X',
     codon_aln = []
     shift = None
     for pair in pro_nucl_pair:
-        # Beaware that the following span corresponds to an ungapped
+        # Beware that the following span corresponds to an ungapped
         # nucleotide sequence.
         corr_span = _check_corr(pair[0], pair[1], gap_char=gap_char,
                                 codon_table=codon_table,
@@ -204,7 +204,7 @@ def _codons2re(codons):
 
 def _get_aa_regex(codon_table, stop='*', unknown='X'):
     """Set up the regular expression of a given CodonTable for
-    futher use.
+    further use.
 
     >>> from Bio.Data.CodonTable import generic_by_id
     >>> p = generic_by_id[1]

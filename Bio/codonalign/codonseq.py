@@ -5,7 +5,7 @@
 # as part of this package.
 """Code for dealing with coding sequence.
 
-CodonSeq class is interited from Seq class. This is the core class to
+CodonSeq class is inherited from Seq class. This is the core class to
 deal with sequences in CodonAlignment in biopython.
 
 """
@@ -314,7 +314,7 @@ def cal_dn_ds(codon_seq1, codon_seq2, method="NG86",
     Arguments:
         - codon_seq1 - CodonSeq or or SeqRecord that contains a CodonSeq
         - codon_seq2 - CodonSeq or or SeqRecord that contains a CodonSeq
-        - w  - transition/transvertion ratio
+        - w  - transition/transversion ratio
         - cfreq - Current codon frequency vector can only be specified
           when you are using ML method. Possible ways of
           getting cfreq are: F1x4, F3x4 and F61.
@@ -750,7 +750,7 @@ def _yn00(seq1, seq2, k, codon_table):
                                 codon_table.stop_codons if 'U' not in i]
         Q = _get_Q(pi, kappa, w, codon_lst, codon_table)
         P = expm(Q * t)
-        TV = [0, 0, 0, 0]  # synonymous/nonsynonymous transition/transvertion
+        TV = [0, 0, 0, 0]  # synonymous/nonsynonymous transition/transversion
         sites = [0, 0]
         codon_npath = {}
         for i, j in zip(seq1, seq2):
@@ -896,7 +896,7 @@ def _count_diff_YN00(codon1, codon2, P, codon_lst,
 
     The function will weighted multiple pathways from codon1 to codon2
     according to P matrix of codon substitution. The proportion
-    of transition and transvertion (TV) will also be calculated in
+    of transition and transversion (TV) will also be calculated in
     the function.
     """
     if not all([isinstance(codon1, str), isinstance(codon2, str)]):
@@ -908,7 +908,7 @@ def _count_diff_YN00(codon1, codon2, P, codon_lst,
     if len(codon1) != 3 or len(codon2) != 3:
         raise RuntimeError("codon should be three letter string ({0}, {1} "
                            "detected)".format(len(codon1), len(codon2)))
-    TV = [0, 0, 0, 0]  # transition and transvertion counts (synonymous and nonsynonymous)
+    TV = [0, 0, 0, 0]  # transition and transversion counts (synonymous and nonsynonymous)
     site = 0
     if codon1 == '---' or codon2 == '---':
         return TV

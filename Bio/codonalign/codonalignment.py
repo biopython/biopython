@@ -5,7 +5,7 @@
 # as part of this package.
 """Code for dealing with Codon Alignment.
 
-CodonAlignment class is interited from MultipleSeqAlignment class. This is
+CodonAlignment class is inherited from MultipleSeqAlignment class. This is
 the core class to deal with codon alignment in biopython.
 """
 from __future__ import division, print_function
@@ -155,7 +155,7 @@ class CodonAlignment(MultipleSeqAlignment):
             dn_tree = dn_constructor.nj(dn_dm)
             ds_tree = ds_constructor.nj(ds_dm)
         else:
-            raise RuntimeError("Unkown tree method ({0}). Only NJ and UPGMA "
+            raise RuntimeError("Unknown tree method ({0}). Only NJ and UPGMA "
                                "are accepted.".format(tree_method))
         return dn_tree, ds_tree
 
@@ -233,7 +233,7 @@ def mktest(codon_alns, codon_table=default_codon_table, alpha=0.05):
 
 
 def _get_codon2codon_matrix(codon_table=default_codon_table):
-    """Function to get codon codon subsitution matrix. Elements
+    """Function to get codon codon substitution matrix. Elements
     in the matrix are number of synonymous and nonsynonymous
     substitutions required for the substitution (PRIVATE).
     """
@@ -287,7 +287,7 @@ def _dijkstra(graph, start, end):
     Dijkstra's algorithm Python implementation.
     Algorithm adapted from
     http://thomas.pelletier.im/2010/02/dijkstras-algorithm-python-implementation/.
-    However, an abvious bug in::
+    However, an obvious bug in::
 
         if D[child_node] >(<) D[node] + child_value:
 
@@ -296,12 +296,12 @@ def _dijkstra(graph, start, end):
 
     Arguments:
 
-        - graph: Dictionnary of dictionnary (keys are vertices).
+        - graph: Dictionary of dictionary (keys are vertices).
         - start: Start vertex.
         - end: End vertex.
 
     Output:
-        List of vertices from the beggining to the end.
+        List of vertices from the beginning to the end.
     """
     D = {}  # Final distances dict
     P = {}  # Predecessor dict
