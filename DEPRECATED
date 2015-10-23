@@ -88,7 +88,8 @@ attribute sub_features was deprecated.
 Bio.Motif
 =========
 Declared obsolete with a PendingDeprecationWarning in Release 1.61, formally
-deprecated in Release 1.62. Please use the newer Bio.motifs module instead.
+deprecated in Release 1.62, removed in Release 1.67. Please use the newer
+Bio.motifs module instead.
 
 AlignAceCommandline and CompareAceCommandline
 =============================================
