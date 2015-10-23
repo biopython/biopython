@@ -4,7 +4,6 @@ Adapted from SciPy: scipy/special/cephes/{chdtr,igam}.
 """
 
 import math
-import sys
 
 __docformat__ = "restructuredtext en"
 

@@ -17,9 +17,7 @@ try:
 except ImportError:
     izip = zip
 
-from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
-from Bio.Alphabet import IUPAC, Gapped, HasStopCodon, Alphabet, generic_dna
+from Bio.Alphabet import IUPAC, Gapped, HasStopCodon, Alphabet
 from Bio.Data.CodonTable import generic_by_id
 
 default_codon_table = copy.deepcopy(generic_by_id[1])

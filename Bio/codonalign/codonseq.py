@@ -15,9 +15,7 @@ from math import log
 
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.Alphabet import IUPAC, Gapped, HasStopCodon, Alphabet
 from Bio.Alphabet import generic_dna, _ungap
-from Bio.Data.CodonTable import generic_by_id
 
 from Bio.codonalign.codonalphabet import default_codon_alphabet, default_codon_table
 
