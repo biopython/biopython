@@ -92,8 +92,9 @@ deprecated in Release 1.62. Please use the newer Bio.motifs module instead.
 
 AlignAceCommandline and CompareAceCommandline
 =============================================
-Deprecated in release 1.62. An up to date version of the software cannot
-be obtained anymore (affects Bio.Motif and its replacement Bio.motifs).
+Deprecated in release 1.62, removed in Release 1.67. An up to date version of
+the software cannot be obtained anymore (affects Bio.Motif and its replacement
+Bio.motifs).
 
 Bio.SeqIO.Interfaces
 ====================

@@ -4,6 +4,4 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """Motif command line tool wrappers (DEPRECATED, see Bio.motifs instead)."""
-from Bio.motifs.applications import AlignAceCommandline
-from Bio.motifs.applications import CompareAceCommandline
 from Bio.motifs.applications import XXmotifCommandline

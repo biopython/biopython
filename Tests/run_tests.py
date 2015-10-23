@@ -99,7 +99,6 @@ DOCTEST_MODULES = [
     "Bio.NMR.xpktools",
     "Bio.Motif",
     "Bio.motifs",
-    "Bio.motifs.applications._alignace",
     "Bio.motifs.applications._xxmotif",
     "Bio.pairwise2",
     "Bio.Phylo.Applications._Raxml",
