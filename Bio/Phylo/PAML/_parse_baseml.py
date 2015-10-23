@@ -64,7 +64,7 @@ def parse_parameters(lines, results, num_params):
 
 
 def parse_parameter_list(lines, parameters, num_params):
-    """ Parse the parameters list, which is just an unlabeled list of numeric values.
+    """Parse the parameters list, which is just an unlabeled list of numeric values.
     """
     for line_num in range(len(lines)):
         line = lines[line_num]
