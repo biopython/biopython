@@ -266,7 +266,7 @@ def _SeqIO_to_alignment_iterator(handle, format, alphabet=None, seq_count=None):
             if len(records) == seq_count:
                 yield MultipleSeqAlignment(records, alphabet)
                 records = []
-        if len(records) > 0:
+        if records:
             raise ValueError("Check seq_count argument, not enough sequences?")
     else:
         # Must assume that there is a single alignment using all
