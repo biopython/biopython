@@ -182,7 +182,7 @@ characters and the values are the scores, e.g. ("A", "C") : 2.5."""),
             'c': (['match_fn'],
 """match_fn is a callback function that takes two characters and
 returns the score between them."""),
-            }
+        }
         # penalty code -> tuple of (parameters, docstring)
         penalty2args = {
             'x': ([], ''),
@@ -196,7 +196,7 @@ and extendB for sequeneB.  The penalties should be negative."""),
 """gap_A_fn and gap_B_fn are callback functions that takes 1) the
 index where the gap is opened, and 2) the length of the gap.  They
 should return a gap penalty."""),
-            }
+        }
 
         def __init__(self, name):
             # Check to make sure the name of the function is
@@ -209,8 +209,7 @@ should return a gap penalty."""),
                     raise AttributeError("function should be localXX")
             else:
                 raise AttributeError(name)
-            align_type, match_type, penalty_type = \
-                        name[:-2], name[-2], name[-1]
+            align_type, match_type, penalty_type = name[:-2], name[-2], name[-1]
             try:
                 match_args, match_doc = self.match2args[match_type]
             except KeyError as x:
@@ -300,7 +299,7 @@ alignment occurs.
                 ('force_generic', 0),
                 ('score_only', 0),
                 ('one_alignment_only', 0)
-                ]
+            ]
             for name, default in default_params:
                 keywds[name] = keywds.get(name, default)
             value = keywds['penalize_end_gaps']
@@ -329,7 +328,7 @@ def _align(sequenceA, sequenceB, match_fn, gap_A_fn, gap_B_fn,
         return []
 
     if (not force_generic) and isinstance(gap_A_fn, affine_penalty) \
-    and isinstance(gap_B_fn, affine_penalty):
+            and isinstance(gap_B_fn, affine_penalty):
         open_A, extend_A = gap_A_fn.open, gap_A_fn.extend
         open_B, extend_B = gap_B_fn.open, gap_B_fn.extend
         x = _make_score_matrix_fast(
@@ -562,8 +561,7 @@ def _make_score_matrix_fast(
             # and keep the best one.
             open_score = score_matrix[row - 1][col - 1] + first_B_gap
             extend_score = col_cache_score[col - 1] + extend_B
-            open_score_rint, extend_score_rint = \
-                             rint(open_score), rint(extend_score)
+            open_score_rint, extend_score_rint = rint(open_score), rint(extend_score)
             if open_score_rint > extend_score_rint:
                 col_cache_score[col - 1] = open_score
                 col_cache_index[col - 1] = [(row - 1, col - 1)]
@@ -730,7 +728,7 @@ def _clean_alignments(alignments):
         if end is None:   # global alignment
             end = len(seqA)
         elif end < 0:
-            end = end + len(seqA)
+            end += len(seqA)
         # If there's no alignment here, get rid of it.
         if begin >= end:
             del unique_alignments[i]
