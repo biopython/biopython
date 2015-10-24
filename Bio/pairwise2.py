@@ -213,11 +213,11 @@ should return a gap penalty."""),
             try:
                 match_args, match_doc = self.match2args[match_type]
             except KeyError:
-                raise AttributeError("unknown match type %r" % match_type)
+                raise AttributeError("unknown match type {0!r}".format(match_type))
             try:
                 penalty_args, penalty_doc = self.penalty2args[penalty_type]
             except KeyError:
-                raise AttributeError("unknown penalty type %r" % penalty_type)
+                raise AttributeError("unknown penalty type {0!r}".format(penalty_type))
 
             # Now get the names of the parameters to this function.
             param_names = ['sequenceA', 'sequenceB']
@@ -229,12 +229,12 @@ should return a gap penalty."""),
 
             self.__name__ = self.function_name
             # Set the doc string.
-            doc = "%s(%s) -> alignments\n" % (
-                self.__name__, ', '.join(self.param_names))
+            doc = "{0}({1}) -> alignments\n".format(self.__name__,
+                                                    ', '.join(self.param_names))
             if match_doc:
-                doc += "\n%s\n" % match_doc
+                doc += "\n{0}\n".format(match_doc)
             if penalty_doc:
-                doc += "\n%s\n" % penalty_doc
+                doc += "\n{0}\n".format(penalty_doc)
             doc += (
 """\nalignments is a list of tuples (seqA, seqB, score, begin, end).
 seqA and seqB are strings showing the alignment between the
@@ -250,8 +250,8 @@ alignment occurs.
             # this function into forms appropriate for _align.
             keywds = keywds.copy()
             if len(args) != len(self.param_names):
-                raise TypeError("%s takes exactly %d argument (%d given)"
-                    % (self.function_name, len(self.param_names), len(args)))
+                raise TypeError("{0} takes exactly {1} argument ({2} given)".format(
+                    self.function_name, len(self.param_names), len(args)))
             i = 0
             while i < len(self.param_names):
                 if self.param_names[i] in [
@@ -282,8 +282,7 @@ alignment occurs.
                     keywds['gap_B_fn'] = affine_penalty(openB, extendB, pe)
                     i += 4
                 else:
-                    raise ValueError("unknown parameter %r"
-                                     % self.param_names[i])
+                    raise ValueError("unknown parameter {0!r}".format(self.param_names[i]))
 
             # Here are the default parameters for _align.  Assign
             # these to keywds, unless already specified.
@@ -867,10 +866,10 @@ def format_alignment(align1, align2, score, begin, end):
 
     """
     s = []
-    s.append("%s\n" % align1)
-    s.append("%s%s\n" % (" " * begin, "|" * (end - begin)))
-    s.append("%s\n" % align2)
-    s.append("  Score=%g\n" % score)
+    s.append("{0}\n".format(align1))
+    s.append("{0}{1}\n".format(" " * begin, "|" * (end - begin)))
+    s.append("{0}\n".format(align2))
+    s.append("  Score={0:g}\n".format(score))
     return ''.join(s)
 
 
