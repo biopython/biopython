@@ -32,6 +32,14 @@ GA--T
   Score=3
 """)
 
+    def test_incorrect_global_function_name(self):
+        with self.assertRaises(AttributeError):
+            pairwise2.align.globalxxx("GAACT", "GAT")
+
+    def test_incorrect_number_of_parameters(self):
+        with self.assertRaises(TypeError):
+            pairwise2.align.globalxs("GAACT", "GAT", -0.2)
+
 
 class TestPairwiseLocal(unittest.TestCase):
 
@@ -54,8 +62,24 @@ zA-Bz
   Score=1.9
 """)
 
+    def test_incorrect_local_function_name(self):
+        with self.assertRaises(AttributeError):
+            pairwise2.align.localxxx("GAACT", "GAT")
+
+    def test_incorrect_function_name(self):
+        with self.assertRaises(AttributeError):
+            pairwise2.align.xxxlocalxxx("GAACT", "GAT")
+
 
 class TestPairwiseOpenPenalty(unittest.TestCase):
+
+    def test_unknown_match_score(self):
+        with self.assertRaises(AttributeError):
+            pairwise2.align.globalzx("AA", "A")
+
+    def test_unknown_penalty(self):
+        with self.assertRaises(AttributeError):
+            pairwise2.align.globalxz("AA", "A")
 
     def test_match_score_open_penalty1(self):
         aligns = pairwise2.align.globalms("AA", "A", 2.0, -1, -0.1, 0)
@@ -208,6 +232,10 @@ GT--
 
 
 class TestPairwiseSeparateGapPenalties(unittest.TestCase):
+
+    def test_incorrect_gap_penalties1(self):
+        with self.assertRaises(ValueError):
+            pairwise2.align.localxd("GAT", "GTCT", 0.3, 0, -0.8, 0)
 
     def test_separate_gap_penalties1(self):
         aligns = pairwise2.align.localxd("GAT", "GTCT", -0.3, 0, -0.8, 0)
@@ -425,6 +453,33 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
 --AAB----------BBAAAACCCCAAAABBBAA--
   Score=-10
 """)
+
+
+class TestOtherFunctions(unittest.TestCase):
+
+    def test_pad_until_equal1(self):
+        expected = 'ACGTA-------'
+        result = pairwise2._pad_until_equal("ACCGATTAGATA", "ACGTA", "-")
+        self.assertEqual(expected, result[1])
+
+    def test_pad_until_equal2(self):
+        expected = 'ACGTA-------'
+        result = pairwise2._pad_until_equal("ACGTA", "ACCGATTAGATA", "-")
+        self.assertEqual(expected, result[0])
+
+    def test_clean_alignments(self):
+        alns = [
+            ('ACCGT', 'AC-G-', 3.0, 0, 4),
+            ('ACCGT', 'A-CG-', 3.0, 0, 4),
+            ('ACCGT', 'AC-G-', 3.0, 0, 4),
+            ('ACCGT', 'A-CG-', 3.0, 0, 4),
+        ]
+        expected = [
+            ('ACCGT', 'AC-G-', 3.0, 0, 4),
+            ('ACCGT', 'A-CG-', 3.0, 0, 4),
+        ]
+        result = pairwise2._clean_alignments(alns)
+        self.assertEqual(expected, result)
 
 
 if __name__ == '__main__':
