@@ -309,7 +309,7 @@ class TestPairwiseMatchDictionary(unittest.TestCase):
         ("A", "A"): 1.5,
         ("A", "T"): 0.5,
         ("T", "T"): 1.0
-        }
+    }
 
     def test_match_dictionary1(self):
         aligns = pairwise2.align.localds("ATAT", "ATT", self.match_dict, -.5, 0)
