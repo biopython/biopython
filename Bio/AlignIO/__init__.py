@@ -84,7 +84,7 @@ overwrite the existing file each time.
 Conversion
 ----------
 The Bio.AlignIO.convert(...) function allows an easy interface for simple
-alignnment file format conversions. Additionally, it may use file format
+alignment file format conversions. Additionally, it may use file format
 specific optimisations so this should be the fastest way too.
 
 In general however, you can combine the Bio.AlignIO.parse(...) function with
