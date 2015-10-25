@@ -30,15 +30,25 @@ http://dx.doi.org/10.1093/bioinformatics/btp163 pmid:19304878
 For the impatient
 =================
 
-To build and install Biopython, download and unzip the source code, go to this
-directory at the command line, and type::
+The simplest way to install Biopython is using the pip installer, which by
+default is included in Python versions 2.7.9, 3.4 and later. Biopython may
+be intalled via pip by the following command:
 
-    python setup.py build
-    python setup.py test
-    sudo python setup.py install
+    pip install biopython
+    
+If you do not have super-user privledges, you may install biopython locally
+via:
 
-Windows users are instead recommended to use the installation packages provided
-on our website, http://biopython.org -- further instructions are given below.
+    pip install --user biopython
+
+For Windows users, the simplest manner to install Biopython is through the
+Anaconda Python distribution, and Biopython can be installed via the command:
+
+    conda install biopython
+
+Additional instructions for Windows users not using the Anaconda distribution
+can be found on our website, http://biopython.org -- further instructions are
+given below.
 
 
 Python Requirements
