@@ -428,13 +428,12 @@ so we must use the \verb|Bio.SeqIO.parse()| function:
 from Bio import Entrez
 from Bio import SeqIO
 Entrez.email = "A.N.Other@example.com"
-handle = Entrez.efetch(db="nucleotide", rettype="gb", retmode="text", \
+handle = Entrez.efetch(db="nucleotide", rettype="gb", retmode="text",
                        id="6273291,6273290,6273289")
 for seq_record in SeqIO.parse(handle, "gb"):
-    print(seq_record.id, seq_record.description[:50] + "...")
-    print("Sequence length %i," % len(seq_record), end=" ")
-    print("%i features," % len(seq_record.features), end=" ")
-    print("from: %s" % seq_record.annotations["source"])
+    print("%s %s..." % (seq_record.id, seq_record.description[:50]))
+    print("Sequence length %i, %i features, from: %s"
+          % (len(seq_record), len(seq_record.features), seq_record.annotations["source"]))
 handle.close()
 \end{verbatim}
 
