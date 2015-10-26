@@ -74,9 +74,9 @@ for pathway in repair_pathways:
             if not gene_symbol in repair_genes:
                 repair_genes.append(gene_symbol)
 
-print "There are %d repair pathways and %d repair genes. The genes are:" % \
-      (len(repair_pathways), len(repair_genes))
-print ", ".join(repair_genes)
+print("There are %d repair pathways and %d repair genes. The genes are:" % \
+      (len(repair_pathways), len(repair_genes)))
+print(", ".join(repair_genes))
 \end{verbatim}
 
 The KEGG API wrapper is compatible with all endpoints. Usage is essentially replacing all slashes in the url with commas and using that list as arguments to the corresponding method in the KEGG module. Here are a few examples from the api documentation (\url{http://www.kegg.jp/kegg/docs/keggapi.html}).
