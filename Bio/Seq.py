@@ -1108,7 +1108,7 @@ class UnknownSeq(Seq):
     NNNNN
 
     However, this is rather wasteful of memory (especially for large
-    sequences), which is where this class is most usefull:
+    sequences), which is where this class is most useful:
 
     >>> unk_five = UnknownSeq(5)
     >>> unk_five
@@ -1988,7 +1988,7 @@ def _translate_str(sequence, table, stop_symbol="*", to_stop=False,
        ...
     TranslationError: Codon 'TA?' is invalid
 
-    In a change to older verions of Biopython, partial codons are now
+    In a change to older versions of Biopython, partial codons are now
     always regarded as an error (previously only checked if cds=True)
     and will trigger a warning (likely to become an exception in a
     future release).
