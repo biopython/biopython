@@ -2066,7 +2066,7 @@ def _translate_str(sequence, table, stop_symbol="*", to_stop=False,
 
 
 def translate(sequence, table="Standard", stop_symbol="*", to_stop=False,
-              cds=False):
+              cds=False, gap=None):
     """Translate a nucleotide sequence into amino acids.
 
     If given a string, returns a new string object. Given a Seq or
@@ -2092,6 +2092,8 @@ def translate(sequence, table="Standard", stop_symbol="*", to_stop=False,
           single in frame stop codon at the end (this will be excluded
           from the protein sequence, regardless of the to_stop option).
           If these tests fail, an exception is raised.
+        - gap - Single character string to denote symbol used for gaps.
+          Defaults to None.
 
     A simple string example using the default (standard) genetic code:
 
@@ -2148,7 +2150,8 @@ def translate(sequence, table="Standard", stop_symbol="*", to_stop=False,
                 codon_table = table
             else:
                 raise ValueError('Bad table argument')
-        return _translate_str(sequence, codon_table, stop_symbol, to_stop, cds)
+        return _translate_str(sequence, codon_table, stop_symbol, to_stop, cds,
+                              gap=gap)
 
 
 def reverse_complement(sequence):
