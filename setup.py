@@ -339,9 +339,6 @@ PACKAGES = [
     'Bio.KEGG.Map',
     'Bio.KEGG.KGML',
     'Bio.Medline',
-    'Bio.Motif',
-    'Bio.Motif.Parsers',
-    'Bio.Motif.Applications',
     'Bio.motifs',
     'Bio.motifs.applications',
     'Bio.motifs.jaspar',
@@ -428,11 +425,6 @@ if is_Numpy_installed():
         Extension('Bio.KDTree._CKDTree',
                   ["Bio/KDTree/KDTree.c",
                    "Bio/KDTree/KDTreemodule.c"],
-                  include_dirs=[numpy_include_dir],
-                  ))
-    EXTENSIONS.append(
-        Extension('Bio.Motif._pwm',
-                  ["Bio/Motif/_pwm.c"],
                   include_dirs=[numpy_include_dir],
                   ))
     EXTENSIONS.append(

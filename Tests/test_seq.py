@@ -85,6 +85,11 @@ class TestSeq(unittest.TestCase):
         with self.assertRaises(TypeError):
             Seq.Seq(self.s)
 
+    def test_repr(self):
+        """Test representation of Seq object"""
+        self.assertEqual("Seq('TCAAAAGGATGCATCATG', IUPACUnambiguousDNA())",
+                         repr(self.s))
+
     def test_truncated_repr(self):
         seq = "TCAAAAGGATGCATCATGTCAAAAGGATGCATCATGTCAAAAGGATGCATCATGTCAAAAGGA"
         expected = "Seq('TCAAAAGGATGCATCATGTCAAAAGGATGCATCATGTCAAAAGGATGCATCATG...GGA', IUPACAmbiguousDNA())"

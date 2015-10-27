@@ -80,7 +80,7 @@ class _RestrictedDict(dict):
         if not hasattr(value, "__len__") or not hasattr(value, "__getitem__") \
                 or (hasattr(self, "_length") and len(value) != self._length):
             raise TypeError("We only allow python sequences (lists, tuples or "
-                            "strings) of length %i." % self._length)
+                            "strings) of length {0}.".format(self._length))
         dict.__setitem__(self, key, value)
 
     def update(self, new_dict):
@@ -314,7 +314,7 @@ class SeqRecord(object):
         """Returns a sub-sequence or an individual letter.
 
         Slicing, e.g. my_record[5:10], returns a new SeqRecord for
-        that sub-sequence with approriate annotation preserved.  The
+        that sub-sequence with appropriate annotation preserved.  The
         name, id and description are kept.
 
         Any per-letter-annotations are sliced to match the requested
@@ -325,7 +325,7 @@ class SeqRecord(object):
         However, the annotations dictionary and the dbxrefs list are
         not used for the new SeqRecord, as in general they may not
         apply to the subsequence.  If you want to preserve them, you
-        must explictly copy them to the new SeqRecord yourself.
+        must explicitly copy them to the new SeqRecord yourself.
 
         Using an integer index, e.g. my_record[5] is shorthand for
         extracting that letter from the sequence, my_record.seq[5].
@@ -431,7 +431,7 @@ class SeqRecord(object):
                                     id=self.id,
                                     name=self.name,
                                     description=self.description)
-            # TODO - The desription may no longer apply.
+            # TODO - The description may no longer apply.
             # It would be safer to change it to something
             # generic like "edited" or the default value.
 
@@ -586,20 +586,18 @@ class SeqRecord(object):
         """
         lines = []
         if self.id:
-            lines.append("ID: %s" % self.id)
+            lines.append("ID: {0}".format(self.id))
         if self.name:
-            lines.append("Name: %s" % self.name)
+            lines.append("Name: {0}".format(self.name))
         if self.description:
-            lines.append("Description: %s" % self.description)
+            lines.append("Description: {0}".format(self.description))
         if self.dbxrefs:
-            lines.append("Database cross-references: "
-                         + ", ".join(self.dbxrefs))
-        lines.append("Number of features: %i" % len(self.features))
+            lines.append("Database cross-references: " + ", ".join(self.dbxrefs))
+        lines.append("Number of features: {0}".format(len(self.features)))
         for a in self.annotations:
-            lines.append("/%s=%s" % (a, str(self.annotations[a])))
+            lines.append("/{0}={1}".format(a, str(self.annotations[a])))
         if self.letter_annotations:
-            lines.append("Per letter annotation for: "
-                         + ", ".join(self.letter_annotations))
+            lines.append("Per letter annotation for: " + ", ".join(self.letter_annotations))
         # Don't want to include the entire sequence,
         # and showing the alphabet is useful:
         lines.append(repr(self.seq))
@@ -634,10 +632,10 @@ class SeqRecord(object):
         annotations, letter_annotations and features are not shown (as they
         would lead to a very long string).
         """
-        return self.__class__.__name__ \
-            + "(seq=%s, id=%s, name=%s, description=%s, dbxrefs=%s)" \
-            % tuple(map(repr, (self.seq, self.id, self.name,
-                               self.description, self.dbxrefs)))
+        return "{0}(seq={1!r}, id={2!r}, name={3!r}, description={4!r}, dbxrefs={5!r})".format(
+               self.__class__.__name__,
+               self.seq, self.id, self.name,
+               self.description, self.dbxrefs)
 
     def format(self, format):
         r"""Returns the record as a string in the specified file format.
@@ -1043,7 +1041,7 @@ class SeqRecord(object):
 
         Note that if the SeqFeature annotation includes any strand specific
         information (e.g. base changes for a SNP), this information is not
-        ammended, and would need correction after the reverse complement.
+        amended, and would need correction after the reverse complement.
 
         Note trying to reverse complement a protein SeqRecord raises an
         exception:

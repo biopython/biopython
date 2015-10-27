@@ -7,7 +7,7 @@ Please note that the KEGG parser implementation in Biopython is incomplete. Whil
 
 \section{Parsing KEGG records}
 Parsing a KEGG record is as simple as using any other file format parser in Biopython. 
-(Before running the following codes, please open http://rest.kegg.jp/get/ec:5.4.2.2 with your web browser and save it as ec_5.4.2.2.txt.)
+(Before running the following codes, please open \url{http://rest.kegg.jp/get/ec:5.4.2.2} with your web browser and save it as \verb|ec_5.4.2.2.txt|.)
 
 \begin{verbatim}
 >>> from Bio.KEGG import Enzyme
@@ -74,9 +74,9 @@ for pathway in repair_pathways:
             if not gene_symbol in repair_genes:
                 repair_genes.append(gene_symbol)
 
-print "There are %d repair pathways and %d repair genes. The genes are:" % \
-      (len(repair_pathways), len(repair_genes))
-print ", ".join(repair_genes)
+print("There are %d repair pathways and %d repair genes. The genes are:" % \
+      (len(repair_pathways), len(repair_genes)))
+print(", ".join(repair_genes))
 \end{verbatim}
 
 The KEGG API wrapper is compatible with all endpoints. Usage is essentially replacing all slashes in the url with commas and using that list as arguments to the corresponding method in the KEGG module. Here are a few examples from the api documentation (\url{http://www.kegg.jp/kegg/docs/keggapi.html}).

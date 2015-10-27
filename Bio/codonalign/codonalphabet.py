@@ -5,7 +5,7 @@
 # as part of this package.
 """Code for Codon Alphabet.
 
-CodonAlphabet class is interited from Alphabet class. It is an
+CodonAlphabet class is inherited from Alphabet class. It is an
 alphabet for CodonSeq class.
 """
 __docformat__ = "restructuredtext en"  # Don't just use plain text in epydoc API pages!
@@ -17,9 +17,7 @@ try:
 except ImportError:
     izip = zip
 
-from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
-from Bio.Alphabet import IUPAC, Gapped, HasStopCodon, Alphabet, generic_dna
+from Bio.Alphabet import IUPAC, Gapped, HasStopCodon, Alphabet
 from Bio.Data.CodonTable import generic_by_id
 
 default_codon_table = copy.deepcopy(generic_by_id[1])
@@ -27,8 +25,8 @@ default_codon_table = copy.deepcopy(generic_by_id[1])
 
 def get_codon_alphabet(alphabet, gap="-", stop="*"):
     """Gets alignment alphabet for codon alignment.
-    
-    Only nucleotide alphabet is accepted. Raise an error when the type of 
+
+    Only nucleotide alphabet is accepted. Raise an error when the type of
     alphabet is incompatible.
     """
     from Bio.Alphabet import NucleotideAlphabet
