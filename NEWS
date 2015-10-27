@@ -10,7 +10,17 @@ The latest news is at the top of this file.
 
 ===================================================================
 
-(In progress, not yet released) Biopython 1.66
+(In progress, not yet released) Biopython 1.67
+
+Many thanks to the Biopython developers and community for making this release
+possible, especially the following contributors:
+
+Anders Pitman (first contribution)
+Carlos Pena
+
+===================================================================
+
+21 October 2015: Biopython 1.66
 
 Further work on the Bio.KEGG and Bio.Graphics modules now allows drawing KGML
 pathways with transparency.
@@ -50,6 +60,7 @@ Anuj Sharma (first contribution)
 Ben Fulton (first contribution)
 Bertrand Néron (first contribution)
 Brandon Invergo
+Carlos Pena
 Christian Brueffer
 Connor T. Skennerton (first contribution)
 David Arenillas (first contribution)
@@ -70,6 +81,7 @@ Leighton Pritchard
 Lucas Sinclair
 Michiel de Hoon
 Peter Cock
+Saket Choudhary
 Sunhwan Jo (first contribution)
 Tarcisio Fedrizzi (first contribution)
 Tiago Antao

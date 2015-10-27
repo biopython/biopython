@@ -88,8 +88,8 @@ class SeqFeature(object):
           values.
         - sub_features - Obsolete list of additional SeqFeatures which was
           used for holding compound locations (e.g. joins in GenBank/EMBL).
-          This is now superceded by a CompoundFeatureLocation as the location,
-          and should not be used (DEPRECATED).
+          This is now superceded by a CompoundLocation as the location, and
+          should not be used (DEPRECATED).
     """
 
     def __init__(self, location=None, type='', location_operator='',

@@ -88,7 +88,7 @@ def train(xs, ys, update_fn=None, typecode=None):
             # Check to see if the likelihood decreased.  If it did, then
             # restore the old beta parameters and half the step size.
             if llik < old_llik:
-                stepsize = stepsize / 2.0
+                stepsize /= 2.0
                 beta = old_beta
             # If I've converged, then stop.
             if numpy.fabs(llik - old_llik) <= CONVERGE_THRESHOLD:
@@ -99,13 +99,10 @@ def train(xs, ys, update_fn=None, typecode=None):
         W = numpy.identity(N) * p
         Xtyp = numpy.dot(Xt, y - p)  # Calculate the first derivative.
         XtWX = numpy.dot(numpy.dot(Xt, W), X)  # Calculate the second derivative.
-        # u, s, vt = singular_value_decomposition(XtWX)
-        # print("U %s" % u)
-        # print("S %s" % s)
         delta = numpy.linalg.solve(XtWX, Xtyp)
         if numpy.fabs(stepsize - 1.0) > 0.001:
-            delta = delta * stepsize
-        beta = beta + delta                 # Update beta.
+            delta *= stepsize
+        beta += delta                 # Update beta.
     else:
         raise RuntimeError("Didn't converge.")
 

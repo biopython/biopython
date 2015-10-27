@@ -17,10 +17,16 @@ Python 2.5
 No longer supported as of Release 1.63, having triggered a warning with
 Release 1.62, with advance notice in the release notes for Release 1.61.
 
+Python 2.6
+==========
+Still supported but deprecated as of Release 1.66, triggering a warning
+at installation time.
+
 Python 3.0, 3.1, 3.2
 ====================
-Never officially supported, these trigger a warning in Release 1.62
-recommending Python 3.3 or later if you wish to use Python 3.
+Never officially supported, these triggered a warning in Release 1.62
+recommending Python 3.3 or later. As of Biopython Release 1.63 onwards,
+installation simply aborts with a error message.
 
 Bio.CodonAlign
 ==============
@@ -82,12 +88,14 @@ attribute sub_features was deprecated.
 Bio.Motif
 =========
 Declared obsolete with a PendingDeprecationWarning in Release 1.61, formally
-deprecated in Release 1.62. Please use the newer Bio.motifs module instead.
+deprecated in Release 1.62, removed in Release 1.67. Please use the newer
+Bio.motifs module instead.
 
 AlignAceCommandline and CompareAceCommandline
 =============================================
-Deprecated in release 1.62. An up to date version of the software cannot
-be obtained anymore (affects Bio.Motif and its replacement Bio.motifs).
+Deprecated in release 1.62, removed in Release 1.67. An up to date version of
+the software cannot be obtained anymore (affects Bio.Motif and its replacement
+Bio.motifs).
 
 Bio.SeqIO.Interfaces
 ====================

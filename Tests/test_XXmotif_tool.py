@@ -12,7 +12,7 @@ import unittest
 from Bio import MissingExternalDependencyError
 from Bio import SeqIO
 from Bio.Application import ApplicationError
-from Bio.Motif.Applications import XXmotifCommandline
+from Bio.motifs.applications import XXmotifCommandline
 
 
 # Try to avoid problems when the OS is in another language

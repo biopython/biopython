@@ -84,7 +84,7 @@ overwrite the existing file each time.
 Conversion
 ----------
 The Bio.AlignIO.convert(...) function allows an easy interface for simple
-alignnment file format conversions. Additionally, it may use file format
+alignment file format conversions. Additionally, it may use file format
 specific optimisations so this should be the fastest way too.
 
 In general however, you can combine the Bio.AlignIO.parse(...) function with
@@ -266,7 +266,7 @@ def _SeqIO_to_alignment_iterator(handle, format, alphabet=None, seq_count=None):
             if len(records) == seq_count:
                 yield MultipleSeqAlignment(records, alphabet)
                 records = []
-        if len(records) > 0:
+        if records:
             raise ValueError("Check seq_count argument, not enough sequences?")
     else:
         # Must assume that there is a single alignment using all

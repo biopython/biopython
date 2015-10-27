@@ -420,7 +420,7 @@ def _read_rn(reference, rn):
     # RN   [1]
     # As of the 2014-10-01 release, there may be an evidence code, e.g.
     # RN   [1] {ECO:0000313|EMBL:AEX14553.1}
-    words = rn.rsplit(None, 1)
+    words = rn.split(None, 1)
     number = words[0]
     assert number.startswith('[') and number.endswith(']'), "Missing brackets %s" % number
     reference.number = int(number[1:-1])

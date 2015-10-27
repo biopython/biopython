@@ -126,6 +126,8 @@ if sys.version_info[:2] < (2, 6):
     print("Biopython requires Python 2.6 or 2.7 (or Python 3.3 or later). "
           "Python %d.%d detected" % sys.version_info[:2])
     sys.exit(1)
+elif sys.version_info[:2] == (2, 6):
+    print("WARNING: Biopython support for Python 2.6 is now deprecated.")
 elif is_pypy() and sys.version_info[0] == 3 and sys.version_info[:2] == (3, 2):
     # PyPy3 2.4.0 is compatibile with Python 3.2.5 plus unicode literals
     # so ought to work with Biopython
@@ -337,9 +339,6 @@ PACKAGES = [
     'Bio.KEGG.Map',
     'Bio.KEGG.KGML',
     'Bio.Medline',
-    'Bio.Motif',
-    'Bio.Motif.Parsers',
-    'Bio.Motif.Applications',
     'Bio.motifs',
     'Bio.motifs.applications',
     'Bio.motifs.jaspar',
@@ -426,11 +425,6 @@ if is_Numpy_installed():
         Extension('Bio.KDTree._CKDTree',
                   ["Bio/KDTree/KDTree.c",
                    "Bio/KDTree/KDTreemodule.c"],
-                  include_dirs=[numpy_include_dir],
-                  ))
-    EXTENSIONS.append(
-        Extension('Bio.Motif._pwm',
-                  ["Bio/Motif/_pwm.c"],
                   include_dirs=[numpy_include_dir],
                   ))
     EXTENSIONS.append(

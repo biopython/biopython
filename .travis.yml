@@ -43,6 +43,8 @@ before_install:
   - "export MSQL=$PG"
   - "if [[ $PY3 == 'yes' ]]; then export MSQL=no; fi"
   - "if [[ $MSQL == 'yes' ]]; then pip install mysql-python; fi"
+#Lib unittest2 is needed for some assertRaises tests under Python 2.6
+  - "if [[ $TRAVIS_PYTHON_VERSION == '2.6' ]]; then pip install unittest2; fi"
 
 install:
   - "/usr/bin/yes | python setup.py install"
