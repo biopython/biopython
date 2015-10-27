@@ -2041,6 +2041,12 @@ def _translate_str(sequence, table, stop_symbol="*", to_stop=False,
                       "Explicitly trim the sequence or add trailing N before "
                       "translation. This may become an error in future.",
                       BiopythonWarning)
+    if gap is not None:
+        if not isinstance(gap, basestring):
+            raise TypeError("Gap character should be a single character string.")
+        elif len(gap) > 1:
+            raise ValueError("Gap character should be a single character string.")
+
     for i in range(0, n - n % 3, 3):
         codon = sequence[i:i + 3]
         try:

@@ -974,6 +974,10 @@ class TestTranslating(unittest.TestCase):
         seq = "GTG---GCCATTGTAATGGGCCGC"
         expected = "V-AIVMGR"
         self.assertEqual(expected, Seq.translate(seq, gap="-"))
+        with self.assertRaises(TypeError):
+            Seq.translate(seq, gap=[])
+        with self.assertRaises(ValueError):
+            Seq.translate(seq, gap="-*")
 
     def test_translation_of_gapped_string_no_gap_char_given(self):
         seq = "GTG---GCCATTGTAATGGGCCGC"
