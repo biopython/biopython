@@ -953,8 +953,6 @@ class Seq(object):
         or a stop codon.  These are translated as "X".  Any invalid codon
         (e.g. "TA?" or "T-A") will throw a TranslationError.
 
-        NOTE - Does NOT support gapped sequences.
-
         NOTE - This does NOT behave like the python string's translate
         method.  For that use str(my_seq).translate(...) instead.
         """
@@ -2127,8 +2125,6 @@ def translate(sequence, table="Standard", stop_symbol="*", to_stop=False,
     NOTE - Ambiguous codons like "TAN" or "NNN" could be an amino acid
     or a stop codon.  These are translated as "X".  Any invalid codon
     (e.g. "TA?" or "T-A") will throw a TranslationError.
-
-    NOTE - Does NOT support gapped sequences.
 
     It will however translate either DNA or RNA.
     """
