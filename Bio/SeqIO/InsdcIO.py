@@ -746,7 +746,7 @@ class GenBankWriter(_InsdcWriter):
         if descr == "<unknown description>":
             descr = "."
 
-        # The DEFINITION filed must end with a period
+        # The DEFINITION field must end with a period
         # see ftp://ftp.ncbi.nih.gov/genbank/gbrel.txt [3.4.5]
         # and discussion https://github.com/biopython/biopython/pull/616
         # So let's add a period
