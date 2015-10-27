@@ -9,8 +9,8 @@
 The main Entrez web page is available at:
 http://www.ncbi.nlm.nih.gov/Entrez/
 
-A list of the Entrez utilities is available at:
-http://www.ncbi.nlm.nih.gov/entrez/utils/utils_index.html
+Entrez Programming Utilities web page is available at:
+http://www.ncbi.nlm.nih.gov/books/NBK25501/
 
 Variables:
 
@@ -99,7 +99,7 @@ def epost(db, **keywds):
     environment to use with subsequent search strategies.
 
     See the online documentation for an explanation of the parameters:
-    http://www.ncbi.nlm.nih.gov/entrez/query/static/epost_help.html
+    http://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.EPost
 
     Return a handle to the results.
 
@@ -118,7 +118,7 @@ def efetch(db, **keywords):
     more UIs or from user's environment.
 
     See the online documentation for an explanation of the parameters:
-    http://www.ncbi.nlm.nih.gov/entrez/query/static/efetch_help.html
+    http://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.EFetch
 
     Return a handle to the results.
 
@@ -163,7 +163,7 @@ def esearch(db, term, **keywds):
     for future use in the user's environment.
 
     See the online documentation for an explanation of the parameters:
-    http://www.ncbi.nlm.nih.gov/entrez/query/static/esearch_help.html
+    http://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.ESearch
 
     Return a handle to the results which are always in XML format.
 
@@ -201,7 +201,7 @@ def elink(**keywds):
     database, or lists LinkOut URLs and attributes for multiple IDs.
 
     See the online documentation for an explanation of the parameters:
-    http://www.ncbi.nlm.nih.gov/entrez/query/static/elink_help.html
+    http://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.ELink
 
     Return a handle to the results, by default in XML format.
 
@@ -237,7 +237,7 @@ def einfo(**keywds):
     available links for each Entrez database.
 
     See the online documentation for an explanation of the parameters:
-    http://www.ncbi.nlm.nih.gov/entrez/query/static/einfo_help.html
+    http://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.EInfo
 
     Return a handle to the results, by default in XML format.
 
@@ -265,7 +265,7 @@ def esummary(**keywds):
     from the user's environment.
 
     See the online documentation for an explanation of the parameters:
-    http://www.ncbi.nlm.nih.gov/entrez/query/static/esummary_help.html
+    http://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.ESummary
 
     Return a handle to the results, by default in XML format.
 
@@ -297,7 +297,7 @@ def egquery(**keywds):
     using Global Query.
 
     See the online documentation for an explanation of the parameters:
-    http://www.ncbi.nlm.nih.gov/entrez/query/static/egquery_help.html
+    http://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.EGQuery
 
     Return a handle to the results in XML format.
 
@@ -330,7 +330,7 @@ def espell(**keywds):
     ESpell retrieves spelling suggestions, if available.
 
     See the online documentation for an explanation of the parameters:
-    http://www.ncbi.nlm.nih.gov/entrez/query/static/espell_help.html
+    http://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.ESpell
 
     Return a handle to the results, by default in XML format.
 
