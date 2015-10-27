@@ -1400,7 +1400,7 @@ class GenBankScanner(InsdcScanner):
                             # We consider this period belong to the syntax, not to the data
                             # So remove it if it exist
                             if line_type == 'DEFINITION' and data.endswith('.'):
-                                data = data.rstrip('.')
+                                data = data[:-1]
                             getattr(consumer, consumer_dict[line_type])(data)
                             # End of continuation - return to top of loop!
                             break
