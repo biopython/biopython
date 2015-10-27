@@ -970,9 +970,9 @@ class TestTranslating(unittest.TestCase):
         seq = "GTGGCCATTGTAATGGGCCGC"
         self.assertEqual("VAIVMGR", Seq.translate(seq))
 
-    def test_translation_of_gapped_string(self):
+    def test_translation_of_gapped_string_no_gap_char_given(self):
         seq = "GTG---GCCATTGTAATGGGCCGC"
-        self.assertEqual("V-AIVMGR", Seq.translate(seq))
+        self.assertRaises(TranslationError, Seq.translate, seq)
 
     def test_translation_to_stop(self):
         for nucleotide_seq in self.test_seqs:
