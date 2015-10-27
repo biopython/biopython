@@ -2044,7 +2044,6 @@ def _translate_str(sequence, table, stop_symbol="*", to_stop=False,
         try:
             amino_acids.append(forward_table[codon])
         except (KeyError, CodonTable.TranslationError):
-            # TODO? Treat "---" as a special case (gapped translation)
             if codon in table.stop_codons:
                 if cds:
                     raise CodonTable.TranslationError(
@@ -2055,6 +2054,9 @@ def _translate_str(sequence, table, stop_symbol="*", to_stop=False,
             elif valid_letters.issuperset(set(codon)):
                 # Possible stop codon (e.g. NNN or TAN)
                 amino_acids.append(pos_stop)
+            elif codon == "---":
+                # Treat "---" as a special case (gapped translation)
+                amino_acids.append("-")
             else:
                 raise CodonTable.TranslationError(
                     "Codon '{0}' is invalid".format(codon))

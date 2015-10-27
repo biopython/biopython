@@ -950,6 +950,12 @@ class TestTranslating(unittest.TestCase):
                 expected = Seq.translate(nucleotide_seq)
                 self.assertEqual(repr(expected), repr(nucleotide_seq.translate()))
 
+    def test_translation_of_gapped_seq(self):
+        seq = Seq.Seq("ATG---AAACTG")
+        expected = "M-KL"
+        result = seq.translate()
+        self.assertEqual(expected, result)
+
     def test_translation_wrong_type(self):
         """Test translation table cannot be CodonTable"""
         seq = Seq.Seq("ATCGTA")
