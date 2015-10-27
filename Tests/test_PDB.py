@@ -686,8 +686,8 @@ class ParseReal(unittest.TestCase):
         def confirm_numbering(struct):
             self.assertEqual(len(struct), 20)
             for idx, model in enumerate(struct):
-                self.assertTrue(model.serial_num, idx + 1)
-                self.assertTrue(model.serial_num, model.id + 1)
+                self.assertEqual(model.serial_num, idx + 1)
+                self.assertEqual(model.serial_num, model.id + 1)
 
         def confirm_single_end(fname):
             """Ensure there is only one END statement in multi-model files"""
