@@ -156,7 +156,7 @@ class PDBIO(object):
          - accept_chain(chain)
          - accept_residue(residue)
          - accept_atom(atom)
-                
+
         These methods should return 1 if the entity is to be
         written out, 0 otherwise.
 
@@ -211,8 +211,8 @@ class PDBIO(object):
                     fp.write("TER\n")
             if model_flag and model_residues_written:
                 fp.write("ENDMDL\n")
-            if write_end:
-                fp.write('END\n')
+        if write_end:
+            fp.write('END\n')
         if close_file:
             fp.close()
 
