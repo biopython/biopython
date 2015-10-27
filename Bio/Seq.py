@@ -881,7 +881,7 @@ class Seq(object):
         return Seq(str(self).replace("U", "T").replace("u", "t"), alphabet)
 
     def translate(self, table="Standard", stop_symbol="*", to_stop=False,
-                  cds=False):
+                  cds=False, gap=None):
         """Turns a nucleotide sequence into a protein sequence. New Seq object.
 
         This method will translate DNA or RNA sequences, and those with a
@@ -908,6 +908,8 @@ class Seq(object):
               single in frame stop codon at the end (this will be excluded
               from the protein sequence, regardless of the to_stop option).
               If these tests fail, an exception is raised.
+            - gap - Single character string to denote symbol used for gaps.
+              Defaults to None.
 
         e.g. Using the standard table:
 
@@ -998,8 +1000,8 @@ class Seq(object):
                 # The same table can be used for RNA or DNA (we use this for
                 # translating strings).
                 codon_table = CodonTable.ambiguous_generic_by_id[table_id]
-        protein = _translate_str(str(self), codon_table,
-                                 stop_symbol, to_stop, cds)
+        protein = _translate_str(str(self), codon_table, stop_symbol, to_stop,
+                                 cds, gap=gap)
         if stop_symbol in protein:
             alphabet = Alphabet.HasStopCodon(codon_table.protein_alphabet,
                                              stop_symbol=stop_symbol)
@@ -1947,7 +1949,7 @@ def back_transcribe(rna):
 
 
 def _translate_str(sequence, table, stop_symbol="*", to_stop=False,
-                   cds=False, pos_stop="X"):
+                   cds=False, pos_stop="X", gap=None):
     """Helper function to translate a nucleotide string (PRIVATE).
 
     Arguments:
@@ -1966,6 +1968,8 @@ def _translate_str(sequence, table, stop_symbol="*", to_stop=False,
           single in frame stop codon at the end (this will be excluded
           from the protein sequence, regardless of the to_stop option).
           If these tests fail, an exception is raised.
+        - gap - Single character string to denote symbol used for gaps.
+          Defaults to None.
 
     Returns a string.
 
@@ -2052,9 +2056,9 @@ def _translate_str(sequence, table, stop_symbol="*", to_stop=False,
             elif valid_letters.issuperset(set(codon)):
                 # Possible stop codon (e.g. NNN or TAN)
                 amino_acids.append(pos_stop)
-            elif codon == "---":
-                # Treat "---" as a special case (gapped translation)
-                amino_acids.append("-")
+            elif gap is not None and codon == gap * 3:
+                # Gapped translation
+                amino_acids.append(gap)
             else:
                 raise CodonTable.TranslationError(
                     "Codon '{0}' is invalid".format(codon))
