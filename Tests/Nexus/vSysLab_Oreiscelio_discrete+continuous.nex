@@ -1,0 +1,162 @@
+#NEXUS
+
+BEGIN TAXA;
+	DIMENSIONS NTAX=19;
+	TAXLABELS
+		'Oreiscelio zulu'
+		'Oreiscelio aequalis'
+		'Oreiscelio alluaudi'
+		'Oreiscelio badius'
+		'Oreiscelio coracinus'
+		'Oreiscelio cultrarius'
+		'Oreiscelio gryphus'
+		'Oreiscelio iommii'
+		'Oreiscelio magnipennis'
+		'Oreiscelio majikununuensis'
+		'Oreiscelio megadontus'
+		'Oreiscelio naevus'
+		'Oreiscelio paradoxus'
+		'Oreiscelio rostratus'
+		'Oreiscelio rugosus'
+		'Oreiscelio scapularis'
+		'Oreiscelio sechellensis'
+		'Oreiscelio turneri'
+		'Oreiscelio zuzkae'
+	;
+END;
+
+BEGIN CHARACTERS;
+	DIMENSIONS NCHAR=68;
+	FORMAT DATATYPE=STANDARD MISSING=? GAP=-
+		SYMBOLS="0123456789"
+	;
+	CHARSET 'General' = 1;
+	CHARSET 'Antenna' = 2 3 4;
+	CHARSET 'Head' = 5 6 7 8 9 10 11 12 13 14 15 16 17 18;
+	CHARSET 'Legs' = 19;
+	CHARSET 'Mesosoma' = 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42;
+	CHARSET 'Metasoma' = 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68;
+	CHARSTATELABELS
+		1 'body color'/'dark brown to black' 'black' 'head and mesosoma black; metasoma dark brown to black' 'metasoma often lighter than head and mesosoma',
+		2 'color of antennae in female'/'dark brown to black throughout' 'A1-A6 yellow; A7-A12 dark brown to black' 'A1-A6 pale brown; A7-A12 dark brown' 'pale brown throughout' 'A1, A3-A6 dark brown; A2 yellow; A7-A12 black' 'A1 black, A2-A6 pale brown, A7-A12 black' 'A1 dark brown, A2-A6 yellow, A7-A12 dark brown' 'A1-A6 brown; A7-A12 dark brown to black' 'A1 brown, A2-A6 yellow, A7-A12 brown' 'A1 brown, A2 pale brown, A3-A12 brown',
+		3 'color of antennae in male'/'A1-A2 brown; A3-A12 variably becoming yellow apically, antennomeres often yellow ventrally' 'A1 brown; A2-A12 yellow' 'brown' 'A1-A2 brown; A3-A12 yellow',
+		4 'seta on pedicel of antenna in female'/'present, reaching past apex of A3' 'present, not reaching apex of A3' 'present, reaching to apex of A3',
+		5 'color of setae on the head'/'white' 'brown' 'yellow',
+		6 'sculpture of dorsal frons between frontal carina and median ocellus'/'coarsely foveate' 'areolate' 'areolate, effaced medially' 'foveate with contiguous cells' 'transversely rugose',
+		7 'preocellar pit in females'/'absent' 'indicated by a small round depression' 'present as a distinct pit',
+		8 'transverse rugae at vertex'/'absent' 'present',
+		9 'sculpture of posterior vertex'/'areolate' 'coarsely foveate' 'transversely strigose',
+		10 'sculpture of occipital rim'/'areolate' 'coarsely foveate, cells often contiguous.',
+		11 'interantennal process'/'extended dorsally into medial flange, flange reaching from near apex of interantennal process to frons' 'diverging into two carinae that extend laterally along surface of frons' 'simple' 'with semiparallel carinae dorsally that do not extend laterally onto frons',
+		12 'number of anteriorly projecting setae on anteclypeus'/'6' '8',
+		13 'color of mandibles in male'/'yellow throughout, teeth brown' 'basal half black; apical half pale brown' 'black throughout' 'black throughout with brown teeth' 'basal half black, apical half brown' 'basal half black, apical half brown, teeth dark brown to black',
+		14 'color of mandibles in female'/'brown throughout with teeth black' 'basal half black; apical half dark brown' 'yellow throughout with teeth brown' 'dark brown throughout' 'black throughout' 'basal half black; apical half pale brown' 'brown throughout' 'basal half black; apical half yellow' 'pale brown with teeth dark brown',
+		15 'mandibular teeth in female'/'dorsal tooth larger' 'teeth of equal size' 'ventral tooth larger, but less than 2x as long as dorsal tooth' 'ventral tooth at least twice as long and wide at base than dorsal tooth',
+		16 'sculpture of ventral gena anterior to genal carina'/'row of areolae' 'row of shallow areolae with reduced ridges between cells' 'row of contiguous punctures' 'row of well separated punctures' 'dorsoventrally rugose',
+		17 'sculpture of ventral gena posterior to genal carina'/'areolate' 'smooth' 'mostly smooth, with sparse large punctures' 'mostly smooth, with sparse small punctures' 'coarsely and irregularly punctate' 'irregularly rugose',
+		18 'shape of anteclypeus'/'striplike, straight to slightly convex' 'concave medially, with points laterally',
+		19 'color of legs'/'entirely yellow' 'dark brown, tarsi and distal portion of tibiae light brown' 'coxae brown, legs otherwise yellow' 'coxae dark brown, femora light brown, tibiae and tarsi yellow' 'brown, tarsi and distal portion of tibiae yellow' 'brown, distal portion of tibiae and tarsomeres 1-4 yellow, apical tarsomere brown' 'coxae and femora dark brown, trochanters, tibia and tarsi yellowish-brown' 'coxae black; femora brown; trochanters, tibia and tarsomeres 1-4 yellowish-brown; apical tarsomere brown',
+		20 'sculpture of dorsal pronotum'/'areolate' 'areolate with expanded ridges' 'shallowly areolate',
+		21 'color of setae on the dorsal mesosoma'/'white' 'brown' 'yellow',
+		22 'sculpture of medial mesoscutum'/'coarsely foveate' 'areolate' 'areolate, with pronounced longitudinal ridges' 'shallowly areolate, becoming smooth posteriorly' 'longitudinally strigose throughout' 'partially to mostly effaced',
+		23 'sculpture of lateral mesoscutum'/'same as medial mesoscutum with a subtle confusion of sculptural elements' 'smooth throughout' 'with an elevated patch of smoother sculpture, bounded by mesoscutal humeral sulcus laterally, extending to scuto-scutellar sulcus posteriorly' 'with small patch of smoother sculpture, formed by fusion of sculptural ridges, smooth patch not extending to scuto-scutellar sulcus' 'areolate',
+		24 'notaulus in female'/'present' 'absent',
+		25 'parapsidal line'/'delimited' 'indistinguishable',
+		26 'sculpture of scutellum'/'coarsely foveate' 'areolate',
+		27 'median furrow on scutellum'/'absent' 'present as a weak indentation' 'present as a distinct furrow reaching from posterior to anterior margin',
+		28 'posterior margin of scutellum'/'emarginate' 'deeply notched' 'convex',
+		29 'outer projection of the propodeum'/'present as distinct corner or posteriorly projecting spine' 'rounded',
+		30 'posterior margin of propodeal shelf between inner and outer propodeal projections in female'/'nearly straight, perpendicular to lateral margin of propodeal shelf' 'concave' 'nearly straight, strongly oblique',
+		31 'posterior margin of propodeal shelf between inner and outer propodeal projections in male'/'nearly straight' 'concave',
+		32 'sculpture of ventral pronotum'/'foveate reticulate, becoming smooth at anterolateral corner' 'obliterated' 'mostly smooth with longitudinal rugulae ventrally' 'mostly smooth with small foveolae around antespiracular patch',
+		33 'anterior pronotal pit'/'absent' 'small' 'large',
+		34 'pronotal cervical sulcus'/'poorly defined' 'well defined by contiguous punctures',
+		35 'mesepimeral sulcus'/'indicated by dorsoventral line of foveae' 'crenulate' 'indicated by a row of faint and shallow depressions',
+		36 'sculpture of femoral depression in female'/'smooth throughout' 'transversely striate throughout' 'anterior half smooth, posterior half finely foveate' 'finely foveate throughout' 'anterior half smooth, posterior half longitudinally striate',
+		37 'sculpture of femoral depression in male'/'smooth throughout' 'smooth medially, bounded by small foveae' 'finely foveate throughout' 'with weak transverse striae throughout' 'anterior half smooth, posterior half finely foveate' 'anterior half smooth, posterior half longitudinally striate',
+		38 'mesopleural carina'/'indicated by one or two rows of punctures' 'present as one or two carinae' 'absent' 'weakly defined by fine ridges',
+		39 'sculpture of ventral mesepisternum'/'smooth' 'foveate' 'with smooth area surrounded by small foveae' 'irregularly areolate',
+		40 'pilosity of metapleural triangle in female'/'present as many short fine white setae' 'glabrous or with at most 3 small setae',
+		41 'pilosity of metapleural triangle in male'/'absent' 'present as many short fine white setae' 'sparsely setose',
+		42 'sculpture of ventral area of metapleuron'/'smooth' 'foveate reticulate' 'foveate reticulate, with slightly appressed ridges',
+		43 'submarginal ridge on T1'/'percurrent, well-defined' 'indicated by an irregular ridge' 'absent' 'partially fused with marginal carina',
+		44 'sublateral carina on T2'/'percurrent' 'absent' 'present in anterior half',
+		45 'sculpture of T2-T3'/'reticulate rugose' 'longitudinally striate' 'longitudinally strigose with rugose interstices' 'weakly rugulose',
+		46 'sculpture of T4'/'reticulate with finely rugulose interstices' 'longitudinally strigose' 'weakly rugulose' 'longitudinally striate' 'reticulate rugose',
+		47 'sculpure of T5'/'longitudinally strigose' 'weakly rugulose' 'reticulate rugose',
+		48 'shape of subapical T6 in female in dorsal view'/'semicircular, width along anterior margin twice the length.' 'short, width along anterior margin at least three times the length' 'trapezoidal, basal width twice the apical width',
+		49 'apex of T7 in male'/'slightly convex' 'bispinose' 'straight to slightly concave, with small points laterally',
+		50 'longitudinal medial keel on S1'/'absent' 'present',
+		51 'sculpture of medial S2 in female'/'punctate reticulate' 'reticulate rugose' 'foveolate' 'punctate',
+		52 'sculpture of medial S3 in female'/'longitudinally strigose' 'foveate' 'effaced to smooth',
+		53 'sculpture of medial S4 in female'/'longitudinally strigose' 'effaced to smooth',
+		54 'sculpture of medial S5 in female'/'reticulate rugose' 'longitudinally strigose' 'effaced to smooth',
+		55 'sculpture of lateral S3 in female'/'reticulate rugose' 'foveolate' 'longitudinally strigose' 'smooth' 'punctate crenulate' 'rugulose',
+		56 'sculpture of lateral S4 in female'/'reticulate rugose' 'longitudinally strigose' 'foveolate' 'smooth' 'rugulose' 'punctate crenulate',
+		57 'sculpture of lateral S5 in female'/'reticulate rugose' 'foveate' 'longitudinally strigose' 'punctate crenulate',
+		58 'sculpture of marginal depression of S2 in female'/'mostly smooth, with scattered punctures or shallow rugulae' 'rugulose' 'finely punctate throughout' 'smooth',
+		59 'sculpture of marginal depression of S3 in female'/'mostly smooth, with scattered punctures or shallow rugulae' 'smooth' 'finely punctate throughout' 'rugulose',
+		60 'sculpture of marginal depression of S4 in female'/'mostly smooth with scattered punctures or shallow rugulae' 'finely punctate throughout' 'rugulose',
+		61 'sculpture of marginal depression of S5 in female'/'rugulose' 'mostly smooth with scattered punctures' 'finely punctate throughout',
+		62 'apical spine on S6 in female'/'not extending beyond apex of T6 and not visible in dorsal view' 'extending beyond apex of T6 and visible in dorsal view',
+		63 'sculpture of medial S2 in male'/'punctate reticulate' 'longitudinally strigose' 'foveolate' 'punctate' 'reticulate rugose',
+		64 'sculpture of medial S3 in male'/'smooth' 'foveate' 'longitudinally reticulate' 'weakly longitudinally strigose',
+		65 'sculpture of lateral S3 in male'/'smooth' 'reticulate rugose' 'longitudinally strigose' 'foveolate' 'rugulose',
+		66 'sculpture of lateral S4 in male'/'smooth' 'rugulose' 'longitudinally strigose' 'foveolate' 'reticulate rugose',
+		67 'sculpture of medial S5 in male'/'smooth' 'foveate' 'longitudinally strigose',
+		68 'sculpture of lateral S5 in male'/'foveolate' 'longitudinally strigose' 'smooth' 'reticulate rugose' 'rugulose'
+	;
+	MATRIX
+		'Oreiscelio zulu' 1000010100003511(05)06001(04)111110110111(13)312022200421100(12)114531320(01)031221
+		'Oreiscelio aequalis' 25?021210010?12000402101011001?021(01)(13)?110?1002102?0021245310011??????
+		'Oreiscelio alluaudi' 1(17)1020(12)11020020(02)(24)0012020010(02)01102102(23)01102210421010212121(02)(02)200003300
+		'Oreiscelio badius' (03)3000(12)(01)1002012(12)(04)(02)0(45)00(12)0111(01)(02)010(02)(01)(01)(01)4(03)(13)2010(12)10101201212(02)(01)013201002101
+		'Oreiscelio coracinus' 0000(012)1(012)10010(23)(145)(12)0(04)0(15)0(012)(12)01(01)1(01)00110(12)1(01)(0123)(023)1(12)01(012)0(01)0(14)01100(012)11(015)(01)(02)(012)(02)(02)01(02)1(034)(013)(01)(013)
+		'Oreiscelio cultrarius' 2(01)?000(12)11030?(23)(12)140(23)0010101(01)001?0210(03)?(13)10?20(12)0101?00212(14)(15)(02)00(02)(01)1??????
+		'Oreiscelio gryphus' 10?011210010?1(12)04010110111(01)001?01103?130?1010101?002120001(03)201??????
+		'Oreiscelio iommii' 10?021110000?11130122311010101?10020?200?0023211?0021134222201??????
+		'Oreiscelio magnipennis' 16?011(12)11010?61200701(12)01011001?01111?110?2022101?002120(01)(02)13201??????
+		'Oreiscelio majikununuensis' 04?22(01)000021?031(04)160210101(01)000?0(12)002?0(13)0?0000401?00(12)121(02)0(03)0201??????
+		'Oreiscelio megadontus' 11?020211021?23130202231010001?01100?020?0300101?0021012031201??????
+		'Oreiscelio naevus' 10000(01)01(01)02002(012)04030012(01)01(01)(02)011(02)110(03)(34)10010210(04)21003212(01)(02)(01)(12)(23)(12)(02)0003(134)(01)(03)
+		'Oreiscelio paradoxus' 10?101211010?5(12)150(14)00(12)01010212?0100(013)?3(02)0?1000101?00(02)(01)(12)4120(01)001??????
+		'Oreiscelio rostratus' 1(01)002(01)01(01)000020(23)(24)00(01)20200002011321000021(01)(02)201121010212(01)2(01)(13)(13)200(04)(02)(13)(34)0(03)
+		'Oreiscelio rugosus' 20202(14)(12)1(02)0201(1567)1110502(1245)(013)1(01)1(01)(02)011(012)(01)(01)(01)4(35)(13)201(02)(0123)(12)0(14)0100221(12)(03)(03)0(13)(13)20100(04)1(02)(14)
+		'Oreiscelio scapularis' 11002(03)011120020(23)(24)001202000020110210010210020130000?(02)(01)(12)21231(02)001(03)22(02)1
+		'Oreiscelio sechellensis' 12312011102046112020213101(12)1011001004(01)201(12)010(14)(02)120321233(03)302(01)0300002
+		'Oreiscelio turneri' (03)(05689)(02)221(01)100105(168)3(12)(04)0402(12)0111(01)00110(01)0(01)(012)(0234)1(12)01(012)(012)(12)0(14)(02)11(01)1212(45)(145)011001(02)(01)(23)(123)(01)(0134)
+		'Oreiscelio zuzkae' 11?101(012)10020?221(45)020(02)100012101?021(01)(123)?1(12)0?(012)(01)2(02)(13)01?01(12)11(01)(02)(02)(01)00(01)0??????
+	;
+END;
+
+BEGIN CHARACTERS;
+	DIMENSIONS NCHAR=2;
+	FORMAT DATATYPE=CONTINUOUS MISSING=?
+		ITEMS=(MIN MAX MEDIAN AVERAGE VARIANCE SAMPLESIZE)
+	;
+	CHARSTATELABELS
+		1 'body length of female'
+		2 'body length of male'
+	;
+	MATRIX
+		'Oreiscelio zulu' (2.40 2.50 ? 2.45 0.0025 3)?
+		'Oreiscelio aequalis' (3.30 3.30 ? 3.30 ? 1)?
+		'Oreiscelio alluaudi' (3.20 3.80 ? 3.50 ? 10)(3.01 3.01 ? 3.01 ? 1)
+		'Oreiscelio badius' (2.20 2.40 ? 2.30 0.0036 20)(2.10 2.10 ? 2.10 ? 1)
+		'Oreiscelio coracinus' (2.30 3.10 ? 2.60 0.0400 20)(2.30 2.90 ? 2.70 0.0400 20)
+		'Oreiscelio cultrarius' (3.00 3.20 ? 3.10 0.0025 5)?
+		'Oreiscelio gryphus' (2.90 3.30 2.90 3.00 0.0289 5)?
+		'Oreiscelio iommii' (2.42 2.42 2.42 2.42 ? 1)?
+		'Oreiscelio magnipennis' (3.10 3.20 ? 3.20 0.0100 2)?
+		'Oreiscelio majikununuensis' ??
+		'Oreiscelio megadontus' (4.10 4.10 4.10 4.10 ? 4.1)?
+		'Oreiscelio naevus' (2.20 3.00 ? 2.70 0.0900 20)(2.20 3.00 ? 2.70 0.0900 20)
+		'Oreiscelio paradoxus' (3.00 3.00 3.00 3.00 0.0000 2)?
+		'Oreiscelio rostratus' (3.30 3.70 ? 3.50 0.0100 20)(3.40 3.90 ? 3.60 0.0400 5)
+		'Oreiscelio rugosus' (2.10 2.70 ? 2.40 0.0100 20)(2.30 2.50 ? 2.50 ? 4)
+		'Oreiscelio scapularis' (3.10 4.10 ? 3.70 0.0400 15)(3.60 3.80 ? 3.70 0.0100 6)
+		'Oreiscelio sechellensis' (3.10 3.40 ? 3.20 0.0081 9)(? ? ? 3.00 ? 1)
+		'Oreiscelio turneri' (2.30 2.90 ? 2.60 0.0400 20)(2.20 2.70 ? 2.40 0.0100 20)
+		'Oreiscelio zuzkae' (3.30 3.90 ? 3.70 0.0225 14)?
+	;
+END;
