@@ -314,18 +314,11 @@ def read(handle):
     If the handle contains no records, or more than one record,
     an exception is raised.  For example:
 
-    >>> with open("KEGG/enzyme.sample") as handle:
+    >>> with open("KEGG/enzyme.new") as handle:
     ...     record = read(handle)
     ...     print("%s %s" % (record.entry, record.name[0]))
     ...
-    1.1.1.1 Alcohol dehydrogenase
-    1.1.1.62 Estradiol 17beta-dehydrogenase
-    1.1.1.68 Transferred to EC 1.7.99.5
-    1.6.5.3 NADH dehydrogenase (ubiquinone)
-    1.14.13.28 3,9-Dihydroxypterocarpan 6a-monooxygenase
-    2.4.1.68 Glycoprotein 6-alpha-L-fucosyltransferase
-    3.1.1.6 Acetylesterase
-    2.7.2.1 Acetate kinase
+    6.2.1.25 benzoate---CoA ligase
     """
 
     iterator = parse(handle)
