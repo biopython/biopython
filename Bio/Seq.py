@@ -909,7 +909,7 @@ class Seq(object):
               from the protein sequence, regardless of the to_stop option).
               If these tests fail, an exception is raised.
             - gap - Single character string to denote symbol used for gaps.
-              Defaults to None.
+              It will try to guess the gap character from the alphabet.
 
         e.g. Using the standard table:
 
@@ -1000,6 +1000,11 @@ class Seq(object):
                 # The same table can be used for RNA or DNA (we use this for
                 # translating strings).
                 codon_table = CodonTable.ambiguous_generic_by_id[table_id]
+
+        # Deal with gaps for translation
+        if hasattr(self.alphabet, "gap_char"):
+            gap = self.alphabet.gap_char
+
         protein = _translate_str(str(self), codon_table, stop_symbol, to_stop,
                                  cds, gap=gap)
         if stop_symbol in protein:

@@ -20,7 +20,7 @@ else:
 
 from Bio import Alphabet
 from Bio import Seq
-from Bio.Alphabet import IUPAC
+from Bio.Alphabet import IUPAC, Gapped
 from Bio.Data.IUPACData import ambiguous_dna_complement, ambiguous_rna_complement
 from Bio.Data.IUPACData import ambiguous_dna_values, ambiguous_rna_values
 from Bio.Data.CodonTable import TranslationError
@@ -958,6 +958,13 @@ class TestTranslating(unittest.TestCase):
 
     def test_translation_of_gapped_seq_no_gap_char_given(self):
         seq = Seq.Seq("ATG---AAACTG")
+        self.assertRaises(TranslationError, seq.translate)
+
+    def test_translation_of_gapped_seq_no_gap_char_given_infer_from_alphabet(self):
+        seq = Seq.Seq("ATG---AAACTG", Gapped(IUPAC.unambiguous_dna))
+        self.assertEqual("M-KL", seq.translate())
+
+        seq = Seq.Seq("ATG~~~AAACTG", Gapped(IUPAC.unambiguous_dna))
         self.assertRaises(TranslationError, seq.translate)
 
     def test_translation_wrong_type(self):
