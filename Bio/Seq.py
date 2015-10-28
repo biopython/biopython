@@ -1003,7 +1003,11 @@ class Seq(object):
 
         # Deal with gaps for translation
         if hasattr(self.alphabet, "gap_char"):
-            gap = self.alphabet.gap_char
+            if not gap:
+                gap = self.alphabet.gap_char
+            elif gap != self.alphabet.gap_char:
+                raise ValueError("Gap {0!r} does not match {1!r} from alphabet".format(
+                    gap, self.alphabet.gap_char))
 
         protein = _translate_str(str(self), codon_table, stop_symbol, to_stop,
                                  cds, gap=gap)

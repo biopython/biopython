@@ -956,11 +956,20 @@ class TestTranslating(unittest.TestCase):
         result = seq.translate(gap="-")
         self.assertEqual(expected, result)
 
+    def test_translation_of_gapped_seq_with_gap_char_given_and_inferred_from_alphabet(self):
+        seq = Seq.Seq("ATG---AAACTG", Gapped(IUPAC.unambiguous_dna))
+        self.assertEqual("M-KL", seq.translate(gap="-"))
+        self.assertRaises(ValueError, seq.translate, gap="~")
+
+        seq = Seq.Seq("ATG~~~AAACTG", Gapped(IUPAC.unambiguous_dna))
+        self.assertRaises(ValueError, seq.translate, gap="~")
+        self.assertRaises(TranslationError, seq.translate, gap="-")
+
     def test_translation_of_gapped_seq_no_gap_char_given(self):
         seq = Seq.Seq("ATG---AAACTG")
         self.assertRaises(TranslationError, seq.translate)
 
-    def test_translation_of_gapped_seq_no_gap_char_given_infer_from_alphabet(self):
+    def test_translation_of_gapped_seq_no_gap_char_given_and_inferred_from_alphabet(self):
         seq = Seq.Seq("ATG---AAACTG", Gapped(IUPAC.unambiguous_dna))
         self.assertEqual("M-KL", seq.translate())
 
