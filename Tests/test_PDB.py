@@ -686,11 +686,23 @@ class ParseReal(unittest.TestCase):
         def confirm_numbering(struct):
             self.assertEqual(len(struct), 20)
             for idx, model in enumerate(struct):
-                self.assertTrue(model.serial_num, idx + 1)
-                self.assertTrue(model.serial_num, model.id + 1)
+                self.assertEqual(model.serial_num, idx + 1)
+                self.assertEqual(model.serial_num, model.id + 1)
+
+        def confirm_single_end(fname):
+            """Ensure there is only one END statement in multi-model files"""
+            with open(fname) as handle:
+                end_stment = []
+                for iline, line in enumerate(handle):
+                    if line.strip() == 'END':
+                        end_stment.append((line, iline))
+            self.assertEqual(len(end_stment), 1) # Only one?
+            self.assertEqual(end_stment[0][1], iline) # Last line of the file?
+
         parser = PDBParser()
         struct1 = parser.get_structure("1mot", "PDB/1MOT.pdb")
         confirm_numbering(struct1)
+
         # Round trip: serialize and parse again
         io = PDBIO()
         io.set_structure(struct1)
@@ -700,6 +712,7 @@ class ParseReal(unittest.TestCase):
             io.save(filename)
             struct2 = parser.get_structure("1mot", filename)
             confirm_numbering(struct2)
+            confirm_single_end(filename)
         finally:
             os.remove(filename)
 
