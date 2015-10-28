@@ -308,6 +308,42 @@ def parse(handle):
             record.sysname.append(data.strip(";"))
 
 
+def read(handle):
+    """Parse a KEGG Enzyme file with exactly one entry.
+
+    If the handle contains no records, or more than one record,
+    an exception is raised.  For example:
+
+    >>> with open("KEGG/enzyme.sample") as handle:
+    ...     record = read(handle)
+    ...     print("%s %s" % (record.entry, record.name[0]))
+    ...
+    1.1.1.1 Alcohol dehydrogenase
+    1.1.1.62 Estradiol 17beta-dehydrogenase
+    1.1.1.68 Transferred to EC 1.7.99.5
+    1.6.5.3 NADH dehydrogenase (ubiquinone)
+    1.14.13.28 3,9-Dihydroxypterocarpan 6a-monooxygenase
+    2.4.1.68 Glycoprotein 6-alpha-L-fucosyltransferase
+    3.1.1.6 Acetylesterase
+    2.7.2.1 Acetate kinase
+    """
+
+    iterator = parse(handle)
+    try:
+        first = next(iterator)
+    except StopIteration:
+        first = None
+    if first is None:
+        raise ValueError("No records found in handle")
+    try:
+        second = next(iterator)
+    except StopIteration:
+        second = None
+    if second is not None:
+        raise ValueError("More than one record found in handle")
+    return first
+
+
 if __name__ == "__main__":
     from Bio._utils import run_doctest
     run_doctest()
