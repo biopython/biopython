@@ -975,6 +975,9 @@ class TestTranslating(unittest.TestCase):
         seq = Seq.Seq("ATG~~~AAACTG", Gapped(IUPAC.unambiguous_dna))
         self.assertRaises(TranslationError, seq.translate)
 
+        seq = Seq.Seq("ATG~~~AAACTG", Gapped(IUPAC.unambiguous_dna, "~"))
+        self.assertEqual("M~KL", seq.translate())
+
     def test_translation_wrong_type(self):
         """Test translation table cannot be CodonTable"""
         seq = Seq.Seq("ATCGTA")
