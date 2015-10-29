@@ -1011,7 +1011,9 @@ class Seq(object):
 
         protein = _translate_str(str(self), codon_table, stop_symbol, to_stop,
                                  cds, gap=gap)
-        if stop_symbol in protein:
+        if gap and gap in protein:
+            alphabet = Alphabet.Gapped(codon_table.protein_alphabet, gap_char=gap)
+        elif stop_symbol in protein:
             alphabet = Alphabet.HasStopCodon(codon_table.protein_alphabet,
                                              stop_symbol=stop_symbol)
         else:

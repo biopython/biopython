@@ -1000,8 +1000,19 @@ class TestTranslating(unittest.TestCase):
 
     def test_alphabet_of_translated_gapped_seq(self):
         seq = Seq.Seq("ATG---AAACTG", Gapped(IUPAC.unambiguous_dna))
-        expected = "Gapped(IUPACProtein(), '-')"
-        self.assertEqual(expected, repr(seq.translate().alphabet))
+        self.assertEqual("Gapped(ExtendedIUPACProtein(), '-')", repr(seq.translate().alphabet))
+
+        seq = Seq.Seq("ATG---AAACTG", Gapped(IUPAC.unambiguous_dna, "-"))
+        self.assertEqual("Gapped(ExtendedIUPACProtein(), '-')", repr(seq.translate().alphabet))
+
+        seq = Seq.Seq("ATG~~~AAACTG", Gapped(IUPAC.unambiguous_dna, "~"))
+        self.assertEqual("Gapped(ExtendedIUPACProtein(), '~')", repr(seq.translate().alphabet))
+
+        seq = Seq.Seq("ATG---AAACTG")
+        self.assertEqual("Gapped(ExtendedIUPACProtein(), '-')", repr(seq.translate(gap="-").alphabet))
+
+        seq = Seq.Seq("ATG~~~AAACTG")
+        self.assertEqual("Gapped(ExtendedIUPACProtein(), '~')", repr(seq.translate(gap="~").alphabet))
 
     def test_translation_wrong_type(self):
         """Test translation table cannot be CodonTable"""
