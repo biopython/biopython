@@ -89,7 +89,7 @@ class _NcbibaseblastCommandline(AbstractCommandline):
             # Miscellaneous options
             _Switch(["-parse_deflines", "parse_deflines"],
                     "Should the query and subject defline(s) be parsed?"),
-            ]
+        ]
         try:
             # Insert extra parameters - at the start just in case there
             # are any arguments which must come last:
@@ -238,7 +238,7 @@ class _NcbiblastCommandline(_NcbibaseblastCommandline):
                     """Execute search remotely?
 
                     Incompatible with: gilist, negative_gilist, subject_loc, num_threads, ..."""),
-            ]
+        ]
         try:
             # Insert extra parameters - at the start just in case there
             # are any arguments which must come last:
@@ -316,7 +316,7 @@ class _Ncbiblast2SeqCommandline(_NcbiblastCommandline):
 
                     Incompatible with: culling_limit.""",
                     equate=False),
-            ]
+        ]
         try:
             # Insert extra parameters - at the start just in case there
             # are any arguments which must come last:
@@ -359,7 +359,7 @@ class _NcbiblastMain2SeqCommandline(_Ncbiblast2SeqCommandline):
 
                     Incompatible with: db_soft_mask, subject, subject_loc""",
                     equate=False),
-            ]
+        ]
         try:
             # Insert extra parameters - at the start just in case there
             # are any arguments which must come last:
@@ -431,7 +431,7 @@ class NcbiblastpCommandline(_NcbiblastMain2SeqCommandline):
             # Miscellaneous options:
             _Switch(["-use_sw_tback", "use_sw_tback"],
                     "Compute locally optimal Smith-Waterman alignments?"),
-            ]
+        ]
         _NcbiblastMain2SeqCommandline.__init__(self, cmd, **kwargs)
 
 
@@ -465,8 +465,8 @@ class NcbiblastnCommandline(_NcbiblastMain2SeqCommandline):
 
                     Values allowed are "both" (default), "minus", "plus".""",
                     checker_function=lambda value: value in ["both",
-                                                              "minus",
-                                                              "plus"],
+                                                             "minus",
+                                                             "plus"],
                     equate=False),
             # General search options:
             _Option(["-task", "task"],
@@ -475,10 +475,10 @@ class NcbiblastnCommandline(_NcbiblastMain2SeqCommandline):
                     Allowed values 'blastn', 'blastn-short', 'dc-megablast', 'megablast'
                     (the default), or 'vecscreen'.""",
                     checker_function=lambda value: value in ['blastn',
-                                                              'blastn-short',
-                                                              'dc-megablast',
-                                                              'megablast',
-                                                              'vecscreen'],
+                                                             'blastn-short',
+                                                             'dc-megablast',
+                                                             'megablast',
+                                                             'vecscreen'],
                     equate=False),
             _Option(["-penalty", "penalty"],
                     "Penalty for a nucleotide mismatch (integer, at most zero).",
@@ -546,12 +546,12 @@ class NcbiblastnCommandline(_NcbiblastMain2SeqCommandline):
                     Added in BLAST 2.2.23+
                     """,
                     equate=False),
-            ]
+        ]
         _NcbiblastMain2SeqCommandline.__init__(self, cmd, **kwargs)
 
     def _validate(self):
         if (self.template_type and not self.template_length) \
-        or (self.template_length and not self.template_type):
+                or (self.template_length and not self.template_type):
             raise ValueError("Options template_type and template_type require each other.")
         _NcbiblastMain2SeqCommandline._validate(self)
 
@@ -635,7 +635,7 @@ class NcbiblastxCommandline(_NcbiblastMain2SeqCommandline):
                     "Perform ungapped alignment only?"),
             _Switch(["-use_sw_tback", "use_sw_tback"],
                     "Compute locally optimal Smith-Waterman alignments?"),
-            ]
+        ]
         _NcbiblastMain2SeqCommandline.__init__(self, cmd, **kwargs)
 
 
@@ -718,7 +718,7 @@ class NcbitblastnCommandline(_NcbiblastMain2SeqCommandline):
                     Incompatible with: remote, query""",
                     filename=True,
                     equate=False),
-            ]
+        ]
         _NcbiblastMain2SeqCommandline.__init__(self, cmd, **kwargs)
 
 
@@ -776,7 +776,7 @@ class NcbitblastxCommandline(_NcbiblastMain2SeqCommandline):
                     Format: "yes", "window locut hicut", or "no" to disable.
                     Default is "12 2.2 2.5""",
                     equate=False),
-            ]
+        ]
         _NcbiblastMain2SeqCommandline.__init__(self, cmd, **kwargs)
 
 
@@ -887,7 +887,7 @@ class NcbipsiblastCommandline(_Ncbiblast2SeqCommandline):
                     Incompatible with: in_pssm""",
                     filename=True,
                     equate=False),
-            ]
+        ]
         _Ncbiblast2SeqCommandline.__init__(self, cmd, **kwargs)
 
     def _validate(self):
@@ -895,7 +895,7 @@ class NcbipsiblastCommandline(_Ncbiblast2SeqCommandline):
                          "in_msa": ["in_pssm", "query"],
                          "in_pssm": ["in_msa", "query", "phi_pattern"],
                          "ignore_msa_master": ["msa_master_idx", "in_pssm",
-                                 "query", "query_loc", "phi_pattern"],
+                                               "query", "query_loc", "phi_pattern"],
                          }
         self._validate_incompatibilities(incompatibles)
         _Ncbiblast2SeqCommandline._validate(self)
@@ -971,7 +971,7 @@ class NcbirpsblastCommandline(_NcbiblastCommandline):
             # Misc options:
             _Switch(["-use_sw_tback", "use_sw_tback"],
                     "Compute locally optimal Smith-Waterman alignments?"),
-            ]
+        ]
         _NcbiblastCommandline.__init__(self, cmd, **kwargs)
 
     def _validate(self):
@@ -1009,8 +1009,8 @@ class NcbirpstblastnCommandline(_NcbiblastCommandline):
 
                     Values allowed are "both" (default), "minus", "plus".""",
                     checker_function=lambda value: value in ["both",
-                                                              "minus",
-                                                              "plus"],
+                                                             "minus",
+                                                             "plus"],
                     equate=False),
             # Input query options:
             _Option(["-query_gencode", "query_gencode"],
@@ -1026,7 +1026,7 @@ class NcbirpstblastnCommandline(_NcbiblastCommandline):
             # Extension options:
             _Switch(["-ungapped", "ungapped"],
                     "Perform ungapped alignment only?"),
-            ]
+        ]
         _NcbiblastCommandline.__init__(self, cmd, **kwargs)
 
 
@@ -1072,7 +1072,7 @@ class NcbiblastformatterCommandline(_NcbibaseblastCommandline):
                     "Maximum number of aligned sequences to keep",
                     checker_function=lambda value: value >= 1,
                     equate=False),
-            ]
+        ]
         _NcbibaseblastCommandline.__init__(self, cmd, **kwargs)
 
     def _validate(self):
@@ -1164,7 +1164,7 @@ class NcbideltablastCommandline(_Ncbiblast2SeqCommandline):
                     """Show domain hits?
 
                     Incompatible with:  remote, subject""")
-            ]
+        ]
         _Ncbiblast2SeqCommandline.__init__(self, cmd, **kwargs)
 
 

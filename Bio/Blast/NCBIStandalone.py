@@ -29,14 +29,10 @@ import warnings
 warnings.warn("This module has been deprecated. Consider Bio.SearchIO for "
               "parsing BLAST output instead.", BiopythonDeprecationWarning)
 
-import os
 import re
-from Bio._py3k import StringIO
 
-from Bio import File
 from Bio.ParserSupport import *
 from Bio.Blast import Record
-from Bio.Application import _escape_filename
 
 __docformat__ = "restructuredtext en"
 
@@ -1427,7 +1423,7 @@ class _ParametersConsumer(object):
 
     def threshold(self, line):
         if line[:2] == "T:":
-            # Assume its an old stlye line like "T: 123"
+            # Assume its an old style line like "T: 123"
             self._params.threshold, = _get_cols(
                 line, (1,), ncols=2, expected={0: "T:"})
         elif line[:28] == "Neighboring words threshold:":
@@ -1769,7 +1765,7 @@ class BlastErrorParser(AbstractParser):
 
     Current BLAST problems this detects are:
     o LowQualityBlastError - When BLASTing really low quality sequences
-    (ie. some GenBank entries which are just short streches of a single
+    (ie. some GenBank entries which are just short stretches of a single
     nucleotide), BLAST will report an error with the sequence and be
     unable to search with this. This will lead to a badly formatted
     BLAST report that the parsers choke on. The parser will convert the
