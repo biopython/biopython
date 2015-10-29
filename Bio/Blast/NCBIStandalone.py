@@ -29,14 +29,10 @@ import warnings
 warnings.warn("This module has been deprecated. Consider Bio.SearchIO for "
               "parsing BLAST output instead.", BiopythonDeprecationWarning)
 
-import os
 import re
-from Bio._py3k import StringIO
 
-from Bio import File
 from Bio.ParserSupport import *
 from Bio.Blast import Record
-from Bio.Application import _escape_filename
 
 __docformat__ = "restructuredtext en"
 
