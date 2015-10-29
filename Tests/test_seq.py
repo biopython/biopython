@@ -950,6 +950,26 @@ class TestTranslating(unittest.TestCase):
                 expected = Seq.translate(nucleotide_seq)
                 self.assertEqual(repr(expected), repr(nucleotide_seq.translate()))
 
+    def test_alphabets_of_translated_seqs(self):
+        self.assertEqual("IUPACProtein()", repr(self.test_seqs[0].translate().alphabet))
+        self.assertEqual("ExtendedIUPACProtein()", repr(self.test_seqs[1].translate().alphabet))
+        self.assertEqual("ExtendedIUPACProtein()", repr(self.test_seqs[2].translate().alphabet))
+        self.assertEqual("ExtendedIUPACProtein()", repr(self.test_seqs[3].translate().alphabet))
+        self.assertEqual("ExtendedIUPACProtein()", repr(self.test_seqs[4].translate().alphabet))
+        self.assertEqual("ExtendedIUPACProtein()", repr(self.test_seqs[5].translate().alphabet))
+        self.assertEqual("ExtendedIUPACProtein()", repr(self.test_seqs[6].translate().alphabet))
+        self.assertEqual("ExtendedIUPACProtein()", repr(self.test_seqs[7].translate().alphabet))
+        self.assertEqual("ExtendedIUPACProtein()", repr(self.test_seqs[8].translate().alphabet))
+        self.assertEqual("ExtendedIUPACProtein()", repr(self.test_seqs[9].translate().alphabet))
+        self.assertEqual("ExtendedIUPACProtein()", repr(self.test_seqs[10].translate().alphabet))
+        self.assertEqual("ExtendedIUPACProtein()", repr(self.test_seqs[11].translate().alphabet))
+        self.assertEqual("IUPACProtein()", repr(self.test_seqs[12].translate().alphabet))
+        self.assertEqual("ExtendedIUPACProtein()", repr(self.test_seqs[13].translate().alphabet))
+        self.assertEqual("ExtendedIUPACProtein()", repr(self.test_seqs[14].translate().alphabet))
+        self.assertEqual("IUPACProtein()", repr(self.test_seqs[15].translate().alphabet))
+        self.assertEqual("ExtendedIUPACProtein()", repr(self.test_seqs[16].translate().alphabet))
+        self.assertEqual("ExtendedIUPACProtein()", repr(self.test_seqs[17].translate().alphabet))
+
     def test_translation_of_gapped_seq_with_gap_char_given(self):
         seq = Seq.Seq("ATG---AAACTG")
         self.assertEqual("M-KL", seq.translate(gap="-"))
@@ -977,6 +997,11 @@ class TestTranslating(unittest.TestCase):
 
         seq = Seq.Seq("ATG~~~AAACTG", Gapped(IUPAC.unambiguous_dna, "~"))
         self.assertEqual("M~KL", seq.translate())
+
+    def test_alphabet_of_translated_gapped_seq(self):
+        seq = Seq.Seq("ATG---AAACTG", Gapped(IUPAC.unambiguous_dna))
+        expected = "Gapped(IUPACProtein(), '-')"
+        self.assertEqual(expected, repr(seq.translate().alphabet))
 
     def test_translation_wrong_type(self):
         """Test translation table cannot be CodonTable"""
