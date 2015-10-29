@@ -185,7 +185,7 @@ def qblast(program, database, sequence,
 def _parse_qblast_ref_page(handle):
     """Extract a tuple of RID, RTOE from the 'please wait' page (PRIVATE).
 
-    The NCBI FAQ pages use TOE for 'Time of Execution', so RTOE is proably
+    The NCBI FAQ pages use TOE for 'Time of Execution', so RTOE is probably
     'Request Time of Execution' and RID would be 'Request Identifier'.
     """
     s = _as_string(handle.read())
