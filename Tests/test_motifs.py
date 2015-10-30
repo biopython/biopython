@@ -6,10 +6,10 @@
 
 import os
 import unittest
+import math
 
 from Bio.Alphabet import IUPAC
 from Bio import motifs
-from Bio.motifs.matrix import _isnan
 from Bio.Seq import Seq
 
 
@@ -1686,7 +1686,7 @@ class MotifTestPWM(unittest.TestCase):
         self.assertAlmostEqual(result[3], -38.04542542, places=5)
         self.assertAlmostEqual(result[4], -20.3014183, places=5)
         self.assertAlmostEqual(result[5], -25.18009186, places=5)
-        self.assertTrue(_isnan(result[6]), "Expected nan, not %r" % result[6])
+        self.assertTrue(math.isnan(result[6]), "Expected nan, not %r" % result[6])
 
 
 if __name__ == "__main__":
