@@ -19,6 +19,17 @@ Parsing a KEGG record is as simple as using any other file format parser in Biop
 '5.4.2.2'
 \end{verbatim}
 
+Alternatively, if the input KEGG file has exactly one entry, you can use \verb|read|:
+\begin{verbatim}
+>>> from Bio.KEGG import Enzyme
+>>> record = Enzyme.read(open("ec_5.4.2.2.txt"))
+>>> record.classname
+['Isomerases;', 'Intramolecular transferases;', 'Phosphotransferases (phosphomutases)']
+>>> record.entry
+'5.4.2.2'
+\end{verbatim}
+
+
 The following section will shows how to download the above enzyme using the KEGG api as well as how to use the generic parser with data that does not have a custom parser implemented.
 
 \section{Querying the KEGG API}
