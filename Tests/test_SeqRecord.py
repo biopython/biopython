@@ -338,6 +338,15 @@ Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX', ProteinAlphabet())"""
         s = SeqRecord(MutableSeq("ACTG"))
         self.assertEqual("CAGT", str(s.reverse_complement().seq))
 
+    def test_eq_exception(self):
+        def equality():
+            SeqRecord(Seq("A")) == SeqRecord(Seq("A"))
+        self.assertRaises(NotImplementedError, equality)
+
+    def test_ne_exception(self):
+        def notequality():
+            SeqRecord(Seq("A")) != SeqRecord(Seq("A"))
+        self.assertRaises(NotImplementedError, notequality)
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
