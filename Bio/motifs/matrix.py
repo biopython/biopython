@@ -13,24 +13,6 @@ from Bio._py3k import range
 from Bio.Seq import Seq
 from Bio.Alphabet import IUPAC
 
-# Hack for Python 2.5, isnan and isinf were new in Python 2.6
-try:
-    from math import isnan as _isnan
-except ImportError:
-    def _isnan(value):
-        # This is tricky due to cross platform float differences
-        if str(value).lower() == "nan":
-            return True
-        return value != value
-try:
-    from math import isinf as _isinf
-except ImportError:
-    def _isinf(value):
-        # This is tricky due to cross platform float differences
-        if str(value).lower().endswith("inf"):
-            return True
-        return False
-
 
 class GenericPositionMatrix(dict):
 
@@ -446,9 +428,9 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
         for i in range(self.length):
             for letter in self._letters:
                 logodds = self[letter, i]
-                if _isnan(logodds):
+                if math.isnan(logodds):
                     continue
-                if _isinf(logodds) and logodds < 0:
+                if math.isinf(logodds) and logodds < 0:
                     continue
                 b = background[letter]
                 p = b * math.pow(2, logodds)
@@ -470,9 +452,9 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
             sxx = 0.0
             for letter in self._letters:
                 logodds = self[letter, i]
-                if _isnan(logodds):
+                if math.isnan(logodds):
                     continue
-                if _isinf(logodds) and logodds < 0:
+                if math.isinf(logodds) and logodds < 0:
                     continue
                 b = background[letter]
                 p = b * math.pow(2, logodds)
