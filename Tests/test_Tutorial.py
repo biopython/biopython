@@ -188,7 +188,6 @@ if __name__ == "__main__":
     print("Running Tutorial doctests...")
     import doctest
     tests = doctest.testmod()
-    if tests[0]:
-        # Note on Python 2.5+ can use tests.failed rather than tests[0]
+    if tests.failed:
         raise RuntimeError("%i/%i tests failed" % tests)
     print("Tests done")
