@@ -27,8 +27,19 @@ def t_KEGG_Enzyme(testfiles):
         fh = open(os.path.join("KEGG", file))
         print("Testing Bio.KEGG.Enzyme on " + file + "\n\n")
         records = Enzyme.parse(fh)
-        for record in records:
+        for i, record in enumerate(records):
             print(record)
+
+        fh.seek(0)
+        if i == 0:
+            print(Enzyme.read(fh))
+        else:
+            try:
+                print(Enzyme.read(fh))
+                assert False
+            except ValueError as e:
+                assert str(e) == 'More than one record found in handle'
+
         print("\n")
         fh.close()
 

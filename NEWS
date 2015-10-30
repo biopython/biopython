@@ -12,15 +12,22 @@ The latest news is at the top of this file.
 
 (In progress, not yet released) Biopython 1.67
 
+Following the convention used elsewhere in Biopython, there is a new function
+Bio.KEGG.read(...) for parsing KEGG files expected to contain a single record
+only - existing function Bio.KEGG.parse(...) is intended to be used to iterate
+over multi-record files.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
-Joe Cora (first contribution)
+Aaron Rosenfeld (first contribution)
 Anders Pitman (first contribution)
 Carlos Pena
+Eric Talevich
 Jacek Śmietański (first contribution)
 João Rodrigues
-Eric Talevich
+Joe Cora (first contribution)
+Matt Ruffalo (first contribution)
 
 ===================================================================
 
