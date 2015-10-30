@@ -30,11 +30,6 @@ except ImportError:
         if str(value).lower().endswith("inf"):
             return True
         return False
-# Hack for Python 2.5 on Windows:
-try:
-    _nan = float("nan")
-except ValueError:
-    _nan = 1e1000 / 1e1000
 
 
 class GenericPositionMatrix(dict):
@@ -328,7 +323,7 @@ class PositionWeightMatrix(GenericPositionMatrix):
                     if p > 0:
                         logodds = float("inf")
                     else:
-                        logodds = _nan
+                        logodds = float("nan")
                 values[letter].append(logodds)
         pssm = PositionSpecificScoringMatrix(alphabet, values)
         return pssm
@@ -376,7 +371,7 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
                     try:
                         score += self[letter][position]
                     except KeyError:
-                        score = _nan
+                        score = float("nan")
                         break
                 scores.append(score)
         else:
