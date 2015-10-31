@@ -951,6 +951,20 @@ class Seq(object):
         >>> coding_dna2.translate(to_stop=True)
         Seq('LAIVMGR', ExtendedIUPACProtein())
 
+        When translating gapped sequences, the gap character is inferred from
+        the alphabet:
+
+        >>> from Bio.Alphabet import Gapped
+        >>> coding_dna3 = Seq("GTG---GCCATT", Gapped(IUPAC.unambiguous_dna))
+        >>> coding_dna3.translate()
+        Seq('V-AI', Gapped(ExtendedIUPACProtein(), '-'))
+
+        It is possible to pass the gap character when the alphabet is missing:
+
+        >>> coding_dna4 = Seq("GTG---GCCATT")
+        >>> coding_dna4.translate(gap='-')
+        Seq('V-AI', Gapped(ExtendedIUPACProtein(), '-'))
+
         NOTE - Ambiguous codons like "TAN" or "NNN" could be an amino acid
         or a stop codon.  These are translated as "X".  Any invalid codon
         (e.g. "TA?" or "T-A") will throw a TranslationError.

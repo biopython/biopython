@@ -989,7 +989,8 @@ class TestTranslating(unittest.TestCase):
         self.assertRaises(ValueError, seq.translate, gap="~")
         self.assertRaises(TranslationError, seq.translate, gap="-")
 
-    def test_translation_of_gapped_seq_with_stop_codon_and_gap_char_given_and_inferred_from_alphabet(self):
+    def test_translation_of_gapped_seq_with_gap_char_given_and_inferred_from_alphabet2(self):
+        """Test using stop codon in sequence"""
         seq = Seq.Seq("ATG---AAACTGTAG", Gapped(IUPAC.unambiguous_dna))
         self.assertEqual("M-KL*", seq.translate(gap="-"))
         self.assertRaises(ValueError, seq.translate, gap="~")
