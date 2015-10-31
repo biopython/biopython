@@ -975,12 +975,26 @@ class TestTranslating(unittest.TestCase):
         self.assertEqual("M-KL", seq.translate(gap="-"))
         self.assertRaises(TranslationError, seq.translate, gap="~")
 
+    def test_translation_of_gapped_seq_with_stop_codon_and_gap_char_given(self):
+        seq = Seq.Seq("GTG---GCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG")
+        self.assertEqual("V-AIVMGR*KGAR*", seq.translate(gap="-"))
+        self.assertRaises(TranslationError, seq.translate)
+
     def test_translation_of_gapped_seq_with_gap_char_given_and_inferred_from_alphabet(self):
         seq = Seq.Seq("ATG---AAACTG", Gapped(IUPAC.unambiguous_dna))
         self.assertEqual("M-KL", seq.translate(gap="-"))
         self.assertRaises(ValueError, seq.translate, gap="~")
 
         seq = Seq.Seq("ATG~~~AAACTG", Gapped(IUPAC.unambiguous_dna))
+        self.assertRaises(ValueError, seq.translate, gap="~")
+        self.assertRaises(TranslationError, seq.translate, gap="-")
+
+    def test_translation_of_gapped_seq_with_stop_codon_and_gap_char_given_and_inferred_from_alphabet(self):
+        seq = Seq.Seq("ATG---AAACTGTAG", Gapped(IUPAC.unambiguous_dna))
+        self.assertEqual("M-KL*", seq.translate(gap="-"))
+        self.assertRaises(ValueError, seq.translate, gap="~")
+
+        seq = Seq.Seq("ATG~~~AAACTGTAG", Gapped(IUPAC.unambiguous_dna))
         self.assertRaises(ValueError, seq.translate, gap="~")
         self.assertRaises(TranslationError, seq.translate, gap="-")
 
@@ -1013,6 +1027,14 @@ class TestTranslating(unittest.TestCase):
 
         seq = Seq.Seq("ATG~~~AAACTG")
         self.assertEqual("Gapped(ExtendedIUPACProtein(), '~')", repr(seq.translate(gap="~").alphabet))
+
+        seq = Seq.Seq("ATG~~~AAACTGTAG")
+        self.assertEqual("HasStopCodon(Gapped(ExtendedIUPACProtein(), '~'), '*')",
+                         repr(seq.translate(gap="~").alphabet))
+
+        seq = Seq.Seq("ATG---AAACTGTGA")
+        self.assertEqual("HasStopCodon(Gapped(ExtendedIUPACProtein(), '-'), '*')",
+                         repr(seq.translate(gap="-").alphabet))
 
     def test_translation_wrong_type(self):
         """Test translation table cannot be CodonTable"""
