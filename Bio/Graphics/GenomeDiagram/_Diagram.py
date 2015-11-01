@@ -145,10 +145,10 @@ class Diagram(object):
 
     """
     def __init__(self, name=None, format='circular', pagesize='A3',
-         orientation='landscape', x=0.05, y=0.05, xl=None,
-         xr=None, yt=None, yb=None, start=None, end=None,
-         tracklines=False, fragments=10, fragment_size=0.9,
-         track_size=0.75, circular=True, circle_core=0.0):
+                 orientation='landscape', x=0.05, y=0.05, xl=None,
+                 xr=None, yt=None, yb=None, start=None, end=None,
+                 tracklines=False, fragments=10, fragment_size=0.9,
+                 track_size=0.75, circular=True, circle_core=0.0):
         """ __init__(self, name=None)
 
             o name  String describing the diagram
@@ -447,7 +447,7 @@ class Diagram(object):
             low, high = track.range()
             lows.append(low)
             highs.append(high)
-        return (min(lows), max(highs))      # Return extremes from all tracks
+        return min(lows), max(highs)      # Return extremes from all tracks
 
     def __getitem__(self, key):
         """ __getitem__(self, key) -> Track
