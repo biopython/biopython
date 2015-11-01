@@ -226,6 +226,7 @@ class Diagram(object):
         self.circular = circular
         self.circle_core = circle_core
         self.cross_track_links = []
+        self.drawing = None
 
     def set_all_tracks(self, attr, value):
         """ set_all_tracks(self, attr, value)
