@@ -24,7 +24,7 @@ try:
     from reportlab.lib.units import cm
 except ImportError:
     raise MissingPythonDependencyError(
-            "Install reportlab if you want to use Bio.Graphics.")
+        "Install reportlab if you want to use Bio.Graphics.")
 
 try:
     # The preferred PIL import has changed over time...
@@ -39,17 +39,11 @@ except ImportError:
     # bitmap format is attempted.
     renderPM = None
 
-# Biopython core
 from Bio import SeqIO
 from Bio.SeqFeature import SeqFeature, FeatureLocation
-from Bio import SeqUtils
 
-# Bio.Graphics.GenomeDiagram
 from Bio.Graphics.GenomeDiagram import FeatureSet, GraphSet, Track, Diagram
 from Bio.Graphics.GenomeDiagram import CrossLink
-# from Bio.Graphics.GenomeDiagram.Utilities import *
-
-# Currently private, but we test them here:
 from Bio.Graphics.GenomeDiagram._Graph import GraphData
 from Bio.Graphics.GenomeDiagram._Colors import ColorTranslator
 
@@ -70,21 +64,20 @@ def fill_and_border(base_color, alpha=0.5):
 
 
 def apply_to_window(sequence, window_size, function, step=None):
-    """ apply_to_window(sequence, window_size, function) -> [(int, float),(int, float),...]
+    """Returns a list of (position, value) tuples for fragments of the passed
+    sequence of length window_size (stepped by step), calculated by the passed
+    function.  Returned positions are the midpoint of each window.
 
-        o sequence      Bio.Seq.Seq object
+    Arguments:
+        - sequence      - Bio.Seq.Seq object.
+        - window_size   - an integer describing the length of sequence to consider.
+        - step          - an integer describing the step to take between windows
+          (default = window_size//2).
 
-        o window_size   Int describing the length of sequence to consider
+        - function      - Method or function that accepts a Bio.Seq.Seq object
+          as its sole argument and returns a single value.
 
-        o step          Int describing the step to take between windows
-                        (default = window_size//2)
-
-        o function      Method or function that accepts a Bio.Seq.Seq object
-                        as its sole argument and returns a single value
-
-        Returns a list of (position, value) tuples for fragments of the passed
-        sequence of length window_size (stepped by step), calculated by the
-        passed function.  Returned positions are the midpoint of each window.
+    apply_to_window(sequence, window_size, function) -> [(int, float),(int, float),...]
     """
     seqlen = len(sequence)      # Total length of sequence to be used
     if step is None:    # No step specified, so use half window-width or 1 if larger
@@ -118,18 +111,16 @@ def apply_to_window(sequence, window_size, function, step=None):
         value = function(fragment)
         results.append((middle, value))  # Add results to list
 
-    # Check on last sequence
-    # print(fragment)
-    # print(seq[-100:])
     return results      # Return the list of (position, value) results
 
 
 def calc_gc_content(sequence):
-    """ calc_gc_content(sequence)
+    """Returns the % G+C content in a passed sequence.
 
-        o sequence  A Bio.Seq.Seq object
+    Arguments:
+        - sequence  - a Bio.Seq.Seq object.
 
-        Returns the % G+C content in a passed sequence
+    calc_gc_content(sequence)
     """
     d = {}
     for nt in ['A', 'T', 'G', 'C']:
@@ -143,11 +134,12 @@ def calc_gc_content(sequence):
 
 
 def calc_at_content(sequence):
-    """ calc_at_content(sequence)
+    """Returns the % A+T content in a passed sequence.
 
-        o sequence  A Bio.Seq.Seq object
+    Arguments:
+        - sequence  - a Bio.Seq.Seq object.
 
-        Returns the % A+T content in a passed sequence
+    calc_at_content(sequence)
     """
     d = {}
     for nt in ['A', 'T', 'G', 'C']:
@@ -160,11 +152,12 @@ def calc_at_content(sequence):
 
 
 def calc_gc_skew(sequence):
-    """ calc_gc_skew(sequence)
+    """Returns the (G-C)/(G+C) GC skew in a passed sequence.
 
-        o sequence   A Bio.Seq.Seq object
+    Arguments:
+        - sequence   - a Bio.Seq.Seq object.
 
-        Returns the (G-C)/(G+C) GC skew in a passed sequence
+    calc_gc_skew(sequence)
     """
     g = sequence.count('G') + sequence.count('g')
     c = sequence.count('C') + sequence.count('c')
@@ -175,11 +168,12 @@ def calc_gc_skew(sequence):
 
 
 def calc_at_skew(sequence):
-    """ calc_at_skew(sequence)
+    """Returns the (A-T)/(A+T) AT skew in a passed sequence.
 
-        o sequence   A Bio.Seq.Seq object
+    Arguments:
+        - sequence   - a Bio.Seq.Seq object.
 
-        Returns the (A-T)/(A+T) AT skew in a passed sequence
+    calc_at_skew(sequence)
     """
     a = sequence.count('A') + sequence.count('a')
     t = sequence.count('T') + sequence.count('t')
@@ -274,7 +268,7 @@ class GraphTest(unittest.TestCase):
         gd.add_point((10, 20))
 
         assert gd[4:16] == [(5, 15), (10, 20)], \
-                "Unable to insert and retrieve points correctly"
+            "Unable to insert and retrieve points correctly"
 
 
 class LabelTest(unittest.TestCase):
@@ -287,7 +281,7 @@ class LabelTest(unittest.TestCase):
     def finish(self, name, circular=True):
         # And draw it...
         tracks = len(self.gdd.tracks)
-        # Work arround the page orientation code being too clever
+        # Work around the page orientation code being too clever
         # and flipping the h & w round:
         if tracks <= 3:
             orient = "landscape"
@@ -307,7 +301,8 @@ class LabelTest(unittest.TestCase):
             except renderPM.RenderPMError:
                 # Probably a font problem, e.g.
                 # RenderPMError: Can't setFont(Times-Roman) missing the T1 files?
-                # Originally <type 'exceptions.TypeError'>: makeT1Font() argument 2 must be string, not None
+                # Originally <type 'exceptions.TypeError'>: makeT1Font() argument 2
+                # must be string, not None
                 renderPM = None
             except IOError:
                 # Probably a library problem, e.g.
@@ -378,7 +373,7 @@ class SigilsTest(unittest.TestCase):
     def finish(self, name, circular=True):
         # And draw it...
         tracks = len(self.gdd.tracks)
-        # Work arround the page orientation code being too clever
+        # Work around the page orientation code being too clever
         # and flipping the h & w round:
         if tracks <= 3:
             orient = "landscape"
@@ -647,14 +642,14 @@ class DiagramTest(unittest.TestCase):
             try:
                 gdd.write(filename, output)
                 assert False, \
-                       "Should have rejected %s as an output format" % output
+                    "Should have rejected %s as an output format" % output
             except ValueError as e:
                 # Good!
                 pass
             try:
                 gdd.write_to_string(output)
                 assert False, \
-                       "Should have rejected %s as an output format" % output
+                    "Should have rejected %s as an output format" % output
             except ValueError as e:
                 # Good!
                 pass
@@ -757,13 +752,13 @@ class DiagramTest(unittest.TestCase):
                 else:
                     color = "lightblue"
                 gds_features.add_feature(feature, color=color,
-                                            # label_position="middle",
-                                            # label_position="end",
-                                            label_position="start",
-                                            label_size=11,
-                                            # label_angle=90,
-                                            sigil="ARROW",
-                                            label=True)
+                                         # label_position="middle",
+                                         # label_position="end",
+                                         label_position="start",
+                                         label_size=11,
+                                         # label_angle=90,
+                                         sigil="ARROW",
+                                         label=True)
 
         # I want to include some strandless features, so for an example
         # will use EcoRI recognition sites etc.
@@ -805,17 +800,17 @@ class DiagramTest(unittest.TestCase):
 
         step = len(genbank_entry) // 200
         gds_at_gc.new_graph(apply_to_window(genbank_entry.seq, step, calc_gc_content, step),
-                        'GC content', style='line',
-                        color=colors.lightgreen,
-                        altcolor=colors.darkseagreen)
+                            'GC content', style='line',
+                            color=colors.lightgreen,
+                            altcolor=colors.darkseagreen)
         gds_at_gc.new_graph(apply_to_window(genbank_entry.seq, step, calc_at_content, step),
-                        'AT content', style='line',
-                        color=colors.orange,
-                        altcolor=colors.red)
+                            'AT content', style='line',
+                            color=colors.orange,
+                            altcolor=colors.red)
 
         # Finally draw it in both formats,
-        gdd.draw(format='linear', orientation='landscape',
-             tracklines=0, pagesize='A4', fragments=3)
+        gdd.draw(format='linear', orientation='landscape', tracklines=0,
+                 pagesize='A4', fragments=3)
         output_filename = os.path.join('Graphics', 'GD_by_meth_linear.pdf')
         gdd.write(output_filename, 'PDF')
 
@@ -835,8 +830,7 @@ class DiagramTest(unittest.TestCase):
                      greytrack_labels=10,
                      greytrack_font_color="red",
                      scale_format="SInt")
-        gdt2 = Track('gene features', greytrack=1,
-                   scale_largetick_interval=1e4)
+        gdt2 = Track('gene features', greytrack=1, scale_largetick_interval=1e4)
 
         # First add some feature sets:
         gdfsA = FeatureSet(name='CDS backgrounds')
@@ -860,7 +854,7 @@ class DiagramTest(unittest.TestCase):
                         dark, light = colors.burlywood, colors.bisque
                     # Background for CDS,
                     a = gdfsA.add_feature(SeqFeature(FeatureLocation(feature.location.start, feature.location.end, strand=0)),
-                                         color=dark)
+                                          color=dark)
                     # Background for gene,
                     b = gdfsB.add_feature(SeqFeature(FeatureLocation(prev_gene.location.start, prev_gene.location.end, strand=0)),
                                           color=dark)
@@ -954,7 +948,7 @@ class DiagramTest(unittest.TestCase):
         gdt2.add_set(gdfs2)
 
         gdt3 = Track('misc features and repeats', greytrack=1,
-                   scale_largetick_interval=1e4)
+                     scale_largetick_interval=1e4)
         gdt3.add_set(gdfs3)
         gdt3.add_set(gdfs4)
 
@@ -967,30 +961,23 @@ class DiagramTest(unittest.TestCase):
 
         graphdata1 = apply_to_window(genbank_entry.seq, step, calc_gc_skew, step)
         gdgs1.new_graph(graphdata1, 'GC Skew', style='bar',
-                color=colors.violet,
-                altcolor=colors.purple)
+                        color=colors.violet, altcolor=colors.purple)
 
-        gdt4 = Track(
-                'GC Skew (bar)',
-                height=1.94, greytrack=1,
-                scale_largetick_interval=1e4)
+        gdt4 = Track('GC Skew (bar)', height=1.94, greytrack=1,
+                     scale_largetick_interval=1e4)
         gdt4.add_set(gdgs1)
 
         gdgs2 = GraphSet('GC and AT Content')
         gdgs2.new_graph(apply_to_window(genbank_entry.seq, step, calc_gc_content, step),
-                        'GC content', style='line',
-                        color=colors.lightgreen,
+                        'GC content', style='line', color=colors.lightgreen,
                         altcolor=colors.darkseagreen)
 
         gdgs2.new_graph(apply_to_window(genbank_entry.seq, step, calc_at_content, step),
-                        'AT content', style='line',
-                        color=colors.orange,
+                        'AT content', style='line', color=colors.orange,
                         altcolor=colors.red)
 
-        gdt5 = Track(
-                'GC Content(green line), AT Content(red line)',
-                height=1.94, greytrack=1,
-                scale_largetick_interval=1e4)
+        gdt5 = Track('GC Content(green line), AT Content(red line)',
+                     height=1.94, greytrack=1, scale_largetick_interval=1e4)
         gdt5.add_set(gdgs2)
 
         gdgs3 = GraphSet('Di-nucleotide count')
@@ -1012,25 +999,25 @@ class DiagramTest(unittest.TestCase):
 
         # Finally draw it in both formats, and full view and partial
         gdd.draw(format='circular', orientation='landscape',
-             tracklines=0, pagesize='A0')
+                 tracklines=0, pagesize='A0')
         output_filename = os.path.join('Graphics', 'GD_by_obj_circular.pdf')
         gdd.write(output_filename, 'PDF')
 
         gdd.circular = False
         gdd.draw(format='circular', orientation='landscape',
-             tracklines=0, pagesize='A0', start=3000, end=6300)
+                 tracklines=0, pagesize='A0', start=3000, end=6300)
         output_filename = os.path.join('Graphics', 'GD_by_obj_frag_circular.pdf')
         gdd.write(output_filename, 'PDF')
 
         gdd.draw(format='linear', orientation='landscape',
-             tracklines=0, pagesize='A0', fragments=3)
+                 tracklines=0, pagesize='A0', fragments=3)
         output_filename = os.path.join('Graphics', 'GD_by_obj_linear.pdf')
         gdd.write(output_filename, 'PDF')
 
         gdd.set_all_tracks("greytrack_labels", 2)
         gdd.draw(format='linear', orientation='landscape',
-             tracklines=0, pagesize=(30 * cm, 10 * cm), fragments=1,
-             start=3000, end=6300)
+                 tracklines=0, pagesize=(30 * cm, 10 * cm), fragments=1,
+                 start=3000, end=6300)
         output_filename = os.path.join('Graphics', 'GD_by_obj_frag_linear.pdf')
         gdd.write(output_filename, 'PDF')
 
