@@ -6,24 +6,22 @@
 # Contact:       Leighton Pritchard, Scottish Crop Research Institute,
 #                Invergowrie, Dundee, Scotland, DD2 5DA, UK
 #                L.Pritchard@scri.ac.uk
-################################################################################
+"""Provides a container for information concerning the tracks to be drawn in a diagram.
 
-""" Diagram module
+It also provides the interface for defining the diagram (possibly split these
+functions in later version?).
 
-    Provides:
+For drawing capabilities, this module uses reportlab to draw and write the
+diagram:
 
-    o Diagram -   Container for information concerning the tracks to be
-                    drawn in a diagram, and the interface for defining the
-                    diagram (possibly split these functions in later version?)
+http://www.reportlab.com
 
-    For drawing capabilities, this module uses reportlab to draw and write
-    the diagram:
-
-    http://www.reportlab.com
-
-    For dealing with biological information, the package expects BioPython
-    objects - namely SeqRecord objects containing SeqFeature objects.
+For dealing with biological information, the package expects BioPython
+objects - namely SeqRecord objects containing SeqFeature objects.
 """
+__docformat__ = "restructuredtext en"
+
+import sys
 
 try:
     from reportlab.graphics import renderPM
@@ -39,98 +37,70 @@ from Bio.Graphics import _write
 
 
 class Diagram(object):
-    """ Diagram
+    """Diagram container.
 
-        Provides:
+    Arguments:
+        - name           - a string, identifier for the diagram.
+        - tracks         - a list of Track objects comprising the diagram.
+        - format         - a string, format of the diagram (circular/linear).
+        - pagesize       - a string, the pagesize of output.
+        - orientation    - a string, the page orientation (landscape/portrait).
+        - x              - a float, the proportion of the page to take up with
+          even X margins.
+        - y              - a float, the proportion of the page to take up with
+          even Y margins.
+        - xl             - a float, the proportion of the page to take up with
+          the left X margin.
+        - xr             - a float, the proportion of the page to take up with
+          the right X margin.
+        - yt             - a float, the proportion of the page to take up with
+          the top Y margin.
+        - yb             - a float, the proportion of the page to take up with
+          the bottom Y margin.
+        - circle_core    - a float, the proportion of the available radius to
+          leave empty at the center of a circular diagram (0 to 1).
+        - start          - an integer, the base/aa position to start the diagram at.
+        - end            - an integer, the base/aa position to end the diagram at.
+        - tracklines     - a boolean, True if track guidelines are to be drawn.
+        - fragments      - and integer, for a linear diagram, the number of equal
+          divisions into which the sequence is divided.
+        - fragment_size  - a float, the proportion of the space available to
+          each fragment that should be used in drawing.
+        - track_size     - a float, the proportion of the space available to
+          each track that should be used in drawing.
+        - circular       - a boolean, True if the genome/sequence to be drawn
+          is, in reality, circular.
 
-        Attributes:
+    Methods:
 
-        o name         String, identifier for the diagram
 
-        o tracks       List of Track objects comprising the diagram
-
-        o format       String, format of the diagram (circular/linear)
-
-        o pagesize     String, the pagesize of output
-
-        o orientation  String, the page orientation (landscape/portrait)
-
-        o x            Float, the proportion of the page to take up with even
-                              X margins
-
-        o y            Float, the proportion of the page to take up with even
-                              Y margins
-
-        o xl           Float, the proportion of the page to take up with the
-                              left X margin
-
-        o xr           Float, the proportion of the page to take up with the
-                              right X margin
-
-        o yt           Float, the proportion of the page to take up with the
-                              top Y margin
-
-        o yb           Float, the proportion of the page to take up with the
-                              bottom Y margin
-
-        o circle_core  Float, the proportion of the available radius to leave
-                       empty at the center of a circular diagram (0 to 1).
-
-        o start        Int, the base/aa position to start the diagram at
-
-        o end          Int, the base/aa position to end the diagram at
-
-        o tracklines   Boolean, True if track guidelines are to be drawn
-
-        o fragments    Int, for a linear diagram, the number of equal divisions
-                                into which the sequence is divided
-
-        o fragment_size Float, the proportion of the space available to each
-                                   fragment that should be used in drawing
-
-        o track_size   Float, the proportion of the space available to each
-                                  track that should be used in drawing
-
-        o circular     Boolean, True if the genome/sequence to be drawn is, in
-                                reality, circular.
-
-        Methods:
-
-        o __init__(self, name=None) Called on instantiation
-
-        o draw(self, format='circular', ...) Instructs the package to draw
-            the diagram
-
-        o write(self, filename='test1.ps', output='PS') Writes the drawn
-            diagram to a specified file, in a specified format.
-
-        o add_track(self, track, track_level) Adds a Track object to the
+        - add_track(self, track, track_level) Adds a Track object to the
             diagram, with instructions to place it at a particular level on
             the diagram
 
-        o del_track(self, track_level) Removes the track that is to be drawn
+        - del_track(self, track_level) Removes the track that is to be drawn
             at a particular level on the diagram
 
-        o get_tracks(self) Returns the list of Track objects to be drawn
+        - get_tracks(self) Returns the list of Track objects to be drawn
             contained in the diagram
 
-        o renumber_tracks(self, low=1) Renumbers all tracks consecutively,
+        - renumber_tracks(self, low=1) Renumbers all tracks consecutively,
             optionally from a passed lowest number
 
-        o get_levels(self) Returns a list of levels currently occupied by
+        - get_levels(self) Returns a list of levels currently occupied by
             Track objects
 
-        o get_drawn_levels(self) Returns a list of levels currently occupied
+        - get_drawn_levels(self) Returns a list of levels currently occupied
             by Track objects that will be shown in the drawn diagram (i.e.
             are not hidden)
 
-        o range(self) Returns the lowest- and highest-numbered positions
+        - range(self) Returns the lowest- and highest-numbered positions
             contained within features in all tracks on the diagram as a tuple.
 
-        o __getitem__(self, key) Returns the track contained at the level of
+        - __getitem__(self, key) Returns the track contained at the level of
             the passed key
 
-        o __str__(self) Returns a formatted string describing the diagram
+        - __str__(self) Returns a formatted string describing the diagram
 
     """
     def __init__(self, name=None, format='circular', pagesize='A3',
@@ -138,7 +108,11 @@ class Diagram(object):
                  xr=None, yt=None, yb=None, start=None, end=None,
                  tracklines=False, fragments=10, fragment_size=0.9,
                  track_size=0.75, circular=True, circle_core=0.0):
-        """ __init__(self, name=None)
+        """Called on instantiation.
+
+        gdd = Diagram(name=None)
+        """
+        """
 
             o name  String describing the diagram
 
@@ -238,6 +212,8 @@ class Diagram(object):
              fragment_size=None, track_size=None, circular=None,
              circle_core=None, cross_track_links=None):
         """Draw the diagram, with passed parameters overriding existing attributes.
+
+        gdd.draw(format='circular')
         """
         # Pass the parameters to the drawer objects that will build the
         # diagrams.  At the moment, we detect overrides with an or in the
@@ -271,22 +247,21 @@ class Diagram(object):
         self.drawing = drawer.drawing  # Get the completed drawing
 
     def write(self, filename='test1.ps', output='PS', dpi=72):
-        """ write(self, filename='test1.ps', output='PS', dpi=72)
+        """Writes the drawn diagram to a specified file, in a specified format.
 
-            o filename      String indicating the name of the output file,
-                            or a handle to write to.
+        Arguments:
+            - filename   - a string indicating the name of the output file,
+              or a handle to write to.
+            - output     - a string indicating output format, one of PS, PDF,
+              SVG, or provided the ReportLab renderPM module is installed, one
+              of the bitmap formats JPG, BMP, GIF, PNG, TIFF or TIFF.  The
+              format can be given in upper or lower case.
+            - dpi        - an integer. Resolution (dots per inch) for bitmap formats.
 
-            o output        String indicating output format, one of PS, PDF,
-                            SVG, or provided the ReportLab renderPM module is
-                            installed, one of the bitmap formats JPG, BMP,
-                            GIF, PNG, TIFF or TIFF.  The format can be given
-                            in upper or lower case.
-
-            o dpi           Resolution (dots per inch) for bitmap formats.
-
-            Write the completed drawing out to a file in a prescribed format
-
+        Returns:
             No return value.
+
+        write(self, filename='test1.ps', output='PS', dpi=72)
         """
         return _write(self.drawing, filename, output, dpi=dpi)
 
@@ -459,3 +434,18 @@ class Diagram(object):
             outstr.append("Track %d: %s\n" % (level, self.tracks[level]))
         outstr = '\n'.join(outstr)
         return outstr
+
+
+def _test():
+    """Run the Bio.Seq module's doctests (PRIVATE)."""
+    if sys.version_info[0:2] == (3, 1):
+        print("Not running Bio.Seq doctest on Python 3.1")
+        print("See http://bugs.python.org/issue7490")
+    else:
+        print("Running doctests...")
+        import doctest
+        doctest.testmod(optionflags=doctest.IGNORE_EXCEPTION_DETAIL)
+        print("Done")
+
+if __name__ == "__main__":
+    _test()
