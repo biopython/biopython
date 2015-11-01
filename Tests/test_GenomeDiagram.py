@@ -577,6 +577,66 @@ class DiagramTest(unittest.TestCase):
         self.record = SeqIO.read(handle, "genbank")
         handle.close()
 
+        self.gdd = Diagram('Test Diagram')
+        # Add a track of features,
+        self.gdd.new_track(1, greytrack=True, name="CDS Features",
+                           greytrack_labels=0, height=0.5)
+
+    def tearDown(self):
+        del self.gdd
+
+    def test_str(self):
+        """Test diagram's info as string."""
+        expected = "\n<<class 'Bio.Graphics.GenomeDiagram._Diagram.Diagram'>: Test Diagram>" \
+                   "\n1 tracks" \
+                   "\nTrack 1: " \
+                   "\n<<class 'Bio.Graphics.GenomeDiagram._Track.Track'>: CDS Features>" \
+                   "\n0 sets" \
+                   "\n"
+        self.assertEqual(expected, str(self.gdd))
+
+    def test_add_track(self):
+        track = Track(name="Annotated Features")
+        self.gdd.add_track(track, 2)
+        self.assertEqual(2, len(self.gdd.get_tracks()))
+
+    def test_add_track_to_occupied_level(self):
+        new_track = self.gdd.get_tracks()[0]
+        self.gdd.add_track(new_track, 1)
+        self.assertEqual(2, len(self.gdd.get_tracks()))
+
+    def test_add_track_error(self):
+        """Test adding unspecified track."""
+        self.assertRaises(ValueError, self.gdd.add_track, None, 1)
+
+    def test_del_tracks(self):
+        self.gdd.del_track(1)
+        self.assertEqual(0, len(self.gdd.get_tracks()))
+
+    def test_get_tracks(self):
+        self.assertEqual(1, len(self.gdd.get_tracks()))
+
+    def test_move_track(self):
+        self.gdd.move_track(1, 2)
+        expected = "\n<<class 'Bio.Graphics.GenomeDiagram._Diagram.Diagram'>: Test Diagram>" \
+                   "\n1 tracks" \
+                   "\nTrack 2: " \
+                   "\n<<class 'Bio.Graphics.GenomeDiagram._Track.Track'>: CDS Features>" \
+                   "\n0 sets" \
+                   "\n"
+        self.assertEqual(expected, str(self.gdd))
+
+    def test_renumber(self):
+        """Test renumbering tracks."""
+        self.gdd.renumber_tracks(0)
+        expected = "\n<<class 'Bio.Graphics.GenomeDiagram._Diagram.Diagram'>: Test Diagram>" \
+                   "\n1 tracks" \
+                   "\nTrack 0: " \
+                   "\n<<class 'Bio.Graphics.GenomeDiagram._Track.Track'>: CDS Features>" \
+                   "\n0 sets" \
+                   "\n"
+        self.assertEqual(expected, str(self.gdd))
+
     def test_write_arguments(self):
         """Check how the write methods respond to output format arguments."""
         gdd = Diagram('Test Diagram')
