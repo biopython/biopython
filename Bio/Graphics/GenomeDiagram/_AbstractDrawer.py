@@ -273,7 +273,7 @@ def draw_arrow(point1, point2, color=colors.lightgreen, border=None,
 
 
 def angle2trig(theta):
-    """Convert anngle to a reportlab ready tuple.
+    """Convert angle to a reportlab ready tuple.
 
     Arguments:
 
@@ -346,7 +346,7 @@ class AbstractDrawer(object):
 
         Attributes:
 
-            - tracklines    Boolean for whether to draw lines dilineating tracks
+            - tracklines    Boolean for whether to draw lines delineating tracks
 
             - pagesize      Tuple describing the size of the page in pixels
 

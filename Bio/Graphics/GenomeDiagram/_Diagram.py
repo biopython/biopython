@@ -22,7 +22,7 @@
     http://www.reportlab.com
 
     For dealing with biological information, the package expects BioPython
-    objects - namely SeqRecord ojbects containing SeqFeature objects.
+    objects - namely SeqRecord objects containing SeqFeature objects.
 """
 
 # -----------------------------------------------------------------------------
@@ -439,7 +439,7 @@ class Diagram(object):
     def range(self):
         """ range(self) -> (int, int)
 
-            Returns the lowest and highest base (or mark) numbers containd in
+            Returns the lowest and highest base (or mark) numbers contained in
             track features as a tuple
         """
         lows, highs = [], []
