@@ -25,28 +25,17 @@
     objects - namely SeqRecord objects containing SeqFeature objects.
 """
 
-# -----------------------------------------------------------------------------
-# IMPORTS
-
-# ReportLab
 try:
     from reportlab.graphics import renderPM
 except ImportError:
     # This is an optional part of ReportLab, so may not be installed.
     renderPM = None
 
-# GenomeDiagram
 from ._LinearDrawer import LinearDrawer
 from ._CircularDrawer import CircularDrawer
 from ._Track import Track
 
 from Bio.Graphics import _write
-
-# -----------------------------------------------------------------------------
-# CLASSES
-
-# -----------------------------------------------------------
-# Diagram
 
 
 class Diagram(object):
