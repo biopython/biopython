@@ -1871,11 +1871,15 @@ class MutableSeq(object):
         Because str(my_seq) will give you the full sequence as a python string,
         there is often no need to make an explicit conversion.  For example,
 
-        print("ID={%s}, sequence={%s}" % (my_name, my_seq))
+        >>> my_seq = Seq("ATCGTG")
+        >>> my_name = "seq_1"
+        >>> print("ID={%s}, sequence={%s}" % (my_name, my_seq))
+        ID={seq_1}, sequence={ATCGTG}
 
         On Biopython 1.44 or older you would have to have done this:
 
-        print("ID={%s}, sequence={%s}" % (my_name, my_seq.tostring()))
+        >>> print("ID={%s}, sequence={%s}" % (my_name, my_seq.tostring()))
+        ID={seq_1}, sequence={ATCGTG}
         """
         from Bio import BiopythonDeprecationWarning
         warnings.warn("This method is obsolete; please use str(my_seq) "
