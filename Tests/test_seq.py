@@ -989,6 +989,10 @@ class TestTranslating(unittest.TestCase):
         self.assertEqual("M-KL*", seq.translate(gap="-"))
         self.assertRaises(ValueError, seq.translate, gap="~")
 
+        seq = Seq.Seq("ATG---AAACTGTAG", Gapped(IUPAC.unambiguous_dna))
+        self.assertEqual("M-KL@", seq.translate(gap="-", stop_symbol="@"))
+        self.assertRaises(ValueError, seq.translate, gap="~")
+
         seq = Seq.Seq("ATG~~~AAACTGTAG", Gapped(IUPAC.unambiguous_dna))
         self.assertRaises(ValueError, seq.translate, gap="~")
         self.assertRaises(TranslationError, seq.translate, gap="-")
@@ -1030,6 +1034,10 @@ class TestTranslating(unittest.TestCase):
         seq = Seq.Seq("ATG---AAACTGTGA")
         self.assertEqual("HasStopCodon(Gapped(ExtendedIUPACProtein(), '-'), '*')",
                          repr(seq.translate(gap="-").alphabet))
+
+        seq = Seq.Seq("ATG---AAACTGTGA")
+        self.assertEqual("HasStopCodon(Gapped(ExtendedIUPACProtein(), '-'), '@')",
+                         repr(seq.translate(gap="-", stop_symbol="@").alphabet))
 
     def test_translation_wrong_type(self):
         """Test translation table cannot be CodonTable"""
