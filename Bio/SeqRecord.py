@@ -17,6 +17,8 @@ __docformat__ = "restructuredtext en"  # Simple markup to show doctests nicely
 # need to be in sync (this is the BioSQL "Database SeqRecord", see
 # also BioSQL.BioSeq.DBSeq which is the "Database Seq" class)
 
+_NO_SEQRECORD_COMPARISON = "SeqRecord comparison is deliberately not implemented. Explicitly compare the attributes of interest."
+
 
 class _RestrictedDict(dict):
     """Dict which only allows sequences of given length as values (PRIVATE).
@@ -710,12 +712,26 @@ class SeqRecord(object):
         """
         return len(self.seq)
 
+    def __lt__(self, other):
+        raise NotImplementedError(_NO_SEQRECORD_COMPARISON)
+
+    def __le___(self, other):
+        raise NotImplementedError(_NO_SEQRECORD_COMPARISON)
+
     def __eq__(self, other):
-        raise NotImplementedError("SeqRecord equality not implemented because "
-                                  "of object complexity.")
+        raise NotImplementedError(_NO_SEQRECORD_COMPARISON)
+
     def __ne__(self, other):
-        raise NotImplementedError("SeqRecord equality not implemented because "
-                                  "of object complexity.")
+        raise NotImplementedError(_NO_SEQRECORD_COMPARISON)
+
+    def __gt__(self, other):
+        raise NotImplementedError(_NO_SEQRECORD_COMPARISON)
+
+    def __ge__(self, other):
+        raise NotImplementedError(_NO_SEQRECORD_COMPARISON)
+
+    # Note Python 3 does not use __cmp__ and there is no need to
+    # define __cmp__ on Python 2 as have all of  _lt__ etc defined.
 
     # Python 3:
     def __bool__(self):
