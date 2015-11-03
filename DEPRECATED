@@ -33,6 +33,19 @@ Bio.CodonAlign
 This new experimental module included in Biopython 1.64 was renamed to
 Bio.codonalign in Biopython 1.65 to follow PEP8 module naming rules.
 
+Bio.SeqRecord equality
+======================
+As of Release 1.67, the SeqRecord objects (and their subclasses) no longer use
+the default Python object comparison. Instead they will raise an exception if
+you try to compare them.
+
+For backward compatibility and/or to explicitly use object comparison, please
+use id(record1) == id(record2) instead.
+
+Otherwise please test whichever specific attributes you are interested in
+explicitly, for example record1.id == record2.id or record1.seq == record.seq
+(see also the note below about sequence equality).
+
 Bio.Seq sequence equality
 =========================
 As of Release 1.65, the Seq and MutableSeq objects (and their subclasses)
