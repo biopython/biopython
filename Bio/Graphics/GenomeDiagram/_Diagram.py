@@ -105,8 +105,7 @@ class Diagram(object):
         self.drawing = None
 
     def set_all_tracks(self, attr, value):
-        """Set the passed attribute of all tracks in the set to the passed
-        value.
+        """Set the passed attribute of all tracks in the set to the passed value.
 
         Arguments:
             - attr    - An attribute of the Track class.
@@ -206,12 +205,13 @@ class Diagram(object):
     def add_track(self, track, track_level):
         """Adds a Track object to the diagram.
 
-        It also accepts instructions to place it at a particular level on the diagram.
+        It also accepts instructions to place it at a particular level on the
+        diagram.
 
         Arguments:
             - track          - Track object to draw.
-            - track_level    - an integer. The level at which the track will be drawn
-              (above an arbitrary baseline).
+            - track_level    - an integer. The level at which the track will be
+              drawn (above an arbitrary baseline).
 
         add_track(self, track, track_level)
         """
@@ -230,8 +230,9 @@ class Diagram(object):
         self.tracks[track_level].track_level = track_level
 
     def new_track(self, track_level, **args):
-        """Add a new Track to the diagram at a given level and returns it for
-        further user manipulation.
+        """Add a new Track to the diagram at a given level.
+
+        The track is returned for further user manipulation.
 
         Arguments:
             - track_level   - an integer. The level at which the track will be
@@ -255,8 +256,7 @@ class Diagram(object):
         return newtrack
 
     def del_track(self, track_level):
-        """Removes the track that is to be drawn at a particular level on the
-        diagram.
+        """Removes the track to be drawn at a particular level on the diagram.
 
         Arguments:
             - track_level   - an integer. The level of the track on the diagram
@@ -288,8 +288,9 @@ class Diagram(object):
         self.add_track(aux, to_level)
 
     def renumber_tracks(self, low=1, step=1):
-        """Renumbers all tracks consecutively, optionally from a passed lowest
-        number.
+        """Renumbers all tracks consecutively.
+
+        Optionally from a passed lowest number.
 
         Arguments:
             - low     - an integer. The track number to start from.
@@ -316,16 +317,18 @@ class Diagram(object):
         return sorted(self.tracks)
 
     def get_drawn_levels(self):
-        """Return a sorted list of levels occupied by tracks that are not
-        explicitly hidden.
+        """Return a sorted list of levels occupied by tracks.
+
+        These tracks are not explicitly hidden.
 
         get_drawn_levels(self)
         """
         return sorted(key for key in self.tracks if not self.tracks[key].hide)
 
     def range(self):
-        """Returns the lowest and highest base (or mark) numbers contained in
-        track features as a tuple.
+        """Returns lowest and highest base numbers from track features.
+
+        Returned type is a tuple.
 
         range(self)
         """
