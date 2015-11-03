@@ -121,7 +121,7 @@ class LinearDrawer(AbstractDrawer):
 
         Attributes:
 
-        o tracklines    Boolean for whether to draw lines dilineating tracks
+        o tracklines    Boolean for whether to draw lines delineating tracks
 
         o pagesize      Tuple describing the size of the page in pixels
 

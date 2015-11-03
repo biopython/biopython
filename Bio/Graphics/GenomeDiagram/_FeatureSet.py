@@ -122,7 +122,7 @@ class FeatureSet(object):
         #    self.set_all_feature("color",value)
 
     def get_features(self, attribute=None, value=None, comparator=None):
-        """Retreive features.
+        """Retrieve features.
 
         Arguments:
          - attribute: String, attribute of a Feature object

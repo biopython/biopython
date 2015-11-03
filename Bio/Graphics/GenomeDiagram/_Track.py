@@ -102,7 +102,7 @@ class Track(object):
                         as numerals.  Setting this to 'SInt' invokes SI
                         unit-like multiples, such as Mbp, Kbp and so on.
 
-        o scale_color  colors.Color to draw the elemnts of the scale
+        o scale_color  colors.Color to draw the elements of the scale
 
         o scale_font    String describing the font to use for the scale labels
 
@@ -178,7 +178,7 @@ class Track(object):
 
             o scale     Boolean, 1 if a scale is to be drawn on the track
 
-            o scale_color  colors.Color to draw the elemnts of the scale
+            o scale_color  colors.Color to draw the elements of the scale
                            (overridden by backwards compatible argument with UK
                            spelling, colour).
 
@@ -347,7 +347,7 @@ class Track(object):
         """
         if not verbose:             # Return the short description
             return "%s" % self      # Use __str__ method instead
-        else:                       # Return the long desription
+        else:                       # Return the long description
             outstr = ["\n<%s: %s>" % (self.__class__, self.name)]
             outstr.append("%d sets" % len(self._sets))
             for key in self._sets:
