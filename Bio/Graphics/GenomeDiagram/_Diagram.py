@@ -21,8 +21,6 @@ objects - namely SeqRecord objects containing SeqFeature objects.
 """
 __docformat__ = "restructuredtext en"
 
-import sys
-
 try:
     from reportlab.graphics import renderPM
 except ImportError:
@@ -207,7 +205,7 @@ class Diagram(object):
 
     def add_track(self, track, track_level):
         """Adds a Track object to the diagram.
-        
+
         It also accepts instructions to place it at a particular level on the diagram.
 
         Arguments:
@@ -264,14 +262,14 @@ class Diagram(object):
             - track_level   - an integer. The level of the track on the diagram
               to delete.
 
-        del_track(self, track_level) 
+        del_track(self, track_level)
         """
         del self.tracks[track_level]
 
     def get_tracks(self):
         """Returns a list of the tracks contained in the diagram.
 
-        get_tracks(self) 
+        get_tracks(self)
         """
         return list(self.tracks.values())
 
@@ -321,7 +319,7 @@ class Diagram(object):
         """Return a sorted list of levels occupied by tracks that are not
         explicitly hidden.
 
-        get_drawn_levels(self) 
+        get_drawn_levels(self)
         """
         return sorted(key for key in self.tracks if not self.tracks[key].hide)
 
@@ -344,7 +342,7 @@ class Diagram(object):
         Arguments:
             - key    - The id of a track in the diagram.
 
-        __getitem__(self, key) 
+        __getitem__(self, key)
         """
         return self.tracks[key]
 
