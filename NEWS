@@ -23,6 +23,11 @@ Bio.KEGG.read(...) for parsing KEGG files expected to contain a single record
 only - existing function Bio.KEGG.parse(...) is intended to be used to iterate
 over multi-record files.
 
+When a gap character is defined, Bio.Seq will now translate gap codons
+(e.g. "---") into a single gap ("-") in the protein sequence. The gap character
+is inferred from the Seq object's alphabet, but it can also be passed as an
+argument to the translate method.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
