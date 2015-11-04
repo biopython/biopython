@@ -881,7 +881,7 @@ class Seq(object):
         return Seq(str(self).replace("U", "T").replace("u", "t"), alphabet)
 
     def translate(self, table="Standard", stop_symbol="*", to_stop=False,
-                  cds=False):
+                  cds=False, gap=None):
         """Turns a nucleotide sequence into a protein sequence. New Seq object.
 
         This method will translate DNA or RNA sequences, and those with a
@@ -908,6 +908,8 @@ class Seq(object):
               single in frame stop codon at the end (this will be excluded
               from the protein sequence, regardless of the to_stop option).
               If these tests fail, an exception is raised.
+            - gap - Single character string to denote symbol used for gaps.
+              It will try to guess the gap character from the alphabet.
 
         e.g. Using the standard table:
 
@@ -949,11 +951,23 @@ class Seq(object):
         >>> coding_dna2.translate(to_stop=True)
         Seq('LAIVMGR', ExtendedIUPACProtein())
 
+        When translating gapped sequences, the gap character is inferred from
+        the alphabet:
+
+        >>> from Bio.Alphabet import Gapped
+        >>> coding_dna3 = Seq("GTG---GCCATT", Gapped(IUPAC.unambiguous_dna))
+        >>> coding_dna3.translate()
+        Seq('V-AI', Gapped(ExtendedIUPACProtein(), '-'))
+
+        It is possible to pass the gap character when the alphabet is missing:
+
+        >>> coding_dna4 = Seq("GTG---GCCATT")
+        >>> coding_dna4.translate(gap='-')
+        Seq('V-AI', Gapped(ExtendedIUPACProtein(), '-'))
+
         NOTE - Ambiguous codons like "TAN" or "NNN" could be an amino acid
         or a stop codon.  These are translated as "X".  Any invalid codon
         (e.g. "TA?" or "T-A") will throw a TranslationError.
-
-        NOTE - Does NOT support gapped sequences.
 
         NOTE - This does NOT behave like the python string's translate
         method.  For that use str(my_seq).translate(...) instead.
@@ -1000,13 +1014,26 @@ class Seq(object):
                 # The same table can be used for RNA or DNA (we use this for
                 # translating strings).
                 codon_table = CodonTable.ambiguous_generic_by_id[table_id]
-        protein = _translate_str(str(self), codon_table,
-                                 stop_symbol, to_stop, cds)
-        if stop_symbol in protein:
-            alphabet = Alphabet.HasStopCodon(codon_table.protein_alphabet,
-                                             stop_symbol=stop_symbol)
+
+        # Deal with gaps for translation
+        if hasattr(self.alphabet, "gap_char"):
+            if not gap:
+                gap = self.alphabet.gap_char
+            elif gap != self.alphabet.gap_char:
+                raise ValueError("Gap {0!r} does not match {1!r} from alphabet".format(
+                    gap, self.alphabet.gap_char))
+
+        protein = _translate_str(str(self), codon_table, stop_symbol, to_stop,
+                                 cds, gap=gap)
+
+        if gap and gap in protein:
+            alphabet = Alphabet.Gapped(codon_table.protein_alphabet, gap)
         else:
             alphabet = codon_table.protein_alphabet
+
+        if stop_symbol in protein:
+            alphabet = Alphabet.HasStopCodon(alphabet, stop_symbol)
+
         return Seq(protein, alphabet)
 
     def ungap(self, gap=None):
@@ -1953,7 +1980,7 @@ def back_transcribe(rna):
 
 
 def _translate_str(sequence, table, stop_symbol="*", to_stop=False,
-                   cds=False, pos_stop="X"):
+                   cds=False, pos_stop="X", gap=None):
     """Helper function to translate a nucleotide string (PRIVATE).
 
     Arguments:
@@ -1972,6 +1999,8 @@ def _translate_str(sequence, table, stop_symbol="*", to_stop=False,
           single in frame stop codon at the end (this will be excluded
           from the protein sequence, regardless of the to_stop option).
           If these tests fail, an exception is raised.
+        - gap - Single character string to denote symbol used for gaps.
+          Defaults to None.
 
     Returns a string.
 
@@ -1992,7 +2021,7 @@ def _translate_str(sequence, table, stop_symbol="*", to_stop=False,
        ...
     TranslationError: Codon 'TA?' is invalid
 
-    In a change to older verions of Biopython, partial codons are now
+    In a change to older versions of Biopython, partial codons are now
     always regarded as an error (previously only checked if cds=True)
     and will trigger a warning (likely to become an exception in a
     future release).
@@ -2042,12 +2071,17 @@ def _translate_str(sequence, table, stop_symbol="*", to_stop=False,
                       "Explicitly trim the sequence or add trailing N before "
                       "translation. This may become an error in future.",
                       BiopythonWarning)
+    if gap is not None:
+        if not isinstance(gap, basestring):
+            raise TypeError("Gap character should be a single character string.")
+        elif len(gap) > 1:
+            raise ValueError("Gap character should be a single character string.")
+
     for i in range(0, n - n % 3, 3):
         codon = sequence[i:i + 3]
         try:
             amino_acids.append(forward_table[codon])
         except (KeyError, CodonTable.TranslationError):
-            # TODO? Treat "---" as a special case (gapped translation)
             if codon in table.stop_codons:
                 if cds:
                     raise CodonTable.TranslationError(
@@ -2058,6 +2092,9 @@ def _translate_str(sequence, table, stop_symbol="*", to_stop=False,
             elif valid_letters.issuperset(set(codon)):
                 # Possible stop codon (e.g. NNN or TAN)
                 amino_acids.append(pos_stop)
+            elif gap is not None and codon == gap * 3:
+                # Gapped translation
+                amino_acids.append(gap)
             else:
                 raise CodonTable.TranslationError(
                     "Codon '{0}' is invalid".format(codon))
@@ -2065,7 +2102,7 @@ def _translate_str(sequence, table, stop_symbol="*", to_stop=False,
 
 
 def translate(sequence, table="Standard", stop_symbol="*", to_stop=False,
-              cds=False):
+              cds=False, gap=None):
     """Translate a nucleotide sequence into amino acids.
 
     If given a string, returns a new string object. Given a Seq or
@@ -2091,6 +2128,8 @@ def translate(sequence, table="Standard", stop_symbol="*", to_stop=False,
           single in frame stop codon at the end (this will be excluded
           from the protein sequence, regardless of the to_stop option).
           If these tests fail, an exception is raised.
+        - gap - Single character string to denote symbol used for gaps.
+          Defaults to None.
 
     A simple string example using the default (standard) genetic code:
 
@@ -2129,8 +2168,6 @@ def translate(sequence, table="Standard", stop_symbol="*", to_stop=False,
     or a stop codon.  These are translated as "X".  Any invalid codon
     (e.g. "TA?" or "T-A") will throw a TranslationError.
 
-    NOTE - Does NOT support gapped sequences.
-
     It will however translate either DNA or RNA.
     """
     if isinstance(sequence, Seq):
@@ -2149,7 +2186,8 @@ def translate(sequence, table="Standard", stop_symbol="*", to_stop=False,
                 codon_table = table
             else:
                 raise ValueError('Bad table argument')
-        return _translate_str(sequence, codon_table, stop_symbol, to_stop, cds)
+        return _translate_str(sequence, codon_table, stop_symbol, to_stop, cds,
+                              gap=gap)
 
 
 def reverse_complement(sequence):
