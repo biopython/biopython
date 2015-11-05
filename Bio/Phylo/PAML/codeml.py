@@ -108,7 +108,7 @@ class Codeml(Paml):
                         if "=" not in uncommented:
                             raise AttributeError(
                                 "Malformed line in control file:\n%r" % line)
-                        (option, value) = uncommented.split("=")
+                        (option, value) = uncommented.split("=",1)
                         option = option.strip()
                         value = value.strip()
                         if option == "seqfile":
