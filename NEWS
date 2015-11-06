@@ -23,6 +23,11 @@ Bio.KEGG.read(...) for parsing KEGG files expected to contain a single record
 only - existing function Bio.KEGG.parse(...) is intended to be used to iterate
 over multi-record files.
 
+Additionally, a number of small bugs have been fixed with further additions
+to the test suite, and there has been further work to follow the Python PEP8
+standard coding style, and in converting our docstring documentation to use
+the reStructuredText markup style.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
