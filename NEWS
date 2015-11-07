@@ -14,7 +14,7 @@ The latest news is at the top of this file.
 
 Comparison of SeqRecord objects until now has used the default Python object
 comparison (are they same instance in memory?). This can be surprising, but
-comparison of all the attributes would be too complex. As of this release
+comparing all of the attributes would be too complex. As of this release
 attempting to compare SeqRecord objects should raise an exception instead. If
 you want the old behaviour, use id(record1) == id(record2) instead.
 
@@ -34,6 +34,7 @@ possible, especially the following contributors:
 Aaron Rosenfeld (first contribution)
 Anders Pitman (first contribution)
 Carlos Pena
+Chris Warth (first contribution)
 David Koppstein (first contribution)
 Eric Talevich
 Jacek Śmietański (first contribution)
