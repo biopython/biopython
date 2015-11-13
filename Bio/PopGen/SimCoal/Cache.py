@@ -57,9 +57,9 @@ class SimCoalCache(object):
         tf.close()
 
     def listSimulations(self, ploidy='1'):
-        '''
+        """
            Lists available simulations.
-        '''
+        """
         files = os.listdir(self.cacheDir + os.sep + ploidy)
         sims = []
         for file in files:
@@ -68,13 +68,13 @@ class SimCoalCache(object):
         return sims
 
     def getSimulation(self, sim_name, ploidy='1', parDir=None):
-        '''
+        """
            Makes available a cached simulation.
 
            @param sim_name simulation name.
 
            This mainly means untaring a file.
-        '''
+        """
         if parDir is None:
             parDir = os.sep.join([self.dataDir, 'SimCoal', 'runs'])
         tar_name = os.sep.join([self.cacheDir, ploidy, sim_name +

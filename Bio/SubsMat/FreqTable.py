@@ -3,7 +3,7 @@
 # as part of this package.
 # Copyright Iddo Friedberg idoerg@cc.huji.ac.il
 # Biopython (http://biopython.org) license applies
-'''
+"""
 A class to handle frequency tables
 Methods to read a letter frequency or a letter count file:
 Example files for a DNA alphabet:
@@ -44,7 +44,7 @@ Example of use:
   >>> ftab = FreqTable.FreqTable(my_count_dictionary,FreqTable.COUNT)
   >>> ftab = FreqTable.read_count(open('myDNACountFile'))
 
-'''
+"""
 
 from Bio import Alphabet
 COUNT = 1

@@ -3,11 +3,11 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-'''
+"""
 Asynchronous local execution.
 
 Supports multicore architectures.
-'''
+"""
 
 from Bio.PopGen.Async import Async
 
@@ -17,29 +17,29 @@ __docformat__ = "restructuredtext en"
 
 
 class Local(Async):
-    '''Execution on Local machine.
-    '''
+    """Execution on Local machine.
+    """
 
     def __init__(self, num_cores=1):
-        '''Constructor.
+        """Constructor.
 
            parameters:
 
              - num_cores - Number of cores (for multiprocessor machines,
                multiply accordingly)
-        '''
+        """
         Async.__init__(self)
         self.num_cores = num_cores
         self.cores_used = 0
 
     def _run_program(self, id, hook, parameters, input_files):
-        '''Run program.
+        """Run program.
 
            For parameters, please check Async.run_program.
 
            Either runs a program if a core is available or
            schedules it.
-        '''
+        """
         self.access_ds.acquire()
         self.waiting.append((id, hook, parameters, input_files))
         if self.cores_used < self.num_cores:
@@ -48,13 +48,13 @@ class Local(Async):
         self.access_ds.release()
 
     def start_work(self):
-        '''Starts work.
+        """Starts work.
 
            Thread initial point.
            While there are tasks to be done, runs them.
            The thread dies as soon as there is nothing waiting to be
            executed.
-        '''
+        """
         self.access_ds.acquire()
         while (len(self.waiting) > 0):
             id, hook, parameters, input_files = self.waiting[0]

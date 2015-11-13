@@ -2,7 +2,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 #
-'''
+"""
 Several routines used to extract information from FSSP sections
 
 filter: filters a passed summary section and alignment section according to a numeric
@@ -12,7 +12,7 @@ For example, to filter in only  those records which have a zscore greater than
 4.0 and lesser than 7.5:
 
 new_sum, new_align = filter(sum, align, 'zscore', 4, 7.5)
-'''
+"""
 
 from Bio import FSSP
 import copy

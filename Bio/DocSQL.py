@@ -12,12 +12,12 @@
 >>> from Bio import DocSQL
 >>> db=MySQLdb.connect(passwd='', db='test')
 >>> class CreatePeople(DocSQL.Create):
-...     '''
+...     """
 ...     CREATE TEMPORARY TABLE people
 ...     (id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
 ...     last_name TINYTEXT,
 ...     first_name TINYTEXT)
-...     '''
+...     """
 ...
 >>> CreatePeople(connection=db)
 CreatePeople(message=Success)
