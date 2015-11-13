@@ -100,14 +100,20 @@ class Tree(Nodes.Chain):
             subtrees = []
             plevel = 0
             prev = 1
+            incomment = False
             for p in range(1, closing):
-                if tree[p] == '(':
+                if not incomment and tree[p] == '(':
                     plevel += 1
-                elif tree[p] == ')':
+                elif not incomment and tree[p] == ')':
                     plevel -= 1
-                elif tree[p] == ',' and plevel == 0:
+                elif tree[p:].startswith(NODECOMMENT_START):
+                    incomment = True
+                elif incomment and tree[p] == NODECOMMENT_END:
+                    incomment = False
+                elif not incomment and tree[p] == ',' and plevel == 0:
                     subtrees.append(tree[prev:p])
                     prev = p + 1
+                    
             subtrees.append(tree[prev:closing])
             subclades = [self._parse(subtree) for subtree in subtrees]
             return [subclades, val]
@@ -152,7 +158,6 @@ class Tree(Nodes.Chain):
 
     def _get_values(self, text):
         """Extracts values (support/branchlength) from xx[:yyy], xx."""
-
         if text == '':
             return None
         nodecomment = None
