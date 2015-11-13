@@ -163,13 +163,17 @@ class ClustalIterator(AlignmentIterator):
                     if len(fields[1].replace("-", "")) != letters:
                         raise ValueError("Could not parse line, invalid sequence number:\n%s" % line)
             elif line[0] == " ":
-                # Sequence consensus line...
-                assert len(ids) == len(seqs)
-                assert len(ids) > 0
-                assert seq_cols is not None
-                consensus = line[seq_cols]
-                assert not line[:seq_cols.start].strip()
-                assert not line[seq_cols.stop:].strip()
+                try:
+                    # Sequence consensus line...
+                    assert consensus != "Fail"
+                    assert len(ids) == len(seqs)
+                    assert len(ids) > 0
+                    assert seq_cols is not None
+                    consensus = line[seq_cols]
+                    assert not line[:seq_cols.start].strip()
+                    assert not line[seq_cols.stop:].strip()
+                except AssertionError:
+                    consensus = "Fail"
                 # Check for blank line (or end of file)
                 line = handle.readline()
                 assert line.strip() == ""
@@ -246,12 +250,16 @@ class ClustalIterator(AlignmentIterator):
                 line = handle.readline()
             # There should now be a consensus line
             if consensus:
-                assert line[0] == " "
-                assert seq_cols is not None
-                consensus += line[seq_cols]
-                assert len(consensus) == len(seqs[0])
-                assert not line[:seq_cols.start].strip()
-                assert not line[seq_cols.stop:].strip()
+                try:
+                    assert consensus != "Fail"
+                    assert line[0] == " "
+                    assert seq_cols is not None
+                    consensus += line[seq_cols]
+                    assert len(consensus) == len(seqs[0])
+                    assert not line[:seq_cols.start].strip()
+                    assert not line[seq_cols.stop:].strip()
+                except AssertionError:
+                    consensus = "Fail"
                 # Read in the next line
                 line = handle.readline()
 
@@ -271,7 +279,7 @@ class ClustalIterator(AlignmentIterator):
         # mimic the old parser in Bio.Clustalw
         if version:
             alignment._version = version
-        if consensus:
+        if consensus and consensus != "Fail":
             alignment_length = len(seqs[0])
             assert len(consensus) == alignment_length, \
                    "Alignment length is %i, consensus length is %i, '%s'" \
