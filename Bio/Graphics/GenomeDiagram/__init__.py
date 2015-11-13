@@ -9,10 +9,10 @@
 #                L.Pritchard@scri.ac.uk
 # #############################################################################
 
-'''
+"""
 Local imports, to make these classes available directly under the
 Bio.Graphics.GenomeDiagram namespace:
-'''
+"""
 
 from ._Diagram import Diagram
 from ._Track import Track

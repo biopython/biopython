@@ -1,4 +1,4 @@
-'''A superclass for reading [f]ixed-column type [f]lat-[f]ile records.'''
+"""A superclass for reading [f]ixed-column type [f]lat-[f]ile records."""
 __docformat__ = "restructuredtext en"
 
 
@@ -24,7 +24,7 @@ class fff_rec(object):
             return self.data[index]
 
 
-'''Definition of the align section in a FSSP file'''
+"""Definition of the align section in a FSSP file"""
 class align(object):
     abs_res_num = (0, 4)
     pdb_res_num = (4, 9)

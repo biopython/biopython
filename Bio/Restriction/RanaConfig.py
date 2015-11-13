@@ -6,7 +6,7 @@
 #      Restriction Analysis Libraries.
 #      Copyright (C) 2004. Frederic Sohm.
 #
-'''
+"""
 Configuration of the console.
 
 Mainly used by PrintFormat.PrintFormat
@@ -33,7 +33,7 @@ Example:
                     <-->
                       Indent
 
-'''
+"""
 
 __docformat__ = "restructuredtext en"
 
@@ -42,7 +42,7 @@ ConsoleWidth = 80
 NameWidth = 10
 Indent = 4
 MaxSize = 6
-'''
+"""
 Proxies
 
 Enter here the address of your proxy if any.
@@ -54,7 +54,7 @@ Example:
   ftp_proxy       =   'http://www.somewhere.something:one_number'
                   -> www.somewhere.something is the address of the proxy.
                      one_number is the port number.
-'''
+"""
 ftp_proxy = ''
 ###############################################################################
 #                   Rebase ftp location

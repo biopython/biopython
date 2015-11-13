@@ -2,7 +2,7 @@
 # This code is part of the Biopython distribution and governed by its
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
-'''
+"""
 Nodes.py
 
 Provides functionality of a linked list.
@@ -12,7 +12,7 @@ Nodes can store arbitrary data in a NodeData class.
 Subclassed by Nexus.Trees to store phylogenetic trees.
 
 Bug reports to Frank Kauff (fkauff@biologie.uni-kl.de)
-'''
+"""
 
 __docformat__ = "restructuredtext en"
 
