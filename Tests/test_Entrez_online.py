@@ -13,10 +13,12 @@ scope of this file as they are already covered in test_Entrez.py.
 """
 import os
 import unittest
+from unittest.mock import patch
 
 import requires_internet
 requires_internet.check()
 
+from Bio._py3k import _binary_to_string_handle
 from Bio import Entrez
 from Bio import Medline
 from Bio import SeqIO
@@ -41,13 +43,16 @@ URL_EMAIL = "email=biopython-dev%40biopython.org"
 
 
 class EntrezOnlineCase(unittest.TestCase):
-
-    def test_read_from_url(self):
-        """Test Entrez.read from URL"""
+    def test_request_url(self):
         handle = Entrez.einfo()
         self.assertTrue(handle.url.startswith(URL_HEAD + "einfo.fcgi?"), handle.url)
         self.assertTrue(URL_TOOL in handle.url)
         self.assertTrue(URL_EMAIL in handle.url)
+
+    @patch("Bio.Entrez._open", return_value=_binary_to_string_handle(open("Entrez/einfo1.xml", "rb")))
+    def test_read_from_url(self, mock_open):
+        """Test Entrez.read from URL"""
+        handle = Entrez.einfo()
         rec = Entrez.read(handle)
         handle.close()
         self.assertTrue(isinstance(rec, dict))
