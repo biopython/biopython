@@ -5,6 +5,7 @@
 """Tests for Bio.AlignIO.ClustalIO"""
 
 import unittest
+import warnings
 
 from Bio._py3k import StringIO
 
@@ -245,8 +246,14 @@ class TestClustalIO(unittest.TestCase):
         self.assertEqual(alignments[0]._version, "2.0.9")
 
     def test_four(self):
+        with warnings.catch_warnings():
+            warnings.simplefilter("error", BiopythonParserWarning)
+            try:
+                ClustalIterator(StringIO(aln_example4))
+            except BiopythonParserWarning as e:
+                self.assertEqual(str(e), "Malformed clustal consensus line in input, some information may be lost.")
+
         alignments = list(ClustalIterator(StringIO(aln_example4)))
-        self.assertWarns(BiopythonParserWarning)
         self.assertEqual(alignments[0]._star_info,
                          "          *    **    **  ** **                    "
                          "*  * * *         *   ***  * **  ****       ***  * "
