@@ -2,19 +2,20 @@
 # This code is part of the Biopython distribution and governed by its
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
-from __future__ import print_function
 
 import re
 
 
 def parse_ng86(lines, results):
-    """ Parse the Nei & Gojobori (1986) section of the results.
+    """Parse the Nei & Gojobori (1986) section of the results.
+
     Nei_Gojobori results are organized in a lower
     triangular matrix, with the sequence names labeling
     the rows and statistics in the format:
     w (dN dS) per column
     Example row (2 columns):
-    0.0000 (0.0000 0.0207) 0.0000 (0.0000 0.0421)"""
+    0.0000 (0.0000 0.0207) 0.0000 (0.0000 0.0421)
+    """
     sequences = []
     for line in lines:
         # Find all floating point numbers in this line
@@ -48,12 +49,13 @@ def parse_ng86(lines, results):
 
 
 def parse_yn00(lines, results, sequences):
-    """ Parse the Yang & Nielsen (2000) part of the results.
+    """Parse the Yang & Nielsen (2000) part of the results.
+
     Yang & Nielsen results are organized in a table with
     each row comprising one pairwise species comparison.
     Rows are labeled by sequence number rather than by
-    sequence name."""
-
+    sequence name.
+    """
     # Example (header row and first table row):
     # seq. seq.     S       N        t   kappa   omega     dN +- SE    dS +- SE
     # 2    1    67.3   154.7   0.0136  3.6564  0.0000 -0.0000 +- 0.0000  0.0150
