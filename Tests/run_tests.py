@@ -366,7 +366,7 @@ class TestRunner(unittest.TextTestRunner):
         file = sys.argv[0]
     else:
         file = __file__
-    testdir = os.path.dirname(file) or os.curdir
+    testdir = os.path.abspath(os.path.dirname(file) or os.curdir)
 
     def __init__(self, tests=[], verbosity=0):
         # if no tests were specified to run, we run them all
@@ -398,8 +398,6 @@ class TestRunner(unittest.TextTestRunner):
         # Always run tests from the Tests/ folder where run_tests.py
         # should be located (as we assume this with relative paths etc)
         os.chdir(self.testdir)
-        # Note the current directory:
-        cur_dir = os.path.abspath(".")
         try:
             stdout = sys.stdout
             sys.stdout = output
@@ -438,15 +436,15 @@ class TestRunner(unittest.TextTestRunner):
                                              optionflags=doctest.ELLIPSIS)
                 del module
             suite.run(result)
-            if cur_dir != os.path.abspath("."):
+            if self.testdir != os.path.abspath("."):
                 sys.stderr.write("FAIL\n")
                 result.stream.write(result.separator1 + "\n")
                 result.stream.write("ERROR: %s\n" % name)
                 result.stream.write(result.separator2 + "\n")
                 result.stream.write("Current directory changed\n")
-                result.stream.write("Was: %s\n" % cur_dir)
+                result.stream.write("Was: %s\n" % self.testdir)
                 result.stream.write("Now: %s\n" % os.path.abspath("."))
-                os.chdir(cur_dir)
+                os.chdir(self.testdir)
                 if not result.wasSuccessful():
                     result.printErrors()
                 return False
