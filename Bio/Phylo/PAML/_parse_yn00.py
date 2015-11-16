@@ -7,19 +7,33 @@ import re
 
 
 def parse_ng86(lines, results):
-    """ Parse the Nei & Gojobori (1986) section of the results.
+    """Parse the Nei & Gojobori (1986) section of the results.
+
     Nei_Gojobori results are organized in a lower
     triangular matrix, with the sequence names labeling
     the rows and statistics in the format:
     w (dN dS) per column
     Example row (2 columns):
-    0.0000 (0.0000 0.0207) 0.0000 (0.0000 0.0421)"""
+    0.0000 (0.0000 0.0207) 0.0000 (0.0000 0.0421)
+    """
     sequences = []
     for line in lines:
         # Find all floating point numbers in this line
         line_floats_res = re.findall("-*\d+\.\d+", line)
         line_floats = [float(val) for val in line_floats_res]
-        matrix_row_res = re.match("(.+)\s{5,15}", line)
+
+        # The purpose of this complex regex is to parse the NG86 section for
+        # valid lines of data that are mixed in with citations and comments.
+        # The data lines begin with a taxon name, followed by zero or more
+        # fields containing numeric values, sometimes enclosed in parens.
+        # Taxon names are from 1-30 characters and are usually separated from
+        # the numeric portion of the line by space(s).  Long taxon names to are
+        # truncated to 30 characters, and may run into the data fields without
+        # any separator., e.g. some_long_name-1.0000
+        # This regex is an attempt to cover more pathological cases while also
+        # parsing all existing versions of yn00 output with shorter names.
+
+        matrix_row_res = re.match("^([^\s]+?)(?:\s+-?\d+\.\d+|\s*$|-1.0000\s*\()", line)
         if matrix_row_res is not None:
             seq_name = matrix_row_res.group(1).strip()
             sequences.append(seq_name)
@@ -35,12 +49,13 @@ def parse_ng86(lines, results):
 
 
 def parse_yn00(lines, results, sequences):
-    """ Parse the Yang & Nielsen (2000) part of the results.
+    """Parse the Yang & Nielsen (2000) part of the results.
+
     Yang & Nielsen results are organized in a table with
     each row comprising one pairwise species comparison.
     Rows are labeled by sequence number rather than by
-    sequence name."""
-
+    sequence name.
+    """
     # Example (header row and first table row):
     # seq. seq.     S       N        t   kappa   omega     dN +- SE    dS +- SE
     # 2    1    67.3   154.7   0.0136  3.6564  0.0000 -0.0000 +- 0.0000  0.0150

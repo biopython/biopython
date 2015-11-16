@@ -111,8 +111,7 @@ def yn00(vers=None, verbose=False):
         versions = [vers]
     else:
         versions = VERSIONS
-    tests = ["yn00"]
-    alignment = os.path.join("Alignments", "alignment.phylip")
+    tests = ["yn00", "yn00_long"]
     for test in tests:
         print(test[0])
         yn = yn00.Yn00()
@@ -121,9 +120,8 @@ def yn00(vers=None, verbose=False):
             ctl_file = os.path.join("Control_files", "yn00",
                 "{0}.ctl".format(test))
             yn.read_ctl_file(ctl_file)
-            yn.alignment = alignment
             out_file = "{0}-{1}.out".format(test, version)
-            yn.out_file = os.path.join("Results", "yn00", out_file)
+            yn.out_file = os.path.join("Results", 'yn00', out_file)
             bin = "yn00{0}".format(version)
             yn.run(command=bin, verbose=verbose)
 

@@ -138,20 +138,15 @@ class Paml(object):
         if ctl_file is None:
             # Dynamically build a control file
             self.write_ctl_file()
-            if verbose:
-                result_code = subprocess.call([command, self.ctl_file])
-            else:
-                # To suppress output, redirect it to a pipe to nowhere
-                result_code = subprocess.call([command, self.ctl_file],
-                                              stdout=subprocess.PIPE)
+            ctl_file = self.ctl_file
         else:
             if not os.path.exists(ctl_file):
                 raise IOError("The specified control file does not exist.")
-            if verbose:
-                result_code = subprocess.call([command, ctl_file])
-            else:
-                result_code = subprocess.call([command, ctl_file],
-                                              stdout=subprocess.PIPE)
+        if verbose:
+            result_code = subprocess.call([command, ctl_file])
+        else:
+            with open(os.devnull) as dn:
+                result_code = subprocess.call([command, ctl_file], stdout=dn, stderr=dn)
         os.chdir(cwd)
         if result_code > 0:
             # If the program fails for any reason
