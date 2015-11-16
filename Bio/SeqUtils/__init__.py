@@ -516,56 +516,6 @@ def six_frame_translations(seq, genetic_code=1):
 
 # }}}
 
-######################################
-# FASTA file utilities
-######################
-# {{{
-
-
-def quick_FASTA_reader(file):
-    """Simple FASTA reader, returning a list of string tuples (DEPRECATED).
-
-    The single argument 'file' should be the filename of a FASTA format file.
-    This function will open and read in the entire file, constructing a list
-    of all the records, each held as a tuple of strings (the sequence name or
-    title, and its sequence).
-
-    >>> seqs = quick_FASTA_reader("Fasta/dups.fasta")
-    >>> for title, sequence in seqs:
-    ...     print("%s %s" % (title, sequence))
-    alpha ACGTA
-    beta CGTC
-    gamma CCGCC
-    alpha (again - this is a duplicate entry to test the indexing code) ACGTA
-    delta CGCGC
-
-    This function was is fast, but because it returns the data as a single in
-    memory list, is unsuitable for large files where an iterator approach is
-    preferable.
-
-    You are generally encouraged to use Bio.SeqIO.parse(handle, "fasta") which
-    allows you to iterate over the records one by one (avoiding having all the
-    records in memory at once).  Using Bio.SeqIO also makes it easy to switch
-    between different input file formats.  However, please note that rather
-    than simple strings, Bio.SeqIO uses SeqRecord objects for each record.
-
-    If you want to use simple strings, use the function SimpleFastaParser
-    added to Bio.SeqIO.FastaIO in Biopython 1.61 instead.
-    """
-    import warnings
-    from Bio import BiopythonDeprecationWarning
-    warnings.warn("The quick_FASTA_reader has been deprecated and will be "
-                  "removed in a future release of Biopython. Please try "
-                  "function SimpleFastaParser from Bio.SeqIO.FastaIO "
-                  "instead.", BiopythonDeprecationWarning)
-    from Bio.SeqIO.FastaIO import SimpleFastaParser
-    with open(file) as handle:
-        entries = list(SimpleFastaParser(handle))
-    return entries
-
-
-# }}}
-
 
 def _test():
     """Run the module's doctests (PRIVATE)."""
