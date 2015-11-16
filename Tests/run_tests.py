@@ -395,6 +395,9 @@ class TestRunner(unittest.TextTestRunner):
         # test changed this, e.g. to help with detecting command line tools)
         global system_lang
         os.environ['LANG'] = system_lang
+        # Always run tests from the Tests/ folder where run_tests.py
+        # should be located (as we assume this with relative paths etc)
+        os.chdir(self.testdir)
         # Note the current directory:
         cur_dir = os.path.abspath(".")
         try:
