@@ -10,7 +10,9 @@ Bio.SeqIO functions if you want to work directly with the gapped sequences).
 """
 
 from __future__ import print_function
+import warnings
 
+from Bio import BiopythonParserWarning
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
@@ -23,8 +25,11 @@ class ClustalWriter(SequentialAlignmentWriter):
     """Clustalw alignment writer."""
 
     def write_alignment(self, alignment):
-        """Use this to write (another) single alignment to an open file."""
-
+        """
+        Use this to write (another) single alignment to an open file.
+        :param alignment:
+        :return:
+        """
         if len(alignment) == 0:
             raise ValueError("Must have at least one sequence")
         if alignment.get_alignment_length() == 0:
@@ -74,8 +79,8 @@ class ClustalWriter(SequentialAlignmentWriter):
             # now we need to print out the star info, if we've got it
             # This was stored by Bio.Clustalw using a ._star_info property.
             if hasattr(alignment, "_star_info") and alignment._star_info != '':
-                output += (" " * 36) + \
-                     alignment._star_info[cur_char:(cur_char + show_num)] + "\n"
+                output += "%s%s\n" % ((" " * 36),
+                                      alignment._star_info[cur_char:(cur_char + show_num)])
 
             output += "\n"
             cur_char += show_num
@@ -192,7 +197,10 @@ class ClustalIterator(AlignmentIterator):
         for s in seqs:
             assert len(s) == len(seqs[0])
         if consensus:
-            assert len(consensus) == len(seqs[0])
+            try:
+                assert len(consensus) == len(seqs[0])
+            except AssertionError:
+                consensus = "Fail"
 
         # Loop over any remaining blocks...
         done = False
@@ -209,7 +217,6 @@ class ClustalIterator(AlignmentIterator):
 
             if line.split(None, 1)[0] in known_headers:
                 # Found concatenated alignment.
-                done = True
                 self._header = line
                 break
 
@@ -224,7 +231,7 @@ class ClustalIterator(AlignmentIterator):
 
                 if fields[0] != ids[i]:
                     raise ValueError("Identifiers out of order? Got '%s' but expected '%s'"
-                                      % (fields[0], ids[i]))
+                                     % (fields[0], ids[i]))
 
                 if fields[1] != line[seq_cols]:
                     start = len(fields[0]) + line[len(fields[0]):].find(fields[1])
@@ -268,7 +275,7 @@ class ClustalIterator(AlignmentIterator):
             raise StopIteration
 
         if self.records_per_alignment is not None \
-        and self.records_per_alignment != len(ids):
+                and self.records_per_alignment != len(ids):
             raise ValueError("Found %i records in this alignment, told to expect %i"
                              % (len(ids), self.records_per_alignment))
 
@@ -279,10 +286,27 @@ class ClustalIterator(AlignmentIterator):
         # mimic the old parser in Bio.Clustalw
         if version:
             alignment._version = version
-        if consensus and consensus != "Fail":
+        if len(alignment) < 2:
+            consensus = None
+        if consensus:
+            if consensus == "Fail":
+                warnings.warn("Malformed clustal consensus line in input, "
+                              "some information may be lost.",
+                              BiopythonParserWarning)
+                consensus = ""
+                for indx in range(alignment.get_alignment_length()):
+                    consensus += _annotation(alignment[:, indx])
             alignment_length = len(seqs[0])
             assert len(consensus) == alignment_length, \
-                   "Alignment length is %i, consensus length is %i, '%s'" \
-                   % (alignment_length, len(consensus), consensus)
+                "Alignment length is %i, consensus length is %i, '%s'" \
+                % (alignment_length, len(consensus), consensus)
             alignment._star_info = consensus
         return alignment
+
+
+def _annotation(column):
+    # ToDo: Match the actual output of a clustal run, marking conserved substitutions. Skip on nucleotide.
+    if column[0] * len(column) == column:  # Mark columns with 100% conservation
+        return "*"
+    else:
+        return " "

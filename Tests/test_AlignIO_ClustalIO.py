@@ -9,6 +9,7 @@ import unittest
 from Bio._py3k import StringIO
 
 from Bio.AlignIO.ClustalIO import ClustalIterator, ClustalWriter
+from Bio import BiopythonParserWarning
 
 # This is a truncated version of the example in Tests/cw02.aln
 # Notice the inclusion of sequence numbers (right hand side)
@@ -145,6 +146,35 @@ AT3G20900.1-CDS      GCTGGGGATGGAGAGGGAACAGAGTAG
                      *************************  
 """
 
+aln_example4 = \
+"""CLUSTAL 2.1 multiple sequence alignment
+
+
+Mle-Panxα3      MLLLGSLGTIKNLSIFKDLSLDDWLDQMNRTFMFLLLCFMGTIVAVSQYTGKNISCDGFT
+Mle-Panxα4      -MVIELLAGYKGLSPFKDATVDDSWDQINRCYVFIAMVVMGAVTTMRQYSGTLIACDGFT
+Mle-Panxα6      -MLLEILANFKGATPFKEIVLDDKWDQINRCYMFLLCVIFGTVVTFRQYTGGIIACDGLT
+Mle-Panxα5      -MIYWVWAVFKRMAPFKVVTLDDRWDQMNRSFMMPLTMSFAYLIDYGIIAGSTIKCTGFE
+                  ::    .  *  : **   :**  **:** :::     :. :      :*  * * *:
+
+Mle-Panxα3      K--FGEDFSQDYCWTQGLYTIKEAYDLPESQIPYPGIIPENVPACREHALKNGGKIVCPP
+Mle-Panxα4      K--FHPQFAEDYCWSIGMYTVREAYDLPSSMVAYPGVIPWDMPACVPRLLKNGTRTKCGS
+Mle-Panxα6      K--FSAAFAEDYCWTQGLYTIKEAYDIVDNSLPYPGLLPEDAPPCLSRRLVSGGRIECPP
+Mle-Panxα5      DSFRSEAFVDEYCWTQGIYTLREAYDLENTKIPYPGIIPEGFPNCMPYERWDGMKVECPK
+                 .      * ::***: *:**::****: .. :.***::* . * *      .* :  *
+
+Mle-Panxα3      EDQVKPLTRARHLWYQWIPFYFWVIAPVFYLPYMFVKRMGLDRMKPLLKIMSDYYHCTTE
+Mle-Panxα4      EKDVMPSEKIYHLWYQWASFYFWIVAILYYAPYIMFKQLGGGEYKPLIKLLC-LASGSPE
+Mle-Panxα6      ADLYLEPTRVHHTWYQWIPFYFWVISIAFIGPYIVYKQLGVNELKPILAMLHNPVDG--D
+Mle-Panxα5      EEQYLKPTRVYHLYYQHIQLYFWLVCTLFYLPYMVGICLGFNYTKPLINLLHNPLTRD-E
+                  .      :  * :**   :***::.  :  **:.   :* .  **:: ::        :
+
+Mle-Panxα3      TPSEEIIVKCADWVYNSIVDRL---
+Mle-Panxα4      QQMQDIQERVVKWLFFRFKTYIFA-
+Mle-Panxα6      DVTKDQISKVSRWLAIKLNIFIQEK
+Mle-Panxα5      EELEALLDKAARSLRLRLDIYS---
+                    :    :    :   :
+"""
+
 
 class TestClustalIO(unittest.TestCase):
 
@@ -213,6 +243,16 @@ class TestClustalIO(unittest.TestCase):
         alignments = list(ClustalIterator(StringIO(aln_example3)))
         self.assertEqual(1, len(alignments))
         self.assertEqual(alignments[0]._version, "2.0.9")
+
+    def test_four(self):
+        alignments = list(ClustalIterator(StringIO(aln_example4)))
+        self.assertWarns(BiopythonParserWarning)
+        self.assertEqual(alignments[0]._star_info,
+                         "          *    **    **  ** **                    "
+                         "*  * * *         *   ***  * **  ****       ***  * "
+                         "  * *       *    *             *  **    ***       "
+                         " **      *    **                                  "
+                         "     ")
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
