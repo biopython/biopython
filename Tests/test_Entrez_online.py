@@ -13,6 +13,7 @@ scope of this file as they are already covered in test_Entrez.py.
 """
 import os
 import unittest
+from unittest.mock import patch
 
 import requires_internet
 requires_internet.check()
@@ -40,14 +41,22 @@ URL_TOOL = "tool=biopython"
 URL_EMAIL = "email=biopython-dev%40biopython.org"
 
 
-class EntrezOnlineCase(unittest.TestCase):
+class MockUrlopen(object):
+    def __init__(self):
+        self.url = "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/einfo.fcgi?email=biopython-dev%40biopython.org&tool=biopython"
 
-    def test_read_from_url(self):
-        """Test Entrez.read from URL"""
+
+class EntrezOnlineCase(unittest.TestCase):
+    @patch("Bio.Entrez._urlopen", return_value=MockUrlopen())
+    def test_request_url(self, mock_urlopen):
         handle = Entrez.einfo()
         self.assertTrue(handle.url.startswith(URL_HEAD + "einfo.fcgi?"), handle.url)
         self.assertTrue(URL_TOOL in handle.url)
         self.assertTrue(URL_EMAIL in handle.url)
+
+    def test_read_from_url(self, mock_handle):
+        """Test Entrez.read from URL"""
+        handle = Entrez.einfo()
         rec = Entrez.read(handle)
         handle.close()
         self.assertTrue(isinstance(rec, dict))
