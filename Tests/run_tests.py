@@ -20,12 +20,13 @@ Command line options:
 <test_name>   -- supply the name of one (or more) tests to be run.
                  The .py file extension is optional.
 doctest       -- run the docstring tests.
+
 By default, all tests are run.
 """
 
-# The default verbosity (not verbose)
 from __future__ import print_function
 
+# The default verbosity (not verbose)
 VERBOSITY = 0
 
 # standard modules
