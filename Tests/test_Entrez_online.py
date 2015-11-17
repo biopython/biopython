@@ -15,8 +15,8 @@ import os
 import unittest
 from unittest.mock import patch
 
-import requires_internet
-requires_internet.check()
+#import requires_internet
+#requires_internet.check()
 
 from Bio._py3k import _binary_to_string_handle
 from Bio import Entrez
@@ -43,11 +43,15 @@ URL_EMAIL = "email=biopython-dev%40biopython.org"
 
 
 class EntrezOnlineCase(unittest.TestCase):
-    def test_request_url(self):
-        handle = Entrez.einfo()
-        self.assertTrue(handle.url.startswith(URL_HEAD + "einfo.fcgi?"), handle.url)
-        self.assertTrue(URL_TOOL in handle.url)
-        self.assertTrue(URL_EMAIL in handle.url)
+    def test_construct_cgi(self):
+        """Test constructed url for request to Entrez."""
+        cgi = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/einfo.fcgi'
+        params = Entrez._construct_params(params=None)
+        options = Entrez._encode_options(ecitmatch=False, params=params)
+        result_url = Entrez._construct_cgi(cgi, post=False, options=options)
+        self.assertTrue(result_url.startswith(URL_HEAD + "einfo.fcgi?"), result_url)
+        self.assertTrue(URL_TOOL in result_url)
+        self.assertTrue(URL_EMAIL in result_url)
 
     @patch("Bio.Entrez._open", return_value=_binary_to_string_handle(open("Entrez/einfo1.xml", "rb")))
     def test_read_from_url(self, mock_open):
