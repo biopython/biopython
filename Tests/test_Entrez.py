@@ -1,5 +1,5 @@
 # Copyright 2008-2010 by Michiel de Hoon.  All rights reserved.
-# Revisions copyright 2009-2013 by Peter Cock. All rights reserved.
+# Revisions copyright 2009-2015 by Peter Cock. All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -18,6 +18,8 @@ if os.name == 'java':
         raise MissingPythonDependencyError("The Bio.Entrez XML parser fails on "
                                   "Jython, see http://bugs.jython.org/issue1447")
 
+
+from Bio._py3k import StringIO
 
 from Bio import Entrez
 
@@ -4219,6 +4221,20 @@ class EFetchTest(unittest.TestCase):
         handle.seek(0)
         records = Entrez.parse(handle)
         self.assertRaises(CorruptedXMLError, next, records)
+
+class TestErrorSniffer(unittest.TestCase):
+
+    def test_fine(self):
+        """Check sniffer returns simple example unchanged."""
+        old = StringIO("Nothing to see here\n")
+        new = Entrez._error_sniff(old)
+        self.assertEqual(new.read(), "Nothing to see here\n")
+
+    def test_server_error(self):
+        """Check 'Server Error' is spotted as an exception."""
+        h = StringIO("Server Error\n")
+        self.assertRaises(IOError, Entrez._error_sniff, h)
+
 
 if __name__ == '__main__':
     runner = unittest.TextTestRunner(verbosity=2)
