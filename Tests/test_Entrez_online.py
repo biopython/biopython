@@ -77,15 +77,11 @@ class EntrezOnlineCase(unittest.TestCase):
         self.assertTrue(URL_EMAIL in result_url)
         self.assertTrue("id=15718680%2C157427902%2C119703751" in result_url, result_url)
 
-    @patch("Bio.Entrez._open", return_value=_binary_to_string_handle(open("Entrez/einfo1.xml", "rb")))
+    @patch("Bio.Entrez._open", return_value=_binary_to_string_handle(open("Entrez/protein2.xml", "rb")))
     def test_parse_from_url(self, mock_open):
         """Test Entrez.parse from URL"""
         handle = Entrez.efetch(db='protein', id='15718680,157427902,119703751',
                                retmode='xml')
-        self.assertTrue(handle.url.startswith(URL_HEAD + "efetch.fcgi?"), handle.url)
-        self.assertTrue(URL_TOOL in handle.url)
-        self.assertTrue(URL_EMAIL in handle.url)
-        self.assertTrue("id=15718680%2C157427902%2C119703751" in handle.url, handle.url)
         recs = list(Entrez.parse(handle))
         handle.close()
         self.assertEqual(3, len(recs))
