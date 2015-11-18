@@ -464,8 +464,6 @@ def _open(cgi, params=None, post=False, ecitmatch=False):
     This function also enforces the "up to three queries per second rule"
     to avoid abusing the NCBI servers.
     """
-    if params is None:
-        params = {}
     # NCBI requirement: At most three queries per second.
     # Equivalently, at least a third of second between queries
     delay = 0.333333334
@@ -476,6 +474,26 @@ def _open(cgi, params=None, post=False, ecitmatch=False):
         _open.previous = current + wait
     else:
         _open.previous = current
+
+    params = _construct_params(params)
+    options = _encode_options(ecitmatch, params)
+    cgi = _construct_cgi(cgi, post, options)
+
+    try:
+        if post:
+            handle = _urlopen(cgi, data=_as_bytes(options))
+        else:
+            handle = _urlopen(cgi)
+    except _HTTPError as exception:
+        raise exception
+
+    return _binary_to_string_handle(handle)
+
+
+def _construct_params(params):
+    if params is None:
+        params = {}
+
     # Remove None values from the parameters
     for key, value in list(params.items()):
         if value is None:
@@ -500,24 +518,24 @@ is A.N.Other@example.com, you can specify it as follows:
 In case of excessive usage of the E-utilities, NCBI will attempt to contact
 a user at the email address provided before blocking access to the
 E-utilities.""", UserWarning)
+    return params
+
+
+def _encode_options(ecitmatch, params):
     # Open a handle to Entrez.
     options = _urlencode(params, doseq=True)
     # _urlencode encodes pipes, which NCBI expects in ECitMatch
     if ecitmatch:
         options = options.replace('%7C', '|')
-    # print cgi + "?" + options
-    try:
-        if post:
-            # HTTP POST
-            handle = _urlopen(cgi, data=_as_bytes(options))
-        else:
-            # HTTP GET
-            cgi += "?" + options
-            handle = _urlopen(cgi)
-    except _HTTPError as exception:
-        raise exception
+    return options
 
-    return _binary_to_string_handle(handle)
+
+def _construct_cgi(cgi, post, options):
+    if not post:
+        # HTTP GET
+        cgi += "?" + options
+    return cgi
+
 
 _open.previous = 0
 
