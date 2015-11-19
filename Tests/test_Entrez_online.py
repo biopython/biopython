@@ -66,7 +66,8 @@ class EntrezOnlineCase(unittest.TestCase):
 
     def test_construct_cgi_efetch(self):
         cgi = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi'
-        variables = {'db': 'protein', 'id': '15718680,157427902,119703751', 'retmode': 'xml'}
+        variables = {'db': 'protein', 'id': '15718680,157427902,119703751',
+                     'retmode': 'xml'}
         post = False
 
         params = Entrez._construct_params(variables)
@@ -88,15 +89,26 @@ class EntrezOnlineCase(unittest.TestCase):
         # arbitrary number, just to make sure the parser works
         self.assertTrue(all(len(rec).keys > 5) for rec in recs)
 
+    def test_construct_cgi_elink(self):
+        cgi = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi'
+        variables = {'cmd': 'neighbor_history', 'db': 'nucleotide',
+                     'dbfrom': 'protein', 'id': '22347800,48526535',
+                     'query_key': None, 'webenv': None}
+        post = False
+
+        params = Entrez._construct_params(variables)
+        options = Entrez._encode_options(ecitmatch=False, params=params)
+        result_url = Entrez._construct_cgi(cgi, post=post, options=options)
+        self.assertTrue(result_url.startswith(URL_HEAD + "elink.fcgi?"), result_url)
+        self.assertTrue(URL_TOOL in result_url)
+        self.assertTrue(URL_EMAIL in result_url)
+        self.assertTrue("id=22347800%2C48526535" in result_url, result_url)
+
     def test_webenv_search(self):
         """Test Entrez.search from link webenv history"""
         handle = Entrez.elink(db='nucleotide', dbfrom='protein',
                               id='22347800,48526535', webenv=None, query_key=None,
                               cmd='neighbor_history')
-        self.assertTrue(handle.url.startswith(URL_HEAD + "elink.fcgi?"), handle.url)
-        self.assertTrue(URL_TOOL in handle.url)
-        self.assertTrue(URL_EMAIL in handle.url)
-        self.assertTrue("id=22347800%2C48526535" in handle.url, handle.url)
         recs = Entrez.read(handle)
         handle.close()
         record = recs.pop()
