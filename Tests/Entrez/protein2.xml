@@ -1,0 +1,2900 @@
+<?xml version="1.0"?>
+ <!DOCTYPE GBSet PUBLIC "-//NCBI//NCBI GBSeq/EN" "http://www.ncbi.nlm.nih.gov/dtd/NCBI_GBSeq.dtd">
+ <GBSet>
+<GBSeq>
+  <GBSeq_locus>NP_005537</GBSeq_locus>
+  <GBSeq_length>620</GBSeq_length>
+  <GBSeq_moltype>AA</GBSeq_moltype>
+  <GBSeq_topology>linear</GBSeq_topology>
+  <GBSeq_division>PRI</GBSeq_division>
+  <GBSeq_update-date>15-MAR-2015</GBSeq_update-date>
+  <GBSeq_create-date>09-JUN-1999</GBSeq_create-date>
+  <GBSeq_definition>tyrosine-protein kinase ITK/TSK [Homo sapiens]</GBSeq_definition>
+  <GBSeq_primary-accession>NP_005537</GBSeq_primary-accession>
+  <GBSeq_accession-version>NP_005537.3</GBSeq_accession-version>
+  <GBSeq_other-seqids>
+    <GBSeqid>ref|NP_005537.3|</GBSeqid>
+    <GBSeqid>gi|15718680</GBSeqid>
+  </GBSeq_other-seqids>
+  <GBSeq_keywords>
+    <GBKeyword>RefSeq</GBKeyword>
+  </GBSeq_keywords>
+  <GBSeq_source>Homo sapiens (human)</GBSeq_source>
+  <GBSeq_organism>Homo sapiens</GBSeq_organism>
+  <GBSeq_taxonomy>Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia; Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae; Homo</GBSeq_taxonomy>
+  <GBSeq_references>
+    <GBReference>
+      <GBReference_reference>1</GBReference_reference>
+      <GBReference_position>1..620</GBReference_position>
+      <GBReference_authors>
+        <GBAuthor>Bach MP</GBAuthor>
+        <GBAuthor>Hug E</GBAuthor>
+        <GBAuthor>Werner M</GBAuthor>
+        <GBAuthor>Holch J</GBAuthor>
+        <GBAuthor>Sprissler C</GBAuthor>
+        <GBAuthor>Pechloff K</GBAuthor>
+        <GBAuthor>Zirlik K</GBAuthor>
+        <GBAuthor>Zeiser R</GBAuthor>
+        <GBAuthor>Dierks C</GBAuthor>
+        <GBAuthor>Ruland J</GBAuthor>
+        <GBAuthor>Jumaa H</GBAuthor>
+      </GBReference_authors>
+      <GBReference_title>Premature terminal differentiation protects from deregulated lymphocyte activation by ITK-Syk</GBReference_title>
+      <GBReference_journal>J. Immunol. 192 (3), 1024-1033 (2014)</GBReference_journal>
+      <GBReference_xref>
+        <GBXref>
+          <GBXref_dbname>doi</GBXref_dbname>
+          <GBXref_id>10.4049/jimmunol.1300420</GBXref_id>
+        </GBXref>
+      </GBReference_xref>
+      <GBReference_pubmed>24376268</GBReference_pubmed>
+      <GBReference_remark>GeneRIF: T-cell-specific human ITK-Syk oncogene in mice leads to early polyclonal T cell lymphoproliferation with B cell expansion. It induces terminal T cell differentiation via Blimp-1, eliminating oncogene-expressing cells early in development.</GBReference_remark>
+    </GBReference>
+    <GBReference>
+      <GBReference_reference>2</GBReference_reference>
+      <GBReference_position>1..620</GBReference_position>
+      <GBReference_authors>
+        <GBAuthor>Attygalle AD</GBAuthor>
+        <GBAuthor>Feldman AL</GBAuthor>
+        <GBAuthor>Dogan A</GBAuthor>
+      </GBReference_authors>
+      <GBReference_title>ITK/SYK translocation in angioimmunoblastic T-cell lymphoma</GBReference_title>
+      <GBReference_journal>Am. J. Surg. Pathol. 37 (9), 1456-1457 (2013)</GBReference_journal>
+      <GBReference_xref>
+        <GBXref>
+          <GBXref_dbname>doi</GBXref_dbname>
+          <GBXref_id>10.1097/PAS.0b013e3182991415</GBXref_id>
+        </GBXref>
+      </GBReference_xref>
+      <GBReference_pubmed>24076779</GBReference_pubmed>
+      <GBReference_remark>GeneRIF: Case Report/Letter: ITK/SYK translocation in angioimmunoblastic T-cell lymphoma.</GBReference_remark>
+    </GBReference>
+    <GBReference>
+      <GBReference_reference>3</GBReference_reference>
+      <GBReference_position>1..620</GBReference_position>
+      <GBReference_authors>
+        <GBAuthor>Huang W</GBAuthor>
+        <GBAuthor>Morales JL</GBAuthor>
+        <GBAuthor>Gazivoda VP</GBAuthor>
+        <GBAuthor>Lai J</GBAuthor>
+        <GBAuthor>Qi Q</GBAuthor>
+        <GBAuthor>August A</GBAuthor>
+      </GBReference_authors>
+      <GBReference_title>The zinc-binding region of IL-2 inducible T cell kinase (Itk) is required for interaction with Galpha13 and activation of serum response factor</GBReference_title>
+      <GBReference_journal>Int. J. Biochem. Cell Biol. 45 (6), 1074-1082 (2013)</GBReference_journal>
+      <GBReference_xref>
+        <GBXref>
+          <GBXref_dbname>doi</GBXref_dbname>
+          <GBXref_id>10.1016/j.biocel.2013.02.011</GBXref_id>
+        </GBXref>
+      </GBReference_xref>
+      <GBReference_pubmed>23454662</GBReference_pubmed>
+      <GBReference_remark>GeneRIF: a new pathway regulated by Itk in cells, and suggest cross talk between Itk and G-protein signaling downstream of the TcR.</GBReference_remark>
+    </GBReference>
+    <GBReference>
+      <GBReference_reference>4</GBReference_reference>
+      <GBReference_position>1..620</GBReference_position>
+      <GBReference_authors>
+        <GBAuthor>Hussain A</GBAuthor>
+        <GBAuthor>Mohammad DK</GBAuthor>
+        <GBAuthor>Gustafsson MO</GBAuthor>
+        <GBAuthor>Uslu M</GBAuthor>
+        <GBAuthor>Hamasy A</GBAuthor>
+        <GBAuthor>Nore BF</GBAuthor>
+        <GBAuthor>Mohamed AJ</GBAuthor>
+        <GBAuthor>Smith CI</GBAuthor>
+      </GBReference_authors>
+      <GBReference_title>Signaling of the ITK (interleukin 2-inducible T cell kinase)-SYK (spleen tyrosine kinase) fusion kinase is dependent on adapter SLP-76 and on the adapter function of the kinases SYK and ZAP70</GBReference_title>
+      <GBReference_journal>J. Biol. Chem. 288 (10), 7338-7350 (2013)</GBReference_journal>
+      <GBReference_xref>
+        <GBXref>
+          <GBXref_dbname>doi</GBXref_dbname>
+          <GBXref_id>10.1074/jbc.M112.374967</GBXref_id>
+        </GBXref>
+      </GBReference_xref>
+      <GBReference_pubmed>23293025</GBReference_pubmed>
+      <GBReference_remark>GeneRIF: Data indicate that the intracellular signaling of ITK-SYK requires both SLP-76 and the adapter function of SYK/ZAP-70 kinases.</GBReference_remark>
+    </GBReference>
+    <GBReference>
+      <GBReference_reference>5</GBReference_reference>
+      <GBReference_position>1..620</GBReference_position>
+      <GBReference_authors>
+        <GBAuthor>Schiralli Lester GM</GBAuthor>
+        <GBAuthor>Akiyama H</GBAuthor>
+        <GBAuthor>Evans E</GBAuthor>
+        <GBAuthor>Singh J</GBAuthor>
+        <GBAuthor>Gummuluru S</GBAuthor>
+        <GBAuthor>Henderson AJ</GBAuthor>
+      </GBReference_authors>
+      <GBReference_title>Interleukin 2-inducible T cell kinase (ITK) facilitates efficient egress of HIV-1 by coordinating Gag distribution and actin organization</GBReference_title>
+      <GBReference_journal>Virology 436 (1), 235-243 (2013)</GBReference_journal>
+      <GBReference_xref>
+        <GBXref>
+          <GBXref_dbname>doi</GBXref_dbname>
+          <GBXref_id>10.1016/j.virol.2012.11.015</GBXref_id>
+        </GBXref>
+      </GBReference_xref>
+      <GBReference_pubmed>23260110</GBReference_pubmed>
+      <GBReference_remark>GeneRIF: ITK and Gag colocalized at the plasma membrane and were concentrated at sites of F-actin accumulation and membrane lipid rafts in HIV-1 infected T cells</GBReference_remark>
+    </GBReference>
+    <GBReference>
+      <GBReference_reference>6</GBReference_reference>
+      <GBReference_position>sites</GBReference_position>
+      <GBReference_authors>
+        <GBAuthor>Wissing,J.</GBAuthor>
+        <GBAuthor>Jansch,L.</GBAuthor>
+        <GBAuthor>Nimtz,M.</GBAuthor>
+        <GBAuthor>Dieterich,G.</GBAuthor>
+        <GBAuthor>Hornberger,R.</GBAuthor>
+        <GBAuthor>Keri,G.</GBAuthor>
+        <GBAuthor>Wehland,J.</GBAuthor>
+        <GBAuthor>Daub,H.</GBAuthor>
+      </GBReference_authors>
+      <GBReference_title>Proteomics analysis of protein kinases by target class-selective prefractionation and tandem mass spectrometry</GBReference_title>
+      <GBReference_journal>Mol. Cell Proteomics 6 (3), 537-547 (2007)</GBReference_journal>
+      <GBReference_xref>
+        <GBXref>
+          <GBXref_dbname>doi</GBXref_dbname>
+          <GBXref_id>10.1074/mcp.T600062-MCP200</GBXref_id>
+        </GBXref>
+      </GBReference_xref>
+      <GBReference_pubmed>17192257</GBReference_pubmed>
+    </GBReference>
+    <GBReference>
+      <GBReference_reference>7</GBReference_reference>
+      <GBReference_position>sites</GBReference_position>
+      <GBReference_authors>
+        <GBAuthor>Brill,L.M.</GBAuthor>
+        <GBAuthor>Salomon,A.R.</GBAuthor>
+        <GBAuthor>Ficarro,S.B.</GBAuthor>
+        <GBAuthor>Mukherji,M.</GBAuthor>
+        <GBAuthor>Stettler-Gill,M.</GBAuthor>
+        <GBAuthor>Peters,E.C.</GBAuthor>
+      </GBReference_authors>
+      <GBReference_title>Robust phosphoproteomic profiling of tyrosine phosphorylation sites from human T cells using immobilized metal affinity chromatography and tandem mass spectrometry</GBReference_title>
+      <GBReference_journal>Anal. Chem. 76 (10), 2763-2772 (2004)</GBReference_journal>
+      <GBReference_xref>
+        <GBXref>
+          <GBXref_dbname>doi</GBXref_dbname>
+          <GBXref_id>10.1021/ac035352d</GBXref_id>
+        </GBXref>
+      </GBReference_xref>
+      <GBReference_pubmed>15144186</GBReference_pubmed>
+    </GBReference>
+    <GBReference>
+      <GBReference_reference>8</GBReference_reference>
+      <GBReference_position>sites</GBReference_position>
+      <GBReference_authors>
+        <GBAuthor>Nore,B.F.</GBAuthor>
+        <GBAuthor>Mattsson,P.T.</GBAuthor>
+        <GBAuthor>Antonsson,P.</GBAuthor>
+        <GBAuthor>Backesjo,C.M.</GBAuthor>
+        <GBAuthor>Westlund,A.</GBAuthor>
+        <GBAuthor>Lennartsson,J.</GBAuthor>
+        <GBAuthor>Hansson,H.</GBAuthor>
+        <GBAuthor>Low,P.</GBAuthor>
+        <GBAuthor>Ronnstrand,L.</GBAuthor>
+        <GBAuthor>Smith,C.I.</GBAuthor>
+      </GBReference_authors>
+      <GBReference_title>Identification of phosphorylation sites within the SH3 domains of Tec family tyrosine kinases</GBReference_title>
+      <GBReference_journal>Biochim. Biophys. Acta 1645 (2), 123-132 (2003)</GBReference_journal>
+      <GBReference_pubmed>12573241</GBReference_pubmed>
+    </GBReference>
+    <GBReference>
+      <GBReference_reference>9</GBReference_reference>
+      <GBReference_position>sites</GBReference_position>
+      <GBReference_authors>
+        <GBAuthor>Heyeck,S.D.</GBAuthor>
+        <GBAuthor>Wilcox,H.M.</GBAuthor>
+        <GBAuthor>Bunnell,S.C.</GBAuthor>
+        <GBAuthor>Berg,L.J.</GBAuthor>
+      </GBReference_authors>
+      <GBReference_title>Lck phosphorylates the activation loop tyrosine of the Itk kinase domain and activates Itk kinase activity</GBReference_title>
+      <GBReference_journal>J. Biol. Chem. 272 (40), 25401-25408 (1997)</GBReference_journal>
+      <GBReference_pubmed>9312162</GBReference_pubmed>
+    </GBReference>
+    <GBReference>
+      <GBReference_reference>10</GBReference_reference>
+      <GBReference_position>1..620</GBReference_position>
+      <GBReference_authors>
+        <GBAuthor>Rawlings DJ</GBAuthor>
+        <GBAuthor>Scharenberg AM</GBAuthor>
+        <GBAuthor>Park H</GBAuthor>
+        <GBAuthor>Wahl MI</GBAuthor>
+        <GBAuthor>Lin S</GBAuthor>
+        <GBAuthor>Kato RM</GBAuthor>
+        <GBAuthor>Fluckiger AC</GBAuthor>
+        <GBAuthor>Witte ON</GBAuthor>
+        <GBAuthor>Kinet JP</GBAuthor>
+      </GBReference_authors>
+      <GBReference_title>Activation of BTK by a phosphorylation mechanism initiated by SRC family kinases</GBReference_title>
+      <GBReference_journal>Science 271 (5250), 822-825 (1996)</GBReference_journal>
+      <GBReference_pubmed>8629002</GBReference_pubmed>
+    </GBReference>
+    <GBReference>
+      <GBReference_reference>11</GBReference_reference>
+      <GBReference_position>1..620</GBReference_position>
+      <GBReference_authors>
+        <GBAuthor>Langhans-Rajasekaran SA</GBAuthor>
+        <GBAuthor>Wan Y</GBAuthor>
+        <GBAuthor>Huang XY</GBAuthor>
+      </GBReference_authors>
+      <GBReference_title>Activation of Tsk and Btk tyrosine kinases by G protein beta gamma subunits</GBReference_title>
+      <GBReference_journal>Proc. Natl. Acad. Sci. U.S.A. 92 (19), 8601-8605 (1995)</GBReference_journal>
+      <GBReference_pubmed>7567982</GBReference_pubmed>
+    </GBReference>
+    <GBReference>
+      <GBReference_reference>12</GBReference_reference>
+      <GBReference_position>1..620</GBReference_position>
+      <GBReference_authors>
+        <GBAuthor>Janis EM</GBAuthor>
+        <GBAuthor>Siliciano JD</GBAuthor>
+        <GBAuthor>Isaac DD</GBAuthor>
+        <GBAuthor>Griffin CA</GBAuthor>
+        <GBAuthor>Hawkins AL</GBAuthor>
+        <GBAuthor>Kozak CA</GBAuthor>
+        <GBAuthor>Desiderio S</GBAuthor>
+      </GBReference_authors>
+      <GBReference_title>Mapping of the gene for the tyrosine kinase Itk to a region of conserved synteny between mouse chromosome 11 and human chromosome 5q</GBReference_title>
+      <GBReference_journal>Genomics 23 (1), 269-271 (1994)</GBReference_journal>
+      <GBReference_pubmed>7829087</GBReference_pubmed>
+    </GBReference>
+    <GBReference>
+      <GBReference_reference>13</GBReference_reference>
+      <GBReference_position>1..620</GBReference_position>
+      <GBReference_authors>
+        <GBAuthor>Gibson S</GBAuthor>
+        <GBAuthor>Leung B</GBAuthor>
+        <GBAuthor>Squire JA</GBAuthor>
+        <GBAuthor>Hill M</GBAuthor>
+        <GBAuthor>Arima N</GBAuthor>
+        <GBAuthor>Goss P</GBAuthor>
+        <GBAuthor>Hogg D</GBAuthor>
+        <GBAuthor>Mills GB</GBAuthor>
+      </GBReference_authors>
+      <GBReference_title>Identification, cloning, and characterization of a novel human T-cell-specific tyrosine kinase located at the hematopoietin complex on chromosome 5q</GBReference_title>
+      <GBReference_journal>Blood 82 (5), 1561-1572 (1993)</GBReference_journal>
+      <GBReference_pubmed>8364206</GBReference_pubmed>
+    </GBReference>
+    <GBReference>
+      <GBReference_reference>14</GBReference_reference>
+      <GBReference_position>1..620</GBReference_position>
+      <GBReference_authors>
+        <GBAuthor>Tanaka N</GBAuthor>
+        <GBAuthor>Asao H</GBAuthor>
+        <GBAuthor>Ohtani K</GBAuthor>
+        <GBAuthor>Nakamura M</GBAuthor>
+        <GBAuthor>Sugamura K</GBAuthor>
+      </GBReference_authors>
+      <GBReference_title>A novel human tyrosine kinase gene inducible in T cells by interleukin 2</GBReference_title>
+      <GBReference_journal>FEBS Lett. 324 (1), 1-5 (1993)</GBReference_journal>
+      <GBReference_pubmed>8504851</GBReference_pubmed>
+    </GBReference>
+  </GBSeq_references>
+  <GBSeq_comment>REVIEWED REFSEQ: This record has been curated by NCBI staff. The reference sequence was derived from D13720.1.; This sequence is a reference standard in the RefSeqGene project.; On Sep 21, 2001 this sequence version replaced gi:7949058.; ~Summary: This gene encodes an intracellular tyrosine kinase expressed in T-cells. The protein contains both SH2 and SH3 domains which are often found in intracellular kinases. It is thought to play a role in T-cell proliferation and differentiation. [provided by RefSeq, Jul 2008]; ~Publication Note: This RefSeq record includes a subset of the publications that are available for this gene. Please see the Gene record to access additional publications.; ##Evidence-Data-START## Transcript exon combination D13720.1, BC109077.2 [ECO:0000332] RNAseq introns single sample supports all introns SAMEA1965299, SAMEA1966682 [ECO:0000348] ##Evidence-Data-END##</GBSeq_comment>
+  <GBSeq_source-db>REFSEQ: accession NM_005546.3</GBSeq_source-db>
+  <GBSeq_feature-table>
+    <GBFeature>
+      <GBFeature_key>source</GBFeature_key>
+      <GBFeature_location>1..620</GBFeature_location>
+      <GBFeature_intervals>
+        <GBInterval>
+          <GBInterval_from>1</GBInterval_from>
+          <GBInterval_to>620</GBInterval_to>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+      </GBFeature_intervals>
+      <GBFeature_quals>
+        <GBQualifier>
+          <GBQualifier_name>organism</GBQualifier_name>
+          <GBQualifier_value>Homo sapiens</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>db_xref</GBQualifier_name>
+          <GBQualifier_value>taxon:9606</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>chromosome</GBQualifier_name>
+          <GBQualifier_value>5</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>map</GBQualifier_name>
+          <GBQualifier_value>5q31-q32</GBQualifier_value>
+        </GBQualifier>
+      </GBFeature_quals>
+    </GBFeature>
+    <GBFeature>
+      <GBFeature_key>Protein</GBFeature_key>
+      <GBFeature_location>1..620</GBFeature_location>
+      <GBFeature_intervals>
+        <GBInterval>
+          <GBInterval_from>1</GBInterval_from>
+          <GBInterval_to>620</GBInterval_to>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+      </GBFeature_intervals>
+      <GBFeature_quals>
+        <GBQualifier>
+          <GBQualifier_name>product</GBQualifier_name>
+          <GBQualifier_value>tyrosine-protein kinase ITK/TSK</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>EC_number</GBQualifier_name>
+          <GBQualifier_value>2.7.10.2</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>note</GBQualifier_name>
+          <GBQualifier_value>tyrosine-protein kinase LYK; homolog of mouse T-cell itk/tsk; kinase EMT; T-cell-specific kinase; IL-2-inducible T cell kinase; interleukin-2-inducible T cell kinase; IL-2-inducible T-cell kinase; interleukin-2-inducible T-cell kinase</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>calculated_mol_wt</GBQualifier_name>
+          <GBQualifier_value>71700</GBQualifier_value>
+        </GBQualifier>
+      </GBFeature_quals>
+    </GBFeature>
+    <GBFeature>
+      <GBFeature_key>Region</GBFeature_key>
+      <GBFeature_location>7..148</GBFeature_location>
+      <GBFeature_intervals>
+        <GBInterval>
+          <GBInterval_from>7</GBInterval_from>
+          <GBInterval_to>148</GBInterval_to>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+      </GBFeature_intervals>
+      <GBFeature_quals>
+        <GBQualifier>
+          <GBQualifier_name>region_name</GBQualifier_name>
+          <GBQualifier_value>PH_Btk</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>note</GBQualifier_name>
+          <GBQualifier_value>Bruton&apos;s tyrosine kinase pleckstrin homology (PH) domain; cd01238</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>db_xref</GBQualifier_name>
+          <GBQualifier_value>CDD:269944</GBQualifier_value>
+        </GBQualifier>
+      </GBFeature_quals>
+    </GBFeature>
+    <GBFeature>
+      <GBFeature_key>Site</GBFeature_key>
+      <GBFeature_location>order(9..10,28..30,43,94)</GBFeature_location>
+      <GBFeature_intervals>
+        <GBInterval>
+          <GBInterval_from>9</GBInterval_from>
+          <GBInterval_to>10</GBInterval_to>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_from>28</GBInterval_from>
+          <GBInterval_to>30</GBInterval_to>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>43</GBInterval_point>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>94</GBInterval_point>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+      </GBFeature_intervals>
+      <GBFeature_operator>order</GBFeature_operator>
+      <GBFeature_quals>
+        <GBQualifier>
+          <GBQualifier_name>site_type</GBQualifier_name>
+          <GBQualifier_value>other</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>note</GBQualifier_name>
+          <GBQualifier_value>homodimer interface [polypeptide binding]</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>db_xref</GBQualifier_name>
+          <GBQualifier_value>CDD:269944</GBQualifier_value>
+        </GBQualifier>
+      </GBFeature_quals>
+    </GBFeature>
+    <GBFeature>
+      <GBFeature_key>Site</GBFeature_key>
+      <GBFeature_location>order(13,15..16,18..19,25,29,52)</GBFeature_location>
+      <GBFeature_intervals>
+        <GBInterval>
+          <GBInterval_point>13</GBInterval_point>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_from>15</GBInterval_from>
+          <GBInterval_to>16</GBInterval_to>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_from>18</GBInterval_from>
+          <GBInterval_to>19</GBInterval_to>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>25</GBInterval_point>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>29</GBInterval_point>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>52</GBInterval_point>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+      </GBFeature_intervals>
+      <GBFeature_operator>order</GBFeature_operator>
+      <GBFeature_quals>
+        <GBQualifier>
+          <GBQualifier_name>site_type</GBQualifier_name>
+          <GBQualifier_value>other</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>note</GBQualifier_name>
+          <GBQualifier_value>phosphoinositide binding site [chemical binding]</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>db_xref</GBQualifier_name>
+          <GBQualifier_value>CDD:269944</GBQualifier_value>
+        </GBQualifier>
+      </GBFeature_quals>
+    </GBFeature>
+    <GBFeature>
+      <GBFeature_key>Site</GBFeature_key>
+      <GBFeature_location>order(121,132..133,143)</GBFeature_location>
+      <GBFeature_intervals>
+        <GBInterval>
+          <GBInterval_point>121</GBInterval_point>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_from>132</GBInterval_from>
+          <GBInterval_to>133</GBInterval_to>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>143</GBInterval_point>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+      </GBFeature_intervals>
+      <GBFeature_operator>order</GBFeature_operator>
+      <GBFeature_quals>
+        <GBQualifier>
+          <GBQualifier_name>site_type</GBQualifier_name>
+          <GBQualifier_value>other</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>note</GBQualifier_name>
+          <GBQualifier_value>Zn binding site [ion binding]</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>db_xref</GBQualifier_name>
+          <GBQualifier_value>CDD:269944</GBQualifier_value>
+        </GBQualifier>
+      </GBFeature_quals>
+    </GBFeature>
+    <GBFeature>
+      <GBFeature_key>Region</GBFeature_key>
+      <GBFeature_location>174..229</GBFeature_location>
+      <GBFeature_intervals>
+        <GBInterval>
+          <GBInterval_from>174</GBInterval_from>
+          <GBInterval_to>229</GBInterval_to>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+      </GBFeature_intervals>
+      <GBFeature_quals>
+        <GBQualifier>
+          <GBQualifier_name>region_name</GBQualifier_name>
+          <GBQualifier_value>SH3_ITK</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>note</GBQualifier_name>
+          <GBQualifier_value>Src Homology 3 domain of Interleukin-2-inducible T-cell Kinase; cd11908</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>db_xref</GBQualifier_name>
+          <GBQualifier_value>CDD:212841</GBQualifier_value>
+        </GBQualifier>
+      </GBFeature_quals>
+    </GBFeature>
+    <GBFeature>
+      <GBFeature_key>Site</GBFeature_key>
+      <GBFeature_location>order(179..180,185..186,188..189,205..209,220,222..225,227)</GBFeature_location>
+      <GBFeature_intervals>
+        <GBInterval>
+          <GBInterval_from>179</GBInterval_from>
+          <GBInterval_to>180</GBInterval_to>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_from>185</GBInterval_from>
+          <GBInterval_to>186</GBInterval_to>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_from>188</GBInterval_from>
+          <GBInterval_to>189</GBInterval_to>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_from>205</GBInterval_from>
+          <GBInterval_to>209</GBInterval_to>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>220</GBInterval_point>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_from>222</GBInterval_from>
+          <GBInterval_to>225</GBInterval_to>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>227</GBInterval_point>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+      </GBFeature_intervals>
+      <GBFeature_operator>order</GBFeature_operator>
+      <GBFeature_quals>
+        <GBQualifier>
+          <GBQualifier_name>site_type</GBQualifier_name>
+          <GBQualifier_value>other</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>note</GBQualifier_name>
+          <GBQualifier_value>SH2 domain interface [polypeptide binding]</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>db_xref</GBQualifier_name>
+          <GBQualifier_value>CDD:212841</GBQualifier_value>
+        </GBQualifier>
+      </GBFeature_quals>
+    </GBFeature>
+    <GBFeature>
+      <GBFeature_key>Site</GBFeature_key>
+      <GBFeature_location>order(180,182,185,189,207..208,222,224..225)</GBFeature_location>
+      <GBFeature_intervals>
+        <GBInterval>
+          <GBInterval_point>180</GBInterval_point>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>182</GBInterval_point>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>185</GBInterval_point>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>189</GBInterval_point>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_from>207</GBInterval_from>
+          <GBInterval_to>208</GBInterval_to>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>222</GBInterval_point>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_from>224</GBInterval_from>
+          <GBInterval_to>225</GBInterval_to>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+      </GBFeature_intervals>
+      <GBFeature_operator>order</GBFeature_operator>
+      <GBFeature_quals>
+        <GBQualifier>
+          <GBQualifier_name>site_type</GBQualifier_name>
+          <GBQualifier_value>other</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>note</GBQualifier_name>
+          <GBQualifier_value>peptide ligand binding site [polypeptide binding]</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>db_xref</GBQualifier_name>
+          <GBQualifier_value>CDD:212841</GBQualifier_value>
+        </GBQualifier>
+      </GBFeature_quals>
+    </GBFeature>
+    <GBFeature>
+      <GBFeature_key>Site</GBFeature_key>
+      <GBFeature_location>180</GBFeature_location>
+      <GBFeature_intervals>
+        <GBInterval>
+          <GBInterval_point>180</GBInterval_point>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+      </GBFeature_intervals>
+      <GBFeature_quals>
+        <GBQualifier>
+          <GBQualifier_name>site_type</GBQualifier_name>
+          <GBQualifier_value>phosphorylation</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>experiment</GBQualifier_name>
+          <GBQualifier_value>experimental evidence, no additional details recorded</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>note</GBQualifier_name>
+          <GBQualifier_value>Phosphotyrosine, by autocatalysis; propagated from UniProtKB/Swiss-Prot (Q08881.1)</GBQualifier_value>
+        </GBQualifier>
+      </GBFeature_quals>
+    </GBFeature>
+    <GBFeature>
+      <GBFeature_key>Site</GBFeature_key>
+      <GBFeature_location>180</GBFeature_location>
+      <GBFeature_intervals>
+        <GBInterval>
+          <GBInterval_point>180</GBInterval_point>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+      </GBFeature_intervals>
+      <GBFeature_quals>
+        <GBQualifier>
+          <GBQualifier_name>site_type</GBQualifier_name>
+          <GBQualifier_value>phosphorylation</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>experiment</GBQualifier_name>
+          <GBQualifier_value>experimental evidence, no additional details recorded</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>citation</GBQualifier_name>
+          <GBQualifier_value>[8]</GBQualifier_value>
+        </GBQualifier>
+      </GBFeature_quals>
+    </GBFeature>
+    <GBFeature>
+      <GBFeature_key>Region</GBFeature_key>
+      <GBFeature_location>232..340</GBFeature_location>
+      <GBFeature_intervals>
+        <GBInterval>
+          <GBInterval_from>232</GBInterval_from>
+          <GBInterval_to>340</GBInterval_to>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+      </GBFeature_intervals>
+      <GBFeature_quals>
+        <GBQualifier>
+          <GBQualifier_name>region_name</GBQualifier_name>
+          <GBQualifier_value>SH2_Tec_Itk</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>note</GBQualifier_name>
+          <GBQualifier_value>Src homology 2 (SH2) domain found in Tec protein, IL2-inducible T-cell kinase (Itk); cd10396</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>db_xref</GBQualifier_name>
+          <GBQualifier_value>CDD:198259</GBQualifier_value>
+        </GBQualifier>
+      </GBFeature_quals>
+    </GBFeature>
+    <GBFeature>
+      <GBFeature_key>Site</GBFeature_key>
+      <GBFeature_location>order(246,265)</GBFeature_location>
+      <GBFeature_intervals>
+        <GBInterval>
+          <GBInterval_point>246</GBInterval_point>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>265</GBInterval_point>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+      </GBFeature_intervals>
+      <GBFeature_operator>order</GBFeature_operator>
+      <GBFeature_quals>
+        <GBQualifier>
+          <GBQualifier_name>site_type</GBQualifier_name>
+          <GBQualifier_value>other</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>note</GBQualifier_name>
+          <GBQualifier_value>phosphotyrosine binding pocket [polypeptide binding]</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>db_xref</GBQualifier_name>
+          <GBQualifier_value>CDD:198259</GBQualifier_value>
+        </GBQualifier>
+      </GBFeature_quals>
+    </GBFeature>
+    <GBFeature>
+      <GBFeature_key>Site</GBFeature_key>
+      <GBFeature_location>order(322,330..331)</GBFeature_location>
+      <GBFeature_intervals>
+        <GBInterval>
+          <GBInterval_point>322</GBInterval_point>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_from>330</GBInterval_from>
+          <GBInterval_to>331</GBInterval_to>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+      </GBFeature_intervals>
+      <GBFeature_operator>order</GBFeature_operator>
+      <GBFeature_quals>
+        <GBQualifier>
+          <GBQualifier_name>site_type</GBQualifier_name>
+          <GBQualifier_value>other</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>note</GBQualifier_name>
+          <GBQualifier_value>hydrophobic binding pocket [polypeptide binding]</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>db_xref</GBQualifier_name>
+          <GBQualifier_value>CDD:198259</GBQualifier_value>
+        </GBQualifier>
+      </GBFeature_quals>
+    </GBFeature>
+    <GBFeature>
+      <GBFeature_key>Region</GBFeature_key>
+      <GBFeature_location>358..613</GBFeature_location>
+      <GBFeature_intervals>
+        <GBInterval>
+          <GBInterval_from>358</GBInterval_from>
+          <GBInterval_to>613</GBInterval_to>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+      </GBFeature_intervals>
+      <GBFeature_quals>
+        <GBQualifier>
+          <GBQualifier_name>region_name</GBQualifier_name>
+          <GBQualifier_value>PTKc_Itk</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>note</GBQualifier_name>
+          <GBQualifier_value>Catalytic domain of the Protein Tyrosine Kinase, Interleukin-2-inducible T-cell Kinase; cd05112</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>db_xref</GBQualifier_name>
+          <GBQualifier_value>CDD:133243</GBQualifier_value>
+        </GBQualifier>
+      </GBFeature_quals>
+    </GBFeature>
+    <GBFeature>
+      <GBFeature_key>Region</GBFeature_key>
+      <GBFeature_location>363..612</GBFeature_location>
+      <GBFeature_intervals>
+        <GBInterval>
+          <GBInterval_from>363</GBInterval_from>
+          <GBInterval_to>612</GBInterval_to>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+      </GBFeature_intervals>
+      <GBFeature_quals>
+        <GBQualifier>
+          <GBQualifier_name>region_name</GBQualifier_name>
+          <GBQualifier_value>Pkinase_Tyr</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>note</GBQualifier_name>
+          <GBQualifier_value>Protein tyrosine kinase; pfam07714</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>db_xref</GBQualifier_name>
+          <GBQualifier_value>CDD:254379</GBQualifier_value>
+        </GBQualifier>
+      </GBFeature_quals>
+    </GBFeature>
+    <GBFeature>
+      <GBFeature_key>Site</GBFeature_key>
+      <GBFeature_location>order(369..370,377,389,391,419,435..438,441..442,482,486..487,489,499..500,517..521,530,564)</GBFeature_location>
+      <GBFeature_intervals>
+        <GBInterval>
+          <GBInterval_from>369</GBInterval_from>
+          <GBInterval_to>370</GBInterval_to>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>377</GBInterval_point>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>389</GBInterval_point>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>391</GBInterval_point>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>419</GBInterval_point>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_from>435</GBInterval_from>
+          <GBInterval_to>438</GBInterval_to>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_from>441</GBInterval_from>
+          <GBInterval_to>442</GBInterval_to>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>482</GBInterval_point>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_from>486</GBInterval_from>
+          <GBInterval_to>487</GBInterval_to>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>489</GBInterval_point>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_from>499</GBInterval_from>
+          <GBInterval_to>500</GBInterval_to>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_from>517</GBInterval_from>
+          <GBInterval_to>521</GBInterval_to>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>530</GBInterval_point>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>564</GBInterval_point>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+      </GBFeature_intervals>
+      <GBFeature_operator>order</GBFeature_operator>
+      <GBFeature_quals>
+        <GBQualifier>
+          <GBQualifier_name>site_type</GBQualifier_name>
+          <GBQualifier_value>active</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>db_xref</GBQualifier_name>
+          <GBQualifier_value>CDD:133243</GBQualifier_value>
+        </GBQualifier>
+      </GBFeature_quals>
+    </GBFeature>
+    <GBFeature>
+      <GBFeature_key>Site</GBFeature_key>
+      <GBFeature_location>order(369..370,377,389,391,419,435..438,441..442,486..487,489,499..500)</GBFeature_location>
+      <GBFeature_intervals>
+        <GBInterval>
+          <GBInterval_from>369</GBInterval_from>
+          <GBInterval_to>370</GBInterval_to>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>377</GBInterval_point>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>389</GBInterval_point>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>391</GBInterval_point>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>419</GBInterval_point>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_from>435</GBInterval_from>
+          <GBInterval_to>438</GBInterval_to>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_from>441</GBInterval_from>
+          <GBInterval_to>442</GBInterval_to>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_from>486</GBInterval_from>
+          <GBInterval_to>487</GBInterval_to>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>489</GBInterval_point>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_from>499</GBInterval_from>
+          <GBInterval_to>500</GBInterval_to>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+      </GBFeature_intervals>
+      <GBFeature_operator>order</GBFeature_operator>
+      <GBFeature_quals>
+        <GBQualifier>
+          <GBQualifier_name>site_type</GBQualifier_name>
+          <GBQualifier_value>other</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>note</GBQualifier_name>
+          <GBQualifier_value>ATP binding site [chemical binding]</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>db_xref</GBQualifier_name>
+          <GBQualifier_value>CDD:133243</GBQualifier_value>
+        </GBQualifier>
+      </GBFeature_quals>
+    </GBFeature>
+    <GBFeature>
+      <GBFeature_key>Site</GBFeature_key>
+      <GBFeature_location>order(482,486,517..521,530,564)</GBFeature_location>
+      <GBFeature_intervals>
+        <GBInterval>
+          <GBInterval_point>482</GBInterval_point>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>486</GBInterval_point>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_from>517</GBInterval_from>
+          <GBInterval_to>521</GBInterval_to>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>530</GBInterval_point>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>564</GBInterval_point>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+      </GBFeature_intervals>
+      <GBFeature_operator>order</GBFeature_operator>
+      <GBFeature_quals>
+        <GBQualifier>
+          <GBQualifier_name>site_type</GBQualifier_name>
+          <GBQualifier_value>other</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>note</GBQualifier_name>
+          <GBQualifier_value>polypeptide substrate binding site [polypeptide binding]</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>db_xref</GBQualifier_name>
+          <GBQualifier_value>CDD:133243</GBQualifier_value>
+        </GBQualifier>
+      </GBFeature_quals>
+    </GBFeature>
+    <GBFeature>
+      <GBFeature_key>Site</GBFeature_key>
+      <GBFeature_location>499..523</GBFeature_location>
+      <GBFeature_intervals>
+        <GBInterval>
+          <GBInterval_from>499</GBInterval_from>
+          <GBInterval_to>523</GBInterval_to>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+      </GBFeature_intervals>
+      <GBFeature_quals>
+        <GBQualifier>
+          <GBQualifier_name>site_type</GBQualifier_name>
+          <GBQualifier_value>other</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>note</GBQualifier_name>
+          <GBQualifier_value>activation loop (A-loop)</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>db_xref</GBQualifier_name>
+          <GBQualifier_value>CDD:133243</GBQualifier_value>
+        </GBQualifier>
+      </GBFeature_quals>
+    </GBFeature>
+    <GBFeature>
+      <GBFeature_key>Site</GBFeature_key>
+      <GBFeature_location>512</GBFeature_location>
+      <GBFeature_intervals>
+        <GBInterval>
+          <GBInterval_point>512</GBInterval_point>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+      </GBFeature_intervals>
+      <GBFeature_quals>
+        <GBQualifier>
+          <GBQualifier_name>site_type</GBQualifier_name>
+          <GBQualifier_value>phosphorylation</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>experiment</GBQualifier_name>
+          <GBQualifier_value>experimental evidence, no additional details recorded</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>note</GBQualifier_name>
+          <GBQualifier_value>Phosphotyrosine, by LCK; propagated from UniProtKB/Swiss-Prot (Q08881.1)</GBQualifier_value>
+        </GBQualifier>
+      </GBFeature_quals>
+    </GBFeature>
+    <GBFeature>
+      <GBFeature_key>Site</GBFeature_key>
+      <GBFeature_location>512</GBFeature_location>
+      <GBFeature_intervals>
+        <GBInterval>
+          <GBInterval_point>512</GBInterval_point>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+      </GBFeature_intervals>
+      <GBFeature_quals>
+        <GBQualifier>
+          <GBQualifier_name>site_type</GBQualifier_name>
+          <GBQualifier_value>phosphorylation</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>experiment</GBQualifier_name>
+          <GBQualifier_value>experimental evidence, no additional details recorded</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>citation</GBQualifier_name>
+          <GBQualifier_value>[7]</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>citation</GBQualifier_name>
+          <GBQualifier_value>[9]</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>db_xref</GBQualifier_name>
+          <GBQualifier_value>HPRD:01080</GBQualifier_value>
+        </GBQualifier>
+      </GBFeature_quals>
+    </GBFeature>
+    <GBFeature>
+      <GBFeature_key>Site</GBFeature_key>
+      <GBFeature_location>565</GBFeature_location>
+      <GBFeature_intervals>
+        <GBInterval>
+          <GBInterval_point>565</GBInterval_point>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+      </GBFeature_intervals>
+      <GBFeature_quals>
+        <GBQualifier>
+          <GBQualifier_name>site_type</GBQualifier_name>
+          <GBQualifier_value>phosphorylation</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>experiment</GBQualifier_name>
+          <GBQualifier_value>experimental evidence, no additional details recorded</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>note</GBQualifier_name>
+          <GBQualifier_value>Phosphoserine; propagated from UniProtKB/Swiss-Prot (Q08881.1)</GBQualifier_value>
+        </GBQualifier>
+      </GBFeature_quals>
+    </GBFeature>
+    <GBFeature>
+      <GBFeature_key>Site</GBFeature_key>
+      <GBFeature_location>565</GBFeature_location>
+      <GBFeature_intervals>
+        <GBInterval>
+          <GBInterval_point>565</GBInterval_point>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+      </GBFeature_intervals>
+      <GBFeature_quals>
+        <GBQualifier>
+          <GBQualifier_name>site_type</GBQualifier_name>
+          <GBQualifier_value>phosphorylation</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>experiment</GBQualifier_name>
+          <GBQualifier_value>experimental evidence, no additional details recorded</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>citation</GBQualifier_name>
+          <GBQualifier_value>[6]</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>db_xref</GBQualifier_name>
+          <GBQualifier_value>HPRD:01746</GBQualifier_value>
+        </GBQualifier>
+      </GBFeature_quals>
+    </GBFeature>
+    <GBFeature>
+      <GBFeature_key>CDS</GBFeature_key>
+      <GBFeature_location>1..620</GBFeature_location>
+      <GBFeature_intervals>
+        <GBInterval>
+          <GBInterval_from>1</GBInterval_from>
+          <GBInterval_to>620</GBInterval_to>
+          <GBInterval_accession>NP_005537.3</GBInterval_accession>
+        </GBInterval>
+      </GBFeature_intervals>
+      <GBFeature_quals>
+        <GBQualifier>
+          <GBQualifier_name>gene</GBQualifier_name>
+          <GBQualifier_value>ITK</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>gene_synonym</GBQualifier_name>
+          <GBQualifier_value>EMT; LPFS1; LYK; PSCTK2</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>coded_by</GBQualifier_name>
+          <GBQualifier_value>NM_005546.3:83..1945</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>db_xref</GBQualifier_name>
+          <GBQualifier_value>CCDS:CCDS4336.1</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>db_xref</GBQualifier_name>
+          <GBQualifier_value>GeneID:3702</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>db_xref</GBQualifier_name>
+          <GBQualifier_value>HGNC:HGNC:6171</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>db_xref</GBQualifier_name>
+          <GBQualifier_value>HPRD:01746</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>db_xref</GBQualifier_name>
+          <GBQualifier_value>MIM:186973</GBQualifier_value>
+        </GBQualifier>
+      </GBFeature_quals>
+    </GBFeature>
+  </GBSeq_feature-table>
+  <GBSeq_sequence>mnnfilleeqlikksqqkrrtspsnfkvrffvltkaslayfedrhgkkrtlkgsielsrikcveivksdisipchykypfqvvhdnyllyvfapdresrqrwvlalkeetrnnnslvpkyhpnfwmdgkwrccsqleklatgcaqydptknaskkplpptpednrrplwepeetvvialydyqtndpqelalrrneeyclldsseihwwrvqdrnghegyvpssylvekspnnletyewynksisrdkaekllldtgkegafmvrdsrtagtytvsvftkavvsennpcikhyhiketndnpkryyvaekyvfdsipllinyhqhnggglvtrlrypvcfgrqkapvtaglrygkwvidpseltfvqeigsgqfglvhlgywlnkdkvaiktiregamseedfieeaevmmklshpklvqlygvcleqapiclvfefmehgclsdylrtqrglfaaetllgmcldvcegmayleeacvihrdlaarnclvgenqvikvsdfgmtrfvlddqytsstgtkfpvkwaspevfsfsryssksdvwsfgvlmwevfsegkipyenrsnsevvedistgfrlykprlasthvyqimnhcwkerpedrpafsrllrqlaeiaesgl</GBSeq_sequence>
+</GBSeq>
+
+<GBSeq>
+  <GBSeq_locus>NP_001098858</GBSeq_locus>
+  <GBSeq_length>620</GBSeq_length>
+  <GBSeq_moltype>AA</GBSeq_moltype>
+  <GBSeq_topology>linear</GBSeq_topology>
+  <GBSeq_division>MAM</GBSeq_division>
+  <GBSeq_update-date>04-JAN-2015</GBSeq_update-date>
+  <GBSeq_create-date>24-SEP-2007</GBSeq_create-date>
+  <GBSeq_definition>tyrosine-protein kinase ITK/TSK [Bos taurus]</GBSeq_definition>
+  <GBSeq_primary-accession>NP_001098858</GBSeq_primary-accession>
+  <GBSeq_accession-version>NP_001098858.1</GBSeq_accession-version>
+  <GBSeq_other-seqids>
+    <GBSeqid>ref|NP_001098858.1|</GBSeqid>
+    <GBSeqid>gi|157427902</GBSeqid>
+  </GBSeq_other-seqids>
+  <GBSeq_secondary-accessions>
+    <GBSecondary-accn>XP_600591</GBSecondary-accn>
+  </GBSeq_secondary-accessions>
+  <GBSeq_keywords>
+    <GBKeyword>RefSeq</GBKeyword>
+  </GBSeq_keywords>
+  <GBSeq_source>Bos taurus (cattle)</GBSeq_source>
+  <GBSeq_organism>Bos taurus</GBSeq_organism>
+  <GBSeq_taxonomy>Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia; Eutheria; Laurasiatheria; Cetartiodactyla; Ruminantia; Pecora; Bovidae; Bovinae; Bos</GBSeq_taxonomy>
+  <GBSeq_references>
+    <GBReference>
+      <GBReference_reference>1</GBReference_reference>
+      <GBReference_position>1..620</GBReference_position>
+      <GBReference_authors>
+        <GBAuthor>Zimin,A.V.</GBAuthor>
+        <GBAuthor>Delcher,A.L.</GBAuthor>
+        <GBAuthor>Florea,L.</GBAuthor>
+        <GBAuthor>Kelley,D.R.</GBAuthor>
+        <GBAuthor>Schatz,M.C.</GBAuthor>
+        <GBAuthor>Puiu,D.</GBAuthor>
+        <GBAuthor>Hanrahan,F.</GBAuthor>
+        <GBAuthor>Pertea,G.</GBAuthor>
+        <GBAuthor>Van Tassell,C.P.</GBAuthor>
+        <GBAuthor>Sonstegard,T.S.</GBAuthor>
+        <GBAuthor>Marcais,G.</GBAuthor>
+        <GBAuthor>Roberts,M.</GBAuthor>
+        <GBAuthor>Subramanian,P.</GBAuthor>
+        <GBAuthor>Yorke,J.A.</GBAuthor>
+        <GBAuthor>Salzberg,S.L.</GBAuthor>
+      </GBReference_authors>
+      <GBReference_title>A whole-genome assembly of the domestic cow, Bos taurus</GBReference_title>
+      <GBReference_journal>Genome Biol. 10 (4), R42 (2009)</GBReference_journal>
+      <GBReference_xref>
+        <GBXref>
+          <GBXref_dbname>doi</GBXref_dbname>
+          <GBXref_id>10.1186/gb-2009-10-4-r42</GBXref_id>
+        </GBXref>
+      </GBReference_xref>
+      <GBReference_pubmed>19393038</GBReference_pubmed>
+    </GBReference>
+  </GBSeq_references>
+  <GBSeq_comment>PROVISIONAL REFSEQ: This record has not yet been subject to final NCBI review. The reference sequence was derived from BC153237.1.; On Sep 25, 2007 this sequence version replaced gi:119895792.; ##Evidence-Data-START## Transcript exon combination BC153237.1 [ECO:0000332] RNAseq introns single sample supports all introns SAMN02404553, SAMN02404558 [ECO:0000348] ##Evidence-Data-END##</GBSeq_comment>
+  <GBSeq_source-db>REFSEQ: accession NM_001105388.1</GBSeq_source-db>
+  <GBSeq_feature-table>
+    <GBFeature>
+      <GBFeature_key>source</GBFeature_key>
+      <GBFeature_location>1..620</GBFeature_location>
+      <GBFeature_intervals>
+        <GBInterval>
+          <GBInterval_from>1</GBInterval_from>
+          <GBInterval_to>620</GBInterval_to>
+          <GBInterval_accession>NP_001098858.1</GBInterval_accession>
+        </GBInterval>
+      </GBFeature_intervals>
+      <GBFeature_quals>
+        <GBQualifier>
+          <GBQualifier_name>organism</GBQualifier_name>
+          <GBQualifier_value>Bos taurus</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>db_xref</GBQualifier_name>
+          <GBQualifier_value>taxon:9913</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>chromosome</GBQualifier_name>
+          <GBQualifier_value>7</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>map</GBQualifier_name>
+          <GBQualifier_value>7</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>breed</GBQualifier_name>
+          <GBQualifier_value>Hereford</GBQualifier_value>
+        </GBQualifier>
+      </GBFeature_quals>
+    </GBFeature>
+    <GBFeature>
+      <GBFeature_key>Protein</GBFeature_key>
+      <GBFeature_location>1..620</GBFeature_location>
+      <GBFeature_intervals>
+        <GBInterval>
+          <GBInterval_from>1</GBInterval_from>
+          <GBInterval_to>620</GBInterval_to>
+          <GBInterval_accession>NP_001098858.1</GBInterval_accession>
+        </GBInterval>
+      </GBFeature_intervals>
+      <GBFeature_quals>
+        <GBQualifier>
+          <GBQualifier_name>product</GBQualifier_name>
+          <GBQualifier_value>tyrosine-protein kinase ITK/TSK</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>EC_number</GBQualifier_name>
+          <GBQualifier_value>2.7.10.1</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>calculated_mol_wt</GBQualifier_name>
+          <GBQualifier_value>71939</GBQualifier_value>
+        </GBQualifier>
+      </GBFeature_quals>
+    </GBFeature>
+    <GBFeature>
+      <GBFeature_key>Region</GBFeature_key>
+      <GBFeature_location>7..148</GBFeature_location>
+      <GBFeature_intervals>
+        <GBInterval>
+          <GBInterval_from>7</GBInterval_from>
+          <GBInterval_to>148</GBInterval_to>
+          <GBInterval_accession>NP_001098858.1</GBInterval_accession>
+        </GBInterval>
+      </GBFeature_intervals>
+      <GBFeature_quals>
+        <GBQualifier>
+          <GBQualifier_name>region_name</GBQualifier_name>
+          <GBQualifier_value>PH_Btk</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>note</GBQualifier_name>
+          <GBQualifier_value>Bruton&apos;s tyrosine kinase pleckstrin homology (PH) domain; cd01238</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>db_xref</GBQualifier_name>
+          <GBQualifier_value>CDD:269944</GBQualifier_value>
+        </GBQualifier>
+      </GBFeature_quals>
+    </GBFeature>
+    <GBFeature>
+      <GBFeature_key>Site</GBFeature_key>
+      <GBFeature_location>order(9..10,28..30,43,94)</GBFeature_location>
+      <GBFeature_intervals>
+        <GBInterval>
+          <GBInterval_from>9</GBInterval_from>
+          <GBInterval_to>10</GBInterval_to>
+          <GBInterval_accession>NP_001098858.1</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_from>28</GBInterval_from>
+          <GBInterval_to>30</GBInterval_to>
+          <GBInterval_accession>NP_001098858.1</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>43</GBInterval_point>
+          <GBInterval_accession>NP_001098858.1</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>94</GBInterval_point>
+          <GBInterval_accession>NP_001098858.1</GBInterval_accession>
+        </GBInterval>
+      </GBFeature_intervals>
+      <GBFeature_operator>order</GBFeature_operator>
+      <GBFeature_quals>
+        <GBQualifier>
+          <GBQualifier_name>site_type</GBQualifier_name>
+          <GBQualifier_value>other</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>note</GBQualifier_name>
+          <GBQualifier_value>homodimer interface [polypeptide binding]</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>db_xref</GBQualifier_name>
+          <GBQualifier_value>CDD:269944</GBQualifier_value>
+        </GBQualifier>
+      </GBFeature_quals>
+    </GBFeature>
+    <GBFeature>
+      <GBFeature_key>Site</GBFeature_key>
+      <GBFeature_location>order(13,15..16,18..19,25,29,52)</GBFeature_location>
+      <GBFeature_intervals>
+        <GBInterval>
+          <GBInterval_point>13</GBInterval_point>
+          <GBInterval_accession>NP_001098858.1</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_from>15</GBInterval_from>
+          <GBInterval_to>16</GBInterval_to>
+          <GBInterval_accession>NP_001098858.1</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_from>18</GBInterval_from>
+          <GBInterval_to>19</GBInterval_to>
+          <GBInterval_accession>NP_001098858.1</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>25</GBInterval_point>
+          <GBInterval_accession>NP_001098858.1</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>29</GBInterval_point>
+          <GBInterval_accession>NP_001098858.1</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>52</GBInterval_point>
+          <GBInterval_accession>NP_001098858.1</GBInterval_accession>
+        </GBInterval>
+      </GBFeature_intervals>
+      <GBFeature_operator>order</GBFeature_operator>
+      <GBFeature_quals>
+        <GBQualifier>
+          <GBQualifier_name>site_type</GBQualifier_name>
+          <GBQualifier_value>other</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>note</GBQualifier_name>
+          <GBQualifier_value>phosphoinositide binding site [chemical binding]</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>db_xref</GBQualifier_name>
+          <GBQualifier_value>CDD:269944</GBQualifier_value>
+        </GBQualifier>
+      </GBFeature_quals>
+    </GBFeature>
+    <GBFeature>
+      <GBFeature_key>Site</GBFeature_key>
+      <GBFeature_location>order(121,132..133,143)</GBFeature_location>
+      <GBFeature_intervals>
+        <GBInterval>
+          <GBInterval_point>121</GBInterval_point>
+          <GBInterval_accession>NP_001098858.1</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_from>132</GBInterval_from>
+          <GBInterval_to>133</GBInterval_to>
+          <GBInterval_accession>NP_001098858.1</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>143</GBInterval_point>
+          <GBInterval_accession>NP_001098858.1</GBInterval_accession>
+        </GBInterval>
+      </GBFeature_intervals>
+      <GBFeature_operator>order</GBFeature_operator>
+      <GBFeature_quals>
+        <GBQualifier>
+          <GBQualifier_name>site_type</GBQualifier_name>
+          <GBQualifier_value>other</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>note</GBQualifier_name>
+          <GBQualifier_value>Zn binding site [ion binding]</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>db_xref</GBQualifier_name>
+          <GBQualifier_value>CDD:269944</GBQualifier_value>
+        </GBQualifier>
+      </GBFeature_quals>
+    </GBFeature>
+    <GBFeature>
+      <GBFeature_key>Region</GBFeature_key>
+      <GBFeature_location>174..229</GBFeature_location>
+      <GBFeature_intervals>
+        <GBInterval>
+          <GBInterval_from>174</GBInterval_from>
+          <GBInterval_to>229</GBInterval_to>
+          <GBInterval_accession>NP_001098858.1</GBInterval_accession>
+        </GBInterval>
+      </GBFeature_intervals>
+      <GBFeature_quals>
+        <GBQualifier>
+          <GBQualifier_name>region_name</GBQualifier_name>
+          <GBQualifier_value>SH3_ITK</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>note</GBQualifier_name>
+          <GBQualifier_value>Src Homology 3 domain of Interleukin-2-inducible T-cell Kinase; cd11908</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>db_xref</GBQualifier_name>
+          <GBQualifier_value>CDD:212841</GBQualifier_value>
+        </GBQualifier>
+      </GBFeature_quals>
+    </GBFeature>
+    <GBFeature>
+      <GBFeature_key>Site</GBFeature_key>
+      <GBFeature_location>order(179..180,185..186,188..189,205..209,220,222..225,227)</GBFeature_location>
+      <GBFeature_intervals>
+        <GBInterval>
+          <GBInterval_from>179</GBInterval_from>
+          <GBInterval_to>180</GBInterval_to>
+          <GBInterval_accession>NP_001098858.1</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_from>185</GBInterval_from>
+          <GBInterval_to>186</GBInterval_to>
+          <GBInterval_accession>NP_001098858.1</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_from>188</GBInterval_from>
+          <GBInterval_to>189</GBInterval_to>
+          <GBInterval_accession>NP_001098858.1</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_from>205</GBInterval_from>
+          <GBInterval_to>209</GBInterval_to>
+          <GBInterval_accession>NP_001098858.1</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>220</GBInterval_point>
+          <GBInterval_accession>NP_001098858.1</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_from>222</GBInterval_from>
+          <GBInterval_to>225</GBInterval_to>
+          <GBInterval_accession>NP_001098858.1</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>227</GBInterval_point>
+          <GBInterval_accession>NP_001098858.1</GBInterval_accession>
+        </GBInterval>
+      </GBFeature_intervals>
+      <GBFeature_operator>order</GBFeature_operator>
+      <GBFeature_quals>
+        <GBQualifier>
+          <GBQualifier_name>site_type</GBQualifier_name>
+          <GBQualifier_value>other</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>note</GBQualifier_name>
+          <GBQualifier_value>SH2 domain interface [polypeptide binding]</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>db_xref</GBQualifier_name>
+          <GBQualifier_value>CDD:212841</GBQualifier_value>
+        </GBQualifier>
+      </GBFeature_quals>
+    </GBFeature>
+    <GBFeature>
+      <GBFeature_key>Site</GBFeature_key>
+      <GBFeature_location>order(180,182,185,189,207..208,222,224..225)</GBFeature_location>
+      <GBFeature_intervals>
+        <GBInterval>
+          <GBInterval_point>180</GBInterval_point>
+          <GBInterval_accession>NP_001098858.1</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>182</GBInterval_point>
+          <GBInterval_accession>NP_001098858.1</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>185</GBInterval_point>
+          <GBInterval_accession>NP_001098858.1</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>189</GBInterval_point>
+          <GBInterval_accession>NP_001098858.1</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_from>207</GBInterval_from>
+          <GBInterval_to>208</GBInterval_to>
+          <GBInterval_accession>NP_001098858.1</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>222</GBInterval_point>
+          <GBInterval_accession>NP_001098858.1</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_from>224</GBInterval_from>
+          <GBInterval_to>225</GBInterval_to>
+          <GBInterval_accession>NP_001098858.1</GBInterval_accession>
+        </GBInterval>
+      </GBFeature_intervals>
+      <GBFeature_operator>order</GBFeature_operator>
+      <GBFeature_quals>
+        <GBQualifier>
+          <GBQualifier_name>site_type</GBQualifier_name>
+          <GBQualifier_value>other</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>note</GBQualifier_name>
+          <GBQualifier_value>peptide ligand binding site [polypeptide binding]</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>db_xref</GBQualifier_name>
+          <GBQualifier_value>CDD:212841</GBQualifier_value>
+        </GBQualifier>
+      </GBFeature_quals>
+    </GBFeature>
+    <GBFeature>
+      <GBFeature_key>Region</GBFeature_key>
+      <GBFeature_location>232..340</GBFeature_location>
+      <GBFeature_intervals>
+        <GBInterval>
+          <GBInterval_from>232</GBInterval_from>
+          <GBInterval_to>340</GBInterval_to>
+          <GBInterval_accession>NP_001098858.1</GBInterval_accession>
+        </GBInterval>
+      </GBFeature_intervals>
+      <GBFeature_quals>
+        <GBQualifier>
+          <GBQualifier_name>region_name</GBQualifier_name>
+          <GBQualifier_value>SH2_Tec_Itk</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>note</GBQualifier_name>
+          <GBQualifier_value>Src homology 2 (SH2) domain found in Tec protein, IL2-inducible T-cell kinase (Itk); cd10396</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>db_xref</GBQualifier_name>
+          <GBQualifier_value>CDD:198259</GBQualifier_value>
+        </GBQualifier>
+      </GBFeature_quals>
+    </GBFeature>
+    <GBFeature>
+      <GBFeature_key>Site</GBFeature_key>
+      <GBFeature_location>order(246,265)</GBFeature_location>
+      <GBFeature_intervals>
+        <GBInterval>
+          <GBInterval_point>246</GBInterval_point>
+          <GBInterval_accession>NP_001098858.1</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>265</GBInterval_point>
+          <GBInterval_accession>NP_001098858.1</GBInterval_accession>
+        </GBInterval>
+      </GBFeature_intervals>
+      <GBFeature_operator>order</GBFeature_operator>
+      <GBFeature_quals>
+        <GBQualifier>
+          <GBQualifier_name>site_type</GBQualifier_name>
+          <GBQualifier_value>other</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>note</GBQualifier_name>
+          <GBQualifier_value>phosphotyrosine binding pocket [polypeptide binding]</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>db_xref</GBQualifier_name>
+          <GBQualifier_value>CDD:198259</GBQualifier_value>
+        </GBQualifier>
+      </GBFeature_quals>
+    </GBFeature>
+    <GBFeature>
+      <GBFeature_key>Site</GBFeature_key>
+      <GBFeature_location>order(322,330..331)</GBFeature_location>
+      <GBFeature_intervals>
+        <GBInterval>
+          <GBInterval_point>322</GBInterval_point>
+          <GBInterval_accession>NP_001098858.1</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_from>330</GBInterval_from>
+          <GBInterval_to>331</GBInterval_to>
+          <GBInterval_accession>NP_001098858.1</GBInterval_accession>
+        </GBInterval>
+      </GBFeature_intervals>
+      <GBFeature_operator>order</GBFeature_operator>
+      <GBFeature_quals>
+        <GBQualifier>
+          <GBQualifier_name>site_type</GBQualifier_name>
+          <GBQualifier_value>other</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>note</GBQualifier_name>
+          <GBQualifier_value>hydrophobic binding pocket [polypeptide binding]</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>db_xref</GBQualifier_name>
+          <GBQualifier_value>CDD:198259</GBQualifier_value>
+        </GBQualifier>
+      </GBFeature_quals>
+    </GBFeature>
+    <GBFeature>
+      <GBFeature_key>Region</GBFeature_key>
+      <GBFeature_location>358..613</GBFeature_location>
+      <GBFeature_intervals>
+        <GBInterval>
+          <GBInterval_from>358</GBInterval_from>
+          <GBInterval_to>613</GBInterval_to>
+          <GBInterval_accession>NP_001098858.1</GBInterval_accession>
+        </GBInterval>
+      </GBFeature_intervals>
+      <GBFeature_quals>
+        <GBQualifier>
+          <GBQualifier_name>region_name</GBQualifier_name>
+          <GBQualifier_value>PTKc_Itk</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>note</GBQualifier_name>
+          <GBQualifier_value>Catalytic domain of the Protein Tyrosine Kinase, Interleukin-2-inducible T-cell Kinase; cd05112</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>db_xref</GBQualifier_name>
+          <GBQualifier_value>CDD:133243</GBQualifier_value>
+        </GBQualifier>
+      </GBFeature_quals>
+    </GBFeature>
+    <GBFeature>
+      <GBFeature_key>Region</GBFeature_key>
+      <GBFeature_location>363..612</GBFeature_location>
+      <GBFeature_intervals>
+        <GBInterval>
+          <GBInterval_from>363</GBInterval_from>
+          <GBInterval_to>612</GBInterval_to>
+          <GBInterval_accession>NP_001098858.1</GBInterval_accession>
+        </GBInterval>
+      </GBFeature_intervals>
+      <GBFeature_quals>
+        <GBQualifier>
+          <GBQualifier_name>region_name</GBQualifier_name>
+          <GBQualifier_value>Pkinase_Tyr</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>note</GBQualifier_name>
+          <GBQualifier_value>Protein tyrosine kinase; pfam07714</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>db_xref</GBQualifier_name>
+          <GBQualifier_value>CDD:254379</GBQualifier_value>
+        </GBQualifier>
+      </GBFeature_quals>
+    </GBFeature>
+    <GBFeature>
+      <GBFeature_key>Site</GBFeature_key>
+      <GBFeature_location>order(369..370,377,389,391,419,435..438,441..442,482,486..487,489,499..500,517..521,530,564)</GBFeature_location>
+      <GBFeature_intervals>
+        <GBInterval>
+          <GBInterval_from>369</GBInterval_from>
+          <GBInterval_to>370</GBInterval_to>
+          <GBInterval_accession>NP_001098858.1</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>377</GBInterval_point>
+          <GBInterval_accession>NP_001098858.1</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>389</GBInterval_point>
+          <GBInterval_accession>NP_001098858.1</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>391</GBInterval_point>
+          <GBInterval_accession>NP_001098858.1</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>419</GBInterval_point>
+          <GBInterval_accession>NP_001098858.1</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_from>435</GBInterval_from>
+          <GBInterval_to>438</GBInterval_to>
+          <GBInterval_accession>NP_001098858.1</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_from>441</GBInterval_from>
+          <GBInterval_to>442</GBInterval_to>
+          <GBInterval_accession>NP_001098858.1</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>482</GBInterval_point>
+          <GBInterval_accession>NP_001098858.1</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_from>486</GBInterval_from>
+          <GBInterval_to>487</GBInterval_to>
+          <GBInterval_accession>NP_001098858.1</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>489</GBInterval_point>
+          <GBInterval_accession>NP_001098858.1</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_from>499</GBInterval_from>
+          <GBInterval_to>500</GBInterval_to>
+          <GBInterval_accession>NP_001098858.1</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_from>517</GBInterval_from>
+          <GBInterval_to>521</GBInterval_to>
+          <GBInterval_accession>NP_001098858.1</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>530</GBInterval_point>
+          <GBInterval_accession>NP_001098858.1</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>564</GBInterval_point>
+          <GBInterval_accession>NP_001098858.1</GBInterval_accession>
+        </GBInterval>
+      </GBFeature_intervals>
+      <GBFeature_operator>order</GBFeature_operator>
+      <GBFeature_quals>
+        <GBQualifier>
+          <GBQualifier_name>site_type</GBQualifier_name>
+          <GBQualifier_value>active</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>db_xref</GBQualifier_name>
+          <GBQualifier_value>CDD:133243</GBQualifier_value>
+        </GBQualifier>
+      </GBFeature_quals>
+    </GBFeature>
+    <GBFeature>
+      <GBFeature_key>Site</GBFeature_key>
+      <GBFeature_location>order(369..370,377,389,391,419,435..438,441..442,486..487,489,499..500)</GBFeature_location>
+      <GBFeature_intervals>
+        <GBInterval>
+          <GBInterval_from>369</GBInterval_from>
+          <GBInterval_to>370</GBInterval_to>
+          <GBInterval_accession>NP_001098858.1</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>377</GBInterval_point>
+          <GBInterval_accession>NP_001098858.1</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>389</GBInterval_point>
+          <GBInterval_accession>NP_001098858.1</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>391</GBInterval_point>
+          <GBInterval_accession>NP_001098858.1</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>419</GBInterval_point>
+          <GBInterval_accession>NP_001098858.1</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_from>435</GBInterval_from>
+          <GBInterval_to>438</GBInterval_to>
+          <GBInterval_accession>NP_001098858.1</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_from>441</GBInterval_from>
+          <GBInterval_to>442</GBInterval_to>
+          <GBInterval_accession>NP_001098858.1</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_from>486</GBInterval_from>
+          <GBInterval_to>487</GBInterval_to>
+          <GBInterval_accession>NP_001098858.1</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>489</GBInterval_point>
+          <GBInterval_accession>NP_001098858.1</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_from>499</GBInterval_from>
+          <GBInterval_to>500</GBInterval_to>
+          <GBInterval_accession>NP_001098858.1</GBInterval_accession>
+        </GBInterval>
+      </GBFeature_intervals>
+      <GBFeature_operator>order</GBFeature_operator>
+      <GBFeature_quals>
+        <GBQualifier>
+          <GBQualifier_name>site_type</GBQualifier_name>
+          <GBQualifier_value>other</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>note</GBQualifier_name>
+          <GBQualifier_value>ATP binding site [chemical binding]</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>db_xref</GBQualifier_name>
+          <GBQualifier_value>CDD:133243</GBQualifier_value>
+        </GBQualifier>
+      </GBFeature_quals>
+    </GBFeature>
+    <GBFeature>
+      <GBFeature_key>Site</GBFeature_key>
+      <GBFeature_location>order(482,486,517..521,530,564)</GBFeature_location>
+      <GBFeature_intervals>
+        <GBInterval>
+          <GBInterval_point>482</GBInterval_point>
+          <GBInterval_accession>NP_001098858.1</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>486</GBInterval_point>
+          <GBInterval_accession>NP_001098858.1</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_from>517</GBInterval_from>
+          <GBInterval_to>521</GBInterval_to>
+          <GBInterval_accession>NP_001098858.1</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>530</GBInterval_point>
+          <GBInterval_accession>NP_001098858.1</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>564</GBInterval_point>
+          <GBInterval_accession>NP_001098858.1</GBInterval_accession>
+        </GBInterval>
+      </GBFeature_intervals>
+      <GBFeature_operator>order</GBFeature_operator>
+      <GBFeature_quals>
+        <GBQualifier>
+          <GBQualifier_name>site_type</GBQualifier_name>
+          <GBQualifier_value>other</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>note</GBQualifier_name>
+          <GBQualifier_value>polypeptide substrate binding site [polypeptide binding]</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>db_xref</GBQualifier_name>
+          <GBQualifier_value>CDD:133243</GBQualifier_value>
+        </GBQualifier>
+      </GBFeature_quals>
+    </GBFeature>
+    <GBFeature>
+      <GBFeature_key>Site</GBFeature_key>
+      <GBFeature_location>499..523</GBFeature_location>
+      <GBFeature_intervals>
+        <GBInterval>
+          <GBInterval_from>499</GBInterval_from>
+          <GBInterval_to>523</GBInterval_to>
+          <GBInterval_accession>NP_001098858.1</GBInterval_accession>
+        </GBInterval>
+      </GBFeature_intervals>
+      <GBFeature_quals>
+        <GBQualifier>
+          <GBQualifier_name>site_type</GBQualifier_name>
+          <GBQualifier_value>other</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>note</GBQualifier_name>
+          <GBQualifier_value>activation loop (A-loop)</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>db_xref</GBQualifier_name>
+          <GBQualifier_value>CDD:133243</GBQualifier_value>
+        </GBQualifier>
+      </GBFeature_quals>
+    </GBFeature>
+    <GBFeature>
+      <GBFeature_key>CDS</GBFeature_key>
+      <GBFeature_location>1..620</GBFeature_location>
+      <GBFeature_intervals>
+        <GBInterval>
+          <GBInterval_from>1</GBInterval_from>
+          <GBInterval_to>620</GBInterval_to>
+          <GBInterval_accession>NP_001098858.1</GBInterval_accession>
+        </GBInterval>
+      </GBFeature_intervals>
+      <GBFeature_quals>
+        <GBQualifier>
+          <GBQualifier_name>gene</GBQualifier_name>
+          <GBQualifier_value>ITK</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>coded_by</GBQualifier_name>
+          <GBQualifier_value>NM_001105388.1:21..1883</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>db_xref</GBQualifier_name>
+          <GBQualifier_value>BGD:BT12417</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>db_xref</GBQualifier_name>
+          <GBQualifier_value>GeneID:522311</GBQualifier_value>
+        </GBQualifier>
+      </GBFeature_quals>
+    </GBFeature>
+  </GBSeq_feature-table>
+  <GBSeq_sequence>mnnfilleeqlikksqqkrrtspsnfkvrffvltktslayfedrhgkkrtlkgsielsrikcveivksdiiipchykypfqvvhdnyllyvfapdresrqrwvlalkeetrnnnslvpkyhpnfwldgrwrccaqmeklavgcaqydptknaskkplpptpednrrslreleetvvialydyqtndpqelmlqrneeyylldsseihwwrvqdrnghegyvpssylvekspnnletyewynknisrdkaekllldtgkegafmvrdsrtpgtytvsvftkaivsennpcikhyhiketndnpkryyvaekyvfdsipllinyhqhnggglvtrlrypvcswrqkapvtaglrygkwvidpseltfvqeigsgqfglvhlgywlnkdkvaiktiqegamseedfieeaevmmklshpklvqlygvcleqapiclvfefmehgclsdylrsqrglfaaetllgmcldvcegmayleeacvihrdlaarnclvgenqvikvsdfgmtrfvlddqytsstgtkfpvkwaspevfsfsryssksdvwsfgvlmwevfsegkipyenrsnsevvedittgfrlykprlasqhiyqimnhcwkekpedrppfsrllsqlaeiaelgl</GBSeq_sequence>
+</GBSeq>
+
+<GBSeq>
+  <GBSeq_locus>NP_034713</GBSeq_locus>
+  <GBSeq_length>619</GBSeq_length>
+  <GBSeq_moltype>AA</GBSeq_moltype>
+  <GBSeq_topology>linear</GBSeq_topology>
+  <GBSeq_division>ROD</GBSeq_division>
+  <GBSeq_update-date>15-FEB-2015</GBSeq_update-date>
+  <GBSeq_create-date>25-JAN-2000</GBSeq_create-date>
+  <GBSeq_definition>tyrosine-protein kinase ITK/TSK isoform 2 [Mus musculus]</GBSeq_definition>
+  <GBSeq_primary-accession>NP_034713</GBSeq_primary-accession>
+  <GBSeq_accession-version>NP_034713.2</GBSeq_accession-version>
+  <GBSeq_other-seqids>
+    <GBSeqid>ref|NP_034713.2|</GBSeqid>
+    <GBSeqid>gi|119703751</GBSeqid>
+  </GBSeq_other-seqids>
+  <GBSeq_keywords>
+    <GBKeyword>RefSeq</GBKeyword>
+  </GBSeq_keywords>
+  <GBSeq_source>Mus musculus (house mouse)</GBSeq_source>
+  <GBSeq_organism>Mus musculus</GBSeq_organism>
+  <GBSeq_taxonomy>Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia; Eutheria; Euarchontoglires; Glires; Rodentia; Sciurognathi; Muroidea; Muridae; Murinae; Mus; Mus</GBSeq_taxonomy>
+  <GBSeq_references>
+    <GBReference>
+      <GBReference_reference>1</GBReference_reference>
+      <GBReference_position>1..619</GBReference_position>
+      <GBReference_authors>
+        <GBAuthor>Gomez-Rodriguez J</GBAuthor>
+        <GBAuthor>Wohlfert EA</GBAuthor>
+        <GBAuthor>Handon R</GBAuthor>
+        <GBAuthor>Meylan F</GBAuthor>
+        <GBAuthor>Wu JZ</GBAuthor>
+        <GBAuthor>Anderson SM</GBAuthor>
+        <GBAuthor>Kirby MR</GBAuthor>
+        <GBAuthor>Belkaid Y</GBAuthor>
+        <GBAuthor>Schwartzberg PL</GBAuthor>
+      </GBReference_authors>
+      <GBReference_title>Itk-mediated integration of T cell receptor and cytokine signaling regulates the balance between Th17 and regulatory T cells</GBReference_title>
+      <GBReference_journal>J. Exp. Med. 211 (3), 529-543 (2014)</GBReference_journal>
+      <GBReference_xref>
+        <GBXref>
+          <GBXref_dbname>doi</GBXref_dbname>
+          <GBXref_id>10.1084/jem.20131459</GBXref_id>
+        </GBXref>
+      </GBReference_xref>
+      <GBReference_pubmed>24534190</GBReference_pubmed>
+      <GBReference_remark>GeneRIF: Itk-mediated integration of T cell receptor and cytokine signaling regulates the balance between Th17 and regulatory T cells.</GBReference_remark>
+    </GBReference>
+    <GBReference>
+      <GBReference_reference>2</GBReference_reference>
+      <GBReference_position>1..619</GBReference_position>
+      <GBReference_authors>
+        <GBAuthor>Jain N</GBAuthor>
+        <GBAuthor>Miu B</GBAuthor>
+        <GBAuthor>Jiang JK</GBAuthor>
+        <GBAuthor>McKinstry KK</GBAuthor>
+        <GBAuthor>Prince A</GBAuthor>
+        <GBAuthor>Swain SL</GBAuthor>
+        <GBAuthor>Greiner DL</GBAuthor>
+        <GBAuthor>Thomas CJ</GBAuthor>
+        <GBAuthor>Sanderson MJ</GBAuthor>
+        <GBAuthor>Berg LJ</GBAuthor>
+        <GBAuthor>Kang J</GBAuthor>
+      </GBReference_authors>
+      <GBReference_title>CD28 and ITK signals regulate autoreactive T cell trafficking</GBReference_title>
+      <GBReference_journal>Nat. Med. 19 (12), 1632-1637 (2013)</GBReference_journal>
+      <GBReference_xref>
+        <GBXref>
+          <GBXref_dbname>doi</GBXref_dbname>
+          <GBXref_id>10.1038/nm.3393</GBXref_id>
+        </GBXref>
+      </GBReference_xref>
+      <GBReference_pubmed>24270545</GBReference_pubmed>
+      <GBReference_remark>GeneRIF: ITK specifically licenses autoreactive T cells to enter tissues to mount destructive immune responses.</GBReference_remark>
+    </GBReference>
+    <GBReference>
+      <GBReference_reference>3</GBReference_reference>
+      <GBReference_position>1..619</GBReference_position>
+      <GBReference_authors>
+        <GBAuthor>Joseph RE</GBAuthor>
+        <GBAuthor>Kleino I</GBAuthor>
+        <GBAuthor>Wales TE</GBAuthor>
+        <GBAuthor>Xie Q</GBAuthor>
+        <GBAuthor>Fulton DB</GBAuthor>
+        <GBAuthor>Engen JR</GBAuthor>
+        <GBAuthor>Berg LJ</GBAuthor>
+        <GBAuthor>Andreotti AH</GBAuthor>
+      </GBReference_authors>
+      <GBReference_title>Activation loop dynamics determine the different catalytic efficiencies of B cell- and T cell-specific tec kinases</GBReference_title>
+      <GBReference_journal>Sci Signal 6 (290), RA76 (2013)</GBReference_journal>
+      <GBReference_xref>
+        <GBXref>
+          <GBXref_dbname>doi</GBXref_dbname>
+          <GBXref_id>10.1126/scisignal.2004298</GBXref_id>
+        </GBXref>
+      </GBReference_xref>
+      <GBReference_pubmed>23982207</GBReference_pubmed>
+      <GBReference_remark>GeneRIF: Data show that substitution of 6 of the 619 amino acid residues of Itk (interleukin-2-inducible T cell kinase) with the corresponding residues of Btk (Bruton&apos;s tyrosine kinase), and vice versa, completely switched the activities of Itk and Btk.; Publication Status: Online-Only</GBReference_remark>
+    </GBReference>
+    <GBReference>
+      <GBReference_reference>4</GBReference_reference>
+      <GBReference_position>1..619</GBReference_position>
+      <GBReference_authors>
+        <GBAuthor>Dervovic DD</GBAuthor>
+        <GBAuthor>Liang HC</GBAuthor>
+        <GBAuthor>Cannons JL</GBAuthor>
+        <GBAuthor>Elford AR</GBAuthor>
+        <GBAuthor>Mohtashami M</GBAuthor>
+        <GBAuthor>Ohashi PS</GBAuthor>
+        <GBAuthor>Schwartzberg PL</GBAuthor>
+        <GBAuthor>Zuniga-Pflucker JC</GBAuthor>
+      </GBReference_authors>
+      <GBReference_title>Cellular and molecular requirements for the selection of in vitro-generated CD8 T cells reveal a role for Notch</GBReference_title>
+      <GBReference_journal>J. Immunol. 191 (4), 1704-1715 (2013)</GBReference_journal>
+      <GBReference_xref>
+        <GBXref>
+          <GBXref_dbname>doi</GBXref_dbname>
+          <GBXref_id>10.4049/jimmunol.1300417</GBXref_id>
+        </GBXref>
+      </GBReference_xref>
+      <GBReference_pubmed>23851691</GBReference_pubmed>
+    </GBReference>
+    <GBReference>
+      <GBReference_reference>5</GBReference_reference>
+      <GBReference_position>1..619</GBReference_position>
+      <GBReference_authors>
+        <GBAuthor>Liang Y</GBAuthor>
+        <GBAuthor>Cucchetti M</GBAuthor>
+        <GBAuthor>Roncagalli R</GBAuthor>
+        <GBAuthor>Yokosuka T</GBAuthor>
+        <GBAuthor>Malzac A</GBAuthor>
+        <GBAuthor>Bertosio E</GBAuthor>
+        <GBAuthor>Imbert J</GBAuthor>
+        <GBAuthor>Nijman IJ</GBAuthor>
+        <GBAuthor>Suchanek M</GBAuthor>
+        <GBAuthor>Saito T</GBAuthor>
+        <GBAuthor>Wulfing C</GBAuthor>
+        <GBAuthor>Malissen B</GBAuthor>
+        <GBAuthor>Malissen M</GBAuthor>
+      </GBReference_authors>
+      <GBReference_title>The lymphoid lineage-specific actin-uncapping protein Rltpr is essential for costimulation via CD28 and the development of regulatory T cells</GBReference_title>
+      <GBReference_journal>Nat. Immunol. 14 (8), 858-866 (2013)</GBReference_journal>
+      <GBReference_xref>
+        <GBXref>
+          <GBXref_dbname>doi</GBXref_dbname>
+          <GBXref_id>10.1038/ni.2634</GBXref_id>
+        </GBXref>
+      </GBReference_xref>
+      <GBReference_pubmed>23793062</GBReference_pubmed>
+    </GBReference>
+    <GBReference>
+      <GBReference_reference>6</GBReference_reference>
+      <GBReference_position>1..619</GBReference_position>
+      <GBReference_authors>
+        <GBAuthor>August A</GBAuthor>
+        <GBAuthor>Gibson S</GBAuthor>
+        <GBAuthor>Kawakami Y</GBAuthor>
+        <GBAuthor>Kawakami T</GBAuthor>
+        <GBAuthor>Mills GB</GBAuthor>
+        <GBAuthor>Dupont B</GBAuthor>
+      </GBReference_authors>
+      <GBReference_title>CD28 is associated with and induces the immediate tyrosine phosphorylation and activation of the Tec family kinase ITK/EMT in the human Jurkat leukemic T-cell line</GBReference_title>
+      <GBReference_journal>Proc. Natl. Acad. Sci. U.S.A. 91 (20), 9347-9351 (1994)</GBReference_journal>
+      <GBReference_pubmed>7524075</GBReference_pubmed>
+    </GBReference>
+    <GBReference>
+      <GBReference_reference>7</GBReference_reference>
+      <GBReference_position>1..619</GBReference_position>
+      <GBReference_authors>
+        <GBAuthor>Yao L</GBAuthor>
+        <GBAuthor>Kawakami Y</GBAuthor>
+        <GBAuthor>Kawakami T</GBAuthor>
+      </GBReference_authors>
+      <GBReference_title>The pleckstrin homology domain of Bruton tyrosine kinase interacts with protein kinase C</GBReference_title>
+      <GBReference_journal>Proc. Natl. Acad. Sci. U.S.A. 91 (19), 9175-9179 (1994)</GBReference_journal>
+      <GBReference_pubmed>7522330</GBReference_pubmed>
+    </GBReference>
+    <GBReference>
+      <GBReference_reference>8</GBReference_reference>
+      <GBReference_position>1..619</GBReference_position>
+      <GBReference_authors>
+        <GBAuthor>Janis EM</GBAuthor>
+        <GBAuthor>Siliciano JD</GBAuthor>
+        <GBAuthor>Isaac DD</GBAuthor>
+        <GBAuthor>Griffin CA</GBAuthor>
+        <GBAuthor>Hawkins AL</GBAuthor>
+        <GBAuthor>Kozak CA</GBAuthor>
+        <GBAuthor>Desiderio S</GBAuthor>
+      </GBReference_authors>
+      <GBReference_title>Mapping of the gene for the tyrosine kinase Itk to a region of conserved synteny between mouse chromosome 11 and human chromosome 5q</GBReference_title>
+      <GBReference_journal>Genomics 23 (1), 269-271 (1994)</GBReference_journal>
+      <GBReference_pubmed>7829087</GBReference_pubmed>
+    </GBReference>
+    <GBReference>
+      <GBReference_reference>9</GBReference_reference>
+      <GBReference_position>1..619</GBReference_position>
+      <GBReference_authors>
+        <GBAuthor>Siliciano JD</GBAuthor>
+        <GBAuthor>Morrow TA</GBAuthor>
+        <GBAuthor>Desiderio SV</GBAuthor>
+      </GBReference_authors>
+      <GBReference_title>itk, a T-cell-specific tyrosine kinase gene inducible by interleukin 2</GBReference_title>
+      <GBReference_journal>Proc. Natl. Acad. Sci. U.S.A. 89 (23), 11194-11198 (1992)</GBReference_journal>
+      <GBReference_pubmed>1280821</GBReference_pubmed>
+    </GBReference>
+    <GBReference>
+      <GBReference_reference>10</GBReference_reference>
+      <GBReference_position>1..619</GBReference_position>
+      <GBReference_authors>
+        <GBAuthor>Bernards A</GBAuthor>
+        <GBAuthor>de la Monte SM</GBAuthor>
+      </GBReference_authors>
+      <GBReference_title>The ltk receptor tyrosine kinase is expressed in pre-B lymphocytes and cerebral neurons and uses a non-AUG translational initiator</GBReference_title>
+      <GBReference_journal>EMBO J. 9 (7), 2279-2287 (1990)</GBReference_journal>
+      <GBReference_pubmed>2357970</GBReference_pubmed>
+    </GBReference>
+  </GBSeq_references>
+  <GBSeq_comment>VALIDATED REFSEQ: This record has undergone validation or preliminary review. The reference sequence was derived from BB843988.1, D14042.1, AK153613.1 and BY589043.1.; On Dec 20, 2006 this sequence version replaced gi:6754386.; ~Transcript Variant: This variant (2) uses an alternate in-frame splice site in the central coding region, compared to variant 1. The encoded isoform (2) is shorter, compared to isoform 1.; ~Publication Note: This RefSeq record includes a subset of the publications that are available for this gene. Please see the Gene record to access additional publications.; ##Evidence-Data-START## Transcript exon combination L05631.1, D14042.1 [ECO:0000332] RNAseq introns single sample supports all introns SAMN00849375, SAMN00849380 [ECO:0000348] ##Evidence-Data-END##</GBSeq_comment>
+  <GBSeq_source-db>REFSEQ: accession NM_010583.3</GBSeq_source-db>
+  <GBSeq_feature-table>
+    <GBFeature>
+      <GBFeature_key>source</GBFeature_key>
+      <GBFeature_location>1..619</GBFeature_location>
+      <GBFeature_intervals>
+        <GBInterval>
+          <GBInterval_from>1</GBInterval_from>
+          <GBInterval_to>619</GBInterval_to>
+          <GBInterval_accession>NP_034713.2</GBInterval_accession>
+        </GBInterval>
+      </GBFeature_intervals>
+      <GBFeature_quals>
+        <GBQualifier>
+          <GBQualifier_name>organism</GBQualifier_name>
+          <GBQualifier_value>Mus musculus</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>strain</GBQualifier_name>
+          <GBQualifier_value>C57BL/6</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>db_xref</GBQualifier_name>
+          <GBQualifier_value>taxon:10090</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>chromosome</GBQualifier_name>
+          <GBQualifier_value>11</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>map</GBQualifier_name>
+          <GBQualifier_value>11 27.75 cM</GBQualifier_value>
+        </GBQualifier>
+      </GBFeature_quals>
+    </GBFeature>
+    <GBFeature>
+      <GBFeature_key>Protein</GBFeature_key>
+      <GBFeature_location>1..619</GBFeature_location>
+      <GBFeature_intervals>
+        <GBInterval>
+          <GBInterval_from>1</GBInterval_from>
+          <GBInterval_to>619</GBInterval_to>
+          <GBInterval_accession>NP_034713.2</GBInterval_accession>
+        </GBInterval>
+      </GBFeature_intervals>
+      <GBFeature_quals>
+        <GBQualifier>
+          <GBQualifier_name>product</GBQualifier_name>
+          <GBQualifier_value>tyrosine-protein kinase ITK/TSK isoform 2</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>EC_number</GBQualifier_name>
+          <GBQualifier_value>2.7.10.2</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>note</GBQualifier_name>
+          <GBQualifier_value>tyrosine-protein kinase ITK/TSK; interleukin-2-inducible T cell kinase; kinase TLK; T-cell-specific kinase</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>calculated_mol_wt</GBQualifier_name>
+          <GBQualifier_value>71443</GBQualifier_value>
+        </GBQualifier>
+      </GBFeature_quals>
+    </GBFeature>
+    <GBFeature>
+      <GBFeature_key>Region</GBFeature_key>
+      <GBFeature_location>7..148</GBFeature_location>
+      <GBFeature_intervals>
+        <GBInterval>
+          <GBInterval_from>7</GBInterval_from>
+          <GBInterval_to>148</GBInterval_to>
+          <GBInterval_accession>NP_034713.2</GBInterval_accession>
+        </GBInterval>
+      </GBFeature_intervals>
+      <GBFeature_quals>
+        <GBQualifier>
+          <GBQualifier_name>region_name</GBQualifier_name>
+          <GBQualifier_value>PH_Btk</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>note</GBQualifier_name>
+          <GBQualifier_value>Bruton&apos;s tyrosine kinase pleckstrin homology (PH) domain; cd01238</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>db_xref</GBQualifier_name>
+          <GBQualifier_value>CDD:269944</GBQualifier_value>
+        </GBQualifier>
+      </GBFeature_quals>
+    </GBFeature>
+    <GBFeature>
+      <GBFeature_key>Site</GBFeature_key>
+      <GBFeature_location>order(9..10,28..30,43,94)</GBFeature_location>
+      <GBFeature_intervals>
+        <GBInterval>
+          <GBInterval_from>9</GBInterval_from>
+          <GBInterval_to>10</GBInterval_to>
+          <GBInterval_accession>NP_034713.2</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_from>28</GBInterval_from>
+          <GBInterval_to>30</GBInterval_to>
+          <GBInterval_accession>NP_034713.2</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>43</GBInterval_point>
+          <GBInterval_accession>NP_034713.2</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>94</GBInterval_point>
+          <GBInterval_accession>NP_034713.2</GBInterval_accession>
+        </GBInterval>
+      </GBFeature_intervals>
+      <GBFeature_operator>order</GBFeature_operator>
+      <GBFeature_quals>
+        <GBQualifier>
+          <GBQualifier_name>site_type</GBQualifier_name>
+          <GBQualifier_value>other</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>note</GBQualifier_name>
+          <GBQualifier_value>homodimer interface [polypeptide binding]</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>db_xref</GBQualifier_name>
+          <GBQualifier_value>CDD:269944</GBQualifier_value>
+        </GBQualifier>
+      </GBFeature_quals>
+    </GBFeature>
+    <GBFeature>
+      <GBFeature_key>Site</GBFeature_key>
+      <GBFeature_location>order(13,15..16,18..19,25,29,52)</GBFeature_location>
+      <GBFeature_intervals>
+        <GBInterval>
+          <GBInterval_point>13</GBInterval_point>
+          <GBInterval_accession>NP_034713.2</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_from>15</GBInterval_from>
+          <GBInterval_to>16</GBInterval_to>
+          <GBInterval_accession>NP_034713.2</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_from>18</GBInterval_from>
+          <GBInterval_to>19</GBInterval_to>
+          <GBInterval_accession>NP_034713.2</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>25</GBInterval_point>
+          <GBInterval_accession>NP_034713.2</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>29</GBInterval_point>
+          <GBInterval_accession>NP_034713.2</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>52</GBInterval_point>
+          <GBInterval_accession>NP_034713.2</GBInterval_accession>
+        </GBInterval>
+      </GBFeature_intervals>
+      <GBFeature_operator>order</GBFeature_operator>
+      <GBFeature_quals>
+        <GBQualifier>
+          <GBQualifier_name>site_type</GBQualifier_name>
+          <GBQualifier_value>other</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>note</GBQualifier_name>
+          <GBQualifier_value>phosphoinositide binding site [chemical binding]</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>db_xref</GBQualifier_name>
+          <GBQualifier_value>CDD:269944</GBQualifier_value>
+        </GBQualifier>
+      </GBFeature_quals>
+    </GBFeature>
+    <GBFeature>
+      <GBFeature_key>Site</GBFeature_key>
+      <GBFeature_location>order(121,132..133,143)</GBFeature_location>
+      <GBFeature_intervals>
+        <GBInterval>
+          <GBInterval_point>121</GBInterval_point>
+          <GBInterval_accession>NP_034713.2</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_from>132</GBInterval_from>
+          <GBInterval_to>133</GBInterval_to>
+          <GBInterval_accession>NP_034713.2</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>143</GBInterval_point>
+          <GBInterval_accession>NP_034713.2</GBInterval_accession>
+        </GBInterval>
+      </GBFeature_intervals>
+      <GBFeature_operator>order</GBFeature_operator>
+      <GBFeature_quals>
+        <GBQualifier>
+          <GBQualifier_name>site_type</GBQualifier_name>
+          <GBQualifier_value>other</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>note</GBQualifier_name>
+          <GBQualifier_value>Zn binding site [ion binding]</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>db_xref</GBQualifier_name>
+          <GBQualifier_value>CDD:269944</GBQualifier_value>
+        </GBQualifier>
+      </GBFeature_quals>
+    </GBFeature>
+    <GBFeature>
+      <GBFeature_key>Region</GBFeature_key>
+      <GBFeature_location>174..229</GBFeature_location>
+      <GBFeature_intervals>
+        <GBInterval>
+          <GBInterval_from>174</GBInterval_from>
+          <GBInterval_to>229</GBInterval_to>
+          <GBInterval_accession>NP_034713.2</GBInterval_accession>
+        </GBInterval>
+      </GBFeature_intervals>
+      <GBFeature_quals>
+        <GBQualifier>
+          <GBQualifier_name>region_name</GBQualifier_name>
+          <GBQualifier_value>SH3_ITK</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>note</GBQualifier_name>
+          <GBQualifier_value>Src Homology 3 domain of Interleukin-2-inducible T-cell Kinase; cd11908</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>db_xref</GBQualifier_name>
+          <GBQualifier_value>CDD:212841</GBQualifier_value>
+        </GBQualifier>
+      </GBFeature_quals>
+    </GBFeature>
+    <GBFeature>
+      <GBFeature_key>Site</GBFeature_key>
+      <GBFeature_location>order(179..180,185..186,188..189,205..209,220,222..225,227)</GBFeature_location>
+      <GBFeature_intervals>
+        <GBInterval>
+          <GBInterval_from>179</GBInterval_from>
+          <GBInterval_to>180</GBInterval_to>
+          <GBInterval_accession>NP_034713.2</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_from>185</GBInterval_from>
+          <GBInterval_to>186</GBInterval_to>
+          <GBInterval_accession>NP_034713.2</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_from>188</GBInterval_from>
+          <GBInterval_to>189</GBInterval_to>
+          <GBInterval_accession>NP_034713.2</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_from>205</GBInterval_from>
+          <GBInterval_to>209</GBInterval_to>
+          <GBInterval_accession>NP_034713.2</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>220</GBInterval_point>
+          <GBInterval_accession>NP_034713.2</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_from>222</GBInterval_from>
+          <GBInterval_to>225</GBInterval_to>
+          <GBInterval_accession>NP_034713.2</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>227</GBInterval_point>
+          <GBInterval_accession>NP_034713.2</GBInterval_accession>
+        </GBInterval>
+      </GBFeature_intervals>
+      <GBFeature_operator>order</GBFeature_operator>
+      <GBFeature_quals>
+        <GBQualifier>
+          <GBQualifier_name>site_type</GBQualifier_name>
+          <GBQualifier_value>other</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>note</GBQualifier_name>
+          <GBQualifier_value>SH2 domain interface [polypeptide binding]</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>db_xref</GBQualifier_name>
+          <GBQualifier_value>CDD:212841</GBQualifier_value>
+        </GBQualifier>
+      </GBFeature_quals>
+    </GBFeature>
+    <GBFeature>
+      <GBFeature_key>Site</GBFeature_key>
+      <GBFeature_location>order(180,182,185,189,207..208,222,224..225)</GBFeature_location>
+      <GBFeature_intervals>
+        <GBInterval>
+          <GBInterval_point>180</GBInterval_point>
+          <GBInterval_accession>NP_034713.2</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>182</GBInterval_point>
+          <GBInterval_accession>NP_034713.2</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>185</GBInterval_point>
+          <GBInterval_accession>NP_034713.2</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>189</GBInterval_point>
+          <GBInterval_accession>NP_034713.2</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_from>207</GBInterval_from>
+          <GBInterval_to>208</GBInterval_to>
+          <GBInterval_accession>NP_034713.2</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>222</GBInterval_point>
+          <GBInterval_accession>NP_034713.2</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_from>224</GBInterval_from>
+          <GBInterval_to>225</GBInterval_to>
+          <GBInterval_accession>NP_034713.2</GBInterval_accession>
+        </GBInterval>
+      </GBFeature_intervals>
+      <GBFeature_operator>order</GBFeature_operator>
+      <GBFeature_quals>
+        <GBQualifier>
+          <GBQualifier_name>site_type</GBQualifier_name>
+          <GBQualifier_value>other</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>note</GBQualifier_name>
+          <GBQualifier_value>peptide ligand binding site [polypeptide binding]</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>db_xref</GBQualifier_name>
+          <GBQualifier_value>CDD:212841</GBQualifier_value>
+        </GBQualifier>
+      </GBFeature_quals>
+    </GBFeature>
+    <GBFeature>
+      <GBFeature_key>Region</GBFeature_key>
+      <GBFeature_location>232..339</GBFeature_location>
+      <GBFeature_intervals>
+        <GBInterval>
+          <GBInterval_from>232</GBInterval_from>
+          <GBInterval_to>339</GBInterval_to>
+          <GBInterval_accession>NP_034713.2</GBInterval_accession>
+        </GBInterval>
+      </GBFeature_intervals>
+      <GBFeature_quals>
+        <GBQualifier>
+          <GBQualifier_name>region_name</GBQualifier_name>
+          <GBQualifier_value>SH2_Tec_Itk</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>note</GBQualifier_name>
+          <GBQualifier_value>Src homology 2 (SH2) domain found in Tec protein, IL2-inducible T-cell kinase (Itk); cd10396</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>db_xref</GBQualifier_name>
+          <GBQualifier_value>CDD:198259</GBQualifier_value>
+        </GBQualifier>
+      </GBFeature_quals>
+    </GBFeature>
+    <GBFeature>
+      <GBFeature_key>Site</GBFeature_key>
+      <GBFeature_location>order(246,265)</GBFeature_location>
+      <GBFeature_intervals>
+        <GBInterval>
+          <GBInterval_point>246</GBInterval_point>
+          <GBInterval_accession>NP_034713.2</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>265</GBInterval_point>
+          <GBInterval_accession>NP_034713.2</GBInterval_accession>
+        </GBInterval>
+      </GBFeature_intervals>
+      <GBFeature_operator>order</GBFeature_operator>
+      <GBFeature_quals>
+        <GBQualifier>
+          <GBQualifier_name>site_type</GBQualifier_name>
+          <GBQualifier_value>other</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>note</GBQualifier_name>
+          <GBQualifier_value>phosphotyrosine binding pocket [polypeptide binding]</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>db_xref</GBQualifier_name>
+          <GBQualifier_value>CDD:198259</GBQualifier_value>
+        </GBQualifier>
+      </GBFeature_quals>
+    </GBFeature>
+    <GBFeature>
+      <GBFeature_key>Site</GBFeature_key>
+      <GBFeature_location>order(321,329..330)</GBFeature_location>
+      <GBFeature_intervals>
+        <GBInterval>
+          <GBInterval_point>321</GBInterval_point>
+          <GBInterval_accession>NP_034713.2</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_from>329</GBInterval_from>
+          <GBInterval_to>330</GBInterval_to>
+          <GBInterval_accession>NP_034713.2</GBInterval_accession>
+        </GBInterval>
+      </GBFeature_intervals>
+      <GBFeature_operator>order</GBFeature_operator>
+      <GBFeature_quals>
+        <GBQualifier>
+          <GBQualifier_name>site_type</GBQualifier_name>
+          <GBQualifier_value>other</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>note</GBQualifier_name>
+          <GBQualifier_value>hydrophobic binding pocket [polypeptide binding]</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>db_xref</GBQualifier_name>
+          <GBQualifier_value>CDD:198259</GBQualifier_value>
+        </GBQualifier>
+      </GBFeature_quals>
+    </GBFeature>
+    <GBFeature>
+      <GBFeature_key>Region</GBFeature_key>
+      <GBFeature_location>357..612</GBFeature_location>
+      <GBFeature_intervals>
+        <GBInterval>
+          <GBInterval_from>357</GBInterval_from>
+          <GBInterval_to>612</GBInterval_to>
+          <GBInterval_accession>NP_034713.2</GBInterval_accession>
+        </GBInterval>
+      </GBFeature_intervals>
+      <GBFeature_quals>
+        <GBQualifier>
+          <GBQualifier_name>region_name</GBQualifier_name>
+          <GBQualifier_value>PTKc_Itk</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>note</GBQualifier_name>
+          <GBQualifier_value>Catalytic domain of the Protein Tyrosine Kinase, Interleukin-2-inducible T-cell Kinase; cd05112</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>db_xref</GBQualifier_name>
+          <GBQualifier_value>CDD:133243</GBQualifier_value>
+        </GBQualifier>
+      </GBFeature_quals>
+    </GBFeature>
+    <GBFeature>
+      <GBFeature_key>Region</GBFeature_key>
+      <GBFeature_location>362..611</GBFeature_location>
+      <GBFeature_intervals>
+        <GBInterval>
+          <GBInterval_from>362</GBInterval_from>
+          <GBInterval_to>611</GBInterval_to>
+          <GBInterval_accession>NP_034713.2</GBInterval_accession>
+        </GBInterval>
+      </GBFeature_intervals>
+      <GBFeature_quals>
+        <GBQualifier>
+          <GBQualifier_name>region_name</GBQualifier_name>
+          <GBQualifier_value>Pkinase_Tyr</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>note</GBQualifier_name>
+          <GBQualifier_value>Protein tyrosine kinase; pfam07714</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>db_xref</GBQualifier_name>
+          <GBQualifier_value>CDD:254379</GBQualifier_value>
+        </GBQualifier>
+      </GBFeature_quals>
+    </GBFeature>
+    <GBFeature>
+      <GBFeature_key>Site</GBFeature_key>
+      <GBFeature_location>order(368..369,376,388,390,418,434..437,440..441,481,485..486,488,498..499,516..520,529,563)</GBFeature_location>
+      <GBFeature_intervals>
+        <GBInterval>
+          <GBInterval_from>368</GBInterval_from>
+          <GBInterval_to>369</GBInterval_to>
+          <GBInterval_accession>NP_034713.2</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>376</GBInterval_point>
+          <GBInterval_accession>NP_034713.2</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>388</GBInterval_point>
+          <GBInterval_accession>NP_034713.2</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>390</GBInterval_point>
+          <GBInterval_accession>NP_034713.2</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>418</GBInterval_point>
+          <GBInterval_accession>NP_034713.2</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_from>434</GBInterval_from>
+          <GBInterval_to>437</GBInterval_to>
+          <GBInterval_accession>NP_034713.2</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_from>440</GBInterval_from>
+          <GBInterval_to>441</GBInterval_to>
+          <GBInterval_accession>NP_034713.2</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>481</GBInterval_point>
+          <GBInterval_accession>NP_034713.2</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_from>485</GBInterval_from>
+          <GBInterval_to>486</GBInterval_to>
+          <GBInterval_accession>NP_034713.2</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>488</GBInterval_point>
+          <GBInterval_accession>NP_034713.2</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_from>498</GBInterval_from>
+          <GBInterval_to>499</GBInterval_to>
+          <GBInterval_accession>NP_034713.2</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_from>516</GBInterval_from>
+          <GBInterval_to>520</GBInterval_to>
+          <GBInterval_accession>NP_034713.2</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>529</GBInterval_point>
+          <GBInterval_accession>NP_034713.2</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>563</GBInterval_point>
+          <GBInterval_accession>NP_034713.2</GBInterval_accession>
+        </GBInterval>
+      </GBFeature_intervals>
+      <GBFeature_operator>order</GBFeature_operator>
+      <GBFeature_quals>
+        <GBQualifier>
+          <GBQualifier_name>site_type</GBQualifier_name>
+          <GBQualifier_value>active</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>db_xref</GBQualifier_name>
+          <GBQualifier_value>CDD:133243</GBQualifier_value>
+        </GBQualifier>
+      </GBFeature_quals>
+    </GBFeature>
+    <GBFeature>
+      <GBFeature_key>Site</GBFeature_key>
+      <GBFeature_location>order(368..369,376,388,390,418,434..437,440..441,485..486,488,498..499)</GBFeature_location>
+      <GBFeature_intervals>
+        <GBInterval>
+          <GBInterval_from>368</GBInterval_from>
+          <GBInterval_to>369</GBInterval_to>
+          <GBInterval_accession>NP_034713.2</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>376</GBInterval_point>
+          <GBInterval_accession>NP_034713.2</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>388</GBInterval_point>
+          <GBInterval_accession>NP_034713.2</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>390</GBInterval_point>
+          <GBInterval_accession>NP_034713.2</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>418</GBInterval_point>
+          <GBInterval_accession>NP_034713.2</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_from>434</GBInterval_from>
+          <GBInterval_to>437</GBInterval_to>
+          <GBInterval_accession>NP_034713.2</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_from>440</GBInterval_from>
+          <GBInterval_to>441</GBInterval_to>
+          <GBInterval_accession>NP_034713.2</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_from>485</GBInterval_from>
+          <GBInterval_to>486</GBInterval_to>
+          <GBInterval_accession>NP_034713.2</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>488</GBInterval_point>
+          <GBInterval_accession>NP_034713.2</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_from>498</GBInterval_from>
+          <GBInterval_to>499</GBInterval_to>
+          <GBInterval_accession>NP_034713.2</GBInterval_accession>
+        </GBInterval>
+      </GBFeature_intervals>
+      <GBFeature_operator>order</GBFeature_operator>
+      <GBFeature_quals>
+        <GBQualifier>
+          <GBQualifier_name>site_type</GBQualifier_name>
+          <GBQualifier_value>other</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>note</GBQualifier_name>
+          <GBQualifier_value>ATP binding site [chemical binding]</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>db_xref</GBQualifier_name>
+          <GBQualifier_value>CDD:133243</GBQualifier_value>
+        </GBQualifier>
+      </GBFeature_quals>
+    </GBFeature>
+    <GBFeature>
+      <GBFeature_key>Site</GBFeature_key>
+      <GBFeature_location>order(481,485,516..520,529,563)</GBFeature_location>
+      <GBFeature_intervals>
+        <GBInterval>
+          <GBInterval_point>481</GBInterval_point>
+          <GBInterval_accession>NP_034713.2</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>485</GBInterval_point>
+          <GBInterval_accession>NP_034713.2</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_from>516</GBInterval_from>
+          <GBInterval_to>520</GBInterval_to>
+          <GBInterval_accession>NP_034713.2</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>529</GBInterval_point>
+          <GBInterval_accession>NP_034713.2</GBInterval_accession>
+        </GBInterval>
+        <GBInterval>
+          <GBInterval_point>563</GBInterval_point>
+          <GBInterval_accession>NP_034713.2</GBInterval_accession>
+        </GBInterval>
+      </GBFeature_intervals>
+      <GBFeature_operator>order</GBFeature_operator>
+      <GBFeature_quals>
+        <GBQualifier>
+          <GBQualifier_name>site_type</GBQualifier_name>
+          <GBQualifier_value>other</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>note</GBQualifier_name>
+          <GBQualifier_value>polypeptide substrate binding site [polypeptide binding]</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>db_xref</GBQualifier_name>
+          <GBQualifier_value>CDD:133243</GBQualifier_value>
+        </GBQualifier>
+      </GBFeature_quals>
+    </GBFeature>
+    <GBFeature>
+      <GBFeature_key>Site</GBFeature_key>
+      <GBFeature_location>498..522</GBFeature_location>
+      <GBFeature_intervals>
+        <GBInterval>
+          <GBInterval_from>498</GBInterval_from>
+          <GBInterval_to>522</GBInterval_to>
+          <GBInterval_accession>NP_034713.2</GBInterval_accession>
+        </GBInterval>
+      </GBFeature_intervals>
+      <GBFeature_quals>
+        <GBQualifier>
+          <GBQualifier_name>site_type</GBQualifier_name>
+          <GBQualifier_value>other</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>note</GBQualifier_name>
+          <GBQualifier_value>activation loop (A-loop)</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>db_xref</GBQualifier_name>
+          <GBQualifier_value>CDD:133243</GBQualifier_value>
+        </GBQualifier>
+      </GBFeature_quals>
+    </GBFeature>
+    <GBFeature>
+      <GBFeature_key>CDS</GBFeature_key>
+      <GBFeature_location>1..619</GBFeature_location>
+      <GBFeature_intervals>
+        <GBInterval>
+          <GBInterval_from>1</GBInterval_from>
+          <GBInterval_to>619</GBInterval_to>
+          <GBInterval_accession>NP_034713.2</GBInterval_accession>
+        </GBInterval>
+      </GBFeature_intervals>
+      <GBFeature_quals>
+        <GBQualifier>
+          <GBQualifier_name>gene</GBQualifier_name>
+          <GBQualifier_value>Itk</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>gene_synonym</GBQualifier_name>
+          <GBQualifier_value>Emt; Tcsk; Tsk</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>coded_by</GBQualifier_name>
+          <GBQualifier_value>NM_010583.3:106..1965</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>note</GBQualifier_name>
+          <GBQualifier_value>isoform 2 is encoded by transcript variant 2</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>db_xref</GBQualifier_name>
+          <GBQualifier_value>CCDS:CCDS24575.2</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>db_xref</GBQualifier_name>
+          <GBQualifier_value>GeneID:16428</GBQualifier_value>
+        </GBQualifier>
+        <GBQualifier>
+          <GBQualifier_name>db_xref</GBQualifier_name>
+          <GBQualifier_value>MGI:MGI:96621</GBQualifier_value>
+        </GBQualifier>
+      </GBFeature_quals>
+    </GBFeature>
+  </GBSeq_feature-table>
+  <GBSeq_sequence>mnnfilleeqlikksqqkrrtspsnfkvrffvltkaslayfedrhgkkrtlkgsielsrikcveivksdisipchykypfqvvhdnyllyvfapdcesrqrwvltlkeetrnnnslvskyhpnfwmdgrwrccsqlekpavgcapydpsknaskkplpptpednrrsfqepeetlvialydyqtndpqelalrcdeeyylldsseihwwrvqdknghegyapssylvekspnnletyewynksisrdkaekllldtgkegafmvrdsrtpgtytvsvftkaiisenpcikhyhiketndspkryyvaekyvfdsiplliqyhqynggglvtrlrypvcswrqkapvtaglrygkwviqpseltfvqeigsgqfglvhlgywlnkdkvaiktiqegamseedfieeaevmmklshpklvqlygvcleqapiclvfefmehgclsdylrsqrglfaaetllgmcldvcegmaylekacvihrdlaarnclvgenqvikvsdfgmtrfvlddqytsstgtkfpvkwaspevfsfsryssksdvwsfgvlmwevfsegkipyenrsnsevvedistgfrlykprlaschvyqimnhcwkekpedrppfsqllsqlaeiaeagl</GBSeq_sequence>
+</GBSeq>
+
+</GBSet>
+

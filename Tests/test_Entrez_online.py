@@ -43,7 +43,7 @@ URL_EMAIL = "email=biopython-dev%40biopython.org"
 
 
 class EntrezOnlineCase(unittest.TestCase):
-    def test_construct_cgi(self):
+    def test_construct_cgi_einfo(self):
         """Test constructed url for request to Entrez."""
         cgi = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/einfo.fcgi'
         params = Entrez._construct_params(params=None)
@@ -64,14 +64,24 @@ class EntrezOnlineCase(unittest.TestCase):
         # arbitrary number, just to make sure that DbList has contents
         self.assertTrue(len(rec['DbList']) > 5)
 
-    def test_parse_from_url(self):
+    def test_construct_cgi_efetch(self):
+        cgi = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi'
+        variables = {'db': 'protein', 'id': '15718680,157427902,119703751', 'retmode': 'xml'}
+        post = False
+
+        params = Entrez._construct_params(variables)
+        options = Entrez._encode_options(ecitmatch=False, params=params)
+        result_url = Entrez._construct_cgi(cgi, post=post, options=options)
+        self.assertTrue(result_url.startswith(URL_HEAD + "efetch.fcgi?"), result_url)
+        self.assertTrue(URL_TOOL in result_url)
+        self.assertTrue(URL_EMAIL in result_url)
+        self.assertTrue("id=15718680%2C157427902%2C119703751" in result_url, result_url)
+
+    @patch("Bio.Entrez._open", return_value=_binary_to_string_handle(open("Entrez/protein2.xml", "rb")))
+    def test_parse_from_url(self, mock_open):
         """Test Entrez.parse from URL"""
         handle = Entrez.efetch(db='protein', id='15718680,157427902,119703751',
                                retmode='xml')
-        self.assertTrue(handle.url.startswith(URL_HEAD + "efetch.fcgi?"), handle.url)
-        self.assertTrue(URL_TOOL in handle.url)
-        self.assertTrue(URL_EMAIL in handle.url)
-        self.assertTrue("id=15718680%2C157427902%2C119703751" in handle.url, handle.url)
         recs = list(Entrez.parse(handle))
         handle.close()
         self.assertEqual(3, len(recs))
