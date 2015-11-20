@@ -133,14 +133,11 @@ class EntrezOnlineCase(unittest.TestCase):
         self.assertTrue(URL_TOOL in result_url)
         self.assertTrue(URL_EMAIL in result_url)
 
-    def test_seqio_from_url(self):
+    @patch("Bio.Entrez._open", return_value=_binary_to_string_handle(open("Entrez/efetch1.txt", "rb")))
+    def test_seqio_from_url(self, mock_open):
         """Test Entrez into SeqIO.read from URL"""
         handle = Entrez.efetch(db='nucleotide', id='186972394', rettype='gb',
                                retmode='text')
-        self.assertTrue(handle.url.startswith(URL_HEAD + "efetch.fcgi?"), handle.url)
-        self.assertTrue(URL_TOOL in handle.url)
-        self.assertTrue(URL_EMAIL in handle.url)
-        self.assertTrue("id=186972394" in handle.url)
         record = SeqIO.read(handle, 'genbank')
         handle.close()
         self.assertTrue(isinstance(record, SeqRecord))
