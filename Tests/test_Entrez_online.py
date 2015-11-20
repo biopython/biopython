@@ -113,12 +113,25 @@ class EntrezOnlineCase(unittest.TestCase):
                                 retstart=0, retmax=10,
                                 webenv=webenv, query_key=query_key,
                                 usehistory='y')
-        #self.assertTrue(handle.url.startswith(URL_HEAD + "esearch.fcgi?"), handle.url)
-        #self.assertTrue(URL_TOOL in handle.url)
-        #self.assertTrue(URL_EMAIL in handle.url)
         search_record = Entrez.read(handle)
         handle.close()
         self.assertEqual(2, len(search_record['IdList']))
+
+    def test_construct_cgi_esearch(self):
+        webenv = 'NCID_1_214573425_130.14.18.34_9001_1448030770_1520095147_0MetA0_S_MegaStore_F_1'
+        query_key = 2
+        cgi = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi'
+        variables = {'db': 'nucleotide', 'term': None, 'retstart': 0,
+                     'retmax': 10, 'webenv': webenv, 'query_key': query_key,
+                     'usehistory': 'y'}
+        post = False
+
+        params = Entrez._construct_params(variables)
+        options = Entrez._encode_options(ecitmatch=False, params=params)
+        result_url = Entrez._construct_cgi(cgi, post=post, options=options)
+        self.assertTrue(result_url.startswith(URL_HEAD + "esearch.fcgi?"), result_url)
+        self.assertTrue(URL_TOOL in result_url)
+        self.assertTrue(URL_EMAIL in result_url)
 
     def test_seqio_from_url(self):
         """Test Entrez into SeqIO.read from URL"""
