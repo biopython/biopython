@@ -144,21 +144,19 @@ class EntrezOnlineCase(unittest.TestCase):
         self.assertEqual('EU490707.1', record.id)
         self.assertEqual(1302, len(record))
 
-    def test_medline_from_url(self):
+    @patch("Bio.Entrez._open", return_value=_binary_to_string_handle(open("Entrez/efetch2.txt", "rb")))
+    def test_medline_from_url(self, mock_open):
         """Test Entrez into Medline.read from URL"""
         handle = Entrez.efetch(db="pubmed", id='19304878', rettype="medline",
                                retmode="text")
-        self.assertTrue(handle.url.startswith(URL_HEAD + "efetch.fcgi?"), handle.url)
-        self.assertTrue(URL_TOOL in handle.url)
-        self.assertTrue(URL_EMAIL in handle.url)
-        self.assertTrue("id=19304878" in handle.url)
         record = Medline.read(handle)
         handle.close()
         self.assertTrue(isinstance(record, dict))
         self.assertEqual('19304878', record['PMID'])
         self.assertEqual('10.1093/bioinformatics/btp163 [doi]', record['LID'])
 
-    def test_efetch_biosystems_xml(self):
+    @patch("Bio.Entrez._open", return_value=_binary_to_string_handle(open("Entrez/efetch3.xml", "rb")))
+    def test_efetch_biosystems_xml(self, mock_open):
         """Test Entrez parser with XML from biosystems"""
         handle = Entrez.efetch(id="1134002", db="biosystems", retmode="xml")
         records = list(Entrez.parse(handle))

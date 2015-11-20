@@ -1,0 +1,74 @@
+
+PMID- 19304878
+OWN - NLM
+STAT- MEDLINE
+DA  - 20090515
+DCOM- 20090709
+LR  - 20140831
+IS  - 1367-4811 (Electronic)
+IS  - 1367-4803 (Linking)
+VI  - 25
+IP  - 11
+DP  - 2009 Jun 1
+TI  - Biopython: freely available Python tools for computational molecular biology and 
+      bioinformatics.
+PG  - 1422-3
+LID - 10.1093/bioinformatics/btp163 [doi]
+AB  - SUMMARY: The Biopython project is a mature open source international
+      collaboration of volunteer developers, providing Python libraries for a wide
+      range of bioinformatics problems. Biopython includes modules for reading and
+      writing different sequence file formats and multiple sequence alignments, dealing
+      with 3D macro molecular structures, interacting with common tools such as BLAST, 
+      ClustalW and EMBOSS, accessing key online databases, as well as providing
+      numerical methods for statistical learning. AVAILABILITY: Biopython is freely
+      available, with documentation and source code at (www.biopython.org) under the
+      Biopython license.
+FAU - Cock, Peter J A
+AU  - Cock PJ
+AD  - Plant Pathology, SCRI, Invergowrie, Dundee, UK. peter.cock@scri.ac.uk
+FAU - Antao, Tiago
+AU  - Antao T
+FAU - Chang, Jeffrey T
+AU  - Chang JT
+FAU - Chapman, Brad A
+AU  - Chapman BA
+FAU - Cox, Cymon J
+AU  - Cox CJ
+FAU - Dalke, Andrew
+AU  - Dalke A
+FAU - Friedberg, Iddo
+AU  - Friedberg I
+FAU - Hamelryck, Thomas
+AU  - Hamelryck T
+FAU - Kauff, Frank
+AU  - Kauff F
+FAU - Wilczynski, Bartek
+AU  - Wilczynski B
+FAU - de Hoon, Michiel J L
+AU  - de Hoon MJ
+LA  - eng
+GR  - R00 LM009837/LM/NLM NIH HHS/United States
+PT  - Journal Article
+PT  - Research Support, Non-U.S. Gov't
+DEP - 20090320
+PL  - England
+TA  - Bioinformatics
+JT  - Bioinformatics (Oxford, England)
+JID - 9808944
+SB  - IM
+MH  - Computational Biology/*methods
+MH  - Databases, Factual
+MH  - Internet
+MH  - Programming Languages
+MH  - *Software
+PMC - PMC2682512
+OID - NLM: PMC2682512
+EDAT- 2009/03/24 09:00
+MHDA- 2009/07/10 09:00
+CRDT- 2009/03/24 09:00
+PHST- 2009/03/20 [aheadofprint]
+AID - btp163 [pii]
+AID - 10.1093/bioinformatics/btp163 [doi]
+PST - ppublish
+SO  - Bioinformatics. 2009 Jun 1;25(11):1422-3. doi: 10.1093/bioinformatics/btp163.
+      Epub 2009 Mar 20.
