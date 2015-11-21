@@ -89,7 +89,7 @@ class EntrezOnlineCase(unittest.TestCase):
         # arbitrary number, just to make sure the parser works
         self.assertTrue(all(len(rec).keys > 5) for rec in recs)
 
-    def test_construct_cgi_elink(self):
+    def test_construct_cgi_elink1(self):
         cgi = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi'
         variables = {'cmd': 'neighbor_history', 'db': 'nucleotide',
                      'dbfrom': 'protein', 'id': '22347800,48526535',
@@ -103,6 +103,38 @@ class EntrezOnlineCase(unittest.TestCase):
         self.assertTrue(URL_TOOL in result_url)
         self.assertTrue(URL_EMAIL in result_url)
         self.assertTrue("id=22347800%2C48526535" in result_url, result_url)
+
+    def test_construct_cgi_elink2(self):
+        """Commas: Link from protein to gene."""
+        cgi = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi'
+        variables = {'db': 'gene', 'dbfrom': 'protein',
+                     'id': '15718680,157427902,119703751'}
+        post = False
+
+        params = Entrez._construct_params(variables)
+        options = Entrez._encode_options(ecitmatch=False, params=params)
+        result_url = Entrez._construct_cgi(cgi, post=post, options=options)
+        self.assertTrue(result_url.startswith(URL_HEAD + "elink.fcgi"), result_url)
+        self.assertTrue(URL_TOOL in result_url)
+        self.assertTrue(URL_EMAIL in result_url)
+        self.assertTrue("id=15718680%2C157427902%2C119703751" in result_url, result_url)
+
+    def test_construct_cgi_elink3(self):
+        """Multiple ID entries: Find one-to-one links from protein to gene."""
+        cgi = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi'
+        variables = {'db': 'gene', 'dbfrom': 'protein',
+                     'id' : ["15718680", "157427902", "119703751"]}
+        post = False
+
+        params = Entrez._construct_params(variables)
+        options = Entrez._encode_options(ecitmatch=False, params=params)
+        result_url = Entrez._construct_cgi(cgi, post=post, options=options)
+        self.assertTrue(result_url.startswith(URL_HEAD + "elink.fcgi"), result_url)
+        self.assertTrue(URL_TOOL in result_url)
+        self.assertTrue(URL_EMAIL in result_url)
+        self.assertTrue("id=15718680" in result_url, result_url)
+        self.assertTrue("id=157427902" in result_url, result_url)
+        self.assertTrue("id=119703751" in result_url, result_url)
 
     @patch("Bio.Entrez._open", return_value=_binary_to_string_handle(open("Entrez/esearch9.xml", "rb")))
     def test_webenv_search(self, mock_open):
