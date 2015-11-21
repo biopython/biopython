@@ -196,34 +196,25 @@ class EntrezOnlineCase(unittest.TestCase):
         self.assertEqual(len(records), 1)
         self.assertEqual(records[0]['System_sysid']['Sys-id']['Sys-id_bsid'], '1134002')
 
-    def test_elink(self):
-        # Commas: Link from protein to gene
-        handle = Entrez.elink(db="gene", dbfrom="protein",
-                              id="15718680,157427902,119703751")
-        self.assertTrue(handle.url.startswith(URL_HEAD + "elink.fcgi"), handle.url)
-        self.assertTrue(URL_TOOL in handle.url)
-        self.assertTrue(URL_EMAIL in handle.url)
-        self.assertTrue("id=15718680%2C157427902%2C119703751" in handle.url, handle.url)
-        handle.close()
+    def test_construct_cgi_epost1(self):
+        cgi = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/epost.fcgi'
+        variables = {'db': 'nuccore', 'id': '186972394,160418'}
+        post = True
 
-        # Multiple ID entries: Find one-to-one links from protein to gene
-        handle = Entrez.elink(db="gene", dbfrom="protein",
-                              id=["15718680", "157427902", "119703751"])
-        self.assertTrue(handle.url.startswith(URL_HEAD + "elink.fcgi"), handle.url)
-        self.assertTrue(URL_TOOL in handle.url)
-        self.assertTrue(URL_EMAIL in handle.url)
-        self.assertTrue("id=15718680" in handle.url, handle.url)
-        self.assertTrue("id=157427902" in handle.url, handle.url)
-        self.assertTrue("id=119703751" in handle.url, handle.url)
-        handle.close()
+        params = Entrez._construct_params(variables)
+        options = Entrez._encode_options(ecitmatch=False, params=params)
+        result_url = Entrez._construct_cgi(cgi, post=post, options=options)
+        self.assertEqual(URL_HEAD + "epost.fcgi", result_url)
 
-    def test_epost(self):
-        handle = Entrez.epost("nuccore", id="186972394,160418")
-        self.assertEqual(URL_HEAD + "epost.fcgi", handle.url)
-        handle.close()
-        handle = Entrez.epost("nuccore", id=["160418", "160351"])
-        self.assertEqual(URL_HEAD + "epost.fcgi", handle.url)
-        handle.close()
+    def test_construct_cgi_epost2(self):
+        cgi = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/epost.fcgi'
+        variables = {'db': 'nuccore', 'id': ["160418", "160351"]}
+        post = True
+
+        params = Entrez._construct_params(variables)
+        options = Entrez._encode_options(ecitmatch=False, params=params)
+        result_url = Entrez._construct_cgi(cgi, post=post, options=options)
+        self.assertEqual(URL_HEAD + "epost.fcgi", result_url)
 
     def test_ecitmatch(self):
         citation = {
