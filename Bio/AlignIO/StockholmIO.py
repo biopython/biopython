@@ -1,10 +1,10 @@
 # Copyright 2006-2015 by Peter Cock.  All rights reserved.
+# Revisions copyright 2015 by Ben Woodcroft.  All rights reserved.
 #
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-# Ben Woodcroft added modifications to improve read performance
 """Bio.AlignIO support for "stockholm" format (used in the PFAM database).
 
 You are expected to use this module via the Bio.AlignIO functions (or the
@@ -139,6 +139,7 @@ from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
 from .Interfaces import AlignmentIterator, SequentialAlignmentWriter
 from Bio._py3k import OrderedDict
+
 
 class StockholmWriter(SequentialAlignmentWriter):
     """Stockholm/PFAM alignment writer."""
@@ -339,7 +340,7 @@ class StockholmIterator(AlignmentIterator):
         # if present it agrees with our parsing.
 
         seqs = {}
-        ids = OrderedDict() # Really only need an OrderedSet, but python lacks this
+        ids = OrderedDict()  # Really only need an OrderedSet, but python lacks this
         gs = {}
         gr = {}
         gf = {}
