@@ -3,6 +3,8 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
+
+# Ben Woodcroft added modifications to improve read performance
 """Bio.AlignIO support for "stockholm" format (used in the PFAM database).
 
 You are expected to use this module via the Bio.AlignIO functions (or the
@@ -136,7 +138,7 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
 from .Interfaces import AlignmentIterator, SequentialAlignmentWriter
-from collections import OrderedDict
+from Bio._py3k import OrderedDict
 
 class StockholmWriter(SequentialAlignmentWriter):
     """Stockholm/PFAM alignment writer."""
@@ -433,7 +435,7 @@ class StockholmIterator(AlignmentIterator):
 
             alignment_length = len(list(seqs.values())[0])
             records = []  # Alignment obj will put them all in a list anyway
-            for id in ids.keys():
+            for id in ids:
                 seq = seqs[id]
                 if alignment_length != len(seq):
                     raise ValueError("Sequences have different lengths, or repeated identifier")
