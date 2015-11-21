@@ -244,7 +244,8 @@ class EntrezOnlineCase(unittest.TestCase):
         expected_result = "proc natl acad sci u s a|1991|88|3248|mann bj|citation_1|2014248\n"
         self.assertEquals(result, expected_result)
 
-    def test_fetch_xml_schemas(self):
+    @patch("Bio.Entrez._open", return_value=_binary_to_string_handle(open("Entrez/efetch4.xml", "rb")))
+    def test_fetch_xml_schemas(self, mock_open):
         handle = Entrez.efetch("protein", id="783730874", rettype="ipg", retmode="xml")
         records = list(Entrez.parse(handle))
         handle.close()
