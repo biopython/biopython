@@ -377,22 +377,7 @@ def ecitmatch(**keywds):
     >>> print(record["Query"])
     """
     cgi = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/ecitmatch.cgi'
-    # XML is the only supported value, and it actually returns TXT.
-    variables = {'retmode': 'xml'}
-    citation_keys = ('journal_title', 'year', 'volume', 'first_page', 'author_name', 'key')
-
-    # Accept pre-formatted strings
-    if isinstance(keywds['bdata'], str):
-        variables.update(keywds)
-    else:
-        # Alternatively accept a nicer interface
-        variables['db'] = keywds['db']
-        bdata = []
-        for citation in keywds['bdata']:
-            formatted_citation = '|'.join([citation.get(key, "") for key in citation_keys])
-            bdata.append(formatted_citation)
-        variables['bdata'] = '\r'.join(bdata)
-
+    variables = _update_ecitmatch_variables(keywds)
     return _open(cgi, variables, ecitmatch=True)
 
 
@@ -490,6 +475,9 @@ def _open(cgi, params=None, post=False, ecitmatch=False):
     return _binary_to_string_handle(handle)
 
 
+_open.previous = 0
+
+
 def _construct_params(params):
     if params is None:
         params = {}
@@ -537,7 +525,24 @@ def _construct_cgi(cgi, post, options):
     return cgi
 
 
-_open.previous = 0
+def _update_ecitmatch_variables(keywds):
+    # XML is the only supported value, and it actually returns TXT.
+    variables = {'retmode': 'xml'}
+    citation_keys = (
+        'journal_title', 'year', 'volume', 'first_page', 'author_name', 'key')
+    # Accept pre-formatted strings
+    if isinstance(keywds['bdata'], str):
+        variables.update(keywds)
+    else:
+        # Alternatively accept a nicer interface
+        variables['db'] = keywds['db']
+        bdata = []
+        for citation in keywds['bdata']:
+            formatted_citation = '|'.join(
+                [citation.get(key, "") for key in citation_keys])
+            bdata.append(formatted_citation)
+        variables['bdata'] = '\r'.join(bdata)
+    return variables
 
 
 def _test():

@@ -216,14 +216,30 @@ class EntrezOnlineCase(unittest.TestCase):
         result_url = Entrez._construct_cgi(cgi, post=post, options=options)
         self.assertEqual(URL_HEAD + "epost.fcgi", result_url)
 
-    def test_ecitmatch(self):
+    def test_construct_cgi_ecitmatch(self):
+        citation = {
+            "journal_title": "proc natl acad sci u s a",
+            "year": "1991", "volume": "88", "first_page": "3248",
+            "author_name": "mann bj", "key": "citation_1"
+        }
+        cgi = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/ecitmatch.cgi'
+        variables = Entrez._update_ecitmatch_variables({'db': 'pubmed',
+                                                       'bdata': [citation]})
+        post = False
+
+        params = Entrez._construct_params(variables)
+        options = Entrez._encode_options(ecitmatch=True, params=params)
+        result_url = Entrez._construct_cgi(cgi, post=post, options=options)
+        self.assertTrue("retmode=xml" in result_url, result_url)
+
+    @patch("Bio.Entrez._open", return_value=_binary_to_string_handle(open("Entrez/ecitmatch.txt", "rb")))
+    def test_ecitmatch(self, mock_open):
         citation = {
             "journal_title": "proc natl acad sci u s a",
             "year": "1991", "volume": "88", "first_page": "3248",
             "author_name": "mann bj", "key": "citation_1"
         }
         handle = Entrez.ecitmatch(db="pubmed", bdata=[citation])
-        self.assertTrue("retmode=xml" in handle.url, handle.url)
         result = handle.read()
         expected_result = "proc natl acad sci u s a|1991|88|3248|mann bj|citation_1|2014248\n"
         self.assertEquals(result, expected_result)
