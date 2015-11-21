@@ -136,7 +136,7 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
 from .Interfaces import AlignmentIterator, SequentialAlignmentWriter
-
+from collections import OrderedDict
 
 class StockholmWriter(SequentialAlignmentWriter):
     """Stockholm/PFAM alignment writer."""
@@ -337,7 +337,7 @@ class StockholmIterator(AlignmentIterator):
         # if present it agrees with our parsing.
 
         seqs = {}
-        ids = []
+        ids = OrderedDict() # Really only need an OrderedSet, but python lacks this
         gs = {}
         gr = {}
         gf = {}
@@ -368,7 +368,7 @@ class StockholmIterator(AlignmentIterator):
                                       + "and sequence:\n" + line)
                 id, seq = parts
                 if id not in ids:
-                    ids.append(id)
+                    ids[id] = True
                 seqs.setdefault(id, '')
                 seqs[id] += seq.replace(".", "-")
             elif len(line) >= 5:
@@ -419,7 +419,7 @@ class StockholmIterator(AlignmentIterator):
         # assert len(gs)   <= len(ids)
         # assert len(gr)   <= len(ids)
 
-        self.ids = ids
+        self.ids = ids.keys()
         self.sequences = seqs
         self.seq_annotation = gs
         self.seq_col_annotation = gr
@@ -433,7 +433,7 @@ class StockholmIterator(AlignmentIterator):
 
             alignment_length = len(list(seqs.values())[0])
             records = []  # Alignment obj will put them all in a list anyway
-            for id in ids:
+            for id in ids.keys():
                 seq = seqs[id]
                 if alignment_length != len(seq):
                     raise ValueError("Sequences have different lengths, or repeated identifier")
