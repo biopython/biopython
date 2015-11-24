@@ -865,15 +865,59 @@ def print_matrix(matrix):
 def format_alignment(align1, align2, score, begin, end):
     """format_alignment(align1, align2, score, begin, end) -> string
 
-    Format the alignment prettily into a string.
+    Format the alignment very prettily into a string.
 
-    """
+    """ 
+    width = 60  # Max bases per line
+    leftJustify = 13 # Follows NCBI BLAST 
+
+    match = "|"
+    transpose = "-"
+    insrtDel = " "
+
+    qIndex = 0
+    sIndex = 0
+
+    qLineInit = "Query  "
+    lLineInit = "             " # 13 chars
+    sLineInit = "Sbjct  "
+
+    align1 = [align1[i:i+width] for i in range(0, len(align1), width)]
+    align2 = [align2[i:i+width] for i in range(0, len(align2), width)]
+
     s = []
-    s.append("%s\n" % align1)
-    s.append("%s%s\n" % (" " * begin, "|" * (end - begin)))
-    s.append("%s\n" % align2)
-    s.append("  Score=%g\n" % score)
-    return ''.join(s)
+    
+    for i in range(len(align1)):
+        qL = ""
+        lL = ""
+        sL = ""
+        qIndex += 1
+        sIndex += 1
+        qS = align1[i]
+        sS = align2[i]
+        # start of each line
+        qL = qLineInit + str(qIndex)
+        qL = '{{0: <{}}}'.format(leftJustify).format(qL)
+        lL = '{{0: <{}}}'.format(leftJustify).format(lL)
+        sL = sLineInit + str(sIndex)
+        sL = '{{0: <{}}}'.format(leftJustify).format(sL)
+        for j in range(len(qS)):
+            if qS[j] == sS[j]:
+                lL = lL + match
+            elif qS[j] == "-" or sS[j] == "-":
+                lL = lL + insrtDel
+            else:
+                lL = lL + transpose
+        qIndex = qIndex + (len(qS) - qS.count('-')) - 1
+        sIndex = sIndex + (len(sS) - sS.count('-')) - 1
+        qL = qL + str(qS) + "  " + str(qIndex)
+        sL = sL + str(sS) + "  " + str(sIndex)
+        s.append(qL)
+        s.append(lL)
+        s.append(sL)
+        s.append("")
+    s.append("  Score=%g" % score)
+    return '\n'.join(s)
 
 
 # Try and load C implementations of functions.  If I can't,
