@@ -264,9 +264,17 @@ for (t_format, t_per, t_count, t_filename) in test_files:
     assert len(alignments) == t_count, \
          "Found %i alignments but expected %i" % (len(alignments), t_count)
     for alignment in alignments:
-        assert len(alignment) == t_per, \
-            "Expected %i records per alignment, got %i" \
-            % (t_per, len(alignment))
+        if t_format == 'mauve':
+            # Mauve gets a pass here, some sub-alignments will have less than
+            # expected number of records. Forcing them all to have the
+            # "correct" number of records just causes lots of unnecessary pain.
+            assert len(alignment) <= t_per, \
+                "Expected %i records per alignment, got %i" \
+                % (t_per, len(alignment))
+        else:
+            assert len(alignment) == t_per, \
+                "Expected %i records per alignment, got %i" \
+                % (t_per, len(alignment))
 
     # Try using the iterator with a for loop and a filename not handle
     alignments2 = []
