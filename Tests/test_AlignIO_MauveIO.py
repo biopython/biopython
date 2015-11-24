@@ -28,11 +28,8 @@ class TestMauveIO(unittest.TestCase):
             for record in alignment:
                 ids.append(record.id)
         handle.close()
-        self.assertEqual(ids, ['1:1-5670:+', '2:1-5670:+',
-                               '1:5671-9940:-', '2:7141-11410:+',
-                               '1:9941-14910:+', '2:0-0:+',
-                               '1:0-0:+', '2:5671-7140:+',
-                               '1:0-0:+', '2:11411-12880:+'])
+
+        self.assertEqual(ids, ['1/0-5670', '2/0-5670', '1/5670-9940', '2/7140-11410', '1/9940-14910', '2/5670-7140', '2/11410-12880'])
 
         expected = """ATTCGCACAT AAGAATGTAC CTTGCTGTAA TTTATACTCA
             GCAGGTGGTG CAGACATCAT AACAAAAGAA GACTCTTGTT GTACTAGATA TTGTGTAGCA
