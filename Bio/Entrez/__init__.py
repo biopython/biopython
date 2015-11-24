@@ -127,7 +127,7 @@ def epost(db, **keywds):
     cgi = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/epost.fcgi'
     variables = {'db': db}
     variables.update(keywds)
-    return _open(cgi, variables, post=True)
+    return _open(cgi, variables)
 
 
 def efetch(db, **keywords):
@@ -158,20 +158,7 @@ def efetch(db, **keywords):
     cgi = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi'
     variables = {'db': db}
     variables.update(keywords)
-    post = False
-    try:
-        ids = variables["id"]
-    except KeyError:
-        pass
-    else:
-        if isinstance(ids, list):
-            ids = ",".join(ids)
-            variables["id"] = ids
-        if ids.count(",") >= 200:
-            # NCBI prefers an HTTP POST instead of an HTTP GET if there are
-            # more than about 200 IDs
-            post = True
-    return _open(cgi, variables, post)
+    return _open(cgi, variables)
 
 
 def esearch(db, term, **keywds):
@@ -473,7 +460,7 @@ def parse(handle, validate=True):
     return records
 
 
-def _open(cgi, params=None, post=False, ecitmatch=False):
+def _open(cgi, params=None, ecitmatch=False):
     """Helper function to build the URL and open a handle to it (PRIVATE).
 
     Open a handle to Entrez.  cgi is the URL for the cgi script to access.
@@ -481,7 +468,9 @@ def _open(cgi, params=None, post=False, ecitmatch=False):
     simple error checking, and will raise an IOError if it encounters one.
 
     This function also enforces the "up to three queries per second rule"
-    to avoid abusing the NCBI servers.
+    to avoid abusing the NCBI servers, and makes the request through POST
+    rather than GET if the number of characters in the resulting query is
+    greater than 1000.
     """
     if params is None:
         params = {}
@@ -519,12 +508,31 @@ is A.N.Other@example.com, you can specify it as follows:
 In case of excessive usage of the E-utilities, NCBI will attempt to contact
 a user at the email address provided before blocking access to the
 E-utilities.""", UserWarning)
+    
+    # By default, we do not force a POST request
+    force_post = False
+    
+    # Make sure the UIDs are in the format UID,UID,...
+    ids = params.get("id", None)
+    if ids is not None:
+        # Detect whether 200+ UIDs have been provided, and convert the list
+        # [UID, UID, ...] into the string "UID,UID,..."
+        if isinstance(ids, list):
+            params["id"] = ",".join(ids)
+        elif isinstance(ids, str):
+            ids = ids.split(",")
+        
+        # If 200+ UIDs are given, force the POST request
+        force_post = len(ids) > 200
+    
     # Open a handle to Entrez.
     options = _urlencode(params, doseq=True)
     # _urlencode encodes pipes, which NCBI expects in ECitMatch
     if ecitmatch:
         options = options.replace('%7C', '|')
     # print cgi + "?" + options
+    
+    post = force_post or len(options) > 1000
     try:
         if post:
             # HTTP POST
