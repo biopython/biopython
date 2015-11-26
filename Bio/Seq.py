@@ -1,6 +1,6 @@
 # Copyright 2000-2002 Brad Chapman.
 # Copyright 2004-2005 by M de Hoon.
-# Copyright 2007-2014 by Peter Cock.
+# Copyright 2007-2015 by Peter Cock.
 # All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -2038,7 +2038,6 @@ def _translate_str(sequence, table, stop_symbol="*", to_stop=False,
         n -= 6
         amino_acids = ["M"]
     elif n % 3 != 0:
-        from Bio import BiopythonWarning
         warnings.warn("Partial codon, len(sequence) not a multiple of three. "
                       "Explicitly trim the sequence or add trailing N before "
                       "translation. This may become an error in future.",
