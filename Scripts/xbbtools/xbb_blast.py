@@ -150,7 +150,7 @@ class BlastIt:
 
         try:
             self.pipe.close()
-            del(pipe)
+            del(self.pipe)
         except:
             pass
         self.notepad.destroy()
