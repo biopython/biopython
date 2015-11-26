@@ -115,7 +115,7 @@ class BlastIt:
         self.Update()
 
         print(self.command)
-        self.pipe = posix.popen(self.command)
+        self.pipe = os.popen(self.command)
         while True:
             try:
                 char = self.pipe.read(1)
