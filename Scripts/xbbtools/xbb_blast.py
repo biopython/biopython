@@ -12,9 +12,9 @@ import sys
 from threading import *
 
 try:
-    from Tkinter import * # Python 2
+    from Tkinter import *  # Python 2
 except ImportError:
-    from tkinter import * # Python 3
+    from tkinter import *  # Python 3
 
 import Pmw
 sys.path.insert(0, '.')
