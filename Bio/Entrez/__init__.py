@@ -108,7 +108,7 @@ def epost(db, **keywds):
     cgi = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/epost.fcgi'
     variables = {'db': db}
     variables.update(keywds)
-    return _open(cgi, variables, post=True)
+    return _open(cgi, variables)
 
 
 def efetch(db, **keywords):
@@ -139,20 +139,7 @@ def efetch(db, **keywords):
     cgi = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi'
     variables = {'db': db}
     variables.update(keywords)
-    post = False
-    try:
-        ids = variables["id"]
-    except KeyError:
-        pass
-    else:
-        if isinstance(ids, list):
-            ids = ",".join(ids)
-            variables["id"] = ids
-        if ids.count(",") >= 200:
-            # NCBI prefers an HTTP POST instead of an HTTP GET if there are
-            # more than about 200 IDs
-            post = True
-    return _open(cgi, variables, post)
+    return _open(cgi, variables)
 
 
 def esearch(db, term, **keywds):
@@ -439,7 +426,7 @@ def parse(handle, validate=True):
     return records
 
 
-def _open(cgi, params=None, post=False, ecitmatch=False):
+def _open(cgi, params=None, ecitmatch=False):
     """Helper function to build the URL and open a handle to it (PRIVATE).
 
     Open a handle to Entrez.  cgi is the URL for the cgi script to access.
@@ -462,6 +449,21 @@ def _open(cgi, params=None, post=False, ecitmatch=False):
 
     params = _construct_params(params)
     options = _encode_options(ecitmatch, params)
+
+    # By default, we do not force a POST request
+    force_post = False
+    ids = params.get("id", None)
+    if ids is not None:
+        # Detect whether 200+ UIDs have been provided, and convert the list
+        # [UID, UID, ...] into the string "UID,UID,..."
+        if isinstance(ids, list):
+            params["id"] = ",".join(ids)
+        elif isinstance(ids, str):
+            ids = ids.split(",")
+
+        # If 200+ UIDs are given, force the POST request
+        force_post = len(ids) > 200
+    post = force_post or len(options) > 1000
     cgi = _construct_cgi(cgi, post, options)
 
     try:

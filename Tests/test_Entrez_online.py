@@ -60,7 +60,7 @@ class EntrezOnlineCase(unittest.TestCase):
         self.assertTrue(URL_TOOL in result_url)
         self.assertTrue(URL_EMAIL in result_url)
 
-    @patch("Bio.Entrez._open", return_value=_binary_to_string_handle(open("Tests/Entrez/einfo1.xml", "rb")))
+    @patch("Bio.Entrez._open", return_value=_binary_to_string_handle(open("Entrez/einfo1.xml", "rb")))
     def test_read_from_url(self, mock_open):
         """Test Entrez.read from URL"""
         handle = Entrez.einfo()
@@ -85,7 +85,7 @@ class EntrezOnlineCase(unittest.TestCase):
         self.assertTrue(URL_EMAIL in result_url)
         self.assertTrue("id=15718680%2C157427902%2C119703751" in result_url, result_url)
 
-    @patch("Bio.Entrez._open", return_value=_binary_to_string_handle(open("Tests/Entrez/protein2.xml", "rb")))
+    @patch("Bio.Entrez._open", return_value=_binary_to_string_handle(open("Entrez/protein2.xml", "rb")))
     def test_parse_from_url(self, mock_open):
         """Test Entrez.parse from URL"""
         handle = Entrez.efetch(db='protein', id='15718680,157427902,119703751',
@@ -130,7 +130,7 @@ class EntrezOnlineCase(unittest.TestCase):
         """Multiple ID entries: Find one-to-one links from protein to gene."""
         cgi = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi'
         variables = {'db': 'gene', 'dbfrom': 'protein',
-                     'id' : ["15718680", "157427902", "119703751"]}
+                     'id': ["15718680", "157427902", "119703751"]}
         post = False
 
         params = Entrez._construct_params(variables)
@@ -143,7 +143,7 @@ class EntrezOnlineCase(unittest.TestCase):
         self.assertTrue("id=157427902" in result_url, result_url)
         self.assertTrue("id=119703751" in result_url, result_url)
 
-    @patch("Bio.Entrez._open", return_value=_binary_to_string_handle(open("Tests/Entrez/esearch9.xml", "rb")))
+    @patch("Bio.Entrez._open", return_value=_binary_to_string_handle(open("Entrez/esearch9.xml", "rb")))
     def test_webenv_search(self, mock_open):
         """Test Entrez.search from link webenv history"""
         webenv = 'NCID_1_214573425_130.14.18.34_9001_1448030770_1520095147_0MetA0_S_MegaStore_F_1'
@@ -172,7 +172,7 @@ class EntrezOnlineCase(unittest.TestCase):
         self.assertTrue(URL_TOOL in result_url)
         self.assertTrue(URL_EMAIL in result_url)
 
-    @patch("Bio.Entrez._open", return_value=_binary_to_string_handle(open("Tests/Entrez/efetch1.txt", "rb")))
+    @patch("Bio.Entrez._open", return_value=_binary_to_string_handle(open("Entrez/efetch1.txt", "rb")))
     def test_seqio_from_url(self, mock_open):
         """Test Entrez into SeqIO.read from URL"""
         handle = Entrez.efetch(db='nucleotide', id='186972394', rettype='gb',
@@ -183,7 +183,7 @@ class EntrezOnlineCase(unittest.TestCase):
         self.assertEqual('EU490707.1', record.id)
         self.assertEqual(1302, len(record))
 
-    @patch("Bio.Entrez._open", return_value=_binary_to_string_handle(open("Tests/Entrez/efetch2.txt", "rb")))
+    @patch("Bio.Entrez._open", return_value=_binary_to_string_handle(open("Entrez/efetch2.txt", "rb")))
     def test_medline_from_url(self, mock_open):
         """Test Entrez into Medline.read from URL"""
         handle = Entrez.efetch(db="pubmed", id='19304878', rettype="medline",
@@ -194,7 +194,7 @@ class EntrezOnlineCase(unittest.TestCase):
         self.assertEqual('19304878', record['PMID'])
         self.assertEqual('10.1093/bioinformatics/btp163 [doi]', record['LID'])
 
-    @patch("Bio.Entrez._open", return_value=_binary_to_string_handle(open("Tests/Entrez/efetch3.xml", "rb")))
+    @patch("Bio.Entrez._open", return_value=_binary_to_string_handle(open("Entrez/efetch3.xml", "rb")))
     def test_efetch_biosystems_xml(self, mock_open):
         """Test Entrez parser with XML from biosystems"""
         handle = Entrez.efetch(id="1134002", db="biosystems", retmode="xml")
@@ -239,7 +239,7 @@ class EntrezOnlineCase(unittest.TestCase):
         result_url = Entrez._construct_cgi(cgi, post=post, options=options)
         self.assertTrue("retmode=xml" in result_url, result_url)
 
-    @patch("Bio.Entrez._open", return_value=_binary_to_string_handle(open("Tests/Entrez/ecitmatch.txt", "rb")))
+    @patch("Bio.Entrez._open", return_value=_binary_to_string_handle(open("Entrez/ecitmatch.txt", "rb")))
     def test_ecitmatch(self, mock_open):
         citation = {
             "journal_title": "proc natl acad sci u s a",
@@ -251,7 +251,7 @@ class EntrezOnlineCase(unittest.TestCase):
         expected_result = "proc natl acad sci u s a|1991|88|3248|mann bj|citation_1|2014248\n"
         self.assertEquals(result, expected_result)
 
-    @patch("Bio.Entrez._open", return_value=_binary_to_string_handle(open("Tests/Entrez/efetch4.xml", "rb")))
+    @patch("Bio.Entrez._open", return_value=_binary_to_string_handle(open("Entrez/efetch4.xml", "rb")))
     def test_fetch_xml_schemas(self, mock_open):
         handle = Entrez.efetch("protein", id="783730874", rettype="ipg", retmode="xml")
         records = list(Entrez.parse(handle))
