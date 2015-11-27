@@ -3,7 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Tests for Reference objects from Bio.SeqFeature.
+"""Tests Bio.SeqFeature.
 """
 import unittest
 from os import path
@@ -11,6 +11,7 @@ from Bio import SeqIO
 from Bio.SeqFeature import Reference
 
 class TestReference(unittest.TestCase):
+    """Tests for the SeqFeature.Reference class"""
 
     def test_eq_identical(self):
         """Test two identical references eq() to True"""
