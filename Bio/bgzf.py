@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# Copyright 2010-2013 by Peter Cock.
+# Copyright 2010-2015 by Peter Cock.
 # All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -227,7 +227,7 @@ NC_000932.1
 
 from __future__ import print_function
 
-import sys  # to detect when under Python 2
+import sys
 import zlib
 import struct
 
@@ -824,7 +824,6 @@ class BgzfWriter(object):
 
 
 if __name__ == "__main__":
-    import sys
     if len(sys.argv) > 1:
         print("Call this with no arguments and pipe uncompressed data in on stdin")
         print("and it will produce BGZF compressed data on stdout. e.g.")

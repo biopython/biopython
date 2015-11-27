@@ -1,5 +1,7 @@
 # Copyright 1999-2000 by Jeffrey Chang.  All rights reserved.
-# Copyright 2008 by Michiel de Hoon.  All rights reserved.
+# Copyright 2008-2013 by Michiel de Hoon.  All rights reserved.
+# Revisions copyright 2011-2015 by Peter Cock. All rights reserved.
+# Revisions copyright 2015 by Eric Rasche. All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -12,10 +14,27 @@ http://www.ncbi.nlm.nih.gov/Entrez/
 Entrez Programming Utilities web page is available at:
 http://www.ncbi.nlm.nih.gov/books/NBK25501/
 
+This module provides a number of functions like ``efetch`` (short for
+Entrez Fetch) which will return the data as a handle object. This is
+a standard interface used in Python for reading data from a file, or
+in this case a remote network connection, and provides methods like
+``.read()`` or offers iteration over the contents line by line. See
+also "What the heck is a handle?" in the Biopython Tutorial and
+Cookbook: http://biopython.org/DIST/docs/tutorial/Tutorial.html
+http://biopython.org/DIST/docs/tutorial/Tutorial.pdf
+
+Unlike a handle to a file on disk from the ``open(filename)`` function,
+which has a ``.name`` attribute giving the filename, the handles from
+``Bio.Entrez`` all have a ``.url`` attribute instead giving the URL
+used to connect to the NCBI Entrez API.
+
+The Entrez module also provides an XML parser which takes a handle
+as input.
+
 Variables:
 
     - email        Set the Entrez email parameter (default is not set).
-    - tool         Set the Entrez tool parameter (default is  biopython).
+    - tool         Set the Entrez tool parameter (default is ``biopython``).
 
 Functions:
 
@@ -434,7 +453,9 @@ def _open(cgi, params=None, ecitmatch=False):
     simple error checking, and will raise an IOError if it encounters one.
 
     This function also enforces the "up to three queries per second rule"
-    to avoid abusing the NCBI servers.
+    to avoid abusing the NCBI servers, and makes the request through POST
+    rather than GET if the number of characters in the resulting query is
+    greater than 1000.
     """
     # NCBI requirement: At most three queries per second.
     # Equivalently, at least a third of second between queries

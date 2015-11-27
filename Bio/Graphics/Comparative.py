@@ -18,7 +18,9 @@ from reportlab.lib.units import inch
 
 from reportlab.graphics.shapes import Drawing, String, Group
 from reportlab.graphics import renderPDF, renderPS
-from reportlab.graphics.charts.markers import *
+from reportlab.graphics.charts.markers import makeEmptySquare, makeFilledSquare
+from reportlab.graphics.charts.markers import makeFilledDiamond, makeEmptyCircle
+from reportlab.graphics.charts.markers import makeFilledCircle, makeSmiley
 
 from Bio.Graphics import _write
 

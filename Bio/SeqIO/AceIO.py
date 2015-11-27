@@ -1,4 +1,4 @@
-# Copyright 2008-2010 by Peter Cock.  All rights reserved.
+# Copyright 2008-2015 by Peter Cock.  All rights reserved.
 #
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -97,8 +97,8 @@ def AceIterator(handle):
 
         # Consensus base quality (BQ lines).  Note that any gaps (originally
         # as * characters) in the consensus do not get a quality entry, so
-        # we assign a quality of None (zero would be missleading as there may
-        # be excelent support for having a gap here).
+        # we assign a quality of None (zero would be misleading as there may
+        # be excellent support for having a gap here).
         quals = []
         i = 0
         for base in consensus_seq:

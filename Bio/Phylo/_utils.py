@@ -280,7 +280,7 @@ def draw_ascii(tree, file=None, column_width=80):
 
 def draw(tree, label_func=str, do_show=True, show_confidence=True,
          # For power users
-         axes=None, branch_labels=None, *args, **kwargs):
+         axes=None, branch_labels=None, label_colors=None, *args, **kwargs):
     """Plot the given tree using matplotlib (or pylab).
 
     The graphic is a rooted tree, drawn with roughly the same algorithm as
@@ -322,6 +322,10 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True,
             But if you would like to alter the formatting of confidence values,
             or label the branches with something other than confidence, then use
             this option.
+        label_colors : dict or callable
+            A function or a dictionary specifying the color of the tip label.
+            If the tip label can't be found in the dict or label_colors is
+            None, the label will be shown in black.
     """
 
     try:
@@ -364,6 +368,20 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True,
         assert callable(branch_labels), \
             "branch_labels must be either a dict or a callable (function)"
         format_branch_label = branch_labels
+
+    # options for displaying label colors.
+    if label_colors:
+        if callable(label_colors):
+            def get_label_color(label):
+                return label_colors(label)
+        else:
+            # label_colors is presumed to be a dict
+            def get_label_color(label):
+                return label_colors.get(label, 'black')
+    else:
+        def get_label_color(label):
+            # if label_colors is not specified, use black
+            return 'black'
 
     # Layout
 
@@ -446,7 +464,8 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True,
         label = label_func(clade)
         if label not in (None, clade.__class__.__name__):
             axes.text(x_here, y_here, ' %s' %
-                      label, verticalalignment='center')
+                      label, verticalalignment='center',
+                      color=get_label_color(label))
         # Add label above the branch (optional)
         conf_label = format_branch_label(clade)
         if conf_label:

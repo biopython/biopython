@@ -97,7 +97,7 @@ _simple_location = r"\d+\.\.\d+"
 _re_simple_location = re.compile(r"^%s$" % _simple_location)
 _re_simple_compound = re.compile(r"^(join|order|bond)\(%s(,%s)*\)$"
                                  % (_simple_location, _simple_location))
-_complex_location = r"([a-zA-z][a-zA-Z0-9_]*(\.[a-zA-Z0-9]+)?\:)?(%s|%s|%s|%s|%s)" \
+_complex_location = r"([a-zA-Z][a-zA-Z0-9_\.]*[a-zA-Z0-9]?\:)?(%s|%s|%s|%s|%s)" \
                     % (_pair_location, _solo_location, _between_location,
                        _within_location, _oneof_location)
 _re_complex_location = re.compile(r"^%s$" % _complex_location)
@@ -132,10 +132,12 @@ assert _re_complex_location.match("41^42")  # between
 assert _re_complex_location.match("AL121804:41^42")
 assert _re_complex_location.match("AL121804:41..610")
 assert _re_complex_location.match("AL121804.2:41..610")
+assert _re_complex_location.match("AL358792.24.1.166931:3274..3461")  # lots of dots in external reference
 assert _re_complex_location.match("one-of(3,6)..101")
 assert _re_complex_compound.match("join(153490..154269,AL121804.2:41..610,AL121804.2:672..1487)")
 assert not _re_simple_compound.match("join(153490..154269,AL121804.2:41..610,AL121804.2:672..1487)")
 assert _re_complex_compound.match("join(complement(69611..69724),139856..140650)")
+assert _re_complex_compound.match("join(complement(AL354868.10.1.164018:80837..81016),complement(AL354868.10.1.164018:80539..80835))")
 
 # Trans-spliced example from NC_016406, note underscore in reference name:
 assert _re_complex_location.match("NC_016402.1:6618..6676")

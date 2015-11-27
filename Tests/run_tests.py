@@ -20,12 +20,13 @@ Command line options:
 <test_name>   -- supply the name of one (or more) tests to be run.
                  The .py file extension is optional.
 doctest       -- run the docstring tests.
+
 By default, all tests are run.
 """
 
-# The default verbosity (not verbose)
 from __future__ import print_function
 
+# The default verbosity (not verbose)
 VERBOSITY = 0
 
 # standard modules
@@ -365,7 +366,7 @@ class TestRunner(unittest.TextTestRunner):
         file = sys.argv[0]
     else:
         file = __file__
-    testdir = os.path.dirname(file) or os.curdir
+    testdir = os.path.abspath(os.path.dirname(file) or os.curdir)
 
     def __init__(self, tests=[], verbosity=0):
         # if no tests were specified to run, we run them all
@@ -394,8 +395,9 @@ class TestRunner(unittest.TextTestRunner):
         # test changed this, e.g. to help with detecting command line tools)
         global system_lang
         os.environ['LANG'] = system_lang
-        # Note the current directory:
-        cur_dir = os.path.abspath(".")
+        # Always run tests from the Tests/ folder where run_tests.py
+        # should be located (as we assume this with relative paths etc)
+        os.chdir(self.testdir)
         try:
             stdout = sys.stdout
             sys.stdout = output
@@ -434,15 +436,15 @@ class TestRunner(unittest.TextTestRunner):
                                              optionflags=doctest.ELLIPSIS)
                 del module
             suite.run(result)
-            if cur_dir != os.path.abspath("."):
+            if self.testdir != os.path.abspath("."):
                 sys.stderr.write("FAIL\n")
                 result.stream.write(result.separator1 + "\n")
                 result.stream.write("ERROR: %s\n" % name)
                 result.stream.write(result.separator2 + "\n")
                 result.stream.write("Current directory changed\n")
-                result.stream.write("Was: %s\n" % cur_dir)
+                result.stream.write("Was: %s\n" % self.testdir)
                 result.stream.write("Now: %s\n" % os.path.abspath("."))
-                os.chdir(cur_dir)
+                os.chdir(self.testdir)
                 if not result.wasSuccessful():
                     result.printErrors()
                 return False

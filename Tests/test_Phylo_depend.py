@@ -64,6 +64,36 @@ class UtilTests(unittest.TestCase):
         Phylo.draw(apaf, do_show=False, branch_labels={apaf.root: 'Root'})
         Phylo.draw(apaf, do_show=False, branch_labels=lambda c: c.branch_length)
 
+    def test_draw_with_label_colors_dict(self):
+        """Run the tree layout algorithm with a label_colors argument passed in
+        as a dictionary. Don't display tree."""
+        pyplot.ioff()   # Turn off interactive display
+        dollo = Phylo.read(EX_DOLLO, 'phyloxml')
+        apaf = Phylo.read(EX_APAF, 'phyloxml')
+        label_colors_dollo = {
+            'f_50': 'red',
+            'f_34': 'blue',
+        }
+        label_colors_apaf = {
+            '22_MOUSE': 'red',
+            '18_NEMVE': 'blue',
+        }
+        Phylo.draw(dollo, label_colors=label_colors_dollo, do_show=False)
+        Phylo.draw(apaf, label_colors=label_colors_apaf, do_show=False)
+
+    def test_draw_with_label_colors_callable(self):
+        """Run the tree layout algorithm with a label_colors argument passed in
+        as a callable. Don't display tree."""
+        pyplot.ioff()   # Turn off interactive display
+        dollo = Phylo.read(EX_DOLLO, 'phyloxml')
+        apaf = Phylo.read(EX_APAF, 'phyloxml')
+
+        label_colors_dollo = lambda label: 'r' if label == 'f_50' else 'k'
+        label_colors_apaf = lambda label: 'r'
+
+        Phylo.draw(dollo, label_colors=label_colors_dollo, do_show=False)
+        Phylo.draw(apaf, label_colors=label_colors_apaf, do_show=False)
+
     def test_draw_ascii(self):
         """Tree to Graph conversion."""
         handle = StringIO()
