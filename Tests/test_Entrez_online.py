@@ -13,17 +13,16 @@ scope of this file as they are already covered in test_Entrez.py.
 """
 import os
 import unittest
-import sys
 
-# Remove mock import after dropping support for Python2.6
-if sys.version_info < (2, 7):
+try:
+    # Included in standard lib as of Python 3.3
+    from unittest.mock import patch
+except ImportError:
     try:
         from mock import patch
     except ImportError:
         from Bio import MissingPythonDependencyError
-        raise MissingPythonDependencyError("Under Python 2.6 this test needs the mock library")
-else:
-    from unittest.mock import patch
+        raise MissingPythonDependencyError("Install the mock library backport on old versions of Python")
 
 from Bio._py3k import _binary_to_string_handle
 from Bio import Entrez
