@@ -29,7 +29,7 @@ if os.name == 'java':
     except ImportError:
         from Bio import MissingPythonDependencyError
         raise MissingPythonDependencyError("The Bio.Entrez XML parser fails on "
-                                  "Jython, see http://bugs.jython.org/issue1447")
+                                           "Jython, see http://bugs.jython.org/issue1447")
 
 
 # This lets us set the email address to be sent to NCBI Entrez:
