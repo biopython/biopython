@@ -202,7 +202,7 @@ class PDBParser(object):
                                                global_line_counter)
                     bfactor = 0.0  # The PDB use a default of zero if the data is missing
                 segid = line[72:76]
-                element = line[76:78].strip()
+                element = line[76:78].strip().upper()
                 if current_segid != segid:
                     current_segid = segid
                     structure_builder.init_seg(current_segid)
