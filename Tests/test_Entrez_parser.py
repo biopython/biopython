@@ -18,7 +18,6 @@ if os.name == 'java':
         raise MissingPythonDependencyError("The Bio.Entrez XML parser fails on "
                                   "Jython, see http://bugs.jython.org/issue1447")
 
-
 from Bio import Entrez
 
 
@@ -46,6 +45,14 @@ class GeneralTests(unittest.TestCase):
         options = Entrez._encode_options(ecitmatch=True, params=params)
         result_url = Entrez._construct_cgi(cgi, post=post, options=options)
         self.assertTrue("retmode=xml" in result_url, result_url)
+
+    def test_email_warning(self):
+        """Test issuing warning when user does not specify email address."""
+        Entrez.email = None
+
+        def issue_warning():
+            Entrez._construct_params(params=None)
+        self.assertWarns(UserWarning, issue_warning)
 
 
 # This lets us set the email address to be sent to NCBI Entrez:
