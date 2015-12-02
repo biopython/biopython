@@ -49,16 +49,6 @@ URL_EMAIL = "email=biopython-dev%40biopython.org"
 
 
 class EntrezOnlineCase(unittest.TestCase):
-    def test_construct_cgi_einfo(self):
-        """Test constructed url for request to Entrez."""
-        cgi = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/einfo.fcgi'
-        params = Entrez._construct_params(params=None)
-        options = Entrez._encode_options(ecitmatch=False, params=params)
-        result_url = Entrez._construct_cgi(cgi, post=False, options=options)
-        self.assertTrue(result_url.startswith(URL_HEAD + "einfo.fcgi?"), result_url)
-        self.assertTrue(URL_TOOL in result_url)
-        self.assertTrue(URL_EMAIL in result_url)
-
     @patch("Bio.Entrez._open", return_value=_binary_to_string_handle(open("Entrez/einfo1.xml", "rb")))
     def test_read_from_url(self, mock_open):
         """Test Entrez.read from URL"""
@@ -70,20 +60,6 @@ class EntrezOnlineCase(unittest.TestCase):
         # arbitrary number, just to make sure that DbList has contents
         self.assertTrue(len(rec['DbList']) > 5)
 
-    def test_construct_cgi_efetch(self):
-        cgi = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi'
-        variables = {'db': 'protein', 'id': '15718680,157427902,119703751',
-                     'retmode': 'xml'}
-        post = False
-
-        params = Entrez._construct_params(variables)
-        options = Entrez._encode_options(ecitmatch=False, params=params)
-        result_url = Entrez._construct_cgi(cgi, post=post, options=options)
-        self.assertTrue(result_url.startswith(URL_HEAD + "efetch.fcgi?"), result_url)
-        self.assertTrue(URL_TOOL in result_url)
-        self.assertTrue(URL_EMAIL in result_url)
-        self.assertTrue("id=15718680%2C157427902%2C119703751" in result_url, result_url)
-
     @patch("Bio.Entrez._open", return_value=_binary_to_string_handle(open("Entrez/protein2.xml", "rb")))
     def test_parse_from_url(self, mock_open):
         """Test Entrez.parse from URL"""
@@ -94,53 +70,6 @@ class EntrezOnlineCase(unittest.TestCase):
         self.assertEqual(3, len(recs))
         # arbitrary number, just to make sure the parser works
         self.assertTrue(all(len(rec).keys > 5) for rec in recs)
-
-    def test_construct_cgi_elink1(self):
-        cgi = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi'
-        variables = {'cmd': 'neighbor_history', 'db': 'nucleotide',
-                     'dbfrom': 'protein', 'id': '22347800,48526535',
-                     'query_key': None, 'webenv': None}
-        post = False
-
-        params = Entrez._construct_params(variables)
-        options = Entrez._encode_options(ecitmatch=False, params=params)
-        result_url = Entrez._construct_cgi(cgi, post=post, options=options)
-        self.assertTrue(result_url.startswith(URL_HEAD + "elink.fcgi?"), result_url)
-        self.assertTrue(URL_TOOL in result_url)
-        self.assertTrue(URL_EMAIL in result_url)
-        self.assertTrue("id=22347800%2C48526535" in result_url, result_url)
-
-    def test_construct_cgi_elink2(self):
-        """Commas: Link from protein to gene."""
-        cgi = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi'
-        variables = {'db': 'gene', 'dbfrom': 'protein',
-                     'id': '15718680,157427902,119703751'}
-        post = False
-
-        params = Entrez._construct_params(variables)
-        options = Entrez._encode_options(ecitmatch=False, params=params)
-        result_url = Entrez._construct_cgi(cgi, post=post, options=options)
-        self.assertTrue(result_url.startswith(URL_HEAD + "elink.fcgi"), result_url)
-        self.assertTrue(URL_TOOL in result_url)
-        self.assertTrue(URL_EMAIL in result_url)
-        self.assertTrue("id=15718680%2C157427902%2C119703751" in result_url, result_url)
-
-    def test_construct_cgi_elink3(self):
-        """Multiple ID entries: Find one-to-one links from protein to gene."""
-        cgi = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi'
-        variables = {'db': 'gene', 'dbfrom': 'protein',
-                     'id': ["15718680", "157427902", "119703751"]}
-        post = False
-
-        params = Entrez._construct_params(variables)
-        options = Entrez._encode_options(ecitmatch=False, params=params)
-        result_url = Entrez._construct_cgi(cgi, post=post, options=options)
-        self.assertTrue(result_url.startswith(URL_HEAD + "elink.fcgi"), result_url)
-        self.assertTrue(URL_TOOL in result_url)
-        self.assertTrue(URL_EMAIL in result_url)
-        self.assertTrue("id=15718680" in result_url, result_url)
-        self.assertTrue("id=157427902" in result_url, result_url)
-        self.assertTrue("id=119703751" in result_url, result_url)
 
     @patch("Bio.Entrez._open", return_value=_binary_to_string_handle(open("Entrez/esearch9.xml", "rb")))
     def test_webenv_search(self, mock_open):
@@ -154,22 +83,6 @@ class EntrezOnlineCase(unittest.TestCase):
         search_record = Entrez.read(handle)
         handle.close()
         self.assertEqual(2, len(search_record['IdList']))
-
-    def test_construct_cgi_esearch(self):
-        webenv = 'NCID_1_214573425_130.14.18.34_9001_1448030770_1520095147_0MetA0_S_MegaStore_F_1'
-        query_key = 2
-        cgi = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi'
-        variables = {'db': 'nucleotide', 'term': None, 'retstart': 0,
-                     'retmax': 10, 'webenv': webenv, 'query_key': query_key,
-                     'usehistory': 'y'}
-        post = False
-
-        params = Entrez._construct_params(variables)
-        options = Entrez._encode_options(ecitmatch=False, params=params)
-        result_url = Entrez._construct_cgi(cgi, post=post, options=options)
-        self.assertTrue(result_url.startswith(URL_HEAD + "esearch.fcgi?"), result_url)
-        self.assertTrue(URL_TOOL in result_url)
-        self.assertTrue(URL_EMAIL in result_url)
 
     @patch("Bio.Entrez._open", return_value=_binary_to_string_handle(open("Entrez/efetch1.txt", "rb")))
     def test_seqio_from_url(self, mock_open):
@@ -201,42 +114,6 @@ class EntrezOnlineCase(unittest.TestCase):
         handle.close()
         self.assertEqual(len(records), 1)
         self.assertEqual(records[0]['System_sysid']['Sys-id']['Sys-id_bsid'], '1134002')
-
-    def test_construct_cgi_epost1(self):
-        cgi = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/epost.fcgi'
-        variables = {'db': 'nuccore', 'id': '186972394,160418'}
-        post = True
-
-        params = Entrez._construct_params(variables)
-        options = Entrez._encode_options(ecitmatch=False, params=params)
-        result_url = Entrez._construct_cgi(cgi, post=post, options=options)
-        self.assertEqual(URL_HEAD + "epost.fcgi", result_url)
-
-    def test_construct_cgi_epost2(self):
-        cgi = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/epost.fcgi'
-        variables = {'db': 'nuccore', 'id': ["160418", "160351"]}
-        post = True
-
-        params = Entrez._construct_params(variables)
-        options = Entrez._encode_options(ecitmatch=False, params=params)
-        result_url = Entrez._construct_cgi(cgi, post=post, options=options)
-        self.assertEqual(URL_HEAD + "epost.fcgi", result_url)
-
-    def test_construct_cgi_ecitmatch(self):
-        citation = {
-            "journal_title": "proc natl acad sci u s a",
-            "year": "1991", "volume": "88", "first_page": "3248",
-            "author_name": "mann bj", "key": "citation_1"
-        }
-        cgi = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/ecitmatch.cgi'
-        variables = Entrez._update_ecitmatch_variables({'db': 'pubmed',
-                                                       'bdata': [citation]})
-        post = False
-
-        params = Entrez._construct_params(variables)
-        options = Entrez._encode_options(ecitmatch=True, params=params)
-        result_url = Entrez._construct_cgi(cgi, post=post, options=options)
-        self.assertTrue("retmode=xml" in result_url, result_url)
 
     @patch("Bio.Entrez._open", return_value=_binary_to_string_handle(open("Entrez/ecitmatch.txt", "rb")))
     def test_ecitmatch(self, mock_open):
