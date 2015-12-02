@@ -3,8 +3,7 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-'''Testing code for Bio.Entrez parsers.
-'''
+"""Testing code for Bio.Entrez parsers."""
 
 import unittest
 import sys
@@ -16,7 +15,7 @@ if os.name == 'java':
     except ImportError:
         from Bio import MissingPythonDependencyError
         raise MissingPythonDependencyError("The Bio.Entrez XML parser fails on "
-                                  "Jython, see http://bugs.jython.org/issue1447")
+                                           "Jython, see http://bugs.jython.org/issue1447")
 
 from io import BytesIO
 from Bio._py3k import StringIO
@@ -24,10 +23,10 @@ from Bio import Entrez
 
 
 class GeneralTests(unittest.TestCase):
-    '''General tests for Bio.Entrez'''
+    """General tests for Bio.Entrez."""
+
     def test_closed_handle(self):
-        '''Test parsing closed handle fails gracefully
-        '''
+        """Test parsing closed handle fails gracefully."""
         handle = open('Entrez/einfo1.xml', "rb")
         handle.close()
         self.assertRaises(IOError, Entrez.read, handle)
@@ -64,11 +63,10 @@ class GeneralTests(unittest.TestCase):
 
 
 class EInfoTest(unittest.TestCase):
-    '''Tests for parsing XML output returned by EInfo
-    '''
+    """Tests for parsing XML output returned by EInfo."""
+
     def test_list(self):
-        '''Test parsing database list returned by EInfo
-        '''
+        """Test parsing database list returned by EInfo."""
         # To create the XML file, use
         # >>> Bio.Entrez.einfo()
         with open('Entrez/einfo1.xml', "rb") as handle:
@@ -113,8 +111,7 @@ class EInfoTest(unittest.TestCase):
                                             ])
 
     def test_pubmed1(self):
-        '''Test parsing database info returned by EInfo
-        '''
+        """Test parsing database info returned by EInfo."""
         # To create the XML file, use
         # >>> Bio.Entrez.einfo(db="pubmed")
         with open('Entrez/einfo2.xml', "rb") as handle:
@@ -145,8 +142,7 @@ class EInfoTest(unittest.TestCase):
         self.assertEqual(record["DbInfo"]['LinkList'][0]['DbTo'], 'books')
 
     def test_pubmed2(self):
-        '''Test validating the XML against the DTD
-        '''
+        """Test validating the XML against the DTD."""
         # To create the XML file, use
         # >>> Bio.Entrez.einfo(db="pubmed")
         # Starting some time in 2010, the results returned by Bio.Entrez
@@ -156,8 +152,7 @@ class EInfoTest(unittest.TestCase):
             self.assertRaises(Parser.ValidationError, Entrez.read, handle)
 
     def test_pubmed3(self):
-        '''Test non-validating parser on XML with an inconsistent DTD
-        '''
+        """Test non-validating parser on XML with an inconsistent DTD."""
         # To create the XML file, use
         # >>> Bio.Entrez.einfo(db="pubmed")
         # Starting some time in 2010, the results returned by Bio.Entrez
@@ -807,8 +802,7 @@ class EInfoTest(unittest.TestCase):
         self.assertEqual(record["DbInfo"]["LinkList"][56]["DbTo"], "unists")
 
     def test_corrupted(self):
-        '''Test if corrupted XML is handled correctly
-        '''
+        """Test if corrupted XML is handled correctly."""
         # To create the XML file, use
         # >>> Bio.Entrez.einfo()
         # and manually delete the last couple of lines
@@ -818,11 +812,10 @@ class EInfoTest(unittest.TestCase):
 
 
 class ESearchTest(unittest.TestCase):
-    '''Tests for parsing XML output returned by ESearch
-    '''
+    """Tests for parsing XML output returned by ESearch."""
+
     def test_pubmed1(self):
-        '''Test parsing XML returned by ESearch from PubMed (first test)
-        '''
+        """Test parsing XML returned by ESearch from PubMed (first test)."""
         # To create the XML file, use
         # >>> Bio.Entrez.esearch(db="pubmed", term="biopython")
         with open('Entrez/esearch1.xml', "rb") as handle:
@@ -846,8 +839,7 @@ class ESearchTest(unittest.TestCase):
         self.assertEqual(record['QueryTranslation'], 'biopython[All Fields]')
 
     def test_pubmed2(self):
-        '''Test parsing XML returned by ESearch from PubMed (second test)
-        '''
+        """Test parsing XML returned by ESearch from PubMed (second test)."""
         # Search in PubMed for the term cancer for the entrez date from
         # the last 60 days and retrieve the first 100 IDs and translations
         # using the history parameter.
@@ -1000,8 +992,7 @@ class ESearchTest(unittest.TestCase):
         self.assertEqual(record['QueryTranslation'], '(("neoplasms"[TIAB] NOT Medline[SB]) OR "neoplasms"[MeSH Terms] OR cancer[Text Word]) AND 2008/02/16[EDAT] : 2008/04/16[EDAT]')
 
     def test_pubmed3(self):
-        '''Test parsing XML returned by ESearch from PubMed (third test)
-        '''
+        """Test parsing XML returned by ESearch from PubMed (third test)."""
         # Search in PubMed for the journal PNAS Volume 97, and retrieve
         # 6 IDs starting at ID 7.
         # To create the XML file, use
@@ -1035,8 +1026,7 @@ class ESearchTest(unittest.TestCase):
         self.assertEqual(record['QueryTranslation'], '"Proc Natl Acad Sci U S A"[Journal] AND 97[vi]')
 
     def test_journals(self):
-        '''Test parsing XML returned by ESearch from the Journals database
-        '''
+        """Test parsing XML returned by ESearch from the Journals database."""
         # Search in Journals for the term obstetrics.
         # To create the XML file, use
         # >>> Bio.Entrez.esearch(db="journals", term="obstetrics")
@@ -1078,8 +1068,7 @@ class ESearchTest(unittest.TestCase):
         self.assertEqual(record['QueryTranslation'], 'obstetrics[All Fields]')
 
     def test_pmc(self):
-        '''Test parsing XML returned by ESearch from PubMed Central
-        '''
+        """Test parsing XML returned by ESearch from PubMed Central."""
         # Search in PubMed Central for stem cells in free fulltext articles.
         # To create the XML file, use
         # >>> Bio.Entrez.esearch(db="pmc",
@@ -1157,8 +1146,7 @@ class ESearchTest(unittest.TestCase):
         self.assertEqual(record['QueryTranslation'], '("stem cells"[MeSH Terms] OR stem cells[Acknowledgments] OR stem cells[Figure/Table Caption] OR stem cells[Section Title] OR stem cells[Body - All Words] OR stem cells[Title] OR stem cells[Abstract]) AND free fulltext[filter]')
 
     def test_nucleotide(self):
-        '''Test parsing XML returned by ESearch from the Nucleotide database
-        '''
+        """Test parsing XML returned by ESearch from the Nucleotide database."""
         # Search in Nucleotide for a property of the sequence,
         # To create the XML file, use
         # >>> Bio.Entrez.esearch(db="nucleotide", term="biomol trna[prop]")
@@ -1192,8 +1180,7 @@ class ESearchTest(unittest.TestCase):
         self.assertEqual(record['QueryTranslation'], '')
 
     def test_protein(self):
-        '''Test parsing XML returned by ESearch from the Protein database
-        '''
+        """Test parsing XML returned by ESearch from the Protein database."""
         # Search in Protein for a molecular weight
         # To create the XML file, use
         # >>> Bio.Entrez.esearch(db="protein", term="200020[molecular weight]")
@@ -1216,8 +1203,7 @@ class ESearchTest(unittest.TestCase):
         self.assertEqual(record['QueryTranslation'], '000200020[molecular weight]')
 
     def test_notfound(self):
-        '''Test parsing XML returned by ESearch when no items were found
-        '''
+        """Test parsing XML returned by ESearch when no items were found."""
         # To create the XML file, use
         # >>> Bio.Entrez.esearch(db="protein", term="abcXYZ")
         with open('Entrez/esearch8.xml', "rb") as handle:
@@ -1245,13 +1231,12 @@ class ESearchTest(unittest.TestCase):
 
 
 class EPostTest(unittest.TestCase):
-    '''Tests for parsing XML output returned by EPost
-    '''
+    """Tests for parsing XML output returned by EPost."""
+
     # Don't know how to get an InvalidIdList in the XML returned by EPost;
     # unable to test if we are parsing it correctly.
     def test_epost(self):
-        '''Test parsing XML returned by EPost
-        '''
+        """Test parsing XML returned by EPost."""
         # To create the XML file, use
         # >>> Bio.Entrez.epost(db="pubmed", id="11237011")
         with open('Entrez/epost1.xml', "rb") as handle:
@@ -1260,16 +1245,14 @@ class EPostTest(unittest.TestCase):
         self.assertEqual(record["WebEnv"], '0zYsuLk3zG_lRMkblPBEqnT8nIENUGw4HAy8xXChTnoVm7GEnWY71jv3nz@1FC077F3806DE010_0042SID')
 
     def test_wrong(self):
-        '''Test parsing XML returned by EPost with incorrect arguments
-        '''
+        """Test parsing XML returned by EPost with incorrect arguments."""
         # To create the XML file, use
         # >>> Bio.Entrez.epost(db="nothing")
         with open('Entrez/epost2.xml', "rb") as handle:
             self.assertRaises(RuntimeError, Entrez.read, handle)
 
     def test_invalid(self):
-        '''Test parsing XML returned by EPost with an invalid id (overflow tag)
-        '''
+        """Test parsing XML returned by EPost with invalid id (overflow tag)."""
         # To create the XML file, use
         # >>> Bio.Entrez.epost(db="pubmed", id=99999999999999999999999999999999)
         with open('Entrez/epost3.xml', "rb") as handle:
@@ -1280,15 +1263,14 @@ class EPostTest(unittest.TestCase):
 
 
 class ESummaryTest(unittest.TestCase):
-    '''Tests for parsing XML output returned by ESummary
-    '''
+    """Tests for parsing XML output returned by ESummary."""
+
     # Items have a type, which can be
     # (Integer|Date|String|Structure|List|Flags|Qualifier|Enumerator|Unknown)
     # I don't have an XML file where the type "Flags", "Qualifier",
     # "Enumerator", or "Unknown" is used, so they are not tested here.
     def test_pubmed(self):
-        '''Test parsing XML returned by ESummary from PubMed
-        '''
+        """Test parsing XML returned by ESummary from PubMed."""
         # In PubMed display records for PMIDs 11850928 and 11482001 in
         # xml retrieval mode
         # To create the XML file, use
@@ -1366,8 +1348,7 @@ class ESummaryTest(unittest.TestCase):
         self.assertEqual(record[1]["SO"], "2001 Jun;20(2):89-103")
 
     def test_journals(self):
-        '''Test parsing XML returned by ESummary from the Journals database
-        '''
+        """Test parsing XML returned by ESummary from the Journals database."""
         # In Journals display records for journal IDs 27731,439,735,905
         # To create the XML file, use
         # >>> Bio.Entrez.esummary(db="journals", id="27731,439,735,905")
@@ -1440,8 +1421,7 @@ class ESummaryTest(unittest.TestCase):
         self.assertEqual(record[3]["ContinuationNotes"], "Continues: Journal of the Asian Federation of Obstetrics and Gynaecology. Continued by: Journal of obstetrics and gynaecology (Tokyo, Japan). ")
 
     def test_protein(self):
-        '''Test parsing XML returned by ESummary from the Protein database
-        '''
+        """Test parsing XML returned by ESummary from the Protein database."""
         # In Protein display records for GIs 28800982 and 28628843 in xml retrieval mode
         # To create the XML file, use
         # >>> Bio.Entrez.esummary(db="protein", id="28800982,28628843", retmode="xml")
@@ -1476,8 +1456,7 @@ class ESummaryTest(unittest.TestCase):
         self.assertEqual(record[1]["Comment"], "  ")
 
     def test_nucleotide(self):
-        '''Test parsing XML returned by ESummary from the Nucleotide database
-        '''
+        """Test parsing XML returned by ESummary from the Nucleotide database."""
         # In Nucleotide display records for GIs 28864546 and 28800981
         # in xml retrieval mode
         # To create the XML file, use
@@ -1514,8 +1493,7 @@ class ESummaryTest(unittest.TestCase):
         self.assertEqual(record[1]["Comment"], "  ")
 
     def test_structure(self):
-        '''Test parsing XML returned by ESummary from the Structure database
-        '''
+        """Test parsing XML returned by ESummary from the Structure database."""
         # In Nucleotide display records for GIs 28864546 and 28800981
         # in xml retrieval mode
         # To create the XML file, use
@@ -1564,8 +1542,7 @@ class ESummaryTest(unittest.TestCase):
         self.assertEqual(record[1]["RNAChainCount"], "0")
 
     def test_taxonomy(self):
-        '''Test parsing XML returned by ESummary from the Taxonomy database
-        '''
+        """Test parsing XML returned by ESummary from the Taxonomy database."""
         # In Taxonomy display records for TAXIDs 9913 and 30521 in
         # xml retrieval mode
         # To create the XML file, use
@@ -1604,8 +1581,7 @@ class ESummaryTest(unittest.TestCase):
         self.assertEqual(record[1]["Subsp"], "")
 
     def test_unists(self):
-        '''Test parsing XML returned by ESummary from the UniSTS database
-        '''
+        """Test parsing XML returned by ESummary from the UniSTS database."""
         # In UniSTS display records for IDs 254085 and 254086 in xml
         # retrieval mode
         # To create the XML file, use
@@ -1632,8 +1608,7 @@ class ESummaryTest(unittest.TestCase):
         self.assertEqual(record[1]["LocusId"], "")
 
     def test_wrong(self):
-        '''Test parsing XML returned by ESummary with incorrect arguments
-        '''
+        """Test parsing XML returned by ESummary with incorrect arguments."""
         # To create the XML file, use
         # >>> Bio.Entrez.esummary()
         with open('Entrez/esummary8.xml', "rb") as handle:
@@ -1641,11 +1616,10 @@ class ESummaryTest(unittest.TestCase):
 
 
 class ELinkTest(unittest.TestCase):
-    '''Tests for parsing XML output returned by ELink
-    '''
+    """Tests for parsing XML output returned by ELink."""
+
     def test_pubmed1(self):
-        '''Test parsing pubmed links returned by ELink (first test)
-        '''
+        """Test parsing pubmed links returned by ELink (first test)."""
         # Retrieve IDs from PubMed for PMID 9298984 to the PubMed database
         # To create the XML file, use
         # >>> Bio.Entrez.elink(dbfrom="pubmed", id="9298984", cmd="neighbor")
@@ -1853,8 +1827,7 @@ class ELinkTest(unittest.TestCase):
         self.assertEqual(record[0]["LinkSetDb"][7]["Link"][0]["Id"], "9298984")
 
     def test_nucleotide(self):
-        '''Test parsing Nucleotide to Protein links returned by ELink
-        '''
+        """Test parsing Nucleotide to Protein links returned by ELink."""
         # Retrieve IDs from Nucleotide for GI  48819, 7140345 to Protein
         # To create the XML file, use
         # >>> Bio.Entrez.elink(dbfrom="nucleotide", db="protein",
@@ -1892,8 +1865,7 @@ class ELinkTest(unittest.TestCase):
         self.assertEqual(record[0]["LinkSetDb"][1]['Link'][15]['Id'], "48820")
 
     def test_pubmed2(self):
-        '''Test parsing pubmed links returned by ELink (second test)
-        '''
+        """Test parsing pubmed links returned by ELink (second test)."""
         # Retrieve PubMed related articles for PMIDs 11812492 11774222
         # with a publication date from 1995 to the present
         # To create the XML file, use
@@ -2272,8 +2244,7 @@ class ELinkTest(unittest.TestCase):
         self.assertEqual(record[0]["LinkSetDb"][0]["Link"][361]["Id"], "7729881")
 
     def test_medline(self):
-        '''Test parsing medline indexed articles returned by ELink
-        '''
+        """Test parsing medline indexed articles returned by ELink."""
         # Retrieve MEDLINE indexed only related articles for PMID 12242737
         # To create the XML file, use
         # >>> Bio.Entrez.elink(dbfrom="pubmed", id="12242737", db="pubmed",
@@ -2504,8 +2475,7 @@ class ELinkTest(unittest.TestCase):
         self.assertEqual(record[0]["LinkSetDb"][0]["LinkName"], "pubmed_pubmed")
 
     def test_pubmed3(self):
-        '''Test parsing pubmed link returned by ELink (third test)
-        '''
+        """Test parsing pubmed link returned by ELink (third test)."""
         # Create a hyperlink to the first link available for PMID 10611131
         # in PubMed
         # To create the XML file, use
@@ -2538,8 +2508,7 @@ class ELinkTest(unittest.TestCase):
         self.assertEqual(record[0]["IdUrlList"]['IdUrlSet'][0]["ObjUrl"][0]["Provider"]["Url"], "http://highwire.stanford.edu")
 
     def test_pubmed4(self):
-        '''Test parsing pubmed links returned by ELink (fourth test)
-        '''
+        """Test parsing pubmed links returned by ELink (fourth test)."""
         # List all available links in PubMed, except for libraries, for
         # PMIDs 12085856 and 12085853
         # To create the XML file, use
@@ -2604,8 +2573,7 @@ class ELinkTest(unittest.TestCase):
         self.assertEqual(record[0]["IdUrlList"]["IdUrlSet"][1]["ObjUrl"][2]["Provider"]["Url"], "http://medlineplus.gov/")
 
     def test_pubmed5(self):
-        '''Test parsing pubmed links returned by ELink (fifth test)
-        '''
+        """Test parsing pubmed links returned by ELink (fifth test)."""
         # List Entrez database links for PubMed PMIDs 12169658 and 11748140
         # To create the XML file, use
         # >>> Bio.Entrez.elink(dbfrom="pubmed", id="12169658,11748140",
@@ -2825,8 +2793,7 @@ class ELinkTest(unittest.TestCase):
         self.assertEqual(record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][14]["Priority"], "255")
 
     def test_pubmed6(self):
-        '''Test parsing pubmed links returned by ELink (sixth test)
-        '''
+        """Test parsing pubmed links returned by ELink (sixth test)."""
         # Check for the existence of a Related Articles link for PMID
         # 12068369.
         # To create the XML file, use
@@ -2845,11 +2812,10 @@ class ELinkTest(unittest.TestCase):
 
 
 class EGQueryTest(unittest.TestCase):
-    '''Tests for parsing XML output returned by EGQuery
-    '''
+    """Tests for parsing XML output returned by EGQuery."""
+
     def test_egquery1(self):
-        '''Test parsing XML output returned by EGQuery (first test)
-        '''
+        """Test parsing XML output returned by EGQuery (first test)."""
         # Display counts in XML for stem cells in each Entrez database
         # To create the XML file, use
         # >>> Bio.Entrez.egquery(term="stem cells")
@@ -2998,8 +2964,7 @@ class EGQueryTest(unittest.TestCase):
         self.assertEqual(record["eGQueryResult"][34]["Status"], "Term or Database is not found")
 
     def test_egquery2(self):
-        '''Test parsing XML output returned by EGQuery (second test)
-        '''
+        """Test parsing XML output returned by EGQuery (second test)."""
         # Display counts in XML for brca1 or brca2 for each Entrez database
         # To create the XML file, use
         # >>> Bio.Entrez.egquery(term="brca1 OR brca2")
@@ -3149,11 +3114,10 @@ class EGQueryTest(unittest.TestCase):
 
 
 class ESpellTest(unittest.TestCase):
-    '''Tests for parsing XML output returned by ESpell
-    '''
+    """Tests for parsing XML output returned by ESpell."""
+
     def test_espell(self):
-        '''Test parsing XML output returned by ESpell
-        '''
+        """Test parsing XML output returned by ESpell."""
         # Request suggestions for the PubMed search biopythooon
         # To create the XML file, use
         # >>> Bio.Entrez.espell(db="pubmed", term="biopythooon")
@@ -3168,11 +3132,10 @@ class ESpellTest(unittest.TestCase):
 
 
 class EFetchTest(unittest.TestCase):
-    '''Tests for parsing XML output returned by EFetch
-    '''
+    """Tests for parsing XML output returned by EFetch."""
+
     def test_pubmed1(self):
-        '''Test parsing XML returned by EFetch, PubMed database (first test)
-        '''
+        """Test parsing XML returned by EFetch, PubMed database (first test)."""
         # In PubMed display PMIDs 12091962 and 9997 in xml retrieval mode
         # and abstract retrieval type.
         # To create the XML file, use
@@ -3373,8 +3336,7 @@ class EFetchTest(unittest.TestCase):
         self.assertEqual(record[1]["PubmedData"]["ArticleIdList"][0].attributes["IdType"], "pubmed")
 
     def test_pubmed2(self):
-        '''Test parsing XML returned by EFetch, PubMed database (second test)
-        '''
+        """Test parsing XML returned by EFetch, PubMed database (second test)."""
         # In PubMed display PMIDs in xml retrieval mode.
         # To create the XML file, use
         # >>> Bio.Entrez.efetch(db='pubmed', id="11748933,11700088",
@@ -3586,8 +3548,7 @@ class EFetchTest(unittest.TestCase):
         self.assertEqual(record[1]["PubmedData"]["ArticleIdList"][2].attributes["IdType"], "pii")
 
     def test_omim(self):
-        '''Test parsing XML returned by EFetch, OMIM database
-        '''
+        """Test parsing XML returned by EFetch, OMIM database."""
         # In OMIM show the full record for MIM number 601100 as XML
         # To create the XML file, use
         # >>> Bio.Entrez.efetch(db="omim", id="601100", retmode='xml',
@@ -3763,8 +3724,7 @@ class EFetchTest(unittest.TestCase):
         self.assertEqual(record[0]["Mim-entry_nucleotideLinks"]["Mim-link"]["Mim-link_numRelevant"], "0")
 
     def test_taxonomy(self):
-        '''Test parsing XML returned by EFetch, Taxonomy database
-        '''
+        """Test parsing XML returned by EFetch, Taxonomy database."""
         # Access the Taxonomy database using efetch.
         # To create the XML file, use
         # >>> Bio.Entrez.efetch(db="taxonomy", id="9685", retmode="xml")
@@ -3871,8 +3831,7 @@ class EFetchTest(unittest.TestCase):
         self.assertEqual(record[0]["PubDate"], "1993/07/26")
 
     def test_nucleotide1(self):
-        '''Test parsing XML returned by EFetch, Nucleotide database (first test)
-        '''
+        """Test parsing XML returned by EFetch, Nucleotide database (first test)."""
         # Access the nucleotide database using efetch.
         # To create the XML file, use
         # >>> Bio.Entrez.efetch(db='nucleotide', id=5, retmode='xml')
@@ -3993,8 +3952,7 @@ class EFetchTest(unittest.TestCase):
         self.assertEqual(record[0]["GBSeq_sequence"], "ccagcgctcgtcttgctgttggggtttctctgccacgttgctatcgcaggacgaacctgccccaagccagatgagctaccgttttccacggtggttccactgaaacggacctatgagcccggggagcagatagtcttctcctgccagccgggctacgtgtcccggggagggatccggcggtttacatgcccgctcacaggactctggcccatcaacacgctgaaatgcatgcccagagtatgtccttttgctgggatcttagaaaacggaacggtacgctatacaacgtttgagtatcccaacaccatcagcttttcttgccacacggggttttatctgaaaggagctagttctgcaaaatgcactgaggaagggaagtggagcccagaccttcctgtctgtgcccctataacctgccctccaccacccatacccaagtttgcaagtctcagcgtttacaagccgttggctgggaacaactccttctatggcagcaaggcagtctttaagtgcttgccacaccacgcgatgtttggaaatgacaccgttacctgcacggaacatgggaactggacgcagttgccagaatgcagggaagtaagatgcccattcccatcaagaccagacaatgggtttgtgaaccatcctgcaaatccagtgctctactataaggacaccgccacctttggctgccatgaaacgtattccttggatggaccggaagaagtagaatgcagcaaattcggaaactggtctgcacagccaagctgtaaagcatcttgtaagttatctattaaaagagctactgtgatatatgaaggagagagagtagctatccagaacaaatttaagaatggaatgctgcatggccaaaaggtttctttcttctgcaagcataaggaaaagaagtgcagctacacagaagatgctcagtgcatagacggcaccatcgagattcccaaatgcttcaaggagcacagttctttagctttctggaaaacggatgcatctgacgtaaaaccatgctaagctggttttcacactgaaaattaaatgtcatgcttatatgtgtctgtctgagaatctgatggaaacggaaaaataaagagactgaatttaccgtgtcaagaaaaaaa")
 
     def test_nucleotide2(self):
-        '''Test parsing XML returned by EFetch, Nucleotide database (second test)
-        '''
+        """Test parsing XML returned by EFetch, Nucleotide database (second test)."""
         # Access the nucleotide database using efetch.
         # To create the XML file, use
         # >>> Bio.Entrez.efetch(db='nucleotide', id=5,
@@ -4021,8 +3979,7 @@ class EFetchTest(unittest.TestCase):
         self.assertEqual(record[1]["TSeq_sequence"], "PALVLLLGFLCHVAIAGRTCPKPDELPFSTVVPLKRTYEPGEQIVFSCQPGYVSRGGIRRFTCPLTGLWPINTLKCMPRVCPFAGILENGTVRYTTFEYPNTISFSCHTGFYLKGASSAKCTEEGKWSPDLPVCAPITCPPPPIPKFASLSVYKPLAGNNSFYGSKAVFKCLPHHAMFGNDTVTCTEHGNWTQLPECREVRCPFPSRPDNGFVNHPANPVLYYKDTATFGCHETYSLDGPEEVECSKFGNWSAQPSCKASCKLSIKRATVIYEGERVAIQNKFKNGMLHGQKVSFFCKHKEKKCSYTEDAQCIDGTIEIPKCFKEHSSLAFWKTDASDVKPC")
 
     def test_protein(self):
-        '''Test parsing XML returned by EFetch, Protein database
-        '''
+        """Test parsing XML returned by EFetch, Protein database."""
         # Access the protein database using efetch.
         # To create the XML file, use
         # >>> Bio.Entrez.efetch(db='protein', id=8, rettype='gp', retmode='xml')
@@ -4112,8 +4069,7 @@ class EFetchTest(unittest.TestCase):
         self.assertEqual(record[0]["GBSeq_sequence"], "mrtpmllallalatlclagradakpgdaesgkgaafvskqegsevvkrlrryldhwlgapapypdplepkrevcelnpdcdeladhigfqeayrrfygpv")
 
     def test_genbank(self):
-        '''Test error handling when presented with GenBank non-XML data
-        '''
+        """Test error handling when presented with GenBank non-XML data."""
         # Access the nucleotide database using efetch, but return the data
         # in GenBank format.
         # To create the GenBank file, use
@@ -4126,8 +4082,7 @@ class EFetchTest(unittest.TestCase):
             self.assertRaises(Parser.NotXMLError, next, iterator)
 
     def test_fasta(self):
-        '''Test error handling when presented with Fasta non-XML data
-        '''
+        """Test error handling when presented with Fasta non-XML data."""
         from Bio.Entrez import Parser
         with open('Fasta/wisteria.nu', "rb") as handle:
             self.assertRaises(Parser.NotXMLError, Entrez.read, handle)
@@ -4136,8 +4091,7 @@ class EFetchTest(unittest.TestCase):
             self.assertRaises(Parser.NotXMLError, next, iterator)
 
     def test_pubmed_html(self):
-        '''Test error handling when presented with HTML (so XML-like) data
-        '''
+        """Test error handling when presented with HTML (so XML-like) data."""
         # To create the HTML file, use
         # >>> Bio.Entrez.efetch(db="pubmed", id="19304878")
         from Bio.Entrez import Parser
@@ -4149,8 +4103,7 @@ class EFetchTest(unittest.TestCase):
             self.assertRaises(Parser.NotXMLError, next, records)
 
     def test_xml_without_declaration(self):
-        '''Test error handling for a missing XML declaration
-        '''
+        """Test error handling for a missing XML declaration."""
         # To create the XML file, use
         # >>> Bio.Entrez.efetch(db="journals",id="2830,6011,7473",retmode='xml')
         from Bio.Entrez import Parser
@@ -4162,7 +4115,7 @@ class EFetchTest(unittest.TestCase):
             self.assertRaises(Parser.NotXMLError, next, records)
 
     def test_truncated_xml(self):
-        """Test error handling for a truncated XML declaration"""
+        """Test error handling for a truncated XML declaration."""
         from Bio.Entrez.Parser import CorruptedXMLError
         from Bio._py3k import StringIO
         truncated_xml = """<?xml version="1.0"?>
