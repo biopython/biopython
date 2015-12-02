@@ -138,7 +138,7 @@ class EInfoTest(unittest.TestCase):
                                             'toolkit',
                                             'unigene',
                                             'unists'
-                                           ])
+                                            ])
 
     def test_pubmed1(self):
         """Test parsing database info returned by EInfo."""
