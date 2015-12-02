@@ -1246,29 +1246,6 @@ class ESearchTest(unittest.TestCase):
         """Test parsing XML returned by ESearch when no items were found."""
         # To create the XML file, use
         # >>> Bio.Entrez.esearch(db="protein", term="abcXYZ")
-        handle = open('Entrez/esearch8.xml')
-        record = Entrez.read(handle)
-        handle.close()
-        self.assertEqual(record['Count'], '3')
-        self.assertEqual(record['RetMax'], '3')
-        self.assertEqual(record['RetStart'], '0')
-        self.assertEqual(len(record['IdList']), 3)
-        self.assertEqual(record['IdList'][0], '16766766')
-        self.assertEqual(record['IdList'][1], '16422035')
-        self.assertEqual(record['IdList'][2], '4104812')
-        self.assertEqual(len(record['TranslationSet']), 0)
-        self.assertEqual(len(record['TranslationStack']), 2)
-        self.assertEqual(record['TranslationStack'][0]['Term'], '000200020[molecular weight]')
-        self.assertEqual(record['TranslationStack'][0]['Field'], 'molecular weight')
-        self.assertEqual(record['TranslationStack'][0]['Count'], '3')
-        self.assertEqual(record['TranslationStack'][0]['Explode'], 'Y')
-        self.assertEqual(record['TranslationStack'][1], 'GROUP')
-        self.assertEqual(record['QueryTranslation'], '000200020[molecular weight]')
-
-    def test_notfound(self):
-        """Test parsing XML returned by ESearch when no items were found."""
-        # To create the XML file, use
-        # >>> Bio.Entrez.esearch(db="protein", term="abcXYZ")
         handle = open('Entrez/esearch8.xml', "rb")
         record = Entrez.read(handle)
         handle.close()
@@ -4155,7 +4132,7 @@ class EFetchTest(unittest.TestCase):
         self.assertEqual(record[1]["TSeq_length"], "342")
         self.assertEqual(record[1]["TSeq_sequence"], "PALVLLLGFLCHVAIAGRTCPKPDELPFSTVVPLKRTYEPGEQIVFSCQPGYVSRGGIRRFTCPLTGLWPINTLKCMPRVCPFAGILENGTVRYTTFEYPNTISFSCHTGFYLKGASSAKCTEEGKWSPDLPVCAPITCPPPPIPKFASLSVYKPLAGNNSFYGSKAVFKCLPHHAMFGNDTVTCTEHGNWTQLPECREVRCPFPSRPDNGFVNHPANPVLYYKDTATFGCHETYSLDGPEEVECSKFGNWSAQPSCKASCKLSIKRATVIYEGERVAIQNKFKNGMLHGQKVSFFCKHKEKKCSYTEDAQCIDGTIEIPKCFKEHSSLAFWKTDASDVKPC")
 
-    def test_nucleotide2(self):
+    def test_protein(self):
         """Test parsing XML returned by EFetch, Protein database."""
         # Access the protein database using efetch.
         # To create the XML file, use
