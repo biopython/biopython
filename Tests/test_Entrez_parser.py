@@ -54,6 +54,27 @@ class GeneralTests(unittest.TestCase):
             Entrez._construct_params(params=None)
         self.assertWarns(UserWarning, issue_warning)
 
+    def test_doing_get_request(self):
+        """By default we do GET requests to NCBI."""
+        params = Entrez._construct_params(None)
+        options = Entrez._encode_options(ecitmatch=False, params=params)
+        post = Entrez._should_do_post_request(options, params)
+        self.assertFalse(post)
+
+    def test_doing_post_request(self):
+        """Test forcing POST request if 200+ UIDs are given."""
+        ids = [str(110000 + i) for i in range(202)]
+
+        params = Entrez._construct_params({'id': ids})
+        options = Entrez._encode_options(ecitmatch=False, params=params)
+        post = Entrez._should_do_post_request(options, params)
+        self.assertTrue(post)
+
+        params = Entrez._construct_params({'id': ",".join(ids)})
+        options = Entrez._encode_options(ecitmatch=False, params=params)
+        post = Entrez._should_do_post_request(options, params)
+        self.assertTrue(post)
+
 
 # This lets us set the email address to be sent to NCBI Entrez:
 Entrez.email = "biopython-dev@biopython.org"

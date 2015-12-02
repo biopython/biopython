@@ -470,7 +470,27 @@ def _open(cgi, params=None, ecitmatch=False):
     params = _construct_params(params)
     options = _encode_options(ecitmatch, params)
 
-    # By default, we do not force a POST request
+    post = _should_do_post_request(options, params)
+    cgi = _construct_cgi(cgi, post, options)
+
+    try:
+        if post:
+            handle = _urlopen(cgi, data=_as_bytes(options))
+        else:
+            handle = _urlopen(cgi)
+    except _HTTPError as exception:
+        raise exception
+
+    return _binary_to_string_handle(handle)
+
+
+def _should_do_post_request(options, params):
+    """By default, we do not force a POST request.
+
+    Returns:
+        - Boolean.
+
+    """
     force_post = False
     ids = params.get("id", None)
     if ids is not None:
@@ -484,17 +504,7 @@ def _open(cgi, params=None, ecitmatch=False):
         # If 200+ UIDs are given, force the POST request
         force_post = len(ids) > 200
     post = force_post or len(options) > 1000
-    cgi = _construct_cgi(cgi, post, options)
-
-    try:
-        if post:
-            handle = _urlopen(cgi, data=_as_bytes(options))
-        else:
-            handle = _urlopen(cgi)
-    except _HTTPError as exception:
-        raise exception
-
-    return _binary_to_string_handle(handle)
+    return post
 
 
 _open.previous = 0
