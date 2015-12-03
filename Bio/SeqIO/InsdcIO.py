@@ -350,7 +350,7 @@ class _InsdcWriter(SequentialSequenceWriter):
         # Now the qualifiers...
         for key in sorted(feature.qualifiers.keys()):
             values = feature.qualifiers[key]
-            if isinstance(values, list) or isinstance(values, tuple):
+            if isinstance(values, (list, tuple)):
                 for value in values:
                     self._write_feature_qualifier(key, value)
             else:
@@ -408,7 +408,7 @@ class _InsdcWriter(SequentialSequenceWriter):
         # It would need the addition of the comma splitting logic...
         # are there any other cases where that would be sensible?
         contig = record.annotations.get("contig", "")
-        if isinstance(contig, list) or isinstance(contig, tuple):
+        if isinstance(contig, (list, tuple)):
             contig = "".join(contig)
         contig = self.clean(contig)
         answer = []
@@ -683,7 +683,7 @@ class GenBankWriter(_InsdcWriter):
         comment = record.annotations["comment"]
         if isinstance(comment, basestring):
             lines = comment.split("\n")
-        elif isinstance(comment, list) or isinstance(comment, tuple):
+        elif isinstance(comment, (list, tuple)):
             lines = comment
         else:
             raise ValueError("Could not understand comment annotation")
@@ -1049,7 +1049,7 @@ class EmblWriter(_InsdcWriter):
         comment = record.annotations["comment"]
         if isinstance(comment, basestring):
             lines = comment.split("\n")
-        elif isinstance(comment, list) or isinstance(comment, tuple):
+        elif isinstance(comment, (list, tuple)):
             lines = comment
         else:
             raise ValueError("Could not understand comment annotation")

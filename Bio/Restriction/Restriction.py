@@ -157,7 +157,7 @@ class FormattedSeq(object):
         seq is either a Bio.Seq, Bio.MutableSeq or a FormattedSeq.
         if seq is a FormattedSeq, linear will have no effect on the
         shape of the sequence."""
-        if isinstance(seq, Seq) or isinstance(seq, MutableSeq):
+        if isinstance(seq, (Seq, MutableSeq)):
             stringy = str(seq)
             self.lower = stringy.islower()
             # Note this adds a leading space to the sequence (!)
@@ -756,7 +756,7 @@ class TwoCuts(AbstractCut):
         _modify returns the real place where the enzyme will cut.
 
         example::
-        
+
             EcoRI pattern : GAATTC
             EcoRI will cut after the G.
             so in the sequence:

@@ -120,8 +120,7 @@ def write(obj, file, encoding=DEFAULT_ENCODING, indent=True):
 
     if isinstance(obj, PX.Phyloxml):
         pass
-    elif (isinstance(obj, PX.BaseTree.Tree) or
-          isinstance(obj, PX.BaseTree.Clade)):
+    elif isinstance(obj, (PX.BaseTree.Tree, PX.BaseTree.Clade)):
         obj = fix_single(obj).to_phyloxml()
     elif hasattr(obj, '__iter__'):
         obj = PX.Phyloxml({}, phylogenies=(fix_single(t) for t in obj))

@@ -77,7 +77,7 @@ class Phyloxml(PhyloElement):
 
     def __getitem__(self, index):
         """Get a phylogeny by index or name."""
-        if isinstance(index, int) or isinstance(index, slice):
+        if isinstance(index, (int, slice)):
             return self.phylogenies[index]
         if not isinstance(index, basestring):
             raise KeyError("can't use %s as an index" % type(index))
@@ -257,7 +257,7 @@ class Phylogeny(PhyloElement, BaseTree.Tree):
             # Special case: mirror the behavior of _get_confidence
             self.confidences = []
             return
-        if isinstance(value, float) or isinstance(value, int):
+        if isinstance(value, (float, int)):
             value = Confidence(value)
         elif not isinstance(value, Confidence):
             raise ValueError("value must be a number or Confidence instance")
@@ -390,7 +390,7 @@ class Clade(PhyloElement, BaseTree.Clade):
             # Special case: mirror the behavior of _get_confidence
             self.confidences = []
             return
-        if isinstance(value, float) or isinstance(value, int):
+        if isinstance(value, (float, int)):
             value = Confidence(value)
         elif not isinstance(value, Confidence):
             raise ValueError("value must be a number or Confidence instance")

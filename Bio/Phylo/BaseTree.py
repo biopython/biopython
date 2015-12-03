@@ -1023,7 +1023,7 @@ class Clade(TreeElement, TreeMixin):
 
     def __getitem__(self, index):
         """Get clades by index (integer or slice)."""
-        if isinstance(index, int) or isinstance(index, slice):
+        if isinstance(index, (int, slice)):
             return self.clades[index]
         ref = self
         for idx in index:

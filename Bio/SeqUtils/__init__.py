@@ -376,7 +376,7 @@ def molecular_weight(seq, seq_type=None, double_stranded=False, circular=False,
 
     # Find the alphabet type
     tmp_type = ''
-    if isinstance(seq, Seq) or isinstance(seq, MutableSeq):
+    if isinstance(seq, (Seq, MutableSeq)):
         base_alphabet = Alphabet._get_base_alphabet(seq.alphabet)
         if isinstance(base_alphabet, Alphabet.DNAAlphabet):
             tmp_type = 'DNA'
