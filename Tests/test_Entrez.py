@@ -1010,7 +1010,7 @@ class ESearchTest(unittest.TestCase):
         # To create the XML file, use
         # >>> Bio.Entrez.esearch(db="journals", term="obstetrics")
         with open('Entrez/esearch4.xml', "rb") as handle:
-         record = Entrez.read(handle)
+            record = Entrez.read(handle)
         self.assertEqual(record['Count'], '177')
         self.assertEqual(record['RetMax'], '20')
         self.assertEqual(record['RetStart'], '0')
@@ -1167,29 +1167,6 @@ class ESearchTest(unittest.TestCase):
         # To create the XML file, use
         # >>> Bio.Entrez.esearch(db="protein", term="200020[molecular weight]")
         with open('Entrez/esearch7.xml', "rb") as handle:
-            record = Entrez.read(handle)
-        self.assertEqual(record['Count'], '3')
-        self.assertEqual(record['RetMax'], '3')
-        self.assertEqual(record['RetStart'], '0')
-        self.assertEqual(len(record['IdList']), 3)
-        self.assertEqual(record['IdList'][0], '16766766')
-        self.assertEqual(record['IdList'][1], '16422035')
-        self.assertEqual(record['IdList'][2], '4104812')
-        self.assertEqual(len(record['TranslationSet']), 0)
-        self.assertEqual(len(record['TranslationStack']), 2)
-        self.assertEqual(record['TranslationStack'][0]['Term'], '000200020[molecular weight]')
-        self.assertEqual(record['TranslationStack'][0]['Field'], 'molecular weight')
-        self.assertEqual(record['TranslationStack'][0]['Count'], '3')
-        self.assertEqual(record['TranslationStack'][0]['Explode'], 'Y')
-        self.assertEqual(record['TranslationStack'][1], 'GROUP')
-        self.assertEqual(record['QueryTranslation'], '000200020[molecular weight]')
-
-    def test_notfound(self):
-        '''Test parsing XML returned by ESearch when no items were found
-        '''
-        # To create the XML file, use
-        # >>> Bio.Entrez.esearch(db="protein", term="abcXYZ")
-        with open('Entrez/esearch8.xml') as handle:
             record = Entrez.read(handle)
         self.assertEqual(record['Count'], '3')
         self.assertEqual(record['RetMax'], '3')
