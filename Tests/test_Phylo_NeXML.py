@@ -11,7 +11,7 @@ import tempfile
 import unittest
 
 import Bio.Phylo as bp
-from Bio.Phylo import NeXML, NeXMLIO
+from Bio.Phylo import NeXMLIO
 
 # Example NeXML files
 nexml_files = (
