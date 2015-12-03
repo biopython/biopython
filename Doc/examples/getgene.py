@@ -115,7 +115,7 @@ class DB_Index(object):
                 return OS
             if line[0:2] == "//":
                 break
-        return OS
+        return None
 
     def FixOS(self, os):
         os = string.split(os, ',')[0]
