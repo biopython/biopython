@@ -100,6 +100,27 @@ class GenBankTests(unittest.TestCase):
         embl = record.format("embl")
         self.assertTrue("XX\nPR   Project:PRJNA57779;\nXX\n" in embl, embl)
 
+    def test_dbline_gb_embl(self):
+        """GenBank / EMBL paired records with PR project entry: GenBank"""
+        record = SeqIO.read("GenBank/DS830848.gb", "gb")
+        self.assertTrue("BioProject:PRJNA16232" in record.dbxrefs, record.dbxrefs)
+        gb = record.format("gb")
+        self.assertTrue("\nDBLINK      BioProject:PRJNA16232\n" in gb, gb)
+        # Also check EMBL output
+        embl = record.format("embl")
+        self.assertTrue("XX\nPR   Project:PRJNA16232;\nXX\n" in embl, embl)
+
+    def test_dbline_embl_gb(self):
+        """GenBank / EMBL paired records with PR project entry: EMBL"""
+        record = SeqIO.read("EMBL/DS830848.embl", "embl")
+        # TODO: Should we map this to BioProject:PRJNA16232
+        self.assertTrue("Project:PRJNA16232" in record.dbxrefs, record.dbxrefs)
+        gb = record.format("gb")
+        self.assertTrue("\nDBLINK      Project:PRJNA16232\n" in gb, gb)
+        embl = record.format("embl")
+        self.assertTrue("XX\nPR   Project:PRJNA16232;\nXX\n" in embl, embl)
+
+
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)
