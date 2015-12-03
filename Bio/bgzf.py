@@ -588,7 +588,7 @@ class BgzfReader(object):
 
     def tell(self):
         """Returns a 64-bit unsigned BGZF virtual offset."""
-        if 0 < self._within_block_offset == len(self._buffer):
+        if 0 < self._within_block_offset and self._within_block_offset == len(self._buffer):
             # Special case where we're right at the end of a (non empty) block.
             # For non-maximal blocks could give two possible virtual offsets,
             # but for a maximal block can't use 65536 as the within block
