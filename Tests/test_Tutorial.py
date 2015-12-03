@@ -67,38 +67,37 @@ def extract_doctests(latex_filename):
     This is a generator, yielding one tuple per doctest.
     """
     base_name = os.path.splitext(os.path.basename(latex_filename))[0]
-    handle = open(latex_filename, _universal_read_mode)
-    line_number = 0
-    in_test = False
-    lines = []
-    name = None
-    while True:
-        line = handle.readline()
-        line_number += 1
-        if not line:
-            # End of file
-            break
-        elif line.startswith("%cont-doctest"):
-            x = _extract(handle)
-            lines.extend(x)
-            line_number += len(x) + 2
-        elif line.startswith("%doctest"):
-            if lines:
-                if not lines[0].startswith(">>> "):
-                    raise ValueError("Should start '>>> ' not %r" % lines[0])
-                yield name, "".join(lines), folder, deps
-                lines = []
-            deps = [x.strip() for x in line.split()[1:]]
-            if deps:
-                folder = deps[0]
-                deps = deps[1:]
-            else:
-                folder = ""
-            name = "test_%s_line_%05i" % (base_name, line_number)
-            x = _extract(handle)
-            lines.extend(x)
-            line_number += len(x) + 2
-    handle.close()
+    with open(latex_filename, _universal_read_mode) as handle:
+        line_number = 0
+        in_test = False
+        lines = []
+        name = None
+        while True:
+            line = handle.readline()
+            line_number += 1
+            if not line:
+                # End of file
+                break
+            elif line.startswith("%cont-doctest"):
+                x = _extract(handle)
+                lines.extend(x)
+                line_number += len(x) + 2
+            elif line.startswith("%doctest"):
+                if lines:
+                    if not lines[0].startswith(">>> "):
+                        raise ValueError("Should start '>>> ' not %r" % lines[0])
+                    yield name, "".join(lines), folder, deps
+                    lines = []
+                deps = [x.strip() for x in line.split()[1:]]
+                if deps:
+                    folder = deps[0]
+                    deps = deps[1:]
+                else:
+                    folder = ""
+                name = "test_%s_line_%05i" % (base_name, line_number)
+                x = _extract(handle)
+                lines.extend(x)
+                line_number += len(x) + 2
     if lines:
         if not lines[0].startswith(">>> "):
             raise ValueError("Should start '>>> ' not %r" % lines[0])
