@@ -10,20 +10,20 @@ import sys
 sys.path.insert(0, '.')
 
 try:
-    from Tkinter import * # Python 2
+    from Tkinter import *  # Python 2
 except ImportError:
-    from tkinter import * # Python 3
+    from tkinter import *  # Python 3
 
 try:
-    import tkColorChooser as colorchooser # Python 2
+    import tkColorChooser as colorchooser  # Python 2
 except ImportError:
-    from tkinter import colorchooser # Python 3
+    from tkinter import colorchooser  # Python 3
 
 from Bio.Data.IUPACData import ambiguous_dna_values
 from Bio.Seq import reverse_complement
 
 
-class DNAsearch:
+class DNAsearch(object):
     def __init__(self):
         self.init_alphabet()
         self.sequence = ''

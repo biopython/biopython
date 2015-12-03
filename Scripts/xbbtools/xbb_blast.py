@@ -23,7 +23,7 @@ from xbb_utils import NotePad
 import xbb_blastbg
 
 
-class BlastIt:
+class BlastIt(object):
     def __init__(self, seq, parent=None):
         self.seq = seq
         self.parent = parent
