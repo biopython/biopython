@@ -1,4 +1,5 @@
 # Copyright 2013 by Kai Blin.
+# Revisions copyright 2015 by Peter Cock.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -85,9 +86,19 @@ class GenBankTests(unittest.TestCase):
         self.assertEqual(rec.annotations["taxonomy"], [])
 
     def test_dblink(self):
+        """GenBank record with old DBLINK project entry."""
+        record = SeqIO.read("GenBank/NC_005816.gb", "gb")
+        self.assertEqual(record.dbxrefs, ["Project:58037"])
+        embl = record.format("embl")
+        self.assertTrue("XX\nPR   Project:58037;\nXX\n" in embl, embl)
+
+    def test_dblink_two(self):
+        """GenBank record with old and new DBLINK project entries."""
         record = SeqIO.read("GenBank/NP_416719.gbwithparts", "gb")
         self.assertEqual(record.dbxrefs,
                          ["Project:57779", "BioProject:PRJNA57779"])
+        embl = record.format("embl")
+        self.assertTrue("XX\nPR   Project:57779;\nXX\n" in embl, embl)
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
