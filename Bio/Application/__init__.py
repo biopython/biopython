@@ -81,7 +81,7 @@ class ApplicationError(_ProcessCalledError):
         # get first line of any stderr message
         try:
             msg = self.stderr.lstrip().split("\n", 1)[0].rstrip()
-        except:
+        except Exception:  # TODO, ValueError? AttributeError?
             msg = ""
         if msg:
             return "Non-zero return code %d from %r, message %r" \

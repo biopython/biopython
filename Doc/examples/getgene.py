@@ -42,7 +42,7 @@ except ImportError:
     from dbm import gnu as gdbm  # Python 3
 
 
-class DB_Index:
+class DB_Index(object):
     def __init__(self, open=1):
         if open:
             self.Open()
@@ -138,7 +138,7 @@ class DB_Index:
 
     def Get_Kingdom(self, id):
         res = self.Get_Taxonomy(id)
-        #print("%s %s" % (id, res))
+        # print("%s %s" % (id, res))
         if not res:
             return "U"
         kd = string.strip(string.split(res, ";")[0])

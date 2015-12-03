@@ -30,7 +30,7 @@ class ProteinX(Alphabet.ProteinAlphabet):
 proteinX = ProteinX()
 
 
-class MissingTable:
+class MissingTable(object):
     def __init__(self, table):
         self._table = table
 
@@ -50,7 +50,7 @@ def makeTableX(table):
                                 table.stop_codons)
 
 
-class NextOrf:
+class NextOrf(object):
     def __init__(self, file, options):
         self.options = options
         self.file = file
@@ -104,9 +104,9 @@ class NextOrf:
             d[nt] = [0, 0, 0]
 
         for i in range(0, l, 3):
-            codon = seq[i:i+3]
+            codon = seq[i:i + 3]
             if len(codon) < 3:
-                codon = codon + '  '
+                codon += '  '
             for pos in range(0, 3):
                 for nt in ['A', 'T', 'G', 'C']:
                     if codon[pos] == nt:
@@ -123,7 +123,7 @@ class NextOrf:
                 gc[i] = 0
 
             gcall = gcall + d['G'][i] + d['C'][i]
-            nall = nall + n
+            nall += n
 
         gcall = 100.0 * gcall / nall
         res = '%.1f%%, %.1f%%, %.1f%%, %.1f%%' % (gcall, gc[0], gc[1], gc[2])
@@ -143,7 +143,7 @@ class NextOrf:
         for frame in range(0, 3):
             coordinates = []
             for i in range(0 + frame, n - n % 3, 3):
-                codon = s[i:i+3]
+                codon = s[i:i + 3]
                 if codon in start_codons:
                     coordinates.append((i + 1, 1, codon))
                 elif codon in stop_codons:
@@ -160,7 +160,7 @@ class NextOrf:
         CDS = []
         f = 0
         for frame in frame_coordinates:
-            f+=1
+            f += 1
             start_site = 0
             if nostart == '1':
                 start_site = 1
@@ -180,9 +180,9 @@ class NextOrf:
                         if nostart == '1' and start_site == 1:
                             start_site = start_site + f - 1
                         if codon == 'XXX':
-                            stop = start_site + 3*((int((stop-1)-start_site)/3))
-                        s = seq[start_site-1:stop]
-                        CDS.append((start_site, stop, length, s, strand*f))
+                            stop = start_site + 3 * ((int((stop - 1) - start_site) // 3))
+                        s = seq[start_site - 1:stop]
+                        CDS.append((start_site, stop, length, s, strand * f))
                         start_site = 0
                         if nostart == '1':
                             start_site = stop + 1
@@ -202,7 +202,7 @@ class NextOrf:
             if strand > 0:
                 head = 'orf_%s:%s:%d:%d:%d' % (self.counter, self.header, strand, start, stop)
             if strand < 0:
-                head = 'orf_%s:%s:%d:%d:%d' % (self.counter, self.header, strand, n-stop+1, n-start+1)
+                head = 'orf_%s:%s:%d:%d:%d' % (self.counter, self.header, strand, n - stop + 1, n - start + 1)
             if self.options['gc']:
                 head = '%s:%s' % (head, self.Gc2(subs.data))
 

@@ -318,7 +318,7 @@ class Tree(Nodes.Chain):
                         t = t.replace(' ', '_')
                     try:
                         genus = t.split('_', 1)[0]
-                    except:
+                    except IndexError:
                         genus = 'None'
                     if genus not in genera:
                         genera.append(genus)

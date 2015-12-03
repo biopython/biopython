@@ -601,7 +601,7 @@ class _Scanner(object):
         try:
             read_and_call(uhandle, consumer.noevent, start='Lambda')
             read_and_call(uhandle, consumer.ka_params)
-        except:
+        except Exception:  # TODO: ValueError, AttributeError?
             pass
 
         # This blank line is optional:

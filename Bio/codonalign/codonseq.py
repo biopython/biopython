@@ -229,7 +229,7 @@ class CodonSeq(Seq):
             try:
                 this_len = len(self._data[i:i + 3].replace("-", ""))
                 relative_pos[codon_num] -= this_len
-            except:
+            except Exception:  # TODO: IndexError?
                 # we probably reached the last codon
                 pass
         return full_rf_table

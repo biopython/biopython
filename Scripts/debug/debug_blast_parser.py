@@ -37,7 +37,7 @@ OPTIONS:
 """ % sys.argv[0]
 
 
-class DebuggingConsumer:
+class DebuggingConsumer(object):
     def __init__(self, decorated=None):
         self.linenum = 0
         if decorated is None:

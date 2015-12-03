@@ -13,22 +13,22 @@ import sys
 sys.path.insert(0, '.')
 
 try:
-    import Queue as queue # Python 2
+    import Queue as queue  # Python 2
 except ImportError:
-    import queue # Python 3
+    import queue  # Python 3
 
 import tempfile
 import threading
 
 try:
-    from Tkinter import * # Python 2
+    from Tkinter import *  # Python 2
 except ImportError:
-    from tkinter import * # Python 3
+    from tkinter import *  # Python 3
 
 from xbb_utils import NotePad
 
 
-class BlastDisplayer:
+class BlastDisplayer(object):
     def __init__(self, command, text_id=None):
         self.command = command
         self.tid = text_id

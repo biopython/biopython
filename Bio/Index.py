@@ -51,7 +51,7 @@ class _ShelveIndex(dict):
                         os.unlink(file)
                 raise Exception("open a new shelf")
             self.data = shelve.open(indexname, flag='r')
-        except:
+        except Exception:  # TODO: Which exception?
             # No database exists.
             self.data = shelve.open(indexname, flag='n')
             self.data[self.__version_key] = self.__version

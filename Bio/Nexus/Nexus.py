@@ -639,7 +639,7 @@ class Nexus(object):
             try:
                 if cl[:6].upper() == '#NEXUS':
                     commandlines[i] = cl[6:].strip()
-            except:
+            except IndexError:
                 pass
         # now loop through blocks (we parse only data in known blocks, thus ignoring non-block commands
         nexus_block_gen = self._get_nexus_block(commandlines)
@@ -721,8 +721,8 @@ class Nexus(object):
                 self.symbols = self.symbols[1:-1]
             if not self.respectcase:
                 self.symbols = list(self.symbols.upper())
-                #self.symbols = self.symbols.lower() + self.symbols.upper()
-                #self.symbols = list(set(self.symbols))
+                # self.symbols = self.symbols.lower() + self.symbols.upper()
+                # self.symbols = list(set(self.symbols))
         if 'datatype' in options:
             self.datatype = options['datatype'].lower()
 
@@ -1045,7 +1045,7 @@ class Nexus(object):
                     raise NexusError('Missing \',\' in line %s.' % options)
             except NexusError:
                 raise
-            except:
+            except Exception:  # TODO: ValueError?
                 raise NexusError('Format error in line %s.' % options)
 
     def _utree(self, options):
@@ -1932,9 +1932,9 @@ if __name__ == '__main__':
 
     # TODO: Not supported
     # 6. Check character data file with TAXA and two CHARACTERS blocks (one with continuous characters)
-    #print('Testing file "vSysLab_Oreiscelio_discrete+continuous.nex": TAXA, 2 CHARACTERS (discrete and continuous)')
+    # print('Testing file "vSysLab_Oreiscelio_discrete+continuous.nex": TAXA, 2 CHARACTERS (discrete and continuous)')
     #
-    #nexus6 = Nexus()
+    # nexus6 = Nexus()
     #
     # try:
     #    nexus6.read('../../Tests/Nexus/vSysLab_Oreiscelio_discrete+continuous.nex')
