@@ -98,7 +98,7 @@ class GenBankTests(unittest.TestCase):
         self.assertEqual(record.dbxrefs,
                          ["Project:57779", "BioProject:PRJNA57779"])
         embl = record.format("embl")
-        self.assertTrue("XX\nPR   Project:57779;\nXX\n" in embl, embl)
+        self.assertTrue("XX\nPR   Project:PRJNA57779;\nXX\n" in embl, embl)
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)

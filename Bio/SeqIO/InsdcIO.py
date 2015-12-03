@@ -1067,7 +1067,30 @@ class EmblWriter(_InsdcWriter):
         self._write_the_first_lines(record)
 
         # PR line (0 or 1 lines only), project identifier
-        for xref in record.dbxrefs:
+        #
+        # Assuming can't use 2 lines, we should prefer newer GenBank
+        # DBLINK BioProject:... entries over the older GenBank DBLINK
+        # Project:... lines.
+        #
+        # In either case, seems EMBL usess just "PR    Project:..."
+        # regardless of the type of ID (old numeric only, or new
+        # with alpha prefix), e.g. for CP002497 NCBI now uses:
+        #
+        # DBLINK      BioProject: PRJNA60715
+        #             BioSample: SAMN03081426
+        #
+        # While EMBL uses:
+        #
+        # XX
+        # PR   Project:PRJNA60715;
+        # XX
+        #
+        # Sorting ensures (new) BioProject:... is before old Project:...
+        for xref in sorted(record.dbxrefs):
+            if xref.startswith("BioProject:"):
+                self._write_single_line("PR", xref[3:] + ";")
+                handle.write("XX\n")
+                break
             if xref.startswith("Project:"):
                 self._write_single_line("PR", xref + ";")
                 handle.write("XX\n")
