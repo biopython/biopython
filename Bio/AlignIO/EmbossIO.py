@@ -95,6 +95,7 @@ class EmbossIterator(AlignmentIterator):
         number_of_seqs = None
         ids = []
         seqs = []
+        header_dict = {}
 
         while line[0] == "#":
             # Read in the rest of this alignment header,
@@ -116,7 +117,6 @@ class EmbossIterator(AlignmentIterator):
                 length_of_seqs = int(parts[1].strip())
                 
             # Parse the rest of the header
-            header_dict = {}
             if key == 'identity':
                 header_dict['identity'] = int(parts[1].strip().split('/')[0])
             if key == 'similarity':
