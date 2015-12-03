@@ -84,6 +84,11 @@ class GenBankTests(unittest.TestCase):
         self.assertEqual(rec.annotations["organism"], ".")
         self.assertEqual(rec.annotations["taxonomy"], [])
 
+    def test_dblink(self):
+        record = SeqIO.read("GenBank/NP_416719.gbwithparts", "gb")
+        self.assertEqual(record.dbxrefs,
+                         ["Project:57779", "BioProject:PRJNA57779"])
+
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)
