@@ -809,10 +809,24 @@ class EmblScanner(InsdcScanner):
                 # Remove trailing ; at end of authors list
                 consumer.authors(data.rstrip(";"))
             elif line_type == 'PR':
-                # Remove trailing ; at end of the project reference
-                # In GenBank files this corresponds to the old PROJECT
-                # line which is being replaced with the DBLINK line.
-                consumer.project(data.rstrip(";"))
+                # In the EMBL patent files, this is a PR (PRiority) line which
+                # provides the earliest active priority within the family.
+                # The priority  number comes first, followed by the priority date.
+                #
+                # e.g.
+                # PR   JP19990377484 16-DEC-1999
+                #
+                # However, in most EMBL files this is a PR (PRoject) line which
+                # gives the BioProject reference number.
+                #
+                # e.g.
+                # PR   Project:PRJNA60715;
+                #
+                # In GenBank files this corresponds to the old PROJECT line
+                # which was later replaced with the DBLINK line.
+                if data.startswith("Project:"):
+                    # Remove trailing ; at end of the project reference
+                    consumer.project(data.rstrip(";"))
             elif line_type == 'KW':
                 consumer.keywords(data.rstrip(";"))
             elif line_type in consumer_dict:
