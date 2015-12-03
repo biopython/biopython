@@ -6,6 +6,7 @@
 """Testing code for Bio.Entrez parsers."""
 
 import unittest
+import warnings
 
 import os
 if os.name == 'java':
@@ -48,9 +49,9 @@ class GeneralTests(unittest.TestCase):
         """Test issuing warning when user does not specify email address."""
         Entrez.email = None
 
-        def issue_warning():
+        with warnings.catch_warnings(record=True) as w:
             Entrez._construct_params(params=None)
-        self.assertWarns(UserWarning, issue_warning)
+            self.assertEqual(len(w), 1)
 
     def test_doing_get_request(self):
         """By default we do GET requests to NCBI."""
