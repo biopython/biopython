@@ -49,37 +49,36 @@ class DB_Index:
 
     def Create(self, infile, outfile):
         db = gdbm.open(outfile, 'n')
-        fid = open(infile)
+        with open(infile) as fid:
 
-        db['datafile'] = os.path.abspath(infile)
+            db['datafile'] = os.path.abspath(infile)
 
-        while True:
-            line = fid.readline()
-            if not line or not len(line):
-                break
+            while True:
+                line = fid.readline()
+                if not line or not len(line):
+                    break
 
-            if line[:3] == 'ID ':
-                id = string.split(line)[1]
-                start = fid.tell() - len(line)
+                if line[:3] == 'ID ':
+                    id = string.split(line)[1]
+                    start = fid.tell() - len(line)
 
-            elif line[:3] == 'AC ':
-                acc = string.split(line)[1]
-                if acc[-1] == ';':
-                    acc = acc[:-1]
+                elif line[:3] == 'AC ':
+                    acc = string.split(line)[1]
+                    if acc[-1] == ';':
+                        acc = acc[:-1]
 
-            elif line[:2] == '//':
-                stop = fid.tell()
-                try:
-                    value = '%d %d' % (start, stop)
-                    db[id] = value
-                    db[acc] = value
-                    id, acc, start, stop = None, None, None, None
-                except:
-                    print("AARRGGGG %d %d %s %s" % (start, stop, type(start), type(stop)))
-                    print("%s %s" % (id, acc))
+                elif line[:2] == '//':
+                    stop = fid.tell()
+                    try:
+                        value = '%d %d' % (start, stop)
+                        db[id] = value
+                        db[acc] = value
+                        id, acc, start, stop = None, None, None, None
+                    except:
+                        print("AARRGGGG %d %d %s %s" % (start, stop, type(start), type(stop)))
+                        print("%s %s" % (id, acc))
 
-        db.close()
-        fid.close()
+            db.close()
 
     def Open(self, indexfile=None):
         if not indexfile:
