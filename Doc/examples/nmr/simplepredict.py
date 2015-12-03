@@ -145,6 +145,5 @@ while (res <= MAXRES):
     res += 1
 
 # Open the output file and write the data
-outfile = open(outfn, 'a')
-outfile.writelines(outlist)  # Write the output lines to the file
-outfile.close()
+with open(outfn, 'a') as outfile:
+    outfile.writelines(outlist)  # Write the output lines to the file
