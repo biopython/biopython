@@ -7,7 +7,6 @@ from Bio._py3k import _universal_read_mode
 
 import os
 import unittest
-from Bio.PopGen import SimCoal
 from Bio.PopGen.SimCoal.Template import generate_simcoal_from_template
 
 # Tests simcoal related code. Note: this case doesn't require simcoal
