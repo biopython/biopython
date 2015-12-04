@@ -26,7 +26,7 @@ class TemplateTest(unittest.TestCase):
         # Confirm the files match (ignoring any switch of line endings
         # possible if the input file used a different OS convention)
         with open(os.path.join('PopGen', 'simple.par'), _universal_read_mode) as handle:
-        old = handle.readlines()
+            old = handle.readlines()
         with open(os.path.join('PopGen', 'simple_100_30.par')) as handle:
             new = handle.readlines()
         assert old == new, "Error - Old:\n%s\n\nNew:\n%s\n" % (old, new)
