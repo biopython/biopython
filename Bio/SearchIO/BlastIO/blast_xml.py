@@ -654,7 +654,7 @@ class _BlastXmlGenerator(XMLGenerator):
                 '<!DOCTYPE BlastOutput PUBLIC "-//NCBI//NCBI BlastOutput/EN" '
                 '"http://www.ncbi.nlm.nih.gov/dtd/NCBI_BlastOutput.dtd">\n')
 
-    def startElement(self, name, attrs={}, children=False):
+    def startElement(self, name, attrs= None, children=False):
         """Starts an XML element.
 
         :param name: element name
@@ -665,6 +665,8 @@ class _BlastXmlGenerator(XMLGenerator):
         :type children: bool
 
         """
+        if attrs is None:
+                attrs = {}
         self.ignorableWhitespace(self._indent * self._level)
         XMLGenerator.startElement(self, name, attrs)
 
@@ -673,7 +675,7 @@ class _BlastXmlGenerator(XMLGenerator):
         XMLGenerator.endElement(self, name)
         self.write(u'\n')
 
-    def startParent(self, name, attrs={}):
+    def startParent(self, name, attrs= None):
         """Starts an XML element which has children.
 
         :param name: element name
@@ -682,6 +684,8 @@ class _BlastXmlGenerator(XMLGenerator):
         :type attrs: dictionary {string: object}
 
         """
+        if attrs is None:
+                attrs = {}
         self.startElement(name, attrs, children=True)
         self._level += self._increment
         self.write(u'\n')
@@ -747,7 +751,7 @@ class BlastXmlWriter(object):
         return self.qresult_counter, self.hit_counter, self.hsp_counter, \
             self.frag_counter
 
-    def _write_elem_block(self, block_name, map_name, obj, opt_dict={}):
+    def _write_elem_block(self, block_name, map_name, obj, opt_dict= None):
         """Writes sibling XML elements.
 
         :param block_name: common element name prefix
@@ -760,6 +764,8 @@ class BlastXmlWriter(object):
         :type opt_dict: dictionary {string: string}
 
         """
+        if opt_dict is None:
+                opt_dict = {}
         for elem, attr in _WRITE_MAPS[map_name]:
             elem = block_name + elem
             try:

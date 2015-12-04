@@ -249,9 +249,11 @@ class SeqRetSeqIOTests(unittest.TestCase):
     def tearDown(self):
         clean_up()
 
-    def check_SeqIO_to_EMBOSS(self, in_filename, in_format, skip_formats=[],
+    def check_SeqIO_to_EMBOSS(self, in_filename, in_format, skip_formats= None,
                               alphabet=None):
         """Can Bio.SeqIO write files seqret can read back?"""
+        if skip_formats is None:
+                skip_formats = []
         if alphabet:
             records = list(SeqIO.parse(in_filename, in_format, alphabet))
         else:
@@ -267,8 +269,10 @@ class SeqRetSeqIOTests(unittest.TestCase):
                                  % (in_format, in_filename, temp_format, err))
 
     def check_EMBOSS_to_SeqIO(self, filename, old_format,
-                              skip_formats=[]):
+                              skip_formats= None):
         """Can Bio.SeqIO read seqret's conversion of the file?"""
+        if skip_formats is None:
+                skip_formats = []
         # TODO: Why can't we read EMBOSS's swiss output?
         self.assertTrue(os.path.isfile(filename))
         old_records = list(SeqIO.parse(filename, old_format))
@@ -284,9 +288,11 @@ class SeqRetSeqIOTests(unittest.TestCase):
                 raise ValueError("Disagree on %s file %s in %s format: %s"
                                  % (old_format, filename, new_format, err))
 
-    def check_SeqIO_with_EMBOSS(self, filename, old_format, skip_formats=[],
+    def check_SeqIO_with_EMBOSS(self, filename, old_format, skip_formats= None,
                                 alphabet=None):
         # Check EMBOSS can read Bio.SeqIO output...
+        if skip_formats is None:
+                skip_formats = []
         self.check_SeqIO_to_EMBOSS(filename, old_format, skip_formats,
                                    alphabet)
         # Check Bio.SeqIO can read EMBOSS seqret output...
@@ -361,8 +367,10 @@ class SeqRetAlignIOTests(unittest.TestCase):
         clean_up()
 
     def check_EMBOSS_to_AlignIO(self, filename, old_format,
-                              skip_formats=[]):
+                              skip_formats= None):
         """Can AlignIO read seqret's conversion of the file?"""
+        if skip_formats is None:
+                skip_formats = []
         self.assertTrue(os.path.isfile(filename), filename)
         old_aligns = list(AlignIO.parse(filename, old_format))
         formats = ["clustal", "phylip", "ig"]
@@ -385,9 +393,11 @@ class SeqRetAlignIOTests(unittest.TestCase):
                 raise ValueError("Disagree on %s file %s in %s format: %s"
                                  % (old_format, filename, new_format, err))
 
-    def check_AlignIO_to_EMBOSS(self, in_filename, in_format, skip_formats=[],
+    def check_AlignIO_to_EMBOSS(self, in_filename, in_format, skip_formats= None,
                                 alphabet=None):
         """Can Bio.AlignIO write files seqret can read back?"""
+        if skip_formats is None:
+                skip_formats = []
         if alphabet:
             old_aligns = list(AlignIO.parse(in_filename, in_format, alphabet))
         else:
@@ -415,9 +425,11 @@ class SeqRetAlignIOTests(unittest.TestCase):
                 raise ValueError("Disagree on file %s %s in %s format: %s"
                                  % (in_format, in_filename, temp_format, err))
 
-    def check_AlignIO_with_EMBOSS(self, filename, old_format, skip_formats=[],
+    def check_AlignIO_with_EMBOSS(self, filename, old_format, skip_formats= None,
                                   alphabet=None):
         # Check EMBOSS can read Bio.AlignIO output...
+        if skip_formats is None:
+                skip_formats = []
         self.check_AlignIO_to_EMBOSS(filename, old_format, skip_formats,
                                    alphabet)
         # Check Bio.AlignIO can read EMBOSS seqret output...

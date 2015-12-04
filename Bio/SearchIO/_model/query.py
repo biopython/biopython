@@ -188,7 +188,7 @@ class QueryResult(_BaseSearchObject):
     # from this one
     _NON_STICKY_ATTRS = ('_items', '__alt_hit_ids', )
 
-    def __init__(self, hits=[], id=None,
+    def __init__(self, hits= None, id=None,
             hit_key_function=lambda hit: hit.id):
         """Initializes a QueryResult object.
 
@@ -200,6 +200,8 @@ class QueryResult(_BaseSearchObject):
         :type hit_key_function: callable, accepts Hit objects, returns string
 
         """
+        if hits is None:
+                hits = []
         # default values
         self._id = id
         self._hit_key_function = hit_key_function

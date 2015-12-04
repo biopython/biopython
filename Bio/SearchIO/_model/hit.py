@@ -107,7 +107,7 @@ class Hit(_BaseSearchObject):
     # from this one
     _NON_STICKY_ATTRS = ('_items', )
 
-    def __init__(self, hsps=[], id=None, query_id=None):
+    def __init__(self, hsps= None, id=None, query_id=None):
         """Initializes a Hit object.
 
         :param hsps: HSP objects contained in the Hit object
@@ -121,6 +121,8 @@ class Hit(_BaseSearchObject):
         have the same ``query_id``, ``query_description``, ``hit_id``, and
         ``hit_description`` properties.
         """
+        if hsps is None:
+                hsps = []
         # default attribute values
         self._id = id
         self._id_alt = []
