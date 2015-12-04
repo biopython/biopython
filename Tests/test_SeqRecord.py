@@ -343,7 +343,7 @@ Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX', ProteinAlphabet())"""
             SeqRecord(Seq("A")) < SeqRecord(Seq("A"))
         self.assertRaises(NotImplementedError, lt)
 
-    def test_ge_exception(self):
+    def test_le_exception(self):
         def le():
             SeqRecord(Seq("A")) <= SeqRecord(Seq("A"))
             self.assertRaises(NotImplementedError, le)
