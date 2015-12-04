@@ -291,9 +291,9 @@ class _Matrix(object):
     def __str__(self):
         """Get a lower triangular matrix string"""
         matrix_string = '\n'.join(
-            [self.names[i] + "\t" + "\t".join([str(n) for n in self.matrix[i]])
+            [self.names[i] + "    " + "    ".join([str(n) for n in self.matrix[i]])
              for i in range(0, len(self))])
-        matrix_string = matrix_string + "\n\t" + "\t".join(self.names)
+        matrix_string = matrix_string + "\n    " + "    ".join(self.names)
         return matrix_string
 
 
@@ -351,12 +351,12 @@ class DistanceCalculator(object):
         >>> calculator = DistanceCalculator('identity')
         >>> dm = calculator.get_distance(aln)
         >>> print(dm)
-        Alpha   0
-    Beta    0.230769230769  0
-    Gamma   0.384615384615  0.230769230769  0
-    Delta   0.538461538462  0.538461538462  0.538461538462  0
-    Epsilon 0.615384615385  0.384615384615  0.461538461538  0.153846153846  0
-            Alpha           Beta            Gamma           Delta           Epsilon
+        Alpha    0
+        Beta    0.23076923076923073    0
+        Gamma    0.3846153846153846    0.23076923076923073    0
+        Delta    0.5384615384615384    0.5384615384615384    0.5384615384615384    0
+        Epsilon    0.6153846153846154    0.3846153846153846    0.46153846153846156    0.15384615384615385    0
+            Alpha    Beta    Gamma    Delta    Epsilon
 
 
     Protein calculator with 'blosum62' model::
@@ -364,13 +364,13 @@ class DistanceCalculator(object):
         >>> calculator = DistanceCalculator('blosum62')
         >>> dm = calculator.get_distance(aln)
         >>> print(dm)
-        Alpha   0
-        Beta    0.369047619048  0
-        Gamma   0.493975903614  0.25            0
-        Delta   0.585365853659  0.547619047619  0.566265060241  0
-        Epsilon 0.7             0.355555555556  0.488888888889  0.222222222222  0
-                Alpha           Beta            Gamma           Delta           Epsilon
-    """
+        Alpha    0
+        Beta    0.36904761904761907    0
+        Gamma    0.49397590361445787    0.25    0
+        Delta    0.5853658536585367    0.5476190476190477    0.5662650602409638    0
+        Epsilon    0.7    0.3555555555555555    0.48888888888888893    0.2222222222222222    0
+            Alpha    Beta    Gamma    Delta    Epsilon
+        """
 
     dna_alphabet = ['A', 'T', 'C', 'G']
 
@@ -1006,8 +1006,8 @@ class ParsimonyTreeConstructor(TreeConstructor):
     --------
 
     >>> from Bio import AlignIO
-    >>> from TreeConstruction import *
-    >>> aln = AlignIO.read(open('Tests/TreeConstruction/msa.phy'), 'phylip')
+    >>> from Bio.Phylo.TreeConstruction import *
+    >>> aln = AlignIO.read(open('TreeConstruction/msa.phy'), 'phylip')
     >>> print(aln)
     SingleLetterAlphabet() alignment with 5 rows and 13 columns
     AACGTGGCCACAT Alpha
@@ -1026,7 +1026,7 @@ class ParsimonyTreeConstructor(TreeConstructor):
                 Clade(branch_length=0.29231, name='Alpha')
             Clade(branch_length=0.07477, name='Beta')
             Clade(branch_length=0.17523, name='Gamma')
-    >>> from TreeConstruction import *
+    >>> from Bio.Phylo.TreeConstruction import *
     >>> scorer = ParsimonyScorer()
     >>> searcher = NNITreeSearcher(scorer)
     >>> constructor = ParsimonyTreeConstructor(searcher, starting_tree)
