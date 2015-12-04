@@ -358,12 +358,12 @@ Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX', ProteinAlphabet())"""
             SeqRecord(Seq("A")) != SeqRecord(Seq("A"))
         self.assertRaises(NotImplementedError, notequality)
 
-    def test_gt_exception(self):
+    def test_gt_exception_gt(self):
         def gt():
             SeqRecord(Seq("A")) > SeqRecord(Seq("A"))
         self.assertRaises(NotImplementedError, gt)
 
-    def test_ge_exception(self):
+    def test_ge_exception_ge(self):
         def ge():
             SeqRecord(Seq("A")) >= SeqRecord(Seq("A"))
         self.assertRaises(NotImplementedError, ge)
