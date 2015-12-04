@@ -520,34 +520,12 @@ class DistanceTreeConstructor(TreeConstructor):
     UPGMA Tree:
 
     >>> upgmatree = constructor.upgma(dm)
-    >>> print(upgmatree)
-    Tree(rooted=True)
-        Clade(branch_length=0, name='Inner4')
-            Clade(branch_length=0.18749999999999994, name='Inner1')
-                Clade(branch_length=0.07692307692307693, name='Epsilon')
-                Clade(branch_length=0.07692307692307693, name='Delta')
-            Clade(branch_length=0.11057692307692304, name='Inner3')
-                Clade(branch_length=0.038461538461538464, name='Inner2')
-                    Clade(branch_length=0.11538461538461536, name='Gamma')
-                    Clade(branch_length=0.11538461538461536, name='Beta')
-                Clade(branch_length=0.15384615384615383, name='Alpha')
-
-    NJ Tree:
+    >>> print("Total branch length %.4f" % upgmatree.total_branch_length())
+    Total branch length 0.8750
 
     >>> njtree = constructor.nj(dm)
-    >>> print(njtree)
-    Tree(rooted=False)
-        Clade(branch_length=0, name='Inner3')
-            Clade(branch_length=0.18269230769230765, name='Alpha')
-            Clade(branch_length=0.04807692307692307, name='Beta')
-            Clade(branch_length=0.04807692307692307, name='Inner2')
-                Clade(branch_length=0.27884615384615385, name='Inner1')
-                    Clade(branch_length=0.051282051282051266, name='Epsilon')
-                    Clade(branch_length=0.10256410256410259, name='Delta')
-                Clade(branch_length=0.14423076923076922, name='Gamma')
-
-
-
+    >>> print("Total branch length %.4f" % njtree.total_branch_length())
+    Total branch length 0.8558
     """
 
     methods = ['nj', 'upgma']
