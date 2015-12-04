@@ -591,11 +591,11 @@ class TreeMixin(object):
         support:
             >>> from Bio import Phylo
             >>> tree = Phylo.read('PhyloXML/apaf.xml', 'phyloxml')
-            >>> tree.total_branch_length()
-            20.44093
+            >>> print("Total branch length %0.2f" % tree.total_branch_length())
+            Total branch length 20.44
             >>> tree.collapse_all(lambda c: c.confidence is not None and c.confidence < 70)
-            >>> tree.total_branch_length()
-            21.37086
+            >>> print("Total branch length %0.2f" % tree.total_branch_length())
+            Total branch length 21.37
 
         This implementation avoids strange side-effects by using level-order
         traversal and testing all clade properties (versus the target
@@ -604,11 +604,11 @@ class TreeMixin(object):
         if the condition is:
             >>> from Bio import Phylo
             >>> tree = Phylo.read('PhyloXML/apaf.xml', 'phyloxml')
-            >>> tree.total_branch_length()
-            20.44093
+            >>> print("Total branch length %0.2f" % tree.total_branch_length())
+            Total branch length 20.44
             >>> tree.collapse_all(lambda c: c.branch_length < 0.1)
-            >>> tree.total_branch_length()
-            21.13006
+            >>> print("Total branch length %0.2f" % tree.total_branch_length())
+            Total branch length 21.13
 
         Collapsing a clade's parent node adds the parent's branch length to the
         child, so during the execution of collapse_all, a clade's branch_length
