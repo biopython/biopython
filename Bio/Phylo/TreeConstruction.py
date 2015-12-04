@@ -290,10 +290,13 @@ class _Matrix(object):
 
     def __str__(self):
         """Get a lower triangular matrix string"""
+        # >>> print("Total branch length %0.2f" % tree.total_branch_length())
+        #     Total branch length 20.44
+        col1 = max([len(n) for n in self.names]) + 4
         matrix_string = '\n'.join(
-            [self.names[i] + "    " + "    ".join([str(n) for n in self.matrix[i]])
+            [self.names[i] + (' '*(col1 - len(self.names[i]))) + '    '.join(["%0.3f" % n for n in self.matrix[i]])
              for i in range(0, len(self))])
-        matrix_string = matrix_string + "\n    " + "    ".join(self.names)
+        matrix_string = matrix_string + "\n" + ' '*(col1) + ''.join([n + ' '*(9 - len(n)) for n in self.names])
         return matrix_string
 
 
@@ -351,12 +354,12 @@ class DistanceCalculator(object):
         >>> calculator = DistanceCalculator('identity')
         >>> dm = calculator.get_distance(aln)
         >>> print(dm)
-        Alpha    0
-        Beta    0.23076923076923073    0
-        Gamma    0.3846153846153846    0.23076923076923073    0
-        Delta    0.5384615384615384    0.5384615384615384    0.5384615384615384    0
-        Epsilon    0.6153846153846154    0.3846153846153846    0.46153846153846156    0.15384615384615385    0
-            Alpha    Beta    Gamma    Delta    Epsilon
+        Alpha      0.000
+        Beta       0.231    0.000
+        Gamma      0.385    0.231    0.000
+        Delta      0.538    0.538    0.538    0.000
+        Epsilon    0.615    0.385    0.462    0.154    0.000
+                   Alpha    Beta     Gamma    Delta    Epsilon  
 
 
     Protein calculator with 'blosum62' model::
@@ -364,12 +367,13 @@ class DistanceCalculator(object):
         >>> calculator = DistanceCalculator('blosum62')
         >>> dm = calculator.get_distance(aln)
         >>> print(dm)
-        Alpha    0
-        Beta    0.36904761904761907    0
-        Gamma    0.49397590361445787    0.25    0
-        Delta    0.5853658536585367    0.5476190476190477    0.5662650602409638    0
-        Epsilon    0.7    0.3555555555555555    0.48888888888888893    0.2222222222222222    0
-            Alpha    Beta    Gamma    Delta    Epsilon
+        Alpha      0.000
+        Beta       0.369    0.000
+        Gamma      0.494    0.250    0.000
+        Delta      0.585    0.548    0.566    0.000
+        Epsilon    0.700    0.356    0.489    0.222    0.000
+                   Alpha    Beta     Gamma    Delta    Epsilon  
+
         """
 
     dna_alphabet = ['A', 'T', 'C', 'G']
