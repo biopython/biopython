@@ -629,20 +629,20 @@ tests = [
     ("Roche/paired.sff", "sff", None),
     ("Roche/paired.sff", "sff-trim", None),
     ]
-for filename, format, alphabet in tests:
+for filename1, format, alphabet in tests:
     assert format in _FormatToRandomAccess
-    tasks = [(filename, None)]
-    if do_bgzf and os.path.isfile(filename + ".bgz"):
-        tasks.append((filename + ".bgz", "bgzf"))
-    for filename, comp in tasks:
+    tasks = [(filename1, None)]
+    if do_bgzf and os.path.isfile(filename1 + ".bgz"):
+        tasks.append((filename1 + ".bgz", "bgzf"))
+    for filename2, comp in tasks:
 
         def funct(fn, fmt, alpha, c):
             f = lambda x: x.simple_check(fn, fmt, alpha, c)
             f.__doc__ = "Index %s file %s defaults" % (fmt, fn)
             return f
         setattr(IndexDictTests, "test_%s_%s_simple"
-                    % (format, filename.replace("/", "_").replace(".", "_")),
-                funct(filename, format, alphabet, comp))
+                    % (format, filename2.replace("/", "_").replace(".", "_")),
+                funct(filename2, format, alphabet, comp))
         del funct
 
         def funct(fn, fmt, alpha, c):
@@ -650,8 +650,8 @@ for filename, format, alphabet in tests:
             f.__doc__ = "Index %s file %s with key function" % (fmt, fn)
             return f
         setattr(IndexDictTests, "test_%s_%s_keyf"
-                    % (format, filename.replace("/", "_").replace(".", "_")),
-                funct(filename, format, alphabet, comp))
+                    % (format, filename2.replace("/", "_").replace(".", "_")),
+                funct(filename2, format, alphabet, comp))
         del funct
 
         def funct(fn, fmt, alpha, c):
@@ -659,8 +659,8 @@ for filename, format, alphabet in tests:
             f.__doc__ = "Index %s file %s get_raw" % (fmt, fn)
             return f
         setattr(IndexDictTests, "test_%s_%s_get_raw"
-                    % (format, filename.replace("/", "_").replace(".", "_")),
-                funct(filename, format, alphabet, comp))
+                    % (format, filename2.replace("/", "_").replace(".", "_")),
+                funct(filename2, format, alphabet, comp))
         del funct
 
 if __name__ == "__main__":
