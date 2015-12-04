@@ -334,6 +334,7 @@ class TreeMixin(object):
 
         Example
         -------
+
         >>> from Bio import Phylo
         >>> phx = Phylo.PhyloXMLIO.read('PhyloXML/phyloxml_examples.xml')
         >>> matches = phx.phylogenies[5].find_elements(code='OCTVU')
@@ -589,6 +590,7 @@ class TreeMixin(object):
 
         For example, this will safely collapse nodes with poor bootstrap
         support:
+
             >>> from Bio import Phylo
             >>> tree = Phylo.read('PhyloXML/apaf.xml', 'phyloxml')
             >>> print("Total branch length %0.2f" % tree.total_branch_length())
@@ -602,6 +604,7 @@ class TreeMixin(object):
         specification) up front. In particular, if a clade meets the target
         specification in the original tree, it will be collapsed.  For example,
         if the condition is:
+
             >>> from Bio import Phylo
             >>> tree = Phylo.read('PhyloXML/apaf.xml', 'phyloxml')
             >>> print("Total branch length %0.2f" % tree.total_branch_length())
