@@ -186,7 +186,7 @@ class FileRecord(object):
             else:
                 self.current_ind += 1
                 indiv_name, allele_list, ignore = get_indiv(line)
-                return (indiv_name, allele_list)
+                return indiv_name, allele_list
         return False
 
     def remove_population(self, pos, fname):
