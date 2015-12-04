@@ -216,7 +216,6 @@ class NextOrf(object):
 
 
 def help():
-    global options
     print('Usage: %s (<options>) <FASTA file>' % sys.argv[0])
     print("")
     print('Options:                                                       default')

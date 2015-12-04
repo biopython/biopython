@@ -37,7 +37,6 @@ if __name__ == "__main__":
     raise RuntimeError("Call this via test_BioSQL_*.py not directly")
 
 global DBDRIVER, DBTYPE, DBHOST, DBUSER, DBPASSWD, TESTDB, DBSCHEMA, SQL_FILE
-global SYSTEM
 
 SYSTEM = platform.system()
 
@@ -57,8 +56,7 @@ def temp_db_filename():
 
 
 def check_config(dbdriver, dbtype, dbhost, dbuser, dbpasswd, testdb):
-    global DBDRIVER, DBTYPE, DBHOST, DBUSER, DBPASSWD, TESTDB, DBSCHEMA
-    global SYSTEM, SQL_FILE
+    global DBDRIVER, DBTYPE, DBHOST, DBUSER, DBPASSWD, TESTDB, DBSCHEMA, SQL_FILE
     DBDRIVER = dbdriver
     DBTYPE = dbtype
     DBHOST = dbhost
