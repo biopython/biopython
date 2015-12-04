@@ -225,7 +225,7 @@ def compare_records(old_list, new_list):
         if old.features and new.features \
         and len(old.features) != len(new.features):
             raise ValueError("%i vs %i features"
-                             % (len(old.features, len(new.features))))
+                             % (len(old.features), len(new.features)))
         # TODO - check annotation
     return True
 
