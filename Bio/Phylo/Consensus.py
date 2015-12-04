@@ -114,14 +114,10 @@ class _BitString(str):
     False
     >>> bitstr2.independent(bitstr3)
     False
-    >>> bitstr2.independent(bitstr4)
-    True
     >>> bitstr1.iscompatible(bitstr2)
     True
     >>> bitstr2.iscompatible(bitstr3)
     False
-    >>> bitstr2.iscompatible(bitstr4)
-    True
     """
 
     def __new__(cls, strdata):
