@@ -507,6 +507,10 @@ class DistanceTreeConstructor(TreeConstructor):
     --------
 
     >>> from Bio.Phylo.TreeConstruction import DistanceTreeConstructor
+    >>> from Bio import AlignIO
+    >>> aln = AlignIO.read(open('TreeConstruction/msa.phy'), 'phylip')
+    >>> calculator = DistanceCalculator('identity')
+    >>> dm = calculator.get_distance(aln)
     >>> constructor = DistanceTreeConstructor()
 
     UPGMA Tree:
@@ -514,29 +518,30 @@ class DistanceTreeConstructor(TreeConstructor):
     >>> upgmatree = constructor.upgma(dm)
     >>> print(upgmatree)
     Tree(rooted=True)
-        Clade(name='Inner4')
-            Clade(branch_length=0.171955155115, name='Inner1')
-                Clade(branch_length=0.111111111111, name='Epsilon')
-                Clade(branch_length=0.111111111111, name='Delta')
-            Clade(branch_length=0.0673103855608, name='Inner3')
-                Clade(branch_length=0.0907558806655, name='Inner2')
-                    Clade(branch_length=0.125, name='Gamma')
-                    Clade(branch_length=0.125, name='Beta')
-                Clade(branch_length=0.215755880666, name='Alpha')
+        Clade(branch_length=0, name='Inner4')
+            Clade(branch_length=0.18749999999999994, name='Inner1')
+                Clade(branch_length=0.07692307692307693, name='Epsilon')
+                Clade(branch_length=0.07692307692307693, name='Delta')
+            Clade(branch_length=0.11057692307692304, name='Inner3')
+                Clade(branch_length=0.038461538461538464, name='Inner2')
+                    Clade(branch_length=0.11538461538461536, name='Gamma')
+                    Clade(branch_length=0.11538461538461536, name='Beta')
+                Clade(branch_length=0.15384615384615383, name='Alpha')
 
     NJ Tree:
 
     >>> njtree = constructor.nj(dm)
     >>> print(njtree)
     Tree(rooted=False)
-        Clade(name='Inner3')
-            Clade(branch_length=0.0142054862889, name='Inner2')
-                Clade(branch_length=0.239265540676, name='Inner1')
-                    Clade(branch_length=0.0853101915988, name='Epsilon')
-                    Clade(branch_length=0.136912030623, name='Delta')
-                Clade(branch_length=0.292306275042, name='Alpha')
-            Clade(branch_length=0.0747705106139, name='Beta')
-            Clade(branch_length=0.175229489386, name='Gamma')
+        Clade(branch_length=0, name='Inner3')
+            Clade(branch_length=0.18269230769230765, name='Alpha')
+            Clade(branch_length=0.04807692307692307, name='Beta')
+            Clade(branch_length=0.04807692307692307, name='Inner2')
+                Clade(branch_length=0.27884615384615385, name='Inner1')
+                    Clade(branch_length=0.051282051282051266, name='Epsilon')
+                    Clade(branch_length=0.10256410256410259, name='Delta')
+                Clade(branch_length=0.14423076923076922, name='Gamma')
+
 
 
     """
