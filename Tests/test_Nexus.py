@@ -385,10 +385,9 @@ Root:  16
           "t1:0.130208)F:0.0318288)D:0.0273876);"
         tree = Trees.Tree(ts2)
 
-        large_ex_handle = open(os.path.join(self.testfile_dir,
-            "int_node_labels.nwk"))
-        tree = Trees.Tree(large_ex_handle.read())
-        large_ex_handle.close()
+    def test_large_newick(self):
+        with open(os.path.join(self.testfile_dir, "int_node_labels.nwk")) as large_ex_handle:
+            tree = Trees.Tree(large_ex_handle.read())
 
     def _get_flat_nodes(self, tree):
         cur_nodes = [tree.node(tree.root)]
