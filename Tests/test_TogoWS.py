@@ -254,7 +254,7 @@ class TogoEntry(unittest.TestCase):
         handle.close()
         self.assertEqual(data, "X52960")
 
-    def test_nucleotide_genbank_accession(self):
+    def test_nucleotide_genbank_version(self):
         """Bio.TogoWS.entry("nucleotide", "X52960", field="version")"""
         handle = TogoWS.entry("nucleotide", "X52960", field="version")
         data = handle.read().strip()  # ignore trailing \n
