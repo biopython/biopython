@@ -56,7 +56,7 @@ class PatternIOTest(unittest.TestCase):
             self.pattern_io.write(motifs, output_handle)
 
         # read 'em back
-        with open(self.test_file, "r") as input_handle
+        with open(self.test_file, "r") as input_handle:
             read_motifs = self.pattern_io.read(input_handle)
         self.assertEqual(read_motifs, motifs,
                          "Failed to get back expected motifs %s, got %s"
@@ -70,7 +70,7 @@ class PatternIOTest(unittest.TestCase):
             self.pattern_io.write_seq(seq_motifs, output_handle)
 
         # read the seqs back
-        with open(self.test_file, "r") as output_handle:
+        with open(self.test_file, "r") as input_handle:
             read_motifs = self.pattern_io.read(input_handle)
         self.assertEqual(read_motifs, motifs,
                          "Failed to get back expected motifs %s from seqs, got %s"
@@ -85,12 +85,11 @@ class PatternIOTest(unittest.TestCase):
             self.pattern_io.write(schemas, output_handle)
 
         # read back the schemas
-        input_handle = open(self.test_file, "r")
-        read_schemas = self.pattern_io.read(input_handle)
-        input_handle.close()
+        with open(self.test_file, "r") as input_handle:
+            read_schemas = self.pattern_io.read(input_handle)
         self.assertEqual(schemas, read_schemas,
-                         "Read incorrect schemas %s, expected %s."
-                         % (read_schemas, schemas))
+                             "Read incorrect schemas %s, expected %s."
+                             % (read_schemas, schemas))
 
         # --- make sure inappropriate alphabets are reported
         schemas = ["GTR", "G*C"]  # '*' not in the unambigous alphabet
@@ -106,7 +105,6 @@ class PatternIOTest(unittest.TestCase):
         except:
             raise AssertionError("Got unexpected error while reading.")
 
-        input_handle.close()
 
     def test_signature(self):
         """Reading and writing signatures to a file.
