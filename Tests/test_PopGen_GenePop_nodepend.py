@@ -64,13 +64,12 @@ class ParserTest(unittest.TestCase):
     def test_wrong_file_parser(self):
         """Testing the ability to deal with wrongly formatted files
         """
-        f = open(os.path.join("PopGen", "fdist1"))
-        try:
-            rec = GenePop.read(f)
-            raise Error("Should have raised exception")
-        except ValueError:
-            pass
-        f.close()
+        with open(os.path.join("PopGen", "fdist1")) as f:
+            try:
+                rec = GenePop.read(f)
+                raise Error("Should have raised exception")
+            except ValueError:
+                pass
 
 
 class FileParserTest(unittest.TestCase):
@@ -110,13 +109,12 @@ class FileParserTest(unittest.TestCase):
     def test_wrong_file_parser(self):
         """Testing the ability to deal with wrongly formatted files
         """
-        f = open(os.path.join("PopGen", "fdist1"))
-        try:
-            rec = GenePop.read(f)
-            raise Error("Should have raised exception")
-        except ValueError:
-            pass
-        f.close()
+        with open(os.path.join("PopGen", "fdist1")) as f:
+            try:
+                rec = GenePop.read(f)
+                raise Error("Should have raised exception")
+            except ValueError:
+                pass
 
 
 class UtilsTest(unittest.TestCase):
