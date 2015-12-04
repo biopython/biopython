@@ -45,6 +45,5 @@ class NotePad(Toplevel):
         fd = filedialog.SaveFileDialog(self)
         file = fd.go(key="test")
         if file:
-            fid = open(file, 'w')
-            fid.write(self.tid.get(0.0, END))
-            fid.close()
+            with open(file, 'w') as fid:
+                fid.write(self.tid.get(0.0, END))
