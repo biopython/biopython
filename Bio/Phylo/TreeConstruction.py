@@ -1011,24 +1011,25 @@ class ParsimonyTreeConstructor(TreeConstructor):
     --------
 
     >>> from Bio import AlignIO
+    >>> from Bio import Phylo
     >>> from Bio.Phylo.TreeConstruction import *
     >>> aln = AlignIO.read(open('TreeConstruction/msa.phy'), 'phylip')
     >>> print(aln)
     SingleLetterAlphabet() alignment with 5 rows and 13 columns
     AACGTGGCCACAT Alpha
     AAGGTCGCCACAC Beta
+    CAGTTCGCCACAA Gamma
     GAGATTTCCGCCT Delta
     GAGATCTCCGCCC Epsilon
-    CAGTTCGCCACAA Gamma
     >>> starting_tree = Phylo.read('TreeConstruction/nj.tre', 'newick')
-    >>> print(tree)
-    Tree(weight=1.0, rooted=False)
+    >>> print(starting_tree)
+    Tree(rooted=False, weight=1.0)
         Clade(branch_length=0.0, name='Inner3')
             Clade(branch_length=0.01421, name='Inner2')
                 Clade(branch_length=0.23927, name='Inner1')
                     Clade(branch_length=0.08531, name='Epsilon')
                     Clade(branch_length=0.13691, name='Delta')
-                Clade(branch_length=0.29231, name='Alpha')
+                Clade(branch_length=0.2923, name='Alpha')
             Clade(branch_length=0.07477, name='Beta')
             Clade(branch_length=0.17523, name='Gamma')
     >>> from Bio.Phylo.TreeConstruction import *
@@ -1037,16 +1038,16 @@ class ParsimonyTreeConstructor(TreeConstructor):
     >>> constructor = ParsimonyTreeConstructor(searcher, starting_tree)
     >>> pars_tree = constructor.build_tree(aln)
     >>> print(pars_tree)
-    Tree(weight=1.0, rooted=True)
+    Tree(rooted=True, weight=1.0)
         Clade(branch_length=0.0)
-            Clade(branch_length=0.197335, name='Inner1')
+            Clade(branch_length=0.19732999999999998, name='Inner1')
                 Clade(branch_length=0.13691, name='Delta')
                 Clade(branch_length=0.08531, name='Epsilon')
-            Clade(branch_length=0.041935, name='Inner2')
+            Clade(branch_length=0.04194000000000003, name='Inner2')
                 Clade(branch_length=0.01421, name='Inner3')
                     Clade(branch_length=0.17523, name='Gamma')
                     Clade(branch_length=0.07477, name='Beta')
-                Clade(branch_length=0.29231, name='Alpha')
+                Clade(branch_length=0.2923, name='Alpha')
     """
 
     def __init__(self, searcher, starting_tree=None):
