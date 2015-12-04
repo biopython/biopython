@@ -470,11 +470,11 @@ def _count_diff_NG86(codon1, codon2, codon_table=default_codon_table):
     if codon1 == '---' or codon2 == '---':
         return SN
     base_tuple = ('A', 'C', 'G', 'T')
-    if not all([i in base_tuple for i in codon1]):
+    if not all( i in base_tuple for i in codon1):
         raise RuntimeError("Unrecognized character detected in codon1 {0} "
                            "(Codons consist of "
                            "A, T, C or G)".format(codon1))
-    if not all([i in base_tuple for i in codon2]):
+    if not all( i in base_tuple for i in codon2):
         raise RuntimeError("Unrecognized character detected in codon2 {0} "
                            "(Codons consist of "
                            "A, T, C or G)".format(codon2))
@@ -911,11 +911,11 @@ def _count_diff_YN00(codon1, codon2, P, codon_lst,
     if codon1 == '---' or codon2 == '---':
         return TV
     base_tuple = ('A', 'C', 'G', 'T')
-    if not all([i in base_tuple for i in codon1]):
+    if not all( i in base_tuple for i in codon1):
         raise RuntimeError("Unrecognized character detected in codon1 {0} "
                            "(Codons consist of "
                            "A, T, C or G)".format(codon1))
-    if not all([i in base_tuple for i in codon2]):
+    if not all( i in base_tuple for i in codon2):
         raise RuntimeError("Unrecognized character detected in codon2 {0} "
                            "(Codons consist of "
                            "A, T, C or G)".format(codon2))

@@ -497,7 +497,7 @@ class QueryResult(_BaseSearchObject):
         else:
             hit_key = hit.id
 
-        if hit_key not in self and all([pid not in self for pid in hit.id_all[1:]]):
+        if hit_key not in self and all( pid not in self for pid in hit.id_all[1:]):
             self[hit_key] = hit
         else:
             raise ValueError("The ID or alternative IDs of Hit %r exists in "
