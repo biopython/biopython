@@ -67,7 +67,7 @@ class ParserTest(unittest.TestCase):
         with open(os.path.join("PopGen", "fdist1")) as f:
             try:
                 rec = GenePop.read(f)
-                raise Error("Should have raised exception")
+                raise Exception("Should have raised exception")
             except ValueError:
                 pass
 
@@ -97,9 +97,9 @@ class FileParserTest(unittest.TestCase):
             assert len(rec.loci_list) == self.num_loci[index]
             for skip in range(self.pops_indivs[index][0]):
                 if rec.skip_population() is False:
-                    raise Error("Not enough populations")
+                    raise Exception("Not enough populations")
             if rec.skip_population() is True:
-                    raise Error("Too much populations")
+                    raise Exception("Too much populations")
             for i in range(self.pops_indivs[index][0]):
                 continue
                 assert len(rec.populations[i]) == \
@@ -112,7 +112,7 @@ class FileParserTest(unittest.TestCase):
         with open(os.path.join("PopGen", "fdist1")) as f:
             try:
                 rec = GenePop.read(f)
-                raise Error("Should have raised exception")
+                raise Exception("Should have raised exception")
             except ValueError:
                 pass
 
