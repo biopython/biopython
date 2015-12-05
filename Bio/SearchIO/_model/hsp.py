@@ -253,7 +253,7 @@ class HSP(_BaseHSP):
     # from this one
     _NON_STICKY_ATTRS = ('_items', )
 
-    def __init__(self, fragments=[]):
+    def __init__(self, fragments=None):
         """Initializes an HSP object.
 
         :param fragments: fragments contained in the HSP object
@@ -266,6 +266,8 @@ class HSP(_BaseHSP):
         properties.
 
         """
+        if fragments is None:
+                fragments = []
         if not fragments:
             raise ValueError("HSP objects must have at least one HSPFragment "
                     "object.")

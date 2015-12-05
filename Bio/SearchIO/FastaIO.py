@@ -153,8 +153,10 @@ _STATE_HIT_BLOCK = 2
 _STATE_CONS_BLOCK = 3
 
 
-def _set_qresult_hits(qresult, hit_rows=[]):
+def _set_qresult_hits(qresult, hit_rows=None):
     """Helper function for appending Hits without alignments into QueryResults."""
+    if hit_rows is None:
+        hit_rows = []
     for hit_row in hit_rows:
         hit_id, remainder = hit_row.split(' ', 1)
         # TODO: parse hit and hsp properties properly; by dealing with:

@@ -872,7 +872,7 @@ def search(pdb=None, key=None, sid=None, disp=None, dir=None, loc=None,
     return _open(cgi, variables)
 
 
-def _open(cgi, params={}, get=1):
+def _open(cgi, params=None, get=1):
     """_open(cgi, params={}, get=1) -> UndoHandle
 
     Open a handle to SCOP.  cgi is the URL for the cgi script to access.
@@ -881,6 +881,8 @@ def _open(cgi, params={}, get=1):
     simple error checking, and will raise an IOError if it encounters one.
 
     """
+    if params is None:
+        params = {}
     from Bio._py3k import urlopen, urlencode
 
     # Open a handle to SCOP.
