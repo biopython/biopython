@@ -39,7 +39,7 @@ class NexusTest1(unittest.TestCase):
         self.assertTrue(os.path.isfile(filename))
         os.remove(filename)
 
-    def test_Write_with_dups(self):
+    def test_write_with_dups(self):
         # see issue: biopython/Bio/Nexus/Nexus.py _unique_label() eval error #633
         records = [SeqRecord(Seq("ATGCTGCTGAT", alphabet=ambiguous_dna), id="foo") for _ in range(4)]
         try:
