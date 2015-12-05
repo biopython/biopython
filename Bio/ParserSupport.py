@@ -146,7 +146,7 @@ if xml_support:
         Note that Martel is now DEPRECATED.
         """
         def __init__(self, consumer, interest_tags, callback_finalizer=None,
-                     exempt_tags=[]):
+                     exempt_tags= None):
             """Initialize to begin catching and firing off events.
 
             Arguments:
@@ -176,6 +176,8 @@ if xml_support:
             use a finalizer to deal with most tags, but leave those you don't
             want touched.
             """
+            if exempt_tags is None:
+                        exempt_tags = []
             self._consumer = consumer
             self.interest_tags = interest_tags
             self._finalizer = callback_finalizer

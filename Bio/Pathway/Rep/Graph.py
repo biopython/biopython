@@ -11,8 +11,10 @@ from functools import reduce
 class Graph(object):
     """A directed graph abstraction with labeled edges."""
 
-    def __init__(self, nodes=[]):
+    def __init__(self, nodes= None):
         """Initializes a new Graph object."""
+        if nodes is None:
+                nodes = []
         self._adjacency_list = {}    # maps parent -> set of child objects
         for n in nodes:
             self._adjacency_list[n] = set()

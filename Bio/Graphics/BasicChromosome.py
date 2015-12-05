@@ -598,7 +598,7 @@ def _place_labels(desired_etc, minimum, maximum, gap=0):
 class AnnotatedChromosomeSegment(ChromosomeSegment):
     def __init__(self, bp_length, features,
                  default_feature_color=colors.blue,
-                 name_qualifiers=['gene', 'label', 'name', 'locus_tag', 'product']):
+                 name_qualifiers= None):
         """Like the ChromosomeSegment, but accepts a list of features.
 
         The features can either be SeqFeature objects, or tuples of values:
@@ -626,6 +626,8 @@ class AnnotatedChromosomeSegment(ChromosomeSegment):
         chr_percent attribute (half of 25%, thus 12.5%)
 
         """
+        if name_qualifiers is None:
+                name_qualifiers = ['gene', 'label', 'name', 'locus_tag', 'product']
         ChromosomeSegment.__init__(self)
         self.bp_length = bp_length
         self.features = features

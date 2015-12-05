@@ -37,7 +37,9 @@ def _get_location_string(feature, record_length):
 
 
 # Top level function as this makes it easier to use for debugging:
-def write_read(filename, in_format="gb", out_formats=["gb", "embl", "imgt"]):
+def write_read(filename, in_format="gb", out_formats= None):
+    if out_formats is None:
+        out_formats = ["gb", "embl", "imgt"]
     for out_format in out_formats:
         gb_records = list(SeqIO.parse(filename, in_format))
         # Write it out...
@@ -550,7 +552,9 @@ class FeatureWriting(unittest.TestCase):
         record2 = SeqIO.read(handle, format)
         compare_record(self.record, record2)
 
-    def write_read_checks(self, formats=["gb", "embl", "imgt"]):
+    def write_read_checks(self, formats= None):
+        if formats is None:
+                formats = ["gb", "embl", "imgt"]
         for f in formats:
             self.write_read_check(f)
 

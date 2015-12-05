@@ -112,13 +112,17 @@ class PrintFormat(object):
         print(self.make_format(ls, title, nc, s1))
         return
 
-    def make_format(self, cut=[], title='', nc=[], s1=''):
+    def make_format(self, cut= None, title='', nc= None, s1=''):
         """PF.make_format(cut, nc, title, s) -> string
 
         Virtual method.
         Here to be pointed to one of the _make_* methods.
         You can as well create a new method and point make_format to it.
         """
+        if cut is None:
+                cut = []
+        if nc is None:
+                nc = []
         return self._make_list(cut, title, nc, s1)
 
 # _make_* methods to be used with the virtual method make_format
@@ -201,7 +205,7 @@ class PrintFormat(object):
         """
         return title + self._make_nocut_only(nc, s1)
 
-    def _make_nocut_only(self, nc, s1, ls=[], title=''):
+    def _make_nocut_only(self, nc, s1, ls= None, title=''):
         """PF._make_nocut_only(nc, s1) -> string.
 
         return a formatted string of the non cutting enzymes.
@@ -210,6 +214,8 @@ class PrintFormat(object):
          - nc is a list of non cutting enzymes.
          - s1 is the sentence before the non cutting enzymes.
         """
+        if ls is None:
+                ls = []
         if not nc:
             return s1
         nc.sort()
@@ -224,7 +230,7 @@ class PrintFormat(object):
         stringsite = Join((stringsite, st, '\n'))
         return stringsite
 
-    def _make_list_only(self, ls, title, nc=[], s1=''):
+    def _make_list_only(self, ls, title, nc= None, s1=''):
         """PF._make_list_only(ls, title) -> string.
 
         return a string of form::
@@ -240,11 +246,13 @@ class PrintFormat(object):
          - title is a string.
          - Non cutting enzymes are not included.
         """
+        if nc is None:
+                nc = []
         if not ls:
             return title
         return self.__next_section(ls, title)
 
-    def _make_number_only(self, ls, title, nc=[], s1=''):
+    def _make_number_only(self, ls, title, nc= None, s1=''):
         """PF._make_number_only(ls, title) -> string.
 
         return a string of form::
@@ -265,6 +273,8 @@ class PrintFormat(object):
          - title is a string.
          - Non cutting enzymes are not included.
         """
+        if nc is None:
+                nc = []
         if not ls:
             return title
         ls.sort(lambda x, y: cmp(len(x[1]), len(y[1])))
@@ -282,7 +292,7 @@ class PrintFormat(object):
         title += "\n\nenzymes which cut %i times :\n\n" % cur_len
         return self.__next_section(new_sect, title)
 
-    def _make_map_only(self, ls, title, nc=[], s1=''):
+    def _make_map_only(self, ls, title, nc= None, s1=''):
         """PF._make_map_only(ls, title) -> string.
 
         return a string of form::
@@ -300,6 +310,8 @@ class PrintFormat(object):
          - title is a string.
          - Non cutting enzymes are not included.
         """
+        if nc is None:
+                nc = []
         if not ls:
             return title
         resultKeys = sorted(str(x) for x, y in ls)
