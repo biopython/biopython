@@ -370,9 +370,11 @@ class TestRunner(unittest.TextTestRunner):
         file = __file__
     testdir = os.path.abspath(os.path.dirname(file) or os.curdir)
 
-    def __init__(self, tests=[], verbosity=0):
+    def __init__(self, tests=None, verbosity=0):
         # if no tests were specified to run, we run them all
         # including the doctests
+        if tests is None:
+                tests = []
         self.tests = tests
         if not self.tests:
             # Make a list of all applicable test modules.

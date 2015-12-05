@@ -209,7 +209,7 @@ def nt_search(seq, subseq):
 # {{{
 
 
-def seq3(seq, custom_map={'*': 'Ter'}, undef_code='Xaa'):
+def seq3(seq, custom_map=None, undef_code='Xaa'):
     """Turn a one letter code protein sequence into one with three letter codes.
 
     The single input argument 'seq' should be a protein sequence using single
@@ -247,6 +247,8 @@ def seq3(seq, custom_map={'*': 'Ter'}, undef_code='Xaa'):
 
     This function was inspired by BioPerl's seq3.
     """
+    if custom_map is None:
+        custom_map = {'*': 'Ter'}
     # not doing .update() on IUPACData dict with custom_map dict
     # to preserve its initial state (may be imported in other modules)
     threecode = dict(list(IUPACData.protein_letters_1to3_extended.items()) +
@@ -256,7 +258,7 @@ def seq3(seq, custom_map={'*': 'Ter'}, undef_code='Xaa'):
     return ''.join(threecode.get(aa, undef_code) for aa in seq)
 
 
-def seq1(seq, custom_map={'Ter': '*'}, undef_code='X'):
+def seq1(seq, custom_map=None, undef_code='X'):
     """Turns a three-letter code protein sequence into one with single letter codes.
 
     The single input argument 'seq' should be a protein sequence using three-
@@ -299,6 +301,8 @@ def seq1(seq, custom_map={'Ter': '*'}, undef_code='X'):
     'MAIVMGRWKGAXXR*'
 
     """
+    if custom_map is None:
+        custom_map = {'Ter': '*'}
     # reverse map of threecode
     # upper() on all keys to enable caps-insensitive input seq handling
     onecode = dict((k.upper(), v) for k, v in

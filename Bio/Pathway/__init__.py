@@ -70,9 +70,13 @@ class Reaction(object):
 
     """
 
-    def __init__(self, reactants={}, catalysts=[],
+    def __init__(self, reactants=None, catalysts=None,
                  reversible=0, data=None):
         """Initializes a new Reaction object."""
+        if reactants is None:
+                reactants = {}
+        if catalysts is None:
+                catalysts = []
         # enforce invariants on reactants:
         self.reactants = reactants.copy()
         # loop over original, edit the copy
@@ -160,8 +164,10 @@ class System(object):
     None
     """
 
-    def __init__(self, reactions=[]):
+    def __init__(self, reactions=None):
         """Initializes a new System object."""
+        if reactions is None:
+                reactions = []
         self.__reactions = set(reactions)
 
     def __repr__(self):
@@ -262,8 +268,10 @@ class Network(object):
     None
     """
 
-    def __init__(self, species=[]):
+    def __init__(self, species=None):
         """Initializes a new Network object."""
+        if species is None:
+                species = []
         self.__graph = MultiGraph(species)
 
     def __repr__(self):

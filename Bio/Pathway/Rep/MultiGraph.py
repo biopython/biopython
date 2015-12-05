@@ -12,8 +12,10 @@ from functools import reduce
 class MultiGraph(object):
     """A directed multigraph abstraction with labeled edges."""
 
-    def __init__(self, nodes=[]):
+    def __init__(self, nodes=None):
         """Initializes a new MultiGraph object."""
+        if nodes is None:
+                nodes = []
         self._adjacency_list = {}    # maps parent -> set of (child, label) pairs
         for n in nodes:
             self._adjacency_list[n] = set()

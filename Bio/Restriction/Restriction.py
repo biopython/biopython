@@ -242,13 +242,15 @@ class RestrictionType(type):
 
     Implement the operator methods."""
 
-    def __init__(cls, name='', bases=(), dct={}):
+    def __init__(cls, name='', bases=(), dct=None):
         """RE(name, bases, dct) -> RestrictionType instance.
 
         Not intended to be used in normal operation. The enzymes are
         instantiated when importing the module.
 
         see below."""
+        if dct is None:
+                dct = {}
         if "-" in name:
             raise ValueError("Problem with hyphen in %s as enzyme name"
                              % repr(name))
@@ -1852,8 +1854,12 @@ class Not_available(AbstractCut):
 
 class RestrictionBatch(set):
 
-    def __init__(self, first=[], suppliers=[]):
+    def __init__(self, first=None, suppliers=None):
         """RestrictionBatch([sequence]) -> new RestrictionBatch."""
+        if first is None:
+                first = []
+        if suppliers is None:
+                suppliers = []
         first = [self.format(x) for x in first]
         first += [eval(x) for n in suppliers for x in suppliers_dict[n][1]]
         set.__init__(self, first)

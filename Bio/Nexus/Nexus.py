@@ -1332,13 +1332,17 @@ class Nexus(object):
         pass
 
     def write_nexus_data_partitions(self, matrix=None, filename=None, blocksize=None,
-                                    interleave=False, exclude=[], delete=[],
+                                    interleave=False, exclude=None, delete=None,
                                     charpartition=None, comment='', mrbayes=False):
         """Writes a nexus file for each partition in charpartition.
 
         Only non-excluded characters and non-deleted taxa are included,
         just the data block is written.
         """
+        if exclude is None:
+                exclude = []
+        if delete is None:
+                delete = []
 
         if not matrix:
             matrix = self.matrix
@@ -1370,7 +1374,7 @@ class Nexus(object):
                                   comment=comment, append_sets=False, mrbayes=mrbayes)
             return fn
 
-    def write_nexus_data(self, filename=None, matrix=None, exclude=[], delete=[],
+    def write_nexus_data(self, filename=None, matrix=None, exclude=None, delete=None,
                          blocksize=None, interleave=False, interleave_by_partition=False,
                          comment=None, omit_NEXUS=False, append_sets=True, mrbayes=False,
                          codons_block=True):
@@ -1390,6 +1394,10 @@ class Nexus(object):
 
         Returns the filename/handle used to write the data.
         """
+        if exclude is None:
+                exclude = []
+        if delete is None:
+                delete = []
         if not matrix:
             matrix = self.matrix
         if not matrix:
@@ -1496,8 +1504,12 @@ class Nexus(object):
                     fh.write(self.append_sets(exclude=exclude, delete=delete, mrbayes=mrbayes))
         return filename
 
-    def append_sets(self, exclude=[], delete=[], mrbayes=False, include_codons=True, codons_only=False):
+    def append_sets(self, exclude=None, delete=None, mrbayes=False, include_codons=True, codons_only=False):
         """Returns a sets block."""
+        if exclude is None:
+                exclude = []
+        if delete is None:
+                delete = []
         if not self.charsets and not self.taxsets and not self.charpartitions:
             return ''
         if codons_only:
@@ -1598,8 +1610,12 @@ class Nexus(object):
                 fh.write('%s %s\n' % (safename(taxon), str(self.matrix[taxon])))
         return filename
 
-    def constant(self, matrix=None, delete=[], exclude=[]):
+    def constant(self, matrix=None, delete=None, exclude=None):
         """Return a list with all constant characters."""
+        if delete is None:
+                delete = []
+        if exclude is None:
+                exclude = []
         if not matrix:
             matrix = self.matrix
         undelete = [t for t in self.taxlabels if t in matrix and t not in delete]
@@ -1643,12 +1659,14 @@ class Nexus(object):
         cpos = [s[0] for s in constant]
         return cpos
 
-    def cstatus(self, site, delete=[], narrow=True):
+    def cstatus(self, site, delete=None, narrow=True):
         """Summarize character.
 
         narrow=True:  paup-mode (a c ? --> ac; ? ? ? --> ?)
         narrow=false:           (a c ? --> a c g t -; ? ? ? --> a c g t -)
         """
+        if delete is None:
+                delete = []
         undelete = [t for t in self.taxlabels if t not in delete]
         if not undelete:
             return None
@@ -1667,12 +1685,16 @@ class Nexus(object):
         cstatus.sort()
         return cstatus
 
-    def weighted_stepmatrix(self, name='your_name_here', exclude=[], delete=[]):
+    def weighted_stepmatrix(self, name='your_name_here', exclude=None, delete=None):
         """Calculates a stepmatrix for weighted parsimony.
 
         See Wheeler (1990), Cladistics 6:269-275 and
         Felsenstein (1981), Biol. J. Linn. Soc. 16:183-196
         """
+        if exclude is None:
+                exclude = []
+        if delete is None:
+                delete = []
         m = StepMatrix(self.unambiguous_letters, self.gap)
         for site in [s for s in range(self.nchar) if s not in exclude]:
             cstatus = self.cstatus(site, delete)
@@ -1681,8 +1703,12 @@ class Nexus(object):
                     m.add(b1.upper(), b2.upper(), 1)
         return m.transformation().weighting().smprint(name=name)
 
-    def crop_matrix(self, matrix=None, delete=[], exclude=[]):
+    def crop_matrix(self, matrix=None, delete=None, exclude=None):
         """Return a matrix without deleted taxa and excluded characters."""
+        if delete is None:
+                delete = []
+        if exclude is None:
+                exclude = []
         if not matrix:
             matrix = self.matrix
         if [t for t in delete if not self._check_taxlabels(t)]:
@@ -1702,8 +1728,12 @@ class Nexus(object):
         else:
             return dict((t, matrix[t]) for t in self.taxlabels if t in matrix and t not in delete)
 
-    def bootstrap(self, matrix=None, delete=[], exclude=[]):
+    def bootstrap(self, matrix=None, delete=None, exclude=None):
         """Return a bootstrapped matrix."""
+        if delete is None:
+                delete = []
+        if exclude is None:
+                exclude = []
         if not matrix:
             matrix = self.matrix
         seqobjects = isinstance(matrix[list(matrix.keys())[0]], Seq)  # remember if Seq objects
