@@ -492,7 +492,7 @@ def _should_do_post_request(options, params):
 
     """
     force_post = False
-    ids = params.get("id", None)
+    ids = params.get("id")
     if ids is not None:
         # Detect whether 200+ UIDs have been provided, and convert the list
         # [UID, UID, ...] into the string "UID,UID,..."
