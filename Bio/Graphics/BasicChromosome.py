@@ -661,7 +661,7 @@ class AnnotatedChromosomeSegment(ChromosomeSegment):
                 try:
                     # Handles Artemis colour integers, HTML colors, etc
                     color = _color_trans.translate(f.qualifiers['color'][0])
-                except:
+                except Exception:  # TODO: ValueError?
                     color = self.default_feature_color
                 fill_color = color
                 name = ""

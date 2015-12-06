@@ -809,10 +809,24 @@ class EmblScanner(InsdcScanner):
                 # Remove trailing ; at end of authors list
                 consumer.authors(data.rstrip(";"))
             elif line_type == 'PR':
-                # Remove trailing ; at end of the project reference
-                # In GenBank files this corresponds to the old PROJECT
-                # line which is being replaced with the DBLINK line.
-                consumer.project(data.rstrip(";"))
+                # In the EMBL patent files, this is a PR (PRiority) line which
+                # provides the earliest active priority within the family.
+                # The priority  number comes first, followed by the priority date.
+                #
+                # e.g.
+                # PR   JP19990377484 16-DEC-1999
+                #
+                # However, in most EMBL files this is a PR (PRoject) line which
+                # gives the BioProject reference number.
+                #
+                # e.g.
+                # PR   Project:PRJNA60715;
+                #
+                # In GenBank files this corresponds to the old PROJECT line
+                # which was later replaced with the DBLINK line.
+                if data.startswith("Project:"):
+                    # Remove trailing ; at end of the project reference
+                    consumer.project(data.rstrip(";"))
             elif line_type == 'KW':
                 consumer.keywords(data.rstrip(";"))
             elif line_type in consumer_dict:
@@ -1258,7 +1272,6 @@ class GenBankScanner(InsdcScanner):
             'AUTHORS': 'authors',
             'CONSRTM': 'consrtm',
             'PROJECT': 'project',
-            'DBLINK': 'dblink',
             'TITLE': 'title',
             'JOURNAL': 'journal',
             'MEDLINE': 'medline_id',
@@ -1268,6 +1281,7 @@ class GenBankScanner(InsdcScanner):
         # ORIGIN (locus, size, residue_type, data_file_division and date)
         # COMMENT (comment)
         # VERSION (version and gi)
+        # DBLINK (database links like projects, newlines important)
         # REFERENCE (eference_num and reference_bases)
         # ORGANISM (organism and taxonomy)
         lines = [_f for _f in lines if _f]
@@ -1296,6 +1310,20 @@ class GenBankScanner(InsdcScanner):
                         consumer.gi(data.split(' GI:')[1])
                     # Read in the next line!
                     line = next(line_iter)
+                elif line_type == 'DBLINK':
+                    # Need to call consumer.dblink() for each line, e.g.
+                    # DBLINK      Project: 57779
+                    #             BioProject: PRJNA57779
+                    consumer.dblink(data.strip())
+                    # Read in the next line, and see if its more of the DBLINK section:
+                    while True:
+                        line = next(line_iter)
+                        if line[:GENBANK_INDENT] == GENBANK_SPACER:
+                            # Add this continuation to the data string
+                            consumer.dblink(line[GENBANK_INDENT:].strip())
+                        else:
+                            # End of the DBLINK, leave this text in the variable "line"
+                            break
                 elif line_type == 'REFERENCE':
                     if self.debug > 1:
                         print("Found reference [" + data + "]")

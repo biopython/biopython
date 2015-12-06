@@ -176,7 +176,6 @@ class SequentialSeqFileRandomAccess(SeqFileRandomAccess):
                   "phd": "BEGIN_SEQUENCE",
                   "pir": ">..;",
                   "qual": ">",
-                  "qual": ">",
                   "swiss": "ID ",
                   "uniprot-xml": "<entry ",
                   }[format]

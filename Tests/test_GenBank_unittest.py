@@ -1,4 +1,5 @@
 # Copyright 2013 by Kai Blin.
+# Revisions copyright 2015 by Peter Cock.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -83,6 +84,42 @@ class GenBankTests(unittest.TestCase):
             rec = SeqIO.read("GenBank/bad_loc_wrap.gb", "genbank")
         self.assertEqual(rec.annotations["organism"], ".")
         self.assertEqual(rec.annotations["taxonomy"], [])
+
+    def test_dblink(self):
+        """GenBank record with old DBLINK project entry."""
+        record = SeqIO.read("GenBank/NC_005816.gb", "gb")
+        self.assertEqual(record.dbxrefs, ["Project:58037"])
+        embl = record.format("embl")
+        self.assertTrue("XX\nPR   Project:58037;\nXX\n" in embl, embl)
+
+    def test_dblink_two(self):
+        """GenBank record with old and new DBLINK project entries."""
+        record = SeqIO.read("GenBank/NP_416719.gbwithparts", "gb")
+        self.assertEqual(record.dbxrefs,
+                         ["Project:57779", "BioProject:PRJNA57779"])
+        embl = record.format("embl")
+        self.assertTrue("XX\nPR   Project:PRJNA57779;\nXX\n" in embl, embl)
+
+    def test_dbline_gb_embl(self):
+        """GenBank / EMBL paired records with PR project entry: GenBank"""
+        record = SeqIO.read("GenBank/DS830848.gb", "gb")
+        self.assertTrue("BioProject:PRJNA16232" in record.dbxrefs, record.dbxrefs)
+        gb = record.format("gb")
+        self.assertTrue("\nDBLINK      BioProject:PRJNA16232\n" in gb, gb)
+        # Also check EMBL output
+        embl = record.format("embl")
+        self.assertTrue("XX\nPR   Project:PRJNA16232;\nXX\n" in embl, embl)
+
+    def test_dbline_embl_gb(self):
+        """GenBank / EMBL paired records with PR project entry: EMBL"""
+        record = SeqIO.read("EMBL/DS830848.embl", "embl")
+        # TODO: Should we map this to BioProject:PRJNA16232
+        self.assertTrue("Project:PRJNA16232" in record.dbxrefs, record.dbxrefs)
+        gb = record.format("gb")
+        self.assertTrue("\nDBLINK      Project:PRJNA16232\n" in gb, gb)
+        embl = record.format("embl")
+        self.assertTrue("XX\nPR   Project:PRJNA16232;\nXX\n" in embl, embl)
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)

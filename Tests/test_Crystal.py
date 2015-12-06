@@ -463,10 +463,6 @@ class CrystalTestCase(unittest.TestCase):
         self.assertEqual(list(self.crystal.items()),
                          list(self.crystal.data.items()))
 
-    def testKeys(self):
-        self.assertEqual(list(self.crystal.keys()),
-                         list(self.crystal.data.keys()))
-
     def testHasKey(self):
         self.assertTrue('b' in self.crystal)
         self.assertTrue('c' in self.crystal)

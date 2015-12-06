@@ -145,8 +145,7 @@ class MultipleSeqAlignment(_Alignment):
         compatible "hack" so as not to disrupt existing scripts and users, but
         is deprecated and will be removed in a future release.
         """
-        if isinstance(records, Alphabet.Alphabet) \
-        or isinstance(records, Alphabet.AlphabetEncoder):
+        if isinstance(records, (Alphabet.Alphabet, Alphabet.AlphabetEncoder)):
             if alphabet is None:
                 # TODO - Remove this backwards compatible mode!
                 alphabet = records
@@ -163,8 +162,7 @@ class MultipleSeqAlignment(_Alignment):
             else:
                 raise ValueError("Invalid records argument")
         if alphabet is not None:
-            if not (isinstance(alphabet, Alphabet.Alphabet)
-            or isinstance(alphabet, Alphabet.AlphabetEncoder)):
+            if not isinstance(alphabet, (Alphabet.Alphabet, Alphabet.AlphabetEncoder)):
                 raise ValueError("Invalid alphabet argument")
             self._alphabet = alphabet
         else:

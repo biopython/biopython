@@ -421,7 +421,7 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
         f = make_join_feature([f1, f2])
         self.check(s, f, "YWSMKVDN", "join(6..10,13..15)")
 
-    def test_simple_dna_join(self):
+    def test_simple_dna_join_strand_minus(self):
         """Feature on DNA (join, strand -1)"""
         s = Seq("AAAAACCCCCTTTTTGGGGG", generic_dna)
         f1 = SeqFeature(FeatureLocation(5, 10), strand=-1)
@@ -430,7 +430,7 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
         self.check(s, f, reverse_complement("CCCCC" + "TTT"),
                    "complement(join(6..10,13..15))")
 
-    def test_simple_dna_join(self):
+    def test_simple_dna_join_before(self):
         """Feature on DNA (join, strand -1, before position)"""
         s = Seq("AAAAACCCCCTTTTTGGGGG", generic_dna)
         f1 = SeqFeature(FeatureLocation(BeforePosition(5), 10), strand=-1)

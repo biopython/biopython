@@ -350,7 +350,7 @@ class _InsdcWriter(SequentialSequenceWriter):
         # Now the qualifiers...
         for key in sorted(feature.qualifiers.keys()):
             values = feature.qualifiers[key]
-            if isinstance(values, list) or isinstance(values, tuple):
+            if isinstance(values, (list, tuple)):
                 for value in values:
                     self._write_feature_qualifier(key, value)
             else:
@@ -408,7 +408,7 @@ class _InsdcWriter(SequentialSequenceWriter):
         # It would need the addition of the comma splitting logic...
         # are there any other cases where that would be sensible?
         contig = record.annotations.get("contig", "")
-        if isinstance(contig, list) or isinstance(contig, tuple):
+        if isinstance(contig, (list, tuple)):
             contig = "".join(contig)
         contig = self.clean(contig)
         answer = []
@@ -683,7 +683,7 @@ class GenBankWriter(_InsdcWriter):
         comment = record.annotations["comment"]
         if isinstance(comment, basestring):
             lines = comment.split("\n")
-        elif isinstance(comment, list) or isinstance(comment, tuple):
+        elif isinstance(comment, (list, tuple)):
             lines = comment
         else:
             raise ValueError("Could not understand comment annotation")
@@ -1049,7 +1049,7 @@ class EmblWriter(_InsdcWriter):
         comment = record.annotations["comment"]
         if isinstance(comment, basestring):
             lines = comment.split("\n")
-        elif isinstance(comment, list) or isinstance(comment, tuple):
+        elif isinstance(comment, (list, tuple)):
             lines = comment
         else:
             raise ValueError("Could not understand comment annotation")
@@ -1067,7 +1067,30 @@ class EmblWriter(_InsdcWriter):
         self._write_the_first_lines(record)
 
         # PR line (0 or 1 lines only), project identifier
-        for xref in record.dbxrefs:
+        #
+        # Assuming can't use 2 lines, we should prefer newer GenBank
+        # DBLINK BioProject:... entries over the older GenBank DBLINK
+        # Project:... lines.
+        #
+        # In either case, seems EMBL usess just "PR    Project:..."
+        # regardless of the type of ID (old numeric only, or new
+        # with alpha prefix), e.g. for CP002497 NCBI now uses:
+        #
+        # DBLINK      BioProject: PRJNA60715
+        #             BioSample: SAMN03081426
+        #
+        # While EMBL uses:
+        #
+        # XX
+        # PR   Project:PRJNA60715;
+        # XX
+        #
+        # Sorting ensures (new) BioProject:... is before old Project:...
+        for xref in sorted(record.dbxrefs):
+            if xref.startswith("BioProject:"):
+                self._write_single_line("PR", xref[3:] + ";")
+                handle.write("XX\n")
+                break
             if xref.startswith("Project:"):
                 self._write_single_line("PR", xref + ";")
                 handle.write("XX\n")

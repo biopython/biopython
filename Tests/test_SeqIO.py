@@ -159,6 +159,8 @@ test_files = [
     ("genbank", False, 'GenBank/NP_416719.gbwithparts', 1),
     # GenPept file with nasty bond locations,
     ("genbank", False, 'GenBank/1MRR_A.gp', 1),
+    # These are a pair, and should be roughly equivalent:
+    ("genbank", False, 'GenBank/DS830848.gb', 1), ("embl", False, 'EMBL/DS830848.embl', 1),
     # Following files are currently only used here or in test_SeqIO_index.py:
     ("embl", False, 'EMBL/epo_prt_selection.embl', 9),  # proteins
     ("embl", False, 'EMBL/patents.embl', 4),  # more proteins, but no seq

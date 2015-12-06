@@ -671,7 +671,7 @@ class DatabaseLoader(object):
             if isinstance(value, list) or isinstance(value, tuple):
                 rank = 0
                 for entry in value:
-                    if isinstance(entry, str) or isinstance(entry, int):
+                    if isinstance(entry, (str, int)):
                         # Easy case
                         rank += 1
                         self.adaptor.execute(many_sql,

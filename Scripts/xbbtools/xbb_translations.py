@@ -12,16 +12,16 @@ import time
 sys.path.insert(0, '.')
 
 try:
-    from Tkinter import * # Python 2
+    from Tkinter import *  # Python 2
 except ImportError:
-    from tkinter import * # Python 3
+    from tkinter import *  # Python 3
 
 
 from Bio.Seq import reverse_complement, translate
 from Bio.SeqUtils import GC
 
 
-class xbb_translations:
+class xbb_translations(object):
     def __init__(self):
         ""
 
@@ -71,10 +71,10 @@ class xbb_translations:
         protein = self.frame(seq, frame, translation_table)
         res = self.header_nice('Plus one frame translation', seq)
         for i in range(0, length, 60):
-            subseq = seq[i:i+60]
-            p = i/3
-            res += '%d/%d\n' % (i+1, i/3+1)
-            res += '  '.join(protein[p:p+20]) + '\n'
+            subseq = seq[i:i + 60]
+            p = i // 3
+            res += '%d/%d\n' % (i + 1, i // 3 + 1)
+            res += '  '.join(protein[p:p + 20]) + '\n'
             # seq
             res += subseq.lower() + '%5d %%\n' % int(self.gc(subseq))
 
@@ -91,27 +91,27 @@ class xbb_translations:
         length = len(seq)
         frames = {}
         for i in range(0, 3):
-            frames[i+1] = self.frame1(seq[i:], translation_table)
-            frames[-(i+1)] = self.reverse(self.frame1(anti[i:], translation_table))
+            frames[i + 1] = self.frame1(seq[i:], translation_table)
+            frames[-(i + 1)] = self.reverse(self.frame1(anti[i:], translation_table))
 
         res = self.header_nice('GCFrame', seq)
 
         for i in range(0, length, 60):
-            subseq = seq[i:i+60]
-            csubseq = comp[i:i+60]
-            p = i/3
+            subseq = seq[i:i + 60]
+            csubseq = comp[i:i + 60]
+            p = i // 3
             # + frames
-            res += '%d/%d\n' % (i+1, i/3+1)
-            res += '  ' + '  '.join(frames[3][p:p+20]) + '\n'
-            res += ' ' + '  '.join(frames[2][p:p+20]) + '\n'
-            res += '  '.join(frames[1][p:p+20]) + '\n'
+            res += '%d/%d\n' % (i + 1, i // 3 + 1)
+            res += '  ' + '  '.join(frames[3][p:p + 20]) + '\n'
+            res += ' ' + '  '.join(frames[2][p:p + 20]) + '\n'
+            res += '  '.join(frames[1][p:p + 20]) + '\n'
             # seq
             res += subseq.lower() + '%5d %%\n' % int(self.gc(subseq))
             res += csubseq.lower() + '\n'
             # - frames
-            res += '  '.join(frames[-2][p:p+20]) + ' \n'
-            res += ' ' + '  '.join(frames[-1][p:p+20]) + '\n'
-            res += '  ' + '  '.join(frames[-3][p:p+20]) + '\n\n'
+            res += '  '.join(frames[-2][p:p + 20]) + ' \n'
+            res += ' ' + '  '.join(frames[-1][p:p + 20]) + '\n'
+            res += '  ' + '  '.join(frames[-3][p:p + 20]) + '\n\n'
 
         return res
 

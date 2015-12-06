@@ -59,49 +59,48 @@ for i, crunch_file in enumerate(comparisons):
     s = genomes[i][0]  # subject file
     q_set = feature_sets[q]
     s_set = feature_sets[s]
-    handle = open(crunch_file)
-    for line in handle:
-        if line[0]=="#":
-            continue
-        parts = line.rstrip("\n").split(None, 7)
-        # 0 = score
-        # 1 = id
-        # 2 = S1
-        # 3 = E1
-        # 4 = seq1
-        # 5 = S2
-        # 6 = E2
-        # 7 = seq2
-        try:
-            q_start, q_end = int(parts[2]), int(parts[3])
-            s_start, s_end = int(parts[5]), int(parts[6])
-        except IndexError:
-            sys.stderr.write(repr(line) + "\n")
-            sys.stderr.write(repr(parts) + "\n")
-            raise
-        flip = False
-        if q_start > q_end:
-            flip = not flip
-            q_start, q_end = q_end, q_start
-        if s_start > s_end:
-            flip = not flip
-            s_start, s_end = s_end, s_start
-        if flip:
-            c = colors.Color(0, 0, 1, alpha=0.25)
-            b = False
-        else:
-            c = colors.Color(1, 0, 0, alpha=0.25)
-            b = False
-        q_feature = q_set.add_feature(SeqFeature(FeatureLocation(q_start-1, q_end)),
-                                                 color=c, border=b)
-        s_feature = s_set.add_feature(SeqFeature(FeatureLocation(s_start-1, s_end)),
-                                                 color=c, border=b)
-        gd_diagram.cross_track_links.append(CrossLink(q_feature, s_feature, c, b))
-        # NOTE: We are using the same colour for all the matches,
-        # with transparency. This means overlayed matches will appear darker.
-        # It also means the drawing order not very important.
-        # Note ACT puts long hits at the back, and colours by hit score
-    handle.close()
+    with open(crunch_file) as handle:
+        for line in handle:
+            if line[0]=="#":
+                continue
+            parts = line.rstrip("\n").split(None, 7)
+            # 0 = score
+            # 1 = id
+            # 2 = S1
+            # 3 = E1
+            # 4 = seq1
+            # 5 = S2
+            # 6 = E2
+            # 7 = seq2
+            try:
+                q_start, q_end = int(parts[2]), int(parts[3])
+                s_start, s_end = int(parts[5]), int(parts[6])
+            except IndexError:
+                sys.stderr.write(repr(line) + "\n")
+                sys.stderr.write(repr(parts) + "\n")
+                raise
+            flip = False
+            if q_start > q_end:
+                flip = not flip
+                q_start, q_end = q_end, q_start
+            if s_start > s_end:
+                flip = not flip
+                s_start, s_end = s_end, s_start
+            if flip:
+                c = colors.Color(0, 0, 1, alpha=0.25)
+                b = False
+            else:
+                c = colors.Color(1, 0, 0, alpha=0.25)
+                b = False
+            q_feature = q_set.add_feature(SeqFeature(FeatureLocation(q_start-1, q_end)),
+                                                     color=c, border=b)
+            s_feature = s_set.add_feature(SeqFeature(FeatureLocation(s_start-1, s_end)),
+                                                     color=c, border=b)
+            gd_diagram.cross_track_links.append(CrossLink(q_feature, s_feature, c, b))
+            # NOTE: We are using the same colour for all the matches,
+            # with transparency. This means overlayed matches will appear darker.
+            # It also means the drawing order not very important.
+            # Note ACT puts long hits at the back, and colours by hit score
 
 print("Drawing CDS features...")
 for f, format in genomes:

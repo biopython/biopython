@@ -42,44 +42,43 @@ except ImportError:
     from dbm import gnu as gdbm  # Python 3
 
 
-class DB_Index:
+class DB_Index(object):
     def __init__(self, open=1):
         if open:
             self.Open()
 
     def Create(self, infile, outfile):
         db = gdbm.open(outfile, 'n')
-        fid = open(infile)
+        with open(infile) as fid:
 
-        db['datafile'] = os.path.abspath(infile)
+            db['datafile'] = os.path.abspath(infile)
 
-        while True:
-            line = fid.readline()
-            if not line or not len(line):
-                break
+            while True:
+                line = fid.readline()
+                if not line or not len(line):
+                    break
 
-            if line[:3] == 'ID ':
-                id = string.split(line)[1]
-                start = fid.tell() - len(line)
+                if line[:3] == 'ID ':
+                    id = string.split(line)[1]
+                    start = fid.tell() - len(line)
 
-            elif line[:3] == 'AC ':
-                acc = string.split(line)[1]
-                if acc[-1] == ';':
-                    acc = acc[:-1]
+                elif line[:3] == 'AC ':
+                    acc = string.split(line)[1]
+                    if acc[-1] == ';':
+                        acc = acc[:-1]
 
-            elif line[:2] == '//':
-                stop = fid.tell()
-                try:
-                    value = '%d %d' % (start, stop)
-                    db[id] = value
-                    db[acc] = value
-                    id, acc, start, stop = None, None, None, None
-                except:
-                    print("AARRGGGG %d %d %s %s" % (start, stop, type(start), type(stop)))
-                    print("%s %s" % (id, acc))
+                elif line[:2] == '//':
+                    stop = fid.tell()
+                    try:
+                        value = '%d %d' % (start, stop)
+                        db[id] = value
+                        db[acc] = value
+                        id, acc, start, stop = None, None, None, None
+                    except:
+                        print("AARRGGGG %d %d %s %s" % (start, stop, type(start), type(stop)))
+                        print("%s %s" % (id, acc))
 
-        db.close()
-        fid.close()
+            db.close()
 
     def Open(self, indexfile=None):
         if not indexfile:
@@ -115,7 +114,7 @@ class DB_Index:
                 return OS
             if line[0:2] == "//":
                 break
-        return OS
+        return None
 
     def FixOS(self, os):
         os = string.split(os, ',')[0]
@@ -138,7 +137,7 @@ class DB_Index:
 
     def Get_Kingdom(self, id):
         res = self.Get_Taxonomy(id)
-        #print("%s %s" % (id, res))
+        # print("%s %s" % (id, res))
         if not res:
             return "U"
         kd = string.strip(string.split(res, ";")[0])

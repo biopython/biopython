@@ -102,6 +102,8 @@ DOCTEST_MODULES = [
     "Bio.motifs.applications._xxmotif",
     "Bio.pairwise2",
     "Bio.Phylo.Applications._Raxml",
+    "Bio.Phylo.Consensus",
+    "Bio.Phylo.BaseTree",
     "Bio.SearchIO",
     "Bio.SearchIO._model",
     "Bio.SearchIO._model.query",

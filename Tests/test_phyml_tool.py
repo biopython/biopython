@@ -17,14 +17,11 @@ from Bio import MissingExternalDependencyError
 os.environ['LANG'] = 'C'
 
 phyml_exe = None
-if sys.platform == "win32":
-    raise MissingExternalDependencyError(
-        "Testing PhyML on Windows not supported yet")
-else:
-    from Bio._py3k import getoutput
-    output = getoutput("phyml --version")
-    if "not found" not in output and "20" in output:
-        phyml_exe = "phyml"
+exe_name = "PhyML-3.1_win32.exe" if sys.platform == "win32" else "phyml"
+from Bio._py3k import getoutput
+output = getoutput(exe_name + " --version")
+if "not found" not in output and "20" in output:
+    phyml_exe = exe_name
 
 if not phyml_exe:
     raise MissingExternalDependencyError(

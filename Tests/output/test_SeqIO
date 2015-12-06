@@ -2309,6 +2309,22 @@ Testing reading genbank format file GenBank/1MRR_A.gp
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
  Checking can write/read as 'phylip-sequential' format
+Testing reading genbank format file GenBank/DS830848.gb
+ ID = 'DS830848.1', Name='DS830848',
+ Seq='NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN...NNNNNNN', length=1311
+ Checking can write/read as 'embl' format
+ Checking can write/read as 'genbank' format
+ Checking can write/read as 'imgt' format
+ Checking can write/read as 'qual' format
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=DS830848.1).
+Testing reading embl format file EMBL/DS830848.embl
+ ID = 'DS830848.1', Name='DS830848',
+ Seq='NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN...NNNNNNN', length=1311
+ Checking can write/read as 'embl' format
+ Checking can write/read as 'genbank' format
+ Checking can write/read as 'imgt' format
+ Checking can write/read as 'qual' format
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=DS830848.1).
 Testing reading embl format file EMBL/epo_prt_selection.embl
  ID = 'A00022.1', Name='A00022',
  Seq='CLARIIRYFYNAKA', length=14

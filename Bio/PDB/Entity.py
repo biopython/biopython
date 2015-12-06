@@ -13,6 +13,7 @@ from copy import copy
 
 from Bio.PDB.PDBExceptions import PDBConstructionException
 
+
 class Entity(object):
     """
     Basic container object. Structure, Model, Chain and Residue
@@ -143,7 +144,7 @@ class Entity(object):
             entity_id = self.get_id()
             l = [entity_id]
             parent = self.get_parent()
-            while not (parent is None):
+            while parent is not None:
                 entity_id = parent.get_id()
                 l.append(entity_id)
                 parent = parent.get_parent()

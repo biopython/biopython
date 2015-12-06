@@ -76,7 +76,7 @@ def read(file, format, **kwargs):
 
 def write(trees, file, format, **kwargs):
     """Write a sequence of trees to file in the given format."""
-    if isinstance(trees, BaseTree.Tree) or isinstance(trees, BaseTree.Clade):
+    if isinstance(trees, (BaseTree.Tree, BaseTree.Clade)):
         # Passed a single tree instead of an iterable -- that's OK
         trees = [trees]
     with File.as_handle(file, 'w+') as fp:

@@ -163,7 +163,7 @@ MAX_ALIGNMENTS = 1000   # maximum alignments recovered in traceback
 class align(object):
     """This class provides functions that do alignments."""
 
-    class alignment_function:
+    class alignment_function(object):
         """This class is callable impersonates an alignment function.
         The constructor takes the name of the function.  This class
         will decode the name of the function to figure out how to

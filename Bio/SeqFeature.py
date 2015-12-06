@@ -54,6 +54,8 @@ classes:
 
 from __future__ import print_function
 
+from Bio._py3k import _is_int_or_long
+
 from Bio.Seq import MutableSeq, reverse_complement
 
 __docformat__ = "restructuredtext en"
@@ -670,13 +672,13 @@ class FeatureLocation(object):
         # TODO - Check 0 <= start <= end (<= length of reference)
         if isinstance(start, AbstractPosition):
             self._start = start
-        elif isinstance(start, int) or isinstance(start, long):
+        elif _is_int_or_long(start):
             self._start = ExactPosition(start)
         else:
             raise TypeError("start=%r %s" % (start, type(start)))
         if isinstance(end, AbstractPosition):
             self._end = end
-        elif isinstance(end, int) or isinstance(end, long):
+        elif _is_int_or_long(end):
             self._end = ExactPosition(end)
         else:
             raise TypeError("end=%r %s" % (end, type(end)))

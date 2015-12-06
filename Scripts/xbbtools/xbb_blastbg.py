@@ -6,29 +6,27 @@
 
 from __future__ import print_function
 
-import posix
-import posixpath
 import os
 import sys
 sys.path.insert(0, '.')
 
 try:
-    import Queue as queue # Python 2
+    import Queue as queue  # Python 2
 except ImportError:
-    import queue # Python 3
+    import queue  # Python 3
 
 import tempfile
 import threading
 
 try:
-    from Tkinter import * # Python 2
+    from Tkinter import *  # Python 2
 except ImportError:
-    from tkinter import * # Python 3
+    from tkinter import *  # Python 3
 
 from xbb_utils import NotePad
 
 
-class BlastDisplayer:
+class BlastDisplayer(object):
     def __init__(self, command, text_id=None):
         self.command = command
         self.tid = text_id
@@ -37,8 +35,8 @@ class BlastDisplayer:
         self.outfile = tempfile.mktemp()
 
         # make sure outfile exists and is empty
-        fid = open(self.outfile, 'w+')
-        fid.close()
+        with open(self.outfile, 'w+') as fid:
+            pass
 
         com = '%s > %s' % (self.command, self.outfile)
 
@@ -48,23 +46,22 @@ class BlastDisplayer:
 
     def UpdateResults(self):
         # open the oufile and displays new appended text
-        fid = open(self.outfile)
-        size = 0
-        while True:
-            if self.worker.finished:
-                break
-            fid.seek(size)
-            txt = fid.read()
-            size = os.stat(self.outfile)[6]
-            try:
-                self.tid.insert(END, txt)
-                self.tid.update()
-            except:
-                # text widget is detroyed, we assume the search
-                # has been cancelled
-                break
+        with open(self.outfile) as fid:
+            size = 0
+            while True:
+                if self.worker.finished:
+                    break
+                fid.seek(size)
+                txt = fid.read()
+                size = os.stat(self.outfile)[6]
+                try:
+                    self.tid.insert(END, txt)
+                    self.tid.update()
+                except:
+                    # text widget is detroyed, we assume the search
+                    # has been cancelled
+                    break
 
-        fid.close()
         self.Exit()
 
     def Exit(self):

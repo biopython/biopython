@@ -78,7 +78,7 @@ class PDBParser(object):
             # Make a StructureBuilder instance (pass id of structure as parameter)
             self.structure_builder.init_structure(id)
 
-            with as_handle(file) as handle:
+            with as_handle(file, mode='rU') as handle:
                 self._parse(handle.readlines())
 
             self.structure_builder.set_header(self.header)
@@ -133,7 +133,7 @@ class PDBParser(object):
         current_residue_id = None
         current_resname = None
         for i in range(0, len(coords_trailer)):
-            line = coords_trailer[i]
+            line = coords_trailer[i].rstrip('\n')
             record_type = line[0:6]
             global_line_counter = self.line_counter + local_line_counter + 1
             structure_builder.set_line_counter(global_line_counter)
