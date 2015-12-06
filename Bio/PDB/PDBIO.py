@@ -81,6 +81,11 @@ class PDBIO(object):
         altloc = atom.get_altloc()
         x, y, z = atom.get_coord()
         bfactor = atom.get_bfactor()
+
+        # Assert chain is single character only
+        assert len(chain_id) == 1, \
+                "The PDB format is restricted to one-character chain identifiers"
+
         occupancy = atom.get_occupancy()
         try:
             occupancy_str = "%6.2f" % occupancy
