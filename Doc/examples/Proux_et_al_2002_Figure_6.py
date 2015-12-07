@@ -104,7 +104,7 @@ B_vs_C = [
 ]
 
 
-def get_feature(features, id, tags=["locus_tag", "gene", "old_locus_tag"]):
+def get_feature(features, id, tags=("locus_tag", "gene", "old_locus_tag")):
     """Search list of SeqFeature objects for an identifier under the given tags."""
     for f in features:
         for key in tags:

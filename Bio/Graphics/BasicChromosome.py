@@ -598,7 +598,7 @@ def _place_labels(desired_etc, minimum, maximum, gap=0):
 class AnnotatedChromosomeSegment(ChromosomeSegment):
     def __init__(self, bp_length, features,
                  default_feature_color=colors.blue,
-                 name_qualifiers=['gene', 'label', 'name', 'locus_tag', 'product']):
+                 name_qualifiers=('gene', 'label', 'name', 'locus_tag', 'product')):
         """Like the ChromosomeSegment, but accepts a list of features.
 
         The features can either be SeqFeature objects, or tuples of values:
@@ -619,7 +619,7 @@ class AnnotatedChromosomeSegment(ChromosomeSegment):
         is used, unless the feature's qualifiers include an Artemis colour
         string (functionality also in GenomeDiagram). The caption also follows
         the GenomeDiagram approach and takes the first qualifier from the list
-        specified in name_qualifiers.
+        or tuple specified in name_qualifiers.
 
         Note additional attribute label_sep_percent controls the percentage of
         area that the chromosome segment takes up, by default half of the
