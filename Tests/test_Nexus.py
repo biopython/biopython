@@ -13,7 +13,11 @@ import sys
 from Bio._py3k import StringIO
 from Bio._py3k import range
 
+from Bio.SeqRecord import SeqRecord
 from Bio.Nexus import Nexus, Trees
+from Bio.Seq import Seq
+from Bio.Alphabet.IUPAC import ambiguous_dna
+from Bio import SeqIO
 
 
 class NexusTest1(unittest.TestCase):
@@ -34,6 +38,16 @@ class NexusTest1(unittest.TestCase):
         n.write_nexus_data(filename)
         self.assertTrue(os.path.isfile(filename))
         os.remove(filename)
+
+    def test_write_with_dups(self):
+        # see issue: biopython/Bio/Nexus/Nexus.py _unique_label() eval error #633
+        records = [SeqRecord(Seq("ATGCTGCTGAT", alphabet=ambiguous_dna), id="foo") for _ in range(4)]
+        try:
+            ofile = StringIO()
+            SeqIO.write(records, ofile, "nexus")
+        except Exception as e:
+            print(e)
+            raise
 
     def test_NexusTest1(self):
         """Test Nexus module"""
