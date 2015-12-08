@@ -1,6 +1,9 @@
 #Special configuration file to run tests on Travis-CI via GitHub notifications
 #See http://travis-ci.org/ for details
 #
+#The tests are run via the coverage script, and if the tests pass the coverage
+#information is pushed to http://codecov.io/
+#
 #Note when testing Python 3, the 'python' command will invoke Python 3
 #and similarly for PyPy too.
 
@@ -53,6 +56,8 @@ before_install:
   - "if [[ $MSQL == 'yes' ]]; then pip install mysql-python; fi"
 #Lib unittest2 is needed for some assertRaises tests under Python 2.6
   - "if [[ $TRAVIS_PYTHON_VERSION == '2.6' ]]; then pip install unittest2; fi"
+#Used to record test coverage information:
+  - pip install coverage
 
 install:
 #The yes is in case we get our prompt about missing NumPy
@@ -62,7 +67,13 @@ before_script:
   - cd Tests
 
 script:
-  - python run_tests.py --offline
+#Using just coverage should match up to the current Python version:
+  - coverage run --source=Bio,BioSQL run_tests.py --offline
+
+after_success:
+#See https://codecov.io/ and https://github.com/codecov/example-python
+  - pip install codecov
+  - codecov
 
 #The email defaults are too talkative
 notifications:
