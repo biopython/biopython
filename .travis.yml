@@ -14,6 +14,20 @@ python:
   - "pypy"
   - "pypy3"
 
+sudo: false
+addons:
+  apt:
+    packages:
+    - bwa
+    - clustalo
+    - clustalw
+    - emboss
+    - mafft
+    - muscle
+    - probcons
+    - samtools
+    - wise
+
 before_install:
   - "export PY3=yes"
   - "if [[ $TRAVIS_PYTHON_VERSION == '2.6' ]]; then export PY3=no; fi"
@@ -22,12 +36,6 @@ before_install:
   - "export PYPY=no"
   - "if [[ $TRAVIS_PYTHON_VERSION == 'pypy' ]]; then export PYPY=yes; fi"
   - "if [[ $TRAVIS_PYTHON_VERSION == 'pypy3' ]]; then export PYPY=yes; fi"
-#Misc command line tools we can call
-  - "sudo apt-get install clustalw clustalo"
-  - "sudo apt-get install muscle mafft probcons wise emboss"
-#Suspect an update of t-coffee is causing the test run to stall...
-#  - "sudo apt-get install --no-install-recommends t-coffee"
-  - "sudo apt-get install samtools bwa"
 #Misc python modules we can use as soft dependencies
   - "if [[ $PYPY != 'yes' ]]; then pip install reportlab; fi"
   - "pip install rdflib"
@@ -47,6 +55,7 @@ before_install:
   - "if [[ $TRAVIS_PYTHON_VERSION == '2.6' ]]; then pip install unittest2; fi"
 
 install:
+#The yes is in case we get our prompt about missing NumPy
   - "/usr/bin/yes | python setup.py install"
 
 before_script:
@@ -55,6 +64,6 @@ before_script:
 script:
   - python run_tests.py --offline
 
-#The email defaults are too talkative while we're getting Travis working nicely.
+#The email defaults are too talkative
 notifications:
   email: false
