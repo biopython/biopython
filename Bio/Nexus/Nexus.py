@@ -282,9 +282,13 @@ def _make_unique(l):
 def _unique_label(previous_labels, label):
     """Returns a unique name if label is already in previous_labels."""
     while label in previous_labels:
-        if label.split('.')[-1].startswith('copy'):
-            label = '.'.join(label.split('.')[:-1]) \
-                  + '.copy' + str(eval('0' + label.split('.')[-1][4:]) + 1)
+        label_split = label.split('.')
+        if label_split[-1].startswith('copy'):
+            copy_num = 1
+            if label_split[-1] != "copy":
+                copy_num = int(label_split[-1][4:]) + 1
+            new_label = "%s.copy%s" % ('.'.join(label_split[:-1]), copy_num)
+            label = new_label
         else:
             label += '.copy'
     return label

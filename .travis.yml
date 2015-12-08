@@ -1,6 +1,9 @@
 #Special configuration file to run tests on Travis-CI via GitHub notifications
 #See http://travis-ci.org/ for details
 #
+#The tests are run via the coverage script, and if the tests pass the coverage
+#information is pushed to http://codecov.io/
+#
 #Note when testing Python 3, the 'python' command will invoke Python 3
 #and similarly for PyPy too.
 
@@ -14,6 +17,20 @@ python:
   - "pypy"
   - "pypy3"
 
+sudo: false
+addons:
+  apt:
+    packages:
+    - bwa
+    - clustalo
+    - clustalw
+    - emboss
+    - mafft
+    - muscle
+    - probcons
+    - samtools
+    - wise
+
 before_install:
   - "export PY3=yes"
   - "if [[ $TRAVIS_PYTHON_VERSION == '2.6' ]]; then export PY3=no; fi"
@@ -22,12 +39,6 @@ before_install:
   - "export PYPY=no"
   - "if [[ $TRAVIS_PYTHON_VERSION == 'pypy' ]]; then export PYPY=yes; fi"
   - "if [[ $TRAVIS_PYTHON_VERSION == 'pypy3' ]]; then export PYPY=yes; fi"
-#Misc command line tools we can call
-  - "sudo apt-get install clustalw clustalo"
-  - "sudo apt-get install muscle mafft probcons wise emboss"
-#Suspect an update of t-coffee is causing the test run to stall...
-#  - "sudo apt-get install --no-install-recommends t-coffee"
-  - "sudo apt-get install samtools bwa"
 #Misc python modules we can use as soft dependencies
   - "if [[ $PYPY != 'yes' ]]; then pip install reportlab; fi"
   - "pip install rdflib"
@@ -45,16 +56,25 @@ before_install:
   - "if [[ $MSQL == 'yes' ]]; then pip install mysql-python; fi"
 #Lib unittest2 is needed for some assertRaises tests under Python 2.6
   - "if [[ $TRAVIS_PYTHON_VERSION == '2.6' ]]; then pip install unittest2; fi"
+#Used to record test coverage information:
+  - pip install coverage
 
 install:
+#The yes is in case we get our prompt about missing NumPy
   - "/usr/bin/yes | python setup.py install"
 
 before_script:
   - cd Tests
 
 script:
-  - python run_tests.py --offline
+#Using just coverage should match up to the current Python version:
+  - coverage run --source=Bio,BioSQL run_tests.py --offline
 
-#The email defaults are too talkative while we're getting Travis working nicely.
+after_success:
+#See https://codecov.io/ and https://github.com/codecov/example-python
+  - pip install codecov
+  - codecov
+
+#The email defaults are too talkative
 notifications:
   email: false

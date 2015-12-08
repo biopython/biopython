@@ -457,7 +457,7 @@ class TogoSearch(unittest.TestCase):
         """
         self.check("uniprot", "terminal+lung+cancer", limit=150)
 
-    def check(self, database, search_term, expected_matches=[], limit=None):
+    def check(self, database, search_term, expected_matches=(), limit=None):
         if expected_matches and limit:
             raise ValueError("Bad test - TogoWS makes no promises about order")
         search_count = TogoWS.search_count(database, search_term)
