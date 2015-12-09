@@ -127,7 +127,7 @@ def epost(db, **keywds):
     cgi = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/epost.fcgi'
     variables = {'db': db}
     variables.update(keywds)
-    return _open(cgi, variables)
+    return _open(cgi, variables, post=True)
 
 
 def efetch(db, **keywords):
@@ -152,13 +152,29 @@ def efetch(db, **keywords):
     LOCUS       AY851612                 892 bp    DNA     linear   PLN 10-APR-2007
     >>> handle.close()
 
+    This will automatically use an HTTP POST rather than HTTP GET if there
+    are over 200 identifiers as recommended by the NCBI.
+
     **Warning:** The NCBI changed the default retmode in Feb 2012, so many
     databases which previously returned text output now give XML.
     """
     cgi = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi'
     variables = {'db': db}
     variables.update(keywords)
-    return _open(cgi, variables)
+    post = False
+    try:
+        ids = variables["id"]
+    except KeyError:
+        pass
+    else:
+        if isinstance(ids, list):
+            ids = ",".join(ids)
+            variables["id"] = ids
+        if ids.count(",") >= 200:
+            # NCBI prefers an HTTP POST instead of an HTTP GET if there are
+            # more than about 200 IDs
+            post = True
+    return _open(cgi, variables, post=post)
 
 
 def esearch(db, term, **keywds):
@@ -460,17 +476,23 @@ def parse(handle, validate=True):
     return records
 
 
-def _open(cgi, params=None, ecitmatch=False):
+def _open(cgi, params=None, post=None, ecitmatch=False):
     """Helper function to build the URL and open a handle to it (PRIVATE).
 
     Open a handle to Entrez.  cgi is the URL for the cgi script to access.
     params is a dictionary with the options to pass to it.  Does some
     simple error checking, and will raise an IOError if it encounters one.
 
+    The arugment post should be a boolean to explicitly control if an HTTP
+    POST should be used rather an HTTP GET based on the query length.
+    By default (post=None), POST is used if the query URL would be over
+    1000 characters long.
+
+    The arugment post should be a boolean to explicitly control if an HTTP
+    POST should be used rather an HTTP GET based on the query length.
+
     This function also enforces the "up to three queries per second rule"
-    to avoid abusing the NCBI servers, and makes the request through POST
-    rather than GET if the number of characters in the resulting query is
-    greater than 1000.
+    to avoid abusing the NCBI servers.
     """
     if params is None:
         params = {}
@@ -508,31 +530,17 @@ is A.N.Other@example.com, you can specify it as follows:
 In case of excessive usage of the E-utilities, NCBI will attempt to contact
 a user at the email address provided before blocking access to the
 E-utilities.""", UserWarning)
-    
-    # By default, we do not force a POST request
-    force_post = False
-    
-    # Make sure the UIDs are in the format UID,UID,...
-    ids = params.get("id", None)
-    if ids is not None:
-        # Detect whether 200+ UIDs have been provided, and convert the list
-        # [UID, UID, ...] into the string "UID,UID,..."
-        if isinstance(ids, list):
-            params["id"] = ",".join(ids)
-        elif isinstance(ids, str):
-            ids = ids.split(",")
-        
-        # If 200+ UIDs are given, force the POST request
-        force_post = len(ids) > 200
-    
+
     # Open a handle to Entrez.
     options = _urlencode(params, doseq=True)
     # _urlencode encodes pipes, which NCBI expects in ECitMatch
     if ecitmatch:
         options = options.replace('%7C', '|')
     # print cgi + "?" + options
-    
-    post = force_post or len(options) > 1000
+
+    # By default, post is None. Set to a boolean to over-ride length choice:
+    if post is None and len(options) > 1000:
+        post = True
     try:
         if post:
             # HTTP POST
