@@ -23,7 +23,7 @@ __docformat__ = "restructuredtext en"
 class PatternIO(object):
     """Allow reading and writing of patterns to files.
 
-    This just defines a simple persistance class for patterns, making
+    This just defines a simple persistence class for patterns, making
     it easy to write them to a file and read 'em back.
     """
     def __init__(self, alphabet=None):

@@ -76,7 +76,7 @@ class Paml(object):
         """Set the value of an option.
 
         This function abstracts the options dict to prevent the user from
-        adding options that do not exist or mispelling options.
+        adding options that do not exist or misspelling options.
         """
         for option, value in kwargs.items():
             if option not in self._options:

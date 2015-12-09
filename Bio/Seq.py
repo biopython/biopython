@@ -1108,7 +1108,7 @@ class UnknownSeq(Seq):
     NNNNN
 
     However, this is rather wasteful of memory (especially for large
-    sequences), which is where this class is most usefull:
+    sequences), which is where this class is most useful:
 
     >>> unk_five = UnknownSeq(5)
     >>> unk_five

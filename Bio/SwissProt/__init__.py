@@ -307,7 +307,7 @@ def _read_dt(record, line):
 
         # find where the version information will be located
         # This is needed for when you have cases like IPI where
-        # the release verison is in a different spot:
+        # the release version is in a different spot:
         # DT   08-JAN-2002 (IPI Human rel. 2.3, Created)
         uprcols = uprline.split()
         rel_index = -1

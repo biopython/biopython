@@ -159,13 +159,13 @@ class PrankCommandline(AbstractCommandline):
             _Switch(["-printnodes", "printnodes"],
                     "Output each node; mostly for debugging"),
             # -matresize=# [matrix resizing multiplier]
-            # Doesnt specify type but Float and Int work
+            # Doesn't specify type but Float and Int work
             _Option(["-matresize", "matresize"],
                     "Matrix resizing multiplier",
                     checker_function=lambda x: isinstance(x, float) or
                                                isinstance(x, int)),
             # -matinitsize=# [matrix initial size multiplier]
-            # Doesnt specify type but Float and Int work
+            # Doesn't specify type but Float and Int work
             _Option(["-matinitsize", "matinitsize"],
                     "Matrix initial size multiplier",
                     checker_function=lambda x: isinstance(x, float) or

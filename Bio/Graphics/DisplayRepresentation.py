@@ -91,7 +91,7 @@ class ChromosomeCounts(object):
             raise KeyError("Segment name %s not found." % segment_name)
 
     def add_label(self, segment_name, label):
-        """Add a label to a specfic segment.
+        """Add a label to a specific segment.
 
         Raises a KeyError is the specified segment name is not found.
         """

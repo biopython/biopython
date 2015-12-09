@@ -10,7 +10,7 @@ Bio.SeqIO functions if you want to work directly with the gapped sequences).
 
 This module contains a parser for the pairwise alignments produced by Bill
 Pearson's FASTA tools, for use from the Bio.AlignIO interface where it is
-refered to as the "fasta-m10" file format (as we only support the machine
+referred to as the "fasta-m10" file format (as we only support the machine
 readable output format selected with the -m 10 command line option).
 
 This module does NOT cover the generic "fasta" file format originally

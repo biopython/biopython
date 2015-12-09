@@ -13,7 +13,7 @@ Example:
 
     >>> from Rana.fts import fts    #
     >>> from Rana.Vector import *   # Just a way to get a sequence.
-    >>> from Bio.Seq import Seq     # Use your prefered method here.
+    >>> from Bio.Seq import Seq     # Use your preferred method here.
     >>> pbr = fts(pBR322)           #
     >>> seq = Seq(str(pbr))         #
     >>>

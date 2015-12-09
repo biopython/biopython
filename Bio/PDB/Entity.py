@@ -137,7 +137,7 @@ class Entity(object):
         Residue with id (" ", 10, "A")
 
         The Residue id indicates that the residue is not a hetero-residue
-        (or a water) beacuse it has a blank hetero field, that its sequence
+        (or a water) because it has a blank hetero field, that its sequence
         identifier is 10 and its insertion code "A".
         """
         if self.full_id is None:
