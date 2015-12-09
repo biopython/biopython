@@ -33,7 +33,7 @@ XML, the parser analyzes the DTD referred at the top of (almost) every
 XML file returned by the Entrez Utilities. This is preferred over a hand-
 written solution, since the number of DTDs is rather large and their
 contents may change over time. About half the code in this parser deals
-wih parsing the DTD, and the other half with the XML itself.
+with parsing the DTD, and the other half with the XML itself.
 """
 import sys
 import re
