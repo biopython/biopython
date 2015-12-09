@@ -146,7 +146,13 @@ if sys.version_info[0] >= 3:
         # Python 3.4 onwards, the standard library wrappers should work:
         def _binary_to_string_handle(handle):
             """Treat a binary (bytes) handle like a text (unicode) handle."""
-            return io.TextIOWrapper(io.BufferedReader(handle))
+            wrapped = io.TextIOWrapper(io.BufferedReader(handle))
+            try:
+                # If wrapping an online handle, this this is nice to have:
+                wrapped.url = handle.url
+            except AttributeError:
+                pass
+            return wrapped
 
     # This is to avoid the deprecation warning from open(filename, "rU")
     _universal_read_mode = "r"  # text mode does universal new lines
