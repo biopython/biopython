@@ -95,7 +95,6 @@ from __future__ import print_function
 
 import time
 import warnings
-import os.path
 
 # Importing these functions with leading underscore as not intended for reuse
 from Bio._py3k import urlopen as _urlopen
@@ -383,22 +382,7 @@ def ecitmatch(**keywds):
     >>> print(record["Query"])
     """
     cgi = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/ecitmatch.cgi'
-    # XML is the only supported value, and it actually returns TXT.
-    variables = {'retmode': 'xml'}
-    citation_keys = ('journal_title', 'year', 'volume', 'first_page', 'author_name', 'key')
-
-    # Accept pre-formatted strings
-    if isinstance(keywds['bdata'], str):
-        variables.update(keywds)
-    else:
-        # Alternatively accept a nicer interface
-        variables['db'] = keywds['db']
-        bdata = []
-        for citation in keywds['bdata']:
-            formatted_citation = '|'.join([citation.get(key, "") for key in citation_keys])
-            bdata.append(formatted_citation)
-        variables['bdata'] = '\r'.join(bdata)
-
+    variables = _update_ecitmatch_variables(keywds)
     return _open(cgi, variables, ecitmatch=True)
 
 
@@ -472,8 +456,6 @@ def _open(cgi, params=None, ecitmatch=False):
     rather than GET if the number of characters in the resulting query is
     greater than 1000.
     """
-    if params is None:
-        params = {}
     # NCBI requirement: At most three queries per second.
     # Equivalently, at least a third of second between queries
     delay = 0.333333334
@@ -484,6 +466,54 @@ def _open(cgi, params=None, ecitmatch=False):
         _open.previous = current + wait
     else:
         _open.previous = current
+
+    params = _construct_params(params)
+    options = _encode_options(ecitmatch, params)
+
+    post = _should_do_post_request(options, params)
+    cgi = _construct_cgi(cgi, post, options)
+
+    try:
+        if post:
+            handle = _urlopen(cgi, data=_as_bytes(options))
+        else:
+            handle = _urlopen(cgi)
+    except _HTTPError as exception:
+        raise exception
+
+    return _binary_to_string_handle(handle)
+
+
+def _should_do_post_request(options, params):
+    """By default, we do not force a POST request.
+
+    Returns:
+        - Boolean.
+
+    """
+    force_post = False
+    ids = params.get("id")
+    if ids is not None:
+        # Detect whether 200+ UIDs have been provided, and convert the list
+        # [UID, UID, ...] into the string "UID,UID,..."
+        if isinstance(ids, list):
+            params["id"] = ",".join(ids)
+        elif isinstance(ids, str):
+            ids = ids.split(",")
+
+        # If 200+ UIDs are given, force the POST request
+        force_post = len(ids) > 200
+    post = force_post or len(options) > 1000
+    return post
+
+
+_open.previous = 0
+
+
+def _construct_params(params):
+    if params is None:
+        params = {}
+
     # Remove None values from the parameters
     for key, value in list(params.items()):
         if value is None:
@@ -508,45 +538,43 @@ is A.N.Other@example.com, you can specify it as follows:
 In case of excessive usage of the E-utilities, NCBI will attempt to contact
 a user at the email address provided before blocking access to the
 E-utilities.""", UserWarning)
-    
-    # By default, we do not force a POST request
-    force_post = False
-    
-    # Make sure the UIDs are in the format UID,UID,...
-    ids = params.get("id", None)
-    if ids is not None:
-        # Detect whether 200+ UIDs have been provided, and convert the list
-        # [UID, UID, ...] into the string "UID,UID,..."
-        if isinstance(ids, list):
-            params["id"] = ",".join(ids)
-        elif isinstance(ids, str):
-            ids = ids.split(",")
-        
-        # If 200+ UIDs are given, force the POST request
-        force_post = len(ids) > 200
-    
+    return params
+
+
+def _encode_options(ecitmatch, params):
     # Open a handle to Entrez.
     options = _urlencode(params, doseq=True)
     # _urlencode encodes pipes, which NCBI expects in ECitMatch
     if ecitmatch:
         options = options.replace('%7C', '|')
-    # print cgi + "?" + options
-    
-    post = force_post or len(options) > 1000
-    try:
-        if post:
-            # HTTP POST
-            handle = _urlopen(cgi, data=_as_bytes(options))
-        else:
-            # HTTP GET
-            cgi += "?" + options
-            handle = _urlopen(cgi)
-    except _HTTPError as exception:
-        raise exception
+    return options
 
-    return _binary_to_string_handle(handle)
 
-_open.previous = 0
+def _construct_cgi(cgi, post, options):
+    if not post:
+        # HTTP GET
+        cgi += "?" + options
+    return cgi
+
+
+def _update_ecitmatch_variables(keywds):
+    # XML is the only supported value, and it actually returns TXT.
+    variables = {'retmode': 'xml'}
+    citation_keys = (
+        'journal_title', 'year', 'volume', 'first_page', 'author_name', 'key')
+    # Accept pre-formatted strings
+    if isinstance(keywds['bdata'], str):
+        variables.update(keywds)
+    else:
+        # Alternatively accept a nicer interface
+        variables['db'] = keywds['db']
+        bdata = []
+        for citation in keywds['bdata']:
+            formatted_citation = '|'.join(
+                [citation.get(key, "") for key in citation_keys])
+            bdata.append(formatted_citation)
+        variables['bdata'] = '\r'.join(bdata)
+    return variables
 
 
 def _test():
