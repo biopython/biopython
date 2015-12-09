@@ -114,7 +114,7 @@ class MultiGraph(object):
         for n in self._adjacency_list:
             self._adjacency_list[n] = set(x for x in self._adjacency_list[n]
                                           if x[0] != node)
-        # remove all refering pairs in label map
+        # remove all referring pairs in label map
         for label in list(self._label_map.keys()):  # we're editing this!
             lm = set(x for x in self._label_map[label]
                      if (x[0] != node) and (x[1] != node))
@@ -129,7 +129,7 @@ class MultiGraph(object):
         # hm , this is a multigraph - how should this be implemented?
         raise NotImplementedError("remove_edge is not yet implemented")
 
-# auxilliary graph functions
+# auxiliary graph functions
 
 
 def df_search(graph, root=None):

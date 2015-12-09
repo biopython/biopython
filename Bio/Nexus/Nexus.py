@@ -687,10 +687,10 @@ class Nexus(object):
 
     def _parse_nexus_block(self, title, contents):
         """Parse a known Nexus Block (PRIVATE)."""
-        # attached the structered block representation
+        # attached the structured block representation
         self._apply_block_structure(title, contents)
         # now check for taxa,characters,data blocks. If this stuff is defined more than once
-        # the later occurences will override the previous ones.
+        # the later occurrences will override the previous ones.
         block = self.structured[-1]
         for line in block.commandlines:
             try:

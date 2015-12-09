@@ -137,7 +137,7 @@ class FastaWriter(SequentialSequenceWriter):
     def __init__(self, handle, wrap=60, record2title=None):
         """Create a Fasta writer.
 
-        Arguements:
+        Arguments:
 
          - handle - Handle to an output file, e.g. as returned
            by open(filename, "w")

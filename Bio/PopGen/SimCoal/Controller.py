@@ -21,7 +21,7 @@ class SimCoalController(object):
 
         simcoal_dir is the directory where simcoal is.
 
-        The initializer checks for existance and executability of binaries.
+        The initializer checks for existence and executability of binaries.
         """
         self.simcoal_dir = simcoal_dir
         self.os_name = os.name  # remove this?

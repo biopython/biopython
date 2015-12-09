@@ -509,7 +509,7 @@ def ReadRocheXmlManifest(handle):
 
     The SFF file format allows for multiple different index blocks, and Roche
     took advantage of this to define their own index block which also embeds
-    an XML manifest string. This is not a publically documented extension to
+    an XML manifest string. This is not a publicly documented extension to
     the SFF file format, this was reverse engineered.
 
     The handle should be to an SFF file opened in binary mode. This function

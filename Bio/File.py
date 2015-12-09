@@ -602,7 +602,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
                 # Since user gave BOTH filename & index as relative paths,
                 # we will store this relative to the index file even though
                 # if it may now start ../ (meaning up a level)
-                # Note for cross platfrom use (e.g. shared data drive over SAMBA),
+                # Note for cross platform use (e.g. shared data drive over SAMBA),
                 # convert any Windows slash into Unix style / for relative paths.
                 f = os.path.relpath(filename, relative_path).replace(os.path.sep, "/")
             elif (os.path.dirname(os.path.abspath(filename)) + os.path.sep).startswith(relative_path + os.path.sep):

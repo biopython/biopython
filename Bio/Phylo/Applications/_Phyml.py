@@ -118,11 +118,11 @@ class PhymlCommandline(AbstractCommandline):
                 e : Empirical frequencies, determined as follows :
 
                     - Nucleotide sequences: (Empirical) the equilibrium base
-                      frequencies are estimated by counting the occurence of the
+                      frequencies are estimated by counting the occurrence of the
                       different bases in the alignment.
                     - Amino-acid sequences: (Empirical) the equilibrium
                       amino-acid frequencies are estimated by counting the
-                      occurence of the different amino-acids in the alignment.
+                      occurrence of the different amino-acids in the alignment.
 
                 m : ML/model-based frequencies, determined as follows :
 

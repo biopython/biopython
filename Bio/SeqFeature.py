@@ -44,8 +44,8 @@ classes:
     - CompoundLocation - Collection of FeatureLocation objects (for joins etc).
 
     - ExactPosition - Specify the position as being exact.
-    - WithinPosition - Specify a position occuring within some range.
-    - BetweenPosition - Specify a position occuring between a range (OBSOLETE?).
+    - WithinPosition - Specify a position occurring within some range.
+    - BetweenPosition - Specify a position occurring between a range (OBSOLETE?).
     - BeforePosition - Specify the position as being found before some base.
     - AfterPosition - Specify the position as being found after some base.
     - OneOfPosition - Specify a position where the location can be multiple positions.
@@ -553,7 +553,7 @@ class Reference(object):
 class FeatureLocation(object):
     """Specify the location of a feature along a sequence.
 
-    The FeatureLocation is used for simple continous features, which can
+    The FeatureLocation is used for simple continuous features, which can
     be described as running from a start position to and end position
     (optionally with a strand and reference information).  More complex
     locations made up from several non-continuous parts (e.g. a coding
@@ -898,9 +898,9 @@ class FeatureLocation(object):
     def parts(self):
         """Read only list of parts (always one, the Feature Location).
 
-        This is a convience property allowing you to write code handling
+        This is a convenience property allowing you to write code handling
         both simple FeatureLocation objects (with one part) and more complex
-        CompoundLocation objects (with multiple parts) interchangably.
+        CompoundLocation objects (with multiple parts) interchangeably.
         """
         return [self]
 

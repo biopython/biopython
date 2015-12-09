@@ -512,7 +512,7 @@ class AbstractDrawer(object):
         self.length = self.end - self.start + 1
 
     def is_in_bounds(self, value):
-        """Check if given value is withing the region selected for drawing,
+        """Check if given value is within the region selected for drawing,
 
         Arguments:
 

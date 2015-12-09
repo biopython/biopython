@@ -259,7 +259,7 @@ using ("fastq" or "fastq-sanger" for the Sanger standard using PHRED values,
 for the more recent variant), as this cannot be detected reliably
 automatically.
 
-To illustrate this problem, let's consider an artifical example:
+To illustrate this problem, let's consider an artificial example:
 
 >>> from Bio.Seq import Seq
 >>> from Bio.Alphabet import generic_dna

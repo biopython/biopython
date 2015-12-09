@@ -269,7 +269,7 @@ class ScaledDPAlgorithms(AbstractDPAlgorithms):
                                                        cur_state)]
             state_pos_sum += prev_forward * cur_trans_prob
 
-        # if we have the possiblity of having a transition
+        # if we have the possibility of having a transition
         # return the recursion value
         if have_transition:
             return (scale_emission_prob * state_pos_sum)
