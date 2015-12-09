@@ -149,3 +149,8 @@ class TestURLConstruction(unittest.TestCase):
         self.assertTrue(URL_TOOL in result_url)
         self.assertTrue(URL_EMAIL in result_url)
         self.assertTrue("id=15718680%2C157427902%2C119703751" in result_url, result_url)
+
+
+if __name__ == "__main__":
+    runner = unittest.TextTestRunner(verbosity=2)
+    unittest.main(testRunner=runner)
