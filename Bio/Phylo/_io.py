@@ -19,6 +19,7 @@ from Bio.Phylo import (
     NexusIO,
     PhyloXMLIO,
     NeXMLIO,
+    JSONIO,
 )
 
 supported_formats = {
@@ -26,6 +27,7 @@ supported_formats = {
     'nexus': NexusIO,
     'phyloxml': PhyloXMLIO,
     'nexml': NeXMLIO,
+    'json': JSONIO,
 }
 
 try:
