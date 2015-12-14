@@ -809,26 +809,59 @@ This index file is actually an SQLite3 database.
 
 As an example, consider the GenBank flat file releases from the NCBI FTP site,
 \url{ftp://ftp.ncbi.nih.gov/genbank/}, which are gzip compressed GenBank files.
-As of GenBank release $182$, there are $16$ files making up the viral sequences,
-\texttt{gbvrl1.seq}, \ldots, \texttt{gbvrl16.seq}, containing in total almost
-one million records. You can index them like this:
+
+As of GenBank release $210$, there are $38$ files making up the viral sequences,
+\texttt{gbvrl1.seq}, \ldots, \texttt{gbvrl38.seq}, taking about 8GB on disk once
+decompressed, and containing in total nearly two million records.
+
+If you were interested in the viruses, you could download all the virus files
+from the command line very easily with the \texttt{rsync} command, and then
+decompress them with \texttt{gunzip}:
 
 \begin{verbatim}
->>> from Bio import SeqIO
->>> files = ["gbvrl%i.seq" % (i+1) for i in range(16)]
->>> gb_vrl = SeqIO.index_db("gbvrl.idx", files, "genbank")
->>> print("%i sequences indexed" % len(gb_vrl))
-958086 sequences indexed
+# For illustration only, see reduced example below
+$ rsync -avP "ftp.ncbi.nih.gov::genbank/gbvrl*.seq.gz" .
+$ gunzip gbvrl*.seq.gz
 \end{verbatim}
 
-That takes about two minutes to run on my machine. If you rerun it then the
-index file (here \texttt{gbvrl.idx}) is reloaded in under a second. You can
-use the index as a read only Python dictionary - without having to worry
+Unless you care about viruses, that's a lot of data to download just for this
+example - so let's download \emph{just} the first four chunks (about 25MB each
+compressed), and decompress them (taking in all about 1GB of space):
+
+\begin{verbatim}
+# Reduced example, download only the first four chunks
+$ curl -O ftp://ftp.ncbi.nih.gov/genbank/gbvrl1.seq.gz
+$ curl -O ftp://ftp.ncbi.nih.gov/genbank/gbvrl2.seq.gz
+$ curl -O ftp://ftp.ncbi.nih.gov/genbank/gbvrl3.seq.gz
+$ curl -O ftp://ftp.ncbi.nih.gov/genbank/gbvrl4.seq.gz
+$ gunzip gbvrl*.seq.gz
+\end{verbatim}
+
+Now, in Python, index these GenBank files as follows:
+
+\begin{verbatim}
+>>> import glob
+>>> from Bio import SeqIO
+>>> files = glob.glob("gbvrl*.seq")
+>>> print("%i files to index" % len(files))
+4
+>>> gb_vrl = SeqIO.index_db("gbvrl.idx", files, "genbank")
+>>> print("%i sequences indexed" % len(gb_vrl))
+272960 sequences indexed
+\end{verbatim}
+
+Indexing the full set of virus GenBank files took about ten minutes on my machine,
+just the first four files took about a minute or so.
+
+However, once done, repeating this will reload the index file \verb|gbvrl.idx|
+in a fraction of a second.
+
+You can use the index as a read only Python dictionary - without having to worry
 about which file the sequence comes from, e.g.
 
 \begin{verbatim}
->>> print(gb_vrl["GQ333173.1"].description)
-HIV-1 isolate F12279A1 from Uganda gag protein (gag) gene, partial cds.
+>>> print(gb_vrl[``AB811634.1''].description)
+Equine encephalosis virus NS3 gene, complete cds, isolate: Kimron1.
 \end{verbatim}
 
 \subsubsection{Getting the raw data for a record}
@@ -843,11 +876,10 @@ get at the raw bytes of each record:
 % >>> print(gb_vrl.get_raw(``GQ333173.1''))
 % b'LOCUS       GQ333173                 459 bp    DNA     linear   VRL 21-OCT-2009\nDEFINITION...'
 \begin{verbatim}
->>> print(gb_vrl.get_raw("GQ333173.1"))
-LOCUS       GQ333173                 459 bp    DNA     linear   VRL 21-OCT-2009
-DEFINITION  HIV-1 isolate F12279A1 from Uganda gag protein (gag) gene, partial
-            cds.
-ACCESSION   GQ333173
+>>> print(gb_vrl.get_raw(``AB811634.1''))
+LOCUS       AB811634                 723 bp    RNA     linear   VRL 17-JUN-2015
+DEFINITION  Equine encephalosis virus NS3 gene, complete cds, isolate: Kimron1.
+ACCESSION   AB811634
 ...
 //
 \end{verbatim}
