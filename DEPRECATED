@@ -28,6 +28,11 @@ Never officially supported, these triggered a warning in Release 1.62
 recommending Python 3.3 or later. As of Biopython Release 1.63 onwards,
 installation simply aborts with a error message.
 
+Python 3.3
+==========
+Still suported but deprecated as of Release 1.67, triggering a warning
+at installation time.
+
 Bio.CodonAlign
 ==============
 This new experimental module included in Biopython 1.64 was renamed to
