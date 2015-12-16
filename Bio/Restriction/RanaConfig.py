@@ -32,7 +32,7 @@ Example:
 
 """
 
-__docformat__ = "restructuredtext en"
+__docformat__ = "plaintext en"
 
 
 ConsoleWidth = 80
