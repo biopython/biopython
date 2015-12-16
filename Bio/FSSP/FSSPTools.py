@@ -1,9 +1,7 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-#
-"""
-Several routines used to extract information from FSSP sections
+"""Several routines used to extract information from FSSP sections.
 
 filter: filters a passed summary section and alignment section according to a numeric
         attribute in the summary section. Returns new summary and alignment sections
@@ -61,6 +59,7 @@ def mult_align(sum_dict, align_dict):
 # new_align_dict. I have to figure out something better.
 # Took me ~160 seconds for the largest FSSP file (1reqA.fssp)
 #
+
 
 def filter(sum_dict, align_dict, filter_attribute, low_bound, high_bound):
     """Filters a passed summary section and alignment section according to a numeric

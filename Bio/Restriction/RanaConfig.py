@@ -1,13 +1,9 @@
+# Copyright (C) 2004. Frederic Sohm.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-#
-#
-#      Restriction Analysis Libraries.
-#      Copyright (C) 2004. Frederic Sohm.
-#
-"""
-Configuration of the console.
+
+"""Configuration of the console.
 
 Mainly used by PrintFormat.PrintFormat
 
@@ -24,6 +20,7 @@ MaxSize      : Maximal size of the sequence (default=6:
                MaxSize = 5  =>   9.999 bp
                MaxSize = 6  =>  99.999 bp
                MaxSize = 7  => 999.999 bp
+
 Example:
 
   <------------ ConsoleWidth --------------->
@@ -42,20 +39,22 @@ ConsoleWidth = 80
 NameWidth = 10
 Indent = 4
 MaxSize = 6
-"""
-Proxies
 
-Enter here the address of your proxy if any.
-If you don't use proxy use an empty string
-Example:
-  ftp_proxy       =   ''
-                  -> no proxy
-
-  ftp_proxy       =   'http://www.somewhere.something:one_number'
-                  -> www.somewhere.something is the address of the proxy.
-                     one_number is the port number.
-"""
+# Proxies
+#
+# Enter here the address of your proxy if any.
+# If you don't use proxy use an empty string
+#
+# Example:
+#
+#  ftp_proxy       =   ''
+#                  -> no proxy
+#
+#  ftp_proxy       =   'http://www.somewhere.something:one_number'
+#                  -> www.somewhere.something is the address of the proxy.
+#                     one_number is the port number.
 ftp_proxy = ''
+
 ###############################################################################
 #                   Rebase ftp location
 #

@@ -2,9 +2,8 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 # Copyright Iddo Friedberg idoerg@cc.huji.ac.il
-# Biopython (http://biopython.org) license applies
-"""
-A class to handle frequency tables
+"""A class to handle frequency tables
+
 Methods to read a letter frequency or a letter count file:
 Example files for a DNA alphabet:
 
@@ -51,6 +50,7 @@ COUNT = 1
 FREQ = 2
 
 __docformat__ = "restructuredtext en"
+
 
 class FreqTable(dict):
 

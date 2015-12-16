@@ -1,10 +1,9 @@
 # Copyright 2007 by Tiago Antao <tiagoantao@gmail.com>.  All rights reserved.
 
-"""
-(DEPRECATED)
-This module allows to cache Simcoal2 results, and return on the fly
-in case the calculation was done.
+"""Cache for Simacoal2 results ((DEPRECATED).
 
+This module allows you to cache Simcoal2 results, and return on the fly
+in case the calculation was done.
 """
 
 import os
@@ -68,12 +67,11 @@ class SimCoalCache(object):
         return sims
 
     def getSimulation(self, sim_name, ploidy='1', parDir=None):
-        """
-           Makes available a cached simulation.
+        """Makes available a cached simulation.
 
-           @param sim_name simulation name.
+        @param sim_name simulation name.
 
-           This mainly means untaring a file.
+        This mainly means untaring a file.
         """
         if parDir is None:
             parDir = os.sep.join([self.dataDir, 'SimCoal', 'runs'])

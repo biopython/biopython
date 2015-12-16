@@ -28,6 +28,7 @@ from Bio.PDB.AbstractPropertyMap import AbstractResiduePropertyMap, AbstractAtom
 
 __docformat__ = "restructuredtext en"
 
+
 def run_naccess(model, pdb_file, probe_size=None, z_slice=None,
                 naccess='naccess', temp_path='/tmp/'):
 

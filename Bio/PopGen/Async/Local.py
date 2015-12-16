@@ -3,8 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""
-Asynchronous local execution.
+"""Asynchronous local execution.
 
 Supports multicore architectures.
 """
@@ -17,16 +16,15 @@ __docformat__ = "restructuredtext en"
 
 
 class Local(Async):
-    """Execution on Local machine.
-    """
+    """Execution on Local machine."""
 
     def __init__(self, num_cores=1):
         """Constructor.
 
-           parameters:
+        parameters:
 
-             - num_cores - Number of cores (for multiprocessor machines,
-               multiply accordingly)
+         - num_cores - Number of cores (for multiprocessor machines,
+           multiply accordingly)
         """
         Async.__init__(self)
         self.num_cores = num_cores
@@ -35,10 +33,10 @@ class Local(Async):
     def _run_program(self, id, hook, parameters, input_files):
         """Run program.
 
-           For parameters, please check Async.run_program.
+        For parameters, please check Async.run_program.
 
-           Either runs a program if a core is available or
-           schedules it.
+        Either runs a program if a core is available or
+        schedules it.
         """
         self.access_ds.acquire()
         self.waiting.append((id, hook, parameters, input_files))
@@ -50,10 +48,10 @@ class Local(Async):
     def start_work(self):
         """Starts work.
 
-           Thread initial point.
-           While there are tasks to be done, runs them.
-           The thread dies as soon as there is nothing waiting to be
-           executed.
+        Thread initial point.
+        While there are tasks to be done, runs them.
+        The thread dies as soon as there is nothing waiting to be
+        executed.
         """
         self.access_ds.acquire()
         while (len(self.waiting) > 0):

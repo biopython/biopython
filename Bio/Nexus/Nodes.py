@@ -2,8 +2,7 @@
 # This code is part of the Biopython distribution and governed by its
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
-"""
-Nodes.py
+"""Linked list functionality for use in Bio.Nexus.
 
 Provides functionality of a linked list.
 Each node has one (or none) predecessor, and an arbitrary number of successors.
@@ -15,6 +14,7 @@ Bug reports to Frank Kauff (fkauff@biologie.uni-kl.de)
 """
 
 __docformat__ = "restructuredtext en"
+
 
 class ChainException(Exception):
     pass

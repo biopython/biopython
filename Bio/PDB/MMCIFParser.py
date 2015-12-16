@@ -27,10 +27,12 @@ class MMCIFParser(object):
 
     def __init__(self, structure_builder=None, QUIET=False):
         """Create a PDBParser object.
+
         The PDB parser call a number of standard methods in an aggregated
         StructureBuilder object. Normally this object is instanciated by the
         MMCIParser object itself, but if the user provides his/her own
         StructureBuilder object, the latter is used instead.
+
         Arguments:
          - structure_builder - an optional user implemented StructureBuilder class.
          - QUIET - Evaluated as a Boolean. If true, warnings issued in constructing
