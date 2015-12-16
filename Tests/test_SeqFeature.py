@@ -21,7 +21,7 @@ class TestReference(unittest.TestCase):
 
         self.assertEqual(rec1.annotations['references'][0], rec1.annotations['references'][0])
         cmp1, cmp2 = rec1.annotations['references'][0], rec2.annotations['references'][0]
-        self.assertEqual(cmp1, cmp2, "{} vs {}".format(cmp1, cmp2))
+        self.assertEqual(cmp1, cmp2)
         self.assertNotEqual(rec1.annotations['references'][0], rec1.annotations['references'][1])
         self.assertNotEqual(rec1.annotations['references'][0], rec2.annotations['references'][1])
         self.assertEqual(rec1.annotations['references'][1], rec1.annotations['references'][1])
