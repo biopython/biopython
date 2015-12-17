@@ -62,6 +62,13 @@ def osx_clang_fix():
     We can avoid the clang compilation error with -Qunused-arguments which is
     (currently) harmless if gcc is being used instead (e.g. compiling Biopython
     against a locally compiled Python rather than the Apple provided Python).
+    
+    According the link below this is fixed in 10.9.3 released on May 15, 2014.
+    https://stackoverflow.com/questions/22313407/clang-error-unknown-argument-mno-fused-madd-python-package-installation-fa
+    Checking that the Darwin version is >= 13.2, which is osx 10.9.3, might be a better check.  
+    >>> os.uname().release
+    '15.2.0'
+    In addition inspecting sysconfig.get_config_vars('CONFIG_ARGS') might be a better way to search for the combile flags.
     """
     # see http://lists.open-bio.org/pipermail/biopython-dev/2014-April/011240.html
     if sys.platform != "darwin":
