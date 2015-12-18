@@ -1,4 +1,4 @@
-# Copyright 2008-2010 by Peter Cock.  All rights reserved.
+# Copyright 2008-2015 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -55,6 +55,23 @@ def TabIterator(handle, alphabet=single_letter_alphabet):
     any spaces within the text) and the second field is the sequence.
 
     Any blank lines are ignored.
+
+    Example:
+
+    >>> with open("GenBank/NC_005816.tsv") as handle:
+    ...     for record in TabIterator(handle):
+    ...         print("%s length %i" % (record.id, len(record)))
+    gi|45478712|ref|NP_995567.1| length 340
+    gi|45478713|ref|NP_995568.1| length 260
+    gi|45478714|ref|NP_995569.1| length 64
+    gi|45478715|ref|NP_995570.1| length 123
+    gi|45478716|ref|NP_995571.1| length 145
+    gi|45478717|ref|NP_995572.1| length 357
+    gi|45478718|ref|NP_995573.1| length 138
+    gi|45478719|ref|NP_995574.1| length 312
+    gi|45478720|ref|NP_995575.1| length 99
+    gi|45478721|ref|NP_995576.1| length 90
+
     """
     for line in handle:
         try:
@@ -98,20 +115,5 @@ class TabWriter(SequentialSequenceWriter):
 
 
 if __name__ == "__main__":
-    print("Running quick self test")
-    from Bio._py3k import StringIO
-
-    # This example has a trailing blank line which should be ignored
-    handle = StringIO("Alpha\tAAAAAAA\nBeta\tCCCCCCC\n\n")
-    records = list(TabIterator(handle))
-    assert len(records) == 2
-
-    handle = StringIO("Alpha\tAAAAAAA\tExtra\nBeta\tCCCCCCC\n")
-    try:
-        records = list(TabIterator(handle))
-        assert False, "Should have reject this invalid example!"
-    except ValueError:
-        # Good!
-        pass
-
-    print("Done")
+    from Bio._utils import run_doctest
+    run_doctest(verbose=0)

@@ -1,4 +1,4 @@
-# Copyright 2008-2010 by Peter Cock.  All rights reserved.
+# Copyright 2008-2015 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -34,6 +34,31 @@ def IgIterator(handle, alphabet=single_letter_alphabet):
     start with a semi-colon) are recorded as a single string with embedded
     new line characters in the SeqRecord's annotations dictionary under the
     key 'comment'.
+
+    Example:
+
+    >>> with open("IntelliGenetics/TAT_mase_nuc.txt") as handle:
+    ...     for record in IgIterator(handle):
+    ...         print("%s length %i" % (record.id, len(record)))
+    ...
+    A_U455 length 303
+    B_HXB2R length 306
+    C_UG268A length 267
+    D_ELI length 309
+    F_BZ163A length 309
+    O_ANT70 length 342
+    O_MVP5180 length 348
+    CPZGAB length 309
+    CPZANT length 309
+    A_ROD length 390
+    B_EHOA length 420
+    D_MM251 length 390
+    STM_STM length 387
+    VER_AGM3 length 354
+    GRI_AGM677 length 264
+    SAB_SAB1C length 219
+    SYK_SYK length 330
+
     """
     # Skip any file header text before the first record (;; lines)
     while True:
@@ -88,19 +113,5 @@ def IgIterator(handle, alphabet=single_letter_alphabet):
     assert not line
 
 if __name__ == "__main__":
-    print("Running quick self test")
-
-    import os
-    path = "../../Tests/IntelliGenetics/"
-    if os.path.isdir(path):
-        for filename in os.listdir(path):
-            if os.path.splitext(filename)[-1] == ".txt":
-                print("")
-                print(filename)
-                print("-" * len(filename))
-                with open(os.path.join(path, filename)) as handle:
-                    for record in IgIterator(handle):
-                        print("%s %i" % (record.id, len(record)))
-        print("Done")
-    else:
-        print("Could not find input files")
+    from Bio._utils import run_doctest
+    run_doctest(verbose=0)

@@ -1,4 +1,4 @@
-# Copyright 2008-2009 by Peter Cock.  All rights reserved.
+# Copyright 2008-2015 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -121,6 +121,19 @@ def PirIterator(handle):
 
     Note that use of title2ids matches that of Bio.Fasta.SequenceParser
     but the defaults are slightly different.
+
+    Example:
+
+    >>> with open("NBRF/DMB_prot.pir") as handle:
+    ...    for record in PirIterator(handle):
+    ...        print("%s length %i" % (record.id, len(record)))
+    HLA:HLA00489 length 263
+    HLA:HLA00490 length 94
+    HLA:HLA00491 length 94
+    HLA:HLA00492 length 80
+    HLA:HLA00493 length 175
+    HLA:HLA01083 length 188
+
     """
     # Skip any text before the first record (e.g. blank lines, comments)
     while True:
@@ -171,22 +184,5 @@ def PirIterator(handle):
     assert False, "Should not reach this line"
 
 if __name__ == "__main__":
-    print("Running quick self test")
-
-    import os
-
-    for name in ["clustalw", "DMA_nuc", "DMB_prot", "B_nuc", "Cw_prot"]:
-        print(name)
-        filename = "../../Tests/NBRF/%s.pir" % name
-        if not os.path.isfile(filename):
-            print("Missing %s" % filename)
-            continue
-
-        records = list(PirIterator(open(filename)))
-        count = 0
-        for record in records:
-            count += 1
-            parts = record.description.split()
-            if "bases," in parts:
-                assert len(record) == int(parts[parts.index("bases,") - 1])
-        print("Could read %s (%i records)" % (name, count))
+    from Bio._utils import run_doctest
+    run_doctest(verbose=0)
