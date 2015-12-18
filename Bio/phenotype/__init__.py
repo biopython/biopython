@@ -58,16 +58,16 @@ PlateRecord objects (either as a list, or an iterator), an output file handle
 (or in recent versions of Biopython an output filename as a string) and of
 course the file format:
 
-    from Bio import phenotype
-    records = ...
-    phenotype.write(records, "example.json", "pm-json")
+    >>> from Bio import phenotype
+    >>> records = ...
+    >>> phenotype.write(records, "example.json", "pm-json")
 
 Or, using a handle::
 
-    from Bio import phenotype
-    records = ...
-    with open("example.json", "w") as handle:
-        phenotype.write(records, handle, "pm-json")
+    >>> from Bio import phenotype
+    >>> records = ...
+    >>> with open("example.json", "w") as handle:
+    >>>    phenotype.write(records, handle, "pm-json")
 
 You are expected to call this function once (with all your records) and if
 using a handle, make sure you close it to flush the data to the hard disk.
