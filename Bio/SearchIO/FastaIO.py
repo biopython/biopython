@@ -544,6 +544,7 @@ class FastaM10Indexer(SearchIndexer):
                     start_offset = end_offset
 
     def get_raw(self, offset):
+        """Return the raw record from the file as a bytes string."""
         handle = self._handle
         qresult_raw = _as_bytes('')
         query_mark = _as_bytes('>>>')

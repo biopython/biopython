@@ -143,6 +143,7 @@ class SffRandomAccess(SeqFileRandomAccess):
                                                 self._alphabet)
 
     def get_raw(self, offset):
+        """Return the raw record from the file as a bytes string."""
         handle = self._handle
         handle.seek(offset)
         return SeqIO.SffIO._sff_read_raw_record(handle, self._flows_per_read)
@@ -213,7 +214,7 @@ class SequentialSeqFileRandomAccess(SeqFileRandomAccess):
         assert not line, repr(line)
 
     def get_raw(self, offset):
-        """Similar to the get method, but returns the record as a raw string."""
+        """Return the raw record from the file as a bytes string."""
         # For non-trivial file formats this must be over-ridden in the subclass
         handle = self._handle
         marker_re = self._marker_re
@@ -416,7 +417,7 @@ class UniprotRandomAccess(SequentialSeqFileRandomAccess):
         assert not line, repr(line)
 
     def get_raw(self, offset):
-        """Similar to the get method, but returns the record as a raw string."""
+        """Return the raw record from the file as a bytes string."""
         handle = self._handle
         marker_re = self._marker_re
         end_entry_marker = _as_bytes("</entry>")
@@ -481,6 +482,7 @@ class IntelliGeneticsRandomAccess(SeqFileRandomAccess):
                 break
 
     def get_raw(self, offset):
+        """Return the raw record from the file as a bytes string."""
         handle = self._handle
         handle.seek(offset)
         marker_re = self._marker_re
@@ -519,7 +521,7 @@ class TabRandomAccess(SeqFileRandomAccess):
                 yield _bytes_to_string(key), start_offset, len(line)
 
     def get_raw(self, offset):
-        """Like the get method, but returns the record as a raw string."""
+        """Return the raw record from the file as a bytes string."""
         handle = self._handle
         handle.seek(offset)
         return handle.readline()
@@ -590,7 +592,7 @@ class FastqRandomAccess(SeqFileRandomAccess):
         # print("EOF")
 
     def get_raw(self, offset):
-        """Similar to the get method, but returns the record as a raw string."""
+        """Return the raw record from the file as a bytes string."""
         # TODO - Refactor this and the __init__ method to reduce code duplication?
         handle = self._handle
         handle.seek(offset)
