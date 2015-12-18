@@ -1,4 +1,4 @@
-# Copyright 2009-2012 by Peter Cock.  All rights reserved.
+# Copyright 2009-2015 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -510,6 +510,8 @@ class IndexDictTests(unittest.TestCase):
             self.assertEqual(key, rec_dict[key].id.lower())
             self.assertEqual(key, rec_dict.get(key).id.lower())
             raw = rec_dict.get_raw(key)
+            self.assertTrue(isinstance(raw, bytes),
+                            "Didn't get bytes from %s get_raw" % format)
             self.assertTrue(raw.strip())
             self.assertTrue(raw in raw_file)
             rec1 = rec_dict[key]
