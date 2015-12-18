@@ -258,11 +258,11 @@ to sort by length. This can be solved using the
 
 \begin{verbatim}
 from Bio import SeqIO
-#Get the lengths and ids, and sort on length
+# Get the lengths and ids, and sort on length
 len_and_ids = sorted((len(rec), rec.id) for rec in \
                      SeqIO.parse("ls_orchid.fasta","fasta"))
 ids = reversed([id for (length, id) in len_and_ids])
-del len_and_ids	#free this memory
+del len_and_ids  # free this memory
 record_index = SeqIO.index("ls_orchid.fasta", "fasta")
 records = (record_index[id] for id in ids)
 SeqIO.write(records, "sorted.fasta", "fasta")
@@ -284,17 +284,20 @@ in Biopython 1.54 (see Section~\ref{sec:seqio-index-getraw}).
 
 \begin{verbatim}
 from Bio import SeqIO
-#Get the lengths and ids, and sort on length
+# Get the lengths and ids, and sort on length
 len_and_ids = sorted((len(rec), rec.id) for rec in \
                      SeqIO.parse("ls_orchid.fasta","fasta"))
 ids = reversed([id for (length, id) in len_and_ids])
-del len_and_ids	#free this memory
+del len_and_ids  # free this memory
 record_index = SeqIO.index("ls_orchid.fasta", "fasta")
-handle = open("sorted.fasta", "w")
+handle = open("sorted.fasta", "wb")
 for id in ids:
     handle.write(record_index.get_raw(id))
 handle.close()
 \end{verbatim}
+
+Note with Python 3 onwards, we have to open the file for writing in
+binary mode because the \verb|get_raw()| method returns bytes strings.
 
 As a bonus, because it doesn't parse the data into \verb|SeqRecord| objects
 a second time it should be faster.
