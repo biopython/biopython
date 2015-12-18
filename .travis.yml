@@ -1,11 +1,11 @@
-#Special configuration file to run tests on Travis-CI via GitHub notifications
-#See http://travis-ci.org/ for details
+# Special configuration file to run tests on Travis-CI via GitHub notifications
+# See https://travis-ci.org/biopython/biopython/builds for results
 #
-#The tests are run via the coverage script, and if the tests pass the coverage
-#information is pushed to http://codecov.io/
+# The tests are run via the coverage script, and if the tests pass the coverage
+# information is pushed to https://codecov.io/github/biopython/biopython
 #
-#Note when testing Python 3, the 'python' command will invoke Python 3
-#and similarly for PyPy too.
+# Note when testing Python 3, the 'python' command will invoke Python 3
+# and similarly for PyPy too.
 
 language: python
 python:
