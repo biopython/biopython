@@ -32,6 +32,11 @@ When a gap character is defined, Bio.Seq will now translate gap codons
 is inferred from the Seq object's alphabet, but it can also be passed as an
 argument to the translate method.
 
+The Bio.Entrez interface will automatically use an HTTP POST rather than
+HTTP GET if the URL would exceed 1000 characters. This is based on NCBI
+guidelines and the fact that very long queries like complex searches can
+otherwise trigger an HTTP Error 414 Request URI too long.
+
 Additionally, a number of small bugs have been fixed with further additions
 to the test suite, and there has been further work to follow the Python PEP8
 standard coding style, and in converting our docstring documentation to use
