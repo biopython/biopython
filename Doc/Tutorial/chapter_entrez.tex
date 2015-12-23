@@ -201,7 +201,7 @@ Note that instead of a species name like \texttt{Cypripedioideae[Orgn]}, you can
 As a final example, let's get a list of computational journal titles:
 \begin{verbatim}
 print("{} computational Journals found".format(record["Count"]))
->>> handle = Entrez.esearch(db="nlmcatalog", term="computational[Journal]")
+>>> handle = Entrez.esearch(db="nlmcatalog", term="computational[Journal]", , RetMax='20')
 >>> record = Entrez.read(handle)
 >>> print("{} computational Journals found".format(record["Count"]))
 117 computational Journals found
@@ -265,12 +265,11 @@ ESummary retrieves document summaries from a list of primary IDs (see the  \href
 >>> Entrez.email = "A.N.Other@example.com"     # Always tell NCBI who you are
 >>> handle = Entrez.esummary(db="journals", id="30367")
 >>> record = Entrez.read(handle)
->>> record[0]["Id"]
-'30367'
->>> record[0]["Title"]
-'Computational biology and chemistry'
->>> record[0]["Publisher"]
-'Pergamon,'
+>>> info = record[0]['TitleMainList'][0]
+>>> print("Journal info\nid: {}\nTitle: {}".format(record[0]["Id"], info["Title"]))
+Journal info
+id: 101660833
+Title: IEEE transactions on computational imaging.
 \end{verbatim}
 
 \section{EFetch: Downloading full records from Entrez}
