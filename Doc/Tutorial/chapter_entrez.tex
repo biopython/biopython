@@ -203,7 +203,7 @@ As a final example, let's get a list of computational journal titles:
 print("{} computational Journals found".format(record["Count"]))
 >>> handle = Entrez.esearch(db="nlmcatalog", term="computational[Journal]", , RetMax='20')
 >>> record = Entrez.read(handle)
->>> print("{} computational Journals found".format(record["Count"]))
+>>> print("{} computational journals found".format(record["Count"]))
 117 computational Journals found
 >>> print("The first 20 are\n{}".format(record['IdList']))
 ['101660833', '101664671', '101661657', '101659814', '101657941',
