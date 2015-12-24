@@ -263,7 +263,7 @@ ESummary retrieves document summaries from a list of primary IDs (see the  \href
 \begin{verbatim}
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com"     # Always tell NCBI who you are
->>> handle = Entrez.esummary(db="journals", id="30367")
+>>> handle = Entrez.esummary(db="nlmcatalog", term="[journal]", id="101660833")
 >>> record = Entrez.read(handle)
 >>> info = record[0]['TitleMainList'][0]
 >>> print("Journal info\nid: {}\nTitle: {}".format(record[0]["Id"], info["Title"]))
