@@ -200,7 +200,6 @@ Note that instead of a species name like \texttt{Cypripedioideae[Orgn]}, you can
 
 As a final example, let's get a list of computational journal titles:
 \begin{verbatim}
-print("{} computational Journals found".format(record["Count"]))
 >>> handle = Entrez.esearch(db="nlmcatalog", term="computational[Journal]", , RetMax='20')
 >>> record = Entrez.read(handle)
 >>> print("{} computational journals found".format(record["Count"]))
