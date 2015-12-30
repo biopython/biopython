@@ -6,6 +6,13 @@
 
 import unittest
 
+try:
+    import numpy as np
+except ImportError:
+    from Bio import MissingPythonDependencyError
+    raise MissingPythonDependencyError(
+        "Install NumPy if you want to use Bio.SVDSuperimposer.")
+
 from Bio import pairwise2
 
 
@@ -31,6 +38,39 @@ GAACT
 GA--T
   Score=3
 """)
+
+    def test_globalxx_repeats(self):
+        mysize=10
+        seq1 = ''.join(['A',]+['I' for x in range(mysize)])
+        seq2 = ''.join(['V',]+['I' for x in range(mysize)])
+        aligns = pairwise2.align.globalxx(seq1,seq2)
+        self.assertEqual(len(aligns), 1)
+        self.assertEqual(aligns[0], ('AIIIIIIIIII', 'VIIIIIIIIII', 10, 0, 11))
+
+
+class TestTraceMatrix(unittest.TestCase):
+
+    def test_trace_matrix_empty_ret_none(self):
+        num_rows = 3
+        num_cols = 2
+        tm = pairwise2._TraceMatrix(num_rows, num_cols)
+        for i in range(num_rows):
+            for j in range(num_cols):
+                self.assertEqual(str(tm.get(i, j)), str([None]))
+
+    def test_trace_matrix_simple(self):
+        num_rows = 3
+        num_cols = 2
+        tm = pairwise2._TraceMatrix(num_rows, num_cols)
+        for i in range(num_rows):
+            row = tm.create_row(i)
+            for j in range(num_cols):
+                row.set(j, [(i, 0), (0, j), (i, j)])
+            row.save_to_matrix()
+
+        for i in range(num_rows):
+            for j in range(num_cols):
+                self.assertEqual(str(tm.get(i, j)), str([(i, 0), (0, j), (i, j)]))
 
 
 class TestPairwiseLocal(unittest.TestCase):

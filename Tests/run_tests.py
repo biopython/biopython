@@ -100,7 +100,6 @@ DOCTEST_MODULES = [
     "Bio.NMR.xpktools",
     "Bio.motifs",
     "Bio.motifs.applications._xxmotif",
-    "Bio.pairwise2",
     "Bio.Phylo.Applications._Raxml",
     "Bio.Phylo.Consensus",
     "Bio.Phylo.BaseTree",
@@ -139,7 +138,8 @@ if is_numpy():
     DOCTEST_MODULES.extend(["Bio.Affy.CelFile",
                             "Bio.Statistics.lowess",
                             "Bio.PDB.Polypeptide",
-                            "Bio.PDB.Selection"
+                            "Bio.PDB.Selection",
+                            "Bio.pairwise2"
                             ])
 
 
