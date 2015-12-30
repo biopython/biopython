@@ -750,7 +750,6 @@ class BioSeqDatabase(object):
         db_loader = Loader.DatabaseLoader(self.adaptor, self.dbid,
                                           fetch_NCBI_taxonomy)
         num_records = 0
-        global _POSTGRES_RULES_PRESENT
         for cur_record in record_iterator:
             num_records += 1
             # Hack to work arround BioSQL Bug 2839 - If using PostgreSQL and
