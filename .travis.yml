@@ -32,6 +32,7 @@ addons:
     - wise
 
 before_install:
+  - pip install --upgrade pip
   - "export PY3=yes"
   - "if [[ $TRAVIS_PYTHON_VERSION == '2.6' ]]; then export PY3=no; fi"
   - "if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then export PY3=no; fi"
