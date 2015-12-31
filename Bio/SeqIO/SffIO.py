@@ -1,4 +1,4 @@
-# Copyright 2009-2010 by Peter Cock.  All rights reserved.
+# Copyright 2009-2015 by Peter Cock.  All rights reserved.
 # Based on code contributed and copyright 2009 by Jose Blanca (COMAV-UPV).
 #
 # This code is part of the Biopython distribution and governed by its
@@ -330,8 +330,7 @@ def _sff_file_header(handle):
         # Probably user error, calling Bio.SeqIO.parse() twice!
         raise ValueError("Handle seems to be at SFF index block, not start")
     if magic_number != _sff:  # 779314790
-        raise ValueError("SFF file did not start '.sff', but %s"
-                         % repr(magic_number))
+        raise ValueError("SFF file did not start '.sff', but %r" % magic_number)
     if (ver0, ver1, ver2, ver3) != (0, 0, 0, 1):
         raise ValueError("Unsupported SFF version in header, %i.%i.%i.%i"
                          % (ver0, ver1, ver2, ver3))
@@ -400,8 +399,8 @@ def _sff_do_slow_index(handle):
             clip_qual_right, clip_adapter_left, clip_adapter_right \
             = struct.unpack(read_header_fmt, data)
         if read_header_length < 10 or read_header_length % 8 != 0:
-            raise ValueError("Malformed read header, says length is %i:\n%s"
-                             % (read_header_length, repr(data)))
+            raise ValueError("Malformed read header, says length is %i:\n%r"
+                             % (read_header_length, data))
         # now the name and any padding (remainder of header)
         name = _bytes_to_string(handle.read(name_length))
         padding = read_header_length - read_header_size - name_length
@@ -459,8 +458,8 @@ def _sff_find_roche_index(handle):
         raise ValueError("Premature end of file? Expected index of size %i at offest %i, found nothing"
                          % (index_length, index_offset))
     if len(data) < fmt_size:
-        raise ValueError("Premature end of file? Expected index of size %i at offest %i, found %s"
-                         % (index_length, index_offset, repr(data)))
+        raise ValueError("Premature end of file? Expected index of size %i at offest %i, found %r"
+                         % (index_length, index_offset, data))
     magic_number, ver0, ver1, ver2, ver3 = struct.unpack(fmt, data)
     if magic_number == _mft:  # 778921588
         # Roche 454 manifest index
@@ -500,8 +499,8 @@ def _sff_find_roche_index(handle):
         raise ValueError("Hash table style indexes (.hsh) in SFF files are "
                          "not (yet) supported")
     else:
-        raise ValueError("Unknown magic number %s in SFF index header:\n%s"
-                         % (repr(magic_number), repr(data)))
+        raise ValueError("Unknown magic number %r in SFF index header:\n%r"
+                         % (magic_number, data))
 
 
 def ReadRocheXmlManifest(handle):
