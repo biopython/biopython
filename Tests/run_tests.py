@@ -120,7 +120,6 @@ DOCTEST_MODULES = [
     "Bio.SeqIO.FastaIO",
     "Bio.SeqIO.IgIO",
     "Bio.SeqIO.InsdcIO",
-    "Bio.SeqIO.PdbIO",
     "Bio.SeqIO.PhdIO",
     "Bio.SeqIO.PirIO",
     "Bio.SeqIO.QualityIO",
@@ -141,7 +140,8 @@ if is_numpy():
     DOCTEST_MODULES.extend(["Bio.Affy.CelFile",
                             "Bio.Statistics.lowess",
                             "Bio.PDB.Polypeptide",
-                            "Bio.PDB.Selection"
+                            "Bio.PDB.Selection",
+                            "Bio.SeqIO.PdbIO",
                             ])
 
 
