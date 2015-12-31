@@ -125,6 +125,11 @@ def open_database(driver="MySQLdb", **kwargs):
             global _POSTGRES_RULES_PRESENT
             _POSTGRES_RULES_PRESENT = True
 
+    elif driver == 'sqlite3':
+        # Tell SQLite that we want to use foreign keys
+        # https://www.sqlite.org/foreignkeys.html#fk_enable
+        server.adaptor.execute('PRAGMA foreign_keys = ON')
+
     return server
 
 
