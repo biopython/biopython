@@ -46,7 +46,7 @@ before_install:
 #Not hosted on PyPI so this need allow external switch:
 #Currently pypy3-2.4.0 self reports as Python 3.2,
 #which is not supported by mysql-connector-python
-  - "if [[ $TRAVIS_PYTHON_VERSION != 'pypy3' ]]; then pip install --allow-all-external mysql-connector-python; fi"
+  - "if [[ $TRAVIS_PYTHON_VERSION != 'pypy3' ]]; then pip install --allow-all-external mysql-connector-python-rf; fi"
 #Installing psycopg2 does not work under PyPy or Jython
   - "export PG=yes"
   - "if [[ $PYPY == 'yes' ]]; then export PG=no; fi"
