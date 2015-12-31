@@ -39,7 +39,7 @@ from Bio import BiopythonWarning
 from Bio.Seq import UnknownSeq
 from Bio.GenBank.Scanner import GenBankScanner, EmblScanner, _ImgtScanner
 from Bio import Alphabet
-from .Interfaces import SequentialSequenceWriter
+from Bio.SeqIO.Interfaces import SequentialSequenceWriter
 from Bio import SeqFeature
 
 from Bio._py3k import _is_int_or_long
@@ -62,7 +62,35 @@ def GenBankIterator(handle):
     a single SeqRecord with associated annotation and features.
 
     Note that for genomes or chromosomes, there is typically only
-    one record."""
+    one record.
+
+    This gets called internally by Bio.SeqIO for the GenBank file format:
+
+    >>> from Bio import SeqIO
+    >>> for record in SeqIO.parse("GenBank/cor6_6.gb", "gb"):
+    ...     print(record.id)
+    ...
+    X55053.1
+    X62281.1
+    M81224.1
+    AJ237582.1
+    L31939.1
+    AF297471.1
+
+    Equivalently,
+
+    >>> with open("GenBank/cor6_6.gb") as handle:
+    ...     for record in GenBankIterator(handle):
+    ...         print(record.id)
+    ...
+    X55053.1
+    X62281.1
+    M81224.1
+    AJ237582.1
+    L31939.1
+    AF297471.1
+
+    """
     # This calls a generator function:
     return GenBankScanner(debug=0).parse_records(handle)
 
@@ -74,7 +102,41 @@ def EmblIterator(handle):
     a single SeqRecord with associated annotation and features.
 
     Note that for genomes or chromosomes, there is typically only
-    one record."""
+    one record.
+
+    This gets called internally by Bio.SeqIO for the EMBL file format:
+
+    >>> from Bio import SeqIO
+    >>> for record in SeqIO.parse("EMBL/epo_prt_selection.embl", "embl"):
+    ...     print(record.id)
+    ...
+    A00022.1
+    A00028.1
+    A00031.1
+    A00034.1
+    A00060.1
+    A00071.1
+    A00072.1
+    A00078.1
+    CQ797900.1
+
+    Equivalently,
+
+    >>> with open("EMBL/epo_prt_selection.embl") as handle:
+    ...     for record in EmblIterator(handle):
+    ...         print(record.id)
+    ...
+    A00022.1
+    A00028.1
+    A00031.1
+    A00034.1
+    A00060.1
+    A00071.1
+    A00072.1
+    A00078.1
+    CQ797900.1
+
+    """
     # This calls a generator function:
     return EmblScanner(debug=0).parse_records(handle)
 
@@ -1142,140 +1204,5 @@ class ImgtWriter(EmblWriter):
     FEATURE_HEADER = "FH   Key                 Location/Qualifiers\n"
 
 if __name__ == "__main__":
-    print("Quick self test")
-    import os
-    from Bio._py3k import StringIO
-
-    def compare_record(old, new):
-        if old.id != new.id and old.name != new.name:
-            raise ValueError("'%s' or '%s' vs '%s' or '%s' records"
-                             % (old.id, old.name, new.id, new.name))
-        if len(old.seq) != len(new.seq):
-            raise ValueError("%i vs %i" % (len(old.seq), len(new.seq)))
-        if str(old.seq).upper() != str(new.seq).upper():
-            if len(old.seq) < 200:
-                raise ValueError("'%s' vs '%s'" % (old.seq, new.seq))
-            else:
-                raise ValueError(
-                    "'%s...' vs '%s...'" % (old.seq[:100], new.seq[:100]))
-        if old.features and new.features:
-            return compare_features(old.features, new.features)
-        # Just insist on at least one word in common:
-        if (old.description or new.description) \
-                and not set(old.description.split()).intersection(new.description.split()):
-            raise ValueError("%s versus %s"
-                             % (repr(old.description), repr(new.description)))
-        # TODO - check annotation
-        if "contig" in old.annotations:
-            assert old.annotations["contig"] == \
-                new.annotations["contig"]
-        return True
-
-    def compare_records(old_list, new_list):
-        """Check two lists of SeqRecords agree, raises a ValueError if mismatch."""
-        if len(old_list) != len(new_list):
-            raise ValueError(
-                "%i vs %i records" % (len(old_list), len(new_list)))
-        for old, new in zip(old_list, new_list):
-            if not compare_record(old, new):
-                return False
-        return True
-
-    def compare_feature(old, new, ignore_sub_features=False):
-        """Check two SeqFeatures agree."""
-        if old.type != new.type:
-            raise ValueError("Type %s versus %s" % (old.type, new.type))
-        if old.location.nofuzzy_start != new.location.nofuzzy_start \
-                or old.location.nofuzzy_end != new.location.nofuzzy_end:
-            raise ValueError("%s versus %s:\n%s\nvs:\n%s"
-                             % (old.location, new.location, str(old), str(new)))
-        if old.strand != new.strand:
-            raise ValueError(
-                "Different strand:\n%s\nvs:\n%s" % (str(old), str(new)))
-        if old.location.start != new.location.start:
-            raise ValueError("Start %s versus %s:\n%s\nvs:\n%s"
-                             % (old.location.start, new.location.start, str(old), str(new)))
-        if old.location.end != new.location.end:
-            raise ValueError("End %s versus %s:\n%s\nvs:\n%s"
-                             % (old.location.end, new.location.end, str(old), str(new)))
-        if not ignore_sub_features:
-            if len(old.sub_features) != len(new.sub_features):
-                raise ValueError("Different sub features")
-            for a, b in zip(old.sub_features, new.sub_features):
-                if not compare_feature(a, b):
-                    return False
-        # This only checks key shared qualifiers
-        # Would a white list be easier?
-        # for key in ["name", "gene", "translation", "codon_table", "codon_start", "locus_tag"]:
-        for key in set(old.qualifiers).intersection(new.qualifiers):
-            if key in ["db_xref", "protein_id", "product", "note"]:
-                # EMBL and GenBank files are use different references/notes/etc
-                continue
-            if old.qualifiers[key] != new.qualifiers[key]:
-                raise ValueError("Qualifier mis-match for %s:\n%s\n%s"
-                                 % (key, old.qualifiers[key], new.qualifiers[key]))
-        return True
-
-    def compare_features(old_list, new_list, ignore_sub_features=False):
-        """Check two lists of SeqFeatures agree, raises a ValueError if mismatch."""
-        if len(old_list) != len(new_list):
-            raise ValueError(
-                "%i vs %i features" % (len(old_list), len(new_list)))
-        for old, new in zip(old_list, new_list):
-            # This assumes they are in the same order
-            if not compare_feature(old, new, ignore_sub_features):
-                return False
-        return True
-
-    def check_genbank_writer(records):
-        handle = StringIO()
-        GenBankWriter(handle).write_file(records)
-        handle.seek(0)
-
-        records2 = list(GenBankIterator(handle))
-        assert compare_records(records, records2)
-
-    def check_embl_writer(records):
-        handle = StringIO()
-        try:
-            EmblWriter(handle).write_file(records)
-        except ValueError as err:
-            print(err)
-            return
-        handle.seek(0)
-
-        records2 = list(EmblIterator(handle))
-        assert compare_records(records, records2)
-
-    for filename in os.listdir("../../Tests/GenBank"):
-        if not filename.endswith(".gbk") and not filename.endswith(".gb"):
-            continue
-        print(filename)
-
-        with open("../../Tests/GenBank/%s" % filename) as handle:
-            records = list(GenBankIterator(handle))
-
-        check_genbank_writer(records)
-        check_embl_writer(records)
-
-    for filename in os.listdir("../../Tests/EMBL"):
-        if not filename.endswith(".embl"):
-            continue
-        print(filename)
-
-        with open("../../Tests/EMBL/%s" % filename) as handle:
-            records = list(EmblIterator(handle))
-
-        check_genbank_writer(records)
-        check_embl_writer(records)
-
-    from Bio import SeqIO
-    for filename in os.listdir("../../Tests/SwissProt"):
-        if not filename.startswith("sp"):
-            continue
-        print(filename)
-
-        with open("../../Tests/SwissProt/%s" % filename) as handle:
-            records = list(SeqIO.parse(handle, "swiss"))
-
-        check_genbank_writer(records)
+    from Bio._utils import run_doctest
+    run_doctest(verbose=0)

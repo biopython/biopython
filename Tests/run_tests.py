@@ -119,6 +119,7 @@ DOCTEST_MODULES = [
     "Bio.SeqIO.AceIO",
     "Bio.SeqIO.FastaIO",
     "Bio.SeqIO.IgIO",
+    "Bio.SeqIO.InsdcIO",
     "Bio.SeqIO.PhdIO",
     "Bio.SeqIO.PirIO",
     "Bio.SeqIO.QualityIO",
