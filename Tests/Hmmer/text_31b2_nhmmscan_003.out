@@ -1,0 +1,55 @@
+# nhmmscan :: search DNA sequence(s) against a DNA profile database
+# HMMER 3.1b2 (February 2015); http://hmmer.org/
+# Copyright (C) 2015 Howard Hughes Medical Institute.
+# Freely distributed under the GNU General Public License (GPLv3).
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# query sequence file:             single_rna.fa
+# target HMM database:             hmms/single_rna_01.hmm
+# output directed to file:         text_31b2_nhmmscan_003.out
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+Query:       rmark1  [L=1013859]
+Description: rna_sequence_1
+Scores for complete hit:
+    E-value  score  bias  Model     start    end  Description
+    ------- ------ -----  --------  -----  -----  -----------
+     0.0007   18.3  13.6  GcvB     333351 333524  GcvB RNA
+
+
+Annotation for each hit  (and alignments):
+>> GcvB  GcvB RNA
+    score  bias    Evalue   hmmfrom    hmm to     alifrom    ali to      envfrom    env to      mod len      acc
+   ------ ----- ---------   -------   -------    --------- ---------    --------- ---------    ---------    ----
+ !   18.3  13.6    0.0007        51       198 ..    333351    333524 ..    333326    333526 ..       200    0.55
+
+  Alignment:
+  score: 18.3 bits
+                >>>>>>>>>::::.::::::::::::::::::::::<<<<<<<<____>>>>>>>>:<<<<<<___>>>>>>....::::::.........:..... CS
+                cuuuuGgCUUAaG.GUUaUGAUGUUGUGUUUGCAaAugGuCuGggAaAcCaGaCcaaaGuAaCaaAGuUaCu....uAUUUu.........c..... RF
+    GcvB     51 cuuuuggcuuacg.guugugauguuguguuugcaauuggucugcuauuucagaccuugguagcuaagcuacc....uuuuuu.........c..... 128   
+                c  uugg uua+    ug gauguuguguuugcaa+      g u uuu  ga  u gguag +   cuacc      uuuu         c     
+  rmark1 333351 CAAUUGGUUUAGCuCCUGCGAUGUUGUGUUUGCAAACUC---GUUCUUUUCGAGUUGGGUAGAG-UUCUACCaaauG-UUUUguugcaguuCuauac 333442
+                5556677666665578999**************995421...1122222233333334444322.122222211110.1000011111111011111 PP
+
+                ...............:::::::::<<<...<<_______________________>>>>>:<<<<<<<<_____._>>>>>>>>::::: CS
+                ...............ACUUCCUGUacA...uuUAuaauaucUGUcuAUAguGaUUaaUguaagCACCGCuuauU.uGCGGUGcuUUUUU RF
+    GcvB    129 ...............acuuccuguaca...uuuacccugucuguccauagugauuuaugucagcaccgccaaau.ugcggugcuuuuuu 198   
+                               acuuccugua     uuu  ccugucuguc a      uu  ugu   caccgcc  au  gcggug uuuuuu
+  rmark1 333443 ugaaacgaggcauguACUUCCUGUAUUuauUUUGACCUGUCUGUCAAA-----UU--UGUUUACACCGCCUUAUgGGCGGUGUUUUUUU 333524
+                111111111112222899*****98531114567899*******9874.....33..4445779*****99887799*****9888765 PP
+
+
+
+Internal pipeline statistics summary:
+-------------------------------------
+Query sequence(s):                         1  (2027718 residues searched)
+Target model(s):                           1  (200 nodes)
+Residues passing SSV filter:             34059  (0.0168); expected (0.02)
+Residues passing bias filter:            30610  (0.0151); expected (0.02)
+Residues passing Vit filter:              3231  (0.00159); expected (0.003)
+Residues passing Fwd filter:               453  (0.000223); expected (3e-05)
+Total number of hits:                        1  (8.58e-05)
+# CPU time: 0.09u 0.01s 00:00:00.10 Elapsed: 00:00:00.08
+# Mc/sec: 5069.30
+//
+[ok]

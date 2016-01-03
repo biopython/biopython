@@ -1,0 +1,95 @@
+# nhmmscan :: search DNA sequence(s) against a DNA profile database
+# HMMER 3.1b2 (February 2015); http://hmmer.org/
+# Copyright (C) 2015 Howard Hughes Medical Institute.
+# Freely distributed under the GNU General Public License (GPLv3).
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# query sequence file:             single_rna.fa
+# target HMM database:             hmms/multi_rna_01.hmm
+# output directed to file:         text_31b2_nhmmscan_006.out
+# show alignments in output:       no
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+Query:       rmark1  [L=1013859]
+Description: rna_sequence_1
+Scores for complete hit:
+    E-value  score  bias  Model          start    end  Description
+    ------- ------ -----  --------       -----  -----  -----------
+    1.5e-56  191.4  11.6  RNaseP_bact_a  29033  29418  Bacterial RNase P class A
+    3.3e-55  187.0   1.8  RNaseP_bact_a 675576 675173  Bacterial RNase P class A
+    2.7e-37  128.3   3.8  RNaseP_bact_a 652120 652466  Bacterial RNase P class A
+    6.4e-11   43.4   1.7  mir-81        291266 291192  microRNA mir-81
+    4.6e-09   37.5   1.4  L10_leader    770568 770713  Ribosomal protein L10 leader
+    4.5e-08   34.3   3.9  L10_leader    560309 560365  Ribosomal protein L10 leader
+    7.9e-07   30.3   6.0  L10_leader    791970 791852  Ribosomal protein L10 leader
+     0.0022   19.2   1.4  mir-81        291203 291260  microRNA mir-81
+     0.0035   17.8   6.6  SRP_euk_arch  889453 889294  Eukaryotic type signal recognition particle RNA
+  ------ inclusion threshold ------
+        1.3   10.3   3.4  mir-81        301064 301027  microRNA mir-81
+
+
+Annotation for each hit :
+>> RNaseP_bact_a  Bacterial RNase P class A
+    score  bias    Evalue   hmmfrom    hmm to     alifrom    ali to      envfrom    env to      mod len      acc
+   ------ ----- ---------   -------   -------    --------- ---------    --------- ---------    ---------    ----
+ !  191.4  11.6   1.5e-56         5       362 ..     29033     29418 ..     29029     29423 ..       367    0.83
+
+>> RNaseP_bact_a  Bacterial RNase P class A
+    score  bias    Evalue   hmmfrom    hmm to     alifrom    ali to      envfrom    env to      mod len      acc
+   ------ ----- ---------   -------   -------    --------- ---------    --------- ---------    ---------    ----
+ !  187.0   1.8   3.3e-55         9       362 ..    675576    675173 ..    675585    675168 ..       367    0.86
+
+>> RNaseP_bact_a  Bacterial RNase P class A
+    score  bias    Evalue   hmmfrom    hmm to     alifrom    ali to      envfrom    env to      mod len      acc
+   ------ ----- ---------   -------   -------    --------- ---------    --------- ---------    ---------    ----
+ !  128.3   3.8   2.7e-37        32       357 ..    652120    652466 ..    652099    652474 ..       367    0.77
+
+>> mir-81  microRNA mir-81
+    score  bias    Evalue   hmmfrom    hmm to     alifrom    ali to      envfrom    env to      mod len      acc
+   ------ ----- ---------   -------   -------    --------- ---------    --------- ---------    ---------    ----
+ !   43.4   1.7   6.4e-11        17        92 ..    291266    291192 ..    291282    291183 ..       102    0.85
+
+>> L10_leader  Ribosomal protein L10 leader
+    score  bias    Evalue   hmmfrom    hmm to     alifrom    ali to      envfrom    env to      mod len      acc
+   ------ ----- ---------   -------   -------    --------- ---------    --------- ---------    ---------    ----
+ !   37.5   1.4   4.6e-09         9       133 ..    770568    770713 ..    770563    770717 ..       137    0.78
+
+>> L10_leader  Ribosomal protein L10 leader
+    score  bias    Evalue   hmmfrom    hmm to     alifrom    ali to      envfrom    env to      mod len      acc
+   ------ ----- ---------   -------   -------    --------- ---------    --------- ---------    ---------    ----
+ !   34.3   3.9   4.5e-08        12        70 ..    560309    560365 ..    560300    560389 ..       137    0.84
+
+>> L10_leader  Ribosomal protein L10 leader
+    score  bias    Evalue   hmmfrom    hmm to     alifrom    ali to      envfrom    env to      mod len      acc
+   ------ ----- ---------   -------   -------    --------- ---------    --------- ---------    ---------    ----
+ !   30.3   6.0   7.9e-07         5       126 ..    791970    791852 ..    791974    791842 ..       137    0.59
+
+>> mir-81  microRNA mir-81
+    score  bias    Evalue   hmmfrom    hmm to     alifrom    ali to      envfrom    env to      mod len      acc
+   ------ ----- ---------   -------   -------    --------- ---------    --------- ---------    ---------    ----
+ !   19.2   1.4    0.0022        24        82 ..    291203    291260 ..    291183    291280 ..       102    0.86
+
+>> SRP_euk_arch  Eukaryotic type signal recognition particle RNA
+    score  bias    Evalue   hmmfrom    hmm to     alifrom    ali to      envfrom    env to      mod len      acc
+   ------ ----- ---------   -------   -------    --------- ---------    --------- ---------    ---------    ----
+ !   17.8   6.6    0.0035        92       253 ..    889453    889294 ..    889477    889272 ..       295    0.80
+
+>> mir-81  microRNA mir-81
+    score  bias    Evalue   hmmfrom    hmm to     alifrom    ali to      envfrom    env to      mod len      acc
+   ------ ----- ---------   -------   -------    --------- ---------    --------- ---------    ---------    ----
+ ?   10.3   3.4       1.3        36        78 ..    301064    301027 ..    301081    301011 ..       102    0.77
+
+
+
+Internal pipeline statistics summary:
+-------------------------------------
+Query sequence(s):                         1  (2027718 residues searched)
+Target model(s):                           4  (901 nodes)
+Residues passing SSV filter:            197482  (0.0243); expected (0.02)
+Residues passing bias filter:           151845  (0.0187); expected (0.02)
+Residues passing Vit filter:             12964  (0.0016); expected (0.003)
+Residues passing Fwd filter:              5955  (0.000734); expected (3e-05)
+Total number of hits:                       10  (0.000221)
+# CPU time: 0.49u 0.00s 00:00:00.49 Elapsed: 00:00:00.18
+# Mc/sec: 10149.86
+//
+[ok]
