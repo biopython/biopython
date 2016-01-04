@@ -137,7 +137,7 @@ class GenBankTests(unittest.TestCase):
         self.assertEqual(len(record.annotations['structured_comment']['Assembly-Data']), 2)
         # No structured comment in NC_000932.gb, just a regular comment
         record = SeqIO.read(path.join('GenBank', 'NC_000932.gb'), 'genbank')
-        self.assertEqual(record.annotations['structured_comment'], {})
+        self.assertFalse("structured_comment" in record.annotations)
         self.assertEqual(record.annotations['comment'],
                          'REVIEWED REFSEQ: This record has been curated by NCBI staff. The\n'
                          'reference sequence was derived from AP000423.\n'

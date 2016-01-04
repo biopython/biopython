@@ -1439,8 +1439,10 @@ class GenBankScanner(InsdcScanner):
                         else:
                             # End of the comment
                             break
-                    consumer.comment(comment_list)
-                    consumer.structured_comment(structured_comment_dict)
+                    if comment_list:
+                        consumer.comment(comment_list)
+                    if structured_comment_dict:
+                        consumer.structured_comment(structured_comment_dict)
                     del comment_list, structured_comment_key, structured_comment_dict
                 elif line_type in consumer_dict:
                     # It's a semi-automatic entry!
