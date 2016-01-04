@@ -72,3 +72,8 @@ class NaiveBayesTest(unittest.TestCase):
         result = NaiveBayes.calculate(self.model, self.test, scale=True)
         expected = -689.0
         self.assertEqual(expected, round(result['male']))
+
+
+if __name__ == "__main__":
+    runner = unittest.TextTestRunner(verbosity=2)
+    unittest.main(testRunner=runner)
