@@ -25,6 +25,7 @@ from Bio import SeqFeature
 
 __docformat__ = "restructuredtext en"
 
+
 class DBSeq(Seq):
     """BioSQL equivalent of the Biopython Seq object."""
 
@@ -136,6 +137,17 @@ class DBSeq(Seq):
     def __radd__(self, other):
         # Let the Seq object deal with the alphabet issues etc
         return other + self.toseq()
+
+
+def _retrieve_seq_len(adaptor, primary_id):
+    # The database schema ensures there will be only one matching row
+    seqs = adaptor.execute_and_fetchall(
+        "SELECT length FROM biosequence WHERE bioentry_id = %s", (primary_id,))
+    if not seqs:
+        return None
+    assert len(seqs) == 1
+    given_length, = seqs[0]
+    return int(given_length)
 
 
 def _retrieve_seq(adaptor, primary_id):
@@ -511,11 +523,8 @@ class DBSeqRecord(SeqRecord):
         # We don't yet record any per-letter-annotations in the
         # BioSQL database, but we should set this property up
         # for completeness (and the __str__ method).
-        try:
-            length = len(self.seq)
-        except:
-            # Could be no sequence in the database!
-            length = 0
+        # We do NOT want to load the sequence from the DB here!
+        length = _retrieve_seq_len(adaptor, primary_id)
         self._per_letter_annotations = _RestrictedDict(length=length)
 
     def __get_seq(self):
@@ -524,6 +533,7 @@ class DBSeqRecord(SeqRecord):
         return self._seq
 
     def __set_seq(self, seq):
+        # TODO - Check consistent with self._per_letter_annotations
         self._seq = seq
 
     def __del_seq(self):
