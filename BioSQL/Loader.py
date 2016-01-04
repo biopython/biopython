@@ -668,7 +668,7 @@ class DatabaseLoader(object):
                 # Handled separately
                 continue
             term_id = self._get_term_id(key, ontology_id=tag_ontology_id)
-            if isinstance(value, list) or isinstance(value, tuple):
+            if isinstance(value, (list, tuple)):
                 rank = 0
                 for entry in value:
                     if isinstance(entry, (str, int)):
@@ -680,7 +680,7 @@ class DatabaseLoader(object):
                         pass
                         # print "Ignoring annotation '%s' sub-entry of type '%s'" \
                         #      % (key, str(type(entry)))
-            elif isinstance(value, str) or isinstance(value, int):
+            elif isinstance(value, (str, int)):
                 # Have a simple single entry, leave rank as the DB default
                 self.adaptor.execute(mono_sql,
                                      (bioentry_id, term_id, str(value)))
