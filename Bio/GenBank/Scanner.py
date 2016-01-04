@@ -1415,7 +1415,7 @@ class GenBankScanner(InsdcScanner):
                     structured_comment_key = ''
 
                     if STRUCTURED_COMMENT_START in data:
-                        structured_comment_key = re.search(r"([^#]+){}$".format(STRUCTURED_COMMENT_START), data).group(1)
+                        structured_comment_key = re.search(r"([^#]+){0}$".format(STRUCTURED_COMMENT_START), data).group(1)
                         if self.debug > 1:
                             print("Found Structured Comment")
                     else:
@@ -1426,9 +1426,9 @@ class GenBankScanner(InsdcScanner):
                         data = line[GENBANK_INDENT:]
                         if line[0:GENBANK_INDENT] == GENBANK_SPACER:
                             if STRUCTURED_COMMENT_START in data:
-                                structured_comment_key = re.search(r"([^#]+){}$".format(STRUCTURED_COMMENT_START), data).group(1)
+                                structured_comment_key = re.search(r"([^#]+){0}$".format(STRUCTURED_COMMENT_START), data).group(1)
                             elif structured_comment_key is not None and STRUCTURED_COMMENT_DELIM in data:
-                                match = re.search(r"(.+?)\s*{}\s*(.+)".format(STRUCTURED_COMMENT_DELIM), data)
+                                match = re.search(r"(.+?)\s*{0}\s*(.+)".format(STRUCTURED_COMMENT_DELIM), data)
                                 structured_comment_dict[structured_comment_key][match.group(1)] = match.group(2)
                                 if self.debug > 2:
                                     print("Structured Comment continuation [" + data + "]")
