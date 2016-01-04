@@ -60,7 +60,7 @@ class _ShelveIndex(dict):
             self.data[self.__version_key] = self.__version
         else:
             # Check to make sure the database is the correct version.
-            version = self.data.get(self.__version_key, None)
+            version = self.data.get(self.__version_key)
             if version is None:
                 raise IOError("Unrecognized index format")
             elif version != self.__version:

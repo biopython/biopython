@@ -1,5 +1,5 @@
 # Copyright 2002 by Andrew Dalke.  All rights reserved.
-# Revisions 2007-2014 copyright by Peter Cock.  All rights reserved.
+# Revisions 2007-2016 copyright by Peter Cock.  All rights reserved.
 # Revisions 2009 copyright by Cymon J. Cox.  All rights reserved.
 # Revisions 2013-2014 copyright by Tiago Antao.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
@@ -767,7 +767,7 @@ class BioSeqDatabase(object):
                 else:
                     accession = cur_record.id
                     version = 0
-                gi = cur_record.annotations.get("gi", None)
+                gi = cur_record.annotations.get("gi")
                 sql = "SELECT bioentry_id FROM bioentry WHERE (identifier " + \
                       "= '%s' AND biodatabase_id = '%s') OR (accession = " + \
                       "'%s' AND version = '%s' AND biodatabase_id = '%s')"
