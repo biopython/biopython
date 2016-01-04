@@ -9,18 +9,18 @@ from Bio.Phylo.PAML import chi2
 
 class ModTest(unittest.TestCase):
 
-    def testCdfChi2(self):
+    def test_cdf_chi2(self):
         self.assertRaises(ValueError, chi2.cdf_chi2, df=0, stat=3.84)
         self.assertRaises(ValueError, chi2.cdf_chi2, df=1, stat=-3.84)
         self.assertRaises(TypeError, chi2.cdf_chi2, df="d", stat="stat")
         self.assertAlmostEqual(chi2.cdf_chi2(2, 3.84), 0.1466070, places=5)
 
-    def testLnGamma(self):
+    def test_ln_gamma(self):
         self.assertRaises(ValueError, chi2._ln_gamma_function, -1)
         self.assertAlmostEqual(chi2._ln_gamma_function(10), 12.80183,
                                places=5)
 
-    def testIncompleteGamma(self):
+    def test_incomplete_gamma(self):
         self.assertRaises(ValueError, chi2._incomplete_gamma, x=0.5,
                           alpha=-1)
         self.assertAlmostEqual(chi2._incomplete_gamma(0.5, 0.5), 0.6826895,
