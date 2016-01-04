@@ -36,8 +36,8 @@ from seq_tests_common import compare_record, compare_records
 if __name__ == "__main__":
     raise RuntimeError("Call this via test_BioSQL_*.py not directly")
 
-global DBDRIVER, DBTYPE, DBHOST, DBUSER, DBPASSWD, TESTDB, DBSCHEMA, SQL_FILE
-global SYSTEM
+# Exporting these to the test_BioSQL_XXX.py files which import this file:
+# DBDRIVER, DBTYPE, DBHOST, DBUSER, DBPASSWD, TESTDB, DBSCHEMA, SQL_FILE, SYSTEM
 
 SYSTEM = platform.system()
 
