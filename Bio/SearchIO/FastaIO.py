@@ -153,7 +153,7 @@ _STATE_HIT_BLOCK = 2
 _STATE_CONS_BLOCK = 3
 
 
-def _set_qresult_hits(qresult, hit_rows=[]):
+def _set_qresult_hits(qresult, hit_rows=()):
     """Helper function for appending Hits without alignments into QueryResults."""
     for hit_row in hit_rows:
         hit_id, remainder = hit_row.split(' ', 1)

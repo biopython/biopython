@@ -375,7 +375,7 @@ class TestRunner(unittest.TextTestRunner):
         file = __file__
     testdir = os.path.abspath(os.path.dirname(file) or os.curdir)
 
-    def __init__(self, tests=[], verbosity=0):
+    def __init__(self, tests=(), verbosity=0):
         # if no tests were specified to run, we run them all
         # including the doctests
         self.tests = tests
