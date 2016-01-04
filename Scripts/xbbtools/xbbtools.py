@@ -17,9 +17,9 @@ __docformat__ = "restructuredtext en"
 sys.path.insert(0, '.')
 
 try:
-    from Tkinter import * # Python 2
+    from Tkinter import *  # Python 2
 except ImportError:
-    from tkinter import * # Python 3
+    from tkinter import *  # Python 3
 
 from xbb_widget import xbb_widget
 
@@ -29,7 +29,7 @@ xbbtools.main_frame.option_add('*frame.background', 'dimgrey')
 
 try:
     xbbtools.open(sys.argv[1])
-except:
+except Exception:  # TODO - Which exceptions?
     pass
 
 win.mainloop()

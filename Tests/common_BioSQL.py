@@ -158,7 +158,7 @@ def create_database():
                 time.sleep(1)
                 try:
                     os.remove(TESTDB)
-                except:
+                except Exception:
                     # Seen this with PyPy 2.1 (and older) on Windows -
                     # which suggests an open handle still exists?
                     print("Could not remove %r" % TESTDB)

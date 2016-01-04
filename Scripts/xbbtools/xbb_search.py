@@ -126,7 +126,7 @@ class XDNAsearch(Toplevel, DNAsearch):
         if not color:
             try:
                 color = colorchooser.askcolor()[1]
-            except:
+            except Exception:  # TODO - Which exceptions?
                 color = 'cyan'
         self.current_color = color
         self.current_tag = 'searched_%s' % self.current_color
