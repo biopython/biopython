@@ -321,7 +321,7 @@ def _sff_file_header(handle):
     data = handle.read(31)
     if not data:
         raise ValueError("Empty file.")
-    elif len(data) < 13:
+    elif len(data) < 31:
         raise ValueError("File too small to hold a valid SFF header.")
     magic_number, ver0, ver1, ver2, ver3, index_offset, index_length, \
         number_of_reads, header_length, key_length, number_of_flows_per_read, \
