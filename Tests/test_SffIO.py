@@ -6,6 +6,7 @@
 
 import re
 import unittest
+from io import BytesIO
 
 from Bio import SeqIO
 
@@ -83,6 +84,45 @@ class TestUAN(unittest.TestCase):
     def test_coords(self):
         for record in self.records:
             self.assertEqual(record.annotations["coords"], self.test_annotations[record.name]["coords"])
+
+
+class TestErrors(unittest.TestCase):
+    def test_empty(self):
+        fh = BytesIO()
+        try:
+            records = list(SeqIO.parse(fh, "sff"))
+        except ValueError as err:
+            self.assertEqual(str(err), "Empty file.")
+        else:
+            self.assertTrue(False, "Empty file did not raise exception")
+
+    def check_bad_header(self, header, msg):
+        try:
+            records = list(SeqIO.parse(BytesIO(header), "sff"))
+        except ValueError as err:
+            if isinstance(msg, (tuple, list)):
+                self.assertTrue(str(err) in msg, "Unexpected error: %s" % err)
+            else:
+                self.assertEqual(str(err), msg)
+        else:
+            self.assertTrue(False, "Test SFF header only did not raise exception")
+
+    def test_30bytes(self):
+        self.check_bad_header(b"x" * 30,
+                              "File too small to hold a valid SFF header.")
+
+    def test_31bytes(self):
+        self.check_bad_header(b"x" * 31,
+                              ("SFF file did not start '.sff', but 'xxxx'",
+                               "SFF file did not start '.sff', but b'xxxx'"))
+
+    def test_31bytes_bad_ver(self):
+        self.check_bad_header(b".sff1.00" + b"x" * 23,
+                              "Unsupported SFF version in header, 49.46.48.48")
+
+    def test_31bytes_bad_flowgram(self):
+        self.check_bad_header(b".sff\x00\x00\x00\x01" + b"x" * 23,
+                              "Flowgram format code 120 not supported")
 
 
 class TestConcatenated(unittest.TestCase):
