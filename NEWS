@@ -32,6 +32,9 @@ When a gap character is defined, Bio.Seq will now translate gap codons
 is inferred from the Seq object's alphabet, but it can also be passed as an
 argument to the translate method.
 
+The new NCBI genetic code table 25, Candidate Division SR1 and Gracilibacteria,
+has been added to Bio.Data (and the translation functionality).
+
 The Bio.Entrez interface will automatically use an HTTP POST rather than
 HTTP GET if the URL would exceed 1000 characters. This is based on NCBI
 guidelines and the fact that very long queries like complex searches can
