@@ -1,5 +1,5 @@
 # Copyright 2012 by Jeff Hussmann.  All rights reserved.
-# Revisions copyright 2013 by Peter Cock.  All rights reserved.
+# Revisions copyright 2013-2016 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -8,7 +8,8 @@ import re
 import unittest
 from io import BytesIO
 
-from Bio.SeqIO.SffIO import _sff_find_roche_index, SffWriter
+from Bio.SeqIO.SffIO import _sff_find_roche_index, _sff_read_roche_index
+from Bio.SeqIO.SffIO import SffWriter, ReadRocheXmlManifest
 from Bio import SeqIO
 
 # sffinfo E3MFGYR02_random_10_reads.sff | sed -n '/>\|Run Prefix\|Region\|XY/p'
@@ -181,6 +182,49 @@ class TestErrors(unittest.TestCase):
                                              "Unknown magic number b'.diy' in SFF index header:\nb'.diy1.00'"))
             else:
                 self.assertTrue(False, "Test _sff_find_roche_index did not raise exception")
+
+    def check_sff_read_roche_index(self, data, msg):
+        handle = BytesIO(data)
+        try:
+            index = list(_sff_read_roche_index(handle))
+        except ValueError as err:
+            self.assertEqual(str(err), msg)
+        else:
+            self.assertTrue(False, "_sff_read_roche_index did not raise exception")
+
+    def test_premature_end_of_index(self):
+        self.check_sff_read_roche_index(self.good[:-50],
+                                        "Premature end of file!")
+
+    def test_index_name_no_null(self):
+        self.assertEqual(self.good[17502:17503], b"\x00")
+        self.check_sff_read_roche_index(self.good[:17502] + b"x" + self.good[17503:],
+                                        "Expected a null terminator to the read name.")
+
+    def test_index_mft_version(self):
+        self.assertEqual(self.good[16824:16832], b".mft1.00")
+        self.check_sff_read_roche_index(self.good[:16828] + b"\x01\x02\x03\x04" + self.good[16832:],
+                                        "Unsupported version in .mft index header, 1.2.3.4")
+
+    def test_index_mft_data_size(self):
+        self.assertEqual(self.good[16824:16832], b".mft1.00")
+        self.check_sff_read_roche_index(self.good[:16836] + b"\x00\x00\x00\x00" + self.good[16840:],
+                                        "Problem understanding .mft index header, 764 != 8 + 8 + 548 + 0")
+
+    def test_index_lengths(self):
+        # Reduce the number of reads from 10 to 9 so index loading fails...
+        self.assertEqual(self.good[20:24], b"\x00\x00\x00\x0A")
+        self.check_sff_read_roche_index(self.good[:20] + b"\x00\x00\x00\x09" + self.good[24:],
+                                        "Problem with index length? 17568 vs 17588")
+
+    def test_no_manifest_xml(self):
+        with open("Roche/E3MFGYR02_no_manifest.sff", "rb") as handle:
+            try:
+                xml = ReadRocheXmlManifest(handle)
+            except ValueError as err:
+                self.assertEqual(str(err), "No XML manifest found")
+            else:
+                self.assertTrue(False, "ReadRocheXmlManifest did not raise exception")
 
 
 class TestConcatenated(unittest.TestCase):
