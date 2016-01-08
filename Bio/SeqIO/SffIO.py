@@ -1,4 +1,4 @@
-# Copyright 2009-2015 by Peter Cock.  All rights reserved.
+# Copyright 2009-2016 by Peter Cock.  All rights reserved.
 # Based on code contributed and copyright 2009 by Jose Blanca (COMAV-UPV).
 #
 # This code is part of the Biopython distribution and governed by its
@@ -1310,32 +1310,9 @@ if __name__ == "__main__":
     filename = "../../Tests/Roche/E3MFGYR02_random_10_reads.sff"
     with open(filename, "rb") as handle:
         metadata = ReadRocheXmlManifest(handle)
-    with open(filename, "rb") as handle:
-        index1 = sorted(_sff_read_roche_index(handle))
-    with open(filename, "rb") as handle:
-        index2 = sorted(_sff_do_slow_index(handle))
-    assert index1 == index2
-    with open(filename, "rb") as handle:
-        assert len(index1) == len(list(SffIterator(handle)))
+
     from Bio._py3k import StringIO
     from io import BytesIO
-    with open(filename, "rb") as handle:
-        assert len(index1) == len(list(SffIterator(BytesIO(handle.read()))))
-
-    if sys.platform != "win32" and sys.version_info[0] < 3:
-        # Can be lazy and treat as binary...
-        with open(filename, "r") as handle:
-            assert len(index1) == len(list(SffIterator(handle)))
-        with open(filename) as handle:
-            index2 = sorted(_sff_read_roche_index(handle))
-        assert index1 == index2
-        with open(filename, "r") as handle:
-            index2 = sorted(_sff_do_slow_index(handle))
-        assert index1 == index2
-        with open(filename, "r") as handle:
-            assert len(index1) == len(list(SffIterator(handle)))
-        with open(filename, "r") as handle:
-            assert len(index1) == len(list(SffIterator(BytesIO(handle.read()))))
 
     with open(filename, "rb") as handle:
         sff = list(SffIterator(handle))
@@ -1377,9 +1354,6 @@ if __name__ == "__main__":
 
     with open(filename, "rb") as handle:
         sff_trim = list(SffIterator(handle, trim=True))
-
-    with open(filename, "rb") as handle:
-        print(ReadRocheXmlManifest(handle))
 
     from Bio import SeqIO
     filename = "../../Tests/Roche/E3MFGYR02_random_10_reads_no_trim.fasta"

@@ -9,7 +9,8 @@ import unittest
 from io import BytesIO
 
 from Bio.SeqIO.SffIO import _sff_find_roche_index, _sff_read_roche_index
-from Bio.SeqIO.SffIO import SffWriter, ReadRocheXmlManifest
+from Bio.SeqIO.SffIO import _sff_do_slow_index
+from Bio.SeqIO.SffIO import SffIterator, SffWriter, ReadRocheXmlManifest
 from Bio import SeqIO
 
 # sffinfo E3MFGYR02_random_10_reads.sff | sed -n '/>\|Run Prefix\|Region\|XY/p'
@@ -225,6 +226,41 @@ class TestErrors(unittest.TestCase):
                 self.assertEqual(str(err), "No XML manifest found")
             else:
                 self.assertTrue(False, "ReadRocheXmlManifest did not raise exception")
+
+
+class TestIndex(unittest.TestCase):
+
+    def test_manifest(self):
+        filename = "Roche/E3MFGYR02_random_10_reads.sff"
+        with open(filename, "rb") as handle:
+            metadata = ReadRocheXmlManifest(handle)
+
+    def test_both_ways(self):
+        filename = "Roche/E3MFGYR02_random_10_reads.sff"
+        with open(filename, "rb") as handle:
+            index1 = sorted(_sff_read_roche_index(handle))
+        with open(filename, "rb") as handle:
+            index2 = sorted(_sff_do_slow_index(handle))
+        self.assertEqual(index1, index2)
+        with open(filename, "rb") as handle:
+            self.assertEqual(len(index1), len(list(SffIterator(handle))))
+        with open(filename, "rb") as handle:
+            self.assertEqual(len(index1), len(list(SffIterator(BytesIO(handle.read())))))
+
+        if sys.platform != "win32" and sys.version_info[0] < 3:
+            # Can be lazy and treat as binary...
+            with open(filename, "r") as handle:
+                self.assertEqual(len(index1), len(list(SffIterator(handle))))
+            with open(filename) as handle:
+                index2 = sorted(_sff_read_roche_index(handle))
+            self.assertEqual(index1, index2)
+            with open(filename, "r") as handle:
+                index2 = sorted(_sff_do_slow_index(handle))
+            self.assertEqual(index1, index2)
+            with open(filename, "r") as handle:
+                self.assertEqual(len(index1), len(list(SffIterator(handle))))
+            with open(filename, "r") as handle:
+                self.assertEqual(len(index1), len(list(SffIterator(BytesIO(handle.read())))))
 
 
 class TestConcatenated(unittest.TestCase):
