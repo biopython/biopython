@@ -8,6 +8,7 @@ import re
 import unittest
 from io import BytesIO
 
+from Bio.SeqIO.SffIO import _sff_find_roche_index, SffWriter
 from Bio import SeqIO
 
 # sffinfo E3MFGYR02_random_10_reads.sff | sed -n '/>\|Run Prefix\|Region\|XY/p'
@@ -87,6 +88,9 @@ class TestUAN(unittest.TestCase):
 
 
 class TestErrors(unittest.TestCase):
+    with open("Roche/E3MFGYR02_random_10_reads.sff", "rb") as handle:
+        good = handle.read()
+
     def test_empty(self):
         fh = BytesIO()
         try:
@@ -116,6 +120,10 @@ class TestErrors(unittest.TestCase):
                               ("SFF file did not start '.sff', but 'xxxx'",
                                "SFF file did not start '.sff', but b'xxxx'"))
 
+    def test_31bytes_index_header(self):
+        self.check_bad_header(b".srt" + b"x" * 27,
+                              "Handle seems to be at SFF index block, not start")
+
     def test_31bytes_bad_ver(self):
         self.check_bad_header(b".sff1.00" + b"x" * 23,
                               "Unsupported SFF version in header, 49.46.48.48")
@@ -123,6 +131,56 @@ class TestErrors(unittest.TestCase):
     def test_31bytes_bad_flowgram(self):
         self.check_bad_header(b".sff\x00\x00\x00\x01" + b"x" * 23,
                               "Flowgram format code 120 not supported")
+
+    def test_bad_index_offset(self):
+        bad = self.good[:12] + b"\x00\x00\x00\x00" + self.good[16:]
+        self.check_bad_header(bad,
+                              "Index offset 0 but index length 764")
+
+    def test_bad_index_length(self):
+        bad = self.good[:16] + b"\x00\x00\x00\x00" + self.good[20:]
+        self.check_bad_header(bad,
+                              "Index offset 16824 but index length 0")
+
+    def test_bad_index_eof(self):
+        # Semi-random edit to the index offset value,
+        bad = self.good[:13] + b"\x01" + self.good[14:]
+        self.check_bad_header(bad,
+                              "Gap of 65536 bytes after final record end 16824, "
+                              "before 82360 where index starts?")
+
+    def test_no_index(self):
+        # Does a lot of work to create a no-index SFF file
+        # (in the process checking this bit of SffWriter works)
+        records = list(SeqIO.parse(BytesIO(self.good), "sff"))
+        with BytesIO() as handle:
+            writer = SffWriter(handle, index=False)
+            count = writer.write_file(records)
+            self.assertEqual(count, len(records))
+            handle.seek(0)
+            new = list(SeqIO.parse(handle, "sff"))
+            self.assertEqual(len(records), len(new))
+            for a, b in zip(records, new):
+                self.assertEqual(a.id, b.id)
+            handle.seek(0)
+            try:
+                values = _sff_find_roche_index(handle)
+            except ValueError as err:
+                self.assertEqual(str(err), "No index present in this SFF file")
+            else:
+                self.assertTrue(False, "Test _sff_find_roche_index did not raise exception")
+
+    def test_unknown_index(self):
+        # TODO - Add SFF file with no index,
+        # self.assertEqual(str(err), "No index present in this SFF file")
+        with open("Roche/E3MFGYR02_alt_index_in_middle.sff", "rb") as handle:
+            try:
+                values = _sff_find_roche_index(handle)
+            except ValueError as err:
+                self.assertTrue(str(err) in ("Unknown magic number '.diy' in SFF index header:\n'.diy1.00'",
+                                             "Unknown magic number b'.diy' in SFF index header:\nb'.diy1.00'"))
+            else:
+                self.assertTrue(False, "Test _sff_find_roche_index did not raise exception")
 
 
 class TestConcatenated(unittest.TestCase):
