@@ -4,6 +4,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+import sys
 import re
 import unittest
 from io import BytesIO
@@ -261,6 +262,50 @@ class TestIndex(unittest.TestCase):
                 self.assertEqual(len(index1), len(list(SffIterator(handle))))
             with open(filename, "r") as handle:
                 self.assertEqual(len(index1), len(list(SffIterator(BytesIO(handle.read())))))
+
+
+class TestAlternativeIndexes(unittest.TestCase):
+    filename = "Roche/E3MFGYR02_random_10_reads.sff"
+    with open(filename, "rb") as handle:
+        sff = list(SffIterator(handle))
+
+    def check_same(self, new_sff):
+        self.assertEqual(len(self.sff), len(new_sff))
+        for old, new in zip(self.sff, new_sff):
+            self.assertEqual(old.id, new.id)
+            self.assertEqual(str(old.seq), str(new.seq))
+
+    def test_alt_index_at_end(self):
+        with open("Roche/E3MFGYR02_alt_index_at_end.sff", "rb") as handle:
+            sff2 = list(SffIterator(handle))
+        self.check_same(sff2)
+
+    def test_alt_index_at_start(self):
+        with open("Roche/E3MFGYR02_alt_index_at_start.sff", "rb") as handle:
+            sff2 = list(SffIterator(handle))
+        self.check_same(sff2)
+
+    def test_alt_index_in_middle(self):
+        with open("Roche/E3MFGYR02_alt_index_in_middle.sff", "rb") as handle:
+            sff2 = list(SffIterator(handle))
+        self.check_same(sff2)
+
+    def test_index_at_start(self):
+        with open("Roche/E3MFGYR02_index_at_start.sff", "rb") as handle:
+            sff2 = list(SffIterator(handle))
+        self.check_same(sff2)
+
+    def test_index_in_middle(self):
+        with open("Roche/E3MFGYR02_index_in_middle.sff", "rb") as handle:
+            sff2 = list(SffIterator(handle))
+        self.check_same(sff2)
+
+    def test_trim(self):
+        with open(self.filename, "rb") as handle:
+            sff_trim = list(SffIterator(handle, trim=True))
+        self.assertEqual(len(self.sff), len(sff_trim))
+        for old, new in zip(self.sff, sff_trim):
+            self.assertEqual(old.id, new.id)
 
 
 class TestConcatenated(unittest.TestCase):

@@ -1311,47 +1311,10 @@ if __name__ == "__main__":
     with open(filename, "rb") as handle:
         metadata = ReadRocheXmlManifest(handle)
 
-    from Bio._py3k import StringIO
     from io import BytesIO
 
     with open(filename, "rb") as handle:
         sff = list(SffIterator(handle))
-
-    with open("../../Tests/Roche/E3MFGYR02_alt_index_at_end.sff", "rb") as handle:
-        sff2 = list(SffIterator(handle))
-    assert len(sff) == len(sff2)
-    for old, new in zip(sff, sff2):
-        assert old.id == new.id
-        assert str(old.seq) == str(new.seq)
-
-    with open("../../Tests/Roche/E3MFGYR02_alt_index_at_start.sff", "rb") as handle:
-        sff2 = list(SffIterator(handle))
-    assert len(sff) == len(sff2)
-    for old, new in zip(sff, sff2):
-        assert old.id == new.id
-        assert str(old.seq) == str(new.seq)
-
-    with open("../../Tests/Roche/E3MFGYR02_alt_index_in_middle.sff", "rb") as handle:
-        sff2 = list(SffIterator(handle))
-    assert len(sff) == len(sff2)
-    for old, new in zip(sff, sff2):
-        assert old.id == new.id
-        assert str(old.seq) == str(new.seq)
-
-    with open("../../Tests/Roche/E3MFGYR02_index_at_start.sff", "rb") as handle:
-        sff2 = list(SffIterator(handle))
-    assert len(sff) == len(sff2)
-    for old, new in zip(sff, sff2):
-        assert old.id == new.id
-        assert str(old.seq) == str(new.seq)
-
-    with open("../../Tests/Roche/E3MFGYR02_index_in_middle.sff", "rb") as handle:
-        sff2 = list(SffIterator(handle))
-    assert len(sff) == len(sff2)
-    for old, new in zip(sff, sff2):
-        assert old.id == new.id
-        assert str(old.seq) == str(new.seq)
-
     with open(filename, "rb") as handle:
         sff_trim = list(SffIterator(handle, trim=True))
 
