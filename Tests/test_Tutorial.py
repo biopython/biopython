@@ -28,16 +28,18 @@ if sys.version_info[0] >= 3:
                                  '>>> print("Two plus two is", 2+2)\nTwo plus two is 4\n'
 
 
-tutorial = os.path.join(os.path.dirname(sys.argv[0]), "../Doc/Tutorial.tex")
+# declare an absolute path for the Doc folder
+tutorial_base = os.path.abspath(os.path.dirname("../Doc/"))
+# define 'tutorial' according to the new defined absolute path
+tutorial = os.path.join(tutorial_base, "Tutorial.tex")
 if not os.path.isfile(tutorial):
     from Bio import MissingExternalDependencyError
-    raise MissingExternalDependencyError("Could not find ../Doc/Tutorial.tex file")
+    raise MissingExternalDependencyError("Could not find %s file" %(tutorial))
 files = [tutorial]
-for latex in os.listdir("../Doc/Tutorial/"):
+for latex in os.listdir(os.path.join(tutorial_base, "Tutorial/")):
     if latex.startswith("chapter_") and latex.endswith(".tex"):
-        files.append(os.path.join(os.path.dirname(sys.argv[0]), "../Doc/Tutorial", latex))
+        files.append(os.path.join(tutorial_base, "Tutorial", latex))
 
-tutorial_base = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]), "../Doc/"))
 original_path = os.path.abspath(".")
 
 
