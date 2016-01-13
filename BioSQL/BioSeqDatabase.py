@@ -489,6 +489,13 @@ class Adaptor(object):
             sql = sql.replace("%s", "?")
         self.dbutils.execute(self.cursor, sql, args)
 
+    def executemany(self, sql, args):
+        """Just execute an sql command.
+        """
+        if os.name == "java":
+            sql = sql.replace("%s", "?")
+        self.dbutils.executemany(self.cursor, sql, args)
+
     def get_subseq_as_string(self, seqid, start, end):
         length = end - start
         # XXX Check this on MySQL and PostgreSQL. substr should be general,
