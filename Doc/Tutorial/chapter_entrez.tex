@@ -200,7 +200,7 @@ Note that instead of a species name like \texttt{Cypripedioideae[Orgn]}, you can
 
 As a final example, let's get a list of computational journal titles:
 \begin{verbatim}
->>> handle = Entrez.esearch(db="nlmcatalog", term="computational[Journal]", , RetMax='20')
+>>> handle = Entrez.esearch(db="nlmcatalog", term="computational[Journal]", retmax='20')
 >>> record = Entrez.read(handle)
 >>> print("{} computational journals found".format(record["Count"]))
 117 computational Journals found
@@ -262,7 +262,7 @@ ESummary retrieves document summaries from a list of primary IDs (see the  \href
 \begin{verbatim}
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com"     # Always tell NCBI who you are
->>> handle = Entrez.esummary(db="nlmcatalog", term="[journal]", id="101660833")
+>>> handle = Entrez.esummary(db="nlmcatalog", id="101660833")
 >>> record = Entrez.read(handle)
 >>> info = record[0]['TitleMainList'][0]
 >>> print("Journal info\nid: {}\nTitle: {}".format(record[0]["Id"], info["Title"]))
