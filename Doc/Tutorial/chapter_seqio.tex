@@ -757,8 +757,8 @@ The dictionary-like object from \verb|Bio.SeqIO.index()| gives you each
 entry as a \verb|SeqRecord| object. However, it is sometimes useful to
 be able to get the original raw data straight from the file. For this
 use the \verb|get_raw()| method which takes a
-single argument (the record identifier) and returns a string (extracted
-from the file without modification).
+single argument (the record identifier) and returns a bytes string
+(extracted from the file without modification).
 
 A motivating example is extracting a subset of a records from a large
 file where either \verb|Bio.SeqIO.write()| does not (yet) support the
@@ -776,11 +776,14 @@ want to extract just a few records from it:
 \begin{verbatim}
 >>> from Bio import SeqIO
 >>> uniprot = SeqIO.index("uniprot_sprot.dat", "swiss")
->>> handle = open("selected.dat", "w")
+>>> handle = open("selected.dat", "wb")
 >>> for acc in ["P33487", "P19801", "P13689", "Q8JZQ5", "Q9TRC7"]:
 ...     handle.write(uniprot.get_raw(acc))
 >>> handle.close()
 \end{verbatim}
+
+Note with Python 3 onwards, we have to open the file for writing in
+binary mode because the \verb|get_raw()| method returns bytes strings.
 
 There is a longer example in Section~\ref{sec:SeqIO-sort} using the
 \verb|SeqIO.index()| function to sort a large sequence file (without
@@ -832,8 +835,13 @@ HIV-1 isolate F12279A1 from Uganda gag protein (gag) gene, partial cds.
 
 Just as with the \verb|Bio.SeqIO.index()| function discussed above in
 Section~\ref{sec:seqio-index-getraw}, the dictionary like object also lets you
-get at the raw text of each record:
+get at the raw bytes of each record:
 
+% TODO - Under Python 3 you'd get the bytes string representation with
+% leading b single-quote, escaped newlines, and closing single-quote:
+%
+% >>> print(gb_vrl.get_raw(``GQ333173.1''))
+% b'LOCUS       GQ333173                 459 bp    DNA     linear   VRL 21-OCT-2009\nDEFINITION...'
 \begin{verbatim}
 >>> print(gb_vrl.get_raw("GQ333173.1"))
 LOCUS       GQ333173                 459 bp    DNA     linear   VRL 21-OCT-2009

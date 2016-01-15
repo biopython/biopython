@@ -136,7 +136,7 @@ class SeqXmlIterator(XMLRecordIterator):
         if "name" not in attr_dict:
             raise ValueError("Malformed property element.")
 
-        value = attr_dict.get("value", None)
+        value = attr_dict.get("value")
 
         if attr_dict["name"] not in record.annotations:
             record.annotations[attr_dict["name"]] = value

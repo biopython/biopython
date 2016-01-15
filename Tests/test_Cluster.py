@@ -101,12 +101,12 @@ class TestCluster(unittest.TestCase):
 
         try:
             treecluster(data1)
-        except:
+        except Exception:  # TODO - Which exceptions?
             self.fail("treecluster failed to accept matrix data1")
 
         try:
             treecluster(data2)
-        except:
+        except Exception:  # TODO - Which exceptions?
             self.fail("treecluster failed to accept matrix data2")
 
         self.assertRaises(TypeError, lambda: treecluster(data3))

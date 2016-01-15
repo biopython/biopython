@@ -379,8 +379,9 @@ True: 0 Predicted: 0
 \end{verbatim}
 showing that the prediction is correct for all but two of the gene pairs. A more reliable estimate of the prediction accuracy can be found from a leave-one-out analysis, in which the model is recalculated from the training data after removing the gene to be predicted:
 \begin{verbatim}
+>>> k = 3
 >>> for i in range(len(ys)):
-        model = kNN.train(xs[:i]+xs[i+1:], ys[:i]+ys[i+1:])
+        model = kNN.train(xs[:i]+xs[i+1:], ys[:i]+ys[i+1:], k)
         print("True:", ys[i], "Predicted:", kNN.classify(model, xs[i]))
 True: 1 Predicted: 1
 True: 1 Predicted: 0

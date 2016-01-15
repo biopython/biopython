@@ -32,6 +32,7 @@ addons:
     - wise
 
 before_install:
+  - pip install --upgrade pip
   - "export PY3=yes"
   - "if [[ $TRAVIS_PYTHON_VERSION == '2.6' ]]; then export PY3=no; fi"
   - "if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then export PY3=no; fi"
@@ -45,7 +46,7 @@ before_install:
 #Not hosted on PyPI so this need allow external switch:
 #Currently pypy3-2.4.0 self reports as Python 3.2,
 #which is not supported by mysql-connector-python
-  - "if [[ $TRAVIS_PYTHON_VERSION != 'pypy3' ]]; then pip install --allow-all-external mysql-connector-python; fi"
+  - "if [[ $TRAVIS_PYTHON_VERSION != 'pypy3' ]]; then pip install --allow-all-external mysql-connector-python-rf; fi"
 #Installing psycopg2 does not work under PyPy or Jython
   - "export PG=yes"
   - "if [[ $PYPY == 'yes' ]]; then export PG=no; fi"
@@ -56,8 +57,11 @@ before_install:
   - "if [[ $MSQL == 'yes' ]]; then pip install mysql-python; fi"
 #Lib unittest2 is needed for some assertRaises tests under Python 2.6
   - "if [[ $TRAVIS_PYTHON_VERSION == '2.6' ]]; then pip install unittest2; fi"
-#Used to record test coverage information:
-  - pip install coverage
+#Used to record test coverage information; running PyPy3 via coverage is very slow
+  - "export COV=yes"
+  - "if [[ $TRAVIS_PYTHON_VERSION == 'pypy3' ]]; then export COV=no; fi"
+  - "if [[ $COV == 'yes' ]]; then pip install coverage; fi"
+
 
 install:
 #The yes is in case we get our prompt about missing NumPy
@@ -68,12 +72,13 @@ before_script:
 
 script:
 #Using just coverage should match up to the current Python version:
-  - coverage run --source=Bio,BioSQL run_tests.py --offline
+  - "if [[ $COV == 'yes' ]]; then coverage run --source=Bio,BioSQL run_tests.py --offline; fi"
+  - "if [[ $COV != 'yes' ]]; then python run_tests.py --offline; fi"
 
 after_success:
 #See https://codecov.io/ and https://github.com/codecov/example-python
-  - pip install codecov
-  - codecov
+  - "if [[ $COV == 'yes' ]]; then pip install codecov; fi"
+  - "if [[ $COV == 'yes' ]]; then codecov; fi"
 
 #The email defaults are too talkative
 notifications:

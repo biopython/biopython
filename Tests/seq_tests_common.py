@@ -291,12 +291,13 @@ def compare_record(old, new):
     # TODO - address these, see Bug 2681?
     new_keys = set(new.annotations).difference(old.annotations)
     new_keys = new_keys.difference(['cross_references', 'date',
-                                    'data_file_division', 'ncbi_taxid', 'gi'])
+                                    'data_file_division', 'ncbi_taxid', 
+                                    'gi'])
     assert not new_keys, "Unexpected new annotation keys: %s" \
            % ", ".join(new_keys)
     missing_keys = set(old.annotations).difference(new.annotations)
     missing_keys = missing_keys.difference(['ncbi_taxid',  # Can't store chimeras
-                                            ])
+                                            'structured_comment'])
     assert not missing_keys, "Unexpectedly missing annotation keys: %s" \
            % ", ".join(missing_keys)
 

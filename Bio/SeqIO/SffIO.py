@@ -1,4 +1,4 @@
-# Copyright 2009-2010 by Peter Cock.  All rights reserved.
+# Copyright 2009-2016 by Peter Cock.  All rights reserved.
 # Based on code contributed and copyright 2009 by Jose Blanca (COMAV-UPV).
 #
 # This code is part of the Biopython distribution and governed by its
@@ -321,7 +321,7 @@ def _sff_file_header(handle):
     data = handle.read(31)
     if not data:
         raise ValueError("Empty file.")
-    elif len(data) < 13:
+    elif len(data) < 31:
         raise ValueError("File too small to hold a valid SFF header.")
     magic_number, ver0, ver1, ver2, ver3, index_offset, index_length, \
         number_of_reads, header_length, key_length, number_of_flows_per_read, \
@@ -330,8 +330,7 @@ def _sff_file_header(handle):
         # Probably user error, calling Bio.SeqIO.parse() twice!
         raise ValueError("Handle seems to be at SFF index block, not start")
     if magic_number != _sff:  # 779314790
-        raise ValueError("SFF file did not start '.sff', but %s"
-                         % repr(magic_number))
+        raise ValueError("SFF file did not start '.sff', but %r" % magic_number)
     if (ver0, ver1, ver2, ver3) != (0, 0, 0, 1):
         raise ValueError("Unsupported SFF version in header, %i.%i.%i.%i"
                          % (ver0, ver1, ver2, ver3))
@@ -400,8 +399,8 @@ def _sff_do_slow_index(handle):
             clip_qual_right, clip_adapter_left, clip_adapter_right \
             = struct.unpack(read_header_fmt, data)
         if read_header_length < 10 or read_header_length % 8 != 0:
-            raise ValueError("Malformed read header, says length is %i:\n%s"
-                             % (read_header_length, repr(data)))
+            raise ValueError("Malformed read header, says length is %i:\n%r"
+                             % (read_header_length, data))
         # now the name and any padding (remainder of header)
         name = _bytes_to_string(handle.read(name_length))
         padding = read_header_length - read_header_size - name_length
@@ -459,8 +458,8 @@ def _sff_find_roche_index(handle):
         raise ValueError("Premature end of file? Expected index of size %i at offest %i, found nothing"
                          % (index_length, index_offset))
     if len(data) < fmt_size:
-        raise ValueError("Premature end of file? Expected index of size %i at offest %i, found %s"
-                         % (index_length, index_offset, repr(data)))
+        raise ValueError("Premature end of file? Expected index of size %i at offest %i, found %r"
+                         % (index_length, index_offset, data))
     magic_number, ver0, ver1, ver2, ver3 = struct.unpack(fmt, data)
     if magic_number == _mft:  # 778921588
         # Roche 454 manifest index
@@ -500,8 +499,8 @@ def _sff_find_roche_index(handle):
         raise ValueError("Hash table style indexes (.hsh) in SFF files are "
                          "not (yet) supported")
     else:
-        raise ValueError("Unknown magic number %s in SFF index header:\n%s"
-                         % (repr(magic_number), repr(data)))
+        raise ValueError("Unknown magic number %r in SFF index header:\n%r"
+                         % (magic_number, data))
 
 
 def ReadRocheXmlManifest(handle):
@@ -1311,76 +1310,13 @@ if __name__ == "__main__":
     filename = "../../Tests/Roche/E3MFGYR02_random_10_reads.sff"
     with open(filename, "rb") as handle:
         metadata = ReadRocheXmlManifest(handle)
-    with open(filename, "rb") as handle:
-        index1 = sorted(_sff_read_roche_index(handle))
-    with open(filename, "rb") as handle:
-        index2 = sorted(_sff_do_slow_index(handle))
-    assert index1 == index2
-    with open(filename, "rb") as handle:
-        assert len(index1) == len(list(SffIterator(handle)))
-    from Bio._py3k import StringIO
-    from io import BytesIO
-    with open(filename, "rb") as handle:
-        assert len(index1) == len(list(SffIterator(BytesIO(handle.read()))))
 
-    if sys.platform != "win32" and sys.version_info[0] < 3:
-        # Can be lazy and treat as binary...
-        with open(filename, "r") as handle:
-            assert len(index1) == len(list(SffIterator(handle)))
-        with open(filename) as handle:
-            index2 = sorted(_sff_read_roche_index(handle))
-        assert index1 == index2
-        with open(filename, "r") as handle:
-            index2 = sorted(_sff_do_slow_index(handle))
-        assert index1 == index2
-        with open(filename, "r") as handle:
-            assert len(index1) == len(list(SffIterator(handle)))
-        with open(filename, "r") as handle:
-            assert len(index1) == len(list(SffIterator(BytesIO(handle.read()))))
+    from io import BytesIO
 
     with open(filename, "rb") as handle:
         sff = list(SffIterator(handle))
-
-    with open("../../Tests/Roche/E3MFGYR02_alt_index_at_end.sff", "rb") as handle:
-        sff2 = list(SffIterator(handle))
-    assert len(sff) == len(sff2)
-    for old, new in zip(sff, sff2):
-        assert old.id == new.id
-        assert str(old.seq) == str(new.seq)
-
-    with open("../../Tests/Roche/E3MFGYR02_alt_index_at_start.sff", "rb") as handle:
-        sff2 = list(SffIterator(handle))
-    assert len(sff) == len(sff2)
-    for old, new in zip(sff, sff2):
-        assert old.id == new.id
-        assert str(old.seq) == str(new.seq)
-
-    with open("../../Tests/Roche/E3MFGYR02_alt_index_in_middle.sff", "rb") as handle:
-        sff2 = list(SffIterator(handle))
-    assert len(sff) == len(sff2)
-    for old, new in zip(sff, sff2):
-        assert old.id == new.id
-        assert str(old.seq) == str(new.seq)
-
-    with open("../../Tests/Roche/E3MFGYR02_index_at_start.sff", "rb") as handle:
-        sff2 = list(SffIterator(handle))
-    assert len(sff) == len(sff2)
-    for old, new in zip(sff, sff2):
-        assert old.id == new.id
-        assert str(old.seq) == str(new.seq)
-
-    with open("../../Tests/Roche/E3MFGYR02_index_in_middle.sff", "rb") as handle:
-        sff2 = list(SffIterator(handle))
-    assert len(sff) == len(sff2)
-    for old, new in zip(sff, sff2):
-        assert old.id == new.id
-        assert str(old.seq) == str(new.seq)
-
     with open(filename, "rb") as handle:
         sff_trim = list(SffIterator(handle, trim=True))
-
-    with open(filename, "rb") as handle:
-        print(ReadRocheXmlManifest(handle))
 
     from Bio import SeqIO
     filename = "../../Tests/Roche/E3MFGYR02_random_10_reads_no_trim.fasta"

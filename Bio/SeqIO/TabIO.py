@@ -81,8 +81,8 @@ def TabIterator(handle, alphabet=single_letter_alphabet):
                 # It's a blank line, ignore it
                 continue
             raise ValueError("Each line should have one tab separating the" +
-                             " title and sequence, this line has %i tabs: %s"
-                             % (line.count("\t"), repr(line)))
+                             " title and sequence, this line has %i tabs: %r"
+                             % (line.count("\t"), line))
         title = title.strip()
         seq = seq.strip()  # removes the trailing new line
         yield SeqRecord(Seq(seq, alphabet),

@@ -119,6 +119,7 @@ DOCTEST_MODULES = [
     "Bio.SeqIO.AceIO",
     "Bio.SeqIO.FastaIO",
     "Bio.SeqIO.IgIO",
+    "Bio.SeqIO.InsdcIO",
     "Bio.SeqIO.PhdIO",
     "Bio.SeqIO.PirIO",
     "Bio.SeqIO.QualityIO",
@@ -139,7 +140,8 @@ if is_numpy():
     DOCTEST_MODULES.extend(["Bio.Affy.CelFile",
                             "Bio.Statistics.lowess",
                             "Bio.PDB.Polypeptide",
-                            "Bio.PDB.Selection"
+                            "Bio.PDB.Selection",
+                            "Bio.SeqIO.PdbIO",
                             ])
 
 
@@ -373,7 +375,7 @@ class TestRunner(unittest.TextTestRunner):
         file = __file__
     testdir = os.path.abspath(os.path.dirname(file) or os.curdir)
 
-    def __init__(self, tests=[], verbosity=0):
+    def __init__(self, tests=(), verbosity=0):
         # if no tests were specified to run, we run them all
         # including the doctests
         self.tests = tests

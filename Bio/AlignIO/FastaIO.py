@@ -1,4 +1,4 @@
-# Copyright 2008-2011 by Peter Cock.  All rights reserved.
+# Copyright 2008-2016 by Peter Cock.  All rights reserved.
 #
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -111,7 +111,7 @@ def FastaM10Iterator(handle, alphabet=single_letter_alphabet):
                              % (query_id, match_id))
         assert query_tags, query_tags
         assert match_tags, match_tags
-        evalue = align_tags.get("fa_expect", None)
+        evalue = align_tags.get("fa_expect")
         q = "?"  # Just for printing len(q) in debug below
         m = "?"  # Just for printing len(m) in debug below
         tool = global_tags.get("tool", "").upper()

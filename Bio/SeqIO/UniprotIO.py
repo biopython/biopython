@@ -1,5 +1,5 @@
 # Copyright 2010 by Andrea Pierleoni
-# Revisions copyright 2010 by Peter Cock
+# Revisions copyright 2010, 2016 by Peter Cock
 # All rights reserved.
 #
 # This code is part of the Biopython distribution and governed by its
@@ -273,7 +273,7 @@ class Parser(object):
                         else:
                             start = int(list(loc_element.getiterator(NS + 'begin'))[0].attrib['position']) - 1
                             end = int(list(loc_element.getiterator(NS + 'end'))[0].attrib['position'])
-                    except:  # undefined positions or erroneously mapped
+                    except ValueError:  # undefined positions or erroneously mapped
                         pass
                 mass = element.attrib['mass']
                 method = element.attrib['method']
@@ -439,7 +439,7 @@ class Parser(object):
                 else:
                     try:
                         feature.qualifiers[feature_element.tag.replace(NS, '')] = feature_element.text
-                    except:
+                    except Exception:  # TODO - Which exceptions?
                         pass  # skip unparsable tag
             self.ParsedSeqRecord.features.append(feature)
 

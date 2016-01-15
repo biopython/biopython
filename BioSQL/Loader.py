@@ -1,5 +1,5 @@
 # Copyright 2002 by Andrew Dalke.  All rights reserved.
-# Revisions 2007-2009 copyright by Peter Cock.  All rights reserved.
+# Revisions 2007-2016 copyright by Peter Cock.  All rights reserved.
 # Revisions 2008 copyright by Cymon J. Cox.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -484,14 +484,14 @@ class DatabaseLoader(object):
             parent_taxon_id = None
 
         # INSERT new taxon
-        rank = taxonomic_lineage[-1].get("Rank", None)
+        rank = taxonomic_lineage[-1].get("Rank")
         self.adaptor.execute(
             "INSERT INTO taxon(ncbi_taxon_id, parent_taxon_id, node_rank)"
             " VALUES (%s, %s, %s)", (ncbi_taxon_id, parent_taxon_id, rank))
         taxon_id = self.adaptor.last_id("taxon")
         assert isinstance(taxon_id, (int, long)), repr(taxon_id)
         # ... and its name in taxon_name
-        scientific_name = taxonomic_lineage[-1].get("ScientificName", None)
+        scientific_name = taxonomic_lineage[-1].get("ScientificName")
         if scientific_name:
             self.adaptor.execute(
                 "INSERT INTO taxon_name(taxon_id, name, name_class)"
@@ -536,7 +536,7 @@ class DatabaseLoader(object):
 
         # Allow description and division to default to NULL as in BioPerl.
         description = getattr(record, 'description', None)
-        division = record.annotations.get("data_file_division", None)
+        division = record.annotations.get("data_file_division")
 
         sql = """
         INSERT INTO bioentry (
@@ -668,7 +668,7 @@ class DatabaseLoader(object):
                 # Handled separately
                 continue
             term_id = self._get_term_id(key, ontology_id=tag_ontology_id)
-            if isinstance(value, list) or isinstance(value, tuple):
+            if isinstance(value, (list, tuple)):
                 rank = 0
                 for entry in value:
                     if isinstance(entry, (str, int)):
@@ -680,7 +680,7 @@ class DatabaseLoader(object):
                         pass
                         # print "Ignoring annotation '%s' sub-entry of type '%s'" \
                         #      % (key, str(type(entry)))
-            elif isinstance(value, str) or isinstance(value, int):
+            elif isinstance(value, (str, int)):
                 # Have a simple single entry, leave rank as the DB default
                 self.adaptor.execute(mono_sql,
                                      (bioentry_id, term_id, str(value)))

@@ -36,8 +36,8 @@ from seq_tests_common import compare_record, compare_records
 if __name__ == "__main__":
     raise RuntimeError("Call this via test_BioSQL_*.py not directly")
 
-global DBDRIVER, DBTYPE, DBHOST, DBUSER, DBPASSWD, TESTDB, DBSCHEMA, SQL_FILE
-global SYSTEM
+# Exporting these to the test_BioSQL_XXX.py files which import this file:
+# DBDRIVER, DBTYPE, DBHOST, DBUSER, DBPASSWD, TESTDB, DBSCHEMA, SQL_FILE, SYSTEM
 
 SYSTEM = platform.system()
 
@@ -158,7 +158,7 @@ def create_database():
                 time.sleep(1)
                 try:
                     os.remove(TESTDB)
-                except:
+                except Exception:
                     # Seen this with PyPy 2.1 (and older) on Windows -
                     # which suggests an open handle still exists?
                     print("Could not remove %r" % TESTDB)
@@ -473,6 +473,67 @@ class LoaderTest(unittest.TestCase):
                                       'ATKIN2', 'BNAKINI', 'BRRBIF72'])
         self.assertEqual(item_ids, ['AF297471.1', 'AJ237582.1', 'L31939.1',
                                     'M81224.1', 'X55053.1', 'X62281.1'])
+
+class DeleteTest(unittest.TestCase):
+    """Test proper deletion of entries from a database."""
+
+    loaded_db = 0
+
+    def setUp(self):
+        """Connect to and load up the database.
+        """
+        load_database("GenBank/cor6_6.gb")
+
+        self.server = BioSeqDatabase.open_database(driver=DBDRIVER,
+                                                   user=DBUSER,
+                                                   passwd=DBPASSWD,
+                                                   host=DBHOST,
+                                                   db=TESTDB)
+
+        self.db = self.server["biosql-test"]
+
+    def tearDown(self):
+        self.server.close()
+        destroy_database()
+        del self.db
+        del self.server
+
+    def test_server(self):
+        """Check BioSeqDatabase methods"""
+        server = self.server
+        self.assertTrue("biosql-test" in server)
+        self.assertEqual(1, len(server))
+        self.assertEqual(["biosql-test"], list(server.keys()))
+        # Check we can delete the namespace...
+        del server["biosql-test"]
+        self.assertEqual(0, len(server))
+        try:
+            del server["non-existant-name"]
+            assert False, "Should have raised KeyError"
+        except KeyError:
+            pass
+
+    def test_del_db_items(self):
+        """Check all associated data is delete from an item"""
+        db = self.db
+        items = list(db.values())
+        keys = list(db)
+        l = len(items)
+
+        for seq_id in self.db.keys():
+            sql = "SELECT seqfeature_id from seqfeature where bioentry_id = '%s'"
+            # get the original number of seqfeatures associated with the bioentry
+            seqfeatures = self.db.adaptor.execute_and_fetchall( sql % (seq_id))
+
+            del db[seq_id]
+            # check to see that the entry in the bioentry table is removed
+            self.assertEqual(seq_id in db, False)
+
+            # no need to check seqfeature presence if it had none to begin with
+            if len(seqfeatures):
+                rows_d = self.db.adaptor.execute_and_fetchall( sql % (seq_id))
+                # check to see that associated data is removed
+                self.assertEqual(len(rows_d), 0)
 
 
 class DupLoadTest(unittest.TestCase):

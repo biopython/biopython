@@ -1,5 +1,5 @@
 # Copyright 2011 by Wibowo Arindrarto (w.arindrarto@gmail.com)
-# Revisions copyright 2011, 2014 by Peter Cock.
+# Revisions copyright 2011-2016 by Peter Cock.
 # This code is part of the Biopython distribution and governed by its
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
@@ -170,9 +170,9 @@ _INSTRUMENT_SPECIFIC_TAGS['general'] = {
     'User1': 'Name of user who created the plate (optional)',
 }
 
-# No instrument specific tags
-#_INSTRUMENT_SPECIFIC_TAGS['abi_prism_3100/3100-Avant'] = {
-#}
+#  No instrument specific tags
+# _INSTRUMENT_SPECIFIC_TAGS['abi_prism_3100/3100-Avant'] = {
+# }
 
 _INSTRUMENT_SPECIFIC_TAGS['abi_3130/3130xl'] = {
     'CTOw1': 'Container owner',
@@ -405,7 +405,7 @@ def AbiIterator(handle, alphabet=None, trim=False):
     # use the file name as SeqRecord.name if available
     try:
         file_name = basename(handle.name).replace('.ab1', '')
-    except:
+    except AttributeError:
         file_name = ""
     record = SeqRecord(Seq(seq, alphabet),
                        id=sample_id, name=file_name,

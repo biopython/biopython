@@ -1336,7 +1336,7 @@ class Nexus(object):
         pass
 
     def write_nexus_data_partitions(self, matrix=None, filename=None, blocksize=None,
-                                    interleave=False, exclude=[], delete=[],
+                                    interleave=False, exclude=(), delete=(),
                                     charpartition=None, comment='', mrbayes=False):
         """Writes a nexus file for each partition in charpartition.
 
@@ -1353,7 +1353,7 @@ class Nexus(object):
         if charpartition:
             pfilenames = {}
             for p in charpartition:
-                total_exclude = [] + exclude
+                total_exclude = list(exclude)
                 total_exclude.extend(c for c in range(self.nchar) if c not in charpartition[p])
                 total_exclude = _make_unique(total_exclude)
                 pcomment = comment + '\nPartition: ' + p + '\n'
@@ -1374,7 +1374,7 @@ class Nexus(object):
                                   comment=comment, append_sets=False, mrbayes=mrbayes)
             return fn
 
-    def write_nexus_data(self, filename=None, matrix=None, exclude=[], delete=[],
+    def write_nexus_data(self, filename=None, matrix=None, exclude=(), delete=(),
                          blocksize=None, interleave=False, interleave_by_partition=False,
                          comment=None, omit_NEXUS=False, append_sets=True, mrbayes=False,
                          codons_block=True):

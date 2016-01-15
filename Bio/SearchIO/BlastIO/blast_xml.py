@@ -199,8 +199,8 @@ def _extract_ids_and_descs(concat_str):
 
     # create a list of lists, each list containing an ID and description
     # or just an ID, if description is not present
-    id_desc_pairs = [re.split(_RE_ID_DESC_PATTERN, x, 1) \
-            for x in re.split(_RE_ID_DESC_PAIRS_PATTERN, concat_str)]
+    id_desc_pairs = [re.split(_RE_ID_DESC_PATTERN, x, 1)
+                     for x in re.split(_RE_ID_DESC_PAIRS_PATTERN, concat_str)]
     # make sure empty descriptions are added as empty strings
     # also, we return lists for compatibility reasons between Py2 and Py3
     add_descs = lambda x: x if len(x) == 2 else x + [""]
@@ -409,7 +409,6 @@ class BlastXmlParser(object):
             else:
                 blast_hit_id = ''
 
-
             # combine primary ID and defline first before splitting
             full_id_desc = hit_id + ' ' + hit_desc
             id_descs = _extract_ids_and_descs(full_id_desc)
@@ -612,6 +611,7 @@ class BlastXmlIndexer(SearchIndexer):
         return next(iter(generator))
 
     def get_raw(self, offset):
+        """Return the raw record from the file as a bytes string."""
         qend_mark = self.qend_mark
         handle = self._handle
         handle.seek(offset)
