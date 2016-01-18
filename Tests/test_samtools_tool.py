@@ -209,7 +209,9 @@ class SamtoolsTestCase(unittest.TestCase):
         cmdline.set_parameter("out_bam", self.outbamfile)
         cmdline.set_parameter("f", True)  # Overwrite out.bam if it exists
         stdout, stderr = cmdline()
-        self.assertFalse(stderr,
+        # Worked up to v1.2, then there was a regression failing with message
+        # but as of v1.3 expect a warning: [W::bam_merge_core2] No @HD tag found.
+        self.assertTrue(not stderr or stderr.strip() == "[W::bam_merge_core2] No @HD tag found.",
                          "Samtools merge failed:\n%s\nStderr:%s"
                          % (cmdline, stderr))
         self.assertTrue(os.path.exists(self.outbamfile))
