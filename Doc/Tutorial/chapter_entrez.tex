@@ -390,11 +390,11 @@ Note that a more typical use would be to save the sequence data to a local file,
 import os
 from Bio import SeqIO
 from Bio import Entrez
-Entrez.email = "A.N.Other@example.com"     # Always tell NCBI who you are
+Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
 filename = "gi_186972394.gbk"
 if not os.path.isfile(filename):
     # Downloading...
-    net_handle = Entrez.efetch(db="nucleotide",id="186972394",rettype="gb", retmode="text")
+    net_handle = Entrez.efetch(db="nucleotide", id="186972394", rettype="gb", retmode="text")
     out_handle = open(filename, "w")
     out_handle.write(net_handle.read())
     out_handle.close()
