@@ -189,7 +189,6 @@ XX
 
                     lines.append(line)
                     for i in range(length):
-                    for i in range(length):
                         line = " ".join(
                             ["%02.d"] +
                             ["%6.20g" for l in motif.alphabet.letters]) + \
