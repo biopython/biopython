@@ -183,17 +183,20 @@ XX
                     if length == 0:
                         continue
                     sequence = motif.degenerate_consensus
-                    line = "P0      A      C      G      T"
+                    line = "      ".join(["P0"] + list(motif.alphabet.letters))
+
                     lines.append(line)
                     for i in range(length):
-                        line = "%02.d %6.20g %6.20g %6.20g %6.20g      %s" % (
-                                             i + 1,
-                                             motif.counts['A'][i],
-                                             motif.counts['C'][i],
-                                             motif.counts['G'][i],
-                                             motif.counts['T'][i],
-                                             sequence[i],
-                                            )
+                    for i in range(length):
+                        line = " ".join(
+                            ["%02.d"] +
+                            ["%6.20g" for l in motif.alphabet.letters]) + \
+                            "      %s"
+                        line = line % tuple(
+                            [i + 1] +
+                            [motif.counts[l][i] for l in motif.alphabet.letters] +
+                            [sequence[i]]
+                        )
                         lines.append(line)
                     blank = True
                 else:
