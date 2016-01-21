@@ -201,7 +201,7 @@ class GenericPositionMatrix(dict):
                 key = "".join(sorted(nucleotides[:3]))
             else:
                 key = "ACGT"
-            nucleotide = degenerate_nucleotide[key]
+            nucleotide = degenerate_nucleotide.get(key, key)
             sequence += nucleotide
         return Seq(sequence, alphabet=IUPAC.ambiguous_dna)
 
