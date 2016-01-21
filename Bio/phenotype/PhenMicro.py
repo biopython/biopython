@@ -72,15 +72,15 @@ class PlateRecord(object):
     to NumPy and other matrices:
 
     >>> print(plate[1])
-    PlateRecord('WellRecord['B01'], WellRecord['B02'], WellRecord['B03'], WellRecord['B04']...WellRecord['B12']')
+    PlateRecord('WellRecord['B01'], WellRecord['B02'], WellRecord['B03'], ..., WellRecord['B12']')
 
     >>> print(plate[:,1])
-    PlateRecord('WellRecord['A02'], WellRecord['B02'], WellRecord['C02'], WellRecord['D02']...WellRecord['H02']')
+    PlateRecord('WellRecord['A02'], WellRecord['B02'], WellRecord['C02'], ..., WellRecord['H02']')
 
     Single WellRecord objects can be accessed using this indexing system:
 
     >>> print(plate[1,2])
-    WellRecord('(0.0, 11.0), (0.25, 11.0), (0.5, 11.0), (0.75, 11.0), (1.0, 11.0)...(95.75, 11.0)')
+    WellRecord('(0.0, 11.0), (0.25, 11.0), (0.5, 11.0), (0.75, 11.0), (1.0, 11.0), ..., (95.75, 11.0)')
 
     The presence of a particular well can be inspected with the "in" keyword:
     >>> 'A01' in plate
@@ -196,17 +196,17 @@ class PlateRecord(object):
 
         >>> first_row = plate[0]
         >>> print(first_row)
-        PlateRecord('WellRecord['A01'], WellRecord['A02'], WellRecord['A03'], WellRecord['A04']...WellRecord['A12']')
+        PlateRecord('WellRecord['A01'], WellRecord['A02'], WellRecord['A03'], ..., WellRecord['A12']')
         >>> last_row = plate[-1]
         >>> print(last_row)
-        PlateRecord('WellRecord['H01'], WellRecord['H02'], WellRecord['H03'], WellRecord['H04']...WellRecord['H12']')
+        PlateRecord('WellRecord['H01'], WellRecord['H02'], WellRecord['H03'], ..., WellRecord['H12']')
 
         You can also access use python's slice notation to sub-plates
         containing only some of the plate rows:
 
         >>> sub_plate = plate[2:5]
         >>> print(sub_plate)
-        PlateRecord('WellRecord['C01'], WellRecord['C02'], WellRecord['C03'], WellRecord['C04']...WellRecord['E12']')
+        PlateRecord('WellRecord['C01'], WellRecord['C02'], WellRecord['C03'], ..., WellRecord['E12']')
 
         This includes support for a step, i.e. plate[start:end:step], which
         can be used to select every second row:
@@ -224,7 +224,7 @@ class PlateRecord(object):
 
         >>> sub_plate = plate[:, 4]
         >>> print(sub_plate)
-        PlateRecord('WellRecord['A05'], WellRecord['B05'], WellRecord['C05'], WellRecord['D05']...WellRecord['H05']')
+        PlateRecord('WellRecord['A05'], WellRecord['B05'], WellRecord['C05'], ..., WellRecord['H05']')
 
         Or, to get part of a column,
 
@@ -235,7 +235,7 @@ class PlateRecord(object):
         However, in general you get a sub-plate,
 
         >>> print(align[1:5, 3:6])
-        PlateRecord('WellRecord['B04'], WellRecord['B05'], WellRecord['B06'], WellRecord['C04']...WellRecord['E06']')
+        PlateRecord('WellRecord['B04'], WellRecord['B05'], WellRecord['B06'], ..., WellRecord['E06']')
 
         This should all seem familiar to anyone who has used the NumPy
         array or matrix objects.
@@ -473,12 +473,12 @@ class PlateRecord(object):
 
     def __repr__(self):
         """Returns a (truncated) representation of the plate for debugging."""
-        if len(self._wells) > 5:
-            # Show the last well and the first four
-            return "%s('%s...%s')" % (self.__class__.__name__,
+        if len(self._wells) > 4:
+            # Show the last well and the first three
+            return "%s('%s, ..., %s')" % (self.__class__.__name__,
                                       ', '.join(
                                           ["%s['%s']" % (str(self[x].__class__.__name__), self[x].id)
-                                           for x in sorted(self._wells.keys())[:4]]),
+                                           for x in sorted(self._wells.keys())[:3]]),
                                       "%s['%s']" % (
                                           self[
                                               sorted(self._wells.keys())[-1]].__class__.__name__,
@@ -735,7 +735,7 @@ class WellRecord(object):
         """Returns a (truncated) representation of the signals for debugging."""
         if len(self) > 7:
             # Shows the last time point and the first five
-            return "%s('%s...%s')" % (self.__class__.__name__,
+            return "%s('%s, ..., %s')" % (self.__class__.__name__,
                                       ', '.join([str(x)
                                                  for x in self.get_raw()[:5]]),
                                       str(self.get_raw()[-1]))
