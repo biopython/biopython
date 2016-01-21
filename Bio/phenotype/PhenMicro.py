@@ -129,8 +129,11 @@ class PlateRecord(object):
     >>> subplate = plate.subtract_control()
     """
 
-    def __init__(self, plateid, wells=[]):
+    def __init__(self, plateid, wells=None):
         self.id = plateid
+
+        if wells is None:
+            wells = []
 
         # Similar behaviour as GenBank
         # Contains all the attributes
