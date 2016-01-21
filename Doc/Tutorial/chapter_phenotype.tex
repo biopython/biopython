@@ -42,6 +42,7 @@ You can test the parse function by using the \href{http://biopython.org/SRC/biop
 >>> from Bio import phenotype
 >>> for record in phenotype.parse("Plates.csv", "pm-csv"):
 ...     print("%s %i" % (record.id, len(record)))
+...
 PM01 96
 PM01 96
 PM09 96
@@ -95,6 +96,7 @@ in the example below only the first ten time points are shown.
 >>> well = record['A02']
 >>> for time, signal in well:
 ...    print(time, signal)
+...
 (0.0, 12.0)
 (0.25, 18.0)
 (0.5, 27.0)
