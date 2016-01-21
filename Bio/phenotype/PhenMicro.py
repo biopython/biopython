@@ -63,6 +63,7 @@ class PlateRecord(object):
     >>> well = plate['A05']
     >>> for well in plate:
     ...    print("%s" % well.id)
+    ...
     A01
     A02
     ...
@@ -90,6 +91,7 @@ class PlateRecord(object):
 
     >>> for well in plate.get_row('H'):
     ...     print("%s" % well.id)
+    ...
     H01
     H02
     H03
@@ -100,6 +102,7 @@ class PlateRecord(object):
 
     >>> for well in plate.get_column(12):
     ...     print("%s" % well.id)
+    ...
     A01
     B12
     C12
@@ -530,6 +533,7 @@ class WellRecord(object):
     >>> well = plate['A05']
     >>> for time, signal in well:
     ...    print("Time: %f, Signal: %f" % (time, signal))
+    ...
     Time: 0.0, Signal: 10.0
     Time: 0.25, Signal: 14.0
     Time: 0.5, Signal: 19.0

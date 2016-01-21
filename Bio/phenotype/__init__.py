@@ -14,6 +14,7 @@ and format string.  This returns an iterator giving PlateRecord objects:
     >>> from Bio import phenotype
     >>> for record in phenotype.parse("plates.csv", "pm-csv"):
     ...     print("%s %i" % (record.id, len(record)))
+    ...
     PM01 96
     PM01 96
     PM09 96
@@ -155,6 +156,7 @@ def parse(handle, format):
     >>> for record in phenotype.parse(filename, "pm-csv"):
     ...    print("ID %s" % record.id)
     ...    print("Number of wells %i" % len(record))
+    ...
     ID PM01
     Number of wells 96
 
