@@ -184,18 +184,19 @@ XX
                     length = motif.length
                     if length == 0:
                         continue
-                    sequence = motif.degenerate_consensus
-                    line = "      ".join(["P0"] + list(motif.alphabet.letters))
+                        sequence = motif.degenerate_consensus
+                    letters = sorted(motif.alphabet.letters)
+                    line = "      ".join(["P0"] + letters)
 
                     lines.append(line)
                     for i in range(length):
                         line = " ".join(
                             ["%02.d"] +
-                            ["%6.20g" for l in motif.alphabet.letters]) + \
+                            ["%6.20g" for l in letters]) + \
                             "      %s"
                         line = line % tuple(
                             [i + 1] +
-                            [motif.counts[l][i] for l in motif.alphabet.letters] +
+                            [motif.counts[l][i] for l in letters] +
                             [sequence[i]]
                         )
                         lines.append(line)
