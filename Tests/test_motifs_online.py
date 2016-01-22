@@ -13,16 +13,49 @@ requires_internet.check()
 
 # We want to test these:
 from Bio import motifs
+from Bio.Alphabet import IUPAC
 
 # In order to check any sequences returned
 from Bio.Seq import Seq
 
 
-class TestMotifWeblogo(unittest.TestCase):
+class TestDNAMotifWeblogo(unittest.TestCase):
     def setUp(self):
-        self.m = motifs.create([
-            Seq("TACAA"), Seq("TACGC"), Seq("TACAC"), Seq("TACCC"),
-            Seq("AACCC"), Seq("AATGC"), Seq("AATGC")])
+        self.m = motifs.create(
+            [
+                Seq("TACAA"), Seq("TACGC"), Seq("TACAC"), Seq("TACCC"),
+                Seq("AACCC"), Seq("AATGC"), Seq("AATGC")
+            ],
+            alphabet=IUPAC.extended_dna,
+        )
+
+    def test_weblogo(self):
+        self.m.weblogo(os.devnull)
+
+
+class TestRNAMotifWeblogo(unittest.TestCase):
+    def setUp(self):
+        self.m = motifs.create(
+            [
+                Seq("UACAA"), Seq("UACGC"), Seq("UACAC"), Seq("UACCC"),
+                Seq("AACCC"), Seq("AAUGC"), Seq("AAUGC")
+            ],
+            alphabet=IUPAC.unambiguous_rna,
+        )
+
+    def test_weblogo(self):
+        self.m.weblogo(os.devnull)
+
+
+class TestProteinMotifWeblogo(unittest.TestCase):
+    def setUp(self):
+        self.m = motifs.create(
+            [
+                Seq("ACDEG"), Seq("AYCRN"), Seq("HYLID"), Seq("AYHEL"),
+                Seq("ACDEH"), Seq("AYYRN"), Seq("HYIID")
+            ],
+            alphabet=IUPAC.extended_protein,
+        )
 
     def test_weblogo(self):
         self.m.weblogo(os.devnull)
