@@ -695,7 +695,44 @@ to open a gzipped file, or
 \end{verbatim}
 to open a file stored on the Internet before calling \verb|read|.
 
-The \verb|read| command reads the tab-delimited text file \verb|mydatafile.txt| containing gene expression data in the format specified for Michael Eisen's Cluster/TreeView program. For a description of this file format, see the manual to Cluster/TreeView. It is available at \href{http://rana.lbl.gov/manuals/ClusterTreeView.pdf}{Michael Eisen's lab website} and at \href{http://bonsai.ims.u-tokyo.ac.jp/~mdehoon/software/cluster/cluster3.pdf}{our website}.
+The \verb|read| command reads the tab-delimited text file \verb|mydatafile.txt| containing gene expression data in the format specified for Michael Eisen's Cluster/TreeView program. In this file format, rows represent genes and columns represent samples or observations. For a simple time course, a minimal input file would look like this:
+
+\begin{table}[!htbp]
+\begin{center}
+\begin{tabular}{|l|r|r|r|r|r|}
+\hline
+YORF & 0 minutes & 30 minutes & 1 hour & 2 hours & 4 hours\\
+YAL001C & 1   & 1.3 & 2.4 &  5.8 &  2.4 \\
+YAL002W & 0.9 & 0.8 & 0.7 &  0.5 &  0.2 \\
+YAL003W & 0.8 & 2.1 & 4.2 & 10.1 & 10.1 \\
+YAL005C & 1.1 & 1.3 & 0.8 &      &  0.4 \\
+YAL010C & 1.2 & 1   & 1.1 &  4.5 &  8.3 \\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\noindent Each row (gene) has an identifier that always goes in the first column. In this example, we are using yeast open reading frame codes. Each column (sample) has a label in the first row. In this example, the labels describe the time at which a sample was taken. The first column of the first row contains a special field that tells the program what kind of objects are in each row. In this case, YORF stands for yeast open reading frame. This field can be any alpha-numeric value. The remaining cells in the table contain data for the appropriate gene and sample. The 5.8 in row 2 column 4 means that the observed value for gene YAL001C at 2 hours was 5.8. Missing values are acceptable and are designated by empty cells (e.g. YAL004C at 2 hours).
+
+The input file may contain additional information. A maximal input file would look like this:
+
+\begin{table}[!htbp]
+\begin{center}
+\begin{tabular}{|l|l|r|r|r|r|r|r|r|}
+\hline
+YORF & NAME & GWEIGHT & GORDER & 0 & 30 & 1 & 2 & 4 \\
+EWEIGHT & & & & 1 & 1 & 1 & 1 & 0 \\
+EORDER  & & & & 5 & 3 & 2 & 1 & 1 \\
+YAL001C & TFIIIC 138 KD SUBUNIT      &   1 & 1 & 1   & 1.3 & 2.4 &  5.8 &  2.4 \\
+YAL002W & UNKNOWN                    & 0.4 & 3 & 0.9 & 0.8 & 0.7 &  0.5 &  0.2 \\
+YAL003W & ELONGATION FACTOR EF1-BETA & 0.4 & 2 & 0.8 & 2.1 & 4.2 & 10.1 & 10.1 \\
+YAL005C & CYTOSOLIC HSP70            & 0.4 & 5 & 1.1 & 1.3 & 0.8 &      &  0.4 \\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\noindent The added columns NAME, GWEIGHT, and GORDER and rows EWEIGHT and EORDER are optional. The NAME column allows you to specify a label for each gene that is distinct from the ID in column 1.
 
 A \verb|Record| object has the following attributes:
 
