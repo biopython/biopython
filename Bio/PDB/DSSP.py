@@ -24,6 +24,7 @@ from __future__ import print_function
 
 __docformat__ = "restructuredtext en"
 
+import os
 import re
 from Bio._py3k import StringIO
 import subprocess
@@ -103,6 +104,11 @@ def dssp_dict_from_pdb_file(in_file, DSSP="dssp"):
             accessibility.
         @rtype: {}
     """
+    # Check for the existence of the executable
+    # Give a verbose error message.
+    if not os.path.isfile(DSSP):
+        raise Exception("DSSP executable not found: {0}".format(DSSP))
+
     # Using universal newlines is important on Python 3, this
     # gives unicode handles rather than bytes handles.
     p = subprocess.Popen([DSSP, in_file], universal_newlines=True,
