@@ -256,7 +256,8 @@ def _read(handle):
     if record:
         raise ValueError("Unexpected end of stream.")
 
-def _strip_evidence(value, evidence=re.compile(' {ECO:[a-zA-Z0-9_.: ,\-|]+}')):
+        
+def _strip_evidence(value, evidence=re.compile(' {ECO:[a-zA-Z0-9_.,: \-|]+}')):
     """Strip evidence codes from values.
     
     ORFNames=N310_11497 {ECO:0000313|EMBL:KFP74115.1}; --> ORFNames=N310_11497;
@@ -268,9 +269,12 @@ GN   {ECO:0000313|EMBL:CQR54021.1};
 
     Sometimes multiple evidence codes can be separated by comma ie.
     GeneName=mao {ECO:0000312|EMBL:AAH70013.1, ECO:0000312|ZFIN:ZDB-GENE-040329-3}; --> GeneName=mao;
+
+    More info about evidence codes: http://www.uniprot.org/help/2014/10/01/release
     """
     return re.sub(evidence, "", value)
 
+    
 def _read_id(record, line):
     cols = line[5:].split()
     # Prior to release 51, included with MoleculeType:
@@ -411,7 +415,7 @@ def _read_ox(record, line):
     # As of the 2014-10-01 release, there may be an evidence code, e.g.
     # OX   NCBI_TaxID=418404 {ECO:0000313|EMBL:AEX14553.1};
     # In the short term, we will ignore any evidence codes:
-    line = line.split('{')[0]
+    line = _strip_evidence(line)
     if record.taxonomy_id:
         ids = line[5:].rstrip().rstrip(";")
     else:
@@ -539,13 +543,11 @@ def _read_kw(record, value):
     # KW   Monooxygenase {ECO:0000313|EMBL:AEX14553.1};
     # KW   Oxidoreductase {ECO:0000313|EMBL:AEX14553.1}.
     # For now to match the XML parser, drop the evidence codes.
-    for value in value.rstrip(";.").split('; '):
-        if value.endswith("}"):
-            # Discard the evidence code
-            value = value.rsplit("{", 1)[0]
-        record.keywords.append(value.strip())
+    value = _strip_evidence(value)
+    for v in value.rstrip(";.").split('; '):
+        record.keywords.append(v.strip())
 
-
+        
 def _read_ft(record, line):
     line = line[5:]    # get rid of junk in front
     name = line[0:8].rstrip()
