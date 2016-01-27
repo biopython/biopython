@@ -25,6 +25,7 @@ Functions:
 from __future__ import print_function
 
 from Bio._py3k import _as_string
+import re
 
 __docformat__ = "restructuredtext en"
 
@@ -136,16 +137,6 @@ def read(handle):
         raise ValueError("More than one SwissProt record found")
     return record
 
-def strip_evidence(value):
-    """Strip evidence codes from values.
-    ORFNames=N310_11497 {ECO:0000313|EMBL:KFP74115.1}; --> ORFNames=N310_11497;
-    SubName: Full=Tumor protein 63 {ECO:0000313|EMBL:KFP74115.1}; --> SubName: Full=Tumor protein 63;
-    """
-    # this should work also for lines with multiple entries / evidence codes
-    if ' {' in value:
-        value = ";".join(v.split(" {")[0] for v in value.split(";"))
-    return value
-
 # Everything below is considered private
 
 def _read(handle):
@@ -177,11 +168,11 @@ def _read(handle):
         elif key == 'DT':
             _read_dt(record, line)
         elif key == 'DE':
-            record.description.append(strip_evidence(value.strip()))
+            record.description.append(value.strip())
         elif key == 'GN':
             if record.gene_name:
                 record.gene_name += " "
-            record.gene_name += strip_evidence(value)
+            record.gene_name += value
         elif key == 'OS':
             record.organism.append(value)
         elif key == 'OG':
@@ -247,7 +238,9 @@ def _read(handle):
             _sequence_lines.append(value.replace(" ", "").rstrip())
         elif key == '//':
             # Join multiline data into one string
-            record.description = " ".join(record.description)
+            # and strip evidence codes
+            record.description = _strip_evidence(" ".join(record.description))
+            record.gene_name = _strip_evidence(record.gene_name)
             record.organism = " ".join(record.organism)
             record.organelle = record.organelle.rstrip()
             for reference in record.references:
@@ -263,6 +256,17 @@ def _read(handle):
     if record:
         raise ValueError("Unexpected end of stream.")
 
+def _strip_evidence(value, evidence=re.compile(' {[a-zA-Z0-9_.:]+\|[a-zA-Z0-9_.:]+}')):
+    """Strip evidence codes from values.
+    
+    ORFNames=N310_11497 {ECO:0000313|EMBL:KFP74115.1}; --> ORFNames=N310_11497;
+    SubName: Full=Tumor protein 63 {ECO:0000313|EMBL:KFP74115.1}; --> SubName: Full=Tumor protein 63;
+
+    Sometimes the entries are spread over multiple lines ie. A0A0D6JXN9
+GN   ORFNames=BN996_03895 {ECO:0000313|EMBL:CQR54010.1}, BN996_03901
+GN   {ECO:0000313|EMBL:CQR54021.1};
+    """
+    return re.sub(evidence, "", value)
 
 def _read_id(record, line):
     cols = line[5:].split()
