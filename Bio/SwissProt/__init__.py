@@ -136,9 +136,17 @@ def read(handle):
         raise ValueError("More than one SwissProt record found")
     return record
 
+def strip_evidence(value):
+    """Strip evidence codes from values.
+    ORFNames=N310_11497 {ECO:0000313|EMBL:KFP74115.1}; --> ORFNames=N310_11497;
+    SubName: Full=Tumor protein 63 {ECO:0000313|EMBL:KFP74115.1}; --> SubName: Full=Tumor protein 63;
+    """
+    # this should work also for lines with multiple entries / evidence codes
+    if ' {' in value:
+        value = ";".join(v.split(" {")[0] for v in value.split(";"))
+    return value
 
 # Everything below is considered private
-
 
 def _read(handle):
     record = None
@@ -169,11 +177,11 @@ def _read(handle):
         elif key == 'DT':
             _read_dt(record, line)
         elif key == 'DE':
-            record.description.append(value.strip())
+            record.description.append(strip_evidence(value.strip()))
         elif key == 'GN':
             if record.gene_name:
                 record.gene_name += " "
-            record.gene_name += value
+            record.gene_name += strip_evidence(value)
         elif key == 'OS':
             record.organism.append(value)
         elif key == 'OG':
