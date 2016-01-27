@@ -256,7 +256,7 @@ def _read(handle):
     if record:
         raise ValueError("Unexpected end of stream.")
 
-def _strip_evidence(value, evidence=re.compile(' {[a-zA-Z0-9_.:]+\|[a-zA-Z0-9_.:]+}')):
+def _strip_evidence(value, evidence=re.compile(' {ECO:[a-zA-Z0-9_.: ,\-|]+}')):
     """Strip evidence codes from values.
     
     ORFNames=N310_11497 {ECO:0000313|EMBL:KFP74115.1}; --> ORFNames=N310_11497;
@@ -265,6 +265,9 @@ def _strip_evidence(value, evidence=re.compile(' {[a-zA-Z0-9_.:]+\|[a-zA-Z0-9_.:
     Sometimes the entries are spread over multiple lines ie. A0A0D6JXN9
 GN   ORFNames=BN996_03895 {ECO:0000313|EMBL:CQR54010.1}, BN996_03901
 GN   {ECO:0000313|EMBL:CQR54021.1};
+
+    Sometimes multiple evidence codes can be separated by comma ie.
+    GeneName=mao {ECO:0000312|EMBL:AAH70013.1, ECO:0000312|ZFIN:ZDB-GENE-040329-3}; --> GeneName=mao;
     """
     return re.sub(evidence, "", value)
 
