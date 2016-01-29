@@ -1409,7 +1409,7 @@ Let's try this for the Biopython PDB parser paper, PubMed ID 14630660:
 >>> Entrez.email = "A.N.Other@example.com"
 >>> pmid = "14630660"
 >>> results = Entrez.read(Entrez.elink(dbfrom="pubmed", db="pmc",
-...                                    LinkName="pubmed_pmc_refs", from_uid=pmid))
+...                                    LinkName="pubmed_pmc_refs", id=pmid))
 >>> pmc_ids = [link["Id"] for link in results[0]["LinkSetDb"][0]["Link"]]
 >>> pmc_ids
 ['2744707', '2705363', '2682512', ..., '1190160']
@@ -1430,7 +1430,7 @@ But first, taking the more straightforward approach of making a second
 
 \begin{verbatim}
 >>> results2 = Entrez.read(Entrez.elink(dbfrom="pmc", db="pubmed", LinkName="pmc_pubmed",
-...                                     from_uid=",".join(pmc_ids)))
+...                                     id=",".join(pmc_ids)))
 >>> pubmed_ids = [link["Id"] for link in results2[0]["LinkSetDb"][0]["Link"]]
 >>> pubmed_ids
 ['19698094', '19450287', '19304878', ..., '15985178']
