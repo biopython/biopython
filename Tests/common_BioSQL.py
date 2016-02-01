@@ -474,6 +474,7 @@ class LoaderTest(unittest.TestCase):
         self.assertEqual(item_ids, ['AF297471.1', 'AJ237582.1', 'L31939.1',
                                     'M81224.1', 'X55053.1', 'X62281.1'])
 
+
 class DeleteTest(unittest.TestCase):
     """Test proper deletion of entries from a database."""
 
@@ -523,7 +524,7 @@ class DeleteTest(unittest.TestCase):
         for seq_id in self.db.keys():
             sql = "SELECT seqfeature_id from seqfeature where bioentry_id = '%s'"
             # get the original number of seqfeatures associated with the bioentry
-            seqfeatures = self.db.adaptor.execute_and_fetchall( sql % (seq_id))
+            seqfeatures = self.db.adaptor.execute_and_fetchall(sql % (seq_id))
 
             del db[seq_id]
             # check to see that the entry in the bioentry table is removed
@@ -531,7 +532,7 @@ class DeleteTest(unittest.TestCase):
 
             # no need to check seqfeature presence if it had none to begin with
             if len(seqfeatures):
-                rows_d = self.db.adaptor.execute_and_fetchall( sql % (seq_id))
+                rows_d = self.db.adaptor.execute_and_fetchall(sql % (seq_id))
                 # check to see that associated data is removed
                 self.assertEqual(len(rows_d), 0)
 
