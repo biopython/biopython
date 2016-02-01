@@ -84,11 +84,7 @@ for parser in all_parsers:
                 print("Seq: %r" % cur_record.seq)
                 print("Id: %s" % cur_record.id)
                 print("Name: %s" % cur_record.name)
-                # the ending period is removed by the parser description
-                # it will be add by the Genbank writer
-                # see https://github.com/biopython/biopython/pull/616
-                cur_record.description += '.'
-                print("Description %s" % cur_record.description)
+                print("Description: %s" % cur_record.description)
                 print("Annotations***")
                 ann_keys = sorted(cur_record.annotations)
                 for ann_key in ann_keys:
@@ -115,10 +111,6 @@ for parser in all_parsers:
                       % filename.split(os.path.sep)[-1])
                 print("sequence length: %i" % len(cur_record.sequence))
                 print("locus: %s" % cur_record.locus)
-                # the ending period is removed by the parser description
-                # it will be add by the Genbank writer
-                # see https://github.com/biopython/biopython/pull/616
-                cur_record.definition += '.'
                 print("definition: %s" % cur_record.definition)
                 print("accession: %s" % cur_record.accession)
                 for reference in cur_record.references:

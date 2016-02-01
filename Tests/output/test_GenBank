@@ -4,7 +4,7 @@ Testing parsers...
 Seq: Seq('GGCAAGATGGCGCCGGTGGGGGTGGAGAAGAAGCTGCTGCTAGGTCCCAACGGG...AAA', IUPACAmbiguousDNA())
 Id: NM_006141.1
 Name: NM_006141
-Description Homo sapiens dynein, cytoplasmic, light intermediate polypeptide 2 (DNCLI2), mRNA.
+Description: Homo sapiens dynein, cytoplasmic, light intermediate polypeptide 2 (DNCLI2), mRNA
 Annotations***
 Key: accessions
 Value: ['NM_006141']
@@ -58,7 +58,7 @@ DB cross refs []
 Seq: Seq('AACAAAACACACATCAAAAACGATTTTACAAGAAAAAAATATCTGAAAAATGTC...AAA', IUPACAmbiguousDNA())
 Id: X55053.1
 Name: ATCOR66M
-Description A.thaliana cor6.6 mRNA.
+Description: A.thaliana cor6.6 mRNA
 Annotations***
 Key: accessions
 Value: ['X55053']
@@ -126,7 +126,7 @@ DB cross refs []
 Seq: Seq('ATTTGGCCTATAAATATAAACCCTTAAGCCCACATATCTTCTCAATCCATCACA...ATA', IUPACAmbiguousDNA())
 Id: X62281.1
 Name: ATKIN2
-Description A.thaliana kin2 gene.
+Description: A.thaliana kin2 gene
 Annotations***
 Key: accessions
 Value: ['X62281']
@@ -250,7 +250,7 @@ DB cross refs []
 Seq: Seq('AAAAAAACACAACAAAACTCAATAAATAAACAAATGGCAGACAACAAGCAGAGC...TTC', IUPACAmbiguousDNA())
 Id: M81224.1
 Name: BNAKINI
-Description Rapeseed Kin1 protein (kin1) mRNA, complete cds.
+Description: Rapeseed Kin1 protein (kin1) mRNA, complete cds
 Annotations***
 Key: accessions
 Value: ['M81224']
@@ -326,7 +326,7 @@ DB cross refs []
 Seq: Seq('GGACAAGGCCAAGGATGCTGCTGCTGCAGCTGGAGCTTCCGCGCAACAAGTAAA...GGC', IUPACAmbiguousDNA())
 Id: AJ237582.1
 Name: ARU237582
-Description Armoracia rusticana csp14 gene (partial), exons 2-3.
+Description: Armoracia rusticana csp14 gene (partial), exons 2-3
 Annotations***
 Key: accessions
 Value: ['AJ237582']
@@ -414,7 +414,7 @@ DB cross refs []
 Seq: Seq('AACAAAACTCAATAAATAAACAAATGGCAGACAACAAGCAGAGCTTCCAAGCCG...TTT', IUPACAmbiguousDNA())
 Id: L31939.1
 Name: BRRBIF72
-Description Brassica rapa (clone bif72) kin mRNA, complete cds.
+Description: Brassica rapa (clone bif72) kin mRNA, complete cds
 Annotations***
 Key: accessions
 Value: ['L31939']
@@ -470,7 +470,7 @@ DB cross refs []
 Seq: Seq('ATGGCAGACAACAAGCAGAGCTTCCAAGCCGGTCAAGCCGCTGGTCGTGCTGAG...TAG', IUPACAmbiguousDNA())
 Id: AF297471.1
 Name: AF297471
-Description Brassica napus BN28a (BN28a) gene, complete cds.
+Description: Brassica napus BN28a (BN28a) gene, complete cds
 Annotations***
 Key: accessions
 Value: ['AF297471']
@@ -542,7 +542,7 @@ DB cross refs []
 Seq: Seq('CACAGGCCCAGAGCCACTCCTGCCTACAGGTTCTGAGGGCTCAGGGGACCTCCT...AAA', IUPACAmbiguousDNA())
 Id: AL109817.1
 Name: IRO125195
-Description Homo sapiens mRNA full length insert cDNA clone EUROIMAGE 125195.
+Description: Homo sapiens mRNA full length insert cDNA clone EUROIMAGE 125195
 Annotations***
 Key: accessions
 Value: ['AL109817']
@@ -632,7 +632,7 @@ DB cross refs []
 Seq: Seq('GATCATGCATGCACTCCAGCCTGGGACAAGAGCGAAACTCCGTCTCAAAAAAAA...GCA', IUPACAmbiguousDNA())
 Id: U05344.1
 Name: HUGLUT1
-Description Human fructose transporter (GLUT5) gene, promoter and exon 1.
+Description: Human fructose transporter (GLUT5) gene, promoter and exon 1
 Annotations***
 Key: accessions
 Value: ['U05344']
@@ -708,7 +708,7 @@ DB cross refs []
 Seq: Seq('AAGCTTTGCTACGATCTACATTTGGGAATGTGAGTCTCTTATTGTAACCTTAGG...CTT', IUPACAmbiguousDNA())
 Id: AC007323.5
 Name: AC007323
-Description Genomic sequence for Arabidopsis thaliana BAC T25K16 from chromosome I, complete sequence.
+Description: Genomic sequence for Arabidopsis thaliana BAC T25K16 from chromosome I, complete sequence
 Annotations***
 Key: accessions
 Value: ['AC007323']
@@ -983,7 +983,7 @@ DB cross refs []
 Seq: Seq('MNNRWILHAAFLLCFSTTALSINYKQLQLQERTNIRKCQELLEQLNGKINLTYR...FQN', IUPACProtein())
 Id: NP_034640.1
 Name: NP_034640
-Description interferon beta, fibroblast [Mus musculus].
+Description: interferon beta, fibroblast [Mus musculus]
 Annotations***
 Key: accessions
 Value: ['NP_034640']
@@ -1068,7 +1068,7 @@ DB cross refs []
 Seq: Seq('TCCAGGGGATTCACGCGCAATATGTTTCCCTCGCTCGTCTGCAGGGTGTGGGAA...TTG', IUPACAmbiguousDNA())
 Id: AL138972.1
 Name: DMBR25B3
-Description Drosophila melanogaster BAC clone BACR25B3.
+Description: Drosophila melanogaster BAC clone BACR25B3
 Annotations***
 Key: accessions
 Value: ['AL138972']
@@ -1321,7 +1321,7 @@ DB cross refs []
 Seq: Seq('GAATTCAGATAGAATGTAGACAAGAGGGATGGTGAGGAAAACCTACGGCAAGCA...GGC', IUPACAmbiguousDNA())
 Id: U18266.1
 Name: HSTMPO1
-Description Human thymopoietin (TMPO) gene, exon 1.
+Description: Human thymopoietin (TMPO) gene, exon 1
 Annotations***
 Key: accessions
 Value: ['U18266']
@@ -1412,7 +1412,7 @@ DB cross refs []
 Seq: UnknownSeq(1250660, alphabet = IUPACAmbiguousDNA(), character = 'N')
 Id: NT_019265.6
 Name: NT_019265
-Description Homo sapiens chromosome 1 working draft sequence segment.
+Description: Homo sapiens chromosome 1 working draft sequence segment
 Annotations***
 Key: accessions
 Value: ['NT_019265']
@@ -1490,7 +1490,7 @@ DB cross refs []
 Seq: Seq('TTAATTAACTGTCTTCGATTGCGTTTAATTGACGGTTTTCGATTAAAAGCGGTA...CGC', IUPACAmbiguousDNA())
 Id: NC_002678.1
 Name: NC_002678
-Description Mesorhizobium loti, complete genome (edited).
+Description: Mesorhizobium loti, complete genome (edited)
 Annotations***
 Key: accessions
 Value: ['NC_002678']
@@ -1546,7 +1546,7 @@ DB cross refs []
 Seq: Seq('MEECWVTEIANGSKDGLDSNPMKDYMILSGPQKTAVAVLCTLLGLLSALENVAV...SDC', IUPACProtein())
 Id: NP_001832.1
 Name: NP_001832
-Description cannabinoid receptor 2 (macrophage) [Homo sapiens].
+Description: cannabinoid receptor 2 (macrophage) [Homo sapiens]
 Annotations***
 Key: accessions
 Value: ['NP_001832']
@@ -1645,7 +1645,7 @@ DB cross refs []
 Seq: Seq('VKDGYIVDDRNCTYFCGRNAYCNEECTKLKGESGYCQWASPYGNACYCYKVPDH...RCN', IUPACProtein())
 Id: P01485
 Name: SCX3_BUTOC
-Description Neurotoxin III.
+Description: Neurotoxin III
 Annotations***
 Key: accessions
 Value: ['P01485']
@@ -1730,7 +1730,7 @@ DB cross refs []
 Seq: Seq('ATGTCTGGCAACCAGTATACTGAGGAAGTTATGGAGGGAGTAAATTGGTTAAAG...TAA', IUPACAmbiguousDNA())
 Id: AB000048.1
 Name: AB000048
-Description Feline panleukopenia virus DNA for nonstructural protein 1, complete cds.
+Description: Feline panleukopenia virus DNA for nonstructural protein 1, complete cds
 Annotations***
 Key: accessions
 Value: ['AB000048']
@@ -1793,7 +1793,7 @@ DB cross refs []
 Seq: Seq('ATGTCTGGCAACCAGTATACTGAGGAAGTTATGGAGGGAGTAAATTGGTTAAAG...TAA', IUPACAmbiguousDNA())
 Id: AB000049.1
 Name: AB000049
-Description Feline panleukopenia virus DNA for nonstructural protein 1, complete cds.
+Description: Feline panleukopenia virus DNA for nonstructural protein 1, complete cds
 Annotations***
 Key: accessions
 Value: ['AB000049']
@@ -1856,7 +1856,7 @@ DB cross refs []
 Seq: Seq('ATGAGTGATGGAGCAGTTCAACCAGACGGTGGTCAACCTGCTGTCAGAAATGAA...TAA', IUPACAmbiguousDNA())
 Id: AB000050.1
 Name: AB000050
-Description Feline panleukopenia virus DNA for capsid protein 2, complete cds.
+Description: Feline panleukopenia virus DNA for capsid protein 2, complete cds
 Annotations***
 Key: accessions
 Value: ['AB000050']
@@ -1919,7 +1919,7 @@ DB cross refs []
 Seq: Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG', IUPACAmbiguousDNA())
 Id: NC_005816.1
 Name: NC_005816
-Description Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence.
+Description: Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence
 Annotations***
 Key: accessions
 Value: ['NC_005816']
@@ -2319,7 +2319,7 @@ DB cross refs ['Project:58037']
 Seq: Seq('CTAGCAGCCCGCATCGCCCTCGACGTTGGCGATCATCGTGCGCAGCACCTTGAG...TGA', IUPACAmbiguousDNA())
 Id: AB070938.1
 Name: AB070938
-Description Streptomyces avermitilis melanin biosynthetic gene cluster.
+Description: Streptomyces avermitilis melanin biosynthetic gene cluster
 Annotations***
 Key: accessions
 Value: ['AB070938']
@@ -2354,7 +2354,7 @@ DB cross refs []
 Seq: Seq('CTAGCAGCCCGCATCGCCCTCGACGTTGGCGATCATCGTGCGCAGCACCTTGAG...TGA', IUPACAmbiguousDNA())
 Id: AB070938.1
 Name: AB070938
-Description Streptomyces avermitilis melanin biosynthetic gene cluster.
+Description: Streptomyces avermitilis melanin biosynthetic gene cluster
 Annotations***
 Key: accessions
 Value: ['AB070938']
@@ -2389,7 +2389,7 @@ DB cross refs []
 Seq: Seq('CTAGCAGCCCGCATCGCCCTCGACGTTGGCGATCATCGTGCGCAGCACCTTGAG...TGA', IUPACAmbiguousDNA())
 Id: AB070938.1
 Name: AB070938
-Description Streptomyces avermitilis melanin biosynthetic gene cluster.
+Description: Streptomyces avermitilis melanin biosynthetic gene cluster
 Annotations***
 Key: accessions
 Value: ['AB070938']
@@ -2422,7 +2422,7 @@ DB cross refs []
 Seq: Seq('CTAGCAGCCCGCATCGCCCTCGACGTTGGCGATCATCGTGCGCAGCACCTTGAG...TGA', IUPACAmbiguousDNA())
 Id: AB070938.1
 Name: AB070938
-Description Streptomyces avermitilis melanin biosynthetic gene cluster.
+Description: Streptomyces avermitilis melanin biosynthetic gene cluster
 Annotations***
 Key: accessions
 Value: ['AB070938']
@@ -2458,7 +2458,7 @@ DB cross refs []
 Seq: Seq('CTAGCAGCCCGCATCGCCCTCGACGTTGGCGATCATCGTGCGCAGCACCTTGAG...TGA', IUPACAmbiguousDNA())
 Id: AB070938.1
 Name: AB070938
-Description Streptomyces avermitilis melanin biosynthetic gene cluster.
+Description: Streptomyces avermitilis melanin biosynthetic gene cluster
 Annotations***
 Key: accessions
 Value: ['AB070938']
@@ -2493,7 +2493,7 @@ DB cross refs []
 Seq: Seq('AYTTFSATKNDQLKEPMFFGQPVQVARYDQQKYDIFEKLIEKQLSFFWRPEEVD...FQL', IUPACProtein())
 Id: 1MRR_A
 Name: 1MRR_A
-Description Chain A, Substitution Of Manganese For Iron In Ribonucleotide Reductase From Escherichia Coli. Spectroscopic And Crystallographic Characterization.
+Description: Chain A, Substitution Of Manganese For Iron In Ribonucleotide Reductase From Escherichia Coli. Spectroscopic And Crystallographic Characterization
 Annotations***
 Key: accessions
 Value: ['1MRR_A']
@@ -2712,7 +2712,7 @@ DB cross refs []
 ***Record from noref.gb with the RecordParser
 sequence length: 1622
 locus: NM_006141
-definition: Homo sapiens dynein, cytoplasmic, light intermediate polypeptide 2 (DNCLI2), mRNA.
+definition: Homo sapiens dynein, cytoplasmic, light intermediate polypeptide 2 (DNCLI2), mRNA
 accession: ['NM_006141']
 feature key: source
 location: 1..1622
@@ -2740,7 +2740,7 @@ key: /translation= value: "MAPVGVEKKLLLGPNGPAVAAAGDLTSEEEEGQSLWSSILSEVSTRARSKLPS
 ***Record from cor6_6.gb with the RecordParser
 sequence length: 513
 locus: ATCOR66M
-definition: A.thaliana cor6.6 mRNA.
+definition: A.thaliana cor6.6 mRNA
 accession: ['X55053']
 reference title: Direct Submission
 reference title: cDNA sequence analysis and expression of two cold-regulated genes of Arabidopsis thaliana
@@ -2767,7 +2767,7 @@ key: /translation= value: "MSETNKNAFQAGQAAGKAEEKSNVLLDKAKDAAAAAGASAQQAGKSISDAAVG
 ***Record from cor6_6.gb with the RecordParser
 sequence length: 880
 locus: ATKIN2
-definition: A.thaliana kin2 gene.
+definition: A.thaliana kin2 gene
 accession: ['X62281']
 reference title: Direct Submission
 reference title: Structure and expression of kin2, one of two cold- and ABA-induced genes of Arabidopsis thaliana
@@ -2841,7 +2841,7 @@ num qualifiers: 0
 ***Record from cor6_6.gb with the RecordParser
 sequence length: 441
 locus: BNAKINI
-definition: Rapeseed Kin1 protein (kin1) mRNA, complete cds.
+definition: Rapeseed Kin1 protein (kin1) mRNA, complete cds
 accession: ['M81224']
 reference title: Nucleotide sequence of a winter B. napus Kin 1 cDNA
 feature key: source
@@ -2882,7 +2882,7 @@ key: /gene= value: "kin1"
 ***Record from cor6_6.gb with the RecordParser
 sequence length: 206
 locus: ARU237582
-definition: Armoracia rusticana csp14 gene (partial), exons 2-3.
+definition: Armoracia rusticana csp14 gene (partial), exons 2-3
 accession: ['AJ237582']
 reference title: 
 reference title: Direct Submission
@@ -2927,7 +2927,7 @@ key: /number= value: 3
 ***Record from cor6_6.gb with the RecordParser
 sequence length: 282
 locus: BRRBIF72
-definition: Brassica rapa (clone bif72) kin mRNA, complete cds.
+definition: Brassica rapa (clone bif72) kin mRNA, complete cds
 accession: ['L31939']
 reference title: Nucleotide sequences of kin gene in chinese cabbage
 feature key: source
@@ -2951,7 +2951,7 @@ key: /translation= value: "MADNKQSFQAGQAAGRAEEKGNVLLMDKVKDAATAAGALQTAGQKITEAAGGA
 ***Record from cor6_6.gb with the RecordParser
 sequence length: 497
 locus: AF297471
-definition: Brassica napus BN28a (BN28a) gene, complete cds.
+definition: Brassica napus BN28a (BN28a) gene, complete cds
 accession: ['AF297471']
 reference title: BN28a, a low temperature-induced gene of Brassica napus
 reference title: Direct Submission
@@ -2983,7 +2983,7 @@ key: /translation= value: "MADNKQSFQAGQAAGRAEEKGNVLMDKVKDAATAAGASAQTAGQKITEAAGGA
 ***Record from iro.gb with the RecordParser
 sequence length: 1326
 locus: IRO125195
-definition: Homo sapiens mRNA full length insert cDNA clone EUROIMAGE 125195.
+definition: Homo sapiens mRNA full length insert cDNA clone EUROIMAGE 125195
 accession: ['AL109817']
 reference title: The European IMAGE consortium for integrated Molecular analysis of human gene transcripts
 reference title: Direct Submission
@@ -3018,7 +3018,7 @@ key: /number= value: 2
 ***Record from pri1.gb with the RecordParser
 sequence length: 741
 locus: HUGLUT1
-definition: Human fructose transporter (GLUT5) gene, promoter and exon 1.
+definition: Human fructose transporter (GLUT5) gene, promoter and exon 1
 accession: ['U05344']
 reference title: Regulation of expression of the human fructose transporter (GLUT5) by cyclic AMP
 reference title: Direct Submission
@@ -3053,7 +3053,7 @@ key: /product= value: "fructose transporter"
 ***Record from arab1.gb with the RecordParser
 sequence length: 86436
 locus: AC007323
-definition: Genomic sequence for Arabidopsis thaliana BAC T25K16 from chromosome I, complete sequence.
+definition: Genomic sequence for Arabidopsis thaliana BAC T25K16 from chromosome I, complete sequence
 accession: ['AC007323']
 reference title: Genomic sequence for Arabidopsis thaliana BAC T25K16 from chromosome I
 reference title: Direct Submission
@@ -3250,7 +3250,7 @@ key: /translation= value: "MFSLNMRTEIESLWVFALASKFNIYMQQHFASLLVAIAITWFTITIVFWSTPG
 ***Record from protein_refseq.gb with the RecordParser
 sequence length: 182
 locus: NP_034640
-definition: interferon beta, fibroblast [Mus musculus].
+definition: interferon beta, fibroblast [Mus musculus]
 accession: ['NP_034640']
 reference title: structure and expression of a cloned cdna for mouse interferon-beta
 feature key: source
@@ -3293,7 +3293,7 @@ key: /coded_by= value: "NM_010510.1:21..569"
 ***Record from extra_keywords.gb with the RecordParser
 sequence length: 154329
 locus: DMBR25B3
-definition: Drosophila melanogaster BAC clone BACR25B3.
+definition: Drosophila melanogaster BAC clone BACR25B3
 accession: ['AL138972']
 reference title: Sequencing the distal X chromosome of Drosophila melanogaster
 reference title: Direct Submission
@@ -3461,7 +3461,7 @@ key: /translation= value: "MEEEAPRFNVLEEAFNGNGNGCANVEATQSAILKVLTRVNRFQMRVRKHIEDN
 ***Record from one_of.gb with the RecordParser
 sequence length: 2509
 locus: HSTMPO1
-definition: Human thymopoietin (TMPO) gene, exon 1.
+definition: Human thymopoietin (TMPO) gene, exon 1
 accession: ['U18266']
 reference title: Structure and mapping of the human thymopoietin (TMPO) gene and relationship of TMPO beta to rat lamin-associated polypeptide 2
 reference title: Direct Submission
@@ -3508,7 +3508,7 @@ key: /translation= value: "MPEFLEDPSVLTKDKLKSELVANNVTLPAGEQRKDVYVQLYLQHLTARNRPPL
 ***Record from NT_019265.gb with the RecordParser
 sequence length: 0
 locus: NT_019265
-definition: Homo sapiens chromosome 1 working draft sequence segment.
+definition: Homo sapiens chromosome 1 working draft sequence segment
 accession: ['NT_019265']
 reference title: Direct Submission
 feature key: source
@@ -3545,7 +3545,7 @@ key: /db_xref= value: "LocusID:55735"
 ***Record from origin_line.gb with the RecordParser
 sequence length: 180
 locus: NC_002678
-definition: Mesorhizobium loti, complete genome (edited).
+definition: Mesorhizobium loti, complete genome (edited)
 accession: ['NC_002678']
 reference title: Complete genome structure of the nitrogen-fixing symbiotic bacterium Mesorhizobium loti
 reference title: Direct Submission
@@ -3562,7 +3562,7 @@ key: /gene= value: "fake"
 ***Record from blank_seq.gb with the RecordParser
 sequence length: 360
 locus: NP_001832
-definition: cannabinoid receptor 2 (macrophage) [Homo sapiens].
+definition: cannabinoid receptor 2 (macrophage) [Homo sapiens]
 accession: ['NP_001832']
 reference title: Molecular characterization of a peripheral receptor for cannabinoids
 reference title: Expression of central and peripheral cannabinoid receptors in human immune tissues and leukocyte subpopulations
@@ -3595,7 +3595,7 @@ key: /coded_by= value: "NM_001841.1:127..1209"
 ***Record from dbsource_wrap.gb with the RecordParser
 sequence length: 64
 locus: SCX3_BUTOC
-definition: Neurotoxin III.
+definition: Neurotoxin III
 accession: ['P01485']
 reference title: Neurotoxins from the venoms of two scorpions: Buthus occitanus tunetanus and Buthus occitanus mardochei
 feature key: source
@@ -3634,7 +3634,7 @@ key: /site_type= value: "amidation"
 ***Record from gbvrl1_start.seq with the RecordParser
 sequence length: 2007
 locus: AB000048
-definition: Feline panleukopenia virus DNA for nonstructural protein 1, complete cds.
+definition: Feline panleukopenia virus DNA for nonstructural protein 1, complete cds
 accession: ['AB000048']
 reference title: Evolutionary pattern of feline panleukopenia virus differs from that of canine parvovirus
 reference title: Direct Submission
@@ -3657,7 +3657,7 @@ key: /translation= value: "MSGNQYTEEVMEGVNWLKKHAEDEAFSFVFKCDNVQLNGKDVRWNNYTKPIQN
 ***Record from gbvrl1_start.seq with the RecordParser
 sequence length: 2007
 locus: AB000049
-definition: Feline panleukopenia virus DNA for nonstructural protein 1, complete cds.
+definition: Feline panleukopenia virus DNA for nonstructural protein 1, complete cds
 accession: ['AB000049']
 reference title: Evolutionary pattern of feline panleukopenia virus differs that of canine parvovirus
 reference title: Direct Submission
@@ -3680,7 +3680,7 @@ key: /translation= value: "MSGNQYTEEVMEGVNWLKKHAEDEAFSFVFKCDNVQLNGKDVRWNNYTKPIQN
 ***Record from gbvrl1_start.seq with the RecordParser
 sequence length: 1755
 locus: AB000050
-definition: Feline panleukopenia virus DNA for capsid protein 2, complete cds.
+definition: Feline panleukopenia virus DNA for capsid protein 2, complete cds
 accession: ['AB000050']
 reference title: Evolutionary pattern of feline panleukopenia virus differs from that of canine parvovirus
 reference title: Direct Submission
@@ -3703,7 +3703,7 @@ key: /translation= value: "MSDGAVQPDGGQPAVRNERATGSGNGSGGGGGGGSGGVGISTGTFNNQTEFKF
 ***Record from NC_005816.gb with the RecordParser
 sequence length: 9609
 locus: NC_005816
-definition: Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence.
+definition: Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence
 accession: ['NC_005816']
 reference title: Genetics of metabolic variations between Yersinia pestis biovars and the proposal of a new biovar, microtus
 reference title: Complete genome sequence of Yersinia pestis strain 91001, an isolate avirulent to humans
@@ -4015,7 +4015,7 @@ key: /replace= value: "tt"
 ***Record from no_end_marker.gb with the RecordParser
 sequence length: 6497
 locus: AB070938
-definition: Streptomyces avermitilis melanin biosynthetic gene cluster.
+definition: Streptomyces avermitilis melanin biosynthetic gene cluster
 accession: ['AB070938']
 feature key: source
 location: 1..6497
@@ -4026,7 +4026,7 @@ key: /db_xref= value: "taxon:33903"
 ***Record from wrong_sequence_indent.gb with the RecordParser
 sequence length: 6497
 locus: AB070938
-definition: Streptomyces avermitilis melanin biosynthetic gene cluster.
+definition: Streptomyces avermitilis melanin biosynthetic gene cluster
 accession: ['AB070938']
 feature key: source
 location: 1..6497
@@ -4037,7 +4037,7 @@ key: /db_xref= value: "taxon:33903"
 ***Record from invalid_locus_line_spacing.gb with the RecordParser
 sequence length: 6497
 locus: AB070938
-definition: Streptomyces avermitilis melanin biosynthetic gene cluster.
+definition: Streptomyces avermitilis melanin biosynthetic gene cluster
 accession: ['AB070938']
 feature key: source
 location: 1..6497
@@ -4048,7 +4048,7 @@ key: /db_xref= value: "taxon:33903"
 ***Record from empty_feature_qualifier.gb with the RecordParser
 sequence length: 6497
 locus: AB070938
-definition: Streptomyces avermitilis melanin biosynthetic gene cluster.
+definition: Streptomyces avermitilis melanin biosynthetic gene cluster
 accession: ['AB070938']
 feature key: source
 location: 1..6497
@@ -4061,7 +4061,7 @@ key: /note value:
 ***Record from invalid_misc_feature.gb with the RecordParser
 sequence length: 6497
 locus: AB070938
-definition: Streptomyces avermitilis melanin biosynthetic gene cluster.
+definition: Streptomyces avermitilis melanin biosynthetic gene cluster
 accession: ['AB070938']
 feature key: source
 location: 1..6497
@@ -4072,7 +4072,7 @@ key: /db_xref= value: "taxon:33903"
 ***Record from 1MRR_A.gp with the RecordParser
 sequence length: 375
 locus: 1MRR_A
-definition: Chain A, Substitution Of Manganese For Iron In Ribonucleotide Reductase From Escherichia Coli. Spectroscopic And Crystallographic Characterization.
+definition: Chain A, Substitution Of Manganese For Iron In Ribonucleotide Reductase From Escherichia Coli. Spectroscopic And Crystallographic Characterization
 accession: ['1MRR_A']
 reference title: Three-dimensional structure of the free radical protein of ribonucleotide reductase
 reference title: Substitution of manganese for iron in ribonucleotide reductase from Escherichia coli. Spectroscopic and crystallographic characterization
