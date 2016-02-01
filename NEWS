@@ -23,6 +23,7 @@ PEP257 and best practice standard coding style.
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+Bertrand Néron
 Chris Warth
 Peter Cock
 
@@ -227,7 +228,7 @@ Anthony Mathelier (first contribution)
 Antony Lee (first contribution)
 Anuj Sharma (first contribution)
 Ben Fulton (first contribution)
-Bertrand Néron (first contribution)
+Bertrand Néron
 Brandon Invergo
 Carlos Pena
 Christian Brueffer
