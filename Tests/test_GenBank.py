@@ -183,9 +183,7 @@ def t_write_format():
 
             print("\tTesting for %s" % cur_record.version)
 
-            cur_record.definition += '.'
             output_record = str(cur_record) + "\n"
-
             do_comparison(compare_record, output_record)
 
         cur_handle.close()

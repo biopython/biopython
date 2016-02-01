@@ -273,7 +273,7 @@ class Record(object):
         """Provide output for the DEFINITION line.
         """
         output = Record.BASE_FORMAT % "DEFINITION"
-        output += _wrapped_genbank(self.definition, Record.GB_BASE_INDENT)
+        output += _wrapped_genbank(self.definition + ".", Record.GB_BASE_INDENT)
         return output
 
     def _accession_line(self):
