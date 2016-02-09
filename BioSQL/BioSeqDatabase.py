@@ -630,14 +630,14 @@ class BioSeqDatabase(object):
 
     def __getitem__(self, key):
         if key not in self:
-            raise KeyError(key)
+            raise KeyError("Entry %r cannot be found or is invalid" % key)
 
         return BioSeq.DBSeqRecord(self.adaptor, key)
 
     def __delitem__(self, key):
         """Remove an entry and all its annotation."""
         if key not in self:
-            raise KeyError(key)
+            raise KeyError("Entry %r cannot be deleted. It was not found or is invalid" % key)
         # Assuming this will automatically cascade to the other tables...
         sql = "DELETE FROM bioentry " + \
               "WHERE biodatabase_id=%s AND bioentry_id=%s;"
