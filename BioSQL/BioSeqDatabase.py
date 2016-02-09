@@ -629,6 +629,9 @@ class BioSeqDatabase(object):
         return list(self.keys())
 
     def __getitem__(self, key):
+        if key not in self:
+            raise KeyError(key)
+
         return BioSeq.DBSeqRecord(self.adaptor, key)
 
     def __delitem__(self, key):
