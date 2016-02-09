@@ -332,6 +332,8 @@ class DatabaseLoader(object):
     def _update_left_right_taxon_values(self, left_value):
         """ update the left and right values in the table
         """
+        if not left_value:
+            return
         # Due to the UNIQUE constraint on the left and right values in the taxon
         # table we cannot simply update them through an SQL statement as we risk
         # colliding values. Instead we must select all of the rows that we want to
@@ -341,17 +343,42 @@ class DatabaseLoader(object):
 
         rows = self.adaptor.execute_and_fetchall(
                 "SELECT left_value, right_value, taxon_id FROM taxon WHERE right_value >= %s or left_value > %s",
-                (left_value, left_value))
+                #"SELECT left_value, right_value, taxon_id FROM taxon",
+                (left_value, left_value)
+                )
 
+        right_rows = []
+        left_rows = []
         for i in range(len(rows)):
-            rows[i] = [rows[i][0] + 2, rows[i][1] + 2, rows[i][2]]
+            new_right = rows[i][1]
+            new_left = rows[i][0]
+            if new_right >= left_value:
+                new_right += 2
+
+            if new_left > left_value:
+                new_left += 2
+            right_rows.append((new_right, rows[i][2]))
+            left_rows.append((new_left, rows[i][2]))
 
 
-        # sort the rows based on the left value from largest to smallest
+        # sort the rows based on the value from largest to smallest
         # should ensure no overlaps
-        rows = sorted(rows, key=lambda x: x[0], reverse=True)
+        right_rows = sorted(right_rows, key=lambda x: x[0], reverse=True)
+        left_rows = sorted(left_rows, key=lambda x: x[0], reverse=True)
 
-        self.adaptor.executemany("UPDATE taxon SET left_value = %s, right_value = %s WHERE taxon_id = %s", rows)
+        try:
+            self.adaptor.executemany("UPDATE taxon SET left_value = %s WHERE taxon_id = %s", left_rows)
+            self.adaptor.executemany("UPDATE taxon SET right_value = %s WHERE taxon_id = %s", right_rows)
+        except:
+            #print(orig_rows)
+            #print(rows2)
+            #print(rows)
+
+            #for r in self.adaptor.execute_and_fetchall("select * from taxon"):
+            #    print(r)
+
+            raise
+
 
 
     def _get_taxon_id_from_ncbi_taxon_id(self, ncbi_taxon_id,
