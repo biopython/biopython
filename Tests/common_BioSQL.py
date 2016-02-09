@@ -314,8 +314,11 @@ class MultiReadTest(unittest.TestCase):
         db = self.db
         db2 = self.db2
         for db2_id in db2.keys():
-            with self.assertRaises(KeyError):
+            try:
                 rec = db[db2_id]
+                assert False, "Should have raised KeyError"
+            except KeyError:
+                pass
 
 
 class ReadTest(unittest.TestCase):
