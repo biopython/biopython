@@ -212,6 +212,111 @@ def load_database(gb_filename_or_handle):
     server.close()
     return count
 
+def load_multi_database(gb_filename_or_handle, gb_filename_or_handle2):
+    """Load two GenBank files into a new BioSQL database as different subdatabases.
+
+    This is useful for running tests against a newly created database.
+    """
+
+    create_database()
+    # now open a connection to load the database
+    db_name = "biosql-test"
+    db_name2 = "biosql-test2"
+    server = BioSeqDatabase.open_database(driver=DBDRIVER,
+                                          user=DBUSER, passwd=DBPASSWD,
+                                          host=DBHOST, db=TESTDB)
+    db = server.new_database(db_name)
+
+    # get the GenBank file we are going to put into it
+    iterator = SeqIO.parse(gb_filename_or_handle, "gb")
+    count = db.load(iterator)
+
+    db = server.new_database(db_name2)
+
+    # get the GenBank file we are going to put into it
+    iterator = SeqIO.parse(gb_filename_or_handle2, "gb")
+    # finally put it in the database
+    count2 = db.load(iterator)
+    server.commit()
+
+    server.close()
+    return count + count2
+
+
+class MultiReadTest(unittest.TestCase):
+    """Test reading a database with multiple namespaces."""
+
+    loaded_db = 0
+
+    def setUp(self):
+        """Connect to and load up the database.
+        """
+        load_multi_database("GenBank/cor6_6.gb", "GenBank/NC_000932.gb")
+
+        self.server = BioSeqDatabase.open_database(driver=DBDRIVER,
+                                                   user=DBUSER,
+                                                   passwd=DBPASSWD,
+                                                   host=DBHOST,
+                                                   db=TESTDB)
+
+        self.db = self.server["biosql-test"]
+        self.db2 = self.server['biosql-test2']
+
+    def tearDown(self):
+        self.server.close()
+        destroy_database()
+        del self.db
+        del self.db2
+        del self.server
+
+    def test_server(self):
+        """Check BioSeqDatabase methods"""
+        server = self.server
+        self.assertTrue("biosql-test" in server)
+        self.assertTrue("biosql-test2" in server)
+        self.assertEqual(2, len(server))
+        self.assertEqual(["biosql-test", 'biosql-test2'], list(server.keys()))
+        # Check we can delete the namespace...
+        del server["biosql-test"]
+        del server["biosql-test2"]
+        self.assertEqual(0, len(server))
+        try:
+            del server["non-existant-name"]
+            assert False, "Should have raised KeyError"
+        except KeyError:
+            pass
+
+    def test_get_db_items(self):
+        """Check list, keys, length etc"""
+        db = self.db
+        items = list(db.values())
+        keys = list(db)
+        l = len(items)
+        self.assertEqual(l, len(db))
+        self.assertEqual(l, len(list(db.items())))
+        self.assertEqual(l, len(list(db)))
+        self.assertEqual(l, len(list(db.values())))
+        for (k1, r1), (k2, r2) in zip(zip(keys, items), db.items()):
+            self.assertEqual(k1, k2)
+            self.assertEqual(r1.id, r2.id)
+        for k in keys:
+            del db[k]
+        self.assertEqual(0, len(db))
+        try:
+            del db["non-existant-name"]
+            assert False, "Should have raised KeyError"
+        except KeyError:
+            pass
+
+    def test_cross_retrieval_of_items(self):
+        """Test that valid ids can't be retrieved between namespaces.
+        """
+        db = self.db
+        db2 = self.db2
+        for db2_id in db2.keys():
+            with self.assertRaises(KeyError):
+                rec = db[db2_id]
+
 
 class ReadTest(unittest.TestCase):
     """Test reading a database from an already built database."""
