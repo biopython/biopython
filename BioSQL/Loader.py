@@ -556,8 +556,12 @@ class DatabaseLoader(object):
             # we have reached the top of the lineage but no current taxonomy
             # id has been found
             parent_taxon_id = None
-            right_value = 2
-            left_value = 1
+            left_value = self.adaptor.execute_one(
+                "SELECT MAX(left_value) FROM taxon")[0]
+            if not left_value:
+                left_value = 0
+
+            right_value = left_value + 1
 
         self._update_left_right_taxon_values(left_value)
 
