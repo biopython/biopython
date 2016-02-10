@@ -629,8 +629,10 @@ class BioSeqDatabase(object):
         return list(self.keys())
 
     def __getitem__(self, key):
-        if key not in self:
-            raise KeyError("Entry %r cannot be found or is invalid" % key)
+        record = BioSeq.DBSeqRecord(self.adaptor, key)
+        if record._biodatabase_id != self.dbid:
+            raise KeyError("Entry %r does exist, but not in current name space" % key)
+        return record
 
         return BioSeq.DBSeqRecord(self.adaptor, key)
 
