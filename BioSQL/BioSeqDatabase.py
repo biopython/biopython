@@ -634,8 +634,6 @@ class BioSeqDatabase(object):
             raise KeyError("Entry %r does exist, but not in current name space" % key)
         return record
 
-        return BioSeq.DBSeqRecord(self.adaptor, key)
-
     def __delitem__(self, key):
         """Remove an entry and all its annotation."""
         if key not in self:
