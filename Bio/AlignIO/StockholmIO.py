@@ -141,22 +141,29 @@ from .Interfaces import AlignmentIterator, SequentialAlignmentWriter
 from Bio._py3k import OrderedDict
 
 
+PFAM_GR_MAPPING = {
+    "secondary_structure": "SS",
+    "surface_accessibility": "SA",
+    "transmembrane": "TM",
+    "posterior_probability": "PP",
+    "ligand_binding": "LI",
+    "active_site": "AS",
+    "intron": "IN"
+}
+# Following dictionary deliberately does not cover AC, DE or DR
+PFAM_GS_MAPPING = {
+    "organism": "OS",
+    "organism_classification": "OC",
+    "look": "LO"
+}
+
+
 class StockholmWriter(SequentialAlignmentWriter):
     """Stockholm/PFAM alignment writer."""
 
-    # These dictionaries should be kept in sync with those
-    # defined in the StockholmIterator class.
-    pfam_gr_mapping = {"secondary_structure": "SS",
-                       "surface_accessibility": "SA",
-                       "transmembrane": "TM",
-                       "posterior_probability": "PP",
-                       "ligand_binding": "LI",
-                       "active_site": "AS",
-                       "intron": "IN"}
-    # Following dictionary deliberately does not cover AC, DE or DR
-    pfam_gs_mapping = {"organism": "OS",
-                       "organism_classification": "OC",
-                       "look": "LO"}
+    # Keeping a copy of the global dictionary
+    pfam_gr_mapping = PFAM_GR_MAPPING.copy()
+    pfam_gs_mapping = PFAM_GS_MAPPING.copy()
 
     def write_alignment(self, alignment):
         """Use this to write (another) single alignment to an open file.
@@ -180,8 +187,18 @@ class StockholmWriter(SequentialAlignmentWriter):
 
         self.handle.write("# STOCKHOLM 1.0\n")
         self.handle.write("#=GF SQ %i\n" % count)
+        # Writes the rest of the GF features, before the sequences
+        for feature, values in alignment.annotations['GF'].iteritems():
+            if isinstance(values, str):
+                values = [values]
+            for value in values:
+                self.handle.write("#=GF %s %s\n" % (feature, value))
         for record in alignment:
             self._write_record(record)
+        # Writes the GS features, after the sequences
+        for feature, values in alignment.annotations['GC'].iteritems():
+            for value in values:
+                self.handle.write("#=GC %s %s\n" % (feature, value))
         self.handle.write("//\n")
 
     def _write_record(self, record):
@@ -301,19 +318,9 @@ class StockholmIterator(AlignmentIterator):
     format.
     """
 
-    # These dictionaries should be kept in sync with those
-    # defined in the PfamStockholmWriter class.
-    pfam_gr_mapping = {"SS": "secondary_structure",
-                       "SA": "surface_accessibility",
-                       "TM": "transmembrane",
-                       "PP": "posterior_probability",
-                       "LI": "ligand_binding",
-                       "AS": "active_site",
-                       "IN": "intron"}
-    # Following dictionary deliberately does not cover AC, DE or DR
-    pfam_gs_mapping = {"OS": "organism",
-                       "OC": "organism_classification",
-                       "LO": "look"}
+    # Keeping a copy of the global dictionary
+    pfam_gr_mapping = PFAM_GR_MAPPING.copy()
+    pfam_gs_mapping = PFAM_GS_MAPPING.copy()
 
     _header = None  # for caching lines between __next__ calls
 
@@ -341,8 +348,13 @@ class StockholmIterator(AlignmentIterator):
 
         seqs = {}
         ids = OrderedDict()  # Really only need an OrderedSet, but python lacks this
+        # Generic per-Sequence annotation, free text
         gs = {}
+        # Generic per-Column annotation, exactly 1 char per column
+        gc = {}
+        # Generic per-Residue annotation, exactly 1 char per residue
         gr = {}
+        # Generic per-File annotation, free text
         gf = {}
         passed_end_alignment = False
         while True:
@@ -389,7 +401,13 @@ class StockholmIterator(AlignmentIterator):
                 elif line[:5] == '#=GC ':
                     # Generic per-Column annotation, exactly 1 char per column
                     # Format: "#=GC <feature> <exactly 1 char per column>"
-                    pass
+                    feature, text = line[5:].strip().split(None, 1)
+                    # Each feature key could be used more than once,
+                    # so store the entries as a list of strings.
+                    try:
+                        gc[feature].append(text)
+                    except KeyError:
+                        gc[feature] = [text]
                 elif line[:5] == '#=GS ':
                     # Generic per-Sequence annotation, free text
                     # Format: "#=GS <seqname> <feature> <free text>"
@@ -419,6 +437,10 @@ class StockholmIterator(AlignmentIterator):
             # Next line...
 
         assert len(seqs) <= len(ids)
+        # quick test that all the sequences were loaded
+        assert len(seqs) == int(gf['SQ'][0])
+        # and that feature is not useful
+        del gf['SQ']
         # assert len(gs)   <= len(ids)
         # assert len(gr)   <= len(ids)
 
@@ -457,9 +479,18 @@ class StockholmIterator(AlignmentIterator):
                 records.append(record)
             alignment = MultipleSeqAlignment(records, self.alphabet)
 
-            # TODO - Introduce an annotated alignment class?
-            # For now, store the annotation a new private property:
-            alignment._annotations = gr
+            alignment.annotations = dict(
+                GF=dict(
+                    # making a list of 1 elemet a string allow feature
+                    # such as ID/ACC in Pfam easily checked (no transormation)
+                    (key, value if len(value) > 1 else value[0])
+                    for key, value in gf.iteritems()
+                ),
+                # right now, there's no per column annotation attribute
+                # keeping it like it is, allows to write it in the same
+                # way.
+                GC=gc
+            )
 
             return alignment
         else:
