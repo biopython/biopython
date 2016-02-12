@@ -188,17 +188,19 @@ class StockholmWriter(SequentialAlignmentWriter):
         self.handle.write("# STOCKHOLM 1.0\n")
         self.handle.write("#=GF SQ %i\n" % count)
         # Writes the rest of the GF features, before the sequences
-        for feature, values in alignment.annotations['GF'].iteritems():
-            if isinstance(values, str):
-                values = [values]
-            for value in values:
-                self.handle.write("#=GF %s %s\n" % (feature, value))
+        if 'GF' in alignment.annotations:
+            for feature, values in alignment.annotations['GF'].iteritems():
+                if isinstance(values, str):
+                    values = [values]
+                for value in values:
+                    self.handle.write("#=GF %s %s\n" % (feature, value))
         for record in alignment:
             self._write_record(record)
         # Writes the GS features, after the sequences
-        for feature, values in alignment.annotations['GC'].iteritems():
-            for value in values:
-                self.handle.write("#=GC %s %s\n" % (feature, value))
+        if 'GC' in alignment.annotations:
+            for feature, values in alignment.annotations['GC'].iteritems():
+                for value in values:
+                    self.handle.write("#=GC %s %s\n" % (feature, value))
         self.handle.write("//\n")
 
     def _write_record(self, record):
