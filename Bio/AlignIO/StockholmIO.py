@@ -96,6 +96,8 @@ Stockholm file:
     #=GS AE007476.1 AC AE007476.1
     #=GS AE007476.1 DE AE007476.1
     #=GR AE007476.1 SS -----------------<<<<<<<<-----<<.<<-------->>.>>----------.<<<<<--------->>>>>.-->>>>>>>>---------------
+    #=GC SS_cons .................<<<<<<<<...<<<<<<<........>>>>>>>..
+    #=GC SS_cons ......<<<<<<<.......>>>>>>>..>>>>>>>>...............
     //
     <BLANKLINE>
 
@@ -141,29 +143,31 @@ from .Interfaces import AlignmentIterator, SequentialAlignmentWriter
 from Bio._py3k import OrderedDict
 
 
-PFAM_GR_MAPPING = {
-    "secondary_structure": "SS",
-    "surface_accessibility": "SA",
-    "transmembrane": "TM",
-    "posterior_probability": "PP",
-    "ligand_binding": "LI",
-    "active_site": "AS",
-    "intron": "IN"
-}
+PFAM_GR_MAPPING = {"SS": "secondary_structure",
+                   "SA": "surface_accessibility",
+                   "TM": "transmembrane",
+                   "PP": "posterior_probability",
+                   "LI": "ligand_binding",
+                   "AS": "active_site",
+                   "IN": "intron"}
 # Following dictionary deliberately does not cover AC, DE or DR
-PFAM_GS_MAPPING = {
-    "organism": "OS",
-    "organism_classification": "OC",
-    "look": "LO"
-}
+PFAM_GS_MAPPING = {"OS": "organism",
+                   "OC": "organism_classification",
+                   "LO": "look"}
 
 
 class StockholmWriter(SequentialAlignmentWriter):
     """Stockholm/PFAM alignment writer."""
 
     # Keeping a copy of the global dictionary
-    pfam_gr_mapping = PFAM_GR_MAPPING.copy()
-    pfam_gs_mapping = PFAM_GS_MAPPING.copy()
+    pfam_gr_mapping = dict(
+        (value, key)
+        for key, value in PFAM_GR_MAPPING.iteritems()
+    )
+    pfam_gs_mapping = dict(
+        (value, key)
+        for key, value in PFAM_GS_MAPPING.iteritems()
+    )
 
     def write_alignment(self, alignment):
         """Use this to write (another) single alignment to an open file.
@@ -481,20 +485,27 @@ class StockholmIterator(AlignmentIterator):
 
                 self._populate_meta_data(id, record)
                 records.append(record)
-            alignment = MultipleSeqAlignment(records, self.alphabet)
 
-            alignment.annotations = dict(
-                GF=dict(
-                    # making a list of 1 elemet a string allow feature
-                    # such as ID/ACC in Pfam easily checked (no transormation)
-                    (key, value if len(value) > 1 else value[0])
-                    for key, value in gf.iteritems()
-                ),
-                # right now, there's no per column annotation attribute
-                # keeping it like it is, allows to write it in the same
-                # way.
-                GC=gc
+            alignment = MultipleSeqAlignment(
+                records,
+                self.alphabet,
+                annotations=dict(
+                    GF=dict(
+                        # making a list of 1 elemet a string allow feature
+                        # such as ID/ACC in Pfam easily checked (no transormation)
+                        (key, value if len(value) > 1 else value[0])
+                        for key, value in gf.iteritems()
+                    ),
+                    # right now, there's no per column annotation attribute
+                    # keeping it like it is, allows to write it in the same
+                    # way.
+                    GC=gc
+                )
             )
+
+            # I thought this was redundant, since it's assigned to another
+            # attribute, but I can't find where it's used
+            alignment._annotations = gr
 
             return alignment
         else:
