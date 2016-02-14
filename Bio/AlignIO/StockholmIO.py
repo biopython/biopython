@@ -162,11 +162,11 @@ class StockholmWriter(SequentialAlignmentWriter):
     # Keeping a copy of the global dictionary
     pfam_gr_mapping = dict(
         (value, key)
-        for key, value in PFAM_GR_MAPPING.iteritems()
+        for key, value in PFAM_GR_MAPPING.items()
     )
     pfam_gs_mapping = dict(
         (value, key)
-        for key, value in PFAM_GS_MAPPING.iteritems()
+        for key, value in PFAM_GS_MAPPING.items()
     )
 
     def write_alignment(self, alignment):
@@ -193,7 +193,7 @@ class StockholmWriter(SequentialAlignmentWriter):
         self.handle.write("#=GF SQ %i\n" % count)
         # Writes the rest of the GF features, before the sequences
         if 'GF' in alignment.annotations:
-            for feature, values in alignment.annotations['GF'].iteritems():
+            for feature, values in alignment.annotations['GF'].items():
                 if isinstance(values, str):
                     values = [values]
                 for value in values:
@@ -202,7 +202,7 @@ class StockholmWriter(SequentialAlignmentWriter):
             self._write_record(record)
         # Writes the GS features, after the sequences
         if 'GC' in alignment.annotations:
-            for feature, values in alignment.annotations['GC'].iteritems():
+            for feature, values in alignment.annotations['GC'].items():
                 for value in values:
                     self.handle.write("#=GC %s %s\n" % (feature, value))
         self.handle.write("//\n")
@@ -494,7 +494,7 @@ class StockholmIterator(AlignmentIterator):
                         # making a list of 1 elemet a string allow feature
                         # such as ID/ACC in Pfam easily checked (no transormation)
                         (key, value if len(value) > 1 else value[0])
-                        for key, value in gf.iteritems()
+                        for key, value in gf.items()
                     ),
                     # right now, there's no per column annotation attribute
                     # keeping it like it is, allows to write it in the same
