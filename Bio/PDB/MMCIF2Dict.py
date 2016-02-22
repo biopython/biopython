@@ -73,7 +73,15 @@ class MMCIF2Dict(dict):
                     token += line
                 yield token
             else:
-                tokens = shlex.split(line)
+                try:
+                    tokens = shlex.split(line)
+                except ValueError:
+                    # error "No closing quotation"
+                    line = line.replace("'",'"')
+                    # if odd - add a closing " to that line
+                    if not line.count('"') % 2 == 0:
+                        line = '{}"'.format(line)
+                    tokens = shlex.split(line)
                 for token in tokens:
                     yield token
 
