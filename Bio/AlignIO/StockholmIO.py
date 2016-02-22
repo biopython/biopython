@@ -489,18 +489,7 @@ class StockholmIterator(AlignmentIterator):
             alignment = MultipleSeqAlignment(
                 records,
                 self.alphabet,
-                annotations=dict(
-                    GF=dict(
-                        # making a list of 1 elemet a string allow feature
-                        # such as ID/ACC in Pfam easily checked (no transormation)
-                        (key, value if len(value) > 1 else value[0])
-                        for key, value in gf.items()
-                    ),
-                    # right now, there's no per column annotation attribute
-                    # keeping it like it is, allows to write it in the same
-                    # way.
-                    GC=gc
-                )
+                annotations=dict(GF=gf, GC=gc)
             )
 
             # I thought this was redundant, since it's assigned to another
