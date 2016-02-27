@@ -133,6 +133,29 @@ class ParseReal(unittest.TestCase):
         structure = parser.get_structure("example", "PDB/2OFG.cif")
         self.assertEqual(len(structure), 3)
 
+    def testInsertions(self):
+        """Test file with residue insertion codes"""
+        parser = MMCIFParser()
+        structure = parser.get_structure("example", "PDB/4zhl.cif")
+        for ppbuild in [PPBuilder(), CaPPBuilder()]:
+            # First try allowing non-standard amino acids,
+            polypeptides = ppbuild.build_peptides(structure[0], False)
+            self.assertEqual(len(polypeptides), 2)
+            pp = polypeptides[0]
+            # Check the start and end positions (first segment only)
+            self.assertEqual(pp[0].get_id()[1], 16)
+            self.assertEqual(pp[-1].get_id()[1], 244)
+            # Check the sequence
+            refseq = "IIGGEFTTIENQPWFAAIYRRHRGGSVTYVCGGSLISPCWVISATHCFIDYPKKEDYIVYLGR" \
+                     "SRLNSNTQGEMKFEVENLILHKDYSADTLAYHNDIALLKIRSKEGRCAQPSRTIQTIALPSMY" \
+                     "NDPQFGTSCEITGFGKEQSTDYLYPEQLKMTVVKLISHRECQQPHYYGSEVTTKMLCAADPQW" \
+                     "KTDSCQGDSGGPLVCSLQGRMTLTGIVSWGRGCALKDKPGVYTRVSHFLPWIRSHTKE"
+
+            s = pp.get_sequence()
+            self.assertTrue(isinstance(s, Seq))
+            self.assertEqual(s.alphabet, generic_protein)
+            self.assertEqual(refseq, str(s))
+
     def test_filehandle(self):
         """Test if the parser can handle file handle as well as filename"""
         parser = MMCIFParser()
