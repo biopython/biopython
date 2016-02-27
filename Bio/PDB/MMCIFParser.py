@@ -135,7 +135,7 @@ class MMCIFParser(object):
             altloc = alt_list[i]
             if altloc == ".":
                 altloc = " "
-            resseq = seq_id_list[i]
+            int_resseq = int(seq_id_list[i])
             icode = icode_list[i]
             if icode == "?":
                 icode = " "
@@ -154,6 +154,9 @@ class MMCIFParser(object):
                 hetatm_flag = "H"
             else:
                 hetatm_flag = " "
+
+            resseq = (hetatm_flag, int_resseq, icode)
+
             if serial_list is not None:
                 # model column exists; use it
                 serial_id = serial_list[i]
@@ -171,10 +174,10 @@ class MMCIFParser(object):
             if current_chain_id != chainid:
                 current_chain_id = chainid
                 structure_builder.init_chain(current_chain_id)
+                current_residue_id = None
 
             if current_residue_id != resseq:
                 current_residue_id = resseq
-                int_resseq = int(resseq)
                 structure_builder.init_residue(resname, hetatm_flag, int_resseq, icode)
 
             coord = numpy.array((x, y, z), 'f')
