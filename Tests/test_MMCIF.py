@@ -133,7 +133,7 @@ class ParseReal(unittest.TestCase):
         structure = parser.get_structure("example", "PDB/2OFG.cif")
         self.assertEqual(len(structure), 3)
 
-    def testInsertions(self):
+    def test_insertions(self):
         """Test file with residue insertion codes"""
         parser = MMCIFParser()
         structure = parser.get_structure("example", "PDB/4zhl.cif")
