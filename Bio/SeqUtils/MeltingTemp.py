@@ -123,18 +123,18 @@ Here:
 
 The same for RNA:
 
-    >>> print('{:0.2f}'.format(mt.Tm_NN('CGUUCCAAAGAUGUGGGCAUGAGCUUAC',
-    ...                          c_seq='UGCAAGGcUUCUACACCCGUACUCGAAUGC',
-    ...                          shift=1, nn_table=mt.RNA_NN3,
-    ...                          de_table=mt.RNA_DE1)))
+    >>> print('%0.2f' % mt.Tm_NN('CGUUCCAAAGAUGUGGGCAUGAGCUUAC',
+    ...                   c_seq='UGCAAGGcUUCUACACCCGUACUCGAAUGC',
+    ...                   shift=1, nn_table=mt.RNA_NN3,
+    ...                   de_table=mt.RNA_DE1))
     73.00
 
 Note, that thermodynamic data are not available for all kind of mismatches,
 e.g. most double mismatches or terminal mismaches combined with danglind ends:
 
-    >>> print('{:0.2f}'.format(mt.Tm_NN('CGTTCCAAAGATGTGGGCATGAGCTTAC',
-    ...                          c_seq='TtCAAGGcTTCTACACCCGTACTCGAATGC',
-    ...                          shift=1)))
+    >>> print('%0.2f' % mt.Tm_NN('CGTTCCAAAGATGTGGGCATGAGCTTAC',
+    ...                   c_seq='TtCAAGGcTTCTACACCCGTACTCGAATGC',
+    ...                   shift=1))
     Traceback (most recent call last):
     ValueError: no thermodynamic data for neighbors '.C/TT' available
 
