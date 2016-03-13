@@ -25,14 +25,14 @@ with default parameters gives (essentially) the same results.
 
 General parameters for most Tm methods:
  - seq -- A Biopython sequence object or a string.
- - check -- Checks if the sequence is valid for the given method (default=True).
-   In general, whitespaces and non-base characters are removed and
+ - check -- Checks if the sequence is valid for the given method (default=
+   True). In general, whitespaces and non-base characters are removed and
    characters are converted to uppercase. RNA will be backtranscribed.
- - strict - Do not allow base characters or neighbor duplex keys (e.g. 'AT/NA').
-   that could not or not unambigiously be evaluated for the respective
-   method (default=True). Note that W (= A or T) and S (= C or G) are
-   not ambiguous for Tm_Wallace and Tm_GC. If 'False', average values
-   (if applicable) will be used.
+ - strict -- Do not allow base characters or neighbor duplex keys (e.g.
+   'AT/NA') that could not or not unambigiously be evaluated for the respective
+   method (default=True). Note that W (= A or T) and S (= C or G) are not
+   ambiguous for Tm_Wallace and Tm_GC. If 'False', average values (if
+   applicable) will be used.
 
 This module is not able to detect self-complementary and it will not use
 alignment tools to align an oligonucleotide sequence to its target sequence.
@@ -106,20 +106,37 @@ to von Ahsen et al. (2001) or Owczarzy et al. (2008) (for Tm_NN and Tm_GC):
 
 Dangling ends and mismatches, e.g.::
 
-    Oligo:     CGTTCCaAAGATGTGGGCATGAGCTTAC         CGTTCCaAAGATGTGGGCATGAGCTTAC
-               ::::::X:::::::::::::::::::::   or    ::::::X:::::::::::::::::::::
-    Template:  GCAAGGcTTCTACACCCGTACTCGAATG        TGCAAGGcTTCTACACCCGTACTCGAATGC
+    Oligo:     CGTTCCaAAGATGTGGGCATGAGCTTAC       CGTTCCaAAGATGTGGGCATGAGCTTAC
+               ::::::X:::::::::::::::::::::  or   ::::::X:::::::::::::::::::::
+    Template:  GCAAGGcTTCTACACCCGTACTCGAATG      TGCAAGGcTTCTACACCCGTACTCGAATGC
 
 Here:
 
     >>> print('%0.2f' % mt.Tm_NN('CGTTCCAAAGATGTGGGCATGAGCTTAC'))
     60.32
     >>> print('%0.2f' % mt.Tm_NN('CGTTCCAAAGATGTGGGCATGAGCTTAC',
-    ...                    c_seq='GCAAGGCTTCTACACCCGTACTCGAATG'))
+    ...                    c_seq='GCAAGGcTTCTACACCCGTACTCGAATG'))
     55.39
     >>> print('%0.2f' % mt.Tm_NN('CGTTCCAAAGATGTGGGCATGAGCTTAC', shift=1,
-    ...                   c_seq='TGCAAGGCTTCTACACCCGTACTCGAATGC'))
+    ...                   c_seq='TGCAAGGcTTCTACACCCGTACTCGAATGC'))
     55.69
+
+The same for RNA:
+
+    >>> print('%0.2f' % mt.Tm_NN('CGUUCCAAAGAUGUGGGCAUGAGCUUAC',
+    ...                   c_seq='UGCAAGGcUUCUACACCCGUACUCGAAUGC',
+    ...                   shift=1, nn_table=mt.RNA_NN3,
+    ...                   de_table=mt.RNA_DE1))
+    73.00
+
+Note, that thermodynamic data are not available for all kind of mismatches,
+e.g. most double mismatches or terminal mismaches combined with danglind ends:
+
+    >>> print('%0.2f' % mt.Tm_NN('CGTTCCAAAGATGTGGGCATGAGCTTAC',
+    ...                   c_seq='TtCAAGGcTTCTACACCCGTACTCGAATGC',
+    ...                   shift=1))
+    Traceback (most recent call last):
+    ValueError: no thermodynamic data for neighbors '.C/TT' available
 
 Make your own tables, or update/extend existing tables. E.g., add values for
 locked nucleotides. Here, 'locked A' (and its complement) should be represented
@@ -333,30 +350,30 @@ DNA_DE1 = {
 # Dangling ends table (RNA)
 # Turner & Mathews (2010), Nucl Acids Res 38: D280-D282
 RNA_DE1 = {
-    'AA/T.': (-4.9, -13.2), 'AC/T.': (-0.9, -1.3), 'AG/T.': (-5.5, -15.1),
-    'AT/T.': (-2.3, -5.5),
-    'CA/G.': (-9.0, -23.5), 'CC/G.': (-4.1, -10.6), 'CG/G.': (-8.6, -22.2),
-    'CT/G.': (-7.5, -20.31),
-    'GA/C.': (-7.4, -20.3), 'GC/C.': (-2.8, -7.7), 'GG/C.': (-6.4, -16.4),
-    'GT/C.': (-3.6, -9.7),
-    'GA/T.': (-4.9, -13.2), 'GC/T.': (-0.9, -1.3), 'GG/T.': (-5.5, -15.1),
-    'GT/T.': (-2.3, -5.5),
-    'TA/A.': (-5.7, -16.1), 'TC/A.': (-0.7, -1.9), 'TG/A.': (-5.8, -16.4),
-    'TT/A.': (-2.2, -6.8),
-    'TA/G.': (-5.7, -16.1), 'TC/G.': (-0.7, -1.9), 'TG/G.': (-5.8, -16.4),
-    'TT/G.': (-2.2, -6.8),
-    'A./TA': (-0.5, -0.6), 'A./TC': (6.9, 22.6), 'A./TG': (0.6, 2.6),
-    'A./TT': (0.6, 2.6),
-    'C./GA': (-1.6, -4.5), 'C./GC': (0.7, 3.2), 'C./GG': (-4.6, -14.8),
-    'C./GT': (-0.4, -1.3),
-    'G./CA': (-2.4, -6.1), 'G./CC': (3.3, 11.6), 'G./CG': (0.8, 3.2),
-    'G./CT': (-1.4, -4.2),
-    'G./TA': (-0.5, -0.6), 'G./TC': (6.9, 22.6), 'G./TG': (0.6, 2.6),
-    'G./TT': (0.6, 2.6),
-    'T./AA': (1.6, 6.1), 'T./AC': (2.2, 8.1), 'T./AG': (0.7, 3.5),
-    'T./AT': (3.1, 10.6),
-    'T./GA': (1.6, 6.1), 'T./GC': (2.2, 8.1), 'T./GG': (0.7, 3.5),
-    'T./GT': (3.1, 10.6)}
+    '.T/AA': (-4.9, -13.2), '.T/CA': (-0.9, -1.3), '.T/GA': (-5.5, -15.1),
+    '.T/TA': (-2.3, -5.5),
+    '.G/AC': (-9.0, -23.5), '.G/CC': (-4.1, -10.6), '.G/GC': (-8.6, -22.2),
+    '.G/TC': (-7.5, -20.31),
+    '.C/AG': (-7.4, -20.3), '.C/CG': (-2.8, -7.7), '.C/GG': (-6.4, -16.4),
+    '.C/TG': (-3.6, -9.7),
+    '.T/AG': (-4.9, -13.2), '.T/CG': (-0.9, -1.3), '.T/GG': (-5.5, -15.1),
+    '.T/TG': (-2.3, -5.5),
+    '.A/AT': (-5.7, -16.1), '.A/CT': (-0.7, -1.9), '.A/GT': (-5.8, -16.4),
+    '.A/TT': (-2.2, -6.8),
+    '.G/AT': (-5.7, -16.1), '.G/CT': (-0.7, -1.9), '.G/GT': (-5.8, -16.4),
+    '.G/TT': (-2.2, -6.8),
+    'AT/.A': (-0.5, -0.6), 'CT/.A': (6.9, 22.6), 'GT/.A': (0.6, 2.6),
+    'TT/.A': (0.6, 2.6),
+    'AG/.C': (-1.6, -4.5), 'CG/.C': (0.7, 3.2), 'GG/.C': (-4.6, -14.8),
+    'TG/.C': (-0.4, -1.3),
+    'AC/.G': (-2.4, -6.1), 'CC/.G': (3.3, 11.6), 'GC/.G': (0.8, 3.2),
+    'TC/.G': (-1.4, -4.2),
+    'AT/.G': (-0.5, -0.6), 'CT/.G': (6.9, 22.6), 'GT/.G': (0.6, 2.6),
+    'TT/.G': (0.6, 2.6),
+    'AA/.T': (1.6, 6.1), 'CA/.T': (2.2, 8.1), 'GA/.T': (0.7, 3.5),
+    'TA/.T': (3.1, 10.6),
+    'AG/.T': (1.6, 6.1), 'CG/.T': (2.2, 8.1), 'GG/.T': (0.7, 3.5),
+    'TG/.T': (3.1, 10.6)}
 
 
 def make_table(oldtable=None, values=None):
@@ -395,13 +412,13 @@ def make_table(oldtable=None, values=None):
 
 
 def _check(seq, method):
-    """Return a sequence which fullfils the requirements of the given method (PRIVATE).
+    """Return a sequence which fullfils the requirements of the given method.
 
     All Tm methods in this package require the sequence in uppercase format.
     Most methods make use of the length of the sequence (directly or
     indirectly), which can only be expressed as len(seq) if the sequence does
     not contain whitespaces and other non-base characters. RNA sequences are
-    backtranscribed to DNA. This method is private.
+    backtranscribed to DNA. This method is PRIVATE.
 
     Arguments:
     seq: The sequence as given by the user (passed as string).
@@ -436,8 +453,8 @@ def salt_correction(Na=0, K=0, Tris=0, Mg=0, dNTPs=0, method=1, seq=None):
      - methods 6+7: Tm(new) = 1/(1/Tm(old) + corr)
 
     Parameters:
-     - Na, K, Tris, Mg, dNTPS: Millimolar concentration of respective ion. To have
-       a simple 'salt correction', just pass Na. If any of K, Tris, Mg and
+     - Na, K, Tris, Mg, dNTPS: Millimolar concentration of respective ion. To
+       have a simple 'salt correction', just pass Na. If any of K, Tris, Mg and
        dNTPS is non-zero, a 'sodium-equivalent' concentration is calculated
        according to von Ahsen et al. (2001, Clin Chem 47: 1956-1961):
        [Na_eq] = [Na+] + [K+] + [Tris]/2 + 120*([Mg2+] - [dNTPs])^0.5
@@ -486,11 +503,10 @@ def salt_correction(Na=0, K=0, Tris=0, Mg=0, dNTPs=0, method=1, seq=None):
     Mon = Na + K + Tris / 2.0  # Note: all these values are millimolar
     mg = Mg * 1e-3             # Lowercase ions (mg, mon, dntps) are molar
     # Na equivalent according to von Ahsen et al. (2001):
-    if sum((K, Mg, Tris, dNTPs)) > 0 and not method == 7:
-        if dNTPs < Mg:
-            # dNTPs bind Mg2+ strongly. If [dNTPs] is larger or equal than
-            # [Mg2+], free Mg2+ is considered not to be relevant.
-            Mon += 120 * math.sqrt(Mg - dNTPs)
+    if sum((K, Mg, Tris, dNTPs)) > 0 and not method == 7 and dNTPs < Mg:
+        # dNTPs bind Mg2+ strongly. If [dNTPs] is larger or equal than
+        # [Mg2+], free Mg2+ is considered not to be relevant.
+        Mon += 120 * math.sqrt(Mg - dNTPs)
     mon = Mon * 1e-3
     # Note: math.log = ln(), math.log10 = log()
     if method in range(1, 7) and not mon:
@@ -507,7 +523,7 @@ def salt_correction(Na=0, K=0, Tris=0, Mg=0, dNTPs=0, method=1, seq=None):
     if method == 5:
         corr = 0.368 * (len(seq) - 1) * math.log(mon)
     if method == 6:
-        corr = (4.29 * SeqUtils.GC(seq) / 100 - 3.95) * 1e-5 * math.log(mon) + \
+        corr = (4.29 * SeqUtils.GC(seq) / 100 - 3.95) * 1e-5 * math.log(mon) +\
             9.40e-6 * math.log(mon) ** 2
     if method == 7:
         a, b, c, d = 3.92, -0.911, 6.26, 1.42
@@ -517,7 +533,8 @@ def salt_correction(Na=0, K=0, Tris=0, Mg=0, dNTPs=0, method=1, seq=None):
             ka = 3e4  # Dissociation constant for Mg:dNTP
             # Free Mg2+ calculation:
             mg = (-(ka * dntps - ka * mg + 1.0) +
-                  math.sqrt((ka * dntps - ka * mg + 1.0) ** 2 + 4.0 * ka * mg)) / (2.0 * ka)
+                  math.sqrt((ka * dntps - ka * mg + 1.0) ** 2 +
+                            4.0 * ka * mg)) / (2.0 * ka)
         if Mon > 0:
             R = math.sqrt(mg) / mon
             if R < 0.22:
@@ -538,20 +555,20 @@ def salt_correction(Na=0, K=0, Tris=0, Mg=0, dNTPs=0, method=1, seq=None):
     return corr
 
 
-def chem_correction(Tm, DMSO=0, fmd=0, DMSOfactor=0.75, fmdfactor=0.65,
-                    fmdmethod=1, GC=None):
+def chem_correction(melting_temp, DMSO=0, fmd=0, DMSOfactor=0.75,
+                    fmdfactor=0.65, fmdmethod=1, GC=None):
     """Correct a given Tm for DMSO and formamide.
 
     Please note that these corrections are +/- rough approximations.
 
     Arguments:
-     - Tm: Melting temperature.
+     - melting_temp: Melting temperature.
      - DMSO: Percent DMSO.
-     - fmd: Formamide concentration in %(fmdmethod=1) or in molar (fmdmethod=2).
+     - fmd: Formamide concentration in %(fmdmethod=1) or molar (fmdmethod=2).
      - DMSOfactor: How much should Tm decreases per percent DMSO. Default=0.65
        (von Ahsen et al. 2001). Other published values are 0.5, 0.6 and 0.675.
-     - fmdfactor: How much should Tm decrease per percent formamide. Default=0.65.
-       Several papers report factors between 0.6 and 0.72.
+     - fmdfactor: How much should Tm decrease per percent formamide.
+       Default=0.65. Several papers report factors between 0.6 and 0.72.
      - fmdmethod:
 
          1. Tm = Tm - factor(%formamide) (Default)
@@ -577,19 +594,21 @@ def chem_correction(Tm, DMSO=0, fmd=0, DMSOfactor=0.75, fmdfactor=0.65,
 
     """
     if DMSO:
-        Tm -= DMSOfactor * DMSO
+        melting_temp -= DMSOfactor * DMSO
     if fmd:
         # McConaughy et al. (1969), Biochemistry 8: 3289-3295
         if fmdmethod == 1:
-            Tm -= fmdfactor * fmd                 # Note: fmd is percent
+            # Note: Here fmd is given in percent
+            melting_temp -= fmdfactor * fmd
         # Blake & Delcourt (1996), Nucl Acids Res 11: 2095-2103
         if fmdmethod == 2:
             if GC is None or GC < 0:
                 raise ValueError('\'GC\' is missing or negative')
-            Tm += (0.453 * (GC / 100.0) - 2.88) * fmd   # Note: fmd is molar
+            # Note: Here fmd is given in molar
+            melting_temp += (0.453 * (GC / 100.0) - 2.88) * fmd
         if fmdmethod not in (1, 2):
             raise ValueError('\'fmdmethod\' must be 1 or 2')
-    return Tm
+    return melting_temp
 
 
 def Tm_Wallace(seq, check=True, strict=True):
@@ -618,7 +637,7 @@ def Tm_Wallace(seq, check=True, strict=True):
     if check:
         seq = _check(seq, 'Tm_Wallace')
 
-    Tm = 2 * (sum(map(seq.count, ('A', 'T', 'W')))) + \
+    melting_temp = 2 * (sum(map(seq.count, ('A', 'T', 'W')))) + \
         4 * (sum(map(seq.count, ('C', 'G', 'S'))))
 
     # Intermediate values for ambiguous positions:
@@ -629,8 +648,8 @@ def Tm_Wallace(seq, check=True, strict=True):
         raise ValueError('ambiguous bases B, D, H, K, M, N, R, V, Y not ' +
                          'allowed when strict=True')
     else:
-        Tm += tmp
-    return Tm
+        melting_temp += tmp
+    return melting_temp
 
 
 def Tm_GC(seq, check=True, strict=True, valueset=7, userset=None, Na=50, K=0,
@@ -655,17 +674,20 @@ def Tm_GC(seq, check=True, strict=True, valueset=7, userset=None, Na=50, K=0,
            (Marmur & Doty 1962, J Mol Biol 5: 109-118; Chester & Marshak 1993),
            Anal Biochem 209: 284-290)
         2. Tm = 81.5 + 0.41(%GC) - 675/N - %mismatch
-           'QuikChange' formula. Recommended (by the manufacturer) for the design
-           of primers for QuikChange mutagenesis.
+           'QuikChange' formula. Recommended (by the manufacturer) for the
+           design of primers for QuikChange mutagenesis.
         3. Tm = 81.5 + 0.41(%GC) - 675/N + 16.6 x log[Na+]
-           (Marmur & Doty 1962, J Mol Biol 5: 109-118; Schildkraut & Lifson 1965,
-           Biopolymers 3: 195-208)
-        4. Tm = 81.5 + 0.41(%GC) - 500/N + 16.6 x log([Na+]/(1.0 + 0.7 x [Na+])) - %mismatch
+           (Marmur & Doty 1962, J Mol Biol 5: 109-118; Schildkraut & Lifson
+           1965, Biopolymers 3: 195-208)
+        4. Tm = 81.5 + 0.41(%GC) - 500/N + 16.6 x log([Na+]/(1.0 + 0.7 x
+                [Na+])) - %mismatch
            (Wetmur 1991, Crit Rev Biochem Mol Biol 126: 227-259). This is the
            standard formula in approximative mode of MELTING 4.3.
-        5. Tm = 78 + 0.7(%GC) - 500/N + 16.6 x log([Na+]/(1.0 + 0.7 x [Na+])) - %mismatch
+        5. Tm = 78 + 0.7(%GC) - 500/N + 16.6 x log([Na+]/(1.0 + 0.7 x [Na+]))
+                - %mismatch
            (Wetmur 1991, Crit Rev Biochem Mol Biol 126: 227-259). For RNA.
-        6. Tm = 67 + 0.8(%GC) - 500/N + 16.6 x log([Na+]/(1.0 + 0.7 x [Na+])) - %mismatch
+        6. Tm = 67 + 0.8(%GC) - 500/N + 16.6 x log([Na+]/(1.0 + 0.7 x [Na+]))
+                - %mismatch
            (Wetmur 1991, Crit Rev Biochem Mol Biol 126: 227-259). For RNA/DNA
            hybrids.
         7. Tm = 81.5 + 0.41(%GC) - 600/N + 16.6 x log[Na+]
@@ -676,12 +698,12 @@ def Tm_GC(seq, check=True, strict=True, valueset=7, userset=None, Na=50, K=0,
 
      - userset: Tuple of four values for A, B, C, and D. Usersets override
        valuesets.
-     - Na, K, Tris, Mg, dNTPs: Concentration of the respective ions [mM]. If any
-       of K, Tris, Mg and dNTPS is non-zero, a 'sodium-equivalent'
+     - Na, K, Tris, Mg, dNTPs: Concentration of the respective ions [mM]. If
+       any of K, Tris, Mg and dNTPS is non-zero, a 'sodium-equivalent'
        concentration is calculated and used for salt correction (von Ahsen et
        al., 2001).
-     - saltcorr: Type of salt correction (see method salt_correction). Default=5.
-       0 or None means no salt correction.
+     - saltcorr: Type of salt correction (see method salt_correction).
+       Default=5. 0 or None means no salt correction.
      - mismatch: If 'True' (default) every 'X' in the sequence is counted as
        mismatch.
 
@@ -692,7 +714,7 @@ def Tm_GC(seq, check=True, strict=True, valueset=7, userset=None, Na=50, K=0,
     seq = str(seq)
     if check:
         seq = _check(seq, 'Tm_GC')
-    pGC = SeqUtils.GC(seq)
+    percent_gc = SeqUtils.GC(seq)
     # Ambiguous bases: add 0.5, 0.67 or 0.33% depending on G+C probability:
     tmp = sum(map(seq.count, ('K', 'M', 'N', 'R', 'Y'))) * 50.0 / len(seq) + \
         sum(map(seq.count, ('B', 'V'))) * 66.67 / len(seq) + \
@@ -701,7 +723,7 @@ def Tm_GC(seq, check=True, strict=True, valueset=7, userset=None, Na=50, K=0,
         raise ValueError('ambiguous bases B, D, H, K, M, N, R, V, Y not ' +
                          'allowed when strict=True')
     else:
-        pGC += tmp
+        percent_gc += tmp
     if userset:
         A, B, C, D = userset
     else:
@@ -732,13 +754,26 @@ def Tm_GC(seq, check=True, strict=True, valueset=7, userset=None, Na=50, K=0,
     if valueset > 8:
         raise ValueError('allowed values for parameter \'valueset\' are 0-8.')
 
-    Tm = A + B * pGC - C / (len(seq) * 1.0)
+    melting_temp = A + B * percent_gc - C / (len(seq) * 1.0)
     if saltcorr:
-        Tm += salt_correction(Na=Na, K=K, Tris=Tris, Mg=Mg, dNTPs=dNTPs,
-                              seq=seq, method=saltcorr)
+        melting_temp += salt_correction(Na=Na, K=K, Tris=Tris, Mg=Mg,
+                                        dNTPs=dNTPs, seq=seq, method=saltcorr)
     if mismatch:
-        Tm -= D * (seq.count('X') * 100.0 / len(seq))
-    return Tm
+        melting_temp -= D * (seq.count('X') * 100.0 / len(seq))
+    return melting_temp
+
+
+def _key_error(neighbors, strict):
+    """Throw an error or a warning if there is no data for the neighbors."""
+    # We haven't found the key in the tables
+    if strict:
+        raise ValueError('no thermodynamic data for neighbors \'' + neighbors +
+                         '\' available')
+    else:
+        warnings.warn('no themodynamic data for neighbors \'' + neighbors +
+                      '\' available. Calculation will be wrong',
+                      BiopythonWarning)
+        return
 
 
 def Tm_NN(seq, check=True, strict=True, c_seq=None, shift=0, nn_table=DNA_NN3,
@@ -748,14 +783,14 @@ def Tm_NN(seq, check=True, strict=True, c_seq=None, shift=0, nn_table=DNA_NN3,
     """Return the Tm using nearest neighbor thermodynamics.
 
     Arguments:
-     - seq: The primer/probe sequence as string or Biopython sequence object. For
-       RNA/DNA hybridizations seq must be the RNA sequence.
+     - seq: The primer/probe sequence as string or Biopython sequence object.
+       For RNA/DNA hybridizations seq must be the RNA sequence.
      - c_seq: Complementary sequence. The sequence of the template/target in
        3'->5' direction. c_seq is necessary for mismatch correction and
        dangling-ends correction. Both corrections will automatically be
        applied if mismatches or dangling ends are present. Default=None.
-     - shift: Shift of the primer/probe sequence on the template/target sequence,
-       e.g.::
+     - shift: Shift of the primer/probe sequence on the template/target
+       sequence, e.g.::
 
                            shift=0       shift=1        shift= -1
         Primer (seq):      5' ATGC...    5'  ATGC...    5' ATGC...
@@ -783,8 +818,8 @@ def Tm_NN(seq, check=True, strict=True, c_seq=None, shift=0, nn_table=DNA_NN3,
 
        Use the module's maketable method to make a new table or to update one
        one of the implemented tables.
-     - tmm_table: Thermodynamic values for terminal mismatches. Default: DNA_TMM1
-       (SantaLucia & Peyret, 2001)
+     - tmm_table: Thermodynamic values for terminal mismatches.
+       Default: DNA_TMM1 (SantaLucia & Peyret, 2001)
      - imm_table: Thermodynamic values for internal mismatches, may include
        insosine mismatches. Default: DNA_IMM1 (Allawi & SantaLucia, 1997-1998;
        Peyret et al., 1999; Watkins & SantaLucia, 2005)
@@ -793,18 +828,18 @@ def Tm_NN(seq, check=True, strict=True, c_seq=None, shift=0, nn_table=DNA_NN3,
         - DNA_DE1: for DNA. Values from Bommarito et al. (2000). Default
         - RNA_DE1: for RNA. Values from Turner & Mathews (2010)
 
-     - dnac1: Concentration of the higher concentrated strand [nM]. Typically this
-       will be the primer (for PCR) or the probe. Default=25.
-     - dnac2: Concentration of the lower concentrated strand [nM]. In PCR this is
-       the template strand which concentration is typically very low and may
+     - dnac1: Concentration of the higher concentrated strand [nM]. Typically
+       this will be the primer (for PCR) or the probe. Default=25.
+     - dnac2: Concentration of the lower concentrated strand [nM]. In PCR this
+       is the template strand which concentration is typically very low and may
        be ignored (dnac2=0). In oligo/oligo hybridization experiments, dnac1
        equals dnac1. Default=25.
        MELTING and Primer3Plus use k = [Oligo(Total)]/4 by default. To mimic
        this behaviour, you have to divide [Oligo(Total)] by 2 and assign this
        concentration to dnac1 and dnac2. E.g., Total oligo concentration of
        50 nM in Primer3Plus means dnac1=25, dnac2=25.
-     - selfcomp: Is the sequence self-complementary? Default=False. If 'True' the
-       primer is thought binding to itself, thus dnac2 is not considered.
+     - selfcomp: Is the sequence self-complementary? Default=False. If 'True'
+       the primer is thought binding to itself, thus dnac2 is not considered.
      - Na, K, Tris, Mg, dNTPs: See method 'Tm_GC' for details. Defaults: Na=50,
        K=0, Tris=0, Mg=0, dNTPs=0.
      - saltcorr: See method 'Tm_GC'. Default=5. 0 means no salt correction.
@@ -819,57 +854,63 @@ def Tm_NN(seq, check=True, strict=True, c_seq=None, shift=0, nn_table=DNA_NN3,
     if check:
         seq = _check(seq, 'Tm_NN')
         c_seq = _check(c_seq, 'Tm_NN')
-    tmpseq = seq
+    tmp_seq = seq
     tmp_cseq = c_seq
-    deltaH = 0
-    deltaS = 0
-    dH = 0  # Names for indexes
-    dS = 1  # 0 and 1
+    delta_h = 0
+    delta_s = 0
+    d_h = 0  # Names for indexes
+    d_s = 1  # 0 and 1
 
     # Dangling ends?
     if shift or len(seq) != len(c_seq):
         # Align both sequences using the shift parameter
         if shift > 0:
-            tmpseq = '.' * shift + seq
+            tmp_seq = '.' * shift + seq
         if shift < 0:
             tmp_cseq = '.' * abs(shift) + c_seq
-        if len(tmp_cseq) > len(tmpseq):
-            tmpseq += (len(tmp_cseq) - len(tmpseq)) * '.'
-        if len(tmp_cseq) < len(tmpseq):
-            tmp_cseq += (len(tmpseq) - len(tmp_cseq)) * '.'
+        if len(tmp_cseq) > len(tmp_seq):
+            tmp_seq += (len(tmp_cseq) - len(tmp_seq)) * '.'
+        if len(tmp_cseq) < len(tmp_seq):
+            tmp_cseq += (len(tmp_seq) - len(tmp_cseq)) * '.'
         # Remove 'over-dangling' ends
-        while tmpseq.startswith('..') or tmp_cseq.startswith('..'):
-            tmpseq = tmpseq[1:]
+        while tmp_seq.startswith('..') or tmp_cseq.startswith('..'):
+            tmp_seq = tmp_seq[1:]
             tmp_cseq = tmp_cseq[1:]
-        while tmpseq.endswith('..') or tmp_cseq.endswith('..'):
-            tmpseq = tmpseq[:-1]
+        while tmp_seq.endswith('..') or tmp_cseq.endswith('..'):
+            tmp_seq = tmp_seq[:-1]
             tmp_cseq = tmp_cseq[:-1]
         # Now for the dangling ends
-        if tmpseq.startswith('.') or tmp_cseq.startswith('.'):
-            left_de = tmpseq[:2] + '/' + tmp_cseq[:2]
-            deltaH += de_table[left_de][dH]
-            deltaS += de_table[left_de][dS]
-            tmpseq = tmpseq[1:]
+        if tmp_seq.startswith('.') or tmp_cseq.startswith('.'):
+            left_de = tmp_seq[:2] + '/' + tmp_cseq[:2]
+            try:
+                delta_h += de_table[left_de][d_h]
+                delta_s += de_table[left_de][d_s]
+            except KeyError:
+                _key_error(left_de, strict)
+            tmp_seq = tmp_seq[1:]
             tmp_cseq = tmp_cseq[1:]
-        if tmpseq.endswith('.') or tmp_cseq.endswith('.'):
-            right_de = tmp_cseq[-2:][::-1] + '/' + tmpseq[-2:][::-1]
-            deltaH += de_table[right_de][dH]
-            deltaS += de_table[right_de][dS]
-            tmpseq = tmpseq[:-1]
+        if tmp_seq.endswith('.') or tmp_cseq.endswith('.'):
+            right_de = tmp_cseq[-2:][::-1] + '/' + tmp_seq[-2:][::-1]
+            try:
+                delta_h += de_table[right_de][d_h]
+                delta_s += de_table[right_de][d_s]
+            except KeyError:
+                _key_error(right_de, strict)
+            tmp_seq = tmp_seq[:-1]
             tmp_cseq = tmp_cseq[:-1]
 
     # Now for terminal mismatches
-    left_tmm = tmp_cseq[:2][::-1] + '/' + tmpseq[:2][::-1]
+    left_tmm = tmp_cseq[:2][::-1] + '/' + tmp_seq[:2][::-1]
     if left_tmm in tmm_table:
-        deltaH += tmm_table[left_tmm][dH]
-        deltaS += tmm_table[left_tmm][dS]
-        tmpseq = tmpseq[1:]
+        delta_h += tmm_table[left_tmm][d_h]
+        delta_s += tmm_table[left_tmm][d_s]
+        tmp_seq = tmp_seq[1:]
         tmp_cseq = tmp_cseq[1:]
-    right_tmm = tmpseq[-2:] + '/' + tmp_cseq[-2:]
+    right_tmm = tmp_seq[-2:] + '/' + tmp_cseq[-2:]
     if right_tmm in tmm_table:
-        deltaH += tmm_table[right_tmm][dH]
-        deltaS += tmm_table[right_tmm][dS]
-        tmpseq = tmpseq[:-1]
+        delta_h += tmm_table[right_tmm][d_h]
+        delta_s += tmm_table[right_tmm][d_s]
+        tmp_seq = tmp_seq[:-1]
         tmp_cseq = tmp_cseq[:-1]
 
     # Now everything 'unusual' at the ends is handled and removed and we can
@@ -877,84 +918,79 @@ def Tm_NN(seq, check=True, strict=True, c_seq=None, shift=0, nn_table=DNA_NN3,
     # One or several of the following initiation types may apply:
 
     # Type: General initiation value
-    deltaH += nn_table['init'][dH]
-    deltaS += nn_table['init'][dS]
+    delta_h += nn_table['init'][d_h]
+    delta_s += nn_table['init'][d_s]
 
     # Type: Duplex with no (allA/T) or at least one (oneG/C) GC pair
     if SeqUtils.GC(seq) == 0:
-        deltaH += nn_table['init_allA/T'][dH]
-        deltaS += nn_table['init_allA/T'][dS]
+        delta_h += nn_table['init_allA/T'][d_h]
+        delta_s += nn_table['init_allA/T'][d_s]
     else:
-        deltaH += nn_table['init_oneG/C'][dH]
-        deltaS += nn_table['init_oneG/C'][dS]
+        delta_h += nn_table['init_oneG/C'][d_h]
+        delta_s += nn_table['init_oneG/C'][d_s]
 
     # Type: Penalty if 5' end is T
     if seq.startswith('T'):
-        deltaH += nn_table['init_5T/A'][dH]
-        deltaS += nn_table['init_5T/A'][dS]
+        delta_h += nn_table['init_5T/A'][d_h]
+        delta_s += nn_table['init_5T/A'][d_s]
     if seq.endswith('A'):
-        deltaH += nn_table['init_5T/A'][dH]
-        deltaS += nn_table['init_5T/A'][dS]
+        delta_h += nn_table['init_5T/A'][d_h]
+        delta_s += nn_table['init_5T/A'][d_s]
 
     # Type: Different values for G/C or A/T terminal basepairs
     ends = seq[0] + seq[-1]
     AT = ends.count('A') + ends.count('T')
     GC = ends.count('G') + ends.count('C')
-    deltaH += nn_table['init_A/T'][dH] * AT
-    deltaS += nn_table['init_A/T'][dS] * AT
-    deltaH += nn_table['init_G/C'][dH] * GC
-    deltaS += nn_table['init_G/C'][dS] * GC
+    delta_h += nn_table['init_A/T'][d_h] * AT
+    delta_s += nn_table['init_A/T'][d_s] * AT
+    delta_h += nn_table['init_G/C'][d_h] * GC
+    delta_s += nn_table['init_G/C'][d_s] * GC
 
     # Finally, the 'zipping'
-    for basenumber in range(len(tmpseq) - 1):
-        neighbors = tmpseq[basenumber:basenumber + 2] + '/' + \
+    for basenumber in range(len(tmp_seq) - 1):
+        neighbors = tmp_seq[basenumber:basenumber + 2] + '/' + \
             tmp_cseq[basenumber:basenumber + 2]
         if neighbors in imm_table:
-            deltaH += imm_table[neighbors][dH]
-            deltaS += imm_table[neighbors][dS]
+            delta_h += imm_table[neighbors][d_h]
+            delta_s += imm_table[neighbors][d_s]
         elif neighbors[::-1] in imm_table:
-            deltaH += imm_table[neighbors[::-1]][dH]
-            deltaS += imm_table[neighbors[::-1]][dS]
+            delta_h += imm_table[neighbors[::-1]][d_h]
+            delta_s += imm_table[neighbors[::-1]][d_s]
         elif neighbors in nn_table:
-            deltaH += nn_table[neighbors][dH]
-            deltaS += nn_table[neighbors][dS]
+            delta_h += nn_table[neighbors][d_h]
+            delta_s += nn_table[neighbors][d_s]
         elif neighbors[::-1] in nn_table:
-            deltaH += nn_table[neighbors[::-1]][dH]
-            deltaS += nn_table[neighbors[::-1]][dS]
+            delta_h += nn_table[neighbors[::-1]][d_h]
+            delta_s += nn_table[neighbors[::-1]][d_s]
         else:
             # We haven't found the key...
-            if strict:
-                raise ValueError('no data for neighbors \'' + neighbors + '\'')
-            else:
-                warnings.warn('no data for neighbors \'' + neighbors +
-                              '\'. Calculation will be wrong',
-                              BiopythonWarning)
+            _key_error(neighbors, strict)
 
     k = (dnac1 - (dnac2 / 2.0)) * 1e-9
     if selfcomp:
         k = dnac1 * 1e-9
-        deltaH += nn_table['sym'][dH]
-        deltaS += nn_table['sym'][dS]
+        delta_h += nn_table['sym'][d_h]
+        delta_s += nn_table['sym'][d_s]
     R = 1.987  # universal gas constant in Cal/degrees C*Mol
     if saltcorr:
         corr = salt_correction(Na=Na, K=K, Tris=Tris, Mg=Mg, dNTPs=dNTPs,
                                method=saltcorr, seq=seq)
     if saltcorr == 5:
-        deltaS += corr
-    Tm = (1000 * deltaH) / (deltaS + (R * (math.log(k)))) - 273.15
+        delta_s += corr
+    melting_temp = (1000 * delta_h) / (delta_s + (R * (math.log(k)))) - 273.15
     if saltcorr in (1, 2, 3, 4):
-        Tm += corr
+        melting_temp += corr
     if saltcorr in (6, 7):
         # Tm = 1/(1/Tm + corr)
-        Tm = (1 / (1 / (Tm + 273.15) + corr) - 273.15)
+        melting_temp = (1 / (1 / (melting_temp + 273.15) + corr) - 273.15)
 
-    return Tm
+    return melting_temp
 
 __docformat__ = "restructuredtext en"
 
 
 def Tm_staluc(s, dnac=50, saltc=50, rna=0):
-    """Returns DNA/DNA tm using nearest neighbor thermodynamics (OBSOLETE).
+    """Returns DNA/DNA Tm using nearest neighbor thermodynamics (OBSOLETE).
 
     This method may be depreceated in the future. Use Tm_NN instead. Tm_NN
     with default values gives the same result as Tm_staluc.
@@ -996,7 +1032,7 @@ def Tm_staluc(s, dnac=50, saltc=50, rna=0):
         return Tm_NN(s, dnac1=dnac / 2.0, dnac2=dnac / 2.0, Na=saltc,
                      nn_table=RNA_NN2)
     else:
-        raise ValueError("rna=%r not supported" % rna)
+        raise ValueError("rna={0} not supported".format(rna))
 
 
 def _test():
