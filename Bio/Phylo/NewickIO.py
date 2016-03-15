@@ -333,7 +333,7 @@ class Writer(object):
                     return (':' + format_branch_length
                             ) % (clade.branch_length or 0.0) + _get_comment(clade)
                 else:
-                    return (':' + format_confidence + ':' + format_branch_length
+                    return (format_confidence + ':' + format_branch_length
                             ) % (clade.confidence, clade.branch_length or 0.0) + _get_comment(clade)
 
         return make_info_string
