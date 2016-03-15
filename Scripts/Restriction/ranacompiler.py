@@ -6,25 +6,20 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-#
-#   this script is used to produce the dictionary which will contains the data
-#   about the restriction enzymes from the Emboss/Rebase data files
-#   namely
+# This script is used to produce the dictionary which will contains the data
+# about the restriction enzymes from the Emboss/Rebase data files, namely:
 #   emboss_e.### (description of the sites),
 #   emboss_r.### (origin, methylation, references)
 #   emboss_s.### (suppliers)
-#   where ### is a number of three digits : 1 for the year two for the month
-#
-#   very dirty implementation but it does the job, so...
-#   Not very quick either but you are not supposed to use it frequently.
-#
+# Where ### is a number of three digits : 1 for the year two for the month
 #   The results are stored in
 #   path/to/site-packages/Bio/Restriction/Restriction_Dictionary.py
 #   the file contains two dictionary:
 #   'rest_dict' which contains the data for the enzymes
 #   and
 #   'suppliers' which map the name of the suppliers to their abbreviation.
-#
+# very dirty implementation but it does the job, so...
+# Not very quick either but you are not supposed to use it frequently.
 
 """Convert a series of Rebase files into a Restriction_Dictionary.py module.
 
@@ -72,6 +67,8 @@ from Bio.Restriction.Restriction import Commercially_available, Not_available
 import Bio.Restriction.RanaConfig as config
 from Bio.Restriction._Update.Update import RebaseUpdate
 from Bio.Restriction.Restriction import *
+
+__docformat__ = "restructuredtext en"
 
 dna_alphabet = {'A':'A', 'C':'C', 'G':'G', 'T':'T',
                 'R':'AG', 'Y':'CT', 'W':'AT', 'S':'CG', 'M':'AC', 'K':'GT',

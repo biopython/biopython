@@ -207,6 +207,8 @@ class DataHandler(object):
         # expects binary data
         if handle.__class__.__name__ == 'EvilHandleHack':
             handle = handle._handle
+        if handle.__class__.__name__ == 'TextIOWrapper':
+            handle = handle.buffer
         if hasattr(handle, "closed") and handle.closed:
             # Should avoid a possible Segmentation Fault, see:
             # http://bugs.python.org/issue4877

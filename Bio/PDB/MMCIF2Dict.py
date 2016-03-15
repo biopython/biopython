@@ -12,6 +12,8 @@ from Bio._py3k import input as _input
 
 import shlex
 
+__docformat__ = "restructuredtext en"
+
 
 class MMCIF2Dict(dict):
     """Parse a mmCIF file and return a dictionary."""

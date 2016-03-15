@@ -13,6 +13,8 @@ from __future__ import print_function
 
 import sys
 
+__docformat__ = "restructuredtext en"
+
 
 class SteadyStateEvolver(object):
     """Evolve a population in place.

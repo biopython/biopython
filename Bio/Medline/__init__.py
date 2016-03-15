@@ -112,7 +112,7 @@ def parse(handle):
         from Bio import Medline
         with open("mymedlinefile") as handle:
             records = Medline.parse(handle)
-            for record in record:
+            for record in records:
                 print(record['TI'])
 
     """

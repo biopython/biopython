@@ -272,7 +272,7 @@ def help(exit=0):
         sys.exit(0)
 
 if __name__ == '__main__':
-    pyphy_home = os.environ.get('PYPHY', None)
+    pyphy_home = os.environ.get('PYPHY')
 
     if len(sys.argv) == 1:
         help(exit=1)

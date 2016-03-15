@@ -11,6 +11,8 @@ from __future__ import print_function
 import os
 from Bio.Application import AbstractCommandline, _Option, _Switch, _Argument
 
+__docformat__ = "restructuredtext en"
+
 
 class XXmotifCommandline(AbstractCommandline):
     """Command line wrapper for XXmotif.

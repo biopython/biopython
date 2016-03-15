@@ -1178,9 +1178,9 @@ or a threshold (approximately) satisfying some relation between the false-positi
 >>> print("%5.3f" % threshold)
 6.241
 \end{verbatim}
-or a threshold satisfying (roughly) the equality between the
-false-positive rate and the $-log$ of the information content (as used
-in patser software by Hertz and Stormo):
+or a threshold satisfying (roughly) the equality between the $-log$ of the
+false-positive rate and the information content (as used in patser software by
+Hertz and Stormo):
 %cont-doctest
 \begin{verbatim}
 >>> threshold = distribution.threshold_patser()
@@ -1434,7 +1434,7 @@ roughly $1-0.239=0.761$.
 \label{sec:find}
 
 Currently, Biopython has only limited support for \emph{de novo} motif
-finding. Namely, we support running and parsing of AlignAce and
+finding. Namely, we support running \verb|xxmotif| and also parsing of
 MEME. Since the number of motif finding tools is growing rapidly,
 contributions of new parsers are welcome.
 
@@ -1488,58 +1488,7 @@ Seq('CTCAATCGTA', IUPACUnambiguousDNA())
 \end{verbatim}
 
 
-\subsection{AlignAce}
-\label{sec:alignace}
-
-We can do very similar things with the AlignACE program. Assume, you have
-your output in the file \verb|alignace.out|. You can parse your output
-with the following code:
-
-%cont-doctest
-\begin{verbatim}
->>> from Bio import motifs
->>> with open("alignace.out") as handle:
-...     motifsA = motifs.parse(handle, "alignace")
-...
-\end{verbatim}
-
-Again, your motifs behave as they should:
-%cont-doctest
-\begin{verbatim}
->>> motifsA[0].consensus
-Seq('TCTACGATTGAG', IUPACUnambiguousDNA())
-\end{verbatim}
-
-In fact you can even see, that AlignAce found a very similar motif as
-MEME. It is just a longer version of a reverse complement of the MEME
-motif:
-%cont-doctest
-\begin{verbatim}
->>> motifsM[0].reverse_complement().consensus
-Seq('TACGATTGAG', IUPACUnambiguousDNA())
-\end{verbatim}
-
-If you have AlignAce installed on the same machine, you can also run
-it directly from Biopython. A short example of how this can be done is
-shown below (other parameters can be specified as keyword parameters):
-
-\begin{verbatim}
->>> command="/opt/bin/AlignACE"
->>> input_file="test.fa"
->>> from Bio.motifs.applications import AlignAceCommandline
->>> cmd = AlignAceCommandline(cmd=command, input=input_file, gcback=0.6, numcols=10)
->>> stdout, stderr= cmd()
-\end{verbatim}
-
-Since AlignAce prints all of its output to standard output, you can get
-to your motifs by parsing the first part of the result:
-\begin{verbatim}
->>> motifs = motifs.parse(stdout, "alignace")
-\end{verbatim}
-
-
-
-\section{Useful links }
+\section{Useful links}
 \label{sec:links}
 
 

@@ -9,6 +9,8 @@ from __future__ import print_function
 
 import numpy
 
+__docformat__ = "restructuredtext en"
+
 
 def m2rotaxis(m):
     """

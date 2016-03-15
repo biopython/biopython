@@ -19,6 +19,8 @@ of the classes passed to the network.
 
 from __future__ import print_function
 
+__docformat__ = "restructuredtext en"
+
 
 class ValidationIncreaseStop(object):
     """Class to stop training on a network when the validation error increases.

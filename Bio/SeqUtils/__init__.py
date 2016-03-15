@@ -3,7 +3,7 @@
 # thomas@cbs.dtu.dk, Cecilia.Alsmark@ebc.uu.se
 # Copyright 2001 by Thomas Sicheritz-Ponten and Cecilia Alsmark.
 # Revisions copyright 2014 by Markus Piotrowski.
-# Revisions copyright 2014 by Peter Cock.
+# Revisions copyright 2014-2016 by Peter Cock.
 # All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -81,7 +81,7 @@ def GC123(seq):
         try:
             n = d['G'][i] + d['C'][i] + d['T'][i] + d['A'][i]
             gc[i] = (d['G'][i] + d['C'][i]) * 100.0 / n
-        except:
+        except Exception:  # TODO - ValueError?
             gc[i] = 0
 
         gcall = gcall + d['G'][i] + d['C'][i]

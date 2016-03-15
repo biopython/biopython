@@ -13,6 +13,8 @@ check.
 # standard library
 import random
 
+__docformat__ = "restructuredtext en"
+
 
 class AmbiguousRepair(object):
     """Perform repair to reduce the number of Ambiguous genes in a genome.

@@ -14,6 +14,8 @@ from Bio.PDB.PDBExceptions import PDBConstructionWarning
 from Bio.PDB.Vector import Vector
 from Bio.Data import IUPACData
 
+__docformat__ = "restructuredtext en"
+
 
 class Atom(object):
     def __init__(self, name, coord, bfactor, occupancy, altloc, fullname, serial_number,

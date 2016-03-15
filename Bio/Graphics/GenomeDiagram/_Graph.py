@@ -34,6 +34,8 @@ from reportlab.lib import colors
 
 from math import sqrt
 
+__docformat__ = "restructuredtext en"
+
 
 class GraphData(object):
     """ GraphData

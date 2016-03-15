@@ -9,7 +9,7 @@ Representing DNA (or RNA or proteins) in a neural network can be difficult
 since input sequences can have different lengths. One way to get around
 this problem is to deal with sequences by finding common motifs, and counting
 the number of times those motifs occur in a sequence. This information can
-then be used for creating the neural networks, with occurances of motifs
+then be used for creating the neural networks, with occurrences of motifs
 going into the network instead of raw sequence data.
 """
 # biopython
@@ -18,6 +18,8 @@ from Bio.Seq import Seq
 
 # local modules
 from .Pattern import PatternRepository
+
+__docformat__ = "restructuredtext en"
 
 
 class MotifFinder(object):

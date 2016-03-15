@@ -17,6 +17,8 @@ import sys
 # GenBank stuff to test
 from Bio import GenBank
 
+__docformat__ = "restructuredtext en"
+
 if len(sys.argv) != 2:
     print("Usage ./check_output.py <GenBank file to parse>")
     sys.exit()

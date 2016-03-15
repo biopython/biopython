@@ -34,7 +34,7 @@ Notes about the diverses class of the restriction enzyme implementation::
                                     with palindromic sites.
         ----------------------------------------------------------------------------
             Unknown, Blunt,         represent the overhang.
-            Ov5, Ov3                Unknown is here for symetry reasons and
+            Ov5, Ov3                Unknown is here for symmetry reasons and
                                     correspond to enzymes that are not characterised
                                     in rebase.
         ----------------------------------------------------------------------------

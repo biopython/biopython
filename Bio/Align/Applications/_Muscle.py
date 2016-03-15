@@ -406,7 +406,7 @@ class MuscleCommandline(AbstractCommandline):
             # One of either -le, -sp, or -sv
             #
             # According to the doc, spn is default and the only option for
-            # nucleotides: this doesnt appear to be true. -le, -sp, and -sv can
+            # nucleotides: this doesn't appear to be true. -le, -sp, and -sv can
             # be used and produce numerically different logs (what is going on?)
             #
             # spn fails on proteins

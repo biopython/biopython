@@ -10,6 +10,8 @@ from __future__ import print_function
 
 import os
 
+__docformat__ = "restructuredtext en"
+
 
 def iterlen(items):
     """Count the number of items in an iterable.
@@ -106,7 +108,7 @@ def run_doctest(target_dir=None, *args, **kwargs):
 
     cur_dir = os.path.abspath(os.curdir)
 
-    print("Runing doctests...")
+    print("Running doctests...")
     try:
         os.chdir(find_test_dir(target_dir))
         doctest.testmod(*args, **kwargs)

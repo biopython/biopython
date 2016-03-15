@@ -1,4 +1,4 @@
-# Copyright 2006-2010 by Peter Cock.  All rights reserved.
+# Copyright 2006-2015 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -488,7 +488,7 @@ def write(sequences, handle, format):
             alignment_count = AlignIO.write([alignment], fp, format)
             assert alignment_count == 1, \
                 "Internal error - the underlying writer " \
-                " should have returned 1, not %s" % repr(alignment_count)
+                " should have returned 1, not %r" % alignment_count
             count = len(alignment)
             del alignment_count, alignment
         elif format in _FormatToIterator or format in AlignIO._FormatToIterator:
@@ -498,8 +498,8 @@ def write(sequences, handle, format):
             raise ValueError("Unknown format '%s'" % format)
 
         assert isinstance(count, int), "Internal error - the underlying %s " \
-            "writer should have returned the record count, not %s" \
-            % (format, repr(count))
+            "writer should have returned the record count, not %r" \
+            % (format, count)
 
     return count
 
@@ -578,7 +578,7 @@ def parse(handle, format, alphabet=None):
         raise ValueError("Format string '%s' should be lower case" % format)
     if alphabet is not None and not (isinstance(alphabet, Alphabet) or
                                      isinstance(alphabet, AlphabetEncoder)):
-        raise ValueError("Invalid alphabet, %s" % repr(alphabet))
+        raise ValueError("Invalid alphabet, %r" % alphabet)
 
     with as_handle(handle, mode) as fp:
         # Map the file format to a sequence iterator:
@@ -613,9 +613,9 @@ def _force_alphabet(record_iterator, alphabet):
             record.seq.alphabet = alphabet
             yield record
         else:
-            raise ValueError("Specified alphabet %s clashes with "
-                             "that determined from the file, %s"
-                             % (repr(alphabet), repr(record.seq.alphabet)))
+            raise ValueError("Specified alphabet %r clashes with "
+                             "that determined from the file, %r"
+                             % (alphabet, record.seq.alphabet))
 
 
 def read(handle, format, alphabet=None):
@@ -857,7 +857,7 @@ def index(filename, format, alphabet=None, key_function=None):
         raise ValueError("Format string '%s' should be lower case" % format)
     if alphabet is not None and not (isinstance(alphabet, Alphabet) or
                                      isinstance(alphabet, AlphabetEncoder)):
-        raise ValueError("Invalid alphabet, %s" % repr(alphabet))
+        raise ValueError("Invalid alphabet, %r" % alphabet)
 
     # Map the file format to a sequence iterator:
     from ._index import _FormatToRandomAccess  # Lazy import
@@ -937,7 +937,7 @@ def index_db(index_filename, filenames=None, format=None, alphabet=None,
         raise ValueError("Format string '%s' should be lower case" % format)
     if alphabet is not None and not (isinstance(alphabet, Alphabet) or
                                      isinstance(alphabet, AlphabetEncoder)):
-        raise ValueError("Invalid alphabet, %s" % repr(alphabet))
+        raise ValueError("Invalid alphabet, %r" % alphabet)
 
     # Map the file format to a sequence iterator:
     from ._index import _FormatToRandomAccess  # Lazy import

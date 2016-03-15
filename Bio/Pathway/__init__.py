@@ -57,9 +57,9 @@ class Reaction(object):
 
     Attributes:
 
-        - reactants   -- map of involved species to their stochiometric coefficients:
+        - reactants   -- dict of involved species to their stochiometric coefficients:
           reactants[S] = stochiometric constant for S
-        - catalysts   -- list of tuples of catalysts required for this reaction
+        - catalysts   -- list/tuple of tuples of catalysts required for this reaction
         - reversible  -- true iff reaction is reversible
         - data        -- reference to arbitrary additional data
 
@@ -70,15 +70,18 @@ class Reaction(object):
 
     """
 
-    def __init__(self, reactants={}, catalysts=[],
+    def __init__(self, reactants=None, catalysts=(),
                  reversible=0, data=None):
         """Initializes a new Reaction object."""
         # enforce invariants on reactants:
-        self.reactants = reactants.copy()
-        # loop over original, edit the copy
-        for r, value in reactants.items():
-            if value == 0:
-                del self.reactants[r]
+        if reactants is None:
+            self.reactants = {}
+        else:
+            self.reactants = reactants.copy()
+            # loop over original, edit the copy
+            for r, value in reactants.items():
+                if value == 0:
+                    del self.reactants[r]
         self.catalysts = sorted(set(catalysts))
         self.data = data
         self.reversible = reversible

@@ -9,6 +9,8 @@
 
 from reportlab.lib import colors
 
+__docformat__ = "restructuredtext en"
+
 
 class CrossLink(object):
     """Hold information for drawing a cross link between features.

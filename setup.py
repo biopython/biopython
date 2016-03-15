@@ -136,6 +136,8 @@ elif sys.version_info[0] == 3 and sys.version_info[:2] < (3, 3):
     print("Biopython requires Python 3.3 or later (or Python 2.6 or 2.7). "
           "Python %d.%d detected" % sys.version_info[:2])
     sys.exit(1)
+elif sys.version_info[:2] == (3, 3):
+    print("WARNING: Biopython support for Python 3.3 is now deprecated.")
 
 
 def check_dependencies_once():

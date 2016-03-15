@@ -39,7 +39,7 @@ ja = {'A': 0.28, 'R':-1.14, 'N':-0.55, 'D':-0.52, 'C': 0.97,
       'S':-0.19, 'T':-0.32, 'W': 0.29, 'Y':-0.15, 'V': 0.60}
 
 
-# A two dimentional dictionary for calculating the instability index.
+# A two dimensional dictionary for calculating the instability index.
 # Guruprasad K., Reddy B.V.B., Pandit M.W.    Protein Engineering 4:155-161(1990).
 # It is based on dipeptide values therefore the vale for the dipeptide DG is DIWV['D']['G'].
 DIWV = {'A': {'A': 1.0, 'C': 44.94, 'E': 1.0, 'D': -7.49,

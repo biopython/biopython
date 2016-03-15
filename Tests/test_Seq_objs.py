@@ -500,6 +500,7 @@ class StringMethodTests(unittest.TestCase):
             self.assertEqual("***RR", str(nuc.translate(table=11)))
             self.assertEqual("***RR", str(nuc.translate(table='11')))
             self.assertEqual("***RR", str(nuc.translate(table='Bacterial')))
+            self.assertEqual("**GRR", str(nuc.translate(table=25)))
             self.assertEqual("", str(nuc.translate(to_stop=True)))
             self.assertEqual("O*ORR", str(nuc.translate(table=special_table)))
             self.assertEqual("*QWRR", str(nuc.translate(table=Chilodonella_uncinata_table)))

@@ -229,7 +229,12 @@ class _IndexedSeqFileProxy(object):
         raise NotImplementedError("Subclass should implement this")
 
     def get_raw(self, offset):
-        """Returns bytes string (if implemented for this file format)."""
+        """Return the raw record from the file as a bytes string (if implemented).
+
+        If the key is not found, a KeyError exception is raised.
+
+        This may not have been implemented for all file formats.
+        """
         # Should be done by each sub-class (if possible)
         raise NotImplementedError("Not available for this file format.")
 
@@ -371,14 +376,9 @@ class _IndexedSeqFileDict(_dict_base):
             return d
 
     def get_raw(self, key):
-        """Similar to the get method, but returns the record as a raw string.
+        """Return the raw record from the file as a bytes string.
 
         If the key is not found, a KeyError exception is raised.
-
-        Note that on Python 3 a bytes string is returned, not a typical
-        unicode string.
-
-        NOTE - This functionality is not supported for every file format.
         """
         # Pass the offset to the proxy
         return self._proxy.get_raw(self._offsets[key])
@@ -602,7 +602,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
                 # Since user gave BOTH filename & index as relative paths,
                 # we will store this relative to the index file even though
                 # if it may now start ../ (meaning up a level)
-                # Note for cross platfrom use (e.g. shared data drive over SAMBA),
+                # Note for cross platform use (e.g. shared data drive over SAMBA),
                 # convert any Windows slash into Unix style / for relative paths.
                 f = os.path.relpath(filename, relative_path).replace(os.path.sep, "/")
             elif (os.path.dirname(os.path.abspath(filename)) + os.path.sep).startswith(relative_path + os.path.sep):
@@ -714,14 +714,9 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
             return d
 
     def get_raw(self, key):
-        """Similar to the get method, but returns the record as a raw string.
+        """Return the raw record from the file as a bytes string.
 
         If the key is not found, a KeyError exception is raised.
-
-        Note that on Python 3 a bytes string is returned, not a typical
-        unicode string.
-
-        **NOTE** - This functionality is not supported for every file format.
         """
         # Pass the offset to the proxy
         row = self._con.execute(

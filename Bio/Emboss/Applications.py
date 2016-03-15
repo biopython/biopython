@@ -646,7 +646,7 @@ class FDNAParsCommandline(_EmbossCommandLine):
         _Option(["-thorough", "thorough"],
                  "more thorough search (Y/n)"),
         _Option(["-rearrange", "rearrange"],
-                 "Rearrange on jsut 1 best tree (Y/n)"),
+                 "Rearrange on just 1 best tree (Y/n)"),
         _Option(["-transversion", "transversion"],
                  "Use tranversion parsimony (y/N)"),
         _Option(["-njumble", "njumble"],

@@ -2,7 +2,8 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""
+"""Align on protein structure onto another using SVD alignment.
+
 SVDSuperimposer finds the best rotation and translation to put
 two point sets on top of each other (minimizing the RMSD). This is
 eg. useful to superimpose crystal structures. SVD stands for singular
@@ -14,9 +15,12 @@ from __future__ import print_function
 from numpy import dot, transpose, sqrt, array
 from numpy.linalg import svd, det
 
+__docformat__ = "restructuredtext en"
+
 
 class SVDSuperimposer(object):
-    """
+    """Class to run SVD alignment,
+
     SVDSuperimposer finds the best rotation and translation to put
     two point sets on top of each other (minimizing the RMSD). This is
     eg. useful to superimpose crystal structures.
@@ -44,7 +48,7 @@ class SVDSuperimposer(object):
         self.init_rms = None
 
     def _rms(self, coords1, coords2):
-        "Return rms deviations between coords1 and coords2."
+        """Return rms deviations between coords1 and coords2."""
         diff = coords1 - coords2
         l = coords1.shape[0]
         return sqrt(sum(sum(diff * diff)) / l)
@@ -52,12 +56,12 @@ class SVDSuperimposer(object):
     # Public methods
 
     def set(self, reference_coords, coords):
-        """
-        Set the coordinates to be superimposed.
+        """Set the coordinates to be superimposed.
+
         coords will be put on top of reference_coords.
 
-        o reference_coords: an NxDIM array
-        o coords: an NxDIM array
+        - reference_coords: an NxDIM array
+        - coords: an NxDIM array
 
         DIM is the dimension of the points, N is the number
         of points to be superimposed.
@@ -74,7 +78,7 @@ class SVDSuperimposer(object):
         self.n = n[0]
 
     def run(self):
-        "Superimpose the coordinate sets."
+        """Superimpose the coordinate sets."""
         if self.coords is None or self.reference_coords is None:
             raise Exception("No coordinates set.")
         coords = self.coords
@@ -95,7 +99,7 @@ class SVDSuperimposer(object):
         self.tran = av2 - dot(av1, self.rot)
 
     def get_transformed(self):
-        "Get the transformed coordinate set."
+        """Get the transformed coordinate set."""
         if self.coords is None or self.reference_coords is None:
             raise Exception("No coordinates set.")
         if self.rot is None:
@@ -105,13 +109,13 @@ class SVDSuperimposer(object):
         return self.transformed_coords
 
     def get_rotran(self):
-        "Right multiplying rotation matrix and translation."
+        """Right multiplying rotation matrix and translation."""
         if self.rot is None:
             raise Exception("Nothing superimposed yet.")
         return self.rot, self.tran
 
     def get_init_rms(self):
-        "Root mean square deviation of untransformed coordinates."
+        """Root mean square deviation of untransformed coordinates."""
         if self.coords is None:
             raise Exception("No coordinates set yet.")
         if self.init_rms is None:
@@ -119,7 +123,7 @@ class SVDSuperimposer(object):
         return self.init_rms
 
     def get_rms(self):
-        "Root mean square deviation of superimposed coordinates."
+        """Root mean square deviation of superimposed coordinates."""
         if self.rms is None:
             transformed_coords = self.get_transformed()
             self.rms = self._rms(transformed_coords, self.reference_coords)

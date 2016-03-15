@@ -1,4 +1,4 @@
-# Copyright 2006-2014 by Peter Cock.  All rights reserved.
+# Copyright 2006-2015 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -137,7 +137,7 @@ class FastaWriter(SequentialSequenceWriter):
     def __init__(self, handle, wrap=60, record2title=None):
         """Create a Fasta writer.
 
-        Arguements:
+        Arguments:
 
          - handle - Handle to an output file, e.g. as returned
            by open(filename, "w")
@@ -213,71 +213,5 @@ class FastaWriter(SequentialSequenceWriter):
             self.handle.write(data + "\n")
 
 if __name__ == "__main__":
-    print("Running quick self test")
-
-    import os
-    from Bio.Alphabet import generic_protein, generic_nucleotide
-
-    # Download the files from here:
-    # ftp://ftp.ncbi.nlm.nih.gov/genomes/Bacteria/Nanoarchaeum_equitans
-    fna_filename = "NC_005213.fna"
-    faa_filename = "NC_005213.faa"
-
-    def genbank_name_function(text):
-        text, descr = text.split(None, 1)
-        id = text.split("|")[3]
-        name = id.split(".", 1)[0]
-        return id, name, descr
-
-    def print_record(record):
-        # See also bug 2057
-        # http://bugzilla.open-bio.org/show_bug.cgi?id=2057
-        print("ID:" + record.id)
-        print("Name:" + record.name)
-        print("Descr:" + record.description)
-        print(record.seq)
-        for feature in record.annotations:
-            print('/%s=%s' % (feature, record.annotations[feature]))
-        if record.dbxrefs:
-            print("Database cross references:")
-            for x in record.dbxrefs:
-                print(" - %s" % x)
-
-    if os.path.isfile(fna_filename):
-        print("--------")
-        print("FastaIterator (single sequence)")
-        with open(fna_filename, "r") as h:
-            iterator = FastaIterator(h, alphabet=generic_nucleotide,
-                                     title2ids=genbank_name_function)
-        count = 0
-        for record in iterator:
-            count += 1
-            print_record(record)
-        assert count == 1
-        print(str(record.__class__))
-
-    if os.path.isfile(faa_filename):
-        print("--------")
-        print("FastaIterator (multiple sequences)")
-        with open(faa_filename, "r") as h:
-            iterator = FastaIterator(h, alphabet=generic_protein,
-                                     title2ids=genbank_name_function)
-        count = 0
-        for record in iterator:
-            count += 1
-            print_record(record)
-            break
-        assert count > 0
-        print(str(record.__class__))
-
-    from Bio._py3k import StringIO
-    print("--------")
-    print("FastaIterator (empty input file)")
-    # Just to make sure no errors happen
-    iterator = FastaIterator(StringIO(""))
-    count = 0
-    for record in iterator:
-        count += 1
-    assert count == 0
-
-    print("Done")
+    from Bio._utils import run_doctest
+    run_doctest(verbose=0)

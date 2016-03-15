@@ -29,6 +29,8 @@ Nucleic Acids Res. 28, 29-34 (2000).
 
 from Bio._py3k import urlopen as _urlopen
 
+__docformat__ = "restructuredtext en"
+
 
 def _q(op, arg1, arg2=None, arg3=None):
     URL = "http://rest.kegg.jp/%s"

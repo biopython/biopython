@@ -131,7 +131,10 @@ def read(handle):
     if not record:
         raise ValueError("No SwissProt record found")
     # We should have reached the end of the record by now
-    remainder = handle.read()
+    # Used to check with handle.read() but that breaks on Python 3.5
+    # due to http://bugs.python.org/issue26499 and could download
+    # lot of data needlessly if there were more records.
+    remainder = handle.readline()
     if remainder:
         raise ValueError("More than one SwissProt record found")
     return record
@@ -307,7 +310,7 @@ def _read_dt(record, line):
 
         # find where the version information will be located
         # This is needed for when you have cases like IPI where
-        # the release verison is in a different spot:
+        # the release version is in a different spot:
         # DT   08-JAN-2002 (IPI Human rel. 2.3, Created)
         uprcols = uprline.split()
         rel_index = -1
@@ -428,6 +431,7 @@ def _read_rn(reference, rn):
         evidence = words[1]
         assert evidence.startswith('{') and evidence.endswith('}'), "Missing braces %s" % evidence
         reference.evidence = evidence[1:-1].split('|')
+
 
 def _read_rc(reference, value):
     cols = value.split(';')

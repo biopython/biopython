@@ -14,6 +14,8 @@ from Bio._py3k import range
 from Bio.Seq import Seq
 from Bio.Alphabet import IUPAC
 
+__docformat__ = "restructuredtext en"
+
 
 class GenericPositionMatrix(dict):
 
@@ -318,6 +320,7 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
     # Fall back to the slower Python implementation if Jython or IronPython.
     try:
         from . import _pwm
+
         def _calculate(self, sequence, m, n):
             logodds = [[self[letter][i] for letter in "ACGT"] for i in range(m)]
             return self._pwm.calculate(sequence, logodds)

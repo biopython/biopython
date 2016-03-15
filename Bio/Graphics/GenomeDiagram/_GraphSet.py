@@ -36,6 +36,8 @@ from reportlab.lib import colors
 
 from ._Graph import GraphData
 
+__docformat__ = "restructuredtext en"
+
 
 class GraphSet(object):
     """ GraphSet

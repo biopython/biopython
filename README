@@ -64,7 +64,8 @@ implementations:
   or dependent on SQLite3 or NumPy, everything should work. There are some
   known issues with test failures which have not yet been resolved.
 
-Please note that support for Python 2.6 is deprecated as of Biopython 1.66.
+Please note that support for Python 3.3 is deprecated as of Biopython 1.67,
+and that support for Python 2.6 is deprecated as of Biopython 1.66.
 Biopython 1.62 was our final release to support Python 2.5 and Jython 2.5.
 
 

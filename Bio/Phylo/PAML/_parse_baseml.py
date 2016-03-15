@@ -5,6 +5,8 @@
 
 import re
 
+__docformat__ = "restructuredtext en"
+
 line_floats_re = re.compile("-*\d+\.\d+")
 
 
@@ -62,7 +64,7 @@ def parse_parameters(lines, results, num_params):
 
 
 def parse_parameter_list(lines, parameters, num_params):
-    """ Parse the parameters list, which is just an unlabeled list of numeric values.
+    """Parse the parameters list, which is just an unlabeled list of numeric values.
     """
     for line_num in range(len(lines)):
         line = lines[line_num]
@@ -78,7 +80,7 @@ def parse_parameter_list(lines, parameters, num_params):
         if len(line_floats) == num_params:
             parameters["parameter list"] = line.strip()
         # Find SEs. The same format as parameters above is maintained
-        # since there is a correspondance between the SE format and
+        # since there is a correspondence between the SE format and
         # the parameter format.
         # Example match:
         # "SEs for parameters:
@@ -238,7 +240,7 @@ def parse_freqs(lines, parameters):
         elif "(frequency parameters for branches)" in line:
             parameters["nodes"] = {}
             branch_freqs_found = True
-        elif branch_freqs_found is True:
+        elif branch_freqs_found:
             if len(line_floats) > 0:
                 node_res = re.match("Node \#(\d+)", line)
                 node_num = int(node_res.group(1))

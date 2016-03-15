@@ -200,18 +200,19 @@ Note that instead of a species name like \texttt{Cypripedioideae[Orgn]}, you can
 
 As a final example, let's get a list of computational journal titles:
 \begin{verbatim}
->>> handle = Entrez.esearch(db="journals", term="computational")
+>>> handle = Entrez.esearch(db="nlmcatalog", term="computational[Journal]", retmax='20')
 >>> record = Entrez.read(handle)
->>> record["Count"]
-'16'
->>> record["IdList"]
-['30367', '33843', '33823', '32989', '33190', '33009', '31986',
- '34502', '8799', '22857', '32675', '20258', '33859', '32534',
- '32357', '32249']
+>>> print("{} computational journals found".format(record["Count"]))
+117 computational Journals found
+>>> print("The first 20 are\n{}".format(record['IdList']))
+['101660833', '101664671', '101661657', '101659814', '101657941',
+ '101653734', '101669877', '101649614', '101647835', '101639023',
+ '101627224', '101647801', '101589678', '101585369', '101645372',
+ '101586429', '101582229', '101574747', '101564639', '101671907']
 \end{verbatim}
 Again, we could use EFetch to obtain more information for each of these journal IDs.
 
-ESearch has many useful options --- see the \href{http://www.ncbi.nlm.nih.gov/entrez/query/static/esearch\_help.html}{ESearch help page} for more information.
+ESearch has many useful options --- see the \href{https://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.ESearch}{ESearch help page} for more information.
 
 \section{EPost: Uploading a list of identifiers}
 EPost uploads a list of UIs for use in subsequent search strategies; see the
@@ -261,14 +262,13 @@ ESummary retrieves document summaries from a list of primary IDs (see the  \href
 \begin{verbatim}
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com"     # Always tell NCBI who you are
->>> handle = Entrez.esummary(db="journals", id="30367")
+>>> handle = Entrez.esummary(db="nlmcatalog", id="101660833")
 >>> record = Entrez.read(handle)
->>> record[0]["Id"]
-'30367'
->>> record[0]["Title"]
-'Computational biology and chemistry'
->>> record[0]["Publisher"]
-'Pergamon,'
+>>> info = record[0]['TitleMainList'][0]
+>>> print("Journal info\nid: {}\nTitle: {}".format(record[0]["Id"], info["Title"]))
+Journal info
+id: 101660833
+Title: IEEE transactions on computational imaging.
 \end{verbatim}
 
 \section{EFetch: Downloading full records from Entrez}
@@ -390,11 +390,11 @@ Note that a more typical use would be to save the sequence data to a local file,
 import os
 from Bio import SeqIO
 from Bio import Entrez
-Entrez.email = "A.N.Other@example.com"     # Always tell NCBI who you are
+Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
 filename = "gi_186972394.gbk"
 if not os.path.isfile(filename):
     # Downloading...
-    net_handle = Entrez.efetch(db="nucleotide",id="186972394",rettype="gb", retmode="text")
+    net_handle = Entrez.efetch(db="nucleotide", id="186972394", rettype="gb", retmode="text")
     out_handle = open(filename, "w")
     out_handle.write(net_handle.read())
     out_handle.close()
@@ -1409,7 +1409,7 @@ Let's try this for the Biopython PDB parser paper, PubMed ID 14630660:
 >>> Entrez.email = "A.N.Other@example.com"
 >>> pmid = "14630660"
 >>> results = Entrez.read(Entrez.elink(dbfrom="pubmed", db="pmc",
-...                                    LinkName="pubmed_pmc_refs", from_uid=pmid))
+...                                    LinkName="pubmed_pmc_refs", id=pmid))
 >>> pmc_ids = [link["Id"] for link in results[0]["LinkSetDb"][0]["Link"]]
 >>> pmc_ids
 ['2744707', '2705363', '2682512', ..., '1190160']
@@ -1430,7 +1430,7 @@ But first, taking the more straightforward approach of making a second
 
 \begin{verbatim}
 >>> results2 = Entrez.read(Entrez.elink(dbfrom="pmc", db="pubmed", LinkName="pmc_pubmed",
-...                                     from_uid=",".join(pmc_ids)))
+...                                     id=",".join(pmc_ids)))
 >>> pubmed_ids = [link["Id"] for link in results2[0]["LinkSetDb"][0]["Link"]]
 >>> pubmed_ids
 ['19698094', '19450287', '19304878', ..., '15985178']

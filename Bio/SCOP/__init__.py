@@ -319,7 +319,7 @@ class Scop(object):
 
     def write_des(self, handle):
         """Build a DES SCOP parsable file from this object"""
-        # Origional SCOP file is not ordered?
+        # Original SCOP file is not ordered?
         for n in sorted(self._sunidDict.values(), key=lambda n: n.sunid):
             if n != self.root:
                 handle.write(str(n.toDesRecord()))
@@ -574,7 +574,7 @@ class Node(object):
             return self.scop.getNodeBySunid(self.parent)
 
     def getDescendents(self, node_type):
-        """ Return a list of all decendent nodes of the given type. Node type can a
+        """ Return a list of all descendant nodes of the given type. Node type can a
         two letter code or longer description. e.g. 'fa' or 'family'
         """
         if node_type in _nodetype_to_code:

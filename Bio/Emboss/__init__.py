@@ -3,5 +3,6 @@
 # as part of this package.
 #
 
-"""Code to interact with the ever-so-useful EMBOSS programs.
-"""
+"""Code to interact with the ever-so-useful EMBOSS programs."""
+
+__docformat__ = "restructuredtext en"

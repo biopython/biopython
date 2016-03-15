@@ -103,7 +103,7 @@ class DialignCommandline(AbstractCommandline):
             _Switch(["-lo", "lo"],
                     "(Long Output) Additional file *.log with information "
                     "about fragments selected for pairwise alignment and "
-                    "about consistency in multi-alignment proceedure."),
+                    "about consistency in multi-alignment procedure."),
             _Switch(["-ma", "ma"],
                     "`mixed alignments' consisting of P-fragments and "
                     "N-fragments if nucleic acid sequences are aligned."),
@@ -137,7 +137,7 @@ class DialignCommandline(AbstractCommandline):
             _Switch(["-nta", "nta"],
                     "`no textual alignment' - textual alignment suppressed. "
                     "This option makes sense if other output files are of "
-                    "intrest -- e.g. the fragment files created with -ff, "
+                    "interest -- e.g. the fragment files created with -ff, "
                     "-fop, -fsm or -lo."),
             _Switch(["-o", "o"],
                     "Fast version, resulting alignments may be slightly "

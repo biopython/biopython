@@ -5,6 +5,8 @@
 
 import re
 
+__docformat__ = "restructuredtext en"
+
 
 def parse_ng86(lines, results):
     """ Parse the Nei & Gojobori (1986) section of the results.
@@ -38,7 +40,7 @@ def parse_yn00(lines, results, sequences):
     """ Parse the Yang & Nielsen (2000) part of the results.
     Yang & Nielsen results are organized in a table with
     each row comprising one pairwise species comparison.
-    Rows are labeled by spequence number rather than by
+    Rows are labeled by sequence number rather than by
     sequence name."""
 
     # Example (header row and first table row):

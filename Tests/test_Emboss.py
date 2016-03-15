@@ -374,7 +374,7 @@ class SeqRetAlignIOTests(unittest.TestCase):
             handle = emboss_convert(filename, old_format, new_format)
             try:
                 new_aligns = list(AlignIO.parse(handle, new_format))
-            except:
+            except Exception:  # TODO - Which exceptions?
                 handle.close()
                 raise ValueError("Can't parse %s file %s in %s format."
                                  % (old_format, filename, new_format))
@@ -933,7 +933,7 @@ def clean_up():
         if filename.startswith("temp_"):
             try:
                 os.remove(filename)
-            except:
+            except Exception:  # TODO - Which exceptions?
                 pass
 
 if __name__ == "__main__":

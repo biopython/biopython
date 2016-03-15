@@ -20,6 +20,8 @@ import warnings
 
 from Bio._py3k import urlopen
 
+__docformat__ = "restructuredtext en"
+
 url = "ftp://ftp.wwpdb.org/pub/pdb/data/monomers/components.cif.gz"
 
 # extract name of gzip file

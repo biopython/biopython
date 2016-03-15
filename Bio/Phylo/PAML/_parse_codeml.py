@@ -5,6 +5,8 @@
 
 import re
 
+__docformat__ = "restructuredtext en"
+
 line_floats_re = re.compile("-*\d+\.\d+")
 
 try:
@@ -99,11 +101,11 @@ def parse_nssites(lines, results, multi_models, multi_genes):
         if siteclass_model is None:
             siteclass_model = "one-ratio"
         current_model = {"one-ratio": 0,
-                        "NearlyNeutral": 1,
-                        "PositiveSelection": 2,
-                        "discrete": 3,
-                        "beta": 7,
-                        "beta&w>1": 8}[siteclass_model]
+                         "NearlyNeutral": 1,
+                         "PositiveSelection": 2,
+                         "discrete": 3,
+                         "beta": 7,
+                         "beta&w>1": 8}[siteclass_model]
         if multi_genes:
             genes = results["genes"]
             current_gene = None
@@ -199,7 +201,7 @@ def parse_model(lines, results):
         elif len(line_floats) == num_params and not SEs_flag:
             parameters["parameter list"] = line.strip()
         # Find SEs. The same format as parameters above is maintained
-        # since there is a correspondance between the SE format and
+        # since there is a correspondence between the SE format and
         # the parameter format.
         # Example match:
         # "SEs for parameters:
@@ -256,7 +258,7 @@ def parse_model(lines, results):
             if parameters.get("genes") is None:
                 parameters["genes"] = {}
             parameters["genes"][gene_num] = {"kappa": line_floats[0],
-                                            "omega": line_floats[1]}
+                                             "omega": line_floats[1]}
         # Find dN values.
         # Example match: "tree length for dN:       0.2990"
         elif "tree length for dN" in line and len(line_floats) > 0:
@@ -289,7 +291,7 @@ def parse_model(lines, results):
                 site_classes = parameters.get("site classes")
                 branch_type_no = int(branch_type.group(1))
                 site_classes = parse_clademodelc(branch_type_no, line_floats,
-                        site_classes)
+                                                 site_classes)
                 parameters["site classes"] = site_classes
         # Find the omega values of the foreground branch for each site
         # class in the branch site A model
@@ -344,7 +346,8 @@ def parse_model(lines, results):
 
 
 def parse_siteclass_proportions(line_floats):
-    """For models which have multiple site classes, find the proportion of the alignment assigned to each class.
+    """For models which have multiple site classes, find the proportion of the
+    alignment assigned to each class.
     """
     site_classes = {}
     if len(line_floats) > 0:
@@ -354,7 +357,8 @@ def parse_siteclass_proportions(line_floats):
 
 
 def parse_siteclass_omegas(line, site_classes):
-    """For models which have multiple site classes, find the omega estimated for each class.
+    """For models which have multiple site classes, find the omega estimated
+    for each class.
     """
     # The omega results are tabular with strictly 9 characters per column
     # (1 to 3 digits before the  decimal point and 5 after). This causes
@@ -390,11 +394,9 @@ def parse_branch_site_a(foreground, line_floats, site_classes):
         if site_classes[n].get("branch types") is None:
             site_classes[n]["branch types"] = {}
         if foreground:
-            site_classes[n]["branch types"]["foreground"] =\
-                    line_floats[n]
+            site_classes[n]["branch types"]["foreground"] = line_floats[n]
         else:
-            site_classes[n]["branch types"]["background"] =\
-                    line_floats[n]
+            site_classes[n]["branch types"]["background"] = line_floats[n]
     return site_classes
 
 
@@ -427,11 +429,11 @@ def parse_pairwise(lines, results):
                 pairwise[seq2][seq1] = pairwise[seq1][seq2]
             elif len(line_floats) == 6:
                 pairwise[seq1][seq2] = {"t": line_floats[0],
-                        "S": line_floats[1],
-                        "N": line_floats[2],
-                        "omega": line_floats[3],
-                        "dN": line_floats[4],
-                        "dS": line_floats[5]}
+                                        "S": line_floats[1],
+                                        "N": line_floats[2],
+                                        "omega": line_floats[3],
+                                        "dN": line_floats[4],
+                                        "dS": line_floats[5]}
                 pairwise[seq2][seq1] = pairwise[seq1][seq2]
     if len(pairwise) > 0:
         results["pairwise"] = pairwise
@@ -461,7 +463,7 @@ def parse_distances(lines, results):
         # Parse AA distances (raw or ML), in a lower diagonal matrix
         matrix_row_res = matrix_row_re.match(line)
         if matrix_row_res and (raw_aa_distances_flag or
-                ml_aa_distances_flag):
+                               ml_aa_distances_flag):
             seq_name = matrix_row_res.group(1).strip()
             if seq_name not in sequences:
                 sequences.append(seq_name)

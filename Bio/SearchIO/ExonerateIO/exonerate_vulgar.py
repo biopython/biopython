@@ -12,6 +12,8 @@ from Bio._py3k import zip
 
 from ._base import _BaseExonerateParser, _BaseExonerateIndexer, _STRAND_MAP
 
+__docformat__ = "restructuredtext en"
+
 
 __all__ = ['ExonerateVulgarParser', 'ExonerateVulgarIndexer']
 
@@ -179,7 +181,7 @@ class ExonerateVulgarIndexer(_BaseExonerateIndexer):
         return id.group(1)
 
     def get_raw(self, offset):
-        """Returns the raw string of a QueryResult object from the given offset."""
+        """Returns the raw bytes string of a QueryResult object from the given offset."""
         handle = self._handle
         handle.seek(offset)
         qresult_key = None

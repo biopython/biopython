@@ -9,6 +9,9 @@
 from Bio.PDB.PDBExceptions import PDBConstructionException
 from Bio.PDB.Entity import Entity, DisorderedEntityWrapper
 
+__docformat__ = "restructuredtext en"
+
+
 _atom_name_dict = {}
 _atom_name_dict["N"] = 1
 _atom_name_dict["CA"] = 2

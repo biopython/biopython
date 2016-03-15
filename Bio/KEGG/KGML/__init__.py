@@ -13,3 +13,4 @@ Nucleic Acids Res. 28, 29-34 (2000).
 
 URL: http://www.genome.ad.jp/kegg/
 """
+__docformat__ = "restructuredtext en"

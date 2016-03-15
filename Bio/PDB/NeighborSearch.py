@@ -14,6 +14,8 @@ from Bio.KDTree import KDTree
 from Bio.PDB.PDBExceptions import PDBException
 from Bio.PDB.Selection import unfold_entities, entity_levels, uniqueify
 
+__docformat__ = "restructuredtext en"
+
 
 class NeighborSearch(object):
     """Class for neighbor searching,
@@ -74,7 +76,7 @@ class NeighborSearch(object):
 
         Return all atoms/residues/chains/models/structures
         that have at least one atom within radius of center.
-        What entitity level is returned (e.g. atoms or residues)
+        What entity level is returned (e.g. atoms or residues)
         is determined by level (A=atoms, R=residues, C=chains,
         M=models, S=structures).
 

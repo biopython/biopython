@@ -7,6 +7,8 @@
 
 from functools import reduce
 
+__docformat__ = "restructuredtext en"
+
 
 class Graph(object):
     """A directed graph abstraction with labeled edges."""
@@ -119,7 +121,7 @@ class Graph(object):
         for n in self._adjacency_list.keys():
             self._adjacency_list[n] = set(x for x in self._adjacency_list[n]
                                           if x != node)
-        # remove all refering pairs in label map
+        # remove all referring pairs in label map
         for label in list(self._label_map.keys()):  # we're editing this!
             lm = set(x for x in self._label_map[label]
                      if (x[0] != node) and (x[1] != node))
@@ -128,7 +130,7 @@ class Graph(object):
                 self._label_map[label] = lm
             else:
                 del self._label_map[label]
-        # remove all refering entries in edge map
+        # remove all referring entries in edge map
         for edge in list(self._edge_map.keys()):  # we're editing this!
             if edge[0] == node or edge[1] == node:
                 del self._edge_map[edge]

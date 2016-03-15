@@ -1,4 +1,4 @@
-# Copyright 2008-2010 by Peter Cock.  All rights reserved.
+# Copyright 2008-2016 by Peter Cock.  All rights reserved.
 # Revisions copyright 2009 by Cymon J. Cox.  All rights reserved.
 #
 # This code is part of the Biopython distribution and governed by its
@@ -106,7 +106,7 @@ class PhdWriter(SequentialSequenceWriter):
         # This method returns the 'phred_quality' scores or converted
         # 'solexa_quality' scores if present, else raises a value error
         phred_qualities = QualityIO._get_phred_quality(record)
-        peak_locations = record.letter_annotations.get("peak_location", None)
+        peak_locations = record.letter_annotations.get("peak_location")
         assert len(record.seq) == len(phred_qualities), "Number of " + \
             "phd quality scores does not match length of sequence"
         if peak_locations:
@@ -123,14 +123,14 @@ class PhdWriter(SequentialSequenceWriter):
         for annot in [k.lower() for k in Phd.CKEYWORDS]:
             value = None
             if annot == "trim":
-                if record.annotations.get("trim", None):
+                if record.annotations.get("trim"):
                     value = "%s %s %.4f" % record.annotations["trim"]
             elif annot == "trace_peak_area_ratio":
-                if record.annotations.get("trace_peak_area_ratio", None):
+                if record.annotations.get("trace_peak_area_ratio"):
                     value = "%.4f" % record.annotations[
                         "trace_peak_area_ratio"]
             else:
-                value = record.annotations.get(annot, None)
+                value = record.annotations.get(annot)
             if value or value == 0:
                 self.handle.write("%s: %s\n" % (annot.upper(), value))
 

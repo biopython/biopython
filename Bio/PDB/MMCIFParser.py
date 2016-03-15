@@ -19,16 +19,20 @@ from Bio.PDB.StructureBuilder import StructureBuilder
 from Bio.PDB.PDBExceptions import PDBConstructionException
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
 
+__docformat__ = "restructuredtext en"
+
 
 class MMCIFParser(object):
     """Parse a PDB file and return a Structure object."""
 
     def __init__(self, structure_builder=None, QUIET=False):
         """Create a PDBParser object.
+
         The PDB parser call a number of standard methods in an aggregated
         StructureBuilder object. Normally this object is instanciated by the
         MMCIParser object itself, but if the user provides his/her own
         StructureBuilder object, the latter is used instead.
+
         Arguments:
          - structure_builder - an optional user implemented StructureBuilder class.
          - QUIET - Evaluated as a Boolean. If true, warnings issued in constructing
@@ -131,7 +135,7 @@ class MMCIFParser(object):
             altloc = alt_list[i]
             if altloc == ".":
                 altloc = " "
-            resseq = seq_id_list[i]
+            int_resseq = int(seq_id_list[i])
             icode = icode_list[i]
             if icode == "?":
                 icode = " "
@@ -150,6 +154,9 @@ class MMCIFParser(object):
                 hetatm_flag = "H"
             else:
                 hetatm_flag = " "
+
+            resseq = (hetatm_flag, int_resseq, icode)
+
             if serial_list is not None:
                 # model column exists; use it
                 serial_id = serial_list[i]
@@ -167,10 +174,10 @@ class MMCIFParser(object):
             if current_chain_id != chainid:
                 current_chain_id = chainid
                 structure_builder.init_chain(current_chain_id)
+                current_residue_id = None
 
             if current_residue_id != resseq:
                 current_residue_id = resseq
-                int_resseq = int(resseq)
                 structure_builder.init_residue(resname, hetatm_flag, int_resseq, icode)
 
             coord = numpy.array((x, y, z), 'f')

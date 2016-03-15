@@ -25,6 +25,8 @@ except ImportError:
 
 from xbb_utils import NotePad
 
+__docformat__ = "restructuredtext en"
+
 
 class BlastDisplayer(object):
     def __init__(self, command, text_id=None):

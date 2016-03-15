@@ -27,6 +27,22 @@ Bio.KEGG.read(...) for parsing KEGG files expected to contain a single record
 only - existing function Bio.KEGG.parse(...) is intended to be used to iterate
 over multi-record files.
 
+When a gap character is defined, Bio.Seq will now translate gap codons
+(e.g. "---") into a single gap ("-") in the protein sequence. The gap character
+is inferred from the Seq object's alphabet, but it can also be passed as an
+argument to the translate method.
+
+The new NCBI genetic code table 25, Candidate Division SR1 and Gracilibacteria,
+has been added to Bio.Data (and the translation functionality).
+
+The Bio.Entrez interface will automatically use an HTTP POST rather than
+HTTP GET if the URL would exceed 1000 characters. This is based on NCBI
+guidelines and the fact that very long queries like complex searches can
+otherwise trigger an HTTP Error 414 Request URI too long.
+
+Foreign keys are now used when creating BioSQL databases with SQLite3 (this
+was not possible until SQLite version 3.6.19).
+
 Additionally, a number of small bugs have been fixed with further additions
 to the test suite, and there has been further work to follow the Python PEP8
 standard coding style, and in converting our docstring documentation to use
@@ -40,15 +56,20 @@ Anders Pitman (first contribution)
 Barbara Mühlemann (first contribution)
 Ben Fulton
 Ben Woodcroft (first contribution)
+Brian Osborne (first contribution)
 Carlos Pena
+Chaitanya Gupta (first contribution)
 Chris Warth (first contribution)
+Connor T. Skennerton (first contribution)
 David Koppstein (first contribution)
 Eric Talevich
 Jacek Śmietański (first contribution)
 João D Ferreira (first contribution)
 João Rodrigues
 Joe Cora (first contribution)
+Kai Blin
 Matt Ruffalo (first contribution)
+Matteo Sticco (first contribution)
 Lenna Peterson
 Peter Cock
 Steve Bond (first contribution)
@@ -454,6 +475,10 @@ are familiar with BioPerl its purpose isn't immediately clear.
 The Bio.Motif module has been updated and reorganized. To allow for a clean
 deprecation of the old code, the new motif code is stored in a new module
 Bio.motifs, and a PendingDeprecationWarning was added to Bio.Motif.
+
+A faster low level string FASTA based parser SimpleFastaParser has been added
+to Bio.SeqIO.FastaIO which like its sister function for FASTQ files does not
+have the overhead of constructing SeqRecord objects.
 
 Additionally there have been other minor bug fixes and more unit tests.
 
