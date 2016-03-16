@@ -49,6 +49,8 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
     URL API (http://ncbi.github.io/blast-cloud/dev/api.html). To
     use this feature, please set url_base to
     'http://host.my.cloud.service.provider.com/cgi-bin/blast.cgi'
+    For more details, please see 
+    https://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE_TYPE=BlastDocs&DOC_TYPE=CloudBlast
 
     Some useful parameters:
 
