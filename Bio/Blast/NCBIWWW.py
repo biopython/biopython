@@ -23,8 +23,9 @@ from Bio._py3k import Request as _Request
 
 __docformat__ = "restructuredtext en"
 
+NCBI_BLAST_URL = "http://blast.ncbi.nlm.nih.gov/Blast.cgi"
 
-def qblast(program, database, sequence,
+def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
            auto_format=None, composition_based_statistics=None,
            db_genetic_code=None, endpoints=None, entrez_query='(none)',
            expect=10.0, filter=None, gapcosts=None, genetic_code=None,
@@ -39,9 +40,18 @@ def qblast(program, database, sequence,
            format_entrez_query=None, format_object=None, format_type='XML',
            ncbi_gi=None, results_file=None, show_overview=None, megablast=None,
            ):
-    """Do a BLAST search using the QBLAST server at NCBI.
+    """Do a BLAST search using the QBLAST server at NCBI or a cloud service
+    provider.
 
     Supports all parameters of the qblast API for Put and Get.
+
+    Please note that BLAST on the cloud supports the NCBI-BLAST Common
+    URL API (http://ncbi.github.io/blast-cloud/dev/api.html). To
+    use this feature, please set url_base to
+    'http://host.my.cloud.service.provider.com/cgi-bin/blast.cgi' and 
+    format_object='Alignment'. For more details, please see 
+    https://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE_TYPE=BlastDocs&DOC_TYPE=CloudBlast
+
     Some useful parameters:
 
      - program        blastn, blastp, blastx, tblastn, or tblastx (lower case)
@@ -62,6 +72,7 @@ def qblast(program, database, sequence,
     This function does no checking of the validity of the parameters
     and passes the values to the server as is.  More help is available at:
     http://www.ncbi.nlm.nih.gov/BLAST/Doc/urlapi.html
+
     """
     import time
 
@@ -116,7 +127,7 @@ def qblast(program, database, sequence,
     # Note the NCBI do not currently impose a rate limit here, other
     # than the request not to make say 50 queries at once using multiple
     # threads.
-    request = _Request("http://blast.ncbi.nlm.nih.gov/Blast.cgi",
+    request = _Request(url_base,
                        message,
                        {"User-Agent": "BiopythonClient"})
     handle = _urlopen(request)
@@ -160,7 +171,7 @@ def qblast(program, database, sequence,
         else:
             delay = 120
 
-        request = _Request("http://blast.ncbi.nlm.nih.gov/Blast.cgi",
+        request = _Request(url_base,
                            message,
                            {"User-Agent": "BiopythonClient"})
         handle = _urlopen(request)
