@@ -61,7 +61,7 @@ class _XMLparser(ContentHandler):
         # Note could use try / except AttributeError
         # BUT I found often triggered by nested errors...
         if hasattr(self, method):
-            eval("self.%s()" % method)
+            getattr(self, method)()
             if self._debug > 4:
                 print("NCBIXML: Parsed:  " + method)
         elif self._debug > 3:
@@ -96,7 +96,7 @@ class _XMLparser(ContentHandler):
         # Note could use try / except AttributeError
         # BUT I found often triggered by nested errors...
         if hasattr(self, method):
-            eval("self.%s()" % method)
+            getattr(self, method)()
             if self._debug > 2:
                 print("NCBIXML: Parsed:  %s %s" % (method, self._value))
         elif self._debug > 1:
