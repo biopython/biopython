@@ -1,5 +1,5 @@
 # Copyright 2008-2010 by Michiel de Hoon.  All rights reserved.
-# Revisions copyright 2009-2013 by Peter Cock. All rights reserved.
+# Revisions copyright 2009-2016 by Peter Cock. All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -7,7 +7,7 @@
 '''
 
 import unittest
-
+import sys
 import os
 if os.name == 'java':
     try:
@@ -18,7 +18,8 @@ if os.name == 'java':
         raise MissingPythonDependencyError("The Bio.Entrez XML parser fails on "
                                   "Jython, see http://bugs.jython.org/issue1447")
 
-
+from io import BytesIO
+from Bio._py3k import StringIO
 from Bio import Entrez
 
 
@@ -30,6 +31,46 @@ class GeneralTests(unittest.TestCase):
         handle = open('Entrez/einfo1.xml', "rb")
         handle.close()
         self.assertRaises(IOError, Entrez.read, handle)
+
+    def test_bytes_handle(self):
+        """Test parsing a handle opened in binary mode."""
+        with open("Entrez/einfo1.xml", "rb") as handle:
+            record = Entrez.read(handle)
+        self.assertTrue("DbList" in record)
+
+    def test_text_handle(self):
+        """Test parsing a handle opened in text mode."""
+        with open("Entrez/einfo1.xml", "rt") as handle:
+            if sys.version_info[0] < 3:
+                # Python 2 didn't case
+                record = Entrez.read(handle)
+                self.assertTrue("DbList" in record)
+            else:
+                # TODO - Can we support this?
+                self.assertRaises(TypeError, Entrez.read, handle)
+
+    def test_BytesIO(self):
+        """Test parsing a BytesIO handle (bytes not unicode)."""
+        with open("Entrez/einfo1.xml", "rb") as in_handle:
+            data = in_handle.read()
+        handle = BytesIO(data)
+        record = Entrez.read(handle)
+        self.assertTrue("DbList" in record)
+        handle.close()
+
+    def test_StringIO(self):
+        """Test parsing a StringIO handle (unicode not bytes)."""
+        with open("Entrez/einfo1.xml", "rt") as in_handle:
+            data = in_handle.read()
+        handle = StringIO(data)
+        if sys.version_info[0] < 3:
+            # Python 2 didn't care
+            record = Entrez.read(handle)
+            self.assertTrue("DbList" in record)
+        else:
+            # TODO - Could we handle this as another special case?
+            self.assertRaises(TypeError, Entrez.read, handle)
+        handle.close()
 
 
 class EInfoTest(unittest.TestCase):
