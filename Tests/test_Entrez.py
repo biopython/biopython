@@ -41,13 +41,8 @@ class GeneralTests(unittest.TestCase):
     def test_text_handle(self):
         """Test parsing a handle opened in text mode."""
         with open("Entrez/einfo1.xml", "rt") as handle:
-            if sys.version_info[0] < 3:
-                # Python 2 didn't case
-                record = Entrez.read(handle)
-                self.assertTrue("DbList" in record)
-            else:
-                # TODO - Can we support this?
-                self.assertRaises(TypeError, Entrez.read, handle)
+            record = Entrez.read(handle)
+        self.assertTrue("DbList" in record)
 
     def test_BytesIO(self):
         """Test parsing a BytesIO handle (bytes not unicode)."""
