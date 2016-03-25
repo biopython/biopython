@@ -9,6 +9,7 @@
 import unittest
 import sys
 import os
+import platform
 if os.name == 'java':
     try:
         from xml.parsers.expat import XML_PARAM_ENTITY_PARSING_ALWAYS
@@ -58,8 +59,9 @@ class GeneralTests(unittest.TestCase):
         with open("Entrez/einfo1.xml", "rt") as in_handle:
             data = in_handle.read()
         handle = StringIO(data)
-        if sys.version_info[0] < 3:
+        if sys.version_info[0] < 3 or platform.python_implementation() == 'PyPy':
             # Python 2 didn't care
+            # PyPy3 doesn't seem to care either
             record = Entrez.read(handle)
             self.assertTrue("DbList" in record)
         else:
