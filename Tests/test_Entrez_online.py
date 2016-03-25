@@ -131,6 +131,15 @@ class EntrezOnlineCase(unittest.TestCase):
         self.assertEqual(len(records), 1)
         self.assertEqual(records[0]['System_sysid']['Sys-id']['Sys-id_bsid'], '1134002')
 
+    def test_efetch_taxonomy_xml(self):
+        """Test Entrez using a integer id - like a taxon id
+        """
+        handle = Entrez.efetch( db="taxonomy", id=3702, retmode="XML")
+        taxon_record = Entrez.read(handle)
+        self.assertTrue(1, len(taxon_record))
+        self.assertTrue('TaxId' in taxon_record[0])
+        self.assertTrue('3702', taxon_record[0]['TaxId'])
+
     def test_elink(self):
         # Commas: Link from protein to gene
         handle = Entrez.elink(db="gene", dbfrom="protein",

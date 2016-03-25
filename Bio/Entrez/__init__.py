@@ -170,6 +170,10 @@ def efetch(db, **keywords):
         if isinstance(ids, list):
             ids = ",".join(ids)
             variables["id"] = ids
+        elif isinstance(ids, int):
+            ids = str(ids)
+            variables["id"] = ids
+
         if ids.count(",") >= 200:
             # NCBI prefers an HTTP POST instead of an HTTP GET if there are
             # more than about 200 IDs
