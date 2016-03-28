@@ -35,6 +35,7 @@ written solution, since the number of DTDs is rather large and their
 contents may change over time. About half the code in this parser deals
 wih parsing the DTD, and the other half with the XML itself.
 """
+import sys
 import re
 import os
 import warnings
@@ -213,6 +214,14 @@ class DataHandler(object):
             # Should avoid a possible Segmentation Fault, see:
             # http://bugs.python.org/issue4877
             raise IOError("Can't parse a closed handle")
+        if sys.version_info[0] >= 3:
+            # Another nasty hack to cope with a unicode StringIO handle
+            # since the Entrez XML parser expects binary data (bytes)
+            from io import StringIO
+            if isinstance(handle, StringIO):
+                from io import BytesIO
+                from Bio._py3k import _as_bytes
+                handle = BytesIO(_as_bytes(handle.read()))
         try:
             self.parser.ParseFile(handle)
         except expat.ExpatError as e:
