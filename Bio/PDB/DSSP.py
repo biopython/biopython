@@ -293,7 +293,19 @@ class DSSP(AbstractResiduePropertyMap):
         assert(file_type in ['PDB', 'DSSP'])
         # If the input file is a PDB file run DSSP and parse output:
         if file_type == 'PDB':
-            dssp_dict, dssp_keys = dssp_dict_from_pdb_file(in_file, dssp)
+            # Newer versions of DSSP program call the binary 'mkdssp', so
+            # calling 'dssp' will not work in some operating systems
+            # (Debian distribution of DSSP includes a symlink for 'dssp' argument)
+            try:
+                dssp_dict, dssp_keys = dssp_dict_from_pdb_file(pdb_file, dssp)
+            except FileNotFoundError:
+                if dssp == 'dssp':
+                    dssp = 'mkdssp'
+                elif dssp == 'mkdssp':
+                    dssp = 'dssp'
+                else:
+                    raise
+            dssp_dict, dssp_keys = dssp_dict_from_pdb_file(pdb_file, dssp)
         # If the input file is a DSSP file just parse it directly:
         elif file_type == 'DSSP':
             dssp_dict, dssp_keys = make_dssp_dict(in_file)
