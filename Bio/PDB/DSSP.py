@@ -251,7 +251,20 @@ class DSSP(AbstractResiduePropertyMap):
         @type dssp: string
         """
         # create DSSP dictionary
-        dssp_dict, dssp_keys = dssp_dict_from_pdb_file(pdb_file, dssp)
+        # newer version of DSSP program is called by 'mkdssp' argument,
+        # and calling 'dssp' will hence not work in some operating systems
+        # (Debian distribution of DSSP includes a symlink for 'dssp' argument)
+        try:
+            dssp_dict, dssp_keys = dssp_dict_from_pdb_file(pdb_file, dssp)
+        except FileNotFoundError:
+            if dssp == 'dssp':
+                dssp = 'mkdssp'
+            elif dssp == 'mkdssp':
+                dssp = 'dssp'
+            else:
+                raise
+            dssp_dict, dssp_keys = dssp_dict_from_pdb_file(pdb_file, dssp)
+
         dssp_map = {}
         dssp_list = []
 
