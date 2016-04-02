@@ -37,20 +37,12 @@ except OSError:
 class DSSP_test(unittest.TestCase):
     """Test DSSP module"""
 
-    def test_DSSP(self):
+    def test_dssp(self):
         """Test DSSP generation from PDB"""
         p = PDBParser()
         pdbfile = "PDB/2BEG.pdb"
         model = p.get_structure("2BEG", pdbfile)[0]
         dssp = DSSP(model, pdbfile)
-        self.assertEqual(len(dssp), 130)
-
-    def test_DSSP_with_mkdssp_argument(self):
-        """Test DSSP generation from PDB"""
-        p = PDBParser()
-        pdbfile = "PDB/2BEG.pdb"
-        model = p.get_structure("2BEG", pdbfile)[0]
-        dssp = DSSP(model, pdbfile, dssp='mkdssp')
         self.assertEqual(len(dssp), 130)
 
 
