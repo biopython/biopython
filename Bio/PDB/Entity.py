@@ -3,14 +3,17 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+"""
+Base class for Residue, Chain, Model and Structure classes.
+
+It is a simple container class, with list and dictionary like properties.
+"""
+
 from copy import copy
 
 from Bio.PDB.PDBExceptions import PDBConstructionException
 
-"""Base class for Residue, Chain, Model and Structure classes.
-
-It is a simple container class, with list and dictionary like properties.
-"""
+__docformat__ = "restructuredtext en"
 
 
 class Entity(object):
@@ -19,13 +22,13 @@ class Entity(object):
     are subclasses of Entity. It deals with storage and lookup.
     """
     def __init__(self, id):
-        self.id=id
-        self.full_id=None
-        self.parent=None
-        self.child_list=[]
-        self.child_dict={}
+        self.id = id
+        self.full_id = None
+        self.parent = None
+        self.child_list = []
+        self.child_dict = {}
         # Dictionary that keeps additional properties
-        self.xtra={}
+        self.xtra = {}
 
     # Special methods
 
@@ -65,38 +68,38 @@ class Entity(object):
 
     def set_parent(self, entity):
         "Set the parent Entity object."
-        self.parent=entity
+        self.parent = entity
 
     def detach_parent(self):
         "Detach the parent."
-        self.parent=None
+        self.parent = None
 
     def detach_child(self, id):
         "Remove a child."
-        child=self.child_dict[id]
+        child = self.child_dict[id]
         child.detach_parent()
         del self.child_dict[id]
         self.child_list.remove(child)
 
     def add(self, entity):
         "Add a child to the Entity."
-        entity_id=entity.get_id()
+        entity_id = entity.get_id()
         if self.has_id(entity_id):
             raise PDBConstructionException(
                 "%s defined twice" % str(entity_id))
         entity.set_parent(self)
         self.child_list.append(entity)
-        self.child_dict[entity_id]=entity
+        self.child_dict[entity_id] = entity
 
     def insert(self, pos, entity):
         "Add a child to the Entity at a specified position."
-        entity_id=entity.get_id()
+        entity_id = entity.get_id()
         if self.has_id(entity_id):
             raise PDBConstructionException(
                 "%s defined twice" % str(entity_id))
         entity.set_parent(self)
         self.child_list[pos:pos] = [entity]
-        self.child_dict[entity_id]=entity
+        self.child_dict[entity_id] = entity
 
     def get_iterator(self):
         "Return iterator over children."
@@ -136,19 +139,19 @@ class Entity(object):
         Residue with id (" ", 10, "A")
 
         The Residue id indicates that the residue is not a hetero-residue
-        (or a water) beacuse it has a blank hetero field, that its sequence
+        (or a water) because it has a blank hetero field, that its sequence
         identifier is 10 and its insertion code "A".
         """
         if self.full_id is None:
-            entity_id=self.get_id()
-            l=[entity_id]
-            parent=self.get_parent()
-            while not (parent is None):
-                entity_id=parent.get_id()
+            entity_id = self.get_id()
+            l = [entity_id]
+            parent = self.get_parent()
+            while parent is not None:
+                entity_id = parent.get_id()
                 l.append(entity_id)
-                parent=parent.get_parent()
+                parent = parent.get_parent()
             l.reverse()
-            self.full_id=tuple(l)
+            self.full_id = tuple(l)
         return self.full_id
 
     def transform(self, rot, tran):
@@ -194,10 +197,10 @@ class DisorderedEntityWrapper(object):
     atom in the structure.
     """
     def __init__(self, id):
-        self.id=id
-        self.child_dict={}
-        self.selected_child=None
-        self.parent=None
+        self.id = id
+        self.child_dict = {}
+        self.selected_child = None
+        self.parent = None
 
     # Special methods
 
@@ -217,7 +220,7 @@ class DisorderedEntityWrapper(object):
     # (NB: setitem was here before getitem, iter, len, sub)
     def __setitem__(self, id, child):
         "Add a child, associated with a certain id."
-        self.child_dict[id]=child
+        self.child_dict[id] = child
 
     def __contains__(self, id):
         "True if the child has the given id."
@@ -247,7 +250,7 @@ class DisorderedEntityWrapper(object):
 
     def detach_parent(self):
         "Detach the parent"
-        self.parent=None
+        self.parent = None
         for child in self.disordered_get_list():
             child.detach_parent()
 
@@ -257,7 +260,7 @@ class DisorderedEntityWrapper(object):
 
     def set_parent(self, parent):
         "Set the parent for the object and its children."
-        self.parent=parent
+        self.parent = parent
         for child in self.disordered_get_list():
             child.set_parent(parent)
 
@@ -266,7 +269,7 @@ class DisorderedEntityWrapper(object):
 
         Uncaught method calls are forwarded to the selected child object.
         """
-        self.selected_child=self.child_dict[id]
+        self.selected_child = self.child_dict[id]
 
     def disordered_add(self, child):
         "This is implemented by DisorderedAtom and DisorderedResidue."
@@ -295,4 +298,3 @@ class DisorderedEntityWrapper(object):
     def disordered_get_list(self):
         "Return list of children."
         return list(self.child_dict.values())
-

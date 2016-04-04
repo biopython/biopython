@@ -9,21 +9,23 @@ import os
 import shutil
 import unittest
 
-#Tests fastsimcoal related code. Note: this case requires fastsimcoal21
+# Tests fastsimcoal related code. Note: this case requires fastsimcoal 2.51
 
 found = False
 for path in os.environ['PATH'].split(os.pathsep):
     try:
         for filename in os.listdir(path):
-            if filename == "fastsimcoal21" \
-            or (filename.lower() == "fastsimcoal21.exe"):
+            if filename == "fsc252" \
+                    or (filename.lower() == "fsc252.exe"):
                 found = True
                 fastsimcoal_dir = path
     except os.error:
         pass  # Path doesn't exist - correct to pass
 if not found:
-    raise MissingExternalDependencyError("Install fastsimcoal if you want to use "
-                                         "Bio.PopGen.SimCoal.Controller.FastSimCoalController.")
+    raise MissingExternalDependencyError(
+        "Install fastsimcoal if you want to use "
+        "Bio.PopGen.SimCoal.Controller.FastSimCoalController.")
+
 
 class AppTest(unittest.TestCase):
     """Tests fastsimcoal execution via biopython.
@@ -36,8 +38,8 @@ class AppTest(unittest.TestCase):
 
     def tidy(self):
         if not os.path.isdir(os.path.join('PopGen', 'simple')):
-            #Unit test must have failed to invoke fastsimcaol21,
-            #and thus it never created the directory.
+            # Unit test must have failed to invoke fastsimcoal251,
+            # and thus it never created the directory.
             return
         shutil.rmtree(os.path.join('PopGen', 'simple'))
 
@@ -45,11 +47,11 @@ class AppTest(unittest.TestCase):
         """Test fastsimcoal execution.
         """
         ctrl = FastSimCoalController(fastsimcoal_dir=fastsimcoal_dir)
-        ctrl.run_fastsimcoal('simple.par', 50, par_dir = 'PopGen')
+        ctrl.run_fastsimcoal('simple.par', 50, par_dir='PopGen')
         assert os.path.isdir(os.path.join('PopGen', 'simple')), \
-               "Output directory not created!"
+            "Output directory not created!"
         assert(len(os.listdir(os.path.join('PopGen', 'simple'))) == 52)
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

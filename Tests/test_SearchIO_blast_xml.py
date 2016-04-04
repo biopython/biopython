@@ -13,9 +13,10 @@ import warnings
 from Bio import BiopythonParserWarning
 from Bio import BiopythonExperimentalWarning
 
+
 with warnings.catch_warnings():
-   warnings.simplefilter('ignore', BiopythonExperimentalWarning)
-   from Bio.SearchIO import parse
+    warnings.simplefilter('ignore', BiopythonExperimentalWarning)
+    from Bio.SearchIO import parse
 
 # test case files are in the Blast directory
 TEST_DIR = 'Blast'
@@ -25,6 +26,7 @@ REFERENCE = (u'Altschul, Stephen F., Thomas L. Madden, Alejandro A. Sch\xe4ffer,
              u'Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), '
              u'"Gapped BLAST and PSI-BLAST: a new generation of protein database '
              u'search programs", Nucleic Acids Res. 25:3389-3402.')
+
 
 def get_file(filename):
     """Returns the path of a test file."""
@@ -3182,5 +3184,5 @@ class BlastXmlSpecialCases(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

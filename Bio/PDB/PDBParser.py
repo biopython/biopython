@@ -11,7 +11,7 @@ import warnings
 
 try:
     import numpy
-except:
+except ImportError:
     from Bio import MissingPythonDependencyError
     raise MissingPythonDependencyError(
         "Install NumPy if you want to use the PDB parser.")
@@ -24,35 +24,32 @@ from Bio.PDB.PDBExceptions import PDBConstructionWarning
 from Bio.PDB.StructureBuilder import StructureBuilder
 from Bio.PDB.parse_pdb_header import _parse_pdb_header_list
 
+__docformat__ = "restructuredtext en"
 
 # If PDB spec says "COLUMNS 18-20" this means line[17:20]
 
 
 class PDBParser(object):
-    """
-    Parse a PDB file and return a Structure object.
-    """
+    """Parse a PDB file and return a Structure object."""
 
     def __init__(self, PERMISSIVE=True, get_header=False,
                  structure_builder=None, QUIET=False):
-        """
+        """Create a PDBParser object.
+
         The PDB parser call a number of standard methods in an aggregated
         StructureBuilder object. Normally this object is instanciated by the
         PDBParser object itself, but if the user provides his/her own
         StructureBuilder object, the latter is used instead.
 
         Arguments:
-
-        o PERMISSIVE - Evaluated as a Boolean. If false, exceptions in
-        constructing the SMCRA data structure are fatal. If true (DEFAULT),
-        the exceptions are caught, but some residues or atoms will be missing.
-        THESE EXCEPTIONS ARE DUE TO PROBLEMS IN THE PDB FILE!.
-
-        o structure_builder - an optional user implemented StructureBuilder class.
-
-        o QUIET - Evaluated as a Boolean. If true, warnings issued in constructing
-        the SMCRA data will be suppressed. If false (DEFAULT), they will be shown.
-        These warnings might be indicative of problems in the PDB file!
+         - PERMISSIVE - Evaluated as a Boolean. If false, exceptions in
+           constructing the SMCRA data structure are fatal. If true (DEFAULT),
+           the exceptions are caught, but some residues or atoms will be missing.
+           THESE EXCEPTIONS ARE DUE TO PROBLEMS IN THE PDB FILE!.
+         - structure_builder - an optional user implemented StructureBuilder class.
+         - QUIET - Evaluated as a Boolean. If true, warnings issued in constructing
+           the SMCRA data will be suppressed. If false (DEFAULT), they will be shown.
+           These warnings might be indicative of problems in the PDB file!
         """
         if structure_builder is not None:
             self.structure_builder = structure_builder
@@ -70,8 +67,8 @@ class PDBParser(object):
         """Return the structure.
 
         Arguments:
-        o id - string, the id that will be used for the structure
-        o file - name of the PDB file OR an open filehandle
+         - id - string, the id that will be used for the structure
+         - file - name of the PDB file OR an open filehandle
         """
         with warnings.catch_warnings():
             if self.QUIET:
@@ -82,7 +79,7 @@ class PDBParser(object):
             # Make a StructureBuilder instance (pass id of structure as parameter)
             self.structure_builder.init_structure(id)
 
-            with as_handle(file) as handle:
+            with as_handle(file, mode='rU') as handle:
                 self._parse(handle.readlines())
 
             self.structure_builder.set_header(self.header)
@@ -92,24 +89,24 @@ class PDBParser(object):
         return structure
 
     def get_header(self):
-        "Return the header."
+        """Return the header."""
         return self.header
 
     def get_trailer(self):
-        "Return the trailer."
+        """Return the trailer."""
         return self.trailer
 
     # Private methods
 
     def _parse(self, header_coords_trailer):
-        "Parse the PDB file."
+        """Parse the PDB file (PRIVATE)."""
         # Extract the header; return the rest of the file
         self.header, coords_trailer = self._get_header(header_coords_trailer)
         # Parse the atomic data; return the PDB file trailer
         self.trailer = self._parse_coordinates(coords_trailer)
 
     def _get_header(self, header_coords_trailer):
-        "Get the header of the PDB file, return the rest."
+        """Get the header of the PDB file, return the rest (PRIVATE)."""
         structure_builder = self.structure_builder
         i = 0
         for i in range(0, len(header_coords_trailer)):
@@ -126,7 +123,7 @@ class PDBParser(object):
         return header_dict, coords_trailer
 
     def _parse_coordinates(self, coords_trailer):
-        "Parse the atomic data in the PDB file."
+        """Parse the atomic data in the PDB file (PRIVATE)."""
         local_line_counter = 0
         structure_builder = self.structure_builder
         current_model_id = 0
@@ -137,7 +134,7 @@ class PDBParser(object):
         current_residue_id = None
         current_resname = None
         for i in range(0, len(coords_trailer)):
-            line = coords_trailer[i]
+            line = coords_trailer[i].rstrip('\n')
             record_type = line[0:6]
             global_line_counter = self.line_counter + local_line_counter + 1
             structure_builder.set_line_counter(global_line_counter)
@@ -162,7 +159,7 @@ class PDBParser(object):
                 chainid = line[21]
                 try:
                     serial_number = int(line[6:11])
-                except:
+                except Exception:
                     serial_number = 0
                 resseq = int(line[22:26].split()[0])  # sequence identifier
                 icode = line[26]  # insertion code
@@ -179,7 +176,7 @@ class PDBParser(object):
                     x = float(line[30:38])
                     y = float(line[38:46])
                     z = float(line[46:54])
-                except:
+                except Exception:
                     # Should we allow parsing to continue in permissive mode?
                     # If so, what coordinates should we default to?  Easier to abort!
                     raise PDBConstructionException("Invalid or missing coordinate(s) at line %i."
@@ -188,18 +185,24 @@ class PDBParser(object):
                 # occupancy & B factor
                 try:
                     occupancy = float(line[54:60])
-                except:
+                except Exception:
                     self._handle_PDB_exception("Invalid or missing occupancy",
                                                global_line_counter)
-                    occupancy = None # Rather than arbitrary zero or one
+                    occupancy = None  # Rather than arbitrary zero or one
+                if occupancy is not None and occupancy < 0:
+                    # TODO - Should this be an error in strict mode?
+                    # self._handle_PDB_exception("Negative occupancy",
+                    #                            global_line_counter)
+                    # This uses fixed text so the warning occurs once only:
+                    warnings.warn("Negative occupancy in one or more atoms", PDBConstructionWarning)
                 try:
                     bfactor = float(line[60:66])
-                except:
+                except Exception:
                     self._handle_PDB_exception("Invalid or missing B factor",
                                                global_line_counter)
                     bfactor = 0.0  # The PDB use a default of zero if the data is missing
                 segid = line[72:76]
-                element = line[76:78].strip()
+                element = line[76:78].strip().upper()
                 if current_segid != segid:
                     current_segid = segid
                     structure_builder.init_seg(current_segid)
@@ -234,7 +237,7 @@ class PDBParser(object):
             elif record_type == "MODEL ":
                 try:
                     serial_num = int(line[10:14])
-                except:
+                except Exception:
                     self._handle_PDB_exception("Invalid or missing model serial number",
                                                global_line_counter)
                     serial_num = 0
@@ -270,7 +273,8 @@ class PDBParser(object):
         return []
 
     def _handle_PDB_exception(self, message, line_counter):
-        """
+        """Handle exception (PRIVATE).
+
         This method catches an exception that occurs in the StructureBuilder
         object (if PERMISSIVE), or raises it again, this time adding the
         PDB line number to the error message.
@@ -308,5 +312,5 @@ if __name__ == "__main__":
                 assert(p is c)
                 for a in r:
                     p = a.get_parent()
-                    if not p is r:
+                    if p is not r:
                         print("%s %s" % (p, r))

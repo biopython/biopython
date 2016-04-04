@@ -6,11 +6,11 @@
 
 We used to have lines like this under Python 2 in order to use
 iterator based zip, map and filter (in Python 3 these functions
-are all iterator based):
+are all iterator based)::
 
     from future_builtins import zip
 
-There is no similar option for range yet, other than:
+There is no similar option for range yet, other than::
 
     range = xrange
     input = raw_input
@@ -21,11 +21,11 @@ or:
     from __builtin__ import raw_input as input
 
 Under Python 3 these imports need to be removed. Also, deliberate
-importing of built in functions like open changes from Python 2:
+importing of built in functions like open changes from Python 2::
 
     from __builtin__ import open
 
-to this under Python 3:
+To do this under Python 3:
 
     from builtins import open
 
@@ -39,26 +39,35 @@ go away.
 """
 import sys
 
+__docformat__ = "restructuredtext en"
+
+
 if sys.version_info[0] >= 3:
-    #Code for Python 3
+    # Code for Python 3
     from builtins import open, zip, map, filter, range, input
 
     import codecs
 
-    #Lots of our Python 2 code uses isinstance(x, basestring)
-    #which after 2to3 becomes isinstance(x, str)
+    # Lots of our Python 2 code uses isinstance(x, basestring)
+    # which after 2to3 becomes isinstance(x, str)
     basestring = str
     unicode = str
 
-    _bytes_to_string = lambda b: b.decode() # bytes to unicode string
-    _string_to_bytes = lambda s: s.encode() # unicode string to bytes
+    _bytes_to_string = lambda b: b.decode()  # bytes to unicode string
+    _string_to_bytes = lambda s: s.encode()  # unicode string to bytes
+
+    def _bytes_bytearray_to_str(s):
+        """If s is bytes or bytearray, convert to a unicode string."""
+        if isinstance(s, (bytes, bytearray)):
+            return s.decode()
+        return s
 
     def _as_unicode(s):
         """Turn byte string or unicode string into a unicode string."""
         if isinstance(s, str):
             return s
-        #Assume it is a bytes string
-        #Note ISO-8859-1 aka Latin-1 preserves first 256 chars
+        # Assume it is a bytes string
+        # Note ISO-8859-1 aka Latin-1 preserves first 256 chars
         return codecs.latin_1_decode(s)[0]
 
     def _as_bytes(s):
@@ -68,8 +77,8 @@ if sys.version_info[0] >= 3:
         """
         if isinstance(s, bytes):
             return s
-        #Assume it is a unicode string
-        #Note ISO-8859-1 aka Latin-1 preserves first 256 chars
+        # Assume it is a unicode string
+        # Note ISO-8859-1 aka Latin-1 preserves first 256 chars
         return codecs.latin_1_encode(s)[0]
 
     _as_string = _as_unicode
@@ -83,84 +92,106 @@ if sys.version_info[0] >= 3:
 
     import io
 
-    def _binary_to_string_handle(handle):
-        """Treat a binary (bytes) handle like a text (unicode) handle."""
-        # TODO, once drop all of Python 3.0 - 3.3, replace this with just:
-        #
-        # return io.TextIOWrapper(io.BufferedReader(handle))
-        #
-        # See also http://bugs.python.org/issue5628
-        # and http://bugs.python.org/issue13541
-        # and http://bugs.python.org/issue13464 which should be fixed in Python 3.3
-        #
-        # However, still have problems under Python 3.3.0, e.g.
-        #
-        # $ python3.3 test_SeqIO_online.py
-        # test_nuccore_X52960 (__main__.EntrezTests)
-        # Bio.Entrez.efetch('nuccore', id='X52960', ...) ... ERROR
-        # test_nucleotide_6273291 (__main__.EntrezTests)
-        # Bio.Entrez.efetch('nucleotide', id='6273291', ...) ... ERROR
-        # test_protein_16130152 (__main__.EntrezTests)
-        # Bio.Entrez.efetch('protein', id='16130152', ...) ... ERROR
-        # test_get_sprot_raw (__main__.ExPASyTests)
-        # Bio.ExPASy.get_sprot_raw("O23729") ... ok
-        # ..
-        # ValueError: I/O operation on closed file.
-        #
-        class EvilHandleHack(object):
-            def __init__(self, handle):
-                self._handle = handle
+    if sys.version_info[:2] <= (3, 3):
+        def _binary_to_string_handle(handle):
+            """Treat a binary (bytes) handle like a text (unicode) handle."""
+            # TODO, once drop all of Python 3.0 - 3.3, remove this!
+            #
+            # See also http://bugs.python.org/issue5628
+            # and http://bugs.python.org/issue13541
+            # and http://bugs.python.org/issue13464 which should be fixed in Python 3.3
+            #
+            # However, still have problems under Python 3.3.0, e.g.
+            #
+            # $ python3.3 test_SeqIO_online.py
+            # test_nuccore_X52960 (__main__.EntrezTests)
+            # Bio.Entrez.efetch('nuccore', id='X52960', ...) ... ERROR
+            # test_nucleotide_6273291 (__main__.EntrezTests)
+            # Bio.Entrez.efetch('nucleotide', id='6273291', ...) ... ERROR
+            # test_protein_16130152 (__main__.EntrezTests)
+            # Bio.Entrez.efetch('protein', id='16130152', ...) ... ERROR
+            # test_get_sprot_raw (__main__.ExPASyTests)
+            # Bio.ExPASy.get_sprot_raw("O23729") ... ok
+            # ..
+            # ValueError: I/O operation on closed file.
+            #
+            class EvilHandleHack(object):
+                """Biopython internal class to work around bugs in early versions of Python 3."""
+                def __init__(self, handle):
+                    self._handle = handle
+                    try:
+                        # If wrapping an online handle, this this is nice to have:
+                        self.url = handle.url
+                    except AttributeError:
+                        pass
 
-            def read(self, length=None):
-                return _as_string(self._handle.read(length))
+                def read(self, length=None):
+                    return _as_string(self._handle.read(length))
 
-            def readline(self):
-                return _as_string(self._handle.readline())
+                def readline(self):
+                    return _as_string(self._handle.readline())
 
-            def __iter__(self):
-                for line in self._handle:
-                    yield _as_string(line)
+                def __iter__(self):
+                    for line in self._handle:
+                        yield _as_string(line)
 
-            def close(self):
-                return self._handle.close()
+                def close(self):
+                    return self._handle.close()
 
-            def seek(self, pos):
-                return self._handle.seek(pos)
+                def seek(self, pos):
+                    return self._handle.seek(pos)
 
-            def tell(self):
-                return self._handle.tell()
+                def tell(self):
+                    return self._handle.tell()
 
-        return EvilHandleHack(handle)
+            return EvilHandleHack(handle)
+    else:
+        # Python 3.4 onwards, the standard library wrappers should work:
+        def _binary_to_string_handle(handle):
+            """Treat a binary (bytes) handle like a text (unicode) handle."""
+            wrapped = io.TextIOWrapper(io.BufferedReader(handle))
+            try:
+                # If wrapping an online handle, this this is nice to have:
+                wrapped.url = handle.url
+            except AttributeError:
+                pass
+            return wrapped
 
-    #This is to avoid the deprecation warning from open(filename, "rU")
-    _universal_read_mode = "r" # text mode does universal new lines
+    # This is to avoid the deprecation warning from open(filename, "rU")
+    _universal_read_mode = "r"  # text mode does universal new lines
 
-    #On Python 3, can depend on OrderedDict being present:
+    # On Python 3, can depend on OrderedDict being present:
     from collections import OrderedDict
 
-    #On Python 3, this will be a unicode StringIO
+    # On Python 3, this will be a unicode StringIO
     from io import StringIO
 
-    #On Python 3 urllib, urllib2, and urlparse were merged:
+    # On Python 3 urllib, urllib2, and urlparse were merged:
     from urllib.request import urlopen, Request, urlretrieve, urlparse
     from urllib.parse import urlencode, quote
     from urllib.error import HTTPError
 
 else:
-    #Python 2 code
+    # Python 2 code
     from __builtin__ import open, basestring, unicode
 
-    #Import Python3 like iterator functions:
+    # Import Python3 like iterator functions:
     from future_builtins import zip, map, filter
     from __builtin__ import xrange as range
     from __builtin__ import raw_input as input
 
-    _bytes_to_string = lambda b: b # bytes to string, i.e. do nothing
-    _string_to_bytes = lambda s: str(s) # str (or unicode) to bytes string
+    _bytes_to_string = lambda b: b  # bytes to string, i.e. do nothing
+    _string_to_bytes = lambda s: str(s)  # str (or unicode) to bytes string
+
+    def _bytes_bytearray_to_str(s):
+        """If s is bytes or bytearray, convert to a string."""
+        if isinstance(s, (bytes, bytearray)):
+            return str(s)
+        return s
 
     def _as_unicode(s):
         """Turn a (byte) string or a unicode string into a (byte) string."""
-        #Will be changed by 2to3 to "isinstance(s, str)" but doesn't matter:
+        # Will be changed by 2to3 to "isinstance(s, str)" but doesn't matter:
         if isinstance(s, unicode):
             return s
         return s.decode()
@@ -184,14 +215,14 @@ else:
     _universal_read_mode = "rU"
 
     try:
-        #Present on Python 2.7
+        # Present on Python 2.7
         from collections import OrderedDict
     except ImportError:
         try:
-            #Raymond Hettinger's backport available on PyPI
+            # Raymond Hettinger's backport available on PyPI
             from ordereddict import OrderedDict
         except ImportError:
-            #Use our bundled copy instead
+            # Use our bundled copy instead
             from ._ordereddict import OrderedDict
 
     # On Python 2 this will be a (bytes) string based handle.
@@ -202,15 +233,15 @@ else:
     except ImportError:
         from StringIO import StringIO
 
-    #Under urllib.request on Python 3:
+    # Under urllib.request on Python 3:
     from urllib2 import urlopen, Request
     from urllib import urlretrieve
     from urlparse import urlparse
 
-    #Under urllib.parse on Python 3:
+    # Under urllib.parse on Python 3:
     from urllib import urlencode, quote
 
-    #Under urllib.error on Python 3:
+    # Under urllib.error on Python 3:
     from urllib2 import HTTPError
 
 

@@ -16,19 +16,19 @@ from Bio import MissingExternalDependencyError
 from Bio.Align.Applications import PrankCommandline
 from Bio.Nexus.Nexus import NexusError
 
-#Try to avoid problems when the OS is in another language
+# Try to avoid problems when the OS is in another language
 os.environ['LANG'] = 'C'
 
 prank_exe = None
 if sys.platform == "win32":
     try:
-        #This can vary depending on the Windows language.
+        # This can vary depending on the Windows language.
         prog_files = os.environ["PROGRAMFILES"]
     except KeyError:
         prog_files = r"C:\Program Files"
-    #For Windows, PRANK just comes as a zip file which contains the
-    #prank.exe file which the user could put anywhere.  We'll try a few
-    #sensible locations under Program Files... and then the full path.
+    # For Windows, PRANK just comes as a zip file which contains the
+    # prank.exe file which the user could put anywhere.  We'll try a few
+    # sensible locations under Program Files... and then the full path.
     likely_dirs = ["",  # Current dir
                    prog_files,
                    os.path.join(prog_files, "Prank")] + sys.path
@@ -93,9 +93,9 @@ class PrankApplication(unittest.TestCase):
         output.?.??? files written to cwd - no way to redirect
         """
         records = list(SeqIO.parse(self.infile1, "fasta"))
-        #Try using keyword argument,
+        # Try using keyword argument,
         cmdline = PrankCommandline(prank_exe, d=self.infile1)
-        #Try using a property,
+        # Try using a property,
         cmdline.d = self.infile1
         cmdline.f = 17  # NEXUS format
         cmdline.set_parameter("dots", True)
@@ -116,14 +116,14 @@ class PrankApplication(unittest.TestCase):
                 raise RuntimeError("Can't find PRANK's NEXUS output (*.nex)")
             align = AlignIO.read(nex_fname, "nexus")
             for old, new in zip(records, align):
-                #Old versions of Prank reduced name to 9 chars
+                # Old versions of Prank reduced name to 9 chars
                 self.assertTrue(old.id == new.id or old.id[:9] == new.id)
-                #infile1 has alignment gaps in it
+                # infile1 has alignment gaps in it
                 self.assertEqual(str(new.seq).replace("-", ""),
                                  str(old.seq).replace("-", ""))
         except NexusError:
-            #See bug 3119,
-            #Bio.Nexus can't parse output from prank v100701 (1 July 2010)
+            # See bug 3119,
+            # Bio.Nexus can't parse output from prank v100701 (1 July 2010)
             pass
 
     def test_Prank_complex_command_line(self):
@@ -133,7 +133,7 @@ class PrankApplication(unittest.TestCase):
         cmdline.set_parameter("-gaprate", 0.321)
         cmdline.set_parameter("gapext", 0.6)
         cmdline.set_parameter("-dots", 1)  # i.e. True
-        #Try using a property:
+        # Try using a property:
         cmdline.kappa = 3
         cmdline.skipins = True
         cmdline.set_parameter("-once", True)
@@ -149,7 +149,7 @@ class PrankApplication(unittest.TestCase):
 
 class PrankConversion(unittest.TestCase):
     def setUp(self):
-        #As these reads are all 36, it can be seen as pre-aligned:
+        # As these reads are all 36, it can be seen as pre-aligned:
         self.input = "Quality/example.fasta"
         self.output = 'temp with space'  # prefix, PRANK will pick extensions
 
@@ -174,7 +174,7 @@ class PrankConversion(unittest.TestCase):
         self.assertEqual(error, "")
         self.assertTrue(os.path.isfile(filename))
         old = AlignIO.read(self.input, "fasta")
-        #Hack...
+        # Hack...
         if format == "phylip":
             for record in old:
                 record.id = record.id[:10]
@@ -189,8 +189,8 @@ class PrankConversion(unittest.TestCase):
         """Convert FASTA to FASTA format."""
         self.conversion(8, "fas", "fasta")
 
-    #Prank v.100701 seems to output an invalid file here...
-    #def test_convert_to_phylip32(self):
+    # Prank v.100701 seems to output an invalid file here...
+    # def test_convert_to_phylip32(self):
     #    """Convert FASTA to PHYLIP 3.2 format."""
     #    self.conversion(11, "phy", "phylip")
 
@@ -198,12 +198,12 @@ class PrankConversion(unittest.TestCase):
         """Convert FASTA to PHYLIP format."""
         self.conversion(12, "phy", "phylip")
 
-    #PRANK truncated the record names in the matrix block. An error?
-    #def test_convert_to_paup_nexus(self):
+    # PRANK truncated the record names in the matrix block. An error?
+    # def test_convert_to_paup_nexus(self):
     #    """Convert FASTA to PAUP/NEXUS."""
     #    self.conversion(17, "nex", "nexus")
 
-    #We don't support format 18, PAML
+    # We don't support format 18, PAML
 
 
 if __name__ == "__main__":

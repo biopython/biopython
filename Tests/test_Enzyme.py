@@ -13,8 +13,8 @@ from Bio.ExPASy import Enzyme
 class TestEnzyme(unittest.TestCase):
 
     def test_lipoprotein(self):
-        "Parsing ENZYME record for lipoprotein lipase (3.1.1.34)"
-        filename = os.path.join( 'Enzymes', 'lipoprotein.txt')
+        """Parsing ENZYME record for lipoprotein lipase (3.1.1.34)"""
+        filename = os.path.join('Enzymes', 'lipoprotein.txt')
         handle = open(filename)
         record = Enzyme.read(handle)
         handle.close()
@@ -41,8 +41,8 @@ class TestEnzyme(unittest.TestCase):
         self.assertEqual(record["DR"][10], ["Q29524", "LIPL_SHEEP"])
 
     def test_proline(self):
-        "Parsing ENZYME record for proline racemase (5.1.1.4)"
-        filename = os.path.join( 'Enzymes', 'proline.txt')
+        """Parsing ENZYME record for proline racemase (5.1.1.4)"""
+        filename = os.path.join('Enzymes', 'proline.txt')
         handle = open(filename)
         record = Enzyme.read(handle)
         handle.close()
@@ -61,8 +61,8 @@ class TestEnzyme(unittest.TestCase):
         self.assertEqual(record["DR"][8], ["Q66II5", "PRCM_XENTR"])
 
     def test_valine(self):
-        "Parsing ENZYME record for valine decarboxylase (4.1.1.14)"
-        filename = os.path.join( 'Enzymes', 'valine.txt')
+        """Parsing ENZYME record for valine decarboxylase (4.1.1.14)"""
+        filename = os.path.join('Enzymes', 'valine.txt')
         handle = open(filename)
         record = Enzyme.read(handle)
         handle.close()
@@ -74,8 +74,8 @@ class TestEnzyme(unittest.TestCase):
         self.assertEqual(len(record["DR"]), 0)
 
     def test_lactate(self):
-        "Parsing ENZYME record for lactate racemase (5.1.2.1)"
-        filename = os.path.join( 'Enzymes', 'lactate.txt')
+        """Parsing ENZYME record for lactate racemase (5.1.2.1)"""
+        filename = os.path.join('Enzymes', 'lactate.txt')
         handle = open(filename)
         record = Enzyme.read(handle)
         handle.close()
@@ -89,5 +89,5 @@ class TestEnzyme(unittest.TestCase):
         self.assertEqual(len(record["DR"]), 0)
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

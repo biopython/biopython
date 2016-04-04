@@ -1,5 +1,5 @@
 # Copyright 2012 by Wibowo Arindrarto. All rights reserved.
-# Revisions Copyright 2012 by Peter Cock. All rights reserved.
+# Revisions Copyright 2012-2015 by Peter Cock. All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -14,7 +14,6 @@ try:
 except ImportError:
     sqlite3 = None
 
-from Bio import SearchIO
 from Bio._py3k import _as_bytes
 from Bio.SeqRecord import SeqRecord
 
@@ -22,12 +21,13 @@ from Bio import BiopythonExperimentalWarning
 
 import warnings
 with warnings.catch_warnings():
-   warnings.simplefilter('ignore', BiopythonExperimentalWarning)
-   from Bio import SearchIO
+    warnings.simplefilter('ignore', BiopythonExperimentalWarning)
+    from Bio import SearchIO
+
 
 class CheckRaw(unittest.TestCase):
-
     """Base class for testing index's get_raw method."""
+    fmt = None  # define this in subclasses!
 
     def check_raw(self, filename, id, raw, **kwargs):
         """Index filename using **kwargs, check get_raw(id)==raw."""
@@ -35,25 +35,30 @@ class CheckRaw(unittest.TestCase):
         raw = _as_bytes(raw)
         # Anticipate cases where the raw string and/or file uses different
         # newline characters ~ we set everything to \n.
+        new = idx.get_raw(id)
+        self.assertTrue(isinstance(new, bytes),
+                        "Didn't get bytes from %s get_raw" % self.fmt)
         self.assertEqual(raw.replace(b'\r\n', b'\n'),
-                idx.get_raw(id).replace(b'\r\n', b'\n'))
+                         new.replace(b'\r\n', b'\n'))
         idx.close()
 
-        #Now again, but using SQLite backend
+        # Now again, but using SQLite backend
         if sqlite3:
             idx = SearchIO.index_db(":memory:", filename, self.fmt, **kwargs)
+            new = idx.get_raw(id)
+            self.assertTrue(isinstance(new, bytes),
+                            "Didn't get bytes from %s get_raw" % self.fmt)
             self.assertEqual(raw.replace(b'\r\n', b'\n'),
-                    idx.get_raw(id).replace(b'\r\n', b'\n'))
+                             new.replace(b'\r\n', b'\n'))
             idx.close()
 
         if os.path.isfile(filename + ".bgz"):
-            #Do the tests again with the BGZF compressed file
+            # Do the tests again with the BGZF compressed file
             print("[BONUS %s.bgz]" % filename)
             self.check_raw(filename + ".bgz", id, raw, **kwargs)
 
 
 class CheckIndex(unittest.TestCase):
-
     """Base class for testing indexing."""
 
     def check_index(self, filename, format, **kwargs):
@@ -72,13 +77,13 @@ class CheckIndex(unittest.TestCase):
         # compare values by index
         indexed = SearchIO.index(filename, format, **kwargs)
         self.assertEqual(len(parsed), len(indexed),
-                         "Should be %i records in %s, index says %i" \
+                         "Should be %i records in %s, index says %i"
                          % (len(parsed), filename, len(indexed)))
         # compare values by index_db, only if sqlite3 is present
         if sqlite3 is not None:
             db_indexed = SearchIO.index_db(':memory:', [filename], format, **kwargs)
             self.assertEqual(len(parsed), len(db_indexed),
-                             "Should be %i records in %s, index_db says %i" \
+                             "Should be %i records in %s, index_db says %i"
                              % (len(parsed), filename, len(db_indexed)))
 
         for qres in parsed:
@@ -99,9 +104,10 @@ class CheckIndex(unittest.TestCase):
             db_indexed._con.close()
 
         if os.path.isfile(filename + ".bgz"):
-            #Do the tests again with the BGZF compressed file
+            # Do the tests again with the BGZF compressed file
             print("[BONUS %s.bgz]" % filename)
             self.check_index(filename + ".bgz", format, **kwargs)
+
 
 def _num_difference(obj_a, obj_b):
     """Returns the number of instance attributes presence only in one object."""
@@ -125,7 +131,7 @@ def compare_search_obj(obj_a, obj_b):
     # compare objects recursively if it's not an HSPFragment
     if not isinstance(obj_a, SearchIO.HSPFragment):
         # check the number of hits contained
-        assert len(obj_a) == len(obj_b), "length: %r vs %r" % (len(obj_a),
+        assert len(obj_a) == len(obj_b), "length: %i vs %i for %r vs %r" % (len(obj_a),
                 len(obj_b), obj_a, obj_b)
         for item_a, item_b in zip(obj_a, obj_b):
             assert compare_search_obj(item_a, item_b)

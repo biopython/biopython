@@ -13,24 +13,16 @@
 #
 ################################################################################
 
-""" FeatureSet module
+"""FeatureSet module
 
-    Provides:
+Provides:
+ - FeatureSet - container for Feature objects
 
-    o FeatureSet - container for Feature objects
-
-    For drawing capabilities, this module uses reportlab to draw and write
-    the diagram:
-
-    http://www.reportlab.com
-
-    For dealing with biological information, the package expects BioPython
-    objects:
-
-    http://www.biopython.org
+For drawing capabilities, this module uses reportlab to draw and write
+the diagram: http://www.reportlab.com
 """
 
-#------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # IMPORTS
 
 # ReportLab
@@ -45,57 +37,24 @@ from ._Feature import Feature
 # Builtins
 import re
 
-#------------------------------------------------------------------------------
+__docformat__ = "restructuredtext en"
+
+# ------------------------------------------------------------------------------
 # CLASSES
 
-#------------------------------------------------------------
+# ------------------------------------------------------------
 # FeatureSet
 
 
 class FeatureSet(object):
-    """ FeatureSet
+    """FeatureSet object."""
 
-        Provides:
-
-        Methods:
-
-        o __init__(self, set_id=None, name=None) Called on instantiation
-
-        o add_feature(self, feature, color=colors.lightgreen)  Add a Feature
-                        object to the set
-
-        o del_feature(self, feature_id) Remove a feature from the set, by id
-
-        o set_all_features(self, attr, value)   Set the passed attribute to the
-                        passed value in all features in the set
-
-        o get_features(self)    Returns a list of Features from the set
-
-        o get_ids(self)     Returns a list of unique ids for features in the set
-
-        o range(self)       Returns the range of bases covered by features in
-                            the set
-
-        o to_string(self, verbose=0)    Returns a string describing the set
-
-        o __len__(self)     Returns the length of sequence covered by the set
-
-        o __getitem__(self, key)    Returns a feature from the set, keyed by id
-
-        o __str__(self)     Returns a string describing the set
-
-        Attributes:
-
-        o id    Unique id for the set
-
-        o name  String describing the set
-    """
     def __init__(self, set_id=None, name=None, parent=None):
-        """ __init__(self, set_id=None, name=None)
+        """Create the object.
 
-            o set_id    Unique id for the set
-
-            o name      String identifying the feature set
+        Arguments:
+         - set_id: Unique id for the set
+         - name: String identifying the feature set
         """
         self.parent = parent
         self.id = id            # Unique id for the set
@@ -104,26 +63,26 @@ class FeatureSet(object):
         self.name = name        # String describing the set
 
     def add_feature(self, feature, **kwargs):
-        """ add_feature(self, feature, **args)
+        """Add a new feature.
 
-            o feature       Bio.SeqFeature object
+        Arguments:
+         - feature: Bio.SeqFeature object
+         - kwargs: Keyword arguments for Feature.  Named attributes
+           of the Feature
 
-            o **kwargs      Keyword arguments for Feature.  Named attributes
-                            of the Feature
-
-            Add a Bio.SeqFeature object to the diagram (will be stored
-            internally in a Feature wrapper
+        Add a Bio.SeqFeature object to the diagram (will be stored
+        internally in a Feature wrapper).
         """
-        id = self.next_id                                  # get id number
+        id = self.next_id  # get id number
         f = Feature(self, id, feature)
-        self.features[id] = f # add feature
+        self.features[id] = f  # add feature
         for key in kwargs:
             if key == "colour" or key == "color":
-                #Deal with "colour" as a special case by also mapping to color.
-                #If Feature.py used a python property we wouldn't need to call
-                #set_color explicitly.  However, this is important to make sure
-                #every color gets mapped to a colors object - for example color
-                #numbers, or strings (may not matter for PDF, but does for PNG).
+                # Deal with "colour" as a special case by also mapping to color.
+                # If Feature.py used a python property we wouldn't need to call
+                # set_color explicitly.  However, this is important to make sure
+                # every color gets mapped to a colors object - for example color
+                # numbers, or strings (may not matter for PDF, but does for PNG).
                 self.features[id].set_color(kwargs[key])
                 continue
             setattr(self.features[id], key, kwargs[key])
@@ -131,55 +90,54 @@ class FeatureSet(object):
         return f
 
     def del_feature(self, feature_id):
-        """ del_feature(self, feature_id)
+        """Delete a feature.
 
-            o feature_id        Unique id of the feature to delete
+        Arguments:
+         - feature_id: Unique id of the feature to delete
 
-            Remove a feature from the set, indicated by its id
+        Remove a feature from the set, indicated by its id.
         """
         del self.features[feature_id]
 
     def set_all_features(self, attr, value):
-        """ set_all_features(self, attr, value)
+        """Set an attribute of all the features.
 
-            o attr      An attribute of the Feature class
+        Arguments:
+         - attr: An attribute of the Feature class
+         - value: The value to set that attribute to
 
-            o value     The value to set that attribute
-
-            Set the passed attribute of all features in the set to the
-            passed value
+        Set the passed attribute of all features in the set to the
+        passed value.
         """
         changed = 0
         for feature in self.features.values():
             # If the feature has the attribute, and the value should change
             if hasattr(feature, attr):
                 if getattr(feature, attr) != value:
-                    setattr(feature, attr, value) # set it to the passed value
+                    setattr(feature, attr, value)  # set it to the passed value
 
-        #For backwards compatibility, we support both colour and color.
-        #As a quick hack, make "colour" set both "colour" and "color".
-        #if attr=="colour":
+        # For backwards compatibility, we support both colour and color.
+        # As a quick hack, make "colour" set both "colour" and "color".
+        # if attr=="colour":
         #    self.set_all_feature("color",value)
 
     def get_features(self, attribute=None, value=None, comparator=None):
-        """ get_features(self, attribute=None, value=None, comparator=None) ->
-                                            [Feature, Feature, ...]
+        """Retrieve features.
 
-            o attribute        String, attribute of a Feature object
+        Arguments:
+         - attribute: String, attribute of a Feature object
+         - value: The value desired of the attribute
+         - comparator: String, how to compare the Feature attribute to the
+           passed value
 
-            o value            The value desired of the attribute
+        If no attribute or value is given, return a list of all features in the
+        feature set.  If both an attribute and value are given, then depending
+        on the comparator, then a list of all features in the FeatureSet
+        matching (or not) the passed value will be returned.  Allowed comparators
+        are: 'startswith', 'not', 'like'.
 
-            o comparator       String, how to compare the Feature attribute to the
-                               passed value
-
-            If no attribute or value is given, return a list of all features in the
-            feature set.  If both an attribute and value are given, then depending
-            on the comparator, then a list of all features in the FeatureSet
-            matching (or not) the passed value will be returned.  Allowed comparators
-            are: 'startswith', 'not', 'like'.
-
-            The user is expected to make a responsible decision about which feature
-            attributes to use with which passed values and comparator settings.
+        The user is expected to make a responsible decision about which feature
+        attributes to use with which passed values and comparator settings.
         """
         # If no attribute or value specified, return all features
         if attribute is None or value is None:
@@ -208,17 +166,11 @@ class FeatureSet(object):
         return []
 
     def get_ids(self):
-        """ get_ids(self) -> [int, int, ...]
-
-            Return a list of all ids for the feature set
-        """
+        """Return a list of all ids for the feature set."""
         return list(self.features.keys())
 
     def range(self):
-        """ range(self)
-
-            Returns the lowest and highest base (or mark) numbers as a tuple
-        """
+        """Returns the lowest and highest base (or mark) numbers as a tuple."""
         lows, highs = [], []
         for feature in self.features.values():
             for start, end in feature.locations:
@@ -229,12 +181,11 @@ class FeatureSet(object):
         return 0, 0
 
     def to_string(self, verbose=0):
-        """ to_string(self, verbose=0) -> ""
+        """Returns a formatted string with information about the set
 
-            o verbose       Boolean indicating whether a short or complete
-                            account of the set is required
-
-            Returns a formatted string with information about the set
+        Arguments:
+         - verbose: Boolean indicating whether a short (default) or
+           complete account of the set is required
         """
         if not verbose:         # Short account only required
             return "%s" % self
@@ -246,24 +197,15 @@ class FeatureSet(object):
             return "\n".join(outstr)
 
     def __len__(self):
-        """ __len__(self) -> int
-
-            Return the number of features in the set
-        """
+        """Return the number of features in the set."""
         return len(self.features)
 
     def __getitem__(self, key):
-        """ __getitem__(self, key) -> Feature
-
-            Return a feature, keyed by id
-        """
+        """Return a feature, keyed by id."""
         return self.features[key]
 
     def __str__(self):
-        """ __str__(self) -> ""
-
-            Returns a formatted string with information about the feature set
-        """
+        """Returns a formatted string with information about the feature set."""
         outstr = ["\n<%s: %s %d features>" % (self.__class__, self.name,
                                               len(self.features))]
         return "\n".join(outstr)
@@ -283,11 +225,11 @@ if __name__ == '__main__':
         if feature.type == 'CDS':
             gdfs.add_feature(feature)
 
-    #print len(gdfs)
-    #print gdfs.get_ids()
-    #gdfs.del_feature(560)
-    #print gdfs.get_ids()
-    #print gdfs.get_features()
-    #for feature in gdfs.get_features():
+    # print len(gdfs)
+    # print gdfs.get_ids()
+    # gdfs.del_feature(560)
+    # print gdfs.get_ids()
+    # print gdfs.get_features()
+    # for feature in gdfs.get_features():
     #    print feature.id, feature.start, feature.end
-    #print gdfs[500]
+    # print gdfs[500]

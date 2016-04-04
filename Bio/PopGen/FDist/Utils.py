@@ -7,12 +7,15 @@
 from Bio.PopGen.GenePop import FileParser
 import Bio.PopGen.FDist
 
+__docformat__ = "restructuredtext en"
+
+
 # Quite a few utility functions could be done (like remove pop,
 # add locus, etc...). The recommended strategy is convert back
 # and forth from/to GenePop and use GenePop Utils
 
 
-def convert_genepop_to_fdist(gp_rec, report_pops = None):
+def convert_genepop_to_fdist(gp_rec, report_pops=None):
     """Converts a GenePop record to a FDist one.
 
        Parameters:
@@ -51,7 +54,7 @@ def _convert_genepop_to_fdist(gp_rec):
                         alleles.append(al)
         alleles.sort()  # Dominance requires this
 
-        #here we go again (necessary...)
+        # here we go again (necessary...)
         for pop_i in range(len(gp_rec.populations)):
             allele_counts = {}
             for indiv in gp_rec.populations[pop_i]:
@@ -67,7 +70,7 @@ def _convert_genepop_to_fdist(gp_rec):
     return fd_rec
 
 
-def _convert_genepop_to_fdist_big(gp_rec, report_pops = None):
+def _convert_genepop_to_fdist_big(gp_rec, report_pops=None):
     """Converts a big GenePop record to a FDist one.
 
        Parameters:
@@ -104,7 +107,7 @@ def _convert_genepop_to_fdist_big(gp_rec, report_pops = None):
                 for al in lParser[1][loci_pos]:
                     if al is not None:
                         loci[loci_pos].add(al)
-                        curr_pop[loci_pos][al]= curr_pop[loci_pos].get(al, 0)+1
+                        curr_pop[loci_pos][al] = curr_pop[loci_pos].get(al, 0) + 1
         else:
             pops.append(curr_pop)
             num_pops += 1
@@ -127,7 +130,7 @@ def _convert_genepop_to_fdist_big(gp_rec, report_pops = None):
     return fd_rec
 
 
-def _convert_genepop_to_fdist_big_old(gp_rec, report_loci = None):
+def _convert_genepop_to_fdist_big_old(gp_rec, report_loci=None):
     """Converts a big GenePop record to a FDist one.
 
        Parameters:
@@ -166,7 +169,7 @@ def _convert_genepop_to_fdist_big_old(gp_rec, report_loci = None):
                     if al is not None and al not in alleles:
                         alleles.append(al)
             lParser = work_rec.get_individual()
-        #here we go again (necessary...)
+        # here we go again (necessary...)
         alleles.sort()
 
         def process_pop(pop_data, alleles, allele_counts):
@@ -179,14 +182,14 @@ def _convert_genepop_to_fdist_big_old(gp_rec, report_loci = None):
         allele_counts = {}
         for allele in alleles:
             allele_counts[allele] = 0
-        allele_counts[None]=0
+        allele_counts[None] = 0
         while lParser:
             if lParser is True:
                 process_pop(pop_data, alleles, allele_counts)
                 allele_counts = {}
                 for allele in alleles:
                     allele_counts[allele] = 0
-                allele_counts[None]=0
+                allele_counts[None] = 0
             else:
                 for al in lParser[1][lc_i]:
                     allele_counts[al] += 1
@@ -197,7 +200,7 @@ def _convert_genepop_to_fdist_big_old(gp_rec, report_loci = None):
 
 
 def approximate_fst(desired_fst, simulated_fst, parameter_fst,
-           max_run_fst = 1, min_run_fst = 0, limit = 0.005):
+           max_run_fst=1, min_run_fst=0, limit=0.005):
     """Calculates the next Fst attempt in order to approximate a
        desired Fst.
     """
@@ -205,8 +208,8 @@ def approximate_fst(desired_fst, simulated_fst, parameter_fst,
         return parameter_fst, max_run_fst, min_run_fst
     if simulated_fst > desired_fst:
         max_run_fst = parameter_fst
-        next_parameter_fst = (min_run_fst + parameter_fst)/2
+        next_parameter_fst = (min_run_fst + parameter_fst) / 2
     else:
         min_run_fst = parameter_fst
-        next_parameter_fst = (max_run_fst + parameter_fst)/2
+        next_parameter_fst = (max_run_fst + parameter_fst) / 2
     return next_parameter_fst, max_run_fst, min_run_fst

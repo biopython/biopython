@@ -18,6 +18,8 @@
 
 
 rest_dict = {}
+
+
 def _temp():
     return {
         'compsite': '(?P<AanI>TTATAA)',
@@ -39,6 +41,7 @@ def _temp():
         'ovhgseq': '',
     }
 rest_dict['AanI'] = _temp()
+
 
 def _temp():
     return {
@@ -62,6 +65,7 @@ def _temp():
     }
 rest_dict['AarI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<AasI>GAC......GTC)',
@@ -83,6 +87,7 @@ def _temp():
         'ovhgseq': 'NN',
     }
 rest_dict['AasI'] = _temp()
+
 
 def _temp():
     return {
@@ -106,6 +111,7 @@ def _temp():
     }
 rest_dict['AatII'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<AbaSI>C)|(?P<AbaSI_as>G)',
@@ -127,6 +133,7 @@ def _temp():
         'ovhgseq': 'NN',
     }
 rest_dict['AbaSI'] = _temp()
+
 
 def _temp():
     return {
@@ -150,6 +157,7 @@ def _temp():
     }
 rest_dict['AbsI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<Acc16I>TGCGCA)',
@@ -171,6 +179,7 @@ def _temp():
         'ovhgseq': '',
     }
 rest_dict['Acc16I'] = _temp()
+
 
 def _temp():
     return {
@@ -194,6 +203,7 @@ def _temp():
     }
 rest_dict['Acc36I'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<Acc65I>GGTACC)',
@@ -215,6 +225,7 @@ def _temp():
         'ovhgseq': 'GTAC',
     }
 rest_dict['Acc65I'] = _temp()
+
 
 def _temp():
     return {
@@ -238,6 +249,7 @@ def _temp():
     }
 rest_dict['AccB1I'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<AccB7I>CCA.....TGG)',
@@ -259,6 +271,7 @@ def _temp():
         'ovhgseq': 'NNN',
     }
 rest_dict['AccB7I'] = _temp()
+
 
 def _temp():
     return {
@@ -282,6 +295,7 @@ def _temp():
     }
 rest_dict['AccBSI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<AccI>GT[AC][GT]AC)',
@@ -303,6 +317,7 @@ def _temp():
         'ovhgseq': 'MK',
     }
 rest_dict['AccI'] = _temp()
+
 
 def _temp():
     return {
@@ -326,6 +341,7 @@ def _temp():
     }
 rest_dict['AccII'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<AccIII>TCCGGA)',
@@ -347,6 +363,7 @@ def _temp():
         'ovhgseq': 'CCGG',
     }
 rest_dict['AccIII'] = _temp()
+
 
 def _temp():
     return {
@@ -370,6 +387,7 @@ def _temp():
     }
 rest_dict['AceIII'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<AciI>CCGC)|(?P<AciI_as>GCGG)',
@@ -391,6 +409,7 @@ def _temp():
         'ovhgseq': 'CG',
     }
 rest_dict['AciI'] = _temp()
+
 
 def _temp():
     return {
@@ -414,6 +433,7 @@ def _temp():
     }
 rest_dict['AclI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<AclWI>GGATC)|(?P<AclWI_as>GATCC)',
@@ -435,6 +455,7 @@ def _temp():
         'ovhgseq': 'N',
     }
 rest_dict['AclWI'] = _temp()
+
 
 def _temp():
     return {
@@ -458,6 +479,7 @@ def _temp():
     }
 rest_dict['AcoI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<AcsI>[AG]AATT[CT])',
@@ -479,6 +501,7 @@ def _temp():
         'ovhgseq': 'AATT',
     }
 rest_dict['AcsI'] = _temp()
+
 
 def _temp():
     return {
@@ -502,6 +525,7 @@ def _temp():
     }
 rest_dict['AcuI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<AcvI>CACGTG)',
@@ -523,6 +547,7 @@ def _temp():
         'ovhgseq': '',
     }
 rest_dict['AcvI'] = _temp()
+
 
 def _temp():
     return {
@@ -546,6 +571,7 @@ def _temp():
     }
 rest_dict['AcyI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<AdeI>CAC...GTG)',
@@ -567,6 +593,7 @@ def _temp():
         'ovhgseq': 'NNN',
     }
 rest_dict['AdeI'] = _temp()
+
 
 def _temp():
     return {
@@ -590,6 +617,7 @@ def _temp():
     }
 rest_dict['AfaI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<AfeI>AGCGCT)',
@@ -611,6 +639,7 @@ def _temp():
         'ovhgseq': '',
     }
 rest_dict['AfeI'] = _temp()
+
 
 def _temp():
     return {
@@ -634,6 +663,7 @@ def _temp():
     }
 rest_dict['AfiI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<AflII>CTTAAG)',
@@ -655,6 +685,7 @@ def _temp():
         'ovhgseq': 'TTAA',
     }
 rest_dict['AflII'] = _temp()
+
 
 def _temp():
     return {
@@ -678,6 +709,7 @@ def _temp():
     }
 rest_dict['AflIII'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<AgeI>ACCGGT)',
@@ -699,6 +731,7 @@ def _temp():
         'ovhgseq': 'CCGG',
     }
 rest_dict['AgeI'] = _temp()
+
 
 def _temp():
     return {
@@ -722,6 +755,7 @@ def _temp():
     }
 rest_dict['AgsI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<AhaIII>TTTAAA)',
@@ -743,6 +777,7 @@ def _temp():
         'ovhgseq': '',
     }
 rest_dict['AhaIII'] = _temp()
+
 
 def _temp():
     return {
@@ -766,6 +801,7 @@ def _temp():
     }
 rest_dict['AhdI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<AhlI>ACTAGT)',
@@ -787,6 +823,7 @@ def _temp():
         'ovhgseq': 'CTAG',
     }
 rest_dict['AhlI'] = _temp()
+
 
 def _temp():
     return {
@@ -810,6 +847,7 @@ def _temp():
     }
 rest_dict['AjiI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<AjnI>CC[AT]GG)',
@@ -831,6 +869,7 @@ def _temp():
         'ovhgseq': 'CCWGG',
     }
 rest_dict['AjnI'] = _temp()
+
 
 def _temp():
     return {
@@ -854,6 +893,7 @@ def _temp():
     }
 rest_dict['AjuI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<AleI>CAC....GTG)',
@@ -875,6 +915,7 @@ def _temp():
         'ovhgseq': '',
     }
 rest_dict['AleI'] = _temp()
+
 
 def _temp():
     return {
@@ -898,6 +939,7 @@ def _temp():
     }
 rest_dict['AlfI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<AloI>GAAC......TCC)|(?P<AloI_as>GGA......GTTC)',
@@ -919,6 +961,7 @@ def _temp():
         'ovhgseq': 'NNNNN',
     }
 rest_dict['AloI'] = _temp()
+
 
 def _temp():
     return {
@@ -942,6 +985,7 @@ def _temp():
     }
 rest_dict['AluBI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<AluI>AGCT)',
@@ -963,6 +1007,7 @@ def _temp():
         'ovhgseq': '',
     }
 rest_dict['AluI'] = _temp()
+
 
 def _temp():
     return {
@@ -986,6 +1031,7 @@ def _temp():
     }
 rest_dict['Alw21I'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<Alw26I>GTCTC)|(?P<Alw26I_as>GAGAC)',
@@ -1007,6 +1053,7 @@ def _temp():
         'ovhgseq': 'NNNN',
     }
 rest_dict['Alw26I'] = _temp()
+
 
 def _temp():
     return {
@@ -1030,6 +1077,7 @@ def _temp():
     }
 rest_dict['Alw44I'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<AlwFI>GAAA[CT].....[AG]TG)|(?P<AlwFI_as>CA[CT].....[AG]TTTC)',
@@ -1051,6 +1099,7 @@ def _temp():
         'ovhgseq': None,
     }
 rest_dict['AlwFI'] = _temp()
+
 
 def _temp():
     return {
@@ -1074,6 +1123,7 @@ def _temp():
     }
 rest_dict['AlwI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<AlwNI>CAG...CTG)',
@@ -1095,6 +1145,7 @@ def _temp():
         'ovhgseq': 'NNN',
     }
 rest_dict['AlwNI'] = _temp()
+
 
 def _temp():
     return {
@@ -1118,6 +1169,7 @@ def _temp():
     }
 rest_dict['Ama87I'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<Aor13HI>TCCGGA)',
@@ -1139,6 +1191,7 @@ def _temp():
         'ovhgseq': 'CCGG',
     }
 rest_dict['Aor13HI'] = _temp()
+
 
 def _temp():
     return {
@@ -1162,6 +1215,7 @@ def _temp():
     }
 rest_dict['Aor51HI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<AoxI>GGCC)',
@@ -1183,6 +1237,7 @@ def _temp():
         'ovhgseq': 'GGCC',
     }
 rest_dict['AoxI'] = _temp()
+
 
 def _temp():
     return {
@@ -1206,6 +1261,7 @@ def _temp():
     }
 rest_dict['ApaBI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<ApaI>GGGCCC)',
@@ -1227,6 +1283,7 @@ def _temp():
         'ovhgseq': 'GGCC',
     }
 rest_dict['ApaI'] = _temp()
+
 
 def _temp():
     return {
@@ -1250,6 +1307,7 @@ def _temp():
     }
 rest_dict['ApaLI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<ApeKI>GC[AT]GC)',
@@ -1271,6 +1329,7 @@ def _temp():
         'ovhgseq': 'CWG',
     }
 rest_dict['ApeKI'] = _temp()
+
 
 def _temp():
     return {
@@ -1294,6 +1353,7 @@ def _temp():
     }
 rest_dict['ApoI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<ApyPI>ATCGAC)|(?P<ApyPI_as>GTCGAT)',
@@ -1315,6 +1375,7 @@ def _temp():
         'ovhgseq': 'NN',
     }
 rest_dict['ApyPI'] = _temp()
+
 
 def _temp():
     return {
@@ -1338,6 +1399,7 @@ def _temp():
     }
 rest_dict['AquII'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<AquIII>GAGGAG)|(?P<AquIII_as>CTCCTC)',
@@ -1359,6 +1421,7 @@ def _temp():
         'ovhgseq': 'NN',
     }
 rest_dict['AquIII'] = _temp()
+
 
 def _temp():
     return {
@@ -1382,6 +1445,7 @@ def _temp():
     }
 rest_dict['AquIV'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<ArsI>GAC......TT[CT]G)|(?P<ArsI_as>C[AG]AA......GTC)',
@@ -1403,6 +1467,7 @@ def _temp():
         'ovhgseq': 'NNNNN',
     }
 rest_dict['ArsI'] = _temp()
+
 
 def _temp():
     return {
@@ -1426,6 +1491,7 @@ def _temp():
     }
 rest_dict['AscI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<AseI>ATTAAT)',
@@ -1447,6 +1513,7 @@ def _temp():
         'ovhgseq': 'TA',
     }
 rest_dict['AseI'] = _temp()
+
 
 def _temp():
     return {
@@ -1470,6 +1537,7 @@ def _temp():
     }
 rest_dict['Asi256I'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<AsiGI>ACCGGT)',
@@ -1491,6 +1559,7 @@ def _temp():
         'ovhgseq': 'CCGG',
     }
 rest_dict['AsiGI'] = _temp()
+
 
 def _temp():
     return {
@@ -1514,6 +1583,7 @@ def _temp():
     }
 rest_dict['AsiSI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<Asp700I>GAA....TTC)',
@@ -1535,6 +1605,7 @@ def _temp():
         'ovhgseq': '',
     }
 rest_dict['Asp700I'] = _temp()
+
 
 def _temp():
     return {
@@ -1558,6 +1629,7 @@ def _temp():
     }
 rest_dict['Asp718I'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<AspA2I>CCTAGG)',
@@ -1579,6 +1651,7 @@ def _temp():
         'ovhgseq': 'CTAG',
     }
 rest_dict['AspA2I'] = _temp()
+
 
 def _temp():
     return {
@@ -1602,6 +1675,7 @@ def _temp():
     }
 rest_dict['AspBHI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<AspLEI>GCGC)',
@@ -1623,6 +1697,7 @@ def _temp():
         'ovhgseq': 'CG',
     }
 rest_dict['AspLEI'] = _temp()
+
 
 def _temp():
     return {
@@ -1646,6 +1721,7 @@ def _temp():
     }
 rest_dict['AspS9I'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<AssI>AGTACT)',
@@ -1667,6 +1743,7 @@ def _temp():
         'ovhgseq': '',
     }
 rest_dict['AssI'] = _temp()
+
 
 def _temp():
     return {
@@ -1690,6 +1767,7 @@ def _temp():
     }
 rest_dict['AsuC2I'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<AsuHPI>GGTGA)|(?P<AsuHPI_as>TCACC)',
@@ -1711,6 +1789,7 @@ def _temp():
         'ovhgseq': 'N',
     }
 rest_dict['AsuHPI'] = _temp()
+
 
 def _temp():
     return {
@@ -1734,6 +1813,7 @@ def _temp():
     }
 rest_dict['AsuI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<AsuII>TTCGAA)',
@@ -1755,6 +1835,7 @@ def _temp():
         'ovhgseq': 'CG',
     }
 rest_dict['AsuII'] = _temp()
+
 
 def _temp():
     return {
@@ -1778,6 +1859,7 @@ def _temp():
     }
 rest_dict['AsuNHI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<AvaI>C[CT]CG[AG]G)',
@@ -1799,6 +1881,7 @@ def _temp():
         'ovhgseq': 'YCGR',
     }
 rest_dict['AvaI'] = _temp()
+
 
 def _temp():
     return {
@@ -1822,6 +1905,7 @@ def _temp():
     }
 rest_dict['AvaII'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<AvaIII>ATGCAT)',
@@ -1843,6 +1927,7 @@ def _temp():
         'ovhgseq': None,
     }
 rest_dict['AvaIII'] = _temp()
+
 
 def _temp():
     return {
@@ -1866,6 +1951,7 @@ def _temp():
     }
 rest_dict['AvrII'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<AxyI>CCT.AGG)',
@@ -1887,6 +1973,7 @@ def _temp():
         'ovhgseq': 'TNA',
     }
 rest_dict['AxyI'] = _temp()
+
 
 def _temp():
     return {
@@ -1910,6 +1997,7 @@ def _temp():
     }
 rest_dict['BaeGI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BaeI>AC....GTA[CT]C)|(?P<BaeI_as>G[AG]TAC....GT)',
@@ -1931,6 +2019,7 @@ def _temp():
         'ovhgseq': 'NNNNN',
     }
 rest_dict['BaeI'] = _temp()
+
 
 def _temp():
     return {
@@ -1954,6 +2043,7 @@ def _temp():
     }
 rest_dict['BalI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BamHI>GGATCC)',
@@ -1975,6 +2065,7 @@ def _temp():
         'ovhgseq': 'GATC',
     }
 rest_dict['BamHI'] = _temp()
+
 
 def _temp():
     return {
@@ -1998,6 +2089,7 @@ def _temp():
     }
 rest_dict['BanI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BanII>G[AG]GC[CT]C)',
@@ -2019,6 +2111,7 @@ def _temp():
         'ovhgseq': 'RGCY',
     }
 rest_dict['BanII'] = _temp()
+
 
 def _temp():
     return {
@@ -2042,6 +2135,7 @@ def _temp():
     }
 rest_dict['BarI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BasI>CCA.....TGG)',
@@ -2063,6 +2157,7 @@ def _temp():
         'ovhgseq': 'NNN',
     }
 rest_dict['BasI'] = _temp()
+
 
 def _temp():
     return {
@@ -2086,6 +2181,7 @@ def _temp():
     }
 rest_dict['BauI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<Bbr7I>GAAGAC)|(?P<Bbr7I_as>GTCTTC)',
@@ -2107,6 +2203,7 @@ def _temp():
         'ovhgseq': 'NNNN',
     }
 rest_dict['Bbr7I'] = _temp()
+
 
 def _temp():
     return {
@@ -2130,6 +2227,7 @@ def _temp():
     }
 rest_dict['BbrPI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BbsI>GAAGAC)|(?P<BbsI_as>GTCTTC)',
@@ -2151,6 +2249,7 @@ def _temp():
         'ovhgseq': 'NNNN',
     }
 rest_dict['BbsI'] = _temp()
+
 
 def _temp():
     return {
@@ -2174,6 +2273,7 @@ def _temp():
     }
 rest_dict['Bbv12I'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BbvCI>CCTCAGC)|(?P<BbvCI_as>GCTGAGG)',
@@ -2195,6 +2295,7 @@ def _temp():
         'ovhgseq': 'TCA',
     }
 rest_dict['BbvCI'] = _temp()
+
 
 def _temp():
     return {
@@ -2218,6 +2319,7 @@ def _temp():
     }
 rest_dict['BbvI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BbvII>GAAGAC)|(?P<BbvII_as>GTCTTC)',
@@ -2239,6 +2341,7 @@ def _temp():
         'ovhgseq': 'NNNN',
     }
 rest_dict['BbvII'] = _temp()
+
 
 def _temp():
     return {
@@ -2262,6 +2365,7 @@ def _temp():
     }
 rest_dict['BccI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<Bce83I>CTTGAG)|(?P<Bce83I_as>CTCAAG)',
@@ -2283,6 +2387,7 @@ def _temp():
         'ovhgseq': 'NN',
     }
 rest_dict['Bce83I'] = _temp()
+
 
 def _temp():
     return {
@@ -2306,6 +2411,7 @@ def _temp():
     }
 rest_dict['BceAI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BcefI>ACGGC)|(?P<BcefI_as>GCCGT)',
@@ -2327,6 +2433,7 @@ def _temp():
         'ovhgseq': 'N',
     }
 rest_dict['BcefI'] = _temp()
+
 
 def _temp():
     return {
@@ -2350,6 +2457,7 @@ def _temp():
     }
 rest_dict['BcgI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BciT130I>CC[AT]GG)',
@@ -2371,6 +2479,7 @@ def _temp():
         'ovhgseq': 'W',
     }
 rest_dict['BciT130I'] = _temp()
+
 
 def _temp():
     return {
@@ -2394,6 +2503,7 @@ def _temp():
     }
 rest_dict['BciVI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BclI>TGATCA)',
@@ -2415,6 +2525,7 @@ def _temp():
         'ovhgseq': 'GATC',
     }
 rest_dict['BclI'] = _temp()
+
 
 def _temp():
     return {
@@ -2438,6 +2549,7 @@ def _temp():
     }
 rest_dict['BcnI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BcoDI>GTCTC)|(?P<BcoDI_as>GAGAC)',
@@ -2459,6 +2571,7 @@ def _temp():
         'ovhgseq': 'NNNN',
     }
 rest_dict['BcoDI'] = _temp()
+
 
 def _temp():
     return {
@@ -2482,6 +2595,7 @@ def _temp():
     }
 rest_dict['BcuI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BdaI>TGA......TCA)',
@@ -2503,6 +2617,7 @@ def _temp():
         'ovhgseq': 'NN',
     }
 rest_dict['BdaI'] = _temp()
+
 
 def _temp():
     return {
@@ -2526,6 +2641,7 @@ def _temp():
     }
 rest_dict['BetI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BfaI>CTAG)',
@@ -2547,6 +2663,7 @@ def _temp():
         'ovhgseq': 'TA',
     }
 rest_dict['BfaI'] = _temp()
+
 
 def _temp():
     return {
@@ -2570,6 +2687,7 @@ def _temp():
     }
 rest_dict['BfiI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BfmI>CT[AG][CT]AG)',
@@ -2591,6 +2709,7 @@ def _temp():
         'ovhgseq': 'TRYA',
     }
 rest_dict['BfmI'] = _temp()
+
 
 def _temp():
     return {
@@ -2614,6 +2733,7 @@ def _temp():
     }
 rest_dict['BfoI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BfrI>CTTAAG)',
@@ -2635,6 +2755,7 @@ def _temp():
         'ovhgseq': 'TTAA',
     }
 rest_dict['BfrI'] = _temp()
+
 
 def _temp():
     return {
@@ -2658,6 +2779,7 @@ def _temp():
     }
 rest_dict['BfuAI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BfuCI>GATC)',
@@ -2679,6 +2801,7 @@ def _temp():
         'ovhgseq': 'GATC',
     }
 rest_dict['BfuCI'] = _temp()
+
 
 def _temp():
     return {
@@ -2702,6 +2825,7 @@ def _temp():
     }
 rest_dict['BfuI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BglI>GCC.....GGC)',
@@ -2723,6 +2847,7 @@ def _temp():
         'ovhgseq': 'NNN',
     }
 rest_dict['BglI'] = _temp()
+
 
 def _temp():
     return {
@@ -2746,6 +2871,7 @@ def _temp():
     }
 rest_dict['BglII'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BinI>GGATC)|(?P<BinI_as>GATCC)',
@@ -2767,6 +2893,7 @@ def _temp():
         'ovhgseq': 'N',
     }
 rest_dict['BinI'] = _temp()
+
 
 def _temp():
     return {
@@ -2790,6 +2917,7 @@ def _temp():
     }
 rest_dict['BisI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BlnI>CCTAGG)',
@@ -2811,6 +2939,7 @@ def _temp():
         'ovhgseq': 'CTAG',
     }
 rest_dict['BlnI'] = _temp()
+
 
 def _temp():
     return {
@@ -2834,6 +2963,7 @@ def _temp():
     }
 rest_dict['BlpI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BlsI>GC.GC)',
@@ -2855,6 +2985,7 @@ def _temp():
         'ovhgseq': 'N',
     }
 rest_dict['BlsI'] = _temp()
+
 
 def _temp():
     return {
@@ -2878,6 +3009,7 @@ def _temp():
     }
 rest_dict['BmcAI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<Bme1390I>CC.GG)',
@@ -2899,6 +3031,7 @@ def _temp():
         'ovhgseq': 'N',
     }
 rest_dict['Bme1390I'] = _temp()
+
 
 def _temp():
     return {
@@ -2922,6 +3055,7 @@ def _temp():
     }
 rest_dict['Bme18I'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BmeDI>C)|(?P<BmeDI_as>G)',
@@ -2943,6 +3077,7 @@ def _temp():
         'ovhgseq': 'NN',
     }
 rest_dict['BmeDI'] = _temp()
+
 
 def _temp():
     return {
@@ -2966,6 +3101,7 @@ def _temp():
     }
 rest_dict['BmeRI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BmeT110I>C[CT]CG[AG]G)',
@@ -2987,6 +3123,7 @@ def _temp():
         'ovhgseq': 'YCGR',
     }
 rest_dict['BmeT110I'] = _temp()
+
 
 def _temp():
     return {
@@ -3010,6 +3147,7 @@ def _temp():
     }
 rest_dict['BmgBI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BmgI>G[GT]GCCC)|(?P<BmgI_as>GGGC[AC]C)',
@@ -3031,6 +3169,7 @@ def _temp():
         'ovhgseq': None,
     }
 rest_dict['BmgI'] = _temp()
+
 
 def _temp():
     return {
@@ -3054,6 +3193,7 @@ def _temp():
     }
 rest_dict['BmgT120I'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BmiI>GG..CC)',
@@ -3075,6 +3215,7 @@ def _temp():
         'ovhgseq': '',
     }
 rest_dict['BmiI'] = _temp()
+
 
 def _temp():
     return {
@@ -3098,6 +3239,7 @@ def _temp():
     }
 rest_dict['BmrFI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BmrI>ACTGGG)|(?P<BmrI_as>CCCAGT)',
@@ -3119,6 +3261,7 @@ def _temp():
         'ovhgseq': 'N',
     }
 rest_dict['BmrI'] = _temp()
+
 
 def _temp():
     return {
@@ -3142,6 +3285,7 @@ def _temp():
     }
 rest_dict['BmsI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BmtI>GCTAGC)',
@@ -3163,6 +3307,7 @@ def _temp():
         'ovhgseq': 'CTAG',
     }
 rest_dict['BmtI'] = _temp()
+
 
 def _temp():
     return {
@@ -3186,6 +3331,7 @@ def _temp():
     }
 rest_dict['BmuI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BoxI>GAC....GTC)',
@@ -3207,6 +3353,7 @@ def _temp():
         'ovhgseq': '',
     }
 rest_dict['BoxI'] = _temp()
+
 
 def _temp():
     return {
@@ -3230,6 +3377,7 @@ def _temp():
     }
 rest_dict['BpiI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BplI>GAG.....CTC)',
@@ -3251,6 +3399,7 @@ def _temp():
         'ovhgseq': 'NNNNN',
     }
 rest_dict['BplI'] = _temp()
+
 
 def _temp():
     return {
@@ -3274,6 +3423,7 @@ def _temp():
     }
 rest_dict['BpmI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<Bpu10I>CCT.AGC)|(?P<Bpu10I_as>GCT.AGG)',
@@ -3295,6 +3445,7 @@ def _temp():
         'ovhgseq': 'TNA',
     }
 rest_dict['Bpu10I'] = _temp()
+
 
 def _temp():
     return {
@@ -3318,6 +3469,7 @@ def _temp():
     }
 rest_dict['Bpu1102I'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<Bpu14I>TTCGAA)',
@@ -3339,6 +3491,7 @@ def _temp():
         'ovhgseq': 'CG',
     }
 rest_dict['Bpu14I'] = _temp()
+
 
 def _temp():
     return {
@@ -3362,6 +3515,7 @@ def _temp():
     }
 rest_dict['BpuEI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BpuMI>CC[CG]GG)',
@@ -3383,6 +3537,7 @@ def _temp():
         'ovhgseq': 'S',
     }
 rest_dict['BpuMI'] = _temp()
+
 
 def _temp():
     return {
@@ -3406,6 +3561,7 @@ def _temp():
     }
 rest_dict['BpvUI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<Bsa29I>ATCGAT)',
@@ -3427,6 +3583,7 @@ def _temp():
         'ovhgseq': 'CG',
     }
 rest_dict['Bsa29I'] = _temp()
+
 
 def _temp():
     return {
@@ -3450,6 +3607,7 @@ def _temp():
     }
 rest_dict['BsaAI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BsaBI>GAT....ATC)',
@@ -3471,6 +3629,7 @@ def _temp():
         'ovhgseq': '',
     }
 rest_dict['BsaBI'] = _temp()
+
 
 def _temp():
     return {
@@ -3494,6 +3653,7 @@ def _temp():
     }
 rest_dict['BsaHI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BsaI>GGTCTC)|(?P<BsaI_as>GAGACC)',
@@ -3515,6 +3675,7 @@ def _temp():
         'ovhgseq': 'NNNN',
     }
 rest_dict['BsaI'] = _temp()
+
 
 def _temp():
     return {
@@ -3538,6 +3699,7 @@ def _temp():
     }
 rest_dict['BsaJI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BsaWI>[AT]CCGG[AT])',
@@ -3559,6 +3721,7 @@ def _temp():
         'ovhgseq': 'CCGG',
     }
 rest_dict['BsaWI'] = _temp()
+
 
 def _temp():
     return {
@@ -3582,6 +3745,7 @@ def _temp():
     }
 rest_dict['BsaXI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BsbI>CAACAC)|(?P<BsbI_as>GTGTTG)',
@@ -3603,6 +3767,7 @@ def _temp():
         'ovhgseq': 'NN',
     }
 rest_dict['BsbI'] = _temp()
+
 
 def _temp():
     return {
@@ -3626,6 +3791,7 @@ def _temp():
     }
 rest_dict['Bsc4I'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BscAI>GCATC)|(?P<BscAI_as>GATGC)',
@@ -3647,6 +3813,7 @@ def _temp():
         'ovhgseq': 'NN',
     }
 rest_dict['BscAI'] = _temp()
+
 
 def _temp():
     return {
@@ -3670,6 +3837,7 @@ def _temp():
     }
 rest_dict['BscGI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<Bse118I>[AG]CCGG[CT])',
@@ -3691,6 +3859,7 @@ def _temp():
         'ovhgseq': 'CCGG',
     }
 rest_dict['Bse118I'] = _temp()
+
 
 def _temp():
     return {
@@ -3714,6 +3883,7 @@ def _temp():
     }
 rest_dict['Bse1I'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<Bse21I>CCT.AGG)',
@@ -3735,6 +3905,7 @@ def _temp():
         'ovhgseq': 'TNA',
     }
 rest_dict['Bse21I'] = _temp()
+
 
 def _temp():
     return {
@@ -3758,6 +3929,7 @@ def _temp():
     }
 rest_dict['Bse3DI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<Bse8I>GAT....ATC)',
@@ -3779,6 +3951,7 @@ def _temp():
         'ovhgseq': '',
     }
 rest_dict['Bse8I'] = _temp()
+
 
 def _temp():
     return {
@@ -3802,6 +3975,7 @@ def _temp():
     }
 rest_dict['BseAI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BseBI>CC[AT]GG)',
@@ -3823,6 +3997,7 @@ def _temp():
         'ovhgseq': 'W',
     }
 rest_dict['BseBI'] = _temp()
+
 
 def _temp():
     return {
@@ -3846,6 +4021,7 @@ def _temp():
     }
 rest_dict['BseCI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BseDI>CC..GG)',
@@ -3867,6 +4043,7 @@ def _temp():
         'ovhgseq': 'CNNG',
     }
 rest_dict['BseDI'] = _temp()
+
 
 def _temp():
     return {
@@ -3890,6 +4067,7 @@ def _temp():
     }
 rest_dict['BseGI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BseJI>GAT....ATC)',
@@ -3911,6 +4089,7 @@ def _temp():
         'ovhgseq': '',
     }
 rest_dict['BseJI'] = _temp()
+
 
 def _temp():
     return {
@@ -3934,6 +4113,7 @@ def _temp():
     }
 rest_dict['BseLI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BseMI>GCAATG)|(?P<BseMI_as>CATTGC)',
@@ -3955,6 +4135,7 @@ def _temp():
         'ovhgseq': 'NN',
     }
 rest_dict['BseMI'] = _temp()
+
 
 def _temp():
     return {
@@ -3978,6 +4159,7 @@ def _temp():
     }
 rest_dict['BseMII'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BseNI>ACTGG)|(?P<BseNI_as>CCAGT)',
@@ -3999,6 +4181,7 @@ def _temp():
         'ovhgseq': 'GN',
     }
 rest_dict['BseNI'] = _temp()
+
 
 def _temp():
     return {
@@ -4022,6 +4205,7 @@ def _temp():
     }
 rest_dict['BsePI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BseRI>GAGGAG)|(?P<BseRI_as>CTCCTC)',
@@ -4043,6 +4227,7 @@ def _temp():
         'ovhgseq': 'NN',
     }
 rest_dict['BseRI'] = _temp()
+
 
 def _temp():
     return {
@@ -4066,6 +4251,7 @@ def _temp():
     }
 rest_dict['BseSI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BseX3I>CGGCCG)',
@@ -4087,6 +4273,7 @@ def _temp():
         'ovhgseq': 'GGCC',
     }
 rest_dict['BseX3I'] = _temp()
+
 
 def _temp():
     return {
@@ -4110,6 +4297,7 @@ def _temp():
     }
 rest_dict['BseXI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BseYI>CCCAGC)|(?P<BseYI_as>GCTGGG)',
@@ -4131,6 +4319,7 @@ def _temp():
         'ovhgseq': 'CCAG',
     }
 rest_dict['BseYI'] = _temp()
+
 
 def _temp():
     return {
@@ -4154,6 +4343,7 @@ def _temp():
     }
 rest_dict['BsgI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<Bsh1236I>CGCG)',
@@ -4175,6 +4365,7 @@ def _temp():
         'ovhgseq': '',
     }
 rest_dict['Bsh1236I'] = _temp()
+
 
 def _temp():
     return {
@@ -4198,6 +4389,7 @@ def _temp():
     }
 rest_dict['Bsh1285I'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BshFI>GGCC)',
@@ -4219,6 +4411,7 @@ def _temp():
         'ovhgseq': '',
     }
 rest_dict['BshFI'] = _temp()
+
 
 def _temp():
     return {
@@ -4242,6 +4435,7 @@ def _temp():
     }
 rest_dict['BshNI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BshTI>ACCGGT)',
@@ -4263,6 +4457,7 @@ def _temp():
         'ovhgseq': 'CCGG',
     }
 rest_dict['BshTI'] = _temp()
+
 
 def _temp():
     return {
@@ -4286,6 +4481,7 @@ def _temp():
     }
 rest_dict['BshVI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BsiEI>CG[AG][CT]CG)',
@@ -4307,6 +4503,7 @@ def _temp():
         'ovhgseq': 'RY',
     }
 rest_dict['BsiEI'] = _temp()
+
 
 def _temp():
     return {
@@ -4330,6 +4527,7 @@ def _temp():
     }
 rest_dict['BsiHKAI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BsiHKCI>C[CT]CG[AG]G)',
@@ -4351,6 +4549,7 @@ def _temp():
         'ovhgseq': 'YCGR',
     }
 rest_dict['BsiHKCI'] = _temp()
+
 
 def _temp():
     return {
@@ -4374,6 +4573,7 @@ def _temp():
     }
 rest_dict['BsiI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BsiSI>CCGG)',
@@ -4395,6 +4595,7 @@ def _temp():
         'ovhgseq': 'CG',
     }
 rest_dict['BsiSI'] = _temp()
+
 
 def _temp():
     return {
@@ -4418,6 +4619,7 @@ def _temp():
     }
 rest_dict['BsiWI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BsiYI>CC.......GG)',
@@ -4439,6 +4641,7 @@ def _temp():
         'ovhgseq': 'NNN',
     }
 rest_dict['BsiYI'] = _temp()
+
 
 def _temp():
     return {
@@ -4462,6 +4665,7 @@ def _temp():
     }
 rest_dict['BslFI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BslI>CC.......GG)',
@@ -4483,6 +4687,7 @@ def _temp():
         'ovhgseq': 'NNN',
     }
 rest_dict['BslI'] = _temp()
+
 
 def _temp():
     return {
@@ -4506,6 +4711,7 @@ def _temp():
     }
 rest_dict['BsmAI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BsmBI>CGTCTC)|(?P<BsmBI_as>GAGACG)',
@@ -4527,6 +4733,7 @@ def _temp():
         'ovhgseq': 'NNNN',
     }
 rest_dict['BsmBI'] = _temp()
+
 
 def _temp():
     return {
@@ -4550,6 +4757,7 @@ def _temp():
     }
 rest_dict['BsmFI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BsmI>GAATGC)|(?P<BsmI_as>GCATTC)',
@@ -4571,6 +4779,7 @@ def _temp():
         'ovhgseq': 'CN',
     }
 rest_dict['BsmI'] = _temp()
+
 
 def _temp():
     return {
@@ -4594,6 +4803,7 @@ def _temp():
     }
 rest_dict['BsnI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<Bso31I>GGTCTC)|(?P<Bso31I_as>GAGACC)',
@@ -4615,6 +4825,7 @@ def _temp():
         'ovhgseq': 'NNNN',
     }
 rest_dict['Bso31I'] = _temp()
+
 
 def _temp():
     return {
@@ -4638,6 +4849,7 @@ def _temp():
     }
 rest_dict['BsoBI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<Bsp119I>TTCGAA)',
@@ -4659,6 +4871,7 @@ def _temp():
         'ovhgseq': 'CG',
     }
 rest_dict['Bsp119I'] = _temp()
+
 
 def _temp():
     return {
@@ -4682,6 +4895,7 @@ def _temp():
     }
 rest_dict['Bsp120I'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<Bsp1286I>G[AGT]GC[ACT]C)',
@@ -4703,6 +4917,7 @@ def _temp():
         'ovhgseq': 'DGCH',
     }
 rest_dict['Bsp1286I'] = _temp()
+
 
 def _temp():
     return {
@@ -4726,6 +4941,7 @@ def _temp():
     }
 rest_dict['Bsp13I'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<Bsp1407I>TGTACA)',
@@ -4747,6 +4963,7 @@ def _temp():
         'ovhgseq': 'GTAC',
     }
 rest_dict['Bsp1407I'] = _temp()
+
 
 def _temp():
     return {
@@ -4770,6 +4987,7 @@ def _temp():
     }
 rest_dict['Bsp143I'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<Bsp1720I>GCT.AGC)',
@@ -4791,6 +5009,7 @@ def _temp():
         'ovhgseq': 'TNA',
     }
 rest_dict['Bsp1720I'] = _temp()
+
 
 def _temp():
     return {
@@ -4814,6 +5033,7 @@ def _temp():
     }
 rest_dict['Bsp19I'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<Bsp24I>GAC......TGG)|(?P<Bsp24I_as>CCA......GTC)',
@@ -4835,6 +5055,7 @@ def _temp():
         'ovhgseq': 'NNNNN',
     }
 rest_dict['Bsp24I'] = _temp()
+
 
 def _temp():
     return {
@@ -4858,6 +5079,7 @@ def _temp():
     }
 rest_dict['Bsp68I'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BspACI>CCGC)|(?P<BspACI_as>GCGG)',
@@ -4879,6 +5101,7 @@ def _temp():
         'ovhgseq': 'CG',
     }
 rest_dict['BspACI'] = _temp()
+
 
 def _temp():
     return {
@@ -4902,6 +5125,7 @@ def _temp():
     }
 rest_dict['BspCNI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BspD6I>GACTC)|(?P<BspD6I_as>GAGTC)',
@@ -4923,6 +5147,7 @@ def _temp():
         'ovhgseq': 'NN',
     }
 rest_dict['BspD6I'] = _temp()
+
 
 def _temp():
     return {
@@ -4946,6 +5171,7 @@ def _temp():
     }
 rest_dict['BspDI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BspEI>TCCGGA)',
@@ -4967,6 +5193,7 @@ def _temp():
         'ovhgseq': 'CCGG',
     }
 rest_dict['BspEI'] = _temp()
+
 
 def _temp():
     return {
@@ -4990,6 +5217,7 @@ def _temp():
     }
 rest_dict['BspFNI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BspGI>CTGGAC)|(?P<BspGI_as>GTCCAG)',
@@ -5011,6 +5239,7 @@ def _temp():
         'ovhgseq': None,
     }
 rest_dict['BspGI'] = _temp()
+
 
 def _temp():
     return {
@@ -5034,6 +5263,7 @@ def _temp():
     }
 rest_dict['BspHI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BspLI>GG..CC)',
@@ -5055,6 +5285,7 @@ def _temp():
         'ovhgseq': '',
     }
 rest_dict['BspLI'] = _temp()
+
 
 def _temp():
     return {
@@ -5078,6 +5309,7 @@ def _temp():
     }
 rest_dict['BspLU11I'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BspMI>ACCTGC)|(?P<BspMI_as>GCAGGT)',
@@ -5099,6 +5331,7 @@ def _temp():
         'ovhgseq': 'NNNN',
     }
 rest_dict['BspMI'] = _temp()
+
 
 def _temp():
     return {
@@ -5122,6 +5355,7 @@ def _temp():
     }
 rest_dict['BspMII'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BspNCI>CCAGA)|(?P<BspNCI_as>TCTGG)',
@@ -5143,6 +5377,7 @@ def _temp():
         'ovhgseq': None,
     }
 rest_dict['BspNCI'] = _temp()
+
 
 def _temp():
     return {
@@ -5166,6 +5401,7 @@ def _temp():
     }
 rest_dict['BspOI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BspPI>GGATC)|(?P<BspPI_as>GATCC)',
@@ -5187,6 +5423,7 @@ def _temp():
         'ovhgseq': 'N',
     }
 rest_dict['BspPI'] = _temp()
+
 
 def _temp():
     return {
@@ -5210,6 +5447,7 @@ def _temp():
     }
 rest_dict['BspQI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BspT104I>TTCGAA)',
@@ -5231,6 +5469,7 @@ def _temp():
         'ovhgseq': 'CG',
     }
 rest_dict['BspT104I'] = _temp()
+
 
 def _temp():
     return {
@@ -5254,6 +5493,7 @@ def _temp():
     }
 rest_dict['BspT107I'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BspTI>CTTAAG)',
@@ -5275,6 +5515,7 @@ def _temp():
         'ovhgseq': 'TTAA',
     }
 rest_dict['BspTI'] = _temp()
+
 
 def _temp():
     return {
@@ -5298,6 +5539,7 @@ def _temp():
     }
 rest_dict['BsrBI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BsrDI>GCAATG)|(?P<BsrDI_as>CATTGC)',
@@ -5319,6 +5561,7 @@ def _temp():
         'ovhgseq': 'NN',
     }
 rest_dict['BsrDI'] = _temp()
+
 
 def _temp():
     return {
@@ -5342,6 +5585,7 @@ def _temp():
     }
 rest_dict['BsrFI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BsrGI>TGTACA)',
@@ -5363,6 +5607,7 @@ def _temp():
         'ovhgseq': 'GTAC',
     }
 rest_dict['BsrGI'] = _temp()
+
 
 def _temp():
     return {
@@ -5386,6 +5631,7 @@ def _temp():
     }
 rest_dict['BsrI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BsrSI>ACTGG)|(?P<BsrSI_as>CCAGT)',
@@ -5407,6 +5653,7 @@ def _temp():
         'ovhgseq': 'GN',
     }
 rest_dict['BsrSI'] = _temp()
+
 
 def _temp():
     return {
@@ -5430,6 +5677,7 @@ def _temp():
     }
 rest_dict['BssAI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BssECI>CC..GG)',
@@ -5451,6 +5699,7 @@ def _temp():
         'ovhgseq': 'CNNG',
     }
 rest_dict['BssECI'] = _temp()
+
 
 def _temp():
     return {
@@ -5474,6 +5723,7 @@ def _temp():
     }
 rest_dict['BssHII'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BssKI>CC.GG)',
@@ -5495,6 +5745,7 @@ def _temp():
         'ovhgseq': 'CCNGG',
     }
 rest_dict['BssKI'] = _temp()
+
 
 def _temp():
     return {
@@ -5518,6 +5769,7 @@ def _temp():
     }
 rest_dict['BssMI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BssNAI>GTATAC)',
@@ -5539,6 +5791,7 @@ def _temp():
         'ovhgseq': '',
     }
 rest_dict['BssNAI'] = _temp()
+
 
 def _temp():
     return {
@@ -5562,6 +5815,7 @@ def _temp():
     }
 rest_dict['BssNI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BssSI>CACGAG)|(?P<BssSI_as>CTCGTG)',
@@ -5583,6 +5837,7 @@ def _temp():
         'ovhgseq': 'ACGA',
     }
 rest_dict['BssSI'] = _temp()
+
 
 def _temp():
     return {
@@ -5606,6 +5861,7 @@ def _temp():
     }
 rest_dict['BssT1I'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<Bst1107I>GTATAC)',
@@ -5627,6 +5883,7 @@ def _temp():
         'ovhgseq': '',
     }
 rest_dict['Bst1107I'] = _temp()
+
 
 def _temp():
     return {
@@ -5650,6 +5907,7 @@ def _temp():
     }
 rest_dict['Bst2BI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<Bst2UI>CC[AT]GG)',
@@ -5671,6 +5929,7 @@ def _temp():
         'ovhgseq': 'W',
     }
 rest_dict['Bst2UI'] = _temp()
+
 
 def _temp():
     return {
@@ -5694,6 +5953,7 @@ def _temp():
     }
 rest_dict['Bst4CI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<Bst6I>CTCTTC)|(?P<Bst6I_as>GAAGAG)',
@@ -5715,6 +5975,7 @@ def _temp():
         'ovhgseq': 'NNN',
     }
 rest_dict['Bst6I'] = _temp()
+
 
 def _temp():
     return {
@@ -5738,6 +5999,7 @@ def _temp():
     }
 rest_dict['BstACI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BstAFI>CTTAAG)',
@@ -5759,6 +6021,7 @@ def _temp():
         'ovhgseq': 'TTAA',
     }
 rest_dict['BstAFI'] = _temp()
+
 
 def _temp():
     return {
@@ -5782,6 +6045,7 @@ def _temp():
     }
 rest_dict['BstAPI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BstAUI>TGTACA)',
@@ -5803,6 +6067,7 @@ def _temp():
         'ovhgseq': 'GTAC',
     }
 rest_dict['BstAUI'] = _temp()
+
 
 def _temp():
     return {
@@ -5826,6 +6091,7 @@ def _temp():
     }
 rest_dict['BstBAI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BstBI>TTCGAA)',
@@ -5847,6 +6113,7 @@ def _temp():
         'ovhgseq': 'CG',
     }
 rest_dict['BstBI'] = _temp()
+
 
 def _temp():
     return {
@@ -5870,6 +6137,7 @@ def _temp():
     }
 rest_dict['BstC8I'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BstDEI>CT.AG)',
@@ -5891,6 +6159,7 @@ def _temp():
         'ovhgseq': 'TNA',
     }
 rest_dict['BstDEI'] = _temp()
+
 
 def _temp():
     return {
@@ -5914,6 +6183,7 @@ def _temp():
     }
 rest_dict['BstDSI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BstEII>GGT.ACC)',
@@ -5935,6 +6205,7 @@ def _temp():
         'ovhgseq': 'GTNAC',
     }
 rest_dict['BstEII'] = _temp()
+
 
 def _temp():
     return {
@@ -5958,6 +6229,7 @@ def _temp():
     }
 rest_dict['BstENI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BstF5I>GGATG)|(?P<BstF5I_as>CATCC)',
@@ -5979,6 +6251,7 @@ def _temp():
         'ovhgseq': 'NN',
     }
 rest_dict['BstF5I'] = _temp()
+
 
 def _temp():
     return {
@@ -6002,6 +6275,7 @@ def _temp():
     }
 rest_dict['BstFNI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BstH2I>[AG]GCGC[CT])',
@@ -6023,6 +6297,7 @@ def _temp():
         'ovhgseq': 'GCGC',
     }
 rest_dict['BstH2I'] = _temp()
+
 
 def _temp():
     return {
@@ -6046,6 +6321,7 @@ def _temp():
     }
 rest_dict['BstHHI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BstKTI>GATC)',
@@ -6067,6 +6343,7 @@ def _temp():
         'ovhgseq': 'AT',
     }
 rest_dict['BstKTI'] = _temp()
+
 
 def _temp():
     return {
@@ -6090,6 +6367,7 @@ def _temp():
     }
 rest_dict['BstMAI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BstMBI>GATC)',
@@ -6111,6 +6389,7 @@ def _temp():
         'ovhgseq': 'GATC',
     }
 rest_dict['BstMBI'] = _temp()
+
 
 def _temp():
     return {
@@ -6134,6 +6413,7 @@ def _temp():
     }
 rest_dict['BstMCI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BstMWI>GC.......GC)',
@@ -6155,6 +6435,7 @@ def _temp():
         'ovhgseq': 'NNN',
     }
 rest_dict['BstMWI'] = _temp()
+
 
 def _temp():
     return {
@@ -6178,6 +6459,7 @@ def _temp():
     }
 rest_dict['BstNI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BstNSI>[AG]CATG[CT])',
@@ -6199,6 +6481,7 @@ def _temp():
         'ovhgseq': 'CATG',
     }
 rest_dict['BstNSI'] = _temp()
+
 
 def _temp():
     return {
@@ -6222,6 +6505,7 @@ def _temp():
     }
 rest_dict['BstOI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BstPAI>GAC....GTC)',
@@ -6243,6 +6527,7 @@ def _temp():
         'ovhgseq': '',
     }
 rest_dict['BstPAI'] = _temp()
+
 
 def _temp():
     return {
@@ -6266,6 +6551,7 @@ def _temp():
     }
 rest_dict['BstPI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BstSCI>CC.GG)',
@@ -6287,6 +6573,7 @@ def _temp():
         'ovhgseq': 'CCNGG',
     }
 rest_dict['BstSCI'] = _temp()
+
 
 def _temp():
     return {
@@ -6310,6 +6597,7 @@ def _temp():
     }
 rest_dict['BstSFI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BstSLI>G[GT]GC[AC]C)',
@@ -6331,6 +6619,7 @@ def _temp():
         'ovhgseq': 'KGCM',
     }
 rest_dict['BstSLI'] = _temp()
+
 
 def _temp():
     return {
@@ -6354,6 +6643,7 @@ def _temp():
     }
 rest_dict['BstSNI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BstUI>CGCG)',
@@ -6375,6 +6665,7 @@ def _temp():
         'ovhgseq': '',
     }
 rest_dict['BstUI'] = _temp()
+
 
 def _temp():
     return {
@@ -6398,6 +6689,7 @@ def _temp():
     }
 rest_dict['BstV1I'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BstV2I>GAAGAC)|(?P<BstV2I_as>GTCTTC)',
@@ -6419,6 +6711,7 @@ def _temp():
         'ovhgseq': 'NNNN',
     }
 rest_dict['BstV2I'] = _temp()
+
 
 def _temp():
     return {
@@ -6442,6 +6735,7 @@ def _temp():
     }
 rest_dict['BstX2I'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BstXI>CCA......TGG)',
@@ -6463,6 +6757,7 @@ def _temp():
         'ovhgseq': 'NNNN',
     }
 rest_dict['BstXI'] = _temp()
+
 
 def _temp():
     return {
@@ -6486,6 +6781,7 @@ def _temp():
     }
 rest_dict['BstYI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BstZ17I>GTATAC)',
@@ -6507,6 +6803,7 @@ def _temp():
         'ovhgseq': '',
     }
 rest_dict['BstZ17I'] = _temp()
+
 
 def _temp():
     return {
@@ -6530,6 +6827,7 @@ def _temp():
     }
 rest_dict['BstZI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<Bsu15I>ATCGAT)',
@@ -6551,6 +6849,7 @@ def _temp():
         'ovhgseq': 'CG',
     }
 rest_dict['Bsu15I'] = _temp()
+
 
 def _temp():
     return {
@@ -6574,6 +6873,7 @@ def _temp():
     }
 rest_dict['Bsu36I'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BsuI>GTATCC)|(?P<BsuI_as>GGATAC)',
@@ -6595,6 +6895,7 @@ def _temp():
         'ovhgseq': 'N',
     }
 rest_dict['BsuI'] = _temp()
+
 
 def _temp():
     return {
@@ -6618,6 +6919,7 @@ def _temp():
     }
 rest_dict['BsuRI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BtgI>CC[AG][CT]GG)',
@@ -6639,6 +6941,7 @@ def _temp():
         'ovhgseq': 'CRYG',
     }
 rest_dict['BtgI'] = _temp()
+
 
 def _temp():
     return {
@@ -6662,6 +6965,7 @@ def _temp():
     }
 rest_dict['BtgZI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BthCI>GC.GC)',
@@ -6683,6 +6987,7 @@ def _temp():
         'ovhgseq': 'CNG',
     }
 rest_dict['BthCI'] = _temp()
+
 
 def _temp():
     return {
@@ -6706,6 +7011,7 @@ def _temp():
     }
 rest_dict['BtrI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BtsCI>GGATG)|(?P<BtsCI_as>CATCC)',
@@ -6727,6 +7033,7 @@ def _temp():
         'ovhgseq': 'NN',
     }
 rest_dict['BtsCI'] = _temp()
+
 
 def _temp():
     return {
@@ -6750,6 +7057,7 @@ def _temp():
     }
 rest_dict['BtsI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BtsIMutI>CAGTG)|(?P<BtsIMutI_as>CACTG)',
@@ -6771,6 +7079,7 @@ def _temp():
         'ovhgseq': 'NN',
     }
 rest_dict['BtsIMutI'] = _temp()
+
 
 def _temp():
     return {
@@ -6794,6 +7103,7 @@ def _temp():
     }
 rest_dict['BtuMI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<BveI>ACCTGC)|(?P<BveI_as>GCAGGT)',
@@ -6815,6 +7125,7 @@ def _temp():
         'ovhgseq': 'NNNN',
     }
 rest_dict['BveI'] = _temp()
+
 
 def _temp():
     return {
@@ -6838,6 +7149,7 @@ def _temp():
     }
 rest_dict['Cac8I'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<CaiI>CAG...CTG)',
@@ -6859,6 +7171,7 @@ def _temp():
         'ovhgseq': 'NNN',
     }
 rest_dict['CaiI'] = _temp()
+
 
 def _temp():
     return {
@@ -6882,6 +7195,7 @@ def _temp():
     }
 rest_dict['CauII'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<CchII>GGA[AG]GA)|(?P<CchII_as>TC[CT]TCC)',
@@ -6903,6 +7217,7 @@ def _temp():
         'ovhgseq': 'NN',
     }
 rest_dict['CchII'] = _temp()
+
 
 def _temp():
     return {
@@ -6926,6 +7241,7 @@ def _temp():
     }
 rest_dict['CchIII'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<CciI>TCATGA)',
@@ -6947,6 +7263,7 @@ def _temp():
         'ovhgseq': 'CATG',
     }
 rest_dict['CciI'] = _temp()
+
 
 def _temp():
     return {
@@ -6970,6 +7287,7 @@ def _temp():
     }
 rest_dict['CciNI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<Cdi630V>CAAAAA)|(?P<Cdi630V_as>TTTTTG)',
@@ -6991,6 +7309,7 @@ def _temp():
         'ovhgseq': None,
     }
 rest_dict['Cdi630V'] = _temp()
+
 
 def _temp():
     return {
@@ -7014,6 +7333,7 @@ def _temp():
     }
 rest_dict['CdiI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<CdpI>GCGGAG)|(?P<CdpI_as>CTCCGC)',
@@ -7035,6 +7355,7 @@ def _temp():
         'ovhgseq': 'NN',
     }
 rest_dict['CdpI'] = _temp()
+
 
 def _temp():
     return {
@@ -7058,6 +7379,7 @@ def _temp():
     }
 rest_dict['CfoI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<Cfr10I>[AG]CCGG[CT])',
@@ -7079,6 +7401,7 @@ def _temp():
         'ovhgseq': 'CCGG',
     }
 rest_dict['Cfr10I'] = _temp()
+
 
 def _temp():
     return {
@@ -7102,6 +7425,7 @@ def _temp():
     }
 rest_dict['Cfr13I'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<Cfr42I>CCGCGG)',
@@ -7123,6 +7447,7 @@ def _temp():
         'ovhgseq': 'GC',
     }
 rest_dict['Cfr42I'] = _temp()
+
 
 def _temp():
     return {
@@ -7146,6 +7471,7 @@ def _temp():
     }
 rest_dict['Cfr9I'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<CfrI>[CT]GGCC[AG])',
@@ -7167,6 +7493,7 @@ def _temp():
         'ovhgseq': 'GGCC',
     }
 rest_dict['CfrI'] = _temp()
+
 
 def _temp():
     return {
@@ -7190,6 +7517,7 @@ def _temp():
     }
 rest_dict['Cgl13032I'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<Cgl13032II>ACGA[CGT]GG)|(?P<Cgl13032II_as>CC[ACG]TCGT)',
@@ -7211,6 +7539,7 @@ def _temp():
         'ovhgseq': None,
     }
 rest_dict['Cgl13032II'] = _temp()
+
 
 def _temp():
     return {
@@ -7234,6 +7563,7 @@ def _temp():
     }
 rest_dict['ChaI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<CjeFIII>GCAAGG)|(?P<CjeFIII_as>CCTTGC)',
@@ -7255,6 +7585,7 @@ def _temp():
         'ovhgseq': None,
     }
 rest_dict['CjeFIII'] = _temp()
+
 
 def _temp():
     return {
@@ -7278,6 +7609,7 @@ def _temp():
     }
 rest_dict['CjeFV'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<CjeI>CCA......GT)|(?P<CjeI_as>AC......TGG)',
@@ -7299,6 +7631,7 @@ def _temp():
         'ovhgseq': 'NNNNNN',
     }
 rest_dict['CjeI'] = _temp()
+
 
 def _temp():
     return {
@@ -7322,6 +7655,7 @@ def _temp():
     }
 rest_dict['CjeNII'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<CjeNIII>G[GT]AA[CT]G)|(?P<CjeNIII_as>C[AG]TT[AC]C)',
@@ -7343,6 +7677,7 @@ def _temp():
         'ovhgseq': 'NN',
     }
 rest_dict['CjeNIII'] = _temp()
+
 
 def _temp():
     return {
@@ -7366,6 +7701,7 @@ def _temp():
     }
 rest_dict['CjeP659IV'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<CjePI>CCA.......TC)|(?P<CjePI_as>GA.......TGG)',
@@ -7387,6 +7723,7 @@ def _temp():
         'ovhgseq': 'NNNNNN',
     }
 rest_dict['CjePI'] = _temp()
+
 
 def _temp():
     return {
@@ -7410,6 +7747,7 @@ def _temp():
     }
 rest_dict['CjuI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<CjuII>CA[CT].....CTC)|(?P<CjuII_as>GAG.....[AG]TG)',
@@ -7431,6 +7769,7 @@ def _temp():
         'ovhgseq': None,
     }
 rest_dict['CjuII'] = _temp()
+
 
 def _temp():
     return {
@@ -7454,6 +7793,7 @@ def _temp():
     }
 rest_dict['ClaI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<CpoI>CGG[AT]CCG)',
@@ -7475,6 +7815,7 @@ def _temp():
         'ovhgseq': 'GWC',
     }
 rest_dict['CpoI'] = _temp()
+
 
 def _temp():
     return {
@@ -7498,6 +7839,7 @@ def _temp():
     }
 rest_dict['CseI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<CsiI>ACC[AT]GGT)',
@@ -7519,6 +7861,7 @@ def _temp():
         'ovhgseq': 'CCWGG',
     }
 rest_dict['CsiI'] = _temp()
+
 
 def _temp():
     return {
@@ -7542,6 +7885,7 @@ def _temp():
     }
 rest_dict['Csp6I'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<CspAI>ACCGGT)',
@@ -7563,6 +7907,7 @@ def _temp():
         'ovhgseq': 'CCGG',
     }
 rest_dict['CspAI'] = _temp()
+
 
 def _temp():
     return {
@@ -7586,6 +7931,7 @@ def _temp():
     }
 rest_dict['CspCI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<CspI>CGG[AT]CCG)',
@@ -7607,6 +7953,7 @@ def _temp():
         'ovhgseq': 'GWC',
     }
 rest_dict['CspI'] = _temp()
+
 
 def _temp():
     return {
@@ -7630,6 +7977,7 @@ def _temp():
     }
 rest_dict['CstMI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<CviAII>CATG)',
@@ -7651,6 +7999,7 @@ def _temp():
         'ovhgseq': 'AT',
     }
 rest_dict['CviAII'] = _temp()
+
 
 def _temp():
     return {
@@ -7674,6 +8023,7 @@ def _temp():
     }
 rest_dict['CviJI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<CviKI_1>[AG]GC[CT])',
@@ -7695,6 +8045,7 @@ def _temp():
         'ovhgseq': '',
     }
 rest_dict['CviKI_1'] = _temp()
+
 
 def _temp():
     return {
@@ -7718,6 +8069,7 @@ def _temp():
     }
 rest_dict['CviQI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<CviRI>TGCA)',
@@ -7739,6 +8091,7 @@ def _temp():
         'ovhgseq': '',
     }
 rest_dict['CviRI'] = _temp()
+
 
 def _temp():
     return {
@@ -7762,6 +8115,7 @@ def _temp():
     }
 rest_dict['DdeI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<DinI>GGCGCC)',
@@ -7783,6 +8137,7 @@ def _temp():
         'ovhgseq': '',
     }
 rest_dict['DinI'] = _temp()
+
 
 def _temp():
     return {
@@ -7806,6 +8161,7 @@ def _temp():
     }
 rest_dict['DpnI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<DpnII>GATC)',
@@ -7827,6 +8183,7 @@ def _temp():
         'ovhgseq': 'GATC',
     }
 rest_dict['DpnII'] = _temp()
+
 
 def _temp():
     return {
@@ -7850,6 +8207,7 @@ def _temp():
     }
 rest_dict['DraI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<DraII>[AG]GG.CC[CT])',
@@ -7871,6 +8229,7 @@ def _temp():
         'ovhgseq': 'GNC',
     }
 rest_dict['DraII'] = _temp()
+
 
 def _temp():
     return {
@@ -7894,6 +8253,7 @@ def _temp():
     }
 rest_dict['DraIII'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<DraRI>CAAG.AC)|(?P<DraRI_as>GT.CTTG)',
@@ -7915,6 +8275,7 @@ def _temp():
         'ovhgseq': 'NN',
     }
 rest_dict['DraRI'] = _temp()
+
 
 def _temp():
     return {
@@ -7938,6 +8299,7 @@ def _temp():
     }
 rest_dict['DrdI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<DrdII>GAACCA)|(?P<DrdII_as>TGGTTC)',
@@ -7959,6 +8321,7 @@ def _temp():
         'ovhgseq': None,
     }
 rest_dict['DrdII'] = _temp()
+
 
 def _temp():
     return {
@@ -7982,6 +8345,7 @@ def _temp():
     }
 rest_dict['DriI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<DsaI>CC[AG][CT]GG)',
@@ -8003,6 +8367,7 @@ def _temp():
         'ovhgseq': 'CRYG',
     }
 rest_dict['DsaI'] = _temp()
+
 
 def _temp():
     return {
@@ -8026,6 +8391,7 @@ def _temp():
     }
 rest_dict['DseDI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<EaeI>[CT]GGCC[AG])',
@@ -8047,6 +8413,7 @@ def _temp():
         'ovhgseq': 'GGCC',
     }
 rest_dict['EaeI'] = _temp()
+
 
 def _temp():
     return {
@@ -8070,6 +8437,7 @@ def _temp():
     }
 rest_dict['EagI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<Eam1104I>CTCTTC)|(?P<Eam1104I_as>GAAGAG)',
@@ -8091,6 +8459,7 @@ def _temp():
         'ovhgseq': 'NNN',
     }
 rest_dict['Eam1104I'] = _temp()
+
 
 def _temp():
     return {
@@ -8114,6 +8483,7 @@ def _temp():
     }
 rest_dict['Eam1105I'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<EarI>CTCTTC)|(?P<EarI_as>GAAGAG)',
@@ -8135,6 +8505,7 @@ def _temp():
         'ovhgseq': 'NNN',
     }
 rest_dict['EarI'] = _temp()
+
 
 def _temp():
     return {
@@ -8158,6 +8529,7 @@ def _temp():
     }
 rest_dict['EciI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<Ecl136II>GAGCTC)',
@@ -8179,6 +8551,7 @@ def _temp():
         'ovhgseq': '',
     }
 rest_dict['Ecl136II'] = _temp()
+
 
 def _temp():
     return {
@@ -8202,6 +8575,7 @@ def _temp():
     }
 rest_dict['EclXI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<Eco105I>TACGTA)',
@@ -8223,6 +8597,7 @@ def _temp():
         'ovhgseq': '',
     }
 rest_dict['Eco105I'] = _temp()
+
 
 def _temp():
     return {
@@ -8246,6 +8621,7 @@ def _temp():
     }
 rest_dict['Eco130I'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<Eco147I>AGGCCT)',
@@ -8267,6 +8643,7 @@ def _temp():
         'ovhgseq': '',
     }
 rest_dict['Eco147I'] = _temp()
+
 
 def _temp():
     return {
@@ -8290,6 +8667,7 @@ def _temp():
     }
 rest_dict['Eco24I'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<Eco31I>GGTCTC)|(?P<Eco31I_as>GAGACC)',
@@ -8311,6 +8689,7 @@ def _temp():
         'ovhgseq': 'NNNN',
     }
 rest_dict['Eco31I'] = _temp()
+
 
 def _temp():
     return {
@@ -8334,6 +8713,7 @@ def _temp():
     }
 rest_dict['Eco32I'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<Eco47I>GG[AT]CC)',
@@ -8355,6 +8735,7 @@ def _temp():
         'ovhgseq': 'GWC',
     }
 rest_dict['Eco47I'] = _temp()
+
 
 def _temp():
     return {
@@ -8378,6 +8759,7 @@ def _temp():
     }
 rest_dict['Eco47III'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<Eco52I>CGGCCG)',
@@ -8399,6 +8781,7 @@ def _temp():
         'ovhgseq': 'GGCC',
     }
 rest_dict['Eco52I'] = _temp()
+
 
 def _temp():
     return {
@@ -8422,6 +8805,7 @@ def _temp():
     }
 rest_dict['Eco53kI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<Eco57I>CTGAAG)|(?P<Eco57I_as>CTTCAG)',
@@ -8443,6 +8827,7 @@ def _temp():
         'ovhgseq': 'NN',
     }
 rest_dict['Eco57I'] = _temp()
+
 
 def _temp():
     return {
@@ -8466,6 +8851,7 @@ def _temp():
     }
 rest_dict['Eco57MI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<Eco72I>CACGTG)',
@@ -8487,6 +8873,7 @@ def _temp():
         'ovhgseq': '',
     }
 rest_dict['Eco72I'] = _temp()
+
 
 def _temp():
     return {
@@ -8510,6 +8897,7 @@ def _temp():
     }
 rest_dict['Eco81I'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<Eco88I>C[CT]CG[AG]G)',
@@ -8531,6 +8919,7 @@ def _temp():
         'ovhgseq': 'YCGR',
     }
 rest_dict['Eco88I'] = _temp()
+
 
 def _temp():
     return {
@@ -8554,6 +8943,7 @@ def _temp():
     }
 rest_dict['Eco91I'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<EcoHI>CC[CG]GG)',
@@ -8575,6 +8965,7 @@ def _temp():
         'ovhgseq': 'CCSGG',
     }
 rest_dict['EcoHI'] = _temp()
+
 
 def _temp():
     return {
@@ -8598,6 +8989,7 @@ def _temp():
     }
 rest_dict['EcoICRI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<EcoNI>CCT.....AGG)',
@@ -8619,6 +9011,7 @@ def _temp():
         'ovhgseq': 'N',
     }
 rest_dict['EcoNI'] = _temp()
+
 
 def _temp():
     return {
@@ -8642,6 +9035,7 @@ def _temp():
     }
 rest_dict['EcoO109I'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<EcoO65I>GGT.ACC)',
@@ -8663,6 +9057,7 @@ def _temp():
         'ovhgseq': 'GTNAC',
     }
 rest_dict['EcoO65I'] = _temp()
+
 
 def _temp():
     return {
@@ -8686,6 +9081,7 @@ def _temp():
     }
 rest_dict['EcoRI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<EcoRII>CC[AT]GG)',
@@ -8707,6 +9103,7 @@ def _temp():
         'ovhgseq': 'CCWGG',
     }
 rest_dict['EcoRII'] = _temp()
+
 
 def _temp():
     return {
@@ -8730,6 +9127,7 @@ def _temp():
     }
 rest_dict['EcoRV'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<EcoT14I>CC[AT][AT]GG)',
@@ -8751,6 +9149,7 @@ def _temp():
         'ovhgseq': 'CWWG',
     }
 rest_dict['EcoT14I'] = _temp()
+
 
 def _temp():
     return {
@@ -8774,6 +9173,7 @@ def _temp():
     }
 rest_dict['EcoT22I'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<EcoT38I>G[AG]GC[CT]C)',
@@ -8795,6 +9195,7 @@ def _temp():
         'ovhgseq': 'RGCY',
     }
 rest_dict['EcoT38I'] = _temp()
+
 
 def _temp():
     return {
@@ -8818,6 +9219,7 @@ def _temp():
     }
 rest_dict['EgeI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<EheI>GGCGCC)',
@@ -8839,6 +9241,7 @@ def _temp():
         'ovhgseq': '',
     }
 rest_dict['EheI'] = _temp()
+
 
 def _temp():
     return {
@@ -8862,6 +9265,7 @@ def _temp():
     }
 rest_dict['ErhI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<EsaBC3I>TCGA)',
@@ -8883,6 +9287,7 @@ def _temp():
         'ovhgseq': '',
     }
 rest_dict['EsaBC3I'] = _temp()
+
 
 def _temp():
     return {
@@ -8906,6 +9311,7 @@ def _temp():
     }
 rest_dict['EsaSSI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<Esp3I>CGTCTC)|(?P<Esp3I_as>GAGACG)',
@@ -8927,6 +9333,7 @@ def _temp():
         'ovhgseq': 'NNNN',
     }
 rest_dict['Esp3I'] = _temp()
+
 
 def _temp():
     return {
@@ -8950,6 +9357,7 @@ def _temp():
     }
 rest_dict['EspI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<FaeI>CATG)',
@@ -8971,6 +9379,7 @@ def _temp():
         'ovhgseq': 'CATG',
     }
 rest_dict['FaeI'] = _temp()
+
 
 def _temp():
     return {
@@ -8994,6 +9403,7 @@ def _temp():
     }
 rest_dict['FaiI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<FalI>AAG.....CTT)',
@@ -9015,6 +9425,7 @@ def _temp():
         'ovhgseq': 'NNNNN',
     }
 rest_dict['FalI'] = _temp()
+
 
 def _temp():
     return {
@@ -9038,6 +9449,7 @@ def _temp():
     }
 rest_dict['FaqI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<FatI>CATG)',
@@ -9059,6 +9471,7 @@ def _temp():
         'ovhgseq': 'CATG',
     }
 rest_dict['FatI'] = _temp()
+
 
 def _temp():
     return {
@@ -9082,6 +9495,7 @@ def _temp():
     }
 rest_dict['FauI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<FauNDI>CATATG)',
@@ -9103,6 +9517,7 @@ def _temp():
         'ovhgseq': 'TA',
     }
 rest_dict['FauNDI'] = _temp()
+
 
 def _temp():
     return {
@@ -9126,6 +9541,7 @@ def _temp():
     }
 rest_dict['FbaI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<FblI>GT[AC][GT]AC)',
@@ -9147,6 +9563,7 @@ def _temp():
         'ovhgseq': 'MK',
     }
 rest_dict['FblI'] = _temp()
+
 
 def _temp():
     return {
@@ -9170,6 +9587,7 @@ def _temp():
     }
 rest_dict['FinI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<FmuI>GG.CC)',
@@ -9191,6 +9609,7 @@ def _temp():
         'ovhgseq': 'GNC',
     }
 rest_dict['FmuI'] = _temp()
+
 
 def _temp():
     return {
@@ -9214,6 +9633,7 @@ def _temp():
     }
 rest_dict['Fnu4HI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<FnuDII>CGCG)',
@@ -9235,6 +9655,7 @@ def _temp():
         'ovhgseq': '',
     }
 rest_dict['FnuDII'] = _temp()
+
 
 def _temp():
     return {
@@ -9258,6 +9679,7 @@ def _temp():
     }
 rest_dict['FokI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<FriOI>G[AG]GC[CT]C)',
@@ -9279,6 +9701,7 @@ def _temp():
         'ovhgseq': 'RGCY',
     }
 rest_dict['FriOI'] = _temp()
+
 
 def _temp():
     return {
@@ -9302,6 +9725,7 @@ def _temp():
     }
 rest_dict['FseI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<Fsp4HI>GC.GC)',
@@ -9323,6 +9747,7 @@ def _temp():
         'ovhgseq': 'N',
     }
 rest_dict['Fsp4HI'] = _temp()
+
 
 def _temp():
     return {
@@ -9346,6 +9771,7 @@ def _temp():
     }
 rest_dict['FspAI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<FspBI>CTAG)',
@@ -9367,6 +9793,7 @@ def _temp():
         'ovhgseq': 'TA',
     }
 rest_dict['FspBI'] = _temp()
+
 
 def _temp():
     return {
@@ -9390,6 +9817,7 @@ def _temp():
     }
 rest_dict['FspEI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<FspI>TGCGCA)',
@@ -9411,6 +9839,7 @@ def _temp():
         'ovhgseq': '',
     }
 rest_dict['FspI'] = _temp()
+
 
 def _temp():
     return {
@@ -9434,6 +9863,7 @@ def _temp():
     }
 rest_dict['GauT27I'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<GdiII>CGGCC[AG])|(?P<GdiII_as>[CT]GGCCG)',
@@ -9455,6 +9885,7 @@ def _temp():
         'ovhgseq': 'GGCC',
     }
 rest_dict['GdiII'] = _temp()
+
 
 def _temp():
     return {
@@ -9478,6 +9909,7 @@ def _temp():
     }
 rest_dict['GlaI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<GluI>GC.GC)',
@@ -9499,6 +9931,7 @@ def _temp():
         'ovhgseq': 'N',
     }
 rest_dict['GluI'] = _temp()
+
 
 def _temp():
     return {
@@ -9522,6 +9955,7 @@ def _temp():
     }
 rest_dict['GsaI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<GsuI>CTGGAG)|(?P<GsuI_as>CTCCAG)',
@@ -9543,6 +9977,7 @@ def _temp():
         'ovhgseq': 'NN',
     }
 rest_dict['GsuI'] = _temp()
+
 
 def _temp():
     return {
@@ -9566,6 +10001,7 @@ def _temp():
     }
 rest_dict['HaeI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<HaeII>[AG]GCGC[CT])',
@@ -9587,6 +10023,7 @@ def _temp():
         'ovhgseq': 'GCGC',
     }
 rest_dict['HaeII'] = _temp()
+
 
 def _temp():
     return {
@@ -9610,6 +10047,7 @@ def _temp():
     }
 rest_dict['HaeIII'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<HapII>CCGG)',
@@ -9631,6 +10069,7 @@ def _temp():
         'ovhgseq': 'CG',
     }
 rest_dict['HapII'] = _temp()
+
 
 def _temp():
     return {
@@ -9654,6 +10093,7 @@ def _temp():
     }
 rest_dict['HauII'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<HgaI>GACGC)|(?P<HgaI_as>GCGTC)',
@@ -9675,6 +10115,7 @@ def _temp():
         'ovhgseq': 'NNNNN',
     }
 rest_dict['HgaI'] = _temp()
+
 
 def _temp():
     return {
@@ -9698,6 +10139,7 @@ def _temp():
     }
 rest_dict['HgiAI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<HgiCI>GG[CT][AG]CC)',
@@ -9719,6 +10161,7 @@ def _temp():
         'ovhgseq': 'GYRC',
     }
 rest_dict['HgiCI'] = _temp()
+
 
 def _temp():
     return {
@@ -9742,6 +10185,7 @@ def _temp():
     }
 rest_dict['HgiEII'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<HgiJII>G[AG]GC[CT]C)',
@@ -9763,6 +10207,7 @@ def _temp():
         'ovhgseq': 'RGCY',
     }
 rest_dict['HgiJII'] = _temp()
+
 
 def _temp():
     return {
@@ -9786,6 +10231,7 @@ def _temp():
     }
 rest_dict['HhaI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<Hin1I>G[AG]CG[CT]C)',
@@ -9807,6 +10253,7 @@ def _temp():
         'ovhgseq': 'CG',
     }
 rest_dict['Hin1I'] = _temp()
+
 
 def _temp():
     return {
@@ -9830,6 +10277,7 @@ def _temp():
     }
 rest_dict['Hin1II'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<Hin4I>GA[CT].....[ACG]TC)|(?P<Hin4I_as>GA[CGT].....[AG]TC)',
@@ -9851,6 +10299,7 @@ def _temp():
         'ovhgseq': 'NNNNN',
     }
 rest_dict['Hin4I'] = _temp()
+
 
 def _temp():
     return {
@@ -9874,6 +10323,7 @@ def _temp():
     }
 rest_dict['Hin4II'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<Hin6I>GCGC)',
@@ -9895,6 +10345,7 @@ def _temp():
         'ovhgseq': 'CG',
     }
 rest_dict['Hin6I'] = _temp()
+
 
 def _temp():
     return {
@@ -9918,6 +10369,7 @@ def _temp():
     }
 rest_dict['HinP1I'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<HincII>GT[CT][AG]AC)',
@@ -9939,6 +10391,7 @@ def _temp():
         'ovhgseq': '',
     }
 rest_dict['HincII'] = _temp()
+
 
 def _temp():
     return {
@@ -9962,6 +10415,7 @@ def _temp():
     }
 rest_dict['HindII'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<HindIII>AAGCTT)',
@@ -9983,6 +10437,7 @@ def _temp():
         'ovhgseq': 'AGCT',
     }
 rest_dict['HindIII'] = _temp()
+
 
 def _temp():
     return {
@@ -10006,6 +10461,7 @@ def _temp():
     }
 rest_dict['HinfI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<HpaI>GTTAAC)',
@@ -10027,6 +10483,7 @@ def _temp():
         'ovhgseq': '',
     }
 rest_dict['HpaI'] = _temp()
+
 
 def _temp():
     return {
@@ -10050,6 +10507,7 @@ def _temp():
     }
 rest_dict['HpaII'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<HphI>GGTGA)|(?P<HphI_as>TCACC)',
@@ -10071,6 +10529,7 @@ def _temp():
         'ovhgseq': 'N',
     }
 rest_dict['HphI'] = _temp()
+
 
 def _temp():
     return {
@@ -10094,6 +10553,7 @@ def _temp():
     }
 rest_dict['Hpy166II'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<Hpy178III>TC..GA)',
@@ -10115,6 +10575,7 @@ def _temp():
         'ovhgseq': 'NN',
     }
 rest_dict['Hpy178III'] = _temp()
+
 
 def _temp():
     return {
@@ -10138,6 +10599,7 @@ def _temp():
     }
 rest_dict['Hpy188I'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<Hpy188III>TC..GA)',
@@ -10159,6 +10621,7 @@ def _temp():
         'ovhgseq': 'NN',
     }
 rest_dict['Hpy188III'] = _temp()
+
 
 def _temp():
     return {
@@ -10182,6 +10645,7 @@ def _temp():
     }
 rest_dict['Hpy8I'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<Hpy99I>CG[AT]CG)',
@@ -10203,6 +10667,7 @@ def _temp():
         'ovhgseq': 'CGWCG',
     }
 rest_dict['Hpy99I'] = _temp()
+
 
 def _temp():
     return {
@@ -10226,6 +10691,7 @@ def _temp():
     }
 rest_dict['Hpy99XIII'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<Hpy99XIV>GG[AT]TAA)|(?P<Hpy99XIV_as>TTA[AT]CC)',
@@ -10247,6 +10713,7 @@ def _temp():
         'ovhgseq': None,
     }
 rest_dict['Hpy99XIV'] = _temp()
+
 
 def _temp():
     return {
@@ -10270,6 +10737,7 @@ def _temp():
     }
 rest_dict['HpyAV'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<HpyCH4III>AC.GT)',
@@ -10291,6 +10759,7 @@ def _temp():
         'ovhgseq': 'N',
     }
 rest_dict['HpyCH4III'] = _temp()
+
 
 def _temp():
     return {
@@ -10314,6 +10783,7 @@ def _temp():
     }
 rest_dict['HpyCH4IV'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<HpyCH4V>TGCA)',
@@ -10335,6 +10805,7 @@ def _temp():
         'ovhgseq': '',
     }
 rest_dict['HpyCH4V'] = _temp()
+
 
 def _temp():
     return {
@@ -10358,6 +10829,7 @@ def _temp():
     }
 rest_dict['HpyF10VI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<HpyF3I>CT.AG)',
@@ -10379,6 +10851,7 @@ def _temp():
         'ovhgseq': 'TNA',
     }
 rest_dict['HpyF3I'] = _temp()
+
 
 def _temp():
     return {
@@ -10402,6 +10875,7 @@ def _temp():
     }
 rest_dict['HpySE526I'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<Hsp92I>G[AG]CG[CT]C)',
@@ -10423,6 +10897,7 @@ def _temp():
         'ovhgseq': 'CG',
     }
 rest_dict['Hsp92I'] = _temp()
+
 
 def _temp():
     return {
@@ -10446,6 +10921,7 @@ def _temp():
     }
 rest_dict['Hsp92II'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<HspAI>GCGC)',
@@ -10467,6 +10943,7 @@ def _temp():
         'ovhgseq': 'CG',
     }
 rest_dict['HspAI'] = _temp()
+
 
 def _temp():
     return {
@@ -10490,6 +10967,7 @@ def _temp():
     }
 rest_dict['Jma19592I'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<KasI>GGCGCC)',
@@ -10511,6 +10989,7 @@ def _temp():
         'ovhgseq': 'GCGC',
     }
 rest_dict['KasI'] = _temp()
+
 
 def _temp():
     return {
@@ -10534,6 +11013,7 @@ def _temp():
     }
 rest_dict['KflI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<Kpn2I>TCCGGA)',
@@ -10555,6 +11035,7 @@ def _temp():
         'ovhgseq': 'CCGG',
     }
 rest_dict['Kpn2I'] = _temp()
+
 
 def _temp():
     return {
@@ -10578,6 +11059,7 @@ def _temp():
     }
 rest_dict['KpnI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<KroI>GCCGGC)',
@@ -10599,6 +11081,7 @@ def _temp():
         'ovhgseq': 'CCGG',
     }
 rest_dict['KroI'] = _temp()
+
 
 def _temp():
     return {
@@ -10622,6 +11105,7 @@ def _temp():
     }
 rest_dict['Ksp22I'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<Ksp632I>CTCTTC)|(?P<Ksp632I_as>GAAGAG)',
@@ -10643,6 +11127,7 @@ def _temp():
         'ovhgseq': 'NNN',
     }
 rest_dict['Ksp632I'] = _temp()
+
 
 def _temp():
     return {
@@ -10666,6 +11151,7 @@ def _temp():
     }
 rest_dict['KspAI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<KspI>CCGCGG)',
@@ -10687,6 +11173,7 @@ def _temp():
         'ovhgseq': 'GC',
     }
 rest_dict['KspI'] = _temp()
+
 
 def _temp():
     return {
@@ -10710,6 +11197,7 @@ def _temp():
     }
 rest_dict['Kzo9I'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<LguI>GCTCTTC)|(?P<LguI_as>GAAGAGC)',
@@ -10731,6 +11219,7 @@ def _temp():
         'ovhgseq': 'NNN',
     }
 rest_dict['LguI'] = _temp()
+
 
 def _temp():
     return {
@@ -10754,6 +11243,7 @@ def _temp():
     }
 rest_dict['LpnI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<LpnPI>CC[AGT]G)|(?P<LpnPI_as>C[ACT]GG)',
@@ -10775,6 +11265,7 @@ def _temp():
         'ovhgseq': 'NNNN',
     }
 rest_dict['LpnPI'] = _temp()
+
 
 def _temp():
     return {
@@ -10798,6 +11289,7 @@ def _temp():
     }
 rest_dict['Lsp1109I'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<LweI>GCATC)|(?P<LweI_as>GATGC)',
@@ -10819,6 +11311,7 @@ def _temp():
         'ovhgseq': 'NNNN',
     }
 rest_dict['LweI'] = _temp()
+
 
 def _temp():
     return {
@@ -10842,6 +11335,7 @@ def _temp():
     }
 rest_dict['MabI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<MaeI>CTAG)',
@@ -10863,6 +11357,7 @@ def _temp():
         'ovhgseq': 'TA',
     }
 rest_dict['MaeI'] = _temp()
+
 
 def _temp():
     return {
@@ -10886,6 +11381,7 @@ def _temp():
     }
 rest_dict['MaeII'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<MaeIII>GT.AC)',
@@ -10907,6 +11403,7 @@ def _temp():
         'ovhgseq': 'GTNAC',
     }
 rest_dict['MaeIII'] = _temp()
+
 
 def _temp():
     return {
@@ -10930,6 +11427,7 @@ def _temp():
     }
 rest_dict['MalI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<MaqI>C[AG]TTGAC)|(?P<MaqI_as>GTCAA[CT]G)',
@@ -10951,6 +11449,7 @@ def _temp():
         'ovhgseq': 'NN',
     }
 rest_dict['MaqI'] = _temp()
+
 
 def _temp():
     return {
@@ -10974,6 +11473,7 @@ def _temp():
     }
 rest_dict['MauBI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<MbiI>CCGCTC)|(?P<MbiI_as>GAGCGG)',
@@ -10995,6 +11495,7 @@ def _temp():
         'ovhgseq': '',
     }
 rest_dict['MbiI'] = _temp()
+
 
 def _temp():
     return {
@@ -11018,6 +11519,7 @@ def _temp():
     }
 rest_dict['MboI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<MboII>GAAGA)|(?P<MboII_as>TCTTC)',
@@ -11039,6 +11541,7 @@ def _temp():
         'ovhgseq': 'N',
     }
 rest_dict['MboII'] = _temp()
+
 
 def _temp():
     return {
@@ -11062,6 +11565,7 @@ def _temp():
     }
 rest_dict['McaTI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<McrI>CG[AG][CT]CG)',
@@ -11083,6 +11587,7 @@ def _temp():
         'ovhgseq': 'RY',
     }
 rest_dict['McrI'] = _temp()
+
 
 def _temp():
     return {
@@ -11106,6 +11611,7 @@ def _temp():
     }
 rest_dict['MfeI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<MflI>[AG]GATC[CT])',
@@ -11127,6 +11633,7 @@ def _temp():
         'ovhgseq': 'GATC',
     }
 rest_dict['MflI'] = _temp()
+
 
 def _temp():
     return {
@@ -11150,6 +11657,7 @@ def _temp():
     }
 rest_dict['MhlI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<MjaIV>GT..AC)',
@@ -11171,6 +11679,7 @@ def _temp():
         'ovhgseq': None,
     }
 rest_dict['MjaIV'] = _temp()
+
 
 def _temp():
     return {
@@ -11194,6 +11703,7 @@ def _temp():
     }
 rest_dict['MkaDII'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<MlsI>TGGCCA)',
@@ -11215,6 +11725,7 @@ def _temp():
         'ovhgseq': '',
     }
 rest_dict['MlsI'] = _temp()
+
 
 def _temp():
     return {
@@ -11238,6 +11749,7 @@ def _temp():
     }
 rest_dict['MluCI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<MluI>ACGCGT)',
@@ -11259,6 +11771,7 @@ def _temp():
         'ovhgseq': 'CGCG',
     }
 rest_dict['MluI'] = _temp()
+
 
 def _temp():
     return {
@@ -11282,6 +11795,7 @@ def _temp():
     }
 rest_dict['MluNI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<Mly113I>GGCGCC)',
@@ -11303,6 +11817,7 @@ def _temp():
         'ovhgseq': 'CG',
     }
 rest_dict['Mly113I'] = _temp()
+
 
 def _temp():
     return {
@@ -11326,6 +11841,7 @@ def _temp():
     }
 rest_dict['MlyI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<MmeI>TCC[AG]AC)|(?P<MmeI_as>GT[CT]GGA)',
@@ -11347,6 +11863,7 @@ def _temp():
         'ovhgseq': 'NN',
     }
 rest_dict['MmeI'] = _temp()
+
 
 def _temp():
     return {
@@ -11370,6 +11887,7 @@ def _temp():
     }
 rest_dict['MnlI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<Mph1103I>ATGCAT)',
@@ -11391,6 +11909,7 @@ def _temp():
         'ovhgseq': 'TGCA',
     }
 rest_dict['Mph1103I'] = _temp()
+
 
 def _temp():
     return {
@@ -11414,6 +11933,7 @@ def _temp():
     }
 rest_dict['MreI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<MroI>TCCGGA)',
@@ -11435,6 +11955,7 @@ def _temp():
         'ovhgseq': 'CCGG',
     }
 rest_dict['MroI'] = _temp()
+
 
 def _temp():
     return {
@@ -11458,6 +11979,7 @@ def _temp():
     }
 rest_dict['MroNI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<MroXI>GAA....TTC)',
@@ -11479,6 +12001,7 @@ def _temp():
         'ovhgseq': '',
     }
 rest_dict['MroXI'] = _temp()
+
 
 def _temp():
     return {
@@ -11502,6 +12025,7 @@ def _temp():
     }
 rest_dict['MscI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<MseI>TTAA)',
@@ -11523,6 +12047,7 @@ def _temp():
         'ovhgseq': 'TA',
     }
 rest_dict['MseI'] = _temp()
+
 
 def _temp():
     return {
@@ -11546,6 +12071,7 @@ def _temp():
     }
 rest_dict['MslI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<Msp20I>TGGCCA)',
@@ -11567,6 +12093,7 @@ def _temp():
         'ovhgseq': '',
     }
 rest_dict['Msp20I'] = _temp()
+
 
 def _temp():
     return {
@@ -11590,6 +12117,7 @@ def _temp():
     }
 rest_dict['MspA1I'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<MspCI>CTTAAG)',
@@ -11611,6 +12139,7 @@ def _temp():
         'ovhgseq': 'TTAA',
     }
 rest_dict['MspCI'] = _temp()
+
 
 def _temp():
     return {
@@ -11634,6 +12163,7 @@ def _temp():
     }
 rest_dict['MspI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<MspJI>C..[AG])|(?P<MspJI_as>[CT]..G)',
@@ -11655,6 +12185,7 @@ def _temp():
         'ovhgseq': 'NNNN',
     }
 rest_dict['MspJI'] = _temp()
+
 
 def _temp():
     return {
@@ -11678,6 +12209,7 @@ def _temp():
     }
 rest_dict['MspR9I'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<MssI>GTTTAAAC)',
@@ -11699,6 +12231,7 @@ def _temp():
         'ovhgseq': '',
     }
 rest_dict['MssI'] = _temp()
+
 
 def _temp():
     return {
@@ -11722,6 +12255,7 @@ def _temp():
     }
 rest_dict['MstI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<MunI>CAATTG)',
@@ -11743,6 +12277,7 @@ def _temp():
         'ovhgseq': 'AATT',
     }
 rest_dict['MunI'] = _temp()
+
 
 def _temp():
     return {
@@ -11766,6 +12301,7 @@ def _temp():
     }
 rest_dict['Mva1269I'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<MvaI>CC[AT]GG)',
@@ -11787,6 +12323,7 @@ def _temp():
         'ovhgseq': 'W',
     }
 rest_dict['MvaI'] = _temp()
+
 
 def _temp():
     return {
@@ -11810,6 +12347,7 @@ def _temp():
     }
 rest_dict['MvnI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<MvrI>CGATCG)',
@@ -11831,6 +12369,7 @@ def _temp():
         'ovhgseq': 'AT',
     }
 rest_dict['MvrI'] = _temp()
+
 
 def _temp():
     return {
@@ -11854,6 +12393,7 @@ def _temp():
     }
 rest_dict['MwoI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<NaeI>GCCGGC)',
@@ -11875,6 +12415,7 @@ def _temp():
         'ovhgseq': '',
     }
 rest_dict['NaeI'] = _temp()
+
 
 def _temp():
     return {
@@ -11898,6 +12439,7 @@ def _temp():
     }
 rest_dict['NarI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<NciI>CC[CG]GG)',
@@ -11919,6 +12461,7 @@ def _temp():
         'ovhgseq': 'S',
     }
 rest_dict['NciI'] = _temp()
+
 
 def _temp():
     return {
@@ -11942,6 +12485,7 @@ def _temp():
     }
 rest_dict['NcoI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<NdeI>CATATG)',
@@ -11963,6 +12507,7 @@ def _temp():
         'ovhgseq': 'TA',
     }
 rest_dict['NdeI'] = _temp()
+
 
 def _temp():
     return {
@@ -11986,6 +12531,7 @@ def _temp():
     }
 rest_dict['NdeII'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<NgoAVIII>GAC.....TGA)|(?P<NgoAVIII_as>TCA.....GTC)',
@@ -12007,6 +12553,7 @@ def _temp():
         'ovhgseq': 'NN',
     }
 rest_dict['NgoAVIII'] = _temp()
+
 
 def _temp():
     return {
@@ -12030,6 +12577,7 @@ def _temp():
     }
 rest_dict['NgoMIV'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<NhaXI>CAAG[AG]AG)|(?P<NhaXI_as>CT[CT]CTTG)',
@@ -12051,6 +12599,7 @@ def _temp():
         'ovhgseq': None,
     }
 rest_dict['NhaXI'] = _temp()
+
 
 def _temp():
     return {
@@ -12074,6 +12623,7 @@ def _temp():
     }
 rest_dict['NheI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<NlaCI>CATCAC)|(?P<NlaCI_as>GTGATG)',
@@ -12095,6 +12645,7 @@ def _temp():
         'ovhgseq': 'NN',
     }
 rest_dict['NlaCI'] = _temp()
+
 
 def _temp():
     return {
@@ -12118,6 +12669,7 @@ def _temp():
     }
 rest_dict['NlaIII'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<NlaIV>GG..CC)',
@@ -12139,6 +12691,7 @@ def _temp():
         'ovhgseq': '',
     }
 rest_dict['NlaIV'] = _temp()
+
 
 def _temp():
     return {
@@ -12162,6 +12715,7 @@ def _temp():
     }
 rest_dict['Nli3877I'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<NmeAIII>GCCGAG)|(?P<NmeAIII_as>CTCGGC)',
@@ -12183,6 +12737,7 @@ def _temp():
         'ovhgseq': 'NN',
     }
 rest_dict['NmeAIII'] = _temp()
+
 
 def _temp():
     return {
@@ -12206,6 +12761,7 @@ def _temp():
     }
 rest_dict['NmeDI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<NmuCI>GT[CG]AC)',
@@ -12227,6 +12783,7 @@ def _temp():
         'ovhgseq': 'GTSAC',
     }
 rest_dict['NmuCI'] = _temp()
+
 
 def _temp():
     return {
@@ -12250,6 +12807,7 @@ def _temp():
     }
 rest_dict['NotI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<NruI>TCGCGA)',
@@ -12271,6 +12829,7 @@ def _temp():
         'ovhgseq': '',
     }
 rest_dict['NruI'] = _temp()
+
 
 def _temp():
     return {
@@ -12294,6 +12853,7 @@ def _temp():
     }
 rest_dict['NsbI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<NsiI>ATGCAT)',
@@ -12315,6 +12875,7 @@ def _temp():
         'ovhgseq': 'TGCA',
     }
 rest_dict['NsiI'] = _temp()
+
 
 def _temp():
     return {
@@ -12338,6 +12899,7 @@ def _temp():
     }
 rest_dict['NspBII'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<NspI>[AG]CATG[CT])',
@@ -12359,6 +12921,7 @@ def _temp():
         'ovhgseq': 'CATG',
     }
 rest_dict['NspI'] = _temp()
+
 
 def _temp():
     return {
@@ -12382,6 +12945,7 @@ def _temp():
     }
 rest_dict['NspV'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<OliI>CAC....GTG)',
@@ -12403,6 +12967,7 @@ def _temp():
         'ovhgseq': '',
     }
 rest_dict['OliI'] = _temp()
+
 
 def _temp():
     return {
@@ -12426,6 +12991,7 @@ def _temp():
     }
 rest_dict['PabI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<PacI>TTAATTAA)',
@@ -12447,6 +13013,7 @@ def _temp():
         'ovhgseq': 'AT',
     }
 rest_dict['PacI'] = _temp()
+
 
 def _temp():
     return {
@@ -12470,6 +13037,7 @@ def _temp():
     }
 rest_dict['PaeI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<PaeR7I>CTCGAG)',
@@ -12491,6 +13059,7 @@ def _temp():
         'ovhgseq': 'TCGA',
     }
 rest_dict['PaeR7I'] = _temp()
+
 
 def _temp():
     return {
@@ -12514,6 +13083,7 @@ def _temp():
     }
 rest_dict['PagI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<PalAI>GGCGCGCC)',
@@ -12535,6 +13105,7 @@ def _temp():
         'ovhgseq': 'CGCG',
     }
 rest_dict['PalAI'] = _temp()
+
 
 def _temp():
     return {
@@ -12558,6 +13129,7 @@ def _temp():
     }
 rest_dict['PasI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<PauI>GCGCGC)',
@@ -12579,6 +13151,7 @@ def _temp():
         'ovhgseq': 'CGCG',
     }
 rest_dict['PauI'] = _temp()
+
 
 def _temp():
     return {
@@ -12602,6 +13175,7 @@ def _temp():
     }
 rest_dict['PceI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<PciI>ACATGT)',
@@ -12623,6 +13197,7 @@ def _temp():
         'ovhgseq': 'CATG',
     }
 rest_dict['PciI'] = _temp()
+
 
 def _temp():
     return {
@@ -12646,6 +13221,7 @@ def _temp():
     }
 rest_dict['PciSI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<PcsI>[AT]CG.......CG[AT])',
@@ -12667,6 +13243,7 @@ def _temp():
         'ovhgseq': 'N',
     }
 rest_dict['PcsI'] = _temp()
+
 
 def _temp():
     return {
@@ -12690,6 +13267,7 @@ def _temp():
     }
 rest_dict['PctI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<PdiI>GCCGGC)',
@@ -12711,6 +13289,7 @@ def _temp():
         'ovhgseq': '',
     }
 rest_dict['PdiI'] = _temp()
+
 
 def _temp():
     return {
@@ -12734,6 +13313,7 @@ def _temp():
     }
 rest_dict['PdmI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<PenI>GCAGT)|(?P<PenI_as>ACTGC)',
@@ -12755,6 +13335,7 @@ def _temp():
         'ovhgseq': None,
     }
 rest_dict['PenI'] = _temp()
+
 
 def _temp():
     return {
@@ -12778,6 +13359,7 @@ def _temp():
     }
 rest_dict['PfeI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<Pfl1108I>TCGTAG)|(?P<Pfl1108I_as>CTACGA)',
@@ -12799,6 +13381,7 @@ def _temp():
         'ovhgseq': None,
     }
 rest_dict['Pfl1108I'] = _temp()
+
 
 def _temp():
     return {
@@ -12822,6 +13405,7 @@ def _temp():
     }
 rest_dict['Pfl23II'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<PflFI>GAC...GTC)',
@@ -12843,6 +13427,7 @@ def _temp():
         'ovhgseq': 'N',
     }
 rest_dict['PflFI'] = _temp()
+
 
 def _temp():
     return {
@@ -12866,6 +13451,7 @@ def _temp():
     }
 rest_dict['PflMI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<PfoI>TCC.GGA)',
@@ -12887,6 +13473,7 @@ def _temp():
         'ovhgseq': 'CCNGG',
     }
 rest_dict['PfoI'] = _temp()
+
 
 def _temp():
     return {
@@ -12910,6 +13497,7 @@ def _temp():
     }
 rest_dict['PinAI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<PlaDI>CATCAG)|(?P<PlaDI_as>CTGATG)',
@@ -12931,6 +13519,7 @@ def _temp():
         'ovhgseq': 'NN',
     }
 rest_dict['PlaDI'] = _temp()
+
 
 def _temp():
     return {
@@ -12954,6 +13543,7 @@ def _temp():
     }
 rest_dict['Ple19I'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<PleI>GAGTC)|(?P<PleI_as>GACTC)',
@@ -12975,6 +13565,7 @@ def _temp():
         'ovhgseq': 'N',
     }
 rest_dict['PleI'] = _temp()
+
 
 def _temp():
     return {
@@ -12998,6 +13589,7 @@ def _temp():
     }
 rest_dict['PluTI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<PmaCI>CACGTG)',
@@ -13019,6 +13611,7 @@ def _temp():
         'ovhgseq': '',
     }
 rest_dict['PmaCI'] = _temp()
+
 
 def _temp():
     return {
@@ -13042,6 +13635,7 @@ def _temp():
     }
 rest_dict['PmeI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<PmlI>CACGTG)',
@@ -13063,6 +13657,7 @@ def _temp():
         'ovhgseq': '',
     }
 rest_dict['PmlI'] = _temp()
+
 
 def _temp():
     return {
@@ -13086,6 +13681,7 @@ def _temp():
     }
 rest_dict['PpiI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<PpsI>GAGTC)|(?P<PpsI_as>GACTC)',
@@ -13107,6 +13703,7 @@ def _temp():
         'ovhgseq': 'N',
     }
 rest_dict['PpsI'] = _temp()
+
 
 def _temp():
     return {
@@ -13130,6 +13727,7 @@ def _temp():
     }
 rest_dict['Ppu10I'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<Ppu21I>[CT]ACGT[AG])',
@@ -13151,6 +13749,7 @@ def _temp():
         'ovhgseq': '',
     }
 rest_dict['Ppu21I'] = _temp()
+
 
 def _temp():
     return {
@@ -13174,6 +13773,7 @@ def _temp():
     }
 rest_dict['PpuMI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<PscI>ACATGT)',
@@ -13195,6 +13795,7 @@ def _temp():
         'ovhgseq': 'CATG',
     }
 rest_dict['PscI'] = _temp()
+
 
 def _temp():
     return {
@@ -13218,6 +13819,7 @@ def _temp():
     }
 rest_dict['PshAI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<PshBI>ATTAAT)',
@@ -13239,6 +13841,7 @@ def _temp():
         'ovhgseq': 'TA',
     }
 rest_dict['PshBI'] = _temp()
+
 
 def _temp():
     return {
@@ -13262,6 +13865,7 @@ def _temp():
     }
 rest_dict['PsiI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<Psp03I>GG[AT]CC)',
@@ -13283,6 +13887,7 @@ def _temp():
         'ovhgseq': 'GWC',
     }
 rest_dict['Psp03I'] = _temp()
+
 
 def _temp():
     return {
@@ -13306,6 +13911,7 @@ def _temp():
     }
 rest_dict['Psp124BI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<Psp1406I>AACGTT)',
@@ -13327,6 +13933,7 @@ def _temp():
         'ovhgseq': 'CG',
     }
 rest_dict['Psp1406I'] = _temp()
+
 
 def _temp():
     return {
@@ -13350,6 +13957,7 @@ def _temp():
     }
 rest_dict['Psp5II'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<Psp6I>CC[AT]GG)',
@@ -13371,6 +13979,7 @@ def _temp():
         'ovhgseq': 'CCWGG',
     }
 rest_dict['Psp6I'] = _temp()
+
 
 def _temp():
     return {
@@ -13394,6 +14003,7 @@ def _temp():
     }
 rest_dict['PspCI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<PspEI>GGT.ACC)',
@@ -13415,6 +14025,7 @@ def _temp():
         'ovhgseq': 'GTNAC',
     }
 rest_dict['PspEI'] = _temp()
+
 
 def _temp():
     return {
@@ -13438,6 +14049,7 @@ def _temp():
     }
 rest_dict['PspGI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<PspLI>CGTACG)',
@@ -13459,6 +14071,7 @@ def _temp():
         'ovhgseq': 'GTAC',
     }
 rest_dict['PspLI'] = _temp()
+
 
 def _temp():
     return {
@@ -13482,6 +14095,7 @@ def _temp():
     }
 rest_dict['PspN4I'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<PspOMI>GGGCCC)',
@@ -13503,6 +14117,7 @@ def _temp():
         'ovhgseq': 'GGCC',
     }
 rest_dict['PspOMI'] = _temp()
+
 
 def _temp():
     return {
@@ -13526,6 +14141,7 @@ def _temp():
     }
 rest_dict['PspOMII'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<PspPI>GG.CC)',
@@ -13547,6 +14163,7 @@ def _temp():
         'ovhgseq': 'GNC',
     }
 rest_dict['PspPI'] = _temp()
+
 
 def _temp():
     return {
@@ -13570,6 +14187,7 @@ def _temp():
     }
 rest_dict['PspPPI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<PspPRI>CC[CT]CAG)|(?P<PspPRI_as>CTG[AG]GG)',
@@ -13591,6 +14209,7 @@ def _temp():
         'ovhgseq': 'NN',
     }
 rest_dict['PspPRI'] = _temp()
+
 
 def _temp():
     return {
@@ -13614,6 +14233,7 @@ def _temp():
     }
 rest_dict['PspXI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<PsrI>GAAC......TAC)|(?P<PsrI_as>GTA......GTTC)',
@@ -13635,6 +14255,7 @@ def _temp():
         'ovhgseq': 'NNNNN',
     }
 rest_dict['PsrI'] = _temp()
+
 
 def _temp():
     return {
@@ -13658,6 +14279,7 @@ def _temp():
     }
 rest_dict['PssI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<PstI>CTGCAG)',
@@ -13679,6 +14301,7 @@ def _temp():
         'ovhgseq': 'TGCA',
     }
 rest_dict['PstI'] = _temp()
+
 
 def _temp():
     return {
@@ -13702,6 +14325,7 @@ def _temp():
     }
 rest_dict['PstNI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<PsuI>[AG]GATC[CT])',
@@ -13723,6 +14347,7 @@ def _temp():
         'ovhgseq': 'GATC',
     }
 rest_dict['PsuI'] = _temp()
+
 
 def _temp():
     return {
@@ -13746,6 +14371,7 @@ def _temp():
     }
 rest_dict['PsyI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<PteI>GCGCGC)',
@@ -13767,6 +14393,7 @@ def _temp():
         'ovhgseq': 'CGCG',
     }
 rest_dict['PteI'] = _temp()
+
 
 def _temp():
     return {
@@ -13790,6 +14417,7 @@ def _temp():
     }
 rest_dict['PvuI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<PvuII>CAGCTG)',
@@ -13811,6 +14439,7 @@ def _temp():
         'ovhgseq': '',
     }
 rest_dict['PvuII'] = _temp()
+
 
 def _temp():
     return {
@@ -13834,6 +14463,7 @@ def _temp():
     }
 rest_dict['R2_BceSIV'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<RceI>CATCGAC)|(?P<RceI_as>GTCGATG)',
@@ -13855,6 +14485,7 @@ def _temp():
         'ovhgseq': 'NN',
     }
 rest_dict['RceI'] = _temp()
+
 
 def _temp():
     return {
@@ -13878,6 +14509,7 @@ def _temp():
     }
 rest_dict['RdeGBI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<RdeGBII>ACCCAG)|(?P<RdeGBII_as>CTGGGT)',
@@ -13899,6 +14531,7 @@ def _temp():
         'ovhgseq': 'NN',
     }
 rest_dict['RdeGBII'] = _temp()
+
 
 def _temp():
     return {
@@ -13922,6 +14555,7 @@ def _temp():
     }
 rest_dict['RdeGBIII'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<RflFIII>CGCCAG)|(?P<RflFIII_as>CTGGCG)',
@@ -13943,6 +14577,7 @@ def _temp():
         'ovhgseq': None,
     }
 rest_dict['RflFIII'] = _temp()
+
 
 def _temp():
     return {
@@ -13966,6 +14601,7 @@ def _temp():
     }
 rest_dict['RgaI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<RigI>GGCCGGCC)',
@@ -13987,6 +14623,7 @@ def _temp():
         'ovhgseq': 'CCGG',
     }
 rest_dict['RigI'] = _temp()
+
 
 def _temp():
     return {
@@ -14010,6 +14647,7 @@ def _temp():
     }
 rest_dict['RlaI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<RleAI>CCCACA)|(?P<RleAI_as>TGTGGG)',
@@ -14031,6 +14669,7 @@ def _temp():
         'ovhgseq': 'NNN',
     }
 rest_dict['RleAI'] = _temp()
+
 
 def _temp():
     return {
@@ -14054,6 +14693,7 @@ def _temp():
     }
 rest_dict['RpaB5I'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<RpaBI>CCCGCAG)|(?P<RpaBI_as>CTGCGGG)',
@@ -14075,6 +14715,7 @@ def _temp():
         'ovhgseq': 'NN',
     }
 rest_dict['RpaBI'] = _temp()
+
 
 def _temp():
     return {
@@ -14098,6 +14739,7 @@ def _temp():
     }
 rest_dict['RpaI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<RpaTI>G[AG]TGGAG)|(?P<RpaTI_as>CTCCA[CT]C)',
@@ -14119,6 +14761,7 @@ def _temp():
         'ovhgseq': None,
     }
 rest_dict['RpaTI'] = _temp()
+
 
 def _temp():
     return {
@@ -14142,6 +14785,7 @@ def _temp():
     }
 rest_dict['RruI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<RsaI>GTAC)',
@@ -14163,6 +14807,7 @@ def _temp():
         'ovhgseq': '',
     }
 rest_dict['RsaI'] = _temp()
+
 
 def _temp():
     return {
@@ -14186,6 +14831,7 @@ def _temp():
     }
 rest_dict['RsaNI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<RseI>CA[CT]....[AG]TG)',
@@ -14207,6 +14853,7 @@ def _temp():
         'ovhgseq': '',
     }
 rest_dict['RseI'] = _temp()
+
 
 def _temp():
     return {
@@ -14230,6 +14877,7 @@ def _temp():
     }
 rest_dict['Rsr2I'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<RsrII>CGG[AT]CCG)',
@@ -14251,6 +14899,7 @@ def _temp():
         'ovhgseq': 'GWC',
     }
 rest_dict['RsrII'] = _temp()
+
 
 def _temp():
     return {
@@ -14274,6 +14923,7 @@ def _temp():
     }
 rest_dict['SacI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<SacII>CCGCGG)',
@@ -14295,6 +14945,7 @@ def _temp():
         'ovhgseq': 'GC',
     }
 rest_dict['SacII'] = _temp()
+
 
 def _temp():
     return {
@@ -14318,6 +14969,7 @@ def _temp():
     }
 rest_dict['SalI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<SanDI>GGG[AT]CCC)',
@@ -14339,6 +14991,7 @@ def _temp():
         'ovhgseq': 'GWC',
     }
 rest_dict['SanDI'] = _temp()
+
 
 def _temp():
     return {
@@ -14362,6 +15015,7 @@ def _temp():
     }
 rest_dict['SapI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<SaqAI>TTAA)',
@@ -14383,6 +15037,7 @@ def _temp():
         'ovhgseq': 'TA',
     }
 rest_dict['SaqAI'] = _temp()
+
 
 def _temp():
     return {
@@ -14406,6 +15061,7 @@ def _temp():
     }
 rest_dict['SatI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<Sau3AI>GATC)',
@@ -14427,6 +15083,7 @@ def _temp():
         'ovhgseq': 'GATC',
     }
 rest_dict['Sau3AI'] = _temp()
+
 
 def _temp():
     return {
@@ -14450,6 +15107,7 @@ def _temp():
     }
 rest_dict['Sau96I'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<SauI>CCT.AGG)',
@@ -14471,6 +15129,7 @@ def _temp():
         'ovhgseq': 'TNA',
     }
 rest_dict['SauI'] = _temp()
+
 
 def _temp():
     return {
@@ -14494,6 +15153,7 @@ def _temp():
     }
 rest_dict['SbfI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<ScaI>AGTACT)',
@@ -14515,6 +15175,7 @@ def _temp():
         'ovhgseq': '',
     }
 rest_dict['ScaI'] = _temp()
+
 
 def _temp():
     return {
@@ -14538,6 +15199,7 @@ def _temp():
     }
 rest_dict['SchI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<SciI>CTCGAG)',
@@ -14559,6 +15221,7 @@ def _temp():
         'ovhgseq': '',
     }
 rest_dict['SciI'] = _temp()
+
 
 def _temp():
     return {
@@ -14582,6 +15245,7 @@ def _temp():
     }
 rest_dict['ScrFI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<SdaI>CCTGCAGG)',
@@ -14603,6 +15267,7 @@ def _temp():
         'ovhgseq': 'TGCA',
     }
 rest_dict['SdaI'] = _temp()
+
 
 def _temp():
     return {
@@ -14626,6 +15291,7 @@ def _temp():
     }
 rest_dict['SdeAI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<SdeOSI>GAC....[AG]TGA)|(?P<SdeOSI_as>TCA[CT]....GTC)',
@@ -14647,6 +15313,7 @@ def _temp():
         'ovhgseq': 'NN',
     }
 rest_dict['SdeOSI'] = _temp()
+
 
 def _temp():
     return {
@@ -14670,6 +15337,7 @@ def _temp():
     }
 rest_dict['SduI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<SecI>CC..GG)',
@@ -14691,6 +15359,7 @@ def _temp():
         'ovhgseq': 'CNNG',
     }
 rest_dict['SecI'] = _temp()
+
 
 def _temp():
     return {
@@ -14714,6 +15383,7 @@ def _temp():
     }
 rest_dict['SelI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<SetI>A[CG][CG]T)',
@@ -14735,6 +15405,7 @@ def _temp():
         'ovhgseq': 'ASST',
     }
 rest_dict['SetI'] = _temp()
+
 
 def _temp():
     return {
@@ -14758,6 +15429,7 @@ def _temp():
     }
 rest_dict['SexAI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<SfaAI>GCGATCGC)',
@@ -14779,6 +15451,7 @@ def _temp():
         'ovhgseq': 'AT',
     }
 rest_dict['SfaAI'] = _temp()
+
 
 def _temp():
     return {
@@ -14802,6 +15475,7 @@ def _temp():
     }
 rest_dict['SfaNI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<SfcI>CT[AG][CT]AG)',
@@ -14823,6 +15497,7 @@ def _temp():
         'ovhgseq': 'TRYA',
     }
 rest_dict['SfcI'] = _temp()
+
 
 def _temp():
     return {
@@ -14846,6 +15521,7 @@ def _temp():
     }
 rest_dict['SfeI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<SfiI>GGCC.....GGCC)',
@@ -14867,6 +15543,7 @@ def _temp():
         'ovhgseq': 'NNN',
     }
 rest_dict['SfiI'] = _temp()
+
 
 def _temp():
     return {
@@ -14890,6 +15567,7 @@ def _temp():
     }
 rest_dict['SfoI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<Sfr274I>CTCGAG)',
@@ -14911,6 +15589,7 @@ def _temp():
         'ovhgseq': 'TCGA',
     }
 rest_dict['Sfr274I'] = _temp()
+
 
 def _temp():
     return {
@@ -14934,6 +15613,7 @@ def _temp():
     }
 rest_dict['Sfr303I'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<SfuI>TTCGAA)',
@@ -14955,6 +15635,7 @@ def _temp():
         'ovhgseq': 'CG',
     }
 rest_dict['SfuI'] = _temp()
+
 
 def _temp():
     return {
@@ -14978,6 +15659,7 @@ def _temp():
     }
 rest_dict['SgeI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<SgfI>GCGATCGC)',
@@ -14999,6 +15681,7 @@ def _temp():
         'ovhgseq': 'AT',
     }
 rest_dict['SgfI'] = _temp()
+
 
 def _temp():
     return {
@@ -15022,6 +15705,7 @@ def _temp():
     }
 rest_dict['SgrAI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<SgrBI>CCGCGG)',
@@ -15043,6 +15727,7 @@ def _temp():
         'ovhgseq': 'GC',
     }
 rest_dict['SgrBI'] = _temp()
+
 
 def _temp():
     return {
@@ -15066,6 +15751,7 @@ def _temp():
     }
 rest_dict['SgrDI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<SgrTI>CC[AGT][CG])|(?P<SgrTI_as>[CG][ACT]GG)',
@@ -15087,6 +15773,7 @@ def _temp():
         'ovhgseq': 'NNNN',
     }
 rest_dict['SgrTI'] = _temp()
+
 
 def _temp():
     return {
@@ -15110,6 +15797,7 @@ def _temp():
     }
 rest_dict['SgsI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<SimI>GGGTC)|(?P<SimI_as>GACCC)',
@@ -15131,6 +15819,7 @@ def _temp():
         'ovhgseq': 'GTC',
     }
 rest_dict['SimI'] = _temp()
+
 
 def _temp():
     return {
@@ -15154,6 +15843,7 @@ def _temp():
     }
 rest_dict['SlaI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<SmaI>CCCGGG)',
@@ -15175,6 +15865,7 @@ def _temp():
         'ovhgseq': '',
     }
 rest_dict['SmaI'] = _temp()
+
 
 def _temp():
     return {
@@ -15198,6 +15889,7 @@ def _temp():
     }
 rest_dict['SmiI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<SmiMI>CA[CT]....[AG]TG)',
@@ -15219,6 +15911,7 @@ def _temp():
         'ovhgseq': '',
     }
 rest_dict['SmiMI'] = _temp()
+
 
 def _temp():
     return {
@@ -15242,6 +15935,7 @@ def _temp():
     }
 rest_dict['SmlI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<SmoI>CT[CT][AG]AG)',
@@ -15263,6 +15957,7 @@ def _temp():
         'ovhgseq': 'TYRA',
     }
 rest_dict['SmoI'] = _temp()
+
 
 def _temp():
     return {
@@ -15286,6 +15981,7 @@ def _temp():
     }
 rest_dict['SnaBI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<SnaI>GTATAC)',
@@ -15307,6 +16003,7 @@ def _temp():
         'ovhgseq': None,
     }
 rest_dict['SnaI'] = _temp()
+
 
 def _temp():
     return {
@@ -15330,6 +16027,7 @@ def _temp():
     }
 rest_dict['Sno506I'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<SpeI>ACTAGT)',
@@ -15351,6 +16049,7 @@ def _temp():
         'ovhgseq': 'CTAG',
     }
 rest_dict['SpeI'] = _temp()
+
 
 def _temp():
     return {
@@ -15374,6 +16073,7 @@ def _temp():
     }
 rest_dict['SphI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<SplI>CGTACG)',
@@ -15395,6 +16095,7 @@ def _temp():
         'ovhgseq': 'GTAC',
     }
 rest_dict['SplI'] = _temp()
+
 
 def _temp():
     return {
@@ -15418,6 +16119,7 @@ def _temp():
     }
 rest_dict['SpoDI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<SrfI>GCCCGGGC)',
@@ -15439,6 +16141,7 @@ def _temp():
         'ovhgseq': '',
     }
 rest_dict['SrfI'] = _temp()
+
 
 def _temp():
     return {
@@ -15462,6 +16165,7 @@ def _temp():
     }
 rest_dict['Sse232I'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<Sse8387I>CCTGCAGG)',
@@ -15483,6 +16187,7 @@ def _temp():
         'ovhgseq': 'TGCA',
     }
 rest_dict['Sse8387I'] = _temp()
+
 
 def _temp():
     return {
@@ -15506,6 +16211,7 @@ def _temp():
     }
 rest_dict['Sse8647I'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<Sse9I>AATT)',
@@ -15527,6 +16233,7 @@ def _temp():
         'ovhgseq': 'AATT',
     }
 rest_dict['Sse9I'] = _temp()
+
 
 def _temp():
     return {
@@ -15550,6 +16257,7 @@ def _temp():
     }
 rest_dict['SseBI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<SsiI>CCGC)|(?P<SsiI_as>GCGG)',
@@ -15571,6 +16279,7 @@ def _temp():
         'ovhgseq': 'CG',
     }
 rest_dict['SsiI'] = _temp()
+
 
 def _temp():
     return {
@@ -15594,6 +16303,7 @@ def _temp():
     }
 rest_dict['SspD5I'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<SspDI>GGCGCC)',
@@ -15615,6 +16325,7 @@ def _temp():
         'ovhgseq': 'GCGC',
     }
 rest_dict['SspDI'] = _temp()
+
 
 def _temp():
     return {
@@ -15638,6 +16349,7 @@ def _temp():
     }
 rest_dict['SspI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<SstE37I>CGAAGAC)|(?P<SstE37I_as>GTCTTCG)',
@@ -15659,6 +16371,7 @@ def _temp():
         'ovhgseq': 'NN',
     }
 rest_dict['SstE37I'] = _temp()
+
 
 def _temp():
     return {
@@ -15682,6 +16395,7 @@ def _temp():
     }
 rest_dict['SstI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<Sth132I>CCCG)|(?P<Sth132I_as>CGGG)',
@@ -15703,6 +16417,7 @@ def _temp():
         'ovhgseq': 'NNNN',
     }
 rest_dict['Sth132I'] = _temp()
+
 
 def _temp():
     return {
@@ -15726,6 +16441,7 @@ def _temp():
     }
 rest_dict['Sth302II'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<StrI>CTCGAG)',
@@ -15747,6 +16463,7 @@ def _temp():
         'ovhgseq': 'TCGA',
     }
 rest_dict['StrI'] = _temp()
+
 
 def _temp():
     return {
@@ -15770,6 +16487,7 @@ def _temp():
     }
 rest_dict['StsI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<StuI>AGGCCT)',
@@ -15791,6 +16509,7 @@ def _temp():
         'ovhgseq': '',
     }
 rest_dict['StuI'] = _temp()
+
 
 def _temp():
     return {
@@ -15814,6 +16533,7 @@ def _temp():
     }
 rest_dict['StyD4I'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<StyI>CC[AT][AT]GG)',
@@ -15835,6 +16555,7 @@ def _temp():
         'ovhgseq': 'CWWG',
     }
 rest_dict['StyI'] = _temp()
+
 
 def _temp():
     return {
@@ -15858,6 +16579,7 @@ def _temp():
     }
 rest_dict['SwaI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<TaaI>AC.GT)',
@@ -15879,6 +16601,7 @@ def _temp():
         'ovhgseq': 'N',
     }
 rest_dict['TaaI'] = _temp()
+
 
 def _temp():
     return {
@@ -15902,6 +16625,7 @@ def _temp():
     }
 rest_dict['TaiI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<TaqI>TCGA)',
@@ -15923,6 +16647,7 @@ def _temp():
         'ovhgseq': 'CG',
     }
 rest_dict['TaqI'] = _temp()
+
 
 def _temp():
     return {
@@ -15946,6 +16671,7 @@ def _temp():
     }
 rest_dict['TaqII'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<TasI>AATT)',
@@ -15967,6 +16693,7 @@ def _temp():
         'ovhgseq': 'AATT',
     }
 rest_dict['TasI'] = _temp()
+
 
 def _temp():
     return {
@@ -15990,6 +16717,7 @@ def _temp():
     }
 rest_dict['TatI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<TauI>GC[CG]GC)',
@@ -16011,6 +16739,7 @@ def _temp():
         'ovhgseq': 'CSG',
     }
 rest_dict['TauI'] = _temp()
+
 
 def _temp():
     return {
@@ -16034,6 +16763,7 @@ def _temp():
     }
 rest_dict['TfiI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<Tru1I>TTAA)',
@@ -16055,6 +16785,7 @@ def _temp():
         'ovhgseq': 'TA',
     }
 rest_dict['Tru1I'] = _temp()
+
 
 def _temp():
     return {
@@ -16078,6 +16809,7 @@ def _temp():
     }
 rest_dict['Tru9I'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<TscAI>CA[CG]TG)',
@@ -16099,6 +16831,7 @@ def _temp():
         'ovhgseq': 'NNCASTGNN',
     }
 rest_dict['TscAI'] = _temp()
+
 
 def _temp():
     return {
@@ -16122,6 +16855,7 @@ def _temp():
     }
 rest_dict['TseFI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<TseI>GC[AT]GC)',
@@ -16143,6 +16877,7 @@ def _temp():
         'ovhgseq': 'CWG',
     }
 rest_dict['TseI'] = _temp()
+
 
 def _temp():
     return {
@@ -16166,6 +16901,7 @@ def _temp():
     }
 rest_dict['TsoI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<Tsp45I>GT[CG]AC)',
@@ -16187,6 +16923,7 @@ def _temp():
         'ovhgseq': 'GTSAC',
     }
 rest_dict['Tsp45I'] = _temp()
+
 
 def _temp():
     return {
@@ -16210,6 +16947,7 @@ def _temp():
     }
 rest_dict['Tsp4CI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<TspDTI>ATGAA)|(?P<TspDTI_as>TTCAT)',
@@ -16231,6 +16969,7 @@ def _temp():
         'ovhgseq': 'NN',
     }
 rest_dict['TspDTI'] = _temp()
+
 
 def _temp():
     return {
@@ -16254,6 +16993,7 @@ def _temp():
     }
 rest_dict['TspEI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<TspGWI>ACGGA)|(?P<TspGWI_as>TCCGT)',
@@ -16275,6 +17015,7 @@ def _temp():
         'ovhgseq': 'NN',
     }
 rest_dict['TspGWI'] = _temp()
+
 
 def _temp():
     return {
@@ -16298,6 +17039,7 @@ def _temp():
     }
 rest_dict['TspMI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<TspRI>CA[CG]TG)',
@@ -16319,6 +17061,7 @@ def _temp():
         'ovhgseq': 'NNCASTGNN',
     }
 rest_dict['TspRI'] = _temp()
+
 
 def _temp():
     return {
@@ -16342,6 +17085,7 @@ def _temp():
     }
 rest_dict['TssI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<TstI>CAC......TCC)|(?P<TstI_as>GGA......GTG)',
@@ -16363,6 +17107,7 @@ def _temp():
         'ovhgseq': 'NNNNN',
     }
 rest_dict['TstI'] = _temp()
+
 
 def _temp():
     return {
@@ -16386,6 +17131,7 @@ def _temp():
     }
 rest_dict['TsuI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<Tth111I>GAC...GTC)',
@@ -16407,6 +17153,7 @@ def _temp():
         'ovhgseq': 'N',
     }
 rest_dict['Tth111I'] = _temp()
+
 
 def _temp():
     return {
@@ -16430,6 +17177,7 @@ def _temp():
     }
 rest_dict['Tth111II'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<UbaF11I>TCGTA)|(?P<UbaF11I_as>TACGA)',
@@ -16451,6 +17199,7 @@ def _temp():
         'ovhgseq': None,
     }
 rest_dict['UbaF11I'] = _temp()
+
 
 def _temp():
     return {
@@ -16474,6 +17223,7 @@ def _temp():
     }
 rest_dict['UbaF12I'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<UbaF13I>GAG......CTGG)|(?P<UbaF13I_as>CCAG......CTC)',
@@ -16495,6 +17245,7 @@ def _temp():
         'ovhgseq': None,
     }
 rest_dict['UbaF13I'] = _temp()
+
 
 def _temp():
     return {
@@ -16518,6 +17269,7 @@ def _temp():
     }
 rest_dict['UbaF14I'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<UbaF9I>TAC.....[AG]TGT)|(?P<UbaF9I_as>ACA[CT].....GTA)',
@@ -16539,6 +17291,7 @@ def _temp():
         'ovhgseq': None,
     }
 rest_dict['UbaF9I'] = _temp()
+
 
 def _temp():
     return {
@@ -16562,6 +17315,7 @@ def _temp():
     }
 rest_dict['UbaPI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<UcoMSI>GAGCTC)',
@@ -16583,6 +17337,7 @@ def _temp():
         'ovhgseq': 'NN',
     }
 rest_dict['UcoMSI'] = _temp()
+
 
 def _temp():
     return {
@@ -16606,6 +17361,7 @@ def _temp():
     }
 rest_dict['UnbI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<Van91I>CCA.....TGG)',
@@ -16627,6 +17383,7 @@ def _temp():
         'ovhgseq': 'NNN',
     }
 rest_dict['Van91I'] = _temp()
+
 
 def _temp():
     return {
@@ -16650,6 +17407,7 @@ def _temp():
     }
 rest_dict['Vha464I'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<VneI>GTGCAC)',
@@ -16671,6 +17429,7 @@ def _temp():
         'ovhgseq': 'TGCA',
     }
 rest_dict['VneI'] = _temp()
+
 
 def _temp():
     return {
@@ -16694,6 +17453,7 @@ def _temp():
     }
 rest_dict['VpaK11AI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<VpaK11BI>GG[AT]CC)',
@@ -16715,6 +17475,7 @@ def _temp():
         'ovhgseq': 'GWC',
     }
 rest_dict['VpaK11BI'] = _temp()
+
 
 def _temp():
     return {
@@ -16738,6 +17499,7 @@ def _temp():
     }
 rest_dict['VspI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<WviI>CAC[AG]AG)|(?P<WviI_as>CT[CT]GTG)',
@@ -16759,6 +17521,7 @@ def _temp():
         'ovhgseq': 'NN',
     }
 rest_dict['WviI'] = _temp()
+
 
 def _temp():
     return {
@@ -16782,6 +17545,7 @@ def _temp():
     }
 rest_dict['XagI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<XapI>[AG]AATT[CT])',
@@ -16803,6 +17567,7 @@ def _temp():
         'ovhgseq': 'AATT',
     }
 rest_dict['XapI'] = _temp()
+
 
 def _temp():
     return {
@@ -16826,6 +17591,7 @@ def _temp():
     }
 rest_dict['XbaI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<XceI>[AG]CATG[CT])',
@@ -16847,6 +17613,7 @@ def _temp():
         'ovhgseq': 'CATG',
     }
 rest_dict['XceI'] = _temp()
+
 
 def _temp():
     return {
@@ -16870,6 +17637,7 @@ def _temp():
     }
 rest_dict['XcmI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<XhoI>CTCGAG)',
@@ -16891,6 +17659,7 @@ def _temp():
         'ovhgseq': 'TCGA',
     }
 rest_dict['XhoI'] = _temp()
+
 
 def _temp():
     return {
@@ -16914,6 +17683,7 @@ def _temp():
     }
 rest_dict['XhoII'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<XmaI>CCCGGG)',
@@ -16935,6 +17705,7 @@ def _temp():
         'ovhgseq': 'CCGG',
     }
 rest_dict['XmaI'] = _temp()
+
 
 def _temp():
     return {
@@ -16958,6 +17729,7 @@ def _temp():
     }
 rest_dict['XmaIII'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<XmaJI>CCTAGG)',
@@ -16979,6 +17751,7 @@ def _temp():
         'ovhgseq': 'CTAG',
     }
 rest_dict['XmaJI'] = _temp()
+
 
 def _temp():
     return {
@@ -17002,6 +17775,7 @@ def _temp():
     }
 rest_dict['XmiI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<XmnI>GAA....TTC)',
@@ -17023,6 +17797,7 @@ def _temp():
         'ovhgseq': '',
     }
 rest_dict['XmnI'] = _temp()
+
 
 def _temp():
     return {
@@ -17046,6 +17821,7 @@ def _temp():
     }
 rest_dict['XspI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<YkrI>C)|(?P<YkrI_as>G)',
@@ -17067,6 +17843,7 @@ def _temp():
         'ovhgseq': 'N',
     }
 rest_dict['YkrI'] = _temp()
+
 
 def _temp():
     return {
@@ -17090,6 +17867,7 @@ def _temp():
     }
 rest_dict['ZraI'] = _temp()
 
+
 def _temp():
     return {
         'compsite': '(?P<ZrmI>AGTACT)',
@@ -17111,6 +17889,7 @@ def _temp():
         'ovhgseq': '',
     }
 rest_dict['ZrmI'] = _temp()
+
 
 def _temp():
     return {
@@ -17135,12 +17914,15 @@ def _temp():
 rest_dict['Zsp2I'] = _temp()
 
 suppliers = {}
+
+
 def _temp():
     return (
         'Life Technologies',
         ['MluI', 'SacI', 'SalI', 'BshTI', 'NcoI', 'ClaI', 'DraI', 'PvuI', 'DpnI', 'TaqI', 'KpnI', 'NdeI', 'HapII', 'BglII', 'SacII', 'BmeT110I', 'MseI', 'NruI', 'HincII', 'XbaI', 'MboI', 'AluI', 'SmaI', 'NheI', 'StuI', 'SphI', 'PvuII', 'SpeI', 'HinfI', 'EcoRV', 'EcoRI', 'XhoI', 'PstI', 'HaeIII', 'AccI', 'SspI', 'ApaI', 'EcoT22I', 'ScaI', 'BalI', 'AfaI', 'NotI', 'HindIII', 'BamHI', 'HpaI', 'HhaI'],
     )
 suppliers['B'] = _temp()
+
 
 def _temp():
     return (
@@ -17149,12 +17931,14 @@ def _temp():
     )
 suppliers['C'] = _temp()
 
+
 def _temp():
     return (
         'Agilent Technologies',
         ['DpnI'],
     )
 suppliers['E'] = _temp()
+
 
 def _temp():
     return (
@@ -17163,12 +17947,14 @@ def _temp():
     )
 suppliers['F'] = _temp()
 
+
 def _temp():
     return (
         'SibEnzyme Ltd.',
         ['AsuNHI', 'AgsI', 'BstSFI', 'MluI', 'CciI', 'BstHHI', 'HpaII', 'AhlI', 'KroI', 'PspN4I', 'BglI', 'SalI', 'PspEI', 'MspI', 'VneI', 'BstH2I', 'BisI', 'BmtI', 'PspXI', 'AsiGI', 'CciNI', 'Sfr274I', 'SmiI', 'Ksp22I', 'BssT1I', 'MspA1I', 'Bsp19I', 'Bse1I', 'AspS9I', 'AbsI', 'FauNDI', 'BstMWI', 'AclWI', 'DraI', 'Bst2UI', 'AluBI', 'PsrI', 'BstACI', 'BstXI', 'BstDEI', 'GluI', 'AcoI', 'XmaI', 'BstF5I', 'BstENI', 'BssECI', 'FalI', 'EgeI', 'Ama87I', 'BstDSI', 'BstV2I', 'AjnI', 'AspLEI', 'PalAI', 'Zsp2I', 'DseDI', 'BstAUI', 'Bpu14I', 'FaeI', 'TaqI', 'KpnI', 'BstSNI', 'AclI', 'MboII', 'BglII', 'PspPPI', 'SetI', 'AcsI', 'BstNSI', 'BseX3I', 'RsaNI', 'Bpu10I', 'Rsr2I', 'Acc65I', 'Bst2BI', 'NruI', 'Ple19I', 'TseFI', 'SmiMI', 'PciI', 'MalI', 'Bse118I', 'BsuI', 'BsePI', 'BstMCI', 'Bme18I', 'RsaI', 'BssNAI', 'BstV1I', 'Bsp13I', 'Bst4CI', 'MabI', 'AsuHPI', 'BtrI', 'XbaI', 'ArsI', 'BstC8I', 'Psp124BI', 'GlaI', 'HgaI', 'BstX2I', 'AluI', 'ZraI', 'Bse21I', 'Sfr303I', 'BstSCI', 'Bse3DI', 'Bso31I', 'AccB7I', 'BstKTI', 'AccBSI', 'SmaI', 'BspACI', 'AspA2I', 'Bsp1720I', 'Bsc4I', 'SphI', 'Mly113I', 'FriOI', 'PvuII', 'MfeI', 'ErhI', 'FokI', 'AsuC2I', 'GsaI', 'HinfI', 'BsuRI', 'PpsI', 'BstPAI', 'HspAI', 'RgaI', 'Fsp4HI', 'Kzo9I', 'Acc36I', 'DraIII', 'Acc16I', 'MspR9I', 'EcoRV', 'PsiI', 'AatII', 'MroXI', 'EcoRI', 'ZrmI', 'BstFNI', 'BslFI', 'Bsa29I', 'MnlI', 'SbfI', 'PstI', 'Bse8I', 'FauI', 'VspI', 'PciSI', 'SfiI', 'Bst6I', 'PspLI', 'BspFNI', 'Msp20I', 'Bbv12I', 'HaeIII', 'BstAPI', 'SspI', 'AfeI', 'Tth111I', 'BstMBI', 'PspOMI', 'BstMAI', 'BstSLI', 'ApaI', 'BlsI', 'FblI', 'BmuI', 'PcsI', 'BarI', 'PctI', 'FaiI', 'BpmI', 'PstNI', 'AcuI', 'AccB1I', 'PceI', 'HpySE526I', 'Sse9I', 'Tru9I', 'MhlI', 'BstBAI', 'DriI', 'MroNI', 'HindIII', 'EcoICRI', 'FatI', 'BamHI', 'Psp6I', 'BstAFI', 'SfaNI', 'RigI', 'HpaI', 'PspCI', 'HindII', 'AsiSI'],
     )
 suppliers['I'] = _temp()
+
 
 def _temp():
     return (
@@ -17177,12 +17963,14 @@ def _temp():
     )
 suppliers['J'] = _temp()
 
+
 def _temp():
     return (
         'Takara Bio Inc.',
         ['BssHII', 'MluI', 'BspT107I', 'SacI', 'XspI', 'BglI', 'SalI', 'MspI', 'BstPI', 'BanII', 'PmaCI', 'SnaBI', 'SmiI', 'BmgT120I', 'NcoI', 'ClaI', 'DraI', 'BstXI', 'PshAI', 'PvuI', 'DpnI', 'Van91I', 'Bst1107I', 'TaqI', 'EaeI', 'Eco52I', 'BspT104I', 'KpnI', 'HaeII', 'EcoO65I', 'NdeI', 'HapII', 'MboII', 'AflII', 'EcoT14I', 'BglII', 'NaeI', 'AccII', 'SacII', 'BmeT110I', 'Aor51HI', 'Bsp1407I', 'NruI', 'Sse8387I', 'CpoI', 'HincII', 'XbaI', 'Sau3AI', 'Cfr10I', 'MboI', 'AluI', 'BcnI', 'SmaI', 'NheI', 'StuI', 'SphI', 'PvuII', 'MflI', 'FokI', 'Hin1I', 'ApaLI', 'SpeI', 'HinfI', 'Eam1105I', 'Psp1406I', 'EcoO109I', 'EcoRV', 'AatII', 'EcoRI', 'XhoI', 'VpaK11BI', 'Bsp1286I', 'AccIII', 'Bpu1102I', 'MunI', 'Aor13HI', 'NsbI', 'PstI', 'SfiI', 'BlnI', 'HaeIII', 'BciT130I', 'AccI', 'SspI', 'Tth111I', 'FbaI', 'Eco81I', 'ApaI', 'PshBI', 'EcoT22I', 'ScaI', 'BalI', 'DdeI', 'AfaI', 'NotI', 'HindIII', 'BamHI', 'HpaI', 'HhaI'],
     )
 suppliers['K'] = _temp()
+
 
 def _temp():
     return (
@@ -17191,12 +17979,14 @@ def _temp():
     )
 suppliers['M'] = _temp()
 
+
 def _temp():
     return (
         'New England Biolabs',
         ['BssHII', 'EciI', 'BsrFI', 'DpnII', 'AlwI', 'MluI', 'NgoMIV', 'HpaII', 'TspMI', 'BclI', 'MlyI', 'BsaWI', 'SacI', 'MwoI', 'BfaI', 'DrdI', 'BmgBI', 'BglI', 'SalI', 'MspI', 'BanII', 'MslI', 'BmtI', 'PspXI', 'BsaBI', 'SnaBI', 'BstEII', 'TspRI', 'NcoI', 'MspA1I', 'BtgI', 'ClaI', 'BsaI', 'BsrBI', 'AlwNI', 'XmnI', 'DraI', 'Hpy166II', 'Hpy99I', 'StyD4I', 'BstXI', 'PspGI', 'BsiHKAI', 'BsoBI', 'BlpI', 'PshAI', 'XmaI', 'BtsIMutI', 'SwaI', 'AvaI', 'PvuI', 'DpnI', 'CspCI', 'PflFI', 'BpuEI', 'TaqI', 'EaeI', 'SexAI', 'BsrI', 'AseI', 'KpnI', 'Sau96I', 'BstNI', 'HaeII', 'AclI', 'ApoI', 'HpyCH4IV', 'NdeI', 'MboII', 'AflII', 'TseI', 'BglII', 'SmlI', 'NaeI', 'Bpu10I', 'SacII', 'Acc65I', 'BspQI', 'MseI', 'AvrII', 'NruI', 'BaeI', 'BtsCI', 'BssKI', 'PciI', 'BcgI', 'BsaHI', 'SfoI', 'MspJI', 'NarI', 'Bsu36I', 'RsaI', 'HincII', 'AflIII', 'BspCNI', 'BsgI', 'XbaI', 'Sau3AI', 'BfuAI', 'TfiI', 'PmlI', 'BbvI', 'MboI', 'HgaI', 'BanI', 'AluI', 'BaeGI', 'ZraI', 'Hpy188III', 'RsrII', 'BspMI', 'MluCI', 'AciI', 'ScrFI', 'MscI', 'BseYI', 'CviQI', 'BmrI', 'Hpy188I', 'SmaI', 'PleI', 'EcoNI', 'NheI', 'BccI', 'FspEI', 'BsiEI', 'StuI', 'BcoDI', 'BsiWI', 'SphI', 'HpyAV', 'NciI', 'FspI', 'CviAII', 'PvuII', 'Eco53kI', 'MfeI', 'BsrDI', 'BssSI', 'FokI', 'ApaLI', 'ApeKI', 'AbaSI', 'SpeI', 'HinfI', 'BciVI', 'HinP1I', 'BceAI', 'HphI', 'BsmAI', 'DraIII', 'EcoO109I', 'BtsI', 'SapI', 'PpuMI', 'EcoRV', 'PsiI', 'AatII', 'EcoRI', 'BsmFI', 'XhoI', 'Bsp1286I', 'PluTI', 'MnlI', 'EagI', 'AscI', 'AhdI', 'NlaIII', 'SbfI', 'PstI', 'FauI', 'SfcI', 'BspEI', 'BsmI', 'SfiI', 'BstUI', 'BstZ17I', 'KasI', 'HaeIII', 'BsmBI', 'XcmI', 'LpnPI', 'BstAPI', 'AccI', 'SspI', 'HpyCH4III', 'BsrGI', 'AfeI', 'Tth111I', 'SgrAI', 'NsiI', 'BspHI', 'BstYI', 'PspOMI', 'PmeI', 'FseI', 'ApaI', 'BseRI', 'MmeI', 'ScaI', 'AgeI', 'BtgZI', 'BpmI', 'EarI', 'CviKI_1', 'AcuI', 'BfuCI', 'NspI', 'PacI', 'BstBI', 'HpyCH4V', 'NlaIV', 'BbsI', 'DdeI', 'NotI', 'BsaXI', 'HindIII', 'FatI', 'BamHI', 'BslI', 'AvaII', 'BspDI', 'PaeR7I', 'SfaNI', 'HpaI', 'BsaJI', 'BbvCI', 'Fnu4HI', 'Cac8I', 'Tsp45I', 'StyI', 'PflMI', 'HhaI', 'AsiSI', 'AleI', 'NmeAIII', 'BsaAI'],
     )
 suppliers['N'] = _temp()
+
 
 def _temp():
     return (
@@ -17205,12 +17995,14 @@ def _temp():
     )
 suppliers['O'] = _temp()
 
+
 def _temp():
     return (
         'Molecular Biology Resources - CHIMERx',
         ['BssHII', 'MluI', 'HpaII', 'SacI', 'BglI', 'SalI', 'MspI', 'NcoI', 'ClaI', 'CviJI', 'DraI', 'BstXI', 'AcvI', 'AvaI', 'PvuI', 'DpnI', 'TaqI', 'KpnI', 'NdeI', 'PinAI', 'MboII', 'BglII', 'SacII', 'NruI', 'NarI', 'TaqII', 'RsaI', 'HincII', 'XbaI', 'TspGWI', 'MboI', 'AluI', 'RsrII', 'SmaI', 'NheI', 'StuI', 'SphI', 'PvuII', 'SpeI', 'HinfI', 'BsiHKCI', 'EcoRV', 'EcoRI', 'XhoI', 'MnlI', 'PstI', 'SfiI', 'HaeIII', 'AccI', 'SspI', 'Tth111I', 'NsiI', 'ApaI', 'ScaI', 'TspDTI', 'BalI', 'DdeI', 'NotI', 'HindIII', 'BamHI', 'HpaI', 'HhaI'],
     )
 suppliers['Q'] = _temp()
+
 
 def _temp():
     return (
@@ -17219,12 +18011,14 @@ def _temp():
     )
 suppliers['R'] = _temp()
 
+
 def _temp():
     return (
         'Sigma Chemical Corporation',
         ['BssHII', 'HpaII', 'BclI', 'SacI', 'SalI', 'MspI', 'BstEII', 'NcoI', 'ClaI', 'DraI', 'PvuI', 'DpnI', 'TaqI', 'KpnI', 'NdeI', 'BglII', 'MvaI', 'RsaI', 'XbaI', 'Sau3AI', 'AluI', 'CfoI', 'SmaI', 'NheI', 'SphI', 'PvuII', 'SpeI', 'EcoRV', 'EcoRI', 'XhoI', 'EclXI', 'PstI', 'BsmI', 'SfiI', 'BlnI', 'HaeIII', 'AccI', 'SspI', 'NsiI', 'ApaI', 'ScaI', 'KspI', 'DdeI', 'NotI', 'HindIII', 'BamHI', 'HpaI'],
     )
 suppliers['S'] = _temp()
+
 
 def _temp():
     return (
@@ -17233,6 +18027,7 @@ def _temp():
     )
 suppliers['U'] = _temp()
 
+
 def _temp():
     return (
         'Vivantis Technologies',
@@ -17240,12 +18035,14 @@ def _temp():
     )
 suppliers['V'] = _temp()
 
+
 def _temp():
     return (
         'EURx Ltd.',
         ['BssHII', 'MluI', 'HpaII', 'SacI', 'BglI', 'SalI', 'MspI', 'BanII', 'NcoI', 'ClaI', 'CviJI', 'DraI', 'BstXI', 'AcvI', 'AvaI', 'PvuI', 'DpnI', 'TaqI', 'KpnI', 'NdeI', 'PinAI', 'MboII', 'BglII', 'SacII', 'NruI', 'NarI', 'TaqII', 'RsaI', 'HincII', 'XbaI', 'TspGWI', 'MboI', 'AluI', 'RsrII', 'SmaI', 'NheI', 'StuI', 'SphI', 'PvuII', 'FokI', 'SpeI', 'HinfI', 'BsiHKCI', 'EcoRV', 'EcoRI', 'XhoI', 'MnlI', 'PstI', 'SfiI', 'HaeIII', 'AccI', 'SspI', 'Tth111I', 'NsiI', 'ApaI', 'ScaI', 'TspDTI', 'BalI', 'DdeI', 'NotI', 'HindIII', 'BamHI', 'AvaII', 'HpaI', 'HhaI'],
     )
 suppliers['X'] = _temp()
+
 
 def _temp():
     return (
@@ -17255,12 +18052,15 @@ def _temp():
 suppliers['Y'] = _temp()
 
 typedict = {}
+
+
 def _temp():
     return (
         ('Palindromic', 'TwoCuts', 'Ov5', 'Ambiguous', 'Meth_Dep', 'Not_available', 'AbstractCut', 'RestrictionType'),
         ['NmeDI'],
     )
 typedict['type130'] = _temp()
+
 
 def _temp():
     return (
@@ -17269,12 +18069,14 @@ def _temp():
     )
 typedict['type132'] = _temp()
 
+
 def _temp():
     return (
         ('Palindromic', 'TwoCuts', 'Ov3', 'Ambiguous', 'Meth_Dep', 'Not_available', 'AbstractCut', 'RestrictionType'),
         ['RdeGBIII'],
     )
 typedict['type142'] = _temp()
+
 
 def _temp():
     return (
@@ -17283,12 +18085,14 @@ def _temp():
     )
 typedict['type143'] = _temp()
 
+
 def _temp():
     return (
         ('Palindromic', 'TwoCuts', 'Ov3', 'Ambiguous', 'Meth_Undep', 'Not_available', 'AbstractCut', 'RestrictionType'),
         ['BdaI'],
     )
 typedict['type144'] = _temp()
+
 
 def _temp():
     return (
@@ -17297,12 +18101,14 @@ def _temp():
     )
 typedict['type146'] = _temp()
 
+
 def _temp():
     return (
         ('NonPalindromic', 'NoCut', 'Unknown', 'NotDefined', 'Meth_Undep', 'Not_available', 'AbstractCut', 'RestrictionType'),
         ['UbaF14I', 'CjeP659IV', 'UbaPI', 'CjuII', 'AlwFI', 'BspGI', 'Pfl1108I', 'UbaF13I', 'RlaI', 'PenI', 'UbaF12I', 'BspNCI', 'TsuI', 'UbaF9I', 'FinI', 'UbaF11I', 'BmgI'],
     )
 typedict['type148'] = _temp()
+
 
 def _temp():
     return (
@@ -17311,12 +18117,14 @@ def _temp():
     )
 typedict['type2'] = _temp()
 
+
 def _temp():
     return (
         ('NonPalindromic', 'OneCut', 'Blunt', 'Defined', 'Meth_Dep', 'Commercially_available', 'AbstractCut', 'RestrictionType'),
         ['MlyI', 'BsrBI'],
     )
 typedict['type209'] = _temp()
+
 
 def _temp():
     return (
@@ -17325,12 +18133,14 @@ def _temp():
     )
 typedict['type211'] = _temp()
 
+
 def _temp():
     return (
         ('NonPalindromic', 'OneCut', 'Blunt', 'Defined', 'Meth_Undep', 'Not_available', 'AbstractCut', 'RestrictionType'),
         ['CdiI', 'SspD5I'],
     )
 typedict['type212'] = _temp()
+
 
 def _temp():
     return (
@@ -17339,12 +18149,14 @@ def _temp():
     )
 typedict['type221'] = _temp()
 
+
 def _temp():
     return (
         ('NonPalindromic', 'OneCut', 'Ov5', 'Defined', 'Meth_Undep', 'Commercially_available', 'AbstractCut', 'RestrictionType'),
         ['SsiI', 'Bst2BI', 'BseYI', 'BauI'],
     )
 typedict['type223'] = _temp()
+
 
 def _temp():
     return (
@@ -17353,12 +18165,14 @@ def _temp():
     )
 typedict['type224'] = _temp()
 
+
 def _temp():
     return (
         ('NonPalindromic', 'OneCut', 'Ov5', 'Ambiguous', 'Meth_Dep', 'Commercially_available', 'AbstractCut', 'RestrictionType'),
         ['AlwI', 'Esp3I', 'Bpu10I', 'Lsp1109I', 'BfuAI', 'BbvI', 'HgaI', 'BspMI', 'BccI', 'FokI', 'Alw26I', 'Eco31I', 'BceAI', 'BsmAI', 'BsmFI', 'FauI', 'BsmBI', 'BtgZI'],
     )
 typedict['type225'] = _temp()
+
 
 def _temp():
     return (
@@ -17367,12 +18181,14 @@ def _temp():
     )
 typedict['type226'] = _temp()
 
+
 def _temp():
     return (
         ('NonPalindromic', 'OneCut', 'Ov5', 'Ambiguous', 'Meth_Undep', 'Commercially_available', 'AbstractCut', 'RestrictionType'),
         ['CseI', 'LweI', 'BsaI', 'AclWI', 'BseXI', 'BstV2I', 'AarI', 'BveI', 'BmsI', 'BspQI', 'MspJI', 'BstV1I', 'Bso31I', 'PleI', 'FaqI', 'FspEI', 'BcoDI', 'PpsI', 'Eam1104I', 'Acc36I', 'SapI', 'BspPI', 'BslFI', 'LguI', 'PciSI', 'Bst6I', 'BpiI', 'LpnPI', 'BstMAI', 'EarI', 'BbsI', 'SfaNI'],
     )
 typedict['type227'] = _temp()
+
 
 def _temp():
     return (
@@ -17381,12 +18197,14 @@ def _temp():
     )
 typedict['type228'] = _temp()
 
+
 def _temp():
     return (
         ('NonPalindromic', 'OneCut', 'Ov3', 'Defined', 'Meth_Undep', 'Commercially_available', 'AbstractCut', 'RestrictionType'),
         ['GsaI'],
     )
 typedict['type235'] = _temp()
+
 
 def _temp():
     return (
@@ -17395,12 +18213,14 @@ def _temp():
     )
 typedict['type237'] = _temp()
 
+
 def _temp():
     return (
         ('NonPalindromic', 'OneCut', 'Ov3', 'Ambiguous', 'Meth_Dep', 'Not_available', 'AbstractCut', 'RestrictionType'),
         ['RpaBI', 'DraRI', 'SdeAI', 'RceI', 'WviI', 'BfiI', 'CstMI', 'PspOMII', 'CchII', 'PlaDI', 'SstE37I', 'RpaB5I', 'MaqI', 'CdpI', 'CchIII', 'Tth111II', 'CjeNIII', 'NlaCI', 'AquII', 'AquIV', 'ApyPI', 'RpaI', 'PspPRI', 'AquIII', 'RdeGBII'],
     )
 typedict['type238'] = _temp()
+
 
 def _temp():
     return (
@@ -17409,12 +18229,14 @@ def _temp():
     )
 typedict['type239'] = _temp()
 
+
 def _temp():
     return (
         ('NonPalindromic', 'OneCut', 'Ov3', 'Ambiguous', 'Meth_Undep', 'Not_available', 'AbstractCut', 'RestrictionType'),
         ['BmeDI', 'Bce83I', 'Hin4II', 'TsoI', 'Eco57MI', 'BsbI', 'YkrI', 'RleAI'],
     )
 typedict['type240'] = _temp()
+
 
 def _temp():
     return (
@@ -17423,12 +18245,14 @@ def _temp():
     )
 typedict['type274'] = _temp()
 
+
 def _temp():
     return (
         ('NonPalindromic', 'TwoCuts', 'Ov3', 'Ambiguous', 'Meth_Dep', 'Commercially_available', 'AbstractCut', 'RestrictionType'),
         ['CspCI', 'AloI', 'BcgI'],
     )
 typedict['type285'] = _temp()
+
 
 def _temp():
     return (
@@ -17437,12 +18261,14 @@ def _temp():
     )
 typedict['type286'] = _temp()
 
+
 def _temp():
     return (
         ('NonPalindromic', 'TwoCuts', 'Ov3', 'Ambiguous', 'Meth_Undep', 'Commercially_available', 'AbstractCut', 'RestrictionType'),
         ['PsrI', 'AjuI', 'BaeI', 'ArsI', 'BarI', 'BsaXI'],
     )
 typedict['type287'] = _temp()
+
 
 def _temp():
     return (
@@ -17451,12 +18277,14 @@ def _temp():
     )
 typedict['type288'] = _temp()
 
+
 def _temp():
     return (
         ('Palindromic', 'NoCut', 'Unknown', 'NotDefined', 'Meth_Undep', 'Not_available', 'AbstractCut', 'RestrictionType'),
         ['CjuI', 'AvaIII', 'TssI', 'SnaI', 'HgiEII'],
     )
 typedict['type4'] = _temp()
+
 
 def _temp():
     return (
@@ -17465,12 +18293,14 @@ def _temp():
     )
 typedict['type65'] = _temp()
 
+
 def _temp():
     return (
         ('Palindromic', 'OneCut', 'Blunt', 'Defined', 'Meth_Dep', 'Not_available', 'AbstractCut', 'RestrictionType'),
         ['FnuDII', 'EsaBC3I', 'CviRI'],
     )
 typedict['type66'] = _temp()
+
 
 def _temp():
     return (
@@ -17479,12 +18309,14 @@ def _temp():
     )
 typedict['type67'] = _temp()
 
+
 def _temp():
     return (
         ('Palindromic', 'OneCut', 'Blunt', 'Defined', 'Meth_Undep', 'Not_available', 'AbstractCut', 'RestrictionType'),
         ['NspBII', 'HaeI', 'SciI', 'LpnI', 'SrfI', 'AhaIII', 'Sth302II', 'MstI'],
     )
 typedict['type68'] = _temp()
+
 
 def _temp():
     return (
@@ -17493,12 +18325,14 @@ def _temp():
     )
 typedict['type77'] = _temp()
 
+
 def _temp():
     return (
         ('Palindromic', 'OneCut', 'Ov5', 'Defined', 'Meth_Dep', 'Not_available', 'AbstractCut', 'RestrictionType'),
         ['XmaIII', 'CfrI'],
     )
 typedict['type78'] = _temp()
+
 
 def _temp():
     return (
@@ -17507,12 +18341,14 @@ def _temp():
     )
 typedict['type79'] = _temp()
 
+
 def _temp():
     return (
         ('Palindromic', 'OneCut', 'Ov5', 'Defined', 'Meth_Undep', 'Not_available', 'AbstractCut', 'RestrictionType'),
         ['SelI', 'BspLU11I', 'TspEI', 'Asi256I', 'Ppu10I', 'Sse232I', 'BetI', 'SplI', 'AoxI', 'BspMII'],
     )
 typedict['type80'] = _temp()
+
 
 def _temp():
     return (
@@ -17521,12 +18357,14 @@ def _temp():
     )
 typedict['type81'] = _temp()
 
+
 def _temp():
     return (
         ('Palindromic', 'OneCut', 'Ov5', 'Ambiguous', 'Meth_Dep', 'Not_available', 'AbstractCut', 'RestrictionType'),
         ['HgiCI', 'EcoHI'],
     )
 typedict['type82'] = _temp()
+
 
 def _temp():
     return (
@@ -17535,12 +18373,14 @@ def _temp():
     )
 typedict['type83'] = _temp()
 
+
 def _temp():
     return (
         ('Palindromic', 'OneCut', 'Ov5', 'Ambiguous', 'Meth_Undep', 'Not_available', 'AbstractCut', 'RestrictionType'),
         ['SanDI', 'DsaI', 'DraII', 'SauI', 'UnbI', 'VpaK11AI', 'SfeI', 'CauII', 'Hpy178III', 'AsuI', 'SecI', 'EspI', 'Sse8647I'],
     )
 typedict['type84'] = _temp()
+
 
 def _temp():
     return (
@@ -17549,12 +18389,14 @@ def _temp():
     )
 typedict['type89'] = _temp()
 
+
 def _temp():
     return (
         ('Palindromic', 'OneCut', 'Ov3', 'Defined', 'Meth_Dep', 'Not_available', 'AbstractCut', 'RestrictionType'),
         ['PabI', 'McaTI'],
     )
 typedict['type90'] = _temp()
+
 
 def _temp():
     return (
@@ -17563,12 +18405,14 @@ def _temp():
     )
 typedict['type91'] = _temp()
 
+
 def _temp():
     return (
         ('Palindromic', 'OneCut', 'Ov3', 'Defined', 'Meth_Undep', 'Not_available', 'AbstractCut', 'RestrictionType'),
         ['ChaI'],
     )
 typedict['type92'] = _temp()
+
 
 def _temp():
     return (
@@ -17577,6 +18421,7 @@ def _temp():
     )
 typedict['type93'] = _temp()
 
+
 def _temp():
     return (
         ('Palindromic', 'OneCut', 'Ov3', 'Ambiguous', 'Meth_Dep', 'Not_available', 'AbstractCut', 'RestrictionType'),
@@ -17584,12 +18429,14 @@ def _temp():
     )
 typedict['type94'] = _temp()
 
+
 def _temp():
     return (
         ('Palindromic', 'OneCut', 'Ov3', 'Ambiguous', 'Meth_Undep', 'Commercially_available', 'AbstractCut', 'RestrictionType'),
         ['AgsI', 'DrdI', 'TscAI', 'BstMWI', 'Eco24I', 'AlwNI', 'BseSI', 'AdeI', 'Van91I', 'DseDI', 'SetI', 'BmeRI', 'TaaI', 'BstMCI', 'HpyF10VI', 'Bst4CI', 'SduI', 'Alw21I', 'AccB7I', 'BasI', 'BsiEI', 'BseLI', 'FriOI', 'AasI', 'Eam1105I', 'TauI', 'AfiI', 'CaiI', 'Bbv12I', 'BstAPI', 'HpyCH4III', 'BstSLI', 'BlsI', 'PcsI', 'PstNI', 'MhlI', 'DriI', 'Bsh1285I', 'PflMI'],
     )
 typedict['type95'] = _temp()
+
 
 def _temp():
     return (
@@ -17599,4 +18446,3 @@ def _temp():
 typedict['type96'] = _temp()
 
 del _temp
-

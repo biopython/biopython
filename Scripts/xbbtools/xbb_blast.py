@@ -12,9 +12,9 @@ import sys
 from threading import *
 
 try:
-    from Tkinter import * # Python 2
+    from Tkinter import *  # Python 2
 except ImportError:
-    from tkinter import * # Python 3
+    from tkinter import *  # Python 3
 
 import Pmw
 sys.path.insert(0, '.')
@@ -22,8 +22,10 @@ sys.path.insert(0, '.')
 from xbb_utils import NotePad
 import xbb_blastbg
 
+__docformat__ = "restructuredtext en"
 
-class BlastIt:
+
+class BlastIt(object):
     def __init__(self, seq, parent=None):
         self.seq = seq
         self.parent = parent
@@ -115,7 +117,7 @@ class BlastIt:
         self.Update()
 
         print(self.command)
-        self.pipe = posix.popen(self.command)
+        self.pipe = os.popen(self.command)
         while True:
             try:
                 char = self.pipe.read(1)
@@ -150,7 +152,7 @@ class BlastIt:
 
         try:
             self.pipe.close()
-            del(pipe)
+            del(self.pipe)
         except:
             pass
         self.notepad.destroy()

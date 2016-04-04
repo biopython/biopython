@@ -20,12 +20,12 @@ class ClaTests(unittest.TestCase):
 
     def testParse(self):
         """Test if all records in a CLA file are being read"""
-        f=open(self.filename)
+        f = open(self.filename)
         try:
             count = 0
             records = Cla.parse(f)
             for record in records:
-                count +=1
+                count += 1
             self.assertEqual(count, 14)
         finally:
             f.close()
@@ -41,7 +41,7 @@ class ClaTests(unittest.TestCase):
                 # that the list of classification hierarchy key-value pairs is
                 # unordered, therefore we need only check that they are all
                 # there, NOT that they are in the same order.
-                #End of line is platform dependent. Strip it off
+                # End of line is platform dependent. Strip it off
                 expected_hierarchy = line.rstrip().split('\t')[5].split(',')
                 expected_hierarchy = dict(pair.split('=') for pair
                                           in expected_hierarchy)
@@ -70,13 +70,13 @@ class ClaTests(unittest.TestCase):
         self.assertEqual(record.residues.fragments, (('T', '', ''), ('U', '91', '106')))
         self.assertEqual(record.sccs, 'b.1.2.1')
         self.assertEqual(record.sunid, 21953)
-        self.assertEqual(record.hierarchy, {'cl' : 48724,
-                                            'cf' : 48725,
-                                            'sf' : 49265,
-                                            'fa' : 49266,
-                                            'dm' : 49267,
-                                            'sp' : 49268,
-                                            'px' : 21953})
+        self.assertEqual(record.hierarchy, {'cl': 48724,
+                                            'cf': 48725,
+                                            'sf': 49265,
+                                            'fa': 49266,
+                                            'dm': 49267,
+                                            'sp': 49268,
+                                            'px': 21953})
 
     def testIndex(self):
         """Test CLA file indexing"""
@@ -89,6 +89,6 @@ class ClaTests(unittest.TestCase):
         self.assertEqual(rec.sunid, 14996)
 
 
-if __name__=='__main__':
-    runner = unittest.TextTestRunner(verbosity = 2)
+if __name__ == '__main__':
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

@@ -41,11 +41,12 @@ from Bio.PDB.PDBExceptions import PDBException
 from Bio.PDB.PDBParser import PDBParser
 from Bio.PDB.Polypeptide import PPBuilder
 
+__docformat__ = "restructuredtext en"
 
 # fragment file (lib_SIZE_z_LENGTH.txt)
 # SIZE=number of fragments
 # LENGTH=length of fragment (4,5,6,7)
-_FRAGMENT_FILE="lib_%s_z_%s.txt"
+_FRAGMENT_FILE = "lib_%s_z_%s.txt"
 
 
 def _read_fragments(size, length, dir="."):
@@ -63,22 +64,22 @@ def _read_fragments(size, length, dir="."):
     @param dir: directory where the fragment spec files can be found
     @type dir: string
     """
-    filename=(dir+"/"+_FRAGMENT_FILE) % (size, length)
+    filename = (dir + "/" + _FRAGMENT_FILE) % (size, length)
     with open(filename, "r") as fp:
-        flist=[]
+        flist = []
         # ID of fragment=rank in spec file
-        fid=0
+        fid = 0
         for l in fp.readlines():
                     # skip comment and blank lines
-            if l[0]=="*" or l[0]=="\n":
+            if l[0] == "*" or l[0] == "\n":
                 continue
-            sl=l.split()
-            if sl[1]=="------":
+            sl = l.split()
+            if sl[1] == "------":
                 # Start of fragment definition
-                f=Fragment(length, fid)
+                f = Fragment(length, fid)
                 flist.append(f)
                 # increase fragment id (rank)
-                fid+=1
+                fid += 1
                 continue
             # Add CA coord to Fragment
             coord = numpy.array([float(x) for x in sl[0:3]])
@@ -100,13 +101,13 @@ class Fragment(object):
         @type fid: int
         """
         # nr of residues in fragment
-        self.length=length
+        self.length = length
         # nr of residues added
-        self.counter=0
-        self.resname_list=[]
+        self.counter = 0
+        self.resname_list = []
         # CA coordinate matrix
-        self.coords_ca=numpy.zeros((length, 3), "d")
-        self.fid=fid
+        self.coords_ca = numpy.zeros((length, 3), "d")
+        self.fid = fid
 
     def get_resname_list(self):
         """
@@ -137,11 +138,11 @@ class Fragment(object):
         @param ca_coord: the c-alpha coorinates of the residues
         @type ca_coord: Numeric array with length 3
         """
-        if self.counter>=self.length:
+        if self.counter >= self.length:
             raise PDBException("Fragment boundary exceeded.")
         self.resname_list.append(resname)
-        self.coords_ca[self.counter]=ca_coord
-        self.counter=self.counter+1
+        self.coords_ca[self.counter] = ca_coord
+        self.counter = self.counter + 1
 
     def __len__(self):
         """
@@ -160,7 +161,7 @@ class Fragment(object):
         @return: rmsd between fragments
         @rtype: float
         """
-        sup=SVDSuperimposer()
+        sup = SVDSuperimposer()
         sup.set(self.coords_ca, other.coords_ca)
         sup.run()
         return sup.get_rms()
@@ -183,19 +184,19 @@ def _make_fragment_list(pp, length):
     @param length: fragment length
     @type length: int
     """
-    frag_list=[]
-    for i in range(0, len(pp)-length+1):
-        f=Fragment(length, -1)
+    frag_list = []
+    for i in range(0, len(pp) - length + 1):
+        f = Fragment(length, -1)
         for j in range(0, length):
-            residue=pp[i+j]
-            resname=residue.get_resname()
+            residue = pp[i + j]
+            resname = residue.get_resname()
             if residue.has_id("CA"):
-                ca=residue["CA"]
+                ca = residue["CA"]
             else:
                 raise PDBException("CHAINBREAK")
             if ca.is_disordered():
                 raise PDBException("CHAINBREAK")
-            ca_coord=ca.get_coord()
+            ca_coord = ca.get_coord()
             f.add_residue(resname, ca_coord)
         frag_list.append(f)
     return frag_list
@@ -214,15 +215,15 @@ def _map_fragment_list(flist, reflist):
     @param reflist: list of reference (ie. library) fragments
     @type reflist: [L{Fragment}, L{Fragment}, ...]
     """
-    mapped=[]
+    mapped = []
     for f in flist:
-        rank=[]
+        rank = []
         for i in range(0, len(reflist)):
-            rf=reflist[i]
-            rms=f-rf
+            rf = reflist[i]
+            rms = f - rf
             rank.append((rms, rf))
         rank.sort()
-        fragment=rank[0][1]
+        fragment = rank[0][1]
         mapped.append(fragment)
     return mapped
 
@@ -233,58 +234,60 @@ class FragmentMapper(object):
     """
     def __init__(self, model, lsize=20, flength=5, fdir="."):
         """
-        @param model: the model that will be mapped
-        @type model: L{Model}
+        ::
+        
+            @param model: the model that will be mapped
+            @type model: L{Model}
 
-        @param lsize: number of fragments in the library
-        @type lsize: int
+            @param lsize: number of fragments in the library
+            @type lsize: int
 
-        @param flength: length of fragments in the library
-        @type flength: int
+            @param flength: length of fragments in the library
+            @type flength: int
 
-        @param fdir: directory where the definition files are
+            @param fdir: directory where the definition files are
             found (default=".")
-        @type fdir: string
+            @type fdir: string
         """
-        if flength==5:
-            self.edge=2
-        elif flength==7:
-            self.edge=3
+        if flength == 5:
+            self.edge = 2
+        elif flength == 7:
+            self.edge = 3
         else:
             raise PDBException("Fragment length should be 5 or 7.")
-        self.flength=flength
-        self.lsize=lsize
-        self.reflist=_read_fragments(lsize, flength, fdir)
-        self.model=model
-        self.fd=self._map(self.model)
+        self.flength = flength
+        self.lsize = lsize
+        self.reflist = _read_fragments(lsize, flength, fdir)
+        self.model = model
+        self.fd = self._map(self.model)
 
     def _map(self, model):
         """
         @param model: the model that will be mapped
         @type model: L{Model}
         """
-        ppb=PPBuilder()
-        ppl=ppb.build_peptides(model)
-        fd={}
+        ppb = PPBuilder()
+        ppl = ppb.build_peptides(model)
+        fd = {}
         for pp in ppl:
             try:
                 # make fragments
-                flist=_make_fragment_list(pp, self.flength)
+                flist = _make_fragment_list(pp, self.flength)
                 # classify fragments
-                mflist=_map_fragment_list(flist, self.reflist)
+                mflist = _map_fragment_list(flist, self.reflist)
                 for i in range(0, len(pp)):
-                    res=pp[i]
-                    if i<self.edge:
+                    res = pp[i]
+                    if i < self.edge:
                         # start residues
                         continue
-                    elif i>=(len(pp)-self.edge):
+                    elif i >= (len(pp) - self.edge):
                         # end residues
                         continue
                     else:
                         # fragment
-                        index=i-self.edge
-                        assert(index>=0)
-                        fd[res]=mflist[index]
+                        index = i - self.edge
+                        assert(index >= 0)
+                        fd[res] = mflist[index]
             except PDBException as why:
                 if why == 'CHAINBREAK':
                     # Funny polypeptide - skip
@@ -320,7 +323,7 @@ class FragmentMapper(object):
         return self.fd[res]
 
 
-if __name__=="__main__":
+if __name__ == "__main__":
 
     import sys
 

@@ -10,6 +10,8 @@ import random
 
 from Bio._py3k import range
 
+__docformat__ = "restructuredtext en"
+
 
 class SinglePositionMutation(object):
     """Perform a conversion mutation, but only at a single point in the genome.
@@ -17,7 +19,7 @@ class SinglePositionMutation(object):
     This does not randomize the genome as much as ConversionMutation, since
     only one change is allowed per genome at the specified mutation rate.
     """
-    def __init__(self, mutation_rate = 0.001):
+    def __init__(self, mutation_rate=0.001):
         """Initialize a mutator.
 
         Arguments:
@@ -61,7 +63,7 @@ class ConversionMutation(object):
     is determined to mutate, then the alphabet item it is equally likely
     to switch to any other letter in the alphabet.
     """
-    def __init__(self, mutation_rate = 0.001):
+    def __init__(self, mutation_rate=0.001):
         """Inititialize a mutator.
 
         Arguments:

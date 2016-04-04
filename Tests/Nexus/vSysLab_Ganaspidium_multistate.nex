@@ -1,0 +1,48 @@
+#NEXUS
+
+BEGIN TAXA;
+	DIMENSIONS NTAX=6;
+	TAXLABELS
+		'Ganaspidium didionae'
+		'Ganaspidium eldiablo'
+		'Ganaspidium flemingi'
+		'Ganaspidium kolmaci'
+		'Ganaspidium konzaense'
+		'Ganaspidium pusillae'
+	;
+END;
+
+BEGIN CHARACTERS;
+	DIMENSIONS NCHAR=14;
+	FORMAT DATATYPE=STANDARD MISSING=? GAP=-
+		SYMBOLS="012345"
+	;
+	CHARSET 'Head' = 1 2 3 4;
+	CHARSET 'Mesosoma' = 5 6 7 8 9 10 11 12;
+	CHARSET 'Forewing' = 13;
+	CHARSET 'Metasoma' = 14;
+	CHARSTATELABELS
+		1 'Malar sulcus'/'simple' 'compound',
+		2 'Malar space'/'smooth' 'partially striate, striations extending 1/2 to 2/3 distance from ventral margin of malar space to base of compound eye' 'completely striate from ventral margin of malar space to base of compound eye' 'partially striate, striations extending to 1/4 distance from ventral margin of malar space to base of compound eye',
+		3 'Malar protuberance'/'smooth, elongate, extending beyond length of ventral margin of malar space' 'striate, elongate, extending beyond length of ventral margin of malar space' 'smooth, short, not extending beyond length of ventral margin of malar space' 'striate, short, not extending beyond length of ventral margin of malar space',
+		4 'Clypeal protuberance'/'elongate, overhanging anterior margin of clypeus' 'short, not overhanging anterior margin of clypeus',
+		5 'Tubercles of scutellar plate'/'present, extremely reduced, hardly distinguishable' 'present, distinct, small, length of tuber less than 1/2 width of tubercle base' 'present, distinct, large, length of tubercle equal to or greater than width of tubercle base' 'absent',
+		6 'Dorsal surface of scutellar plate'/'flat, smooth, setal bearing pits present surrounding midpit' 'flat, horizontally striate, setal bearing pits present surrounding midpit' 'gently convex, smooth, setal bearing pits surrounding midpit' 'concave, smooth, setal bearing pits surrounding midpit' 'concave around midpit, two setal bearing pits at base of each tubercle' 'concave, radially striate, setal bearing pits surrounding midpit',
+		7 'Carina along posterior margin of scutellum'/'absent' 'present, delicate, defining transition from dorsal surface of scutellum from posterior surface' 'present, distinctly cleft, defining transition from dorsal surface of scutellum from posterior surface',
+		8 'Dorsal surface of scutellum'/'entirely smooth' 'smooth except for faint wrinkles along posterior carina' 'smooth anteriorly, reticular/strigate posteriorly' 'smooth anteriorly, longitudinally striate posteriorly' 'entirely rugulose/wrinkled' 'smooth anteriorly, gently striate posteriorly',
+		9 'Midpit of scutellar plate'/'in center of plate; plate large, obscuring dorsal surface of scutellum when viewed dorsally' 'in center of plate; plate small, revealing dorsal surface of scutellum when viewed dorsally' 'in posterior half of plate; plate small, revealing dorsal surface of scutellum when viewed dorsally',
+		10 'Mesopopleura setal patch'/'present' 'absent',
+		11 'Mesopleuron'/'entirely smooth' 'smooth anteriorly, striate along the postero-dorsal margin' 'distinctly striate along the anterior, posterior margins; often entire sclerite striate' 'striate within confines of mesopleural triangle, remainder of sclerite smooth',
+		12 'Lateral aspect of pronotum'/'covered in long, thin, white setae' 'anteriorly with some short setae, remainder glabrous',
+		13 'Marginal cell of forewing'/'as deep as long' 'distinctly deeper than long',
+		14 'Size of metasoma (in lateral view)'/'sub-equal in size to mesosoma' 'distinctly larger than mesosoma (longer and deeper)'
+	;
+	MATRIX
+		'Ganaspidium didionae' 1100242421(01)110
+		'Ganaspidium eldiablo' 10000405210110
+		'Ganaspidium flemingi' 10(02)(01)1411210110
+		'Ganaspidium kolmaci' 010000(01)221(01)100
+		'Ganaspidium konzaense' 12002424212100
+		'Ganaspidium pusillae' 01(02)(01)141221(01)110
+	;
+END;

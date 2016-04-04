@@ -1,6 +1,6 @@
 # Copyright 2000-2003 Jeff Chang.
 # Copyright 2001-2008 Brad Chapman.
-# Copyright 2005-2012 by Peter Cock.
+# Copyright 2005-2015 by Peter Cock.
 # Copyright 2006-2009 Michiel de Hoon.
 # All rights reserved.
 # This code is part of the Biopython distribution and governed by its
@@ -14,81 +14,90 @@ for the GenBank parser output...
 
 What's here:
 
-Base class to hold a Feature.
+Base class to hold a Feature
 ----------------------------
-classes:
-o SeqFeature
 
-Hold information about a Reference.
+classes:
+
+    - SeqFeature
+
+Hold information about a Reference
 ----------------------------------
 
 This is an attempt to create a General class to hold Reference type
 information.
 
 classes:
-o Reference
 
-Specify locations of a feature on a Sequence.
----------------------------------------------
+    - Reference
 
-This aims to handle, in Ewan's words, 'the dreaded fuzziness issue' in
-much the same way as Biocorba. This has the advantages of allowing us
-to handle fuzzy stuff in case anyone needs it, and also be compatible
-with Biocorba.
+Specify locations of a feature on a Sequence
+--------------------------------------------
+
+This aims to handle, in Ewan Birney's words, 'the dreaded fuzziness issue'.
+This has the advantages of allowing us to handle fuzzy stuff in case anyone
+needs it, and also be compatible with BioPerl etc and BioSQL.
 
 classes:
-o FeatureLocation - Specify the start and end location of a feature.
-o CompoundLocation - Collection of FeatureLocation objects (for joins etc).
 
-o ExactPosition - Specify the position as being exact.
-o WithinPosition - Specify a position occuring within some range.
-o BetweenPosition - Specify a position occuring between a range (OBSOLETE?).
-o BeforePosition - Specify the position as being found before some base.
-o AfterPosition - Specify the position as being found after some base.
-o OneOfPosition - Specify a position where the location can be multiple positions.
-o UnknownPosition - Represents missing information like '?' in UniProt.
+    - FeatureLocation - Specify the start and end location of a feature.
+    - CompoundLocation - Collection of FeatureLocation objects (for joins etc).
+
+    - ExactPosition - Specify the position as being exact.
+    - WithinPosition - Specify a position occurring within some range.
+    - BetweenPosition - Specify a position occurring between a range (OBSOLETE?).
+    - BeforePosition - Specify the position as being found before some base.
+    - AfterPosition - Specify the position as being found after some base.
+    - OneOfPosition - Specify a position where the location can be multiple positions.
+    - UnknownPosition - Represents missing information like '?' in UniProt.
 """
 
 from __future__ import print_function
 
+from Bio._py3k import _is_int_or_long
+
 from Bio.Seq import MutableSeq, reverse_complement
+
+__docformat__ = "restructuredtext en"
 
 
 class SeqFeature(object):
     """Represent a Sequence Feature on an object.
 
     Attributes:
-    o location - the location of the feature on the sequence (FeatureLocation)
-    o type - the specified type of the feature (ie. CDS, exon, repeat...)
-    o location_operator - a string specifying how this SeqFeature may
-    be related to others. For example, in the example GenBank feature
-    shown below, the location_operator would be "join". This is a proxy
-    for feature.location.operator and only applies to compound locations.
-    o strand - A value specifying on which strand (of a DNA sequence, for
-    instance) the feature deals with. 1 indicates the plus strand, -1
-    indicates the minus strand, 0 indicates stranded but unknown (? in GFF3),
-    while the default of None indicates that strand doesn't apply (dot in GFF3,
-    e.g. features on proteins). Note this is a shortcut for accessing the
-    strand property of the feature's location.
-    o id - A string identifier for the feature.
-    o ref - A reference to another sequence. This could be an accession
-    number for some different sequence. Note this is a shortcut for the
-    reference property of the feature's location.
-    o ref_db - A different database for the reference accession number.
-    Note this is a shortcut for the reference property of the location
-    o qualifiers - A dictionary of qualifiers on the feature. These are
-    analogous to the qualifiers from a GenBank feature table. The keys of
-    the dictionary are qualifier names, the values are the qualifier
-    values.
-    o sub_features - Obsolete list of additional SeqFeatures which was
-    used for holding compound locations (e.g. joins in GenBank/EMBL).
-    This is now superceded by a CompoundFeatureLocation as the location,
-    and should not be used (DEPRECATED).
+
+        - location - the location of the feature on the sequence (FeatureLocation)
+        - type - the specified type of the feature (ie. CDS, exon, repeat...)
+        - location_operator - a string specifying how this SeqFeature may
+          be related to others. For example, in the example GenBank feature
+          shown below, the location_operator would be "join". This is a proxy
+          for feature.location.operator and only applies to compound locations.
+        - strand - A value specifying on which strand (of a DNA sequence, for
+          instance) the feature deals with. 1 indicates the plus strand, -1
+          indicates the minus strand, 0 indicates stranded but unknown (? in GFF3),
+          while the default of None indicates that strand doesn't apply (dot in GFF3,
+          e.g. features on proteins). Note this is a shortcut for accessing the
+          strand property of the feature's location.
+        - id - A string identifier for the feature.
+        - ref - A reference to another sequence. This could be an accession
+          number for some different sequence. Note this is a shortcut for the
+          reference property of the feature's location.
+        - ref_db - A different database for the reference accession number.
+          Note this is a shortcut for the reference property of the location
+        - qualifiers - A dictionary of qualifiers on the feature. These are
+          analogous to the qualifiers from a GenBank feature table. The keys of
+          the dictionary are qualifier names, the values are the qualifier
+          values.
+        - sub_features - Obsolete list of additional SeqFeatures which was
+          used for holding compound locations (e.g. joins in GenBank/EMBL).
+          This is now superceded by a CompoundLocation as the location, and
+          should not be used (DEPRECATED).
     """
-    def __init__(self, location = None, type = '', location_operator = '',
-                 strand = None, id = "<unknown id>",
-                 qualifiers = None, sub_features = None,
-                 ref = None, ref_db = None):
+
+    def __init__(self, location=None, type='', location_operator='',
+                 strand=None, id="<unknown id>",
+                 qualifiers=None, sub_features=None,
+                 ref=None, ref_db=None):
         """Initialize a SeqFeature on a Sequence.
 
         location can either be a FeatureLocation (with strand argument also
@@ -134,15 +143,16 @@ class SeqFeature(object):
         be used, instead do this via the CompoundLocation object.
         """
         if location is not None and not isinstance(location, FeatureLocation) \
-        and not isinstance(location, CompoundLocation):
-            raise TypeError("FeatureLocation, CompoundLocation (or None) required for the location")
+                and not isinstance(location, CompoundLocation):
+            raise TypeError(
+                "FeatureLocation, CompoundLocation (or None) required for the location")
         self.location = location
         self.type = type
         if location_operator:
-            #TODO - Deprecation warning
+            # TODO - Deprecation warning
             self.location_operator = location_operator
         if strand is not None:
-            #TODO - Deprecation warning
+            # TODO - Deprecation warning
             self.strand = strand
         self.id = id
         if qualifiers is None:
@@ -157,10 +167,10 @@ class SeqFeature(object):
                           BiopythonDeprecationWarning)
         self._sub_features = sub_features
         if ref is not None:
-            #TODO - Deprecation warning
+            # TODO - Deprecation warning
             self.ref = ref
         if ref_db is not None:
-            #TODO - Deprecation warning
+            # TODO - Deprecation warning
             self.ref_db = ref_db
 
     def _get_sub_features(self):
@@ -170,6 +180,7 @@ class SeqFeature(object):
             warnings.warn("Rather using f.sub_features, f.location should be a CompoundFeatureLocation",
                           BiopythonDeprecationWarning)
         return self._sub_features
+
     def _set_sub_features(self, value):
         if value:
             import warnings
@@ -177,8 +188,8 @@ class SeqFeature(object):
             warnings.warn("Rather than f.sub_features, use a CompoundFeatureLocation for f.location",
                           BiopythonDeprecationWarning)
         self._sub_features = value
-    sub_features = property(fget = _get_sub_features, fset = _set_sub_features,
-                            doc = "Obsolete representation of compound locations (DEPRECATED).")
+    sub_features = property(fget=_get_sub_features, fset=_set_sub_features,
+                            doc="Obsolete representation of compound locations (DEPRECATED).")
 
     def _get_strand(self):
         return self.location.strand
@@ -193,17 +204,18 @@ class SeqFeature(object):
             else:
                 raise
 
-    strand = property(fget = _get_strand, fset = _set_strand,
-                      doc = """Feature's strand
+    strand = property(fget=_get_strand, fset=_set_strand,
+                      doc="""Feature's strand
 
-                            This is a shortcut for feature.location.strand
-                            """)
+                          This is a shortcut for feature.location.strand
+                          """)
 
     def _get_ref(self):
         try:
             return self.location.ref
         except AttributeError:
             return None
+
     def _set_ref(self, value):
         try:
             self.location.ref = value
@@ -213,40 +225,44 @@ class SeqFeature(object):
                     raise ValueError("Can't set ref without a location.")
             else:
                 raise
-    ref = property(fget = _get_ref, fset = _set_ref,
-                   doc = """Feature location reference (e.g. accession).
+    ref = property(fget=_get_ref, fset=_set_ref,
+                   doc="""Feature location reference (e.g. accession).
 
-                         This is a shortcut for feature.location.ref
-                         """)
+                       This is a shortcut for feature.location.ref
+                       """)
 
     def _get_ref_db(self):
         try:
             return self.location.ref_db
         except AttributeError:
             return None
+
     def _set_ref_db(self, value):
         self.location.ref_db = value
-    ref_db = property(fget = _get_ref_db, fset = _set_ref_db,
-                      doc = """Feature location reference's database.
+    ref_db = property(fget=_get_ref_db, fset=_set_ref_db,
+                      doc="""Feature location reference's database.
 
-                            This is a shortcut for feature.location.ref_db
-                            """)
+                          This is a shortcut for feature.location.ref_db
+                          """)
 
     def _get_location_operator(self):
         try:
             return self.location.operator
         except AttributeError:
             return None
+
     def _set_location_operator(self, value):
         if value:
             if isinstance(self.location, CompoundLocation):
                 self.location.operator = value
             elif self.location is None:
-                raise ValueError("Location is None so can't set its operator (to %r)" % value)
+                raise ValueError(
+                    "Location is None so can't set its operator (to %r)" % value)
             else:
-                raise ValueError("Only CompoundLocation gets an operator (%r)" % value)
-    location_operator = property(fget = _get_location_operator, fset = _set_location_operator,
-                                 doc = "Location operator for compound locations (e.g. join).")
+                raise ValueError(
+                    "Only CompoundLocation gets an operator (%r)" % value)
+    location_operator = property(fget=_get_location_operator, fset=_set_location_operator,
+                                 doc="Location operator for compound locations (e.g. join).")
 
     def __repr__(self):
         """A string representation of the record for debugging."""
@@ -271,27 +287,27 @@ class SeqFeature(object):
         out += "location: %s\n" % self.location
         if self.id and self.id != "<unknown id>":
             out += "id: %s\n" % self.id
-        out += "qualifiers: \n"
+        out += "qualifiers:\n"
         for qual_key in sorted(self.qualifiers):
             out += "    Key: %s, Value: %s\n" % (qual_key,
-                                               self.qualifiers[qual_key])
-        #TODO - Remove this from __str__ since deprecated
+                                                 self.qualifiers[qual_key])
+        # TODO - Remove this from __str__ since deprecated
         if len(self._sub_features) != 0:
             out += "Sub-Features\n"
             for sub_feature in self._sub_features:
-                out +="%s\n" % sub_feature
+                out += "%s\n" % sub_feature
         return out
 
     def _shift(self, offset):
         """Returns a copy of the feature with its location shifted (PRIVATE).
 
         The annotation qaulifiers are copied."""
-        answer = SeqFeature(location = self.location._shift(offset),
-                            type = self.type,
-                            location_operator = self.location_operator,
-                            id = self.id,
-                            qualifiers = dict(self.qualifiers.items()))
-        #This is to avoid the deprecation warning:
+        answer = SeqFeature(location=self.location._shift(offset),
+                            type=self.type,
+                            location_operator=self.location_operator,
+                            id=self.id,
+                            qualifiers=dict(self.qualifiers.items()))
+        # This is to avoid the deprecation warning:
         answer._sub_features = [f._shift(offset) for f in self._sub_features]
         return answer
 
@@ -305,13 +321,14 @@ class SeqFeature(object):
 
         The annotation qaulifiers are copied.
         """
-        answer = SeqFeature(location = self.location._flip(length),
-                            type = self.type,
-                            location_operator = self.location_operator,
-                            id = self.id,
-                            qualifiers = dict(self.qualifiers.items()))
-        #This is to avoid the deprecation warning: 
-        answer._sub_features = [f._flip(length) for f in self._sub_features[::-1]]
+        answer = SeqFeature(location=self.location._flip(length),
+                            type=self.type,
+                            location_operator=self.location_operator,
+                            id=self.id,
+                            qualifiers=dict(self.qualifiers.items()))
+        # This is to avoid the deprecation warning:
+        answer._sub_features = [f._flip(length)
+                                for f in self._sub_features[::-1]]
         return answer
 
     def extract(self, parent_sequence):
@@ -334,11 +351,26 @@ class SeqFeature(object):
         >>> f.extract(seq)
         Seq('VALIVIC', ProteinAlphabet())
 
+        If the FeatureLocation is None, e.g. when parsing invalid locus
+        locations in the GenBank parser, extract() will raise a ValueError.
+
+        >>> from Bio.Seq import Seq
+        >>> from Bio.SeqFeature import SeqFeature
+        >>> seq = Seq("MKQHKAMIVALIVICITAVVAAL", generic_protein)
+        >>> f = SeqFeature(None, type="domain")
+        >>> f.extract(seq)
+        Traceback (most recent call last):
+           ...
+        ValueError: The feature's .location is None. Check the sequence file for a valid location.
+
         Note - currently only sub-features of type "join" are supported.
         """
+        if self.location is None:
+            raise ValueError("The feature's .location is None. Check the "
+                             "sequence file for a valid location.")
         return self.location.extract(parent_sequence)
-    
-    #Python 3:
+
+    # Python 3:
     def __bool__(self):
         """Boolean value of an instance of this class (True).
 
@@ -353,8 +385,8 @@ class SeqFeature(object):
         """
         return True
 
-    #Python 2:
-    __nonzero__= __bool__
+    # Python 2:
+    __nonzero__ = __bool__
 
     def __len__(self):
         """Returns the length of the region described by a feature.
@@ -483,6 +515,7 @@ class Reference(object):
     o pubmed_id - A pubmed reference for the article.
     o comment - A place to stick any comments about the reference.
     """
+
     def __init__(self):
         self.location = []
         self.authors = ''
@@ -510,9 +543,23 @@ class Reference(object):
         return out
 
     def __repr__(self):
-        #TODO - Update this is __init__ later accpets values
+        # TODO - Update this is __init__ later accpets values
         return "%s(title=%s, ...)" % (self.__class__.__name__,
                                       repr(self.title))
+
+    def __eq__(self, other):
+        """Check if two Reference objects should be considered equal
+
+        Note that the location is not compared, as __eq__ for the
+        FeatureLocation class is not defined.
+        """
+        return self.authors == other.authors and \
+            self.consrtm == other.consrtm and \
+            self.title == other.title and \
+            self.journal == other.journal and \
+            self.medline_id == other.medline_id and \
+            self.pubmed_id == other.pubmed_id and \
+            self.comment == other.comment
 
 
 # --- Handling feature locations
@@ -520,7 +567,7 @@ class Reference(object):
 class FeatureLocation(object):
     """Specify the location of a feature along a sequence.
 
-    The FeatureLocation is used for simple continous features, which can
+    The FeatureLocation is used for simple continuous features, which can
     be described as running from a start position to and end position
     (optionally with a strand and reference information).  More complex
     locations made up from several non-continuous parts (e.g. a coding
@@ -580,11 +627,12 @@ class FeatureLocation(object):
     as well, for example a GenBank location like complement(<123..150)
     would use a BeforePosition object for the start.
     """
+
     def __init__(self, start, end, strand=None, ref=None, ref_db=None):
         """Specify the start, end, strand etc of a sequence feature.
 
         start and end arguments specify the values where the feature begins
-        and ends. These can either by any of the *Position objects that
+        and ends. These can either by any of the ``*Position`` objects that
         inherit from AbstractPosition, or can just be integers specifying the
         position. In the case of integers, the values are assumed to be
         exact and are converted in ExactPosition arguments. This is meant
@@ -635,16 +683,16 @@ class FeatureLocation(object):
         AL391218.9
 
         """
-        #TODO - Check 0 <= start <= end (<= length of reference)
+        # TODO - Check 0 <= start <= end (<= length of reference)
         if isinstance(start, AbstractPosition):
             self._start = start
-        elif isinstance(start, int) or isinstance(start, long):
+        elif _is_int_or_long(start):
             self._start = ExactPosition(start)
         else:
             raise TypeError("start=%r %s" % (start, type(start)))
         if isinstance(end, AbstractPosition):
             self._end = end
-        elif isinstance(end, int) or isinstance(end, long):
+        elif _is_int_or_long(end):
             self._end = ExactPosition(end)
         else:
             raise TypeError("end=%r %s" % (end, type(end)))
@@ -661,8 +709,8 @@ class FeatureLocation(object):
                              % value)
         self._strand = value
 
-    strand = property(fget = _get_strand, fset = _set_strand,
-                      doc = "Strand of the location (+1, -1, 0 or None).")
+    strand = property(fget=_get_strand, fset=_set_strand,
+                      doc="Strand of the location (+1, -1, 0 or None).")
 
     def __str__(self):
         """Returns a representation of the location (with python counting).
@@ -676,7 +724,7 @@ class FeatureLocation(object):
             answer = "%s:%s%s" % (self.ref_db, self.ref, answer)
         elif self.ref:
             answer = self.ref + answer
-        #Is ref_db without ref meaningful?
+        # Is ref_db without ref meaningful?
         if self.strand is None:
             return answer
         elif self.strand == +1:
@@ -684,7 +732,7 @@ class FeatureLocation(object):
         elif self.strand == -1:
             return answer + "(-)"
         else:
-            #strand = 0, stranded but strand unknown, ? in GFF3
+            # strand = 0, stranded but strand unknown, ? in GFF3
             return answer + "(?)"
 
     def __repr__(self):
@@ -697,7 +745,7 @@ class FeatureLocation(object):
         if self.ref_db is not None:
             optional += ", ref_db=%r" % self.ref_db
         return "%s(%r, %r%s)" \
-                   % (self.__class__.__name__, self.start, self.end, optional)
+            % (self.__class__.__name__, self.start, self.end, optional)
 
     def __add__(self, other):
         """Combine location with another feature location, or shift it.
@@ -744,7 +792,7 @@ class FeatureLocation(object):
         elif isinstance(other, int):
             return self._shift(other)
         else:
-            #This will allow CompoundLocation's __radd__ to be called:
+            # This will allow CompoundLocation's __radd__ to be called:
             return NotImplemented
 
     def __radd__(self, other):
@@ -835,38 +883,38 @@ class FeatureLocation(object):
 
     def _shift(self, offset):
         """Returns a copy of the location shifted by the offset (PRIVATE)."""
-        #TODO - What if offset is a fuzzy position?
+        # TODO - What if offset is a fuzzy position?
         if self.ref or self.ref_db:
-            #TODO - Return self?
+            # TODO - Return self?
             raise ValueError("Feature references another sequence.")
-        return FeatureLocation(start = self._start._shift(offset),
-                               end = self._end._shift(offset),
-                               strand = self.strand)
+        return FeatureLocation(start=self._start._shift(offset),
+                               end=self._end._shift(offset),
+                               strand=self.strand)
 
     def _flip(self, length):
         """Returns a copy of the location after the parent is reversed (PRIVATE)."""
         if self.ref or self.ref_db:
-            #TODO - Return self?
+            # TODO - Return self?
             raise ValueError("Feature references another sequence.")
-        #Note this will flip the start and end too!
+        # Note this will flip the start and end too!
         if self.strand == +1:
             flip_strand = -1
         elif self.strand == -1:
             flip_strand = +1
         else:
-            #0 or None
+            # 0 or None
             flip_strand = self.strand
-        return FeatureLocation(start = self._end._flip(length),
-                               end = self._start._flip(length),
-                               strand = flip_strand)
+        return FeatureLocation(start=self._end._flip(length),
+                               end=self._start._flip(length),
+                               strand=flip_strand)
 
     @property
     def parts(self):
         """Read only list of parts (always one, the Feature Location).
 
-        This is a convience property allowing you to write code handling
+        This is a convenience property allowing you to write code handling
         both simple FeatureLocation objects (with one part) and more complex
-        CompoundLocation objects (with multiple parts) interchangably.
+        CompoundLocation objects (with multiple parts) interchangeably.
         """
         return [self]
 
@@ -913,11 +961,11 @@ class FeatureLocation(object):
     def extract(self, parent_sequence):
         """Extract feature sequence from the supplied parent sequence."""
         if self.ref or self.ref_db:
-            #TODO - Take a dictionary as an optional argument?
+            # TODO - Take a dictionary as an optional argument?
             raise ValueError("Feature references another sequence.")
         if isinstance(parent_sequence, MutableSeq):
-            #This avoids complications with reverse complements
-            #(the MutableSeq reverse complement acts in situ)
+            # This avoids complications with reverse complements
+            # (the MutableSeq reverse complement acts in situ)
             parent_sequence = parent_sequence.toseq()
         f_seq = parent_sequence[self.nofuzzy_start:self.nofuzzy_end]
         if self.strand == -1:
@@ -931,6 +979,7 @@ class FeatureLocation(object):
 
 class CompoundLocation(object):
     """For handling joins etc where a feature location has several parts."""
+
     def __init__(self, parts, operator="join"):
         """Create a compound location with several parts.
 
@@ -1000,7 +1049,8 @@ class CompoundLocation(object):
                 raise ValueError("CompoundLocation should be given a list of "
                                  "FeatureLocation objects, not %s" % loc.__class__)
         if len(parts) < 2:
-            raise ValueError("CompoundLocation should have at least 2 parts, not %r" % parts)
+            raise ValueError(
+                "CompoundLocation should have at least 2 parts, not %r" % parts)
 
     def __str__(self):
         """Returns a representation of the location (with python counting)."""
@@ -1008,7 +1058,7 @@ class CompoundLocation(object):
 
     def __repr__(self):
         """String representation of the location for debugging."""
-        return "%s(%r, %r)" % (self.__class__.__name__, \
+        return "%s(%r, %r)" % (self.__class__.__name__,
                                self.parts, self.operator)
 
     def _get_strand(self):
@@ -1018,16 +1068,17 @@ class CompoundLocation(object):
         # a join feature on the forward strand they all have strand +1.
         # However, we must also consider evil mixed strand examples like
         # this, join(complement(69611..69724),139856..140087,140625..140650)
-        if len(set(loc.strand for loc in self.parts))==1:
+        if len(set(loc.strand for loc in self.parts)) == 1:
             return self.parts[0].strand
         else:
-            return None # i.e. mixed strands
+            return None  # i.e. mixed strands
+
     def _set_strand(self, value):
         # Should this be allowed/encouraged?
         for loc in self.parts:
             loc.strand = value
-    strand = property(fget = _get_strand, fset = _set_strand,
-                      doc = """Overall strand of the compound location.
+    strand = property(fget=_get_strand, fset=_set_strand,
+                      doc="""Overall strand of the compound location.
 
         If all the parts have the same strand, that is returned. Otherwise
         for mixed strands, this returns None.
@@ -1094,8 +1145,8 @@ class CompoundLocation(object):
             return CompoundLocation(self.parts + [other], self.operator)
         elif isinstance(other, CompoundLocation):
             if self.operator != other.operator:
-                #Handle join+order -> order as a special case?
-                raise ValueError("Mixed operators %s and %s" \
+                # Handle join+order -> order as a special case?
+                raise ValueError("Mixed operators %s and %s"
                                  % (self.operator, other.operator))
             return CompoundLocation(self.parts + other.parts, self.operator)
         elif isinstance(other, int):
@@ -1111,7 +1162,6 @@ class CompoundLocation(object):
             return self._shift(other)
         else:
             raise NotImplementedError
-
 
     def __contains__(self, value):
         """Check if an integer position is within the location."""
@@ -1150,9 +1200,76 @@ class CompoundLocation(object):
     def _flip(self, length):
         """Returns a copy of the location after the parent is reversed (PRIVATE).
 
-        Note that the order of the parts is reversed too.
+        Note that the order of the parts is NOT reversed too. Consider a CDS
+        on the forward strand with exons small, medium and large (in length).
+        Once we change the frame of reference to the reverse complement strand,
+        the start codon is still part of the small exon, and the stop codon
+        still part of the large exon - so the part order remains the same!
+
+        Here is an artificial example, were the features map to the two upper
+        case regions and the lower case runs of n are not used:
+
+        >>> from Bio.Seq import Seq
+        >>> from Bio.SeqFeature import FeatureLocation
+        >>> dna = Seq("nnnnnAGCATCCTGCTGTACnnnnnnnnGAGAMTGCCATGCCCCTGGAGTGAnnnnn")
+        >>> small = FeatureLocation(5, 20, strand=1)
+        >>> large = FeatureLocation(28, 52, strand=1)
+        >>> location = small + large
+        >>> print(small)
+        [5:20](+)
+        >>> print(large)
+        [28:52](+)
+        >>> print(location)
+        join{[5:20](+), [28:52](+)}
+        >>> for part in location.parts:
+        ...     print(len(part))
+        ...
+        15
+        24
+
+        As you can see, this is a silly example where each "exon" is a word:
+
+        >>> print(small.extract(dna).translate())
+        SILLY
+        >>> print(large.extract(dna).translate())
+        EXAMPLE*
+        >>> print(location.extract(dna).translate())
+        SILLYEXAMPLE*
+        >>> for part in location.parts:
+        ...     print(part.extract(dna).translate())
+        ...
+        SILLY
+        EXAMPLE*
+
+        Now, let's look at this from the reverse strand frame of reference:
+
+        >>> flipped_dna = dna.reverse_complement()
+        >>> flipped_location = location._flip(len(dna))
+        >>> print(flipped_location.extract(flipped_dna).translate())
+        SILLYEXAMPLE*
+        >>> for part in flipped_location.parts:
+        ...     print(part.extract(flipped_dna).translate())
+        ...
+        SILLY
+        EXAMPLE*
+
+        The key point here is the first part of the CompoundFeature is still the
+        small exon, while the second part is still the large exon:
+
+        >>> for part in flipped_location.parts:
+        ...     print(len(part))
+        ...
+        15
+        24
+        >>> print(flipped_location)
+        join{[37:52](-), [5:29](-)}
+
+        Notice the parts are not reversed. However, there was a bug here in older
+        versions of Biopython which would have given join{[5:29](-), [37:52](-)}
+        and the translation would have wrongly been "EXAMPLE*SILLY" instead.
+
         """
-        return CompoundLocation([loc._flip(length) for loc in self.parts[::-1]],
+        return CompoundLocation([loc._flip(length) for loc in self.parts],
                                 self.operator)
 
     @property
@@ -1207,9 +1324,9 @@ class CompoundLocation(object):
 
     def extract(self, parent_sequence):
         """Extract feature sequence from the supplied parent sequence."""
-        #This copes with mixed strand features & all on reverse:
+        # This copes with mixed strand features & all on reverse:
         parts = [loc.extract(parent_sequence) for loc in self.parts]
-        #We use addition rather than a join to avoid alphabet issues:
+        # We use addition rather than a join to avoid alphabet issues:
         f_seq = parts[0]
         for part in parts[1:]:
             f_seq += part
@@ -1217,8 +1334,7 @@ class CompoundLocation(object):
 
 
 class AbstractPosition(object):
-    """Abstract base class representing a position.
-    """
+    """Abstract base class representing a position."""
 
     def __repr__(self):
         """String representation of the location for debugging."""
@@ -1258,7 +1374,7 @@ class ExactPosition(int, AbstractPosition):
     15
 
     """
-    def __new__(cls, position, extension = 0):
+    def __new__(cls, position, extension=0):
         if extension != 0:
             raise AttributeError("Non-zero extension %s for exact position."
                                  % extension)
@@ -1279,11 +1395,11 @@ class ExactPosition(int, AbstractPosition):
         return 0
 
     def _shift(self, offset):
-        #By default preserve any subclass
+        # By default preserve any subclass
         return self.__class__(int(self) + offset)
 
     def _flip(self, length):
-        #By default perserve any subclass
+        # By default perserve any subclass
         return self.__class__(length - int(self))
 
 
@@ -1411,9 +1527,9 @@ class WithinPosition(int, AbstractPosition):
 
     """
     def __new__(cls, position, left, right):
-        assert position==left or position==right, \
+        assert position == left or position == right, \
             "WithinPosition: %r should match left %r or right %r" \
-            (position, left, right)
+            % (position, left, right)
         obj = int.__new__(cls, position)
         obj._left = left
         obj._right = right
@@ -1515,7 +1631,7 @@ class BetweenPosition(int, AbstractPosition):
     integers.
     """
     def __new__(cls, position, left, right):
-        assert position==left or position==right
+        assert position == left or position == right
         obj = int.__new__(cls, position)
         obj._left = left
         obj._right = right
@@ -1583,8 +1699,8 @@ class BeforePosition(int, AbstractPosition):
     Just remember that for equality and sorting the position objects act
     like integers.
     """
-    #Subclasses int so can't use __init__
-    def __new__(cls, position, extension = 0):
+    # Subclasses int so can't use __init__
+    def __new__(cls, position, extension=0):
         if extension != 0:
             raise AttributeError("Non-zero extension %s for exact position."
                                  % extension)
@@ -1653,8 +1769,8 @@ class AfterPosition(int, AbstractPosition):
     Just remember that for equality and sorting the position objects act
     like integers.
     """
-    #Subclasses int so can't use __init__
-    def __new__(cls, position, extension = 0):
+    # Subclasses int so can't use __init__
+    def __new__(cls, position, extension=0):
         if extension != 0:
             raise AttributeError("Non-zero extension %s for exact position."
                                  % extension)
@@ -1782,8 +1898,8 @@ class OneOfPosition(int, AbstractPosition):
 
 
 class PositionGap(object):
-    """Simple class to hold information about a gap between positions.
-    """
+    """Simple class to hold information about a gap between positions."""
+
     def __init__(self, gap_size):
         """Intialize with a position object containing the gap information.
         """
@@ -1801,4 +1917,3 @@ class PositionGap(object):
 if __name__ == "__main__":
     from Bio._utils import run_doctest
     run_doctest()
-

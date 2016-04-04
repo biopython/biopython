@@ -7,12 +7,14 @@
 
 from functools import reduce
 
+__docformat__ = "restructuredtext en"
 
-#TODO - Subclass graph?
+
+# TODO - Subclass graph?
 class MultiGraph(object):
     """A directed multigraph abstraction with labeled edges."""
 
-    def __init__(self, nodes = []):
+    def __init__(self, nodes=[]):
         """Initializes a new MultiGraph object."""
         self._adjacency_list = {}    # maps parent -> set of (child, label) pairs
         for n in nodes:
@@ -40,7 +42,7 @@ class MultiGraph(object):
     def __str__(self):
         """Returns a concise string description of this graph."""
         nodenum = len(self._adjacency_list)
-        edgenum = reduce(lambda x, y: x+y,
+        edgenum = reduce(lambda x, y: x + y,
                          [len(v) for v in self._adjacency_list.values()])
         labelnum = len(self._label_map)
         return "<MultiGraph: " + \
@@ -53,7 +55,7 @@ class MultiGraph(object):
         if node not in self._adjacency_list:
             self._adjacency_list[node] = set()
 
-    def add_edge(self, source, to, label = None):
+    def add_edge(self, source, to, label=None):
         """Adds an edge to this graph."""
         if source not in self._adjacency_list:
             raise ValueError("Unknown <from> node: " + str(source))
@@ -114,8 +116,8 @@ class MultiGraph(object):
         for n in self._adjacency_list:
             self._adjacency_list[n] = set(x for x in self._adjacency_list[n]
                                           if x[0] != node)
-        # remove all refering pairs in label map
-        for label in list(self._label_map.keys()): # we're editing this!
+        # remove all referring pairs in label map
+        for label in list(self._label_map.keys()):  # we're editing this!
             lm = set(x for x in self._label_map[label]
                      if (x[0] != node) and (x[1] != node))
             # remove the entry completely if the label is now unused
@@ -129,10 +131,10 @@ class MultiGraph(object):
         # hm , this is a multigraph - how should this be implemented?
         raise NotImplementedError("remove_edge is not yet implemented")
 
-# auxilliary graph functions
+# auxiliary graph functions
 
 
-def df_search(graph, root = None):
+def df_search(graph, root=None):
     """Depth first search of g.
 
     Returns a list of all nodes that can be reached from the root node
@@ -159,7 +161,7 @@ def df_search(graph, root = None):
     return search
 
 
-def bf_search(graph, root = None):
+def bf_search(graph, root=None):
     """Breadth first search of g.
 
     Returns a list of all nodes that can be reached from the root node

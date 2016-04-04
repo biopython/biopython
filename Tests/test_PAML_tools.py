@@ -21,13 +21,13 @@ def which(program):
     os_path = os.environ["PATH"].split(os.pathsep)
     if sys.platform == "win32":
         try:
-            #This can vary depending on the Windows language.
+            # This can vary depending on the Windows language.
             prog_files = os.environ["PROGRAMFILES"]
         except KeyError:
             prog_files = r"C:\Program Files"
-        #For Windows, the user is instructed to move the programs to a folder
-        #and then to add the folder to the system path. Just in case they didn't
-        #do that, we can check for it in Program Files.
+        # For Windows, the user is instructed to move the programs to a folder
+        # and then to add the folder to the system path. Just in case they didn't
+        # do that, we can check for it in Program Files.
         likely_dirs = ["",  # Current dir
                        prog_files,
                        os.path.join(prog_files, "paml41"),
@@ -41,7 +41,7 @@ def which(program):
             return exe_file
     return None
 
-#Find the PAML binaries
+# Find the PAML binaries
 if sys.platform == "win32":
     binaries = ["codeml.exe", "baseml.exe", "yn00.exe"]
 else:
@@ -130,6 +130,6 @@ class Yn00Test(Common):
 
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)
     clean_up()

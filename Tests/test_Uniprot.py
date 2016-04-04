@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # Copyright 2010 by Andrea Pierleoni
-# Revisions copyright 2010-2013 by Peter Cock.  All rights reserved.
+# Revisions copyright 2010-2015 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -12,7 +12,7 @@ import unittest
 from Bio import SeqIO
 from Bio.SeqRecord import SeqRecord
 
-#Left as None if the import within UniProtIO fails
+# Left as None if the import within UniProtIO fails
 if SeqIO.UniprotIO.ElementTree is None:
     from Bio import MissingPythonDependencyError
     raise MissingPythonDependencyError("No ElementTree module was found. "
@@ -256,12 +256,12 @@ class TestUniprot(unittest.TestCase):
                 self.assertEqual(len(old.annotations[key]),
                                  len(new.annotations[key]))
                 for r1, r2 in zip(old.annotations[key], new.annotations[key]):
-                    #Tweak for line breaks in plain text SwissProt
+                    # Tweak for line breaks in plain text SwissProt
                     r1.title = r1.title.replace("- ", "-")
                     r2.title = r2.title.replace("- ", "-")
                     r1.journal = r1.journal.rstrip(".")  # Should parser do this?
                     r1.medline_id = ""  # Missing in UniPort XML? TODO - check
-                    #Lots of extra comments in UniProt XML
+                    # Lots of extra comments in UniProt XML
                     r1.comment = ""
                     r2.comment = ""
                     if not r2.journal:
@@ -270,7 +270,7 @@ class TestUniprot(unittest.TestCase):
             elif old.annotations[key] == new.annotations[key]:
                 pass
             elif key in ["date"]:
-                #TODO - Why is this a list vs str?
+                # TODO - Why is this a list vs str?
                 pass
             elif type(old.annotations[key]) != type(new.annotations[key]):
                 raise TypeError("%s gives %s vs %s" %
@@ -278,7 +278,7 @@ class TestUniprot(unittest.TestCase):
             elif key in ["organism"]:
                 if old.annotations[key] == new.annotations[key]:
                     pass
-                elif old.annotations[key].startswith(new.annotations[key]+" "):
+                elif old.annotations[key].startswith(new.annotations[key] + " "):
                     pass
                 else:
                     raise ValueError(key)
@@ -310,6 +310,27 @@ class TestUniprot(unittest.TestCase):
         new = SeqIO.read("SwissProt/Q13639.xml", "uniprot-xml")
         self.compare_txt_xml(old, new)
 
+    def test_H2CNN8(self):
+        """Compare SwissProt text and uniprot XML versions of H2CNN8."""
+        old = SeqIO.read("SwissProt/H2CNN8.txt", "swiss")
+        new = SeqIO.read("SwissProt/H2CNN8.xml", "uniprot-xml")
+        self.compare_txt_xml(old, new)
+
+    def test_F2CXE6(self):
+        """Compare SwissProt text and uniprot XML versions of F2CXE6."""
+        # This evil record has a semi-colon in the genem name,
+        # GN   Name=HvPIP2;8 {ECO:0000313|EMBL:BAN04711.1};
+        # <gene><name type="primary" evidence="3">HvPIP2;8</name></gene>
+        old = SeqIO.read("SwissProt/F2CXE6.txt", "swiss")
+        new = SeqIO.read("SwissProt/F2CXE6.xml", "uniprot-xml")
+        self.compare_txt_xml(old, new)
+        # TODO - Why the mismatch gene_name vs gene_name_primary?
+        # TODO - Handle evidence codes on GN line (see GitHub isse #416)
+        self.assertEqual(old.annotations["gene_name"], 'Name=HvPIP2;8 {ECO:0000313|EMBL:BAN04711.1};')
+        self.assertEqual(new.annotations["gene_name_primary"], 'HvPIP2;8')
+        self.assertEqual(old.name, 'F2CXE6_HORVD')
+        self.assertEqual(new.name, 'F2CXE6_HORVD')
+
     def test_multi_ex(self):
         """Compare SwissProt text and uniprot XML versions of several examples."""
         txt_list = list(SeqIO.parse("SwissProt/multi_ex.txt", "swiss"))
@@ -336,11 +357,11 @@ class TestUniprot(unittest.TestCase):
         xml_index = SeqIO.index("SwissProt/multi_ex.xml", "uniprot-xml")
         self.assertEqual(sorted(txt_index), sorted(ids))
         self.assertEqual(sorted(xml_index), sorted(ids))
-        #Check SeqIO.parse() versus SeqIO.index() for plain text "swiss"
+        # Check SeqIO.parse() versus SeqIO.index() for plain text "swiss"
         for old in txt_list:
             new = txt_index[old.id]
             compare_record(old, new)
-        #Check SeqIO.parse() versus SeqIO.index() for XML "uniprot-xml"
+        # Check SeqIO.parse() versus SeqIO.index() for XML "uniprot-xml"
         for old in xml_list:
             new = xml_index[old.id]
             compare_record(old, new)
@@ -348,5 +369,5 @@ class TestUniprot(unittest.TestCase):
         xml_index.close()
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

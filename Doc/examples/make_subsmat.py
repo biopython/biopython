@@ -4,8 +4,6 @@
 # standard library
 from __future__ import print_function
 
-import sys
-
 # Biopython
 from Bio import SubsMat
 from Bio import AlignIO

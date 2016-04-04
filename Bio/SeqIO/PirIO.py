@@ -1,4 +1,4 @@
-# Copyright 2008-2009 by Peter Cock.  All rights reserved.
+# Copyright 2008-2015 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -19,50 +19,50 @@ The file format is described online at:
 http://www.ebi.ac.uk/help/pir_frame.html
 http://www.cmbi.kun.nl/bioinf/tools/crab_pir.html (currently down)
 
-An example file in this format would be:
+An example file in this format would be::
 
->P1;CRAB_ANAPL
-ALPHA CRYSTALLIN B CHAIN (ALPHA(B)-CRYSTALLIN).
-  MDITIHNPLI RRPLFSWLAP SRIFDQIFGE HLQESELLPA SPSLSPFLMR
-  SPIFRMPSWL ETGLSEMRLE KDKFSVNLDV KHFSPEELKV KVLGDMVEIH
-  GKHEERQDEH GFIAREFNRK YRIPADVDPL TITSSLSLDG VLTVSAPRKQ
-  SDVPERSIPI TREEKPAIAG AQRK*
+  >P1;CRAB_ANAPL
+  ALPHA CRYSTALLIN B CHAIN (ALPHA(B)-CRYSTALLIN).
+    MDITIHNPLI RRPLFSWLAP SRIFDQIFGE HLQESELLPA SPSLSPFLMR
+    SPIFRMPSWL ETGLSEMRLE KDKFSVNLDV KHFSPEELKV KVLGDMVEIH
+    GKHEERQDEH GFIAREFNRK YRIPADVDPL TITSSLSLDG VLTVSAPRKQ
+    SDVPERSIPI TREEKPAIAG AQRK*
 
->P1;CRAB_BOVIN
-ALPHA CRYSTALLIN B CHAIN (ALPHA(B)-CRYSTALLIN).
-  MDIAIHHPWI RRPFFPFHSP SRLFDQFFGE HLLESDLFPA STSLSPFYLR
-  PPSFLRAPSW IDTGLSEMRL EKDRFSVNLD VKHFSPEELK VKVLGDVIEV
-  HGKHEERQDE HGFISREFHR KYRIPADVDP LAITSSLSSD GVLTVNGPRK
-  QASGPERTIP ITREEKPAVT AAPKK*
+  >P1;CRAB_BOVIN
+  ALPHA CRYSTALLIN B CHAIN (ALPHA(B)-CRYSTALLIN).
+    MDIAIHHPWI RRPFFPFHSP SRLFDQFFGE HLLESDLFPA STSLSPFYLR
+    PPSFLRAPSW IDTGLSEMRL EKDRFSVNLD VKHFSPEELK VKVLGDVIEV
+    HGKHEERQDE HGFISREFHR KYRIPADVDP LAITSSLSSD GVLTVNGPRK
+    QASGPERTIP ITREEKPAVT AAPKK*
 
-Or, an example of a multiple sequence alignment:
+Or, an example of a multiple sequence alignment::
 
->P1;S27231
-rhodopsin - northern leopard frog
-MNGTEGPNFY IPMSNKTGVV RSPFDYPQYY LAEPWKYSVL AAYMFLLILL GLPINFMTLY
-VTIQHKKLRT PLNYILLNLG VCNHFMVLCG FTITMYTSLH GYFVFGQTGC YFEGFFATLG
-GEIALWSLVV LAIERYIVVC KPMSNFRFGE NHAMMGVAFT WIMALACAVP PLFGWSRYIP
-EGMQCSCGVD YYTLKPEVNN ESFVIYMFVV HFLIPLIIIS FCYGRLVCTV KEAAAQQQES
-ATTQKAEKEV TRMVIIMVIF FLICWVPYAY VAFYIFTHQG SEFGPIFMTV PAFFAKSSAI
-YNPVIYIMLN KQFRNCMITT LCCGKNPFGD DDASSAATSK TEATSVSTSQ VSPA*
+  >P1;S27231
+  rhodopsin - northern leopard frog
+  MNGTEGPNFY IPMSNKTGVV RSPFDYPQYY LAEPWKYSVL AAYMFLLILL GLPINFMTLY
+  VTIQHKKLRT PLNYILLNLG VCNHFMVLCG FTITMYTSLH GYFVFGQTGC YFEGFFATLG
+  GEIALWSLVV LAIERYIVVC KPMSNFRFGE NHAMMGVAFT WIMALACAVP PLFGWSRYIP
+  EGMQCSCGVD YYTLKPEVNN ESFVIYMFVV HFLIPLIIIS FCYGRLVCTV KEAAAQQQES
+  ATTQKAEKEV TRMVIIMVIF FLICWVPYAY VAFYIFTHQG SEFGPIFMTV PAFFAKSSAI
+  YNPVIYIMLN KQFRNCMITT LCCGKNPFGD DDASSAATSK TEATSVSTSQ VSPA*
 
->P1;I51200
-rhodopsin - African clawed frog
-MNGTEGPNFY VPMSNKTGVV RSPFDYPQYY LAEPWQYSAL AAYMFLLILL GLPINFMTLF
-VTIQHKKLRT PLNYILLNLV FANHFMVLCG FTVTMYTSMH GYFIFGPTGC YIEGFFATLG
-GEVALWSLVV LAVERYIVVC KPMANFRFGE NHAIMGVAFT WIMALSCAAP PLFGWSRYIP
-EGMQCSCGVD YYTLKPEVNN ESFVIYMFIV HFTIPLIVIF FCYGRLLCTV KEAAAQQQES
-LTTQKAEKEV TRMVVIMVVF FLICWVPYAY VAFYIFTHQG SNFGPVFMTV PAFFAKSSAI
-YNPVIYIVLN KQFRNCLITT LCCGKNPFGD EDGSSAATSK TEASSVSSSQ VSPA*
+  >P1;I51200
+  rhodopsin - African clawed frog
+  MNGTEGPNFY VPMSNKTGVV RSPFDYPQYY LAEPWQYSAL AAYMFLLILL GLPINFMTLF
+  VTIQHKKLRT PLNYILLNLV FANHFMVLCG FTVTMYTSMH GYFIFGPTGC YIEGFFATLG
+  GEVALWSLVV LAVERYIVVC KPMANFRFGE NHAIMGVAFT WIMALSCAAP PLFGWSRYIP
+  EGMQCSCGVD YYTLKPEVNN ESFVIYMFIV HFTIPLIVIF FCYGRLLCTV KEAAAQQQES
+  LTTQKAEKEV TRMVVIMVVF FLICWVPYAY VAFYIFTHQG SNFGPVFMTV PAFFAKSSAI
+  YNPVIYIVLN KQFRNCLITT LCCGKNPFGD EDGSSAATSK TEASSVSSSQ VSPA*
 
->P1;JN0120
-rhodopsin - Japanese lamprey
-MNGTEGDNFY VPFSNKTGLA RSPYEYPQYY LAEPWKYSAL AAYMFFLILV GFPVNFLTLF
-VTVQHKKLRT PLNYILLNLA MANLFMVLFG FTVTMYTSMN GYFVFGPTMC SIEGFFATLG
-GEVALWSLVV LAIERYIVIC KPMGNFRFGN THAIMGVAFT WIMALACAAP PLVGWSRYIP
-EGMQCSCGPD YYTLNPNFNN ESYVVYMFVV HFLVPFVIIF FCYGRLLCTV KEAAAAQQES
-ASTQKAEKEV TRMVVLMVIG FLVCWVPYAS VAFYIFTHQG SDFGATFMTL PAFFAKSSAL
-YNPVIYILMN KQFRNCMITT LCCGKNPLGD DE-SGASTSKT EVSSVSTSPV SPA*
+  >P1;JN0120
+  rhodopsin - Japanese lamprey
+  MNGTEGDNFY VPFSNKTGLA RSPYEYPQYY LAEPWKYSAL AAYMFFLILV GFPVNFLTLF
+  VTVQHKKLRT PLNYILLNLA MANLFMVLFG FTVTMYTSMN GYFVFGPTMC SIEGFFATLG
+  GEVALWSLVV LAIERYIVIC KPMGNFRFGN THAIMGVAFT WIMALACAAP PLVGWSRYIP
+  EGMQCSCGPD YYTLNPNFNN ESYVVYMFVV HFLVPFVIIF FCYGRLLCTV KEAAAAQQES
+  ASTQKAEKEV TRMVVLMVIG FLVCWVPYAS VAFYIFTHQG SDFGATFMTL PAFFAKSSAL
+  YNPVIYILMN KQFRNCMITT LCCGKNPLGD DE-SGASTSKT EVSSVSTSPV SPA*
 
 
 As with the FASTA format, each record starts with a line beginning with ">"
@@ -74,16 +74,16 @@ above are typical.
 
 Sequence codes and their meanings:
 
-P1 - Protein (complete)
-F1 - Protein (fragment)
-D1 - DNA (e.g. EMBOSS seqret output)
-DL - DNA (linear)
-DC - DNA (circular)
-RL - RNA (linear)
-RC - RNA (circular)
-N3 - tRNA
-N1 - Other functional RNA
-XX - Unknown
+  - P1 - Protein (complete)
+  - F1 - Protein (fragment)
+  - D1 - DNA (e.g. EMBOSS seqret output)
+  - DL - DNA (linear)
+  - DC - DNA (circular)
+  - RL - RNA (linear)
+  - RC - RNA (circular)
+  - N3 - tRNA
+  - N1 - Other functional RNA
+  - XX - Unknown
 """
 
 from __future__ import print_function
@@ -92,6 +92,8 @@ from Bio.Alphabet import single_letter_alphabet, generic_protein, \
     generic_dna, generic_rna
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
+
+__docformat__ = "restructuredtext en"
 
 _pir_alphabets = {"P1": generic_protein,
                   "F1": generic_protein,
@@ -119,8 +121,21 @@ def PirIterator(handle):
 
     Note that use of title2ids matches that of Bio.Fasta.SequenceParser
     but the defaults are slightly different.
+
+    Example:
+
+    >>> with open("NBRF/DMB_prot.pir") as handle:
+    ...    for record in PirIterator(handle):
+    ...        print("%s length %i" % (record.id, len(record)))
+    HLA:HLA00489 length 263
+    HLA:HLA00490 length 94
+    HLA:HLA00491 length 94
+    HLA:HLA00492 length 80
+    HLA:HLA00493 length 175
+    HLA:HLA01083 length 188
+
     """
-    #Skip any text before the first record (e.g. blank lines, comments)
+    # Skip any text before the first record (e.g. blank lines, comments)
     while True:
         line = handle.readline()
         if line == "":
@@ -147,17 +162,17 @@ def PirIterator(handle):
                 break
             if line[0] == ">":
                 break
-            #Remove trailing whitespace, and any internal spaces
+            # Remove trailing whitespace, and any internal spaces
             lines.append(line.rstrip().replace(" ", ""))
             line = handle.readline()
         seq = "".join(lines)
         if seq[-1] != "*":
-            #Note the * terminator is present on nucleotide sequences too,
-            #it is not a stop codon!
+            # Note the * terminator is present on nucleotide sequences too,
+            # it is not a stop codon!
             raise ValueError(
                 "Sequences in PIR files should include a * terminator!")
 
-        #Return the record and then continue...
+        # Return the record and then continue...
         record = SeqRecord(Seq(seq[:-1], _pir_alphabets[pir_type]),
                            id=identifier, name=identifier,
                            description=description)
@@ -169,22 +184,5 @@ def PirIterator(handle):
     assert False, "Should not reach this line"
 
 if __name__ == "__main__":
-    print("Running quick self test")
-
-    import os
-
-    for name in ["clustalw", "DMA_nuc", "DMB_prot", "B_nuc", "Cw_prot"]:
-        print(name)
-        filename = "../../Tests/NBRF/%s.pir" % name
-        if not os.path.isfile(filename):
-            print("Missing %s" % filename)
-            continue
-
-        records = list(PirIterator(open(filename)))
-        count = 0
-        for record in records:
-            count += 1
-            parts = record.description.split()
-            if "bases," in parts:
-                assert len(record) == int(parts[parts.index("bases,") - 1])
-        print("Could read %s (%i records)" % (name, count))
+    from Bio._utils import run_doctest
+    run_doctest(verbose=0)

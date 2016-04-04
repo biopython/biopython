@@ -15,7 +15,7 @@ from xml.sax.saxutils import XMLGenerator, escape
 from Bio import BiopythonParserWarning
 
 
-#For speed try to use cElementTree rather than ElementTree
+# For speed try to use cElementTree rather than ElementTree
 try:
     if (3, 0) <= sys.version_info[:2] <= (3, 1):
         # Workaround for bug in python 3.0 and 3.1,
@@ -52,7 +52,7 @@ _ELEM_QRESULT_OPT = {
 }
 # element - hit attribute name mapping
 _ELEM_HIT = {
-    #'Hit_def': ('description', str),   # not set by this dict
+    # 'Hit_def': ('description', str),   # not set by this dict
     'Hit_accession': ('accession', str),
     'Hit_len': ('seq_len', int),
 }
@@ -184,7 +184,27 @@ _DTD_OPT = (
 )
 
 # compile RE patterns
+# for capturing BLAST version
 _RE_VERSION = re.compile(r'\d+\.\d+\.\d+\+?')
+# for splitting ID-description pairs
+_RE_ID_DESC_PAIRS_PATTERN = re.compile(" +>")
+# for splitting ID and description (must be used with maxsplit = 1)
+_RE_ID_DESC_PATTERN = re.compile(" +")
+
+
+def _extract_ids_and_descs(concat_str):
+    # Given a string space-separate string of IDs and descriptions,
+    # return a list of tuples, each tuple containing an ID and
+    # a description string (which may be empty)
+
+    # create a list of lists, each list containing an ID and description
+    # or just an ID, if description is not present
+    id_desc_pairs = [re.split(_RE_ID_DESC_PATTERN, x, 1)
+                     for x in re.split(_RE_ID_DESC_PAIRS_PATTERN, concat_str)]
+    # make sure empty descriptions are added as empty strings
+    # also, we return lists for compatibility reasons between Py2 and Py3
+    add_descs = lambda x: x if len(x) == 2 else x + [""]
+    return [pair for pair in map(add_descs, id_desc_pairs)]
 
 
 class BlastXmlParser(object):
@@ -391,9 +411,8 @@ class BlastXmlParser(object):
 
             # combine primary ID and defline first before splitting
             full_id_desc = hit_id + ' ' + hit_desc
-            id_descs = [(x.strip(), y.strip()) for x, y in \
-                    [a.split(' ', 1) for a in full_id_desc.split(' >')]]
-            hit_id, hit_desc = id_descs[0] 
+            id_descs = _extract_ids_and_descs(full_id_desc)
+            hit_id, hit_desc = id_descs[0]
 
             hsps = [hsp for hsp in
                     self._parse_hsp(hit_elem.find('Hit_hsps'),
@@ -568,7 +587,7 @@ class BlastXmlIndexer(SearchIndexer):
                 block = _empty_bytes_string.join(block)
             assert block.count(qstart_mark) == 1, "XML without line breaks? %r" % block
             assert block.count(qend_mark) == 1, "XML without line breaks? %r" % block
-            #Now we have a full <Iteration>...</Iteration> block, find the ID
+            # Now we have a full <Iteration>...</Iteration> block, find the ID
             regx = re.search(re_desc, block)
             try:
                 qstart_desc = regx.group(2)
@@ -592,6 +611,7 @@ class BlastXmlIndexer(SearchIndexer):
         return next(iter(generator))
 
     def get_raw(self, offset):
+        """Return the raw record from the file as a bytes string."""
         qend_mark = self.qend_mark
         handle = self._handle
         handle.seek(offset)
@@ -795,7 +815,7 @@ class BlastXmlWriter(object):
 
         for num, qresult in enumerate(qresults):
             xml.startParent('Iteration')
-            xml.simpleElement('Iteration_iter-num', str(num+1))
+            xml.simpleElement('Iteration_iter-num', str(num + 1))
             opt_dict = {}
             # use custom Iteration_query-ID and Iteration_query-def mapping
             # if the query has a BLAST-generated ID
@@ -830,7 +850,7 @@ class BlastXmlWriter(object):
 
         for num, hit in enumerate(hits):
             xml.startParent('Hit')
-            xml.simpleElement('Hit_num', str(num+1))
+            xml.simpleElement('Hit_num', str(num + 1))
             # use custom hit_id and hit_def mapping if the hit has a
             # BLAST-generated ID
             opt_dict = {}
@@ -850,7 +870,7 @@ class BlastXmlWriter(object):
         xml = self.xml
         for num, hsp in enumerate(hsps):
             xml.startParent('Hsp')
-            xml.simpleElement('Hsp_num', str(num+1))
+            xml.simpleElement('Hsp_num', str(num + 1))
             for elem, attr in _WRITE_MAPS['hsp']:
                 elem = 'Hsp_' + elem
                 try:

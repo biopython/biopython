@@ -34,6 +34,8 @@ from functools import reduce
 
 from Bio.Pathway.Rep.MultiGraph import *
 
+__docformat__ = "restructuredtext en"
+
 
 class Reaction(object):
     """Abstraction for a biochemical transformation.
@@ -44,9 +46,9 @@ class Reaction(object):
       a S1 + b S2 + ... --> c P1 + d P2 + ...
 
     where
-    - a, b, c, d ... are positive numeric stochiometric coefficients,
-    - S1, S2, ... are substrates
-    - P1, P2, ... are products
+        - a, b, c, d ... are positive numeric stochiometric coefficients,
+        - S1, S2, ... are substrates
+        - P1, P2, ... are products
 
     A Reaction should be viewed as the net result of one or more individual
     reaction steps, where each step is potentially facilitated by a different
@@ -55,28 +57,31 @@ class Reaction(object):
 
     Attributes:
 
-    reactants   -- map of involved species to their stochiometric coefficients:
-                     reactants[S] = stochiometric constant for S
-    catalysts   -- list of tuples of catalysts required for this reaction
-    reversible  -- true iff reaction is reversible
-    data        -- reference to arbitrary additional data
+        - reactants   -- dict of involved species to their stochiometric coefficients:
+          reactants[S] = stochiometric constant for S
+        - catalysts   -- list/tuple of tuples of catalysts required for this reaction
+        - reversible  -- true iff reaction is reversible
+        - data        -- reference to arbitrary additional data
 
     Invariants:
 
-    for all S in reactants: reactants[S] != 0
-    for all C in catalysts: catalysts[C] != 0
+        - for all S in reactants: reactants[S] != 0
+        - for all C in catalysts: catalysts[C] != 0
 
     """
 
-    def __init__(self, reactants = {}, catalysts = [],
-                 reversible = 0, data = None):
+    def __init__(self, reactants=None, catalysts=(),
+                 reversible=0, data=None):
         """Initializes a new Reaction object."""
         # enforce invariants on reactants:
-        self.reactants = reactants.copy()
-        # loop over original, edit the copy
-        for r, value in reactants.items():
-            if value == 0:
-                del self.reactants[r]
+        if reactants is None:
+            self.reactants = {}
+        else:
+            self.reactants = reactants.copy()
+            # loop over original, edit the copy
+            for r, value in reactants.items():
+                if value == 0:
+                    del self.reactants[r]
         self.catalysts = sorted(set(catalysts))
         self.data = data
         self.reversible = reversible
@@ -158,7 +163,7 @@ class System(object):
     None
     """
 
-    def __init__(self, reactions = []):
+    def __init__(self, reactions=[]):
         """Initializes a new System object."""
         self.__reactions = set(reactions)
 
@@ -185,7 +190,7 @@ class System(object):
 
         Note the order is arbitrary!
         """
-        #TODO - Define __lt__ so that Reactions can be sorted on Python?
+        # TODO - Define __lt__ so that Reactions can be sorted on Python?
         return list(self.__reactions)
 
     def species(self):
@@ -198,11 +203,11 @@ class System(object):
 
         Returns (species, reactions, stoch) where
 
-            species    = ordered list of species in this system
-            reactions  = ordered list of reactions in this system
-            stoch      = 2D array where stoch[i][j] is coef of the
-                         jth species in the ith reaction, as defined
-                         by species and reactions above
+            - species    = ordered list of species in this system
+            - reactions  = ordered list of reactions in this system
+            - stoch      = 2D array where stoch[i][j] is coef of the
+              jth species in the ith reaction, as defined
+              by species and reactions above
         """
         # Note: This an inefficient and ugly temporary implementation.
         #       To be practical, stochiometric matrices should probably
@@ -228,7 +233,7 @@ class Interaction(object):
 
     Attributes:
 
-    data      -- reference to arbitrary additional data
+        - data      -- reference to arbitrary additional data
     """
 
     def __init_(self, data):
@@ -260,7 +265,7 @@ class Network(object):
     None
     """
 
-    def __init__(self, species = []):
+    def __init__(self, species=[]):
         """Initializes a new Network object."""
         self.__graph = MultiGraph(species)
 

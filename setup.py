@@ -89,14 +89,14 @@ def is_pypy():
         if platform.python_implementation() == 'PyPy':
             return True
     except AttributeError:
-        #New in Python 2.6, not in Jython yet either
+        # New in Python 2.6, not in Jython yet either
         pass
     return False
 
 
 def is_ironpython():
     return sys.platform == "cli"
-    #TODO - Use platform as in Pypy test?
+    # TODO - Use platform as in Pypy test?
 
 
 def get_yes_or_no(question, default):
@@ -126,10 +126,18 @@ if sys.version_info[:2] < (2, 6):
     print("Biopython requires Python 2.6 or 2.7 (or Python 3.3 or later). "
           "Python %d.%d detected" % sys.version_info[:2])
     sys.exit(1)
+elif sys.version_info[:2] == (2, 6):
+    print("WARNING: Biopython support for Python 2.6 is now deprecated.")
+elif is_pypy() and sys.version_info[0] == 3 and sys.version_info[:2] == (3, 2):
+    # PyPy3 2.4.0 is compatibile with Python 3.2.5 plus unicode literals
+    # so ought to work with Biopython
+    pass
 elif sys.version_info[0] == 3 and sys.version_info[:2] < (3, 3):
     print("Biopython requires Python 3.3 or later (or Python 2.6 or 2.7). "
           "Python %d.%d detected" % sys.version_info[:2])
     sys.exit(1)
+elif sys.version_info[:2] == (3, 3):
+    print("WARNING: Biopython support for Python 3.3 is now deprecated.")
 
 
 def check_dependencies_once():
@@ -309,7 +317,7 @@ PACKAGES = [
     'Bio.Application',
     'Bio.Blast',
     'Bio.CAPS',
-    'Bio.CodonAlign',
+    'Bio.codonalign',
     'Bio.Compass',
     'Bio.Crystal',
     'Bio.Data',
@@ -333,9 +341,6 @@ PACKAGES = [
     'Bio.KEGG.Map',
     'Bio.KEGG.KGML',
     'Bio.Medline',
-    'Bio.Motif',
-    'Bio.Motif.Parsers',
-    'Bio.Motif.Applications',
     'Bio.motifs',
     'Bio.motifs.applications',
     'Bio.motifs.jaspar',
@@ -366,6 +371,7 @@ PACKAGES = [
     'Bio.Statistics',
     'Bio.SubsMat',
     'Bio.SVDSuperimposer',
+    'Bio.PDB.QCPSuperimposer',
     'Bio.SwissProt',
     'Bio.TogoWS',
     'Bio.Phylo',
@@ -375,7 +381,7 @@ PACKAGES = [
     'Bio.UniProt',
     'Bio.Wise',
     'Bio._py3k',
-    #Other top level packages,
+    # Other top level packages,
     'BioSQL',
     ]
 
@@ -407,7 +413,7 @@ else:
               ),
     ]
 
-#Add extensions that requires NumPy to build
+# Add extensions that requires NumPy to build
 if is_Numpy_installed():
     import numpy
     numpy_include_dir = numpy.get_include()
@@ -424,29 +430,29 @@ if is_Numpy_installed():
                   include_dirs=[numpy_include_dir],
                   ))
     EXTENSIONS.append(
-        Extension('Bio.Motif._pwm',
-                  ["Bio/Motif/_pwm.c"],
-                  include_dirs=[numpy_include_dir],
-                  ))
-    EXTENSIONS.append(
         Extension('Bio.motifs._pwm',
                   ["Bio/motifs/_pwm.c"],
                   include_dirs=[numpy_include_dir],
                   ))
+    EXTENSIONS.append(
+        Extension('Bio.PDB.QCPSuperimposer.qcprotmodule',
+                  ["Bio/PDB/QCPSuperimposer/qcprotmodule.c"],
+                  include_dirs=[numpy_include_dir],
+                  ))
 
 
-#We now define the Biopython version number in Bio/__init__.py
-#Here we can't use "import Bio" then "Bio.__version__" as that would
-#tell us the version of Biopython already installed (if any).
+# We now define the Biopython version number in Bio/__init__.py
+# Here we can't use "import Bio" then "Bio.__version__" as that would
+# tell us the version of Biopython already installed (if any).
 __version__ = "Undefined"
 for line in open('Bio/__init__.py'):
     if (line.startswith('__version__')):
         exec(line.strip())
 
-#Simple trick to use the 2to3 converted source under Python 3,
-#change the current directory before/after running setup.
-#Note as a side effect there will be a build folder underneath
-#the python3_source folder.
+# Simple trick to use the 2to3 converted source under Python 3,
+# change the current directory before/after running setup.
+# Note as a side effect there will be a build folder underneath
+# the python3_source folder.
 old_path = os.getcwd()
 try:
     src_path = python3_source

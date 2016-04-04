@@ -13,6 +13,8 @@ import array
 # Sequence objects from Biopython
 from Bio.Seq import MutableSeq
 
+__docformat__ = "restructuredtext en"
+
 
 def function_population(new_genome, num_organisms, fitness_calculator):
     """Generate a population given a function to create genomes
@@ -102,7 +104,7 @@ class Organism(object):
     if you are not careful to recalculate it after changes with
     recalculate_fitness()
     """
-    def __init__(self, genome, fitness_calculator, start_fitness = None):
+    def __init__(self, genome, fitness_calculator, start_fitness=None):
         """Initialize an organism
 
         Arguments:

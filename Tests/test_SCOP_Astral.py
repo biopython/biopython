@@ -47,11 +47,11 @@ class AstralTests(unittest.TestCase):
         domains2 = self.astral.domainsClusteredByEv(1e-15)
         self.assertEqual(len(domains2), 1)
 
-        #d1 = scop.getDomainBySid("d3sdha_")
-        #self.assertEqual(d1.isIn(astral.getHashedDomainsClusteredByPercentId(20))
-        #self.assertEqual(d1.isIn(astral.getHashedDomainsClusteredByEv(-15))
+        # d1 = scop.getDomainBySid("d3sdha_")
+        # self.assertEqual(d1.isIn(astral.getHashedDomainsClusteredByPercentId(20))
+        # self.assertEqual(d1.isIn(astral.getHashedDomainsClusteredByEv(-15))
 
 
-if __name__=='__main__':
-    runner = unittest.TextTestRunner(verbosity = 2)
+if __name__ == '__main__':
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

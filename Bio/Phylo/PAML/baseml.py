@@ -8,17 +8,19 @@ import os.path
 from ._paml import Paml, _relpath
 from . import _parse_baseml
 
+__docformat__ = "restructuredtext en"
+
 
 class BasemlError(EnvironmentError):
     """BASEML has failed. Run with verbose = True to view BASEML's error
-message"""
+    message"""
 
 
 class Baseml(Paml):
     """This class implements an interface to BASEML, part of the PAML package."""
 
-    def __init__(self, alignment = None, tree = None, working_dir = None,
-                out_file = None):
+    def __init__(self, alignment=None, tree=None, working_dir=None,
+                out_file=None):
         """Initialize the Baseml instance.
 
         The user may optionally pass in strings specifying the locations
@@ -32,30 +34,30 @@ class Baseml(Paml):
         self.tree = tree
         self.ctl_file = "baseml.ctl"
         self._options = {"noisy": None,
-                        "verbose": None,
-                        "runmode": None,
-                        "model": None,
-                        "model_options": None,
-                        "Mgene": None,
-                        "ndata": None,
-                        "clock": None,
-                        "fix_kappa": None,
-                        "kappa": None,
-                        "fix_alpha": None,
-                        "alpha": None,
-                        "Malpha": None,
-                        "ncatG": None,
-                        "fix_rho": None,
-                        "rho": None,
-                        "nparK": None,
-                        "nhomo": None,
-                        "getSE": None,
-                        "RateAncestor": None,
-                        "Small_Diff": None,
-                        "cleandata": None,
-                        "icode": None,
-                        "fix_blength": None,
-                        "method": None}
+                         "verbose": None,
+                         "runmode": None,
+                         "model": None,
+                         "model_options": None,
+                         "Mgene": None,
+                         "ndata": None,
+                         "clock": None,
+                         "fix_kappa": None,
+                         "kappa": None,
+                         "fix_alpha": None,
+                         "alpha": None,
+                         "Malpha": None,
+                         "ncatG": None,
+                         "fix_rho": None,
+                         "rho": None,
+                         "nparK": None,
+                         "nhomo": None,
+                         "getSE": None,
+                         "RateAncestor": None,
+                         "Small_Diff": None,
+                         "cleandata": None,
+                         "icode": None,
+                         "fix_blength": None,
+                         "method": None}
 
     def write_ctl_file(self):
         """Dynamically build a BASEML control file from the options.
@@ -145,7 +147,8 @@ class Baseml(Paml):
                 self._options[option] = None
 
     def _set_rel_paths(self):
-        """Convert all file/directory locations to paths relative to the current working directory.
+        """Convert all file/directory locations to paths relative to the current
+        working directory.
 
         BASEML requires that all paths specified in the control file be
         relative to the directory from which it is called rather than
@@ -155,8 +158,8 @@ class Baseml(Paml):
         if self.tree is not None:
             self._rel_tree = _relpath(self.tree, self.working_dir)
 
-    def run(self, ctl_file = None, verbose = False, command = "baseml",
-                parse = True):
+    def run(self, ctl_file=None, verbose=False, command="baseml",
+                parse=True):
         """Run baseml using the current configuration and then parse the results.
 
         Return a process signal so the user can determine if

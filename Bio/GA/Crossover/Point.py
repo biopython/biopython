@@ -18,6 +18,8 @@ new genome 2 --   a b c D E F
 # standard modules
 from .GeneralPoint import TwoCrossover
 
+__docformat__ = "restructuredtext en"
+
 
 class SinglePointCrossover(TwoCrossover):
     """Perform point crossover between genomes at some defined rate.
@@ -26,7 +28,7 @@ class SinglePointCrossover(TwoCrossover):
     frequency.  Length of genome is preserved, as the crossover
     point is the same for either genome.
     """
-    def __init__(self, crossover_prob = .1):
+    def __init__(self, crossover_prob=.1):
         """Initialize to do crossovers at the specified probability.
         """
         TwoCrossover.__init__(self, 1, crossover_prob)

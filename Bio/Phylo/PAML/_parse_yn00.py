@@ -5,11 +5,13 @@
 
 import re
 
+__docformat__ = "restructuredtext en"
+
 
 def parse_ng86(lines, results):
-    """ Parse the Nei & Gojobori (1986) section of the resuls.
+    """ Parse the Nei & Gojobori (1986) section of the results.
     Nei_Gojobori results are organized in a lower
-    triangular mattrix, with the sequence names labeling
+    triangular matrix, with the sequence names labeling
     the rows and statistics in the format:
     w (dN dS) per column
     Example row (2 columns):
@@ -27,10 +29,10 @@ def parse_ng86(lines, results):
             for i in range(0, len(line_floats), 3):
                 NG86 = {}
                 NG86["omega"] = line_floats[i]
-                NG86["dN"] = line_floats[i+1]
-                NG86["dS"] = line_floats[i+2]
-                results[seq_name][sequences[i//3]] = {"NG86":NG86}
-                results[sequences[i//3]][seq_name] = {"NG86":NG86}
+                NG86["dN"] = line_floats[i + 1]
+                NG86["dS"] = line_floats[i + 2]
+                results[seq_name][sequences[i // 3]] = {"NG86": NG86}
+                results[sequences[i // 3]][seq_name] = {"NG86": NG86}
     return (results, sequences)
 
 
@@ -38,7 +40,7 @@ def parse_yn00(lines, results, sequences):
     """ Parse the Yang & Nielsen (2000) part of the results.
     Yang & Nielsen results are organized in a table with
     each row comprising one pairwise species comparison.
-    Rows are labeled by spequence number rather than by
+    Rows are labeled by sequence number rather than by
     sequence name."""
 
     # Example (header row and first table row):
@@ -53,8 +55,8 @@ def parse_yn00(lines, results, sequences):
         if row_res is not None:
             seq1 = int(row_res.group(1))
             seq2 = int(row_res.group(2))
-            seq_name1 = sequences[seq1-1]
-            seq_name2 = sequences[seq2-1]
+            seq_name1 = sequences[seq1 - 1]
+            seq_name2 = sequences[seq2 - 1]
             YN00 = {}
             YN00["S"] = line_floats[0]
             YN00["N"] = line_floats[1]

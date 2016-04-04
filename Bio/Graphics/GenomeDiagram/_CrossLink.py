@@ -9,6 +9,8 @@
 
 from reportlab.lib import colors
 
+__docformat__ = "restructuredtext en"
+
 
 class CrossLink(object):
     """Hold information for drawing a cross link between features.
@@ -58,7 +60,7 @@ class CrossLink(object):
             track, start, end = self.featureA
             assert track in tracks
             return track
-        except:
+        except Exception:  # TODO: ValueError?
             for track in tracks:
                 for feature_set in track.get_sets():
                     if hasattr(feature_set, "features"):

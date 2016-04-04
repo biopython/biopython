@@ -15,6 +15,8 @@ except ImportError:
         "Install NumPy if you want to use Bio.LogisticRegression.")
 
 import unittest
+import copy
+
 from Bio import LogisticRegression
 
 
@@ -55,14 +57,43 @@ ys = [1,
       0]
 
 
+def show_progress(iteration, loglikelihood):
+    """Callback function to be used for training the model"""
+    pass
+
+
 class TestLogisticRegression(unittest.TestCase):
+
+    def test_xs_and_ys_input_parameter_lengths(self):
+        modified_xs = copy.copy(xs)
+        modified_xs.pop()
+        self.assertRaises(ValueError,
+                          LogisticRegression.train, modified_xs, ys)
+
+    def test_ys_input_class_assignments(self):
+        modified_ys = copy.copy(ys)
+        modified_ys.pop()
+        modified_ys.append(2)
+        self.assertRaises(ValueError,
+                          LogisticRegression.train, xs, modified_ys)
+
+    def test_dimensionality_of_input_xs(self):
+        modified_xs = copy.copy(xs)
+        modified_xs[0] = []
+        self.assertRaises(ValueError,
+                          LogisticRegression.train, modified_xs, ys)
 
     def test_calculate_model(self):
         model = LogisticRegression.train(xs, ys)
         beta = model.beta
-        self.assertAlmostEqual(beta[0],  8.9830, places=4)
+        self.assertAlmostEqual(beta[0], 8.9830, places=4)
         self.assertAlmostEqual(beta[1], -0.0360, places=4)
-        self.assertAlmostEqual(beta[2],  0.0218, places=4)
+        self.assertAlmostEqual(beta[2], 0.0218, places=4)
+
+    def test_calculate_model_with_update_callback(self):
+        model = LogisticRegression.train(xs, ys, update_fn=show_progress)
+        beta = model.beta
+        self.assertAlmostEqual(beta[0], 8.9830, places=4)
 
     def test_classify(self):
         model = LogisticRegression.train(xs, ys)
@@ -87,21 +118,21 @@ class TestLogisticRegression(unittest.TestCase):
         for i in range(len(predictions)):
             prediction = LogisticRegression.classify(model, xs[i])
             self.assertEqual(prediction, predictions[i])
-            if prediction==ys[i]:
-                correct+=1
+            if prediction == ys[i]:
+                correct += 1
         self.assertEqual(correct, 16)
 
     def test_leave_one_out(self):
         correct = 0
         predictions = [1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0]
         for i in range(len(predictions)):
-            model = LogisticRegression.train(xs[:i]+xs[i+1:], ys[:i]+ys[i+1:])
+            model = LogisticRegression.train(xs[:i] + xs[i + 1:], ys[:i] + ys[i + 1:])
             prediction = LogisticRegression.classify(model, xs[i])
             self.assertEqual(prediction, predictions[i])
-            if prediction==ys[i]:
-                correct+=1
+            if prediction == ys[i]:
+                correct += 1
         self.assertEqual(correct, 15)
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

@@ -232,7 +232,7 @@ class BlastTabParser(object):
         # we want to transform 'std' to its proper column names
         if 'std' in fields:
             idx = fields.index('std')
-            fields = fields[:idx] + _DEFAULT_FIELDS + fields[idx+1:]
+            fields = fields[:idx] + _DEFAULT_FIELDS + fields[idx + 1:]
         # if set(fields) has a null intersection with minimum required
         # fields for hit and query, raise an exception
         if not set(fields).intersection(_MIN_QUERY_FIELDS) or \
@@ -373,6 +373,8 @@ class BlastTabParser(object):
         qres_state = None
         hit_state = None
         file_state = None
+        cur_qid = None
+        cur_hid = None
         # dummies for initial id caches
         prev_qid = None
         prev_hid = None
@@ -579,7 +581,7 @@ class BlastTabIndexer(SearchIndexer):
             # get end offset here since we only know a qresult ends after
             # encountering the next one
             end_offset = handle.tell()
-            #line = handle.readline()
+            # line = handle.readline()
             line = handle.readline()
 
             if qresult_key is None:
@@ -600,7 +602,7 @@ class BlastTabIndexer(SearchIndexer):
                 break
 
     def get_raw(self, offset):
-        """Returns the raw string of a QueryResult object from the given offset."""
+        """Returns the raw bytes string of a QueryResult object from the given offset."""
         if self._kwargs['comments']:
             getfunc = self._get_raw_qresult_commented
         else:
@@ -609,7 +611,7 @@ class BlastTabIndexer(SearchIndexer):
         return getfunc(offset)
 
     def _get_raw_qresult(self, offset):
-        """Returns the raw string of a single QueryResult from a noncommented file."""
+        """Returns the raw bytes string of a single QueryResult from a noncommented file."""
         handle = self._handle
         handle.seek(offset)
         qresult_raw = _as_bytes('')
@@ -636,7 +638,7 @@ class BlastTabIndexer(SearchIndexer):
         return qresult_raw
 
     def _get_raw_qresult_commented(self, offset):
-        """Returns the raw string of a single QueryResult from a commented file."""
+        """Returns the bytes raw string of a single QueryResult from a commented file."""
         handle = self._handle
         handle.seek(offset)
         qresult_raw = _as_bytes('')

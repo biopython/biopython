@@ -6,204 +6,81 @@
 # Contact:       Leighton Pritchard, Scottish Crop Research Institute,
 #                Invergowrie, Dundee, Scotland, DD2 5DA, UK
 #                L.Pritchard@scri.ac.uk
-################################################################################
+"""Provides a container for information concerning the tracks to be drawn in a diagram.
 
-""" Diagram module
+It also provides the interface for defining the diagram (possibly split these
+functions in later version?).
 
-    Provides:
+For drawing capabilities, this module uses reportlab to draw and write the
+diagram:
 
-    o Diagram -   Container for information concerning the tracks to be
-                    drawn in a diagram, and the interface for defining the
-                    diagram (possibly split these functions in later version?)
+http://www.reportlab.com
 
-    For drawing capabilities, this module uses reportlab to draw and write
-    the diagram:
-
-    http://www.reportlab.com
-
-    For dealing with biological information, the package expects BioPython
-    objects - namely SeqRecord ojbects containing SeqFeature objects.
+For dealing with biological information, the package expects BioPython
+objects - namely SeqRecord objects containing SeqFeature objects.
 """
 
-#------------------------------------------------------------------------------
-# IMPORTS
-
-# ReportLab
 try:
     from reportlab.graphics import renderPM
 except ImportError:
-    #This is an optional part of ReportLab, so may not be installed.
-    renderPM=None
+    # This is an optional part of ReportLab, so may not be installed.
+    renderPM = None
 
-# GenomeDiagram
 from ._LinearDrawer import LinearDrawer
 from ._CircularDrawer import CircularDrawer
 from ._Track import Track
 
 from Bio.Graphics import _write
 
-#------------------------------------------------------------------------------
-# CLASSES
-
-#------------------------------------------------------------
-# Diagram
+__docformat__ = "restructuredtext en"
 
 
 class Diagram(object):
-    """ Diagram
+    """Diagram container.
 
-        Provides:
-
-        Attributes:
-
-        o name         String, identifier for the diagram
-
-        o tracks       List of Track objects comprising the diagram
-
-        o format       String, format of the diagram (circular/linear)
-
-        o pagesize     String, the pagesize of output
-
-        o orientation  String, the page orientation (landscape/portrait)
-
-        o x            Float, the proportion of the page to take up with even
-                              X margins
-
-        o y            Float, the proportion of the page to take up with even
-                              Y margins
-
-        o xl           Float, the proportion of the page to take up with the
-                              left X margin
-
-        o xr           Float, the proportion of the page to take up with the
-                              right X margin
-
-        o yt           Float, the proportion of the page to take up with the
-                              top Y margin
-
-        o yb           Float, the proportion of the page to take up with the
-                              bottom Y margin
-
-        o circle_core  Float, the proportion of the available radius to leave
-                       empty at the center of a circular diagram (0 to 1).
-
-        o start        Int, the base/aa position to start the diagram at
-
-        o end          Int, the base/aa position to end the diagram at
-
-        o tracklines   Boolean, True if track guidelines are to be drawn
-
-        o fragments    Int, for a linear diagram, the number of equal divisions
-                                into which the sequence is divided
-
-        o fragment_size Float, the proportion of the space available to each
-                                   fragment that should be used in drawing
-
-        o track_size   Float, the proportion of the space available to each
-                                  track that should be used in drawing
-
-        o circular     Boolean, True if the genome/sequence to be drawn is, in
-                                reality, circular.
-
-        Methods:
-
-        o __init__(self, name=None) Called on instantiation
-
-        o draw(self, format='circular', ...) Instructs the package to draw
-            the diagram
-
-        o write(self, filename='test1.ps', output='PS') Writes the drawn
-            diagram to a specified file, in a specified format.
-
-        o add_track(self, track, track_level) Adds a Track object to the
-            diagram, with instructions to place it at a particular level on
-            the diagram
-
-        o del_track(self, track_level) Removes the track that is to be drawn
-            at a particular level on the diagram
-
-        o get_tracks(self) Returns the list of Track objects to be drawn
-            contained in the diagram
-
-        o renumber_tracks(self, low=1) Renumbers all tracks consecutively,
-            optionally from a passed lowest number
-
-        o get_levels(self) Returns a list of levels currently occupied by
-            Track objects
-
-        o get_drawn_levels(self) Returns a list of levels currently occupied
-            by Track objects that will be shown in the drawn diagram (i.e.
-            are not hidden)
-
-        o range(self) Returns the lowest- and highest-numbered positions
-            contained within features in all tracks on the diagram as a tuple.
-
-        o __getitem__(self, key) Returns the track contained at the level of
-            the passed key
-
-        o __str__(self) Returns a formatted string describing the diagram
-
+    Arguments:
+        - name           - a string, identifier for the diagram.
+        - tracks         - a list of Track objects comprising the diagram.
+        - format         - a string, format of the diagram 'circular' or
+          'linear', depending on the sort of diagram required.
+        - pagesize       - a string, the pagesize of output describing the ISO
+          size of the image, or a tuple of pixels.
+        - orientation    - a string describing the required orientation of the
+          final drawing ('landscape' or 'portrait').
+        - x              - a float (0->1), the proportion of the page to take
+          up with even X margins t the page.
+        - y              - a float (0->1), the proportion of the page to take
+          up with even Y margins to the page.
+        - xl             - a float (0->1), the proportion of the page to take
+          up with the left X margin to the page (overrides x).
+        - xr             - a float (0->1), the proportion of the page to take
+          up with the right X margin to the page (overrides x).
+        - yt             - a float (0->1), the proportion of the page to take
+          up with the top Y margin to the page (overrides y).
+        - yb             - a float (0->1), the proportion of the page to take
+          up with the bottom Y margin to the page (overrides y).
+        - circle_core    - a float, the proportion of the available radius to
+          leave empty at the center of a circular diagram (0 to 1).
+        - start          - an integer, the base/aa position to start the diagram at.
+        - end            - an integer, the base/aa position to end the diagram at.
+        - tracklines     - a boolean, True if track guidelines are to be drawn.
+        - fragments      - and integer, for a linear diagram, the number of equal
+          divisions into which the sequence is divided.
+        - fragment_size  - a float (0->1), the proportion of the space
+          available to each fragment that should be used in drawing.
+        - track_size     - a float (0->1), the proportion of the space
+          available to each track that should be used in drawing with sigils.
+        - circular       - a boolean, True if the genome/sequence to be drawn
+          is, in reality, circular.
     """
     def __init__(self, name=None, format='circular', pagesize='A3',
-         orientation='landscape', x=0.05, y=0.05, xl=None,
-         xr=None, yt=None, yb=None, start=None, end=None,
-         tracklines=False, fragments=10, fragment_size=0.9,
-         track_size=0.75, circular=True, circle_core=0.0):
-        """ __init__(self, name=None)
+                 orientation='landscape', x=0.05, y=0.05, xl=None,
+                 xr=None, yt=None, yb=None, start=None, end=None,
+                 tracklines=False, fragments=10, fragment_size=0.9,
+                 track_size=0.75, circular=True, circle_core=0.0):
+        """Called on instantiation.
 
-            o name  String describing the diagram
-
-            o format    String: 'circular' or 'linear', depending on the sort of
-                        diagram required
-
-            o pagesize  String describing the ISO size of the image, or a tuple
-                        of pixels
-
-            o orientation   String describing the required orientation of the
-                            final drawing ('landscape' or 'portrait')
-
-            o x         Float (0->1) describing the relative size of the X
-                        margins to the page
-
-            o y         Float (0->1) describing the relative size of the Y
-                        margins to the page
-
-            o xl        Float (0->1) describing the relative size of the left X
-                        margin to the page (overrides x)
-
-            o xl        Float (0->1) describing the relative size of the left X
-                        margin to the page (overrides x)
-
-            o xr        Float (0->1) describing the relative size of the right X
-                        margin to the page (overrides x)
-
-            o yt        Float (0->1) describing the relative size of the top Y
-                        margin to the page (overrides y)
-
-            o yb        Float (0->1) describing the relative size of the lower Y
-                        margin to the page (overrides y)
-
-            o start     Int, the position to begin drawing the diagram at
-
-
-            o end       Int, the position to stop drawing the diagram at
-
-            o tracklines    Boolean flag to show (or not) lines delineating
-                        tracks on the diagram
-
-            o fragments Int, for linear diagrams, the number of sections into
-                        which to break the sequence being drawn
-
-            o fragment_size     Float (0->1), for linear diagrams, describing
-                                the proportion of space in a fragment to take
-                                up with tracks
-
-            o track_size        Float (0->1) describing the proportion of space
-                                in a track to take up with sigils
-
-            o circular  Boolean flag to indicate whether the sequence being
-                        drawn is circular
-
+        gdd = Diagram(name=None)
         """
         self.tracks = {}   # Holds all Track objects, keyed by level
         self.name = name    # Description of the diagram
@@ -226,16 +103,16 @@ class Diagram(object):
         self.circular = circular
         self.circle_core = circle_core
         self.cross_track_links = []
+        self.drawing = None
 
     def set_all_tracks(self, attr, value):
-        """ set_all_tracks(self, attr, value)
+        """Set the passed attribute of all tracks in the set to the passed value.
 
-            o attr      An attribute of the Track class
+        Arguments:
+            - attr    - An attribute of the Track class.
+            - value   - The value to set that attribute.
 
-            o value     The value to set that attribute
-
-            Set the passed attribute of all tracks in the set to the
-            passed value
+        set_all_tracks(self, attr, value)
         """
         for track in self.tracks.values():
             if hasattr(track, attr):          # If the feature has the attribute
@@ -248,6 +125,8 @@ class Diagram(object):
              fragment_size=None, track_size=None, circular=None,
              circle_core=None, cross_track_links=None):
         """Draw the diagram, with passed parameters overriding existing attributes.
+
+        gdd.draw(format='circular')
         """
         # Pass the parameters to the drawer objects that will build the
         # diagrams.  At the moment, we detect overrides with an or in the
@@ -281,80 +160,86 @@ class Diagram(object):
         self.drawing = drawer.drawing  # Get the completed drawing
 
     def write(self, filename='test1.ps', output='PS', dpi=72):
-        """ write(self, filename='test1.ps', output='PS', dpi=72)
+        """Writes the drawn diagram to a specified file, in a specified format.
 
-            o filename      String indicating the name of the output file,
-                            or a handle to write to.
+        Arguments:
+            - filename   - a string indicating the name of the output file,
+              or a handle to write to.
+            - output     - a string indicating output format, one of PS, PDF,
+              SVG, or provided the ReportLab renderPM module is installed, one
+              of the bitmap formats JPG, BMP, GIF, PNG, TIFF or TIFF.  The
+              format can be given in upper or lower case.
+            - dpi        - an integer. Resolution (dots per inch) for bitmap formats.
 
-            o output        String indicating output format, one of PS, PDF,
-                            SVG, or provided the ReportLab renderPM module is
-                            installed, one of the bitmap formats JPG, BMP,
-                            GIF, PNG, TIFF or TIFF.  The format can be given
-                            in upper or lower case.
-
-            o dpi           Resolution (dots per inch) for bitmap formats.
-
-            Write the completed drawing out to a file in a prescribed format
-
+        Returns:
             No return value.
+
+        write(self, filename='test1.ps', output='PS', dpi=72)
         """
         return _write(self.drawing, filename, output, dpi=dpi)
 
     def write_to_string(self, output='PS', dpi=72):
         """Returns a byte string containing the diagram in the requested format.
 
-            o output        String indicating output format, one of PS, PDF,
-                            SVG, JPG, BMP, GIF, PNG, TIFF or TIFF (as
-                            specified for the write method).
+        Arguments:
+            - output    - a string indicating output format, one of PS, PDF,
+              SVG, JPG, BMP, GIF, PNG, TIFF or TIFF (as specified for the write
+              method).
+            - dpi       - Resolution (dots per inch) for bitmap formats.
 
-            o dpi           Resolution (dots per inch) for bitmap formats.
-
-            Return the completed drawing as a bytes string in a prescribed format
+        Returns:
+            Return the completed drawing as a bytes string in a prescribed
+            format.
         """
-        #The ReportLab drawToString method, which this function used to call,
-        #just used a cStringIO or StringIO handle with the drawToFile method.
-        #In order to put all our complicated file format specific code in one
-        #place we just used a StringIO handle here, later a BytesIO handle
-        #for Python 3 compatibility.
+        # The ReportLab drawToString method, which this function used to call,
+        # just used a cStringIO or StringIO handle with the drawToFile method.
+        # In order to put all our complicated file format specific code in one
+        # place we just used a StringIO handle here, later a BytesIO handle
+        # for Python 3 compatibility.
         #
-        #TODO - Rename this method to include keyword bytes?
+        # TODO - Rename this method to include keyword bytes?
         from io import BytesIO
         handle = BytesIO()
         self.write(handle, output, dpi)
         return handle.getvalue()
 
     def add_track(self, track, track_level):
-        """ add_track(self, track, track_level)
+        """Adds a Track object to the diagram.
 
-            o track         Track object to draw
+        It also accepts instructions to place it at a particular level on the
+        diagram.
 
-            o track_level   Int, the level at which the track will be drawn
-                            (above an arbitrary baseline)
+        Arguments:
+            - track          - Track object to draw.
+            - track_level    - an integer. The level at which the track will be
+              drawn (above an arbitrary baseline).
 
-            Add a pre-existing Track to the diagram at a given level
+        add_track(self, track, track_level)
         """
         if track is None:
             raise ValueError("Must specify track")
         if track_level not in self.tracks:     # No track at that level
             self.tracks[track_level] = track   # so just add it
         else:       # Already a track there, so shunt all higher tracks up one
-            occupied_levels = sorted(self.get_levels()) # Get list of occupied levels...
+            occupied_levels = sorted(self.get_levels())  # Get list of occupied levels...
             occupied_levels.reverse()           # ...reverse it (highest first)
             for val in occupied_levels:
                 # If track value >= that to be added
                 if val >= track.track_level:
-                    self.tracks[val+1] = self.tracks[val] # ...increment by 1
+                    self.tracks[val + 1] = self.tracks[val]  # ...increment by 1
             self.tracks[track_level] = track   # And put the new track in
         self.tracks[track_level].track_level = track_level
 
     def new_track(self, track_level, **args):
-        """ new_track(self, track_level) -> Track
+        """Add a new Track to the diagram at a given level.
 
-            o track_level   Int, the level at which the track will be drawn
-                            (above an arbitrary baseline)
+        The track is returned for further user manipulation.
 
-            Add a new Track to the diagram at a given level and returns it for
-            further user manipulation.
+        Arguments:
+            - track_level   - an integer. The level at which the track will be
+              drawn (above an arbitrary baseline).
+
+        new_track(self, track_level)
         """
         newtrack = Track()
         for key in args:
@@ -362,54 +247,58 @@ class Diagram(object):
         if track_level not in self.tracks:        # No track at that level
             self.tracks[track_level] = newtrack   # so just add it
         else:       # Already a track there, so shunt all higher tracks up one
-            occupied_levels = sorted(self.get_levels()) # Get list of occupied levels...
+            occupied_levels = sorted(self.get_levels())  # Get list of occupied levels...
             occupied_levels.reverse()           # ...reverse (highest first)...
             for val in occupied_levels:
                 if val >= track_level:        # Track value >= that to be added
-                    self.tracks[val+1] = self.tracks[val] # ..increment by 1
+                    self.tracks[val + 1] = self.tracks[val]  # ..increment by 1
             self.tracks[track_level] = newtrack   # And put the new track in
         self.tracks[track_level].track_level = track_level
         return newtrack
 
     def del_track(self, track_level):
-        """ del_track(self, track_level)
+        """Removes the track to be drawn at a particular level on the diagram.
 
-            o track_level   Int, the level of the track on the diagram to delete
+        Arguments:
+            - track_level   - an integer. The level of the track on the diagram
+              to delete.
 
-            Remove the track at the passed level from the diagram
+        del_track(self, track_level)
         """
         del self.tracks[track_level]
 
     def get_tracks(self):
-        """ get_tracks(self) -> list
+        """Returns a list of the tracks contained in the diagram.
 
-            Returns a list of the tracks contained in the diagram
+        get_tracks(self)
         """
         return list(self.tracks.values())
 
     def move_track(self, from_level, to_level):
-        """ move_track(self, from_level, to_level)
+        """Moves a track from one level on the diagram to another.
 
-            o from_level    Int, the level at which the track to be moved is
-                            found
+        Arguments:
+            - from_level   - an integer. The level at which the track to be
+              moved is found.
+            - to_level     - an integer. The level to move the track to.
 
-            o to_level      Int, the level to move the track to
-
-            Moves a track from one level on the diagram to another
+        move_track(self, from_level, to_level)
         """
         aux = self.tracks[from_level]
         del self.tracks[from_level]
         self.add_track(aux, to_level)
 
     def renumber_tracks(self, low=1, step=1):
-        """ renumber_tracks(self, low=1, step=1)
+        """Renumbers all tracks consecutively.
 
-            o low       Int, the track number to start from
+        Optionally from a passed lowest number.
 
-            o step      Int, the track interval for separation of tracks
+        Arguments:
+            - low     - an integer. The track number to start from.
+            - step    - an integer. The track interval for separation of
+              tracks.
 
-            Reassigns all the tracks to run consecutively from the lowest
-            value (low)
+        renumber_tracks(self, low=1, step=1)
         """
         track = low                 # Start numbering from here
         levels = self.get_levels()
@@ -422,46 +311,49 @@ class Diagram(object):
         self.tracks = conversion   # Replace old set of levels with new set
 
     def get_levels(self):
-        """ get_levels(self) -> [int, int, ...]
+        """Return a sorted list of levels occupied by tracks in the diagram.
 
-            Return a sorted list of levels occupied by tracks in the diagram
+        get_levels(self)
         """
         return sorted(self.tracks)
 
     def get_drawn_levels(self):
-        """ get_drawn_levels(self) -> [int, int, ...]
+        """Return a sorted list of levels occupied by tracks.
 
-            Return a sorted list of levels occupied by tracks that are not
-            explicitly hidden
+        These tracks are not explicitly hidden.
+
+        get_drawn_levels(self)
         """
         return sorted(key for key in self.tracks if not self.tracks[key].hide)
 
     def range(self):
-        """ range(self) -> (int, int)
+        """Returns lowest and highest base numbers from track features.
 
-            Returns the lowest and highest base (or mark) numbers containd in
-            track features as a tuple
+        Returned type is a tuple.
+
+        range(self)
         """
         lows, highs = [], []
-        for track in self.tracks.values(): # Get ranges for each track
+        for track in self.tracks.values():  # Get ranges for each track
             low, high = track.range()
             lows.append(low)
             highs.append(high)
-        return (min(lows), max(highs))      # Return extremes from all tracks
+        return min(lows), max(highs)      # Return extremes from all tracks
 
     def __getitem__(self, key):
-        """ __getitem__(self, key) -> Track
+        """Returns the track contained at the level of the passed key.
 
-            o key       The id of a track in the diagram
+        Arguments:
+            - key    - The id of a track in the diagram.
 
-            Return the Track object with the passed id
+        __getitem__(self, key)
         """
         return self.tracks[key]
 
     def __str__(self):
-        """ __str__(self) -> ""
+        """Returns a formatted string describing the diagram.
 
-            Returns a formatted string with information about the diagram
+        __str__(self)
         """
         outstr = ["\n<%s: %s>" % (self.__class__, self.name)]
         outstr.append("%d tracks" % len(self.tracks))

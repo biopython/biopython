@@ -77,10 +77,10 @@ chr4_info = (("", None, 1.5),
              ("", colors.blue, 1),
              ("AC22222", colors.blue, 1))
 
-all_chr_info = {"I" : chr1_info,
-                "II" : chr2_info,
-                "III" : chr3_info,
-                "IV" : chr4_info}
+all_chr_info = {"I": chr1_info,
+                "II": chr2_info,
+                "III": chr3_info,
+                "IV": chr4_info}
 
 
 def load_chromosome(chr_name):
@@ -255,7 +255,7 @@ class OrganismGraphicTest(unittest.TestCase):
         self.assertEqual(properties["label_size"], 6,
                "Unexpected results from getProperties: %s" % properties)
 
-        test_widget.setProperties({"start_x_position" : 12})
+        test_widget.setProperties({"start_x_position": 12})
         self.assertEqual(test_widget.start_x_position, 12,
                "setProperties doesn't seem to work right: %s"
                % test_widget.start_x_position)
@@ -287,7 +287,7 @@ class OrganismSubAnnotationsTest(unittest.TestCase):
         chr_diagram = BasicChromosome.Organism()
         for name, acc, length, features, color in entries:
             if False:
-                #How I generated the values above... and tested passing in SeqFeatures
+                # How I generated the values above... and tested passing in SeqFeatures
                 filename = "/Users/pjcock/Documents/comp_genomics/seed/%s.gbk" % acc
                 import os
                 if not os.path.isfile(filename):
@@ -295,75 +295,75 @@ class OrganismSubAnnotationsTest(unittest.TestCase):
                 from Bio import SeqIO
                 record = SeqIO.read(filename, "gb")
                 assert length == len(record)
-                features = [f for f in record.features if f.type=="tRNA"]
+                features = [f for f in record.features if f.type == "tRNA"]
                 print(name)
-                #Strip of the first three chars, AT# where # is the chr
+                # Strip of the first three chars, AT# where # is the chr
                 print([(int(f.location.start), int(f.location.end),
                         f.strand, f.qualifiers['locus_tag'][0][3:])
                        for f in features])
-                #Output was copy and pasted to the script, see above.
-                #Continue test using SeqFeature objects!
-                #To test colours from the qualifiers,
+                # Output was copy and pasted to the script, see above.
+                # Continue test using SeqFeature objects!
+                # To test colours from the qualifiers,
                 for i, f in enumerate(features):
                     f.qualifiers['color'] = [str(i % 16)]
             elif use_seqfeatures:
-                #Features as SeqFeatures
+                # Features as SeqFeatures
                 features = [SeqFeature(FeatureLocation(start, end, strand),
                                        qualifiers={"name": [label],
                                                    "color": [color]})
                             for (start, end, strand, label) in features]
             else:
-                #Features as 5-tuples
+                # Features as 5-tuples
                 features = [(start, end, strand, label, color)
                             for (start, end, strand, label) in features]
 
-            #I haven't found a nice source of data for real Arabidopsis
-            #cytobands, so these three are made up at random!
+            # I haven't found a nice source of data for real Arabidopsis
+            # cytobands, so these three are made up at random!
             cytobands = []
             for color in [colors.gray, colors.darkgray, colors.slategray]:
                 start = (length - 1000000) * random.random()
                 end = min(length, start + 1000000)
-                #Draw these with black borders, and a grey fill
+                # Draw these with black borders, and a grey fill
                 cytobands.append((start, end, 0, None, colors.black, color))
-            #Draw these with black borders, and a brown fill:
+            # Draw these with black borders, and a brown fill:
             cytobands.append((0, 1000000, 0, "First 1 Mbp", colors.black, colors.brown))
-            cytobands.append((length-1000000, length, 0, "Last 1 Mbp", colors.black, colors.brown))
-            #Additional dummy entry to check fill colour on both strands,
+            cytobands.append((length - 1000000, length, 0, "Last 1 Mbp", colors.black, colors.brown))
+            # Additional dummy entry to check fill colour on both strands,
             if name == "Chr III":
                 cytobands.append((11000000, 13000000, -1, "Reverse", "red", "yellow"))
             elif name == "Chr V":
                 cytobands.append((9500000, 11000000, +1, "Forward", colors.red, colors.yellow))
-            #Create the drawing object for the chromosome
+            # Create the drawing object for the chromosome
             cur_chromosome = BasicChromosome.Chromosome(name)
-            #Set the length, adding an extra 20 percent for the tolomeres etc:
+            # Set the length, adding an extra 20 percent for the tolomeres etc:
             cur_chromosome.scale_num = max_length * 1.2
             cur_chromosome.label_sep_percent = 0.15
-            #Add a dummy segment for allocating vertical space
-            #which can be used for feature label placement
+            # Add a dummy segment for allocating vertical space
+            # which can be used for feature label placement
             spacer = BasicChromosome.SpacerSegment()
             spacer.scale = 0.03 * max_length
             cur_chromosome.add(spacer)
-            #Add an opening telomere
+            # Add an opening telomere
             start = BasicChromosome.TelomereSegment()
             start.scale = 0.02 * max_length
             start.fill_color = colors.lightgrey
             cur_chromosome.add(start)
-            #Add a body - using bp as the scale length here.
-            #Note we put the cytobands a start of combined list,
-            #as want them drawn underneath the tRNA markers.
+            # Add a body - using bp as the scale length here.
+            # Note we put the cytobands a start of combined list,
+            # as want them drawn underneath the tRNA markers.
             body = BasicChromosome.AnnotatedChromosomeSegment(length, cytobands + features)
             body.scale = length
             cur_chromosome.add(body)
-            #Add a closing telomere
+            # Add a closing telomere
             end = BasicChromosome.TelomereSegment(inverted=True)
             end.scale = 0.02 * max_length
             end.fill_color = colors.lightgrey
             cur_chromosome.add(end)
-            #Another spacer
+            # Another spacer
             spacer = BasicChromosome.SpacerSegment()
             spacer.scale = 0.03 * max_length
             cur_chromosome.add(spacer)
-            #This chromosome is done
+            # This chromosome is done
             chr_diagram.add(cur_chromosome)
         with warnings.catch_warnings():
             # BiopythonWarning: Too many labels to avoid overlap
@@ -459,5 +459,5 @@ class ChromosomeCountTest(unittest.TestCase):
                "Did not set and retrieve label correctly."
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

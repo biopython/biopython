@@ -3,8 +3,7 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""Tests the basic functionality of the KEGG parsers.
-"""
+"""Tests the basic functionality of the KEGG parsers."""
 
 from __future__ import print_function
 
@@ -15,9 +14,11 @@ from Bio.KEGG import Compound
 from Bio.KEGG import Map
 from Bio.Pathway import System
 
-test_KEGG_Enzyme_files   = ["enzyme.sample", "enzyme.irregular", "enzyme.new"]
+# TODO - use unittest instead of print-and-compare testing
+
+test_KEGG_Enzyme_files = ["enzyme.sample", "enzyme.irregular", "enzyme.new"]
 test_KEGG_Compound_files = ["compound.sample", "compound.irregular"]
-test_KEGG_Map_files      = ["map00950.rea"]
+test_KEGG_Map_files = ["map00950.rea"]
 
 
 def t_KEGG_Enzyme(testfiles):
@@ -26,8 +27,19 @@ def t_KEGG_Enzyme(testfiles):
         fh = open(os.path.join("KEGG", file))
         print("Testing Bio.KEGG.Enzyme on " + file + "\n\n")
         records = Enzyme.parse(fh)
-        for record in records:
+        for i, record in enumerate(records):
             print(record)
+
+        fh.seek(0)
+        if i == 0:
+            print(Enzyme.read(fh))
+        else:
+            try:
+                print(Enzyme.read(fh))
+                assert False
+            except ValueError as e:
+                assert str(e) == 'More than one record found in handle'
+
         print("\n")
         fh.close()
 
@@ -55,13 +67,13 @@ def t_KEGG_Map(testfiles):
             system.add_reaction(reaction)
         # sort the reaction output by the string names, so that the
         # output will be consistent between python versions
-        #def str_cmp(first, second):
+        # def str_cmp(first, second):
         #    return cmp(str(first), str(second))
         rxs = system.reactions()
-        #sort: key instead of compare function (for py3 support)
+        # sort: key instead of compare function (for py3 support)
         #  The function str_cmp above can be removed if the
         #  solution below proves resilient
-        rxs.sort(key=lambda x:str(x))
+        rxs.sort(key=lambda x: str(x))
         for x in rxs:
             print(str(x))
         fh.close()

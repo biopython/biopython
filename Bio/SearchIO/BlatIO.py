@@ -293,7 +293,7 @@ def _create_hsp(hid, qid, psl):
     # protein flag
     is_protein = _is_protein(psl)
     # strand
-    #if query is protein, strand is 0
+    # if query is protein, strand is 0
     if is_protein:
         qstrand = 0
     else:
@@ -411,27 +411,27 @@ class BlatPslParser(object):
         self._validate_cols(cols)
 
         psl = {}
-        psl['qname'] = cols[9]                            # qName
-        psl['qsize'] = int(cols[10])                      # qSize
-        psl['tname'] = cols[13]                           # tName
-        psl['tsize'] = int(cols[14])                      # tSize
-        psl['matches'] = int(cols[0])                     # matches
-        psl['mismatches'] = int(cols[1])                  # misMatches
-        psl['repmatches'] = int(cols[2])                  # repMatches
-        psl['ncount'] = int(cols[3])                      # nCount
-        psl['qnuminsert'] = int(cols[4])                  # qNumInsert
-        psl['qbaseinsert'] = int(cols[5])                 # qBaseInsert
-        psl['tnuminsert'] = int(cols[6])                  # tNumInsert
-        psl['tbaseinsert'] = int(cols[7])                 # tBaseInsert
-        psl['strand'] = cols[8]                           # strand
-        psl['qstart'] = int(cols[11])                     # qStart
-        psl['qend'] = int(cols[12])                       # qEnd
-        psl['tstart'] = int(cols[15])                     # tStart
-        psl['tend'] = int(cols[16])                       # tEnd
-        psl['blockcount'] = int(cols[17])                 # blockCount
-        psl['blocksizes'] = _list_from_csv(cols[18], int) # blockSizes
-        psl['qstarts'] = _list_from_csv(cols[19], int)    # qStarts
-        psl['tstarts'] = _list_from_csv(cols[20], int)    # tStarts
+        psl['qname'] = cols[9]                             # qName
+        psl['qsize'] = int(cols[10])                       # qSize
+        psl['tname'] = cols[13]                            # tName
+        psl['tsize'] = int(cols[14])                       # tSize
+        psl['matches'] = int(cols[0])                      # matches
+        psl['mismatches'] = int(cols[1])                   # misMatches
+        psl['repmatches'] = int(cols[2])                   # repMatches
+        psl['ncount'] = int(cols[3])                       # nCount
+        psl['qnuminsert'] = int(cols[4])                   # qNumInsert
+        psl['qbaseinsert'] = int(cols[5])                  # qBaseInsert
+        psl['tnuminsert'] = int(cols[6])                   # tNumInsert
+        psl['tbaseinsert'] = int(cols[7])                  # tBaseInsert
+        psl['strand'] = cols[8]                            # strand
+        psl['qstart'] = int(cols[11])                      # qStart
+        psl['qend'] = int(cols[12])                        # qEnd
+        psl['tstart'] = int(cols[15])                      # tStart
+        psl['tend'] = int(cols[16])                        # tEnd
+        psl['blockcount'] = int(cols[17])                  # blockCount
+        psl['blocksizes'] = _list_from_csv(cols[18], int)  # blockSizes
+        psl['qstarts'] = _list_from_csv(cols[19], int)     # qStarts
+        psl['tstarts'] = _list_from_csv(cols[20], int)     # tStarts
         if self.pslx:
             psl['qseqs'] = _list_from_csv(cols[21])       # query sequence
             psl['tseqs'] = _list_from_csv(cols[22])       # hit sequence
@@ -457,6 +457,7 @@ class BlatPslParser(object):
         # initial dummy values
         qres_state = None
         file_state = None
+        cur_qid, cur_hid = None, None
         prev_qid, prev_hid = None, None
         cur, prev = None, None
         hit_list, hsp_list = [], []
@@ -566,7 +567,7 @@ class BlatPslIndexer(SearchIndexer):
                 break
 
     def get_raw(self, offset):
-        """Returns the raw string of a QueryResult object from the given offset."""
+        """Returns raw bytes string of a QueryResult object from the given offset."""
         handle = self._handle
         handle.seek(offset)
         query_id_idx = 9
@@ -658,7 +659,7 @@ class BlatPslWriter(object):
                 block_sizes = hsp.query_span_all
 
                 # set strand and starts
-                if hsp[0].query_strand >= 0: # since it may be a protein seq
+                if hsp[0].query_strand >= 0:  # since it may be a protein seq
                     strand = '+'
                 else:
                     strand = '-'

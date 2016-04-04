@@ -17,6 +17,7 @@ import tempfile
 # Biopython Bio.KEGG.KGML (?)
 from Bio.KEGG.KGML.KGML_parser import read
 
+
 class PathwayData(object):
     """ Convenience structure for testing pathway data
     """
@@ -27,6 +28,7 @@ class PathwayData(object):
         self.element_counts = element_counts
         self.pathway_image = pathway_image
         self.show_pathway_image = show_pathway_image
+
 
 class KGMLPathwayTest(unittest.TestCase):
     """ Import the ko01100 metabolic map from a local .xml KGML file, and from
@@ -81,7 +83,7 @@ class KGMLPathwayTest(unittest.TestCase):
             with open(p.infilename, 'rU') as f:
                 pathway = read(f)
                 # Do we have the correct number of elements of each type
-                self.assertEqual((len(pathway.entries), 
+                self.assertEqual((len(pathway.entries),
                                   len(pathway.orthologs),
                                   len(pathway.compounds),
                                   len(pathway.maps)),
@@ -93,7 +95,7 @@ class KGMLPathwayTest(unittest.TestCase):
             with open(p.outfilename, 'rU') as f:
                 pathway = read(f)
                 # Do we have the correct number of elements of each type
-                self.assertEqual((len(pathway.entries), 
+                self.assertEqual((len(pathway.entries),
                                   len(pathway.orthologs),
                                   len(pathway.compounds),
                                   len(pathway.maps)),
@@ -101,5 +103,5 @@ class KGMLPathwayTest(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    runner = unittest.TextTestRunner(verbosity = 2)
-    unittest.main(testRunner = runner)
+    runner = unittest.TextTestRunner(verbosity=2)
+    unittest.main(testRunner=runner)

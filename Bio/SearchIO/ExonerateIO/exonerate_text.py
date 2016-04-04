@@ -18,6 +18,8 @@ from ._base import _BaseExonerateParser, _BaseExonerateIndexer, _STRAND_MAP, \
         _parse_hit_or_query_line
 from .exonerate_vulgar import _RE_VULGAR
 
+__docformat__ = "restructuredtext en"
+
 
 __all__ = ['ExonerateTextParser', 'ExonerateTextIndexer']
 
@@ -373,7 +375,7 @@ class ExonerateTextParser(_BaseExonerateParser):
                 pass
 
         # use vulgar coordinates if vulgar line is present and return
-        #if vulgar_comp is not None:
+        # if vulgar_comp is not None:
         #    hsp = parse_vulgar_comp(hsp, vulgar_comp)
 
         #    return {'qresult': qresult, 'hit': hit, 'hsp': hsp}
@@ -408,8 +410,8 @@ class ExonerateTextParser(_BaseExonerateParser):
                         re.findall(_RE_NER_LEN, cmbn_rows[row_dict[seq_type]])]
 
             # check that inter_lens's length is len opp_type block - 1
-            assert len(inter_lens) == len(hsp[opp_type])-1, \
-                    "%r vs %r" % (len(inter_lens), len(hsp[opp_type])-1)
+            assert len(inter_lens) == len(hsp[opp_type]) - 1, \
+                    "%r vs %r" % (len(inter_lens), len(hsp[opp_type]) - 1)
             # fill the hsp query and hit coordinates
             hsp['%s_ranges' % opp_type] = \
                     _comp_coords(hsp, opp_type, inter_lens)
@@ -448,7 +450,7 @@ class ExonerateTextParser(_BaseExonerateParser):
                 raw_aln_block = []
             # if we're in an alignment row, grab the sequence
             if in_aln_row:
-                raw_aln_block.append(self.line[start_idx:start_idx+row_len])
+                raw_aln_block.append(self.line[start_idx:start_idx + row_len])
             # reset flags and values if the line matches, we're in an alignment
             # row, and there are more than 1 line in rows
             if match and in_aln_row and len(raw_aln_block) > 1:

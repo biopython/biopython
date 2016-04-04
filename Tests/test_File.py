@@ -20,37 +20,51 @@ a multi-line
 file"""
 
 
-### UndoHandle
+class UndoHandleTests(unittest.TestCase):
 
-h = File.UndoHandle(StringIO(data))
+    def test_one(self):
+        h = File.UndoHandle(StringIO(data))
+        self.assertEqual(h.readline(), "This\n")
+        self.assertEqual(h.peekline(), "is\n")
+        self.assertEqual(h.readline(), "is\n")
+        # TODO - Meaning of saveline lacking \n?
+        h.saveline("saved\n")
+        self.assertEqual(h.peekline(), "saved\n")
+        h.saveline("another\n")
+        self.assertEqual(h.readline(), "another\n")
+        self.assertEqual(h.readline(), "saved\n")
+        # Test readlines after saveline
+        h.saveline("saved again\n")
+        lines = h.readlines()
+        self.assertEqual(len(lines), 3)
+        self.assertEqual(lines[0], "saved again\n")
+        self.assertEqual(lines[1], "a multi-line\n")
+        self.assertEqual(lines[2], "file")  # no trailing \n
+        # should be empty now
+        self.assertEqual(h.readline(), "")
+        h.saveline("save after empty\n")
+        self.assertEqual(h.readline(), "save after empty\n")
+        self.assertEqual(h.readline(), "")
 
-print(h.readline())   # 'This'
-print(h.peekline())   # 'is'
-print(h.readline())   # 'is'
-h.saveline("saved")
-print(h.peekline())   # 'saved'
-h.saveline("another")
-print(h.readline())   # 'another'
-print(h.readline())   # 'saved'
+    def test_read(self):
+        """test read method"""
+        h = File.UndoHandle(StringIO("some text"))
+        h.saveline("more text")
+        self.assertEqual(h.read(), 'more textsome text')
 
-# Test readlines after saveline
-h.saveline("saved again")
-lines = h.readlines()
-print(repr(lines[0]))   # 'saved again'
-print(repr(lines[1]))   # 'a multi-line'
-print(repr(lines[2]))   # 'file'
-
-# should be empty now
-print(repr(h.readline()))       # ''
-
-h.saveline("save after empty")
-print(h.readline())             # 'save after empty'
-print(repr(h.readline()))       # ''
-
-# test read method
-h = File.UndoHandle(StringIO("some text"))
-h.saveline("more text")
-print(h.read())                 # 'more textsome text'
+    def test_undohandle_read_block(self):
+        for block in [1, 2, 10]:
+            s = StringIO(data)
+            h = File.UndoHandle(s)
+            h.peekline()
+            new = ""
+            while True:
+                tmp = h.read(block)
+                if not tmp:
+                    break
+                new += tmp
+            self.assertEqual(data, new)
+            h.close()
 
 
 class AsHandleTestCase(unittest.TestCase):
@@ -92,3 +106,8 @@ class AsHandleTestCase(unittest.TestCase):
         s = StringIO()
         with File.as_handle(s) as handle:
             self.assertEqual(s, handle)
+
+
+if __name__ == "__main__":
+    runner = unittest.TextTestRunner(verbosity=2)
+    unittest.main(testRunner=runner)

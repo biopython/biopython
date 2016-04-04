@@ -739,7 +739,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.database_letters, 29652561)
         self.assertEqual(len(record.rounds), 3)
         self.assertEqual(len(record.rounds[0].new_seqs), 14)
-        #Rest of test broken up to avoid Jython JVM limitations
+        # Rest of test broken up to avoid Jython JVM limitations
         self._check_text_2010L_phiblast_002_round0(record)
         self._check_text_2010L_phiblast_002_round1(record)
         self._check_text_2010L_phiblast_002_round2(record)
@@ -1937,7 +1937,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.database_letters, 29652561)
         self.assertEqual(len(record.rounds), 2)
         self.assertEqual(len(record.rounds[0].new_seqs), 30)
-        #Rest of test broken up to avoid Jython JVM limitations
+        # Rest of test broken up to avoid Jython JVM limitations
         self._check_text_2010L_phiblast_003_round0(record)
         self._check_text_2010L_phiblast_003_round1(record)
         self._check_text_2010L_phiblast_003_hsps(record)
@@ -5715,7 +5715,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.database_letters, 29652561)
         self.assertEqual(len(record.rounds), 2)
         self.assertEqual(len(record.rounds[0].new_seqs), 30)
-        #Rest of test broken up to avoid Jython JVM limitations
+        # Rest of test broken up to avoid Jython JVM limitations
         self._check_text_2011L_psiblast_002_round0(record)
         self._check_text_2011L_psiblast_002_round1(record)
         self._check_text_2011L_psiblast_002_hsps(record)
@@ -10067,7 +10067,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.database_sequences, 88201)
         self.assertEqual(record.database_letters, 31957340)
         self.assertEqual(len(record.rounds), 5)
-        #Rest of test broken up to avoid Jython JVM limitations
+        # Rest of test broken up to avoid Jython JVM limitations
         self._check_text_2012L_psiblast_001_round0(record)
         self._check_text_2012L_psiblast_001_round1(record)
         self._check_text_2012L_psiblast_001_round2(record)
@@ -13525,7 +13525,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.alignments[0].hsps[0].query_end, 1834)
         self.assertEqual(record.alignments[0].hsps[0].sbjct_start, 17)
         self.assertEqual(record.alignments[0].hsps[0].sbjct_end, 160)
-        self.assertEqual(record.alignments[0].hsps[1].bits,  37.7)
+        self.assertEqual(record.alignments[0].hsps[1].bits, 37.7)
         self.assertEqual(record.alignments[0].hsps[1].score, 86)
         self.assertAlmostEqual(record.alignments[0].hsps[1].expect, 0.007)
         self.assertEqual(record.alignments[0].hsps[1].identities, (20, 47))
@@ -13540,7 +13540,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.alignments[1].title, ">gi|16080962|ref|NP_391790.1| ATP-dependent RNA helicase [Bacillus subtilis subsp. subtilis str. 168]")
         self.assertEqual(record.alignments[1].length, 479)
         self.assertEqual(len(record.alignments[1].hsps), 1)
-        self.assertEqual(record.alignments[1].hsps[0].bits,  47.8)
+        self.assertEqual(record.alignments[1].hsps[0].bits, 47.8)
         self.assertEqual(record.alignments[1].hsps[0].score, 112)
         self.assertAlmostEqual(record.alignments[1].hsps[0].expect, 6e-06)
         self.assertEqual(record.alignments[1].hsps[0].identities, (28, 82))
@@ -13556,7 +13556,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.alignments[2].title, ">gi|16078650|ref|NP_389469.1| ATP-dependent DNA helicase [Bacillus subtilis subsp. subtilis str. 168]")
         self.assertEqual(record.alignments[2].length, 682)
         self.assertEqual(len(record.alignments[2].hsps), 1)
-        self.assertEqual(record.alignments[2].hsps[0].bits,  42.4)
+        self.assertEqual(record.alignments[2].hsps[0].bits, 42.4)
         self.assertEqual(record.alignments[2].hsps[0].score, 98)
         self.assertAlmostEqual(record.alignments[2].hsps[0].expect, 3e-04)
         self.assertEqual(record.alignments[2].hsps[0].identities, (26, 98))
@@ -13572,7 +13572,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.alignments[3].title, ">gi|16077525|ref|NP_388339.1| hypothetical protein BSU04580 [Bacillus subtilis subsp. subtilis str. 168]")
         self.assertEqual(record.alignments[3].length, 511)
         self.assertEqual(len(record.alignments[3].hsps), 1)
-        self.assertEqual(record.alignments[3].hsps[0].bits,  42.0)
+        self.assertEqual(record.alignments[3].hsps[0].bits, 42.0)
         self.assertEqual(record.alignments[3].hsps[0].score, 97)
         self.assertAlmostEqual(record.alignments[3].hsps[0].expect, 3e-04)
         self.assertEqual(record.alignments[3].hsps[0].identities, (30, 94))
@@ -13588,7 +13588,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.alignments[4].title, ">gi|16079569|ref|NP_390393.1| hypothetical protein BSU25140 [Bacillus subtilis subsp. subtilis str. 168]")
         self.assertEqual(record.alignments[4].length, 438)
         self.assertEqual(len(record.alignments[4].hsps), 1)
-        self.assertEqual(record.alignments[4].hsps[0].bits,  39.3)
+        self.assertEqual(record.alignments[4].hsps[0].bits, 39.3)
         self.assertEqual(record.alignments[4].hsps[0].score, 90)
         self.assertAlmostEqual(record.alignments[4].hsps[0].expect, 0.002)
         self.assertEqual(record.alignments[4].hsps[0].identities, (25, 81))
@@ -13619,7 +13619,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.alignments[6].title, ">gi|16080570|ref|NP_391397.1| excinuclease ABC subunit B [Bacillus subtilis subsp. subtilis str. 168]")
         self.assertEqual(record.alignments[6].length, 661)
         self.assertEqual(len(record.alignments[6].hsps), 1)
-        self.assertEqual(record.alignments[6].hsps[0].bits,  37.4)
+        self.assertEqual(record.alignments[6].hsps[0].bits, 37.4)
         self.assertEqual(record.alignments[6].hsps[0].score, 85)
         self.assertAlmostEqual(record.alignments[6].hsps[0].expect, 0.009)
         self.assertEqual(record.alignments[6].hsps[0].identities, (24, 69))
@@ -13637,7 +13637,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.alignments[7].length, 463)
 
         self.assertEqual(len(record.alignments[7].hsps), 1)
-        self.assertEqual(record.alignments[7].hsps[0].bits,  35.8)
+        self.assertEqual(record.alignments[7].hsps[0].bits, 35.8)
         self.assertEqual(record.alignments[7].hsps[0].score, 81)
         self.assertAlmostEqual(record.alignments[7].hsps[0].expect, 0.025)
         self.assertEqual(record.alignments[7].hsps[0].identities, (16, 41))
@@ -13654,7 +13654,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.alignments[8].length, 376)
 
         self.assertEqual(len(record.alignments[8].hsps), 1)
-        self.assertEqual(record.alignments[8].hsps[0].bits,  35.0)
+        self.assertEqual(record.alignments[8].hsps[0].bits, 35.0)
         self.assertEqual(record.alignments[8].hsps[0].score, 79)
         self.assertAlmostEqual(record.alignments[8].hsps[0].expect, 0.042)
         self.assertEqual(record.alignments[8].hsps[0].identities, (20, 58))
@@ -13671,7 +13671,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.alignments[9].title, ">gi|16078982|ref|NP_389803.1| hypothetical protein BSU19220 [Bacillus subtilis subsp. subtilis str. 168]")
         self.assertEqual(record.alignments[9].length, 591)
         self.assertEqual(len(record.alignments[9].hsps), 1)
-        self.assertEqual(record.alignments[9].hsps[0].bits,  33.5)
+        self.assertEqual(record.alignments[9].hsps[0].bits, 33.5)
         self.assertEqual(record.alignments[9].hsps[0].score, 75)
         self.assertAlmostEqual(record.alignments[9].hsps[0].expect, 0.12)
         self.assertEqual(record.alignments[9].hsps[0].identities, (17, 57))
@@ -13687,7 +13687,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.alignments[10].title, ">gi|16079514|ref|NP_390338.1| hypothetical protein BSU24580 [Bacillus subtilis subsp. subtilis str. 168]")
         self.assertEqual(record.alignments[10].length, 557)
         self.assertEqual(len(record.alignments[10].hsps), 1)
-        self.assertEqual(record.alignments[10].hsps[0].bits,  30.8)
+        self.assertEqual(record.alignments[10].hsps[0].bits, 30.8)
         self.assertEqual(record.alignments[10].hsps[0].score, 68)
         self.assertAlmostEqual(record.alignments[10].hsps[0].expect, 0.80)
         self.assertEqual(record.alignments[10].hsps[0].identities, (31, 108))
@@ -13703,7 +13703,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.alignments[11].title, ">gi|16079359|ref|NP_390183.1| ATP-dependent DNA helicase [Bacillus subtilis subsp. subtilis str. 168]")
         self.assertEqual(record.alignments[11].length, 496)
         self.assertEqual(len(record.alignments[11].hsps), 1)
-        self.assertEqual(record.alignments[11].hsps[0].bits,  30.4)
+        self.assertEqual(record.alignments[11].hsps[0].bits, 30.4)
         self.assertEqual(record.alignments[11].hsps[0].score, 67)
         self.assertAlmostEqual(record.alignments[11].hsps[0].expect, 1.0)
         self.assertEqual(record.alignments[11].hsps[0].identities, (14, 50))
@@ -13718,7 +13718,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.alignments[12].title, ">gi|16079280|ref|NP_390104.1| hypothetical protein BSU22220 [Bacillus subtilis subsp. subtilis str. 168]")
         self.assertEqual(record.alignments[12].length, 749)
         self.assertEqual(len(record.alignments[12].hsps), 1)
-        self.assertEqual(record.alignments[12].hsps[0].bits,  29.3)
+        self.assertEqual(record.alignments[12].hsps[0].bits, 29.3)
         self.assertEqual(record.alignments[12].hsps[0].score, 64)
         self.assertAlmostEqual(record.alignments[12].hsps[0].expect, 2.3)
         self.assertEqual(record.alignments[12].hsps[0].identities, (22, 76))
@@ -13734,7 +13734,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.alignments[13].title, ">gi|16081087|ref|NP_391915.1| transcriptional regulator (NtrC/NifA family) [Bacillus subtilis subsp. subtilis str. 168]")
         self.assertEqual(record.alignments[13].length, 461)
         self.assertEqual(len(record.alignments[13].hsps), 1)
-        self.assertEqual(record.alignments[13].hsps[0].bits,  28.1)
+        self.assertEqual(record.alignments[13].hsps[0].bits, 28.1)
         self.assertEqual(record.alignments[13].hsps[0].score, 61)
         self.assertAlmostEqual(record.alignments[13].hsps[0].expect, 5.2)
         self.assertEqual(record.alignments[13].hsps[0].identities, (26, 116))
@@ -13752,7 +13752,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.alignments[14].length, 718)
 
         self.assertEqual(len(record.alignments[14].hsps), 1)
-        self.assertEqual(record.alignments[14].hsps[0].bits,  27.3)
+        self.assertEqual(record.alignments[14].hsps[0].bits, 27.3)
         self.assertEqual(record.alignments[14].hsps[0].score, 59)
         self.assertAlmostEqual(record.alignments[14].hsps[0].expect, 8.8)
         self.assertEqual(record.alignments[14].hsps[0].identities, (11, 31))
@@ -13880,7 +13880,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.alignments[1].length, 4262)
 
         self.assertEqual(len(record.alignments[1].hsps), 1)
-        self.assertEqual(record.alignments[1].hsps[0].bits,  29.3)
+        self.assertEqual(record.alignments[1].hsps[0].bits, 29.3)
         self.assertEqual(record.alignments[1].hsps[0].score, 64)
         self.assertAlmostEqual(record.alignments[1].hsps[0].expect, 1.7)
         self.assertEqual(record.alignments[1].hsps[0].identities, (21, 74))
@@ -13896,7 +13896,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.alignments[2].title, ">gi|16077075|ref|NP_387888.1| DNA gyrase subunit A [Bacillus subtilis subsp. subtilis str. 168]")
         self.assertEqual(record.alignments[2].length, 821)
         self.assertEqual(len(record.alignments[2].hsps), 1)
-        self.assertEqual(record.alignments[2].hsps[0].bits,  28.5)
+        self.assertEqual(record.alignments[2].hsps[0].bits, 28.5)
         self.assertEqual(record.alignments[2].hsps[0].score, 62)
         self.assertAlmostEqual(record.alignments[2].hsps[0].expect, 2.8)
         self.assertEqual(record.alignments[2].hsps[0].identities, (20, 77))
@@ -13912,7 +13912,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.alignments[3].title, ">gi|16080582|ref|NP_391409.1| peptide chain release factor 2 [Bacillus subtilis subsp. subtilis str. 168]")
         self.assertEqual(record.alignments[3].length, 366)
         self.assertEqual(len(record.alignments[3].hsps), 1)
-        self.assertEqual(record.alignments[3].hsps[0].bits,  28.1)
+        self.assertEqual(record.alignments[3].hsps[0].bits, 28.1)
         self.assertEqual(record.alignments[3].hsps[0].score, 61)
         self.assertAlmostEqual(record.alignments[3].hsps[0].expect, 3.7)
         self.assertEqual(record.alignments[3].hsps[0].identities, (14, 48))
@@ -13927,7 +13927,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.alignments[4].title, ">gi|16079863|ref|NP_390689.1| required for assembly of the spore coat (stage VI sporulation) [Bacillus subtilis subsp. subtilis str. 168]")
         self.assertEqual(record.alignments[4].length, 575)
         self.assertEqual(len(record.alignments[4].hsps), 1)
-        self.assertEqual(record.alignments[4].hsps[0].bits,  27.3)
+        self.assertEqual(record.alignments[4].hsps[0].bits, 27.3)
         self.assertEqual(record.alignments[4].hsps[0].score, 59)
         self.assertAlmostEqual(record.alignments[4].hsps[0].expect, 6.3)
         self.assertEqual(record.alignments[4].hsps[0].identities, (25, 105))
@@ -13943,7 +13943,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.alignments[5].title, ">gi|16077459|ref|NP_388273.1| succinate-semialdehyde dehydrogenase [Bacillus subtilis subsp. subtilis str. 168]")
         self.assertEqual(record.alignments[5].length, 462)
         self.assertEqual(len(record.alignments[5].hsps), 1)
-        self.assertEqual(record.alignments[5].hsps[0].bits,  27.3)
+        self.assertEqual(record.alignments[5].hsps[0].bits, 27.3)
         self.assertEqual(record.alignments[5].hsps[0].score, 59)
         self.assertAlmostEqual(record.alignments[5].hsps[0].expect, 6.3)
         self.assertEqual(record.alignments[5].hsps[0].identities, (12, 22))
@@ -13958,7 +13958,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.alignments[6].title, ">gi|16080133|ref|NP_390959.1| hypothetical protein BSU30810 [Bacillus subtilis subsp. subtilis str. 168]")
         self.assertEqual(record.alignments[6].length, 274)
         self.assertEqual(len(record.alignments[6].hsps), 1)
-        self.assertEqual(record.alignments[6].hsps[0].bits,  26.9)
+        self.assertEqual(record.alignments[6].hsps[0].bits, 26.9)
         self.assertEqual(record.alignments[6].hsps[0].score, 58)
         self.assertAlmostEqual(record.alignments[6].hsps[0].expect, 8.2)
         self.assertEqual(record.alignments[6].hsps[0].identities, (12, 29))
@@ -13973,7 +13973,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.alignments[7].title, ">gi|16078464|ref|NP_389283.1| hypothetical protein BSU14000 [Bacillus subtilis subsp. subtilis str. 168]")
         self.assertEqual(record.alignments[7].length, 392)
         self.assertEqual(len(record.alignments[7].hsps), 1)
-        self.assertEqual(record.alignments[7].hsps[0].bits,  26.9)
+        self.assertEqual(record.alignments[7].hsps[0].bits, 26.9)
         self.assertEqual(record.alignments[7].hsps[0].score, 58)
         self.assertAlmostEqual(record.alignments[7].hsps[0].expect, 8.2)
         self.assertEqual(record.alignments[7].hsps[0].identities, (14, 51))
@@ -14238,7 +14238,7 @@ class TestNCBITextParser(unittest.TestCase):
         for (a, b) in zip(record.alignments, descrs):
             self.assertEqual(a.title[0], ">")
             if b[0].endswith("..."):
-                self.assertTrue(a.title.startswith(">"+b[0][:-3]))
+                self.assertTrue(a.title.startswith(">" + b[0][:-3]))
             else:
                 self.assertEqual(a.title, ">" + b[0])
 
@@ -14375,8 +14375,8 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.database, "All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding environmental samples from WGS projects")
         self.assertEqual(record.database_sequences, 8994603)
         self.assertEqual(record.database_letters, 3078807967)
-        self.assertEqual(len(record.descriptions), 10) # I used -v 10
-        self.assertEqual(len(record.alignments), 1) # I used -b 1
+        self.assertEqual(len(record.descriptions), 10)  # I used -v 10
+        self.assertEqual(len(record.alignments), 1)  # I used -b 1
         self.assertEqual(len(record.alignments[0].hsps), 1)
 
         record = next(records)
@@ -14388,8 +14388,8 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.database, "All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding environmental samples from WGS projects")
         self.assertEqual(record.database_sequences, 8994603)
         self.assertEqual(record.database_letters, 3078807967)
-        self.assertEqual(len(record.descriptions), 10) # I used -v 10
-        self.assertEqual(len(record.alignments), 1) # I used -b 1
+        self.assertEqual(len(record.descriptions), 10)  # I used -v 10
+        self.assertEqual(len(record.alignments), 1)  # I used -b 1
         self.assertEqual(len(record.alignments[0].hsps), 2)
 
         record = next(records)
@@ -14401,8 +14401,8 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.database, "All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding environmental samples from WGS projects")
         self.assertEqual(record.database_sequences, 8994603)
         self.assertEqual(record.database_letters, 3078807967)
-        self.assertEqual(len(record.descriptions), 10) # I used -v 10
-        self.assertEqual(len(record.alignments), 1) # I used -b 1
+        self.assertEqual(len(record.descriptions), 10)  # I used -v 10
+        self.assertEqual(len(record.alignments), 1)  # I used -b 1
         self.assertEqual(len(record.alignments[0].hsps), 1)
 
         self.assertEqual(None, next(records))
@@ -14424,8 +14424,8 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.database, "All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding environmental samples from WGS projects")
         self.assertEqual(record.database_sequences, 8994603)
         self.assertEqual(record.database_letters, 3078807967)
-        self.assertEqual(len(record.descriptions), 1) # I used -v 10
-        self.assertEqual(len(record.alignments), 1) # I used -b 1
+        self.assertEqual(len(record.descriptions), 1)  # I used -v 10
+        self.assertEqual(len(record.alignments), 1)  # I used -b 1
         self.assertEqual(len(record.alignments[0].hsps), 1)
 
         record = next(records)
@@ -14437,8 +14437,8 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.database, "All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding environmental samples from WGS projects")
         self.assertEqual(record.database_sequences, 8994603)
         self.assertEqual(record.database_letters, 3078807967)
-        self.assertEqual(len(record.descriptions), 10) # I used -v 10
-        self.assertEqual(len(record.alignments), 1) # I used -b 1
+        self.assertEqual(len(record.descriptions), 10)  # I used -v 10
+        self.assertEqual(len(record.alignments), 1)  # I used -b 1
         self.assertEqual(len(record.alignments[0].hsps), 2)
 
         record = next(records)
@@ -14462,8 +14462,8 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.database, "All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding environmental samples from WGS projects")
         self.assertEqual(record.database_sequences, 8994603)
         self.assertEqual(record.database_letters, 3078807967)
-        self.assertEqual(len(record.descriptions), 10) # I used -v 10
-        self.assertEqual(len(record.alignments), 1) # I used -b 1
+        self.assertEqual(len(record.descriptions), 10)  # I used -v 10
+        self.assertEqual(len(record.alignments), 1)  # I used -b 1
         self.assertEqual(len(record.alignments[0].hsps), 1)
 
         record = next(records)
@@ -14475,8 +14475,8 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.database, "All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding environmental samples from WGS projects")
         self.assertEqual(record.database_sequences, 8994603)
         self.assertEqual(record.database_letters, 3078807967)
-        self.assertEqual(len(record.descriptions), 10) # I used -v 10
-        self.assertEqual(len(record.alignments), 1) # I used -b 1
+        self.assertEqual(len(record.descriptions), 10)  # I used -v 10
+        self.assertEqual(len(record.alignments), 1)  # I used -b 1
         self.assertEqual(len(record.alignments[0].hsps), 2)
 
         record = next(records)
@@ -14488,8 +14488,8 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.database, "All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding environmental samples from WGS projects")
         self.assertEqual(record.database_sequences, 8994603)
         self.assertEqual(record.database_letters, 3078807967)
-        self.assertEqual(len(record.descriptions), 10) # I used -v 10
-        self.assertEqual(len(record.alignments), 1) # I used -b 1
+        self.assertEqual(len(record.descriptions), 10)  # I used -v 10
+        self.assertEqual(len(record.alignments), 1)  # I used -b 1
         self.assertEqual(len(record.alignments[0].hsps), 1)
 
         record = next(records)
@@ -14501,8 +14501,8 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.database, "All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding environmental samples from WGS projects")
         self.assertEqual(record.database_sequences, 8994603)
         self.assertEqual(record.database_letters, 3078807967)
-        self.assertEqual(len(record.descriptions), 10) # I used -v 10
-        self.assertEqual(len(record.alignments), 1) # I used -b 1
+        self.assertEqual(len(record.descriptions), 10)  # I used -v 10
+        self.assertEqual(len(record.alignments), 1)  # I used -b 1
         self.assertEqual(len(record.alignments[0].hsps), 1)
 
         self.assertEqual(None, next(records))
@@ -14524,8 +14524,8 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.database, "All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding environmental samples from WGS projects")
         self.assertEqual(record.database_sequences, 8994603)
         self.assertEqual(record.database_letters, 3078807967)
-        self.assertEqual(len(record.descriptions), 1) # I used -v 10
-        self.assertEqual(len(record.alignments), 1) # I used -b 1
+        self.assertEqual(len(record.descriptions), 1)  # I used -v 10
+        self.assertEqual(len(record.alignments), 1)  # I used -b 1
         self.assertEqual(len(record.alignments[0].hsps), 1)
 
         record = next(records)
@@ -14537,9 +14537,9 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.database, "All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding environmental samples from WGS projects")
         self.assertEqual(record.database_sequences, 8994603)
         self.assertEqual(record.database_letters, 3078807967)
-        self.assertEqual(len(record.descriptions), 10) # I used -v 10
-        self.assertEqual(len(record.alignments), 1) # I used -b 1
-        #Two short HSPs with 2.2.22 (text_2222L_blastx_001.txt), but one with 2.2.22+
+        self.assertEqual(len(record.descriptions), 10)  # I used -v 10
+        self.assertEqual(len(record.alignments), 1)  # I used -b 1
+        # Two short HSPs with 2.2.22 (text_2222L_blastx_001.txt), but one with 2.2.22+
         self.assertEqual(len(record.alignments[0].hsps), 1)
 
         record = next(records)
@@ -14563,8 +14563,8 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.database, "All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding environmental samples from WGS projects")
         self.assertEqual(record.database_sequences, 8994603)
         self.assertEqual(record.database_letters, 3078807967)
-        self.assertEqual(len(record.descriptions), 10) # I used -v 10
-        self.assertEqual(len(record.alignments), 1) # I used -b 1
+        self.assertEqual(len(record.descriptions), 10)  # I used -v 10
+        self.assertEqual(len(record.alignments), 1)  # I used -b 1
         self.assertEqual(len(record.alignments[0].hsps), 1)
 
         record = next(records)
@@ -14576,9 +14576,9 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.database, "All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding environmental samples from WGS projects")
         self.assertEqual(record.database_sequences, 8994603)
         self.assertEqual(record.database_letters, 3078807967)
-        self.assertEqual(len(record.descriptions), 10) # I used -v 10
-        self.assertEqual(len(record.alignments), 1) # I used -b 1
-        #Two short HSPs with 2.2.22 (text_2222L_blastx_001.txt), but one with 2.2.22+
+        self.assertEqual(len(record.descriptions), 10)  # I used -v 10
+        self.assertEqual(len(record.alignments), 1)  # I used -b 1
+        # Two short HSPs with 2.2.22 (text_2222L_blastx_001.txt), but one with 2.2.22+
         self.assertEqual(len(record.alignments[0].hsps), 1)
 
         record = next(records)
@@ -14590,8 +14590,8 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.database, "All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding environmental samples from WGS projects")
         self.assertEqual(record.database_sequences, 8994603)
         self.assertEqual(record.database_letters, 3078807967)
-        self.assertEqual(len(record.descriptions), 10) # I used -v 10
-        self.assertEqual(len(record.alignments), 1) # I used -b 1
+        self.assertEqual(len(record.descriptions), 10)  # I used -v 10
+        self.assertEqual(len(record.alignments), 1)  # I used -b 1
         self.assertEqual(len(record.alignments[0].hsps), 1)
 
         record = next(records)
@@ -14603,8 +14603,8 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.database, "All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding environmental samples from WGS projects")
         self.assertEqual(record.database_sequences, 8994603)
         self.assertEqual(record.database_letters, 3078807967)
-        self.assertEqual(len(record.descriptions), 10) # I used -v 10
-        self.assertEqual(len(record.alignments), 1) # I used -b 1
+        self.assertEqual(len(record.descriptions), 10)  # I used -v 10
+        self.assertEqual(len(record.alignments), 1)  # I used -b 1
         self.assertEqual(len(record.alignments[0].hsps), 1)
 
         self.assertEqual(None, next(records))
@@ -14958,7 +14958,27 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(None, next(records))
         handle.close()
 
+    def test_text_2230_blastp_001(self):
+        """Test parsing BLASTP 2.2.30+ output with line of dashes."""
+        with open("Blast/text_2230_blastp_001.txt") as handle:
+            records = NCBIStandalone.Iterator(handle, self.parser)
+            record = next(records)
+            self.assertEqual(record.application, 'BLASTP')
+            self.assertEqual(record.version, '2.2.30+')
+            self.assertEqual(record.query, "TR11080zzzc0_g2_i2_0")
+            self.assertEqual(record.query_letters, 1691)
+            self.assertEqual(len(record.descriptions), 1)
+            self.assertEqual(len(record.alignments), 1)
+            self.assertEqual(len(record.alignments[0].hsps), 3)
+            h = record.alignments[0].hsps[0]
+            self.assertTrue("PTSP" + ("-" * 79) + "AYSP" in h.query)
+            h = record.alignments[0].hsps[1]
+            self.assertTrue(h.query.startswith("AYSPTSPAYSPTSPAYSPTSPAYSPTSPAYS----------PTSPAYSPTSPAYSPTSPA"))
+            h = record.alignments[0].hsps[2]
+            self.assertTrue(h.query.startswith("YSPTSPAYSPTSPAYSPTSPAYSPTSPAYS----------PTSPAYSPTSPAYSPTSPAY"))
+            self.assertEqual(None, next(records))
+
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

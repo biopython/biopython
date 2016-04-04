@@ -157,7 +157,6 @@ class Hmmer2TextParser(object):
             bitscore = float(fields.pop())
             description = ' '.join(fields).strip()
 
-
             hit = _HitPlaceholder()
             hit.id_ = id_
             hit.evalue = evalue
@@ -211,7 +210,7 @@ class Hmmer2TextParser(object):
                 hsp.hit_endtype = seq_compl
 
             if id_ not in unordered_hits:
-                placeholder = [ p for p in hit_placeholders if p.id_ == id_][0]
+                placeholder = [p for p in hit_placeholders if p.id_ == id_][0]
                 hit = placeholder.createHit([hsp])
                 unordered_hits[id_] = hit
             else:
@@ -245,7 +244,7 @@ class Hmmer2TextParser(object):
             if hit.domain_obs_num != num:
                 continue
 
-            frag = hit[idx-1][0]
+            frag = hit[idx - 1][0]
 
             hmmseq = ''
             consensus = ''
@@ -276,7 +275,7 @@ class Hmmer2TextParser(object):
                 line_len = len(seq)
                 if not self.read_next(rstrip=False):
                     break
-                consensus += self.line[19+pad:19+pad+line_len]
+                consensus += self.line[19 + pad:19 + pad + line_len]
                 # If there's no consensus sequence, hmmer2 doesn't
                 # bother to put spaces here, so add extra padding
                 extra_padding = len(hmmseq) - len(consensus)

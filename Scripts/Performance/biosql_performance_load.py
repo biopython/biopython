@@ -1,4 +1,4 @@
-#/usr/bin/env python
+#!/usr/bin/env python
 """Small script to test timing of loading records into a BioSQL database.
 """
 from __future__ import print_function
@@ -7,6 +7,9 @@ import time
 # set up the connection
 from Bio import GenBank
 from BioSQL import BioSeqDatabase
+
+__docformat__ = "restructuredtext en"
+
 server = BioSeqDatabase.open_database(host="192.168.0.192", user="root",
                                        passwd="", db="pythonloadtest")
 

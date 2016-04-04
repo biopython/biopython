@@ -199,7 +199,7 @@ class Hmmer3TabIndexer(SearchIndexer):
                 break
 
     def get_raw(self, offset):
-        """Returns the raw string of a QueryResult object from the given offset."""
+        """Returns the raw bytes string of a QueryResult object from the given offset."""
         handle = self._handle
         handle.seek(offset)
         query_id_idx = self._query_id_idx
@@ -263,8 +263,8 @@ class Hmmer3TabWriter(object):
         # calculate whitespace required
         # adapted from HMMER's source: src/p7_tophits.c#L1083
         if first_qresult is not None:
-            #qnamew = max(20, len(first_qresult.id))
-            qnamew = 20 # why doesn't the above work?
+            # qnamew = max(20, len(first_qresult.id))
+            qnamew = 20  # why doesn't the above work?
             tnamew = max(20, len(first_qresult[0].id))
             qaccw = max(10, len(first_qresult.accession))
             taccw = max(10, len(first_qresult[0].accession))
@@ -276,14 +276,14 @@ class Hmmer3TabWriter(object):
                 "--- full sequence ----", "--- best 1 domain ----",
                 "--- domain number estimation ----")
         header += "#%-*s %-*s %-*s %-*s %9s %6s %5s %9s %6s %5s %5s %3s " \
-                "%3s %3s %3s %3s %3s %3s %s\n" % (tnamew-1, " target name",
-                        taccw, "accession",  qnamew, "query name", qaccw,
-                        "accession",  "  E-value", " score", " bias",
+                "%3s %3s %3s %3s %3s %3s %s\n" % (tnamew - 1, " target name",
+                        taccw, "accession", qnamew, "query name", qaccw,
+                        "accession", "  E-value", " score", " bias",
                         "  E-value", " score", " bias", "exp",
                         "reg", "clu", " ov", "env", "dom", "rep",
                         "inc", "description of target")
         header += "#%*s %*s %*s %*s %9s %6s %5s %9s %6s %5s %5s %3s %3s " \
-                "%3s %3s %3s %3s %3s %s\n" % (tnamew-1, "-------------------",
+                "%3s %3s %3s %3s %3s %s\n" % (tnamew - 1, "-------------------",
                 taccw, "----------", qnamew, "--------------------", qaccw,
                 "----------", "---------", "------", "-----", "---------",
                 "------", "-----", "---", "---", "---", "---", "---", "---",

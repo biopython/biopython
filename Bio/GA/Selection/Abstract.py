@@ -5,6 +5,7 @@
 
 """Base selection class from which all Selectors should derive.
 """
+__docformat__ = "restructuredtext en"
 
 
 class AbstractSelection(object):
@@ -16,7 +17,7 @@ class AbstractSelection(object):
 
     This class should not be used directly, but rather should be subclassed.
     """
-    def __init__(self, mutator, crossover, repairer = None):
+    def __init__(self, mutator, crossover, repairer=None):
         """Initialize a selector.
 
         Arguments:

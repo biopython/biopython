@@ -16,14 +16,14 @@ import sys
 import time
 
 try:
-    from Tkinter import * # Python 2
+    from Tkinter import *  # Python 2
 except ImportError:
-    from tkinter import * # Python 3
+    from tkinter import *  # Python 3
 
 try:
-    import tkFileDialog as filedialog # Python 2
+    import tkFileDialog as filedialog  # Python 2
 except ImportError:
-    from tkinter import filedialog # Python 3
+    from tkinter import filedialog  # Python 3
 
 sys.path.insert(0, '.')
 from xbb_utils import *
@@ -34,7 +34,10 @@ from xbb_help import xbbtools_help
 from Bio.Data import CodonTable
 from Bio.SeqIO.FastaIO import SimpleFastaParser
 
-class xbb_widget:
+__docformat__ = "restructuredtext en"
+
+
+class xbb_widget(object):
     def __init__(self, parent=None):
         self.is_a_master = (parent is None)
         self.parent = parent
@@ -290,22 +293,22 @@ class xbb_widget:
 
     def get_selection(self):
         w = self.sequence_id
-        #print(w.selection_own())
-        #w.selection_own()
+        # print(w.selection_own())
+        # w.selection_own()
         try:
             return w.selection_get()
-            #return string.upper(w.get(sel.first, sel.last))
-        except:
+            # return string.upper(w.get(sel.first, sel.last))
+        except Exception:  # TODO - Which exceptions?
             return ''
 
     def get_self_selection(self):
         w = self.sequence_id
-        #w.selection_own()
+        # w.selection_own()
         try:
             return w.selection_get()
-            #return string.upper(w.get(sel.first, sel.last))
-            #return string.upper(w.selection_own_get())
-        except:
+            # return string.upper(w.get(sel.first, sel.last))
+            # return string.upper(w.selection_own_get())
+        except Exception:  # TODO - Which exceptions?
             return ''
 
     def count_selection(self, event):
@@ -325,7 +328,7 @@ class xbb_widget:
             for nt in ['A', 'C', 'G', 'T']:
                 n = seq.count(nt)
                 self.statistics_ids[nt].configure(text='%s=%d' % (nt, n))
-        except:
+        except Exception:  # TODO - Which exceptions?
             pass
 
     def position(self, event):
@@ -428,7 +431,7 @@ GC=%f
         w.selection_own()
         try:
             start, stop = w.tag_ranges(SEL)
-        except:
+        except Exception:  # TODO - Which exceptions?
             start, stop = 1.0, self.sequence_id.index(END)
 
         seq = w.get(start, stop)
@@ -447,13 +450,13 @@ GC=%f
         w.selection_own()
         try:
             start, stop = w.tag_ranges(SEL)
-        except:
+        except Exception:  # Which exceptions?
             start, stop = 1.0, self.sequence_id.index(END)
 
         seq = w.get(start, stop)
         seq = re.sub('[^A-Z]', '', seq)
 
-        #print('seq >%s<' % seq)
+        # print('seq >%s<' % seq)
         complementary = self.translator.complement(seq)
         w.delete(start, stop)
         w.insert(start, complementary)
@@ -466,7 +469,7 @@ GC=%f
         w.selection_own()
         try:
             start, stop = w.tag_ranges(SEL)
-        except:
+        except Exception:  # TODO - Which exceptions?
             start, stop = 1.0, self.sequence_id.index(END)
 
         seq = w.get(start, stop)
@@ -487,14 +490,14 @@ GC=%f
         pos = self.goto_entry.get()
         try:
             pos = int(pos) - 1
-        except:
+        except ValueError:
             try:
                 start, stop = pos.split(':')
                 start = int(start) - 1
                 stop = int(stop)
                 self.mark(start, stop)
                 return
-            except:
+            except Exception:  # TODO - which exceptions?
                 import traceback
                 traceback.print_exc()
 

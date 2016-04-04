@@ -38,6 +38,7 @@ class TestPrositeRead(unittest.TestCase):
         self.read1_positive1(record)
         self.read1_positive2(record)
         self.read1_positive3(record)
+        self.read1_positive4(record)
         self.read1_false_neg(record)
         self.read1_false_pos(record)
         self.read1_potential(record)
@@ -1551,7 +1552,7 @@ class TestPrositeRead(unittest.TestCase):
         self.assertEqual(record.dr_positive[1498], ('Q62270', 'SRMS_MOUSE'))
         self.assertEqual(record.dr_positive[1499], ('Q96SB4', 'SRPK1_HUMAN'))
 
-    def read1_positive3(self, record):
+    def read1_positive4(self, record):
         self.assertEqual(len(record.dr_positive), 1689)
         self.assertEqual(record.dr_positive[1500], ('O70551', 'SRPK1_MOUSE'))
         self.assertEqual(record.dr_positive[1501], ('Q5RD27', 'SRPK1_PONPY'))
@@ -2716,5 +2717,5 @@ class TestPrositeRead(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

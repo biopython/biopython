@@ -15,6 +15,8 @@ from Bio.PDB.PDBParser import PDBParser
 from Bio.PDB.Polypeptide import CaPPBuilder, is_aa
 from Bio.PDB.Vector import rotaxis
 
+__docformat__ = "restructuredtext en"
+
 
 class _AbstractHSExposure(AbstractPropertyMap):
     """
@@ -44,63 +46,63 @@ class _AbstractHSExposure(AbstractPropertyMap):
         @type hse_down_key: string
 
         @param angle_key: key used to store the angle between CA-CB and CA-pCB in
-            the entity.xtra attribute
+        the entity.xtra attribute
         @type angle_key: string
         """
-        assert(offset>=0)
+        assert(offset >= 0)
         # For PyMOL visualization
-        self.ca_cb_list=[]
-        ppb=CaPPBuilder()
-        ppl=ppb.build_peptides(model)
-        hse_map={}
-        hse_list=[]
-        hse_keys=[]
+        self.ca_cb_list = []
+        ppb = CaPPBuilder()
+        ppl = ppb.build_peptides(model)
+        hse_map = {}
+        hse_list = []
+        hse_keys = []
         for pp1 in ppl:
             for i in range(0, len(pp1)):
-                if i==0:
-                    r1=None
+                if i == 0:
+                    r1 = None
                 else:
-                    r1=pp1[i-1]
-                r2=pp1[i]
-                if i==len(pp1)-1:
-                    r3=None
+                    r1 = pp1[i - 1]
+                r2 = pp1[i]
+                if i == len(pp1) - 1:
+                    r3 = None
                 else:
-                    r3=pp1[i+1]
+                    r3 = pp1[i + 1]
                 # This method is provided by the subclasses to calculate HSE
-                result=self._get_cb(r1, r2, r3)
+                result = self._get_cb(r1, r2, r3)
                 if result is None:
                     # Missing atoms, or i==0, or i==len(pp1)-1
                     continue
-                pcb, angle=result
-                hse_u=0
-                hse_d=0
-                ca2=r2['CA'].get_vector()
+                pcb, angle = result
+                hse_u = 0
+                hse_d = 0
+                ca2 = r2['CA'].get_vector()
                 for pp2 in ppl:
                     for j in range(0, len(pp2)):
-                        if pp1 is pp2 and abs(i-j)<=offset:
+                        if pp1 is pp2 and abs(i - j) <= offset:
                             # neighboring residues in the chain are ignored
                             continue
-                        ro=pp2[j]
+                        ro = pp2[j]
                         if not is_aa(ro) or not ro.has_id('CA'):
                             continue
-                        cao=ro['CA'].get_vector()
-                        d=(cao-ca2)
-                        if d.norm()<radius:
-                            if d.angle(pcb)<(pi/2):
-                                hse_u+=1
+                        cao = ro['CA'].get_vector()
+                        d = (cao - ca2)
+                        if d.norm() < radius:
+                            if d.angle(pcb) < (pi / 2):
+                                hse_u += 1
                             else:
-                                hse_d+=1
-                res_id=r2.get_id()
-                chain_id=r2.get_parent().get_id()
+                                hse_d += 1
+                res_id = r2.get_id()
+                chain_id = r2.get_parent().get_id()
                 # Fill the 3 data structures
-                hse_map[(chain_id, res_id)]=(hse_u, hse_d, angle)
+                hse_map[(chain_id, res_id)] = (hse_u, hse_d, angle)
                 hse_list.append((r2, (hse_u, hse_d, angle)))
                 hse_keys.append((chain_id, res_id))
                 # Add to xtra
-                r2.xtra[hse_up_key]=hse_u
-                r2.xtra[hse_down_key]=hse_d
+                r2.xtra[hse_up_key] = hse_u
+                r2.xtra[hse_down_key] = hse_d
                 if angle_key:
-                    r2.xtra[angle_key]=angle
+                    r2.xtra[angle_key] = angle
         AbstractPropertyMap.__init__(self, hse_map, hse_keys, hse_list)
 
     def _get_cb(self, r1, r2, r3):
@@ -116,19 +118,19 @@ class _AbstractHSExposure(AbstractPropertyMap):
         along the CA-C axis.
         """
         try:
-            n_v=residue["N"].get_vector()
-            c_v=residue["C"].get_vector()
-            ca_v=residue["CA"].get_vector()
+            n_v = residue["N"].get_vector()
+            c_v = residue["C"].get_vector()
+            ca_v = residue["CA"].get_vector()
         except:
             return None
         # center at origin
-        n_v=n_v-ca_v
-        c_v=c_v-ca_v
+        n_v = n_v - ca_v
+        c_v = c_v - ca_v
         # rotation around c-ca over -120 deg
-        rot=rotaxis(-pi*120.0/180.0, c_v)
-        cb_at_origin_v=n_v.left_multiply(rot)
+        rot = rotaxis(-pi * 120.0 / 180.0, c_v)
+        cb_at_origin_v = n_v.left_multiply(rot)
         # move back to ca position
-        cb_v=cb_at_origin_v+ca_v
+        cb_v = cb_at_origin_v + ca_v
         # This is for PyMol visualization
         self.ca_cb_list.append((ca_v, cb_v))
         return cb_at_origin_v
@@ -167,34 +169,34 @@ class HSExposureCA(_AbstractHSExposure):
         if r1 is None or r3 is None:
             return None
         try:
-            ca1=r1['CA'].get_vector()
-            ca2=r2['CA'].get_vector()
-            ca3=r3['CA'].get_vector()
+            ca1 = r1['CA'].get_vector()
+            ca2 = r2['CA'].get_vector()
+            ca3 = r3['CA'].get_vector()
         except:
             return None
         # center
-        d1=ca2-ca1
-        d3=ca2-ca3
+        d1 = ca2 - ca1
+        d3 = ca2 - ca3
         d1.normalize()
         d3.normalize()
         # bisection
-        b=(d1+d3)
+        b = (d1 + d3)
         b.normalize()
         # Add to ca_cb_list for drawing
-        self.ca_cb_list.append((ca2, b+ca2))
+        self.ca_cb_list.append((ca2, b + ca2))
         if r2.has_id('CB'):
-            cb=r2['CB'].get_vector()
-            cb_ca=cb-ca2
+            cb = r2['CB'].get_vector()
+            cb_ca = cb - ca2
             cb_ca.normalize()
-            angle=cb_ca.angle(b)
-        elif r2.get_resname()=='GLY':
-            cb_ca=self._get_gly_cb_vector(r2)
+            angle = cb_ca.angle(b)
+        elif r2.get_resname() == 'GLY':
+            cb_ca = self._get_gly_cb_vector(r2)
             if cb_ca is None:
-                angle=None
+                angle = None
             else:
-                angle=cb_ca.angle(b)
+                angle = cb_ca.angle(b)
         else:
-            angle=None
+            angle = None
         # vector b is centered at the origin!
         return b, angle
 
@@ -206,7 +208,7 @@ class HSExposureCA(_AbstractHSExposure):
         @param filename: the name of the pymol script file
         @type filename: string
         """
-        if len(self.ca_cb_list)==0:
+        if len(self.ca_cb_list) == 0:
             warnings.warn("Nothing to draw.", RuntimeWarning)
             return
         with open(filename, "w") as fp:
@@ -216,9 +218,9 @@ class HSExposureCA(_AbstractHSExposure):
             fp.write("BEGIN, LINES,\n")
             fp.write("COLOR, %.2f, %.2f, %.2f,\n" % (1.0, 1.0, 1.0))
             for (ca, cb) in self.ca_cb_list:
-                x, y, z=ca.get_array()
+                x, y, z = ca.get_array()
                 fp.write("VERTEX, %.2f, %.2f, %.2f,\n" % (x, y, z))
-                x, y, z=cb.get_array()
+                x, y, z = cb.get_array()
                 fp.write("VERTEX, %.2f, %.2f, %.2f,\n" % (x, y, z))
             fp.write("END]\n")
             fp.write("cmd.load_cgo(obj, 'HS')\n")
@@ -249,13 +251,13 @@ class HSExposureCB(_AbstractHSExposure):
         @param r1, r2, r3: three consecutive residues (only r2 is used)
         @type r1, r2, r3: L{Residue}
         """
-        if r2.get_resname()=='GLY':
+        if r2.get_resname() == 'GLY':
             return self._get_gly_cb_vector(r2), 0.0
         else:
             if r2.has_id('CB') and r2.has_id('CA'):
-                vcb=r2['CB'].get_vector()
-                vca=r2['CA'].get_vector()
-                return (vcb-vca), 0.0
+                vcb = r2['CB'].get_vector()
+                vca = r2['CA'].get_vector()
+                return (vcb - vca), 0.0
         return None
 
 
@@ -276,64 +278,64 @@ class ExposureCN(AbstractPropertyMap):
         @type offset: int
 
         """
-        assert(offset>=0)
-        ppb=CaPPBuilder()
-        ppl=ppb.build_peptides(model)
-        fs_map={}
-        fs_list=[]
-        fs_keys=[]
+        assert(offset >= 0)
+        ppb = CaPPBuilder()
+        ppl = ppb.build_peptides(model)
+        fs_map = {}
+        fs_list = []
+        fs_keys = []
         for pp1 in ppl:
             for i in range(0, len(pp1)):
-                fs=0
-                r1=pp1[i]
+                fs = 0
+                r1 = pp1[i]
                 if not is_aa(r1) or not r1.has_id('CA'):
                     continue
-                ca1=r1['CA']
+                ca1 = r1['CA']
                 for pp2 in ppl:
                     for j in range(0, len(pp2)):
-                        if pp1 is pp2 and abs(i-j)<=offset:
+                        if pp1 is pp2 and abs(i - j) <= offset:
                             continue
-                        r2=pp2[j]
+                        r2 = pp2[j]
                         if not is_aa(r2) or not r2.has_id('CA'):
                             continue
-                        ca2=r2['CA']
-                        d=(ca2-ca1)
-                        if d<radius:
-                            fs+=1
-                res_id=r1.get_id()
-                chain_id=r1.get_parent().get_id()
+                        ca2 = r2['CA']
+                        d = (ca2 - ca1)
+                        if d < radius:
+                            fs += 1
+                res_id = r1.get_id()
+                chain_id = r1.get_parent().get_id()
                 # Fill the 3 data structures
-                fs_map[(chain_id, res_id)]=fs
+                fs_map[(chain_id, res_id)] = fs
                 fs_list.append((r1, fs))
                 fs_keys.append((chain_id, res_id))
                 # Add to xtra
-                r1.xtra['EXP_CN']=fs
+                r1.xtra['EXP_CN'] = fs
         AbstractPropertyMap.__init__(self, fs_map, fs_keys, fs_list)
 
 
-if __name__=="__main__":
+if __name__ == "__main__":
 
     import sys
 
-    p=PDBParser()
-    s=p.get_structure('X', sys.argv[1])
-    model=s[0]
+    p = PDBParser()
+    s = p.get_structure('X', sys.argv[1])
+    model = s[0]
 
     # Neighbor sphere radius
-    RADIUS=13.0
-    OFFSET=0
+    RADIUS = 13.0
+    OFFSET = 0
 
-    hse=HSExposureCA(model, radius=RADIUS, offset=OFFSET)
+    hse = HSExposureCA(model, radius=RADIUS, offset=OFFSET)
     for l in hse:
         print(l)
     print("")
 
-    hse=HSExposureCB(model, radius=RADIUS, offset=OFFSET)
+    hse = HSExposureCB(model, radius=RADIUS, offset=OFFSET)
     for l in hse:
         print(l)
     print("")
 
-    hse=ExposureCN(model, radius=RADIUS, offset=OFFSET)
+    hse = ExposureCN(model, radius=RADIUS, offset=OFFSET)
     for l in hse:
         print(l)
     print("")

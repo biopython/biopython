@@ -10,10 +10,157 @@ The latest news is at the top of this file.
 
 ===================================================================
 
-(In progress, not yet released) Biopython 1.65
+(In progress, not yet released) Biopython 1.67
+
+This release of Biopython supports Python 2.6, 2.7, 3.3, 3.4 and 3.5, but
+support for Python 2.6 is considered to be deprecated. It has also been
+tested on PyPy 2.4 to 2.6, PyPy3 version 2.4, and Jython 2.7.
+
+Comparison of SeqRecord objects until now has used the default Python object
+comparison (are they same instance in memory?). This can be surprising, but
+comparing all of the attributes would be too complex. As of this release
+attempting to compare SeqRecord objects should raise an exception instead. If
+you want the old behaviour, use id(record1) == id(record2) instead.
+
+Following the convention used elsewhere in Biopython, there is a new function
+Bio.KEGG.read(...) for parsing KEGG files expected to contain a single record
+only - existing function Bio.KEGG.parse(...) is intended to be used to iterate
+over multi-record files.
+
+When a gap character is defined, Bio.Seq will now translate gap codons
+(e.g. "---") into a single gap ("-") in the protein sequence. The gap character
+is inferred from the Seq object's alphabet, but it can also be passed as an
+argument to the translate method.
+
+The new NCBI genetic code table 25, Candidate Division SR1 and Gracilibacteria,
+has been added to Bio.Data (and the translation functionality).
+
+The Bio.Entrez interface will automatically use an HTTP POST rather than
+HTTP GET if the URL would exceed 1000 characters. This is based on NCBI
+guidelines and the fact that very long queries like complex searches can
+otherwise trigger an HTTP Error 414 Request URI too long.
+
+Foreign keys are now used when creating BioSQL databases with SQLite3 (this
+was not possible until SQLite version 3.6.19).
+
+Additionally, a number of small bugs have been fixed with further additions
+to the test suite, and there has been further work to follow the Python PEP8
+standard coding style, and in converting our docstring documentation to use
+the reStructuredText markup style.
+
+Many thanks to the Biopython developers and community for making this release
+possible, especially the following contributors:
+
+Aaron Rosenfeld (first contribution)
+Anders Pitman (first contribution)
+Barbara Mühlemann (first contribution)
+Ben Fulton
+Ben Woodcroft (first contribution)
+Brian Osborne (first contribution)
+Carlos Pena
+Chaitanya Gupta (first contribution)
+Chris Warth (first contribution)
+Christiam Camacho (first contribution)
+Connor T. Skennerton
+David Koppstein (first contribution)
+Eric Talevich
+Jacek Śmietański (first contribution)
+João D Ferreira (first contribution)
+João Rodrigues
+Joe Cora (first contribution)
+Kai Blin
+Markus Piotrowski
+Matt Ruffalo (first contribution)
+Matteo Sticco (first contribution)
+Lenna Peterson
+Peter Cock
+Steve Bond (first contribution)
+Terry Jones (first contribution)
+Vincent Davis
+
+===================================================================
+
+21 October 2015: Biopython 1.66
+
+This release of Biopython supports Python 2.6, 2.7, 3.3, 3.4 and 3.5, but
+support for Python 2.6 is considered to be deprecated. It has also been
+tested on PyPy 2.4 to 2.6, PyPy3 version 2.4, and Jython 2.7.
+
+Further work on the Bio.KEGG and Bio.Graphics modules now allows drawing KGML
+pathways with transparency.
+
+The Bio.SeqIO "abi" parser now decodes almost all the documented fields used
+by the ABIF instruments - including the individual color channels.
+
+Bio.PDB now has a QCPSuperimposer module using the Quaternion Characteristic
+Polynomial algorithm for superimposing structures. This is a fast alternative
+to the existing SVDSuperimposer code using singular value decomposition.
+
+Bio.Entrez now implements the NCBI Entrez Citation Matching function
+(ECitMatch), which retrieves PubMed IDs (PMIDs) that correspond to a set of
+input citation strings.
+
+Bio.Entrez.parse(...) now supports NCBI XML files using XSD schemas, which
+will be downloaded and cached like NCBI DTD files.
+
+A subtle bug in how multi-part GenBank/EMBL locations on the reverse strand
+were parsed into CompoundLocations was fixed: complement(join(...)) as used
+by NCBI worked, but join(complement(...),complement(...),...) as used by
+EMBL/ENSEMBL gave the CompoundLocation parts in the wrong order. A related
+bug when taking the reverse complement of a SeqRecord containing features
+with CompoundLocations was also fixed.
+
+Additionally, a number of small bugs have been fixed with further additions
+to the test suite, and there has been further work on conforming to the
+Python PEP8 standard coding style.
+
+Many thanks to the Biopython developers and community for making this release
+possible, especially the following contributors:
+
+Alan Medlar (first contribution)
+Anthony Mathelier (first contribution)
+Antony Lee (first contribution)
+Anuj Sharma (first contribution)
+Ben Fulton (first contribution)
+Bertrand Néron (first contribution)
+Brandon Invergo
+Carlos Pena
+Christian Brueffer
+Connor T. Skennerton (first contribution)
+David Arenillas (first contribution)
+David Nicholson (first contribution)
+Emmanuel Noutahi (first contribution)
+Eric Rasche (first contribution)
+Fabio Madeira (first contribution)
+Franco Caramia (first contribution)
+Gert Hulselmans (first contribution)
+Gleb Kuznetsov (first contribution)
+João Rodrigues
+John Bradley (first contribution)
+Kai Blin
+Kian Ho (first contribution)
+Kozo Nishida (first contribution)
+Kuan-Yi Li (first contribution)
+Leighton Pritchard
+Lucas Sinclair
+Michiel de Hoon
+Peter Cock
+Saket Choudhary
+Sunhwan Jo (first contribution)
+Tarcisio Fedrizzi (first contribution)
+Tiago Antao
+Vincent Davis
+
+===================================================================
+
+17 December 2014: Biopython 1.65 released.
+
+The Biopython sequence objects now use string comparison, rather than Python's
+object comparison. This has been planned for a long time with warning messages
+in place (under Python 2, the warnings were sadly missing under Python 3).
 
 The Bio.KEGG and Bio.Graphics modules have been expanded with support for
-parsing, representing and drawing KGML pathways.
+the online KEGG REST API, and parsing, representing and drawing KGML pathways.
 
 The Pterobranchia Mitochondrial genetic code has been added to Bio.Data (and
 the translation functionality), which is the new NCBI genetic code table 24.
@@ -26,21 +173,50 @@ Bio.SearchIO QueryResult objects now allow Hit retrieval using its alternative
 IDs (any IDs listed after the first one, for example as used with the NCBI
 BLAST NR database).
 
+We have also done some more work applying PEP8 coding styles to Biopython.
+
+Bio.SeqUtils.MeltingTemp has been rewritten with new functionality.
+
+The new experimental module Bio.CodonAlign has been renamed Bio.codonalign
+(and similar lower case PEP8 style module names have been used for the
+sub-modules within this).
+
+Bio.SeqIO.index_db(...) and Bio.SearchIO.index_db(...) now store any relative
+filenames relative to the index file, rather than (as before) relative to the
+current directory at the time the index was built. This makes the indexes
+less fragile, so that they can be used from other working directories. NOTE:
+This change is backward compatible (old index files work as before), however
+relative paths in new indexes will not work on older versions of Biopython!
+
+Biopython also seems to work fine under PyPy3 2.4 which implements Python 3.2
+plus unicode string literals.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
 Alan Du (first contribution)
+Carlos Pena (first contribution)
 Colin Lappala (first contribution)
+Christian Brueffer
 David Bulger (first contribution)
 Eric Talevich
 Evan Parker (first contribution)
+Hongbo Zhu
 Kai Blin
+Kevin Wu (first contribution)
 Leighton Pritchard
+Leszek Pryszcz (first contribution)
+Markus Piotrowski
 Matt Shirley (first contribution)
 Mike Cariaso (first contribution)
 Peter Cock
+Seth Sims (first contribution)
 Tiago Antao
+Travis Wrightsman (first contribution)
+Tyghe Vallard (first contribution)
+Vincent Davis
 Wibowo 'Bow' Arindrarto
+Zheng Ruan
 
 ===================================================================
 
@@ -53,7 +229,7 @@ The new experimental module Bio.CodonAlign facilitates building codon
 alignment and further analysis upon it. This work is from the Google
 Summer of Code (GSoC) project by Zheng Ruan.
 
-Bio.Phylo now has tree construction and consensus modules, from on the
+Bio.Phylo now has tree construction and consensus modules, from the
 GSoC work by Yanbo Ye.
 
 Bio.Entrez will now automatically download and cache new NCBI DTD files for
@@ -175,7 +351,7 @@ Martin Mokrejs
 Matsuyuki Shirota (first contribution)
 
 ===================================================================
- 
+
 15 July 2013: Biopython 1.62 beta released.
 
 This is a beta release for testing purposes, both for new features added,
@@ -302,6 +478,10 @@ are familiar with BioPerl its purpose isn't immediately clear.
 The Bio.Motif module has been updated and reorganized. To allow for a clean
 deprecation of the old code, the new motif code is stored in a new module
 Bio.motifs, and a PendingDeprecationWarning was added to Bio.Motif.
+
+A faster low level string FASTA based parser SimpleFastaParser has been added
+to Bio.SeqIO.FastaIO which like its sister function for FASTQ files does not
+have the overhead of constructing SeqRecord objects.
 
 Additionally there have been other minor bug fixes and more unit tests.
 
@@ -521,13 +701,13 @@ as quality scores from FASTQ) or features (such as annotation from GenBank).
 Bio.SeqIO.write's QUAL output has been sped up, and Bio.SeqIO.convert now
 uses an optimised routine for FASTQ to QUAL making this much faster.
 
-Biopython can now be installed with pip. Thanks to David Koppstein and 
+Biopython can now be installed with pip. Thanks to David Koppstein and
 James Casbon for reporting the problem.
 
 Bio.SeqIO.write now uses lower case for the sequence for GenBank, EMBL and
 IMGT output.
 
-The Bio.PDB module received several fixes and improvements, including starting 
+The Bio.PDB module received several fixes and improvements, including starting
 to merge João's work from GSoC 2010; consequently Atom objects now know
 their element type and IUPAC mass. (The new features that use these
 attributes won't be included in Biopython until the next release, though, so
@@ -1319,7 +1499,7 @@ Major Changes since v1.30. For a full list of changes please see the CVS
 IMPORTANT: Biopython now works with Python version >= 2.3
 
 NEW: Bio.Nexus -- thanks to Frank Kauff
-Bio.Nexus is a Nexus file parser. Nexus is  a common format for phylogenetic trees.
+Bio.Nexus is a Nexus file parser. Nexus is a common format for phylogenetic trees.
 
 NEW: CAPS module -- Thanks to Jonathan Taylor
 
@@ -1332,10 +1512,10 @@ Added secondary structure support (through DSSP)
 Added Accessible Surface Area support (through DSSP)
 Added Residue Depth support (through MSMS)
 Added Half Sphere Exposure.
-Added Fragment classification of the protein backbone (see Kolodny et al., 
+Added Fragment classification of the protein backbone (see Kolodny et al.,
 JMB, 2002)
 Corrected problem on Windows with PDBList (thanks to Matt Dimmic)
-Added StructureAlignment module to superimpose structures based on a FASTA 
+Added StructureAlignment module to superimpose structures based on a FASTA
 sequence alignment.
 Various additions to Polypeptide.
 Various bug corrections in Vector.
@@ -1357,18 +1537,18 @@ will modify the MutableSeq object itself, and don't return anything.
 ===================================================================
 
 May 14, 2004: Biopython 1.30
- Affy package added for dealing with Affymetrix cel files -- thanks to Harry 
+ Affy package added for dealing with Affymetrix cel files -- thanks to Harry
   Zuzan.
  Added code for parsing Blast XML output -- thanks to Bertrand Frottier.
  Added code for parsing Compass output -- thanks to James Casbon.
  New melting temperature calculation module -- thanks to Sebastian Bassi.
  Added lowess function for non-parameteric regression -- thanks to Michiel.
  Reduced protein alphabet supported added -- thanks to Iddo.
- 
+
  Added documentation for Logistic Regression and Bio.PDB -- thanks to Michiel
   and Thomas.
  Documentation added for converting between file formats.
- Updates to install documentation for non-root users -- thanks to Jakob 
+ Updates to install documentation for non-root users -- thanks to Jakob
   Fredslund.
  epydoc now used for automatic generation of documentation.
 
@@ -1378,7 +1558,7 @@ May 14, 2004: Biopython 1.30
   retrieval options, including embl, fasta, genbak, interpro, prodoc and swissprot.
  GenBank parser uses new Martel format. GenBank retrieval now uses EUtils instead
   of the old non-working entrez scripts. GenBank indexing uses standard Mindy
-  indexing. Fix for valueless qualifiers in feature keys -- thanks to Leighton 
+  indexing. Fix for valueless qualifiers in feature keys -- thanks to Leighton
   Pritchard.
  Numerous updated to Bio.PDB modules -- thanks to Thomas. PDB can now parse headers
   -- thanks to Kristian Rother.
@@ -1388,7 +1568,7 @@ May 14, 2004: Biopython 1.30
  Fix problems with using py2exe and Biopython -- thanks to Michael Cariaso.
  PSIBlast parser fixes -- thanks to Jer-Yee John Chuang and James Casbon.
  Fix to NCBIWWW retrieval so that HTML results are returned correctly.
- Fix to Clustalw to handle question marks in title names -- thanks to Ashleigh 
+ Fix to Clustalw to handle question marks in title names -- thanks to Ashleigh
   Smythe.
  Fix to NBRF parsing to it accepts files produced by Clustalw -- thanks to
   Ashleigh Smythe.
@@ -1420,20 +1600,20 @@ Feb 16, 2004: Biopython 1.24
   protein properties -- thanks to Yair Benita
  New code for dealing with Wise contributed by Michael
  EZ-Retrieve sequence retrieval now supported thanks to Jeff
- Bio.Cluster updated along with documentation by Michiel 
+ Bio.Cluster updated along with documentation by Michiel
  BioSQL fixed so it now works with the current SQL schema -- thanks to Yves
   Bastide for patches
- Patches to Bio/__init__ to make it compatible with py2exe -- thanks to 
+ Patches to Bio/__init__ to make it compatible with py2exe -- thanks to
   Leighton Pritchard
  Added __iter__ to all Biopython Iterators to make them Python 2.2 compatible
  Fixes to NCBIWWW for retrieving from NCBI -- thanks to Chris Wroe
- Retrieval of multiple alignment objects from BLAST records -- thanks to 
+ Retrieval of multiple alignment objects from BLAST records -- thanks to
   James Casbon
  Fixes to GenBank format for new tags by Peter
  Parsing fixes in clustalw parsed -- thanks to Greg Singer and Iddo
  Fasta Indexes can have a specified filename -- thanks to Chunlei Wu
  Fix to Prosite parser -- thanks to Mike Liang
- Fix in GenBank parsing -- mRNAs now get strand information 
+ Fix in GenBank parsing -- mRNAs now get strand information
 
 
 Oct 18, 2003: Biopython 1.23
@@ -1544,7 +1724,7 @@ Sept 3, 2001: Biopython1.00a3
   added sequtils module for computations on sequences
   added pairwise sequence alignment algorithm
   major bug fixes in UndoHandle
-  format updates in PubMed  
+  format updates in PubMed
   Tk interface to kMeans clustering
 
 July 5, 2001: Biopython1.00a2
@@ -1646,5 +1826,3 @@ mailing list, and let us know what you think!
 
 Jeffrey Chang <jchang@smi.stanford.edu>
 Andrew Dalke <dalke@bioreason.com>
-
-

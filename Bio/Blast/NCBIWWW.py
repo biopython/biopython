@@ -11,9 +11,6 @@
 This module provides code to work with the WWW version of BLAST
 provided by the NCBI.
 http://blast.ncbi.nlm.nih.gov/
-
-Functions:
-qblast        Do a BLAST search using the QBLAST API.
 """
 
 from __future__ import print_function
@@ -24,8 +21,11 @@ from Bio._py3k import urlopen as _urlopen
 from Bio._py3k import urlencode as _urlencode
 from Bio._py3k import Request as _Request
 
+__docformat__ = "restructuredtext en"
 
-def qblast(program, database, sequence,
+NCBI_BLAST_URL = "http://blast.ncbi.nlm.nih.gov/Blast.cgi"
+
+def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
            auto_format=None, composition_based_statistics=None,
            db_genetic_code=None, endpoints=None, entrez_query='(none)',
            expect=10.0, filter=None, gapcosts=None, genetic_code=None,
@@ -40,24 +40,34 @@ def qblast(program, database, sequence,
            format_entrez_query=None, format_object=None, format_type='XML',
            ncbi_gi=None, results_file=None, show_overview=None, megablast=None,
            ):
-    """Do a BLAST search using the QBLAST server at NCBI.
+    """Do a BLAST search using the QBLAST server at NCBI or a cloud service
+    provider.
 
     Supports all parameters of the qblast API for Put and Get.
+
+    Please note that BLAST on the cloud supports the NCBI-BLAST Common
+    URL API (http://ncbi.github.io/blast-cloud/dev/api.html). To
+    use this feature, please set url_base to
+    'http://host.my.cloud.service.provider.com/cgi-bin/blast.cgi' and 
+    format_object='Alignment'. For more details, please see 
+    https://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE_TYPE=BlastDocs&DOC_TYPE=CloudBlast
+
     Some useful parameters:
-    program        blastn, blastp, blastx, tblastn, or tblastx (lower case)
-    database       Which database to search against (e.g. "nr").
-    sequence       The sequence to search.
-    ncbi_gi        TRUE/FALSE whether to give 'gi' identifier.
-    descriptions   Number of descriptions to show.  Def 500.
-    alignments     Number of alignments to show.  Def 500.
-    expect         An expect value cutoff.  Def 10.0.
-    matrix_name    Specify an alt. matrix (PAM30, PAM70, BLOSUM80, BLOSUM45).
-    filter         "none" turns off filtering.  Default no filtering
-    format_type    "HTML", "Text", "ASN.1", or "XML".  Def. "XML".
-    entrez_query   Entrez query to limit Blast search
-    hitlist_size   Number of hits to return. Default 50
-    megablast      TRUE/FALSE whether to use MEga BLAST algorithm (blastn only)
-    service        plain, psi, phi, rpsblast, megablast (lower case)
+
+     - program        blastn, blastp, blastx, tblastn, or tblastx (lower case)
+     - database       Which database to search against (e.g. "nr").
+     - sequence       The sequence to search.
+     - ncbi_gi        TRUE/FALSE whether to give 'gi' identifier.
+     - descriptions   Number of descriptions to show.  Def 500.
+     - alignments     Number of alignments to show.  Def 500.
+     - expect         An expect value cutoff.  Def 10.0.
+     - matrix_name    Specify an alt. matrix (PAM30, PAM70, BLOSUM80, BLOSUM45).
+     - filter         "none" turns off filtering.  Default no filtering
+     - format_type    "HTML", "Text", "ASN.1", or "XML".  Def. "XML".
+     - entrez_query   Entrez query to limit Blast search
+     - hitlist_size   Number of hits to return. Default 50
+     - megablast      TRUE/FALSE whether to use MEga BLAST algorithm (blastn only)
+     - service        plain, psi, phi, rpsblast, megablast (lower case)
 
     This function does no checking of the validity of the parameters
     and passes the values to the server as is.  More help is available at:
@@ -96,13 +106,13 @@ def qblast(program, database, sequence,
         ('PERC_IDENT', perc_ident),
         ('PHI_PATTERN', phi_pattern),
         ('PROGRAM', program),
-        #('PSSM',pssm), - It is possible to use PSI-BLAST via this API?
+        # ('PSSM',pssm), - It is possible to use PSI-BLAST via this API?
         ('QUERY', sequence),
         ('QUERY_FILE', query_file),
         ('QUERY_BELIEVE_DEFLINE', query_believe_defline),
         ('QUERY_FROM', query_from),
         ('QUERY_TO', query_to),
-        #('RESULTS_FILE',...), - Can we use this parameter?
+        # ('RESULTS_FILE',...), - Can we use this parameter?
         ('SEARCHSP_EFF', searchsp_eff),
         ('SERVICE', service),
         ('THRESHOLD', threshold),
@@ -117,9 +127,9 @@ def qblast(program, database, sequence,
     # Note the NCBI do not currently impose a rate limit here, other
     # than the request not to make say 50 queries at once using multiple
     # threads.
-    request = _Request("http://blast.ncbi.nlm.nih.gov/Blast.cgi",
+    request = _Request(url_base,
                        message,
-                       {"User-Agent":"BiopythonClient"})
+                       {"User-Agent": "BiopythonClient"})
     handle = _urlopen(request)
 
     # Format the "Get" command, which gets the formatted results from qblast
@@ -156,27 +166,27 @@ def qblast(program, database, sequence,
             previous = current + wait
         else:
             previous = current
-        if delay + .5*delay <= 120:
-            delay += .5*delay
+        if delay + .5 * delay <= 120:
+            delay += .5 * delay
         else:
             delay = 120
 
-        request = _Request("http://blast.ncbi.nlm.nih.gov/Blast.cgi",
+        request = _Request(url_base,
                            message,
-                           {"User-Agent":"BiopythonClient"})
+                           {"User-Agent": "BiopythonClient"})
         handle = _urlopen(request)
         results = _as_string(handle.read())
 
         # Can see an "\n\n" page while results are in progress,
         # if so just wait a bit longer...
-        if results=="\n\n":
+        if results == "\n\n":
             continue
         # XML results don't have the Status tag when finished
         if "Status=" not in results:
             break
         i = results.index("Status=")
         j = results.index("\n", i)
-        status = results[i+len("Status="):j].strip()
+        status = results[i + len("Status="):j].strip()
         if status.upper() == "READY":
             break
 
@@ -186,7 +196,7 @@ def qblast(program, database, sequence,
 def _parse_qblast_ref_page(handle):
     """Extract a tuple of RID, RTOE from the 'please wait' page (PRIVATE).
 
-    The NCBI FAQ pages use TOE for 'Time of Execution', so RTOE is proably
+    The NCBI FAQ pages use TOE for 'Time of Execution', so RTOE is probably
     'Request Time of Execution' and RID would be 'Request Identifier'.
     """
     s = _as_string(handle.read())
@@ -195,53 +205,53 @@ def _parse_qblast_ref_page(handle):
         rid = None
     else:
         j = s.find("\n", i)
-        rid = s[i+len("RID ="):j].strip()
+        rid = s[i + len("RID ="):j].strip()
 
     i = s.find("RTOE =")
     if i == -1:
         rtoe = None
     else:
         j = s.find("\n", i)
-        rtoe = s[i+len("RTOE ="):j].strip()
+        rtoe = s[i + len("RTOE ="):j].strip()
 
     if not rid and not rtoe:
-        #Can we reliably extract the error message from the HTML page?
-        #e.g.  "Message ID#24 Error: Failed to read the Blast query:
+        # Can we reliably extract the error message from the HTML page?
+        # e.g.  "Message ID#24 Error: Failed to read the Blast query:
         #       Nucleotide FASTA provided for protein sequence"
-        #or    "Message ID#32 Error: Query contains no data: Query
+        # or    "Message ID#32 Error: Query contains no data: Query
         #       contains no sequence data"
         #
-        #This used to occur inside a <div class="error msInf"> entry:
+        # This used to occur inside a <div class="error msInf"> entry:
         i = s.find('<div class="error msInf">')
         if i != -1:
-            msg = s[i+len('<div class="error msInf">'):].strip()
+            msg = s[i + len('<div class="error msInf">'):].strip()
             msg = msg.split("</div>", 1)[0].split("\n", 1)[0].strip()
             if msg:
                 raise ValueError("Error message from NCBI: %s" % msg)
-        #In spring 2010 the markup was like this:
+        # In spring 2010 the markup was like this:
         i = s.find('<p class="error">')
         if i != -1:
-            msg = s[i+len('<p class="error">'):].strip()
+            msg = s[i + len('<p class="error">'):].strip()
             msg = msg.split("</p>", 1)[0].split("\n", 1)[0].strip()
             if msg:
                 raise ValueError("Error message from NCBI: %s" % msg)
-        #Generic search based on the way the error messages start:
+        # Generic search based on the way the error messages start:
         i = s.find('Message ID#')
         if i != -1:
-            #Break the message at the first HTML tag
+            # Break the message at the first HTML tag
             msg = s[i:].split("<", 1)[0].split("\n", 1)[0].strip()
             raise ValueError("Error message from NCBI: %s" % msg)
-        #We didn't recognise the error layout :(
-        #print s
+        # We didn't recognise the error layout :(
+        # print s
         raise ValueError("No RID and no RTOE found in the 'please wait' page, "
                          "there was probably an error in your request but we "
                          "could not extract a helpful error message.")
     elif not rid:
-        #Can this happen?
+        # Can this happen?
         raise ValueError("No RID found in the 'please wait' page."
                          " (although RTOE = %s)" % repr(rtoe))
     elif not rtoe:
-        #Can this happen?
+        # Can this happen?
         raise ValueError("No RTOE found in the 'please wait' page."
                          " (although RID = %s)" % repr(rid))
 
@@ -249,4 +259,4 @@ def _parse_qblast_ref_page(handle):
         return rid, int(rtoe)
     except ValueError:
         raise ValueError("A non-integer RTOE found in "
-                         +"the 'please wait' page, %s" % repr(rtoe))
+                         "the 'please wait' page, %s" % repr(rtoe))

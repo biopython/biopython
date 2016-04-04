@@ -12,3 +12,4 @@ relational database.  See:
 http://biopython.org/wiki/BioSQL
 http://www.biosql.org/
 """
+__docformat__ = "restructuredtext en"

@@ -1,5 +1,9 @@
-# A superclass for reading [f]ixed-column type [f]lat-[f]ile records. (e.g.
-class fff_rec:
+"""A superclass for reading [f]ixed-column type [f]lat-[f]ile records."""
+
+__docformat__ = "restructuredtext en"
+
+
+class fff_rec(object):
     def __init__(self, inrec=''):
         self.data = inrec
 
@@ -15,14 +19,14 @@ class fff_rec:
             return self.data[index]
         elif (isinstance(index, tuple) or isinstance(index, list)) \
         and len(index) == 2:
-            #Not sure if this is needed anymore:
+            # Not sure if this is needed anymore:
             return self.data[index[0]:index[1]]
         else:
             return self.data[index]
 
 
-# Definition of the align section in a FSSP file
 class align(object):
+    """Definition of the align section in a FSSP file."""
     abs_res_num = (0, 4)
     pdb_res_num = (4, 9)
     chain_id = 10

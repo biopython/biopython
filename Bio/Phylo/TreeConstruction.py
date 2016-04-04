@@ -17,23 +17,25 @@ from Bio import _py3k
 def _is_numeric(x):
     return _py3k._is_int_or_long(x) or isinstance(x, (float, complex))
 
-class _Matrix(object):
-    """A base class for distance matrix or scoring matrix that accepts
-    a list of names and a lower triangular matrix.
 
-    matrix = [[0],
-              [1, 0],
-              [2, 3, 0],
-              [4, 5, 6, 0]]
-    represents the symmetric matrix of
-    [0,1,2,4]
-    [1,0,3,5]
-    [2,3,0,6]
-    [4,5,6,0]
+class _Matrix(object):
+    """Base class for distance matrix or scoring matrix
+
+    Accepts a list of names and a lower triangular matrix.::
+
+        matrix = [[0],
+                  [1, 0],
+                  [2, 3, 0],
+                  [4, 5, 6, 0]]
+        represents the symmetric matrix of
+        [0,1,2,4]
+        [1,0,3,5]
+        [2,3,0,6]
+        [4,5,6,0]
 
     :Parameters:
         names : list
-            names of elements, used for indexing 
+            names of elements, used for indexing
         matrix : list
             nested list of numerical lists in lower triangular format
 
@@ -46,9 +48,9 @@ class _Matrix(object):
     >>> m = _Matrix(names, matrix)
     >>> m
     _Matrix(names=['Alpha', 'Beta', 'Gamma', 'Delta'], matrix=[[0], [1, 0], [2, 3, 0], [4, 5, 6, 0]])
-    
+
     You can use two indices to get or assign an element in the matrix.
-    
+
     >>> m[1,2]
     3
     >>> m['Beta','Gamma']
@@ -58,7 +60,7 @@ class _Matrix(object):
     4
 
     Further more, you can use one index to get or assign a list of elements related to that index.
-    
+
     >>> m[0]
     [0, 1, 2, 4]
     >>> m['Alpha']
@@ -97,7 +99,7 @@ class _Matrix(object):
         # check matrix
         if matrix is None:
             # create a new one with 0 if matrix is not assigned
-            matrix = [[0]*i for i in range(1, len(self) + 1)]
+            matrix = [[0] * i for i in range(1, len(self) + 1)]
             self.matrix = matrix
         else:
             # check if all elements are numbers
@@ -111,19 +113,23 @@ class _Matrix(object):
                     if [len(m) for m in matrix] == list(range(1, len(self) + 1)):
                         self.matrix = matrix
                     else:
-                        raise ValueError("'matrix' should be in lower triangle format")
+                        raise ValueError(
+                            "'matrix' should be in lower triangle format")
                 else:
-                    raise ValueError("'names' and 'matrix' should be the same size")
+                    raise ValueError(
+                        "'names' and 'matrix' should be the same size")
             else:
                 raise TypeError("'matrix' should be a list of numerical lists")
 
     def __getitem__(self, item):
         """Access value(s) by the index(s) or name(s).
-        For a _Matrix object 'dm':
-        dm[i]                   get a value list from the given 'i' to others;
-        dm[i, j]                get the value between 'i' and 'j';
-        dm['name']              map name to index first
-        dm['name1', 'name2']    map name to index first
+
+        For a _Matrix object 'dm'::
+
+            dm[i]                   get a value list from the given 'i' to others;
+            dm[i, j]                get the value between 'i' and 'j';
+            dm['name']              map name to index first
+            dm['name1', 'name2']    map name to index first
         """
         # Handle single indexing
         if isinstance(item, (int, str)):
@@ -168,9 +174,12 @@ class _Matrix(object):
 
     def __setitem__(self, item, value):
         """Set value by the index(s) or name(s).
-        Similar to __getitem__
-        dm[1] = [1, 0, 3, 4]    set values from '1' to others;
-        dm[i, j] = 2            set the value from 'i' to 'j'
+
+        Similar to __getitem__::
+
+            dm[1] = [1, 0, 3, 4]    set values from '1' to others;
+            dm[i, j] = 2            set the value from 'i' to 'j'
+
         """
 
         # Handle single indexing
@@ -248,10 +257,10 @@ class _Matrix(object):
         """Insert distances given the name and value.
 
         :Parameters:
-        name : str
-            name of a row/col to be inserted
-        value : list
-            a row/col of values to be inserted
+            name : str
+                name of a row/col to be inserted
+            value : list
+                a row/col of values to be inserted
         """
         if isinstance(name, str):
             # insert at the given index or at the end
@@ -273,11 +282,11 @@ class _Matrix(object):
     def __len__(self):
         """Matrix length"""
         return len(self.names)
-    
+
     def __repr__(self):
         return self.__class__.__name__ \
-        + "(names=%s, matrix=%s)" \
-        % tuple(map(repr, (self.names, self.matrix)))
+            + "(names=%s, matrix=%s)" \
+            % tuple(map(repr, (self.names, self.matrix)))
 
     def __str__(self):
         """Get a lower triangular matrix string"""
@@ -289,8 +298,8 @@ class _Matrix(object):
 
 
 class _DistanceMatrix(_Matrix):
-    """Distance matrix class that can be used for distance based tree
-     algorithms.
+    """Distance matrix class that can be used for distance based tree algorithms.
+
     All diagonal elements will be zero no matter what the users provide.
     """
 
@@ -310,6 +319,7 @@ class _DistanceMatrix(_Matrix):
 
 class DistanceCalculator(object):
     """Class to calculate the distance matrix from a DNA or Protein
+
     Multiple Sequence Alignment(MSA) and the given name of the
     substitution model.
 
@@ -336,40 +346,41 @@ class DistanceCalculator(object):
     GAGATCTCCGCCC Epsilon
     CAGTTCGCCACAA Gamma
 
-    DNA calculator with 'identity' model:
+    DNA calculator with 'identity' model::
 
-    >>> calculator = DistanceCalculator('identity')
-    >>> dm = calculator.get_distance(aln)
-    >>> print dm
-    Alpha   0
-    Beta    0.230769230769  0
-    Gamma   0.384615384615  0.230769230769  0
-    Delta   0.538461538462  0.538461538462  0.538461538462  0
-    Epsilon 0.615384615385  0.384615384615  0.461538461538  0.153846153846  0
-            Alpha           Beta            Gamma           Delta           Epsilon
+        >>> calculator = DistanceCalculator('identity')
+        >>> dm = calculator.get_distance(aln)
+        >>> print dm
+        Alpha   0
+        Beta    0.230769230769  0
+        Gamma   0.384615384615  0.230769230769  0
+        Delta   0.538461538462  0.538461538462  0.538461538462  0
+        Epsilon 0.615384615385  0.384615384615  0.461538461538  0.153846153846  0
+                Alpha           Beta            Gamma           Delta           Epsilon
 
-    Protein calculator with 'blosum62' model:
-    >>> calculator = DistanceCalculator('blosum62')
-    >>> dm = calculator.get_distance(aln)
-    >>> print dm
-    Alpha   0
-    Beta    0.369047619048  0
-    Gamma   0.493975903614  0.25            0
-    Delta   0.585365853659  0.547619047619  0.566265060241  0
-    Epsilon 0.7             0.355555555556  0.488888888889  0.222222222222  0
-            Alpha           Beta            Gamma           Delta           Epsilon
+    Protein calculator with 'blosum62' model::
+
+        >>> calculator = DistanceCalculator('blosum62')
+        >>> dm = calculator.get_distance(aln)
+        >>> print dm
+        Alpha   0
+        Beta    0.369047619048  0
+        Gamma   0.493975903614  0.25            0
+        Delta   0.585365853659  0.547619047619  0.566265060241  0
+        Epsilon 0.7             0.355555555556  0.488888888889  0.222222222222  0
+                Alpha           Beta            Gamma           Delta           Epsilon
     """
 
     dna_alphabet = ['A', 'T', 'C', 'G']
 
     # BLAST nucleic acid scoring matrix
-    blastn = [[ 5],
+    blastn = [[5],
               [-4,  5],
               [-4, -4,  5],
               [-4, -4, -4,  5]]
 
     # transition/transversion scoring matrix
-    trans = [[ 6],
+    trans = [[6],
              [-5,  6],
              [-5, -1,  6],
              [-1, -5, -5,  6]]
@@ -404,7 +415,11 @@ class DistanceCalculator(object):
                              + ", ".join(self.models))
 
     def _pairwise(self, seq1, seq2):
-        """Calculate pairwise distance from two sequences"""
+        """Calculate pairwise distance from two sequences.
+
+        Returns a value between 0 (identical sequences) and 1 (completely
+        different, or seq1 is an empty string.)
+        """
         score = 0
         max_score = 0
         if self.scoring_matrix:
@@ -425,9 +440,10 @@ class DistanceCalculator(object):
                 max_score1 += self.scoring_matrix[l1, l1]
                 max_score2 += self.scoring_matrix[l2, l2]
                 score += self.scoring_matrix[l1, l2]
-
-            max_score = max_score1 > max_score2 and max_score1 or max_score2
+            # Take the higher score if the matrix is asymmetrical
+            max_score = max(max_score1, max_score2)
         else:
+            # Score by character identity, not skipping any special letters
             for i in range(0, len(seq1)):
                 l1 = seq1[i]
                 l2 = seq2[i]
@@ -435,6 +451,8 @@ class DistanceCalculator(object):
                     score += 1
             max_score = len(seq1)
 
+        if max_score == 0:
+            return 1  # max possible scaled distance
         return 1 - (score * 1.0 / max_score)
 
     def get_distance(self, msa):
@@ -442,7 +460,7 @@ class DistanceCalculator(object):
 
         :Parameters:
             msa : MultipleSeqAlignment
-                DNA or Protein multiple sequence alignment.  
+                DNA or Protein multiple sequence alignment.
 
         """
 
@@ -469,6 +487,7 @@ class TreeConstructor(object):
 
     def build_tree(self, msa):
         """Caller to built the tree from a MultipleSeqAlignment object.
+
         This should be implemented in subclass"""
         raise NotImplementedError("Method not implemented!")
 
@@ -478,7 +497,7 @@ class DistanceTreeConstructor(TreeConstructor):
 
     :Parameters:
         method : str
-            Distance tree construction method, 'nj'(default) or 'upgma'. 
+            Distance tree construction method, 'nj'(default) or 'upgma'.
         distance_calculator : DistanceCalculator
             The distance matrix calculator for multiple sequence alignment.
             It must be provided if `build_tree` will be called.
@@ -489,7 +508,7 @@ class DistanceTreeConstructor(TreeConstructor):
     >>> from TreeConstruction import DistanceTreeConstructor
     >>> constructor = DistanceTreeConstructor()
 
-    UPGMA Tree: 
+    UPGMA Tree:
 
     >>> upgmatree = constructor.upgma(dm)
     >>> print upgmatree
@@ -524,8 +543,8 @@ class DistanceTreeConstructor(TreeConstructor):
     methods = ['nj', 'upgma']
 
     def __init__(self, distance_calculator=None, method="nj"):
-        if (distance_calculator == None
-            or isinstance(distance_calculator, DistanceCalculator)):
+        if (distance_calculator is None
+                or isinstance(distance_calculator, DistanceCalculator)):
             self.distance_calculator = distance_calculator
         else:
             raise TypeError("Must provide a DistanceCalculator object.")
@@ -548,9 +567,11 @@ class DistanceTreeConstructor(TreeConstructor):
             raise TypeError("Must provide a DistanceCalculator object.")
 
     def upgma(self, distance_matrix):
-        """Construct and return an UPGMA(Unweighted Pair Group Method
-        with Arithmetic mean) tree.
-        
+        """Construct and return an UPGMA tree.
+
+        Constructs and returns an Unweighted Pair Group Method
+        with Arithmetic mean (UPGMA) tree.
+
         :Parameters:
             distance_matrix : _DistanceMatrix
                 The distance matrix for tree construction.
@@ -583,16 +604,18 @@ class DistanceTreeConstructor(TreeConstructor):
             inner_clade = BaseTree.Clade(None, "Inner" + str(inner_count))
             inner_clade.clades.append(clade1)
             inner_clade.clades.append(clade2)
-            #assign branch length
+            # assign branch length
             if clade1.is_terminal():
                 clade1.branch_length = min_dist * 1.0 / 2
             else:
-                clade1.branch_length = min_dist * 1.0 / 2 - self._height_of(clade1)
+                clade1.branch_length = min_dist * \
+                    1.0 / 2 - self._height_of(clade1)
 
             if clade2.is_terminal():
                 clade2.branch_length = min_dist * 1.0 / 2
             else:
-                clade2.branch_length = min_dist * 1.0 / 2 - self._height_of(clade2)
+                clade2.branch_length = min_dist * \
+                    1.0 / 2 - self._height_of(clade2)
 
             # update node list
             clades[min_j] = inner_clade
@@ -657,7 +680,7 @@ class DistanceTreeConstructor(TreeConstructor):
             inner_clade = BaseTree.Clade(None, "Inner" + str(inner_count))
             inner_clade.clades.append(clade1)
             inner_clade.clades.append(clade2)
-            #assign branch length
+            # assign branch length
             clade1.branch_length = (dm[min_i, min_j] + node_dist[min_i]
                                     - node_dist[min_j]) / 2.0
             clade2.branch_length = dm[min_i, min_j] - clade1.branch_length
@@ -692,8 +715,7 @@ class DistanceTreeConstructor(TreeConstructor):
         return BaseTree.Tree(root, rooted=False)
 
     def _height_of(self, clade):
-        """calculate height of the clade -- the longest path to one of
-        the terminals"""
+        """calculate clade height -- the longest path to any terminal."""
         height = 0
         if clade.is_terminal():
             height = clade.branch_length
@@ -701,13 +723,15 @@ class DistanceTreeConstructor(TreeConstructor):
             height = height + max([self._height_of(c) for c in clade.clades])
         return height
 
-##################### Tree Scoring and Searching Classes #####################
+# #################### Tree Scoring and Searching Classes #####################
+
 
 class Scorer(object):
     """Base class for all tree scoring methods"""
 
     def get_score(self, tree, alignment):
         """Caller to get the score of a tree for the given alignment.
+
         This should be implemented in subclass"""
         raise NotImplementedError("Method not implemented!")
 
@@ -717,19 +741,19 @@ class TreeSearcher(object):
 
     def search(self, starting_tree, alignment):
         """Caller to search the best tree with a starting tree.
+
         This should be implemented in subclass"""
         raise NotImplementedError("Method not implemented!")
 
 
 class NNITreeSearcher(TreeSearcher):
-    """Tree searching class of NNI(Nearest Neighbor Interchanges)
-     algorithm.
+    """Tree searching with Nearest Neighbor Interchanges (NNI) algorithm.
 
     :Parameters:
-        scorer: ParsimonyScorer
+        scorer : ParsimonyScorer
             parsimony scorer to calculate the parsimony score of
             different trees during NNI algorithm.
-     """
+    """
 
     def __init__(self, scorer):
         if isinstance(scorer, Scorer):
@@ -743,7 +767,7 @@ class NNITreeSearcher(TreeSearcher):
         :Parameters:
            starting_tree : Tree
                starting tree of NNI method.
-           alignment: MultipleSeqAlignment
+           alignment : MultipleSeqAlignment
                multiple sequence alignment used to calculate parsimony
                score of different NNI trees.
         """
@@ -751,8 +775,7 @@ class NNITreeSearcher(TreeSearcher):
         return self._nni(starting_tree, alignment)
 
     def _nni(self, starting_tree, alignment):
-        """Search the best parsimony tree by using the NNI(Nearest
-        Neighbor Interchanges) algorithm"""
+        """Search for the best parsimony tree using the NNI algorithm."""
         best_tree = starting_tree
         while True:
             best_score = self.scorer.get_score(best_tree, alignment)
@@ -768,8 +791,10 @@ class NNITreeSearcher(TreeSearcher):
         return best_tree
 
     def _get_neighbors(self, tree):
-        """Get all neighbor trees of the given tree(currently only
-         for binary rooted tree)"""
+        """Get all neighbor trees of the given tree.
+
+        Currently only for binary rooted trees.
+        """
         # make child to parent dict
         parents = {}
         for clade in tree.find_clades():
@@ -790,7 +815,7 @@ class NNITreeSearcher(TreeSearcher):
                 root_childs.append(right)
                 if not left.is_terminal() and not right.is_terminal():
                     # make changes around the left_left clade
-                    #left_left = left.clades[0]
+                    # left_left = left.clades[0]
                     left_right = left.clades[1]
                     right_left = right.clades[0]
                     right_right = right.clades[1]
@@ -866,19 +891,20 @@ class NNITreeSearcher(TreeSearcher):
                     clade.clades.insert(0, left)
         return neighbors
 
-######################### Parsimony Classes ##########################
+# ######################## Parsimony Classes ##########################
 
 
 class ParsimonyScorer(Scorer):
     """Parsimony scorer with a scoring matrix.
 
-    This is a combination of Fitch algorithm and Sankoff algorithm. 
+    This is a combination of Fitch algorithm and Sankoff algorithm.
     See ParsimonyTreeConstructor for usage.
 
     :Parameters:
-        matrix: _Matrix
+        matrix : _Matrix
             scoring matrix used in parsimony score calculation.
     """
+
     def __init__(self, matrix=None):
         if not matrix or isinstance(matrix, _Matrix):
             self.matrix = matrix
@@ -899,8 +925,9 @@ class ParsimonyScorer(Scorer):
         terms.sort(key=lambda term: term.name)
         alignment.sort()
         if not all([t.name == a.id for t, a in zip(terms, alignment)]):
-            raise ValueError("Taxon names of the input tree should be the same with the alignment.")
-        #term_align = dict(zip(terms, alignment))
+            raise ValueError(
+                "Taxon names of the input tree should be the same with the alignment.")
+        # term_align = dict(zip(terms, alignment))
         score = 0
         for i in range(len(alignment[0])):
             # parsimony score for column_i
@@ -911,9 +938,9 @@ class ParsimonyScorer(Scorer):
             if column_i == len(column_i) * column_i[0]:
                 continue
 
-            #### start calculating score_i using the tree and column_i
+            # start calculating score_i using the tree and column_i
 
-            ## Fitch algorithm without the penalty matrix
+            # Fitch algorithm without the penalty matrix
             if not self.matrix:
                 # init by mapping terminal clades and states in column_i
                 clade_states = dict(zip(terms, [set([c]) for c in column_i]))
@@ -926,7 +953,7 @@ class ParsimonyScorer(Scorer):
                         state = left_state | right_state
                         score_i = score_i + 1
                     clade_states[clade] = state
-            ## Sankoff algorithm with the penalty matrix
+            # Sankoff algorithm with the penalty matrix
             else:
                 inf = float('inf')
                 # init score arrays for terminal clades
@@ -948,8 +975,10 @@ class ParsimonyScorer(Scorer):
                         min_l = inf
                         min_r = inf
                         for n in range(length):
-                            sl = self.matrix[alphabet[m], alphabet[n]] + left_score[n]
-                            sr = self.matrix[alphabet[m], alphabet[n]] + right_score[n]
+                            sl = self.matrix[
+                                alphabet[m], alphabet[n]] + left_score[n]
+                            sr = self.matrix[
+                                alphabet[m], alphabet[n]] + right_score[n]
                             if min_l > sl:
                                 min_l = sl
                             if min_r > sr:
@@ -967,9 +996,9 @@ class ParsimonyTreeConstructor(TreeConstructor):
     """Parsimony tree constructor.
 
     :Parameters:
-        searcher: TreeSearcher
+        searcher : TreeSearcher
             tree searcher to search the best parsimony tree.
-        starting_tree: Tree
+        starting_tree : Tree
             starting tree provided to the searcher.
 
     Example
@@ -1013,17 +1042,19 @@ class ParsimonyTreeConstructor(TreeConstructor):
                     Clade(branch_length=0.07477, name='Beta')
                 Clade(branch_length=0.29231, name='Alpha')
     """
+
     def __init__(self, searcher, starting_tree=None):
         self.searcher = searcher
         self.starting_tree = starting_tree
 
     def build_tree(self, alignment):
-        """
+        """Build the tree.
+
         :Parameters:
-            alignment: MultipleSeqAlignment
+            alignment : MultipleSeqAlignment
                 multiple sequence alignment to calculate parsimony tree.
         """
-        # if starting_tree is none, 
+        # if starting_tree is none,
         # create a upgma tree with 'identity' scoring matrix
         if self.starting_tree is None:
             dtc = DistanceTreeConstructor(DistanceCalculator("identity"),

@@ -11,11 +11,11 @@ import unittest
 from Bio import MissingExternalDependencyError
 from Bio.Align.Applications import DialignCommandline
 
-#Try to avoid problems when the OS is in another language
+# Try to avoid problems when the OS is in another language
 os.environ['LANG'] = 'C'
 
 dialign_exe = None
-if sys.platform=="win32":
+if sys.platform == "win32":
     raise MissingExternalDependencyError("DIALIGN2-2 not available on Windows")
 else:
     from Bio._py3k import getoutput
@@ -31,7 +31,7 @@ else:
         if not os.path.isfile(os.path.join(os.environ["DIALIGN2_DIR"], "BLOSUM")):
             raise MissingExternalDependencyError(
                 "Environment variable DIALIGN2_DIR directory missing BLOSUM file.")
-        #TODO - check for tp400_dna, tp400_prot and tp400_trans too?
+        # TODO - check for tp400_dna, tp400_prot and tp400_trans too?
 
 if not dialign_exe:
     raise MissingExternalDependencyError(
@@ -42,9 +42,9 @@ class DialignApplication(unittest.TestCase):
 
     def setUp(self):
         self.infile1 = "Fasta/f002"
-        #Standard output file
+        # Standard output file
         self.outfile1 = "Fasta/f002.ali"
-        #MSF output
+        # MSF output
         self.outfile2 = "Fasta/f002.ms"
 
     def tearDown(self):
@@ -56,7 +56,7 @@ class DialignApplication(unittest.TestCase):
     def test_Dialign_simple(self):
         """Simple round-trip through app with infile.
         """
-        #Test using keyword arguments:
+        # Test using keyword arguments:
         cmdline = DialignCommandline(dialign_exe, input=self.infile1)
         self.assertEqual(str(cmdline), dialign_exe + " Fasta/f002")
         stdout, stderr = cmdline()
@@ -82,7 +82,7 @@ class DialignApplication(unittest.TestCase):
         """Simple round-trip through app with infile, output MSF
         """
         cmdline = DialignCommandline(dialign_exe)
-        #Test with properties
+        # Test with properties
         cmdline.input = self.infile1
         cmdline.msf = True
         self.assertEqual(str(cmdline), dialign_exe + " -msf Fasta/f002")
@@ -111,5 +111,5 @@ class DialignApplication(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

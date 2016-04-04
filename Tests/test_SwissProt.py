@@ -58,14 +58,14 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(len(record.references[0].references), 1)
         self.assertEqual(record.references[0].references[0], ('MEDLINE', '96299740'))
 
-        #Check the two parsers agree on the essentials
+        # Check the two parsers agree on the essentials
         self.assertEqual(str(seq_record.seq), record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
         self.assertTrue(seq_record.id in record.accessions)
 
-        #Now try using the iterator - note that all these
-        #test cases have only one record.
+        # Now try using the iterator - note that all these
+        # test cases have only one record.
 
         # With the SequenceParser
         test_handle = open(datafile)
@@ -75,7 +75,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(len(records), 1)
         self.assertTrue(isinstance(records[0], SeqRecord))
 
-        #Check matches what we got earlier without the iterator:
+        # Check matches what we got earlier without the iterator:
         self.assertEqual(str(records[0].seq), str(seq_record.seq))
         self.assertEqual(records[0].description, seq_record.description)
         self.assertEqual(records[0].name, seq_record.name)
@@ -89,7 +89,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(len(records), 1)
         self.assertTrue(isinstance(records[0], SwissProt.Record))
 
-        #Check matches what we got earlier without the iterator:
+        # Check matches what we got earlier without the iterator:
         self.assertEqual(records[0].sequence, record.sequence)
         self.assertEqual(records[0].description, record.description)
         self.assertEqual(records[0].entry_name, record.entry_name)
@@ -141,14 +141,14 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(len(record.references[2].references), 1)
         self.assertEqual(record.references[2].references[0], ('MEDLINE', '96188189'))
 
-        #Check the two parsers agree on the essentials
+        # Check the two parsers agree on the essentials
         self.assertEqual(str(seq_record.seq), record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
         self.assertTrue(seq_record.id in record.accessions)
 
-        #Now try using the iterator - note that all these
-        #test cases have only one record.
+        # Now try using the iterator - note that all these
+        # test cases have only one record.
 
         # With the SequenceParser
         test_handle = open(datafile)
@@ -158,7 +158,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(len(records), 1)
         self.assertTrue(isinstance(records[0], SeqRecord))
 
-        #Check matches what we got earlier without the iterator:
+        # Check matches what we got earlier without the iterator:
         self.assertEqual(str(records[0].seq), str(seq_record.seq))
         self.assertEqual(records[0].description, seq_record.description)
         self.assertEqual(records[0].name, seq_record.name)
@@ -172,7 +172,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(len(records), 1)
         self.assertTrue(isinstance(records[0], SwissProt.Record))
 
-        #Check matches what we got earlier without the iterator:
+        # Check matches what we got earlier without the iterator:
         self.assertEqual(records[0].sequence, record.sequence)
         self.assertEqual(records[0].description, record.description)
         self.assertEqual(records[0].entry_name, record.entry_name)
@@ -264,14 +264,14 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(len(record.references[12].references), 1)
         self.assertEqual(record.references[12].references[0], ('MEDLINE', '90345949'))
 
-        #Check the two parsers agree on the essentials
+        # Check the two parsers agree on the essentials
         self.assertEqual(str(seq_record.seq), record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
         self.assertTrue(seq_record.id in record.accessions)
 
-        #Now try using the iterator - note that all these
-        #test cases have only one record.
+        # Now try using the iterator - note that all these
+        # test cases have only one record.
 
         # With the SequenceParser
         test_handle = open(datafile)
@@ -281,7 +281,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(len(records), 1)
         self.assertTrue(isinstance(records[0], SeqRecord))
 
-        #Check matches what we got earlier without the iterator:
+        # Check matches what we got earlier without the iterator:
         self.assertEqual(str(records[0].seq), str(seq_record.seq))
         self.assertEqual(records[0].description, seq_record.description)
         self.assertEqual(records[0].name, seq_record.name)
@@ -295,7 +295,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(len(records), 1)
         self.assertTrue(isinstance(records[0], SwissProt.Record))
 
-        #Check matches what we got earlier without the iterator:
+        # Check matches what we got earlier without the iterator:
         self.assertEqual(records[0].sequence, record.sequence)
         self.assertEqual(records[0].description, record.description)
         self.assertEqual(records[0].entry_name, record.entry_name)
@@ -361,14 +361,14 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(record.references[3].title, "")
         self.assertEqual(len(record.references[3].references), 0)
 
-        #Check the two parsers agree on the essentials
+        # Check the two parsers agree on the essentials
         self.assertEqual(str(seq_record.seq), record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
         self.assertTrue(seq_record.id in record.accessions)
 
-        #Now try using the iterator - note that all these
-        #test cases have only one record.
+        # Now try using the iterator - note that all these
+        # test cases have only one record.
 
         # With the SequenceParser
         test_handle = open(datafile)
@@ -378,7 +378,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(len(records), 1)
         self.assertTrue(isinstance(records[0], SeqRecord))
 
-        #Check matches what we got earlier without the iterator:
+        # Check matches what we got earlier without the iterator:
         self.assertEqual(str(records[0].seq), str(seq_record.seq))
         self.assertEqual(records[0].description, seq_record.description)
         self.assertEqual(records[0].name, seq_record.name)
@@ -392,7 +392,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(len(records), 1)
         self.assertTrue(isinstance(records[0], SwissProt.Record))
 
-        #Check matches what we got earlier without the iterator:
+        # Check matches what we got earlier without the iterator:
         self.assertEqual(records[0].sequence, record.sequence)
         self.assertEqual(records[0].description, record.description)
         self.assertEqual(records[0].entry_name, record.entry_name)
@@ -439,14 +439,14 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(len(record.references[1].references), 1)
         self.assertEqual(record.references[1].references[0], ('MEDLINE', '94141932'))
 
-        #Check the two parsers agree on the essentials
+        # Check the two parsers agree on the essentials
         self.assertEqual(str(seq_record.seq), record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
         self.assertTrue(seq_record.id in record.accessions)
 
-        #Now try using the iterator - note that all these
-        #test cases have only one record.
+        # Now try using the iterator - note that all these
+        # test cases have only one record.
 
         # With the SequenceParser
         test_handle = open(datafile)
@@ -456,7 +456,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(len(records), 1)
         self.assertTrue(isinstance(records[0], SeqRecord))
 
-        #Check matches what we got earlier without the iterator:
+        # Check matches what we got earlier without the iterator:
         self.assertEqual(str(records[0].seq), str(seq_record.seq))
         self.assertEqual(records[0].description, seq_record.description)
         self.assertEqual(records[0].name, seq_record.name)
@@ -470,7 +470,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(len(records), 1)
         self.assertTrue(isinstance(records[0], SwissProt.Record))
 
-        #Check matches what we got earlier without the iterator:
+        # Check matches what we got earlier without the iterator:
         self.assertEqual(records[0].sequence, record.sequence)
         self.assertEqual(records[0].description, record.description)
         self.assertEqual(records[0].entry_name, record.entry_name)
@@ -513,14 +513,14 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(len(record.references[0].references), 1)
         self.assertEqual(record.references[0].references[0], ('MEDLINE', '92193265'))
 
-        #Check the two parsers agree on the essentials
+        # Check the two parsers agree on the essentials
         self.assertEqual(str(seq_record.seq), record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
         self.assertTrue(seq_record.id in record.accessions)
 
-        #Now try using the iterator - note that all these
-        #test cases have only one record.
+        # Now try using the iterator - note that all these
+        # test cases have only one record.
 
         # With the SequenceParser
         test_handle = open(datafile)
@@ -530,7 +530,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(len(records), 1)
         self.assertTrue(isinstance(records[0], SeqRecord))
 
-        #Check matches what we got earlier without the iterator:
+        # Check matches what we got earlier without the iterator:
         self.assertEqual(str(records[0].seq), str(seq_record.seq))
         self.assertEqual(records[0].description, seq_record.description)
         self.assertEqual(records[0].name, seq_record.name)
@@ -544,7 +544,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(len(records), 1)
         self.assertTrue(isinstance(records[0], SwissProt.Record))
 
-        #Check matches what we got earlier without the iterator:
+        # Check matches what we got earlier without the iterator:
         self.assertEqual(records[0].sequence, record.sequence)
         self.assertEqual(records[0].description, record.description)
         self.assertEqual(records[0].entry_name, record.entry_name)
@@ -596,14 +596,14 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(record.references[1].title, "Human claudin-1 isolated from Caco-2 mRNA.")
         self.assertEqual(len(record.references[1].references), 0)
 
-        #Check the two parsers agree on the essentials
+        # Check the two parsers agree on the essentials
         self.assertEqual(str(seq_record.seq), record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
         self.assertTrue(seq_record.id in record.accessions)
 
-        #Now try using the iterator - note that all these
-        #test cases have only one record.
+        # Now try using the iterator - note that all these
+        # test cases have only one record.
 
         # With the SequenceParser
         test_handle = open(datafile)
@@ -613,7 +613,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(len(records), 1)
         self.assertTrue(isinstance(records[0], SeqRecord))
 
-        #Check matches what we got earlier without the iterator:
+        # Check matches what we got earlier without the iterator:
         self.assertEqual(str(records[0].seq), str(seq_record.seq))
         self.assertEqual(records[0].description, seq_record.description)
         self.assertEqual(records[0].name, seq_record.name)
@@ -627,7 +627,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(len(records), 1)
         self.assertTrue(isinstance(records[0], SwissProt.Record))
 
-        #Check matches what we got earlier without the iterator:
+        # Check matches what we got earlier without the iterator:
         self.assertEqual(records[0].sequence, record.sequence)
         self.assertEqual(records[0].description, record.description)
         self.assertEqual(records[0].entry_name, record.entry_name)
@@ -842,14 +842,14 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(len(record.references[26].references), 1)
         self.assertEqual(record.references[26].references[0], ('MEDLINE', '91245570'))
 
-        #Check the two parsers agree on the essentials
+        # Check the two parsers agree on the essentials
         self.assertEqual(str(seq_record.seq), record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
         self.assertTrue(seq_record.id in record.accessions)
 
-        #Now try using the iterator - note that all these
-        #test cases have only one record.
+        # Now try using the iterator - note that all these
+        # test cases have only one record.
 
         # With the SequenceParser
         test_handle = open(datafile)
@@ -859,7 +859,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(len(records), 1)
         self.assertTrue(isinstance(records[0], SeqRecord))
 
-        #Check matches what we got earlier without the iterator:
+        # Check matches what we got earlier without the iterator:
         self.assertEqual(str(records[0].seq), str(seq_record.seq))
         self.assertEqual(records[0].description, seq_record.description)
         self.assertEqual(records[0].name, seq_record.name)
@@ -873,7 +873,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(len(records), 1)
         self.assertTrue(isinstance(records[0], SwissProt.Record))
 
-        #Check matches what we got earlier without the iterator:
+        # Check matches what we got earlier without the iterator:
         self.assertEqual(records[0].sequence, record.sequence)
         self.assertEqual(records[0].description, record.description)
         self.assertEqual(records[0].entry_name, record.entry_name)
@@ -916,14 +916,14 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(record.references[0].title, "Molecular cloning and sequence analysis of chalcone synthase cDNAs of Bromheadia finlaysoniana.")
         self.assertEqual(len(record.references[0].references), 0)
 
-        #Check the two parsers agree on the essentials
+        # Check the two parsers agree on the essentials
         self.assertEqual(str(seq_record.seq), record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
         self.assertTrue(seq_record.id in record.accessions)
 
-        #Now try using the iterator - note that all these
-        #test cases have only one record.
+        # Now try using the iterator - note that all these
+        # test cases have only one record.
 
         # With the SequenceParser
         test_handle = open(datafile)
@@ -933,7 +933,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(len(records), 1)
         self.assertTrue(isinstance(records[0], SeqRecord))
 
-        #Check matches what we got earlier without the iterator:
+        # Check matches what we got earlier without the iterator:
         self.assertEqual(str(records[0].seq), str(seq_record.seq))
         self.assertEqual(records[0].description, seq_record.description)
         self.assertEqual(records[0].name, seq_record.name)
@@ -947,7 +947,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(len(records), 1)
         self.assertTrue(isinstance(records[0], SwissProt.Record))
 
-        #Check matches what we got earlier without the iterator:
+        # Check matches what we got earlier without the iterator:
         self.assertEqual(records[0].sequence, record.sequence)
         self.assertEqual(records[0].description, record.description)
         self.assertEqual(records[0].entry_name, record.entry_name)
@@ -1032,14 +1032,14 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(record.references[5].references[0], ('MEDLINE', '95385798'))
         self.assertEqual(record.references[5].references[1], ('PubMed', '7656980'))
 
-        #Check the two parsers agree on the essentials
+        # Check the two parsers agree on the essentials
         self.assertEqual(str(seq_record.seq), record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
         self.assertTrue(seq_record.id in record.accessions)
 
-        #Now try using the iterator - note that all these
-        #test cases have only one record.
+        # Now try using the iterator - note that all these
+        # test cases have only one record.
 
         # With the SequenceParser
         test_handle = open(datafile)
@@ -1049,7 +1049,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(len(records), 1)
         self.assertTrue(isinstance(records[0], SeqRecord))
 
-        #Check matches what we got earlier without the iterator:
+        # Check matches what we got earlier without the iterator:
         self.assertEqual(str(records[0].seq), str(seq_record.seq))
         self.assertEqual(records[0].description, seq_record.description)
         self.assertEqual(records[0].name, seq_record.name)
@@ -1063,7 +1063,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(len(records), 1)
         self.assertTrue(isinstance(records[0], SwissProt.Record))
 
-        #Check matches what we got earlier without the iterator:
+        # Check matches what we got earlier without the iterator:
         self.assertEqual(records[0].sequence, record.sequence)
         self.assertEqual(records[0].description, record.description)
         self.assertEqual(records[0].entry_name, record.entry_name)
@@ -1194,14 +1194,14 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(record.references[7].references[0], ('MEDLINE', '91332007'))
         self.assertEqual(record.references[7].references[1], ('PubMed', '1714448'))
 
-        #Check the two parsers agree on the essentials
+        # Check the two parsers agree on the essentials
         self.assertEqual(str(seq_record.seq), record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
         self.assertTrue(seq_record.id in record.accessions)
 
-        #Now try using the iterator - note that all these
-        #test cases have only one record.
+        # Now try using the iterator - note that all these
+        # test cases have only one record.
 
         # With the SequenceParser
         test_handle = open(datafile)
@@ -1211,7 +1211,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(len(records), 1)
         self.assertTrue(isinstance(records[0], SeqRecord))
 
-        #Check matches what we got earlier without the iterator:
+        # Check matches what we got earlier without the iterator:
         self.assertEqual(str(records[0].seq), str(seq_record.seq))
         self.assertEqual(records[0].description, seq_record.description)
         self.assertEqual(records[0].name, seq_record.name)
@@ -1225,7 +1225,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(len(records), 1)
         self.assertTrue(isinstance(records[0], SwissProt.Record))
 
-        #Check matches what we got earlier without the iterator:
+        # Check matches what we got earlier without the iterator:
         self.assertEqual(records[0].sequence, record.sequence)
         self.assertEqual(records[0].description, record.description)
         self.assertEqual(records[0].entry_name, record.entry_name)
@@ -1270,14 +1270,14 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(record.references[1].title, "Microsporum canis mRNA for ubiquitin, complete cds.")
         self.assertEqual(len(record.references[1].references), 0)
 
-        #Check the two parsers agree on the essentials
+        # Check the two parsers agree on the essentials
         self.assertEqual(str(seq_record.seq), record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
         self.assertTrue(seq_record.id in record.accessions)
 
-        #Now try using the iterator - note that all these
-        #test cases have only one record.
+        # Now try using the iterator - note that all these
+        # test cases have only one record.
 
         # With the SequenceParser
         test_handle = open(datafile)
@@ -1287,7 +1287,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(len(records), 1)
         self.assertTrue(isinstance(records[0], SeqRecord))
 
-        #Check matches what we got earlier without the iterator:
+        # Check matches what we got earlier without the iterator:
         self.assertEqual(str(records[0].seq), str(seq_record.seq))
         self.assertEqual(records[0].description, seq_record.description)
         self.assertEqual(records[0].name, seq_record.name)
@@ -1301,7 +1301,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(len(records), 1)
         self.assertTrue(isinstance(records[0], SwissProt.Record))
 
-        #Check matches what we got earlier without the iterator:
+        # Check matches what we got earlier without the iterator:
         self.assertEqual(records[0].sequence, record.sequence)
         self.assertEqual(records[0].description, record.description)
         self.assertEqual(records[0].entry_name, record.entry_name)
@@ -1346,14 +1346,14 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(record.references[1].title, "The small subunit of the mammalian mitochondrial ribosome. Identification of the full complement ribosomal proteins present.")
         self.assertEqual(len(record.references[1].references), 0)
 
-        #Check the two parsers agree on the essentials
+        # Check the two parsers agree on the essentials
         self.assertEqual(str(seq_record.seq), record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
         self.assertTrue(seq_record.id in record.accessions)
 
-        #Now try using the iterator - note that all these
-        #test cases have only one record.
+        # Now try using the iterator - note that all these
+        # test cases have only one record.
 
         # With the SequenceParser
         test_handle = open(datafile)
@@ -1363,7 +1363,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(len(records), 1)
         self.assertTrue(isinstance(records[0], SeqRecord))
 
-        #Check matches what we got earlier without the iterator:
+        # Check matches what we got earlier without the iterator:
         self.assertEqual(str(records[0].seq), str(seq_record.seq))
         self.assertEqual(records[0].description, seq_record.description)
         self.assertEqual(records[0].name, seq_record.name)
@@ -1377,7 +1377,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(len(records), 1)
         self.assertTrue(isinstance(records[0], SwissProt.Record))
 
-        #Check matches what we got earlier without the iterator:
+        # Check matches what we got earlier without the iterator:
         self.assertEqual(records[0].sequence, record.sequence)
         self.assertEqual(records[0].description, record.description)
         self.assertEqual(records[0].entry_name, record.entry_name)
@@ -1513,14 +1513,14 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(record.references[21].references[0], ('MEDLINE', '98298118'))
         self.assertEqual(record.references[21].references[1], ('PubMed', '9632665'))
 
-        #Check the two parsers agree on the essentials
+        # Check the two parsers agree on the essentials
         self.assertEqual(str(seq_record.seq), record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
         self.assertTrue(seq_record.id in record.accessions)
 
-        #Now try using the iterator - note that all these
-        #test cases have only one record.
+        # Now try using the iterator - note that all these
+        # test cases have only one record.
 
         # With the SequenceParser
         test_handle = open(datafile)
@@ -1530,7 +1530,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(len(records), 1)
         self.assertTrue(isinstance(records[0], SeqRecord))
 
-        #Check matches what we got earlier without the iterator:
+        # Check matches what we got earlier without the iterator:
         self.assertEqual(str(records[0].seq), str(seq_record.seq))
         self.assertEqual(records[0].description, seq_record.description)
         self.assertEqual(records[0].name, seq_record.name)
@@ -1544,7 +1544,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(len(records), 1)
         self.assertTrue(isinstance(records[0], SwissProt.Record))
 
-        #Check matches what we got earlier without the iterator:
+        # Check matches what we got earlier without the iterator:
         self.assertEqual(records[0].sequence, record.sequence)
         self.assertEqual(records[0].description, record.description)
         self.assertEqual(records[0].entry_name, record.entry_name)
@@ -1582,14 +1582,14 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(len(record.features), 0)
         self.assertEqual(len(record.references), 0)
 
-        #Check the two parsers agree on the essentials
+        # Check the two parsers agree on the essentials
         self.assertEqual(str(seq_record.seq), record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
         self.assertTrue(seq_record.id in record.accessions)
 
-        #Now try using the iterator - note that all these
-        #test cases have only one record.
+        # Now try using the iterator - note that all these
+        # test cases have only one record.
 
         # With the SequenceParser
         test_handle = open(datafile)
@@ -1599,7 +1599,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(len(records), 1)
         self.assertTrue(isinstance(records[0], SeqRecord))
 
-        #Check matches what we got earlier without the iterator:
+        # Check matches what we got earlier without the iterator:
         self.assertEqual(str(records[0].seq), str(seq_record.seq))
         self.assertEqual(records[0].description, seq_record.description)
         self.assertEqual(records[0].name, seq_record.name)
@@ -1613,7 +1613,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(len(records), 1)
         self.assertTrue(isinstance(records[0], SwissProt.Record))
 
-        #Check matches what we got earlier without the iterator:
+        # Check matches what we got earlier without the iterator:
         self.assertEqual(records[0].sequence, record.sequence)
         self.assertEqual(records[0].description, record.description)
         self.assertEqual(records[0].entry_name, record.entry_name)
@@ -1621,5 +1621,5 @@ class TestSwissProt(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

@@ -10,6 +10,8 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Data.SCOPData import protein_letters_3to1
 
+__docformat__ = "restructuredtext en"
+
 
 def PdbSeqresIterator(handle):
     """Returns SeqRecord objects for each chain in a PDB file.
@@ -20,6 +22,30 @@ def PdbSeqresIterator(handle):
     Specifically, these PDB records are handled: DBREF, SEQADV, SEQRES, MODRES
 
     See: http://www.wwpdb.org/documentation/format23/sect3.html
+
+    This gets called internally via Bio.SeqIO for the SEQRES based interpretation
+    of the PDB file format:
+
+    >>> from Bio import SeqIO
+    >>> for record in SeqIO.parse("PDB/1A8O.pdb", "pdb-seqres"):
+    ...     print("Record id %s, chain %s" % (record.id, record.annotations["chain"]))
+    ...     print(record.dbxrefs)
+    ...
+    Record id 1A8O:A, chain A
+    ['UNP:P12497', 'UNP:POL_HV1N5']
+
+    Equivalently,
+
+    >>> with open("PDB/1A8O.pdb") as handle:
+    ...     for record in PdbSeqresIterator(handle):
+    ...         print("Record id %s, chain %s" % (record.id, record.annotations["chain"]))
+    ...         print(record.dbxrefs)
+    ...
+    Record id 1A8O:A, chain A
+    ['UNP:P12497', 'UNP:POL_HV1N5']
+
+    Note the chain is recorded in the annotations dictionary, and any PDB DBREF
+    lines are recorded in the database cross-references list.
     """
     # Late-binding import to avoid circular dependency on SeqIO in Bio.SeqUtils
     from Bio.SeqUtils import seq1
@@ -118,7 +144,27 @@ def PdbAtomIterator(handle):
     This function uses the Bio.PDB module to do most of the hard work. The
     annotation information could be improved but this extra parsing should be
     done in parse_pdb_header, not this module.
+
+    This gets called internally via Bio.SeqIO for the atom based interpretation
+    of the PDB file format:
+
+    >>> from Bio import SeqIO
+    >>> for record in SeqIO.parse("PDB/1A8O.pdb", "pdb-atom"):
+    ...     print("Record id %s, chain %s" % (record.id, record.annotations["chain"]))
+    ...
+    Record id 1A8O:A, chain A
+
+    Equivalently,
+
+    >>> with open("PDB/1A8O.pdb") as handle:
+    ...     for record in PdbAtomIterator(handle):
+    ...         print("Record id %s, chain %s" % (record.id, record.annotations["chain"]))
+    ...
+    Record id 1A8O:A, chain A
+
     """
+    # TODO - Add record.annotations to the doctest, esp the residues (not working?)
+
     # Only import PDB when needed, to avoid/delay NumPy dependency in SeqIO
     from Bio.PDB import PDBParser
     from Bio.SeqUtils import seq1
@@ -155,18 +201,18 @@ def PdbAtomIterator(handle):
         gaps = []
         rnumbers = [r.id[1] for r in residues]
         for i, rnum in enumerate(rnumbers[:-1]):
-            if rnumbers[i+1] != rnum + 1:
+            if rnumbers[i + 1] != rnum + 1:
                 # It's a gap!
-                gaps.append((i+1, rnum, rnumbers[i+1]))
+                gaps.append((i + 1, rnum, rnumbers[i + 1]))
         if gaps:
             res_out = []
             prev_idx = 0
             for i, pregap, postgap in gaps:
                 if postgap > pregap:
                     gapsize = postgap - pregap - 1
-                    res_out.extend(restype(x) for x in  residues[prev_idx:i])
+                    res_out.extend(restype(x) for x in residues[prev_idx:i])
                     prev_idx = i
-                    res_out.append('X'*gapsize)
+                    res_out.append('X' * gapsize)
                 else:
                     warnings.warn("Ignoring out-of-order residues after a gap",
                                   UserWarning)
@@ -207,11 +253,5 @@ def PdbAtomIterator(handle):
 
 
 if __name__ == '__main__':
-    # Test
-    import sys
-    from Bio import SeqIO
-    for fname in sys.argv[1:]:
-        for parser in (PdbSeqresIterator, PdbAtomIterator):
-            with open(fname) as handle:
-                records = parser(handle)
-                SeqIO.write(records, sys.stdout, 'fasta')
+    from Bio._utils import run_doctest
+    run_doctest(verbose=0)

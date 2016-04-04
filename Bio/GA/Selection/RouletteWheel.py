@@ -16,6 +16,8 @@ import copy
 # local modules
 from .Abstract import AbstractSelection
 
+__docformat__ = "restructuredtext en"
+
 
 class RouletteWheelSelection(AbstractSelection):
     """Roulette wheel selection proportional to individuals fitness.
@@ -24,7 +26,7 @@ class RouletteWheelSelection(AbstractSelection):
     from the population, and performs mutation and crossover on
     the selected individuals.
     """
-    def __init__(self, mutator, crossover, repairer = None):
+    def __init__(self, mutator, crossover, repairer=None):
         """Initialize the selector.
 
         Arguments:

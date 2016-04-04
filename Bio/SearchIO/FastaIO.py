@@ -153,7 +153,7 @@ _STATE_HIT_BLOCK = 2
 _STATE_CONS_BLOCK = 3
 
 
-def _set_qresult_hits(qresult, hit_rows=[]):
+def _set_qresult_hits(qresult, hit_rows=()):
     """Helper function for appending Hits without alignments into QueryResults."""
     for hit_row in hit_rows:
         hit_id, remainder = hit_row.split(' ', 1)
@@ -207,7 +207,7 @@ def _set_hsp_seqs(hsp, parsed, program):
 
     # query and hit sequence types must be the same
     assert parsed['query']['_type'] == parsed['hit']['_type']
-    type_val = parsed['query']['_type'] # hit works fine too
+    type_val = parsed['query']['_type']  # hit works fine too
     alphabet = generic_dna if type_val == 'D' else generic_protein
     setattr(hsp.fragment, 'alphabet', alphabet)
 
@@ -389,6 +389,7 @@ class FastaM10Parser(object):
             if self.line.startswith('>>'):
                 break
 
+        state = _STATE_NONE
         strand = None
         hsp_list = []
         while True:
@@ -433,7 +434,7 @@ class FastaM10Parser(object):
                 hsp_list.append(hsp)
                 # set or reset the state to none
                 state = _STATE_NONE
-                parsed_hsp = {'query':{}, 'hit': {}}
+                parsed_hsp = {'query': {}, 'hit': {}}
             # create and append a new HSP if line starts with '>--'
             elif self.line.startswith('>--'):
                 # set seq attributes of previous hsp
@@ -444,7 +445,7 @@ class FastaM10Parser(object):
                 hsp_list.append(hsp)
                 # set the state ~ none yet
                 state = _STATE_NONE
-                parsed_hsp = {'query':{}, 'hit': {}}
+                parsed_hsp = {'query': {}, 'hit': {}}
             # this is either query or hit data in the HSP, depending on the state
             elif self.line.startswith('>'):
                 if state == _STATE_NONE:
@@ -543,6 +544,7 @@ class FastaM10Indexer(SearchIndexer):
                     start_offset = end_offset
 
     def get_raw(self, offset):
+        """Return the raw record from the file as a bytes string."""
         handle = self._handle
         qresult_raw = _as_bytes('')
         query_mark = _as_bytes('>>>')

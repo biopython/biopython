@@ -7,7 +7,7 @@
 
 from __future__ import print_function
 
-__docformat__ = "epytext en"  # Don't just use plain text in epydoc API pages!
+__docformat__ = "restructuredtext en"  # Don't just use plain text in epydoc API pages!
 
 from Bio.Application import _Option, _Argument, _Switch, AbstractCommandline
 
@@ -18,6 +18,7 @@ class DialignCommandline(AbstractCommandline):
     http://bibiserv.techfak.uni-bielefeld.de/dialign/welcome.html
 
     Example:
+    --------
 
     To align a FASTA file (unaligned.fasta) with the output files names
     aligned.* including a FASTA output file (aligned.fa), use:
@@ -32,6 +33,7 @@ class DialignCommandline(AbstractCommandline):
     the Python subprocess module, as described in the Biopython tutorial.
 
     Citation:
+    ---------
 
     B. Morgenstern (2004). DIALIGN: Multiple DNA and Protein Sequence
     Alignment at BiBiServ. Nucleic Acids Research 32, W33-W36.
@@ -101,7 +103,7 @@ class DialignCommandline(AbstractCommandline):
             _Switch(["-lo", "lo"],
                     "(Long Output) Additional file *.log with information "
                     "about fragments selected for pairwise alignment and "
-                    "about consistency in multi-alignment proceedure."),
+                    "about consistency in multi-alignment procedure."),
             _Switch(["-ma", "ma"],
                     "`mixed alignments' consisting of P-fragments and "
                     "N-fragments if nucleic acid sequences are aligned."),
@@ -135,7 +137,7 @@ class DialignCommandline(AbstractCommandline):
             _Switch(["-nta", "nta"],
                     "`no textual alignment' - textual alignment suppressed. "
                     "This option makes sense if other output files are of "
-                    "intrest -- e.g. the fragment files created with -ff, "
+                    "interest -- e.g. the fragment files created with -ff, "
                     "-fop, -fsm or -lo."),
             _Switch(["-o", "o"],
                     "Fast version, resulting alignments may be slightly "

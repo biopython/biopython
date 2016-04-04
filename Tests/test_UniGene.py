@@ -10,8 +10,8 @@ class TestUniGene(unittest.TestCase):
 
     def test_parse(self):
 
-        #Start of the UniGene file for Equus caballus downloaded from:
-        #ftp://ftp.ncbi.nih.gov/repository/UniGene/Equus_caballus
+        # Start of the UniGene file for Equus caballus downloaded from:
+        # ftp://ftp.ncbi.nih.gov/repository/UniGene/Equus_caballus
         handle = open("UniGene/Eca.1.2425.data")
 
         records = UniGene.parse(handle)
@@ -816,8 +816,8 @@ class TestUniGene(unittest.TestCase):
 
     def test_read(self):
 
-        #Start of the UniGene file for Homo sapiens downloaded from:
-        #ftp://ftp.ncbi.nih.gov/repository/UniGene/Homo_sapiens
+        # Start of the UniGene file for Homo sapiens downloaded from:
+        # ftp://ftp.ncbi.nih.gov/repository/UniGene/Homo_sapiens
         handle = open("UniGene/Hs.2.data")
 
         record = UniGene.read(handle)
@@ -1128,5 +1128,5 @@ class TestUniGene(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

@@ -40,9 +40,9 @@ class SimpleEnzyme(unittest.TestCase):
     def test_circular_sequences(self):
         """Deal with cutting circular sequences.
         """
-        parts = EcoRI.catalyse(self.ecosite_seq, linear = False)
+        parts = EcoRI.catalyse(self.ecosite_seq, linear=False)
         self.assertEqual(len(parts), 1)
-        locations = EcoRI.search(parts[0], linear = False)
+        locations = EcoRI.search(parts[0], linear=False)
         self.assertEqual(locations, [1])
 
 
@@ -72,6 +72,114 @@ class EnzymeComparison(unittest.TestCase):
         self.assertTrue(Acc65I % Asp718I)
         self.assertTrue(Acc65I % Acc65I)
         self.assertFalse(Acc65I % KpnI)
+
+
+class RestrictionBatchPrintTest(unittest.TestCase):
+    """Tests Restriction.Analysis printing functionality.
+    """
+    def createAnalysis(self, seq_str, batch_ary):
+        """Restriction.Analysis creation helper method."""
+        rb = Restriction.RestrictionBatch(batch_ary)
+        seq = Seq(seq_str)
+        return Restriction.Analysis(rb, seq)
+
+    def assertAnalysisFormat(self, analysis, expected):
+        """Asserts that the Restriction.Analysis make_format(print_that) matches some string."""
+        dct = analysis.mapping
+        ls, nc = [], []
+        for k, v in dct.items():
+            if v:
+                ls.append((k, v))
+            else:
+                nc.append(k)
+        result = analysis.make_format(ls, '', [], '')
+        self.assertEqual(result.replace(' ',''), expected.replace(' ',''))
+
+    def test_make_format_map1(self):
+        """Make sure print_as('map'); print_that() does not error on wrap round with no markers.
+        """
+        analysis = self.createAnalysis(
+                'CCAGTCTATAATTCG' +
+                Restriction.BamHI.site +
+                'GCGGCATCATACTCGAATATCGCGTGATGATACGTAGTAATTACGCATG',
+                ["BamHI"])
+        analysis.print_as('map')
+        expected = [
+            "                17 BamHI",
+            "                |                                           ",
+            "CCAGTCTATAATTCGGGATCCGCGGCATCATACTCGAATATCGCGTGATGATACGTAGTA",
+            "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||",
+            "GGTCAGATATTAAGCCCTAGGCGCCGTAGTATGAGCTTATAGCGCACTACTATGCATCAT",
+            "1                                                         60",
+            "",
+            "ATTACGCATG",
+            "||||||||||",
+            "TAATGCGTAC",
+            "61                          70",
+            "", ""]
+        self.assertAnalysisFormat(analysis, '\n'.join(expected))
+
+    def test_make_format_map2(self):
+        """Make sure print_as('map'); print_that() does not error on wrap round with marker.
+        """
+        analysis = self.createAnalysis(
+                'CCAGTCTATAATTCG' + 
+                Restriction.BamHI.site +
+                'GCGGCATCATACTCGA' + 
+                Restriction.BamHI.site + 
+                'ATATCGCGTGATGATA' +
+                Restriction.NdeI.site +
+                'CGTAGTAATTACGCATG',
+                ["NdeI","EcoRI","BamHI","BsmBI"])
+        analysis.print_as('map')
+        expected = [
+            "                17 BamHI",
+            "                |                                           ",
+            "                |                     39 BamHI",
+            "                |                     |                     ",
+            "CCAGTCTATAATTCGGGATCCGCGGCATCATACTCGAGGATCCATATCGCGTGATGATAC",
+            "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||",
+            "GGTCAGATATTAAGCCCTAGGCGCCGTAGTATGAGCTCCTAGGTATAGCGCACTACTATG",
+            "1                                                         60",
+            "",
+            " 62 NdeI",
+            " |                                                          ",
+            "ATATGCGTAGTAATTACGCATG",
+            "||||||||||||||||||||||",
+            "TATACGCATCATTAATGCGTAC",
+            "61                          82",
+            "", ""]
+        self.assertAnalysisFormat(analysis, '\n'.join(expected))
+
+    def test_make_format_map3(self):
+        """Make sure print_as('map'); print_that() does not error on wrap round with marker restricted.
+        """
+        analysis = self.createAnalysis(
+                'CCAGTCTATAATTCG' +
+                Restriction.BamHI.site +
+                'GCGGCATCATACTCGA' +
+                Restriction.BamHI.site +
+                'ATATCGCGTGATGATA' +
+                Restriction.EcoRV.site +
+                'CGTAGTAATTACGCATG',
+                ["NdeI","EcoRI","BamHI","BsmBI"])
+        analysis.print_as('map')
+        expected = [
+            "                17 BamHI",
+            "                |                                           ",
+            "                |                     39 BamHI",
+            "                |                     |                     ",
+            "CCAGTCTATAATTCGGGATCCGCGGCATCATACTCGAGGATCCATATCGCGTGATGATAG",
+            "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||",
+            "GGTCAGATATTAAGCCCTAGGCGCCGTAGTATGAGCTCCTAGGTATAGCGCACTACTATC",
+            "1                                                         60",
+            "",
+            "ATATCCGTAGTAATTACGCATG",
+            "||||||||||||||||||||||",
+            "TATAGGCATCATTAATGCGTAC",
+            "61                          82",
+            "", ""]
+        self.assertAnalysisFormat(analysis, '\n'.join(expected))
 
 
 class RestrictionBatches(unittest.TestCase):
@@ -116,5 +224,5 @@ class RestrictionBatches(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

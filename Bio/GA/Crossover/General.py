@@ -14,6 +14,8 @@ import random
 # local stuff
 from Bio.GA.Organism import Organism
 
+__docformat__ = "restructuredtext en"
+
 
 class SafeFitnessCrossover(object):
     """Perform crossovers, but do not allow decreases in organism fitness.
@@ -23,7 +25,7 @@ class SafeFitnessCrossover(object):
     organisms do not have less fitness. This is useful for cases where
     crossovers can
     """
-    def __init__(self, actual_crossover, accept_less = 0.0):
+    def __init__(self, actual_crossover, accept_less=0.0):
         """Initialize to do safe crossovers.
 
         Arguments:

@@ -32,24 +32,26 @@ from subprocess import CalledProcessError as _ProcessCalledError
 
 from Bio import File
 
-#Use this regular expression to test the property names are going to
-#be valid as Python properties or arguments
+__docformat__ = "restructuredtext en"
+
+# Use this regular expression to test the property names are going to
+# be valid as Python properties or arguments
 _re_prop_name = re.compile(r"^[a-zA-Z][a-zA-Z0-9_]*$")
 assert _re_prop_name.match("t")
 assert _re_prop_name.match("test")
-assert _re_prop_name.match("_test") is None # we don't want private names
+assert _re_prop_name.match("_test") is None  # we don't want private names
 assert _re_prop_name.match("-test") is None
 assert _re_prop_name.match("any-hyphen") is None
 assert _re_prop_name.match("underscore_ok")
 assert _re_prop_name.match("test_name")
 assert _re_prop_name.match("test2")
-#These are reserved names in Python itself,
+# These are reserved names in Python itself,
 _reserved_names = ["and", "del", "from", "not", "while", "as", "elif",
                    "global", "or", "with", "assert", "else", "if", "pass",
                    "yield", "break", "except", "import", "print", "class",
                    "exec", "in", "raise", "continue", "finally", "is",
                    "return", "def", "for", "lambda", "try"]
-#These are reserved names due to the way the wrappers work
+# These are reserved names due to the way the wrappers work
 _local_reserved_names = ["set_parameter"]
 
 
@@ -76,10 +78,10 @@ class ApplicationError(_ProcessCalledError):
         self.stderr = stderr
 
     def __str__(self):
-        #get first line of any stderr message
+        # get first line of any stderr message
         try:
             msg = self.stderr.lstrip().split("\n", 1)[0].rstrip()
-        except:
+        except Exception:  # TODO, ValueError? AttributeError?
             msg = ""
         if msg:
             return "Non-zero return code %d from %r, message %r" \
@@ -169,11 +171,14 @@ class AbstractCommandline(object):
     been quoted.
 
     """
-    #TODO - Replace the above example since EMBOSS doesn't work properly
-    #if installed into a folder with a space like "C:\Program Files\EMBOSS"
+    # TODO - Replace the above example since EMBOSS doesn't work properly
+    # if installed into a folder with a space like "C:\Program Files\EMBOSS"
+    #
+    # Note the call example above is not a doctest as we can't handle EMBOSS
+    # (or any other tool) being missing in the unit tests.
 
-    #Note the call example above is not a doctest as we can't handle EMBOSS
-    #(or any other tool) being missing in the unit tests.
+    parameters = None  # will be a list defined in subclasses
+
     def __init__(self, cmd, **kwargs):
         """Create a new instance of a command line wrapper object."""
         # Init method - should be subclassed!
@@ -197,7 +202,7 @@ class AbstractCommandline(object):
             parameters = self.parameters
         except AttributeError:
             raise AttributeError("Subclass should have defined self.parameters")
-        #Create properties for each parameter at run time
+        # Create properties for each parameter at run time
         aliases = set()
         for p in parameters:
             if not p.names:
@@ -223,7 +228,7 @@ class AbstractCommandline(object):
                                  "way the AbstractCommandline class works"
                                  % repr(name))
 
-            #Beware of binding-versus-assignment confusion issues
+            # Beware of binding-versus-assignment confusion issues
             def getter(name):
                 return lambda x: x._get_parameter(name)
 
@@ -255,11 +260,11 @@ class AbstractCommandline(object):
         override it.
         """
         for p in self.parameters:
-            #Check for missing required parameters:
+            # Check for missing required parameters:
             if p.is_required and not(p.is_set):
                 raise ValueError("Parameter %s is not set."
                                  % p.names[-1])
-            #Also repeat the parameter validation here, just in case?
+            # Also repeat the parameter validation here, just in case?
 
     def __str__(self):
         """Make the commandline string with the currently set options.
@@ -279,9 +284,9 @@ class AbstractCommandline(object):
         commandline = "%s " % _escape_filename(self.program_name)
         for parameter in self.parameters:
             if parameter.is_set:
-                #This will include a trailing space:
+                # This will include a trailing space:
                 commandline += str(parameter)
-        return commandline.strip() # remove trailing space
+        return commandline.strip()  # remove trailing space
 
     def __repr__(self):
         """Return a representation of the command line object for debugging.
@@ -329,7 +334,7 @@ class AbstractCommandline(object):
         if not cleared_option:
             raise ValueError("Option name %s was not found." % name)
 
-    def set_parameter(self, name, value = None):
+    def set_parameter(self, name, value=None):
         """Set a commandline option for a program (OBSOLETE).
 
         Every parameter is available via a property and as a named
@@ -431,14 +436,14 @@ class AbstractCommandline(object):
         process' environment variables are used. See Python's subprocess
         module documentation for more details.
 
-        Default example usage:
+        Default example usage::
 
-        from Bio.Emboss.Applications import WaterCommandline
-        water_cmd = WaterCommandline(gapopen=10, gapextend=0.5,
-                                     stdout=True, auto=True,
-                                     asequence="a.fasta", bsequence="b.fasta")
-        print "About to run:\n%s" % water_cmd
-        std_output, err_output = water_cmd()
+            from Bio.Emboss.Applications import WaterCommandline
+            water_cmd = WaterCommandline(gapopen=10, gapextend=0.5,
+                                         stdout=True, auto=True,
+                                         asequence="a.fasta", bsequence="b.fasta")
+            print("About to run: %s" % water_cmd)
+            std_output, err_output = water_cmd()
 
         This functionality is similar to subprocess.check_output() added in
         Python 2.7. In general if you require more control over running the
@@ -460,7 +465,7 @@ class AbstractCommandline(object):
             stderr_arg = open(os.devnull, "w")
         elif isinstance(stderr, basestring):
             if stdout == stderr:
-                stderr_arg = stdout_arg # Write both to the same file
+                stderr_arg = stdout_arg  # Write both to the same file
             else:
                 stderr_arg = open(stderr, "w")
         else:
@@ -474,14 +479,13 @@ class AbstractCommandline(object):
         # Using universal newlines is important on Python 3, this
         # gives unicode handles rather than bytes handles.
 
-	# Windows 7 and 8 want shell = True
-	# platform is easier to understand that sys to determine
-	# windows version
+        # Windows 7, 8 and 8.1 want shell = True
+        # TODO: Test under Windows 10 and revisit platform detection.
         if sys.platform != "win32":
             use_shell = True
         else:
             win_ver = platform.win32_ver()[0]
-            if win_ver in ["7", "8"]:
+            if win_ver in ["7", "8", "post2012Server"]:
                 use_shell = True
             else:
                 use_shell = False
@@ -514,7 +518,7 @@ class AbstractCommandline(object):
         return stdout_str, stderr_str
 
 
-class _AbstractParameter:
+class _AbstractParameter(object):
     """A class to hold information about a parameter for a commandline.
 
     Do not use this directly, instead use one of the subclasses.
@@ -652,7 +656,7 @@ class _Argument(_AbstractParameter):
     """
     def __init__(self, names, description, filename=False,
                  checker_function=None, is_required=False):
-        #if len(names) != 1:
+        # if len(names) != 1:
         #    raise ValueError("The names argument to _Argument should be a "
         #                     "single entry list with a PEP8 property name.")
         self.names = names
@@ -676,7 +680,7 @@ class _Argument(_AbstractParameter):
 
 class _ArgumentList(_Argument):
     """Represent a variable list of arguments on a command line, e.g. multiple filenames."""
-    #TODO - Option to require at least one value? e.g. min/max count?
+    # TODO - Option to require at least one value? e.g. min/max count?
 
     def __str__(self):
         assert isinstance(self.value, list), \
@@ -718,12 +722,12 @@ def _escape_filename(filename):
     >>> print((_escape_filename('"example with spaces"')))
     "example with spaces"
     """
-    #Is adding the following helpful
-    #if os.path.isfile(filename):
-    #    #On Windows, if the file exists, we can ask for
-    #    #its alternative short name (DOS style 8.3 format)
-    #    #which has no spaces in it.  Note that this name
-    #    #is not portable between machines, or even folder!
+    # Is adding the following helpful
+    # if os.path.isfile(filename):
+    #    # On Windows, if the file exists, we can ask for
+    #    # its alternative short name (DOS style 8.3 format)
+    #    # which has no spaces in it.  Note that this name
+    #    # is not portable between machines, or even folder!
     #    try:
     #        import win32api
     #        short = win32api.GetShortPathName(filename)
@@ -733,9 +737,9 @@ def _escape_filename(filename):
     #        pass
     if " " not in filename:
         return filename
-    #We'll just quote it - works on Windows, Mac OS X etc
+    # We'll just quote it - works on Windows, Mac OS X etc
     if filename.startswith('"') and filename.endswith('"'):
-        #Its already quoted
+        # Its already quoted
         return filename
     else:
         return '"%s"' % filename
@@ -747,6 +751,5 @@ def _test():
     doctest.testmod(verbose=1)
 
 if __name__ == "__main__":
-    #Run the doctests
+    # Run the doctests
     _test()
-

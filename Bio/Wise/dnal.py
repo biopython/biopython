@@ -3,24 +3,28 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 #
-# Bio.Wise contains modules for running and processing the output of
-# some of the models in the Wise2 package by Ewan Birney available from:
-# ftp://ftp.ebi.ac.uk/pub/software/unix/wise2/
-# http://www.ebi.ac.uk/Wise2/
-#
-# Bio.Wise.psw is for protein Smith-Waterman alignments
-# Bio.Wise.dnal is for Smith-Waterman DNA alignments
+"""
+Bio.Wise contains modules for running and processing the output of
+some of the models in the Wise2 package by Ewan Birney available from:
+ftp://ftp.ebi.ac.uk/pub/software/unix/wise2/
+http://www.ebi.ac.uk/Wise2/
+
+Bio.Wise.psw is for protein Smith-Waterman alignments
+Bio.Wise.dnal is for Smith-Waterman DNA alignments
+"""
 
 from __future__ import print_function
 
 import re
 
-#Importing with leading underscore as not intended to be exposed
+# Importing with leading underscore as not intended to be exposed
 from Bio._py3k import getoutput as _getoutput
 from Bio._py3k import zip
 from Bio._py3k import map
 
 from Bio import Wise
+
+__docformat__ = "restructuredtext en"
 
 _SCORE_MATCH = 4
 _SCORE_MISMATCH = -1
@@ -34,7 +38,7 @@ def _build_dnal_cmdline(match, mismatch, gap, extension):
     res = _CMDLINE_DNAL[:]
     res.extend(["-match", str(match)])
     res.extend(["-mis", str(mismatch)])
-    res.extend(["-gap", str(-gap)]) # negative: convert score to penalty
+    res.extend(["-gap", str(-gap)])  # negative: convert score to penalty
     res.extend(["-ext", str(-extension)])  # negative: convert score to penalty
 
     return res
@@ -49,7 +53,7 @@ _re_alb_line2coords = re.compile(r"^\[([^:]+):[^\[]+\[([^:]+):")
 
 
 def _alb_line2coords(line):
-    return tuple([int(coord)+1 # one-based -> zero-based
+    return tuple([int(coord) + 1  # one-based -> zero-based
                   for coord
                   in _re_alb_line2coords.match(line).groups()])
 
@@ -63,14 +67,14 @@ def _get_coords(filename):
     for line in alb:
         if line.startswith("["):
             if not start_line:
-                start_line = line # rstrip not needed
+                start_line = line  # rstrip not needed
             else:
                 end_line = line
 
-    if end_line is None: # sequence is too short
+    if end_line is None:  # sequence is too short
         return [(0, 0), (0, 0)]
 
-    return list(zip(*map(_alb_line2coords, [start_line, end_line]))) # returns [(start0, end0), (start1, end1)]
+    return list(zip(*map(_alb_line2coords, [start_line, end_line])))  # returns [(start0, end0), (start1, end1)]
 
 
 class Statistics(object):
@@ -87,10 +91,10 @@ class Statistics(object):
         else:
             self.extensions = _fgrep_count('"INSERT" %s' % extension, filename)
 
-        self.score = (match*self.matches +
-                      mismatch*self.mismatches +
-                      gap*self.gaps +
-                      extension*self.extensions)
+        self.score = (match * self.matches +
+                      mismatch * self.mismatches +
+                      gap * self.gaps +
+                      extension * self.extensions)
 
         if self.matches or self.mismatches or self.gaps or self.extensions:
             self.coords = _get_coords(filename)
@@ -98,7 +102,7 @@ class Statistics(object):
             self.coords = [(0, 0), (0, 0)]
 
     def identity_fraction(self):
-        return self.matches/(self.matches+self.mismatches)
+        return self.matches / (self.matches + self.mismatches)
 
     header = "identity_fraction\tmatches\tmismatches\tgaps\textensions"
 

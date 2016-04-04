@@ -85,13 +85,13 @@ class CreatePopulationTest(unittest.TestCase):
     def test_random_population_types(self):
         """Creating a random population with different types of alphabets.
         """
-        class DoubleAlphabet:
+        class DoubleAlphabet(object):
             letters = [1.0, 2.0]
 
-        class CharacterAlphabet:
+        class CharacterAlphabet(object):
             letters = ["a", "b"]
 
-        class IntegerAlphabet:
+        class IntegerAlphabet(object):
             letters = [1, 2]
 
         def test_fitness(genome):
@@ -170,5 +170,5 @@ class OrganismTest(unittest.TestCase):
         new_org = Organism.Organism(genome, fitness_calc, 50)
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

@@ -1,4 +1,4 @@
-# Copyright 2011-2013 by Peter Cock.  All rights reserved.
+# Copyright 2011-2016 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -19,7 +19,7 @@ warnings.simplefilter('ignore', BiopythonExperimentalWarning)
 if sys.version_info[0] >= 3:
     from lib2to3 import refactor
     fixers = refactor.get_fixers_from_package("lib2to3.fixes")
-    fixers.remove("lib2to3.fixes.fix_print") # Already using print function
+    fixers.remove("lib2to3.fixes.fix_print")  # Already using print function
     rt = refactor.RefactoringTool(fixers)
     assert rt.refactor_docstring(">>> print(2+2)\n4\n", "example1") == \
                                  ">>> print(2+2)\n4\n"
@@ -27,16 +27,30 @@ if sys.version_info[0] >= 3:
                                  'Two plus two is 4\n', "example2") == \
                                  '>>> print("Two plus two is", 2+2)\nTwo plus two is 4\n'
 
+# Cache this to restore the cwd at the end of the tests
+original_path = os.path.abspath(".")
 
-tutorial = os.path.join(os.path.dirname(sys.argv[0]), "../Doc/Tutorial.tex")
-if not os.path.isfile(tutorial) and sys.version_info[0] >= 3:
-    tutorial = os.path.join(os.path.dirname(sys.argv[0]), "../../../Doc/Tutorial.tex")
+if os.path.basename(sys.argv[0]) == "test_Tutorial.py":
+    # sys.argv[0] will be (relative) path to test_Turorial.py - use this to allow, e.g.
+    # [base]$ python Tests/test_Tutorial.py
+    # [Tests/]$ python test_Tutorial.py
+    tutorial_base = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]), "../Doc/"))
+    tutorial = os.path.join(tutorial_base, "Tutorial.tex")
+else:
+    # Probably called via run_tests.py so current directory should (now) be Tests/
+    # but may have been changed by run_tests.py so can't infer from sys.argv[0] with e.g.
+    # [base]$ python Tests/run_tests.py test_Tutorial
+    tutorial_base = os.path.abspath("../Doc/")
+    tutorial = os.path.join(tutorial_base, "Tutorial.tex")
 if not os.path.isfile(tutorial):
     from Bio import MissingExternalDependencyError
     raise MissingExternalDependencyError("Could not find ../Doc/Tutorial.tex file")
 
-tutorial_base = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]), "../Doc/"))
-original_path = os.path.abspath(".")
+# Build a list of all the Tutorial LaTeX files:
+files = [tutorial]
+for latex in os.listdir(os.path.join(tutorial_base, "Tutorial/")):
+    if latex.startswith("chapter_") and latex.endswith(".tex"):
+        files.append(os.path.join(tutorial_base, "Tutorial", latex))
 
 
 def _extract(handle):
@@ -64,47 +78,49 @@ def extract_doctests(latex_filename):
 
     This is a generator, yielding one tuple per doctest.
     """
-    handle = open(latex_filename, _universal_read_mode)
-    line_number = 0
-    in_test = False
-    lines = []
-    while True:
-        line = handle.readline()
-        line_number += 1
-        if not line:
-            #End of file
-            break
-        elif line.startswith("%cont-doctest"):
-            x = _extract(handle)
-            lines.extend(x)
-            line_number += len(x) + 2
-        elif line.startswith("%doctest"):
-            if lines:
-                if not lines[0].startswith(">>> "):
-                    raise ValueError("Should start '>>> ' not %r" % lines[0])
-                yield name, "".join(lines), folder, deps
-                lines = []
-            deps = [x.strip() for x in line.split()[1:]]
-            if deps:
-                folder = deps[0]
-                deps = deps[1:]
-            else:
-                folder = ""
-            name = "test_from_line_%05i" % line_number
-            x = _extract(handle)
-            lines.extend(x)
-            line_number += len(x) + 2
-    handle.close()
+    base_name = os.path.splitext(os.path.basename(latex_filename))[0]
+    with open(latex_filename, _universal_read_mode) as handle:
+        line_number = 0
+        in_test = False
+        lines = []
+        name = None
+        while True:
+            line = handle.readline()
+            line_number += 1
+            if not line:
+                # End of file
+                break
+            elif line.startswith("%cont-doctest"):
+                x = _extract(handle)
+                lines.extend(x)
+                line_number += len(x) + 2
+            elif line.startswith("%doctest"):
+                if lines:
+                    if not lines[0].startswith(">>> "):
+                        raise ValueError("Should start '>>> ' not %r" % lines[0])
+                    yield name, "".join(lines), folder, deps
+                    lines = []
+                deps = [x.strip() for x in line.split()[1:]]
+                if deps:
+                    folder = deps[0]
+                    deps = deps[1:]
+                else:
+                    folder = ""
+                name = "test_%s_line_%05i" % (base_name, line_number)
+                x = _extract(handle)
+                lines.extend(x)
+                line_number += len(x) + 2
     if lines:
         if not lines[0].startswith(">>> "):
             raise ValueError("Should start '>>> ' not %r" % lines[0])
         yield name, "".join(lines), folder, deps
-    #yield "dummy", ">>> 2 + 2\n5\n"
+    # yield "dummy", ">>> 2 + 2\n5\n"
 
 
 class TutorialDocTestHolder(object):
     """Python doctests extracted from the Biopython Tutorial."""
     pass
+
 
 def check_deps(dependencies):
     missing = []
@@ -118,40 +134,42 @@ def check_deps(dependencies):
             missing.append(lib)
     return missing
 
-#Create dummy methods on the object purely to hold doctests
+# Create dummy methods on the object purely to hold doctests
 missing_deps = set()
-for name, example, folder, deps in extract_doctests(tutorial):
-    missing = check_deps(deps)
-    if missing:
-        missing_deps.update(missing)
-        continue
+for latex in files:
+    # print("Extracting doctests from %s" % latex)
+    for name, example, folder, deps in extract_doctests(latex):
+        missing = check_deps(deps)
+        if missing:
+            missing_deps.update(missing)
+            continue
 
-    if sys.version_info[0] >= 3:
-        example = ">>> from __future__ import print_function\n" + example
-        example = rt.refactor_docstring(example, name)
+        if sys.version_info[0] >= 3:
+            example = ">>> from __future__ import print_function\n" + example
+            example = rt.refactor_docstring(example, name)
 
-    def funct(n, d, f):
-        global tutorial_base
-        method = lambda x : None
-        if f:
-            p = os.path.join(tutorial_base, f)
-            method.__doc__ = "%s\n\n>>> import os\n>>> os.chdir(%r)\n%s\n" \
-                           % (n, p, d)
-        else:
-            method.__doc__ = "%s\n\n%s\n" % (n, d)
-        method._folder = f
-        return method
+        def funct(n, d, f):
+            global tutorial_base
+            method = lambda x: None
+            if f:
+                p = os.path.join(tutorial_base, f)
+                method.__doc__ = "%s\n\n>>> import os\n>>> os.chdir(%r)\n%s\n" \
+                    % (n, p, d)
+            else:
+                method.__doc__ = "%s\n\n%s\n" % (n, d)
+            method._folder = f
+            return method
 
-    setattr(TutorialDocTestHolder,
-            "doctest_%s" % name.replace(" ", "_"),
-            funct(name, example, folder))
-    del funct
+        setattr(TutorialDocTestHolder,
+                "doctest_%s" % name.replace(" ", "_"),
+                funct(name, example, folder))
+        del funct
 
 
-#This is a TestCase class so it is found by run_tests.py
+# This is a TestCase class so it is found by run_tests.py
 class TutorialTestCase(unittest.TestCase):
     """Python doctests extracted from the Biopython Tutorial."""
-    #Single method to be invoked by run_tests.py
+    # Single method to be invoked by run_tests.py
     def test_doctests(self):
         """Run tutorial doctests."""
         runner = doctest.DocTestRunner()
@@ -162,7 +180,7 @@ class TutorialTestCase(unittest.TestCase):
                 name = test.name
                 assert name.startswith("TutorialDocTestHolder.doctest_")
                 failures.append(name[30:])
-                #raise ValueError("Tutorial doctest %s failed" % test.name[30:])
+                # raise ValueError("Tutorial doctest %s failed" % test.name[30:])
         if failures:
             raise ValueError("%i Tutorial doctests failed: %s" %
                              (len(failures), ", ".join(failures)))
@@ -172,7 +190,7 @@ class TutorialTestCase(unittest.TestCase):
         os.chdir(original_path)
 
 
-#This is to run the doctests if the script is called directly:
+# This is to run the doctests if the script is called directly:
 if __name__ == "__main__":
     if missing_deps:
         print("Skipping tests needing the following:")
@@ -181,7 +199,6 @@ if __name__ == "__main__":
     print("Running Tutorial doctests...")
     import doctest
     tests = doctest.testmod()
-    if tests[0]:
-        #Note on Python 2.5+ can use tests.failed rather than tests[0]
+    if tests.failed:
         raise RuntimeError("%i/%i tests failed" % tests)
     print("Tests done")

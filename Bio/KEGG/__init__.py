@@ -3,8 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""
-This module provides code to work with data from the KEGG database.
+"""Code to work with data from the KEGG database.
 
 References:
 
@@ -13,6 +12,9 @@ Nucleic Acids Res. 28, 29-34 (2000).
 
 URL: http://www.genome.ad.jp/kegg/
 """
+
+__docformat__ = "restructuredtext en"
+
 KEGG_ITEM_LENGTH = 12
 KEGG_LINE_LENGTH = 80
 KEGG_DATA_LENGTH = KEGG_LINE_LENGTH - KEGG_ITEM_LENGTH
@@ -21,7 +23,7 @@ KEGG_DATA_LENGTH = KEGG_LINE_LENGTH - KEGG_ITEM_LENGTH
 _default_wrap = lambda indent: [indent, "", (" ", "", 1, 0)]
 
 
-def _wrap_kegg(line, max_width = KEGG_DATA_LENGTH, wrap_rule = _default_wrap):
+def _wrap_kegg(line, max_width=KEGG_DATA_LENGTH, wrap_rule=_default_wrap):
     """Wraps the input line  for KEGG output.
 
     Arguments:
@@ -64,7 +66,7 @@ def _wrap_kegg(line, max_width = KEGG_DATA_LENGTH, wrap_rule = _default_wrap):
     return s
 
 
-def _write_kegg(item, info, indent = KEGG_ITEM_LENGTH):
+def _write_kegg(item, info, indent=KEGG_ITEM_LENGTH):
     """Write a indented KEGG record item.
 
     Arguments:

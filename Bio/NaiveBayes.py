@@ -12,17 +12,17 @@ the Bayes assumption that the features are independent.  Although this
 is hardly ever true, the classifier works well enough in practice.
 
 Glossary:
-observation    A feature vector of discrete data.
-class          A possible classification for an observation.
+    - observation - A feature vector of discrete data.
+    - class       - A possible classification for an observation.
 
 
 Classes:
-NaiveBayes     Holds information for a naive Bayes classifier.
+    - NaiveBayes - Holds information for a naive Bayes classifier.
 
 Functions:
-train          Train a new naive Bayes classifier.
-calculate      Calculate the probabilities of each class, given an observation.
-classify       Classify an observation into a class.
+    - train     - Train a new naive Bayes classifier.
+    - calculate - Calculate the probabilities of each class, given an observation.
+    - classify  - Classify an observation into a class.
 
 """
 
@@ -30,9 +30,14 @@ from __future__ import print_function
 
 import numpy
 
+__docformat__ = "restructuredtext en"
+
+
+__docformat__ = "restructuredtext en"
+
 
 def _contents(items):
-    term = 1.0/len(items)
+    term = 1.0 / len(items)
     counts = {}
     for item in items:
         counts[item] = counts.get(item, 0) + term
@@ -42,11 +47,11 @@ def _contents(items):
 class NaiveBayes(object):
     """Holds information for a NaiveBayes classifier.
 
-    Members:
-    classes         List of the possible classes of data.
-    p_conditional   CLASS x DIM array of dicts of value -> P(value|class,dim)
-    p_prior         List of the prior probabilities for every class.
-    dimensionality  Dimensionality of the data.
+    Attributes:
+        - classes        - List of the possible classes of data.
+        - p_conditional  - CLASS x DIM array of dicts of value -> ``P(value|class,dim)``
+        - p_prior        - List of the prior probabilities for every class.
+        - dimensionality - Dimensionality of the data.
 
     """
     def __init__(self):
@@ -56,16 +61,17 @@ class NaiveBayes(object):
         self.dimensionality = None
 
 
-def calculate(nb, observation, scale=0):
-    """calculate(nb, observation[, scale]) -> probability dict
+def calculate(nb, observation, scale=False):
+    """Calculate ``log P(class|observation)`` for each class.
 
-    Calculate log P(class|observation) for each class.  nb is a NaiveBayes
-    classifier that has been trained.  observation is a list representing
-    the observed data.  scale is whether the probability should be
-    scaled by P(observation).  By default, no scaling is done.  The return
-    value is a dictionary where the keys is the class and the value is the
-    log probability of the class.
+        - nb          - A NaiveBayes classifier that has been trained.
+        - observation - A list representing the observed data.
+        - scale       - Boolean to indicate whether the probability should be
+          scaled by ``P(observation)``.  By default, no scaling is done.
 
+    Returns:
+        A dictionary where the keys is the class and the value is the log
+        probability of the class.
     """
     # P(class|observation) = P(observation|class)*P(class)/P(observation)
     # Taking the log:
@@ -73,8 +79,8 @@ def calculate(nb, observation, scale=0):
 
     # Make sure the observation has the right dimensionality.
     if len(observation) != nb.dimensionality:
-        raise ValueError("observation in %d dimension, but classifier in %d"
-                         % (len(observation), nb.dimensionality))
+        raise ValueError("observation in {0} dimension, but classifier in {1}".format(len(observation),
+                                                                                      nb.dimensionality))
 
     # Calculate log P(observation|class) for every class.
     n = len(nb.classes)
@@ -94,7 +100,7 @@ def calculate(nb, observation, scale=0):
     lp_observation = 0.0          # P(observation)
     if scale:   # Only calculate this if requested.
         # log P(observation) = log SUM_i P(observation|class_i)P(class_i)
-        obs = numpy.exp(numpy.clip(lp_prior+lp_observation_class, -700, +700))
+        obs = numpy.exp(numpy.clip(lp_prior + lp_observation_class, -700, +700))
         lp_observation = numpy.log(sum(obs))
 
     # Calculate log P(class|observation).
@@ -107,13 +113,13 @@ def calculate(nb, observation, scale=0):
 
 
 def classify(nb, observation):
-    """classify(nb, observation) -> class
+    """ Classify an observation into a class.
 
-    Classify an observation into a class.
+    ``classify(nb, observation) -> class``
 
     """
     # The class is the one with the highest probability.
-    probs = calculate(nb, observation, scale=0)
+    probs = calculate(nb, observation, scale=False)
     max_prob = max_class = None
     for klass in nb.classes:
         if max_prob is None or probs[klass] > max_prob:
@@ -122,14 +128,16 @@ def classify(nb, observation):
 
 
 def train(training_set, results, priors=None, typecode=None):
-    """train(training_set, results[, priors]) -> NaiveBayes
+    """ Train a naive bayes classifier on a training set.
 
-    Train a naive bayes classifier on a training set.  training_set is a
-    list of observations.  results is a list of the class assignments
-    for each observation.  Thus, training_set and results must be the same
-    length.  priors is an optional dictionary specifying the prior
-    probabilities for each type of result.  If not specified, the priors
-    will be estimated from the training results.
+    ``train(training_set, results[, priors]) -> NaiveBayes``
+
+        - training_set - List of observations.
+        - results      - List of the class assignments for each observation.
+          Thus, training_set and results must be the same length.
+        - priors       - Optional dictionary specifying the prior probabilities
+          for each type of result.  If not specified, the priors will be
+          estimated from the training results.
 
     """
     if not len(training_set):
@@ -179,7 +187,7 @@ def train(training_set, results, priors=None, typecode=None):
     for i in range(len(results)):
         klass, obs = results[i], training_set[i]
         observations[c2i[klass]].append(obs)
-    # Now make the observations Numeric matrics.
+    # Now make the observations Numeric matrix.
     for i in range(len(observations)):
         # XXX typecode must be specified!
         observations[i] = numpy.asarray(observations[i], typecode)
@@ -195,7 +203,7 @@ def train(training_set, results, priors=None, typecode=None):
             values = class_observations[:, j]
 
             # Add pseudocounts here.  This needs to be parameterized.
-            #values = list(values) + range(len(nb.classes))  # XXX add 1
+            # values = list(values) + range(len(nb.classes))  # XXX add 1
 
             # Estimate P(value|class,dim)
             nb.p_conditional[i][j] = _contents(values)
@@ -204,7 +212,7 @@ def train(training_set, results, priors=None, typecode=None):
 if __name__ == "__main__":
     # Car data from example 'Naive Bayes Classifier example' by Eric Meisner November 22, 2003
     # http://www.inf.u-szeged.hu/~ormandi/teaching/mi2/02-naiveBayes-example.pdf
-    xcar=[
+    xcar = [
         ['Red',    'Sports', 'Domestic'],
         ['Red',    'Sports', 'Domestic'],
         ['Red',    'Sports', 'Domestic'],
@@ -217,7 +225,7 @@ if __name__ == "__main__":
         ['Red',    'Sports', 'Imported']
     ]
 
-    ycar=[
+    ycar = [
         'Yes',
         'No',
         'Yes',

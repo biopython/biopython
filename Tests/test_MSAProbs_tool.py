@@ -16,17 +16,17 @@ from Bio._py3k import getoutput
 
 #################################################################
 
-#Try to avoid problems when the OS is in another language
+# Try to avoid problems when the OS is in another language
 os.environ['LANG'] = 'C'
 
 msaprobs_exe = None
-if sys.platform == "win32":
-    #TODO
-    raise MissingExternalDependencyError("Testing this on Windows is not implemented yet")
-else:
+try:
     output = getoutput("msaprobs -version")
     if output.startswith("MSAPROBS version"):
         msaprobs_exe = "msaprobs"
+except OSError:
+    # TODO: Use FileNotFoundError once we drop Python 2
+    pass
 
 if not msaprobs_exe:
     raise MissingExternalDependencyError(
@@ -85,7 +85,11 @@ class MSAProbsTestErrorConditions(MSAProbsTestCase):
         try:
             stdout, stderr = cline()
         except ApplicationError as err:
-            self.assertEqual(err.returncode, 139)
+            if sys.platform == "win32":
+                expected = 0xC0000005
+            else:
+                expected = 139  # TODO: Check return codes on various other platforms
+            self.assertEqual(expected, err.returncode)
         else:
             self.fail("Should have failed, returned:\n%s\n%s" % (stdout, stderr))
 

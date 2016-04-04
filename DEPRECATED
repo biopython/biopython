@@ -17,10 +17,53 @@ Python 2.5
 No longer supported as of Release 1.63, having triggered a warning with
 Release 1.62, with advance notice in the release notes for Release 1.61.
 
+Python 2.6
+==========
+Still supported but deprecated as of Release 1.66, triggering a warning
+at installation time.
+
 Python 3.0, 3.1, 3.2
 ====================
-Never officially supported, these trigger a warning in Release 1.62
-recommending Python 3.3 or later if you wish to use Python 3.
+Never officially supported, these triggered a warning in Release 1.62
+recommending Python 3.3 or later. As of Biopython Release 1.63 onwards,
+installation simply aborts with a error message.
+
+Python 3.3
+==========
+Still suported but deprecated as of Release 1.67, triggering a warning
+at installation time.
+
+Bio.CodonAlign
+==============
+This new experimental module included in Biopython 1.64 was renamed to
+Bio.codonalign in Biopython 1.65 to follow PEP8 module naming rules.
+
+Bio.SeqRecord equality
+======================
+As of Release 1.67, the SeqRecord objects (and their subclasses) no longer use
+the default Python object comparison. Instead they will raise an exception if
+you try to compare them.
+
+For backward compatibility and/or to explicitly use object comparison, please
+use id(record1) == id(record2) instead.
+
+Otherwise please test whichever specific attributes you are interested in
+explicitly, for example record1.id == record2.id or record1.seq == record.seq
+(see also the note below about sequence equality).
+
+Bio.Seq sequence equality
+=========================
+As of Release 1.65, the Seq and MutableSeq objects (and their subclasses)
+use string-like equality testing and hashing (ingoring any difference in
+alphabet except to issue warnings).
+
+Prior releases used Python's object comparison. Warnings of this change
+were first added in Release 1.54 (May 2010), with hash warnings added in
+Release 1.62 (August 2013).
+
+For backward compatibility and/or to silence the warnings, please use
+explicit string comparision, str(seq1) == str(seq2), or object comparison,
+id(seq1) == id(seq2), as required.
 
 Bio.Seq.Seq.tostring() and Bio.Seq.MutableSeq.tostring()
 ========================================================
@@ -63,12 +106,14 @@ attribute sub_features was deprecated.
 Bio.Motif
 =========
 Declared obsolete with a PendingDeprecationWarning in Release 1.61, formally
-deprecated in Release 1.62. Please use the newer Bio.motifs module instead.
+deprecated in Release 1.62, removed in Release 1.67. Please use the newer
+Bio.motifs module instead.
 
 AlignAceCommandline and CompareAceCommandline
 =============================================
-Deprecated in release 1.62. An up to date version of the software cannot
-be obtained anymore (affects Bio.Motif and its replacement Bio.motifs).
+Deprecated in release 1.62, removed in Release 1.67. An up to date version of
+the software cannot be obtained anymore (affects Bio.Motif and its replacement
+Bio.motifs).
 
 Bio.SeqIO.Interfaces
 ====================
@@ -504,10 +549,10 @@ Functions GC_Frame, fasta_uniqids, apply_on_multi_fasta, and
 quicker_apply_on_multi_fasta were deprecated in Release 1.55, and removed
 in Release 1.58.
 
-Function quick_FASTA_reader was declared obsolete in Release 1.61, and
-deprecated in Release 1.64. Use function list(SimpleFastaParser(handle))
-from Bio.SeqIO.FastaIO instead (but ideally convert your code to using
-an iterator approach).
+Function quick_FASTA_reader was declared obsolete in Release 1.61,
+deprecated in Release 1.64, and removed in Release 1.67. Use function
+list(SimpleFastaParser(handle)) from Bio.SeqIO.FastaIO instead (but
+ideally convert your code to using an iterator approach).
 
 Bio.GFF (for accessing a MySQL database created with BioPerl, etc)
 =======
@@ -527,7 +572,7 @@ Use Bio.SeqUtils instead.
 Bio.SVM
 =======
 Deprecated as of Release 1.30, removed in Release 1.42.
-The Support Vector Machine code in Biopython has been superseded by a 
+The Support Vector Machine code in Biopython has been superseded by a
 more robust (and maintained) SVM library, which includes a python
 interface. We recommend using LIBSVM:
 
@@ -554,6 +599,11 @@ Bio.SCOP
 The module Bio.SCOP.FileIndex was deprecated in Release 1.46, and removed in
 Release 1.53. The class Parser in Bio.SCOP.Dom was removed in Release 1.55
 final. The class Iterator in Bio.SCOP.Dom was removed in Release 1.56.
+
+Dictionary to_one_letter_code in module Bio.SCOP.three_to_one_dict was moved
+to protein_letters_3to1 in module Bio.Data.SCOPData in Release 1.62. The old
+alias was preserved with a deprecation warning, until it was removed in
+Release 1.66.
 
 Bio.utils
 =========

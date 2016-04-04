@@ -1,4 +1,4 @@
-# Copyright 2009-2012 by Peter Cock.  All rights reserved.
+# Copyright 2009-2015 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -8,8 +8,8 @@
 try:
     import sqlite3
 except ImportError:
-    #Try and run what tests we can on Python 2.4 or Jython
-    #where we don't expect this to be installed.
+    # Try to run what tests we can on Python 2.4 or Jython
+    # where we don't expect this to be installed.
     sqlite3 = None
 
 import sys
@@ -24,10 +24,10 @@ from Bio._py3k import _as_bytes, _bytes_to_string, StringIO
 from Bio._py3k import _universal_read_mode
 
 try:
-    #Defined on Python 3
+    # Defined on Python 3
     FileNotFoundError
 except NameError:
-    #Python 2 does not have this,
+    # Python 2 does not have this,
     FileNotFoundError = IOError
 
 from Bio.SeqRecord import SeqRecord
@@ -47,15 +47,16 @@ except MissingPythonDependencyError:
 
 CUR_DIR = os.getcwd()
 
+
 def add_prefix(key):
     """Dummy key_function for testing index code."""
     return "id_" + key
 
 
 def gzip_open(filename, format):
-    #At time of writing, under Python 3.2.2 seems gzip.open(filename, mode)
-    #insists on giving byte strings (i.e. binary mode)
-    #See http://bugs.python.org/issue13989
+    # At time of writing, under Python 3.2.2 seems gzip.open(filename, mode)
+    # insists on giving byte strings (i.e. binary mode)
+    # See http://bugs.python.org/issue13989
     if sys.version_info[0] < 3 or format in SeqIO._BinaryFormats:
         return gzip.open(filename)
     handle = gzip.open(filename)
@@ -65,6 +66,30 @@ def gzip_open(filename, format):
 
 
 if sqlite3:
+
+    def raw_filenames(index_filename):
+        """Open SQLite index and extract filenames (as is).
+
+        Returns a 2-tuple, holding a list of strings, and the value
+        of the meta_data.filenames_relative_to_index (of None).
+        """
+        con = sqlite3.dbapi2.connect(index_filename)
+
+        filenames = [row[0] for row in
+                     con.execute("SELECT name FROM file_data "
+                                 "ORDER BY file_number;").fetchall()]
+
+        try:
+            filenames_relative_to_index, = con.execute(
+                "SELECT value FROM meta_data WHERE key=?;",
+                ("filenames_relative_to_index",)).fetchone()
+            filenames_relative_to_index = (filenames_relative_to_index.upper() == "TRUE")
+        except TypeError:
+            filenames_relative_to_index = None
+
+        con.close()
+        return filenames, filenames_relative_to_index
+
     class OldIndexTest(unittest.TestCase):
         """Testing a pre-built index (make sure cross platform etc).
 
@@ -85,10 +110,33 @@ if sqlite3:
             self.assertEqual(54, len(d))
             self.assertRaises(FileNotFoundError, d.get_raw, "alpha")
 
+        def test_old_rel(self):
+            """Load existing index (with relative paths) with no options (from parent directory)."""
+            d = SeqIO.index_db("Roche/triple_sff_rel_paths.idx")
+            self.assertEqual(54, len(d))
+            self.assertEqual(395, len(d["alpha"]))
+
+        def test_old_contents(self):
+            """Check actual filenames in existing indexes."""
+            filenames, flag = raw_filenames("Roche/triple_sff.idx")
+            self.assertEqual(flag, None)
+            self.assertEqual(filenames, ["E3MFGYR02_no_manifest.sff", "greek.sff", "paired.sff"])
+
+            filenames, flag = raw_filenames("Roche/triple_sff_rel_paths.idx")
+            self.assertEqual(flag, True)
+            self.assertEqual(filenames, ["E3MFGYR02_no_manifest.sff", "greek.sff", "paired.sff"])
+
         def test_old_same_dir(self):
             """Load existing index with no options (from same directory)."""
             os.chdir("Roche")
             d = SeqIO.index_db("triple_sff.idx")
+            self.assertEqual(54, len(d))
+            self.assertEqual(395, len(d["alpha"]))
+
+        def test_old_same_dir_rel(self):
+            """Load existing index (with relative paths) with no options (from same directory)."""
+            os.chdir("Roche")
+            d = SeqIO.index_db("triple_sff_rel_paths.idx")
             self.assertEqual(54, len(d))
             self.assertEqual(395, len(d["alpha"]))
 
@@ -128,7 +176,6 @@ if sqlite3:
                               "Roche/triple_sff.idx",
                               ["E3MFGYR02_no_manifest.sff", "greek.sff"])
 
-
     class NewIndexTest(unittest.TestCase):
         """Check paths etc in newly built index."""
         def setUp(self):
@@ -140,60 +187,110 @@ if sqlite3:
                 if os.path.isfile(i):
                     os.remove(i)
 
-        def check(self, index_file, sff_files):
+        def check(self, index_file, sff_files, expt_sff_files):
             if os.path.isfile(index_file):
                 os.remove(index_file)
-            #Build index...
+            # Build index...
             d = SeqIO.index_db(index_file, sff_files, "sff")
             self.assertEqual(395, len(d["alpha"]))
             d._con.close()  # hack for PyPy
             d.close()
             self.assertEqual([os.path.abspath(f) for f in sff_files],
                              [os.path.abspath(f) for f in d._filenames])
-            #Load index...
+
+            # Now directly check the filenames inside the SQLite index:
+            filenames, flag = raw_filenames(index_file)
+            self.assertEqual(flag, True)
+            self.assertEqual(filenames, expt_sff_files)
+
+            # Load index...
             d = SeqIO.index_db(index_file, sff_files)
             self.assertEqual(395, len(d["alpha"]))
             d._con.close()  # hack for PyPy
             d.close()
-            self.assertEqual([os.path.abspath(f) for f in sff_files],
-                             [os.path.abspath(f) for f in d._filenames])
+            self.assertEqual([os.path.abspath(f) for f in sff_files], d._filenames)
+
             os.remove(index_file)
 
         def test_child_folder_rel(self):
             """Check relative links to child folder."""
-            self.check("temp.idx",
-                       ["Roche/E3MFGYR02_no_manifest.sff",
-                        "Roche/greek.sff",
-                        "Roche/paired.sff"])
-            #Here index is given as abs
+            # Note we expect relative paths recorded with Unix slashs!
+            expt_sff_files = ["Roche/E3MFGYR02_no_manifest.sff",
+                              "Roche/greek.sff",
+                              "Roche/paired.sff"]
+
+            self.check("temp.idx", expt_sff_files, expt_sff_files)
+            # Here index is given as abs
             self.check(os.path.abspath("temp.idx"),
                        ["Roche/E3MFGYR02_no_manifest.sff",
                         os.path.abspath("Roche/greek.sff"),
-                        "Roche/paired.sff"])
+                        "Roche/paired.sff"],
+                       expt_sff_files)
             # Here index is given as relative path
             self.check("temp.idx",
                        ["Roche/E3MFGYR02_no_manifest.sff",
                         os.path.abspath("Roche/greek.sff"),
-                        "Roche/paired.sff"])
+                        "Roche/paired.sff"],
+                       expt_sff_files)
 
         def test_same_folder(self):
             """Check relative links in same folder."""
             os.chdir("Roche")
+            expt_sff_files = ["E3MFGYR02_no_manifest.sff", "greek.sff", "paired.sff"]
 
-            #Here everything is relative,
-            self.check("temp.idx", ["E3MFGYR02_no_manifest.sff", "greek.sff", "paired.sff"])
+            # Here everything is relative,
+            self.check("temp.idx", expt_sff_files, expt_sff_files)
             self.check(os.path.abspath("temp.idx"),
                        ["E3MFGYR02_no_manifest.sff",
                         os.path.abspath("greek.sff"),
-                        "../Roche/paired.sff"])
+                        "../Roche/paired.sff"],
+                       expt_sff_files)
             self.check("temp.idx",
                        ["E3MFGYR02_no_manifest.sff",
                         os.path.abspath("greek.sff"),
-                        "../Roche/paired.sff"])
+                        "../Roche/paired.sff"],
+                       expt_sff_files)
             self.check("../Roche/temp.idx",
                        ["E3MFGYR02_no_manifest.sff",
                         os.path.abspath("greek.sff"),
-                        "../Roche/paired.sff"])
+                        "../Roche/paired.sff"],
+                       expt_sff_files)
+
+        def test_some_abs(self):
+            """Check absolute filenames in index.
+
+            Unless the repository and tests themselves are under the temp
+            directory (as detected by ``tempfile``), we expect the index to
+            use absolute filenames.
+            """
+            h, t = tempfile.mkstemp(prefix="index_test_", suffix=".idx")
+            os.close(h)
+            os.remove(t)
+
+            abs_sff_files = [os.path.abspath("Roche/E3MFGYR02_no_manifest.sff"),
+                             os.path.abspath("Roche/greek.sff"),
+                             os.path.abspath(os.path.join("Roche", "paired.sff"))]
+
+            if os.getcwd().startswith(os.path.dirname(t)):
+                # The tests are being run from within the temp directory,
+                # e.g. index filename /tmp/index_test_XYZ.idx
+                # and working directory of /tmp/biopython/Tests/
+                # This means the indexing will use a RELATIVE path
+                # e.g. biopython/Tests/Roche/E3MFGYR02_no_manifest.sff
+                # not /tmp/biopython/Tests/Roche/E3MFGYR02_no_manifest.sff
+                expt_sff_files = [os.path.relpath(f, os.path.dirname(t))
+                                  for f in abs_sff_files]
+            else:
+                expt_sff_files = abs_sff_files
+
+            # Providing absolute paths...
+            self.check(t, abs_sff_files, expt_sff_files)
+            # Now try with mix of abs and relative paths...
+            self.check(t,
+                       [os.path.abspath("Roche/E3MFGYR02_no_manifest.sff"),
+                        os.path.join("Roche", "greek.sff"),
+                        os.path.abspath("Roche/paired.sff")],
+                       expt_sff_files)
 
 
 class IndexDictTests(unittest.TestCase):
@@ -225,28 +322,28 @@ class IndexDictTests(unittest.TestCase):
         if not sqlite3:
             return
 
-        #In memory,
-        #note here give filenames as list of strings
+        # In memory,
+        # note here give filenames as list of strings
         rec_dict = SeqIO.index_db(":memory:", [filename], format,
                                   alphabet)
         self.check_dict_methods(rec_dict, id_list, id_list)
         rec_dict.close()
         del rec_dict
 
-        #check error conditions
+        # check error conditions
         self.assertRaises(ValueError, SeqIO.index_db,
                           ":memory:", format="dummy")
         self.assertRaises(ValueError, SeqIO.index_db,
                           ":memory:", filenames=["dummy"])
 
-        #Saving to file...
+        # Saving to file...
         index_tmp = self.index_tmp
         if os.path.isfile(index_tmp):
             os.remove(index_tmp)
 
-        #To disk,
-        #note here we give the filename as a single string
-        #to confirm that works too (convience feature).
+        # To disk,
+        # note here we give the filename as a single string
+        # to confirm that works too (convience feature).
         rec_dict = SeqIO.index_db(index_tmp, filename, format,
                                   alphabet)
         self.check_dict_methods(rec_dict, id_list, id_list)
@@ -254,7 +351,7 @@ class IndexDictTests(unittest.TestCase):
         rec_dict._con.close()  # hack for PyPy
         del rec_dict
 
-        #Now reload it...
+        # Now reload it...
         rec_dict = SeqIO.index_db(index_tmp, [filename], format,
                                   alphabet)
         self.check_dict_methods(rec_dict, id_list, id_list)
@@ -262,12 +359,16 @@ class IndexDictTests(unittest.TestCase):
         rec_dict._con.close()  # hack for PyPy
         del rec_dict
 
-        #Now reload without passing filenames and format
+        # Now reload without passing filenames and format
+        # and switch directory to check  paths still work
+        index_tmp = os.path.abspath(index_tmp)
+        os.chdir(os.path.dirname(filename))
         rec_dict = SeqIO.index_db(index_tmp, alphabet=alphabet)
         self.check_dict_methods(rec_dict, id_list, id_list)
         rec_dict.close()
         rec_dict._con.close()  # hack for PyPy
         del rec_dict
+
         os.remove(index_tmp)
 
     def key_check(self, filename, format, alphabet, comp):
@@ -288,11 +389,11 @@ class IndexDictTests(unittest.TestCase):
         if not sqlite3:
             return
 
-        #In memory,
+        # In memory,
         rec_dict = SeqIO.index_db(":memory:", [filename], format, alphabet,
                                   add_prefix)
         self.check_dict_methods(rec_dict, key_list, id_list)
-        #check error conditions
+        # check error conditions
         self.assertRaises(ValueError, SeqIO.index_db,
                           ":memory:", format="dummy",
                           key_function=add_prefix)
@@ -302,7 +403,7 @@ class IndexDictTests(unittest.TestCase):
         rec_dict.close()
         del rec_dict
 
-        #Saving to file...
+        # Saving to file...
         index_tmp = filename + ".key.idx"
         if os.path.isfile(index_tmp):
             os.remove(index_tmp)
@@ -313,7 +414,7 @@ class IndexDictTests(unittest.TestCase):
         rec_dict._con.close()  # hack for PyPy
         del rec_dict
 
-        #Now reload it...
+        # Now reload it...
         rec_dict = SeqIO.index_db(index_tmp, [filename], format, alphabet,
                                   add_prefix)
         self.check_dict_methods(rec_dict, key_list, id_list)
@@ -321,7 +422,7 @@ class IndexDictTests(unittest.TestCase):
         rec_dict._con.close()  # hack for PyPy
         del rec_dict
 
-        #Now reload without passing filenames and format
+        # Now reload without passing filenames and format
         rec_dict = SeqIO.index_db(index_tmp, alphabet=alphabet,
                                   key_function=add_prefix)
         self.check_dict_methods(rec_dict, key_list, id_list)
@@ -329,19 +430,19 @@ class IndexDictTests(unittest.TestCase):
         rec_dict._con.close()  # hack for PyPy
         del rec_dict
         os.remove(index_tmp)
-        #Done
+        # Done
 
     def check_dict_methods(self, rec_dict, keys, ids):
         self.assertEqual(set(keys), set(rec_dict))
-        #This is redundant, I just want to make sure len works:
+        # This is redundant, I just want to make sure len works:
         self.assertEqual(len(keys), len(rec_dict))
-        #Make sure boolean evaluation works
+        # Make sure boolean evaluation works
         self.assertEqual(bool(keys), bool(rec_dict))
         for key, id in zip(keys, ids):
             self.assertTrue(key in rec_dict)
             self.assertEqual(id, rec_dict[key].id)
             self.assertEqual(id, rec_dict.get(key).id)
-        #Check non-existant keys,
+        # Check non-existant keys,
         assert chr(0) not in keys, "Bad example in test"
         try:
             rec = rec_dict[chr(0)]
@@ -351,13 +452,13 @@ class IndexDictTests(unittest.TestCase):
         self.assertEqual(rec_dict.get(chr(0)), None)
         self.assertEqual(rec_dict.get(chr(0), chr(1)), chr(1))
         if hasattr(dict, "iteritems"):
-            #Python 2.x
+            # Python 2.x
             for key, rec in rec_dict.items():
                 self.assertTrue(key in keys)
                 self.assertTrue(isinstance(rec, SeqRecord))
                 self.assertTrue(rec.id in ids)
         else:
-            #Python 3
+            # Python 3
             assert not hasattr(rec_dict, "iteritems")
             for key, rec in rec_dict.items():
                 self.assertTrue(key in keys)
@@ -367,7 +468,7 @@ class IndexDictTests(unittest.TestCase):
                 self.assertTrue(key in keys)
                 self.assertTrue(isinstance(rec, SeqRecord))
                 self.assertTrue(rec.id in ids)
-        #Check the following fail
+        # Check the following fail
         self.assertRaises(NotImplementedError, rec_dict.popitem)
         self.assertRaises(NotImplementedError, rec_dict.pop, chr(0))
         self.assertRaises(NotImplementedError, rec_dict.pop, chr(0), chr(1))
@@ -377,7 +478,7 @@ class IndexDictTests(unittest.TestCase):
         self.assertRaises(NotImplementedError, rec_dict.fromkeys, [])
 
     def get_raw_check(self, filename, format, alphabet, comp):
-        #Also checking the key_function here
+        # Also checking the key_function here
         if comp:
             h = gzip.open(filename, "rb")
             raw_file = h.read()
@@ -397,10 +498,10 @@ class IndexDictTests(unittest.TestCase):
             with warnings.catch_warnings():
                 warnings.simplefilter('ignore', BiopythonParserWarning)
                 rec_dict = SeqIO.index(filename, format, alphabet,
-                                       key_function = lambda x : x.lower())
+                                       key_function=lambda x: x.lower())
         else:
             rec_dict = SeqIO.index(filename, format, alphabet,
-                                   key_function = lambda x : x.lower())
+                                   key_function=lambda x: x.lower())
 
         self.assertEqual(set(id_list), set(rec_dict))
         self.assertEqual(len(id_list), len(rec_dict))
@@ -409,11 +510,13 @@ class IndexDictTests(unittest.TestCase):
             self.assertEqual(key, rec_dict[key].id.lower())
             self.assertEqual(key, rec_dict.get(key).id.lower())
             raw = rec_dict.get_raw(key)
+            self.assertTrue(isinstance(raw, bytes),
+                            "Didn't get bytes from %s get_raw" % format)
             self.assertTrue(raw.strip())
             self.assertTrue(raw in raw_file)
             rec1 = rec_dict[key]
-            #Following isn't very elegant, but it lets me test the
-            #__getitem__ SFF code is working.
+            # Following isn't very elegant, but it lets me test the
+            # __getitem__ SFF code is working.
             if format in SeqIO._BinaryFormats:
                 handle = BytesIO(raw)
             else:
@@ -435,8 +538,8 @@ class IndexDictTests(unittest.TestCase):
             elif format == "uniprot-xml":
                 self.assertTrue(raw.startswith(_as_bytes("<entry ")))
                 self.assertTrue(raw.endswith(_as_bytes("</entry>")))
-                #Currently the __getitem__ method uses this
-                #trick too, but we hope to fix that later
+                # Currently the __getitem__ method uses this
+                # trick too, but we hope to fix that later
                 raw = """<?xml version='1.0' encoding='UTF-8'?>
                 <uniprot xmlns="http://uniprot.org/uniprot"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -475,9 +578,9 @@ tests = [
     ("Ace/consed_sample.ace", "ace", None),
     ("Ace/seq.cap.ace", "ace", generic_dna),
     ("Quality/wrapping_original_sanger.fastq", "fastq", None),
-    ("Quality/example.fastq", "fastq", None), #Unix newlines
+    ("Quality/example.fastq", "fastq", None),  # Unix newlines
     ("Quality/example.fastq", "fastq-sanger", generic_dna),
-    ("Quality/example_dos.fastq", "fastq", None), #DOS/Windows newlines
+    ("Quality/example_dos.fastq", "fastq", None),  # DOS/Windows newlines
     ("Quality/tricky.fastq", "fastq", generic_nucleotide),
     ("Quality/sanger_faked.fastq", "fastq-sanger", generic_dna),
     ("Quality/solexa_faked.fastq", "fastq-solexa", generic_dna),
@@ -534,7 +637,7 @@ for filename, format, alphabet in tests:
     for filename, comp in tasks:
 
         def funct(fn, fmt, alpha, c):
-            f = lambda x : x.simple_check(fn, fmt, alpha, c)
+            f = lambda x: x.simple_check(fn, fmt, alpha, c)
             f.__doc__ = "Index %s file %s defaults" % (fmt, fn)
             return f
         setattr(IndexDictTests, "test_%s_%s_simple"
@@ -543,7 +646,7 @@ for filename, format, alphabet in tests:
         del funct
 
         def funct(fn, fmt, alpha, c):
-            f = lambda x : x.key_check(fn, fmt, alpha, c)
+            f = lambda x: x.key_check(fn, fmt, alpha, c)
             f.__doc__ = "Index %s file %s with key function" % (fmt, fn)
             return f
         setattr(IndexDictTests, "test_%s_%s_keyf"
@@ -552,7 +655,7 @@ for filename, format, alphabet in tests:
         del funct
 
         def funct(fn, fmt, alpha, c):
-            f = lambda x : x.get_raw_check(fn, fmt, alpha, c)
+            f = lambda x: x.get_raw_check(fn, fmt, alpha, c)
             f.__doc__ = "Index %s file %s get_raw" % (fmt, fn)
             return f
         setattr(IndexDictTests, "test_%s_%s_get_raw"
@@ -561,5 +664,5 @@ for filename, format, alphabet in tests:
         del funct
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

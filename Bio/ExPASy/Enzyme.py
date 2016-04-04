@@ -12,13 +12,17 @@ http://www.expasy.ch/enzyme/
 Tested with the release of 03-Mar-2009.
 
 Functions:
-read       Reads a file containing one ENZYME entry
-parse      Reads a file containing multiple ENZYME entries
+
+    - read       Reads a file containing one ENZYME entry
+    - parse      Reads a file containing multiple ENZYME entries
 
 Classes:
-Record     Holds ENZYME data.
+
+    - Record     Holds ENZYME data.
 
 """
+
+__docformat__ = "restructuredtext en"
 
 
 def parse(handle):
@@ -57,16 +61,16 @@ class Record(dict):
 Holds information from an ExPASy ENZYME record as a Python dictionary.
 
 Each record contains the following keys:
-    ID: EC number
-    DE: Recommended name
-    AN: Alternative names (if any)
-    CA: Catalytic activity
-    CF: Cofactors (if any)
-    PR: Pointers to the Prosite documentation entrie(s) that
-        correspond to the enzyme (if any)
-    DR: Pointers to the Swiss-Prot protein sequence entrie(s)
-        that correspond to the enzyme (if any)
-    CC: Comments
+    - ID: EC number
+    - DE: Recommended name
+    - AN: Alternative names (if any)
+    - CA: Catalytic activity
+    - CF: Cofactors (if any)
+    - PR: Pointers to the Prosite documentation entrie(s) that
+      correspond to the enzyme (if any)
+    - DR: Pointers to the Swiss-Prot protein sequence entrie(s)
+      that correspond to the enzyme (if any)
+    - CC: Comments
 """
 
     def __init__(self):
@@ -109,43 +113,43 @@ def __read(handle):
     record = None
     for line in handle:
         key, value = line[:2], line[5:].rstrip()
-        if key=="ID":
+        if key == "ID":
             record = Record()
             record["ID"] = value
-        elif key=="DE":
-            record["DE"]+=value
-        elif key=="AN":
+        elif key == "DE":
+            record["DE"] += value
+        elif key == "AN":
             if record["AN"] and not record["AN"][-1].endswith("."):
                 record["AN"][-1] += " " + value
             else:
                 record["AN"].append(value)
-        elif key=="CA":
+        elif key == "CA":
             record["CA"] += value
-        elif key=="DR":
+        elif key == "DR":
             pair_data = value.rstrip(";").split(';')
             for pair in pair_data:
                 t1, t2 = pair.split(',')
                 row = [t1.strip(), t2.strip()]
                 record["DR"].append(row)
-        elif key=="CF":
+        elif key == "CF":
             if record["CF"]:
                 record["CF"] += " " + value
             else:
                 record["CF"] = value
-        elif key=="PR":
+        elif key == "PR":
             assert value.startswith("PROSITE; ")
             value = value[9:].rstrip(";")
             record["PR"].append(value)
-        elif key=='CC':
+        elif key == 'CC':
             if value.startswith("-!- "):
                 record["CC"].append(value[4:])
             elif value.startswith("    ") and record["CC"]:
                 record["CC"][-1] += value[3:]
             # copyright notice is silently skipped
-        elif key=="//":
+        elif key == "//":
             if record:
                 return record
-            else: # This was the copyright notice
+            else:  # This was the copyright notice
                 continue
     if record:
         raise ValueError("Unexpected end of stream")

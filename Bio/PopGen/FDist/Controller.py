@@ -17,11 +17,13 @@ import subprocess
 import sys
 from random import randint
 from time import strftime, clock
-#from logging import debug
+# from logging import debug
+
+__docformat__ = "restructuredtext en"
 
 
 def my_float(f):
-    #Because of Jython, mostly
+    # Because of Jython, mostly
     if f == "-nan":
         f = "nan"
     return float(f)
@@ -33,7 +35,7 @@ class FDistController(object):
 
         fdist_dir is the directory where fdist2 is.
         ext is the extension of binaries (.exe on windows,
-          none on Unix)
+        none on Unix)
 
         """
         self.tmp_idx = 0
@@ -114,7 +116,7 @@ class FDistController(object):
         """
         inf = open(data_dir + os.sep + 'INTFILE', 'w')
         for i in range(98):
-            inf.write(str(randint(-2**31 + 1, 2**31 - 1)) + '\n')
+            inf.write(str(randint(-2 ** 31 + 1, 2 ** 31 - 1)) + '\n')
         inf.write('8\n')
         inf.close()
 
@@ -125,29 +127,31 @@ class FDistController(object):
         """Executes (d)fdist.
 
         Parameters:
-        npops - Number of populations
-        nsamples - Number of populations sampled
-        fst - expected Fst
-        sample_size - Sample size per population
-                For dfdist: if zero a sample size file has to be provided
-        mut - 1=Stepwise, 0=Infinite allele
-        num_sims - number of simulations
-        data_dir - Where the data is found
-        is_dominant - If true executes dfdist
-        theta - Theta (=2Nmu)
-        beta - Parameters for the beta prior
-        max_freq - Maximum allowed frequency of the commonest allele
+
+            - npops - Number of populations
+            - nsamples - Number of populations sampled
+            - fst - expected Fst
+            - sample_size - Sample size per population
+              For dfdist: if zero a sample size file has to be provided
+            - mut - 1=Stepwise, 0=Infinite allele
+            - num_sims - number of simulations
+            - data_dir - Where the data is found
+            - is_dominant - If true executes dfdist
+            - theta - Theta (=2Nmu)
+            - beta - Parameters for the beta prior
+            - max_freq - Maximum allowed frequency of the commonest allele
 
         Returns:
-        fst - Average Fst
+
+        - fst - Average Fst
 
         Important Note: This can take quite a while to run!
         """
         if fst >= 0.9:
-            #Lets not joke
+            # Lets not joke
             fst = 0.899
         if fst <= 0.0:
-            #0  will make fdist run forever
+            # 0  will make fdist run forever
             fst = 0.001
         if is_dominant:
             config_name = "Dfdist_params"
@@ -194,9 +198,11 @@ class FDistController(object):
         """Executes fdist trying to force Fst.
 
         Parameters:
-        try_runs - Number of simulations on the part trying to get
-                   Fst correct
-        limit - Interval limit
+
+            - try_runs - Number of simulations on the part trying to get
+                       Fst correct
+            - limit - Interval limit
+            
         Other parameters can be seen on run_fdist.
         """
         max_run_fst = 1
@@ -213,8 +219,8 @@ class FDistController(object):
             if real_fst > fst:
                 max_run_fst = current_run_fst
                 if current_run_fst < min_run_fst + limit:
-                    #we can do no better
-                    #debug('Lower limit is ' + str(min_run_fst))
+                    # we can do no better
+                    # debug('Lower limit is ' + str(min_run_fst))
                     return self.run_fdist(npops, nsamples, current_run_fst,
                                           sample_size, mut, num_sims,
                                           data_dir)

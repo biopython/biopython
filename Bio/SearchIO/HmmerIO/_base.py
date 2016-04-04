@@ -21,6 +21,7 @@ class _BaseHmmerTextIndexer(SearchIndexer):
         self._preamble = _as_bytes('')
 
     def get_raw(self, offset):
+        """Return the raw record from the file as a bytes string."""
         handle = self._handle
         qresult_raw = _as_bytes('')
 

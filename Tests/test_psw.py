@@ -88,7 +88,7 @@ class TestPSW(unittest.TestCase):
 
 def run_tests(argv):
     test_suite = testing_suite()
-    runner = unittest.TextTestRunner(sys.stdout, verbosity = 2)
+    runner = unittest.TextTestRunner(sys.stdout, verbosity=2)
     runner.run(test_suite)
 
 
@@ -115,5 +115,5 @@ if __name__ == "__main__":
     unittest_suite = unittest.TestLoader().loadTestsFromName("test_psw")
     doctest_suite = doctest.DocTestSuite(psw)
     suite = unittest.TestSuite((unittest_suite, doctest_suite))
-    runner = unittest.TextTestRunner(sys.stdout, verbosity = 2)
+    runner = unittest.TextTestRunner(sys.stdout, verbosity=2)
     runner.run(suite)

@@ -7,8 +7,9 @@
 
 from __future__ import print_function
 
-import types
 from Bio.Application import _Option, AbstractCommandline
+
+__docformat__ = "restructuredtext en"
 
 
 class NovoalignCommandline(AbstractCommandline):

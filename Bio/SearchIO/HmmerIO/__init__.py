@@ -242,6 +242,8 @@ The following SearchIO objects attributes are provided:
 |                 | evalue                  | hit-level e-value                |
 |                 +-------------------------+----------------------------------+
 |                 | id                      | hit sequence ID                  |
+|                 +-------------------------+----------------------------------+
+|                 | seq_len                 | length of hit sequence or HMM    |
 +-----------------+-------------------------+----------------------------------+
 | HSP             | acc_avg                 | expected accuracy per alignment  |
 |                 |                         | residue (acc column)             |

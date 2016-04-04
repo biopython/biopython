@@ -5,10 +5,11 @@
 
 # Gavin E. Crooks 2001-11-03
 # Minor extensions, some bug fixes, and major changes to the interface
+"""A collection of residues from a PDB structure."""
 
 import re
 
-"""A collection of residues from a PDB structure."""
+__docformat__ = "restructuredtext en"
 
 _pdbid_re = re.compile(r"^(\w\w\w\w)(?:$|\s+|_)(.*)")
 _fragment_re = re.compile(r"\(?(\w:)?(-?\w*)-?(-?\w*)\)?(.*)")
@@ -43,13 +44,13 @@ class Residues(object):
     def _parse(self, str):
         str = str.strip()
 
-        #Is there a pdbid at the front? e.g. 1bba A:1-100
+        # Is there a pdbid at the front? e.g. 1bba A:1-100
         m = _pdbid_re.match(str)
         if m is not None:
             self.pdbid = m.group(1)
-            str = m.group(2) # Everything else
+            str = m.group(2)  # Everything else
 
-        if str=='' or str == '-' or str=='(-)':  # no fragments, whole sequence
+        if str == '' or str == '-' or str == '(-)':  # no fragments, whole sequence
             return
 
         fragments = []
@@ -75,7 +76,7 @@ class Residues(object):
     def __str__(self):
         prefix = ""
         if self.pdbid:
-            prefix = self.pdbid +' '
+            prefix = self.pdbid + ' '
 
         if not self.fragments:
             return prefix + '-'

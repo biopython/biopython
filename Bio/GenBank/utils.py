@@ -6,18 +6,21 @@
 """Useful utilities for helping in parsing GenBank files.
 """
 
+__docformat__ = "restructuredtext en"
+
 
 class FeatureValueCleaner(object):
-    """Provide specialized capabilities for cleaning up values in features.
+    r"""Provide specialized capabilities for cleaning up values in features.
 
     This class is designed to provide a mechanism to clean up and process
     values in the key/value pairs of GenBank features. This is useful
-    because in cases like:
+    because in cases like::
 
          /translation="MED
          YDPWNLRFQSKYKSRDA"
 
-    you'll end up with a value with \012s and spaces in it like:
+    you'll end up with a value with \012s and spaces in it like::
+
         "MED\012 YDPWEL..."
 
     which you probably don't want.
@@ -29,7 +32,7 @@ class FeatureValueCleaner(object):
     """
     keys_to_process = ["translation"]
 
-    def __init__(self, to_process = keys_to_process):
+    def __init__(self, to_process=keys_to_process):
         """Initialize with the keys we should deal with.
         """
         self._to_process = to_process

@@ -18,6 +18,8 @@ from __future__ import print_function
 from Bio.KEGG import _write_kegg
 from Bio.KEGG import _wrap_kegg
 
+__docformat__ = "restructuredtext en"
+
 
 # Set up line wrapping rules (see Bio.KEGG._wrap_kegg)
 rxn_wrap = [0, "",
@@ -28,10 +30,8 @@ rxn_wrap = [0, "",
 name_wrap = [0, "",
              (" ", "$", 1, 1),
              ("-", "$", 1, 1)]
-id_wrap = lambda indent : [indent, "",
-                           (" ", "", 1, 0)]
-struct_wrap = lambda indent : [indent, "",
-                               ("  ", "", 1, 1)]
+id_wrap = lambda indent: [indent, "", (" ", "", 1, 0)]
+struct_wrap = lambda indent: [indent, "", ("  ", "", 1, 1)]
 
 
 class Record(object):
@@ -60,22 +60,22 @@ class Record(object):
 
         Create a new Record.
         """
-        self.entry      = ""
-        self.name       = []
-        self.classname  = []
-        self.sysname    = []
-        self.reaction   = []
-        self.substrate  = []
-        self.product    = []
-        self.inhibitor  = []
-        self.cofactor   = []
-        self.effector   = []
-        self.comment    = []
-        self.pathway    = []
-        self.genes      = []
-        self.disease    = []
+        self.entry = ""
+        self.name = []
+        self.classname = []
+        self.sysname = []
+        self.reaction = []
+        self.substrate = []
+        self.product = []
+        self.inhibitor = []
+        self.cofactor = []
+        self.effector = []
+        self.comment = []
+        self.pathway = []
+        self.genes = []
+        self.disease = []
         self.structures = []
-        self.dblinks    = []
+        self.dblinks = []
 
     def __str__(self):
         """__str__(self)
@@ -106,7 +106,7 @@ class Record(object):
 
     def _name(self):
         return _write_kegg("NAME",
-                           [_wrap_kegg(l, wrap_rule = name_wrap)
+                           [_wrap_kegg(l, wrap_rule=name_wrap)
                             for l in self.name])
 
     def _classname(self):
@@ -115,42 +115,42 @@ class Record(object):
 
     def _sysname(self):
         return _write_kegg("SYSNAME",
-                           [_wrap_kegg(l, wrap_rule = name_wrap)
+                           [_wrap_kegg(l, wrap_rule=name_wrap)
                             for l in self.sysname])
 
     def _reaction(self):
         return _write_kegg("REACTION",
-                           [_wrap_kegg(l, wrap_rule = rxn_wrap)
+                           [_wrap_kegg(l, wrap_rule=rxn_wrap)
                             for l in self.reaction])
 
     def _substrate(self):
         return _write_kegg("SUBSTRATE",
-                           [_wrap_kegg(l, wrap_rule = name_wrap)
+                           [_wrap_kegg(l, wrap_rule=name_wrap)
                             for l in self.substrate])
 
     def _product(self):
         return _write_kegg("PRODUCT",
-                           [_wrap_kegg(l, wrap_rule = name_wrap)
+                           [_wrap_kegg(l, wrap_rule=name_wrap)
                             for l in self.product])
 
     def _inhibitor(self):
         return _write_kegg("INHIBITOR",
-                           [_wrap_kegg(l, wrap_rule = name_wrap)
+                           [_wrap_kegg(l, wrap_rule=name_wrap)
                             for l in self.inhibitor])
 
     def _cofactor(self):
         return _write_kegg("COFACTOR",
-                           [_wrap_kegg(l, wrap_rule = name_wrap)
+                           [_wrap_kegg(l, wrap_rule=name_wrap)
                             for l in self.cofactor])
 
     def _effector(self):
         return _write_kegg("EFFECTOR",
-                           [_wrap_kegg(l, wrap_rule = name_wrap)
+                           [_wrap_kegg(l, wrap_rule=name_wrap)
                             for l in self.effector])
 
     def _comment(self):
         return _write_kegg("COMMENT",
-                           [_wrap_kegg(l, wrap_rule = id_wrap(0))
+                           [_wrap_kegg(l, wrap_rule=id_wrap(0))
                             for l in self.comment])
 
     def _pathway(self):
@@ -158,7 +158,7 @@ class Record(object):
         for entry in self.pathway:
             s.append(entry[0] + ": " + entry[1] + "  " + entry[2])
         return _write_kegg("PATHWAY",
-                           [_wrap_kegg(l, wrap_rule = id_wrap(16))
+                           [_wrap_kegg(l, wrap_rule=id_wrap(16))
                             for l in s])
 
     def _genes(self):
@@ -166,7 +166,7 @@ class Record(object):
         for entry in self.genes:
             s.append(entry[0] + ": " + " ".join(entry[1]))
         return _write_kegg("GENES",
-                           [_wrap_kegg(l, wrap_rule = id_wrap(5))
+                           [_wrap_kegg(l, wrap_rule=id_wrap(5))
                             for l in s])
 
     def _disease(self):
@@ -174,7 +174,7 @@ class Record(object):
         for entry in self.disease:
             s.append(entry[0] + ": " + entry[1] + "  " + entry[2])
         return _write_kegg("DISEASE",
-                           [_wrap_kegg(l, wrap_rule = id_wrap(13))
+                           [_wrap_kegg(l, wrap_rule=id_wrap(13))
                             for l in s])
 
     def _structures(self):
@@ -182,7 +182,7 @@ class Record(object):
         for entry in self.structures:
             s.append(entry[0] + ": " + "  ".join(entry[1]) + "  ")
         return _write_kegg("STRUCTURES",
-                           [_wrap_kegg(l, wrap_rule = struct_wrap(5))
+                           [_wrap_kegg(l, wrap_rule=struct_wrap(5))
                             for l in s])
 
     def _dblinks(self):
@@ -206,7 +206,7 @@ def parse(handle):
     >>> with open("KEGG/enzyme.sample") as handle:
     ...     for record in parse(handle):
     ...         print("%s %s" % (record.entry, record.name[0]))
-    ... 
+    ...
     1.1.1.1 Alcohol dehydrogenase
     1.1.1.62 Estradiol 17beta-dehydrogenase
     1.1.1.68 Transferred to EC 1.7.99.5
@@ -219,23 +219,23 @@ def parse(handle):
     """
     record = Record()
     for line in handle:
-        if line[:3]=="///":
+        if line[:3] == "///":
             yield record
             record = Record()
             continue
-        if line[:12]!="            ":
+        if line[:12] != "            ":
             keyword = line[:12]
         data = line[12:].strip()
-        if keyword=="ENTRY       ":
+        if keyword == "ENTRY       ":
             words = data.split()
             record.entry = words[1]
-        elif keyword=="CLASS       ":
+        elif keyword == "CLASS       ":
             record.classname.append(data)
-        elif keyword=="COFACTOR    ":
+        elif keyword == "COFACTOR    ":
             record.cofactor.append(data)
-        elif keyword=="COMMENT     ":
+        elif keyword == "COMMENT     ":
             record.comment.append(data)
-        elif keyword=="DBLINKS     ":
+        elif keyword == "DBLINKS     ":
             if ":" in data:
                 key, values = data.split(":")
                 values = values.split()
@@ -247,7 +247,7 @@ def parse(handle):
                 values.extend(data.split())
                 row = key, values
                 record.dblinks[-1] = row
-        elif keyword=="DISEASE     ":
+        elif keyword == "DISEASE     ":
             if ":" in data:
                 database, data = data.split(":")
                 number, name = data.split(None, 1)
@@ -259,10 +259,10 @@ def parse(handle):
                 name = name + " " + data
                 row = database, number, name
                 record.disease[-1] = row
-        elif keyword=="EFFECTOR    ":
+        elif keyword == "EFFECTOR    ":
             record.effector.append(data.strip(";"))
-        elif keyword=="GENES       ":
-            if data[3:5]==': ':
+        elif keyword == "GENES       ":
+            if data[3:5] == ': ':
                 key, values = data.split(":", 1)
                 values = [value.split("(")[0] for value in values.split()]
                 row = (key, values)
@@ -275,12 +275,12 @@ def parse(handle):
                     values.append(value)
                 row = key, values
                 record.genes[-1] = row
-        elif keyword=="INHIBITOR   ":
+        elif keyword == "INHIBITOR   ":
             record.inhibitor.append(data.strip(";"))
-        elif keyword=="NAME        ":
+        elif keyword == "NAME        ":
             record.name.append(data.strip(";"))
-        elif keyword=="PATHWAY     ":
-            if data[:5]=='PATH:':
+        elif keyword == "PATHWAY     ":
+            if data[:5] == 'PATH:':
                 _, map_num, name = data.split(None, 2)
                 pathway = ('PATH', map_num, name)
                 record.pathway.append(pathway)
@@ -288,12 +288,12 @@ def parse(handle):
                 ec_num, name = data.split(None, 1)
                 pathway = 'PATH', ec_num, name
                 record.pathway.append(pathway)
-        elif keyword=="PRODUCT     ":
+        elif keyword == "PRODUCT     ":
             record.product.append(data.strip(";"))
-        elif keyword=="REACTION    ":
+        elif keyword == "REACTION    ":
             record.reaction.append(data.strip(";"))
-        elif keyword=="STRUCTURES  ":
-            if data[:4]=='PDB:':
+        elif keyword == "STRUCTURES  ":
+            if data[:4] == 'PDB:':
                 database = data[:3]
                 accessions = data[4:].split()
                 row = (database, accessions)
@@ -304,13 +304,41 @@ def parse(handle):
                 accessions.extend(data.split())
                 row = (database, accessions)
                 record.structures[-1] = row
-        elif keyword=="SUBSTRATE   ":
+        elif keyword == "SUBSTRATE   ":
             record.substrate.append(data.strip(";"))
-        elif keyword=="SYSNAME     ":
+        elif keyword == "SYSNAME     ":
             record.sysname.append(data.strip(";"))
+
+
+def read(handle):
+    """Parse a KEGG Enzyme file with exactly one entry.
+
+    If the handle contains no records, or more than one record,
+    an exception is raised.  For example:
+
+    >>> with open("KEGG/enzyme.new") as handle:
+    ...     record = read(handle)
+    ...     print("%s %s" % (record.entry, record.name[0]))
+    ...
+    6.2.1.25 benzoate---CoA ligase
+    """
+
+    iterator = parse(handle)
+    try:
+        first = next(iterator)
+    except StopIteration:
+        first = None
+    if first is None:
+        raise ValueError("No records found in handle")
+    try:
+        second = next(iterator)
+    except StopIteration:
+        second = None
+    if second is not None:
+        raise ValueError("More than one record found in handle")
+    return first
 
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest
     run_doctest()
-

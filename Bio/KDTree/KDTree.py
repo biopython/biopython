@@ -16,9 +16,11 @@ Otfried Schwarzkopf). Author: Thomas Hamelryck.
 from __future__ import print_function
 
 from numpy import sum, sqrt, array
-from numpy.random import random
+from numpy import random
 
 from Bio.KDTree import _CKDTree
+
+__docformat__ = "restructuredtext en"
 
 
 def _dist(p, q):
@@ -27,19 +29,22 @@ def _dist(p, q):
 
 
 def _neighbor_test(nr_points, dim, bucket_size, radius):
-    """ Test all fixed radius neighbor search.
+    """Test all fixed radius neighbor search.
 
     Test all fixed radius neighbor search using the
     KD tree C module.
 
-    o nr_points - number of points used in test
-    o dim - dimension of coords
-    o bucket_size - nr of points per tree node
-    o radius - radius of search (typically 0.05 or so)
+    Arguments:
+     - nr_points: number of points used in test
+     - dim: dimension of coords
+     - bucket_size: nr of points per tree node
+     - radius: radius of search (typically 0.05 or so)
+
+    Returns true if the test passes.
     """
     # KD tree search
     kdt = _CKDTree.KDTree(dim, bucket_size)
-    coords = random((nr_points, dim))
+    coords = random.random((nr_points, dim))
     kdt.set_data(coords)
     neighbors = kdt.neighbor_search(radius)
     r = [neighbor.radius for neighbor in neighbors]
@@ -55,9 +60,11 @@ def _neighbor_test(nr_points, dim, bucket_size, radius):
     else:
         l2 = len(r)
     if l1 == l2:
-        print("Passed.")
+        # print("Passed.")
+        return True
     else:
         print("Not passed: %i != %i." % (l1, l2))
+        return False
 
 
 def _test(nr_points, dim, bucket_size, radius):
@@ -65,14 +72,17 @@ def _test(nr_points, dim, bucket_size, radius):
 
     Test neighbor search using the KD tree C module.
 
-    o nr_points - number of points used in test
-    o dim - dimension of coords
-    o bucket_size - nr of points per tree node
-    o radius - radius of search (typically 0.05 or so)
+    Arguments:
+     - nr_points: number of points used in test
+     - dim: dimension of coords
+     - bucket_size: nr of points per tree node
+     - radius: radius of search (typically 0.05 or so)
+
+    Returns true if the test passes.
     """
     # kd tree search
     kdt = _CKDTree.KDTree(dim, bucket_size)
-    coords = random((nr_points, dim))
+    coords = random.random((nr_points, dim))
     center = coords[0]
     kdt.set_data(coords)
     kdt.search_center_radius(center, radius)
@@ -88,14 +98,15 @@ def _test(nr_points, dim, bucket_size, radius):
         if _dist(p, center) <= radius:
             l2 = l2 + 1
     if l1 == l2:
-        print("Passed.")
+        # print("Passed.")
+        return True
     else:
         print("Not passed: %i != %i." % (l1, l2))
+        return False
 
 
 class KDTree(object):
-    """
-    KD tree implementation (C++, SWIG python wrapper)
+    """KD tree implementation (C++, SWIG python wrapper)
 
     The KD tree data structure can be used for all kinds of searches that
     involve N-dimensional vectors, e.g.  neighbor searches (find all points
@@ -136,14 +147,15 @@ class KDTree(object):
     def set_coords(self, coords):
         """Add the coordinates of the points.
 
-        o coords - two dimensional NumPy array. E.g. if the points
-        have dimensionality D and there are N points, the coords
-        array should be NxD dimensional.
+        Arguments:
+         - coords: two dimensional NumPy array. E.g. if the points
+           have dimensionality D and there are N points, the coords
+           array should be NxD dimensional.
         """
         if coords.min() <= -1e6 or coords.max() >= 1e6:
-                raise Exception("Points should lie between -1e6 and 1e6")
+            raise Exception("Points should lie between -1e6 and 1e6")
         if len(coords.shape) != 2 or coords.shape[1] != self.dim:
-                raise Exception("Expected a Nx%i NumPy array" % self.dim)
+            raise Exception("Expected a Nx%i NumPy array" % self.dim)
         self.kdt.set_data(coords)
         self.built = 1
 
@@ -152,15 +164,16 @@ class KDTree(object):
     def search(self, center, radius):
         """Search all points within radius of center.
 
-        o center - one dimensional NumPy array. E.g. if the points have
-        dimensionality D, the center array should be D dimensional.
-        o radius - float>0
+        Arguments:
+         - center: one dimensional NumPy array. E.g. if the points have
+           dimensionality D, the center array should be D dimensional.
+         - radius: float>0
         """
         if not self.built:
-                raise Exception("No point set specified")
+            raise Exception("No point set specified")
         if center.shape != (self.dim,):
-                raise Exception("Expected a %i-dimensional NumPy array"
-                                % self.dim)
+            raise Exception("Expected a %i-dimensional NumPy array"
+                            % self.dim)
         self.kdt.search_center_radius(center, radius)
 
     def get_radii(self):
@@ -195,10 +208,11 @@ class KDTree(object):
 
         Search all point pairs that are within radius.
 
-        o radius - float (>0)
+        Arguments:
+         - radius: float (>0)
         """
         if not self.built:
-                raise Exception("No point set specified")
+            raise Exception("No point set specified")
         self.neighbors = self.kdt.neighbor_search(radius)
 
     def all_get_indices(self):
@@ -227,7 +241,7 @@ if __name__ == "__main__":
     bucket_size = 10
     query_radius = 10
 
-    coords = (200 * random((nr_points, dim)))
+    coords = 200 * random.random((nr_points, dim))
 
     kdtree = KDTree(dim, bucket_size)
 
@@ -252,7 +266,7 @@ if __name__ == "__main__":
 
     for i in range(0, 10):
         # pick a random center
-        center = random(dim)
+        center = random.random(dim)
 
         # search neighbors
         kdtree.search(center, query_radius)

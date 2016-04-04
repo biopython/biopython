@@ -1,4 +1,4 @@
-# Copyright 2008-2010 by Peter Cock.  All rights reserved.
+# Copyright 2008-2015 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -10,18 +10,18 @@ You are expected to use this module via the Bio.SeqIO functions.
 The "tab" format is an ad-hoc plain text file format where each sequence is
 on one (long) line.  Each line contains the identifier/description, followed
 by a tab, followed by the sequence.  For example, consider the following
-short FASTA format file:
+short FASTA format file::
 
->ID123456 possible binding site?
-CATCNAGATGACACTACGACTACGACTCAGACTAC
->ID123457 random sequence
-ACACTACGACTACGACTCAGACTACAAN
+    >ID123456 possible binding site?
+    CATCNAGATGACACTACGACTACGACTCAGACTAC
+    >ID123457 random sequence
+    ACACTACGACTACGACTCAGACTACAAN
 
 Apart from the descriptions, this can be represented in the simple two column
-tab separated format as follows:
+tab separated format as follows::
 
-ID123456(tab)CATCNAGATGACACTACGACTACGACTCAGACTAC
-ID123457(tab)ACACTACGACTACGACTCAGACTACAAN
+    ID123456(tab)CATCNAGATGACACTACGACTACGACTCAGACTAC
+    ID123457(tab)ACACTACGACTACGACTCAGACTACAAN
 
 When reading this file, "ID123456" or "ID123457" will be taken as the record's
 .id and .name property.  There is no other information to record.
@@ -38,6 +38,8 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqIO.Interfaces import SequentialSequenceWriter
 
+__docformat__ = "restructuredtext en"
+
 
 def TabIterator(handle, alphabet=single_letter_alphabet):
     """Iterates over tab separated lines (as SeqRecord objects).
@@ -45,24 +47,42 @@ def TabIterator(handle, alphabet=single_letter_alphabet):
     Each line of the file should contain one tab only, dividing the line
     into an identifier and the full sequence.
 
-    handle - input file
-    alphabet - optional alphabet
+    Arguments:
+     - handle - input file
+     - alphabet - optional alphabet
 
     The first field is taken as the record's .id and .name (regardless of
     any spaces within the text) and the second field is the sequence.
 
     Any blank lines are ignored.
+
+    Example:
+
+    >>> with open("GenBank/NC_005816.tsv") as handle:
+    ...     for record in TabIterator(handle):
+    ...         print("%s length %i" % (record.id, len(record)))
+    gi|45478712|ref|NP_995567.1| length 340
+    gi|45478713|ref|NP_995568.1| length 260
+    gi|45478714|ref|NP_995569.1| length 64
+    gi|45478715|ref|NP_995570.1| length 123
+    gi|45478716|ref|NP_995571.1| length 145
+    gi|45478717|ref|NP_995572.1| length 357
+    gi|45478718|ref|NP_995573.1| length 138
+    gi|45478719|ref|NP_995574.1| length 312
+    gi|45478720|ref|NP_995575.1| length 99
+    gi|45478721|ref|NP_995576.1| length 90
+
     """
     for line in handle:
         try:
             title, seq = line.split("\t")  # will fail if more than one tab!
         except:
             if line.strip() == "":
-                #It's a blank line, ignore it
+                # It's a blank line, ignore it
                 continue
             raise ValueError("Each line should have one tab separating the" +
-                             " title and sequence, this line has %i tabs: %s"
-                             % (line.count("\t"), repr(line)))
+                             " title and sequence, this line has %i tabs: %r"
+                             % (line.count("\t"), line))
         title = title.strip()
         seq = seq.strip()  # removes the trailing new line
         yield SeqRecord(Seq(seq, alphabet),
@@ -95,20 +115,5 @@ class TabWriter(SequentialSequenceWriter):
 
 
 if __name__ == "__main__":
-    print("Running quick self test")
-    from Bio._py3k import StringIO
-
-    #This example has a trailing blank line which should be ignored
-    handle = StringIO("Alpha\tAAAAAAA\nBeta\tCCCCCCC\n\n")
-    records = list(TabIterator(handle))
-    assert len(records) == 2
-
-    handle = StringIO("Alpha\tAAAAAAA\tExtra\nBeta\tCCCCCCC\n")
-    try:
-        records = list(TabIterator(handle))
-        assert False, "Should have reject this invalid example!"
-    except ValueError:
-        #Good!
-        pass
-
-    print("Done")
+    from Bio._utils import run_doctest
+    run_doctest(verbose=0)

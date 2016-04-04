@@ -7,7 +7,9 @@ from __future__ import print_function
 
 import math
 from .CodonUsageIndices import SharpEcoliIndex
-from Bio import SeqIO # To parse a FASTA file
+from Bio import SeqIO  # To parse a FASTA file
+
+__docformat__ = "restructuredtext en"
 
 
 CodonsDict = {'TTT': 0, 'TTC': 0, 'TTA': 0, 'TTG': 0, 'CTT': 0,
@@ -68,6 +70,7 @@ class CodonAdaptationIndex(object):
     # use this method with predefined CAI index
     def set_cai_index(self, index):
         """Sets up an index to be used when calculating CAI for a gene.
+
         Just pass a dictionary similar to the SharpEcoliIndex in the
         CodonUsageIndices module.
         """
@@ -124,7 +127,7 @@ class CodonAdaptationIndex(object):
             dna_sequence = dna_sequence.upper()
 
         for i in range(0, len(dna_sequence), 3):
-            codon = dna_sequence[i:i+3]
+            codon = dna_sequence[i:i + 3]
             if codon in self.index:
                 if codon not in ['ATG', 'TGG']:  # these two codons are always one, exclude them
                     cai_value += math.log(self.index[codon])
@@ -148,7 +151,7 @@ class CodonAdaptationIndex(object):
                 else:
                     dna_sequence = str(cur_record.seq)
                 for i in range(0, len(dna_sequence), 3):
-                    codon = dna_sequence[i:i+3]
+                    codon = dna_sequence[i:i + 3]
                     if codon in self.codon_count:
                         self.codon_count[codon] += 1
                     else:

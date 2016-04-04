@@ -1,7 +1,7 @@
 # Copyright 2004 by Bob Bussell.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
-# as part of this package. 
+# as part of this package.
 """Tools to manipulate data from nmrview .xpk peaklist files.
 """
 
@@ -17,9 +17,9 @@ HEADERLEN = 6
 class XpkEntry(object):
     """Provide dictonary access to single entry from nmrview .xpk file.
 
-    This class is suited for handling single lines of non-header data 
+    This class is suited for handling single lines of non-header data
     from an nmrview .xpk file. This class provides methods for extracting
-    data by the field name which is listed in the last line of the 
+    data by the field name which is listed in the last line of the
     peaklist header.
 
     Parameters
@@ -40,14 +40,16 @@ class XpkEntry(object):
 
     """
     def __init__(self, entry, headline):
-        self.fields = {}  # Holds all fields from input line in a dictionary
-                          # keys are data labels from the .xpk header
+        # Holds all fields from input line in a dictionary
+        # keys are data labels from the .xpk header
+        self.fields = {}
+
         datlist = entry.split()
         headlist = headline.split()
 
         i = 0
         for i in range(len(datlist) - 1):
-            self.fields[headlist[i]] = datlist[i+1]
+            self.fields[headlist[i]] = datlist[i + 1]
         i = i + 1
 
         try:
@@ -71,7 +73,7 @@ class Peaklist(object):
     firstline  : str
         The first line in the header.
     axislabels : str
-        The axis labels. 
+        The axis labels.
     dataset    : str
         The label of the dataset.
     sw         : str
@@ -115,9 +117,9 @@ class Peaklist(object):
             self.data = [line.split("\012")[0] for line in infile]
 
     def residue_dict(self, index):
-        """Return a dict of lines in `data` indexed by residue number or a nucleus.
+        """Return a dict of lines in \`data\` indexed by residue number or a nucleus.
 
-        The nucleus should be given as the input argument in the same form as 
+        The nucleus should be given as the input argument in the same form as
         it appears in the xpk label line (H1, 15N for example)
 
         Parameters
@@ -202,11 +204,11 @@ def replace_entry(line, fieldn, newentry):
     the original field entry and the new field entry are of
     different lengths.
     """
-    #This method depends on xpktools._find_start_entry
+    # This method depends on xpktools._find_start_entry
 
     start = _find_start_entry(line, fieldn)
     leng = len(line[start:].split()[0])
-    newline = line[:start] + str(newentry) + line[(start+leng):]
+    newline = line[:start] + str(newentry) + line[(start + leng):]
     return newline
 
 
@@ -243,7 +245,7 @@ def _find_start_entry(line, n):
 
     while (c < leng and field < n):
         if (infield):
-            if (line[c] == " " and not (line[c-1] == " ")):
+            if (line[c] == " " and not (line[c - 1] == " ")):
                 infield = 0
             else:
                 if (not line[c] == " "):
@@ -273,7 +275,7 @@ def data_table(fn_list, datalabel, keyatom):
        List of table rows indexed by `keyatom`.
 
     """
-    #TODO - Clarify this docstring, add an example?
+    # TODO - Clarify this docstring, add an example?
     outlist = []
 
     [dict_list, label_line_list] = _read_dicts(fn_list, keyatom)

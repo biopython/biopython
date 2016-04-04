@@ -8,9 +8,9 @@ documentation.
 from __future__ import print_function
 
 try:
-    from StringIO import StringIO # Python 2
+    from StringIO import StringIO  # Python 2
 except ImportError:
-    from io import StringIO # Python 3
+    from io import StringIO  # Python 3
 
 # biopython
 from Bio import SeqIO
@@ -24,10 +24,9 @@ print('Doing the BLAST and retrieving the results...')
 result_handle = NCBIWWW.qblast('blastn', 'nr', f_record.format('fasta'))
 
 # save the results for later, in case we want to look at it
-save_file = open('m_cold_blast.out', 'w')
-blast_results = result_handle.read()
-save_file.write(blast_results)
-save_file.close()
+with open('m_cold_blast.out', 'w') as save_file:
+    blast_results = result_handle.read()
+    save_file.write(blast_results)
 
 print('Parsing the results and extracting info...')
 

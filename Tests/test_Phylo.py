@@ -5,10 +5,12 @@
 
 """Unit tests for the Bio.Phylo module."""
 
+import os
 import sys
 import unittest
+import tempfile
+
 from Bio._py3k import StringIO
-from io import BytesIO
 
 from Bio import Phylo
 from Bio.Phylo import PhyloXML, NewickIO
@@ -19,11 +21,12 @@ EX_NEWICK = 'Nexus/int_node_labels.nwk'
 EX_NEWICK2 = 'Nexus/test.new'
 EX_NEXUS = 'Nexus/test_Nexus_input.nex'
 EX_NEXUS2 = 'Nexus/bats.nex'
-EX_NEWICK_BOM= 'Nexus/ByteOrderMarkFile.nwk'
+EX_NEWICK_BOM = 'Nexus/ByteOrderMarkFile.nwk'
 
 # Example PhyloXML files
 EX_APAF = 'PhyloXML/apaf.xml'
 EX_BCL2 = 'PhyloXML/bcl_2.xml'
+EX_DIST = 'PhyloXML/distribution.xml'
 EX_PHYLO = 'PhyloXML/phyloxml_examples.xml'
 
 
@@ -90,6 +93,34 @@ class IOTests(unittest.TestCase):
         self.assertEqual(clade_a.name, 'foo')
         self.assertAlmostEqual(clade_a.branch_length, 0.1)
 
+
+        """Additional tests to check correct parsing"""
+        tree = Phylo.read(StringIO("(A:1, B:-2, (C:3, D:4):-2)"),'newick')
+        self.assertEqual(tree.distance('A'),1)
+        self.assertEqual(tree.distance('B'),-2)
+        self.assertEqual(tree.distance('C'),1)
+        self.assertEqual(tree.distance('D'),2)
+
+        tree = Phylo.read(StringIO("((A:1, B:-2):-5, (C:3, D:4):-2)"),'newick')
+        self.assertEqual(tree.distance('A'),-4)
+        self.assertEqual(tree.distance('B'),-7)
+        self.assertEqual(tree.distance('C'),1)
+        self.assertEqual(tree.distance('D'),2)
+
+        tree = Phylo.read(StringIO("((:1, B:-2):-5, (C:3, D:4):-2)"),'newick')
+        distances = {-4.0:1,-7.0:1,1:1,2:1}
+        for x in tree.get_terminals():
+            entry = int(tree.distance(x))
+            distances[entry] -= distances[entry]
+            self.assertEqual(distances[entry],0)
+
+        tree = Phylo.read(StringIO("((:\n1\n,\n B:-2):-5, (C:3, D:4):-2);"),'newick')
+        distances = {-4.0:1,-7.0:1,1:1,2:1}
+        for x in tree.get_terminals():
+            entry = int(tree.distance(x))
+            distances[entry] -= distances[entry]
+            self.assertEqual(distances[entry],0)
+
     def test_format_branch_length(self):
         """Custom format string for Newick branch length serialization."""
         tree = Phylo.read(StringIO('A:0.1;'), 'newick')
@@ -103,7 +134,7 @@ class IOTests(unittest.TestCase):
     def test_convert(self):
         """Convert a tree between all supported formats."""
         mem_file_1 = StringIO()
-        mem_file_2 = BytesIO()
+        mem_file_2 = StringIO()
         mem_file_3 = StringIO()
         Phylo.convert(EX_NEWICK, 'newick', mem_file_1, 'nexus')
         mem_file_1.seek(0)
@@ -114,6 +145,39 @@ class IOTests(unittest.TestCase):
         tree = Phylo.read(mem_file_3, 'newick')
         self.assertEqual(len(tree.get_terminals()), 28)
 
+    def test_convert_phyloxml_binary(self):
+        """Try writing phyloxml to a binary handle; fail on Py3."""
+        trees = Phylo.parse("PhyloXML/phyloxml_examples.xml", "phyloxml")
+        with tempfile.NamedTemporaryFile(mode="wb") as out_handle:
+            if sys.version_info[0] < 3:
+                count = Phylo.write(trees, out_handle, "phyloxml")
+                self.assertEqual(13, count)
+            else:
+                self.assertRaises(TypeError, Phylo.write,
+                                  trees, out_handle, "phyloxml")
+
+    def test_convert_phyloxml_text(self):
+        """Write phyloxml to a text handle."""
+        trees = Phylo.parse("PhyloXML/phyloxml_examples.xml", "phyloxml")
+        with tempfile.NamedTemporaryFile(mode="w") as out_handle:
+            count = Phylo.write(trees, out_handle, "phyloxml")
+            self.assertEqual(13, count)
+
+    def test_convert_phyloxml_filename(self):
+        """Write phyloxml to a given filename."""
+        trees = Phylo.parse("PhyloXML/phyloxml_examples.xml", "phyloxml")
+        tmp_filename = tempfile.mktemp()
+        count = Phylo.write(trees, tmp_filename, "phyloxml")
+        os.remove(tmp_filename)
+        self.assertEqual(13, count)
+
+    def test_int_labels(self):
+        """Read newick formatted tree with numeric labels."""
+        tree = Phylo.read(StringIO('(((0:0.1,1:0.1)0.99:0.1,2:0.1)0.98:0.0);'),
+                          'newick')
+        self.assertEqual(set(leaf.name for leaf in tree.get_terminals()),
+                         set(['0', '1', '2']))
+
 
 class TreeTests(unittest.TestCase):
     """Tests for methods on BaseTree.Tree objects."""
@@ -122,9 +186,9 @@ class TreeTests(unittest.TestCase):
         for N in (2, 5, 20):
             tree = Phylo.BaseTree.Tree.randomized(N)
             self.assertEqual(tree.count_terminals(), N)
-            self.assertEqual(tree.total_branch_length(), (N-1)*2)
+            self.assertEqual(tree.total_branch_length(), (N - 1) * 2)
             tree = Phylo.BaseTree.Tree.randomized(N, branch_length=2.0)
-            self.assertEqual(tree.total_branch_length(), (N-1)*4)
+            self.assertEqual(tree.total_branch_length(), (N - 1) * 4)
         tree = Phylo.BaseTree.Tree.randomized(5, branch_stdev=.5)
         self.assertEqual(tree.count_terminals(), 5)
 
@@ -188,7 +252,7 @@ class TreeTests(unittest.TestCase):
         NB: The exact line counts are liable to change if the object
         constructors change.
         """
-        for source, count in zip((EX_APAF, EX_BCL2), (386, 747)):
+        for source, count in zip((EX_APAF, EX_BCL2, EX_DIST), (386, 747, 15)):
             tree = Phylo.read(source, 'phyloxml')
             output = str(tree)
             self.assertEqual(len(output.splitlines()), count)
@@ -256,8 +320,8 @@ class MixinTests(unittest.TestCase):
         for tree, total, extern, intern in zip(
                 self.phylogenies,
                 (6, 6, 7, 18, 21, 27, 7, 9, 9, 19, 15, 9, 6),
-                (3, 3, 3, 3,  3,  3,  3, 3, 3, 3,  4,  3, 3),
-                (3, 3, 3, 3,  3,  3,  3, 3, 3, 3,  3,  3, 3),
+                (3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3),
+                (3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3),
                 ):
             self.assertEqual(len(list(tree.find_elements())), total)
             self.assertEqual(len(list(tree.find_elements(terminal=True))),

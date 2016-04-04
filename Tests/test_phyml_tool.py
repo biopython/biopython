@@ -13,18 +13,23 @@ from Bio import Phylo
 from Bio.Phylo.Applications import PhymlCommandline
 from Bio import MissingExternalDependencyError
 
-#Try to avoid problems when the OS is in another language
+# Try to avoid problems when the OS is in another language
 os.environ['LANG'] = 'C'
 
 phyml_exe = None
-if sys.platform=="win32":
-    raise MissingExternalDependencyError(
-        "Testing PhyML on Windows not supported yet")
-else:
-    from Bio._py3k import getoutput
-    output = getoutput("phyml --version")
+exe_name = "PhyML-3.1_win32.exe" if sys.platform == "win32" else "phyml"
+from Bio._py3k import getoutput
+try:
+    output = getoutput(exe_name + " --version")
     if "not found" not in output and "20" in output:
-        phyml_exe = "phyml"
+        phyml_exe = exe_name
+except OSError:
+    # TODO: Use FileNotFoundError once we drop Python 2
+    # Python 2.6 or 2.7 on Windows XP:
+    # WindowsError: [Error 2] The system cannot find the file specified
+    # Python 3.3 or 3.4 on Windows XP:
+    # FileNotFoundError: [WinError 2] The system cannot find the file specified
+    pass
 
 if not phyml_exe:
     raise MissingExternalDependencyError(

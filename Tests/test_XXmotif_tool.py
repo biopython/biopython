@@ -12,7 +12,7 @@ import unittest
 from Bio import MissingExternalDependencyError
 from Bio import SeqIO
 from Bio.Application import ApplicationError
-from Bio.Motif.Applications import XXmotifCommandline
+from Bio.motifs.applications import XXmotifCommandline
 
 
 # Try to avoid problems when the OS is in another language
@@ -87,8 +87,8 @@ class XXmotifTestErrorConditions(XXmotifTestCase):
         input_file = "does_not_exist.fasta"
         self.assertFalse(os.path.isfile(input_file))
 
-        cline = XXmotifCommandline(outdir = self.out_dir,
-                                   seqfile = input_file)
+        cline = XXmotifCommandline(outdir=self.out_dir,
+                                   seqfile=input_file)
 
         try:
             stdout, stderr = cline()
@@ -101,8 +101,8 @@ class XXmotifTestErrorConditions(XXmotifTestCase):
         """Test an input file in an invalid format."""
         input_file = self.copy_and_mark_for_cleanup("Medline/pubmed_result1.txt")
 
-        cline = XXmotifCommandline(outdir = self.out_dir,
-                                   seqfile = input_file)
+        cline = XXmotifCommandline(outdir=self.out_dir,
+                                   seqfile=input_file)
 
         try:
             stdout, stderr = cline()
@@ -117,8 +117,8 @@ class XXmotifTestErrorConditions(XXmotifTestCase):
         input_file = self.copy_and_mark_for_cleanup("Fasta/f002")
 
         try:
-            cline = XXmotifCommandline(outdir = temp_out_dir,
-                                       seqfile = input_file)
+            cline = XXmotifCommandline(outdir=temp_out_dir,
+                                       seqfile=input_file)
         except ValueError:
             pass
         else:
@@ -136,8 +136,8 @@ class XXmotifTestNormalConditions(XXmotifTestCase):
         handle.close()
         del handle, record
 
-        cline = XXmotifCommandline(outdir = self.out_dir,
-                                   seqfile = input_file)
+        cline = XXmotifCommandline(outdir=self.out_dir,
+                                   seqfile=input_file)
 
         self.add_file_to_clean(input_file)
         self.standard_test_procedure(cline)
@@ -146,8 +146,8 @@ class XXmotifTestNormalConditions(XXmotifTestCase):
         """Test setting options via properties."""
         input_file = self.copy_and_mark_for_cleanup("Fasta/f002")
 
-        cline = XXmotifCommandline(outdir = self.out_dir,
-                                   seqfile = input_file)
+        cline = XXmotifCommandline(outdir=self.out_dir,
+                                   seqfile=input_file)
 
         cline.revcomp = True
         cline.pseudo = 20
@@ -164,8 +164,8 @@ class XXmotifTestNormalConditions(XXmotifTestCase):
         handle.close()
         del handle, records
 
-        cline = XXmotifCommandline(outdir = self.out_dir,
-                                   seqfile = input_file)
+        cline = XXmotifCommandline(outdir=self.out_dir,
+                                   seqfile=input_file)
 
         self.add_file_to_clean(input_file)
         self.standard_test_procedure(cline)
@@ -177,13 +177,13 @@ class XXmotifTestNormalConditions(XXmotifTestCase):
         SeqIO.write(SeqIO.parse("Phylip/hennigian.phy", "phylip"), handle, "fasta")
         handle.close()
 
-        cline = XXmotifCommandline(outdir = self.out_dir,
-                                   seqfile = input_file)
+        cline = XXmotifCommandline(outdir=self.out_dir,
+                                   seqfile=input_file)
 
         self.add_file_to_clean(input_file)
         self.standard_test_procedure(cline)
 
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
-    unittest.main(testRunner = runner)
+    runner = unittest.TextTestRunner(verbosity=2)
+    unittest.main(testRunner=runner)
