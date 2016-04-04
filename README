@@ -61,7 +61,7 @@ implementations:
 
   This is the primary development platform for Biopython.
 
-- PyPy 2.4, 2.5, 2.6 and also PyPy3 2.4 -- see http://www.pypy.org
+- PyPy 5.0.1 and also PyPy3 2.4 -- see http://www.pypy.org
 
   Aside from modules with C code or dependent on NumPy, everything should
   work. PyPy's NumPy reimplementation NumPyPy is still in progress.
