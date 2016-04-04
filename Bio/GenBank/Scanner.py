@@ -1096,8 +1096,15 @@ class GenBankScanner(InsdcScanner):
             # Should be possible to split them based on position, if
             # a clear definition of the standard exists THAT AGREES with
             # existing files.
-            consumer.locus(name_and_length[0])
-            consumer.size(name_and_length[1])
+            name, length = name_and_length
+            if len(name) > 16:
+                # As long as the sequence is short, can steal its leading spaces
+                # to extend the name over the current 16 character limit.
+                # However, that deserves a warning as it is out of spec.
+                warnings.warn("GenBank LOCUS line identifier over 16 characters",
+                              BiopythonParserWarning)
+            consumer.locus(name)
+            consumer.size(length)
             # consumer.residue_type(line[33:41].strip())
 
             if line[33:51].strip() == "" and line[29:33] == ' aa ':
