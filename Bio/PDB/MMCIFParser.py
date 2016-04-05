@@ -76,7 +76,7 @@ class MMCIFParser(object):
         except KeyError:
             element_list = None
         seq_id_list = mmcif_dict["_atom_site.label_seq_id"]
-        chain_id_list = mmcif_dict["_atom_site.label_asym_id"]
+        chain_id_list = mmcif_dict["_atom_site.auth_asym_id"]
         x_list = [float(x) for x in mmcif_dict["_atom_site.Cartn_x"]]
         y_list = [float(x) for x in mmcif_dict["_atom_site.Cartn_y"]]
         z_list = [float(x) for x in mmcif_dict["_atom_site.Cartn_z"]]
@@ -119,7 +119,7 @@ class MMCIFParser(object):
         # Historically, Biopython PDB parser uses model_id to mean array index
         # so serial_id means the Model ID specified in the file
         current_model_id = -1
-        current_serial_id = 0
+        current_serial_id = -1
         for i in range(0, len(atom_id_list)):
 
             # set the line_counter for 'ATOM' lines only and not
