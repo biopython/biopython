@@ -10,6 +10,7 @@
 """Unit tests for the MMCIF portion of the Bio.PDB module."""
 
 import unittest
+import warnings
 
 try:
     import numpy
@@ -89,9 +90,12 @@ class ParseReal(unittest.TestCase):
 
     def testModels(self):
         """Test file with multiple models"""
-        parser = MMCIFParser()
+
+        parser = MMCIFParser(QUIET=1)
         structure = parser.get_structure("example", "PDB/1LCD.cif")
+
         self.assertEqual(len(structure), 3)
+
         for ppbuild in [PPBuilder(), CaPPBuilder()]:
             # ==========================================================
             # Check that serial_num (model column) is stored properly
@@ -127,7 +131,6 @@ class ParseReal(unittest.TestCase):
             self.assertEqual("MKPVTLYDVAEYAGVSYQTVSRVVNQASHVSAKTREKVEAAMAELNYIPNR",
                              str(s))
 
-        parser = MMCIFParser()
         # This structure contains several models with multiple lengths.
         # The tests were failing.
         structure = parser.get_structure("example", "PDB/2OFG.cif")
@@ -135,7 +138,7 @@ class ParseReal(unittest.TestCase):
 
     def test_insertions(self):
         """Test file with residue insertion codes"""
-        parser = MMCIFParser()
+        parser = MMCIFParser(QUIET=1)
         structure = parser.get_structure("example", "PDB/4zhl.cif")
         for ppbuild in [PPBuilder(), CaPPBuilder()]:
             # First try allowing non-standard amino acids,
