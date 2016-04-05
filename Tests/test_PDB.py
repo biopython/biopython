@@ -702,7 +702,7 @@ class ParseReal(unittest.TestCase):
     def test_model_numbering(self):
         """Preserve model serial numbers during I/O."""
         def confirm_numbering(struct):
-            self.assertEqual(len(struct), 20)
+            self.assertEqual(len(struct), 3)
             for idx, model in enumerate(struct):
                 self.assertEqual(model.serial_num, idx + 1)
                 self.assertEqual(model.serial_num, model.id + 1)
@@ -718,7 +718,7 @@ class ParseReal(unittest.TestCase):
             self.assertEqual(end_stment[0][1], iline) # Last line of the file?
 
         parser = PDBParser()
-        struct1 = parser.get_structure("1mot", "PDB/1MOT.pdb")
+        struct1 = parser.get_structure("1lcd", "PDB/1LCD.pdb")
         confirm_numbering(struct1)
 
         # Round trip: serialize and parse again
@@ -728,7 +728,7 @@ class ParseReal(unittest.TestCase):
         os.close(filenumber)
         try:
             io.save(filename)
-            struct2 = parser.get_structure("1mot", filename)
+            struct2 = parser.get_structure("1lcd", filename)
             confirm_numbering(struct2)
             confirm_single_end(filename)
         finally:
