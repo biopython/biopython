@@ -1,4 +1,4 @@
-# Copyright (C) 2011, 2015 by Brandon Invergo (b.invergo@gmail.com)
+# Copyright (C) 2011, 2015, 2016 by Brandon Invergo (b.invergo@gmail.com)
 # This code is part of the Biopython distribution and governed by its
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
@@ -13,10 +13,10 @@ from Bio.Phylo.PAML._paml import PamlError
 # Some constants to assist with testing:
 # This is the number of parameters that should be parsed for each
 # NSsites site class model
-SITECLASS_PARAMS = {0: 6, 1: 4, 2: 4, 3: 4, 7: 5, 8: 8}
+SITECLASS_PARAMS = {0: 6, 1: 4, 2: 4, 3: 4, 7: 5, 8: 8, 22: 4}
 # This is the default number of site classes per NSsites site
 # class model
-SITECLASSES = {0: None, 1: 2, 2: 3, 3: 3, 7: 10, 8: 11}
+SITECLASSES = {0: None, 1: 2, 2: 3, 3: 3, 7: 10, 8: 11, 22: 3}
 
 
 class ModTest(unittest.TestCase):
@@ -523,6 +523,24 @@ class ModTest(unittest.TestCase):
         self.assertTrue("tree" in m0)
         self.assertTrue(m0["tree"] is not None)
         self.assertNotEqual(len(m0["tree"]), 0)
+
+    def testParseM2arel(self):
+        res_dir = os.path.join(self.results_dir, "codeml", "m2a_rel")
+        for results_file in os.listdir(res_dir):
+            version = results_file.split('-')[1].split('.')[0]
+            version_msg = "Improper parsing for version %s" \
+                        % version.replace('_', '.')
+            results_path = os.path.join(res_dir, results_file)
+            results = codeml.read(results_path)
+            self.assertTrue("NSsites" in results)
+            self.assertTrue(22 in results["NSsites"])
+            model = results["NSsites"][22]
+            self.assertEqual(len(model), 5, version_msg)
+            params = model["parameters"]
+            self.assertEqual(len(params), SITECLASS_PARAMS[22],
+                             version_msg)
+
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)

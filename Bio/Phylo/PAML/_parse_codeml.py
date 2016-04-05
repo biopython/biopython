@@ -1,4 +1,4 @@
-# Copyright (C) 2011 by Brandon Invergo (b.invergo@gmail.com)
+# Copyright (C) 2011, 2016 by Brandon Invergo (b.invergo@gmail.com)
 # This code is part of the Biopython distribution and governed by its
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
@@ -105,7 +105,8 @@ def parse_nssites(lines, results, multi_models, multi_genes):
                          "PositiveSelection": 2,
                          "discrete": 3,
                          "beta": 7,
-                         "beta&w>1": 8}[siteclass_model]
+                         "beta&w>1": 8,
+                         "M2a_rel": 22}[siteclass_model]
         if multi_genes:
             genes = results["genes"]
             current_gene = None
