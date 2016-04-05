@@ -61,8 +61,9 @@ class MMCIFParser(object):
         with warnings.catch_warnings():
             if self.QUIET:
                 warnings.filterwarnings("ignore", category=PDBConstructionWarning)
-        self._mmcif_dict = MMCIF2Dict(filename)
-        self._build_structure(structure_id)
+            self._mmcif_dict = MMCIF2Dict(filename)
+            self._build_structure(structure_id)
+
         return self._structure_builder.get_structure()
 
     # Private methods
