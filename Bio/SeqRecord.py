@@ -360,7 +360,7 @@ class SeqRecord(object):
         Per letter annotation for: secondary_structure
         Seq('MAAGVKQLADDRTLLMAGVSHDLRTPLTRIRLATEMMSEQDGYLAESINKDIEE...YLR', IUPACProtein())
         >>> print(rec.letter_annotations["secondary_structure"])
-          S  SSSSSSHHHHHTTTHHHHHHHHHHHHHHHHHHHHHHTHHHHHHHHHHHHHHHHHHHHHTT  
+          S  SSSSSSHHHHHTTTHHHHHHHHHHHHHHHHHHHHHHTHHHHHHHHHHHHHHHHHHHHHTT
         >>> print(rec.features[0].location)
         [20:21]
 
@@ -430,8 +430,8 @@ class SeqRecord(object):
                 raise ValueError("If the sequence is None, we cannot slice it.")
             parent_length = len(self)
             # import placed here to avoid circular dependancy
-            import BioSQL.BioSeq
-            if isinstance(self, BioSQL.BioSeq.DBSeqRecord):
+            from BioSQL.BioSeq import DBSeqRecord
+            if isinstance(self, DBSeqRecord):
                 answer = SeqRecord(self.seq[index],
                                         id=self.id,
                                         name=self.name,
