@@ -430,8 +430,8 @@ class SeqRecord(object):
                 raise ValueError("If the sequence is None, we cannot slice it.")
             parent_length = len(self)
             # import placed here to avoid circular dependancy
-            from BioSQL.BioSeq import DBSeqRecord
-            if isinstance(self, DBSeqRecord):
+            import BioSQL.BioSeq
+            if isinstance(self, BioSQL.BioSeq.DBSeqRecord):
                 answer = SeqRecord(self.seq[index],
                                         id=self.id,
                                         name=self.name,
