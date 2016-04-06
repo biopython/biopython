@@ -43,6 +43,9 @@ otherwise trigger an HTTP Error 414 Request URI too long.
 Foreign keys are now used when creating BioSQL databases with SQLite3 (this
 was not possible until SQLite version 3.6.19).
 
+There have been some fixes to the MMCIF structure parser which now uses
+identifiers which better match results from the PDB structure parse.
+
 Additionally, a number of small bugs have been fixed with further additions
 to the test suite, and there has been further work to follow the Python PEP8
 standard coding style, and in converting our docstring documentation to use
