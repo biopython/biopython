@@ -617,8 +617,11 @@ class GenBankWriter(_InsdcWriter):
             locus = self._get_annotation_str(
                 record, "accession", just_first=True)
         if len(locus) > 16:
-            raise ValueError("Locus identifier %r is too long" % str(locus))
-
+            if len(locus) + 1 + len(str(len(record))) > 28:
+                # Locus name and record length to long to squeeze in.
+                raise ValueError("Locus identifier %r is too long" % locus)
+            else:
+                warnings.warn("Stealing space from length field to allow long name in LOCUS line", BiopythonWarning)
         if len(record) > 99999999999:
             # Currently GenBank only officially support up to 350000, but
             # the length field can take eleven digits
@@ -652,24 +655,30 @@ class GenBankWriter(_InsdcWriter):
 
         division = self._get_data_division(record)
 
+        name_length = str(len(record)).rjust(28)
+        name_length = locus + name_length[len(locus):]
+        assert len(name_length) == 28 and " " in name_length, name_length
+
         assert len(units) == 2
         assert len(division) == 3
         # TODO - date
         # TODO - mol_type
-        line = "LOCUS       %s %s %s    %s           %s %s\n" \
-            % (locus.ljust(16),
-               str(len(record)).rjust(11),
+        line = "LOCUS       %s %s    %s           %s %s\n" \
+            % (name_length,
                units,
                mol_type.ljust(6),
                division,
                self._get_date(record))
         assert len(line) == 79 + 1, repr(line)  # plus one for new line
 
-        assert line[12:28].rstrip() == locus, \
-            'LOCUS line does not contain the locus at the expected position:\n' + line
-        assert line[28:29] == " "
-        assert line[29:40].lstrip() == str(len(record)), \
-            'LOCUS line does not contain the length at the expected position:\n' + line
+        # We're bending the rules to allow an identifier over 16 characters
+        # if we can steal spaces from the length field:
+        # assert line[12:28].rstrip() == locus, \
+        #     'LOCUS line does not contain the locus at the expected position:\n' + line
+        # assert line[28:29] == " "
+        # assert line[29:40].lstrip() == str(len(record)), \
+        #     'LOCUS line does not contain the length at the expected position:\n' + line
+        assert line[12:40].split() == [locus, str(len(record))]
 
         # Tests copied from Bio.GenBank.Scanner
         assert line[40:44] in [' bp ', ' aa '], \
