@@ -14,7 +14,7 @@ The latest news is at the top of this file.
 
 This release of Biopython supports Python 2.6, 2.7, 3.3, 3.4 and 3.5, but
 support for Python 2.6 is considered to be deprecated. It has also been
-tested on PyPy 2.4 to 2.6, PyPy3 version 2.4, and Jython 2.7.
+tested on PyPy 5.0, PyPy3 version 2.4, and Jython 2.7.
 
 Comparison of SeqRecord objects until now has used the default Python object
 comparison (are they same instance in memory?). This can be surprising, but
