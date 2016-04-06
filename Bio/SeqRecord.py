@@ -360,7 +360,7 @@ class SeqRecord(object):
         Per letter annotation for: secondary_structure
         Seq('MAAGVKQLADDRTLLMAGVSHDLRTPLTRIRLATEMMSEQDGYLAESINKDIEE...YLR', IUPACProtein())
         >>> print(rec.letter_annotations["secondary_structure"])
-          S  SSSSSSHHHHHTTTHHHHHHHHHHHHHHHHHHHHHHTHHHHHHHHHHHHHHHHHHHHHTT
+          S  SSSSSSHHHHHTTTHHHHHHHHHHHHHHHHHHHHHHTHHHHHHHHHHHHHHHHHHHHHTT  
         >>> print(rec.features[0].location)
         [20:21]
 
