@@ -1,4 +1,4 @@
-# Copyright 2008 by Peter Cock.  All rights reserved.
+# Copyright 2008-2016 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -95,9 +95,13 @@ class TestQblast(unittest.TestCase):
             # We used a FASTA record as the query
             expected = query[1:].split("\n", 1)[0]
             self.assertEqual(expected, record.query)
+        elif record.query_id.startswith("Query_") and len(query) == record.query_letters:
+            # We used a sequence as the entry and it was given a placeholder name
+            pass
         else:
             # We used an identifier as the query
-            self.assertTrue(query in record.query_id.split("|"))
+            self.assertTrue(query in record.query_id.split("|"),
+                            "Expected %r within query_id %r" % (query, record.query_id))
 
         # Check the recorded input parameters agree with those requested
         self.assertEqual(float(record.expect), e_value)
