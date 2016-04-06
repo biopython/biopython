@@ -1,5 +1,5 @@
 # Copyright 2013 by Kai Blin.
-# Revisions copyright 2015 by Peter Cock.
+# Revisions copyright 2015-2016 by Peter Cock.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -9,8 +9,10 @@ import warnings
 from os import path
 
 from Bio import BiopythonParserWarning
+from Bio import BiopythonWarning
 from Bio import GenBank
 from Bio import SeqIO
+from Bio.Seq import Seq
 
 
 class GenBankTests(unittest.TestCase):
@@ -142,6 +144,43 @@ class GenBankTests(unittest.TestCase):
                          'REVIEWED REFSEQ: This record has been curated by NCBI staff. The\n'
                          'reference sequence was derived from AP000423.\n'
                          'COMPLETENESS: full length.')
+
+    def test_long_names(self):
+        """Various GenBank names which push the column based LOCUS line."""
+        original = SeqIO.read("GenBank/iro.gb", "gb")
+        self.assertEqual(len(original), 1326)
+        for name, seq_len, ok in [
+                ("short", 1, True),
+                ("max_length_of_16", 1000, True),
+                ("overly_long_at_17", 1000, True),
+                ("excessively_long_at_22", 99999, True),
+                ("excessively_long_at_22", 100000, False),
+                ("pushing_the_limits_at_24", 999, True),
+                ("pushing_the_limits_at_24", 1000, False),
+                ("longest_possible_len_of_26", 10, False),  # 2 digits
+                ("longest_possible_len_of_26", 9, True),  # 1 digit
+            ]:
+            # Make the length match the desired target
+            record = original[:]
+            # TODO - Implement Seq * int
+            record.seq = Seq("N" * seq_len, original.seq.alphabet)
+            # Set the identifer to the desired name
+            record.id = record.name = name
+            # Attempt to output the record...
+            if not ok:
+                # e.g. ValueError: Locus identifier 'excessively_long_at_22' is too long
+                self.assertRaises(ValueError, record.format, "gb")
+                continue
+            with warnings.catch_warnings():
+                # e.g. BiopythonWarning: Stealing space from length field to allow long name in LOCUS line
+                warnings.simplefilter("ignore", BiopythonWarning)
+                output = record.format("gb")
+            line = output.split("\n", 1)[0]
+            self.assertTrue(" %s " % name in line, line)
+            self.assertTrue(" %i bp " % seq_len in line, line)
+            name_and_length = line[12:40]
+            self.assertEqual(name_and_length.split(), [name, str(seq_len)], line)
+            # TODO - Attempt to parse the output
 
 
 if __name__ == "__main__":
