@@ -13,6 +13,7 @@ from Bio import BiopythonWarning
 from Bio import GenBank
 from Bio import SeqIO
 from Bio.Seq import Seq
+from Bio._py3k import StringIO
 
 
 class GenBankTests(unittest.TestCase):
@@ -174,13 +175,22 @@ class GenBankTests(unittest.TestCase):
             with warnings.catch_warnings():
                 # e.g. BiopythonWarning: Stealing space from length field to allow long name in LOCUS line
                 warnings.simplefilter("ignore", BiopythonWarning)
-                output = record.format("gb")
-            line = output.split("\n", 1)[0]
+                # output = record.format("gb")
+                handle = StringIO()
+                self.assertEqual(1, SeqIO.write(record, handle, "gb"))
+            handle.seek(0)
+            line = handle.readline()
             self.assertTrue(" %s " % name in line, line)
             self.assertTrue(" %i bp " % seq_len in line, line)
             name_and_length = line[12:40]
             self.assertEqual(name_and_length.split(), [name, str(seq_len)], line)
-            # TODO - Attempt to parse the output
+            handle.seek(0)
+            with warnings.catch_warnings():
+                # e.g. BiopythonParserWarning: GenBank LOCUS line identifier over 16 characters
+                warnings.simplefilter("ignore", BiopythonWarning)
+                new = SeqIO.read(handle, "gb")
+            self.assertEqual(name, new.name)
+            self.assertEqual(seq_len, len(new))
 
 
 if __name__ == "__main__":
