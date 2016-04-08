@@ -486,7 +486,7 @@ Testing reading fasta format file Fasta/loveliesbleeding.pro
  Checking can write/read as 'fastq-solexa' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=gi|2781234|pdb|1JLY|B).
  Checking can write/read as 'genbank' format
- Failed: Locus identifier 'gi|2781234|pdb|1JLY|B' is too long
+ Failed: Need a Nucleotide or Protein alphabet
  Checking can write/read as 'imgt' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phd' format
@@ -582,7 +582,7 @@ Testing reading fasta format file Fasta/f001
  Checking can write/read as 'fastq-solexa' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3318709|pdb|1A91|).
  Checking can write/read as 'genbank' format
- Failed: Locus identifier 'gi|3318709|pdb|1A91|' is too long
+ Failed: Need a Nucleotide or Protein alphabet
  Checking can write/read as 'imgt' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phd' format
@@ -3186,7 +3186,7 @@ Testing reading emboss format file Emboss/needle.txt
  Checking can write/read as 'fastq-solexa' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=gi|94970041|receiver).
  Checking can write/read as 'genbank' format
- Failed: Locus identifier 'gi|94970041|receiver' is too long
+ Failed: Need a Nucleotide or Protein alphabet
  Checking can write/read as 'imgt' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phd' format
@@ -3265,7 +3265,7 @@ Testing reading phd format file Phd/phd1
  Checking can write/read as 'fastq-illumina' format
  Checking can write/read as 'fastq-solexa' format
  Checking can write/read as 'genbank' format
- Failed: Locus identifier '425_7_(71-A03-19).b.ab1' is too long
+ Failed: Locus identifier '425_103_(81-A03-19).g.ab1' is too long
  Checking can write/read as 'imgt' format
  Checking can write/read as 'phd' format
  Checking can write/read as 'qual' format
@@ -3315,7 +3315,6 @@ Testing reading phd format file Phd/phd_solexa
  Checking can write/read as 'fastq-illumina' format
  Checking can write/read as 'fastq-solexa' format
  Checking can write/read as 'genbank' format
- Failed: Locus identifier 'HWI-EAS94_4_1_1_602_99' is too long
  Checking can write/read as 'imgt' format
  Checking can write/read as 'phd' format
  Checking can write/read as 'qual' format
@@ -3339,7 +3338,6 @@ Testing reading phd format file Phd/phd_454
  Checking can write/read as 'fastq-illumina' format
  Checking can write/read as 'fastq-solexa' format
  Checking can write/read as 'genbank' format
- Failed: Locus identifier 'EBE03TV04IHLTF.77-243' is too long
  Checking can write/read as 'imgt' format
  Checking can write/read as 'phd' format
  Checking can write/read as 'qual' format
@@ -3785,7 +3783,7 @@ Testing reading fasta format file Quality/example.fasta as an alignment
  Checking can write/read as 'fastq-solexa' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=EAS54_6_R1_2_1_443_348).
  Checking can write/read as 'genbank' format
- Failed: Locus identifier 'EAS54_6_R1_2_1_443_348' is too long
+ Failed: Need a Nucleotide or Protein alphabet
  Checking can write/read as 'imgt' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phd' format
@@ -3820,7 +3818,7 @@ Testing reading qual format file Quality/example.qual
  Checking can write/read as 'fastq-illumina' format
  Checking can write/read as 'fastq-solexa' format
  Checking can write/read as 'genbank' format
- Failed: Locus identifier 'EAS54_6_R1_2_1_443_348' is too long
+ Failed: Need a Nucleotide or Protein alphabet
  Checking can write/read as 'imgt' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phd' format
@@ -3861,7 +3859,7 @@ Testing reading fastq format file Quality/example.fastq as an alignment
  Checking can write/read as 'fastq-illumina' format
  Checking can write/read as 'fastq-solexa' format
  Checking can write/read as 'genbank' format
- Failed: Locus identifier 'EAS54_6_R1_2_1_443_348' is too long
+ Failed: Need a Nucleotide or Protein alphabet
  Checking can write/read as 'imgt' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phd' format
@@ -3902,7 +3900,7 @@ Testing reading fastq format file Quality/example_dos.fastq as an alignment
  Checking can write/read as 'fastq-illumina' format
  Checking can write/read as 'fastq-solexa' format
  Checking can write/read as 'genbank' format
- Failed: Locus identifier 'EAS54_6_R1_2_1_443_348' is too long
+ Failed: Need a Nucleotide or Protein alphabet
  Checking can write/read as 'imgt' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phd' format
@@ -4054,7 +4052,7 @@ Testing reading fastq-solexa format file Quality/solexa_faked.fastq
  Checking can write/read as 'fastq-illumina' format
  Checking can write/read as 'fastq-solexa' format
  Checking can write/read as 'genbank' format
- Failed: Locus identifier 'slxa_0001_1_0001_01' is too long
+ Failed: Need a Nucleotide or Protein alphabet
  Checking can write/read as 'imgt' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phd' format
@@ -4137,7 +4135,6 @@ Testing reading seqxml format file SeqXML/dna_example.xml
  Checking can write/read as 'fastq-solexa' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=minimal).
  Checking can write/read as 'genbank' format
- Failed: Locus identifier 'ENSMUSG00000076441' is too long
  Checking can write/read as 'imgt' format
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=minimal).
@@ -4179,7 +4176,7 @@ Testing reading seqxml format file SeqXML/rna_example.xml
  Checking can write/read as 'fastq-solexa' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=empty description).
  Checking can write/read as 'genbank' format
- Failed: Locus identifier 'empty description' is too long
+ Failed: Invalid whitespace in 'empty description' for LOCUS line
  Checking can write/read as 'imgt' format
  Failed: Cannot have spaces in EMBL accession, 'empty description'
  Checking can write/read as 'phd' format
@@ -4221,7 +4218,6 @@ Testing reading seqxml format file SeqXML/protein_example.xml
  Checking can write/read as 'fastq-solexa' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=UniprotProtein).
  Checking can write/read as 'genbank' format
- Failed: Locus identifier 'ENSMUSP00000099904' is too long
  Checking can write/read as 'imgt' format
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=UniprotProtein).
