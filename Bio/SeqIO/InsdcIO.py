@@ -622,6 +622,8 @@ class GenBankWriter(_InsdcWriter):
                 raise ValueError("Locus identifier %r is too long" % locus)
             else:
                 warnings.warn("Stealing space from length field to allow long name in LOCUS line", BiopythonWarning)
+        if len(locus.split()) > 1:
+            raise ValueError("Invalid whitespace in %r for LOCUS line" % locus)
         if len(record) > 99999999999:
             # Currently GenBank only officially support up to 350000, but
             # the length field can take eleven digits
@@ -678,7 +680,7 @@ class GenBankWriter(_InsdcWriter):
         # assert line[28:29] == " "
         # assert line[29:40].lstrip() == str(len(record)), \
         #     'LOCUS line does not contain the length at the expected position:\n' + line
-        assert line[12:40].split() == [locus, str(len(record))]
+        assert line[12:40].split() == [locus, str(len(record))], line
 
         # Tests copied from Bio.GenBank.Scanner
         assert line[40:44] in [' bp ', ' aa '], \
