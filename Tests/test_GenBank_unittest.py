@@ -12,7 +12,9 @@ from Bio import BiopythonParserWarning
 from Bio import BiopythonWarning
 from Bio import GenBank
 from Bio import SeqIO
+from Bio.SeqRecord import SeqRecord
 from Bio.Seq import Seq
+from Bio.Alphabet import generic_dna
 from Bio._py3k import StringIO
 
 
@@ -191,6 +193,24 @@ class GenBankTests(unittest.TestCase):
                 new = SeqIO.read(handle, "gb")
             self.assertEqual(name, new.name)
             self.assertEqual(seq_len, len(new))
+
+
+class OutputTests(unittest.TestCase):
+    def test_mad_dots(self):
+        for identifier in ["example",
+                           "example.1a",
+                           "example.1.2",
+                           "example.1-2",
+                           ]:
+            old = SeqRecord(Seq("ACGT", generic_dna),
+                            id=identifier,
+                            name=identifier,
+                            description="mad dots")
+            new = SeqIO.read(StringIO(old.format("gb")), "gb")
+            self.assertEqual(old.id, new.id)
+            self.assertEqual(old.name, new.name)
+            self.assertEqual(old.description, new.description)
+            self.assertEqual(old.seq, new.seq)
 
 
 if __name__ == "__main__":

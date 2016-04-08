@@ -805,8 +805,13 @@ class GenBankWriter(_InsdcWriter):
         handle = self.handle
         self._write_the_first_line(record)
 
+        default = record.id
+        if default.count(".") == 1 and default[default.index(".") + 1:].isdigit():
+            # Good, looks like accesion.version and not something
+            # else like identifier.start-end
+            refault = record.id.split(".", 1)[0]
         accession = self._get_annotation_str(record, "accession",
-                                             record.id.split(".", 1)[0],
+                                             default,
                                              just_first=True)
         acc_with_version = accession
         if record.id.startswith(accession + "."):
