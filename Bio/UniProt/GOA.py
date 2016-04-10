@@ -172,9 +172,14 @@ def gpi_iterator(handle):
     if inline.strip() == '!gpi-version: 1.1':
         sys.stderr.write("gpi 1.1\n")
         return _gpi11iterator(handle)
-    else:
+    elif inline.strip() == '!gpi-version: 1.0':
         sys.stderr.write("gpi 1.0\n")
         return _gpi10iterator(handle)
+    elif inline.strip() == '!gpi-version: 2.1':
+        sys.stderr.write("gpi 2.1\n")
+        return _gpi20iterator(handle)
+    else:
+        raise ValueError('Unknown GPI version %s\n' % inline)
 
 
 def _gpa10iterator(handle):
@@ -229,9 +234,11 @@ def gpa_iterator(handle):
     if inline.strip() == '!gpa-version: 1.1':
         sys.stderr.write("gpa 1.1\n")
         return _gpa11iterator(handle)
-    else:
+    elif inline.strip() == '!gpa-version: 1.0':
         sys.stderr.write("gpa 1.0\n")
         return _gpa10iterator(handle)
+    else:
+        raise ValueError('Unknown GPA version %s\n' % inline)
 
 
 def _gaf20iterator(handle):
@@ -321,14 +328,22 @@ def gafbyproteiniterator(handle):
     This function should be called to read a
     gene_association.goa_uniprot file. Reads the first record and
     returns a gaf 2.0 or a gaf 1.0 iterator as needed
+    2016-04-09: added GAF 2.1 iterator & fixed bug in iterator assignment
+    In the meantime GAF 2.1 uses the GAF 2.0 iterator
     """
     inline = handle.readline()
     if inline.strip() == '!gaf-version: 2.0':
         sys.stderr.write("gaf 2.0\n")
         return _gaf20byproteiniterator(handle)
-    else:
+    elif inline.strip() == '!gaf-version: 1.0':
         sys.stderr.write("gaf 1.0\n")
         return _gaf10byproteiniterator(handle)
+    elif inline.strip() == '!gaf-version: 2.1':
+        # Handle GAF 2.1 as GAF 2.0 for now TODO: fix
+        sys.stderr.write("gaf 2.1\n")
+        return _gaf20byproteiniterator(handle)
+    else:
+        raise ValueError('Unknown GAF version %s\n' % inline)
 
 
 def gafiterator(handle):
@@ -342,9 +357,15 @@ def gafiterator(handle):
     if inline.strip() == '!gaf-version: 2.0':
         sys.stderr.write("gaf 2.0\n")
         return _gaf20iterator(handle)
-    else:
+    elif inline.strip() == '!gaf-version: 2.1':
+        sys.stderr.write("gaf 2.1\n")
+        # Handle GAF 2.1 as GAF 2.0 for now. TODO: fix
+        return _gaf20iterator(handle)
+    elif inline.strip() == '!gaf-version: 1.0':
         sys.stderr.write("gaf 1.0\n")
         return _gaf10iterator(handle)
+    else:
+        raise ValueError('Unknown GAF version %s\n' % inline)
 
 
 def writerec(outrec, handle, fields=GAF20FIELDS):
