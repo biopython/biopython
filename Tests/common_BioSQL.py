@@ -568,7 +568,7 @@ class TaxonomyTest(unittest.TestCase):
                   WHERE taxon.taxon_id IN
                       (SELECT taxon_id FROM taxon_name
                                   WHERE name LIKE '%Brassicales%')
-                      AND include.right_value - include.left_value == 1"""
+                      AND include.right_value - include.left_value = 1"""
 
         rows = self.db.adaptor.execute_and_fetch_col0(sql)
         self.assertEqual(4, len(rows))
