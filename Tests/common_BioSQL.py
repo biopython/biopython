@@ -530,6 +530,8 @@ class SeqInterfaceTest(unittest.TestCase):
 
 class TaxonomyTest(unittest.TestCase):
     def setUp(self):
+        from Bio import Entrez
+        Entrez.email = "biopython-dev@biopython.org"
         # create TESTDB
         create_database()
 
