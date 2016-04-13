@@ -366,20 +366,8 @@ class DatabaseLoader(object):
         right_rows = sorted(right_rows, key=lambda x: x[0], reverse=True)
         left_rows = sorted(left_rows, key=lambda x: x[0], reverse=True)
 
-        try:
-            self.adaptor.executemany("UPDATE taxon SET left_value = %s WHERE taxon_id = %s", left_rows)
-            self.adaptor.executemany("UPDATE taxon SET right_value = %s WHERE taxon_id = %s", right_rows)
-        except:
-            #print(orig_rows)
-            #print(rows2)
-            #print(rows)
-
-            #for r in self.adaptor.execute_and_fetchall("select * from taxon"):
-            #    print(r)
-
-            raise
-
-
+        self.adaptor.executemany("UPDATE taxon SET left_value = %s WHERE taxon_id = %s", left_rows)
+        self.adaptor.executemany("UPDATE taxon SET right_value = %s WHERE taxon_id = %s", right_rows)
 
     def _get_taxon_id_from_ncbi_taxon_id(self, ncbi_taxon_id,
                                          scientific_name=None,
