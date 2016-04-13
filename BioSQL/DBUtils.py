@@ -41,7 +41,7 @@ class Generic_dbutils(object):
         cursor.execute(sql, args or ())
 
     def executemany(self, cursor, sql, seq):
-        """
+        """Execute many sql commands
         """
         cursor.executemany(sql, seq)
 

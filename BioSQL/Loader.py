@@ -330,7 +330,7 @@ class DatabaseLoader(object):
         return answer
 
     def _update_left_right_taxon_values(self, left_value):
-        """ update the left and right values in the table
+        """update the left and right values in the table
         """
         if not left_value:
             return
