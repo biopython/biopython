@@ -313,6 +313,9 @@ class _CursorWrapper(object):
     def execute(self, operation, params=None, multi=False):
         self.real_cursor.execute(operation, params, multi)
 
+    def executemany(self, operation, params):
+        self.real_cursor.executemany(operation, params)
+
     def _convert_tuple(self, tuple_):
         tuple_list = list(tuple_)
         for i, elem in enumerate(tuple_list):
