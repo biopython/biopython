@@ -560,7 +560,7 @@ class DatabaseLoader(object):
             " VALUES (%s, %s, %s, %s, %s)", (ncbi_taxon_id, parent_taxon_id, rank, left_value, right_value))
 
         taxon_id = self.adaptor.last_id("taxon")
-        assert isinstance(taxon_id, int), repr(taxon_id)
+        #assert isinstance(taxon_id, int), repr(taxon_id)
         # ... and its name in taxon_name
         scientific_name = taxonomic_lineage[-1].get("ScientificName")
         if scientific_name:
