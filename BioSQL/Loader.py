@@ -349,16 +349,16 @@ class DatabaseLoader(object):
 
         right_rows = []
         left_rows = []
-        for i in range(len(rows)):
-            new_right = rows[i][1]
-            new_left = rows[i][0]
+        for row in rows:
+            new_right = row[1]
+            new_left = row[0]
             if new_right >= left_value:
                 new_right += 2
 
             if new_left > left_value:
                 new_left += 2
-            right_rows.append((new_right, rows[i][2]))
-            left_rows.append((new_left, rows[i][2]))
+            right_rows.append((new_right, row[2]))
+            left_rows.append((new_left, row[2]))
 
 
         # sort the rows based on the value from largest to smallest
