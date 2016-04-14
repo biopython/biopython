@@ -54,6 +54,8 @@ class Sqlite_dbutils(Generic_dbutils):
     """Custom database utilities for SQLite."""
 
     def _sub_placeholder(self, sql):
+        """Format the argument placeholders for sqlite
+        """
         return sql.replace("%s", "?")
 
     def execute(self, cursor, sql, args=None):

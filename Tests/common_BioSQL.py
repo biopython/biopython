@@ -529,6 +529,8 @@ class SeqInterfaceTest(unittest.TestCase):
         self.assertTrue("SWISS-PROT:P31169" in multi_ann)
 
 class TaxonomyTest(unittest.TestCase):
+    """Test proper insertion and retrieval of taxonomy data
+    """
     def setUp(self):
         from Bio import Entrez
         Entrez.email = "biopython-dev@biopython.org"
