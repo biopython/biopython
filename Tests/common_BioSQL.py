@@ -568,11 +568,14 @@ class TaxonomyTest(unittest.TestCase):
                   WHERE taxon.taxon_id IN
                       (SELECT taxon_id FROM taxon_name
                                   WHERE name LIKE '%Brassicales%')
-                      AND include.right_value - include.left_value = 1"""
+                      AND (include.left_value + 1) = include.right_value"""
 
-        rows = self.db.adaptor.execute_and_fetch_col0(sql)
+        rows = self.db.adaptor.execute_and_fetchall(sql)
         self.assertEqual(4, len(rows))
-        self.assertEqual(set([3704, 3711, 3708, 3702]), set(rows))
+        values = set()
+        for row in rows:
+            values.add(row[0])
+        self.assertEqual(set([3704, 3711, 3708, 3702]), set(values))
 
 
 class DeleteTest(unittest.TestCase):
