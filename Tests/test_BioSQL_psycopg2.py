@@ -15,8 +15,8 @@ from common_BioSQL import *
 
 # Constants for the database driver
 DBHOST = 'localhost'
-DBUSER = 'cts'
-DBPASSWD = 'OCean1.pgs'
+DBUSER = 'root'
+DBPASSWD = ''
 TESTDB = 'biosql_test'
 
 ################################
