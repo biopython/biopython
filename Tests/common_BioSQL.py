@@ -570,9 +570,12 @@ class TaxonomyTest(unittest.TestCase):
                                   WHERE name = 'Brassicales')
                       AND include.right_value - include.left_value = 1"""
 
-        rows = self.db.adaptor.execute_and_fetch_col0(sql)
+        rows = self.db.adaptor.execute_and_fetchall(sql)
         self.assertEqual(4, len(rows))
-        self.assertEqual(set([3704, 3711, 3708, 3702]), set(rows))
+        values = set()
+        for row in rows:
+            values.add(row[0])
+        self.assertEqual(set([3704, 3711, 3708, 3702]), set(values))
 
 
 class DeleteTest(unittest.TestCase):

@@ -438,15 +438,15 @@ class DatabaseLoader(object):
                 left_value = parent_right_value
                 right_value = parent_right_value + 1
 
-                rank = taxonomic_record[0]["Rank"]
+                rank = str(taxonomic_record[0]["Rank"])
 
-                genetic_code = taxonomic_record[0]["GeneticCode"]["GCId"]
+                genetic_code = int(taxonomic_record[0]["GeneticCode"]["GCId"])
 
-                mito_genetic_code = taxonomic_record[
-                    0]["MitoGeneticCode"]["MGCId"]
+                mito_genetic_code = int(taxonomic_record[
+                    0]["MitoGeneticCode"]["MGCId"])
 
                 species_names = [("scientific name",
-                                  taxonomic_record[0]["ScientificName"])]
+                                  str(taxonomic_record[0]["ScientificName"]))]
                 try:
                     for name_class, names in taxonomic_record[0]["OtherNames"].items():
                         name_class = self._fix_name_class(name_class)
@@ -516,7 +516,7 @@ class DatabaseLoader(object):
         This method will record all the lineage given, returning the taxon id
         (database key, not NCBI taxon id) of the final entry (the species).
         """
-        ncbi_taxon_id = taxonomic_lineage[-1]["TaxId"]
+        ncbi_taxon_id = int(taxonomic_lineage[-1]["TaxId"])
         left_value = None
         right_value = None
         parent_left_value = None
@@ -554,13 +554,13 @@ class DatabaseLoader(object):
         self._update_left_right_taxon_values(left_value)
 
         # INSERT new taxon
-        rank = taxonomic_lineage[-1].get("Rank")
+        rank = str(taxonomic_lineage[-1].get("Rank"))
         self.adaptor.execute(
             "INSERT INTO taxon(ncbi_taxon_id, parent_taxon_id, node_rank, left_value, right_value)"
             " VALUES (%s, %s, %s, %s, %s)", (ncbi_taxon_id, parent_taxon_id, rank, left_value, right_value))
 
         taxon_id = self.adaptor.last_id("taxon")
-        assert isinstance(taxon_id, (int, long)), repr(taxon_id)
+        #assert isinstance(taxon_id, int), repr(taxon_id)
         # ... and its name in taxon_name
         scientific_name = taxonomic_lineage[-1].get("ScientificName")
         if scientific_name:
