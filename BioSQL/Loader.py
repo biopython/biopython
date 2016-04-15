@@ -329,6 +329,46 @@ class DatabaseLoader(object):
         assert answer == answer.lower()
         return answer
 
+    def _update_left_right_taxon_values(self, left_value):
+        """update the left and right values in the table
+        """
+        if not left_value:
+            return
+        # Due to the UNIQUE constraint on the left and right values in the taxon
+        # table we cannot simply update them through an SQL statement as we risk
+        # colliding values. Instead we must select all of the rows that we want to
+        # update, modify the values in python and then update the rows
+        #self.adaptor.execute("UPDATE taxon SET right_value = right_value + 2 WHERE right_value >= %s", (left_value,))
+        #self.adaptor.execute("UPDATE taxon SET left_value = left_value + 2 WHERE left_value > %s", (left_value,))
+
+        rows = self.adaptor.execute_and_fetchall(
+                "SELECT left_value, right_value, taxon_id FROM taxon WHERE right_value >= %s or left_value > %s",
+                #"SELECT left_value, right_value, taxon_id FROM taxon",
+                (left_value, left_value)
+                )
+
+        right_rows = []
+        left_rows = []
+        for row in rows:
+            new_right = row[1]
+            new_left = row[0]
+            if new_right >= left_value:
+                new_right += 2
+
+            if new_left > left_value:
+                new_left += 2
+            right_rows.append((new_right, row[2]))
+            left_rows.append((new_left, row[2]))
+
+
+        # sort the rows based on the value from largest to smallest
+        # should ensure no overlaps
+        right_rows = sorted(right_rows, key=lambda x: x[0], reverse=True)
+        left_rows = sorted(left_rows, key=lambda x: x[0], reverse=True)
+
+        self.adaptor.executemany("UPDATE taxon SET left_value = %s WHERE taxon_id = %s", left_rows)
+        self.adaptor.executemany("UPDATE taxon SET right_value = %s WHERE taxon_id = %s", right_rows)
+
     def _get_taxon_id_from_ncbi_taxon_id(self, ncbi_taxon_id,
                                          scientific_name=None,
                                          common_name=None):
@@ -372,6 +412,10 @@ class DatabaseLoader(object):
         rank = "species"
         genetic_code = None
         mito_genetic_code = None
+        parent_left_value = None
+        parent_right_value = None
+        left_value = None
+        right_value = None
         species_names = []
         if scientific_name:
             species_names.append(("scientific name", scientific_name))
@@ -387,14 +431,22 @@ class DatabaseLoader(object):
                 assert taxonomic_record[0]["TaxId"] == str(ncbi_taxon_id), \
                     "%s versus %s" % (taxonomic_record[0]["TaxId"],
                                       ncbi_taxon_id)
-                parent_taxon_id = self._get_taxon_id_from_ncbi_lineage(
+
+                parent_taxon_id, parent_left_value, parent_right_value = self._get_taxon_id_from_ncbi_lineage(
                     taxonomic_record[0]["LineageEx"])
-                rank = taxonomic_record[0]["Rank"]
-                genetic_code = taxonomic_record[0]["GeneticCode"]["GCId"]
-                mito_genetic_code = taxonomic_record[
-                    0]["MitoGeneticCode"]["MGCId"]
+
+                left_value = parent_right_value
+                right_value = parent_right_value + 1
+
+                rank = str(taxonomic_record[0]["Rank"])
+
+                genetic_code = int(taxonomic_record[0]["GeneticCode"]["GCId"])
+
+                mito_genetic_code = int(taxonomic_record[
+                    0]["MitoGeneticCode"]["MGCId"])
+
                 species_names = [("scientific name",
-                                  taxonomic_record[0]["ScientificName"])]
+                                  str(taxonomic_record[0]["ScientificName"]))]
                 try:
                     for name_class, names in taxonomic_record[0]["OtherNames"].items():
                         name_class = self._fix_name_class(name_class)
@@ -422,6 +474,10 @@ class DatabaseLoader(object):
             # is in the record annotation as a list of names, as we won't
             # know the NCBI taxon IDs for these parent nodes.
 
+
+
+        self._update_left_right_taxon_values(left_value)
+
         self.adaptor.execute(
             "INSERT INTO taxon(parent_taxon_id, ncbi_taxon_id, node_rank,"
             " genetic_code, mito_genetic_code, left_value, right_value)"
@@ -430,8 +486,9 @@ class DatabaseLoader(object):
                                                      rank,
                                                      genetic_code,
                                                      mito_genetic_code,
-                                                     None,
-                                                     None))
+                                                     left_value,
+                                                     right_value))
+
         taxon_id = self.adaptor.last_id("taxon")
 
         # Record the scientific name, common name, etc
@@ -442,6 +499,7 @@ class DatabaseLoader(object):
                                          name[:255],
                                          name_class))
         return taxon_id
+
 
     def _get_taxon_id_from_ncbi_lineage(self, taxonomic_lineage):
         """This is recursive! (PRIVATE).
@@ -458,38 +516,51 @@ class DatabaseLoader(object):
         This method will record all the lineage given, returning the taxon id
         (database key, not NCBI taxon id) of the final entry (the species).
         """
-        ncbi_taxon_id = taxonomic_lineage[-1]["TaxId"]
-
+        ncbi_taxon_id = int(taxonomic_lineage[-1]["TaxId"])
+        left_value = None
+        right_value = None
+        parent_left_value = None
+        parent_right_value = None
         # Is this in the database already?  Check the taxon table...
-        taxon_id = self.adaptor.execute_and_fetch_col0(
-            "SELECT taxon_id FROM taxon"
+        rows = self.adaptor.execute_and_fetchall(
+            "SELECT taxon_id, left_value, right_value FROM taxon"
             " WHERE ncbi_taxon_id=%s" % ncbi_taxon_id)
-        if taxon_id:
+        if rows:
             # we could verify that the Scientific Name etc in the database
             # is the same and update it or print a warning if not...
-            if isinstance(taxon_id, list):
-                assert len(taxon_id) == 1
-                return taxon_id[0]
-            else:
-                return taxon_id
+            assert len(rows) == 1
+            return rows[0]
 
         # We have to record this.
         if len(taxonomic_lineage) > 1:
             # Use recursion to find out the taxon id (database key) of the
             # parent.
-            parent_taxon_id = self._get_taxon_id_from_ncbi_lineage(
+            parent_taxon_id, parent_left_value, parent_right_value = self._get_taxon_id_from_ncbi_lineage(
                 taxonomic_lineage[:-1])
+            left_value = parent_right_value
+            right_value = parent_right_value + 1
             assert _is_int_or_long(parent_taxon_id), repr(parent_taxon_id)
         else:
+            # we have reached the top of the lineage but no current taxonomy
+            # id has been found
             parent_taxon_id = None
+            left_value = self.adaptor.execute_one(
+                "SELECT MAX(left_value) FROM taxon")[0]
+            if not left_value:
+                left_value = 0
+
+            right_value = left_value + 1
+
+        self._update_left_right_taxon_values(left_value)
 
         # INSERT new taxon
-        rank = taxonomic_lineage[-1].get("Rank")
+        rank = str(taxonomic_lineage[-1].get("Rank"))
         self.adaptor.execute(
-            "INSERT INTO taxon(ncbi_taxon_id, parent_taxon_id, node_rank)"
-            " VALUES (%s, %s, %s)", (ncbi_taxon_id, parent_taxon_id, rank))
+            "INSERT INTO taxon(ncbi_taxon_id, parent_taxon_id, node_rank, left_value, right_value)"
+            " VALUES (%s, %s, %s, %s, %s)", (ncbi_taxon_id, parent_taxon_id, rank, left_value, right_value))
+
         taxon_id = self.adaptor.last_id("taxon")
-        assert isinstance(taxon_id, (int, long)), repr(taxon_id)
+        #assert isinstance(taxon_id, int), repr(taxon_id)
         # ... and its name in taxon_name
         scientific_name = taxonomic_lineage[-1].get("ScientificName")
         if scientific_name:
@@ -497,7 +568,7 @@ class DatabaseLoader(object):
                 "INSERT INTO taxon_name(taxon_id, name, name_class)"
                 " VALUES (%s, %s, 'scientific name')", (taxon_id,
                                                         scientific_name[:255]))
-        return taxon_id
+        return taxon_id, left_value, right_value
 
     def _load_bioentry_table(self, record):
         """Fill the bioentry table with sequence information (PRIVATE).
