@@ -89,10 +89,17 @@ write in JSON format.
 from __future__ import print_function
 from Bio._py3k import basestring
 
+from Bio import BiopythonExperimentalWarning
 from Bio.File import as_handle
 from . import PhenMicro
 
+import warnings
+
 __docformat__ = "epytext en"  # not just plaintext
+
+warnings.warn('Bio.phenotype is an experimental submodule which may undergo '
+        'significant changes prior to its future official release.',
+        BiopythonExperimentalWarning)
 
 # Convention for format names is "mainname-format" in lower case.
 
