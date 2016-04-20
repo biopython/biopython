@@ -18,6 +18,42 @@ from functools import reduce
 
 __docformat__ = "restructuredtext en"
 
+# some helper functions for coverage logic
+def length(range):
+    """length of a seqeunce portion given by tuple (start, end)"""
+    return range[1] - range[0] + 1
+
+def intersection(range1, range2):
+    """intersection of ranges if any"""
+    ret = False
+    if range1[1] >= range2[0]:
+       ret = (max(range1[0], range2[0]), min(range1[1], range2[1]))
+    return ret
+
+def combination(range1, range2):
+    """combine to ranges"""
+    return (min(range1[0], range2[0]), max(range1[1], range2[1]))
+
+def merge_range_list(rangeList):
+    """return range list with overlapping ranges merged"""
+    merge_list = []
+    is_first = True
+    prev_range = (0, 0)
+    for act_range in rangeList:
+        if is_first:
+            merge_list.append(act_range)
+            is_first = False
+            prev_range = act_range
+        else:
+            if intersection(prev_range, act_range):
+                merge_list.pop()
+                temp_range = combination(prev_range, act_range)
+                merge_list.append(temp_range)
+                prev_range = temp_range
+            else:
+                merge_list.append(act_range)
+                prev_range = act_range
+    return merge_list
 
 class _XMLparser(ContentHandler):
     """Generic SAX Parser (PRIVATE).
@@ -366,7 +402,30 @@ class BlastParser(_XMLparser):
         self._descr = self._blast.descriptions[-1]
         self._descr.num_alignments = 0
 
+    def _get_master_coverage(self, hsps):
+        """get length of query covered by HSPs altogether (PRIVATE)."""
+        temp = []
+        for hsp in hsps:
+            seq_range = (hsp.query_start, hsp.query_end)
+            # reverse for minus strand
+            if seq_range[0] > seq_range[1]:
+                seq_range[0] = seq_range[1]
+                seq_range[1] = seq_range[0]
+            temp.append(seq_range)
+        temp.sort()
+        merge_list = merge_range_list(temp)
+        master_covered_length = 0
+        for merge in merge_list:
+            master_covered_length = master_covered_length + length(merge)
+        return master_covered_length
+
     def _end_Hit(self):
+        # calculate the qcovs (query coverage subject)
+        subj_coverage = 100.0 * self._get_master_coverage(self._hit.hsps) / self._blast.query_letters
+        if subj_coverage < 99:
+            subj_coverage = subj_coverage + 0.5
+        self._hit.qcovs = int(subj_coverage)
+        
         # Cleanup
         self._blast.multiple_alignment = None
         self._hit = None
@@ -400,6 +459,24 @@ class BlastParser(_XMLparser):
         self._descr.num_alignments += 1
         self._blast.multiple_alignment.append(Record.MultipleAlignment())
         self._mult_al = self._blast.multiple_alignment[-1]
+
+    def _get_hsp_coverage(self, hsp):
+        """get length of query covered by one HSP (PRIVATE)."""
+        hsp_covered_length = -1
+        seq_range = (hsp.query_start, hsp.query_end)
+        # reverse for minus strand
+        if seq_range[0] < seq_range[1]:
+            hsp_covered_length = length((seq_range[0], seq_range[1]))
+        else:
+            hsp_covered_length = length((seq_range[1], seq_range[0]))
+        return hsp_covered_length
+
+    # calculate the qcovhsp (query coverage of hsp)
+    def _end_Hsp(self):
+        hsp_coverage = 100.0 * self._get_hsp_coverage(self._hsp) / self._blast.query_letters
+        if hsp_coverage < 99:
+            hsp_coverage = hsp_coverage + 0.5
+        self._hsp.qcovhsp = int(hsp_coverage)
 
     # Hsp_num is useless
     def _end_Hsp_score(self):
