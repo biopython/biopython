@@ -161,6 +161,18 @@ class GenBankTests(unittest.TestCase):
                          'reference sequence was derived from AP000423.\n'
                          'COMPLETENESS: full length.')
 
+    def test_locus_line_topogoly(self):
+        """Test if chromosome topology is conserved"""
+        record = SeqIO.read('GenBank/DS830848.gb', 'genbank')
+        self.assertEqual(record.annotations['topology'], 'linear')
+        out_handle = StringIO()
+        SeqIO.write([record], out_handle, 'genbank')
+        first_line = out_handle.getvalue().split('\n')[0]
+        self.assertIn('linear', first_line)
+        with open('GenBank/DS830848.gb', 'r') as fh:
+            orig_first_line = fh.readline().strip()
+        self.assertEqual(first_line, orig_first_line)
+
     def test_long_names(self):
         """Various GenBank names which push the column based LOCUS line."""
         original = SeqIO.read("GenBank/iro.gb", "gb")
