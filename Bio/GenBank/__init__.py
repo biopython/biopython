@@ -1259,8 +1259,6 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                 self.data.annotations['topology'] = 'circular'
             elif 'linear' in self._seq_type.lower():
                 self.data.annotations['topology'] = 'linear'
-            elif 'unspecified' in self._seq_type.lower():
-                self.data.annotations['topology'] = 'unspecified'
 
         if not sequence and self.__expected_size:
             self.data.seq = UnknownSeq(self._expected_size, seq_alphabet)

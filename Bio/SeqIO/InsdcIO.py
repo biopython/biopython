@@ -609,8 +609,7 @@ class GenBankWriter(_InsdcWriter):
         max_topology_len = len('circular')
 
         # return an empty placeholder string if not given
-        if 'topology' not in record.annotations or \
-            record.annotations['topology'] == 'unspecified':
+        if 'topology' not in record.annotations:
             return ' ' * max_topology_len
 
         template = '%%-%ds' % max_topology_len
