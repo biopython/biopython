@@ -143,6 +143,19 @@ class GenBankTests(unittest.TestCase):
                          'reference sequence was derived from AP000423.\n'
                          'COMPLETENESS: full length.')
 
+    def test_locus_line_topogoly(self):
+        """Test if chromosome topology is conserved"""
+        record = SeqIO.read(path.join('GenBank', 'melanin.gbk'), 'genbank')
+        self.assertEqual(record.annotations['topology'], 'linear')
+        from StringIO import StringIO
+        out_handle = StringIO()
+        SeqIO.write([record], out_handle, 'genbank')
+        first_line = out_handle.getvalue().split('\n')[0]
+        self.assertIn('linear', first_line)
+        with open(path.join('GenBank', 'melanin.gbk'), 'r') as fh:
+            orig_first_line = fh.readline().strip()
+        self.assertEqual(first_line, orig_first_line)
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)

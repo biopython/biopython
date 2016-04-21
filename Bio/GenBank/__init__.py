@@ -1254,6 +1254,14 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                 raise ValueError("Could not determine alphabet for seq_type %s"
                                  % self._seq_type)
 
+            # Also save the chomosome layout
+            if 'circular' in self._seq_type.lower():
+                self.data.annotations['topology'] = 'circular'
+            elif 'linear' in self._seq_type.lower():
+                self.data.annotations['topology'] = 'linear'
+            elif 'unspecified' in self._seq_type.lower():
+                self.data.annotations['topology'] = 'unspecified'
+
         if not sequence and self.__expected_size:
             self.data.seq = UnknownSeq(self._expected_size, seq_alphabet)
         else:
