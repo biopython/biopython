@@ -66,12 +66,20 @@ from __future__ import print_function
 import warnings
 from Bio import BiopythonWarning
 from Bio import MissingPythonDependencyError
+import sys
 
-try:
-    import MySQLdb as mdb
-except:
-    raise MissingPythonDependencyError("Install MySQLdb if you want to use "
-                                       "Bio.motifs.jaspar.db")
+if sys.version_info < (3,):
+    try:
+        import MySQLdb as mdb
+    except:
+        raise MissingPythonDependencyError("Install MySQLdb if you want to use "
+                                           "Bio.motifs.jaspar.db")
+else:
+    try:
+        import mysql.connector as mdb
+    except:
+        raise MissingPythonDependencyError("Install mysql.connector if you want to use "
+                                           "Bio.motifs.jaspar.db")
 
 from Bio.Alphabet.IUPAC import unambiguous_dna as dna
 from Bio.motifs import jaspar, matrix
@@ -109,7 +117,10 @@ class JASPAR5(object):
         self.user = user
         self.password = password
 
-        self.dbh = mdb.connect(host, user, password, name)
+        if sys.version_info < (3,):
+            self.dbh = mdb.connect(host, user, password, name)
+        else:
+            self.dbh = mdb.connect(host=host, user=user, database=name, password=password)
 
     def __str__(self):
         """
