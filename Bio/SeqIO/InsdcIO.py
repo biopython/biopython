@@ -245,8 +245,8 @@ def _insdc_location_string_ignoring_strand_and_subfeatures(location, rec_length)
             # Treat the unknown end position as an AfterPosition
             return "%s%s..>%i" \
                 % (ref,
-                   _insdc_feature_position_string(location.start),
-                   location.nofuzzy_start)
+                   _insdc_feature_position_string(location.start, +1),
+                   location.nofuzzy_start + 1)
     else:
         # Typical case, e.g. 12..15 gets mapped to 11:15
         return ref \

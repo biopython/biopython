@@ -21,8 +21,8 @@ from Bio.Data.CodonTable import TranslationError
 from Bio.Seq import Seq, UnknownSeq, MutableSeq, reverse_complement
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqFeature import SeqFeature, FeatureLocation, CompoundLocation
-from Bio.SeqFeature import ExactPosition, BeforePosition, AfterPosition, \
-                           OneOfPosition, WithinPosition
+from Bio.SeqFeature import ExactPosition, BeforePosition, AfterPosition
+from Bio.SeqFeature import OneOfPosition, WithinPosition, UnknownPosition
 from Bio.SeqIO.InsdcIO import _insdc_location_string
 from Bio.SeqIO.InsdcIO import _insdc_feature_location_string
 
@@ -625,6 +625,34 @@ class FeatureWriting(unittest.TestCase):
         self.assertEqual(f._flip(100).strand, +1)
         self.record.features.append(f)
         self.write_read_checks()
+
+    def test_unknown(self):
+        """GenBank/EMBL write/read with unknown end points."""
+        f = SeqFeature(FeatureLocation(10, 15), strand=+1, type="region")
+        self.assertEqual(_get_location_string(f, 100),
+                         "11..15")
+        self.record.features.append(f)
+        f = SeqFeature(FeatureLocation(10, UnknownPosition()), strand=+1, type="region")
+        self.assertEqual(_get_location_string(f, 100),
+                         "11..>11")
+        self.record.features.append(f)
+        f = SeqFeature(FeatureLocation(UnknownPosition(), 15), strand=+1, type="region")
+        self.assertEqual(_get_location_string(f, 100),
+                         "<15..15")
+        self.record.features.append(f)
+        f = SeqFeature(FeatureLocation(10, 15), strand=-1, type="region")
+        self.assertEqual(_get_location_string(f, 100),
+                         "complement(11..15)")
+        f = SeqFeature(FeatureLocation(10, UnknownPosition()), strand=-1, type="region")
+        self.assertEqual(_get_location_string(f, 100),
+                         "complement(11..>11)")
+        self.record.features.append(f)
+        f = SeqFeature(FeatureLocation(UnknownPosition(), 15), strand=-1, type="region")
+        self.assertEqual(_get_location_string(f, 100),
+                         "complement(<15..15)")
+        self.record.features.append(f)
+        # This doesn't round trip
+        # self.write_read_checks()
 
     def test_join(self):
         """GenBank/EMBL write/read simple join locations."""
