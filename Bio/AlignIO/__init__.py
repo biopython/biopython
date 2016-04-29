@@ -274,7 +274,6 @@ def _SeqIO_to_alignment_iterator(handle, format, alphabet=None, seq_count=None):
         records = list(SeqIO.parse(handle, format, alphabet))
         if records:
             yield MultipleSeqAlignment(records, alphabet)
-    raise StopIteration
 
 
 def _force_alphabet(alignment_iterator, alphabet):
