@@ -179,7 +179,7 @@ def gpi_iterator(handle):
         sys.stderr.write("gpi 2.1\n")
         return _gpi20iterator(handle)
     else:
-        raise ValueError('Unknown GPI version %s\n' % inline)
+        raise ValueError('Unknown GPI version {0}\n'.format(inline))
 
 
 def _gpa10iterator(handle):
@@ -238,7 +238,7 @@ def gpa_iterator(handle):
         sys.stderr.write("gpa 1.0\n")
         return _gpa10iterator(handle)
     else:
-        raise ValueError('Unknown GPA version %s\n' % inline)
+        raise ValueError('Unknown GPA version {0}\n'.format(inline))
 
 
 def _gaf20iterator(handle):
@@ -343,7 +343,7 @@ def gafbyproteiniterator(handle):
         sys.stderr.write("gaf 2.1\n")
         return _gaf20byproteiniterator(handle)
     else:
-        raise ValueError('Unknown GAF version %s\n' % inline)
+        raise ValueError('Unknown GAF version {0}\n'.format(inline))
 
 
 def gafiterator(handle):
@@ -365,7 +365,7 @@ def gafiterator(handle):
         sys.stderr.write("gaf 1.0\n")
         return _gaf10iterator(handle)
     else:
-        raise ValueError('Unknown GAF version %s\n' % inline)
+        raise ValueError('Unknown GAF version {0}\n'.format(inline))
 
 
 def writerec(outrec, handle, fields=GAF20FIELDS):
