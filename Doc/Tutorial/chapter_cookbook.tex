@@ -915,14 +915,21 @@ find whole books about this topic!
 \section{Sequence parsing plus simple plots}
 \label{seq:sequence-parsing-plus-pylab}
 
-This section shows some more examples of sequence parsing, using the \verb|Bio.SeqIO|
-module described in Chapter~\ref{chapter:Bio.SeqIO}, plus the Python library matplotlib's \verb|pylab| plotting interface (see \href{http://matplotlib.sourceforge.net/}{the matplotlib website for a tutorial}).  Note that to follow these examples you will need matplotlib installed - but without it you can still try the data parsing bits.
+This section shows some more examples of sequence parsing, using the
+\verb|Bio.SeqIO| module described in Chapter~\ref{chapter:Bio.SeqIO},
+plus the Python library matplotlib's \verb|pylab| plotting interface
+(see \href{http://matplotlib.sourceforge.net/}{the matplotlib website
+for a tutorial}).  Note that to follow these examples you will need
+matplotlib installed - but without it you can still try the data
+parsing bits.
 
 \subsection{Histogram of sequence lengths}
 
 There are lots of times when you might want to visualise the distribution of sequence
 lengths in a dataset -- for example the range of contig sizes in a genome assembly
-project.  In this example we'll reuse our orchid FASTA file \href{http://biopython.org/DIST/docs/tutorial/examples/ls_orchid.fasta}{\tt ls\_orchid.fasta} which has only 94 sequences.
+project.  In this example we'll reuse our orchid FASTA file
+\href{https://raw.githubusercontent.com/biopython/biopython/master/Doc/examples/ls_orchid.fasta}{\tt ls\_orchid.fasta}
+which has only 94 sequences.
 
 First of all, we will use \verb|Bio.SeqIO| to parse the FASTA file and compile a list
 of all the sequence lengths.  You could do this with a for loop, but I find a list
@@ -982,14 +989,17 @@ shown in Figure~\ref{fig:seq-len-hist}.
 Notice that most of these orchid sequences are about $740$ bp long, and there could be
 two distinct classes of sequence here with a subset of shorter sequences.
 
-\emph{Tip:} Rather than using \verb|pylab.show()| to show the plot in a window, you can also use \verb|pylab.savefig(...)| to save the figure to a file (e.g. as a PNG or PDF).
+\emph{Tip:} Rather than using \verb|pylab.show()| to show the plot in a window,
+you can also use \verb|pylab.savefig(...)| to save the figure to a file
+(e.g. as a PNG or PDF).
 
 \subsection{Plot of sequence GC\%}
 
 Another easily calculated quantity of a nucleotide sequence is the GC\%.  You might
 want to look at the GC\% of all the genes in a bacterial genome for example, and
 investigate any outliers which could have been recently acquired by horizontal gene
-transfer.  Again, for this example we'll reuse our orchid FASTA file \href{http://biopython.org/DIST/docs/tutorial/examples/ls_orchid.fasta}{\tt ls\_orchid.fasta}.
+transfer.  Again, for this example we'll reuse our orchid FASTA file
+\href{https://raw.githubusercontent.com/biopython/biopython/master/Doc/examples/ls_orchid.fasta}{\tt ls\_orchid.fasta}.
 
 First of all, we will use \verb|Bio.SeqIO| to parse the FASTA file and compile a list
 of all the GC percentages.  Again, you could do this with a for loop, but I prefer this:
@@ -1068,7 +1078,7 @@ in the plot below).
 \end{latexonly}
 
 To start off, we'll need two sequences.  For the sake of argument, we'll just take
-the first two from our orchid FASTA file \href{http://biopython.org/DIST/docs/tutorial/examples/ls_orchid.fasta}{\tt ls\_orchid.fasta}:
+the first two from our orchid FASTA file \href{https://raw.githubusercontent.com/biopython/biopython/master/Doc/examples/ls_orchid.fasta}{\tt ls\_orchid.fasta}:
 
 \begin{verbatim}
 from Bio import SeqIO
@@ -1489,7 +1499,7 @@ alignments. In this example, we'll first get a Biopython alignment
 object and then get a summary object to calculate info about the
 alignment. The file containing \href{examples/protein.aln}{protein.aln}
 (also available online
-\href{http://biopython.org/DIST/docs/tutorial/examples/protein.aln}{here})
+\href{https://raw.githubusercontent.com/biopython/biopython/master/Doc/examples/protein.aln}{here})
 contains the Clustalw alignment output.
 
 %doctest examples

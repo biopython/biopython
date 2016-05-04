@@ -42,7 +42,8 @@ guidelines and the fact that very long queries like complex searches can
 otherwise trigger an HTTP Error 414 Request URI too long.
 
 Foreign keys are now used when creating BioSQL databases with SQLite3 (this
-was not possible until SQLite version 3.6.19).
+was not possible until SQLite version 3.6.19). The BioSQL taxonomy code now
+updates the taxon table left/right keys when updating the taxonomy.
 
 There have been some fixes to the MMCIF structure parser which now uses
 identifiers which better match results from the PDB structure parse.
@@ -74,10 +75,11 @@ João D Ferreira (first contribution)
 João Rodrigues
 Joe Cora (first contribution)
 Kai Blin
+Lenna Peterson
 Markus Piotrowski
 Matt Ruffalo (first contribution)
 Matteo Sticco (first contribution)
-Lenna Peterson
+Owen Solberg (first contribution)
 Peter Cock
 Steve Bond (first contribution)
 Terry Jones (first contribution)

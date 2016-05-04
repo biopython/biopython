@@ -311,9 +311,18 @@ class _CursorWrapper(object):
         self.real_cursor = real_cursor
 
     def execute(self, operation, params=None, multi=False):
+        """Execute a sql statement
+        """
         self.real_cursor.execute(operation, params, multi)
 
+    def executemany(self, operation, params):
+        """Execute many sql statements
+        """
+        self.real_cursor.executemany(operation, params)
+
     def _convert_tuple(self, tuple_):
+        """Decode any bytestrings present in the row
+        """
         tuple_list = list(tuple_)
         for i, elem in enumerate(tuple_list):
             if type(elem) is bytes:
@@ -489,6 +498,13 @@ class Adaptor(object):
             sql = sql.replace("%s", "?")
         self.dbutils.execute(self.cursor, sql, args)
 
+    def executemany(self, sql, args):
+        """Execute many sql commands.
+        """
+        if os.name == "java":
+            sql = sql.replace("%s", "?")
+        self.dbutils.executemany(self.cursor, sql, args)
+
     def get_subseq_as_string(self, seqid, start, end):
         length = end - start
         # XXX Check this on MySQL and PostgreSQL. substr should be general,
@@ -506,10 +522,14 @@ class Adaptor(object):
             (start + 1, length, seqid))[0])
 
     def execute_and_fetch_col0(self, sql, args=None):
+        """Return a list of values from the first column in the row
+        """
         self.execute(sql, args or ())
         return [field[0] for field in self.cursor.fetchall()]
 
     def execute_and_fetchall(self, sql, args=None):
+        """Return a list of tuples of all rows
+        """
         self.execute(sql, args or ())
         return self.cursor.fetchall()
 
