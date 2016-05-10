@@ -76,7 +76,6 @@ except:
 from Bio.Alphabet.IUPAC import unambiguous_dna as dna
 from Bio.motifs import jaspar, matrix
 
-__docformat__ = "restructuredtext en"
 
 JASPAR_DFLT_COLLECTION = 'CORE'
 
@@ -235,7 +234,7 @@ class JASPAR5(object):
                           ('ChIP-seq', 'PBM', 'SELEX' etc.) are returned.
                           NOTE - must match exactly as stored in the database.
             pazar_id    - Only motifs with the given PAZAR TF ID are returned.
-            medline     - Only motifs with the given medline (PubmMed IDs) are 
+            medline     - Only motifs with the given medline (PubmMed IDs) are
                           returned.
             min_ic      - Only motifs whose profile matrices have at least this
                           information content (specificty) are returned.
@@ -388,7 +387,7 @@ class JASPAR5(object):
 
         # Many JASPAR motifs (especially those not in the CORE collection)
         # do not have taxonomy IDs. So this warning would get annoying.
-        #if not tax_ids:
+        # if not tax_ids:
         #    warnings.warn("Could not fetch any taxonomy IDs for JASPAR motif {0}".format(motif.matrix_id), BiopythonWarning)
 
         motif.species = tax_ids

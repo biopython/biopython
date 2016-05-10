@@ -9,5 +9,3 @@ This directory currently contains contributions from
 
 Bob Bussell <rgb2003@med.cornell.edu> -- NOEtools and xpktools
 """
-
-__docformat__ = "restructuredtext en"

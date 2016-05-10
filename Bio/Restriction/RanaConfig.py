@@ -32,8 +32,6 @@ Example:
 
 """
 
-__docformat__ = "plaintext en"
-
 
 ConsoleWidth = 80
 NameWidth = 10

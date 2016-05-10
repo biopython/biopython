@@ -21,8 +21,6 @@ Functions:
 from Bio._py3k import urlopen as _urlopen
 from Bio._py3k import urlencode as _urlencode
 
-__docformat__ = "restructuredtext en"
-
 
 def get_prodoc_entry(id, cgi='http://www.expasy.ch/cgi-bin/get-prodoc-entry'):
     """get_prodoc_entry(id,

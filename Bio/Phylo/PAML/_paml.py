@@ -8,8 +8,6 @@ from __future__ import print_function
 import os
 import subprocess
 
-__docformat__ = "restructuredtext en"
-
 
 try:
     from os.path import relpath as _relpath

@@ -52,8 +52,6 @@ from Bio._py3k import range
 
 from Bio.Restriction import RanaConfig as RanaConf
 
-__docformat__ = "restructuredtext en"
-
 
 class PrintFormat(object):
     """PrintFormat allow the printing of results of restriction analysis."""
@@ -324,7 +322,7 @@ class PrintFormat(object):
                     l.append(key)
                 else:
                     remaining.append(key)
-            mapping = remaining 
+            mapping = remaining
         cutloc[x] = mapping
         sequence = str(self.sequence)
         revsequence = str(self.sequence.complement())

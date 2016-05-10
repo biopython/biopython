@@ -10,8 +10,6 @@ the core class to deal with codon alignment in biopython.
 """
 from __future__ import division, print_function
 
-__docformat__ = "restructuredtext en"  # Don't just use plain text in epydoc API pages!
-
 from Bio.Align import MultipleSeqAlignment
 from Bio.SeqRecord import SeqRecord
 

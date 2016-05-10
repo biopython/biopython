@@ -17,7 +17,6 @@ except ImportError:
         "to use Bio.Graphics. You can find ReportLab at "
         "http://www.reportlab.com/software/opensource/")
 
-__docformat__ = "restructuredtext en"
 
 # The following code is to allow all the Bio.Graphics
 # code to deal with the different ReportLab renderers

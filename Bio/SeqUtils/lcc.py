@@ -7,8 +7,6 @@
 
 import math
 
-__docformat__ = "restructuredtext en"
-
 
 def lcc_mult(seq, wsize):
     """Local Composition Complexity (LCC) values over sliding window.

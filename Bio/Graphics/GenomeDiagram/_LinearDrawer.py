@@ -41,8 +41,6 @@ from ._GraphSet import GraphSet
 
 from math import ceil
 
-__docformat__ = "restructuredtext en"
-
 
 class LinearDrawer(AbstractDrawer):
     """ LinearDrawer(AbstractDrawer)

@@ -12,8 +12,6 @@ This version will run Sincoal2 (if necessary) Asynchrously.
 import os
 from . import Cache
 
-__docformat__ = "restructuredtext en"
-
 
 class SimCoalCache(Cache.SimCoalCache):
     def __init__(self, data_dir, simcoal_dir):

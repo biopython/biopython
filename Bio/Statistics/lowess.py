@@ -25,7 +25,6 @@ from Bio._py3k import range
 
 import numpy
 
-__docformat__ = "restructuredtext en"
 
 try:
     from Bio.Cluster import median

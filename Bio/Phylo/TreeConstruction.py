@@ -4,7 +4,6 @@
 # as part of this package.
 
 """Classes and methods for tree construction"""
-__docformat__ = "restructuredtext en"
 
 import itertools
 import copy

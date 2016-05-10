@@ -4,8 +4,6 @@
 # as part of this package.
 """Alignment command line tool wrappers."""
 
-__docformat__ = "restructuredtext en"  # Don't just use plain text in epydoc API pages!
-
 from ._Muscle import MuscleCommandline
 from ._Clustalw import ClustalwCommandline
 from ._ClustalOmega import ClustalOmegaCommandline

@@ -18,9 +18,6 @@ from ._base import _BaseSearchObject
 from .hsp import HSP
 
 
-__docformat__ = "restructuredtext en"
-
-
 class Hit(_BaseSearchObject):
 
     """Class representing a single database hit of a search result.

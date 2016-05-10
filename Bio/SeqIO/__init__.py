@@ -313,8 +313,6 @@ making up each alignment as SeqRecords.
 from __future__ import print_function
 from Bio._py3k import basestring
 
-__docformat__ = "restructuredtext en"  # not just plaintext
-
 # TODO
 # - define policy on reading aligned sequences with gaps in
 #   (e.g. - and . characters) including how the alphabet interacts
@@ -325,40 +323,37 @@ __docformat__ = "restructuredtext en"  # not just plaintext
 #
 # - MSF multiple alignment format, aka GCG, aka PileUp format (*.msf)
 #   http://www.bioperl.org/wiki/MSF_multiple_alignment_format
-
-"""
-FAO BioPython Developers
-------------------------
-The way I envision this SeqIO system working as that for any sequence file
-format we have an iterator that returns SeqRecord objects.
-
-This also applies to interlaced file formats (like clustal - although that
-is now handled via Bio.AlignIO instead) where the file cannot be read record
-by record.  You should still return an iterator, even if the implementation
-could just as easily return a list.
-
-These file format specific sequence iterators may be implemented as:
-    - Classes which take a handle for __init__ and provide the __iter__ method
-    - Functions that take a handle, and return an iterator object
-    - Generator functions that take a handle, and yield SeqRecord objects
-
-It is then trivial to turn this iterator into a list of SeqRecord objects,
-an in memory dictionary, or a multiple sequence alignment object.
-
-For building the dictionary by default the id property of each SeqRecord is
-used as the key.  You should always populate the id property, and it should
-be unique in most cases. For some file formats the accession number is a good
-choice.  If the file itself contains ambiguous identifiers, don't try and
-dis-ambiguate them - return them as is.
-
-When adding a new file format, please use the same lower case format name
-as BioPerl, or if they have not defined one, try the names used by EMBOSS.
-
-See also http://biopython.org/wiki/SeqIO_dev
-
---Peter
-"""
-
+#
+# FAO BioPython Developers
+# ------------------------
+# The way I envision this SeqIO system working as that for any sequence file
+# format we have an iterator that returns SeqRecord objects.
+#
+# This also applies to interlaced file formats (like clustal - although that
+# is now handled via Bio.AlignIO instead) where the file cannot be read record
+# by record.  You should still return an iterator, even if the implementation
+# could just as easily return a list.
+#
+# These file format specific sequence iterators may be implemented as:
+#    - Classes which take a handle for __init__ and provide the __iter__ method
+#    - Functions that take a handle, and return an iterator object
+#    - Generator functions that take a handle, and yield SeqRecord objects
+#
+# It is then trivial to turn this iterator into a list of SeqRecord objects,
+# an in memory dictionary, or a multiple sequence alignment object.
+#
+# For building the dictionary by default the id property of each SeqRecord is
+# used as the key.  You should always populate the id property, and it should
+# be unique in most cases. For some file formats the accession number is a good
+# choice.  If the file itself contains ambiguous identifiers, don't try and
+# dis-ambiguate them - return them as is.
+#
+# When adding a new file format, please use the same lower case format name
+# as BioPerl, or if they have not defined one, try the names used by EMBOSS.
+#
+# See also http://biopython.org/wiki/SeqIO_dev
+#
+# --Peter
 
 from Bio.File import as_handle
 from Bio.SeqRecord import SeqRecord

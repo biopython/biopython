@@ -9,9 +9,6 @@ from Bio._py3k import _as_bytes
 from Bio.SearchIO._index import SearchIndexer
 
 
-__docformat__ = "restructuredtext en"
-
-
 class _BaseHmmerTextIndexer(SearchIndexer):
 
     """Base indexer class for HMMER plain text output."""

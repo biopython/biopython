@@ -16,8 +16,6 @@ import tempfile
 
 from Bio.Application import AbstractCommandline, _Argument
 
-__docformat__ = "restructuredtext en"
-
 
 def _gp_float(tok):
     """Gets a float from a token, if it fails, returns the string (PRIVATE)."""

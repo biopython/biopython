@@ -24,8 +24,6 @@ from reportlab.graphics.charts.markers import makeFilledCircle, makeSmiley
 
 from Bio.Graphics import _write
 
-__docformat__ = "restructuredtext en"
-
 
 class ComparativeScatterPlot(object):
     """Display a scatter-type plot comparing two different kinds of info.

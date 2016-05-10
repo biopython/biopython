@@ -3,5 +3,3 @@
 # as part of this package.
 
 """Collections of various bits of useful biological data."""
-
-__docformat__ = "restructuredtext en"

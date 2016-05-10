@@ -13,8 +13,6 @@ from copy import copy
 
 from Bio.PDB.PDBExceptions import PDBConstructionException
 
-__docformat__ = "restructuredtext en"
-
 
 class Entity(object):
     """

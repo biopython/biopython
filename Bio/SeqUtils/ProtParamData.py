@@ -1,7 +1,5 @@
 """This module contains indices to be used with ProtParam."""
 
-__docformat__ = "restructuredtext en"
-
 
 # Kyte & Doolittle index of hydrophobicity
 kd = {'A': 1.8, 'R':-4.5, 'N':-3.5, 'D':-3.5, 'C': 2.5,

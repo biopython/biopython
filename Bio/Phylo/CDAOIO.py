@@ -19,8 +19,6 @@ the CDAOIO.Writer can store triples in a triple store instead of serializing
 them to a file.
 """
 
-__docformat__ = "restructuredtext en"
-
 from Bio._py3k import StringIO
 
 from Bio.Phylo import CDAO

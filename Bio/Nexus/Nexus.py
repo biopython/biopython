@@ -30,7 +30,6 @@ from Bio.Seq import Seq
 from Bio.Nexus.StandardData import StandardData
 from Bio.Nexus.Trees import Tree
 
-__docformat__ = "restructuredtext en"
 
 INTERLEAVE = 70
 SPECIAL_COMMANDS = ['charstatelabels', 'charlabels', 'taxlabels', 'taxset',
@@ -1450,9 +1449,9 @@ class Nexus(object):
             if self.charlabels:
                 newcharlabels = self._adjust_charlabels(exclude=exclude)
                 clkeys = sorted(newcharlabels)
-                fh.write('charlabels '
-                         + ', '.join("%s %s" % (k + 1, safename(newcharlabels[k])) for k in clkeys)
-                         + ';\n')
+                fh.write('charlabels ' +
+                         ', '.join("%s %s" % (k + 1, safename(newcharlabels[k])) for k in clkeys) +
+                         ';\n')
             fh.write('matrix\n')
             if not blocksize:
                 if interleave:

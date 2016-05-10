@@ -14,7 +14,6 @@ from xml.sax.saxutils import XMLGenerator, escape
 
 from Bio import BiopythonParserWarning
 
-
 # For speed try to use cElementTree rather than ElementTree
 try:
     if (3, 0) <= sys.version_info[:2] <= (3, 1):
@@ -27,17 +26,14 @@ except ImportError:
     from xml.etree import ElementTree as ElementTree
 
 
-from Bio._py3k import _as_bytes, _bytes_to_string, unicode
-_empty_bytes_string = _as_bytes("")
-
 from Bio.Alphabet import generic_dna, generic_protein
 from Bio.SearchIO._index import SearchIndexer
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 
+from Bio._py3k import _as_bytes, _bytes_to_string, unicode
+_empty_bytes_string = _as_bytes("")
 
 __all__ = ['BlastXmlParser', 'BlastXmlIndexer', 'BlastXmlWriter']
-
-__docformat__ = "restructuredtext en"
 
 
 # element - optional qresult attribute name mapping

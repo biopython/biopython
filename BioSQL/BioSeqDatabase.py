@@ -24,7 +24,6 @@ from . import BioSeq
 from . import Loader
 from . import DBUtils
 
-__docformat__ = "restructuredtext en"
 
 _POSTGRES_RULES_PRESENT = False  # Hack for BioSQL Bug 2839
 

@@ -21,9 +21,6 @@ from ._base import _BaseSearchObject
 from .hit import Hit
 
 
-__docformat__ = "restructuredtext en"
-
-
 class QueryResult(_BaseSearchObject):
 
     """Class representing search results from a single query.

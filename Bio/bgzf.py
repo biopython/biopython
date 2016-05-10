@@ -234,7 +234,6 @@ import struct
 from Bio._py3k import _as_bytes, _as_string
 from Bio._py3k import open as _open
 
-__docformat__ = "restructuredtext en"
 
 # For Python 2 can just use: _bgzf_magic = '\x1f\x8b\x08\x04'
 # but need to use bytes on Python 3

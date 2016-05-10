@@ -51,8 +51,6 @@ except ImportError:
                      "This causes problems with some ParserSupport modules\n")
     xml_support = 0
 
-__docformat__ = "restructuredtext en"
-
 
 class AbstractParser(object):
     """Base class for other parsers.

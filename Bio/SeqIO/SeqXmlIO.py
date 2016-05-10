@@ -28,8 +28,6 @@ from Bio.Seq import UnknownSeq
 from Bio.SeqRecord import SeqRecord
 from .Interfaces import SequentialSequenceWriter
 
-__docformat__ = "restructuredtext en"
-
 
 class XMLRecordIterator(object):
     """Base class for building iterators for record style XML formats.

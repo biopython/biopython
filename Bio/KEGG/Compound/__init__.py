@@ -19,8 +19,6 @@ from __future__ import print_function
 from Bio.KEGG import _write_kegg
 from Bio.KEGG import _wrap_kegg
 
-__docformat__ = "restructuredtext en"
-
 
 # Set up line wrapping rules (see Bio.KEGG._wrap_kegg)
 name_wrap = [0, "",

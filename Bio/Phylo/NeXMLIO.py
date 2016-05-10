@@ -11,7 +11,6 @@
 See: http://www.nexml.org
 """
 
-__docformat__ = "restructuredtext en"
 
 from Bio._py3k import StringIO
 

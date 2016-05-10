@@ -27,7 +27,6 @@ the tables here, or a user-defined table.
 
 from Bio import Alphabet
 
-__docformat__ = "restructuredtext en"
 
 murphy_15_tab = {"L": "L",
                  "V": "L",

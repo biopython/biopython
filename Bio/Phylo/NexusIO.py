@@ -4,7 +4,6 @@
 # as part of this package.
 
 """I/O function wrappers for `Bio.Nexus` trees."""
-__docformat__ = "restructuredtext en"
 
 from itertools import chain
 

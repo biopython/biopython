@@ -23,8 +23,6 @@ new genome 2 --   a b c C D E F
 # standard modules
 from .GeneralPoint import TwoCrossover
 
-__docformat__ = "restructuredtext en"
-
 
 class TwoPointCrossover(TwoCrossover):
     """Perform two point crossover between genomes at some defined rate.

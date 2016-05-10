@@ -5,7 +5,6 @@
 
 import xml.etree.ElementTree as ET
 
-__docformat__ = "restructuredtext en"
 
 cdao_namespaces = {
     'cdao': 'http://purl.obolibrary.org/obo/cdao.owl#',

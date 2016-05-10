@@ -7,14 +7,8 @@
 """Code for dealing with Codon Alignment.
 """
 from __future__ import print_function
-__docformat__ = "restructuredtext en"  # Don't just use plain text in epydoc API pages!
 
 from Bio import BiopythonExperimentalWarning
-
-import warnings
-warnings.warn('Bio.codonalign is an experimental module which may undergo '
-              'significant changes prior to its future official release.',
-              BiopythonExperimentalWarning)
 
 try:
     from itertools import izip
@@ -29,6 +23,11 @@ from Bio.codonalign.codonalignment import CodonAlignment, mktest
 from Bio.codonalign.codonalphabet import CodonAlphabet
 from Bio.codonalign.codonalphabet import default_codon_table, default_codon_alphabet
 from Bio.codonalign.codonalphabet import get_codon_alphabet as _get_codon_alphabet
+
+import warnings
+warnings.warn('Bio.codonalign is an experimental module which may undergo '
+              'significant changes prior to its future official release.',
+              BiopythonExperimentalWarning)
 
 
 def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X',

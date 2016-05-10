@@ -10,8 +10,6 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Data.SCOPData import protein_letters_3to1
 
-__docformat__ = "restructuredtext en"
-
 
 def PdbSeqresIterator(handle):
     """Returns SeqRecord objects for each chain in a PDB file.

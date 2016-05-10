@@ -15,8 +15,6 @@ from Bio.PDB.PDBParser import PDBParser
 from Bio.PDB.Polypeptide import CaPPBuilder, is_aa
 from Bio.PDB.Vector import rotaxis
 
-__docformat__ = "restructuredtext en"
-
 
 class _AbstractHSExposure(AbstractPropertyMap):
     """

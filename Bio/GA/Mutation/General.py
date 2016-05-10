@@ -11,8 +11,6 @@ import random
 # local stuff
 from Bio.GA.Organism import Organism
 
-__docformat__ = "restructuredtext en"
-
 
 class SafeFitnessMutation(object):
     """Perform mutations, but do not allow decreases in organism fitness.

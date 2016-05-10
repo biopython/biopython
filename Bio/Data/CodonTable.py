@@ -15,7 +15,6 @@ from Bio import Alphabet
 from Bio.Alphabet import IUPAC
 from Bio.Data import IUPACData
 
-__docformat__ = "restructuredtext en"
 
 unambiguous_dna_by_name = {}
 unambiguous_dna_by_id = {}
@@ -206,8 +205,8 @@ def list_possible_proteins(codon, forward_table, ambiguous_nucleotide_values):
                         stops.append(y1 + y2 + y3)
         if stops:
             if possible:
-                raise TranslationError("ambiguous codon '%s' codes " % codon
-                                       + "for both proteins and stop codons")
+                raise TranslationError("ambiguous codon %r codes for both"
+                                       " proteins and stop codons" % codon)
             # This is a true stop codon - tell the caller about it
             raise KeyError(codon)
         return list(possible)

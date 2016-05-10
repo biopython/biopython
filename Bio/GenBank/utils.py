@@ -6,8 +6,6 @@
 """Useful utilities for helping in parsing GenBank files.
 """
 
-__docformat__ = "restructuredtext en"
-
 
 class FeatureValueCleaner(object):
     r"""Provide specialized capabilities for cleaning up values in features.

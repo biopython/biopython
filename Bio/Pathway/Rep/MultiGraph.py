@@ -7,8 +7,6 @@
 
 from functools import reduce
 
-__docformat__ = "restructuredtext en"
-
 
 # TODO - Subclass graph?
 class MultiGraph(object):

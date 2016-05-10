@@ -16,7 +16,6 @@ from ._base import _BaseHmmerTextIndexer
 
 __all__ = ['Hmmer2TextParser', 'Hmmer2TextIndexer']
 
-__docformat__ = "restructuredtext en"
 
 _HSP_ALIGN_LINE = re.compile(r'(\S+):\s+domain (\d+) of (\d+)')
 

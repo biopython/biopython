@@ -8,8 +8,6 @@
 import os
 import sys
 
-__docformat__ = "restructuredtext en"
-
 
 # This is a workaround to work with the test system
 # In any case the problem is with the test system

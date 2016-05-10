@@ -39,8 +39,6 @@ go away.
 """
 import sys
 
-__docformat__ = "restructuredtext en"
-
 
 if sys.version_info[0] >= 3:
     # Code for Python 3

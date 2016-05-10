@@ -10,8 +10,6 @@ import os
 import tarfile
 from .Controller import SimCoalController
 
-__docformat__ = "restructuredtext en"
-
 
 class SimCoalCache(object):
     def __init__(self, data_dir, simcoal_dir):

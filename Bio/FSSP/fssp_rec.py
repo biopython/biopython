@@ -1,7 +1,5 @@
 """A superclass for reading [f]ixed-column type [f]lat-[f]ile records."""
 
-__docformat__ = "restructuredtext en"
-
 
 class fff_rec(object):
     def __init__(self, inrec=''):

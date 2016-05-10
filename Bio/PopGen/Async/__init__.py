@@ -8,8 +8,6 @@
 import os
 import threading
 
-__docformat__ = "restructuredtext en"
-
 
 class Async(object):
     """Abstract Asynchronous execution class.

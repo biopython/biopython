@@ -1,4 +1,4 @@
-# Copyright 2008-2010 by Peter Cock.  All rights reserved.
+# Copyright 2008-2016 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -126,8 +126,6 @@ same length.
 
 from __future__ import print_function
 from Bio._py3k import basestring
-
-__docformat__ = "restructuredtext en"  # not just plaintext
 
 # TODO
 # - define policy on reading aligned sequences with gaps in

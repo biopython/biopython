@@ -22,8 +22,6 @@ The DSSP codes for secondary structure used here are:
 
 from __future__ import print_function
 
-__docformat__ = "restructuredtext en"
-
 import re
 from Bio._py3k import StringIO
 import subprocess

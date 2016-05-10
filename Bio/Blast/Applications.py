@@ -30,8 +30,6 @@ from __future__ import print_function
 
 from Bio.Application import _Option, AbstractCommandline, _Switch
 
-__docformat__ = "restructuredtext en"
-
 
 class _NcbibaseblastCommandline(AbstractCommandline):
     """Base Commandline object for (new) NCBI BLAST+ wrappers (PRIVATE).

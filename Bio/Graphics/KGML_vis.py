@@ -25,8 +25,6 @@ from Bio._py3k import urlopen as _urlopen
 
 from Bio.KEGG.KGML.KGML_pathway import Pathway
 
-__docformat__ = "restructuredtext en"
-
 
 def darken(color, factor=0.7):
     """Returns darkened color as a ReportLab RGB color.

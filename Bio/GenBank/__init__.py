@@ -53,7 +53,6 @@ from Bio import SeqFeature
 from .utils import FeatureValueCleaner
 from .Scanner import GenBankScanner
 
-__docformat__ = "restructuredtext en"
 
 # Constants used to parse GenBank header lines
 GENBANK_INDENT = 12

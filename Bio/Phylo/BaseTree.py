@@ -8,7 +8,6 @@
 All object representations for phylogenetic trees should derive from these base
 classes in order to use the common methods defined on them.
 """
-__docformat__ = "restructuredtext en"
 
 from Bio._py3k import basestring, filter, unicode, zip
 
@@ -19,7 +18,6 @@ import random
 import re
 
 from Bio import _utils
-
 
 # NB: On Python 2, repr() and str() are specified to return byte strings, not
 # unicode. On Python 3, it's the opposite. Horrible.

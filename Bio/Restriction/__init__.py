@@ -56,7 +56,6 @@ Example:
 
 from Bio.Restriction.Restriction import *
 
-__docformat__ = "restructuredtext en"
 
 #
 #   OK can't put the following code in Bio.Restriction.__init__ unless

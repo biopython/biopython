@@ -3,5 +3,3 @@
 # as part of this package.
 
 """The Bio.Nexus contains a NEXUS file parser and objects to model this data."""
-
-__docformat__ = "restructuredtext en"

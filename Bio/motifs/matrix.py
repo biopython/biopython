@@ -14,8 +14,6 @@ from Bio._py3k import range
 from Bio.Seq import Seq
 from Bio.Alphabet import IUPAC
 
-__docformat__ = "restructuredtext en"
-
 
 class GenericPositionMatrix(dict):
 

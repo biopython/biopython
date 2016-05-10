@@ -19,8 +19,6 @@ from Bio.Alphabet import generic_dna, _ungap
 
 from Bio.codonalign.codonalphabet import default_codon_alphabet, default_codon_table
 
-__docformat__ = "restructuredtext en"
-
 
 class CodonSeq(Seq):
     """CodonSeq is designed to be within the SeqRecords of a CodonAlignment class.

@@ -19,8 +19,6 @@ from random import randint
 from time import strftime, clock
 # from logging import debug
 
-__docformat__ = "restructuredtext en"
-
 
 def my_float(f):
     # Because of Jython, mostly
@@ -202,7 +200,7 @@ class FDistController(object):
             - try_runs - Number of simulations on the part trying to get
                        Fst correct
             - limit - Interval limit
-            
+
         Other parameters can be seen on run_fdist.
         """
         max_run_fst = 1

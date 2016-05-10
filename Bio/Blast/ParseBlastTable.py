@@ -10,8 +10,6 @@ Returns a BlastTableRec instance
 
 import sys
 
-__docformat__ = "restructuredtext en"
-
 
 class BlastTableEntry(object):
     def __init__(self, in_rec):

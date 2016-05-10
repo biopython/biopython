@@ -24,5 +24,3 @@ from ._CrossLink import CrossLink
 # from ._Colors import ColorTranslator
 # from ._Feature import Feature
 # from ._Graph import GraphData
-
-__docformat__ = "restructuredtext en"

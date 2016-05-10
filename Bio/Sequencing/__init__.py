@@ -9,5 +9,3 @@ This code deals with programs such as Phred, Phrap and Consed -- which provide
 utilities for calling bases from sequencing reads, and assembling sequences
 into contigs.
 """
-
-__docformat__ = "restructuredtext en"

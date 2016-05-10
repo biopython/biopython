@@ -27,8 +27,6 @@ All these file format specific optimisations are handled by this (private) modul
 from Bio import SeqIO
 # NOTE - Lots of lazy imports further on...
 
-__docformat__ = "restructuredtext en"
-
 
 def _genbank_convert_fasta(in_handle, out_handle, alphabet=None):
     """Fast GenBank to FASTA (PRIVATE)."""

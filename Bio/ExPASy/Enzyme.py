@@ -22,8 +22,6 @@ Classes:
 
 """
 
-__docformat__ = "restructuredtext en"
-
 
 def parse(handle):
     """Parse ENZYME records.

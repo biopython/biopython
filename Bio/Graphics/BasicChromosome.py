@@ -47,7 +47,6 @@ from reportlab.graphics.widgetbase import Widget
 from Bio.Graphics import _write
 from Bio.Graphics.GenomeDiagram._Colors import ColorTranslator as _ColorTranslator
 
-__docformat__ = "restructuredtext en"
 
 _color_trans = _ColorTranslator()
 

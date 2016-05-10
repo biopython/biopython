@@ -18,8 +18,6 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqIO.Interfaces import SequentialSequenceWriter
 
-__docformat__ = "restructuredtext en"
-
 
 def SimpleFastaParser(handle):
     """Generator function to iterate over Fasta records (as string tuples).

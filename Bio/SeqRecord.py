@@ -10,8 +10,6 @@
 
 from Bio._py3k import basestring
 
-__docformat__ = "restructuredtext en"  # Simple markup to show doctests nicely
-
 # NEEDS TO BE SYNCH WITH THE REST OF BIOPYTHON AND BIOPERL
 # In particular, the SeqRecord and BioSQL.BioSeq.DBSeqRecord classes
 # need to be in sync (this is the BioSQL "Database SeqRecord", see

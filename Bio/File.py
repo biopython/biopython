@@ -43,8 +43,6 @@ except ImportError:
     _sqlite = None
     pass
 
-__docformat__ = "restructuredtext en"
-
 
 @contextlib.contextmanager
 def as_handle(handleish, mode='r', **kwargs):

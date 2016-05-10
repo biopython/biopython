@@ -13,8 +13,6 @@ Journal article:
     Han and Zmasek (2009), doi:10.1186/1471-2105-10-356
 """
 
-__docformat__ = "restructuredtext en"
-
 import re
 import warnings
 

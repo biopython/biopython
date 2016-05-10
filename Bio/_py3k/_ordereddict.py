@@ -23,8 +23,6 @@
 
 from UserDict import DictMixin
 
-__docformat__ = "restructuredtext en"
-
 
 class OrderedDict(dict, DictMixin):
 

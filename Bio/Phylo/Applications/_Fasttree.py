@@ -5,7 +5,6 @@
 """Command-line wrapper for tree inference program Fasttree."""
 from __future__ import print_function
 
-__docformat__ = "restructuredtext en"
 
 from Bio.Application import _Option, _Switch, _Argument, AbstractCommandline
 

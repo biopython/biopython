@@ -4,7 +4,7 @@
 # are missing from this wrapper
 
 from __future__ import print_function
-__docformat__ = "restructuredtext en"
+
 from Bio.Application import _Option, _Argument, _Switch
 from Bio.Application import AbstractCommandline, _ArgumentList
 from Bio.Application import _StaticArgument

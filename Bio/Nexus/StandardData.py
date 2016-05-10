@@ -7,8 +7,6 @@
 """
 from __future__ import print_function
 
-__docformat__ = "restructuredtext en"
-
 
 class NexusError(Exception):
     pass

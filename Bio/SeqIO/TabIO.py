@@ -38,8 +38,6 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqIO.Interfaces import SequentialSequenceWriter
 
-__docformat__ = "restructuredtext en"
-
 
 def TabIterator(handle, alphabet=single_letter_alphabet):
     """Iterates over tab separated lines (as SeqRecord objects).

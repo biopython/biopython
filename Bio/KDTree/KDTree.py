@@ -20,8 +20,6 @@ from numpy import random
 
 from Bio.KDTree import _CKDTree
 
-__docformat__ = "restructuredtext en"
-
 
 def _dist(p, q):
     diff = p - q

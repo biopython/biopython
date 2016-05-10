@@ -17,8 +17,6 @@ See also the Seq_ wiki and the chapter in our tutorial:
 """
 from __future__ import print_function
 
-__docformat__ = "restructuredtext en"  # Don't just use plain text in epydoc API pages!
-
 import string  # for maketrans only
 import array
 import sys

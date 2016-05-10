@@ -133,7 +133,6 @@ secondary structure string here, are also sliced:
 """
 from __future__ import print_function
 
-__docformat__ = "restructuredtext en"  # not just plaintext
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment

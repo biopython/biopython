@@ -24,9 +24,6 @@ from Bio.SearchIO._utils import singleitem, allitems, fullcascade, \
 from ._base import _BaseHSP
 
 
-__docformat__ = "restructuredtext en"
-
-
 class HSP(_BaseHSP):
 
     """Class representing high-scoring region(s) between query and hit.

@@ -23,8 +23,6 @@ Functions:
 """
 from Bio.PopGen.GenePop import get_indiv
 
-__docformat__ = "restructuredtext en"
-
 
 def read(fname):
     """Parses a file containing a GenePop file.

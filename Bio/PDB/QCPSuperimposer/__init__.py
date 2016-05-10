@@ -17,7 +17,6 @@ from Bio import BiopythonExperimentalWarning
 from numpy import dot, sqrt, array, matrix, inner, zeros
 from .qcprotmodule import FastCalcRMSDAndRotation
 
-__docformat__ = "restructuredtext en"
 
 warnings.warn('Bio.PDB.QCPSuperimposer is an experimental submodule which may undergo '
               'significant changes prior to its future official release.',

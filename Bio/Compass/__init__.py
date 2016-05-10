@@ -16,8 +16,6 @@ Tested with COMPASS 1.24.
 
 import re
 
-__docformat__ = "restructuredtext en"
-
 
 def read(handle):
     """Reads a COMPASS file containing one COMPASS record."""

@@ -8,7 +8,6 @@
 
 from __future__ import print_function
 
-__docformat__ = "restructuredtext en"  # Don't just use plain text in epydoc API pages!
 
 from Bio.Application import _Argument, _Option, _Switch, AbstractCommandline
 

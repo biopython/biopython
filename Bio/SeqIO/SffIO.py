@@ -251,8 +251,6 @@ _srt = b".srt"
 _mft = b".mft"
 _flag = b"\xff"
 
-__docformat__ = "restructuredtext en"
-
 
 def _check_mode(handle):
     """Ensure handle not opened in text mode.

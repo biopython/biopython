@@ -15,8 +15,6 @@ from __future__ import print_function
 from binascii import crc32 as _crc32
 from Bio._py3k import _as_bytes
 
-__docformat__ = "restructuredtext en"
-
 
 def crc32(seq):
     """Returns the crc32 checksum for a sequence (string or Seq object)."""

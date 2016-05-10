@@ -49,8 +49,6 @@ from Bio import Alphabet
 COUNT = 1
 FREQ = 2
 
-__docformat__ = "restructuredtext en"
-
 
 class FreqTable(dict):
 

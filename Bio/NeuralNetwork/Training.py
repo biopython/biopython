@@ -8,8 +8,6 @@
 # standard modules
 import random
 
-__docformat__ = "restructuredtext en"
-
 
 class TrainingExample(object):
     """Hold inputs and outputs of a training example."""

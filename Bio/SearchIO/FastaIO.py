@@ -116,8 +116,6 @@ from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 
 __all__ = ['FastaM10Parser', 'FastaM10Indexer']
 
-__docformat__ = "restructuredtext en"
-
 
 # precompile regex patterns
 # regex for program name

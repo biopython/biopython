@@ -9,8 +9,6 @@
 from Bio import motifs
 from Bio.Alphabet import IUPAC
 
-__docformat__ = "restructuredtext en"
-
 
 class Motif(motifs.Motif, dict):
     """A Bio.motifs.transfac.Motif stores the information in one TRANSFAC

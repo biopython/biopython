@@ -10,8 +10,6 @@ from Bio.Alphabet import IUPAC
 from Bio import Seq
 from Bio import motifs
 
-__docformat__ = "restructuredtext en"
-
 
 def read(handle):
     """Parses the text output of the MEME program into a meme.Record object.
@@ -49,7 +47,7 @@ def read(handle):
         motif.evalue = evalue
         motif.name = name
         record.append(motif)
-        assert len(record)==motif_number
+        assert len(record) == motif_number
         __skip_unused_lines(handle)
         try:
             line = next(handle)
@@ -222,18 +220,18 @@ def __read_motif_statistics(line):
     # or like
     #    MOTIF  1 MEME    width =  19  sites =   3  llr = 43  E-value = 6.9e-002
     words = line.split()
-    assert words[0]=='MOTIF'
+    assert words[0] == 'MOTIF'
     motif_number = int(words[1])
-    if words[2]=='MEME':
+    if words[2] == 'MEME':
         key_values = words[3:]
     else:
         key_values = words[2:]
     keys = key_values[::3]
     equal_signs = key_values[1::3]
     values = key_values[2::3]
-    assert keys==['width', 'sites', 'llr', 'E-value']
+    assert keys == ['width', 'sites', 'llr', 'E-value']
     for equal_sign in equal_signs:
-        assert equal_sign=='='
+        assert equal_sign == '='
     length = int(values[0])
     num_occurrences = int(values[1])
     evalue = float(values[3])

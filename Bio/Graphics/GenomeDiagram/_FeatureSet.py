@@ -37,7 +37,6 @@ from ._Feature import Feature
 # Builtins
 import re
 
-__docformat__ = "restructuredtext en"
 
 # ------------------------------------------------------------------------------
 # CLASSES

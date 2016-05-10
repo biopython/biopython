@@ -16,8 +16,6 @@ from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
 from .Interfaces import AlignmentIterator, SequentialAlignmentWriter
 
-__docformat__ = "restructuredtext en"
-
 
 class ClustalWriter(SequentialAlignmentWriter):
     """Clustalw alignment writer."""
@@ -104,7 +102,7 @@ class ClustalIterator(AlignmentIterator):
             raise StopIteration
 
         # Whitelisted headers we know about
-        known_headers = ['CLUSTAL', 'PROBCONS', 'MUSCLE', 'MSAPROBS','Kalign']
+        known_headers = ['CLUSTAL', 'PROBCONS', 'MUSCLE', 'MSAPROBS', 'Kalign']
         if line.strip().split()[0] not in known_headers:
             raise ValueError("%s is not a known CLUSTAL header: %s" %
                              (line.strip().split()[0],

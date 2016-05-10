@@ -6,8 +6,6 @@
 """Code to interact with the primersearch program from EMBOSS.
 """
 
-__docformat__ = "restructuredtext en"
-
 
 class InputRecord(object):
     """Represent the input file into the primersearch program.

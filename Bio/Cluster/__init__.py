@@ -7,8 +7,6 @@ import numpy
 
 from Bio.Cluster.cluster import *
 
-__docformat__ = "restructuredtext en"
-
 
 def _treesort(order, nodeorder, nodecounts, tree):
     # Find the order of the nodes consistent with the hierarchical clustering
@@ -526,8 +524,8 @@ Arguments:
         if geneclusters is not None and expclusters is not None and \
            type(geneclusters) != type(expclusters):
             raise ValueError("found one k-means and one hierarchical "
-                           + "clustering solution in geneclusters and "
-                           + "expclusters")
+                             "clustering solution in geneclusters and "
+                             "expclusters")
         gid = 0
         aid = 0
         filename = jobname

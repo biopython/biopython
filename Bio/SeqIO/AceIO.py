@@ -18,8 +18,6 @@ from Bio.SeqRecord import SeqRecord
 from Bio.Alphabet import generic_nucleotide, generic_dna, generic_rna, Gapped
 from Bio.Sequencing import Ace
 
-__docformat__ = "restructuredtext en"
-
 
 def AceIterator(handle):
     """Returns SeqRecord objects from an ACE file.

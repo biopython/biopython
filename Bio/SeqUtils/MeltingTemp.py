@@ -162,7 +162,6 @@ import warnings
 from Bio import SeqUtils, Seq
 from Bio import BiopythonWarning
 
-__docformat__ = "restructuredtext en"
 
 # Thermodynamic lookup tables (dictionaries):
 # Enthalpy (dH) and entropy (dS) values for nearest neighbors and initiation
@@ -985,8 +984,6 @@ def Tm_NN(seq, check=True, strict=True, c_seq=None, shift=0, nn_table=DNA_NN3,
         melting_temp = (1 / (1 / (melting_temp + 273.15) + corr) - 273.15)
 
     return melting_temp
-
-__docformat__ = "restructuredtext en"
 
 
 def Tm_staluc(s, dnac=50, saltc=50, rna=0):

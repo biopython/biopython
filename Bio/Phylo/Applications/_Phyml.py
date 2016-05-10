@@ -3,7 +3,6 @@
 # Please see the LICENSE file that should have been included as part of this
 # package.
 """Command-line wrapper for the tree inference program PhyML."""
-__docformat__ = "restructuredtext en"
 
 from Bio._py3k import basestring
 

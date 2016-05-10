@@ -28,8 +28,6 @@ import xml.etree.ElementTree as ET
 
 from Bio._py3k import _is_int_or_long, _as_string
 
-__docformat__ = "restructuredtext en"
-
 
 # Pathway
 class Pathway(object):

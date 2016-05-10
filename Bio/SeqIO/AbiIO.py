@@ -14,7 +14,6 @@ http://www.appliedbiosystem.com/support/software_community/ABIF_File_Format.pdf
 
 """
 
-__docformat__ = "restructuredtext en"
 
 import datetime
 import struct

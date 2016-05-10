@@ -19,7 +19,6 @@ import os
 import array
 import shelve
 
-__docformat__ = "restructuredtext en"
 
 try:
     import cPickle as pickle  # Only available under Python 2

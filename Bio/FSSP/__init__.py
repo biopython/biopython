@@ -22,8 +22,6 @@ from . import fssp_rec
 from Bio.Align import Generic
 from Bio import Alphabet
 
-__docformat__ = "restructuredtext en"
-
 
 fff_rec = fssp_rec.fff_rec
 header_records = {

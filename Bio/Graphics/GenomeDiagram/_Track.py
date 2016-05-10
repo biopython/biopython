@@ -37,8 +37,6 @@ from Bio._py3k import range
 from ._FeatureSet import FeatureSet
 from ._GraphSet import GraphSet
 
-__docformat__ = "restructuredtext en"
-
 
 class Track(object):
     """ Track

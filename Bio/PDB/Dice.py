@@ -8,8 +8,6 @@ import warnings
 
 from Bio.PDB.PDBIO import PDBIO
 
-__docformat__ = "restructuredtext en"
-
 
 _hydrogen = re.compile("[123 ]*H.*")
 

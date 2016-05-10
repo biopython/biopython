@@ -192,8 +192,6 @@ from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 
 __all__ = ['BlatPslParser', 'BlatPslIndexer', 'BlatPslWriter']
 
-__docformat__ = "restructuredtext en"
-
 
 # precompile regex patterns
 _PTR_ROW_CHECK = r'^\d+\s+\d+\s+\d+\s+\d+'

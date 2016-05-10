@@ -20,7 +20,6 @@ from Bio.Alphabet import IUPAC
 from Bio.Seq import Seq
 from Bio.SubsMat import FreqTable
 
-__docformat__ = "restructuredtext en"
 
 # Expected random distributions for 20-letter protein, and
 # for 4-letter nucleotide alphabets

@@ -8,7 +8,6 @@ This is an implementation of a state-emitting MarkovModel.  I am using
 terminology similar to Manning and Schutze.
 
 
-
 Functions:
 train_bw        Train a markov model using the Baum-Welch algorithm.
 train_visible   Train a visible markov model using MLE.
@@ -23,7 +22,6 @@ MarkovModel     Holds the description of a markov model
 
 import numpy
 
-__docformat__ = "restructuredtext en"
 
 try:
     logaddexp = numpy.logaddexp

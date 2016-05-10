@@ -10,8 +10,6 @@ import os.path
 from ._paml import Paml, _relpath
 from . import _parse_codeml
 
-__docformat__ = "restructuredtext en"
-
 
 class CodemlError(EnvironmentError):
     """CODEML has failed. Run with verbose = True to view CODEML's error

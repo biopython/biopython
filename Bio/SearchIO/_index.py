@@ -12,9 +12,6 @@ from Bio import bgzf
 from Bio.File import _IndexedSeqFileProxy, _open_for_random_access
 
 
-__docformat__ = "restructuredtext en"
-
-
 class SearchIndexer(_IndexedSeqFileProxy):
     """Base class for file format specific random access.
 

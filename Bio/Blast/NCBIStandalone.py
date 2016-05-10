@@ -24,17 +24,16 @@ wrappers for these under Bio.Blast.Applications (see the tutorial).
 
 from __future__ import print_function
 
-from Bio import BiopythonDeprecationWarning
-import warnings
-warnings.warn("This module has been deprecated. Consider Bio.SearchIO for "
-              "parsing BLAST output instead.", BiopythonDeprecationWarning)
-
 import re
 
 from Bio.ParserSupport import *
 from Bio.Blast import Record
 
-__docformat__ = "restructuredtext en"
+from Bio import BiopythonDeprecationWarning
+import warnings
+warnings.warn("This module has been deprecated. Consider Bio.SearchIO for "
+              "parsing BLAST output instead.", BiopythonDeprecationWarning)
+
 
 _score_e_re = re.compile(r'Score +E')
 
