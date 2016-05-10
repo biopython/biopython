@@ -1,4 +1,4 @@
-# Copyright 2007-2011 by Peter Cock.  All rights reserved.
+# Copyright 2007-2016 by Peter Cock.  All rights reserved.
 #
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -928,8 +928,8 @@ class EmblWriter(_InsdcWriter):
                 index = LETTERS_PER_LINE * line_number + \
                     LETTERS_PER_BLOCK * block
                 handle.write((" %s" % data[index:index + LETTERS_PER_BLOCK]))
-            handle.write(str((line_number + 1)
-                             * LETTERS_PER_LINE).rjust(POSITION_PADDING))
+            handle.write(str((line_number + 1) *
+                             LETTERS_PER_LINE).rjust(POSITION_PADDING))
             handle.write("\n")
         if seq_len % LETTERS_PER_LINE:
             # Final (partial) line

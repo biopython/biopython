@@ -257,11 +257,11 @@ class Chromosome(_ChromosomeComponent):
         # will actually be the picture of the chromosome
         cur_y_pos = self.start_y_position
         if self.scale_num:
-            y_pos_change = ((self.start_y_position * .95 - self.end_y_position)
-                            / self.scale_num)
+            y_pos_change = ((self.start_y_position * .95 - self.end_y_position) /
+                            self.scale_num)
         elif len(self._sub_components) > 0:
-            y_pos_change = ((self.start_y_position * .95 - self.end_y_position)
-                            / self.subcomponent_size())
+            y_pos_change = ((self.start_y_position * .95 - self.end_y_position) /
+                            self.subcomponent_size())
         # no sub_components to draw
         else:
             pass

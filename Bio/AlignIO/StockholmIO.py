@@ -1,4 +1,4 @@
-# Copyright 2006-2015 by Peter Cock.  All rights reserved.
+# Copyright 2006-2016 by Peter Cock.  All rights reserved.
 # Revisions copyright 2015 by Ben Woodcroft.  All rights reserved.
 #
 # This code is part of the Biopython distribution and governed by its
@@ -368,7 +368,7 @@ class StockholmIterator(AlignmentIterator):
                 if len(parts) != 2:
                     # This might be someone attempting to store a zero length sequence?
                     raise ValueError("Could not split line into identifier "
-                                      + "and sequence:\n" + line)
+                                     "and sequence:\n" + line)
                 id, seq = parts
                 if id not in ids:
                     ids[id] = True

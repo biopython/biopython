@@ -1,6 +1,6 @@
 # Copyright 2000-2004 Brad Chapman.
 # Copyright 2001 Iddo Friedberg.
-# Copyright 2007-2010 by Peter Cock.
+# Copyright 2007-2016 by Peter Cock.
 # All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -54,7 +54,7 @@ class Alignment(object):
         import Bio
         warnings.warn("With the introduction of the MultipleSeqAlignment class in Bio.Align, this base class is deprecated and is likely to be removed in a future release of Biopython.", Bio.BiopythonDeprecationWarning)
         if not (isinstance(alphabet, Alphabet.Alphabet)
-        or isinstance(alphabet, Alphabet.AlphabetEncoder)):
+                or isinstance(alphabet, Alphabet.AlphabetEncoder)):
             raise ValueError("Invalid alphabet argument")
         self._alphabet = alphabet
         # hold everything at a list of SeqRecord objects

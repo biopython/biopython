@@ -649,7 +649,7 @@ def _diff_codon(codon1, codon2, fold_dict):
                 else:
                     raise RuntimeError("Unexpected fold_num %d" % fold_num[n])
             if i != j and ((i in purine and j in pyrimidine)
-                    or (i in pyrimidine and j in purine)):
+                           or (i in pyrimidine and j in purine)):
                 if fold_num[n] == '0':
                     Q0 += 1
                 elif fold_num[n] == '2':

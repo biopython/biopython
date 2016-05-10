@@ -104,8 +104,8 @@ class SummaryInfo(object):
 
             if require_multiple and num_atoms == 1:
                 consensus += ambiguous
-            elif (len(max_atoms) == 1) and ((float(max_size) / float(num_atoms))
-                                            >= threshold):
+            elif (len(max_atoms) == 1) and ((float(max_size) /
+                                             float(num_atoms)) >= threshold):
                 consensus += max_atoms[0]
             else:
                 consensus += ambiguous
@@ -161,8 +161,8 @@ class SummaryInfo(object):
 
             if require_multiple and num_atoms == 1:
                 consensus += ambiguous
-            elif (len(max_atoms) == 1) and ((float(max_size) / float(num_atoms))
-                                            >= threshold):
+            elif (len(max_atoms) == 1) and ((float(max_size) /
+                                             float(num_atoms)) >= threshold):
                 consensus += max_atoms[0]
             else:
                 consensus += ambiguous

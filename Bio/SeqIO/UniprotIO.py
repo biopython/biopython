@@ -361,8 +361,8 @@ class Parser(object):
                             for person_element in cit_element:
                                 authors.append(person_element.attrib['name'])
                         elif cit_element.tag == NS + 'dbReference':
-                            self.ParsedSeqRecord.dbxrefs.append(cit_element.attrib['type']
-                                                                + ':' + cit_element.attrib['id'])
+                            self.ParsedSeqRecord.dbxrefs.append(cit_element.attrib['type'] +
+                                                                ':' + cit_element.attrib['id'])
                             if cit_element.attrib['type'] == 'PubMed':
                                 reference.pubmed_id = cit_element.attrib['id']
                             elif ref_element.attrib['type'] == 'MEDLINE':
