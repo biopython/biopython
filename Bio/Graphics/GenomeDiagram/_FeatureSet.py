@@ -22,27 +22,13 @@ For drawing capabilities, this module uses reportlab to draw and write
 the diagram: http://www.reportlab.com
 """
 
-# -----------------------------------------------------------------------------
-# IMPORTS
-
-# ReportLab
 from __future__ import print_function
-
-from reportlab.pdfbase import _fontdata
-from reportlab.lib import colors
 
 # GenomeDiagram
 from ._Feature import Feature
 
 # Builtins
 import re
-
-
-# ------------------------------------------------------------------------------
-# CLASSES
-
-# ------------------------------------------------------------
-# FeatureSet
 
 
 class FeatureSet(object):
