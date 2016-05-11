@@ -26,7 +26,7 @@ for junk_id, record in db.items():
 end_time = time.time()
 elapsed_time = end_time - start_time
 print("Fasta")
-print("\tDid %s records in %s seconds for\n\t%f records per second" % \
+print("\tDid %s records in %s seconds for\n\t%f records per second" %
       (num_records, elapsed_time, float(num_records) / float(elapsed_time)))
 
 # -- do the "EMBL" timing part
@@ -46,5 +46,5 @@ for junk_id, record in db.items():
 end_time = time.time()
 elapsed_time = end_time - start_time
 print("EMBL")
-print("\tDid %s records in %s seconds for\n\t%f records per second" % \
+print("\tDid %s records in %s seconds for\n\t%f records per second" %
       (num_records, elapsed_time, float(num_records) / float(elapsed_time)))
