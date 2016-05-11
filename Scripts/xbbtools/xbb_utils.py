@@ -9,14 +9,14 @@ import sys
 sys.path.insert(0, '.')
 
 try:
-    from Tkinter import * # Python 2
+    from Tkinter import *  # Python 2
 except ImportError:
-    from tkinter import * # Python 3
+    from tkinter import *  # Python 3
 
 try:
-    import tkFileDialog as filedialog # Python 2
+    import tkFileDialog as filedialog  # Python 2
 except ImportError:
-    from tkinter import filedialog # Python 3
+    from tkinter import filedialog  # Python 3
 
 
 class NotePad(Toplevel):

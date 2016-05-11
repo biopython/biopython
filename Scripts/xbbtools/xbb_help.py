@@ -5,14 +5,14 @@
 # File: xbb_help.py
 
 try:
-    from Tkinter import * # Python 2
+    from Tkinter import *  # Python 2
 except ImportError:
-    from tkinter import * # Python 3
+    from tkinter import *  # Python 3
 
 try:
-    import ScrolledText as scrolledtext # Python 2
+    import ScrolledText as scrolledtext  # Python 2
 except ImportError:
-    from tkinter import scrolledtext # Python 3
+    from tkinter import scrolledtext  # Python 3
 
 
 class xbbtools_help(Toplevel):
