@@ -22,7 +22,20 @@ class MissingExternalDependencyError(Exception):
     pass
 
 
-class MissingPythonDependencyError(MissingExternalDependencyError, ImportError):
+class MissingProprietaryDependencyError(MissingExternalDependencyError):
+    """Missing an external proprietary dependency.
+
+    Used for things like missing command line tools. Important for our unit
+    tests to allow skipping tests with missing external dependencies.
+
+    We need to segregate proprietary tools when running automated testing and
+    dependency checking as we might not be able to install them for testing.
+    """
+    pass
+
+
+class MissingPythonDependencyError(MissingExternalDependencyError,
+                                   ImportError):
     """Missing an external python dependency (subclass of ImportError).
 
     Used for missing Python modules (rather than just a typical ImportError).

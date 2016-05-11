@@ -10,24 +10,25 @@ additional facilities.
 
 Command line options:
 
---help        -- show usage info
---offline     -- skip tests which require internet access
--g;--generate -- write the output file for a test instead of comparing it.
-                 The name of the test to write the output for must be
-                 specified.
--v;--verbose  -- run tests with higher verbosity (does not affect our
-                 print-and-compare style unit tests).
-<test_name>   -- supply the name of one (or more) tests to be run.
-                 The .py file extension is optional.
-doctest       -- run the docstring tests.
+--help                     -- show usage info.
+--check-dependencies       -- will report missing dependencies as errors
+                              and fail.
+--check-free-dependencies  -- will report missing dependencies of free software
+                              as errors. Proprietary software will be ignored.
+--offline                  -- skip tests which require internet access
+-g;--generate              -- write the output file for a test instead of
+                              comparing it. The name of the test to write the
+                              output for must be specified.
+-v;--verbose               -- run tests with higher verbosity (does not affect
+                              our print-and-compare style unit tests).
+<test_name>                -- supply the name of one (or more) tests to be run.
+                              The .py file extension is optional.
+doctest                    -- run the docstring tests.
 
 By default, all tests are run.
 """
 
 from __future__ import print_function
-
-# The default verbosity (not verbose)
-VERBOSITY = 0
 
 # standard modules
 import sys
@@ -41,6 +42,14 @@ import doctest
 import distutils.util
 import gc
 from io import BytesIO
+
+# The default verbosity (not verbose)
+VERBOSITY = 0
+
+# Dependency checking
+check_dependencies = False
+check_free_dependencies = False
+
 
 # Note, we want to be able to call run_tests.py BEFORE
 # Biopython is installed, so we can't use this:
@@ -200,6 +209,7 @@ def main(argv):
     # A. To find the C modules (which are in ../build/lib.*/Bio)
     # Q. Then, why ".."?
     # A. Because Martel may not be in ../build/lib.*
+    global check_dependencies, check_free_dependencies
     test_path = sys.path[0] or "."
     source_path = os.path.abspath("%s/.." % test_path)
     sys.path.insert(1, source_path)
@@ -218,7 +228,9 @@ def main(argv):
     # get the command line options
     try:
         opts, args = getopt.getopt(argv, 'gv', ["generate", "verbose",
-                                                "doctest", "help", "offline"])
+                                                "doctest", "help", "offline",
+                                                "check-dependencies",
+                                                "check-free-dependencies"])
     except getopt.error as msg:
         print(msg)
         print(__doc__)
@@ -237,6 +249,13 @@ def main(argv):
             import requires_internet
             requires_internet.check.available = False
             # The check() function should now report internet not available
+        if o == "--check-dependencies":
+            print("Will check if dependencies are available")
+            check_dependencies = True
+            check_free_dependencies = True
+        if o == "--check-free-dependencies":
+            print("Will check if free software dependencies are available")
+            check_free_dependencies = True
         if o == "-g" or o == "--generate":
             if len(args) > 1:
                 print("Only one argument (the test name) needed for generate")
@@ -396,6 +415,7 @@ class TestRunner(unittest.TextTestRunner):
 
     def runTest(self, name):
         from Bio import MissingExternalDependencyError
+        from Bio import MissingProprietaryDependencyError
         result = self._makeResult()
         output = StringIO()
         # Restore the language and thus default encoding (in case a prior
@@ -417,8 +437,17 @@ class TestRunner(unittest.TextTestRunner):
                     # New in Python 3.5, don't always get an exception anymore
                     # Instead this is a list of error messages as strings
                     for msg in loader.errors:
+                        if check_dependencies:
+                            # We do not ignore dependency issues
+                            break
+                        if check_free_dependencies and (
+                           "Bio.MissingExternalDependencyError: " in msg or
+                           "Bio.MissingPythonDependencyError: " in msg):
+                            # We do not ignore free software dependencies
+                            break
                         if "Bio.MissingExternalDependencyError: " in msg or \
-                                "Bio.MissingPythonDependencyError: " in msg:
+                           "Bio.MissingProprietaryDependencyError: " in msg or\
+                           "Bio.MissingPythonDependencyError: " in msg:
                             # Remove the traceback etc
                             msg = msg[msg.find("Bio.Missing"):]
                             msg = msg[msg.find("Error: "):]
@@ -462,9 +491,20 @@ class TestRunner(unittest.TextTestRunner):
                 sys.stderr.write("FAIL\n")
                 result.printErrors()
             return False
+        except MissingProprietaryDependencyError as msg:
+            # Seems this isn't always triggered on Python 3.5,
+            # exception messages can be in loader.errors instead.
+            if check_dependencies:
+                sys.stderr.write("Missing proprietary dependency %s\n" % msg)
+                return False
+            sys.stderr.write("skipping. %s\n" % msg)
+            return True
         except MissingExternalDependencyError as msg:
             # Seems this isn't always triggered on Python 3.5,
             # exception messages can be in loader.errors instead.
+            if check_free_dependencies:
+                sys.stderr.write("Missing free dependency %s\n" % msg)
+                return False
             sys.stderr.write("skipping. %s\n" % msg)
             return True
         except Exception as msg:
