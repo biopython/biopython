@@ -70,21 +70,21 @@ from Bio.Restriction.Restriction import *
 
 __docformat__ = "restructuredtext en"
 
-dna_alphabet = {'A':'A', 'C':'C', 'G':'G', 'T':'T',
-                'R':'AG', 'Y':'CT', 'W':'AT', 'S':'CG', 'M':'AC', 'K':'GT',
-                'H':'ACT', 'B':'CGT', 'V':'ACG', 'D':'AGT',
-                'N':'ACGT',
+dna_alphabet = {'A': 'A', 'C': 'C', 'G': 'G', 'T': 'T',
+                'R': 'AG', 'Y': 'CT', 'W': 'AT', 'S': 'CG', 'M': 'AC', 'K': 'GT',
+                'H': 'ACT', 'B': 'CGT', 'V': 'ACG', 'D': 'AGT',
+                'N': 'ACGT',
                 'a': 'a', 'c': 'c', 'g': 'g', 't': 't',
-                'r':'ag', 'y':'ct', 'w':'at', 's':'cg', 'm':'ac', 'k':'gt',
-                'h':'act', 'b':'cgt', 'v':'acg', 'd':'agt',
-                'n':'acgt'}
+                'r': 'ag', 'y': 'ct', 'w': 'at', 's': 'cg', 'm': 'ac', 'k': 'gt',
+                'h': 'act', 'b': 'cgt', 'v': 'acg', 'd': 'agt',
+                'n': 'acgt'}
 
 
-complement_alphabet = {'A':'T', 'T':'A', 'C':'G', 'G':'C','R':'Y', 'Y':'R',
-                       'W':'W', 'S':'S', 'M':'K', 'K':'M', 'H':'D', 'D':'H',
-                       'B':'V', 'V':'B', 'N':'N','a':'t', 'c':'g', 'g':'c',
-                       't':'a', 'r':'y', 'y':'r', 'w':'w', 's':'s','m':'k',
-                       'k':'m', 'h':'d', 'd':'h', 'b':'v', 'v':'b', 'n':'n'}
+complement_alphabet = {'A': 'T', 'T': 'A', 'C': 'G', 'G': 'C', 'R': 'Y', 'Y': 'R',
+                       'W': 'W', 'S': 'S', 'M': 'K', 'K': 'M', 'H': 'D', 'D': 'H',
+                       'B': 'V', 'V': 'B', 'N': 'N', 'a': 't', 'c': 'g', 'g': 'c',
+                       't': 'a', 'r': 'y', 'y': 'r', 'w': 'w', 's': 's', 'm': 'k',
+                       'k': 'm', 'h': 'd', 'd': 'h', 'b': 'v', 'v': 'b', 'n': 'n'}
 enzymedict = {}
 suppliersdict = {}
 classdict = {}
@@ -123,7 +123,7 @@ def regex(site):
             reg_ex = '.'.join(reg_ex.split('N'))
             reg_ex = '.'.join(reg_ex.split('n'))
         if base in ('R', 'Y', 'W', 'M', 'S', 'K', 'H', 'D', 'B', 'V'):
-            expand = '['+ str(BaseExpand(base))+']'
+            expand = '[' + str(BaseExpand(base)) + ']'
             reg_ex = expand.join(reg_ex.split(base))
     return reg_ex
 
@@ -146,7 +146,7 @@ def LocalTime():
     month = str(t.tm_mon)
     if len(month) == 1:
         month = '0' + month
-    return year+month
+    return year + month
 
 
 class newenzyme(object):
@@ -322,7 +322,7 @@ class TypeCompiler(object):
         types = [(p, c, o, d, m, co, baT[0], baT[1])
                  for p in paT for c in cuT for o in ovT
                  for d in deT for m in meT for co in coT]
-        n= 1
+        n = 1
         for ty in types:
             dct = {}
             for t in ty:
@@ -345,13 +345,13 @@ class TypeCompiler(object):
 
             class klass(type):
                 def __new__(cls):
-                    return type.__new__(cls, 'type%i'%n, ty, dct)
+                    return type.__new__(cls, 'type%i' % n, ty, dct)
 
                 def __init__(cls):
-                    super(klass, cls).__init__('type%i'%n, ty, dct)
+                    super(klass, cls).__init__('type%i' % n, ty, dct)
 
             yield klass()
-            n+=1
+            n += 1
 
 start = '\n\
 #!/usr/bin/env python\n\
@@ -410,8 +410,8 @@ class DictionaryBuilder(object):
         #
         tdct = {}
         for klass in TypeCompiler().buildtype():
-            exec(klass.__name__ +'= klass')
-            exec("tdct['"+klass.__name__+"'] = klass")
+            exec(klass.__name__ + '= klass')
+            exec("tdct['" + klass.__name__ + "'] = klass")
 
         #
         #   Now we build the enzymes from enzymedict
@@ -445,7 +445,7 @@ class DictionaryBuilder(object):
             dct = dict(cls.__dict__)
             del dct['bases']
             del dct['__bases__']
-            del dct['__name__']# no need to keep that, it's already in the type.
+            del dct['__name__']  # no need to keep that, it's already in the type.
             classdict[name] = dct
 
             commonattr = ['fst5', 'fst3', 'scd5', 'scd3', 'substrat',
@@ -453,7 +453,7 @@ class DictionaryBuilder(object):
             if typename in typedict:
                 typedict[typename][1].append(name)
             else:
-                enzlst= []
+                enzlst = []
                 tydct = dict(typestuff.__dict__)
                 tydct = dict([(k, v) for k, v in tydct.items() if k in commonattr])
                 enzlst.append(name)
@@ -524,7 +524,7 @@ class DictionaryBuilder(object):
         Install the newly created dictionary in the site-packages folder.
 
         May need super user privilege on some architectures."""
-        print('\n ' +'*'*78 + ' \n')
+        print('\n ' + '*' * 78 + ' \n')
         print('\n\t\tInstalling Restriction_Dictionary.py')
         try:
             import Bio.Restriction.Restriction_Dictionary as rd
@@ -559,9 +559,9 @@ class DictionaryBuilder(object):
             print('\n\t Everything ok. If you need it a version of the old\
             \n\t dictionary have been saved in the Updates folder under\
             \n\t the name Restriction_Dictionary.old.')
-            print('\n ' +'*'*78 + ' \n')
+            print('\n ' + '*' * 78 + ' \n')
         except IOError:
-            print('\n ' +'*'*78 + ' \n')
+            print('\n ' + '*' * 78 + ' \n')
             print('\
             \n\t WARNING : Impossible to install the new dictionary.\
             \n\t Are you sure you have write permission to the folder :\n\
@@ -573,7 +573,7 @@ class DictionaryBuilder(object):
         """BD.no_install() -> None.
 
         build the new dictionary but do not install the dictionary."""
-        print('\n ' +'*'*78 + '\n')
+        print('\n ' + '*' * 78 + '\n')
         # update = config.updatefolder
         try:
             import Bio.Restriction.Restriction_Dictionary as rd
@@ -600,7 +600,7 @@ class DictionaryBuilder(object):
         \n note : \
         \n This folder should be :\n\
         \n\t%s\n" % places)
-        print('\n ' +'*'*78 + '\n')
+        print('\n ' + '*' * 78 + '\n')
         return
 
     def lastrebasefile(self):
@@ -616,7 +616,7 @@ class DictionaryBuilder(object):
         update_needed = False
         # dircontent = os.listdir(config.Rebase) #    local database content
         dircontent = os.listdir(os.getcwd())
-        base = os.getcwd() # added for biopython current directory
+        base = os.getcwd()  # added for biopython current directory
         for name in emboss_now:
             if name in dircontent:
                 pass
@@ -627,7 +627,7 @@ class DictionaryBuilder(object):
             #
             #   nothing to be done
             #
-            print('\n Using the files : %s'% ', '.join(emboss_now))
+            print('\n Using the files : %s' % ', '.join(emboss_now))
             return tuple(open(os.path.join(base, n)) for n in emboss_now)
         else:
             #
@@ -642,7 +642,7 @@ class DictionaryBuilder(object):
                 updt.getfiles()
                 updt.close()
                 print('\n Update complete. Creating the dictionaries.\n')
-                print('\n Using the files : %s'% ', '.join(emboss_now))
+                print('\n Using the files : %s' % ', '.join(emboss_now))
                 return tuple(open(os.path.join(base, n)) for n in emboss_now)
             else:
                 #
@@ -660,7 +660,7 @@ class DictionaryBuilder(object):
                             pass
                         raise NotFoundError
                     except NotFoundError:
-                        print("\nNo %s file found. Upgrade is impossible.\n"%name)
+                        print("\nNo %s file found. Upgrade is impossible.\n" % name)
                         sys.exit()
                     continue
                 pass
@@ -686,24 +686,24 @@ class DictionaryBuilder(object):
             last[0], last[-1] = last[-1], last[0]
 
         for number in last:
-            files = [(name, name+'.%s'%number) for name in embossnames]
+            files = [(name, name + '.%s' % number) for name in embossnames]
             strmess = '\nLast EMBOSS files found are :\n'
             try:
                 for name, file in files:
                     if os.path.isfile(os.path.join(base, file)):
-                        strmess += '\t%s.\n'%file
+                        strmess += '\t%s.\n' % file
                     else:
                         raise ValueError
                 print(strmess)
-                emboss_e = open(os.path.join(base, 'emboss_e.%s'%number), 'r')
-                emboss_r = open(os.path.join(base, 'emboss_r.%s'%number), 'r')
-                emboss_s = open(os.path.join(base, 'emboss_s.%s'%number), 'r')
+                emboss_e = open(os.path.join(base, 'emboss_e.%s' % number), 'r')
+                emboss_r = open(os.path.join(base, 'emboss_r.%s' % number), 'r')
+                emboss_s = open(os.path.join(base, 'emboss_s.%s' % number), 'r')
                 return emboss_e, emboss_r, emboss_s
             except ValueError:
                 continue
 
     def parseline(self, line):
-        line = [line[0]]+[line[1].upper()]+[int(i) for i in line[2:9]]+line[9:]
+        line = [line[0]] + [line[1].upper()] + [int(i) for i in line[2:9]] + line[9:]
         name = line[0].replace("-", "_").replace(".", "_")
         site = line[1]  # sequence of the recognition site
         dna = Seq(site, generic_dna)
@@ -750,7 +750,7 @@ class DictionaryBuilder(object):
             print('\
             \nWARNING : %s cut twice with different overhang length each time.\
             \n\tUnable to deal with this behaviour. \
-            \n\tThis enzyme will not be included in the database. Sorry.' %name)
+            \n\tThis enzyme will not be included in the database. Sorry.' % name)
             print('\tChecking...')
             raise OverhangError
         if 0 <= fst5 <= size and 0 <= fst3 <= size:
@@ -827,12 +827,12 @@ class DictionaryBuilder(object):
             #
             #   3' overhang. site is included.
             #
-            ovhgseq = abs(fst3)*'N' + site + (fst5-size)*'N'
-        elif fst5 < 0 and size <fst3:
+            ovhgseq = abs(fst3) * 'N' + site + (fst5 - size) * 'N'
+        elif fst5 < 0 and size < fst3:
             #
             #   5' overhang. site is included.
             #
-            ovhgseq = abs(fst5)*'N' + site + (fst3-size)*'N'
+            ovhgseq = abs(fst5) * 'N' + site + (fst3 - size) * 'N'
         else:
             #
             #   5' and  3' outside of the site
@@ -885,8 +885,8 @@ class DictionaryBuilder(object):
         #
         #   exact frequency of the site. (ie freq(N) == 1, ...)
         #
-        f = [4/len(dna_alphabet[l]) for l in site.upper()]
-        freq = reduce(lambda x, y: x*y, f)
+        f = [4 / len(dna_alphabet[l]) for l in site.upper()]
+        freq = reduce(lambda x, y: x * y, f)
         line.append(freq)
         #
         #   append regex and ovhg1, they have not been appended before not to
@@ -909,7 +909,7 @@ class DictionaryBuilder(object):
         #
         take = itertools.takewhile
         block = [l for l in take(lambda l: not l.startswith('//'), file[index:])]
-        index += len(block)+1
+        index += len(block) + 1
         return block, index
 
     def get(self, block):
@@ -934,7 +934,7 @@ class DictionaryBuilder(object):
         sitefile = self.removestart(file2)
         supplier = self.removestart(file3)
 
-        i1, i2= 0, 0
+        i1, i2 = 0, 0
         try:
             while True:
                 block, i1 = self.getblock(methfile, i1)
@@ -959,9 +959,9 @@ class DictionaryBuilder(object):
                 except OverhangError:   # overhang error
                     n = name            # do not include the enzyme
                     if not bl[2]:
-                        print('Anyway, %s is not commercially available.\n' %n)
+                        print('Anyway, %s is not commercially available.\n' % n)
                     else:
-                        print('Unfortunately, %s is commercially available.\n'%n)
+                        print('Unfortunately, %s is commercially available.\n' % n)
 
                     continue
                 # Hyphens and dots can't be used as a Python name, nor as a
@@ -979,8 +979,8 @@ class DictionaryBuilder(object):
                     dna = Seq(enzymedict[other][0], generic_dna)
                     sense2 = regex(dna)
                     antisense2 = regex(dna.reverse_complement())
-                    sense = '(?P<'+other+'>'+sense1+'|'+sense2+')'
-                    antisense = '(?P<'+other+'_as>'+antisense1+'|'+antisense2 + ')'
+                    sense = '(?P<' + other + '>' + sense1 + '|' + sense2 + ')'
+                    antisense = '(?P<' + other + '_as>' + antisense1 + '|' + antisense2 + ')'
                     reg = sense + '|' + antisense
                     line[1] = line[1] + '|' + enzymedict[other][0]
                     line[-1] = reg
