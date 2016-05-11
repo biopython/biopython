@@ -45,9 +45,7 @@
 # ***** LOAD MODULES *****
 
 from __future__ import print_function
-import getopt
 import string
-import sys
 
 # -- don't need to modify sys.path with the *tools in Biopython
 # -- just need Biopython installed somewhere in the PYTHONPATH

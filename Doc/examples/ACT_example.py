@@ -7,11 +7,9 @@ from __future__ import print_function
 
 import sys
 import os
-import time
 from reportlab.lib import colors
 from reportlab.lib.units import cm
 
-from Bio.Blast.Applications import NcbitblastxCommandline
 from Bio.Graphics.GenomeDiagram import Diagram, CrossLink
 from Bio.SeqFeature import SeqFeature, FeatureLocation
 from Bio import SeqIO
