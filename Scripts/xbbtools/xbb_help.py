@@ -14,8 +14,6 @@ try:
 except ImportError:
     from tkinter import scrolledtext # Python 3
 
-__docformat__ = "restructuredtext en"
-
 
 class xbbtools_help(Toplevel):
     def __init__(self, *args):

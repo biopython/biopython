@@ -8,8 +8,6 @@ from __future__ import print_function
 from Bio.Seq import translate, transcribe, back_transcribe
 import wx
 
-__docformat__ = "restructuredtext en"
-
 
 ID_APPLY = 101
 ID_CLEAR = 102

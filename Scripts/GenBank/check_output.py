@@ -23,8 +23,6 @@ except ImportError:
 # biopython
 from Bio import GenBank
 
-__docformat__ = "restructuredtext en"
-
 
 def do_comparison(good_record, test_record):
     """Compare two records to see if they are the same.

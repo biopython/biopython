@@ -22,8 +22,6 @@ sys.path.insert(0, '.')
 from xbb_utils import NotePad
 import xbb_blastbg
 
-__docformat__ = "restructuredtext en"
-
 
 class BlastIt(object):
     def __init__(self, seq, parent=None):

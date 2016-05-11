@@ -12,8 +12,6 @@ import getopt
 
 from Bio import Entrez
 
-__docformat__ = "restructuredtext en"
-
 
 def print_usage():
     print("""query_pubmed.py [-h] [-c] [-d delay] query

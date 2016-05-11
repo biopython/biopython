@@ -18,8 +18,6 @@ import sys
 import time
 import optparse
 
-__docformat__ = "restructuredtext en"
-
 
 try:
     from urllib import FancyURLopener
@@ -77,7 +75,7 @@ class RebaseUpdate(FancyURLopener):
         month = str(t.tm_mon)
         if len(month) == 1:
             month = '0' + month
-        return year+month
+        return year + month
 
     def update(self, *files):
         if not files:
