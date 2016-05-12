@@ -416,6 +416,7 @@ class TestRunner(unittest.TextTestRunner):
     def runTest(self, name):
         from Bio import MissingExternalDependencyError
         from Bio import MissingProprietaryDependencyError
+        from Bio import ExternalDependencyUnavailableException
         result = self._makeResult()
         output = StringIO()
         # Restore the language and thus default encoding (in case a prior
@@ -437,6 +438,12 @@ class TestRunner(unittest.TextTestRunner):
                     # New in Python 3.5, don't always get an exception anymore
                     # Instead this is a list of error messages as strings
                     for msg in loader.errors:
+                        if "Bio.ExternalDependencyUnavailableException" in msg:
+                            # Remove the traceback etc
+                            msg = msg[msg.find("Bio.Missing"):]
+                            msg = msg[msg.find("Error: "):]
+                            sys.stderr.write("tool not available. %s\n" % msg)
+                            return True
                         if check_dependencies:
                             # We do not ignore dependency issues
                             break
@@ -491,6 +498,9 @@ class TestRunner(unittest.TextTestRunner):
                 sys.stderr.write("FAIL\n")
                 result.printErrors()
             return False
+        except ExternalDependencyUnavailableException as msg:
+            sys.stderr.write("tool not available. %s\n" % msg)
+            return True
         except MissingProprietaryDependencyError as msg:
             # Seems this isn't always triggered on Python 3.5,
             # exception messages can be in loader.errors instead.

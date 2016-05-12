@@ -13,6 +13,7 @@ http://biopython.org
 __version__ = "1.66+"
 
 
+
 class MissingExternalDependencyError(Exception):
     """Missing an external dependency.
 
@@ -42,6 +43,16 @@ class MissingPythonDependencyError(MissingExternalDependencyError,
     Important for our unit tests to allow skipping tests with missing external
     python dependencies, while also allowing the exception to be caught as an
     ImportError.
+    """
+    pass
+
+
+class ExternalDependencyUnavailableException(Exception):
+    """An external dependency is not available.
+
+    For cases where an external dependency is not available on a certain
+    environment. In these situations we are not missing a dependency on
+    testing, it simply does not exist.
     """
     pass
 
