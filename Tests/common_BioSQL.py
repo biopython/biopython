@@ -584,58 +584,6 @@ class LoaderTest(unittest.TestCase):
                                     'M81224.1', 'X55053.1', 'X62281.1'])
 
 
-class TaxonomyTest(unittest.TestCase):
-    """Test proper insertion and retrieval of taxonomy data
-    """
-    def setUp(self):
-        from Bio import Entrez
-        Entrez.email = "biopython-dev@biopython.org"
-        # create TESTDB
-        create_database()
-
-        # load the database
-        db_name = "biosql-test"
-        self.server = BioSeqDatabase.open_database(driver=DBDRIVER,
-                                                   user=DBUSER, passwd=DBPASSWD,
-                                                   host=DBHOST, db=TESTDB)
-
-        # remove the database if it already exists
-        try:
-            self.server[db_name]
-            self.server.remove_database(db_name)
-        except KeyError:
-            pass
-
-        self.db = self.server.new_database(db_name)
-
-        # get the GenBank file we are going to put into it
-        self.iterator = SeqIO.parse("GenBank/cor6_6.gb", "gb")
-
-    def tearDown(self):
-        self.server.close()
-        destroy_database()
-        del self.db
-        del self.server
-
-    def test_taxon_left_right_values(self):
-        self.db.load(self.iterator, True)
-        sql = """SELECT DISTINCT include.ncbi_taxon_id FROM taxon
-                  INNER JOIN taxon AS include ON
-                      (include.left_value BETWEEN taxon.left_value
-                                  AND taxon.right_value)
-                  WHERE taxon.taxon_id IN
-                      (SELECT taxon_id FROM taxon_name
-                                  WHERE name = 'Brassicales')
-                      AND include.right_value - include.left_value = 1"""
-
-        rows = self.db.adaptor.execute_and_fetchall(sql)
-        self.assertEqual(4, len(rows))
-        values = set()
-        for row in rows:
-            values.add(row[0])
-        self.assertEqual(set([3704, 3711, 3708, 3702]), set(values))
-
-
 class DeleteTest(unittest.TestCase):
     """Test proper deletion of entries from a database."""
 
