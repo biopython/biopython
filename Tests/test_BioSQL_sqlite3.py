@@ -26,7 +26,7 @@ check_config(DBDRIVER, DBTYPE, DBHOST, DBUSER, DBPASSWD, TESTDB)
 
 # Some of the unit tests don't create their own database,
 # so just in case there is no database already:
-create_database()
+TESTDB = create_database()
 
 
 if False:
