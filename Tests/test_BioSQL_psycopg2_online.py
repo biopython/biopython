@@ -3,23 +3,18 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Run BioSQL tests using SQLite"""
-from Bio import MissingExternalDependencyError
-from BioSQL import BioSeqDatabase
+"""Run BioSQL tests using PostgreSQL"""
 
-from common_BioSQL import *
+from common_BioSQL import load_biosql_ini
+from common_BioSQL_online import *
 
-DBDRIVER = 'mysql.connector'
-DBTYPE = 'mysql'
-
+DBDRIVER = 'psycopg2'
+DBTYPE = 'pg'
 DBHOST, DBUSER, DBPASSWD, TESTDB = load_biosql_ini(DBTYPE)
 
 # This will abort if driver not installed etc:
-TESTDB = check_config(DBDRIVER, DBTYPE, DBHOST, DBUSER, DBPASSWD, TESTDB)
-
-# Some of the unit tests don't create their own database,
-# so just in case there is no database already:
-create_database()
+check_config(DBDRIVER, DBTYPE, DBHOST, DBUSER, DBPASSWD, TESTDB)
+share_config(DBDRIVER, DBTYPE, DBHOST, DBUSER, DBPASSWD, TESTDB)
 
 if __name__ == "__main__":
     # Run the test cases

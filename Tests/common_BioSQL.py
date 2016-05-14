@@ -174,7 +174,10 @@ def _do_db_create():
 
 
 def create_database():
-    """Delete any existing BioSQL test DB, then (re)create an empty BioSQL DB."""
+    """Delete any existing BioSQL test DB, then (re)create an empty BioSQL DB.
+
+    Returns TESTDB name which will change for for SQLite.
+    """
     if DBDRIVER in ["sqlite3"]:
         global TESTDB
         if os.path.exists(TESTDB):
@@ -208,6 +211,8 @@ def create_database():
         server.close()
         raise
 
+    return TESTDB
+
 
 def destroy_database():
     """Delete any temporary BioSQL sqlite3 database files."""
@@ -222,7 +227,7 @@ def load_database(gb_filename_or_handle):
     This is useful for running tests against a newly created database.
     """
 
-    create_database()
+    TESTDB = create_database()
     # now open a connection to load the database
     db_name = "biosql-test"
     server = BioSeqDatabase.open_database(driver=DBDRIVER,
@@ -245,7 +250,7 @@ def load_multi_database(gb_filename_or_handle, gb_filename_or_handle2):
     This is useful for running tests against a newly created database.
     """
 
-    create_database()
+    TESTDB = create_database()
     # now open a connection to load the database
     db_name = "biosql-test"
     db_name2 = "biosql-test2"
@@ -561,7 +566,7 @@ class LoaderTest(unittest.TestCase):
 
     def setUp(self):
         # create TESTDB
-        create_database()
+        TESTDB = create_database()
 
         # load the database
         db_name = "biosql-test"
@@ -608,58 +613,6 @@ class LoaderTest(unittest.TestCase):
                                       'ATKIN2', 'BNAKINI', 'BRRBIF72'])
         self.assertEqual(item_ids, ['AF297471.1', 'AJ237582.1', 'L31939.1',
                                     'M81224.1', 'X55053.1', 'X62281.1'])
-
-
-class TaxonomyTest(unittest.TestCase):
-    """Test proper insertion and retrieval of taxonomy data
-    """
-    def setUp(self):
-        from Bio import Entrez
-        Entrez.email = "biopython-dev@biopython.org"
-        # create TESTDB
-        create_database()
-
-        # load the database
-        db_name = "biosql-test"
-        self.server = BioSeqDatabase.open_database(driver=DBDRIVER,
-                                                   user=DBUSER, passwd=DBPASSWD,
-                                                   host=DBHOST, db=TESTDB)
-
-        # remove the database if it already exists
-        try:
-            self.server[db_name]
-            self.server.remove_database(db_name)
-        except KeyError:
-            pass
-
-        self.db = self.server.new_database(db_name)
-
-        # get the GenBank file we are going to put into it
-        self.iterator = SeqIO.parse("GenBank/cor6_6.gb", "gb")
-
-    def tearDown(self):
-        self.server.close()
-        destroy_database()
-        del self.db
-        del self.server
-
-    def test_taxon_left_right_values(self):
-        self.db.load(self.iterator, True)
-        sql = """SELECT DISTINCT include.ncbi_taxon_id FROM taxon
-                  INNER JOIN taxon AS include ON
-                      (include.left_value BETWEEN taxon.left_value
-                                  AND taxon.right_value)
-                  WHERE taxon.taxon_id IN
-                      (SELECT taxon_id FROM taxon_name
-                                  WHERE name = 'Brassicales')
-                      AND include.right_value - include.left_value = 1"""
-
-        rows = self.db.adaptor.execute_and_fetchall(sql)
-        self.assertEqual(4, len(rows))
-        values = set()
-        for row in rows:
-            values.add(row[0])
-        self.assertEqual(set([3704, 3711, 3708, 3702]), set(values))
 
 
 class DeleteTest(unittest.TestCase):
@@ -729,7 +682,7 @@ class DupLoadTest(unittest.TestCase):
 
     def setUp(self):
         # drop any old database and create a new one:
-        create_database()
+        TESTDB = create_database()
         # connect to new database:
         self.server = BioSeqDatabase.open_database(driver=DBDRIVER,
                                                    user=DBUSER, passwd=DBPASSWD,
@@ -880,7 +833,7 @@ class TransferTest(unittest.TestCase):
     # simply a new unique namespace is used for each test.
 
     def setUp(self):
-        create_database()
+        TESTDB = create_database()
 
     def test_NC_005816(self):
         """GenBank file to BioSQL, then again to a new namespace, NC_005816."""
