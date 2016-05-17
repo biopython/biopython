@@ -11,20 +11,26 @@ from Bio import SeqIO
 from BioSQL import BioSeqDatabase
 
 from common_BioSQL import *
+import BioSQL_settings
 
 # Constants for the database driver
-DBHOST = 'localhost'
-DBUSER = 'root'
-DBPASSWD = ''
+BioSQL_settings.DBHOST = 'localhost'
+BioSQL_settings.DBUSER = 'root'
+BioSQL_settings.DBPASSWD = ''
 
-DBDRIVER = 'sqlite3'
-DBTYPE = 'sqlite'
+BioSQL_settings.DBDRIVER = 'sqlite3'
+BioSQL_settings.DBTYPE = 'sqlite'
 
-TESTDB = temp_db_filename()
+BioSQL_settings.TESTDB = temp_db_filename()
 
 
 # This will abort if driver not installed etc:
-check_config(DBDRIVER, DBTYPE, DBHOST, DBUSER, DBPASSWD, TESTDB)
+check_config(BioSQL_settings.DBDRIVER,
+             BioSQL_settings.DBTYPE,
+             BioSQL_settings.DBHOST,
+             BioSQL_settings.DBUSER,
+             BioSQL_settings.DBPASSWD,
+             BioSQL_settings.TESTDB)
 
 # Some of the unit tests don't create their own database,
 # so just in case there is no database already:
@@ -37,12 +43,12 @@ if False:
     # catch any regressions in how we map GenBank entries to
     # the database.
     assert not os.path.isfile("BioSQL/cor6_6.db")
-    server = BioSeqDatabase.open_database(driver=DBDRIVER,
+    server = BioSeqDatabase.open_database(driver=BioSQL_settings.DBDRIVER,
                                           db="BioSQL/cor6_6.db")
-    DBSCHEMA = "biosqldb-" + DBTYPE + ".sql"
-    SQL_FILE = os.path.join(os.getcwd(), "BioSQL", DBSCHEMA)
-    assert os.path.isfile(SQL_FILE), SQL_FILE
-    server.load_database_sql(SQL_FILE)
+    BioSQL_settings.DBSCHEMA = "biosqldb-" + BioSQL_settings.DBTYPE + ".sql"
+    BioSQL_settings.SQL_FILE = os.path.join(os.getcwd(), "BioSQL", BioSQL_settings.DBSCHEMA)
+    assert os.path.isfile(BioSQL_settings.SQL_FILE), BioSQL_settings.SQL_FILE
+    server.load_database_sql(BioSQL_settings.SQL_FILE)
     server.commit()
     db = server.new_database("OLD")
     count = db.load(SeqIO.parse("GenBank/cor6_6.gb", "gb"))
@@ -57,7 +63,7 @@ class BackwardsCompatibilityTest(unittest.TestCase):
         """Check can re-use an old BioSQL SQLite3 database."""
         original_records = list(SeqIO.parse("GenBank/cor6_6.gb", "gb"))
         # now open a connection to load the database
-        server = BioSeqDatabase.open_database(driver=DBDRIVER,
+        server = BioSeqDatabase.open_database(driver=BioSQL_settings.DBDRIVER,
                                               db="BioSQL/cor6_6.db")
         db = server["OLD"]
         self.assertEqual(len(db), len(original_records))
