@@ -31,6 +31,8 @@ from Bio.SeqRecord import SeqRecord
 from BioSQL import BioSeqDatabase
 from BioSQL import BioSeq
 
+import BioSQL_settings
+
 from seq_tests_common import compare_record, compare_records
 
 if __name__ == "__main__":
@@ -57,49 +59,49 @@ def temp_db_filename():
 
 
 def check_config(dbdriver, dbtype, dbhost, dbuser, dbpasswd, testdb):
-    global DBDRIVER, DBTYPE, DBHOST, DBUSER, DBPASSWD, TESTDB, DBSCHEMA
-    global SYSTEM, SQL_FILE
-    DBDRIVER = dbdriver
-    DBTYPE = dbtype
-    DBHOST = dbhost
-    DBUSER = dbuser
-    DBPASSWD = dbpasswd
-    TESTDB = testdb
+    #global DBDRIVER, DBTYPE, DBHOST, DBUSER, DBPASSWD, TESTDB, DBSCHEMA
+    #global SYSTEM, SQL_FILE
+    BioSQL_settings.DBDRIVER = dbdriver
+    BioSQL_settings.DBTYPE = dbtype
+    BioSQL_settings.DBHOST = dbhost
+    BioSQL_settings.DBUSER = dbuser
+    BioSQL_settings.DBPASSWD = dbpasswd
+    BioSQL_settings.TESTDB = testdb
 
     # Check the database driver is installed:
     if SYSTEM == "Java":
         try:
-            if DBDRIVER in ["MySQLdb"]:
+            if BioSQL_settings.DBDRIVER in ["MySQLdb"]:
                 import com.mysql.jdbc.Driver
-            elif DBDRIVER in ["psycopg2"]:
+            elif BioSQL_settings.DBDRIVER in ["psycopg2"]:
                 import org.postgresql.Driver
         except ImportError:
             message = "Install the JDBC driver for %s to use BioSQL " % DBTYPE
             raise MissingExternalDependencyError(message)
     else:
         try:
-            __import__(DBDRIVER)
+            __import__(BioSQL_settings.DBDRIVER)
         except ImportError:
-            message = "Install %s if you want to use %s with BioSQL " % (DBDRIVER, DBTYPE)
+            message = "Install %s if you want to use %s with BioSQL " % (BioSQL_settings.DBDRIVER, BioSQL_settings.DBTYPE)
             raise MissingExternalDependencyError(message)
 
     try:
-        if DBDRIVER in ["sqlite3"]:
-            server = BioSeqDatabase.open_database(driver=DBDRIVER, db=TESTDB)
+        if BioSQL_settings.DBDRIVER in ["sqlite3"]:
+            server = BioSeqDatabase.open_database(driver=BioSQL_settings.DBDRIVER, db=BioSQL_settings.TESTDB)
         else:
-            server = BioSeqDatabase.open_database(driver=DBDRIVER, host=DBHOST,
-                                                  user=DBUSER, passwd=DBPASSWD)
+            server = BioSeqDatabase.open_database(driver=BioSQL_settings.DBDRIVER, host=BioSQL_settings.DBHOST,
+                                                  user=BioSQL_settings.DBUSER, passwd=BioSQL_settings.DBPASSWD)
         server.close()
         del server
     except Exception as e:
         message = "Connection failed, check settings if you plan to use BioSQL: %s" % e
         raise MissingExternalDependencyError(message)
 
-    DBSCHEMA = "biosqldb-" + DBTYPE + ".sql"
-    SQL_FILE = os.path.join(os.getcwd(), "BioSQL", DBSCHEMA)
+    BioSQL_settings.DBSCHEMA = "biosqldb-" + BioSQL_settings.DBTYPE + ".sql"
+    BioSQL_settings.SQL_FILE = os.path.join(os.getcwd(), "BioSQL", BioSQL_settings.DBSCHEMA)
 
-    if not os.path.isfile(SQL_FILE):
-        message = "Missing SQL schema file: %s" % SQL_FILE
+    if not os.path.isfile(BioSQL_settings.SQL_FILE):
+        message = "Missing SQL schema file: %s" % BioSQL_settings.SQL_FILE
         raise MissingExternalDependencyError(message)
 
 
@@ -109,10 +111,10 @@ def _do_db_create():
     Relevant for MySQL and PostgreSQL.
     """
     # first open a connection to create the database
-    server = BioSeqDatabase.open_database(driver=DBDRIVER, host=DBHOST,
-                                          user=DBUSER, passwd=DBPASSWD)
+    server = BioSeqDatabase.open_database(driver=BioSQL_settings.DBDRIVER, host=BioSQL_settings.DBHOST,
+                                          user=BioSQL_settings.DBUSER, passwd=BioSQL_settings.DBPASSWD)
 
-    if DBDRIVER == "pgdb":
+    if BioSQL_settings.DBDRIVER == "pgdb":
         # The pgdb postgres driver does not support autocommit, so here we
         # commit the current transaction so that 'drop database' query will
         # be outside a transaction block
@@ -130,7 +132,7 @@ def _do_db_create():
         # not able to be dropped. Wait briefly to be sure previous tests are
         # done with it.
         time.sleep(1)
-        sql = r"DROP DATABASE " + TESTDB
+        sql = r"DROP DATABASE " + BioSQL_settings.TESTDB
         server.adaptor.cursor.execute(sql, ())
     except (server.module.OperationalError,
             server.module.Error,
@@ -142,39 +144,38 @@ def _do_db_create():
             server.close()
             raise
     # create a new database
-    sql = r"CREATE DATABASE " + TESTDB
+    sql = r"CREATE DATABASE " + BioSQL_settings.TESTDB
     server.adaptor.execute(sql, ())
     server.close()
 
 
 def create_database():
     """Delete any existing BioSQL test database, then (re)create an empty BioSQL database."""
-    if DBDRIVER in ["sqlite3"]:
-        global TESTDB
-        if os.path.exists(TESTDB):
+    if BioSQL_settings.DBDRIVER in ["sqlite3"]:
+        if os.path.exists(BioSQL_settings.TESTDB):
             try:
-                os.remove(TESTDB)
+                os.remove(BioSQL_settings.TESTDB)
             except:
                 time.sleep(1)
                 try:
-                    os.remove(TESTDB)
+                    os.remove(BioSQL_settings.TESTDB)
                 except Exception:
                     # Seen this with PyPy 2.1 (and older) on Windows -
                     # which suggests an open handle still exists?
-                    print("Could not remove %r" % TESTDB)
+                    print("Could not remove %r" % BioSQL_settings.TESTDB)
                     pass
         # Now pick a new filename - just in case there is a stale handle
         # (which might be happening under Windows...)
-        TESTDB = temp_db_filename()
+        BioSQL_settings.TESTDB = temp_db_filename()
     else:
         _do_db_create()
 
     # now open a connection to load the database
-    server = BioSeqDatabase.open_database(driver=DBDRIVER,
-                                          user=DBUSER, passwd=DBPASSWD,
-                                          host=DBHOST, db=TESTDB)
+    server = BioSeqDatabase.open_database(driver=BioSQL_settings.DBDRIVER,
+                                          user=BioSQL_settings.DBUSER, passwd=BioSQL_settings.DBPASSWD,
+                                          host=BioSQL_settings.DBHOST, db=BioSQL_settings.TESTDB)
     try:
-        server.load_database_sql(SQL_FILE)
+        server.load_database_sql(BioSQL_settings.SQL_FILE)
         server.commit()
         server.close()
     except:
@@ -185,9 +186,9 @@ def create_database():
 
 def destroy_database():
     """Delete any temporary BioSQL sqlite3 database files."""
-    if DBDRIVER in ["sqlite3"]:
-        if os.path.exists(TESTDB):
-            os.remove(TESTDB)
+    if BioSQL_settings.DBDRIVER in ["sqlite3"]:
+        if os.path.exists(BioSQL_settings.TESTDB):
+            os.remove(BioSQL_settings.TESTDB)
 
 
 def load_database(gb_filename_or_handle):
@@ -199,9 +200,9 @@ def load_database(gb_filename_or_handle):
     create_database()
     # now open a connection to load the database
     db_name = "biosql-test"
-    server = BioSeqDatabase.open_database(driver=DBDRIVER,
-                                          user=DBUSER, passwd=DBPASSWD,
-                                          host=DBHOST, db=TESTDB)
+    server = BioSeqDatabase.open_database(driver=BioSQL_settings.DBDRIVER,
+                                          user=BioSQL_settings.DBUSER, passwd=BioSQL_settings.DBPASSWD,
+                                          host=BioSQL_settings.DBHOST, db=BioSQL_settings.TESTDB)
     db = server.new_database(db_name)
 
     # get the GenBank file we are going to put into it
@@ -223,9 +224,9 @@ def load_multi_database(gb_filename_or_handle, gb_filename_or_handle2):
     # now open a connection to load the database
     db_name = "biosql-test"
     db_name2 = "biosql-test2"
-    server = BioSeqDatabase.open_database(driver=DBDRIVER,
-                                          user=DBUSER, passwd=DBPASSWD,
-                                          host=DBHOST, db=TESTDB)
+    server = BioSeqDatabase.open_database(driver=BioSQL_settings.DBDRIVER,
+                                          user=BioSQL_settings.DBUSER, passwd=BioSQL_settings.DBPASSWD,
+                                          host=BioSQL_settings.DBHOST, db=BioSQL_settings.TESTDB)
     db = server.new_database(db_name)
 
     # get the GenBank file we are going to put into it
@@ -254,11 +255,11 @@ class MultiReadTest(unittest.TestCase):
         """
         load_multi_database("GenBank/cor6_6.gb", "GenBank/NC_000932.gb")
 
-        self.server = BioSeqDatabase.open_database(driver=DBDRIVER,
-                                                   user=DBUSER,
-                                                   passwd=DBPASSWD,
-                                                   host=DBHOST,
-                                                   db=TESTDB)
+        self.server = BioSeqDatabase.open_database(driver=BioSQL_settings.DBDRIVER,
+                                                   user=BioSQL_settings.DBUSER,
+                                                   passwd=BioSQL_settings.DBPASSWD,
+                                                   host=BioSQL_settings.DBHOST,
+                                                   db=BioSQL_settings.TESTDB)
 
         self.db = self.server["biosql-test"]
         self.db2 = self.server['biosql-test2']
@@ -332,11 +333,11 @@ class ReadTest(unittest.TestCase):
         """
         load_database("GenBank/cor6_6.gb")
 
-        self.server = BioSeqDatabase.open_database(driver=DBDRIVER,
-                                                   user=DBUSER,
-                                                   passwd=DBPASSWD,
-                                                   host=DBHOST,
-                                                   db=TESTDB)
+        self.server = BioSeqDatabase.open_database(driver=BioSQL_settings.DBDRIVER,
+                                                   user=BioSQL_settings.DBUSER,
+                                                   passwd=BioSQL_settings.DBPASSWD,
+                                                   host=BioSQL_settings.DBHOST,
+                                                   db=BioSQL_settings.TESTDB)
 
         self.db = self.server["biosql-test"]
 
@@ -416,9 +417,9 @@ class SeqInterfaceTest(unittest.TestCase):
         """
         load_database("GenBank/cor6_6.gb")
 
-        self.server = BioSeqDatabase.open_database(driver=DBDRIVER,
-                                                   user=DBUSER, passwd=DBPASSWD,
-                                                   host=DBHOST, db=TESTDB)
+        self.server = BioSeqDatabase.open_database(driver=BioSQL_settings.DBDRIVER,
+                                                   user=BioSQL_settings.DBUSER, passwd=BioSQL_settings.DBPASSWD,
+                                                   host=BioSQL_settings.DBHOST, db=BioSQL_settings.TESTDB)
         self.db = self.server["biosql-test"]
         self.item = self.db.lookup(accession="X62281")
 
@@ -539,9 +540,9 @@ class LoaderTest(unittest.TestCase):
 
         # load the database
         db_name = "biosql-test"
-        self.server = BioSeqDatabase.open_database(driver=DBDRIVER,
-                                                   user=DBUSER, passwd=DBPASSWD,
-                                                   host=DBHOST, db=TESTDB)
+        self.server = BioSeqDatabase.open_database(driver=BioSQL_settings.DBDRIVER,
+                                                   user=BioSQL_settings.DBUSER, passwd=BioSQL_settings.DBPASSWD,
+                                                   host=BioSQL_settings.DBHOST, db=BioSQL_settings.TESTDB)
 
         # remove the database if it already exists
         try:
@@ -594,11 +595,11 @@ class DeleteTest(unittest.TestCase):
         """
         load_database("GenBank/cor6_6.gb")
 
-        self.server = BioSeqDatabase.open_database(driver=DBDRIVER,
-                                                   user=DBUSER,
-                                                   passwd=DBPASSWD,
-                                                   host=DBHOST,
-                                                   db=TESTDB)
+        self.server = BioSeqDatabase.open_database(driver=BioSQL_settings.DBDRIVER,
+                                                   user=BioSQL_settings.DBUSER,
+                                                   passwd=BioSQL_settings.DBPASSWD,
+                                                   host=BioSQL_settings.DBHOST,
+                                                   db=BioSQL_settings.TESTDB)
 
         self.db = self.server["biosql-test"]
 
@@ -653,9 +654,9 @@ class DupLoadTest(unittest.TestCase):
         # drop any old database and create a new one:
         create_database()
         # connect to new database:
-        self.server = BioSeqDatabase.open_database(driver=DBDRIVER,
-                                                   user=DBUSER, passwd=DBPASSWD,
-                                                   host=DBHOST, db=TESTDB)
+        self.server = BioSeqDatabase.open_database(driver=BioSQL_settings.DBDRIVER,
+                                                   user=BioSQL_settings.DBUSER, passwd=BioSQL_settings.DBPASSWD,
+                                                   host=BioSQL_settings.DBHOST, db=BioSQL_settings.TESTDB)
         # Create new namespace within new empty database:
         self.db = self.server.new_database("biosql-test")
 
@@ -757,9 +758,9 @@ class ClosedLoopTest(unittest.TestCase):
     def loop(self, filename, format):
         original_records = list(SeqIO.parse(filename, format))
         # now open a connection to load the database
-        server = BioSeqDatabase.open_database(driver=DBDRIVER,
-                                              user=DBUSER, passwd=DBPASSWD,
-                                              host=DBHOST, db=TESTDB)
+        server = BioSeqDatabase.open_database(driver=BioSQL_settings.DBDRIVER,
+                                              user=BioSQL_settings.DBUSER, passwd=BioSQL_settings.DBPASSWD,
+                                              host=BioSQL_settings.DBHOST, db=BioSQL_settings.TESTDB)
         db_name = "test_loop_%s" % filename  # new namespace!
         db = server.new_database(db_name)
         count = db.load(original_records)
@@ -833,9 +834,9 @@ class TransferTest(unittest.TestCase):
     def trans(self, filename, format):
         original_records = list(SeqIO.parse(filename, format))
         # now open a connection to load the database
-        server = BioSeqDatabase.open_database(driver=DBDRIVER,
-                                              user=DBUSER, passwd=DBPASSWD,
-                                              host=DBHOST, db=TESTDB)
+        server = BioSeqDatabase.open_database(driver=BioSQL_settings.DBDRIVER,
+                                              user=BioSQL_settings.DBUSER, passwd=BioSQL_settings.DBPASSWD,
+                                              host=BioSQL_settings.DBHOST, db=BioSQL_settings.TESTDB)
         db_name = "test_trans1_%s" % filename  # new namespace!
         db = server.new_database(db_name)
         count = db.load(original_records)
@@ -870,9 +871,9 @@ class InDepthLoadTest(unittest.TestCase):
         gb_file = os.path.join(os.getcwd(), "GenBank", "cor6_6.gb")
         load_database(gb_file)
 
-        self.server = BioSeqDatabase.open_database(driver=DBDRIVER,
-                                                   user=DBUSER, passwd=DBPASSWD,
-                                                   host=DBHOST, db=TESTDB)
+        self.server = BioSeqDatabase.open_database(driver=BioSQL_settings.DBDRIVER,
+                                                   user=BioSQL_settings.DBUSER, passwd=BioSQL_settings.DBPASSWD,
+                                                   host=BioSQL_settings.DBHOST, db=BioSQL_settings.TESTDB)
         self.db = self.server["biosql-test"]
 
     def tearDown(self):
@@ -995,10 +996,10 @@ class AutoSeqIOTests(unittest.TestCase):
     def setUp(self):
         """Connect to the database."""
         db_name = "biosql-test-seqio"
-        server = BioSeqDatabase.open_database(driver=DBDRIVER,
-                                              user=DBUSER,
-                                              passwd=DBPASSWD,
-                                              host=DBHOST, db=TESTDB)
+        server = BioSeqDatabase.open_database(driver=BioSQL_settings.DBDRIVER,
+                                              user=BioSQL_settings.DBUSER,
+                                              passwd=BioSQL_settings.DBPASSWD,
+                                              host=BioSQL_settings.DBHOST, db=BioSQL_settings.TESTDB)
         self.server = server
         if db_name not in server:
             self.db = server.new_database(db_name)
