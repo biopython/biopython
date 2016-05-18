@@ -58,7 +58,7 @@ class TaxonomyTest(unittest.TestCase):
 
         # load the database
         db_name = "biosql-test"
-        with warning.catch_warnings():
+        with warnings.catch_warnings():
             warnings.simplefilter("ignore", BiopythonWarning)
             self.server = BioSeqDatabase.open_database(driver=BioSQL_settings.DBDRIVER,
                                                        user=BioSQL_settings.DBUSER,
