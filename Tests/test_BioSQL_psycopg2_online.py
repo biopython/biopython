@@ -8,6 +8,7 @@ from Bio import MissingExternalDependencyError
 from BioSQL import BioSeqDatabase
 
 from common_BioSQL_online import *
+from common_BioSQL import check_config, create_database
 import BioSQL_settings
 
 ##################################
@@ -24,8 +25,8 @@ BioSQL_settings.TESTDB = 'biosql_test'
 # End of user-editable section #
 ################################
 
-DBDRIVER = 'psycopg2'
-DBTYPE = 'pg'
+BioSQL_settings.DBDRIVER = 'psycopg2'
+BioSQL_settings.DBTYPE = 'pg'
 
 # This will abort if driver not installed etc:
 check_config(BioSQL_settings.DBDRIVER,

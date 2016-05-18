@@ -12,7 +12,7 @@ from BioSQL import BioSeqDatabase
 
 from common_BioSQL_online import *
 import BioSQL_settings
-from common_BioSQL import temp_db_filename, check_config, create_database
+from common_BioSQL import check_config, create_database
 
 # Constants for the database driver
 BioSQL_settings.DBHOST = 'localhost'
