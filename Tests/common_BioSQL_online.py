@@ -58,11 +58,13 @@ class TaxonomyTest(unittest.TestCase):
 
         # load the database
         db_name = "biosql-test"
-        self.server = BioSeqDatabase.open_database(driver=BioSQL_settings.DBDRIVER,
-                                                   user=BioSQL_settings.DBUSER,
-                                                   passwd=BioSQL_settings.DBPASSWD,
-                                                   host=BioSQL_settings.DBHOST,
-                                                   db=BioSQL_settings.TESTDB)
+        with warning.catch_warnings():
+            warnings.simplefilter("ignore", BiopythonWarning)
+            self.server = BioSeqDatabase.open_database(driver=BioSQL_settings.DBDRIVER,
+                                                       user=BioSQL_settings.DBUSER,
+                                                       passwd=BioSQL_settings.DBPASSWD,
+                                                       host=BioSQL_settings.DBHOST,
+                                                       db=BioSQL_settings.TESTDB)
 
         # remove the database if it already exists
         try:

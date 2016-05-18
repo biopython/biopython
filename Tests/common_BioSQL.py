@@ -89,8 +89,10 @@ def check_config(dbdriver, dbtype, dbhost, dbuser, dbpasswd, testdb):
         if BioSQL_settings.DBDRIVER in ["sqlite3"]:
             server = BioSeqDatabase.open_database(driver=BioSQL_settings.DBDRIVER, db=BioSQL_settings.TESTDB)
         else:
-            server = BioSeqDatabase.open_database(driver=BioSQL_settings.DBDRIVER, host=BioSQL_settings.DBHOST,
-                                                  user=BioSQL_settings.DBUSER, passwd=BioSQL_settings.DBPASSWD)
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore", BiopythonWarning)
+                server = BioSeqDatabase.open_database(driver=BioSQL_settings.DBDRIVER, host=BioSQL_settings.DBHOST,
+                                                      user=BioSQL_settings.DBUSER, passwd=BioSQL_settings.DBPASSWD)
         server.close()
         del server
     except Exception as e:
@@ -111,8 +113,10 @@ def _do_db_create():
     Relevant for MySQL and PostgreSQL.
     """
     # first open a connection to create the database
-    server = BioSeqDatabase.open_database(driver=BioSQL_settings.DBDRIVER, host=BioSQL_settings.DBHOST,
-                                          user=BioSQL_settings.DBUSER, passwd=BioSQL_settings.DBPASSWD)
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", BiopythonWarning)
+        server = BioSeqDatabase.open_database(driver=BioSQL_settings.DBDRIVER, host=BioSQL_settings.DBHOST,
+                                              user=BioSQL_settings.DBUSER, passwd=BioSQL_settings.DBPASSWD)
 
     if BioSQL_settings.DBDRIVER == "pgdb":
         # The pgdb postgres driver does not support autocommit, so here we
@@ -171,9 +175,11 @@ def create_database():
         _do_db_create()
 
     # now open a connection to load the database
-    server = BioSeqDatabase.open_database(driver=BioSQL_settings.DBDRIVER,
-                                          user=BioSQL_settings.DBUSER, passwd=BioSQL_settings.DBPASSWD,
-                                          host=BioSQL_settings.DBHOST, db=BioSQL_settings.TESTDB)
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", BiopythonWarning)
+        server = BioSeqDatabase.open_database(driver=BioSQL_settings.DBDRIVER,
+                                              user=BioSQL_settings.DBUSER, passwd=BioSQL_settings.DBPASSWD,
+                                              host=BioSQL_settings.DBHOST, db=BioSQL_settings.TESTDB)
     try:
         server.load_database_sql(BioSQL_settings.SQL_FILE)
         server.commit()
@@ -200,9 +206,11 @@ def load_database(gb_filename_or_handle):
     create_database()
     # now open a connection to load the database
     db_name = "biosql-test"
-    server = BioSeqDatabase.open_database(driver=BioSQL_settings.DBDRIVER,
-                                          user=BioSQL_settings.DBUSER, passwd=BioSQL_settings.DBPASSWD,
-                                          host=BioSQL_settings.DBHOST, db=BioSQL_settings.TESTDB)
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", BiopythonWarning)
+        server = BioSeqDatabase.open_database(driver=BioSQL_settings.DBDRIVER,
+                                              user=BioSQL_settings.DBUSER, passwd=BioSQL_settings.DBPASSWD,
+                                              host=BioSQL_settings.DBHOST, db=BioSQL_settings.TESTDB)
     db = server.new_database(db_name)
 
     # get the GenBank file we are going to put into it
@@ -224,9 +232,11 @@ def load_multi_database(gb_filename_or_handle, gb_filename_or_handle2):
     # now open a connection to load the database
     db_name = "biosql-test"
     db_name2 = "biosql-test2"
-    server = BioSeqDatabase.open_database(driver=BioSQL_settings.DBDRIVER,
-                                          user=BioSQL_settings.DBUSER, passwd=BioSQL_settings.DBPASSWD,
-                                          host=BioSQL_settings.DBHOST, db=BioSQL_settings.TESTDB)
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", BiopythonWarning)
+        server = BioSeqDatabase.open_database(driver=BioSQL_settings.DBDRIVER,
+                                              user=BioSQL_settings.DBUSER, passwd=BioSQL_settings.DBPASSWD,
+                                              host=BioSQL_settings.DBHOST, db=BioSQL_settings.TESTDB)
     db = server.new_database(db_name)
 
     # get the GenBank file we are going to put into it
@@ -255,11 +265,11 @@ class MultiReadTest(unittest.TestCase):
         """
         load_multi_database("GenBank/cor6_6.gb", "GenBank/NC_000932.gb")
 
-        self.server = BioSeqDatabase.open_database(driver=BioSQL_settings.DBDRIVER,
-                                                   user=BioSQL_settings.DBUSER,
-                                                   passwd=BioSQL_settings.DBPASSWD,
-                                                   host=BioSQL_settings.DBHOST,
-                                                   db=BioSQL_settings.TESTDB)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", BiopythonWarning)
+            self.server = BioSeqDatabase.open_database(driver=BioSQL_settings.DBDRIVER,
+                                                       user=BioSQL_settings.DBUSER, passwd=BioSQL_settings.DBPASSWD,
+                                                       host=BioSQL_settings.DBHOST, db=BioSQL_settings.TESTDB)
 
         self.db = self.server["biosql-test"]
         self.db2 = self.server['biosql-test2']
@@ -333,11 +343,13 @@ class ReadTest(unittest.TestCase):
         """
         load_database("GenBank/cor6_6.gb")
 
-        self.server = BioSeqDatabase.open_database(driver=BioSQL_settings.DBDRIVER,
-                                                   user=BioSQL_settings.DBUSER,
-                                                   passwd=BioSQL_settings.DBPASSWD,
-                                                   host=BioSQL_settings.DBHOST,
-                                                   db=BioSQL_settings.TESTDB)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", BiopythonWarning)
+            self.server = BioSeqDatabase.open_database(driver=BioSQL_settings.DBDRIVER,
+                                                       user=BioSQL_settings.DBUSER,
+                                                       passwd=BioSQL_settings.DBPASSWD,
+                                                       host=BioSQL_settings.DBHOST,
+                                                       db=BioSQL_settings.TESTDB)
 
         self.db = self.server["biosql-test"]
 
@@ -417,9 +429,13 @@ class SeqInterfaceTest(unittest.TestCase):
         """
         load_database("GenBank/cor6_6.gb")
 
-        self.server = BioSeqDatabase.open_database(driver=BioSQL_settings.DBDRIVER,
-                                                   user=BioSQL_settings.DBUSER, passwd=BioSQL_settings.DBPASSWD,
-                                                   host=BioSQL_settings.DBHOST, db=BioSQL_settings.TESTDB)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", BiopythonWarning)
+            self.server = BioSeqDatabase.open_database(driver=BioSQL_settings.DBDRIVER,
+                                                       user=BioSQL_settings.DBUSER,
+                                                       passwd=BioSQL_settings.DBPASSWD,
+                                                       host=BioSQL_settings.DBHOST,
+                                                       db=BioSQL_settings.TESTDB)
         self.db = self.server["biosql-test"]
         self.item = self.db.lookup(accession="X62281")
 
@@ -540,9 +556,13 @@ class LoaderTest(unittest.TestCase):
 
         # load the database
         db_name = "biosql-test"
-        self.server = BioSeqDatabase.open_database(driver=BioSQL_settings.DBDRIVER,
-                                                   user=BioSQL_settings.DBUSER, passwd=BioSQL_settings.DBPASSWD,
-                                                   host=BioSQL_settings.DBHOST, db=BioSQL_settings.TESTDB)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", BiopythonWarning)
+            self.server = BioSeqDatabase.open_database(driver=BioSQL_settings.DBDRIVER,
+                                                       user=BioSQL_settings.DBUSER,
+                                                       passwd=BioSQL_settings.DBPASSWD,
+                                                       host=BioSQL_settings.DBHOST,
+                                                       db=BioSQL_settings.TESTDB)
 
         # remove the database if it already exists
         try:
@@ -595,11 +615,13 @@ class DeleteTest(unittest.TestCase):
         """
         load_database("GenBank/cor6_6.gb")
 
-        self.server = BioSeqDatabase.open_database(driver=BioSQL_settings.DBDRIVER,
-                                                   user=BioSQL_settings.DBUSER,
-                                                   passwd=BioSQL_settings.DBPASSWD,
-                                                   host=BioSQL_settings.DBHOST,
-                                                   db=BioSQL_settings.TESTDB)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", BiopythonWarning)
+            self.server = BioSeqDatabase.open_database(driver=BioSQL_settings.DBDRIVER,
+                                                  user=BioSQL_settings.DBUSER,
+                                                  passwd=BioSQL_settings.DBPASSWD,
+                                                  host=BioSQL_settings.DBHOST,
+                                                  db=BioSQL_settings.TESTDB)
 
         self.db = self.server["biosql-test"]
 
@@ -654,9 +676,13 @@ class DupLoadTest(unittest.TestCase):
         # drop any old database and create a new one:
         create_database()
         # connect to new database:
-        self.server = BioSeqDatabase.open_database(driver=BioSQL_settings.DBDRIVER,
-                                                   user=BioSQL_settings.DBUSER, passwd=BioSQL_settings.DBPASSWD,
-                                                   host=BioSQL_settings.DBHOST, db=BioSQL_settings.TESTDB)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", BiopythonWarning)
+            self.server = BioSeqDatabase.open_database(driver=BioSQL_settings.DBDRIVER,
+                                                  user=BioSQL_settings.DBUSER,
+                                                  passwd=BioSQL_settings.DBPASSWD,
+                                                  host=BioSQL_settings.DBHOST,
+                                                  db=BioSQL_settings.TESTDB)
         # Create new namespace within new empty database:
         self.db = self.server.new_database("biosql-test")
 
@@ -758,9 +784,13 @@ class ClosedLoopTest(unittest.TestCase):
     def loop(self, filename, format):
         original_records = list(SeqIO.parse(filename, format))
         # now open a connection to load the database
-        server = BioSeqDatabase.open_database(driver=BioSQL_settings.DBDRIVER,
-                                              user=BioSQL_settings.DBUSER, passwd=BioSQL_settings.DBPASSWD,
-                                              host=BioSQL_settings.DBHOST, db=BioSQL_settings.TESTDB)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", BiopythonWarning)
+            server = BioSeqDatabase.open_database(driver=BioSQL_settings.DBDRIVER,
+                                                  user=BioSQL_settings.DBUSER,
+                                                  passwd=BioSQL_settings.DBPASSWD,
+                                                  host=BioSQL_settings.DBHOST,
+                                                  db=BioSQL_settings.TESTDB)
         db_name = "test_loop_%s" % filename  # new namespace!
         db = server.new_database(db_name)
         count = db.load(original_records)
@@ -834,9 +864,13 @@ class TransferTest(unittest.TestCase):
     def trans(self, filename, format):
         original_records = list(SeqIO.parse(filename, format))
         # now open a connection to load the database
-        server = BioSeqDatabase.open_database(driver=BioSQL_settings.DBDRIVER,
-                                              user=BioSQL_settings.DBUSER, passwd=BioSQL_settings.DBPASSWD,
-                                              host=BioSQL_settings.DBHOST, db=BioSQL_settings.TESTDB)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", BiopythonWarning)
+            server = BioSeqDatabase.open_database(driver=BioSQL_settings.DBDRIVER,
+                                                  user=BioSQL_settings.DBUSER,
+                                                  passwd=BioSQL_settings.DBPASSWD,
+                                                  host=BioSQL_settings.DBHOST,
+                                                  db=BioSQL_settings.TESTDB)
         db_name = "test_trans1_%s" % filename  # new namespace!
         db = server.new_database(db_name)
         count = db.load(original_records)
@@ -871,9 +905,13 @@ class InDepthLoadTest(unittest.TestCase):
         gb_file = os.path.join(os.getcwd(), "GenBank", "cor6_6.gb")
         load_database(gb_file)
 
-        self.server = BioSeqDatabase.open_database(driver=BioSQL_settings.DBDRIVER,
-                                                   user=BioSQL_settings.DBUSER, passwd=BioSQL_settings.DBPASSWD,
-                                                   host=BioSQL_settings.DBHOST, db=BioSQL_settings.TESTDB)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", BiopythonWarning)
+            self.server = BioSeqDatabase.open_database(driver=BioSQL_settings.DBDRIVER,
+                                                  user=BioSQL_settings.DBUSER,
+                                                  passwd=BioSQL_settings.DBPASSWD,
+                                                  host=BioSQL_settings.DBHOST,
+                                                  db=BioSQL_settings.TESTDB)
         self.db = self.server["biosql-test"]
 
     def tearDown(self):
@@ -996,14 +1034,16 @@ class AutoSeqIOTests(unittest.TestCase):
     def setUp(self):
         """Connect to the database."""
         db_name = "biosql-test-seqio"
-        server = BioSeqDatabase.open_database(driver=BioSQL_settings.DBDRIVER,
-                                              user=BioSQL_settings.DBUSER,
-                                              passwd=BioSQL_settings.DBPASSWD,
-                                              host=BioSQL_settings.DBHOST, db=BioSQL_settings.TESTDB)
-        self.server = server
-        if db_name not in server:
-            self.db = server.new_database(db_name)
-            server.commit()
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", BiopythonWarning)
+            self.server = BioSeqDatabase.open_database(driver=BioSQL_settings.DBDRIVER,
+                                                  user=BioSQL_settings.DBUSER,
+                                                  passwd=BioSQL_settings.DBPASSWD,
+                                                  host=BioSQL_settings.DBHOST,
+                                                  db=BioSQL_settings.TESTDB)
+        if db_name not in self.server:
+            self.db = self.server.new_database(db_name)
+            self.server.commit()
         self.db = self.server[db_name]
 
     def tearDown(self):
