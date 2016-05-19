@@ -10,6 +10,7 @@ import platform
 import unittest
 import tempfile
 import time
+import configparser
 
 from Bio._py3k import StringIO
 from Bio._py3k import zip
@@ -40,6 +41,21 @@ if __name__ == "__main__":
 # DBDRIVER, DBTYPE, DBHOST, DBUSER, DBPASSWD, TESTDB, DBSCHEMA, SQL_FILE, SYSTEM
 
 SYSTEM = platform.system()
+
+
+def load_biosql_ini(DBTYPE):
+    if not os.path.isfile("biosql.ini"):
+        raise MissingExternalDependencyError("BioSQL test configuration"
+                                             " file biosql.ini missing"
+                                             " (see biosql.ini.sample)")
+
+    config = configparser.ConfigParser()
+    config.read("biosql.ini")
+    DBHOST = config[DBTYPE]["dbhost"]
+    DBUSER = config[DBTYPE]["dbuser"]
+    DBPASSWD = config[DBTYPE]["dbpasswd"]
+    TESTDB = config[DBTYPE]["testdb"]
+    return DBHOST, DBUSER, DBPASSWD, TESTDB
 
 
 def temp_db_filename():

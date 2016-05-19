@@ -9,22 +9,9 @@ from BioSQL import BioSeqDatabase
 
 from common_BioSQL import *
 
-##################################
-# Start of user-editable section #
-##################################
-
-# Constants for the database driver
-DBHOST = 'localhost'
-DBUSER = 'postgres'
-DBPASSWD = ''
-TESTDB = 'biosql_test'
-
-################################
-# End of user-editable section #
-################################
-
 DBDRIVER = 'psycopg2'
 DBTYPE = 'pg'
+DBHOST, DBUSER, DBPASSWD, TESTDB = load_biosql_ini(DBTYPE)
 
 # This will abort if driver not installed etc:
 check_config(DBDRIVER, DBTYPE, DBHOST, DBUSER, DBPASSWD, TESTDB)
