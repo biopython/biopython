@@ -102,12 +102,18 @@ class Pairwise(unittest.TestCase):
         return_code = child.returncode
         self.assertEqual(return_code, 0, "Got error code %i back from:\n%s"
                          % (return_code, cline))
-        self.assertEqual(10, stdoutdata.count("Query= "))
-        if stdoutdata.count("***** No hits found *****") == 7:
-            # This happens with BLAST 2.2.26+ which is potentially a bug
-            pass
+        # Used to get 10 matches from 10 pairwise searches,
+        # as of NCBI BLAST+ 2.3.0 only get 1 Query= line:
+        if stdoutdata.count("Query= ") == 10:
+            if stdoutdata.count("***** No hits found *****") == 7:
+                # This happens with BLAST 2.2.26+ which is potentially a bug
+                pass
+            else:
+                self.assertEqual(9, stdoutdata.count("***** No hits found *****"))
         else:
-            self.assertEqual(9, stdoutdata.count("***** No hits found *****"))
+            # Assume this is NCBI BLAST+ 2.3.0 or later,
+            self.assertEqual(1, stdoutdata.count("Query= "))
+            self.assertEqual(0, stdoutdata.count("***** No hits found *****"))
 
         # TODO - Parse it? I think we'd need to update this obsole code :(
         # records = list(NCBIStandalone.Iterator(StringIO(stdoutdata),
