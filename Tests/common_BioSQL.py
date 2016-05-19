@@ -47,6 +47,7 @@ SYSTEM = platform.system()
 
 
 def load_biosql_ini(DBTYPE):
+    """Load the database settings from INI file."""
     if not os.path.isfile("biosql.ini"):
         raise MissingExternalDependencyError("BioSQL test configuration"
                                              " file biosql.ini missing"
@@ -62,6 +63,7 @@ def load_biosql_ini(DBTYPE):
 
 
 def temp_db_filename():
+    """Generate a temporary filename for SQLite database."""
     # In memory SQLite does not work with current test structure since the tests
     # expect databases to be retained between individual tests.
     # TESTDB = ':memory:'
@@ -76,6 +78,7 @@ def temp_db_filename():
 
 
 def check_config(dbdriver, dbtype, dbhost, dbuser, dbpasswd, testdb):
+    """Verify the database settings work for connecting."""
     global DBDRIVER, DBTYPE, DBHOST, DBUSER, DBPASSWD, TESTDB, DBSCHEMA
     global SYSTEM, SQL_FILE
     DBDRIVER = dbdriver
@@ -167,7 +170,7 @@ def _do_db_create():
 
 
 def create_database():
-    """Delete any existing BioSQL test database, then (re)create an empty BioSQL database."""
+    """Delete any existing BioSQL test DB, then (re)create an empty BioSQL DB."""
     if DBDRIVER in ["sqlite3"]:
         global TESTDB
         if os.path.exists(TESTDB):
