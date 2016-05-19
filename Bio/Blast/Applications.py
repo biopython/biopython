@@ -844,6 +844,13 @@ class NcbipsiblastCommandline(_Ncbiblast2SeqCommandline):
                     "File name to store ASCII version of PSSM.",
                     filename=True,
                     equate=False),
+            _Switch(["-save_pssm_after_last_round", "save_pssm_after_last_round"],
+                    "Save PSSM after the last database search."),
+            _Switch(["-save_each_pssm", "save_each_pssm"],
+                    """Save PSSM after each iteration
+
+                    File name is given in -save_pssm or -save_ascii_pssm options.
+                    """),
             _Option(["-in_msa", "in_msa"],
                     """File name of multiple sequence alignment to restart PSI-BLAST.
 
@@ -1142,6 +1149,13 @@ class NcbideltablastCommandline(_Ncbiblast2SeqCommandline):
                     "File name to store ASCII version of PSSM.",
                     filename=True,
                     equate=False),
+            _Switch(["-save_pssm_after_last_round", "save_pssm_after_last_round"],
+                    "Save PSSM after the last database search."),
+            _Switch(["-save_each_pssm", "save_each_pssm"],
+                    """Save PSSM after each iteration
+
+                    File name is given in -save_pssm or -save_ascii_pssm options.
+                    """),
             # PSSM engine options
             _Option(["-pseudocount", "pseudocount"],
                     "Pseudo-count value used when constructing PSSM (integer, default 0).",

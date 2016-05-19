@@ -271,6 +271,9 @@ class CheckCompleteArgList(unittest.TestCase):
                         "rpstblastn", "rpsblast", "tblastn", "tblastx"]:
             # New in BLAST+ 2.2.30 so will look like extra args on BLAST+ 2.2.29 etc
             extra = extra.difference(["-line_length", "-qcov_hsp_perc", "-sum_stats"])
+        if exe_name in ["deltablast", "psiblast"]:
+            # New in BLAST+ 2.3.0 so will look like extra args on older verions
+            extra = extra.difference(["-save_each_pssm", "-save_pssm_after_last_round"])
 
         if extra or missing:
             import warnings
