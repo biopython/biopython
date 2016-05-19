@@ -7,7 +7,8 @@
 from Bio import MissingExternalDependencyError
 from BioSQL import BioSeqDatabase
 
-from common_BioSQL import *
+from common_BioSQL_online import *
+from common_BioSQL import check_config, create_database
 import BioSQL_settings
 
 ##################################

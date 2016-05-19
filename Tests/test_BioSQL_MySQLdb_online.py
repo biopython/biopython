@@ -7,7 +7,8 @@
 from Bio import MissingExternalDependencyError
 from BioSQL import BioSeqDatabase
 
-from common_BioSQL import *
+from common_BioSQL_online import *
+from common_BioSQL import check_config, create_database
 import BioSQL_settings
 
 ##################################
@@ -24,7 +25,7 @@ BioSQL_settings.TESTDB = 'biosql_test'
 # End of user-editable section #
 ################################
 
-BioSQL_settings.DBDRIVER = 'mysql.connector'
+BioSQL_settings.DBDRIVER = 'MySQLdb'
 BioSQL_settings.DBTYPE = 'mysql'
 
 # This will abort if driver not installed etc:

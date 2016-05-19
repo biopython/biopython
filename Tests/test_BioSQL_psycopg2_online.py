@@ -3,11 +3,12 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Run BioSQL tests using SQLite"""
+"""Run BioSQL tests using PostgreSQL"""
 from Bio import MissingExternalDependencyError
 from BioSQL import BioSeqDatabase
 
-from common_BioSQL import *
+from common_BioSQL_online import *
+from common_BioSQL import check_config, create_database
 import BioSQL_settings
 
 ##################################
@@ -16,7 +17,7 @@ import BioSQL_settings
 
 # Constants for the database driver
 BioSQL_settings.DBHOST = 'localhost'
-BioSQL_settings.DBUSER = 'root'
+BioSQL_settings.DBUSER = 'postgres'
 BioSQL_settings.DBPASSWD = ''
 BioSQL_settings.TESTDB = 'biosql_test'
 
@@ -24,8 +25,8 @@ BioSQL_settings.TESTDB = 'biosql_test'
 # End of user-editable section #
 ################################
 
-BioSQL_settings.DBDRIVER = 'mysql.connector'
-BioSQL_settings.DBTYPE = 'mysql'
+BioSQL_settings.DBDRIVER = 'psycopg2'
+BioSQL_settings.DBTYPE = 'pg'
 
 # This will abort if driver not installed etc:
 check_config(BioSQL_settings.DBDRIVER,
