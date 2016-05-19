@@ -84,9 +84,8 @@ class TestPhenoMicro(unittest.TestCase):
 
     def test_PlateRecord(self):
         '''Test basic functionalities of PlateRecord objects'''
-        handle = open(JSON_PLATE)
-        j = json.load(handle)
-        handle.close()
+        with open(JSON_PLATE) as handle:
+            j = json.load(handle)
 
         p = phenotype.phen_micro.PlateRecord(j['csv_data']['Plate Type'])
 
@@ -137,9 +136,8 @@ class TestPhenoMicro(unittest.TestCase):
                          "12\nPlateRecord('WellRecord['A01'], WellRecord['A02'], WellRecord" +
                          "['A03'], ..., WellRecord['H12']')")
 
-        handle = open(JSON_PLATE_2)
-        j = json.load(handle)
-        handle.close()
+        with open(JSON_PLATE_2) as handle:
+            j = json.load(handle)
 
         p1 = phenotype.phen_micro.PlateRecord(j['csv_data']['Plate Type'])
 
@@ -169,9 +167,8 @@ class TestPhenoMicro(unittest.TestCase):
 
     def test_WellRecord(self):
         '''Test basic functionalities of WellRecord objects'''
-        handle = open(JSON_PLATE)
-        p = json.load(handle)
-        handle.close()
+        with open(JSON_PLATE) as handle:
+            p = json.load(handle)
 
         times = p['measurements']['Hour']
         w = phenotype.phen_micro.WellRecord('A10',
