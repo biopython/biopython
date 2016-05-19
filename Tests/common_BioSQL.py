@@ -10,7 +10,10 @@ import platform
 import unittest
 import tempfile
 import time
-import configparser
+try:
+    import configparser  # Python 3
+except ImportError:
+    import ConfigParser as configparser  # Python 2
 
 from Bio._py3k import StringIO
 from Bio._py3k import zip
@@ -51,10 +54,10 @@ def load_biosql_ini(DBTYPE):
 
     config = configparser.ConfigParser()
     config.read("biosql.ini")
-    DBHOST = config[DBTYPE]["dbhost"]
-    DBUSER = config[DBTYPE]["dbuser"]
-    DBPASSWD = config[DBTYPE]["dbpasswd"]
-    TESTDB = config[DBTYPE]["testdb"]
+    DBHOST = config.get(DBTYPE, "dbhost")
+    DBUSER = config.get(DBTYPE, "dbuser")
+    DBPASSWD = config.get(DBTYPE, "dbpasswd")
+    TESTDB = config.get(DBTYPE, "testdb")
     return DBHOST, DBUSER, DBPASSWD, TESTDB
 
 
