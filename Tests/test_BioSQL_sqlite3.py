@@ -13,15 +13,11 @@ from BioSQL import BioSeqDatabase
 from common_BioSQL import *
 
 # Constants for the database driver
-DBHOST = 'localhost'
-DBUSER = 'root'
-DBPASSWD = ''
-
 DBDRIVER = 'sqlite3'
 DBTYPE = 'sqlite'
 
+DBHOST, DBUSER, DBPASSWD, TESTDB = load_biosql_ini(DBTYPE)
 TESTDB = temp_db_filename()
-
 
 # This will abort if driver not installed etc:
 check_config(DBDRIVER, DBTYPE, DBHOST, DBUSER, DBPASSWD, TESTDB)
