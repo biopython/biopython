@@ -90,9 +90,9 @@ class Pairwise(unittest.TestCase):
                         query="Fasta/rose.pro",
                         subject="GenBank/NC_005816.faa",
                         evalue=1)
-        self.assertEqual(str(cline), _escape_filename(exe_names["blastp"])
-                         + " -query Fasta/rose.pro -evalue 1"
-                         + " -subject GenBank/NC_005816.faa")
+        self.assertEqual(str(cline), _escape_filename(exe_names["blastp"]) +
+                         " -query Fasta/rose.pro -evalue 1" +
+                         " -subject GenBank/NC_005816.faa")
         child = subprocess.Popen(str(cline),
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
@@ -120,9 +120,9 @@ class Pairwise(unittest.TestCase):
                         query="GenBank/NC_005816.ffn",
                         subject="GenBank/NC_005816.fna",
                         evalue="0.000001")
-        self.assertEqual(str(cline), _escape_filename(exe_names["blastn"])
-                         + " -query GenBank/NC_005816.ffn -evalue 0.000001"
-                         + " -subject GenBank/NC_005816.fna")
+        self.assertEqual(str(cline), _escape_filename(exe_names["blastn"]) +
+                         " -query GenBank/NC_005816.ffn -evalue 0.000001" +
+                         " -subject GenBank/NC_005816.fna")
         child = subprocess.Popen(str(cline),
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
@@ -143,9 +143,9 @@ class Pairwise(unittest.TestCase):
                         query="GenBank/NC_005816.faa",
                         subject="GenBank/NC_005816.fna",
                         evalue="1e-6")
-        self.assertEqual(str(cline), _escape_filename(exe_names["tblastn"])
-                         + " -query GenBank/NC_005816.faa -evalue 1e-6"
-                         + " -subject GenBank/NC_005816.fna")
+        self.assertEqual(str(cline), _escape_filename(exe_names["tblastn"]) +
+                         " -query GenBank/NC_005816.faa -evalue 1e-6" +
+                         " -subject GenBank/NC_005816.fna")
         child = subprocess.Popen(str(cline),
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
