@@ -69,6 +69,7 @@ install:
 
 before_script:
   - cd Tests
+  - cp biosql.ini.sample biosql.ini
 
 script:
 #Using just coverage should match up to the current Python version:
