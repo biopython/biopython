@@ -17,7 +17,12 @@ import unittest
 
 from Bio._py3k import StringIO
 
-from Bio import phenotype
+from Bio import BiopythonExperimentalWarning
+
+import warnings
+with warnings.catch_warnings():
+    warnings.simplefilter('ignore', BiopythonExperimentalWarning)
+    from Bio import phenotype
 
 # Example plate files
 JSON_PLATE = 'phenotype/Plate.json'
