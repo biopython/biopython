@@ -467,3 +467,4 @@ def convert(in_file, in_format, out_file, out_format, alphabet=None):
 if __name__ == "__main__":
     from Bio._utils import run_doctest
     run_doctest()
+
