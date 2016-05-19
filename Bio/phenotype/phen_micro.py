@@ -455,11 +455,8 @@ class PlateRecord(object):
         if wells is None:
             wells = self._wells.keys()
 
-        missing = set()
-        for w in wells:
-            if w not in self:
-                missing.add(w)
-        if len(missing) > 0:
+        missing = set(w for w in wells if w not in self)
+        if missing:
             raise ValueError('Some wells to be subtracted are not present')
 
         nwells = []
