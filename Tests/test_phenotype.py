@@ -30,8 +30,8 @@ CSV_PLATES = 'phenotype/Plates.csv'
 
 class TestPhenoMicro(unittest.TestCase):
 
-    def test_phenotype_IO(self):
-        '''Test basic functionalities of phenotype IO methods'''
+    def test_phenotype_IO_errors(self):
+        '''Test bad arguments to phenotype IO methods'''
         self.assertRaises(ValueError, phenotype.read, CSV_PLATES, 'pm-csv')
         self.assertRaises(ValueError, phenotype.read, CSV_PLATES, 'pm-json')
         self.assertRaises(
@@ -43,6 +43,8 @@ class TestPhenoMicro(unittest.TestCase):
         self.assertRaises(TypeError, phenotype.read, CSV_PLATES, 1)
         self.assertRaises(KeyError, phenotype.read, JSON_BAD, 'pm-json')
 
+    def test_phenotype_IO(self):
+        '''Test basic functionalities of phenotype IO methods'''
         p1 = phenotype.read(JSON_PLATE_3, 'pm-json')
         p2 = next(phenotype.parse(CSV_PLATES, 'pm-csv'))
 
@@ -73,13 +75,15 @@ class TestPhenoMicro(unittest.TestCase):
         self.assertRaises(ValueError, phenotype.write, p1, handle, 'pm-csv')
         handle.close()
 
-    def test_PlateRecord(self):
-        '''Test basic functionalities of PlateRecord objects'''
+    def test_PlateRecord_errors(self):
+        '''Test bad arguments with PlateRecord objects'''
         self.assertRaises(ValueError,
                           phenotype.phen_micro.PlateRecord, 'test', [1, 2, 3])
         self.assertRaises(TypeError,
                           phenotype.phen_micro.PlateRecord, 'test', 1)
 
+    def test_PlateRecord(self):
+        '''Test basic functionalities of PlateRecord objects'''
         handle = open(JSON_PLATE)
         j = json.load(handle)
         handle.close()
