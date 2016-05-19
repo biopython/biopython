@@ -1,0 +1,28 @@
+# We provide biosql.ini.sample as an example
+# (preconfigured to work on the virtual machines
+# used for automated TravisCI testing)
+#
+# Please copy this to biosql.ini and edit it
+# match your local system if you want to run
+# the Biopython BioSQL tests locally yourself.
+
+[mysql]
+# Covers DBDRIVER="MySQLdb" and "mysql.connector" etc
+dbhost=localhost
+dbuser=root
+dbpasswd=
+testdb=biosql_test
+
+[pg]
+# Covers DBDRIVER="psycopg2" etc
+dbhost=localhost
+dbuser=postgres
+dbpasswd=
+testdb=biosql_test
+
+[sqlite]
+# Covers DBDRIVER="sqlite3" where these are essentially dummy values
+dbhost=localhost
+dbuser=root
+dbpasswd=
+testdb=
