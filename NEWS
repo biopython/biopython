@@ -22,6 +22,10 @@ comparing all of the attributes would be too complex. As of this release
 attempting to compare SeqRecord objects should raise an exception instead. If
 you want the old behaviour, use id(record1) == id(record2) instead.
 
+New experimental module Bio.phenotype is for working with Phenotype Microarray
+plates in JSON and the machine vendor's CVS format (contributed by Marco
+Galardini).
+
 Following the convention used elsewhere in Biopython, there is a new function
 Bio.KEGG.read(...) for parsing KEGG files expected to contain a single record
 only - the existing function Bio.KEGG.parse(...) is intended to be used to
@@ -76,6 +80,7 @@ João Rodrigues
 Joe Cora (first contribution)
 Kai Blin
 Lenna Peterson
+Marco Galardini (first contribution)
 Markus Piotrowski
 Matt Ruffalo (first contribution)
 Matteo Sticco (first contribution)
