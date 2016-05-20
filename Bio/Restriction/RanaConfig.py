@@ -72,12 +72,8 @@ ftp_emb_r = ftp_Rebase + 'pub/rebase/emboss_r.###'
 #   connect as anonymous user (rebase_name) and providing your e-mail address
 #   as password.
 #
-#   Therefore, you need to enter your e-mail address in rebase_password.
-#   The address will not be send to anyone but is necessary to login the
-#   ftp server of rebase when connecting as anonymous user.
-#
-#   Do not forget to enclose the address between "'".
+#   However, a password is not required (any more?) for connecting tho REBASE,
+#   so we don't send our e-mail
 #
 Rebase_name = 'anonymous'
-Rebase_password = ''
-# Rebase_password = 'your_address@somewhere.something'
+
