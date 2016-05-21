@@ -25,11 +25,14 @@ with warnings.catch_warnings():
     from Bio import phenotype
 
 # Example plate files
+SMALL_JSON_PLATE = 'phenotype/SmallPlate.json'
+SMALL_JSON_PLATE_2 = 'phenotype/SmallPlate_2.json'
 JSON_PLATE = 'phenotype/Plate.json'
 JSON_PLATE_2 = 'phenotype/Plate_2.json'
 JSON_PLATE_3 = 'phenotype/Plate_3.json'
 JSON_BAD = 'phenotype/BadPlate.json'
 
+SMALL_CSV_PLATES = 'phenotype/SmallPlates.csv'
 CSV_PLATES = 'phenotype/Plates.csv'
 
 
@@ -50,8 +53,8 @@ class TestPhenoMicro(unittest.TestCase):
 
     def test_phenotype_IO(self):
         '''Test basic functionalities of phenotype IO methods'''
-        p1 = phenotype.read(JSON_PLATE_3, 'pm-json')
-        p2 = next(phenotype.parse(CSV_PLATES, 'pm-csv'))
+        p1 = phenotype.read(SMALL_JSON_PLATE, 'pm-json')
+        p2 = next(phenotype.parse(SMALL_CSV_PLATES, 'pm-csv'))
 
         handle = StringIO()
 
@@ -89,7 +92,7 @@ class TestPhenoMicro(unittest.TestCase):
 
     def test_PlateRecord(self):
         '''Test basic functionalities of PlateRecord objects'''
-        with open(JSON_PLATE) as handle:
+        with open(SMALL_JSON_PLATE) as handle:
             j = json.load(handle)
 
         p = phenotype.phen_micro.PlateRecord(j['csv_data']['Plate Type'])
@@ -106,16 +109,16 @@ class TestPhenoMicro(unittest.TestCase):
         p.qualifiers = j
 
         self.assertEqual(p.id, 'PM01')
-        self.assertEqual(len(p), 96)
+        self.assertEqual(len(p), 24)
         self.assertEqual(p.qualifiers, j)
         self.assertRaises(ValueError, p._is_well, 'a')
         self.assertEqual(p['A01'].id, 'A01')
         self.assertRaises(KeyError, p.__getitem__, 'test')
         self.assertEqual(len(p[1]), 12)
-        self.assertEqual(len(p[1:4:2]), 24)
+        self.assertEqual(len(p[1:2:2]), 12)
         self.assertEqual(p[1, 2], p['B03'])
-        self.assertEqual(len(p[:, 1]), 8)
-        self.assertEqual(len(p[:, 1:4:2]), 16)
+        self.assertEqual(len(p[:, 1]), 2)
+        self.assertEqual(len(p[:, 1:4:2]), 4)
         self.assertRaises(TypeError, p.__getitem__, 1, 2, 3)
         self.assertRaises(IndexError, p.__getitem__, 13)
         self.assertRaises(ValueError, p.__setitem__, 'A02', p['A01'])
@@ -136,12 +139,12 @@ class TestPhenoMicro(unittest.TestCase):
         self.assertEqual(p2.id, p.id)
         self.assertEqual(p2['A02'], p['A02'] - p['A01'])
         self.assertEqual(repr(p), "PlateRecord('WellRecord['A01'], WellRecord" +
-                         "['A02'], WellRecord['A03'], ..., WellRecord['H12']')")
-        self.assertEqual(str(p), "Plate ID: PM01\nWell: 96\nRows: 8\nColumns: " +
+                         "['A02'], WellRecord['A03'], ..., WellRecord['B12']')")
+        self.assertEqual(str(p), "Plate ID: PM01\nWell: 24\nRows: 2\nColumns: " +
                          "12\nPlateRecord('WellRecord['A01'], WellRecord['A02'], WellRecord" +
-                         "['A03'], ..., WellRecord['H12']')")
+                         "['A03'], ..., WellRecord['B12']')")
 
-        with open(JSON_PLATE_2) as handle:
+        with open(SMALL_JSON_PLATE_2) as handle:
             j = json.load(handle)
 
         p1 = phenotype.phen_micro.PlateRecord(j['csv_data']['Plate Type'])
