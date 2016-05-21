@@ -1090,6 +1090,8 @@ def _toOPM(plate):
     """
     d = dict(plate.qualifiers.items())
 
+    d[_csvData] = {}
+    d[_csvData][_plate] = plate.id
     d[_measurements] = {}
     d[_measurements][_hour] = []
     times = set()
