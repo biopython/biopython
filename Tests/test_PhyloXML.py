@@ -202,7 +202,6 @@ class TreeTests(unittest.TestCase):
                 'a pylogeny of some monitor lizards')
         self.assertEqual(trees[9].rooted, True)
         # Network (unrooted)
-        tree6 = trees[6]
         self.assertEqual(trees[6].name,
                 'network, node B is connected to TWO nodes: AB and C')
         self.assertEqual(trees[6].rooted, False)
@@ -233,11 +232,8 @@ class TreeTests(unittest.TestCase):
 
     def test_BinaryCharacters(self):
         """Instantiation of BinaryCharacters objects."""
-        # Because we short circult interation, must close handle explicitly
-        # to avoid a ResourceWarning
-        handle = open(EX_DOLLO)
-        tree = next(PhyloXMLIO.parse(handle))
-        handle.close()
+        with open(EX_DOLLO) as handle:
+            tree = next(PhyloXMLIO.parse(handle))
         bchars = tree.clade[0, 0].binary_characters
         self.assertTrue(isinstance(bchars, PX.BinaryCharacters))
         self.assertEqual(bchars.type, 'parsimony inferred')
@@ -344,9 +340,9 @@ class TreeTests(unittest.TestCase):
                 (6, 109, 605, 647, 689, 733, 872, 993, 1075, 1117, 1168),
                 (90, 414, 643, 685, 729, 771, 910, 1031, 1113, 1155, 1204),
                 (7.0e-26, 7.2e-117, 2.4e-6, 1.1e-12, 2.4e-7, 4.7e-14, 2.5e-8,
-                    4.6e-6, 6.3e-7, 1.4e-7, 0.3),
+                 4.6e-6, 6.3e-7, 1.4e-7, 0.3),
                 ('CARD', 'NB-ARC', 'WD40', 'WD40', 'WD40', 'WD40', 'WD40',
-                    'WD40', 'WD40', 'WD40', 'WD40')):
+                 'WD40', 'WD40', 'WD40', 'WD40')):
             self.assertTrue(isinstance(domain, PX.ProteinDomain))
             self.assertEqual(domain.start + 1, start)
             self.assertEqual(domain.end, end)
