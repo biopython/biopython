@@ -180,7 +180,7 @@ def mktest(codon_alns, codon_table=default_codon_table, alpha=0.05):
     Return the p-value of test result
     """
     import copy
-    if not all([isinstance(i, CodonAlignment) for i in codon_alns]):
+    if not all( isinstance(i, CodonAlignment) for i in codon_alns):
         raise TypeError("mktest accepts CodonAlignment list.")
     codon_aln_len = [i.get_alignment_length() for i in codon_alns]
     if len(set(codon_aln_len)) != 1:
@@ -210,7 +210,7 @@ def mktest(codon_alns, codon_table=default_codon_table, alpha=0.05):
         all_codon = i[0].union(*i[1:])
         if '-' in all_codon or len(all_codon) == 1:
             continue
-        fix_or_not = all([len(k) == 1 for k in i])
+        fix_or_not = all( len(k) == 1 for k in i)
         if fix_or_not:
             # fixed
             nonsyn_subgraph = _get_subgraph(all_codon, nonsyn_G)

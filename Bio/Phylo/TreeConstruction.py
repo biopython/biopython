@@ -923,7 +923,7 @@ class ParsimonyScorer(Scorer):
         terms = tree.get_terminals()
         terms.sort(key=lambda term: term.name)
         alignment.sort()
-        if not all([t.name == a.id for t, a in zip(terms, alignment)]):
+        if not all( t.name == a.id for t, a in zip(terms, alignment)):
             raise ValueError(
                 "Taxon names of the input tree should be the same with the alignment.")
         # term_align = dict(zip(terms, alignment))
