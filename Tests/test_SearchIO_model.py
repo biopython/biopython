@@ -484,7 +484,7 @@ class QueryResultCases(unittest.TestCase):
         filtered = self.qresult.hit_filter(filter_func)
         self.assertEqual([hit11, hit31], list(filtered.hits))
         # make sure all remaining hits return True for the filter function
-        self.assertTrue(all([filter_func(hit) for hit in filtered]))
+        self.assertTrue(all(filter_func(hit) for hit in filtered))
         self.assertEqual(1102, filtered.seq_len)
         self.assertEqual('refseq_rna', filtered.target)
 
@@ -555,11 +555,11 @@ class QueryResultCases(unittest.TestCase):
         self.assertTrue('hit2' not in filtered)
         self.assertTrue('hit3' in filtered)
         # test hsps in hit11
-        self.assertTrue(all([hsp in filtered['hit1'] for hsp in
-                [hsp111, hsp112, hsp114]]))
+        self.assertTrue(all(hsp in filtered['hit1'] for hsp in
+                            [hsp111, hsp112, hsp114]))
         # test hsps in hit31
-        self.assertTrue(all([hsp in filtered['hit3'] for hsp in
-                [hsp311, hsp312]]))
+        self.assertTrue(all(hsp in filtered['hit3'] for hsp in
+                            [hsp311, hsp312]))
 
     def test_hsp_filter_no_func(self):
         """Test QueryResult.hsp_filter, no arguments"""
@@ -944,7 +944,7 @@ class HitCases(unittest.TestCase):
         filtered = self.hit.filter(filter_func)
         self.assertEqual([hsp111, hsp113], filtered.hsps)
         # make sure all remaining hits return True for the filter function
-        self.assertTrue(all([filter_func(hit) for hit in filtered]))
+        self.assertTrue(all(filter_func(hit) for hit in filtered))
         self.assertEqual(5e-10, filtered.evalue)
         self.assertEqual('test', filtered.name)
 

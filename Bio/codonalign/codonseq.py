@@ -315,11 +315,9 @@ def cal_dn_ds(codon_seq1, codon_seq2, method="NG86",
           when you are using ML method. Possible ways of
           getting cfreq are: F1x4, F3x4 and F61.
     """
-    if all([isinstance(codon_seq1, CodonSeq),
-           isinstance(codon_seq2, CodonSeq)]):
+    if isinstance(codon_seq1, CodonSeq) and isinstance(codon_seq2, CodonSeq):
         pass
-    elif all([isinstance(codon_seq1, SeqRecord),
-             isinstance(codon_seq2, SeqRecord)]):
+    elif isinstance(codon_seq1, SeqRecord) and isinstance(codon_seq2, SeqRecord):
         codon_seq1 = codon_seq1.seq
         codon_seq2 = codon_seq2.seq
     else:
@@ -455,12 +453,10 @@ def _count_diff_NG86(codon1, codon2, codon_table=default_codon_table):
     The function will take multiple pathways from codon1 to codon2
     into account.
     """
-    if not all([isinstance(codon1, str), isinstance(codon2, str)]):
-        raise TypeError("_count_diff_NG86 accepts string object to represent "
-                        "codon ({0}, {1} detected)".format(
-                                                        type(codon1),
-                                                        type(codon2))
-                       )
+    if not isinstance(codon1, str) or not isinstance(codon2, str):
+        raise TypeError("_count_diff_NG86 accepts string object "
+                        "to represent codon ({0}, {1} "
+                        "detected)".format(type(codon1), type(codon2)))
     if len(codon1) != 3 or len(codon2) != 3:
         raise RuntimeError("codon should be three letter string ({0}, {1} "
                            "detected)".format(len(codon1), len(codon2)))
@@ -468,11 +464,11 @@ def _count_diff_NG86(codon1, codon2, codon_table=default_codon_table):
     if codon1 == '---' or codon2 == '---':
         return SN
     base_tuple = ('A', 'C', 'G', 'T')
-    if not all([i in base_tuple for i in codon1]):
+    if not all(i in base_tuple for i in codon1):
         raise RuntimeError("Unrecognized character detected in codon1 {0} "
                            "(Codons consist of "
                            "A, T, C or G)".format(codon1))
-    if not all([i in base_tuple for i in codon2]):
+    if not all(i in base_tuple for i in codon2):
         raise RuntimeError("Unrecognized character detected in codon2 {0} "
                            "(Codons consist of "
                            "A, T, C or G)".format(codon2))
@@ -895,12 +891,10 @@ def _count_diff_YN00(codon1, codon2, P, codon_lst,
     of transition and transversion (TV) will also be calculated in
     the function.
     """
-    if not all([isinstance(codon1, str), isinstance(codon2, str)]):
-        raise TypeError("_count_diff_YN00 accepts string object to represent "
-                        "codon ({0}, {1} detected)".format(
-                                                        type(codon1),
-                                                        type(codon2))
-                       )
+    if not isinstance(codon1, str) or not isinstance(codon2, str):
+        raise TypeError("_count_diff_YN00 accepts string object "
+                        "to represent codon ({0}, {1} "
+                        "detected)".format(type(codon1), type(codon2)))
     if len(codon1) != 3 or len(codon2) != 3:
         raise RuntimeError("codon should be three letter string ({0}, {1} "
                            "detected)".format(len(codon1), len(codon2)))
@@ -909,11 +903,11 @@ def _count_diff_YN00(codon1, codon2, P, codon_lst,
     if codon1 == '---' or codon2 == '---':
         return TV
     base_tuple = ('A', 'C', 'G', 'T')
-    if not all([i in base_tuple for i in codon1]):
+    if not all(i in base_tuple for i in codon1):
         raise RuntimeError("Unrecognized character detected in codon1 {0} "
                            "(Codons consist of "
                            "A, T, C or G)".format(codon1))
-    if not all([i in base_tuple for i in codon2]):
+    if not all(i in base_tuple for i in codon2):
         raise RuntimeError("Unrecognized character detected in codon2 {0} "
                            "(Codons consist of "
                            "A, T, C or G)".format(codon2))

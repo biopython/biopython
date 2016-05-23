@@ -244,7 +244,7 @@ def _check_corr(pro, nucl, gap_char='-', codon_table=default_codon_table,
     import re
     from Bio.Alphabet import NucleotideAlphabet
 
-    if not all([isinstance(pro, SeqRecord), isinstance(nucl, SeqRecord)]):
+    if not isinstance(pro, SeqRecord) or not isinstance(nucl, SeqRecord):
         raise TypeError("_check_corr accepts two SeqRecord object. Please "
                         "check your input.")
 
