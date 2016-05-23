@@ -1499,7 +1499,7 @@ class Nexus(object):
                     fh.write(self.append_sets(exclude=exclude, delete=delete, mrbayes=mrbayes))
         return filename
 
-    def append_sets(self, exclude=[], delete=[], mrbayes=False, include_codons=True, codons_only=False):
+    def append_sets(self, exclude=(), delete=(), mrbayes=False, include_codons=True, codons_only=False):
         """Returns a sets block."""
         if not self.charsets and not self.taxsets and not self.charpartitions:
             return ''
@@ -1601,7 +1601,7 @@ class Nexus(object):
                 fh.write('%s %s\n' % (safename(taxon), str(self.matrix[taxon])))
         return filename
 
-    def constant(self, matrix=None, delete=[], exclude=[]):
+    def constant(self, matrix=None, delete=(), exclude=()):
         """Return a list with all constant characters."""
         if not matrix:
             matrix = self.matrix
@@ -1646,7 +1646,7 @@ class Nexus(object):
         cpos = [s[0] for s in constant]
         return cpos
 
-    def cstatus(self, site, delete=[], narrow=True):
+    def cstatus(self, site, delete=(), narrow=True):
         """Summarize character.
 
         narrow=True:  paup-mode (a c ? --> ac; ? ? ? --> ?)
@@ -1670,7 +1670,7 @@ class Nexus(object):
         cstatus.sort()
         return cstatus
 
-    def weighted_stepmatrix(self, name='your_name_here', exclude=[], delete=[]):
+    def weighted_stepmatrix(self, name='your_name_here', exclude=(), delete=()):
         """Calculates a stepmatrix for weighted parsimony.
 
         See Wheeler (1990), Cladistics 6:269-275 and
@@ -1684,7 +1684,7 @@ class Nexus(object):
                     m.add(b1.upper(), b2.upper(), 1)
         return m.transformation().weighting().smprint(name=name)
 
-    def crop_matrix(self, matrix=None, delete=[], exclude=[]):
+    def crop_matrix(self, matrix=None, delete=(), exclude=()):
         """Return a matrix without deleted taxa and excluded characters."""
         if not matrix:
             matrix = self.matrix
@@ -1705,7 +1705,7 @@ class Nexus(object):
         else:
             return dict((t, matrix[t]) for t in self.taxlabels if t in matrix and t not in delete)
 
-    def bootstrap(self, matrix=None, delete=[], exclude=[]):
+    def bootstrap(self, matrix=None, delete=(), exclude=()):
         """Return a bootstrapped matrix."""
         if not matrix:
             matrix = self.matrix
