@@ -1851,7 +1851,7 @@ class Not_available(AbstractCut):
 
 class RestrictionBatch(set):
 
-    def __init__(self, first=[], suppliers=[]):
+    def __init__(self, first=(), suppliers=()):
         """RestrictionBatch([sequence]) -> new RestrictionBatch."""
         first = [self.format(x) for x in first]
         first += [eval(x) for n in suppliers for x in suppliers_dict[n][1]]
