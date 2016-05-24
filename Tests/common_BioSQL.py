@@ -88,6 +88,10 @@ def check_config(dbdriver, dbtype, dbhost, dbuser, dbpasswd, testdb):
     DBPASSWD = dbpasswd
     TESTDB = testdb
 
+    if not DBDRIVER or not DBTYPE or not DBUSER:
+        # No point going any further...
+        raise MissingExternalDependencyError("Incomplete BioSQL test settings")
+
     # Check the database driver is installed:
     if SYSTEM == "Java":
         try:

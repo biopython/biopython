@@ -5,6 +5,9 @@
 # Please copy this to biosql.ini and edit it
 # match your local system if you want to run
 # the Biopython BioSQL tests locally yourself.
+#
+# To disable testing against any specific back-end,
+# set dbuser to an empty string.
 
 [mysql]
 # Covers DBDRIVER="MySQLdb" and "mysql.connector" etc
