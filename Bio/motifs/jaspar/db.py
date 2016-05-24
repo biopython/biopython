@@ -4,9 +4,9 @@
 # as part of this package.
 """Provides read access to a JASPAR5 formatted database.
 
-This modules requires MySQLdb to be installed.
+This modules requires MySQLdb(python 2.6 or 2.7) or mysql.connector (python > 3) to be installed.
 
-Example, substitute the your database credentials as
+Example for python version 2.x, substitute the your database credentials as
 appropriate:
 
     >>> from Bio.motifs.jaspar.db import JASPAR5
