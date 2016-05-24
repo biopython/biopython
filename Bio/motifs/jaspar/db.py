@@ -4,7 +4,8 @@
 # as part of this package.
 """Provides read access to a JASPAR5 formatted database.
 
-This modules requires MySQLdb for python < 3 and mysql.connector for python > 3 to be installed.
+For python < 3, this modules requeirs MySQLdb; for python > 3 requires mysql.connector.
+
 
 Example for python version 2.x, substitute the your database credentials as
 appropriate:
