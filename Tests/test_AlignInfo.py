@@ -9,7 +9,9 @@ import unittest
 from Bio.Alphabet import DNAAlphabet, generic_protein
 from Bio.Alphabet import HasStopCodon, Gapped
 from Bio.Alphabet.IUPAC import unambiguous_dna
-from Bio.Align.Generic import Alignment
+from Bio.Align import MultipleSeqAlignment
+from Bio.Seq import Seq
+from Bio.SeqRecord import SeqRecord
 from Bio import AlignIO
 from Bio.SubsMat.FreqTable import FreqTable, FREQ
 from Bio.Align.AlignInfo import SummaryInfo
@@ -58,10 +60,10 @@ N  0.0 2.0 1.0 0.0
 
     def test_proteins(self):
         alpha = HasStopCodon(Gapped(generic_protein, "-"), "*")
-        a = Alignment(alpha)
-        a.add_sequence("ID001", "MHQAIFIYQIGYP*LKSGYIQSIRSPEYDNW-")
-        a.add_sequence("ID002", "MH--IFIYQIGYAYLKSGYIQSIRSPEY-NW*")
-        a.add_sequence("ID003", "MHQAIFIYQIGYPYLKSGYIQSIRSPEYDNW*")
+        a = MultipleSeqAlignment([
+                SeqRecord(Seq("MHQAIFIYQIGYP*LKSGYIQSIRSPEYDNW-", alpha), id="ID001"),
+                SeqRecord(Seq("MH--IFIYQIGYAYLKSGYIQSIRSPEY-NW*", alpha), id="ID002"),
+                SeqRecord(Seq("MHQAIFIYQIGYPYLKSGYIQSIRSPEYDNW*", alpha), id="ID003")])
         self.assertEqual(32, a.get_alignment_length())
 
         s = SummaryInfo(a)
