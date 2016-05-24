@@ -37,6 +37,7 @@ class Alignment(object):
         e.g.
 
         >>> from Bio.Alphabet import IUPAC, Gapped
+        >>> from Bio.Align.Generic import Alignment
         >>> align = Alignment(Gapped(IUPAC.unambiguous_dna, "-"))
         >>> align.add_sequence("Alpha", "ACTGCTAGCTAG")
         >>> align.add_sequence("Beta",  "ACT-CTAGCTAG")
@@ -84,6 +85,7 @@ class Alignment(object):
         single screen. e.g.
 
         >>> from Bio.Alphabet import IUPAC, Gapped
+        >>> from Bio.Align.Generic import Alignment
         >>> align = Alignment(Gapped(IUPAC.unambiguous_dna, "-"))
         >>> align.add_sequence("Alpha", "ACTGCTAGCTAG")
         >>> align.add_sequence("Beta",  "ACT-CTAGCTAG")
@@ -141,6 +143,7 @@ class Alignment(object):
         e.g.
 
         >>> from Bio.Alphabet import IUPAC, Gapped
+        >>> from Bio.Align.Generic import Alignment
         >>> align = Alignment(Gapped(IUPAC.unambiguous_dna, "-"))
         >>> align.add_sequence("Alpha", "ACTGCTAGCTAG")
         >>> align.add_sequence("Beta",  "ACT-CTAGCTAG")
@@ -207,6 +210,7 @@ class Alignment(object):
         e.g.
 
         >>> from Bio.Alphabet import IUPAC, Gapped
+        >>> from Bio.Align.Generic import Alignment
         >>> align = Alignment(Gapped(IUPAC.unambiguous_dna, "-"))
         >>> align.add_sequence("Alpha", "ACTGCTAGCTAG")
         >>> align.add_sequence("Beta",  "ACT-CTAGCTAG")
@@ -261,6 +265,7 @@ class Alignment(object):
         by finding the maximum length of sequences in the alignment.
 
         >>> from Bio.Alphabet import IUPAC, Gapped
+        >>> from Bio.Align.Generic import Alignment
         >>> align = Alignment(Gapped(IUPAC.unambiguous_dna, "-"))
         >>> align.add_sequence("Alpha", "ACTGCTAGCTAG")
         >>> align.add_sequence("Beta",  "ACT-CTAGCTAG")
@@ -340,6 +345,7 @@ class Alignment(object):
         e.g.
 
         >>> from Bio.Alphabet import IUPAC, Gapped
+        >>> from Bio.Align.Generic import Alignment
         >>> align = Alignment(Gapped(IUPAC.unambiguous_dna, "-"))
         >>> align.add_sequence("Alpha", "ACTGCTAGCTAG")
         >>> align.add_sequence("Beta",  "ACT-CTAGCTAG")
@@ -362,6 +368,7 @@ class Alignment(object):
         We'll use the following example alignment here for illustration:
 
         >>> from Bio.Alphabet import IUPAC, Gapped
+        >>> from Bio.Align.Generic import Alignment
         >>> align = Alignment(Gapped(IUPAC.unambiguous_dna, "-"))
         >>> align.add_sequence("Alpha",  "ACTGCTAGCTAG")
         >>> align.add_sequence("Beta",   "ACT-CTAGCTAG")
