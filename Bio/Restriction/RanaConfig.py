@@ -7,28 +7,28 @@
 
 Mainly used by PrintFormat.PrintFormat
 
-ConsoleWidth : width of the console used default to 80.
-               should never be less than 60.
-NameWidth    : space attributed to the name in PrintList method.
-Indent       : Indent of the second line.
-MaxSize      : Maximal size of the sequence (default=6:
-                                             -> 99 999 bp + 1 trailing ','
-               people are unlikely to ask for restriction map of sequences
-               bigger than 100.000 bp. This is needed to determine the
-               space to be reserved for sites location.
+ - ConsoleWidth : width of the console used default to 80.
+                  should never be less than 60.
+ - NameWidth    : space attributed to the name in PrintList method.
+ - Indent       : Indent of the second line.
+ - MaxSize      : Maximal size of the sequence (default=6:
+                  -> 99 999 bp + 1 trailing ','
+                  people are unlikely to ask for restriction map of sequences
+                  bigger than 100.000 bp. This is needed to determine the
+                  space to be reserved for sites location.
 
-               MaxSize = 5  =>   9.999 bp
-               MaxSize = 6  =>  99.999 bp
-               MaxSize = 7  => 999.999 bp
+                   - MaxSize = 5  =>   9.999 bp
+                   - MaxSize = 6  =>  99.999 bp
+                   - MaxSize = 7  => 999.999 bp
 
-Example:
+Example::
 
-  <------------ ConsoleWidth --------------->
-  <- NameWidth ->
-  EcoRI         :   1, 45, 50, 300, 400, 650,
-                        700, 1200, 2500.
-                    <-->
-                      Indent
+    <------------ ConsoleWidth --------------->
+    <- NameWidth ->
+    EcoRI         :   1, 45, 50, 300, 400, 650,
+                          700, 1200, 2500.
+                      <-->
+                        Indent
 
 """
 
@@ -76,4 +76,3 @@ ftp_emb_r = ftp_Rebase + 'pub/rebase/emboss_r.###'
 #   so we don't send our e-mail
 #
 Rebase_name = 'anonymous'
-
