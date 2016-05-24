@@ -80,6 +80,7 @@ DOCTEST_MODULES = [
     "Bio.Align.Generic",
     "Bio.Align.Applications._Clustalw",
     "Bio.Align.Applications._ClustalOmega",
+    "Bio.Align.Applications._Dialign",
     "Bio.Align.Applications._MSAProbs",
     "Bio.Align.Applications._Mafft",
     "Bio.Align.Applications._Muscle",
