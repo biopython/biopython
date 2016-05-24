@@ -26,9 +26,6 @@ By default, all tests are run.
 
 from __future__ import print_function
 
-# The default verbosity (not verbose)
-VERBOSITY = 0
-
 # standard modules
 import sys
 import os
@@ -71,6 +68,9 @@ def is_numpy():
         return True
     except ImportError:
         return False
+
+# The default verbosity (not verbose)
+VERBOSITY = 0
 
 # This is the list of modules containing docstring tests.
 # If you develop docstring tests for other modules, please add
