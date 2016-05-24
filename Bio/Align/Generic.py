@@ -50,8 +50,8 @@ class Alignment(object):
         import warnings
         import Bio
         warnings.warn("With the introduction of the MultipleSeqAlignment class in Bio.Align, this base class is deprecated and is likely to be removed in a future release of Biopython.", Bio.BiopythonDeprecationWarning)
-        if not (isinstance(alphabet, Alphabet.Alphabet)
-                or isinstance(alphabet, Alphabet.AlphabetEncoder)):
+        if not (isinstance(alphabet, Alphabet.Alphabet) or
+                isinstance(alphabet, Alphabet.AlphabetEncoder)):
             raise ValueError("Invalid alphabet argument")
         self._alphabet = alphabet
         # hold everything at a list of SeqRecord objects
@@ -432,12 +432,6 @@ class Alignment(object):
             raise TypeError("Invalid index type.")
 
 
-def _test():
-    """Run the Bio.Align.Generic module's doctests."""
-    print("Running doctests...")
-    import doctest
-    doctest.testmod()
-    print("Done")
-
 if __name__ == "__main__":
-    _test()
+    from Bio._utils import run_doctest
+    run_doctest()
