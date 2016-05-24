@@ -417,7 +417,7 @@ def _G_test(site_counts):
 
         - site_counts - [syn_fix, nonsyn_fix, syn_poly, nonsyn_poly]
 
-    >>> round(_G_test([17, 7, 42, 2]), 7)
+    >>> print("%0.6f" % _G_test([17, 7, 42, 2]))
     0.004924
     """
     # TODO:
