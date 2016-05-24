@@ -17,7 +17,16 @@ from Bio._py3k import _as_bytes
 
 
 def crc32(seq):
-    """Returns the crc32 checksum for a sequence (string or Seq object)."""
+    """Returns the crc32 checksum for a sequence (string or Seq object).
+
+    Note that the case is important:
+
+    >>> crc32("ACGTACGTACGT")
+    20049947
+    >>> crc32("acgtACGTacgt")
+    1688586483
+
+    """
     # NOTE - On Python 2 returns a signed int, on Python 3 it is unsigned
     # Docs suggest should use crc32(x) & 0xffffffff for consistency.
     # TODO - Should we return crc32(x) & 0xffffffff here?
@@ -50,7 +59,16 @@ _table_h = _init_table_h()
 
 
 def crc64(s):
-    """Returns the crc64 checksum for a sequence (string or Seq object)."""
+    """Returns the crc64 checksum for a sequence (string or Seq object).
+
+    Note that the case is important:
+
+    >>> crc64("ACGTACGTACGT")
+    'CRC-C4FBB762C4A87EBD'
+    >>> crc64("acgtACGTacgt")
+    'CRC-DA4509DC64A87EBD'
+
+    """
     crcl = 0
     crch = 0
     for c in s:
@@ -75,6 +93,12 @@ def gcg(seq):
     with the help of John Lenton, Pablo Ziliani, and Gabriel Genellina.
 
     All sequences are converted to uppercase.
+
+    >>> gcg("ACGTACGTACGT")
+    5688
+    >>> gcg("acgtACGTacgt")
+    5688
+
     """
     try:
         # Assume its a Seq object
@@ -98,6 +122,13 @@ def seguid(seq):
     returns the SEGUID string (A SEquence Globally Unique IDentifier).
     seq type = str.
 
+    Note that the case is not important:
+
+    >>> seguid("ACGTACGTACGT")
+    'If6HIvcnRSQDVNiAoefAzySc6i4'
+    >>> seguid("acgtACGTacgt")
+    'If6HIvcnRSQDVNiAoefAzySc6i4'
+
     For more information about SEGUID, see:
     http://bioinformatics.anl.gov/seguid/
     DOI: 10.1002/pmic.200600032
@@ -119,3 +150,8 @@ def seguid(seq):
         pass
     # For all other Pythons
     return base64.b64encode(m.digest()).rstrip("=")
+
+
+if __name__ == "__main__":
+    from Bio._utils import run_doctest
+    run_doctest()
