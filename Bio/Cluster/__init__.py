@@ -395,7 +395,7 @@ Return values:
         return clustercentroids(self.data, self.mask, clusterid, method,
                                 transpose)
 
-    def clusterdistance(self, index1=[0], index2=[0], method='a', dist='e',
+    def clusterdistance(self, index1=0, index2=0, method='a', dist='e',
                         transpose=0):
         """Calculate the distance between two clusters.
 
