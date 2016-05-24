@@ -119,23 +119,3 @@ def seguid(seq):
         pass
     # For all other Pythons
     return base64.b64encode(m.digest()).rstrip("=")
-
-
-if __name__ == "__main__":
-    print("Quick self test")
-
-    str_light_chain_one = "QSALTQPASVSGSPGQSITISCTGTSSDVGSYNLVSWYQQHPGK" \
-                    + "APKLMIYEGSKRPSGVSNRFSGSKSGNTASLTISGLQAEDEADY" \
-                    + "YCSSYAGSSTLVFGGGTKLTVL"
-
-    str_light_chain_two = "QSALTQPASVSGSPGQSITISCTGTSSDVGSYNLVSWYQQHPGK" \
-                    + "APKLMIYEGSKRPSGVSNRFSGSKSGNTASLTISGLQAEDEADY" \
-                    + "YCCSYAGSSTWVFGGGTKLTVL"
-
-    assert crc64(str_light_chain_one) == crc64(str_light_chain_two)
-    assert 'CRC-44CAAD88706CC153' == crc64(str_light_chain_one)
-
-    assert 'BpBeDdcNUYNsdk46JoJdw7Pd3BI' == seguid(str_light_chain_one)
-    assert 'X5XEaayob1nZLOc7eVT9qyczarY' == seguid(str_light_chain_two)
-
-    print("Done")
