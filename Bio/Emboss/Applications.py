@@ -1254,11 +1254,6 @@ class SeqmatchallCommandline(_EmbossCommandLine):
         _EmbossCommandLine.__init__(self, cmd, **kwargs)
 
 
-def _test():
-    """Run the Bio.Emboss.Applications module doctests."""
-    import doctest
-    doctest.testmod()
-
 if __name__ == "__main__":
-    # Run the doctests
-    _test()
+    from Bio._utils import run_doctest
+    run_doctest()

@@ -368,3 +368,8 @@ class RaxmlCommandline(AbstractCommandline):
         # ENH: enforce -s, -n and -m
         if not self.parsimony_seed:
             self.parsimony_seed = 10000
+
+
+if __name__ == "__main__":
+    from Bio._utils import run_doctest
+    run_doctest()
