@@ -59,6 +59,31 @@ appropriate:
     >>> for motif in motifs:
     ...     pass # do something with the motif
 
+This is an example for python3.5
+
+    Python 3.5.1 (default, Jan 22 2016, 08:54:32)
+    [GCC 4.2.1 Compatible Apple LLVM 7.0.2 (clang-700.1.81)] on darwin
+    Type "help", "copyright", "credits" or "license" for more information.
+    >>> from Bio.motifs.jaspar.db import JASPAR5
+    >>> jdb = JASPAR5(host="localhost",name="jaspar",user="root",password="")
+    >>> sep3 = jdb.fetch_motif_by_id('MA0563.1')
+    >>> print(sep3)
+    TF name	SEP3
+    Matrix ID	MA0563.1
+    Collection	CORE
+    TF class	MADS box factors
+    Species	3702
+    Taxonomic group	plants
+    Accession	['O22456']
+    Data type used	ChIP-seq
+    Medline	19033361
+    Matrix:
+            0      1      2      3      4      5      6      7      8      9     10
+    A:  24.00  19.00   1.00  77.00  12.00  19.00   0.00   9.00  11.00   9.00   0.00
+    C:  37.00 111.00  97.00   0.00  28.00   0.00   0.00   0.00   3.00   0.00   7.00
+    G:  29.00   5.00   1.00   0.00   5.00   5.00   0.00  24.00  22.00 138.00 114.00
+    T:  60.00  15.00  51.00  73.00 105.00 126.00 150.00 117.00 114.00   3.00  29.00
+
 """
 
 from __future__ import print_function
@@ -69,12 +94,18 @@ from Bio import MissingPythonDependencyError
 import sys
 
 if sys.version_info < (3,):
+    """
+        Python < 3 use MySQLdb
+    """
     try:
         import MySQLdb as mdb
     except:
         raise MissingPythonDependencyError("Install MySQLdb if you want to use "
                                            "Bio.motifs.jaspar.db")
 else:
+    """
+        Python > 3 use mysql.connector
+    """
     try:
         import mysql.connector as mdb
     except:
