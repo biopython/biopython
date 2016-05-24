@@ -1,6 +1,5 @@
 Working with restriction enzymes
 ================================
-(Updated version)
 
 ## Table of contents
 
@@ -103,7 +102,7 @@ convention with the upper case letters and Latin numbering (in upper case as
 well):
 
 ``` python
->>>> EcoRI
+>>> EcoRI
 EcoRI
 >>> ecori
 
@@ -1210,7 +1209,7 @@ emboss files. From a DOS or Unix shell do the following:
 
 ``` bash
 $ cd path_to_the_update_script
-$ rebase_update.py -m your_e_mail@my_address.com -p http://www.somewhere.com:8000
+$ rebase_update.py -p http://www.somewhere.com:8000
 
 Please wait, trying to connect to Rebase
 
@@ -1222,11 +1221,9 @@ copying ftp://ftp.neb.com/pub/rebase/emboss_r.407
 to /cvsroot/bioPython/Bio/Restriction/Scripts/emboss_r.407
 ```
 
-Some explanation are needed: `-m` stands for e-mail, in order to connect to the
-ftp server you need to provide a your e-mail address. So replace
-`your_e_mail@your_address.com` with your e-mail address. `-p` is the switch to
-indicate to the script you are using a proxy. If you use a ftp proxy enter its
-address and the connection port after the '`:`'.
+Some explanation are needed: `-p` is the switch to indicate to the script you
+are using a proxy. If you use a ftp proxy enter its address and the connection
+port after the '`:`'.
 
 
 ##### <a name="6.1.3"></a>6.1.3 Compiling a new dictionary with ranacompiler.py
@@ -1323,34 +1320,11 @@ whole thing.
 If you whish, the script may install the folder for you as well, but you will
 have to run it as root if your normal user has no write access to your Python
 installation (and it should'nt). Use the command `ranacompiler.py -i` or
-`ranacompiler.py --install`.
+`ranacompiler.py --install` for this.
 
-``` bash
-$ su -c "./ranacompiler.py -i"
-password :
-
- Using the files : emboss_e.407, emboss_r.407, emboss_s.407
-
-...
-
- ******************************************************************************
-
-                Installing Restriction_Dictionary.py
-
-        The new file seems ok. Proceeding with the installation.
-
-         Everything ok. If you need it a version of the old
-         dictionary have been saved in the Updates folder under
-         the name Restriction_Dictionary.old.
-
- ******************************************************************************
- ```
-
-Much of the same really, but this time the module has directly been installed
-with your other Python modules, you don't need to do anything more. If anything
-goes wrong (you have no write access to the destination folder for example) the
-script will let you know it did not perform the installation. It will however
-still save the new module in the current directory.
+If anything goes wrong (you have no write access to the destination folder for
+example) the script will let you know it did not perform the installation. It
+will however still save the new module in the current directory.
 
 As you can see the script is not very bright and will redo the compilation each
 time it is invoked, no matter if a previous version of the module is already
