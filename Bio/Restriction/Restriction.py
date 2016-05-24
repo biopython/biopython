@@ -247,7 +247,7 @@ class RestrictionType(type):
     Implement the operator methods.
     """
 
-    def __init__(cls, name='', bases=(), dct={}):
+    def __init__(cls, name='', bases=(), dct=None):
         """RE(name, bases, dct) -> RestrictionType instance.
 
         Not intended to be used in normal operation. The enzymes are
