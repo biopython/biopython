@@ -24,6 +24,7 @@ means that using Bio.SeqIO.convert() may be faster, as well as more convenient.
 All these file format specific optimisations are handled by this (private) module.
 """
 
+from Bio import BiopythonWarning
 from Bio import SeqIO
 # NOTE - Lots of lazy imports further on...
 
@@ -77,7 +78,7 @@ def _fastq_generic2(in_handle, out_handle, mapping, truncate_char, truncate_msg)
         if truncate_char in qual:
             qual = qual.replace(truncate_char, chr(126))
             import warnings
-            warnings.warn(truncate_msg)
+            warnings.warn(truncate_msg, BiopythonWarning)
         out_handle.write("@%s\n%s\n+\n%s\n" % (title, seq, qual))
     return count
 

@@ -289,7 +289,6 @@ class TestReferenceFastqConversions(unittest.TestCase):
                 if out_variant != "sanger":
                     # Ignore data loss warnings from max qualities
                     warnings.simplefilter("ignore", BiopythonWarning)
-                    warnings.simplefilter("ignore", UserWarning)
                 # Check matches using convert...
                 handle = StringIO()
                 SeqIO.convert(in_filename, "fastq-" + in_variant,
