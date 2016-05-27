@@ -5,6 +5,7 @@
 import collections
 import warnings
 
+from Bio import BiopythonWarning
 from Bio.Alphabet import generic_protein
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
@@ -182,7 +183,8 @@ def PdbAtomIterator(handle):
     if firstline.startswith("HEADER"):
         pdb_id = firstline[62:66]
     else:
-        warnings.warn("First line is not a 'HEADER'; can't determine PDB ID")
+        warnings.warn("First line is not a 'HEADER'; can't determine PDB ID. "
+                      "Line: %r" % firstline, BiopythonWarning)
         pdb_id = '????'
 
     struct = PDBParser().get_structure(pdb_id, undo_handle)
@@ -213,7 +215,7 @@ def PdbAtomIterator(handle):
                     res_out.append('X' * gapsize)
                 else:
                     warnings.warn("Ignoring out-of-order residues after a gap",
-                                  UserWarning)
+                                  BiopythonWarning)
                     # Keep the normal part, drop the out-of-order segment
                     # (presumably modified or hetatm residues, e.g. 3BEG)
                     res_out.extend(restype(x) for x in residues[prev_idx:i])
