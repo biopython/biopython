@@ -83,7 +83,6 @@ class A_ExceptionTest(unittest.TestCase):
               ]):
                 self.assertTrue(msg in str(wrn), str(wrn))
 
-
     def test_2_strict(self):
         """Check error: Parse a flawed PDB file in strict mode."""
         parser = PDBParser(PERMISSIVE=False)
@@ -513,7 +512,6 @@ class ParseTest(unittest.TestCase):
                          "C C O C S N C C O C C C O N N C C O C C C C C C C O "
                          "N C C O C C C N C N N N C C O C S")
 
-
     def test_pdbio_write_truncated(self):
         """Test parsing of truncated lines"""
         io = PDBIO()
@@ -531,6 +529,7 @@ class ParseTest(unittest.TestCase):
             self.assertEqual(record_set, set())
         finally:
             os.remove(filename)
+
 
 class ParseReal(unittest.TestCase):
     """Testing with real PDB files."""
@@ -708,8 +707,8 @@ class ParseReal(unittest.TestCase):
                 for iline, line in enumerate(handle):
                     if line.strip() == 'END':
                         end_stment.append((line, iline))
-            self.assertEqual(len(end_stment), 1) # Only one?
-            self.assertEqual(end_stment[0][1], iline) # Last line of the file?
+            self.assertEqual(len(end_stment), 1)  # Only one?
+            self.assertEqual(end_stment[0][1], iline)  # Last line of the file?
 
         parser = PDBParser(QUIET=1)
         struct1 = parser.get_structure("1lcd", "PDB/1LCD.pdb")
@@ -981,7 +980,9 @@ class Atom_Element(unittest.TestCase):
 class IterationTests(unittest.TestCase):
 
     def setUp(self):
-        self.struc = PDBParser(PERMISSIVE=True).get_structure('X', "PDB/a_structure.pdb")
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", PDBConstructionWarning)
+            self.struc = PDBParser(PERMISSIVE=True).get_structure('X', "PDB/a_structure.pdb")
 
     def test_get_chains(self):
         """Yields chains from different models separately."""
@@ -1018,8 +1019,10 @@ class IterationTests(unittest.TestCase):
 class TransformTests(unittest.TestCase):
 
     def setUp(self):
-        self.s = PDBParser(PERMISSIVE=True).get_structure(
-            'X', "PDB/a_structure.pdb")
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", PDBConstructionWarning)
+            self.s = PDBParser(PERMISSIVE=True).get_structure(
+                'X', "PDB/a_structure.pdb")
         self.m = self.s.get_list()[0]
         self.c = self.m.get_list()[0]
         self.r = self.c.get_list()[0]
@@ -1063,8 +1066,10 @@ class TransformTests(unittest.TestCase):
 class CopyTests(unittest.TestCase):
 
     def setUp(self):
-        self.s = PDBParser(PERMISSIVE=True).get_structure(
-            'X', "PDB/a_structure.pdb")
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", PDBConstructionWarning)
+            self.s = PDBParser(PERMISSIVE=True).get_structure(
+                'X', "PDB/a_structure.pdb")
         self.m = self.s.get_list()[0]
         self.c = self.m.get_list()[0]
         self.r = self.c.get_list()[0]
