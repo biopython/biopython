@@ -2,10 +2,11 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-# TODO - Don't use "from XXX import *"
 from __future__ import print_function
+import warnings
 
 try:
+    # TODO - Don't use "from XXX import *"
     from numpy import *
     from numpy import dot  # missing in old PyPy's micronumpy
 except ImportError:
@@ -13,7 +14,10 @@ except ImportError:
     raise MissingPythonDependencyError(
         "Install NumPy if you want to use Bio.QCPSuperimposer.")
 
-from Bio.PDB.QCPSuperimposer import QCPSuperimposer
+from Bio import BiopythonExperimentalWarning
+with warnings.catch_warnings():
+    warnings.simplefilter('ignore', BiopythonExperimentalWarning)
+    from Bio.PDB.QCPSuperimposer import QCPSuperimposer
 
 # start with two coordinate sets (Nx3 arrays - Float0)
 
