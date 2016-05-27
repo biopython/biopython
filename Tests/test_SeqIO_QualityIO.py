@@ -499,8 +499,11 @@ class TestWriteRead(unittest.TestCase):
         """Write and read back sanger_93.fastq"""
         self.check(os.path.join("Quality", "sanger_93.fastq"), "fastq",
                    ["fastq", "fastq-sanger", "fasta", "qual", "phd"])
-        self.check(os.path.join("Quality", "sanger_93.fastq"), "fastq",
-                   ["fastq-solexa", "fastq-illumina"])
+        with warnings.catch_warnings():
+            # TODO - Have a Biopython defined "DataLossWarning?"
+            warnings.simplefilter('ignore', BiopythonWarning)
+            self.check(os.path.join("Quality", "sanger_93.fastq"), "fastq",
+                       ["fastq-solexa", "fastq-illumina"])
 
     def test_sanger_faked(self):
         """Write and read back sanger_faked.fastq"""
