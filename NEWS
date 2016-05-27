@@ -51,6 +51,9 @@ identifiers which better match results from the PDB structure parse.
 The restriction enzyme list in Bio.Restriction has been updated to the
 May 2016 release of REBASE.
 
+The mmCIF parser in Bio.PDB.MMCIFParser has been joined by a second version
+which only looks at the ATOM and HETATM lines and can be much faster.
+
 Additionally, a number of small bugs have been fixed with further additions
 to the test suite, and there has been further work to follow the Python PEP8
 standard coding style, and in converting our docstring documentation to use
