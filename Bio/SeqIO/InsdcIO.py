@@ -494,8 +494,12 @@ class GenBankWriter(_InsdcWriter):
         """Used in the 'header' of each GenBank record."""
         assert len(tag) < self.HEADER_WIDTH
         if len(text) > self.MAX_WIDTH - self.HEADER_WIDTH:
-            warnings.warn("Annotation %r too long for %r line" % (text, tag),
-                          BiopythonWarning)
+            if tag:
+                warnings.warn("Annotation %r too long for %r line" % (text, tag),
+                              BiopythonWarning)
+            else:
+                # Can't give such a precise warning
+                warnings.warn("Annotation %r too long" % text, BiopythonWarning)
         self.handle.write("%s%s\n" % (tag.ljust(self.HEADER_WIDTH),
                                       text.replace("\n", " ")))
 
