@@ -10,6 +10,12 @@ except ImportError:
     from Bio import MissingExternalDependencyError
     raise MissingExternalDependencyError(
         "Install NumPy if you want to use Bio.phenotype.")
+try:
+    import scipy
+except ImportError:
+    from Bio import MissingExternalDependencyError
+    raise MissingExternalDependencyError(
+        "Install SciPy if you want to use Bio.phenotype fit functionality.")
 
 import os
 import json
