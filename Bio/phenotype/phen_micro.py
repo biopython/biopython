@@ -815,8 +815,8 @@ class WellRecord(object):
 
         # Parameters that depend on scipy curve_fit
         try:
-            from pm_fitting import fit, get_area
-            from pm_fitting import logistic, gompertz, richards
+            from .pm_fitting import fit, get_area
+            from .pm_fitting import logistic, gompertz, richards
             functions = {'logistic': logistic,
                          'gompertz': gompertz,
                          'richards': richards}
