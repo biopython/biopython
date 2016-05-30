@@ -62,7 +62,7 @@ before_install:
   - "if [[ $TRAVIS_PYTHON_VERSION == 'pypy3' ]]; then export COV=no; fi"
   - "if [[ $COV == 'yes' ]]; then pip install coverage; fi"
 #Reduce SciPy installation overhead to the most recent python version 
-  - "if [[ TRAVIS_PYTHON_VERSION == '3.5' ]]; then pip install scipy; fi"
+  - "if [[ $TRAVIS_PYTHON_VERSION == '3.5' ]]; then pip install scipy; fi"
 
 
 install:
