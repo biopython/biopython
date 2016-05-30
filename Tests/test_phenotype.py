@@ -222,28 +222,6 @@ class TestPhenoMicro(unittest.TestCase):
                          "(0.5, 32.0), (0.75, 30.0), " +
                          "(1.0, 29.0), ..., (95.75, 217.0)')")
 
-        w.fit()
-        try:
-            import scipy
-            self.assertAlmostEqual(w.area, 20879.5)
-            self.assertEqual(w.model, 'gompertz')
-            self.assertAlmostEqual(w.lag, 6.0425868725090357, places=5)
-            self.assertAlmostEqual(w.plateau, 188.51404344898586, places=5)
-            self.assertAlmostEqual(w.slope, 48.190618284831132, places=5)
-            self.assertAlmostEqual(w.v, 0.10000000000000001, places=5)
-            self.assertAlmostEqual(w.y0, 45.879770069807989, places=5)
-        except ImportError:
-            self.assertEqual(w.area, None)
-            self.assertEqual(w.model, None)
-            self.assertEqual(w.lag, None)
-            self.assertEqual(w.plateau, None)
-            self.assertEqual(w.slope, None)
-            self.assertEqual(w.v, None)
-            self.assertEqual(w.y0, None)
-        self.assertEqual(w.max, 313.0)
-        self.assertEqual(w.min, 29.0)
-        self.assertEqual(w.average_height, 217.82552083333334)
-
         self.assertRaises(TypeError, w.__add__, 'a')
 
         w2 = w + w1
