@@ -13,6 +13,7 @@ from Bio._py3k import range
 
 from Bio.Seq import Seq
 from Bio.Alphabet import IUPAC
+from Bio import Alphabet
 
 
 class GenericPositionMatrix(dict):
@@ -199,9 +200,17 @@ class GenericPositionMatrix(dict):
                 key = "".join(sorted(nucleotides[:3]))
             else:
                 key = "ACGT"
-            nucleotide = degenerate_nucleotide[key]
+            nucleotide = degenerate_nucleotide.get(key, key)
             sequence += nucleotide
-        return Seq(sequence, alphabet=IUPAC.ambiguous_dna)
+        if isinstance(self.alphabet, Alphabet.DNAAlphabet):
+            alpha = IUPAC.ambiguous_dna
+        elif isinstance(self.alphabet, Alphabet.RNAAlphabet):
+            alpha = IUPAC.amiguous_rna
+        elif isinstance(self.alphabet, Alphabet.ProteinAlphabet):
+            alpha = IUPAC.protein
+        else:
+            raise Exception("Unknown alphabet")
+        return Seq(sequence, alphabet=alpha)
 
     @property
     def gc_content(self):

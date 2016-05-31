@@ -438,6 +438,16 @@ class Motif(object):
 
         """
         from Bio._py3k import urlopen, urlencode, Request
+        from Bio import Alphabet
+
+        if isinstance(self.alphabet, Alphabet.ProteinAlphabet):
+            alpha = "alphabet_protein"
+        elif isinstance(self.alphabet, Alphabet.RNAAlphabet):
+            alpha = "alphabet_rna"
+        elif isinstance(self.alphabet, Alphabet.DNAAlphabet):
+            alpha = "alphabet_dna"
+        else:
+            alpha = "auto"
 
         frequencies = self.format('transfac')
         url = 'http://weblogo.threeplusone.com/create.cgi'
@@ -445,7 +455,7 @@ class Motif(object):
                   'format': format.lower(),
                   'stack_width': 'medium',
                   'stack_per_line': '40',
-                  'alphabet': 'alphabet_dna',
+                  'alphabet': alpha,
                   'ignore_lower_case': True,
                   'unit_name': "bits",
                   'first_index': '1',
