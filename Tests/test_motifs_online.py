@@ -24,7 +24,14 @@ class TestotifWeblogo(unittest.TestCase):
     """Tests Bio.motifs online code."""
 
     def check(self, seqs_as_strs, alpha):
+        # Using Seq objects and passing exactly the same alphabet:
         m = motifs.create([Seq(s, alpha) for s in seqs_as_strs], alpha)
+        m.weblogo(os.devnull)
+        # Using Seq objects but not passing alphabet:
+        m = motifs.create([Seq(s, alpha) for s in seqs_as_strs])
+        m.weblogo(os.devnull)
+        # Using strings and passing alphabet:
+        m = motifs.create(seqs_as_strs, alpha)
         m.weblogo(os.devnull)
 
     def test_dna(self):
