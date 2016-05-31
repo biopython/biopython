@@ -23,32 +23,24 @@ requires_internet.check()
 class TestotifWeblogo(unittest.TestCase):
     """Tests Bio.motifs online code."""
 
+    def check(self, seqs_as_strs, alpha):
+        m = motifs.create([Seq(s, alpha) for s in seqs_as_strs], alpha)
+        m.weblogo(os.devnull)
+
     def test_dna(self):
         """Test Bio.Motif.weblogo with a DNA sequence."""
-        a = extended_dna
-        m = motifs.create([Seq("TACAA", a), Seq("TACGC", a),
-                           Seq("TACAC", a), Seq("TACCC", a),
-                           Seq("AACCC", a), Seq("AATGC", a),
-                           Seq("AATGC", a)], alphabet=a)
-        m.weblogo(os.devnull)
+        self.check(["TACAA", "TACGC", "TACAC", "TACCC",
+                    "AACCC", "AATGC", "AATGC"], extended_dna)
 
     def test_rna(self):
         """Test Bio.Motif.weblogo with an RNA sequence."""
-        a = unambiguous_rna
-        m = motifs.create([Seq("UACAA", a), Seq("UACGC", a),
-                           Seq("UACAC", a), Seq("UACCC", a),
-                           Seq("AACCC", a), Seq("AAUGC", a),
-                           Seq("AAUGC", a)], alphabet=a)
-        m.weblogo(os.devnull)
+        self.check(["UACAA", "UACGC", "UACAC", "UACCC",
+                    "AACCC", "AAUGC", "AAUGC"], unambiguous_rna)
 
     def test_protein(self):
         """Test Bio.Motif.weblogo with a protein sequence."""
-        a = extended_protein
-        m = motifs.create([Seq("ACDEG", a), Seq("AYCRN", a),
-                           Seq("HYLID", a), Seq("AYHEL", a),
-                           Seq("ACDEH", a), Seq("AYYRN", a),
-                           Seq("HYIID", a)], alphabet=a)
-        m.weblogo(os.devnull)
+        self.check(["ACDEG", "AYCRN", "HYLID", "AYHEL",
+                    "ACDEH", "AYYRN", "HYIID"], extended_protein)
 
 
 if __name__ == "__main__":
