@@ -8,15 +8,15 @@
 import os
 import unittest
 
-import requires_internet
-requires_internet.check()
-
 # We want to test these:
 from Bio import motifs
 from Bio.Alphabet import IUPAC
 
 # In order to check any sequences returned
 from Bio.Seq import Seq
+
+import requires_internet
+requires_internet.check()
 
 
 class TestDNAMotifWeblogo(unittest.TestCase):
