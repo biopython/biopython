@@ -10,7 +10,8 @@ import unittest
 
 # We want to test these:
 from Bio import motifs
-from Bio.Alphabet import IUPAC
+from Bio.Alphabet.IUPAC import extended_dna, unambiguous_rna
+from Bio.Alphabet.IUPAC import extended_protein
 
 # In order to check any sequences returned
 from Bio.Seq import Seq
@@ -24,13 +25,11 @@ class TestDNAMotifWeblogo(unittest.TestCase):
 
     def setUp(self):
         """Create DNA motif for testing."""
-        self.m = motifs.create(
-            [
-                Seq("TACAA"), Seq("TACGC"), Seq("TACAC"), Seq("TACCC"),
-                Seq("AACCC"), Seq("AATGC"), Seq("AATGC")
-            ],
-            alphabet=IUPAC.extended_dna,
-        )
+        a = extended_dna
+        self.m = motifs.create([Seq("TACAA", a), Seq("TACGC", a),
+                                Seq("TACAC", a), Seq("TACCC", a),
+                                Seq("AACCC", a), Seq("AATGC", a),
+                                Seq("AATGC", a)], alphabet=a)
 
     def test_weblogo(self):
         """Test Bio.Motif.weblogo with a DNA sequence."""
@@ -42,13 +41,11 @@ class TestRNAMotifWeblogo(unittest.TestCase):
 
     def setUp(self):
         """Create RNA motif for testing."""
-        self.m = motifs.create(
-            [
-                Seq("UACAA"), Seq("UACGC"), Seq("UACAC"), Seq("UACCC"),
-                Seq("AACCC"), Seq("AAUGC"), Seq("AAUGC")
-            ],
-            alphabet=IUPAC.unambiguous_rna,
-        )
+        a = unambiguous_rna
+        self.m = motifs.create([Seq("UACAA", a), Seq("UACGC", a),
+                                Seq("UACAC", a), Seq("UACCC", a),
+                                Seq("AACCC", a), Seq("AAUGC", a),
+                                Seq("AAUGC", a)], alphabet=a)
 
     def test_weblogo(self):
         """Test Bio.Motif.weblogo with an RNA sequence."""
@@ -60,13 +57,11 @@ class TestProteinMotifWeblogo(unittest.TestCase):
 
     def setUp(self):
         """Create protein motif for testing."""
-        self.m = motifs.create(
-            [
-                Seq("ACDEG"), Seq("AYCRN"), Seq("HYLID"), Seq("AYHEL"),
-                Seq("ACDEH"), Seq("AYYRN"), Seq("HYIID")
-            ],
-            alphabet=IUPAC.extended_protein,
-        )
+        a = extended_protein
+        self.m = motifs.create([Seq("ACDEG", a), Seq("AYCRN", a),
+                                Seq("HYLID", a), Seq("AYHEL", a),
+                                Seq("ACDEH", a), Seq("AYYRN", a),
+                                Seq("HYIID", a)], alphabet=a)
 
     def test_weblogo(self):
         """Test Bio.Motif.weblogo with a protein sequence."""
