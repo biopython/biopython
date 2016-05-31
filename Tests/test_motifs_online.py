@@ -20,10 +20,10 @@ from Bio.Seq import Seq
 
 
 class TestDNAMotifWeblogo(unittest.TestCase):
-    """
-    Tests Bio.motifs online code with DNA sequences.
-    """
+    """Tests Bio.motifs online code with DNA sequences."""
+
     def setUp(self):
+        """Create DNA motif for testing."""
         self.m = motifs.create(
             [
                 Seq("TACAA"), Seq("TACGC"), Seq("TACAC"), Seq("TACCC"),
@@ -33,17 +33,15 @@ class TestDNAMotifWeblogo(unittest.TestCase):
         )
 
     def test_weblogo(self):
-        """
-        Test Bio.Motif.weblogo with a DNA sequence.
-        """
+        """Test Bio.Motif.weblogo with a DNA sequence."""
         self.m.weblogo(os.devnull)
 
 
 class TestRNAMotifWeblogo(unittest.TestCase):
-    """
-    Tests Bio.motifs online code with RNA sequences.
-    """
+    """Tests Bio.motifs online code with RNA sequences."""
+
     def setUp(self):
+        """Create RNA motif for testing."""
         self.m = motifs.create(
             [
                 Seq("UACAA"), Seq("UACGC"), Seq("UACAC"), Seq("UACCC"),
@@ -53,17 +51,15 @@ class TestRNAMotifWeblogo(unittest.TestCase):
         )
 
     def test_weblogo(self):
-        """
-        Test Bio.Motif.weblogo with an RNA sequence.
-        """
+        """Test Bio.Motif.weblogo with an RNA sequence."""
         self.m.weblogo(os.devnull)
 
 
 class TestProteinMotifWeblogo(unittest.TestCase):
-    """
-    Tests Bio.motifs online code with protein sequences.
-    """
+    """Tests Bio.motifs online code with protein sequences."""
+
     def setUp(self):
+        """Create protein motif for testing."""
         self.m = motifs.create(
             [
                 Seq("ACDEG"), Seq("AYCRN"), Seq("HYLID"), Seq("AYHEL"),
@@ -73,9 +69,7 @@ class TestProteinMotifWeblogo(unittest.TestCase):
         )
 
     def test_weblogo(self):
-        """
-        Test Bio.Motif.weblogo with a protein sequence.
-        """
+        """Test Bio.Motif.weblogo with a protein sequence."""
         self.m.weblogo(os.devnull)
 
 
