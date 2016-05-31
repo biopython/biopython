@@ -20,52 +20,35 @@ import requires_internet
 requires_internet.check()
 
 
-class TestDNAMotifWeblogo(unittest.TestCase):
-    """Tests Bio.motifs online code with DNA sequences."""
+class TestotifWeblogo(unittest.TestCase):
+    """Tests Bio.motifs online code."""
 
-    def setUp(self):
-        """Create DNA motif for testing."""
-        a = extended_dna
-        self.m = motifs.create([Seq("TACAA", a), Seq("TACGC", a),
-                                Seq("TACAC", a), Seq("TACCC", a),
-                                Seq("AACCC", a), Seq("AATGC", a),
-                                Seq("AATGC", a)], alphabet=a)
-
-    def test_weblogo(self):
+    def test_dna(self):
         """Test Bio.Motif.weblogo with a DNA sequence."""
-        self.m.weblogo(os.devnull)
+        a = extended_dna
+        m = motifs.create([Seq("TACAA", a), Seq("TACGC", a),
+                           Seq("TACAC", a), Seq("TACCC", a),
+                           Seq("AACCC", a), Seq("AATGC", a),
+                           Seq("AATGC", a)], alphabet=a)
+        m.weblogo(os.devnull)
 
-
-class TestRNAMotifWeblogo(unittest.TestCase):
-    """Tests Bio.motifs online code with RNA sequences."""
-
-    def setUp(self):
-        """Create RNA motif for testing."""
-        a = unambiguous_rna
-        self.m = motifs.create([Seq("UACAA", a), Seq("UACGC", a),
-                                Seq("UACAC", a), Seq("UACCC", a),
-                                Seq("AACCC", a), Seq("AAUGC", a),
-                                Seq("AAUGC", a)], alphabet=a)
-
-    def test_weblogo(self):
+    def test_rna(self):
         """Test Bio.Motif.weblogo with an RNA sequence."""
-        self.m.weblogo(os.devnull)
+        a = unambiguous_rna
+        m = motifs.create([Seq("UACAA", a), Seq("UACGC", a),
+                           Seq("UACAC", a), Seq("UACCC", a),
+                           Seq("AACCC", a), Seq("AAUGC", a),
+                           Seq("AAUGC", a)], alphabet=a)
+        m.weblogo(os.devnull)
 
-
-class TestProteinMotifWeblogo(unittest.TestCase):
-    """Tests Bio.motifs online code with protein sequences."""
-
-    def setUp(self):
-        """Create protein motif for testing."""
-        a = extended_protein
-        self.m = motifs.create([Seq("ACDEG", a), Seq("AYCRN", a),
-                                Seq("HYLID", a), Seq("AYHEL", a),
-                                Seq("ACDEH", a), Seq("AYYRN", a),
-                                Seq("HYIID", a)], alphabet=a)
-
-    def test_weblogo(self):
+    def test_protein(self):
         """Test Bio.Motif.weblogo with a protein sequence."""
-        self.m.weblogo(os.devnull)
+        a = extended_protein
+        m = motifs.create([Seq("ACDEG", a), Seq("AYCRN", a),
+                           Seq("HYLID", a), Seq("AYHEL", a),
+                           Seq("ACDEH", a), Seq("AYYRN", a),
+                           Seq("HYIID", a)], alphabet=a)
+        m.weblogo(os.devnull)
 
 
 if __name__ == "__main__":
