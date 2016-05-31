@@ -205,7 +205,7 @@ class GenericPositionMatrix(dict):
         if isinstance(self.alphabet, Alphabet.DNAAlphabet):
             alpha = IUPAC.ambiguous_dna
         elif isinstance(self.alphabet, Alphabet.RNAAlphabet):
-            alpha = IUPAC.amiguous_rna
+            alpha = IUPAC.ambiguous_rna
         elif isinstance(self.alphabet, Alphabet.ProteinAlphabet):
             alpha = IUPAC.protein
         else:
