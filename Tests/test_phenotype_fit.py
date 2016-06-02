@@ -17,11 +17,8 @@ except ImportError:
     raise MissingExternalDependencyError(
         "Install SciPy if you want to use Bio.phenotype fit functionality.")
 
-import os
 import json
 import unittest
-
-from Bio._py3k import StringIO
 
 from Bio import BiopythonExperimentalWarning
 
@@ -32,6 +29,7 @@ with warnings.catch_warnings():
 
 # Example plate files
 JSON_PLATE = 'phenotype/Plate.json'
+
 
 class TestPhenoMicro(unittest.TestCase):
 

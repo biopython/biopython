@@ -11,7 +11,6 @@ except ImportError:
     raise MissingExternalDependencyError(
         "Install NumPy if you want to use Bio.phenotype.")
 
-import os
 import json
 import unittest
 
