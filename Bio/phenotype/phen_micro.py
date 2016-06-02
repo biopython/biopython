@@ -820,9 +820,9 @@ class WellRecord(object):
             self.area = None
             self.model = None
             return
-        for f in function:
-            if f not in avail_func:
-                raise ValueError("Fitting function %r not supported" % f)
+        for sigmoid_func in function:
+            if sigmoid_func not in avail_func:
+                raise ValueError("Fitting function %r not supported" % sigmoid_func)
 
         # Parameters that depend on scipy curve_fit
         from pm_fitting import fit, get_area
@@ -834,8 +834,8 @@ class WellRecord(object):
         self.area = get_area(self.get_signals(), self.get_times())
 
         self.model = None
-        for f in function:
-            func = function_map[f]
+        for sigmoid_func in function:
+            func = function_map[sigmoid_func]
             try:
                 (self.plateau, self.slope,
                  self.lag, self.v, self.y0), pcov = fit(func,
