@@ -810,9 +810,6 @@ class WellRecord(object):
         """
         avail_func = ('gompertz', 'logistic', 'richards', )
 
-        if function not in avail_func and function is not None:
-            raise ValueError('Sigmoid function %s not recognized' % function)
-
         # Parameters not dependent on curve fitting
         self.max = max(self, key=lambda x: x[1])[1]
         self.min = min(self, key=lambda x: x[1])[1]

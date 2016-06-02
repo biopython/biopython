@@ -173,6 +173,22 @@ class TestPhenoMicro(unittest.TestCase):
         self.assertRaises(ValueError, p.__add__, p1)
         self.assertRaises(ValueError, p.__sub__, p1)
 
+    def test_bad_fit_args(self):
+        """Test error handling of the fit method."""
+        with open(JSON_PLATE) as handle:
+            p = json.load(handle)
+
+        times = p['measurements']['Hour']
+        w = phenotype.phen_micro.WellRecord('A10',
+                                            signals=dict([(times[i], p['measurements']['A10'][i])
+                                                          for i in range(len(times))]))
+
+        self.assertRaises(ValueError, w.fit, "wibble")
+        self.assertRaises(ValueError, w.fit, ["wibble"])
+        self.assertRaises(ValueError, w.fit, ("logistic", "wibble"))
+        self.assertRaises(ValueError, w.fit, ("wibble", "logistic"))
+        self.assertRaises(ValueError, w.fit, "logistic")  # should be a list/tuple!
+
     def test_WellRecord(self):
         '''Test basic functionalities of WellRecord objects'''
         with open(JSON_PLATE) as handle:
