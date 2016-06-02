@@ -172,6 +172,22 @@ class TestPhenoMicro(unittest.TestCase):
         self.assertRaises(ValueError, p.__add__, p1)
         self.assertRaises(ValueError, p.__sub__, p1)
 
+    def test_bad_fit_args(self):
+        """Test error handling of the fit method."""
+        with open(JSON_PLATE) as handle:
+            p = json.load(handle)
+
+        times = p['measurements']['Hour']
+        w = phenotype.phen_micro.WellRecord('A10',
+                                            signals=dict([(times[i], p['measurements']['A10'][i])
+                                                          for i in range(len(times))]))
+
+        self.assertRaises(ValueError, w.fit, "wibble")
+        self.assertRaises(ValueError, w.fit, ["wibble"])
+        self.assertRaises(ValueError, w.fit, ("logistic", "wibble"))
+        self.assertRaises(ValueError, w.fit, ("wibble", "logistic"))
+        self.assertRaises(ValueError, w.fit, "logistic")  # should be a list/tuple!
+
     def test_WellRecord(self):
         '''Test basic functionalities of WellRecord objects'''
         with open(JSON_PLATE) as handle:
@@ -220,6 +236,18 @@ class TestPhenoMicro(unittest.TestCase):
                          "313.00\nWellRecord('(0.0, 37.0), (0.25, 29.0), " +
                          "(0.5, 32.0), (0.75, 30.0), " +
                          "(1.0, 29.0), ..., (95.75, 217.0)')")
+
+        w.fit(None)
+        self.assertEqual(w.area, None)
+        self.assertEqual(w.model, None)
+        self.assertEqual(w.lag, None)
+        self.assertEqual(w.plateau, None)
+        self.assertEqual(w.slope, None)
+        self.assertEqual(w.v, None)
+        self.assertEqual(w.y0, None)
+        self.assertEqual(w.max, 313.0)
+        self.assertEqual(w.min, 29.0)
+        self.assertEqual(w.average_height, 217.82552083333334)
 
         self.assertRaises(TypeError, w.__add__, 'a')
 
