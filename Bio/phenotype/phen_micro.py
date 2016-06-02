@@ -833,6 +833,7 @@ class WellRecord(object):
         else:
             sigmoid = {function: functions[function]}
 
+        self.model = None
         for sigmoid_func in avail_func:
             if sigmoid_func in sigmoid:
                 func = sigmoid[sigmoid_func]
@@ -845,13 +846,10 @@ class WellRecord(object):
                                                         self.get_signals())
 
                 self.model = sigmoid_func
-                break
+                return
             except RuntimeError:
-                pass
-
-        if self.model is None:
-            warnings.warn('Could not fit any sigmoid function',
-                          RuntimeWarning)
+                continue
+        warnings.warn('Could not fit any sigmoid function', RuntimeWarning)
 
 
 def JsonIterator(handle):
