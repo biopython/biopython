@@ -17,7 +17,6 @@ guess_lag          Guess the lag point to improve sigmoid fitting.
 fit                Sigmoid functions fit.
 get_area           Calculate the area under the PM curve."""
 
-import warnings
 import numpy as np
 
 try:
