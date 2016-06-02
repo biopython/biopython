@@ -825,8 +825,8 @@ class WellRecord(object):
                 raise ValueError("Fitting function %r not supported" % sigmoid_func)
 
         # Parameters that depend on scipy curve_fit
-        from pm_fitting import fit, get_area
-        from pm_fitting import logistic, gompertz, richards
+        from .pm_fitting import fit, get_area
+        from .pm_fitting import logistic, gompertz, richards
         function_map = {'logistic': logistic,
                         'gompertz': gompertz,
                         'richards': richards}
