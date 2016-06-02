@@ -797,11 +797,12 @@ class WellRecord(object):
 
         The first function that is succesfuly fitted to the signals will
         be used to extract the curve parameters; if no function can be fitted
-        a warning is raised.
+        an exception is raised.
 
         Some of the parameters don't need the curve fitting, which depends on
         the scipy curve_fit function. If scipy is not available, only those
-        paraeters will be calculated, and a warning will be raised."""
+        parameters will be calculated, and a warning will be raised.
+        """
         avail_func = ('gompertz', 'logistic', 'richards', )
 
         if function not in avail_func and function is not None:
@@ -849,7 +850,7 @@ class WellRecord(object):
                 return
             except RuntimeError:
                 continue
-        warnings.warn('Could not fit any sigmoid function', RuntimeWarning)
+        raise RuntimeError("Could not fit any sigmoid function")
 
 
 def JsonIterator(handle):
