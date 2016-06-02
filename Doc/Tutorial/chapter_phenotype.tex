@@ -1,7 +1,7 @@
 \chapter{Bio.phenotype: analyse phenotypic data}
 \label{chapter:phenotype}
 
-This chapter gives an overwiev of the functionalities of the
+This chapter gives an overview of the functionalities of the
 \verb|Bio.phenotype| package included in Biopython. The scope of this
 package is the analysis of phenotypic data, which means parsing and
 analysing growth measurements of cell cultures.
@@ -15,7 +15,7 @@ but future developments may include other platforms and formats.
 
 The \href{https://en.wikipedia.org/wiki/Phenotype_microarray}{Phenotype Microarray}
 is a technology that measures the metabolism of bacterial
-and eukaryotic cells on rhoughly 2000 chemicals, divided in twenty 96-well
+and eukaryotic cells on roughly 2000 chemicals, divided in twenty 96-well
 plates.
 The technology measures the reduction of a tetrazolium dye by
 NADH, whose production by the cell is used as a proxy for cell metabolism;
@@ -53,7 +53,7 @@ PM09 96
 
 The parser returns a series of PlateRecord objects, each one containing a series of WellRecord objects
 (holding each well's experimental data) arranged in 8 rows and 12 columns; each row is indicated by
-a uppercase charachter from A to H, while columns are indicated by a two digit number, from 01 to 12.
+a uppercase character from A to H, while columns are indicated by a two digit number, from 01 to 12.
 There are several ways to access WellRecord objects from a PlateRecord objects:
 
 \begin{description}
@@ -177,7 +177,7 @@ Different time intervals can be used, for instance five minutes:
 
 \subsubsection{Control well subtraction}
 Many Phenotype Microarray plates contain a control well (usually A01), that is a well where the media shouldn't support
-any growth; the low signal produced by this well can be subtracted to the other wells.
+any growth; the low signal produced by this well can be subtracted from the other wells.
 The PlateRecord objects have a dedicated function for that, which returns another PlateRecord object
 with the corrected data.
 
