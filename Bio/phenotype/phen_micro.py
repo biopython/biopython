@@ -787,21 +787,26 @@ class WellRecord(object):
         """Get a list of the recorded signals (ordered by collection time)"""
         return [self._signals[t] for t in sorted(self._signals.keys())]
 
-    def fit(self, function=None):
-        """Fit a sigmoid function to this well and extract curve parameters
+    def fit(self, function=("gompertz", "logistic", "richards")):
+        """Fit a sigmoid function to this well and extract curve parameters.
 
-        If function is not set, the following order will be applied:
+        If function is None or an empty tuple/list, then no fitting is done.
+        Only the object's ``.min``, ``.max`` and ``.average_height`` are
+        calculated.
+
+        By default the following fitting functions will be used in order:
         * gompertz
         * logistic
         * richards
 
         The first function that is succesfuly fitted to the signals will
-        be used to extract the curve parameters; if no function can be fitted
-        an exception is raised.
+        be used to extract the curve parameters and update ``.area`` and
+        ``.model``. If no function can be fitted an exception is raised.
 
-        Some of the parameters don't need the curve fitting, which depends on
-        the scipy curve_fit function. If scipy is not available, only those
-        parameters will be calculated, and a warning will be raised.
+        The function argument should be a tuple or list of any of these three
+        function names as strings.
+
+        There is no return value.
         """
         avail_func = ('gompertz', 'logistic', 'richards', )
 
@@ -814,32 +819,26 @@ class WellRecord(object):
 
         self.average_height = np.array(self.get_signals()).mean()
 
-        # Parameters that depend on scipy curve_fit
-        try:
-            from pm_fitting import fit, get_area
-            from pm_fitting import logistic, gompertz, richards
-            functions = {'logistic': logistic,
-                         'gompertz': gompertz,
-                         'richards': richards}
-        except ImportError:
-            warnings.warn('SciPy not installed, could not calculate area, ' +
-                          'plateau, slope, lag, v and y0',
-                          ImportWarning)
+        if not function:
+            self.area = None
+            self.model = None
             return
+        for f in function:
+            if f not in avail_func:
+                raise ValueError("Fitting function %r not supported" % f)
+
+        # Parameters that depend on scipy curve_fit
+        from pm_fitting import fit, get_area
+        from pm_fitting import logistic, gompertz, richards
+        function_map = {'logistic': logistic,
+                        'gompertz': gompertz,
+                        'richards': richards}
 
         self.area = get_area(self.get_signals(), self.get_times())
 
-        if function is None:
-            sigmoid = functions
-        else:
-            sigmoid = {function: functions[function]}
-
         self.model = None
-        for sigmoid_func in avail_func:
-            if sigmoid_func in sigmoid:
-                func = sigmoid[sigmoid_func]
-            else:
-                continue
+        for f in function:
+            func = function_map[f]
             try:
                 (self.plateau, self.slope,
                  self.lag, self.v, self.y0), pcov = fit(func,
