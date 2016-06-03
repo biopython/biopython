@@ -802,7 +802,10 @@ class ClosedLoopTest(unittest.TestCase):
 
     def test_NC_005816(self):
         """GenBank file to BioSQL and back to a GenBank file, NC_005816."""
-        self.loop("GenBank/NC_005816.gb", "gb")
+        with warnings.catch_warnings():
+            # BiopythonWarning: order location operators are not fully supported
+            warnings.simplefilter('ignore', BiopythonWarning)
+            self.loop("GenBank/NC_005816.gb", "gb")
 
     def test_NC_000932(self):
         """GenBank file to BioSQL and back to a GenBank file, NC_000932."""
@@ -814,7 +817,10 @@ class ClosedLoopTest(unittest.TestCase):
 
     def test_protein_refseq2(self):
         """GenBank file to BioSQL and back to a GenBank file, protein_refseq2."""
-        self.loop("GenBank/protein_refseq2.gb", "gb")
+        with warnings.catch_warnings():
+            # BiopythonWarning: order location operators are not fully supported
+            warnings.simplefilter('ignore', BiopythonWarning)
+            self.loop("GenBank/protein_refseq2.gb", "gb")
 
     def test_no_ref(self):
         """GenBank file to BioSQL and back to a GenBank file, noref."""
@@ -878,7 +884,10 @@ class TransferTest(unittest.TestCase):
 
     def test_NC_005816(self):
         """GenBank file to BioSQL, then again to a new namespace, NC_005816."""
-        self.trans("GenBank/NC_005816.gb", "gb")
+        with warnings.catch_warnings():
+            # BiopythonWarning: order location operators are not fully supported
+            warnings.simplefilter('ignore', BiopythonWarning)
+            self.trans("GenBank/NC_005816.gb", "gb")
 
     def test_NC_000932(self):
         """GenBank file to BioSQL, then again to a new namespace, NC_000932."""
@@ -890,7 +899,10 @@ class TransferTest(unittest.TestCase):
 
     def test_protein_refseq2(self):
         """GenBank file to BioSQL, then again to a new namespace, protein_refseq2."""
-        self.trans("GenBank/protein_refseq2.gb", "gb")
+        with warnings.catch_warnings():
+            # BiopythonWarning: order location operators are not fully supported
+            warnings.simplefilter('ignore', BiopythonWarning)
+            self.trans("GenBank/protein_refseq2.gb", "gb")
 
     def test_no_ref(self):
         """GenBank file to BioSQL, then again to a new namespace, noref."""
@@ -1184,7 +1196,9 @@ class AutoSeqIOTests(unittest.TestCase):
             # BiopythonWarning: bond location operators are not fully supported
             warnings.simplefilter("ignore", BiopythonWarning)
             self.check('genbank', 'GenBank/dbsource_wrap.gb')
-        self.check('genbank', 'GenBank/NC_005816.gb')
+            # BiopythonWarning: order location operators are not fully
+            # supported
+            self.check('genbank', 'GenBank/NC_005816.gb')
         self.check('genbank', 'GenBank/gbvrl1_start.seq', 3)
         self.check('genbank', 'GFF/NC_001422.gbk')
         self.check('embl', 'EMBL/TRBG361.embl')
