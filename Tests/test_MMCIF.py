@@ -73,7 +73,7 @@ class ParseReal(unittest.TestCase):
             s = pp.get_sequence()
             f_s = f_pp.get_sequence()
 
-            self.assertEqual(s, f_s) # enough to test this
+            self.assertEqual(s, f_s)  # enough to test this
 
             self.assertTrue(isinstance(s, Seq))
             self.assertEqual(s.alphabet, generic_protein)
@@ -121,8 +121,10 @@ class ParseReal(unittest.TestCase):
 
         parser = MMCIFParser(QUIET=1)
         f_parser = FastMMCIFParser(QUIET=1)
-        structure = parser.get_structure("example", "PDB/1LCD.cif")
-        f_structure = f_parser.get_structure("example", "PDB/1LCD.cif")
+        with warnings.catch_warnings():
+            warnings.simplefilter('ignore', PDBConstructionWarning)
+            structure = parser.get_structure("example", "PDB/1LCD.cif")
+            f_structure = f_parser.get_structure("example", "PDB/1LCD.cif")
 
         self.assertEqual(len(structure), 3)
         self.assertEqual(len(f_structure), 3)
@@ -170,7 +172,9 @@ class ParseReal(unittest.TestCase):
     def test_insertions(self):
         """Test file with residue insertion codes"""
         parser = MMCIFParser(QUIET=1)
-        structure = parser.get_structure("example", "PDB/4zhl.cif")
+        with warnings.catch_warnings():
+            warnings.simplefilter('ignore', PDBConstructionWarning)
+            structure = parser.get_structure("example", "PDB/4zhl.cif")
         for ppbuild in [PPBuilder(), CaPPBuilder()]:
             # First try allowing non-standard amino acids,
             polypeptides = ppbuild.build_peptides(structure[0], False)
