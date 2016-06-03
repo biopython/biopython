@@ -43,7 +43,10 @@ before_install:
 #Misc python modules we can use as soft dependencies
   - "if [[ $PYPY != 'yes' ]]; then pip install reportlab; fi"
   - "pip install rdflib"
-#Not hosted on PyPI so this need allow external switch:
+#This takes about 8s even with binary wheels, so don't do it on all platforms:
+  - "if [[ $TRAVIS_PYTHON_VERSION == '2.6' ]]; then pip install scipy --only-binary numpy,scipy; fi"
+  - "if [[ $TRAVIS_PYTHON_VERSION == '3.5' ]]; then pip install scipy --only-binary numpy,scipy; fi"
+#Not hosted on PyPI so this needs the allow external switch:
 #Currently pypy3-2.4.0 self reports as Python 3.2,
 #which is not supported by mysql-connector-python
   - "if [[ $TRAVIS_PYTHON_VERSION != 'pypy3' ]]; then pip install --allow-all-external mysql-connector-python-rf; fi"
