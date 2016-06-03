@@ -48,14 +48,7 @@ class A_ExceptionTest(unittest.TestCase):
     works -- a warning is only logged the first time it is encountered.
     """
     def test_1_warnings(self):
-        """Check warnings: Parse a flawed PDB file in permissive mode.
-
-        NB: The try/finally block is adapted from the warnings.catch_warnings
-        context manager in the Python 2.6 standard library.
-
-        TODO: Now we require Python 2.6, switch to using warnings.catch_warnings
-        """
-
+        """Check warnings: Parse a flawed PDB file in permissive mode."""
         with warnings.catch_warnings(record=True) as w:
             warnings.simplefilter('always', PDBConstructionWarning)
 
@@ -65,22 +58,22 @@ class A_ExceptionTest(unittest.TestCase):
 
             self.assertEqual(len(w), 14)
             for wrn, msg in zip(w, [
-              # Expected warning messages:
-              "Used element 'N' for Atom (name=N) with given element ''",
-              "Used element 'C' for Atom (name=CA) with given element ''",
-              "Atom names ' CA ' and 'CA  ' differ only in spaces at line 17.",
-              "Used element 'CA' for Atom (name=CA  ) with given element ''",
-              'Atom N defined twice in residue <Residue ARG het=  resseq=2 icode= > at line 21.',
-              'disordered atom found with blank altloc before line 33.',
-              "Residue (' ', 4, ' ') redefined at line 43.",
-              "Blank altlocs in duplicate residue SER (' ', 4, ' ') at line 43.",
-              "Residue (' ', 10, ' ') redefined at line 75.",
-              "Residue (' ', 14, ' ') redefined at line 106.",
-              "Residue (' ', 16, ' ') redefined at line 135.",
-              "Residue (' ', 80, ' ') redefined at line 633.",
-              "Residue (' ', 81, ' ') redefined at line 646.",
-              'Atom O defined twice in residue <Residue HOH het=W resseq=67 icode= > at line 822.'
-              ]):
+                    # Expected warning messages:
+                    "Used element 'N' for Atom (name=N) with given element ''",
+                    "Used element 'C' for Atom (name=CA) with given element ''",
+                    "Atom names ' CA ' and 'CA  ' differ only in spaces at line 17.",
+                    "Used element 'CA' for Atom (name=CA  ) with given element ''",
+                    'Atom N defined twice in residue <Residue ARG het=  resseq=2 icode= > at line 21.',
+                    'disordered atom found with blank altloc before line 33.',
+                    "Residue (' ', 4, ' ') redefined at line 43.",
+                    "Blank altlocs in duplicate residue SER (' ', 4, ' ') at line 43.",
+                    "Residue (' ', 10, ' ') redefined at line 75.",
+                    "Residue (' ', 14, ' ') redefined at line 106.",
+                    "Residue (' ', 16, ' ') redefined at line 135.",
+                    "Residue (' ', 80, ' ') redefined at line 633.",
+                    "Residue (' ', 81, ' ') redefined at line 646.",
+                    'Atom O defined twice in residue <Residue HOH het=W resseq=67 icode= > at line 822.'
+                    ]):
                 self.assertTrue(msg in str(wrn), str(wrn))
 
     def test_2_strict(self):
