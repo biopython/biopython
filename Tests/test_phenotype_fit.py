@@ -12,6 +12,7 @@ except ImportError:
         "Install NumPy if you want to use Bio.phenotype.")
 try:
     import scipy
+    from scipy.optimize import OptimizeWarning
 except ImportError:
     from Bio import MissingExternalDependencyError
     raise MissingExternalDependencyError(
@@ -43,7 +44,9 @@ class TestPhenoMicro(unittest.TestCase):
                                             signals=dict([(times[i], p['measurements']['A10'][i])
                                                           for i in range(len(times))]))
 
-        w.fit()
+        with warnings.catch_warnings():
+            warnings.simplefilter('ignore', OptimizeWarning)
+            w.fit()
         self.assertAlmostEqual(w.area, 20879.5)
         self.assertEqual(w.model, 'gompertz')
         self.assertAlmostEqual(w.lag, 6.0425868725090357, places=5)
