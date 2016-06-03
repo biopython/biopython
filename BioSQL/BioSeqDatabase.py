@@ -113,14 +113,15 @@ def open_database(driver="MySQLdb", **kwargs):
         if server.adaptor.execute_and_fetchall(sql):
             import warnings
             from Bio import BiopythonWarning
-            warnings.warn("Your BioSQL PostgreSQL schema includes some "
-                          "rules currently required for bioperl-db but "
-                          "which may cause problems loading data using "
-                          "Biopython (see BioSQL Bug 2839). If you do not "
-                          "use BioPerl, please remove these rules. "
-                          "Biopython should cope with the rules present, "
-                          "but with a performance penalty when loading "
-                          "new records.", BiopythonWarning)
+            warnings.warn("Your BioSQL PostgreSQL schema includes some rules "
+                          "currently required for bioperl-db but which may"
+                          "cause problems loading data using Biopython (see "
+                          "BioSQL's RedMine Bug 2839 aka GitHub Issue 4 "
+                          "https://github.com/biosql/biosql/issues/4). "
+                          "If you do not use BioPerl, please remove these "
+                          "rules. Biopython should cope with the rules "
+                          "present, but with a performance penalty when "
+                          "loading new records.", BiopythonWarning)
             global _POSTGRES_RULES_PRESENT
             _POSTGRES_RULES_PRESENT = True
 
