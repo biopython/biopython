@@ -442,8 +442,7 @@ class TestRunner(unittest.TextTestRunner):
             else:
                 # It's a doc test
                 sys.stderr.write("%s docstring test ... " % name)
-                # Can't use fromlist=name.split(".") until python 2.5+
-                module = __import__(name, None, None, name.split("."))
+                module = __import__(name, fromlist=name.split("."))
                 suite = doctest.DocTestSuite(module,
                                              optionflags=doctest.ELLIPSIS)
                 del module
