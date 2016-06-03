@@ -241,8 +241,7 @@ class FastMMCIFParser(object):
     # Public methods
 
     def get_structure(self, structure_id, filename):
-        """
-        Return the structure.
+        """Return the structure.
 
         Arguments:
          - structure_id - string, the id that will be used for the structure
@@ -287,7 +286,7 @@ class FastMMCIFParser(object):
         _anisob_tbl = zip(*map(str.split, _anisors))
 
         mmcif_dict = dict(zip(_fields, _record_tbl))
-        mmcif_dict.update( dict(zip(_anisof, _anisob_tbl)) )
+        mmcif_dict.update(dict(zip(_anisof, _anisob_tbl)))
 
         # Build structure object
         atom_id_list = mmcif_dict["_atom_site.label_atom_id"]
@@ -368,7 +367,7 @@ class FastMMCIFParser(object):
             icode = icode_list[i]
             if icode == "?":
                 icode = " "
-            name = atom_id_list[i].strip('"') # Remove occasional " from quoted atom names (e.g. xNA)
+            name = atom_id_list[i].strip('"')  # Remove occasional " from quoted atom names (e.g. xNA)
 
             # occupancy & B factor
             try:
