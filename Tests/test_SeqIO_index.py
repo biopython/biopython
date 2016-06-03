@@ -314,62 +314,69 @@ class IndexDictTests(unittest.TestCase):
         else:
             id_list = [rec.id for rec in SeqIO.parse(filename, format, alphabet)]
 
-        rec_dict = SeqIO.index(filename, format, alphabet)
-        self.check_dict_methods(rec_dict, id_list, id_list)
-        rec_dict.close()
-        del rec_dict
+        with warnings.catch_warnings():
+            if "_alt_index_" in filename:
+                # BiopythonParserWarning: Could not parse the SFF index:
+                # Unknown magic number b'.diy' in SFF index header:
+                # b'.diy1.00'
+                warnings.simplefilter('ignore', BiopythonParserWarning)
 
-        if not sqlite3:
-            return
+            rec_dict = SeqIO.index(filename, format, alphabet)
+            self.check_dict_methods(rec_dict, id_list, id_list)
+            rec_dict.close()
+            del rec_dict
 
-        # In memory,
-        # note here give filenames as list of strings
-        rec_dict = SeqIO.index_db(":memory:", [filename], format,
-                                  alphabet)
-        self.check_dict_methods(rec_dict, id_list, id_list)
-        rec_dict.close()
-        del rec_dict
+            if not sqlite3:
+                return
 
-        # check error conditions
-        self.assertRaises(ValueError, SeqIO.index_db,
-                          ":memory:", format="dummy")
-        self.assertRaises(ValueError, SeqIO.index_db,
-                          ":memory:", filenames=["dummy"])
+            # In memory,
+            # note here give filenames as list of strings
+            rec_dict = SeqIO.index_db(":memory:", [filename], format,
+                                      alphabet)
+            self.check_dict_methods(rec_dict, id_list, id_list)
+            rec_dict.close()
+            del rec_dict
 
-        # Saving to file...
-        index_tmp = self.index_tmp
-        if os.path.isfile(index_tmp):
+            # check error conditions
+            self.assertRaises(ValueError, SeqIO.index_db,
+                              ":memory:", format="dummy")
+            self.assertRaises(ValueError, SeqIO.index_db,
+                              ":memory:", filenames=["dummy"])
+
+            # Saving to file...
+            index_tmp = self.index_tmp
+            if os.path.isfile(index_tmp):
+                os.remove(index_tmp)
+
+            # To disk,
+            # note here we give the filename as a single string
+            # to confirm that works too (convience feature).
+            rec_dict = SeqIO.index_db(index_tmp, filename, format,
+                                      alphabet)
+            self.check_dict_methods(rec_dict, id_list, id_list)
+            rec_dict.close()
+            rec_dict._con.close()  # hack for PyPy
+            del rec_dict
+
+            # Now reload it...
+            rec_dict = SeqIO.index_db(index_tmp, [filename], format,
+                                      alphabet)
+            self.check_dict_methods(rec_dict, id_list, id_list)
+            rec_dict.close()
+            rec_dict._con.close()  # hack for PyPy
+            del rec_dict
+
+            # Now reload without passing filenames and format
+            # and switch directory to check  paths still work
+            index_tmp = os.path.abspath(index_tmp)
+            os.chdir(os.path.dirname(filename))
+            rec_dict = SeqIO.index_db(index_tmp, alphabet=alphabet)
+            self.check_dict_methods(rec_dict, id_list, id_list)
+            rec_dict.close()
+            rec_dict._con.close()  # hack for PyPy
+            del rec_dict
+
             os.remove(index_tmp)
-
-        # To disk,
-        # note here we give the filename as a single string
-        # to confirm that works too (convience feature).
-        rec_dict = SeqIO.index_db(index_tmp, filename, format,
-                                  alphabet)
-        self.check_dict_methods(rec_dict, id_list, id_list)
-        rec_dict.close()
-        rec_dict._con.close()  # hack for PyPy
-        del rec_dict
-
-        # Now reload it...
-        rec_dict = SeqIO.index_db(index_tmp, [filename], format,
-                                  alphabet)
-        self.check_dict_methods(rec_dict, id_list, id_list)
-        rec_dict.close()
-        rec_dict._con.close()  # hack for PyPy
-        del rec_dict
-
-        # Now reload without passing filenames and format
-        # and switch directory to check  paths still work
-        index_tmp = os.path.abspath(index_tmp)
-        os.chdir(os.path.dirname(filename))
-        rec_dict = SeqIO.index_db(index_tmp, alphabet=alphabet)
-        self.check_dict_methods(rec_dict, id_list, id_list)
-        rec_dict.close()
-        rec_dict._con.close()  # hack for PyPy
-        del rec_dict
-
-        os.remove(index_tmp)
 
     def key_check(self, filename, format, alphabet, comp):
         """Check indexing with a key function."""
@@ -381,56 +388,64 @@ class IndexDictTests(unittest.TestCase):
             id_list = [rec.id for rec in SeqIO.parse(filename, format, alphabet)]
 
         key_list = [add_prefix(id) for id in id_list]
-        rec_dict = SeqIO.index(filename, format, alphabet, add_prefix)
-        self.check_dict_methods(rec_dict, key_list, id_list)
-        rec_dict.close()
-        del rec_dict
 
-        if not sqlite3:
-            return
+        with warnings.catch_warnings():
+            if "_alt_index_" in filename:
+                # BiopythonParserWarning: Could not parse the SFF index:
+                # Unknown magic number b'.diy' in SFF index header:
+                # b'.diy1.00'
+                warnings.simplefilter('ignore', BiopythonParserWarning)
 
-        # In memory,
-        rec_dict = SeqIO.index_db(":memory:", [filename], format, alphabet,
-                                  add_prefix)
-        self.check_dict_methods(rec_dict, key_list, id_list)
-        # check error conditions
-        self.assertRaises(ValueError, SeqIO.index_db,
-                          ":memory:", format="dummy",
-                          key_function=add_prefix)
-        self.assertRaises(ValueError, SeqIO.index_db,
-                          ":memory:", filenames=["dummy"],
-                          key_function=add_prefix)
-        rec_dict.close()
-        del rec_dict
+            rec_dict = SeqIO.index(filename, format, alphabet, add_prefix)
+            self.check_dict_methods(rec_dict, key_list, id_list)
+            rec_dict.close()
+            del rec_dict
 
-        # Saving to file...
-        index_tmp = filename + ".key.idx"
-        if os.path.isfile(index_tmp):
+            if not sqlite3:
+                return
+
+            # In memory,
+            rec_dict = SeqIO.index_db(":memory:", [filename], format, alphabet,
+                                      add_prefix)
+            self.check_dict_methods(rec_dict, key_list, id_list)
+            # check error conditions
+            self.assertRaises(ValueError, SeqIO.index_db,
+                              ":memory:", format="dummy",
+                              key_function=add_prefix)
+            self.assertRaises(ValueError, SeqIO.index_db,
+                              ":memory:", filenames=["dummy"],
+                              key_function=add_prefix)
+            rec_dict.close()
+            del rec_dict
+
+            # Saving to file...
+            index_tmp = filename + ".key.idx"
+            if os.path.isfile(index_tmp):
+                os.remove(index_tmp)
+            rec_dict = SeqIO.index_db(index_tmp, [filename], format, alphabet,
+                                      add_prefix)
+            self.check_dict_methods(rec_dict, key_list, id_list)
+            rec_dict.close()
+            rec_dict._con.close()  # hack for PyPy
+            del rec_dict
+
+            # Now reload it...
+            rec_dict = SeqIO.index_db(index_tmp, [filename], format, alphabet,
+                                      add_prefix)
+            self.check_dict_methods(rec_dict, key_list, id_list)
+            rec_dict.close()
+            rec_dict._con.close()  # hack for PyPy
+            del rec_dict
+
+            # Now reload without passing filenames and format
+            rec_dict = SeqIO.index_db(index_tmp, alphabet=alphabet,
+                                      key_function=add_prefix)
+            self.check_dict_methods(rec_dict, key_list, id_list)
+            rec_dict.close()
+            rec_dict._con.close()  # hack for PyPy
+            del rec_dict
             os.remove(index_tmp)
-        rec_dict = SeqIO.index_db(index_tmp, [filename], format, alphabet,
-                                  add_prefix)
-        self.check_dict_methods(rec_dict, key_list, id_list)
-        rec_dict.close()
-        rec_dict._con.close()  # hack for PyPy
-        del rec_dict
-
-        # Now reload it...
-        rec_dict = SeqIO.index_db(index_tmp, [filename], format, alphabet,
-                                  add_prefix)
-        self.check_dict_methods(rec_dict, key_list, id_list)
-        rec_dict.close()
-        rec_dict._con.close()  # hack for PyPy
-        del rec_dict
-
-        # Now reload without passing filenames and format
-        rec_dict = SeqIO.index_db(index_tmp, alphabet=alphabet,
-                                  key_function=add_prefix)
-        self.check_dict_methods(rec_dict, key_list, id_list)
-        rec_dict.close()
-        rec_dict._con.close()  # hack for PyPy
-        del rec_dict
-        os.remove(index_tmp)
-        # Done
+            # Done
 
     def check_dict_methods(self, rec_dict, keys, ids):
         self.assertEqual(set(keys), set(rec_dict))
