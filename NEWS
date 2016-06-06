@@ -62,6 +62,11 @@ The Bio.KEGG.REST will now return unicode text-based handles, except for
 images which remain as binary bytes-based handles, making it easier to use
 with the mostly text-based parsers in Biopython.
 
+Note that the BioSQL test configuration information is now in a new file
+Tests/biosql.ini rather than directly in Tests/test_BioSQL_*.py as before.
+You can make a copy of the provided example file Tests/biosql.ini.sample
+as Tests/biosql.ini and edit this if you wish to run the BioSQL tests.
+
 Additionally, a number of small bugs have been fixed with further additions
 to the test suite, and there has been further work to follow the Python PEP8
 standard coding style, and in converting our docstring documentation to use
