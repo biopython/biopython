@@ -62,11 +62,11 @@ test_records = [
 # Meddle with the annotation too:
 assert test_records[4][1] == "3 DNA seq alignment with CR/LF in name/descr"
 # Add a list of strings,
-test_records[4][0][2].annotations["note"] = ["Note%salso" % os.linesep
-                                    + "\r\nhas\n evil line\rbreaks!", "Wow"]
+test_records[4][0][2].annotations["note"] = ["Note%salso" % os.linesep +
+                                             "\r\nhas\n evil line\rbreaks!", "Wow"]
 # Add a simple string
-test_records[4][0][2].annotations["comment"] = "More%sof" % os.linesep \
-                                          + "\r\nthese\n evil line\rbreaks!"
+test_records[4][0][2].annotations["comment"] = ("More%sof" % os.linesep +
+                                               "\r\nthese\n evil line\rbreaks!")
 # Add a float too:
 test_records[4][0][2].annotations["weight"] = 2.5
 

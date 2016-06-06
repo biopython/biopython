@@ -323,14 +323,14 @@ def alignment_summary(alignment, index=" "):
     alignment_len = alignment.get_alignment_length()
     rec_count = len(alignment)
     for i in range(min(5, alignment_len)):
-        answer.append(index + col_summary(alignment[:, i])
-                            + " alignment column %i" % i)
+        answer.append(index + col_summary(alignment[:, i]) +
+                      " alignment column %i" % i)
     if alignment_len > 5:
         i = alignment_len - 1
-        answer.append(index + col_summary("|" * rec_count)
-                            + " ...")
-        answer.append(index + col_summary(alignment[:, i])
-                            + " alignment column %i" % i)
+        answer.append(index + col_summary("|" * rec_count) +
+                      " ...")
+        answer.append(index + col_summary(alignment[:, i]) +
+                      " alignment column %i" % i)
     return "\n".join(answer)
 
 

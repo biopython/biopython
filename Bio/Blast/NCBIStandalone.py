@@ -1637,9 +1637,9 @@ class Iterator(object):
             if not line:
                 break
             # If I've reached the next one, then put the line back and stop.
-            if lines and (line.startswith('BLAST')
-                          or line.startswith('BLAST', 1)
-                          or line.startswith('<?xml ')):
+            if lines and (line.startswith('BLAST') or
+                          line.startswith('BLAST', 1) or
+                          line.startswith('<?xml ')):
                 self._uhandle.saveline(line)
                 break
             # New style files omit the BLAST line to mark a new query:

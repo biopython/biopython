@@ -271,8 +271,7 @@ class Writer(object):
                         '\\', '\\\\').replace("'", "\\'")
 
             if clade.is_terminal():    # terminal
-                return (label
-                        + make_info_string(clade, terminal=True))
+                return (label + make_info_string(clade, terminal=True))
             else:
                 subtrees = (newickize(sub) for sub in clade)
                 return '(%s)%s' % (','.join(subtrees),

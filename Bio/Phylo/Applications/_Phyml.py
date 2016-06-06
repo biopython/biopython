@@ -104,8 +104,8 @@ class PhymlCommandline(AbstractCommandline):
                     # Amino acid models:
                     'LG', 'WAG', 'JTT', 'MtREV', 'Dayhoff', 'DCMut',
                     'RtREV', 'CpREV', 'VT', 'Blosum62', 'MtMam', 'MtArt',
-                    'HIVw', 'HIVb')
-                    or isinstance(x, int)),
+                    'HIVw', 'HIVb') or
+                    isinstance(x, int)),
                 equate=False,
                 ),
 

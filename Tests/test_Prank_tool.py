@@ -161,11 +161,11 @@ class PrankConversion(unittest.TestCase):
         cmdline = PrankCommandline(prank_exe, d=self.input,
                                    convert=True, f=prank_number,
                                    o='"%s"' % self.output)
-        self.assertEqual(str(cmdline), _escape_filename(prank_exe)
-                         + ' -d=%s' % self.input
-                         + ' -o="%s"' % self.output
-                         + ' -f=%i' % prank_number
-                         + ' -convert')
+        self.assertEqual(str(cmdline), _escape_filename(prank_exe) +
+                         ' -d=%s' % self.input +
+                         ' -o="%s"' % self.output +
+                         ' -f=%i' % prank_number +
+                         ' -convert')
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         message, error = cmdline()
         self.assertTrue("PRANK" in message, message)

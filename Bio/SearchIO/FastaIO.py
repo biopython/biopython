@@ -534,8 +534,8 @@ class FastaM10Indexer(SearchIndexer):
                 start_offset = end_offset - len(line)
             # yield whenever we encounter a new query or at the end of the file
             if qresult_key is not None:
-                if (not peekline.startswith(query_mark)
-                        and query_mark in peekline) or not line:
+                if (not peekline.startswith(query_mark) and
+                    query_mark in peekline) or not line:
                     yield qresult_key, start_offset, end_offset - start_offset
                     if not line:
                         break
