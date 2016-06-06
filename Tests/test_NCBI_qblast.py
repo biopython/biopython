@@ -18,14 +18,14 @@ import unittest
 from Bio._py3k import HTTPError
 from Bio._py3k import StringIO
 
-import requires_internet
-requires_internet.check()
 from Bio import MissingExternalDependencyError
 
 # We want to test these:
 from Bio.Blast import NCBIWWW
 from Bio.Blast import NCBIXML
 
+import requires_internet
+requires_internet.check()
 
 #####################################################################
 
