@@ -7,16 +7,28 @@
 # Note when testing Python 3, the 'python' command will invoke Python 3
 # and similarly for PyPy too.
 
+# Environment variables setup via the matrix
+# - DEP = list of python packages to install via default pip install
+# - EXT = list of python packages to install via pip install --allow-all-external
+# - BIN = list of python packages to install via pip install --only-binary
+# - COV = yes/no; should tests be run with coverage metric collection
 language: python
 matrix:
   include:
     - python: "2.6"
+      env: DEP=reportlab psycopg2 mysql-python unittest2 EXT=mysql-connector-python-rf BIN=scipy COV=yes
     - python: "2.7"
+      env: DEP=reportlab psycopg2 mysql-python EXT=mysql-connector-python-rf COV=yes
     - python: "3.3"
+      env: DEP=reportlab psycopg2 EXT=mysql-connector-python-rf COV=yes
     - python: "3.4"
+      env: DEP=reportlab psycopg2 EXT=mysql-connector-python-rf COV=yes
     - python: "3.5"
+      env: DEP=reportlab psycopg2 EXT=mysql-connector-python-rf BIN=scipy COV=yes
     - python: "pypy"
+      env: EXT=mysql-connector-python-rf COV=yes
     - python: "pypy3"
+      env: COV=no
 
 sudo: false
 addons:
@@ -33,37 +45,11 @@ addons:
     - wise
 
 before_install:
-  - pip install --upgrade pip
-  - "export PY3=yes"
-  - "if [[ $TRAVIS_PYTHON_VERSION == '2.6' ]]; then export PY3=no; fi"
-  - "if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then export PY3=no; fi"
-  - "if [[ $TRAVIS_PYTHON_VERSION == 'pypy' ]]; then export PY3=no; fi"
-  - "export PYPY=no"
-  - "if [[ $TRAVIS_PYTHON_VERSION == 'pypy' ]]; then export PYPY=yes; fi"
-  - "if [[ $TRAVIS_PYTHON_VERSION == 'pypy3' ]]; then export PYPY=yes; fi"
-#Misc python modules we can use as soft dependencies
-  - "if [[ $PYPY != 'yes' ]]; then pip install reportlab; fi"
+  - "pip install --upgrade pip"
   - "pip install rdflib"
-#This takes about 8s even with binary wheels, so don't do it on all platforms:
-  - "if [[ $TRAVIS_PYTHON_VERSION == '2.6' ]]; then pip install scipy --only-binary numpy,scipy; fi"
-  - "if [[ $TRAVIS_PYTHON_VERSION == '3.5' ]]; then pip install scipy --only-binary numpy,scipy; fi"
-#Not hosted on PyPI so this needs the allow external switch:
-#Currently pypy3-2.4.0 self reports as Python 3.2,
-#which is not supported by mysql-connector-python
-  - "if [[ $TRAVIS_PYTHON_VERSION != 'pypy3' ]]; then pip install --allow-all-external mysql-connector-python-rf; fi"
-#Installing psycopg2 does not work under PyPy or Jython
-  - "export PG=yes"
-  - "if [[ $PYPY == 'yes' ]]; then export PG=no; fi"
-  - "if [[ $PG == 'yes' ]]; then pip install psycopg2; fi"
-#Installing mysql-python does not work under Python 3
-  - "export MSQL=$PG"
-  - "if [[ $PY3 == 'yes' ]]; then export MSQL=no; fi"
-  - "if [[ $MSQL == 'yes' ]]; then pip install mysql-python; fi"
-#Lib unittest2 is needed for some assertRaises tests under Python 2.6
-  - "if [[ $TRAVIS_PYTHON_VERSION == '2.6' ]]; then pip install unittest2; fi"
-#Used to record test coverage information; running PyPy3 via coverage is very slow
-  - "export COV=yes"
-  - "if [[ $TRAVIS_PYTHON_VERSION == 'pypy3' ]]; then export COV=no; fi"
+  - "pip install $DEP"
+  - "pip install --only-binary=:all: $BIN"
+  - "pip install --allow-all-external $EXT"
   - "if [[ $COV == 'yes' ]]; then pip install coverage; fi"
 
 
