@@ -24,9 +24,15 @@ wrappers for these under Bio.Blast.Applications (see the tutorial).
 
 from __future__ import print_function
 
+import sys
 import re
 
-from Bio.ParserSupport import *
+from Bio._py3k import StringIO
+from Bio.ParserSupport import AbstractParser, AbstractConsumer
+from Bio.ParserSupport import read_and_call, read_and_call_until
+from Bio.ParserSupport import read_and_call_while, attempt_read_and_call
+from Bio.ParserSupport import is_blank_line, safe_peekline, safe_readline
+from Bio import File
 from Bio.Blast import Record
 
 from Bio import BiopythonDeprecationWarning

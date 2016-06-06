@@ -31,16 +31,7 @@ warnings.warn("Bio.ParserSupport is now deprecated will be removed in a "
               "future release of Biopython.", BiopythonDeprecationWarning)
 
 import sys
-try:
-    from types import InstanceType
-except ImportError:
-    # Python 3, see http://bugs.python.org/issue8206
-    InstanceType = object
-from types import MethodType
-
 from Bio._py3k import StringIO
-
-from Bio import File
 
 # XML from python 2.0
 try:
