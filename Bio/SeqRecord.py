@@ -357,8 +357,8 @@ class SeqRecord(object):
         Number of features: 1
         Per letter annotation for: secondary_structure
         Seq('MAAGVKQLADDRTLLMAGVSHDLRTPLTRIRLATEMMSEQDGYLAESINKDIEE...YLR', IUPACProtein())
-        >>> print(rec.letter_annotations["secondary_structure"])
-          S  SSSSSSHHHHHTTTHHHHHHHHHHHHHHHHHHHHHHTHHHHHHHHHHHHHHHHHHHHHTT  
+        >>> rec.letter_annotations["secondary_structure"]
+        '  S  SSSSSSHHHHHTTTHHHHHHHHHHHHHHHHHHHHHHTHHHHHHHHHHHHHHHHHHHHHTT  '
         >>> print(rec.features[0].location)
         [20:21]
 
@@ -373,8 +373,8 @@ class SeqRecord(object):
         Number of features: 1
         Per letter annotation for: secondary_structure
         Seq('RTLLMAGVSHDLRTPLTRIRLATEMMSEQD', IUPACProtein())
-        >>> print(sub.letter_annotations["secondary_structure"])
-        HHHHHTTTHHHHHHHHHHHHHHHHHHHHHH
+        >>> sub.letter_annotations["secondary_structure"]
+        'HHHHHTTTHHHHHHHHHHHHHHHHHHHHHH'
         >>> print(sub.features[0].location)
         [9:10]
 
