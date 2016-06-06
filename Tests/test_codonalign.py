@@ -9,7 +9,7 @@ import warnings
 import tempfile
 import unittest
 
-from Bio import BiopythonExperimentalWarning
+from Bio import BiopythonWarning, BiopythonExperimentalWarning
 from Bio import SeqIO
 from Bio import AlignIO
 from Bio.Seq import Seq
@@ -161,7 +161,9 @@ class Test_dn_ds(unittest.TestCase):
         prot = AlignIO.read(TEST_ALIGN_FILE6[0][1], 'clustal', alphabet=IUPAC.protein)
         with open(TEST_ALIGN_FILE6[0][2]) as handle:
             id_corr = dict((i.split()[0], i.split()[1]) for i in handle)
-        aln = codonalign.build(prot, nucl, corr_dict=id_corr, alphabet=codonalign.default_codon_alphabet)
+        with warnings.catch_warnings():
+            warnings.simplefilter('ignore', BiopythonWarning)
+            aln = codonalign.build(prot, nucl, corr_dict=id_corr, alphabet=codonalign.default_codon_alphabet)
         self.aln = aln
 
     def test_dn_ds(self):
