@@ -64,6 +64,7 @@ class BackwardsCompatibilityTest(unittest.TestCase):
                           for rec in original_records]
         # And check they agree
         self.assertTrue(compare_records(original_records, biosql_records))
+        server.close()
 
 if __name__ == "__main__":
     # Run the test cases
