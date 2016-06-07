@@ -16,17 +16,17 @@ language: python
 matrix:
   include:
     - python: "2.6"
-      env: DEP=reportlab psycopg2 mysql-python unittest2 EXT=mysql-connector-python-rf BIN=scipy COV=yes
+      env: DEP="reportlab psycopg2 mysql-python unittest2" EXT=mysql-connector-python-rf BIN=scipy COV=yes
     - python: "2.7"
-      env: DEP=reportlab psycopg2 mysql-python EXT=mysql-connector-python-rf COV=yes
+      env: DEP="reportlab psycopg2 mysql-python" EXT=mysql-connector-python-rf COV=yes
     - python: "3.3"
-      env: DEP=reportlab psycopg2 EXT=mysql-connector-python-rf COV=yes
+      env: DEP="reportlab psycopg2" EXT=mysql-connector-python-rf COV=yes
     - python: "3.4"
-      env: DEP=reportlab psycopg2 EXT=mysql-connector-python-rf COV=yes
+      env: DEP="reportlab psycopg2" EXT=mysql-connector-python-rf COV=yes
     - python: "3.5"
-      env: DEP=reportlab psycopg2 EXT=mysql-connector-python-rf BIN=scipy COV=yes
+      env: DEP=reportlab psycopg2" EXT=mysql-connector-python-rf BIN=scipy COV=yes
     - python: "pypy"
-      env: EXT=mysql-connector-python-rf COV=yes
+      env: EXT="mysql-connector-python-rf" COV=yes
     - python: "pypy3"
       env: COV=no
 
