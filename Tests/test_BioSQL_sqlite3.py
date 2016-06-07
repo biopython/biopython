@@ -16,7 +16,9 @@ from common_BioSQL import *
 DBDRIVER = 'sqlite3'
 DBTYPE = 'sqlite'
 
-DBHOST, DBUSER, DBPASSWD, TESTDB = load_biosql_ini(DBTYPE)
+DBHOST = None
+DBUSER = 'root'
+DBPASSWD = None
 TESTDB = temp_db_filename()
 
 # This will abort if driver not installed etc:
