@@ -702,7 +702,7 @@ class DeleteTest(unittest.TestCase):
             pass
 
     def test_del_db_items(self):
-        """Check all associated data is delete from an item"""
+        """Check all associated data is deleted from an item"""
         db = self.db
         items = list(db.values())
         keys = list(db)
