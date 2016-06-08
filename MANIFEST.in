@@ -27,6 +27,7 @@ recursive-include Doc/examples *.bgz
 recursive-include Doc/examples *.xml
 recursive-include Doc/examples *.psl
 recursive-include Doc/examples *.dnd
+recursive-include Doc/examples *.csv
 recursive-include Doc/images *.png
 recursive-include Doc/images *.jpg # e.g. the logo for the Tutorial
 
