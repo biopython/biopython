@@ -10,7 +10,7 @@ The latest news is at the top of this file.
 
 ===================================================================
 
-(In progress, not yet released) Biopython 1.67
+8 June 2016: Biopython 1.67
 
 This release of Biopython supports Python 2.6, 2.7, 3.3, 3.4 and 3.5, but
 support for Python 2.6 is considered to be deprecated. It has also been
