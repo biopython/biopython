@@ -607,6 +607,18 @@ class GenBankWriter(_InsdcWriter):
         assert len(division) == 3
         return division
 
+    def _get_topology(self, record):
+        """Set the topology to 'circular', 'linear' if defined"""
+        max_topology_len = len('circular')
+
+        # return an empty placeholder string if not given
+        if 'topology' not in record.annotations:
+            return ' ' * max_topology_len
+
+        template = '%%-%ds' % max_topology_len
+
+        return template % record.annotations['topology'][:max_topology_len]
+
     def _write_the_first_line(self, record):
         """Write the LOCUS line."""
 
@@ -650,17 +662,20 @@ class GenBankWriter(_InsdcWriter):
             # just the generic Alphabet (default for fasta files)
             raise ValueError("Need a DNA, RNA or Protein alphabet")
 
+        topology = self._get_topology(record)
+
         division = self._get_data_division(record)
 
         assert len(units) == 2
         assert len(division) == 3
         # TODO - date
         # TODO - mol_type
-        line = "LOCUS       %s %s %s    %s           %s %s\n" \
+        line = "LOCUS       %s %s %s    %s  %s %s %s\n" \
             % (locus.ljust(16),
                str(len(record)).rjust(11),
                units,
                mol_type.ljust(6),
+               topology,
                division,
                self._get_date(record))
         assert len(line) == 79 + 1, repr(line)  # plus one for new line
