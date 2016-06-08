@@ -3,21 +3,26 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """This module provides classes to work with Phenotype Microarray data.
+
 More information on the single plates can be found here: http://www.biolog.com/
 
 Classes:
-PlateRecord         Object that contain time course data on each well of the
-                    plate, as well as metadata (if any).
-WellRecord          Object that contains the time course data of a single well
-JsonWriter          Writer of PlateRecord objects in JSON format.
+
+ - PlateRecord - Object that contain time course data on each well of the
+   plate, as well as metadata (if any).
+ - WellRecord - Object that contains the time course data of a single well
+ - JsonWriter - Writer of PlateRecord objects in JSON format.
 
 Functions:
-JsonIterator        Incremental PM JSON parser, this is an iterator that returns
-                    PlateRecord objects.
-CsvIterator         Incremental PM CSV parser, this is an iterator that returns
-                    PlateRecord objects.
-_toOPM              Used internally by JsonWriter, converts PlateRecord objects
-                    in dictionaries ready to be serialized in JSON format."""
+
+ - JsonIterator -  Incremental PM JSON parser, this is an iterator that returns
+   PlateRecord objects.
+ - CsvIterator - Incremental PM CSV parser, this is an iterator that returns
+   PlateRecord objects.
+ - _toOPM - Used internally by JsonWriter, converts PlateRecord objects in
+   dictionaries ready to be serialized in JSON format.
+
+"""
 
 import warnings
 import json
@@ -1081,8 +1086,7 @@ def CsvIterator(handle):
 
 
 def _toOPM(plate):
-    """Helper function to transform a PlateRecord object into a dictionary
-    """
+    """Transform a PlateRecord object into a dictionary (PRIVATE)."""
     d = dict(plate.qualifiers.items())
 
     d[_csvData] = {}
