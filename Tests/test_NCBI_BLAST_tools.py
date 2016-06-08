@@ -68,7 +68,8 @@ for folder in likely_dirs:
         del exe_name, name
 
 # To avoid the name clash with legacy BLAST, Debian introduced rpsblast+ alias
-wanted.remove("rpsblast+")
+if "rpsblast+" in wanted:
+    wanted.remove("rpsblast+")
 if "rpsblast+" in exe_names:
     exe_names["rpsblast"] = exe_names["rpsblast+"]
     del exe_names["rpsblast+"]
