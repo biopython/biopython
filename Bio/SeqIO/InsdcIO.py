@@ -487,6 +487,8 @@ class _InsdcWriter(SequentialSequenceWriter):
 
 
 class GenBankWriter(_InsdcWriter):
+    """GenBank writer."""
+
     HEADER_WIDTH = 12
     QUALIFIER_INDENT = 21
 
@@ -895,6 +897,8 @@ class GenBankWriter(_InsdcWriter):
 
 
 class EmblWriter(_InsdcWriter):
+    """EMBL writer."""
+
     HEADER_WIDTH = 5
     QUALIFIER_INDENT = 21
     QUALIFIER_INDENT_STR = "FT" + " " * (QUALIFIER_INDENT - 2)
@@ -1217,6 +1221,8 @@ class EmblWriter(_InsdcWriter):
 
 
 class ImgtWriter(EmblWriter):
+    """IMGT writer (EMBL format variant)."""
+
     HEADER_WIDTH = 5
     QUALIFIER_INDENT = 25  # Not 21 as in EMBL
     QUALIFIER_INDENT_STR = "FT" + " " * (QUALIFIER_INDENT - 2)
