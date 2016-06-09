@@ -462,6 +462,7 @@ class DictionaryBuilder(object):
                   'classes...')
             results.write(start)
             results.write('rest_dict = {}\n')
+            results.write("\n\n")
             for name in sorted(classdict):
                 results.write("def _temp():\n")
                 results.write("    return {\n")
@@ -470,10 +471,11 @@ class DictionaryBuilder(object):
                                   (repr(key), repr(value)))
                 results.write("    }\n")
                 results.write("rest_dict[%s] = _temp()\n" % repr(name))
-                results.write("\n")
+                results.write("\n\n")
             print('OK.\n')
             print('Writing the dictionary containing the suppliers data...')
             results.write('suppliers = {}\n')
+            results.write("\n\n")
             for name in sorted(suppliersdict):
                 results.write("def _temp():\n")
                 results.write("    return (\n")
@@ -481,10 +483,11 @@ class DictionaryBuilder(object):
                     results.write("        %s,\n" % repr(value))
                 results.write("    )\n")
                 results.write("suppliers[%s] = _temp()\n" % repr(name))
-                results.write("\n")
+                results.write("\n\n")
             print('OK.\n')
             print('Writing the dictionary containing the Restriction types...')
             results.write('typedict = {}\n')
+            results.write("\n\n")
             for name in sorted(typedict):
                 results.write("def _temp():\n")
                 results.write("    return (\n")
@@ -492,7 +495,7 @@ class DictionaryBuilder(object):
                     results.write("        %s,\n" % repr(value))
                 results.write("    )\n")
                 results.write("typedict[%s] = _temp()\n" % repr(name))
-                results.write("\n")
+                results.write("\n\n")
             # I had wanted to do "del _temp" at each stage (just for clarity),
             # but that pushed the code size just over the Jython JVM limit. We
             # include one the final "del _temp" to clean up the namespace.
