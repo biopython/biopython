@@ -659,7 +659,8 @@ class GenBankWriter(_InsdcWriter):
 
         name_length = str(len(record)).rjust(28)
         name_length = locus + name_length[len(locus):]
-        assert len(name_length) == 28 and " " in name_length, name_length
+        assert len(name_length) == 28, name_length
+        assert " " in name_length, name_length
 
         assert len(units) == 2
         assert len(division) == 3
