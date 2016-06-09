@@ -546,10 +546,10 @@ class StringMethodTests(unittest.TestCase):
             for c1 in ambig:
                 for c2 in ambig:
                     for c3 in ambig:
-                        values = set([str(Seq(a + b + c).translate())
-                                      for a in ambig_values[c1]
-                                      for b in ambig_values[c2]
-                                      for c in ambig_values[c3]])
+                        values = set(str(Seq(a + b + c).translate())
+                                     for a in ambig_values[c1]
+                                     for b in ambig_values[c2]
+                                     for c in ambig_values[c3])
                         t = str(Seq(c1 + c2 + c3).translate())
                         if t == "*":
                             self.assertEqual(values, set("*"))

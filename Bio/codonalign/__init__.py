@@ -141,7 +141,7 @@ def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X',
     # corr_method = 1, keyword pairing
     elif corr_method == 1:
         nucl_id = set(nucl_seqs.keys())
-        pro_id = set([i.id for i in pro_align])
+        pro_id = set(i.id for i in pro_align)
         # check if there is pro_id that does not have a nucleotide match
         if pro_id - nucl_id:
             diff = pro_id - nucl_id

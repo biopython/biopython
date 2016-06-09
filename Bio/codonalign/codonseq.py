@@ -108,7 +108,7 @@ class CodonSeq(Seq):
     def get_codon(self, index):
         """get the `index`-th codon from the self.seq
         """
-        if len(set([i % 3 for i in self.rf_table])) != 1:
+        if len(set(i % 3 for i in self.rf_table)) != 1:
             raise RuntimeError("frameshift detected. "
                                "CodonSeq object is not able to deal "
                                "with codon sequence with frameshift. "
