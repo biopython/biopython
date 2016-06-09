@@ -19,33 +19,40 @@ from Bio._py3k import StringIO
 
 
 class GenBankTests(unittest.TestCase):
+    """GenBank tests."""
+
     def test_invalid_product_line_raises_value_error(self):
-        """Test GenBank parsing invalid product line raises ValueError"""
+        """Parsing invalid product line."""
         def parse_invalid_product_line():
             rec = SeqIO.read(path.join('GenBank', 'invalid_product.gb'),
                              'genbank')
         self.assertRaises(ValueError, parse_invalid_product_line)
 
     def test_genbank_read(self):
+        """GenBank.read(...) simple test."""
         with open(path.join("GenBank", "NC_000932.gb")) as handle:
             record = GenBank.read(handle)
         self.assertEqual(['NC_000932'], record.accession)
 
     def test_genbank_read_multirecord(self):
+        """GenBank.read(...) error on multiple record input."""
         with open(path.join("GenBank", "cor6_6.gb")) as handle:
             self.assertRaises(ValueError, GenBank.read, handle)
 
     def test_genbank_read_invalid(self):
+        """GenBank.read(...) error on invalid file (e.g. FASTA file)."""
         with open(path.join("GenBank", "NC_000932.faa")) as handle:
             self.assertRaises(ValueError, GenBank.read, handle)
 
     def test_genbank_read_no_origin_no_end(self):
+        """GenBank.read(...) error on malformed file."""
         with open(path.join("GenBank", "no_origin_no_end.gb")) as handle:
             self.assertRaises(ValueError, GenBank.read, handle)
 
     # Evil hack with 000 to manipulate sort order to ensure this is tested
     # first (otherwise something silences the warning)
     def test_000_genbank_bad_loc_wrap_warning(self):
+        """Feature line wrapping warning."""
         with warnings.catch_warnings():
             warnings.simplefilter("error", BiopythonParserWarning)
             with open(path.join("GenBank", "bad_loc_wrap.gb")) as handle:
@@ -59,6 +66,7 @@ class GenBankTests(unittest.TestCase):
 
     # Similar hack as we also want to catch that warning here
     def test_001_negative_location_warning(self):
+        """Un-parsable feature location warning."""
         with warnings.catch_warnings():
             warnings.simplefilter("error", BiopythonParserWarning)
             try:
@@ -69,6 +77,7 @@ class GenBankTests(unittest.TestCase):
                 self.assertTrue(False, "Expected specified BiopythonParserWarning here.")
 
     def test_genbank_bad_loc_wrap_parsing(self):
+        """Bad location wrapping."""
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", BiopythonParserWarning)
             with open(path.join("GenBank", "bad_loc_wrap.gb")) as handle:
@@ -78,12 +87,14 @@ class GenBankTests(unittest.TestCase):
                 self.assertEqual(loc, "join(3462..3615,3698..3978,4077..4307,4408..4797,4876..5028,5141..5332)")
 
     def test_negative_location(self):
+        """Negative feature locations."""
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", BiopythonParserWarning)
             rec = SeqIO.read(path.join("GenBank", "negative_location.gb"), "genbank")
             self.assertEqual(None, rec.features[-1].location)
 
     def test_dot_lineage(self):
+        """Missing taxonomy lineage."""
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", BiopythonParserWarning)
             rec = SeqIO.read("GenBank/bad_loc_wrap.gb", "genbank")
@@ -126,6 +137,7 @@ class GenBankTests(unittest.TestCase):
         self.assertTrue("XX\nPR   Project:PRJNA16232;\nXX\n" in embl, embl)
 
     def test_structured_comment_parsing(self):
+        """Structued comment parsing."""
         # GISAID_EpiFlu(TM)Data, HM138502.gbk has both 'comment' and 'structured_comment'
         record = SeqIO.read(path.join('GenBank', 'HM138502.gbk'), 'genbank')
         self.assertEqual(record.annotations['comment'],
@@ -196,7 +208,10 @@ class GenBankTests(unittest.TestCase):
 
 
 class OutputTests(unittest.TestCase):
+    """GenBank output tests."""
+
     def test_mad_dots(self):
+        """Writing and reading back accesssion.version variants."""
         for identifier in ["example",
                            "example.1a",
                            "example.1.2",
