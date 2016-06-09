@@ -19550,4 +19550,3 @@ def _temp():
 typedict['type96'] = _temp()
 
 del _temp
-
