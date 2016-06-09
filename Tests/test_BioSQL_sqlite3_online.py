@@ -8,6 +8,9 @@
 from common_BioSQL import temp_db_filename
 from common_BioSQL_online import *
 
+import requires_internet
+requires_internet.check()
+
 # Constants for the database driver
 DBDRIVER = 'sqlite3'
 DBTYPE = 'sqlite'
