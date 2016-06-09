@@ -159,7 +159,7 @@ class xbb_widget(object):
         self.current_codon_table.set('Standard')
         self.current_codon_table_id = 1
 
-        keys = self.translation_tables.keys()
+        keys = list(self.translation_tables.keys())
         keys.remove('Standard')
         keys.sort()
         keys = ['Standard'] + keys
