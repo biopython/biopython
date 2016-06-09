@@ -625,7 +625,12 @@ class GenBankWriter(_InsdcWriter):
             else:
                 warnings.warn("Stealing space from length field to allow long name in LOCUS line", BiopythonWarning)
         if len(locus.split()) > 1:
-            raise ValueError("Invalid whitespace in %r for LOCUS line" % locus)
+            # locus could be unicode, and u'with space' versus 'with space'
+            # causes trouble with doctest or print-and-compare tests, so
+            tmp = repr(locus)
+            if tmp.startswith("u'") and tmp.endswith("'"):
+                tmp = tmp[1:]
+            raise ValueError("Invalid whitespace in %s for LOCUS line" % tmp)
         if len(record) > 99999999999:
             # Currently GenBank only officially support up to 350000, but
             # the length field can take eleven digits
