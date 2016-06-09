@@ -493,14 +493,14 @@ class AbstractCut(RestrictionType):
             return cls._search()
 
     @classmethod
-    def all_suppliers(self):
+    def all_suppliers(cls):
         """RE.all_suppliers -> print all the suppliers of R"""
         supply = sorted(x[0] for x in suppliers_dict.values())
         print(",\n".join(supply))
         return
 
     @classmethod
-    def is_equischizomer(self, other):
+    def is_equischizomer(cls, other):
         """RE.is_equischizomers(other) -> bool.
 
         True if other is an isoschizomer of RE.
@@ -508,10 +508,10 @@ class AbstractCut(RestrictionType):
 
         equischizomer <=> same site, same position of restriction.
         """
-        return not self != other
+        return not cls != other
 
     @classmethod
-    def is_neoschizomer(self, other):
+    def is_neoschizomer(cls, other):
         """RE.is_neoschizomers(other) -> bool.
 
         True if other is an isoschizomer of RE.
@@ -519,20 +519,20 @@ class AbstractCut(RestrictionType):
 
         neoschizomer <=> same site, different position of restriction.
         """
-        return self >> other
+        return cls >> other
 
     @classmethod
-    def is_isoschizomer(self, other):
+    def is_isoschizomer(cls, other):
         """RE.is_isoschizomers(other) -> bool.
 
         True if other is an isoschizomer of RE.
         False else.
 
         isoschizomer <=> same site."""
-        return (not self != other) or self >> other
+        return (not cls != other) or cls >> other
 
     @classmethod
-    def equischizomers(self, batch=None):
+    def equischizomers(cls, batch=None):
         """RE.equischizomers([batch]) -> list.
 
         return a tuple of all the isoschizomers of RE.
@@ -542,14 +542,14 @@ class AbstractCut(RestrictionType):
         """
         if not batch:
             batch = AllEnzymes
-        r = [x for x in batch if not self != x]
-        i = r.index(self)
+        r = [x for x in batch if not cls != x]
+        i = r.index(cls)
         del r[i]
         r.sort()
         return r
 
     @classmethod
-    def neoschizomers(self, batch=None):
+    def neoschizomers(cls, batch=None):
         """RE.neoschizomers([batch]) -> list.
 
         return a tuple of all the neoschizomers of RE.
@@ -558,11 +558,11 @@ class AbstractCut(RestrictionType):
         neoschizomer <=> same site, different position of restriction."""
         if not batch:
             batch = AllEnzymes
-        r = sorted(x for x in batch if self >> x)
+        r = sorted(x for x in batch if cls >> x)
         return r
 
     @classmethod
-    def isoschizomers(self, batch=None):
+    def isoschizomers(cls, batch=None):
         """RE.isoschizomers([batch]) -> list.
 
         return a tuple of all the equischizomers and neoschizomers of RE.
@@ -570,18 +570,18 @@ class AbstractCut(RestrictionType):
         """
         if not batch:
             batch = AllEnzymes
-        r = [x for x in batch if (self >> x) or (not self != x)]
-        i = r.index(self)
+        r = [x for x in batch if (cls >> x) or (not cls != x)]
+        i = r.index(cls)
         del r[i]
         r.sort()
         return r
 
     @classmethod
-    def frequency(self):
+    def frequency(cls):
         """RE.frequency() -> int.
 
         frequency of the site."""
-        return self.freq
+        return cls.freq
 
 
 class NoCut(AbstractCut):
@@ -603,21 +603,21 @@ class NoCut(AbstractCut):
     """
 
     @classmethod
-    def cut_once(self):
+    def cut_once(cls):
         """RE.cut_once() -> bool.
 
         True if the enzyme cut the sequence one time on each strand."""
         return False
 
     @classmethod
-    def cut_twice(self):
+    def cut_twice(cls):
         """RE.cut_twice() -> bool.
 
         True if the enzyme cut the sequence twice on each strand."""
         return False
 
     @classmethod
-    def _modify(self, location):
+    def _modify(cls, location):
         """RE._modify(location) -> int.
 
         for internal use only.
@@ -645,7 +645,7 @@ class NoCut(AbstractCut):
         yield location
 
     @classmethod
-    def _rev_modify(self, location):
+    def _rev_modify(cls, location):
         """RE._rev_modify(location) -> generator of int.
 
         for internal use only.
@@ -656,7 +656,7 @@ class NoCut(AbstractCut):
         yield location
 
     @classmethod
-    def characteristic(self):
+    def characteristic(cls):
         """RE.characteristic() -> tuple.
 
         the tuple contains the attributes:
@@ -666,7 +666,7 @@ class NoCut(AbstractCut):
             scd5 -> second 3' cut (complementary strand) or None
             site -> recognition site.
         """
-        return None, None, None, None, self.site
+        return None, None, None, None, cls.site
 
 
 class OneCut(AbstractCut):
@@ -678,7 +678,7 @@ class OneCut(AbstractCut):
     """
 
     @classmethod
-    def cut_once(self):
+    def cut_once(cls):
         """RE.cut_once() -> bool.
 
         True if the enzyme cut the sequence one time on each strand.
@@ -686,7 +686,7 @@ class OneCut(AbstractCut):
         return True
 
     @classmethod
-    def cut_twice(self):
+    def cut_twice(cls):
         """RE.cut_twice() -> bool.
 
         True if the enzyme cut the sequence twice on each strand.
@@ -694,7 +694,7 @@ class OneCut(AbstractCut):
         return False
 
     @classmethod
-    def _modify(self, location):
+    def _modify(cls, location):
         """RE._modify(location) -> int.
 
         for internal use only.
@@ -719,10 +719,10 @@ class OneCut(AbstractCut):
         if the enzyme cut twice _modify will returns two integer corresponding
         to each cutting site.
         """
-        yield location + self.fst5
+        yield location + cls.fst5
 
     @classmethod
-    def _rev_modify(self, location):
+    def _rev_modify(cls, location):
         """RE._rev_modify(location) -> generator of int.
 
         for internal use only.
@@ -730,10 +730,10 @@ class OneCut(AbstractCut):
         as _modify for site situated on the antiparallel strand when the
         enzyme is not palindromic
         """
-        yield location - self.fst3
+        yield location - cls.fst3
 
     @classmethod
-    def characteristic(self):
+    def characteristic(cls):
         """RE.characteristic() -> tuple.
 
         the tuple contains the attributes:
@@ -743,7 +743,7 @@ class OneCut(AbstractCut):
             scd5 -> second 3' cut (complementary strand) or None
             site -> recognition site.
             """
-        return self.fst5, self.fst3, None, None, self.site
+        return cls.fst5, cls.fst3, None, None, cls.site
 
 
 class TwoCuts(AbstractCut):
@@ -754,14 +754,14 @@ class TwoCuts(AbstractCut):
     Internal use only. Not meant to be instantiated."""
 
     @classmethod
-    def cut_once(self):
+    def cut_once(cls):
         """RE.cut_once() -> bool.
 
         True if the enzyme cut the sequence one time on each strand."""
         return False
 
     @classmethod
-    def cut_twice(self):
+    def cut_twice(cls):
         """RE.cut_twice() -> bool.
 
         True if the enzyme cut the sequence twice on each strand.
@@ -769,7 +769,7 @@ class TwoCuts(AbstractCut):
         return True
 
     @classmethod
-    def _modify(self, location):
+    def _modify(cls, location):
         """RE._modify(location) -> int.
 
         for internal use only.
@@ -794,11 +794,11 @@ class TwoCuts(AbstractCut):
         if the enzyme cut twice _modify will returns two integer corresponding
         to each cutting site.
         """
-        yield location + self.fst5
-        yield location + self.scd5
+        yield location + cls.fst5
+        yield location + cls.scd5
 
     @classmethod
-    def _rev_modify(self, location):
+    def _rev_modify(cls, location):
         """RE._rev_modify(location) -> generator of int.
 
         for internal use only.
@@ -806,11 +806,11 @@ class TwoCuts(AbstractCut):
         as _modify for site situated on the antiparallel strand when the
         enzyme is not palindromic
         """
-        yield location - self.fst3
-        yield location - self.scd3
+        yield location - cls.fst3
+        yield location - cls.scd3
 
     @classmethod
-    def characteristic(self):
+    def characteristic(cls):
         """RE.characteristic() -> tuple.
 
         the tuple contains the attributes:
@@ -820,7 +820,7 @@ class TwoCuts(AbstractCut):
             scd5 -> second 3' cut (complementary strand) or None
             site -> recognition site.
         """
-        return self.fst5, self.fst3, self.scd5, self.scd3, self.site
+        return cls.fst5, cls.fst3, cls.scd5, cls.scd3, cls.site
 
 
 class Meth_Dep(AbstractCut):
@@ -830,7 +830,7 @@ class Meth_Dep(AbstractCut):
     """
 
     @classmethod
-    def is_methylable(self):
+    def is_methylable(cls):
         """RE.is_methylable() -> bool.
 
         True if the recognition site is a methylable.
@@ -845,7 +845,7 @@ class Meth_Undep(AbstractCut):
     """
 
     @classmethod
-    def is_methylable(self):
+    def is_methylable(cls):
         """RE.is_methylable() -> bool.
 
         True if the recognition site is a methylable.
@@ -865,21 +865,21 @@ class Palindromic(AbstractCut):
     Internal use only. Not meant to be instantiated."""
 
     @classmethod
-    def _search(self):
+    def _search(cls):
         """RE._search() -> list.
 
         for internal use only.
 
         implement the search method for palindromic and non palindromic enzyme.
         """
-        siteloc = self.dna.finditer(self.compsite, self.size)
-        self.results = [r for s, g in siteloc for r in self._modify(s)]
-        if self.results:
-            self._drop()
-        return self.results
+        siteloc = cls.dna.finditer(cls.compsite, cls.size)
+        cls.results = [r for s, g in siteloc for r in cls._modify(s)]
+        if cls.results:
+            cls._drop()
+        return cls.results
 
     @classmethod
-    def is_palindromic(self):
+    def is_palindromic(cls):
         """RE.is_palindromic() -> bool.
 
         True if the recognition site is a palindrom.
@@ -896,32 +896,32 @@ class NonPalindromic(AbstractCut):
     Internal use only. Not meant to be instantiated."""
 
     @classmethod
-    def _search(self):
+    def _search(cls):
         """RE._search() -> list.
 
         for internal use only.
 
         implement the search method for palindromic and non palindromic enzyme.
         """
-        iterator = self.dna.finditer(self.compsite, self.size)
-        self.results = []
-        modif = self._modify
-        revmodif = self._rev_modify
-        s = str(self)
-        self.on_minus = []
+        iterator = cls.dna.finditer(cls.compsite, cls.size)
+        cls.results = []
+        modif = cls._modify
+        revmodif = cls._rev_modify
+        s = str(cls)
+        cls.on_minus = []
         for start, group in iterator:
             if group(s):
-                self.results += [r for r in modif(start)]
+                cls.results += [r for r in modif(start)]
             else:
-                self.on_minus += [r for r in revmodif(start)]
-        self.results += self.on_minus
-        if self.results:
-            self.results.sort()
-            self._drop()
-        return self.results
+                cls.on_minus += [r for r in revmodif(start)]
+        cls.results += cls.on_minus
+        if cls.results:
+            cls.results.sort()
+            cls._drop()
+        return cls.results
 
     @classmethod
-    def is_palindromic(self):
+    def is_palindromic(cls):
         """RE.is_palindromic() -> bool.
 
         True if the recognition site is a palindrom.
@@ -939,7 +939,7 @@ class Unknown(AbstractCut):
     """
 
     @classmethod
-    def catalyse(self, dna, linear=True):
+    def catalyse(cls, dna, linear=True):
         """RE.catalyse(dna, linear=True) -> tuple of DNA.
         RE.catalyze(dna, linear=True) -> tuple of DNA.
 
@@ -952,11 +952,11 @@ class Unknown(AbstractCut):
         output will be modified accordingly.
         """
         raise NotImplementedError('%s restriction is unknown.'
-                                  % self.__name__)
+                                  % cls.__name__)
     catalyze = catalyse
 
     @classmethod
-    def is_blunt(self):
+    def is_blunt(cls):
         """RE.is_blunt() -> bool.
 
         True if the enzyme produces blunt end.
@@ -969,7 +969,7 @@ class Unknown(AbstractCut):
         return False
 
     @classmethod
-    def is_5overhang(self):
+    def is_5overhang(cls):
         """RE.is_5overhang() -> bool.
 
         True if the enzyme produces 5' overhang sticky end.
@@ -982,7 +982,7 @@ class Unknown(AbstractCut):
         return False
 
     @classmethod
-    def is_3overhang(self):
+    def is_3overhang(cls):
         """RE.is_3overhang() -> bool.
 
         True if the enzyme produces 3' overhang sticky end.
@@ -995,7 +995,7 @@ class Unknown(AbstractCut):
         return False
 
     @classmethod
-    def overhang(self):
+    def overhang(cls):
         """RE.overhang() -> str. type of overhang of the enzyme.,
 
         can be "3' overhang", "5' overhang", "blunt", "unknown"
@@ -1003,7 +1003,7 @@ class Unknown(AbstractCut):
         return 'unknown'
 
     @classmethod
-    def compatible_end(self):
+    def compatible_end(cls):
         """RE.compatible_end() -> list.
 
         list of all the enzymes that share compatible end with RE.
@@ -1011,7 +1011,7 @@ class Unknown(AbstractCut):
         return []
 
     @classmethod
-    def _mod1(self, other):
+    def _mod1(cls, other):
         """RE._mod1(other) -> bool.
 
         for internal use only
@@ -1032,7 +1032,7 @@ class Blunt(AbstractCut):
     """
 
     @classmethod
-    def catalyse(self, dna, linear=True):
+    def catalyse(cls, dna, linear=True):
         """RE.catalyse(dna, linear=True) -> tuple of DNA.
         RE.catalyze(dna, linear=True) -> tuple of DNA.
 
@@ -1044,8 +1044,8 @@ class Blunt(AbstractCut):
         if linear is False, the sequence is considered to be circular and the
         output will be modified accordingly.
         """
-        r = self.search(dna, linear)
-        d = self.dna
+        r = cls.search(dna, linear)
+        d = cls.dna
         if not r:
             return d[1:],
         fragments = []
@@ -1082,7 +1082,7 @@ class Blunt(AbstractCut):
     catalyze = catalyse
 
     @classmethod
-    def is_blunt(self):
+    def is_blunt(cls):
         """RE.is_blunt() -> bool.
 
         True if the enzyme produces blunt end.
@@ -1095,7 +1095,7 @@ class Blunt(AbstractCut):
         return True
 
     @classmethod
-    def is_5overhang(self):
+    def is_5overhang(cls):
         """RE.is_5overhang() -> bool.
 
         True if the enzyme produces 5' overhang sticky end.
@@ -1108,7 +1108,7 @@ class Blunt(AbstractCut):
         return False
 
     @classmethod
-    def is_3overhang(self):
+    def is_3overhang(cls):
         """RE.is_3overhang() -> bool.
 
         True if the enzyme produces 3' overhang sticky end.
@@ -1121,7 +1121,7 @@ class Blunt(AbstractCut):
         return False
 
     @classmethod
-    def overhang(self):
+    def overhang(cls):
         """RE.overhang() -> str. type of overhang of the enzyme.,
 
         can be "3' overhang", "5' overhang", "blunt", "unknown"
@@ -1129,7 +1129,7 @@ class Blunt(AbstractCut):
         return 'blunt'
 
     @classmethod
-    def compatible_end(self, batch=None):
+    def compatible_end(cls, batch=None):
         """RE.compatible_end() -> list.
 
         list of all the enzymes that share compatible end with RE.
@@ -1160,7 +1160,7 @@ class Ov5(AbstractCut):
     """
 
     @classmethod
-    def catalyse(self, dna, linear=True):
+    def catalyse(cls, dna, linear=True):
         """RE.catalyse(dna, linear=True) -> tuple of DNA.
         RE.catalyze(dna, linear=True) -> tuple of DNA.
 
@@ -1172,8 +1172,8 @@ class Ov5(AbstractCut):
         if linear is False, the sequence is considered to be circular and the
         output will be modified accordingly.
         """
-        r = self.search(dna, linear)
-        d = self.dna
+        r = cls.search(dna, linear)
+        d = cls.dna
         if not r:
             return d[1:],
         length = len(r) - 1
@@ -1210,7 +1210,7 @@ class Ov5(AbstractCut):
     catalyze = catalyse
 
     @classmethod
-    def is_blunt(self):
+    def is_blunt(cls):
         """RE.is_blunt() -> bool.
 
         True if the enzyme produces blunt end.
@@ -1223,7 +1223,7 @@ class Ov5(AbstractCut):
         return False
 
     @classmethod
-    def is_5overhang(self):
+    def is_5overhang(cls):
         """RE.is_5overhang() -> bool.
 
         True if the enzyme produces 5' overhang sticky end.
@@ -1236,7 +1236,7 @@ class Ov5(AbstractCut):
         return True
 
     @classmethod
-    def is_3overhang(self):
+    def is_3overhang(cls):
         """RE.is_3overhang() -> bool.
 
         True if the enzyme produces 3' overhang sticky end.
@@ -1249,7 +1249,7 @@ class Ov5(AbstractCut):
         return False
 
     @classmethod
-    def overhang(self):
+    def overhang(cls):
         """RE.overhang() -> str. type of overhang of the enzyme.,
 
         can be "3' overhang", "5' overhang", "blunt", "unknown"
@@ -1257,18 +1257,18 @@ class Ov5(AbstractCut):
         return "5' overhang"
 
     @classmethod
-    def compatible_end(self, batch=None):
+    def compatible_end(cls, batch=None):
         """RE.compatible_end() -> list.
 
         list of all the enzymes that share compatible end with RE."""
         if not batch:
             batch = AllEnzymes
         r = sorted(x for x in iter(AllEnzymes) if x.is_5overhang() and
-                   x % self)
+                   x % cls)
         return r
 
     @classmethod
-    def _mod1(self, other):
+    def _mod1(cls, other):
         """RE._mod1(other) -> bool.
 
         for internal use only
@@ -1276,7 +1276,7 @@ class Ov5(AbstractCut):
         test for the compatibility of restriction ending of RE and other.
         """
         if issubclass(other, Ov5):
-            return self._mod2(other)
+            return cls._mod2(other)
         else:
             return False
 
@@ -1291,7 +1291,7 @@ class Ov3(AbstractCut):
     """
 
     @classmethod
-    def catalyse(self, dna, linear=True):
+    def catalyse(cls, dna, linear=True):
         """RE.catalyse(dna, linear=True) -> tuple of DNA.
         RE.catalyze(dna, linear=True) -> tuple of DNA.
 
@@ -1303,8 +1303,8 @@ class Ov3(AbstractCut):
         if linear is False, the sequence is considered to be circular and the
         output will be modified accordingly.
         """
-        r = self.search(dna, linear)
-        d = self.dna
+        r = cls.search(dna, linear)
+        d = cls.dna
         if not r:
             return d[1:],
         fragments = []
@@ -1341,7 +1341,7 @@ class Ov3(AbstractCut):
     catalyze = catalyse
 
     @classmethod
-    def is_blunt(self):
+    def is_blunt(cls):
         """RE.is_blunt() -> bool.
 
         True if the enzyme produces blunt end.
@@ -1354,7 +1354,7 @@ class Ov3(AbstractCut):
         return False
 
     @classmethod
-    def is_5overhang(self):
+    def is_5overhang(cls):
         """RE.is_5overhang() -> bool.
 
         True if the enzyme produces 5' overhang sticky end.
@@ -1367,7 +1367,7 @@ class Ov3(AbstractCut):
         return False
 
     @classmethod
-    def is_3overhang(self):
+    def is_3overhang(cls):
         """RE.is_3overhang() -> bool.
 
         True if the enzyme produces 3' overhang sticky end.
@@ -1380,7 +1380,7 @@ class Ov3(AbstractCut):
         return True
 
     @classmethod
-    def overhang(self):
+    def overhang(cls):
         """RE.overhang() -> str. type of overhang of the enzyme.,
 
         can be "3' overhang", "5' overhang", "blunt", "unknown"
@@ -1388,7 +1388,7 @@ class Ov3(AbstractCut):
         return "3' overhang"
 
     @classmethod
-    def compatible_end(self, batch=None):
+    def compatible_end(cls, batch=None):
         """RE.compatible_end() -> list.
 
         list of all the enzymes that share compatible end with RE.
@@ -1396,11 +1396,11 @@ class Ov3(AbstractCut):
         if not batch:
             batch = AllEnzymes
         r = sorted(x for x in iter(AllEnzymes) if x.is_3overhang() and
-                   x % self)
+                   x % cls)
         return r
 
     @classmethod
-    def _mod1(self, other):
+    def _mod1(cls, other):
         """RE._mod1(other) -> bool.
 
         for internal use only
@@ -1411,7 +1411,7 @@ class Ov3(AbstractCut):
         #   called by RE._mod1(other) when the one of the enzyme is ambiguous
         #
         if issubclass(other, Ov3):
-            return self._mod2(other)
+            return cls._mod2(other)
         else:
             return False
 
@@ -1429,7 +1429,7 @@ class Defined(AbstractCut):
     Internal use only. Not meant to be instantiated."""
 
     @classmethod
-    def _drop(self):
+    def _drop(cls):
         """RE._drop() -> list.
 
         for internal use only.
@@ -1445,27 +1445,27 @@ class Defined(AbstractCut):
         #   For circular sequence, we modify the result rather than _drop it
         #   since the site is in the sequence.
         #
-        length = len(self.dna)
+        length = len(cls.dna)
         drop = itertools.dropwhile
         take = itertools.takewhile
-        if self.dna.is_linear():
-            self.results = [x for x in drop(lambda x:x < 1, self.results)]
-            self.results = [x for x in take(lambda x:x < length, self.results)]
+        if cls.dna.is_linear():
+            cls.results = [x for x in drop(lambda x:x < 1, cls.results)]
+            cls.results = [x for x in take(lambda x:x < length, cls.results)]
         else:
-            for index, location in enumerate(self.results):
+            for index, location in enumerate(cls.results):
                 if location < 1:
-                    self.results[index] += length
+                    cls.results[index] += length
                 else:
                     break
-            for index, location in enumerate(self.results[::-1]):
+            for index, location in enumerate(cls.results[::-1]):
                 if location > length:
-                    self.results[-(index + 1)] -= length
+                    cls.results[-(index + 1)] -= length
                 else:
                     break
         return
 
     @classmethod
-    def is_defined(self):
+    def is_defined(cls):
         """RE.is_defined() -> bool.
 
         True if the sequence recognised and cut is constant,
@@ -1479,7 +1479,7 @@ class Defined(AbstractCut):
         return True
 
     @classmethod
-    def is_ambiguous(self):
+    def is_ambiguous(cls):
         """RE.is_ambiguous() -> bool.
 
         True if the sequence recognised and cut is ambiguous,
@@ -1493,7 +1493,7 @@ class Defined(AbstractCut):
         return False
 
     @classmethod
-    def is_unknown(self):
+    def is_unknown(cls):
         """RE.is_unknown() -> bool.
 
         True if the sequence is unknown,
@@ -1506,7 +1506,7 @@ class Defined(AbstractCut):
         return False
 
     @classmethod
-    def elucidate(self):
+    def elucidate(cls):
         """RE.elucidate() -> str
 
         return a representation of the site with the cut on the (+) strand
@@ -1522,19 +1522,19 @@ class Defined(AbstractCut):
         '? GTATAC ?'
         >>>
         """
-        f5 = self.fst5
-        f3 = self.fst3
-        site = self.site
-        if self.cut_twice():
+        f5 = cls.fst5
+        f3 = cls.fst3
+        site = cls.site
+        if cls.cut_twice():
             re = 'cut twice, not yet implemented sorry.'
-        elif self.is_5overhang():
+        elif cls.is_5overhang():
             if f5 == f3 == 0:
-                re = 'N^' + self.site + '_N'
+                re = 'N^' + cls.site + '_N'
             elif f3 == 0:
                 re = site[:f5] + '^' + site[f5:] + '_N'
             else:
                 re = site[:f5] + '^' + site[f5:f3] + '_' + site[f3:]
-        elif self.is_blunt():
+        elif cls.is_blunt():
             re = site[:f5] + '^_' + site[f5:]
         else:
             if f5 == f3 == 0:
@@ -1544,7 +1544,7 @@ class Defined(AbstractCut):
         return re
 
     @classmethod
-    def _mod2(self, other):
+    def _mod2(cls, other):
         """RE._mod2(other) -> bool.
 
         for internal use only
@@ -1554,10 +1554,10 @@ class Defined(AbstractCut):
         #
         #   called by RE._mod1(other) when the one of the enzyme is ambiguous
         #
-        if other.ovhgseq == self.ovhgseq:
+        if other.ovhgseq == cls.ovhgseq:
             return True
         elif issubclass(other, Ambiguous):
-            return other._mod2(self)
+            return other._mod2(cls)
         else:
             return False
 
@@ -1576,7 +1576,7 @@ class Ambiguous(AbstractCut):
     """
 
     @classmethod
-    def _drop(self):
+    def _drop(cls):
         """RE._drop() -> list.
 
         for internal use only.
@@ -1584,28 +1584,28 @@ class Ambiguous(AbstractCut):
         drop the site that are situated outside the sequence in linear
         sequence. modify the index for site in circular sequences.
         """
-        length = len(self.dna)
+        length = len(cls.dna)
         drop = itertools.dropwhile
         take = itertools.takewhile
-        if self.dna.is_linear():
-            self.results = [x for x in drop(lambda x: x < 1, self.results)]
-            self.results = [x for x in take(lambda x: x <
-                                            length, self.results)]
+        if cls.dna.is_linear():
+            cls.results = [x for x in drop(lambda x: x < 1, cls.results)]
+            cls.results = [x for x in take(lambda x: x <
+                                            length, cls.results)]
         else:
-            for index, location in enumerate(self.results):
+            for index, location in enumerate(cls.results):
                 if location < 1:
-                    self.results[index] += length
+                    cls.results[index] += length
                 else:
                     break
-            for index, location in enumerate(self.results[::-1]):
+            for index, location in enumerate(cls.results[::-1]):
                 if location > length:
-                    self.results[-(index + 1)] -= length
+                    cls.results[-(index + 1)] -= length
                 else:
                     break
         return
 
     @classmethod
-    def is_defined(self):
+    def is_defined(cls):
         """RE.is_defined() -> bool.
 
         True if the sequence recognised and cut is constant,
@@ -1619,7 +1619,7 @@ class Ambiguous(AbstractCut):
         return False
 
     @classmethod
-    def is_ambiguous(self):
+    def is_ambiguous(cls):
         """RE.is_ambiguous() -> bool.
 
         True if the sequence recognised and cut is ambiguous,
@@ -1633,7 +1633,7 @@ class Ambiguous(AbstractCut):
         return True
 
     @classmethod
-    def is_unknown(self):
+    def is_unknown(cls):
         """RE.is_unknown() -> bool.
 
         True if the sequence is unknown,
@@ -1646,7 +1646,7 @@ class Ambiguous(AbstractCut):
         return False
 
     @classmethod
-    def _mod2(self, other):
+    def _mod2(cls, other):
         """RE._mod2(other) -> bool.
 
         for internal use only
@@ -1656,10 +1656,10 @@ class Ambiguous(AbstractCut):
         #
         #   called by RE._mod1(other) when the one of the enzyme is ambiguous
         #
-        if len(self.ovhgseq) != len(other.ovhgseq):
+        if len(cls.ovhgseq) != len(other.ovhgseq):
             return False
         else:
-            se = self.ovhgseq
+            se = cls.ovhgseq
             for base in se:
                 if base in 'ATCG':
                     pass
@@ -1674,7 +1674,7 @@ class Ambiguous(AbstractCut):
                 return False
 
     @classmethod
-    def elucidate(self):
+    def elucidate(cls):
         """RE.elucidate() -> str
 
         return a representation of the site with the cut on the (+) strand
@@ -1690,13 +1690,13 @@ class Ambiguous(AbstractCut):
         '? GTATAC ?'
         >>>
         """
-        f5 = self.fst5
-        f3 = self.fst3
-        length = len(self)
-        site = self.site
-        if self.cut_twice():
+        f5 = cls.fst5
+        f3 = cls.fst3
+        length = len(cls)
+        site = cls.site
+        if cls.cut_twice():
             re = 'cut twice, not yet implemented sorry.'
-        elif self.is_5overhang():
+        elif cls.is_5overhang():
             if f3 == f5 == 0:
                 re = 'N^' + site + '_N'
             elif 0 <= f5 <= length and 0 <= f3 + length <= length:
@@ -1712,14 +1712,14 @@ class Ambiguous(AbstractCut):
                                                          f3 - f5) * 'N' + '_N'
             else:
                 re = 'N^' + abs(f5) * 'N' + site + f3 * 'N' + '_N'
-        elif self.is_blunt():
+        elif cls.is_blunt():
             if f5 < 0:
                 re = 'N^_' + abs(f5) * 'N' + site
             elif f5 > length:
                 re = site + (f5 - length) * 'N' + '^_N'
             else:
                 raise ValueError('%s.easyrepr() : error f5=%i'
-                                 % (self.name, f5))
+                                 % (cls.name, f5))
         else:
             if f3 == 0:
                 if f5 == 0:
@@ -1753,7 +1753,7 @@ class NotDefined(AbstractCut):
     """
 
     @classmethod
-    def _drop(self):
+    def _drop(cls):
         """RE._drop() -> list.
 
         for internal use only.
@@ -1761,24 +1761,24 @@ class NotDefined(AbstractCut):
         drop the site that are situated outside the sequence in linear
         sequence. modify the index for site in circular sequences.
         """
-        if self.dna.is_linear():
+        if cls.dna.is_linear():
             return
         else:
-            length = len(self.dna)
-            for index, location in enumerate(self.results):
+            length = len(cls.dna)
+            for index, location in enumerate(cls.results):
                 if location < 1:
-                    self.results[index] += length
+                    cls.results[index] += length
                 else:
                     break
-            for index, location in enumerate(self.results[:-1]):
+            for index, location in enumerate(cls.results[:-1]):
                 if location > length:
-                    self.results[-(index + 1)] -= length
+                    cls.results[-(index + 1)] -= length
                 else:
                     break
         return
 
     @classmethod
-    def is_defined(self):
+    def is_defined(cls):
         """RE.is_defined() -> bool.
 
         True if the sequence recognised and cut is constant,
@@ -1792,7 +1792,7 @@ class NotDefined(AbstractCut):
         return False
 
     @classmethod
-    def is_ambiguous(self):
+    def is_ambiguous(cls):
         """RE.is_ambiguous() -> bool.
 
         True if the sequence recognised and cut is ambiguous,
@@ -1806,7 +1806,7 @@ class NotDefined(AbstractCut):
         return False
 
     @classmethod
-    def is_unknown(self):
+    def is_unknown(cls):
         """RE.is_unknown() -> bool.
 
         True if the sequence is unknown,
@@ -1818,7 +1818,7 @@ class NotDefined(AbstractCut):
         return True
 
     @classmethod
-    def _mod2(self, other):
+    def _mod2(cls, other):
         """RE._mod2(other) -> bool.
 
         for internal use only
@@ -1833,10 +1833,10 @@ class NotDefined(AbstractCut):
         #
         # return False
         raise ValueError("%s.mod2(%s), %s : NotDefined. pas glop pas glop!"
-                         % (str(self), str(other), str(self)))
+                         % (str(cls), str(other), str(cls)))
 
     @classmethod
-    def elucidate(self):
+    def elucidate(cls):
         """RE.elucidate() -> str
 
         return a representation of the site with the cut on the (+) strand
@@ -1852,7 +1852,7 @@ class NotDefined(AbstractCut):
         '? GTATAC ?'
         >>>
         """
-        return '? %s ?' % self.site
+        return '? %s ?' % cls.site
 
 
 class Commercially_available(AbstractCut):
@@ -1867,22 +1867,22 @@ class Commercially_available(AbstractCut):
     """
 
     @classmethod
-    def suppliers(self):
+    def suppliers(cls):
         """RE.suppliers() -> print the suppliers of RE."""
-        for s in self.suppl:
+        for s in cls.suppl:
             print(suppliers_dict[s][0] + ',')
         return
 
     @classmethod
-    def supplier_list(self):
+    def supplier_list(cls):
         """RE.supplier_list() -> list.
 
         list of the supplier names for RE.
         """
-        return [v[0] for k, v in suppliers_dict.items() if k in self.suppl]
+        return [v[0] for k, v in suppliers_dict.items() if k in cls.suppl]
 
     @classmethod
-    def buffers(self, supplier):
+    def buffers(cls, supplier):
         """RE.buffers(supplier) -> string.
 
         not implemented yet.
@@ -1890,7 +1890,7 @@ class Commercially_available(AbstractCut):
         return
 
     @classmethod
-    def is_comm(self):
+    def is_comm(cls):
         """RE.iscomm() -> bool.
 
         True if RE has suppliers.
@@ -1911,7 +1911,7 @@ class Not_available(AbstractCut):
         return None
 
     @classmethod
-    def supplier_list(self):
+    def supplier_list(cls):
         """RE.supplier_list() -> list.
 
         list of the supplier names for RE.
@@ -1919,7 +1919,7 @@ class Not_available(AbstractCut):
         return []
 
     @classmethod
-    def buffers(self, supplier):
+    def buffers(cls, supplier):
         """RE.buffers(supplier) -> string.
 
         not implemented yet.
@@ -1927,7 +1927,7 @@ class Not_available(AbstractCut):
         raise TypeError("Enzyme not commercially available.")
 
     @classmethod
-    def is_comm(self):
+    def is_comm(cls):
         """RE.iscomm() -> bool.
 
         True if RE has suppliers.
@@ -2129,7 +2129,7 @@ class RestrictionBatch(set):
         return [str(e) for e in self]
 
     @classmethod
-    def suppl_codes(self):
+    def suppl_codes(cls):
         """B.suppl_codes() -> dict
 
         letter code for the suppliers
@@ -2138,9 +2138,9 @@ class RestrictionBatch(set):
         return supply
 
     @classmethod
-    def show_codes(self):
+    def show_codes(cls):
         """B.show_codes() -> letter codes for the suppliers"""
-        supply = [' = '.join(i) for i in self.suppl_codes().items()]
+        supply = [' = '.join(i) for i in cls.suppl_codes().items()]
         print('\n'.join(supply))
         return
 
