@@ -5,9 +5,10 @@
 
 import os
 import unittest
+import warnings
 from io import BytesIO
 from Bio._py3k import StringIO
-
+from Bio import BiopythonWarning
 from Bio import SeqIO
 from Bio import AlignIO
 from Bio.SeqRecord import SeqRecord
@@ -129,7 +130,9 @@ class WriterTests(unittest.TestCase):
             handle = StringIO()
         if err_msg:
             try:
-                SeqIO.write(records, handle, format)
+                with warnings.catch_warnings():
+                    warnings.simplefilter('ignore', BiopythonWarning)
+                    SeqIO.write(records, handle, format)
             except err_type as err:
                 self.assertEqual(str(err), err_msg)
         else:
