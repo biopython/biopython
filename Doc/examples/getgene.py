@@ -78,7 +78,8 @@ class DB_Index(object):
                         db[acc] = value
                         id, acc, start, stop = None, None, None, None
                     except:
-                        print("AARRGGGG %d %d %s %s" % (start, stop, type(start), type(stop)))
+                        print("AARRGGGG %d %d %s %s" %
+                              (start, stop, type(start), type(stop)))
                         print("%s %s" % (id, acc))
 
             db.close()

@@ -91,9 +91,9 @@ for i, crunch_file in enumerate(comparisons):
                 c = colors.Color(1, 0, 0, alpha=0.25)
                 b = False
             q_feature = q_set.add_feature(SeqFeature(FeatureLocation(q_start - 1, q_end)),
-                                                     color=c, border=b)
+                                          color=c, border=b)
             s_feature = s_set.add_feature(SeqFeature(FeatureLocation(s_start - 1, s_end)),
-                                                     color=c, border=b)
+                                          color=c, border=b)
             gd_diagram.cross_track_links.append(CrossLink(q_feature, s_feature, c, b))
             # NOTE: We are using the same colour for all the matches,
             # with transparency. This means overlayed matches will appear darker.
