@@ -1575,13 +1575,13 @@ class MutableSeq(object):
             # is a stop codon at the end of a sequence.
             # Note total length is 54+3+3=60
             return "{0}('{1}...{2}', {3!r})".format(self.__class__.__name__,
-                                                  str(self[:54]),
-                                                  str(self[-3:]),
-                                                  self.alphabet)
+                                                    str(self[:54]),
+                                                    str(self[-3:]),
+                                                    self.alphabet)
         else:
             return "{0}('{1}', {2!r})".format(self.__class__.__name__,
-                                            str(self),
-                                            self.alphabet)
+                                              str(self),
+                                              self.alphabet)
 
     def __str__(self):
         """Returns the full sequence as a python string.
