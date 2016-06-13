@@ -320,7 +320,7 @@ usertype matrix_test stepmatrix=5
 [T]    2.43     2.12     2.31      .       2.14     
 [-]    2.43     2.14     2.31     2.14      .       
 ;
-""")
+""")  # noqa for pep8 W291 trailing whitespace
 
     def test_TreeTest1(self):
         """Test Tree module."""

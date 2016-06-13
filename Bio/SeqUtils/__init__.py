@@ -479,7 +479,7 @@ def six_frame_translations(seq, genetic_code=1):
     <BLANKLINE>
     <BLANKLINE>
 
-    """
+    """  # noqa for pep8 W291 trailing whitespace
     from Bio.Seq import reverse_complement, translate
     anti = reverse_complement(seq)
     comp = anti[::-1]
