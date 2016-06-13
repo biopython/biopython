@@ -193,7 +193,7 @@ def PdbAtomIterator(handle):
         # HETATM mod. res. policy: remove mod if in sequence, else discard
         residues = [res for res in chain.get_unpacked_list()
                     if seq1(res.get_resname().upper(),
-                        custom_map=protein_letters_3to1) != "X"]
+                            custom_map=protein_letters_3to1) != "X"]
         if not residues:
             continue
         # Identify missing residues in the structure
@@ -233,9 +233,7 @@ def PdbAtomIterator(handle):
         #     id = ("Model%s|" % str(model.id)) + id
 
         record = SeqRecord(Seq(''.join(res_out), generic_protein),
-                id=record_id,
-                description=record_id,
-                )
+                           id=record_id, description=record_id)
 
         # The PDB header was loaded as a dictionary, so let's reuse it all
         record.annotations = struct.header.copy()
