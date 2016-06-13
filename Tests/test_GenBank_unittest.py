@@ -60,7 +60,8 @@ class GenBankTests(unittest.TestCase):
                 try:
                     record = GenBank.read(handle)
                 except BiopythonParserWarning as e:
-                    self.assertEqual(str(e), "Non-standard feature line wrapping (didn't break on comma)?")
+                    self.assertEqual(str(e),
+                                     "Non-standard feature line wrapping (didn't break on comma)?")
                 else:
                     self.assertTrue(False, "Expected specified BiopythonParserWarning here.")
 
@@ -141,7 +142,7 @@ class GenBankTests(unittest.TestCase):
         # GISAID_EpiFlu(TM)Data, HM138502.gbk has both 'comment' and 'structured_comment'
         record = SeqIO.read(path.join('GenBank', 'HM138502.gbk'), 'genbank')
         self.assertEqual(record.annotations['comment'],
-            "Swine influenza A (H1N1) virus isolated during human swine flu\noutbreak of 2009.")
+                         "Swine influenza A (H1N1) virus isolated during human swine flu\noutbreak of 2009.")
         self.assertEqual(record.annotations['structured_comment']['GISAID_EpiFlu(TM)Data']['Lineage'], 'swl')
         self.assertEqual(len(record.annotations['structured_comment']['GISAID_EpiFlu(TM)Data']), 3)
         # FluData structured comment
@@ -174,7 +175,7 @@ class GenBankTests(unittest.TestCase):
                 ("pushing_the_limits_at_24", 1000, False),
                 ("longest_possible_len_of_26", 10, False),  # 2 digits
                 ("longest_possible_len_of_26", 9, True),  # 1 digit
-            ]:
+                ]:
             # Make the length match the desired target
             record = original[:]
             # TODO - Implement Seq * int
@@ -187,7 +188,8 @@ class GenBankTests(unittest.TestCase):
                 self.assertRaises(ValueError, record.format, "gb")
                 continue
             with warnings.catch_warnings():
-                # e.g. BiopythonWarning: Stealing space from length field to allow long name in LOCUS line
+                # e.g. BiopythonWarning: Stealing space from length field to
+                # allow long name in LOCUS line
                 warnings.simplefilter("ignore", BiopythonWarning)
                 # output = record.format("gb")
                 handle = StringIO()
@@ -200,7 +202,8 @@ class GenBankTests(unittest.TestCase):
             self.assertEqual(name_and_length.split(), [name, str(seq_len)], line)
             handle.seek(0)
             with warnings.catch_warnings():
-                # e.g. BiopythonParserWarning: GenBank LOCUS line identifier over 16 characters
+                # e.g. BiopythonParserWarning: GenBank LOCUS line
+                # identifier over 16 characters
                 warnings.simplefilter("ignore", BiopythonWarning)
                 new = SeqIO.read(handle, "gb")
             self.assertEqual(name, new.name)
