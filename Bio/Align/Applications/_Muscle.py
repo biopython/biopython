@@ -45,13 +45,12 @@ class MuscleCommandline(AbstractCommandline):
         DISTANCE_MEASURES_ITER1 = ["kmer6_6", "kmer20_3", "kmer20_4", "kbit20_3",
                                    "kmer4_6"]
         DISTANCE_MEASURES_ITER2 = DISTANCE_MEASURES_ITER1 + \
-                                  ["pctid_kimura", "pctid_log"]
+            ["pctid_kimura", "pctid_log"]
         OBJECTIVE_SCORES = ["sp", "ps", "dp", "xp", "spf", "spm"]
         TREE_ROOT_METHODS = ["pseudo", "midlongestspan", "minavgleafdist"]
         SEQUENCE_TYPES = ["protein", "nucleo", "auto"]
         WEIGHTING_SCHEMES = ["none", "clustalw", "henikoff", "henikoffpb", "gsc", "threeway"]
-        self.parameters = \
-           [
+        self.parameters = [
             # Can't use "in" as the final alias as this is a reserved word in python:
             _Option(["-in", "in", "input"],
                     "Input filename",
@@ -462,7 +461,7 @@ class MuscleCommandline(AbstractCommandline):
             # version            no              Write version string to stdout and exit.
             _Switch(["-version", "version"],
                     "Write version string to stdout and exit"),
-           ]
+            ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
 
