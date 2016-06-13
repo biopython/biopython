@@ -181,7 +181,7 @@ characters and the values are the scores, e.g. ("A", "C") : 2.5."""),
             'c': (['match_fn'],
 """match_fn is a callback function that takes two characters and
 returns the score between them."""),
-            }
+        }
         # penalty code -> tuple of (parameters, docstring)
         penalty2args = {
             'x': ([], ''),
@@ -195,7 +195,7 @@ and extendB for sequeneB.  The penalties should be negative."""),
 """gap_A_fn and gap_B_fn are callback functions that takes 1) the
 index where the gap is opened, and 2) the length of the gap.  They
 should return a gap penalty."""),
-            }
+        }
 
         def __init__(self, name):
             # Check to make sure the name of the function is
@@ -208,16 +208,15 @@ should return a gap penalty."""),
                     raise AttributeError("function should be localXX")
             else:
                 raise AttributeError(name)
-            align_type, match_type, penalty_type = \
-                        name[:-2], name[-2], name[-1]
+            align_type, match_type, penalty_type = name[:-2], name[-2], name[-1]
             try:
                 match_args, match_doc = self.match2args[match_type]
-            except KeyError as x:
-                raise AttributeError("unknown match type %r" % match_type)
+            except KeyError:
+                raise AttributeError("unknown match type {0!r}".format(match_type))
             try:
                 penalty_args, penalty_doc = self.penalty2args[penalty_type]
-            except KeyError as x:
-                raise AttributeError("unknown penalty type %r" % penalty_type)
+            except KeyError:
+                raise AttributeError("unknown penalty type {0!r}".format(penalty_type))
 
             # Now get the names of the parameters to this function.
             param_names = ['sequenceA', 'sequenceB']
@@ -229,12 +228,12 @@ should return a gap penalty."""),
 
             self.__name__ = self.function_name
             # Set the doc string.
-            doc = "%s(%s) -> alignments\n" % (
-                self.__name__, ', '.join(self.param_names))
+            doc = "{0}({1}) -> alignments\n".format(self.__name__,
+                                                    ', '.join(self.param_names))
             if match_doc:
-                doc += "\n%s\n" % match_doc
+                doc += "\n{0}\n".format(match_doc)
             if penalty_doc:
-                doc += "\n%s\n" % penalty_doc
+                doc += "\n{0}\n".format(penalty_doc)
             doc += (
 """\nalignments is a list of tuples (seqA, seqB, score, begin, end).
 seqA and seqB are strings showing the alignment between the
@@ -250,8 +249,8 @@ alignment occurs.
             # this function into forms appropriate for _align.
             keywds = keywds.copy()
             if len(args) != len(self.param_names):
-                raise TypeError("%s takes exactly %d argument (%d given)"
-                    % (self.function_name, len(self.param_names), len(args)))
+                raise TypeError("{0} takes exactly {1} argument ({2} given)".format(
+                    self.function_name, len(self.param_names), len(args)))
             i = 0
             while i < len(self.param_names):
                 if self.param_names[i] in [
@@ -282,8 +281,7 @@ alignment occurs.
                     keywds['gap_B_fn'] = affine_penalty(openB, extendB, pe)
                     i += 4
                 else:
-                    raise ValueError("unknown parameter %r"
-                                     % self.param_names[i])
+                    raise ValueError("unknown parameter {0!r}".format(self.param_names[i]))
 
             # Here are the default parameters for _align.  Assign
             # these to keywds, unless already specified.
@@ -299,7 +297,7 @@ alignment occurs.
                 ('force_generic', 0),
                 ('score_only', 0),
                 ('one_alignment_only', 0)
-                ]
+            ]
             for name, default in default_params:
                 keywds[name] = keywds.get(name, default)
             value = keywds['penalize_end_gaps']
@@ -328,7 +326,7 @@ def _align(sequenceA, sequenceB, match_fn, gap_A_fn, gap_B_fn,
         return []
 
     if (not force_generic) and isinstance(gap_A_fn, affine_penalty) \
-    and isinstance(gap_B_fn, affine_penalty):
+            and isinstance(gap_B_fn, affine_penalty):
         open_A, extend_A = gap_A_fn.open, gap_A_fn.extend
         open_B, extend_B = gap_B_fn.open, gap_B_fn.extend
         x = _make_score_matrix_fast(
@@ -561,8 +559,7 @@ def _make_score_matrix_fast(
             # and keep the best one.
             open_score = score_matrix[row - 1][col - 1] + first_B_gap
             extend_score = col_cache_score[col - 1] + extend_B
-            open_score_rint, extend_score_rint = \
-                             rint(open_score), rint(extend_score)
+            open_score_rint, extend_score_rint = rint(open_score), rint(extend_score)
             if open_score_rint > extend_score_rint:
                 col_cache_score[col - 1] = open_score
                 col_cache_index[col - 1] = [(row - 1, col - 1)]
@@ -729,7 +726,7 @@ def _clean_alignments(alignments):
         if end is None:   # global alignment
             end = len(seqA)
         elif end < 0:
-            end = end + len(seqA)
+            end += len(seqA)
         # If there's no alignment here, get rid of it.
         if begin >= end:
             del unique_alignments[i]
@@ -868,10 +865,10 @@ def format_alignment(align1, align2, score, begin, end):
 
     """
     s = []
-    s.append("%s\n" % align1)
-    s.append("%s%s\n" % (" " * begin, "|" * (end - begin)))
-    s.append("%s\n" % align2)
-    s.append("  Score=%g\n" % score)
+    s.append("{0}\n".format(align1))
+    s.append("{0}{1}\n".format(" " * begin, "|" * (end - begin)))
+    s.append("{0}\n".format(align2))
+    s.append("  Score={0:g}\n".format(score))
     return ''.join(s)
 
 
