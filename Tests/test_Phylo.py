@@ -93,7 +93,7 @@ class IOTests(unittest.TestCase):
         self.assertEqual(clade_a.name, 'foo')
         self.assertAlmostEqual(clade_a.branch_length, 0.1)
 
-
+    def test_phylo_read_extra(self):
         """Additional tests to check correct parsing"""
         tree = Phylo.read(StringIO("(A:1, B:-2, (C:3, D:4):-2)"),'newick')
         self.assertEqual(tree.distance('A'),1)
