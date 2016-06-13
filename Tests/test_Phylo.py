@@ -232,7 +232,7 @@ class TreeTests(unittest.TestCase):
         for treefname, fmt in [(EX_APAF, 'phyloxml'),
                                (EX_BCL2, 'phyloxml'),
                                (EX_NEWICK, 'newick'),
-                              ]:
+                               ]:
             tree = Phylo.read(treefname, fmt)
             orig_tree_len = tree.total_branch_length()
             # Total branch length does not change
