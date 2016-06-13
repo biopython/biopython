@@ -336,7 +336,6 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
             raise
         else:
             def _calculate(self, sequence, m, n):
-                # The C code handles mixed case so Python version must too:
                 scores = []
                 for i in range(n - m + 1):
                     score = 0.0
