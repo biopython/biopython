@@ -59,7 +59,7 @@ class _NcbibaseblastCommandline(AbstractCommandline):
                     "Alignment view.  Integer 0-11.  Use 5 for XML output "
                     "(differs from classic BLAST which used 7 for XML).",
                     equate=False),
-                    # TODO - Document and test the column options
+            # TODO - Document and test the column options
             _Switch(["-show_gis", "show_gis"],
                     "Show NCBI GIs in deflines?"),
             _Option(["-num_descriptions", "num_descriptions"],
@@ -185,10 +185,10 @@ class _NcbiblastCommandline(_NcbibaseblastCommandline):
                     "Effective length of the search space (integer).",
                     equate=False),
             _Option(["-max_hsps_per_subject", "max_hsps_per_subject"],
-                    "Override maximum number of HSPs per subject to save for ungapped searches (integer).",
+                    "Override max number of HSPs per subject saved for ungapped searches (integer).",
                     equate=False),
             _Option(["-max_hsps", "max_hsps"],
-                    "Set maximum number of HSPs per subject sequence to save (default 0 means no limit).",
+                    "Set max number of HSPs saved per subject sequence (default 0 means no limit).",
                     equate=False),
             _Switch(["-sum_statistics", "sum_statistics"],
                     "Use sum statistics."),
@@ -614,8 +614,10 @@ class NcbiblastxCommandline(_NcbiblastMain2SeqCommandline):
                     D or d: default (equivalent to 2 )
                     0 or F or f: no composition-based statistics
                     1: Composition-based statistics as in NAR 29:2994-3005, 2001
-                    2 or T or t : Composition-based score adjustment as in Bioinformatics 21:902-911, 2005, conditioned on sequence properties
-                    3: Composition-based score adjustment as in Bioinformatics 21:902-911, 2005, unconditionally
+                    2 or T or t : Composition-based score adjustment as in
+                    Bioinformatics 21:902-911, 2005, conditioned on sequence properties
+                    3: Composition-based score adjustment as in
+                    Bioinformatics 21:902-911, 2005, unconditionally
 
                     For programs other than tblastn, must either be absent or be D, F or 0
                     Default = `2'
@@ -1166,7 +1168,7 @@ class NcbideltablastCommandline(_Ncbiblast2SeqCommandline):
                     (float, Default is 0.05)""",
                     equate=False),
             _Option(["-inclusion_ethresh", "inclusion_ethresh"],
-                    "E-value inclusion threshold for pairwise alignments (float, Default is 0.002).",
+                    "Pairwise alignment e-value inclusion threshold (float, default 0.002).",
                     equate=False),
             # DELTA-BLAST options
             _Option(["-rpsdb", "rpsdb"],
