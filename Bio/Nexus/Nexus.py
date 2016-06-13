@@ -719,8 +719,8 @@ class Nexus(object):
         # adjust symbols to for respectcase
         if 'symbols' in options:
             self.symbols = ''.join(options['symbols'].split())
-            if (self.symbols.startswith('"') and self.symbols.endswith('"')) or\
-                (self.symbols.startswith("'") and self.symbols.endswith("'")):
+            if (self.symbols.startswith('"') and self.symbols.endswith('"')) or \
+                    (self.symbols.startswith("'") and self.symbols.endswith("'")):
                 self.symbols = self.symbols[1:-1]
             if not self.respectcase:
                 self.symbols = list(self.symbols.upper())
@@ -997,12 +997,12 @@ class Nexus(object):
                 for i, c in enumerate(iupac_seq):
                     # Go through each coding for each character
                     for coding in c['d']:
-                        if (coding not in self.valid_characters and
-                            coding != self.gap and coding != self.missing):
-                            raise NexusError("Taxon %s: Illegal character %s "
-                                             "in sequence %s "
-                                             "(check dimensions/interleaving)"
-                                             % (id, coding, iupac_seq))
+                        if coding not in self.valid_characters:
+                            if coding != self.gap and coding != self.missing:
+                                raise NexusError("Taxon %s: Illegal character %s "
+                                                 "in sequence %s "
+                                                 "(check dimensions/interleaving)"
+                                                 % (id, coding, iupac_seq))
 
             # add sequence to matrix
             if first_matrix_block:
@@ -1620,10 +1620,9 @@ class Nexus(object):
                 # print '%d (paup=%d)' % (site[0],site[0]+1),
                 seqsite = matrix[taxon][site[0]].upper()
                 # print seqsite,'checked against',site[1],'\t',
-                if (seqsite == self.missing or
-                    (seqsite == self.gap and
-                     self.options['gapmode'].lower() == 'missing') or
-                    seqsite == site[1]):
+                if seqsite == self.missing or \
+                   (seqsite == self.gap and self.options['gapmode'].lower() == 'missing') or \
+                   seqsite == site[1]:
                     # missing or same as before  -> ok
                     newconstant.append(site)
                 elif (seqsite in site[1] or
@@ -1746,7 +1745,8 @@ class Nexus(object):
         else:
             unique_name = name
 
-        assert unique_name not in self.matrix, "ERROR. There is a discrepancy between taxlabels and matrix keys. Report this as a bug."
+        assert unique_name not in self.matrix, \
+            "ERROR. There is a discrepancy between taxlabels and matrix keys. Report this as a bug."
 
         self.matrix[unique_name] = Seq(sequence, self.alphabet)
         self.ntax += 1
@@ -1860,7 +1860,8 @@ class Nexus(object):
             else:
                 sequence = sequence[:end + 1] + missing * (length - end - 1)
                 sequence = start * missing + sequence[start:]
-            assert length == len(sequence), 'Illegal sequence manipulation in Nexus.terminal_gap_to_missing in taxon %s' % taxon
+            assert length == len(sequence), \
+                "Illegal sequence manipulation in Nexus.terminal_gap_to_missing in taxon %s" % taxon
             self.matrix[taxon] = Seq(sequence, self.alphabet)
 
 
