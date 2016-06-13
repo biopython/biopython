@@ -337,7 +337,6 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
         else:
             def _calculate(self, sequence, m, n):
                 # The C code handles mixed case so Python version must too:
-                sequence = sequence.upper()
                 scores = []
                 for i in range(n - m + 1):
                     score = 0.0
@@ -370,9 +369,7 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
             raise ValueError("Sequence has wrong alphabet: %r - Use only with DNA sequences"
                                  % sequence.alphabet)
 
-        # TODO - Force uppercase here and optimise switch statement in C
-        # by assuming upper case?
-        sequence = str(sequence)
+        sequence = str(sequence).upper()
         m = self.length
         n = len(sequence)
 

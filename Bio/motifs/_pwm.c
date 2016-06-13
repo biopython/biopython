@@ -41,16 +41,12 @@ calculate(const char sequence[], int s, PyObject* matrix, npy_intp m)
             switch (c)
             {
                 case 'A':
-                case 'a':
                     score += *((double*)PyArray_GETPTR2(array, j, 0)); break;
                 case 'C':
-                case 'c':
                     score += *((double*)PyArray_GETPTR2(array, j, 1)); break;
                 case 'G':
-                case 'g':
                     score += *((double*)PyArray_GETPTR2(array, j, 2)); break;
                 case 'T':
-                case 't':
                     score += *((double*)PyArray_GETPTR2(array, j, 3)); break;
                 default:
                     ok = 0;
