@@ -285,8 +285,8 @@ def _retrieve_features(adaptor, primary_id):
                 v = "%s.%s" % (accession, version)
             else:
                 v = accession
-            # subfeature remote location db_ref are stored as a empty string when
-            # not present
+            # subfeature remote location db_ref are stored as a empty string
+            # when not present
             if dbname == "":
                 dbname = None
             lookup[location_id] = (dbname, v)

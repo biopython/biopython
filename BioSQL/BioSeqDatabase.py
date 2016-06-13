@@ -186,7 +186,7 @@ class DBServer(object):
             return [self[key] for key in self]
 
         def items(self):
-            """List of (namespace, BioSeqDatabase) for entries in the database."""
+            """List of (namespace, BioSeqDatabase) for entries in database."""
             return [(key, self[key]) for key in self]
 
         def iterkeys(self):
@@ -657,7 +657,8 @@ class BioSeqDatabase(object):
     def __delitem__(self, key):
         """Remove an entry and all its annotation."""
         if key not in self:
-            raise KeyError("Entry %r cannot be deleted. It was not found or is invalid" % key)
+            raise KeyError("Entry %r cannot be deleted. "
+                           "It was not found or is invalid" % key)
         # Assuming this will automatically cascade to the other tables...
         sql = "DELETE FROM bioentry " + \
               "WHERE biodatabase_id=%s AND bioentry_id=%s;"
@@ -802,8 +803,9 @@ class BioSeqDatabase(object):
                 self.adaptor.execute(
                     sql % (gi, self.dbid, accession, version, self.dbid))
                 if self.adaptor.cursor.fetchone():
-                    raise self.adaptor.conn.IntegrityError("Duplicate record "
-                                                           "detected: record has not been inserted")
+                    raise self.adaptor.conn.IntegrityError(
+                        "Duplicate record detected: "
+                        "record has not been inserted")
             # End of hack
             db_loader.load_seqrecord(cur_record)
         return num_records
