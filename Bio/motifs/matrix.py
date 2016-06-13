@@ -370,8 +370,9 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
             raise ValueError("Sequence has wrong alphabet: %r - Use only with DNA sequences"
                                  % sequence.alphabet)
 
-        # TODO - Force uppercase here and optimise switch statement in C
-        # by assuming upper case?
+        # NOTE: The C code handles mixed case input as this could be large
+        # (e.g. contig or chromosome), so requiring it be all upper or lower
+        # case would impose an overhead to allocate the extra memory.
         sequence = str(sequence)
         m = self.length
         n = len(sequence)

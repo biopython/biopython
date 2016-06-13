@@ -40,6 +40,10 @@ calculate(const char sequence[], int s, PyObject* matrix, npy_intp m)
             c = sequence[i+j];
             switch (c)
             {
+              /* Handling mixed case input here rather than converting it to
+                 uppercase in Python code first, since doing so could use too
+                 much memory if sequence is too long (e.g. chromosome or
+                 plasmid). */
                 case 'A':
                 case 'a':
                     score += *((double*)PyArray_GETPTR2(array, j, 0)); break;
