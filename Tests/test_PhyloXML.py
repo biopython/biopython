@@ -183,9 +183,11 @@ class TreeTests(unittest.TestCase):
         self.assertEqual(otr.tag, 'alignment')
         self.assertEqual(otr.namespace, 'http://example.org/align')
         self.assertEqual(len(otr.children), 3)
-        for child, name, value in zip(otr, ('A', 'B', 'C'), (
-          'acgtcgcggcccgtggaagtcctctcct', 'aggtcgcggcctgtggaagtcctctcct',
-          'taaatcgc--cccgtgg-agtccc-cct')):
+        for child, name, value in zip(otr,
+                                      ('A', 'B', 'C'),
+                                      ('acgtcgcggcccgtggaagtcctctcct',
+                                       'aggtcgcggcctgtggaagtcctctcct',
+                                       'taaatcgc--cccgtgg-agtccc-cct')):
             self.assertEqual(child.tag, 'seq')
             self.assertEqual(child.attributes['name'], name)
             self.assertEqual(child.value, value)

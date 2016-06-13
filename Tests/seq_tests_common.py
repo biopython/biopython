@@ -19,9 +19,9 @@ def checksum_summary(record):
         short = str(record.seq)
     else:
         short = str(record.seq)[:19] \
-              + "..." + str(record.seq)[-3:]
+            + "..." + str(record.seq)[-3:]
     return "%s [%s] len %i" \
-           % (short, seguid(record.seq), len(record.seq))
+        % (short, seguid(record.seq), len(record.seq))
 
 
 def compare_reference(old_r, new_r):
@@ -108,7 +108,7 @@ def compare_feature(old_f, new_f):
                              new_f.location.end)
 
     assert isinstance(old_f.location, CompoundLocation) == \
-           isinstance(new_f.location, CompoundLocation)
+        isinstance(new_f.location, CompoundLocation)
     if isinstance(old_f.location, CompoundLocation):
         assert len(old_f.location.parts) == len(new_f.location.parts)
         for old_l, new_l in zip(old_f.location.parts, new_f.location.parts):
@@ -158,7 +158,7 @@ def compare_feature(old_f, new_f):
 
         try:
             assert str(old_sub.location) == str(new_sub.location), \
-               "%s -> %s" % (str(old_sub.location), str(new_sub.location))
+                "%s -> %s" % (str(old_sub.location), str(new_sub.location))
         except AssertionError as e:
             if isinstance(old_sub.location.start, ExactPosition) and \
                isinstance(old_sub.location.end, ExactPosition):
@@ -299,7 +299,7 @@ def compare_record(old, new):
     missing_keys = missing_keys.difference(['ncbi_taxid',  # Can't store chimeras
                                             'structured_comment'])
     assert not missing_keys, "Unexpectedly missing annotation keys: %s" \
-           % ", ".join(missing_keys)
+        % ", ".join(missing_keys)
 
     # In the short term, just compare any shared keys:
     for key in set(old.annotations).intersection(new.annotations):

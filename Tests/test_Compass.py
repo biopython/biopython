@@ -15,9 +15,10 @@ class CompassTest(unittest.TestCase):
     def setUp(self):
         file_dir = os.path.join("Compass")
         self.test_files = [
-          os.path.join(file_dir, "comtest1"),
-          os.path.join(file_dir, "comtest2"),
-          os.path.join(file_dir, "comtest3")]
+            os.path.join(file_dir, "comtest1"),
+            os.path.join(file_dir, "comtest2"),
+            os.path.join(file_dir, "comtest3"),
+            ]
 
     def testCompassScanAndConsume(self):
         handle = open(self.test_files[0])
