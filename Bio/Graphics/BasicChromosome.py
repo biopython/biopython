@@ -544,7 +544,7 @@ def _spring_layout(desired, minimum, maximum, gap=0):
     for split in [0.5 * span,
                   span / 3.0,
                   2 * span / 3.0,
-                  0.25 * span
+                  0.25 * span,
                   0.75 * span]:
         midpoint = minimum + split
         low = [x for x in desired if x <= midpoint - 0.5 * gap]
