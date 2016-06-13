@@ -171,7 +171,7 @@ XX
                 ('CC',),        # Comments
                 ('DR',),        # External databases
                 ('OV', 'PV',),  # Versions
-               )
+                )
     for motif in motifs:
         lines = []
         for section in sections:

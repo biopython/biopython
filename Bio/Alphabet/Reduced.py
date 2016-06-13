@@ -47,8 +47,7 @@ murphy_15_tab = {"L": "L",
                  "Q": "Q",
                  "K": "K",
                  "R": "K",
-                 "H": "H",
-}
+                 "H": "H"}
 
 
 class Murphy15(Alphabet.ProteinAlphabet):
