@@ -291,7 +291,7 @@ def compare_record(old, new):
     # TODO - address these, see Bug 2681?
     new_keys = set(new.annotations).difference(old.annotations)
     new_keys = new_keys.difference(['cross_references', 'date',
-                                    'data_file_division', 'ncbi_taxid', 
+                                    'data_file_division', 'ncbi_taxid',
                                     'gi'])
     assert not new_keys, "Unexpected new annotation keys: %s" \
            % ", ".join(new_keys)

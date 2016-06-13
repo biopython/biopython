@@ -17,7 +17,7 @@ class TestPrositeRead(unittest.TestCase):
         """Parsing Prosite record ps00107.txt"""
         filename = os.path.join('Prosite', 'ps00107.txt')
         with open(filename) as handle:
-           record = Prosite.read(handle)
+            record = Prosite.read(handle)
         self.assertEqual(record.name, "PROTEIN_KINASE_ATP")
         self.assertEqual(record.type, "PATTERN")
         self.assertEqual(record.accession, "PS00107")

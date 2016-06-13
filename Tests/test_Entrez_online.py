@@ -132,9 +132,8 @@ class EntrezOnlineCase(unittest.TestCase):
         self.assertEqual(records[0]['System_sysid']['Sys-id']['Sys-id_bsid'], '1134002')
 
     def test_efetch_taxonomy_xml(self):
-        """Test Entrez using a integer id - like a taxon id
-        """
-        handle = Entrez.efetch( db="taxonomy", id=3702, retmode="XML")
+        """Test Entrez using a integer id - like a taxon id"""
+        handle = Entrez.efetch(db="taxonomy", id=3702, retmode="XML")
         taxon_record = Entrez.read(handle)
         self.assertTrue(1, len(taxon_record))
         self.assertTrue('TaxId' in taxon_record[0])

@@ -86,10 +86,10 @@ class ModTest(unittest.TestCase):
             self.yn00.run)
 
     # def testPamlErrorsCaught(self):
-        # self.yn00.alignment = self.align_file
-        # self.yn00.out_file = self.out_file
-        # self.assertRaises((EnvironmentError, PamlError),
-            # self.yn00.run)
+    #     self.yn00.alignment = self.align_file
+    #     self.yn00.out_file = self.out_file
+    #     self.assertRaises((EnvironmentError, PamlError),
+    #                        self.yn00.run)
 
     def testCtlFileValidOnRun(self):
         self.yn00.alignment = self.align_file

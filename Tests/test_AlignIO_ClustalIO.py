@@ -153,6 +153,7 @@ AT3G20900.1-SEQ      GCTGGGGATGGAGAGGGAACAGAGTAG
 
 """
 
+
 class TestClustalIO(unittest.TestCase):
 
     def test_one(self):
