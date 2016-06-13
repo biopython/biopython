@@ -87,7 +87,7 @@ class ChromosomeCounts(object):
         """
         try:
             self._count_info[segment_name] = \
-              float(self._count_info[segment_name]) / float(scale_value)
+                float(self._count_info[segment_name]) / float(scale_value)
         except KeyError:
             raise KeyError("Segment name %s not found." % segment_name)
 

@@ -44,8 +44,7 @@ class NovoalignCommandline(AbstractCommandline):
         REPORT_FORMAT = ['Native', 'Pairwise', 'SAM']
         REPEAT_METHOD = ['None', 'Random', 'All', 'Exhaustive', '0.99']
 
-        self.parameters = \
-           [
+        self.parameters = [
             _Option(["-d", "database"],
                     "database filename",
                     filename=True,
