@@ -62,7 +62,9 @@ class BlastIt(object):
         self.blasts = Pmw.ComboBox(self.cf,
                                    label_text='Blast Programs:',
                                    labelpos='nw',
-                                   scrolledlist_items=['blastn', 'blastp', 'blastx', 'tblastn', 'tblastx'],
+                                   scrolledlist_items=['blastn', 'blastp',
+                                                       'blastx', 'tblastn',
+                                                       'tblastx'],
                                    selectioncommand=self.Validate
                                    )
         self.dbs.pack(side=LEFT, expand=1, fill=X)

@@ -49,8 +49,8 @@ def do_comparison(good_record, test_record):
                                      % good_line)
 
         assert test_line == good_line, \
-               "Expected does not match Test.\nExpect:`%s`\nTest  :`%s`\n" % \
-               (good_line, test_line)
+            "Expected does not match Test.\nExpect:`%s`\nTest  :`%s`\n" % \
+            (good_line, test_line)
 
 
 def write_format(file):

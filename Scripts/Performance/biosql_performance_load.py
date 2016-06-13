@@ -11,7 +11,7 @@ from BioSQL import BioSeqDatabase
 __docformat__ = "restructuredtext en"
 
 server = BioSeqDatabase.open_database(host="192.168.0.192", user="root",
-                                       passwd="", db="pythonloadtest")
+                                      passwd="", db="pythonloadtest")
 
 # remove the database if it already exists
 db_name = "testload"

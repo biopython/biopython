@@ -10,7 +10,7 @@ from BioSQL import BioSeqDatabase
 __docformat__ = "restructuredtext en"
 
 server = BioSeqDatabase.open_database(host="192.168.0.192", user="root",
-                                       passwd="", db="test_biosql")
+                                      passwd="", db="test_biosql")
 db = server["embl_rod"]
 
 # -- do the fasta-only timing part

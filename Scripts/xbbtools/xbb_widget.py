@@ -97,17 +97,10 @@ class xbb_widget(object):
         self.colorsNT = {'A': 'green',
                          'C': 'lightblue',
                          'G': 'orange',
-                         'T': 'tomato'
-                         }
-
-        self.colorsPMWbg = {
-            'ComboBox': 'darkgreen',
-            'ComboBox.Label': 'darkgreen',
-            }
-
-        self.colorsPMWfg = {
-            'ComboBox.Label': 'lightblue',
-            }
+                         'T': 'tomato'}
+        self.colorsPMWbg = {'ComboBox': 'darkgreen',
+                            'ComboBox.Label': 'darkgreen'}
+        self.colorsPMWfg = {'ComboBox.Label': 'lightblue'}
 
     def init_optionsdb(self):
         # does anybody know a better way of defining colors ?
@@ -167,8 +160,11 @@ class xbb_widget(object):
         self.gencode_menu = Menu(self.translation_menu)
         menu = self.gencode_menu
         for table in keys:
-            menu.add_radiobutton(label=table, command=self.set_codon_table, variable=self.current_codon_table)
-        self.translation_menu.add_cascade(label="Genetic Codes", menu=self.gencode_menu)
+            menu.add_radiobutton(label=table,
+                                 command=self.set_codon_table,
+                                 variable=self.current_codon_table)
+        self.translation_menu.add_cascade(label="Genetic Codes",
+                                          menu=self.gencode_menu)
 
         self.menubar.add_cascade(label="Translations", menu=self.translation_menu)
 
@@ -188,7 +184,8 @@ class xbb_widget(object):
         self.parent.config(menu=self.menubar)
 
     def set_codon_table(self):
-        self.current_codon_table_id = self.translation_tables[self.current_codon_table.get()]
+        self.current_codon_table_id = \
+            self.translation_tables[self.current_codon_table.get()]
 
     def exit(self, *args):
         # depending on if this widget is the first created or a child widget
@@ -381,7 +378,9 @@ class xbb_widget(object):
             return
         np = NotePad()
         tid = np.text_id()
-        tid.insert(END, self.translator.frame_nice(seq, frame, self.current_codon_table_id))
+        tid.insert(END,
+                   self.translator.frame_nice(seq, frame,
+                                              self.current_codon_table_id))
 
     def extract(self, frame=1):
         seq = self.get_selection_or_sequence()
@@ -410,15 +409,9 @@ class xbb_widget(object):
         np = NotePad()
         tid = np.text_id()
 
-        tid.insert(END, """%s
-
-Length = %d
-A=%d C=%d G=%d T=%d other=%d
-GC=%f
-
-""" % (time.strftime('%y %b %d, %X\n', time.localtime(time.time())),
-               len(seq), aa['A'], aa['C'], aa['G'], aa['T'], aa['N'], GC)
-                   )
+        tid.insert(END, "%s\n\nLength = %d\nA=%d C=%d G=%d T=%d other=%d\nGC=%f\n\n" %
+                   (time.strftime('%y %b %d, %X\n', time.localtime(time.time())),
+                    len(seq), aa['A'], aa['C'], aa['G'], aa['T'], aa['N'], GC))
 
     def blast(self):
         seq = self.get_selection_or_sequence()

@@ -696,8 +696,9 @@ class DictionaryBuilder(object):
                 continue
 
     def parseline(self, line):
-        line = [line[0]] + [line[1].upper()] + [int(i) for i in line[2:9]] + \
-               line[9:]
+        line = [line[0]] + \
+            [line[1].upper()] + [int(i) for i in line[2:9]] + \
+            line[9:]
         name = line[0].replace("-", "_").replace(".", "_")
         site = line[1]  # sequence of the recognition site
         dna = Seq(site, generic_dna)
