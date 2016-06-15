@@ -239,30 +239,32 @@ class align(object):
         # match code -> tuple of (parameters, docstring)
         match2args = {
             'x': ([], ''),
-            'm': (['match', 'mismatch'], """\
-match is the score to given to identical characters.  mismatch is
-the score given to non-identical ones."""),
-            'd': (['match_dict'], """\
-match_dict is a dictionary where the keys are tuples of pairs of
-characters and the values are the scores, e.g. ("A", "C") : 2.5."""),
-            'c': (['match_fn'], """\
-match_fn is a callback function that takes two characters and
-returns the score between them."""),
-            }
+            'm': (['match', 'mismatch'],
+                  "match is the score to given to identical characters. "
+                  "mismatch is the score given to non-identical ones."),
+            'd': (['match_dict'],
+                  "match_dict is a dictionary where the keys are tuples "
+                  "of pairs of characters and the values are the scores, "
+                  "e.g. ('A', 'C') : 2.5."),
+            'c': (['match_fn'],
+                  "match_fn is a callback function that takes two "
+                  "characters and returns the score between them."),
+        }
         # penalty code -> tuple of (parameters, docstring)
         penalty2args = {
             'x': ([], ''),
-            's': (['open', 'extend'], """\
-open and extend are the gap penalties when a gap is opened and
-extended.  They should be negative."""),
-            'd': (['openA', 'extendA', 'openB', 'extendB'], """\
-openA and extendA are the gap penalties for sequenceA, and openB
-and extendB for sequeneB.  The penalties should be negative."""),
-            'c': (['gap_A_fn', 'gap_B_fn'], """\
-gap_A_fn and gap_B_fn are callback functions that takes 1) the
-index where the gap is opened, and 2) the length of the gap.  They
-should return a gap penalty."""),
-            }
+            's': (['open', 'extend'],
+                  "open and extend are the gap penalties when a gap is "
+                  "opened and extended.  They should be negative."),
+            'd': (['openA', 'extendA', 'openB', 'extendB'],
+                  "openA and extendA are the gap penalties for sequenceA, "
+                  "and openB and extendB for sequeneB.  The penalties "
+                  "should be negative."),
+            'c': (['gap_A_fn', 'gap_B_fn'],
+                  "gap_A_fn and gap_B_fn are callback functions that takes "
+                  "(1) the index where the gap is opened, and (2) the length "
+                  "of the gap.  They should return a gap penalty."),
+        }
 
         def __init__(self, name):
             # Check to make sure the name of the function is
@@ -366,8 +368,8 @@ alignment occurs.
                 ('gap_char', '-'),
                 ('force_generic', 0),
                 ('score_only', 0),
-                ('one_alignment_only', 0)
-                ]
+                ('one_alignment_only', 0),
+            ]
             for name, default in default_params:
                 keywds[name] = keywds.get(name, default)
             value = keywds['penalize_end_gaps']
@@ -442,10 +444,9 @@ def _align(sequenceA, sequenceB, match_fn, gap_A_fn, gap_B_fn,
               if rint(abs(score - best_score)) <= rint(tolerance)]
 
     # Recover the alignments and return them.
-    x = _recover_alignments(
-        sequenceA, sequenceB, starts, score_matrix, trace_matrix,
-        align_globally, gap_char, one_alignment_only, gap_A_fn, gap_B_fn)
-    return x
+    return _recover_alignments(sequenceA, sequenceB, starts, score_matrix,
+                               trace_matrix, align_globally, gap_char,
+                               one_alignment_only, gap_A_fn, gap_B_fn)
 
 
 def _make_score_matrix_generic(sequenceA, sequenceB, match_fn, gap_A_fn,
@@ -462,20 +463,20 @@ def _make_score_matrix_generic(sequenceA, sequenceB, match_fn, gap_A_fn,
     # sequenceA (down) x sequenceB (across)
     lenA, lenB = len(sequenceA), len(sequenceB)
     score_matrix, trace_matrix = [], []
-    for i in range(lenA+1):
-        score_matrix.append([None] * (lenB+1))
+    for i in range(lenA + 1):
+        score_matrix.append([None] * (lenB + 1))
         if not score_only:
-            trace_matrix.append([None] * (lenB+1))
+            trace_matrix.append([None] * (lenB + 1))
 
     # Initialize first row and column with gap scores. This is like opening up
     # i gaps at the beginning of sequence A or B.
-    for i in range(lenA+1):
+    for i in range(lenA + 1):
         if penalize_end_gaps[1]:  # [1]:gap in sequence B
             score = gap_B_fn(0, i)
         else:
             score = 0
         score_matrix[i][0] = score
-    for i in range(lenB+1):
+    for i in range(lenB + 1):
         if penalize_end_gaps[0]:  # [0]:gap in sequence A
             score = gap_A_fn(0, i)
         else:
@@ -489,12 +490,12 @@ def _make_score_matrix_generic(sequenceA, sequenceB, match_fn, gap_A_fn,
     #    1) extending a previous alignment without gaps
     #    2) adding a gap in sequenceA
     #    3) adding a gap in sequenceB
-    for row in range(1, lenA+1):
-        for col in range(1, lenB+1):
+    for row in range(1, lenA + 1):
+        for col in range(1, lenB + 1):
             # First, calculate the score that would occur by extending
             # the alignment without gaps.
             nogap_score = score_matrix[row - 1][col - 1] + \
-                          match_fn(sequenceA[row-1], sequenceB[col-1])
+                match_fn(sequenceA[row - 1], sequenceB[col - 1])
 
             # Try to find a better score by opening gaps in sequenceA.
             # Do this by checking alignments from each column in the row.
@@ -503,20 +504,20 @@ def _make_score_matrix_generic(sequenceA, sequenceB, match_fn, gap_A_fn,
             # Although the gap function does not distinguish between opening
             # and extending a gap, we distinguish them for the backtrace.
             if not penalize_end_gaps[0] and row == lenA:
-                row_open = score_matrix[row][col-1]
+                row_open = score_matrix[row][col - 1]
                 row_extend = max([score_matrix[row][x] for x in range(col)])
             else:
-                row_open = score_matrix[row][col-1] + gap_A_fn(row, 1)
-                row_extend = max([score_matrix[row][x] + gap_A_fn(row, col-x)
+                row_open = score_matrix[row][col - 1] + gap_A_fn(row, 1)
+                row_extend = max([score_matrix[row][x] + gap_A_fn(row, col - x)
                                   for x in range(col)])
 
             # Try to find a better score by opening gaps in sequenceB.
             if not penalize_end_gaps[1] and col == lenB:
-                col_open = score_matrix[row-1][col]
+                col_open = score_matrix[row - 1][col]
                 col_extend = max([score_matrix[x][col] for x in range(row)])
             else:
-                col_open = score_matrix[row-1][col] + gap_B_fn(col, 1)
-                col_extend = max([score_matrix[x][col] + gap_B_fn(col, row-x)
+                col_open = score_matrix[row - 1][col] + gap_B_fn(col, 1)
+                col_extend = max([score_matrix[x][col] + gap_B_fn(col, row - x)
                                   for x in range(row)])
 
             best_score = max(nogap_score, row_open, row_extend, col_open,
@@ -568,21 +569,21 @@ def _make_score_matrix_fast(sequenceA, sequenceB, match_fn, open_A, extend_A,
     # sequenceA (down) x sequenceB (across)
     lenA, lenB = len(sequenceA), len(sequenceB)
     score_matrix, trace_matrix = [], []
-    for i in range(lenA+1):
-        score_matrix.append([None] * (lenB+1))
+    for i in range(lenA + 1):
+        score_matrix.append([None] * (lenB + 1))
         if not score_only:
-            trace_matrix.append([None] * (lenB+1))
+            trace_matrix.append([None] * (lenB + 1))
 
     # Initialize first row and column with gap scores. This is like opening up
     # i gaps at the beginning of sequence A or B.
-    for i in range(lenA+1):
+    for i in range(lenA + 1):
         if penalize_end_gaps[1]:  # [1]:gap in sequence B
             score = calc_affine_penalty(i, open_B, extend_B,
                                         penalize_extend_when_opening)
         else:
             score = 0
         score_matrix[i][0] = score
-    for i in range(lenB+1):
+    for i in range(lenB + 1):
         if penalize_end_gaps[0]:  # [0]:gap in sequence A
             score = calc_affine_penalty(i, open_A, extend_A,
                                         penalize_extend_when_opening)
@@ -593,21 +594,21 @@ def _make_score_matrix_fast(sequenceA, sequenceB, match_fn, open_A, extend_A,
     # Now initialize the col 'matrix'. Actually this is only a one dimensional
     # list, since we only need the col scores from the last row.
     col_score = [0]  # Best score, if actual alignment ends with gap in seqB
-    for i in range(1, lenB+1):
-        col_score.append(calc_affine_penalty(i, 2*open_B, extend_B,
+    for i in range(1, lenB + 1):
+        col_score.append(calc_affine_penalty(i, 2 * open_B, extend_B,
                                              penalize_extend_when_opening))
 
     # The row 'matrix' is calculated on the fly. Here we only need the actual
     # score.
     # Now, filling up the score and traceback matrices:
-    for row in range(1, lenA+1):
-        row_score = calc_affine_penalty(row, 2*open_A, extend_A,
+    for row in range(1, lenA + 1):
+        row_score = calc_affine_penalty(row, 2 * open_A, extend_A,
                                         penalize_extend_when_opening)
-        for col in range(1, lenB+1):
+        for col in range(1, lenB + 1):
             # Calculate the score that would occur by extending the
             # alignment without gaps.
-            nogap_score = score_matrix[row-1][col-1] + \
-                          match_fn(sequenceA[row-1], sequenceB[col-1])
+            nogap_score = score_matrix[row - 1][col - 1] + \
+                match_fn(sequenceA[row - 1], sequenceB[col - 1])
 
             # Check the score that would occur if there were a gap in
             # sequence A. This could come from opening a new gap or
@@ -616,19 +617,19 @@ def _make_score_matrix_fast(sequenceA, sequenceB, match_fn, open_A, extend_A,
             # sequence B:  A-
             #              -B
             if not penalize_end_gaps[0] and row == lenA:
-                row_open = score_matrix[row][col-1]
+                row_open = score_matrix[row][col - 1]
                 row_extend = row_score
             else:
-                row_open = score_matrix[row][col-1] + first_A_gap
+                row_open = score_matrix[row][col - 1] + first_A_gap
                 row_extend = row_score + extend_A
             row_score = max(row_open, row_extend)
 
             # The same for sequence B:
             if not penalize_end_gaps[1] and col == lenB:
-                col_open = score_matrix[row-1][col]
+                col_open = score_matrix[row - 1][col]
                 col_extend = col_score[col]
             else:
-                col_open = score_matrix[row-1][col] + first_B_gap
+                col_open = score_matrix[row - 1][col] + first_B_gap
                 col_extend = col_score[col] + extend_B
             col_score[col] = max(col_open, col_extend)
 
@@ -707,9 +708,9 @@ def _recover_alignments(sequenceA, sequenceB, starts, score_matrix,
             col_distance = lenB - col
             row_distance = lenA - row
             ali_seqA = ((col_distance - row_distance) * gap_char +
-                        sequenceA[lenA-1:row-1:-1])
+                        sequenceA[lenA - 1:row - 1:-1])
             ali_seqB = ((row_distance - col_distance) * gap_char +
-                        sequenceB[lenB-1:col-1:-1])
+                        sequenceB[lenB - 1:col - 1:-1])
         in_process += [(ali_seqA, ali_seqB, end, row, col, False,
                         trace_matrix[row][col])]
     while in_process and len(tracebacks) < MAX_ALIGNMENTS:
@@ -803,7 +804,7 @@ def _find_start(score_matrix, align_globally):
     # In this implementation of the global algorithm, the start will always be
     # the bottom right corner of the matrix.
     if align_globally:
-        starts = [(score_matrix[-1][-1], (nrows-1, ncols-1))]
+        starts = [(score_matrix[-1][-1], (nrows - 1, ncols - 1))]
     else:
         starts = []
         for row in range(nrows):
@@ -842,13 +843,13 @@ def _finish_backtrace(sequenceA, sequenceB, ali_seqA, ali_seqB, row, col,
                       gap_char):
     """Add remaining sequences and fill with gaps if neccessary"""
     if row:
-        ali_seqA += sequenceA[row-1::-1]
+        ali_seqA += sequenceA[row - 1::-1]
     if col:
-        ali_seqB += sequenceB[col-1::-1]
+        ali_seqB += sequenceB[col - 1::-1]
     if row > col:
-            ali_seqB += gap_char * (len(ali_seqA)-len(ali_seqB))
+            ali_seqB += gap_char * (len(ali_seqA) - len(ali_seqB))
     elif col > row:
-            ali_seqA += gap_char * (len(ali_seqB)-len(ali_seqA))
+            ali_seqA += gap_char * (len(ali_seqB) - len(ali_seqA))
     return ali_seqA, ali_seqB
 
 
@@ -867,7 +868,7 @@ def _find_gap_open(sequenceA, sequenceB, ali_seqA, ali_seqB, end, row, col,
             row -= 1
             ali_seqA += sequenceA[row]
             ali_seqB += gap_char
-        actual_score = score_matrix[row][col] + gap_fn(index, n+1)
+        actual_score = score_matrix[row][col] + gap_fn(index, n + 1)
         if rint(actual_score) == rint(target_score) and n > 0:
             if not trace_matrix[row][col]:
                 break

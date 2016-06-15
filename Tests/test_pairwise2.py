@@ -551,7 +551,6 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
 
         def no_gaps(x, y):
             """Very expensive to open a gap in seq1."""
-            
             x = 0  # fool QuantifiedCode, x is not used here
             return -2000 - y
 
