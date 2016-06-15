@@ -1,5 +1,5 @@
 from mmtf import fetch,parse
-from Bio.PDB.MMTF.DefaultParser import StructureDecoder
+from Bio.PDB.mmtf.DefaultParser import StructureDecoder
 
 
 def get_from_decoded(decoder):

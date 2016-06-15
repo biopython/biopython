@@ -1,9 +1,9 @@
 import unittest
-from Bio.PDB.MMTF import MMTFParser
+from Bio.PDB.mmtf import MMTFParser
 from Bio.PDB.MMCIFParser import MMCIFParser
 
 class ParseMMTF(unittest.TestCase):
-    """Testing with real MMTF file(s)."""
+    """Testing with real mmtf file(s)."""
 
     def test_parser(self):
         parser = MMTFParser()
