@@ -9,13 +9,12 @@
 
 # Environment variables setup via the matrix
 # - DEP = list of python packages to install via default pip install
-# - BIN = list of python packages to install via pip install --only-binary
 # - COV = yes/no; should tests be run with coverage metric collection
 language: python
 matrix:
   include:
     - python: "2.6"
-      env: DEP="reportlab psycopg2 mysql-python mysql-connector-python-rf unittest2" BIN=scipy COV=yes
+      env: DEP="reportlab psycopg2 mysql-python mysql-connector-python-rf unittest2 scipy" COV=yes
     - python: "2.7"
       env: DEP="reportlab psycopg2 mysql-python mysql-connector-python-rf" COV=yes
     - python: "3.3"
@@ -23,7 +22,7 @@ matrix:
     - python: "3.4"
       env: DEP="reportlab psycopg2 mysql-connector-python-rf" COV=yes
     - python: "3.5"
-      env: DEP=reportlab psycopg2 mysql-connector-python-rf" BIN=scipy COV=yes
+      env: DEP=reportlab psycopg2 mysql-connector-python-rf scipy" COV=yes
     - python: "pypy"
       env: DEP="mysql-connector-python-rf" COV=yes
     - python: "pypy3"
@@ -46,8 +45,7 @@ addons:
 before_install:
   - "pip install --upgrade pip"
   - "pip install rdflib"
-  - "pip install $DEP"
-  - "pip install --only-binary=:all: $BIN"
+  - "pip install --only-binary=numpy,scipy $DEP"
   - "if [[ $COV == 'yes' ]]; then pip install coverage; fi"
 
 
