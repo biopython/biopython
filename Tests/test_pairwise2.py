@@ -7,6 +7,7 @@
 import unittest
 
 from Bio import pairwise2
+from Bio.SubsMat.MatrixInfo import blosum62
 
 
 class TestPairwiseErrorConditions(unittest.TestCase):
@@ -133,6 +134,17 @@ xxxABCDxxx
 zzzABzzCDz
   Score=2
 """)
+
+    def test_blosum62(self):
+        """Test localds with blosum62."""
+        self.assertEqual(1, blosum62[('K', 'Q')])
+        self.assertEqual(4, blosum62[('A', 'A')])
+        self.assertEqual(8, blosum62[('H', 'H')])
+        alignments = pairwise2.align.localds('VKAHGKKV', 'FQAHCAGV',
+                                             blosum62, -4, -4)
+        for a in alignments:
+            self.assertEqual(pairwise2.format_alignment(*a),
+                             "VKAHGKKV\n |||\nFQAHCAGV\n  Score=13\n")
 
 
 class TestScoreOnly(unittest.TestCase):
