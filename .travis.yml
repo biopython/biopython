@@ -14,15 +14,15 @@ language: python
 matrix:
   include:
     - python: "2.6"
-      env: DEP="rdflib reportlab psycopg2 mysql-python mysql-connector-python-rf unittest2 scipy" COV=yes
+      env: DEP="mmtf-python rdflib reportlab psycopg2 mysql-python mysql-connector-python-rf unittest2 scipy" COV=yes
     - python: "2.7"
-      env: DEP="rdflib reportlab psycopg2 mysql-python mysql-connector-python-rf networkx" COV=yes
+      env: DEP="mmtf-python rdflib reportlab psycopg2 mysql-python mysql-connector-python-rf networkx" COV=yes
     - python: "3.3"
-      env: DEP="rdflib reportlab psycopg2 mysql-connector-python-rf" COV=yes
+      env: DEP="mmtf-python rdflib reportlab psycopg2 mysql-connector-python-rf" COV=yes
     - python: "3.4"
-      env: DEP="" COV=yes
+      env: DEP="mmtf-python" COV=yes
     - python: "3.5"
-      env: DEP="rdflib reportlab psycopg2 mysql-connector-python-rf scipy matplotlib" COV=yes
+      env: DEP="mmtf-python rdflib reportlab psycopg2 mysql-connector-python-rf scipy matplotlib" COV=yes
     - python: "pypy"
       env: DEP="rdflib mysql-connector-python-rf" COV=yes
     - python: "pypy3"
