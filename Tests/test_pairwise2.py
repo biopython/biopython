@@ -6,6 +6,10 @@
 
 # Remove unittest2 import after dropping support for Python2.6
 import sys
+
+from Bio import pairwise2
+from Bio.SubsMat.MatrixInfo import blosum62
+
 if sys.version_info < (2, 7):
     try:
         import unittest2 as unittest
@@ -14,9 +18,6 @@ if sys.version_info < (2, 7):
         raise MissingPythonDependencyError("Under Python 2.6 this test needs the unittest2 library")
 else:
     import unittest
-
-from Bio import pairwise2
-from Bio.SubsMat.MatrixInfo import blosum62
 
 
 class TestPairwiseErrorConditions(unittest.TestCase):
