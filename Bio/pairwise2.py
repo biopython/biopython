@@ -991,14 +991,3 @@ try:
 except ImportError:
     warnings.warn('Import of C module failed. Falling back to pure Python ' +
                   'implementation. This may be slooow...', BiopythonWarning)
-
-
-def _test():
-    """Run the module's doctests (PRIVATE)."""
-    print("Running doctests...")
-    import doctest
-    doctest.testmod(optionflags=doctest.IGNORE_EXCEPTION_DETAIL)
-    print("Done")
-
-if __name__ == "__main__":
-    _test()
