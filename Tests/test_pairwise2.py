@@ -103,14 +103,6 @@ GAACT
   Score=3
 """)
 
-    def test_incorrect_global_function_name(self):
-        with self.assertRaises(AttributeError):
-            pairwise2.align.globalxxx("GAACT", "GAT")
-
-    def test_incorrect_number_of_parameters(self):
-        with self.assertRaises(TypeError):
-            pairwise2.align.globalxs("GAACT", "GAT", -0.2)
-
 
 class TestPairwiseLocal(unittest.TestCase):
 
@@ -181,24 +173,8 @@ class TestScoreOnly(unittest.TestCase):
                                           -3, -1, score_only=True)
         self.assertEqual(aligns1[0][2], aligns2)
 
-    def test_incorrect_local_function_name(self):
-        with self.assertRaises(AttributeError):
-            pairwise2.align.localxxx("GAACT", "GAT")
-
-    def test_incorrect_function_name(self):
-        with self.assertRaises(AttributeError):
-            pairwise2.align.xxxlocalxxx("GAACT", "GAT")
-
 
 class TestPairwiseOpenPenalty(unittest.TestCase):
-
-    def test_unknown_match_score(self):
-        with self.assertRaises(AttributeError):
-            pairwise2.align.globalzx("AA", "A")
-
-    def test_unknown_penalty(self):
-        with self.assertRaises(AttributeError):
-            pairwise2.align.globalxz("AA", "A")
 
     def test_match_score_open_penalty1(self):
         aligns = pairwise2.align.globalms("AA", "A", 2.0, -1, -0.1, 0)
@@ -377,10 +353,6 @@ GT--
 
 
 class TestPairwiseSeparateGapPenalties(unittest.TestCase):
-
-    def test_incorrect_gap_penalties1(self):
-        with self.assertRaises(ValueError):
-            pairwise2.align.localxd("GAT", "GTCT", 0.3, 0, -0.8, 0)
 
     def test_separate_gap_penalties1(self):
         aligns = pairwise2.align.localxd("GAT", "GTCT", -0.3, 0, -0.8, 0)
