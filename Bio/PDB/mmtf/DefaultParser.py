@@ -1,9 +1,7 @@
 from Bio.PDB.StructureBuilder import StructureBuilder
 
 class StructureDecoder(object):
-    """
-    Class to pass the data from mmtf-python into a BioPython data structure.
-    """
+    """Class to pass the data from mmtf-python into a BioPython data structure."""
 
     def __init__(self):
         self.this_type = ""
@@ -61,7 +59,7 @@ class StructureDecoder(object):
             self.this_type = "H"
         elif self.chain_index_to_type_map[self.chain_counter] == "water":
             self.this_type = "W"
-        self.chain_counter+=1
+        self.chain_counter += 1
 
 
     def set_entity_info(self, chain_indices, sequence, description, entity_type):
