@@ -168,6 +168,26 @@ class EntrezOnlineCase(unittest.TestCase):
         self.assertEqual(URL_HEAD + "epost.fcgi", handle.url)
         handle.close()
 
+    def test_egquery(self):
+        handle = Entrez.egquery(term="biopython")
+        record = Entrez.read(handle)
+        handle.close()
+
+        done = False
+        for row in record["eGQueryResult"]:
+            if "pmc" in row["DbName"]:
+                self.assertTrue(row["Count"] > 60)
+                done = True
+        self.assertTrue(done)
+
+    def test_espell(self):
+        handle = Entrez.espell(term="biopythooon")
+        record = Entrez.read(handle)
+        handle.close()
+
+        self.assertEqual(record["Query"], "biopythooon")
+        self.assertEqual(record["CorrectedQuery"], "biopython")
+
     def test_ecitmatch(self):
         citation = {
             "journal_title": "proc natl acad sci u s a",
