@@ -10,23 +10,24 @@
 # Environment variables setup via the matrix
 # - DEP = list of python packages to install via default pip install
 # - COV = yes/no; should tests be run with coverage metric collection
+# - OPT = options to run_tests.py such as --offline
 language: python
 matrix:
   include:
     - python: "2.6"
-      env: DEP="rdflib reportlab psycopg2 mysql-python mysql-connector-python-rf unittest2 scipy" COV=yes
+      env: DEP="rdflib reportlab psycopg2 mysql-python mysql-connector-python-rf unittest2 scipy" COV="yes" OPT="--offline"
     - python: "2.7"
-      env: DEP="rdflib reportlab psycopg2 mysql-python mysql-connector-python-rf networkx" COV=yes
+      env: DEP="rdflib reportlab psycopg2 mysql-python mysql-connector-python-rf networkx" COV="yes" OPT="--offline"
     - python: "3.3"
-      env: DEP="rdflib reportlab psycopg2 mysql-connector-python-rf" COV=yes
+      env: DEP="psycopg2 mysql-connector-python-rf" COV="yes" OPT=""
     - python: "3.4"
-      env: DEP="" COV=yes
+      env: DEP="" COV="yes" OPT="--offline"
     - python: "3.5"
-      env: DEP="rdflib reportlab psycopg2 mysql-connector-python-rf scipy matplotlib" COV=yes
+      env: DEP="rdflib reportlab psycopg2 mysql-connector-python-rf scipy matplotlib" COV="yes" OPT="--offline"
     - python: "pypy"
-      env: DEP="rdflib mysql-connector-python-rf" COV=yes
+      env: DEP="rdflib mysql-connector-python-rf" COV="yes" OPT="--offline"
     - python: "pypy3"
-      env: COV=no
+      env: COV="no" OPT="--offline"
 
 sudo: false
 addons:
@@ -58,8 +59,8 @@ before_script:
 
 script:
 #Using just coverage should match up to the current Python version:
-  - "if [[ $COV == 'yes' ]]; then coverage run --source=Bio,BioSQL run_tests.py --offline; fi"
-  - "if [[ $COV != 'yes' ]]; then python run_tests.py --offline; fi"
+  - "if [[ $COV == 'yes' ]]; then coverage run --source=Bio,BioSQL run_tests.py $OPT; fi"
+  - "if [[ $COV != 'yes' ]]; then python run_tests.py $OPT; fi"
 
 after_success:
 #See https://codecov.io/ and https://github.com/codecov/example-python
