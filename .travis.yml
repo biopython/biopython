@@ -20,7 +20,7 @@ matrix:
     - python: "3.3"
       env: DEP="reportlab psycopg2 mysql-connector-python-rf" COV=yes
     - python: "3.4"
-      env: DEP="reportlab psycopg2 mysql-connector-python-rf" COV=yes
+      env: DEP="" COV=yes
     - python: "3.5"
       env: DEP="reportlab psycopg2 mysql-connector-python-rf scipy matplotlib" COV=yes
     - python: "pypy"
