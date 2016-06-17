@@ -64,7 +64,6 @@ class ParseMMTF(unittest.TestCase):
         self.assertEqual(len([x for x in mmcif_struct.get_models()]), len([x for x in mmtf_struct.get_models()]))
 
 
-
 def test_parser():
     """Simply test that """
     with warnings.catch_warnings():

@@ -10,12 +10,14 @@ class StructureDecoder(object):
 
     def init_structure(self, total_num_bonds, total_num_atoms, total_num_groups, total_num_chains, total_num_models, structure_id):
         """Initialise the structure object.
+
         :param total_num_bonds the number of bonds in the structure
         :param total_num_atoms the number of atoms in the structure
         :param total_num_groups the number of groups in the structure
         :param total_num_chains the number of chains in the structure
         :param total_num_models the number of models in the structure
-        :param structure_id the id of the structure (e.g. PDB id)"""
+        :param structure_id the id of the structure (e.g. PDB id)
+	"""
         self.structure_bulder = StructureBuilder()
         self.structure_bulder.init_structure(structure_id=structure_id)
         self.chain_index_to_type_map = {}
@@ -27,6 +29,7 @@ class StructureDecoder(object):
     def set_atom_info(self, atom_name, serial_number, alternative_location_id, x, y, z, occupancy,
                       temperature_factor, element, charge):
         """Create an atom object an set the information.
+
         :param atom_name the atom name, e.g. CA for this atom
         :param serial_number the serial id of the atom (e.g. 1)
         :param alternative_location_id the alternative location id for the atom, if present
@@ -44,9 +47,11 @@ class StructureDecoder(object):
 
     def set_chain_info(self, chain_id, chain_name, num_groups):
         """Set the chain information.
+
         :param chain_id the asym chain id from mmCIF
         :param chain_name the auth chain id from mmCIF
-        :param num_groups the number of groups this chain has"""
+        :param num_groups the number of groups this chain has
+	"""
         # A Bradley - chose to use chain_name (auth_id) as it complies with current BioPython. Chain_id might be better.
         self.structure_bulder.init_chain(chain_id=chain_name)
         if self.chain_index_to_type_map[self.chain_counter] == "polymer":
@@ -60,10 +65,12 @@ class StructureDecoder(object):
 
     def set_entity_info(self, chain_indices, sequence, description, entity_type):
         """Set the entity level information for the structure.
-        :param chain_indices the indices of the chains for this entity
+        
+	:param chain_indices the indices of the chains for this entity
         :param sequence the one letter code sequence for this entity
         :param description the description for this entity
-        :param entity_type the entity type (polymer,non-polymer,water)"""
+        :param entity_type the entity type (polymer,non-polymer,water)
+	"""
         for chain_ind in chain_indices:
             self.chain_index_to_type_map[chain_ind] = entity_type
             self.chain_index_to_seq_map[chain_ind] = sequence
@@ -72,6 +79,7 @@ class StructureDecoder(object):
     def set_group_info(self, group_name, group_number, insertion_code, group_type, atom_count, bond_count,
                        single_letter_code, sequence_index, secondary_structure_type):
         """Set the information for a group
+
         :param group_name the name of this group,e.g. LYS
         :param group_number the residue number of this group
         :param insertion_code the insertion code for this group
@@ -82,18 +90,22 @@ class StructureDecoder(object):
         :param single_letter_code the single letter code of the group
         :param sequence_index the index of this group in the sequence defined by the enttiy
         :param secondary_structure_type the type of secondary structure used (types are according to DSSP and
-        number to type mappings are defined in the specification)"""
+        number to type mappings are defined in the specification)
+	"""
         self.structure_bulder.init_seg(' ')
         self.structure_bulder.init_residue(group_name, self.this_type, group_number, insertion_code)
 
     def set_model_info(self, model_id, chain_count):
-        """Set the information for a model
+        """Set the information for a model.
+
         :param model_id the index for the model
-        :param chain_count the number of chains in the model"""
+        :param chain_count the number of chains in the model
+	"""
         self.structure_bulder.init_model(model_id)
 
     def set_xtal_info(self, space_group, unit_cell):
         """Set the crystallographic information for the structure
+
         :param space_group the space group name, e.g. "P 21 21 21"
         :param unit_cell an array of length 6 with the unit cell parameters in order: a, b, c, alpha, beta, gamma
         """
@@ -101,17 +113,19 @@ class StructureDecoder(object):
 
     def set_header_info(self, r_free, r_work, resolution, title, deposition_date, release_date, experimnetal_methods):
         """Sets the header information.
+
         :param r_free the measured R-Free for the structure
         :param r_work the measure R-Work for the structure
         :param resolution the resolution of the structure
         :param title the title of the structure
         :param deposition_date the deposition date of the structure
         :param release_date the release date of the structure
-        :param experimnetal_methods the list of experimental methods in the structure"""
+        :param experimnetal_methods the list of experimental methods in the structure
+	"""
         pass
 
     def set_bio_assembly_trans(self, bio_assembly_index, input_chain_indices, input_transform):
-        """"""
+        """Set the Bioassembly transformation information."""
         pass
 
     def finalize_structure(self):
@@ -120,15 +134,19 @@ class StructureDecoder(object):
 
     def set_group_bond(self, atom_index_one, atom_index_two, bond_order):
         """Add bonds within a group.
+
         :param atom_index_one the atom index (in the group) of the first partner in the bond
         :param atom_index_two the atom index (in the group) of the second partner in the bond
-        :param bond_order the bond order"""
+        :param bond_order the bond order
+	"""
         pass
     def set_inter_group_bond(self, atom_index_one, atom_index_two, bond_order):
         """Add bonds between groups.
+
         :param atom_index_one the atom index (in the structure) of the first partner in the bond
         :param atom_index_two the atom index (in the structure) of the second partner in the bond
-        :param bond_order the bond order"""
+        :param bond_order the bond order
+	"""
         pass
 
 
