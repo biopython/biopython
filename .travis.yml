@@ -18,7 +18,7 @@ matrix:
     - python: "2.7"
       env: DEP="rdflib reportlab psycopg2 mysql-python mysql-connector-python-rf networkx" COV=yes
     - python: "3.3"
-      env: DEP="rdlfib reportlab psycopg2 mysql-connector-python-rf" COV=yes
+      env: DEP="rdflib reportlab psycopg2 mysql-connector-python-rf" COV=yes
     - python: "3.4"
       env: DEP="" COV=yes
     - python: "3.5"
