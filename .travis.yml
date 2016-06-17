@@ -14,17 +14,17 @@ language: python
 matrix:
   include:
     - python: "2.6"
-      env: DEP="reportlab psycopg2 mysql-python mysql-connector-python-rf unittest2 scipy" COV=yes
+      env: DEP="rdflib reportlab psycopg2 mysql-python mysql-connector-python-rf unittest2 scipy" COV=yes
     - python: "2.7"
-      env: DEP="reportlab psycopg2 mysql-python mysql-connector-python-rf networkx" COV=yes
+      env: DEP="rdflib reportlab psycopg2 mysql-python mysql-connector-python-rf networkx" COV=yes
     - python: "3.3"
-      env: DEP="reportlab psycopg2 mysql-connector-python-rf" COV=yes
+      env: DEP="rdlfib reportlab psycopg2 mysql-connector-python-rf" COV=yes
     - python: "3.4"
       env: DEP="" COV=yes
     - python: "3.5"
-      env: DEP="reportlab psycopg2 mysql-connector-python-rf scipy matplotlib" COV=yes
+      env: DEP="rdflib reportlab psycopg2 mysql-connector-python-rf scipy matplotlib" COV=yes
     - python: "pypy"
-      env: DEP="mysql-connector-python-rf" COV=yes
+      env: DEP="rdflib mysql-connector-python-rf" COV=yes
     - python: "pypy3"
       env: COV=no
 
@@ -44,7 +44,6 @@ addons:
 
 before_install:
   - "pip install --upgrade pip"
-  - "pip install rdflib"
   - "pip install --only-binary=numpy,scipy $DEP"
   - "if [[ $COV == 'yes' ]]; then pip install coverage; fi"
 
