@@ -22,7 +22,7 @@ matrix:
     - python: "3.4"
       env: DEP="reportlab psycopg2 mysql-connector-python-rf" COV=yes
     - python: "3.5"
-      env: DEP=reportlab psycopg2 mysql-connector-python-rf scipy" COV=yes
+      env: DEP="reportlab psycopg2 mysql-connector-python-rf scipy" COV=yes
     - python: "pypy"
       env: DEP="mysql-connector-python-rf" COV=yes
     - python: "pypy3"
