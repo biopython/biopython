@@ -15,7 +15,8 @@ if sys.version_info < (2, 7):
         import unittest2 as unittest
     except ImportError:
         from Bio import MissingPythonDependencyError
-        raise MissingPythonDependencyError("Under Python 2.6 this test needs the unittest2 library")
+        raise MissingPythonDependencyError("Under Python 2.6 this test needs" +
+                                           " the unittest2 library")
 else:
     import unittest
 
@@ -597,8 +598,10 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
 
 
 class TestOtherFunctions(unittest.TestCase):
+    """Test remaining non-tested private methods."""
 
     def test_clean_alignments(self):
+        """``_clean_alignments`` removes redundant alignments."""
         alns = [
             ('ACCGT', 'AC-G-', 3.0, 0, 4),
             ('ACCGT', 'A-CG-', 3.0, 0, 4),
@@ -611,6 +614,29 @@ class TestOtherFunctions(unittest.TestCase):
         ]
         result = pairwise2._clean_alignments(alns)
         self.assertEqual(expected, result)
+
+    def test_print_matrix(self):
+        """``print_matrix`` prints nested lists as nice matrices."""
+        import sys
+
+        try:  # Python 2
+            from StringIO import StringIO
+        except ImportError:  # Python 3
+            from io import StringIO
+        out = StringIO()
+        sys.stdout = out
+        pairwise2.print_matrix([[0.0, -1.0, -1.5, -2.0], [-1.0, 4.0, 3.0, 2.5],
+                                [-1.5, 3.0, 8.0, 7.0], [-2.0, 2.5, 7.0, 6.0],
+                                [-2.5, 2.0, 6.5, 11.0],
+                                [-3.0, 1.5, 6.0, 10.0]])
+        self.assertEqual(out.getvalue(),
+                         ' 0.0  -1.0  -1.5  -2.0 \n' +
+                         '-1.0   4.0   3.0   2.5 \n' +
+                         '-1.5   3.0   8.0   7.0 \n' +
+                         '-2.0   2.5   7.0   6.0 \n' +
+                         '-2.5   2.0   6.5  11.0 \n' +
+                         '-3.0   1.5   6.0  10.0 \n')
+        sys.stdout = sys.__stdout__
 
 
 if __name__ == '__main__':
