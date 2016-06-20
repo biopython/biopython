@@ -101,7 +101,7 @@ include when installing Biopython from source due to a dependency on flex.
 Bio.SeqFeature
 ==============
 With the introduction of the CompoundLocation in Release 1.62, the SeqFeature
-attribute sub_features was deprecated.
+attribute sub_features was deprecated. It was removed in Release 1.68.
 
 Bio.Motif
 =========
