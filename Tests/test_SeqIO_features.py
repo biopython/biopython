@@ -191,7 +191,7 @@ def make_join_feature(f_list, ftype="misc_feature"):
         f.type = ftype
     if strand == -1:
         # All reverse strand.
-        # Historical accident from GenBank parser means sub_features reversed
+        # Put into biological order for CompoundLocation
         c_loc = CompoundLocation([f.location for f in f_list[::-1]])
     else:
         # All forward, or mixed strand
