@@ -11,6 +11,10 @@
 # - DEP = list of python packages to install via default pip install
 # - COV = yes/no; should tests be run with coverage metric collection
 # - OPT = options to run_tests.py such as --offline
+#
+# Note we're explicitly allowing the online test targets to fail without
+# considering the whole test run to be a failure.
+
 language: python
 matrix:
   include:
@@ -28,6 +32,8 @@ matrix:
       env: DEP="rdflib mysql-connector-python-rf" COV="yes" OPT="--offline"
     - python: "pypy3"
       env: COV="no" OPT="--offline"
+  allow_failures:
+    - python: "3.3"
 
 sudo: false
 addons:
