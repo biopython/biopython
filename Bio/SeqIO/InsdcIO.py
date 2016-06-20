@@ -285,58 +285,6 @@ def _insdc_location_string(location, rec_length):
             return loc
 
 
-def _insdc_feature_location_string(feature, rec_length):
-    """Build a GenBank/EMBL location string from a SeqFeature (PRIVATE, OBSOLETE).
-
-    There is a choice of how to show joins on the reverse complement strand,
-    GenBank used "complement(join(1,10),(20,100))" while EMBL used to use
-    "join(complement(20,100),complement(1,10))" instead (but appears to have
-    now adopted the GenBank convention). Notice that the order of the entries
-    is reversed! This function therefore uses the first form. In this situation
-    we expect the parent feature and the two children to all be marked as
-    strand == -1, and in the order 0:10 then 19:100.
-
-    Also need to consider dual-strand examples like these from the Arabidopsis
-    thaliana chloroplast NC_000932: join(complement(69611..69724),139856..140650)
-    gene ArthCp047, GeneID:844801 or its CDS (protein NP_051038.1 GI:7525057)
-    which is further complicated by a splice:
-    join(complement(69611..69724),139856..140087,140625..140650)
-
-    For this mixed strand feature, the parent SeqFeature should have
-    no strand (either 0 or None) while the child features should have either
-    strand +1 or -1 as appropriate, and be listed in the order given here.
-    """
-    # Using private variable to avoid deprecation warning
-    if not feature._sub_features:
-        # Non-recursive.
-        # assert feature.location_operator == "", \
-        #       "%s has no subfeatures but location_operator %s" \
-        #       % (repr(feature), feature.location_operator)
-        location = _insdc_location_string_ignoring_strand_and_subfeatures(
-            feature.location, rec_length)
-        if feature.strand == -1:
-            location = "complement(%s)" % location
-        return location
-    # As noted above, treat reverse complement strand features carefully:
-    if feature.strand == -1:
-        for f in feature._sub_features:
-            if f.strand != -1:
-                raise ValueError("Inconsistent strands: %r for parent, %r for child"
-                                 % (feature.strand, f.strand))
-        return "complement(%s(%s))" \
-               % (feature.location_operator,
-                  ",".join(_insdc_location_string_ignoring_strand_and_subfeatures(f.location, rec_length)
-                           for f in feature._sub_features))
-    # if feature.strand == +1:
-    #    for f in feature.sub_features:
-    #        assert f.strand == +1
-    # This covers typical forward strand features, and also an evil mixed strand:
-    assert feature.location_operator != ""
-    return "%s(%s)" % (feature.location_operator,
-                       ",".join(_insdc_feature_location_string(f, rec_length)
-                                for f in feature._sub_features))
-
-
 class _InsdcWriter(SequentialSequenceWriter):
     """Base class for GenBank and EMBL writers (PRIVATE)."""
     MAX_WIDTH = 80
