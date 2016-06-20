@@ -176,7 +176,7 @@ class EntrezOnlineCase(unittest.TestCase):
         done = False
         for row in record["eGQueryResult"]:
             if "pmc" in row["DbName"]:
-                self.assertTrue(row["Count"] > 60)
+                self.assertTrue(int(row["Count"]) > 60)
                 done = True
         self.assertTrue(done)
 
