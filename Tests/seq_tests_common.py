@@ -125,56 +125,6 @@ def compare_feature(old_f, new_f):
         assert old_sub.nofuzzy_end == new_sub.nofuzzy_end
         assert old_sub.strand == new_sub.strand
 
-    # Using private variable to avoid deprecation warnings
-    assert len(old_f._sub_features) == len(new_f._sub_features), \
-        "number of sub_features: %s -> %s" % \
-        (len(old_f._sub_features), len(new_f._sub_features))
-
-    for old_sub, new_sub in zip(old_f._sub_features, new_f._sub_features):
-        # These are SeqFeature objects
-        assert old_sub.type == new_sub.type, \
-            "%s -> %s" % (old_sub.type, new_sub.type)
-
-        assert old_sub.strand == new_sub.strand, \
-            "%s -> %s" % (old_sub.strand, new_sub.strand)
-
-        assert old_sub.ref == new_sub.ref, \
-            "%s -> %s" % (old_sub.ref, new_sub.ref)
-
-        assert old_sub.ref_db == new_sub.ref_db, \
-            "%s -> %s" % (old_sub.ref_db, new_sub.ref_db)
-
-        # TODO - Work out how the location_qualifier_value table should
-        # be used, given BioPerl seems to ignore it (Bug 2766)
-        # assert old_sub.location_operator == new_sub.location_operator, \
-        #    "%s -> %s" % (old_sub.location_operator, new_sub.location_operator)
-
-        # Compare sub-feature Locations:
-        #
-        # BioSQL currently does not store fuzzy locations, but instead stores
-        # them as FeatureLocation.nofuzzy_start FeatureLocation.nofuzzy_end.
-        # The vast majority of cases will be comparisons of ExactPosition
-        # class locations, so we'll try that first and catch the exceptions.
-
-        try:
-            assert str(old_sub.location) == str(new_sub.location), \
-                "%s -> %s" % (str(old_sub.location), str(new_sub.location))
-        except AssertionError as e:
-            if isinstance(old_sub.location.start, ExactPosition) and \
-               isinstance(old_sub.location.end, ExactPosition):
-                # Its not a problem with fuzzy locations, re-raise
-                raise e
-            else:
-                # At least one of the locations is fuzzy
-                assert old_sub.location.nofuzzy_start == \
-                       new_sub.location.nofuzzy_start, \
-                       "%s -> %s" % (old_sub.location.nofuzzy_start,
-                                     new_sub.location.nofuzzy_start)
-                assert old_sub.location.nofuzzy_end == \
-                       new_sub.location.nofuzzy_end, \
-                       "%s -> %s" % (old_sub.location.nofuzzy_end,
-                                     new_sub.location.nofuzzy_end)
-
     assert len(old_f.qualifiers) == len(new_f.qualifiers)
     assert set(old_f.qualifiers) == set(new_f.qualifiers)
     for key in old_f.qualifiers:
