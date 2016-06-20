@@ -15,8 +15,8 @@ if sys.version_info < (2, 7):
         import unittest2 as unittest
     except ImportError:
         from Bio import MissingPythonDependencyError
-        raise MissingPythonDependencyError("Under Python 2.6 this test needs" +
-                                           " the unittest2 library")
+        raise MissingPythonDependencyError("Under Python 2.6 this test needs "
+                                           "the unittest2 library")
 else:
     import unittest
 
@@ -630,11 +630,11 @@ class TestOtherFunctions(unittest.TestCase):
                                 [-2.5, 2.0, 6.5, 11.0],
                                 [-3.0, 1.5, 6.0, 10.0]])
         self.assertEqual(out.getvalue(),
-                         ' 0.0  -1.0  -1.5  -2.0 \n' +
-                         '-1.0   4.0   3.0   2.5 \n' +
-                         '-1.5   3.0   8.0   7.0 \n' +
-                         '-2.0   2.5   7.0   6.0 \n' +
-                         '-2.5   2.0   6.5  11.0 \n' +
+                         ' 0.0  -1.0  -1.5  -2.0 \n'
+                         '-1.0   4.0   3.0   2.5 \n'
+                         '-1.5   3.0   8.0   7.0 \n'
+                         '-2.0   2.5   7.0   6.0 \n'
+                         '-2.5   2.0   6.5  11.0 \n'
                          '-3.0   1.5   6.0  10.0 \n')
         sys.stdout = sys.__stdout__
 
