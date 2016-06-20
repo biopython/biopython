@@ -289,11 +289,6 @@ class SeqFeature(object):
         for qual_key in sorted(self.qualifiers):
             out += "    Key: %s, Value: %s\n" % (qual_key,
                                                  self.qualifiers[qual_key])
-        # TODO - Remove this from __str__ since deprecated
-        if len(self._sub_features) != 0:
-            out += "Sub-Features\n"
-            for sub_feature in self._sub_features:
-                out += "%s\n" % sub_feature
         return out
 
     def _shift(self, offset):
