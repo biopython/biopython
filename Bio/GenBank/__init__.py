@@ -1048,10 +1048,10 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             # e.g. "AL121804.2:41..610"
             if ":" in location_line:
                 location_ref, location_line = location_line.split(":")
-                cur_feature.location = _loc(location_line, self._expected_size, strand)
-                cur_feature.location.ref = location_ref
             else:
-                cur_feature.location = _loc(location_line, self._expected_size, strand)
+                location_ref = None
+            cur_feature.location = _loc(location_line, self._expected_size, strand)
+            cur_feature.location.ref = location_ref
             return
 
         if _re_complex_compound.match(location_line):
@@ -1068,15 +1068,16 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                 else:
                     part_strand = strand
                 if ":" in part:
-                    ref, part = part.split(":")
+                    location_ref, part = part.split(":")
                 else:
-                    ref = None
+                    location_ref = None
                 try:
                     loc = _loc(part, self._expected_size, part_strand)
                 except ValueError as err:
                     print(location_line)
                     print(part)
                     raise err
+                loc.ref = location_ref
                 locs.append(loc)
             # Historically a join on the reverse strand has been represented
             # in Biopython with both the parent SeqFeature and its children
