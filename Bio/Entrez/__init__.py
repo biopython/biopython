@@ -2,7 +2,7 @@
 # Copyright 2008-2013 by Michiel de Hoon.  All rights reserved.
 # Revisions copyright 2011-2016 by Peter Cock. All rights reserved.
 # Revisions copyright 2015 by Eric Rasche. All rights reserved.
-# Revisions copyright 2015 by Carlos Peña. All rights reserved.
+# Revisions copyright 2015 by Carlos Pena. All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
