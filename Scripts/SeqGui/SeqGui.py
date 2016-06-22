@@ -1,11 +1,13 @@
-# Original SeqGui written by  Katharine Lindner (Cayte) in 2000 using wxPython
-# as GUI.
-# Rewritten by Markus Piotrowski in 2016 using tkinter and tkinter's themed
-# widgets (ttk).
+# Copyright 2000 by Katharine Lindner (Cayte).
+# Copyright 2016 by Markus Piotrowski.
+# All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-
+#
+# The original SeqGui was written by Katharine Lindner (Cayte) in 2000 using
+# the wxPython library for the GUI. It was rewritten by Markus Piotrowski in
+# 2016 using tkinter and tkinter's themed widgets (ttk).
 """A small GUI tool to demonstrate some basic sequence operations.
 
 SeqGui (sequence graphical user interface) is a little tool that allows
