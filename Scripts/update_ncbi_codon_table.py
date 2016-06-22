@@ -15,6 +15,12 @@ and check for any differences in the old tables.
 
 import re
 
+print("##########################################################################")
+print("# Start of auto-generated output from Scripts/update_ncbi_codon_table.py #")
+print("##########################################################################")
+print("")
+print("")
+
 for line in open("gc.prt").readlines():
     if line[:2] == " {":
         names = []
@@ -81,8 +87,16 @@ for line in open("gc.prt").readlines():
         s_with_spaces = s.replace("','", "', '")
         print("%s ]" % s_with_spaces)
         print("                    )")
+        # Two blank lines between each function call
+        print("")
+        print("")
     elif line[:2] == "--" or line == "\n" or line == "}\n" or \
          line == 'Genetic-code-table ::= {\n':
         pass
     else:
         raise Exception("Unparsed: " + repr(line))
+
+
+print("########################################################################")
+print("# End of auto-generated output from Scripts/update_ncbi_codon_table.py #")
+print("########################################################################")
