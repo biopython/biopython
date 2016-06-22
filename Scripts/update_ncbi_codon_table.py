@@ -15,6 +15,23 @@ and check for any differences in the old tables.
 
 import re
 
+INDENT = len("register_ncbi_table(")
+
+
+def line_wrap(text, indent=0, max_len=78):
+    if len(text) <= max_len:
+        return text
+    line = text[:max_len]
+    assert " " in line, line
+    line, rest = line.rsplit(" ", 1)
+    rest = " " * indent + rest + text[max_len:]
+    assert len(line) < max_len
+    if indent + len(rest) <= max_len:
+        return line + "\n" + rest
+    else:
+        return line + "\n" + line_wrap(rest, max_len)
+
+
 print("##########################################################################")
 print("# Start of auto-generated output from Scripts/update_ncbi_codon_table.py #")
 print("##########################################################################")
@@ -47,10 +64,9 @@ for line in open("gc.prt").readlines():
         assert start is not None and bases != []
         if len(names) == 1:
             names.append(None)
-        print("register_ncbi_table(name=%s," % repr(names[0]))
-        print("                    alt_name=%s, id=%d," % \
-              (repr(names[1]), id))
-        print("                    table={")
+        print("register_ncbi_table(name=%r," % names[0])
+        print(" " * INDENT + "alt_name=%r, id=%d," % (names[1], id))
+        print(" " * INDENT + "table={")
         s = "    "
         for i in range(64):
             if aa[i] != "*":
@@ -60,43 +76,19 @@ for line in open("gc.prt").readlines():
                     print(s)
                     s = "    " + t
                 else:
-                    s = s + t
+                    s += t
         print("%s }," % s)
-        s = "                    stop_codons=["
-        for i in range(64):
-            if aa[i] == "*":
-                t = "'%s%s%s'," % (bases[0][i], bases[1][i], bases[2][i])
-                if len(s) + len(t) > 75:
-                    s_with_spaces = s.replace("','", "', '")
-                    print(s_with_spaces)
-                    s = "                                    " + t
-                else:
-                    s = s + t
-        s_with_spaces = s.replace("','", "', '")
-        print("%s ]," % s_with_spaces)
-        s = "                    start_codons=["
-        for i in range(64):
-            if start[i] == "M":
-                t = "'%s%s%s'," % (bases[0][i], bases[1][i], bases[2][i])
-                if len(s) + len(t) > 75:
-                    s_with_spaces = s.replace("','", "', '")
-                    print(s_with_spaces)
-                    s = "                                    " + t
-                else:
-                    s = s + t
-        s_with_spaces = s.replace("','", "', '")
-        print("%s ]" % s_with_spaces)
-        print("                    )")
-        # Two blank lines between each function call
+        codons = [bases[0][i] + bases[1][i] + bases[2][i] for i in range(64) if aa[i] == "*"]
+        print(line_wrap(" " * INDENT + "stop_codons=%r," % codons, indent=INDENT + 13))
+        codons = [bases[0][i] + bases[1][i] + bases[2][i] for i in range(64) if start[i] == "M"]
+        print(line_wrap(" " * INDENT + "start_codons=%r)" % codons, indent=INDENT + 14))
         print("")
-        print("")
-    elif line[:2] == "--" or line == "\n" or line == "}\n" or \
-         line == 'Genetic-code-table ::= {\n':
+    elif line[:2] == "--" or line in ("\n", "}\n", 'Genetic-code-table ::= {\n'):
         pass
     else:
         raise Exception("Unparsed: " + repr(line))
 
-
+print("")
 print("########################################################################")
 print("# End of auto-generated output from Scripts/update_ncbi_codon_table.py #")
 print("########################################################################")
