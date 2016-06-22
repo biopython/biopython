@@ -21,6 +21,12 @@ It is now faster, addresses some problems with local alignments, and also
 now allows gap insertions after deletions, and vice versa, inspired by the
 http://dx.doi.org/10.1101/031500 preprint from Flouri et al.
 
+The sample graphical tool SeqGui (Sequence Graphical User Interface) was
+rewritten using the tkinter library (contributed by Markus Piotrowski). This
+allows simple nucleotide transcription, back-transcription and translation
+into amino acids using Bio.Seq internally, offering of the NCBI genetic codes
+supported in Biopython.
+
 Additionally, a number of small bugs have been fixed with further additions
 to the test suite, and there has been further work to follow the Python PEP8
 and best practice standard coding style.
