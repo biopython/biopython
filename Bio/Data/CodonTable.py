@@ -393,8 +393,9 @@ def register_ncbi_table(name, alt_name, id,
                         table, start_codons, stop_codons):
     """Turns codon table data into objects, and stores them in the dictionaries (PRIVATE)."""
     # In most cases names are divided by "; ", however there is also
-    # 'Bacterial and Plant Plastid' (which used to be just 'Bacterial')
-    names = [x.strip() for x in name.replace(" and ", "; ").split("; ")]
+    # Table 11 'Bacterial, Archaeal and Plant Plastid Code', previously
+    # 'Bacterial and Plant Plastid' which used to be just 'Bacterial'
+    names = [x.strip() for x in name.replace(" and ", "; ").replace(", ", "; ").split("; ")]
 
     dna = NCBICodonTableDNA(id, names + [alt_name], table, start_codons,
                             stop_codons)
@@ -874,6 +875,7 @@ del n
 assert ambiguous_generic_by_id[1] == ambiguous_generic_by_name["Standard"]
 assert ambiguous_generic_by_id[4] == ambiguous_generic_by_name["SGC3"]
 assert ambiguous_generic_by_id[11] == ambiguous_generic_by_name["Bacterial"]
+assert ambiguous_generic_by_id[11] == ambiguous_generic_by_name["Archaeal"]
 assert ambiguous_generic_by_id[11] == ambiguous_generic_by_name["Plant Plastid"]
 assert ambiguous_generic_by_id[15] == ambiguous_generic_by_name['Blepharisma Macronuclear']
 assert ambiguous_generic_by_id[24] == ambiguous_generic_by_name["Pterobranchia Mitochondrial"]
