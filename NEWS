@@ -31,6 +31,9 @@ New NCBI genetic code table 26 (Pachysolen tannophilus Nuclear Code) has been
 added to Bio.Data (and the translation functionality), and table 11 is now
 also available under the alias Archaeal.
 
+In line with NCBI website changes, Biopython now uses HTTPS rather than HTTP
+to connect to the NCBI Entrez API.
+
 Additionally, a number of small bugs have been fixed with further additions
 to the test suite, and there has been further work to follow the Python PEP8
 and best practice standard coding style.

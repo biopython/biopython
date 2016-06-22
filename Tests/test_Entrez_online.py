@@ -35,7 +35,7 @@ if os.name == 'java':
 # This lets us set the email address to be sent to NCBI Entrez:
 Entrez.email = "biopython-dev@biopython.org"
 
-URL_HEAD = "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/"
+URL_HEAD = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/"
 URL_TOOL = "tool=biopython"
 URL_EMAIL = "email=biopython-dev%40biopython.org"
 
