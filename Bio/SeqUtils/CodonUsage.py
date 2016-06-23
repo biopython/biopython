@@ -106,8 +106,8 @@ class CodonAdaptationIndex(object):
 
             # now generate the index W=RCSUi/RCSUmax:
             rcsu_max = max(rcsu)
-            for i in range(len(codons)):
-                self.index[codons[i]] = rcsu[i] / rcsu_max
+            for idx, i in enumerate(codons):
+                self.index[i] = rcsu[idx] / rcsu_max
 
     def cai_for_gene(self, dna_sequence):
         """Calculate the CAI (float) for the provided DNA sequence (string).
