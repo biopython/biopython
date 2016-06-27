@@ -50,14 +50,19 @@ To run the docstring tests (see section \ref{section:doctest}), you can use
 \begin{verbatim}
 python run_tests.py doctest
 \end{verbatim}
+You can also skip any tests which have been setup with an explicit
+online component by adding \verb|--offline|, e.g.
+\begin{verbatim}
+python run_tests.py --offline
+\end{verbatim}
 By default, \verb|run_tests.py| runs all tests, including the docstring tests.
 
 If an individual test is failing, you can also try running it
 directly, which may give you more information.
 
-Importantly, note that the individual unit tests come in two types:
+Importantly, note that the individual unit test files come in two types:
 \begin{itemize}
-\item Simple print-and-compare scripts.  These unit tests are
+\item Older simple print-and-compare scripts.  These unit tests are
       essentially short example Python programs, which print out
       various output text.  For a test file named \verb|test_XXX.py|
       there will be a matching text file called \verb|test_XXX| under
@@ -129,9 +134,9 @@ Each Biopython test can have three important files and directories involved with
 \begin{enumerate}
   \item \verb|test_Biospam.py| -- The actual test code for your module.
   \item \verb|Biospam| [optional]-- A directory where any necessary input files
-    will be located. Any output files that will be generated should also
-    be written here (and preferably cleaned up after the tests are
-    done) to prevent clogging up the main Tests directory.
+    will be located. If you have any output files that should be manually
+    reviewed, output them here (but this is discouraged) to prevent clogging
+    up the main Tests directory. In general use a temporary file/folder.
   \item \verb|output/Biospam| -- [for print-and-compare tests only] This
     file contains the expected output from running \verb|test_Biospam.py|.
     This file is not needed for \verb|unittest|-style tests, since there
@@ -402,7 +407,7 @@ OK
 \end{itemize}
 
 If your module contains docstring tests (see section \ref{section:doctest}),
-you may want to include those in the tests to be run. You can do so as
+you \emph{may} want to include those in the tests to be run. You can do so as
 follows by modifying the code under \verb|if __name__ == "__main__":|
 to look like this:
 
@@ -416,10 +421,11 @@ if __name__ == "__main__":
 \end{verbatim}
 
 This is only relevant if you want to run the docstring tests when you
-execute \verb|python test_Biospam.py|; with
-\verb|python run_tests.py|, the docstring tests are run automatically
-(assuming they are included in the list of docstring tests in
-\verb|run_tests.py|, see the section below).
+execute \verb|python test_Biospam.py| if it has some complex run-time
+dependency checking.
+
+In general instead include the docstring tests by adding them to the
+\verb|run_tests.py| as explained below.
 
 \section{Writing doctests}
 \label{section:doctest}
@@ -471,3 +477,61 @@ To run the docstring tests only, use
 $ python run_tests.py doctest
 \end{verbatim}
 
+Note that the doctest system is fragile and care is needed to ensure
+your output will match on all the different versions of Python that
+Biopython supports (e.g. differences in floating point numbers).
+
+\section{Writing doctests in the Tutorial}
+\label{section:doctest-tutorial}
+
+This Tutorial you are reading has a lot of code snippets, which are
+often formatted like a doctest. We have our own system in file
+\verb|test_Tutorial.py| to allow tagging code snippets in the
+Tutorial source to be run as Python doctests. This works by adding
+special \verb|%doctest| comment lines before each verbatim block,
+e.g.
+
+\begin{lstlisting}
+%doctest
+\begin{verbatim}
+>>> from Bio.Alphabet import generic_dna
+>>> from Bio.Seq import Seq
+>>> len("ACGT")
+4
+\end{verbatim}
+\end{lstlisting}
+
+\noindent Often code examples are not self-contained, but
+continue from the previous verbatim block. Here we use the
+magic comment \verb|%cont-doctest| as shown here:
+
+\begin{lstlisting}
+%cont-doctest
+\begin{verbatim}
+>>> Seq("ACGT") == Seq("ACGT", generic_dna)
+True
+\end{verbatim}
+\end{lstlisting}
+
+The special \verb|%doctest| comment line can take a working directory
+(relative to the \verb|Doc/| folder) to use if you have any example
+data files, e.g. \verb|%doctest examples| will use the
+\verb|Doc/examples| folder, while  \verb|%doctest ../Tests/GenBank|
+will use the \verb|Tests/GenBank| folder.
+
+After the directory argument, you can specify any Python dependencies
+which must be present in order to run the test by adding \verb|lib:XXX|
+to indicate \verb|import XXX| must work, e.g.
+\verb|%doctest examples lib:numpy|
+
+You can run the Tutorial doctests via:
+
+\begin{verbatim}
+$ python test_Tutorial.py
+\end{verbatim}
+
+or:
+
+\begin{verbatim}
+$ python run_tests.py test_Tutorial.py
+\end{verbatim}
