@@ -534,6 +534,14 @@ class SeqInterfaceTest(unittest.TestCase):
         self.assertEqual(str(test_seq[-10:][5:]), "TTATA")
         self.assertEqual(str(test_seq[-10:][5:]), "TTATA")
 
+    def test_record_slicing(self):
+        """Check that slices of DBSeqRecord are retrieved properly.
+        """
+        new_rec = self.item[400:]
+        self.assertTrue(isinstance(new_rec, SeqRecord))
+        self.assertEqual(len(new_rec), 480)
+        self.assertEqual(len(new_rec.features), 5)
+
     def test_seq_features(self):
         """Check SeqFeatures of a sequence.
         """

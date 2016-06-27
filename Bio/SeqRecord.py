@@ -427,10 +427,17 @@ class SeqRecord(object):
             if self.seq is None:
                 raise ValueError("If the sequence is None, we cannot slice it.")
             parent_length = len(self)
-            answer = self.__class__(self.seq[index],
-                                    id=self.id,
-                                    name=self.name,
-                                    description=self.description)
+            from BioSQL.BioSeq import DBSeqRecord
+            if isinstance(self, DBSeqRecord):
+                answer = SeqRecord(self.seq[index],
+                                        id=self.id,
+                                        name=self.name,
+                                        description=self.description)
+            else:
+                answer = self.__class__(self.seq[index],
+                                        id=self.id,
+                                        name=self.name,
+                                        description=self.description)
             # TODO - The description may no longer apply.
             # It would be safer to change it to something
             # generic like "edited" or the default value.
