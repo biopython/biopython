@@ -267,7 +267,7 @@ class GenericPositionMatrix(dict):
 
     def reverse_complement(self):
         values = {}
-        if "U" in self.alphabet.letters:
+        if isinstance(self.alphabet, Alphabet.RNAAlphabet):
             values["A"] = self["U"][::-1]
             values["U"] = self["A"][::-1]
         else:
