@@ -1412,7 +1412,7 @@ stored in \texttt{alpha.faa} and \texttt{beta.faa}:
 >>> from Bio import SeqIO
 >>> seq1 = SeqIO.read("alpha.faa", "fasta")
 >>> seq2 = SeqIO.read("beta.faa", "fasta")
->>> alignment = pairwise2.align.globalxx(seq1.seq, seq2.seq)
+>>> alignments = pairwise2.align.globalxx(seq1.seq, seq2.seq)
 \end{verbatim}
 
 As you see, we call the alignment function with \verb|align.globalxx|. The tricky
@@ -1426,19 +1426,19 @@ The second letter decodes the cost for gaps; \texttt{x} means no gap costs at al
 with \texttt{s} different penalties for opening and extending a gap can be assigned.
 So, \verb|globalxx| means that only matches between both sequences are counted.
 
-Our variable \texttt{alignment} now contains a list of alignments (at least one) which
+Our variable \texttt{alignments} now contains a list of alignments (at least one) which
 have the same optimal score for the given conditions. In our example this are 80
 different alignments with the score 72 (\verb|Bio.pairwise2| will return up to 1000
 alignments). Have a look at one of these alignments:
 
 %cont-doctest
 \begin{verbatim}
->>> len(alignment)
+>>> len(alignments)
 80
 \end{verbatim}
 %This has been abbreviated, can't use as doctest
 \end{verbatim}
->>> print(alignment[0])
+>>> print(alignments[0])
 ('MV-LSPADKTNV---K-A--A-WGKVGAHAG...YR-', 'MVHL-----T--PEEKSAVTALWGKV----...Y-H',
 72.0, 0, 217)
 \end{verbatim}
@@ -1471,13 +1471,13 @@ and a gap extension penalty of 0.5 (using \verb|globalds|):
 >>> from Bio.SubsMat.MatrixInfo import blosum62
 >>> seq1 = SeqIO.read("alpha.faa", "fasta")
 >>> seq2 = SeqIO.read("beta.faa", "fasta")
->>> alignment = pairwise2.align.globalds(seq1.seq, seq2.seq, blosum62, -10, -0.5)
->>> len(alignment)
+>>> alignments = pairwise2.align.globalds(seq1.seq, seq2.seq, blosum62, -10, -0.5)
+>>> len(alignments)
 2
 \end{verbatim}
 %This has been abbreviated, can't use as doctest
 \begin{verbatim}
->>> print(pairwise2.format_alignment(*alignment[0]))
+>>> print(pairwise2.format_alignment(*alignments[0]))
 MV-LSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTY...KYR
 ||||||||||||||||||||||||||||||||||||||||||||...|||
 MVHLTPEEKSAVTALWGKV-NVDEVGGEALGRLLVVYPWTQRFF...KYH
@@ -1494,8 +1494,8 @@ where again XX stands for a two letter code for the match and gap functions:
 \begin{verbatim}
 >>> from Bio import pairwise2
 >>> from Bio.SubsMat.MatrixInfo import blosum62
->>> alignment = pairwise2.align.localds("LSPADKTNVKAA", "PEEKSAV", blosum62, -10, -1)
->>> print(pairwise2.format_alignment(*alignment[0]))
+>>> alignments = pairwise2.align.localds("LSPADKTNVKAA", "PEEKSAV", blosum62, -10, -1)
+>>> print(pairwise2.format_alignment(*alignments[0]))
 LSPADKTNVKAA
   |||||||
 --PEEKSAV---
@@ -1510,8 +1510,8 @@ of 2/0.5 using \verb|localms|):
 
 %cont-doctest
 \begin{verbatim}
->>> alignment = pairwise2.align.localms("AGAACT", "GAC", 5, -4, -2, -0.5)
->>> print(pairwise2.format_alignment(*alignment[0]))
+>>> alignments = pairwise2.align.localms("AGAACT", "GAC", 5, -4, -2, -0.5)
+>>> print(pairwise2.format_alignment(*alignments[0]))
 AGAACT
  ||||
 -G-AC-
@@ -1524,8 +1524,9 @@ One useful keyword argument of the \verb|Bio.pairwise2.align| functions is
 of the best alignment(s), but in a significantly shorter time. It will also
 allow the alignment of longer sequences before a memory error is raised.
 
-Unfortunately, \verb|Bio.pairwise2| does not work with alignment objects
-(yet). However, the module has some interesting advanced features: you can
+Unfortunately, \verb|Bio.pairwise2| does not work with Biopython's multiple
+sequence alignment objects (yet).
+However, the module has some interesting advanced features: you can
 define your own match and gap functions (interested in testing affine
 logarithmic gap costs?), gap penalties and end gaps penalties can be different
 for both sequences, sequences can be supplied as lists (useful if you have
