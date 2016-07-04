@@ -1297,6 +1297,9 @@ VKAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDPENFRLLGNVLVCVLAHHFG
 KEFTPPVQAAYQKVVAGVANALAHKYH
 \end{verbatim}
 
+You can find copies of these example files with the Biopython source code
+under the \verb|Doc/examples/| directory.
+
 Let's start by creating a complete \texttt{needle} command line object in one go:
 
 %doctest
@@ -1403,6 +1406,7 @@ Suppose you want to do a global pairwise alignment between the same two
 hemoglobin sequences from above (\texttt{HBA\_HUMAN}, \texttt{HBB\_HUMAN})
 stored in \texttt{alpha.faa} and \texttt{beta.faa}:
 
+%doctest examples
 \begin{verbatim}
 >>> from Bio import pairwise2
 >>> from Bio import SeqIO
@@ -1427,9 +1431,13 @@ have the same optimal score for the given conditions. In our example this are 80
 different alignments with the score 72 (\verb|Bio.pairwise2| will return up to 1000
 alignments). Have a look at one of these alignments:
 
+%cont-doctest
 \begin{verbatim}
 >>> len(alignment)
 80
+\end{verbatim}
+%This has been abbreviated, can't use as doctest
+\end{verbatim}
 >>> print(alignment[0])
 ('MV-LSPADKTNV---K-A--A-WGKVGAHAG...YR-', 'MVHL-----T--PEEKSAVTALWGKV----...Y-H',
 72.0, 0, 217)
@@ -1440,6 +1448,7 @@ start and the end positions of the alignment (in global alignments the start is
 always 0 and the end the length of the alignment). \verb|Bio.pairwise2| has a
 function \verb|format_alignment| for a nicer printout:
 
+%This has been abbreviated, can't use as doctest
 \begin{verbatim}
 >>> print(pairwise2.format_alignment(*alignment[0]))
 MV-LSPADKTNV---K-A--A-WGKVGAHAG---EY-GA-EALE-RMFLSF----PTTK-TY--F...YR-
@@ -1455,10 +1464,19 @@ or \texttt{BLOSUM}. Thus, a more meaningful alignment for our example can be
 obtained by using the BLOSUM62 matrix, together with a gap open penalty of 10
 and a gap extension penalty of 0.5 (using \verb|globalds|):
 
+%doctest examples
 \begin{verbatim}
->>> from Bio.SubsMat import MatrixInfo as matlist
->>> matrix = matlist.blosum62
->>> alignment = pairwise2.align.globalds(seq1.seq, seq2.seq, matrix, -10, -0.5)
+>>> from Bio import pairwise2
+>>> from Bio import SeqIO
+>>> from Bio.SubsMat.MatrixInfo import blosum62
+>>> seq1 = SeqIO.read("alpha.faa", "fasta")
+>>> seq2 = SeqIO.read("beta.faa", "fasta")
+>>> alignment = pairwise2.align.globalds(seq1.seq, seq2.seq, blosum62, -10, -0.5)
+>>> len(alignment)
+2
+\end{verbatim}
+%This has been abbreviated, can't use as doctest
+\begin{verbatim}
 >>> print(pairwise2.format_alignment(*alignment[0]))
 MV-LSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTY...KYR
 ||||||||||||||||||||||||||||||||||||||||||||...|||
@@ -1472,13 +1490,17 @@ using the same sequences and the same parameters.
 Local alignments are called similarly with the function \verb|align.localXX|,
 where again XX stands for a two letter code for the match and gap functions:
 
+%doctest
 \begin{verbatim}
->>> alignment = pairwise2.align.localds("LSPADKTNVKAA", "PEEKSAV", matrix, -10, -1)
+>>> from Bio import pairwise2
+>>> from Bio.SubsMat.MatrixInfo import blosum62
+>>> alignment = pairwise2.align.localds("LSPADKTNVKAA", "PEEKSAV", blosum62, -10, -1)
 >>> print(pairwise2.format_alignment(*alignment[0]))
 LSPADKTNVKAA
   |||||||
 --PEEKSAV---
   Score=16
+<BLANKLINE>
 \end{verbatim}
 
 Instead of supplying a complete match/mismatch matrix, the match code
@@ -1486,6 +1508,7 @@ Instead of supplying a complete match/mismatch matrix, the match code
 example uses match/mismatch scores of 5/-4 and gap penalties (open/extend)
 of 2/0.5 using \verb|localms|):
 
+%cont-doctest
 \begin{verbatim}
 >>> alignment = pairwise2.align.localms("AGAACT", "GAC", 5, -4, -2, -0.5)
 >>> print(pairwise2.format_alignment(*alignment[0]))
@@ -1493,6 +1516,7 @@ AGAACT
  ||||
 -G-AC-
   Score=13
+<BLANKLINE>
 \end{verbatim}
 
 One useful keyword argument of the \verb|Bio.pairwise2.align| functions is
