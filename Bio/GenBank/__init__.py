@@ -274,7 +274,17 @@ def _loc(loc_str, expected_seq_length, strand):
     Traceback (most recent call last):
        ...
     ValueError: Invalid between location '123^456'
+
+    You can optionally provide a reference name:
+
+    >>> _loc("AL391218.9:105173..108462", 2000000, 1)
+    FeatureLocation(ExactPosition(105172), ExactPosition(108462), strand=1, ref='AL391218.9')
+
     """
+    if ":" in loc_str:
+        ref, loc_str = loc_str.split(":")
+    else:
+        ref = None
     try:
         s, e = loc_str.split("..")
     except ValueError:
@@ -294,12 +304,12 @@ def _loc(loc_str, expected_seq_length, strand):
                 pos = _pos(s)
             else:
                 raise ValueError("Invalid between location %s" % repr(loc_str))
-            return SeqFeature.FeatureLocation(pos, pos, strand)
+            return SeqFeature.FeatureLocation(pos, pos, strand, ref=ref)
         else:
             # e.g. "123"
             s = loc_str
             e = loc_str
-    return SeqFeature.FeatureLocation(_pos(s, -1), _pos(e), strand)
+    return SeqFeature.FeatureLocation(_pos(s, -1), _pos(e), strand, ref=ref)
 
 
 def _split_compound_loc(compound_loc):
@@ -1046,12 +1056,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         # Handle the general case with more complex regular expressions
         if _re_complex_location.match(location_line):
             # e.g. "AL121804.2:41..610"
-            if ":" in location_line:
-                location_ref, location_line = location_line.split(":")
-            else:
-                location_ref = None
             cur_feature.location = _loc(location_line, self._expected_size, strand)
-            cur_feature.location.ref = location_ref
             return
 
         if _re_complex_compound.match(location_line):
@@ -1067,17 +1072,12 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                     part_strand = -1
                 else:
                     part_strand = strand
-                if ":" in part:
-                    location_ref, part = part.split(":")
-                else:
-                    location_ref = None
                 try:
                     loc = _loc(part, self._expected_size, part_strand)
                 except ValueError as err:
                     print(location_line)
                     print(part)
                     raise err
-                loc.ref = location_ref
                 locs.append(loc)
             # Historically a join on the reverse strand has been represented
             # in Biopython with both the parent SeqFeature and its children
