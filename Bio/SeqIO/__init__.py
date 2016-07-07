@@ -463,7 +463,7 @@ def write(sequences, handle, format):
         raise TypeError("Check arguments, handle should NOT be a list")
 
     if isinstance(sequences, SeqRecord):
-        # This raised an exception in order version of Biopython
+        # This raised an exception in older versions of Biopython
         sequences = [sequences]
 
     if format in _BinaryFormats:
