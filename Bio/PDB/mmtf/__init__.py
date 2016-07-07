@@ -12,6 +12,7 @@ def get_from_decoded(decoder):
     decoder.pass_data_on(structure_decoder)
     return structure_decoder.structure_bulder.get_structure()
 
+
 class MMTFParser(object):
     """Class with static methods to get a BioPython structure from a url or a file."""
     @staticmethod

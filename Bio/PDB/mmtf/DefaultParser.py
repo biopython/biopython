@@ -1,5 +1,6 @@
 from Bio.PDB.StructureBuilder import StructureBuilder
 
+
 class StructureDecoder(object):
     """Class to pass the data from mmtf-python into a BioPython data structure."""
 
@@ -22,7 +23,6 @@ class StructureDecoder(object):
         self.chain_index_to_seq_map = {}
         self.chain_index_to_description_map = {}
         self.chain_counter = 0
-
 
     def set_atom_info(self, atom_name, serial_number, alternative_location_id, x, y, z, occupancy,
                       temperature_factor, element, charge):
@@ -61,10 +61,9 @@ class StructureDecoder(object):
             self.this_type = "W"
         self.chain_counter += 1
 
-
     def set_entity_info(self, chain_indices, sequence, description, entity_type):
         """Set the entity level information for the structure.
-        
+
         :param chain_indices: the indices of the chains for this entity
         :param sequence: the one letter code sequence for this entity
         :param description: the description for this entity
@@ -152,4 +151,3 @@ class StructureDecoder(object):
         :param bond_order the bond order
         """
         pass
-
