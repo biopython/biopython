@@ -331,7 +331,7 @@ def compare_record(old, new):
             # guarantee that they will be identical after a load/retrieve.
             assert isinstance(new.annotations[key], basestring) \
                 or isinstance(new.annotations[key], list)
-        elif type(old.annotations[key]) == type(new.annotations[key]):
+        elif isinstance(old.annotations[key], type(new.annotations[key])):
             assert old.annotations[key] == new.annotations[key], \
                 "Annotation '%s' changed by load/retrieve\nWas:%s\nNow:%s" \
                 % (key, old.annotations[key], new.annotations[key])
