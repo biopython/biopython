@@ -15,7 +15,7 @@ class StructureDecoder(object):
         :param total_num_chains: the number of chains in the structure
         :param total_num_models: the number of models in the structure
         :param structure_id the: id of the structure (e.g. PDB id)
-	"""
+        """
         self.structure_bulder = StructureBuilder()
         self.structure_bulder.init_structure(structure_id=structure_id)
         self.chain_index_to_type_map = {}
@@ -50,7 +50,7 @@ class StructureDecoder(object):
         :param chain_id: the asym chain id from mmCIF
         :param chain_name: the auth chain id from mmCIF
         :param num_groups: the number of groups this chain has
-	"""
+        """
         # A Bradley - chose to use chain_name (auth_id) as it complies with current BioPython. Chain_id might be better.
         self.structure_bulder.init_chain(chain_id=chain_name)
         if self.chain_index_to_type_map[self.chain_counter] == "polymer":
@@ -65,11 +65,11 @@ class StructureDecoder(object):
     def set_entity_info(self, chain_indices, sequence, description, entity_type):
         """Set the entity level information for the structure.
         
-	:param chain_indices: the indices of the chains for this entity
+        :param chain_indices: the indices of the chains for this entity
         :param sequence: the one letter code sequence for this entity
         :param description: the description for this entity
         :param entity_type: the entity type (polymer,non-polymer,water)
-	"""
+        """
         for chain_ind in chain_indices:
             self.chain_index_to_type_map[chain_ind] = entity_type
             self.chain_index_to_seq_map[chain_ind] = sequence
@@ -90,7 +90,7 @@ class StructureDecoder(object):
         :param sequence_index: the index of this group in the sequence defined by the enttiy
         :param secondary_structure_type: the type of secondary structure used (types are according to DSSP and
         number to type mappings are defined in the specification)
-	"""
+        """
         self.structure_bulder.init_seg(' ')
         self.structure_bulder.init_residue(group_name, self.this_type, group_number, insertion_code)
 
@@ -99,7 +99,7 @@ class StructureDecoder(object):
 
         :param model_id: the index for the model
         :param chain_count: the number of chains in the model
-	"""
+        """
         self.structure_bulder.init_model(model_id)
 
     def set_xtal_info(self, space_group, unit_cell):
@@ -120,15 +120,15 @@ class StructureDecoder(object):
         :param deposition_date: the deposition date of the structure
         :param release_date: the release date of the structure
         :param experimnetal_methods: the list of experimental methods in the structure
-	"""
+        """
         pass
 
     def set_bio_assembly_trans(self, bio_assembly_index, input_chain_indices, input_transform):
         """Set the Bioassembly transformation information. A single bioassembly can have multiple transforms,
 
-	:param bio_assembly_index: the integer index of the bioassembly
-	:param input_chain_indices: the list of integer indices for the chains of this bioassembly
-	:param input_transformation: the list of doubles for  the transform of this bioassmbly transform"""
+        :param bio_assembly_index: the integer index of the bioassembly
+        :param input_chain_indices: the list of integer indices for the chains of this bioassembly
+        :param input_transformation: the list of doubles for  the transform of this bioassmbly transform"""
         pass
 
     def finalize_structure(self):
@@ -141,14 +141,15 @@ class StructureDecoder(object):
         :param atom_index_one: the integer atom index (in the group) of the first partner in the bond
         :param atom_index_two: the integer atom index (in the group) of the second partner in the bond
         :param bond_order: the integer bond order
-	"""
+        """
         pass
+
     def set_inter_group_bond(self, atom_index_one, atom_index_two, bond_order):
         """Add bonds between groups.
 
         :param atom_index_one: the integer atom index (in the structure) of the first partner in the bond
         :param atom_index_two: the integer atom index (in the structure) of the second partner in the bond
         :param bond_order the bond order
-	"""
+        """
         pass
 
