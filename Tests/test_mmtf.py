@@ -28,6 +28,7 @@ class ParseMMTF(unittest.TestCase):
                                        mmcif_atom.full_id)  # (structure id, model id, chain id, residue id, atom id)
                 parse_mmtf.assertEqual(mmtf_atom.id, mmcif_atom.name)  # id of atom is the atom name (e.g. "CA")
                 # self.assertEqual(mmtf_atom.serial_number,mmcif_atom.serial_number) # mmCIF serial number is none
+
         def test_residues(parse_mmtf):
             """Test that all residues in self.mmcif_res and self.mmtf_res are equivalent"""
             parse_mmtf.assertEqual(len(parse_mmtf.mmcif_res), len(parse_mmtf.mmtf_res))
@@ -72,4 +73,3 @@ def test_parser():
 
 if __name__ == '__main__':
     unittest.main()
-
