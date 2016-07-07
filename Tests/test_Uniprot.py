@@ -272,7 +272,7 @@ class TestUniprot(unittest.TestCase):
             elif key in ["date"]:
                 # TODO - Why is this a list vs str?
                 pass
-            elif type(old.annotations[key]) != type(new.annotations[key]):
+            elif not isinstance(old.annotations[key], type(new.annotations[key])):
                 raise TypeError("%s gives %s vs %s" %
                                  (key, old.annotations[key], new.annotations[key]))
             elif key in ["organism"]:
