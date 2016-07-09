@@ -21,7 +21,7 @@ Transmission Format (MMTF, see http://mmtf.rcsb.org), in addition to the
 mmCIF and PDB file formats (contributed by Anthony Bradley). This requires
 an optional external dependency on the mmtf-python library.
 
-Module Bio.pariwise2 has been re-written (contributed by Markus Piotrowski).
+Module Bio.pairwise2 has been re-written (contributed by Markus Piotrowski).
 It is now faster, addresses some problems with local alignments, and also
 now allows gap insertions after deletions, and vice versa, inspired by the
 http://dx.doi.org/10.1101/031500 preprint from Flouri et al.
