@@ -38,29 +38,34 @@ from Bio.PDB.PDBParser import PDBParser
 _dssp_cys = re.compile('[a-z]')
 
 # Maximal ASA of amino acids
-# Values from Sander & Rost, (1994), Proteins, 20:216-226
 # Used for relative accessibility
-MAX_ACC = {}
-MAX_ACC["ALA"] = 106.0
-MAX_ACC["CYS"] = 135.0
-MAX_ACC["ASP"] = 163.0
-MAX_ACC["GLU"] = 194.0
-MAX_ACC["PHE"] = 197.0
-MAX_ACC["GLY"] = 84.0
-MAX_ACC["HIS"] = 184.0
-MAX_ACC["ILE"] = 169.0
-MAX_ACC["LYS"] = 205.0
-MAX_ACC["LEU"] = 164.0
-MAX_ACC["MET"] = 188.0
-MAX_ACC["ASN"] = 157.0
-MAX_ACC["PRO"] = 136.0
-MAX_ACC["GLN"] = 198.0
-MAX_ACC["ARG"] = 248.0
-MAX_ACC["SER"] = 130.0
-MAX_ACC["THR"] = 142.0
-MAX_ACC["VAL"] = 142.0
-MAX_ACC["TRP"] = 227.0
-MAX_ACC["TYR"] = 222.0
+
+residue_max_acc = dict(
+    # Miller max acc: Miller et al. 1987 (http://dx.doi.org/10.1016/0022-2836(87)90038-6)
+    # Wilke: Tien et al., 2013 (http://dx.doi.org/10.1371/journal.pone.0080635)
+    # Sander: Sander & Rost, (1994), Proteins, 20:216-226
+    Miller={
+        'ALA': 113.0, 'ARG': 241.0, 'ASN': 158.0, 'ASP': 151.0,
+        'CYS': 140.0, 'GLN': 189.0, 'GLU': 183.0, 'GLY': 85.0,
+        'HIS': 194.0, 'ILE': 182.0, 'LEU': 180.0, 'LYS': 211.0,
+        'MET': 204.0, 'PHE': 218.0, 'PRO': 143.0, 'SER': 122.0,
+        'THR': 146.0, 'TRP': 259.0, 'TYR': 229.0, 'VAL': 160.0
+    },
+    Wilke={
+        'ALA': 129.0, 'ARG': 274.0, 'ASN': 195.0, 'ASP': 193.0,
+        'CYS': 167.0, 'GLN': 225.0, 'GLU': 223.0, 'GLY': 104.0,
+        'HIS': 224.0, 'ILE': 197.0, 'LEU': 201.0, 'LYS': 236.0,
+        'MET': 224.0, 'PHE': 240.0, 'PRO': 159.0, 'SER': 155.0,
+        'THR': 172.0, 'TRP': 285.0, 'TYR': 263.0, 'VAL': 174.0
+    },
+    Sander={
+        'ALA': 126.0, 'ARG': 248.0, 'ASN': 157.0, 'ASP': 163.0,
+        'CYS': 135.0, 'GLN': 198.0, 'GLU': 194.0, 'GLY': 84.0,
+        'HIS': 184.0, 'ILE': 169.0, 'LEU': 164.0, 'LYS': 205.0,
+        'MET': 188.0, 'PHE': 197.0, 'PRO': 136.0, 'SER': 130.0,
+        'THR': 142.0, 'TRP': 227.0, 'TYR': 222.0, 'VAL': 142.0
+    }
+)
 
 
 def ss_to_index(ss):
@@ -235,7 +240,7 @@ class DSSP(AbstractResiduePropertyMap):
     -42.399999999999999)
     """
 
-    def __init__(self, model, pdb_file, dssp="dssp"):
+    def __init__(self, model, pdb_file, dssp="dssp", acc_array = 'Sander'):
         """
         ::
 
@@ -248,6 +253,9 @@ class DSSP(AbstractResiduePropertyMap):
         @param dssp: the dssp executable (ie. the argument to os.system)
         @type dssp: string
         """
+        
+        self.residue_max_acc = residue_max_acc[acc_array]
+        
         # create DSSP dictionary
         dssp_dict, dssp_keys = dssp_dict_from_pdb_file(pdb_file, dssp)
         dssp_map = {}
@@ -346,6 +354,7 @@ class DSSP(AbstractResiduePropertyMap):
             # Relative accessibility
             resname = res.get_resname()
             try:
+                rel_acc = acc / self.residue_max_acc[resname]
                 rel_acc = acc / MAX_ACC[resname]
             except KeyError:
                 # Invalid value for resname
