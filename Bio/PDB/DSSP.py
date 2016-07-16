@@ -355,7 +355,6 @@ class DSSP(AbstractResiduePropertyMap):
             resname = res.get_resname()
             try:
                 rel_acc = acc / self.residue_max_acc[resname]
-                rel_acc = acc / MAX_ACC[resname]
             except KeyError:
                 # Invalid value for resname
                 rel_acc = 'NA'
