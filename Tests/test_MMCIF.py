@@ -174,7 +174,7 @@ class ParseReal(unittest.TestCase):
         parser = MMCIFParser(QUIET=1)
         with warnings.catch_warnings():
             warnings.simplefilter('ignore', PDBConstructionWarning)
-            structure = parser.get_structure("example", "PDB/4zhl.cif")
+            structure = parser.get_structure("example", "PDB/4ZHL.cif")
         for ppbuild in [PPBuilder(), CaPPBuilder()]:
             # First try allowing non-standard amino acids,
             polypeptides = ppbuild.build_peptides(structure[0], False)
