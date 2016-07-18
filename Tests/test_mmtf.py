@@ -9,7 +9,7 @@ class ParseMMTF(unittest.TestCase):
     """Testing with real mmtf file(s)."""
 
     def test_compare_to_mmcif(self):
-        """Compre the MMTF and mmCIF parsed structrues"""
+        """Compare the MMTF and mmCIF parsed structures"""
         def test_atoms(parse_mmtf):
             """Test that all atoms in self.mmtf_atoms and self.mmcif_atoms are equivalent"""
             parse_mmtf.assertEqual(len(parse_mmtf.mmcif_atoms), len(parse_mmtf.mmtf_atoms))
@@ -73,5 +73,7 @@ def test_parser():
         structure = MMTFParser.get_structure("PDB/1A8O.mmtf")
         structure = MMTFParser.get_structure("PDB/4CUP.mmtf")
 
-if __name__ == '__main__':
-    unittest.main()
+
+if __name__ == "__main__":
+    runner = unittest.TextTestRunner(verbosity=2)
+    unittest.main(testRunner=runner)
