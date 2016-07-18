@@ -69,6 +69,8 @@ def test_parser():
     """Simply test that """
     with warnings.catch_warnings():
         warnings.simplefilter('ignore', PDBConstructionWarning)
+        structure = MMTFParser.get_structure("PDB/4ZHL.mmtf")
+        structure = MMTFParser.get_structure("PDB/1A8O.mmtf")
         structure = MMTFParser.get_structure("PDB/4CUP.mmtf")
 
 if __name__ == '__main__':
