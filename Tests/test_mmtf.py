@@ -41,13 +41,13 @@ class ParseMMTF(unittest.TestCase):
             self.mmtf_atoms = [x for x in mmtf_r.get_atom()]
             self.check_atoms()
 
-    def test_compare_to_mmcif(self):
-        """Compare the MMTF and mmCIF parsed structures"""
+    def check_mmtf_vs_cif(self, mmtf_filename, cif_filename):
+        """Compare parsed structures for MMTF and CIF files."""
         with warnings.catch_warnings():
             warnings.simplefilter('ignore', PDBConstructionWarning)
-            mmtf_struct = MMTFParser.get_structure("PDB/4CUP.mmtf")
+            mmtf_struct = MMTFParser.get_structure(mmtf_filename)
         mmcif_parser = MMCIFParser()
-        mmcif_struct = mmcif_parser.get_structure("example", "PDB/4CUP.cif")
+        mmcif_struct = mmcif_parser.get_structure("example", cif_filename)
         self.mmcif_atoms = [x for x in mmcif_struct.get_atoms()]
         self.mmtf_atoms = [x for x in mmtf_struct.get_atoms()]
         self.check_atoms()
@@ -64,14 +64,34 @@ class ParseMMTF(unittest.TestCase):
         self.check_residues()
         self.assertEqual(len([x for x in mmcif_struct.get_models()]), len([x for x in mmtf_struct.get_models()]))
 
+    def test_4CUP(self):
+        """Compare parsing 4CUP.mmtf and 4CUP.cif"""
+        self.check_mmtf_vs_cif("PDB/4CUP.mmtf", "PDB/4CUP.cif")
 
-def test_parser():
-    """Simply test that """
-    with warnings.catch_warnings():
-        warnings.simplefilter('ignore', PDBConstructionWarning)
-        structure = MMTFParser.get_structure("PDB/4ZHL.mmtf")
-        structure = MMTFParser.get_structure("PDB/1A8O.mmtf")
-        structure = MMTFParser.get_structure("PDB/4CUP.mmtf")
+#TODO:
+#    def test_1A8O(self):
+#        """Compare parsing 1A8O.mmtf and 1A8O.cif"""
+#        self.check_mmtf_vs_cif("PDB/1A8O.mmtf", "PDB/1A8O.cif")
+
+#TODO:
+#    def test_4ZHL(self):
+#        """Compare parsing 4ZHL.mmtf and 4ZHL.cif"""
+#        self.check_mmtf_vs_cif("PDB/4ZHL.mmtf", "PDB/4ZHL.cif")
+
+class SimpleParseMMTF(unittest.TestCase):
+    """Just parse some real mmtf files."""
+
+    def test_4ZHL(self):
+        """Parse 4ZHL.mmtf"""
+        with warnings.catch_warnings():
+            warnings.simplefilter('ignore', PDBConstructionWarning)
+            structure = MMTFParser.get_structure("PDB/4ZHL.mmtf")
+
+    def test_1A80(self):
+        """Parse 1A8O.mmtf"""
+        with warnings.catch_warnings():
+            warnings.simplefilter('ignore', PDBConstructionWarning)
+            structure = MMTFParser.get_structure("PDB/1A8O.mmtf")
 
 
 if __name__ == "__main__":
