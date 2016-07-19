@@ -27,31 +27,27 @@ import sys
 import os
 import shutil
 
-try:
+if "bdist_wheel" in sys.argv:
+    try:
+        import setuptools
+        import wheel
+    except ImportError:
+        sys.exit("We need both setuptools AND wheel packages installed for bdist_wheel to work")
+    # Import specific bits of setuptools ...
     from setuptools import setup
     from setuptools import Command
     from setuptools.command.install import install
     from setuptools.command.build_py import build_py
     from setuptools.command.build_ext import build_ext
     from setuptools import Extension
-    SETUPTOOLS = True
-except ImportError:
+else:
+    # Except for wheels, stick with standard library's distutils
     from distutils.core import setup
     from distutils.core import Command
     from distutils.command.install import install
     from distutils.command.build_py import build_py
     from distutils.command.build_ext import build_ext
     from distutils.extension import Extension
-    SETUPTOOLS = False
-
-
-if "bdist_wheel" in sys.argv:
-    try:
-        import wheel
-    except ImportError:
-        wheel = None
-    if not SETUPTOOLS or wheel is None:
-        sys.exit("We need both setuptools AND wheel packages installed for bdist_wheel to work")
 
 
 _CHECKED = None
