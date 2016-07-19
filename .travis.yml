@@ -1,39 +1,34 @@
 # Special configuration file to run tests on Travis-CI via GitHub notifications
 # See https://travis-ci.org/biopython/biopython/builds for results
 #
-# The tests are run via the coverage script, and if the tests pass the coverage
-# information is pushed to https://codecov.io/github/biopython/biopython
+# Using TravisCI's configuration alone became too complicated once we wanted
+# to cover more than just running the unit tests on different versions of
+# Python, so this now does all the complicated test configuration via TOX
+# See file .travis-tox.ini
 #
-# Note when testing Python 3, the 'python' command will invoke Python 3
-# and similarly for PyPy too.
-
-# Environment variables setup via the matrix
-# - DEP = list of python packages to install via default pip install
-# - COV = yes/no; should tests be run with coverage metric collection
-# - OPT = options to run_tests.py such as --offline
+# Environment variables setup here:
+# - TOXENV = environment used in Tox (conventionally uses py35 etc)
 #
-# Note we're explicitly allowing the online test targets to fail without
-# considering the whole test run to be a failure.
 
 language: python
 matrix:
   include:
-    - python: "2.6"
-      env: DEP="mmtf-python rdflib reportlab psycopg2 mysql-python mysql-connector-python-rf unittest2 scipy" COV="yes" OPT="--offline"
-    - python: "2.7"
-      env: DEP="mmtf-python rdflib reportlab psycopg2 mysql-python mysql-connector-python-rf networkx" COV="yes" OPT="--offline"
-    - python: "3.3"
-      env: DEP="mmtf-python psycopg2 mysql-connector-python-rf" COV="yes" OPT=""
-    - python: "3.4"
-      env: DEP="" COV="yes" OPT="--offline"
-    - python: "3.5"
-      env: DEP="mmtf-python rdflib reportlab psycopg2 mysql-connector-python-rf scipy matplotlib" COV="yes" OPT="--offline"
-    - python: "pypy"
-      env: DEP="rdflib mysql-connector-python-rf" COV="yes" OPT="--offline"
-    - python: "pypy3"
-      env: COV="no" OPT="--offline"
-  allow_failures:
-    - python: "3.3"
+    - env: TOXENV=pep8
+    - env: TOXENV=sdist
+    - python: 2.6
+      env: TOXENV=py26-cover
+    - python: 2.7
+      env: TOXENV=py27-cover
+    - python: 3.3
+      env: TOXENV=py33-cover
+    - python: 3.4
+      env: TOXENV=py34-cover
+    - python: 3.5
+      env: TOXENV=py35-cover
+    - python: pypy
+      env: TOXENV=pypy-cover
+    - python: pypy3
+      env: TOXENV=pypy3-nocov
 
 sudo: false
 addons:
@@ -49,30 +44,14 @@ addons:
     - samtools
     - wise
 
-before_install:
-  - "pip install --upgrade pip setuptools"
-  - "pip install --only-binary=numpy,scipy $DEP"
-  - "if [[ $COV == 'yes' ]]; then pip install coverage; fi"
-
-
 install:
-#The yes is in case we get our prompt about missing NumPy
-  - "/usr/bin/yes | python setup.py install"
-
-before_script:
-  - cd Tests
-  - cp biosql.ini.sample biosql.ini
+  - "cp Tests/biosql.ini.sample Tests/biosql.ini"
+  - "pip install --upgrade pip setuptools"
+  - "pip install tox"
+  - "tox -c .travis-tox.ini -e $TOXENV --notest"
 
 script:
-#Using just coverage should match up to the current Python version:
-  - "if [[ $COV == 'yes' ]]; then coverage run --source=Bio,BioSQL run_tests.py $OPT; fi"
-  - "if [[ $COV != 'yes' ]]; then python run_tests.py $OPT; fi"
+  - "tox -c .travis-tox.ini -e $TOXENV"
 
-after_success:
-#See https://codecov.io/ and https://github.com/codecov/example-python
-  - "if [[ $COV == 'yes' ]]; then pip install codecov; fi"
-  - "if [[ $COV == 'yes' ]]; then codecov; fi"
-
-#The email defaults are too talkative
 notifications:
   email: false
