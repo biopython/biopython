@@ -303,7 +303,10 @@ class Motif(object):
             self._background = dict.fromkeys(self.alphabet.letters, 1.0)
         else:
             if sorted(self.alphabet.letters) != ["A", "C", "G", "T"]:
-                raise Exception("Setting the background to a single value only works for DNA motifs (in which case the value is interpreted as the GC content")
+                # TODO - Should this be a ValueError?
+                raise Exception("Setting the background to a single value only "
+                                "works for DNA motifs (in which case the value "
+                                "is interpreted as the GC content")
             self._background['A'] = (1.0 - value) / 2.0
             self._background['C'] = value / 2.0
             self._background['G'] = value / 2.0

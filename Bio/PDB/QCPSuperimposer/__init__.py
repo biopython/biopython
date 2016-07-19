@@ -69,7 +69,8 @@ class QCPSuperimposer(object):
     def _align(self, centered_coords1, centered_coords2):
         (E0, A) = self._inner_product(centered_coords1, centered_coords2)
         (rmsd, r0, r1, r2, r3, r4, r5, r6, r7, r8, q1, q2, q3, q4) = FastCalcRMSDAndRotation(
-            A[0][0], A[0][1], A[0][2], A[1][0], A[1][1], A[1][2], A[2][0], A[2][1], A[2][2], E0, len(centered_coords1), -1.0)
+            A[0][0], A[0][1], A[0][2], A[1][0], A[1][1], A[1][2], A[2][0], A[2][1], A[2][2],
+            E0, len(centered_coords1), -1.0)
         rot = array([r0, r1, r2, r3, r4, r5, r6, r7, r8]).reshape(3, 3)
         return (rmsd, rot.T, [q1, q2, q3, q4])
 

@@ -614,8 +614,12 @@ class MultipleSeqAlignment(_Alignment):
         of Biopython..
         """
         import warnings
-        import Bio
-        warnings.warn("This method is deprecated and is provided for backwards compatibility with the old Bio.Align.Generic.Alignment object. Please use the slice notation instead, as get_column is likely to be removed in a future release of Biopython.", Bio.BiopythonDeprecationWarning)
+        from Bio import BiopythonDeprecationWarning
+        warnings.warn("This method is deprecated and is provided for backwards "
+                      "compatibility with the old Bio.Align.Generic.Alignment "
+                      "object. Please use the slice notation instead, as "
+                      "get_column is likely to be removed in a future release "
+                      "of Biopython.", BiopythonDeprecationWarning)
         return _Alignment.get_column(self, col)
 
     def add_sequence(self, descriptor, sequence, start=None, end=None,
@@ -629,8 +633,14 @@ class MultipleSeqAlignment(_Alignment):
         future release of Biopython.
         """
         import warnings
-        import Bio
-        warnings.warn("The start, end, and weight arguments are not supported! This method only provides limited backwards compatibility with the old Bio.Align.Generic.Alignment object. Please use the append method with a SeqRecord instead, as the add_sequence method is likely to be removed in a future release of Biopython.", Bio.BiopythonDeprecationWarning)
+        from Bio import BiopythonDeprecationWarning
+        warnings.warn("The start, end, and weight arguments are not supported! "
+                      "This method only provides limited backwards "
+                      "compatibility with the old Bio.Align.Generic.Alignment "
+                      "object. Please use the append method with a SeqRecord "
+                      "instead, as the add_sequence method is likely to be "
+                      "removed in a future release of Biopython.",
+                      BiopythonDeprecationWarning)
         # Should we handle start/end/strand information somehow? What for?
         # TODO - Should we handle weights somehow? See also AlignInfo code...
         if start is not None or end is not None or weight != 1.0:

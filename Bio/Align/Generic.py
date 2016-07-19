@@ -50,7 +50,10 @@ class Alignment(object):
         """
         import warnings
         import Bio
-        warnings.warn("With the introduction of the MultipleSeqAlignment class in Bio.Align, this base class is deprecated and is likely to be removed in a future release of Biopython.", Bio.BiopythonDeprecationWarning)
+        warnings.warn("With the introduction of the MultipleSeqAlignment "
+                      "class in Bio.Align, this base class is deprecated "
+                      "and is likely to be removed in a future release of "
+                      "Biopython.", Bio.BiopythonDeprecationWarning)
         if not (isinstance(alphabet, Alphabet.Alphabet) or
                 isinstance(alphabet, Alphabet.AlphabetEncoder)):
             raise ValueError("Invalid alphabet argument")
@@ -242,7 +245,12 @@ class Alignment(object):
         """
         import warnings
         import Bio
-        warnings.warn("This is a legacy method and is likely to be removed in a future release of Biopython. In new code where you need to access the rows of the alignment (i.e. the sequences) consider iterating over them or accessing them as SeqRecord objects.", Bio.BiopythonDeprecationWarning)
+        warnings.warn("This is a legacy method and is likely to be removed "
+                      "in a future release of Biopython. In new code where "
+                      "you need to access the rows of the alignment (i.e. the "
+                      "sequences) consider iterating over them or accessing "
+                      "them as SeqRecord objects.",
+                      Bio.BiopythonDeprecationWarning)
         return self._records[number].seq
 
     def __len__(self):
