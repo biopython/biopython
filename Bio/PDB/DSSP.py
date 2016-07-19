@@ -240,7 +240,7 @@ class DSSP(AbstractResiduePropertyMap):
     -42.399999999999999)
     """
 
-    def __init__(self, model, pdb_file, dssp="dssp", acc_array = 'Sander'):
+    def __init__(self, model, pdb_file, dssp="dssp", acc_array="Sander"):
         """
         ::
 
