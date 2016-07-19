@@ -50,7 +50,7 @@ addons:
     - wise
 
 before_install:
-  - "pip install --upgrade pip"
+  - "pip install --upgrade pip setuptools"
   - "pip install --only-binary=numpy,scipy $DEP"
   - "if [[ $COV == 'yes' ]]; then pip install coverage; fi"
 
