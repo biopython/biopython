@@ -7,7 +7,9 @@ class StructureDecoder(object):
     def __init__(self):
         self.this_type = ""
 
-    def init_structure(self, total_num_bonds, total_num_atoms, total_num_groups, total_num_chains, total_num_models, structure_id):
+    def init_structure(self, total_num_bonds, total_num_atoms,
+                       total_num_groups, total_num_chains, total_num_models,
+                       structure_id):
         """Initialise the structure object.
 
         :param total_num_bonds: the number of bonds in the structure
@@ -24,8 +26,8 @@ class StructureDecoder(object):
         self.chain_index_to_description_map = {}
         self.chain_counter = 0
 
-    def set_atom_info(self, atom_name, serial_number, alternative_location_id, x, y, z, occupancy,
-                      temperature_factor, element, charge):
+    def set_atom_info(self, atom_name, serial_number, alternative_location_id,
+                      x, y, z, occupancy, temperature_factor, element, charge):
         """Create an atom object an set the information.
 
         :param atom_name: the atom name, e.g. CA for this atom
@@ -40,9 +42,11 @@ class StructureDecoder(object):
         :param charge: the formal atomic charge of the atom
         """
         # Atom_name is in twice - the full_name is with spaces
-        self.structure_bulder.init_atom(str(atom_name), [x,y,z], temperature_factor, occupancy,
+        self.structure_bulder.init_atom(str(atom_name), [x, y, z],
+                                        temperature_factor, occupancy,
                                         alternative_location_id, str(atom_name),
-                  serial_number=serial_number, element=str(element).upper())
+                                        serial_number=serial_number,
+                                        element=str(element).upper())
 
     def set_chain_info(self, chain_id, chain_name, num_groups):
         """Set the chain information.
@@ -51,7 +55,8 @@ class StructureDecoder(object):
         :param chain_name: the auth chain id from mmCIF
         :param num_groups: the number of groups this chain has
         """
-        # A Bradley - chose to use chain_name (auth_id) as it complies with current BioPython. Chain_id might be better.
+        # A Bradley - chose to use chain_name (auth_id) as it complies
+        # with current BioPython. Chain_id might be better.
         self.structure_bulder.init_chain(chain_id=chain_name)
         if self.chain_index_to_type_map[self.chain_counter] == "polymer":
             self.this_type = ""
@@ -74,8 +79,9 @@ class StructureDecoder(object):
             self.chain_index_to_seq_map[chain_ind] = sequence
             self.chain_index_to_description_map[chain_ind] = description
 
-    def set_group_info(self, group_name, group_number, insertion_code, group_type, atom_count, bond_count,
-                       single_letter_code, sequence_index, secondary_structure_type):
+    def set_group_info(self, group_name, group_number, insertion_code,
+                       group_type, atom_count, bond_count, single_letter_code,
+                       sequence_index, secondary_structure_type):
         """Set the information for a group
 
         :param group_name: the name of this group,e.g. LYS
@@ -91,7 +97,8 @@ class StructureDecoder(object):
         number to type mappings are defined in the specification)
         """
         self.structure_bulder.init_seg(' ')
-        self.structure_bulder.init_residue(group_name, self.this_type, group_number, insertion_code)
+        self.structure_bulder.init_residue(group_name, self.this_type,
+                                           group_number, insertion_code)
 
     def set_model_info(self, model_id, chain_count):
         """Set the information for a model.
@@ -109,7 +116,8 @@ class StructureDecoder(object):
         """
         self.structure_bulder.set_symmetry(space_group, unit_cell)
 
-    def set_header_info(self, r_free, r_work, resolution, title, deposition_date, release_date, experimnetal_methods):
+    def set_header_info(self, r_free, r_work, resolution, title,
+                        deposition_date, release_date, experimnetal_methods):
         """Sets the header information.
 
         :param r_free: the measured R-Free for the structure
@@ -122,7 +130,8 @@ class StructureDecoder(object):
         """
         pass
 
-    def set_bio_assembly_trans(self, bio_assembly_index, input_chain_indices, input_transform):
+    def set_bio_assembly_trans(self, bio_assembly_index, input_chain_indices,
+                               input_transform):
         """Set the Bioassembly transformation information. A single bioassembly can have multiple transforms,
 
         :param bio_assembly_index: the integer index of the bioassembly
