@@ -68,15 +68,16 @@ class ParseMMTF(unittest.TestCase):
         """Compare parsing 4CUP.mmtf and 4CUP.cif"""
         self.check_mmtf_vs_cif("PDB/4CUP.mmtf", "PDB/4CUP.cif")
 
-#TODO:
+# TODO:
 #    def test_1A8O(self):
 #        """Compare parsing 1A8O.mmtf and 1A8O.cif"""
 #        self.check_mmtf_vs_cif("PDB/1A8O.mmtf", "PDB/1A8O.cif")
 
-#TODO:
+# TODO:
 #    def test_4ZHL(self):
 #        """Compare parsing 4ZHL.mmtf and 4ZHL.cif"""
 #        self.check_mmtf_vs_cif("PDB/4ZHL.mmtf", "PDB/4ZHL.cif")
+
 
 class SimpleParseMMTF(unittest.TestCase):
     """Just parse some real mmtf files."""
