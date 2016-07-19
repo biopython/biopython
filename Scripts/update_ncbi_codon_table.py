@@ -54,11 +54,11 @@ for line in open("gc.prt").readlines():
     elif line[:4] == "  id":
         id = int(re.search('(\d+)', line).group(1))
     elif line[:10] == "  ncbieaa ":
-        aa = line[12:12+64]
+        aa = line[12:12 + 64]
     elif line[:10] == "  sncbieaa":
-        start = line[12:12+64]
+        start = line[12:12 + 64]
     elif line[:9] == "  -- Base":
-        bases.append(line[12:12+64])
+        bases.append(line[12:12 + 64])
     elif line[:2] == " }":
         assert names != [] and id is not None and aa is not None
         assert start is not None and bases != []
@@ -78,9 +78,11 @@ for line in open("gc.prt").readlines():
                 else:
                     s += t
         print("%s }," % s)
-        codons = [bases[0][i] + bases[1][i] + bases[2][i] for i in range(64) if aa[i] == "*"]
+        codons = [bases[0][i] + bases[1][i] + bases[2][i]
+                  for i in range(64) if aa[i] == "*"]
         print(line_wrap(" " * INDENT + "stop_codons=%r," % codons, indent=INDENT + 13))
-        codons = [bases[0][i] + bases[1][i] + bases[2][i] for i in range(64) if start[i] == "M"]
+        codons = [bases[0][i] + bases[1][i] + bases[2][i]
+                  for i in range(64) if start[i] == "M"]
         print(line_wrap(" " * INDENT + "start_codons=%r)" % codons, indent=INDENT + 14))
         print("")
     elif line[:2] == "--" or line in ("\n", "}\n", 'Genetic-code-table ::= {\n'):
