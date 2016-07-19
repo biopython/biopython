@@ -15,6 +15,7 @@ matrix:
   include:
     - env: TOXENV=pep8
     - env: TOXENV=sdist
+    - env: TOXENV=bdist_wheel
     - python: 2.6
       env: TOXENV=py26-cover
     - python: 2.7
