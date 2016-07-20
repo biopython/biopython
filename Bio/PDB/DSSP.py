@@ -40,32 +40,32 @@ _dssp_cys = re.compile('[a-z]')
 # Maximal ASA of amino acids
 # Used for relative accessibility
 
-residue_max_acc = dict(
+residue_max_acc = {
     # Miller max acc: Miller et al. 1987 (http://dx.doi.org/10.1016/0022-2836(87)90038-6)
     # Wilke: Tien et al., 2013 (http://dx.doi.org/10.1371/journal.pone.0080635)
     # Sander: Sander & Rost, (1994), Proteins, 20:216-226
-    Miller={
+    'Miller': {
         'ALA': 113.0, 'ARG': 241.0, 'ASN': 158.0, 'ASP': 151.0,
         'CYS': 140.0, 'GLN': 189.0, 'GLU': 183.0, 'GLY': 85.0,
         'HIS': 194.0, 'ILE': 182.0, 'LEU': 180.0, 'LYS': 211.0,
         'MET': 204.0, 'PHE': 218.0, 'PRO': 143.0, 'SER': 122.0,
         'THR': 146.0, 'TRP': 259.0, 'TYR': 229.0, 'VAL': 160.0
     },
-    Wilke={
+    'Wilke': {
         'ALA': 129.0, 'ARG': 274.0, 'ASN': 195.0, 'ASP': 193.0,
         'CYS': 167.0, 'GLN': 225.0, 'GLU': 223.0, 'GLY': 104.0,
         'HIS': 224.0, 'ILE': 197.0, 'LEU': 201.0, 'LYS': 236.0,
         'MET': 224.0, 'PHE': 240.0, 'PRO': 159.0, 'SER': 155.0,
         'THR': 172.0, 'TRP': 285.0, 'TYR': 263.0, 'VAL': 174.0
     },
-    Sander={
+    'Sander': {
         'ALA': 126.0, 'ARG': 248.0, 'ASN': 157.0, 'ASP': 163.0,
         'CYS': 135.0, 'GLN': 198.0, 'GLU': 194.0, 'GLY': 84.0,
         'HIS': 184.0, 'ILE': 169.0, 'LEU': 164.0, 'LYS': 205.0,
         'MET': 188.0, 'PHE': 197.0, 'PRO': 136.0, 'SER': 130.0,
         'THR': 142.0, 'TRP': 227.0, 'TYR': 222.0, 'VAL': 142.0
     }
-)
+}
 
 
 def ss_to_index(ss):
@@ -252,8 +252,12 @@ class DSSP(AbstractResiduePropertyMap):
 
         @param dssp: the dssp executable (ie. the argument to os.system)
         @type dssp: string
-        """
         
+        @param acc_array: Accessible surface area (ASA) from either Miller et al. 1987, \
+        Sander & Rost, (1994) or Wilke: Tien et al. 2013
+        @type acc_array: string Sander/Wilke/Miller
+        """
+
         self.residue_max_acc = residue_max_acc[acc_array]
         
         # create DSSP dictionary
