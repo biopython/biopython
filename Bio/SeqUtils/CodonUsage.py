@@ -79,7 +79,7 @@ class CodonAdaptationIndex(object):
                 self.SynonymousCodons[value].append(key)
             except KeyError:
                 self.SynonymousCodons[value] = [key]
- 
+
     def generate_rscu(self, fasta_file):
         """Create an RSCU (Relative Synonymous Codon Usage) table from a FASTA file of CDS sequences.
         Takes a location of a Fasta file containing CDS sequences
@@ -88,7 +88,7 @@ class CodonAdaptationIndex(object):
         # first make sure we're not overwriting an existing index:
         if self.index or self.codon_count or self.rscu:
             raise ValueError("an index has already been set or a codon count has been done. cannot overwrite either.")
-            
+
         if self.genetic_code != 1:
             change_tranlation_table(self.genetic_code)
 
@@ -109,7 +109,7 @@ class CodonAdaptationIndex(object):
             for codon in codons:
                 denominator = float(total) / len(codons)
                 self.rscu[codon] = self.codon_count[codon] / denominator
-   
+
     def generate_index(self, *args):
         """Generate a codon usage index from a the instance's RSCU.
         Takes a the instance's RSCU dictionary and generates a codon
@@ -147,7 +147,7 @@ class CodonAdaptationIndex(object):
         if not self.index and not self.rscu:
             self.set_cai_index(SharpEcoliIndex)
             print("No index or RSCU set... using default SharpEcoliIndex!")
- 
+
         if dna_sequence.islower():
             dna_sequence = dna_sequence.upper()
 
