@@ -120,7 +120,7 @@ class CodonAdaptationIndex(object):
         # first make sure an RSCU table is set. Optionally accepts a FASTA file location for backwards compatibility.
         if not self.rscu and not self.index:
             try:
-                generaterate_rscu(args[0])
+                self.generaterate_rscu(args[0])
             except IndexError:
             	raise IndexError("No RSCU table or index set and no FASTA file location passed")
         
