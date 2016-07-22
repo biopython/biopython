@@ -11,6 +11,7 @@ from .CodonUsageIndices import SharpEcoliIndex
 from Bio import SeqIO    # To parse a FASTA file
 from Bio import Data    # To handle multiple genetic codes
 
+
 class CodonAdaptationIndex(object):
     """A codon adaptation index (CAI) implementation.
     Implements the codon adaptation index (CAI) described by Sharp and
@@ -36,7 +37,6 @@ class CodonAdaptationIndex(object):
         'CGG': 0, 'AGT': 0, 'AGC': 0, 'AGA': 0, 'AGG': 0,
         'GGT': 0, 'GGC': 0, 'GGA': 0, 'GGG': 0}
 
-
         # this dictionary shows which codons encode the same AA
         self.SynonymousCodons = {
             'CYS': ['TGT', 'TGC'],
@@ -61,7 +61,6 @@ class CodonAdaptationIndex(object):
             'TYR': ['TAT', 'TAC']
         }
 
-
     # use this method with predefined CAI index
     def set_cai_index(self, index):
         """Sets up an index to be used when calculating CAI for a gene.
@@ -69,7 +68,7 @@ class CodonAdaptationIndex(object):
         CodonUsageIndices module.
         """
         self.index = index
-        
+
     def change_translation_table(self, genetic_code):
         """Change the synonymous codon dictionary to one for an alternative genetic code.
         Takes the ID of a gentic code (an integer) and changes the table for the CodonAdaptationIndex instance.
@@ -80,8 +79,8 @@ class CodonAdaptationIndex(object):
                 self.SynonymousCodons[value].append(key)
             except KeyError:
                 self.SynonymousCodons[value] = [key]
-        
-    def generate_rscu (self, fasta_file):
+ 
+    def generate_rscu(self, fasta_file):
         """Create an RSCU (Relative Synonymous Codon Usage) table from a FASTA file of CDS sequences.
         Takes a location of a Fasta file containing CDS sequences
         (which must all have a whole number of codons) and generates an RSCU dictionary.
@@ -110,8 +109,7 @@ class CodonAdaptationIndex(object):
             for codon in codons:
                 denominator = float(total) / len(codons)
                 self.rscu[codon] = self.codon_count[codon] / denominator
-            
-
+   
     def generate_index(self, *args):
         """Generate a codon usage index from a the instance's RSCU.
         Takes a the instance's RSCU dictionary and generates a codon
@@ -120,20 +118,20 @@ class CodonAdaptationIndex(object):
         # first make sure an RSCU table is set. Optionally accepts a FASTA file location for backwards compatibility.
         if not self.rscu and not self.index:
             try:
-                self.generaterate_rscu(args[0])
+                self.generate_rscu(args[0])
             except IndexError:
-            	raise IndexError("No RSCU table or index set and no FASTA file location passed")
-        
+                raise IndexError("No RSCU table or index set and no FASTA file location passed")
+
         if self.genetic_code != 1:
             change_tranlation_table(self.genetic_code)
-        
+
         for aa in self.SynonymousCodons:
             codons = self.SynonymousCodons[aa]
 
             # now generate the index W=rscui/rscumax:
             rscu_max = max([self.rscu[codon] for codon in codons])
             for codon in codons:
-                self.index[codon] = self.rscu[codon] / float(rscu_max) if self.rscu[codon] != 0 else 0.5 / float(rscu_max) # uses an RSCU value of 0.5 if the codon is not used in the reference set
+                self.index[codon] = self.rscu[codon] / float(rscu_max) if self.rscu[codon] != 0 else 0.5 / float(rscu_max)  # uses an RSCU value of 0.5 if the codon is not used in the reference set
 
     def cai_for_gene(self, dna_sequence):
         """Calculate the CAI (float) for the provided DNA sequence (string).
@@ -149,7 +147,7 @@ class CodonAdaptationIndex(object):
         if not self.index and not self.rscu:
             self.set_cai_index(SharpEcoliIndex)
             print("No index or RSCU set... using default SharpEcoliIndex!")
-            
+ 
         if dna_sequence.islower():
             dna_sequence = dna_sequence.upper()
 
