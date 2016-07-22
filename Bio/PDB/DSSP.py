@@ -285,7 +285,7 @@ class DSSP(AbstractResiduePropertyMap):
         """
 
         self.residue_max_acc = residue_max_acc[acc_array]
-        
+
         # create DSSP dictionary
         dssp_dict, dssp_keys = dssp_dict_from_pdb_file(pdb_file, dssp)
         dssp_map = {}
