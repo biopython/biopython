@@ -77,8 +77,8 @@ residue_max_acc = {
 
 
 def ss_to_index(ss):
-    """
-    Secondary structure symbol to index.
+    """Secondary structure symbol to index.
+
     H=0
     E=1
     C=2
@@ -93,8 +93,7 @@ def ss_to_index(ss):
 
 
 def dssp_dict_from_pdb_file(in_file, DSSP="dssp"):
-    """
-    Create a DSSP dictionary from a PDB file.
+    """Create a DSSP dictionary from a PDB file.
 
     Example:
     --------
@@ -133,7 +132,8 @@ def dssp_dict_from_pdb_file(in_file, DSSP="dssp"):
 
 
 def make_dssp_dict(filename):
-    """
+    """DSSP dictionary mapping identifers to properties.
+
     Return a DSSP dictionary that maps (chainid, resid) to
     aa, ss and accessibility, from a DSSP file. ::
 
@@ -147,7 +147,8 @@ def make_dssp_dict(filename):
 
 
 def _make_dssp_dict(handle):
-    """
+    """Internal function used by mask_dssp_dict (PRIVATE).
+
     Return a DSSP dictionary that maps (chainid, resid) to an amino acid,
     secondary structure symbol, solvent accessibility value, and hydrogen bond
     information (relative dssp indices and hydrogen bond energies) from an open
@@ -228,7 +229,8 @@ def _make_dssp_dict(handle):
 
 
 class DSSP(AbstractResiduePropertyMap):
-    """
+    """Run DSSP and parse secondary structure and accessibility.
+
     Run DSSP on a pdb file, and provide a handle to the
     DSSP secondary structure and accessibility.
 
@@ -255,7 +257,8 @@ class DSSP(AbstractResiduePropertyMap):
     """
 
     def __init__(self, model, pdb_file, dssp="dssp", acc_array="Sander"):
-        """
+        """Create a DSSP object.
+
         Parameters
         ----------
         model : Model
