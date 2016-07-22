@@ -10,14 +10,22 @@ use) in order to use this. For DSSP, see U{http://swift.cmbi.ru.nl/gv/dssp/}.
 
 The DSSP codes for secondary structure used here are:
 
-    - H        Alpha helix (4-12)
-    - B        Isolated beta-bridge residue
-    - E        Strand
-    - G        3-10 helix
-    - I        pi helix
-    - T        Turn
-    - S        Bend
-    - -        None
+    H
+        Alpha helix (4-12)
+    B
+        Isolated beta-bridge residue
+    E
+        Strand
+    G
+        3-10 helix
+    I
+        pi helix
+    T
+        Turn
+    S
+        Bend
+    \-
+        None
 """
 
 from __future__ import print_function
@@ -88,18 +96,20 @@ def dssp_dict_from_pdb_file(in_file, DSSP="dssp"):
     >>> dssp_dict=dssp_dict_from_pdb_file("1fat.pdb")
     >>> aa, ss, acc=dssp_dict[('A', 1)]
 
-    ::
+    Parameters
+    ----------
+    in_file : string
+        pdb file
 
-        @param in_file: pdb file
-        @type in_file: string ::
+    DSSP : string
+        DSSP executable (argument to os.system)
 
-        @param DSSP: DSSP executable (argument to os.system)
-        @type DSSP: string ::
-
-        @return: a dictionary that maps (chainid, resid) to
-            amino acid type, secondary structure code and
-            accessibility.
-        @rtype: {}
+    Returns
+    -------
+    (out_dict, keys) : tuple
+        a dictionary that maps (chainid, resid) to
+        amino acid type, secondary structure code and
+        accessibility.
     """
     # Using universal newlines is important on Python 3, this
     # gives unicode handles rather than bytes handles.
@@ -122,8 +132,10 @@ def make_dssp_dict(filename):
     Return a DSSP dictionary that maps (chainid, resid) to
     aa, ss and accessibility, from a DSSP file. ::
 
-    @param filename: the DSSP output file
-    @type filename: string
+    Parameters
+    ----------
+    filename : string
+        the DSSP output file
     """
     with open(filename, "r") as handle:
         return _make_dssp_dict(handle)
@@ -136,8 +148,10 @@ def _make_dssp_dict(handle):
     information (relative dssp indices and hydrogen bond energies) from an open
     DSSP file object. ::
 
-    @param handle: the open DSSP output file handle
-    @type handle: file
+    Parameters
+    ----------
+    handle : file
+        the open DSSP output file handle
     """
     dssp = {}
     start = 0
@@ -237,16 +251,14 @@ class DSSP(AbstractResiduePropertyMap):
 
     def __init__(self, model, pdb_file, dssp="dssp"):
         """
-        ::
-
-        @param model: the first model of the structure
-        @type model: L{Model} ::
-
-        @param pdb_file: a PDB file
-        @type pdb_file: string ::
-
-        @param dssp: the dssp executable (ie. the argument to os.system)
-        @type dssp: string
+        Parameters
+        ----------
+        model : Model
+            the first model of the structure
+        pdb_file : string
+            a PDB file
+        dssp : string
+            the dssp executable (ie. the argument to os.system)
         """
         # create DSSP dictionary
         dssp_dict, dssp_keys = dssp_dict_from_pdb_file(pdb_file, dssp)
