@@ -8,181 +8,184 @@ from __future__ import print_function
 import math
 
 from .CodonUsageIndices import SharpEcoliIndex
-from Bio import SeqIO	# To parse a FASTA file
-from Bio import Data	# To handle multiple genetic codes
+from Bio import SeqIO    # To parse a FASTA file
+from Bio import Data    # To handle multiple genetic codes
 
 class CodonAdaptationIndex(object):
-	"""A codon adaptation index (CAI) implementation.
-	Implements the codon adaptation index (CAI) described by Sharp and
-	Li (Nucleic Acids Res. 1987 Feb 11;15(3):1281-95).
-	"""
+    """A codon adaptation index (CAI) implementation.
+    Implements the codon adaptation index (CAI) described by Sharp and
+    Li (Nucleic Acids Res. 1987 Feb 11;15(3):1281-95).
+    """
 
-	def __init__(self):
-		self.rscu = {}
-		self.genetic_code = 1
-		self.index = {}
-		self.codon_count = {}
-		self.CodonsDict = {'TTT': 0, 'TTC': 0, 'TTA': 0, 'TTG': 0, 'CTT': 0,
-		'CTC': 0, 'CTA': 0, 'CTG': 0, 'ATT': 0, 'ATC': 0,
-		'ATA': 0, 'ATG': 0, 'GTT': 0, 'GTC': 0, 'GTA': 0,
-		'GTG': 0, 'TAT': 0, 'TAC': 0, 'TAA': 0, 'TAG': 0,
-		'CAT': 0, 'CAC': 0, 'CAA': 0, 'CAG': 0, 'AAT': 0,
-		'AAC': 0, 'AAA': 0, 'AAG': 0, 'GAT': 0, 'GAC': 0,
-		'GAA': 0, 'GAG': 0, 'TCT': 0, 'TCC': 0, 'TCA': 0,
-		'TCG': 0, 'CCT': 0, 'CCC': 0, 'CCA': 0, 'CCG': 0,
-		'ACT': 0, 'ACC': 0, 'ACA': 0, 'ACG': 0, 'GCT': 0,
-		'GCC': 0, 'GCA': 0, 'GCG': 0, 'TGT': 0, 'TGC': 0,
-		'TGA': 0, 'TGG': 0, 'CGT': 0, 'CGC': 0, 'CGA': 0,
-		'CGG': 0, 'AGT': 0, 'AGC': 0, 'AGA': 0, 'AGG': 0,
-		'GGT': 0, 'GGC': 0, 'GGA': 0, 'GGG': 0}
-
-
-		# this dictionary shows which codons encode the same AA
-		self.SynonymousCodons = {
-			'CYS': ['TGT', 'TGC'],
-			'ASP': ['GAT', 'GAC'],
-			'SER': ['TCT', 'TCG', 'TCA', 'TCC', 'AGC', 'AGT'],
-			'GLN': ['CAA', 'CAG'],
-			'MET': ['ATG'],
-			'ASN': ['AAC', 'AAT'],
-			'PRO': ['CCT', 'CCG', 'CCA', 'CCC'],
-			'LYS': ['AAG', 'AAA'],
-			'THR': ['ACC', 'ACA', 'ACG', 'ACT'],
-			'PHE': ['TTT', 'TTC'],
-			'ALA': ['GCA', 'GCC', 'GCG', 'GCT'],
-			'GLY': ['GGT', 'GGG', 'GGA', 'GGC'],
-			'ILE': ['ATC', 'ATA', 'ATT'],
-			'LEU': ['TTA', 'TTG', 'CTC', 'CTT', 'CTG', 'CTA'],
-			'HIS': ['CAT', 'CAC'],
-			'ARG': ['CGA', 'CGC', 'CGG', 'CGT', 'AGG', 'AGA'],
-			'TRP': ['TGG'],
-			'VAL': ['GTA', 'GTC', 'GTG', 'GTT'],
-			'GLU': ['GAG', 'GAA'],
-			'TYR': ['TAT', 'TAC']
-		}
+    def __init__(self):
+        self.rscu = {}
+        self.genetic_code = 1
+        self.index = {}
+        self.codon_count = {}
+        self.CodonsDict = {'TTT': 0, 'TTC': 0, 'TTA': 0, 'TTG': 0, 'CTT': 0,
+        'CTC': 0, 'CTA': 0, 'CTG': 0, 'ATT': 0, 'ATC': 0,
+        'ATA': 0, 'ATG': 0, 'GTT': 0, 'GTC': 0, 'GTA': 0,
+        'GTG': 0, 'TAT': 0, 'TAC': 0, 'TAA': 0, 'TAG': 0,
+        'CAT': 0, 'CAC': 0, 'CAA': 0, 'CAG': 0, 'AAT': 0,
+        'AAC': 0, 'AAA': 0, 'AAG': 0, 'GAT': 0, 'GAC': 0,
+        'GAA': 0, 'GAG': 0, 'TCT': 0, 'TCC': 0, 'TCA': 0,
+        'TCG': 0, 'CCT': 0, 'CCC': 0, 'CCA': 0, 'CCG': 0,
+        'ACT': 0, 'ACC': 0, 'ACA': 0, 'ACG': 0, 'GCT': 0,
+        'GCC': 0, 'GCA': 0, 'GCG': 0, 'TGT': 0, 'TGC': 0,
+        'TGA': 0, 'TGG': 0, 'CGT': 0, 'CGC': 0, 'CGA': 0,
+        'CGG': 0, 'AGT': 0, 'AGC': 0, 'AGA': 0, 'AGG': 0,
+        'GGT': 0, 'GGC': 0, 'GGA': 0, 'GGG': 0}
 
 
-	# use this method with predefined CAI index
-	def set_cai_index(self, index):
-		"""Sets up an index to be used when calculating CAI for a gene.
-		Just pass a dictionary similar to the SharpEcoliIndex in the
-		CodonUsageIndices module.
-		"""
-		self.index = index
-		
-	def change_translation_table(self, genetic_code):
-		"""Change the synonymous codon dictionary to one for an alternative genetic code.
-		Takes the ID of a gentic code (an integer) and changes the table for the CodonAdaptationIndex instance.
-		"""
-		self.SynonymousCodons = {}
-		for key, value in Data.CodonTable.unambiguous_dna_by_id[genetic_code].forward_table.iteritems():
-			try:
-				self.SynonymousCodons[value].append(key)
-			except KeyError:
-				self.SynonymousCodons[value] = [key]
-		
-	def generate_rscu (self, fasta_file):
-		"""Create an RSCU (Relative Synonymous Codon Usage) table from a FASTA file of CDS sequences.
-		Takes a location of a Fasta file containing CDS sequences
-		(which must all have a whole number of codons) and generates an RSCU dictionary.
-		"""
-		# first make sure we're not overwriting an existing index:
-		if self.index or self.codon_count or self.rscu:
-			raise ValueError("an index has already been set or a codon count has been done. cannot overwrite either.")
-			
-		if self.genetic_code != 1:
-			change_tranlation_table(self.genetic_code)
+        # this dictionary shows which codons encode the same AA
+        self.SynonymousCodons = {
+            'CYS': ['TGT', 'TGC'],
+            'ASP': ['GAT', 'GAC'],
+            'SER': ['TCT', 'TCG', 'TCA', 'TCC', 'AGC', 'AGT'],
+            'GLN': ['CAA', 'CAG'],
+            'MET': ['ATG'],
+            'ASN': ['AAC', 'AAT'],
+            'PRO': ['CCT', 'CCG', 'CCA', 'CCC'],
+            'LYS': ['AAG', 'AAA'],
+            'THR': ['ACC', 'ACA', 'ACG', 'ACT'],
+            'PHE': ['TTT', 'TTC'],
+            'ALA': ['GCA', 'GCC', 'GCG', 'GCT'],
+            'GLY': ['GGT', 'GGG', 'GGA', 'GGC'],
+            'ILE': ['ATC', 'ATA', 'ATT'],
+            'LEU': ['TTA', 'TTG', 'CTC', 'CTT', 'CTG', 'CTA'],
+            'HIS': ['CAT', 'CAC'],
+            'ARG': ['CGA', 'CGC', 'CGG', 'CGT', 'AGG', 'AGA'],
+            'TRP': ['TGG'],
+            'VAL': ['GTA', 'GTC', 'GTG', 'GTT'],
+            'GLU': ['GAG', 'GAA'],
+            'TYR': ['TAT', 'TAC']
+        }
 
-		# count codon occurrences in the file.
-		self._count_codons(fasta_file)
 
-		# now to calculate the index we first need to sum the number of times
-		# synonymous codons were used all together.
-		for aa in self.SynonymousCodons:
-			total = 0.0
-			rscu_for_amino_acid = []  # RSCU values are CodonCount/((1/num of synonymous codons) * sum of all synonymous codons)
-			codons = self.SynonymousCodons[aa]
+    # use this method with predefined CAI index
+    def set_cai_index(self, index):
+        """Sets up an index to be used when calculating CAI for a gene.
+        Just pass a dictionary similar to the SharpEcoliIndex in the
+        CodonUsageIndices module.
+        """
+        self.index = index
+        
+    def change_translation_table(self, genetic_code):
+        """Change the synonymous codon dictionary to one for an alternative genetic code.
+        Takes the ID of a gentic code (an integer) and changes the table for the CodonAdaptationIndex instance.
+        """
+        self.SynonymousCodons = {}
+        for key, value in Data.CodonTable.unambiguous_dna_by_id[genetic_code].forward_table.iteritems():
+            try:
+                self.SynonymousCodons[value].append(key)
+            except KeyError:
+                self.SynonymousCodons[value] = [key]
+        
+    def generate_rscu (self, fasta_file):
+        """Create an RSCU (Relative Synonymous Codon Usage) table from a FASTA file of CDS sequences.
+        Takes a location of a Fasta file containing CDS sequences
+        (which must all have a whole number of codons) and generates an RSCU dictionary.
+        """
+        # first make sure we're not overwriting an existing index:
+        if self.index or self.codon_count or self.rscu:
+            raise ValueError("an index has already been set or a codon count has been done. cannot overwrite either.")
+            
+        if self.genetic_code != 1:
+            change_tranlation_table(self.genetic_code)
 
-			for codon in codons:
-				total += self.codon_count[codon]
+        # count codon occurrences in the file.
+        self._count_codons(fasta_file)
 
-			# calculate the rscu value for each of the codons
-			for codon in codons:
-				denominator = float(total) / len(codons)
-				self.rscu[codon] = self.codon_count[codon] / denominator
-			
+        # now to calculate the index we first need to sum the number of times
+        # synonymous codons were used all together.
+        for aa in self.SynonymousCodons:
+            total = 0.0
+            rscu_for_amino_acid = []  # RSCU values are CodonCount/((1/num of synonymous codons) * sum of all synonymous codons)
+            codons = self.SynonymousCodons[aa]
 
-	def generate_index(self):
-		"""Generate a codon usage index from a the instance's RSCU.
-		Takes a the instance's RSCU dictionary and generates a codon
-		usage index.
-		"""
-		if not self.rscu:
-			raise ValueError("No RSCU table set to generate index from") 
-		
-		if self.genetic_code != 1:
-			change_tranlation_table(self.genetic_code)
-		
-		for aa in self.SynonymousCodons:
-			codons = self.SynonymousCodons[aa]
+            for codon in codons:
+                total += self.codon_count[codon]
 
-			# now generate the index W=rscui/rscumax:
-			rscu_max = max([self.rscu[codon] for codon in codons])
-			for codon in codons:
-				self.index[codon] = self.rscu[codon] / float(rscu_max) if self.rscu[codon] != 0 else 0.5 / float(rscu_max) # uses an RSCU value of 0.5 if the codon is not used in the reference set
+            # calculate the rscu value for each of the codons
+            for codon in codons:
+                denominator = float(total) / len(codons)
+                self.rscu[codon] = self.codon_count[codon] / denominator
+            
 
-	def cai_for_gene(self, dna_sequence):
-		"""Calculate the CAI (float) for the provided DNA sequence (string).
-		This method uses the Index (either the one you set or the one you generated)
-		and returns the CAI for the DNA sequence.
-		"""
-		cai_value, cai_length = 0, 0
-		# if an RSCU table is given but no index is set or generated, generates an index
-		if not self.index and self.rscu:
-			self.generate_index()
-			print("No index set... generating!")
+    def generate_index(self, *args):
+        """Generate a codon usage index from a the instance's RSCU.
+        Takes a the instance's RSCU dictionary and generates a codon
+        usage index.
+        """
+        # first make sure an RSCU table is set. Optionally accepts a FASTA file location for backwards compatibility.
+        if not self.rscu and not self.index:
+            try:
+                generaterate_rscu(args[0])
+            except IndexError:
+            	raise IndexError("No RSCU table or index set and no FASTA file location passed")
+        
+        if self.genetic_code != 1:
+            change_tranlation_table(self.genetic_code)
+        
+        for aa in self.SynonymousCodons:
+            codons = self.SynonymousCodons[aa]
 
-		# if no index is set or generated, the default SharpEcoliIndex will be used.
-		if not self.index and not self.rscu:
-			self.set_cai_index(SharpEcoliIndex)
-			print("No index or RSCU set... using default SharpEcoliIndex!")
-			
-		if dna_sequence.islower():
-			dna_sequence = dna_sequence.upper()
+            # now generate the index W=rscui/rscumax:
+            rscu_max = max([self.rscu[codon] for codon in codons])
+            for codon in codons:
+                self.index[codon] = self.rscu[codon] / float(rscu_max) if self.rscu[codon] != 0 else 0.5 / float(rscu_max) # uses an RSCU value of 0.5 if the codon is not used in the reference set
 
-		for i in range(0, len(dna_sequence), 3):
-			codon = dna_sequence[i:i + 3]
-			if codon in self.index:
-				if codon not in ['ATG', 'TGG']:  # these two codons are always one, exclude them
-					cai_value += math.log(self.index[codon])
-					cai_length += 1
-			elif codon not in ['TGA', 'TAA', 'TAG']:  # some indices may not include stop codons
-				raise TypeError("illegal codon in sequence: %s.\n%s" % (codon, self.index))
+    def cai_for_gene(self, dna_sequence):
+        """Calculate the CAI (float) for the provided DNA sequence (string).
+        This method uses the Index (either the one you set or the one you generated)
+        and returns the CAI for the DNA sequence.
+        """
+        cai_value, cai_length = 0, 0
+        # if an RSCU table is given but no index is set or generated, generates an index
+        if not self.index and self.rscu:
+            self.generate_index()
 
-		return math.exp(cai_value / (cai_length - 1.0))
+        # if no index is set or generated, the default SharpEcoliIndex will be used.
+        if not self.index and not self.rscu:
+            self.set_cai_index(SharpEcoliIndex)
+            print("No index or RSCU set... using default SharpEcoliIndex!")
+            
+        if dna_sequence.islower():
+            dna_sequence = dna_sequence.upper()
 
-	def _count_codons(self, fasta_file):
-		with open(fasta_file, 'r') as handle:
+        for i in range(0, len(dna_sequence), 3):
+            codon = dna_sequence[i:i + 3]
+            if codon in self.index:
+                if codon not in ['ATG', 'TGG']:  # these two codons are always one; exclude them
+                    cai_value += math.log(self.index[codon])
+                    cai_length += 1
+            elif codon not in ['TGA', 'TAA', 'TAG']:  # some indices may not include stop codons
+                raise TypeError("illegal codon in sequence: %s.\n%s" % (codon, self.index))
 
-			# make the codon dictionary local
-			self.codon_count = self.CodonsDict.copy()
+        return math.exp(cai_value / (cai_length - 1.0))
 
-			# iterate over sequence and count all the codons in the FastaFile.
-			for cur_record in SeqIO.parse(handle, "fasta"):
-				# make sure the sequence is lower case
-				if str(cur_record.seq).islower():
-					dna_sequence = str(cur_record.seq).upper()
-				else:
-					dna_sequence = str(cur_record.seq)
-				for i in range(0, len(dna_sequence), 3):
-					codon = dna_sequence[i:i + 3]
-					if codon in self.codon_count:
-						self.codon_count[codon] += 1
-					else:
-						raise TypeError("illegal codon %s in gene: %s" % (codon, cur_record.id))
+    def _count_codons(self, fasta_file):
+        with open(fasta_file, 'r') as handle:
 
-	# this just gives the index when the objects is printed.
-	def print_index(self):
-		"""Prints out the index used."""
-		for i in sorted(self.index):
-			print("%s\t%.3f" % (i, self.index[i]))
+            # make the codon dictionary local
+            self.codon_count = self.CodonsDict.copy()
+
+            # iterate over sequence and count all the codons in the FastaFile.
+            for cur_record in SeqIO.parse(handle, "fasta"):
+                # make sure the sequence is lower case
+                if str(cur_record.seq).islower():
+                    dna_sequence = str(cur_record.seq).upper()
+                else:
+                    dna_sequence = str(cur_record.seq)
+                for i in range(0, len(dna_sequence), 3):
+                    codon = dna_sequence[i:i + 3]
+                    if codon in self.codon_count:
+                        self.codon_count[codon] += 1
+                    else:
+                        raise TypeError("illegal codon %s in gene: %s" % (codon, cur_record.id))
+
+    # this just gives the index when the objects is printed.
+    def print_index(self):
+        """Prints out the index used."""
+        for i in sorted(self.index):
+            print("%s\t%.3f" % (i, self.index[i]))
