@@ -7,7 +7,7 @@ from __future__ import print_function
 
 import math
 
-from .CodonUsageIndices import SharpEcoliIndex
+# from .CodonUsageIndices import SharpEcoliIndex
 from Bio import SeqIO    # To parse a FASTA file
 from Bio import Data    # To handle multiple genetic codes
 
@@ -47,6 +47,7 @@ class CodonAdaptationIndex(object):
             'ASN': ['AAC', 'AAT'],
             'PRO': ['CCT', 'CCG', 'CCA', 'CCC'],
             'LYS': ['AAG', 'AAA'],
+            'STOP': ['TAG', 'TGA', 'TAA'],
             'THR': ['ACC', 'ACA', 'ACG', 'ACT'],
             'PHE': ['TTT', 'TTC'],
             'ALA': ['GCA', 'GCC', 'GCG', 'GCT'],
