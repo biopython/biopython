@@ -878,12 +878,20 @@ class FeatureLocation(object):
 
     @property
     def start(self):
-        """Start location (integer like, possibly a fuzzy position, read only)."""
+        """Start location - left most (minimum) value, regardless of strand.
+
+        Read only, returns an integer like position object, possibly a fuzzy
+        position.
+        """
         return self._start
 
     @property
     def end(self):
-        """End location (integer like, possibly a fuzzy position, read only)."""
+        """End location - right most (maximum) value, regardless of strand.
+
+        Read only, returns an integer like position object, possibly a fuzzy
+        position.
+        """
         return self._end
 
     @property
@@ -1232,12 +1240,27 @@ class CompoundLocation(object):
 
     @property
     def start(self):
-        """Start location (integer like, possibly a fuzzy position, read only)."""
+        """Start location - left most (minimum) value, regardless of strand.
+
+        Read only, returns an integer like position object, possibly a fuzzy
+        position.
+
+        For the special case of a CompoundLocation wrapping the origin of a
+        circular genome, this will return zero.
+        """
         return min(loc.start for loc in self.parts)
 
     @property
     def end(self):
-        """End location (integer like, possibly a fuzzy position, read only)."""
+        """End location - right most (maximum) value, regardless of strand.
+
+        Read only, returns an integer like position object, possibly a fuzzy
+        position.
+
+        For the special case of a CompoundLocation wrapping the origin of
+        a circular genome this will match the genome length (minus one
+        given how Python counts from zero).
+        """
         return max(loc.end for loc in self.parts)
 
     @property
