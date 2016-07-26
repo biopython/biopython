@@ -1161,7 +1161,9 @@ class DsspTests(unittest.TestCase):
                     # and convert to floats where possible:
                     xtra_list = [t[1] for t in xtra_itemts]
                     xtra_list = list(map(will_it_float, xtra_list))
-                    self.assertAlmostEqual(xtra_list, xtra_list_ref)
+                    # The reason for converting to float is, that casting a float to a string in python2.6
+                    # will include fewer decimals than python3 and an assertion error will be thrown.
+                    self.assertEqual(xtra_list, xtra_list_ref)
                     i += 1
 
     def test_DSSP_RSA(self):
