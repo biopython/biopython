@@ -78,7 +78,7 @@ residue_max_acc = {
         'THR': 172.0, 'TRP': 285.0, 'TYR': 263.0, 'VAL': 174.0
     },
     'Sander': {
-        'ALA': 126.0, 'ARG': 248.0, 'ASN': 157.0, 'ASP': 163.0,
+        'ALA': 106.0, 'ARG': 248.0, 'ASN': 157.0, 'ASP': 163.0,
         'CYS': 135.0, 'GLN': 198.0, 'GLU': 194.0, 'GLY': 84.0,
         'HIS': 184.0, 'ILE': 169.0, 'LEU': 164.0, 'LYS': 205.0,
         'MET': 188.0, 'PHE': 197.0, 'PRO': 136.0, 'SER': 130.0,
@@ -267,27 +267,37 @@ class DSSP(AbstractResiduePropertyMap):
     -42.399999999999999)
     """
 
-    def __init__(self, model, pdb_file, dssp="dssp", acc_array="Sander"):
+    def __init__(self, model, in_file, dssp="dssp", acc_array="Sander", file_type='PDB'):
         """Create a DSSP object.
 
         Parameters
         ----------
         model : Model
-            the first model of the structure
-        pdb_file : string
-            a PDB file
+            The first model of the structure
+        in_file : string
+            Either a PDB file or a DSSP file.
         dssp : string
-            the dssp executable (ie. the argument to os.system)
+            The dssp executable (ie. the argument to os.system)
         acc_array : string
             Accessible surface area (ASA) from either Miller et al. (1987),
             Sander & Rost (1994), or Wilke: Tien et al. 2013, as string
             Sander/Wilke/Miller. Defaults to Sander.
+        file_type: string
+            File type switch, either PDB or DSSP with PDB as default.
         """
 
         self.residue_max_acc = residue_max_acc[acc_array]
 
         # create DSSP dictionary
-        dssp_dict, dssp_keys = dssp_dict_from_pdb_file(pdb_file, dssp)
+        file_type = file_type.upper()
+        assert(file_type in ['PDB', 'DSSP'])
+        # If the input file is a PDB file run DSSP and parse output:
+        if file_type == 'PDB':
+            dssp_dict, dssp_keys = dssp_dict_from_pdb_file(in_file, dssp)
+        # If the input file is a DSSP file just parse it directly:
+        elif file_type == 'DSSP':
+            dssp_dict, dssp_keys = make_dssp_dict(in_file)
+
         dssp_map = {}
         dssp_list = []
 
