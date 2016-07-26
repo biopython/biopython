@@ -1171,7 +1171,9 @@ class DsspTests(unittest.TestCase):
         # Sander/default:
         s = p.get_structure("example", "PDB/2BEG.pdb")
         m = s[0]
+        # Read the DSSP data into the pdb object:
         trash_var = DSSP(m, "PDB/2BEG.dssp", 'dssp', 'Sander', 'DSSP')
+        # Then compare the RASA values for each residue with the pre-computed values:
         i = 0
         with open("PDB/Sander_RASA.txt", 'r') as fh_ref:
             ref_lines = fh_ref.readlines()
@@ -1182,7 +1184,7 @@ class DsspTests(unittest.TestCase):
                     self.assertAlmostEqual(RASA, RASA_ref)
                     i += 1
 
-        # Wilke:
+        # Wilke (procedure similar as for the Sander values above):
         s = p.get_structure("example", "PDB/2BEG.pdb")
         m = s[0]
         trash_var = DSSP(m, "PDB/2BEG.dssp", 'dssp', 'Wilke', 'DSSP')
@@ -1196,7 +1198,7 @@ class DsspTests(unittest.TestCase):
                     self.assertAlmostEqual(RASA, RASA_ref)
                     i += 1
 
-        # Miller:
+        # Miller (procedure similar as for the Sander values above):
         s = p.get_structure("example", "PDB/2BEG.pdb")
         m = s[0]
         trash_var = DSSP(m, "PDB/2BEG.dssp", 'dssp', 'Miller', 'DSSP')
