@@ -1153,14 +1153,14 @@ class DsspTests(unittest.TestCase):
                     # Split the pre-computed values into a list:
                     xtra_list_ref = ref_lines[i].rstrip().split('\t')
                     # Then convert each element to float where possible:
-                    xtra_list_ref = map(will_it_float, xtra_list_ref)
+                    xtra_list_ref = list(map(will_it_float, xtra_list_ref))
                     # The xtra attribute is a dict.
                     # To compare with the pre-comouted values first sort according to keys:
                     xtra_itemts = sorted(res.xtra.items(), key=lambda s: s[0])
                     # Then extract the list of xtra values for the residue
                     # and convert to floats where possible:
                     xtra_list = [t[1] for t in xtra_itemts]
-                    xtra_list = map(will_it_float, xtra_list)
+                    xtra_list = list(map(will_it_float, xtra_list))
                     self.assertAlmostEqual(xtra_list, xtra_list_ref)
                     i += 1
 
@@ -1179,9 +1179,9 @@ class DsspTests(unittest.TestCase):
             ref_lines = fh_ref.readlines()
             for chain in m:
                 for res in chain:
-                    RASA_ref = float(ref_lines[i].rstrip())
-                    RASA = float(res.xtra['EXP_DSSP_RASA'])
-                    self.assertAlmostEqual(RASA, RASA_ref)
+                    rasa_ref = float(ref_lines[i].rstrip())
+                    rasa = float(res.xtra['EXP_DSSP_RASA'])
+                    self.assertAlmostEqual(rasa, rasa_ref)
                     i += 1
 
         # Wilke (procedure similar as for the Sander values above):
@@ -1193,9 +1193,9 @@ class DsspTests(unittest.TestCase):
             ref_lines = fh_ref.readlines()
             for chain in m:
                 for res in chain:
-                    RASA_ref = float(ref_lines[i].rstrip())
-                    RASA = float(res.xtra['EXP_DSSP_RASA'])
-                    self.assertAlmostEqual(RASA, RASA_ref)
+                    rasa_ref = float(ref_lines[i].rstrip())
+                    rasa = float(res.xtra['EXP_DSSP_RASA'])
+                    self.assertAlmostEqual(rasa, rasa_ref)
                     i += 1
 
         # Miller (procedure similar as for the Sander values above):
@@ -1207,9 +1207,9 @@ class DsspTests(unittest.TestCase):
             ref_lines = fh_ref.readlines()
             for chain in m:
                 for res in chain:
-                    RASA_ref = float(ref_lines[i].rstrip())
-                    RASA = float(res.xtra['EXP_DSSP_RASA'])
-                    self.assertAlmostEqual(RASA, RASA_ref)
+                    rasa_ref = float(ref_lines[i].rstrip())
+                    rasa = float(res.xtra['EXP_DSSP_RASA'])
+                    self.assertAlmostEqual(rasa, rasa_ref)
                     i += 1
 
 
