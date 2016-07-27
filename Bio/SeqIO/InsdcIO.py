@@ -559,15 +559,13 @@ class GenBankWriter(_InsdcWriter):
 
     def _get_topology(self, record):
         """Set the topology to 'circular', 'linear' if defined"""
-        max_topology_len = len('circular')
+        max_topology_len = len("circular")
 
-        # return an empty placeholder string if not given
-        if 'topology' not in record.annotations:
-            return ' ' * max_topology_len
-
-        template = '%%-%ds' % max_topology_len
-
-        return template % record.annotations['topology'][:max_topology_len]
+        topology = self._get_annotation_str(record, "topology", default="")
+        if topology and len(topology) <= max_topology_len:
+            return topology.ljust(max_topology_len)
+        else:
+            return " " * max_topology_len
 
     def _write_the_first_line(self, record):
         """Write the LOCUS line."""
