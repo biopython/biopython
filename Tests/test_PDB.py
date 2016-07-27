@@ -13,6 +13,7 @@
 from __future__ import print_function
 
 import os
+import sys
 import tempfile
 import unittest
 import warnings
@@ -37,6 +38,7 @@ from Bio.PDB.PDBExceptions import PDBConstructionException, PDBConstructionWarni
 from Bio.PDB import rotmat, Vector
 from Bio.PDB import Residue, Atom
 from Bio.PDB import make_dssp_dict
+from Bio.PDB import DSSP
 from Bio.PDB.NACCESS import process_asa_data, process_rsa_data
 
 
@@ -92,7 +94,7 @@ class A_ExceptionTest(unittest.TestCase):
         s = parser.get_structure("example", StringIO(data))
         data = "ATOM      9  N   ASP A 152      21.ish  34.953  27.691  1.00 19.26           N\n"
         self.assertRaises(PDBConstructionException,
-                parser.get_structure, "example", StringIO(data))
+                          parser.get_structure, "example", StringIO(data))
 
     def test_4_occupancy(self):
         """Parse file with missing occupancy"""
@@ -122,16 +124,16 @@ class HeaderTests(unittest.TestCase):
         self.assertAlmostEqual(struct.header['resolution'], 1.7)
         # Case-insensitive string comparisons
         known_strings = {
-                'author': 'T.R.Gamble,S.Yoo,F.F.Vajdos,U.K.Von Schwedler,D.K.Worthylake,H.Wang,J.P.Mccutcheon,W.I.Sundquist,C.P.Hill',
-                'deposition_date': '1998-03-27',
-                'head': 'viral protein',
-                'journal': 'AUTH   T.R.GAMBLE,S.YOO,F.F.VAJDOS,U.K.VON SCHWEDLER,AUTH 2 D.K.WORTHYLAKE,H.WANG,J.P.MCCUTCHEON,W.I.SUNDQUIST,AUTH 3 C.P.HILLTITL   STRUCTURE OF THE CARBOXYL-TERMINAL DIMERIZATIONTITL 2 DOMAIN OF THE HIV-1 CAPSID PROTEIN.REF    SCIENCE                       V. 278   849 1997REFN                   ISSN 0036-8075PMID   9346481DOI    10.1126/SCIENCE.278.5339.849',
-                'journal_reference': 't.r.gamble,s.yoo,f.f.vajdos,u.k.von schwedler, d.k.worthylake,h.wang,j.p.mccutcheon,w.i.sundquist, c.p.hill structure of the carboxyl-terminal dimerization domain of the hiv-1 capsid protein. science v. 278 849 1997 issn 0036-8075 9346481 10.1126/science.278.5339.849 ',
-                'keywords': 'capsid, core protein, hiv, c-terminal domain, viral protein',
-                'name': ' hiv capsid c-terminal domain',
-                'release_date': '1998-10-14',
-                'structure_method': 'x-ray diffraction',
-                }
+            'author': 'T.R.Gamble,S.Yoo,F.F.Vajdos,U.K.Von Schwedler,D.K.Worthylake,H.Wang,J.P.Mccutcheon,W.I.Sundquist,C.P.Hill',
+            'deposition_date': '1998-03-27',
+            'head': 'viral protein',
+            'journal': 'AUTH   T.R.GAMBLE,S.YOO,F.F.VAJDOS,U.K.VON SCHWEDLER,AUTH 2 D.K.WORTHYLAKE,H.WANG,J.P.MCCUTCHEON,W.I.SUNDQUIST,AUTH 3 C.P.HILLTITL   STRUCTURE OF THE CARBOXYL-TERMINAL DIMERIZATIONTITL 2 DOMAIN OF THE HIV-1 CAPSID PROTEIN.REF    SCIENCE                       V. 278   849 1997REFN                   ISSN 0036-8075PMID   9346481DOI    10.1126/SCIENCE.278.5339.849',
+            'journal_reference': 't.r.gamble,s.yoo,f.f.vajdos,u.k.von schwedler, d.k.worthylake,h.wang,j.p.mccutcheon,w.i.sundquist, c.p.hill structure of the carboxyl-terminal dimerization domain of the hiv-1 capsid protein. science v. 278 849 1997 issn 0036-8075 9346481 10.1126/science.278.5339.849 ',
+            'keywords': 'capsid, core protein, hiv, c-terminal domain, viral protein',
+            'name': ' hiv capsid c-terminal domain',
+            'release_date': '1998-10-14',
+            'structure_method': 'x-ray diffraction',
+        }
         for key, expect in known_strings.items():
             self.assertEqual(struct.header[key].lower(), expect.lower())
 
@@ -140,16 +142,16 @@ class HeaderTests(unittest.TestCase):
         parser = PDBParser()
         struct = parser.get_structure('2BEG', 'PDB/2BEG.pdb')
         known_strings = {
-                'author': 'T.Luhrs,C.Ritter,M.Adrian,D.Riek-Loher,B.Bohrmann,H.Dobeli,D.Schubert,R.Riek',
-                'deposition_date': '2005-10-24',
-                'head': 'protein fibril',
-                'journal': "AUTH   T.LUHRS,C.RITTER,M.ADRIAN,D.RIEK-LOHER,B.BOHRMANN,AUTH 2 H.DOBELI,D.SCHUBERT,R.RIEKTITL   3D STRUCTURE OF ALZHEIMER'S AMYLOID-{BETA}(1-42)TITL 2 FIBRILS.REF    PROC.NATL.ACAD.SCI.USA        V. 102 17342 2005REFN                   ISSN 0027-8424PMID   16293696DOI    10.1073/PNAS.0506723102",
-                'journal_reference': "t.luhrs,c.ritter,m.adrian,d.riek-loher,b.bohrmann, h.dobeli,d.schubert,r.riek 3d structure of alzheimer's amyloid-{beta}(1-42) fibrils. proc.natl.acad.sci.usa v. 102 17342 2005 issn 0027-8424 16293696 10.1073/pnas.0506723102 ",
-                'keywords': "alzheimer's, fibril, protofilament, beta-sandwich, quenched hydrogen/deuterium exchange, pairwise mutagenesis, protein fibril",
-                'name': " 3d structure of alzheimer's abeta(1-42) fibrils",
-                'release_date': '2005-11-22',
-                'structure_method': 'solution nmr',
-                }
+            'author': 'T.Luhrs,C.Ritter,M.Adrian,D.Riek-Loher,B.Bohrmann,H.Dobeli,D.Schubert,R.Riek',
+            'deposition_date': '2005-10-24',
+            'head': 'protein fibril',
+            'journal': "AUTH   T.LUHRS,C.RITTER,M.ADRIAN,D.RIEK-LOHER,B.BOHRMANN,AUTH 2 H.DOBELI,D.SCHUBERT,R.RIEKTITL   3D STRUCTURE OF ALZHEIMER'S AMYLOID-{BETA}(1-42)TITL 2 FIBRILS.REF    PROC.NATL.ACAD.SCI.USA        V. 102 17342 2005REFN                   ISSN 0027-8424PMID   16293696DOI    10.1073/PNAS.0506723102",
+            'journal_reference': "t.luhrs,c.ritter,m.adrian,d.riek-loher,b.bohrmann, h.dobeli,d.schubert,r.riek 3d structure of alzheimer's amyloid-{beta}(1-42) fibrils. proc.natl.acad.sci.usa v. 102 17342 2005 issn 0027-8424 16293696 10.1073/pnas.0506723102 ",
+            'keywords': "alzheimer's, fibril, protofilament, beta-sandwich, quenched hydrogen/deuterium exchange, pairwise mutagenesis, protein fibril",
+            'name': " 3d structure of alzheimer's abeta(1-42) fibrils",
+            'release_date': '2005-11-22',
+            'structure_method': 'solution nmr',
+        }
         for key, expect in known_strings.items():
             self.assertEqual(struct.header[key].lower(), expect.lower())
 
@@ -384,7 +386,7 @@ class ParseTest(unittest.TestCase):
                        (('W', 75, ' '), 1),
                        (('W', 77, ' '), 1),
                        ])
-            ]
+        ]
 
         for c_idx, chn in enumerate(chain_data):
             # Check chain ID and length
@@ -1081,6 +1083,21 @@ class CopyTests(unittest.TestCase):
             self.assertFalse(e.get_list()[0] is ee.get_list()[0])
 
 
+def eprint(*args, **kwargs):
+    '''Helper function that prints to stderr.'''
+    print(*args, file=sys.stderr, **kwargs)
+
+
+def will_it_float(s):
+    '''
+    Helper function that converts the input into a float if it is a number.
+    Otherwise if the input is a string it is returned as it is.'''
+    try:
+        return float(s)
+    except ValueError:
+        return(s)
+
+
 class DsspTests(unittest.TestCase):
     """Tests for DSSP parsing etc which don't need the binary tool.
 
@@ -1116,6 +1133,86 @@ class DsspTests(unittest.TestCase):
 
         # Check if all h-bond partner indices were successfully parsed.
         self.assertEqual((dssp_indices & hb_indices), hb_indices)
+
+    def test_DSSP_in_model_obj(self):
+        '''
+        Test that all the elements are added correctly to the xtra attribute of the input model object.
+        '''
+        p = PDBParser()
+        s = p.get_structure("example", "PDB/2BEG.pdb")
+        m = s[0]
+        # Read the DSSP data into the pdb object:
+        trash_var = DSSP(m, "PDB/2BEG.dssp", 'dssp', 'Sander', 'DSSP')
+        # Now compare the xtra attribute of the pdb object
+        # residue by residue with the pre-computed values:
+        i = 0
+        with open("PDB/dssp_xtra_Sander.txt", 'r') as fh_ref:
+            ref_lines = fh_ref.readlines()
+            for chain in m:
+                for res in chain:
+                    # Split the pre-computed values into a list:
+                    xtra_list_ref = ref_lines[i].rstrip().split('\t')
+                    # Then convert each element to float where possible:
+                    xtra_list_ref = list(map(will_it_float, xtra_list_ref))
+                    # The xtra attribute is a dict.
+                    # To compare with the pre-comouted values first sort according to keys:
+                    xtra_itemts = sorted(res.xtra.items(), key=lambda s: s[0])
+                    # Then extract the list of xtra values for the residue
+                    # and convert to floats where possible:
+                    xtra_list = [t[1] for t in xtra_itemts]
+                    xtra_list = list(map(will_it_float, xtra_list))
+                    # The reason for converting to float is, that casting a float to a string in python2.6
+                    # will include fewer decimals than python3 and an assertion error will be thrown.
+                    self.assertEqual(xtra_list, xtra_list_ref)
+                    i += 1
+
+    def test_DSSP_RSA(self):
+        """Tests the usage of different ASA tables."""
+        # Tests include Sander/default, Wilke and Miller
+        p = PDBParser()
+        # Sander/default:
+        s = p.get_structure("example", "PDB/2BEG.pdb")
+        m = s[0]
+        # Read the DSSP data into the pdb object:
+        trash_var = DSSP(m, "PDB/2BEG.dssp", 'dssp', 'Sander', 'DSSP')
+        # Then compare the RASA values for each residue with the pre-computed values:
+        i = 0
+        with open("PDB/Sander_RASA.txt", 'r') as fh_ref:
+            ref_lines = fh_ref.readlines()
+            for chain in m:
+                for res in chain:
+                    rasa_ref = float(ref_lines[i].rstrip())
+                    rasa = float(res.xtra['EXP_DSSP_RASA'])
+                    self.assertAlmostEqual(rasa, rasa_ref)
+                    i += 1
+
+        # Wilke (procedure similar as for the Sander values above):
+        s = p.get_structure("example", "PDB/2BEG.pdb")
+        m = s[0]
+        trash_var = DSSP(m, "PDB/2BEG.dssp", 'dssp', 'Wilke', 'DSSP')
+        i = 0
+        with open("PDB/Wilke_RASA.txt", 'r') as fh_ref:
+            ref_lines = fh_ref.readlines()
+            for chain in m:
+                for res in chain:
+                    rasa_ref = float(ref_lines[i].rstrip())
+                    rasa = float(res.xtra['EXP_DSSP_RASA'])
+                    self.assertAlmostEqual(rasa, rasa_ref)
+                    i += 1
+
+        # Miller (procedure similar as for the Sander values above):
+        s = p.get_structure("example", "PDB/2BEG.pdb")
+        m = s[0]
+        trash_var = DSSP(m, "PDB/2BEG.dssp", 'dssp', 'Miller', 'DSSP')
+        i = 0
+        with open("PDB/Miller_RASA.txt", 'r') as fh_ref:
+            ref_lines = fh_ref.readlines()
+            for chain in m:
+                for res in chain:
+                    rasa_ref = float(ref_lines[i].rstrip())
+                    rasa = float(res.xtra['EXP_DSSP_RASA'])
+                    self.assertAlmostEqual(rasa, rasa_ref)
+                    i += 1
 
 
 class NACCESSTests(unittest.TestCase):

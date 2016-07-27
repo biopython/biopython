@@ -267,27 +267,37 @@ class DSSP(AbstractResiduePropertyMap):
     -42.399999999999999)
     """
 
-    def __init__(self, model, pdb_file, dssp="dssp", acc_array="Sander"):
+    def __init__(self, model, in_file, dssp="dssp", acc_array="Sander", file_type='PDB'):
         """Create a DSSP object.
 
         Parameters
         ----------
         model : Model
-            the first model of the structure
-        pdb_file : string
-            a PDB file
+            The first model of the structure
+        in_file : string
+            Either a PDB file or a DSSP file.
         dssp : string
-            the dssp executable (ie. the argument to os.system)
+            The dssp executable (ie. the argument to os.system)
         acc_array : string
             Accessible surface area (ASA) from either Miller et al. (1987),
             Sander & Rost (1994), or Wilke: Tien et al. 2013, as string
             Sander/Wilke/Miller. Defaults to Sander.
+        file_type: string
+            File type switch, either PDB or DSSP with PDB as default.
         """
 
         self.residue_max_acc = residue_max_acc[acc_array]
 
         # create DSSP dictionary
-        dssp_dict, dssp_keys = dssp_dict_from_pdb_file(pdb_file, dssp)
+        file_type = file_type.upper()
+        assert(file_type in ['PDB', 'DSSP'])
+        # If the input file is a PDB file run DSSP and parse output:
+        if file_type == 'PDB':
+            dssp_dict, dssp_keys = dssp_dict_from_pdb_file(in_file, dssp)
+        # If the input file is a DSSP file just parse it directly:
+        elif file_type == 'DSSP':
+            dssp_dict, dssp_keys = make_dssp_dict(in_file)
+
         dssp_map = {}
         dssp_list = []
 
