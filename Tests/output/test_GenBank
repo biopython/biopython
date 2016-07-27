@@ -1526,6 +1526,8 @@ Key: source
 Value: Mesorhizobium loti
 Key: taxonomy
 Value: ['Bacteria', 'Proteobacteria', 'alpha subdivision', 'Rhizobiaceae group', 'Phyllobacteriaceae', 'Mesorhizobium']
+Key: topology
+Value: circular
 Feaures
 type: source
 location: [0:180](+)
@@ -1607,6 +1609,8 @@ Key: source
 Value: human
 Key: taxonomy
 Value: ['Eukaryota', 'Metazoa', 'Chordata', 'Craniata', 'Vertebrata', 'Euteleostomi', 'Mammalia', 'Eutheria', 'Primates', 'Catarrhini', 'Hominidae', 'Homo']
+Key: topology
+Value: linear
 Feaures
 type: source
 location: [0:360]
@@ -1678,6 +1682,8 @@ Key: source
 Value: Tunisian scorpion
 Key: taxonomy
 Value: ['Eukaryota', 'Metazoa', 'Arthropoda', 'Chelicerata', 'Arachnida', 'Scorpiones', 'Buthoidea', 'Buthidae', 'Buthus']
+Key: topology
+Value: linear
 Feaures
 type: source
 location: [0:64]
@@ -1761,6 +1767,8 @@ Key: source
 Value: Feline panleukopenia virus
 Key: taxonomy
 Value: ['Viruses', 'ssDNA viruses', 'Parvoviridae', 'Parvovirinae', 'Parvovirus']
+Key: topology
+Value: linear
 Feaures
 type: source
 location: [0:2007](+)
@@ -1822,6 +1830,8 @@ Key: source
 Value: Feline panleukopenia virus
 Key: taxonomy
 Value: ['Viruses', 'ssDNA viruses', 'Parvoviridae', 'Parvovirinae', 'Parvovirus']
+Key: topology
+Value: linear
 Feaures
 type: source
 location: [0:2007](+)
@@ -1883,6 +1893,8 @@ Key: source
 Value: Feline panleukopenia virus
 Key: taxonomy
 Value: ['Viruses', 'ssDNA viruses', 'Parvoviridae', 'Parvovirinae', 'Parvovirus']
+Key: topology
+Value: linear
 Feaures
 type: source
 location: [0:1755](+)
@@ -1965,6 +1977,8 @@ Key: source
 Value: Yersinia pestis biovar Microtus str. 91001
 Key: taxonomy
 Value: ['Bacteria', 'Proteobacteria', 'Gammaproteobacteria', 'Enterobacteriales', 'Enterobacteriaceae', 'Yersinia']
+Key: topology
+Value: circular
 Feaures
 type: source
 location: [0:9609](+)
@@ -2325,6 +2339,8 @@ Key: source
 Value: Streptomyces avermitilis
 Key: taxonomy
 Value: ['Bacteria', 'Actinobacteria', 'Actinobacteridae', 'Actinomycetales', 'Streptomycineae', 'Streptomycetaceae', 'Streptomyces']
+Key: topology
+Value: linear
 Feaures
 type: source
 location: [0:6497](+)
@@ -2358,6 +2374,8 @@ Key: source
 Value: Streptomyces avermitilis
 Key: taxonomy
 Value: ['Bacteria', 'Actinobacteria', 'Actinobacteridae', 'Actinomycetales', 'Streptomycineae', 'Streptomycetaceae', 'Streptomyces']
+Key: topology
+Value: linear
 Feaures
 type: source
 location: [0:6497](+)
@@ -2424,6 +2442,8 @@ Key: source
 Value: Streptomyces avermitilis
 Key: taxonomy
 Value: ['Bacteria', 'Actinobacteria', 'Actinobacteridae', 'Actinomycetales', 'Streptomycineae', 'Streptomycetaceae', 'Streptomyces']
+Key: topology
+Value: linear
 Feaures
 type: source
 location: [0:6497](+)
@@ -2458,6 +2478,8 @@ Key: source
 Value: Streptomyces avermitilis
 Key: taxonomy
 Value: ['Bacteria', 'Actinobacteria', 'Actinobacteridae', 'Actinomycetales', 'Streptomycineae', 'Streptomycetaceae', 'Streptomyces']
+Key: topology
+Value: linear
 Feaures
 type: source
 location: [0:6497](+)
@@ -2518,6 +2540,8 @@ Key: source
 Value: Escherichia coli
 Key: taxonomy
 Value: ['Bacteria', 'Proteobacteria', 'Gammaproteobacteria', 'Enterobacteriales', 'Enterobacteriaceae', 'Escherichia']
+Key: topology
+Value: linear
 Feaures
 type: source
 location: [0:375]
