@@ -27,7 +27,7 @@ Key: source
 Value: human
 Key: taxonomy
 Value: ['Eukaryota', 'Metazoa', 'Chordata', 'Craniata', 'Vertebrata', 'Euteleostomi', 'Mammalia', 'Eutheria', 'Primates', 'Catarrhini', 'Hominidae', 'Homo']
-Feaures
+Features
 type: source
 location: [0:1622](+)
 qualifiers:
@@ -98,7 +98,7 @@ Key: source
 Value: thale cress
 Key: taxonomy
 Value: ['Eukaryota', 'Viridiplantae', 'Streptophyta', 'Embryophyta', 'Tracheophyta', 'euphyllophytes', 'Spermatophyta', 'Magnoliophyta', 'eudicotyledons', 'Rosidae', 'Capparales', 'Brassicaceae', 'Arabidopsis']
-Feaures
+Features
 type: source
 location: [0:513](+)
 qualifiers:
@@ -163,7 +163,7 @@ Key: source
 Value: thale cress
 Key: taxonomy
 Value: ['Eukaryota', 'Viridiplantae', 'Streptophyta', 'Embryophyta', 'Tracheophyta', 'euphyllophytes', 'Spermatophyta', 'Magnoliophyta', 'eudicotyledons', 'Rosidae', 'Capparales', 'Brassicaceae', 'Arabidopsis']
-Feaures
+Features
 type: source
 location: [0:880](+)
 qualifiers:
@@ -279,7 +279,7 @@ Key: source
 Value: Brassica napus (cultivar Jet neuf) cold induced leaf cDNA to mRNA
 Key: taxonomy
 Value: ['Eukaryota', 'Viridiplantae', 'Embryophyta', 'Tracheophyta', 'Spermatophyta', 'Magnoliophyta', 'eudicotyledons', 'core eudicots', 'Rosidae', 'eurosids II', 'Brassicales', 'Brassicaceae', 'Brassica']
-Feaures
+Features
 type: source
 location: [0:441](+)
 qualifiers:
@@ -363,7 +363,7 @@ Key: source
 Value: horseradish
 Key: taxonomy
 Value: ['Eukaryota', 'Viridiplantae', 'Streptophyta', 'Embryophyta', 'Tracheophyta', 'euphyllophytes', 'Spermatophyta', 'Magnoliophyta', 'eudicotyledons', 'Rosidae', 'Capparales', 'Brassicaceae', 'Armoracia']
-Feaures
+Features
 type: source
 location: [0:206](+)
 qualifiers:
@@ -443,7 +443,7 @@ Key: source
 Value: Brassica rapa flower cDNA to mRNA
 Key: taxonomy
 Value: ['Eukaryota', 'Viridiplantae', 'Embryophyta', 'Tracheophyta', 'Spermatophyta', 'Magnoliophyta', 'eudicotyledons', 'core eudicots', 'Rosidae', 'eurosids II', 'Brassicales', 'Brassicaceae', 'Brassica']
-Feaures
+Features
 type: source
 location: [0:282](+)
 qualifiers:
@@ -507,7 +507,7 @@ Key: source
 Value: rape
 Key: taxonomy
 Value: ['Eukaryota', 'Viridiplantae', 'Embryophyta', 'Tracheophyta', 'Spermatophyta', 'Magnoliophyta', 'eudicotyledons', 'core eudicots', 'Rosidae', 'eurosids II', 'Brassicales', 'Brassicaceae', 'Brassica']
-Feaures
+Features
 type: source
 location: [0:497](+)
 qualifiers:
@@ -593,7 +593,7 @@ Key: source
 Value: human
 Key: taxonomy
 Value: ['Eukaryota', 'Metazoa', 'Chordata', 'Craniata', 'Vertebrata', 'Mammalia', 'Eutheria', 'Primates', 'Catarrhini', 'Hominidae', 'Homo']
-Feaures
+Features
 type: source
 location: [0:1326](+)
 qualifiers:
@@ -669,7 +669,7 @@ Key: source
 Value: human
 Key: taxonomy
 Value: ['Eukaryota', 'Metazoa', 'Chordata', 'Craniata', 'Vertebrata', 'Euteleostomi', 'Mammalia', 'Eutheria', 'Primates', 'Catarrhini', 'Hominidae', 'Homo']
-Feaures
+Features
 type: source
 location: [0:741](+)
 qualifiers:
@@ -771,7 +771,7 @@ Key: source
 Value: thale cress
 Key: taxonomy
 Value: ['Eukaryota', 'Viridiplantae', 'Embryophyta', 'Tracheophyta', 'Spermatophyta', 'Magnoliophyta', 'eudicotyledons', 'core eudicots', 'Rosidae', 'eurosids II', 'Brassicales', 'Brassicaceae', 'Arabidopsis']
-Feaures
+Features
 type: source
 location: [0:86436](+)
 qualifiers:
@@ -1019,7 +1019,7 @@ Key: source
 Value: house mouse
 Key: taxonomy
 Value: ['Eukaryota', 'Metazoa', 'Chordata', 'Craniata', 'Vertebrata', 'Euteleostomi', 'Mammalia', 'Eutheria', 'Rodentia', 'Sciurognathi', 'Muridae', 'Murinae', 'Mus']
-Feaures
+Features
 type: source
 location: [0:182]
 qualifiers:
@@ -1129,7 +1129,7 @@ Key: source
 Value: fruit fly
 Key: taxonomy
 Value: ['Eukaryota', 'Metazoa', 'Arthropoda', 'Tracheata', 'Hexapoda', 'Insecta', 'Pterygota', 'Neoptera', 'Endopterygota', 'Diptera', 'Brachycera', 'Muscomorpha', 'Ephydroidea', 'Drosophilidae', 'Drosophila']
-Feaures
+Features
 type: source
 location: [0:154329](+)
 qualifiers:
@@ -1360,7 +1360,7 @@ Key: source
 Value: human
 Key: taxonomy
 Value: ['Eukaryota', 'Metazoa', 'Chordata', 'Craniata', 'Vertebrata', 'Euteleostomi', 'Mammalia', 'Eutheria', 'Primates', 'Catarrhini', 'Hominidae', 'Homo']
-Feaures
+Features
 type: source
 location: [0:2509](+)
 qualifiers:
@@ -1449,7 +1449,7 @@ Key: source
 Value: human
 Key: taxonomy
 Value: ['Eukaryota', 'Metazoa', 'Chordata', 'Craniata', 'Vertebrata', 'Euteleostomi', 'Mammalia', 'Eutheria', 'Primates', 'Catarrhini', 'Hominidae', 'Homo']
-Feaures
+Features
 type: source
 location: [0:1250660](+)
 qualifiers:
@@ -1528,7 +1528,7 @@ Key: taxonomy
 Value: ['Bacteria', 'Proteobacteria', 'alpha subdivision', 'Rhizobiaceae group', 'Phyllobacteriaceae', 'Mesorhizobium']
 Key: topology
 Value: circular
-Feaures
+Features
 type: source
 location: [0:180](+)
 qualifiers:
@@ -1611,7 +1611,7 @@ Key: taxonomy
 Value: ['Eukaryota', 'Metazoa', 'Chordata', 'Craniata', 'Vertebrata', 'Euteleostomi', 'Mammalia', 'Eutheria', 'Primates', 'Catarrhini', 'Hominidae', 'Homo']
 Key: topology
 Value: linear
-Feaures
+Features
 type: source
 location: [0:360]
 qualifiers:
@@ -1684,7 +1684,7 @@ Key: taxonomy
 Value: ['Eukaryota', 'Metazoa', 'Arthropoda', 'Chelicerata', 'Arachnida', 'Scorpiones', 'Buthoidea', 'Buthidae', 'Buthus']
 Key: topology
 Value: linear
-Feaures
+Features
 type: source
 location: [0:64]
 qualifiers:
@@ -1769,7 +1769,7 @@ Key: taxonomy
 Value: ['Viruses', 'ssDNA viruses', 'Parvoviridae', 'Parvovirinae', 'Parvovirus']
 Key: topology
 Value: linear
-Feaures
+Features
 type: source
 location: [0:2007](+)
 qualifiers:
@@ -1832,7 +1832,7 @@ Key: taxonomy
 Value: ['Viruses', 'ssDNA viruses', 'Parvoviridae', 'Parvovirinae', 'Parvovirus']
 Key: topology
 Value: linear
-Feaures
+Features
 type: source
 location: [0:2007](+)
 qualifiers:
@@ -1895,7 +1895,7 @@ Key: taxonomy
 Value: ['Viruses', 'ssDNA viruses', 'Parvoviridae', 'Parvovirinae', 'Parvovirus']
 Key: topology
 Value: linear
-Feaures
+Features
 type: source
 location: [0:1755](+)
 qualifiers:
@@ -1979,7 +1979,7 @@ Key: taxonomy
 Value: ['Bacteria', 'Proteobacteria', 'Gammaproteobacteria', 'Enterobacteriales', 'Enterobacteriaceae', 'Yersinia']
 Key: topology
 Value: circular
-Feaures
+Features
 type: source
 location: [0:9609](+)
 qualifiers:
@@ -2341,7 +2341,7 @@ Key: taxonomy
 Value: ['Bacteria', 'Actinobacteria', 'Actinobacteridae', 'Actinomycetales', 'Streptomycineae', 'Streptomycetaceae', 'Streptomyces']
 Key: topology
 Value: linear
-Feaures
+Features
 type: source
 location: [0:6497](+)
 qualifiers:
@@ -2376,7 +2376,7 @@ Key: taxonomy
 Value: ['Bacteria', 'Actinobacteria', 'Actinobacteridae', 'Actinomycetales', 'Streptomycineae', 'Streptomycetaceae', 'Streptomyces']
 Key: topology
 Value: linear
-Feaures
+Features
 type: source
 location: [0:6497](+)
 qualifiers:
@@ -2409,7 +2409,7 @@ Key: source
 Value: Streptomyces avermitilis
 Key: taxonomy
 Value: ['Bacteria', 'Actinobacteria', 'Actinobacteridae', 'Actinomycetales', 'Streptomycineae', 'Streptomycetaceae', 'Streptomyces']
-Feaures
+Features
 type: source
 location: [0:6497](+)
 qualifiers:
@@ -2444,7 +2444,7 @@ Key: taxonomy
 Value: ['Bacteria', 'Actinobacteria', 'Actinobacteridae', 'Actinomycetales', 'Streptomycineae', 'Streptomycetaceae', 'Streptomyces']
 Key: topology
 Value: linear
-Feaures
+Features
 type: source
 location: [0:6497](+)
 qualifiers:
@@ -2480,7 +2480,7 @@ Key: taxonomy
 Value: ['Bacteria', 'Actinobacteria', 'Actinobacteridae', 'Actinomycetales', 'Streptomycineae', 'Streptomycetaceae', 'Streptomyces']
 Key: topology
 Value: linear
-Feaures
+Features
 type: source
 location: [0:6497](+)
 qualifiers:
@@ -2542,7 +2542,7 @@ Key: taxonomy
 Value: ['Bacteria', 'Proteobacteria', 'Gammaproteobacteria', 'Enterobacteriales', 'Enterobacteriaceae', 'Escherichia']
 Key: topology
 Value: linear
-Feaures
+Features
 type: source
 location: [0:375]
 qualifiers:
