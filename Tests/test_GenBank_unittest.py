@@ -169,7 +169,7 @@ class GenBankTests(unittest.TestCase):
         SeqIO.write([record], out_handle, 'genbank')
         first_line = out_handle.getvalue().split('\n')[0]
         # TODO - Use self.assertIn once drop Python 2.6
-        #self.assertIn('linear', first_line)
+        # self.assertIn('linear', first_line)
         self.assertTrue(" linear " in first_line)
         with open('GenBank/DS830848.gb', 'r') as fh:
             orig_first_line = fh.readline().strip()
