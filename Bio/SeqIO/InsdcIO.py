@@ -965,6 +965,8 @@ class EmblWriter(_InsdcWriter):
             raise ValueError("Cannot have spaces in EMBL accession, %s"
                              % repr(str(accession)))
 
+        topology = self._get_annotation_str(record, "topology", default="")
+
         # Get the molecule type
         # TODO - record this explicitly in the parser?
         # Get the base alphabet (underneath any Gapped or StopCodon encoding)
@@ -997,8 +999,8 @@ class EmblWriter(_InsdcWriter):
         # 5. Data class
         # 6. Taxonomic division
         # 7. Sequence length
-        self._write_single_line("ID", "%s; %s; ; %s; ; %s; %i %s."
-                                % (accession, version, mol_type,
+        self._write_single_line("ID", "%s; %s; %s; %s; ; %s; %i %s."
+                                % (accession, version, topology, mol_type,
                                    division, len(record), units))
         handle.write("XX\n")
         self._write_single_line("AC", accession + ";")
