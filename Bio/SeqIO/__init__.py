@@ -1,4 +1,4 @@
-# Copyright 2006-2015 by Peter Cock.  All rights reserved.
+# Copyright 2006-2016 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -233,11 +233,14 @@ will be overwritten. For sequential files formats (e.g. fasta, genbank) each
 "record block" holds a single sequence.  For these files it would probably
 be safe to call write() multiple times by re-using the same handle.
 
-
 However, trying this for certain alignment formats (e.g. phylip, clustal,
 stockholm) would have the effect of concatenating several multiple sequence
 alignments together.  Such files are created by the PHYLIP suite of programs
 for bootstrap analysis, but it is clearer to do this via Bio.AlignIO instead.
+
+Worse, many fileformats have an explicit header and/or footer structure
+(e.g. any XMl format, and most binary file formats like SFF). Here making
+multiple calls to write() will result in an invalid file.
 
 
 Conversion
