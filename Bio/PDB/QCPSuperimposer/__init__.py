@@ -11,16 +11,8 @@ Quaternion Characteristic Polynomial, which is used in the algorithm.
 
 from __future__ import print_function
 
-import warnings
-
-from Bio import BiopythonExperimentalWarning
 from numpy import dot, sqrt, array, matrix, inner, zeros
 from .qcprotmodule import FastCalcRMSDAndRotation
-
-
-warnings.warn('Bio.PDB.QCPSuperimposer is an experimental submodule which may undergo '
-              'significant changes prior to its future official release.',
-              BiopythonExperimentalWarning)
 
 
 class QCPSuperimposer(object):

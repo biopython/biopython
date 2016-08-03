@@ -3,7 +3,6 @@
 # as part of this package.
 
 from __future__ import print_function
-import warnings
 
 try:
     # TODO - Don't use "from XXX import *"
@@ -14,10 +13,7 @@ except ImportError:
     raise MissingPythonDependencyError(
         "Install NumPy if you want to use Bio.QCPSuperimposer.")
 
-from Bio import BiopythonExperimentalWarning
-with warnings.catch_warnings():
-    warnings.simplefilter('ignore', BiopythonExperimentalWarning)
-    from Bio.PDB.QCPSuperimposer import QCPSuperimposer
+from Bio.PDB.QCPSuperimposer import QCPSuperimposer
 
 # start with two coordinate sets (Nx3 arrays - Float0)
 
