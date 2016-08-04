@@ -48,9 +48,9 @@ Testing
 -------
 
 Any new feature or functionality will not be accepted without tests. Likewise
-for any bug fix, we encourage an additional test is also included. See the
-testing chapter in the Biopython Tutorial for more information on our test
-framework: http://biopython.org/DIST/docs/tutorial/Tutorial.html
+for any bug fix, we encourage including an additional test. See the testing
+chapter in the Biopython Tutorial for more information on our test framework:
+http://biopython.org/DIST/docs/tutorial/Tutorial.html
 
 
 Local Testing
