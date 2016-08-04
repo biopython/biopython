@@ -1,8 +1,8 @@
 Biopython is currently released under the "Biopython License Agreement"
 (given in full below). Unless stated otherwise in individual file headers,
-all Biopython's Python files are under the "Biopython License Agreement".
+all Biopython's files are under the "Biopython License Agreement".
 
-Some Python files are explicitly dual licensed under your choice of the
+Some files are explicitly dual licensed under your choice of the
 "Biopython License Agreement" or the "BSD 3-Clause License" (both given
 in full below). This is with the intention of later offering all of
 Biopython under this dual licensing approach.
