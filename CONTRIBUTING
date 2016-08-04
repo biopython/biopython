@@ -9,7 +9,7 @@ contributing - this file is primarily concerned with the practicalities.
 Licensing
 ---------
 
-Biopython moving towards dual licensing the code. In yout git commit and/or
+Biopython is moving towards dual licensing the code. In your git commit and/or
 pull request, please explicitly state that you agree to your contributions
 being dual licensed under *both* our original "Biopython License Agreement"
 and the more widely used "3-Clause BSD License" (see our LICENSE file for more
@@ -60,14 +60,14 @@ Tools like ``pep8`` and ``flake8`` are useful, but currently we suggest you
 install this git pre-commit hook which will check our basic coding conventions
 as you work, https://github.com/biopython/biopython/issues/493
 
-Please allways run the full test suite on your local computer before
+Please always run the full test suite on your local computer before
 submitting a pull request, e.g.::
 
     $ git commit Bio/XXX.py Tests/test_XXX.py  -m "Fixed bug 123"
     $ python3.5 setup.py build
     $ python3.5 setup.py test
 
-If you have mutliple versions of Python installed, ideally test them all
+If you have multiple versions of Python installed, ideally test them all
 (the Python tool Tox can be helpful here).
 
 
@@ -83,5 +83,5 @@ check the Python coding style using the ``pep8`` tool. This must pass before
 your pull request will be merged.
 
 We also are using QuantifiedCode which provides an independent code analysis
-which can catch important errors. Some of the issues it flags are subjecting,
+which can catch important errors. Some of the issues it flags are subjective,
 so in general we do not require this pass before merging a pull request.
