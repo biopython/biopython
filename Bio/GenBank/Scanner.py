@@ -609,8 +609,9 @@ class EmblScanner(InsdcScanner):
             assert self.line[:self.HEADER_WIDTH] == " " * self.HEADER_WIDTH, \
                 repr(self.line)
             # Remove tailing number now, remove spaces later
-            if(len(line.rsplit(None, 1))-1):
-                seq_lines.append(line.rsplit(None, 1)[0])
+            linersplit = line.rsplit(None, 1)
+            if(len(linersplit) > 1):
+                seq_lines.append(linersplit[0])
             line = self.handle.readline()
         self.line = line
         return (misc_lines, "".join(seq_lines).replace(" ", ""))
