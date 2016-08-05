@@ -64,7 +64,7 @@ submitting a pull request, e.g.::
     $ python3.5 setup.py test
 
 If you have multiple versions of Python installed, ideally test them all
-(the Python tool Tox can be helpful here).
+(the Python tool ``tox`` can be helpful here).
 
 
 Continous Integration
