@@ -56,10 +56,6 @@ http://biopython.org/DIST/docs/tutorial/Tutorial.html
 Local Testing
 -------------
 
-Tools like ``pep8`` and ``flake8`` are useful, but currently we suggest you
-install this git pre-commit hook which will check our basic coding conventions
-as you work, https://github.com/biopython/biopython/issues/493
-
 Please always run the full test suite on your local computer before
 submitting a pull request, e.g.::
 
