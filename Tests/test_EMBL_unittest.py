@@ -25,7 +25,7 @@ class EMBLTests(unittest.TestCase):
         else:
             self.assertTrue(False, "Error message without explanation raised by content after CO line")
 
-        def test_embl_0nt_line(self):
+        def test_embl_0_line(self):
         """Test an Assertion is thrown by SQ line with 0 length sequence"""
         with warnings.catch_warnings(record=True) as w:
             warnings.simplefilter("always")
