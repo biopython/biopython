@@ -3,18 +3,10 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Asynchronous local execution.
+"""Asynchronous local execution (DEPRECATED).
 
 Supports multicore architectures.
 """
-import warnings
-from Bio import BiopythonDeprecationWarning
-warnings.warn("Bio.PopGen.Async.Local has been deprecated, and we intend to" 
-              " remove it in a future release of Biopython. If you would like to"
-              " continue using it, please contact the Biopython"
-              " developers via the mailing list.",
-              BiopythonDeprecationWarning)
-
 
 from Bio.PopGen.Async import Async
 

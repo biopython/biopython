@@ -3,7 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""SimCoal2 execution module and support functions."""
+"""SimCoal2 execution module and support functions (DEPRECATED)."""
 
 import warnings
 from Bio import BiopythonDeprecationWarning

@@ -1,19 +1,10 @@
 # Copyright 2007 by Tiago Antao <tiagoantao@gmail.com>.  All rights reserved.
 
-"""Cache for Simacoal2 results ((DEPRECATED).
+"""Cache for Simcoal2 results (DEPRECATED).
 
 This module allows you to cache Simcoal2 results, and return on the fly
 in case the calculation was done.
 """
-
-import warnings
-from Bio import BiopythonDeprecationWarning
-warnings.warn("Bio.PopGen.SimCoal.Cache has been deprecated, and we intend to" 
-              " remove it in a future release of Biopython. If you would like to"
-              " continue using it, please contact the Biopython"
-              " developers via the mailing list.",
-              BiopythonDeprecationWarning)
-
 
 import os
 import tarfile

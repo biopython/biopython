@@ -3,22 +3,13 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Asynchronous execution of Fdist and spliting of loads.
+"""Asynchronous execution of Fdist and spliting of loads (DEPRECATED).
 
 FDistAsync Allows for the execution of FDist.
 
 SplitFDist splits a single Fdist execution in several, taking advantage
 of multi-core architectures.
 """
-
-import warnings
-from Bio import BiopythonDeprecationWarning
-warnings.warn("Bio.PopGen.FDist.Async has been deprecated, and we intend to" 
-              " remove it in a future release of Biopython. If you would like to"
-              " continue using it, please contact the Biopython"
-              " developers via the mailing list.",
-              BiopythonDeprecationWarning)
-
 
 import os
 import shutil

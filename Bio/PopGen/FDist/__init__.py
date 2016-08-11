@@ -3,9 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-
-"""
-This module provides code to work with FDist.
+"""This module provides code to work with FDist (DEPRECATED).
 
 See http://www.rubic.rdg.ac.uk/~mab/software.html (old) and
 http://www.maths.bris.ac.uk/~mamab/ (new) for downloading the

@@ -5,18 +5,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""
-This module allows you to control Simcoal2 and FastSimcoal
-
-"""
-import warnings
-from Bio import BiopythonDeprecationWarning
-warnings.warn("Bio.PopGen.SimCoal.Controller has been deprecated, and we intend to" 
-              " remove it in a future release of Biopython. If you would like to"
-              " continue using it, please contact the Biopython"
-              " developers via the mailing list.",
-              BiopythonDeprecationWarning)
-
+"""This module allows you to control Simcoal2 and FastSimcoal (DEPRECATED)."""
 
 import os
 import sys

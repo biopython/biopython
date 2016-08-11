@@ -3,7 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""This module allows you to control fdist.
+"""This module allows you to control fdist (DEPRECATED).
 
 This will allow you to call fdist and associated programs (cplot,
 datacal, pv) by Mark Beaumont.
@@ -11,15 +11,6 @@ datacal, pv) by Mark Beaumont.
 http://www.rubic.rdg.ac.uk/~mab/software.html (old)
 http://www.maths.bris.ac.uk/~mamab/ (new)
 """
-
-import warnings
-from Bio import BiopythonDeprecationWarning
-warnings.warn("Bio.PopGen.FDist.Controller has been deprecated, and we intend to" 
-              " remove it in a future release of Biopython. If you would like to"
-              " continue using it, please contact the Biopython"
-              " developers via the mailing list.",
-              BiopythonDeprecationWarning)
-
 
 import os
 import subprocess
