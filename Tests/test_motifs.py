@@ -8,6 +8,8 @@ import os
 import unittest
 import math
 
+from Bio.Alphabet import generic_dna
+from Bio.Alphabet import Gapped
 from Bio.Alphabet import IUPAC
 from Bio import motifs
 from Bio.Seq import Seq
@@ -1687,6 +1689,19 @@ class MotifTestPWM(unittest.TestCase):
         self.assertAlmostEqual(result[4], -20.3014183, places=5)
         self.assertAlmostEqual(result[5], -25.18009186, places=5)
         self.assertTrue(math.isnan(result[6]), "Expected nan, not %r" % result[6])
+
+    def test_mixed_alphabets(self):
+        """Test creating motif with mixed alphabets."""
+        # TODO - Can we support this?
+        seqs = [Seq("TACAA", IUPAC.unambiguous_dna),
+                Seq("TACGC", IUPAC.ambiguous_dna),
+                Seq("TACAC", IUPAC.extended_dna),
+                Seq("TACCC", Gapped(IUPAC.unambiguous_dna)),
+                Seq("AACCC", IUPAC.unambiguous_dna),
+                Seq("AATGC", IUPAC.unambiguous_dna),
+                Seq("AATGC", generic_dna)]
+        # ValueError: Alphabets are inconsistent
+        self.assertRaises(ValueError, motifs.create, seqs)
 
 
 if __name__ == "__main__":

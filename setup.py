@@ -27,12 +27,28 @@ import sys
 import os
 import shutil
 
-from distutils.core import setup
-from distutils.core import Command
-from distutils.command.install import install
-from distutils.command.build_py import build_py
-from distutils.command.build_ext import build_ext
-from distutils.extension import Extension
+if "bdist_wheel" in sys.argv:
+    try:
+        import setuptools
+        import wheel
+    except ImportError:
+        sys.exit("We need both setuptools AND wheel packages installed for bdist_wheel to work")
+    # Import specific bits of setuptools ...
+    from setuptools import setup
+    from setuptools import Command
+    from setuptools.command.install import install
+    from setuptools.command.build_py import build_py
+    from setuptools.command.build_ext import build_ext
+    from setuptools import Extension
+else:
+    # Except for wheels, stick with standard library's distutils
+    from distutils.core import setup
+    from distutils.core import Command
+    from distutils.command.install import install
+    from distutils.command.build_py import build_py
+    from distutils.command.build_ext import build_ext
+    from distutils.extension import Extension
+
 
 _CHECKED = None
 
@@ -339,6 +355,7 @@ PACKAGES = [
     'Bio.KEGG.Compound',
     'Bio.KEGG.Enzyme',
     'Bio.KEGG.Map',
+    'Bio.PDB.mmtf',
     'Bio.KEGG.KGML',
     'Bio.Medline',
     'Bio.motifs',
@@ -390,6 +407,7 @@ NUMPY_PACKAGES = [
     'Bio.Affy',
     'Bio.Cluster',
     'Bio.KDTree',
+    'Bio.phenotype',
 ]
 
 if os.name == 'java':

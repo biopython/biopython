@@ -323,7 +323,10 @@ class JASPAR5(object):
         if row:
             latest = row[0]
         else:
-            warnings.warn("Failed to fetch latest version number for JASPAR motif with base ID '{0}'. No JASPAR motif with this base ID appears to exist in the database.".format(base_id), BiopythonWarning)
+            warnings.warn("Failed to fetch latest version number for JASPAR "
+                          "motif with base ID '{0}'. "
+                          "No JASPAR motif with this base ID appears to exist "
+                          "in the database.".format(base_id), BiopythonWarning)
 
         return latest
 
@@ -344,7 +347,10 @@ class JASPAR5(object):
         if row:
             int_id = row[0]
         else:
-            warnings.warn("Failed to fetch internal database ID for JASPAR motif with matrix ID '{0}.{1}'. No JASPAR motif with this matrix ID appears to exist.".format(base_id, version), BiopythonWarning)
+            warnings.warn("Failed to fetch internal database ID for JASPAR "
+                          "motif with matrix ID '{0}.{1}'. "
+                          "No JASPAR motif with this matrix ID appears to "
+                          "exist.".format(base_id, version), BiopythonWarning)
 
         return int_id
 
@@ -359,7 +365,8 @@ class JASPAR5(object):
         # This should never happen as it is an internal method. If it does
         # we should probably raise an exception
         if not row:
-            warnings.warn("Could not fetch JASPAR motif with internal ID = {0}".format(int_id), BiopythonWarning)
+            warnings.warn("Could not fetch JASPAR motif with internal "
+                          "ID = {0}".format(int_id), BiopythonWarning)
             return None
 
         base_id = row[0]
@@ -388,7 +395,8 @@ class JASPAR5(object):
         # Many JASPAR motifs (especially those not in the CORE collection)
         # do not have taxonomy IDs. So this warning would get annoying.
         # if not tax_ids:
-        #    warnings.warn("Could not fetch any taxonomy IDs for JASPAR motif {0}".format(motif.matrix_id), BiopythonWarning)
+        #     warnings.warn("Could not fetch any taxonomy IDs for JASPAR motif"
+        #                   " {0}".format(motif.matrix_id), BiopythonWarning)
 
         motif.species = tax_ids
 
@@ -744,7 +752,8 @@ class JASPAR5(object):
                     int_ids.append(id)
 
         if len(int_ids) < 1:
-            warnings.warn("Zero motifs returned with current select critera", BiopythonWarning)
+            warnings.warn("Zero motifs returned with current select critera",
+                          BiopythonWarning)
 
         return int_ids
 
@@ -756,12 +765,10 @@ class JASPAR5(object):
         """
         cur = self.dbh.cursor()
 
-        cur.execute(
-            """select count(*) from MATRIX
-               where BASE_ID = (select BASE_ID from MATRIX where ID = %s)
-               and VERSION > (select VERSION from MATRIX where ID = %s)""",
-               (int_id, int_id)
-        )
+        cur.execute("select count(*) from MATRIX where "
+                    "BASE_ID = (select BASE_ID from MATRIX where ID = %s) "
+                    "and VERSION > (select VERSION from MATRIX where ID = %s)",
+                    (int_id, int_id))
 
         row = cur.fetchone()
 

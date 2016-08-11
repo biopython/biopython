@@ -285,7 +285,7 @@ class QueensCrossover(object):
                                                     make_best_larger=0)
 
             assert len(best_1) + len(best_2) == len(rest_1) + len(rest_2), \
-                   "Did not preserve genome length!"
+                "Did not preserve genome length!"
 
             new_org_1.genome = best_1 + best_2
             new_org_2.genome = rest_1 + rest_2
@@ -326,8 +326,8 @@ class QueensCrossover(object):
         # will overridden right away
         best_fitness = [0, 0, -1]
         for start_index in range(len(genome) - region_size):
-            region_fitness = \
-             self._fitness_calc(genome[start_index: start_index + region_size])
+            region_fitness = self._fitness_calc(
+                genome[start_index: start_index + region_size])
 
             if region_fitness > best_fitness[2]:
                 best_fitness = [start_index, start_index + region_size,

@@ -114,7 +114,8 @@ class XDNAsearch(Toplevel, DNAsearch):
         self.cancel = Button(f, text='Cancel', command=self.exit)
         self.cancel.pack(side=LEFT)
         self.current_color = 'cyan'
-        self.colorb = Button(f, text='Color', command=self.change_color, foreground=self.current_color)
+        self.colorb = Button(f, text='Color', command=self.change_color,
+                             foreground=self.current_color)
         self.colorb.pack(side=LEFT)
         self.config_color(self.current_color)
 
@@ -129,7 +130,8 @@ class XDNAsearch(Toplevel, DNAsearch):
         self.current_color = color
         self.current_tag = 'searched_%s' % self.current_color
         self.master.tag_config(self.current_tag, background=self.current_color)
-        self.master.tag_config(self.current_tag + 'R', background=self.current_color, underline=1)
+        self.master.tag_config(self.current_tag + 'R',
+                               background=self.current_color, underline=1)
         self.colors.append(color)
 
     def change_color(self):

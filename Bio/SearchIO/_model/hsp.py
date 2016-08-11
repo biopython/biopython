@@ -250,7 +250,7 @@ class HSP(_BaseHSP):
     # from this one
     _NON_STICKY_ATTRS = ('_items', )
 
-    def __init__(self, fragments=[]):
+    def __init__(self, fragments=()):
         """Initializes an HSP object.
 
         :param fragments: fragments contained in the HSP object
@@ -266,6 +266,8 @@ class HSP(_BaseHSP):
         if not fragments:
             raise ValueError("HSP objects must have at least one HSPFragment "
                     "object.")
+        # TODO - Move this into the for look in case hsps is a single use
+        # iterable?
         # check that all fragments contain the same IDs, descriptions, alphabet
         for attr in ('query_id', 'query_description', 'hit_id',
                 'hit_description', 'alphabet'):

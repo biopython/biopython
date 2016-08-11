@@ -5,6 +5,11 @@
 
 """Unit tests for Bio.Phylo functions with external dependencies."""
 
+import unittest
+
+from Bio._py3k import StringIO
+from Bio import Phylo
+
 # Check for any missing dependencies at the top level so we can skip
 from Bio import MissingExternalDependencyError
 
@@ -24,26 +29,8 @@ try:
 except ImportError:
     # Can fail here with font problems
     raise MissingExternalDependencyError(
-            "Install matplotlib installation if you want to use Bio.Phylo._utils.")
+            "Install matplotlib if you want to use Bio.Phylo._utils.")
 
-try:
-    import networkx
-except ImportError:
-    # We'll skip any tests requiring this below...
-    networkx = None
-
-try:
-    import pygraphviz
-except ImportError:
-    # We'll skip any tests requiring this below...
-    pygraphviz = None
-
-
-# OK, we can go ahead
-import unittest
-from Bio._py3k import StringIO
-
-from Bio import Phylo
 
 # Example PhyloXML file
 EX_DOLLO = 'PhyloXML/o_tol_332_d_dollo.xml'
@@ -102,15 +89,6 @@ class UtilTests(unittest.TestCase):
         Phylo.draw_ascii(tree, file=handle, column_width=120)
         handle.close()
 
-    if networkx:
-        def test_to_networkx(self):
-            """Tree to Graph conversion, if networkx is available."""
-            tree = Phylo.read(EX_DOLLO, 'phyloxml')
-            G = Phylo.to_networkx(tree)
-            self.assertEqual(len(G.nodes()), 659)
-
-
-# ---------------------------------------------------------
 
 if __name__ == '__main__':
     runner = unittest.TextTestRunner(verbosity=2)

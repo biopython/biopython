@@ -1,4 +1,4 @@
-# Copyright 2009 by Peter Cock.  All rights reserved.
+# Copyright 2009-2016 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -71,6 +71,23 @@ class SeqRecordCreation(unittest.TestCase):
             self.fail("Wrong length letter_annotations should fail!")
         except (TypeError, ValueError) as e:
             pass
+
+    def test_replacing_seq(self):
+        """Replacing .seq if .letter_annotation present."""
+        rec = SeqRecord(Seq("ACGT", generic_dna),
+                        id="Test", name="Test", description="Test",
+                        letter_annotations={"example": [1, 2, 3, 4]})
+        try:
+            rec.seq = Seq("ACGTACGT", generic_dna)
+            self.fail("Changing .seq length with letter_annotations present should fail!")
+        except ValueError as e:
+            self.assertEqual(str(e), "You must empty the letter annotations first!")
+        # Check we can replace IF the length is the same
+        self.assertEqual(str(rec.seq), "ACGT")
+        self.assertEqual(rec.letter_annotations, {"example": [1, 2, 3, 4]})
+        rec.seq = Seq("NNNN", generic_dna)
+        self.assertEqual(str(rec.seq), "NNNN")
+        self.assertEqual(rec.letter_annotations, {"example": [1, 2, 3, 4]})
 
     def test_valid_id(self):
         with self.assertRaises(TypeError):

@@ -5,9 +5,10 @@
 
 import os
 import unittest
+import warnings
 from io import BytesIO
 from Bio._py3k import StringIO
-
+from Bio import BiopythonWarning
 from Bio import SeqIO
 from Bio import AlignIO
 from Bio.SeqRecord import SeqRecord
@@ -50,7 +51,7 @@ test_records = [
                 description="an%sevil\rdescription right\nhere" % os.linesep),
       SeqRecord(Seq("TTTCCTCGGAGGCCAATCTGGATCAAGACCAT", Alphabet.generic_dna), id="Z")],
      "3 DNA seq alignment with CR/LF in name/descr",
-      [(["genbank"], ValueError, r"Locus identifier 'The\nMystery\rSequece:\r\nX' is too long")]),
+      [(["genbank"], ValueError, r"Invalid whitespace in 'The\nMystery\rSequece:\r\nX' for LOCUS line")]),
     ([SeqRecord(Seq("CHSMAIKLSSEHNIPSGIANAL", Alphabet.generic_protein), id="Alpha"),
       SeqRecord(Seq("VHGMAHPLGAFYNTPHGVANAI", Alphabet.generic_protein), id="Beta"),
       SeqRecord(Seq("VHGMAHPLGAFYNTPHGVANAI", Alphabet.generic_protein), id="Beta"),
@@ -62,11 +63,11 @@ test_records = [
 # Meddle with the annotation too:
 assert test_records[4][1] == "3 DNA seq alignment with CR/LF in name/descr"
 # Add a list of strings,
-test_records[4][0][2].annotations["note"] = ["Note%salso" % os.linesep
-                                    + "\r\nhas\n evil line\rbreaks!", "Wow"]
+test_records[4][0][2].annotations["note"] = ["Note%salso" % os.linesep +
+                                             "\r\nhas\n evil line\rbreaks!", "Wow"]
 # Add a simple string
-test_records[4][0][2].annotations["comment"] = "More%sof" % os.linesep \
-                                          + "\r\nthese\n evil line\rbreaks!"
+test_records[4][0][2].annotations["comment"] = ("More%sof" % os.linesep +
+                                               "\r\nthese\n evil line\rbreaks!")
 # Add a float too:
 test_records[4][0][2].annotations["weight"] = 2.5
 
@@ -129,7 +130,9 @@ class WriterTests(unittest.TestCase):
             handle = StringIO()
         if err_msg:
             try:
-                SeqIO.write(records, handle, format)
+                with warnings.catch_warnings():
+                    warnings.simplefilter('ignore', BiopythonWarning)
+                    SeqIO.write(records, handle, format)
             except err_type as err:
                 self.assertEqual(str(err), err_msg)
         else:

@@ -13,8 +13,8 @@ from Bio import BiopythonExperimentalWarning
 
 import warnings
 with warnings.catch_warnings():
-   warnings.simplefilter('ignore', BiopythonExperimentalWarning)
-   from Bio.SearchIO import parse
+    warnings.simplefilter('ignore', BiopythonExperimentalWarning)
+    from Bio.SearchIO import parse
 
 # test case files are in the Blast directory
 TEST_DIR = 'Hmmer'

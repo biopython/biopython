@@ -130,8 +130,8 @@ def yn00(vers=None, verbose=False):
 
 def print_usage():
     versions = ", ".join(vers.replace("_", ".") for vers in VERSIONS)
-    usage = \
-'''Usage: gen_results.py [-v] PROGRAM [VERSION]
+    usage = """Usage: gen_results.py [-v] PROGRAM [VERSION]
+
 Generate result files to be used in Bio.Phylo.PAML unit tests.
 
   -v         Use verbose output
@@ -142,7 +142,7 @@ To use this, the PAML programs must be in your executable path and
 they must be named programX_Y, where X and Y are the version numbers
 (i.e. baseml4_5 or codeml4_4c). If VERSION is not specified, test
 results will be generated for all versions listed above.
-'''%(versions)
+""" % (versions)
     sys.exit(usage)
 
 if __name__ == "__main__":

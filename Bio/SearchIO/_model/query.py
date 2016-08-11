@@ -185,7 +185,7 @@ class QueryResult(_BaseSearchObject):
     # from this one
     _NON_STICKY_ATTRS = ('_items', '__alt_hit_ids', )
 
-    def __init__(self, hits=[], id=None,
+    def __init__(self, hits=(), id=None,
             hit_key_function=lambda hit: hit.id):
         """Initializes a QueryResult object.
 
@@ -494,7 +494,7 @@ class QueryResult(_BaseSearchObject):
         else:
             hit_key = hit.id
 
-        if hit_key not in self and all([pid not in self for pid in hit.id_all[1:]]):
+        if hit_key not in self and all(pid not in self for pid in hit.id_all[1:]):
             self[hit_key] = hit
         else:
             raise ValueError("The ID or alternative IDs of Hit %r exists in "

@@ -1,4 +1,4 @@
-# Copyright 2007-2015 by Peter Cock.  All rights reserved.
+# Copyright 2007-2016 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -323,14 +323,14 @@ def alignment_summary(alignment, index=" "):
     alignment_len = alignment.get_alignment_length()
     rec_count = len(alignment)
     for i in range(min(5, alignment_len)):
-        answer.append(index + col_summary(alignment[:, i])
-                            + " alignment column %i" % i)
+        answer.append(index + col_summary(alignment[:, i]) +
+                      " alignment column %i" % i)
     if alignment_len > 5:
         i = alignment_len - 1
-        answer.append(index + col_summary("|" * rec_count)
-                            + " ...")
-        answer.append(index + col_summary(alignment[:, i])
-                            + " alignment column %i" % i)
+        answer.append(index + col_summary("|" * rec_count) +
+                      " ...")
+        answer.append(index + col_summary(alignment[:, i]) +
+                      " alignment column %i" % i)
     return "\n".join(answer)
 
 
@@ -440,8 +440,10 @@ def check_simple_write_read(records, indent=" "):
                 handle = BytesIO()
             else:
                 handle = StringIO()
-            SeqIO.write(records[0], handle, format)
-            assert handle.getvalue() == records[0].format(format)
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore", BiopythonWarning)
+                SeqIO.write(records[0], handle, format)
+                assert handle.getvalue() == records[0].format(format)
 
 
 # Check parsers can cope with an empty file
@@ -530,135 +532,135 @@ for (t_format, t_alignment, t_filename, t_count) in test_files:
         assert len(records5) == t_count
         h.close()
 
-    for i in range(t_count):
-        record = records[i]
-
-        # Check returned expected object type
-        assert isinstance(record, SeqRecord)
-        if t_format in possible_unknown_seq_formats:
-            assert isinstance(record.seq, Seq) or \
-                isinstance(record.seq, UnknownSeq)
-        else:
-            assert isinstance(record.seq, Seq)
-        assert isinstance(record.id, basestring)
-        assert isinstance(record.name, basestring)
-        assert isinstance(record.description, basestring)
-        assert record.id != ""
-
-        if "accessions" in record.annotations:
-            accs = record.annotations["accessions"]
-            # Check for blanks, or entries with leading/trailing spaces
-            for acc in accs:
-                assert acc and acc == acc.strip(), \
-                    "Bad accession in annotations: %s" % repr(acc)
-            assert len(set(accs)) == len(accs), \
-                "Repeated accession in annotations: %s" % repr(accs)
-        for ref in record.dbxrefs:
-            assert ref and ref == ref.strip(), \
-                "Bad cross reference in dbxrefs: %s" % repr(ref)
-        assert len(record.dbxrefs) == len(record.dbxrefs), \
-            "Repeated cross reference in dbxrefs: %s" % repr(record.dbxrefs)
-
-        # Check the lists obtained by the different methods agree
-        assert compare_record(record, records2[i])
-        assert compare_record(record, records3[i])
-        assert compare_record(record, records4[i])
-        assert compare_record(record, records5[i])
-
-        if i < 3:
-            print(record_summary(record))
-    # Only printed the only first three records: 0,1,2
-    if t_count > 4:
-        print(" ...")
-    if t_count > 3:
-        print(record_summary(records[-1]))
-
-    # Check Bio.SeqIO.read(...)
-    if t_count == 1:
-        record = SeqIO.read(t_filename, format=t_format)
-        assert isinstance(record, SeqRecord)
-    else:
-        try:
-            record = SeqIO.read(t_filename, t_format)
-            assert False, "Bio.SeqIO.read(...) should have failed"
-        except ValueError:
-            # Expected to fail
-            pass
-
-    # Check alphabets
-    for record in records:
-        base_alpha = Alphabet._get_base_alphabet(record.seq.alphabet)
-        if isinstance(base_alpha, Alphabet.SingleLetterAlphabet):
-            if t_format in no_alpha_formats:
-                # Too harsh?
-                assert base_alpha == Alphabet.single_letter_alphabet
-        else:
-            base_alpha = None
-    if base_alpha is None:
-        good = []
-        bad = []
-        given_alpha = None
-    elif isinstance(base_alpha, Alphabet.ProteinAlphabet):
-        good = protein_alphas
-        bad = dna_alphas + rna_alphas + nucleotide_alphas
-    elif isinstance(base_alpha, Alphabet.RNAAlphabet):
-        good = nucleotide_alphas + rna_alphas
-        bad = protein_alphas + dna_alphas
-    elif isinstance(base_alpha, Alphabet.DNAAlphabet):
-        good = nucleotide_alphas + dna_alphas
-        bad = protein_alphas + rna_alphas
-    elif isinstance(base_alpha, Alphabet.NucleotideAlphabet):
-        good = nucleotide_alphas
-        bad = protein_alphas
-    else:
-        assert t_format in no_alpha_formats, "Got %s from %s file" \
-            % (repr(base_alpha), t_format)
-        good = protein_alphas + dna_alphas + rna_alphas + nucleotide_alphas
-        bad = []
-    for given_alpha in good:
-        # These should all work...
-        given_base = Alphabet._get_base_alphabet(given_alpha)
-        for record in SeqIO.parse(t_filename, t_format, given_alpha):
-            base_alpha = Alphabet._get_base_alphabet(record.seq.alphabet)
-            assert isinstance(base_alpha, given_base.__class__)
-            assert base_alpha == given_base
-        if t_count == 1:
-            h = open(t_filename, mode)
-            record = SeqIO.read(h, t_format, given_alpha)
-            h.close()
-            assert isinstance(base_alpha, given_base.__class__)
-            assert base_alpha == given_base
-    for given_alpha in bad:
-        # These should all fail...
-        h = open(t_filename, mode)
-        try:
-            print(next(SeqIO.parse(h, t_format, given_alpha)))
-            h.close()
-            assert False, "Forcing wrong alphabet, %s, should fail (%s)" \
-                % (repr(given_alpha), t_filename)
-        except ValueError:
-            # Good - should fail
-            pass
-        h.close()
-    del good, bad, given_alpha, base_alpha
-
-    if t_alignment:
-        print("Testing reading %s format file %s as an alignment"
-              % (t_format, t_filename))
-
-        alignment = MultipleSeqAlignment(SeqIO.parse(
-            handle=t_filename, format=t_format))
-        assert len(alignment) == t_count
-
-        alignment_len = alignment.get_alignment_length()
-
-        # Check the record order agrees, and double check the
-        # sequence lengths all agree too.
         for i in range(t_count):
-            assert compare_record(records[i], alignment[i])
-            assert len(records[i].seq) == alignment_len
+            record = records[i]
 
-        print(alignment_summary(alignment))
+            # Check returned expected object type
+            assert isinstance(record, SeqRecord)
+            if t_format in possible_unknown_seq_formats:
+                assert isinstance(record.seq, Seq) or \
+                    isinstance(record.seq, UnknownSeq)
+            else:
+                assert isinstance(record.seq, Seq)
+            assert isinstance(record.id, basestring)
+            assert isinstance(record.name, basestring)
+            assert isinstance(record.description, basestring)
+            assert record.id != ""
+
+            if "accessions" in record.annotations:
+                accs = record.annotations["accessions"]
+                # Check for blanks, or entries with leading/trailing spaces
+                for acc in accs:
+                    assert acc and acc == acc.strip(), \
+                        "Bad accession in annotations: %s" % repr(acc)
+                assert len(set(accs)) == len(accs), \
+                    "Repeated accession in annotations: %s" % repr(accs)
+            for ref in record.dbxrefs:
+                assert ref and ref == ref.strip(), \
+                    "Bad cross reference in dbxrefs: %s" % repr(ref)
+            assert len(record.dbxrefs) == len(record.dbxrefs), \
+                "Repeated cross reference in dbxrefs: %s" % repr(record.dbxrefs)
+
+            # Check the lists obtained by the different methods agree
+            assert compare_record(record, records2[i])
+            assert compare_record(record, records3[i])
+            assert compare_record(record, records4[i])
+            assert compare_record(record, records5[i])
+
+            if i < 3:
+                print(record_summary(record))
+        # Only printed the only first three records: 0,1,2
+        if t_count > 4:
+            print(" ...")
+        if t_count > 3:
+            print(record_summary(records[-1]))
+
+        # Check Bio.SeqIO.read(...)
+        if t_count == 1:
+            record = SeqIO.read(t_filename, format=t_format)
+            assert isinstance(record, SeqRecord)
+        else:
+            try:
+                record = SeqIO.read(t_filename, t_format)
+                assert False, "Bio.SeqIO.read(...) should have failed"
+            except ValueError:
+                # Expected to fail
+                pass
+
+        # Check alphabets
+        for record in records:
+            base_alpha = Alphabet._get_base_alphabet(record.seq.alphabet)
+            if isinstance(base_alpha, Alphabet.SingleLetterAlphabet):
+                if t_format in no_alpha_formats:
+                    # Too harsh?
+                    assert base_alpha == Alphabet.single_letter_alphabet
+            else:
+                base_alpha = None
+        if base_alpha is None:
+            good = []
+            bad = []
+            given_alpha = None
+        elif isinstance(base_alpha, Alphabet.ProteinAlphabet):
+            good = protein_alphas
+            bad = dna_alphas + rna_alphas + nucleotide_alphas
+        elif isinstance(base_alpha, Alphabet.RNAAlphabet):
+            good = nucleotide_alphas + rna_alphas
+            bad = protein_alphas + dna_alphas
+        elif isinstance(base_alpha, Alphabet.DNAAlphabet):
+            good = nucleotide_alphas + dna_alphas
+            bad = protein_alphas + rna_alphas
+        elif isinstance(base_alpha, Alphabet.NucleotideAlphabet):
+            good = nucleotide_alphas
+            bad = protein_alphas
+        else:
+            assert t_format in no_alpha_formats, "Got %s from %s file" \
+                % (repr(base_alpha), t_format)
+            good = protein_alphas + dna_alphas + rna_alphas + nucleotide_alphas
+            bad = []
+        for given_alpha in good:
+            # These should all work...
+            given_base = Alphabet._get_base_alphabet(given_alpha)
+            for record in SeqIO.parse(t_filename, t_format, given_alpha):
+                base_alpha = Alphabet._get_base_alphabet(record.seq.alphabet)
+                assert isinstance(base_alpha, given_base.__class__)
+                assert base_alpha == given_base
+            if t_count == 1:
+                h = open(t_filename, mode)
+                record = SeqIO.read(h, t_format, given_alpha)
+                h.close()
+                assert isinstance(base_alpha, given_base.__class__)
+                assert base_alpha == given_base
+        for given_alpha in bad:
+            # These should all fail...
+            h = open(t_filename, mode)
+            try:
+                print(next(SeqIO.parse(h, t_format, given_alpha)))
+                h.close()
+                assert False, "Forcing wrong alphabet, %s, should fail (%s)" \
+                    % (repr(given_alpha), t_filename)
+            except ValueError:
+                # Good - should fail
+                pass
+            h.close()
+        del good, bad, given_alpha, base_alpha
+
+        if t_alignment:
+            print("Testing reading %s format file %s as an alignment"
+                  % (t_format, t_filename))
+
+            alignment = MultipleSeqAlignment(SeqIO.parse(
+                    handle=t_filename, format=t_format))
+            assert len(alignment) == t_count
+
+            alignment_len = alignment.get_alignment_length()
+
+            # Check the record order agrees, and double check the
+            # sequence lengths all agree too.
+            for i in range(t_count):
+                assert compare_record(records[i], alignment[i])
+                assert len(records[i].seq) == alignment_len
+
+            print(alignment_summary(alignment))
 
     # Some alignment file formats have magic characters which mean
     # use the letter in this position in the first sequence.

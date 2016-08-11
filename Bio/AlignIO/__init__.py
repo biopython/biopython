@@ -218,8 +218,8 @@ def write(alignments, handle, format):
             count = 0
             for alignment in alignments:
                 if not isinstance(alignment, Alignment):
-                    raise TypeError(
-                        "Expect a list or iterator of Alignment objects.")
+                    raise TypeError("Expect a list or iterator of Alignment "
+                                    "objects, got: %r" % alignment)
                 SeqIO.write(alignment, fp, format)
                 count += 1
         elif format in _FormatToIterator or format in SeqIO._FormatToIterator:

@@ -230,7 +230,9 @@ class GenePopController(object):
                 opts["HWtests"] = "MCMC"
         return opts
 
-    def _run_genepop(self, extensions, option, fname, opts={}):
+    def _run_genepop(self, extensions, option, fname, opts=None):
+        if opts is None:
+            opts = {}
         cwd = os.getcwd()
         temp_dir = tempfile.mkdtemp()
         os.chdir(temp_dir)

@@ -126,7 +126,7 @@ class DistanceCalculatorTest(unittest.TestCase):
         # Comparing characters only -- 4 misses, 1 match
         dmat = DistanceCalculator().get_distance(aln)
         self.assertEqual(dmat['Alpha', 'Alpha'], 0.)
-        self.assertAlmostEqual(dmat['Alpha', 'Gamma'], 4./5.)
+        self.assertAlmostEqual(dmat['Alpha', 'Gamma'], 4. / 5.)
 
 
 class DistanceTreeConstructorTest(unittest.TestCase):
@@ -177,9 +177,9 @@ class ParsimonyScorerTest(unittest.TestCase):
 
         alphabet = ['A', 'T', 'C', 'G']
         step_matrix = [[0],
-                       [2.5,   0],
-                       [2.5,   1,    0],
-                       [  1, 2.5,  2.5, 0]]
+                       [2.5, 0],
+                       [2.5, 1, 0],
+                       [1, 2.5, 2.5, 0]]
         matrix = _Matrix(alphabet, step_matrix)
         scorer = ParsimonyScorer(matrix)
         score = scorer.get_score(tree, aln)
@@ -223,9 +223,9 @@ class NNITreeSearcherTest(unittest.TestCase):
         tree = Phylo.read('./TreeConstruction/upgma.tre', 'newick')
         alphabet = ['A', 'T', 'C', 'G']
         step_matrix = [[0],
-                       [2.5,   0],
-                       [2.5,   1,    0],
-                       [  1, 2.5,  2.5, 0]]
+                       [2.5, 0],
+                       [2.5, 1, 0],
+                       [1, 2.5, 2.5, 0]]
         matrix = _Matrix(alphabet, step_matrix)
         scorer = ParsimonyScorer(matrix)
         searcher = NNITreeSearcher(scorer)
@@ -243,9 +243,9 @@ class ParsimonyTreeConstructorTest(unittest.TestCase):
         tree2 = Phylo.read('./TreeConstruction/nj.tre', 'newick')
         alphabet = ['A', 'T', 'C', 'G']
         step_matrix = [[0],
-                       [2.5,   0],
-                       [2.5,   1,    0],
-                       [  1, 2.5,  2.5, 0]]
+                       [2.5, 0],
+                       [2.5, 1, 0],
+                       [1, 2.5, 2.5, 0]]
         matrix = _Matrix(alphabet, step_matrix)
         scorer = ParsimonyScorer(matrix)
         searcher = NNITreeSearcher(scorer)

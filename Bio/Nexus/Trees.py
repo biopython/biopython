@@ -558,7 +558,9 @@ class Tree(Nodes.Chain):
         print('\n'.join('%3s %32s %15s %15s %8s %10s %8s %20s' % l for l in table))
         print('\nRoot:  %s' % self.root)
 
-    def to_string(self, support_as_branchlengths=False, branchlengths_only=False, plain=True, plain_newick=False, ladderize=None, ignore_comments=True):
+    def to_string(self, support_as_branchlengths=False,
+                  branchlengths_only=False, plain=True, plain_newick=False,
+                  ladderize=None, ignore_comments=True):
         """Return a paup compatible tree line."""
         # if there's a conflict in the arguments, we override plain=True
         if support_as_branchlengths or branchlengths_only:

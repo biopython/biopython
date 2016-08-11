@@ -81,6 +81,9 @@ def is_numpy():
     except ImportError:
         return False
 
+# The default verbosity (not verbose)
+VERBOSITY = 0
+
 # This is the list of modules containing docstring tests.
 # If you develop docstring tests for other modules, please add
 # those modules here. Please sort names alphabetically.
@@ -89,6 +92,7 @@ DOCTEST_MODULES = [
     "Bio.Align.Generic",
     "Bio.Align.Applications._Clustalw",
     "Bio.Align.Applications._ClustalOmega",
+    "Bio.Align.Applications._Dialign",
     "Bio.Align.Applications._MSAProbs",
     "Bio.Align.Applications._Mafft",
     "Bio.Align.Applications._Muscle",
@@ -101,6 +105,9 @@ DOCTEST_MODULES = [
     "Bio.Application",
     "Bio.bgzf",
     "Bio.codonalign",
+    "Bio.codonalign.codonalignment",
+    "Bio.codonalign.codonalphabet",
+    "Bio.codonalign.codonseq",
     "Bio.Blast.Applications",
     "Bio.Emboss.Applications",
     "Bio.GenBank",
@@ -137,6 +144,7 @@ DOCTEST_MODULES = [
     "Bio.SeqFeature",
     "Bio.SeqRecord",
     "Bio.SeqUtils",
+    "Bio.SeqUtils.CheckSum",
     "Bio.SeqUtils.MeltingTemp",
     "Bio.Sequencing.Applications._Novoalign",
     "Bio.Sequencing.Applications._bwa",
@@ -473,8 +481,7 @@ class TestRunner(unittest.TextTestRunner):
             else:
                 # It's a doc test
                 sys.stderr.write("%s docstring test ... " % name)
-                # Can't use fromlist=name.split(".") until python 2.5+
-                module = __import__(name, None, None, name.split("."))
+                module = __import__(name, fromlist=name.split("."))
                 suite = doctest.DocTestSuite(module,
                                              optionflags=doctest.ELLIPSIS)
                 del module

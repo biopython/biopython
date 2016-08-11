@@ -123,9 +123,17 @@ assert "UAR" in ambiguous_rna_by_id[2].stop_codons
 assert "AGR" in ambiguous_generic_by_id[2].stop_codons
 assert "UAR" in ambiguous_generic_by_id[2].stop_codons
 assert "TAR" in ambiguous_generic_by_id[2].stop_codons
+assert "UGA" not in ambiguous_rna_by_id[24].stop_codons
+assert "UGA" not in ambiguous_rna_by_id[25].stop_codons
 assert ambiguous_generic_by_id[1].stop_codons == ambiguous_generic_by_name["Standard"].stop_codons
 assert ambiguous_generic_by_id[4].stop_codons == ambiguous_generic_by_name["SGC3"].stop_codons
 assert ambiguous_generic_by_id[15].stop_codons == ambiguous_generic_by_name['Blepharisma Macronuclear'].stop_codons
 assert ambiguous_generic_by_id[24].stop_codons == ambiguous_generic_by_name["Pterobranchia Mitochondrial"].stop_codons
+
+assert ambiguous_generic_by_id[24].forward_table["AGA"] == "S"  # Ser not Arg
+assert ambiguous_generic_by_id[24].forward_table["AGG"] == "K"  # Lys not Arg
+assert ambiguous_generic_by_id[24].forward_table["UGA"] == "W"  # Trp not stop
+assert ambiguous_generic_by_id[25].forward_table["UGA"] == "G"  # Gly not stop
+assert ambiguous_generic_by_id[26].forward_table["CUG"] == "A"  # Ala not Leu
 
 print("Done")

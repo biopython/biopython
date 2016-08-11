@@ -104,7 +104,7 @@ class Hit(_BaseSearchObject):
     # from this one
     _NON_STICKY_ATTRS = ('_items', )
 
-    def __init__(self, hsps=[], id=None, query_id=None):
+    def __init__(self, hsps=(), id=None, query_id=None):
         """Initializes a Hit object.
 
         :param hsps: HSP objects contained in the Hit object
@@ -126,6 +126,8 @@ class Hit(_BaseSearchObject):
         self._description_alt = []
         self._query_description = None
 
+        # TODO - Move this into the for look below in case
+        # hsps is a single use iterator?
         for attr in ('query_id', 'query_description', 'hit_id',
                 'hit_description'):
             # HACK: setting the if clause to '> 1' allows for empty hit objects.

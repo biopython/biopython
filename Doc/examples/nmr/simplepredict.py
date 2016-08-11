@@ -125,9 +125,9 @@ while (res <= MAXRES):
         # intensity of the resonance.
 
         print(string.split(entry1.fields["15N2.L"], ".")[0], "-->",
-            string.split(entry1.fields["N15.L"], ".")[0], "\t",
-            entry1.fields["H1.P"], entry1.fields["N15.P"],
-            entry1.fields["15N2.P"], entry1.fields["int"])
+              string.split(entry1.fields["N15.L"], ".")[0], "\t",
+              entry1.fields["H1.P"], entry1.fields["N15.P"],
+              entry1.fields["15N2.P"], entry1.fields["int"])
 
         noe1 = noe1 + "\012"
         noe1 = xpktools.replace_entry(noe1, 1, count)

@@ -101,7 +101,7 @@ include when installing Biopython from source due to a dependency on flex.
 Bio.SeqFeature
 ==============
 With the introduction of the CompoundLocation in Release 1.62, the SeqFeature
-attribute sub_features was deprecated.
+attribute sub_features was deprecated. It was removed in Release 1.68.
 
 Bio.Motif
 =========
@@ -670,7 +670,7 @@ method get_seq_by_num were deprecated in Release 1.57.
 Bio.ParserSupport
 =================
 Bio.ParserSupport was declared obsolete in Release 1.59, and deprecated in
-Release 1.63.
+Release 1.63. The Martel specific EventGenerator was removed in Release 1.67..
 
 Bio.ParserSupport.SGMLStrippingConsumer was deprecated in Release 1.59, and
 removed in Release 1.61.

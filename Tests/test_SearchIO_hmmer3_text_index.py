@@ -118,7 +118,7 @@ Domain search space  (domZ):               1  [number of targets reported over t
 # CPU time: 0.33u 0.16s 00:00:00.49 Elapsed: 00:00:00.21
 # Mc/sec: 1757.33
 //
-"""
+"""  # noqa for pep8 W291 trailing whitespace
         self.check_raw(filename, "gi|4885477|ref|NP_005359.1|", raw)
 
     def test_hmmer3text_30_multiple_last(self):
@@ -234,7 +234,7 @@ Domain search space  (domZ):               5  [number of targets reported over t
 # CPU time: 0.51u 0.15s 00:00:00.66 Elapsed: 00:00:00.23
 # Mc/sec: 3667.47
 //
-"""
+"""  # noqa for pep8 W291 trailing whitespace
         self.check_raw(filename, "gi|125490392|ref|NP_038661.2|", raw)
 
     def test_hmmer3text_30_single(self):
@@ -296,7 +296,7 @@ Domain search space  (domZ):               1  [number of targets reported over t
 # CPU time: 0.28u 0.17s 00:00:00.45 Elapsed: 00:00:00.21
 # Mc/sec: 1757.33
 //
-"""
+"""  # noqa for pep8 W291 trailing whitespace
         self.check_raw(filename, "gi|4885477|ref|NP_005359.1|", raw)
 
 

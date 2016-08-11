@@ -158,7 +158,7 @@ if __name__ == "__main__":
     CYS1_DICDI          -----MKVIL LFVLAVFTVF VSS------- --------RG IPPEEQ---X
     ;
     end; 
-    """)
+    """)  # noqa for pep8 W291 trailing whitespace
     for a in NexusIterator(handle):
         print(a)
         for r in a:
@@ -188,7 +188,7 @@ if __name__ == "__main__":
     CYS1_DICDI          -----MKVIL LFVLAVFTVF VSS------- --------RG IPPEEQ---X
     ;
     end; 
-    """)
+    """)  # noqa for pep8 W291 trailing whitespace
     for a in NexusIterator(handle):
         print(a)
         for r in a:

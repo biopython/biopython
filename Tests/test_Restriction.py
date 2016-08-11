@@ -93,7 +93,7 @@ class RestrictionBatchPrintTest(unittest.TestCase):
             else:
                 nc.append(k)
         result = analysis.make_format(ls, '', [], '')
-        self.assertEqual(result.replace(' ',''), expected.replace(' ',''))
+        self.assertEqual(result.replace(' ', ''), expected.replace(' ', ''))
 
     def test_make_format_map1(self):
         """Make sure print_as('map'); print_that() does not error on wrap round with no markers.
@@ -123,14 +123,14 @@ class RestrictionBatchPrintTest(unittest.TestCase):
         """Make sure print_as('map'); print_that() does not error on wrap round with marker.
         """
         analysis = self.createAnalysis(
-                'CCAGTCTATAATTCG' + 
+                'CCAGTCTATAATTCG' +
                 Restriction.BamHI.site +
-                'GCGGCATCATACTCGA' + 
-                Restriction.BamHI.site + 
+                'GCGGCATCATACTCGA' +
+                Restriction.BamHI.site +
                 'ATATCGCGTGATGATA' +
                 Restriction.NdeI.site +
                 'CGTAGTAATTACGCATG',
-                ["NdeI","EcoRI","BamHI","BsmBI"])
+                ["NdeI", "EcoRI", "BamHI", "BsmBI"])
         analysis.print_as('map')
         expected = [
             "                17 BamHI",
@@ -162,7 +162,7 @@ class RestrictionBatchPrintTest(unittest.TestCase):
                 'ATATCGCGTGATGATA' +
                 Restriction.EcoRV.site +
                 'CGTAGTAATTACGCATG',
-                ["NdeI","EcoRI","BamHI","BsmBI"])
+                ["NdeI", "EcoRI", "BamHI", "BsmBI"])
         analysis.print_as('map')
         expected = [
             "                17 BamHI",

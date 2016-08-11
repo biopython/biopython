@@ -679,14 +679,14 @@ def Tm_GC(seq, check=True, strict=True, valueset=7, userset=None, Na=50, K=0,
            (Marmur & Doty 1962, J Mol Biol 5: 109-118; Schildkraut & Lifson
            1965, Biopolymers 3: 195-208)
         4. Tm = 81.5 + 0.41(%GC) - 500/N + 16.6 x log([Na+]/(1.0 + 0.7 x
-                [Na+])) - %mismatch
+           [Na+])) - %mismatch
            (Wetmur 1991, Crit Rev Biochem Mol Biol 126: 227-259). This is the
            standard formula in approximative mode of MELTING 4.3.
         5. Tm = 78 + 0.7(%GC) - 500/N + 16.6 x log([Na+]/(1.0 + 0.7 x [Na+]))
-                - %mismatch
+           - %mismatch
            (Wetmur 1991, Crit Rev Biochem Mol Biol 126: 227-259). For RNA.
         6. Tm = 67 + 0.8(%GC) - 500/N + 16.6 x log([Na+]/(1.0 + 0.7 x [Na+]))
-                - %mismatch
+           - %mismatch
            (Wetmur 1991, Crit Rev Biochem Mol Biol 126: 227-259). For RNA/DNA
            hybrids.
         7. Tm = 81.5 + 0.41(%GC) - 600/N + 16.6 x log[Na+]

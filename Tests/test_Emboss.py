@@ -520,10 +520,10 @@ class PairwiseAlignmentTests(unittest.TestCase):
                                  gapextend=0.5,
                                  auto=True, filter=True)
         self.assertEqual(str(cline),
-                         exes["water"] + " -auto -filter"
-                         + " -asequence=asis:ACCCGGGCGCGGT"
-                         + " -bsequence=asis:ACCCGAGCGCGGT"
-                         + " -gapopen=10 -gapextend=0.5")
+                         exes["water"] + " -auto -filter" +
+                         " -asequence=asis:ACCCGGGCGCGGT" +
+                         " -bsequence=asis:ACCCGAGCGCGGT" +
+                         " -gapopen=10 -gapextend=0.5")
         # Run the tool,
         child = subprocess.Popen(str(cline),
                                  stdin=subprocess.PIPE,
@@ -580,10 +580,10 @@ class PairwiseAlignmentTests(unittest.TestCase):
                                  gapextend=0.5,
                                  auto=True, filter=True)
         self.assertEqual(str(cline),
-                         exes["needle"] + " -auto -filter"
-                         + " -asequence=asis:ACCCGGGCGCGGT"
-                         + " -bsequence=asis:ACCCGAGCGCGGT"
-                         + " -gapopen=10 -gapextend=0.5")
+                         exes["needle"] + " -auto -filter" +
+                         " -asequence=asis:ACCCGGGCGCGGT" +
+                         " -bsequence=asis:ACCCGAGCGCGGT" +
+                         " -gapopen=10 -gapextend=0.5")
         # Run the tool,
         child = subprocess.Popen(str(cline),
                                  stdin=subprocess.PIPE,
@@ -750,9 +750,9 @@ class PairwiseAlignmentTests(unittest.TestCase):
                                        aformat="pair", wordsize=9,
                                        auto=True, stdout=True)
         self.assertEqual(str(cline),
-                         exes["seqmatchall"] + " -auto -stdout"
-                         + " -sequence=Fasta/f002"
-                         + " -wordsize=9 -aformat=pair")
+                         exes["seqmatchall"] + " -auto -stdout" +
+                         " -sequence=Fasta/f002" +
+                         " -wordsize=9 -aformat=pair")
         # Run the tool,
         child = subprocess.Popen(str(cline),
                                  stdin=subprocess.PIPE,

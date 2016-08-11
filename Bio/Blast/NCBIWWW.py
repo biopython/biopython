@@ -9,8 +9,7 @@
 """Code to invoke the NCBI BLAST server over the internet.
 
 This module provides code to work with the WWW version of BLAST
-provided by the NCBI.
-http://blast.ncbi.nlm.nih.gov/
+provided by the NCBI. https://blast.ncbi.nlm.nih.gov/
 """
 
 from __future__ import print_function
@@ -22,7 +21,7 @@ from Bio._py3k import urlencode as _urlencode
 from Bio._py3k import Request as _Request
 
 
-NCBI_BLAST_URL = "http://blast.ncbi.nlm.nih.gov/Blast.cgi"
+NCBI_BLAST_URL = "https://blast.ncbi.nlm.nih.gov/Blast.cgi"
 
 
 def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,

@@ -58,7 +58,7 @@ def _write(drawing, output_file, format, dpi=72):
                   'PNG': renderPM,
                   'TIFF': renderPM,
                   'TIF': renderPM
-                 }
+                  }
     try:
         # If output is not a string, then .upper() will trigger
         # an attribute error...

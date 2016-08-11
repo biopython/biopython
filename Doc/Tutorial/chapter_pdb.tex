@@ -89,6 +89,38 @@ Example: get the list of the $y$ coordinates of all atoms
 >>> y_list = mmcif_dict['_atom_site.Cartn_y']
 \end{verbatim}
 
+
+\subsection{Reading files in the MMTF format}
+
+You can use the direct MMTFParser to read a structure from a file:
+%want to use doctest ../Tests lib:mmtf
+%but will trigger PDBConstructionWarning
+\begin{verbatim}
+>>> from Bio.PDB.mmtf import MMTFParser
+>>> structure = MMTFParser.get_structure("PDB/4CUP.mmtf")
+\end{verbatim}
+
+Or you can use the same class to get a structure by it's PDB ID:
+%want online doctest here
+\begin{verbatim}
+>>> structure = MMTFParser.get_structure_from_url("4CUP")
+\end{verbatim}
+
+This gives you a Structure object as if read from a PDB or mmCIF file.
+
+You can also have access to the underlying data using the external
+MMTF library which Biopython is using internally:
+%want online doctest here
+\begin{verbatim}
+>>> from mmtf import fetch
+>>> decoded_data = fetch("4CUP")
+\end{verbatim}
+For example you can access just the X-coordinate.
+\begin{verbatim}
+>>> print(decoded_data.x_coord_list)
+...
+\end{verbatim}
+
 \subsection{Reading files in the PDB XML format}
 
 That's not yet supported, but we are definitely planning to support that

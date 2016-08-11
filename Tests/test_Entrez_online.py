@@ -29,13 +29,13 @@ if os.name == 'java':
     except ImportError:
         from Bio import MissingPythonDependencyError
         raise MissingPythonDependencyError("The Bio.Entrez XML parser fails on "
-                                  "Jython, see http://bugs.jython.org/issue1447")
+                                           "Jython, see http://bugs.jython.org/issue1447")
 
 
 # This lets us set the email address to be sent to NCBI Entrez:
 Entrez.email = "biopython-dev@biopython.org"
 
-URL_HEAD = "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/"
+URL_HEAD = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/"
 URL_TOOL = "tool=biopython"
 URL_EMAIL = "email=biopython-dev%40biopython.org"
 
@@ -132,9 +132,8 @@ class EntrezOnlineCase(unittest.TestCase):
         self.assertEqual(records[0]['System_sysid']['Sys-id']['Sys-id_bsid'], '1134002')
 
     def test_efetch_taxonomy_xml(self):
-        """Test Entrez using a integer id - like a taxon id
-        """
-        handle = Entrez.efetch( db="taxonomy", id=3702, retmode="XML")
+        """Test Entrez using a integer id - like a taxon id"""
+        handle = Entrez.efetch(db="taxonomy", id=3702, retmode="XML")
         taxon_record = Entrez.read(handle)
         self.assertTrue(1, len(taxon_record))
         self.assertTrue('TaxId' in taxon_record[0])
@@ -168,6 +167,26 @@ class EntrezOnlineCase(unittest.TestCase):
         handle = Entrez.epost("nuccore", id=["160418", "160351"])
         self.assertEqual(URL_HEAD + "epost.fcgi", handle.url)
         handle.close()
+
+    def test_egquery(self):
+        handle = Entrez.egquery(term="biopython")
+        record = Entrez.read(handle)
+        handle.close()
+
+        done = False
+        for row in record["eGQueryResult"]:
+            if "pmc" in row["DbName"]:
+                self.assertTrue(int(row["Count"]) > 60)
+                done = True
+        self.assertTrue(done)
+
+    def test_espell(self):
+        handle = Entrez.espell(term="biopythooon")
+        record = Entrez.read(handle)
+        handle.close()
+
+        self.assertEqual(record["Query"], "biopythooon")
+        self.assertEqual(record["CorrectedQuery"], "biopython")
 
     def test_ecitmatch(self):
         citation = {

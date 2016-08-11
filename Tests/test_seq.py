@@ -951,6 +951,13 @@ class TestTranslating(unittest.TestCase):
                 self.assertEqual(repr(expected), repr(nucleotide_seq.translate()))
 
     def test_alphabets_of_translated_seqs(self):
+
+        def triple_pad(s):
+            """Add N to ensure length is a multiple of three (whole codons)."""
+            while len(s) % 3:
+                s += "N"
+            return s
+
         self.assertEqual("IUPACProtein()", repr(self.test_seqs[0].translate().alphabet))
         self.assertEqual("ExtendedIUPACProtein()", repr(self.test_seqs[1].translate().alphabet))
         self.assertEqual("ExtendedIUPACProtein()", repr(self.test_seqs[2].translate().alphabet))
@@ -958,11 +965,14 @@ class TestTranslating(unittest.TestCase):
         self.assertEqual("ExtendedIUPACProtein()", repr(self.test_seqs[10].translate().alphabet))
         self.assertEqual("ExtendedIUPACProtein()", repr(self.test_seqs[11].translate().alphabet))
         self.assertEqual("IUPACProtein()", repr(self.test_seqs[12].translate().alphabet))
-        self.assertEqual("ExtendedIUPACProtein()", repr(self.test_seqs[13].translate().alphabet))
+        self.assertEqual("ExtendedIUPACProtein()",
+                         repr(triple_pad(self.test_seqs[13]).translate().alphabet))
         self.assertEqual("ExtendedIUPACProtein()", repr(self.test_seqs[14].translate().alphabet))
         self.assertEqual("IUPACProtein()", repr(self.test_seqs[15].translate().alphabet))
-        self.assertEqual("ExtendedIUPACProtein()", repr(self.test_seqs[16].translate().alphabet))
-        self.assertEqual("ExtendedIUPACProtein()", repr(self.test_seqs[17].translate().alphabet))
+        self.assertEqual("ExtendedIUPACProtein()",
+                         repr(triple_pad(self.test_seqs[16]).translate().alphabet))
+        self.assertEqual("ExtendedIUPACProtein()",
+                         repr(triple_pad(self.test_seqs[17]).translate().alphabet))
 
     def test_translation_of_gapped_seq_with_gap_char_given(self):
         seq = Seq.Seq("ATG---AAACTG")

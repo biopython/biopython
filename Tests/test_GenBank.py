@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # Copyright 2001-2004 by Brad Chapman.  All rights reserved.
-# Revisions copyright 2007-2013 by Peter Cock. All rights reserved.
+# Revisions copyright 2007-2016 by Peter Cock. All rights reserved.
 # Revisions copyright 2013 by Kai Blin. All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -96,7 +96,7 @@ for parser in all_parsers:
                         print("References*")
                         for reference in cur_record.annotations[ann_key]:
                             print(str(reference))
-                print("Feaures")
+                print("Features")
                 for feature in cur_record.features:
                     print(feature)
                     if isinstance(_get_base_alphabet(cur_record.seq.alphabet),
