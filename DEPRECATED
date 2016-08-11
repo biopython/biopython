@@ -674,3 +674,18 @@ Release 1.63. The Martel specific EventGenerator was removed in Release 1.67..
 
 Bio.ParserSupport.SGMLStrippingConsumer was deprecated in Release 1.59, and
 removed in Release 1.61.
+
+Bio.PopGen.Async
+================
+Bio.PopGen.Async was deprecated in Release 1.68. It will be removed in
+Release 1.70.
+
+Bio.PopGen.FDist
+================
+Bio.PopGen.FDist was deprecated in Release 1.68. It will be removed in
+Release 1.70.
+
+Bio.PopGen.SimCoal
+==================
+Bio.PopGen.SimCoal was deprecated in Release 1.68. It will be removed in
+Release 1.70.

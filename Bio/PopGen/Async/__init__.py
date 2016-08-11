@@ -5,6 +5,15 @@
 
 """Support for asynchronous execution."""
 
+import warnings
+from Bio import BiopythonDeprecationWarning
+warnings.warn("Bio.PopGen.Async has been deprecated, and we intend to" 
+              " remove it in a future release of Biopython. If you would like to"
+              " continue using it, please contact the Biopython"
+              " developers via the mailing list.",
+              BiopythonDeprecationWarning)
+
+
 import os
 import threading
 
