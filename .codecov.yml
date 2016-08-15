@@ -2,6 +2,6 @@
 # and https://codecov.io/gh/biopython/biopython which is
 # updated via our TravisCI configuration
 
-coverage
+coverage:
   ignore:
    - "Tests/*"
