@@ -8,9 +8,9 @@
 Supports multicore architectures.
 """
 
-from Bio.PopGen.Async import Async
-
 import threading
+
+from Bio.PopGen.Async import Async
 
 
 class Local(Async):
