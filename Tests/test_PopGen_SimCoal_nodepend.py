@@ -7,7 +7,13 @@ from Bio._py3k import _universal_read_mode
 
 import os
 import unittest
-from Bio.PopGen.SimCoal.Template import generate_simcoal_from_template
+import warnings
+
+from Bio import BiopythonDeprecationWarning
+
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore", BiopythonDeprecationWarning)
+    from Bio.PopGen.SimCoal.Template import generate_simcoal_from_template
 
 # Tests simcoal related code. Note: this case doesn't require simcoal
 # test_PopGen_SimCoal tests code that requires simcoal
