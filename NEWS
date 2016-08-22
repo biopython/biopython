@@ -26,11 +26,15 @@ It is now faster, addresses some problems with local alignments, and also
 now allows gap insertions after deletions, and vice versa, inspired by the
 http://dx.doi.org/10.1101/031500 preprint from Flouri et al.
 
-The sample graphical tool SeqGui (Sequence Graphical User Interface) was
-rewritten using the tkinter library (contributed by Markus Piotrowski). This
-allows simple nucleotide transcription, back-transcription and translation
-into amino acids using Bio.Seq internally, offering of the NCBI genetic codes
-supported in Biopython.
+The two sample graphical tools SeqGui (Sequence Graphical User Interface)
+and xbbtools were rewritten (SeqGui) or updated (xbbtools) using the tkinter
+library (contributed by Markus Piotrowski). SeqGui allows simple nucleotide
+transcription, back-transcription and translation into amino acids using
+Bio.Seq internally, offering of the NCBI genetic codes supported in Biopython.
+xbbtools is able to open Fasta formatted files, does simple nucleotide
+operations and translations in any reading frame using one of the NCBI genetic
+codes. In addition, it supports standalone Blast installations to do local
+Blast searches.
 
 New NCBI genetic code table 26 (Pachysolen tannophilus Nuclear Code) has been
 added to Bio.Data (and the translation functionality), and table 11 is now
