@@ -26,11 +26,15 @@ class EMBLTests(unittest.TestCase):
             self.assertTrue(False, "Error message without explanation raised by content after CO line")
 
     def test_embl_0_line(self):
-        """Test an Assertion is thrown by SQ line with 0 length sequence"""
+        """Test SQ line with 0 length sequence"""
+        # Biopython 1.67 and older would parse this file with a warning: 
+        # 'Expected sequence length 1740, found 1744 (TIR43YW1_CE).' and 
+        # the coordinates 1740 added to the sequence as four extra letters.
         with warnings.catch_warnings(record=True) as w:
             warnings.simplefilter("always")
-            SeqIO.read(path.join('EMBL', 'embl_with_0_line.embl'), 'embl')
-            assert len(w) == 0, "Importing embl format error: sequence line with no seuqence but coordinate"
+            rec = SeqIO.read(path.join('EMBL', 'embl_with_0_line.embl'), 'embl')
+            self.assertEqual(len(w), 0, "Unexpected parser warnings: " + "\n".join(str(warn.message) for warn in w))
+            self.assertEqual(len(rec), 1740)
 
 
 if __name__ == "__main__":
