@@ -10,7 +10,7 @@ The latest news is at the top of this file.
 
 ===================================================================
 
-(In progress, not yet released) Biopython 1.68
+25 August 2016: Biopython 1.68
 
 This release of Biopython supports Python 2.6, 2.7, 3.3, 3.4 and 3.5, but
 this will be our final release to run on Python 2.6. It has also been tested
