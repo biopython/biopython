@@ -20,6 +20,7 @@ recursive-include Doc *.html
 recursive-include Doc *.fasta
 recursive-include Doc Makefile
 recursive-include Doc/examples *.aln
+recursive-include Doc/examples *.faa
 recursive-include Doc/examples *.xpk
 recursive-include Doc/examples *.gbk
 recursive-include Doc/examples *.sth
