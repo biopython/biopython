@@ -45,6 +45,16 @@ addons:
     - samtools
     - wise
 
+#There is a phyml Ubuntu package, but currently too old
+before_install:
+  - cd $HOME
+  - mkdir bin
+  - export PATH=$HOME/bin:$PATH
+  - curl -L -O http://www.atgc-montpellier.fr/download/binaries/phyml/PhyML-3.1.zip
+  - unzip PhyML-3.1.zip
+  - mv PhyML-3.1/PhyML-3.1_linux64 bin/phyml
+  - cd $TRAVIS_BUILD_DIR
+
 install:
   - "cp Tests/biosql.ini.sample Tests/biosql.ini"
   - "pip install --upgrade pip setuptools"
