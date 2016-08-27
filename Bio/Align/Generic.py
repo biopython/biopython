@@ -189,24 +189,6 @@ class Alignment(object):
             # Follow python convention and default to using __str__
             return str(self)
 
-    def get_all_seqs(self):
-        """Return all of the sequences involved in the alignment (DEPRECATED).
-
-        The return value is a list of SeqRecord objects.
-
-        This method is deprecated, as the Alignment object itself now offers
-        much of the functionality of a list of SeqRecord objects (e.g.
-        iteration or slicing to create a sub-alignment). Instead use the
-        Python builtin function list, i.e. my_list = list(my_align)
-        """
-        import warnings
-        import Bio
-        warnings.warn("This method is deprecated, since the alignment object"
-                      "now acts more like a list. Instead of calling "
-                      "align.get_all_seqs() you can use list(align)",
-                      Bio.BiopythonDeprecationWarning)
-        return self._records
-
     def __iter__(self):
         """Iterate over alignment rows as SeqRecord objects.
 
@@ -229,29 +211,6 @@ class Alignment(object):
         ACTGCTAGATAG
         """
         return iter(self._records)
-
-    def get_seq_by_num(self, number):
-        """Retrieve a sequence by row number (DEPRECATED).
-
-        Returns:
-            - A Seq object for the requested sequence.
-
-        Raises:
-            - IndexError - If the specified number is out of range.
-
-        NOTE: This is a legacy method.  In new code where you need to access
-        the rows of the alignment (i.e. the sequences) consider iterating
-        over them or accessing them as SeqRecord objects.
-        """
-        import warnings
-        import Bio
-        warnings.warn("This is a legacy method and is likely to be removed "
-                      "in a future release of Biopython. In new code where "
-                      "you need to access the rows of the alignment (i.e. the "
-                      "sequences) consider iterating over them or accessing "
-                      "them as SeqRecord objects.",
-                      Bio.BiopythonDeprecationWarning)
-        return self._records[number].seq
 
     def __len__(self):
         """Returns the number of sequences in the alignment.
