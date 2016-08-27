@@ -664,8 +664,12 @@ Bio.SubsMat in Release 1.57.
 Bio.Align
 =========
 The methods get_column and add_sequence of the MultipleSeqAlignment class were
-deprecated in Release 1.57. The Alignment class in Bio.Align.Generic and its
-method get_seq_by_num were deprecated in Release 1.57.
+deprecated in Release 1.57 and removed in Release 1.69.
+
+Bio.Align.Generic
+=================
+This module which defined to original (Multiple-Sequence) Alignment class
+was deprecated in Release 1.57.
 
 Bio.ParserSupport
 =================
