@@ -208,7 +208,7 @@ class MultipleSeqAlignment(object):
 
         >>> from Bio.Alphabet import IUPAC, Gapped
         >>> from Bio.Align import MultipleSeqAlignment
-        >>> align = MultipleSeqAlignment(Gapped(IUPAC.unambiguous_dna, "-"))
+        >>> align = MultipleSeqAlignment([], Gapped(IUPAC.unambiguous_dna, "-"))
         >>> align.add_sequence("Alpha", "ACTGCTAGCTAG")
         >>> align.add_sequence("Beta",  "ACT-CTAGCTAG")
         >>> align.add_sequence("Gamma", "ACTGCTAGATAG")
@@ -266,7 +266,7 @@ class MultipleSeqAlignment(object):
 
         >>> from Bio.Alphabet import IUPAC, Gapped
         >>> from Bio.Align import MultipleSeqAlignment
-        >>> align = MultipleSeqAlignment(Gapped(IUPAC.unambiguous_dna, "-"))
+        >>> align = MultipleSeqAlignment([], Gapped(IUPAC.unambiguous_dna, "-"))
         >>> align.add_sequence("Alpha", "ACTGCTAGCTAG")
         >>> align.add_sequence("Beta",  "ACT-CTAGCTAG")
         >>> align.add_sequence("Gamma", "ACTGCTAGATAG")
@@ -315,7 +315,7 @@ class MultipleSeqAlignment(object):
 
         >>> from Bio.Alphabet import IUPAC, Gapped
         >>> from Bio.Align import MultipleSeqAlignment
-        >>> align = MultipleSeqAlignment(Gapped(IUPAC.unambiguous_dna, "-"))
+        >>> align = MultipleSeqAlignment([], Gapped(IUPAC.unambiguous_dna, "-"))
         >>> align.add_sequence("Alpha", "ACTGCTAGCTAG")
         >>> align.add_sequence("Beta",  "ACT-CTAGCTAG")
         >>> align.add_sequence("Gamma", "ACTGCTAGATAG")
@@ -352,7 +352,7 @@ class MultipleSeqAlignment(object):
 
         >>> from Bio.Alphabet import IUPAC, Gapped
         >>> from Bio.Align import MultipleSeqAlignment
-        >>> align = MultipleSeqAlignment(Gapped(IUPAC.unambiguous_dna, "-"))
+        >>> align = MultipleSeqAlignment([], Gapped(IUPAC.unambiguous_dna, "-"))
         >>> align.add_sequence("Alpha", "ACTGCTAGCTAG")
         >>> align.add_sequence("Beta",  "ACT-CTAGCTAG")
         >>> align.add_sequence("Gamma", "ACTGCTAGATAG")
@@ -396,6 +396,8 @@ class MultipleSeqAlignment(object):
             - weight - The weight to place on the sequence in the alignment.
               By default, all sequences have the same weight. (0.0 =>
               no weight, 1.0 => highest weight)
+
+        In general providing a SeqRecord and calling .append is prefered.
         """
         new_seq = Seq(sequence, self._alphabet)
 
