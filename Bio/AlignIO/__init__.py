@@ -142,7 +142,6 @@ from Bio._py3k import basestring
 #   http://www.bioperl.org/wiki/MSF_multiple_alignment_format
 
 from Bio.Align import MultipleSeqAlignment
-from Bio.Align.Generic import Alignment
 from Bio.Alphabet import Alphabet, AlphabetEncoder, _get_base_alphabet
 from Bio.File import as_handle
 
@@ -182,9 +181,8 @@ def write(alignments, handle, format):
     """Write complete set of alignments to a file.
 
     Arguments:
-      - alignments - A list (or iterator) of Alignment objects (ideally the
-        new MultipleSeqAlignment objects), or (if using Biopython
-        1.54 or later) a single alignment object.
+      - alignments - A list (or iterator) of MultipleSeqAlignment objects,
+        or a single alignment object.
       - handle    - File handle object to write to, or filename as string
         (note older versions of Biopython only took a handle).
       - format    - lower case string describing the file format to write.
@@ -203,7 +201,7 @@ def write(alignments, handle, format):
     if format != format.lower():
         raise ValueError("Format string '%s' should be lower case" % format)
 
-    if isinstance(alignments, Alignment):
+    if isinstance(alignments, MultipleSeqAlignment):
         # This raised an exception in older versions of Biopython
         alignments = [alignments]
 
@@ -217,8 +215,8 @@ def write(alignments, handle, format):
             # TODO - Can we make one call to SeqIO.write() and count the alignments?
             count = 0
             for alignment in alignments:
-                if not isinstance(alignment, Alignment):
-                    raise TypeError("Expect a list or iterator of Alignment "
+                if not isinstance(alignment, MultipleSeqAlignment):
+                    raise TypeError("Expect a list or iterator of MultipleSeqAlignment "
                                     "objects, got: %r" % alignment)
                 SeqIO.write(alignment, fp, format)
                 count += 1

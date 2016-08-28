@@ -9,7 +9,6 @@ import os
 from Bio._py3k import StringIO
 from Bio import SeqIO
 from Bio import AlignIO
-from Bio.Align.Generic import Alignment
 from Bio.Align import AlignInfo, MultipleSeqAlignment
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
@@ -315,7 +314,7 @@ for (t_format, t_per, t_count, t_filename) in test_files:
     if t_count == 1:
         with open(t_filename) as handle:
             alignment = AlignIO.read(handle, format=t_format)
-        assert isinstance(alignment, Alignment)
+        assert isinstance(alignment, MultipleSeqAlignment)
     else:
         try:
             with open(t_filename) as handle:

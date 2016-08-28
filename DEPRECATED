@@ -668,13 +668,13 @@ deprecated in Release 1.57 and removed in Release 1.69.
 
 Bio.Align.Generic
 =================
-This module which defined to original (Multiple-Sequence) Alignment class
-was deprecated in Release 1.57.
+This module which defined to original (Multiple-Sequence) Alignment class was
+deprecated in Release 1.57 and removed in Release 1.69.
 
 Bio.ParserSupport
 =================
 Bio.ParserSupport was declared obsolete in Release 1.59, and deprecated in
-Release 1.63. The Martel specific EventGenerator was removed in Release 1.67..
+Release 1.63. The Martel specific EventGenerator was removed in Release 1.67.
 
 Bio.ParserSupport.SGMLStrippingConsumer was deprecated in Release 1.59, and
 removed in Release 1.61.
