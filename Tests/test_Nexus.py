@@ -5,6 +5,7 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
+from __future__ import print_function
 
 import os.path
 import unittest
@@ -412,6 +413,33 @@ Root:  16
                     cur_node.get_succ()])
             cur_nodes = new_nodes
         return nodedata
+
+    def test_NexusComments(self):
+        """Test the ability to parse nexus comments at internal and leaf nodes
+        """
+        # A tree with simple comments throughout the tree.
+        ts1b = "((12:0.13,19[&comment1]:0.13)[&comment2]:0.1,(20:0.171,11:0.171):0.13)[&comment3];"
+        tree = Trees.Tree(ts1b)
+        self.assertEqual(self._get_flat_nodes(tree), [(None, 0.0, None, '[&comment3]'),
+                                                      (None, 0.1, None, '[&comment2]'),
+                                                      (None, 0.13, None, None), ('12', 0.13, None, None),
+                                                      ('19', 0.13, None, '[&comment1]'),
+                                                      ('20', 0.171, None, None),
+                                                      ('11', 0.171, None, None)])
+
+        # A tree with more complex comments throughout the tree.
+        # This is typical of the MCC trees produced by `treeannotator` in the beast-mcmc suite of phylogenetic tools
+        # The key difference being tested here is the ability to parse internal node comments that include ','.
+        ts1b = "(((9[&rate_range={1.3E-5,0.10958320752991428},height_95%_HPD={0.309132419999969,0.3091324199999691},length_range={3.513906814545109E-4,0.4381986285528381},height_median=0.309132419999969,length_95%_HPD={0.003011577063374571,0.08041621647998398}]:0.055354097721950546,5[&rate_range={1.3E-5,0.10958320752991428},height_95%_HPD={0.309132419999969,0.3091324199999691},length_range={3.865051168833178E-5,0.4391594442572986},height_median=0.309132419999969,length_95%_HPD={0.003011577063374571,0.08041621647998398}]:0.055354097721950546)[&height_95%_HPD={0.3110921040545068,0.38690865205576275},length_range={0.09675588357303178,0.4332959544380489},length_95%_HPD={0.16680375169879613,0.36500804261814374}]:0.20039426358269385)[&height_95%_HPD={0.5289500597932948,0.6973881165460601},length_range={0.02586430194846201,0.29509451958008265},length_95%_HPD={0.0840287249314221,0.2411078625957056}]:0.23042678598484334)[&height_95%_HPD={0.7527502510685965,0.821862094763501},height_median=0.8014438411766163,height=0.795965080422763,posterior=1.0,height_range={0.49863013698599995,0.821862094763501},length=0.0];"
+        tree = Trees.Tree(ts1b)
+        self.assertEqual(self._get_flat_nodes(tree), [(None, 0.0, None, '[&height_95%_HPD={0.7527502510685965,0.821862094763501},height_median=0.8014438411766163,height=0.795965080422763,posterior=1.0,height_range={0.49863013698599995,0.821862094763501},length=0.0]'),
+                                                      (None, 0.23042678598484334, None, '[&height_95%_HPD={0.5289500597932948,0.6973881165460601},length_range={0.02586430194846201,0.29509451958008265},length_95%_HPD={0.0840287249314221,0.2411078625957056}]'),
+                                                      (None, 0.20039426358269385, None, '[&height_95%_HPD={0.3110921040545068,0.38690865205576275},length_range={0.09675588357303178,0.4332959544380489},length_95%_HPD={0.16680375169879613,0.36500804261814374}]'),
+                                                      ('9', 0.055354097721950546, None, '[&rate_range={1.3E-5,0.10958320752991428},height_95%_HPD={0.309132419999969,0.3091324199999691},length_range={3.513906814545109E-4,0.4381986285528381},height_median=0.309132419999969,length_95%_HPD={0.003011577063374571,0.08041621647998398}]'),
+                                                      ('5', 0.055354097721950546, None, '[&rate_range={1.3E-5,0.10958320752991428},height_95%_HPD={0.309132419999969,0.3091324199999691},length_range={3.865051168833178E-5,0.4391594442572986},height_median=0.309132419999969,length_95%_HPD={0.003011577063374571,0.08041621647998398}]')])
+
+        
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
