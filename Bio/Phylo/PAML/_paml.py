@@ -42,8 +42,7 @@ except ImportError:
 
 
 class PamlError(EnvironmentError):
-    """paml has failed. Run with verbose = True to view the error
-    message"""
+    """paml has failed. Run with verbose=True to view the error message."""
 
 
 class Paml(object):
@@ -143,7 +142,8 @@ class Paml(object):
             else:
                 # To suppress output, redirect it to a pipe to nowhere
                 result_code = subprocess.call([command, self.ctl_file],
-                                              stdout=subprocess.PIPE)
+                                              stdout=subprocess.PIPE,
+                                              stderr=subprocess.STDOUT)
         else:
             if not os.path.exists(ctl_file):
                 raise IOError("The specified control file does not exist.")
@@ -151,7 +151,8 @@ class Paml(object):
                 result_code = subprocess.call([command, ctl_file])
             else:
                 result_code = subprocess.call([command, ctl_file],
-                                              stdout=subprocess.PIPE)
+                                              stdout=subprocess.PIPE,
+                                              stderr=subprocess.STDOUT)
         os.chdir(cwd)
         if result_code > 0:
             # If the program fails for any reason
