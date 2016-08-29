@@ -16,6 +16,16 @@ This release of Biopython supports Python 2.7, 3.3, 3.4 and 3.5 (we have now
 dropped support for Python 2.6). It has also been tested on PyPy 5.0, PyPy3
 version 2.4, and Jython 2.7.
 
+Additionally, a number of small bugs have been fixed with further additions
+to the test suite, and there has been further work to follow the Python PEP8,
+PEP257 and best practice standard coding style.
+
+Many thanks to the Biopython developers and community for making this release
+possible, especially the following contributors:
+
+Chris Warth
+Peter Cock
+
 ===================================================================
 
 25 August 2016: Biopython 1.68
