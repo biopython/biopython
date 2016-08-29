@@ -559,7 +559,7 @@ We can access a single \verb|SeqRecord| object via the keys and manipulate the o
 \begin{verbatim}
 >>> seq_record = orchid_dict["Z78475.1"]
 >>> print(seq_record.description)
-P.supardii 5.8S rRNA gene and ITS1 and ITS2 DNA.
+P.supardii 5.8S rRNA gene and ITS1 and ITS2 DNA
 >>> print(repr(seq_record.seq))
 Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGTTGAGATCACAT...GGT', IUPACAmbiguousDNA())
 \end{verbatim}
@@ -652,7 +652,7 @@ Now, recall the \verb|Bio.SeqIO.to_dict()| function's \verb|key_function| argume
 >>> print(record.id)
 Z78532.1
 >>> print(record.description)
-C.californicum 5.8S rRNA gene and ITS1 and ITS2 DNA.
+C.californicum 5.8S rRNA gene and ITS1 and ITS2 DNA
 \end{verbatim}
 
 \noindent That should have retrieved the record {\tt Z78532.1}, the second entry in the file.
@@ -691,7 +691,7 @@ As an example, let's use the same GenBank file as before:
 \begin{verbatim}
 >>> seq_record = orchid_dict["Z78475.1"]
 >>> print(seq_record.description)
-P.supardii 5.8S rRNA gene and ITS1 and ITS2 DNA.
+P.supardii 5.8S rRNA gene and ITS1 and ITS2 DNA
 >>> seq_record.seq
 Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGTTGAGATCACAT...GGT', IUPACAmbiguousDNA())
 >>> orchid_dict.close()

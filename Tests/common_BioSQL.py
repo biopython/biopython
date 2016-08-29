@@ -467,7 +467,7 @@ class SeqInterfaceTest(unittest.TestCase):
         self.assertTrue(isinstance(test_record.seq, BioSeq.DBSeq))
         self.assertEqual(test_record.id, "X62281.1", test_record.id)
         self.assertEqual(test_record.name, "ATKIN2")
-        self.assertEqual(test_record.description, "A.thaliana kin2 gene.")
+        self.assertEqual(test_record.description, "A.thaliana kin2 gene")
         self.assertTrue(hasattr(test_record, 'annotations'))
         # XXX should do something with annotations once they are like
         # a dictionary
@@ -968,14 +968,14 @@ class InDepthLoadTest(unittest.TestCase):
         test_record = self.db.lookup(accession="X55053")
         self.assertEqual(test_record.name, "ATCOR66M")
         self.assertEqual(test_record.id, "X55053.1")
-        self.assertEqual(test_record.description, "A.thaliana cor6.6 mRNA.")
+        self.assertEqual(test_record.description, "A.thaliana cor6.6 mRNA")
         self.assertTrue(isinstance(test_record.seq.alphabet, Alphabet.DNAAlphabet))
         self.assertEqual(str(test_record.seq[:10]), 'AACAAAACAC')
 
         test_record = self.db.lookup(accession="X62281")
         self.assertEqual(test_record.name, "ATKIN2")
         self.assertEqual(test_record.id, "X62281.1")
-        self.assertEqual(test_record.description, "A.thaliana kin2 gene.")
+        self.assertEqual(test_record.description, "A.thaliana kin2 gene")
         self.assertTrue(isinstance(test_record.seq.alphabet, Alphabet.DNAAlphabet))
         self.assertEqual(str(test_record.seq[:10]), 'ATTTGGCCTA')
 
