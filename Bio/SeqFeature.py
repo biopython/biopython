@@ -747,14 +747,14 @@ class FeatureLocation(object):
         """
         if isinstance(other, FeatureLocation):
             return CompoundLocation([self, other])
-        elif isinstance(other, int):
+        elif _is_int_or_long(other):
             return self._shift(other)
         else:
             # This will allow CompoundLocation's __radd__ to be called:
             return NotImplemented
 
     def __radd__(self, other):
-        if isinstance(other, int):
+        if _is_int_or_long(other):
             return self._shift(other)
         else:
             return NotImplemented
@@ -799,7 +799,7 @@ class FeatureLocation(object):
         >>> [i for i in range(15) if i in loc]
         [5, 6, 7, 8, 9]
         """
-        if not isinstance(value, int):
+        if not _is_int_or_long(value):
             raise ValueError("Currently we only support checking for integer "
                              "positions being within a FeatureLocation.")
         if value < self._start or value >= self._end:
@@ -1115,7 +1115,7 @@ class CompoundLocation(object):
                 raise ValueError("Mixed operators %s and %s"
                                  % (self.operator, other.operator))
             return CompoundLocation(self.parts + other.parts, self.operator)
-        elif isinstance(other, int):
+        elif _is_int_or_long(other):
             return self._shift(other)
         else:
             raise NotImplementedError
@@ -1124,7 +1124,7 @@ class CompoundLocation(object):
         """Combine locations."""
         if isinstance(other, FeatureLocation):
             return CompoundLocation([other] + self.parts, self.operator)
-        elif isinstance(other, int):
+        elif _is_int_or_long(other):
             return self._shift(other)
         else:
             raise NotImplementedError
