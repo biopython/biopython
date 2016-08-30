@@ -113,7 +113,7 @@ class Tree(Nodes.Chain):
                 elif not incomment and tree[p] == ',' and plevel == 0:
                     subtrees.append(tree[prev:p])
                     prev = p + 1
-                    
+
             subtrees.append(tree[prev:closing])
             subclades = [self._parse(subtree) for subtree in subtrees]
             return [subclades, val]
