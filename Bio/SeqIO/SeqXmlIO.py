@@ -49,8 +49,7 @@ class XMLRecordIterator(object):
         self._events = pulldom.parse(handle)
 
     def __iter__(self):
-        """Iterate over the records in the XML file.
-        Returns the last parsed record."""
+        """Iterate over the records in the XML file."""
 
         record = None
         try:
