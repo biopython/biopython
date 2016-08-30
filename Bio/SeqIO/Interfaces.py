@@ -20,15 +20,17 @@ from Bio.SeqRecord import SeqRecord
 class SequenceIterator(object):
     """Base class for building SeqRecord iterators.
 
-    You should write a next() method to return SeqRecord
-    objects.  You may wish to redefine the __init__
-    method as well.
+    You should write a __next__ method to return SeqRecord  objects.  You may
+    wish to redefine the __init__ method as well.
     """
     def __init__(self, handle, alphabet=generic_alphabet):
         """Create a SequenceIterator object.
 
             - handle - input file
             - alphabet - optional, e.g. Bio.Alphabet.generic_protein
+
+        This method MAY be overridden by any subclass, for example if you need
+        to process a header or accept additional arguments.
 
         Note when subclassing:
 
@@ -38,22 +40,15 @@ class SequenceIterator(object):
             - you can add additional optional arguments."""
         self.handle = handle
         self.alphabet = alphabet
-        #####################################################
-        # You may want to subclass this, for example        #
-        # to read through the file to find the first record,#
-        # or if additional arguments are required.          #
-        #####################################################
 
     def __next__(self):
         """Return the next record in the file.
 
-        This method should be replaced by any derived class to do something useful."""
-        raise NotImplementedError("This object should be subclassed")
-        #####################################################
-        # You SHOULD subclass this, to split the file up    #
-        # into your individual records, and convert these   #
-        # into useful objects, e.g. return SeqRecord object #
-        #####################################################
+        This method's stub-implementation MUST be overridden by any subclass
+        to actually parse the file and return the next entry as a SeqRecord
+        object.
+        """
+        raise NotImplementedError("The subclass should implement the __next__ method.")
 
     if sys.version_info[0] < 3:
         def next(self):
@@ -70,17 +65,21 @@ class SequenceIterator(object):
                 for record in myFastaReader:
                     print(record.id)
                     print(record.seq)
+
+        This method SHOULD NOT be overridden by any subclass. It should be
+        left as is, which will call the subclass implementation of __next__
+        to actually parse the file.
         """
         return iter(self.__next__, None)
 
 
 class SequenceWriter(object):
-    """This class should be subclassed.
+    """Base class for building SeqRecord writers.
 
     Interlaced file formats (e.g. Clustal) should subclass directly.
 
-    Sequential file formats (e.g. Fasta, GenBank) should subclass
-    the SequentialSequenceWriter class instead.
+    Sequential file formats (e.g. Fasta, GenBank) should subclass the
+    SequentialSequenceWriter class instead.
     """
     def __init__(self, handle):
         """Creates the writer object.
