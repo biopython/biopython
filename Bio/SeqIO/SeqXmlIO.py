@@ -48,6 +48,10 @@ class XMLRecordIterator(object):
         self._namespace = namespace
         self._events = pulldom.parse(handle)
 
+    # TODO: Implement __next__ in order for Python to treat this class as
+    # an interator and not just as an iterable. The SequenceIterator API
+    # expects base implementation of __iter__ to call __next__ internally.
+
     def __iter__(self):
         """Iterate over the records in the XML file."""
 
