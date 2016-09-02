@@ -58,9 +58,14 @@ def UniprotIterator(handle, alphabet=Alphabet.ProteinAlphabet(), return_raw_comm
 
     if not hasattr(handle, "read"):
         if isinstance(handle, str):
+            import warnings
+            from Biopython import BiopythonDeprecationWarning
+            warnings.warn("Passing an XML-containing handle is recommended",
+                          BiopythonDeprecationWarning)
             handle = StringIO(handle)
         else:
-            raise Exception('An XML-containing handler or an XML string must be passed')
+            raise TypeError("Requires an XML-containing handle"
+                            " (or XML as a string, but that's deprectaed)")
 
     if ElementTree is None:
         from Bio import MissingExternalDependencyError
