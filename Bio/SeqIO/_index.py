@@ -26,6 +26,7 @@ temp lookup file might be one idea (e.g. using SQLite or an OBDA style index).
 from __future__ import print_function
 
 import re
+from io import BytesIO
 from Bio._py3k import StringIO
 from Bio._py3k import _bytes_to_string, _as_bytes
 
@@ -437,16 +438,13 @@ class UniprotRandomAccess(SequentialSeqFileRandomAccess):
         # TODO - Can we handle this directly in the parser?
         # This is a hack - use get_raw for <entry>...</entry> and wrap it with
         # the apparently required XML header and footer.
-        data = """<?xml version='1.0' encoding='UTF-8'?>
+        data = b"""<?xml version='1.0' encoding='UTF-8'?>
         <uniprot xmlns="http://uniprot.org/uniprot"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://uniprot.org/uniprot
         http://www.uniprot.org/support/docs/uniprot.xsd">
-        %s
-        </uniprot>
-        """ % _bytes_to_string(self.get_raw(offset))
-        # TODO - For consistency, this function should not accept a string:
-        return next(SeqIO.UniprotIO.UniprotIterator(data))
+        """ + self.get_raw(offset) + b"</uniprot>"
+        return next(SeqIO.UniprotIO.UniprotIterator(BytesIO(data)))
 
 
 class IntelliGeneticsRandomAccess(SeqFileRandomAccess):
