@@ -1,4 +1,4 @@
-# Copyright 2009-2015 by Peter Cock.  All rights reserved.
+# Copyright 2009-2016 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -8,7 +8,7 @@
 try:
     import sqlite3
 except ImportError:
-    # Try to run what tests we can on Python 2.4 or Jython
+    # Try to run what tests we can on Jython
     # where we don't expect this to be installed.
     sqlite3 = None
 
@@ -71,7 +71,7 @@ if sqlite3:
         """Open SQLite index and extract filenames (as is).
 
         Returns a 2-tuple, holding a list of strings, and the value
-        of the meta_data.filenames_relative_to_index (of None).
+        of the meta_data.filenames_relative_to_index (or None).
         """
         con = sqlite3.dbapi2.connect(index_filename)
 
