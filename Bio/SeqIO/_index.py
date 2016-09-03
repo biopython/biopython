@@ -458,24 +458,32 @@ class IntelliGeneticsRandomAccess(SeqFileRandomAccess):
     def __iter__(self):
         handle = self._handle
         handle.seek(0)
-        marker_re = self._marker_re
-        semi_char = _as_bytes(";")
+        # Skip any header
+        offset = 0
+        line = ""
         while True:
-            offset = handle.tell()
+            offset += len(line)
             line = handle.readline()
-            if marker_re.match(line):
-                # Now look for the first line which doesn't start ";"
-                while True:
-                    line = handle.readline()
-                    if line[0:1] != semi_char and line.strip():
-                        key = line.split()[0]
-                        yield _bytes_to_string(key), offset, 0
-                        break
-                    if not line:
-                        raise ValueError("Premature end of file?")
-            elif not line:
-                # End of file
+            if not line:
+                break  # Premature end of file, or just empty?
+            if not line.startswith(b";;"):
                 break
+        while line:
+            length = 0
+            assert offset + len(line) == handle.tell()
+            if not line.startswith(b";"):
+                raise ValueError("Records should start with ';' and not:\n%r" % line)
+            while line.startswith(b";"):
+                length += len(line)
+                line = handle.readline()
+            key = line.rstrip()
+            # Now look for the first line which starts ";"
+            while line and not line.startswith(b";"):
+                length += len(line)
+                line = handle.readline()
+            yield _bytes_to_string(key), offset, length
+            offset += length
+            assert offset + len(line) == handle.tell()
 
     def get_raw(self, offset):
         """Return the raw record from the file as a bytes string."""
