@@ -183,12 +183,12 @@ class SequentialSeqFileRandomAccess(SeqFileRandomAccess):
         self._marker_re = re.compile(_as_bytes("^%s" % marker))
 
     def __iter__(self):
-        """Returns (id,offset) tuples."""
+        """Returns (id, offset, length) tuples."""
         marker_offset = len(self._marker)
         marker_re = self._marker_re
         handle = self._handle
         handle.seek(0)
-        # Skip and header before first record
+        # Skip any header before first record
         while True:
             start_offset = handle.tell()
             line = handle.readline()
