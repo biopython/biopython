@@ -463,18 +463,16 @@ class IntelliGeneticsRandomAccess(SeqFileRandomAccess):
         while True:
             offset = handle.tell()
             line = handle.readline()
-            length = len(line)
             if marker_re.match(line):
                 # Now look for the first line which doesn't start ";"
                 while True:
                     line = handle.readline()
                     if line[0:1] != semi_char and line.strip():
                         key = line.split()[0]
-                        yield _bytes_to_string(key), offset, length
+                        yield _bytes_to_string(key), offset, 0
                         break
                     if not line:
                         raise ValueError("Premature end of file?")
-                    length += len(line)
             elif not line:
                 # End of file
                 break
