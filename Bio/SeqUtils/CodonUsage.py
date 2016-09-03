@@ -36,31 +36,9 @@ class CodonAdaptationIndex(object):
         'TGA': 0, 'TGG': 0, 'CGT': 0, 'CGC': 0, 'CGA': 0,
         'CGG': 0, 'AGT': 0, 'AGC': 0, 'AGA': 0, 'AGG': 0,
         'GGT': 0, 'GGC': 0, 'GGA': 0, 'GGG': 0}
-
+        
         # this dictionary shows which codons encode the same AA
-        self.SynonymousCodons = {
-            'CYS': ['TGT', 'TGC'],
-            'ASP': ['GAT', 'GAC'],
-            'SER': ['TCT', 'TCG', 'TCA', 'TCC', 'AGC', 'AGT'],
-            'GLN': ['CAA', 'CAG'],
-            'MET': ['ATG'],
-            'ASN': ['AAC', 'AAT'],
-            'PRO': ['CCT', 'CCG', 'CCA', 'CCC'],
-            'LYS': ['AAG', 'AAA'],
-            'STOP': ['TAG', 'TGA', 'TAA'],
-            'THR': ['ACC', 'ACA', 'ACG', 'ACT'],
-            'PHE': ['TTT', 'TTC'],
-            'ALA': ['GCA', 'GCC', 'GCG', 'GCT'],
-            'GLY': ['GGT', 'GGG', 'GGA', 'GGC'],
-            'ILE': ['ATC', 'ATA', 'ATT'],
-            'LEU': ['TTA', 'TTG', 'CTC', 'CTT', 'CTG', 'CTA'],
-            'HIS': ['CAT', 'CAC'],
-            'ARG': ['CGA', 'CGC', 'CGG', 'CGT', 'AGG', 'AGA'],
-            'TRP': ['TGG'],
-            'VAL': ['GTA', 'GTC', 'GTG', 'GTT'],
-            'GLU': ['GAG', 'GAA'],
-            'TYR': ['TAT', 'TAC']
-        }
+        self.SynonymousCodons = {}
 
     # use this method with predefined CAI index
     def set_cai_index(self, index):
@@ -69,17 +47,6 @@ class CodonAdaptationIndex(object):
         CodonUsageIndices module.
         """
         self.index = index
-
-    def change_translation_table(self, genetic_code):
-        """Change the synonymous codon dictionary to one for an alternative genetic code.
-        Takes the ID of a gentic code (an integer) and changes the table for the CodonAdaptationIndex instance.
-        """
-        self.SynonymousCodons = {}
-        for key, value in Data.CodonTable.unambiguous_dna_by_id[genetic_code].forward_table.iteritems():
-            try:
-                self.SynonymousCodons[value].append(key)
-            except KeyError:
-                self.SynonymousCodons[value] = [key]
 
     def generate_rscu(self, fasta_file):
         """Create an RSCU (Relative Synonymous Codon Usage) table from a FASTA file of CDS sequences.
@@ -90,8 +57,12 @@ class CodonAdaptationIndex(object):
         if self.index or self.codon_count or self.rscu:
             raise ValueError("an index has already been set or a codon count has been done. cannot overwrite either.")
 
-        if self.genetic_code != 1:
-            change_tranlation_table(self.genetic_code)
+        # sets up the genetic code dictionary (which is defualted to 1)
+        for key, value in Data.CodonTable.unambiguous_dna_by_id[self.genetic_code].forward_table.iteritems():
+            try:
+                self.SynonymousCodons[value].append(key)
+            except KeyError:
+                self.SynonymousCodons[value] = [key]
 
         # count codon occurrences in the file.
         self._count_codons(fasta_file)
