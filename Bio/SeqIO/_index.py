@@ -397,8 +397,10 @@ class UniprotRandomAccess(SequentialSeqFileRandomAccess):
                         start_acc_marker) + 11:].split(less_than, 1)[0]
                     length += len(line)
                 elif end_entry_marker in line:
+                    length += line.find(end_entry_marker) + 8
                     end_offset = handle.tell() - len(line) \
                         + line.find(end_entry_marker) + 8
+                    assert start_offset + length == end_offset
                     break
                 elif marker_re.match(line) or not line:
                     # Start of next record or end of file
@@ -407,7 +409,7 @@ class UniprotRandomAccess(SequentialSeqFileRandomAccess):
                     length += len(line)
             if not key:
                 raise ValueError("Did not find <accession> line in bytes %i to %i"
-                                 % (start_offset, end_offset))
+                                 % (start_offset, start_offset + length))
             yield _bytes_to_string(key), start_offset, length
             # Find start of next record
             while not marker_re.match(line) and line:
