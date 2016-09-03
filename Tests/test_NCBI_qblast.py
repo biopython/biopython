@@ -43,9 +43,10 @@ print("Checking Bio.Blast.NCBIWWW.qblast() with various queries")
 class TestQblast(unittest.TestCase):
 
     def test_blastp_nr_actin(self):
-        # Simple protein blast filtered for rat only, using protein GI:160837788
+        # Simple protein blast filtered for rat only, using protein
+        # GI:160837788 aka NP_075631.2
         # the actin related protein 2/3 complex, subunit 1B [Mus musculus]
-        self.run_qblast("blastp", "nr", "160837788", 0.001,
+        self.run_qblast("blastp", "nr", "NP_075631.2", 0.001,
                         "rat [ORGN]", ['9506405', '13592137', '37589612', '149064087', '56912225'])
 
     def test_pcr_primers(self):
