@@ -530,7 +530,7 @@ class BlatPslIndexer(SearchIndexer):
         # denotes column location for query identifier
         query_id_idx = 9
         qresult_key = None
-        tab_char = _as_bytes('\t')
+        tab_char = b"\t"
 
         start_offset = handle.tell()
         line = handle.readline()
@@ -570,8 +570,8 @@ class BlatPslIndexer(SearchIndexer):
         handle.seek(offset)
         query_id_idx = 9
         qresult_key = None
-        qresult_raw = _as_bytes('')
-        tab_char = _as_bytes('\t')
+        qresult_raw = b""
+        tab_char = b"\t"
 
         while True:
             line = handle.readline()

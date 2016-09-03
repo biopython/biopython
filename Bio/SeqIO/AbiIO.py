@@ -25,7 +25,7 @@ from Bio.Alphabet.IUPAC import ambiguous_dna, unambiguous_dna
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
-from Bio._py3k import _bytes_to_string, _as_bytes
+from Bio._py3k import _bytes_to_string
 from Bio._py3k import zip
 
 # dictionary for determining which tags goes into SeqRecord annotation
@@ -354,7 +354,7 @@ def AbiIterator(handle, alphabet=None, trim=False):
     if not marker:
         # handle empty file gracefully
         raise StopIteration
-    if marker != _as_bytes('ABIF'):
+    if marker != b"ABIF":
         raise IOError('File should start ABIF, not %r' % marker)
 
     # dirty hack for handling time information

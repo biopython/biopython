@@ -1,4 +1,4 @@
-# Copyright 2010-2013 by Peter Cock.
+# Copyright 2010-2016 by Peter Cock.
 # All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -14,7 +14,6 @@ import os
 from random import shuffle
 
 from Bio._py3k import _as_bytes, _as_string
-_empty_bytes_string = _as_bytes("")
 
 from Bio import bgzf
 
@@ -132,7 +131,7 @@ class BgzfTests(unittest.TestCase):
             for cache in [1, 10]:
                 h = bgzf.BgzfReader(new_file, mode, max_cache=cache)
                 if "b" in mode:
-                    new = _empty_bytes_string.join(line for line in h)
+                    new = b"".join(line for line in h)
                 else:
                     new = "".join(line for line in h)
                 h.close()
@@ -166,7 +165,7 @@ class BgzfTests(unittest.TestCase):
                         break
                     temp.append(char)
                 if "b" in mode:
-                    new = _empty_bytes_string.join(temp)
+                    new = b"".join(temp)
                 else:
                     new = "".join(temp)
                 del temp
@@ -189,7 +188,7 @@ class BgzfTests(unittest.TestCase):
         h.close()
 
         # Forward, using explicit open/close
-        new = _empty_bytes_string
+        new = b""
         h = bgzf.BgzfReader(filename, "rb")
         self.assertTrue(h.seekable())
         self.assertFalse(h.isatty())
@@ -206,7 +205,7 @@ class BgzfTests(unittest.TestCase):
         self.assertEqual(old, new)
 
         # Reverse, using with statement
-        new = _empty_bytes_string
+        new = b""
         with bgzf.BgzfReader(filename, "rb") as h:
             for start, raw_len, data_start, data_len in blocks[::-1]:
                 h.seek(bgzf.make_virtual_offset(start, 0))

@@ -20,7 +20,7 @@ import gzip
 import warnings
 from io import BytesIO
 
-from Bio._py3k import _as_bytes, _bytes_to_string, StringIO
+from Bio._py3k import _bytes_to_string, StringIO
 from Bio._py3k import _universal_read_mode
 
 try:
@@ -563,8 +563,8 @@ class IndexDictTests(unittest.TestCase):
                             rec_dict._proxy._alphabet,
                             trim=True)
             elif format == "uniprot-xml":
-                self.assertTrue(raw.startswith(_as_bytes("<entry ")))
-                self.assertTrue(raw.endswith(_as_bytes("</entry>")))
+                self.assertTrue(raw.startswith(b"<entry "))
+                self.assertTrue(raw.endswith(b"</entry>"))
                 # Currently the __getitem__ method uses this
                 # trick too, but we hope to fix that later
                 raw = """<?xml version='1.0' encoding='UTF-8'?>
