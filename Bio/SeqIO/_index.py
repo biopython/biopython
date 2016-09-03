@@ -573,6 +573,7 @@ class FastqRandomAccess(SeqFileRandomAccess):
                         line = handle.readline()
                         if line.strip():
                             raise ValueError("Expected blank quality line, not %r" % line)
+                        length += len(line)  # Need to include the blank ling
                     # Should be end of record...
                     end_offset = handle.tell()
                     line = handle.readline()
