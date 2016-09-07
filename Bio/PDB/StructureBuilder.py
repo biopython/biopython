@@ -132,6 +132,7 @@ class StructureBuilder(object):
                         # The residue was already made
                         self.residue = duplicate_residue
                         duplicate_residue.disordered_select(resname)
+                        return
                     else:
                         # Make a new residue and add it to the already
                         # present DisorderedResidue
