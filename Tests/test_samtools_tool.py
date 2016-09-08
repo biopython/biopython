@@ -181,7 +181,7 @@ class SamtoolsTestCase(unittest.TestCase):
     def test_sort(self):
         cmdline = SamtoolsSortCommandline(samtools_exe)
         cmdline.set_parameter("input", self.bamfile1)
-        cmdline.set_parameter("-T", "SamBam/out")
+        cmdline.set_parameter("-T", "out")
         cmdline.set_parameter("-o", "out.bam")
         try:
             stdout, stderr = cmdline()
