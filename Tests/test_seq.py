@@ -6,17 +6,8 @@ from __future__ import print_function
 import array
 import copy
 import sys
+import unittest
 import warnings
-
-# Remove unittest2 import after dropping support for Python2.6
-if sys.version_info < (2, 7):
-    try:
-        import unittest2 as unittest
-    except ImportError:
-        from Bio import MissingPythonDependencyError
-        raise MissingPythonDependencyError("Under Python 2.6 this test needs the unittest2 library")
-else:
-    import unittest
 
 from Bio import Alphabet
 from Bio import Seq
