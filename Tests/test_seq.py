@@ -768,6 +768,27 @@ class TestComplement(unittest.TestCase):
         with self.assertRaises(ValueError):
             seq.complement()
 
+    def test_complement_of_mixed_dna_rna(self):
+        seq = "AUGAAACTG"  # U and T
+        self.assertRaises(ValueError, Seq.complement, seq)
+
+    def test_complement_of_rna(self):
+        seq = "AUGAAACUG"
+        self.assertEqual("UACUUUGAC", Seq.complement(seq))
+
+    def test_complement_of_dna(self):
+        seq = "ATGAAACTG"
+        self.assertEqual("TACTTTGAC", Seq.complement(seq))
+
+    def test_complement_on_proteins(self):
+        """Test complement shouldn't work on a protein!"""
+        for s in protein_seqs:
+            with self.assertRaises(ValueError):
+                Seq.complement(s)
+
+            with self.assertRaises(ValueError):
+                s.complement()
+
 
 class TestReverseComplement(unittest.TestCase):
     def test_reverse_complement(self):

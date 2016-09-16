@@ -2192,7 +2192,8 @@ def reverse_complement(sequence):
     """Returns the reverse complement sequence of a nucleotide string.
 
     If given a string, returns a new string object.
-    Given a Seq or a MutableSeq, returns a new Seq object with the same alphabet.
+    Given a Seq or a MutableSeq, returns a new Seq object with the same
+    alphabet.
 
     Supports unambiguous and ambiguous nucleotide sequences.
 
@@ -2201,17 +2202,36 @@ def reverse_complement(sequence):
     >>> reverse_complement("ACTG-NH")
     'DN-CAGT'
     """
+    return complement(sequence)[::-1]
+
+
+def complement(sequence):
+    """Returns the complement sequence of a nucleotide string.
+
+    If given a string, returns a new string object.
+    Given a Seq or a MutableSeq, returns a new Seq object with the same
+    alphabet.
+
+    Supports unambiguous and ambiguous nucleotide sequences.
+
+    e.g.
+
+    >>> complement("ACTG-NH")
+    'TGAC-ND'
+    """
     if isinstance(sequence, Seq):
         # Return a Seq
-        return sequence.reverse_complement()
+        return sequence.complement()
     elif isinstance(sequence, MutableSeq):
         # Return a Seq
-        # Don't use the MutableSeq reverse_complement method as it is 'in place'.
-        return sequence.toseq().reverse_complement()
+        # Don't use the MutableSeq reverse_complement method as it is
+        # 'in place'.
+        return sequence.toseq().complement()
 
     # Assume its a string.
-    # In order to avoid some code duplication, the old code would turn the string
-    # into a Seq, use the reverse_complement method, and convert back to a string.
+    # In order to avoid some code duplication, the old code would turn the
+    # string into a Seq, use the reverse_complement method, and convert back
+    # to a string.
     # This worked, but is over five times slower on short sequences!
     if ('U' in sequence or 'u' in sequence) \
             and ('T' in sequence or 't' in sequence):
@@ -2220,7 +2240,7 @@ def reverse_complement(sequence):
         ttable = _rna_complement_table
     else:
         ttable = _dna_complement_table
-    return sequence.translate(ttable)[::-1]
+    return sequence.translate(ttable)
 
 
 def _test():
