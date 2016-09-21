@@ -1023,6 +1023,13 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                                                               strand)
             return
 
+        if ",)" in location_line:
+            import warnings
+            from Bio import BiopythonParserWarning
+            warnings.warn("Dropping trailing comma in malformed feature location",
+                          BiopythonParserWarning)
+            location_line = location_line.replace(",)", ")")
+
         if _solo_bond.search(location_line):
             # e.g. bond(196)
             # e.g. join(bond(284),bond(305),bond(309),bond(305))
