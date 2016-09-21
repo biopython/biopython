@@ -1052,6 +1052,14 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                 locs.append(SeqFeature.FeatureLocation(int(s) - 1,
                                                        int(e),
                                                        strand))
+            if len(locs) < 2:
+                # The CompoundLocation will raise a ValueError here!
+                import warnings
+                from Bio import BiopythonParserWarning
+                warnings.warn("Should have at least 2 parts for compound location",
+                              BiopythonParserWarning)
+                cur_feature.location = None
+                return
             if strand == -1:
                 cur_feature.location = SeqFeature.CompoundLocation(locs[::-1],
                                                                    operator=location_line[:i])
