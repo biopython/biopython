@@ -121,7 +121,7 @@ X  0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0
 
 
     def test_pseudo_count(self):
-        # use example from http://homepages.ulb.ac.be/~dgonze/TEACHING/info_content.pdf
+        # use example from http://biologie.univ-mrs.fr/upload/p202/01.4.PSSM_theory.pdf
         alpha = unambiguous_dna
         dna_align = MultipleSeqAlignment([
                 SeqRecord(Seq("AACCACGTTTAA", alpha), id="ID001"),
