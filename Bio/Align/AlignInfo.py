@@ -441,10 +441,22 @@ class SummaryInfo(object):
 
         return base_info
 
+    def _get_gap_char(self):
+        """Return the gap character used in the alignment
+        """
+        try:
+            gap_char = self.alignment._alphabet.gap_char
+        except AttributeError:
+            # The alphabet doesn't declare a gap - there could be none
+            # in the sequence... or just a vague alphabet.
+            gap_char = "-"  # Safe?
+        
+        return gap_char
+
     def information_content(self, start=0,
                             end=None,
                             e_freq_table=None, log_base=2,
-                            chars_to_ignore=None):
+                            chars_to_ignore=None, pseudo_count=0):
         """Calculate the information content for each residue along an alignment.
 
         Arguments:
@@ -504,14 +516,17 @@ class SummaryInfo(object):
         info_content = {}
         for residue_num in range(start, end):
             freq_dict = self._get_letter_freqs(residue_num,
-                                               self.alignment,
-                                               all_letters, chars_to_ignore)
+                                               self.alignment, 
+                                               all_letters, 
+                                               chars_to_ignore,
+                                               pseudo_count,
+                                               e_freq_table,
+                                               random_expected)
             # print freq_dict,
             column_score = self._get_column_info_content(freq_dict,
                                                          e_freq_table,
                                                          log_base,
                                                          random_expected)
-
             info_content[residue_num] = column_score
         # sum up the score
         total_info = sum(info_content.values())
@@ -520,7 +535,9 @@ class SummaryInfo(object):
             self.ic_vector[i] = info_content[i]
         return total_info
 
-    def _get_letter_freqs(self, residue_num, all_records, letters, to_ignore):
+
+    def _get_letter_freqs(self, residue_num, all_records, letters, to_ignore,
+                                pseudo_count=0, e_freq_table=None, random_expected=None):
         """Determine the frequency of specific letters in the alignment.
 
         Arguments:
@@ -530,15 +547,25 @@ class SummaryInfo(object):
             - letters - The letters we are interested in getting the frequency
               for.
             - to_ignore - Letters we are specifically supposed to ignore.
-
+            - pseudo_count - Optional argument specifying the Pseudo count (k) 
+              to add in order to prevent a frequency of 0 for a letter.
+            - e_freq_table - An optional argument specifying the expected
+              frequencies for each letter. This is a SubsMat.FreqTable instance.
+            - random_expected - Optional argument that specify the frequency to use
+              when e_freq_table is not defined.
+        
         This will calculate the frequencies of each of the specified letters
         in the alignment at the given frequency, and return this as a
         dictionary where the keys are the letters and the values are the
-        frequencies.
+        frequencies. Pseudo count can be added to prevent a null frequency
         """
         freq_info = self._get_base_letters(letters)
 
         total_count = 0
+
+        gap_char = self._get_gap_char()
+        
+
         # collect the count info into the dictionary for all the records
         for record in all_records:
             try:
@@ -552,6 +579,18 @@ class SummaryInfo(object):
                                  % (record.seq[residue_num],
                                     self.alignment._alphabet))
 
+        if e_freq_table:
+            if not isinstance(e_freq_table, FreqTable.FreqTable):
+                raise ValueError("e_freq_table should be a FreqTable object")
+            
+            # check if all the residus in freq_info are in e_freq_table
+            for key in freq_info:
+                if (key != gap_char and key not in e_freq_table):
+                    raise ValueError("letters in current column %s "
+                                     "and not in expected frequency table %s"
+                                     % (list(freq_info) - [gap_char],
+                                        list(e_freq_table)))
+
         if total_count == 0:
             # This column must be entirely ignored characters
             for letter in freq_info:
@@ -560,7 +599,19 @@ class SummaryInfo(object):
         else:
             # now convert the counts into frequencies
             for letter in freq_info:
-                freq_info[letter] = freq_info[letter] / total_count
+                if pseudo_count and (random_expected or e_freq_table):
+                    # use either the expected random freq or the 
+                    if e_freq_table:
+                        ajust_freq = e_freq_table[letter]
+                    else:
+                        ajust_freq = random_expected
+                    
+                    ajusted_letter_count = freq_info[letter] + ajust_freq * pseudo_count
+                    ajusted_total =  total_count + pseudo_count
+                    freq_info[letter] =  ajusted_letter_count / ajusted_total
+
+                else:
+                    freq_info[letter] = freq_info[letter] / total_count
 
         return freq_info
 
@@ -575,12 +626,7 @@ class SummaryInfo(object):
             - log_base - The base of the logathrim to use in calculating the
               info content.
         """
-        try:
-            gap_char = self.alignment._alphabet.gap_char
-        except AttributeError:
-            # The alphabet doesn't declare a gap - there could be none
-            # in the sequence... or just a vague alphabet.
-            gap_char = "-"  # Safe?
+        gap_char = self._get_gap_char()
 
         if e_freq_table:
             if not isinstance(e_freq_table, FreqTable.FreqTable):
