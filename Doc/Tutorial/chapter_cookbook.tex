@@ -1478,6 +1478,27 @@ info_content = summary_align.information_content(5, 30, log_base = 10,
                                                  chars_to_ignore = ['N'])
 \end{verbatim}
 
+By default nucleotide or amino acid residues with a frequency of 0 in a column are not take into account when the relative information column for that column is computed. If this is not the desired result, you can use \verb|pseudo_count| instead.
+
+\begin{verbatim}
+info_content = summary_align.information_content(5, 30,
+                                                 chars_to_ignore = ['N'],
+                                                 pseudo_count = 1)
+\end{verbatim}
+
+In this case, the observed frequency $P_{ij}$ of a particular letter $i$ in the $j$-th column is computed as follow :
+
+\begin{displaymath}
+P_{ij} = \frac{P_{ij} + k\times Q_{i}}{N + k}
+\end{displaymath}
+
+\noindent where:
+
+\begin{itemize}
+  \item $k$ -- the pseudo count you pass as argument.
+  \item $Q_{i}$ --  The expected frequency of the letter $i$ as described above.
+\end{itemize}
+
 Well, now you are ready to calculate information content. If you want to try applying this to some real life problems, it would probably be best to dig into the literature on information content to get an idea of how it is used. Hopefully your digging won't reveal any mistakes made in coding this function!
 
 \section{Substitution Matrices}
