@@ -23,7 +23,7 @@ class AlignInfoTests(unittest.TestCase):
 
     def assertAlmostEqualList(self, list1, list2, **kwargs):
         self.assertEqual(len(list1), len(list2))
-        for i in xrange(len(list1)):
+        for i in range(len(list1)):
             self.assertAlmostEqual(list1[i], list2[i], **kwargs)
 
     def test_nucleotides(self):
@@ -139,7 +139,7 @@ X  0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0
         ic = summary.information_content(e_freq_table=expected,
                                          log_base=math.exp(1),
                                          pseudo_count=1)
-        ic_vector = summary.ic_vector.values()
+        ic_vector = list(summary.ic_vector.values())
         self.assertAlmostEqualList(ic_vector, [0.110, 0.090, 0.360, 1.290, 0.800, \
                                         1.290, 1.290, 0.80, 0.610, 0.390, 0.470, 0.040], places=2)
         self.assertAlmostEqual(ic, 7.546, places=3)
