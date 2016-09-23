@@ -565,6 +565,10 @@ class SummaryInfo(object):
 
         gap_char = self._get_gap_char()
         
+        if pseudo_count <0 :
+            raise ValueError("Positive value required for " 
+                             "pseudo_count, %s provided"%(pseudo_count))
+
 
         # collect the count info into the dictionary for all the records
         for record in all_records:

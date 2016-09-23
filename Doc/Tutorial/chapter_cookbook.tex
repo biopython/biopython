@@ -1489,12 +1489,13 @@ info_content = summary_align.information_content(5, 30,
 In this case, the observed frequency $P_{ij}$ of a particular letter $i$ in the $j$-th column is computed as follow :
 
 \begin{displaymath}
-P_{ij} = \frac{P_{ij} + k\times Q_{i}}{N + k}
+P_{ij} = \frac{n_{ij} + k\times Q_{i}}{N_{j} + k}
 \end{displaymath}
 
 \noindent where:
 
 \begin{itemize}
+  \item $k$ -- the pseudo count you pass as argument.
   \item $k$ -- the pseudo count you pass as argument.
   \item $Q_{i}$ --  The expected frequency of the letter $i$ as described above.
 \end{itemize}
