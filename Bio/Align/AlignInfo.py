@@ -549,7 +549,7 @@ class SummaryInfo(object):
             - letters - The letters we are interested in getting the frequency
               for.
             - to_ignore - Letters we are specifically supposed to ignore.
-            - pseudo_count - Optional argument specifying the Pseudo count (k) 
+            - pseudo_count - Optional argument specifying the Pseudo count (k)
               to add in order to prevent a frequency of 0 for a letter.
             - e_freq_table - An optional argument specifying the expected
               frequencies for each letter. This is a SubsMat.FreqTable instance.
