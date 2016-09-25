@@ -36,7 +36,7 @@ class CodonAdaptationIndex(object):
         'TGA': 0, 'TGG': 0, 'CGT': 0, 'CGC': 0, 'CGA': 0,
         'CGG': 0, 'AGT': 0, 'AGC': 0, 'AGA': 0, 'AGG': 0,
         'GGT': 0, 'GGC': 0, 'GGA': 0, 'GGG': 0}
-        
+
         # this dictionary shows which codons encode the same AA
         self.SynonymousCodons = {}
 
