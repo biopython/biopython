@@ -13,10 +13,21 @@
 #    email    : krother@genesilico.pl
 #
 #
+# (c) 2016 Wiktoria Karwicka & Jacek Smietanski
+#   - updated and Python 3.x compatible code
+#   - new options to enable download PDBx/mmCif, PDBML and mmtf formatted
+#       files as well as large PDB bundles
+#   - unit tests for the module
+#
+# Contact the corresponding author
+#   homepage : http://jaceksmietanski.net
+#   email    : jacek.smietanski@ii.uj.edu.pl
+#
 # This code is released under the conditions of the Biopython license.
 # It may be distributed freely with respect to the original author.
 # Any maintainer of the Biopython code may change this notice
 # when appropriate.
+
 
 """ Access the PDB over the internet (e.g. to download structures). """
 
@@ -26,6 +37,7 @@ import contextlib
 import gzip
 import os
 import shutil
+import re
 
 # Importing these functions with leading underscore as not intended for reuse
 from Bio._py3k import urlopen as _urlopen
@@ -44,6 +56,15 @@ class PDBList(object):
     To use it properly, prepare a directory /pdb or the like,
     where PDB files are stored.
 
+    All available file formats (PDB, PDBx/mmCif, PDBML, mmtf) are supported.
+    Please note that large structures (containing >62 chains
+    and/or 99999 ATOM lines) are no longer stored as a single PDB file
+    and by default (when PDB format selected) are not downloaded.
+
+    Large structures can be downloaded in other formats, including PDBx/mmCif
+    or as a .tar file (a collection of PDB-like formatted files for a given
+    structure).
+
     If you want to use this module from inside a proxy, add
     the proxy variable to your environment, e.g. in Unix:
     export HTTP_PROXY='http://realproxy.charite.de:888'
@@ -56,9 +77,6 @@ class PDBList(object):
     J. Mol. Biol. 112 pp. 535-542 (1977)
     http://www.pdb.org/.
     """
-
-    alternative_download_url = "http://www.rcsb.org/pdb/files/"
-    # just append PDB code to this, and then it works.
 
     def __init__(self, server='ftp://ftp.wwpdb.org', pdb=os.getcwd(),
                  obsolete_pdb=None):
@@ -74,9 +92,8 @@ class PDBList(object):
             if not os.access(self.obsolete_pdb, os.F_OK):
                 os.makedirs(self.obsolete_pdb)
 
-        # variables for command-line options
-        self.overwrite = 0
-        self.flat_tree = 0
+        # variable for command-line option
+        self.flat_tree = False
 
     def get_status_list(self, url):
         """Retrieves a list of pdb codes in the weekly pdb status file
@@ -90,7 +107,7 @@ class PDBList(object):
             for line in handle:
                 pdb = line.strip()
                 assert len(pdb) == 4
-                answer.append(pdb)
+                answer.append(pdb.decode())
         return answer
 
     def get_recent_changes(self):
@@ -107,13 +124,7 @@ class PDBList(object):
         drwxrwxr-x   2 1002     sysadmin     512 Oct 14 02:14 20031013
         -rw-r--r--   1 1002     sysadmin    1327 Mar 12  2001 README
         """
-        url = self.pdb_server + '/pub/pdb/data/status/'
-        with contextlib.closing(_urlopen(url)) as handle:
-            recent = filter(str.isdigit,
-                            (x.split()[-1] for x in handle.readlines())
-                            )[-1]
-
-        path = self.pdb_server + '/pub/pdb/data/status/%s/' % (recent)
+        path = self.pdb_server + '/pub/pdb/data/status/latest/'
 
         # Retrieve the lists
         added = self.get_status_list(path + 'added.pdb')
@@ -126,8 +137,8 @@ class PDBList(object):
         PDB entries and some annotation to them.
         Returns a list of PDB codes in the index file.
         """
-        print("retrieving index file. Takes about 5 MB.")
         url = self.pdb_server + '/pub/pdb/derived_data/index/entries.idx'
+        print("Retrieving index file. Takes about 27 MB.")
         with contextlib.closing(_urlopen(url)) as handle:
             all_entries = [line[:4] for line in handle.readlines()[2:]
                            if len(line) > 4]
@@ -162,19 +173,42 @@ class PDBList(object):
             # to include an assert to check for mis-reading the data.
             obsolete = []
             for line in handle:
-                if not line.startswith("OBSLTE "):
+                if not line.startswith(b"OBSLTE "):
                     continue
                 pdb = line.split()[2]
                 assert len(pdb) == 4
                 obsolete.append(pdb)
         return obsolete
 
-    def retrieve_pdb_file(self, pdb_code, obsolete=False, pdir=None):
+    def retrieve_pdb_file(self, pdb_code, file_format='mmCif', overwrite=False, obsolete=False, pdir=None):
         """ Retrieves a PDB structure file from the PDB server and
         stores it in a local file tree.
 
         The PDB structure's file name is returned as a single string.
         If obsolete ``==`` True, the file will be saved in a special file tree.
+
+        @param pdb_code: 4-symbols structure Id from PDB (e.g. 3J92).
+        @type pdb_code: string
+
+        @param file_format: file format. Available options:
+            "mmCif" (default, PDBx/mmCif file),
+            "pdb" (format PDB),
+            "xml" (PDBML/XML format),
+            "mmtf" (highly compressed),
+            "bundle" (PDB formatted archive for large structure}
+
+        @param overwrite: if set to True, existing structure files will be overwritten. Default: False
+        @type overwrite: bool
+
+        @param obsolete: (default: False)
+            has a meaning only for obsolete structures. If True, download the obsolete structure
+            to 'obsolete' folder, otherwise download won't be performed.
+            This option doesn't work for mmtf format as obsoleted structures aren't stored in mmtf.
+            Also doesn't have meaning when parameter pdir is specified.
+
+            Note: make sure that you are about to download the really obsolete structure. Trying to download
+            non-obsolete structure into obsolete folder will not work and you face the "structure doesn't exists" error.
+        @type obsolete: bool
 
         @param pdir: put the file in this directory (default: create a PDB-style directory tree)
         @type pdir: string
@@ -182,13 +216,25 @@ class PDBList(object):
         @return: filename
         @rtype: string
         """
+
         # Get the compressed PDB structure
         code = pdb_code.lower()
-        archive_fn = "pdb%s.ent.gz" % code
-        pdb_dir = "divided" if not obsolete else "obsolete"
-        url = (self.pdb_server +
-               '/pub/pdb/data/structures/%s/pdb/%s/%s' %
-               (pdb_dir, code[1:3], archive_fn))
+        archive = {'pdb': 'pdb%s.ent.gz', 'mmCif': '%s.cif.gz', 'xml': '%s.xml.gz', 'mmtf': '%s',
+                   'bundle': '%s-pdb-bundle.tar.gz'}
+        archive_fn = archive[file_format] % code
+
+        if file_format not in archive.keys():
+            raise("Specified file_format %s doesn't exists or is not supported. Maybe a typo. "
+                  "Please, use one of the following: mmCif, pdb, xml, mmtf, bundle" % file_format)
+
+        if file_format in ('pdb', 'mmCif', 'xml'):
+            pdb_dir = "divided" if not obsolete else "obsolete"
+            file_type = "pdb" if file_format == "pdb" else "mmCIF" if file_format == "mmCif" else "XML"
+            url = (self.pdb_server + '/pub/pdb/data/structures/%s/%s/%s/%s' % (pdb_dir, file_type, code[1:3], archive_fn))
+        elif file_format == 'bundle':
+            url = (self.pdb_server + '/pub/pdb/compatible/pdb_bundle/%s/%s/%s' % (code[1:3], code, archive_fn))
+        else:
+            url = ('http://mmtf.rcsb.org/v1.0/full/%s' % code)
 
         # Where does the final PDB file get saved?
         if pdir is None:
@@ -199,31 +245,30 @@ class PDBList(object):
             path = pdir
         if not os.access(path, os.F_OK):
             os.makedirs(path)
-
         filename = os.path.join(path, archive_fn)
-        final_file = os.path.join(path, "pdb%s.ent" % code)  # (decompressed)
+        final = {'pdb': 'pdb%s.ent', 'mmCif': '%s.cif', 'xml': '%s.xml', 'mmtf': '%s.mmtf', 'bundle': '%s-pdb-bundle.tar'}
+        final_file = os.path.join(path, final[file_format] % code)
 
         # Skip download if the file already exists
-        if not self.overwrite:
+        if not overwrite:
             if os.path.exists(final_file):
                 print("Structure exists: '%s' " % final_file)
                 return final_file
 
         # Retrieve the file
         print("Downloading PDB structure '%s'..." % pdb_code)
-        _urlretrieve(url, filename)
-
-        # Uncompress the archive, delete when done
-        # Can't use context manager with gzip.open until Python 2.7
-        gz = gzip.open(filename, 'rb')
-        with open(final_file, 'wb') as out:
-            out.writelines(gz)
-        gz.close()
-        os.remove(filename)
-
+        try:
+            _urlretrieve(url, filename)
+        except IOError:
+            print("Desired structure doesn't exists")
+        else:
+            with gzip.open(filename, 'rb') as gz:
+                with open(final_file, 'wb') as out:
+                    out.writelines(gz)
+            os.remove(filename)
         return final_file
 
-    def update_pdb(self):
+    def update_pdb(self, file_format='mmCif'):
         """
         I guess this is the 'most wanted' function from this module.
         It gets the weekly lists of new and modified pdb entries and
@@ -237,7 +282,7 @@ class PDBList(object):
 
         for pdb_code in new + modified:
             try:
-                self.retrieve_pdb_file(pdb_code)
+                self.retrieve_pdb_file(pdb_code, file_format)
             except Exception:
                 print('error %s\n' % pdb_code)
                 # you can insert here some more log notes that
@@ -266,7 +311,41 @@ class PDBList(object):
             else:
                 print("Obsolete file %s is missing" % old_file)
 
-    def download_entire_pdb(self, listfile=None):
+    def download_pdb_files(self, pdb_codes, file_format='mmCif', overwrite=False, obsolete=False, pdir=None):
+        """ Retrieves a set of PDB structure files from the PDB server and stores them in a local file tree.
+
+        The PDB structure's file name is returned as a single string.
+        If obsolete ``==`` True, the files will be saved in a special file tree.
+
+        @param pdb_codes: a list of 4-symbols structure Ids from PDB
+        @type pdb_codes: list of strings
+
+        @param file_format: file format. Available options:
+            "mmCif" (default, PDBx/mmCif file),
+            "pdb" (format PDB),
+            "xml" (PMDML/XML format),
+            "mmtf" (highly compressed),
+            "bundle" (PDB formatted archive for large structure}
+
+        @param overwrite: if set to True, existing structure files will be overwritten. Default: False
+        @type overwrite: bool
+
+        @param obsolete: has a meaning only for obsolete structures. If True, download the obsolete structure
+            to 'obsolete' folder, otherwise download won't be performed.
+            This option doesn't work for mmtf format as obsoleted structures doesn't stored in mmtf.
+        (default: False)
+        @type obsolete: bool
+
+        @param pdir: put the file in this directory (default: create a PDB-style directory tree)
+        @type pdir: string
+
+        @return: filenames
+        @rtype: string
+        """
+        for pdb_code in pdb_codes:
+            self.retrieve_pdb_file(pdb_code, file_format, overwrite, obsolete, pdir)
+
+    def download_entire_pdb(self, file_format='mmCif', listfile=None):
         """Retrieve all PDB entries not present in the local PDB copy.
 
         Writes a list file containing all PDB codes (optional, if listfile is
@@ -274,13 +353,13 @@ class PDBList(object):
         """
         entries = self.get_all_entries()
         for pdb_code in entries:
-            self.retrieve_pdb_file(pdb_code)
+            self.retrieve_pdb_file(pdb_code, file_format)
         # Write the list
         if listfile:
             with open(listfile, 'w') as outfile:
                 outfile.writelines((x + '\n' for x in entries))
 
-    def download_obsolete_entries(self, listfile=None):
+    def download_obsolete_entries(self, file_format='mmCif', listfile=None):
         """Retrieve all obsolete PDB entries not present in the local obsolete
         PDB copy.
 
@@ -289,7 +368,7 @@ class PDBList(object):
         """
         entries = self.get_all_obsolete()
         for pdb_code in entries:
-            self.retrieve_pdb_file(pdb_code, obsolete=1)
+            self.retrieve_pdb_file(pdb_code, file_format, obsolete=True)
 
         # Write the list
         if listfile:
@@ -300,7 +379,7 @@ class PDBList(object):
         """Retrieves a (big) file containing all the sequences of PDB entries
         and writes it to a file.
         """
-        print("Retrieving sequence file (takes about 15 MB).")
+        print("Retrieving sequence file (takes over 110 MB).")
         url = self.pdb_server + '/pub/pdb/derived_data/pdb_seqres.txt'
         _urlretrieve(url, savefile)
 
@@ -310,7 +389,8 @@ if __name__ == '__main__':
     import sys
 
     doc = """PDBList.py
-    (c) Kristian Rother 2003, Contributed to BioPython
+    (c) Kristian Rother 2003, Wiktoria Karwicka & Jacek Smietanski 2016
+    Contributed to Biopython
 
     Usage:
     PDBList.py update <pdb_path> [options]   - write weekly PDB updates to
@@ -320,12 +400,24 @@ if __name__ == '__main__':
     PDBList.py obsol  <pdb_path> [options]   - write all obsolete PDB
                                                entries to local pdb tree.
     PDBList.py <PDB-ID> <pdb_path> [options] - retrieve single structure
+    PDBList.py (<PDB-ID1>,<PDB-ID2>,...) <pdb_path> [options] - retrieve a set
+                                               of structures
 
     Options:
-       -d   A single directory will be used as <pdb_path>, not a tree.
-       -o   Overwrite existing structure files.
+       -d       A single directory will be used as <pdb_path>, not a tree.
+       -o       Overwrite existing structure files.
+       -pdb     Downloads structures in PDB format
+       -xml     Downloads structures in PDBML (XML) format
+       -mmtf    Downloads structures in mmtf format
+
+    Maximum one format can be specified simultaneously (if more selected, only
+    the last will be considered). By default (no format specified) structures are
+    downloaded as PDBx/mmCif files.
     """
     print(doc)
+
+    file_format = "mmCif"
+    overwrite = False
 
     if len(sys.argv) > 2:
         pdb_path = sys.argv[2]
@@ -333,14 +425,15 @@ if __name__ == '__main__':
         if len(sys.argv) > 3:
             for option in sys.argv[3:]:
                 if option == '-d':
-                    pl.flat_tree = 1
+                    pl.flat_tree = True
                 elif option == '-o':
-                    pl.overwrite = 1
-
+                    overwrite = True
+                elif option in ('-pdb', '-xml', '-mmtf'):
+                    file_format = option[1:]
     else:
         pdb_path = os.getcwd()
         pl = PDBList()
-        pl.flat_tree = 1
+        pl.flat_tree = True
 
     if len(sys.argv) > 1:
         if sys.argv[1] == 'update':
@@ -358,4 +451,10 @@ if __name__ == '__main__':
 
         elif len(sys.argv[1]) == 4 and sys.argv[1][0].isdigit():
             # get single PDB entry
-            pl.retrieve_pdb_file(sys.argv[1], pdir=pdb_path)
+            pl.retrieve_pdb_file(sys.argv[1], file_format=file_format, overwrite=overwrite, pdir=pdb_path)
+
+        elif sys.argv[1][0] == '(':
+            # get a set of PDB entries
+            pdb_ids = re.findall(sys.argv[1], "[0-9A-Za-z]{4}")
+            for pdb_id in pdb_ids:
+                pl.retrieve_pdb_file(pdb_id, file_format=file_format, overwrite=overwrite, pdir=pdb_path)
