@@ -729,19 +729,26 @@ class GenBankWriter(_InsdcWriter):
         lines = []
         if "structured_comment" in record.annotations:
             comment = record.annotations["structured_comment"]
+            # Find max length of keys for equal padded printing
+            padding = 0
+            for key, data in comment.items():
+                for subkey, subdata in data.items():
+                    padding = len(subkey) if len(subkey) > padding else padding
+            # Construct output
             for key, data in comment.items():
                 lines.append("##{0}{1}".format(key, self.STRUCTURED_COMMENT_START))
                 for subkey, subdata in data.items():
-                    lines.append("{0}{1}{2}".format(subkey, self.STRUCTURED_COMMENT_DELIM, subdata))
+                    spaces = " " * (padding - len(subkey))
+                    lines.append("{0}{1}{2}{3}".format(subkey, spaces, self.STRUCTURED_COMMENT_DELIM, subdata))
                 lines.append("##{0}{1}".format(key, self.STRUCTURED_COMMENT_END))
-
-        comment = record.annotations["comment"]
-        if isinstance(comment, basestring):
-            lines += comment.split("\n")
-        elif isinstance(comment, (list, tuple)):
-            lines += list(comment)
-        else:
-            raise ValueError("Could not understand comment annotation")
+        if "comment" in record.annotations:
+            comment = record.annotations["comment"]
+            if isinstance(comment, basestring):
+                lines += comment.split("\n")
+            elif isinstance(comment, (list, tuple)):
+                lines += list(comment)
+            else:
+                raise ValueError("Could not understand comment annotation")
         self._write_multi_line("COMMENT", lines[0])
         for line in lines[1:]:
             self._write_multi_line("", line)
@@ -867,7 +874,7 @@ class GenBankWriter(_InsdcWriter):
         if "references" in record.annotations:
             self._write_references(record)
 
-        if "comment" in record.annotations:
+        if "comment" in record.annotations or "structured_comment" in record.annotations:
             self._write_comment(record)
 
         handle.write("FEATURES             Location/Qualifiers\n")
