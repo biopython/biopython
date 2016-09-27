@@ -30,7 +30,7 @@ from __future__ import print_function
 
 import warnings
 import re
-from collections import defaultdict
+from collections import OrderedDict
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Alphabet import generic_protein
@@ -1406,7 +1406,7 @@ class GenBankScanner(InsdcScanner):
                     del organism_data, lineage_data
                 elif line_type == 'COMMENT':
                     # A COMMENT can either be plain text or tabular (Structured Comment),
-                    # or contain both. Multiline comments are common. The code calls
+                    # or contain both. Multi-line comments are common. The code calls
                     # consumer.comment() once with a list where each entry
                     # is a line. If there's a structured comment consumer.structured_comment()
                     # is called with a dict of dicts where the secondary key/value pairs are
@@ -1418,11 +1418,11 @@ class GenBankScanner(InsdcScanner):
                     if self.debug > 1:
                         print("Found comment")
                     comment_list = []
-                    structured_comment_dict = defaultdict(dict)
-                    structured_comment_key = ''
+                    structured_comment_dict = OrderedDict()
+                    structured_comment_key = re.search(r"([^#]+){0}$".format(STRUCTURED_COMMENT_START), data)
 
-                    if STRUCTURED_COMMENT_START in data:
-                        structured_comment_key = re.search(r"([^#]+){0}$".format(STRUCTURED_COMMENT_START), data).group(1)
+                    if structured_comment_key is not None:
+                        structured_comment_key = structured_comment_key.group(1)
                         if self.debug > 1:
                             print("Found Structured Comment")
                     else:
@@ -1433,9 +1433,14 @@ class GenBankScanner(InsdcScanner):
                         data = line[GENBANK_INDENT:]
                         if line[0:GENBANK_INDENT] == GENBANK_SPACER:
                             if STRUCTURED_COMMENT_START in data:
-                                structured_comment_key = re.search(r"([^#]+){0}$".format(STRUCTURED_COMMENT_START), data).group(1)
+                                structured_comment_key = re.search(r"([^#]+){0}$".format(STRUCTURED_COMMENT_START), data)
+                                if structured_comment_key is not None:
+                                    structured_comment_key = structured_comment_key.group(1)
+                                else:
+                                    comment_list.append(data)
                             elif structured_comment_key is not None and STRUCTURED_COMMENT_DELIM in data:
                                 match = re.search(r"(.+?)\s*{0}\s*(.+)".format(STRUCTURED_COMMENT_DELIM), data)
+                                structured_comment_dict.setdefault(structured_comment_key, OrderedDict())
                                 structured_comment_dict[structured_comment_key][match.group(1)] = match.group(2)
                                 if self.debug > 2:
                                     print("Structured Comment continuation [" + data + "]")

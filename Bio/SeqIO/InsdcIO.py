@@ -439,6 +439,9 @@ class GenBankWriter(_InsdcWriter):
 
     HEADER_WIDTH = 12
     QUALIFIER_INDENT = 21
+    STRUCTURED_COMMENT_START = "-START##"
+    STRUCTURED_COMMENT_END = "-END##"
+    STRUCTURED_COMMENT_DELIM = " :: "
 
     def _write_single_line(self, tag, text):
         """Used in the 'header' of each GenBank record."""
@@ -723,11 +726,20 @@ class GenBankWriter(_InsdcWriter):
         # A list of lines is also reasonable.
         # A single (long) string is perhaps the most natural of all.
         # This means we may need to deal with line wrapping.
+        lines = []
+        if "structured_comment" in record.annotations:
+            comment = record.annotations["structured_comment"]
+            for key, data in comment.items():
+                lines.append("##{0}{1}".format(key, self.STRUCTURED_COMMENT_START))
+                for subkey, subdata in data.items():
+                    lines.append("{0}{1}{2}".format(subkey, self.STRUCTURED_COMMENT_DELIM, subdata))
+                lines.append("##{0}{1}".format(key, self.STRUCTURED_COMMENT_END))
+
         comment = record.annotations["comment"]
         if isinstance(comment, basestring):
-            lines = comment.split("\n")
+            lines += comment.split("\n")
         elif isinstance(comment, (list, tuple)):
-            lines = comment
+            lines += list(comment)
         else:
             raise ValueError("Could not understand comment annotation")
         self._write_multi_line("COMMENT", lines[0])
