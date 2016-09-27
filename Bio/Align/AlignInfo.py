@@ -38,10 +38,10 @@ class SummaryInfo(object):
     def __init__(self, alignment):
         """Initialize with the alignment to calculate information on.
 
-        ic_vector attribute. A dictionary. Keys: column numbers. Values:
+        ic_vector attribute. A list of ic content for each column number.
         """
         self.alignment = alignment
-        self.ic_vector = {}
+        self.ic_vector = []
 
     def dumb_consensus(self, threshold=.7, ambiguous="X",
                        consensus_alpha=None, require_multiple=0):
@@ -534,8 +534,10 @@ class SummaryInfo(object):
         # sum up the score
         total_info = sum(info_content.values())
         # fill in the ic_vector member: holds IC for each column
-        for i in info_content:
-            self.ic_vector[i] = info_content[i]
+        # reset ic_vector to empty list at each call
+        self.ic_vector = []
+        for (i,k) in enumerate(info_content):
+            self.ic_vector.append(info_content[i])
         return total_info
 
     def _get_letter_freqs(self, residue_num, all_records, letters, to_ignore,
@@ -746,6 +748,5 @@ def print_info_content(summary_info, fout=None, rep_record=0):
     if not summary_info.ic_vector:
         summary_info.information_content()
     rep_sequence = summary_info.alignment[rep_record].seq
-    for pos in sorted(summary_info.ic_vector):
-        fout.write("%d %s %.3f\n" % (pos, rep_sequence[pos],
-                                     summary_info.ic_vector[pos]))
+    for pos, ic in enumerate(summary_info.ic_vector):
+        fout.write("%d %s %.3f\n" % (pos, rep_sequence[pos], ic))
