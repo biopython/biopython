@@ -537,7 +537,7 @@ class SummaryInfo(object):
         # reset ic_vector to empty list at each call
         self.ic_vector = []
         for (i, k) in enumerate(info_content):
-            self.ic_vector.append(info_content[i])
+            self.ic_vector.append(info_content[i+start])
         return total_info
 
     def _get_letter_freqs(self, residue_num, all_records, letters, to_ignore,
