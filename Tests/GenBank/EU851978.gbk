@@ -1,4 +1,4 @@
-LOCUS       EU851978                1698 bp    cRNA    linear   VRL 24-OCT-2008
+LOCUS       EU851978                1698 bp    DNA     linear   VRL 24-OCT-2008
 DEFINITION  Influenza A virus (A/Wisconsin/36/2007(H1N1)) segment 4
             hemagglutinin (HA) gene, complete cds.
 ACCESSION   EU851978
@@ -23,38 +23,38 @@ COMMENT     ##FluData-START##
             ##FluData-END##
 FEATURES             Location/Qualifiers
      source          1..1698
-                     /organism="Influenza A virus (A/Wisconsin/36/2007(H1N1))"
-                     /mol_type="viral cRNA"
-                     /strain="A/Wisconsin/36/2007"
-                     /serotype="H1N1"
-                     /isolate="2008704957"
-                     /host="Homo sapiens"
-                     /db_xref="taxon:535875"
-                     /segment="4"
-                     /country="USA"
                      /collection_date="30-Dec-2007"
+                     /country="USA"
+                     /db_xref="taxon:535875"
+                     /host="Homo sapiens"
+                     /isolate="2008704957"
+                     /mol_type="viral cRNA"
+                     /organism="Influenza A virus (A/Wisconsin/36/2007(H1N1))"
+                     /segment="4"
+                     /serotype="H1N1"
+                     /strain="A/Wisconsin/36/2007"
      gene            1..1698
                      /gene="HA"
      CDS             1..1698
-                     /gene="HA"
                      /codon_start=1
+                     /db_xref="GI:193084887"
+                     /gene="HA"
                      /product="hemagglutinin"
                      /protein_id="ACF10333.1"
-                     /db_xref="GI:193084887"
-                     /translation="MKVKLLVLLCTFTATYADTICIGYHANNSTDTVDTVLEKNVTVT
-                     HSVNLLENSHNGKLCLLKGIAPLQLGNCSVAGWILGNPECELLISKESWSYIVEKPNP
-                     ENGTCYPGHFADYEELREQLSSVSSFERFEIFPKESSWPNHTVTGVSASCSHNGESSF
-                     YRNLLWLTGKNGLYPNLSKSYANNKEKEVLVLWGVHHPPNIGGQKALYHTENAYVSVV
-                     SSHYSRKFTPEIAKRPKVRDQEGRINYYWTLLEPGDTIIFEANGNLIAPRYAFALSRG
-                     FGSGIINSNAPMDKCDAKCQTPQGAINSSLPFQNVHPVTIGECPKYVRSAKLRMVTGL
-                     RNIPSIQSRGLFGAIAGFIEGGWTGMVDGWYGYHHQNEQGSGYAADQKSTQNAINGIT
-                     NKVNSVIEKMNTQFTAVGKEFNKLERRMENLNKKVDDGFIDIWTYNAELLVLLENERT
-                     LDFHDSNVKNLYEKVKSQLKNNAKEIGNGCFEFYHKCNDECMESVKNGTYDYPKYSEE
-                     SKLNREKIDGVKLESMGVYQILAIYSTVASSLVLLVSLGAISFWMCSNGSLQCRICI"
+                     /translation="MKVKLLVLLCTFTATYADTICIGYHANNSTDTVDTVLEKNVTVTH
+                     SVNLLENSHNGKLCLLKGIAPLQLGNCSVAGWILGNPECELLISKESWSYIVEKPNPEN
+                     GTCYPGHFADYEELREQLSSVSSFERFEIFPKESSWPNHTVTGVSASCSHNGESSFYRN
+                     LLWLTGKNGLYPNLSKSYANNKEKEVLVLWGVHHPPNIGGQKALYHTENAYVSVVSSHY
+                     SRKFTPEIAKRPKVRDQEGRINYYWTLLEPGDTIIFEANGNLIAPRYAFALSRGFGSGI
+                     INSNAPMDKCDAKCQTPQGAINSSLPFQNVHPVTIGECPKYVRSAKLRMVTGLRNIPSI
+                     QSRGLFGAIAGFIEGGWTGMVDGWYGYHHQNEQGSGYAADQKSTQNAINGITNKVNSVI
+                     EKMNTQFTAVGKEFNKLERRMENLNKKVDDGFIDIWTYNAELLVLLENERTLDFHDSNV
+                     KNLYEKVKSQLKNNAKEIGNGCFEFYHKCNDECMESVKNGTYDYPKYSEESKLNREKID
+                     GVKLESMGVYQILAIYSTVASSLVLLVSLGAISFWMCSNGSLQCRICI"
      misc_feature    1..1698
                      /gene="HA"
                      /note="ISDN306605"
-ORIGIN      
+ORIGIN
         1 atgaaagtaa aactactggt cctgttatgc acattcacag ctacatatgc agacacaata
        61 tgtataggct accatgctaa caactcgacc gacactgttg acacagtact tgaaaagaat
       121 gtgacagtga cacactctgt caacctgctt gagaacagtc acaatggaaa actatgtcta

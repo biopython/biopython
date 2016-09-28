@@ -1,4 +1,4 @@
-LOCUS       KF527485                1444 bp    cRNA    linear   VRL 02-OCT-2013
+LOCUS       KF527485                1444 bp    DNA     linear   VRL 02-OCT-2013
 DEFINITION  Influenza A virus (A/California/07/2009(H1N1)) segment 5
             nucleocapsid protein (NP) gene, partial cds.
 ACCESSION   KF527485
@@ -26,34 +26,34 @@ COMMENT     ##Assembly-Data-START##
             ##Assembly-Data-END##
 FEATURES             Location/Qualifiers
      source          1..1444
-                     /organism="Influenza A virus (A/California/07/2009(H1N1))"
-                     /mol_type="viral cRNA"
-                     /strain="A/California/07/2009"
-                     /serotype="H1N1"
-                     /host="Homo sapiens"
-                     /db_xref="taxon:641809"
-                     /segment="5"
-                     /country="USA"
                      /collection_date="09-Apr-2009"
+                     /country="USA"
+                     /db_xref="taxon:641809"
+                     /host="Homo sapiens"
+                     /mol_type="viral cRNA"
                      /note="passage details: MDCK 6"
+                     /organism="Influenza A virus (A/California/07/2009(H1N1))"
+                     /segment="5"
+                     /serotype="H1N1"
+                     /strain="A/California/07/2009"
      gene            <1..>1444
                      /gene="NP"
      CDS             <1..>1444
-                     /gene="NP"
                      /codon_start=2
+                     /db_xref="GI:537446969"
+                     /gene="NP"
                      /product="nucleocapsid protein"
                      /protein_id="AGU69828.1"
-                     /db_xref="GI:537446969"
-                     /translation="ASQGTKRSYEQMETGGERQDATEIRASVGRMIGGIGRFYIQMCT
-                     ELKLSDYDGRLIQNSITIERMVLSAFDERRNKYLEEHPSAGKDPKKTGGPIYRRVGGK
-                     WMRELILYDKEEIRRVWRQANNGEDATAGLTHIMIWHSNLNDATYQRTRALVRTGMDP
-                     RMCSLMQGSTLPRRSGAAGAAVKGVGTIAMELIRMIKRGINDRNFWRGENGRRTRVAY
-                     ERMCNILKGKFQTAAQRAMMDQVRESRNPGNAEIEDLIFLARSALILRGSVAHKSCLP
-                     ACVYGLAVASGHDFEREGYSLVGIDPFKLLQNSQVVSLMRPNENPAHKSQLVWMACHS
-                     AAFEDLRVSSFIRGKKVIPRGKLSTRGVQIASNENVETMDSNTLELRSRYWAIRTRSG
-                     GNTNQQKASAGQISVQPTFSVQRNLPFERATVMAAFSGNNEGRTSDMRTEVIRMMESA
-                     KPEDLSFQGRGVFELSDEKATNPIVPSFDMS"
-ORIGIN      
+                     /translation="ASQGTKRSYEQMETGGERQDATEIRASVGRMIGGIGRFYIQMCTE
+                     LKLSDYDGRLIQNSITIERMVLSAFDERRNKYLEEHPSAGKDPKKTGGPIYRRVGGKWM
+                     RELILYDKEEIRRVWRQANNGEDATAGLTHIMIWHSNLNDATYQRTRALVRTGMDPRMC
+                     SLMQGSTLPRRSGAAGAAVKGVGTIAMELIRMIKRGINDRNFWRGENGRRTRVAYERMC
+                     NILKGKFQTAAQRAMMDQVRESRNPGNAEIEDLIFLARSALILRGSVAHKSCLPACVYG
+                     LAVASGHDFEREGYSLVGIDPFKLLQNSQVVSLMRPNENPAHKSQLVWMACHSAAFEDL
+                     RVSSFIRGKKVIPRGKLSTRGVQIASNENVETMDSNTLELRSRYWAIRTRSGGNTNQQK
+                     ASAGQISVQPTFSVQRNLPFERATVMAAFSGNNEGRTSDMRTEVIRMMESAKPEDLSFQ
+                     GRGVFELSDEKATNPIVPSFDMS"
+ORIGIN
         1 ggcgtctcaa ggcaccaaac gatcatatga acaaatggag actggtgggg agcgccagga
        61 tgccacagaa atcagagcat ctgtcggaag aatgattggt ggaatcggga gattctacat
       121 ccaaatgtgc actgaactca aactcagtga ttatgatgga cgactaatcc agaatagcat
