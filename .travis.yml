@@ -39,6 +39,8 @@ addons:
     - emboss
     - mafft
     - muscle
+    - paml
+    - phyml
     - probcons
     - samtools
     - wise

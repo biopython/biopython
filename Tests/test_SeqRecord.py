@@ -8,16 +8,7 @@
 Initially this takes matched tests of GenBank and FASTA files from the NCBI
 and confirms they are consistent using our different parsers.
 """
-import sys
-# Remove unittest2 import after dropping support for Python2.6
-if sys.version_info < (2, 7):
-    try:
-        import unittest2 as unittest
-    except ImportError:
-        from Bio import MissingPythonDependencyError
-        raise MissingPythonDependencyError("Under Python 2.6 this test needs the unittest2 library")
-else:
-    import unittest
+import unittest
 
 from Bio import SeqIO
 from Bio.Alphabet import generic_dna, generic_protein
