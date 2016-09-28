@@ -65,7 +65,7 @@ class Record(object):
         Example:
 
         >>> import Bio.SwissProt as sp
-        >>> example_filename = "Tests/SwissProt/sp008"
+        >>> example_filename = "../../Tests/SwissProt/sp008"
         >>> with open(example_filename) as handle:
         ...     records = sp.parse(handle)
         ...     for record in records:
