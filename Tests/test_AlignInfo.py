@@ -15,10 +15,16 @@ from Bio.SeqRecord import SeqRecord
 from Bio import AlignIO
 from Bio.SubsMat.FreqTable import FreqTable, FREQ
 from Bio.Align.AlignInfo import SummaryInfo
+import math
 
 
 class AlignInfoTests(unittest.TestCase):
     """Test basic usage."""
+
+    def assertAlmostEqualList(self, list1, list2, **kwargs):
+        self.assertEqual(len(list1), len(list2))
+        for (v1, v2) in zip(list1, list2):
+            self.assertAlmostEqual(v1, v2, **kwargs)
 
     def test_nucleotides(self):
         filename = "GFF/multi.fna"
@@ -61,9 +67,9 @@ N  0.0 2.0 1.0 0.0
     def test_proteins(self):
         alpha = HasStopCodon(Gapped(generic_protein, "-"), "*")
         a = MultipleSeqAlignment([
-                SeqRecord(Seq("MHQAIFIYQIGYP*LKSGYIQSIRSPEYDNW-", alpha), id="ID001"),
-                SeqRecord(Seq("MH--IFIYQIGYAYLKSGYIQSIRSPEY-NW*", alpha), id="ID002"),
-                SeqRecord(Seq("MHQAIFIYQIGYPYLKSGYIQSIRSPEYDNW*", alpha), id="ID003")])
+            SeqRecord(Seq("MHQAIFIYQIGYP*LKSGYIQSIRSPEYDNW-", alpha), id="ID001"),
+            SeqRecord(Seq("MH--IFIYQIGYAYLKSGYIQSIRSPEY-NW*", alpha), id="ID002"),
+            SeqRecord(Seq("MHQAIFIYQIGYPYLKSGYIQSIRSPEYDNW*", alpha), id="ID003")])
         self.assertEqual(32, a.get_alignment_length())
 
         s = SummaryInfo(a)
@@ -112,6 +118,30 @@ X  0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0
 
         ic = s.information_content(chars_to_ignore=['-', '*'])
         self.assertAlmostEqual(ic, 133.061475107, places=6)
+
+    def test_pseudo_count(self):
+        # use example from
+        # http://biologie.univ-mrs.fr/upload/p202/01.4.PSSM_theory.pdf
+        alpha = unambiguous_dna
+        dna_align = MultipleSeqAlignment([
+            SeqRecord(Seq("AACCACGTTTAA", alpha), id="ID001"),
+            SeqRecord(Seq("CACCACGTGGGT", alpha), id="ID002"),
+            SeqRecord(Seq("CACCACGTTCGC", alpha), id="ID003"),
+            SeqRecord(Seq("GCGCACGTGGGG", alpha), id="ID004"),
+            SeqRecord(Seq("TCGCACGTTGTG", alpha), id="ID005"),
+            SeqRecord(Seq("TGGCACGTGTTT", alpha), id="ID006"),
+            SeqRecord(Seq("TGACACGTGGGA", alpha), id="ID007"),
+            SeqRecord(Seq("TTACACGTGCGC", alpha), id="ID008")])
+
+        summary = SummaryInfo(dna_align)
+        expected = FreqTable({"A": 0.325, "G": 0.175, "T": 0.325, "C": 0.175},
+                             FREQ, unambiguous_dna)
+        ic = summary.information_content(e_freq_table=expected,
+                                         log_base=math.exp(1),
+                                         pseudo_count=1)
+        self.assertAlmostEqualList(summary.ic_vector, [0.110, 0.090, 0.360, 1.290, 0.800,
+                                               1.290, 1.290, 0.80, 0.610, 0.390, 0.470, 0.040], places=2)
+        self.assertAlmostEqual(ic, 7.546, places=3)
 
 
 if __name__ == "__main__":
