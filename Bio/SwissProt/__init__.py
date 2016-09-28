@@ -62,24 +62,24 @@ class Record(object):
         - seqinfo           tuple of (length, molecular weight, CRC32 value)
         - sequence          The sequence.
 
-        Example:
+    Example:
 
-        >>> import Bio.SwissProt as sp
-        >>> example_filename = "../../Tests/SwissProt/sp008"
-        >>> with open(example_filename) as handle:
-        ...     records = sp.parse(handle)
-        ...     for record in records:
-        ...         print(record.entry_name)
-        ...         print(",".join(record.accessions))
-        ...         print(record.keywords)
-        ...         print(repr(record.organism))
-        ...         print(record.sequence[:20] + "...")
-        ...
-        1A02_HUMAN
-        P01892,P06338,P30514,P30444,P30445,P30446,Q29680,Q29899,Q95352,Q29837,Q95380
-        ['MHC I', 'Transmembrane', 'Glycoprotein', 'Signal', 'Polymorphism', '3D-structure']
-        'Homo sapiens (Human).'
-        MAVMAPRTLVLLLSGALALT...
+    >>> import Bio.SwissProt as sp
+    >>> example_filename = "../../Tests/SwissProt/sp008"
+    >>> with open(example_filename) as handle:
+    ...     records = sp.parse(handle)
+    ...     for record in records:
+    ...         print(record.entry_name)
+    ...         print(",".join(record.accessions))
+    ...         print(record.keywords)
+    ...         print(repr(record.organism))
+    ...         print(record.sequence[:20] + "...")
+    ...
+    1A02_HUMAN
+    P01892,P06338,P30514,P30444,P30445,P30446,Q29680,Q29899,Q95352,Q29837,Q95380
+    ['MHC I', 'Transmembrane', 'Glycoprotein', 'Signal', 'Polymorphism', '3D-structure']
+    'Homo sapiens (Human).'
+    MAVMAPRTLVLLLSGALALT...
 
     """
     def __init__(self):
