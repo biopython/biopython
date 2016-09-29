@@ -23,19 +23,19 @@ from Bio.GenBank import utils
 
 from Bio.Alphabet import _get_base_alphabet, ProteinAlphabet
 
-gb_file_dir = os.path.join(os.getcwd(), 'GenBank')
+gb_file_dir = os.path.join(os.getcwd(), "GenBank")
 
-test_files = ['noref.gb', 'cor6_6.gb', 'iro.gb', 'pri1.gb', 'arab1.gb',
-              'protein_refseq.gb', 'extra_keywords.gb', 'one_of.gb',
-              'NT_019265.gb', 'origin_line.gb', 'blank_seq.gb',
-              'dbsource_wrap.gb', 'gbvrl1_start.seq', 'NC_005816.gb',
-              'no_end_marker.gb', 'wrong_sequence_indent.gb',
-              'invalid_locus_line_spacing.gb', 'empty_feature_qualifier.gb',
-              'invalid_misc_feature.gb', '1MRR_A.gp']
+test_files = ["noref.gb", "cor6_6.gb", "iro.gb", "pri1.gb", "arab1.gb",
+              "protein_refseq.gb", "extra_keywords.gb", "one_of.gb",
+              "NT_019265.gb", "origin_line.gb", "blank_seq.gb",
+              "dbsource_wrap.gb", "gbvrl1_start.seq", "NC_005816.gb",
+              "no_end_marker.gb", "wrong_sequence_indent.gb",
+              "invalid_locus_line_spacing.gb", "empty_feature_qualifier.gb",
+              "invalid_misc_feature.gb", "1MRR_A.gp"]
 
 # We only test writing on a subset of the examples:
-write_format_files = ['noref.gb', 'cor6_6.gb', 'iro.gb', 'pri1.gb', 'arab1.gb',
-                      'extra_keywords.gb', 'one_of.gb', 'origin_line.gb']
+write_format_files = ["noref.gb", "cor6_6.gb", "iro.gb", "pri1.gb", "arab1.gb",
+                      "extra_keywords.gb", "one_of.gb", "origin_line.gb"]
 # don't test writing on protein_refseq, since it is horribly nasty
 # don't test writing on the CONTIG refseq, because the wrapping of
 # locations won't work exactly
@@ -49,10 +49,10 @@ for file in test_files:
 # parse the bioperl test files
 # comment this out for now -- there are a bunch of junky records in here
 # that no longer exist in GenBank -- do we really need to support those?
-# files_to_parse = [os.path.join(os.getcwd(), 'GenBank', 'bioperl_test.gb')]
+# files_to_parse = [os.path.join(os.getcwd(), "GenBank", "bioperl_test.gb")]
 
 # parse the biojava test files
-# files_to_parse += [os.path.join(os.getcwd(), 'GenBank', 'biojava_test.gb')]
+# files_to_parse += [os.path.join(os.getcwd(), "GenBank", "biojava_test.gb")]
 
 # test the parsers
 feat_parser = GenBank.FeatureParser(debug_level=0)
@@ -66,7 +66,7 @@ for parser in all_parsers:
             print("Missing test input file: %s" % filename)
             continue
 
-        ifile = open(filename, 'r')
+        ifile = open(filename, "r")
         gb_iterator = GenBank.Iterator(ifile, parser)
 
         while True:
@@ -88,7 +88,7 @@ for parser in all_parsers:
                 print("Annotations***")
                 ann_keys = sorted(cur_record.annotations)
                 for ann_key in ann_keys:
-                    if ann_key != 'references':
+                    if ann_key != "references":
                         print("Key: %s" % ann_key)
                         print("Value: %s" %
                               cur_record.annotations[ann_key])
@@ -148,8 +148,8 @@ def do_comparison(good_record, test_record):
             raise AssertionError("Extra info in Test: %r" % test_line)
         if not test_line:
             raise AssertionError("Extra info in Expected: %r" % good_line)
-        test_normalized = ' '.join(x for x in test_line.split() if x)
-        good_normalized = ' '.join(x for x in good_line.split() if x)
+        test_normalized = " ".join(x for x in test_line.split() if x)
+        good_normalized = " ".join(x for x in good_line.split() if x)
         assert test_normalized == good_normalized, \
             "Expected does not match Test.\nExpect: %r\nTest:   %r\n" % (good_line, test_line)
 
@@ -195,8 +195,8 @@ def t_cleaning_features():
     # test for cleaning of translation
     translation_feature = first_record.features[1]
     test_trans = translation_feature.qualifiers["translation"][0]
-    assert ' ' not in test_trans, "Did not clean spaces out of the translation"
-    assert '\012' not in test_trans, "Did not clean newlines out of the translation"
+    assert " " not in test_trans, "Did not clean spaces out of the translation"
+    assert "\012" not in test_trans, "Did not clean newlines out of the translation"
 
     handle.close()
 
