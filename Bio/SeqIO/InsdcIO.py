@@ -353,8 +353,8 @@ class _InsdcWriter(SequentialSequenceWriter):
         assert feature.type, feature
         location = _insdc_location_string(feature.location, record_length)
         f_type = feature.type.replace(" ", "_")
-        line = (self.QUALIFIER_INDENT_TMP % f_type)[:self.QUALIFIER_INDENT] \
-               + self._wrap_location(location) + "\n"
+        line = "%s%s\n" % ((self.QUALIFIER_INDENT_TMP % f_type)[:self.QUALIFIER_INDENT],
+                           self._wrap_location(location))
         self.handle.write(line)
         # Now the qualifiers...
         for key in sorted(feature.qualifiers.keys()):
@@ -366,7 +366,8 @@ class _InsdcWriter(SequentialSequenceWriter):
                 # String, int, etc - or None for a /pseudo tpy entry
                 self._write_feature_qualifier(key, values)
 
-    def _get_annotation_str(self, record, key, default=".", just_first=False):
+    @staticmethod
+    def _get_annotation_str(record, key, default=".", just_first=False):
         """Get an annotation dictionary entry (as a string).
 
         Some entries are lists, in which case if just_first=True the first entry
@@ -383,7 +384,8 @@ class _InsdcWriter(SequentialSequenceWriter):
         else:
             return str(answer)
 
-    def _split_multi_line(self, text, max_len):
+    @staticmethod
+    def _split_multi_line(text, max_len):
         """Returns a list of strings.
 
         Any single words which are too long get returned as a whole line
@@ -439,6 +441,11 @@ class GenBankWriter(_InsdcWriter):
 
     HEADER_WIDTH = 12
     QUALIFIER_INDENT = 21
+    STRUCTURED_COMMENT_START = "-START##"
+    STRUCTURED_COMMENT_END = "-END##"
+    STRUCTURED_COMMENT_DELIM = " :: "
+    LETTERS_PER_LINE = 60
+    SEQUENCE_INDENT = 9
 
     def _write_single_line(self, tag, text):
         """Used in the 'header' of each GenBank record."""
@@ -471,7 +478,8 @@ class GenBankWriter(_InsdcWriter):
             else:
                 self._write_single_line("", text)
 
-    def _get_date(self, record):
+    @staticmethod
+    def _get_date(record):
         default = "01-JAN-1980"
         try:
             date = record.annotations["date"]
@@ -491,7 +499,8 @@ class GenBankWriter(_InsdcWriter):
             return default
         return date
 
-    def _get_data_division(self, record):
+    @staticmethod
+    def _get_data_division(record):
         try:
             division = record.annotations["data_file_division"]
         except KeyError:
@@ -723,13 +732,29 @@ class GenBankWriter(_InsdcWriter):
         # A list of lines is also reasonable.
         # A single (long) string is perhaps the most natural of all.
         # This means we may need to deal with line wrapping.
-        comment = record.annotations["comment"]
-        if isinstance(comment, basestring):
-            lines = comment.split("\n")
-        elif isinstance(comment, (list, tuple)):
-            lines = comment
-        else:
-            raise ValueError("Could not understand comment annotation")
+        lines = []
+        if "structured_comment" in record.annotations:
+            comment = record.annotations["structured_comment"]
+            # Find max length of keys for equal padded printing
+            padding = 0
+            for key, data in comment.items():
+                for subkey, subdata in data.items():
+                    padding = len(subkey) if len(subkey) > padding else padding
+            # Construct output
+            for key, data in comment.items():
+                lines.append("##{0}{1}".format(key, self.STRUCTURED_COMMENT_START))
+                for subkey, subdata in data.items():
+                    spaces = " " * (padding - len(subkey))
+                    lines.append("{0}{1}{2}{3}".format(subkey, spaces, self.STRUCTURED_COMMENT_DELIM, subdata))
+                lines.append("##{0}{1}".format(key, self.STRUCTURED_COMMENT_END))
+        if "comment" in record.annotations:
+            comment = record.annotations["comment"]
+            if isinstance(comment, basestring):
+                lines += comment.split("\n")
+            elif isinstance(comment, (list, tuple)):
+                lines += list(comment)
+            else:
+                raise ValueError("Could not understand comment annotation")
         self._write_multi_line("COMMENT", lines[0])
         for line in lines[1:]:
             self._write_multi_line("", line)
@@ -744,9 +769,6 @@ class GenBankWriter(_InsdcWriter):
     def _write_sequence(self, record):
         # Loosely based on code from Howard Salis
         # TODO - Force lower case?
-        LETTERS_PER_LINE = 60
-        SEQUENCE_INDENT = 9
-
         if isinstance(record.seq, UnknownSeq):
             # We have already recorded the length, and there is no need
             # to record a long sequence of NNNNNNN...NNN or whatever.
@@ -760,10 +782,10 @@ class GenBankWriter(_InsdcWriter):
         data = self._get_seq_string(record).lower()
         seq_len = len(data)
         self.handle.write("ORIGIN\n")
-        for line_number in range(0, seq_len, LETTERS_PER_LINE):
-            self.handle.write(str(line_number + 1).rjust(SEQUENCE_INDENT))
+        for line_number in range(0, seq_len, self.LETTERS_PER_LINE):
+            self.handle.write(str(line_number + 1).rjust(self.SEQUENCE_INDENT))
             for words in range(line_number,
-                               min(line_number + LETTERS_PER_LINE, seq_len), 10):
+                               min(line_number + self.LETTERS_PER_LINE, seq_len), 10):
                 self.handle.write(" %s" % data[words:words + 10])
             self.handle.write("\n")
 
@@ -806,7 +828,7 @@ class GenBankWriter(_InsdcWriter):
             self._write_single_line("VERSION", "%s  GI:%s"
                                     % (acc_with_version, gi))
         else:
-            self._write_single_line("VERSION", "%s" % (acc_with_version))
+            self._write_single_line("VERSION", "%s" % acc_with_version)
 
         # The NCBI only expect two types of link so far,
         # e.g. "Project:28471" and "Trace Assembly Archive:123456"
@@ -855,7 +877,7 @@ class GenBankWriter(_InsdcWriter):
         if "references" in record.annotations:
             self._write_references(record)
 
-        if "comment" in record.annotations:
+        if "comment" in record.annotations or "structured_comment" in record.annotations:
             self._write_comment(record)
 
         handle.write("FEATURES             Location/Qualifiers\n")
@@ -874,6 +896,10 @@ class EmblWriter(_InsdcWriter):
     QUALIFIER_INDENT_STR = "FT" + " " * (QUALIFIER_INDENT - 2)
     QUALIFIER_INDENT_TMP = "FT   %s                "  # 21 if %s is empty
     FEATURE_HEADER = "FH   Key             Location/Qualifiers\n"
+    LETTERS_PER_BLOCK = 10
+    BLOCKS_PER_LINE = 6
+    LETTERS_PER_LINE = LETTERS_PER_BLOCK * BLOCKS_PER_LINE
+    POSITION_PADDING = 10
 
     def _write_contig(self, record):
         max_len = self.MAX_WIDTH - self.HEADER_WIDTH
@@ -882,10 +908,6 @@ class EmblWriter(_InsdcWriter):
             self._write_single_line("CO", text)
 
     def _write_sequence(self, record):
-        LETTERS_PER_BLOCK = 10
-        BLOCKS_PER_LINE = 6
-        LETTERS_PER_LINE = LETTERS_PER_BLOCK * BLOCKS_PER_LINE
-        POSITION_PADDING = 10
         handle = self.handle  # save looking up this multiple times
 
         if isinstance(record.seq, UnknownSeq):
@@ -916,25 +938,25 @@ class EmblWriter(_InsdcWriter):
         else:
             handle.write("SQ   \n")
 
-        for line_number in range(0, seq_len // LETTERS_PER_LINE):
+        for line_number in range(0, seq_len // self.LETTERS_PER_LINE):
             handle.write("    ")  # Just four, not five
-            for block in range(BLOCKS_PER_LINE):
-                index = LETTERS_PER_LINE * line_number + \
-                    LETTERS_PER_BLOCK * block
-                handle.write((" %s" % data[index:index + LETTERS_PER_BLOCK]))
+            for block in range(self.BLOCKS_PER_LINE):
+                index = self.LETTERS_PER_LINE * line_number + \
+                    self.LETTERS_PER_BLOCK * block
+                handle.write((" %s" % data[index:index + self.LETTERS_PER_BLOCK]))
             handle.write(str((line_number + 1) *
-                             LETTERS_PER_LINE).rjust(POSITION_PADDING))
+                             self.LETTERS_PER_LINE).rjust(self.POSITION_PADDING))
             handle.write("\n")
-        if seq_len % LETTERS_PER_LINE:
+        if seq_len % self.LETTERS_PER_LINE:
             # Final (partial) line
-            line_number = (seq_len // LETTERS_PER_LINE)
+            line_number = (seq_len // self.LETTERS_PER_LINE)
             handle.write("    ")  # Just four, not five
-            for block in range(BLOCKS_PER_LINE):
-                index = LETTERS_PER_LINE * line_number + \
-                    LETTERS_PER_BLOCK * block
+            for block in range(self.BLOCKS_PER_LINE):
+                index = self.LETTERS_PER_LINE * line_number + \
+                    self.LETTERS_PER_BLOCK * block
                 handle.write(
-                    (" %s" % data[index:index + LETTERS_PER_BLOCK]).ljust(11))
-            handle.write(str(seq_len).rjust(POSITION_PADDING))
+                    (" %s" % data[index:index + self.LETTERS_PER_BLOCK]).ljust(11))
+            handle.write(str(seq_len).rjust(self.POSITION_PADDING))
             handle.write("\n")
 
     def _write_single_line(self, tag, text):
@@ -1012,7 +1034,8 @@ class EmblWriter(_InsdcWriter):
         self._write_single_line("AC", accession + ";")
         handle.write("XX\n")
 
-    def _get_data_division(self, record):
+    @staticmethod
+    def _get_data_division(record):
         try:
             division = record.annotations["data_file_division"]
         except KeyError:
