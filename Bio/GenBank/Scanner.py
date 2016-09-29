@@ -352,7 +352,7 @@ class InsdcScanner(object):
             if line == "//":
                 break
         self.line = line
-        return ([], "")  # Dummy values!
+        return [], ""  # Dummy values!
 
     def _feed_first_line(self, consumer, line):
         """Handle the LOCUS/ID line, passing data to the comsumer
@@ -372,7 +372,8 @@ class InsdcScanner(object):
         """
         pass
 
-    def _feed_feature_table(self, consumer, feature_tuples):
+    @staticmethod
+    def _feed_feature_table(consumer, feature_tuples):
         """Handle the feature table (list of tuples), passing data to the comsumer
 
         Used by the parse_records() and parse() methods.
@@ -712,7 +713,8 @@ class EmblScanner(InsdcScanner):
 
         self._feed_seq_length(consumer, fields[6])
 
-    def _feed_seq_length(self, consumer, text):
+    @staticmethod
+    def _feed_seq_length(consumer, text):
         length_parts = text.split()
         assert len(length_parts) == 2, "Invalid sequence length string %r" % text
         assert length_parts[1].upper() in ["BP", "BP.", "AA", "AA."]
