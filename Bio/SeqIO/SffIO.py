@@ -15,7 +15,7 @@ the format name "sff" (or "sff-trim" as described below).
 For example, to iterate over the records in an SFF file,
 
     >>> from Bio import SeqIO
-    >>> for record in SeqIO.parse("Roche/E3MFGYR02_random_10_reads.sff", "sff"):
+    >>> for record in SeqIO.parse("../../Tests/Roche/E3MFGYR02_random_10_reads.sff", "sff"):
     ...     print("%s %i %s..." % (record.id, len(record), record.seq[:20]))
     ...
     E3MFGYR02JWQ7T 265 tcagGGTCTACATGTTGGTT...
@@ -97,7 +97,7 @@ instead of "sff" to get just the trimmed sequences (without any annotation
 except for the PHRED quality scores and anything encoded in the read names):
 
     >>> from Bio import SeqIO
-    >>> for record in SeqIO.parse("Roche/E3MFGYR02_random_10_reads.sff", "sff-trim"):
+    >>> for record in SeqIO.parse("../../Tests/Roche/E3MFGYR02_random_10_reads.sff", "sff-trim"):
     ...     print("%s %i %s..." % (record.id, len(record), record.seq[:20]))
     ...
     E3MFGYR02JWQ7T 260 GGTCTACATGTTGGTTAACC...
@@ -139,7 +139,7 @@ reads into a FASTQ file (or a FASTA file and a QUAL file), e.g.
     ...     from io import StringIO # Python 3
     ...
     >>> out_handle = StringIO()
-    >>> count = SeqIO.convert("Roche/E3MFGYR02_random_10_reads.sff", "sff",
+    >>> count = SeqIO.convert("../../Tests/Roche/E3MFGYR02_random_10_reads.sff", "sff",
     ...                       out_handle, "fastq")
     ...
     >>> print("Converted %i records" % count)
@@ -158,7 +158,7 @@ yet supported in Biopython) the file is indexed by scanning all the reads -
 which is a little slower. For example,
 
     >>> from Bio import SeqIO
-    >>> reads = SeqIO.index("Roche/E3MFGYR02_random_10_reads.sff", "sff")
+    >>> reads = SeqIO.index("../../Tests/Roche/E3MFGYR02_random_10_reads.sff", "sff")
     >>> record = reads["E3MFGYR02JHD4H"]
     >>> print("%s %i %s..." % (record.id, len(record), record.seq[:20]))
     E3MFGYR02JHD4H 310 tcagAAAGACAAGTGGTATC...
@@ -167,7 +167,7 @@ which is a little slower. For example,
 Or, using the trimmed reads:
 
     >>> from Bio import SeqIO
-    >>> reads = SeqIO.index("Roche/E3MFGYR02_random_10_reads.sff", "sff-trim")
+    >>> reads = SeqIO.index("../../Tests/Roche/E3MFGYR02_random_10_reads.sff", "sff-trim")
     >>> record = reads["E3MFGYR02JHD4H"]
     >>> print("%s %i %s..." % (record.id, len(record), record.seq[:20]))
     E3MFGYR02JHD4H 292 AAAGACAAGTGGTATCAACG...
@@ -186,7 +186,7 @@ degenerate bit of this pretend primer):
 
     >>> from Bio import SeqIO
     >>> records = (record for record in
-    ...            SeqIO.parse("Roche/E3MFGYR02_random_10_reads.sff", "sff")
+    ...            SeqIO.parse("../../Tests/Roche/E3MFGYR02_random_10_reads.sff", "sff")
     ...            if record.seq[record.annotations["clip_qual_left"]:].startswith("AAAGA"))
     ...
     >>> count = SeqIO.write(records, "temp_filtered.sff", "sff")
@@ -205,7 +205,7 @@ is just to adjust the left clip position!
     ...             record.annotations["clip_qual_left"] += len(primer)
     ...             yield record
     ...
-    >>> records = SeqIO.parse("Roche/E3MFGYR02_random_10_reads.sff", "sff")
+    >>> records = SeqIO.parse("../../Tests/Roche/E3MFGYR02_random_10_reads.sff", "sff")
     >>> count = SeqIO.write(filter_and_trim(records, "AAAGA"),
     ...                     "temp_filtered.sff", "sff")
     ...
@@ -284,8 +284,8 @@ def _sff_file_header(handle):
     Returns a tuple of values from the header (header_length, index_offset,
     index_length, number_of_reads, flows_per_read, flow_chars, key_sequence)
 
-    >>> with open("Roche/greek.sff", "rb") as handle:
-    ...     values = _sff_file_header(handle)
+    >>> with open("../../Tests/Roche/greek.sff", "rb") as handle:
+    ...    values = _sff_file_header(handle)
     ...
     >>> print(values[0])
     840
@@ -839,7 +839,7 @@ def SffIterator(handle, alphabet=Alphabet.generic_dna, trim=False):
     This function is used internally via the Bio.SeqIO functions:
 
     >>> from Bio import SeqIO
-    >>> for record in SeqIO.parse("Roche/E3MFGYR02_random_10_reads.sff", "sff"):
+    >>> for record in SeqIO.parse("../../Tests/Roche/E3MFGYR02_random_10_reads.sff", "sff"):
     ...     print("%s %i" % (record.id, len(record)))
     ...
     E3MFGYR02JWQ7T 265
@@ -855,7 +855,7 @@ def SffIterator(handle, alphabet=Alphabet.generic_dna, trim=False):
 
     You can also call it directly:
 
-    >>> with open("Roche/E3MFGYR02_random_10_reads.sff", "rb") as handle:
+    >>> with open("../../Tests/Roche/E3MFGYR02_random_10_reads.sff", "rb") as handle:
     ...     for record in SffIterator(handle):
     ...         print("%s %i" % (record.id, len(record)))
     ...
@@ -872,7 +872,7 @@ def SffIterator(handle, alphabet=Alphabet.generic_dna, trim=False):
 
     Or, with the trim option:
 
-    >>> with open("Roche/E3MFGYR02_random_10_reads.sff", "rb") as handle:
+    >>> with open("../../Tests/Roche/E3MFGYR02_random_10_reads.sff", "rb") as handle:
     ...     for record in SffIterator(handle, trim=True):
     ...         print("%s %i" % (record.id, len(record)))
     ...
@@ -1305,91 +1305,93 @@ class SffWriter(SequenceWriter):
 
 
 if __name__ == "__main__":
-    print("Running quick self test")
-    filename = "../../Tests/Roche/E3MFGYR02_random_10_reads.sff"
-    with open(filename, "rb") as handle:
-        metadata = ReadRocheXmlManifest(handle)
-
-    from io import BytesIO
-
-    with open(filename, "rb") as handle:
-        sff = list(SffIterator(handle))
-    with open(filename, "rb") as handle:
-        sff_trim = list(SffIterator(handle, trim=True))
-
-    from Bio import SeqIO
-    filename = "../../Tests/Roche/E3MFGYR02_random_10_reads_no_trim.fasta"
-    fasta_no_trim = list(SeqIO.parse(filename, "fasta"))
-    filename = "../../Tests/Roche/E3MFGYR02_random_10_reads_no_trim.qual"
-    qual_no_trim = list(SeqIO.parse(filename, "qual"))
-
-    filename = "../../Tests/Roche/E3MFGYR02_random_10_reads.fasta"
-    fasta_trim = list(SeqIO.parse(filename, "fasta"))
-    filename = "../../Tests/Roche/E3MFGYR02_random_10_reads.qual"
-    qual_trim = list(SeqIO.parse(filename, "qual"))
-
-    for s, sT, f, q, fT, qT in zip(sff, sff_trim, fasta_no_trim,
-                                   qual_no_trim, fasta_trim, qual_trim):
-        # print("")
-        print(s.id)
-        # print(s.seq)
-        # print(s.letter_annotations["phred_quality"])
-
-        assert s.id == f.id == q.id
-        assert str(s.seq) == str(f.seq)
-        assert s.letter_annotations[
-            "phred_quality"] == q.letter_annotations["phred_quality"]
-
-        assert s.id == sT.id == fT.id == qT.id
-        assert str(sT.seq) == str(fT.seq)
-        assert sT.letter_annotations[
-            "phred_quality"] == qT.letter_annotations["phred_quality"]
-
-    print("Writing with a list of SeqRecords...")
-    handle = BytesIO()
-    w = SffWriter(handle, xml=metadata)
-    w.write_file(sff)  # list
-    data = handle.getvalue()
-    print("And again with an iterator...")
-    handle = BytesIO()
-    w = SffWriter(handle, xml=metadata)
-    w.write_file(iter(sff))
-    assert data == handle.getvalue()
-    # Check 100% identical to the original:
-    filename = "../../Tests/Roche/E3MFGYR02_random_10_reads.sff"
-    with open(filename, "rb") as handle:
-        original = handle.read()
-        assert len(data) == len(original)
-        assert data == original
-        del data
-
-    print("-" * 50)
-    filename = "../../Tests/Roche/greek.sff"
-    with open(filename, "rb") as handle:
-        for record in SffIterator(handle):
-            print(record.id)
-    with open(filename, "rb") as handle:
-        index1 = sorted(_sff_read_roche_index(handle))
-    with open(filename, "rb") as handle:
-        index2 = sorted(_sff_do_slow_index(handle))
-    assert index1 == index2
-    try:
-        with open(filename, "rb") as handle:
-            print(ReadRocheXmlManifest(handle))
-        assert False, "Should fail!"
-    except ValueError:
-        pass
-
-    with open(filename, "rb") as handle:
-        for record in SffIterator(handle):
-            pass
-        try:
-            for record in SffIterator(handle):
-                print(record.id)
-            assert False, "Should have failed"
-        except ValueError as err:
-            print("Checking what happens on re-reading a handle:")
-            print(err)
+    from Bio._utils import run_doctest
+    run_doctest(verbose=0)
+    # print("Running quick self test")
+    # filename = "../../Tests/Roche/E3MFGYR02_random_10_reads.sff"
+    # with open(filename, "rb") as handle:
+    #     metadata = ReadRocheXmlManifest(handle)
+    #
+    # from io import BytesIO
+    #
+    # with open(filename, "rb") as handle:
+    #     sff = list(SffIterator(handle))
+    # with open(filename, "rb") as handle:
+    #     sff_trim = list(SffIterator(handle, trim=True))
+    #
+    # from Bio import SeqIO
+    # filename = "../../Tests/Roche/E3MFGYR02_random_10_reads_no_trim.fasta"
+    # fasta_no_trim = list(SeqIO.parse(filename, "fasta"))
+    # filename = "../../Tests/Roche/E3MFGYR02_random_10_reads_no_trim.qual"
+    # qual_no_trim = list(SeqIO.parse(filename, "qual"))
+    #
+    # filename = "../../Tests/Roche/E3MFGYR02_random_10_reads.fasta"
+    # fasta_trim = list(SeqIO.parse(filename, "fasta"))
+    # filename = "../../Tests/Roche/E3MFGYR02_random_10_reads.qual"
+    # qual_trim = list(SeqIO.parse(filename, "qual"))
+    #
+    # for s, sT, f, q, fT, qT in zip(sff, sff_trim, fasta_no_trim,
+    #                                qual_no_trim, fasta_trim, qual_trim):
+    #     # print("")
+    #     print(s.id)
+    #     # print(s.seq)
+    #     # print(s.letter_annotations["phred_quality"])
+    #
+    #     assert s.id == f.id == q.id
+    #     assert str(s.seq) == str(f.seq)
+    #     assert s.letter_annotations[
+    #         "phred_quality"] == q.letter_annotations["phred_quality"]
+    #
+    #     assert s.id == sT.id == fT.id == qT.id
+    #     assert str(sT.seq) == str(fT.seq)
+    #     assert sT.letter_annotations[
+    #         "phred_quality"] == qT.letter_annotations["phred_quality"]
+    #
+    # print("Writing with a list of SeqRecords...")
+    # handle = BytesIO()
+    # w = SffWriter(handle, xml=metadata)
+    # w.write_file(sff)  # list
+    # data = handle.getvalue()
+    # print("And again with an iterator...")
+    # handle = BytesIO()
+    # w = SffWriter(handle, xml=metadata)
+    # w.write_file(iter(sff))
+    # assert data == handle.getvalue()
+    # # Check 100% identical to the original:
+    # filename = "../../Tests/Roche/E3MFGYR02_random_10_reads.sff"
+    # with open(filename, "rb") as handle:
+    #     original = handle.read()
+    #     assert len(data) == len(original)
+    #     assert data == original
+    #     del data
+    #
+    # print("-" * 50)
+    # filename = "../../Tests/Roche/greek.sff"
+    # with open(filename, "rb") as handle:
+    #     for record in SffIterator(handle):
+    #         print(record.id)
+    # with open(filename, "rb") as handle:
+    #     index1 = sorted(_sff_read_roche_index(handle))
+    # with open(filename, "rb") as handle:
+    #     index2 = sorted(_sff_do_slow_index(handle))
+    # assert index1 == index2
+    # try:
+    #     with open(filename, "rb") as handle:
+    #         print(ReadRocheXmlManifest(handle))
+    #     assert False, "Should fail!"
+    # except ValueError:
+    #     pass
+    #
+    # with open(filename, "rb") as handle:
+    #     for record in SffIterator(handle):
+    #         pass
+    #     try:
+    #         for record in SffIterator(handle):
+    #             print(record.id)
+    #         assert False, "Should have failed"
+    #     except ValueError as err:
+    #         print("Checking what happens on re-reading a handle:")
+    #         print(err)
 
     """
     # Ugly code to make test files...
