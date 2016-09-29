@@ -500,19 +500,21 @@ class SeqFeatureCreation(unittest.TestCase):
         """
         f = SeqFeature(FeatureLocation(10, 20), strand=+1, type="CDS")
         self.assertEqual(f.qualifiers, {})
-        f = SeqFeature(FeatureLocation(10, 20), strand=+1, type="CDS", qualifiers={"test": ["a test"]})
+        f = SeqFeature(FeatureLocation(10, 20), strand=+1, type="CDS",
+                       qualifiers={"test": ["a test"]})
         self.assertEqual(f.qualifiers["test"], ["a test"])
 
 
 class FeatureWriting(unittest.TestCase):
     def setUp(self):
-        self.record = SeqRecord(Seq("ACGT" * 100, generic_dna), id="Test", name="Test", description="Test")
+        self.record = SeqRecord(Seq("ACGT" * 100, generic_dna),
+                                id="Test", name="Test", description="Test")
 
-    def write_read_check(self, in_format):
+    def write_read_check(self, check_format):
         handle = StringIO()
-        SeqIO.write([self.record], handle, in_format)
+        SeqIO.write([self.record], handle, check_format)
         handle.seek(0)
-        record2 = SeqIO.read(handle, in_format)
+        record2 = SeqIO.read(handle, check_format)
         compare_record(self.record, record2)
 
     def write_read_checks(self, formats=("gb", "embl", "imgt")):
@@ -732,8 +734,8 @@ class FeatureWriting(unittest.TestCase):
 
         f1 = SeqFeature(FeatureLocation(AfterPosition(310), 320), strand=-1)
         # Note - is one-of(340,337) allowed or should it be one-of(337,340)?
-        f2 = SeqFeature(FeatureLocation(325, OneOfPosition(340, [ExactPosition(340), ExactPosition(337)])),
-                        strand=-1)
+        pos = OneOfPosition(340, [ExactPosition(340), ExactPosition(337)])
+        f2 = SeqFeature(FeatureLocation(325, pos), strand=-1)
         f3 = SeqFeature(FeatureLocation(345, WithinPosition(355, left=350, right=355)), strand=-1)
         f = make_join_feature([f1, f2, f3], "CDS")
         self.assertEqual(_get_location_string(f, 500),
