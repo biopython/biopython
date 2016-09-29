@@ -444,6 +444,8 @@ class GenBankWriter(_InsdcWriter):
     STRUCTURED_COMMENT_START = "-START##"
     STRUCTURED_COMMENT_END = "-END##"
     STRUCTURED_COMMENT_DELIM = " :: "
+    LETTERS_PER_LINE = 60
+    SEQUENCE_INDENT = 9
 
     def _write_single_line(self, tag, text):
         """Used in the 'header' of each GenBank record."""
@@ -767,9 +769,6 @@ class GenBankWriter(_InsdcWriter):
     def _write_sequence(self, record):
         # Loosely based on code from Howard Salis
         # TODO - Force lower case?
-        letters_per_line = 60
-        sequence_indent = 9
-
         if isinstance(record.seq, UnknownSeq):
             # We have already recorded the length, and there is no need
             # to record a long sequence of NNNNNNN...NNN or whatever.
@@ -783,10 +782,10 @@ class GenBankWriter(_InsdcWriter):
         data = self._get_seq_string(record).lower()
         seq_len = len(data)
         self.handle.write("ORIGIN\n")
-        for line_number in range(0, seq_len, letters_per_line):
-            self.handle.write(str(line_number + 1).rjust(sequence_indent))
+        for line_number in range(0, seq_len, self.LETTERS_PER_LINE):
+            self.handle.write(str(line_number + 1).rjust(self.SEQUENCE_INDENT))
             for words in range(line_number,
-                               min(line_number + letters_per_line, seq_len), 10):
+                               min(line_number + self.LETTERS_PER_LINE, seq_len), 10):
                 self.handle.write(" %s" % data[words:words + 10])
             self.handle.write("\n")
 
@@ -897,6 +896,10 @@ class EmblWriter(_InsdcWriter):
     QUALIFIER_INDENT_STR = "FT" + " " * (QUALIFIER_INDENT - 2)
     QUALIFIER_INDENT_TMP = "FT   %s                "  # 21 if %s is empty
     FEATURE_HEADER = "FH   Key             Location/Qualifiers\n"
+    LETTERS_PER_BLOCK = 10
+    BLOCKS_PER_LINE = 6
+    LETTERS_PER_LINE = LETTERS_PER_BLOCK * BLOCKS_PER_LINE
+    POSITION_PADDING = 10
 
     def _write_contig(self, record):
         max_len = self.MAX_WIDTH - self.HEADER_WIDTH
@@ -905,10 +908,6 @@ class EmblWriter(_InsdcWriter):
             self._write_single_line("CO", text)
 
     def _write_sequence(self, record):
-        letters_per_block = 10
-        blocks_per_line = 6
-        letters_per_line = letters_per_block * blocks_per_line
-        position_padding = 10
         handle = self.handle  # save looking up this multiple times
 
         if isinstance(record.seq, UnknownSeq):
@@ -939,25 +938,25 @@ class EmblWriter(_InsdcWriter):
         else:
             handle.write("SQ   \n")
 
-        for line_number in range(0, seq_len // letters_per_line):
+        for line_number in range(0, seq_len // self.LETTERS_PER_LINE):
             handle.write("    ")  # Just four, not five
-            for block in range(blocks_per_line):
-                index = letters_per_line * line_number + \
-                    letters_per_block * block
-                handle.write((" %s" % data[index:index + letters_per_block]))
+            for block in range(self.BLOCKS_PER_LINE):
+                index = self.LETTERS_PER_LINE * line_number + \
+                    self.LETTERS_PER_BLOCK * block
+                handle.write((" %s" % data[index:index + self.LETTERS_PER_BLOCK]))
             handle.write(str((line_number + 1) *
-                             letters_per_line).rjust(position_padding))
+                             self.LETTERS_PER_LINE).rjust(self.POSITION_PADDING))
             handle.write("\n")
-        if seq_len % letters_per_line:
+        if seq_len % self.LETTERS_PER_LINE:
             # Final (partial) line
-            line_number = (seq_len // letters_per_line)
+            line_number = (seq_len // self.LETTERS_PER_LINE)
             handle.write("    ")  # Just four, not five
-            for block in range(blocks_per_line):
-                index = letters_per_line * line_number + \
-                    letters_per_block * block
+            for block in range(self.BLOCKS_PER_LINE):
+                index = self.LETTERS_PER_LINE * line_number + \
+                    self.LETTERS_PER_BLOCK * block
                 handle.write(
-                    (" %s" % data[index:index + letters_per_block]).ljust(11))
-            handle.write(str(seq_len).rjust(position_padding))
+                    (" %s" % data[index:index + self.LETTERS_PER_BLOCK]).ljust(11))
+            handle.write(str(seq_len).rjust(self.POSITION_PADDING))
             handle.write("\n")
 
     def _write_single_line(self, tag, text):
