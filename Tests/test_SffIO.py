@@ -230,7 +230,6 @@ class TestErrors(unittest.TestCase):
 
 
 class TestIndex(unittest.TestCase):
-
     def test_manifest(self):
         filename = "Roche/E3MFGYR02_random_10_reads.sff"
         with open(filename, "rb") as handle:
@@ -372,6 +371,7 @@ class TestSelf(unittest.TestCase):
     """
     These tests were originally seltests run in SffIO.py
     """
+
     def test_read(self):
         filename = "Roche/E3MFGYR02_random_10_reads.sff"
         with open(filename, "rb") as handle:
@@ -436,7 +436,7 @@ class TestSelf(unittest.TestCase):
         filename = "Roche/greek.sff"
         try:
             with open(filename, "rb") as handle:
-                #print(ReadRocheXmlManifest(handle))
+                # print(ReadRocheXmlManifest(handle))
                 r = ReadRocheXmlManifest(handle)
             assert False, "Should fail!"
         except ValueError:
@@ -447,13 +447,13 @@ class TestSelf(unittest.TestCase):
                 pass
             try:
                 for record in SffIterator(handle):
-                    #print(record.id)
+                    # print(record.id)
                     i = record.id
                 assert False, "Should have failed"
             except ValueError as err:
                 pass
-                #print("Checking what happens on re-reading a handle:")
-                #print(err)
+                # print("Checking what happens on re-reading a handle:")
+                # print(err)
 
 
 if __name__ == "__main__":
@@ -573,4 +573,3 @@ k = list(_sff_do_slow_index(
     open("Roche/E3MFGYR02_alt_index_at_end.sff", "rb")))
 print("Done")
     """
-
