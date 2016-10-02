@@ -9,6 +9,8 @@ from Bio.Application import _Option, _Argument, _Switch
 from Bio.Application import AbstractCommandline, _ArgumentList
 from Bio.Application import _StaticArgument
 
+import subprocess
+
 
 class SamtoolsViewCommandline(AbstractCommandline):
 
@@ -321,6 +323,7 @@ class SamtoolsSortCommandline(AbstractCommandline):
     Concatenate BAMs, equivalent to::
 
     $ samtools sort [-no] [-m maxMem] <in.bam> <out.prefix>
+    $ samtools sort [-n] [-T FREFIX] [-o file] [-I INT] [-m maxMem] <in.bam>
 
     See http://samtools.sourceforge.net/samtools.shtml for more details
 
@@ -328,40 +331,87 @@ class SamtoolsSortCommandline(AbstractCommandline):
     -------
 
     >>> from Bio.Sequencing.Applications import SamtoolsSortCommandline
-    >>> input_bam = "/path/to/input_bam"
-    >>> out_prefix = "/path/to/out_prefix"
-    >>> samtools_sort_cmd = SamtoolsSortCommandline(\
-                                                    input_bam=input_bam,\
-                                                    out_prefix=out_prefix)
-    >>> print(samtools_sort_cmd)
-    samtools sort /path/to/input_bam /path/to/out_prefix
+    >>> import subprocess
+    >>> child = subprocess.Popen(\
+                str("samtools"), \
+                stdout=subprocess.PIPE, \
+                stderr=subprocess.PIPE, \
+                universal_newlines=True)
+    >>> stdoutdata, stderrdata = child.communicate()
+    >>> if '1.3.' in stderrdata:
+    ...     input_bam = "/path/to/input_bam"
+    ...     FREFIX = "/path/to/out_prefix"
+    ...     file_name = "/path/to/out_file"
+    ...     samtools_sort_cmd = SamtoolsSortCommandline(input=input_bam, T=FREFIX, o=file_name)
+    ...     samtools_sort_cmd.__str__()=='samtools sort -o /path/to/out_file -T /path/to/out_prefix /path/to/input_bam'
+
+    >>> if '0.1.' in stderrdata:
+    ...     input_bam = "/path/to/input_bam"
+    ...     out_prefix = "/path/to/out_prefix"
+    ...     samtools_sort_cmd = SamtoolsSortCommandline(input=input_bam, out_prefix=out_prefix)
+    ...     samtools_sort_cmd.__str__()=='samtools sort /path/to/input_bam /path/to/out_prefix'
+    True
+
 
     """
     def __init__(self, cmd="samtools", **kwargs):
         self.program_name = cmd
-        self.parameters = [
-            _StaticArgument("sort"),
-            _Switch(["-n", "n"], """Sort by read names rather
-                                    than by chromosomal coordinates"""),
-            _Option(["-o", "o"], """(file) Write the final sorted output to FILE,
-                    rather than to standard output""",
-                    equate=False, checker_function=lambda x: isinstance(x, str)),
-            _Option(["-O", "O"], """(FORMAT) Write the final output as sam, bam, or cram""",
-                    equate=False, checker_function=lambda x: isinstance(x, str)),
-            _Option(["-T", "T"], """(FREFIX) Write temporary files to PREFIX.nnnn.bam, or if the specified PREFIX
-                    is an existing directory, to PREFIX/samtools.mmm.mmm.tmp.nnnn.bam,
-                    where mmm is unique to this invocation of the sort command""",
-                    equate=False, checker_function=lambda x: isinstance(x, str)),
-            _Option(["-I", "I"], """(INT) Set the desired compression level for the final output file,
-                    ranging from 0 (uncompressed) or 1 (fastest but minimal compression)
-                    to 9 (best compression but slowest to write), similarly to gzip(1)'s compression level setting.""",
-                    equate=False, checker_function=lambda x: isinstance(x, str)),
-            _Option(["-m", "m"], "Approximately the maximum required memory",
-                    equate=False,
-                    checker_function=lambda x: isinstance(x, int)),
-            _Argument(["input"], "Input SAM/BAM/CRAM file",
-                      filename=True, is_required=True),
-        ]
+
+        # Checking samtools version
+        child = subprocess.Popen(str(cmd),
+                                 stdout=subprocess.PIPE,
+                                 stderr=subprocess.PIPE,
+                                 universal_newlines=True)
+        stdoutdata, stderrdata = child.communicate()
+
+        index = stderrdata.find("Version")
+        stderrdata = stderrdata[index + 1:]
+        index = stderrdata.find("Usage")
+        name = stderrdata[:index]
+        if " " in name:
+            version_number = name.split(None, 1)[1]
+
+        # options for version samtools 0.0.19
+        if '0.1.' in version_number:
+            self.parameters = [
+                _StaticArgument("sort"),
+                _Switch(["-o", "o"], """Output the final alignment
+                                        to the standard output"""),
+                _Switch(["-n", "n"], """Sort by read names rather
+                                        than by chromosomal coordinates"""),
+                _Option(["-m", "m"], "Approximately the maximum required memory",
+                        equate=False,
+                        checker_function=lambda x: isinstance(x, int)),
+                _Argument(["input"], "Input BAM file",
+                          filename=True, is_required=True),
+                _Argument(["out_prefix"], "Output prefix",
+                          filename=True, is_required=True),
+            ]
+        # options for version samtools 1.3.1
+        elif '1.3.' in version_number:
+            self.parameters = [
+                _StaticArgument("sort"),
+                _Switch(["-n", "n"], """Sort by read names rather
+                                        than by chromosomal coordinates"""),
+                _Option(["-o", "o"], """(file) Write the final sorted output to FILE,
+                        rather than to standard output""",
+                        equate=False, checker_function=lambda x: isinstance(x, str)),
+                _Option(["-O", "O"], """(FORMAT) Write the final output as sam, bam, or cram""",
+                        equate=False, checker_function=lambda x: isinstance(x, str)),
+                _Option(["-T", "T"], """(FREFIX) Write temporary files to PREFIX.nnnn.bam, or if the specified PREFIX
+                        is an existing directory, to PREFIX/samtools.mmm.mmm.tmp.nnnn.bam,
+                        where mmm is unique to this invocation of the sort command""",
+                        equate=False, checker_function=lambda x: isinstance(x, str)),
+                _Option(["-I", "I"], """(INT) Set the desired compression level for the final output file,
+                        ranging from 0 (uncompressed) or 1 (fastest but minimal compression)
+                        to 9 (best compression but slowest to write), similarly to gzip(1)'s compression level setting.""",
+                        equate=False, checker_function=lambda x: isinstance(x, str)),
+                _Option(["-m", "m"], "Approximately the maximum required memory",
+                        equate=False,
+                        checker_function=lambda x: isinstance(x, int)),
+                _Argument(["input"], "Input SAM/BAM/CRAM file",
+                          filename=True, is_required=True),
+            ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
 
