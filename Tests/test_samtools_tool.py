@@ -9,6 +9,7 @@
 
 from Bio import MissingExternalDependencyError
 import sys
+import subprocess
 import os
 import unittest
 
@@ -108,6 +109,24 @@ class SamtoolsTestCase(unittest.TestCase):
                                           "bam2_sorted.bam")
         self.files_to_clean = [self.referenceindexfile, self.bamindexfile1, self.outbamfile]
 
+    def check(self):
+        cline = samtools_exe
+        child = subprocess.Popen(str(cline),
+                                 stdout=subprocess.PIPE,
+                                 stderr=subprocess.PIPE,
+                                 universal_newlines=True,
+                                 shell=(sys.platform != "win32"))
+
+        stdoutdata, stderrdata = child.communicate()
+        # Checking samtools version
+        index = stderrdata.find("V")
+        stderrdata = stderrdata[index + 1:]
+        index = stderrdata.find("U")
+        name = stderrdata[:index]
+        if " " in name:
+            version_number = name.split(None, 1)[1]
+        return version_number
+
     def tearDown(self):
         for filename in self.files_to_clean:
             if os.path.isfile(filename):
@@ -180,9 +199,16 @@ class SamtoolsTestCase(unittest.TestCase):
 
     def test_sort(self):
         cmdline = SamtoolsSortCommandline(samtools_exe)
-        cmdline.set_parameter("input", self.bamfile1)
-        cmdline.set_parameter("-T", "out")
-        cmdline.set_parameter("-o", "out.bam")
+        version_number = self.check()
+
+        if '0.1.' in version_number:
+            cmdline.set_parameter("input", self.bamfile1)
+            cmdline.set_parameter("out_prefix", "SamBam/out")
+        elif '1.3.' in version_number:
+            cmdline.set_parameter("input", self.bamfile1)
+            cmdline.set_parameter("-T", "out")
+            cmdline.set_parameter("-o", "out.bam")
+
         try:
             stdout, stderr = cmdline()
         except ApplicationError as err:
