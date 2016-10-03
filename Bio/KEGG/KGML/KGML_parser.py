@@ -25,7 +25,6 @@ try:
 except ImportError:
     import xml.etree.ElementTree as ElementTree
 
-
 from Bio._py3k import StringIO
 
 from Bio.KEGG.KGML.KGML_pathway import *
@@ -68,8 +67,8 @@ def parse(handle, debug=0):
         if isinstance(handle, str):
             handle = StringIO(handle)
         else:
-            exc_txt = "An XML-containing handle or an XML string " +\
-                "must be provided"
+            exc_txt = "An XML-containing handle or an XML string " + \
+                      "must be provided"
             raise Exception(exc_txt)
     # Parse XML and return each Pathway
     for event, elem in \
@@ -80,7 +79,59 @@ def parse(handle, debug=0):
 
 
 class KGMLParser(object):
-    """Parses a KGML XML Pathway entry into a Pathway object."""
+    """Parses a KGML XML Pathway entry into a Pathway object.
+
+    Example: Read and parse large metabolism file
+
+    >>> from Bio.KEGG.KGML.KGML_parser import read
+    >>> pathway = read(open('KEGG/ko01100.xml', 'r'))
+    >>> for k, v in list(pathway.entries.items())[:2]:
+    ...        print(v)
+    ...
+    Entry node ID: 1
+    Names: ko:K02821 ko:K02822 ko:K03475
+    Type: ortholog
+    Components: set()
+    Reactions: rn:R07671
+    Graphics elements: 1 ...
+    <BLANKLINE>
+    Entry node ID: 2
+    Names: ko:K03476
+    Type: ortholog
+    Components: set()
+    Reactions: rn:R07677
+    Graphics elements: 1 ...
+    >>> for r in list(pathway.reactions)[:2]:
+    ...     print(r)
+    ...
+    Reaction node ID: 1
+    Reaction KEGG IDs: rn:R07671
+    Type: reversible
+    Substrates: cpd:C00072
+    Products: cpd:C16186
+    <BLANKLINE>
+    Reaction node ID: 2
+    Reaction KEGG IDs: rn:R07677
+    Type: reversible
+    Substrates: cpd:C16186
+    Products: cpd:C14899
+    <BLANKLINE>
+    >>> print(len(pathway.maps))
+    149
+
+    >>> pathway = read(open('KEGG/ko00010.xml', 'r'))
+    >>> print(pathway) #doctest: +NORMALIZE_WHITESPACE
+    Pathway: Glycolysis / Gluconeogenesis
+    KEGG ID: path:ko00010
+    Image file: http://www.kegg.jp/kegg/pathway/ko/ko00010.png
+    Organism: ko
+    Entries: 99
+    Entry types:
+        ortholog: 61
+        compound: 31
+        map: 7
+
+    """
 
     def __init__(self, elem):
         self.entry = elem
@@ -161,36 +212,7 @@ class KGMLParser(object):
         return self.pathway
 
 
-if __name__ == '__main__':
-    # Check large metabolism
-    pathway = read(open('ko01100.xml', 'rU'))
-    print(pathway)
-    for k, v in list(pathway.entries.items())[:20]:
-        print(v)
-    for r in list(pathway.reactions)[:20]:
-        print(r)
-    print(len(pathway.maps))
+if __name__ == "__main__":
+    from Bio._utils import run_doctest
 
-    # Check relations
-    pathway = read(open('ko_metabolic/ko00010.xml', 'rU'))
-    print(pathway)
-    for k, v in list(pathway.entries.items())[:20]:
-        print(v)
-    for r in list(pathway.reactions[:20]):
-        print(r)
-    for r in list(pathway.relations[:20]):
-        print(r)
-    print(len(pathway.maps))
-
-    # Check components
-    pathway = read(open('ko_metabolic/ko00253.xml', 'rU'))
-    print(pathway)
-    for k, v in pathway.entries.items():
-        print(v)
-    print(len(pathway.maps))
-
-    # Test XML representation
-    print(pathway.get_KGML())
-
-    # Test bounds of pathway
-    print(pathway.bounds)
+    run_doctest(verbose=0)
