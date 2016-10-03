@@ -368,52 +368,54 @@ class TestConcatenated(unittest.TestCase):
 
 
 class TestSelf(unittest.TestCase):
-    """ These tests were originally seltests run in SffIO.py """
+    """ These tests were originally self-tests run in SffIO.py """
 
     def test_read(self):
         filename = "Roche/E3MFGYR02_random_10_reads.sff"
-        with open(filename, "rb") as a_handle, open(filename, "rb") as b_handle:
-            sff = list(SffIterator(a_handle))
-            sff_trim = list(SffIterator(b_handle, trim=True))
+        with open(filename, "rb") as handle:
+            sff = list(SffIterator(handle))
+        with open(filename, "rb") as handle:
+            sff_trim = list(SffIterator(handle, trim=True))
 
-            filename = "Roche/E3MFGYR02_random_10_reads_no_trim.fasta"
-            fasta_no_trim = list(SeqIO.parse(filename, "fasta"))
-            filename = "Roche/E3MFGYR02_random_10_reads_no_trim.qual"
-            qual_no_trim = list(SeqIO.parse(filename, "qual"))
+        filename = "Roche/E3MFGYR02_random_10_reads_no_trim.fasta"
+        fasta_no_trim = list(SeqIO.parse(filename, "fasta"))
+        filename = "Roche/E3MFGYR02_random_10_reads_no_trim.qual"
+        qual_no_trim = list(SeqIO.parse(filename, "qual"))
 
-            filename = "Roche/E3MFGYR02_random_10_reads.fasta"
-            fasta_trim = list(SeqIO.parse(filename, "fasta"))
-            filename = "Roche/E3MFGYR02_random_10_reads.qual"
-            qual_trim = list(SeqIO.parse(filename, "qual"))
+        filename = "Roche/E3MFGYR02_random_10_reads.fasta"
+        fasta_trim = list(SeqIO.parse(filename, "fasta"))
+        filename = "Roche/E3MFGYR02_random_10_reads.qual"
+        qual_trim = list(SeqIO.parse(filename, "qual"))
 
-            for s, sT, f, q, fT, qT in zip(sff, sff_trim, fasta_no_trim, qual_no_trim, fasta_trim, qual_trim):
-                self.assertEqual(len({s.id, f.id, q.id}), 1)  # All values are the same
-                self.assertEqual(str(s.seq), str(f.seq))
-                self.assertEqual(s.letter_annotations["phred_quality"], q.letter_annotations["phred_quality"])
-                self.assertEqual(len({s.id, sT.id, fT.id, qT.id}), 1)  # All values are the same
-                self.assertEqual(str(sT.seq), str(fT.seq))
-                self.assertEqual(sT.letter_annotations["phred_quality"], qT.letter_annotations["phred_quality"])
+        for s, sT, f, q, fT, qT in zip(sff, sff_trim, fasta_no_trim, qual_no_trim, fasta_trim, qual_trim):
+            self.assertEqual(len({s.id, f.id, q.id}), 1)  # All values are the same
+            self.assertEqual(str(s.seq), str(f.seq))
+            self.assertEqual(s.letter_annotations["phred_quality"], q.letter_annotations["phred_quality"])
+            self.assertEqual(len({s.id, sT.id, fT.id, qT.id}), 1)  # All values are the same
+            self.assertEqual(str(sT.seq), str(fT.seq))
+            self.assertEqual(sT.letter_annotations["phred_quality"], qT.letter_annotations["phred_quality"])
 
     def test_write(self):
         filename = "Roche/E3MFGYR02_random_10_reads.sff"
-        with open(filename, "rb") as a_handle, open(filename, "rb") as b_handle:
-            metadata = ReadRocheXmlManifest(a_handle)
-            sff = list(SffIterator(b_handle))
-            b_handle = BytesIO()
-            w = SffWriter(b_handle, xml=metadata)
-            w.write_file(sff)  # list
-            data = b_handle.getvalue()
-            # And again with an iterator...
-            handle = BytesIO()
-            w = SffWriter(handle, xml=metadata)
-            w.write_file(iter(sff))
-            self.assertEqual(data, handle.getvalue())
-        # Check 100% identical to the original:
+        with open(filename, "rb") as handle:
+            metadata = ReadRocheXmlManifest(handle)
+        with open(filename, "rb") as handle:
+            sff = list(SffIterator(handle))
+        b_handle = BytesIO()
+        w = SffWriter(b_handle, xml=metadata)
+        w.write_file(sff)  # list
+        data = b_handle.getvalue()
+        # And again with an iterator...
+        handle = BytesIO()
+        w = SffWriter(handle, xml=metadata)
+        w.write_file(iter(sff))
+        self.assertEqual(data, handle.getvalue())
+    # Check 100% identical to the original:
         with open(filename, "rb") as handle:
             original = handle.read()
-            self.assertEqual(len(data), len(original))
-            self.assertEqual(data, original)
-            del data
+        self.assertEqual(len(data), len(original))
+        self.assertEqual(data, original)
+        del data
 
     def test_index(self):
         filename = "Roche/greek.sff"
@@ -447,7 +449,6 @@ if __name__ == "__main__":
     unittest.main(testRunner=runner)
 
 if False:
-    """
     # Ugly code to make test files...
     index = ".diy1.00This is a fake index block (DIY = Do It Yourself), which is allowed under the SFF standard.\0"
     padding = len(index)%8
@@ -559,4 +560,3 @@ if False:
     k = list(_sff_do_slow_index(
         open("Roche/E3MFGYR02_alt_index_at_end.sff", "rb")))
     print("Done")
-    """
