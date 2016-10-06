@@ -101,7 +101,7 @@ DOCTEST_MODULES = [
     "Bio.KEGG.Compound",
     "Bio.KEGG.Enzyme",
     "Bio.NMR.xpktools",
-    "Bio.MaxEntropy"
+    "Bio.MaxEntropy",
     "Bio.motifs",
     "Bio.motifs.applications._xxmotif",
     "Bio.pairwise2",

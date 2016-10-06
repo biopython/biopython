@@ -27,6 +27,7 @@ class MaxEntropy(object):
 
     Car data from example Naive Bayes Classifier example by Eric Meisner November 22, 2003
     http://www.inf.u-szeged.hu/~ormandi/teaching
+
     >>> from Bio.MaxEntropy import train, classify
     >>> xcar = [
     ...     ['Red', 'Sports', 'Domestic'],
@@ -42,23 +43,15 @@ class MaxEntropy(object):
     >>> ycar = ['Yes','No','Yes','No','Yes','No','Yes','No','No','Yes']
 
     Requires some rules or features
+
     >>> def udf1(ts, cl):
-    ...     if ts[0] == 'Red':
-    ...         return 0
-    ...     else:
-    ...         return 1
+    ...     return ts[0] != 'Red'
     ...
     >>> def udf2(ts, cl):
-    ...     if ts[1] == 'Sports':
-    ...         return 0
-    ...     else:
-    ...         return 1
+    ...     return ts[1] != 'Sports'
     ...
     >>> def udf3(ts, cl):
-    ...     if ts[2] == 'Domestic':
-    ...         return 0
-    ...     else:
-    ...         return 1
+    ...     return ts[2] != 'Domestic'
     ...
     >>> user_functions = [udf1, udf2, udf3]  # must be an iterable type
     >>> xe = train(xcar, ycar, user_functions)

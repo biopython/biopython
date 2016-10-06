@@ -25,7 +25,6 @@ try:
 except ImportError:
     import xml.etree.ElementTree as ElementTree
 
-
 from Bio._py3k import StringIO
 
 from Bio.KEGG.KGML.KGML_pathway import *
@@ -68,8 +67,8 @@ def parse(handle, debug=0):
         if isinstance(handle, str):
             handle = StringIO(handle)
         else:
-            exc_txt = "An XML-containing handle or an XML string " +\
-                "must be provided"
+            exc_txt = "An XML-containing handle or an XML string " + \
+                      "must be provided"
             raise Exception(exc_txt)
     # Parse XML and return each Pathway
     for event, elem in \
@@ -81,10 +80,11 @@ def parse(handle, debug=0):
 
 class KGMLParser(object):
     """Parses a KGML XML Pathway entry into a Pathway object.
-        Example: Read and parse large metabolism file
+
+    Example: Read and parse large metabolism file
 
     >>> from Bio.KEGG.KGML.KGML_parser import read
-    >>> pathway = read(open('KEGG/ko01100.xml', 'rU'))
+    >>> pathway = read(open('KEGG/ko01100.xml', 'r'))
     >>> for k, v in list(pathway.entries.items())[:2]:
     ...        print(v)
     ...
@@ -121,7 +121,7 @@ class KGMLParser(object):
     >>> print(len(pathway.maps))
     149
 
-    >>> pathway = read(open('KEGG/ko00010.xml', 'rU'))
+    >>> pathway = read(open('KEGG/ko00010.xml', 'r'))
     >>> print(pathway) #doctest: +NORMALIZE_WHITESPACE
     Pathway: Glycolysis / Gluconeogenesis
     KEGG ID: path:ko00010
@@ -132,8 +132,6 @@ class KGMLParser(object):
         ortholog: 61
         compound: 31
         map: 7
-
-
 
     >>> for k, v in list(pathway.entries.items())[:3]:
     ...     print(v)
@@ -262,32 +260,34 @@ class KGMLParser(object):
                               element.tag, BiopythonParserWarning)
         return self.pathway
 
+
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest(verbose=0)
 
-# if __name__ == '__main__':
-#
-#     # Check relations
-#     pathway = read(open('../../../Tests/KEGG/ko00010.xml', 'rU'))
-#     print("The pathway is: {}".format(pathway))
-#     for k, v in list(pathway.entries.items())[:3]:
-#         print(v)
-#     for r in list(pathway.reactions)[:3]:
-#         print(r)
-#     for r in list(pathway.relations)[:3]:
-#         print(r)
-#     print("Number of pathway.maps: {}".format(len(pathway.maps)))
-#
-#     # Check components
-#     pathway = read(open('../../../Tests/KEGG/ko00253.xml', 'rU'))
-#     print("The pathway is: {}".format(pathway))
-#     for k, v in list(pathway.entries.items())[:3]:
-#         print(v)
-#     print("Number of pathway.maps: {}".format(len(pathway.maps)))
-#
-#     # Test XML representation
-#     print("Test XML representation:\n {} ...".format(pathway.get_KGML()[:100]))
-#
-#     # Test bounds of pathway
-#     print("Test bounds of pathway: {}".format(pathway.bounds))
+    # if __name__ == '__main__':
+    #
+    #     # Check relations
+    #     pathway = read(open('../../../Tests/KEGG/ko00010.xml', 'rU'))
+    #     print("The pathway is: {}".format(pathway))
+    #     for k, v in list(pathway.entries.items())[:3]:
+    #         print(v)
+    #     for r in list(pathway.reactions)[:3]:
+    #         print(r)
+    #     for r in list(pathway.relations)[:3]:
+    #         print(r)
+    #     print("Number of pathway.maps: {}".format(len(pathway.maps)))
+    #
+    #     # Check components
+    #     pathway = read(open('../../../Tests/KEGG/ko00253.xml', 'rU'))
+    #     print("The pathway is: {}".format(pathway))
+    #     for k, v in list(pathway.entries.items())[:3]:
+    #         print(v)
+    #     print("Number of pathway.maps: {}".format(len(pathway.maps)))
+    #
+    #     # Test XML representation
+    #     print("Test XML representation:\n {} ...".format(pathway.get_KGML()[:100]))
+    #
+    #     # Test bounds of pathway
+    #     print("Test bounds of pathway: {}".format(pathway.bounds))
