@@ -62,47 +62,6 @@ def parse(handle, debug=0):
     - debug - integer for amount of debug information to print
 
     This is a generator for the return of multiple Pathway objects.
-    Example: Read and parse large metabolism file
-
-    >>> from Bio.KEGG.KGML.KGML_parser import read
-    >>> pathway = read(open('KEGG/ko01100.xml', 'rU'))
-    >>> for k, v in list(pathway.entries.items())[:2]:
-    ...     print(v)
-    ...
-    Entry node ID: 1
-    Names: ko:K02821 ko:K02822 ko:K03475
-    Type: ortholog
-    Components: set()
-    Reactions: rn:R07671
-    Graphics elements: 1 [<Bio.KEGG.KGML.KGML_pathway.Graphics object at 0x103da2080>]
-
-    Entry node ID: 2
-    Names: ko:K03476
-    Type: ortholog
-    Components: set()
-    Reactions: rn:R07677
-    Graphics elements: 1 [<Bio.KEGG.KGML.KGML_pathway.Graphics object at 0x103da21d0>]
-
-    >>> for r in list(pathway.reactions)[:2]:
-    ...     print(r)
-    ...
-    Reaction node ID: 1
-    Reaction KEGG IDs: rn:R07671
-    Type: reversible
-    Substrates: cpd:C00072
-    Products: cpd:C16186
-
-    Reaction node ID: 2
-    Reaction KEGG IDs: rn:R07677
-    Type: reversible
-    Substrates: cpd:C16186
-    Products: cpd:C14899
-
-    >>> print(len(pathway.maps))
-    149
-    >>>
-
-
     """
     # Check handle
     if not hasattr(handle, 'read'):
@@ -121,7 +80,109 @@ def parse(handle, debug=0):
 
 
 class KGMLParser(object):
-    """Parses a KGML XML Pathway entry into a Pathway object."""
+    """Parses a KGML XML Pathway entry into a Pathway object.
+        Example: Read and parse large metabolism file
+
+    >>> from Bio.KEGG.KGML.KGML_parser import read
+    >>> pathway = read(open('KEGG/ko01100.xml', 'rU'))
+    >>> for k, v in list(pathway.entries.items())[:2]:
+    ...        print(v)
+    ...
+    Entry node ID: 1
+    Names: ko:K02821 ko:K02822 ko:K03475
+    Type: ortholog
+    Components: set()
+    Reactions: rn:R07671
+    Graphics elements: 1 ...
+    <BLANKLINE>
+    Entry node ID: 2
+    Names: ko:K03476
+    Type: ortholog
+    Components: set()
+    Reactions: rn:R07677
+    Graphics elements: 1 ...
+
+    >>> for r in list(pathway.reactions)[:2]:
+    ...     print(r)
+    ...
+    Reaction node ID: 1
+    Reaction KEGG IDs: rn:R07671
+    Type: reversible
+    Substrates: cpd:C00072
+    Products: cpd:C16186
+    <BLANKLINE>
+    Reaction node ID: 2
+    Reaction KEGG IDs: rn:R07677
+    Type: reversible
+    Substrates: cpd:C16186
+    Products: cpd:C14899
+    <BLANKLINE>
+
+    >>> print(len(pathway.maps))
+    149
+
+    >>> pathway = read(open('KEGG/ko00010.xml', 'rU'))
+    >>> print(pathway) #doctest: +NORMALIZE_WHITESPACE
+    Pathway: Glycolysis / Gluconeogenesis
+    KEGG ID: path:ko00010
+    Image file: http://www.kegg.jp/kegg/pathway/ko/ko00010.png
+    Organism: ko
+    Entries: 99
+    Entry types:
+        ortholog: 61
+        compound: 31
+        map: 7
+
+
+
+    >>> for k, v in list(pathway.entries.items())[:3]:
+    ...     print(v)
+    ...
+    Entry node ID: 13
+    Names: ko:K01623 ko:K01624 ko:K01622 ko:K11645 ko:K16305 ko:K16306
+    Type: ortholog
+    Components: set()
+    Reactions: rn:R01070
+    Graphics elements: 1 ...
+    <BLANKLINE>
+    Entry node ID: 37
+    Names: ko:K00128 ko:K14085 ko:K00149
+    Type: ortholog
+    Components: set()
+    Reactions: rn:R00710
+    Graphics elements: 1 ...
+    <BLANKLINE>
+    Entry node ID: 38
+    Names: ko:K01905
+    Type: ortholog
+    Components: set()
+    Reactions: rn:R00229
+    Graphics elements: 1 ...
+    <BLANKLINE>
+
+    >>> for r in list(pathway.reactions)[:3]:
+    ...     print(r)
+    ...
+    Reaction node ID: 128
+    Reaction KEGG IDs: rn:R01662
+    Type: reversible
+    Substrates: cpd:C00236
+    Products: cpd:C01159
+    <BLANKLINE>
+    Reaction node ID: 130
+    Reaction KEGG IDs: rn:R00235
+    Type: irreversible
+    Substrates: cpd:C00033
+    Products: cpd:C00024
+    <BLANKLINE>
+    Reaction node ID: 131
+    Reaction KEGG IDs: rn:R09084
+    Type: irreversible
+    Substrates: cpd:C05345
+    Products: cpd:C05378
+    <BLANKLINE>
+
+    """
 
     def __init__(self, elem):
         self.entry = elem
@@ -201,32 +262,32 @@ class KGMLParser(object):
                               element.tag, BiopythonParserWarning)
         return self.pathway
 
-# if __name__ == "__main__":
-#     from Bio._utils import run_doctest
-#     run_doctest(verbose=0)
+if __name__ == "__main__":
+    from Bio._utils import run_doctest
+    run_doctest(verbose=0)
 
-if __name__ == '__main__':
-
-    # Check relations
-    pathway = read(open('../../Tests/ko_metabolic/ko00010.xml', 'rU'))
-    print(pathway)
-    for k, v in list(pathway.entries.items())[:20]:
-        print(v)
-    for r in list(pathway.reactions[:20]):
-        print(r)
-    for r in list(pathway.relations[:20]):
-        print(r)
-    print(len(pathway.maps))
-
-    # Check components
-    pathway = read(open('../../../Tests/ko_metabolic/ko00253.xml', 'rU'))
-    print(pathway)
-    for k, v in pathway.entries.items():
-        print(v)
-    print(len(pathway.maps))
-
-    # Test XML representation
-    print(pathway.get_KGML())
-
-    # Test bounds of pathway
-    print(pathway.bounds)
+# if __name__ == '__main__':
+#
+#     # Check relations
+#     pathway = read(open('../../../Tests/KEGG/ko00010.xml', 'rU'))
+#     print("The pathway is: {}".format(pathway))
+#     for k, v in list(pathway.entries.items())[:3]:
+#         print(v)
+#     for r in list(pathway.reactions)[:3]:
+#         print(r)
+#     for r in list(pathway.relations)[:3]:
+#         print(r)
+#     print("Number of pathway.maps: {}".format(len(pathway.maps)))
+#
+#     # Check components
+#     pathway = read(open('../../../Tests/KEGG/ko00253.xml', 'rU'))
+#     print("The pathway is: {}".format(pathway))
+#     for k, v in list(pathway.entries.items())[:3]:
+#         print(v)
+#     print("Number of pathway.maps: {}".format(len(pathway.maps)))
+#
+#     # Test XML representation
+#     print("Test XML representation:\n {} ...".format(pathway.get_KGML()[:100]))
+#
+#     # Test bounds of pathway
+#     print("Test bounds of pathway: {}".format(pathway.bounds))
