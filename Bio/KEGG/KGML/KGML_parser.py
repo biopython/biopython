@@ -101,7 +101,6 @@ class KGMLParser(object):
     Components: set()
     Reactions: rn:R07677
     Graphics elements: 1 ...
-
     >>> for r in list(pathway.reactions)[:2]:
     ...     print(r)
     ...
@@ -117,7 +116,6 @@ class KGMLParser(object):
     Substrates: cpd:C16186
     Products: cpd:C14899
     <BLANKLINE>
-
     >>> print(len(pathway.maps))
     149
 
@@ -132,53 +130,6 @@ class KGMLParser(object):
         ortholog: 61
         compound: 31
         map: 7
-
-    >>> for k, v in list(pathway.entries.items())[:3]:
-    ...     print(v)
-    ...
-    Entry node ID: 13
-    Names: ko:K01623 ko:K01624 ko:K01622 ko:K11645 ko:K16305 ko:K16306
-    Type: ortholog
-    Components: set()
-    Reactions: rn:R01070
-    Graphics elements: 1 ...
-    <BLANKLINE>
-    Entry node ID: 37
-    Names: ko:K00128 ko:K14085 ko:K00149
-    Type: ortholog
-    Components: set()
-    Reactions: rn:R00710
-    Graphics elements: 1 ...
-    <BLANKLINE>
-    Entry node ID: 38
-    Names: ko:K01905
-    Type: ortholog
-    Components: set()
-    Reactions: rn:R00229
-    Graphics elements: 1 ...
-    <BLANKLINE>
-
-    >>> for r in list(pathway.reactions)[:3]:
-    ...     print(r)
-    ...
-    Reaction node ID: 128
-    Reaction KEGG IDs: rn:R01662
-    Type: reversible
-    Substrates: cpd:C00236
-    Products: cpd:C01159
-    <BLANKLINE>
-    Reaction node ID: 130
-    Reaction KEGG IDs: rn:R00235
-    Type: irreversible
-    Substrates: cpd:C00033
-    Products: cpd:C00024
-    <BLANKLINE>
-    Reaction node ID: 131
-    Reaction KEGG IDs: rn:R09084
-    Type: irreversible
-    Substrates: cpd:C05345
-    Products: cpd:C05378
-    <BLANKLINE>
 
     """
 
@@ -265,29 +216,3 @@ if __name__ == "__main__":
     from Bio._utils import run_doctest
 
     run_doctest(verbose=0)
-
-    # if __name__ == '__main__':
-    #
-    #     # Check relations
-    #     pathway = read(open('../../../Tests/KEGG/ko00010.xml', 'rU'))
-    #     print("The pathway is: {}".format(pathway))
-    #     for k, v in list(pathway.entries.items())[:3]:
-    #         print(v)
-    #     for r in list(pathway.reactions)[:3]:
-    #         print(r)
-    #     for r in list(pathway.relations)[:3]:
-    #         print(r)
-    #     print("Number of pathway.maps: {}".format(len(pathway.maps)))
-    #
-    #     # Check components
-    #     pathway = read(open('../../../Tests/KEGG/ko00253.xml', 'rU'))
-    #     print("The pathway is: {}".format(pathway))
-    #     for k, v in list(pathway.entries.items())[:3]:
-    #         print(v)
-    #     print("Number of pathway.maps: {}".format(len(pathway.maps)))
-    #
-    #     # Test XML representation
-    #     print("Test XML representation:\n {} ...".format(pathway.get_KGML()[:100]))
-    #
-    #     # Test bounds of pathway
-    #     print("Test bounds of pathway: {}".format(pathway.bounds))
