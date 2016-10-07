@@ -148,7 +148,7 @@ if is_numpy():
                             "Bio.PDB.Polypeptide",
                             "Bio.PDB.Selection",
                             "Bio.SeqIO.PdbIO",
-                            "Bio.SVDSuperimposer.__init__",
+                            "Bio.SVDSuperimposer",
                             ])
 
 
