@@ -314,4 +314,3 @@ def train(training_set, results, feature_fns, update_fn=None,
 if __name__ == "__main__":
     from Bio._utils import run_doctest
     run_doctest(verbose=0)
-
