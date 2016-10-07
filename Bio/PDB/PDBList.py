@@ -23,8 +23,7 @@
 #   homepage : http://jaceksmietanski.net
 #   email    : jacek.smietanski@ii.uj.edu.pl
 #
-# This file is part of the Biopython distribution and governed by your
-# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# This code is released under the conditions of the Biopython license.
 # Please see the LICENSE file that should have been included as part of this
 # package.
 # It may be distributed freely with respect to the original authors.
@@ -190,6 +189,8 @@ class PDBList(object):
         The PDB structure's file name is returned as a single string.
         If obsolete ``==`` True, the file will be saved in a special file tree.
 
+        NOTE. The default download format has changed from PDB to PDBx/mmCif
+
         @param pdb_code: 4-symbols structure Id from PDB (e.g. 3J92).
         @type pdb_code: string
 
@@ -314,7 +315,7 @@ class PDBList(object):
             else:
                 print("Obsolete file %s is missing" % old_file)
 
-    def download_pdb_files(self, pdb_codes, file_format='mmCif', overwrite=False, obsolete=False, pdir=None):
+    def download_pdb_files(self, pdb_codes, obsolete=False, pdir=None, file_format='mmCif', overwrite=False):
         """ Retrieves a set of PDB structure files from the PDB server and stores them in a local file tree.
 
         The PDB structure's file name is returned as a single string.
@@ -348,11 +349,19 @@ class PDBList(object):
         for pdb_code in pdb_codes:
             self.retrieve_pdb_file(pdb_code, obsolete=obsolete, pdir=pdir, file_format=file_format, overwrite=overwrite)
 
-    def download_entire_pdb(self, file_format='mmCif', listfile=None):
+    def download_entire_pdb(self, listfile=None, file_format='mmCif'):
         """Retrieve all PDB entries not present in the local PDB copy.
 
-        Writes a list file containing all PDB codes (optional, if listfile is
-        given).
+        @param listfile: filename to which all PDB codes will be written (optional)
+
+        @param file_format: file format. Available options:
+            "mmCif" (default, PDBx/mmCif file),
+            "pdb" (format PDB),
+            "xml" (PMDML/XML format),
+            "mmtf" (highly compressed),
+            "bundle" (PDB formatted archive for large structure}
+
+        NOTE. The default download format has changed from PDB to PDBx/mmCif
         """
         entries = self.get_all_entries()
         for pdb_code in entries:
@@ -362,12 +371,18 @@ class PDBList(object):
             with open(listfile, 'w') as outfile:
                 outfile.writelines((x + '\n' for x in entries))
 
-    def download_obsolete_entries(self, file_format='mmCif', listfile=None):
+    def download_obsolete_entries(self, listfile=None, file_format='mmCif'):
         """Retrieve all obsolete PDB entries not present in the local obsolete
         PDB copy.
 
-        Writes a list file containing all PDB codes (optional, if listfile is
-        given).
+        @param listfile: filename to which all PDB codes will be written (optional)
+
+        @param file_format: file format. Available options:
+            "mmCif" (default, PDBx/mmCif file),
+            "pdb" (format PDB),
+            "xml" (PMDML/XML format),
+
+        NOTE. The default download format has changed from PDB to PDBx/mmCif
         """
         entries = self.get_all_obsolete()
         for pdb_code in entries:
