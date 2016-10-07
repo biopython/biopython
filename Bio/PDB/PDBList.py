@@ -44,6 +44,7 @@ import re
 # Importing these functions with leading underscore as not intended for reuse
 from Bio._py3k import urlopen as _urlopen
 from Bio._py3k import urlretrieve as _urlretrieve
+from Bio._py3k import urlcleanup as _urlcleanup
 
 
 class PDBList(object):
@@ -262,6 +263,7 @@ class PDBList(object):
         # Retrieve the file
         print("Downloading PDB structure '%s'..." % pdb_code)
         try:
+            _urlcleanup()
             _urlretrieve(url, filename)
         except IOError:
             print("Desired structure doesn't exists")

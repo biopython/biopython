@@ -55,11 +55,13 @@ class TestPDBListGetStructure(unittest.TestCase):
         finally:
             shutil.rmtree(temp_dir)
 
-    def check(self, structure, filename, file_format, obsolete=False):
+    def check(self, structure, filename, file_format, obsolete=False, pdir=None):
         with self.make_temp_directory(os.getcwd()) as tmp:
             pdblist = PDBList(pdb=tmp, obsolete_pdb=os.path.join(tmp, "obsolete"))
             path = os.path.join(tmp, filename)
-            pdblist.retrieve_pdb_file(structure, obsolete=obsolete, file_format=file_format)
+            if pdir:
+                pdir = os.path.join(tmp, pdir)
+            pdblist.retrieve_pdb_file(structure, obsolete=obsolete, pdir=pdir, file_format=file_format)
             self.assertTrue(os.path.isfile(path))
             os.remove(path)
 
@@ -102,3 +104,9 @@ class TestPDBListGetStructure(unittest.TestCase):
         """Tests retrieving the molecule in mmtf format."""
         structure = "127d"
         self.check(structure, os.path.join(structure[1:3], "%s.mmtf" % structure), "mmtf")
+
+    def test_double_retrieve(self):
+        """Tests retrieving the same file to different directories."""
+        structure = "127d"
+        self.check(structure, os.path.join("a", "%s.cif" % structure), "mmCif", pdir="a")
+        self.check(structure, os.path.join("b", "%s.cif" % structure), "mmCif", pdir="b")
