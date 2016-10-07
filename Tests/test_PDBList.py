@@ -28,7 +28,7 @@ class TestPBDListGetList(unittest.TestCase):
         """
         Tests the Bio.PDB.PDBList.get_recent_changes method.
         """
-        pdblist = PDBList()
+        pdblist = PDBList(obsolete_pdb="unimpotrant")  # obsolete_pdb declared to prevent from creating the "obsolete" directory
         url = pdblist.pdb_server + '/pub/pdb/data/status/latest/added.pdb'
         entries = pdblist.get_status_list(url)
         self.assertIsNotNone(entries)
@@ -37,7 +37,7 @@ class TestPBDListGetList(unittest.TestCase):
         """
         Tests the Bio.PDB.PDBList.get_all_entries method.
         """
-        pdblist = PDBList()
+        pdblist = PDBList(obsolete_pdb="unimpotrant")  # obsolete_pdb declared to prevent from creating the "obsolete" directory
         entries = pdblist.get_all_entries()
         # As number of entries constantly grow, test checks if a certain number was exceeded
         self.assertTrue(len(entries) > 100000)
@@ -46,7 +46,7 @@ class TestPBDListGetList(unittest.TestCase):
         """
         Tests the Bio.PDB.PDBList.get_all_obsolete method.
         """
-        pdblist = PDBList()
+        pdblist = PDBList(obsolete_pdb="unimpotrant")  # obsolete_pdb declared to prevent from creating the "obsolete" directory
         entries = pdblist.get_all_obsolete()
         # As number of obsolete entries constantly grow, test checks if a certain number was exceeded
         self.assertTrue(len(entries) > 3000)
@@ -125,9 +125,21 @@ class TestPDBListGetStructure(unittest.TestCase):
             self.assertTrue(os.path.isfile(path))
             os.remove(path)
 
+    def test_retrieve_pdb_file_obsolete_xml(self):
+        """
+        Tests retrieving the obsolete molecule in mmcif format
+        """
+        structure = "347d"
+        with self.make_temp_directory(os.getcwd()) as tmp:
+            pdblist = PDBList(pdb=tmp, obsolete_pdb=os.path.join(tmp, "obsolete"))
+            path = os.path.join(tmp, "obsolete", structure[1:3], "%s.xml" % structure)
+            pdblist.retrieve_pdb_file(structure, obsolete=True, file_format="xml")
+            self.assertTrue(os.path.isfile(path))
+            os.remove(path)
+
     def test_retrieve_pdb_file_xml(self):
         """
-        Tests retrieving the molecule in xml format
+        Tests retrieving the (non obsolete) molecule in xml format
         """
         structure = "127d"
         with self.make_temp_directory(os.getcwd()) as tmp:
