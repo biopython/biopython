@@ -12,9 +12,13 @@ value decomposition, which is used in the algorithm.
 
 from __future__ import print_function
 
-from numpy import dot, transpose, sqrt
-from numpy.linalg import svd, det
-
+try:
+    from numpy import dot, transpose, sqrt
+    from numpy.linalg import svd, det
+except ImportError:
+    from Bio import MissingPythonDependencyError
+    raise MissingPythonDependencyError(
+        "Install NumPy if you want to use Bio.SVDSuperimposer.")
 
 class SVDSuperimposer(object):
     """Class to run SVD alignment,
