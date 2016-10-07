@@ -1,13 +1,20 @@
 # Copyright 2016 by Jacek Smietanski.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license. Please see the LICENSE file that should have been included
-# as part of this package.
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
 """Testing access to the PDB over the internet."""
 
-import unittest
+import contextlib
 import os
 import shutil
+import tempfile
+import unittest
+
+import requires_internet
+requires_internet.check()
+
 # We want to test this module:
 from Bio.PDB.PDBList import PDBList
 
@@ -50,50 +57,94 @@ class TestPDBListGetStructure(unittest.TestCase):
     Test methods responsible for getting structures.
     """
 
-    def test_retrieve_pdb_file(self):
-        """
-        Tests the process of retrieving files from PDB database.
-        """
-        # This test downloads several large files from external database so it may run a while.
-
-        # Create temporary directory for files downloaded while testing.
-        basedir = os.path.join(os.getcwd(), "pdb-test")
+    @contextlib.contextmanager
+    def make_temp_directory(self, dir):
+        temp_dir = tempfile.mkdtemp(dir=dir)
         try:
-            os.mkdir(basedir)
-        except FileExistsError:
-            pass
+            yield temp_dir
+        finally:
+            shutil.rmtree(temp_dir)
 
-        pdblist = PDBList(pdb = basedir, obsolete_pdb=os.path.join(basedir, "obsolete"))
-        small = "1esy"
-        obslte = "347d"
-        large = "3k1q"
-        nonexistent = "0000"
-        formats = {"pdb": "pdb%s.ent", "mmCif": "%s.cif", "xml": "%s.xml", "mmtf": "%s.mmtf",
-                   "bundle": "%s-pdb-bundle.tar"}
-        for file_format in formats.keys():
-            for structure in (small, large, obslte, nonexistent):
-                for overwrite in (False, True):
-                    for pdir in (None, os.path.join(basedir, "test-pdir")):
-                        print(file_format, structure, "overwrite:", overwrite, "pdir:", pdir)
-                        if pdir is None:
-                            if structure == obslte and format != 'mmtf':
-                                obsolete = True
-                                path = os.path.join(basedir, "obsolete", structure[1:3], formats[file_format] % structure)
-                            else:
-                                obsolete = False
-                                path = os.path.join(basedir, structure[1:3], formats[file_format] % structure)
-                        else:  # pdir specified
-                            path = os.path.join(pdir, formats[file_format] % structure)
-                        pdblist.retrieve_pdb_file(structure, file_format, overwrite, obsolete, pdir)
-                        exists = os.path.isfile(path)
-                        error_msg = "error with " + structure + " " + file_format + " overwrite=" + str(overwrite) + \
-                                    " obsolete=" + str(obsolete) + " pdir:" + str(pdir)
-                        if structure == nonexistent or \
-                           (structure == large and file_format == "pdb") or \
-                           (file_format == "bundle" and structure in (small, obslte)) or \
-                           (file_format) == "mmtf" and structure==obslte:
-                            self.assertFalse(exists, msg=error_msg)
-                        else:
-                            self.assertTrue(exists, msg=error_msg)
-        # Delete temporary directory
-        shutil.rmtree(basedir)
+    def test_retrieve_pdb_file_small_pdb(self):
+        """
+        Tests retrieving the small molecule in pdb format
+        """
+        structure = "127d"
+        with self.make_temp_directory(os.getcwd()) as tmp:
+            pdblist = PDBList(pdb=tmp, obsolete_pdb=os.path.join(tmp, "obsolete"))
+            path = os.path.join(tmp, structure[1:3], "pdb%s.ent" % structure)
+            pdblist.retrieve_pdb_file(structure, file_format="pdb")
+            self.assertTrue(os.path.isfile(path))
+            os.remove(path)
+
+    def test_retrieve_pdb_file_large_pdb(self):
+        """
+        Tests retrieving the bundle for large molecule in pdb-like format
+        """
+        structure = "3k1q"
+        with self.make_temp_directory(os.getcwd()) as tmp:
+            pdblist = PDBList(pdb=tmp, obsolete_pdb=os.path.join(tmp, "obsolete"))
+            path = os.path.join(tmp, structure[1:3], "%s-pdb-bundle.tar" % structure)
+            pdblist.retrieve_pdb_file(structure, file_format="bundle")
+            self.assertTrue(os.path.isfile(path))
+            os.remove(path)
+
+    def test_retrieve_pdb_file_obsolete_pdb(self):
+        """
+        Tests retrieving the obsolete molecule in pdb format
+        """
+        structure = "347d"
+        with self.make_temp_directory(os.getcwd()) as tmp:
+            pdblist = PDBList(pdb=tmp, obsolete_pdb=os.path.join(tmp, "obsolete"))
+            path = os.path.join(tmp, "obsolete", structure[1:3], "pdb%s.ent" % structure)
+            pdblist.retrieve_pdb_file(structure, obsolete=True, file_format="pdb")
+            self.assertTrue(os.path.isfile(path))
+            os.remove(path)
+
+    def test_retrieve_pdb_file_obsolete_mmcif(self):
+        """
+        Tests retrieving the obsolete molecule in mmcif format
+        """
+        structure = "347d"
+        with self.make_temp_directory(os.getcwd()) as tmp:
+            pdblist = PDBList(pdb=tmp, obsolete_pdb=os.path.join(tmp, "obsolete"))
+            path = os.path.join(tmp, "obsolete", structure[1:3], "%s.cif" % structure)
+            pdblist.retrieve_pdb_file(structure, obsolete=True, file_format="mmCif")
+            self.assertTrue(os.path.isfile(path))
+            os.remove(path)
+
+    def test_retrieve_pdb_file_mmcif(self):
+        """
+        Tests retrieving the (non-obsolete) molecule in mmcif format
+        """
+        structure = "127d"
+        with self.make_temp_directory(os.getcwd()) as tmp:
+            pdblist = PDBList(pdb=tmp, obsolete_pdb=os.path.join(tmp, "obsolete"))
+            path = os.path.join(tmp, structure[1:3], "%s.cif" % structure)
+            pdblist.retrieve_pdb_file(structure, file_format="mmCif")
+            self.assertTrue(os.path.isfile(path))
+            os.remove(path)
+
+    def test_retrieve_pdb_file_xml(self):
+        """
+        Tests retrieving the molecule in xml format
+        """
+        structure = "127d"
+        with self.make_temp_directory(os.getcwd()) as tmp:
+            pdblist = PDBList(pdb=tmp, obsolete_pdb=os.path.join(tmp, "obsolete"))
+            path = os.path.join(tmp, structure[1:3], "%s.xml" % structure)
+            pdblist.retrieve_pdb_file(structure, file_format="xml")
+            self.assertTrue(os.path.isfile(path))
+            os.remove(path)
+
+    def test_retrieve_pdb_file_mmtf(self):
+        """
+        Tests retrieving the molecule in mmtf format
+        """
+        structure = "127d"
+        with self.make_temp_directory(os.getcwd()) as tmp:
+            pdblist = PDBList(pdb=tmp, obsolete_pdb=os.path.join(tmp, "obsolete"))
+            path = os.path.join(tmp, structure[1:3], "%s.mmtf" % structure)
+            pdblist.retrieve_pdb_file(structure, file_format="mmtf")
+            self.assertTrue(os.path.isfile(path))
+            os.remove(path)

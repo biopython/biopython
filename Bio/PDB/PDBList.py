@@ -23,8 +23,11 @@
 #   homepage : http://jaceksmietanski.net
 #   email    : jacek.smietanski@ii.uj.edu.pl
 #
-# This code is released under the conditions of the Biopython license.
-# It may be distributed freely with respect to the original author.
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
+# It may be distributed freely with respect to the original authors.
 # Any maintainer of the Biopython code may change this notice
 # when appropriate.
 
@@ -180,7 +183,7 @@ class PDBList(object):
                 obsolete.append(pdb)
         return obsolete
 
-    def retrieve_pdb_file(self, pdb_code, file_format='mmCif', overwrite=False, obsolete=False, pdir=None):
+    def retrieve_pdb_file(self, pdb_code, obsolete=False, pdir=None, file_format='mmCif', overwrite=False):
         """ Retrieves a PDB structure file from the PDB server and
         stores it in a local file tree.
 
@@ -282,7 +285,7 @@ class PDBList(object):
 
         for pdb_code in new + modified:
             try:
-                self.retrieve_pdb_file(pdb_code, file_format)
+                self.retrieve_pdb_file(pdb_code, file_format=file_format)
             except Exception:
                 print('error %s\n' % pdb_code)
                 # you can insert here some more log notes that
@@ -343,7 +346,7 @@ class PDBList(object):
         @rtype: string
         """
         for pdb_code in pdb_codes:
-            self.retrieve_pdb_file(pdb_code, file_format, overwrite, obsolete, pdir)
+            self.retrieve_pdb_file(pdb_code, obsolete=obsolete, pdir=pdir, file_format=file_format, overwrite=overwrite)
 
     def download_entire_pdb(self, file_format='mmCif', listfile=None):
         """Retrieve all PDB entries not present in the local PDB copy.
@@ -353,7 +356,7 @@ class PDBList(object):
         """
         entries = self.get_all_entries()
         for pdb_code in entries:
-            self.retrieve_pdb_file(pdb_code, file_format)
+            self.retrieve_pdb_file(pdb_code, file_format=file_format)
         # Write the list
         if listfile:
             with open(listfile, 'w') as outfile:
@@ -368,7 +371,7 @@ class PDBList(object):
         """
         entries = self.get_all_obsolete()
         for pdb_code in entries:
-            self.retrieve_pdb_file(pdb_code, file_format, obsolete=True)
+            self.retrieve_pdb_file(pdb_code, obsolete=True, file_format=file_format)
 
         # Write the list
         if listfile:
@@ -451,10 +454,10 @@ if __name__ == '__main__':
 
         elif len(sys.argv[1]) == 4 and sys.argv[1][0].isdigit():
             # get single PDB entry
-            pl.retrieve_pdb_file(sys.argv[1], file_format=file_format, overwrite=overwrite, pdir=pdb_path)
+            pl.retrieve_pdb_file(sys.argv[1], pdir=pdb_path, file_format=file_format, overwrite=overwrite)
 
         elif sys.argv[1][0] == '(':
             # get a set of PDB entries
             pdb_ids = re.findall(sys.argv[1], "[0-9A-Za-z]{4}")
             for pdb_id in pdb_ids:
-                pl.retrieve_pdb_file(pdb_id, file_format=file_format, overwrite=overwrite, pdir=pdb_path)
+                pl.retrieve_pdb_file(pdb_id, pdir=pdb_path, file_format=file_format, overwrite=overwrite)
