@@ -39,7 +39,7 @@ class SVDSuperimposer(object):
     start with two coordinate sets (Nx3 arrays - float)
 
     >>> from Bio.SVDSuperimposer import SVDSuperimposer
-    >>> from numpy import array, dot
+    >>> from numpy import array, dot, set_printoptions
     >>>
     >>> x = array([[51.65, -1.90, 50.07],
     ...      [50.40, -1.23, 50.65],
@@ -79,16 +79,17 @@ class SVDSuperimposer(object):
 
     >>> y_on_x2 = sup.get_transformed()
 
+    >>> set_printoptions(precision=2)
     >>> print(y_on_x1)
-    [[  5.16518898e+01  -1.90018272e+00   5.00708466e+01]
-     [  5.03977165e+01  -1.22877121e+00   5.06488266e+01]
-     [  5.06801834e+01  -4.16088104e-02   5.15368958e+01]
-     [  5.02202301e+01  -1.94377899e-02   5.28534546e+01]]
+    [[  5.17e+01  -1.90e+00   5.01e+01]
+     [  5.04e+01  -1.23e+00   5.06e+01]
+     [  5.07e+01  -4.16e-02   5.15e+01]
+     [  5.02e+01  -1.94e-02   5.29e+01]]
     >>> print(y_on_x2)
-    [[  5.16518898e+01  -1.90018272e+00   5.00708466e+01]
-     [  5.03977165e+01  -1.22877121e+00   5.06488266e+01]
-     [  5.06801834e+01  -4.16088104e-02   5.15368958e+01]
-     [  5.02202301e+01  -1.94377899e-02   5.28534546e+01]]
+    [[  5.17e+01  -1.90e+00   5.01e+01]
+     [  5.04e+01  -1.23e+00   5.06e+01]
+     [  5.07e+01  -4.16e-02   5.15e+01]
+     [  5.02e+01  -1.94e-02   5.29e+01]]
     >>> print("%.2f" % rms)
     0.00
 
