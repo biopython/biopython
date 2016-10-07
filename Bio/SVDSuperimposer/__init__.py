@@ -20,6 +20,7 @@ except ImportError:
     raise MissingPythonDependencyError(
         "Install NumPy if you want to use Bio.SVDSuperimposer.")
 
+
 class SVDSuperimposer(object):
     """Class to run SVD alignment,
 
