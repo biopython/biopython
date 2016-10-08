@@ -101,7 +101,6 @@ DOCTEST_MODULES = [
     "Bio.KEGG.Compound",
     "Bio.KEGG.Enzyme",
     "Bio.NMR.xpktools",
-    "Bio.MaxEntropy",
     "Bio.motifs",
     "Bio.motifs.applications._xxmotif",
     "Bio.pairwise2",
@@ -145,6 +144,7 @@ DOCTEST_MODULES = [
 if is_numpy():
     DOCTEST_MODULES.extend(["Bio.Affy.CelFile",
                             "Bio.Statistics.lowess",
+                            "Bio.MaxEntropy",
                             "Bio.PDB.Polypeptide",
                             "Bio.PDB.Selection",
                             "Bio.SeqIO.PdbIO",

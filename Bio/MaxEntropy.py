@@ -11,10 +11,13 @@ Uses Improved Iterative Scaling.
 
 from __future__ import print_function
 from functools import reduce
-
 from Bio._py3k import map
-
-import numpy
+try:
+    import numpy
+except ImportError:
+    from Bio import MissingPythonDependencyError
+    raise MissingPythonDependencyError(
+        "Install NumPy if you want to use Bio.MaxEntropy.")
 
 
 class MaxEntropy(object):
