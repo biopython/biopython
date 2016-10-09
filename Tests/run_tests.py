@@ -137,6 +137,7 @@ DOCTEST_MODULES = [
     "Bio.Sequencing.Applications._bwa",
     "Bio.Sequencing.Applications._samtools",
     "Bio.SwissProt",
+    "Bio.UniProt.GOA",
     "Bio.Wise",
     "Bio.Wise.psw",
 ]
@@ -144,9 +145,11 @@ DOCTEST_MODULES = [
 if is_numpy():
     DOCTEST_MODULES.extend(["Bio.Affy.CelFile",
                             "Bio.Statistics.lowess",
+                            "Bio.MaxEntropy",
                             "Bio.PDB.Polypeptide",
                             "Bio.PDB.Selection",
                             "Bio.SeqIO.PdbIO",
+                            "Bio.SVDSuperimposer",
                             ])
 
 
