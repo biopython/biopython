@@ -137,6 +137,7 @@ DOCTEST_MODULES = [
     "Bio.Sequencing.Applications._bwa",
     "Bio.Sequencing.Applications._samtools",
     "Bio.SwissProt",
+    "Bio.UniProt.GOA",
     "Bio.Wise",
     "Bio.Wise.psw",
 ]
