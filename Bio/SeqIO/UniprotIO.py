@@ -59,7 +59,7 @@ def UniprotIterator(handle, alphabet=Alphabet.ProteinAlphabet(), return_raw_comm
     if not hasattr(handle, "read"):
         if isinstance(handle, str):
             import warnings
-            from Biopython import BiopythonDeprecationWarning
+            from Bio import BiopythonDeprecationWarning
             warnings.warn("Passing an XML-containing handle is recommended",
                           BiopythonDeprecationWarning)
             handle = StringIO(handle)
