@@ -13,6 +13,7 @@ import tempfile
 import sys
 from Bio._py3k import StringIO
 from Bio._py3k import range
+from Bio.AlignIO import NexusIO
 
 from Bio.SeqRecord import SeqRecord
 from Bio.Nexus import Nexus, Trees
@@ -540,7 +541,7 @@ class TestSelf(unittest.TestCase):
         ;
         end;
         """)  # noqa for pep8 W291 trailing whitespace
-        for a in NexusIterator(handle):
+        for a in NexusIO.NexusIterator(handle):
             print(a)
             for r in a:
                 print("%r %s %s" % (r.seq, r.name, r.id))
@@ -568,7 +569,7 @@ class TestSelf(unittest.TestCase):
         ;
         end;
         """)  # noqa for pep8 W291 trailing whitespace
-        for a in NexusIterator(handle):
+        for a in NexusIO.NexusIterator(handle):
             print(a)
             for r in a:
                 print("%r %s %s" % (r.seq, r.name, r.id))
@@ -577,19 +578,19 @@ class TestSelf(unittest.TestCase):
         def test_empty_file(self):
 
             print("Reading an empty file")
-            assert 0 == len(list(NexusIterator(StringIO())))
+            assert 0 == len(list(NexusIO.NexusIterator(StringIO())))
             print("Done")
             print("")
             print("Writing...")
 
             handle = StringIO()
-            NexusWriter(handle).write_file([a])
+            NexusIO.NexusWriter(handle).write_file([a])
             handle.seek(0)
             print(handle.read())
 
             handle = StringIO()
             try:
-                NexusWriter(handle).write_file([a, a])
+                NexusIO.NexusWriter(handle).write_file([a, a])
                 assert False, "Should have rejected more than one alignment!"
             except ValueError:
                 pass
