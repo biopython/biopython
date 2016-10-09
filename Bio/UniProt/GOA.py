@@ -363,11 +363,12 @@ def gafiterator(handle):
     >>> with open('UniProt/goa_yeast.gaf', 'r') as handle:
     ...     for inrec in gafiterator(handle):
     ...         if record_has(inrec, Taxon_ID) and record_has(inrec, Evidence) and record_has(inrec, Synonym):
-    ...             print(inrec['DB_Object_Name'], inrec['Evidence'], inrec['Synonym'], inrec['Taxon_ID'])
+    ...             col = [inrec['DB_Object_Name'], inrec['Evidence'], inrec['Synonym'], inrec['Taxon_ID']]
+    ...             print("{}, {}, {}, {}".format(col[0], col[1], col[2], col[3]))
     ...
-    Putative uncharacterized protein YAL019W-A ND ['YA19A_YEAST', 'YAL019W-A'] ['taxon:559292']
-    Putative uncharacterized protein YAL019W-A ND ['YA19A_YEAST', 'YAL019W-A'] ['taxon:559292']
-    Putative uncharacterized protein YAL019W-A ND ['YA19A_YEAST', 'YAL019W-A'] ['taxon:559292']
+    Putative uncharacterized protein YAL019W-A, ND, ['YA19A_YEAST', 'YAL019W-A'], ['taxon:559292']
+    Putative uncharacterized protein YAL019W-A, ND, ['YA19A_YEAST', 'YAL019W-A'], ['taxon:559292']
+    Putative uncharacterized protein YAL019W-A, ND, ['YA19A_YEAST', 'YAL019W-A'], ['taxon:559292']
 
     """
     inline = handle.readline()
