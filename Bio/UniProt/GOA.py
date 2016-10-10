@@ -18,6 +18,8 @@ gp_information (GPI format) README:
 ftp://ftp.ebi.ac.uk/pub/databases/GO/goa/UNIPROT/gp_information_readme
 """
 
+from __future__ import print_function
+
 import copy
 import sys
 
