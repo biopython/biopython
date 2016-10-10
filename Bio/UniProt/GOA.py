@@ -21,7 +21,6 @@ ftp://ftp.ebi.ac.uk/pub/databases/GO/goa/UNIPROT/gp_information_readme
 from __future__ import print_function
 
 import copy
-import sys
 
 from Bio._py3k import zip
 
@@ -169,13 +168,13 @@ def gpi_iterator(handle):
     """
     inline = handle.readline()
     if inline.strip() == '!gpi-version: 1.1':
-        sys.stderr.write("gpi 1.1\n")
+        # sys.stderr.write("gpi 1.1\n")
         return _gpi11iterator(handle)
     elif inline.strip() == '!gpi-version: 1.0':
-        sys.stderr.write("gpi 1.0\n")
+        # sys.stderr.write("gpi 1.0\n")
         return _gpi10iterator(handle)
     elif inline.strip() == '!gpi-version: 2.1':
-        sys.stderr.write("gpi 2.1\n")
+        # sys.stderr.write("gpi 2.1\n")
         return _gpi20iterator(handle)
     else:
         raise ValueError('Unknown GPI version {0}\n'.format(inline))
@@ -231,10 +230,10 @@ def gpa_iterator(handle):
     """
     inline = handle.readline()
     if inline.strip() == '!gpa-version: 1.1':
-        sys.stderr.write("gpa 1.1\n")
+        # sys.stderr.write("gpa 1.1\n")
         return _gpa11iterator(handle)
     elif inline.strip() == '!gpa-version: 1.0':
-        sys.stderr.write("gpa 1.0\n")
+        # sys.stderr.write("gpa 1.0\n")
         return _gpa10iterator(handle)
     else:
         raise ValueError('Unknown GPA version {0}\n'.format(inline))
@@ -332,14 +331,14 @@ def gafbyproteiniterator(handle):
     """
     inline = handle.readline()
     if inline.strip() == '!gaf-version: 2.0':
-        sys.stderr.write("gaf 2.0\n")
+        # sys.stderr.write("gaf 2.0\n")
         return _gaf20byproteiniterator(handle)
     elif inline.strip() == '!gaf-version: 1.0':
-        sys.stderr.write("gaf 1.0\n")
+        # sys.stderr.write("gaf 1.0\n")
         return _gaf10byproteiniterator(handle)
     elif inline.strip() == '!gaf-version: 2.1':
         # Handle GAF 2.1 as GAF 2.0 for now TODO: fix
-        sys.stderr.write("gaf 2.1\n")
+        # sys.stderr.write("gaf 2.1\n")
         return _gaf20byproteiniterator(handle)
     else:
         raise ValueError('Unknown GAF version {0}\n'.format(inline))
@@ -374,14 +373,14 @@ def gafiterator(handle):
     """
     inline = handle.readline()
     if inline.strip() == '!gaf-version: 2.0':
-        sys.stderr.write("gaf 2.0\n")
+        # sys.stderr.write("gaf 2.0\n")
         return _gaf20iterator(handle)
     elif inline.strip() == '!gaf-version: 2.1':
-        sys.stderr.write("gaf 2.1\n")
+        # sys.stderr.write("gaf 2.1\n")
         # Handle GAF 2.1 as GAF 2.0 for now. TODO: fix
         return _gaf20iterator(handle)
     elif inline.strip() == '!gaf-version: 1.0':
-        sys.stderr.write("gaf 1.0\n")
+        # sys.stderr.write("gaf 1.0\n")
         return _gaf10iterator(handle)
     else:
         raise ValueError('Unknown GAF version {0}\n'.format(inline))
