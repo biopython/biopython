@@ -85,37 +85,10 @@ class KGMLParser(object):
 
     >>> from Bio.KEGG.KGML.KGML_parser import read
     >>> pathway = read(open('KEGG/ko01100.xml', 'r'))
-    >>> for k, v in list(pathway.entries.items())[:2]:
-    ...        print(v)
-    ...
-    Entry node ID: 1
-    Names: ko:K02821 ko:K02822 ko:K03475
-    Type: ortholog
-    Components: set()
-    Reactions: rn:R07671
-    Graphics elements: 1 ...
-    <BLANKLINE>
-    Entry node ID: 2
-    Names: ko:K03476
-    Type: ortholog
-    Components: set()
-    Reactions: rn:R07677
-    Graphics elements: 1 ...
-    >>> for r in list(pathway.reactions)[:2]:
-    ...     print(r)
-    ...
-    Reaction node ID: 1
-    Reaction KEGG IDs: rn:R07671
-    Type: reversible
-    Substrates: cpd:C00072
-    Products: cpd:C16186
-    <BLANKLINE>
-    Reaction node ID: 2
-    Reaction KEGG IDs: rn:R07677
-    Type: reversible
-    Substrates: cpd:C16186
-    Products: cpd:C14899
-    <BLANKLINE>
+    >>> print(len(pathway.entries))
+    3628
+    >>> print(len(pathway.reactions))
+    1672
     >>> print(len(pathway.maps))
     149
 

@@ -100,6 +100,7 @@ DOCTEST_MODULES = [
     "Bio.GenBank",
     "Bio.KEGG.Compound",
     "Bio.KEGG.Enzyme",
+    "Bio.KEGG.KGML.KGML_parser",
     "Bio.NMR.xpktools",
     "Bio.motifs",
     "Bio.motifs.applications._xxmotif",
