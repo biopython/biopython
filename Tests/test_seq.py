@@ -6,9 +6,19 @@ from __future__ import print_function
 import array
 import copy
 import sys
-import unittest
 import warnings
 
+# Remove unittest2 import after dropping support for Python 2
+if sys.version_info[0] < 3:
+    try:
+        import unittest2 as unittest
+    except ImportError:
+        from Bio import MissingPythonDependencyError
+        raise MissingPythonDependencyError("Under Python 2 this test needs the unittest2 library")
+else:
+    import unittest
+
+from Bio import BiopythonWarning
 from Bio import Alphabet
 from Bio import Seq
 from Bio.Alphabet import IUPAC, Gapped
@@ -237,14 +247,14 @@ class TestSeqStringMethods(unittest.TestCase):
         """Test __lt__ comparison method"""
         seq1 = Seq.Seq("TCAAA", IUPAC.ambiguous_dna)
         seq2 = Seq.Seq("UCAAAA", IUPAC.ambiguous_rna)
-        with warnings.catch_warnings(record=True):
+        with self.assertWarns(BiopythonWarning):
             self.assertTrue(seq1 < seq2)
 
     def test_less_than_or_equal_comparison_of_incompatible_alphabets(self):
         """Test __lt__ comparison method"""
         seq1 = Seq.Seq("TCAAA", IUPAC.ambiguous_dna)
         seq2 = Seq.Seq("UCAAAA", IUPAC.ambiguous_rna)
-        with warnings.catch_warnings(record=True):
+        with self.assertWarns(BiopythonWarning):
             self.assertTrue(seq1 <= seq2)
 
     def test_add_method_using_wrong_object(self):
@@ -265,7 +275,7 @@ class TestSeqStringMethods(unittest.TestCase):
             self.s.__radd__(dict())
 
     def test_to_string_deprecated_method(self):
-        with warnings.catch_warnings(record=True):
+        with self.assertWarns(BiopythonWarning):
             self.s.tostring()
 
     def test_contains_method(self):
@@ -496,7 +506,7 @@ class TestMutableSeq(unittest.TestCase):
         self.assertEqual(self.mutable_s, "TCAAAAGGATGCATCATG")
 
     def test_equal_comparison_of_incompatible_alphabets(self):
-        with warnings.catch_warnings(record=True):
+        with self.assertWarns(BiopythonWarning):
             self.mutable_s == MutableSeq('UCAAAAGGA', IUPAC.ambiguous_rna)
 
     def test_not_equal_comparison(self):
@@ -508,7 +518,7 @@ class TestMutableSeq(unittest.TestCase):
         self.assertTrue(self.mutable_s[:-1] < self.mutable_s)
 
     def test_less_than_comparison_of_incompatible_alphabets(self):
-        with warnings.catch_warnings(record=True):
+        with self.assertWarns(BiopythonWarning):
             self.mutable_s[:-1] < MutableSeq("UCAAAAGGAUGCAUCAUG",
                                              IUPAC.ambiguous_rna)
 
@@ -520,7 +530,7 @@ class TestMutableSeq(unittest.TestCase):
         self.assertTrue(self.mutable_s[:-1] <= self.mutable_s)
 
     def test_less_than_or_equal_comparison_of_incompatible_alphabets(self):
-        with warnings.catch_warnings(record=True):
+        with self.assertWarns(BiopythonWarning):
             self.mutable_s[:-1] <= MutableSeq("UCAAAAGGAUGCAUCAUG",
                                               IUPAC.ambiguous_rna)
 
@@ -673,7 +683,7 @@ class TestMutableSeq(unittest.TestCase):
     def test_to_string_method(self):
         """This method is currently deprecated, probably will need to remove
         this test soon"""
-        with warnings.catch_warnings(record=True):
+        with self.assertWarns(BiopythonWarning):
             self.mutable_s.tostring()
 
     def test_extend_method(self):
@@ -1241,7 +1251,7 @@ class TestTranslating(unittest.TestCase):
                                                   table=table))
 
     def test_translation_incomplete_codon(self):
-        with warnings.catch_warnings(record=True):
+        with self.assertWarns(BiopythonWarning):
             Seq.translate("GTGGCCATTGTAATGGGCCG")
 
     def test_translation_extra_stop_codon(self):
