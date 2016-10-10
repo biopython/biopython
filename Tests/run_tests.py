@@ -100,6 +100,7 @@ DOCTEST_MODULES = [
     "Bio.GenBank",
     "Bio.KEGG.Compound",
     "Bio.KEGG.Enzyme",
+    "Bio.KEGG.KGML.KGML_parser",
     "Bio.NMR.xpktools",
     "Bio.motifs",
     "Bio.motifs.applications._xxmotif",
@@ -137,16 +138,19 @@ DOCTEST_MODULES = [
     "Bio.Sequencing.Applications._bwa",
     "Bio.Sequencing.Applications._samtools",
     "Bio.SwissProt",
+    "Bio.UniProt.GOA",
     "Bio.Wise",
     "Bio.Wise.psw",
 ]
 # Silently ignore any doctests for modules requiring numpy!
 if is_numpy():
     DOCTEST_MODULES.extend(["Bio.Affy.CelFile",
-                            "Bio.Statistics.lowess",
+                            "Bio.MaxEntropy",
                             "Bio.PDB.Polypeptide",
                             "Bio.PDB.Selection",
                             "Bio.SeqIO.PdbIO",
+                            "Bio.Statistics.lowess",
+                            "Bio.SVDSuperimposer",
                             ])
 
 
