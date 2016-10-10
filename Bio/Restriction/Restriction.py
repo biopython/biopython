@@ -2383,7 +2383,7 @@ class Analysis(RestrictionBatch, PrintFormat):
          """
         for i, enzyme in enumerate(names):
             if enzyme not in AllEnzymes:
-                print("no data for the enzyme: %s" % name)
+                print("no data for the enzyme: %s" % enzyme)
                 del names[i]
         if not dct:
             return RestrictionBatch(names).search(self.sequence)
