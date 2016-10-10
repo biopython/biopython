@@ -222,6 +222,23 @@ class RestrictionBatches(unittest.TestCase):
         self.assertEqual(hits[EcoRV], [8])
         self.assertEqual(hits[EcoRI], [16])
 
+    def test_analysis_restrictions(self):
+        """Test Fancier restriction analysis
+        """
+        new_seq = Seq('TTCAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAA', IUPACAmbiguousDNA())
+        rb = RestrictionBatch([EcoRI, KpnI, EcoRV])
+        Ana = Analysis(rb, new_seq, linear=False)
+        self.assertEqual(Ana.blunt(), {EcoRV: []})  # output only the result for enzymes which cut blunt
+        self.assertEqual(Ana.full(), {KpnI: [], EcoRV: [], EcoRI: [33]})
+        self.assertEqual(Ana.with_sites(),  {EcoRI: [33]})  # output only the result for enzymes which have a site
+        self.assertEqual(Ana.without_site(),  {KpnI: [], EcoRV: []})  # output only the enzymes which have no site
+        self.assertEqual(Ana.only_between(1, 20), {})  # the enzymes which cut between position 1 and 20
+        self.assertEqual(Ana.only_between(20, 34),   {EcoRI: [33]})# etc...
+        self.assertEqual(Ana.only_outside(20, 34), {})
+        self.assertEqual(Ana.with_name(['fake']), {})
+        self.assertEqual(Ana.with_name([EcoRI]), {EcoRI: [33]})
+
+        print(Ana)
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
