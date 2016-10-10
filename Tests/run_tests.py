@@ -143,10 +143,11 @@ DOCTEST_MODULES = [
 # Silently ignore any doctests for modules requiring numpy!
 if is_numpy():
     DOCTEST_MODULES.extend(["Bio.Affy.CelFile",
-                            "Bio.Statistics.lowess",
                             "Bio.PDB.Polypeptide",
                             "Bio.PDB.Selection",
                             "Bio.SeqIO.PdbIO",
+                            "Bio.Statistics.lowess",
+                            "Bio.SVDSuperimposer",
                             ])
 
 
