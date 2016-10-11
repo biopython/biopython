@@ -82,6 +82,9 @@ Notes about the diverses class of the restriction enzyme implementation::
 """
 
 from __future__ import print_function
+
+import warnings
+
 from Bio._py3k import zip
 from Bio._py3k import filter
 from Bio._py3k import range
@@ -98,6 +101,7 @@ from Bio.Restriction.Restriction_Dictionary import suppliers as suppliers_dict
 # TODO: Consider removing this wildcard import.
 from Bio.Restriction.RanaConfig import *
 from Bio.Restriction.PrintFormat import PrintFormat
+from Bio import BiopythonWarning
 
 
 # Used to use Bio.Restriction.DNAUtils.check_bases (and expose it under this
@@ -2383,7 +2387,7 @@ class Analysis(RestrictionBatch, PrintFormat):
          """
         for i, enzyme in enumerate(names):
             if enzyme not in AllEnzymes:
-                print("no data for the enzyme: %s" % enzyme)
+                warnings.warn("no data for the enzyme: %s" % enzyme, BiopythonWarning)
                 del names[i]
         if not dct:
             return RestrictionBatch(names).search(self.sequence)
