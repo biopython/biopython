@@ -144,6 +144,11 @@ class MafftCommandline(AbstractCommandline):
                     "Default: 0",
                     checker_function=lambda x: isinstance(x, int),
                     equate=False),
+            # Number of threads to use. Default: 1
+            _Option(["--thread", "thread"],
+                    "Number of threads to use. Default: 1",
+                    checker_function=lambda x: isinstance(x, int),
+                    equate=False),
             # Use FFT approximation in group-to-group alignment. Default: on
             _Switch(["--fft", "fft"],
                     "Use FFT approximation in group-to-group alignment. "
