@@ -237,7 +237,9 @@ class RestrictionBatches(unittest.TestCase):
         self.assertEqual(ana.with_sites(), {EcoRI: [33]})  # output only the result for enzymes which have a site
         self.assertEqual(ana.without_site(), {KpnI: [], EcoRV: []})  # output only the enzymes which have no site
         self.assertEqual(ana.only_between(1, 20), {})  # the enzymes which cut between position 1 and 20
+        self.assertEqual(ana.only_between(0, 20), {})  # start less than 1
         self.assertEqual(ana.only_between(20, 34), {EcoRI: [33]})  # etc...
+        self.assertEqual(ana.only_between(34, 20), {EcoRI: [33]})  # mix start end order
         self.assertEqual(ana.only_outside(20, 34), {})
         self.assertEqual(ana.with_name(['fake']), {})
         self.assertEqual(ana.with_name([EcoRI]), {EcoRI: [33]})

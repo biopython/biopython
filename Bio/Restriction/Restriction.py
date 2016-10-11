@@ -2231,7 +2231,7 @@ class Analysis(RestrictionBatch, PrintFormat):
         if start < end:
             pass
         else:
-            start, end == end, start
+            start, end = end, start
         if start < 1:
             start == 1
         if start < end:
