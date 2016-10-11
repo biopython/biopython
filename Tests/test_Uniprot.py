@@ -331,6 +331,13 @@ class TestUniprot(unittest.TestCase):
         self.assertEqual(old.name, 'F2CXE6_HORVD')
         self.assertEqual(new.name, 'F2CXE6_HORVD')
 
+    def test_P84001(self):
+        """Parse mass spec structured comment with unknown loc"""
+        xml = list(SeqIO.parse("SwissProt/P84001.xml", "uniprot-xml"))[0]
+        self.assertEqual(xml.id, 'P84001')
+        self.assertEqual(len(xml.annotations['comment_massspectrometry']), 1)
+        self.assertEqual(xml.annotations['comment_massspectrometry'][0], 'undefined:9571|Electrospray')
+
     def test_multi_ex(self):
         """Compare SwissProt text and uniprot XML versions of several examples."""
         txt_list = list(SeqIO.parse("SwissProt/multi_ex.txt", "swiss"))
