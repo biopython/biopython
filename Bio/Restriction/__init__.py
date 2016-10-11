@@ -105,7 +105,7 @@ from Bio.Restriction.Restriction import *
 #   3) I prefer to keep all the code together.
 #   4) and 5) both are OK. Only a matter of preference.
 #
-#   So the following code has been moved back to Bio.Restricion.Restriction
+#   So the following code has been moved back to Bio.Restriction.Restriction
 #   For the user the results is transparent:
 #   from Bio.Restriction import * works as before.
 #
