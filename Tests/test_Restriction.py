@@ -242,10 +242,10 @@ class RestrictionBatches(unittest.TestCase):
         self.assertEqual(ana.only_between(34, 20), {EcoRI: [33]})  # mix start end order
         self.assertEqual(ana.only_outside(20, 34), {})
         self.assertEqual(ana.with_name(['fake']), {})
-        #TODO What is the expected behaviour on this next test?
+        # TODO What is the expected behaviour on this next test?
         self.assertEqual(ana.with_name([EcoRI]), {EcoRI: [33]})
         self.assertEqual((ana._boundaries(1, 20)[:2]), (1, 20))
-        self.assertEqual((ana._boundaries(20, 1)[:2]), (1, 20))  #reverse order
+        self.assertEqual((ana._boundaries(20, 1)[:2]), (1, 20))  # reverse order
         self.assertEqual((ana._boundaries(-1, 20)[:2]), (20, 33))  # fix negative start
 
 
