@@ -197,8 +197,11 @@ class Polypeptide(list):
         """
         ca_list = []
         for res in self:
-            ca = res["CA"]
-            ca_list.append(ca)
+            try:
+                ca = res["CA"]
+                ca_list.append(ca)
+            except:
+                ca_list.append("None")
         return ca_list
 
     def get_phi_psi_list(self):
