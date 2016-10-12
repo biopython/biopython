@@ -1014,8 +1014,8 @@ class RenamingElementTests(unittest.TestCase):
     def test_full_id_is_updated(self):
         for atom in self.struc.get_atoms(): break #First atom
         original_id = atom.get_full_id()
-        for chain in self.struc.get_chains(): break #Get first chain
-        chain.change_child_id(('H_PCA', 1, ' '), (' ', 1, ' '))
+        for model in self.struc: break #Get first model
+        model.change_child_id('A', '1_A')
         new_id = atom.get_full_id()
         self.assertNotEqual(original_id, new_id)
     def test_parent_name_is_updated(self):

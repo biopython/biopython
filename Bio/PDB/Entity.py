@@ -92,45 +92,46 @@ class Entity(object):
     def reset_full_id(self):
         """Reset the full_id.
 
-        Sets the full_id of this entity and 
+        Sets the full_id of this entity and
         recursively of all its children to None.
-        This means that it will be newly generated 
+        This means that it will be newly generated
         at the next call to get_full_id.
         """
         for child in self:
             try:
                 child.reset_full_id()
-            except AttributeError: pass #Atoms do not cache their full ids.
+            except AttributeError: 
+                pass  # Atoms do not cache their full ids.
         self.full_id = None
 
-    def change_child_id(self, old_id, new_id, rename_structure = "_modified"):
+    def change_child_id(self, old_id, new_id, rename_structure="_modified"):
         """Change the id of a child.
 
         @param rename_structure: Append this string to the id
                 of the corresponding (parent) Structure instance.
-                This is to guarantee adherence to point one of 
-                the pdb advisory 
+                This is to guarantee adherence to point one of
+                the pdb advisory
                 (http://www.rcsb.org/pdb/static.do?p=general_information/about_pdb/pdb_advisory.html)
         @type rename_structure: string
         """
         entity = self[old_id]
-        #Pdb does not want people to distribute modified
-        #data under the original id. Changing the id of an
-        #entity can be seen as a modification of the pdb data.
-        #We thus change the id of the Structure object to be on the save side.
+        # Pdb does not want people to distribute modified
+        # data under the original id. Changing the id of an
+        # entity can be seen as a modification of the pdb data.
+        # We thus change the id of the Structure object to be on the save side.
         if rename_structure:
             parent = self
             while parent is not None:
                 if parent.level == "S":
-                    assert parent.get_parent() is None #Structure Entity should not have a parent.
-                    parent.id+=rename_structure
+                    assert parent.get_parent() is None  # Structure Entity should not have a parent.
+                    parent.id += rename_structure
                     break
                 parent = parent.get_parent()
         entity.id = new_id
         self.child_dict[new_id] = entity
         del self.child_dict[old_id]
         entity.reset_full_id()
-            
+     
     def insert(self, pos, entity):
         "Add a child to the Entity at a specified position."
         entity_id = entity.get_id()
