@@ -2228,7 +2228,7 @@ class Analysis(RestrictionBatch, PrintFormat):
             raise TypeError('expected int, got %s instead' % type(start))
         if not isinstance(end, int):
             raise TypeError('expected int, got %s instead' % type(end))
-        if start < 1:
+        if start < 1:  # Looks like this tries to do python list like indexing
             start += len(self.sequence)
         if end < 1:
             end += len(self.sequence)
@@ -2236,12 +2236,8 @@ class Analysis(RestrictionBatch, PrintFormat):
             pass
         else:
             start, end = end, start
-        if start < 1:
-            start == 1
         if start < end:
             return start, end, self._test_normal
-        else:
-            return start, end, self._test_reverse
 
     def _test_normal(self, start, end, site):
         """A._test_normal(start, end, site) -> bool.

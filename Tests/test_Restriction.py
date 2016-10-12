@@ -236,15 +236,17 @@ class RestrictionBatches(unittest.TestCase):
         self.assertEqual(ana.full(), {KpnI: [], EcoRV: [], EcoRI: [33]})
         self.assertEqual(ana.with_sites(), {EcoRI: [33]})  # output only the result for enzymes which have a site
         self.assertEqual(ana.without_site(), {KpnI: [], EcoRV: []})  # output only the enzymes which have no site
+        self.assertEqual(ana.with_site_size([32]), {})
         self.assertEqual(ana.only_between(1, 20), {})  # the enzymes which cut between position 1 and 20
-        self.assertEqual(ana.only_between(0, 20), {})  # start less than 1
         self.assertEqual(ana.only_between(20, 34), {EcoRI: [33]})  # etc...
         self.assertEqual(ana.only_between(34, 20), {EcoRI: [33]})  # mix start end order
         self.assertEqual(ana.only_outside(20, 34), {})
         self.assertEqual(ana.with_name(['fake']), {})
+        #TODO What is the expected behaviour on this next test?
         self.assertEqual(ana.with_name([EcoRI]), {EcoRI: [33]})
-
-        print(Ana)
+        self.assertEqual((ana._boundaries(1, 20)[:2]), (1, 20))
+        self.assertEqual((ana._boundaries(20, 1)[:2]), (1, 20))  #reverse order
+        self.assertEqual((ana._boundaries(-1, 20)[:2]), (20, 33))  # fix negative start
 
 
 if __name__ == "__main__":
