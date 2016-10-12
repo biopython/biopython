@@ -100,7 +100,7 @@ class Entity(object):
         for child in self:
             try:
                 child.reset_full_id()
-            except AttributeError: 
+            except AttributeError:
                 pass  # Atoms do not cache their full ids.
         self.full_id = None
 
@@ -131,7 +131,7 @@ class Entity(object):
         self.child_dict[new_id] = entity
         del self.child_dict[old_id]
         entity.reset_full_id()
-     
+
     def insert(self, pos, entity):
         "Add a child to the Entity at a specified position."
         entity_id = entity.get_id()
