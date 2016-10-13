@@ -2386,7 +2386,7 @@ class Analysis(RestrictionBatch, PrintFormat):
                 warnings.warn("no data for the enzyme: %s" % enzyme, BiopythonWarning)
                 del names[i]
         if not dct:
-            return RestrictionBatch(names).search(self.sequence)
+            return RestrictionBatch(names).search(self.sequence, self.linear)
         return dict((n, dct[n]) for n in names if n in dct)
 
     def with_site_size(self, site_size, dct=None):
