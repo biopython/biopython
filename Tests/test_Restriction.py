@@ -13,6 +13,15 @@ from Bio.Seq import Seq
 from Bio.Alphabet.IUPAC import IUPACAmbiguousDNA
 from Bio import BiopythonWarning
 
+from sys import version_info
+if version_info[0] < 3:
+    try:
+        import unittest2 as unittest
+    except ImportError:
+        from Bio import MissingPythonDependencyError
+        raise MissingPythonDependencyError("Under Python 2 this test needs the unittest2 library")
+else:
+    import unittest
 
 
 class SimpleEnzyme(unittest.TestCase):
@@ -245,8 +254,7 @@ class RestrictionBatches(unittest.TestCase):
         self.assertEqual(ana.only_outside(20, 34), {})
         with self.assertWarns(BiopythonWarning):
             ana.with_name(['fake'])
-        # TODO What is the expected behaviour on this next test?
-        self.assertEqual(ana.with_name([EcoRI]), {EcoRI: []})
+        self.assertEqual(ana.with_name([EcoRI]), {EcoRI: [33]})
         self.assertEqual((ana._boundaries(1, 20)[:2]), (1, 20))
         self.assertEqual((ana._boundaries(20, 1)[:2]), (1, 20))  # reverse order
         self.assertEqual((ana._boundaries(-1, 20)[:2]), (20, 33))  # fix negative start
