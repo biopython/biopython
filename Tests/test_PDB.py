@@ -994,35 +994,79 @@ class IterationTests(unittest.TestCase):
         atoms = ["%12s" % str((atom.id, atom.altloc)) for atom in self.struc.get_atoms()]
         self.assertEqual(len(atoms), 756)
 
-class RenamingElementTests(unittest.TestCase):
+
+class ChangingIdTests(unittest.TestCase):
+
     def setUp(self):
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", PDBConstructionWarning)
-            self.struc = PDBParser(PERMISSIVE=True).get_structure('X', "PDB/a_structure.pdb")
-    def test_rename_chain(self):
-        """Changes the id of a model's child (a chain)"""
-        for model in self.struc: break #Get first model in structure
-        model.change_child_id('A', '1_A')
-        self.assertEqual([chain.id for chain in model.get_chains()] , ["1_A"])
-    def test_rename_residue(self):
-        """Changes the id of a residue"""
-        for chain in self.struc.get_chains(): break #Get first chain
-        chain.change_child_id(('H_PCA', 1, ' '), (' ', 1, ' '))
-        self.assertIn((' ', 1, ' '), chain) #__contains__ uses child_dict
-        for res in chain: break #__iter__ uses child_list
-        self.assertEqual(res.get_id(), (' ', 1, ' ')) 
+            self.struc = PDBParser(PERMISSIVE=True).get_structure(
+                                                  'X', "PDB/a_structure.pdb")
+
+    def test_change_model_id(self):
+        """Change the id of a model"""
+        for model in self.struc:
+            break  # Get first model in structure
+        model.id = 2
+        self.assertEqual(model.id, 2)
+        self.assertIn(2, self.struc)
+        self.assertNotIn(0, self.struc)
+
+    def test_change_model_id_raises(self):
+        """Cannot change id to a value already in use by another child"""
+        for model in self.struc:
+            break  # Get first model in structure
+        with self.assertRaises(ValueError):
+            model.id = 1
+        # Make sure nothing was changed
+        self.assertEqual(model.id, 0)
+        self.assertIn(0, self.struc)
+        self.assertIn(1, self.struc)
+
+    def test_change_chain_id(self):
+        """Change the id of a model"""
+        for chain in self.struc.get_chains():
+            break  # Get first chain in structure
+        chain.id = "R"
+        self.assertEqual(chain.id, "R")
+        for model in self.struc:
+            break  # Get first model
+        self.assertIn("R", model)
+
+    def test_change_residue_id(self):
+        """Change the id of a residue"""
+        for chain in self.struc.get_chains():
+            break  # Get first chain in structure
+        res = chain[('H_PCA', 1, ' ')]
+        res.id = (' ', 1, ' ')
+
+        self.assertEqual(res.id, (' ', 1, ' '))
+        self.assertIn((' ', 1, ' '), chain)
+        self.assertNotIn(('H_PCA', 1, ' '), chain)
+        self.assertEqual(chain[(' ', 1, ' ')], res)
+
     def test_full_id_is_updated(self):
-        for atom in self.struc.get_atoms(): break #First atom
-        original_id = atom.get_full_id()
-        for model in self.struc: break #Get first model
-        model.change_child_id('A', '1_A')
+        """
+        Invalidate cached full_ids if an id is changed.
+        """
+        for atom in self.struc.get_atoms():
+            break  # First atom
+        original_id = atom.get_full_id()  # ('X', 0, 'A', ('H_PCA', 1, ' '), ('N', ' '))
+        if original_id != ('X', 0, 'A', ('H_PCA', 1, ' '), ('N', ' ')):
+            raise ValueError("This test is broken, probably because the file"
+                             " 'a_structure.pdb' changed")
+        for residue in self.struc.get_residues():
+            break  # Get first model
+        if residue.full_id != ('X', 0, 'A', ('H_PCA', 1, ' ')):
+            raise ValueError(
+                    "This test is broken, either because the full_id "
+                    "was not cached or because the file "
+                    "'a_structure.pdb' changed, {}".format(residue.full_id))
+        residue.id = (' ', 1, ' ')
         new_id = atom.get_full_id()
         self.assertNotEqual(original_id, new_id)
-    def test_parent_name_is_updated(self):
-        for chain in self.struc.get_chains(): break #Get first chain
-        chain.change_child_id(('H_PCA', 1, ' '), (' ', 1, ' '), "I changed it")
-        self.assertIn("I changed it", self.struc.get_id())
-        
+        self.assertEqual(new_id, ('X', 0, 'A', (' ', 1, ' '), ('N', ' ')))
+
 # class RenumberTests(unittest.TestCase):
 #    """Tests renumbering of structures."""
 #

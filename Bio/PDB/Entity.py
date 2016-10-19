@@ -20,7 +20,7 @@ class Entity(object):
     are subclasses of Entity. It deals with storage and lookup.
     """
     def __init__(self, id):
-        self.id = id
+        self._id = id
         self.full_id = None
         self.parent = None
         self.child_list = []
@@ -52,6 +52,32 @@ class Entity(object):
             yield child
 
     # Public methods
+
+    @property
+    def id(self):
+        return self._id
+
+    @id.setter
+    def id(self, value):
+        """
+        Change the id of this entity.
+
+        This will update the child_dict of this entity's parent
+        and invalidate all cached full ids involving this entity.
+
+        @raises: ValueError
+        """
+        if self.parent:
+            if value in self.parent.child_dict:
+                raise ValueError(
+                              "Cannot change id from `{}` to `{}`. "
+                              "The id `{}` is already used for a sibling of"
+                              " this entity.".format(self._id, value, value))
+            del self.parent.child_dict[self._id]
+            self.parent.child_dict[value] = self
+
+        self._id = value
+        self.reset_full_id()
 
     def get_level(self):
         """Return level in hierarchy.
@@ -100,38 +126,10 @@ class Entity(object):
         for child in self:
             try:
                 child.reset_full_id()
-            except AttributeError: 
+            except AttributeError:
                 pass  # Atoms do not cache their full ids.
         self.full_id = None
 
-    def change_child_id(self, old_id, new_id, rename_structure="_modified"):
-        """Change the id of a child.
-
-        @param rename_structure: Append this string to the id
-                of the corresponding (parent) Structure instance.
-                This is to guarantee adherence to point one of
-                the pdb advisory
-                (http://www.rcsb.org/pdb/static.do?p=general_information/about_pdb/pdb_advisory.html)
-        @type rename_structure: string
-        """
-        entity = self[old_id]
-        # Pdb does not want people to distribute modified
-        # data under the original id. Changing the id of an
-        # entity can be seen as a modification of the pdb data.
-        # We thus change the id of the Structure object to be on the save side.
-        if rename_structure:
-            parent = self
-            while parent is not None:
-                if parent.level == "S":
-                    assert parent.get_parent() is None  # Structure Entity should not have a parent.
-                    parent.id += rename_structure
-                    break
-                parent = parent.get_parent()
-        entity.id = new_id
-        self.child_dict[new_id] = entity
-        del self.child_dict[old_id]
-        entity.reset_full_id()
-     
     def insert(self, pos, entity):
         "Add a child to the Entity at a specified position."
         entity_id = entity.get_id()
