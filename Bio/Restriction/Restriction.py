@@ -82,6 +82,9 @@ Notes about the diverses class of the restriction enzyme implementation::
 """
 
 from __future__ import print_function
+
+import warnings
+
 from Bio._py3k import zip
 from Bio._py3k import filter
 from Bio._py3k import range
@@ -98,6 +101,7 @@ from Bio.Restriction.Restriction_Dictionary import suppliers as suppliers_dict
 # TODO: Consider removing this wildcard import.
 from Bio.Restriction.RanaConfig import *
 from Bio.Restriction.PrintFormat import PrintFormat
+from Bio import BiopythonWarning
 
 
 # Used to use Bio.Restriction.DNAUtils.check_bases (and expose it under this
@@ -2224,20 +2228,16 @@ class Analysis(RestrictionBatch, PrintFormat):
             raise TypeError('expected int, got %s instead' % type(start))
         if not isinstance(end, int):
             raise TypeError('expected int, got %s instead' % type(end))
-        if start < 1:
+        if start < 1:  # Looks like this tries to do python list like indexing
             start += len(self.sequence)
         if end < 1:
             end += len(self.sequence)
         if start < end:
             pass
         else:
-            start, end == end, start
-        if start < 1:
-            start == 1
+            start, end = end, start
         if start < end:
             return start, end, self._test_normal
-        else:
-            return start, end, self._test_reverse
 
     def _test_normal(self, start, end, site):
         """A._test_normal(start, end, site) -> bool.
@@ -2383,10 +2383,10 @@ class Analysis(RestrictionBatch, PrintFormat):
          """
         for i, enzyme in enumerate(names):
             if enzyme not in AllEnzymes:
-                print("no data for the enzyme: %s" % enzyme)
+                warnings.warn("no data for the enzyme: %s" % enzyme, BiopythonWarning)
                 del names[i]
         if not dct:
-            return RestrictionBatch(names).search(self.sequence)
+            return RestrictionBatch(names).search(self.sequence, self.linear)
         return dict((n, dct[n]) for n in names if n in dct)
 
     def with_site_size(self, site_size, dct=None):
