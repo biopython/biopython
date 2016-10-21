@@ -51,6 +51,23 @@ class Entity(object):
         for child in self.child_list:
             yield child
 
+    # Private methods
+
+    def _reset_full_id(self):
+        """Reset the full_id.
+
+        Sets the full_id of this entity and
+        recursively of all its children to None.
+        This means that it will be newly generated
+        at the next call to get_full_id.
+        """
+        for child in self:
+            try:
+                child._reset_full_id()
+            except AttributeError:
+                pass  # Atoms do not cache their full ids.
+        self.full_id = None
+
     # Public methods
 
     @property
@@ -77,7 +94,7 @@ class Entity(object):
             self.parent.child_dict[value] = self
 
         self._id = value
-        self.reset_full_id()
+        self._reset_full_id()
 
     def get_level(self):
         """Return level in hierarchy.
@@ -114,21 +131,6 @@ class Entity(object):
         entity.set_parent(self)
         self.child_list.append(entity)
         self.child_dict[entity_id] = entity
-
-    def reset_full_id(self):
-        """Reset the full_id.
-
-        Sets the full_id of this entity and
-        recursively of all its children to None.
-        This means that it will be newly generated
-        at the next call to get_full_id.
-        """
-        for child in self:
-            try:
-                child.reset_full_id()
-            except AttributeError:
-                pass  # Atoms do not cache their full ids.
-        self.full_id = None
 
     def insert(self, pos, entity):
         "Add a child to the Entity at a specified position."
