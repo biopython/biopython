@@ -67,7 +67,7 @@ def write(obj, handle, **kwargs):
                    for idx, nwk in enumerate(
         writer.to_strings(plain=False, plain_newick=True,
                           **kwargs))]
-    tax_labels = [str(x) for x in chain(*(t.get_terminals() for t in trees))]
+    tax_labels = [str(x.name) for x in chain(*(t.get_terminals() for t in trees))]
     text = NEX_TEMPLATE % {
         'count': len(tax_labels),
         'labels': ' '.join(tax_labels),
