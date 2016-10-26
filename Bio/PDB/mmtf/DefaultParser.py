@@ -64,7 +64,7 @@ class StructureDecoder(object):
         # with current BioPython. Chain_id might be better.
         self.structure_bulder.init_chain(chain_id=chain_name)
         if self.chain_index_to_type_map[self.chain_counter] == "polymer":
-            self.this_type = ""
+            self.this_type = " "
         elif self.chain_index_to_type_map[self.chain_counter] == "non-polymer":
             self.this_type = "H"
         elif self.chain_index_to_type_map[self.chain_counter] == "water":
