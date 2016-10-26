@@ -142,9 +142,9 @@ def _parse_pdb_header_list(header):
         'structure_reference': "unknown",
         'journal_reference': "unknown",
         'author': "",
-        'cell' : (1.0, 1.0, 1.0, 90.0, 90.0, 90.0),
-        'cell_z' : 1,
-        'spacegroup' : "P1",
+        'cell': (1.0, 1.0, 1.0, 90.0, 90.0, 90.0),
+        'cell_z': 1,
+        'spacegroup': "P1",
         'compound': {'1': {'misc': ''}}, 'source': {'1': {'misc': ''}}}
 
     dict['structure_reference'] = _get_references(header)
@@ -250,13 +250,9 @@ def _parse_pdb_header_list(header):
                 try:
                     dict['resolution'] = float(r)
                 except:
-<<<<<<< HEAD
                     # print('nonstandard resolution %r' % r)
                     dict['resolution'] = None
-=======
-                    #print('nonstandard resolution %r' % r)
-                    dict['resolution']=None
-        elif key=="CRYST1":
+        elif key == "CRYST1":
             # get the symmetry & the cell parameters
             dict['cell'] = (float(hh[6:15]),
                             float(hh[15:24]),
@@ -266,7 +262,6 @@ def _parse_pdb_header_list(header):
                             float(hh[47:55]))
             dict['spacegroup'] = hh[55:66]
             dict['cell_z'] = int(hh[66:70])
->>>>>>> c4dc819... Include the CRYST1 information in the header. Resolves issue #2727
         else:
             # print(key)
             pass
