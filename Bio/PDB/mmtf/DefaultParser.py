@@ -41,6 +41,11 @@ class StructureDecoder(object):
         :param element: the element of the atom, e.g. C for carbon. According to IUPAC. Calcium  is Ca
         :param charge: the formal atomic charge of the atom
         """
+        # MMTF uses "\x00" (the NUL character) to indicate to altloc, so convert
+        # that to the space required by StructureBuilder
+        if alternative_location_id == "\x00":
+            alternative_location_id = " "
+
         # Atom_name is in twice - the full_name is with spaces
         self.structure_bulder.init_atom(str(atom_name), [x, y, z],
                                         temperature_factor, occupancy,
