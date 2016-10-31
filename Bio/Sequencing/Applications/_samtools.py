@@ -329,13 +329,13 @@ class SamtoolsVersion0xSortCommandline(AbstractCommandline):
     Example
     -------
 
-    >>> from Bio.Sequencing.Applications import SamtoolsSortCommandline
+    >>> from Bio.Sequencing.Applications import SamtoolsVersion0xSortCommandline
     >>> input_bam = "/path/to/input_bam"
     >>> out_prefix = "/path/to/out_prefix"
-    >>> samtools_sort_cmd = SamtoolsSortCommandline(input=input_bam, out_prefix=out_prefix)
+    >>> samtools_sort_cmd = SamtoolsVersion0xSortCommandline(input=input_bam, out_prefix=out_prefix)
     >>> samtools_sort_cmd.__str__()=='samtools sort /path/to/input_bam /path/to/out_prefix'
+    >>> print(samtools_sort_cmd)
     samtools sort /path/to/input_bam /path/to/out_prefix
-
 
     """
     def __init__(self, cmd="samtools", **kwargs):
@@ -371,12 +371,13 @@ class SamtoolsVersion1xSortCommandline(AbstractCommandline):
     Example
     -------
 
-    >>> from Bio.Sequencing.Applications import SamtoolsSortCommandline
+    >>> from Bio.Sequencing.Applications import SamtoolsVersion1xSortCommandline
     >>> input_bam = "/path/to/input_bam"
     >>> FREFIX = "/path/to/out_prefix"
     >>> file_name = "/path/to/out_file"
-    >>> samtools_sort_cmd = SamtoolsSortCommandline(input=input_bam, T=FREFIX, o=file_name)
+    >>> samtools_sort_cmd = SamtoolsVersion1xSortCommandline(input=input_bam, T=FREFIX, o=file_name)
     >>> samtools_sort_cmd.__str__()=='samtools sort -o /path/to/out_file -T /path/to/out_prefix /path/to/input_bam'
+    >>> print(samtools_sort_cmd)
     samtools sort -o /path/to/out_file -T /path/to/out_prefix /path/to/input_bam
 
     """

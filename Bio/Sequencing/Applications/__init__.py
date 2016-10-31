@@ -14,7 +14,7 @@ from ._samtools import SamtoolsFixmateCommandline, SamtoolsIdxstatsCommandline
 from ._samtools import SamtoolsIndexCommandline, SamtoolsMergeCommandline
 from ._samtools import SamtoolsMpileupCommandline, SamtoolsPhaseCommandline
 from ._samtools import SamtoolsReheaderCommandline, SamtoolsRmdupCommandline
-from ._samtools import SamtoolsSortCommandline, SamtoolsTargetcutCommandline
+from ._samtools import SamtoolsVersion0xSortCommandline, SamtoolsVersion1xSortCommandline, SamtoolsTargetcutCommandline
 
 
 # Make this explicit, then they show up in the API docs
