@@ -22,7 +22,8 @@ from Bio.Sequencing.Applications import SamtoolsIdxstatsCommandline
 from Bio.Sequencing.Applications import SamtoolsIndexCommandline
 from Bio.Sequencing.Applications import SamtoolsMergeCommandline
 from Bio.Sequencing.Applications import SamtoolsMpileupCommandline
-from Bio.Sequencing.Applications import SamtoolsSortCommandline
+from Bio.Sequencing.Applications import SamtoolsVersion1xSortCommandline
+from Bio.Sequencing.Applications import SamtoolsVersion0xSortCommandline
 # TODO from Bio.Sequencing.Applications import SamtoolsPhaseCommandline
 # TODO from Bio.Sequencing.Applications import SamtoolsReheaderCommandline
 # TODO from Bio.Sequencing.Applications import SamtoolsRmdupCommandline
@@ -109,24 +110,6 @@ class SamtoolsTestCase(unittest.TestCase):
                                           "bam2_sorted.bam")
         self.files_to_clean = [self.referenceindexfile, self.bamindexfile1, self.outbamfile]
 
-    def check(self):
-        cline = samtools_exe
-        child = subprocess.Popen(str(cline),
-                                 stdout=subprocess.PIPE,
-                                 stderr=subprocess.PIPE,
-                                 universal_newlines=True,
-                                 shell=(sys.platform != "win32"))
-
-        stdoutdata, stderrdata = child.communicate()
-        # Checking samtools version
-        index = stderrdata.find("V")
-        stderrdata = stderrdata[index + 1:]
-        index = stderrdata.find("U")
-        name = stderrdata[:index]
-        if " " in name:
-            version_number = name.split(None, 1)[1]
-        return version_number
-
     def tearDown(self):
         for filename in self.files_to_clean:
             if os.path.isfile(filename):
@@ -198,23 +181,24 @@ class SamtoolsTestCase(unittest.TestCase):
     # TODO: def test_fixmate(self):
 
     def test_sort(self):
-        cmdline = SamtoolsSortCommandline(samtools_exe)
-        version_number = self.check()
 
-        if '0.1.' in version_number:
-            cmdline.set_parameter("input", self.bamfile1)
-            cmdline.set_parameter("out_prefix", "SamBam/out")
-        elif '1.3.' in version_number:
-            cmdline.set_parameter("input", self.bamfile1)
-            cmdline.set_parameter("-T", "out")
-            cmdline.set_parameter("-o", "out.bam")
+        cmdline = SamtoolsVersion0xSortCommandline(samtools_exe)
+        cmdline.set_parameter("input", self.bamfile1)
+        cmdline.set_parameter("out_prefix", "SamBam/out")
+
 
         try:
             stdout, stderr = cmdline()
         except ApplicationError as err:
             if "[bam_sort] Use -T PREFIX / -o FILE to specify temporary and final output files" in str(err):
-                # TODO: The samtools sort API changed...
-                return
+                cmdline = SamtoolsVersion1xSortCommandline(samtools_exe)
+                cmdline.set_parameter("input", self.bamfile1)
+                cmdline.set_parameter("-T", "out")
+                cmdline.set_parameter("-o", "out.bam")
+                try:
+                    stdout, stderr = cmdline()
+                except ApplicationError:
+                    raise
             else:
                 raise
         self.assertFalse(stderr,
