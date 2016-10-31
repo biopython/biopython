@@ -333,7 +333,6 @@ class SamtoolsVersion0xSortCommandline(AbstractCommandline):
     >>> input_bam = "/path/to/input_bam"
     >>> out_prefix = "/path/to/out_prefix"
     >>> samtools_sort_cmd = SamtoolsVersion0xSortCommandline(input=input_bam, out_prefix=out_prefix)
-    >>> samtools_sort_cmd = 'samtools sort /path/to/input_bam /path/to/out_prefix'
     >>> print(samtools_sort_cmd)
     samtools sort /path/to/input_bam /path/to/out_prefix
 
@@ -376,7 +375,6 @@ class SamtoolsVersion1xSortCommandline(AbstractCommandline):
     >>> FREFIX = "/path/to/out_prefix"
     >>> file_name = "/path/to/out_file"
     >>> samtools_sort_cmd = SamtoolsVersion1xSortCommandline(input=input_bam, T=FREFIX, o=file_name)
-    >>> samtools_sort_cmd = 'samtools sort -o /path/to/out_file -T /path/to/out_prefix /path/to/input_bam'
     >>> print(samtools_sort_cmd)
     samtools sort -o /path/to/out_file -T /path/to/out_prefix /path/to/input_bam
 

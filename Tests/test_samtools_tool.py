@@ -186,7 +186,6 @@ class SamtoolsTestCase(unittest.TestCase):
         cmdline.set_parameter("input", self.bamfile1)
         cmdline.set_parameter("out_prefix", "SamBam/out")
 
-
         try:
             stdout, stderr = cmdline()
         except ApplicationError as err:
@@ -232,8 +231,8 @@ class SamtoolsTestCase(unittest.TestCase):
         # Worked up to v1.2, then there was a regression failing with message
         # but as of v1.3 expect a warning: [W::bam_merge_core2] No @HD tag found.
         self.assertTrue(not stderr or stderr.strip() == "[W::bam_merge_core2] No @HD tag found.",
-                         "Samtools merge failed:\n%s\nStderr:%s"
-                         % (cmdline, stderr))
+                        "Samtools merge failed:\n%s\nStderr:%s"
+                        % (cmdline, stderr))
         self.assertTrue(os.path.exists(self.outbamfile))
 
     def test_mpileup(self):
