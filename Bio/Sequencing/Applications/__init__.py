@@ -35,6 +35,7 @@ __all__ = ["BwaIndexCommandline",
            "SamtoolsPhaseCommandline",
            "SamtoolsReheaderCommandline",
            "SamtoolsRmdupCommandline",
-           "SamtoolsSortCommandline",
+           "SamtoolsVersion0xSortCommandline",
+           "SamtoolsVersion1xSortCommandline",
            "SamtoolsTargetcutCommandline",
            ]
