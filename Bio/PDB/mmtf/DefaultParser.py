@@ -41,6 +41,11 @@ class StructureDecoder(object):
         :param element: the element of the atom, e.g. C for carbon. According to IUPAC. Calcium  is Ca
         :param charge: the formal atomic charge of the atom
         """
+        # MMTF uses "\x00" (the NUL character) to indicate to altloc, so convert
+        # that to the space required by StructureBuilder
+        if alternative_location_id == "\x00":
+            alternative_location_id = " "
+
         # Atom_name is in twice - the full_name is with spaces
         self.structure_bulder.init_atom(str(atom_name), [x, y, z],
                                         temperature_factor, occupancy,
@@ -59,7 +64,7 @@ class StructureDecoder(object):
         # with current BioPython. Chain_id might be better.
         self.structure_bulder.init_chain(chain_id=chain_name)
         if self.chain_index_to_type_map[self.chain_counter] == "polymer":
-            self.this_type = ""
+            self.this_type = " "
         elif self.chain_index_to_type_map[self.chain_counter] == "non-polymer":
             self.this_type = "H"
         elif self.chain_index_to_type_map[self.chain_counter] == "water":
@@ -96,6 +101,12 @@ class StructureDecoder(object):
         :param secondary_structure_type: the type of secondary structure used (types are according to DSSP and
         number to type mappings are defined in the specification)
         """
+
+        # MMTF uses a NUL character to indicate a blank insertion code, but
+        # StructureBuilder expects a space instead.
+        if insertion_code == "\x00":
+            insertion_code = " "
+
         self.structure_bulder.init_seg(' ')
         self.structure_bulder.init_residue(group_name, self.this_type,
                                            group_number, insertion_code)
