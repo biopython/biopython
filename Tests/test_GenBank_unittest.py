@@ -175,6 +175,13 @@ class GenBankTests(unittest.TestCase):
             orig_first_line = fh.readline().strip()
         self.assertEqual(first_line, orig_first_line)
 
+    def test_qualifier_order(self):
+        """Check the qualifier order is preserved."""
+        record = SeqIO.read("GenBank/DS830848.gb", "gb")
+        f = record.features[0]
+        self.assertEqual(list(f.qualifiers),
+                         ['organism', 'mol_type', 'strain', 'db_xref', 'dev_stage'])
+
     def test_long_names(self):
         """Various GenBank names which push the column based LOCUS line."""
         original = SeqIO.read("GenBank/iro.gb", "gb")

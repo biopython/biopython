@@ -357,8 +357,8 @@ class _InsdcWriter(SequentialSequenceWriter):
                + self._wrap_location(location) + "\n"
         self.handle.write(line)
         # Now the qualifiers...
-        for key in sorted(feature.qualifiers.keys()):
-            values = feature.qualifiers[key]
+        # Note as of Biopython 1.69, this is an ordered-dict, don't sort it:
+        for key, values in feature.qualifiers.items():
             if isinstance(values, (list, tuple)):
                 for value in values:
                     self._write_feature_qualifier(key, value)
