@@ -1,0 +1,8 @@
+NumPy
+ReportLab
+matplotlib
+networkx
+pygraphviz
+rdflib
+psycopg2
+MySQLdb
