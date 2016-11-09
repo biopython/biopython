@@ -26,6 +26,7 @@ from __future__ import print_function
 import sys
 import os
 import shutil
+import subprocess
 
 if "bdist_wheel" in sys.argv:
     try:
@@ -199,8 +200,6 @@ def check_dependencies():
     # forced an installation, should we also ignore dependencies?
 
     # We only check for NumPy, as this is a compile time dependency
-    if is_Numpy_installed():
-        return True
     if is_automated():
         return True  # For automated builds go ahead with installed packages
     if os.name == 'java':
@@ -210,16 +209,6 @@ def check_dependencies():
     if is_ironpython():
         return True  # We're ignoring NumPy under IronPython (for now)
 
-    print("""
-Numerical Python (NumPy) is not installed.
-
-This package is required for many Biopython features.  Please install
-it before you install Biopython. You can install Biopython anyway, but
-anything dependent on NumPy will not work. If you do this, and later
-install NumPy, you should then re-install Biopython.
-
-You can find NumPy at http://www.numpy.org
-""")
     # exit automatically if running as part of some script
     # (e.g. PyPM, ActiveState's Python Package Manager)
     if not sys.stdout.isatty():
@@ -306,19 +295,8 @@ class test_biopython(Command):
         # change back to the current directory
         os.chdir(this_dir)
 
-
-def can_import(module_name):
-    """can_import(module_name) -> module or None"""
-    try:
-        return __import__(module_name)
-    except ImportError:
-        return None
-
-
 def is_Numpy_installed():
-    if is_pypy():
-        return False
-    return bool(can_import("numpy"))
+    return True
 
 # --- set up the packages we are going to install
 # standard biopython packages
@@ -430,32 +408,35 @@ else:
     ]
 
 # Add extensions that requires NumPy to build
-if is_Numpy_installed():
+try:
     import numpy
-    numpy_include_dir = numpy.get_include()
-    EXTENSIONS.append(
-        Extension('Bio.Cluster.cluster',
-                  ['Bio/Cluster/clustermodule.c',
-                   'Bio/Cluster/cluster.c'],
-                  include_dirs=[numpy_include_dir],
-                  ))
-    EXTENSIONS.append(
-        Extension('Bio.KDTree._CKDTree',
-                  ["Bio/KDTree/KDTree.c",
-                   "Bio/KDTree/KDTreemodule.c"],
-                  include_dirs=[numpy_include_dir],
-                  ))
-    EXTENSIONS.append(
-        Extension('Bio.motifs._pwm',
-                  ["Bio/motifs/_pwm.c"],
-                  include_dirs=[numpy_include_dir],
-                  ))
-    EXTENSIONS.append(
-        Extension('Bio.PDB.QCPSuperimposer.qcprotmodule',
-                  ["Bio/PDB/QCPSuperimposer/qcprotmodule.c"],
-                  include_dirs=[numpy_include_dir],
-                  ))
-
+except ImportError as e:
+    subprocess.call(["pip", "install", "numpy"])
+finally:
+    import numpy
+numpy_include_dir = numpy.get_include()
+EXTENSIONS.append(
+    Extension('Bio.Cluster.cluster',
+              ['Bio/Cluster/clustermodule.c',
+               'Bio/Cluster/cluster.c'],
+              include_dirs=[numpy_include_dir],
+              ))
+EXTENSIONS.append(
+    Extension('Bio.KDTree._CKDTree',
+              ["Bio/KDTree/KDTree.c",
+               "Bio/KDTree/KDTreemodule.c"],
+              include_dirs=[numpy_include_dir],
+              ))
+EXTENSIONS.append(
+    Extension('Bio.motifs._pwm',
+              ["Bio/motifs/_pwm.c"],
+              include_dirs=[numpy_include_dir],
+              ))
+EXTENSIONS.append(
+    Extension('Bio.PDB.QCPSuperimposer.qcprotmodule',
+              ["Bio/PDB/QCPSuperimposer/qcprotmodule.c"],
+              include_dirs=[numpy_include_dir],
+              ))
 
 # We now define the Biopython version number in Bio/__init__.py
 # Here we can't use "import Bio" then "Bio.__version__" as that would
@@ -477,30 +458,56 @@ except NameError:
 os.chdir(src_path)
 sys.path.insert(0, src_path)
 
-setup_args = {
-    "name": 'biopython',
-    "version": __version__,
-    "author": 'The Biopython Contributors',
-    "author_email": 'biopython@biopython.org',
-    "url": 'http://www.biopython.org/',
-    "description": 'Freely available tools for computational molecular biology.',
-    "download_url": 'http://biopython.org/DIST/',
-    "cmdclass": {
-        "install": install_biopython,
-        "build_py": build_py_biopython,
-        "build_ext": build_ext_biopython,
-        "test": test_biopython,
-        },
-    "packages": PACKAGES,
-    "ext_modules": EXTENSIONS,
-    "package_data": {
-        'Bio.Entrez': ['DTDs/*.dtd', 'DTDs/*.ent', 'DTDs/*.mod'],
-        'Bio.PopGen': ['SimCoal/data/*.par'],
-         },
-   }
-
 try:
-    setup(**setup_args)
+    setup(
+        name='biopython',
+        version=__version__,
+        url='http://www.biopython.org/',
+        license='Biopython License Agreement',
+        author='The Biopython Contributors',
+        author_email='biopython@biopython.org',
+        description='Freely available tools for computational molecular biology.',
+        long_description=__doc__,
+        download_url='http://biopython.org/DIST/',
+        cmdclass={
+            "install": install_biopython,
+            "build_py": build_py_biopython,
+            "build_ext": build_ext_biopython,
+            "test": test_biopython,
+        },
+        packages=PACKAGES,
+        ext_modules=EXTENSIONS,
+        include_package_data=True,
+        zip_safe=False,
+        platforms='any',
+        install_requires=[
+            'numpy>=1.8.2',
+        ],
+        package_data={
+            'Bio.Entrez': ['DTDs/*.dtd', 'DTDs/*.ent', 'DTDs/*.mod'],
+            'Bio.PopGen': ['SimCoal/data/*.par'],
+         },
+        classifiers=[
+            'Development Status :: 4 - Beta',
+            'Environment :: Web Environment',
+            'Intended Audience :: Developers',
+            'License :: OSI Approved :: BSD License',
+            'Operating System :: OS Independent',
+            'Programming Language :: Python',
+            'Programming Language :: Python :: 2.6',
+            'Programming Language :: Python :: 2.7',
+            'Programming Language :: Python :: 3.3',
+            'Programming Language :: Python :: 3.4',
+            'Programming Language :: Python :: 3.5',
+            'Programming Language :: PyPy :: 2.4',
+            'Programming Language :: PyPy :: 2.5',
+            'Programming Language :: PyPy :: 2.6',
+            'Programming Language :: PyPy3 :: 2.4',
+            'Programming Language :: Jython :: 2.7',
+            'Topic :: Science/Research :: Biology :: Computational Biology',
+            'Topic :: Software Development :: Libraries :: Python Modules'
+        ]
+    )
 finally:
     del sys.path[0]
     os.chdir(old_path)
