@@ -873,7 +873,8 @@ class EmblWriter(_InsdcWriter):
     QUALIFIER_INDENT = 21
     QUALIFIER_INDENT_STR = "FT" + " " * (QUALIFIER_INDENT - 2)
     QUALIFIER_INDENT_TMP = "FT   %s                "  # 21 if %s is empty
-    FEATURE_HEADER = "FH   Key             Location/Qualifiers\n"
+    # Note second spacer line of just FH is expected:
+    FEATURE_HEADER = "FH   Key             Location/Qualifiers\nFH\n"
 
     def _write_contig(self, record):
         max_len = self.MAX_WIDTH - self.HEADER_WIDTH
