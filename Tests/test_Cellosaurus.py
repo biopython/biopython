@@ -12,8 +12,6 @@ from Bio.ExPASy import Cellosaurus
 
 
 class TestCellosaurus(unittest.TestCase):
-
-
     def test_read(self):
         """Test read function"""
         handle = open("Cellosaurus/cell_lines_1.txt")
@@ -132,6 +130,7 @@ class TestCellosaurus(unittest.TestCase):
                 "OX: ['NCBI_TaxID=9925; ! Capra hircus'] HI: [] OI: [] SX:  CA: " \
                 "Spontaneously immortalized cell line"
         self.assertEquals(record.__str__(), input)
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=3)
