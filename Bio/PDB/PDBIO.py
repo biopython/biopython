@@ -209,7 +209,7 @@ class PDBIO(object):
                                 resseq, icode, chain_id)
                             fp.write(s)
                             if not preserve_atom_numbering:
-                                atom_number = atom_number + 1
+                                atom_number += 1
                 if chain_residues_written:
                     fp.write("TER\n")
             if model_flag and model_residues_written:
