@@ -23,6 +23,10 @@ now also allowed in identifiers.
 For consistency the Bio.Seq module now offers a complement function (already
 available as a method on the Seq and MutableSeq objects).
 
+The SeqFeature object's qualifiers is now an explicitly ordered dictionary
+(note that as of Python 3.6 the Python dict is ordered by default anyway).
+This helps reproduce GenBank/EMBL files on input/output.
+
 Additionally, a number of small bugs have been fixed with further additions
 to the test suite, and there has been further work to follow the Python PEP8,
 PEP257 and best practice standard coding style.
@@ -34,9 +38,11 @@ Allis Tauri (first contribution)
 Bernhard Thiel (first contribution)
 Bertrand Néron
 Carlos Pena
+Carlos Ríos
 Chris Warth
 Emmanuel Noutahi
 Markus Piotrowski
+Lenna Peterson
 Peter Cock
 Richard Neher (first contribution)
 Steve Bond
@@ -924,7 +930,7 @@ improvements.
 (At least) 12 people have contributed to this release, including 6 new people:
 
 Andres Colubri (first contribution)
-Carlos Rios Vera (first contribution)
+Carlos Ríos (first contribution)
 Claude Paroz (first contribution)
 Cymon Cox
 Eric Talevich
@@ -974,7 +980,7 @@ This avoids having to worry about the details of how best to use subprocess.
 (At least) 10 people have contributed to this release, including 5 new people:
 
 Andres Colubri (first contribution)
-Carlos Rios Vera (first contribution)
+Carlos Ríos (first contribution)
 Claude Paroz (first contribution)
 Eric Talevich
 Frank Kauff
