@@ -13,7 +13,7 @@ import tempfile
 import sys
 from Bio._py3k import StringIO
 from Bio._py3k import range
-
+from Bio.AlignIO.NexusIO import NexusIterator
 from Bio.SeqRecord import SeqRecord
 from Bio.Nexus import Nexus, Trees
 from Bio.Seq import Seq
@@ -511,4 +511,4 @@ class TestSelf(unittest.TestCase):
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
-    unittest.main(testRunner=runner)
+unittest.main(testRunner=runner)
