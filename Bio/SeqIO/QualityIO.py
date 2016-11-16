@@ -952,7 +952,6 @@ def FastqGeneralIterator(handle):
 
         # Return the record and then continue...
         yield (title_line, seq_string, quality_string)
-    raise StopIteration
 
 
 def FastqPhredIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
