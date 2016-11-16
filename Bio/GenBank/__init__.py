@@ -659,13 +659,23 @@ class _FeatureConsumer(_BaseGenBankConsumer):
 
         This reflects the fact that the topology (linear/circular) and
         molecule type (e.g. DNA vs RNA) were a single field in early
-        GenBank files. Current GenBank/EMBL files have two fields.
+        files. Current GenBank/EMBL files have two fields.
         """
         self._seq_type = type.strip()
 
     def topology(self, topology):
+        """Record the topology (linear or circular as strings)."""
         if topology:
+            if topology not in ['linear', 'circular']:
+                raise ParserFailureError("Unexpected topology %r should be linear or circular" % topology)
             self.data.annotations['topology'] = topology
+
+    def molecule_type(self, mol_type):
+        """Record the molecule type (for round-trip etc)."""
+        if mol_type:
+            if "circular" in mol_type or 'linear' in mol_type:
+                raise ParserFailureError("Molecule type %r should not include topology" % mol_type)
+            self.data.annotations['molecule_type'] = mol_type
 
     def data_file_division(self, division):
         self.data.annotations['data_file_division'] = division

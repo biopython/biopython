@@ -230,12 +230,12 @@ class GenBankTests(unittest.TestCase):
             self.assertEqual(seq_len, len(new))
 
 
-class TopologyTests(unittest.TestCase):
-    """Check GenBank/EMBL topology parsing."""
+class LineOneTests(unittest.TestCase):
+    """Check GenBank/EMBL topology / molecule_type parsing."""
 
     def test_topology_genbank(self):
-        """Check GenBank topology parsing."""
-        # This is a bit low level, but can test pasing the ID line only
+        """Check GenBank LOCUS line parsing."""
+        # This is a bit low level, but can test pasing the LOCUS line only
         tests = [
             ("LOCUS       U00096",
              None, None, None),
@@ -256,13 +256,16 @@ class TopologyTests(unittest.TestCase):
             t = consumer.data.annotations.get('topology', None)
             self.assertEqual(t, topo,
                              "Wrong topology %r not %r from %r" % (t, topo, line))
-            # TODO - molecule type - see issue 363 / pull request #1005
+            mt = consumer.data.annotations.get('molecule_type', None)
+            self.assertEqual(mt, mol_type,
+                             "Wrong molecule_type %r not %r from %r" %
+                             (mt, mol_type, line))
             d = consumer.data.annotations.get('data_file_division', None)
             self.assertEqual(d, div,
                              "Wrong division %r not %r from %r" % (d, div, line))
 
     def test_topology_embl(self):
-        """Check EMBL topology parsing."""
+        """Check EMBL ID line parsing."""
         # This is a bit low level, but can test pasing the ID line only
         tests = [
             # Modern examples with sequence version
@@ -296,7 +299,10 @@ class TopologyTests(unittest.TestCase):
             t = consumer.data.annotations.get('topology', None)
             self.assertEqual(t, topo,
                              "Wrong topology %r not %r from %r" % (t, topo, line))
-            # TODO - molecule type - see issue 363 / pull request #1005
+            mt = consumer.data.annotations.get('molecule_type', None)
+            self.assertEqual(mt, mol_type,
+                             "Wrong molecule_type %r not %r from %r" %
+                             (mt, mol_type, line))
             d = consumer.data.annotations.get('data_file_division', None)
             self.assertEqual(d, div,
                              "Wrong division %r not %r from %r" % (d, div, line))
@@ -317,7 +323,10 @@ class TopologyTests(unittest.TestCase):
             t = consumer.data.annotations.get('topology', None)
             self.assertEqual(t, topo,
                              "Wrong topology %r not %r from %r" % (t, topo, line))
-            # TODO - molecule type - see issue 363 / pull request #1005
+            mt = consumer.data.annotations.get('molecule_type', None)
+            self.assertEqual(mt, mol_type,
+                             "Wrong molecule_type %r not %r from %r" %
+                             (mt, mol_type, line))
             d = consumer.data.annotations.get('data_file_division', None)
             self.assertEqual(d, div,
                              "Wrong division %r not %r from %r" % (d, div, line))
