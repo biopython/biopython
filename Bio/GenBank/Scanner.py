@@ -636,6 +636,10 @@ class EmblScanner(InsdcScanner):
             raise ValueError('Did not recognise the ID line layout:\n' + line)
 
     def _feed_first_line_patents(self, consumer, line):
+        # Old style EMBL patent records where ID line ended SQ
+        # Not 100% sure that PRT here is really molecule type and
+        # not the data file division...
+        #
         # Either Non-Redundant Level 1 database records,
         # ID <accession>; <molecule type>; <non-redundant level 1>; <cluster size L1>
         # e.g. ID   NRP_AX000635; PRT; NR1; 15 SQ
@@ -647,7 +651,7 @@ class EmblScanner(InsdcScanner):
         fields = [data.strip() for data in line[self.HEADER_WIDTH:].strip()[:-3].split(";")]
         assert len(fields) == 4
         consumer.locus(fields[0])
-        consumer.residue_type(fields[1])
+        consumer.residue_type(fields[1])  # semi-redundant
         consumer.data_file_division(fields[2])
         # TODO - Record cluster size?
 
@@ -673,6 +677,7 @@ class EmblScanner(InsdcScanner):
            3. Sequence length (e.g. '111 AA.')
         """
         consumer.locus(fields[0])  # Should we also call the accession consumer?
+        # consumer.molecule_type(fields[2])
         self._feed_seq_length(consumer, fields[3])
 
     def _feed_first_line_old(self, consumer, line):
@@ -698,8 +703,12 @@ class EmblScanner(InsdcScanner):
         consumer.residue_type(fields[2])
         if "circular" in fields[2]:
             consumer.topology("circular")
+            consumer.molecule_type(fields[2].replace("circular", "").strip())
         elif "linear" in fields[2]:
             consumer.topology("linear")
+            consumer.molecule_type(fields[2].replace("linear", "").strip())
+        else:
+            consumer.molecule_type(fields[2].strip())
         consumer.data_file_division(fields[3])
         self._feed_seq_length(consumer, fields[4])
 
@@ -737,9 +746,10 @@ class EmblScanner(InsdcScanner):
             consumer.version_suffix(version_parts[1])
 
         # Based on how the old GenBank parser worked, merge these two:
-        consumer.residue_type(" ".join(fields[2:4]))  # TODO - Store as two fields?
+        consumer.residue_type(" ".join(fields[2:4]))  # Semi-obsolete
 
         consumer.topology(fields[2])
+        consumer.molecule_type(fields[3])
 
         # consumer.xxx(fields[4]) # TODO - What should we do with the data class?
 
@@ -968,8 +978,12 @@ class _ImgtScanner(EmblScanner):
         consumer.residue_type(fields[3])
         if "circular" in fields[3]:
             consumer.topology("circular")
+            consumer.molecule_type(fields[3].replace("circular", "").strip())
         elif "linear" in fields[3]:
             consumer.topology("linear")
+            consumer.molecule_type(fields[3].replace("linear", "").strip())
+        else:
+            consumer.molecule_type(fields[3].strip())
         consumer.data_file_division(fields[4])
         self._feed_seq_length(consumer, fields[5])
 
@@ -1151,7 +1165,7 @@ class GenBankScanner(InsdcScanner):
             #    ??:??      space
             #    ??:29      Length of sequence, right-justified
             #    29:33      space, bp, space
-            #    33:41      strand type
+            #    33:41      strand type / molecule type, e.g. DNA
             #    41:42      space
             #    42:51      Blank (implies linear), linear or circular
             #    51:52      space
@@ -1206,6 +1220,7 @@ class GenBankScanner(InsdcScanner):
             else:
                 consumer.residue_type(line[33:51].strip())
 
+            consumer.molecule_type(line[33:41].strip())
             consumer.topology(line[42:51].strip())
             consumer.data_file_division(line[52:55])
             if line[62:73].strip():
@@ -1277,6 +1292,7 @@ class GenBankScanner(InsdcScanner):
             else:
                 consumer.residue_type(line[44:63].strip())
 
+            consumer.molecule_type(line[44:54].strip())
             consumer.topology(line[55:63].strip())
             consumer.data_file_division(line[64:67])
             if line[68:79].strip():

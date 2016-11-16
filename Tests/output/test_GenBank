@@ -19,6 +19,8 @@ Key: gi
 Value: 5453633
 Key: keywords
 Value: ['']
+Key: molecule_type
+Value: mRNA
 Key: organism
 Value: Homo sapiens
 Key: sequence_version
@@ -73,6 +75,8 @@ Key: gi
 Value: 16229
 Key: keywords
 Value: ['antifreeze protein homology', 'cold-regulated gene', 'cor6.6 gene', 'KIN1 homology']
+Key: molecule_type
+Value: mRNA
 Key: organism
 Value: Arabidopsis thaliana
 References*
@@ -138,6 +142,8 @@ Key: gi
 Value: 16353
 Key: keywords
 Value: ['kin2 gene']
+Key: molecule_type
+Value: DNA
 Key: organism
 Value: Arabidopsis thaliana
 References*
@@ -262,6 +268,8 @@ Key: gi
 Value: 167145
 Key: keywords
 Value: ['']
+Key: molecule_type
+Value: mRNA
 Key: organism
 Value: Brassica napus
 References*
@@ -338,6 +346,8 @@ Key: gi
 Value: 4538892
 Key: keywords
 Value: ['cold shock protein', 'csp14 gene']
+Key: molecule_type
+Value: DNA
 Key: organism
 Value: Armoracia rusticana
 References*
@@ -426,6 +436,8 @@ Key: gi
 Value: 1209261
 Key: keywords
 Value: ['']
+Key: molecule_type
+Value: mRNA
 Key: organism
 Value: Brassica rapa
 References*
@@ -482,6 +494,8 @@ Key: gi
 Value: 10121868
 Key: keywords
 Value: ['']
+Key: molecule_type
+Value: DNA
 Key: organism
 Value: Brassica napus
 References*
@@ -568,6 +582,8 @@ Key: gi
 Value: 5731880
 Key: keywords
 Value: ['FLI_CDNA']
+Key: molecule_type
+Value: mRNA
 Key: organism
 Value: Homo sapiens
 References*
@@ -644,6 +660,8 @@ Key: gi
 Value: 452475
 Key: keywords
 Value: ['']
+Key: molecule_type
+Value: DNA
 Key: organism
 Value: Homo sapiens
 References*
@@ -722,6 +740,8 @@ Key: gi
 Value: 6587720
 Key: keywords
 Value: ['HTG']
+Key: molecule_type
+Value: DNA
 Key: organism
 Value: Arabidopsis thaliana
 References*
@@ -1104,6 +1124,8 @@ Key: gi
 Value: 6946668
 Key: keywords
 Value: ['']
+Key: molecule_type
+Value: DNA
 Key: organism
 Value: Drosophila melanogaster
 References*
@@ -1333,6 +1355,8 @@ Key: gi
 Value: 885676
 Key: keywords
 Value: ['']
+Key: molecule_type
+Value: DNA
 Key: organism
 Value: Homo sapiens
 References*
@@ -1432,6 +1456,8 @@ Key: gi
 Value: 16156830
 Key: keywords
 Value: ['']
+Key: molecule_type
+Value: DNA
 Key: organism
 Value: Homo sapiens
 References*
@@ -1502,6 +1528,8 @@ Key: gi
 Value: 13470324
 Key: keywords
 Value: ['']
+Key: molecule_type
+Value: DNA
 Key: organism
 Value: Mesorhizobium loti
 References*
@@ -1742,6 +1770,8 @@ Key: gi
 Value: 1769753
 Key: keywords
 Value: ['nonstructural protein 1']
+Key: molecule_type
+Value: DNA
 Key: organism
 Value: Feline panleukopenia virus
 References*
@@ -1805,6 +1835,8 @@ Key: gi
 Value: 1769755
 Key: keywords
 Value: ['nonstructural protein 1']
+Key: molecule_type
+Value: DNA
 Key: organism
 Value: Feline panleukopenia virus
 References*
@@ -1868,6 +1900,8 @@ Key: gi
 Value: 1769757
 Key: keywords
 Value: ['capsid protein 2']
+Key: molecule_type
+Value: DNA
 Key: organism
 Value: Feline panleukopenia virus
 References*
@@ -1935,6 +1969,8 @@ Key: gi
 Value: 45478711
 Key: keywords
 Value: ['']
+Key: molecule_type
+Value: DNA
 Key: organism
 Value: Yersinia pestis biovar Microtus str. 91001
 References*
@@ -2331,6 +2367,8 @@ Key: gi
 Value: 15823953
 Key: keywords
 Value: ['']
+Key: molecule_type
+Value: DNA
 Key: organism
 Value: Streptomyces avermitilis
 Key: sequence_version
@@ -2366,6 +2404,8 @@ Key: gi
 Value: 15823953
 Key: keywords
 Value: ['']
+Key: molecule_type
+Value: DNA
 Key: organism
 Value: Streptomyces avermitilis
 Key: sequence_version
@@ -2436,6 +2476,8 @@ Key: gi
 Value: 15823953
 Key: keywords
 Value: ['']
+Key: molecule_type
+Value: DNA
 Key: organism
 Value: Streptomyces avermitilis
 Key: sequence_version
@@ -2472,6 +2514,8 @@ Key: gi
 Value: 15823953
 Key: keywords
 Value: ['']
+Key: molecule_type
+Value: DNA
 Key: organism
 Value: Streptomyces avermitilis
 Key: sequence_version
