@@ -11,6 +11,7 @@ from os import path
 from Bio import BiopythonParserWarning
 from Bio import BiopythonWarning
 from Bio import GenBank
+from Bio.GenBank import Scanner
 from Bio import SeqIO
 from Bio.SeqRecord import SeqRecord
 from Bio.Seq import Seq
@@ -229,6 +230,47 @@ class GenBankTests(unittest.TestCase):
                 new = SeqIO.read(handle, "gb")
             self.assertEqual(name, new.name)
             self.assertEqual(seq_len, len(new))
+
+
+class TopologyTests(unittest.TestCase):
+    """Check GenBank/EMBL topology parsing."""
+
+    def test_topology_genbank(self):
+        """Check GenBank topology parsing."""
+        # This is a bit low level, but can test pasing the ID line only
+        tests = [
+            ("LOCUS       U00096", None),
+            ("LOCUS       SCU49845     5028 bp    DNA             PLN       21-JUN-1999", None),
+            ("LOCUS       AB070938                6497 bp    DNA     linear   BCT 11-OCT-2001", "linear"),
+            ("LOCUS       NC_005816               9609 bp    DNA     circular BCT 21-JUL-2008", "circular"),
+            ("LOCUS       SCX3_BUTOC                64 aa            linear   INV 16-OCT-2001", "linear"),
+        ]
+        for (line, topo) in tests:
+            scanner = Scanner.GenBankScanner()
+            consumer = GenBank._FeatureConsumer(1, GenBank.FeatureValueCleaner)
+            scanner._feed_first_line(consumer, line)
+            t = consumer.data.annotations.get('topology', None)
+            self.assertEqual(t, topo,
+                             "Wrong topology %r not %r from %r" % (t, topo, line))
+
+    def test_topology_embl(self):
+        """Check EMBL topology parsing."""
+        # This is a bit low level, but can test pasing the ID line only
+        tests = [
+            ("ID   X56734; SV 1; linear; mRNA; STD; PLN; 1859 BP.", "linear"),
+            ("ID   CD789012; SV 4; linear; genomic DNA; HTG; MAM; 500 BP.", "linear"),
+            ("ID   BSUB9999   standard; circular DNA; PRO; 4214630 BP.", "circular"),
+            ("ID   SC10H5 standard; DNA; PRO; 4870 BP.", None),
+            ("ID   NRP_AX000635; PRT; NR1; 15 SQ", None),
+            ("ID   NRP0000016E; PRT; NR2; 5 SQ", None),
+        ]
+        for (line, topo) in tests:
+            scanner = Scanner.EmblScanner()
+            consumer = GenBank._FeatureConsumer(1, GenBank.FeatureValueCleaner)
+            scanner._feed_first_line(consumer, line)
+            t = consumer.data.annotations.get('topology', None)
+            self.assertEqual(t, topo,
+                             "Wrong topology %r not %r from %r" % (t, topo, line))
 
 
 class OutputTests(unittest.TestCase):

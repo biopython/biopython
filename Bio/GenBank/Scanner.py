@@ -1,4 +1,4 @@
-# Copyright 2007-2010 by Peter Cock.  All rights reserved.
+# Copyright 2007-2016 by Peter Cock.  All rights reserved.
 # Revisions copyright 2010 by Uri Laserson.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -668,6 +668,10 @@ class EmblScanner(InsdcScanner):
         """
         consumer.locus(fields[0])  # Should we also call the accession consumer?
         consumer.residue_type(fields[2])
+        if "circular" in fields[2]:
+            consumer.topology("circular")
+        elif "linear" in fields[2]:
+            consumer.topology("linear")
         consumer.data_file_division(fields[3])
         self._feed_seq_length(consumer, fields[4])
 
@@ -706,6 +710,8 @@ class EmblScanner(InsdcScanner):
 
         # Based on how the old GenBank parser worked, merge these two:
         consumer.residue_type(" ".join(fields[2:4]))  # TODO - Store as two fields?
+
+        consumer.topology(fields[2])
 
         # consumer.xxx(fields[4]) # TODO - What should we do with the data class?
 
@@ -1120,6 +1126,7 @@ class GenBankScanner(InsdcScanner):
             else:
                 consumer.residue_type(line[33:51].strip())
 
+            consumer.topology(line[42:51].strip())
             consumer.data_file_division(line[52:55])
             if line[62:73].strip():
                 consumer.date(line[62:73])
@@ -1190,6 +1197,7 @@ class GenBankScanner(InsdcScanner):
             else:
                 consumer.residue_type(line[44:63].strip())
 
+            consumer.topology(line[55:63].strip())
             consumer.data_file_division(line[64:67])
             if line[68:79].strip():
                 consumer.date(line[68:79])
@@ -1224,6 +1232,7 @@ class GenBankScanner(InsdcScanner):
             consumer.locus(splitline[1])
             consumer.size(splitline[2])
             consumer.residue_type(splitline[4])
+            consumer.topology(splitline[5])
             consumer.data_file_division(splitline[6])
             consumer.date(splitline[7])
             warnings.warn("Attempting to parse malformed locus line:\n%r\n"

@@ -660,7 +660,12 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         self._seq_type = type.strip()
 
     def data_file_division(self, division):
+        # Semi-obsolete, see topology and molecule_type
         self.data.annotations['data_file_division'] = division
+
+    def topology(self, topology):
+        if topology:
+            self.data.annotations['topology'] = topology
 
     def date(self, submit_date):
         self.data.annotations['date'] = submit_date
@@ -1256,7 +1261,8 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                 raise ValueError("Could not determine alphabet for seq_type %s"
                                  % self._seq_type)
 
-            # Also save the chomosome layout
+            # Also save the chomosome layout - now semi-obsolete,
+            # see topology consumer
             if 'circular' in self._seq_type.lower():
                 self.data.annotations['topology'] = 'circular'
             elif 'linear' in self._seq_type.lower():

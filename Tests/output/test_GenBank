@@ -2409,6 +2409,8 @@ Key: source
 Value: Streptomyces avermitilis
 Key: taxonomy
 Value: ['Bacteria', 'Actinobacteria', 'Actinobacteridae', 'Actinomycetales', 'Streptomycineae', 'Streptomycetaceae', 'Streptomyces']
+Key: topology
+Value: linear
 Features
 type: source
 location: [0:6497](+)
