@@ -7,8 +7,6 @@
 
 from Bio.PDB.Entity import Entity
 
-__docformat__ = "restructuredtext en"
-
 
 class Structure(Entity):
     """

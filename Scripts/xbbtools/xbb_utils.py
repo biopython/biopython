@@ -1,42 +1,41 @@
 #!/usr/bin/env python
+# Copyright 2000 by Thomas Sicheritz-Ponten.
+# Copyright 2016 by Markus Piotrowski.
+# All rights reserved.
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+
 # Created: Thu Jul 13 12:09:58 2000
-# Last changed: Time-stamp: <00/12/03 12:10:58 thomas>
 # thomas@cbs.dtu.dk, http://www.cbs.dtu.dk/thomas
 # File: xbb_utils.py
 
-import sys
-
-__docformat__ = "restructuredtext en"
-
-sys.path.insert(0, '.')
-
-try:
-    from Tkinter import * # Python 2
-except ImportError:
-    from tkinter import * # Python 3
-
-try:
-    import tkFileDialog as filedialog # Python 2
-except ImportError:
-    from tkinter import filedialog # Python 3
+try:  # Python 2
+    import Tkinter as tk
+    import ttk
+    import tkFileDialog as filedialog
+except ImportError:  # Python 3
+    import tkinter as tk
+    import tkinter.ttk as ttk
+    from tkinter import filedialog
 
 
-class NotePad(Toplevel):
+class NotePad(tk.Toplevel):
     def __init__(self, master=None):
-        Toplevel.__init__(self, master)
-        self.menubar = Menu(self)
-        self.filemenu = Menu(self.menubar)
+        tk.Toplevel.__init__(self, master)
+        self.menubar = tk.Menu(self)
+        self.filemenu = tk.Menu(self.menubar)
         self.filemenu.add_command(label="Save", command=self.save)
         self.filemenu.add_separator()
         self.filemenu.add_command(label="Dismiss", command=self.destroy)
 
         self.menubar.add_cascade(label="File", menu=self.filemenu)
         self.configure(menu=self.menubar)
-        self.yscroll = Scrollbar(self, orient=VERTICAL)
-        self.tid = Text(self, yscrollcommand=self.yscroll.set)
+        self.yscroll = ttk.Scrollbar(self, orient='vertical')
+        self.tid = tk.Text(self, width=88, yscrollcommand=self.yscroll.set)
         self.yscroll.configure(command=self.tid.yview)
-        self.tid.pack(side=LEFT, fill=BOTH, expand=1)
-        self.yscroll.pack(side=RIGHT, fill=Y)
+        self.tid.pack(side='left', fill='both', expand=1)
+        self.yscroll.pack(side='right', fill='y')
 
     def text_id(self):
         return self.tid
@@ -45,8 +44,7 @@ class NotePad(Toplevel):
         self.tid.insert(start, txt)
 
     def save(self):
-        fd = filedialog.SaveFileDialog(self)
-        file = fd.go(key="test")
+        file = filedialog.asksaveasfilename()
         if file:
             with open(file, 'w') as fid:
-                fid.write(self.tid.get(0.0, END))
+                fid.write(self.tid.get(0.0, 'end'))

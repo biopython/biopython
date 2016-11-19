@@ -1,6 +1,12 @@
 #!/usr/bin/env python
+# Copyright 2000 by Thomas Sicheritz-Ponten.
+# Copyrigth 2016 by Markus Piotrowski.
+# All rights reserved.
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+
 # Created: Thu Jul 13 14:07:25 2000
-# Last changed: Time-stamp: <00/12/03 13:27:24 thomas>
 # thomas@cbs.dtu.dk, http://www.cbs.dtu.dk/thomas
 # File: xbb_blast.py
 
@@ -9,159 +15,192 @@ from __future__ import print_function
 import glob
 import os
 import sys
-from threading import *
 
-try:
-    from Tkinter import *  # Python 2
-except ImportError:
-    from tkinter import *  # Python 3
+try:  # Python 2
+    import Tkinter as tk
+    import ttk
+    import tkFileDialog as filedialog
+    import tkMessageBox as messagebox
+except ImportError:  # Python 3
+    import tkinter as tk
+    import tkinter.ttk as ttk
+    from tkinter import filedialog
+    from tkinter import messagebox
 
-import Pmw
-sys.path.insert(0, '.')
 
 from xbb_utils import NotePad
 import xbb_blastbg
 
-__docformat__ = "restructuredtext en"
-
 
 class BlastIt(object):
+
+    nin, pin = [], []
+    blast_ok = False
+    blast_path = ''
+
     def __init__(self, seq, parent=None):
         self.seq = seq
         self.parent = parent
-        self.toplevel = Toplevel(parent)
-        Pmw.initialise(parent)
-        self.GetBlasts()
+        self.toplevel = tk.Toplevel(parent)
+        self.toplevel.title('BLAST parameters')
+        if not self.get_blast_databases() or not self.get_blast_binaries():
+            return
         self.Choices()
+        self.dbs.bind('<<ComboboxSelected>>', self.Validate)
+        self.blasts.bind('<<ComboboxSelected>>', self.Validate)
 
-    def GetBlasts(self):
-        pin, nin = [], []
-        try:
-            pin.extend(glob.glob(os.environ['BLASTDB'] + '/*.pin'))
-        except:
-            pass
-        pin.extend(glob.glob('*.pin'))
+    def get_blast_databases(self):
+        """Try to locate the BLAST databases and put into lists."""
+        if not (BlastIt.nin and BlastIt.pin):
+            pin, nin = [], []
 
-        try:
-            nin.extend(glob.glob(os.environ['BLASTDB'] + '/*.nin'))
-        except:
-            pass
-        nin.extend(glob.glob('*.nin'))
+            try:
+                pin.extend(glob.glob(os.environ['BLASTDB'] + '/*.pin'))
+            except KeyError:
+                pass
+            pin.extend(glob.glob('C:*.pin'))
 
-        self.pin = [os.path.splitext(x)[0] for x in pin]
-        self.nin = [os.path.splitext(x)[0] for x in nin]
+            try:
+                nin.extend(glob.glob(os.environ['BLASTDB'] + '/*.nin'))
+            except KeyError:
+                pass
+
+            # If no system variable BLASTDB exists, give user the chance to
+            # locate his database folder:
+            if not(nin and pin):
+                database_folder = filedialog.askdirectory(
+                    title='Please locate your BLAST database(s) folder:')
+                nin.extend(glob.glob(database_folder + '/*.nin'))
+                pin.extend(glob.glob(database_folder + '/*.pin'))
+                if not (nin and pin):
+                    messagebox.showerror('xbb tools', 'This folder does not'
+                                         ' contain any BLAST databases!')
+                    self.toplevel.destroy()
+                    return False
+
+            self.pin = [os.path.splitext(x)[0] for x in pin]
+            self.nin = [os.path.splitext(x)[0] for x in nin]
+
+            BlastIt.pin = self.pin
+            BlastIt.nin = self.nin
+
+        return True
+
+    def get_blast_binaries(self):
+        """Test if BLAST binaries are in PATH or let user locate them."""
+        if not BlastIt.blast_ok:
+            # Test if blast binaries are in path
+            if os.system('blastn -version'):  # Return of non-zero means error
+                self.blast_path = filedialog.askdirectory(
+                    title='Please locate your BLAST program folder:')
+                self.blast_path += os.sep
+                if os.system('{}blastn -version'.format(self.blast_path)):
+                    messagebox.showerror(
+                        'xbb tools', 'Wrong folder or missing BLAST'
+                        ' binaries!\n  To run BLAST you must install the '
+                        ' standalone BLAST binaries.')
+                    self.toplevel.destroy()
+                    return False
+                else:
+                    BlastIt.blast_ok = True
+
+            else:  # BLAST binaries are in PATH
+                BlastIt.blast_ok = True
+                self.blast_path = ''
+        BlastIt.blast_path = self.blast_path
+        self.toplevel.lift()
+        return True
+
+    def database_readable(self, db_paths):
+        """Return the name of the blast database without path and extension."""
+        db_names = [entry.split(os.sep)[-1].split('.')[0]
+                    for entry in db_paths]
+        return db_names
+
+    def convert_dbname_to_dbpath(self, db_name):
+        """Return the full path for a given blast database name."""
+        database_path = ''
+        for database in self.nin:
+            if database.endswith(db_name):
+                database_path = database
+                break
+        for database in self.pin:
+            if database.endswith(db_name):
+                database_path = database
+                break
+        return database_path
 
     def Choices(self):
-        self.GetBlasts()
-        self.cf = Frame(self.toplevel)
-        self.cf.pack(side=TOP, expand=1, fill=X)
-        self.dbs = Pmw.ComboBox(self.cf,
-                                label_text='Blast Databases:',
-                                labelpos='nw',
-                                scrolledlist_items=self.nin + self.pin,
-                                selectioncommand=self.Validate
-                                )
-        self.blasts = Pmw.ComboBox(self.cf,
-                                   label_text='Blast Programs:',
-                                   labelpos='nw',
-                                   scrolledlist_items=['blastn', 'blastp', 'blastx', 'tblastn', 'tblastx'],
-                                   selectioncommand=self.Validate
-                                   )
-        self.dbs.pack(side=LEFT, expand=1, fill=X)
-        self.blasts.pack(side=LEFT, expand=1, fill=X)
+        self.blast_string = tk.StringVar()
+        self.blast_string.set('blastn')
+        self.cf = ttk.Frame(self.toplevel)
+        self.cf.pack(side='top', expand=1, fill='x')
+        self.dbs_frame = ttk.LabelFrame(self.cf, text='Databases')
+        self.dbs_frame.pack(side='left', padx=5, pady=5, expand=1, fill='x')
+        nin_values = self.database_readable(self.nin)
+        pin_values = self.database_readable(self.pin)
+        self.dbs = ttk.Combobox(self.dbs_frame, exportselection=0,
+                                values=nin_values + pin_values)
+        self.dbs.current(0)
 
-        self.alternative_f = Frame(self.cf)
-        self.alternative = Entry(self.alternative_f)
-        self.alternative_f.pack(side=TOP, fill=X, expand=1)
-        self.alternative.pack(side=LEFT, fill=X, expand=1)
-        self.ok = Button(self.alternative_f, text='Run',
-                         command=self._Run)
-        self.ok.pack(side=RIGHT)
+        self.blast_frame = ttk.LabelFrame(self.cf, text='BLAST programs')
+        self.blast_frame.pack(side='left', padx=5, pady=5, expand=1, fill='x')
+        self.blasts = ttk.Combobox(self.blast_frame, exportselection=0,
+                                   textvariable=self.blast_string,
+                                   values=['blastn', 'blastp', 'blastx',
+                                           'tblastn', 'tblastx'])
 
-        self.dbs.selectitem(0)
-        self.blasts.selectitem(0)
+        self.dbs.pack(side='left', padx=5, pady=5, expand=1, fill='x')
+        self.blasts.pack(side='left', padx=5, pady=5, expand=1, fill='x')
+
+        self.option_f = ttk.LabelFrame(self.cf, text='Command line options')
+        self.option_f.pack(side='left', padx=5, pady=5, expand=1, fill='x')
+        self.option = ttk.Entry(self.option_f)
+        self.option.pack(side='left', padx=5, pady=5, fill='x', expand=1)
+        self.ok = ttk.Button(self.cf, text='Run', command=self._Run,
+                             state='disabled')
+        self.ok.pack(side='right')
+
         self.Validate()
 
     def Validate(self, *args):
-        db = self.dbs.get()
+        db = self.convert_dbname_to_dbpath(self.dbs.get())
         prog = self.blasts.get()
-        color = 'red'
         if (prog in ['blastn', 'tblastx', 'tblastn']) == (db in self.nin):
-            color = 'green'
+            self.ok.config(state='normal')
         elif (prog in ['blastp', 'blastx']) == (db in self.pin):
-            color = 'green'
-
-        self.dbs.component('entry').configure(bg=color)
-        self.blasts.component('entry').configure(bg=color)
+            self.ok.config(state='normal')
+        else:
+            self.ok.config(state='disabled')
 
     def _Run(self):
-        alternative_command = self.alternative.get()
-        if len(alternative_command.strip()):
-            self.command = alternative_command.strip()
-        else:
-            db = self.dbs.get()
-            prog = self.blasts.get()
-            self.command = 'echo %s | nice blastall -d %s -p %s' % (self.seq, db, prog)
+        """Setup options for Blast commandline (PRIVATE)."""
+        command_options = self.option.get()
+        options = ''
+        if len(command_options.strip()):
+            options = command_options.strip()
+
+        db = self.convert_dbname_to_dbpath(self.dbs.get())
+        prog = self.blast_path + self.blasts.get()
+        self.command_data = [self.seq, prog, db, options]
 
         self.Run()
-
-    def Update(self):
-        self.notepad.update()
-        self.notepad.after(1, self.Update)
-
-    def oldRun(self):
-        self.notepad = NotePad()
-        self.notepad.menubar.configure(bg='red')
-        self.notepad.bind('<Destroy>', self.Exit)
-
-        self.Update()
-
-        print(self.command)
-        self.pipe = os.popen(self.command)
-        while True:
-            try:
-                char = self.pipe.read(1)
-                self.notepad.insert(END, char)
-                self.notepad.update()
-            except:
-                break
-            if not char:
-                break
-
-        try:
-            self.notepad.menubar.configure(bg='green')
-        except:
-            pass
 
     def Run(self):
         self.notepad = NotePad()
         tid = self.notepad.tid
-        self.notepad.menubar.configure(bg='red')
 
         self.toplevel.destroy()
-        blastbg = xbb_blastbg.BlastDisplayer(self.command, tid)
+        blastbg = xbb_blastbg.BlastDisplayer(self.command_data, tid)
         blastbg.RunCommand()
-
-        # indicate the finished run by changing color
-        try:
-            self.notepad.menubar.configure(bg='green4')
-        except:
-            pass
-
-    def Exit(self, *args):
-
-        try:
-            self.pipe.close()
-            del(self.pipe)
-        except:
-            pass
-        self.notepad.destroy()
-
-        sys.exit(0)
 
 
 if __name__ == '__main__':
-    seq = sys.argv[1]
-    win = Tk()
+    try:
+        seq = sys.argv[1]
+    except IndexError:  # Started script without providing a sequence
+        seq = 'ATGACAAAGCTAATTATTCACTTGGTTTCAGACTCTTCTGTGCAAACTGC'
+    win = tk.Tk()
+    win.title('Dummy windows for BLAST test')
     test = BlastIt(seq)
     win.mainloop()

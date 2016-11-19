@@ -50,7 +50,7 @@ test_data = {
                                     'User1', 'phAR1', 'phCH1', 'phDY1',
                                     'phQL1', 'phTR1', 'phTR2', 'AUDT1',
                                     'PXLB1', 'RMdV1', 'DATA9', 'RGNm1',
-                                    'DATA11', 'DATA10', 'DATA12' ]),
+                                    'DATA11', 'DATA10', 'DATA12']),
               },
 'data_3730': {
              'path': ['Abi', '3730.ab1'],

@@ -52,14 +52,12 @@ class PatternIOTest(unittest.TestCase):
         """
         # write to a file
         motifs = ["GAC", "AAA", "TTT", "GGG"]
-        output_handle = open(self.test_file, "w")
-        self.pattern_io.write(motifs, output_handle)
-        output_handle.close()
+        with open(self.test_file, "w") as output_handle:
+            self.pattern_io.write(motifs, output_handle)
 
         # read 'em back
-        input_handle = open(self.test_file, "r")
-        read_motifs = self.pattern_io.read(input_handle)
-        input_handle.close()
+        with open(self.test_file, "r") as input_handle:
+            read_motifs = self.pattern_io.read(input_handle)
         self.assertEqual(read_motifs, motifs,
                          "Failed to get back expected motifs %s, got %s"
                          % (motifs, read_motifs))
@@ -68,14 +66,12 @@ class PatternIOTest(unittest.TestCase):
         seq_motifs = []
         for motif in motifs:
             seq_motifs.append(Seq(motif, self.alphabet))
-        output_handle = open(self.test_file, "w")
-        self.pattern_io.write_seq(seq_motifs, output_handle)
-        output_handle.close()
+        with open(self.test_file, "w") as output_handle:
+            self.pattern_io.write_seq(seq_motifs, output_handle)
 
         # read the seqs back
-        input_handle = open(self.test_file, "r")
-        read_motifs = self.pattern_io.read(input_handle)
-        input_handle.close()
+        with open(self.test_file, "r") as input_handle:
+            read_motifs = self.pattern_io.read(input_handle)
         self.assertEqual(read_motifs, motifs,
                          "Failed to get back expected motifs %s from seqs, got %s"
                          % (motifs, read_motifs))
@@ -85,23 +81,20 @@ class PatternIOTest(unittest.TestCase):
         """
         schemas = ["GTR", "GAC"]
         # write out the schemas
-        output_handle = open(self.test_file, "w")
-        self.pattern_io.write(schemas, output_handle)
-        output_handle.close()
+        with open(self.test_file, "w") as output_handle:
+            self.pattern_io.write(schemas, output_handle)
 
         # read back the schemas
-        input_handle = open(self.test_file, "r")
-        read_schemas = self.pattern_io.read(input_handle)
-        input_handle.close()
+        with open(self.test_file, "r") as input_handle:
+            read_schemas = self.pattern_io.read(input_handle)
         self.assertEqual(schemas, read_schemas,
-                         "Read incorrect schemas %s, expected %s."
-                         % (read_schemas, schemas))
+                             "Read incorrect schemas %s, expected %s."
+                             % (read_schemas, schemas))
 
         # --- make sure inappropriate alphabets are reported
         schemas = ["GTR", "G*C"]  # '*' not in the unambigous alphabet
-        output_handle = open(self.test_file, "w")
-        self.pattern_io.write(schemas, output_handle)
-        output_handle.close()
+        with open(self.test_file, "w") as output_handle:
+            self.pattern_io.write(schemas, output_handle)
 
         input_handle = open(self.test_file, "r")
         try:
@@ -111,16 +104,14 @@ class PatternIOTest(unittest.TestCase):
             pass  # expected behavior
         except:
             raise AssertionError("Got unexpected error while reading.")
-
         input_handle.close()
 
     def test_signature(self):
         """Reading and writing signatures to a file.
         """
         signatures = [("GAC", "GAC"), ("AAA", "TTT")]
-        output_handle = open(self.test_file, "w")
-        self.pattern_io.write(signatures, output_handle)
-        output_handle.close()
+        with open(self.test_file, "w") as output_handle:
+            self.pattern_io.write(signatures, output_handle)
 
         input_handle = open(self.test_file, "r")
         read_sigs = self.pattern_io.read(input_handle)
@@ -481,8 +472,8 @@ class SchemaCoderTest(unittest.TestCase):
 
 
 class SchemaMatchingTest(unittest.TestCase):
-    """Matching schema to strings works correctly.
-    """
+    """Matching schema to strings works correctly."""
+
     def shortDescription(self):
         return "%s:%s" % (self.__class__.__name__, self.__doc__)
 

@@ -163,11 +163,11 @@ class MafftApplication(unittest.TestCase):
         cmdline.set_parameter("--treeout", True)
         cmdline.set_parameter("nuc", True)
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
-        self.assertEqual(str(cmdline), mafft_exe
-                         + " --localpair --weighti 4.2 --retree 5 "
-                         + "--maxiterate 200 --nofft --op 2.04 --ep 0.51"
-                         + " --lop 0.233 --lep 0.2 --reorder --treeout"
-                         + " --nuc Fasta/f002")
+        self.assertEqual(str(cmdline), mafft_exe +
+                         " --localpair --weighti 4.2 --retree 5 " +
+                         "--maxiterate 200 --nofft --op 2.04 --ep 0.51" +
+                         " --lop 0.233 --lep 0.2 --reorder --treeout" +
+                         " --nuc Fasta/f002")
         stdoutdata, stderrdata = cmdline()
         self.assertTrue(stdoutdata.startswith(">gi|1348912|gb|G26680|G26680"))
         self.assertTrue("$#=0" not in stderrdata)

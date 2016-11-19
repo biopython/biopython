@@ -59,7 +59,7 @@ class SeqUtilsTests(unittest.TestCase):
         record = SeqIO.read(dna_genbank_filename, "genbank")
         records = []
         for feature in record.features:
-            if feature.type == "CDS" and not feature.sub_features:
+            if feature.type == "CDS" and len(feature.location.parts) == 1:
                 start = feature.location.start.position
                 end = feature.location.end.position
                 table = int(feature.qualifiers["transl_table"][0])

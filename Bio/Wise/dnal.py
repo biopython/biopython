@@ -24,7 +24,6 @@ from Bio._py3k import map
 
 from Bio import Wise
 
-__docformat__ = "restructuredtext en"
 
 _SCORE_MATCH = 4
 _SCORE_MISMATCH = -1

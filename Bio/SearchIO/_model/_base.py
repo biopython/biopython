@@ -9,9 +9,6 @@
 from Bio._utils import getattr_str, trim_str
 
 
-__docformat__ = "restructuredtext en"
-
-
 class _BaseSearchObject(object):
 
     """Abstract class for SearchIO objects."""

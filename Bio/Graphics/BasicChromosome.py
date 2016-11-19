@@ -30,24 +30,19 @@ http://www.reportlab.com
 This provides nice output in PDF, SVG and postscript.  If you have
 reportlab's renderPM module installed you can also use PNG etc.
 """
-# standard library
-import os
 
 # reportlab
-from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.units import inch
 from reportlab.lib import colors
 from reportlab.pdfbase.pdfmetrics import stringWidth
 
 from reportlab.graphics.shapes import Drawing, String, Line, Rect, Wedge, ArcPath
-from reportlab.graphics import renderPDF, renderPS
 from reportlab.graphics.widgetbase import Widget
 
 from Bio.Graphics import _write
 from Bio.Graphics.GenomeDiagram._Colors import ColorTranslator as _ColorTranslator
 
-__docformat__ = "restructuredtext en"
 
 _color_trans = _ColorTranslator()
 
@@ -73,7 +68,7 @@ class _ChromosomeComponent(Widget):
         """Add a sub_component to the list of components under this item.
         """
         assert isinstance(component, _ChromosomeComponent), \
-               "Expected a _ChromosomeComponent object, got %s" % component
+            "Expected a _ChromosomeComponent object, got %s" % component
 
         self._sub_components.append(component)
 
@@ -257,11 +252,11 @@ class Chromosome(_ChromosomeComponent):
         # will actually be the picture of the chromosome
         cur_y_pos = self.start_y_position
         if self.scale_num:
-            y_pos_change = ((self.start_y_position * .95 - self.end_y_position)
-                            / self.scale_num)
+            y_pos_change = ((self.start_y_position * .95 - self.end_y_position) /
+                            self.scale_num)
         elif len(self._sub_components) > 0:
-            y_pos_change = ((self.start_y_position * .95 - self.end_y_position)
-                            / self.subcomponent_size())
+            y_pos_change = ((self.start_y_position * .95 - self.end_y_position) /
+                            self.subcomponent_size())
         # no sub_components to draw
         else:
             pass
@@ -318,15 +313,16 @@ class Chromosome(_ChromosomeComponent):
         color_label = self._color_labels
 
         segment_width = (self.end_x_position - self.start_x_position) \
-                        * self.chr_percent
+            * self.chr_percent
         label_sep = (self.end_x_position - self.start_x_position) \
-                        * self.label_sep_percent
+            * self.label_sep_percent
         segment_x = self.start_x_position \
-                  + 0.5 * (self.end_x_position - self.start_x_position - segment_width)
+            + 0.5 * (self.end_x_position - self.start_x_position - segment_width)
 
         y_limits = []
         for sub_component in self._sub_components:
-            y_limits.extend((sub_component.start_y_position, sub_component.end_y_position))
+            y_limits.extend((sub_component.start_y_position,
+                             sub_component.end_y_position))
         y_min = min(y_limits)
         y_max = max(y_limits)
         del y_limits
@@ -344,7 +340,7 @@ class Chromosome(_ChromosomeComponent):
                  segment_x + segment_width + label_sep,
                  _place_labels(right_labels, y_min, y_max, h),
                  "start"),
-            ]:
+                ]:
             for (y1, y2, color, back_color, name) in labels:
                 cur_drawing.add(Line(x1, y1, x2, y2,
                                      strokeColor=color,
@@ -356,7 +352,9 @@ class Chromosome(_ChromosomeComponent):
                 if color_label:
                     label_string.fillColor = color
                 if back_color:
-                    w = stringWidth(name, label_string.fontName, label_string.fontSize)
+                    w = stringWidth(name,
+                                    label_string.fontName,
+                                    label_string.fontSize)
                     if x1 > x2:
                         w = w * -1.0
                     cur_drawing.add(Rect(x2, y2 - 0.1 * h, w, h,
@@ -443,10 +441,10 @@ class ChromosomeSegment(_ChromosomeComponent):
         # of the space we have.
         segment_y = self.end_y_position
         segment_width = (self.end_x_position - self.start_x_position) \
-                        * self.chr_percent
+            * self.chr_percent
         segment_height = self.start_y_position - self.end_y_position
         segment_x = self.start_x_position \
-                  + 0.5 * (self.end_x_position - self.start_x_position - segment_width)
+            + 0.5 * (self.end_x_position - self.start_x_position - segment_width)
 
         # first draw the sides of the segment
         right_line = Line(segment_x, segment_y,
@@ -543,7 +541,11 @@ def _spring_layout(desired, minimum, maximum, gap=0):
         return desired
 
     span = maximum - minimum
-    for split in [0.5 * span, span / 3.0, 2 * span / 3.0, 0.25 * span, 0.75 * span]:
+    for split in [0.5 * span,
+                  span / 3.0,
+                  2 * span / 3.0,
+                  0.25 * span,
+                  0.75 * span]:
         midpoint = minimum + split
         low = [x for x in desired if x <= midpoint - 0.5 * gap]
         high = [x for x in desired if x > midpoint + 0.5 * gap]
@@ -556,8 +558,8 @@ def _spring_layout(desired, minimum, maximum, gap=0):
         elif not high and len(low) * gap <= split + 0.5 * gap:
             # Give a little of the unused highspace to the low points
             return _spring_layout(low, minimum, midpoint - 0.5 * gap, gap)
-        elif len(low) * gap <= split - 0.5 * gap \
-        and len(high) * gap <= (span - split) - 0.5 * gap:
+        elif (len(low) * gap <= split - 0.5 * gap and
+              len(high) * gap <= (span - split) - 0.5 * gap):
             return _spring_layout(low, minimum, midpoint - 0.5 * gap, gap) + \
                    _spring_layout(high, midpoint + 0.5 * gap, maximum, gap)
 
@@ -583,8 +585,11 @@ def _spring_layout(desired, minimum, maximum, gap=0):
     return [minimum + i * equal_step for i in range(count)]
 
 # assert False, _spring_layout([0.10,0.12,0.13,0.14,0.5,0.75, 1.0], 0, 1, 0.1)
-# assert _spring_layout([0.10,0.12,0.13,0.14,0.5,0.75, 1.0], 0, 1, 0.1) == [0.0, 0.125, 0.25, 0.375, 0.5, 0.75, 1.0]
-# assert _spring_layout([0.10,0.12,0.13,0.14,0.5,0.75, 1.0], 0, 1, 0.1) == [0.0, 0.16666666666666666, 0.33333333333333331, 0.5, 0.66666666666666663, 0.83333333333333326, 1.0]
+# assert _spring_layout([0.10,0.12,0.13,0.14,0.5,0.75, 1.0], 0, 1, 0.1) == \
+#     [0.0, 0.125, 0.25, 0.375, 0.5, 0.75, 1.0]
+# assert _spring_layout([0.10,0.12,0.13,0.14,0.5,0.75, 1.0], 0, 1, 0.1) == \
+#     [0.0, 0.16666666666666666, 0.33333333333333331, 0.5,
+#      0.66666666666666663, 0.83333333333333326, 1.0]
 
 
 def _place_labels(desired_etc, minimum, maximum, gap=0):
@@ -645,12 +650,12 @@ class AnnotatedChromosomeSegment(ChromosomeSegment):
         # of the space we have.
         segment_y = self.end_y_position
         segment_width = (self.end_x_position - self.start_x_position) \
-                        * self.chr_percent
+            * self.chr_percent
         label_sep = (self.end_x_position - self.start_x_position) \
-                        * self.label_sep_percent
+            * self.label_sep_percent
         segment_height = self.start_y_position - self.end_y_position
         segment_x = self.start_x_position \
-                  + 0.5 * (self.end_x_position - self.start_x_position - segment_width)
+            + 0.5 * (self.end_x_position - self.start_x_position - segment_width)
 
         left_labels = []
         right_labels = []
@@ -693,8 +698,10 @@ class AnnotatedChromosomeSegment(ChromosomeSegment):
                 x = segment_x
                 w = segment_width
             local_scale = segment_height / self.bp_length
-            fill_rectangle = Rect(x, segment_y + segment_height - local_scale * start,
-                                  w, local_scale * (start - end))
+            fill_rectangle = Rect(x,
+                                  segment_y + segment_height - local_scale * start,
+                                  w,
+                                  local_scale * (start - end))
             fill_rectangle.fillColor = fill_color
             fill_rectangle.strokeColor = color
             cur_drawing.add(fill_rectangle)
@@ -703,7 +710,8 @@ class AnnotatedChromosomeSegment(ChromosomeSegment):
                     back_color = None
                 else:
                     back_color = fill_color
-                value = (segment_y + segment_height - local_scale * start, color, back_color, name)
+                value = (segment_y + segment_height - local_scale * start,
+                         color, back_color, name)
                 if strand == -1:
                     self._left_labels.append(value)
                 else:
@@ -739,7 +747,7 @@ class TelomereSegment(ChromosomeSegment):
         # set the coordinates of the segment -- it'll take up the MIDDLE part
         # of the space we have.
         width = (self.end_x_position - self.start_x_position) \
-                * self.chr_percent
+            * self.chr_percent
         height = self.start_y_position - self.end_y_position
         center_x = 0.5 * (self.end_x_position + self.start_x_position)
         start_x = center_x - 0.5 * width

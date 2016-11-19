@@ -93,33 +93,33 @@ class IOTests(unittest.TestCase):
         self.assertEqual(clade_a.name, 'foo')
         self.assertAlmostEqual(clade_a.branch_length, 0.1)
 
-
+    def test_phylo_read_extra(self):
         """Additional tests to check correct parsing"""
-        tree = Phylo.read(StringIO("(A:1, B:-2, (C:3, D:4):-2)"),'newick')
-        self.assertEqual(tree.distance('A'),1)
-        self.assertEqual(tree.distance('B'),-2)
-        self.assertEqual(tree.distance('C'),1)
-        self.assertEqual(tree.distance('D'),2)
+        tree = Phylo.read(StringIO("(A:1, B:-2, (C:3, D:4):-2)"), 'newick')
+        self.assertEqual(tree.distance('A'), 1)
+        self.assertEqual(tree.distance('B'), -2)
+        self.assertEqual(tree.distance('C'), 1)
+        self.assertEqual(tree.distance('D'), 2)
 
-        tree = Phylo.read(StringIO("((A:1, B:-2):-5, (C:3, D:4):-2)"),'newick')
-        self.assertEqual(tree.distance('A'),-4)
-        self.assertEqual(tree.distance('B'),-7)
-        self.assertEqual(tree.distance('C'),1)
-        self.assertEqual(tree.distance('D'),2)
+        tree = Phylo.read(StringIO("((A:1, B:-2):-5, (C:3, D:4):-2)"), 'newick')
+        self.assertEqual(tree.distance('A'), -4)
+        self.assertEqual(tree.distance('B'), -7)
+        self.assertEqual(tree.distance('C'), 1)
+        self.assertEqual(tree.distance('D'), 2)
 
-        tree = Phylo.read(StringIO("((:1, B:-2):-5, (C:3, D:4):-2)"),'newick')
-        distances = {-4.0:1,-7.0:1,1:1,2:1}
+        tree = Phylo.read(StringIO("((:1, B:-2):-5, (C:3, D:4):-2)"), 'newick')
+        distances = {-4.0: 1, -7.0: 1, 1: 1, 2: 1}
         for x in tree.get_terminals():
             entry = int(tree.distance(x))
             distances[entry] -= distances[entry]
-            self.assertEqual(distances[entry],0)
+            self.assertEqual(distances[entry], 0)
 
-        tree = Phylo.read(StringIO("((:\n1\n,\n B:-2):-5, (C:3, D:4):-2);"),'newick')
-        distances = {-4.0:1,-7.0:1,1:1,2:1}
+        tree = Phylo.read(StringIO("((:\n1\n,\n B:-2):-5, (C:3, D:4):-2);"), 'newick')
+        distances = {-4.0: 1, -7.0: 1, 1: 1, 2: 1}
         for x in tree.get_terminals():
             entry = int(tree.distance(x))
             distances[entry] -= distances[entry]
-            self.assertEqual(distances[entry],0)
+            self.assertEqual(distances[entry], 0)
 
     def test_format_branch_length(self):
         """Custom format string for Newick branch length serialization."""
@@ -232,7 +232,7 @@ class TreeTests(unittest.TestCase):
         for treefname, fmt in [(EX_APAF, 'phyloxml'),
                                (EX_BCL2, 'phyloxml'),
                                (EX_NEWICK, 'newick'),
-                              ]:
+                               ]:
             tree = Phylo.read(treefname, fmt)
             orig_tree_len = tree.total_branch_length()
             # Total branch length does not change

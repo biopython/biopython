@@ -4,7 +4,7 @@
 # are missing from this wrapper
 
 from __future__ import print_function
-__docformat__ = "restructuredtext en"
+
 from Bio.Application import _Option, _Argument, _Switch
 from Bio.Application import AbstractCommandline, _ArgumentList
 from Bio.Application import _StaticArgument
@@ -731,12 +731,6 @@ class SamtoolsPhaseCommandline(AbstractCommandline):
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
 
-def _test():
-        """Run the module's doctests (PRIVATE)."""
-        print("Running modules doctests...")
-        import doctest
-        doctest.testmod()
-        print("Done")
-
 if __name__ == "__main__":
-    _test()
+    from Bio._utils import run_doctest
+    run_doctest()

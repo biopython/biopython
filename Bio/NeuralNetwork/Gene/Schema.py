@@ -38,8 +38,6 @@ from Bio.GA.Repair.Stabilizing import AmbiguousRepair
 from Bio.GA.Selection.Tournament import TournamentSelection
 from Bio.GA.Selection.Diversity import DiversitySelection
 
-__docformat__ = "restructuredtext en"
-
 
 class Schema(object):
     """Deal with motifs that have ambiguity characters in it.

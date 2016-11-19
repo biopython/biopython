@@ -16,7 +16,6 @@ from __future__ import print_function
 
 from reportlab.graphics.shapes import Drawing, String, Group, Line, Circle, Polygon
 from reportlab.lib import colors
-from reportlab.pdfbase import _fontdata
 from reportlab.graphics.shapes import ArcPath
 
 from Bio._py3k import range
@@ -27,9 +26,7 @@ from ._AbstractDrawer import _stroke_and_fill_colors
 from ._FeatureSet import FeatureSet
 from ._GraphSet import GraphSet
 
-from math import ceil, pi, cos, sin, asin
-
-__docformat__ = "restructuredtext en"
+from math import pi, cos, sin
 
 
 class CircularDrawer(AbstractDrawer):

@@ -3,16 +3,14 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Asynchronous local execution.
+"""Asynchronous local execution (DEPRECATED).
 
 Supports multicore architectures.
 """
 
-from Bio.PopGen.Async import Async
-
 import threading
 
-__docformat__ = "restructuredtext en"
+from Bio.PopGen.Async import Async
 
 
 class Local(Async):

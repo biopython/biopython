@@ -60,7 +60,6 @@ from . import Residues
 from Bio import SeqIO
 from Bio.Seq import Seq
 
-__docformat__ = "restructuredtext en"
 
 nodeCodeDict = {'cl': 'class', 'cf': 'fold', 'sf': 'superfamily',
                 'fa': 'family', 'dm': 'protein', 'sp': 'species', 'px': 'domain'}
@@ -698,8 +697,8 @@ class Astral(object):
         """
 
         if astral_file is None and dir_path is None and db_handle is None:
-            raise RuntimeError("Need either file handle, or (dir_path + "
-                       + "version) or database handle to construct Astral")
+            raise RuntimeError("Need either file handle, or (dir_path + version),"
+                               " or database handle to construct Astral")
         if not scop:
             raise RuntimeError("Must provide a Scop instance to construct")
 
@@ -872,8 +871,8 @@ def search(pdb=None, key=None, sid=None, disp=None, dir=None, loc=None,
     return _open(cgi, variables)
 
 
-def _open(cgi, params={}, get=1):
-    """_open(cgi, params={}, get=1) -> UndoHandle
+def _open(cgi, params=None, get=1):
+    """Open a hnadle to SCOP, returns an UndoHandle
 
     Open a handle to SCOP.  cgi is the URL for the cgi script to access.
     params is a dictionary with the options to pass to it.  get is a boolean
@@ -884,6 +883,8 @@ def _open(cgi, params={}, get=1):
     from Bio._py3k import urlopen, urlencode
 
     # Open a handle to SCOP.
+    if params is None:
+        params = {}
     options = urlencode(params)
     if get:  # do a GET
         if options:

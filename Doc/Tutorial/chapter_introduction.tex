@@ -168,8 +168,16 @@ from __future__ import print_function
   If the ``\verb|import Bio|'' line fails, Biopython is not installed.
   Note that those are double underscores before and after version.
   If the second line fails, your version is \emph{very} out of date.
-  If the version string ends with a plus, you don't have an official
-  release, but a snapshot of the in development code.
+
+  If the version string ends with a plus like ``\verb|1.66+|'', you
+  don't have an official release, but an old snapshot of the in
+  development code \emph{after} that version was released. This naming
+  was used until June 2016 in the run-up to Biopython 1.68..
+
+  If the version string ends with ``\verb|.dev<number>|'' like
+  ``\verb|1.68.dev0|'', again you don't have an official release,
+  but instead a snapshot of the in developement code \emph{before}
+  that version was released.
 
   \item \emph{Where is the latest version of this document?}\\
   If you download a Biopython source code archive, it will include the
@@ -179,13 +187,6 @@ from __future__ import print_function
   \item \url{http://biopython.org/DIST/docs/tutorial/Tutorial.html}
   \item \url{http://biopython.org/DIST/docs/tutorial/Tutorial.pdf}
   \end{itemize}
-  If you are using the very latest unreleased code from our repository
-  you can find copies of the in-progress tutorial here:
-  \begin{itemize}
-  \item \url{http://biopython.org/DIST/docs/tutorial/Tutorial-dev.html}
-  \item \url{http://biopython.org/DIST/docs/tutorial/Tutorial-dev.pdf}
-  \end{itemize}
-
 
   \item \emph{What is wrong with my sequence comparisons?} \\
   There was a major change in Biopython 1.65 making the \verb|Seq| and

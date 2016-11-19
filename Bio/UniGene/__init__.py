@@ -78,8 +78,6 @@ Here is an overview of the flat file format that this parser deals with:
                          NCBI Trace Archive
 """
 
-__docformat__ = "restructuredtext en"
-
 
 class SequenceLine(object):
     """Store the information for one SEQUENCE line from a Unigene file
@@ -87,7 +85,7 @@ class SequenceLine(object):
     Initialize with the text part of the SEQUENCE line, or nothing.
 
     Attributes and descriptions (access as LOWER CASE):
-    
+
         - ACC=         GenBank/EMBL/DDBJ accession number of sequence
         - NID=         Unique nucleotide sequence identifier (gi)
         - PID=         Unique protein sequence identifier (used for non-ESTs)

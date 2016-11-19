@@ -16,14 +16,12 @@ import os
 import gzip
 
 try:
-    from StringIO import StringIO # Python 2
+    from StringIO import StringIO  # Python 2
 except ImportError:
-    from io import StringIO # Python 3
+    from io import StringIO  # Python 3
 
 # biopython
 from Bio import GenBank
-
-__docformat__ = "restructuredtext en"
 
 
 def do_comparison(good_record, test_record):
@@ -51,8 +49,8 @@ def do_comparison(good_record, test_record):
                                      % good_line)
 
         assert test_line == good_line, \
-               "Expected does not match Test.\nExpect:`%s`\nTest  :`%s`\n" % \
-               (good_line, test_line)
+            "Expected does not match Test.\nExpect:`%s`\nTest  :`%s`\n" % \
+            (good_line, test_line)
 
 
 def write_format(file):

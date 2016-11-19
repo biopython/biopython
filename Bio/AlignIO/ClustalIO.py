@@ -1,4 +1,4 @@
-# Copyright 2006-2013 by Peter Cock.  All rights reserved.
+# Copyright 2006-2016 by Peter Cock.  All rights reserved.
 #
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -15,8 +15,6 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
 from .Interfaces import AlignmentIterator, SequentialAlignmentWriter
-
-__docformat__ = "restructuredtext en"
 
 
 class ClustalWriter(SequentialAlignmentWriter):
@@ -75,7 +73,7 @@ class ClustalWriter(SequentialAlignmentWriter):
             # This was stored by Bio.Clustalw using a ._star_info property.
             if hasattr(alignment, "_star_info") and alignment._star_info != '':
                 output += (" " * 36) + \
-                     alignment._star_info[cur_char:(cur_char + show_num)] + "\n"
+                    alignment._star_info[cur_char:(cur_char + show_num)] + "\n"
 
             output += "\n"
             cur_char += show_num
@@ -104,7 +102,7 @@ class ClustalIterator(AlignmentIterator):
             raise StopIteration
 
         # Whitelisted headers we know about
-        known_headers = ['CLUSTAL', 'PROBCONS', 'MUSCLE', 'MSAPROBS','Kalign']
+        known_headers = ['CLUSTAL', 'PROBCONS', 'MUSCLE', 'MSAPROBS', 'Kalign']
         if line.strip().split()[0] not in known_headers:
             raise ValueError("%s is not a known CLUSTAL header: %s" %
                              (line.strip().split()[0],
@@ -148,7 +146,8 @@ class ClustalIterator(AlignmentIterator):
 
                 # Record the sequence position to get the consensus
                 if seq_cols is None:
-                    start = len(fields[0]) + line[len(fields[0]):].find(fields[1])
+                    start = len(fields[0]) + \
+                        line[len(fields[0]):].find(fields[1])
                     end = start + len(fields[1])
                     seq_cols = slice(start, end)
                     del start, end
@@ -159,9 +158,11 @@ class ClustalIterator(AlignmentIterator):
                     try:
                         letters = int(fields[2])
                     except ValueError:
-                        raise ValueError("Could not parse line, bad sequence number:\n%s" % line)
+                        raise ValueError("Could not parse line, "
+                                         "bad sequence number:\n%s" % line)
                     if len(fields[1].replace("-", "")) != letters:
-                        raise ValueError("Could not parse line, invalid sequence number:\n%s" % line)
+                        raise ValueError("Could not parse line, "
+                                         "invalid sequence number:\n%s" % line)
             elif line[0] == " ":
                 # Sequence consensus line...
                 assert len(ids) == len(seqs)
@@ -219,12 +220,15 @@ class ClustalIterator(AlignmentIterator):
                     raise ValueError("Could not parse line:\n%s" % repr(line))
 
                 if fields[0] != ids[i]:
-                    raise ValueError("Identifiers out of order? Got '%s' but expected '%s'"
-                                      % (fields[0], ids[i]))
+                    raise ValueError("Identifiers out of order? "
+                                     "Got '%s' but expected '%s'"
+                                     % (fields[0], ids[i]))
 
                 if fields[1] != line[seq_cols]:
-                    start = len(fields[0]) + line[len(fields[0]):].find(fields[1])
-                    assert start == seq_cols.start, 'Old location %s -> %i:XX' % (seq_cols, start)
+                    start = len(fields[0]) + \
+                        line[len(fields[0]):].find(fields[1])
+                    assert start == seq_cols.start, \
+                        'Old location %s -> %i:XX' % (seq_cols, start)
                     end = start + len(fields[1])
                     seq_cols = slice(start, end)
                     del start, end
@@ -238,9 +242,12 @@ class ClustalIterator(AlignmentIterator):
                     try:
                         letters = int(fields[2])
                     except ValueError:
-                        raise ValueError("Could not parse line, bad sequence number:\n%s" % line)
+                        raise ValueError("Could not parse line, "
+                                         "bad sequence number:\n%s" %
+                                         line)
                     if len(seqs[i].replace("-", "")) != letters:
-                        raise ValueError("Could not parse line, invalid sequence number:\n%s" % line)
+                        raise ValueError("Could not parse line, "
+                                         "invalid sequence number:\n%s" % line)
 
                 # Read in the next line
                 line = handle.readline()
@@ -259,9 +266,10 @@ class ClustalIterator(AlignmentIterator):
         if len(seqs) == 0 or len(seqs[0]) == 0:
             raise StopIteration
 
-        if self.records_per_alignment is not None \
-        and self.records_per_alignment != len(ids):
-            raise ValueError("Found %i records in this alignment, told to expect %i"
+        if self.records_per_alignment is not None and \
+                self.records_per_alignment != len(ids):
+            raise ValueError("Found %i records in this alignment, "
+                             "told to expect %i"
                              % (len(ids), self.records_per_alignment))
 
         records = (SeqRecord(Seq(s, self.alphabet), id=i, description=i)
@@ -274,7 +282,7 @@ class ClustalIterator(AlignmentIterator):
         if consensus:
             alignment_length = len(seqs[0])
             assert len(consensus) == alignment_length, \
-                   "Alignment length is %i, consensus length is %i, '%s'" \
-                   % (alignment_length, len(consensus), consensus)
+                "Alignment length is %i, consensus length is %i, '%s'" \
+                % (alignment_length, len(consensus), consensus)
             alignment._star_info = consensus
         return alignment

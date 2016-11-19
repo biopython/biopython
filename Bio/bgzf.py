@@ -234,7 +234,6 @@ import struct
 from Bio._py3k import _as_bytes, _as_string
 from Bio._py3k import open as _open
 
-__docformat__ = "restructuredtext en"
 
 # For Python 2 can just use: _bgzf_magic = '\x1f\x8b\x08\x04'
 # but need to use bytes on Python 3
@@ -299,9 +298,11 @@ def make_virtual_offset(block_start_offset, within_block_offset):
 
     """
     if within_block_offset < 0 or within_block_offset >= 65536:
-        raise ValueError("Require 0 <= within_block_offset < 2**16, got %i" % within_block_offset)
+        raise ValueError("Require 0 <= within_block_offset < 2**16, got %i" %
+                         within_block_offset)
     if block_start_offset < 0 or block_start_offset >= 281474976710656:
-        raise ValueError("Require 0 <= block_start_offset < 2**48, got %i" % block_start_offset)
+        raise ValueError("Require 0 <= block_start_offset < 2**48, got %i" %
+                         block_start_offset)
     return (block_start_offset << 16) | within_block_offset
 
 
@@ -435,7 +436,7 @@ def _load_bgzf_block(handle, text_mode=False):
     expected_crc = handle.read(4)
     expected_size = struct.unpack("<I", handle.read(4))[0]
     assert expected_size == len(data), \
-           "Decompressed to %i, not %i" % (len(data), expected_size)
+        "Decompressed to %i, not %i" % (len(data), expected_size)
     # Should cope with a mix of Python platforms...
     crc = zlib.crc32(data)
     if crc < 0:
@@ -443,7 +444,7 @@ def _load_bgzf_block(handle, text_mode=False):
     else:
         crc = struct.pack("<I", crc)
     assert expected_crc == crc, \
-           "CRC is %s, not %s" % (crc, expected_crc)
+        "CRC is %s, not %s" % (crc, expected_crc)
     if text_mode:
         return block_size, _as_string(data)
     else:
@@ -532,8 +533,7 @@ class BgzfReader(object):
             handle = fileobj
             assert "b" in handle.mode.lower()
         else:
-            if "w" in mode.lower() \
-            or "a" in mode.lower():
+            if "w" in mode.lower() or "a" in mode.lower():
                 raise ValueError("Must use read mode (default), not write or append mode")
             handle = _open(filename, "rb")
         self._text = "b" not in mode.lower()
@@ -588,7 +588,8 @@ class BgzfReader(object):
 
     def tell(self):
         """Returns a 64-bit unsigned BGZF virtual offset."""
-        if 0 < self._within_block_offset and self._within_block_offset == len(self._buffer):
+        if 0 < self._within_block_offset and \
+                self._within_block_offset == len(self._buffer):
             # Special case where we're right at the end of a (non empty) block.
             # For non-maximal blocks could give two possible virtual offsets,
             # but for a maximal block can't use 65536 as the within block
@@ -612,15 +613,16 @@ class BgzfReader(object):
             # (this avoids a function call since _load_block would do nothing)
             self._load_block(start_offset)
             assert start_offset == self._block_start_offset
-        if within_block > len(self._buffer) \
-        and not (within_block == 0 and len(self._buffer) == 0):
-            raise ValueError("Within offset %i but block size only %i"
-                             % (within_block, len(self._buffer)))
+        if within_block > len(self._buffer):
+            if not (within_block == 0 and len(self._buffer) == 0):
+                raise ValueError("Within offset %i but block size only %i"
+                                 % (within_block, len(self._buffer)))
         self._within_block_offset = within_block
         # assert virtual_offset == self.tell(), \
         #    "Did seek to %i (%i, %i), but tell says %i (%i, %i)" \
         #    % (virtual_offset, start_offset, within_block,
-        #       self.tell(), self._block_start_offset, self._within_block_offset)
+        #       self.tell(), self._block_start_offset,
+        #       self._within_block_offset)
         return virtual_offset
 
     def read(self, size=-1):
@@ -722,8 +724,7 @@ class BgzfWriter(object):
             assert filename is None
             handle = fileobj
         else:
-            if "w" not in mode.lower() \
-            and "a" not in mode.lower():
+            if "w" not in mode.lower() and "a" not in mode.lower():
                 raise ValueError("Must use write or append mode, not %r" % mode)
             if "a" in mode.lower():
                 handle = _open(filename, "ab")
@@ -738,7 +739,8 @@ class BgzfWriter(object):
         # print("Saving %i bytes" % len(block))
         start_offset = self._handle.tell()
         assert len(block) <= 65536
-        # Giving a negative window bits means no gzip/zlib headers, -15 used in samtools
+        # Giving a negative window bits means no gzip/zlib headers,
+        # -15 used in samtools
         c = zlib.compressobj(self.compresslevel,
                              zlib.DEFLATED,
                              -15,
@@ -746,7 +748,8 @@ class BgzfWriter(object):
                              0)
         compressed = c.compress(block) + c.flush()
         del c
-        assert len(compressed) < 65536, "TODO - Didn't compress enough, try less data in this block"
+        assert len(compressed) < 65536, \
+            "TODO - Didn't compress enough, try less data in this block"
         crc = zlib.crc32(block)
         # Should cope with a mix of Python platforms...
         if crc < 0:
@@ -792,12 +795,15 @@ class BgzfWriter(object):
         self._handle.flush()
 
     def close(self):
-        """Flush data, write 28 bytes empty BGZF EOF marker, and close the BGZF file."""
+        """Flush data, write 28 bytes BGZF EOF marker, and close BGZF file.
+
+        samtools will look for a magic EOF marker, just a 28 byte empty BGZF
+        block, and if it is missing warns the BAM file may be truncated. In
+        addition to samtools writing this block, so too does bgzip - so this
+        implementation does too.
+        """
         if self._buffer:
             self.flush()
-        # samtools will look for a magic EOF marker, just a 28 byte empty BGZF block,
-        # and if it is missing warns the BAM file may be truncated. In addition to
-        # samtools writing this block, so too does bgzip - so we should too.
         self._handle.write(_bgzf_eof)
         self._handle.flush()
         self._handle.close()

@@ -2,8 +2,47 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
+#
+# This script looks for entries in the LaTeX source for the
+# Biopython Tutorial which can be turned into Python doctests,
+# e.g.
+#
+# %doctest
+# \begin{verbatim}
+# >>> from Bio.Alphabet import generic_dna
+# >>> from Bio.Seq import Seq
+# >>> len("ACGT")
+# 4
+# \end{verbatim}
+#
+# Code snippets can be extended using a similar syntax, which
+# will create a single combined doctest:
+#
+# %cont-doctest
+# \begin{verbatim}
+# >>> Seq("ACGT") == Seq("ACGT", generic_dna)
+# True
+# \end{verbatim}
+#
+# The %doctest line also supports a relative working directory,
+# and listing multiple Python dependencies as lib:XXX which will
+# ensure "import XXX" works before using the test. e.g.
+#
+# %doctest examples lib:numpy lib:scipy
+#
+# Note if using lib:XXX you must include a relative path to the
+# working directory, just use . for the default path, e.g.
+#
+# %doctest . lib:reportlab
+#
+# TODO: Adding bin:XXX for checking binary XXX is on $PATH?
+# TODO: Adding way to specify the doctest needs the network?
+#
+# See also "Writing doctests in the Tutorial" in the Tutorial
+# itself.
 
-# This will apply to all the doctests too:
+
+# This future import will apply to all the doctests too:
 from __future__ import print_function
 from Bio._py3k import _universal_read_mode
 

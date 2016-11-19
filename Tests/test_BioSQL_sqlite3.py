@@ -13,22 +13,20 @@ from BioSQL import BioSeqDatabase
 from common_BioSQL import *
 
 # Constants for the database driver
-DBHOST = 'localhost'
-DBUSER = 'root'
-DBPASSWD = ''
-
 DBDRIVER = 'sqlite3'
 DBTYPE = 'sqlite'
 
+DBHOST = None
+DBUSER = 'root'
+DBPASSWD = None
 TESTDB = temp_db_filename()
-
 
 # This will abort if driver not installed etc:
 check_config(DBDRIVER, DBTYPE, DBHOST, DBUSER, DBPASSWD, TESTDB)
 
 # Some of the unit tests don't create their own database,
 # so just in case there is no database already:
-create_database()
+TESTDB = create_database()
 
 
 if False:
@@ -66,6 +64,7 @@ class BackwardsCompatibilityTest(unittest.TestCase):
                           for rec in original_records]
         # And check they agree
         self.assertTrue(compare_records(original_records, biosql_records))
+        server.close()
 
 if __name__ == "__main__":
     # Run the test cases

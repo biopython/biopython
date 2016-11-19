@@ -10,7 +10,6 @@
 # available and licensed separately.  Please consult www.biosql.org
 import os
 
-__docformat__ = "restructuredtext en"
 
 _dbutils = {}
 

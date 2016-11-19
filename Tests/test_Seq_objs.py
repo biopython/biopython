@@ -9,20 +9,21 @@ from __future__ import print_function
 import warnings
 import unittest
 import sys
-if sys.version_info[0] >= 3:
-    maketrans = str.maketrans
-else:
-    from string import maketrans
 
 from Bio import BiopythonWarning
-from Bio.Alphabet import generic_protein, generic_nucleotide, \
-                         generic_dna, generic_rna
+from Bio.Alphabet import generic_protein, generic_nucleotide
+from Bio.Alphabet import generic_dna, generic_rna
 from Bio.Alphabet import _check_type_compatible
 from Bio.Alphabet.IUPAC import protein, extended_protein
 from Bio.Alphabet.IUPAC import unambiguous_dna, ambiguous_dna, ambiguous_rna
 from Bio.Data.IUPACData import ambiguous_dna_values, ambiguous_rna_values
 from Bio.Seq import Seq, UnknownSeq, MutableSeq, translate
 from Bio.Data.CodonTable import TranslationError, CodonTable
+
+if sys.version_info[0] < 3:
+    from string import maketrans
+else:
+    maketrans = str.maketrans
 
 # This is just the standard table with less stop codons
 # (replaced with coding for O as an artifical example)
@@ -99,7 +100,8 @@ class StringMethodTests(unittest.TestCase):
             _examples.append(seq.tomutable())
     _start_end_values = [0, 1, 2, 1000, -1, -2, -999]
 
-    def _test_method(self, method_name, pre_comp_function=None, start_end=False):
+    def _test_method(self, method_name, pre_comp_function=None,
+                     start_end=False):
         """Check this method matches the plain string's method."""
         self.assertTrue(isinstance(method_name, str))
         for example1 in self._examples:
@@ -379,12 +381,10 @@ class StringMethodTests(unittest.TestCase):
                 continue
             str1 = str(example1)
             # This only does the unambiguous cases
-            if "U" in str1 or "u" in str1 \
-            or example1.alphabet == generic_rna:
+            if any(("U" in str1, "u" in str1, example1.alphabet == generic_rna)):
                 mapping = maketrans("ACGUacgu", "UGCAugca")
-            elif "T" in str1 or "t" in str1 \
-            or example1.alphabet == generic_dna \
-            or example1.alphabet == generic_nucleotide:
+            elif any(("T" in str1, "t" in str1, example1.alphabet == generic_dna,
+                     example1.alphabet == generic_nucleotide)):
                 mapping = maketrans("ACGTacgt", "TGCAtgca")
             elif "A" not in str1 and "a" not in str1:
                 mapping = maketrans("CGcg", "GCgc")
@@ -407,12 +407,10 @@ class StringMethodTests(unittest.TestCase):
                 continue
             str1 = str(example1)
             # This only does the unambiguous cases
-            if "U" in str1 or "u" in str1 \
-            or example1.alphabet == generic_rna:
+            if any(("U" in str1, "u" in str1, example1.alphabet == generic_rna)):
                 mapping = maketrans("ACGUacgu", "UGCAugca")
-            elif "T" in str1 or "t" in str1 \
-            or example1.alphabet == generic_dna \
-            or example1.alphabet == generic_nucleotide:
+            elif any(("T" in str1, "t" in str1, example1.alphabet == generic_dna,
+                     example1.alphabet == generic_nucleotide)):
                 mapping = maketrans("ACGTacgt", "TGCAtgca")
             elif "A" not in str1 and "a" not in str1:
                 mapping = maketrans("CGcg", "GCgc")
@@ -493,7 +491,8 @@ class StringMethodTests(unittest.TestCase):
             self.assertEqual("***RR", str(nuc.translate(1)))
             self.assertEqual("***RR", str(nuc.translate("SGC0")))
             self.assertEqual("**W**", str(nuc.translate(table=2)))
-            self.assertEqual("**WRR", str(nuc.translate(table='Yeast Mitochondrial')))
+            self.assertEqual("**WRR",
+                             str(nuc.translate(table='Yeast Mitochondrial')))
             self.assertEqual("**WSS", str(nuc.translate(table=5)))
             self.assertEqual("**WSS", str(nuc.translate(table=9)))
             self.assertEqual("**CRR", str(nuc.translate(table='Euplotid Nuclear')))
@@ -503,9 +502,11 @@ class StringMethodTests(unittest.TestCase):
             self.assertEqual("**GRR", str(nuc.translate(table=25)))
             self.assertEqual("", str(nuc.translate(to_stop=True)))
             self.assertEqual("O*ORR", str(nuc.translate(table=special_table)))
-            self.assertEqual("*QWRR", str(nuc.translate(table=Chilodonella_uncinata_table)))
+            self.assertEqual("*QWRR",
+                             str(nuc.translate(table=Chilodonella_uncinata_table)))
             # These test the Bio.Seq.translate() function - move these?:
-            self.assertEqual("*QWRR", translate(str(nuc), table=Chilodonella_uncinata_table))
+            self.assertEqual("*QWRR",
+                             translate(str(nuc), table=Chilodonella_uncinata_table))
             self.assertEqual("O*ORR", translate(str(nuc), table=special_table))
             self.assertEqual("", translate(str(nuc), to_stop=True))
             self.assertEqual("***RR", translate(str(nuc), table='Bacterial'))
@@ -546,17 +547,17 @@ class StringMethodTests(unittest.TestCase):
             for c1 in ambig:
                 for c2 in ambig:
                     for c3 in ambig:
-                        values = set([str(Seq(a + b + c).translate())
-                                      for a in ambig_values[c1]
-                                      for b in ambig_values[c2]
-                                      for c in ambig_values[c3]])
+                        values = set(str(Seq(a + b + c).translate())
+                                     for a in ambig_values[c1]
+                                     for b in ambig_values[c2]
+                                     for c in ambig_values[c3])
                         t = str(Seq(c1 + c2 + c3).translate())
                         if t == "*":
                             self.assertEqual(values, set("*"))
                         elif t == "X":
                             self.assertTrue(len(values) > 1,
-                                "translate('%s') = '%s' not '%s'"
-                                % (c1 + c2 + c3, t, ",".join(values)))
+                                            "translate('%s') = '%s' not '%s'"
+                                            % (c1 + c2 + c3, t, ",".join(values)))
                         elif t == "Z":
                             self.assertEqual(values, set("EQ"))
                         elif t == "B":

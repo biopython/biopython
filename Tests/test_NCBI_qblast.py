@@ -18,14 +18,14 @@ import unittest
 from Bio._py3k import HTTPError
 from Bio._py3k import StringIO
 
-import requires_internet
-requires_internet.check()
 from Bio import MissingExternalDependencyError
 
 # We want to test these:
 from Bio.Blast import NCBIWWW
 from Bio.Blast import NCBIXML
 
+import requires_internet
+requires_internet.check()
 
 #####################################################################
 
@@ -43,15 +43,19 @@ print("Checking Bio.Blast.NCBIWWW.qblast() with various queries")
 class TestQblast(unittest.TestCase):
 
     def test_blastp_nr_actin(self):
-        # Simple protein blast filtered for rat only, using protein GI:160837788
+        # Simple protein blast filtered for rat only, using protein
+        # GI:160837788 aka NP_075631.2
         # the actin related protein 2/3 complex, subunit 1B [Mus musculus]
-        self.run_qblast("blastp", "nr", "160837788", 0.001,
+        self.run_qblast("blastp", "nr", "NP_075631.2", 0.001,
                         "rat [ORGN]", ['9506405', '13592137', '37589612', '149064087', '56912225'])
 
     def test_pcr_primers(self):
         # This next example finds PCR primer matches in Chimpanzees, e.g. BRCA1:
         self.run_qblast("blastn", "nr", "GTACCTTGATTTCGTATTC" + ("N" * 30) + "GACTCTACTACCTTTACCC",
-                        10, "pan [ORGN]", ["37953274", "51104367", "51104367", "51104367"])
+                        10, "pan [ORGN]", ["XM_009432096.2", "XM_009432102.2", "XM_009432101.2",
+                                           "XM_016930487.1", "XM_009432104.2", "XM_009432099.2",
+                                           "XR_001710553.1", "XM_016930485.1", "XM_009432089.2",
+                                           "XM_016930484.1"])
 
     def test_orchid_est(self):
         # Try an orchid EST (nucleotide) sequence against NR using BLASTX

@@ -3,6 +3,8 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+"""Utility code for using SimCoal (DEPRECATED)."""
+
 from __future__ import print_function
 
 from os import sep
@@ -10,8 +12,6 @@ import re
 from functools import reduce
 
 from Bio.PopGen.SimCoal import builtin_tpl_dir
-
-__docformat__ = "restructuredtext en"
 
 
 def exec_template(template):

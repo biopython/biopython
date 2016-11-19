@@ -19,8 +19,6 @@ from Bio.Seq import Seq
 # local modules
 from .Pattern import PatternRepository
 
-__docformat__ = "restructuredtext en"
-
 
 class MotifFinder(object):
     """Find motifs in a set of Sequence Records.
@@ -209,8 +207,8 @@ class MotifCoder(object):
         # otherwise we'll just return 0 for everything
         if max_count > 0:
             for motif in seq_motifs:
-                seq_motifs[motif] = (float(seq_motifs[motif] - min_count)
-                                     / float(max_count))
+                seq_motifs[motif] = (float(seq_motifs[motif] - min_count) /
+                                     float(max_count))
 
         # return the relative motif counts in the specified order
         motif_amounts = []

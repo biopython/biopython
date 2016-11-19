@@ -1,4 +1,4 @@
-# Copyright 2007-2010 by Peter Cock.  All rights reserved.
+# Copyright 2007-2016 by Peter Cock.  All rights reserved.
 # Revisions copyright 2010 by Uri Laserson.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -35,8 +35,6 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Alphabet import generic_protein
 from Bio import BiopythonParserWarning
-
-__docformat__ = "restructuredtext en"
 
 
 class InsdcScanner(object):
@@ -354,7 +352,7 @@ class InsdcScanner(object):
             if line == "//":
                 break
         self.line = line
-        return ([], "")  # Dummy values!
+        return [], ""  # Dummy values!
 
     def _feed_first_line(self, consumer, line):
         """Handle the LOCUS/ID line, passing data to the comsumer
@@ -374,7 +372,8 @@ class InsdcScanner(object):
         """
         pass
 
-    def _feed_feature_table(self, consumer, feature_tuples):
+    @staticmethod
+    def _feed_feature_table(consumer, feature_tuples):
         """Handle the feature table (list of tuples), passing data to the comsumer
 
         Used by the parse_records() and parse() methods.
@@ -611,7 +610,9 @@ class EmblScanner(InsdcScanner):
             assert self.line[:self.HEADER_WIDTH] == " " * self.HEADER_WIDTH, \
                 repr(self.line)
             # Remove tailing number now, remove spaces later
-            seq_lines.append(line.rsplit(None, 1)[0])
+            linersplit = line.rsplit(None, 1)
+            if(len(linersplit) > 1):
+                seq_lines.append(linersplit[0])
             line = self.handle.readline()
         self.line = line
         return (misc_lines, "".join(seq_lines).replace(" ", ""))
@@ -667,6 +668,10 @@ class EmblScanner(InsdcScanner):
         """
         consumer.locus(fields[0])  # Should we also call the accession consumer?
         consumer.residue_type(fields[2])
+        if "circular" in fields[2]:
+            consumer.topology("circular")
+        elif "linear" in fields[2]:
+            consumer.topology("linear")
         consumer.data_file_division(fields[3])
         self._feed_seq_length(consumer, fields[4])
 
@@ -706,13 +711,16 @@ class EmblScanner(InsdcScanner):
         # Based on how the old GenBank parser worked, merge these two:
         consumer.residue_type(" ".join(fields[2:4]))  # TODO - Store as two fields?
 
+        consumer.topology(fields[2])
+
         # consumer.xxx(fields[4]) # TODO - What should we do with the data class?
 
         consumer.data_file_division(fields[5])
 
         self._feed_seq_length(consumer, fields[6])
 
-    def _feed_seq_length(self, consumer, text):
+    @staticmethod
+    def _feed_seq_length(consumer, text):
         length_parts = text.split()
         assert len(length_parts) == 2, "Invalid sequence length string %r" % text
         assert length_parts[1].upper() in ["BP", "BP.", "AA", "AA."]
@@ -1098,8 +1106,15 @@ class GenBankScanner(InsdcScanner):
             # Should be possible to split them based on position, if
             # a clear definition of the standard exists THAT AGREES with
             # existing files.
-            consumer.locus(name_and_length[0])
-            consumer.size(name_and_length[1])
+            name, length = name_and_length
+            if len(name) > 16:
+                # As long as the sequence is short, can steal its leading spaces
+                # to extend the name over the current 16 character limit.
+                # However, that deserves a warning as it is out of spec.
+                warnings.warn("GenBank LOCUS line identifier over 16 characters",
+                              BiopythonParserWarning)
+            consumer.locus(name)
+            consumer.size(length)
             # consumer.residue_type(line[33:41].strip())
 
             if line[33:51].strip() == "" and line[29:33] == ' aa ':
@@ -1111,6 +1126,7 @@ class GenBankScanner(InsdcScanner):
             else:
                 consumer.residue_type(line[33:51].strip())
 
+            consumer.topology(line[42:51].strip())
             consumer.data_file_division(line[52:55])
             if line[62:73].strip():
                 consumer.date(line[62:73])
@@ -1181,6 +1197,7 @@ class GenBankScanner(InsdcScanner):
             else:
                 consumer.residue_type(line[44:63].strip())
 
+            consumer.topology(line[55:63].strip())
             consumer.data_file_division(line[64:67])
             if line[68:79].strip():
                 consumer.date(line[68:79])
@@ -1215,6 +1232,7 @@ class GenBankScanner(InsdcScanner):
             consumer.locus(splitline[1])
             consumer.size(splitline[2])
             consumer.residue_type(splitline[4])
+            consumer.topology(splitline[5])
             consumer.data_file_division(splitline[6])
             consumer.date(splitline[7])
             warnings.warn("Attempting to parse malformed locus line:\n%r\n"
@@ -1453,6 +1471,14 @@ class GenBankScanner(InsdcScanner):
                             data += ' ' + line[GENBANK_INDENT:]
                         else:
                             # We now have all the data for this entry:
+
+                            # The DEFINITION field must ends with a period
+                            # # see ftp://ftp.ncbi.nih.gov/genbank/gbrel.txt [3.4.5]
+                            # and discussion https://github.com/biopython/biopython/pull/616
+                            # We consider this period belong to the syntax, not to the data
+                            # So remove it if it exist
+                            if line_type == 'DEFINITION' and data.endswith('.'):
+                                data = data[:-1]
                             getattr(consumer, consumer_dict[line_type])(data)
                             # End of continuation - return to top of loop!
                             break

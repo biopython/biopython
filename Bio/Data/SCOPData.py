@@ -7,8 +7,6 @@
 See Bio.SCOP for more information about SCOP and Biopython"s SCOP module.
 """
 
-__docformat__ = "restructuredtext en"
-
 
 protein_letters_3to1 = {
     "00C": "C", "01W": "X", "02K": "A", "03Y": "C", "07O": "C",

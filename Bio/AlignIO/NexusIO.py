@@ -21,7 +21,6 @@ from Bio.Align import MultipleSeqAlignment
 from .Interfaces import AlignmentWriter
 from Bio import Alphabet
 
-__docformat__ = "restructuredtext en"
 
 # You can get a couple of example files here:
 # http://www.molecularevolution.org/resources/fileformats/
@@ -159,7 +158,7 @@ if __name__ == "__main__":
     CYS1_DICDI          -----MKVIL LFVLAVFTVF VSS------- --------RG IPPEEQ---X
     ;
     end; 
-    """)
+    """)  # noqa for pep8 W291 trailing whitespace
     for a in NexusIterator(handle):
         print(a)
         for r in a:
@@ -189,7 +188,7 @@ if __name__ == "__main__":
     CYS1_DICDI          -----MKVIL LFVLAVFTVF VSS------- --------RG IPPEEQ---X
     ;
     end; 
-    """)
+    """)  # noqa for pep8 W291 trailing whitespace
     for a in NexusIterator(handle):
         print(a)
         for r in a:

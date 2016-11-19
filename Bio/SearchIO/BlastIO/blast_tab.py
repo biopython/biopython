@@ -16,8 +16,6 @@ from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 
 __all__ = ['BlastTabIndexer', 'BlastTabParser', 'BlastTabWriter']
 
-__docformat__ = "restructuredtext en"
-
 
 # longname-shortname map
 # maps the column names shown in a commented output to its short name

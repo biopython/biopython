@@ -46,7 +46,6 @@ from reportlab.graphics.shapes import Polygon
 
 from math import pi, sin, cos
 
-__docformat__ = "restructuredtext en"
 
 ################################################################################
 # METHODS

@@ -1,104 +1,134 @@
 #!/usr/bin/env python
+# Copyright 2000 by Thomas Sicheritz-Ponten.
+# Copyrigth 2016 by Markus Piotrowski.
+# All rights reserved.
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+
 # Created: Sat Dec  2 16:02:17 2000
-# Last changed: Time-stamp: <00/12/03 13:12:39 thomas>
-# Thomas.Sicheritz@molbio.uu.se, http://evolution.bmc.uu.se/~thomas
+# thomas@cbs.dtu.dk, http://www.cbs.dtu.dk/thomas
 # File: xbb_blastbg.py
 
 from __future__ import print_function
 
 import os
-import sys
-sys.path.insert(0, '.')
-
-try:
-    import Queue as queue  # Python 2
-except ImportError:
-    import queue  # Python 3
-
 import tempfile
 import threading
 
 try:
-    from Tkinter import *  # Python 2
+    import tkMessageBox as messagebox  # Python 2
 except ImportError:
-    from tkinter import *  # Python 3
+    from tkinter import messagebox  # Python 3
 
-from xbb_utils import NotePad
-
-__docformat__ = "restructuredtext en"
+from Bio.Blast.Applications import (NcbiblastnCommandline,
+                                    NcbiblastpCommandline,
+                                    NcbiblastxCommandline,
+                                    NcbitblastnCommandline,
+                                    NcbitblastxCommandline)
 
 
 class BlastDisplayer(object):
-    def __init__(self, command, text_id=None):
-        self.command = command
+    def __init__(self, command_data, text_id=None):
+        self.command_data = command_data
         self.tid = text_id
 
     def RunCommand(self):
-        self.outfile = tempfile.mktemp()
+        self.fh_in, self.infile = tempfile.mkstemp()
+        self.fh_out, self.outfile = tempfile.mkstemp()
 
-        # make sure outfile exists and is empty
-        with open(self.outfile, 'w+') as fid:
-            pass
+        with open(self.infile, 'w+') as f:
+            f.write('>Name\n')
+            f.write(self.command_data[0])
 
-        com = '%s > %s' % (self.command, self.outfile)
+        blast_program = self.command_data[1]
+        database = self.command_data[2]
 
-        self.worker = BlastWorker(com)
+        # Check if user supplied additional options and extract them
+        if self.command_data[3]:
+            option = self.command_data[3]
+            options = {}
+            for x in range(0, len(option.split()) - 1, 2):
+                options[option.split()[x]] = option.split()[x + 1]
+        else:
+            options = {}
+
+        args, kwargs = blast_program, {'query': self.infile, 'db': database,
+                                       'out': self.outfile}
+
+        if blast_program.endswith('blastn'):
+            blast_cmd = NcbiblastnCommandline(args, **kwargs)
+        elif blast_program.endswith('blastp'):
+            blast_cmd = NcbiblastpCommandline(args, **kwargs)
+        elif blast_program.endswith('blastx'):
+            blast_cmd = NcbiblastxCommandline(args, **kwargs)
+        elif blast_program.endswith('tblastn'):
+            blast_cmd = NcbitblastnCommandline(args, **kwargs)
+        elif blast_program.endswith('tblastx'):
+            blast_cmd = NcbitblastxCommandline(args, **kwargs)
+        else:
+            return
+
+        if options:
+            try:
+                for key in options:
+                    blast_cmd.set_parameter(key, options[key])
+            except ValueError as e:
+                messagebox.showerror('xbb tools',
+                                     'Commandline error:\n\n' + str(e))
+                self.tid.destroy()
+                return
+
+        self.worker = BlastWorker(blast_cmd)
         self.worker.start()
+
         self.UpdateResults()
 
     def UpdateResults(self):
         # open the oufile and displays new appended text
+        self.tid.insert('end', 'BLAST is running...')
+        while True:
+            self.tid.update()
+            if self.worker.finished:
+                self.tid.delete('1.0', 'end')
+                break
         with open(self.outfile) as fid:
-            size = 0
-            while True:
-                if self.worker.finished:
-                    break
-                fid.seek(size)
+            try:
                 txt = fid.read()
-                size = os.stat(self.outfile)[6]
-                try:
-                    self.tid.insert(END, txt)
-                    self.tid.update()
-                except:
-                    # text widget is detroyed, we assume the search
-                    # has been cancelled
-                    break
-
+                self.tid.insert('end', txt)
+                self.tid.update()
+            except:
+                # text widget is detroyed, we assume the search
+                # has been cancelled
+                pass
         self.Exit()
 
     def Exit(self):
         if os.path.exists(self.outfile):
+            os.close(self.fh_out)
             os.remove(self.outfile)
+        if os.path.exists(self.infile):
+            os.close(self.fh_in)
+            os.remove(self.infile)
 
-        # do I need to stop the queue ?
-        self.worker.shutdown()
         del self.worker
 
 
 class BlastWorker(threading.Thread):
 
-    def __init__(self, command):
-        self.com = command
-        q = queue.Queue(0)
-        self.queue = q
+    def __init__(self, blast_command):
+        self.com = blast_command
         threading.Thread.__init__(self)
         self.finished = 0
-        print(dir(q))
-        print(q.queue)
-
-    def shutdown(self):
-        # GRRRR How do I explicitely kill a thread ???????
-        # self.queue.put(None)
-        del self.queue
 
     def run(self):
-        print('running %s' % self.com)
-        os.system(self.com)
+        try:
+            self.com()
+        except Exception as e:
+            messagebox.showwarning('BLAST error',
+                                   'BLAST error:\n\n' + str(e))
         self.finished = 1
 
-
 if __name__ == '__main__':
-    np = NotePad()
-    com = "blastall -d nr -i test.fas -p blastx"
-    test = BlastDisplayer(com, np.tid)
-    test.RunCommand()
+    os.system('python xbb_blast.py' +
+              ' ATGACAAAGCTAATTATTCACTTGGTTTCAGACTCTTCTGTGCAAACTGC')

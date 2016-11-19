@@ -40,7 +40,7 @@ for seq_record in SeqIO.parse("ls_orchid.fasta", "fasta"):
     print(len(seq_record))
 \end{verbatim}
 
-The above example is repeated from the introduction in Section~\ref{sec:sequence-parsing}, and will load the orchid DNA sequences in the FASTA format file \href{http://biopython.org/DIST/docs/tutorial/examples/ls_orchid.fasta}{ls\_orchid.fasta}.  If instead you wanted to load a GenBank format file like \href{http://biopython.org/DIST/docs/tutorial/examples/ls_orchid.gbk}{ls\_orchid.gbk} then all you need to do is change the filename and the format string:
+The above example is repeated from the introduction in Section~\ref{sec:sequence-parsing}, and will load the orchid DNA sequences in the FASTA format file \href{https://raw.githubusercontent.com/biopython/biopython/master/Doc/examples/ls_orchid.fasta}{ls\_orchid.fasta}.  If instead you wanted to load a GenBank format file like \href{https://raw.githubusercontent.com/biopython/biopython/master/Doc/examples/ls_orchid.gbk}{ls\_orchid.gbk} then all you need to do is change the filename and the format string:
 
 \begin{verbatim}
 from Bio import SeqIO
@@ -143,7 +143,7 @@ You can of course still use a for loop with a list of \verb|SeqRecord| objects. 
 \subsection{Extracting data}
 
 The \verb|SeqRecord| object and its annotation structures are described more fully in
-Chapter~\ref{chapter:SeqRecord}.  As an example of how annotations are stored, we'll look at the output from parsing the first record in the GenBank file \href{http://biopython.org/DIST/docs/tutorial/examples/ls_orchid.gbk}{ls\_orchid.gbk}.
+Chapter~\ref{chapter:SeqRecord}.  As an example of how annotations are stored, we'll look at the output from parsing the first record in the GenBank file \href{https://raw.githubusercontent.com/biopython/biopython/master/Doc/examples/ls_orchid.gbk}{ls\_orchid.gbk}.
 
 \begin{verbatim}
 from Bio import SeqIO
@@ -190,7 +190,7 @@ print(first_record.annotations.values())
 
 In general, the annotation values are strings, or lists of strings.  One special case is any references in the file get stored as reference objects.
 
-Suppose you wanted to extract a list of the species from the \href{http://biopython.org/DIST/docs/tutorial/examples/ls_orchid.gbk}{ls\_orchid.gbk} GenBank file.  The information we want, \emph{Cypripedium irapeanum}, is held in the annotations dictionary under `source' and `organism', which we can access like this:
+Suppose you wanted to extract a list of the species from the \href{https://raw.githubusercontent.com/biopython/biopython/master/Doc/examples/ls_orchid.gbk}{ls\_orchid.gbk} GenBank file.  The information we want, \emph{Cypripedium irapeanum}, is held in the annotations dictionary under `source' and `organism', which we can access like this:
 
 \begin{verbatim}
 >>> print(first_record.annotations["source"])
@@ -236,7 +236,7 @@ print(all_species)
 
 Great.  That was pretty easy because GenBank files are annotated in a standardised way.
 
-Now, let's suppose you wanted to extract a list of the species from a FASTA file, rather than the GenBank file.  The bad news is you will have to write some code to extract the data you want from the record's description line - if the information is in the file in the first place!  Our example FASTA format file \href{http://biopython.org/DIST/docs/tutorial/examples/ls_orchid.fasta}{ls\_orchid.fasta} starts like this:
+Now, let's suppose you wanted to extract a list of the species from a FASTA file, rather than the GenBank file.  The bad news is you will have to write some code to extract the data you want from the record's description line - if the information is in the file in the first place!  Our example FASTA format file \href{https://raw.githubusercontent.com/biopython/biopython/master/Doc/examples/ls_orchid.fasta}{ls\_orchid.fasta} starts like this:
 
 \begin{verbatim}
 >gi|2765658|emb|Z78533.1|CIZ78533 C.irapeanum 5.8S rRNA gene and ITS1 and ITS2 DNA
@@ -559,7 +559,7 @@ We can access a single \verb|SeqRecord| object via the keys and manipulate the o
 \begin{verbatim}
 >>> seq_record = orchid_dict["Z78475.1"]
 >>> print(seq_record.description)
-P.supardii 5.8S rRNA gene and ITS1 and ITS2 DNA.
+P.supardii 5.8S rRNA gene and ITS1 and ITS2 DNA
 >>> print(repr(seq_record.seq))
 Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGTTGAGATCACAT...GGT', IUPACAmbiguousDNA())
 \end{verbatim}
@@ -652,7 +652,7 @@ Now, recall the \verb|Bio.SeqIO.to_dict()| function's \verb|key_function| argume
 >>> print(record.id)
 Z78532.1
 >>> print(record.description)
-C.californicum 5.8S rRNA gene and ITS1 and ITS2 DNA.
+C.californicum 5.8S rRNA gene and ITS1 and ITS2 DNA
 \end{verbatim}
 
 \noindent That should have retrieved the record {\tt Z78532.1}, the second entry in the file.
@@ -691,7 +691,7 @@ As an example, let's use the same GenBank file as before:
 \begin{verbatim}
 >>> seq_record = orchid_dict["Z78475.1"]
 >>> print(seq_record.description)
-P.supardii 5.8S rRNA gene and ITS1 and ITS2 DNA.
+P.supardii 5.8S rRNA gene and ITS1 and ITS2 DNA
 >>> seq_record.seq
 Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGTTGAGATCACAT...GGT', IUPACAmbiguousDNA())
 >>> orchid_dict.close()
@@ -1104,7 +1104,7 @@ solution.
 
 In previous example we used a list of \verb|SeqRecord| objects as input to the \verb|Bio.SeqIO.write()| function, but it will also accept a \verb|SeqRecord| iterator like we get from \verb|Bio.SeqIO.parse()| -- this lets us do file conversion by combining these two functions.
 
-For this example we'll read in the GenBank format file \href{http://biopython.org/DIST/docs/tutorial/examples/ls_orchid.gbk}{ls\_orchid.gbk} and write it out in FASTA format:
+For this example we'll read in the GenBank format file \href{https://raw.githubusercontent.com/biopython/biopython/master/Doc/examples/ls_orchid.gbk}{ls\_orchid.gbk} and write it out in FASTA format:
 
 \begin{verbatim}
 from Bio import SeqIO

@@ -17,8 +17,6 @@ read             Parses a GenePop record (file) into a Record object.
 
 """
 
-__docformat__ = "restructuredtext en"
-
 
 def get_indiv(line):
     indiv_name, marker_line = line.split(',')

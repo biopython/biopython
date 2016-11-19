@@ -18,14 +18,14 @@ from Bio.Emboss import PrimerSearch, Primer3
 
 class Primer3ParseTest(unittest.TestCase):
     def setUp(self):
-        self.test_files = \
-          [os.path.join("Emboss", "bac_find.primer3"),
-           os.path.join("Emboss", "cds_forward.primer3"),
-           os.path.join("Emboss", "cds_reverse.primer3"),
-           os.path.join("Emboss", "short.primer3"),
-           os.path.join("Emboss", "internal_oligo.primer3"),
-           os.path.join("Emboss", "no_oligo.primer3"),
-           ]
+        self.test_files = [
+            os.path.join("Emboss", "bac_find.primer3"),
+            os.path.join("Emboss", "cds_forward.primer3"),
+            os.path.join("Emboss", "cds_reverse.primer3"),
+            os.path.join("Emboss", "short.primer3"),
+            os.path.join("Emboss", "internal_oligo.primer3"),
+            os.path.join("Emboss", "no_oligo.primer3"),
+            ]
 
     def test_simple_parse(self):
         """Make sure that we can use all single target primer3 files.
@@ -79,7 +79,8 @@ class Primer3ParseTest(unittest.TestCase):
                          "# PRIMER3 RESULTS FOR 26964-28647#\n")
         self.assertEqual(primer_info.primers[1].reverse_seq, "")
         self.assertEqual(primer_info.primers[1].internal_seq, "")
-        self.assertEqual(primer_info.primers[3].forward_seq, "TGTGATTGCTTGAGCTGGAC")
+        self.assertEqual(primer_info.primers[3].forward_seq,
+                         "TGTGATTGCTTGAGCTGGAC")
         self.assertEqual(primer_info.primers[3].internal_seq, "")
         self.assertEqual(primer_info.primers[3].forward_start, 253)
 
@@ -190,8 +191,7 @@ class Primer3ParseTest(unittest.TestCase):
 
 class PrimersearchParseTest(unittest.TestCase):
     def setUp(self):
-        self.test_files = \
-          [os.path.join("Emboss", "bac_find.psearch")]
+        self.test_files = [os.path.join("Emboss", "bac_find.psearch")]
 
     def test_simple_parse(self):
         """Make sure that we can parse all primersearch files.
@@ -215,13 +215,13 @@ class PrimersearchParseTest(unittest.TestCase):
 
         self.assertEqual(amp_info.amplifiers["Test"][0].length, 218)
         self.assertEqual(amp_info.amplifiers["Test"][0].hit_info,
-          "AC074298 AC074298 \n"
-          "\tTelomere associated sequence for Arabidopsis thaliana "
-          "TEL1N from chromosome I, complete sequence.\n"
-          "\tCCGGTTTCTCTGGTTGAAAA hits forward strand at 114 with "
-          "0 mismatches\n"
-          "\tTCACATTCCCAAATGTAGATCG hits reverse strand at [114] with "
-          "0 mismatches")
+                         "AC074298 AC074298 \n"
+                         "\tTelomere associated sequence for Arabidopsis thaliana "
+                         "TEL1N from chromosome I, complete sequence.\n"
+                         "\tCCGGTTTCTCTGGTTGAAAA hits forward strand at 114 "
+                         "with 0 mismatches\n"
+                         "\tTCACATTCCCAAATGTAGATCG hits reverse strand at "
+                         "[114] with 0 mismatches")
 
 
 class PrimerSearchInputTest(unittest.TestCase):

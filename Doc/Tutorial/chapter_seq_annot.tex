@@ -698,8 +698,8 @@ For example, taking the same GenBank file used earlier:
 >>> record
 SeqRecord(seq=Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG',
 IUPACAmbiguousDNA()), id='NC_005816.1', name='NC_005816',
-description='Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence.',
-dbxrefs=['Project:10638'])
+description='Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence',
+dbxrefs=['Project:58037'])
 \end{verbatim}
 %cont-doctest
 \begin{verbatim}
@@ -824,7 +824,7 @@ and \texttt{description}, but for practicality these are preserved:
 >>> sub_record.name
 'NC_005816'
 >>> sub_record.description
-'Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence.'
+'Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence'
 \end{verbatim}
 
 \noindent This illustrates the problem nicely though, our new sub-record is
@@ -1028,7 +1028,7 @@ Consider this example record:
 >>> from Bio import SeqIO
 >>> record = SeqIO.read("NC_005816.gb", "genbank")
 >>> print("%s %i %i %i %i" % (record.id, len(record), len(record.features), len(record.dbxrefs), len(record.annotations)))
-NC_005816.1 9609 41 1 11
+NC_005816.1 9609 41 1 12
 \end{verbatim}
 
 Here we take the reverse complement and specify a new identifier -- but notice

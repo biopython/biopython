@@ -289,7 +289,6 @@ class TestReferenceFastqConversions(unittest.TestCase):
                 if out_variant != "sanger":
                     # Ignore data loss warnings from max qualities
                     warnings.simplefilter("ignore", BiopythonWarning)
-                    warnings.simplefilter("ignore", UserWarning)
                 # Check matches using convert...
                 handle = StringIO()
                 SeqIO.convert(in_filename, "fastq-" + in_variant,
@@ -371,7 +370,7 @@ class TestQual(unittest.TestCase):
 >1117_10_1017_F3
 33 33 -1 -1 -1 27 -1 -1 17 16 -1 28 24 11 -1 6 -1 -1 -1 29 -1 8 29 24 -1 -1 8 8 -1 20 -1 13 -1 -1 8 13 -1 28 10 24 -1 10 -1 -1 -1 4 -1 -1 7 6 
 >1117_11_136_F3
-16 22 -1 -1 -1 33 -1 -1 30 27 -1 27 28 32 -1 29 -1 -1 -1 27 -1 18 9 6 -1 -1 23 16 -1 26 -1 5 7 -1 22 7 -1 18 14 8 -1 8 -1 -1 -1 11 -1 -1 4 24"""
+16 22 -1 -1 -1 33 -1 -1 30 27 -1 27 28 32 -1 29 -1 -1 -1 27 -1 18 9 6 -1 -1 23 16 -1 26 -1 5 7 -1 22 7 -1 18 14 8 -1 8 -1 -1 -1 11 -1 -1 4 24"""  # noqa for pep8 W291 trailing whitespace
         h = StringIO(data)
         h2 = StringIO()
         with warnings.catch_warnings():
@@ -500,8 +499,11 @@ class TestWriteRead(unittest.TestCase):
         """Write and read back sanger_93.fastq"""
         self.check(os.path.join("Quality", "sanger_93.fastq"), "fastq",
                    ["fastq", "fastq-sanger", "fasta", "qual", "phd"])
-        self.check(os.path.join("Quality", "sanger_93.fastq"), "fastq",
-                   ["fastq-solexa", "fastq-illumina"])
+        with warnings.catch_warnings():
+            # TODO - Have a Biopython defined "DataLossWarning?"
+            warnings.simplefilter('ignore', BiopythonWarning)
+            self.check(os.path.join("Quality", "sanger_93.fastq"), "fastq",
+                       ["fastq-solexa", "fastq-illumina"])
 
     def test_sanger_faked(self):
         """Write and read back sanger_faked.fastq"""

@@ -11,4 +11,3 @@ from UniProt-GOA as the module Bio.UniProt.GOA.
 See also Bio.SwissProt and the "swiss" support in Bio.SeqIO for
 the legacy plain text sequence format still used in UniProt.
 """
-__docformat__ = "restructuredtext en"

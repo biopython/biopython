@@ -20,8 +20,6 @@ from __future__ import print_function
 import numpy
 import numpy.linalg
 
-__docformat__ = "restructuredtext en"
-
 
 class LogisticRegression(object):
     """Holds information necessary to do logistic regression

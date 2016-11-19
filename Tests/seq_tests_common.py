@@ -19,9 +19,9 @@ def checksum_summary(record):
         short = str(record.seq)
     else:
         short = str(record.seq)[:19] \
-              + "..." + str(record.seq)[-3:]
+            + "..." + str(record.seq)[-3:]
     return "%s [%s] len %i" \
-           % (short, seguid(record.seq), len(record.seq))
+        % (short, seguid(record.seq), len(record.seq))
 
 
 def compare_reference(old_r, new_r):
@@ -108,7 +108,7 @@ def compare_feature(old_f, new_f):
                              new_f.location.end)
 
     assert isinstance(old_f.location, CompoundLocation) == \
-           isinstance(new_f.location, CompoundLocation)
+        isinstance(new_f.location, CompoundLocation)
     if isinstance(old_f.location, CompoundLocation):
         assert len(old_f.location.parts) == len(new_f.location.parts)
         for old_l, new_l in zip(old_f.location.parts, new_f.location.parts):
@@ -124,56 +124,6 @@ def compare_feature(old_f, new_f):
         assert old_sub.nofuzzy_start == new_sub.nofuzzy_start
         assert old_sub.nofuzzy_end == new_sub.nofuzzy_end
         assert old_sub.strand == new_sub.strand
-
-    # Using private variable to avoid deprecation warnings
-    assert len(old_f._sub_features) == len(new_f._sub_features), \
-        "number of sub_features: %s -> %s" % \
-        (len(old_f._sub_features), len(new_f._sub_features))
-
-    for old_sub, new_sub in zip(old_f._sub_features, new_f._sub_features):
-        # These are SeqFeature objects
-        assert old_sub.type == new_sub.type, \
-            "%s -> %s" % (old_sub.type, new_sub.type)
-
-        assert old_sub.strand == new_sub.strand, \
-            "%s -> %s" % (old_sub.strand, new_sub.strand)
-
-        assert old_sub.ref == new_sub.ref, \
-            "%s -> %s" % (old_sub.ref, new_sub.ref)
-
-        assert old_sub.ref_db == new_sub.ref_db, \
-            "%s -> %s" % (old_sub.ref_db, new_sub.ref_db)
-
-        # TODO - Work out how the location_qualifier_value table should
-        # be used, given BioPerl seems to ignore it (Bug 2766)
-        # assert old_sub.location_operator == new_sub.location_operator, \
-        #    "%s -> %s" % (old_sub.location_operator, new_sub.location_operator)
-
-        # Compare sub-feature Locations:
-        #
-        # BioSQL currently does not store fuzzy locations, but instead stores
-        # them as FeatureLocation.nofuzzy_start FeatureLocation.nofuzzy_end.
-        # The vast majority of cases will be comparisons of ExactPosition
-        # class locations, so we'll try that first and catch the exceptions.
-
-        try:
-            assert str(old_sub.location) == str(new_sub.location), \
-               "%s -> %s" % (str(old_sub.location), str(new_sub.location))
-        except AssertionError as e:
-            if isinstance(old_sub.location.start, ExactPosition) and \
-               isinstance(old_sub.location.end, ExactPosition):
-                # Its not a problem with fuzzy locations, re-raise
-                raise e
-            else:
-                # At least one of the locations is fuzzy
-                assert old_sub.location.nofuzzy_start == \
-                       new_sub.location.nofuzzy_start, \
-                       "%s -> %s" % (old_sub.location.nofuzzy_start,
-                                     new_sub.location.nofuzzy_start)
-                assert old_sub.location.nofuzzy_end == \
-                       new_sub.location.nofuzzy_end, \
-                       "%s -> %s" % (old_sub.location.nofuzzy_end,
-                                     new_sub.location.nofuzzy_end)
 
     assert len(old_f.qualifiers) == len(new_f.qualifiers)
     assert set(old_f.qualifiers) == set(new_f.qualifiers)
@@ -291,7 +241,7 @@ def compare_record(old, new):
     # TODO - address these, see Bug 2681?
     new_keys = set(new.annotations).difference(old.annotations)
     new_keys = new_keys.difference(['cross_references', 'date',
-                                    'data_file_division', 'ncbi_taxid', 
+                                    'data_file_division', 'ncbi_taxid',
                                     'gi'])
     assert not new_keys, "Unexpected new annotation keys: %s" \
            % ", ".join(new_keys)
@@ -299,7 +249,7 @@ def compare_record(old, new):
     missing_keys = missing_keys.difference(['ncbi_taxid',  # Can't store chimeras
                                             'structured_comment'])
     assert not missing_keys, "Unexpectedly missing annotation keys: %s" \
-           % ", ".join(missing_keys)
+        % ", ".join(missing_keys)
 
     # In the short term, just compare any shared keys:
     for key in set(old.annotations).intersection(new.annotations):
@@ -331,7 +281,7 @@ def compare_record(old, new):
             # guarantee that they will be identical after a load/retrieve.
             assert isinstance(new.annotations[key], basestring) \
                 or isinstance(new.annotations[key], list)
-        elif type(old.annotations[key]) == type(new.annotations[key]):
+        elif isinstance(old.annotations[key], type(new.annotations[key])):
             assert old.annotations[key] == new.annotations[key], \
                 "Annotation '%s' changed by load/retrieve\nWas:%s\nNow:%s" \
                 % (key, old.annotations[key], new.annotations[key])

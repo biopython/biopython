@@ -3,7 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Asynchronous execution of Fdist and spliting of loads.
+"""Asynchronous execution of Fdist and spliting of loads (DEPRECATED).
 
 FDistAsync Allows for the execution of FDist.
 
@@ -15,10 +15,9 @@ import os
 import shutil
 import threading
 from time import sleep
+
 from Bio.PopGen.Async import Local
 from Bio.PopGen.FDist.Controller import FDistController
-
-__docformat__ = "restructuredtext en"
 
 
 class FDistAsync(FDistController):
@@ -29,7 +28,7 @@ class FDistAsync(FDistController):
         """Constructor.
 
         Parameters:
-        
+
           - fdist_dir - Where fdist can be found, if = "", then it
               should be on the path.
           - ext - Extension of binary names (e.g. nothing on Unix,
@@ -80,7 +79,7 @@ class SplitFDist(object):
         """Constructor.
 
            Parameters:
-           
+
              - report_fun - Function that is called when a single packet is
                run, it should have a single parameter: Fst.
              - num_thr - Number of desired threads, typically the number

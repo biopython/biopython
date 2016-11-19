@@ -28,41 +28,67 @@ from Bio.Alphabet import generic_protein
 from Bio.PDB.PDBExceptions import PDBConstructionException, PDBConstructionWarning
 
 from Bio.PDB import PPBuilder, CaPPBuilder
-from Bio.PDB.MMCIFParser import MMCIFParser
+from Bio.PDB.MMCIFParser import MMCIFParser, FastMMCIFParser
 
 
 class ParseReal(unittest.TestCase):
     """Testing with real CIF file(s)."""
 
-    def test_parser(self):
+    def test_parsers(self):
         """Extract polypeptides from 1A80."""
+
         parser = MMCIFParser()
+        fast_parser = FastMMCIFParser()
+
         structure = parser.get_structure("example", "PDB/1A8O.cif")
+        f_structure = fast_parser.get_structure("example", "PDB/1A8O.cif")
+
         self.assertEqual(len(structure), 1)
+        self.assertEqual(len(f_structure), 1)
+
         for ppbuild in [PPBuilder(), CaPPBuilder()]:
             # ==========================================================
             # Check that serial_num (model column) is stored properly
             self.assertEqual(structure[0].serial_num, 1)
+            self.assertEqual(f_structure[0].serial_num, structure[0].serial_num)
+
             # First try allowing non-standard amino acids,
             polypeptides = ppbuild.build_peptides(structure[0], False)
+            f_polypeptides = ppbuild.build_peptides(f_structure[0], False)
+
             self.assertEqual(len(polypeptides), 1)
+            self.assertEqual(len(f_polypeptides), 1)
+
             pp = polypeptides[0]
+            f_pp = f_polypeptides[0]
+
             # Check the start and end positions
             self.assertEqual(pp[0].get_id()[1], 151)
             self.assertEqual(pp[-1].get_id()[1], 220)
+
+            self.assertEqual(f_pp[0].get_id()[1], 151)
+            self.assertEqual(f_pp[-1].get_id()[1], 220)
+
             # Check the sequence
             s = pp.get_sequence()
+            f_s = f_pp.get_sequence()
+
+            self.assertEqual(s, f_s)  # enough to test this
+
             self.assertTrue(isinstance(s, Seq))
             self.assertEqual(s.alphabet, generic_protein)
+
             # Here non-standard MSE are shown as M
             self.assertEqual("MDIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNWMTETLLVQ"
                              "NANPDCKTILKALGPGATLEEMMTACQG", str(s))
+
             # ==========================================================
             # Now try strict version with only standard amino acids
             # Should ignore MSE 151 at start, and then break the chain
             # at MSE 185, and MSE 214,215
             polypeptides = ppbuild.build_peptides(structure[0], True)
             self.assertEqual(len(polypeptides), 3)
+
             # First fragment
             pp = polypeptides[0]
             self.assertEqual(pp[0].get_id()[1], 152)
@@ -71,6 +97,7 @@ class ParseReal(unittest.TestCase):
             self.assertTrue(isinstance(s, Seq))
             self.assertEqual(s.alphabet, generic_protein)
             self.assertEqual("DIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNW", str(s))
+
             # Second fragment
             pp = polypeptides[1]
             self.assertEqual(pp[0].get_id()[1], 186)
@@ -79,6 +106,7 @@ class ParseReal(unittest.TestCase):
             self.assertTrue(isinstance(s, Seq))
             self.assertEqual(s.alphabet, generic_protein)
             self.assertEqual("TETLLVQNANPDCKTILKALGPGATLEE", str(s))
+
             # Third fragment
             pp = polypeptides[2]
             self.assertEqual(pp[0].get_id()[1], 216)
@@ -92,9 +120,14 @@ class ParseReal(unittest.TestCase):
         """Test file with multiple models"""
 
         parser = MMCIFParser(QUIET=1)
-        structure = parser.get_structure("example", "PDB/1LCD.cif")
+        f_parser = FastMMCIFParser(QUIET=1)
+        with warnings.catch_warnings():
+            warnings.simplefilter('ignore', PDBConstructionWarning)
+            structure = parser.get_structure("example", "PDB/1LCD.cif")
+            f_structure = f_parser.get_structure("example", "PDB/1LCD.cif")
 
         self.assertEqual(len(structure), 3)
+        self.assertEqual(len(f_structure), 3)
 
         for ppbuild in [PPBuilder(), CaPPBuilder()]:
             # ==========================================================
@@ -139,7 +172,9 @@ class ParseReal(unittest.TestCase):
     def test_insertions(self):
         """Test file with residue insertion codes"""
         parser = MMCIFParser(QUIET=1)
-        structure = parser.get_structure("example", "PDB/4zhl.cif")
+        with warnings.catch_warnings():
+            warnings.simplefilter('ignore', PDBConstructionWarning)
+            structure = parser.get_structure("example", "PDB/4ZHL.cif")
         for ppbuild in [PPBuilder(), CaPPBuilder()]:
             # First try allowing non-standard amino acids,
             polypeptides = ppbuild.build_peptides(structure[0], False)

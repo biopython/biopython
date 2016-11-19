@@ -9,8 +9,6 @@ from __future__ import print_function
 
 from Bio.Application import _Option, AbstractCommandline
 
-__docformat__ = "restructuredtext en"
-
 
 class NovoalignCommandline(AbstractCommandline):
     """Command line wrapper for novoalign by Novocraft.
@@ -46,8 +44,7 @@ class NovoalignCommandline(AbstractCommandline):
         REPORT_FORMAT = ['Native', 'Pairwise', 'SAM']
         REPEAT_METHOD = ['None', 'Random', 'All', 'Exhaustive', '0.99']
 
-        self.parameters = \
-           [
+        self.parameters = [
             _Option(["-d", "database"],
                     "database filename",
                     filename=True,
@@ -178,12 +175,6 @@ class NovoalignCommandline(AbstractCommandline):
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
 
-def _test():
-    """Run the module's doctests (PRIVATE)."""
-    print("Running Novoalign doctests...")
-    import doctest
-    doctest.testmod()
-    print("Done")
-
 if __name__ == "__main__":
-    _test()
+    from Bio._utils import run_doctest
+    run_doctest()

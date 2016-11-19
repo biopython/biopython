@@ -10,9 +10,7 @@ of freely available Python tools for computational molecular biology.
 http://biopython.org
 """
 
-__docformat__ = "restructuredtext en"  # not just plaintext
-
-__version__ = "1.66+"
+__version__ = "1.69.dev0"
 
 
 class MissingExternalDependencyError(Exception):

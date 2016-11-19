@@ -3,7 +3,6 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """Phylogenetics command line tool wrappers."""
-__docformat__ = "restructuredtext en"
 
 from ._Phyml import PhymlCommandline
 from ._Raxml import RaxmlCommandline

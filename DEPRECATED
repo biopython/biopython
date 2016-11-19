@@ -19,8 +19,8 @@ Release 1.62, with advance notice in the release notes for Release 1.61.
 
 Python 2.6
 ==========
-Still supported but deprecated as of Release 1.66, triggering a warning
-at installation time.
+No longer supported as of Release 1.69, having triggered a warning with
+release 1.66 onwards.
 
 Python 3.0, 3.1, 3.2
 ====================
@@ -101,7 +101,7 @@ include when installing Biopython from source due to a dependency on flex.
 Bio.SeqFeature
 ==============
 With the introduction of the CompoundLocation in Release 1.62, the SeqFeature
-attribute sub_features was deprecated.
+attribute sub_features was deprecated. It was removed in Release 1.68.
 
 Bio.Motif
 =========
@@ -664,13 +664,32 @@ Bio.SubsMat in Release 1.57.
 Bio.Align
 =========
 The methods get_column and add_sequence of the MultipleSeqAlignment class were
-deprecated in Release 1.57. The Alignment class in Bio.Align.Generic and its
-method get_seq_by_num were deprecated in Release 1.57.
+deprecated in Release 1.57 and removed in Release 1.69.
+
+Bio.Align.Generic
+=================
+This module which defined to original (Multiple-Sequence) Alignment class was
+deprecated in Release 1.57 and removed in Release 1.69.
 
 Bio.ParserSupport
 =================
 Bio.ParserSupport was declared obsolete in Release 1.59, and deprecated in
-Release 1.63.
+Release 1.63. The Martel specific EventGenerator was removed in Release 1.67.
 
 Bio.ParserSupport.SGMLStrippingConsumer was deprecated in Release 1.59, and
 removed in Release 1.61.
+
+Bio.PopGen.Async
+================
+Bio.PopGen.Async was deprecated in Release 1.68. It will be removed in
+Release 1.70.
+
+Bio.PopGen.FDist
+================
+Bio.PopGen.FDist was deprecated in Release 1.68. It will be removed in
+Release 1.70.
+
+Bio.PopGen.SimCoal
+==================
+Bio.PopGen.SimCoal was deprecated in Release 1.68. It will be removed in
+Release 1.70.

@@ -18,8 +18,6 @@ import sys
 import time
 import optparse
 
-__docformat__ = "restructuredtext en"
-
 
 try:
     from urllib import FancyURLopener
@@ -32,25 +30,20 @@ from Bio.Restriction.RanaConfig import *
 
 class RebaseUpdate(FancyURLopener):
 
-    def __init__(self, e_mail='', ftpproxy=''):
-        """RebaseUpdate([e_mail[, ftpproxy]]) -> new RebaseUpdate instance.
+    def __init__(self, ftpproxy=''):
+        """RebaseUpdate([ftpproxy]]) -> new RebaseUpdate instance.
 
-        if e_mail and ftpproxy are not given RebaseUpdate uses the corresponding
+        if ftpproxy is not given RebaseUpdate uses the corresponding
         variable from RanaConfig.
 
-        e_mail is the password for the anonymous ftp connection to Rebase.
-        ftpproxy is the proxy to use if any."""
+        ftpproxy is the proxy to use if any.
+        """
         proxy = {'ftp': ftpproxy or ftp_proxy}
-        global Rebase_password
-        Rebase_password = e_mail or Rebase_password
-        if not Rebase_password:
-            raise FtpPasswordError('Rebase')
         if not Rebase_name:
             raise FtpNameError('Rebase')
+        if not proxy['ftp']:
+            proxy = {}
         FancyURLopener.__init__(self, proxy)
-
-    def prompt_user_passwd(self, host, realm):
-        return (Rebase_name, Rebase_password)
 
     def openRebase(self, name=ftp_Rebase):
         print('\n Please wait, trying to connect to Rebase\n')
@@ -77,7 +70,7 @@ class RebaseUpdate(FancyURLopener):
         month = str(t.tm_mon)
         if len(month) == 1:
             month = '0' + month
-        return year+month
+        return year + month
 
     def update(self, *files):
         if not files:
@@ -101,16 +94,6 @@ class FtpNameError(ValueError):
         sys.exit()
 
 
-class FtpPasswordError(ValueError):
-
-    def __init__(self, which_server):
-        print("\n\
-        \n In order to connect to %s ftp server, you must provide a password.\
-        \n Use the --e-mail switch to enter your e-mail address.\
-        \n\n" % which_server)
-        sys.exit()
-
-
 class ConnectionError(IOError):
 
     def __init__(self, which_server):
@@ -127,12 +110,6 @@ if __name__ == '__main__':
     parser = optparse.OptionParser()
     add = parser.add_option
 
-    add('-m', '--e-mail',
-        action="store",
-        dest='rebase_password',
-        default='',
-        help="set the e-mail address to be used as password for the"
-        "anonymous ftp connection to Rebase.")
     add('-p', '--proxy',
         action="store",
         dest='ftp_proxy',
@@ -141,7 +118,7 @@ if __name__ == '__main__':
 
     (option, args) = parser.parse_args()
 
-    Getfiles = RebaseUpdate(option.rebase_password, option.ftp_proxy)
+    Getfiles = RebaseUpdate(option.ftp_proxy)
     Getfiles.openRebase()
     Getfiles.getfiles()
     Getfiles.close()

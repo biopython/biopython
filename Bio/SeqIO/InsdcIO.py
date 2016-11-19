@@ -1,4 +1,4 @@
-# Copyright 2007-2011 by Peter Cock.  All rights reserved.
+# Copyright 2007-2016 by Peter Cock.  All rights reserved.
 #
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -45,7 +45,6 @@ from Bio import SeqFeature
 from Bio._py3k import _is_int_or_long
 from Bio._py3k import basestring
 
-__docformat__ = "restructuredtext en"
 
 # NOTE
 # ====
@@ -245,8 +244,8 @@ def _insdc_location_string_ignoring_strand_and_subfeatures(location, rec_length)
             # Treat the unknown end position as an AfterPosition
             return "%s%s..>%i" \
                 % (ref,
-                   _insdc_feature_position_string(location.start),
-                   location.nofuzzy_start)
+                   _insdc_feature_position_string(location.start, +1),
+                   location.nofuzzy_start + 1)
     else:
         # Typical case, e.g. 12..15 gets mapped to 11:15
         return ref \
@@ -284,58 +283,6 @@ def _insdc_location_string(location, rec_length):
             return "complement(%s)" % loc
         else:
             return loc
-
-
-def _insdc_feature_location_string(feature, rec_length):
-    """Build a GenBank/EMBL location string from a SeqFeature (PRIVATE, OBSOLETE).
-
-    There is a choice of how to show joins on the reverse complement strand,
-    GenBank used "complement(join(1,10),(20,100))" while EMBL used to use
-    "join(complement(20,100),complement(1,10))" instead (but appears to have
-    now adopted the GenBank convention). Notice that the order of the entries
-    is reversed! This function therefore uses the first form. In this situation
-    we expect the parent feature and the two children to all be marked as
-    strand == -1, and in the order 0:10 then 19:100.
-
-    Also need to consider dual-strand examples like these from the Arabidopsis
-    thaliana chloroplast NC_000932: join(complement(69611..69724),139856..140650)
-    gene ArthCp047, GeneID:844801 or its CDS (protein NP_051038.1 GI:7525057)
-    which is further complicated by a splice:
-    join(complement(69611..69724),139856..140087,140625..140650)
-
-    For this mixed strand feature, the parent SeqFeature should have
-    no strand (either 0 or None) while the child features should have either
-    strand +1 or -1 as appropriate, and be listed in the order given here.
-    """
-    # Using private variable to avoid deprecation warning
-    if not feature._sub_features:
-        # Non-recursive.
-        # assert feature.location_operator == "", \
-        #       "%s has no subfeatures but location_operator %s" \
-        #       % (repr(feature), feature.location_operator)
-        location = _insdc_location_string_ignoring_strand_and_subfeatures(
-            feature.location, rec_length)
-        if feature.strand == -1:
-            location = "complement(%s)" % location
-        return location
-    # As noted above, treat reverse complement strand features carefully:
-    if feature.strand == -1:
-        for f in feature._sub_features:
-            if f.strand != -1:
-                raise ValueError("Inconsistent strands: %r for parent, %r for child"
-                                 % (feature.strand, f.strand))
-        return "complement(%s(%s))" \
-               % (feature.location_operator,
-                  ",".join(_insdc_location_string_ignoring_strand_and_subfeatures(f.location, rec_length)
-                           for f in feature._sub_features))
-    # if feature.strand == +1:
-    #    for f in feature.sub_features:
-    #        assert f.strand == +1
-    # This covers typical forward strand features, and also an evil mixed strand:
-    assert feature.location_operator != ""
-    return "%s(%s)" % (feature.location_operator,
-                       ",".join(_insdc_feature_location_string(f, rec_length)
-                                for f in feature._sub_features))
 
 
 class _InsdcWriter(SequentialSequenceWriter):
@@ -410,8 +357,8 @@ class _InsdcWriter(SequentialSequenceWriter):
                + self._wrap_location(location) + "\n"
         self.handle.write(line)
         # Now the qualifiers...
-        for key in sorted(feature.qualifiers.keys()):
-            values = feature.qualifiers[key]
+        # Note as of Biopython 1.69, this is an ordered-dict, don't sort it:
+        for key, values in feature.qualifiers.items():
             if isinstance(values, (list, tuple)):
                 for value in values:
                     self._write_feature_qualifier(key, value)
@@ -488,6 +435,8 @@ class _InsdcWriter(SequentialSequenceWriter):
 
 
 class GenBankWriter(_InsdcWriter):
+    """GenBank writer."""
+
     HEADER_WIDTH = 12
     QUALIFIER_INDENT = 21
 
@@ -495,8 +444,12 @@ class GenBankWriter(_InsdcWriter):
         """Used in the 'header' of each GenBank record."""
         assert len(tag) < self.HEADER_WIDTH
         if len(text) > self.MAX_WIDTH - self.HEADER_WIDTH:
-            warnings.warn("Annotation %r too long for %r line" % (text, tag),
-                          BiopythonWarning)
+            if tag:
+                warnings.warn("Annotation %r too long for %r line" % (text, tag),
+                              BiopythonWarning)
+            else:
+                # Can't give such a precise warning
+                warnings.warn("Annotation %r too long" % text, BiopythonWarning)
         self.handle.write("%s%s\n" % (tag.ljust(self.HEADER_WIDTH),
                                       text.replace("\n", " ")))
 
@@ -604,6 +557,16 @@ class GenBankWriter(_InsdcWriter):
         assert len(division) == 3
         return division
 
+    def _get_topology(self, record):
+        """Set the topology to 'circular', 'linear' if defined"""
+        max_topology_len = len("circular")
+
+        topology = self._get_annotation_str(record, "topology", default="")
+        if topology and len(topology) <= max_topology_len:
+            return topology.ljust(max_topology_len)
+        else:
+            return " " * max_topology_len
+
     def _write_the_first_line(self, record):
         """Write the LOCUS line."""
 
@@ -614,8 +577,18 @@ class GenBankWriter(_InsdcWriter):
             locus = self._get_annotation_str(
                 record, "accession", just_first=True)
         if len(locus) > 16:
-            raise ValueError("Locus identifier %r is too long" % str(locus))
-
+            if len(locus) + 1 + len(str(len(record))) > 28:
+                # Locus name and record length to long to squeeze in.
+                raise ValueError("Locus identifier %r is too long" % locus)
+            else:
+                warnings.warn("Stealing space from length field to allow long name in LOCUS line", BiopythonWarning)
+        if len(locus.split()) > 1:
+            # locus could be unicode, and u'with space' versus 'with space'
+            # causes trouble with doctest or print-and-compare tests, so
+            tmp = repr(locus)
+            if tmp.startswith("u'") and tmp.endswith("'"):
+                tmp = tmp[1:]
+            raise ValueError("Invalid whitespace in %s for LOCUS line" % tmp)
         if len(record) > 99999999999:
             # Currently GenBank only officially support up to 350000, but
             # the length field can take eleven digits
@@ -647,26 +620,34 @@ class GenBankWriter(_InsdcWriter):
             # just the generic Alphabet (default for fasta files)
             raise ValueError("Need a DNA, RNA or Protein alphabet")
 
+        topology = self._get_topology(record)
+
         division = self._get_data_division(record)
+
+        name_length = str(len(record)).rjust(28)
+        name_length = locus + name_length[len(locus):]
+        assert len(name_length) == 28, name_length
+        assert " " in name_length, name_length
 
         assert len(units) == 2
         assert len(division) == 3
-        # TODO - date
-        # TODO - mol_type
-        line = "LOCUS       %s %s %s    %s           %s %s\n" \
-            % (locus.ljust(16),
-               str(len(record)).rjust(11),
+        line = "LOCUS       %s %s    %s %s %s %s\n" \
+            % (name_length,
                units,
-               mol_type.ljust(6),
+               mol_type.ljust(7),
+               topology,
                division,
                self._get_date(record))
         assert len(line) == 79 + 1, repr(line)  # plus one for new line
 
-        assert line[12:28].rstrip() == locus, \
-            'LOCUS line does not contain the locus at the expected position:\n' + line
-        assert line[28:29] == " "
-        assert line[29:40].lstrip() == str(len(record)), \
-            'LOCUS line does not contain the length at the expected position:\n' + line
+        # We're bending the rules to allow an identifier over 16 characters
+        # if we can steal spaces from the length field:
+        # assert line[12:28].rstrip() == locus, \
+        #     'LOCUS line does not contain the locus at the expected position:\n' + line
+        # assert line[28:29] == " "
+        # assert line[29:40].lstrip() == str(len(record)), \
+        #     'LOCUS line does not contain the length at the expected position:\n' + line
+        assert line[12:40].split() == [locus, str(len(record))], line
 
         # Tests copied from Bio.GenBank.Scanner
         assert line[40:44] in [' bp ', ' aa '], \
@@ -791,8 +772,13 @@ class GenBankWriter(_InsdcWriter):
         handle = self.handle
         self._write_the_first_line(record)
 
+        default = record.id
+        if default.count(".") == 1 and default[default.index(".") + 1:].isdigit():
+            # Good, looks like accesion.version and not something
+            # else like identifier.start-end
+            default = record.id.split(".", 1)[0]
         accession = self._get_annotation_str(record, "accession",
-                                             record.id.split(".", 1)[0],
+                                             default,
                                              just_first=True)
         acc_with_version = accession
         if record.id.startswith(accession + "."):
@@ -807,6 +793,12 @@ class GenBankWriter(_InsdcWriter):
         descr = record.description
         if descr == "<unknown description>":
             descr = "."
+
+        # The DEFINITION field must end with a period
+        # see ftp://ftp.ncbi.nih.gov/genbank/gbrel.txt [3.4.5]
+        # and discussion https://github.com/biopython/biopython/pull/616
+        # So let's add a period
+        descr += '.'
         self._write_multi_line("DEFINITION", descr)
 
         self._write_single_line("ACCESSION", accession)
@@ -875,6 +867,8 @@ class GenBankWriter(_InsdcWriter):
 
 
 class EmblWriter(_InsdcWriter):
+    """EMBL writer."""
+
     HEADER_WIDTH = 5
     QUALIFIER_INDENT = 21
     QUALIFIER_INDENT_STR = "FT" + " " * (QUALIFIER_INDENT - 2)
@@ -928,8 +922,8 @@ class EmblWriter(_InsdcWriter):
                 index = LETTERS_PER_LINE * line_number + \
                     LETTERS_PER_BLOCK * block
                 handle.write((" %s" % data[index:index + LETTERS_PER_BLOCK]))
-            handle.write(str((line_number + 1)
-                             * LETTERS_PER_LINE).rjust(POSITION_PADDING))
+            handle.write(str((line_number + 1) *
+                             LETTERS_PER_LINE).rjust(POSITION_PADDING))
             handle.write("\n")
         if seq_len % LETTERS_PER_LINE:
             # Final (partial) line
@@ -977,6 +971,8 @@ class EmblWriter(_InsdcWriter):
             raise ValueError("Cannot have spaces in EMBL accession, %s"
                              % repr(str(accession)))
 
+        topology = self._get_annotation_str(record, "topology", default="")
+
         # Get the molecule type
         # TODO - record this explicitly in the parser?
         # Get the base alphabet (underneath any Gapped or StopCodon encoding)
@@ -1009,8 +1005,8 @@ class EmblWriter(_InsdcWriter):
         # 5. Data class
         # 6. Taxonomic division
         # 7. Sequence length
-        self._write_single_line("ID", "%s; %s; ; %s; ; %s; %i %s."
-                                % (accession, version, mol_type,
+        self._write_single_line("ID", "%s; %s; %s; %s; ; %s; %i %s."
+                                % (accession, version, topology, mol_type,
                                    division, len(record), units))
         handle.write("XX\n")
         self._write_single_line("AC", accession + ";")
@@ -1197,6 +1193,8 @@ class EmblWriter(_InsdcWriter):
 
 
 class ImgtWriter(EmblWriter):
+    """IMGT writer (EMBL format variant)."""
+
     HEADER_WIDTH = 5
     QUALIFIER_INDENT = 25  # Not 21 as in EMBL
     QUALIFIER_INDENT_STR = "FT" + " " * (QUALIFIER_INDENT - 2)

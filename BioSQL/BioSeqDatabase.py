@@ -24,7 +24,6 @@ from . import BioSeq
 from . import Loader
 from . import DBUtils
 
-__docformat__ = "restructuredtext en"
 
 _POSTGRES_RULES_PRESENT = False  # Hack for BioSQL Bug 2839
 
@@ -114,14 +113,15 @@ def open_database(driver="MySQLdb", **kwargs):
         if server.adaptor.execute_and_fetchall(sql):
             import warnings
             from Bio import BiopythonWarning
-            warnings.warn("Your BioSQL PostgreSQL schema includes some "
-                          "rules currently required for bioperl-db but "
-                          "which may cause problems loading data using "
-                          "Biopython (see BioSQL Bug 2839). If you do not "
-                          "use BioPerl, please remove these rules. "
-                          "Biopython should cope with the rules present, "
-                          "but with a performance penalty when loading "
-                          "new records.", BiopythonWarning)
+            warnings.warn("Your BioSQL PostgreSQL schema includes some rules "
+                          "currently required for bioperl-db but which may"
+                          "cause problems loading data using Biopython (see "
+                          "BioSQL's RedMine Bug 2839 aka GitHub Issue 4 "
+                          "https://github.com/biosql/biosql/issues/4). "
+                          "If you do not use BioPerl, please remove these "
+                          "rules. Biopython should cope with the rules "
+                          "present, but with a performance penalty when "
+                          "loading new records.", BiopythonWarning)
             global _POSTGRES_RULES_PRESENT
             _POSTGRES_RULES_PRESENT = True
 
@@ -186,7 +186,7 @@ class DBServer(object):
             return [self[key] for key in self]
 
         def items(self):
-            """List of (namespace, BioSeqDatabase) for entries in the database."""
+            """List of (namespace, BioSeqDatabase) for entries in database."""
             return [(key, self[key]) for key in self]
 
         def iterkeys(self):
@@ -657,7 +657,8 @@ class BioSeqDatabase(object):
     def __delitem__(self, key):
         """Remove an entry and all its annotation."""
         if key not in self:
-            raise KeyError("Entry %r cannot be deleted. It was not found or is invalid" % key)
+            raise KeyError("Entry %r cannot be deleted. "
+                           "It was not found or is invalid" % key)
         # Assuming this will automatically cascade to the other tables...
         sql = "DELETE FROM bioentry " + \
               "WHERE biodatabase_id=%s AND bioentry_id=%s;"
@@ -802,8 +803,9 @@ class BioSeqDatabase(object):
                 self.adaptor.execute(
                     sql % (gi, self.dbid, accession, version, self.dbid))
                 if self.adaptor.cursor.fetchone():
-                    raise self.adaptor.conn.IntegrityError("Duplicate record "
-                                                           "detected: record has not been inserted")
+                    raise self.adaptor.conn.IntegrityError(
+                        "Duplicate record detected: "
+                        "record has not been inserted")
             # End of hack
             db_loader.load_seqrecord(cur_record)
         return num_records

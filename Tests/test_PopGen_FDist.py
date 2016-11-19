@@ -9,9 +9,16 @@ import os
 import shutil
 import tempfile
 import unittest
-from Bio.PopGen import FDist
-from Bio.PopGen.FDist import Controller
+import warnings
+
 from Bio import MissingExternalDependencyError
+from Bio import BiopythonDeprecationWarning
+
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore", BiopythonDeprecationWarning)
+    from Bio.PopGen import FDist
+    from Bio.PopGen.FDist import Controller
+
 
 # Tests FDist2 related code. Note: this case requires fdist2 (four binaries)
 # test_PopGen_FDist_nodepend tests code that does not require fdist2 or Dfdist

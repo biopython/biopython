@@ -1,6 +1,6 @@
 # Copyright 2007 by Tiago Antao <tiagoantao@gmail.com>.  All rights reserved.
 
-"""Cache for Simacoal2 results ((DEPRECATED).
+"""Cache for Simcoal2 results (DEPRECATED).
 
 This module allows you to cache Simcoal2 results, and return on the fly
 in case the calculation was done.
@@ -9,8 +9,6 @@ in case the calculation was done.
 import os
 import tarfile
 from .Controller import SimCoalController
-
-__docformat__ = "restructuredtext en"
 
 
 class SimCoalCache(object):

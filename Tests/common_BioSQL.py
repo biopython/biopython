@@ -10,6 +10,10 @@ import platform
 import unittest
 import tempfile
 import time
+try:
+    import configparser  # Python 3
+except ImportError:
+    import ConfigParser as configparser  # Python 2
 
 from Bio._py3k import StringIO
 from Bio._py3k import zip
@@ -42,7 +46,24 @@ if __name__ == "__main__":
 SYSTEM = platform.system()
 
 
+def load_biosql_ini(DBTYPE):
+    """Load the database settings from INI file."""
+    if not os.path.isfile("biosql.ini"):
+        raise MissingExternalDependencyError("BioSQL test configuration"
+                                             " file biosql.ini missing"
+                                             " (see biosql.ini.sample)")
+
+    config = configparser.ConfigParser()
+    config.read("biosql.ini")
+    DBHOST = config.get(DBTYPE, "dbhost")
+    DBUSER = config.get(DBTYPE, "dbuser")
+    DBPASSWD = config.get(DBTYPE, "dbpasswd")
+    TESTDB = config.get(DBTYPE, "testdb")
+    return DBHOST, DBUSER, DBPASSWD, TESTDB
+
+
 def temp_db_filename():
+    """Generate a temporary filename for SQLite database."""
     # In memory SQLite does not work with current test structure since the tests
     # expect databases to be retained between individual tests.
     # TESTDB = ':memory:'
@@ -57,6 +78,7 @@ def temp_db_filename():
 
 
 def check_config(dbdriver, dbtype, dbhost, dbuser, dbpasswd, testdb):
+    """Verify the database settings work for connecting."""
     global DBDRIVER, DBTYPE, DBHOST, DBUSER, DBPASSWD, TESTDB, DBSCHEMA
     global SYSTEM, SQL_FILE
     DBDRIVER = dbdriver
@@ -65,6 +87,10 @@ def check_config(dbdriver, dbtype, dbhost, dbuser, dbpasswd, testdb):
     DBUSER = dbuser
     DBPASSWD = dbpasswd
     TESTDB = testdb
+
+    if not DBDRIVER or not DBTYPE or not DBUSER:
+        # No point going any further...
+        raise MissingExternalDependencyError("Incomplete BioSQL test settings")
 
     # Check the database driver is installed:
     if SYSTEM == "Java":
@@ -148,7 +174,10 @@ def _do_db_create():
 
 
 def create_database():
-    """Delete any existing BioSQL test database, then (re)create an empty BioSQL database."""
+    """Delete any existing BioSQL test DB, then (re)create an empty BioSQL DB.
+
+    Returns TESTDB name which will change for for SQLite.
+    """
     if DBDRIVER in ["sqlite3"]:
         global TESTDB
         if os.path.exists(TESTDB):
@@ -182,6 +211,8 @@ def create_database():
         server.close()
         raise
 
+    return TESTDB
+
 
 def destroy_database():
     """Delete any temporary BioSQL sqlite3 database files."""
@@ -196,7 +227,7 @@ def load_database(gb_filename_or_handle):
     This is useful for running tests against a newly created database.
     """
 
-    create_database()
+    TESTDB = create_database()
     # now open a connection to load the database
     db_name = "biosql-test"
     server = BioSeqDatabase.open_database(driver=DBDRIVER,
@@ -219,7 +250,7 @@ def load_multi_database(gb_filename_or_handle, gb_filename_or_handle2):
     This is useful for running tests against a newly created database.
     """
 
-    create_database()
+    TESTDB = create_database()
     # now open a connection to load the database
     db_name = "biosql-test"
     db_name2 = "biosql-test2"
@@ -436,7 +467,7 @@ class SeqInterfaceTest(unittest.TestCase):
         self.assertTrue(isinstance(test_record.seq, BioSeq.DBSeq))
         self.assertEqual(test_record.id, "X62281.1", test_record.id)
         self.assertEqual(test_record.name, "ATKIN2")
-        self.assertEqual(test_record.description, "A.thaliana kin2 gene.")
+        self.assertEqual(test_record.description, "A.thaliana kin2 gene")
         self.assertTrue(hasattr(test_record, 'annotations'))
         # XXX should do something with annotations once they are like
         # a dictionary
@@ -503,6 +534,14 @@ class SeqInterfaceTest(unittest.TestCase):
         self.assertEqual(str(test_seq[-10:][5:]), "TTATA")
         self.assertEqual(str(test_seq[-10:][5:]), "TTATA")
 
+    def test_record_slicing(self):
+        """Check that slices of DBSeqRecord are retrieved properly.
+        """
+        new_rec = self.item[400:]
+        self.assertTrue(isinstance(new_rec, SeqRecord))
+        self.assertEqual(len(new_rec), 480)
+        self.assertEqual(len(new_rec.features), 5)
+
     def test_seq_features(self):
         """Check SeqFeatures of a sequence.
         """
@@ -511,9 +550,6 @@ class SeqInterfaceTest(unittest.TestCase):
         self.assertEqual(cds_feature.type, "CDS")
         self.assertEqual(str(cds_feature.location),
                          "join{[103:160](+), [319:390](+), [503:579](+)}")
-        for sub_feature in cds_feature._sub_features:
-            self.assertEqual(sub_feature.type, "CDS")
-            # self.assertEqual(sub_feature.location_operator, "join")
 
         try:
             self.assertEqual(cds_feature.qualifiers["gene"], ["kin2"])
@@ -535,7 +571,7 @@ class LoaderTest(unittest.TestCase):
 
     def setUp(self):
         # create TESTDB
-        create_database()
+        TESTDB = create_database()
 
         # load the database
         db_name = "biosql-test"
@@ -584,58 +620,6 @@ class LoaderTest(unittest.TestCase):
                                     'M81224.1', 'X55053.1', 'X62281.1'])
 
 
-class TaxonomyTest(unittest.TestCase):
-    """Test proper insertion and retrieval of taxonomy data
-    """
-    def setUp(self):
-        from Bio import Entrez
-        Entrez.email = "biopython-dev@biopython.org"
-        # create TESTDB
-        create_database()
-
-        # load the database
-        db_name = "biosql-test"
-        self.server = BioSeqDatabase.open_database(driver=DBDRIVER,
-                                                   user=DBUSER, passwd=DBPASSWD,
-                                                   host=DBHOST, db=TESTDB)
-
-        # remove the database if it already exists
-        try:
-            self.server[db_name]
-            self.server.remove_database(db_name)
-        except KeyError:
-            pass
-
-        self.db = self.server.new_database(db_name)
-
-        # get the GenBank file we are going to put into it
-        self.iterator = SeqIO.parse("GenBank/cor6_6.gb", "gb")
-
-    def tearDown(self):
-        self.server.close()
-        destroy_database()
-        del self.db
-        del self.server
-
-    def test_taxon_left_right_values(self):
-        self.db.load(self.iterator, True)
-        sql = """SELECT DISTINCT include.ncbi_taxon_id FROM taxon
-                  INNER JOIN taxon AS include ON
-                      (include.left_value BETWEEN taxon.left_value
-                                  AND taxon.right_value)
-                  WHERE taxon.taxon_id IN
-                      (SELECT taxon_id FROM taxon_name
-                                  WHERE name = 'Brassicales')
-                      AND include.right_value - include.left_value = 1"""
-
-        rows = self.db.adaptor.execute_and_fetchall(sql)
-        self.assertEqual(4, len(rows))
-        values = set()
-        for row in rows:
-            values.add(row[0])
-        self.assertEqual(set([3704, 3711, 3708, 3702]), set(values))
-
-
 class DeleteTest(unittest.TestCase):
     """Test proper deletion of entries from a database."""
 
@@ -676,7 +660,7 @@ class DeleteTest(unittest.TestCase):
             pass
 
     def test_del_db_items(self):
-        """Check all associated data is delete from an item"""
+        """Check all associated data is deleted from an item"""
         db = self.db
         items = list(db.values())
         keys = list(db)
@@ -703,7 +687,7 @@ class DupLoadTest(unittest.TestCase):
 
     def setUp(self):
         # drop any old database and create a new one:
-        create_database()
+        TESTDB = create_database()
         # connect to new database:
         self.server = BioSeqDatabase.open_database(driver=DBDRIVER,
                                                    user=DBUSER, passwd=DBPASSWD,
@@ -776,7 +760,10 @@ class ClosedLoopTest(unittest.TestCase):
 
     def test_NC_005816(self):
         """GenBank file to BioSQL and back to a GenBank file, NC_005816."""
-        self.loop("GenBank/NC_005816.gb", "gb")
+        with warnings.catch_warnings():
+            # BiopythonWarning: order location operators are not fully supported
+            warnings.simplefilter('ignore', BiopythonWarning)
+            self.loop("GenBank/NC_005816.gb", "gb")
 
     def test_NC_000932(self):
         """GenBank file to BioSQL and back to a GenBank file, NC_000932."""
@@ -788,7 +775,10 @@ class ClosedLoopTest(unittest.TestCase):
 
     def test_protein_refseq2(self):
         """GenBank file to BioSQL and back to a GenBank file, protein_refseq2."""
-        self.loop("GenBank/protein_refseq2.gb", "gb")
+        with warnings.catch_warnings():
+            # BiopythonWarning: order location operators are not fully supported
+            warnings.simplefilter('ignore', BiopythonWarning)
+            self.loop("GenBank/protein_refseq2.gb", "gb")
 
     def test_no_ref(self):
         """GenBank file to BioSQL and back to a GenBank file, noref."""
@@ -848,11 +838,14 @@ class TransferTest(unittest.TestCase):
     # simply a new unique namespace is used for each test.
 
     def setUp(self):
-        create_database()
+        TESTDB = create_database()
 
     def test_NC_005816(self):
         """GenBank file to BioSQL, then again to a new namespace, NC_005816."""
-        self.trans("GenBank/NC_005816.gb", "gb")
+        with warnings.catch_warnings():
+            # BiopythonWarning: order location operators are not fully supported
+            warnings.simplefilter('ignore', BiopythonWarning)
+            self.trans("GenBank/NC_005816.gb", "gb")
 
     def test_NC_000932(self):
         """GenBank file to BioSQL, then again to a new namespace, NC_000932."""
@@ -864,7 +857,10 @@ class TransferTest(unittest.TestCase):
 
     def test_protein_refseq2(self):
         """GenBank file to BioSQL, then again to a new namespace, protein_refseq2."""
-        self.trans("GenBank/protein_refseq2.gb", "gb")
+        with warnings.catch_warnings():
+            # BiopythonWarning: order location operators are not fully supported
+            warnings.simplefilter('ignore', BiopythonWarning)
+            self.trans("GenBank/protein_refseq2.gb", "gb")
 
     def test_no_ref(self):
         """GenBank file to BioSQL, then again to a new namespace, noref."""
@@ -972,14 +968,14 @@ class InDepthLoadTest(unittest.TestCase):
         test_record = self.db.lookup(accession="X55053")
         self.assertEqual(test_record.name, "ATCOR66M")
         self.assertEqual(test_record.id, "X55053.1")
-        self.assertEqual(test_record.description, "A.thaliana cor6.6 mRNA.")
+        self.assertEqual(test_record.description, "A.thaliana cor6.6 mRNA")
         self.assertTrue(isinstance(test_record.seq.alphabet, Alphabet.DNAAlphabet))
         self.assertEqual(str(test_record.seq[:10]), 'AACAAAACAC')
 
         test_record = self.db.lookup(accession="X62281")
         self.assertEqual(test_record.name, "ATKIN2")
         self.assertEqual(test_record.id, "X62281.1")
-        self.assertEqual(test_record.description, "A.thaliana kin2 gene.")
+        self.assertEqual(test_record.description, "A.thaliana kin2 gene")
         self.assertTrue(isinstance(test_record.seq.alphabet, Alphabet.DNAAlphabet))
         self.assertEqual(str(test_record.seq[:10]), 'ATTTGGCCTA')
 
@@ -1005,13 +1001,10 @@ class InDepthLoadTest(unittest.TestCase):
         test_feature = features[4]
         self.assertEqual(test_feature.type, "CDS")
         self.assertEqual(str(test_feature.location), "join{[0:48](+), [142:206](+)}")
-        self.assertEqual(len(test_feature._sub_features), 2)
-        self.assertEqual(str(test_feature._sub_features[0].location), "[0:48](+)")
-        self.assertEqual(test_feature._sub_features[0].type, "CDS")
-        # self.assertEqual(test_feature._sub_features[0].location_operator, "join")
-        self.assertEqual(str(test_feature._sub_features[1].location), "[142:206](+)")
-        self.assertEqual(test_feature._sub_features[1].type, "CDS")
-        # self.assertEqual(test_feature._sub_features[1].location_operator, "join")
+        self.assertEqual(len(test_feature.location.parts), 2)
+        self.assertEqual(str(test_feature.location.parts[0]), "[0:48](+)")
+        self.assertEqual(str(test_feature.location.parts[1]), "[142:206](+)")
+        self.assertEqual(test_feature.location.operator, "join")
         self.assertEqual(len(test_feature.qualifiers), 6)
         self.assertEqual(test_feature.qualifiers["gene"], ["csp14"])
         self.assertEqual(test_feature.qualifiers["codon_start"], ["2"])
@@ -1027,8 +1020,8 @@ class InDepthLoadTest(unittest.TestCase):
         test_record = self.db.lookup(accession="AJ237582")
         test_feature = test_record.features[4]  # DNA, no complement
         self.assertEqual(test_feature.strand, 1)
-        for sub_feature in test_feature._sub_features:
-            self.assertEqual(sub_feature.strand, 1)
+        for loc in test_feature.location.parts:
+            self.assertEqual(loc.strand, 1)
 
         test_record = self.db.lookup(accession="X55053")
         test_feature = test_record.features[0]
@@ -1158,7 +1151,9 @@ class AutoSeqIOTests(unittest.TestCase):
             # BiopythonWarning: bond location operators are not fully supported
             warnings.simplefilter("ignore", BiopythonWarning)
             self.check('genbank', 'GenBank/dbsource_wrap.gb')
-        self.check('genbank', 'GenBank/NC_005816.gb')
+            # BiopythonWarning: order location operators are not fully
+            # supported
+            self.check('genbank', 'GenBank/NC_005816.gb')
         self.check('genbank', 'GenBank/gbvrl1_start.seq', 3)
         self.check('genbank', 'GFF/NC_001422.gbk')
         self.check('embl', 'EMBL/TRBG361.embl')

@@ -8,8 +8,6 @@
 CodonAlphabet class is inherited from Alphabet class. It is an
 alphabet for CodonSeq class.
 """
-__docformat__ = "restructuredtext en"  # Don't just use plain text in epydoc API pages!
-
 
 import copy
 try:

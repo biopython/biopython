@@ -7,7 +7,6 @@ and parse the results into an object that can be dealt with easily."""
 
 from __future__ import print_function
 
-import os
 import sys
 import subprocess
 

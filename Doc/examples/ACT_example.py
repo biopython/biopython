@@ -7,11 +7,9 @@ from __future__ import print_function
 
 import sys
 import os
-import time
 from reportlab.lib import colors
 from reportlab.lib.units import cm
 
-from Bio.Blast.Applications import NcbitblastxCommandline
 from Bio.Graphics.GenomeDiagram import Diagram, CrossLink
 from Bio.SeqFeature import SeqFeature, FeatureLocation
 from Bio import SeqIO
@@ -40,7 +38,7 @@ genomes = [
 comparisons = [os.path.join(input_folder, file_a_vs_b)]
 
 # Create diagram with tracks, each with a feature set
-assert len(genomes) >= 2 and len(genomes) == len(comparisons)+1
+assert len(genomes) >= 2 and len(genomes) == len(comparisons) + 1
 gd_diagram = Diagram(name, track_size=0.35, circular=False)
 tracks = dict()
 feature_sets = dict()
@@ -55,13 +53,13 @@ for f, format in genomes:
 
 print("Drawing matches...")
 for i, crunch_file in enumerate(comparisons):
-    q = genomes[i+1][0]  # query file
+    q = genomes[i + 1][0]  # query file
     s = genomes[i][0]  # subject file
     q_set = feature_sets[q]
     s_set = feature_sets[s]
     with open(crunch_file) as handle:
         for line in handle:
-            if line[0]=="#":
+            if line[0] == "#":
                 continue
             parts = line.rstrip("\n").split(None, 7)
             # 0 = score
@@ -92,10 +90,10 @@ for i, crunch_file in enumerate(comparisons):
             else:
                 c = colors.Color(1, 0, 0, alpha=0.25)
                 b = False
-            q_feature = q_set.add_feature(SeqFeature(FeatureLocation(q_start-1, q_end)),
-                                                     color=c, border=b)
-            s_feature = s_set.add_feature(SeqFeature(FeatureLocation(s_start-1, s_end)),
-                                                     color=c, border=b)
+            q_feature = q_set.add_feature(SeqFeature(FeatureLocation(q_start - 1, q_end)),
+                                          color=c, border=b)
+            s_feature = s_set.add_feature(SeqFeature(FeatureLocation(s_start - 1, s_end)),
+                                          color=c, border=b)
             gd_diagram.cross_track_links.append(CrossLink(q_feature, s_feature, c, b))
             # NOTE: We are using the same colour for all the matches,
             # with transparency. This means overlayed matches will appear darker.
@@ -115,9 +113,9 @@ for f, format in genomes:
                                 border=colors.blue)
 
 gd_diagram.draw(format="linear", fragments=3,
-                orientation="landscape", pagesize=(20*cm, 10*cm))
+                orientation="landscape", pagesize=(20 * cm, 10 * cm))
 gd_diagram.write(name + ".pdf", "PDF")
 
 gd_diagram.draw(format="circular",
-                orientation="landscape", pagesize=(20*cm, 20*cm))
+                orientation="landscape", pagesize=(20 * cm, 20 * cm))
 gd_diagram.write(name + "_c.pdf", "PDF")

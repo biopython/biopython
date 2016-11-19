@@ -7,8 +7,6 @@
 
 from Bio.PDB.Entity import Entity
 
-__docformat__ = "restructuredtext en"
-
 
 class Chain(Entity):
     def __init__(self, id):
@@ -111,12 +109,12 @@ class Chain(Entity):
         """Return 1 if a residue with given id is present.
 
         The id of a residue is (hetero flag, sequence identifier, insertion code).
-        
+
         If id is an int, it is translated to (" ", id, " ") by the _translate_id
         method.
 
         Arguments:
-        
+
             - id - (string, int, string) or int
         """
         id = self._translate_id(id)

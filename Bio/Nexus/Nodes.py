@@ -13,8 +13,6 @@ Subclassed by Nexus.Trees to store phylogenetic trees.
 Bug reports to Frank Kauff (fkauff@biologie.uni-kl.de)
 """
 
-__docformat__ = "restructuredtext en"
-
 
 class ChainException(Exception):
     pass

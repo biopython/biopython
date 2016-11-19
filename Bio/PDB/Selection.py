@@ -13,8 +13,6 @@ from Bio.PDB.Atom import Atom
 from Bio.PDB.Entity import Entity
 from Bio.PDB.PDBExceptions import PDBException
 
-__docformat__ = "restructuredtext en"
-
 
 entity_levels = ["A", "R", "C", "M", "S"]
 

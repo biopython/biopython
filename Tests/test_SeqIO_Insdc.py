@@ -22,6 +22,7 @@ class TestEmbl(unittest.TestCase):
         self.assertEqual(len(record), 1859)
         # Single keyword:
         self.assertEqual(record.annotations["keywords"], ["beta-glucosidase"])
+        self.assertEqual(record.annotations["topology"], "linear")
 
     def test_annotation2(self):
         """Check parsing of annotation from EMBL files (2)."""
@@ -32,6 +33,23 @@ class TestEmbl(unittest.TestCase):
                          ['JP 2005522996-A/12', 'test-data',
                           'lot and lots of keywords for this example',
                           'multi-line keywords'])
+        self.assertEqual(record.annotations["topology"], "linear")
+
+    def test_annotation3(self):
+        """Check parsing of annotation from EMBL files (3)."""
+        record = SeqIO.read("EMBL/AE017046.embl", "embl")
+        self.assertEqual(len(record), 9609)
+        # TODO: Should this be an empty list, or simply absent?
+        self.assertEqual(record.annotations["keywords"], [""])
+        self.assertEqual(record.annotations["topology"], "circular")
+
+    def test_annotation4(self):
+        """Check parsing of annotation from EMBL files (4)."""
+        record = SeqIO.read("EMBL/location_wrap.embl", "embl")
+        self.assertEqual(len(record), 120)
+        self.assertTrue("keywords" not in record.annotations)
+        # The ID line has the topology as unspecified:
+        self.assertTrue("topology" not in record.annotations)
 
     def test_writing_empty_qualifiers(self):
         f = SeqFeature(FeatureLocation(5, 20, strand=+1),

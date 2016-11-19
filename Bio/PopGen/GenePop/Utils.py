@@ -15,5 +15,3 @@ GenePop.Record (now methods of that class).
 This file is maintained as it is believed it will have
 utility functions in the future again.
 """
-
-__docformat__ = "restructuredtext en"

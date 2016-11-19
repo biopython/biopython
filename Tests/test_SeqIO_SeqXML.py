@@ -17,9 +17,10 @@ test_files = {
     "globalSpecies": ["SeqXML/global_species_example.xml", 2],
 }
 
-corrupt_files = ["SeqXML/corrupt_example1.xml",
-                 "SeqXML/corrupt_example2.xml",
-                ]
+corrupt_files = [
+    "SeqXML/corrupt_example1.xml",
+    "SeqXML/corrupt_example2.xml",
+]
 
 
 def assert_equal_records(testCase, record_a, record_b):

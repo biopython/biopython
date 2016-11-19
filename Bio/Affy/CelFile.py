@@ -23,8 +23,6 @@ except ImportError:
     raise MissingPythonDependencyError(
         "Install NumPy if you want to use Bio.Affy.CelFile")
 
-__docformat__ = "restructuredtext en"
-
 
 class Record(object):
     """Stores the information in a cel file

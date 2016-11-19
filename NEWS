@@ -9,8 +9,106 @@ http://news.open-bio.org/news/category/obf-projects/biopython/
 The latest news is at the top of this file.
 
 ===================================================================
+  
+(In progress, not yet released) Biopython 1.69
 
-(In progress, not yet released) Biopython 1.67
+This release of Biopython supports Python 2.7, 3.3, 3.4 and 3.5 (we have now
+dropped support for Python 2.6). It has also been tested on PyPy 5.0, PyPy3
+version 2.4, and Jython 2.7.
+
+The NEXUS parser handling of internal node comments has been improved, which
+should help if working with tools like the BEAST TreeAnnotator. Slashes are
+now also allowed in identifiers.
+
+For consistency the Bio.Seq module now offers a complement function (already
+available as a method on the Seq and MutableSeq objects).
+
+The SeqFeature object's qualifiers is now an explicitly ordered dictionary
+(note that as of Python 3.6 the Python dict is ordered by default anyway).
+This helps reproduce GenBank/EMBL files on input/output.
+
+Additionally, a number of small bugs have been fixed with further additions
+to the test suite, and there has been further work to follow the Python PEP8,
+PEP257 and best practice standard coding style.
+
+Many thanks to the Biopython developers and community for making this release
+possible, especially the following contributors:
+
+Allis Tauri (first contribution)
+Bernhard Thiel (first contribution)
+Bertrand Néron
+Carlos Pena
+Carlos Ríos
+Chris Warth
+Emmanuel Noutahi
+Markus Piotrowski
+Lenna Peterson
+Peter Cock
+Richard Neher (first contribution)
+Steve Bond
+Vincent Davis
+
+===================================================================
+
+25 August 2016: Biopython 1.68
+
+This release of Biopython supports Python 2.6, 2.7, 3.3, 3.4 and 3.5, but
+this will be our final release to run on Python 2.6. It has also been tested
+on PyPy 5.0, PyPy3 version 2.4, and Jython 2.7.
+
+Bio.PDB has been extended to parse the RSSB's new binary Macromolecular
+Transmission Format (MMTF, see http://mmtf.rcsb.org), in addition to the
+mmCIF and PDB file formats (contributed by Anthony Bradley). This requires
+an optional external dependency on the mmtf-python library.
+
+Module Bio.pairwise2 has been re-written (contributed by Markus Piotrowski).
+It is now faster, addresses some problems with local alignments, and also
+now allows gap insertions after deletions, and vice versa, inspired by the
+http://dx.doi.org/10.1101/031500 preprint from Flouri et al.
+
+The two sample graphical tools SeqGui (Sequence Graphical User Interface)
+and xbbtools were rewritten (SeqGui) or updated (xbbtools) using the tkinter
+library (contributed by Markus Piotrowski). SeqGui allows simple nucleotide
+transcription, back-transcription and translation into amino acids using
+Bio.Seq internally, offering of the NCBI genetic codes supported in Biopython.
+xbbtools is able to open Fasta formatted files, does simple nucleotide
+operations and translations in any reading frame using one of the NCBI genetic
+codes. In addition, it supports standalone Blast installations to do local
+Blast searches.
+
+New NCBI genetic code table 26 (Pachysolen tannophilus Nuclear Code) has been
+added to Bio.Data (and the translation functionality), and table 11 is now
+also available under the alias Archaeal.
+
+In line with NCBI website changes, Biopython now uses HTTPS rather than HTTP
+to connect to the NCBI Entrez and QBLAST API.
+
+Additionally, a number of small bugs have been fixed with further additions
+to the test suite, and there has been further work to follow the Python PEP8
+and best practice standard coding style.
+
+Many thanks to the Biopython developers and community for making this release
+possible, especially the following contributors:
+
+Anthony Bradley (first contribution)
+Ben Fulton
+Carlos Pena
+Connor T. Skennerton
+Iddo Friedberg
+Kai Blin
+Kristian Davidsen (first contribution)
+Markus Piotrowski
+Olivier Morelle (first contribution)
+Peter Cock
+Stefans Mezulis (first contribution)
+Tiago Antao
+Travis Wrightsman
+Uwe Schmitt (first contribution)
+Xiaoyu Zhuo (first contribution)
+
+===================================================================
+
+8 June 2016: Biopython 1.67
 
 This release of Biopython supports Python 2.6, 2.7, 3.3, 3.4 and 3.5, but
 support for Python 2.6 is considered to be deprecated. It has also been
@@ -21,6 +119,10 @@ comparison (are they the same instance in memory?). This can be surprising, but
 comparing all of the attributes would be too complex. As of this release
 attempting to compare SeqRecord objects should raise an exception instead. If
 you want the old behaviour, use id(record1) == id(record2) instead.
+
+New experimental module Bio.phenotype is for working with Phenotype Microarray
+plates in JSON and the machine vendor's CSV format (contributed by Marco
+Galardini).
 
 Following the convention used elsewhere in Biopython, there is a new function
 Bio.KEGG.read(...) for parsing KEGG files expected to contain a single record
@@ -47,6 +149,21 @@ updates the taxon table left/right keys when updating the taxonomy.
 
 There have been some fixes to the MMCIF structure parser which now uses
 identifiers which better match results from the PDB structure parse.
+
+The restriction enzyme list in Bio.Restriction has been updated to the
+May 2016 release of REBASE.
+
+The mmCIF parser in Bio.PDB.MMCIFParser has been joined by a second version
+which only looks at the ATOM and HETATM lines and can be much faster.
+
+The Bio.KEGG.REST will now return unicode text-based handles, except for
+images which remain as binary bytes-based handles, making it easier to use
+with the mostly text-based parsers in Biopython.
+
+Note that the BioSQL test configuration information is now in a new file
+Tests/biosql.ini rather than directly in Tests/test_BioSQL_*.py as before.
+You can make a copy of the provided example file Tests/biosql.ini.sample
+as Tests/biosql.ini and edit this if you wish to run the BioSQL tests.
 
 Additionally, a number of small bugs have been fixed with further additions
 to the test suite, and there has been further work to follow the Python PEP8
@@ -75,14 +192,19 @@ João D Ferreira (first contribution)
 João Rodrigues
 Joe Cora (first contribution)
 Kai Blin
+Leighton Pritchard
+Lenna Peterson
+Marco Galardini (first contribution)
 Markus Piotrowski
 Matt Ruffalo (first contribution)
 Matteo Sticco (first contribution)
-Lenna Peterson
+Nader Morshed (first contribution)
+Owen Solberg (first contribution)
 Peter Cock
 Steve Bond (first contribution)
 Terry Jones (first contribution)
 Vincent Davis
+Zheng Ruan
 
 ===================================================================
 
@@ -128,7 +250,7 @@ Anthony Mathelier (first contribution)
 Antony Lee (first contribution)
 Anuj Sharma (first contribution)
 Ben Fulton (first contribution)
-Bertrand Néron (first contribution)
+Bertrand Néron
 Brandon Invergo
 Carlos Pena
 Christian Brueffer
@@ -808,7 +930,7 @@ improvements.
 (At least) 12 people have contributed to this release, including 6 new people:
 
 Andres Colubri (first contribution)
-Carlos Rios Vera (first contribution)
+Carlos Ríos (first contribution)
 Claude Paroz (first contribution)
 Cymon Cox
 Eric Talevich
@@ -858,7 +980,7 @@ This avoids having to worry about the details of how best to use subprocess.
 (At least) 10 people have contributed to this release, including 5 new people:
 
 Andres Colubri (first contribution)
-Carlos Rios Vera (first contribution)
+Carlos Ríos (first contribution)
 Claude Paroz (first contribution)
 Eric Talevich
 Frank Kauff

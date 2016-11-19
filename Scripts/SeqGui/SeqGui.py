@@ -1,244 +1,186 @@
+# Copyright 2000 by Katharine Lindner (Cayte).
+# Copyright 2016 by Markus Piotrowski.
+# All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 #
+# The original SeqGui was written by Katharine Lindner (Cayte) in 2000 using
+# the wxPython library for the GUI. It was rewritten by Markus Piotrowski in
+# 2016 using tkinter and tkinter's themed widgets (ttk).
+"""A small GUI tool to demonstrate some basic sequence operations.
+
+SeqGui (sequence graphical user interface) is a little tool that allows
+transcription, translation and back translation of a sequence that the
+user can type or copy into a text field. For translation the user can select
+from several codon tables which are implemented in Biopython.
+It runs as a standalone application.
+
+"""
 
 from __future__ import print_function
 
 from Bio.Seq import translate, transcribe, back_transcribe
-import wx
+from Bio.Data import CodonTable
 
-__docformat__ = "restructuredtext en"
-
-
-ID_APPLY = 101
-ID_CLEAR = 102
-ID_EXIT = 103
-ID_CLOSE = 104
-ID_ABOUT = 105
-ID_CODON = 106
-ID_TRANSFORM = 107
+try:  # Python 2
+    import Tkinter as tk
+    import ttk
+except ImportError:  # Python 3
+    import tkinter as tk
+    import tkinter.ttk as ttk
 
 
-class ParamsPanel(wx.Panel):
-    def __init__(self, parent, log):
-        wx.Panel.__init__(self, parent, -1)
-        codon_table_static = wx.StaticText(self, -1, 'Codon Tables',
-                                           style=wx.ALIGN_CENTER)
-        lc = wx.LayoutConstraints()
-        lc.top.SameAs(self, wx.Top, 5)
-        lc.left.SameAs(self, wx.Left, 5)
-        lc.height.AsIs()
-        lc.right.SameAs(self, wx.Right, 5)
-        codon_table_static.SetConstraints(lc)
+main_window = tk.Tk()
+main_window.title('Greetings from Biopython')
 
-        codon_table_lb = wx.ListBox(self, ID_CODON)
-        lc = wx.LayoutConstraints()
-        lc.top.Below(codon_table_static, 5)
-        lc.left.SameAs(self, wx.Left, 5)
-        lc.height.PercentOf(self, wx.Height, 30)
-        lc.right.SameAs(self, wx.Right, 5)
-        codon_table_lb.SetConstraints(lc)
-        self.codon_table_lb = codon_table_lb
+menue = tk.Menu(main_window)
+menue_single = tk.Menu(menue, tearoff=0)
+menue.add_cascade(menu=menue_single, label='File')
+menue_single.add_command(label='About')
+menue_single.add_separator()
+menue_single.add_command(label='Exit', command=main_window.destroy)
+main_window.config(menu=menue)
 
-        codon_table_lb.Append('Standard')
-        codon_table_lb.Append('Vertebrate Mitochondrial')
-        codon_table_lb.Append('Yeast Mitochondrial')
-        codon_table_lb.Append('Mold Mitochondrial')
-        codon_table_lb.Append('Invertebrate Mitochondrial')
-        codon_table_lb.Append('Echinoderm Mitochondrial')
-        codon_table_lb.Append('Euplotid Nuclear')
-        codon_table_lb.Append('Bacterial')
-        codon_table_lb.Append('Alternative Yeast Nuclear')
-        codon_table_lb.Append('Ascidian Mitochondrial')
-        codon_table_lb.Append('Flatworm Mitochondrial')
-        codon_table_lb.Append('Blepharisma Macronuclear')
-        codon_table_lb.SetSelection(0)
+# Left panel with parameters
+param_panel = ttk.Frame(main_window, relief=tk.GROOVE, padding=5)
 
-        transform_static = wx.StaticText(self, -1, 'Transformation',
-                                         style=wx.ALIGN_CENTER)
-        lc = wx.LayoutConstraints()
-        lc.top.Below(codon_table_lb, 5)
-        lc.left.SameAs(self, wx.Left, 5)
-        lc.height.AsIs()
-        lc.right.SameAs(self, wx.Right, 5)
-        transform_static.SetConstraints(lc)
+codon_panel = ttk.LabelFrame(param_panel, text='Codon Tables')
+codon_scroller = ttk.Scrollbar(codon_panel, orient=tk.VERTICAL)
+codon_list = tk.Listbox(codon_panel, height=5, width=25,
+                        yscrollcommand=codon_scroller.set)
 
-        transform_lb = wx.ListBox(self, ID_TRANSFORM)
-        lc = wx.LayoutConstraints()
-        lc.top.Below(transform_static, 5)
-        lc.left.SameAs(self, wx.Left, 5)
-        lc.height.PercentOf(self, wx.Height, 30)
-        lc.right.SameAs(self, wx.Right, 5)
-        transform_lb.SetConstraints(lc)
+# Import actual codon tables from Biopython and sort alphabetically
+codon_table_list = sorted([table.names[0] for n, table in
+                           CodonTable.generic_by_id.items()])
 
-        transform_lb.Append('Transcribe')
-        transform_lb.Append('Translate')
-        transform_lb.Append('Back transcribe')
-        transform_lb.SetSelection(1)
-        self.transform_lb = transform_lb
+# 'Standard' table should be first in the list
+del(codon_table_list[codon_table_list.index('Standard')])
+codon_table_list.insert(0, 'Standard')
 
+for codon_table in codon_table_list:
+    codon_list.insert(tk.END, codon_table)
+codon_list.selection_set(0)
+codon_list.configure(exportselection=False)
+codon_scroller.config(command=codon_list.yview)
 
-class SeqPanel(wx.Panel):
-    def __init__(self, parent, log):
-        self.parent = parent
-        wx.Panel.__init__(self, parent, -1)
-        apply_button = wx.Button(self, ID_APPLY, "Apply")
-        clear_button = wx.Button(self, ID_CLEAR, "Clear")
-        close_button = wx.Button(self, ID_CLOSE, "Close")
-        wx.EVT_BUTTON(self, ID_CLOSE, self.OnClose)
-        wx.EVT_BUTTON(self, ID_APPLY, self.OnApply)
-        wx.EVT_BUTTON(self, ID_CLEAR, self.OnClear)
+# Radiobuttons are more appropiate than another listbox here:
+transform_panel = ttk.LabelFrame(param_panel, text='Transformation')
 
-        lc = wx.LayoutConstraints()
-        lc.bottom.SameAs(self, wx.Bottom, 10)
-        lc.left.SameAs(self, wx.Left, 10)
-        lc.height.AsIs()
-        lc.width.PercentOf(self, wx.Width, 25)
-        apply_button.SetConstraints(lc)
+transform_var = tk.StringVar()
+transform_transcribe = ttk.Radiobutton(transform_panel, text='Transcribe',
+                                       variable=transform_var,
+                                       value='transcribe')
+transform_translate = ttk.Radiobutton(transform_panel, text='Translate',
+                                      variable=transform_var,
+                                      value='translate')
+transform_backtranscribe = ttk.Radiobutton(transform_panel,
+                                           text='Back transcribe',
+                                           variable=transform_var,
+                                           value='back transcribe')
+transform_translate.invoke()
 
-        lc = wx.LayoutConstraints()
-        lc.bottom.SameAs(self, wx.Bottom, 10)
-        lc.left.RightOf(apply_button, 5)
-        lc.height.AsIs()
-        lc.width.PercentOf(self, wx.Width, 25)
-        clear_button.SetConstraints(lc)
+# Right panel with sequence in- and output
+seq_panel = ttk.Frame(main_window, relief=tk.GROOVE, padding=5)
 
-        lc = wx.LayoutConstraints()
-        lc.bottom.SameAs(self, wx.Bottom, 10)
-        lc.left.RightOf(clear_button, 5)
-        lc.height.AsIs()
-        lc.width.PercentOf(self, wx.Width, 25)
-        close_button.SetConstraints(lc)
+input_panel = ttk.LabelFrame(seq_panel, text='Original Sequence')
+input_scroller = ttk.Scrollbar(input_panel, orient=tk.VERTICAL)
+input_text = tk.Text(input_panel, width=39, height=5,
+                     yscrollcommand=input_scroller.set)
+input_scroller.config(command=input_text.yview)
 
-        src_static = wx.StaticText(self, -1, 'Original Sequence',
-                                   style=wx.ALIGN_CENTER)
-        lc = wx.LayoutConstraints()
-        lc.top.SameAs(self, wx.Top, 5)
-        lc.left.SameAs(self, wx.Left, 5)
-        lc.height.AsIs()
-        lc.right.SameAs(self, wx.Right, 5)
-        src_static.SetConstraints(lc)
+output_panel = ttk.LabelFrame(seq_panel, text='Transformed Sequence')
+output_scroller = ttk.Scrollbar(output_panel, orient=tk.VERTICAL)
+output_text = tk.Text(output_panel, width=39, height=5,
+                      yscrollcommand=output_scroller.set)
+output_scroller.config(command=output_text.yview)
 
-        src_text = wx.TextCtrl(self, -1, '', style=wx.TE_MULTILINE)
-        lc = wx.LayoutConstraints()
-        lc.top.Below(src_static, 5)
-        lc.left.SameAs(self, wx.Left, 5)
-        lc.height.PercentOf(self, wx.Height, 30)
-        lc.right.SameAs(self, wx.Right, 5)
-        src_text.SetConstraints(lc)
-        self.src_text = src_text
-
-        dest_static = wx.StaticText(self, -1, 'Transformed Sequence',
-                                    style=wx.ALIGN_CENTER)
-        lc = wx.LayoutConstraints()
-        lc.top.Below(src_text, 5)
-        lc.left.SameAs(self, wx.Left, 5)
-        lc.height.AsIs()
-        lc.right.SameAs(self, wx.Right, 5)
-        dest_static.SetConstraints(lc)
-
-        dest_text = wx.TextCtrl(self, -1, '', style=wx.TE_MULTILINE)
-        lc = wx.LayoutConstraints()
-        lc.top.Below(dest_static, 5)
-        lc.left.SameAs(self, wx.Left, 5)
-        lc.height.PercentOf(self, wx.Height, 30)
-        lc.right.SameAs(self, wx.Right, 5)
-        dest_text.SetConstraints(lc)
-        self.dest_text = dest_text
-
-    def OnClose(self, event):
-        parent = self.GetParent()
-        parent.Destroy()
-
-    def OnApply(self, event):
-        codon_table_lb = self.parent.params_panel.codon_table_lb
-        selection = codon_table_lb.GetStringSelection()
-        print(selection)
-        codon_table = selection[:]
-        transform_lb = self.parent.params_panel.transform_lb
-        selection = transform_lb.GetStringSelection()
-        transform = selection[:]
-        print(transform)
-        if(transform == 'Translate'):
-            self.translate(codon_table)
-        elif(transform == 'Transcribe'):
-            self.transcribe()
-        elif(transform == 'Back transcribe'):
-            self.back_transcribe()
-
-    def OnClear(self, event):
-        self.src_text.Clear()
-        self.dest_text.Clear()
-
-    def translate(self, codon_table):
-        seq = "".join(self.src_text.GetValue().split())  # remove whitespace
-        print(seq)
-        self.dest_text.Clear()
-        self.dest_text.SetValue(translate(seq, table=codon_table,
-                                          to_stop=True))
-
-    def transcribe(self):
-        seq = "".join(self.src_text.GetValue().split())  # remove whitespace
-        print(seq)
-        self.dest_text.Clear()
-        self.dest_text.SetValue(transcribe(seq))
-
-    def back_transcribe(self):
-        seq = "".join(self.src_text.GetValue().split())  # remove whitespace
-        print(seq)
-        self.dest_text.Clear()
-        self.dest_text.SetValue(back_transcribe(seq))
+# Buttons
+apply_button = ttk.Button(seq_panel, text='Apply')
+clear_button = ttk.Button(seq_panel, text='Clear')
+close_button = ttk.Button(seq_panel, text='Close', command=main_window.destroy)
 
 
-class SeqFrame(wx.Frame):
-    def __init__(self, parent, ID, title):
-        wx.Frame.__init__(self, parent, ID, title,
-                          wx.DefaultPosition, wx.Size(500, 400))
-        self.SetAutoLayout(True)
-        self.CreateStatusBar()
-        self.SetStatusText("This is the statusbar")
-        menu = wx.Menu()
-        menu.Append(ID_ABOUT, "&About",
-                    "More information about this program")
-        menu.AppendSeparator()
-        menu.Append(ID_EXIT, "E&xit", "Terminate the program")
-
-        menuBar = wx.MenuBar()
-        menuBar.Append(menu, "&File")
-        self.SetMenuBar(menuBar)
-
-        params_panel = ParamsPanel(self, -1)
-        lc = wx.LayoutConstraints()
-        lc.top.SameAs(self, wx.Top, 10)
-        lc.left.SameAs(self, wx.Left, 5)
-        lc.bottom.SameAs(self, wx.Bottom, 5)
-        lc.width.PercentOf(self, wx.Width, 40)
-        params_panel.SetConstraints(lc)
-
-        seq_panel = SeqPanel(self, -1)
-        lc = wx.LayoutConstraints()
-        lc.top.SameAs(self, wx.Top, 10)
-        lc.left.RightOf(params_panel, 5)
-        lc.bottom.SameAs(self, wx.Bottom, 5)
-        lc.right.SameAs(self, wx.Right)
-        seq_panel.SetConstraints(lc)
-
-        self.seq_panel = seq_panel
-        self.params_panel = params_panel
-
-        wx.EVT_MENU(self, ID_EXIT, self.exit)
-
-    def exit(self, event):
-        self.Close(True)
+# Statusbar
+statustext = tk.StringVar()
+statusbar = ttk.Label(main_window, textvariable=statustext, relief=tk.GROOVE,
+                      padding=5)
+statustext.set('This is the statusbar')
+sizegrip = ttk.Sizegrip(statusbar)
 
 
-class MyApp(wx.App):
-    def OnInit(self):
-        frame = SeqFrame(None, -1, "Greetings from Biopython")
-        frame.Show(True)
-        self.SetTopWindow(frame)
-        return True
+# Event methods
+def clear_output():
+    """Clear the output window."""
+    input_text.delete(1.0, tk.END)
+    output_text.delete(1.0, tk.END)
+    return
 
-app = MyApp(0)
-app.MainLoop()
+
+def apply_operation():
+    """Do the selected operation."""
+    codon_table = codon_list.get(codon_list.curselection())
+    print('Code: {}'.format(codon_table))
+
+    seq = ''.join(input_text.get(1.0, tk.END).split())
+    print('Input sequence: {}'.format(seq))
+
+    operation = transform_var.get()
+    print('Operation: {}'.format(operation))
+
+    if operation == 'transcribe':
+        result = transcribe(seq)
+    elif operation == 'translate':
+        result = translate(seq, table=codon_table, to_stop=True)
+    elif operation == 'back transcribe':
+        result = back_transcribe(seq)
+    else:
+        result = ''
+
+    output_text.delete(1.0, tk.END)
+    output_text.insert(tk.END, result)
+    print('Result: {}'.format(result))
+    return
+
+
+def set_statusbar(event):
+    """Show statusbar comments from menu selection."""
+    index = main_window.call(event.widget, "index", "active")
+    if index == 0:
+        statustext.set('More information about this program')
+    elif index == 2:
+        statustext.set('Terminate the program')
+    else:
+        statustext.set('This is the statusbar')
+    return
+
+# Set commands and bind events
+menue_single.bind('<<MenuSelect>>', set_statusbar)
+apply_button.config(command=apply_operation)
+clear_button.config(command=clear_output)
+
+# Build GUI
+statusbar.pack(side=tk.BOTTOM, padx=1, fill=tk.X)
+sizegrip.pack(side=tk.RIGHT, padx=3, pady=4)
+
+param_panel.pack(side=tk.LEFT, anchor=tk.N, padx=5, pady=10, fill=tk.Y)
+codon_panel.pack(fill=tk.Y, expand=True)
+codon_scroller.pack(side=tk.RIGHT, fill=tk.Y)
+codon_list.pack(fill=tk.Y, expand=True)
+transform_panel.pack(pady=10, fill=tk.X)
+transform_transcribe.pack(anchor=tk.W)
+transform_translate.pack(anchor=tk.W)
+transform_backtranscribe.pack(anchor=tk.W)
+
+seq_panel.pack(anchor=tk.N, padx=5, pady=10, fill=tk.BOTH, expand=True)
+input_panel.pack(fill=tk.BOTH, expand=True)
+input_scroller.pack(side=tk.RIGHT, fill=tk.Y)
+input_text.pack(fill=tk.BOTH, expand=True)
+output_panel.pack(pady=10, fill=tk.BOTH, expand=True)
+output_scroller.pack(side=tk.RIGHT, fill=tk.Y)
+output_text.pack(fill=tk.BOTH, expand=True)
+apply_button.pack(side=tk.LEFT)
+clear_button.pack(side=tk.LEFT, padx=10)
+close_button.pack(side=tk.LEFT)
+
+main_window.mainloop()

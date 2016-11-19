@@ -19,8 +19,6 @@ The latest CLA file can be found
 
 from . import Residues
 
-__docformat__ = "restructuredtext en"
-
 
 class Record(object):
     """Holds information for one SCOP domain.

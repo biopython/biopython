@@ -17,8 +17,6 @@ classes:
 # local stuff
 import Bio.GenBank
 
-__docformat__ = "restructuredtext en"
-
 
 def _wrapped_genbank(information, indent, wrap_space=1, split_char=" "):
     """Write a line of GenBank info that can wrap over multiple lines.
@@ -275,7 +273,7 @@ class Record(object):
         """Provide output for the DEFINITION line.
         """
         output = Record.BASE_FORMAT % "DEFINITION"
-        output += _wrapped_genbank(self.definition, Record.GB_BASE_INDENT)
+        output += _wrapped_genbank(self.definition + ".", Record.GB_BASE_INDENT)
         return output
 
     def _accession_line(self):

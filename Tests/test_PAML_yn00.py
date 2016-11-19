@@ -8,6 +8,7 @@ import os
 import os.path
 from Bio.Phylo.PAML import yn00
 from Bio.Phylo.PAML._paml import PamlError
+import glob
 
 
 class ModTest(unittest.TestCase):
@@ -86,10 +87,10 @@ class ModTest(unittest.TestCase):
             self.yn00.run)
 
     # def testPamlErrorsCaught(self):
-        # self.yn00.alignment = self.align_file
-        # self.yn00.out_file = self.out_file
-        # self.assertRaises((EnvironmentError, PamlError),
-            # self.yn00.run)
+    #     self.yn00.alignment = self.align_file
+    #     self.yn00.out_file = self.out_file
+    #     self.assertRaises((EnvironmentError, PamlError),
+    #                        self.yn00.run)
 
     def testCtlFileValidOnRun(self):
         self.yn00.alignment = self.align_file
@@ -134,14 +135,23 @@ class ModTest(unittest.TestCase):
         self.assertRaises(ValueError, yn00.read, self.results_file)
 
     def testParseAllVersions(self):
-        folder = os.path.join(self.results_dir, "yn00")
-        for results_file in os.listdir(folder):
-            file_path = os.path.join(folder, results_file)
-            results = yn00.read(file_path)
+        pattern = os.path.join(self.results_dir, "yn00", 'yn00-*')
+        for results_file in glob.glob(pattern):
+            results = yn00.read(results_file)
             self.assertEqual(len(results), 5)
             self.assertEqual(len(results["Homo_sapie"]), 4)
-            self.assertEqual(len(results["Homo_sapie"]["Pan_troglo"]),
-                5)
+            self.assertEqual(len(results["Homo_sapie"]["Pan_troglo"]), 5)
+
+    def testParseLongNames(self):
+        pattern = os.path.join(self.results_dir, "yn00", 'yn00_long-*')
+        for results_file in glob.glob(pattern):
+            results = yn00.read(results_file)
+            # Expect seven taxa...
+            self.assertEqual(len(results), 7)
+            # ...each of which is compared to the other six.
+            self.assertEqual(set([len(v) for v in results.values()]), set([6]))
+            # ...each of which has five measures.
+            self.assertEqual(set([len(v) for taxa in results.values() for v in taxa.values()]), set([5]))
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)

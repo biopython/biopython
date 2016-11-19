@@ -12,8 +12,6 @@ input assignment peaklist.
 
 from . import xpktools
 
-__docformat__ = "restructuredtext en"
-
 
 def predictNOE(peaklist, originNuc, detectedNuc, originResNum, toResNum):
     """Predict the i->j NOE position based on self peak (diagonal) assignments

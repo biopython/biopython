@@ -192,8 +192,6 @@ from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 
 __all__ = ['BlatPslParser', 'BlatPslIndexer', 'BlatPslWriter']
 
-__docformat__ = "restructuredtext en"
-
 
 # precompile regex patterns
 _PTR_ROW_CHECK = r'^\d+\s+\d+\s+\d+\s+\d+'
@@ -532,7 +530,7 @@ class BlatPslIndexer(SearchIndexer):
         # denotes column location for query identifier
         query_id_idx = 9
         qresult_key = None
-        tab_char = _as_bytes('\t')
+        tab_char = b"\t"
 
         start_offset = handle.tell()
         line = handle.readline()
@@ -572,8 +570,8 @@ class BlatPslIndexer(SearchIndexer):
         handle.seek(offset)
         query_id_idx = 9
         qresult_key = None
-        qresult_raw = _as_bytes('')
-        tab_char = _as_bytes('\t')
+        qresult_raw = b""
+        tab_char = b"\t"
 
         while True:
             line = handle.readline()

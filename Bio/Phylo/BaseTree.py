@@ -8,7 +8,6 @@
 All object representations for phylogenetic trees should derive from these base
 classes in order to use the common methods defined on them.
 """
-__docformat__ = "restructuredtext en"
 
 from Bio._py3k import basestring, filter, unicode, zip
 
@@ -19,7 +18,6 @@ import random
 import re
 
 from Bio import _utils
-
 
 # NB: On Python 2, repr() and str() are specified to return byte strings, not
 # unicode. On Python 3, it's the opposite. Horrible.
@@ -1102,42 +1100,42 @@ class BranchColor(object):
     """
 
     color_names = {
-        'red':     (255,   0,   0),
-        'r':       (255,   0,   0),
-        'yellow':  (255, 255,   0),
-        'y':       (255, 255,   0),
-        'green':   (  0, 128,   0),
-        'g':       (  0, 128,   0),
-        'cyan':    (  0, 255, 255),
-        'c':       (  0, 255, 255),
-        'blue':    (  0,   0, 255),
-        'b':       (  0,   0, 255),
-        'magenta': (255,   0, 255),
-        'm':       (255,   0, 255),
-        'black':   (  0,   0,   0),
-        'k':       (  0,   0,   0),
-        'white':   (255, 255, 255),
-        'w':       (255, 255, 255),
+        'red': (255, 0, 0),
+        'r': (255, 0, 0),
+        'yellow': (255, 255, 0),
+        'y': (255, 255, 0),
+        'green': (0, 128, 0),
+        'g': (0, 128, 0),
+        'cyan': (0, 255, 255),
+        'c': (0, 255, 255),
+        'blue': (0, 0, 255),
+        'b': (0, 0, 255),
+        'magenta': (255, 0, 255),
+        'm': (255, 0, 255),
+        'black': (0, 0, 0),
+        'k': (0, 0, 0),
+        'white': (255, 255, 255),
+        'w': (255, 255, 255),
         # Names standardized in HTML/CSS spec
         # http://w3schools.com/html/html_colornames.asp
-        'maroon':  (128,   0,   0),
-        'olive':   (128, 128,   0),
-        'lime':    (  0, 255,   0),
-        'aqua':    (  0, 255, 255),
-        'teal':    (  0, 128, 128),
-        'navy':    (  0,   0, 128),
-        'fuchsia': (255,   0, 255),
-        'purple':  (128,   0, 128),
-        'silver':  (192, 192, 192),
-        'gray':    (128, 128, 128),
+        'maroon': (128, 0, 0),
+        'olive': (128, 128, 0),
+        'lime': (0, 255, 0),
+        'aqua': (0, 255, 255),
+        'teal': (0, 128, 128),
+        'navy': (0, 0, 128),
+        'fuchsia': (255, 0, 255),
+        'purple': (128, 0, 128),
+        'silver': (192, 192, 192),
+        'gray': (128, 128, 128),
         # More definitions from matplotlib/gcolor2
-        'grey':    (128, 128, 128),
-        'pink':    (255, 192, 203),
-        'salmon':  (250, 128, 114),
-        'orange':  (255, 165,   0),
-        'gold':    (255, 215,   0),
-        'tan':     (210, 180, 140),
-        'brown':   (165,  42,  42),
+        'grey': (128, 128, 128),
+        'pink': (255, 192, 203),
+        'salmon': (250, 128, 114),
+        'orange': (255, 165, 0),
+        'gold': (255, 215, 0),
+        'tan': (210, 180, 140),
+        'brown': (165, 42, 42),
         }
 
     def __init__(self, red, green, blue):

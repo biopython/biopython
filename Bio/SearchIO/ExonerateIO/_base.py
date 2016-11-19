@@ -11,8 +11,6 @@ from Bio.SearchIO._index import SearchIndexer
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 from Bio.SeqUtils import seq1
 
-__docformat__ = "restructuredtext en"
-
 
 # strand char-value mapping
 _STRAND_MAP = {'+': 1, '-': -1, '.': 0}

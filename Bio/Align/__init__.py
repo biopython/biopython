@@ -11,17 +11,12 @@ class, used in the Bio.AlignIO module.
 """
 from __future__ import print_function
 
-__docformat__ = "restructuredtext en"  # Don't just use plain text in epydoc API pages!
-
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio import Alphabet
 
-# We only import this and subclass it for some limited backward compatibility.
-from Bio.Align.Generic import Alignment as _Alignment
 
-
-class MultipleSeqAlignment(_Alignment):
+class MultipleSeqAlignment(object):
     """Represents a classical multiple sequence alignment (MSA).
 
     By this we mean a collection of sequences (usually shown as rows) which
@@ -98,9 +93,8 @@ class MultipleSeqAlignment(_Alignment):
     TATACATTAAGTATACCAGA gi|6273289|gb|AF191663.1|AF191
     TATACATTAAGTGTACCAGA gi|6273291|gb|AF191665.1|AF191
 
-    Note - This object is intended to replace the existing Alignment object
-    defined in module Bio.Align.Generic but is not fully backwards compatible
-    with it.
+    Note - This object replaced the older Alignment object defined in module
+    Bio.Align.Generic but is not fully backwards compatible with it.
 
     Note - This object does NOT attempt to model the kind of alignments used
     in next generation sequencing with multiple sequencing reads which are
@@ -185,6 +179,253 @@ class MultipleSeqAlignment(_Alignment):
         elif not isinstance(annotations, dict):
             raise TypeError("annotations argument should be a dict")
         self.annotations = annotations
+
+    def _str_line(self, record, length=50):
+        """Returns a truncated string representation of a SeqRecord (PRIVATE).
+
+        This is a PRIVATE function used by the __str__ method.
+        """
+        if record.seq.__class__.__name__ == "CodonSeq":
+            if len(record.seq) <= length:
+                return "%s %s" % (record.seq, record.id)
+            else:
+                return "%s...%s %s" \
+                    % (record.seq[:length - 3], record.seq[-3:], record.id)
+        else:
+            if len(record.seq) <= length:
+                return "%s %s" % (record.seq, record.id)
+            else:
+                return "%s...%s %s" \
+                    % (record.seq[:length - 6], record.seq[-3:], record.id)
+
+    def __str__(self):
+        """Returns a multi-line string summary of the alignment.
+
+        This output is intended to be readable, but large alignments are
+        shown truncated.  A maximum of 20 rows (sequences) and 50 columns
+        are shown, with the record identifiers.  This should fit nicely on a
+        single screen. e.g.
+
+        >>> from Bio.Alphabet import IUPAC, Gapped
+        >>> from Bio.Align import MultipleSeqAlignment
+        >>> align = MultipleSeqAlignment([], Gapped(IUPAC.unambiguous_dna, "-"))
+        >>> align.add_sequence("Alpha", "ACTGCTAGCTAG")
+        >>> align.add_sequence("Beta",  "ACT-CTAGCTAG")
+        >>> align.add_sequence("Gamma", "ACTGCTAGATAG")
+        >>> print(align)
+        Gapped(IUPACUnambiguousDNA(), '-') alignment with 3 rows and 12 columns
+        ACTGCTAGCTAG Alpha
+        ACT-CTAGCTAG Beta
+        ACTGCTAGATAG Gamma
+
+        See also the alignment's format method.
+        """
+        rows = len(self._records)
+        lines = ["%s alignment with %i rows and %i columns"
+                 % (str(self._alphabet), rows, self.get_alignment_length())]
+        if rows <= 20:
+            lines.extend(self._str_line(rec) for rec in self._records)
+        else:
+            lines.extend(self._str_line(rec) for rec in self._records[:18])
+            lines.append("...")
+            lines.append(self._str_line(self._records[-1]))
+        return "\n".join(lines)
+
+    def __repr__(self):
+        """Returns a representation of the object for debugging.
+
+        The representation cannot be used with eval() to recreate the object,
+        which is usually possible with simple python ojects.  For example:
+
+        <Bio.Align.MultipleSeqAlignment instance (2 records of length 14,
+        SingleLetterAlphabet()) at a3c184c>
+
+        The hex string is the memory address of the object, see help(id).
+        This provides a simple way to visually distinguish alignments of
+        the same size.
+        """
+        # A doctest for __repr__ would be nice, but __class__ comes out differently
+        # if run via the __main__ trick.
+        return "<%s instance (%i records of length %i, %s) at %x>" % \
+            (self.__class__, len(self._records),
+             self.get_alignment_length(), repr(self._alphabet), id(self))
+        # This version is useful for doing eval(repr(alignment)),
+        # but it can be VERY long:
+        # return "%s(%s, %s)" \
+        #       % (self.__class__, repr(self._records), repr(self._alphabet))
+
+    def format(self, format):
+        """Returns the alignment as a string in the specified file format.
+
+        The format should be a lower case string supported as an output
+        format by Bio.AlignIO (such as "fasta", "clustal", "phylip",
+        "stockholm", etc), which is used to turn the alignment into a
+        string.
+
+        e.g.
+
+        >>> from Bio.Alphabet import IUPAC, Gapped
+        >>> from Bio.Align import MultipleSeqAlignment
+        >>> align = MultipleSeqAlignment([], Gapped(IUPAC.unambiguous_dna, "-"))
+        >>> align.add_sequence("Alpha", "ACTGCTAGCTAG")
+        >>> align.add_sequence("Beta",  "ACT-CTAGCTAG")
+        >>> align.add_sequence("Gamma", "ACTGCTAGATAG")
+        >>> print(align.format("fasta"))
+        >Alpha
+        ACTGCTAGCTAG
+        >Beta
+        ACT-CTAGCTAG
+        >Gamma
+        ACTGCTAGATAG
+        <BLANKLINE>
+        >>> print(align.format("phylip"))
+         3 12
+        Alpha      ACTGCTAGCT AG
+        Beta       ACT-CTAGCT AG
+        Gamma      ACTGCTAGAT AG
+        <BLANKLINE>
+
+        For Python 2.6, 3.0 or later see also the built in format() function.
+        """
+        # See also the __format__ added for Python 2.6 / 3.0, PEP 3101
+        # See also the SeqRecord class and its format() method using Bio.SeqIO
+        return self.__format__(format)
+
+    def __format__(self, format_spec):
+        """Returns the alignment as a string in the specified file format.
+
+        This method supports the python format() function added in
+        Python 2.6/3.0.  The format_spec should be a lower case
+        string supported by Bio.AlignIO as an output file format.
+        See also the alignment's format() method."""
+        if format_spec:
+            from Bio._py3k import StringIO
+            from Bio import AlignIO
+            handle = StringIO()
+            AlignIO.write([self], handle, format_spec)
+            return handle.getvalue()
+        else:
+            # Follow python convention and default to using __str__
+            return str(self)
+
+    def __iter__(self):
+        """Iterate over alignment rows as SeqRecord objects.
+
+        e.g.
+
+        >>> from Bio.Alphabet import IUPAC, Gapped
+        >>> from Bio.Align import MultipleSeqAlignment
+        >>> align = MultipleSeqAlignment([], Gapped(IUPAC.unambiguous_dna, "-"))
+        >>> align.add_sequence("Alpha", "ACTGCTAGCTAG")
+        >>> align.add_sequence("Beta",  "ACT-CTAGCTAG")
+        >>> align.add_sequence("Gamma", "ACTGCTAGATAG")
+        >>> for record in align:
+        ...    print(record.id)
+        ...    print(record.seq)
+        Alpha
+        ACTGCTAGCTAG
+        Beta
+        ACT-CTAGCTAG
+        Gamma
+        ACTGCTAGATAG
+        """
+        return iter(self._records)
+
+    def __len__(self):
+        """Returns the number of sequences in the alignment.
+
+        Use len(alignment) to get the number of sequences (i.e. the number of
+        rows), and alignment.get_alignment_length() to get the length of the
+        longest sequence (i.e. the number of columns).
+
+        This is easy to remember if you think of the alignment as being like a
+        list of SeqRecord objects.
+        """
+        return len(self._records)
+
+    def get_alignment_length(self):
+        """Return the maximum length of the alignment.
+
+        All objects in the alignment should (hopefully) have the same
+        length. This function will go through and find this length
+        by finding the maximum length of sequences in the alignment.
+
+        >>> from Bio.Alphabet import IUPAC, Gapped
+        >>> from Bio.Align import MultipleSeqAlignment
+        >>> align = MultipleSeqAlignment([], Gapped(IUPAC.unambiguous_dna, "-"))
+        >>> align.add_sequence("Alpha", "ACTGCTAGCTAG")
+        >>> align.add_sequence("Beta",  "ACT-CTAGCTAG")
+        >>> align.add_sequence("Gamma", "ACTGCTAGATAG")
+        >>> align.get_alignment_length()
+        12
+
+        If you want to know the number of sequences in the alignment,
+        use len(align) instead:
+
+        >>> len(align)
+        3
+
+        """
+        max_length = 0
+
+        for record in self._records:
+            if len(record.seq) > max_length:
+                max_length = len(record.seq)
+
+        return max_length
+
+    def add_sequence(self, descriptor, sequence, start=None, end=None,
+                     weight=1.0):
+        """Add a sequence to the alignment.
+
+        This doesn't do any kind of alignment, it just adds in the sequence
+        object, which is assumed to be prealigned with the existing
+        sequences.
+
+        Arguments:
+            - descriptor - The descriptive id of the sequence being added.
+              This will be used as the resulting SeqRecord's
+              .id property (and, for historical compatibility,
+              also the .description property)
+            - sequence - A string with sequence info.
+            - start - You can explicitly set the start point of the sequence.
+              This is useful (at least) for BLAST alignments, which can
+              just be partial alignments of sequences.
+            - end - Specify the end of the sequence, which is important
+              for the same reason as the start.
+            - weight - The weight to place on the sequence in the alignment.
+              By default, all sequences have the same weight. (0.0 =>
+              no weight, 1.0 => highest weight)
+
+        In general providing a SeqRecord and calling .append is prefered.
+        """
+        new_seq = Seq(sequence, self._alphabet)
+
+        # We are now effectively using the SeqRecord's .id as
+        # the primary identifier (e.g. in Bio.SeqIO) so we should
+        # populate it with the descriptor.
+        # For backwards compatibility, also store this in the
+        # SeqRecord's description property.
+        new_record = SeqRecord(new_seq,
+                               id=descriptor,
+                               description=descriptor)
+
+        # hack! We really need to work out how to deal with annotations
+        # and features in biopython. Right now, I'll just use the
+        # generic annotations dictionary we've got to store the start
+        # and end, but we should think up something better. I don't know
+        # if I'm really a big fan of the LocatableSeq thing they've got
+        # in BioPerl, but I'm not positive what the best thing to do on
+        # this is...
+        if start:
+            new_record.annotations['start'] = start
+        if end:
+            new_record.annotations['end'] = end
+
+        # another hack to add weight information to the sequence
+        new_record.annotations['weight'] = weight
+
+        self._records.append(new_record)
 
     def extend(self, records):
         """Add more SeqRecord objects to the alignment as rows.
@@ -606,42 +847,6 @@ class MultipleSeqAlignment(_Alignment):
             self._records.sort(key=lambda r: r.id, reverse=reverse)
         else:
             self._records.sort(key=key, reverse=reverse)
-
-    def get_column(self, col):
-        """Returns a string containing a given column (DEPRECATED).
-
-        This is a method provided for backwards compatibility with the old
-        Bio.Align.Generic.Alignment object. Please use the slice notation
-        instead, since get_column is likely to be removed in a future release
-        of Biopython..
-        """
-        import warnings
-        import Bio
-        warnings.warn("This method is deprecated and is provided for backwards compatibility with the old Bio.Align.Generic.Alignment object. Please use the slice notation instead, as get_column is likely to be removed in a future release of Biopython.", Bio.BiopythonDeprecationWarning)
-        return _Alignment.get_column(self, col)
-
-    def add_sequence(self, descriptor, sequence, start=None, end=None,
-                     weight=1.0):
-        """Add a sequence to the alignment (DEPRECATED).
-
-        The start, end, and weight arguments are not supported! This method
-        only provides limited backwards compatibility with the old
-        Bio.Align.Generic.Alignment object. Please use the append method with
-        a SeqRecord instead, since add_sequence is likely to be removed in a
-        future release of Biopython.
-        """
-        import warnings
-        import Bio
-        warnings.warn("The start, end, and weight arguments are not supported! This method only provides limited backwards compatibility with the old Bio.Align.Generic.Alignment object. Please use the append method with a SeqRecord instead, as the add_sequence method is likely to be removed in a future release of Biopython.", Bio.BiopythonDeprecationWarning)
-        # Should we handle start/end/strand information somehow? What for?
-        # TODO - Should we handle weights somehow? See also AlignInfo code...
-        if start is not None or end is not None or weight != 1.0:
-            raise ValueError("The add_Sequence method is obsolete, and only "
-                             "provides limited backwards compatibily. The"
-                             "start, end and weight arguments are not "
-                             "supported.")
-        self.append(SeqRecord(Seq(sequence, self._alphabet),
-                              id=descriptor, description=descriptor))
 
 
 if __name__ == "__main__":

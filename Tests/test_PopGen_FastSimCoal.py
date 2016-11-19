@@ -3,11 +3,17 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-from Bio.PopGen.SimCoal.Controller import FastSimCoalController
-from Bio import MissingExternalDependencyError
 import os
 import shutil
 import unittest
+import warnings
+
+from Bio import MissingExternalDependencyError
+from Bio import BiopythonDeprecationWarning
+
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore", BiopythonDeprecationWarning)
+    from Bio.PopGen.SimCoal.Controller import FastSimCoalController
 
 # Tests fastsimcoal related code. Note: this case requires fastsimcoal 2.51
 

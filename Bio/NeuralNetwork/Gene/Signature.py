@@ -18,8 +18,6 @@ from Bio.Seq import Seq
 # local stuff
 from .Pattern import PatternRepository
 
-__docformat__ = "restructuredtext en"
-
 
 class SignatureFinder(object):
     """Find Signatures in a group of sequence records.
@@ -215,8 +213,8 @@ class SignatureCoder(object):
         # otherwise we'll just return 0 for everything
         if max_count > 0:
             for sig in sequence_sigs:
-                sequence_sigs[sig] = (float(sequence_sigs[sig] - min_count)
-                                      / float(max_count))
+                sequence_sigs[sig] = (float(sequence_sigs[sig] - min_count) /
+                                      float(max_count))
 
         # return the relative signature info in the specified order
         sig_amounts = []

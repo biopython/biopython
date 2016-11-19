@@ -41,7 +41,6 @@ from Bio.PDB.PDBExceptions import PDBException
 from Bio.PDB.PDBParser import PDBParser
 from Bio.PDB.Polypeptide import PPBuilder
 
-__docformat__ = "restructuredtext en"
 
 # fragment file (lib_SIZE_z_LENGTH.txt)
 # SIZE=number of fragments
@@ -233,9 +232,8 @@ class FragmentMapper(object):
     Map polypeptides in a model to lists of representative fragments.
     """
     def __init__(self, model, lsize=20, flength=5, fdir="."):
-        """
-        ::
-        
+        """Create instance of FragmentMapper
+
             @param model: the model that will be mapped
             @type model: L{Model}
 

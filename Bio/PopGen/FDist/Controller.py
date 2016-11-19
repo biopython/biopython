@@ -3,7 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""This module allows you to control fdist.
+"""This module allows you to control fdist (DEPRECATED).
 
 This will allow you to call fdist and associated programs (cplot,
 datacal, pv) by Mark Beaumont.
@@ -18,8 +18,6 @@ import sys
 from random import randint
 from time import strftime, clock
 # from logging import debug
-
-__docformat__ = "restructuredtext en"
 
 
 def my_float(f):
@@ -202,7 +200,7 @@ class FDistController(object):
             - try_runs - Number of simulations on the part trying to get
                        Fst correct
             - limit - Interval limit
-            
+
         Other parameters can be seen on run_fdist.
         """
         max_run_fst = 1

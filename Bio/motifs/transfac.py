@@ -9,8 +9,6 @@
 from Bio import motifs
 from Bio.Alphabet import IUPAC
 
-__docformat__ = "restructuredtext en"
-
 
 class Motif(motifs.Motif, dict):
     """A Bio.motifs.transfac.Motif stores the information in one TRANSFAC
@@ -173,7 +171,7 @@ XX
                 ('CC',),        # Comments
                 ('DR',),        # External databases
                 ('OV', 'PV',),  # Versions
-               )
+                )
     for motif in motifs:
         lines = []
         for section in sections:
@@ -185,17 +183,20 @@ XX
                     if length == 0:
                         continue
                     sequence = motif.degenerate_consensus
-                    line = "P0      A      C      G      T"
+                    letters = sorted(motif.alphabet.letters)
+                    line = "      ".join(["P0"] + letters)
+
                     lines.append(line)
                     for i in range(length):
-                        line = "%02.d %6.20g %6.20g %6.20g %6.20g      %s" % (
-                                             i + 1,
-                                             motif.counts['A'][i],
-                                             motif.counts['C'][i],
-                                             motif.counts['G'][i],
-                                             motif.counts['T'][i],
-                                             sequence[i],
-                                            )
+                        line = " ".join(
+                            ["%02.d"] +
+                            ["%6.20g" for l in letters]) + \
+                            "      %s"
+                        line = line % tuple(
+                            [i + 1] +
+                            [motif.counts[l][i] for l in letters] +
+                            [sequence[i]]
+                        )
                         lines.append(line)
                     blank = True
                 else:

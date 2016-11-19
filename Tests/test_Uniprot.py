@@ -272,7 +272,7 @@ class TestUniprot(unittest.TestCase):
             elif key in ["date"]:
                 # TODO - Why is this a list vs str?
                 pass
-            elif type(old.annotations[key]) != type(new.annotations[key]):
+            elif not isinstance(old.annotations[key], type(new.annotations[key])):
                 raise TypeError("%s gives %s vs %s" %
                                  (key, old.annotations[key], new.annotations[key]))
             elif key in ["organism"]:
@@ -330,6 +330,13 @@ class TestUniprot(unittest.TestCase):
         self.assertEqual(new.annotations["gene_name_primary"], 'HvPIP2;8')
         self.assertEqual(old.name, 'F2CXE6_HORVD')
         self.assertEqual(new.name, 'F2CXE6_HORVD')
+
+    def test_P84001(self):
+        """Parse mass spec structured comment with unknown loc"""
+        xml = list(SeqIO.parse("SwissProt/P84001.xml", "uniprot-xml"))[0]
+        self.assertEqual(xml.id, 'P84001')
+        self.assertEqual(len(xml.annotations['comment_massspectrometry']), 1)
+        self.assertEqual(xml.annotations['comment_massspectrometry'][0], 'undefined:9571|Electrospray')
 
     def test_multi_ex(self):
         """Compare SwissProt text and uniprot XML versions of several examples."""

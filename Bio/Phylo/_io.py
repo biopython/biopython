@@ -10,8 +10,6 @@ This API follows the same semantics as Biopython's `SeqIO` and `AlignIO`.
 
 from __future__ import print_function
 
-__docformat__ = "restructuredtext en"
-
 from Bio import File
 from Bio.Phylo import (
     BaseTree,
@@ -84,7 +82,9 @@ def write(trees, file, format, **kwargs):
     return n
 
 
-def convert(in_file, in_format, out_file, out_format, parse_args={}, **kwargs):
+def convert(in_file, in_format, out_file, out_format, parse_args=None, **kwargs):
     """Convert between two tree file formats."""
+    if parse_args is None:
+        parse_args = {}
     trees = parse(in_file, in_format, **parse_args)
     return write(trees, out_file, out_format, **kwargs)

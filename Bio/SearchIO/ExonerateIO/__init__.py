@@ -244,8 +244,6 @@ from .exonerate_text import ExonerateTextParser, ExonerateTextIndexer
 from .exonerate_vulgar import ExonerateVulgarParser, ExonerateVulgarIndexer
 from .exonerate_cigar import ExonerateCigarParser, ExonerateCigarIndexer
 
-__docformat__ = "restructuredtext en"
-
 
 # if not used as a module, run the doctest
 if __name__ == "__main__":

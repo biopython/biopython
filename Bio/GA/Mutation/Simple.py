@@ -10,8 +10,6 @@ import random
 
 from Bio._py3k import range
 
-__docformat__ = "restructuredtext en"
-
 
 class SinglePositionMutation(object):
     """Perform a conversion mutation, but only at a single point in the genome.

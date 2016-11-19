@@ -21,7 +21,6 @@ from Bio import Alphabet
 from Bio.Alphabet import IUPAC
 from Bio.Data import IUPACData
 
-__docformat__ = "restructuredtext en"
 
 ######################################
 # DNA
@@ -209,18 +208,19 @@ def nt_search(seq, subseq):
 # {{{
 
 
-def seq3(seq, custom_map={'*': 'Ter'}, undef_code='Xaa'):
+def seq3(seq, custom_map=None, undef_code='Xaa'):
     """Turn a one letter code protein sequence into one with three letter codes.
 
-    The single input argument 'seq' should be a protein sequence using single
-    letter codes, either as a python string or as a Seq or MutableSeq object.
+    The single required input argument 'seq' should be a protein sequence using
+    single letter codes, either as a python string or as a Seq or MutableSeq
+    object.
 
     This function returns the amino acid sequence as a string using the three
     letter amino acid codes. Output follows the IUPAC standard (including
     ambiguous characters B for "Asx", J for "Xle" and X for "Xaa", and also U
     for "Sel" and O for "Pyl") plus "Ter" for a terminator given as an asterisk.
     Any unknown character (including possible gap characters), is changed into
-    'Xaa'.
+    'Xaa' by default.
 
     e.g.
 
@@ -229,7 +229,7 @@ def seq3(seq, custom_map={'*': 'Ter'}, undef_code='Xaa'):
     'MetAlaIleValMetGlyArgTrpLysGlyAlaArgTer'
 
     You can set a custom translation of the codon termination code using the
-    "custom_map" argument, e.g.
+    dictionary "custom_map" argument (which defaults to {'*': 'Ter'}), e.g.
 
     >>> seq3("MAIVMGRWKGAR*", custom_map={"*": "***"})
     'MetAlaIleValMetGlyArgTrpLysGlyAlaArg***'
@@ -247,6 +247,8 @@ def seq3(seq, custom_map={'*': 'Ter'}, undef_code='Xaa'):
 
     This function was inspired by BioPerl's seq3.
     """
+    if custom_map is None:
+        custom_map = {'*': 'Ter'}
     # not doing .update() on IUPACData dict with custom_map dict
     # to preserve its initial state (may be imported in other modules)
     threecode = dict(list(IUPACData.protein_letters_1to3_extended.items()) +
@@ -256,18 +258,19 @@ def seq3(seq, custom_map={'*': 'Ter'}, undef_code='Xaa'):
     return ''.join(threecode.get(aa, undef_code) for aa in seq)
 
 
-def seq1(seq, custom_map={'Ter': '*'}, undef_code='X'):
+def seq1(seq, custom_map=None, undef_code='X'):
     """Turns a three-letter code protein sequence into one with single letter codes.
 
-    The single input argument 'seq' should be a protein sequence using three-
-    letter codes, either as a python string or as a Seq or MutableSeq object.
+    The single required input argument 'seq' should be a protein sequence
+    using three-letter codes, either as a python string or as a Seq or
+    MutableSeq object.
 
     This function returns the amino acid sequence as a string using the one
     letter amino acid codes. Output follows the IUPAC standard (including
     ambiguous characters "B" for "Asx", "J" for "Xle", "X" for "Xaa", "U" for
     "Sel", and "O" for "Pyl") plus "*" for a terminator given the "Ter" code.
-    Any unknown character (including possible gap characters), is changed into
-    '-'.
+    Any unknown character (including possible gap characters), is changed
+    into '-' by default.
 
     e.g.
 
@@ -282,7 +285,7 @@ def seq1(seq, custom_map={'Ter': '*'}, undef_code='X'):
     'MAIVMGRWKGAR*'
 
     You can set a custom translation of the codon termination code using the
-    "custom_map" argument, e.g.
+    dictionary "custom_map" argument (defaulting to {'Ter': '*'}), e.g.
 
     >>> seq1("MetAlaIleValMetGlyArgTrpLysGlyAlaArg***", custom_map={"***": "*"})
     'MAIVMGRWKGAR*'
@@ -299,6 +302,8 @@ def seq1(seq, custom_map={'Ter': '*'}, undef_code='X'):
     'MAIVMGRWKGAXXR*'
 
     """
+    if custom_map is None:
+        custom_map = {'Ter': '*'}
     # reverse map of threecode
     # upper() on all keys to enable caps-insensitive input seq handling
     onecode = dict((k.upper(), v) for k, v in
@@ -474,7 +479,7 @@ def six_frame_translations(seq, genetic_code=1):
     <BLANKLINE>
     <BLANKLINE>
 
-    """
+    """  # noqa for pep8 W291 trailing whitespace
     from Bio.Seq import reverse_complement, translate
     anti = reverse_complement(seq)
     comp = anti[::-1]

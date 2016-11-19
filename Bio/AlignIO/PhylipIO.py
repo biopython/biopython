@@ -1,4 +1,4 @@
-# Copyright 2006-2013 by Peter Cock.  All rights reserved.
+# Copyright 2006-2016 by Peter Cock.  All rights reserved.
 # Revisions copyright 2011 Brandon Invergo. All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -43,9 +43,9 @@ from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
 from .Interfaces import AlignmentIterator, SequentialAlignmentWriter
 
-__docformat__ = "restructuredtext en"
 
 _PHYLIP_ID_WIDTH = 10
+_NO_DOTS = "PHYLIP format no longer allows dots in sequence"
 
 
 class PhylipWriter(SequentialAlignmentWriter):
@@ -112,8 +112,7 @@ class PhylipWriter(SequentialAlignmentWriter):
             sequence = str(record.seq)
             if "." in sequence:
                 # Do this check here (once per record, not once per block)
-                raise ValueError("PHYLIP format no longer allows dots in "
-                                 "sequence")
+                raise ValueError(_NO_DOTS)
             seqs.append(sequence)
 
         # From experimentation, the use of tabs is not understood by the
@@ -216,9 +215,10 @@ class PhylipIterator(AlignmentIterator):
 
         assert self._is_header(line)
 
-        if self.records_per_alignment is not None \
-        and self.records_per_alignment != number_of_seqs:
-            raise ValueError("Found %i records in this alignment, told to expect %i"
+        if self.records_per_alignment is not None and \
+                self.records_per_alignment != number_of_seqs:
+            raise ValueError("Found %i records in this alignment, "
+                             "told to expect %i"
                              % (number_of_seqs, self.records_per_alignment))
 
         ids = []
@@ -231,7 +231,7 @@ class PhylipIterator(AlignmentIterator):
             sequence_id, s = self._split_id(line)
             ids.append(sequence_id)
             if "." in s:
-                raise ValueError("PHYLIP format no longer allows dots in sequence")
+                raise ValueError(_NO_DOTS)
             seqs.append([s])
 
         # Look for further blocks
@@ -254,7 +254,7 @@ class PhylipIterator(AlignmentIterator):
             for i in range(number_of_seqs):
                 s = line.strip().replace(" ", "")
                 if "." in s:
-                    raise ValueError("PHYLIP format no longer allows dots in sequence")
+                    raise ValueError(_NO_DOTS)
                 seqs[i].append(s)
                 line = handle.readline()
                 if (not line) and i + 1 < number_of_seqs:
@@ -282,7 +282,7 @@ class RelaxedPhylipWriter(PhylipWriter):
         for name in (s.id.strip() for s in alignment):
             if any(c in name for c in string.whitespace):
                 raise ValueError("Whitespace not allowed in identifier: %s"
-                        % name)
+                                 % name)
 
         # Calculate a truncation length - maximum length of sequence ID plus a
         # single character for padding
@@ -352,8 +352,7 @@ class SequentialPhylipWriter(SequentialAlignmentWriter):
         for name, record in zip(names, alignment):
             sequence = str(record.seq)
             if "." in sequence:
-                raise ValueError("PHYLIP format no longer allows dots in "
-                                 "sequence")
+                raise ValueError(_NO_DOTS)
             handle.write(name[:id_width].ljust(id_width))
             # Write the entire sequence to one line (see sequential format
             # notes in the SequentialPhylipIterator docstring
@@ -362,14 +361,14 @@ class SequentialPhylipWriter(SequentialAlignmentWriter):
 
 
 class SequentialPhylipIterator(PhylipIterator):
-    """
-    Sequential Phylip format Iterator
+    """Sequential Phylip format Iterator.
 
     The sequential format carries the same restrictions as the normal
     interleaved one, with the difference being that the sequences are listed
     sequentially, each sequence written in its entirety before the start of
-    the next. According to the PHYLIP documentation for input file formatting,
-    newlines and spaces may optionally be entered at any point in the sequences.
+    the next. According to the PHYLIP documentation for input file
+    formatting, newlines and spaces may optionally be entered at any point
+    in the sequences.
     """
 
     _header = None  # for caching lines between __next__ calls
@@ -399,9 +398,10 @@ class SequentialPhylipIterator(PhylipIterator):
 
         assert self._is_header(line)
 
-        if self.records_per_alignment is not None \
-        and self.records_per_alignment != number_of_seqs:
-            raise ValueError("Found %i records in this alignment, told to expect %i"
+        if self.records_per_alignment is not None and \
+                self.records_per_alignment != number_of_seqs:
+            raise ValueError("Found %i records in this alignment, "
+                             "told to expect %i"
                              % (number_of_seqs, self.records_per_alignment))
 
         ids = []
@@ -422,10 +422,11 @@ class SequentialPhylipIterator(PhylipIterator):
                     continue
                 s = "".join([s, line.strip().replace(" ", "")])
                 if len(s) > length_of_seqs:
-                    raise ValueError("Found a record of length %i, should be %i"
-                            % (len(s), length_of_seqs))
+                    raise ValueError("Found a record of length %i, "
+                                     "should be %i"
+                                     % (len(s), length_of_seqs))
             if "." in s:
-                raise ValueError("PHYLIP format no longer allows dots in sequence")
+                raise ValueError(_NO_DOTS)
             seqs.append(s)
         while True:
             # Find other alignments in the file

@@ -1,7 +1,7 @@
 # Copyright 2007 by Tiago Antao <tiagoantao@gmail.com>.  All rights reserved.
 
-"""
-(DEPRECATED)
+"""Async. caching of Simcoal2 results (DEPRECATED).
+
 This module allows to cache Simcoal2 results, and return on the fly
 in case the calculation was done. Async version
 
@@ -11,8 +11,6 @@ This version will run Sincoal2 (if necessary) Asynchrously.
 
 import os
 from . import Cache
-
-__docformat__ = "restructuredtext en"
 
 
 class SimCoalCache(Cache.SimCoalCache):

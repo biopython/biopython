@@ -2,12 +2,9 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""Command line wrapper for the multiple alignment program TCOFFEE.
-"""
+"""Command line wrapper for the multiple alignment program TCOFFEE."""
 
 from __future__ import print_function
-
-__docformat__ = "restructuredtext en"  # Don't just use plain text in epydoc API pages!
 
 from Bio.Application import _Option, _Switch, AbstractCommandline
 
@@ -49,67 +46,62 @@ class TCoffeeCommandline(AbstractCommandline):
 
     def __init__(self, cmd="t_coffee", **kwargs):
         self.parameters = [
-           _Option(["-output", "output"],
-                   """Specify the output type.
-                   One (or more separated by a comma) of:
-                   'clustalw_aln', 'clustalw', 'gcg', 'msf_aln',
-                   'pir_aln', 'fasta_aln', 'phylip', 'pir_seq', 'fasta_seq'
+            _Option(["-output", "output"],
+                    """Specify the output type.
 
-                   Note that of these Biopython's AlignIO module will only
-                   read clustalw, pir, and fasta.
-                   """,  # TODO - Can we read the PHYLIP output?
-                   equate=False),
-           _Option(["-infile", "infile"],
-                   "Specify the input file.",
-                   filename=True,
-                   is_required=True,
-                   equate=False),
-           # Indicates the name of the alignment output by t_coffee. If the
-           # default is used, the alignment is named <your sequences>.aln
-           _Option(["-outfile", "outfile"],
-                   "Specify the output file. Default: <your sequences>.aln",
-                   filename=True,
-                   equate=False),
-           _Switch(["-convert", "convert"],
-                   "Specify you want to perform a file conversion"),
-           _Option(["-type", "type"],
-                   "Specify the type of sequence being aligned",
-                   checker_function=lambda x: x in self.SEQ_TYPES,
-                   equate=False),
-           _Option(["-outorder", "outorder"],
-                   "Specify the order of sequence to output"
-                   "Either 'input', 'aligned' or <filename> of "
-                   "Fasta file with sequence order",
-                   equate=False),
-           _Option(["-matrix", "matrix"],
-                   "Specify the filename of the substitution matrix to use."
-                   "Default: blosum62mt",
-                   equate=False),
-           _Option(["-gapopen", "gapopen"],
-                   "Indicates the penalty applied for opening a gap "
-                   "(negative integer)",
-                   checker_function=lambda x: isinstance(x, int),
-                   equate=False),
-           _Option(["-gapext", "gapext"],
-                   "Indicates the penalty applied for extending a "
-                   "gap. (negative integer)",
-                   checker_function=lambda x: isinstance(x, int),
-                   equate=False),
-           _Switch(["-quiet", "quiet"],
-                   "Turn off log output"),
-           _Option(["-mode", "mode"],
-                   "Specifies a special mode: genome, quickaln, dali, 3dcoffee",
-                   equate=False),
-           ]
+                    One (or more separated by a comma) of:
+                    'clustalw_aln', 'clustalw', 'gcg', 'msf_aln',
+                    'pir_aln', 'fasta_aln', 'phylip', 'pir_seq', 'fasta_seq'
+
+                    Note that of these Biopython's AlignIO module will only
+                    read clustalw, pir, and fasta.
+                    """,  # TODO - Can we read the PHYLIP output?
+                    equate=False),
+            _Option(["-infile", "infile"],
+                    "Specify the input file.",
+                    filename=True,
+                    is_required=True,
+                    equate=False),
+            # Indicates the name of the alignment output by t_coffee. If the
+            # default is used, the alignment is named <your sequences>.aln
+            _Option(["-outfile", "outfile"],
+                    "Specify the output file. Default: <your sequences>.aln",
+                    filename=True,
+                    equate=False),
+            _Switch(["-convert", "convert"],
+                    "Specify you want to perform a file conversion"),
+            _Option(["-type", "type"],
+                    "Specify the type of sequence being aligned",
+                    checker_function=lambda x: x in self.SEQ_TYPES,
+                    equate=False),
+            _Option(["-outorder", "outorder"],
+                    "Specify the order of sequence to output"
+                    "Either 'input', 'aligned' or <filename> of "
+                    "Fasta file with sequence order",
+                    equate=False),
+            _Option(["-matrix", "matrix"],
+                    "Specify the filename of the substitution matrix to use."
+                    "Default: blosum62mt",
+                    equate=False),
+            _Option(["-gapopen", "gapopen"],
+                    "Indicates the penalty applied for opening a gap "
+                    "(negative integer)",
+                    checker_function=lambda x: isinstance(x, int),
+                    equate=False),
+            _Option(["-gapext", "gapext"],
+                    "Indicates the penalty applied for extending a gap "
+                    "(negative integer)",
+                    checker_function=lambda x: isinstance(x, int),
+                    equate=False),
+            _Switch(["-quiet", "quiet"],
+                    "Turn off log output"),
+            _Option(["-mode", "mode"],
+                    "Specifies a special mode: genome, quickaln, dali, 3dcoffee",
+                    equate=False),
+            ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
 
-def _test():
-    """Run the module's doctests (PRIVATE)."""
-    print("Running modules doctests...")
-    import doctest
-    doctest.testmod()
-    print("Done")
-
 if __name__ == "__main__":
-    _test()
+    from Bio._utils import run_doctest
+    run_doctest()

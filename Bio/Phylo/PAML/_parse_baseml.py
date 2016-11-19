@@ -5,7 +5,6 @@
 
 import re
 
-__docformat__ = "restructuredtext en"
 
 line_floats_re = re.compile("-*\d+\.\d+")
 
@@ -34,7 +33,7 @@ def parse_basics(lines, results):
         # Find lnL values.
         # Example match (lnL = -2021.348300):
         # "lnL(ntime: 19  np: 22):  -2021.348300      +0.000000"
-        elif "lnL(ntime:" in line and len(line_floats) > 0:
+        elif "lnL(ntime:" in line and line_floats:
             results["lnL"] = line_floats[0]
             np_res = np_re.match(line)
             if np_res is not None:
@@ -106,7 +105,7 @@ def parse_kappas(lines, parameters):
         #    3.00749"
         if "Parameters (kappa)" in line:
             kappa_found = True
-        elif kappa_found and len(line_floats) > 0:
+        elif kappa_found and line_floats:
             branch_res = re.match("\s(\d+\.\.\d+)", line)
             if branch_res is None:
                 if len(line_floats) == 1:
@@ -118,14 +117,14 @@ def parse_kappas(lines, parameters):
                 if parameters.get("branches") is None:
                     parameters["branches"] = {}
                 branch = branch_res.group(1)
-                if len(line_floats) > 0:
+                if line_floats:
                     parameters["branches"][branch] = \
                         {"t": line_floats[0], "kappa": line_floats[1],
                         "TS": line_floats[2], "TV": line_floats[3]}
         # Find kappa under REV
         # Example match:
         # kappa under REV: 999.00000 145.76453  0.00001  0.00001  0.00001
-        elif "kappa under" in line and len(line_floats) > 0:
+        elif "kappa under" in line and line_floats:
             if len(line_floats) == 1:
                 parameters["kappa"] = line_floats[0]
             else:
@@ -145,12 +144,12 @@ def parse_rates(lines, parameters):
         # Find rate parameters
         # Example match:
         # "Rate parameters:   999.00000 145.59775  0.00001  0.00001  0.00001"
-        if "Rate parameters:" in line and len(line_floats) > 0:
+        if "Rate parameters:" in line and line_floats:
             parameters["rate parameters"] = line_floats
         # Find rates
         # Example match:
         # "rate:   0.90121  0.96051  0.99831  1.03711  1.10287"
-        elif "rate: " in line and len(line_floats) > 0:
+        elif "rate: " in line and line_floats:
             parameters["rates"] = line_floats
         # Find Rate matrix Q & average kappa (REV model)
         # Example match:
@@ -161,25 +160,25 @@ def parse_rates(lines, parameters):
         #   0.000000    0.000000    0.004241   -0.004241
         elif "matrix Q" in line:
             parameters["Q matrix"] = {"matrix": []}
-            if len(line_floats) > 0:
+            if line_floats:
                 parameters["Q matrix"]["average Ts/Tv"] = \
                     line_floats[0]
             Q_mat_found = True
-        elif Q_mat_found and len(line_floats) > 0:
+        elif Q_mat_found and line_floats:
             parameters["Q matrix"]["matrix"].append(line_floats)
             if len(parameters["Q matrix"]["matrix"]) == 4:
                 Q_mat_found = False
         # Find alpha (gamma shape parameter for variable rates)
         # Example match: "alpha (gamma, K=5) = 192.47918"
-        elif "alpha" in line and len(line_floats) > 0:
+        elif "alpha" in line and line_floats:
             parameters["alpha"] = line_floats[0]
         # Find rho for auto-discrete-gamma model
-        elif "rho" in line and len(line_floats) > 0:
+        elif "rho" in line and line_floats:
             parameters["rho"] = line_floats[0]
         elif "transition probabilities" in line:
             parameters["transition probs."] = []
             trans_probs_found = True
-        elif trans_probs_found and len(line_floats) > 0:
+        elif trans_probs_found and line_floats:
             parameters["transition probs."].append(line_floats)
             if len(parameters["transition probs."]) == len(parameters["rates"]):
                 trans_probs_found = False
@@ -199,7 +198,7 @@ def parse_freqs(lines, parameters):
         # Find base frequencies from baseml 4.3
         # Example match:
         # "Base frequencies:   0.20090  0.16306  0.37027  0.26577"
-        if "Base frequencies" in line and len(line_floats) > 0:
+        if "Base frequencies" in line and line_floats:
             base_frequencies = {}
             base_frequencies["T"] = line_floats[0]
             base_frequencies["C"] = line_floats[1]
@@ -214,9 +213,9 @@ def parse_freqs(lines, parameters):
             base_freqs_found = True
         # baseml 4.4 returns to having the base frequencies on the next line
         # but the heading changed
-        elif "Base frequencies" in line and len(line_floats) == 0:
+        elif "Base frequencies" in line and not line_floats:
             base_freqs_found = True
-        elif base_freqs_found and len(line_floats) > 0:
+        elif base_freqs_found and line_floats:
             base_frequencies = {}
             base_frequencies["T"] = line_floats[0]
             base_frequencies["C"] = line_floats[1]
@@ -227,7 +226,7 @@ def parse_freqs(lines, parameters):
         # Find frequencies
         # Example match:
         # "freq:   0.90121  0.96051  0.99831  1.03711  1.10287"
-        elif "freq: " in line and len(line_floats) > 0:
+        elif "freq: " in line and line_floats:
             parameters["rate frequencies"] = line_floats
         # Find branch-specific frequency parameters
         # Example match (note: I think it's possible to have 4 more
@@ -241,7 +240,7 @@ def parse_freqs(lines, parameters):
             parameters["nodes"] = {}
             branch_freqs_found = True
         elif branch_freqs_found:
-            if len(line_floats) > 0:
+            if line_floats:
                 node_res = re.match("Node \#(\d+)", line)
                 node_num = int(node_res.group(1))
                 node = {"root": False}

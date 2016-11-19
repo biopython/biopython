@@ -14,15 +14,8 @@ Author: Thomas Hamelryck.  Additional code by Kristian Rother.
 # Get a Structure object from a PDB file
 from .PDBParser import PDBParser
 
-__docformat__ = "restructuredtext en"
-
-
-try:
-    # Get a Structure object from an mmCIF file
-    from .MMCIFParser import MMCIFParser
-except:
-    # Not compiled I guess
-    pass
+from .MMCIFParser import MMCIFParser
+from .MMCIFParser import FastMMCIFParser
 
 # Download from the PDB
 from .PDBList import PDBList

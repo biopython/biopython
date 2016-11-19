@@ -14,8 +14,6 @@ from Bio.KDTree import KDTree
 from Bio.PDB.PDBExceptions import PDBException
 from Bio.PDB.Selection import unfold_entities, entity_levels, uniqueify
 
-__docformat__ = "restructuredtext en"
-
 
 class NeighborSearch(object):
     """Class for neighbor searching,

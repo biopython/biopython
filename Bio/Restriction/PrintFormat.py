@@ -52,8 +52,6 @@ from Bio._py3k import range
 
 from Bio.Restriction import RanaConfig as RanaConf
 
-__docformat__ = "restructuredtext en"
-
 
 class PrintFormat(object):
     """PrintFormat allow the printing of results of restriction analysis."""
@@ -112,7 +110,7 @@ class PrintFormat(object):
         print(self.make_format(ls, title, nc, s1))
         return
 
-    def make_format(self, cut=[], title='', nc=[], s1=''):
+    def make_format(self, cut=(), title='', nc=(), s1=''):
         """PF.make_format(cut, nc, title, s) -> string
 
         Virtual method.
@@ -134,9 +132,9 @@ class PrintFormat(object):
             enzyme2     :   position1, position2, position3.
 
         Arguments:
-         - ls is a list of cutting enzymes.
+         - ls is a tuple or list of cutting enzymes.
          - title is the title.
-         - nc is a list of non cutting enzymes.
+         - nc is a tuple or list of non cutting enzymes.
          - s1 is the sentence before the non cutting enzymes.
         """
         return self._make_list_only(ls, title) + self._make_nocut_only(nc, s1)
@@ -201,22 +199,21 @@ class PrintFormat(object):
         """
         return title + self._make_nocut_only(nc, s1)
 
-    def _make_nocut_only(self, nc, s1, ls=[], title=''):
+    def _make_nocut_only(self, nc, s1, ls=(), title=''):
         """PF._make_nocut_only(nc, s1) -> string.
 
         return a formatted string of the non cutting enzymes.
 
         Arguments:
-         - nc is a list of non cutting enzymes.
+         - nc is a tuple or list of non cutting enzymes.
          - s1 is the sentence before the non cutting enzymes.
         """
         if not nc:
             return s1
-        nc.sort()
         st = ''
         stringsite = s1 or '\n   Enzymes which do not cut the sequence.\n\n'
         Join = ''.join
-        for key in nc:
+        for key in sorted(nc):
             st = Join((st, str.ljust(str(key), self.NameWidth)))
             if len(st) > self.linesize:
                 stringsite = Join((stringsite, st, '\n'))
@@ -224,7 +221,7 @@ class PrintFormat(object):
         stringsite = Join((stringsite, st, '\n'))
         return stringsite
 
-    def _make_list_only(self, ls, title, nc=[], s1=''):
+    def _make_list_only(self, ls, title, nc=(), s1=''):
         """PF._make_list_only(ls, title) -> string.
 
         return a string of form::
@@ -236,7 +233,7 @@ class PrintFormat(object):
             ...
 
         Arguments:
-         - ls is a list of results.
+         - ls is a tuple or list of results.
          - title is a string.
          - Non cutting enzymes are not included.
         """
@@ -244,7 +241,7 @@ class PrintFormat(object):
             return title
         return self.__next_section(ls, title)
 
-    def _make_number_only(self, ls, title, nc=[], s1=''):
+    def _make_number_only(self, ls, title, nc=(), s1=''):
         """PF._make_number_only(ls, title) -> string.
 
         return a string of form::
@@ -267,6 +264,7 @@ class PrintFormat(object):
         """
         if not ls:
             return title
+        # TODO: Use key to sort!
         ls.sort(lambda x, y: cmp(len(x[1]), len(y[1])))
         iterator = iter(ls)
         cur_len = 1
@@ -282,7 +280,7 @@ class PrintFormat(object):
         title += "\n\nenzymes which cut %i times :\n\n" % cur_len
         return self.__next_section(new_sect, title)
 
-    def _make_map_only(self, ls, title, nc=[], s1=''):
+    def _make_map_only(self, ls, title, nc=(), s1=''):
         """PF._make_map_only(ls, title) -> string.
 
         return a string of form::
@@ -324,7 +322,7 @@ class PrintFormat(object):
                     l.append(key)
                 else:
                     remaining.append(key)
-            mapping = remaining 
+            mapping = remaining
         cutloc[x] = mapping
         sequence = str(self.sequence)
         revsequence = str(self.sequence.complement())
@@ -396,7 +394,7 @@ class PrintFormat(object):
         """FP.__next_section(ls, into) -> string.
 
         Arguments:
-         - ls is a list of tuple (string, [int, int]).
+         - ls is a tuple/list of tuple (string, [int, int]).
          - into is a string to which the formatted ls will be added.
 
         Format ls as a string of lines:
@@ -408,12 +406,11 @@ class PrintFormat(object):
         then add the formatted ls to tot
         return tot.
         """
-        ls.sort()
         indentation = '\n' + (self.NameWidth + self.Indent) * ' '
         linesize = self.linesize - self.MaxSize
         pat = re.compile("([\w,\s()]){1,%i}[,\.]" % linesize)
         several, Join = '', ''.join
-        for name, sites in ls:
+        for name, sites in sorted(ls):
             stringsite = ''
             l = Join((', '.join(str(site) for site in sites), '.'))
             if len(l) > linesize:

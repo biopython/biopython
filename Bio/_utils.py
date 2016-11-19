@@ -10,8 +10,6 @@ from __future__ import print_function
 
 import os
 
-__docformat__ = "restructuredtext en"
-
 
 def iterlen(items):
     """Count the number of items in an iterable.
@@ -82,8 +80,8 @@ def find_test_dir(start_dir=None):
 
     target = os.path.abspath(start_dir)
     while True:
-        if os.path.isdir(os.path.join(target, "Bio")) \
-        and os.path.isdir(os.path.join(target, "Tests")):
+        if os.path.isdir(os.path.join(target, "Bio")) and \
+                os.path.isdir(os.path.join(target, "Tests")):
             # Good, we're in the Biopython root now
             return os.path.abspath(os.path.join(target, "Tests"))
         # Recurse up the tree
@@ -93,7 +91,8 @@ def find_test_dir(start_dir=None):
             # Reached root
             break
         target = new
-    raise ValueError("Not within Biopython source tree: %r" % os.path.abspath(start_dir))
+    raise ValueError("Not within Biopython source tree: %r" %
+                     os.path.abspath(start_dir))
 
 
 def run_doctest(target_dir=None, *args, **kwargs):

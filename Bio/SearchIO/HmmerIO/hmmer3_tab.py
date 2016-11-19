@@ -15,8 +15,6 @@ from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 
 __all__ = ['Hmmer3TabParser', 'Hmmer3TabIndexer', 'Hmmer3TabWriter']
 
-__docformat__ = "restructuredtext en"
-
 
 class Hmmer3TabParser(object):
 

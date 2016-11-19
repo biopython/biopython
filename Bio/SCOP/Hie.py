@@ -15,8 +15,6 @@ The latest HIE file can be found
 "Release 1.55":http://scop.berkeley.edu/parse/dir.hie.scop.txt_1.55 (July 2001)
 """
 
-__docformat__ = "restructuredtext en"
-
 
 class Record(object):
     """Holds information for one node in the SCOP hierarchy.

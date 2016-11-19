@@ -3,7 +3,6 @@
 # Please see the LICENSE file that should have been included as part of this
 # package.
 """Command-line wrapper for the tree inference program PhyML."""
-__docformat__ = "restructuredtext en"
 
 from Bio._py3k import basestring
 
@@ -33,227 +32,223 @@ class PhymlCommandline(AbstractCommandline):
     def __init__(self, cmd='phyml', **kwargs):
         self.parameters = [
             _Option(['-i', '--input', 'input'],
-                """Name of the nucleotide or amino-acid sequence file in PHYLIP
-                format.""",
-                filename=True,
-                is_required=True,
-                equate=False,
-                ),
+                    "PHYLIP format input nucleotide or amino-acid sequence filenam.",
+                    filename=True,
+                    is_required=True,
+                    equate=False,
+                    ),
 
             _Option(['-d', '--datatype', 'datatype'],
-                """Data type is 'nt' for nucleotide (default) and 'aa' for
-                amino-acid sequences.""",
-                checker_function=lambda x: x in ('nt', 'aa'),
-                equate=False,
-                ),
+                    "Datatype 'nt' for nucleotide (default) or 'aa' for amino-acids.",
+                    checker_function=lambda x: x in ('nt', 'aa'),
+                    equate=False,
+                    ),
 
             _Switch(['-q', '--sequential', 'sequential'],
-                "Changes interleaved format (default) to sequential format."
-                ),
+                    "Changes interleaved format (default) to sequential format."
+                    ),
 
             _Option(['-n', '--multiple', 'multiple'],
-                "Number of data sets to analyse (integer).",
-                checker_function=(lambda x:
-                    isinstance(x, int) or x.isdigit()),
-                equate=False,
-                ),
+                    "Number of data sets to analyse (integer).",
+                    checker_function=(lambda x: isinstance(x, int) or x.isdigit()),
+                    equate=False,
+                    ),
 
             _Switch(['-p', '--pars', 'pars'],
-                """Use a minimum parsimony starting tree.
+                    """Use a minimum parsimony starting tree.
 
-                This option is taken into account when the '-u' option is absent
-                and when tree topology modifications are to be done.
-                """
-                ),
+                    This option is taken into account when the '-u' option is absent
+                    and when tree topology modifications are to be done.
+                    """
+                    ),
 
             _Option(['-b', '--bootstrap', 'bootstrap'],
-                """Number of bootstrap replicates, if value is > 0.
+                    """Number of bootstrap replicates, if value is > 0.
 
-                Otherwise:
+                    Otherwise:
 
-                 0: neither approximate likelihood ratio test nor bootstrap
-                    values are computed.
-                -1: approximate likelihood ratio test returning aLRT statistics.
-                -2: approximate likelihood ratio test returning Chi2-based
-                    parametric branch supports.
-                -4: SH-like branch supports alone.
-                """,
-                equate=False,
-                ),
+                    0: neither approximate likelihood ratio test nor bootstrap
+                       values are computed.
+                    -1: approximate likelihood ratio test returning aLRT statistics.
+                    -2: approximate likelihood ratio test returning Chi2-based
+                        parametric branch supports.
+                    -4: SH-like branch supports alone.
+                    """,
+                    equate=False,
+                    ),
 
             _Option(['-m', '--model', 'model'],
-                """Substitution model name.
+                    """Substitution model name.
 
-                Nucleotide-based models:
+                    Nucleotide-based models:
 
-                HKY85 (default) | JC69 | K80 | F81 | F84 | TN93 | GTR | custom
+                    HKY85 (default) | JC69 | K80 | F81 | F84 | TN93 | GTR | custom
 
-                For the custom option, a string of six digits identifies the
-                model. For instance, 000000 corresponds to F81 (or JC69,
-                provided the distribution of nucleotide frequencies is uniform).
-                012345 corresponds to GTR. This option can be used for encoding
-                any model that is a nested within GTR.
+                    For the custom option, a string of six digits identifies the
+                    model. For instance, 000000 corresponds to F81 (or JC69,
+                    provided the distribution of nucleotide frequencies is uniform).
+                    012345 corresponds to GTR. This option can be used for encoding
+                    any model that is a nested within GTR.
 
-                Amino-acid based models:
+                    Amino-acid based models:
 
-                LG (default) | WAG | JTT | MtREV | Dayhoff | DCMut | RtREV |
-                CpREV | VT | Blosum62 | MtMam | MtArt | HIVw | HIVb | custom
-                """,
-                checker_function=(lambda x: x in (
-                    # Nucleotide models:
-                    'HKY85', 'JC69', 'K80', 'F81', 'F84', 'TN93', 'GTR',
-                    # Amino acid models:
-                    'LG', 'WAG', 'JTT', 'MtREV', 'Dayhoff', 'DCMut',
-                    'RtREV', 'CpREV', 'VT', 'Blosum62', 'MtMam', 'MtArt',
-                    'HIVw', 'HIVb')
-                    or isinstance(x, int)),
-                equate=False,
-                ),
+                    LG (default) | WAG | JTT | MtREV | Dayhoff | DCMut | RtREV |
+                    CpREV | VT | Blosum62 | MtMam | MtArt | HIVw | HIVb | custom
+                    """,
+                    checker_function=(lambda x: x in (
+                        # Nucleotide models:
+                        'HKY85', 'JC69', 'K80', 'F81', 'F84', 'TN93', 'GTR',
+                        # Amino acid models:
+                        'LG', 'WAG', 'JTT', 'MtREV', 'Dayhoff', 'DCMut',
+                        'RtREV', 'CpREV', 'VT', 'Blosum62', 'MtMam', 'MtArt',
+                        'HIVw', 'HIVb') or isinstance(x, int)),
+                    equate=False,
+                    ),
 
             _Option(['-f', 'frequencies'],
-                """Character frequencies.
+                    """Character frequencies.
 
-                -f e, m, or "fA fC fG fT"
+                    -f e, m, or "fA fC fG fT"
 
-                e : Empirical frequencies, determined as follows :
+                    e : Empirical frequencies, determined as follows :
 
-                    - Nucleotide sequences: (Empirical) the equilibrium base
-                      frequencies are estimated by counting the occurrence of the
-                      different bases in the alignment.
-                    - Amino-acid sequences: (Empirical) the equilibrium
-                      amino-acid frequencies are estimated by counting the
-                      occurrence of the different amino-acids in the alignment.
+                        - Nucleotide sequences: (Empirical) the equilibrium base
+                          frequencies are estimated by counting the occurrence
+                          of the different bases in the alignment.
+                        - Amino-acid sequences: (Empirical) the equilibrium
+                          amino-acid frequencies are estimated by counting the
+                          occurrence of the different amino-acids in the alignment.
 
-                m : ML/model-based frequencies, determined as follows :
+                    m : ML/model-based frequencies, determined as follows :
 
-                    - Nucleotide sequences: (ML) the equilibrium base
-                      frequencies are estimated using maximum likelihood
-                    - Amino-acid sequences: (Model) the equilibrium amino-acid
-                      frequencies are estimated using the frequencies defined by
-                      the substitution model.
+                        - Nucleotide sequences: (ML) the equilibrium base
+                          frequencies are estimated using maximum likelihood
+                        - Amino-acid sequences: (Model) the equilibrium amino-acid
+                          frequencies are estimated using the frequencies defined by
+                          the substitution model.
 
-                "fA fC fG fT" : only valid for nucleotide-based models.
-                    fA, fC, fG and fT are floating-point numbers that correspond
-                    to the frequencies of A, C, G and T, respectively.
-                """,
-                filename=True,  # ensure ".25 .25 .25 .25" stays quoted
-                equate=False,
-                ),
+                    "fA fC fG fT" : only valid for nucleotide-based models.
+                        fA, fC, fG and fT are floating-point numbers that correspond
+                        to the frequencies of A, C, G and T, respectively.
+                    """,
+                    filename=True,  # ensure ".25 .25 .25 .25" stays quoted
+                    equate=False,
+                    ),
 
             _Option(['-t', '--ts/tv', 'ts_tv_ratio'],
-                """Transition/transversion ratio. (DNA sequences only.)
+                    """Transition/transversion ratio. (DNA sequences only.)
 
-                Can be a fixed positive value (ex:4.0) or e to get the
-                maximum-likelihood estimate.
-                """,
-                equate=False,
-                ),
+                    Can be a fixed positive value (ex:4.0) or e to get the
+                    maximum-likelihood estimate.
+                    """,
+                    equate=False,
+                    ),
 
             _Option(['-v', '--pinv', 'prop_invar'],
-                """Proportion of invariable sites.
+                    """Proportion of invariable sites.
 
-                Can be a fixed value in the range [0,1], or 'e' to get the
-                maximum-likelihood estimate.
-                """,
-                equate=False,
-                ),
+                    Can be a fixed value in the range [0,1], or 'e' to get the
+                    maximum-likelihood estimate.
+                    """,
+                    equate=False,
+                    ),
 
             _Option(['-c', '--nclasses', 'nclasses'],
-                """Number of relative substitution rate categories.
+                    """Number of relative substitution rate categories.
 
-                Default 1. Must be a positive integer.
-                """,
-                equate=False,
-                ),
+                    Default 1. Must be a positive integer.
+                    """,
+                    equate=False,
+                    ),
 
             _Option(['-a', '--alpha', 'alpha'],
-                """Distribution of the gamma distribution shape parameter.
+                    """Distribution of the gamma distribution shape parameter.
 
-                Can be a fixed positive value, or 'e' to get the
-                maximum-likelihood estimate.
-                """,
-                equate=False,
-                ),
+                    Can be a fixed positive value, or 'e' to get the
+                    maximum-likelihood estimate.
+                    """,
+                    equate=False,
+                    ),
 
             _Option(['-s', '--search', 'search'],
-                """Tree topology search operation option.
+                    """Tree topology search operation option.
 
-                Can be one of:
+                    Can be one of:
 
-                    NNI : default, fast
-                    SPR : a bit slower than NNI
-                    BEST : best of NNI and SPR search
-                """,
-                checker_function=lambda x: x in ('NNI', 'SPR', 'BEST'),
-                equate=False,
-                ),
+                        NNI : default, fast
+                        SPR : a bit slower than NNI
+                        BEST : best of NNI and SPR search
+                    """,
+                    checker_function=lambda x: x in ('NNI', 'SPR', 'BEST'),
+                    equate=False,
+                    ),
 
             # alt name: user_tree_file
             _Option(['-u', '--inputtree', 'input_tree'],
-                "Starting tree filename. The tree must be in Newick format.",
-                filename=True,
-                equate=False,
-                ),
+                    "Starting tree filename. The tree must be in Newick format.",
+                    filename=True,
+                    equate=False,
+                    ),
 
             _Option(['-o', 'optimize'],
-                """Specific parameter optimisation.
+                    """Specific parameter optimisation.
 
-                tlr : tree topology (t), branch length (l) and
-                      rate parameters (r) are optimised.
-                tl  : tree topology and branch length are optimised.
-                lr  : branch length and rate parameters are optimised.
-                l   : branch length are optimised.
-                r   : rate parameters are optimised.
-                n   : no parameter is optimised.
-                """,
-                equate=False,
-                ),
+                    tlr : tree topology (t), branch length (l) and
+                          rate parameters (r) are optimised.
+                    tl  : tree topology and branch length are optimised.
+                    lr  : branch length and rate parameters are optimised.
+                    l   : branch length are optimised.
+                    r   : rate parameters are optimised.
+                    n   : no parameter is optimised.
+                    """,
+                    equate=False,
+                    ),
 
             _Switch(['--rand_start', 'rand_start'],
-                """Sets the initial tree to random.
+                    """Sets the initial tree to random.
 
-                Only valid if SPR searches are to be performed.
-                """,
-                ),
+                    Only valid if SPR searches are to be performed.
+                    """,
+                    ),
 
             _Option(['--n_rand_starts', 'n_rand_starts'],
-                """Number of initial random trees to be used.
+                    """Number of initial random trees to be used.
 
-                Only valid if SPR searches are to be performed.
-                """,
-                equate=False,
-                ),
+                    Only valid if SPR searches are to be performed.
+                    """,
+                    equate=False,
+                    ),
 
             _Option(['--r_seed', 'r_seed'],
-                """Seed used to initiate the random number generator.
+                    """Seed used to initiate the random number generator.
 
-                Must be an integer.
-                """,
-                equate=False,
-                ),
+                    Must be an integer.
+                    """,
+                    equate=False,
+                    ),
 
             _Switch(['--print_site_lnl', 'print_site_lnl'],
-                "Print the likelihood for each site in file *_phyml_lk.txt."
-                ),
+                    "Print the likelihood for each site in file *_phyml_lk.txt."
+                    ),
 
             _Switch(['--print_trace', 'print_trace'],
-                """Print each phylogeny explored during the tree search process
-                in file *_phyml_trace.txt."""
-                ),
+                    """Print each phylogeny explored during the tree search process
+                    in file *_phyml_trace.txt."""
+                    ),
 
             _Option(['--run_id', 'run_id'],
-                """Append the given string at the end of each PhyML output file.
+                    """Append the given string at the end of each PhyML output file.
 
-                This option may be useful when running simulations involving
-                PhyML.
-                """,
-                checker_function=lambda x: isinstance(x, basestring),
-                equate=False,
-                ),
+                    This option may be useful when running simulations involving
+                    PhyML.
+                    """,
+                    checker_function=lambda x: isinstance(x, basestring),
+                    equate=False,
+                    ),
 
             # XXX should this always be set to True?
             _Switch(['--quiet', 'quiet'],
-                "No interactive questions (for running in batch mode)."
-                ),
-                ]
+                    "No interactive questions (for running in batch mode)."
+                    ),
+            ]
         AbstractCommandline.__init__(self, cmd, **kwargs)

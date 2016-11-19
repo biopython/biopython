@@ -1,13 +1,14 @@
 #!/usr/bin/env python
-# Created: Wed Jun 21 10:28:14 2000
-# Last changed: Time-stamp: <01/09/04 09:42:06 thomas>
-# thomas@cbs.dtu.dk, http://www.cbs.dtu.dk/thomas
-# File: xbb_widget.py
-
-# Copyright 2000 by Thomas Sicheritz-Ponten.  All rights reserved.
+# Copyright 2000 by Thomas Sicheritz-Ponten.
+# Copyright 2016 by Markus Piotrowski.
+# All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
+
+# Created: Wed Jun 21 10:28:14 2000
+# thomas@cbs.dtu.dk, http://www.cbs.dtu.dk/thomas
+# File: xbb_widget.py
 
 from __future__ import print_function
 
@@ -15,26 +16,22 @@ import re
 import sys
 import time
 
-try:
-    from Tkinter import *  # Python 2
-except ImportError:
-    from tkinter import *  # Python 3
+try:  # Python 2
+    import Tkinter as tk
+    import ttk
+    import tkFileDialog as filedialog
+except ImportError:  # Python 3
+    import tkinter as tk
+    import tkinter.ttk as ttk
+    from tkinter import filedialog
 
-try:
-    import tkFileDialog as filedialog  # Python 2
-except ImportError:
-    from tkinter import filedialog  # Python 3
-
-sys.path.insert(0, '.')
-from xbb_utils import *
+from xbb_utils import NotePad
 from xbb_translations import xbb_translations
 from xbb_blast import BlastIt
 from xbb_search import XDNAsearch
 from xbb_help import xbbtools_help
 from Bio.Data import CodonTable
 from Bio.SeqIO.FastaIO import SimpleFastaParser
-
-__docformat__ = "restructuredtext en"
 
 
 class xbb_widget(object):
@@ -43,25 +40,25 @@ class xbb_widget(object):
         self.parent = parent
 
         self.init_variables()
-        self.init_colors()
-        # master frame
-        self.main_frame = Frame(parent)
-        if not parent:
-            self.init_optionsdb()
-            self.parent = self.main_frame.master
 
-        self.main_frame.pack(fill=BOTH, expand=1)
+        # master frame
+        self.main_frame = ttk.Frame(parent)
+        if not parent:
+            self.parent = self.main_frame.master
+            self.parent.option_add('*tearOff', 0)
+
+        self.main_frame.pack(fill='both', expand=1)
 
         # sequence info (GC%, positins etc.)
-        self.info_frame = Frame(self.main_frame)
-        self.info_frame.pack(fill=BOTH, expand=1)
+        self.info_frame = ttk.Frame(self.main_frame)
+        self.info_frame.pack(fill='both', expand=1)
 
         self.create_menu(self.info_frame)
         self.create_seqinfo(self.info_frame)
 
         # sequence field and fast buttons
-        self.seq_frame = Frame(self.main_frame)
-        self.seq_frame.pack(fill=BOTH, expand=1)
+        self.seq_frame = ttk.Frame(self.main_frame)
+        self.seq_frame.pack(fill='both', expand=1)
 
         self.create_buttons(self.seq_frame)
         self.create_seqfield(self.seq_frame)
@@ -76,72 +73,18 @@ class xbb_widget(object):
             self.translation_tables[table.names[0]] = i
         self.translator = xbb_translations()
 
-    def init_colors(self):
-        self.colorsbg = {'frame': 'brown',
-                         'canvas': 'brown',
-                         'button': 'darkgreen',
-                         'radiobutton': 'darkgrey',
-                         'checkbutton': 'darkgrey',
-                         'label': 'dimgrey',
-                         'text': 'bisque1',
-                         'entry': 'bisque1',
-                         'menu': 'darkgreen',
-                         'menubutton': 'darkgreen',
-                         'seqinfo': 'dimgrey'}
-        self.colorsfg = {'button': 'lightblue',
-                         'radiobutton': 'lightblue',
-                         'checkbutton': 'lightblue',
-                         'label': 'green3',
-                         'text': 'black',
-                         'entry': 'black',
-                         'menu': 'black',
-                         'menubutton': 'lightblue'}
-        self.colorsNT = {'A': 'green',
-                         'C': 'lightblue',
-                         'G': 'orange',
-                         'T': 'tomato'
-                         }
-
-        self.colorsPMWbg = {
-            'ComboBox': 'darkgreen',
-            'ComboBox.Label': 'darkgreen',
-            }
-
-        self.colorsPMWfg = {
-            'ComboBox.Label': 'lightblue',
-            }
-
-    def init_optionsdb(self):
-        # does anybody know a better way of defining colors ?
-        # how would one implement Tk's -class ?
-        tk = self.main_frame.master
-        for k, v in self.colorsbg.items():
-            name = '*' + k[0].upper() + k[1:] + '.background'
-            tk.option_add(name, v)
-
-        for k, v in self.colorsfg.items():
-            name = '*' + k[0].upper() + k[1:] + '.foreground'
-            tk.option_add(name, v)
-
-        for k, v in self.colorsPMWbg.items():
-            name = '*' + k[0].upper() + k[1:] + '.background'
-            tk.option_add(name, v)
-
-        for k, v in self.colorsPMWfg.items():
-            name = '*' + k[0].upper() + k[1:] + '.foreground'
-            tk.option_add(name, v)
-
     def create_menu(self, parent):
-        self.menubar = Menu(self.main_frame)
+        self.menubar = tk.Menu(self.main_frame)
 
         # File menu
-        self.file_menu = Menu(self.menubar)
+        self.file_menu = tk.Menu(self.menubar)
         menu = self.file_menu
+        menu.add_command(label='Open', command=self.open)
         menu.add_command(label='Exit', command=self.exit)
         self.menubar.add_cascade(label="File", menu=self.file_menu)
 
         # Edit menu
-        self.edit_menu = Menu(self.menubar)
+        self.edit_menu = tk.Menu(self.menubar)
         menu = self.edit_menu
         menu.add_command(label='Complement', command=self.complement)
         menu.add_command(label='Antiparallel', command=self.antiparallel)
@@ -151,109 +94,134 @@ class xbb_widget(object):
         self.menubar.add_cascade(label="Edit", menu=self.edit_menu)
 
         # Translation menu
-        self.translation_menu = Menu(self.menubar)
+        self.translation_menu = tk.Menu(self.menubar)
+
+        self.gencode_menu = tk.Menu(self.translation_menu)
+        self.frame_menu = tk.Menu(self.translation_menu)
+
         menu = self.translation_menu
-        menu.add_command(label='+1 Frame', command=self.translate)
-        menu.add_command(label='6 Frames', command=self.gcframe)
+        menu.add_cascade(label="Genetic Codes", menu=self.gencode_menu)
+        menu.add_cascade(label='Frame', menu=self.frame_menu)
+        menu.add_separator()
+        menu.add_command(label='Single frame translation',
+                         command=self.translate)
+        menu.add_command(label='Three frame translation (+)',
+                         command=lambda: self.gcframe(direction='plus'))
+        menu.add_command(label='Three frame translation (-)',
+                         command=lambda: self.gcframe(direction='minus'))
+        menu.add_command(label='Six frame translation', command=self.gcframe)
         menu.add_command(label='Extract to FASTA', command=self.extract)
 
-        self.current_codon_table = StringVar()
+        # Frames submenu
+        self.frame_int = tk.IntVar()
+        menu = self.frame_menu
+        menu.add_radiobutton(label='+1', variable=self.frame_int, value=1)
+        menu.add_radiobutton(label='+2', variable=self.frame_int, value=2)
+        menu.add_radiobutton(label='+3', variable=self.frame_int, value=3)
+        menu.add_radiobutton(label='-1', variable=self.frame_int, value=-1)
+        menu.add_radiobutton(label='-2', variable=self.frame_int, value=-2)
+        menu.add_radiobutton(label='-3', variable=self.frame_int, value=-3)
+        self.frame_int.set(1)
+
+        # Codon tables submenu
+        self.current_codon_table = tk.StringVar()
         self.current_codon_table.set('Standard')
         self.current_codon_table_id = 1
 
-        keys = self.translation_tables.keys()
+        keys = list(self.translation_tables.keys())
         keys.remove('Standard')
         keys.sort()
         keys = ['Standard'] + keys
 
-        self.gencode_menu = Menu(self.translation_menu)
         menu = self.gencode_menu
         for table in keys:
-            menu.add_radiobutton(label=table, command=self.set_codon_table, variable=self.current_codon_table)
-        self.translation_menu.add_cascade(label="Genetic Codes", menu=self.gencode_menu)
+            menu.add_radiobutton(label=table,
+                                 command=self.set_codon_table,
+                                 variable=self.current_codon_table)
 
-        self.menubar.add_cascade(label="Translations", menu=self.translation_menu)
+        self.menubar.add_cascade(label="Translations",
+                                 menu=self.translation_menu)
 
         # Tools menu
-        self.tools_menu = Menu(self.menubar)
+        self.tools_menu = tk.Menu(self.menubar)
         menu = self.tools_menu
         menu.add_command(label='Blast', command=self.blast)
         menu.add_command(label='Stats', command=self.statistics)
         self.menubar.add_cascade(label="Tools", menu=self.tools_menu)
 
         # Help menu
-        self.help_menu = Menu(self.menubar, name='help')
+        self.help_menu = tk.Menu(self.menubar)
         menu = self.help_menu
-        menu.add_command(label='Help', command=xbbtools_help)
+        menu.add_command(label='Help', command=lambda: xbbtools_help())
         self.menubar.add_cascade(label="Help", menu=self.help_menu)
 
         self.parent.config(menu=self.menubar)
 
     def set_codon_table(self):
-        self.current_codon_table_id = self.translation_tables[self.current_codon_table.get()]
+        self.current_codon_table_id = \
+            self.translation_tables[self.current_codon_table.get()]
 
     def exit(self, *args):
         # depending on if this widget is the first created or a child widget
         if self.is_a_master:
-            sys.exit(0)
+            sys.exit()
         else:
             self.main_frame.destroy()
 
     def create_seqinfo(self, parent):
         # all the sequence information in the top labels
-        self.seq_info1 = Frame(parent, relief=RIDGE,
-                               borderwidth=5, height=30)
-        self.seq_info1.pack(fill=BOTH, expand=1, side=TOP)
+        self.seq_info1 = ttk.Frame(parent, relief='ridge',
+                                   borderwidth=5, height=30)
+        self.seq_info1.pack(fill='both', expand=1, side='top')
 
         self.position_ids = {}
         d = self.position_ids
-        d['id'] = Label(self.seq_info1, width=10)
-        d['from_id'] = Label(self.seq_info1, width=10)
-        d['to_id'] = Label(self.seq_info1, width=10)
-        d['length_id'] = Label(self.seq_info1, width=10)
-        d['label'] = Label(self.seq_info1, width=10)
+        d['id'] = ttk.Label(self.seq_info1, width=10)
+        d['from_id'] = ttk.Label(self.seq_info1, width=10)
+        d['to_id'] = ttk.Label(self.seq_info1, width=10)
+        d['length_id'] = ttk.Label(self.seq_info1, width=10)
+        d['label'] = ttk.Label(self.seq_info1, width=10)
         for i in ['id', 'from_id', 'to_id', 'length_id', 'label']:
-            d[i].pack(side=LEFT, fill=BOTH, expand=1)
+            d[i].pack(side='left', fill='both', expand=1)
 
-        self.seq_info2 = Frame(parent, relief=RIDGE,
-                               borderwidth=5, height=30)
-        self.seq_info2.pack(fill=BOTH, expand=1, side=TOP)
+        self.seq_info2 = ttk.Frame(parent, relief='ridge',
+                                   borderwidth=5, height=30)
+        self.seq_info2.pack(fill='both', expand=1, side='top')
         self.statistics_ids = {}
         d = self.statistics_ids
-        d['length_id'] = Label(self.seq_info2, width=10)
-        d['length_id'].pack(side=LEFT, fill=BOTH, expand=1)
+        d['length_id'] = ttk.Label(self.seq_info2, width=10)
+        d['length_id'].pack(side='left', fill='both', expand=1)
         for nt in ['A', 'C', 'G', 'T']:
-            d[nt] = Label(self.seq_info2, width=10, fg=self.colorsNT[nt])
-            d[nt].pack(side=LEFT, fill=BOTH, expand=1)
+            d[nt] = ttk.Label(self.seq_info2, width=10)
+            d[nt].pack(side='left', fill='both', expand=1)
 
     def create_buttons(self, parent):
-        self.button_frame = Frame(parent)
-        self.button_frame.pack(fill=Y, side=LEFT)
+        self.button_frame = ttk.Frame(parent)
+        self.button_frame.pack(fill='y', side='left')
         self.buttons = {}
         for text, func in [('Open', self.open),
                            ('Export', self.export),
                            ('GC Frame', self.gcframe),
                            ('Blast', self.blast),
                            ('Exit', self.exit)]:
-            b_id = Button(self.button_frame, text=text,
-                          command=func, width=7)
-            b_id.pack(side=TOP, pady=5, padx=10)
+            b_id = ttk.Button(self.button_frame, text=text,
+                              command=func, width=7)
+            b_id.pack(side='top', pady=5, padx=10)
             self.buttons[text] = b_id
 
-        f = Frame(self.button_frame)
-        l = Label(f, text='Goto:', bg=self.colorsbg['frame'], fg=self.colorsfg['button'])
-        l.pack(side=LEFT)
+        f = ttk.Frame(self.button_frame)
+        l = ttk.Label(f, text='Goto:')
+        l.pack(side='left')
         l.bind('<Button-1>', self.goto)
 
-        self.goto_entry = Entry(f, width=5)
-        self.goto_entry.pack(side=RIGHT, pady=5, padx=4)
+        self.goto_entry = ttk.Entry(f, width=5)
+        self.goto_entry.pack(side='right', pady=5, padx=4)
         self.goto_entry.bind('<Return>', self.goto)
-        f.pack(side=BOTTOM)
+        f.pack(side='bottom')
 
     def create_seqfield(self, parent):
-        self.sequence_id = Text(parent, wrap='char',
-                                width=self.seqwidth)
-        self.sequence_id.pack(fill=BOTH, expand=1, side=RIGHT)
+        self.sequence_id = tk.Text(parent, wrap='char', width=self.seqwidth)
+        self.sequence_id.pack(fill='both', expand=1, side='right')
 
     def create_bindings(self):
         self.sequence_id.bind('<Motion>', self.position)
@@ -264,12 +232,11 @@ class xbb_widget(object):
         self.sequence_id.bind('<Double-Button-1>', self.select_all)
 
     def zero(self, event):
-        p = self.position_ids
         for i in ['from_id', 'to_id', 'length_id']:
             self.position_ids[i].configure(text='')
 
     def get_length(self):
-        self.sequence_length = len(self.sequence_id.get(1.0, END))
+        self.sequence_length = len(self.sequence_id.get(1.0, 'end'))
         return self.sequence_length
 
     def select_all(self, event):
@@ -283,32 +250,25 @@ class xbb_widget(object):
         self.count_selection(None)
 
     def get_selection_or_sequence(self):
-        w = self.sequence_id
         seq = self.get_selection()
         if not len(seq):
-            seq = self.sequence_id.get(1.0, END)
+            seq = self.sequence_id.get(1.0, 'end')
 
         seq = re.sub('[^A-Z]', '', seq)
-        return seq
+        return str(seq)
 
     def get_selection(self):
         w = self.sequence_id
-        # print(w.selection_own())
-        # w.selection_own()
         try:
             return w.selection_get()
-            # return string.upper(w.get(sel.first, sel.last))
-        except Exception:  # TODO - Which exceptions?
+        except tk.TclError:  # Nothing is selected
             return ''
 
     def get_self_selection(self):
         w = self.sequence_id
-        # w.selection_own()
         try:
             return w.selection_get()
-            # return string.upper(w.get(sel.first, sel.last))
-            # return string.upper(w.selection_own_get())
-        except Exception:  # TODO - Which exceptions?
+        except tk.TclError:  # Nothing is selected
             return ''
 
     def count_selection(self, event):
@@ -323,12 +283,13 @@ class xbb_widget(object):
             self.position_ids['to_id'].configure(text='Stop:%d' % b)
             self.position_ids['length_id'].configure(text='%d nt' % length)
 
-            self.statistics_ids['length_id'].configure(text='Length=%d' % length)
+            self.statistics_ids['length_id'].configure(text='Length=%d'
+                                                       % length)
             seq = self.get_self_selection()
             for nt in ['A', 'C', 'G', 'T']:
                 n = seq.count(nt)
                 self.statistics_ids[nt].configure(text='%s=%d' % (nt, n))
-        except Exception:  # TODO - Which exceptions?
+        except tk.TclError:  # Problem with tag 'sel' when actually selecting
             pass
 
     def position(self, event):
@@ -348,17 +309,17 @@ class xbb_widget(object):
 
     def insert_sequence(self, name_sequence):
         (name, sequence) = name_sequence
-        self.sequence_id.delete(0.0, END)
-        self.sequence_id.insert(END, sequence.upper())
+        self.sequence_id.delete(0.0, 'end')
+        self.sequence_id.insert('end', sequence.upper())
         self.fix_sequence()
         self.update_label(name)
 
     def fix_sequence(self):
-        seq = self.sequence_id.get(1.0, END)
+        seq = str(self.sequence_id.get(1.0, 'end'))
         seq = seq.upper()
         seq = re.sub('[^A-Z]', '', seq)
-        self.sequence_id.delete(0.0, END)
-        self.sequence_id.insert(END, seq)
+        self.sequence_id.delete(0.0, 'end')
+        self.sequence_id.insert('end', seq)
 
     def update_label(self, header):
         name = header.split(' ')[0]
@@ -366,35 +327,45 @@ class xbb_widget(object):
         self.position_ids['label'].configure(text=name)
 
     def export(self):
-        seq = self.get_self_selection()
-        print("%s %i" % (seq, len(seq)))
-
-    def gcframe(self):
+        """Export selected text to new text window."""
         seq = self.get_selection_or_sequence()
         if not seq:
             return
         np = NotePad()
         tid = np.text_id()
-        tid.insert(END, self.translator.gcframe(seq, self.current_codon_table_id))
+        tid.insert('end', seq)
 
-    def translate(self, frame=1):
+    def gcframe(self, direction='both'):
         seq = self.get_selection_or_sequence()
         if not seq:
             return
         np = NotePad()
         tid = np.text_id()
-        tid.insert(END, self.translator.frame_nice(seq, frame, self.current_codon_table_id))
+        tid.insert('end',
+                   self.translator.gcframe(seq, self.current_codon_table_id,
+                                           direction))
 
-    def extract(self, frame=1):
+    def translate(self):
         seq = self.get_selection_or_sequence()
+        frame = self.frame_int.get()
+        if not seq:
+            return
+        np = NotePad()
+        tid = np.text_id()
+        tid.insert('end',
+                   self.translator.frame_nice(seq, frame,
+                                              self.current_codon_table_id))
+
+    def extract(self):
+        seq = self.get_selection_or_sequence()
+        frame = self.frame_int.get()
         if not seq:
             return
         aa_seq = self.translator.frame(seq, frame, self.current_codon_table_id)
-        print('>%s<' % aa_seq)
         aa_seq = re.sub('(.{50})', '\\1\n', str(aa_seq))
         np = NotePad()
         tid = np.text_id()
-        tid.insert(END, '>frame%d\n%s' % (frame, aa_seq))
+        tid.insert('end', '>frame%d\n%s' % (frame, aa_seq))
 
     def statistics(self):
         seq = self.get_selection_or_sequence()
@@ -412,15 +383,11 @@ class xbb_widget(object):
         np = NotePad()
         tid = np.text_id()
 
-        tid.insert(END, """%s
-
-Length = %d
-A=%d C=%d G=%d T=%d other=%d
-GC=%f
-
-""" % (time.strftime('%y %b %d, %X\n', time.localtime(time.time())),
-               len(seq), aa['A'], aa['C'], aa['G'], aa['T'], aa['N'], GC)
-                   )
+        tid.insert('end', "%s\n\n" %
+                   (time.strftime('%y %b %d, %X\n',
+                                  time.localtime(time.time()))) +
+                   "Length = %d\nA=%d C=%d G=%d T=%d other=%d\nGC=%f\n\n" %
+                   (len(seq), aa['A'], aa['C'], aa['G'], aa['T'], aa['N'], GC))
 
     def blast(self):
         seq = self.get_selection_or_sequence()
@@ -430,9 +397,9 @@ GC=%f
         w = self.sequence_id
         w.selection_own()
         try:
-            start, stop = w.tag_ranges(SEL)
-        except Exception:  # TODO - Which exceptions?
-            start, stop = 1.0, self.sequence_id.index(END)
+            start, stop = w.tag_ranges('sel')
+        except ValueError:  # Nothing selected
+            start, stop = 1.0, self.sequence_id.index('end')
 
         seq = w.get(start, stop)
         seq = list(re.sub('[^A-Z]', '', seq))
@@ -441,50 +408,50 @@ GC=%f
 
         w.delete(start, stop)
         w.insert(start, seq)
-        w.tag_remove(SEL, 1.0, start)
-        w.tag_add(SEL, start, stop)
-        w.tag_remove(SEL, stop, END)
+        w.tag_remove('sel', 1.0, start)
+        w.tag_add('sel', start, stop)
+        w.tag_remove('sel', stop, 'end')
 
     def complement(self):
         w = self.sequence_id
         w.selection_own()
         try:
-            start, stop = w.tag_ranges(SEL)
-        except Exception:  # Which exceptions?
-            start, stop = 1.0, self.sequence_id.index(END)
+            start, stop = w.tag_ranges('sel')
+        except ValueError:  # Nothing selected
+            start, stop = 1.0, self.sequence_id.index('end')
 
-        seq = w.get(start, stop)
+        seq = str(w.get(start, stop))
+
         seq = re.sub('[^A-Z]', '', seq)
 
-        # print('seq >%s<' % seq)
         complementary = self.translator.complement(seq)
         w.delete(start, stop)
         w.insert(start, complementary)
-        w.tag_remove(SEL, 1.0, start)
-        w.tag_add(SEL, start, stop)
-        w.tag_remove(SEL, stop, END)
+        w.tag_remove('sel', 1.0, start)
+        w.tag_add('sel', start, stop)
+        w.tag_remove('sel', stop, 'end')
 
     def antiparallel(self):
         w = self.sequence_id
         w.selection_own()
         try:
-            start, stop = w.tag_ranges(SEL)
-        except Exception:  # TODO - Which exceptions?
-            start, stop = 1.0, self.sequence_id.index(END)
+            start, stop = w.tag_ranges('sel')
+        except tk.TclError:
+            start, stop = 1.0, self.sequence_id.index('end')
 
-        seq = w.get(start, stop)
+        seq = str(w.get(start, stop))
         seq = re.sub('[^A-Z]', '', seq)
 
         antip = self.translator.antiparallel(seq)
         w.delete(start, stop)
         w.insert(start, antip)
-        w.tag_remove(SEL, 1.0, start)
-        w.tag_add(SEL, start, stop)
-        w.tag_remove(SEL, stop, END)
+        w.tag_remove('sel', 1.0, start)
+        w.tag_add('sel', start, stop)
+        w.tag_remove('sel', stop, 'end')
 
     def search(self):
         seq = self.get_selection_or_sequence()
-        searcher = XDNAsearch(seq, master=self.sequence_id, highlight=1)
+        XDNAsearch(seq, master=self.sequence_id, highlight=1)
 
     def goto(self, *args):
         pos = self.goto_entry.get()
@@ -497,11 +464,11 @@ GC=%f
                 stop = int(stop)
                 self.mark(start, stop)
                 return
-            except Exception:  # TODO - which exceptions?
+            except ValueError:
                 import traceback
                 traceback.print_exc()
 
-                self.goto_entry.delete(0, END)
+                self.goto_entry.delete(0, 'end')
                 return
 
         self.sequence_id.focus()
@@ -510,9 +477,10 @@ GC=%f
     def mark(self, start, stop):
         self.sequence_id.focus()
         self.sequence_id.mark_set('insert', '1.%d' % start)
-        self.sequence_id.tag_add(SEL, '1.%d' % start, '1.%d' % stop)
+        self.sequence_id.tag_add('sel', '1.%d' % start, '1.%d' % stop)
 
 if __name__ == '__main__':
+    win = tk.Tk()
     xbbtools = xbb_widget()
-    xbbtools.main_frame.option_add('*frame.background', 'dimgrey')
     xbbtools.open('test.fas')
+    win.mainloop()

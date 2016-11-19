@@ -39,8 +39,6 @@ go away.
 """
 import sys
 
-__docformat__ = "restructuredtext en"
-
 
 if sys.version_info[0] >= 3:
     # Code for Python 3
@@ -160,9 +158,6 @@ if sys.version_info[0] >= 3:
     # This is to avoid the deprecation warning from open(filename, "rU")
     _universal_read_mode = "r"  # text mode does universal new lines
 
-    # On Python 3, can depend on OrderedDict being present:
-    from collections import OrderedDict
-
     # On Python 3, this will be a unicode StringIO
     from io import StringIO
 
@@ -213,17 +208,6 @@ else:
     # This private variable is set to "r" on Python 3 for text
     # mode which include universal readlines mode
     _universal_read_mode = "rU"
-
-    try:
-        # Present on Python 2.7
-        from collections import OrderedDict
-    except ImportError:
-        try:
-            # Raymond Hettinger's backport available on PyPI
-            from ordereddict import OrderedDict
-        except ImportError:
-            # Use our bundled copy instead
-            from ._ordereddict import OrderedDict
 
     # On Python 2 this will be a (bytes) string based handle.
     # Note this doesn't work as it is unicode based:

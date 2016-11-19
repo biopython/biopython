@@ -14,8 +14,6 @@ import random
 
 from Bio._py3k import range
 
-__docformat__ = "restructuredtext en"
-
 
 def logistic_function(value):
     """Transform the value with the logistic function.

@@ -5,12 +5,11 @@
 import collections
 import warnings
 
+from Bio import BiopythonWarning
 from Bio.Alphabet import generic_protein
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Data.SCOPData import protein_letters_3to1
-
-__docformat__ = "restructuredtext en"
 
 
 def PdbSeqresIterator(handle):
@@ -184,7 +183,8 @@ def PdbAtomIterator(handle):
     if firstline.startswith("HEADER"):
         pdb_id = firstline[62:66]
     else:
-        warnings.warn("First line is not a 'HEADER'; can't determine PDB ID")
+        warnings.warn("First line is not a 'HEADER'; can't determine PDB ID. "
+                      "Line: %r" % firstline, BiopythonWarning)
         pdb_id = '????'
 
     struct = PDBParser().get_structure(pdb_id, undo_handle)
@@ -193,7 +193,7 @@ def PdbAtomIterator(handle):
         # HETATM mod. res. policy: remove mod if in sequence, else discard
         residues = [res for res in chain.get_unpacked_list()
                     if seq1(res.get_resname().upper(),
-                        custom_map=protein_letters_3to1) != "X"]
+                            custom_map=protein_letters_3to1) != "X"]
         if not residues:
             continue
         # Identify missing residues in the structure
@@ -215,7 +215,7 @@ def PdbAtomIterator(handle):
                     res_out.append('X' * gapsize)
                 else:
                     warnings.warn("Ignoring out-of-order residues after a gap",
-                                  UserWarning)
+                                  BiopythonWarning)
                     # Keep the normal part, drop the out-of-order segment
                     # (presumably modified or hetatm residues, e.g. 3BEG)
                     res_out.extend(restype(x) for x in residues[prev_idx:i])
@@ -233,9 +233,7 @@ def PdbAtomIterator(handle):
         #     id = ("Model%s|" % str(model.id)) + id
 
         record = SeqRecord(Seq(''.join(res_out), generic_protein),
-                id=record_id,
-                description=record_id,
-                )
+                           id=record_id, description=record_id)
 
         # The PDB header was loaded as a dictionary, so let's reuse it all
         record.annotations = struct.header.copy()

@@ -766,7 +766,7 @@ class TestCluster(unittest.TestCase):
                             [5.1, 5.5],
                             [5.0, 5.5],
                             [5.1, 5.2],
-                           ])
+                            ])
 
         mean, coordinates, pc, eigenvalues = pca(data)
         self.assertAlmostEqual(mean[0], 3.5461538461538464)

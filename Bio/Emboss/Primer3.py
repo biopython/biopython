@@ -17,7 +17,6 @@ function. If you ran eprimer3 with multiple targets, use the parse
 function to iterate over the retsults.
 """
 
-__docformat__ = "restructuredtext en"
 
 # --- primer3
 
@@ -62,7 +61,7 @@ class Primers(object):
         - internal_length
         - internal_tm
         - internal_gc
-    
+
     """
     def __init__(self):
         self.size = 0

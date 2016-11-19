@@ -18,8 +18,6 @@ import random
 import sys
 from . import Nodes
 
-__docformat__ = "restructuredtext en"
-
 
 PRECISION_BRANCHLENGTH = 6
 PRECISION_SUPPORT = 6
@@ -102,14 +100,20 @@ class Tree(Nodes.Chain):
             subtrees = []
             plevel = 0
             prev = 1
+            incomment = False
             for p in range(1, closing):
-                if tree[p] == '(':
+                if not incomment and tree[p] == '(':
                     plevel += 1
-                elif tree[p] == ')':
+                elif not incomment and tree[p] == ')':
                     plevel -= 1
-                elif tree[p] == ',' and plevel == 0:
+                elif tree[p:].startswith(NODECOMMENT_START):
+                    incomment = True
+                elif incomment and tree[p] == NODECOMMENT_END:
+                    incomment = False
+                elif not incomment and tree[p] == ',' and plevel == 0:
                     subtrees.append(tree[prev:p])
                     prev = p + 1
+
             subtrees.append(tree[prev:closing])
             subclades = [self._parse(subtree) for subtree in subtrees]
             return [subclades, val]
@@ -154,7 +158,6 @@ class Tree(Nodes.Chain):
 
     def _get_values(self, text):
         """Extracts values (support/branchlength) from xx[:yyy], xx."""
-
         if text == '':
             return None
         nodecomment = None
@@ -560,7 +563,9 @@ class Tree(Nodes.Chain):
         print('\n'.join('%3s %32s %15s %15s %8s %10s %8s %20s' % l for l in table))
         print('\nRoot:  %s' % self.root)
 
-    def to_string(self, support_as_branchlengths=False, branchlengths_only=False, plain=True, plain_newick=False, ladderize=None, ignore_comments=True):
+    def to_string(self, support_as_branchlengths=False,
+                  branchlengths_only=False, plain=True, plain_newick=False,
+                  ladderize=None, ignore_comments=True):
         """Return a paup compatible tree line."""
         # if there's a conflict in the arguments, we override plain=True
         if support_as_branchlengths or branchlengths_only:

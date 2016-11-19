@@ -1,5 +1,5 @@
 # Copyright 2000 by Jeffrey Chang, Brad Chapman.  All rights reserved.
-# Copyright 2006-2013 by Peter Cock.  All rights reserved.
+# Copyright 2006-2016 by Peter Cock.  All rights reserved.
 #
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -13,7 +13,7 @@ SeqRecord and SeqFeature objects (see the Biopython tutorial for details).
 
 Using Bio.GenBank directly to parse GenBank files is only useful if you want
 to obtain GenBank-specific Record objects, which is a much closer
-representation to the raw file contents that the SeqRecord alternative from
+representation to the raw file contents than the SeqRecord alternative from
 the FeatureParser (used in Bio.SeqIO).
 
 To use the Bio.GenBank parser, there are two helper functions:
@@ -53,7 +53,6 @@ from Bio import SeqFeature
 from .utils import FeatureValueCleaner
 from .Scanner import GenBankScanner
 
-__docformat__ = "restructuredtext en"
 
 # Constants used to parse GenBank header lines
 GENBANK_INDENT = 12
@@ -97,7 +96,7 @@ _simple_location = r"\d+\.\.\d+"
 _re_simple_location = re.compile(r"^%s$" % _simple_location)
 _re_simple_compound = re.compile(r"^(join|order|bond)\(%s(,%s)*\)$"
                                  % (_simple_location, _simple_location))
-_complex_location = r"([a-zA-Z][a-zA-Z0-9_\.]*[a-zA-Z0-9]?\:)?(%s|%s|%s|%s|%s)" \
+_complex_location = r"([a-zA-Z][a-zA-Z0-9_\.\|]*[a-zA-Z0-9]?\:)?(%s|%s|%s|%s|%s)" \
                     % (_pair_location, _solo_location, _between_location,
                        _within_location, _oneof_location)
 _re_complex_location = re.compile(r"^%s$" % _complex_location)
@@ -275,7 +274,17 @@ def _loc(loc_str, expected_seq_length, strand):
     Traceback (most recent call last):
        ...
     ValueError: Invalid between location '123^456'
+
+    You can optionally provide a reference name:
+
+    >>> _loc("AL391218.9:105173..108462", 2000000, 1)
+    FeatureLocation(ExactPosition(105172), ExactPosition(108462), strand=1, ref='AL391218.9')
+
     """
+    if ":" in loc_str:
+        ref, loc_str = loc_str.split(":")
+    else:
+        ref = None
     try:
         s, e = loc_str.split("..")
     except ValueError:
@@ -295,12 +304,12 @@ def _loc(loc_str, expected_seq_length, strand):
                 pos = _pos(s)
             else:
                 raise ValueError("Invalid between location %s" % repr(loc_str))
-            return SeqFeature.FeatureLocation(pos, pos, strand)
+            return SeqFeature.FeatureLocation(pos, pos, strand, ref=ref)
         else:
             # e.g. "123"
             s = loc_str
             e = loc_str
-    return SeqFeature.FeatureLocation(_pos(s, -1), _pos(e), strand)
+    return SeqFeature.FeatureLocation(_pos(s, -1), _pos(e), strand, ref=ref)
 
 
 def _split_compound_loc(compound_loc):
@@ -651,7 +660,12 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         self._seq_type = type.strip()
 
     def data_file_division(self, division):
+        # Semi-obsolete, see topology and molecule_type
         self.data.annotations['data_file_division'] = division
+
+    def topology(self, topology):
+        if topology:
+            self.data.annotations['topology'] = topology
 
     def date(self, submit_date):
         self.data.annotations['date'] = submit_date
@@ -1014,6 +1028,13 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                                                               strand)
             return
 
+        if ",)" in location_line:
+            import warnings
+            from Bio import BiopythonParserWarning
+            warnings.warn("Dropping trailing comma in malformed feature location",
+                          BiopythonParserWarning)
+            location_line = location_line.replace(",)", ")")
+
         if _solo_bond.search(location_line):
             # e.g. bond(196)
             # e.g. join(bond(284),bond(305),bond(309),bond(305))
@@ -1030,43 +1051,39 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             i = location_line.find("(")
             # cur_feature.location_operator = location_line[:i]
             # we can split on the comma because these are simple locations
-            sub_features = cur_feature.sub_features
+            locs = []
             for part in location_line[i + 1:-1].split(","):
                 s, e = part.split("..")
-                f = SeqFeature.SeqFeature(SeqFeature.FeatureLocation(int(s) - 1,
-                                                                     int(e),
-                                                                     strand),
-                        location_operator=cur_feature.location_operator,
-                        type=cur_feature.type)
-                sub_features.append(f)
-            # s = cur_feature.sub_features[0].location.start
-            # e = cur_feature.sub_features[-1].location.end
-            # cur_feature.location = SeqFeature.FeatureLocation(s,e, strand)
-            # TODO - Remove use of sub_features
+                locs.append(SeqFeature.FeatureLocation(int(s) - 1,
+                                                       int(e),
+                                                       strand))
+            if len(locs) < 2:
+                # The CompoundLocation will raise a ValueError here!
+                import warnings
+                from Bio import BiopythonParserWarning
+                warnings.warn("Should have at least 2 parts for compound location",
+                              BiopythonParserWarning)
+                cur_feature.location = None
+                return
             if strand == -1:
-                cur_feature.location = SeqFeature.CompoundLocation([f.location for f in sub_features[::-1]],
+                cur_feature.location = SeqFeature.CompoundLocation(locs[::-1],
                                                                    operator=location_line[:i])
             else:
-                cur_feature.location = SeqFeature.CompoundLocation([f.location for f in sub_features],
+                cur_feature.location = SeqFeature.CompoundLocation(locs,
                                                                    operator=location_line[:i])
             return
 
         # Handle the general case with more complex regular expressions
         if _re_complex_location.match(location_line):
             # e.g. "AL121804.2:41..610"
-            if ":" in location_line:
-                location_ref, location_line = location_line.split(":")
-                cur_feature.location = _loc(location_line, self._expected_size, strand)
-                cur_feature.location.ref = location_ref
-            else:
-                cur_feature.location = _loc(location_line, self._expected_size, strand)
+            cur_feature.location = _loc(location_line, self._expected_size, strand)
             return
 
         if _re_complex_compound.match(location_line):
             i = location_line.find("(")
             # cur_feature.location_operator = location_line[:i]
             # Can't split on the comma because of positions like one-of(1,2,3)
-            sub_features = cur_feature.sub_features
+            locs = []
             for part in _split_compound_loc(location_line[i + 1:-1]):
                 if part.startswith("complement("):
                     assert part[-1] == ")"
@@ -1075,39 +1092,29 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                     part_strand = -1
                 else:
                     part_strand = strand
-                if ":" in part:
-                    ref, part = part.split(":")
-                else:
-                    ref = None
                 try:
                     loc = _loc(part, self._expected_size, part_strand)
                 except ValueError as err:
                     print(location_line)
                     print(part)
                     raise err
-                f = SeqFeature.SeqFeature(location=loc, ref=ref,
-                        location_operator=cur_feature.location_operator,
-                        type=cur_feature.type)
-                sub_features.append(f)
+                locs.append(loc)
             # Historically a join on the reverse strand has been represented
             # in Biopython with both the parent SeqFeature and its children
             # (the exons for a CDS) all given a strand of -1.  Likewise, for
             # a join feature on the forward strand they all have strand +1.
             # However, we must also consider evil mixed strand examples like
             # this, join(complement(69611..69724),139856..140087,140625..140650)
-            #
-            # TODO - Remove use of sub_features
-            strands = set(sf.strand for sf in sub_features)
             if strand == -1:
                 # Whole thing was wrapped in complement(...)
-                for sf in sub_features:
-                    assert sf.strand == -1
+                for l in locs:
+                    assert l.strand == -1
                 # Reverse the backwards order used in GenBank files
                 # with complement(join(...))
-                cur_feature.location = SeqFeature.CompoundLocation([f.location for f in sub_features[::-1]],
+                cur_feature.location = SeqFeature.CompoundLocation(locs[::-1],
                                                                    operator=location_line[:i])
             else:
-                cur_feature.location = SeqFeature.CompoundLocation([f.location for f in sub_features],
+                cur_feature.location = SeqFeature.CompoundLocation(locs,
                                                                    operator=location_line[:i])
             return
         # Not recognised

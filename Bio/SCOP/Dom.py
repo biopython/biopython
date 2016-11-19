@@ -17,8 +17,6 @@ The DOM files for older releases can be found
 
 from .Residues import Residues
 
-__docformat__ = "restructuredtext en"
-
 
 class Record(object):
     """Holds information for one SCOP domain.

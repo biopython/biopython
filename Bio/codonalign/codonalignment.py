@@ -10,8 +10,6 @@ the core class to deal with codon alignment in biopython.
 """
 from __future__ import division, print_function
 
-__docformat__ = "restructuredtext en"  # Don't just use plain text in epydoc API pages!
-
 from Bio.Align import MultipleSeqAlignment
 from Bio.SeqRecord import SeqRecord
 
@@ -182,7 +180,7 @@ def mktest(codon_alns, codon_table=default_codon_table, alpha=0.05):
     Return the p-value of test result
     """
     import copy
-    if not all([isinstance(i, CodonAlignment) for i in codon_alns]):
+    if not all(isinstance(i, CodonAlignment) for i in codon_alns):
         raise TypeError("mktest accepts CodonAlignment list.")
     codon_aln_len = [i.get_alignment_length() for i in codon_alns]
     if len(set(codon_aln_len)) != 1:
@@ -203,7 +201,7 @@ def mktest(codon_alns, codon_table=default_codon_table, alpha=0.05):
     for i in range(codon_num):
         uniq_codons = []
         for j in codon_lst:
-            uniq_codon = set([k[i] for k in j])
+            uniq_codon = set(k[i] for k in j)
             uniq_codons.append(uniq_codon)
         codon_set.append(uniq_codons)
     syn_fix, nonsyn_fix, syn_poly, nonsyn_poly = 0, 0, 0, 0
@@ -212,7 +210,7 @@ def mktest(codon_alns, codon_table=default_codon_table, alpha=0.05):
         all_codon = i[0].union(*i[1:])
         if '-' in all_codon or len(all_codon) == 1:
             continue
-        fix_or_not = all([len(k) == 1 for k in i])
+        fix_or_not = all(len(k) == 1 for k in i)
         if fix_or_not:
             # fixed
             nonsyn_subgraph = _get_subgraph(all_codon, nonsyn_G)
@@ -419,7 +417,7 @@ def _G_test(site_counts):
 
         - site_counts - [syn_fix, nonsyn_fix, syn_poly, nonsyn_poly]
 
-    >>> round(_G_test([17, 7, 42, 2]), 7)
+    >>> print("%0.6f" % _G_test([17, 7, 42, 2]))
     0.004924
     """
     # TODO:

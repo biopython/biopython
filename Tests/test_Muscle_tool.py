@@ -89,8 +89,8 @@ class MuscleApplication(unittest.TestCase):
         cmdline = MuscleCommandline(muscle_exe,
                                     input=self.infile1,
                                     out=self.outfile1)
-        self.assertEqual(str(cmdline), _escape_filename(muscle_exe)
-                         + ' -in Fasta/f002 -out "Fasta/temp align out1.fa"')
+        self.assertEqual(str(cmdline), _escape_filename(muscle_exe) +
+                         ' -in Fasta/f002 -out "Fasta/temp align out1.fa"')
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         output, error = cmdline()
         self.assertEqual(output, "")

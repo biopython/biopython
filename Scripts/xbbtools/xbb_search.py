@@ -1,29 +1,31 @@
 #!/usr/bin/env python
+# Copyright 2000 by Thomas Sicheritz-Ponten.
+# Copyrigth 2016 by Markus Piotrowski.
+# All rights reserved.
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+
 # Created: Sun Dec  3 13:38:52 2000
-# Last changed: Time-stamp: <01/09/04 09:51:21 thomas>
 # thomas@cbs.dtu.dk, http://www.cbs.dtu.dk/thomas
 # File: xbb_search.py
 
-import os
 import re
-import sys
 
-sys.path.insert(0, '.')
 
-try:
-    from Tkinter import *  # Python 2
-except ImportError:
-    from tkinter import *  # Python 3
-
-try:
-    import tkColorChooser as colorchooser  # Python 2
-except ImportError:
-    from tkinter import colorchooser  # Python 3
+try:  # Python 2
+    import Tkinter as tk
+    import ttk
+    import tkColorChooser as colorchooser
+except ImportError:  # Python 3
+    import tkinter as tk
+    import tkinter.ttk as ttk
+    from tkinter import colorchooser
 
 from Bio.Data.IUPACData import ambiguous_dna_values
 from Bio.Seq import reverse_complement
 
-__docformat__ = "restructuredtext en"
+import xbb_widget
 
 
 class DNAsearch(object):
@@ -86,7 +88,7 @@ class DNAsearch(object):
         return positions
 
 
-class XDNAsearch(Toplevel, DNAsearch):
+class XDNAsearch(tk.Toplevel, DNAsearch):
     def __init__(self, seq='', master=None, highlight=0):
         DNAsearch.__init__(self)
         self.master = master
@@ -97,47 +99,46 @@ class XDNAsearch(Toplevel, DNAsearch):
         self.cur_pos = 0
 
     def init_graphics(self):
-        Toplevel.__init__(self, self.master)
-        self.frame = Frame(self)
-        self.frame.pack(fill=BOTH, expand=1)
+        tk.Toplevel.__init__(self, self.master)
+        self.frame = ttk.Frame(self)
+        self.frame.pack(fill=tk.BOTH, expand=1)
 
-        self.search_entry = Entry(self.frame)
-        self.search_entry.pack(fill=BOTH, expand=1)
+        self.search_entry = ttk.Entry(self.frame)
+        self.search_entry.pack(fill=tk.BOTH, expand=1)
 
-        f2 = Frame(self.frame)
-        f2.pack(side=TOP, fill=BOTH, expand=1)
+        f2 = ttk.Frame(self.frame)
+        f2.pack(side=tk.TOP, fill=tk.BOTH, expand=1)
 
         f = f2
-        self.forward = Button(f, text='Search +', command=self.do_search)
-        self.forward.pack(side=LEFT)
-        self.forward = Button(f, text='Search -',
-                              command=lambda x=self.do_search: x(other_strand=1))
-        self.forward.pack(side=LEFT)
-        self.cancel = Button(f, text='Cancel', command=self.exit)
-        self.cancel.pack(side=LEFT)
+        self.forward = ttk.Button(f, text='Search +', command=self.do_search)
+        self.forward.pack(side=tk.LEFT)
+        self.forward = ttk.Button(
+            f, text='Search -',
+            command=lambda x=self.do_search: x(other_strand=1))
+        self.forward.pack(side=tk.LEFT)
+        self.cancel = ttk.Button(f, text='Cancel', command=self.exit)
+        self.cancel.pack(side=tk.LEFT)
         self.current_color = 'cyan'
-        self.colorb = Button(f, text='Color', command=self.change_color, foreground=self.current_color)
-        self.colorb.pack(side=LEFT)
+        self.colorb = ttk.Button(f, text='Color', command=self.change_color)
+        self.colorb.pack(side=tk.LEFT)
         self.config_color(self.current_color)
 
     def config_color(self, color=None):
         if not self.highlight:
             return
         if not color:
-            try:
-                color = colorchooser.askcolor()[1]
-            except Exception:  # TODO - Which exceptions?
+            color = colorchooser.askcolor()[1]
+            if not color:
                 color = 'cyan'
         self.current_color = color
         self.current_tag = 'searched_%s' % self.current_color
         self.master.tag_config(self.current_tag, background=self.current_color)
-        self.master.tag_config(self.current_tag + 'R', background=self.current_color, underline=1)
+        self.master.tag_config(self.current_tag + 'R',
+                               background=self.current_color, underline=1)
         self.colors.append(color)
 
     def change_color(self):
         self.config_color()
-        self.colorb.configure(foreground=self.current_color)
-        self.colorb.update()
 
     def get_pattern(self):
         pattern = self.search_entry.get()
@@ -155,25 +156,26 @@ class XDNAsearch(Toplevel, DNAsearch):
             if self.highlight:
                 start, stop = pos, pos + len(self.pattern)
                 if other_strand:
-                    w.tag_add(self.current_tag + 'R', '1.%d' % start, '1.%s' % stop)
+                    w.tag_add(self.current_tag + 'R', '1.%d' % start,
+                              '1.%s' % stop)
                 else:
                     w.tag_add(self.current_tag, '1.%d' % start, '1.%s' % stop)
                 w.see('1.%d' % start)
 
     def exit(self):
         for c in self.colors:
-            self.master.tag_remove('searched_%s' % c, 1.0, END)
-            self.master.tag_remove('searched_%sR' % c, 1.0, END)
+            self.master.tag_remove('searched_%s' % c, 1.0, tk.END)
+            self.master.tag_remove('searched_%sR' % c, 1.0, tk.END)
         self.destroy()
         del(self)
 
-    def showcolor(self):
-        pass
-
 
 if __name__ == '__main__':
+    win = tk.Tk()
+    xbbtools = xbb_widget.xbb_widget()
+
     seq = 'ATGGTGTGTGTGTACGATCGCCCCCCCCAGTCGATCGATGCATCGTA'
-    win = Tk()
-    xtest = XDNAsearch(seq=seq, master=win)
+    xbbtools.insert_sequence(('Test_seq', seq))
+    xbbtools.search()
 
     win.mainloop()

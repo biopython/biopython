@@ -16,7 +16,6 @@ About capitalization:
   `Bio.Phylo.read`!), containing a list of Phylogenies (objects derived from
   `BaseTree.Tree`)
 """
-__docformat__ = "restructuredtext en"
 
 import sys
 
@@ -35,6 +34,7 @@ try:
         from xml.etree import cElementTree as ElementTree
 except ImportError:
     from xml.etree import ElementTree as ElementTree
+
 
 # Recognize the phyloXML namespace when parsing
 # See http://effbot.org/zone/element-namespaces.htm

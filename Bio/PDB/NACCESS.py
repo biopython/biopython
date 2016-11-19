@@ -26,8 +26,6 @@ import warnings
 from Bio.PDB.PDBIO import PDBIO
 from Bio.PDB.AbstractPropertyMap import AbstractResiduePropertyMap, AbstractAtomPropertyMap
 
-__docformat__ = "restructuredtext en"
-
 
 def run_naccess(model, pdb_file, probe_size=None, z_slice=None,
                 naccess='naccess', temp_path='/tmp/'):

@@ -10,8 +10,6 @@
 from Bio import Alphabet
 from Bio.Data import IUPACData
 
-__docformat__ = "restructuredtext en"
-
 
 # #################### Protein
 

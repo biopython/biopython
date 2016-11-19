@@ -10,21 +10,17 @@ compare different types of information. The most basic example is comparing
 two variables in a traditional scatter plot.
 """
 # reportlab
-from reportlab.pdfgen import canvas
 from reportlab.lib import colors
 from reportlab.graphics.charts.lineplots import LinePlot
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.units import inch
 
-from reportlab.graphics.shapes import Drawing, String, Group
-from reportlab.graphics import renderPDF, renderPS
+from reportlab.graphics.shapes import Drawing, String
 from reportlab.graphics.charts.markers import makeEmptySquare, makeFilledSquare
-from reportlab.graphics.charts.markers import makeFilledDiamond, makeEmptyCircle
-from reportlab.graphics.charts.markers import makeFilledCircle, makeSmiley
+from reportlab.graphics.charts.markers import makeFilledDiamond, makeSmiley
+from reportlab.graphics.charts.markers import makeFilledCircle, makeEmptyCircle
 
 from Bio.Graphics import _write
-
-__docformat__ = "restructuredtext en"
 
 
 class ComparativeScatterPlot(object):
@@ -146,12 +142,12 @@ class ComparativeScatterPlot(object):
             # otherwise just use the last number
             else:
                 scatter_plot.lines[value_num].strokeColor = \
-                  self.color_choices[-1]
+                    self.color_choices[-1]
                 scatter_plot.lines[value_num].symbol = \
-                  self.shape_choices[-1]
+                    self.shape_choices[-1]
 
     def _find_min_max(self, info):
-        """Find the min and max for the x and y coordinates in the given data."""
+        """Find min and max for x and y coordinates in the given data."""
         x_min = info[0][0][0]
         x_max = info[0][0][0]
         y_min = info[0][0][1]

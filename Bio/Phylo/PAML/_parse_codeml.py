@@ -5,7 +5,6 @@
 
 import re
 
-__docformat__ = "restructuredtext en"
 
 line_floats_re = re.compile("-*\d+\.\d+")
 
@@ -82,7 +81,7 @@ def parse_basics(lines, results):
             else:
                 multi_models = True
         # Get the maximum log-likelihood
-        if "ln Lmax" in line and len(line_floats) > 0:
+        if "ln Lmax" in line and line_floats:
             results["lnL max"] = line_floats[0]
     return (results, multi_models, multi_genes)
 
@@ -188,7 +187,7 @@ def parse_model(lines, results):
         # Find lnL values.
         # Example match (lnL = -2021.348300):
         # "lnL(ntime: 19  np: 22):  -2021.348300      +0.000000"
-        if "lnL(ntime:" in line and len(line_floats) > 0:
+        if "lnL(ntime:" in line and line_floats:
             results["lnL"] = line_floats[0]
             np_res = re.match("lnL\(ntime:\s+\d+\s+np:\s+(\d+)\)", line)
             if np_res is not None:
@@ -214,7 +213,7 @@ def parse_model(lines, results):
             SEs_flag = False
         # Find tree lengths.
         # Example match: "tree length =   1.71931"
-        elif "tree length =" in line and len(line_floats) > 0:
+        elif "tree length =" in line and line_floats:
             results["tree length"] = line_floats[0]
         # Find the estimated trees only taking the tree if it has
         # lengths or rate estimates on the branches
@@ -239,18 +238,18 @@ def parse_model(lines, results):
                 w_tree_flag = True
         # Find rates for multiple genes
         # Example match: "rates for 2 genes:     1  2.75551"
-        elif "rates for" in line and len(line_floats) > 0:
+        elif "rates for" in line and line_floats:
             line_floats.insert(0, 1.0)
             parameters["rates"] = line_floats
         # Find kappa values.
         # Example match: "kappa (ts/tv) =  2.77541"
-        elif "kappa (ts/tv)" in line and len(line_floats) > 0:
+        elif "kappa (ts/tv)" in line and line_floats:
             parameters["kappa"] = line_floats[0]
         # Find omega values.
         # Example match: "omega (dN/dS) =  0.25122"
-        elif "omega (dN/dS)" in line and len(line_floats) > 0:
+        elif "omega (dN/dS)" in line and line_floats:
             parameters["omega"] = line_floats[0]
-        elif "w (dN/dS)" in line and len(line_floats) > 0:
+        elif "w (dN/dS)" in line and line_floats:
             parameters["omega"] = line_floats
         # Find omega and kappa values for multi-gene files
         # Example match: "gene # 1: kappa =   1.72615 omega =   0.39333"
@@ -262,11 +261,11 @@ def parse_model(lines, results):
                                              "omega": line_floats[1]}
         # Find dN values.
         # Example match: "tree length for dN:       0.2990"
-        elif "tree length for dN" in line and len(line_floats) > 0:
+        elif "tree length for dN" in line and line_floats:
             parameters["dN"] = line_floats[0]
         # Find dS values
         # Example match: "tree length for dS:       1.1901"
-        elif "tree length for dS" in line and len(line_floats) > 0:
+        elif "tree length for dS" in line and line_floats:
             parameters["dS"] = line_floats[0]
         # Find site class distributions.
         # Example match 1 (normal model, 2 site classes):
@@ -315,7 +314,7 @@ def parse_model(lines, results):
         # method.
         # Example row (some spaces removed to make it smaller...).
         # " 6..7   0.000  167.7  54.3  0.0000  0.0000  0.0000  0.0  0.0"
-        elif branch_res is not None and len(line_floats) > 0:
+        elif branch_res is not None and line_floats:
             branch = branch_res.group(1)
             if parameters.get("branches") is None:
                 parameters["branches"] = {}
@@ -336,12 +335,12 @@ def parse_model(lines, results):
         # Example matches:
         # "  p0=  0.99043  p=  0.36657 q=  1.04445
         # "  (p1=  0.00957) w=  3.25530"
-        elif len(model_params) > 0:
+        elif model_params:
             float_model_params = []
             for param in model_params:
                 float_model_params.append((param[0], _nan_float(param[1])))
             parameters.update(dict(float_model_params))
-    if len(parameters) > 0:
+    if parameters:
         results["parameters"] = parameters
     return results
 
@@ -351,7 +350,7 @@ def parse_siteclass_proportions(line_floats):
     alignment assigned to each class.
     """
     site_classes = {}
-    if len(line_floats) > 0:
+    if line_floats:
         for n in range(len(line_floats)):
             site_classes[n] = {"proportion": line_floats[n]}
     return site_classes
@@ -436,7 +435,7 @@ def parse_pairwise(lines, results):
                                         "dN": line_floats[4],
                                         "dS": line_floats[5]}
                 pairwise[seq2][seq1] = pairwise[seq1][seq2]
-    if len(pairwise) > 0:
+    if pairwise:
         results["pairwise"] = pairwise
     return results
 
@@ -482,6 +481,6 @@ def parse_distances(lines, results):
                 for i in range(0, len(line_floats)):
                     distances["ml"][seq_name][sequences[i]] = line_floats[i]
                     distances["ml"][sequences[i]][seq_name] = line_floats[i]
-    if len(distances) > 0:
+    if distances:
         results["distances"] = distances
     return results

@@ -59,7 +59,6 @@ from Bio.Seq import Seq
 from Bio.PDB.PDBExceptions import PDBException
 from Bio.PDB.Vector import calc_dihedral, calc_angle
 
-__docformat__ = "restructuredtext en"
 
 standard_aa_names = ["ALA", "CYS", "ASP", "GLU", "PHE", "GLY", "HIS", "ILE", "LYS",
                      "LEU", "MET", "ASN", "PRO", "GLN", "ARG", "SER", "THR", "VAL",
