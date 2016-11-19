@@ -319,7 +319,7 @@ usertype matrix_test stepmatrix=5
 [C]    2.40      .       2.28     2.12     2.14
 [G]    2.57     2.28      .       2.31     2.31
 [T]    2.43     2.12     2.31      .       2.14
-[-]    2.43     2.14     2.31     2.14      .
+[-]    2.43     2.14     2.31     2.14      .  
 ;
 """)  # noqa for pep8 W291 trailing whitespace
 
@@ -360,6 +360,7 @@ usertype matrix_test stepmatrix=5
  16                                -            None        [11, 13]     0.00       0.00        -                    -
  17                              t90               8              []     1.00      19.84        -                    -
  18                              t91               8              []     1.00      19.84        -                    -
+
 Root:  16
 """
         self.assertEqual(len(output.split("\n")), len(expected.split("\n")))
