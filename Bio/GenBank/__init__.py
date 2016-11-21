@@ -655,12 +655,15 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         self._expected_size = int(content)
 
     def residue_type(self, type):
-        """Record the sequence type so we can choose an appropriate alphabet.
+        """Record the sequence type (SEMI-OBSOLETE).
+
+        This reflects the fact that the topology (linear/circular) and
+        molecule type (e.g. DNA vs RNA) were a single field in early
+        GenBank files. Current GenBank/EMBL files have two fields.
         """
         self._seq_type = type.strip()
 
     def data_file_division(self, division):
-        # Semi-obsolete, see topology and molecule_type
         self.data.annotations['data_file_division'] = division
 
     def topology(self, topology):
