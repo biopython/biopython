@@ -663,12 +663,12 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         """
         self._seq_type = type.strip()
 
-    def data_file_division(self, division):
-        self.data.annotations['data_file_division'] = division
-
     def topology(self, topology):
         if topology:
             self.data.annotations['topology'] = topology
+
+    def data_file_division(self, division):
+        self.data.annotations['data_file_division'] = division
 
     def date(self, submit_date):
         self.data.annotations['date'] = submit_date
