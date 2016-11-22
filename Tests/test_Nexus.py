@@ -315,13 +315,14 @@ class NexusTest1(unittest.TestCase):
         """\
 usertype matrix_test stepmatrix=5
         A        C        G        T        -
-[A]     .       2.40     2.57     2.43     2.43
-[C]    2.40      .       2.28     2.12     2.14
-[G]    2.57     2.28      .       2.31     2.31
-[T]    2.43     2.12     2.31      .       2.14
-[-]    2.43     2.14     2.31     2.14      .  
+[A]     .       2.40     2.57     2.43     2.43     
+[C]    2.40      .       2.28     2.12     2.14     
+[G]    2.57     2.28      .       2.31     2.31     
+[T]    2.43     2.12     2.31      .       2.14     
+[-]    2.43     2.14     2.31     2.14      .       
 ;
 """)  # noqa for pep8 W291 trailing whitespace
+
 
     def test_TreeTest1(self):
         """Test Tree module."""
