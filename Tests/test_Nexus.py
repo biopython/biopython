@@ -323,7 +323,6 @@ usertype matrix_test stepmatrix=5
 ;
 """)  # noqa for pep8 W291 trailing whitespace
 
-
     def test_TreeTest1(self):
         """Test Tree module."""
         n = Nexus.Nexus(self.handle)
