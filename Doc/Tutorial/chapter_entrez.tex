@@ -1316,12 +1316,14 @@ While for small searches you might be OK downloading everything at once, it is b
 For example,
 
 \begin{verbatim}
-from Bio import Entrez
-import time
+# This assumes you have already run a search as shown above,
+# and set the variables count, webenv, query_key
+
 try:
     from urllib.error import HTTPError  # for Python 3
 except ImportError:
     from urllib2 import HTTPError  # for Python 2
+
 batch_size = 3
 out_handle = open("orchid_rpl16.fasta", "w")
 for start in range(0, count, batch_size):
