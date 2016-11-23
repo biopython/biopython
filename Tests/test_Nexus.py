@@ -13,7 +13,7 @@ import tempfile
 import sys
 from Bio._py3k import StringIO
 from Bio._py3k import range
-
+from Bio.AlignIO.NexusIO import NexusIterator
 from Bio.SeqRecord import SeqRecord
 from Bio.Nexus import Nexus, Trees
 from Bio.Seq import Seq
@@ -25,7 +25,7 @@ class NexusTest1(unittest.TestCase):
     def setUp(self):
         self.testfile_dir = "Nexus"
         self.handle = open(os.path.join(self.testfile_dir,
-            "test_Nexus_input.nex"))
+                                        "test_Nexus_input.nex"))
 
     def tearDown(self):
         self.handle.close()
@@ -439,6 +439,76 @@ Root:  16
                           ('9', 0.055354097721950546, None, '[&rate_range={1.3E-5,0.10958320752991428},height_95%_HPD={0.309132419999969,0.3091324199999691},length_range={3.513906814545109E-4,0.4381986285528381},height_median=0.309132419999969,length_95%_HPD={0.003011577063374571,0.08041621647998398}]'),
                           ('5', 0.055354097721950546, None, '[&rate_range={1.3E-5,0.10958320752991428},height_95%_HPD={0.309132419999969,0.3091324199999691},length_range={3.865051168833178E-5,0.4391594442572986},height_median=0.309132419999969,length_95%_HPD={0.003011577063374571,0.08041621647998398}]')])
 
+
+class TestSelf(unittest.TestCase):
+    def test_repeated_names_no_taxa(self):
+        print("Repeated names without a TAXA block")
+        handle = StringIO("""#NEXUS
+        [TITLE: NoName]
+        begin data;
+        dimensions ntax=4 nchar=50;
+        format interleave datatype=protein   gap=- symbols="FSTNKEYVQMCLAWPHDRIG";
+        matrix
+        CYS1_DICDI          -----MKVIL LFVLAVFTVF VSS------- --------RG IPPEEQ----
+        ALEU_HORVU          MAHARVLLLA LAVLATAAVA VASSSSFADS NPIRPVTDRA ASTLESAVLG
+        CATH_HUMAN          ------MWAT LPLLCAGAWL LGV------- -PVCGAAELS VNSLEK----
+        CYS1_DICDI          -----MKVIL LFVLAVFTVF VSS------- --------RG IPPEEQ---X
+        ;
+        end;
+        """)  # noqa for pep8 W291 trailing whitespace
+        for a in NexusIterator(handle):
+            print(a)
+            for r in a:
+                print("%r %s %s" % (r.seq, r.name, r.id))
+        print("Done")
+
+    def test_repeated_names_with_taxa(self):
+
+        print("Repeated names with a TAXA block")
+        handle = StringIO("""#NEXUS
+        [TITLE: NoName]
+        begin taxa
+        CYS1_DICDI
+        ALEU_HORVU
+        CATH_HUMAN
+        CYS1_DICDI;
+        end;
+        begin data;
+        dimensions ntax=4 nchar=50;
+        format interleave datatype=protein   gap=- symbols="FSTNKEYVQMCLAWPHDRIG";
+        matrix
+        CYS1_DICDI          -----MKVIL LFVLAVFTVF VSS------- --------RG IPPEEQ----
+        ALEU_HORVU          MAHARVLLLA LAVLATAAVA VASSSSFADS NPIRPVTDRA ASTLESAVLG
+        CATH_HUMAN          ------MWAT LPLLCAGAWL LGV------- -PVCGAAELS VNSLEK----
+        CYS1_DICDI          -----MKVIL LFVLAVFTVF VSS------- --------RG IPPEEQ---X
+        ;
+        end;
+        """)  # noqa for pep8 W291 trailing whitespace
+        for a in NexusIterator(handle):
+            print(a)
+            for r in a:
+                print("%r %s %s" % (r.seq, r.name, r.id))
+        print("Done")
+
+        def test_empty_file(self):
+
+            print("Reading an empty file")
+            assert 0 == len(list(NexusIterator(StringIO())))
+            print("Done")
+            print("")
+            print("Writing...")
+
+            handle = StringIO()
+            NexusWriter(handle).write_file([a])
+            handle.seek(0)
+            print(handle.read())
+
+            handle = StringIO()
+            try:
+                NexusWriter(handle).write_file([a, a])
+                assert False, "Should have rejected more than one alignment!"
+            except ValueError:
+                pass
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
