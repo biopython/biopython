@@ -304,8 +304,9 @@ class EmblRandomAccess(SequentialSeqFileRandomAccess):
                     setbysv = True
                 else:
                     key = parts[0].strip()
-            elif line[2:].count(b";") == 3:
+            elif line[2:].count(b";") in [2, 3]:
                 # Looks like the pre 2006 style, take first word only
+                # Or, with two colons, the KIPO patent variantion
                 key = line[3:].strip().split(None, 1)[0]
                 if key.endswith(b";"):
                     key = key[:-1]

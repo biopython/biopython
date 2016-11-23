@@ -285,6 +285,9 @@ class TopologyTests(unittest.TestCase):
             # Old patent examples
             ("ID   NRP_AX000635; PRT; NR1; 15 SQ", None, None, "NR1"),
             ("ID   NRP0000016E; PRT; NR2; 5 SQ", None, None, "NR2"),
+            # KIPO patent examples
+            ("ID   DI500001       STANDARD;      PRT;   111 AA.", None, None, None),
+            ("ID   DI644510   standard; PRT;  1852 AA.", None, None, None),
         ]
         for (line, topo, mol_type, div) in tests:
             scanner = Scanner.EmblScanner()

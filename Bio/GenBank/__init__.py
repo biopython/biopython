@@ -867,7 +867,8 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         (bases 1 to 105654; 110423 to 111122)
         1  (residues 1 to 182)
         """
-        # first remove the parentheses or other junk
+        # first remove the parentheses
+        assert content.endswith(")"), content
         ref_base_info = content[1:-1]
 
         all_locations = []

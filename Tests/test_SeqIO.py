@@ -172,6 +172,7 @@ test_files = [
     ("embl", False, 'EMBL/AAA03323.embl', 1),  # 2008, PA line but no AC
     ("embl", False, 'EMBL/AE017046.embl', 1),  # See also NC_005816.gb
     ("embl", False, 'EMBL/Human_contigs.embl', 2),  # contigs, no sequences
+    ("embl", False, 'EMBL/kipo_prt_sample.embl', 20),  # Alt. patent ID line
     # wrapped locations and unspecified type
     ("embl", False, 'EMBL/location_wrap.embl', 1),
     # features over indented for EMBL

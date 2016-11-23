@@ -616,6 +616,7 @@ tests = [
     ("EMBL/epo_prt_selection.embl", "embl", None),
     ("EMBL/U87107.embl", "embl", None),
     ("EMBL/TRBG361.embl", "embl", None),
+    ("EMBL/kipo_prt_sample.embl", "embl", None),
     ("EMBL/A04195.imgt", "embl", None),  # Not a proper EMBL file, an IMGT file
     ("EMBL/A04195.imgt", "imgt", None),
     ("EMBL/patents.embl", "embl", generic_protein),

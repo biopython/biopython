@@ -629,6 +629,9 @@ class EmblScanner(InsdcScanner):
             else:
                 # Looks like the pre 2006 style
                 self._feed_first_line_old(consumer, line)
+        elif line[self.HEADER_WIDTH:].count(";") == 2:
+            # Looks like KIKO patent data
+            self._feed_first_line_patents_kipo(consumer, line)
         else:
             raise ValueError('Did not recognise the ID line layout:\n' + line)
 
@@ -647,6 +650,30 @@ class EmblScanner(InsdcScanner):
         consumer.residue_type(fields[1])
         consumer.data_file_division(fields[2])
         # TODO - Record cluster size?
+
+    def _feed_first_line_patents_kipo(self, consumer, line):
+        # EMBL format patent sequence from KIPO, e.g.
+        # ftp://ftp.ebi.ac.uk/pub/databases/patentdata/kipo_prt.dat.gz
+        #
+        # e.g. ID   DI500001       STANDARD;      PRT;   111 AA.
+        #
+        # This follows the style of _feed_first_line_old
+        assert line[:self.HEADER_WIDTH].rstrip() == "ID"
+        fields = [line[self.HEADER_WIDTH:].split(None, 1)[0]]
+        fields.extend(line[self.HEADER_WIDTH:].split(None, 1)[1].split(";"))
+        fields = [entry.strip() for entry in fields]
+        """
+        The tokens represent:
+
+           0. Primary accession number
+           (space sep)
+           1. ??? (e.g. standard)
+           (semi-colon)
+           2. Molecule type (protein)? Division? Always 'PRT'
+           3. Sequence length (e.g. '111 AA.')
+        """
+        consumer.locus(fields[0])  # Should we also call the accession consumer?
+        self._feed_seq_length(consumer, fields[3])
 
     def _feed_first_line_old(self, consumer, line):
         # Expects an ID line in the style before 2006, e.g.
@@ -762,12 +789,16 @@ class EmblScanner(InsdcScanner):
                     data = data[1:-1]
                 consumer.reference_num(data)
             elif line_type == 'RP':
-                # Reformat reference numbers for the GenBank based consumer
-                # e.g. '1-4639675' becomes '(bases 1 to 4639675)'
-                # and '160-550, 904-1055' becomes '(bases 160 to 550; 904 to 1055)'
-                # Note could be multi-line, and end with a comma
-                parts = [bases.replace("-", " to ").strip() for bases in data.split(",") if bases.strip()]
-                consumer.reference_bases("(bases %s)" % "; ".join(parts))
+                if data.strip() == "[-]":
+                    # Patent EMBL files from KIPO just use: RN  [-]
+                    pass
+                else:
+                    # Reformat reference numbers for the GenBank based consumer
+                    # e.g. '1-4639675' becomes '(bases 1 to 4639675)'
+                    # and '160-550, 904-1055' becomes '(bases 160 to 550; 904 to 1055)'
+                    # Note could be multi-line, and end with a comma
+                    parts = [bases.replace("-", " to ").strip() for bases in data.split(",") if bases.strip()]
+                    consumer.reference_bases("(bases %s)" % "; ".join(parts))
             elif line_type == 'RT':
                 # Remove the enclosing quotes and trailing semi colon.
                 # Note the title can be split over multiple lines.
