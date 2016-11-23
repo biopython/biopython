@@ -27,6 +27,9 @@ The SeqFeature object's qualifiers is now an explicitly ordered dictionary
 (note that as of Python 3.6 the Python dict is ordered by default anyway).
 This helps reproduce GenBank/EMBL files on input/output.
 
+The Bio.SeqIO UniProt-XML parser was updated to cope with features with
+unknown locations which can be found in mass spec data.
+
 Additionally, a number of small bugs have been fixed with further additions
 to the test suite, and there has been further work to follow the Python PEP8,
 PEP257 and best practice standard coding style.
@@ -47,6 +50,7 @@ Peter Cock
 Richard Neher (first contribution)
 Sourav Singh (first contribution)
 Steve Bond
+Uri Laserson
 Vincent Davis
 
 ===================================================================
