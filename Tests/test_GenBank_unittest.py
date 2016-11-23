@@ -239,38 +239,88 @@ class TopologyTests(unittest.TestCase):
         """Check GenBank topology parsing."""
         # This is a bit low level, but can test pasing the ID line only
         tests = [
-            ("LOCUS       U00096", None),
-            ("LOCUS       SCU49845     5028 bp    DNA             PLN       21-JUN-1999", None),
-            ("LOCUS       AB070938                6497 bp    DNA     linear   BCT 11-OCT-2001", "linear"),
-            ("LOCUS       NC_005816               9609 bp    DNA     circular BCT 21-JUL-2008", "circular"),
-            ("LOCUS       SCX3_BUTOC                64 aa            linear   INV 16-OCT-2001", "linear"),
+            ("LOCUS       U00096",
+             None, None, None),
+            # This example is actually fungal, accession U49845 from Saccharomyces cerevisiae:
+            ("LOCUS       SCU49845     5028 bp    DNA             PLN       21-JUN-1999",
+             None, "DNA", "PLN"),
+            ("LOCUS       AB070938                6497 bp    DNA     linear   BCT 11-OCT-2001",
+             "linear", "DNA", "BCT"),
+            ("LOCUS       NC_005816               9609 bp    DNA     circular BCT 21-JUL-2008",
+             "circular", "DNA", "BCT"),
+            ("LOCUS       SCX3_BUTOC                64 aa            linear   INV 16-OCT-2001",
+             "linear", None, "INV"),
         ]
-        for (line, topo) in tests:
+        for (line, topo, mol_type, div) in tests:
             scanner = Scanner.GenBankScanner()
             consumer = GenBank._FeatureConsumer(1, GenBank.FeatureValueCleaner)
             scanner._feed_first_line(consumer, line)
             t = consumer.data.annotations.get('topology', None)
             self.assertEqual(t, topo,
                              "Wrong topology %r not %r from %r" % (t, topo, line))
+            # TODO - molecule type - see issue 363 / pull request #1005
+            d = consumer.data.annotations.get('data_file_division', None)
+            self.assertEqual(d, div,
+                             "Wrong division %r not %r from %r" % (d, div, line))
 
     def test_topology_embl(self):
         """Check EMBL topology parsing."""
         # This is a bit low level, but can test pasing the ID line only
         tests = [
-            ("ID   X56734; SV 1; linear; mRNA; STD; PLN; 1859 BP.", "linear"),
-            ("ID   CD789012; SV 4; linear; genomic DNA; HTG; MAM; 500 BP.", "linear"),
-            ("ID   BSUB9999   standard; circular DNA; PRO; 4214630 BP.", "circular"),
-            ("ID   SC10H5 standard; DNA; PRO; 4870 BP.", None),
-            ("ID   NRP_AX000635; PRT; NR1; 15 SQ", None),
-            ("ID   NRP0000016E; PRT; NR2; 5 SQ", None),
+            # Modern examples with sequence version
+            ("ID   X56734; SV 1; linear; mRNA; STD; PLN; 1859 BP.",
+             "linear", "mRNA", "PLN"),
+            ("ID   CD789012; SV 4; linear; genomic DNA; HTG; MAM; 500 BP.",
+             "linear", "genomic DNA", "MAM"),
+            # Example to match GenBank example used above:
+            ("ID   U49845; SV 1; linear; genomic DNA; STD; FUN; 5028 BP.",
+             "linear", "genomic DNA", "FUN"),
+            # Old examples:
+            ("ID   BSUB9999   standard; circular DNA; PRO; 4214630 BP.",
+             "circular", "DNA", "PRO"),
+            ("ID   SC10H5 standard; DNA; PRO; 4870 BP.",
+             None, "DNA", "PRO"),
+            # Patent example from 2016-06-10
+            # ftp://ftp.ebi.ac.uk/pub/databases/embl/patent/
+            ("ID   A01679; SV 1; linear; unassigned DNA; PAT; MUS; 12 BP.",
+             "linear", "unassigned DNA", "MUS"),
+            # Old patent examples
+            ("ID   NRP_AX000635; PRT; NR1; 15 SQ", None, None, "NR1"),
+            ("ID   NRP0000016E; PRT; NR2; 5 SQ", None, None, "NR2"),
         ]
-        for (line, topo) in tests:
+        for (line, topo, mol_type, div) in tests:
             scanner = Scanner.EmblScanner()
             consumer = GenBank._FeatureConsumer(1, GenBank.FeatureValueCleaner)
             scanner._feed_first_line(consumer, line)
             t = consumer.data.annotations.get('topology', None)
             self.assertEqual(t, topo,
                              "Wrong topology %r not %r from %r" % (t, topo, line))
+            # TODO - molecule type - see issue 363 / pull request #1005
+            d = consumer.data.annotations.get('data_file_division', None)
+            self.assertEqual(d, div,
+                             "Wrong division %r not %r from %r" % (d, div, line))
+
+    def test_first_line_imgt(self):
+        """Check IMGT ID line parsing."""
+        # This is a bit low level, but can test pasing the ID line only
+        tests = [
+            ("ID   HLA00001   standard; DNA; HUM; 3503 BP.",
+             None, "DNA", "HUM"),
+            # TODO - see GitHub issue 988:
+            # ("ID   HLA00001; SV 1; standard; DNA; HUM; 3503 BP.",
+            #  None, "DNA", "HUM"),
+        ]
+        for (line, topo, res_type, div) in tests:
+            scanner = Scanner._ImgtScanner()
+            consumer = GenBank._FeatureConsumer(1, GenBank.FeatureValueCleaner)
+            scanner._feed_first_line(consumer, line)
+            t = consumer.data.annotations.get('topology', None)
+            self.assertEqual(t, topo,
+                             "Wrong topology %r not %r from %r" % (t, topo, line))
+            # TODO - molecule type - see issue 363 / pull request #1005
+            d = consumer.data.annotations.get('data_file_division', None)
+            self.assertEqual(d, div,
+                             "Wrong division %r not %r from %r" % (d, div, line))
 
 
 class OutputTests(unittest.TestCase):
