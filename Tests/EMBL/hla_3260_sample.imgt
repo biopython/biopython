@@ -1,0 +1,956 @@
+ID   HLA00001; SV 1; standard; DNA; HUM; 3503 BP.
+XX
+AC   HLA00001;
+XX
+SV   HLA00001.1
+XX
+DT   01-AUG-1989 (Rel. 1.0.0, Created, Version 1)
+DT   14-OCT-2016 (Rel. 3.26.0, Last Updated, Version 1)
+XX
+DE   HLA-A*01:01:01:01, Human MHC Class I sequence
+XX
+KW   Human MHC; HLA; Class I; HLA-A; Allele; HLA-A*01:01:01:01;
+XX
+OS   Homo Sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Vertebrata; Mammalia; Eutheria; Primates;
+OC   Catarrhini; Hominidae; Homo.
+XX
+CC   --------------------------------------------------------------------------
+CC   IPD-IMGT/HLA Release Version 3.26.0
+CC   --------------------------------------------------------------------------
+CC   Copyrighted by the IPD-IMGT/HLA Database, Distributed under the Creative
+CC   Commons Attribution-NoDerivs License, see;
+CC   http://www.ebi.ac.uk/ipd/imgt/hla/licence.html for further details.
+CC   --------------------------------------------------------------------------
+XX
+RN   [1]
+RP   1-3503
+RX   PUBMED; 3375250.
+RA   Parham P, Lomen CE, Lawlor DA, Ways JP, Holmes N, Coppin HL, Salter RD,
+RA   Wan AM, Ennis PD;
+RT   "Nature of polymorphism in HLA-A, -B, and -C molecules";
+RL   Proc Natl Acad Sci U S A 85:4005-9(1988).
+XX
+RN   [2]
+RP   1-3503
+RX   PUBMED; 2251137.
+RA   Girdlestone J;
+RT   "Nucleotide sequence of an HLA-A1 gene";
+RL   Nucleic Acids Res 18:6701-6701(1990).
+XX
+RN   [3]
+RP   1-3503
+RX   PUBMED; 9349617.
+RA   Laforet M, Froelich N, Parissiadis A, Pfeiffer B, Schell A, Faller B,
+RA   Woehl-Jaegle ML, Cazenave JP, Tongio MM;
+RT   "A nucleotide insertion in exon 4 is responsible for the absence of
+RT   expression of an HLA-A*01 allele";
+RL   Tissue Antigens 50:347-50(1997).
+XX
+RN   [4]
+RP   1-3503
+RX   PUBMED; 15140828.
+RA   Stewart CA, Horton R, Allcock RJ, Ashurst JL, Atrazhev AM, Coggill P,
+RA   Dunham I, Forbes S, Halls K, Howson JM, Humphray SJ, Hunt S, Mungall AJ,
+RA   Osoegawa K, Palmer S, Roberts AN, Rogers J, Sims S, Wang Y, Wilming LG,
+RA   Elliott JF, de Jong PJ, Sawcer S, Todd JA, Trowsdale J, Beck S;
+RT   "Complete MHC haplotype sequencing for common disease gene mapping";
+RL   Genome Res 14:1176-87(2004).
+XX
+RN   [5]
+RP   1-3503
+RX   PUBMED; 18193213.
+RA   Horton R, Gibson R, Coggill P, Miretti M, Allcok RJ, Almeida J, Forbes S,
+RA   Gilbert JGR, Halls K, Harrow JL, Hart E, Howe K, Jackson DK, Palmer S,
+RA   Roberts AN, Sims S, Stewart CA, Traherne JA, Trevanion S, Wilming L, Rogers
+RA   J, de Jong PJ, Elliott JF, Sawcer S, Todd JA, Trowsdale J, Beck S;
+RT   "Variation analysis and gene annotation of eight MHC haplotypes: The MHC
+RT   Haplotype Project";
+RL   Immunogenetics 60:1-18(2008).
+XX
+RN   [6]
+RP   1-3503
+RX   PUBMED; 19735485.
+RA   Zhu F, He Y, Zhang W, He J, He J, Xu X, Yan L;
+RT   "Analysis of the complete genomic sequence of HLA-A alleles in the Chinese
+RT   Han population.";
+RL   Int J Immunogenet 36:351-360(2009).
+XX
+RN   [7]
+RP   1-3503
+RX   PUBMED; 24673518.
+RA   Lu L, Xu YP;
+RT   "Genomic full-length sequence of two HLA-A alleles, A*01:01:01:01 and
+RT   A*01:03, identified by cloning and sequencing.";
+RL   Tissue Antigens 83:423-424(2014).
+XX
+CC   --------------------------------------------------------------------------
+CC   The sequence below is the official allele sequence as approved by the
+CC   WHO Nomenclature Committee for Factors of the HLA System.
+CC   Any cross references may differ from the sequence shown below.
+CC   --------------------------------------------------------------------------
+XX
+DR   EMBL; AJ278305; AJ278305.1.
+DR   EMBL; AL645935; AL645935.0.
+DR   EMBL; CR759913; CR759913.0.
+DR   EMBL; EU445470; EU445470.0.
+DR   EMBL; GU812295; GU812295.0.
+DR   EMBL; HG794373; HG794373.0.
+DR   EMBL; M24043; M24043.1.
+DR   EMBL; X55710; X55710.1.
+DR   EMBL; Z93949; Z93949.1.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..3503
+FT                   /organism="Homo sapiens"
+FT                   /mol_type="genomic DNA"
+FT                   /db_xref="taxon:9606"
+FT                   /ethnic="Oriental, Caucasoid"
+FT                   /cell_line="7550800303"
+FT                   /cell_line="APD"
+FT                   /cell_line="B4702"
+FT                   /cell_line="COX"
+FT                   /cell_line="LCL721"
+FT                   /cell_line="MOLT-4"
+FT                   /cell_line="PP"
+FT   CDS             join(301..373,504..773,1015..1290,1870..2145,2248..2364,
+FT                   2807..2839,2982..3029,3199..3203)
+FT                   /codon_start=1
+FT                   /gene="HLA-A"
+FT                   /allele="HLA-A*01:01:01:01"
+FT                   /product="MHC Class I HLA-A*01:01:01:01 sequence"
+FT                   /translation="MAVMAPRTLLLLLSGALALTQTWAGSHSMRYFFTSVSRPGRGEPR
+FT                   FIAVGYVDDTQFVRFDSDAASQKMEPRAPWIEQEGPEYWDQETRNMKAHSQTDRANLGT
+FT                   LRGYYNQSEDGSHTIQIMYGCDVGPDGRFLRGYRQDAYDGKDYIALNEDLRSWTAADMA
+FT                   AQITKRKWEAVHAAEQRRVYLEGRCVDGLRRYLENGKETLQRTDPPKTHMTHHPISDHE
+FT                   ATLRCWALGFYPAEITLTWQRDGEDQTQDTELVETRPAGDGTFQKWAAVVVPSGEEQRY
+FT                   TCHVQHEGLPKPLTLRWELSSQPTIPIVGIIAGLVLLGAVITGAVVAAVMWRRKSSDRK
+FT                   GGSYTQAASSDSAQGSDVSLTACKV"
+FT   UTR             1..300
+FT   exon            301..373
+FT                   /number="1"
+FT   intron          374..503
+FT                   /number="1"
+FT   exon            504..773
+FT                   /number="2"
+FT   intron          774..1014
+FT                   /number="2"
+FT   exon            1015..1290
+FT                   /number="3"
+FT   intron          1291..1869
+FT                   /number="3"
+FT   exon            1870..2145
+FT                   /number="4"
+FT   intron          2146..2247
+FT                   /number="4"
+FT   exon            2248..2364
+FT                   /number="5"
+FT   intron          2365..2806
+FT                   /number="5"
+FT   exon            2807..2839
+FT                   /number="6"
+FT   intron          2840..2981
+FT                   /number="6"
+FT   exon            2982..3029
+FT                   /number="7"
+FT   intron          3030..3198
+FT                   /number="7"
+FT   exon            3199..3203
+FT                   /number="8"
+FT   UTR             3204..3503
+SQ   Sequence 3503 BP; 666 A; 1012 C; 1070 G; 755 T; 0 other;
+     caggagcaga ggggtcaggg cgaagtccca gggccccagg cgtggctctc agggtctcag        60
+     gccccgaagg cggtgtatgg attggggagt cccagccttg gggattcccc aactccgcag       120
+     tttcttttct ccctctccca acctacgtag ggtccttcat cctggatact cacgacgcgg       180
+     acccagttct cactcccatt gggtgtcggg tttccagaga agccaatcag tgtcgtcgcg       240
+     gtcgctgttc taaagtccgc acgcacccac cgggactcag attctcccca gacgccgagg       300
+     atggccgtca tggcgccccg aaccctcctc ctgctactct cgggggccct ggccctgacc       360
+     cagacctggg cgggtgagtg cggggtcggg agggaaaccg cctctgcggg gagaagcaag       420
+     gggccctcct ggcgggggcg caggaccggg ggagccgcgc cgggaggagg gtcgggcagg       480
+     tctcagccac tgctcgcccc caggctccca ctccatgagg tatttcttca catccgtgtc       540
+     ccggcccggc cgcggggagc cccgcttcat cgccgtgggc tacgtggacg acacgcagtt       600
+     cgtgcggttc gacagcgacg ccgcgagcca gaagatggag ccgcgggcgc cgtggataga       660
+     gcaggagggg ccggagtatt gggaccagga gacacggaat atgaaggccc actcacagac       720
+     tgaccgagcg aacctgggga ccctgcgcgg ctactacaac cagagcgagg acggtgagtg       780
+     accccggccc ggggcgcagg tcacgacccc tcatccccca cggacgggcc aggtcgccca       840
+     cagtctccgg gtccgagatc caccccgaag ccgcgggact ccgagaccct tgtcccggga       900
+     gaggcccagg cgcctttacc cggtttcatt ttcagtttag gccaaaaatc cccccgggtt       960
+     ggtcggggcg gggcggggct cgggggactg ggctgaccgc ggggtcgggg ccaggttctc      1020
+     acaccatcca gataatgtat ggctgcgacg tggggccgga cgggcgcttc ctccgcgggt      1080
+     accggcagga cgcctacgac ggcaaggatt acatcgccct gaacgaggac ctgcgctctt      1140
+     ggaccgcggc ggacatggca gctcagatca ccaagcgcaa gtgggaggcg gtccatgcgg      1200
+     cggagcagcg gagagtctac ctggagggcc ggtgcgtgga cgggctccgc agatacctgg      1260
+     agaacgggaa ggagacgctg cagcgcacgg gtaccagggg ccacggggcg cctccctgat      1320
+     cgcctataga tctcccgggc tggcctccca caaggagggg agacaattgg gaccaacact      1380
+     agaatatcac cctccctctg gtcctgaggg agaggaatcc tcctgggttt ccagatcctg      1440
+     taccagagag tgactctgag gttccgccct gctctctgac acaattaagg gataaaatct      1500
+     ctgaaggagt gacgggaaga cgatccctcg aatactgatg agtggttccc tttgacaccg      1560
+     gcagcagcct tgggcccgtg acttttcctc tcaggccttg ttctctgctt cacactcaat      1620
+     gtgtgtgggg gtctgagtcc agcacttctg agtctctcag cctccactca ggtcaggacc      1680
+     agaagtcgct gttcccttct cagggaatag aagattatcc caggtgcctg tgtccaggct      1740
+     ggtgtctggg ttctgtgctc tcttccccat cccgggtgtc ctgtccattc tcaagatggc      1800
+     cacatgcgtg ctggtggagt gtcccatgac agatgcaaaa tgcctgaatt ttctgactct      1860
+     tcccgtcaga cccccccaag acacatatga cccaccaccc catctctgac catgaggcca      1920
+     ccctgaggtg ctgggccctg ggcttctacc ctgcggagat cacactgacc tggcagcggg      1980
+     atggggagga ccagacccag gacacggagc tcgtggagac caggcctgca ggggatggaa      2040
+     ccttccagaa gtgggcggct gtggtggtgc cttctggaga ggagcagaga tacacctgcc      2100
+     atgtgcagca tgagggtctg cccaagcccc tcaccctgag atggggtaag gagggagatg      2160
+     ggggtgtcat gtctcttagg gaaagcagga gcctctctgg agacctttag cagggtcagg      2220
+     gcccctcacc ttcccctctt ttcccagagc tgtcttccca gcccaccatc cccatcgtgg      2280
+     gcatcattgc tggcctggtt ctccttggag ctgtgatcac tggagctgtg gtcgctgccg      2340
+     tgatgtggag gaggaagagc tcaggtggag aaggggtgaa gggtggggtc tgagatttct      2400
+     tgtctcactg agggttccaa gccccagcta gaaatgtgcc ctgtctcatt actgggaagc      2460
+     accttccaca atcatgggcc gacccagcct gggccctgtg tgccagcact tactcttttg      2520
+     taaagcacct gttaaaatga aggacagatt tatcaccttg attacggcgg tgatgggacc      2580
+     tgatcccagc agtcacaagt cacaggggaa ggtccctgag gacagacctc aggagggcta      2640
+     ttggtccagg acccacacct gctttcttca tgtttcctga tcccgccctg ggtctgcagt      2700
+     cacacatttc tggaaacttc tctggggtcc aagactagga ggttcctcta ggaccttaag      2760
+     gccctggctc ctttctggta tctcacagga cattttcttc ccacagatag aaaaggaggg      2820
+     agttacactc aggctgcaag taagtatgaa ggaggctgat gcctgaggtc cttgggatat      2880
+     tgtgtttggg agcccatggg ggagctcacc caccccacaa ttcctcctct agccacatct      2940
+     tctgtgggat ctgaccaggt tctgtttttg ttctacccca ggcagtgaca gtgcccaggg      3000
+     ctctgatgtg tctctcacag cttgtaaagg tgagagcttg gagggcctga tgtgtgttgg      3060
+     gtgttgggtg gaacagtgga cacagctgtg ctatggggtt tctttgcgtt ggatgtattg      3120
+     agcatgcgat gggctgttta aggtgtgacc cctcactgtg atggatatga atttgttcat      3180
+     gaatattttt ttctatagtg tgagacagct gccttgtgtg ggactgagag gcaagagttg      3240
+     ttcctgccct tccctttgtg acttgaagaa ccctgacttt gtttctgcaa aggcacctgc      3300
+     atgtgtctgt gttcgtgtag gcataatgtg aggaggtggg gagagcaccc cacccccatg      3360
+     tccaccatga ccctcttccc acgctgacct gtgctccctc tccaatcatc tttcctgttc      3420
+     cagagaggtg gggctgaggt gtctccatct ctgtctcaac ttcatggtgc actgagctgt      3480
+     aacttcttcc ttccctatta aaa                                              3503
+//
+ID   HLA02169; SV 1; standard; DNA; HUM; 3291 BP.
+XX
+AC   HLA02169;
+XX
+SV   HLA02169.1
+XX
+DT   29-APR-2005 (Rel. 2.10.0, Created, Version 1)
+DT   14-OCT-2016 (Rel. 3.26.0, Last Updated, Version 1)
+XX
+DE   HLA-A*01:01:01:02N, Human MHC Class I sequence
+XX
+KW   Human MHC; HLA; Class I; HLA-A; Allele; HLA-A*01:01:01:02N;
+XX
+OS   Homo Sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Vertebrata; Mammalia; Eutheria; Primates;
+OC   Catarrhini; Hominidae; Homo.
+XX
+CC   --------------------------------------------------------------------------
+CC   IPD-IMGT/HLA Release Version 3.26.0
+CC   --------------------------------------------------------------------------
+CC   Copyrighted by the IPD-IMGT/HLA Database, Distributed under the Creative
+CC   Commons Attribution-NoDerivs License, see;
+CC   http://www.ebi.ac.uk/ipd/imgt/hla/licence.html for further details.
+CC   --------------------------------------------------------------------------
+XX
+CC   --------------------------------------------------------------------------
+CC   The sequence below is the official allele sequence as approved by the
+CC   WHO Nomenclature Committee for Factors of the HLA System.
+CC   Any cross references may differ from the sequence shown below.
+CC   --------------------------------------------------------------------------
+XX
+DR   EMBL; AY973959; AY973959.0.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..3291
+FT                   /organism="Homo sapiens"
+FT                   /mol_type="genomic DNA"
+FT                   /db_xref="taxon:9606"
+FT                   /ethnic="Caucasoid"
+FT                   /cell_line="CTM7681276"
+FT   CDS             join(222..294,425..694,932..1207,1787..2062,2165..2281,
+FT                   2724..2756,2899..2946,3116..3120)
+FT                   /codon_start=1
+FT                   /gene="HLA-A"
+FT                   /allele="HLA-A*01:01:01:02N"
+FT                   /product="MHC Class I HLA-A*01:01:01:02N sequence"
+FT                   /translation="MAVMAPRTLLLLLSGALALTQTWAGSHSMRYFFTSVSRPGRGEPR
+FT                   FIAVGYVDDTQFVRFDSDAASQKMEPRAPWIEQEGPEYWDQETRNMKAHSQTDRANLGT
+FT                   LRGYYNQSEDGDPGPGRRSRPLIPHGRARSPTVSGSEIHPEAAGLRDPCPGRGPGAFTR
+FT                   FHFQFRPKIPPGWSGRGGARGTGLTAGSGPGSHTIQX"
+FT   UTR             1..221
+FT   exon            222..294
+FT                   /number="1"
+FT   intron          295..424
+FT                   /number="1"
+FT   exon            425..694
+FT                   /number="2"
+FT   intron          695..931
+FT                   /number="2"
+FT   exon            932..1207
+FT                   /number="3"
+FT   intron          1208..1786
+FT                   /number="3"
+FT   exon            1787..2062
+FT                   /number="4"
+FT   intron          2063..2164
+FT                   /number="4"
+FT   exon            2165..2281
+FT                   /number="5"
+FT   intron          2282..2723
+FT                   /number="5"
+FT   exon            2724..2756
+FT                   /number="6"
+FT   intron          2757..2898
+FT                   /number="6"
+FT   exon            2899..2946
+FT                   /number="7"
+FT   intron          2947..3115
+FT                   /number="7"
+FT   exon            3116..3120
+FT                   /number="8"
+FT   UTR             3121..3291
+SQ   Sequence 3291 BP; 629 A; 949 C; 1011 G; 702 T; 0 other;
+     gattggggag tcccagcctt ggggattccc caactccgca gtttcttttc tccctctccc        60
+     aacctacgta gggtccttca tcctggatac tcacgacgcg gacccagttc tcactcccat       120
+     tgggtgtcgg gtttccagag aagccaatca gtgtcgtcgc ggtcgctgtt ctaaagtccg       180
+     cacgcaccca ccgggactca gattctcccc agacgccgag gatggccgtc atggcgcccc       240
+     gaaccctcct cctgctactc tcgggggccc tggccctgac ccagacctgg gcgggtgagt       300
+     gcggggtcgg gagggaaacc gcctctgcgg ggagaagcaa ggggccctcc tggcgggggc       360
+     gcaggaccgg gggagccgcg ccgggaggag ggtcgggcag gtctcagcca ctgctcgccc       420
+     ccaggctccc actccatgag gtatttcttc acatccgtgt cccggcccgg ccgcggggag       480
+     ccccgcttca tcgccgtggg ctacgtggac gacacgcagt tcgtgcggtt cgacagcgac       540
+     gccgcgagcc agaagatgga gccgcgggcg ccgtggatag agcaggaggg gccggagtat       600
+     tgggaccagg agacacggaa tatgaaggcc cactcacaga ctgaccgagc gaacctgggg       660
+     accctgcgcg gctactacaa ccagagcgag gacggtgacc ccggcccggg gcgcaggtca       720
+     cgacccctca tcccccacgg acgggccagg tcgcccacag tctccgggtc cgagatccac       780
+     cccgaagccg cgggactccg agacccttgt cccgggagag gcccaggcgc ctttacccgg       840
+     tttcattttc agtttaggcc aaaaatcccc ccgggttggt cggggcgggg cggggctcgg       900
+     gggactgggc tgaccgcggg gtcggggcca ggttctcaca ccatccagat aatgtatggc       960
+     tgcgacgtgg ggccggacgg gcgcttcctc cgcgggtacc ggcaggacgc ctacgacggc      1020
+     aaggattaca tcgccctgaa cgaggacctg cgctcttgga ccgcggcgga catggcagct      1080
+     cagatcacca agcgcaagtg ggaggcggtc catgcggcgg agcagcggag agtctacctg      1140
+     gagggccggt gcgtggacgg gctccgcaga tacctggaga acgggaagga gacgctgcag      1200
+     cgcacgggta ccaggggcca cggggcgcct ccctgatcgc ctatagatct cccgggctgg      1260
+     cctcccacaa ggaggggaga caattgggac caacactaga atatcaccct ccctctggtc      1320
+     ctgagggaga ggaatcctcc tgggtttcca gatcctgtac cagagagtga ctctgaggtt      1380
+     ccgccctgct ctctgacaca attaagggat aaaatctctg aaggagtgac gggaagacga      1440
+     tccctcgaat actgatgagt ggttcccttt gacaccggca gcagccttgg gcccgtgact      1500
+     tttcctctca ggccttgttc tctgcttcac actcaatgtg tgtgggggtc tgagtccagc      1560
+     acttctgagt ctctcagcct ccactcaggt caggaccaga agtcgctgtt cccttctcag      1620
+     ggaatagaag attatcccag gtgcctgtgt ccaggctggt gtctgggttc tgtgctctct      1680
+     tccccatccc gggtgtcctg tccattctca agatggccac atgcgtgctg gtggagtgtc      1740
+     ccatgacaga tgcaaaatgc ctgaattttc tgactcttcc cgtcagaccc ccccaagaca      1800
+     catatgaccc accaccccat ctctgaccat gaggccaccc tgaggtgctg ggccctgggc      1860
+     ttctaccctg cggagatcac actgacctgg cagcgggatg gggaggacca gacccaggac      1920
+     acggagctcg tggagaccag gcctgcaggg gatggaacct tccagaagtg ggcggctgtg      1980
+     gtggtgcctt ctggagagga gcagagatac acctgccatg tgcagcatga gggtctgccc      2040
+     aagcccctca ccctgagatg gggtaaggag ggagatgggg gtgtcatgtc tcttagggaa      2100
+     agcaggagcc tctctggaga cctttagcag ggtcagggcc cctcaccttc ccctcttttc      2160
+     ccagagctgt cttcccagcc caccatcccc atcgtgggca tcattgctgg cctggttctc      2220
+     cttggagctg tgatcactgg agctgtggtc gctgccgtga tgtggaggag gaagagctca      2280
+     ggtggagaag gggtgaaggg tggggtctga gatttcttgt ctcactgagg gttccaagcc      2340
+     ccagctagaa atgtgccctg tctcattact gggaagcacc ttccacaatc atgggccgac      2400
+     ccagcctggg ccctgtgtgc cagcacttac tcttttgtaa agcacctgtt aaaatgaagg      2460
+     acagatttat caccttgatt acggcggtga tgggacctga tcccagcagt cacaagtcac      2520
+     aggggaaggt ccctgaggac agacctcagg agggctattg gtccaggacc cacacctgct      2580
+     ttcttcatgt ttcctgatcc cgccctgggt ctgcagtcac acatttctgg aaacttctct      2640
+     ggggtccaag actaggaggt tcctctagga ccttaaggcc ctggctcctt tctggtatct      2700
+     cacaggacat tttcttccca cagatagaaa aggagggagt tacactcagg ctgcaagtaa      2760
+     gtatgaagga ggctgatgcc tgaggtcctt gggatattgt gtttgggagc ccatggggga      2820
+     gctcacccac cccacaattc ctcctctagc cacatcttct gtgggatctg accaggttct      2880
+     gtttttgttc taccccaggc agtgacagtg cccagggctc tgatgtgtct ctcacagctt      2940
+     gtaaaggtga gagcttggag ggcctgatgt gtgttgggtg ttgggtggaa cagtggacac      3000
+     agctgtgcta tggggtttct ttgcgttgga tgtattgagc atgcgatggg ctgtttaagg      3060
+     tgtgacccct cactgtgatg gatatgaatt tgttcatgaa tatttttttc tatagtgtga      3120
+     gacagctgcc ttgtgtggga ctgagaggca agagttgttc ctgcccttcc ctttgtgact      3180
+     tgaagaaccc tgactttgtt tctgcaaagg cacctgcatg tgtctgtgtt cgtgtaggca      3240
+     taatgtgagg aggtggggag agcaccccac ccccatgtcc accatgaccc t               3291
+//
+ID   HLA14798; SV 1; standard; DNA; HUM; 2903 BP.
+XX
+AC   HLA14798;
+XX
+SV   HLA14798.1
+XX
+DT   30-MAR-2016 (Rel. 3.24.0, Created, Version 1)
+DT   14-OCT-2016 (Rel. 3.26.0, Last Updated, Version 1)
+XX
+DE   HLA-A*01:01:01:03, Human MHC Class I sequence
+XX
+KW   Human MHC; HLA; Class I; HLA-A; Allele; HLA-A*01:01:01:03;
+XX
+OS   Homo Sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Vertebrata; Mammalia; Eutheria; Primates;
+OC   Catarrhini; Hominidae; Homo.
+XX
+CC   --------------------------------------------------------------------------
+CC   IPD-IMGT/HLA Release Version 3.26.0
+CC   --------------------------------------------------------------------------
+CC   Copyrighted by the IPD-IMGT/HLA Database, Distributed under the Creative
+CC   Commons Attribution-NoDerivs License, see;
+CC   http://www.ebi.ac.uk/ipd/imgt/hla/licence.html for further details.
+CC   --------------------------------------------------------------------------
+XX
+CC   --------------------------------------------------------------------------
+CC   The sequence below is the official allele sequence as approved by the
+CC   WHO Nomenclature Committee for Factors of the HLA System.
+CC   Any cross references may differ from the sequence shown below.
+CC   --------------------------------------------------------------------------
+XX
+DR   EMBL; KU528597; KU528597.0.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..2903
+FT                   /organism="Homo sapiens"
+FT                   /mol_type="genomic DNA"
+FT                   /db_xref="taxon:9606"
+FT                   /ethnic="Unknown"
+FT                   /cell_line="M-155-12-1039-A"
+FT   CDS             join(1..73,204..473,715..990,1570..1845,1948..2064,
+FT                   2507..2539,2682..2729,2899..2903)
+FT                   /codon_start=1
+FT                   /gene="HLA-A"
+FT                   /allele="HLA-A*01:01:01:03"
+FT                   /product="MHC Class I HLA-A*01:01:01:03 sequence"
+FT                   /translation="MAVMAPRTLLLLLSGALALTQTWAGSHSMRYFFTSVSRPGRGEPR
+FT                   FIAVGYVDDTQFVRFDSDAASQKMEPRAPWIEQEGPEYWDQETRNMKAHSQTDRANLGT
+FT                   LRGYYNQSEDGSHTIQIMYGCDVGPDGRFLRGYRQDAYDGKDYIALNEDLRSWTAADMA
+FT                   AQITKRKWEAVHAAEQRRVYLEGRCVDGLRRYLENGKETLQRTDPPKTHMTHHPISDHE
+FT                   ATLRCWALGFYPAEITLTWQRDGEDQTQDTELVETRPAGDGTFQKWAAVVVPSGEEQRY
+FT                   TCHVQHEGLPKPLTLRWELSSQPTIPIVGIIAGLVLLGAVITGAVVAAVMWRRKSSDRK
+FT                   GGSYTQAASSDSAQGSDVSLTACKV"
+FT   exon            1..73
+FT                   /number="1"
+FT   intron          74..203
+FT                   /number="1"
+FT   exon            204..473
+FT                   /number="2"
+FT   intron          474..714
+FT                   /number="2"
+FT   exon            715..990
+FT                   /number="3"
+FT   intron          991..1569
+FT                   /number="3"
+FT   exon            1570..1845
+FT                   /number="4"
+FT   intron          1846..1947
+FT                   /number="4"
+FT   exon            1948..2064
+FT                   /number="5"
+FT   intron          2065..2506
+FT                   /number="5"
+FT   exon            2507..2539
+FT                   /number="6"
+FT   intron          2540..2681
+FT                   /number="6"
+FT   exon            2682..2729
+FT                   /number="7"
+FT   intron          2730..2898
+FT                   /number="7"
+FT   exon            2899..2903
+FT                   /number="8"
+SQ   Sequence 2903 BP; 558 A; 827 C; 912 G; 606 T; 0 other;
+     atggccgtca tggcgccccg aaccctcctc ctgctactct cgggggccct ggccctgacc        60
+     cagacctggg cgggtgagtg cggggtcggg agggaaaccg cctctgcggg gagaagcaag       120
+     gggccctcct ggcgggggcg caggaccggg ggagccgcgc ggggaggagg gtcgggcagg       180
+     tctcagccac tgctcgcccc caggctccca ctccatgagg tatttcttca catccgtgtc       240
+     ccggcccggc cgcggggagc cccgcttcat cgccgtgggc tacgtggacg acacgcagtt       300
+     cgtgcggttc gacagcgacg ccgcgagcca gaagatggag ccgcgggcgc cgtggataga       360
+     gcaggagggg ccggagtatt gggaccagga gacacggaat atgaaggccc actcacagac       420
+     tgaccgagcg aacctgggga ccctgcgcgg ctactacaac cagagcgagg acggtgagtg       480
+     accccggccc ggggcgcagg tcacgacccc tcatccccca cggacgggcc aggtcgccca       540
+     cagtctccgg gtccgagatc caccccgaag ccgcgggact ccgagaccct tgtcccggga       600
+     gaggcccagg cgcctttacc cggtttcatt ttcagtttag gccaaaaatc cccccgggtt       660
+     ggtcggggcg gggcggggct cgggggactg ggctgaccgc ggggtcgggg ccaggttctc       720
+     acaccatcca gataatgtat ggctgcgacg tggggccgga cgggcgcttc ctccgcgggt       780
+     accggcagga cgcctacgac ggcaaggatt acatcgccct gaacgaggac ctgcgctctt       840
+     ggaccgcggc ggacatggca gctcagatca ccaagcgcaa gtgggaggcg gtccatgcgg       900
+     cggagcagcg gagagtctac ctggagggcc ggtgcgtgga cgggctccgc agatacctgg       960
+     agaacgggaa ggagacgctg cagcgcacgg gtaccagggg ccacggggcg cctccctgat      1020
+     cgcctataga tctcccgggc tggcctccca caaggagggg agacaattgg gaccaacact      1080
+     agaatatcac cctccctctg gtcctgaggg agaggaatcc tcctgggttt ccagatcctg      1140
+     taccagagag tgactctgag gttccgccct gctctctgac acaattaagg gataaaatct      1200
+     ctgaaggagt gacgggaaga cgatccctcg aatactgatg agtggttccc tttgacaccg      1260
+     gcagcagcct tgggcccgtg acttttcctc tcaggccttg ttctctgctt cacactcaat      1320
+     gtgtgtgggg gtctgagtcc agcacttctg agtctctcag cctccactca ggtcaggacc      1380
+     agaagtcgct gttcccttct cagggaatag aagattatcc caggtgcctg tgtccaggct      1440
+     ggtgtctggg ttctgtgctc tcttccccat cccgggtgtc ctgtccattc tcaagatggc      1500
+     cacatgcgtg ctggtggagt gtcccatgac agatgcaaaa tgcctgaatt ttctgactct      1560
+     tcccgtcaga cccccccaag acacatatga cccaccaccc catctctgac catgaggcca      1620
+     ccctgaggtg ctgggccctg ggcttctacc ctgcggagat cacactgacc tggcagcggg      1680
+     atggggagga ccagacccag gacacggagc tcgtggagac caggcctgca ggggatggaa      1740
+     ccttccagaa gtgggcggct gtggtggtgc cttctggaga ggagcagaga tacacctgcc      1800
+     atgtgcagca tgagggtctg cccaagcccc tcaccctgag atggggtaag gagggagatg      1860
+     ggggtgtcat gtctcttagg gaaagcagga gcctctctgg agacctttag cagggtcagg      1920
+     gcccctcacc ttcccctctt ttcccagagc tgtcttccca gcccaccatc cccatcgtgg      1980
+     gcatcattgc tggcctggtt ctccttggag ctgtgatcac tggagctgtg gtcgctgccg      2040
+     tgatgtggag gaggaagagc tcaggtggag aaggggtgaa gggtggggtc tgagatttct      2100
+     tgtctcactg agggttccaa gccccagcta gaaatgtgcc ctgtctcatt actgggaagc      2160
+     accttccaca atcatgggcc gacccagcct gggccctgtg tgccagcact tactcttttg      2220
+     taaagcacct gttaaaatga aggacagatt tatcaccttg attacggcgg tgatgggacc      2280
+     tgatcccagc agtcacaagt cacaggggaa ggtccctgag gacagacctc aggagggcta      2340
+     ttggtccagg acccacacct gctttcttca tgtttcctga tcccgccctg ggtctgcagt      2400
+     cacacatttc tggaaacttc tctggggtcc aagactagga ggttcctcta ggaccttaag      2460
+     gccctggctc ctttctggta tctcacagga cattttcttc ccacagatag aaaaggaggg      2520
+     agttacactc aggctgcaag taagtatgaa ggaggctgat gcctgaggtc cttgggatat      2580
+     tgtgtttggg agcccatggg ggagctcacc caccccacaa ttcctcctct agccacatct      2640
+     tctgtgggat ctgaccaggt tctgtttttg ttctacccca ggcagtgaca gtgcccaggg      2700
+     ctctgatgtg tctctcacag cttgtaaagg tgagagcttg gagggcctga tgtgtgttgg      2760
+     gtgttgggtg gaacagtgga cacagctgtg ctatggggtt tctttgcgtt ggatgtattg      2820
+     agcatgcgat gggctgttta aggtgtgacc cctcactgtg atggatatga atttgttcat      2880
+     gaatattttt ttctatagtg tga                                              2903
+//
+ID   HLA15760; SV 1; standard; DNA; HUM; 3087 BP.
+XX
+AC   HLA15760;
+XX
+SV   HLA15760.1
+XX
+DT   30-SEP-2016 (Rel. 3.26.0, Created, Version 1)
+DT   14-OCT-2016 (Rel. 3.26.0, Last Updated, Version 1)
+XX
+DE   HLA-A*01:01:01:04, Human MHC Class I sequence
+XX
+KW   Human MHC; HLA; Class I; HLA-A; Allele; HLA-A*01:01:01:04;
+XX
+OS   Homo Sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Vertebrata; Mammalia; Eutheria; Primates;
+OC   Catarrhini; Hominidae; Homo.
+XX
+CC   --------------------------------------------------------------------------
+CC   IPD-IMGT/HLA Release Version 3.26.0
+CC   --------------------------------------------------------------------------
+CC   Copyrighted by the IPD-IMGT/HLA Database, Distributed under the Creative
+CC   Commons Attribution-NoDerivs License, see;
+CC   http://www.ebi.ac.uk/ipd/imgt/hla/licence.html for further details.
+CC   --------------------------------------------------------------------------
+XX
+CC   --------------------------------------------------------------------------
+CC   The sequence below is the official allele sequence as approved by the
+CC   WHO Nomenclature Committee for Factors of the HLA System.
+CC   Any cross references may differ from the sequence shown below.
+CC   --------------------------------------------------------------------------
+XX
+DR   EMBL; KX707637; KX707637.0.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..3087
+FT                   /organism="Homo sapiens"
+FT                   /mol_type="genomic DNA"
+FT                   /db_xref="taxon:9606"
+FT                   /ethnic="Unknown"
+FT                   /cell_line="RDP-CH2-65"
+FT   CDS             join(108..180,311..580,822..1097,1677..1952,2055..2171,
+FT                   2614..2646,2789..2836,3006..3010)
+FT                   /codon_start=1
+FT                   /gene="HLA-A"
+FT                   /allele="HLA-A*01:01:01:04"
+FT                   /product="MHC Class I HLA-A*01:01:01:04 sequence"
+FT                   /translation="MAVMAPRTLLLLLSGALALTQTWAGSHSMRYFFTSVSRPGRGEPR
+FT                   FIAVGYVDDTQFVRFDSDAASQKMEPRAPWIEQEGPEYWDQETRNMKAHSQTDRANLGT
+FT                   LRGYYNQSEDGSHTIQIMYGCDVGPDGRFLRGYRQDAYDGKDYIALNEDLRSWTAADMA
+FT                   AQITKRKWEAVHAAEQRRVYLEGRCVDGLRRYLENGKETLQRTDPPKTHMTHHPISDHE
+FT                   ATLRCWALGFYPAEITLTWQRDGEDQTQDTELVETRPAGDGTFQKWAAVVVPSGEEQRY
+FT                   TCHVQHEGLPKPLTLRWELSSQPTIPIVGIIAGLVLLGAVITGAVVAAVMWRRKSSDRK
+FT                   GGSYTQAASSDSAQGSDVSLTACKV"
+FT   UTR             1..107
+FT   exon            108..180
+FT                   /number="1"
+FT   intron          181..310
+FT                   /number="1"
+FT   exon            311..580
+FT                   /number="2"
+FT   intron          581..821
+FT                   /number="2"
+FT   exon            822..1097
+FT                   /number="3"
+FT   intron          1098..1676
+FT                   /number="3"
+FT   exon            1677..1952
+FT                   /number="4"
+FT   intron          1953..2054
+FT                   /number="4"
+FT   exon            2055..2171
+FT                   /number="5"
+FT   intron          2172..2613
+FT                   /number="5"
+FT   exon            2614..2646
+FT                   /number="6"
+FT   intron          2647..2788
+FT                   /number="6"
+FT   exon            2789..2836
+FT                   /number="7"
+FT   intron          2837..3005
+FT                   /number="7"
+FT   exon            3006..3010
+FT                   /number="8"
+FT   UTR             3011..3087
+SQ   Sequence 3087 BP; 592 A; 883 C; 961 G; 651 T; 0 other;
+     tcccattggg tgtcgggttt ccagagaagc caatcagtgt cgtcgcggtc gctgttctaa        60
+     agtccgcacg cacccaccgg gactcagatt ctccccagac gccgaggatg gccgtcatgg       120
+     cgccccgaac cctcctcctg ctactctcgg gggccctggc cctgacccag acctgggcgg       180
+     gtgagtgcgg ggtcgggagg gaaaccgcct ctgcggggag aagcaagggg ccctcctggc       240
+     gggggcgcag gaccggggga gccgcgccgg gaggagggtc gggcaggtct cagccactgc       300
+     tcgcccccag gctcccactc catgaggtat ttcttcacat ccgtgtcccg gcccggccgc       360
+     ggggagcccc gcttcatcgc cgtgggctac gtggacgaca cgcagttcgt gcggttcgac       420
+     agcgacgccg cgagccagaa gatggagccg cgggcgccgt ggatagagca ggaggggccg       480
+     gagtattggg accaggagac acggaatatg aaggcccact cacagactga ccgagcgaac       540
+     ctggggaccc tgcgcggcta ctacaaccag agcgaggacg gtgagtgacc ccggcccggg       600
+     gcgcaggtca cgacccctca tcccccacgg acgggccagg tcgcccacag tctccgggtc       660
+     cgagatccac cccgaagccg cgggactccg agacccttgt cccgggagag gcccaggcgc       720
+     ctttacccgg tttcattttc agtttaggcc aaaaatcccc ccgggttggt cggggcgggg       780
+     cggggctcgg gggactgggc tgaccgcggg gtcggggcca ggttctcaca ccatccagat       840
+     aatgtatggc tgcgacgtgg ggccggacgg gcgcttcctc cgcgggtacc ggcaggacgc       900
+     ctacgacggc aaggattaca tcgccctgaa cgaggacctg cgctcttgga ccgcggcgga       960
+     catggcagct cagatcacca agcgcaagtg ggaggcggtc catgcggcgg agcagcggag      1020
+     agtctacctg gagggccggt gcgtggacgg gctccgcaga tacctggaga acgggaagga      1080
+     gacgctgcag cgcacgggta ccaggggcca cggggcgcct ccctgatcgc ctatagatct      1140
+     cccgggctgg cctcccacaa ggaggggaga caattgggac caacactaga atatcaccct      1200
+     ccctctggtc ctgagggaga ggaatcctcc tgggtttcca gatcctgtac cagagagtga      1260
+     ctctgaggtt ccgccctgct ctctgacaca attaagggat aaaatctctg aaggagtgac      1320
+     gggaagacga tccctcgaat actgatgagt ggttcccttt gacaccggca gcagccttgg      1380
+     gcccgtgact tttcctctca ggccttgttc tctgcttcac actcaatgtg tgtggcggtc      1440
+     tgagtccagc acttctgagt ctctcagcct ccactcaggt caggaccaga agtcgctgtt      1500
+     cccttctcag ggaatagaag attatcccag gtgcctgtgt ccaggctggt gtctgggttc      1560
+     tgtgctctct tccccatccc gggtgtcctg tccattctca agatggccac atgcgtgctg      1620
+     gtggagtgtc ccatgacaga tgcaaaatgc ctgaattttc tgactcttcc cgtcagaccc      1680
+     ccccaagaca catatgaccc accaccccat ctctgaccat gaggccaccc tgaggtgctg      1740
+     ggccctgggc ttctaccctg cggagatcac actgacctgg cagcgggatg gggaggacca      1800
+     gacccaggac acggagctcg tggagaccag gcctgcaggg gatggaacct tccagaagtg      1860
+     ggcggctgtg gtggtgcctt ctggagagga gcagagatac acctgccatg tgcagcatga      1920
+     gggtctgccc aagcccctca ccctgagatg gggtaaggag ggagatgggg gtgtcatgtc      1980
+     tcttagggaa agcaggagcc tctctggaga cctttagcag ggtcagggcc cctcaccttc      2040
+     ccctcttttc ccagagctgt cttcccagcc caccatcccc atcgtgggca tcattgctgg      2100
+     cctggttctc cttggagctg tgatcactgg agctgtggtc gctgccgtga tgtggaggag      2160
+     gaagagctca ggtggagaag gggtgaaggg tggggtctga gatttcttgt ctcactgagg      2220
+     gttccaagcc ccagctagaa atgtgccctg tctcattact gggaagcacc ttccacaatc      2280
+     atgggccgac ccagcctggg ccctgtgtgc cagcacttac tcttttgtaa agcacctgtt      2340
+     aaaatgaagg acagatttat caccttgatt acggcggtga tgggacctga tcccagcagt      2400
+     cacaagtcac aggggaaggt ccctgaggac agacctcagg agggctattg gtccaggacc      2460
+     cacacctgct ttcttcatgt ttcctgatcc cgccctgggt ctgcagtcac acatttctgg      2520
+     aaacttctct ggggtccaag actaggaggt tcctctagga ccttaaggcc ctggctcctt      2580
+     tctggtatct cacaggacat tttcttccca cagatagaaa aggagggagt tacactcagg      2640
+     ctgcaagtaa gtatgaagga ggctgatgcc tgaggtcctt gggatattgt gtttgggagc      2700
+     ccatggggga gctcacccac cccacaattc ctcctctagc cacatcttct gtgggatctg      2760
+     accaggttct gtttttgttc taccccaggc agtgacagtg cccagggctc tgatgtgtct      2820
+     ctcacagctt gtaaaggtga gagcttggag ggcctgatgt gtgttgggtg ttgggtggaa      2880
+     cagtggacac agctgtgcta tggggtttct ttgcgttgga tgtattgagc atgcgatggg      2940
+     ctgtttaagg tgtgacccct cactgtgatg gatatgaatt tgttcatgaa tatttttttc      3000
+     tatagtgtga gacagctgcc ttgtgtggga ctgagaggca agagttgttc ctgcccttcc      3060
+     ctttgtgact tgaagaaccc tgacttt                                          3087
+//
+ID   HLA01244; SV 1; standard; DNA; HUM; 546 BP.
+XX
+AC   HLA01244;
+XX
+SV   HLA01244.1
+XX
+DT   18-MAY-2000 (Rel. 1.7.0, Created, Version 1)
+DT   14-OCT-2016 (Rel. 3.26.0, Last Updated, Version 1)
+XX
+DE   HLA-A*01:01:02, Human MHC Class I sequence (partial)
+XX
+KW   Human MHC; HLA; Class I; HLA-A; Allele; HLA-A*01:01:02;
+XX
+OS   Homo Sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Vertebrata; Mammalia; Eutheria; Primates;
+OC   Catarrhini; Hominidae; Homo.
+XX
+CC   --------------------------------------------------------------------------
+CC   IPD-IMGT/HLA Release Version 3.26.0
+CC   --------------------------------------------------------------------------
+CC   Copyrighted by the IPD-IMGT/HLA Database, Distributed under the Creative
+CC   Commons Attribution-NoDerivs License, see;
+CC   http://www.ebi.ac.uk/ipd/imgt/hla/licence.html for further details.
+CC   --------------------------------------------------------------------------
+XX
+RN   [1]
+RP   1-546
+RX   PUBMED; 12135434.
+RA   Bradshaw D, Gans CP, Jones P, Rizzuto G, Steiner N, Mitton W, Ng J,
+RA   Koester R, Hartzman RJ, Hurley CK;
+RT   "Novel HLA-A locus alleles including A*01012, A*0306, A*0308, A*2616,
+RT   A*2617, A*3009, A*3206, A*3403, A*3602 and A*6604";
+RL   Tissue Antigens 59:325-7(2002).
+XX
+CC   --------------------------------------------------------------------------
+CC   The sequence below is the official allele sequence as approved by the
+CC   WHO Nomenclature Committee for Factors of the HLA System.
+CC   Any cross references may differ from the sequence shown below.
+CC   --------------------------------------------------------------------------
+XX
+DR   EMBL; AF248059; AF248059.1.
+DR   EMBL; AF248060; AF248060.1.
+DR   EMBL; AH009247; AH009247.1.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..546
+FT                   /organism="Homo sapiens"
+FT                   /mol_type="genomic DNA"
+FT                   /db_xref="taxon:9606"
+FT                   /ethnic="Mixed"
+FT                   /cell_line="GN00348"
+FT   CDS             <1..546>
+FT                   /codon_start=1
+FT                   /partial
+FT                   /gene="HLA-A"
+FT                   /allele="HLA-A*01:01:02"
+FT                   /product="MHC Class I HLA-A*01:01:02 sequence"
+FT                   /translation="SHSMRYFFTSVSRPGRGEPRFIAVGYVDDTQFVRFDSDAASQKME
+FT                   PRAPWIEQEGPEYWDQETRNMKAHSQTDRANLGTLRGYYNQSEDGSHTIQIMYGCDVGP
+FT                   DGRFLRGYRQDAYDGKDYIALNEDLRSWTAADMAAQITKRKWEAVHAAEQRRVYLEGRC
+FT                   VDGLRRYLENGKETLQRT"
+FT   exon            1..270
+FT                   /number="2"
+FT   exon            271..546
+FT                   /number="3"
+SQ   Sequence 546 BP; 112 A; 163 C; 195 G; 76 T; 0 other;
+     gctcccactc catgaggtat ttcttcacat ccgtgtcccg gcccggccgc ggggagcccc        60
+     gcttcatcgc cgtgggctac gtggacgaca cgcagttcgt gcggttcgac agcgacgccg       120
+     cgagccagaa gatggagccg cgggcgccgt ggatagagca ggaggggccg gagtattggg       180
+     accaggagac acggaatatg aaggcccact cacagactga ccgagcgaac ctggggaccc       240
+     tgcgcggcta ctacaaccag agcgaggacg gttctcacac catccagata atgtatggct       300
+     gcgacgtggg gccggacggg cgcttcctcc gcgggtaccg gcaggacgcc tacgacggca       360
+     aggattacat cgccctgaac gaggacctgc gctcttggac cgcggcggac atggcagctc       420
+     agattaccaa gcgcaagtgg gaggcggtcc atgcggcgga gcagcggaga gtctacctgg       480
+     agggccggtg cgtggacggg ctccgcagat acctggagaa cgggaaggag acgctgcagc       540
+     gcacgg                                                                  546
+//
+ID   HLA01971; SV 1; standard; DNA; HUM; 895 BP.
+XX
+AC   HLA01971;
+XX
+SV   HLA01971.1
+XX
+DT   31-JUL-2004 (Rel. 2.7.0, Created, Version 1)
+DT   14-OCT-2016 (Rel. 3.26.0, Last Updated, Version 1)
+XX
+DE   HLA-A*01:01:03, Human MHC Class I sequence (partial)
+XX
+KW   Human MHC; HLA; Class I; HLA-A; Allele; HLA-A*01:01:03;
+XX
+OS   Homo Sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Vertebrata; Mammalia; Eutheria; Primates;
+OC   Catarrhini; Hominidae; Homo.
+XX
+CC   --------------------------------------------------------------------------
+CC   IPD-IMGT/HLA Release Version 3.26.0
+CC   --------------------------------------------------------------------------
+CC   Copyrighted by the IPD-IMGT/HLA Database, Distributed under the Creative
+CC   Commons Attribution-NoDerivs License, see;
+CC   http://www.ebi.ac.uk/ipd/imgt/hla/licence.html for further details.
+CC   --------------------------------------------------------------------------
+XX
+RN   [1]
+RP   1-895
+RX   PUBMED; 16866888.
+RA   Voorter CE, Groeneveld L, Visser D, van den Berg-Loonen EM;
+RT   "Characterization of a new HLA-A allele, A*010103";
+RL   Tissue Antigens 68:173-4(2006).
+XX
+CC   --------------------------------------------------------------------------
+CC   The sequence below is the official allele sequence as approved by the
+CC   WHO Nomenclature Committee for Factors of the HLA System.
+CC   Any cross references may differ from the sequence shown below.
+CC   --------------------------------------------------------------------------
+XX
+DR   EMBL; AJ697951; AJ697951.0.
+DR   EMBL; AJ697952; AJ697952.0.
+DR   EMBL; AJ697953; AJ697953.0.
+DR   EMBL; AJ697954; AJ697954.0.
+DR   EMBL; GQ240343; GQ240343.0.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..895
+FT                   /organism="Homo sapiens"
+FT                   /mol_type="genomic DNA"
+FT                   /db_xref="taxon:9606"
+FT                   /ethnic="Unknown"
+FT                   /cell_line="27720"
+FT                   /cell_line="27785"
+FT                   /cell_line="HN-33780-2"
+FT   CDS             <1..895>
+FT                   /codon_start=1
+FT                   /partial
+FT                   /gene="HLA-A"
+FT                   /allele="HLA-A*01:01:03"
+FT                   /product="MHC Class I HLA-A*01:01:03 sequence"
+FT                   /translation="MAVMAPRTLLLLLSGALALTQTWAGSHSMRYFFTSVSRPGRGEPR
+FT                   FIAVGYVDDTQFVRFDSDAASQKMEPRAPWIEQEGPEYWDQETRNMKAHSQTDRANLGT
+FT                   LRGYYNQSEDGSHTIQIMYGCDVGPDGRFLRGYRQDAYDGKDYIALNEDLRSWTAADMA
+FT                   AQITKRKWEAVHAAEQRRVYLEGRCVDGLRRYLENGKETLQRTDPPKTHMTHHPISDHE
+FT                   ATLRCWALGFYPAEITLTWQRDGEDQTQDTELVETRPAGDGTFQKWAAVVVPSGEEQRY
+FT                   TCHVQHEGLPKPLTLRW"
+FT   exon            1..73
+FT                   /number="1"
+FT   exon            74..343
+FT                   /number="2"
+FT   exon            344..619
+FT                   /number="3"
+FT   exon            620..895
+FT                   /number="4"
+SQ   Sequence 895 BP; 179 A; 282 C; 304 G; 130 T; 0 other;
+     atggccgtca tggcgccccg aaccctcctc ctgctactct cgggggccct ggccctgacc        60
+     cagacctggg cgggctccca ctccatgagg tatttcttca catccgtgtc ccggcccggc       120
+     cgcggggagc cccgcttcat cgccgtgggc tacgtggacg acacgcagtt cgtgcggttc       180
+     gacagcgacg ccgcgagcca gaagatggag ccgcgggcgc cgtggataga gcaggagggg       240
+     ccggagtatt gggaccagga gacacggaat atgaaggccc actcacagac tgaccgagcg       300
+     aacctgggga ccctgcgcgg ctactacaac cagagcgagg acggttctca caccatccag       360
+     ataatgtatg gctgcgacgt ggggccggac gggcgcttcc tccgcgggta ccggcaggac       420
+     gcctacgacg gcaaggatta catcgccctg aacgaggacc tgcgctcttg gaccgcggcg       480
+     gacatggcag ctcagatcac caagcgcaag tgggaggcgg tccatgcggc ggagcagcgg       540
+     agagtctacc tggagggccg gtgcgtggac gggctccgca gatacctgga gaacgggaag       600
+     gagacgctgc agcgcactga cccccccaag acacatatga cccaccaccc catctctgac       660
+     catgaggcca ccctgaggtg ctgggccctg ggcttctacc ctgcggagat cacactgacc       720
+     tggcagcggg atggggagga ccagacccag gacacggagc tcgtggagac caggcctgca       780
+     ggggatggaa ccttccagaa gtgggcggct gtggtggtgc cttctggaga ggagcagaga       840
+     tacacctgcc atgtgcagca tgagggtctg cccaagcccc tcaccctgag atggg            895
+//
+ID   HLA02540; SV 1; standard; DNA; HUM; 546 BP.
+XX
+AC   HLA02540;
+XX
+SV   HLA02540.1
+XX
+DT   30-APR-2006 (Rel. 2.14.0, Created, Version 1)
+DT   14-OCT-2016 (Rel. 3.26.0, Last Updated, Version 1)
+XX
+DE   HLA-A*01:01:04, Human MHC Class I sequence (partial)
+XX
+KW   Human MHC; HLA; Class I; HLA-A; Allele; HLA-A*01:01:04;
+XX
+OS   Homo Sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Vertebrata; Mammalia; Eutheria; Primates;
+OC   Catarrhini; Hominidae; Homo.
+XX
+CC   --------------------------------------------------------------------------
+CC   IPD-IMGT/HLA Release Version 3.26.0
+CC   --------------------------------------------------------------------------
+CC   Copyrighted by the IPD-IMGT/HLA Database, Distributed under the Creative
+CC   Commons Attribution-NoDerivs License, see;
+CC   http://www.ebi.ac.uk/ipd/imgt/hla/licence.html for further details.
+CC   --------------------------------------------------------------------------
+XX
+RN   [1]
+RP   1-546
+RX   PUBMED; 16948651.
+RA   Yu M, Hall JE, Hartman K, Caparelli E, Smyth E, Czech J, O'Gorman M;
+RT   "A novel human leukocyte antigen-A*01 allele, A*010104, identified by
+RT   polymerase chain reaction-sequence-based typing in a Caucasian
+RT   hematopoietic stem cell donor";
+RL   Tissue Antigens 68:263-263(2006).
+XX
+CC   --------------------------------------------------------------------------
+CC   The sequence below is the official allele sequence as approved by the
+CC   WHO Nomenclature Committee for Factors of the HLA System.
+CC   Any cross references may differ from the sequence shown below.
+CC   --------------------------------------------------------------------------
+XX
+DR   EMBL; DQ485722; DQ485722.0.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..546
+FT                   /organism="Homo sapiens"
+FT                   /mol_type="genomic DNA"
+FT                   /db_xref="taxon:9606"
+FT                   /ethnic="Unknown"
+FT                   /cell_line="DA894.3"
+FT   CDS             <1..546>
+FT                   /codon_start=1
+FT                   /partial
+FT                   /gene="HLA-A"
+FT                   /allele="HLA-A*01:01:04"
+FT                   /product="MHC Class I HLA-A*01:01:04 sequence"
+FT                   /translation="SHSMRYFFTSVSRPGRGEPRFIAVGYVDDTQFVRFDSDAASQKME
+FT                   PRAPWIEQEGPEYWDQETRNMKAHSQTDRANLGTLRGYYNQSEDGSHTIQIMYGCDVGP
+FT                   DGRFLRGYRQDAYDGKDYIALNEDLRSWTAADMAAQITKRKWEAVHAAEQRRVYLEGRC
+FT                   VDGLRRYLENGKETLQRT"
+FT   exon            1..270
+FT                   /number="2"
+FT   exon            271..546
+FT                   /number="3"
+SQ   Sequence 546 BP; 112 A; 163 C; 195 G; 76 T; 0 other;
+     gctcccactc catgaggtat ttcttcacat ccgtgtcccg gcccggccgc ggggagcccc        60
+     gcttcatcgc cgtgggctac gtggacgaca cgcagttcgt gcggttcgac agcgacgccg       120
+     cgagccagaa gatggagccg cgggcgccgt ggatagagca ggaggggccg gagtattggg       180
+     accaggagac acggaatatg aaggcccact cacagactga ccgagcgaat ctggggaccc       240
+     tgcgcggcta ctacaaccag agcgaggacg gttctcacac catccagata atgtatggct       300
+     gcgacgtggg gccggacggg cgcttcctcc gcgggtaccg gcaggacgcc tacgacggca       360
+     aggattacat cgccctgaac gaggacctgc gctcttggac cgcggcggac atggcagctc       420
+     agatcaccaa gcgcaagtgg gaggcggtcc atgcggcgga gcagcggaga gtctacctgg       480
+     agggccggtg cgtggacggg ctccgcagat acctggagaa cgggaaggag acgctgcagc       540
+     gcacgg                                                                  546
+//
+ID   HLA03131; SV 1; standard; DNA; HUM; 822 BP.
+XX
+AC   HLA03131;
+XX
+SV   HLA03131.1
+XX
+DT   25-SEP-2007 (Rel. 2.19.0, Created, Version 1)
+DT   14-OCT-2016 (Rel. 3.26.0, Last Updated, Version 1)
+XX
+DE   HLA-A*01:01:05, Human MHC Class I sequence (partial)
+XX
+KW   Human MHC; HLA; Class I; HLA-A; Allele; HLA-A*01:01:05;
+XX
+OS   Homo Sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Vertebrata; Mammalia; Eutheria; Primates;
+OC   Catarrhini; Hominidae; Homo.
+XX
+CC   --------------------------------------------------------------------------
+CC   IPD-IMGT/HLA Release Version 3.26.0
+CC   --------------------------------------------------------------------------
+CC   Copyrighted by the IPD-IMGT/HLA Database, Distributed under the Creative
+CC   Commons Attribution-NoDerivs License, see;
+CC   http://www.ebi.ac.uk/ipd/imgt/hla/licence.html for further details.
+CC   --------------------------------------------------------------------------
+XX
+CC   --------------------------------------------------------------------------
+CC   The sequence below is the official allele sequence as approved by the
+CC   WHO Nomenclature Committee for Factors of the HLA System.
+CC   Any cross references may differ from the sequence shown below.
+CC   --------------------------------------------------------------------------
+XX
+DR   EMBL; AM850141; AM850141.0.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..822
+FT                   /organism="Homo sapiens"
+FT                   /mol_type="genomic DNA"
+FT                   /db_xref="taxon:9606"
+FT                   /ethnic="Caucasoid"
+FT                   /cell_line="99706"
+FT   CDS             <1..822>
+FT                   /codon_start=1
+FT                   /partial
+FT                   /gene="HLA-A"
+FT                   /allele="HLA-A*01:01:05"
+FT                   /product="MHC Class I HLA-A*01:01:05 sequence"
+FT                   /translation="SHSMRYFFTSVSRPGRGEPRFIAVGYVDDTQFVRFDSDAASQKME
+FT                   PRAPWIEQEGPEYWDQETRNMKAHSQTDRANLGTLRGYYNQSEDGSHTIQIMYGCDVGP
+FT                   DGRFLRGYRQDAYDGKDYIALNEDLRSWTAADMAAQITKRKWEAVHAAEQRRVYLEGRC
+FT                   VDGLRRYLENGKETLQRTDPPKTHMTHHPISDHEATLRCWALGFYPAEITLTWQRDGED
+FT                   QTQDTELVETRPAGDGTFQKWAAVVVPSGEEQRYTCHVQHEGLPKPLTLRW"
+FT   exon            1..270
+FT                   /number="2"
+FT   exon            271..546
+FT                   /number="3"
+FT   exon            547..822
+FT                   /number="4"
+SQ   Sequence 822 BP; 171 A; 250 C; 284 G; 117 T; 0 other;
+     gctcccactc catgaggtat ttcttcacat ccgtgtcccg gcccggccgc ggggagcccc        60
+     gcttcatcgc ggtgggctac gtggacgaca cgcagttcgt gcggttcgac agcgacgccg       120
+     cgagccagaa gatggagccg cgggcgccgt ggatagagca ggaggggccg gagtattggg       180
+     accaggagac acggaatatg aaggcccact cacagactga ccgagcgaac ctggggaccc       240
+     tgcgcggcta ctacaaccag agcgaggacg gttctcacac catccagata atgtatggct       300
+     gcgacgtggg gccggacggg cgcttcctcc gcgggtaccg gcaggacgcc tacgacggca       360
+     aggattacat cgccctgaac gaggacctgc gctcttggac cgcggcggac atggcagctc       420
+     agatcaccaa gcgcaagtgg gaggcggtcc atgcggcgga gcagcggaga gtctacctgg       480
+     agggccggtg cgtggacggg ctccgcagat acctggagaa cgggaaggag acgctgcagc       540
+     gcacggaccc ccccaagaca catatgaccc accaccccat ctctgaccat gaggccaccc       600
+     tgaggtgctg ggccctgggc ttctaccctg cggagatcac actgacctgg cagcgggatg       660
+     gggaggacca gacccaggac acggagctcg tggagaccag gcctgcaggg gatggaacct       720
+     tccagaagtg ggcggctgtg gtggtgcctt ctggagagga gcagagatac acctgccatg       780
+     tgcagcatga gggtctgccc aagcccctca ccctgagatg gg                          822
+//
