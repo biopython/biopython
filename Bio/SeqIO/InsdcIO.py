@@ -820,10 +820,36 @@ class GenBankWriter(_InsdcWriter):
         else:
             self._write_single_line("VERSION", "%s" % (acc_with_version))
 
-        # The NCBI only expect two types of link so far,
+        # The NCBI initially expected two types of link,
         # e.g. "Project:28471" and "Trace Assembly Archive:123456"
-        # TODO - Filter the dbxrefs list to just these?
-        self._write_multi_entries("DBLINK", record.dbxrefs)
+        #
+        # This changed and at some point the formatting switched to
+        # include a space after the colon, e.g.
+        #
+        # LOCUS       NC_000011               1606 bp    DNA     linear   CON 06-JUN-2016
+        # DEFINITION  Homo sapiens chromosome 11, GRCh38.p7 Primary Assembly.
+        # ACCESSION   NC_000011 REGION: complement(5225466..5227071) GPC_000001303
+        # VERSION     NC_000011.10  GI:568815587
+        # DBLINK      BioProject: PRJNA168
+        #             Assembly: GCF_000001405.33
+        # ...
+        #
+        # Or,
+        #
+        # LOCUS       JU120277                1044 bp    mRNA    linear   TSA 27-NOV-2012
+        # DEFINITION  TSA: Tupaia chinensis tbc000002.Tuchadli mRNA sequence.
+        # ACCESSION   JU120277
+        # VERSION     JU120277.1  GI:379775257
+        # DBLINK      BioProject: PRJNA87013
+        #             Sequence Read Archive: SRR433859
+        # ...
+        dbxrefs_with_space = []
+        for x in record.dbxrefs:
+            if ": " not in x:
+                x = x.replace(":", ": ")
+            dbxrefs_with_space.append(x)
+        self._write_multi_entries("DBLINK", dbxrefs_with_space)
+        del dbxrefs_with_space
 
         try:
             # List of strings

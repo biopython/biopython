@@ -107,6 +107,8 @@ class GenBankTests(unittest.TestCase):
         """GenBank record with old DBLINK project entry."""
         record = SeqIO.read("GenBank/NC_005816.gb", "gb")
         self.assertEqual(record.dbxrefs, ["Project:58037"])
+        gb = record.format("gb")
+        self.assertTrue("\nDBLINK      Project: 58037\n" in gb, gb)
         embl = record.format("embl")
         self.assertTrue("XX\nPR   Project:58037;\nXX\n" in embl, embl)
 
@@ -115,6 +117,11 @@ class GenBankTests(unittest.TestCase):
         record = SeqIO.read("GenBank/NP_416719.gbwithparts", "gb")
         self.assertEqual(record.dbxrefs,
                          ["Project:57779", "BioProject:PRJNA57779"])
+        gb = record.format("gb")
+        self.assertTrue("""
+DBLINK      Project: 57779
+            BioProject: PRJNA57779
+KEYWORDS    """ in gb, gb)
         embl = record.format("embl")
         self.assertTrue("XX\nPR   Project:PRJNA57779;\nXX\n" in embl, embl)
 
@@ -123,7 +130,10 @@ class GenBankTests(unittest.TestCase):
         record = SeqIO.read("GenBank/DS830848.gb", "gb")
         self.assertTrue("BioProject:PRJNA16232" in record.dbxrefs, record.dbxrefs)
         gb = record.format("gb")
-        self.assertTrue("\nDBLINK      BioProject:PRJNA16232\n" in gb, gb)
+        self.assertTrue("""
+DBLINK      BioProject: PRJNA16232
+            BioSample: SAMN03004382
+KEYWORDS    """ in gb, gb)
         # Also check EMBL output
         embl = record.format("embl")
         self.assertTrue("XX\nPR   Project:PRJNA16232;\nXX\n" in embl, embl)
@@ -134,7 +144,13 @@ class GenBankTests(unittest.TestCase):
         # TODO: Should we map this to BioProject:PRJNA16232
         self.assertTrue("Project:PRJNA16232" in record.dbxrefs, record.dbxrefs)
         gb = record.format("gb")
-        self.assertTrue("\nDBLINK      Project:PRJNA16232\n" in gb, gb)
+        self.assertTrue("""
+DBLINK      Project: PRJNA16232
+            MD5: 387e72e4f7ae804780d06f875ab3bc41
+            ENA: ABJB010000000
+            ENA: ABJB000000000
+            BioSample: SAMN03004382
+KEYWORDS    """ in gb, gb)
         embl = record.format("embl")
         self.assertTrue("XX\nPR   Project:PRJNA16232;\nXX\n" in embl, embl)
 
