@@ -374,10 +374,9 @@ class TogoEntry(unittest.TestCase):
         handle = TogoWS.entry("protein", "16130152", "fasta")
         record = SeqIO.read(handle, "fasta")
         handle.close()
-        # Could use assertIn but requires Python 2.7+
-        self.assertTrue("16130152" in record.id, record.id)
-        self.assertTrue("16130152" in record.name, record.name)
-        self.assertTrue("porin protein" in record.description, record.description)
+        self.assertIn("16130152", record.id)
+        self.assertIn("16130152", record.name)
+        self.assertIn("porin protein", record.description)
         self.assertEqual(len(record), 367)
         self.assertEqual(seguid(record.seq), "fCjcjMFeGIrilHAn6h+yju267lg")
 
