@@ -640,7 +640,8 @@ class EmblScanner(InsdcScanner):
         # Or, Non-Redundant Level 2 database records:
         # ID <L2-accession>; <molecule type>; <non-redundant level 2>; <cluster size L2>
         # e.g. ID   NRP0000016E; PRT; NR2; 5 SQ
-        fields = line[self.HEADER_WIDTH:].rstrip()[:-3].split(";")
+        # e.g. ID   NRP_AX000635; PRT; NR1; 15 SQ
+        fields = [data.strip() for data in line[self.HEADER_WIDTH:].strip()[:-3].split(";")]
         assert len(fields) == 4
         consumer.locus(fields[0])
         consumer.residue_type(fields[1])
