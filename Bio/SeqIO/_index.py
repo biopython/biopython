@@ -294,8 +294,9 @@ class EmblRandomAccess(SequentialSeqFileRandomAccess):
             # normally the SV line is used.
             setbysv = False  # resets sv as false
             length = len(line)
-            if line[2:].count(b";") == 6:
+            if line[2:].count(b";") in [5, 6]:
                 # Looks like the semi colon separated style introduced in 2006
+                # Or style from IPD-IMGT/HLA after their v3.16.0 release
                 parts = line[3:].rstrip().split(b";")
                 if parts[1].strip().startswith(sv_marker):
                     # The SV bit gives the version

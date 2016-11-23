@@ -307,11 +307,10 @@ class TopologyTests(unittest.TestCase):
         tests = [
             ("ID   HLA00001   standard; DNA; HUM; 3503 BP.",
              None, "DNA", "HUM"),
-            # TODO - see GitHub issue 988:
-            # ("ID   HLA00001; SV 1; standard; DNA; HUM; 3503 BP.",
-            #  None, "DNA", "HUM"),
+            ("ID   HLA00001; SV 1; standard; DNA; HUM; 3503 BP.",
+             None, "DNA", "HUM"),
         ]
-        for (line, topo, res_type, div) in tests:
+        for (line, topo, mol_type, div) in tests:
             scanner = Scanner._ImgtScanner()
             consumer = GenBank._FeatureConsumer(1, GenBank.FeatureValueCleaner)
             scanner._feed_first_line(consumer, line)

@@ -925,6 +925,54 @@ class _ImgtScanner(EmblScanner):
                              "FH   Key                 Location/Qualifiers",
                              "FH"]
 
+    def _feed_first_line(self, consumer, line):
+        assert line[:self.HEADER_WIDTH].rstrip() == "ID"
+        if line[self.HEADER_WIDTH:].count(";") != 5:
+            # Assume its an older EMBL-like line,
+            return EmblScanner._feed_first_line(self, consumer, line)
+        # Otherwise assume its the new (circa 2016) IMGT style
+        # as used in the IPD-IMGT/HLA Database
+        #
+        # https://github.com/ANHIG/IMGTHLA/
+        #
+        # The key changes post 3.16 are the addition of an SV value
+        # to the ID line, these additions should make the format more
+        # similar to the ENA style.
+        #
+        # ID   HLA00001   standard; DNA; HUM; 3503 BP.
+        #
+        # becomes
+        #
+        # ID   HLA00001; SV 1; standard; DNA; HUM; 3503 BP.
+        fields = [data.strip() for data in line[self.HEADER_WIDTH:].strip().split(";")]
+        assert len(fields) == 6
+        """
+        The tokens represent:
+
+           0. Primary accession number (eg 'HLA00001')
+           1. Sequence version number (eg 'SV 1')
+           2. ??? eg 'standard'
+           3. Molecule type (e.g. 'DNA')
+           4. Taxonomic division (e.g. 'HUM')
+           5. Sequence length (e.g. '3503 BP.')
+        """
+        consumer.locus(fields[0])
+
+        # See TODO on the EMBL _feed_first_line_new about version field
+        version_parts = fields[1].split()
+        if len(version_parts) == 2 \
+            and version_parts[0] == "SV" \
+                and version_parts[1].isdigit():
+            consumer.version_suffix(version_parts[1])
+
+        consumer.residue_type(fields[3])
+        if "circular" in fields[3]:
+            consumer.topology("circular")
+        elif "linear" in fields[3]:
+            consumer.topology("linear")
+        consumer.data_file_division(fields[4])
+        self._feed_seq_length(consumer, fields[5])
+
     def parse_features(self, skip=False):
         """Return list of tuples for the features (if present)
 

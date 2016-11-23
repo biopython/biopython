@@ -179,6 +179,7 @@ test_files = [
     ("embl", False, 'EMBL/A04195.imgt', 1),
     # features over indented for EMBL
     ("imgt", False, 'EMBL/A04195.imgt', 1),
+    ("imgt", False, 'EMBL/hla_3260_sample.imgt', 8),
     ("stockholm", True, 'Stockholm/simple.sth', 2),
     ("stockholm", True, 'Stockholm/funny.sth', 6),
     # Following PHYLIP files are currently only used here and in test_AlignIO.py,
