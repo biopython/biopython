@@ -1,4 +1,4 @@
-# Copyright 2009-2013 by Peter Cock.  All rights reserved.
+# Copyright 2009-2016 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -499,8 +499,7 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
 
 
 class SeqFeatureCreation(unittest.TestCase):
-    """Test basic creation of SeqFeatures.
-    """
+    """Test basic creation of SeqFeatures."""
 
     def test_qualifiers(self):
         """Pass in qualifiers to SeqFeatures.
