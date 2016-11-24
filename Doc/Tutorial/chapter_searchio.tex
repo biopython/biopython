@@ -124,7 +124,7 @@ beginning with \verb|QueryResult|.
 The QueryResult object represents a single search query and contains zero or
 more Hit objects. Let's see what it looks like using the BLAST file we have:
 
-%doctest ../Doc/examples
+%doctest examples
 \begin{verbatim}
 >>> from Bio import SearchIO
 >>> blast_qresult = SearchIO.read('my_blast.xml', 'blast-xml')
@@ -483,7 +483,7 @@ themselves contain \verb|HSP| objects.
 
 Let's see what they look like, beginning with our BLAST search:
 
-%doctest ../Doc/examples
+%doctest examples
 \begin{verbatim}
 >>> from Bio import SearchIO
 >>> blast_qresult = SearchIO.read('my_blast.xml', 'blast-xml')
@@ -640,7 +640,7 @@ apparent compared to the differences you've seen in \verb|QueryResult| or
 Let's see some examples from our BLAST and BLAT searches. We'll look at the
 BLAST HSP first:
 
-%doctest ../Doc/examples
+%doctest examples
 \begin{verbatim}
 >>> from Bio import SearchIO
 >>> blast_qresult = SearchIO.read('my_blast.xml', 'blast-xml')
@@ -926,7 +926,7 @@ coordinates, the sequences themselves, and their IDs and descriptions.
 These attributes are readily shown when you invoke \verb|print| on an
 \verb|HSPFragment|. Here's an example, taken from our BLAST search:
 
-%doctest ../Doc/examples
+%doctest examples
 \begin{verbatim}
 >>> from Bio import SearchIO
 >>> blast_qresult = SearchIO.read('my_blast.xml', 'blast-xml')
