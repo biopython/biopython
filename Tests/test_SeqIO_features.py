@@ -523,6 +523,7 @@ class FeatureWriting(unittest.TestCase):
         SeqIO.write([self.record], handle, check_format)
         handle.seek(0)
         record2 = SeqIO.read(handle, check_format)
+        compare_record(self.record, record2)
 
     def write_read_checks(self, formats=("gb", "embl", "imgt")):
         for f in formats:
