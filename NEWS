@@ -30,9 +30,12 @@ This helps reproduce GenBank/EMBL files on input/output.
 The Bio.SeqIO UniProt-XML parser was updated to cope with features with
 unknown locations which can be found in mass spec data.
 
+The Bio.SeqIO GenBank, EMBL, and IMGT parsers now record the molecule type
+from the LOCUS/ID line explicitly in the record.annotations dictionary.
 The Bio.SeqIO EMBL parser was updated to cope with more variants seen in
 patent data files, and the related IMGT parser was updated to cope with
-IPD-IMGT/HLA database files after their v3.16.0 when their ID line changed.
+IPD-IMGT/HLA database files after release v3.16.0 when their ID line changed.
+The GenBank output now uses colon space to match current NCBI DBLINK lines.
 
 Additionally, a number of small bugs have been fixed with further additions
 to the test suite, and there has been further work to follow the Python PEP8,
