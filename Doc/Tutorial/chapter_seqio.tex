@@ -325,8 +325,9 @@ the compressed file for reading - which gives us a handle object:
 \begin{verbatim}
 >>> import gzip
 >>> from Bio import SeqIO
->>> handle = gzip.open("ls_orchid.gbk.gz", "rt")
->>> print(sum(len(r) for r in SeqIO.parse(handle, "gb")))
+>>> with gzip.open("ls_orchid.gbk.gz", "rt") as handle:
+...     print(sum(len(r) for r in SeqIO.parse(handle, "gb")))
+...
 67518
 >>> handle.close()
 \end{verbatim}
@@ -344,16 +345,11 @@ quite as consistent under Python 2):
 ... else:
 ...     handle = bz2.BZ2File("ls_orchid.gbk.bz2", "r")  # Python 2
 ...
->>> print(sum(len(r) for r in SeqIO.parse(handle, "gb")))
+>>> with handle:
+...     print(sum(len(r) for r in SeqIO.parse(handle, "gb")))
+...
 67518
->>> handle.close()
 \end{verbatim}
-
-\noindent
-If you are using Python 2.7 or later, the \verb|with|-version works for
-gzip and bz2 as well. Unfortunately this is broken on older versions of
-Python (\href{http://bugs.python.org/issue3860}{Issue 3860}) and you'd
-get an \verb|AttributeError| about \verb|__exit__| being missing.
 
 There is a gzip (GNU Zip) variant called BGZF (Blocked GNU Zip Format),
 which can be treated like an ordinary gzip file for reading, but has
