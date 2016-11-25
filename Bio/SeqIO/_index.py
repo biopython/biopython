@@ -294,8 +294,9 @@ class EmblRandomAccess(SequentialSeqFileRandomAccess):
             # normally the SV line is used.
             setbysv = False  # resets sv as false
             length = len(line)
-            if line[2:].count(b";") == 6:
+            if line[2:].count(b";") in [5, 6]:
                 # Looks like the semi colon separated style introduced in 2006
+                # Or style from IPD-IMGT/HLA after their v3.16.0 release
                 parts = line[3:].rstrip().split(b";")
                 if parts[1].strip().startswith(sv_marker):
                     # The SV bit gives the version
@@ -304,14 +305,15 @@ class EmblRandomAccess(SequentialSeqFileRandomAccess):
                     setbysv = True
                 else:
                     key = parts[0].strip()
-            elif line[2:].count(b";") == 3:
+            elif line[2:].count(b";") in [2, 3]:
                 # Looks like the pre 2006 style, take first word only
+                # Or, with two colons, the KIPO patent variantion
                 key = line[3:].strip().split(None, 1)[0]
                 if key.endswith(b";"):
                     key = key[:-1]
             else:
                 raise ValueError(
-                    'Did not recognise the ID line layout:\n' + line)
+                    'Did not recognise the ID line layout:\n%r' % line)
             while True:
                 end_offset = handle.tell()
                 line = handle.readline()

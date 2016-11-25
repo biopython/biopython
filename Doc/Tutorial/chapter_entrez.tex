@@ -1316,28 +1316,31 @@ While for small searches you might be OK downloading everything at once, it is b
 For example,
 
 \begin{verbatim}
-from Bio import Entrez
-import time
+# This assumes you have already run a search as shown above,
+# and set the variables count, webenv, query_key
+
 try:
     from urllib.error import HTTPError  # for Python 3
 except ImportError:
     from urllib2 import HTTPError  # for Python 2
+
 batch_size = 3
 out_handle = open("orchid_rpl16.fasta", "w")
 for start in range(0, count, batch_size):
     end = min(count, start+batch_size)
     print("Going to download record %i to %i" % (start+1, end))
-    attempt = 1
-    while attempt <= 3:
+    attempt = 0
+    while attempt < 3:
+        attempt += 1
         try:
-            fetch_handle = Entrez.efetch(db="nucleotide", rettype="fasta", retmode="text",
+            fetch_handle = Entrez.efetch(db="nucleotide",
+                                         rettype="fasta", retmode="text",
                                          retstart=start, retmax=batch_size,
                                          webenv=webenv, query_key=query_key)
         except HTTPError as err:
             if 500 <= err.code <= 599:
                 print("Received error from server %s" % err)
                 print("Attempt %i of 3" % attempt)
-                attempt += 1
                 time.sleep(15)
             else:
                 raise

@@ -1,4 +1,4 @@
-# Copyright 2009-2013 by Peter Cock.  All rights reserved.
+# Copyright 2009-2016 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -46,15 +46,15 @@ def write_read(filename, in_format="gb", out_formats=("gb", "embl", "imgt")):
 def compare_record(old, new, expect_minor_diffs=False):
     # Note the name matching is a bit fuzzy
     if not expect_minor_diffs \
-    and old.id != new.id and old.name != new.name \
-    and (old.id not in new.id) and (new.id not in old.id) \
-    and (old.id.replace(" ", "_") != new.id.replace(" ", "_")):
+            and old.id != new.id and old.name != new.name \
+            and (old.id not in new.id) and (new.id not in old.id) \
+            and (old.id.replace(" ", "_") != new.id.replace(" ", "_")):
         raise ValueError("'%s' or '%s' vs '%s' or '%s' records"
                          % (old.id, old.name, new.id, new.name))
     if len(old.seq) != len(new.seq):
         raise ValueError("%i vs %i" % (len(old.seq), len(new.seq)))
     if isinstance(old.seq, UnknownSeq) \
-    and isinstance(new.seq, UnknownSeq):
+            and isinstance(new.seq, UnknownSeq):
         # Jython didn't like us comparing the string of very long
         # UnknownSeq object (out of heap memory error)
         if old.seq._character.upper() != new.seq._character:
@@ -69,7 +69,7 @@ def compare_record(old, new, expect_minor_diffs=False):
             return False
     # Just insist on at least one word in common:
     if (old.description or new.description) \
-    and not set(old.description.split()).intersection(new.description.split()):
+            and not set(old.description.split()).intersection(new.description.split()):
         raise ValueError("%s versus %s"
                          % (repr(old.description), repr(new.description)))
     # This only checks common annotation
@@ -80,11 +80,18 @@ def compare_record(old, new, expect_minor_diffs=False):
             # have other complications (e.g. different number of accessions
             # allowed in various file formats)
             continue
+        if key == "molecule_type":
+            # EMBL allows e.g. "genomics DNA" where GenBank is limited.
+            common_words = set(old.annotations[key].split()).intersection(new.annotations[key].split())
+            if not common_words:
+                raise ValueError("Annotation mis-match for molecule_type:\n%s\n%s"
+                                % (old.annotations[key], new.annotations[key]))
+            continue
         if key == "comment":
             # Ignore whitespace
             if old.annotations[key].split() != new.annotations[key].split():
                 raise ValueError("Annotation mis-match for comment:\n%s\n%s"
-                                % (old.annotations[key], new.annotations[key]))
+                                 % (old.annotations[key], new.annotations[key]))
             continue
         if key == "references":
             if expect_minor_diffs:
@@ -94,7 +101,7 @@ def compare_record(old, new, expect_minor_diffs=False):
             for r1, r2 in zip(old.annotations[key], new.annotations[key]):
                 assert r1.title == r2.title
                 assert r1.authors == r2.authors, \
-                       "Old: '%s'\nNew: '%s'" % (r1.authors, r2.authors)
+                    "Old: '%s'\nNew: '%s'" % (r1.authors, r2.authors)
                 assert r1.journal == r2.journal
                 if r1.consrtm and r2.consrtm:
                     # Not held in EMBL files
@@ -125,7 +132,7 @@ def compare_feature(old, new):
     if old.type != new.type:
         raise ValueError("Type %s versus %s" % (repr(old.type), repr(new.type)))
     if old.location.nofuzzy_start != new.location.nofuzzy_start \
-    or old.location.nofuzzy_end != new.location.nofuzzy_end:
+            or old.location.nofuzzy_end != new.location.nofuzzy_end:
         raise ValueError("%s versus %s:\n%s\nvs:\n%s"
                          % (old.location, new.location, repr(old), repr(new)))
     if old.strand is not None and old.strand != new.strand:
@@ -137,11 +144,11 @@ def compare_feature(old, new):
     if old.location_operator != new.location_operator:
         raise ValueError("Different location_operator:\n%s\nvs:\n%s" % (repr(old), repr(new)))
     if old.location.start != new.location.start \
-    or str(old.location.start) != str(new.location.start):
+            or str(old.location.start) != str(new.location.start):
         raise ValueError("Start %s versus %s:\n%s\nvs:\n%s"
                          % (old.location.start, new.location.start, repr(old), repr(new)))
     if old.location.end != new.location.end \
-    or str(old.location.end) != str(new.location.end):
+            or str(old.location.end) != str(new.location.end):
         raise ValueError("End %s versus %s:\n%s\nvs:\n%s"
                          % (old.location.end, new.location.end, repr(old), repr(new)))
     # This only checks key shared qualifiers
@@ -266,8 +273,7 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
     """Tests for SeqFeature sequence extract method, writing, and reading."""
 
     def check(self, parent_seq, feature, answer_str, location_str):
-        self.assertEqual(location_str,
-            _get_location_string(feature, len(parent_seq)))
+        self.assertEqual(location_str, _get_location_string(feature, len(parent_seq)))
 
         new = feature.extract(parent_seq)
         self.assertTrue(isinstance(new, Seq))
@@ -493,8 +499,7 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
 
 
 class SeqFeatureCreation(unittest.TestCase):
-    """Test basic creation of SeqFeatures.
-    """
+    """Test basic creation of SeqFeatures."""
 
     def test_qualifiers(self):
         """Pass in qualifiers to SeqFeatures.
@@ -516,6 +521,7 @@ class FeatureWriting(unittest.TestCase):
         SeqIO.write([self.record], handle, check_format)
         handle.seek(0)
         record2 = SeqIO.read(handle, check_format)
+        compare_record(self.record, record2)
 
     def write_read_checks(self, formats=("gb", "embl", "imgt")):
         for f in formats:
@@ -1119,7 +1125,7 @@ class NC_005816(NC_000932):
             if faa.id in self.skip_trans_test:
                 continue
             if (str(translation) != str(faa.seq)) \
-            and (str(translation) != str(faa.seq) + "*"):
+                    and (str(translation) != str(faa.seq) + "*"):
                 t = SeqRecord(translation, id="Translation",
                               description="Table %s" % self.table)
                 raise ValueError("FAA vs FNA translation problem:\n%s\n%s\n%s\n"

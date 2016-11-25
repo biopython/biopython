@@ -2609,6 +2609,50 @@ Testing reading embl format file EMBL/Human_contigs.embl
  Checking can write/read as 'imgt' format
  Checking can write/read as 'qual' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=AL954800.2).
+Testing reading embl format file EMBL/kipo_prt_sample.embl
+ ID and Name='DI500001',
+ Seq='DVVMTQTPLSLPVSLGDQASISCRSSQSLVHRNGNTYLHW...AGTKLEI', length=111
+ ID and Name='DI500002',
+ Seq='GSSSSSSSSSSSSSSSSXYSCFWKTCT', length=27
+ ID and Name='DI500003',
+ Seq='GSSNRAT', length=7
+ ...
+ ID and Name='DI500020',
+ Seq='MKRSKRFAVLAQRPVNQDGLIGEWPEEGLIAMDSPFDPVS...HIDLVRE', length=754
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Failed: Sequences must all be the same length
+ Checking can write/read as 'phylip' format
+ Failed: Sequences must all be the same length
+ Checking can write/read as 'stockholm' format
+ Failed: Sequences must all be the same length
+ Checking can write/read as 'phylip-relaxed' format
+ Failed: Sequences must all be the same length
+ Checking can write/read as 'embl' format
+ Failed: Need a DNA, RNA or Protein alphabet
+ Checking can write/read as 'fastq' format
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=DI500020).
+ Checking can write/read as 'fastq-illumina' format
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=DI500020).
+ Checking can write/read as 'fastq-solexa' format
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=DI500020).
+ Checking can write/read as 'genbank' format
+ Failed: Need a Nucleotide or Protein alphabet
+ Checking can write/read as 'imgt' format
+ Failed: Need a DNA, RNA or Protein alphabet
+ Checking can write/read as 'phd' format
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=DI500020).
+ Checking can write/read as 'qual' format
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=DI500020).
+ Checking can write/read as 'seqxml' format
+ Failed: Need a DNA, RNA or Protein alphabet
+ Checking can write/read as 'sff' format
+ Failed: Missing SFF flow information
+ Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+ Failed: Sequences must all be the same length
+ Checking can write/read as 'phylip-sequential' format
+ Failed: Sequences must all be the same length
 Testing reading embl format file EMBL/location_wrap.embl
  ID = 'Test', Name='Tester',
  Seq='CGACTTTCCACTGCCCTCTACGCCCGCGCAATGGGTCGTA...CTACGTT', length=120
@@ -2695,6 +2739,46 @@ Testing reading imgt format file EMBL/A04195.imgt
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
  Checking can write/read as 'phylip-sequential' format
+Testing reading imgt format file EMBL/hla_3260_sample.imgt
+ ID = 'HLA00001.1', Name='HLA00001',
+ Seq='CAGGAGCAGAGGGGTCAGGGCGAAGTCCCAGGGCCCCAGG...ATTAAAA', length=3503
+ ID = 'HLA02169.1', Name='HLA02169',
+ Seq='GATTGGGGAGTCCCAGCCTTGGGGATTCCCCAACTCCGCA...TGACCCT', length=3291
+ ID = 'HLA14798.1', Name='HLA14798',
+ Seq='ATGGCCGTCATGGCGCCCCGAACCCTCCTCCTGCTACTCT...AGTGTGA', length=2903
+ ...
+ ID = 'HLA03131.1', Name='HLA03131',
+ Seq='GCTCCCACTCCATGAGGTATTTCTTCACATCCGTGTCCCG...AGATGGG', length=822
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Failed: Sequences must all be the same length
+ Checking can write/read as 'phylip' format
+ Failed: Sequences must all be the same length
+ Checking can write/read as 'stockholm' format
+ Failed: Sequences must all be the same length
+ Checking can write/read as 'phylip-relaxed' format
+ Failed: Sequences must all be the same length
+ Checking can write/read as 'embl' format
+ Checking can write/read as 'fastq' format
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=HLA03131.1).
+ Checking can write/read as 'fastq-illumina' format
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=HLA03131.1).
+ Checking can write/read as 'fastq-solexa' format
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=HLA03131.1).
+ Checking can write/read as 'genbank' format
+ Checking can write/read as 'imgt' format
+ Checking can write/read as 'phd' format
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=HLA03131.1).
+ Checking can write/read as 'qual' format
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=HLA03131.1).
+ Checking can write/read as 'seqxml' format
+ Checking can write/read as 'sff' format
+ Failed: Missing SFF flow information
+ Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+ Failed: Sequences must all be the same length
+ Checking can write/read as 'phylip-sequential' format
+ Failed: Sequences must all be the same length
 Testing reading stockholm format file Stockholm/simple.sth
  ID and Name='AP001509.1',
  Seq='UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-UCAAUAU...UUAAUGU', length=104
