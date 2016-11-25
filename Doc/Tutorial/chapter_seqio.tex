@@ -332,13 +332,18 @@ the compressed file for reading - which gives us a handle object:
 \end{verbatim}
 
 Similarly if we had a bzip2 compressed file (sadly the function name isn't
-quite as consistent):
+quite as consistent under Python 2):
 
-%This doctest fails on Python 3
+%TODO: Can we make the doctest code Python version specific?
+%doctest examples
 \begin{verbatim}
 >>> import bz2
 >>> from Bio import SeqIO
->>> handle = bz2.BZ2File("ls_orchid.gbk.bz2", "r")
+>>> if hasattr(bz2, "open"):
+...     handle = bz2.open("ls_orchid.gbk.bz2", "rt")  # Python 3
+... else:
+...     handle = bz2.BZ2File("ls_orchid.gbk.bz2", "r")  # Python 2
+...
 >>> print(sum(len(r) for r in SeqIO.parse(handle, "gb")))
 67518
 >>> handle.close()
