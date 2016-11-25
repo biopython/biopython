@@ -46,7 +46,7 @@ The above example is repeated from the introduction in Section~\ref{sec:sequence
 from Bio import SeqIO
 for seq_record in SeqIO.parse("ls_orchid.gbk", "genbank"):
     print(seq_record.id)
-    print(seq_record.seq)
+    print(repr(seq_record.seq))
     print(len(seq_record))
 \end{verbatim}
 
