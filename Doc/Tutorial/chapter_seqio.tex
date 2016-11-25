@@ -329,7 +329,6 @@ the compressed file for reading - which gives us a handle object:
 ...     print(sum(len(r) for r in SeqIO.parse(handle, "gb")))
 ...
 67518
->>> handle.close()
 \end{verbatim}
 
 Similarly if we had a bzip2 compressed file (sadly the function name isn't
