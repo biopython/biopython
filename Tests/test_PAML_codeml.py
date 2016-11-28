@@ -481,8 +481,11 @@ class ModTest(unittest.TestCase):
                         % version.replace('_', '.')
             results_path = os.path.join(res_dir, results_file)
             results = codeml.read(results_path)
-            for seq2 in results['pairwise'].values():
-                for data in seq2.values():
+            for seq in results["pairwise"]:
+                seq_vals = results["pairwise"][seq]
+                self.assertTrue(len(seq_vals) > 0,
+                                "no parsed parameters for '%s'" % seq)
+                for data in seq_vals.values():
                     for param in ("t", "S", "N", "omega", "dN", "dS", "lnL"):
                         self.assertTrue(param in data, version_msg +
                                         ": '%s' not in parsed parameters" % param)
