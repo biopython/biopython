@@ -5,23 +5,25 @@ import struct
 from numpy import array
 import numpy.testing
 
+
 class AffyTest(unittest.TestCase):
     def setUp(self):
         self.affy3 = "Affy/affy_v3_example.CEL"
         self.affy4 = "Affy/affy_v4_example.CEL"
+        with open(self.affy4, "wb") as f:
+            self.writeExampleV4(f)
+
     def tearDown(self):
         pass
-    
+
     # tests if the new strict mode complains about passing a non-file
     def testAffyStrict(self):
-        with self.assertRaises(IOError) as context:
-            with open(self.affy3, "rb") as f:
-                record = CelFile.read("hello", strict=True)
+        with self.assertRaises(IOError):
+            record = CelFile.read("hello", strict=True)
 
     # tests if the new strict mode is backwards compatible
     def testAffyStrict(self):
-        with open(self.affy3, "rb") as f:
-            record = CelFile.read("hello")
+        record = CelFile.read("hello")
         assert record.DatHeader is None
 
     # tests the old Affymetrix v3 parser
@@ -34,6 +36,7 @@ class AffyTest(unittest.TestCase):
             assert(record.intensities.shape == record.npix.shape)
             assert(record.ncols == 5)
             assert(record.nrows == 5)
+
     # tests the new Affymetrix v4 parser
     def testAffy4(self):
         with open(self.affy4, "rb") as f:
@@ -43,60 +46,88 @@ class AffyTest(unittest.TestCase):
             assert(record.intensities.shape == record.npix.shape)
             assert(record.ncols == 5)
             assert(record.nrows == 5)
-            numpy.allclose(record.intensities, [[  0.,   1.,   2.,   3.,   4.],
-                                                [  5.,   6.,   7.,   8.,   9.],
-                                                [ 10.,  11.,  12.,  13.,  14.],
-                                                [ 15.,  16.,  17.,  18.,  19.],
-                                                [ 20.,  21.,  22.,  23.,  24.]])
-            numpy.allclose(record.stdevs, [[  0.,  -1.,  -2.,  -3.,  -4.],
-                                           [ -5.,  -6.,  -7.,  -8.,  -9.],
+            numpy.testing.assert_allclose(record.intensities,
+                                          [[0.,   1.,   2.,   3.,   4.],
+                                           [5.,   6.,   7.,   8.,   9.],
+                                           [10.,  11.,  12.,  13.,  14.],
+                                           [15.,  16.,  17.,  18.,  19.],
+                                           [20.,  21.,  22.,  23.,  24.]])
+            numpy.testing.assert_allclose(record.stdevs,
+                                          [[0.,  -1.,  -2.,  -3.,  -4.],
+                                           [-5.,  -6.,  -7.,  -8.,  -9.],
                                            [-10., -11., -12., -13., -14.],
                                            [-15., -16., -17., -18., -19.],
                                            [-20., -21., -22., -23., -24.]])
-            numpy.allclose(record.npix, [[9, 9, 9, 9, 9],
-                                         [9, 9, 9, 9, 9],
-                                         [9, 9, 9, 9, 9],
-                                         [9, 9, 9, 9, 9],
-                                         [9, 9, 9, 9, 9]])
+            numpy.testing.assert_allclose(record.npix,
+                                          [[9, 9, 9, 9, 9],
+                                           [9, 9, 9, 9, 9],
+                                           [9, 9, 9, 9, 9],
+                                           [9, 9, 9, 9, 9],
+                                           [9, 9, 9, 9, 9]])
+            assert(len(record.AlgorithmParameters) == 329)
+            assert(record.AlgorithmParameters[-3:] == '169')
 
-# Writes a small example Affymetrix V4 CEL File
-def writeExampleV4():
-    preHeaders = {   'cellNo': 25,
-        'columns': 5,
-        'headerLen': 752,
-        'magic': 64,
-        'rows': 5,
-        'version': 4}
-    headers = {   u'Algorithm': u'Percentile',
-        u'AlgorithmParameters': u'Percentile:75;CellMargin:4;OutlierHigh:1.500;OutlierLow:1.004;AlgVersion:6.0;FixedCellSize:TRUE;FullFeatureWidth:7;FullFeatureHeight:7;IgnoreOutliersInShiftRows:FALSE;FeatureExtraction:TRUE;PoolWidthExtenstion:1;PoolHeightExtension:1;UseSubgrids:FALSE;RandomizePixels:FALSE;ErrorBasis:StdvMean;StdMult:1.000000;NumDATSubgrids:169',
-        u'Axis-invertX': u'0',
-        u'AxisInvertY': u'0',
-        u'Cols': u'5',
-        u'DatHeader': u'[0..65534]  20_10N:CLS=19420RWS=19420XIN=0  YIN=0  VE=30        2.0 05/25/05 23:19:07 50102310  M10   \x14  \x14 HuEx-1_0-st-v2.1sq \x14  \x14  \x14  \x14  \x14 570 \x14 25540.671875 \x14 3.500000 \x14 0.7000 \x14 3',
-        u'GridCornerLL': u'518 18668',
-        u'GridCornerLR': u'18800 18825',
-        u'GridCornerUL': u'659 469',
-        u'GridCornerUR': u'18942 623',
-        u'OffsetX': u'0',
-        u'OffsetY': u'0',
-        u'Rows': u'5',
-        u'TotalX': u'2560',
-        u'TotalY': u'2560',
-        u'swapXY': u'0'}
-    prePadding = b"this text doesn't matter and is ignored\x04"
-    preHeadersOrder = ["magic", "version", "columns", "rows", "cellNo", "headerLen"]
-    headersEncoded = struct.pack('<' + 'i' * len(preHeadersOrder), *[preHeaders[header] for header in preHeadersOrder])
-    def packData(intensity, sdev, pixel):
-        return struct.pack("< f f h", intensity, sdev, pixel)
-    with open("exampleFile", "wb") as f:
+    # Writes a small example Affymetrix V4 CEL File
+    def writeExampleV4(self, f):
+        preHeaders = {'cellNo': 25,
+                      'columns': 5,
+                      'headerLen': 752,
+                      'magic': 64,
+                      'rows': 5,
+                      'version': 4}
+        headers = {u'Algorithm': b'Percentile',
+                   u'AlgorithmParameters': b'Percentile:75;CellMargin:4;Outlie'
+                   b'rHigh:1.500;OutlierLow:1.004;AlgVersion:6.0;FixedCellSize'
+                   b':TRUE;FullFeatureWidth:7;FullFeatureHeight:7;IgnoreOutlie'
+                   b'rsInShiftRows:FALSE;FeatureExtraction:TRUE;PoolWidthExten'
+                   b'stion:1;PoolHeightExtension:1;UseSubgrids:FALSE;Randomize'
+                   b'Pixels:FALSE;ErrorBasis:StdvMean;StdMult:1.000000;NumDATS'
+                   b'ubgrids:169',
+                   u'Axis-invertX': b'0',
+                   u'AxisInvertY': b'0',
+                   u'Cols': b'5',
+                   u'DatHeader': b'[0..65534]  20_10N:CLS=19420RWS=19420XIN=0'
+                   b' YIN=0  VE=30        2.0 05/25/05 23:19:07 50102310  M10 '
+                   b'  \x14  \x14 HuEx-1_0-st-v2.1sq \x14  \x14  \x14  \x14  '
+                   b'\x14570 \x14 25540.671875 \x14 3.500000 \x14 0.7000 \x14'
+                   b' 3',
+                   u'GridCornerLL': b'518 18668',
+                   u'GridCornerLR': b'18800 18825',
+                   u'GridCornerUL': b'659 469',
+                   u'GridCornerUR': b'18942 623',
+                   u'OffsetX': b'0',
+                   u'OffsetY': b'0',
+                   u'Rows': b'5',
+                   u'TotalX': b'2560',
+                   u'TotalY': b'2560',
+                   u'swapXY': b'0'}
+        prePadding = b"this text doesn't matter and is ignored\x04"
+        preHeadersOrder = ["magic",
+                           "version",
+                           "columns",
+                           "rows",
+                           "cellNo",
+                           "headerLen"]
+        headersEncoded = struct.pack('<' + 'i' * len(preHeadersOrder),
+                                     *[preHeaders[header] for header in
+                                     preHeadersOrder])
+
+        def packData(intensity, sdev, pixel):
+            return struct.pack("< f f h", intensity, sdev, pixel)
         f.write(headersEncoded)
         for header in headers:
-            f.write(header + "=" + headers[header] + "\n")
+            try:
+                f.write(bytes(header, encoding="utf-8") +
+                        b"=" +
+                        headers[header] +
+                        b"\n")
+            except TypeError:
+                f.write(header + b"=" + headers[header] + b"\n")
         f.write(prePadding)
-        f.write("\x00"*15)
+        f.write(b"\x00"*15)
         for i in range(25):
             f.write(packData(float(i), float(-i), 9))
-            
-if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity=0)
-    unittest.main(testRunner=runner)
+    if __name__ == "__main__":
+        runner = unittest.TextTestRunner(verbosity=0)
+        unittest.main(testRunner=runner)
+
