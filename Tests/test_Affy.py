@@ -53,14 +53,14 @@ class AffyTest(unittest.TestCase):
             assert(record.ncols == 5)
             assert(record.nrows == 5)
             numpy.testing.assert_allclose(record.intensities,
-                                          [[0.,   1.,   2.,   3.,   4.],
-                                           [5.,   6.,   7.,   8.,   9.],
-                                           [10.,  11.,  12.,  13.,  14.],
-                                           [15.,  16.,  17.,  18.,  19.],
-                                           [20.,  21.,  22.,  23.,  24.]])
+                                          [[0., 1., 2., 3., 4.],
+                                           [5., 6., 7., 8., 9.],
+                                           [10., 11., 12., 13., 14.],
+                                           [15., 16., 17., 18., 19.],
+                                           [20., 21., 22., 23., 24.]])
             numpy.testing.assert_allclose(record.stdevs,
-                                          [[0.,  -1.,  -2.,  -3.,  -4.],
-                                           [-5.,  -6.,  -7.,  -8.,  -9.],
+                                          [[0., -1., -2., -3., -4.],
+                                           [-5., -6., -7., -8., -9.],
                                            [-10., -11., -12., -13., -14.],
                                            [-15., -16., -17., -18., -19.],
                                            [-20., -21., -22., -23., -24.]])
@@ -131,10 +131,9 @@ class AffyTest(unittest.TestCase):
             except TypeError:
                 f.write(header + b"=" + headers[header] + b"\n")
         f.write(prePadding)
-        f.write(b"\x00"*15)
+        f.write(b"\x00" * 15)
         for i in range(25):
             f.write(packData(float(i), float(-i), 9))
     if __name__ == "__main__":
         runner = unittest.TextTestRunner(verbosity=0)
         unittest.main(testRunner=runner)
-
