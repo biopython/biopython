@@ -99,13 +99,19 @@ def read(handle, strict=False):
         # By definition an Affymetrix v4 CEL file has 64 as the first 4 bytes.
         # Note that we use little-endian irrespective of the platform, again by
         # definition.
+        position = handle.tell()
         magicNumber = struct.unpack('<i', handle.read(4))[0]
-        # reset the offset, to avoid breaking either v3 or v4.
-        handle.seek(0)
     except (AttributeError, TypeError):
         if strict:
             raise IOError("You have to pass a file-like object. You can get "
                           "a file-like object by using `open`.")
+    finally:
+        try:
+            # reset the offset, to avoid breaking either v3 or v4.
+            handle.seek(position)
+        except AttributeError:
+            pass
+
     if magicNumber != 64:
         # In v4 we're always strict, as we don't have to worry about backwards
         # compatibility
@@ -347,4 +353,3 @@ def read3(handle):
 if __name__ == "__main__":
     from Bio._utils import run_doctest
     run_doctest()
-
