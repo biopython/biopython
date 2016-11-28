@@ -16,7 +16,13 @@ Record    Contains the information from a cel file
 from __future__ import print_function
 import sys
 import struct
-import numpy
+
+try:
+    import numpy
+except ImportError:
+    from Bio import MissingPythonDependencyError
+    raise MissingPythonDependencyError(
+        "Install NumPy if you want to use Bio.Affy.CelFile")
 
 # for debugging
 # import pprint
@@ -113,17 +119,17 @@ def read(handle, strict=False):
             pass
 
     if magicNumber != 64:
-        # In v4 we're always strict, as we don't have to worry about backwards
-        # compatibility
-        if strict and mode != "r":
-            raise IOError("You're trying to open an Affymetrix v3 CEL file."
-                          "You have to use a read mode, like this"
+        if strict and mode not in ["r", "rU"]:
+            raise IOError("You're trying to open an Affymetrix v3 CEL file. "
+                          "You have to use a read mode, like this "
                           "`open(filename, \"r\")`.")
         return read3(handle)
     else:
+        # In v4 we're always strict, as we don't have to worry about backwards
+        # compatibility
         if mode != "rb":
-            raise IOError("You're trying to open an Affymetrix v4 CEL file."
-                          "You have to use a read binary mode, like this"
+            raise IOError("You're trying to open an Affymetrix v4 CEL file. "
+                          "You have to use a read binary mode, like this "
                           "`open(filename \"rb\")`.")
         return read4(handle)
 

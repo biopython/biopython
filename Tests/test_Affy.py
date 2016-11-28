@@ -2,8 +2,14 @@ import unittest
 
 from Bio.Affy import CelFile
 import struct
-from numpy import array
-import numpy.testing
+
+try:
+    from numpy import array
+    import numpy.testing
+except ImportError:
+    from Bio import MissingPythonDependencyError
+    raise MissingPythonDependencyError(
+        "Install NumPy if you want to use Bio.Affy.CelFile")
 
 
 class AffyTest(unittest.TestCase):
@@ -65,6 +71,7 @@ class AffyTest(unittest.TestCase):
                                            [9, 9, 9, 9, 9],
                                            [9, 9, 9, 9, 9]])
             assert(len(record.AlgorithmParameters) == 329)
+            assert(len(record.GridCornerUL) == 7)
             assert(record.AlgorithmParameters[-3:] == '169')
 
     # Writes a small example Affymetrix V4 CEL File
