@@ -5,6 +5,7 @@
 
 import re
 
+import collections
 
 line_floats_re = re.compile("-*\d+\.\d+")
 
@@ -411,7 +412,7 @@ def parse_pairwise(lines, results):
     #
     # t= 0.0126  S=    81.4  N=   140.6  dN/dS= 0.0010  dN= 0.0000  dS= 0.0115
     pair_re = re.compile("\d+ \((.+)\) ... \d+ \((.+)\)")
-    pairwise = {}
+    pairwise, seq1, seq2 = collections.defaultdict(dict), None, None
     for line in lines:
         # Find all floating point numbers in this line
         line_floats_res = line_floats_re.findall(line)
@@ -420,21 +421,17 @@ def parse_pairwise(lines, results):
         if pair_res:
             seq1 = pair_res.group(1)
             seq2 = pair_res.group(2)
-            if pairwise.get(seq1) is None:
-                pairwise[seq1] = {}
-            if pairwise.get(seq2) is None:
-                pairwise[seq2] = {}
-            if len(line_floats) == 1:
-                pairwise[seq1][seq2] = {"lnL": line_floats[0]}
-                pairwise[seq2][seq1] = pairwise[seq1][seq2]
-            elif len(line_floats) == 6:
-                pairwise[seq1][seq2] = {"t": line_floats[0],
-                                        "S": line_floats[1],
-                                        "N": line_floats[2],
-                                        "omega": line_floats[3],
-                                        "dN": line_floats[4],
-                                        "dS": line_floats[5]}
-                pairwise[seq2][seq1] = pairwise[seq1][seq2]
+        if len(line_floats) == 1 and seq1 is not None and seq2 is not None:
+            pairwise[seq1][seq2] = {"lnL": line_floats[0]}
+            pairwise[seq2][seq1] = pairwise[seq1][seq2]
+        elif len(line_floats) == 6 and seq1 is not None and seq2 is not None:
+            pairwise[seq1][seq2].update({"t": line_floats[0],
+                                         "S": line_floats[1],
+                                         "N": line_floats[2],
+                                         "omega": line_floats[3],
+                                         "dN": line_floats[4],
+                                         "dS": line_floats[5]})
+            pairwise[seq2][seq1] = pairwise[seq1][seq2]
     if pairwise:
         results["pairwise"] = pairwise
     return results

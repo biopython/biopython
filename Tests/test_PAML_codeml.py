@@ -6,6 +6,7 @@
 import unittest
 import os
 import os.path
+import numbers
 from Bio.Phylo.PAML import codeml
 from Bio.Phylo.PAML._paml import PamlError
 
@@ -471,6 +472,24 @@ class ModTest(unittest.TestCase):
             self.assertTrue("pairwise" in results, version_msg)
             pairwise = results["pairwise"]
             self.assertEqual(len(pairwise), 5, version_msg)
+
+    def testParseSitesParamsForPairwise(self):
+        """Verify that pairwise site estimates are indeed parsed. Fixes #483"""
+        res_dir = os.path.join(self.results_dir, "codeml", "pairwise")
+        for results_file in os.listdir(res_dir):
+            version = results_file.split('-')[1].split('.')[0]
+            version_msg = "Improper parsing for version %s" \
+                        % version.replace('_', '.')
+            results_path = os.path.join(res_dir, results_file)
+            results = codeml.read(results_path)
+            for seq2 in results['pairwise'].values():
+                for data in seq2.values():
+                    for param in ("t", "S", "N", "omega", "dN", "dS", "lnL"):
+                        self.assertTrue(param in data, version_msg +
+                                        ": '%s' not in parsed parameters" % param)
+                        self.assertTrue(isinstance(data[param], numbers.Number))
+                        if param != "lnL":
+                            self.assertTrue(data[param] >= 0)
 
     def testParseAA(self):
         res_dir = os.path.join(self.results_dir, "codeml", "aa_model0")
