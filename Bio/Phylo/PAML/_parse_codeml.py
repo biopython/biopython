@@ -412,7 +412,9 @@ def parse_pairwise(lines, results):
     #
     # t= 0.0126  S=    81.4  N=   140.6  dN/dS= 0.0010  dN= 0.0000  dS= 0.0115
     pair_re = re.compile("\d+ \((.+)\) ... \d+ \((.+)\)")
-    pairwise, seq1, seq2 = collections.defaultdict(dict), None, None
+    pairwise = collections.defaultdict(dict)
+    seq1 = None
+    seq2 = None
     for line in lines:
         # Find all floating point numbers in this line
         line_floats_res = line_floats_re.findall(line)
