@@ -6,7 +6,6 @@
 import unittest
 import os
 import os.path
-import numbers
 from Bio.Phylo.PAML import codeml
 from Bio.Phylo.PAML._paml import PamlError
 
@@ -487,7 +486,7 @@ class ModTest(unittest.TestCase):
                     for param in ("t", "S", "N", "omega", "dN", "dS", "lnL"):
                         self.assertTrue(param in data, version_msg +
                                         ": '%s' not in parsed parameters" % param)
-                        self.assertTrue(isinstance(data[param], numbers.Number))
+                        self.assertTrue(isinstance(data[param], float))
                         if param != "lnL":
                             self.assertTrue(data[param] >= 0)
 
