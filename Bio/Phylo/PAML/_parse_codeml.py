@@ -5,8 +5,6 @@
 
 import re
 
-import collections
-
 line_floats_re = re.compile("-*\d+\.\d+")
 
 try:
@@ -412,7 +410,7 @@ def parse_pairwise(lines, results):
     #
     # t= 0.0126  S=    81.4  N=   140.6  dN/dS= 0.0010  dN= 0.0000  dS= 0.0115
     pair_re = re.compile("\d+ \((.+)\) ... \d+ \((.+)\)")
-    pairwise = collections.defaultdict(dict)
+    pairwise = {}
     seq1 = None
     seq2 = None
     for line in lines:
@@ -423,6 +421,10 @@ def parse_pairwise(lines, results):
         if pair_res:
             seq1 = pair_res.group(1)
             seq2 = pair_res.group(2)
+            if seq1 not in pairwise:
+                pairwise[seq1] = {}
+            if seq2 not in pairwise:
+                pairwise[seq2] = {}
         if len(line_floats) == 1 and seq1 is not None and seq2 is not None:
             pairwise[seq1][seq2] = {"lnL": line_floats[0]}
             pairwise[seq2][seq1] = pairwise[seq1][seq2]

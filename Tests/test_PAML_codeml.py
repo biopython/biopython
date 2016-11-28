@@ -6,6 +6,8 @@
 import unittest
 import os
 import os.path
+import itertools
+
 from Bio.Phylo.PAML import codeml
 from Bio.Phylo.PAML._paml import PamlError
 
@@ -470,7 +472,13 @@ class ModTest(unittest.TestCase):
             self.assertEqual(len(results), 5, version_msg)
             self.assertTrue("pairwise" in results, version_msg)
             pairwise = results["pairwise"]
-            self.assertEqual(len(pairwise), 5, version_msg)
+            self.assertGreaterEqual(len(pairwise), 2, version_msg +
+                                    ": should have at least two sequences")
+            for seq1, seq2 in itertools.combinations(pairwise.keys(), 2):
+                self.assertEqual(len(pairwise[seq1][seq2]), 7, version_msg +
+                                 ": wrong number of parameters parsed")
+                self.assertEqual(len(pairwise[seq2][seq1]), 7, version_msg +
+                                 ": wrong number of parameters parsed")
 
     def testParseSitesParamsForPairwise(self):
         """Verify that pairwise site estimates are indeed parsed. Fixes #483"""
@@ -481,17 +489,22 @@ class ModTest(unittest.TestCase):
                         % version.replace('_', '.')
             results_path = os.path.join(res_dir, results_file)
             results = codeml.read(results_path)
-            for seq in results["pairwise"]:
-                seq_vals = results["pairwise"][seq]
-                self.assertTrue(len(seq_vals) > 0,
-                                "no parsed parameters for '%s'" % seq)
-                for data in seq_vals.values():
-                    for param in ("t", "S", "N", "omega", "dN", "dS", "lnL"):
-                        self.assertTrue(param in data, version_msg +
-                                        ": '%s' not in parsed parameters" % param)
-                        self.assertTrue(isinstance(data[param], float))
-                        if param != "lnL":
-                            self.assertTrue(data[param] >= 0)
+            self.assertTrue("pairwise" in results)
+            seqs = list(results["pairwise"].keys())
+            self.assertGreaterEqual(len(seqs), 2, version_msg +
+                                    ": should have at least two sequences")
+            for seq1, seq2 in itertools.combinations(seqs, 2):
+                params = results["pairwise"][seq1][seq2]
+                self.assertEqual(len(params), 7,
+                                 version_msg + ": wrong number of parsed parameters" +
+                                 " for %s-%s" % (seq1, seq2))
+                for param in ("t", "S", "N", "omega", "dN", "dS", "lnL"):
+                    self.assertTrue(param in params, version_msg +
+                                    ": '%s' not in parsed parameters"
+                                    % (param))
+                    self.assertTrue(isinstance(params[param], float))
+                    if param != "lnL":
+                        self.assertTrue(params[param] >= 0)
 
     def testParseAA(self):
         res_dir = os.path.join(self.results_dir, "codeml", "aa_model0")
