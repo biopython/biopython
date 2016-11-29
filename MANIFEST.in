@@ -31,6 +31,9 @@ recursive-include Doc/examples *.dnd
 recursive-include Doc/examples *.csv
 recursive-include Doc/images *.png
 recursive-include Doc/images *.jpg # e.g. the logo for the Tutorial
+include Doc/examples/ls_orchid.gbk.gz
+include Doc/examples/ls_orchid.gbk.bz2
+include Doc/examples/ec_5.4.2.2.txt 
 
 # Include Bio.Cluster, Bio.Affy, Bio.KDTree, Bio.phenotype
 # Note setup.py will only install these if Numpy is installed.
