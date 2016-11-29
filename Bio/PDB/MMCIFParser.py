@@ -254,8 +254,8 @@ class FastMMCIFParser(object):
         with warnings.catch_warnings():
             if self.QUIET:
                 warnings.filterwarnings("ignore", category=PDBConstructionWarning)
-        with as_handle(filename) as handle:
-            self._build_structure(structure_id, handle)
+            with as_handle(filename) as handle:
+                self._build_structure(structure_id, handle)
 
         return self._structure_builder.get_structure()
 
