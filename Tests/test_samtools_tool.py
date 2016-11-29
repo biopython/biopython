@@ -23,14 +23,14 @@ from Bio.Sequencing.Applications import SamtoolsIndexCommandline
 from Bio.Sequencing.Applications import SamtoolsMergeCommandline
 from Bio.Sequencing.Applications import SamtoolsMpileupCommandline
 from Bio.Sequencing.Applications import SamtoolsVersion1xSortCommandline
-from Bio.Sequencing.Applications import SamtoolsVersion0xSortCommandline
+from Bio.Sequencing.Applications import SamtoolsSortCommandline
 # TODO from Bio.Sequencing.Applications import SamtoolsPhaseCommandline
 # TODO from Bio.Sequencing.Applications import SamtoolsReheaderCommandline
 # TODO from Bio.Sequencing.Applications import SamtoolsRmdupCommandline
 # TODO from Bio.Sequencing.Applications import SamtoolsTargetcutCommandline
 # TODO from Bio.Sequencing.Applications import SamtoolsFixmateCommandline
 #################################################################
-
+SamtoolsVersion0xSortCommandline=SamtoolsSortCommandline
 # Try to avoid problems when the OS is in another language
 os.environ['LANG'] = 'C'
 
