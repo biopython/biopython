@@ -1,4 +1,3 @@
-# Copyright 1999 by Katharine Lindner.  All rights reserved.
 # Copyright 2016 by Stephen Marshall.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included

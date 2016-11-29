@@ -1,5 +1,3 @@
-# Copyright 1999 by Jeffrey Chang.  All rights reserved.
-# Copyright 2009 by Michiel de Hoon.  All rights reserved.
 # Copyright 2016 by Stephen Marshall.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
