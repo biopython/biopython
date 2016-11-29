@@ -129,7 +129,6 @@ class TestTrie(unittest.TestCase):
         self.assertEqual(set(['ANA', 'ANANA']),
                          set(trieobj.with_prefix("AN")))
 
-
     def test_large_save_load(self):
         """
         Generate random key/val pairs in three length categories,
@@ -140,6 +139,7 @@ class TestTrie(unittest.TestCase):
         import random
         import tempfile
         from string import ascii_lowercase
+        cmp_dict = {}
         trieobj = trie.trie()
         self.assertEqual(trieobj.get("foobar"), None)
         for max_str_len in [100, 1000, 10000]:
