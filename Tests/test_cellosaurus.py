@@ -7,7 +7,7 @@
 import os
 import unittest
 
-from Bio.ExPASy import Cellosaurus
+from Bio.ExPASy import cellosaurus
 
 
 class TestCellosaurus(unittest.TestCase):
