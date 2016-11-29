@@ -26,6 +26,20 @@ New parser for Cellosaurus, a cell line database, cell line catalogue, cell line
 For consistency the Bio.Seq module now offers a complement function (already
 available as a method on the Seq and MutableSeq objects).
 
+The SeqFeature object's qualifiers is now an explicitly ordered dictionary
+(note that as of Python 3.6 the Python dict is ordered by default anyway).
+This helps reproduce GenBank/EMBL files on input/output.
+
+The Bio.SeqIO UniProt-XML parser was updated to cope with features with
+unknown locations which can be found in mass spec data.
+
+The Bio.SeqIO GenBank, EMBL, and IMGT parsers now record the molecule type
+from the LOCUS/ID line explicitly in the record.annotations dictionary.
+The Bio.SeqIO EMBL parser was updated to cope with more variants seen in
+patent data files, and the related IMGT parser was updated to cope with
+IPD-IMGT/HLA database files after release v3.16.0 when their ID line changed.
+The GenBank output now uses colon space to match current NCBI DBLINK lines.
+
 Additionally, a number of small bugs have been fixed with further additions
 to the test suite, and there has been further work to follow the Python PEP8,
 PEP257 and best practice standard coding style.
@@ -34,14 +48,18 @@ Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
 Allis Tauri (first contribution)
+Aaron Rosenfeld
 Bernhard Thiel (first contribution)
 Bertrand Néron
 Carlos Pena
+Carlos Ríos
 Chris Warth
 Emmanuel Noutahi
 Markus Piotrowski
+Lenna Peterson
 Peter Cock
 Richard Neher (first contribution)
+Sourav Singh (first contribution)
 Steve Bond
 Steve Marshall
 Vincent Davis
@@ -927,7 +945,6 @@ improvements.
 (At least) 12 people have contributed to this release, including 6 new people:
 
 Andres Colubri (first contribution)
-Carlos Rios Vera (first contribution)
 Claude Paroz (first contribution)
 Cymon Cox
 Eric Talevich
@@ -977,7 +994,6 @@ This avoids having to worry about the details of how best to use subprocess.
 (At least) 10 people have contributed to this release, including 5 new people:
 
 Andres Colubri (first contribution)
-Carlos Rios Vera (first contribution)
 Claude Paroz (first contribution)
 Eric Talevich
 Frank Kauff

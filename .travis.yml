@@ -28,6 +28,9 @@ matrix:
       env: TOXENV=pypy-nocov
     - python: pypy3
       env: TOXENV=pypy3-nocov
+  allow_failures:
+    - python: pypy3
+      env: TOXENV=pypy3-nocov
 
 sudo: false
 addons:

@@ -46,7 +46,7 @@ The above example is repeated from the introduction in Section~\ref{sec:sequence
 from Bio import SeqIO
 for seq_record in SeqIO.parse("ls_orchid.gbk", "genbank"):
     print(seq_record.id)
-    print(seq_record.seq)
+    print(repr(seq_record.seq))
     print(len(seq_record))
 \end{verbatim}
 
@@ -321,34 +321,34 @@ Now, suppose we have a gzip compressed file instead? These are very
 commonly used on Linux. We can use Python's \verb|gzip| module to open
 the compressed file for reading - which gives us a handle object:
 
-%This doctest fails on Python 3, http://bugs.python.org/issue13989
+%doctest examples
 \begin{verbatim}
 >>> import gzip
 >>> from Bio import SeqIO
->>> handle = gzip.open("ls_orchid.gbk.gz", "r")
->>> print(sum(len(r) for r in SeqIO.parse(handle, "gb")))
+>>> with gzip.open("ls_orchid.gbk.gz", "rt") as handle:
+...     print(sum(len(r) for r in SeqIO.parse(handle, "gb")))
+...
 67518
->>> handle.close()
 \end{verbatim}
 
 Similarly if we had a bzip2 compressed file (sadly the function name isn't
-quite as consistent):
+quite as consistent under Python 2):
 
-%This doctest fails on Python 3
+%TODO: Can we make the doctest code Python version specific?
+%doctest examples
 \begin{verbatim}
 >>> import bz2
 >>> from Bio import SeqIO
->>> handle = bz2.BZ2File("ls_orchid.gbk.bz2", "r")
->>> print(sum(len(r) for r in SeqIO.parse(handle, "gb")))
+>>> if hasattr(bz2, "open"):
+...     handle = bz2.open("ls_orchid.gbk.bz2", "rt")  # Python 3
+... else:
+...     handle = bz2.BZ2File("ls_orchid.gbk.bz2", "r")  # Python 2
+...
+>>> with handle:
+...     print(sum(len(r) for r in SeqIO.parse(handle, "gb")))
+...
 67518
->>> handle.close()
 \end{verbatim}
-
-\noindent
-If you are using Python 2.7 or later, the \verb|with|-version works for
-gzip and bz2 as well. Unfortunately this is broken on older versions of
-Python (\href{http://bugs.python.org/issue3860}{Issue 3860}) and you'd
-get an \verb|AttributeError| about \verb|__exit__| being missing.
 
 There is a gzip (GNU Zip) variant called BGZF (Blocked GNU Zip Format),
 which can be treated like an ordinary gzip file for reading, but has
