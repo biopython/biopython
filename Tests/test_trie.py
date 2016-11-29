@@ -37,7 +37,7 @@ class TestTrie(unittest.TestCase):
         self.assertEqual(len(trieobj), 5)
         trieobj["blah"] = "snew"
         self.assertEqual(trieobj["blah"], "snew")
-object
+
     def test_prefix(self):
         trieobj = trie.trie()
         trieobj["hello"] = 5
