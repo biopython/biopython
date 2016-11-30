@@ -30,7 +30,7 @@ from Bio.Sequencing.Applications import SamtoolsSortCommandline
 # TODO from Bio.Sequencing.Applications import SamtoolsTargetcutCommandline
 # TODO from Bio.Sequencing.Applications import SamtoolsFixmateCommandline
 #################################################################
-SamtoolsVersion0xSortCommandline=SamtoolsSortCommandline
+SamtoolsVersion0xSortCommandline = SamtoolsSortCommandline
 # Try to avoid problems when the OS is in another language
 os.environ['LANG'] = 'C'
 
@@ -103,11 +103,11 @@ class SamtoolsTestCase(unittest.TestCase):
                                           "SamBam",
                                           "bam1.bam.bai")
         self.sortedbamfile1 = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                          "SamBam",
-                                          "bam1_sorted.bam")
+                                           "SamBam",
+                                           "bam1_sorted.bam")
         self.sortedbamfile2 = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                          "SamBam",
-                                          "bam2_sorted.bam")
+                                           "SamBam",
+                                           "bam2_sorted.bam")
         self.files_to_clean = [self.referenceindexfile, self.bamindexfile1, self.outbamfile]
 
     def tearDown(self):
