@@ -694,7 +694,7 @@ _read_from_handle(void *wasread, const int length, void *handle)
     if (!py_retval)
     {
         PyErr_SetString(PyExc_RuntimeError, "Failed to read from file. "
-                "Verify that you did not open a binary file('rb') in text mode('r') or vice versa.");
+                "Verify that you did not open a binary file ('rb') in text mode ('r') or vice versa.");
         goto error;
     }
 #ifdef IS_PY3K
