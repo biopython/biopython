@@ -130,9 +130,9 @@ class TestTrie(unittest.TestCase):
                          set(trieobj.with_prefix("AN")))
 
     def test_large_save_load(self):
-        """
-        Generate random key/val pairs in three length categories,
-        100 in each category. Insert them into a trie and into a reference dict.
+        """ Generate random key/val pairs in three length categories.
+
+        100 items in each category. Insert them into a trie and into a reference dict.
         Write the trie to a temp file and read it back, verify that trie entries match
         the reference dict.
         """
