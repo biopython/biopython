@@ -44,7 +44,7 @@ class Record(object):
 
     >>> from Bio.Affy import CelFile
     >>> with open('Affy/affy_v3_example.CEL', "r") as handle:
-    ...     c = CelFile.read(handle, strict=False)
+    ...     c = CelFile.read(handle)
     ...
     >>> print(c.ncols, c.nrows)
     5 5
@@ -90,9 +90,22 @@ class Record(object):
         self.modified = None
 
 
-def read(handle, strict=False):
+def read(handle):
+    """ Reads Affymetrix CEL file and returns Record object.
+
+    CEL files version 3 and 4 are supported, and the parser attempts version detection.
+
+    Example Usage:
+
+    >>> from Bio.Affy import CelFile
+    >>> with open('Affy/affy_v4_example.CEL', "rb") as handle:
+    ...     c = CelFile.read(handle)
+    ...
+    >>> c.version == 4
+    True
+    """
     # If we fail to read the magic number, then it will remain None, and thus
-    # we will invoke read3 (if mode is not strict), or raise IOError if mode is
+    # we will invoke readV3 (if mode is not strict), or raise IOError if mode is
     # strict.
     magicNumber = None
     # We check if the handle is a file-like object. If it isn't, and the mode
@@ -108,9 +121,7 @@ def read(handle, strict=False):
         position = handle.tell()
         magicNumber = struct.unpack('<i', handle.read(4))[0]
     except (AttributeError, TypeError):
-        if strict:
-            raise IOError("You have to pass a file-like object. You can get "
-                          "a file-like object by using `open`.")
+        pass
     finally:
         try:
             # reset the offset, to avoid breaking either v3 or v4.
@@ -119,11 +130,8 @@ def read(handle, strict=False):
             pass
 
     if magicNumber != 64:
-        if strict and mode not in ["r", "rU"]:
-            raise IOError("You're trying to open an Affymetrix v3 CEL file. "
-                          "You have to use a read mode, like this "
-                          "`open(filename, \"r\")`.")
-        return read3(handle)
+        return readV3(handle)
+
     else:
         # In v4 we're always strict, as we don't have to worry about backwards
         # compatibility
@@ -131,11 +139,28 @@ def read(handle, strict=False):
             raise IOError("You're trying to open an Affymetrix v4 CEL file. "
                           "You have to use a read binary mode, like this "
                           "`open(filename \"rb\")`.")
-        return read4(handle)
+        return readV4(handle)
 
 
 # read Affymetrix files version 4.
-def read4(f):
+def readV4(f):
+    """ Reads Affymetrix CEL file, version 4, and returns a corresponding Record object.
+
+    Most importantly record.intensities correspond to intensities from the CEL file.
+
+    record.mask and record.outliers are not set.
+
+    Example Usage:
+
+    >>> from Bio.Affy import CelFile
+    >>> with open('Affy/affy_v4_example.CEL', "rb") as handle:
+    ...     c = CelFile.readV4(handle)
+    ...
+    >>> c.version == 4
+    True
+    >>> print(c.intensities.shape)
+    (5, 5)
+    """
     # We follow the documentation here:
     # http://www.affymetrix.com/estore/support/developer/powertools/changelog/gcos-agcc/cel.html.affx
     record = Record()
@@ -247,9 +272,17 @@ def read4(f):
     return record
 
 
-def read3(handle):
-    """
-    Read the information in a cel file, and store it in a Record.
+def readV3(handle):
+    """ Reads Affymetrix CEL file, version 3, and returns a corresponding Record object.
+
+    Example Usage:
+
+    >>> from Bio.Affy import CelFile
+    >>> with open('Affy/affy_v3_example.CEL', "r") as handle:
+    ...     c = CelFile.readV3(handle)
+    ...
+    >>> c.version == 3
+    True
     """
     # Needs error handling.
     # Needs to know the chip design.
