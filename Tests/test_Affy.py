@@ -2,6 +2,7 @@ import unittest
 
 from Bio.Affy import CelFile
 import struct
+import os
 
 try:
     from numpy import array
@@ -16,11 +17,11 @@ class AffyTest(unittest.TestCase):
     def setUp(self):
         self.affy3 = "Affy/affy_v3_example.CEL"
         self.affy4 = "Affy/affy_v4_example.CEL"
-        with open(self.affy4, "wb") as f:
-            self.writeExampleV4(f)
-
+        self.affy4Bad = "Affy/affy_v4_bad_example.CEL"
+        with open(self.affy4Bad, "wb") as f:
+            self.writeExampleV4(f, bad=True)
     def tearDown(self):
-        pass
+        os.remove(self.affy4Bad)
 
     # tests if the new strict mode complains about passing a non-file
     def testAffyStrict(self):
@@ -74,14 +75,23 @@ class AffyTest(unittest.TestCase):
             assert(len(record.GridCornerUL) == 7)
             assert(record.AlgorithmParameters[-3:] == '169')
 
+    def testAffyBadHeader(self):
+        with self.assertRaises(ValueError):
+            with open(self.affy4Bad, "rb") as f:
+                record = CelFile.read(f)
+
+
     # Writes a small example Affymetrix V4 CEL File
-    def writeExampleV4(self, f):
+    def writeExampleV4(self, f, bad=False):
         preHeaders = {'cellNo': 25,
                       'columns': 5,
                       'headerLen': 752,
                       'magic': 64,
                       'rows': 5,
                       'version': 4}
+        goodH = {u'Axis-invertX': b'0'}
+        badH = {u'Axis-invertX': b'1'}
+
         headers = {u'Algorithm': b'Percentile',
                    u'AlgorithmParameters': b'Percentile:75;CellMargin:4;Outlie'
                    b'rHigh:1.500;OutlierLow:1.004;AlgVersion:6.0;FixedCellSize'
@@ -90,7 +100,6 @@ class AffyTest(unittest.TestCase):
                    b'stion:1;PoolHeightExtension:1;UseSubgrids:FALSE;Randomize'
                    b'Pixels:FALSE;ErrorBasis:StdvMean;StdMult:1.000000;NumDATS'
                    b'ubgrids:169',
-                   u'Axis-invertX': b'0',
                    u'AxisInvertY': b'0',
                    u'Cols': b'5',
                    u'DatHeader': b'[0..65534]  20_10N:CLS=19420RWS=19420XIN=0'
@@ -108,6 +117,10 @@ class AffyTest(unittest.TestCase):
                    u'TotalX': b'2560',
                    u'TotalY': b'2560',
                    u'swapXY': b'0'}
+        if not bad:
+            headers.update(goodH)
+        else:
+            headers.update(badH)
         prePadding = b"this text doesn't matter and is ignored\x04"
         preHeadersOrder = ["magic",
                            "version",
@@ -134,6 +147,7 @@ class AffyTest(unittest.TestCase):
         f.write(b"\x00" * 15)
         for i in range(25):
             f.write(packData(float(i), float(-i), 9))
-    if __name__ == "__main__":
-        runner = unittest.TextTestRunner(verbosity=0)
-        unittest.main(testRunner=runner)
+
+if __name__ == "__main__":
+    runner = unittest.TextTestRunner(verbosity=0)
+    unittest.main(testRunner=runner)

@@ -1,16 +1,19 @@
-# Copyright 2004 by Harry Zuzan and Adam Kurkiewicz. All rights reserved.
+# Copyright 2004 by Harry Zuzan. All rights reserved.
+# Copyright 2016 by Adam Kurkiewicz. All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
 """
-Classes for accessing the information in Affymetrix cel files version 3 and 4
+Classes for accessing the information in Affymetrix cel files version 3 and 4.
 
 Functions:
-read      Read a cel file and store its contents in a Record
+read      Read a cel file version 3 or 4 and store its contents in a Record.
+read_v3   Read a cel file version 3 and store its contents in a Record.
+read_v4   Read a cel file version 4 and store its contents in a Rectod.
 
 Classes:
-Record    Contains the information from a cel file
+Record    Contains the information from a cel file.
 """
 
 from __future__ import print_function
@@ -43,7 +46,7 @@ class Record(object):
     Example usage:
 
     >>> from Bio.Affy import CelFile
-    >>> with open('Affy/affy_v3_example.CEL', "r") as handle:
+    >>> with open("Affy/affy_v3_example.CEL", "r") as handle:
     ...     c = CelFile.read(handle)
     ...
     >>> print(c.ncols, c.nrows)
@@ -98,14 +101,14 @@ def read(handle):
     Example Usage:
 
     >>> from Bio.Affy import CelFile
-    >>> with open('Affy/affy_v4_example.CEL', "rb") as handle:
+    >>> with open("Affy/affy_v4_example.CEL", "rb") as handle:
     ...     c = CelFile.read(handle)
     ...
     >>> c.version == 4
     True
     """
     # If we fail to read the magic number, then it will remain None, and thus
-    # we will invoke readV3 (if mode is not strict), or raise IOError if mode is
+    # we will invoke read_v3 (if mode is not strict), or raise IOError if mode is
     # strict.
     magicNumber = None
     # We check if the handle is a file-like object. If it isn't, and the mode
@@ -119,7 +122,7 @@ def read(handle):
         # Note that we use little-endian irrespective of the platform, again by
         # definition.
         position = handle.tell()
-        magicNumber = struct.unpack('<i', handle.read(4))[0]
+        magicNumber = struct.unpack("<i", handle.read(4))[0]
     except (AttributeError, TypeError):
         pass
     finally:
@@ -130,7 +133,7 @@ def read(handle):
             pass
 
     if magicNumber != 64:
-        return readV3(handle)
+        return read_v3(handle)
 
     else:
         # In v4 we're always strict, as we don't have to worry about backwards
@@ -139,11 +142,11 @@ def read(handle):
             raise IOError("You're trying to open an Affymetrix v4 CEL file. "
                           "You have to use a read binary mode, like this "
                           "`open(filename \"rb\")`.")
-        return readV4(handle)
+        return read_v4(handle)
 
 
 # read Affymetrix files version 4.
-def readV4(f):
+def read_v4(f):
     """ Reads Affymetrix CEL file, version 4, and returns a corresponding Record object.
 
     Most importantly record.intensities correspond to intensities from the CEL file.
@@ -153,8 +156,8 @@ def readV4(f):
     Example Usage:
 
     >>> from Bio.Affy import CelFile
-    >>> with open('Affy/affy_v4_example.CEL', "rb") as handle:
-    ...     c = CelFile.readV4(handle)
+    >>> with open("Affy/affy_v4_example.CEL", "rb") as handle:
+    ...     c = CelFile.read_v4(handle)
     ...
     >>> c.version == 4
     True
@@ -170,7 +173,7 @@ def readV4(f):
 
     # load pre-headers
     for name in preHeaders:
-        preHeadersMap[name] = struct.unpack('<i', f.read(4))[0]
+        preHeadersMap[name] = struct.unpack("<i", f.read(4))[0]
     char = f.read(preHeadersMap["headerLen"])
     header = char.decode("ascii", "ignore")
     for header in header.split("\n"):
@@ -212,29 +215,35 @@ def readV4(f):
     # Real data never seems to have anything but zeros here, but we don't want
     # to take chances. Raising an error is better than returning unreliable
     # data.
+    def raiseBadHeader(field, expected):
+        actual = int(headersMap[field])
+        message = "The header {field} is expected to be 0, not {value}".format(value=actual, field=field)
+        if actual != expected:
+            raise ValueError(message)
 
-    if headersMap["Axis-invertX"] != "0":
-        raise(ValueError("Parse Error"))
+    raiseBadHeader("Axis-invertX", 0)
 
-    if headersMap["AxisInvertY"] != "0":
-        raise(ValueError("Parse Error"))
+    raiseBadHeader("AxisInvertY", 0)
 
-    if headersMap["AxisInvertY"] != "0":
-        raise(ValueError("Parse Error"))
+    raiseBadHeader("OffsetX", 0)
+
+    raiseBadHeader("OffsetY", 0)
 
     # This is unfortunately undocumented, but it turns out that real data has
     # the `record.AlgorithmParameters` repeated in the data section, until an
-    # EOF, i.e. b'\x04'.
-    char = b'\x00'
+    # EOF, i.e. b"\x04".
+    char = b"\x00"
     safetyValve = 10**4
     for i in range(safetyValve):
         char = f.read(1)
         # For debugging
         # print([i for i in char], end="")
-        if char == b'\x04':
+        if char == b"\x04":
             break
         if i == safetyValve:
-            raise(ValueError("Parse Error"))
+            raise ValueError("Parse Error. The parser expects a short, "
+                             "undocumented binary blob terminating with "
+                             "ASCII EOF, x04")
 
     # After that there are precisely 15 bytes padded. Again, undocumented.
     padding = f.read(15)
@@ -272,14 +281,14 @@ def readV4(f):
     return record
 
 
-def readV3(handle):
+def read_v3(handle):
     """ Reads Affymetrix CEL file, version 3, and returns a corresponding Record object.
 
     Example Usage:
 
     >>> from Bio.Affy import CelFile
-    >>> with open('Affy/affy_v3_example.CEL', "r") as handle:
-    ...     c = CelFile.readV3(handle)
+    >>> with open("Affy/affy_v3_example.CEL", "r") as handle:
+    ...     c = CelFile.read_v3(handle)
     ...
     >>> c.version == 3
     True
@@ -315,7 +324,7 @@ def readV3(handle):
             section = ""
         elif section == "CEL":
             keyword, value = line.split("=", 1)
-            if keyword == 'Version':
+            if keyword == "Version":
                 record.version = int(value)
         elif section == "HEADER":
             # Set record.ncols and record.nrows, remaining data goes into
@@ -325,24 +334,24 @@ def readV3(handle):
                 record.ncols = int(value)
             elif keyword == "Rows":
                 record.nrows = int(value)
-            elif keyword == 'GridCornerUL':
+            elif keyword == "GridCornerUL":
                 x, y = value.split()
                 record.GridCornerUL = (int(x), int(y))
-            elif keyword == 'GridCornerUR':
+            elif keyword == "GridCornerUR":
                 x, y = value.split()
                 record.GridCornerUR = (int(x), int(y))
-            elif keyword == 'GridCornerLR':
+            elif keyword == "GridCornerLR":
                 x, y = value.split()
                 record.GridCornerLR = (int(x), int(y))
-            elif keyword == 'GridCornerLL':
+            elif keyword == "GridCornerLL":
                 x, y = value.split()
                 record.GridCornerLL = (int(x), int(y))
-            elif keyword == 'DatHeader':
-                record.DatHeader = value.strip('\n\r')
-            elif keyword == 'Algorithm':
-                record.Algorithm = value.strip('\n\r')
-            elif keyword == 'AlgorithmParameters':
-                record.AlgorithmParameters = value.strip('\n\r')
+            elif keyword == "DatHeader":
+                record.DatHeader = value.strip("\n\r")
+            elif keyword == "Algorithm":
+                record.Algorithm = value.strip("\n\r")
+            elif keyword == "AlgorithmParameters":
+                record.AlgorithmParameters = value.strip("\n\r")
         elif section == "INTENSITY":
             if "NumberCells" in line:
                 record.NumberCells = int(line.split("=", 1)[1])
