@@ -20,6 +20,7 @@ class AffyTest(unittest.TestCase):
         self.affy4Bad = "Affy/affy_v4_bad_example.CEL"
         with open(self.affy4Bad, "wb") as f:
             self.writeExampleV4(f, bad=True)
+
     def tearDown(self):
         os.remove(self.affy4Bad)
 
@@ -79,7 +80,6 @@ class AffyTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             with open(self.affy4Bad, "rb") as f:
                 record = CelFile.read(f)
-
 
     # Writes a small example Affymetrix V4 CEL File
     def writeExampleV4(self, f, bad=False):
