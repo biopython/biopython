@@ -189,7 +189,7 @@ def read_v4(f):
 
     record.version = preHeadersMap["version"]
     if record.version != 4:
-        raise(ValueError("Parse Error"))
+        raise ValueError("You are trying to parse CEL file version 4. This file violates the structure expected from CEL file version 4")
     record.GridCornerUL = headersMap["GridCornerUL"]
     record.GridCornerUR = headersMap["GridCornerUR"]
     record.GridCornerLR = headersMap["GridCornerLR"]
