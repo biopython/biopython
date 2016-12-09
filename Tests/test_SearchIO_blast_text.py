@@ -1967,7 +1967,7 @@ class TblastxCases(BaseBlastCases):
         self.assertEqual(1, len(qresult))
         self.assertEqual(3, len(qresult.hsps))
         hsp = qresult.hsps[0]
-        self.assertTrue("PTSP" + ("-" * 79) + "AYSP" in hsp.query)
+        self.assertIn("PTSP" + ("-" * 79) + "AYSP", hsp.query)
         hsp = qresult.hsps[1]
         self.assertTrue(hsp.query.seq.startswith("AYSPTSPAYSPTSPAYSPTSPAYSPTSPAYS----------PTSPAYSPTSPAYSPTSPA"))
         hsp = qresult.hsps[2]

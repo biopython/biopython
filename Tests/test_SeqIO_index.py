@@ -454,7 +454,7 @@ class IndexDictTests(unittest.TestCase):
         # Make sure boolean evaluation works
         self.assertEqual(bool(keys), bool(rec_dict))
         for key, id in zip(keys, ids):
-            self.assertTrue(key in rec_dict)
+            self.assertIn(key, rec_dict)
             self.assertEqual(id, rec_dict[key].id)
             self.assertEqual(id, rec_dict.get(key).id)
         # Check non-existant keys,
@@ -469,20 +469,20 @@ class IndexDictTests(unittest.TestCase):
         if hasattr(dict, "iteritems"):
             # Python 2.x
             for key, rec in rec_dict.items():
-                self.assertTrue(key in keys)
+                self.assertIn(key, keys)
                 self.assertTrue(isinstance(rec, SeqRecord))
-                self.assertTrue(rec.id in ids)
+                self.assertIn(rec.id, ids)
         else:
             # Python 3
             assert not hasattr(rec_dict, "iteritems")
             for key, rec in rec_dict.items():
-                self.assertTrue(key in keys)
+                self.assertIn(key, keys)
                 self.assertTrue(isinstance(rec, SeqRecord))
-                self.assertTrue(rec.id in ids)
+                self.assertIn(rec.id, ids)
             for rec in rec_dict.values():
-                self.assertTrue(key in keys)
+                self.assertIn(key, keys)
                 self.assertTrue(isinstance(rec, SeqRecord))
-                self.assertTrue(rec.id in ids)
+                self.assertIn(rec.id, ids)
         # Check the following fail
         self.assertRaises(NotImplementedError, rec_dict.popitem)
         self.assertRaises(NotImplementedError, rec_dict.pop, chr(0))
@@ -526,14 +526,14 @@ class IndexDictTests(unittest.TestCase):
         self.assertEqual(set(id_list), set(rec_dict_db))
         self.assertEqual(len(id_list), len(rec_dict))
         for key in id_list:
-            self.assertTrue(key in rec_dict)
+            self.assertIn(key, rec_dict)
             self.assertEqual(key, rec_dict[key].id.lower())
             self.assertEqual(key, rec_dict.get(key).id.lower())
             raw = rec_dict.get_raw(key)
             self.assertTrue(isinstance(raw, bytes),
                             "Didn't get bytes from %s get_raw" % format)
             self.assertTrue(raw.strip())
-            self.assertTrue(raw in raw_file)
+            self.assertIn(raw, raw_file)
 
             raw_db = rec_dict_db.get_raw(key)
             # Via index using format-specific get_raw which scans the file,

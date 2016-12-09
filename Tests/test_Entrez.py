@@ -42,7 +42,7 @@ class TestURLConstruction(unittest.TestCase):
         params = Entrez._construct_params(variables)
         options = Entrez._encode_options(ecitmatch=True, params=params)
         result_url = Entrez._construct_cgi(cgi, post=post, options=options)
-        self.assertTrue("retmode=xml" in result_url, result_url)
+        self.assertIn("retmode=xml", result_url)
 
     def test_construct_cgi_einfo(self):
         """Test constructed url for request to Entrez."""
@@ -52,8 +52,8 @@ class TestURLConstruction(unittest.TestCase):
         result_url = Entrez._construct_cgi(cgi, post=False, options=options)
         self.assertTrue(result_url.startswith(URL_HEAD + "einfo.fcgi?"),
                         result_url)
-        self.assertTrue(URL_TOOL in result_url)
-        self.assertTrue(URL_EMAIL in result_url)
+        self.assertIn(URL_TOOL, result_url)
+        self.assertIn(URL_EMAIL, result_url)
 
     def test_construct_cgi_epost1(self):
         cgi = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/epost.fcgi'
@@ -87,9 +87,9 @@ class TestURLConstruction(unittest.TestCase):
         result_url = Entrez._construct_cgi(cgi, post=post, options=options)
         self.assertTrue(result_url.startswith(URL_HEAD + "elink.fcgi?"),
                         result_url)
-        self.assertTrue(URL_TOOL in result_url)
-        self.assertTrue(URL_EMAIL in result_url)
-        self.assertTrue("id=22347800%2C48526535" in result_url, result_url)
+        self.assertIn(URL_TOOL, result_url)
+        self.assertIn(URL_EMAIL, result_url)
+        self.assertIn("id=22347800%2C48526535", result_url)
 
     def test_construct_cgi_elink2(self):
         """Commas: Link from protein to gene."""
@@ -103,8 +103,8 @@ class TestURLConstruction(unittest.TestCase):
         result_url = Entrez._construct_cgi(cgi, post=post, options=options)
         self.assertTrue(result_url.startswith(URL_HEAD + "elink.fcgi"),
                         result_url)
-        self.assertTrue(URL_TOOL in result_url)
-        self.assertTrue(URL_EMAIL in result_url)
+        self.assertIn(URL_TOOL, result_url)
+        self.assertIn(URL_EMAIL, result_url)
         self.assertTrue("id=15718680%2C157427902%2C119703751" in result_url,
                         result_url)
 
@@ -120,11 +120,11 @@ class TestURLConstruction(unittest.TestCase):
         result_url = Entrez._construct_cgi(cgi, post=post, options=options)
         self.assertTrue(result_url.startswith(URL_HEAD + "elink.fcgi"),
                         result_url)
-        self.assertTrue(URL_TOOL in result_url)
-        self.assertTrue(URL_EMAIL in result_url)
-        self.assertTrue("id=15718680" in result_url, result_url)
-        self.assertTrue("id=157427902" in result_url, result_url)
-        self.assertTrue("id=119703751" in result_url, result_url)
+        self.assertIn(URL_TOOL, result_url)
+        self.assertIn(URL_EMAIL, result_url)
+        self.assertIn("id=15718680", result_url)
+        self.assertIn("id=157427902", result_url)
+        self.assertIn("id=119703751", result_url)
 
     def test_construct_cgi_efetch(self):
         cgi = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi'
@@ -137,8 +137,8 @@ class TestURLConstruction(unittest.TestCase):
         result_url = Entrez._construct_cgi(cgi, post=post, options=options)
         self.assertTrue(result_url.startswith(URL_HEAD + "efetch.fcgi?"),
                         result_url)
-        self.assertTrue(URL_TOOL in result_url)
-        self.assertTrue(URL_EMAIL in result_url)
+        self.assertIn(URL_TOOL, result_url)
+        self.assertIn(URL_EMAIL, result_url)
         self.assertTrue("id=15718680%2C157427902%2C119703751" in result_url,
                         result_url)
 

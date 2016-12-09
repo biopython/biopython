@@ -219,18 +219,18 @@ class ModTest(unittest.TestCase):
             results_path = os.path.join(res_dir, results_file)
             results = codeml.read(results_path)
             self.assertEqual(len(results), 4, version_msg)
-            self.assertTrue("NSsites" in results, version_msg)
+            self.assertIn("NSsites", results, version_msg)
             models = results["NSsites"]
             # Only site class model 0 was simulated
             self.assertEqual(len(models), 1, version_msg)
-            self.assertTrue(0 in models, version_msg)
+            self.assertIn(0, models, version_msg)
             model = models[0]
             self.assertEqual(len(model), 5, version_msg)
-            self.assertTrue("parameters" in model, version_msg)
+            self.assertIn("parameters", model, version_msg)
             params = model["parameters"]
             # There should be one new item in the parameters, "SEs"
             self.assertEqual(len(params), SITECLASS_PARAMS[0] + 1, version_msg)
-            self.assertTrue("SEs" in params, version_msg)
+            self.assertIn("SEs", params, version_msg)
 
     def testParseAllNSsites(self):
         res_dir = os.path.join(self.results_dir, "codeml", "all_NSsites")
@@ -243,7 +243,7 @@ class ModTest(unittest.TestCase):
             # There should be 4 top-level items: 'codon model', 'model',
             # 'version', & 'NSsites'
             self.assertEqual(len(results), 4, version_msg)
-            self.assertTrue("NSsites" in results, version_msg)
+            self.assertIn("NSsites", results, version_msg)
             # There should be 6 NSsites classes: 0, 1, 2, 3, 7 & 8
             self.assertEqual(len(results["NSsites"]), 6, version_msg)
             # Each site class model should have 5 sub-items: 'lnL', 'tree',
@@ -252,11 +252,11 @@ class ModTest(unittest.TestCase):
             for model_num in [0, 1, 2, 3, 7, 8]:
                 model = results["NSsites"][model_num]
                 self.assertEqual(len(model), 5, version_msg)
-                self.assertTrue("parameters" in model, version_msg)
+                self.assertIn("parameters", model, version_msg)
                 params = model["parameters"]
                 self.assertEqual(len(params), SITECLASS_PARAMS[model_num],
                     version_msg)
-                self.assertTrue("branches" in params, version_msg)
+                self.assertIn("branches", params, version_msg)
                 branches = params["branches"]
                 # There are 7 branches in the test case (specific to these
                 # test cases)
@@ -277,10 +277,10 @@ class ModTest(unittest.TestCase):
             # 'version', 'NSsites' & site-class model, the last of which
             # is only there when only one NSsites class is used
             self.assertEqual(len(results), 5, version_msg)
-            self.assertTrue('site-class model' in results, version_msg)
+            self.assertIn('site-class model', results, version_msg)
             self.assertEqual(results['site-class model'], 'discrete',
                     version_msg)
-            self.assertTrue("NSsites" in results, version_msg)
+            self.assertIn("NSsites", results, version_msg)
             # There should be 1 NSsites classe: 3
             self.assertEqual(len(results["NSsites"]), 1, version_msg)
             # Each site class model should have 5 sub-items: 'lnL', 'tree',
@@ -288,11 +288,11 @@ class ModTest(unittest.TestCase):
             # have the correct number of parameters also.
             model = results["NSsites"][3]
             self.assertEqual(len(model), 5, version_msg)
-            self.assertTrue("parameters" in model, version_msg)
+            self.assertIn("parameters", model, version_msg)
             params = model["parameters"]
             self.assertEqual(len(params), SITECLASS_PARAMS[3],
                 version)
-            self.assertTrue("site classes" in params, version_msg)
+            self.assertIn("site classes", params, version_msg)
             site_classes = params["site classes"]
             self.assertEqual(len(site_classes), 4, version_msg)
 
@@ -307,27 +307,27 @@ class ModTest(unittest.TestCase):
             # There are 5 top-level items in this case:
             # 'codon model', 'model', 'version', 'NSsites' & 'site-class model'
             self.assertEqual(len(results), 5, version_msg)
-            self.assertTrue("NSsites" in results, version_msg)
+            self.assertIn("NSsites", results, version_msg)
             models = results["NSsites"]
             # Only site class model 2 is simulated for Branch Site A
             self.assertEqual(len(models), 1, version_msg)
-            self.assertTrue(2 in models, version_msg)
+            self.assertIn(2, models, version_msg)
             model = models[2]
             self.assertEqual(len(model), 5, version_msg)
-            self.assertTrue("parameters" in model, version_msg)
+            self.assertIn("parameters", model, version_msg)
             params = model["parameters"]
             # Branch Site A results lack a "branches" parameter
             self.assertEqual(len(params), SITECLASS_PARAMS[2] - 1, version_msg)
-            self.assertTrue("site classes" in params, version_msg)
+            self.assertIn("site classes", params, version_msg)
             site_classes = params["site classes"]
             # Branch Site A adds another site class
             self.assertEqual(len(site_classes), SITECLASSES[2] + 1,
                 version)
             for class_num in [0, 1, 2, 3]:
-                self.assertTrue(class_num in site_classes, version_msg)
+                self.assertIn(class_num, site_classes, version_msg)
                 site_class = site_classes[class_num]
                 self.assertEqual(len(site_class), 2, version_msg)
-                self.assertTrue("branch types" in site_class, version_msg)
+                self.assertIn("branch types", site_class, version_msg)
                 branches = site_class["branch types"]
                 self.assertEqual(len(branches), 2, version_msg)
 
@@ -342,26 +342,26 @@ class ModTest(unittest.TestCase):
             results = codeml.read(results_path)
             # 5 top-level items again in this case
             self.assertEqual(len(results), 5, version_msg)
-            self.assertTrue("NSsites" in results, version_msg)
+            self.assertIn("NSsites", results, version_msg)
             models = results["NSsites"]
             # Only site class model 2 is simulated for Clade Model C
             self.assertEqual(len(models), 1, version_msg)
-            self.assertTrue(2 in models, version_msg)
+            self.assertIn(2, models, version_msg)
             model = models[2]
             self.assertEqual(len(model), 5, version_msg)
-            self.assertTrue("parameters" in model, version_msg)
+            self.assertIn("parameters", model, version_msg)
             params = model["parameters"]
             # Clade Model C results lack a "branches" parameter
             self.assertEqual(len(params), SITECLASS_PARAMS[2] - 1, version_msg)
-            self.assertTrue("site classes" in params, version_msg)
+            self.assertIn("site classes", params, version_msg)
             site_classes = params["site classes"]
             self.assertEqual(len(site_classes), SITECLASSES[2],
                 version)
             for class_num in [0, 1, 2]:
-                self.assertTrue(class_num in site_classes, version_msg)
+                self.assertIn(class_num, site_classes, version_msg)
                 site_class = site_classes[class_num]
                 self.assertEqual(len(site_class), 2, version_msg)
-                self.assertTrue("branch types" in site_class, version_msg)
+                self.assertIn("branch types", site_class, version_msg)
                 branches = site_class["branch types"]
                 self.assertEqual(len(branches), 2, version_msg)
 
@@ -374,17 +374,17 @@ class ModTest(unittest.TestCase):
             results_path = os.path.join(res_dir, results_file)
             results = codeml.read(results_path)
             self.assertEqual(len(results), 4, version_msg)
-            self.assertTrue("NSsites" in results, version_msg)
+            self.assertIn("NSsites", results, version_msg)
             models = results["NSsites"]
             self.assertEqual(len(models), 1, version_msg)
-            self.assertTrue(0 in models, version_msg)
+            self.assertIn(0, models, version_msg)
             model = models[0]
             self.assertEqual(len(model), 5, version_msg)
-            self.assertTrue("parameters" in model, version_msg)
+            self.assertIn("parameters", model, version_msg)
             params = model["parameters"]
             # This type of model has fewer parameters for model 0
             self.assertEqual(len(params), 4, version_msg)
-            self.assertTrue("rates" in params, version_msg)
+            self.assertIn("rates", params, version_msg)
             rates = params["rates"]
             self.assertEqual(len(rates), 2, version_msg)
 
@@ -397,12 +397,12 @@ class ModTest(unittest.TestCase):
             results_path = os.path.join(res_dir, results_file)
             results = codeml.read(results_path)
             self.assertEqual(len(results), 4, version_msg)
-            self.assertTrue("genes" in results, version_msg)
+            self.assertIn("genes", results, version_msg)
             genes = results["genes"]
             self.assertEqual(len(genes), 2, version_msg)
             model = genes[0]
             self.assertEqual(len(model), 5, version_msg)
-            self.assertTrue("parameters" in model, version_msg)
+            self.assertIn("parameters", model, version_msg)
             params = model["parameters"]
             self.assertEqual(len(params), SITECLASS_PARAMS[0], version_msg)
 
@@ -415,20 +415,20 @@ class ModTest(unittest.TestCase):
             results_path = os.path.join(res_dir, results_file)
             results = codeml.read(results_path)
             self.assertEqual(len(results), 4, version_msg)
-            self.assertTrue("NSsites" in results, version_msg)
+            self.assertIn("NSsites", results, version_msg)
             models = results["NSsites"]
             self.assertEqual(len(models), 1, version_msg)
-            self.assertTrue(0 in models, version_msg)
+            self.assertIn(0, models, version_msg)
             model = models[0]
             self.assertEqual(len(model), 5, version_msg)
-            self.assertTrue("parameters" in model, version_msg)
+            self.assertIn("parameters", model, version_msg)
             params = model["parameters"]
             # This type of model has fewer parameters for model 0
             self.assertEqual(len(params), 3, version_msg)
-            self.assertTrue("rates" in params, version_msg)
+            self.assertIn("rates", params, version_msg)
             rates = params["rates"]
             self.assertEqual(len(rates), 2, version_msg)
-            self.assertTrue("genes" in params, version_msg)
+            self.assertIn("genes", params, version_msg)
             genes = params["genes"]
             self.assertEqual(len(genes), 2, version_msg)
 
@@ -441,22 +441,22 @@ class ModTest(unittest.TestCase):
             results_path = os.path.join(res_dir, results_file)
             results = codeml.read(results_path)
             self.assertEqual(len(results), 4, version_msg)
-            self.assertTrue("NSsites" in results, version_msg)
+            self.assertIn("NSsites", results, version_msg)
             models = results["NSsites"]
             self.assertEqual(len(models), 1, version_msg)
-            self.assertTrue(0 in models, version_msg)
+            self.assertIn(0, models, version_msg)
             model = models[0]
             # With the free ratio model, you get 3 extra trees: dN tree,
             # dS tree and omega tree
             self.assertEqual(len(model), 8, version_msg)
-            self.assertTrue("parameters" in model, version_msg)
+            self.assertIn("parameters", model, version_msg)
             params = model["parameters"]
             self.assertEqual(len(params), SITECLASS_PARAMS[0], version_msg)
-            self.assertTrue("branches" in params, version_msg)
+            self.assertIn("branches", params, version_msg)
             # There should be 7 branches
             branches = params["branches"]
             self.assertEqual(len(branches), 7, version_msg)
-            self.assertTrue("omega" in params, version_msg)
+            self.assertIn("omega", params, version_msg)
             omega = params["omega"]
             self.assertEqual(len(omega), 7, version_msg)
 
@@ -470,7 +470,7 @@ class ModTest(unittest.TestCase):
             results = codeml.read(results_path)
             # Pairwise models have an extra top-level item: pairwise
             self.assertEqual(len(results), 5, version_msg)
-            self.assertTrue("pairwise" in results, version_msg)
+            self.assertIn("pairwise", results, version_msg)
             pairwise = results["pairwise"]
             self.assertGreaterEqual(len(pairwise), 2, version_msg +
                                     ": should have at least two sequences")
@@ -489,7 +489,7 @@ class ModTest(unittest.TestCase):
                         % version.replace('_', '.')
             results_path = os.path.join(res_dir, results_file)
             results = codeml.read(results_path)
-            self.assertTrue("pairwise" in results)
+            self.assertIn("pairwise", results)
             seqs = list(results["pairwise"].keys())
             self.assertGreaterEqual(len(seqs), 2, version_msg +
                                     ": should have at least two sequences")
@@ -519,11 +519,11 @@ class ModTest(unittest.TestCase):
             # Version 4.1 doesn't seem to produce distances in the results
             if version == "4_1":
                 self.assertEqual(len(results), 4, version_msg)
-                self.assertTrue("lnL max" in results, version_msg)
+                self.assertIn("lnL max", results, version_msg)
             else:
                 self.assertEqual(len(results), 5, version_msg)
-                self.assertTrue("lnL max" in results, version_msg)
-                self.assertTrue("distances" in results, version_msg)
+                self.assertIn("lnL max", results, version_msg)
+                self.assertIn("distances", results, version_msg)
                 distances = results["distances"]
                 # non-pairwise AA analysis only gives raw distances
                 self.assertEqual(len(distances), 1, version_msg)
@@ -538,8 +538,8 @@ class ModTest(unittest.TestCase):
             results = codeml.read(results_path)
             # Pairwise AA analysis has one top-level fewer than non-pairwise
             self.assertEqual(len(results), 4, version_msg)
-            self.assertTrue("lnL max" in results, version_msg)
-            self.assertTrue("distances" in results, version_msg)
+            self.assertIn("lnL max", results, version_msg)
+            self.assertIn("distances", results, version_msg)
             distances = results["distances"]
             # Pairwise AA analysis has ML & raw distances
             self.assertEqual(len(distances), 2, version_msg)
@@ -550,11 +550,11 @@ class ModTest(unittest.TestCase):
         res_file = os.path.join(self.results_dir, "codeml",
                                 "tree_regexp_versatility.out")
         results = codeml.read(res_file)
-        self.assertTrue("NSsites" in results)
+        self.assertIn("NSsites", results)
         nssites = results["NSsites"]
-        self.assertTrue(0 in nssites)
+        self.assertIn(0, nssites)
         m0 = nssites[0]
-        self.assertTrue("tree" in m0)
+        self.assertIn("tree", m0)
         self.assertTrue(m0["tree"] is not None)
         self.assertNotEqual(len(m0["tree"]), 0)
 
@@ -566,8 +566,8 @@ class ModTest(unittest.TestCase):
                         % version.replace('_', '.')
             results_path = os.path.join(res_dir, results_file)
             results = codeml.read(results_path)
-            self.assertTrue("NSsites" in results)
-            self.assertTrue(22 in results["NSsites"])
+            self.assertIn("NSsites", results)
+            self.assertIn(22, results["NSsites"])
             model = results["NSsites"][22]
             self.assertEqual(len(model), 5, version_msg)
             params = model["parameters"]

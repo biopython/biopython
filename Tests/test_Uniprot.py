@@ -350,7 +350,7 @@ class TestUniprot(unittest.TestCase):
         self.assertEqual(len(txt_list), len(xml_list))
         for txt, xml, fas, id in zip(txt_list, xml_list, fas_list, ids):
             self.assertEqual(txt.id, id)
-            self.assertTrue(txt.id in fas.id.split("|"))
+            self.assertIn(txt.id, fas.id.split("|"))
             self.assertEqual(str(txt.seq), str(fas.seq))
             self.compare_txt_xml(txt, xml)
 

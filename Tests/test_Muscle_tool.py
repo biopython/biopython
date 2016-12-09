@@ -94,7 +94,7 @@ class MuscleApplication(unittest.TestCase):
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         output, error = cmdline()
         self.assertEqual(output, "")
-        self.assertTrue("ERROR" not in error)
+        self.assertNotIn("ERROR", error)
 
     def test_Muscle_with_options(self):
         """Round-trip through app with a switch and valued option"""
@@ -111,7 +111,7 @@ class MuscleApplication(unittest.TestCase):
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         output, error = cmdline()
         self.assertEqual(output, "")
-        self.assertTrue("ERROR" not in error)
+        self.assertNotIn("ERROR", error)
         self.assertTrue(error.strip().startswith("MUSCLE"), output)
 
     def test_Muscle_profile_simple(self):
@@ -127,7 +127,7 @@ class MuscleApplication(unittest.TestCase):
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         output, error = cmdline()
         self.assertEqual(output, "")
-        self.assertTrue("ERROR" not in error)
+        self.assertNotIn("ERROR", error)
         self.assertTrue(error.strip().startswith("MUSCLE"), output)
 
     def test_Muscle_profile_with_options(self):
@@ -149,7 +149,7 @@ class MuscleApplication(unittest.TestCase):
         #NOTE: generic_run has been removed from Biopython
         self.assertEqual(result.return_code, 0)
         self.assertEqual(stdout.read(), "")
-        self.assertTrue("ERROR" not in stderr.read())
+        self.assertNotIn("ERROR", stderr.read())
         self.assertEqual(str(result._cl), str(cmdline))
         """
 

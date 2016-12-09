@@ -108,9 +108,9 @@ class GenBankTests(unittest.TestCase):
         record = SeqIO.read("GenBank/NC_005816.gb", "gb")
         self.assertEqual(record.dbxrefs, ["Project:58037"])
         gb = record.format("gb")
-        self.assertTrue("\nDBLINK      Project: 58037\n" in gb, gb)
+        self.assertIn("\nDBLINK      Project: 58037\n", gb)
         embl = record.format("embl")
-        self.assertTrue("XX\nPR   Project:58037;\nXX\n" in embl, embl)
+        self.assertIn("XX\nPR   Project:58037;\nXX\n", embl)
 
     def test_dblink_two(self):
         """GenBank record with old and new DBLINK project entries."""
@@ -123,12 +123,12 @@ DBLINK      Project: 57779
             BioProject: PRJNA57779
 KEYWORDS    """ in gb, gb)
         embl = record.format("embl")
-        self.assertTrue("XX\nPR   Project:PRJNA57779;\nXX\n" in embl, embl)
+        self.assertIn("XX\nPR   Project:PRJNA57779;\nXX\n", embl)
 
     def test_dbline_gb_embl(self):
         """GenBank / EMBL paired records with PR project entry: GenBank"""
         record = SeqIO.read("GenBank/DS830848.gb", "gb")
-        self.assertTrue("BioProject:PRJNA16232" in record.dbxrefs, record.dbxrefs)
+        self.assertIn("BioProject:PRJNA16232", record.dbxrefs)
         gb = record.format("gb")
         self.assertTrue("""
 DBLINK      BioProject: PRJNA16232
@@ -136,13 +136,13 @@ DBLINK      BioProject: PRJNA16232
 KEYWORDS    """ in gb, gb)
         # Also check EMBL output
         embl = record.format("embl")
-        self.assertTrue("XX\nPR   Project:PRJNA16232;\nXX\n" in embl, embl)
+        self.assertIn("XX\nPR   Project:PRJNA16232;\nXX\n", embl)
 
     def test_dbline_embl_gb(self):
         """GenBank / EMBL paired records with PR project entry: EMBL"""
         record = SeqIO.read("EMBL/DS830848.embl", "embl")
         # TODO: Should we map this to BioProject:PRJNA16232
-        self.assertTrue("Project:PRJNA16232" in record.dbxrefs, record.dbxrefs)
+        self.assertIn("Project:PRJNA16232", record.dbxrefs)
         gb = record.format("gb")
         self.assertTrue("""
 DBLINK      Project: PRJNA16232
@@ -152,7 +152,7 @@ DBLINK      Project: PRJNA16232
             BioSample: SAMN03004382
 KEYWORDS    """ in gb, gb)
         embl = record.format("embl")
-        self.assertTrue("XX\nPR   Project:PRJNA16232;\nXX\n" in embl, embl)
+        self.assertIn("XX\nPR   Project:PRJNA16232;\nXX\n", embl)
 
     def test_structured_comment_parsing(self):
         """Structued comment parsing."""
@@ -232,8 +232,8 @@ KEYWORDS    """ in gb, gb)
                 self.assertEqual(1, SeqIO.write(record, handle, "gb"))
             handle.seek(0)
             line = handle.readline()
-            self.assertTrue(" %s " % name in line, line)
-            self.assertTrue(" %i bp " % seq_len in line, line)
+            self.assertIn(" %s " % name, line)
+            self.assertIn(" %i bp " % seq_len, line)
             name_and_length = line[12:40]
             self.assertEqual(name_and_length.split(), [name, str(seq_len)], line)
             handle.seek(0)

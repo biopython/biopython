@@ -227,7 +227,7 @@ class TestAbi(unittest.TestCase):
             record = SeqIO.read(test_data[trace]['handle'], 'abi-trim')
             if trace != 'data_empty':
                 self.assertNotEqual(str(record.seq), test_data[trace]['seq'])
-                self.assertTrue(str(record.seq) in test_data[trace]['seq'])
+                self.assertIn(str(record.seq), test_data[trace]['seq'])
             else:
                 self.assertEqual(str(record.seq), test_data[trace]['seq'])
 

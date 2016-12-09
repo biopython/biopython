@@ -127,7 +127,7 @@ class SeqRecordMethods(unittest.TestCase):
             break
 
     def test_contains(self):
-        self.assertTrue(Seq("ABC", generic_protein) in self.record)
+        self.assertIn(Seq("ABC", generic_protein), self.record)
 
     def test_str(self):
         expected = """

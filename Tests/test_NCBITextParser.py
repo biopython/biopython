@@ -14971,7 +14971,7 @@ class TestNCBITextParser(unittest.TestCase):
             self.assertEqual(len(record.alignments), 1)
             self.assertEqual(len(record.alignments[0].hsps), 3)
             h = record.alignments[0].hsps[0]
-            self.assertTrue("PTSP" + ("-" * 79) + "AYSP" in h.query)
+            self.assertIn("PTSP" + ("-" * 79) + "AYSP", h.query)
             h = record.alignments[0].hsps[1]
             self.assertTrue(h.query.startswith("AYSPTSPAYSPTSPAYSPTSPAYSPTSPAYS----------PTSPAYSPTSPAYSPTSPA"))
             h = record.alignments[0].hsps[2]
