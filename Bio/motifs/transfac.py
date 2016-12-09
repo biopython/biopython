@@ -6,6 +6,9 @@
 """Parsing TRANSFAC files
 """
 
+import warnings
+
+from Bio import BiopythonParserWarning
 from Bio import motifs
 from Bio.Alphabet import IUPAC
 
@@ -90,34 +93,75 @@ def read(handle):
     record = Record()
     for line in handle:
         line = line.strip()
-        key, value = line[:2], line[4:]
+        if not line:
+            continue
+        key_value = line.split(None, 1)
+        key = key_value[0].strip()
+        assert len(key) == 2, 'The key value of a TRANSFAC motif line should have 2 characters: "{0:s}"'.format(line)
+        if len(key_value) == 2:
+            value = key_value[1].strip()
+            if not line.partition('  ')[1]:
+                warnings.warn(
+                    'A TRANSFAC motif line should have 2 spaces between key and value columns: "{0:s}"'.format(line),
+                    BiopythonParserWarning
+                )
         if key == 'VV':
             record.version = value
         elif key in ('P0', 'PO'):  # Old TRANSFAC files use PO instead of P0
             counts = {}
-            assert value.split()[:4] == ['A', 'C', 'G', 'T']
+            assert value.split()[:4] == ['A', 'C', 'G', 'T'], \
+                'A TRANSFAC matrix "{0:s}" line should be followed by "A C G T": "{0:s}"'.format(key, line)
             length = 0
             for c in "ACGT":
                 counts[c] = []
             for line in handle:
-                key, value = line[:2], line[4:]
+                line = line.strip()
+                key_value = line.split(None, 1)
+                key = key_value[0].strip()
+                if len(key_value) == 2:
+                    value = key_value[1].strip()
+                    if not line.partition('  ')[1]:
+                        warnings.warn(
+                            'A TRANSFAC motif line should have 2 spaces between key and value columns: "{0:s}"'.format(
+                                line),
+                            BiopythonParserWarning)
                 try:
                     i = int(key)
                 except ValueError:
                     break
-                length += 1
-                assert i == length
-                values = value.split()
+                if length == 0 and i == 0:
+                    warnings.warn(
+                        'A TRANSFAC matrix should start with "01" as first row of the matrix, '
+                        'but this matrix uses "00": "{0:s}"'.format(line),
+                        BiopythonParserWarning)
+                else:
+                    length += 1
+                assert i == length, \
+                    'The TRANSFAC matrix row number does not match the position in the matrix: "{0:s}"'.format(line)
+                if len(key) == 1:
+                    warnings.warn(
+                        'A TRANSFAC matrix line should have a 2 digit key at the start of the lin ("{0:02d}"), '
+                        'but this matrix uses "{0:d}": "{1:s}".'.format(i, line),
+                        BiopythonParserWarning)
+                assert len(key_value) == 2, 'A TRANSFAC matrix line should have a key and a value: "{0:s}"'.format(line)
+                values = value.split()[:4]
+                assert len(values) == 4, \
+                    'A TRANSFAC matrix line should have a value for each nucleotide (A, C, G and T): "{0:s}"'.format(
+                        line)
                 for c, v in zip("ACGT", values):
                     counts[c].append(float(v))
         if line == 'XX':
             pass
         elif key == 'RN':
             index, separator, accession = value.partition(";")
-            assert index[0] == '['
-            assert index[-1] == ']'
+            assert index[0] == '[', \
+                'The index "{0:s}" in a TRANSFAC RN line should start with a "[": "{0:s}"'.format(index, line)
+            assert index[-1] == ']', \
+                'The index "{0:s}" in a TRANSFAC RN line should end with a "]": "{0:s}"'.format(index, line)
             index = int(index[1:-1])
-            assert len(references) == index - 1
+            assert len(references) == index - 1, \
+                'The index "{0:d}" of the TRANSFAC RN line does not match the current number ' \
+                'of seen references "{1:d}": "{2:s}"'.format(index, len(reference) + 1, line)
             reference = {key: value}
             references.append(reference)
         elif key == '//':

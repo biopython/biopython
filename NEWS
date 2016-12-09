@@ -20,6 +20,9 @@ The NEXUS parser handling of internal node comments has been improved, which
 should help if working with tools like the BEAST TreeAnnotator. Slashes are
 now also allowed in identifiers.
 
+New parser for ExPASy Cellosaurus, a cell line database, cell line catalogue,
+and cell line ontology (contributed by Steve Marshall).
+
 For consistency the Bio.Seq module now offers a complement function (already
 available as a method on the Seq and MutableSeq objects).
 
@@ -49,9 +52,11 @@ possible, especially the following contributors:
 
 Aaron Rosenfeld
 Adam Kurkiewicz (first contribution)
+Adrian Altenhoff (first contribution)
 Allis Tauri (first contribution)
 Bernhard Thiel (first contribution)
 Bertrand Néron
+Brandon Invergo
 Carlos Pena
 Carlos Ríos
 Chris Warth
@@ -61,7 +66,9 @@ Markus Piotrowski
 Peter Cock
 Richard Neher (first contribution)
 Sourav Singh (first contribution)
+Stefans Mezulis
 Steve Bond
+Steve Marshall (first contribution)
 Uri Laserson
 Vincent Davis
 
