@@ -5,15 +5,7 @@
 # as part of this package.
 
 """
-Classes for accessing the information in Affymetrix cel files version 3 and 4.
-
-Functions:
-read      Read a cel file version 3 or 4 and store its contents in a Record.
-read_v3   Read a cel file version 3 and store its contents in a Record.
-read_v4   Read a cel file version 4 and store its contents in a Rectod.
-
-Classes:
-Record    Contains the information from a cel file.
+Reading information from Affymetrix CEL files version 3 and 4.
 """
 
 from __future__ import print_function
@@ -189,7 +181,9 @@ def read_v4(f):
 
     record.version = preHeadersMap["version"]
     if record.version != 4:
-        raise ValueError("You are trying to parse CEL file version 4. This file violates the structure expected from CEL file version 4")
+        raise ValueError("You are trying to parse CEL file version 4. This file"
+                         " violates the structure expected from CEL file"
+                         " version 4")
     record.GridCornerUL = headersMap["GridCornerUL"]
     record.GridCornerUR = headersMap["GridCornerUR"]
     record.GridCornerLR = headersMap["GridCornerLR"]

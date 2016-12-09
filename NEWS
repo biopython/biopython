@@ -37,7 +37,8 @@ patent data files, and the related IMGT parser was updated to cope with
 IPD-IMGT/HLA database files after release v3.16.0 when their ID line changed.
 The GenBank output now uses colon space to match current NCBI DBLINK lines.
 
-The Bio.Affy package supports Affymetrix version 4 of the CEL file format, in addition to version 3.
+The Bio.Affy package supports Affymetrix version 4 of the CEL file format,
+in addition to version 3.
 
 Additionally, a number of small bugs have been fixed with further additions
 to the test suite, and there has been further work to follow the Python PEP8,
@@ -46,23 +47,23 @@ PEP257 and best practice standard coding style.
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
-Allis Tauri (first contribution)
 Aaron Rosenfeld
+Adam Kurkiewicz (first contribution)
+Allis Tauri (first contribution)
 Bernhard Thiel (first contribution)
 Bertrand Néron
 Carlos Pena
 Carlos Ríos
 Chris Warth
 Emmanuel Noutahi
-Markus Piotrowski
 Lenna Peterson
+Markus Piotrowski
 Peter Cock
 Richard Neher (first contribution)
 Sourav Singh (first contribution)
 Steve Bond
 Uri Laserson
 Vincent Davis
-Adam Kurkiewicz (first contribution)
 
 ===================================================================
 
