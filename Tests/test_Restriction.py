@@ -209,13 +209,13 @@ class RestrictionBatches(unittest.TestCase):
         self.assertEqual(len(batch), 3)
 
         # The usual way to test batch membership
-        self.assertTrue(EcoRV in batch)
-        self.assertTrue(EcoRI in batch)
-        self.assertTrue(KpnI in batch)
-        self.assertTrue(SmaI not in batch)
+        self.assertIn(EcoRV, batch)
+        self.assertIn(EcoRI, batch)
+        self.assertIn(KpnI, batch)
+        self.assertNotIn(SmaI, batch)
         # Syntax sugar for the above
-        self.assertTrue('EcoRV' in batch)
-        self.assertFalse('SmaI' in batch)
+        self.assertIn('EcoRV', batch)
+        self.assertNotIn('SmaI', batch)
 
         batch.get(EcoRV)
         self.assertRaises(ValueError, batch.get, SmaI)
@@ -223,8 +223,8 @@ class RestrictionBatches(unittest.TestCase):
         batch.remove(EcoRV)
         self.assertEqual(len(batch), 2)
 
-        self.assertTrue(EcoRV not in batch)
-        self.assertTrue('EcoRV' not in batch)
+        self.assertNotIn(EcoRV, batch)
+        self.assertNotIn('EcoRV', batch)
 
     def test_batch_analysis(self):
         """Sequence analysis with a restriction batch.

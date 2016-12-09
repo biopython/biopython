@@ -35,13 +35,13 @@ class GeneralTests(unittest.TestCase):
         """Test parsing a handle opened in binary mode."""
         with open("Entrez/einfo1.xml", "rb") as handle:
             record = Entrez.read(handle)
-        self.assertTrue("DbList" in record)
+        self.assertIn("DbList", record)
 
     def test_text_handle(self):
         """Test parsing a handle opened in text mode."""
         with open("Entrez/einfo1.xml", "rt") as handle:
             record = Entrez.read(handle)
-        self.assertTrue("DbList" in record)
+        self.assertIn("DbList", record)
 
     def test_BytesIO(self):
         """Test parsing a BytesIO handle (bytes not unicode)."""
@@ -49,7 +49,7 @@ class GeneralTests(unittest.TestCase):
             data = in_handle.read()
         handle = BytesIO(data)
         record = Entrez.read(handle)
-        self.assertTrue("DbList" in record)
+        self.assertIn("DbList", record)
         handle.close()
 
     def test_StringIO(self):
@@ -58,7 +58,7 @@ class GeneralTests(unittest.TestCase):
             data = in_handle.read()
         handle = StringIO(data)
         record = Entrez.read(handle)
-        self.assertTrue("DbList" in record)
+        self.assertIn("DbList", record)
         handle.close()
 
 
@@ -1215,15 +1215,15 @@ class ESearchTest(unittest.TestCase):
         self.assertEqual(len(record['TranslationSet']), 0)
         self.assertEqual(record['QueryTranslation'], '')
         self.assertEqual(len(record['ErrorList']), 2)
-        self.assertTrue("PhraseNotFound" in record['ErrorList'])
-        self.assertTrue("FieldNotFound" in record['ErrorList'])
+        self.assertIn("PhraseNotFound", record['ErrorList'])
+        self.assertIn("FieldNotFound", record['ErrorList'])
         self.assertEqual(len(record['ErrorList']["PhraseNotFound"]), 1)
         self.assertEqual(len(record['ErrorList']["FieldNotFound"]), 0)
         self.assertEqual(record['ErrorList']["PhraseNotFound"][0], "abcXYZ")
         self.assertEqual(len(record['WarningList']), 3)
-        self.assertTrue("PhraseIgnored" in record['WarningList'])
-        self.assertTrue("QuotedPhraseNotFound" in record['WarningList'])
-        self.assertTrue("OutputMessage" in record['WarningList'])
+        self.assertIn("PhraseIgnored", record['WarningList'])
+        self.assertIn("QuotedPhraseNotFound", record['WarningList'])
+        self.assertIn("OutputMessage", record['WarningList'])
         self.assertEqual(len(record['WarningList']["PhraseIgnored"]), 0)
         self.assertEqual(len(record['WarningList']["QuotedPhraseNotFound"]), 0)
         self.assertEqual(len(record['WarningList']["OutputMessage"]), 1)
