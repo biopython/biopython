@@ -30,9 +30,25 @@ def _set_frame(frag):
 
 
 def _make_triplets(seq, phase=0):
-    """Given a sequence of three-letter amino acid codes and its phase,
-    return the letters discarded to reach the first full triplet, the
-    triplets, and the remaining non-triplets."""
+    """Selects a valid amino acid sequence given a 3-letter code input.
+
+    This function takes a single three-letter amino acid sequence and the phase
+    of the sequence to return the longest intact amino acid sequence possible.
+    Parts of the input sequence before and after the selected sequence are also
+    returned.
+
+    This is an internal private function and is meant for parsing Exonerate's
+    three-letter amino acid output.
+
+    >>> from Bio.SearchIO.ExonerateIO._base import _make_triplets
+    >>> _make_triplets('GlyThrSerAlaPro')
+    ('', ['Gly', 'Thr', 'Ser', 'Ala', 'Pro'], '')
+    >>> _make_triplets('yThSerAla', phase=1)
+    ('y', ['Thr', 'Ser', 'Ala'], '')
+    >>> _make_triplets('yThSerAlaPr', phase=1)
+    ('y', ['Thr', 'Ser', 'Ala'], 'Pr')
+
+    """
     pre = seq[:phase]
     np_seq = seq[phase:]
     non_triplets = len(np_seq) % 3
