@@ -59,8 +59,24 @@ def _make_triplets(seq, phase=0):
 
 
 def _get_fragments_coord(frags):
-    """Given a list of three-letter amino acid fragments, return each
-    fragment's letter position in the full, flattened sequence."""
+    """Returns the letter coordinate of the given list of fragments.
+
+    This function takes a list of three-letter amino acid sequences and
+    returns a list of coordinates for each fragment had all the input
+    sequences been flattened.
+
+    This is an internal private function and is meant for parsing Exonerate's
+    three-letter amino acid output.
+
+    >>> from Bio.SearchIO.ExonerateIO._base import _get_fragments_coord
+    >>> _get_fragments_coord(['Thr', 'Ser', 'Ala'])
+    [0, 3, 6]
+    >>> _get_fragments_coord(['Thr', 'SerAlaPro', 'GlyLeu'])
+    [0, 3, 12, ]
+    >>> _get_fragments_coord(['Thr', 'SerAlaPro', 'GlyLeu', 'Cys'])
+    [0, 3, 12, 18]
+
+    """
     if not frags:
         return []
     # first fragment always starts from position 0
