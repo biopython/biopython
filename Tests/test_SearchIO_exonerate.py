@@ -1494,7 +1494,6 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual(2, len(hsp.hit_all))
         self.assertEqual(2, len(hsp.aln_annotation_all))
 
-
     def test_exn_22_q_none(self):
         """Test parsing exonerate output (exn_22_q_none.exn)"""
         exn_file = get_file('exn_22_q_none.exn')
