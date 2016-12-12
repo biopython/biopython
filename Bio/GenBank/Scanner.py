@@ -1527,26 +1527,38 @@ class GenBankScanner(InsdcScanner):
                     comment_list = []
                     structured_comment_dict = defaultdict(dict)
                     structured_comment_key = ''
+                    is_structured_comment_start_delim = False
 
                     if STRUCTURED_COMMENT_START in data:
-                        structured_comment_key = re.search(r"([^#]+){0}$".format(STRUCTURED_COMMENT_START), data).group(1)
-                        if self.debug > 1:
-                            print("Found Structured Comment")
-                    else:
+                        match = re.search(r"([^#]+){0}$".format(STRUCTURED_COMMENT_START), data)
+                        if match:
+                            structured_comment_key = match.group(1)
+                            is_structured_comment_start_delim = True
+                            if self.debug > 1:
+                                print("Found Structured Comment")
+
+                    if not is_structured_comment_start_delim:
                         comment_list.append(data)
 
                     while True:
                         line = next(line_iter)
                         data = line[GENBANK_INDENT:]
                         if line[0:GENBANK_INDENT] == GENBANK_SPACER:
+                            is_structured_comment_start_delim = False
                             if STRUCTURED_COMMENT_START in data:
-                                structured_comment_key = re.search(r"([^#]+){0}$".format(STRUCTURED_COMMENT_START), data).group(1)
+                                match = re.search(r"([^#]+){0}$".format(STRUCTURED_COMMENT_START), data)
+                                if match:
+                                    structured_comment_key = match.group(1)
+                                    is_structured_comment_start_delim = True
                             elif structured_comment_key is not None and STRUCTURED_COMMENT_DELIM in data:
                                 match = re.search(r"(.+?)\s*{0}\s*(.+)".format(STRUCTURED_COMMENT_DELIM), data)
-                                structured_comment_dict[structured_comment_key][match.group(1)] = match.group(2)
-                                if self.debug > 2:
-                                    print("Structured Comment continuation [" + data + "]")
-                            elif STRUCTURED_COMMENT_END not in data:
+                                if match:
+                                    structured_comment_dict[structured_comment_key][match.group(1)] = match.group(2)
+                                    is_structured_comment_start_delim = True
+                                    if self.debug > 2:
+                                        print("Structured Comment continuation [" + data + "]")
+
+                            if not is_structured_comment_start_delim and STRUCTURED_COMMENT_END not in data:
                                 comment_list.append(data)
                                 if self.debug > 2:
                                     print("Comment continuation [" + data + "]")
