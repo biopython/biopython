@@ -108,7 +108,7 @@ class TestErrors(unittest.TestCase):
             records = list(SeqIO.parse(BytesIO(header), "sff"))
         except ValueError as err:
             if isinstance(msg, (tuple, list)):
-                self.assertTrue(str(err) in msg, "Unexpected error: %s" % err)
+                self.assertIn(str(err), msg, "Unexpected error: %s" % err)
             else:
                 self.assertEqual(str(err), msg)
         else:

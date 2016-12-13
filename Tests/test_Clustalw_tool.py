@@ -161,7 +161,7 @@ class ClustalWTestErrorConditions(ClustalWTestCase):
         try:
             stdout, stderr = cline()
             # Zero return code is a possible bug in clustalw 2.1?
-            self.assertTrue("cannot do multiple alignment" in (stdout + stderr))
+            self.assertIn("cannot do multiple alignment", (stdout + stderr))
         except ApplicationError as err:
             # Good, non-zero return code indicating an error in clustalw
             # e.g. Using clustalw 1.83 get:

@@ -20,6 +20,9 @@ The NEXUS parser handling of internal node comments has been improved, which
 should help if working with tools like the BEAST TreeAnnotator. Slashes are
 now also allowed in identifiers.
 
+New parser for ExPASy Cellosaurus, a cell line database, cell line catalogue,
+and cell line ontology (contributed by Steve Marshall).
+
 For consistency the Bio.Seq module now offers a complement function (already
 available as a method on the Seq and MutableSeq objects).
 
@@ -37,6 +40,9 @@ patent data files, and the related IMGT parser was updated to cope with
 IPD-IMGT/HLA database files after release v3.16.0 when their ID line changed.
 The GenBank output now uses colon space to match current NCBI DBLINK lines.
 
+The Bio.Affy package supports Affymetrix version 4 of the CEL file format,
+in addition to version 3.
+
 Additionally, a number of small bugs have been fixed with further additions
 to the test suite, and there has been further work to follow the Python PEP8,
 PEP257 and best practice standard coding style.
@@ -44,9 +50,11 @@ PEP257 and best practice standard coding style.
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+
+Aaron Rosenfeld
+Adam Kurkiewicz (first contribution)
 Adrian Altenhoff (first contribution)
 Allis Tauri (first contribution)
-Aaron Rosenfeld
 Bernhard Thiel (first contribution)
 Bertrand Néron
 Brandon Invergo
@@ -54,14 +62,19 @@ Carlos Pena
 Carlos Ríos
 Chris Warth
 Emmanuel Noutahi
-Markus Piotrowski
 Lenna Peterson
+Markus Piotrowski
+Michiel de Hoon
+Milind Luthra (first contribution)
 Peter Cock
 Richard Neher (first contribution)
 Sourav Singh (first contribution)
+Stefans Mezulis
 Steve Bond
+Steve Marshall (first contribution)
 Uri Laserson
 Vincent Davis
+Wibowo 'Bow' Arindrarto
 
 ===================================================================
 

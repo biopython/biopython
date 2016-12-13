@@ -76,7 +76,7 @@ class A_ExceptionTest(unittest.TestCase):
                     "Residue (' ', 81, ' ') redefined at line 646.",
                     'Atom O defined twice in residue <Residue HOH het=W resseq=67 icode= > at line 822.'
                     ]):
-                self.assertTrue(msg in str(wrn), str(wrn))
+                self.assertIn(msg, str(wrn))
 
     def test_2_strict(self):
         """Check error: Parse a flawed PDB file in strict mode."""

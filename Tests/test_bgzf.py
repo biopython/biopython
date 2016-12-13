@@ -226,7 +226,7 @@ class BgzfTests(unittest.TestCase):
             h.seek(voffset)
             self.assertEqual(voffset, h.tell())
             data = h.read(1000)
-            self.assertTrue(data in old)
+            self.assertIn(data, old)
             self.assertEqual(old.find(data), data_start + data_len // 2)
             # Now seek to an early block in the file,
             # half way into the second block
@@ -237,7 +237,7 @@ class BgzfTests(unittest.TestCase):
             self.assertEqual(voffset, h.tell())
             # Now read all rest of this block and start of next block
             data = h.read(data_len + 1000)
-            self.assertTrue(data in old)
+            self.assertIn(data, old)
             self.assertEqual(old.find(data), data_start + data_len // 2)
             h.close()
 

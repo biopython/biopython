@@ -86,7 +86,7 @@ class PrankApplication(unittest.TestCase):
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         output, error = cmdline()
         self.assertEqual(error, "")
-        self.assertTrue("Total time" in output)
+        self.assertIn("Total time", output)
 
     def test_Prank_simple_with_NEXUS_output(self):
         """Simple round-trip through app with infile, output in NEXUS
@@ -103,7 +103,7 @@ class PrankApplication(unittest.TestCase):
                          " -d=Fasta/fa01 -f=17 -dots")
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         stdout, stderr = cmdline()
-        self.assertTrue("Total time" in stdout)
+        self.assertIn("Total time", stdout)
         self.assertEqual(stderr, "")
         try:
             if os.path.isfile("output.best.nex"):
@@ -144,7 +144,7 @@ class PrankApplication(unittest.TestCase):
                          " -once -skipins -realbranches")
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         stdout, stderr = cmdline()
-        self.assertTrue("Total time" in stdout, stdout)
+        self.assertIn("Total time", stdout)
 
 
 class PrankConversion(unittest.TestCase):
@@ -168,7 +168,7 @@ class PrankConversion(unittest.TestCase):
                          ' -convert')
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         message, error = cmdline()
-        self.assertTrue("PRANK" in message, message)
+        self.assertIn("PRANK", message)
         self.assertTrue(("converting '%s' to '%s'" % (self.input, filename))
                         in message, message)
         self.assertEqual(error, "")

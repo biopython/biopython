@@ -317,7 +317,7 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
         s = feature.extract(parent)
         self.assertEqual(len(feature), len(s))
         for i in feature:
-            self.assertTrue(i in feature)
+            self.assertIn(i, feature)
         self.assertEqual(set(feature),
                          set(i for i in range(1000) if i in feature))
         if feature.strand == +1:

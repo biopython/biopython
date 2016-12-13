@@ -40,7 +40,7 @@ class AppTests(unittest.TestCase):
                                sequences=EX_PHYLIP, model="PROTCATWAG",
                                name="test")
         # The parsimony seed should be set automatically
-        self.assertTrue('-p' in str(cmd))
+        self.assertIn('-p', str(cmd))
         # Smoke test
         try:
             out, err = cmd()

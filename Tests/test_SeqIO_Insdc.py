@@ -47,9 +47,9 @@ class TestEmbl(unittest.TestCase):
         """Check parsing of annotation from EMBL files (4)."""
         record = SeqIO.read("EMBL/location_wrap.embl", "embl")
         self.assertEqual(len(record), 120)
-        self.assertTrue("keywords" not in record.annotations)
+        self.assertNotIn("keywords", record.annotations)
         # The ID line has the topology as unspecified:
-        self.assertTrue("topology" not in record.annotations)
+        self.assertNotIn("topology", record.annotations)
 
     def test_writing_empty_qualifiers(self):
         f = SeqFeature(FeatureLocation(5, 20, strand=+1),
@@ -61,10 +61,10 @@ class TestEmbl(unittest.TestCase):
         record = SeqRecord(Seq("A" * 100, generic_dna), "dummy",
                            features=[f])
         gbk = record.format("gb")
-        self.assertTrue(' /empty\n' in gbk, gbk)
-        self.assertTrue(' /zero=0\n' in gbk, gbk)
-        self.assertTrue(' /one=1\n' in gbk, gbk)
-        self.assertTrue(' /text="blah"\n' in gbk, gbk)
+        self.assertIn(' /empty\n', gbk)
+        self.assertIn(' /zero=0\n', gbk)
+        self.assertIn(' /one=1\n', gbk)
+        self.assertIn(' /text="blah"\n', gbk)
 
 
 class TestEmblRewrite(unittest.TestCase):

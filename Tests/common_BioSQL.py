@@ -304,8 +304,8 @@ class MultiReadTest(unittest.TestCase):
     def test_server(self):
         """Check BioSeqDatabase methods"""
         server = self.server
-        self.assertTrue("biosql-test" in server)
-        self.assertTrue("biosql-test2" in server)
+        self.assertIn("biosql-test", server)
+        self.assertIn("biosql-test2", server)
         self.assertEqual(2, len(server))
         self.assertEqual(["biosql-test", 'biosql-test2'], list(server.keys()))
         # Check we can delete the namespace...
@@ -380,7 +380,7 @@ class ReadTest(unittest.TestCase):
     def test_server(self):
         """Check BioSeqDatabase methods"""
         server = self.server
-        self.assertTrue("biosql-test" in server)
+        self.assertIn("biosql-test", server)
         self.assertEqual(1, len(server))
         self.assertEqual(["biosql-test"], list(server.keys()))
         # Check we can delete the namespace...
@@ -559,11 +559,11 @@ class SeqInterfaceTest(unittest.TestCase):
             raise KeyError("Missing expected entries, have %s"
                            % repr(cds_feature.qualifiers))
 
-        self.assertTrue("db_xref" in cds_feature.qualifiers)
+        self.assertIn("db_xref", cds_feature.qualifiers)
         multi_ann = cds_feature.qualifiers["db_xref"]
         self.assertEqual(len(multi_ann), 2)
-        self.assertTrue("GI:16354" in multi_ann)
-        self.assertTrue("SWISS-PROT:P31169" in multi_ann)
+        self.assertIn("GI:16354", multi_ann)
+        self.assertIn("SWISS-PROT:P31169", multi_ann)
 
 
 class LoaderTest(unittest.TestCase):
@@ -647,7 +647,7 @@ class DeleteTest(unittest.TestCase):
     def test_server(self):
         """Check BioSeqDatabase methods"""
         server = self.server
-        self.assertTrue("biosql-test" in server)
+        self.assertIn("biosql-test", server)
         self.assertEqual(1, len(server))
         self.assertEqual(["biosql-test"], list(server.keys()))
         # Check we can delete the namespace...

@@ -103,7 +103,7 @@ class QueryResultCases(unittest.TestCase):
         """Test QueryResult.__iter__"""
         # iteration should return hits contained
         for counter, hit in enumerate(self.qresult):
-            self.assertTrue(hit in (hit11, hit21, hit31))
+            self.assertIn(hit, (hit11, hit21, hit31))
         self.assertEqual(2, counter)
 
     def test_hits(self):
@@ -142,8 +142,8 @@ class QueryResultCases(unittest.TestCase):
     def test_contains(self):
         """Test QueryResult.__contains__"""
         # contains should work with hit ids or hit objects
-        self.assertTrue('hit1' in self.qresult)
-        self.assertTrue(hit21 in self.qresult)
+        self.assertIn('hit1', self.qresult)
+        self.assertIn(hit21, self.qresult)
         self.assertFalse('hit5' in self.qresult)
         self.assertFalse(hit41 in self.qresult)
 
@@ -152,7 +152,7 @@ class QueryResultCases(unittest.TestCase):
         # contains should work with alternative hit IDs
         hit11._id_alt = ['alt1']
         query = QueryResult([hit11])
-        self.assertTrue('alt1' in query)
+        self.assertIn('alt1', query)
         hit11._id_alt = []
 
     def test_len(self):
@@ -215,13 +215,13 @@ class QueryResultCases(unittest.TestCase):
         query = QueryResult([hit11, hit41])
         self.assertEqual(hit11, query['alt1'])
         self.assertEqual(hit41, query['alt4'])
-        self.assertTrue('alt1' not in query._items)
-        self.assertTrue('alt1' in query._QueryResult__alt_hit_ids)
+        self.assertNotIn('alt1', query._items)
+        self.assertIn('alt1', query._QueryResult__alt_hit_ids)
         query['alt1'] = hit31
         self.assertEqual(hit31, query['alt1'])
         self.assertEqual(hit41, query['alt4'])
-        self.assertTrue('alt1' in query._items)
-        self.assertTrue('alt1' not in query._QueryResult__alt_hit_ids)
+        self.assertIn('alt1', query._items)
+        self.assertNotIn('alt1', query._QueryResult__alt_hit_ids)
         hit11._id_alt = []
         hit41._id_alt = []
         hit31._id_alt = []
@@ -551,9 +551,9 @@ class QueryResultCases(unittest.TestCase):
         # this would filter out hsp113 and hsp211, effectively removing hit21
         filter_func = lambda hsp: '-' not in str(hsp.fragments[0].query)
         filtered = self.qresult.hsp_filter(filter_func)
-        self.assertTrue('hit1' in filtered)
-        self.assertTrue('hit2' not in filtered)
-        self.assertTrue('hit3' in filtered)
+        self.assertIn('hit1', filtered)
+        self.assertNotIn('hit2', filtered)
+        self.assertIn('hit3', filtered)
         # test hsps in hit11
         self.assertTrue(all(hsp in filtered['hit1'] for hsp in
                             [hsp111, hsp112, hsp114]))
@@ -669,7 +669,7 @@ class QueryResultCases(unittest.TestCase):
         hit = qresult.pop('alt1')
         self.assertEqual(hit, hit11)
         self.assertEqual([hit21], list(qresult))
-        self.assertTrue('hit1' not in qresult)
+        self.assertNotIn('hit1', qresult)
         hit11._id_alt = []
         hit21._id_alt = []
 
@@ -793,7 +793,7 @@ class HitCases(unittest.TestCase):
         """Test Hit.__iter__"""
         # iteration should return hsps contained
         for counter, hsp in enumerate(self.hit):
-            self.assertTrue(hsp in [hsp111, hsp112, hsp113])
+            self.assertIn(hsp, [hsp111, hsp112, hsp113])
         self.assertEqual(2, counter)
 
     def test_len(self):
@@ -1157,8 +1157,8 @@ class HSPMultipleFragmentCases(unittest.TestCase):
     def test_contains(self):
         """Test HSP.__contains__"""
         frag3 = HSPFragment('hit_id', 'query_id', 'AAA', 'AAT')
-        self.assertTrue(self.frag1 in self.hsp)
-        self.assertTrue(frag3 not in self.hsp)
+        self.assertIn(self.frag1, self.hsp)
+        self.assertNotIn(frag3, self.hsp)
 
     def test_fragments(self):
         """Test HSP.fragments property"""

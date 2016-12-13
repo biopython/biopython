@@ -113,6 +113,7 @@ class MMCIFParser(object):
         # Now loop over atoms and build the structure
         current_chain_id = None
         current_residue_id = None
+        current_resname = None
         structure_builder = self._structure_builder
         structure_builder.init_structure(structure_id)
         structure_builder.init_seg(" ")
@@ -167,6 +168,7 @@ class MMCIFParser(object):
                     structure_builder.init_model(current_model_id, current_serial_id)
                     current_chain_id = None
                     current_residue_id = None
+                    current_resname = None
             else:
                 # no explicit model column; initialize single model
                 structure_builder.init_model(current_model_id)
@@ -175,9 +177,11 @@ class MMCIFParser(object):
                 current_chain_id = chainid
                 structure_builder.init_chain(current_chain_id)
                 current_residue_id = None
+                current_resname = None
 
-            if current_residue_id != resseq:
+            if current_residue_id != resseq or current_resname != resname:
                 current_residue_id = resseq
+                current_resname = resname
                 structure_builder.init_residue(resname, hetatm_flag, int_resseq, icode)
 
             coord = numpy.array((x, y, z), 'f')
@@ -250,8 +254,8 @@ class FastMMCIFParser(object):
         with warnings.catch_warnings():
             if self.QUIET:
                 warnings.filterwarnings("ignore", category=PDBConstructionWarning)
-        with as_handle(filename) as handle:
-            self._build_structure(structure_id, handle)
+            with as_handle(filename) as handle:
+                self._build_structure(structure_id, handle)
 
         return self._structure_builder.get_structure()
 
@@ -340,6 +344,7 @@ class FastMMCIFParser(object):
         # Now loop over atoms and build the structure
         current_chain_id = None
         current_residue_id = None
+        current_resname = None
         structure_builder = self._structure_builder
         structure_builder.init_structure(structure_id)
         structure_builder.init_seg(" ")
@@ -398,6 +403,7 @@ class FastMMCIFParser(object):
                     structure_builder.init_model(current_model_id, current_serial_id)
                     current_chain_id = None
                     current_residue_id = None
+                    current_resname = None
             else:
                 # no explicit model column; initialize single model
                 structure_builder.init_model(current_model_id)
@@ -406,9 +412,11 @@ class FastMMCIFParser(object):
                 current_chain_id = chainid
                 structure_builder.init_chain(current_chain_id)
                 current_residue_id = None
+                current_resname = None
 
-            if current_residue_id != resseq:
+            if current_residue_id != resseq or current_resname != resname:
                 current_residue_id = resseq
+                current_resname = resname
                 structure_builder.init_residue(resname, hetatm_flag, int_resseq, icode)
 
             coord = numpy.array((x, y, z), 'f')

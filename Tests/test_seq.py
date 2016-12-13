@@ -279,7 +279,7 @@ class TestSeqStringMethods(unittest.TestCase):
             self.s.tostring()
 
     def test_contains_method(self):
-        self.assertTrue("AAAA" in self.s)
+        self.assertIn("AAAA", self.s)
 
     def test_startswith(self):
         self.assertTrue(self.s.startswith("TCA"))
