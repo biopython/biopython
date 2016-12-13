@@ -27,7 +27,7 @@ NCBI_BLAST_URL = "https://blast.ncbi.nlm.nih.gov/Blast.cgi"
 def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
            auto_format=None, composition_based_statistics=None,
            db_genetic_code=None, endpoints=None, entrez_query='(none)',
-           expect=10.0, filter=None, gapcosts=None, genetic_code=None,
+           expect=10.0, filter='F', gapcosts=None, genetic_code=None,
            hitlist_size=50, i_thresh=None, layout=None, lcase_mask=None,
            matrix_name=None, nucl_penalty=None, nucl_reward=None,
            other_advanced=None, perc_ident=None, phi_pattern=None,
@@ -53,7 +53,7 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
 
     Some useful parameters:
 
-     - program        blastn, blastp, blastx, tblastn, or tblastx (lower case)
+     - program        One of blastn, megablast, blastp, blastx, tblastn, tblastx (lower case)
      - database       Which database to search against (e.g. "nr").
      - sequence       The sequence to search.
      - ncbi_gi        TRUE/FALSE whether to give 'gi' identifier.
@@ -61,7 +61,7 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
      - alignments     Number of alignments to show.  Def 500.
      - expect         An expect value cutoff.  Def 10.0.
      - matrix_name    Specify an alt. matrix (PAM30, PAM70, BLOSUM80, BLOSUM45).
-     - filter         "none" turns off filtering.  Default no filtering
+     - filter         F to disable. T or L to enable. Prepend "m" for mask at lookup (e.g., mL)
      - format_type    "HTML", "Text", "ASN.1", or "XML".  Def. "XML".
      - entrez_query   Entrez query to limit Blast search
      - hitlist_size   Number of hits to return. Default 50
@@ -70,12 +70,12 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
 
     This function does no checking of the validity of the parameters
     and passes the values to the server as is.  More help is available at:
-    http://www.ncbi.nlm.nih.gov/BLAST/Doc/urlapi.html
+    https://ncbi.github.io/blast-cloud/dev/api.html
 
     """
     import time
 
-    assert program in ['blastn', 'blastp', 'blastx', 'tblastn', 'tblastx']
+    assert program in ['blastn', 'megablast', 'blastp', 'blastx', 'tblastn', 'tblastx']
 
     # Format the "Put" command, which sends search requests to qblast.
     # Parameters taken from http://www.ncbi.nlm.nih.gov/BLAST/Doc/node5.html on 9 July 2007
