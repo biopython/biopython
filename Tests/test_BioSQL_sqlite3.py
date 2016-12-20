@@ -63,6 +63,10 @@ class BackwardsCompatibilityTest(unittest.TestCase):
         biosql_records = [db.lookup(name=rec.name)
                           for rec in original_records]
         # And check they agree
+        # Note the old parser used to create BioSQL/cor6_6.db
+        # did not record the molecule_type, so remove it here:
+        for r in original_records:
+            del r.annotations["molecule_type"]
         self.assertTrue(compare_records(original_records, biosql_records))
         server.close()
 

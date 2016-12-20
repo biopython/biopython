@@ -34,13 +34,14 @@ class SummaryInfo(object):
     results of an alignment. This may either be straight consensus info
     or more complicated things.
     """
+
     def __init__(self, alignment):
         """Initialize with the alignment to calculate information on.
 
-        ic_vector attribute. A dictionary. Keys: column numbers. Values:
+        ic_vector attribute. A list of ic content for each column number.
         """
         self.alignment = alignment
-        self.ic_vector = {}
+        self.ic_vector = []
 
     def dumb_consensus(self, threshold=.7, ambiguous="X",
                        consensus_alpha=None, require_multiple=0):
@@ -116,7 +117,7 @@ class SummaryInfo(object):
         return Seq(consensus, consensus_alpha)
 
     def gap_consensus(self, threshold=.7, ambiguous="X",
-                       consensus_alpha=None, require_multiple=0):
+                      consensus_alpha=None, require_multiple=0):
         """Same as dumb_consensus(), but allows gap on the output.
 
         Things to do:
@@ -194,7 +195,7 @@ class SummaryInfo(object):
         # Check the ambiguous character we are going to use in the consensus
         # is in the alphabet's list of valid letters (if defined).
         if hasattr(a, "letters") and a.letters is not None \
-        and ambiguous not in a.letters:
+                and ambiguous not in a.letters:
             # We'll need to pick a more generic alphabet...
             if isinstance(a, IUPAC.IUPACUnambiguousDNA):
                 if ambiguous in IUPAC.IUPACUnambiguousDNA().letters:
@@ -303,7 +304,8 @@ class SummaryInfo(object):
                     # modified by the sequence weights
                     start_dict[(residue1, residue2)] += weight1 * weight2
 
-                # if we get a key error, then we've got a problem with alphabets
+                # if we get a key error, then we've got a problem with
+                # alphabets
                 except KeyError:
                     raise ValueError("Residues %s, %s not found in alphabet %s"
                                      % (residue1, residue2,
@@ -353,7 +355,8 @@ class SummaryInfo(object):
         # and drop it out
         if isinstance(self.alignment._alphabet, Alphabet.Gapped):
             skip_items.append(self.alignment._alphabet.gap_char)
-            all_letters = all_letters.replace(self.alignment._alphabet.gap_char, '')
+            all_letters = all_letters.replace(
+                self.alignment._alphabet.gap_char, '')
 
         # now create the dictionary
         for first_letter in all_letters:
@@ -424,8 +427,8 @@ class SummaryInfo(object):
                     # if we get a KeyError then we have an alphabet problem
                     except KeyError:
                         raise ValueError("Residue %s not found in alphabet %s"
-                                     % (this_residue,
-                                        self.alignment._alphabet))
+                                         % (this_residue,
+                                            self.alignment._alphabet))
 
             pssm_info.append((left_seq[residue_num],
                               score_dict))
@@ -441,10 +444,22 @@ class SummaryInfo(object):
 
         return base_info
 
+    def _get_gap_char(self):
+        """Return the gap character used in the alignment
+        """
+        try:
+            gap_char = self.alignment._alphabet.gap_char
+        except AttributeError:
+            # The alphabet doesn't declare a gap - there could be none
+            # in the sequence... or just a vague alphabet.
+            gap_char = "-"  # Safe?
+
+        return gap_char
+
     def information_content(self, start=0,
                             end=None,
                             e_freq_table=None, log_base=2,
-                            chars_to_ignore=None):
+                            chars_to_ignore=None, pseudo_count=0):
         """Calculate the information content for each residue along an alignment.
 
         Arguments:
@@ -478,7 +493,7 @@ class SummaryInfo(object):
         if start < 0 or end > len(self.alignment[0].seq):
             raise ValueError("Start (%s) and end (%s) are not in the \
                     range %s to %s"
-                    % (start, end, 0, len(self.alignment[0].seq)))
+                             % (start, end, 0, len(self.alignment[0].seq)))
         # determine random expected frequencies, if necessary
         random_expected = None
         if not e_freq_table:
@@ -505,22 +520,28 @@ class SummaryInfo(object):
         for residue_num in range(start, end):
             freq_dict = self._get_letter_freqs(residue_num,
                                                self.alignment,
-                                               all_letters, chars_to_ignore)
+                                               all_letters,
+                                               chars_to_ignore,
+                                               pseudo_count,
+                                               e_freq_table,
+                                               random_expected)
             # print freq_dict,
             column_score = self._get_column_info_content(freq_dict,
                                                          e_freq_table,
                                                          log_base,
                                                          random_expected)
-
             info_content[residue_num] = column_score
         # sum up the score
         total_info = sum(info_content.values())
         # fill in the ic_vector member: holds IC for each column
-        for i in info_content:
-            self.ic_vector[i] = info_content[i]
+        # reset ic_vector to empty list at each call
+        self.ic_vector = []
+        for (i, k) in enumerate(info_content):
+            self.ic_vector.append(info_content[i + start])
         return total_info
 
-    def _get_letter_freqs(self, residue_num, all_records, letters, to_ignore):
+    def _get_letter_freqs(self, residue_num, all_records, letters, to_ignore,
+                          pseudo_count=0, e_freq_table=None, random_expected=None):
         """Determine the frequency of specific letters in the alignment.
 
         Arguments:
@@ -530,15 +551,28 @@ class SummaryInfo(object):
             - letters - The letters we are interested in getting the frequency
               for.
             - to_ignore - Letters we are specifically supposed to ignore.
+            - pseudo_count - Optional argument specifying the Pseudo count (k)
+              to add in order to prevent a frequency of 0 for a letter.
+            - e_freq_table - An optional argument specifying the expected
+              frequencies for each letter. This is a SubsMat.FreqTable instance.
+            - random_expected - Optional argument that specify the frequency to use
+              when e_freq_table is not defined.
 
         This will calculate the frequencies of each of the specified letters
         in the alignment at the given frequency, and return this as a
         dictionary where the keys are the letters and the values are the
-        frequencies.
+        frequencies. Pseudo count can be added to prevent a null frequency
         """
         freq_info = self._get_base_letters(letters)
 
         total_count = 0
+
+        gap_char = self._get_gap_char()
+
+        if pseudo_count < 0:
+            raise ValueError("Positive value required for "
+                             "pseudo_count, %s provided" % (pseudo_count))
+
         # collect the count info into the dictionary for all the records
         for record in all_records:
             try:
@@ -552,6 +586,18 @@ class SummaryInfo(object):
                                  % (record.seq[residue_num],
                                     self.alignment._alphabet))
 
+        if e_freq_table:
+            if not isinstance(e_freq_table, FreqTable.FreqTable):
+                raise ValueError("e_freq_table should be a FreqTable object")
+
+            # check if all the residus in freq_info are in e_freq_table
+            for key in freq_info:
+                if (key != gap_char and key not in e_freq_table):
+                    raise ValueError("letters in current column %s "
+                                     "and not in expected frequency table %s"
+                                     % (list(freq_info) - [gap_char],
+                                        list(e_freq_table)))
+
         if total_count == 0:
             # This column must be entirely ignored characters
             for letter in freq_info:
@@ -560,7 +606,20 @@ class SummaryInfo(object):
         else:
             # now convert the counts into frequencies
             for letter in freq_info:
-                freq_info[letter] = freq_info[letter] / total_count
+                if pseudo_count and (random_expected or e_freq_table):
+                    # use either the expected random freq or the
+                    if e_freq_table:
+                        ajust_freq = e_freq_table[letter]
+                    else:
+                        ajust_freq = random_expected
+
+                    ajusted_letter_count = freq_info[
+                        letter] + ajust_freq * pseudo_count
+                    ajusted_total = total_count + pseudo_count
+                    freq_info[letter] = ajusted_letter_count / ajusted_total
+
+                else:
+                    freq_info[letter] = freq_info[letter] / total_count
 
         return freq_info
 
@@ -575,12 +634,7 @@ class SummaryInfo(object):
             - log_base - The base of the logathrim to use in calculating the
               info content.
         """
-        try:
-            gap_char = self.alignment._alphabet.gap_char
-        except AttributeError:
-            # The alphabet doesn't declare a gap - there could be none
-            # in the sequence... or just a vague alphabet.
-            gap_char = "-"  # Safe?
+        gap_char = self._get_gap_char()
 
         if e_freq_table:
             if not isinstance(e_freq_table, FreqTable.FreqTable):
@@ -648,6 +702,7 @@ class PSSM(object):
 
     your_pssm[1]['T']
     """
+
     def __init__(self, pssm):
         """Initialize with pssm data to represent.
 
@@ -693,6 +748,5 @@ def print_info_content(summary_info, fout=None, rep_record=0):
     if not summary_info.ic_vector:
         summary_info.information_content()
     rep_sequence = summary_info.alignment[rep_record].seq
-    for pos in sorted(summary_info.ic_vector):
-        fout.write("%d %s %.3f\n" % (pos, rep_sequence[pos],
-                   summary_info.ic_vector[pos]))
+    for pos, ic in enumerate(summary_info.ic_vector):
+        fout.write("%d %s %.3f\n" % (pos, rep_sequence[pos], ic))

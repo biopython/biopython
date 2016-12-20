@@ -14,7 +14,12 @@ from functools import reduce
 
 from Bio._py3k import map
 
-import numpy
+try:
+    import numpy
+except ImportError:
+    from Bio import MissingPythonDependencyError
+    raise MissingPythonDependencyError(
+        "Install NumPy if you want to use Bio.MaxEntropy.")
 
 
 class MaxEntropy(object):
@@ -24,6 +29,51 @@ class MaxEntropy(object):
     classes      List of the possible classes of data.
     alphas       List of the weights for each feature.
     feature_fns  List of the feature functions.
+
+    Car data from example Naive Bayes Classifier example by Eric Meisner November 22, 2003
+    http://www.inf.u-szeged.hu/~ormandi/teaching
+
+    >>> from Bio.MaxEntropy import train, classify
+    >>> xcar = [
+    ...     ['Red', 'Sports', 'Domestic'],
+    ...     ['Red', 'Sports', 'Domestic'],
+    ...     ['Red', 'Sports', 'Domestic'],
+    ...     ['Yellow', 'Sports', 'Domestic'],
+    ...     ['Yellow', 'Sports', 'Imported'],
+    ...     ['Yellow', 'SUV', 'Imported'],
+    ...     ['Yellow', 'SUV', 'Imported'],
+    ...     ['Yellow', 'SUV', 'Domestic'],
+    ...     ['Red', 'SUV', 'Imported'],
+    ...     ['Red', 'Sports', 'Imported']]
+    >>> ycar = ['Yes','No','Yes','No','Yes','No','Yes','No','No','Yes']
+
+    Requires some rules or features
+
+    >>> def udf1(ts, cl):
+    ...     return ts[0] != 'Red'
+    ...
+    >>> def udf2(ts, cl):
+    ...     return ts[1] != 'Sports'
+    ...
+    >>> def udf3(ts, cl):
+    ...     return ts[2] != 'Domestic'
+    ...
+    >>> user_functions = [udf1, udf2, udf3]  # must be an iterable type
+    >>> xe = train(xcar, ycar, user_functions)
+    >>> for xv, yv in zip(xcar, ycar):
+    ...     xc = classify(xe, xv)
+    ...     print('Pred: %s gives %s y is %s' % (xv, xc, yv))
+    ...
+    Pred: ['Red', 'Sports', 'Domestic'] gives No y is Yes
+    Pred: ['Red', 'Sports', 'Domestic'] gives No y is No
+    Pred: ['Red', 'Sports', 'Domestic'] gives No y is Yes
+    Pred: ['Yellow', 'Sports', 'Domestic'] gives No y is No
+    Pred: ['Yellow', 'Sports', 'Imported'] gives No y is Yes
+    Pred: ['Yellow', 'SUV', 'Imported'] gives No y is No
+    Pred: ['Yellow', 'SUV', 'Imported'] gives No y is Yes
+    Pred: ['Yellow', 'SUV', 'Domestic'] gives No y is No
+    Pred: ['Red', 'SUV', 'Imported'] gives No y is No
+    Pred: ['Red', 'Sports', 'Imported'] gives No y is Yes
 
     """
     def __init__(self):
@@ -266,59 +316,6 @@ def train(training_set, results, feature_fns, update_fn=None,
 
     return me
 
-
 if __name__ == "__main__":
-    # Car data from example Naive Bayes Classifier example by Eric Meisner November 22, 2003
-    # http://www.inf.u-szeged.hu/~ormandi/teaching/mi2/02-naiveBayes-example.pdf
-
-    xcar = [
-        ['Red', 'Sports', 'Domestic'],
-        ['Red', 'Sports', 'Domestic'],
-        ['Red', 'Sports', 'Domestic'],
-        ['Yellow', 'Sports', 'Domestic'],
-        ['Yellow', 'Sports', 'Imported'],
-        ['Yellow', 'SUV', 'Imported'],
-        ['Yellow', 'SUV', 'Imported'],
-        ['Yellow', 'SUV', 'Domestic'],
-        ['Red', 'SUV', 'Imported'],
-        ['Red', 'Sports', 'Imported']
-    ]
-
-    ycar = [
-        'Yes',
-        'No',
-        'Yes',
-        'No',
-        'Yes',
-        'No',
-        'Yes',
-        'No',
-        'No',
-        'Yes'
-    ]
-
-    # Requires some rules or features
-    def udf1(ts, cl):
-        if ts[0] == 'Red':
-            return 0
-        else:
-            return 1
-
-    def udf2(ts, cl):
-        if ts[1] == 'Sports':
-            return 0
-        else:
-            return 1
-
-    def udf3(ts, cl):
-        if ts[2] == 'Domestic':
-            return 0
-        else:
-            return 1
-
-    user_functions = [udf1, udf2, udf3]  # must be an iterable type
-
-    xe = train(xcar, ycar, user_functions)
-    for xv, yv in zip(xcar, ycar):
-        xc = classify(xe, xv)
-        print('Pred: %s gives %s y is %s' % (xv, xc, yv))
+    from Bio._utils import run_doctest
+    run_doctest(verbose=0)

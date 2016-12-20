@@ -109,7 +109,7 @@ class ClustalOmegaTestErrorConditions(ClustalOmegaTestCase):
         try:
             stdout, stderr = cline()
         except ApplicationError as err:
-            self.assertTrue("contains 1 sequence, nothing to align" in str(err))
+            self.assertIn("contains 1 sequence, nothing to align", str(err))
         else:
             self.fail("Should have failed, returned:\n%s\n%s" % (stdout, stderr))
 
@@ -123,7 +123,7 @@ class ClustalOmegaTestErrorConditions(ClustalOmegaTestCase):
         except ApplicationError as err:
             # Ideally we'd catch the return code and raise the specific
             # error for "invalid format".
-            self.assertTrue("Can't determine format of sequence file" in str(err))
+            self.assertIn("Can't determine format of sequence file", str(err))
         else:
             self.fail("Should have failed, returned:\n%s\n%s" % (stdout, stderr))
 

@@ -357,8 +357,8 @@ class _InsdcWriter(SequentialSequenceWriter):
                + self._wrap_location(location) + "\n"
         self.handle.write(line)
         # Now the qualifiers...
-        for key in sorted(feature.qualifiers.keys()):
-            values = feature.qualifiers[key]
+        # Note as of Biopython 1.69, this is an ordered-dict, don't sort it:
+        for key, values in feature.qualifiers.items():
             if isinstance(values, (list, tuple)):
                 for value in values:
                     self._write_feature_qualifier(key, value)
@@ -611,8 +611,20 @@ class GenBankWriter(_InsdcWriter):
             raise ValueError("Need a Nucleotide or Protein alphabet")
 
         # Get the molecule type
-        # TODO - record this explicitly in the parser?
-        if isinstance(a, Alphabet.ProteinAlphabet):
+        mol_type = self._get_annotation_str(record, "molecule_type", default=None)
+        if mol_type and len(mol_type) > 7:
+            # Deal with common cases from EMBL to GenBank
+            mol_type = mol_type.replace("unassigned ", "").replace("genomic ", "")
+            if len(mol_type) > 7:
+                warnings.warn("Molecule type %r too long" % mol_type,
+                              BiopythonWarning)
+                mol_type = None
+        if mol_type == "protein":
+            mol_type = ""
+
+        if mol_type:
+            pass
+        elif isinstance(a, Alphabet.ProteinAlphabet):
             mol_type = ""
         elif isinstance(a, Alphabet.DNAAlphabet):
             mol_type = "DNA"
@@ -820,10 +832,36 @@ class GenBankWriter(_InsdcWriter):
         else:
             self._write_single_line("VERSION", "%s" % (acc_with_version))
 
-        # The NCBI only expect two types of link so far,
+        # The NCBI initially expected two types of link,
         # e.g. "Project:28471" and "Trace Assembly Archive:123456"
-        # TODO - Filter the dbxrefs list to just these?
-        self._write_multi_entries("DBLINK", record.dbxrefs)
+        #
+        # This changed and at some point the formatting switched to
+        # include a space after the colon, e.g.
+        #
+        # LOCUS       NC_000011               1606 bp    DNA     linear   CON 06-JUN-2016
+        # DEFINITION  Homo sapiens chromosome 11, GRCh38.p7 Primary Assembly.
+        # ACCESSION   NC_000011 REGION: complement(5225466..5227071) GPC_000001303
+        # VERSION     NC_000011.10  GI:568815587
+        # DBLINK      BioProject: PRJNA168
+        #             Assembly: GCF_000001405.33
+        # ...
+        #
+        # Or,
+        #
+        # LOCUS       JU120277                1044 bp    mRNA    linear   TSA 27-NOV-2012
+        # DEFINITION  TSA: Tupaia chinensis tbc000002.Tuchadli mRNA sequence.
+        # ACCESSION   JU120277
+        # VERSION     JU120277.1  GI:379775257
+        # DBLINK      BioProject: PRJNA87013
+        #             Sequence Read Archive: SRR433859
+        # ...
+        dbxrefs_with_space = []
+        for x in record.dbxrefs:
+            if ": " not in x:
+                x = x.replace(":", ": ")
+            dbxrefs_with_space.append(x)
+        self._write_multi_entries("DBLINK", dbxrefs_with_space)
+        del dbxrefs_with_space
 
         try:
             # List of strings
@@ -885,7 +923,8 @@ class EmblWriter(_InsdcWriter):
     QUALIFIER_INDENT = 21
     QUALIFIER_INDENT_STR = "FT" + " " * (QUALIFIER_INDENT - 2)
     QUALIFIER_INDENT_TMP = "FT   %s                "  # 21 if %s is empty
-    FEATURE_HEADER = "FH   Key             Location/Qualifiers\n"
+    # Note second spacer line of just FH is expected:
+    FEATURE_HEADER = "FH   Key             Location/Qualifiers\nFH\n"
 
     def _write_contig(self, record):
         max_len = self.MAX_WIDTH - self.HEADER_WIDTH
@@ -1003,6 +1042,12 @@ class EmblWriter(_InsdcWriter):
         else:
             # Must be something like NucleotideAlphabet
             raise ValueError("Need a DNA, RNA or Protein alphabet")
+
+        if record.annotations.get("molecule_type", None):
+            # Note often get RNA vs DNA discrepancy in real EMBL/NCBI files
+            mol_type = record.annotations["molecule_type"]
+            if mol_type in ["protein"]:
+                mol_type = "PROTEIN"
 
         # Get the taxonomy division
         division = self._get_data_division(record)
@@ -1211,7 +1256,7 @@ class ImgtWriter(EmblWriter):
     QUALIFIER_INDENT = 25  # Not 21 as in EMBL
     QUALIFIER_INDENT_STR = "FT" + " " * (QUALIFIER_INDENT - 2)
     QUALIFIER_INDENT_TMP = "FT   %s                    "  # 25 if %s is empty
-    FEATURE_HEADER = "FH   Key                 Location/Qualifiers\n"
+    FEATURE_HEADER = "FH   Key                 Location/Qualifiers\nFH\n"
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest

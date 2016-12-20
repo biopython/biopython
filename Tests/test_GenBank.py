@@ -23,19 +23,19 @@ from Bio.GenBank import utils
 
 from Bio.Alphabet import _get_base_alphabet, ProteinAlphabet
 
-gb_file_dir = os.path.join(os.getcwd(), 'GenBank')
+gb_file_dir = os.path.join(os.getcwd(), "GenBank")
 
-test_files = ['noref.gb', 'cor6_6.gb', 'iro.gb', 'pri1.gb', 'arab1.gb',
-              'protein_refseq.gb', 'extra_keywords.gb', 'one_of.gb',
-              'NT_019265.gb', 'origin_line.gb', 'blank_seq.gb',
-              'dbsource_wrap.gb', 'gbvrl1_start.seq', 'NC_005816.gb',
-              'no_end_marker.gb', 'wrong_sequence_indent.gb',
-              'invalid_locus_line_spacing.gb', 'empty_feature_qualifier.gb',
-              'invalid_misc_feature.gb', '1MRR_A.gp']
+test_files = ["noref.gb", "cor6_6.gb", "iro.gb", "pri1.gb", "arab1.gb",
+              "protein_refseq.gb", "extra_keywords.gb", "one_of.gb",
+              "NT_019265.gb", "origin_line.gb", "blank_seq.gb",
+              "dbsource_wrap.gb", "gbvrl1_start.seq", "NC_005816.gb",
+              "no_end_marker.gb", "wrong_sequence_indent.gb",
+              "invalid_locus_line_spacing.gb", "empty_feature_qualifier.gb",
+              "invalid_misc_feature.gb", "1MRR_A.gp"]
 
 # We only test writing on a subset of the examples:
-write_format_files = ['noref.gb', 'cor6_6.gb', 'iro.gb', 'pri1.gb', 'arab1.gb',
-                      'extra_keywords.gb', 'one_of.gb', 'origin_line.gb']
+write_format_files = ["noref.gb", "cor6_6.gb", "iro.gb", "pri1.gb", "arab1.gb",
+                      "extra_keywords.gb", "one_of.gb", "origin_line.gb"]
 # don't test writing on protein_refseq, since it is horribly nasty
 # don't test writing on the CONTIG refseq, because the wrapping of
 # locations won't work exactly
@@ -49,16 +49,16 @@ for file in test_files:
 # parse the bioperl test files
 # comment this out for now -- there are a bunch of junky records in here
 # that no longer exist in GenBank -- do we really need to support those?
-# files_to_parse = [os.path.join(os.getcwd(), 'GenBank', 'bioperl_test.gb')]
+# files_to_parse = [os.path.join(os.getcwd(), "GenBank", "bioperl_test.gb")]
 
 # parse the biojava test files
-# files_to_parse += [os.path.join(os.getcwd(), 'GenBank', 'biojava_test.gb')]
+# files_to_parse += [os.path.join(os.getcwd(), "GenBank", "biojava_test.gb")]
 
 # test the parsers
-feature_parser = GenBank.FeatureParser(debug_level=0)
-record_parser = GenBank.RecordParser(debug_level=0)
+feat_parser = GenBank.FeatureParser(debug_level=0)
+rec_parser = GenBank.RecordParser(debug_level=0)
 
-all_parsers = [feature_parser, record_parser]
+all_parsers = [feat_parser, rec_parser]
 print("Testing parsers...")
 for parser in all_parsers:
     for filename in files_to_parse:
@@ -66,14 +66,14 @@ for parser in all_parsers:
             print("Missing test input file: %s" % filename)
             continue
 
-        handle = open(filename, 'r')
-        iterator = GenBank.Iterator(handle, parser)
+        handle = open(filename, "r")
+        gb_iterator = GenBank.Iterator(handle, parser)
 
         while True:
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore", BiopythonParserWarning)
                 # e.g. BiopythonParserWarning: Premature end of file in sequence data
-                cur_record = next(iterator)
+                cur_record = next(gb_iterator)
 
             if cur_record is None:
                 break
@@ -88,7 +88,7 @@ for parser in all_parsers:
                 print("Annotations***")
                 ann_keys = sorted(cur_record.annotations)
                 for ann_key in ann_keys:
-                    if ann_key != 'references':
+                    if ann_key != "references":
                         print("Key: %s" % ann_key)
                         print("Value: %s" %
                               cur_record.annotations[ann_key])
@@ -142,40 +142,39 @@ def do_comparison(good_record, test_record):
         good_line = good_handle.readline()
         test_line = test_handle.readline()
 
-        if not(good_line) and not(test_line):
+        if not good_line and not test_line:
             break
-        if not(good_line):
+        if not good_line:
             raise AssertionError("Extra info in Test: %r" % test_line)
-        if not(test_line):
+        if not test_line:
             raise AssertionError("Extra info in Expected: %r" % good_line)
-        test_normalized = ' '.join(x for x in test_line.split() if x)
-        good_normalized = ' '.join(x for x in good_line.split() if x)
+        test_normalized = " ".join(x for x in test_line.split() if x)
+        good_normalized = " ".join(x for x in good_line.split() if x)
         assert test_normalized == good_normalized, \
-               "Expected does not match Test.\nExpect: %r\nTest:   %r\n" % \
-               (good_line, test_line)
+            "Expected does not match Test.\nExpect: %r\nTest:   %r\n" % (good_line, test_line)
 
 
 def t_write_format():
     record_parser = GenBank.RecordParser(debug_level=0)
 
-    for file in write_format_files:
-        print("Testing GenBank writing for %s..." % os.path.basename(file))
-        cur_handle = open(os.path.join("GenBank", file), "r")
-        compare_handle = open(os.path.join("GenBank", file), "r")
+    for next_file in write_format_files:
+        print("Testing GenBank writing for %s..." % os.path.basename(next_file))
+        cur_handle = open(os.path.join("GenBank", next_file), "r")
+        compare_handle = open(os.path.join("GenBank", next_file), "r")
 
         iterator = GenBank.Iterator(cur_handle, record_parser)
         compare_iterator = GenBank.Iterator(compare_handle)
 
         while True:
-            cur_record = next(iterator)
+            cur_rec = next(iterator)
             compare_record = next(compare_iterator)
 
-            if cur_record is None or compare_record is None:
+            if cur_rec is None or compare_record is None:
                 break
 
-            print("\tTesting for %s" % cur_record.version)
+            print("\tTesting for %s" % cur_rec.version)
 
-            output_record = str(cur_record) + "\n"
+            output_record = str(cur_rec) + "\n"
             do_comparison(compare_record, output_record)
 
         cur_handle.close()
@@ -187,19 +186,17 @@ t_write_format()
 def t_cleaning_features():
     """Test the ability to clean up feature values.
     """
-    parser = GenBank.FeatureParser(feature_cleaner=utils.FeatureValueCleaner())
+    gb_parser = GenBank.FeatureParser(feature_cleaner=utils.FeatureValueCleaner())
     handle = open(os.path.join("GenBank", "arab1.gb"))
-    iterator = GenBank.Iterator(handle, parser)
+    iterator = GenBank.Iterator(handle, gb_parser)
 
     first_record = next(iterator)
 
     # test for cleaning of translation
     translation_feature = first_record.features[1]
     test_trans = translation_feature.qualifiers["translation"][0]
-    assert ' ' not in test_trans, \
-      "Did not clean spaces out of the translation"
-    assert '\012' not in test_trans, \
-      "Did not clean newlines out of the translation"
+    assert " " not in test_trans, "Did not clean spaces out of the translation"
+    assert "\012" not in test_trans, "Did not clean newlines out of the translation"
 
     handle.close()
 

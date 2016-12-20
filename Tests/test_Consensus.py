@@ -4,7 +4,11 @@
 # as part of this package.
 
 """Unit tests for the Bio.Phylo.Consensus module."""
+
+import os
 import unittest
+import tempfile
+
 # from Bio._py3k import StringIO
 from Bio import AlignIO
 from Bio import Phylo
@@ -13,6 +17,9 @@ from Bio.Phylo.TreeConstruction import DistanceCalculator
 from Bio.Phylo.TreeConstruction import DistanceTreeConstructor
 from Bio.Phylo import Consensus
 from Bio.Phylo.Consensus import _BitString
+
+
+temp_dir = tempfile.mkdtemp()
 
 
 class BitStringTest(unittest.TestCase):
@@ -140,7 +147,7 @@ class BootstrapTest(unittest.TestCase):
         constructor = DistanceTreeConstructor(calculator, 'nj')
         tree = Consensus.bootstrap_consensus(self.msa, 100, constructor, Consensus.majority_consensus)
         self.assertTrue(isinstance(tree, BaseTree.Tree))
-        Phylo.write(tree, './TreeConstruction/bootstrap_consensus.tre', 'newick')
+        Phylo.write(tree, os.path.join(temp_dir, 'bootstrap_consensus.tre'), 'newick')
 
 
 if __name__ == '__main__':

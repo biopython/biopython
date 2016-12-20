@@ -210,7 +210,7 @@ class PrimersearchParseTest(unittest.TestCase):
         h.close()
 
         self.assertEqual(len(amp_info.amplifiers), 1)
-        self.assertTrue("Test" in amp_info.amplifiers)
+        self.assertIn("Test", amp_info.amplifiers)
         self.assertEqual(len(amp_info.amplifiers["Test"]), 1)
 
         self.assertEqual(amp_info.amplifiers["Test"][0].length, 218)

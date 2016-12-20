@@ -655,9 +655,27 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         self._expected_size = int(content)
 
     def residue_type(self, type):
-        """Record the sequence type so we can choose an appropriate alphabet.
+        """Record the sequence type (SEMI-OBSOLETE).
+
+        This reflects the fact that the topology (linear/circular) and
+        molecule type (e.g. DNA vs RNA) were a single field in early
+        files. Current GenBank/EMBL files have two fields.
         """
         self._seq_type = type.strip()
+
+    def topology(self, topology):
+        """Record the topology (linear or circular as strings)."""
+        if topology:
+            if topology not in ['linear', 'circular']:
+                raise ParserFailureError("Unexpected topology %r should be linear or circular" % topology)
+            self.data.annotations['topology'] = topology
+
+    def molecule_type(self, mol_type):
+        """Record the molecule type (for round-trip etc)."""
+        if mol_type:
+            if "circular" in mol_type or 'linear' in mol_type:
+                raise ParserFailureError("Molecule type %r should not include topology" % mol_type)
+            self.data.annotations['molecule_type'] = mol_type
 
     def data_file_division(self, division):
         self.data.annotations['data_file_division'] = division
@@ -859,7 +877,8 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         (bases 1 to 105654; 110423 to 111122)
         1  (residues 1 to 182)
         """
-        # first remove the parentheses or other junk
+        # first remove the parentheses
+        assert content.endswith(")"), content
         ref_base_info = content[1:-1]
 
         all_locations = []
@@ -1023,6 +1042,13 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                                                               strand)
             return
 
+        if ",)" in location_line:
+            import warnings
+            from Bio import BiopythonParserWarning
+            warnings.warn("Dropping trailing comma in malformed feature location",
+                          BiopythonParserWarning)
+            location_line = location_line.replace(",)", ")")
+
         if _solo_bond.search(location_line):
             # e.g. bond(196)
             # e.g. join(bond(284),bond(305),bond(309),bond(305))
@@ -1045,6 +1071,14 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                 locs.append(SeqFeature.FeatureLocation(int(s) - 1,
                                                        int(e),
                                                        strand))
+            if len(locs) < 2:
+                # The CompoundLocation will raise a ValueError here!
+                import warnings
+                from Bio import BiopythonParserWarning
+                warnings.warn("Should have at least 2 parts for compound location",
+                              BiopythonParserWarning)
+                cur_feature.location = None
+                return
             if strand == -1:
                 cur_feature.location = SeqFeature.CompoundLocation(locs[::-1],
                                                                    operator=location_line[:i])
@@ -1240,12 +1274,6 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             else:
                 raise ValueError("Could not determine alphabet for seq_type %s"
                                  % self._seq_type)
-
-            # Also save the chomosome layout
-            if 'circular' in self._seq_type.lower():
-                self.data.annotations['topology'] = 'circular'
-            elif 'linear' in self._seq_type.lower():
-                self.data.annotations['topology'] = 'linear'
 
         if not sequence and self.__expected_size:
             self.data.seq = UnknownSeq(self._expected_size, seq_alphabet)

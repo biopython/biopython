@@ -58,6 +58,13 @@ class EntrezTests(unittest.TestCase):
                 f = "gb"
             record = SeqIO.read(handle, f)
             handle.close()
+            # NCBI still takes GI on input, but phasing it out in output
+            gi_to_acc = {
+                "6273291": "AF191665.1",
+                "16130152": "NP_416719.1",
+            }
+            if entry in gi_to_acc:
+                entry = gi_to_acc[entry]
             self.assertTrue((entry in record.name) or
                          (entry in record.id) or
                          ("gi" in record.annotations and

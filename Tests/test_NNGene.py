@@ -152,7 +152,7 @@ class PatternRepositoryTest(unittest.TestCase):
                              % (len(patterns), num_patterns))
 
             for pattern in patterns:
-                self.assertTrue(pattern in list(self.motifs.keys()),
+                self.assertIn(pattern, list(self.motifs.keys()),
                                 "Got unexpected pattern %s" % pattern)
 
     def test_get_top_percentage(self):
@@ -165,7 +165,7 @@ class PatternRepositoryTest(unittest.TestCase):
                              % (len(patterns), num_patterns))
 
             for pattern in patterns:
-                self.assertTrue(pattern in list(self.motifs.keys()),
+                self.assertIn(pattern, list(self.motifs.keys()),
                                 "Got unexpected pattern %s" % pattern)
 
     def test_get_top(self):
@@ -178,7 +178,7 @@ class PatternRepositoryTest(unittest.TestCase):
                              % (len(patterns), num_patterns))
 
             for pattern in patterns:
-                self.assertTrue(pattern in list(self.motifs.keys()),
+                self.assertIn(pattern, list(self.motifs.keys()),
                                 "Got unexpected pattern %s" % pattern)
 
     def test_get_differing(self):

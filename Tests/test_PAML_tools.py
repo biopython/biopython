@@ -83,7 +83,7 @@ class CodemlTest(Common):
         self.cml.working_dir = os.path.join("PAML", "codeml_test")
         results = self.cml.run()
         self.assertTrue(results["version"] > "4.0")
-        self.assertTrue("NSsites" in results)
+        self.assertIn("NSsites", results)
         self.assertEqual(len(results["NSsites"]), 1)
         self.assertEqual(len(results["NSsites"][0]), 5)
 
@@ -106,7 +106,7 @@ class BasemlTest(Common):
         self.bml.working_dir = os.path.join("PAML", "baseml_test")
         results = self.bml.run()
         self.assertTrue(results["version"] > "4.0")
-        self.assertTrue("parameters" in results)
+        self.assertIn("parameters", results)
         self.assertEqual(len(results["parameters"]), 5)
 
 

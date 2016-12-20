@@ -60,7 +60,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(str(seq_record.seq), record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
-        self.assertTrue(seq_record.id in record.accessions)
+        self.assertIn(seq_record.id, record.accessions)
 
         # Now try using the iterator - note that all these
         # test cases have only one record.
@@ -139,7 +139,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(str(seq_record.seq), record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
-        self.assertTrue(seq_record.id in record.accessions)
+        self.assertIn(seq_record.id, record.accessions)
 
         # Now try using the iterator - note that all these
         # test cases have only one record.
@@ -258,7 +258,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(str(seq_record.seq), record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
-        self.assertTrue(seq_record.id in record.accessions)
+        self.assertIn(seq_record.id, record.accessions)
 
         # Now try using the iterator - note that all these
         # test cases have only one record.
@@ -351,7 +351,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(str(seq_record.seq), record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
-        self.assertTrue(seq_record.id in record.accessions)
+        self.assertIn(seq_record.id, record.accessions)
 
         # Now try using the iterator - note that all these
         # test cases have only one record.
@@ -425,7 +425,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(str(seq_record.seq), record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
-        self.assertTrue(seq_record.id in record.accessions)
+        self.assertIn(seq_record.id, record.accessions)
 
         # Now try using the iterator - note that all these
         # test cases have only one record.
@@ -495,7 +495,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(str(seq_record.seq), record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
-        self.assertTrue(seq_record.id in record.accessions)
+        self.assertIn(seq_record.id, record.accessions)
 
         # Now try using the iterator - note that all these
         # test cases have only one record.
@@ -574,7 +574,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(str(seq_record.seq), record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
-        self.assertTrue(seq_record.id in record.accessions)
+        self.assertIn(seq_record.id, record.accessions)
 
         # Now try using the iterator - note that all these
         # test cases have only one record.
@@ -816,7 +816,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(str(seq_record.seq), record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
-        self.assertTrue(seq_record.id in record.accessions)
+        self.assertIn(seq_record.id, record.accessions)
 
         # Now try using the iterator - note that all these
         # test cases have only one record.
@@ -886,7 +886,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(str(seq_record.seq), record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
-        self.assertTrue(seq_record.id in record.accessions)
+        self.assertIn(seq_record.id, record.accessions)
 
         # Now try using the iterator - note that all these
         # test cases have only one record.
@@ -998,7 +998,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(str(seq_record.seq), record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
-        self.assertTrue(seq_record.id in record.accessions)
+        self.assertIn(seq_record.id, record.accessions)
 
         # Now try using the iterator - note that all these
         # test cases have only one record.
@@ -1153,7 +1153,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(str(seq_record.seq), record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
-        self.assertTrue(seq_record.id in record.accessions)
+        self.assertIn(seq_record.id, record.accessions)
 
         # Now try using the iterator - note that all these
         # test cases have only one record.
@@ -1222,7 +1222,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(str(seq_record.seq), record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
-        self.assertTrue(seq_record.id in record.accessions)
+        self.assertIn(seq_record.id, record.accessions)
 
         # Now try using the iterator - note that all these
         # test cases have only one record.
@@ -1291,7 +1291,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(str(seq_record.seq), record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
-        self.assertTrue(seq_record.id in record.accessions)
+        self.assertIn(seq_record.id, record.accessions)
 
         # Now try using the iterator - note that all these
         # test cases have only one record.
@@ -1451,7 +1451,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(str(seq_record.seq), record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
-        self.assertTrue(seq_record.id in record.accessions)
+        self.assertIn(seq_record.id, record.accessions)
 
         # Now try using the iterator - note that all these
         # test cases have only one record.
@@ -1515,7 +1515,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(str(seq_record.seq), record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
-        self.assertTrue(seq_record.id in record.accessions)
+        self.assertIn(seq_record.id, record.accessions)
 
         # Now try using the iterator - note that all these
         # test cases have only one record.

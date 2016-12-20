@@ -3,22 +3,10 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-
-# Remove unittest2 import after dropping support for Python2.6
-import sys
+import unittest
 
 from Bio import pairwise2
 from Bio.SubsMat.MatrixInfo import blosum62
-
-if sys.version_info < (2, 7):
-    try:
-        import unittest2 as unittest
-    except ImportError:
-        from Bio import MissingPythonDependencyError
-        raise MissingPythonDependencyError("Under Python 2.6 this test needs "
-                                           "the unittest2 library")
-else:
-    import unittest
 
 
 class TestPairwiseErrorConditions(unittest.TestCase):

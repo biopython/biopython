@@ -73,7 +73,7 @@ class TCoffeeApplication(unittest.TestCase):
                     "-infile Fasta/fa01 -outfile Fasta/tc_out.pir -quiet")
         stdout, stderr = cmdline()
         # Can get warnings in stderr output
-        self.assertTrue("error" not in stderr.lower(), stderr)
+        self.assertNotIn("error", stderr.lower(), stderr)
         align = AlignIO.read(self.outfile3, "pir")
         records = list(SeqIO.parse(self.infile1, "fasta"))
         self.assertEqual(len(records), len(align))

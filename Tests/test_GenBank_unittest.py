@@ -11,6 +11,7 @@ from os import path
 from Bio import BiopythonParserWarning
 from Bio import BiopythonWarning
 from Bio import GenBank
+from Bio.GenBank import Scanner
 from Bio import SeqIO
 from Bio.SeqRecord import SeqRecord
 from Bio.Seq import Seq
@@ -106,36 +107,52 @@ class GenBankTests(unittest.TestCase):
         """GenBank record with old DBLINK project entry."""
         record = SeqIO.read("GenBank/NC_005816.gb", "gb")
         self.assertEqual(record.dbxrefs, ["Project:58037"])
+        gb = record.format("gb")
+        self.assertIn("\nDBLINK      Project: 58037\n", gb)
         embl = record.format("embl")
-        self.assertTrue("XX\nPR   Project:58037;\nXX\n" in embl, embl)
+        self.assertIn("XX\nPR   Project:58037;\nXX\n", embl)
 
     def test_dblink_two(self):
         """GenBank record with old and new DBLINK project entries."""
         record = SeqIO.read("GenBank/NP_416719.gbwithparts", "gb")
         self.assertEqual(record.dbxrefs,
                          ["Project:57779", "BioProject:PRJNA57779"])
+        gb = record.format("gb")
+        self.assertTrue("""
+DBLINK      Project: 57779
+            BioProject: PRJNA57779
+KEYWORDS    """ in gb, gb)
         embl = record.format("embl")
-        self.assertTrue("XX\nPR   Project:PRJNA57779;\nXX\n" in embl, embl)
+        self.assertIn("XX\nPR   Project:PRJNA57779;\nXX\n", embl)
 
     def test_dbline_gb_embl(self):
         """GenBank / EMBL paired records with PR project entry: GenBank"""
         record = SeqIO.read("GenBank/DS830848.gb", "gb")
-        self.assertTrue("BioProject:PRJNA16232" in record.dbxrefs, record.dbxrefs)
+        self.assertIn("BioProject:PRJNA16232", record.dbxrefs)
         gb = record.format("gb")
-        self.assertTrue("\nDBLINK      BioProject:PRJNA16232\n" in gb, gb)
+        self.assertTrue("""
+DBLINK      BioProject: PRJNA16232
+            BioSample: SAMN03004382
+KEYWORDS    """ in gb, gb)
         # Also check EMBL output
         embl = record.format("embl")
-        self.assertTrue("XX\nPR   Project:PRJNA16232;\nXX\n" in embl, embl)
+        self.assertIn("XX\nPR   Project:PRJNA16232;\nXX\n", embl)
 
     def test_dbline_embl_gb(self):
         """GenBank / EMBL paired records with PR project entry: EMBL"""
         record = SeqIO.read("EMBL/DS830848.embl", "embl")
         # TODO: Should we map this to BioProject:PRJNA16232
-        self.assertTrue("Project:PRJNA16232" in record.dbxrefs, record.dbxrefs)
+        self.assertIn("Project:PRJNA16232", record.dbxrefs)
         gb = record.format("gb")
-        self.assertTrue("\nDBLINK      Project:PRJNA16232\n" in gb, gb)
+        self.assertTrue("""
+DBLINK      Project: PRJNA16232
+            MD5: 387e72e4f7ae804780d06f875ab3bc41
+            ENA: ABJB010000000
+            ENA: ABJB000000000
+            BioSample: SAMN03004382
+KEYWORDS    """ in gb, gb)
         embl = record.format("embl")
-        self.assertTrue("XX\nPR   Project:PRJNA16232;\nXX\n" in embl, embl)
+        self.assertIn("XX\nPR   Project:PRJNA16232;\nXX\n", embl)
 
     def test_structured_comment_parsing(self):
         """Structued comment parsing."""
@@ -168,12 +185,17 @@ class GenBankTests(unittest.TestCase):
         out_handle = StringIO()
         SeqIO.write([record], out_handle, 'genbank')
         first_line = out_handle.getvalue().split('\n')[0]
-        # TODO - Use self.assertIn once drop Python 2.6
-        # self.assertIn('linear', first_line)
-        self.assertTrue(" linear " in first_line)
+        self.assertIn('linear', first_line)
         with open('GenBank/DS830848.gb', 'r') as fh:
             orig_first_line = fh.readline().strip()
         self.assertEqual(first_line, orig_first_line)
+
+    def test_qualifier_order(self):
+        """Check the qualifier order is preserved."""
+        record = SeqIO.read("GenBank/DS830848.gb", "gb")
+        f = record.features[0]
+        self.assertEqual(list(f.qualifiers),
+                         ['organism', 'mol_type', 'strain', 'db_xref', 'dev_stage'])
 
     def test_long_names(self):
         """Various GenBank names which push the column based LOCUS line."""
@@ -210,8 +232,8 @@ class GenBankTests(unittest.TestCase):
                 self.assertEqual(1, SeqIO.write(record, handle, "gb"))
             handle.seek(0)
             line = handle.readline()
-            self.assertTrue(" %s " % name in line, line)
-            self.assertTrue(" %i bp " % seq_len in line, line)
+            self.assertIn(" %s " % name, line)
+            self.assertIn(" %i bp " % seq_len, line)
             name_and_length = line[12:40]
             self.assertEqual(name_and_length.split(), [name, str(seq_len)], line)
             handle.seek(0)
@@ -222,6 +244,108 @@ class GenBankTests(unittest.TestCase):
                 new = SeqIO.read(handle, "gb")
             self.assertEqual(name, new.name)
             self.assertEqual(seq_len, len(new))
+
+
+class LineOneTests(unittest.TestCase):
+    """Check GenBank/EMBL topology / molecule_type parsing."""
+
+    def test_topology_genbank(self):
+        """Check GenBank LOCUS line parsing."""
+        # This is a bit low level, but can test pasing the LOCUS line only
+        tests = [
+            ("LOCUS       U00096",
+             None, None, None),
+            # This example is actually fungal, accession U49845 from Saccharomyces cerevisiae:
+            ("LOCUS       SCU49845     5028 bp    DNA             PLN       21-JUN-1999",
+             None, "DNA", "PLN"),
+            ("LOCUS       AB070938                6497 bp    DNA     linear   BCT 11-OCT-2001",
+             "linear", "DNA", "BCT"),
+            ("LOCUS       NC_005816               9609 bp    DNA     circular BCT 21-JUL-2008",
+             "circular", "DNA", "BCT"),
+            ("LOCUS       SCX3_BUTOC                64 aa            linear   INV 16-OCT-2001",
+             "linear", None, "INV"),
+        ]
+        for (line, topo, mol_type, div) in tests:
+            scanner = Scanner.GenBankScanner()
+            consumer = GenBank._FeatureConsumer(1, GenBank.FeatureValueCleaner)
+            scanner._feed_first_line(consumer, line)
+            t = consumer.data.annotations.get('topology', None)
+            self.assertEqual(t, topo,
+                             "Wrong topology %r not %r from %r" % (t, topo, line))
+            mt = consumer.data.annotations.get('molecule_type', None)
+            self.assertEqual(mt, mol_type,
+                             "Wrong molecule_type %r not %r from %r" %
+                             (mt, mol_type, line))
+            d = consumer.data.annotations.get('data_file_division', None)
+            self.assertEqual(d, div,
+                             "Wrong division %r not %r from %r" % (d, div, line))
+
+    def test_topology_embl(self):
+        """Check EMBL ID line parsing."""
+        # This is a bit low level, but can test pasing the ID line only
+        tests = [
+            # Modern examples with sequence version
+            ("ID   X56734; SV 1; linear; mRNA; STD; PLN; 1859 BP.",
+             "linear", "mRNA", "PLN"),
+            ("ID   CD789012; SV 4; linear; genomic DNA; HTG; MAM; 500 BP.",
+             "linear", "genomic DNA", "MAM"),
+            # Example to match GenBank example used above:
+            ("ID   U49845; SV 1; linear; genomic DNA; STD; FUN; 5028 BP.",
+             "linear", "genomic DNA", "FUN"),
+            # Old examples:
+            ("ID   BSUB9999   standard; circular DNA; PRO; 4214630 BP.",
+             "circular", "DNA", "PRO"),
+            ("ID   SC10H5 standard; DNA; PRO; 4870 BP.",
+             None, "DNA", "PRO"),
+            # Patent example from 2016-06-10
+            # ftp://ftp.ebi.ac.uk/pub/databases/embl/patent/
+            ("ID   A01679; SV 1; linear; unassigned DNA; PAT; MUS; 12 BP.",
+             "linear", "unassigned DNA", "MUS"),
+            # Old patent examples
+            ("ID   NRP_AX000635; PRT; NR1; 15 SQ", None, None, "NR1"),
+            ("ID   NRP0000016E; PRT; NR2; 5 SQ", None, None, "NR2"),
+            # KIPO patent examples
+            ("ID   DI500001       STANDARD;      PRT;   111 AA.", None, None, None),
+            ("ID   DI644510   standard; PRT;  1852 AA.", None, None, None),
+        ]
+        for (line, topo, mol_type, div) in tests:
+            scanner = Scanner.EmblScanner()
+            consumer = GenBank._FeatureConsumer(1, GenBank.FeatureValueCleaner)
+            scanner._feed_first_line(consumer, line)
+            t = consumer.data.annotations.get('topology', None)
+            self.assertEqual(t, topo,
+                             "Wrong topology %r not %r from %r" % (t, topo, line))
+            mt = consumer.data.annotations.get('molecule_type', None)
+            self.assertEqual(mt, mol_type,
+                             "Wrong molecule_type %r not %r from %r" %
+                             (mt, mol_type, line))
+            d = consumer.data.annotations.get('data_file_division', None)
+            self.assertEqual(d, div,
+                             "Wrong division %r not %r from %r" % (d, div, line))
+
+    def test_first_line_imgt(self):
+        """Check IMGT ID line parsing."""
+        # This is a bit low level, but can test pasing the ID line only
+        tests = [
+            ("ID   HLA00001   standard; DNA; HUM; 3503 BP.",
+             None, "DNA", "HUM"),
+            ("ID   HLA00001; SV 1; standard; DNA; HUM; 3503 BP.",
+             None, "DNA", "HUM"),
+        ]
+        for (line, topo, mol_type, div) in tests:
+            scanner = Scanner._ImgtScanner()
+            consumer = GenBank._FeatureConsumer(1, GenBank.FeatureValueCleaner)
+            scanner._feed_first_line(consumer, line)
+            t = consumer.data.annotations.get('topology', None)
+            self.assertEqual(t, topo,
+                             "Wrong topology %r not %r from %r" % (t, topo, line))
+            mt = consumer.data.annotations.get('molecule_type', None)
+            self.assertEqual(mt, mol_type,
+                             "Wrong molecule_type %r not %r from %r" %
+                             (mt, mol_type, line))
+            d = consumer.data.annotations.get('data_file_division', None)
+            self.assertEqual(d, div,
+                             "Wrong division %r not %r from %r" % (d, div, line))
 
 
 class OutputTests(unittest.TestCase):

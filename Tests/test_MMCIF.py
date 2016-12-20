@@ -203,6 +203,55 @@ class ParseReal(unittest.TestCase):
         structure = parser.get_structure("example", open("PDB/1A8O.cif"))
         self.assertEqual(len(structure), 1)
 
+    def test_point_mutations_main(self):
+        """Test if MMCIFParser parse point mutations correctly."""
+        self._run_point_mutation_tests(MMCIFParser(QUIET=True))
+
+    def test_point_mutations_fast(self):
+        """Test if FastMMCIFParser can parse point mutations correctly."""
+        self._run_point_mutation_tests(FastMMCIFParser(QUIET=True))
+
+    def _run_point_mutation_tests(self, parser):
+        """Common test code for testing point mutations."""
+        structure = parser.get_structure("example", "PDB/3JQH.cif")
+
+        # Residue 1 and 15 should be disordered.
+        res_1 = structure[0]["A"][1]
+        res_15 = structure[0]["A"][15]
+
+        # Cursory check -- this would be true even if the residue just
+        # contained some disordered atoms.
+        self.assertTrue(res_1.is_disordered(), "Residue 1 is disordered")
+        self.assertTrue(res_15.is_disordered(), "Residue 15 is disordered")
+
+        # Check a non-mutated residue just to be sure we didn't break the
+        # parser and cause everyhing to be disordered.
+        self.assertFalse(
+            structure[0]["A"][13].is_disordered(),
+            "Residue 13 is not disordered")
+
+        # Check that the residue types were parsed correctly.
+        self.assertSetEqual(
+            set(res_1.disordered_get_id_list()),
+            {"PRO", "SER"},
+            "Residue 1 is proline/serine")
+        self.assertSetEqual(
+            set(res_15.disordered_get_id_list()),
+            {"ARG", "GLN", "GLU"},
+            "Residue 15 is arginine/glutamine/glutamic acid")
+
+        # Quickly check that we can switch between residues and that the
+        # correct set of residues was parsed.
+        res_1.disordered_select('PRO')
+        self.assertAlmostEqual(
+            res_1["CA"].get_occupancy(),
+            0.83, 2, "Residue 1 proline occupancy correcy")
+
+        res_1.disordered_select('SER')
+        self.assertAlmostEqual(
+            res_1["CA"].get_occupancy(),
+            0.17, 2, "Residue 1 serine occupancy correcy")
+
 if __name__ == '__main__':
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

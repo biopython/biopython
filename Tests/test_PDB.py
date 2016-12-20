@@ -76,7 +76,7 @@ class A_ExceptionTest(unittest.TestCase):
                     "Residue (' ', 81, ' ') redefined at line 646.",
                     'Atom O defined twice in residue <Residue HOH het=W resseq=67 icode= > at line 822.'
                     ]):
-                self.assertTrue(msg in str(wrn), str(wrn))
+                self.assertIn(msg, str(wrn))
 
     def test_2_strict(self):
         """Check error: Parse a flawed PDB file in strict mode."""
@@ -994,6 +994,97 @@ class IterationTests(unittest.TestCase):
         atoms = ["%12s" % str((atom.id, atom.altloc)) for atom in self.struc.get_atoms()]
         self.assertEqual(len(atoms), 756)
 
+
+class ChangingIdTests(unittest.TestCase):
+
+    def setUp(self):
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", PDBConstructionWarning)
+            self.struc = PDBParser(PERMISSIVE=True).get_structure(
+                                                  'X', "PDB/a_structure.pdb")
+
+    def test_change_model_id(self):
+        """Change the id of a model"""
+        for model in self.struc:
+            break  # Get first model in structure
+        model.id = 2
+        self.assertEqual(model.id, 2)
+        self.assertIn(2, self.struc)
+        self.assertNotIn(0, self.struc)
+
+    def test_change_model_id_raises(self):
+        """Cannot change id to a value already in use by another child"""
+        model = next(iter(self.struc))
+        with self.assertRaises(ValueError):
+            model.id = 1
+        # Make sure nothing was changed
+        self.assertEqual(model.id, 0)
+        self.assertIn(0, self.struc)
+        self.assertIn(1, self.struc)
+
+    def test_change_chain_id(self):
+        """Change the id of a model"""
+        chain = next(iter(self.struc.get_chains()))
+        chain.id = "R"
+        self.assertEqual(chain.id, "R")
+        model = next(iter(self.struc))
+        self.assertIn("R", model)
+
+    def test_change_residue_id(self):
+        """Change the id of a residue"""
+        chain = next(iter(self.struc.get_chains()))
+        res = chain[('H_PCA', 1, ' ')]
+        res.id = (' ', 1, ' ')
+
+        self.assertEqual(res.id, (' ', 1, ' '))
+        self.assertIn((' ', 1, ' '), chain)
+        self.assertNotIn(('H_PCA', 1, ' '), chain)
+        self.assertEqual(chain[(' ', 1, ' ')], res)
+
+    def test_full_id_is_updated_residue(self):
+        """
+        Invalidate cached full_ids if an id is changed.
+        """
+        atom = next(iter(self.struc.get_atoms()))
+
+        # Generate the original full id.
+        original_id = atom.get_full_id()
+        self.assertEqual(original_id,
+                         ('X', 0, 'A', ('H_PCA', 1, ' '), ('N', ' ')))
+        residue = next(iter(self.struc.get_residues()))
+
+        # Make sure the full id was in fact cached,
+        # so we need to invalidate it later.
+        self.assertEqual(residue.full_id, ('X', 0, 'A', ('H_PCA', 1, ' ')))
+
+        # Changing the residue's id should lead to an updated full id.
+        residue.id = (' ', 1, ' ')
+        new_id = atom.get_full_id()
+        self.assertNotEqual(original_id, new_id)
+        self.assertEqual(new_id, ('X', 0, 'A', (' ', 1, ' '), ('N', ' ')))
+
+    def test_full_id_is_updated_chain(self):
+        """
+        Invalidate cached full_ids if an id is changed.
+        """
+        atom = next(iter(self.struc.get_atoms()))
+
+        # Generate the original full id.
+        original_id = atom.get_full_id()
+        self.assertEqual(original_id,
+                         ('X', 0, 'A', ('H_PCA', 1, ' '), ('N', ' ')))
+        residue = next(iter(self.struc.get_residues()))
+
+        # Make sure the full id was in fact cached,
+        # so we need to invalidate it later.
+        self.assertEqual(residue.full_id, ('X', 0, 'A', ('H_PCA', 1, ' ')))
+        chain = next(iter(self.struc.get_chains()))
+
+        # Changing the chain's id should lead to an updated full id.
+        chain.id = 'Q'
+        new_id = atom.get_full_id()
+        self.assertNotEqual(original_id, new_id)
+        self.assertEqual(new_id, ('X', 0, 'Q', ('H_PCA', 1, ' '), ('N', ' ')))
 
 # class RenumberTests(unittest.TestCase):
 #    """Tests renumbering of structures."""

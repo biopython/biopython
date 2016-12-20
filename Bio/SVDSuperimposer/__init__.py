@@ -12,8 +12,13 @@ value decomposition, which is used in the algorithm.
 
 from __future__ import print_function
 
-from numpy import dot, transpose, sqrt, array
-from numpy.linalg import svd, det
+try:
+    from numpy import dot, transpose, sqrt
+    from numpy.linalg import svd, det
+except ImportError:
+    from Bio import MissingPythonDependencyError
+    raise MissingPythonDependencyError(
+        "Install NumPy if you want to use Bio.SVDSuperimposer.")
 
 
 class SVDSuperimposer(object):
@@ -30,6 +35,64 @@ class SVDSuperimposer(object):
 
     Matrix computations, 2nd ed. Golub, G. & Van Loan, CF., The Johns
     Hopkins University Press, Baltimore, 1989
+
+    start with two coordinate sets (Nx3 arrays - float)
+
+    >>> from Bio.SVDSuperimposer import SVDSuperimposer
+    >>> from numpy import array, dot, set_printoptions
+    >>>
+    >>> x = array([[51.65, -1.90, 50.07],
+    ...      [50.40, -1.23, 50.65],
+    ...      [50.68, -0.04, 51.54],
+    ...      [50.22, -0.02, 52.85]], 'f')
+    >>>
+    >>> y = array([[51.30, -2.99, 46.54],
+    ...      [51.09, -1.88, 47.58],
+    ...      [52.36, -1.20, 48.03],
+    ...      [52.71, -1.18, 49.38]], 'f')
+
+    start
+
+    >>> sup = SVDSuperimposer()
+
+    set the coords y will be rotated and translated on x
+
+    >>> sup.set(x, y)
+
+    do the lsq fit
+
+    >>> sup.run()
+
+    get the rmsd
+
+    >>> rms = sup.get_rms()
+
+    get rotation (right multiplying!) and the translation
+
+    >>> rot, tran = sup.get_rotran()
+
+    rotate y on x
+
+    >>> y_on_x1 = dot(y, rot) + tran
+
+    same thing
+
+    >>> y_on_x2 = sup.get_transformed()
+
+    >>> set_printoptions(precision=2)
+    >>> print(y_on_x1)
+    [[  5.17e+01  -1.90e+00   5.01e+01]
+     [  5.04e+01  -1.23e+00   5.06e+01]
+     [  5.07e+01  -4.16e-02   5.15e+01]
+     [  5.02e+01  -1.94e-02   5.29e+01]]
+    >>> print(y_on_x2)
+    [[  5.17e+01  -1.90e+00   5.01e+01]
+     [  5.04e+01  -1.23e+00   5.06e+01]
+     [  5.07e+01  -4.16e-02   5.15e+01]
+     [  5.02e+01  -1.94e-02   5.29e+01]]
+    >>> print("%.2f" % rms)
+    0.00
+
     """
     def __init__(self):
         self._clear()
@@ -129,43 +192,5 @@ class SVDSuperimposer(object):
 
 
 if __name__ == "__main__":
-
-    # start with two coordinate sets (Nx3 arrays - float)
-
-    x = array([[51.65, -1.90, 50.07],
-         [50.40, -1.23, 50.65],
-         [50.68, -0.04, 51.54],
-         [50.22, -0.02, 52.85]], 'f')
-
-    y = array([[51.30, -2.99, 46.54],
-         [51.09, -1.88, 47.58],
-         [52.36, -1.20, 48.03],
-         [52.71, -1.18, 49.38]], 'f')
-
-    # start!
-    sup = SVDSuperimposer()
-
-    # set the coords
-    # y will be rotated and translated on x
-    sup.set(x, y)
-
-    # do the lsq fit
-    sup.run()
-
-    # get the rmsd
-    rms = sup.get_rms()
-
-    # get rotation (right multiplying!) and the translation
-    rot, tran = sup.get_rotran()
-
-    # rotate y on x
-    y_on_x1 = dot(y, rot) + tran
-
-    # same thing
-    y_on_x2 = sup.get_transformed()
-
-    print(y_on_x1)
-    print("")
-    print(y_on_x2)
-    print("")
-    print("%.2f" % rms)
+    from Bio._utils import run_doctest
+    run_doctest(verbose=0)

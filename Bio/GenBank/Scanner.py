@@ -1,4 +1,4 @@
-# Copyright 2007-2010 by Peter Cock.  All rights reserved.
+# Copyright 2007-2016 by Peter Cock.  All rights reserved.
 # Revisions copyright 2010 by Uri Laserson.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -352,7 +352,7 @@ class InsdcScanner(object):
             if line == "//":
                 break
         self.line = line
-        return ([], "")  # Dummy values!
+        return [], ""  # Dummy values!
 
     def _feed_first_line(self, consumer, line):
         """Handle the LOCUS/ID line, passing data to the comsumer
@@ -372,7 +372,8 @@ class InsdcScanner(object):
         """
         pass
 
-    def _feed_feature_table(self, consumer, feature_tuples):
+    @staticmethod
+    def _feed_feature_table(consumer, feature_tuples):
         """Handle the feature table (list of tuples), passing data to the comsumer
 
         Used by the parse_records() and parse() methods.
@@ -628,10 +629,17 @@ class EmblScanner(InsdcScanner):
             else:
                 # Looks like the pre 2006 style
                 self._feed_first_line_old(consumer, line)
+        elif line[self.HEADER_WIDTH:].count(";") == 2:
+            # Looks like KIKO patent data
+            self._feed_first_line_patents_kipo(consumer, line)
         else:
             raise ValueError('Did not recognise the ID line layout:\n' + line)
 
     def _feed_first_line_patents(self, consumer, line):
+        # Old style EMBL patent records where ID line ended SQ
+        # Not 100% sure that PRT here is really molecule type and
+        # not the data file division...
+        #
         # Either Non-Redundant Level 1 database records,
         # ID <accession>; <molecule type>; <non-redundant level 1>; <cluster size L1>
         # e.g. ID   NRP_AX000635; PRT; NR1; 15 SQ
@@ -639,12 +647,38 @@ class EmblScanner(InsdcScanner):
         # Or, Non-Redundant Level 2 database records:
         # ID <L2-accession>; <molecule type>; <non-redundant level 2>; <cluster size L2>
         # e.g. ID   NRP0000016E; PRT; NR2; 5 SQ
-        fields = line[self.HEADER_WIDTH:].rstrip()[:-3].split(";")
+        # e.g. ID   NRP_AX000635; PRT; NR1; 15 SQ
+        fields = [data.strip() for data in line[self.HEADER_WIDTH:].strip()[:-3].split(";")]
         assert len(fields) == 4
         consumer.locus(fields[0])
-        consumer.residue_type(fields[1])
+        consumer.residue_type(fields[1])  # semi-redundant
         consumer.data_file_division(fields[2])
         # TODO - Record cluster size?
+
+    def _feed_first_line_patents_kipo(self, consumer, line):
+        # EMBL format patent sequence from KIPO, e.g.
+        # ftp://ftp.ebi.ac.uk/pub/databases/patentdata/kipo_prt.dat.gz
+        #
+        # e.g. ID   DI500001       STANDARD;      PRT;   111 AA.
+        #
+        # This follows the style of _feed_first_line_old
+        assert line[:self.HEADER_WIDTH].rstrip() == "ID"
+        fields = [line[self.HEADER_WIDTH:].split(None, 1)[0]]
+        fields.extend(line[self.HEADER_WIDTH:].split(None, 1)[1].split(";"))
+        fields = [entry.strip() for entry in fields]
+        """
+        The tokens represent:
+
+           0. Primary accession number
+           (space sep)
+           1. ??? (e.g. standard)
+           (semi-colon)
+           2. Molecule type (protein)? Division? Always 'PRT'
+           3. Sequence length (e.g. '111 AA.')
+        """
+        consumer.locus(fields[0])  # Should we also call the accession consumer?
+        # consumer.molecule_type(fields[2])
+        self._feed_seq_length(consumer, fields[3])
 
     def _feed_first_line_old(self, consumer, line):
         # Expects an ID line in the style before 2006, e.g.
@@ -667,6 +701,14 @@ class EmblScanner(InsdcScanner):
         """
         consumer.locus(fields[0])  # Should we also call the accession consumer?
         consumer.residue_type(fields[2])
+        if "circular" in fields[2]:
+            consumer.topology("circular")
+            consumer.molecule_type(fields[2].replace("circular", "").strip())
+        elif "linear" in fields[2]:
+            consumer.topology("linear")
+            consumer.molecule_type(fields[2].replace("linear", "").strip())
+        else:
+            consumer.molecule_type(fields[2].strip())
         consumer.data_file_division(fields[3])
         self._feed_seq_length(consumer, fields[4])
 
@@ -704,7 +746,10 @@ class EmblScanner(InsdcScanner):
             consumer.version_suffix(version_parts[1])
 
         # Based on how the old GenBank parser worked, merge these two:
-        consumer.residue_type(" ".join(fields[2:4]))  # TODO - Store as two fields?
+        consumer.residue_type(" ".join(fields[2:4]))  # Semi-obsolete
+
+        consumer.topology(fields[2])
+        consumer.molecule_type(fields[3])
 
         # consumer.xxx(fields[4]) # TODO - What should we do with the data class?
 
@@ -712,7 +757,8 @@ class EmblScanner(InsdcScanner):
 
         self._feed_seq_length(consumer, fields[6])
 
-    def _feed_seq_length(self, consumer, text):
+    @staticmethod
+    def _feed_seq_length(consumer, text):
         length_parts = text.split()
         assert len(length_parts) == 2, "Invalid sequence length string %r" % text
         assert length_parts[1].upper() in ["BP", "BP.", "AA", "AA."]
@@ -753,12 +799,16 @@ class EmblScanner(InsdcScanner):
                     data = data[1:-1]
                 consumer.reference_num(data)
             elif line_type == 'RP':
-                # Reformat reference numbers for the GenBank based consumer
-                # e.g. '1-4639675' becomes '(bases 1 to 4639675)'
-                # and '160-550, 904-1055' becomes '(bases 160 to 550; 904 to 1055)'
-                # Note could be multi-line, and end with a comma
-                parts = [bases.replace("-", " to ").strip() for bases in data.split(",") if bases.strip()]
-                consumer.reference_bases("(bases %s)" % "; ".join(parts))
+                if data.strip() == "[-]":
+                    # Patent EMBL files from KIPO just use: RN  [-]
+                    pass
+                else:
+                    # Reformat reference numbers for the GenBank based consumer
+                    # e.g. '1-4639675' becomes '(bases 1 to 4639675)'
+                    # and '160-550, 904-1055' becomes '(bases 160 to 550; 904 to 1055)'
+                    # Note could be multi-line, and end with a comma
+                    parts = [bases.replace("-", " to ").strip() for bases in data.split(",") if bases.strip()]
+                    consumer.reference_bases("(bases %s)" % "; ".join(parts))
             elif line_type == 'RT':
                 # Remove the enclosing quotes and trailing semi colon.
                 # Note the title can be split over multiple lines.
@@ -884,6 +934,58 @@ class _ImgtScanner(EmblScanner):
                              "FH   Key             Location/Qualifiers (from EMBL)",
                              "FH   Key                 Location/Qualifiers",
                              "FH"]
+
+    def _feed_first_line(self, consumer, line):
+        assert line[:self.HEADER_WIDTH].rstrip() == "ID"
+        if line[self.HEADER_WIDTH:].count(";") != 5:
+            # Assume its an older EMBL-like line,
+            return EmblScanner._feed_first_line(self, consumer, line)
+        # Otherwise assume its the new (circa 2016) IMGT style
+        # as used in the IPD-IMGT/HLA Database
+        #
+        # https://github.com/ANHIG/IMGTHLA/
+        #
+        # The key changes post 3.16 are the addition of an SV value
+        # to the ID line, these additions should make the format more
+        # similar to the ENA style.
+        #
+        # ID   HLA00001   standard; DNA; HUM; 3503 BP.
+        #
+        # becomes
+        #
+        # ID   HLA00001; SV 1; standard; DNA; HUM; 3503 BP.
+        fields = [data.strip() for data in line[self.HEADER_WIDTH:].strip().split(";")]
+        assert len(fields) == 6
+        """
+        The tokens represent:
+
+           0. Primary accession number (eg 'HLA00001')
+           1. Sequence version number (eg 'SV 1')
+           2. ??? eg 'standard'
+           3. Molecule type (e.g. 'DNA')
+           4. Taxonomic division (e.g. 'HUM')
+           5. Sequence length (e.g. '3503 BP.')
+        """
+        consumer.locus(fields[0])
+
+        # See TODO on the EMBL _feed_first_line_new about version field
+        version_parts = fields[1].split()
+        if len(version_parts) == 2 \
+            and version_parts[0] == "SV" \
+                and version_parts[1].isdigit():
+            consumer.version_suffix(version_parts[1])
+
+        consumer.residue_type(fields[3])
+        if "circular" in fields[3]:
+            consumer.topology("circular")
+            consumer.molecule_type(fields[3].replace("circular", "").strip())
+        elif "linear" in fields[3]:
+            consumer.topology("linear")
+            consumer.molecule_type(fields[3].replace("linear", "").strip())
+        else:
+            consumer.molecule_type(fields[3].strip())
+        consumer.data_file_division(fields[4])
+        self._feed_seq_length(consumer, fields[5])
 
     def parse_features(self, skip=False):
         """Return list of tuples for the features (if present)
@@ -1063,7 +1165,7 @@ class GenBankScanner(InsdcScanner):
             #    ??:??      space
             #    ??:29      Length of sequence, right-justified
             #    29:33      space, bp, space
-            #    33:41      strand type
+            #    33:41      strand type / molecule type, e.g. DNA
             #    41:42      space
             #    42:51      Blank (implies linear), linear or circular
             #    51:52      space
@@ -1118,6 +1220,8 @@ class GenBankScanner(InsdcScanner):
             else:
                 consumer.residue_type(line[33:51].strip())
 
+            consumer.molecule_type(line[33:41].strip())
+            consumer.topology(line[42:51].strip())
             consumer.data_file_division(line[52:55])
             if line[62:73].strip():
                 consumer.date(line[62:73])
@@ -1188,6 +1292,8 @@ class GenBankScanner(InsdcScanner):
             else:
                 consumer.residue_type(line[44:63].strip())
 
+            consumer.molecule_type(line[44:54].strip())
+            consumer.topology(line[55:63].strip())
             consumer.data_file_division(line[64:67])
             if line[68:79].strip():
                 consumer.date(line[68:79])
@@ -1222,6 +1328,7 @@ class GenBankScanner(InsdcScanner):
             consumer.locus(splitline[1])
             consumer.size(splitline[2])
             consumer.residue_type(splitline[4])
+            consumer.topology(splitline[5])
             consumer.data_file_division(splitline[6])
             consumer.date(splitline[7])
             warnings.warn("Attempting to parse malformed locus line:\n%r\n"
