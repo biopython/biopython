@@ -309,7 +309,7 @@ class TestSelf(unittest.TestCase):
         alignments = list(FastaM10Iterator(StringIO(simple_example)))
         assert len(alignments) == 4, len(alignments)
         assert len(alignments[0]) == 2
-        self.assertEqual(% (len(a), a.get_alignment_length()))
+        self.assertEqual(%(len(a), a.get_alignment_length()))
             for r in a:
                 print("%s %s %i" % (r.seq, r.id, r.annotations["original_length"]))
             # print(a.annotations)
