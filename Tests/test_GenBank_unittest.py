@@ -162,14 +162,20 @@ KEYWORDS    """ in gb, gb)
                          "Swine influenza A (H1N1) virus isolated during human swine flu\noutbreak of 2009.")
         self.assertEqual(record.annotations['structured_comment']['GISAID_EpiFlu(TM)Data']['Lineage'], 'swl')
         self.assertEqual(len(record.annotations['structured_comment']['GISAID_EpiFlu(TM)Data']), 3)
+        with open(path.join('GenBank', 'HM138502_output.gbk'), "r") as ifile:
+            self.assertEqual(record.format("gb"), ifile.read())
         # FluData structured comment
         record = SeqIO.read(path.join('GenBank', 'EU851978.gbk'), 'genbank')
         self.assertEqual(record.annotations['structured_comment']['FluData']['LabID'], '2008704957')
         self.assertEqual(len(record.annotations['structured_comment']['FluData']), 5)
+        with open(path.join('GenBank', 'EU851978_output.gbk'), "r") as ifile:
+            self.assertEqual(record.format("gb"), ifile.read())
         # Assembly-Data structured comment
         record = SeqIO.read(path.join('GenBank', 'KF527485.gbk'), 'genbank')
         self.assertEqual(record.annotations['structured_comment']['Assembly-Data']['Assembly Method'], 'Lasergene v. 10')
         self.assertEqual(len(record.annotations['structured_comment']['Assembly-Data']), 2)
+        with open(path.join('GenBank', 'KF527485_output.gbk'), "r") as ifile:
+            self.assertEqual(record.format("gb"), ifile.read())
         # No structured comment in NC_000932.gb, just a regular comment
         record = SeqIO.read(path.join('GenBank', 'NC_000932.gb'), 'genbank')
         self.assertFalse("structured_comment" in record.annotations)
