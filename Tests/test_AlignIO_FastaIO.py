@@ -12,6 +12,7 @@ from __future__ import print_function
 import os
 from Bio import AlignIO
 from Bio._py3k import StringIO
+from Bio.AlignIO import FastaIO
 import unittest
 
 # test_files is a list of tuples containing:
@@ -307,7 +308,7 @@ class TestSelf(unittest.TestCase):
     """
 
     
-        alignments = list(FastaM10Iterator(StringIO(simple_example)))
+        alignments = list(FastaIO.FastaM10Iterator(StringIO(simple_example)))
         assert len(alignments) == 4, len(alignments)
         assert len(alignments[0]) == 2
         for a in alignments:
@@ -324,7 +325,7 @@ class TestSelf(unittest.TestCase):
                 print("")
                 print(filename)
                 print("=" * len(filename))
-                for i, a in enumerate(FastaM10Iterator(open(os.path.join(path, filename)))):
+                for i, a in enumerate(FastaIO.FastaM10Iterator(open(os.path.join(path, filename)))):
                     print("#%i, %s" % (i + 1, a))
                     for r in a:
                         if "-" in r.seq:
