@@ -325,6 +325,7 @@ class TestSelf(unittest.TestCase):
                 for i, a in enumerate(FastaM10Iterator(open(os.path.join(path, filename)))):
                     print("#%i, %s" % (i + 1, a))
                     for r in a:
+                        if "-" in r.seq:
                         self.assertEqual(r.seq.alphabet.gap_char, "-")
                         else:
                             assert not hasattr(r.seq.alphabet, "gap_char")
