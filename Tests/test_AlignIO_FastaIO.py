@@ -311,8 +311,8 @@ class TestSelf(unittest.TestCase):
         assert len(alignments[0]) == 2
         for a in alignments:
             self.assertEqual((len(a), a.get_alignment_length()))
-                for r in a:
-                    print("%s %s %i" % (r.seq, r.id, r.annotations["original_length"]))
+            for r in a:
+                print("%s %s %i" % (r.seq, r.id, r.annotations["original_length"]))
                 # print(a.annotations)
         print("Done")
             
