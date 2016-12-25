@@ -76,6 +76,7 @@ for (t_format, t_per, t_count, t_filename) in test_files:
     print("=" * 78)
 print("Finished tested reading files")
 
+
 class TestSelf(unittest.TestCase):
     def test_example(self):
         simple_example = \
@@ -83,12 +84,12 @@ class TestSelf(unittest.TestCase):
     FASTA searches a protein or DNA sequence data bank
      version 34.26 January 12, 2007
     Please cite:
-      W.R. Pearson & D.J. Lipman PNAS (1988) 85:2444-2448
+    W.R. Pearson & D.J. Lipman PNAS (1988) 85:2444-2448
         
     Query library NC_002127.faa vs NC_009649.faa library
     searching NC_009649.faa library
       1>>>gi|10955263|ref|NP_052604.1| plasmid mobilization [Escherichia coli O157:H7 s 107 aa - 107 aa
-     vs  NC_009649.faa library
+      vs  NC_009649.faa library
         
       45119 residues in   180 sequences
       Expectation_n fit: rho(ln(x))= 6.9146+/-0.0249; mu= -5.7948+/- 1.273
@@ -181,7 +182,7 @@ class TestSelf(unittest.TestCase):
     ENSEITPLPARTTDQDLIRAMMEGGTAKIYHCNDSDKCLKVVADATVTIT
     SNKALKSQISALLSSIQNKAVADEKLTDQE
       2>>>gi|10955264|ref|NP_052605.1| hypothetical protein pOSAK1_02 [Escherichia coli O157:H7 s 126 aa - 126 aa
-     vs  NC_009649.faa library
+      vs  NC_009649.faa library
           
       45119 residues in   180 sequences
       Expectation_n fit: rho(ln(x))= 7.1374+/-0.0246; mu= -7.6540+/- 1.313
@@ -239,7 +240,7 @@ class TestSelf(unittest.TestCase):
     DALLGEIQRLRKQVHQLQLERDILTKANELIKKDLGVSFLKLKNREKTLI
     VDALKKKYPVAELLSVLQLARSCYFYQNVCTISMRKYA
       3>>>gi|10955265|ref|NP_052606.1| hypothetical protein pOSAK1_03 [Escherichia coli O157:H7 s 346 aa - 346 aa
-     vs  NC_009649.faa library
+      vs  NC_009649.faa library
           
       45119 residues in   180 sequences
       Expectation_n fit: rho(ln(x))= 6.0276+/-0.0276; mu= 3.0670+/- 1.461
@@ -306,8 +307,6 @@ class TestSelf(unittest.TestCase):
         
     Function used was FASTA [version 34.26 January 12, 2007]
     """
-
-    
         alignments = list(FastaIO.FastaM10Iterator(StringIO(simple_example)))
         assert len(alignments) == 4, len(alignments)
         assert len(alignments[0]) == 2
@@ -317,7 +316,6 @@ class TestSelf(unittest.TestCase):
                 print("%s %s %i" % (r.seq, r.id, r.annotations["original_length"]))
                 # print(a.annotations)
         print("Done")
-            
         path = "../../Tests/Fasta/"
         files = sorted(f for f in os.listdir(path) if os.path.splitext(f)[-1] == ".m10")
         for filename in files:
