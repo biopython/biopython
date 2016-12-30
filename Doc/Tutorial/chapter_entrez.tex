@@ -802,10 +802,9 @@ Here, we specify \verb+rettype="medline", retmode="text"+ to obtain the Medline 
 
 For comparison, here we show an example using the XML format:
 \begin{verbatim}
->>> idlist = record["IdList"]
 >>> handle = Entrez.efetch(db="pubmed", id=idlist, rettype="medline", retmode="xml")
 >>> records = Entrez.read(handle)
->>> for record in records:
+>>> for record in records['PubmedArticle']:
 ...     print(record["MedlineCitation"]["Article"]["ArticleTitle"])
 Biopython: freely available Python tools for computational molecular biology and
  bioinformatics.
