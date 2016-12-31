@@ -3,10 +3,7 @@ from Bio.AlignIO import FastaIO
 import os
 import unittest
 
-
-class TestSelf(unittest.TestCase):
-    def test_example(self):
-        simple_example = \
+simple_example = \
 """# /opt/fasta/fasta34 -Q -H -E 1 -m 10 NC_002127.faa NC_009649.faa
 FASTA searches a protein or DNA sequence data bank
  version 34.26 January 12, 2007
@@ -223,27 +220,30 @@ QDFAFTRKMRREARQVEQSW
  Total Scan time:  0.020 Total Display time:  0.010
 Function used was FASTA [version 34.26 January 12, 2007]
 """
-    alignments = list(FastaIO.FastaM10Iterator(StringIO(simple_example)))
-    self.assertEqual(len(alignments), 4)
-    assert len(alignments[0]) == 2
-    for a in alignments:
-         print("Alignment %i sequences of length %i"
-               % (len(a), a.get_alignment_length()))
-         for r in a:
-             print("%s %s %i" % (r.seq, r.id, r.annotations["original_length"]))
-         # print(a.annotations)
-         print("Done")
-         path = "../../Tests/Fasta/"
-         files = sorted(f for f in os.listdir(path) if os.path.splitext(f)[-1] == ".m10")
-         for filename in files:
-             if os.path.splitext(filename)[-1] == ".m10":
-                 print("")
-                 print(filename)
-                 print("=" * len(filename))
-                 for i, a in enumerate(FastaIO.FastaM10Iterator(open(os.path.join(path, filename)))):
-                     print("#%i, %s" % (i + 1, a))
-                     for r in a:
-                         if "-" in r.seq:
-                             self.assertEqual(r.seq.alphabet.gap_char, "-")
-                         else:
-                             assert not hasattr(r.seq.alphabet, "gap_char")
+
+class TestSelf(unittest.TestCase):
+    def test_example(self):
+        alignments = list(FastaIO.FastaM10Iterator(StringIO(simple_example)))
+        self.assertEqual(len(alignments), 4)
+        assert len(alignments[0]) == 2
+        for a in alignments:
+             print("Alignment %i sequences of length %i"
+                   % (len(a), a.get_alignment_length()))
+             for r in a:
+                 print("%s %s %i" % (r.seq, r.id, r.annotations["original_length"]))
+             # print(a.annotations)
+             print("Done")
+             path = "../../Tests/Fasta/"
+             files = sorted(f for f in os.listdir(path) if os.path.splitext(f)[-1] == ".m10")
+             for filename in files:
+                 if os.path.splitext(filename)[-1] == ".m10":
+                     print("")
+                     print(filename)
+                     print("=" * len(filename))
+                     for i, a in enumerate(FastaIO.FastaM10Iterator(open(os.path.join(path, filename)))):
+                         print("#%i, %s" % (i + 1, a))
+                         for r in a:
+                             if "-" in r.seq:
+                                 self.assertEqual(r.seq.alphabet.gap_char, "-")
+                             else:
+                                 assert not hasattr(r.seq.alphabet, "gap_char")
