@@ -233,7 +233,7 @@ class TestSelf(unittest.TestCase):
                  print("%s %s %i" % (r.seq, r.id, r.annotations["original_length"]))
              # print(a.annotations)
              print("Done")
-             path = "../../Tests/Fasta/"
+             path = "Fasta/"
              files = sorted(f for f in os.listdir(path) if os.path.splitext(f)[-1] == ".m10")
              for filename in files:
                  if os.path.splitext(filename)[-1] == ".m10":
