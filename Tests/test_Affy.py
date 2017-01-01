@@ -3,6 +3,7 @@ import unittest
 from Bio.Affy import CelFile
 import struct
 import os
+import sys
 
 try:
     from numpy import array
@@ -11,6 +12,35 @@ except ImportError:
     from Bio import MissingPythonDependencyError
     raise MissingPythonDependencyError(
         "Install NumPy if you want to use Bio.Affy.CelFile")
+
+
+def testRecordV4(record):
+    assert(record.intensities.shape == (5, 5))
+    assert(record.intensities.shape == record.stdevs.shape)
+    assert(record.intensities.shape == record.npix.shape)
+    assert(record.ncols == 5)
+    assert(record.nrows == 5)
+    numpy.testing.assert_allclose(record.intensities,
+                                          [[0., 1., 2., 3., 4.],
+                                           [5., 6., 7., 8., 9.],
+                                           [10., 11., 12., 13., 14.],
+                                           [15., 16., 17., 18., 19.],
+                                           [20., 21., 22., 23., 24.]])
+    numpy.testing.assert_allclose(record.stdevs,
+                                          [[0., -1., -2., -3., -4.],
+                                           [-5., -6., -7., -8., -9.],
+                                           [-10., -11., -12., -13., -14.],
+                                           [-15., -16., -17., -18., -19.],
+                                           [-20., -21., -22., -23., -24.]])
+    numpy.testing.assert_allclose(record.npix,
+                                          [[9, 9, 9, 9, 9],
+                                           [9, 9, 9, 9, 9],
+                                           [9, 9, 9, 9, 9],
+                                           [9, 9, 9, 9, 9],
+                                           [9, 9, 9, 9, 9]])
+    assert(len(record.AlgorithmParameters) == 329)
+    assert(len(record.GridCornerUL) == 7)
+    assert(record.AlgorithmParameters[-3:] == '169')
 
 
 class AffyTest(unittest.TestCase):
@@ -24,12 +54,7 @@ class AffyTest(unittest.TestCase):
     def tearDown(self):
         os.remove(self.affy4Bad)
 
-    # tests if the new strict mode complains about passing a non-file
-    def testAffyStrict(self):
-        with self.assertRaises(IOError):
-            record = CelFile.read("hello", strict=True)
-
-    # tests if the new strict mode is backwards compatible
+    # tests if the code is backwards compatible
     def testAffyStrict(self):
         record = CelFile.read("hello")
         assert record.DatHeader is None
@@ -45,41 +70,53 @@ class AffyTest(unittest.TestCase):
             assert(record.ncols == 5)
             assert(record.nrows == 5)
 
+    def testAffy3Backwards(self):
+        # tests the old Affymetrix v3 parser
+        with open(self.affy3, "r") as f:
+            lines = f.readlines()
+        record = CelFile.read_v3(lines)
+
+        assert(len(record.DatHeader) > 0)
+        assert(record.intensities.shape == (5, 5))
+        assert(record.intensities.shape == record.stdevs.shape)
+        assert(record.intensities.shape == record.npix.shape)
+        assert(record.ncols == 5)
+        assert(record.nrows == 5)
+
     # tests the new Affymetrix v4 parser
     def testAffy4(self):
         with open(self.affy4, "rb") as f:
             record = CelFile.read(f)
-            assert(record.intensities.shape == (5, 5))
-            assert(record.intensities.shape == record.stdevs.shape)
-            assert(record.intensities.shape == record.npix.shape)
-            assert(record.ncols == 5)
-            assert(record.nrows == 5)
-            numpy.testing.assert_allclose(record.intensities,
-                                          [[0., 1., 2., 3., 4.],
-                                           [5., 6., 7., 8., 9.],
-                                           [10., 11., 12., 13., 14.],
-                                           [15., 16., 17., 18., 19.],
-                                           [20., 21., 22., 23., 24.]])
-            numpy.testing.assert_allclose(record.stdevs,
-                                          [[0., -1., -2., -3., -4.],
-                                           [-5., -6., -7., -8., -9.],
-                                           [-10., -11., -12., -13., -14.],
-                                           [-15., -16., -17., -18., -19.],
-                                           [-20., -21., -22., -23., -24.]])
-            numpy.testing.assert_allclose(record.npix,
-                                          [[9, 9, 9, 9, 9],
-                                           [9, 9, 9, 9, 9],
-                                           [9, 9, 9, 9, 9],
-                                           [9, 9, 9, 9, 9],
-                                           [9, 9, 9, 9, 9]])
-            assert(len(record.AlgorithmParameters) == 329)
-            assert(len(record.GridCornerUL) == 7)
-            assert(record.AlgorithmParameters[-3:] == '169')
+            testRecordV4(record)
 
     def testAffyBadHeader(self):
-        with self.assertRaises(ValueError):
+        with self.assertRaises(CelFile.ParserError):
             with open(self.affy4Bad, "rb") as f:
                 record = CelFile.read(f)
+
+    def testAffyWrongModeReadV4(self):
+        try:
+            with open(self.affy4, "r") as f:
+                record = CelFile.read_v4(f)
+        except CelFile.ParserError:
+            if int(sys.version[0]) >= 3:
+                return  # As expected in pyhthon 3
+            else:
+                raise AssertionError("Expected CelFile.ParserError in python3")
+        # the code just works in python 2
+        testRecordV4(record)
+
+    def testAffyWrongModeRead(self):
+        try:
+            with open(self.affy4, "r") as f:
+                record = CelFile.read(f)
+        except CelFile.ParserError:
+            if int(sys.version[0]) >= 3:
+                return  # As expected in pyhthon 3
+            else:
+                raise AssertionError("Expected CelFile.ParserError in python3")
+        # the code just works in python 2
+        testRecordV4(record)
 
     # Writes a small example Affymetrix V4 CEL File
     def writeExampleV4(self, f, bad=False):
