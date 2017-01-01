@@ -19,17 +19,18 @@ except ImportError:
     raise MissingPythonDependencyError(
         "Install NumPy if you want to use Bio.Affy.CelFile")
 
+
+class ParserError(ValueError):
+    def __init__(self, *args):
+        super(ParserError, self).__init__(*args)
+
+_modeError = ParserError("You're trying to open an Affymetrix v4"
+                         " CEL file. You have to use a read binary mode,"
+                         " like this `open(filename \"rb\")`.")
+
 # for debugging
 # import pprint
 # pp = pprint.PrettyPrinter(indent=4)
-
-
-try:
-    import numpy
-except ImportError:
-    from Bio import MissingPythonDependencyError
-    raise MissingPythonDependencyError(
-        "Install NumPy if you want to use Bio.Affy.CelFile")
 
 
 class Record(object):
@@ -100,8 +101,8 @@ def read(handle):
     True
     """
     # If we fail to read the magic number, then it will remain None, and thus
-    # we will invoke read_v3 (if mode is not strict), or raise IOError if mode is
-    # strict.
+    # we will invoke read_v3 (if mode is not strict), or raise IOError if mode
+    # is strict.
     magicNumber = None
     # We check if the handle is a file-like object. If it isn't, and the mode
     # is strict, we raise an error. If it isn't and the mode isn't strict, we
@@ -117,31 +118,28 @@ def read(handle):
         magicNumber = struct.unpack("<i", handle.read(4))[0]
     except (AttributeError, TypeError):
         pass
+    except UnicodeDecodeError:
+        raise _modeError
     finally:
         try:
             # reset the offset, to avoid breaking either v3 or v4.
             handle.seek(position)
         except AttributeError:
             pass
-
     if magicNumber != 64:
         return read_v3(handle)
 
     else:
-        # In v4 we're always strict, as we don't have to worry about backwards
-        # compatibility
-        if mode != "rb":
-            raise IOError("You're trying to open an Affymetrix v4 CEL file. "
-                          "You have to use a read binary mode, like this "
-                          "`open(filename \"rb\")`.")
         return read_v4(handle)
 
 
 # read Affymetrix files version 4.
 def read_v4(f):
-    """ Reads Affymetrix CEL file, version 4, and returns a corresponding Record object.
+    """ Reads Affymetrix CEL file, version 4, and returns a corresponding Record
+    object.
 
-    Most importantly record.intensities correspond to intensities from the CEL file.
+    Most importantly record.intensities correspond to intensities from the CEL
+    file.
 
     record.mask and record.outliers are not set.
 
@@ -164,8 +162,12 @@ def read_v4(f):
     headersMap = dict()
 
     # load pre-headers
-    for name in preHeaders:
-        preHeadersMap[name] = struct.unpack("<i", f.read(4))[0]
+    try:
+        for name in preHeaders:
+            preHeadersMap[name] = struct.unpack("<i", f.read(4))[0]
+    except UnicodeDecodeError as e:
+        raise _modeError
+
     char = f.read(preHeadersMap["headerLen"])
     header = char.decode("ascii", "ignore")
     for header in header.split("\n"):
@@ -181,8 +183,8 @@ def read_v4(f):
 
     record.version = preHeadersMap["version"]
     if record.version != 4:
-        raise ValueError("You are trying to parse CEL file version 4. This file"
-                         " violates the structure expected from CEL file"
+        raise ParserError("You are trying to parse CEL file version 4. This"
+                         " file violates the structure expected from CEL file"
                          " version 4")
     record.GridCornerUL = headersMap["GridCornerUL"]
     record.GridCornerUR = headersMap["GridCornerUR"]
@@ -213,7 +215,7 @@ def read_v4(f):
         actual = int(headersMap[field])
         message = "The header {field} is expected to be 0, not {value}".format(value=actual, field=field)
         if actual != expected:
-            raise ValueError(message)
+            raise ParserError(message)
 
     raiseBadHeader("Axis-invertX", 0)
 
@@ -235,9 +237,9 @@ def read_v4(f):
         if char == b"\x04":
             break
         if i == safetyValve:
-            raise ValueError("Parse Error. The parser expects a short, "
-                             "undocumented binary blob terminating with "
-                             "ASCII EOF, x04")
+            raise ParserError("Parse Error. The parser expects a short, "
+                              "undocumented binary blob terminating with "
+                              "ASCII EOF, x04")
 
     # After that there are precisely 15 bytes padded. Again, undocumented.
     padding = f.read(15)
