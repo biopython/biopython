@@ -11,9 +11,6 @@ from __future__ import print_function
 
 import os
 from Bio import AlignIO
-from Bio._py3k import StringIO
-from Bio.AlignIO import FastaIO
-import unittest
 
 # test_files is a list of tuples containing:
 # - string:  file format
