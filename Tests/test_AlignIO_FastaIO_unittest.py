@@ -226,10 +226,9 @@ class TestSelf(unittest.TestCase):
     def test_example(self):
         alignments = list(FastaIO.FastaM10Iterator(StringIO(simple_example)))
         self.assertEqual(len(alignments), 4)
-        assert len(alignments[0]) == 2
+        self.assertEqual(len(alignments[0]), 2)
         for a in alignments:
-            print("Alignment %i sequences of length %i"
-                  % (len(a), a.get_alignment_length()))
+            self.assertEqual((len(a), a.get_alignment_length()))
             for r in a:
                 print("%s %s %i" % (r.seq, r.id, r.annotations["original_length"]))
             # print(a.annotations)
@@ -248,3 +247,7 @@ class TestSelf(unittest.TestCase):
                                 self.assertEqual(r.seq.alphabet.gap_char, "-")
                             else:
                                 assert not hasattr(r.seq.alphabet, "gap_char")
+
+if __name__ == "__main__":
+    runner = unittest.TextTestRunner(verbosity=2)
+    unittest.main(testRunner=runner)
