@@ -275,7 +275,7 @@ def _insdc_location_string(location, rec_length):
                             for p in parts[::-1]))
         else:
             return "%s(%s)" % (location.operator,
-                   ",".join(_insdc_location_string(p, rec_length) for p in parts))
+                               ",".join(_insdc_location_string(p, rec_length) for p in parts))
     except AttributeError:
         # Simple FeatureLocation
         loc = _insdc_location_string_ignoring_strand_and_subfeatures(location, rec_length)
@@ -354,7 +354,7 @@ class _InsdcWriter(SequentialSequenceWriter):
         location = _insdc_location_string(feature.location, record_length)
         f_type = feature.type.replace(" ", "_")
         line = (self.QUALIFIER_INDENT_TMP % f_type)[:self.QUALIFIER_INDENT] \
-               + self._wrap_location(location) + "\n"
+            + self._wrap_location(location) + "\n"
         self.handle.write(line)
         # Now the qualifiers...
         # Note as of Biopython 1.69, this is an ordered-dict, don't sort it:
@@ -366,7 +366,8 @@ class _InsdcWriter(SequentialSequenceWriter):
                 # String, int, etc - or None for a /pseudo tpy entry
                 self._write_feature_qualifier(key, values)
 
-    def _get_annotation_str(self, record, key, default=".", just_first=False):
+    @staticmethod
+    def _get_annotation_str(record, key, default=".", just_first=False):
         """Get an annotation dictionary entry (as a string).
 
         Some entries are lists, in which case if just_first=True the first entry
@@ -383,7 +384,8 @@ class _InsdcWriter(SequentialSequenceWriter):
         else:
             return str(answer)
 
-    def _split_multi_line(self, text, max_len):
+    @staticmethod
+    def _split_multi_line(text, max_len):
         """Returns a list of strings.
 
         Any single words which are too long get returned as a whole line
@@ -476,7 +478,8 @@ class GenBankWriter(_InsdcWriter):
             else:
                 self._write_single_line("", text)
 
-    def _get_date(self, record):
+    @staticmethod
+    def _get_date(record):
         default = "01-JAN-1980"
         try:
             date = record.annotations["date"]
@@ -496,7 +499,8 @@ class GenBankWriter(_InsdcWriter):
             return default
         return date
 
-    def _get_data_division(self, record):
+    @staticmethod
+    def _get_data_division(record):
         try:
             division = record.annotations["data_file_division"]
         except KeyError:
@@ -777,8 +781,6 @@ class GenBankWriter(_InsdcWriter):
     def _write_sequence(self, record):
         # Loosely based on code from Howard Salis
         # TODO - Force lower case?
-        LETTERS_PER_LINE = 60
-        SEQUENCE_INDENT = 9
 
         if isinstance(record.seq, UnknownSeq):
             # We have already recorded the length, and there is no need
@@ -793,10 +795,10 @@ class GenBankWriter(_InsdcWriter):
         data = self._get_seq_string(record).lower()
         seq_len = len(data)
         self.handle.write("ORIGIN\n")
-        for line_number in range(0, seq_len, LETTERS_PER_LINE):
-            self.handle.write(str(line_number + 1).rjust(SEQUENCE_INDENT))
+        for line_number in range(0, seq_len, self.LETTERS_PER_LINE):
+            self.handle.write(str(line_number + 1).rjust(self.SEQUENCE_INDENT))
             for words in range(line_number,
-                               min(line_number + LETTERS_PER_LINE, seq_len), 10):
+                               min(line_number + self.LETTERS_PER_LINE, seq_len), 10):
                 self.handle.write(" %s" % data[words:words + 10])
             self.handle.write("\n")
 
@@ -839,7 +841,7 @@ class GenBankWriter(_InsdcWriter):
             self._write_single_line("VERSION", "%s  GI:%s"
                                     % (acc_with_version, gi))
         else:
-            self._write_single_line("VERSION", "%s" % (acc_with_version))
+            self._write_single_line("VERSION", "%s" % acc_with_version)
 
         # The NCBI initially expected two types of link,
         # e.g. "Project:28471" and "Trace Assembly Archive:123456"
@@ -935,6 +937,11 @@ class EmblWriter(_InsdcWriter):
     # Note second spacer line of just FH is expected:
     FEATURE_HEADER = "FH   Key             Location/Qualifiers\nFH\n"
 
+    LETTERS_PER_BLOCK = 10
+    BLOCKS_PER_LINE = 6
+    LETTERS_PER_LINE = LETTERS_PER_BLOCK * BLOCKS_PER_LINE
+    POSITION_PADDING = 10
+
     def _write_contig(self, record):
         max_len = self.MAX_WIDTH - self.HEADER_WIDTH
         lines = self._split_contig(record, max_len)
@@ -942,10 +949,6 @@ class EmblWriter(_InsdcWriter):
             self._write_single_line("CO", text)
 
     def _write_sequence(self, record):
-        LETTERS_PER_BLOCK = 10
-        BLOCKS_PER_LINE = 6
-        LETTERS_PER_LINE = LETTERS_PER_BLOCK * BLOCKS_PER_LINE
-        POSITION_PADDING = 10
         handle = self.handle  # save looking up this multiple times
 
         if isinstance(record.seq, UnknownSeq):
@@ -976,25 +979,25 @@ class EmblWriter(_InsdcWriter):
         else:
             handle.write("SQ   \n")
 
-        for line_number in range(0, seq_len // LETTERS_PER_LINE):
+        for line_number in range(0, seq_len // self.LETTERS_PER_LINE):
             handle.write("    ")  # Just four, not five
-            for block in range(BLOCKS_PER_LINE):
-                index = LETTERS_PER_LINE * line_number + \
-                    LETTERS_PER_BLOCK * block
-                handle.write((" %s" % data[index:index + LETTERS_PER_BLOCK]))
+            for block in range(self.BLOCKS_PER_LINE):
+                index = self.LETTERS_PER_LINE * line_number + \
+                    self.LETTERS_PER_BLOCK * block
+                handle.write((" %s" % data[index:index + self.LETTERS_PER_BLOCK]))
             handle.write(str((line_number + 1) *
-                             LETTERS_PER_LINE).rjust(POSITION_PADDING))
+                             self.LETTERS_PER_LINE).rjust(self.POSITION_PADDING))
             handle.write("\n")
-        if seq_len % LETTERS_PER_LINE:
+        if seq_len % self.LETTERS_PER_LINE:
             # Final (partial) line
-            line_number = (seq_len // LETTERS_PER_LINE)
+            line_number = (seq_len // self.LETTERS_PER_LINE)
             handle.write("    ")  # Just four, not five
-            for block in range(BLOCKS_PER_LINE):
-                index = LETTERS_PER_LINE * line_number + \
-                    LETTERS_PER_BLOCK * block
+            for block in range(self.BLOCKS_PER_LINE):
+                index = self.LETTERS_PER_LINE * line_number + \
+                    self.LETTERS_PER_BLOCK * block
                 handle.write(
-                    (" %s" % data[index:index + LETTERS_PER_BLOCK]).ljust(11))
-            handle.write(str(seq_len).rjust(POSITION_PADDING))
+                    (" %s" % data[index:index + self.LETTERS_PER_BLOCK]).ljust(11))
+            handle.write(str(seq_len).rjust(self.POSITION_PADDING))
             handle.write("\n")
 
     def _write_single_line(self, tag, text):
@@ -1078,7 +1081,8 @@ class EmblWriter(_InsdcWriter):
         self._write_single_line("AC", accession + ";")
         handle.write("XX\n")
 
-    def _get_data_division(self, record):
+    @staticmethod
+    def _get_data_division(record):
         try:
             division = record.annotations["data_file_division"]
         except KeyError:
