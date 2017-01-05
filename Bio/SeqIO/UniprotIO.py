@@ -113,7 +113,7 @@ class Parser(object):
             """Parse protein names (PRIVATE)."""
             descr_set = False
             for protein_element in element:
-                if protein_element.tag in [NS + 'recommendedName', NS + 'alternativeName']:  # recommendedName tag are parsed before
+                if protein_element.tag in [NS + 'recommendedName', NS + 'submittedName', NS + 'alternativeName']:  # recommendedName tag are parsed before
                     # use protein fields for name and description
                     for rec_name in protein_element:
                         ann_key = '%s_%s' % (protein_element.tag.replace(NS, ''),
