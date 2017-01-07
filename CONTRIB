@@ -6,7 +6,7 @@
 # (sorry!), please mention it on the development mailing list.
 #
 # People are listed alphabetically, as verfied with tUnix sort:
-# $ grep -v "^#" CONTRIB | sort -u -c
+# $ grep -v "^#" CONTRIB | LC_ALL=C sort -u -c
 #
 Aaron Gallagher <habnabit at gmail>
 Aaron Rosenfeld <https://github.com/arosenfeld>
