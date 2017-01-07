@@ -477,16 +477,16 @@ class InsdcScanner(object):
         """
         # This is a generator function
         while True:
-            next_record = self.parse(handle, do_features)
-            if next_record is None:
+            record = self.parse(handle, do_features)
+            if record is None:
                 break
-            if next_record.id is None:
+            if record.id is None:
                 raise ValueError("Failed to parse the record's ID. Invalid ID line?")
-            if next_record.name == "<unknown name>":
+            if record.name == "<unknown name>":
                 raise ValueError("Failed to parse the record's name. Invalid ID line?")
-            if next_record.description == "<unknown description>":
+            if record.description == "<unknown description>":
                 raise ValueError("Failed to parse the record's description")
-            yield next_record
+            yield record
 
     def parse_cds_features(self, handle,
                            alphabet=generic_protein,
@@ -523,8 +523,8 @@ class InsdcScanner(object):
                     # SeqRecord objects cannot be created with annotations, they
                     # must be added afterwards.  So create an empty record and
                     # then populate it:
-                    new_record = SeqRecord(seq=None)
-                    annotations = new_record.annotations
+                    record = SeqRecord(seq=None)
+                    annotations = record.annotations
 
                     # Should we add a location object to the annotations?
                     # I *think* that only makes sense for SeqFeatures with their
@@ -538,11 +538,11 @@ class InsdcScanner(object):
                             qualifier_data = qualifier_data[1:-1]
                         # Append the data to the annotation qualifier...
                         if qualifier_name == "translation":
-                            assert new_record.seq is None, "Multiple translations!"
-                            new_record.seq = Seq(qualifier_data.replace("\n", ""), alphabet)
+                            assert record.seq is None, "Multiple translations!"
+                            record.seq = Seq(qualifier_data.replace("\n", ""), alphabet)
                         elif qualifier_name == "db_xref":
                             # its a list, possibly empty.  Its safe to extend
-                            new_record.dbxrefs.append(qualifier_data)
+                            record.dbxrefs.append(qualifier_data)
                         else:
                             if qualifier_data is not None:
                                 qualifier_data = qualifier_data.replace("\n", " ").replace("  ", " ")
@@ -555,19 +555,19 @@ class InsdcScanner(object):
                     # Fill in the ID, Name, Description
                     # =================================
                     try:
-                        new_record.id = annotations[tags2id[0]]
+                        record.id = annotations[tags2id[0]]
                     except KeyError:
                         pass
                     try:
-                        new_record.name = annotations[tags2id[1]]
+                        record.name = annotations[tags2id[1]]
                     except KeyError:
                         pass
                     try:
-                        new_record.description = annotations[tags2id[2]]
+                        record.description = annotations[tags2id[2]]
                     except KeyError:
                         pass
 
-                    yield new_record
+                    yield record
 
 
 class EmblScanner(InsdcScanner):
