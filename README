@@ -162,8 +162,12 @@ Testing
 Biopython includes a suite of regression tests to check if everything is
 running correctly. To run the tests, go to the biopython source code
 directory and type::
-
-    python setup.py test
+    
+    # build C extensions
+    python setup.py build
+    cd Tests
+    # skip online tests
+    python run_tests.py --offline
 
 Do not panic if you see messages warning of skipped tests::
 
