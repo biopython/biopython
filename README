@@ -1,3 +1,19 @@
+Warning
+=======
+
+This is my fork of Biopython, started from the official master branch on the
+17/02/2015. I created a alignio_maf branch where I added code from
+https://github.com/polyatail/biopython/tree/alignio-maf
+
+I tried to make the start and end coordinates of alignment slices more
+consistent throughout the code. Some bugs were discovered in the process. Now
+start and end coordinates are zero-based and inclusive, i.e. to ask for the
+alignment portion corresponding to the first 100 nucleotides of the reference
+sequence, you would use MafIndex.get_spliced([0], [99])
+
+Blaise Li (blaise dot li arrobase igh dot cnrs dot fr)
+
+
 Biopython README file
 =====================
 
