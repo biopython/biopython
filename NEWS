@@ -16,6 +16,8 @@ This release of Biopython supports Python 2.7, 3.3, 3.4 and 3.5 (we have now
 dropped support for Python 2.6). It has also been tested on PyPy 5.0, PyPy3
 version 2.4, and Jython 2.7.
 
+The Uniprot parser is now able to parse "submittedName" elements in XML files.
+
 The NEXUS parser handling of internal node comments has been improved, which
 should help if working with tools like the BEAST TreeAnnotator. Slashes are
 now also allowed in identifiers.
@@ -66,6 +68,7 @@ Lenna Peterson
 Markus Piotrowski
 Michiel de Hoon
 Milind Luthra (first contribution)
+Oscar G. Garcia (first contribution)
 Peter Cock
 Richard Neher (first contribution)
 Sourav Singh (first contribution)
