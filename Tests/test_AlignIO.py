@@ -206,11 +206,11 @@ def simple_alignment_comparison(alignments, alignments2, format):
             if format == "stockholm":
                 #We map dot to dash in the stockholm parser, since
                 #both are gaps (but technically different kinds in HMM)
-                assert r1.seq.tostring().replace(".","-") == r2.seq.tostring(), \
+                assert str(r1.seq).replace(".","-") == str(r2.seq), \
                     "Seq does not match %s vs %s (%s vs %s)" \
                     % (r1.seq, r2.seq, r1.id, r2.id)
             else:
-                assert r1.seq.tostring() == r2.seq.tostring(), \
+                assert str(r1.seq) == str(r2.seq), \
                     "Seq does not match %s vs %s (%s vs %s)" \
                     % (r1.seq, r2.seq, r1.id, r2.id)
     return True
