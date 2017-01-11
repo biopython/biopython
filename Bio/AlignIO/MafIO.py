@@ -68,12 +68,15 @@ from Bio.Align.Generic import Alignment
 from Bio.Align import MultipleSeqAlignment
 from .Interfaces import SequentialAlignmentWriter
 
+__docformat__ = "restructuredtext en"
+
 # To avoid method lookup
 STARTSWITH = str.startswith
 STRIP = str.strip
 SPLIT = str.split
 
 MAFINDEX_VERSION = 1
+
 
 class MafWriter(SequentialAlignmentWriter):
     """Accepts a MultipleSeqAlignment object, writes a MAF file"""
@@ -97,7 +100,7 @@ class MafWriter(SequentialAlignmentWriter):
             strand = "+"
 
         fields = ["s",
-                  #In the MAF file format, spaces are not allowed in the id
+                  # In the MAF file format, spaces are not allowed in the id
                   "%-40s" % record.id.replace(" ", "_"),
                   "%15s" % record.annotations.get("start", 0),
                   "%5s" % record.annotations.get("size", len(str(record.seq).replace("-", ""))),
@@ -143,6 +146,7 @@ class MafWriter(SequentialAlignmentWriter):
         self.handle.write("\n")
 
         return recs_out
+
 
 def maf_iterator(handle, seq_count=None, alphabet=single_letter_alphabet):
     """
@@ -250,6 +254,7 @@ def maf_iterator(handle, seq_count=None, alphabet=single_letter_alphabet):
             pass
         elif not line:
             break
+
 
 class MafIndex(object):
     def __init__(self, sqlite_file, maf_file, target_seqname):
@@ -399,15 +404,13 @@ class MafIndex(object):
                         if line_split[1] == self._target_seqname:
                             start = int(line_split[2])
                             size = int(line_split[3])
-                            #end = int(line_split[2]) + int(line_split[3])
-                            #if end - start != len(line_split[6].replace("-", "")):
+                            # end = int(line_split[2]) + int(line_split[3])
+                            # if end - start != len(line_split[6].replace("-", "")):
                             if size != len(line_split[6].replace("-", "")):
                                 raise ValueError(
                                     "Invalid length for target coordinates "
                                     "(expected %s, found %s)" % (
                                         size, len(line_split[6].replace("-", ""))))
-                                        #                        (
-                                        #end - start, len(line_split[6].replace("-", ""))))
 
                             # "inclusive" end position is start + length - 1
                             end = start + size - 1
@@ -442,7 +445,7 @@ class MafIndex(object):
         Taken from http://genomewiki.ucsc.edu/index.php/Bin_indexing_system
         """
 
-        bin_offsets = [512+64+8+1, 64+8+1, 8+1, 1, 0]
+        bin_offsets = [512 + 64 + 8 + 1, 64 + 8 + 1, 8 + 1, 1, 0]
 
         _bin_first_shift = 17
         _bin_next_shift = 3
@@ -536,8 +539,8 @@ class MafIndex(object):
 
                         if not (start == rec_start and end == rec_end):
                             raise ValueError(
-                                "Expected %s-%s @ offset %s, found %s-%s" % \
-                                (rec_start, rec_end, offset, start, end))
+                                "Expected %s-%s @ offset %s, found %s-%s" % (
+                                    rec_start, rec_end, offset, start, end))
 
                 yield fetched
 
@@ -558,7 +561,7 @@ class MafIndex(object):
         fetched = [multiseq for multiseq in self.search(starts, ends)]
 
         # keep track of the expected letter count
-        #expected_letters = sum([y - x for x, y in zip(starts,ends)])
+        # expected_letters = sum([y - x for x, y in zip(starts,ends)])
         # Coordinates are interpreted by MafIndex.search as zero-based
         # (by MAF format specification https://cgwb.nci.nih.gov/FAQ/FAQformat.html#format5),
         # and inclusive
@@ -606,26 +609,26 @@ class MafIndex(object):
                                 "expected '%s'" % (
                                     seqrec.annotations["strand"], ref_first_strand))
                     except KeyError:
-                        raise ValueError("No strand information for target seqname (%s)" % \
-                        (self._target_seqname,))
+                        raise ValueError("No strand information for target seqname (%s)" % (
+                            self._target_seqname,))
 
                     # length including gaps (i.e. alignment length)
                     rec_length = len(seqrec)
                     rec_start = seqrec.annotations["start"]
-                    #rec_end = seqrec.annotations["start"] + seqrec.annotations["size"]
+                    # rec_end = seqrec.annotations["start"] + seqrec.annotations["size"]
                     ungapped_length = seqrec.annotations["size"]
                     # Inclusive end in zero-based coordinates of the reference
                     rec_end = rec_start + ungapped_length - 1
 
-                    #total_rec_length += rec_end - rec_start
+                    # total_rec_length += rec_end - rec_start
                     # This is length in terms of actual letters in the reference
                     total_rec_length += ungapped_length
                     # This would be total alignment length (with gaps)
-                    #total_rec_length += rec_length
+                    # total_rec_length += rec_length
 
                     # blank out these positions for every seqname
                     for seqrec in multiseq:
-                        #for pos in range(rec_start, rec_end):
+                        # for pos in range(rec_start, rec_end):
                         # pos needs to reach rec_end,
                         # because rec_end is inclusive
                         for pos in range(rec_start, rec_end + 1):
@@ -659,13 +662,13 @@ class MafIndex(object):
 
         # make sure the number of bp entries equals the sum of the record lengths
         if len(split_by_position[self._target_seqname]) != total_rec_length:
-            raise ValueError("Target seqname (%s) has %s records, expected %s" % \
-            (self._target_seqname, len(split_by_position[self._target_seqname]), total_rec_length))
+            raise ValueError("Target seqname (%s) has %s records, expected %s" % (
+                self._target_seqname, len(split_by_position[self._target_seqname]), total_rec_length))
 
         # translates a position in the target_seqname sequence to its gapped length
         realpos_to_len = dict(
-            #[(x, len(y)) for x, y in split_by_position[
-            #    self._target_seqname].items() if len(y) > 1])
+            # [(x, len(y)) for x, y in split_by_position[
+            #     self._target_seqname].items() if len(y) > 1])
             [(
                 pos,
                 len(gapped_fragment)) for pos, gapped_fragment in split_by_position[
@@ -685,7 +688,7 @@ class MafIndex(object):
             append = seq_splice.append
 
             for exonstart, exonend in zip(starts, ends):
-                #for real_pos in range(exonstart, exonend):
+                # for real_pos in range(exonstart, exonend):
                 # exonend is inclusive
                 for real_pos in range(exonstart, exonend + 1):
                     # if this seqname has this position, add it
@@ -709,17 +712,17 @@ class MafIndex(object):
 
         # make sure we're returning the right number of letters
         if len(subseq[self._target_seqname].replace("-", "")) != expected_letters:
-            raise ValueError("Returning %s letters for target seqname (%s), expected %s" % \
-            (len(subseq[self._target_seqname].replace("-", "")),
-             self._target_seqname, expected_letters))
+            raise ValueError("Returning %s letters for target seqname (%s), expected %s" % (
+                len(subseq[self._target_seqname].replace("-", "")),
+                self._target_seqname, expected_letters))
 
         # check to make sure all sequences are the same length as the target seqname
         ref_subseq_len = len(subseq[self._target_seqname])
 
         for seqid, seq in subseq.items():
             if len(seq) != ref_subseq_len:
-                raise ValueError("Returning length %s for %s, expected %s" % \
-                (len(seq), seqid, ref_subseq_len))
+                raise ValueError("Returning length %s for %s, expected %s" % (
+                    len(seq), seqid, ref_subseq_len))
 
         # finally, build a MultipleSeqAlignment object for our final sequences
         result_multiseq = []

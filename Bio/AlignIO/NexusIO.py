@@ -153,12 +153,12 @@ if __name__ == "__main__":
     format interleave datatype=protein   gap=- symbols="FSTNKEYVQMCLAWPHDRIG";
 
     matrix
-    CYS1_DICDI          -----MKVIL LFVLAVFTVF VSS------- --------RG IPPEEQ---- 
-    ALEU_HORVU          MAHARVLLLA LAVLATAAVA VASSSSFADS NPIRPVTDRA ASTLESAVLG 
+    CYS1_DICDI          -----MKVIL LFVLAVFTVF VSS------- --------RG IPPEEQ----
+    ALEU_HORVU          MAHARVLLLA LAVLATAAVA VASSSSFADS NPIRPVTDRA ASTLESAVLG
     CATH_HUMAN          ------MWAT LPLLCAGAWL LGV------- -PVCGAAELS VNSLEK----
     CYS1_DICDI          -----MKVIL LFVLAVFTVF VSS------- --------RG IPPEEQ---X
     ;
-    end; 
+    end;
     """)
     for a in NexusIterator(handle):
         print(a)
@@ -183,12 +183,12 @@ if __name__ == "__main__":
     format interleave datatype=protein   gap=- symbols="FSTNKEYVQMCLAWPHDRIG";
 
     matrix
-    CYS1_DICDI          -----MKVIL LFVLAVFTVF VSS------- --------RG IPPEEQ---- 
-    ALEU_HORVU          MAHARVLLLA LAVLATAAVA VASSSSFADS NPIRPVTDRA ASTLESAVLG 
+    CYS1_DICDI          -----MKVIL LFVLAVFTVF VSS------- --------RG IPPEEQ----
+    ALEU_HORVU          MAHARVLLLA LAVLATAAVA VASSSSFADS NPIRPVTDRA ASTLESAVLG
     CATH_HUMAN          ------MWAT LPLLCAGAWL LGV------- -PVCGAAELS VNSLEK----
     CYS1_DICDI          -----MKVIL LFVLAVFTVF VSS------- --------RG IPPEEQ---X
     ;
-    end; 
+    end;
     """)
     for a in NexusIterator(handle):
         print(a)

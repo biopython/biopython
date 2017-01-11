@@ -173,7 +173,7 @@ _FormatToIterator = {  # "fasta" is done via Bio.SeqIO
 
 _FormatToWriter = {  # "fasta" is done via Bio.SeqIO
                      # "emboss" : EmbossIO.EmbossWriter, (unfinished)
-                   "maf" : MafIO.MafWriter,
+                   "maf": MafIO.MafWriter,
                    "nexus": NexusIO.NexusWriter,
                    "phylip": PhylipIO.PhylipWriter,
                    "phylip-sequential": PhylipIO.SequentialPhylipWriter,
