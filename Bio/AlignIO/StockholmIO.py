@@ -204,9 +204,10 @@ class StockholmWriter(SequentialAlignmentWriter):
             suffix = "/%s-%s" % (str(record.annotations["start"]),
                                  str(record.annotations["end"]))
             if seq_name[-len(suffix):] != suffix:
-                seq_name = "%s/%s-%s" % (seq_name,
-                                        str(record.annotations["start"]),
-                                        str(record.annotations["end"]))
+                seq_name = "%s/%s-%s" % (
+                    seq_name,
+                    str(record.annotations["start"]),
+                    str(record.annotations["end"]))
 
         if seq_name in self._ids_written:
             raise ValueError("Duplicate record identifier: %s" % seq_name)
@@ -226,21 +227,21 @@ class StockholmWriter(SequentialAlignmentWriter):
 
         # AC = Accession
         if "accession" in record.annotations:
-            self.handle.write("#=GS %s AC %s\n"
-                % (seq_name, self.clean(record.annotations["accession"])))
+            self.handle.write("#=GS %s AC %s\n" % (
+                seq_name, self.clean(record.annotations["accession"])))
         elif record.id:
-            self.handle.write("#=GS %s AC %s\n"
-                % (seq_name, self.clean(record.id)))
+            self.handle.write("#=GS %s AC %s\n" % (
+                seq_name, self.clean(record.id)))
 
         # DE = description
         if record.description:
-            self.handle.write("#=GS %s DE %s\n"
-                % (seq_name, self.clean(record.description)))
+            self.handle.write("#=GS %s DE %s\n" % (
+                seq_name, self.clean(record.description)))
 
         # DE = database links
         for xref in record.dbxrefs:
-            self.handle.write("#=GS %s DR %s\n"
-                % (seq_name, self.clean(xref)))
+            self.handle.write("#=GS %s DR %s\n" % (
+                seq_name, self.clean(xref)))
 
         # GS = other per sequence annotation
         for key, value in record.annotations.items():
@@ -331,7 +332,7 @@ class StockholmIterator(AlignmentIterator):
         if not line:
             # Empty file - just give up.
             raise StopIteration
-        if not line.strip() == '# STOCKHOLM 1.0':
+        if line.strip() != '# STOCKHOLM 1.0':
             raise ValueError("Did not find STOCKHOLM header")
 
         # Note: If this file follows the PFAM conventions, there should be
@@ -367,13 +368,14 @@ class StockholmIterator(AlignmentIterator):
                 parts = [x.strip() for x in line.split(" ", 1)]
                 if len(parts) != 2:
                     # This might be someone attempting to store a zero length sequence?
-                    raise ValueError("Could not split line into identifier "
-                                     "and sequence:\n" + line)
-                id, seq = parts
-                if id not in ids:
-                    ids[id] = True
-                seqs.setdefault(id, '')
-                seqs[id] += seq.replace(".", "-")
+                    raise ValueError(
+                        "Could not split line into identifier "
+                        "and sequence:\n" + line)
+                seq_id, seq = parts
+                if seq_id not in ids:
+                    ids[seq_id] = True
+                seqs.setdefault(seq_id, '')
+                seqs[seq_id] += seq.replace(".", "-")
             elif len(line) >= 5:
                 # Comment line or meta-data
                 if line[:5] == "#=GF ":
@@ -393,26 +395,26 @@ class StockholmIterator(AlignmentIterator):
                 elif line[:5] == '#=GS ':
                     # Generic per-Sequence annotation, free text
                     # Format: "#=GS <seqname> <feature> <free text>"
-                    id, feature, text = line[5:].strip().split(None, 2)
-                    # if id not in ids:
-                    #    ids.append(id)
-                    if id not in gs:
-                        gs[id] = {}
-                    if feature not in gs[id]:
-                        gs[id][feature] = [text]
+                    seq_id, feature, text = line[5:].strip().split(None, 2)
+                    # if seq_id not in ids:
+                    #    ids.append(seq_id)
+                    if seq_id not in gs:
+                        gs[seq_id] = {}
+                    if feature not in gs[seq_id]:
+                        gs[seq_id][feature] = [text]
                     else:
-                        gs[id][feature].append(text)
+                        gs[seq_id][feature].append(text)
                 elif line[:5] == "#=GR ":
                     # Generic per-Sequence AND per-Column markup
                     # Format: "#=GR <seqname> <feature> <exactly 1 char per column>"
-                    id, feature, text = line[5:].strip().split(None, 2)
-                    # if id not in ids:
-                    #    ids.append(id)
-                    if id not in gr:
-                        gr[id] = {}
-                    if feature not in gr[id]:
-                        gr[id][feature] = ""
-                    gr[id][feature] += text.strip()  # append to any previous entry
+                    seq_id, feature, text = line[5:].strip().split(None, 2)
+                    # if seq_id not in ids:
+                    #    ids.append(seq_id)
+                    if seq_id not in gr:
+                        gr[seq_id] = {}
+                    if feature not in gr[seq_id]:
+                        gr[seq_id][feature] = ""
+                    gr[seq_id][feature] += text.strip()  # append to any previous entry
                     # TODO - Should we check the length matches the alignment length?
                     #       For iterlaced sequences the GR data can be split over
                     #       multiple lines
@@ -436,13 +438,13 @@ class StockholmIterator(AlignmentIterator):
 
             alignment_length = len(list(seqs.values())[0])
             records = []  # Alignment obj will put them all in a list anyway
-            for id in ids:
-                seq = seqs[id]
+            for seq_id in ids:
+                seq = seqs[seq_id]
                 if alignment_length != len(seq):
                     raise ValueError("Sequences have different lengths, or repeated identifier")
-                name, start, end = self._identifier_split(id)
+                name, start, end = self._identifier_split(seq_id)
                 record = SeqRecord(Seq(seq, self.alphabet),
-                                   id=id, name=name, description=id,
+                                   id=seq_id, name=name, description=seq_id,
                                    annotations={"accession": name})
                 # Accession will be overridden by _populate_meta_data if an explicit
                 # accession is provided:
@@ -453,7 +455,7 @@ class StockholmIterator(AlignmentIterator):
                 if end is not None:
                     record.annotations["end"] = end
 
-                self._populate_meta_data(id, record)
+                self._populate_meta_data(seq_id, record)
                 records.append(record)
             alignment = MultipleSeqAlignment(records, self.alphabet)
 
