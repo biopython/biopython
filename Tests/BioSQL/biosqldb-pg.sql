@@ -768,6 +768,12 @@ ALTER TABLE location_qualifier_value ADD CONSTRAINT FKterm_locqual
 -- code that you use and hence add unnecessary overhead.
 --
 
+
+/* Commenting out these rules intended for BioPerl only, in order
+to silence the Biopython test warning from open_database function.
+See: https://redmine.open-bio.org/issues/2839
+aka https://github.com/biosql/biosql/issues/4
+
 CREATE RULE rule_bioentry_i1
        AS ON INSERT TO bioentry
        WHERE (
@@ -1126,6 +1132,9 @@ CREATE RULE rule_term_synonym_i
 	     IS NOT NULL
        DO INSTEAD NOTHING
 ;
+
+-- End of commented out rules
+*/
 
 --
 -- Functions that may be used as an API by applications, e.g. load scripts etc.

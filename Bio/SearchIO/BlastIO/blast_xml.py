@@ -14,7 +14,6 @@ from xml.sax.saxutils import XMLGenerator, escape
 
 from Bio import BiopythonParserWarning
 
-
 # For speed try to use cElementTree rather than ElementTree
 try:
     if (3, 0) <= sys.version_info[:2] <= (3, 1):
@@ -27,17 +26,14 @@ except ImportError:
     from xml.etree import ElementTree as ElementTree
 
 
-from Bio._py3k import _as_bytes, _bytes_to_string, unicode
-_empty_bytes_string = _as_bytes("")
-
 from Bio.Alphabet import generic_dna, generic_protein
 from Bio.SearchIO._index import SearchIndexer
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 
+from Bio._py3k import _as_bytes, _bytes_to_string, unicode
+_empty_bytes_string = _as_bytes("")
 
 __all__ = ['BlastXmlParser', 'BlastXmlIndexer', 'BlastXmlWriter']
-
-__docformat__ = "restructuredtext en"
 
 
 # element - optional qresult attribute name mapping
@@ -199,8 +195,8 @@ def _extract_ids_and_descs(concat_str):
 
     # create a list of lists, each list containing an ID and description
     # or just an ID, if description is not present
-    id_desc_pairs = [re.split(_RE_ID_DESC_PATTERN, x, 1) \
-            for x in re.split(_RE_ID_DESC_PAIRS_PATTERN, concat_str)]
+    id_desc_pairs = [re.split(_RE_ID_DESC_PATTERN, x, 1)
+                     for x in re.split(_RE_ID_DESC_PAIRS_PATTERN, concat_str)]
     # make sure empty descriptions are added as empty strings
     # also, we return lists for compatibility reasons between Py2 and Py3
     add_descs = lambda x: x if len(x) == 2 else x + [""]
@@ -409,7 +405,6 @@ class BlastXmlParser(object):
             else:
                 blast_hit_id = ''
 
-
             # combine primary ID and defline first before splitting
             full_id_desc = hit_id + ' ' + hit_desc
             id_descs = _extract_ids_and_descs(full_id_desc)
@@ -612,6 +607,7 @@ class BlastXmlIndexer(SearchIndexer):
         return next(iter(generator))
 
     def get_raw(self, offset):
+        """Return the raw record from the file as a bytes string."""
         qend_mark = self.qend_mark
         handle = self._handle
         handle.seek(offset)
@@ -654,7 +650,7 @@ class _BlastXmlGenerator(XMLGenerator):
                 '<!DOCTYPE BlastOutput PUBLIC "-//NCBI//NCBI BlastOutput/EN" '
                 '"http://www.ncbi.nlm.nih.gov/dtd/NCBI_BlastOutput.dtd">\n')
 
-    def startElement(self, name, attrs={}, children=False):
+    def startElement(self, name, attrs=None, children=False):
         """Starts an XML element.
 
         :param name: element name
@@ -665,6 +661,8 @@ class _BlastXmlGenerator(XMLGenerator):
         :type children: bool
 
         """
+        if attrs is None:
+            attrs = {}
         self.ignorableWhitespace(self._indent * self._level)
         XMLGenerator.startElement(self, name, attrs)
 
@@ -673,7 +671,7 @@ class _BlastXmlGenerator(XMLGenerator):
         XMLGenerator.endElement(self, name)
         self.write(u'\n')
 
-    def startParent(self, name, attrs={}):
+    def startParent(self, name, attrs=None):
         """Starts an XML element which has children.
 
         :param name: element name
@@ -682,6 +680,8 @@ class _BlastXmlGenerator(XMLGenerator):
         :type attrs: dictionary {string: object}
 
         """
+        if attrs is None:
+            attrs = {}
         self.startElement(name, attrs, children=True)
         self._level += self._increment
         self.write(u'\n')
@@ -747,7 +747,7 @@ class BlastXmlWriter(object):
         return self.qresult_counter, self.hit_counter, self.hsp_counter, \
             self.frag_counter
 
-    def _write_elem_block(self, block_name, map_name, obj, opt_dict={}):
+    def _write_elem_block(self, block_name, map_name, obj, opt_dict=None):
         """Writes sibling XML elements.
 
         :param block_name: common element name prefix
@@ -760,6 +760,8 @@ class BlastXmlWriter(object):
         :type opt_dict: dictionary {string: string}
 
         """
+        if opt_dict is None:
+            opt_dict = {}
         for elem, attr in _WRITE_MAPS[map_name]:
             elem = block_name + elem
             try:

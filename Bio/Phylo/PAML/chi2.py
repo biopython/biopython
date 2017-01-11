@@ -9,8 +9,6 @@
 
 from math import log, exp
 
-__docformat__ = "restructuredtext en"
-
 
 def cdf_chi2(df, stat):
     if df < 1:
@@ -45,9 +43,9 @@ def _ln_gamma_function(alpha):
         x = z
         f = -log(f)
     z = 1 / (x * x)
-    return f + (x - 0.5) * log(x) - x + .918938533204673             \
-          + (((-.000595238095238 * z + .000793650793651) * z - .002777777777778) * z
-               + .083333333333333) / x
+    return f + (x - 0.5) * log(x) - x + .918938533204673 + \
+           (((-.000595238095238 * z + .000793650793651) * z - .002777777777778) * z +
+            .083333333333333) / x
 
 
 def _incomplete_gamma(x, alpha):
@@ -64,7 +62,7 @@ def _incomplete_gamma(x, alpha):
         RATNEST FORTRAN by
         Bhattacharjee GP (1970) The incomplete gamma integral.  Applied Statistics,
         19: 285-287 (AS32)
-        
+
     """
     p = alpha
     g = _ln_gamma_function(alpha)

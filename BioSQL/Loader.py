@@ -1,5 +1,5 @@
 # Copyright 2002 by Andrew Dalke.  All rights reserved.
-# Revisions 2007-2009 copyright by Peter Cock.  All rights reserved.
+# Revisions 2007-2016 copyright by Peter Cock.  All rights reserved.
 # Revisions 2008 copyright by Cymon J. Cox.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -30,8 +30,6 @@ from Bio._py3k import _is_int_or_long
 from Bio._py3k import range
 from Bio._py3k import basestring
 
-__docformat__ = "restructuredtext en"
-
 
 class DatabaseLoader(object):
     """Object used to load SeqRecord objects into a BioSQL database."""
@@ -43,12 +41,16 @@ class DatabaseLoader(object):
         BioSeqDatabase DBServer object, for example::
 
             from BioSQL import BioSeqDatabase
-            server = BioSeqDatabase.open_database(driver="MySQLdb", user="gbrowse",
-                             passwd = "biosql", host = "localhost", db="test_biosql")
+            server = BioSeqDatabase.open_database(driver="MySQLdb",
+                                                  user="gbrowse",
+                                                  passwd="biosql",
+                                                  host="localhost",
+                                                  db="test_biosql")
             try:
                 db = server["test"]
             except KeyError:
-                db = server.new_database("test", description="For testing GBrowse")
+                db = server.new_database("test",
+                description="For testing GBrowse")
         """
         self.adaptor = adaptor
         self.dbid = dbid
@@ -329,10 +331,52 @@ class DatabaseLoader(object):
         assert answer == answer.lower()
         return answer
 
+    def _update_left_right_taxon_values(self, left_value):
+        """update the left and right values in the table
+        """
+        if not left_value:
+            return
+        # Due to the UNIQUE constraint on the left and right values in the taxon
+        # table we cannot simply update them through an SQL statement as we risk
+        # colliding values. Instead we must select all of the rows that we want to
+        # update, modify the values in python and then update the rows
+        # self.adaptor.execute("UPDATE taxon SET right_value = right_value + 2 "
+        #                      "WHERE right_value >= %s", (left_value,))
+        # self.adaptor.execute("UPDATE taxon SET left_value = left_value + 2 "
+        #                      "WHERE left_value > %s", (left_value,))
+
+        rows = self.adaptor.execute_and_fetchall(
+            "SELECT left_value, right_value, taxon_id FROM taxon "
+            "WHERE right_value >= %s or left_value > %s",
+            (left_value, left_value))
+
+        right_rows = []
+        left_rows = []
+        for row in rows:
+            new_right = row[1]
+            new_left = row[0]
+            if new_right >= left_value:
+                new_right += 2
+
+            if new_left > left_value:
+                new_left += 2
+            right_rows.append((new_right, row[2]))
+            left_rows.append((new_left, row[2]))
+
+        # sort the rows based on the value from largest to smallest
+        # should ensure no overlaps
+        right_rows = sorted(right_rows, key=lambda x: x[0], reverse=True)
+        left_rows = sorted(left_rows, key=lambda x: x[0], reverse=True)
+
+        self.adaptor.executemany("UPDATE taxon SET left_value = %s "
+                                 "WHERE taxon_id = %s", left_rows)
+        self.adaptor.executemany("UPDATE taxon SET right_value = %s "
+                                 "WHERE taxon_id = %s", right_rows)
+
     def _get_taxon_id_from_ncbi_taxon_id(self, ncbi_taxon_id,
                                          scientific_name=None,
                                          common_name=None):
-        """Get the taxon id for this record from the NCBI taxon ID (PRIVATE).
+        """Get the taxon id for record from NCBI taxon ID (PRIVATE).
 
         ncbi_taxon_id - string containing an NCBI taxon id
         scientific_name - string, used if a stub entry is recorded
@@ -372,6 +416,10 @@ class DatabaseLoader(object):
         rank = "species"
         genetic_code = None
         mito_genetic_code = None
+        parent_left_value = None
+        parent_right_value = None
+        left_value = None
+        right_value = None
         species_names = []
         if scientific_name:
             species_names.append(("scientific name", scientific_name))
@@ -387,14 +435,22 @@ class DatabaseLoader(object):
                 assert taxonomic_record[0]["TaxId"] == str(ncbi_taxon_id), \
                     "%s versus %s" % (taxonomic_record[0]["TaxId"],
                                       ncbi_taxon_id)
-                parent_taxon_id = self._get_taxon_id_from_ncbi_lineage(
-                    taxonomic_record[0]["LineageEx"])
-                rank = taxonomic_record[0]["Rank"]
-                genetic_code = taxonomic_record[0]["GeneticCode"]["GCId"]
-                mito_genetic_code = taxonomic_record[
-                    0]["MitoGeneticCode"]["MGCId"]
+
+                parent_taxon_id, parent_left_value, parent_right_value \
+                    = self._get_taxon_id_from_ncbi_lineage(taxonomic_record[0]["LineageEx"])
+
+                left_value = parent_right_value
+                right_value = parent_right_value + 1
+
+                rank = str(taxonomic_record[0]["Rank"])
+
+                genetic_code = int(taxonomic_record[0]["GeneticCode"]["GCId"])
+
+                mito_genetic_code = int(taxonomic_record[
+                    0]["MitoGeneticCode"]["MGCId"])
+
                 species_names = [("scientific name",
-                                  taxonomic_record[0]["ScientificName"])]
+                                  str(taxonomic_record[0]["ScientificName"]))]
                 try:
                     for name_class, names in taxonomic_record[0]["OtherNames"].items():
                         name_class = self._fix_name_class(name_class)
@@ -422,6 +478,8 @@ class DatabaseLoader(object):
             # is in the record annotation as a list of names, as we won't
             # know the NCBI taxon IDs for these parent nodes.
 
+        self._update_left_right_taxon_values(left_value)
+
         self.adaptor.execute(
             "INSERT INTO taxon(parent_taxon_id, ncbi_taxon_id, node_rank,"
             " genetic_code, mito_genetic_code, left_value, right_value)"
@@ -430,8 +488,9 @@ class DatabaseLoader(object):
                                                      rank,
                                                      genetic_code,
                                                      mito_genetic_code,
-                                                     None,
-                                                     None))
+                                                     left_value,
+                                                     right_value))
+
         taxon_id = self.adaptor.last_id("taxon")
 
         # Record the scientific name, common name, etc
@@ -448,8 +507,8 @@ class DatabaseLoader(object):
 
         taxonomic_lineage - list of taxonomy dictionaries from Bio.Entrez
 
-        First dictionary in list is the taxonomy root, highest would be the species.
-        Each dictionary includes:
+        First dictionary in list is the taxonomy root, highest would be
+        the species. Each dictionary includes:
         - TaxID (string, NCBI taxon id)
         - Rank (string, e.g. "species", "genus", ..., "phylum", ...)
         - ScientificName (string)
@@ -458,46 +517,60 @@ class DatabaseLoader(object):
         This method will record all the lineage given, returning the taxon id
         (database key, not NCBI taxon id) of the final entry (the species).
         """
-        ncbi_taxon_id = taxonomic_lineage[-1]["TaxId"]
-
+        ncbi_taxon_id = int(taxonomic_lineage[-1]["TaxId"])
+        left_value = None
+        right_value = None
+        parent_left_value = None
+        parent_right_value = None
         # Is this in the database already?  Check the taxon table...
-        taxon_id = self.adaptor.execute_and_fetch_col0(
-            "SELECT taxon_id FROM taxon"
+        rows = self.adaptor.execute_and_fetchall(
+            "SELECT taxon_id, left_value, right_value FROM taxon"
             " WHERE ncbi_taxon_id=%s" % ncbi_taxon_id)
-        if taxon_id:
+        if rows:
             # we could verify that the Scientific Name etc in the database
             # is the same and update it or print a warning if not...
-            if isinstance(taxon_id, list):
-                assert len(taxon_id) == 1
-                return taxon_id[0]
-            else:
-                return taxon_id
+            assert len(rows) == 1
+            return rows[0]
 
         # We have to record this.
         if len(taxonomic_lineage) > 1:
             # Use recursion to find out the taxon id (database key) of the
             # parent.
-            parent_taxon_id = self._get_taxon_id_from_ncbi_lineage(
-                taxonomic_lineage[:-1])
+            parent_taxon_id, parent_left_value, parent_right_value = \
+                self._get_taxon_id_from_ncbi_lineage(taxonomic_lineage[:-1])
+            left_value = parent_right_value
+            right_value = parent_right_value + 1
             assert _is_int_or_long(parent_taxon_id), repr(parent_taxon_id)
         else:
+            # we have reached the top of the lineage but no current taxonomy
+            # id has been found
             parent_taxon_id = None
+            left_value = self.adaptor.execute_one(
+                "SELECT MAX(left_value) FROM taxon")[0]
+            if not left_value:
+                left_value = 0
+
+            right_value = left_value + 1
+
+        self._update_left_right_taxon_values(left_value)
 
         # INSERT new taxon
-        rank = taxonomic_lineage[-1].get("Rank", None)
+        rank = str(taxonomic_lineage[-1].get("Rank"))
         self.adaptor.execute(
-            "INSERT INTO taxon(ncbi_taxon_id, parent_taxon_id, node_rank)"
-            " VALUES (%s, %s, %s)", (ncbi_taxon_id, parent_taxon_id, rank))
+            "INSERT INTO taxon(ncbi_taxon_id, parent_taxon_id, node_rank, "
+            "left_value, right_value) VALUES (%s, %s, %s, %s, %s)",
+            (ncbi_taxon_id, parent_taxon_id, rank, left_value, right_value))
+
         taxon_id = self.adaptor.last_id("taxon")
-        assert isinstance(taxon_id, (int, long)), repr(taxon_id)
+        # assert isinstance(taxon_id, int), repr(taxon_id)
         # ... and its name in taxon_name
-        scientific_name = taxonomic_lineage[-1].get("ScientificName", None)
+        scientific_name = taxonomic_lineage[-1].get("ScientificName")
         if scientific_name:
             self.adaptor.execute(
-                "INSERT INTO taxon_name(taxon_id, name, name_class)"
-                " VALUES (%s, %s, 'scientific name')", (taxon_id,
-                                                        scientific_name[:255]))
-        return taxon_id
+                "INSERT INTO taxon_name(taxon_id, name, name_class) "
+                "VALUES (%s, %s, 'scientific name')",
+                (taxon_id, scientific_name[:255]))
+        return taxon_id, left_value, right_value
 
     def _load_bioentry_table(self, record):
         """Fill the bioentry table with sequence information (PRIVATE).
@@ -536,7 +609,7 @@ class DatabaseLoader(object):
 
         # Allow description and division to default to NULL as in BioPerl.
         description = getattr(record, 'description', None)
-        division = record.annotations.get("data_file_division", None)
+        division = record.annotations.get("data_file_division")
 
         sql = """
         INSERT INTO bioentry (
@@ -592,7 +665,7 @@ class DatabaseLoader(object):
         self.adaptor.execute(sql, (bioentry_id, date_id, date))
 
     def _load_biosequence(self, record, bioentry_id):
-        """Record a SeqRecord's sequence and alphabet in the database (PRIVATE).
+        """Record SeqRecord's sequence and alphabet in DB (PRIVATE).
 
         record - a SeqRecord object with a seq property
         bioentry_id - corresponding database identifier
@@ -668,19 +741,18 @@ class DatabaseLoader(object):
                 # Handled separately
                 continue
             term_id = self._get_term_id(key, ontology_id=tag_ontology_id)
-            if isinstance(value, list) or isinstance(value, tuple):
+            if isinstance(value, (list, tuple)):
                 rank = 0
                 for entry in value:
-                    if isinstance(entry, str) or isinstance(entry, int):
+                    if isinstance(entry, (str, int)):
                         # Easy case
                         rank += 1
                         self.adaptor.execute(many_sql,
-                                             (bioentry_id, term_id, str(entry), rank))
+                                             (bioentry_id, term_id,
+                                              str(entry), rank))
                     else:
                         pass
-                        # print "Ignoring annotation '%s' sub-entry of type '%s'" \
-                        #      % (key, str(type(entry)))
-            elif isinstance(value, str) or isinstance(value, int):
+            elif isinstance(value, (str, int)):
                 # Have a simple single entry, leave rank as the DB default
                 self.adaptor.execute(mono_sql,
                                      (bioentry_id, term_id, str(value)))
@@ -690,7 +762,7 @@ class DatabaseLoader(object):
                 #      % (key, type(value))
 
     def _load_reference(self, reference, rank, bioentry_id):
-        """Record a SeqRecord's annotated references in the database (PRIVATE).
+        """Record SeqRecord's annotated references in the database (PRIVATE).
 
         record - a SeqRecord object with annotated references
         bioentry_id - corresponding database identifier
@@ -749,16 +821,14 @@ class DatabaseLoader(object):
             end = None
 
         sql = "INSERT INTO bioentry_reference (bioentry_id, reference_id," \
-              " start_pos, end_pos, rank)" \
-              " VALUES (%s, %s, %s, %s, %s)"
+              " start_pos, end_pos, rank) VALUES (%s, %s, %s, %s, %s)"
         self.adaptor.execute(sql, (bioentry_id, reference_id,
                                    start, end, rank + 1))
 
     def _load_seqfeature(self, feature, feature_rank, bioentry_id):
-        """Load a biopython SeqFeature into the database (PRIVATE).
-        """
-        # records loaded from a gff file using BCBio.GFF will contain the value
-        # of the 2nd column of the gff as a feature qualifier. The BioSQL wiki
+        """Load a biopython SeqFeature into the database (PRIVATE)."""
+        # records loaded from a gff file using BCBio.GFF will contain value
+        # of 2nd column of the gff as a feature qualifier. The BioSQL wiki
         # suggests that the source should not go in with the other feature
         # mappings but instead be put in the term table
         # (http://www.biosql.org/wiki/Annotation_Mapping)
@@ -766,16 +836,20 @@ class DatabaseLoader(object):
             source = feature.qualifiers['source']
             if isinstance(source, list):
                 source = source[0]
-            seqfeature_id = self._load_seqfeature_basic(feature.type, feature_rank,
-                                                bioentry_id, source=source)
+            seqfeature_id = self._load_seqfeature_basic(feature.type,
+                                                        feature_rank,
+                                                        bioentry_id,
+                                                        source=source)
         except KeyError:
-            seqfeature_id = self._load_seqfeature_basic(feature.type, feature_rank,
-                                                bioentry_id)
+            seqfeature_id = self._load_seqfeature_basic(feature.type,
+                                                        feature_rank,
+                                                        bioentry_id)
 
         self._load_seqfeature_locations(feature, seqfeature_id)
         self._load_seqfeature_qualifiers(feature.qualifiers, seqfeature_id)
 
-    def _load_seqfeature_basic(self, feature_type, feature_rank, bioentry_id, source='EMBL/GenBank/SwissProt'):
+    def _load_seqfeature_basic(self, feature_type, feature_rank, bioentry_id,
+                               source='EMBL/GenBank/SwissProt'):
         """Load the first tables of a seqfeature and returns the id (PRIVATE).
 
         This loads the "key" of the seqfeature (ie. CDS, gene) and
@@ -830,7 +904,7 @@ class DatabaseLoader(object):
             self._insert_location(loc, rank + 1, seqfeature_id)
 
     def _insert_location(self, location, rank, seqfeature_id):
-        """Add a location of a SeqFeature to the seqfeature_location table (PRIVATE).
+        """Add SeqFeatue location to seqfeature_location table (PRIVATE).
 
         TODO - Add location operator to location_qualifier_value?
         """
@@ -848,13 +922,14 @@ class DatabaseLoader(object):
         # TODO - Record an ontology term for the location (location.term_id)
         # which for now like BioPerl we'll leave as NULL.
         # This might allow us to record "between" positions properly, but I
-        # doesn't really see how it could work for before/after fuzzy positions
+        # don't really see how it could work for before/after fuzzy positions
         loc_term_id = None
 
         if location.ref:
-            # sub_feature remote locations when they are in the same db as the current
-            # record do not have a value for ref_db, which the SeqFeature object
-            # stores as None. BioSQL schema requires a varchar and is not NULL
+            # sub_feature remote locations when they are in the same db as the
+            # current record do not have a value for ref_db, which SeqFeature
+            # object stores as None. BioSQL schema requires a varchar and is
+            # not NULL
             dbxref_id = self._get_dbxref_id(
                 location.ref_db or "", location.ref)
         else:
@@ -887,7 +962,7 @@ class DatabaseLoader(object):
         """
 
     def _load_seqfeature_qualifiers(self, qualifiers, seqfeature_id):
-        """Insert the (key, value) pair qualifiers relating to a feature (PRIVATE).
+        """Insert feature's (key, value) pair qualifiers (PRIVATE).
 
         Qualifiers should be a dictionary of the form:
             {key : [value1, value2]}
@@ -925,7 +1000,7 @@ class DatabaseLoader(object):
                                              seqfeature_id)
 
     def _load_seqfeature_dbxref(self, dbxrefs, seqfeature_id):
-        """Add database crossreferences of a SeqFeature to the database (PRIVATE).
+        """Add SeqFeature's DB cross-references to the database (PRIVATE).
 
             o dbxrefs           List, dbxref data from the source file in the
                                 format <database>:<accession>
@@ -1036,10 +1111,11 @@ class DatabaseLoader(object):
             self._get_bioentry_dbxref(bioentry_id, dbxref_id, rank + 1)
 
     def _get_bioentry_dbxref(self, bioentry_id, dbxref_id, rank):
-        """ Check for a pre-existing bioentry_dbxref entry with the passed
-            seqfeature_id and dbxref_id.  If one does not exist, insert new
-            data
+        """Get pre-existing db-xref, or create and return it (PRIVATE).
 
+        Check for a pre-existing bioentry_dbxref entry with the passed
+        seqfeature_id and dbxref_id.  If one does not exist, insert new
+        data
         """
         # Check for an existing record
         sql = r"SELECT bioentry_id, dbxref_id FROM bioentry_dbxref " \
@@ -1053,8 +1129,9 @@ class DatabaseLoader(object):
         return self._add_bioentry_dbxref(bioentry_id, dbxref_id, rank)
 
     def _add_bioentry_dbxref(self, bioentry_id, dbxref_id, rank):
-        """ Insert a bioentry_dbxref row and return the seqfeature_id and
-            dbxref_id
+        """Insert a bioentry_dbxref row (PRIVATE).
+
+        Returns the seqfeature_id and dbxref_id (PRIVATE).
         """
         sql = r'INSERT INTO bioentry_dbxref ' \
               '(bioentry_id,dbxref_id,rank) VALUES ' \

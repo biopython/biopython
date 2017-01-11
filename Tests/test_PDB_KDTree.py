@@ -35,7 +35,7 @@ class NeighborTest(unittest.TestCase):
 
         Based on the self test in Bio.PDB.NeighborSearch.
         """
-        class RandomAtom:
+        class RandomAtom(object):
             def __init__(self):
                 self.coord = 100 * random(3)
 

@@ -16,8 +16,6 @@ from ._base import _BaseHmmerTextIndexer
 
 __all__ = ['Hmmer3TextParser', 'Hmmer3TextIndexer']
 
-__docformat__ = "restructuredtext en"
-
 
 # precompile regex patterns for faster processing
 # regex for program name capture
@@ -219,8 +217,8 @@ class Hmmer3TextParser(object):
     def _create_hits(self, hit_attrs, qid, qdesc):
         """Parses a HMMER3 hsp block, beginning with the hsp table."""
         # read through until the beginning of the hsp block
-        self._read_until(lambda line: line.startswith('Internal pipeline')
-                or line.startswith('>>'))
+        self._read_until(lambda line: line.startswith('Internal pipeline') or
+                         line.startswith('>>'))
 
         # start parsing the hsp block
         hit_list = []

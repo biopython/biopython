@@ -15,6 +15,7 @@ from reportlab.lib import colors
 from Bio.Graphics.BasicChromosome import ChromosomeSegment
 from Bio.Graphics.BasicChromosome import TelomereSegment
 
+
 # --- constants
 # This is a default color scheme based on the light spectrum.
 # Based on my vague recollections from biology, this is our friend ROY G. BIV
@@ -86,12 +87,12 @@ class ChromosomeCounts(object):
         """
         try:
             self._count_info[segment_name] = \
-              float(self._count_info[segment_name]) / float(scale_value)
+                float(self._count_info[segment_name]) / float(scale_value)
         except KeyError:
             raise KeyError("Segment name %s not found." % segment_name)
 
     def add_label(self, segment_name, label):
-        """Add a label to a specfic segment.
+        """Add a label to a specific segment.
 
         Raises a KeyError is the specified segment name is not found.
         """

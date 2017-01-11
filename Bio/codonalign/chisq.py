@@ -5,8 +5,6 @@ Adapted from SciPy: scipy/special/cephes/{chdtr,igam}.
 
 import math
 
-__docformat__ = "restructuredtext en"
-
 # Cephes Math Library Release 2.0:  April, 1987
 # Copyright 1985, 1987 by Stephen L. Moshier
 # Direct inquiries to 30 Frost Street, Cambridge, MA 02140

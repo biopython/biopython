@@ -35,10 +35,11 @@ BLAST and BLAT. They are used merely for illustrative purposes, and you should
 be able to adapt the workflow to any other search tools supported by
 \verb|Bio.SearchIO| in a breeze. You're very welcome to follow along with the
 search output files we'll be using. The BLAST output file can be downloaded
-\href{http://biopython.org/SRC/Tests/Tutorial/my_blast.xml}{here},
+\href{http://biopython.org/SRC/biopython/Doc/examples/my_blast.xml}{here},
 and the BLAT output file
-\href{http://biopython.org/SRC/Tests/Tutorial/my_blat.psl}{here}.
-Both output files were generated using this sequence:
+\href{http://biopython.org/SRC/biopython/Doc/examples/my_blat.psl}{here}
+or are included with the Biopython source code under the \verb|Doc/examples/|
+folder. Both output files were generated using this sequence:
 
 \begin{verbatim}
 >mystery_seq
@@ -123,7 +124,7 @@ beginning with \verb|QueryResult|.
 The QueryResult object represents a single search query and contains zero or
 more Hit objects. Let's see what it looks like using the BLAST file we have:
 
-%doctest ../Doc/examples
+%doctest examples
 \begin{verbatim}
 >>> from Bio import SearchIO
 >>> blast_qresult = SearchIO.read('my_blast.xml', 'blast-xml')
@@ -482,7 +483,7 @@ themselves contain \verb|HSP| objects.
 
 Let's see what they look like, beginning with our BLAST search:
 
-%doctest ../Doc/examples
+%doctest examples
 \begin{verbatim}
 >>> from Bio import SearchIO
 >>> blast_qresult = SearchIO.read('my_blast.xml', 'blast-xml')
@@ -639,7 +640,7 @@ apparent compared to the differences you've seen in \verb|QueryResult| or
 Let's see some examples from our BLAST and BLAT searches. We'll look at the
 BLAST HSP first:
 
-%doctest ../Doc/examples
+%doctest examples
 \begin{verbatim}
 >>> from Bio import SearchIO
 >>> blast_qresult = SearchIO.read('my_blast.xml', 'blast-xml')
@@ -925,7 +926,7 @@ coordinates, the sequences themselves, and their IDs and descriptions.
 These attributes are readily shown when you invoke \verb|print| on an
 \verb|HSPFragment|. Here's an example, taken from our BLAST search:
 
-%doctest ../Doc/examples
+%doctest examples
 \begin{verbatim}
 >>> from Bio import SearchIO
 >>> blast_qresult = SearchIO.read('my_blast.xml', 'blast-xml')

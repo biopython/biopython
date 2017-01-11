@@ -3,9 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-
-"""
-This module provides code to work with FDist.
+"""This module provides code to work with FDist (DEPRECATED).
 
 See http://www.rubic.rdg.ac.uk/~mab/software.html (old) and
 http://www.maths.bris.ac.uk/~mamab/ (new) for downloading the
@@ -20,7 +18,14 @@ read             Parses a FDist record (file) into a Record object.
 
 """
 
-__docformat__ = "restructuredtext en"
+import warnings
+
+from Bio import BiopythonDeprecationWarning
+
+warnings.warn("Bio.PopGen.FDist has been deprecated, and we intend to remove"
+              " it in a future release of Biopython. If you would like to"
+              " continue using it, please contact the Biopython developers"
+              " via the mailing list.", BiopythonDeprecationWarning)
 
 
 def read(handle):

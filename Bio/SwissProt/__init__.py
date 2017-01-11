@@ -26,8 +26,6 @@ from __future__ import print_function
 
 from Bio._py3k import _as_string
 
-__docformat__ = "restructuredtext en"
-
 
 class Record(object):
     """Holds information from a SwissProt record.
@@ -63,6 +61,25 @@ class Record(object):
 
         - seqinfo           tuple of (length, molecular weight, CRC32 value)
         - sequence          The sequence.
+
+    Example:
+
+    >>> import Bio.SwissProt as sp
+    >>> example_filename = "SwissProt/sp008"
+    >>> with open(example_filename) as handle:
+    ...     records = sp.parse(handle)
+    ...     for record in records:
+    ...         print(record.entry_name)
+    ...         print(",".join(record.accessions))
+    ...         print(record.keywords)
+    ...         print(repr(record.organism))
+    ...         print(record.sequence[:20] + "...")
+    ...
+    1A02_HUMAN
+    P01892,P06338,P30514,P30444,P30445,P30446,Q29680,Q29899,Q95352,Q29837,Q95380
+    ['MHC I', 'Transmembrane', 'Glycoprotein', 'Signal', 'Polymorphism', '3D-structure']
+    'Homo sapiens (Human).'
+    MAVMAPRTLVLLLSGALALT...
 
     """
     def __init__(self):
@@ -131,7 +148,10 @@ def read(handle):
     if not record:
         raise ValueError("No SwissProt record found")
     # We should have reached the end of the record by now
-    remainder = handle.read()
+    # Used to check with handle.read() but that breaks on Python 3.5
+    # due to http://bugs.python.org/issue26499 and could download
+    # lot of data needlessly if there were more records.
+    remainder = handle.readline()
     if remainder:
         raise ValueError("More than one SwissProt record found")
     return record
@@ -307,7 +327,7 @@ def _read_dt(record, line):
 
         # find where the version information will be located
         # This is needed for when you have cases like IPI where
-        # the release verison is in a different spot:
+        # the release version is in a different spot:
         # DT   08-JAN-2002 (IPI Human rel. 2.3, Created)
         uprcols = uprline.split()
         rel_index = -1
@@ -428,6 +448,7 @@ def _read_rn(reference, rn):
         evidence = words[1]
         assert evidence.startswith('{') and evidence.endswith('}'), "Missing braces %s" % evidence
         reference.evidence = evidence[1:-1].split('|')
+
 
 def _read_rc(reference, value):
     cols = value.split(';')
@@ -579,23 +600,6 @@ def _read_ft(record, line):
                 description = first_seq + " -> " + second_seq + extra_info
     record.features.append((name, from_res, to_res, description, ft_id))
 
-
 if __name__ == "__main__":
-    print("Quick self test...")
-
-    example_filename = "../../Tests/SwissProt/sp008"
-
-    import os
-    if not os.path.isfile(example_filename):
-        print("Missing test file %s" % example_filename)
-    else:
-        # Try parsing it!
-
-        with open(example_filename) as handle:
-            records = parse(handle)
-            for record in records:
-                print(record.entry_name)
-                print(",".join(record.accessions))
-                print(record.keywords)
-                print(repr(record.organism))
-                print(record.sequence[:20] + "...")
+    from Bio._utils import run_doctest
+    run_doctest(verbose=0)

@@ -26,9 +26,6 @@ By default, all tests are run.
 
 from __future__ import print_function
 
-# The default verbosity (not verbose)
-VERBOSITY = 0
-
 # standard modules
 import sys
 import os
@@ -72,14 +69,17 @@ def is_numpy():
     except ImportError:
         return False
 
+# The default verbosity (not verbose)
+VERBOSITY = 0
+
 # This is the list of modules containing docstring tests.
 # If you develop docstring tests for other modules, please add
 # those modules here. Please sort names alphabetically.
 DOCTEST_MODULES = [
     "Bio.Align",
-    "Bio.Align.Generic",
     "Bio.Align.Applications._Clustalw",
     "Bio.Align.Applications._ClustalOmega",
+    "Bio.Align.Applications._Dialign",
     "Bio.Align.Applications._MSAProbs",
     "Bio.Align.Applications._Mafft",
     "Bio.Align.Applications._Muscle",
@@ -92,16 +92,22 @@ DOCTEST_MODULES = [
     "Bio.Application",
     "Bio.bgzf",
     "Bio.codonalign",
+    "Bio.codonalign.codonalignment",
+    "Bio.codonalign.codonalphabet",
+    "Bio.codonalign.codonseq",
     "Bio.Blast.Applications",
     "Bio.Emboss.Applications",
     "Bio.GenBank",
     "Bio.KEGG.Compound",
     "Bio.KEGG.Enzyme",
+    "Bio.KEGG.KGML.KGML_parser",
     "Bio.NMR.xpktools",
     "Bio.motifs",
     "Bio.motifs.applications._xxmotif",
     "Bio.pairwise2",
     "Bio.Phylo.Applications._Raxml",
+    "Bio.Phylo.Consensus",
+    "Bio.Phylo.BaseTree",
     "Bio.SearchIO",
     "Bio.SearchIO._model",
     "Bio.SearchIO._model.query",
@@ -114,27 +120,37 @@ DOCTEST_MODULES = [
     "Bio.SearchIO.ExonerateIO",
     "Bio.Seq",
     "Bio.SeqIO",
-    "Bio.SeqIO.FastaIO",
     "Bio.SeqIO.AceIO",
+    "Bio.SeqIO.FastaIO",
+    "Bio.SeqIO.IgIO",
+    "Bio.SeqIO.InsdcIO",
     "Bio.SeqIO.PhdIO",
+    "Bio.SeqIO.PirIO",
     "Bio.SeqIO.QualityIO",
     "Bio.SeqIO.SffIO",
+    "Bio.SeqIO.TabIO",
     "Bio.SeqFeature",
     "Bio.SeqRecord",
     "Bio.SeqUtils",
+    "Bio.SeqUtils.CheckSum",
     "Bio.SeqUtils.MeltingTemp",
     "Bio.Sequencing.Applications._Novoalign",
     "Bio.Sequencing.Applications._bwa",
     "Bio.Sequencing.Applications._samtools",
+    "Bio.SwissProt",
+    "Bio.UniProt.GOA",
     "Bio.Wise",
     "Bio.Wise.psw",
 ]
 # Silently ignore any doctests for modules requiring numpy!
 if is_numpy():
     DOCTEST_MODULES.extend(["Bio.Affy.CelFile",
-                            "Bio.Statistics.lowess",
+                            "Bio.MaxEntropy",
                             "Bio.PDB.Polypeptide",
-                            "Bio.PDB.Selection"
+                            "Bio.PDB.Selection",
+                            "Bio.SeqIO.PdbIO",
+                            "Bio.Statistics.lowess",
+                            "Bio.SVDSuperimposer",
                             ])
 
 
@@ -375,7 +391,7 @@ class TestRunner(unittest.TextTestRunner):
         file = __file__
     testdir = os.path.abspath(os.path.dirname(file) or os.curdir)
 
-    def __init__(self, tests=[], verbosity=0):
+    def __init__(self, tests=(), verbosity=0):
         # if no tests were specified to run, we run them all
         # including the doctests
         self.tests = tests
@@ -437,8 +453,7 @@ class TestRunner(unittest.TextTestRunner):
             else:
                 # It's a doc test
                 sys.stderr.write("%s docstring test ... " % name)
-                # Can't use fromlist=name.split(".") until python 2.5+
-                module = __import__(name, None, None, name.split("."))
+                module = __import__(name, fromlist=name.split("."))
                 suite = doctest.DocTestSuite(module,
                                              optionflags=doctest.ELLIPSIS)
                 del module

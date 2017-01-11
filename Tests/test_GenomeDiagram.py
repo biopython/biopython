@@ -551,8 +551,8 @@ class SigilsTest(unittest.TestCase):
         """Feature ARROW sigil heads within bounding box."""
         self.long_sigils("ARROW")
 
-    def test_long_arrow_heads(self):
-        """Feature ARROW sigil heads within bounding box."""
+    def test_long_bigarrow_heads(self):
+        """Feature BIGARROW sigil heads within bounding box."""
         self.long_sigils("BIGARROW")
 
     def test_long_octo_heads(self):

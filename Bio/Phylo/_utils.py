@@ -7,7 +7,6 @@
 
 Third-party libraries are loaded when the corresponding function is called.
 """
-__docformat__ = "restructuredtext en"
 
 import math
 import sys
@@ -225,8 +224,8 @@ def draw_ascii(tree, file=None, column_width=80):
             depths = tree.depths(unit_branch_lengths=True)
         # Potential drawing overflow due to rounding -- 1 char per tree layer
         fudge_margin = int(math.ceil(math.log(len(taxa), 2)))
-        cols_per_branch_unit = ((drawing_width - fudge_margin)
-                                / float(max(depths.values())))
+        cols_per_branch_unit = ((drawing_width - fudge_margin) /
+                                float(max(depths.values())))
         return dict((clade, int(blen * cols_per_branch_unit + 1.0))
                     for clade, blen in depths.items())
 

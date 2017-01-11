@@ -1,4 +1,4 @@
-# Copyright 2009-2010 by Peter Cock.  All rights reserved.
+# Copyright 2009-2015 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -259,7 +259,7 @@ using ("fastq" or "fastq-sanger" for the Sanger standard using PHRED values,
 for the more recent variant), as this cannot be detected reliably
 automatically.
 
-To illustrate this problem, let's consider an artifical example:
+To illustrate this problem, let's consider an artificial example:
 
 >>> from Bio.Seq import Seq
 >>> from Bio.Alphabet import generic_dna
@@ -362,8 +362,6 @@ are approximately equal.
 
 """
 from __future__ import print_function
-
-__docformat__ = "restructuredtext en"  # Don't just use plain text in epydoc API pages!
 
 from Bio.Alphabet import single_letter_alphabet
 from Bio.Seq import Seq, UnknownSeq
@@ -469,8 +467,8 @@ def solexa_quality_from_phred(phred_quality):
         # Special case, map to -5 as discussed in the docstring
         return -5.0
     else:
-        raise ValueError("PHRED qualities must be positive (or zero), not %s"
-                         % repr(phred_quality))
+        raise ValueError("PHRED qualities must be positive (or zero), not %r"
+                         % phred_quality)
 
 
 def phred_quality_from_solexa(solexa_quality):
@@ -515,8 +513,8 @@ def phred_quality_from_solexa(solexa_quality):
         # Assume None is used as some kind of NULL or NA value; return None
         return None
     if solexa_quality < -5:
-        warnings.warn("Solexa quality less than -5 passed, %s"
-                      % repr(solexa_quality), BiopythonWarning)
+        warnings.warn("Solexa quality less than -5 passed, %r" % solexa_quality,
+                      BiopythonWarning)
     return 10 * log(10 ** (solexa_quality / 10.0) + 1, 10)
 
 

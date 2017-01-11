@@ -6,6 +6,7 @@
 """Bio.SearchIO abstract base parser for Exonerate standard output format."""
 
 import re
+from functools import reduce
 
 from Bio.SearchIO._index import SearchIndexer
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
@@ -26,40 +27,128 @@ def _set_frame(frag):
     frag.query_frame = (frag.query_start % 3 + 1) * frag.query_strand
 
 
-def _make_triplets(seq):
-    """Splits a string into a list containing triplets of the original
-    string."""
-    return [seq[3 * i:3 * (i + 1)] for i in range(len(seq) // 3)]
+def _make_triplets(seq, phase=0):
+    """Selects a valid amino acid sequence given a 3-letter code input.
+
+    This function takes a single three-letter amino acid sequence and the phase
+    of the sequence to return the longest intact amino acid sequence possible.
+    Parts of the input sequence before and after the selected sequence are also
+    returned.
+
+    This is an internal private function and is meant for parsing Exonerate's
+    three-letter amino acid output.
+
+    >>> from Bio.SearchIO.ExonerateIO._base import _make_triplets
+    >>> _make_triplets('GlyThrSerAlaPro')
+    ('', ['Gly', 'Thr', 'Ser', 'Ala', 'Pro'], '')
+    >>> _make_triplets('yThSerAla', phase=1)
+    ('y', ['Thr', 'Ser', 'Ala'], '')
+    >>> _make_triplets('yThSerAlaPr', phase=1)
+    ('y', ['Thr', 'Ser', 'Ala'], 'Pr')
+
+    """
+    pre = seq[:phase]
+    np_seq = seq[phase:]
+    non_triplets = len(np_seq) % 3
+    post = "" if not non_triplets else np_seq[-1 * non_triplets:]
+    intacts = [np_seq[3 * i:3 * (i + 1)]
+               for i in range(len(np_seq) // 3)]
+    return pre, intacts, post
+
+
+def _get_fragments_coord(frags):
+    """Returns the letter coordinate of the given list of fragments.
+
+    This function takes a list of three-letter amino acid sequences and
+    returns a list of coordinates for each fragment had all the input
+    sequences been flattened.
+
+    This is an internal private function and is meant for parsing Exonerate's
+    three-letter amino acid output.
+
+    >>> from Bio.SearchIO.ExonerateIO._base import _get_fragments_coord
+    >>> _get_fragments_coord(['Thr', 'Ser', 'Ala'])
+    [0, 3, 6]
+    >>> _get_fragments_coord(['Thr', 'SerAlaPro', 'GlyLeu'])
+    [0, 3, 12, ]
+    >>> _get_fragments_coord(['Thr', 'SerAlaPro', 'GlyLeu', 'Cys'])
+    [0, 3, 12, 18]
+
+    """
+    if not frags:
+        return []
+    # first fragment always starts from position 0
+    init = [0]
+    return reduce(lambda acc, frag: acc + [acc[-1] + len(frag)],
+                  frags[:-1], init)
+
+
+def _get_fragments_phase(frags):
+    """Returns the phases of the given list of 3-letter amino acid fragments.
+
+    This is an internal private function and is meant for parsing Exonerate's
+    three-letter amino acid output.
+
+    >>> from Bio.SearchIO.ExonerateIO._base import _get_fragments_phase
+    >>> _get_fragments_phase(['Thr', 'Ser', 'Ala'])
+    [0, 0, 0]
+    >>> _get_fragments_phase(['ThrSe', 'rAla'])
+    [0, 1]
+    >>> _get_fragments_phase(['ThrSe', 'rAlaLeu', 'ProCys'])
+    [0, 1, 0]
+    >>> _get_fragments_phase(['ThrSe', 'rAlaLeuP', 'roCys'])
+    [0, 1, 2]
+    >>> _get_fragments_phase(['ThrSe', 'rAlaLeuPr', 'oCys'])
+    [0, 1, 1]
+
+    """
+    return [(3 - (x % 3)) % 3 for x in _get_fragments_coord(frags)]
 
 
 def _adjust_aa_seq(fraglist):
     """Transforms three-letter amino acid codes into one-letters in the
     given HSPFragments."""
+    custom_map = {'***': '*', '<->': '-'}
     hsp_hstart = fraglist[0].hit_start
     hsp_qstart = fraglist[0].query_start
-    for frag in fraglist:
+    frag_phases = _get_fragments_phase(fraglist)
+    for frag, phase in zip(fraglist, frag_phases):
         assert frag.query_strand == 0 or frag.hit_strand == 0
-        # fragment should have a length that is a multiple of 3
-        assert len(frag) % 3 == 0
         # hit step may be -1 as we're aligning to DNA
         hstep = 1 if frag.hit_strand >= 0 else -1
+
+        # set fragment phase
+        frag.phase = phase
+
+        # fragment should have a length that is a multiple of 3
+        # assert len(frag) % 3 == 0
+        qseq = str(frag.query.seq)
+        q_triplets_pre, q_triplets, q_triplets_post = \
+            _make_triplets(qseq, phase)
+
+        hseq = str(frag.hit.seq)
+        h_triplets_pre, h_triplets, h_triplets_post = \
+            _make_triplets(hseq, phase)
+
         # get one letter codes
         # and replace gap codon markers and termination characters
-        custom_map = {'***': '*', '<->': '-'}
-
-        hseq1 = seq1(str(frag.hit.seq), custom_map=custom_map)
-        hstart = hsp_hstart
+        hseq1_pre = "X" if h_triplets_pre else ""
+        hseq1_post = "X" if h_triplets_post else ""
+        hseq1 = seq1("".join(h_triplets), custom_map=custom_map)
+        hstart = hsp_hstart + (len(hseq1_pre) * hstep)
         hend = hstart + len(hseq1.replace('-', '')) * hstep
 
-        qseq1 = seq1(str(frag.query.seq), custom_map=custom_map)
-        qstart = hsp_qstart
+        qseq1_pre = "X" if q_triplets_pre else ""
+        qseq1_post = "X" if q_triplets_post else ""
+        qseq1 = seq1("".join(q_triplets), custom_map=custom_map)
+        qstart = hsp_qstart + len(qseq1_pre)
         qend = qstart + len(qseq1.replace('-', ''))
 
         # replace the old frag sequences with the new ones
         frag.hit = None
         frag.query = None
-        frag.hit = hseq1
-        frag.query = qseq1
+        frag.hit = hseq1_pre + hseq1 + hseq1_post
+        frag.query = qseq1_pre + qseq1 + qseq1_post
 
         # set coordinates for the protein sequence
         if frag.query_strand == 0:
@@ -70,7 +159,9 @@ def _adjust_aa_seq(fraglist):
         # update alignment annotation
         # by turning them into list of triplets
         for annot, annotseq in frag.aln_annotation.items():
-            frag.aln_annotation[annot] = _make_triplets(annotseq)
+            pre, intact, post = _make_triplets(annotseq, phase)
+            frag.aln_annotation[annot] = \
+                list(filter(None, [pre])) + intact + list(filter(None, [post]))
 
         # update values for next iteration
         hsp_hstart, hsp_qstart = hend, qend

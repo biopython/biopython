@@ -25,6 +25,7 @@ from Bio._py3k import range
 
 import numpy
 
+
 try:
     from Bio.Cluster import median
     # The function median in Bio.Cluster is faster than the function median

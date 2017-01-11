@@ -10,8 +10,6 @@
 This is used by sequences which contain a finite number of similar words.
 """
 
-__docformat__ = "restructuredtext en"
-
 
 class Alphabet(object):
     """Generic alphabet base class.

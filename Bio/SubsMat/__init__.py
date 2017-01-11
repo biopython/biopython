@@ -122,7 +122,6 @@ import Bio
 from Bio import Alphabet
 from Bio.SubsMat import FreqTable
 
-__docformat__ = "restructuredtext en"
 
 log = math.log
 # Matrix types

@@ -225,7 +225,7 @@ def compare_records(old_list, new_list):
         if old.features and new.features \
         and len(old.features) != len(new.features):
             raise ValueError("%i vs %i features"
-                             % (len(old.features, len(new.features))))
+                             % (len(old.features), len(new.features)))
         # TODO - check annotation
     return True
 
@@ -249,7 +249,7 @@ class SeqRetSeqIOTests(unittest.TestCase):
     def tearDown(self):
         clean_up()
 
-    def check_SeqIO_to_EMBOSS(self, in_filename, in_format, skip_formats=[],
+    def check_SeqIO_to_EMBOSS(self, in_filename, in_format, skip_formats=(),
                               alphabet=None):
         """Can Bio.SeqIO write files seqret can read back?"""
         if alphabet:
@@ -267,7 +267,7 @@ class SeqRetSeqIOTests(unittest.TestCase):
                                  % (in_format, in_filename, temp_format, err))
 
     def check_EMBOSS_to_SeqIO(self, filename, old_format,
-                              skip_formats=[]):
+                              skip_formats=()):
         """Can Bio.SeqIO read seqret's conversion of the file?"""
         # TODO: Why can't we read EMBOSS's swiss output?
         self.assertTrue(os.path.isfile(filename))
@@ -284,7 +284,7 @@ class SeqRetSeqIOTests(unittest.TestCase):
                 raise ValueError("Disagree on %s file %s in %s format: %s"
                                  % (old_format, filename, new_format, err))
 
-    def check_SeqIO_with_EMBOSS(self, filename, old_format, skip_formats=[],
+    def check_SeqIO_with_EMBOSS(self, filename, old_format, skip_formats=(),
                                 alphabet=None):
         # Check EMBOSS can read Bio.SeqIO output...
         self.check_SeqIO_to_EMBOSS(filename, old_format, skip_formats,
@@ -361,7 +361,7 @@ class SeqRetAlignIOTests(unittest.TestCase):
         clean_up()
 
     def check_EMBOSS_to_AlignIO(self, filename, old_format,
-                              skip_formats=[]):
+                              skip_formats=()):
         """Can AlignIO read seqret's conversion of the file?"""
         self.assertTrue(os.path.isfile(filename), filename)
         old_aligns = list(AlignIO.parse(filename, old_format))
@@ -374,7 +374,7 @@ class SeqRetAlignIOTests(unittest.TestCase):
             handle = emboss_convert(filename, old_format, new_format)
             try:
                 new_aligns = list(AlignIO.parse(handle, new_format))
-            except:
+            except Exception:  # TODO - Which exceptions?
                 handle.close()
                 raise ValueError("Can't parse %s file %s in %s format."
                                  % (old_format, filename, new_format))
@@ -385,7 +385,7 @@ class SeqRetAlignIOTests(unittest.TestCase):
                 raise ValueError("Disagree on %s file %s in %s format: %s"
                                  % (old_format, filename, new_format, err))
 
-    def check_AlignIO_to_EMBOSS(self, in_filename, in_format, skip_formats=[],
+    def check_AlignIO_to_EMBOSS(self, in_filename, in_format, skip_formats=(),
                                 alphabet=None):
         """Can Bio.AlignIO write files seqret can read back?"""
         if alphabet:
@@ -415,11 +415,11 @@ class SeqRetAlignIOTests(unittest.TestCase):
                 raise ValueError("Disagree on file %s %s in %s format: %s"
                                  % (in_format, in_filename, temp_format, err))
 
-    def check_AlignIO_with_EMBOSS(self, filename, old_format, skip_formats=[],
+    def check_AlignIO_with_EMBOSS(self, filename, old_format, skip_formats=(),
                                   alphabet=None):
         # Check EMBOSS can read Bio.AlignIO output...
         self.check_AlignIO_to_EMBOSS(filename, old_format, skip_formats,
-                                   alphabet)
+                                     alphabet)
         # Check Bio.AlignIO can read EMBOSS seqret output...
         self.check_EMBOSS_to_AlignIO(filename, old_format, skip_formats)
 
@@ -520,10 +520,10 @@ class PairwiseAlignmentTests(unittest.TestCase):
                                  gapextend=0.5,
                                  auto=True, filter=True)
         self.assertEqual(str(cline),
-                         exes["water"] + " -auto -filter"
-                         + " -asequence=asis:ACCCGGGCGCGGT"
-                         + " -bsequence=asis:ACCCGAGCGCGGT"
-                         + " -gapopen=10 -gapextend=0.5")
+                         exes["water"] + " -auto -filter" +
+                         " -asequence=asis:ACCCGGGCGCGGT" +
+                         " -bsequence=asis:ACCCGAGCGCGGT" +
+                         " -gapopen=10 -gapextend=0.5")
         # Run the tool,
         child = subprocess.Popen(str(cline),
                                  stdin=subprocess.PIPE,
@@ -580,10 +580,10 @@ class PairwiseAlignmentTests(unittest.TestCase):
                                  gapextend=0.5,
                                  auto=True, filter=True)
         self.assertEqual(str(cline),
-                         exes["needle"] + " -auto -filter"
-                         + " -asequence=asis:ACCCGGGCGCGGT"
-                         + " -bsequence=asis:ACCCGAGCGCGGT"
-                         + " -gapopen=10 -gapextend=0.5")
+                         exes["needle"] + " -auto -filter" +
+                         " -asequence=asis:ACCCGGGCGCGGT" +
+                         " -bsequence=asis:ACCCGAGCGCGGT" +
+                         " -gapopen=10 -gapextend=0.5")
         # Run the tool,
         child = subprocess.Popen(str(cline),
                                  stdin=subprocess.PIPE,
@@ -750,9 +750,9 @@ class PairwiseAlignmentTests(unittest.TestCase):
                                        aformat="pair", wordsize=9,
                                        auto=True, stdout=True)
         self.assertEqual(str(cline),
-                         exes["seqmatchall"] + " -auto -stdout"
-                         + " -sequence=Fasta/f002"
-                         + " -wordsize=9 -aformat=pair")
+                         exes["seqmatchall"] + " -auto -stdout" +
+                         " -sequence=Fasta/f002" +
+                         " -wordsize=9 -aformat=pair")
         # Run the tool,
         child = subprocess.Popen(str(cline),
                                  stdin=subprocess.PIPE,
@@ -933,7 +933,7 @@ def clean_up():
         if filename.startswith("temp_"):
             try:
                 os.remove(filename)
-            except:
+            except Exception:  # TODO - Which exceptions?
                 pass
 
 if __name__ == "__main__":

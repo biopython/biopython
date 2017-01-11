@@ -16,8 +16,6 @@ Tested with COMPASS 1.24.
 
 import re
 
-__docformat__ = "restructuredtext en"
-
 
 def read(handle):
     """Reads a COMPASS file containing one COMPASS record."""
@@ -139,7 +137,7 @@ __regex = {"names": re.compile("Ali1:\s+(\S+)\s+Ali2:\s+(\S+)\s+"),
            "start": re.compile("(\d+)"),
            "align": re.compile("^.{15}(\S+)"),
            "positive_alignment": re.compile("^.{15}(.+)"),
-          }
+           }
 
 
 def __read_names(record, line):

@@ -1424,6 +1424,76 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual('RKVGRPGRKRIDSEAKSRRTAQNRAAQRAFRDRKEAKMKS', str(hsp[0].query.seq)[-40:])
         self.assertEqual('RKVGRPGRKRIDSEAKSRRTAQNRAAQRAFRDRKEAKMKS', str(hsp[0].hit.seq)[-40:])
 
+    def test_exn_22_m_protein2genome(self):
+        """Test parsing exonerate output (exn_22_m_protein2genome.exn)"""
+
+        exn_file = get_file('exn_22_m_protein2genome.exn')
+        qresult = read(exn_file, self.fmt)
+
+        # check common attributes
+        for hit in qresult:
+            self.assertEqual(qresult.id, hit.query_id)
+            for hsp in hit:
+                self.assertEqual(hit.id, hsp.hit_id)
+                self.assertEqual(qresult.id, hsp.query_id)
+
+        self.assertEqual('sp|P24813|YAP2_YEAST', qresult.id)
+        self.assertEqual('AP-1-like transcription activator YAP2 OS=Saccharomyces cerevisiae (strain ATCC 204508 / S288c) GN=CAD1 PE=1 SV=2', qresult.description)
+        self.assertEqual('exonerate', qresult.program)
+        self.assertEqual('protein2genome:local', qresult.model)
+        self.assertEqual(3, len(qresult))
+        # first hit
+        hit = qresult[0]
+        self.assertEqual('gi|330443520|ref|NC_001136.10|', hit.id)
+        self.assertEqual('Saccharomyces cerevisiae S288c chromosome IV, complete sequence', hit.description)
+        self.assertEqual(1, len(hit))
+        # first hit, first hsp
+        hsp = qresult[0][0]
+        self.assertEqual(2105, hsp.score)
+        self.assertEqual(0, hsp.query_strand)
+        self.assertEqual(-1, hsp.hit_strand)
+        self.assertEqual(0, hsp.query_start)
+        self.assertEqual(1318048, hsp.hit_start)
+        self.assertEqual(409, hsp.query_end)
+        self.assertEqual(1319275, hsp.hit_end)
+        self.assertEqual('MGNILRKGQQIYLAGDMKKQMLLNKDGTPKRKVGRPGRKR', str(hsp[0].query.seq)[:40])
+        self.assertEqual('MGNILRKGQQIYLAGDMKKQMLLNKDGTPKRKVGRPGRKR', str(hsp[0].hit.seq)[:40])
+        self.assertEqual('SSLDIDDLCSELIIKAKCTDDCKIVVKARDLQSALVRQLL', str(hsp[0].query.seq)[-40:])
+        self.assertEqual('SSLDIDDLCSELIIKAKCTDDCKIVVKARDLQSALVRQLL', str(hsp[0].hit.seq)[-40:])
+
+        # last hit
+        hit = qresult[-1]
+        self.assertEqual('gi|330443590|ref|NC_001140.6|', hit.id)
+        self.assertEqual('Saccharomyces cerevisiae S288c chromosome VIII, complete sequence', hit.description)
+        self.assertEqual(1, len(hit))
+        # last hit, first hsp
+        hsp = qresult[-1][0]
+        self.assertEqual(122, hsp.score)
+        self.assertEqual([0, 0], hsp.query_strand_all)
+        self.assertEqual([-1, -1], hsp.hit_strand_all)
+        self.assertEqual('RKRIDSEAKSRRTAQNRAAQRAFRDRKEAKMKSLQERX', str(hsp[0].query.seq))
+        self.assertEqual('NENVPDDSKAKKKAQNRAAQKAFRERKEARMKELQDKX', str(hsp[0].hit.seq))
+        self.assertEqual('!.!', hsp.aln_annotation_all[0]['similarity'][0])
+        self.assertEqual(':!', hsp.aln_annotation_all[0]['similarity'][-1])
+        self.assertEqual('AAT', hsp.aln_annotation_all[0]['hit_annotation'][0])
+        self.assertEqual('TT', hsp.aln_annotation_all[0]['hit_annotation'][-1])
+        self.assertEqual('XELLEQKDAQNKTTTDFLLCSLKSLLSEITKYRAKNSDDERILAFLDDLQE', str(hsp[-1].query.seq))
+        self.assertEqual('XNKILNRDPQFMSNSSFHQCVSLDSINTIEKDEEKNSDDDAGLQAATDARE', str(hsp[-1].hit.seq))
+        self.assertEqual('!', hsp.aln_annotation_all[-1]['similarity'][0])
+        self.assertEqual('|||', hsp.aln_annotation_all[-1]['similarity'][-1])
+        self.assertEqual('A', hsp.aln_annotation_all[-1]['hit_annotation'][0])
+        self.assertEqual('GAA', hsp.aln_annotation_all[-1]['hit_annotation'][-1])
+
+        self.assertEqual([(37, 74), (75, 125)], hsp.query_range_all)
+        self.assertEqual([(84533, 84646), (68450, 68601)], hsp.hit_range_all)
+        self.assertEqual([(74, 75)], hsp.query_inter_ranges)
+        self.assertEqual([(68601, 84533)], hsp.hit_inter_ranges)
+        self.assertEqual([0, 0], hsp.query_frame_all)
+        self.assertEqual([-3, -3], hsp.hit_frame_all)
+        self.assertEqual(2, len(hsp.query_all))
+        self.assertEqual(2, len(hsp.hit_all))
+        self.assertEqual(2, len(hsp.aln_annotation_all))
+
     def test_exn_22_q_none(self):
         """Test parsing exonerate output (exn_22_q_none.exn)"""
         exn_file = get_file('exn_22_q_none.exn')

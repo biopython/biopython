@@ -127,7 +127,7 @@ class Record(list):
         return "\n".join(str(the_motif) for the_motif in self)
 
     def to_dict(self):
-        """Return the list of matrices as a dictionnary of matrices."""
+        """Return the list of matrices as a dictionary of matrices."""
         dic = {}
         for motif in self:
             dic[motif.matrix_id] = motif

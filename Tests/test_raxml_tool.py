@@ -14,14 +14,15 @@ from Bio.Phylo.Applications import RaxmlCommandline
 from Bio import MissingExternalDependencyError
 
 raxml_exe = None
-if sys.platform == "win32":
-    raise MissingExternalDependencyError(
-          "Testing RAxML on Windows not supported yet")
-else:
+try:
     from Bio._py3k import getoutput
     output = getoutput("raxmlHPC -v")
     if "not found" not in output and "This is RAxML" in output:
         raxml_exe = "raxmlHPC"
+except OSError:
+    # TODO: Use FileNotFoundError once we drop Python 2
+    pass
+
 if not raxml_exe:
     raise MissingExternalDependencyError(
         "Install RAxML (binary raxmlHPC) if you want to test the Bio.Phylo.Applications wrapper.")
@@ -39,7 +40,7 @@ class AppTests(unittest.TestCase):
                                sequences=EX_PHYLIP, model="PROTCATWAG",
                                name="test")
         # The parsimony seed should be set automatically
-        self.assertTrue('-p' in str(cmd))
+        self.assertIn('-p', str(cmd))
         # Smoke test
         try:
             out, err = cmd()
@@ -57,7 +58,7 @@ class AppTests(unittest.TestCase):
                           'RAxML_result.test',
                           # Present in 7.2.X+  but not 7.0.4:
                           'RAxML_bestTree.test',
-                         ]:
+                          ]:
                 if os.path.isfile(fname):
                     os.remove(fname)
 

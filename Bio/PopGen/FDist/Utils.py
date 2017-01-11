@@ -3,9 +3,11 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+"""Utility functions for working with FDist (DEPRECATED)."""
 
 from Bio.PopGen.GenePop import FileParser
 import Bio.PopGen.FDist
+
 
 # Quite a few utility functions could be done (like remove pop,
 # add locus, etc...). The recommended strategy is convert back

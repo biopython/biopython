@@ -32,7 +32,6 @@ from subprocess import CalledProcessError as _ProcessCalledError
 
 from Bio import File
 
-__docformat__ = "restructuredtext en"
 
 # Use this regular expression to test the property names are going to
 # be valid as Python properties or arguments
@@ -81,7 +80,7 @@ class ApplicationError(_ProcessCalledError):
         # get first line of any stderr message
         try:
             msg = self.stderr.lstrip().split("\n", 1)[0].rstrip()
-        except:
+        except Exception:  # TODO, ValueError? AttributeError?
             msg = ""
         if msg:
             return "Non-zero return code %d from %r, message %r" \

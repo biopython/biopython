@@ -19,8 +19,6 @@ the CDAOIO.Writer can store triples in a triple store instead of serializing
 them to a file.
 """
 
-__docformat__ = "restructuredtext en"
-
 from Bio._py3k import StringIO
 
 from Bio.Phylo import CDAO
@@ -117,7 +115,8 @@ class Parser(object):
         if 'base_uri' in kwargs:
             base_uri = kwargs['base_uri']
         else:
-            base_uri = "file://" + os.path.abspath(self.handle.name)
+            # Windows style slashes cannot be used in an RDF URI
+            base_uri = "file://" + os.path.abspath(self.handle.name).replace("\\", "/")
 
         graph.parse(file=self.handle, publicID=base_uri, format=parse_format)
 

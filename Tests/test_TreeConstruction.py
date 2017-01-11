@@ -5,7 +5,10 @@
 
 """Unit tests for the Bio.Phylo.TreeConstruction module."""
 
+import os
 import unittest
+import tempfile
+
 from Bio._py3k import StringIO
 from Bio import AlignIO
 from Bio import Phylo
@@ -19,6 +22,9 @@ from Bio.Phylo.TreeConstruction import DistanceTreeConstructor
 from Bio.Phylo.TreeConstruction import ParsimonyScorer
 from Bio.Phylo.TreeConstruction import NNITreeSearcher
 from Bio.Phylo.TreeConstruction import ParsimonyTreeConstructor
+
+
+temp_dir = tempfile.mkdtemp()
 
 
 class DistanceMatrixTest(unittest.TestCase):
@@ -126,7 +132,7 @@ class DistanceCalculatorTest(unittest.TestCase):
         # Comparing characters only -- 4 misses, 1 match
         dmat = DistanceCalculator().get_distance(aln)
         self.assertEqual(dmat['Alpha', 'Alpha'], 0.)
-        self.assertAlmostEqual(dmat['Alpha', 'Gamma'], 4./5.)
+        self.assertAlmostEqual(dmat['Alpha', 'Gamma'], 4. / 5.)
 
 
 class DistanceTreeConstructorTest(unittest.TestCase):
@@ -177,9 +183,9 @@ class ParsimonyScorerTest(unittest.TestCase):
 
         alphabet = ['A', 'T', 'C', 'G']
         step_matrix = [[0],
-                       [2.5,   0],
-                       [2.5,   1,    0],
-                       [  1, 2.5,  2.5, 0]]
+                       [2.5, 0],
+                       [2.5, 1, 0],
+                       [1, 2.5, 2.5, 0]]
         matrix = _Matrix(alphabet, step_matrix)
         scorer = ParsimonyScorer(matrix)
         score = scorer.get_score(tree, aln)
@@ -223,15 +229,15 @@ class NNITreeSearcherTest(unittest.TestCase):
         tree = Phylo.read('./TreeConstruction/upgma.tre', 'newick')
         alphabet = ['A', 'T', 'C', 'G']
         step_matrix = [[0],
-                       [2.5,   0],
-                       [2.5,   1,    0],
-                       [  1, 2.5,  2.5, 0]]
+                       [2.5, 0],
+                       [2.5, 1, 0],
+                       [1, 2.5, 2.5, 0]]
         matrix = _Matrix(alphabet, step_matrix)
         scorer = ParsimonyScorer(matrix)
         searcher = NNITreeSearcher(scorer)
         trees = searcher._get_neighbors(tree)
         self.assertEqual(len(trees), 2 * (5 - 3))
-        Phylo.write(trees, './TreeConstruction/neighbor_trees.tre', 'newick')
+        Phylo.write(trees, os.path.join(temp_dir, 'neighbor_trees.tre'), 'newick')
 
 
 class ParsimonyTreeConstructorTest(unittest.TestCase):
@@ -243,21 +249,21 @@ class ParsimonyTreeConstructorTest(unittest.TestCase):
         tree2 = Phylo.read('./TreeConstruction/nj.tre', 'newick')
         alphabet = ['A', 'T', 'C', 'G']
         step_matrix = [[0],
-                       [2.5,   0],
-                       [2.5,   1,    0],
-                       [  1, 2.5,  2.5, 0]]
+                       [2.5, 0],
+                       [2.5, 1, 0],
+                       [1, 2.5, 2.5, 0]]
         matrix = _Matrix(alphabet, step_matrix)
         scorer = ParsimonyScorer(matrix)
         searcher = NNITreeSearcher(scorer)
         constructor = ParsimonyTreeConstructor(searcher, tree1)
         best_tree = constructor.build_tree(aln)
-        Phylo.write(best_tree, './TreeConstruction/pars1.tre', 'newick')
+        Phylo.write(best_tree, os.path.join(temp_dir, 'pars1.tre'), 'newick')
         constructor.starting_tree = tree2
         best_tree = constructor.build_tree(aln)
-        Phylo.write(best_tree, './TreeConstruction/pars2.tre', 'newick')
+        Phylo.write(best_tree, os.path.join(temp_dir, 'pars2.tre'), 'newick')
         constructor.starting_tree = None
         best_tree = constructor.build_tree(aln)
-        Phylo.write(best_tree, './TreeConstruction/pars3.tre', 'newick')
+        Phylo.write(best_tree, os.path.join(temp_dir, 'pars3.tre'), 'newick')
 
 if __name__ == '__main__':
     runner = unittest.TextTestRunner(verbosity=2)

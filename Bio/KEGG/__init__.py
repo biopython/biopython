@@ -3,8 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""
-This module provides code to work with data from the KEGG database.
+"""Code to work with data from the KEGG database.
 
 References:
 
@@ -13,6 +12,8 @@ Nucleic Acids Res. 28, 29-34 (2000).
 
 URL: http://www.genome.ad.jp/kegg/
 """
+
+
 KEGG_ITEM_LENGTH = 12
 KEGG_LINE_LENGTH = 80
 KEGG_DATA_LENGTH = KEGG_LINE_LENGTH - KEGG_ITEM_LENGTH

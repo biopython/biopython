@@ -17,8 +17,6 @@ from functools import reduce
 from Bio._py3k import map
 from Bio._py3k import basestring
 
-__docformat__ = "restructuredtext en"
-
 
 class CrystalError(Exception):
     pass

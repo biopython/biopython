@@ -16,8 +16,6 @@ import tempfile
 
 from Bio.Application import AbstractCommandline, _Argument
 
-__docformat__ = "restructuredtext en"
-
 
 def _gp_float(tok):
     """Gets a float from a token, if it fails, returns the string (PRIVATE)."""
@@ -232,7 +230,9 @@ class GenePopController(object):
                 opts["HWtests"] = "MCMC"
         return opts
 
-    def _run_genepop(self, extensions, option, fname, opts={}):
+    def _run_genepop(self, extensions, option, fname, opts=None):
+        if opts is None:
+            opts = {}
         cwd = os.getcwd()
         temp_dir = tempfile.mkdtemp()
         os.chdir(temp_dir)

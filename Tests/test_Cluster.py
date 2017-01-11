@@ -101,12 +101,12 @@ class TestCluster(unittest.TestCase):
 
         try:
             treecluster(data1)
-        except:
+        except Exception:  # TODO - Which exceptions?
             self.fail("treecluster failed to accept matrix data1")
 
         try:
             treecluster(data2)
-        except:
+        except Exception:  # TODO - Which exceptions?
             self.fail("treecluster failed to accept matrix data2")
 
         self.assertRaises(TypeError, treecluster, data3)
@@ -766,7 +766,7 @@ class TestCluster(unittest.TestCase):
                             [5.1, 5.5],
                             [5.0, 5.5],
                             [5.1, 5.2],
-                           ])
+                            ])
 
         mean, coordinates, pc, eigenvalues = pca(data)
         self.assertAlmostEqual(mean[0], 3.5461538461538464)

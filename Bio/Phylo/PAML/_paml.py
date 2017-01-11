@@ -8,6 +8,7 @@ from __future__ import print_function
 import os
 import subprocess
 
+
 try:
     from os.path import relpath as _relpath
 except ImportError:
@@ -42,14 +43,14 @@ except ImportError:
 
 class PamlError(EnvironmentError):
     """paml has failed. Run with verbose = True to view the error
-message"""
+    message"""
 
 
 class Paml(object):
     """Base class for wrapping PAML commands."""
 
     def __init__(self, alignment=None, working_dir=None,
-                out_file=None):
+                 out_file=None):
         if working_dir is None:
             self.working_dir = os.getcwd()
         else:
@@ -76,7 +77,7 @@ class Paml(object):
         """Set the value of an option.
 
         This function abstracts the options dict to prevent the user from
-        adding options that do not exist or mispelling options.
+        adding options that do not exist or misspelling options.
         """
         for option, value in kwargs.items():
             if option not in self._options:
@@ -137,27 +138,22 @@ class Paml(object):
         if ctl_file is None:
             # Dynamically build a control file
             self.write_ctl_file()
-            if verbose:
-                result_code = subprocess.call([command, self.ctl_file])
-            else:
-                # To suppress output, redirect it to a pipe to nowhere
-                result_code = subprocess.call([command, self.ctl_file],
-                    stdout=subprocess.PIPE)
+            ctl_file = self.ctl_file
         else:
             if not os.path.exists(ctl_file):
                 raise IOError("The specified control file does not exist.")
-            if verbose:
-                result_code = subprocess.call([command, ctl_file])
-            else:
-                result_code = subprocess.call([command, ctl_file],
-                    stdout=subprocess.PIPE)
+        if verbose:
+            result_code = subprocess.call([command, ctl_file])
+        else:
+            with open(os.devnull) as dn:
+                result_code = subprocess.call([command, ctl_file], stdout=dn, stderr=dn)
         os.chdir(cwd)
         if result_code > 0:
             # If the program fails for any reason
             raise PamlError(
-            "%s has failed (return code %i). Run with verbose = True to view error message"
-            % (command, result_code))
+                "%s has failed (return code %i). Run with verbose = True to view error message"
+                % (command, result_code))
         if result_code < 0:
             # If the paml process is killed by a signal somehow
             raise EnvironmentError("The %s process was killed (return code %i)."
-                  % (command, result_code))
+                                   % (command, result_code))

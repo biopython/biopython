@@ -1,5 +1,5 @@
 # Copyright 2012 by Wibowo Arindrarto. All rights reserved.
-# Revisions Copyright 2012 by Peter Cock. All rights reserved.
+# Revisions Copyright 2012-2015 by Peter Cock. All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -35,15 +35,21 @@ class CheckRaw(unittest.TestCase):
         raw = _as_bytes(raw)
         # Anticipate cases where the raw string and/or file uses different
         # newline characters ~ we set everything to \n.
+        new = idx.get_raw(id)
+        self.assertTrue(isinstance(new, bytes),
+                        "Didn't get bytes from %s get_raw" % self.fmt)
         self.assertEqual(raw.replace(b'\r\n', b'\n'),
-                idx.get_raw(id).replace(b'\r\n', b'\n'))
+                         new.replace(b'\r\n', b'\n'))
         idx.close()
 
         # Now again, but using SQLite backend
         if sqlite3:
             idx = SearchIO.index_db(":memory:", filename, self.fmt, **kwargs)
+            new = idx.get_raw(id)
+            self.assertTrue(isinstance(new, bytes),
+                            "Didn't get bytes from %s get_raw" % self.fmt)
             self.assertEqual(raw.replace(b'\r\n', b'\n'),
-                    idx.get_raw(id).replace(b'\r\n', b'\n'))
+                             new.replace(b'\r\n', b'\n'))
             idx.close()
 
         if os.path.isfile(filename + ".bgz"):

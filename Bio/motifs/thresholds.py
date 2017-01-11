@@ -10,9 +10,9 @@
 class ScoreDistribution(object):
     """ Class representing approximate score distribution for a given motif.
 
-    Utilizes a dynamic programming approch to calculate the distribution of
+    Utilizes a dynamic programming approach to calculate the distribution of
     scores with a predefined precision. Provides a number of methods for calculating
-    thresholds for motif occurences.
+    thresholds for motif occurrences.
     """
     def __init__(self, motif=None, precision=10 ** 3, pssm=None, background=None):
         if pssm is None:

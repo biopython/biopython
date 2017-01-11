@@ -15,8 +15,6 @@ from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 
 __all__ = ['Hmmer3TabParser', 'Hmmer3TabIndexer', 'Hmmer3TabWriter']
 
-__docformat__ = "restructuredtext en"
-
 
 class Hmmer3TabParser(object):
 
@@ -199,7 +197,7 @@ class Hmmer3TabIndexer(SearchIndexer):
                 break
 
     def get_raw(self, offset):
-        """Returns the raw string of a QueryResult object from the given offset."""
+        """Returns the raw bytes string of a QueryResult object from the given offset."""
         handle = self._handle
         handle.seek(offset)
         query_id_idx = self._query_id_idx

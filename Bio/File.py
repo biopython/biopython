@@ -43,8 +43,6 @@ except ImportError:
     _sqlite = None
     pass
 
-__docformat__ = "restructuredtext en"
-
 
 @contextlib.contextmanager
 def as_handle(handleish, mode='r', **kwargs):
@@ -229,7 +227,12 @@ class _IndexedSeqFileProxy(object):
         raise NotImplementedError("Subclass should implement this")
 
     def get_raw(self, offset):
-        """Returns bytes string (if implemented for this file format)."""
+        """Return the raw record from the file as a bytes string (if implemented).
+
+        If the key is not found, a KeyError exception is raised.
+
+        This may not have been implemented for all file formats.
+        """
         # Should be done by each sub-class (if possible)
         raise NotImplementedError("Not available for this file format.")
 
@@ -371,14 +374,9 @@ class _IndexedSeqFileDict(_dict_base):
             return d
 
     def get_raw(self, key):
-        """Similar to the get method, but returns the record as a raw string.
+        """Return the raw record from the file as a bytes string.
 
         If the key is not found, a KeyError exception is raised.
-
-        Note that on Python 3 a bytes string is returned, not a typical
-        unicode string.
-
-        NOTE - This functionality is not supported for every file format.
         """
         # Pass the offset to the proxy
         return self._proxy.get_raw(self._offsets[key])
@@ -593,7 +591,8 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
         # TODO - Record the file size and modified date?
         con.execute(
             "CREATE TABLE file_data (file_number INTEGER, name TEXT);")
-        con.execute("CREATE TABLE offset_data (key TEXT, file_number INTEGER, offset INTEGER, length INTEGER);")
+        con.execute("CREATE TABLE offset_data (key TEXT, "
+                    "file_number INTEGER, offset INTEGER, length INTEGER);")
         count = 0
         for i, filename in enumerate(filenames):
             # Default to storing as an absolute path,
@@ -602,10 +601,11 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
                 # Since user gave BOTH filename & index as relative paths,
                 # we will store this relative to the index file even though
                 # if it may now start ../ (meaning up a level)
-                # Note for cross platfrom use (e.g. shared data drive over SAMBA),
-                # convert any Windows slash into Unix style / for relative paths.
+                # Note for cross platform use (e.g. shared drive over SAMBA),
+                # convert any Windows slash into Unix style for rel paths.
                 f = os.path.relpath(filename, relative_path).replace(os.path.sep, "/")
-            elif (os.path.dirname(os.path.abspath(filename)) + os.path.sep).startswith(relative_path + os.path.sep):
+            elif (os.path.dirname(os.path.abspath(filename)) +
+                  os.path.sep).startswith(relative_path + os.path.sep):
                 # Since sequence file is in same directory or sub directory,
                 # might as well make this into a relative path:
                 f = os.path.relpath(filename, relative_path).replace(os.path.sep, "/")
@@ -658,7 +658,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
     def __contains__(self, key):
         return bool(
             self._con.execute("SELECT key FROM offset_data WHERE key=?;",
-                   (key,)).fetchone())
+                              (key,)).fetchone())
 
     def __len__(self):
         """How many records are there?"""
@@ -714,14 +714,9 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
             return d
 
     def get_raw(self, key):
-        """Similar to the get method, but returns the record as a raw string.
+        """Return the raw record from the file as a bytes string.
 
         If the key is not found, a KeyError exception is raised.
-
-        Note that on Python 3 a bytes string is returned, not a typical
-        unicode string.
-
-        **NOTE** - This functionality is not supported for every file format.
         """
         # Pass the offset to the proxy
         row = self._con.execute(

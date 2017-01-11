@@ -23,8 +23,6 @@ Classes:
  - Reference          Holds data from a Prodoc reference.
 """
 
-__docformat__ = "restructuredtext en"
-
 
 def read(handle):
     """Read in a record from a file with exactly one Prodoc record."""

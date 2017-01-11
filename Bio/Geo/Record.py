@@ -48,7 +48,7 @@ class Record(object):
                     try:
                         output += '%s: %s\n' % (key, item[:40])
                         output += out_block(item[40:])
-                    except:
+                    except Exception:  # TODO: IndexError?
                         pass
             elif isinstance(contents, str):
                 output += '%s: %s\n' % (key, contents[:40])

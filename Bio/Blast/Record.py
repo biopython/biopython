@@ -24,8 +24,6 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
 
-__docformat__ = "restructuredtext en"
-
 
 class Header(object):
     """Saves information from a blast header.
@@ -133,7 +131,7 @@ class HSP(object):
         - sbjct_end       The end residue for the sbjct sequence.  (1-based)
 
     Not all flavors of BLAST return values for every attribute::
-    
+
                   score     expect     identities   positives    strand  frame
         BLASTP     X          X            X            X
         BLASTN     X          X            X            X          X

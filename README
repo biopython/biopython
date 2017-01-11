@@ -30,15 +30,23 @@ http://dx.doi.org/10.1093/bioinformatics/btp163 pmid:19304878
 For the impatient
 =================
 
-To build and install Biopython, download and unzip the source code, go to this
-directory at the command line, and type::
+Windows users are currently recommended to use the installation packages provided
+on our website, http://biopython.org -- further instructions are given below.
+
+Python 2.7.9 onwards, and Python 3.4 onwards, include the package management
+system "pip" which should allow you to install Biopython with just::
+
+    pip install numpy
+    pip install biopython
+
+Otherwise you may have to build and install Biopython. Download and unzip the
+source code, go to this directory at the command line, and type::
 
     python setup.py build
     python setup.py test
     sudo python setup.py install
 
-Windows users are instead recommended to use the installation packages provided
-on our website, http://biopython.org -- further instructions are given below.
+Here you can replace ``python`` with a specific version, e.g. ``python3.5``.
 
 
 Python Requirements
@@ -49,11 +57,11 @@ We currently recommend using Python 3.5 from http://www.python.org
 Biopython is currently supported and tested on the following Python
 implementations:
 
-- Python 2.6, 2.7, 3.3, 3.4, 3.5 -- see http://www.python.org
+- Python 2.7, 3.3, 3.4, 3.5 -- see http://www.python.org
 
   This is the primary development platform for Biopython.
 
-- PyPy 2.4, 2.5, 2.6 and also PyPy3 2.4 -- see http://www.pypy.org
+- PyPy 5.0.1 and also PyPy3 2.4 -- see http://www.pypy.org
 
   Aside from modules with C code or dependent on NumPy, everything should
   work. PyPy's NumPy reimplementation NumPyPy is still in progress.
@@ -64,7 +72,8 @@ implementations:
   or dependent on SQLite3 or NumPy, everything should work. There are some
   known issues with test failures which have not yet been resolved.
 
-Please note that support for Python 2.6 is deprecated as of Biopython 1.66.
+Please note that support for Python 3.3 is deprecated as of Biopython 1.67,
+and that support for Python 2.6 is deprecated as of Biopython 1.66.
 Biopython 1.62 was our final release to support Python 2.5 and Jython 2.5.
 
 

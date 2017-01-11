@@ -16,6 +16,7 @@ import traceback
 from Bio import ParserSupport
 from Bio.Blast import NCBIStandalone
 
+
 CONTEXT = 5   # show 5 lines of context around the error in the format file
 
 USAGE = """%s [-h] [-v] [-p] [-n] [-o] <testfile>
@@ -37,7 +38,7 @@ OPTIONS:
 """ % sys.argv[0]
 
 
-class DebuggingConsumer:
+class DebuggingConsumer(object):
     def __init__(self, decorated=None):
         self.linenum = 0
         if decorated is None:

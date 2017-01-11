@@ -16,7 +16,6 @@ from __future__ import print_function
 
 from reportlab.graphics.shapes import Drawing, String, Group, Line, Circle, Polygon
 from reportlab.lib import colors
-from reportlab.pdfbase import _fontdata
 from reportlab.graphics.shapes import ArcPath
 
 from Bio._py3k import range
@@ -27,7 +26,7 @@ from ._AbstractDrawer import _stroke_and_fill_colors
 from ._FeatureSet import FeatureSet
 from ._GraphSet import GraphSet
 
-from math import ceil, pi, cos, sin, asin
+from math import pi, cos, sin
 
 
 class CircularDrawer(AbstractDrawer):
@@ -231,7 +230,7 @@ class CircularDrawer(AbstractDrawer):
         for track in range(bot_track, top_track + 1):  # track numbers to 'draw'
             try:
                 trackheight = self._parent[track].height  # Get track height
-            except:
+            except Exception:  # TODO: ValueError? IndexError?
                 trackheight = 1
             trackunit_sum += trackheight  # increment total track unit height
             trackunits[track] = (heightholder, heightholder + trackheight)

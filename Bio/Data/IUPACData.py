@@ -4,8 +4,6 @@
 
 """Information about the IUPAC alphabets."""
 
-__docformat__ = "restructuredtext en"
-
 
 protein_letters = "ACDEFGHIKLMNPQRSTVWY"
 extended_protein_letters = "ACDEFGHIKLMNPQRSTVWYBXZJUO"

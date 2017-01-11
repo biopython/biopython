@@ -1,7 +1,8 @@
 # Copyright 1999-2000 by Jeffrey Chang.  All rights reserved.
 # Copyright 2008-2013 by Michiel de Hoon.  All rights reserved.
-# Revisions copyright 2011-2015 by Peter Cock. All rights reserved.
+# Revisions copyright 2011-2016 by Peter Cock. All rights reserved.
 # Revisions copyright 2015 by Eric Rasche. All rights reserved.
+# Revisions copyright 2015 by Carlos Pena. All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -76,11 +77,11 @@ Functions:
       which can return multiple records - such as efetch, esummary
       and elink. Typical usage is:
 
-          >>> handle = Entrez.efetch("pubmed", id="19304878,14630660", retmode="xml")
+          >>> handle = Entrez.esummary(db="pubmed", id="19304878,14630660", retmode="xml")
           >>> records = Entrez.parse(handle)
           >>> for record in records:
           ...     # each record is a Python dictionary or list.
-          ...     print(record['MedlineCitation']['Article']['ArticleTitle'])
+          ...     print(record['Title'])
           Biopython: freely available Python tools for computational molecular biology and bioinformatics.
           PDB file parser and structure class implemented in Python.
           >>> handle.close()
@@ -95,7 +96,6 @@ from __future__ import print_function
 
 import time
 import warnings
-import os.path
 
 # Importing these functions with leading underscore as not intended for reuse
 from Bio._py3k import urlopen as _urlopen
@@ -104,7 +104,6 @@ from Bio._py3k import HTTPError as _HTTPError
 
 from Bio._py3k import _binary_to_string_handle, _as_bytes
 
-__docformat__ = "restructuredtext en"
 
 email = None
 tool = "biopython"
@@ -124,10 +123,10 @@ def epost(db, **keywds):
 
     Raises an IOError exception if there's a network error.
     """
-    cgi = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/epost.fcgi'
+    cgi = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/epost.fcgi'
     variables = {'db': db}
     variables.update(keywds)
-    return _open(cgi, variables)
+    return _open(cgi, variables, post=True)
 
 
 def efetch(db, **keywords):
@@ -152,13 +151,33 @@ def efetch(db, **keywords):
     LOCUS       AY851612                 892 bp    DNA     linear   PLN 10-APR-2007
     >>> handle.close()
 
+    This will automatically use an HTTP POST rather than HTTP GET if there
+    are over 200 identifiers as recommended by the NCBI.
+
     **Warning:** The NCBI changed the default retmode in Feb 2012, so many
     databases which previously returned text output now give XML.
     """
-    cgi = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi'
+    cgi = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi'
     variables = {'db': db}
     variables.update(keywords)
-    return _open(cgi, variables)
+    post = False
+    try:
+        ids = variables["id"]
+    except KeyError:
+        pass
+    else:
+        if isinstance(ids, list):
+            ids = ",".join(ids)
+            variables["id"] = ids
+        elif isinstance(ids, int):
+            ids = str(ids)
+            variables["id"] = ids
+
+        if ids.count(",") >= 200:
+            # NCBI prefers an HTTP POST instead of an HTTP GET if there are
+            # more than about 200 IDs
+            post = True
+    return _open(cgi, variables, post=post)
 
 
 def esearch(db, term, **keywds):
@@ -190,7 +209,7 @@ def esearch(db, term, **keywds):
     True
 
     """
-    cgi = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi'
+    cgi = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi'
     variables = {'db': db,
                  'term': term}
     variables.update(keywds)
@@ -230,7 +249,7 @@ def elink(**keywds):
 
     This is explained in much more detail in the Biopython Tutorial.
     """
-    cgi = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi'
+    cgi = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi'
     variables = {}
     variables.update(keywds)
     return _open(cgi, variables)
@@ -258,7 +277,7 @@ def einfo(**keywds):
     True
 
     """
-    cgi = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/einfo.fcgi'
+    cgi = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/einfo.fcgi'
     variables = {}
     variables.update(keywds)
     return _open(cgi, variables)
@@ -290,7 +309,7 @@ def esummary(**keywds):
     Computational biology and chemistry
 
     """
-    cgi = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi'
+    cgi = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi'
     variables = {}
     variables.update(keywds)
     return _open(cgi, variables)
@@ -324,7 +343,7 @@ def egquery(**keywds):
     True
 
     """
-    cgi = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/egquery.fcgi'
+    cgi = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/egquery.fcgi'
     variables = {}
     variables.update(keywds)
     return _open(cgi, variables)
@@ -353,10 +372,29 @@ def espell(**keywds):
     biopython
 
     """
-    cgi = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/espell.fcgi'
+    cgi = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/espell.fcgi'
     variables = {}
     variables.update(keywds)
     return _open(cgi, variables)
+
+
+def _update_ecitmatch_variables(keywds):
+    # XML is the only supported value, and it actually returns TXT.
+    variables = {'retmode': 'xml'}
+    citation_keys = ('journal_title', 'year', 'volume', 'first_page', 'author_name', 'key')
+
+    # Accept pre-formatted strings
+    if isinstance(keywds['bdata'], str):
+        variables.update(keywds)
+    else:
+        # Alternatively accept a nicer interface
+        variables['db'] = keywds['db']
+        bdata = []
+        for citation in keywds['bdata']:
+            formatted_citation = '|'.join([citation.get(key, "") for key in citation_keys])
+            bdata.append(formatted_citation)
+        variables['bdata'] = '\r'.join(bdata)
+    return variables
 
 
 def ecitmatch(**keywds):
@@ -382,23 +420,8 @@ def ecitmatch(**keywds):
     >>> record = Entrez.ecitmatch(db="pubmed", bdata=[citation_1])
     >>> print(record["Query"])
     """
-    cgi = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/ecitmatch.cgi'
-    # XML is the only supported value, and it actually returns TXT.
-    variables = {'retmode': 'xml'}
-    citation_keys = ('journal_title', 'year', 'volume', 'first_page', 'author_name', 'key')
-
-    # Accept pre-formatted strings
-    if isinstance(keywds['bdata'], str):
-        variables.update(keywds)
-    else:
-        # Alternatively accept a nicer interface
-        variables['db'] = keywds['db']
-        bdata = []
-        for citation in keywds['bdata']:
-            formatted_citation = '|'.join([citation.get(key, "") for key in citation_keys])
-            bdata.append(formatted_citation)
-        variables['bdata'] = '\r'.join(bdata)
-
+    cgi = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/ecitmatch.cgi'
+    variables = _update_ecitmatch_variables(keywds)
     return _open(cgi, variables, ecitmatch=True)
 
 
@@ -460,20 +483,21 @@ def parse(handle, validate=True):
     return records
 
 
-def _open(cgi, params=None, ecitmatch=False):
+def _open(cgi, params=None, post=None, ecitmatch=False):
     """Helper function to build the URL and open a handle to it (PRIVATE).
 
     Open a handle to Entrez.  cgi is the URL for the cgi script to access.
     params is a dictionary with the options to pass to it.  Does some
     simple error checking, and will raise an IOError if it encounters one.
 
+    The arugment post should be a boolean to explicitly control if an HTTP
+    POST should be used rather an HTTP GET based on the query length.
+    By default (post=None), POST is used if the URL encoded paramters would
+    be over 1000 characters long.
+
     This function also enforces the "up to three queries per second rule"
-    to avoid abusing the NCBI servers, and makes the request through POST
-    rather than GET if the number of characters in the resulting query is
-    greater than 1000.
+    to avoid abusing the NCBI servers.
     """
-    if params is None:
-        params = {}
     # NCBI requirement: At most three queries per second.
     # Equivalently, at least a third of second between queries
     delay = 0.333333334
@@ -484,6 +508,31 @@ def _open(cgi, params=None, ecitmatch=False):
         _open.previous = current + wait
     else:
         _open.previous = current
+
+    params = _construct_params(params)
+    options = _encode_options(ecitmatch, params)
+
+    # By default, post is None. Set to a boolean to over-ride length choice:
+    if post is None and len(options) > 1000:
+        post = True
+    cgi = _construct_cgi(cgi, post, options)
+
+    try:
+        if post:
+            handle = _urlopen(cgi, data=_as_bytes(options))
+        else:
+            handle = _urlopen(cgi)
+    except _HTTPError as exception:
+        raise exception
+
+    return _binary_to_string_handle(handle)
+_open.previous = 0
+
+
+def _construct_params(params):
+    if params is None:
+        params = {}
+
     # Remove None values from the parameters
     for key, value in list(params.items()):
         if value is None:
@@ -508,45 +557,23 @@ is A.N.Other@example.com, you can specify it as follows:
 In case of excessive usage of the E-utilities, NCBI will attempt to contact
 a user at the email address provided before blocking access to the
 E-utilities.""", UserWarning)
-    
-    # By default, we do not force a POST request
-    force_post = False
-    
-    # Make sure the UIDs are in the format UID,UID,...
-    ids = params.get("id", None)
-    if ids is not None:
-        # Detect whether 200+ UIDs have been provided, and convert the list
-        # [UID, UID, ...] into the string "UID,UID,..."
-        if isinstance(ids, list):
-            params["id"] = ",".join(ids)
-        elif isinstance(ids, str):
-            ids = ids.split(",")
-        
-        # If 200+ UIDs are given, force the POST request
-        force_post = len(ids) > 200
-    
+    return params
+
+
+def _encode_options(ecitmatch, params):
     # Open a handle to Entrez.
     options = _urlencode(params, doseq=True)
     # _urlencode encodes pipes, which NCBI expects in ECitMatch
     if ecitmatch:
         options = options.replace('%7C', '|')
-    # print cgi + "?" + options
-    
-    post = force_post or len(options) > 1000
-    try:
-        if post:
-            # HTTP POST
-            handle = _urlopen(cgi, data=_as_bytes(options))
-        else:
-            # HTTP GET
-            cgi += "?" + options
-            handle = _urlopen(cgi)
-    except _HTTPError as exception:
-        raise exception
+    return options
 
-    return _binary_to_string_handle(handle)
 
-_open.previous = 0
+def _construct_cgi(cgi, post, options):
+    if not post:
+        # HTTP GET
+        cgi += "?" + options
+    return cgi
 
 
 def _test():

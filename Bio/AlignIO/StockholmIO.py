@@ -1,4 +1,4 @@
-# Copyright 2006-2015 by Peter Cock.  All rights reserved.
+# Copyright 2006-2016 by Peter Cock.  All rights reserved.
 # Revisions copyright 2015 by Ben Woodcroft.  All rights reserved.
 #
 # This code is part of the Biopython distribution and governed by its
@@ -133,12 +133,12 @@ secondary structure string here, are also sliced:
 """
 from __future__ import print_function
 
-__docformat__ = "restructuredtext en"  # not just plaintext
+from collections import OrderedDict
+
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
 from .Interfaces import AlignmentIterator, SequentialAlignmentWriter
-from Bio._py3k import OrderedDict
 
 
 class StockholmWriter(SequentialAlignmentWriter):

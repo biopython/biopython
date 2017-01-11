@@ -3,6 +3,4 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""
-  PopGen: Population Genetics and Genomics library in Python
-"""
+"""PopGen: Population Genetics and Genomics library in Python."""

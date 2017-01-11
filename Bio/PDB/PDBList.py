@@ -31,8 +31,6 @@ import shutil
 from Bio._py3k import urlopen as _urlopen
 from Bio._py3k import urlretrieve as _urlretrieve
 
-__docformat__ = "restructuredtext en"
-
 
 class PDBList(object):
     """

@@ -58,8 +58,6 @@ are needed, the 'read' function rather than the 'parse' function might be more a
 from __future__ import print_function
 from Bio._py3k import zip
 
-__docformat__ = "restructuredtext en"
-
 
 class rd(object):
     """RD (reads), store a read with its name, sequence etc.

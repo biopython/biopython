@@ -1,9 +1,48 @@
-# Copyright 2011-2013 by Peter Cock.  All rights reserved.
+# Copyright 2011-2016 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
+#
+# This script looks for entries in the LaTeX source for the
+# Biopython Tutorial which can be turned into Python doctests,
+# e.g.
+#
+# %doctest
+# \begin{verbatim}
+# >>> from Bio.Alphabet import generic_dna
+# >>> from Bio.Seq import Seq
+# >>> len("ACGT")
+# 4
+# \end{verbatim}
+#
+# Code snippets can be extended using a similar syntax, which
+# will create a single combined doctest:
+#
+# %cont-doctest
+# \begin{verbatim}
+# >>> Seq("ACGT") == Seq("ACGT", generic_dna)
+# True
+# \end{verbatim}
+#
+# The %doctest line also supports a relative working directory,
+# and listing multiple Python dependencies as lib:XXX which will
+# ensure "import XXX" works before using the test. e.g.
+#
+# %doctest examples lib:numpy lib:scipy
+#
+# Note if using lib:XXX you must include a relative path to the
+# working directory, just use . for the default path, e.g.
+#
+# %doctest . lib:reportlab
+#
+# TODO: Adding bin:XXX for checking binary XXX is on $PATH?
+# TODO: Adding way to specify the doctest needs the network?
+#
+# See also "Writing doctests in the Tutorial" in the Tutorial
+# itself.
 
-# This will apply to all the doctests too:
+
+# This future import will apply to all the doctests too:
 from __future__ import print_function
 from Bio._py3k import _universal_read_mode
 
@@ -27,18 +66,30 @@ if sys.version_info[0] >= 3:
                                  'Two plus two is 4\n', "example2") == \
                                  '>>> print("Two plus two is", 2+2)\nTwo plus two is 4\n'
 
+# Cache this to restore the cwd at the end of the tests
+original_path = os.path.abspath(".")
 
-tutorial = os.path.join(os.path.dirname(sys.argv[0]), "../Doc/Tutorial.tex")
+if os.path.basename(sys.argv[0]) == "test_Tutorial.py":
+    # sys.argv[0] will be (relative) path to test_Turorial.py - use this to allow, e.g.
+    # [base]$ python Tests/test_Tutorial.py
+    # [Tests/]$ python test_Tutorial.py
+    tutorial_base = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]), "../Doc/"))
+    tutorial = os.path.join(tutorial_base, "Tutorial.tex")
+else:
+    # Probably called via run_tests.py so current directory should (now) be Tests/
+    # but may have been changed by run_tests.py so can't infer from sys.argv[0] with e.g.
+    # [base]$ python Tests/run_tests.py test_Tutorial
+    tutorial_base = os.path.abspath("../Doc/")
+    tutorial = os.path.join(tutorial_base, "Tutorial.tex")
 if not os.path.isfile(tutorial):
     from Bio import MissingExternalDependencyError
     raise MissingExternalDependencyError("Could not find ../Doc/Tutorial.tex file")
-files = [tutorial]
-for latex in os.listdir("../Doc/Tutorial/"):
-    if latex.startswith("chapter_") and latex.endswith(".tex"):
-        files.append(os.path.join(os.path.dirname(sys.argv[0]), "../Doc/Tutorial", latex))
 
-tutorial_base = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]), "../Doc/"))
-original_path = os.path.abspath(".")
+# Build a list of all the Tutorial LaTeX files:
+files = [tutorial]
+for latex in os.listdir(os.path.join(tutorial_base, "Tutorial/")):
+    if latex.startswith("chapter_") and latex.endswith(".tex"):
+        files.append(os.path.join(tutorial_base, "Tutorial", latex))
 
 
 def _extract(handle):
@@ -67,38 +118,37 @@ def extract_doctests(latex_filename):
     This is a generator, yielding one tuple per doctest.
     """
     base_name = os.path.splitext(os.path.basename(latex_filename))[0]
-    handle = open(latex_filename, _universal_read_mode)
-    line_number = 0
-    in_test = False
-    lines = []
-    name = None
-    while True:
-        line = handle.readline()
-        line_number += 1
-        if not line:
-            # End of file
-            break
-        elif line.startswith("%cont-doctest"):
-            x = _extract(handle)
-            lines.extend(x)
-            line_number += len(x) + 2
-        elif line.startswith("%doctest"):
-            if lines:
-                if not lines[0].startswith(">>> "):
-                    raise ValueError("Should start '>>> ' not %r" % lines[0])
-                yield name, "".join(lines), folder, deps
-                lines = []
-            deps = [x.strip() for x in line.split()[1:]]
-            if deps:
-                folder = deps[0]
-                deps = deps[1:]
-            else:
-                folder = ""
-            name = "test_%s_line_%05i" % (base_name, line_number)
-            x = _extract(handle)
-            lines.extend(x)
-            line_number += len(x) + 2
-    handle.close()
+    with open(latex_filename, _universal_read_mode) as handle:
+        line_number = 0
+        in_test = False
+        lines = []
+        name = None
+        while True:
+            line = handle.readline()
+            line_number += 1
+            if not line:
+                # End of file
+                break
+            elif line.startswith("%cont-doctest"):
+                x = _extract(handle)
+                lines.extend(x)
+                line_number += len(x) + 2
+            elif line.startswith("%doctest"):
+                if lines:
+                    if not lines[0].startswith(">>> "):
+                        raise ValueError("Should start '>>> ' not %r" % lines[0])
+                    yield name, "".join(lines), folder, deps
+                    lines = []
+                deps = [x.strip() for x in line.split()[1:]]
+                if deps:
+                    folder = deps[0]
+                    deps = deps[1:]
+                else:
+                    folder = ""
+                name = "test_%s_line_%05i" % (base_name, line_number)
+                x = _extract(handle)
+                lines.extend(x)
+                line_number += len(x) + 2
     if lines:
         if not lines[0].startswith(">>> "):
             raise ValueError("Should start '>>> ' not %r" % lines[0])

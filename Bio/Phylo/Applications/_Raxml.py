@@ -10,8 +10,6 @@ should work for any version 7.X (and probably earlier for most options).
 from __future__ import print_function
 from Bio._py3k import basestring
 
-__docformat__ = "restructuredtext en"
-
 from Bio.Application import _Option, _Switch, AbstractCommandline
 
 
@@ -46,98 +44,99 @@ class RaxmlCommandline(AbstractCommandline):
     def __init__(self, cmd='raxmlHPC', **kwargs):
         self.parameters = [
                 _Option(['-a', 'weight_filename'],
-                    "Name of a column weight file to assign individual weights "
-                    "to each column of the alignment. Those weights must be "
-                    "integers separated by any type and number of whitespaces "
-                    "within a separate file.",
-                    filename=True,
-                    equate=False,
-                    ),
+                        "Name of a column weight file to assign individual weights "
+                        "to each column of the alignment. Those weights must be "
+                        "integers separated by any type and number of whitespaces "
+                        "within a separate file.",
+                        filename=True,
+                        equate=False,
+                        ),
 
                 _Option(['-b', 'bootstrap_seed'],
-                    "Random seed for bootstrapping.",
-                    equate=False,
-                    ),
+                        "Random seed for bootstrapping.",
+                        equate=False,
+                        ),
 
                 _Option(['-c', 'num_categories'],
-                    "Number of distinct rate categories for RAxML when "
-                    "evolution model is set to GTRCAT or GTRMIX."
-                    "Individual per-site rates are categorized into this "
-                    "many rate categories to accelerate computations. "
-                    "Default: 25.",
-                    equate=False,
-                    ),
+                        "Number of distinct rate categories for RAxML when "
+                        "evolution model is set to GTRCAT or GTRMIX."
+                        "Individual per-site rates are categorized into this "
+                        "many rate categories to accelerate computations. "
+                        "Default: 25.",
+                        equate=False,
+                        ),
 
                 _Switch(['-d', 'random_starting_tree'],
-                    "Start ML optimization from random starting tree."
-                    ),
+                        "Start ML optimization from random starting tree."
+                        ),
 
                 _Option(['-e', 'epsilon'],
-                    "Set model optimization precision in log likelihood units "
-                    "for final optimization of tree topology under MIX/MIXI "
-                    "or GAMMA/GAMMAI."
-                    "Default: 0.1 for models not using proportion of "
-                    "invariant sites estimate; 0.001 for models using "
-                    "proportion of invariant sites estimate.",
-                    equate=False,
-                    ),
+                        "Set model optimization precision in log likelihood units "
+                        "for final optimization of tree topology under MIX/MIXI "
+                        "or GAMMA/GAMMAI."
+                        "Default: 0.1 for models not using proportion of "
+                        "invariant sites estimate; 0.001 for models using "
+                        "proportion of invariant sites estimate.",
+                        equate=False,
+                        ),
 
                 _Option(['-E', 'exclude_filename'],
-                    "An exclude file name, containing a specification of "
-                    "alignment positions you wish to exclude.  Format is "
-                    "similar to Nexus, the file shall contain entries like "
-                    "'100-200 300-400'; to exclude a single column write, "
-                    "e.g., '100-100'. If you use a mixed model, an "
-                    "appropriately adapted model file will be written.",
-                    filename=True,
-                    equate=False,
-                    ),
+                        "An exclude file name, containing a specification of "
+                        "alignment positions you wish to exclude.  Format is "
+                        "similar to Nexus, the file shall contain entries like "
+                        "'100-200 300-400'; to exclude a single column write, "
+                        "e.g., '100-100'. If you use a mixed model, an "
+                        "appropriately adapted model file will be written.",
+                        filename=True,
+                        equate=False,
+                        ),
 
                 _Option(['-f', 'algorithm'],
-                    """Select algorithm:
-                    a: Rapid Bootstrap analysis and search for best-scoring ML
-                       tree in one program run.
-                    b: Draw bipartition information on a tree provided with '-t'
-                       based on multiple trees (e.g. form a bootstrap) in a file
-                       specifed by '-z'.
-                    c: Check if the alignment can be properly read by RAxML.
-                    d: New rapid hill-climbing (DEFAULT).
-                    e: Optimize model+branch lengths for given input tree under
-                       GAMMA/GAMMAI only.
-                    g: Compute per site log Likelihoods for one ore more trees
-                       passed via '-z' and write them to a file that can be read
-                       by CONSEL.
-                    h: Compute log likelihood test (SH-test) between best tree
-                       passed via '-t' and a bunch of other trees passed via '-z'.
-                    i: Perform a really thorough bootstrap, refinement of final
-                       bootstrap tree under GAMMA and a more exhaustive algorithm.
-                    j: Generate a bunch of bootstrapped alignment files from an
-                       original alignemnt file.
-                    m: Compare bipartitions between two bunches of trees passed
-                       via '-t' and '-z' respectively. This will return the
-                       Pearson correlation between all bipartitions found in the
-                       two tree files. A file called
-                       RAxML_bipartitionFrequencies.outputFileName will be
-                       printed that contains the pair-wise bipartition
-                       frequencies of the two sets.
-                    n: Compute the log likelihood score of all trees contained
-                       in a tree file provided by '-z' under GAMMA or
-                       GAMMA+P-Invar.
-                    o: Old and slower rapid hill-climbing.
-                    p: Perform pure stepwise MP addition of new sequences to an
-                       incomplete starting tree.
-                    s: Split up a multi-gene partitioned alignment into the
-                       respective subalignments.
-                    t: Do randomized tree searches on one fixed starting tree.
-                    w: Compute ELW test on a bunch of trees passed via '-z'.
-                    x: Compute pair-wise ML distances, ML model parameters will
-                       be estimated on an MP starting tree or a user-defined
-                       tree passed via '-t', only allowed for GAMMA-based models
-                       of rate heterogeneity.""",
-                    checker_function=(lambda x:
-                        isinstance(x, basestring) and len(x) == 1),
-                    equate=False,
-                    ),
+                        """Select algorithm:
+
+                        a: Rapid Bootstrap analysis and search for best-scoring ML
+                           tree in one program run.
+                        b: Draw bipartition information on a tree provided with '-t'
+                           based on multiple trees (e.g. form a bootstrap) in a file
+                           specifed by '-z'.
+                        c: Check if the alignment can be properly read by RAxML.
+                        d: New rapid hill-climbing (DEFAULT).
+                        e: Optimize model+branch lengths for given input tree under
+                           GAMMA/GAMMAI only.
+                        g: Compute per site log Likelihoods for one ore more trees
+                           passed via '-z' and write them to a file that can be read
+                           by CONSEL.
+                        h: Compute log likelihood test (SH-test) between best tree
+                           passed via '-t' and a bunch of other trees passed via '-z'.
+                        i: Perform a really thorough bootstrap, refinement of final
+                           bootstrap tree under GAMMA and a more exhaustive algorithm.
+                        j: Generate a bunch of bootstrapped alignment files from an
+                           original alignemnt file.
+                        m: Compare bipartitions between two bunches of trees passed
+                           via '-t' and '-z' respectively. This will return the
+                           Pearson correlation between all bipartitions found in the
+                           two tree files. A file called
+                           RAxML_bipartitionFrequencies.outputFileName will be
+                           printed that contains the pair-wise bipartition
+                           frequencies of the two sets.
+                        n: Compute the log likelihood score of all trees contained
+                           in a tree file provided by '-z' under GAMMA or
+                           GAMMA+P-Invar.
+                        o: Old and slower rapid hill-climbing.
+                        p: Perform pure stepwise MP addition of new sequences to an
+                           incomplete starting tree.
+                        s: Split up a multi-gene partitioned alignment into the
+                           respective subalignments.
+                        t: Do randomized tree searches on one fixed starting tree.
+                        w: Compute ELW test on a bunch of trees passed via '-z'.
+                        x: Compute pair-wise ML distances, ML model parameters will
+                           be estimated on an MP starting tree or a user-defined
+                           tree passed via '-t', only allowed for GAMMA-based models
+                           of rate heterogeneity.""",
+                        checker_function=(lambda x:
+                                          isinstance(x, basestring) and len(x) == 1),
+                        equate=False,
+                        ),
 
                 _Option(['-g', 'grouping_constraint'],
                         "File name of a multifurcating constraint tree. "
@@ -188,49 +187,49 @@ class RaxmlCommandline(AbstractCommandline):
                 _Option(['-m', 'model'],
                         """Model of Nucleotide or Amino Acid Substitution:
 
-              NUCLEOTIDES:
+                        NUCLEOTIDES:
 
-                    GTRCAT         : GTR + Optimization of substitution rates + Optimization of site-specific
-                                     evolutionary rates which are categorized into numberOfCategories distinct
-                                     rate categories for greater computational efficiency
-                                     if you do a multiple analysis with  '-#' or '-N' but without bootstrapping the program
-                                     will use GTRMIX instead
-                    GTRGAMMA       : GTR + Optimization of substitution rates + GAMMA model of rate
-                                     heterogeneity (alpha parameter will be estimated)
-                    GTRMIX         : Inference of the tree under GTRCAT
-                                     and thereafter evaluation of the final tree topology under GTRGAMMA
-                    GTRCAT_GAMMA   : Inference of the tree with site-specific evolutionary rates.
-                                     However, here rates are categorized using the 4 discrete GAMMA rates.
-                                     Evaluation of the final tree topology under GTRGAMMA
-                    GTRGAMMAI      : Same as GTRGAMMA, but with estimate of proportion of invariable sites
-                    GTRMIXI        : Same as GTRMIX, but with estimate of proportion of invariable sites
-                    GTRCAT_GAMMAI  : Same as GTRCAT_GAMMA, but with estimate of proportion of invariable sites
+                        GTRCAT         : GTR + Optimization of substitution rates + Optimization of site-specific
+                                         evolutionary rates which are categorized into numberOfCategories distinct
+                                         rate categories for greater computational efficiency
+                                         if you do a multiple analysis with  '-#' or '-N' but without bootstrapping the program
+                                         will use GTRMIX instead
+                        GTRGAMMA       : GTR + Optimization of substitution rates + GAMMA model of rate
+                                         heterogeneity (alpha parameter will be estimated)
+                        GTRMIX         : Inference of the tree under GTRCAT
+                                         and thereafter evaluation of the final tree topology under GTRGAMMA
+                        GTRCAT_GAMMA   : Inference of the tree with site-specific evolutionary rates.
+                                         However, here rates are categorized using the 4 discrete GAMMA rates.
+                                         Evaluation of the final tree topology under GTRGAMMA
+                        GTRGAMMAI      : Same as GTRGAMMA, but with estimate of proportion of invariable sites
+                        GTRMIXI        : Same as GTRMIX, but with estimate of proportion of invariable sites
+                        GTRCAT_GAMMAI  : Same as GTRCAT_GAMMA, but with estimate of proportion of invariable sites
 
-              AMINO ACIDS:
+                        AMINO ACIDS:
 
-                    PROTCATmatrixName[F]        : specified AA matrix + Optimization of substitution rates + Optimization of site-specific
+                        PROTCATmatrixName[F]    : specified AA matrix + Optimization of substitution rates + Optimization of site-specific
                                                   evolutionary rates which are categorized into numberOfCategories distinct
                                                   rate categories for greater computational efficiency
                                                   if you do a multiple analysis with  '-#' or '-N' but without bootstrapping the program
                                                   will use PROTMIX... instead
-                    PROTGAMMAmatrixName[F]      : specified AA matrix + Optimization of substitution rates + GAMMA model of rate
+                        PROTGAMMAmatrixName[F]  : specified AA matrix + Optimization of substitution rates + GAMMA model of rate
                                                   heterogeneity (alpha parameter will be estimated)
-                    PROTMIXmatrixName[F]        : Inference of the tree under specified AA matrix + CAT
+                        PROTMIXmatrixName[F]    : Inference of the tree under specified AA matrix + CAT
                                                   and thereafter evaluation of the final tree topology under specified AA matrix + GAMMA
-                    PROTCAT_GAMMAmatrixName[F]  : Inference of the tree under specified AA matrix and site-specific evolutionary rates.
+                        PROTCAT_GAMMAmatrixName[F] : Inference of the tree under specified AA matrix and site-specific evolutionary rates.
                                                   However, here rates are categorized using the 4 discrete GAMMA rates.
                                                   Evaluation of the final tree topology under specified AA matrix + GAMMA
-                    PROTGAMMAImatrixName[F]     : Same as PROTGAMMAmatrixName[F], but with estimate of proportion of invariable sites
-                    PROTMIXImatrixName[F]       : Same as PROTMIXmatrixName[F], but with estimate of proportion of invariable sites
-                    PROTCAT_GAMMAImatrixName[F] : Same as PROTCAT_GAMMAmatrixName[F], but with estimate of proportion of invariable sites
+                        PROTGAMMAImatrixName[F] : Same as PROTGAMMAmatrixName[F], but with estimate of proportion of invariable sites
+                        PROTMIXImatrixName[F]   : Same as PROTMIXmatrixName[F], but with estimate of proportion of invariable sites
+                        PROTCAT_GAMMAImatrixName[F] : Same as PROTCAT_GAMMAmatrixName[F], but with estimate of proportion of invariable sites
 
-                Available AA substitution models: DAYHOFF, DCMUT, JTT, MTREV, WAG, RTREV, CPREV, VT, BLOSUM62, MTMAM, GTR
-                With the optional 'F' appendix you can specify if you want to use empirical base frequencies
-                Please not that for mixed models you can in addition specify the per-gene AA model in
-                the mixed model file (see manual for details)
-                """,
-                equate=False,
-                ),
+                        Available AA substitution models: DAYHOFF, DCMUT, JTT, MTREV, WAG, RTREV, CPREV, VT, BLOSUM62, MTMAM, GTR
+                        With the optional 'F' appendix you can specify if you want to use empirical base frequencies
+                        Please not that for mixed models you can in addition specify the per-gene AA model in
+                        the mixed model file (see manual for details)
+                        """,
+                        equate=False,
+                        ),
 
                 _Switch(['-M', 'partition_branch_lengths'],
                         "Switch on estimation of individual per-partition "
@@ -355,18 +354,23 @@ class RaxmlCommandline(AbstractCommandline):
                         ),
 
                 _Option(['-N', '-#', 'num_replicates'],
-                    "Number of alternative runs on distinct starting trees. "
-                    "In combination with the '-b' option, this will invoke a "
-                    "multiple bootstrap analysis. "
-                    "DEFAULT: 1 single analysis."
-                    "Note that '-N' has been added as an alternative since "
-                    "'-#' sometimes caused problems with certain MPI job "
-                    "submission systems, since '-#' is often used to start "
-                    "comments. ",
-                    equate=False,
-                    ),
+                        "Number of alternative runs on distinct starting trees. "
+                        "In combination with the '-b' option, this will invoke a "
+                        "multiple bootstrap analysis. "
+                        "DEFAULT: 1 single analysis."
+                        "Note that '-N' has been added as an alternative since "
+                        "'-#' sometimes caused problems with certain MPI job "
+                        "submission systems, since '-#' is often used to start "
+                        "comments. ",
+                        equate=False,
+                        ),
                 ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
         # ENH: enforce -s, -n and -m
         if not self.parsimony_seed:
             self.parsimony_seed = 10000
+
+
+if __name__ == "__main__":
+    from Bio._utils import run_doctest
+    run_doctest()

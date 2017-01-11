@@ -10,7 +10,6 @@ from Bio._py3k import basestring
 from Bio.PDB.StructureBuilder import StructureBuilder  # To allow saving of chains, residues, etc..
 from Bio.Data.IUPACData import atom_weights  # Allowed Elements
 
-__docformat__ = "restructuredtext en"
 
 _ATOM_FORMAT_STRING = "%s%5i %-4s%c%3s %c%4i%c   %8.3f%8.3f%8.3f%s%6.2f      %4s%2s%2s\n"
 
@@ -141,7 +140,7 @@ class PDBIO(object):
             structure = sb.structure
         self.structure = structure
 
-    def save(self, file, select=Select(), write_end=True):
+    def save(self, file, select=Select(), write_end=True, preserve_atom_numbering=False):
         """
         @param file: output file
         @type file: string or filehandle
@@ -182,7 +181,8 @@ class PDBIO(object):
             # do not write ENDMDL if no residues were written
             # for this model
             model_residues_written = 0
-            atom_number = 1
+            if not preserve_atom_numbering:
+                atom_number = 1
             if model_flag:
                 fp.write("MODEL      %s\n" % model.serial_num)
             for chain in model.get_list():
@@ -203,10 +203,13 @@ class PDBIO(object):
                         if select.accept_atom(atom):
                             chain_residues_written = 1
                             model_residues_written = 1
+                            if preserve_atom_numbering:
+                                atom_number = atom.get_serial_number()
                             s = get_atom_line(atom, hetfield, segid, atom_number, resname,
                                 resseq, icode, chain_id)
                             fp.write(s)
-                            atom_number = atom_number + 1
+                            if not preserve_atom_numbering:
+                                atom_number += 1
                 if chain_residues_written:
                     fp.write("TER\n")
             if model_flag and model_residues_written:

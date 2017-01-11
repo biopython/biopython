@@ -1703,7 +1703,7 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(record.database, "nr")
         self.assertEqual(record.num_sequences_in_database, 8994603)
         self.assertEqual(record.database_sequences, 8994603)
-        #self.assertEqual(record.database_length, 3078807967)
+        # self.assertEqual(record.database_length, 3078807967)
         self.assertEqual(record.database_length, -1216159329)  # NCBI bug!
         self.assertEqual(len(record.descriptions), 10)
         self.assertEqual(len(record.alignments), 10)

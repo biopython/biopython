@@ -7,8 +7,6 @@
 
 import math
 
-__docformat__ = "restructuredtext en"
-
 
 def lcc_mult(seq, wsize):
     """Local Composition Complexity (LCC) values over sliding window.
@@ -146,21 +144,21 @@ def lcc_simp(seq):
         term_a = 0
         # Check to avoid calculating the log of 0.
     else:
-        term_a = ((upper.count('A')) / float(wsize)) * ((math.log((upper.count('A'))
-                                                                  / float(wsize))) / l2)
+        term_a = ((upper.count('A')) / float(wsize)) * \
+                 ((math.log((upper.count('A')) / float(wsize))) / l2)
     if 'C' not in seq:
         term_c = 0
     else:
-        term_c = ((upper.count('C')) / float(wsize)) * ((math.log((upper.count('C'))
-                                                                  / float(wsize))) / l2)
+        term_c = ((upper.count('C')) / float(wsize)) * \
+                 ((math.log((upper.count('C')) / float(wsize))) / l2)
     if 'T' not in seq:
         term_t = 0
     else:
-        term_t = ((upper.count('T')) / float(wsize)) * ((math.log((upper.count('T'))
-                                                                  / float(wsize))) / l2)
+        term_t = ((upper.count('T')) / float(wsize)) * \
+                 ((math.log((upper.count('T')) / float(wsize))) / l2)
     if 'G' not in seq:
         term_g = 0
     else:
-        term_g = ((upper.count('G')) / float(wsize)) * ((math.log((upper.count('G'))
-                                                                  / float(wsize))) / l2)
+        term_g = ((upper.count('G')) / float(wsize)) * \
+                 ((math.log((upper.count('G')) / float(wsize))) / l2)
     return -(term_a + term_c + term_t + term_g)

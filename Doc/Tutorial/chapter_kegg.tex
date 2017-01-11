@@ -9,10 +9,23 @@ Please note that the KEGG parser implementation in Biopython is incomplete. Whil
 Parsing a KEGG record is as simple as using any other file format parser in Biopython. 
 (Before running the following codes, please open \url{http://rest.kegg.jp/get/ec:5.4.2.2} with your web browser and save it as \verb|ec_5.4.2.2.txt|.)
 
+%doctest examples
 \begin{verbatim}
 >>> from Bio.KEGG import Enzyme
 >>> records = Enzyme.parse(open("ec_5.4.2.2.txt"))
 >>> record = list(records)[0]
+>>> record.classname
+['Isomerases;', 'Intramolecular transferases;', 'Phosphotransferases (phosphomutases)']
+>>> record.entry
+'5.4.2.2'
+\end{verbatim}
+
+Alternatively, if the input KEGG file has exactly one entry, you can use \verb|read|:
+
+%doctest examples
+\begin{verbatim}
+>>> from Bio.KEGG import Enzyme
+>>> record = Enzyme.read(open("ec_5.4.2.2.txt"))
 >>> record.classname
 ['Isomerases;', 'Intramolecular transferases;', 'Phosphotransferases (phosphomutases)']
 >>> record.entry
@@ -27,6 +40,7 @@ Biopython has full support for the querying of the KEGG api. Querying all KEGG e
 
 First, here is how to extend the above example by downloading the relevant enzyme and passing it through the Enzyme parser.
 
+%want online doctest here
 \begin{verbatim}
 >>> from Bio.KEGG import REST
 >>> from Bio.KEGG import Enzyme
@@ -42,6 +56,7 @@ First, here is how to extend the above example by downloading the relevant enzym
 
 Now, here's a more realistic example which shows a combination of querying the KEGG API. This will demonstrate how to extract a unique set of all human pathway gene symbols which relate to DNA repair. The steps that need to be taken to do so are as follows. First, we need to get a list of all human pathways. Secondly, we need to filter those for ones which relate to "repair". Lastly, we need to get a list of all the gene symbols in all repair pathways.
 
+%want online doctest here
 \begin{verbatim}
 from Bio.KEGG import REST
 

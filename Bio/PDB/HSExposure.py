@@ -15,8 +15,6 @@ from Bio.PDB.PDBParser import PDBParser
 from Bio.PDB.Polypeptide import CaPPBuilder, is_aa
 from Bio.PDB.Vector import rotaxis
 
-__docformat__ = "restructuredtext en"
-
 
 class _AbstractHSExposure(AbstractPropertyMap):
     """
@@ -149,7 +147,7 @@ class HSExposureCA(_AbstractHSExposure):
         @param radius: radius of the sphere (centred at the CA atom)
         @type radius: float
 
-        @param offset: number of flanking residues that are ignored in the calculation            of the number of neighbors
+        @param offset: number of flanking residues that are ignored in the calculation of the number of neighbors
         @type offset: int
         """
         _AbstractHSExposure.__init__(self, model, radius, offset,
@@ -238,7 +236,7 @@ class HSExposureCB(_AbstractHSExposure):
         @param radius: radius of the sphere (centred at the CA atom)
         @type radius: float
 
-        @param offset: number of flanking residues that are ignored in the calculation            of the number of neighbors
+        @param offset: number of flanking residues that are ignored in the calculation of the number of neighbors
         @type offset: int
         """
         _AbstractHSExposure.__init__(self, model, radius, offset,
@@ -274,7 +272,7 @@ class ExposureCN(AbstractPropertyMap):
         @param radius: radius of the sphere (centred at the CA atom)
         @type radius: float
 
-        @param offset: number of flanking residues that are ignored in the calculation            of the number of neighbors
+        @param offset: number of flanking residues that are ignored in the calculation of the number of neighbors
         @type offset: int
 
         """

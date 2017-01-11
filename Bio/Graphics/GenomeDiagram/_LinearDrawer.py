@@ -356,7 +356,7 @@ class LinearDrawer(AbstractDrawer):
         for track in range(bot_track, top_track + 1):  # for all track numbers to 'draw'
             try:
                 trackheight = self._parent[track].height    # Get track height
-            except:
+            except Exception:  # TODO: IndexError?
                 trackheight = 1                             # ...or default to 1
             trackunit_sum += trackheight    # increment total track unit height
             trackunits[track] = (heightholder, heightholder + trackheight)
