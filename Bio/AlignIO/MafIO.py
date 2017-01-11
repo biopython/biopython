@@ -64,7 +64,6 @@ a 1-column wide alignment would have start == end.
 from Bio.Alphabet import single_letter_alphabet
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.Align.Generic import Alignment
 from Bio.Align import MultipleSeqAlignment
 from .Interfaces import SequentialAlignmentWriter
 
@@ -115,7 +114,7 @@ class MafWriter(SequentialAlignmentWriter):
         MAF block (beginning with an 'a' line, containing 's' lines)
         """
 
-        if not isinstance(alignment, Alignment):
+        if not isinstance(alignment, MultipleSeqAlignment):
             raise TypeError("Expected an alignment object")
 
         if len(set([len(x) for x in alignment])) > 1:
@@ -148,7 +147,7 @@ class MafWriter(SequentialAlignmentWriter):
         return recs_out
 
 
-def maf_iterator(handle, seq_count=None, alphabet=single_letter_alphabet):
+def MafIterator(handle, seq_count=None, alphabet=single_letter_alphabet):
     """
     Iterates over lines in a MAF file-like object (handle), yielding
     MultipleSeqAlignment objects. SeqRecord IDs generally correspond to
@@ -286,8 +285,8 @@ class MafIndex(object):
             self._con = _sqlite.connect(sqlite_file)
             self._record_count = self.__make_new_index()
 
-        # lastly, setup a maf_iterator pointing at the open maf_file
-        self._mafiter = maf_iterator(self._maf_fp)
+        # lastly, setup a MafIterator pointing at the open maf_file
+        self._mafiter = MafIterator(self._maf_fp)
 
     def __check_existing_db(self):
         """Basic sanity checks upon loading an existing index"""
@@ -555,7 +554,7 @@ class MafIndex(object):
 
         # validate strand
         if strand not in (1, -1):
-            raise ValueError("Strand must be 1 or -1")
+            raise ValueError("Strand must be 1 or -1, got %s" % str(strand))
 
         # pull all alignments that span the desired intervals
         fetched = [multiseq for multiseq in self.search(starts, ends)]
