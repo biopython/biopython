@@ -115,7 +115,7 @@ def check_simple_write_read(alignments, indent=" "):
                 records_per_alignment = None
         # Can we expect this format to work?
         if not records_per_alignment \
-        and format not in test_write_read_alignment_formats:
+                and format not in test_write_read_alignment_formats:
             continue
 
         print(indent + "Checking can write/read as '%s' format" % format)
@@ -226,8 +226,8 @@ def check_phylip_reject_duplicate():
         # Expected - check the error
         assert "Repeated name 'longsequen'" in str(err)
 
-check_phylip_reject_duplicate()
 
+check_phylip_reject_duplicate()
 
 # Check parsers can cope with an empty file
 for t_format in AlignIO._FormatToIterator:
@@ -265,8 +265,8 @@ for (t_format, t_per, t_count, t_filename) in test_files:
     # Try as an iterator using handle
     with open(t_filename, "r") as handle:
         alignments = list(AlignIO.parse(handle, format=t_format))
-    assert len(alignments) == t_count, \
-         "Found %i alignments but expected %i" % (len(alignments), t_count)
+    msg = "Found %i alignments but expected %i" % (len(alignments), t_count)
+    assert len(alignments) == t_count, msg
     if t_per is not None:
         for alignment in alignments:
             assert len(alignment) == t_per, \
@@ -355,7 +355,6 @@ for (t_format, t_per, t_count, t_filename) in test_files:
         except ValueError as err:
             if str(err) != "Error in alphabet: not Nucleotide or Protein, supply expected frequencies":
                 raise err
-            pass
 
     if t_count == 1 and t_format not in ["nexus", "emboss", "fasta-m10"]:
         # print(" Trying to read a triple concatenation of the input file")
