@@ -444,10 +444,9 @@ class MafIndex(object):
         start_bin >>= _bin_first_shift
         end_bin >>= _bin_first_shift
 
-        for i in range(0, len(bin_offsets)):
+        for bin_offset in bin_offsets:
             if start_bin == end_bin:
-                return bin_offsets[i] + start_bin
-
+                return bin_offset + start_bin
             start_bin >>= _bin_next_shift
             end_bin >>= _bin_next_shift
 
