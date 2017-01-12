@@ -71,6 +71,7 @@ test_files = [
 
 
 def str_summary(text, max_len=40):
+    """Cuts *text* if too long for summaries."""
     if len(text) <= max_len:
         return text
     else:
@@ -85,8 +86,8 @@ def alignment_summary(alignment, index="  ", vertical_threshold=5):
     if rec_count < vertical_threshold:
         # Show each sequence row horizontally
         for record in alignment:
-            answer.append("%s%s %s"
-            % (index, str_summary(str(record.seq)), record.id))
+            answer.append("%s%s %s" % (
+                index, str_summary(str(record.seq)), record.id))
     else:
         # Show each sequence row vertically
         for i in range(min(5, alignment_len)):
@@ -133,15 +134,17 @@ def check_simple_write_read(alignments, indent=" "):
             handle.flush()
             handle.seek(0)
             try:
-                alignments2 = list(AlignIO.parse(handle=handle, format=format,
-                                                 seq_count=records_per_alignment))
+                alignments2 = list(AlignIO.parse(
+                    handle=handle,
+                    format=format,
+                    seq_count=records_per_alignment))
             except ValueError as e:
                 # This is BAD.  We can't read our own output.
                 # I want to see the output when called from the test harness,
                 # run_tests.py (which can be funny about new lines on Windows)
                 handle.seek(0)
-                raise ValueError("%s\n\n%s\n\n%s"
-                                  % (str(e), repr(handle.read()), repr(alignments2)))
+                raise ValueError("%s\n\n%s\n\n%s" % (
+                    str(e), repr(handle.read()), repr(alignments2)))
             simple_alignment_comparison(alignments, alignments2, format)
 
         if format in test_write_read_alignment_formats:
@@ -155,8 +158,8 @@ def check_simple_write_read(alignments, indent=" "):
                 # I want to see the output when called from the test harness,
                 # run_tests.py (which can be funny about new lines on Windows)
                 handle.seek(0)
-                raise ValueError("%s\n\n%s\n\n%s"
-                                  % (str(e), repr(handle.read()), repr(alignments2)))
+                raise ValueError("%s\n\n%s\n\n%s" % (
+                    str(e), repr(handle.read()), repr(alignments2)))
             simple_alignment_comparison(alignments, alignments2, format)
 
         if len(alignments) > 1:
@@ -215,9 +218,9 @@ def check_phylip_reject_duplicate():
         # This should raise a ValueError
         AlignIO.write(alignment, handle, 'phylip')
         assert False, "Duplicate IDs after truncation are not allowed."
-    except ValueError as e:
+    except ValueError as err:
         # Expected - check the error
-        assert "Repeated name 'longsequen'" in str(e)
+        assert "Repeated name 'longsequen'" in str(err)
 
 check_phylip_reject_duplicate()
 
@@ -231,9 +234,8 @@ for t_format in AlignIO._FormatToIterator:
 # Check writers can cope with no alignments
 for t_format in list(AlignIO._FormatToWriter) + list(SeqIO._FormatToWriter):
     handle = StringIO()
-    assert 0 == AlignIO.write([], handle, t_format), \
-           "Writing no alignments to %s format should work!" \
-           % t_format
+    msg = "Writing no alignments to %s format should work!" % t_format
+    assert AlignIO.write([], handle, t_format) == 0, msg
     handle.close()
 
 # Check writers reject non-alignments
@@ -345,9 +347,9 @@ for (t_format, t_per, t_count, t_filename) in test_files:
         rep_dict = summary.replacement_dictionary()
         try:
             info_content = summary.information_content()
-        except ValueError as e:
-            if str(e) != "Error in alphabet: not Nucleotide or Protein, supply expected frequencies":
-                raise e
+        except ValueError as err:
+            if str(err) != "Error in alphabet: not Nucleotide or Protein, supply expected frequencies":
+                raise err
             pass
 
     if t_count == 1 and t_format not in ["nexus", "emboss", "fasta-m10"]:
@@ -357,7 +359,7 @@ for (t_format, t_per, t_count, t_filename) in test_files:
         handle = StringIO()
         handle.write(data + "\n\n" + data + "\n\n" + data)
         handle.seek(0)
-        assert 3 == len(list(AlignIO.parse(handle=handle, format=t_format, seq_count=t_per)))
+        assert len(list(AlignIO.parse(handle=handle, format=t_format, seq_count=t_per))) == 3
         handle.close()
 
     # Some alignment file formats have magic characters which mean
