@@ -144,14 +144,15 @@ DOCTEST_MODULES = [
 ]
 # Silently ignore any doctests for modules requiring numpy!
 if is_numpy():
-    DOCTEST_MODULES.extend(["Bio.Affy.CelFile",
-                            "Bio.MaxEntropy",
-                            "Bio.PDB.Polypeptide",
-                            "Bio.PDB.Selection",
-                            "Bio.SeqIO.PdbIO",
-                            "Bio.Statistics.lowess",
-                            "Bio.SVDSuperimposer",
-                            ])
+    DOCTEST_MODULES.extend([
+        "Bio.Affy.CelFile",
+        "Bio.MaxEntropy",
+        "Bio.PDB.Polypeptide",
+        "Bio.PDB.Selection",
+        "Bio.SeqIO.PdbIO",
+        "Bio.Statistics.lowess",
+        "Bio.SVDSuperimposer",
+    ])
 
 
 try:
@@ -184,20 +185,20 @@ def _have_bug17666():
     if sys.version_info[0] >= 3:
         import codecs
         bgzf_eof = codecs.latin_1_encode(bgzf_eof)[0]
-    h = gzip.GzipFile(fileobj=BytesIO(bgzf_eof))
+    handle = gzip.GzipFile(fileobj=BytesIO(bgzf_eof))
     try:
-        data = h.read()
-        h.close()
+        data = handle.read()
+        handle.close()
         assert not data, "Should be zero length, not %i" % len(data)
         return False
     except TypeError as err:
         # TypeError: integer argument expected, got 'tuple'
-        h.close()
+        handle.close()
         return True
 if _have_bug17666():
     DOCTEST_MODULES.remove("Bio.bgzf")
 
-system_lang = os.environ.get('LANG', 'C')  # Cache this
+SYSTEM_LANG = os.environ.get('LANG', 'C')  # Cache this
 
 
 def main(argv):
@@ -236,17 +237,17 @@ def main(argv):
     verbosity = VERBOSITY
 
     # deal with the options
-    for o, a in opts:
-        if o == "--help":
+    for opt, _ in opts:
+        if opt == "--help":
             print(__doc__)
             return 0
-        if o == "--offline":
+        if opt == "--offline":
             print("Skipping any tests requiring internet access")
             # This is a bit of a hack...
             import requires_internet
             requires_internet.check.available = False
             # The check() function should now report internet not available
-        if o == "-g" or o == "--generate":
+        if opt == "-g" or opt == "--generate":
             if len(args) > 1:
                 print("Only one argument (the test name) needed for generate")
                 print(__doc__)
@@ -263,7 +264,7 @@ def main(argv):
             test.generate_output()
             return 0
 
-        if o == "-v" or o == "--verbose":
+        if opt == "-v" or opt == "--verbose":
             verbosity = 2
 
     # deal with the arguments, which should be names of tests to run
@@ -336,7 +337,7 @@ class ComparisonTestCase(unittest.TestCase):
             line_number += 1
 
             # stop looping if either of the info handles reach the end
-            if not(expected_line) or not(output_line):
+            if (not expected_line) or (not output_line):
                 # make sure both have no information left
                 assert expected_line == '', "Unread: %s" % expected_line
                 assert output_line == '', "Extra output: %s" % output_line
@@ -354,9 +355,12 @@ class ComparisonTestCase(unittest.TestCase):
             # otherwise make sure the two lines are the same
             elif expected_line != output_line:
                 expected.close()
-                raise ValueError("\nOutput  : %s\nExpected: %s\n%s line %s"
-                      % (repr(output_line), repr(expected_line), outputfile, 
-                         line_number))
+                raise ValueError(
+                    "\nOutput  : %s\nExpected: %s\n%s line %s" % (
+                        repr(output_line),
+                        repr(expected_line),
+                        outputfile,
+                        line_number))
 
         expected.close()
 
@@ -391,10 +395,13 @@ class TestRunner(unittest.TextTestRunner):
         file = __file__
     testdir = os.path.abspath(os.path.dirname(file) or os.curdir)
 
-    def __init__(self, tests=(), verbosity=0):
+    def __init__(self, tests=None, verbosity=0):
         # if no tests were specified to run, we run them all
         # including the doctests
-        self.tests = tests
+        if tests is None:
+            self.tests = []
+        else:
+            self.tests = tests
         if not self.tests:
             # Make a list of all applicable test modules.
             names = os.listdir(TestRunner.testdir)
@@ -416,8 +423,8 @@ class TestRunner(unittest.TextTestRunner):
         output = StringIO()
         # Restore the language and thus default encoding (in case a prior
         # test changed this, e.g. to help with detecting command line tools)
-        global system_lang
-        os.environ['LANG'] = system_lang
+        global SYSTEM_LANG
+        os.environ['LANG'] = SYSTEM_LANG
         # Always run tests from the Tests/ folder where run_tests.py
         # should be located (as we assume this with relative paths etc)
         os.chdir(self.testdir)
@@ -511,18 +518,18 @@ class TestRunner(unittest.TextTestRunner):
     def run(self):
         """Run tests, return number of failures (integer)."""
         failures = 0
-        startTime = time.time()
+        start_time = time.time()
         for test in self.tests:
             ok = self.runTest(test)
             if not ok:
                 failures += 1
         total = len(self.tests)
-        stopTime = time.time()
-        timeTaken = stopTime - startTime
+        stop_time = time.time()
+        time_taken = stop_time - start_time
         sys.stderr.write(self.stream.getvalue())
         sys.stderr.write('-' * 70 + "\n")
         sys.stderr.write("Ran %d test%s in %.3f seconds\n" %
-                         (total, total != 1 and "s" or "", timeTaken))
+                         (total, total != 1 and "s" or "", time_taken))
         sys.stderr.write("\n")
         if failures:
             sys.stderr.write("FAILED (failures = %d)\n" % failures)
