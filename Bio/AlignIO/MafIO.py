@@ -67,8 +67,6 @@ from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
 from .Interfaces import SequentialAlignmentWriter
 
-__docformat__ = "restructuredtext en"
-
 # To avoid method lookup
 STARTSWITH = str.startswith
 STRIP = str.strip
@@ -147,6 +145,8 @@ class MafWriter(SequentialAlignmentWriter):
         return recs_out
 
 
+# Invalid function name according to pylint, but kept for compatibility
+# with Bio* conventions.
 def MafIterator(handle, seq_count=None, alphabet=single_letter_alphabet):
     """
     Iterates over lines in a MAF file-like object (handle), yielding
@@ -191,7 +191,7 @@ def MafIterator(handle, seq_count=None, alphabet=single_letter_alphabet):
 
                 sequence = line_split[6]
 
-                # interpret a dot/period to mean same the first sequence
+                # interpret a dot/period to mean the same as the first sequence
                 if "." in sequence:
                     if not records:
                         raise ValueError("Found dot/period in first sequence of alignment")
@@ -199,8 +199,8 @@ def MafIterator(handle, seq_count=None, alphabet=single_letter_alphabet):
                     ref = str(records[0].seq)
                     new = []
 
-                    for (s, r) in zip(sequence, ref):
-                        new.append(r if s == "." else s)
+                    for (letter, ref_letter) in zip(sequence, ref):
+                        new.append(ref_letter if letter == "." else letter)
 
                     sequence = "".join(new)
 
@@ -210,9 +210,9 @@ def MafIterator(handle, seq_count=None, alphabet=single_letter_alphabet):
                     name=line_split[1],
                     description="",
                     annotations=anno))
-            elif STARTSWITH(line, "e") or \
-                 STARTSWITH(line, "i") or \
-                 STARTSWITH(line, "q"):
+            elif (STARTSWITH(line, "e") or
+                  STARTSWITH(line, "i") or
+                  STARTSWITH(line, "q")):
                 # not implemented
                 # TODO: issue warning?
                 pass
@@ -256,6 +256,12 @@ def MafIterator(handle, seq_count=None, alphabet=single_letter_alphabet):
 
 
 class MafIndex(object):
+    """This is used as an index for a MAF file.
+
+    The index is a sqlite3 database that is build upon creation of the object
+    if necessary, and queried when methods *search* or *get_spliced* are
+    used."""
+
     def __init__(self, sqlite_file, maf_file, target_seqname):
         """Indexes or loads the index of a MAF file"""
 
@@ -265,8 +271,8 @@ class MafIndex(object):
             from sqlite3 import dbapi2 as _sqlite
         except ImportError:
             from Bio import MissingPythonDependencyError
-            raise MissingPythonDependencyError("Requires sqlite3, which is "
-                                               "included in Python 2.5+")
+            raise MissingPythonDependencyError(
+                "Requires sqlite3, which is included in Python 2.5+")
 
         self._target_seqname = target_seqname
         self._maf_file = maf_file
@@ -279,10 +285,10 @@ class MafIndex(object):
 
         # if sqlite_file exists, use the existing db, otherwise index the file
         if os.path.isfile(sqlite_file):
-            self._con = _sqlite.connect(sqlite_file)
+            self._db_con = _sqlite.connect(sqlite_file)
             self._record_count = self.__check_existing_db()
         else:
-            self._con = _sqlite.connect(sqlite_file)
+            self._db_con = _sqlite.connect(sqlite_file)
             self._record_count = self.__make_new_index()
 
         # lastly, setup a MafIterator pointing at the open maf_file
@@ -296,32 +302,33 @@ class MafIndex(object):
         from sqlite3 import DatabaseError as _DatabaseError
 
         try:
-            idx_version = int(self._con.execute(
+            idx_version = int(self._db_con.execute(
                 "SELECT value FROM meta_data WHERE key = 'version'").fetchone()[0])
             if idx_version != MAFINDEX_VERSION:
                 raise ValueError(
                     "Index version (%s) incompatible with this version of MafIndex" % (
                         idx_version,))
 
-            filename = self._con.execute(
+            filename = self._db_con.execute(
                 "SELECT value FROM meta_data WHERE key = 'filename'").fetchone()[0]
             if filename != self._maf_file:
                 raise ValueError("Index uses a different file (%s != %s)" % (
                     filename, self._maf_file))
 
-            db_target = self._con.execute(
+            db_target = self._db_con.execute(
                 "SELECT value FROM meta_data WHERE key = 'target_seqname'").fetchone()[0]
             if db_target != self._target_seqname:
                 raise ValueError(
                     "Provided database indexed for %s, expected %s" % (
                         db_target, self._target_seqname))
 
-            record_count = int(self._con.execute(
+            record_count = int(self._db_con.execute(
                 "SELECT value FROM meta_data WHERE key = 'record_count'").fetchone()[0])
             if record_count == -1:
                 raise ValueError("Unfinished/partial database provided")
 
-            records_found = int(self._con.execute("SELECT COUNT(*) FROM offset_data").fetchone()[0])
+            records_found = int(self._db_con.execute(
+                "SELECT COUNT(*) FROM offset_data").fetchone()[0])
             if records_found != record_count:
                 raise ValueError(
                     "Expected %s records, found %s.  Corrupt index?" % (
@@ -337,15 +344,15 @@ class MafIndex(object):
         from itertools import islice
 
         # make the tables
-        self._con.execute("CREATE TABLE meta_data (key TEXT, value TEXT);")
-        self._con.execute("INSERT INTO meta_data (key, value) VALUES ('version', 1);")
-        self._con.execute("INSERT INTO meta_data (key, value) VALUES ('record_count', -1);")
-        self._con.execute(
+        self._db_con.execute("CREATE TABLE meta_data (key TEXT, value TEXT);")
+        self._db_con.execute("INSERT INTO meta_data (key, value) VALUES ('version', 1);")
+        self._db_con.execute("INSERT INTO meta_data (key, value) VALUES ('record_count', -1);")
+        self._db_con.execute(
             "INSERT INTO meta_data (key, value) VALUES ('target_seqname', '%s');" % (
                 self._target_seqname,))
-        self._con.execute(
+        self._db_con.execute(
             "INSERT INTO meta_data (key, value) VALUES ('filename', '%s');" % (self._maf_file,))
-        self._con.execute(
+        self._db_con.execute(
             "CREATE TABLE offset_data (bin INTEGER, start INTEGER, end INTEGER, offset INTEGER);")
 
         insert_count = 0
@@ -360,26 +367,28 @@ class MafIndex(object):
 
             # batch is made from self.__maf_indexer(),
             # which yields zero-based "inclusive" start and end coordinates
-            self._con.executemany(
+            self._db_con.executemany(
                 "INSERT INTO offset_data (bin, start, end, offset) VALUES (?,?,?,?);", batch)
-            self._con.commit()
+            self._db_con.commit()
 
             insert_count += len(batch)
 
         # then make indexes on the relevant fields
-        self._con.execute("CREATE INDEX IF NOT EXISTS bin_index ON offset_data(bin);")
-        self._con.execute("CREATE INDEX IF NOT EXISTS start_index ON offset_data(start);")
-        self._con.execute("CREATE INDEX IF NOT EXISTS end_index ON offset_data(end);")
+        self._db_con.execute("CREATE INDEX IF NOT EXISTS bin_index ON offset_data(bin);")
+        self._db_con.execute("CREATE INDEX IF NOT EXISTS start_index ON offset_data(start);")
+        self._db_con.execute("CREATE INDEX IF NOT EXISTS end_index ON offset_data(end);")
 
-        self._con.execute(
+        self._db_con.execute(
             "UPDATE meta_data SET value = '%s' WHERE key = 'record_count'" % (insert_count,))
 
-        self._con.commit()
+        self._db_con.commit()
 
         return insert_count
 
     def __maf_indexer(self):
-        """Generator function, returns index information for each bundle"""
+        """Generator function, yields index information for each bundle. in the
+        form of (bin, start, end, offset) tuples where start and end are
+        0-based inclusive coordinates"""
 
         line = self._maf_fp.readline()
 
@@ -441,7 +450,7 @@ class MafIndex(object):
     def _ucscbin(start, end):
         """Returns the smallest bin a given region will fit into.
 
-        Taken from http://genomewiki.ucsc.edu/index.php/Bin_indexing_system
+        Adapted from http://genomewiki.ucsc.edu/index.php/Bin_indexing_system
         """
 
         bin_offsets = [512 + 64 + 8 + 1, 64 + 8 + 1, 8 + 1, 1, 0]
@@ -455,9 +464,9 @@ class MafIndex(object):
         start_bin >>= _bin_first_shift
         end_bin >>= _bin_first_shift
 
-        for i in range(0, len(bin_offsets)):
+        for bin_offset in bin_offsets:
             if start_bin == end_bin:
-                return bin_offsets[i] + start_bin
+                return bin_offset + start_bin
 
             start_bin >>= _bin_next_shift
             end_bin >>= _bin_next_shift
@@ -473,9 +482,13 @@ class MafIndex(object):
 
     def search(self, starts, ends):
         """Searches index database for MAF records overlapping ranges provided.
-        Returns results in order by start, then end, then internal offset
-        field.
-        *starts* and *end* should be lists of zero-based inclusive coordinates.
+        Returns *MultipleSeqAlignment* results in order by start, then end, then
+        internal offset field.
+
+        *starts* should be a list of 0-based start coordinates of segments in the reference.
+        *ends* should be the list of the corresponding segment ends
+        (in the half-open UCSC convention:
+        http://genome.ucsc.edu/blog/the-ucsc-genome-browser-coordinate-counting-systems/).
         """
 
         # verify the provided exon coordinates
@@ -483,19 +496,23 @@ class MafIndex(object):
             raise ValueError("Every position in starts must have a match in ends")
 
         for exonstart, exonend in zip(starts, ends):
-            if exonstart > exonend:
-                raise ValueError("Exon coordinates invalid (%s > %s)" % (exonstart, exonend))
+            exonlen = exonend - exonstart
+            if exonlen < 1:
+                raise ValueError("Exon coordinates (%d, %d) invalid: exon length (%d) < 1" % (
+                    exonstart, exonend, exonlen))
 
-        con = self._con
+        db_con = self._db_con
 
         # search for every exon
         for exonstart, exonend in zip(starts, ends):
             try:
-                possible_bins = ", ".join(map(str, self._region2bin(exonstart, exonend)))
+                possible_bins = ", ".join(map(
+                    str,
+                    self._region2bin(exonstart, exonend - 1)))
             except TypeError:
                 raise TypeError(
                     "Exon coordinates must be integers "
-                    "(start=%s, end=%s)" % (exonstart, exonend))
+                    "(start=%d, end=%d)" % (exonstart, exonend))
 
             # https://www.sqlite.org/lang_expr.html
             # -----
@@ -511,12 +528,13 @@ class MafIndex(object):
 
             # We are testing overlap between the query segment and records in
             # the index, using non-strict coordinates comparisons.
+            # The query segment end must be passed as end-inclusive
 
-            result = con.execute(
+            result = db_con.execute(
                 "SELECT DISTINCT start, end, offset FROM "
                 "offset_data WHERE bin IN (%s) AND (end BETWEEN %s AND %s "
                 "OR %s BETWEEN start AND end) ORDER BY start, end, "
-                "offset ASC;" % (possible_bins, exonstart, exonend, exonend))
+                "offset ASC;" % (possible_bins, exonstart, exonend - 1, exonend - 1))
 
             rows = result.fetchall()
 
@@ -547,9 +565,17 @@ class MafIndex(object):
         """Returns a multiple alignment of the exact sequence range provided.
 
         Accepts two lists of start and end positions on target_seqname, representing
-        exons to be spliced in silico.  Returns a MultipleSeqAlignment of the
+        exons to be spliced in silico.  Returns a *MultipleSeqAlignment* of the
         desired sequences spliced together.
-        *starts* and *end* should be lists of zero-based inclusive coordinates.
+
+        *starts* should be a list of 0-based start coordinates of segments in the reference.
+        *ends* should be the list of the corresponding segment ends
+        (in the half-open UCSC convention:
+        http://genome.ucsc.edu/blog/the-ucsc-genome-browser-coordinate-counting-systems/).
+
+        To ask for the alignment portion corresponding to the first 100
+        nucleotides of the reference sequence, you would use
+        ``search([0], [100])``
         """
 
         # validate strand
@@ -560,11 +586,9 @@ class MafIndex(object):
         fetched = [multiseq for multiseq in self.search(starts, ends)]
 
         # keep track of the expected letter count
-        # expected_letters = sum([y - x for x, y in zip(starts,ends)])
-        # Coordinates are interpreted by MafIndex.search as zero-based
-        # (by MAF format specification https://cgwb.nci.nih.gov/FAQ/FAQformat.html#format5),
-        # and inclusive
-        expected_letters = sum([(y + 1) - x for x, y in zip(starts, ends)])
+        # (sum of lengths of [start, end) segments,
+        # where [start, end) half-open)
+        expected_letters = sum([end - start for start, end in zip(starts, ends)])
 
         # if there's no alignment, return filler for the assembly of the length given
         if len(fetched) == 0:
@@ -616,8 +640,8 @@ class MafIndex(object):
                     rec_start = seqrec.annotations["start"]
                     # rec_end = seqrec.annotations["start"] + seqrec.annotations["size"]
                     ungapped_length = seqrec.annotations["size"]
-                    # Inclusive end in zero-based coordinates of the reference
-                    rec_end = rec_start + ungapped_length - 1
+                    # Exclusive end in zero-based coordinates of the reference
+                    rec_end = rec_start + ungapped_length
 
                     # total_rec_length += rec_end - rec_start
                     # This is length in terms of actual letters in the reference
@@ -627,10 +651,7 @@ class MafIndex(object):
 
                     # blank out these positions for every seqname
                     for seqrec in multiseq:
-                        # for pos in range(rec_start, rec_end):
-                        # pos needs to reach rec_end,
-                        # because rec_end is inclusive
-                        for pos in range(rec_start, rec_end + 1):
+                        for pos in range(rec_start, rec_end):
                             split_by_position[seqrec.id][pos] = ""
 
                     break
@@ -656,13 +677,16 @@ class MafIndex(object):
 
                 # increment the real_pos counter only when non-gaps are found in
                 # the target_seqname, and we haven't reached the end of the record
-                if track_val != "-" and real_pos < rec_end:
+                if track_val != "-" and real_pos < rec_end - 1:
                     real_pos += 1
 
         # make sure the number of bp entries equals the sum of the record lengths
         if len(split_by_position[self._target_seqname]) != total_rec_length:
-            raise ValueError("Target seqname (%s) has %s records, expected %s" % (
-                self._target_seqname, len(split_by_position[self._target_seqname]), total_rec_length))
+            raise ValueError(
+                "Target seqname (%s) has %s records, expected %s" % (
+                    self._target_seqname,
+                    len(split_by_position[self._target_seqname]),
+                    total_rec_length))
 
         # translates a position in the target_seqname sequence to its gapped length
         realpos_to_len = dict(
@@ -687,17 +711,19 @@ class MafIndex(object):
             append = seq_splice.append
 
             for exonstart, exonend in zip(starts, ends):
-                # for real_pos in range(exonstart, exonend):
-                # exonend is inclusive
-                for real_pos in range(exonstart, exonend + 1):
+                # exonend is exclusive
+                for real_pos in range(exonstart, exonend):
                     # if this seqname has this position, add it
                     if real_pos in seq_split:
                         append(seq_split[real_pos])
-                    # if not, but it's in the target_seqname, add length-matched filler
-                    # Can this happen? Aren't all positions in realpos_to_len also in seq_split?
+                    # if not, but it's in the target_seqname,
+                    # add length-matched filler
+                    #
+                    # Can this happen?
+                    # Aren't all positions in realpos_to_len also in seq_split?
                     # realpos_to_len has its keys from split_by_position[self._target_seqname]
                     # The keys in split_by_position.items()
-                    # are all from range(rec_start, rec_end + 1)
+                    # are all from range(rec_start, rec_end)
                     # Yes, but this is for a given aligment block in the maf file.
                     # split_by_position.items() may have missing entries
                     # if the sequence was not that block.
