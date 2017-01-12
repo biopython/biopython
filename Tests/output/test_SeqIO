@@ -2744,6 +2744,8 @@ Testing reading embl format file EMBL/kipo_prt_sample.embl
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
+ Failed: Sequences must all be the same length
  Checking can write/read as 'nexus' format
  Failed: Sequences must all be the same length
  Checking can write/read as 'phylip-sequential' format
@@ -2873,6 +2875,8 @@ Testing reading imgt format file EMBL/hla_3260_sample.imgt
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
+ Failed: Sequences must all be the same length
  Checking can write/read as 'nexus' format
  Failed: Sequences must all be the same length
  Checking can write/read as 'phylip-sequential' format
