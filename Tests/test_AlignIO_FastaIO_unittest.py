@@ -228,8 +228,11 @@ class TestSelf(unittest.TestCase):
         self.assertEqual(len(alignments), 4)
         self.assertEqual(len(alignments[0]), 2)
         for a in alignments:
-            self.assertEqual(2, len(a))
-            self.assertEqual(108, a.get_alignment_length())
+            rows = (2, 3, 4, 5)
+            cols = (108, 64, 123, 456)
+            for a, rows, cols in zip(alignments, rows, cols):
+                self.assertEqual(rows, len(a))
+                self.assertEqual(cols, a.get_alignment_length())
             for r in a:
                 print("%s %s %i" % (r.seq, r.id, r.annotations["original_length"]))
             # print(a.annotations)
