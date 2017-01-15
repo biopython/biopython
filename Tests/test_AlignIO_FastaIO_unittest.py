@@ -229,7 +229,7 @@ class TestSelf(unittest.TestCase):
         self.assertEqual(len(alignments[0]), 2)
         rows = (2, 3, 4, 5)
         cols = (108, 64, 123, 456)
-        for a rows, cols in zip(alignments, rows, cols):
+        for a, rows, cols in zip(alignments, rows, cols):
             self.assertEqual(rows, len(a))
             self.assertEqual(cols, a.get_alignment_length())
             for r in a:
