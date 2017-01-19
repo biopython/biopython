@@ -87,8 +87,9 @@ class PrintFormat(object):
 
         return
 
-    def print_that(self, dct, title='', s1=''):
-        """PF.print_that(dct, [title[, s1]]) -> Print dct nicely formatted.
+    def print_that(self, dct, title='', s1='', print_=True):
+        """PF.print_that(dct, [title[, s1[, print_]]]) -> Print dct nicely
+        formatted.
 
         Arguments:
          - dct is a dictionary as returned by a RestrictionBatch.search()
@@ -97,6 +98,8 @@ class PrintFormat(object):
          - s1 is the title separating the list of enzymes that have sites from
            those without sites.
          - s1 must be a formatted string as well.
+         - print_ is a boolean to flag that the method will output to stdout if
+           True. If false, the output will be returned.
 
         The format of print_that is a list."""
         if not dct:
@@ -107,8 +110,10 @@ class PrintFormat(object):
                 ls.append((k, v))
             else:
                 nc.append(k)
-        print(self.make_format(ls, title, nc, s1))
-        return
+        if print_:
+            print(self.make_format(ls, title, nc, s1))
+        else:
+            return self.make_format(ls, title, nc, s1)
 
     def make_format(self, cut=(), title='', nc=(), s1=''):
         """PF.make_format(cut, nc, title, s) -> string
