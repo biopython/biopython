@@ -2255,16 +2255,24 @@ class Analysis(RestrictionBatch, PrintFormat):
         """
         return start <= site <= len(self.sequence) or 1 <= site < end
 
-    def print_that(self, dct=None, title='', s1='', print_=True):
-        """A.print_that([dct[, title[, s1[,print_]]]]) -> print the results
-        from dct.
+    def format(self, dct=None, title='', s1=''):
+        """A.format([dct[, title[, s1]]]) -> print the results from dct.
 
         If dct is not given the full dictionary is used.
         """
         if not dct:
             dct = self.mapping
-        print("")
-        return PrintFormat.print_that(self, dct, title, s1, print_)
+        return PrintFormat.print_that(self, dct, title, s1)
+
+    def print_that(self, dct=None, title='', s1=''):
+        """A.print_that([dct[, title[, s1[,print_]]]]) -> print the results
+        from dct.
+
+        If dct is not given the full dictionary is used.
+        This method prints the output of A.format() and it is here for
+        backwards compatibility.
+        """
+        print(self.format(dct, title, s1))
 
     def change(self, **what):
         """A.change(**attribute_name) -> Change attribute of Analysis.
