@@ -2255,8 +2255,9 @@ class Analysis(RestrictionBatch, PrintFormat):
         """
         return start <= site <= len(self.sequence) or 1 <= site < end
 
-    def format(self, dct=None, title='', s1=''):
-        """A.format([dct[, title[, s1]]]) -> print the results from dct.
+    def format_output(self, dct=None, title='', s1=''):
+        """A.format_output([dct[, title[, s1]]]) -> print the results from
+        dct.
 
         If dct is not given the full dictionary is used.
         """
@@ -2269,10 +2270,10 @@ class Analysis(RestrictionBatch, PrintFormat):
         from dct.
 
         If dct is not given the full dictionary is used.
-        This method prints the output of A.format() and it is here for
-        backwards compatibility.
+        This method prints the output of A.format_output() and it is here
+        for backwards compatibility.
         """
-        print(self.format(dct, title, s1))
+        print(self.format_output(dct, title, s1))
 
     def change(self, **what):
         """A.change(**attribute_name) -> Change attribute of Analysis.

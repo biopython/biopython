@@ -88,8 +88,7 @@ class PrintFormat(object):
         return
 
     def print_that(self, dct, title='', s1=''):
-        """PF.print_that(dct, [title[, s1[, print_]]]) -> string nicely
-        formatted.
+        """PF.print_that(dct, [title[, s1]]) -> string nicely formatted.
 
         Arguments:
          - dct is a dictionary as returned by a RestrictionBatch.search()
