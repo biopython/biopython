@@ -57,7 +57,7 @@ We currently recommend using Python 3.5 from http://www.python.org
 Biopython is currently supported and tested on the following Python
 implementations:
 
-- Python 2.7, 3.3, 3.4, 3.5 -- see http://www.python.org
+- Python 2.7, 3.3, 3.4, 3.5, 3.6 -- see http://www.python.org
 
   This is the primary development platform for Biopython.
 
