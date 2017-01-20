@@ -576,12 +576,6 @@ def _construct_cgi(cgi, post, options):
     return cgi
 
 
-def _test():
-    """Run the module's doctests (PRIVATE)."""
-    print("Running doctests...")
-    import doctest
-    doctest.testmod()
-    print("Done")
-
 if __name__ == "__main__":
-    _test()
+    from Bio._utils import run_doctest
+    run_doctest()
