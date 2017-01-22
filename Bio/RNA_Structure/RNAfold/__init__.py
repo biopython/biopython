@@ -11,6 +11,15 @@
 #
 # 2. RNAstructure license is available separately.
 #    Please consult rna.urmc.rochester.edu .
+#
+#example of usage:
+#
+#cline = RNAfoldCommandLine(infile="~/Desktop/jakis_plik.fasta",energyModel=0, #dangles=2,maxBPspan=1)
+#print("About to run: %s" % cline)
+#std_output, err_output = cline()
+#print(std_output)
+
+
 from __future__ import print_function
 import re
 from Bio.Application import _Option, _Switch, AbstractCommandline

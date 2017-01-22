@@ -1,9 +1,26 @@
 
 import unittest
-from API import API_NDB, API_RNA_STRAND
-from RBP_score import RBP_score
-from RNAfold import RNAfold_wrapper
+from Bio.RNA_Structure.API import API_RNA_STRAND
+from Bio.RNA_Structure.API import API_NDB
+from Bio.RNA_Structure.RBP_score import RBP_score
+from Bio.RNA_Structure import RNAfold
+from Bio import MissingExternalDependencyError
 import os
+import sys
+
+if sys.platform == "win32":
+    # TODO
+    raise MissingExternalDependencyError("Testing this on Windows is not implemented yet")
+else:
+    from Bio._py3k import getoutput
+    output = getoutput("RNAfold --version")
+    if "not found" not in output:
+        rna_fold = "RNAfold"
+
+if not rna_fold:
+    raise MissingExternalDependencyError(
+        "Install RNAfold if you want to use RNAfold from Biopython.")
+
 
 
 class API_PROJEKTfunctions(unittest.TestCase):
@@ -59,20 +76,20 @@ class ApiRNASTRANDfunctions(unittest.TestCase):
 class Calculations(unittest.TestCase):
 
     def test_rmsd_calculation(self):
-        example = API_NDB.rmsd_calculation("5swe_TEST.pdb", "5swe_TEST.pdb")[0]
+        example = API_NDB.rmsd_calculation("RNA_Structure/5swe_TEST.pdb", "RNA_Structure/5swe_TEST.pdb")[0]
         expected = 'Normal RMSD: 0.0\nKabsch RMSD: 6.40072443532e-15\nQuater RMSD: 2.48372284113e-17\n'
         self.assertEqual(example, expected)
 
     def test_rbp_calculation(self):
-        example = RBP_score.struct_comparison('TMR_00273_structure_test','TMR_00200_structure_test', 1)
+        example = RBP_score.struct_comparison('RNA_Structure/TMR_00273_structure_test','RNA_Structure/TMR_00200_structure_test', 1)
         result = example.rbp_score()
         expected = 1.0
         self.assertEqual(result, expected)
 class RNA_Fold_wrapper(unittest.TestCase):
 
     def  test_rna_fold(self):
-        cline = RNAfold_wrapper.RNAfoldCommandLine(energyModel=0, dangles=2,maxBPspan=1)
-        self.assertIsInstance(cline, RNAfold_wrapper.RNAfoldCommandLine)
+        cline = RNAfold.RNAfoldCommandLine(energyModel=0, dangles=2,maxBPspan=1)
+        self.assertIsInstance(cline, RNAfold.RNAfoldCommandLine)
 
 
 if __name__ == "__main__":
