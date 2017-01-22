@@ -16,6 +16,8 @@
 import os
 from subprocess import Popen, PIPE
 from Bio.RNA_Structure.API.API_function import *
+from Bio.RNA_Structure.API.API_NDB import *
+from Bio.RNA_Structure.API.API_RNA_STRAND import *
 
 def rmsd_calculation(x, y):
     """ Enter two pdb files with paths to generate rmsd value between them """
