@@ -570,7 +570,7 @@ class _Option(_AbstractParameter):
     o value -- the value of a parameter
     """
     def __init__(self, names, description, filename=False, checker_function=None,
-                 is_required=False, equate=True):
+                 is_required=False, equate=True, non_space=False):
         self.names = names
         assert isinstance(description, basestring), \
                "%r for %s" % (description, names[-1])
