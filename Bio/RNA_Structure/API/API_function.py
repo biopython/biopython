@@ -18,8 +18,8 @@ Author = "Joanna Zbijewska"
 """
 
 import sys
-import API_RNA_STRAND
-import API_NDB
+from Bio.RNA_Structure.API.API_RNA_STRAND import *
+from Bio.RNA_Structure.API.API_NDB import *
 
 
 class RNA_API():
@@ -38,7 +38,7 @@ class RNA_API():
         self.inpt = inpt
         self.type = input_type
         self.p = p
-        if p = None:
+        if p == None:
             self.p = ""
 
     def choose_db(self):

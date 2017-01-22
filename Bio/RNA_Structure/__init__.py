@@ -1,3 +1,4 @@
+# coding: utf-8
 # Copyright 2017 by Joanna Zbijewska, Agata Gruszczyńska, Michał Karlicki.
 # All rights reserved.
 # This code is part of the Biopython distribution and governed by its
@@ -14,7 +15,7 @@
 """ADPB"""
 import os
 from subprocess import Popen, PIPE
-
+from Bio.RNA_Structure.API.API_function import *
 
 def rmsd_calculation(x, y):
     """ Enter two pdb files with paths to generate rmsd value between them """

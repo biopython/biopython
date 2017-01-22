@@ -170,5 +170,5 @@ class struct_comparison():
                         print('Your calculated relaxed base pare score for relaxation parameter t = {} is {}'.format(t,rbp_score))
                         return(rbp_score)
 
-a = struct_comparison('TMR_00273_structure_test','TMR_00200_structure_test', 1)
-a.rbp_score()
+#a = struct_comparison('TMR_00273_structure_test','TMR_00200_structure_test', 1)
+#a.rbp_score()
