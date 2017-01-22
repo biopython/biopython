@@ -24,7 +24,7 @@ def rmsd_calculation(x, y):
     cmd = "python calculate_rmsd "+x+" "+y
     p = Popen(cmd, shell=True, stdout=PIPE)
     out, err = p.communicate()
-    return (out,err)
+    return((out,err))
 
 def csv_from_excel():
     """Xls files converter"""
@@ -42,7 +42,7 @@ def database_read(pdb_id):
         otw = csv.reader(f)
         for i in otw:
             if i[1] == pdb_id:
-                return i
+                return(i)
 
 
 def search_blast_pdb(sequence):
@@ -60,9 +60,9 @@ def search_blast_pdb(sequence):
             if len(match.group(0)) == 4:
                 list_pdb_id.append(match.group(0))
     if len(list_pdb_id) > 3:
-        return list_pdb_id[0:3]
+        return(list_pdb_id[0:3])
     else:
-        return list_pdb_id
+        return(list_pdb_id)
 
 def check_base(pdb_id):
     """Check base"""
@@ -70,18 +70,18 @@ def check_base(pdb_id):
         otw = csv.reader(f)
         for i in otw:
             if i[1] == x:
-                return True
+                return(True)
             else:
-                return "No records found"
+                return("No records found")
 
 def get_from_db_via_seq(sequence):
     """If exist PDB ID for enter sequence, this function return it"""
     pdb_ids = search_blast_pdb(sequence) #zakładając pierwszy jako właściwy
     for i in pdb_ids:
         if check_base(i) is True:
-            return i
+            return(i)
         else:
-            return sequence[0]
+            return(sequence[0])
 
 
 
@@ -102,7 +102,7 @@ class Nucleic_acid_database():
         database_link = tree.xpath('//tr/td/h2/span/a[@id]/@href')
         urllib.urlretrieve(url+database_link[0], "NDB_updated.xls")
         csv_from_excel()
-        return "NDB Database was updated and converted to csv file"
+        return("NDB Database was updated and converted to csv file")
 
     def database_read_metadata(self):
         """Metadata reader for NDB database"""
@@ -112,7 +112,7 @@ class Nucleic_acid_database():
                 if i[1] == self.pdb_id:
                       meta = i
 
-        return "Pdb id: {pdb}\nNbd id: {nbd}\nName of the structure: {nazwa}\nTitle of the publication: {title}\nDate of publication: {data}\nAuthors: {aut}\nMethod: {method}\nResolution: {rez}\nR value: {rvl}".format(pdb = meta[1], nazwa = meta[3], nbd = meta[0], title = meta[6], data = meta[4], aut = meta[5], method = meta[8], rez = meta[9], rvl = meta[10])
+        return("Pdb id: {pdb}\nNbd id: {nbd}\nName of the structure: {nazwa}\nTitle of the publication: {title}\nDate of publication: {data}\nAuthors: {aut}\nMethod: {method}\nResolution: {rez}\nR value: {rvl}".format(pdb = meta[1], nazwa = meta[3], nbd = meta[0], title = meta[6], data = meta[4], aut = meta[5], method = meta[8], rez = meta[9], rvl = meta[10]))
 
     def download_pdb_structure(self):
         """Structure downloader in pdb format"""
@@ -127,7 +127,7 @@ class Nucleic_acid_database():
         else:
             urllib.urlretrieve(url2, "{}.pdb1".format(pdb_id))
         os.rename(pdb_id+".pdb1", path+pdb_id+".pdb")
-        return "PDB file {} is ready".format(pdb_id.upper())
+        return("PDB file {} is ready".format(pdb_id.upper()))
 
 
     def get_seq_record(self):
@@ -144,7 +144,7 @@ class Nucleic_acid_database():
                 if i[1] == pdb_id:
                     meta = i
         record = SeqRecord(Seq(sequence[0],IUPAC.ambiguous_rna), id=pdb_id, name = "RNA sequence", description=meta[3])
-        return record
+        return(record)
 
     def download_fasta_sequence(self):
         """Sequence download in fasta format for desired PDB ID (look get_from_db_via_seq)"""
@@ -154,7 +154,7 @@ class Nucleic_acid_database():
         with open("{path}{}_sequence.fasta".format(pdb_id,path= path),"w") as f:
             SeqIO.write(sequence, f, "fasta")
         f.close()
-        return "Fasta file is ready"
+        return("Fasta file is ready")
 
     def metadata_to_file(self):
         """Metadata download for specified sequence or PDB ID (look get_from_db_via_seq)"""
@@ -169,7 +169,7 @@ class Nucleic_acid_database():
         metadata = "Pdb id: {pdb}\nNbd id: {nbd}\nName of the structure: {nazwa}\nTitle of the publication: {title}\nDate of publication: {data}\nAuthors: {aut}\nMethod: {method}\nResolution: {rez}\nR value: {rvl}".format(pdb = meta[1], nazwa = meta[3], nbd = meta[0], title = meta[6], data = meta[4], aut = meta[5], method = meta[8], rez = meta[9], rvl = meta[10])
         f.write("RNA structure from NBD\n"+metadata)
         f.close()
-        return "File with metadata is ready"
+        return("File with metadata is ready")
 
     def metadata(self):
         """Unable to view metadata for specified sequence or PDB ID"""
@@ -180,7 +180,7 @@ class Nucleic_acid_database():
                 if i[1] == pdb_id:
                     meta = i
             information = "Pdb id: {pdb}\nNbd id: {nbd}\nName of the structure: {nazwa}\nTitle of the publication: {title}\nDate of publication: {data}\nAuthors: {aut}\nMethod: {method}\nResolution: {rez}\nR value: {rvl}".format(pdb = meta[1], nazwa = meta[3], nbd = meta[0], title = meta[6], data = meta[4], aut = meta[5], method = meta[8], rez = meta[9], rvl = meta[10])
-            return information
+            return(information)
 
 class via_sequence(Nucleic_acid_database):
     """This class inherites form the Nucleic_acid_database class and enables searching and downloading
