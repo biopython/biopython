@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """Distutils based setup script for Biopython.
 
 This uses Distutils (http://python.org/sigs/distutils-sig/) the standard
@@ -411,7 +412,10 @@ PACKAGES = [
     'Bio._py3k',
     # Other top level packages,
     'BioSQL',
-    'Bio.RNA_Structure'
+    'Bio.RNA_Structure',
+    'Bio.RNA_Structure.API',
+    'Bio.RNA_Structure.RBP_score',
+    'Bio.RNA_Structure.RNAfold',
     ]
 
 # packages that require Numeric Python
