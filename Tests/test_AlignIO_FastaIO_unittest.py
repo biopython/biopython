@@ -233,23 +233,22 @@ class TestSelf(unittest.TestCase):
             self.assertEqual(rows, len(a))
             self.assertEqual(cols, a.get_alignment_length())
             for r in a:
-                print("%s %s %i" % (r.seq, r.id, r.annotations["original_length"]))
-            # print(a.annotations)
+                self.assertEqual(r.seq, rows)
+                self.assertEqual(r.id, rows)
+                self.assertEqual(r.annotations["original_length"], rows)
             print("Done")
-            path = "Fasta/"
-            files = sorted(f for f in os.listdir(path) if os.path.splitext(f)[-1] == ".m10")
-            for filename in files:
-                if os.path.splitext(filename)[-1] == ".m10":
-                    print("")
-                    print(filename)
-                    print("=" * len(filename))
-                    for i, a in enumerate(FastaIO.FastaM10Iterator(open(os.path.join(path, filename)))):
-                        print("#%i, %s" % (i + 1, a))
-                        for r in a:
-                            if "-" in r.seq:
-                                self.assertEqual(r.seq.alphabet.gap_char, "-")
-                            else:
-                                assert not hasattr(r.seq.alphabet, "gap_char")
+    
+    def test_m10_files(self):
+        path = "Fasta/"
+        files = sorted(f for f in os.listdir(path) if os.path.splitext(f)[-1] == ".m10")
+        for filename in files:
+            if os.path.splitext(filename)[-1] == ".m10":
+                for i, a in enumerate(FastaIO.FastaM10Iterator(open(os.path.join(path, filename)))):
+                    for r in a:
+                        if "-" in r.seq:
+                            self.assertEqual(r.seq.alphabet.gap_char, "-")
+                        else:
+                            self.assertFalse(hasattr(r.seq.alphabet, "gap_char"))
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
