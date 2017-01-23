@@ -18,7 +18,7 @@ def kabsch_rmsd(P, Q):
     Rotate matrix P unto Q and calculate the RMSD
     """
     P = rotate(P, Q)
-    return rmsd(P, Q)
+    return(rmsd(P, Q))
 
 
 def rotate(P, Q):
@@ -29,7 +29,7 @@ def rotate(P, Q):
 
     # Rotate P
     P = np.dot(P, U)
-    return P
+    return(P)
 
 
 def kabsch(P, Q):
@@ -79,7 +79,7 @@ def kabsch(P, Q):
     # Create Rotation matrix U
     U = np.dot(V, W)
 
-    return U
+    return(U)
 
 # based on doi:10.1016/1049-9660(91)90036-O
 def quaternion_rmsd(P, Q):
@@ -87,14 +87,14 @@ def quaternion_rmsd(P, Q):
     Rotate matrix P unto Q and calculate the RMSD
     """
     P_rot = quaternion_rotate(P, Q)
-    return rmsd(P_rot, Q)
+    return(rmsd(P_rot, Q))
 
 # get optimal rotation (translation will be zero when the centroids of each molecule are the same)
 def quaternion_transform(r):
     Wt_r = makeW(*r).T
     Q_r = makeQ(*r)
     rot = Wt_r.dot(Q_r)[:3,:3]
-    return rot
+    return(rot)
 
 # matrix involved in quaternion rotation
 def makeW(r1,r2,r3,r4=0):
@@ -103,7 +103,7 @@ def makeW(r1,r2,r3,r4=0):
              [-r3, r4, r1, r2],
              [r2, -r1, r4, r3],
              [-r1, -r2, -r3, r4] ])
-    return W
+    return(W)
 
 # matrix involved in quaternion rotation
 def makeQ(r1,r2,r3,r4=0):
@@ -112,7 +112,7 @@ def makeQ(r1,r2,r3,r4=0):
              [r3, r4, -r1, r2],
              [-r2, r1, r4, r3],
              [-r1, -r2, -r3, r4] ])
-    return Q
+    return(Q)
 
 # calculate the rotation
 def quaternion_rotate(X, Y):
@@ -128,14 +128,14 @@ def quaternion_rotate(X, Y):
     eigen = np.linalg.eigh(A)
     r = eigen[1][:,eigen[0].argmax()]
     rot = quaternion_transform(r)
-    return np.dot(X,rot)
+    return(np.dot(X,rot))
 
 def centroid(X):
     """
     Calculate the centroid from a vectorset X
     """
     C = sum(X)/len(X)
-    return C
+    return(C)
 
 
 def rmsd(V, W):
@@ -147,7 +147,7 @@ def rmsd(V, W):
     rmsd = 0.0
     for v, w in zip(V, W):
         rmsd += sum([(v[i]-w[i])**2.0 for i in range(D)])
-    return np.sqrt(rmsd/N)
+    return(np.sqrt(rmsd/N))
 
 
 def write_coordinates(atoms, V):
@@ -156,12 +156,12 @@ def write_coordinates(atoms, V):
     """
     N, D = V.shape
 
-    print str(N)
+    print(str(N))
     print
 
     for i in xrange(N):
         line = "{0:2s} {1:15.8f} {2:15.8f} {3:15.8f}".format(atoms[i], V[i, 0], V[i, 1], V[i, 2])
-        print line
+        print(line)
 
 def get_coordinates(filename, fmt, ignore_hydrogens):
     """
@@ -232,7 +232,7 @@ def get_coordinates_pdb(filename, ignore_hydrogens):
 
 
     V = np.asarray(V)
-    return atoms, V
+    return(atoms, V)
 
 
 def get_coordinates_xyz(filename, ignore_hydrogens):
@@ -284,7 +284,7 @@ def get_coordinates_xyz(filename, ignore_hydrogens):
 
     f.close()
     V = np.array(V)
-    return atoms, V
+    return(atoms, V)
 
 
 if __name__ == "__main__":
@@ -361,7 +361,6 @@ Quater: RMSD after coordinates are translated and rotated using quaternions.
         write_coordinates(atomsP, V)
         quit()
 
-    print "Normal RMSD:", normal_rmsd
-    print "Kabsch RMSD:", kabsch_rmsd(P, Q)
-    print "Quater RMSD:", quaternion_rmsd(P, Q)
-    
+    print("Normal RMSD:", normal_rmsd)
+    print("Kabsch RMSD:", kabsch_rmsd(P, Q))
+    print("Quater RMSD:", quaternion_rmsd(P, Q))

@@ -11,6 +11,7 @@
 #
 # 2. RNAstructure license is available separately.
 #    Please consult rna.urmc.rochester.edu .
+
 import os
 from subprocess import Popen, PIPE
 import os
