@@ -1,5 +1,6 @@
 
 import unittest
+from Bio import RNA_Structure
 from Bio.RNA_Structure.API import API_RNA_STRAND
 from Bio.RNA_Structure.API import API_NDB
 from Bio.RNA_Structure.RBP_score import RBP_score
@@ -76,8 +77,8 @@ class ApiRNASTRANDfunctions(unittest.TestCase):
 class Calculations(unittest.TestCase):
 
     def test_rmsd_calculation(self):
-        example = API_NDB.rmsd_calculation("RNA_Structure/5swe_TEST.pdb", "RNA_Structure/5swe_TEST.pdb")[0]
-        expected = 'Normal RMSD: 0.0\nKabsch RMSD: 6.40072443532e-15\nQuater RMSD: 2.48372284113e-17\n'
+        example = RNA_Structure.rmsd_calculation("RNA_Structure/5swe_TEST.pdb", "RNA_Structure/5swe_TEST.pdb")
+        expected = 'Normal RMSD: 0.0'
         self.assertEqual(example, expected)
 
     def test_rbp_calculation(self):
