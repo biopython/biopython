@@ -15,13 +15,12 @@
 """ADPB"""
 import os
 from subprocess import Popen, PIPE
-#from Bio.RNA_Structure.API.API_function import *
-#from Bio.RNA_Structure.API.API_NDB import *
-#from Bio.RNA_Structure.API.API_RNA_STRAND import *
+
 
 def rmsd_calculation(x, y):
     """ Enter two pdb files with paths to generate rmsd value between them """
     cmd = "python calculate_rmsd "+x+" "+y
     p = Popen(cmd, shell=True, stdout=PIPE)
     out, err = p.communicate()
-    return((out,err))
+    splited_output = out.split("\n")
+    return(splited_output)
