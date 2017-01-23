@@ -232,7 +232,7 @@ class RNA_STRAND():
         """Saver of chosen molecule's (look choose_result and print_results) structure in bpseq format.
         """
         struct_to_save = self.get_structure()
-        with open('{path}{}_structure.bpseq'.format(struct_to_save[0],path=path), 'w') as bpseq:
+        with open('{path}{}_structure.bpseq'.format(struct_to_save[0],path=self.path), 'w') as bpseq:
             for ind in range(1,len(struct_to_save)):
                 bpseq.write(struct_to_save[ind]+'\n')
         bpseq.close()

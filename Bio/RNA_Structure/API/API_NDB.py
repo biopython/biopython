@@ -165,7 +165,7 @@ class Nucleic_acid_database():
         pdb_id = self.pdb_id
         sequence = self.get_seq_record()
         path = self.path
-        with open("{path}{}_sequence.fasta".format(pdb_id,path= path),"w") as f:
+        with open("{path}/{}_sequence.fasta".format(pdb_id,path = path),"w") as f:
             SeqIO.write(sequence, f, "fasta")
         f.close()
         return("Fasta file is ready")
