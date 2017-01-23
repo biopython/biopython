@@ -491,7 +491,7 @@ _iterate_helper(const Trie* trie,
     for(i=0; i<trie->num_transitions; i++) {
 	Transition* transition = &trie->transitions[i];
 	const char *suffix = transition->suffix;
-	int keylen = strlen(current_key);
+	unsigned int keylen = strlen(current_key);
 
 	if(keylen + strlen(suffix) >= max_key) {
 	    /* BUG: This will fail silently.  It should raise some
