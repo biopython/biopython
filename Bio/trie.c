@@ -147,7 +147,7 @@ int Trie_set(Trie* trie, const char *key, const void *value) {
     else {
 	/* Count the number of characters shared between key
 	   and suffix. */
-	int chars_shared = 0;
+	unsigned int chars_shared = 0;
 	while(key[chars_shared] && key[chars_shared] == suffix[chars_shared])
 	    chars_shared++;
 
@@ -376,7 +376,7 @@ _get_approximate_trie(const Trie* trie, const char *key, const int k,
     else if(!k) {
 	void *value = Trie_get(trie, key);
 	if(value) {
-	    int l = strlen(current_key);
+	    unsigned int l = strlen(current_key);
 	    /* Make sure I have enough space for the full key. */
 	    if(l + strlen(key) < max_key) {
 		strcat(current_key, key);
