@@ -227,9 +227,9 @@ class TestSelf(unittest.TestCase):
         alignments = list(FastaIO.FastaM10Iterator(StringIO(simple_example)))
         self.assertEqual(len(alignments), 4)
         self.assertEqual(len(alignments[0]), 2)
-        rows = (2, 3, 4, 5)
-        cols = (108, 64, 123, 456)
-        for a, rows, cols in zip(alignments, rows, cols):
+        row_counts = (2, 3, 4, 5)
+        col_counts = (108, 64, 123, 456)
+        for a, rows, cols in zip(alignments, row_counts, col_counts):
             self.assertEqual(rows, len(a))
             self.assertEqual(cols, a.get_alignment_length())
             for r in a:
