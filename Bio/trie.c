@@ -266,14 +266,14 @@ _print_trie(const Trie* trie) {
 
 /* Mutually recursive, so need to make a forward declaration. */
 static void
-_get_approximate_trie(const Trie* trie, const char *key, const int k,
+_get_approximate_trie(const Trie* trie, const char *key, const unsigned int k,
 		      void (*callback)(const char *key,
 				       const void *value,
 				       const int mismatches,
 				       void *data),
 		      void *data,
 		      const int mismatches,
-		      char *current_key, const int max_key
+		      char *current_key, const unsigned int max_key
 		      );
 
 static void
@@ -354,14 +354,14 @@ _get_approximate_transition(const char *key,
 }
 
 static void
-_get_approximate_trie(const Trie* trie, const char *key, const int k,
+_get_approximate_trie(const Trie* trie, const char *key, const unsigned int k,
 		      void (*callback)(const char *key,
 				       const void *value,
 				       const int mismatches,
 				       void *data),
 		      void *data,
 		      const int mismatches,
-		      char *current_key, const int max_key
+		      char *current_key, const unsigned int max_key
 		      )
 {
     int i;
@@ -378,7 +378,7 @@ _get_approximate_trie(const Trie* trie, const char *key, const int k,
 	if(value) {
 	    unsigned int l = strlen(current_key);
 	    /* Make sure I have enough space for the full key. */
-	    if(l + strlen(key) < max_key) {
+	    if(l + strlen(key) < max_key) { 
 		strcat(current_key, key);
 		(*callback)(current_key, value, mismatches, data);
 		current_key[l] = 0;
@@ -388,7 +388,7 @@ _get_approximate_trie(const Trie* trie, const char *key, const int k,
 	}
     }
     /* If there are no more transitions, then all the characters left
-       in the key are mismatches. */
+       in the key are mismatches. */    
     else if(!trie->num_transitions) {
 	if(trie->value && (strlen(key) <= k)) {
 	    (*callback)(current_key, trie->value,
