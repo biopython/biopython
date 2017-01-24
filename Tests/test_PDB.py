@@ -425,9 +425,9 @@ class ParseTest(unittest.TestCase):
         self.assertEqual(len(chain), 1)
         self.assertEqual(" ".join(residue.resname for residue in chain), "PCA")
         self.assertEqual(" ".join(atom.name for atom in chain.get_atoms()),
-                         "N CA CB CG CD OE C O CA  ")
+                         "N CA CB CG DA OE C O CA  ")
         self.assertEqual(" ".join(atom.element for atom in chain.get_atoms()),
-                         "N C C C C O C O CA")
+                         "N C C C D O C O CA")
         # Second model
         model = structure[1]
         self.assertEqual(model.id, 1)
@@ -935,6 +935,7 @@ class Atom_Element(unittest.TestCase):
         self.assertEqual('N', atoms[0].element)  # N
         self.assertEqual('C', atoms[1].element)  # Alpha Carbon
         self.assertEqual('CA', atoms[8].element)  # Calcium
+        self.assertEqual('D', atoms[4].element)  # Deuterium
 
     def test_ions(self):
         """Element for magnesium is assigned correctly."""
