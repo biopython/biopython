@@ -39,9 +39,12 @@ using reStructuredText (RST) markup language which allows basic formatting
 like *italics* and **bold** once rendered into HTML webpages for our online
 API documentation.
 
-Tools like ``pep8`` and ``flake8`` are very useful, but currently we suggest
-you install this git pre-commit hook which will check our basic coding
-conventions as you work, https://github.com/biopython/biopython/issues/493
+Tools like ``pep8`` and ``flake8`` are very useful. We currently suggest you
+install this git pre-commit hook which will check our basic coding conventions
+as you work: https://github.com/biopython/biopython/issues/493
+
+We also use continuous integration service TravisCI to enforce some of these
+checks (see below).
 
 
 Testing
