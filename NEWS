@@ -16,6 +16,13 @@ This release of Biopython supports Python 2.7, 3.3, 3.4, 3.5 and 3.6 (we have
 now dropped support for Python 2.6). It has also been tested on PyPy 5.0,
 PyPy3 version 2.4, and Jython 2.7.
 
+We have started to dual-license Biopython under both our original liberal
+"Biopython License Agreement", and the very similar but more commonly used
+"3-Clause BSD License". In this release a small number of the Python files
+are explicitly available under either license, but most of the code remains
+under the "Biopython License Agreement" only. See the LICENSE file for more
+details.
+
 The Uniprot parser is now able to parse "submittedName" elements in XML files.
 
 The NEXUS parser handling of internal node comments has been improved, which
