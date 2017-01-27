@@ -259,7 +259,7 @@ class CheckCompleteArgList(unittest.TestCase):
             extra = extra.difference(["-max_hsps", "-sum_statistics"])
         if exe_name in ["rpstblastn", "rpsblast"]:
             # Removed in BLAST 2.2.29+ so will look like extra args on new BLAST
-            extra = extra.difference(["-gilist", "-negative_gilist" ])
+            extra = extra.difference(["-gilist", "-negative_gilist"])
             # Removed in BLAST 2.2.30 so will look like extra args on new BLAST
             # Apparently -word_size should never have been added to these tools.
             extra = extra.difference(["-word_size"])
