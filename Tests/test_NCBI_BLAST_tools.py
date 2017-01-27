@@ -253,19 +253,19 @@ class CheckCompleteArgList(unittest.TestCase):
         if exe_name in ["blastx", "tblastn"]:
             # Removed in BLAST 2.2.27+ so will look like extra arg on new BLAST
             extra = extra.difference(["-frame_shift_penalty"])
-        if exe_name == "rpsblast":
-            # New in BLAST 2.2.28+ so will look like extra args on old BLAST:
-            extra = extra.difference(["-comp_based_stats", "-use_sw_tback"])
         if exe_name in ["blastn", "blastp", "blastx", "tblastn", "tblastx",
                         "psiblast", "rpstblastn", "rpsblast"]:
             # New in BLAST 2.2.29+ so will look like extra args on old BLAST:
             extra = extra.difference(["-max_hsps", "-sum_statistics"])
         if exe_name in ["rpstblastn", "rpsblast"]:
             # Removed in BLAST 2.2.29+ so will look like extra args on new BLAST
-            extra = extra.difference(["-gilist", "-negative_gilist"])
+            extra = extra.difference(["-gilist", "-negative_gilist" ])
             # Removed in BLAST 2.2.30 so will look like extra args on new BLAST
             # Apparently -word_size should never have been added to these tools.
             extra = extra.difference(["-word_size"])
+            # New in BLAST 2.2.28+ (for rpsblast) and BLAST 2.6+ (for rpstblastn)
+            # so will look like extra args on old BLAST:
+            extra = extra.difference(["-comp_based_stats", "-use_sw_tback"])
         if exe_name == "deltablast":
             # New in BLAST+ 2.2.29 so will look like extra args on BLAST+ 2.2.28
             extra = extra.difference(["-entrez_query", "-max_hsps", "-sum_statistics"])

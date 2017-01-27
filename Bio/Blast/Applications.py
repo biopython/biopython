@@ -1030,9 +1030,25 @@ class NcbirpstblastnCommandline(_NcbiblastCommandline):
                     Format: "yes", "window locut hicut", or "no" to disable.
                     Default is "12 2.2 2.5""",
                     equate=False),
+            # General search options:
+            _Option(["-comp_based_stats", "comp_based_stats"],
+                    """Use composition-based statistics.
+
+                    D or d: default (equivalent to 0 )
+                    0 or F or f: Simplified Composition-based statistics as in
+                                 Bioinformatics 15:1000-1011, 1999
+                    1 or T or t: Composition-based statistics as in NAR 29:2994-3005, 2001
+
+                    Default = `0'
+                    """,
+                    checker_function=lambda value: value in "Dd0Ff1Tt",
+                    equate=False),
             # Extension options:
             _Switch(["-ungapped", "ungapped"],
                     "Perform ungapped alignment only?"),
+            # Miscellaneous options:
+            _Switch(["-use_sw_tback", "use_sw_tback"],
+                    "Compute locally optimal Smith-Waterman alignments?"),
         ]
         _NcbiblastCommandline.__init__(self, cmd, **kwargs)
 
