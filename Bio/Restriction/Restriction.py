@@ -2256,14 +2256,13 @@ class Analysis(RestrictionBatch, PrintFormat):
         return start <= site <= len(self.sequence) or 1 <= site < end
 
     def format_output(self, dct=None, title='', s1=''):
-        """A.format_output([dct[, title[, s1]]]) -> print the results from
-        dct.
+        """A.format_output([dct[, title[, s1]]]) -> dct.
 
         If dct is not given the full dictionary is used.
         """
         if not dct:
             dct = self.mapping
-        return PrintFormat.print_that(self, dct, title, s1)
+        return PrintFormat.format_output(self, dct, title, s1)
 
     def print_that(self, dct=None, title='', s1=''):
         """A.print_that([dct[, title[, s1[,print_]]]]) -> print the results
