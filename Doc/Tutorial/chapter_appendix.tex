@@ -76,11 +76,14 @@ compressed FASTA file you want to parse:
 \begin{verbatim}
 import gzip
 from Bio import SeqIO
-handle = gzip.open("m_cold.fasta.gz")
+handle = gzip.open("m_cold.fasta.gz", "rt")
 for record in SeqIO.parse(handle, "fasta"):
     print(record.id, len(record))
 handle.close()
 \end{verbatim}
+
+With our parsers for plain text files, under Python 3 it is
+essential to use gzip in text mode.
 
 See Section~\ref{sec:SeqIO_compressed} for more examples like this,
 including reading bzip2 compressed files.
