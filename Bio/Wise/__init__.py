@@ -21,8 +21,6 @@ import tempfile
 
 from Bio import SeqIO
 
-__docformat__ = "restructuredtext en"
-
 
 def _build_align_cmdline(cmdline, pair, output_filename, kbyte=None, force_type=None, quiet=False):
     """Helper function to build a command line string (PRIVATE).

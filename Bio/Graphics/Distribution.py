@@ -27,8 +27,6 @@ from reportlab.graphics.widgetbase import TypedPropertyCollection
 
 from Bio.Graphics import _write
 
-__docformat__ = "restructuredtext en"
-
 
 class DistributionPage(object):
     """Display a grouping of distributions on a page.
@@ -67,8 +65,8 @@ class DistributionPage(object):
         end_y_pos = .5 * inch
         x_pos_change = ((end_x_pos - cur_x_pos) /
                         float(self.number_of_columns))
-        num_y_rows = math.ceil(float(len(self.distributions))
-                               / float(self.number_of_columns))
+        num_y_rows = math.ceil(float(len(self.distributions)) /
+                               float(self.number_of_columns))
         y_pos_change = (cur_y_pos - end_y_pos) / num_y_rows
 
         self._draw_distributions(cur_drawing, cur_x_pos, x_pos_change,

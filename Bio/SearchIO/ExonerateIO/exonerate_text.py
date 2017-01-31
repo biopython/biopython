@@ -8,7 +8,7 @@
 import re
 from itertools import chain
 
-from Bio._py3k import _as_bytes, _bytes_to_string
+from Bio._py3k import _bytes_to_string
 from Bio._py3k import zip
 
 
@@ -17,8 +17,6 @@ from Bio.Alphabet import generic_protein
 from ._base import _BaseExonerateParser, _BaseExonerateIndexer, _STRAND_MAP, \
         _parse_hit_or_query_line
 from .exonerate_vulgar import _RE_VULGAR
-
-__docformat__ = "restructuredtext en"
 
 
 __all__ = ['ExonerateTextParser', 'ExonerateTextIndexer']
@@ -482,13 +480,13 @@ class ExonerateTextIndexer(_BaseExonerateIndexer):
     """Indexer class for Exonerate plain text."""
 
     _parser = ExonerateTextParser
-    _query_mark = _as_bytes('C4 Alignment')
+    _query_mark = b"C4 Alignment"
 
     def get_qresult_id(self, pos):
         """Returns the query ID from the nearest "Query:" line."""
         handle = self._handle
         handle.seek(pos)
-        sentinel = _as_bytes('Query:')
+        sentinel = b"Query:"
 
         while True:
             line = handle.readline().strip()
@@ -505,7 +503,7 @@ class ExonerateTextIndexer(_BaseExonerateIndexer):
         handle = self._handle
         handle.seek(offset)
         qresult_key = None
-        qresult_raw = _as_bytes('')
+        qresult_raw = b""
 
         while True:
             line = handle.readline()

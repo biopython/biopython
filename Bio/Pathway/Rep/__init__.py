@@ -6,5 +6,3 @@ implementation of the Bio.Pathway module. These abstractions are not intended
 for direct use, but if they fit your needs there's no reason to reinvent the
 wheel.
 """
-
-__docformat__ = "restructuredtext en"

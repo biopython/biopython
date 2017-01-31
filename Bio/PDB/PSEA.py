@@ -18,8 +18,6 @@ import os
 
 from Bio.PDB.Polypeptide import is_aa
 
-__docformat__ = "restructuredtext en"
-
 
 def run_psea(fname):
     """Run PSEA and return output filename.

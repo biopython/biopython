@@ -5,6 +5,7 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
+from __future__ import print_function
 
 import os.path
 import unittest
@@ -12,7 +13,7 @@ import tempfile
 import sys
 from Bio._py3k import StringIO
 from Bio._py3k import range
-
+from Bio.AlignIO.NexusIO import NexusIterator
 from Bio.SeqRecord import SeqRecord
 from Bio.Nexus import Nexus, Trees
 from Bio.Seq import Seq
@@ -24,7 +25,7 @@ class NexusTest1(unittest.TestCase):
     def setUp(self):
         self.testfile_dir = "Nexus"
         self.handle = open(os.path.join(self.testfile_dir,
-            "test_Nexus_input.nex"))
+                                        "test_Nexus_input.nex"))
 
     def tearDown(self):
         self.handle.close()
@@ -120,8 +121,8 @@ class NexusTest1(unittest.TestCase):
                              't2 the name'],
                 })
         self.assertEqual(len(n.charpartitions), 2)
-        self.assertTrue('codons' in n.charpartitions)
-        self.assertTrue('part' in n.charpartitions)
+        self.assertIn('codons', n.charpartitions)
+        self.assertIn('part', n.charpartitions)
         self.assertEqual(n.charpartitions['codons'],
                          {'a': [0, 3, 6, 9, 12, 15, 18, 21, 24, 27, 30, 33, 36, 39, 42, 45],
                           'b': [1, 4, 7, 10, 13, 16, 19, 22, 25, 28, 31, 34, 37, 40, 43, 46],
@@ -199,8 +200,8 @@ class NexusTest1(unittest.TestCase):
                 'tbyname3': ['t2 the name'],
                 })
         self.assertEqual(len(nf1.charpartitions), 2)
-        self.assertTrue('codons' in nf1.charpartitions)
-        self.assertTrue('part' in nf1.charpartitions)
+        self.assertIn('codons', nf1.charpartitions)
+        self.assertIn('part', nf1.charpartitions)
         self.assertEqual(nf1.charpartitions['codons'], {'a': [0, 3],
                                                         'b': [2],
                                                         'c': [1]})
@@ -290,8 +291,8 @@ class NexusTest1(unittest.TestCase):
                           "tbyname3": ['t1',
                                        't2 the name']})
         self.assertEqual(len(nf2.charpartitions), 2)
-        self.assertTrue('codons' in nf2.charpartitions)
-        self.assertTrue('part' in nf2.charpartitions)
+        self.assertIn('codons', nf2.charpartitions)
+        self.assertIn('part', nf2.charpartitions)
         self.assertEqual(nf2.charpartitions['codons'],
                          {"a": [0, 5, 7, 9, 14, 16, 18, 23, 25, 27, 32, 35],
                           "b": [1, 3, 8, 10, 12, 17, 19, 21, 26, 28, 30, 33, 36],
@@ -320,7 +321,7 @@ usertype matrix_test stepmatrix=5
 [T]    2.43     2.12     2.31      .       2.14     
 [-]    2.43     2.14     2.31     2.14      .       
 ;
-""")
+""")  # noqa for pep8 W291 trailing whitespace
 
     def test_TreeTest1(self):
         """Test Tree module."""
@@ -412,6 +413,102 @@ Root:  16
                     cur_node.get_succ()])
             cur_nodes = new_nodes
         return nodedata
+
+    def test_NexusComments(self):
+        """Test the ability to parse nexus comments at internal and leaf nodes
+        """
+        # A tree with simple comments throughout the tree.
+        ts1b = "((12:0.13,19[&comment1]:0.13)[&comment2]:0.1,(20:0.171,11:0.171):0.13)[&comment3];"
+        tree = Trees.Tree(ts1b)
+        self.assertEqual(self._get_flat_nodes(tree), [(None, 0.0, None, '[&comment3]'),
+                                                      (None, 0.1, None, '[&comment2]'),
+                                                      (None, 0.13, None, None), ('12', 0.13, None, None),
+                                                      ('19', 0.13, None, '[&comment1]'),
+                                                      ('20', 0.171, None, None),
+                                                      ('11', 0.171, None, None)])
+
+        # A tree with more complex comments throughout the tree.
+        # This is typical of the MCC trees produced by `treeannotator` in the beast-mcmc suite of phylogenetic tools
+        # The key difference being tested here is the ability to parse internal node comments that include ','.
+        ts1b = "(((9[&rate_range={1.3E-5,0.10958320752991428},height_95%_HPD={0.309132419999969,0.3091324199999691},length_range={3.513906814545109E-4,0.4381986285528381},height_median=0.309132419999969,length_95%_HPD={0.003011577063374571,0.08041621647998398}]:0.055354097721950546,5[&rate_range={1.3E-5,0.10958320752991428},height_95%_HPD={0.309132419999969,0.3091324199999691},length_range={3.865051168833178E-5,0.4391594442572986},height_median=0.309132419999969,length_95%_HPD={0.003011577063374571,0.08041621647998398}]:0.055354097721950546)[&height_95%_HPD={0.3110921040545068,0.38690865205576275},length_range={0.09675588357303178,0.4332959544380489},length_95%_HPD={0.16680375169879613,0.36500804261814374}]:0.20039426358269385)[&height_95%_HPD={0.5289500597932948,0.6973881165460601},length_range={0.02586430194846201,0.29509451958008265},length_95%_HPD={0.0840287249314221,0.2411078625957056}]:0.23042678598484334)[&height_95%_HPD={0.7527502510685965,0.821862094763501},height_median=0.8014438411766163,height=0.795965080422763,posterior=1.0,height_range={0.49863013698599995,0.821862094763501},length=0.0];"
+        tree = Trees.Tree(ts1b)
+        self.assertEqual(self._get_flat_nodes(tree),
+                         [(None, 0.0, None, '[&height_95%_HPD={0.7527502510685965,0.821862094763501},height_median=0.8014438411766163,height=0.795965080422763,posterior=1.0,height_range={0.49863013698599995,0.821862094763501},length=0.0]'),
+                          (None, 0.23042678598484334, None, '[&height_95%_HPD={0.5289500597932948,0.6973881165460601},length_range={0.02586430194846201,0.29509451958008265},length_95%_HPD={0.0840287249314221,0.2411078625957056}]'),
+                          (None, 0.20039426358269385, None, '[&height_95%_HPD={0.3110921040545068,0.38690865205576275},length_range={0.09675588357303178,0.4332959544380489},length_95%_HPD={0.16680375169879613,0.36500804261814374}]'),
+                          ('9', 0.055354097721950546, None, '[&rate_range={1.3E-5,0.10958320752991428},height_95%_HPD={0.309132419999969,0.3091324199999691},length_range={3.513906814545109E-4,0.4381986285528381},height_median=0.309132419999969,length_95%_HPD={0.003011577063374571,0.08041621647998398}]'),
+                          ('5', 0.055354097721950546, None, '[&rate_range={1.3E-5,0.10958320752991428},height_95%_HPD={0.309132419999969,0.3091324199999691},length_range={3.865051168833178E-5,0.4391594442572986},height_median=0.309132419999969,length_95%_HPD={0.003011577063374571,0.08041621647998398}]')])
+
+
+class TestSelf(unittest.TestCase):
+    def test_repeated_names_no_taxa(self):
+        print("Repeated names without a TAXA block")
+        handle = StringIO("""#NEXUS
+        [TITLE: NoName]
+        begin data;
+        dimensions ntax=4 nchar=50;
+        format interleave datatype=protein   gap=- symbols="FSTNKEYVQMCLAWPHDRIG";
+        matrix
+        CYS1_DICDI          -----MKVIL LFVLAVFTVF VSS------- --------RG IPPEEQ----
+        ALEU_HORVU          MAHARVLLLA LAVLATAAVA VASSSSFADS NPIRPVTDRA ASTLESAVLG
+        CATH_HUMAN          ------MWAT LPLLCAGAWL LGV------- -PVCGAAELS VNSLEK----
+        CYS1_DICDI          -----MKVIL LFVLAVFTVF VSS------- --------RG IPPEEQ---X
+        ;
+        end;
+        """)  # noqa for pep8 W291 trailing whitespace
+        for a in NexusIterator(handle):
+            print(a)
+            for r in a:
+                print("%r %s %s" % (r.seq, r.name, r.id))
+        print("Done")
+
+    def test_repeated_names_with_taxa(self):
+
+        print("Repeated names with a TAXA block")
+        handle = StringIO("""#NEXUS
+        [TITLE: NoName]
+        begin taxa
+        CYS1_DICDI
+        ALEU_HORVU
+        CATH_HUMAN
+        CYS1_DICDI;
+        end;
+        begin data;
+        dimensions ntax=4 nchar=50;
+        format interleave datatype=protein   gap=- symbols="FSTNKEYVQMCLAWPHDRIG";
+        matrix
+        CYS1_DICDI          -----MKVIL LFVLAVFTVF VSS------- --------RG IPPEEQ----
+        ALEU_HORVU          MAHARVLLLA LAVLATAAVA VASSSSFADS NPIRPVTDRA ASTLESAVLG
+        CATH_HUMAN          ------MWAT LPLLCAGAWL LGV------- -PVCGAAELS VNSLEK----
+        CYS1_DICDI          -----MKVIL LFVLAVFTVF VSS------- --------RG IPPEEQ---X
+        ;
+        end;
+        """)  # noqa for pep8 W291 trailing whitespace
+        for a in NexusIterator(handle):
+            print(a)
+            for r in a:
+                print("%r %s %s" % (r.seq, r.name, r.id))
+        print("Done")
+
+        def test_empty_file(self):
+
+            print("Reading an empty file")
+            assert 0 == len(list(NexusIterator(StringIO())))
+            print("Done")
+            print("")
+            print("Writing...")
+
+            handle = StringIO()
+            NexusWriter(handle).write_file([a])
+            handle.seek(0)
+            print(handle.read())
+
+            handle = StringIO()
+            try:
+                NexusWriter(handle).write_file([a, a])
+                assert False, "Should have rejected more than one alignment!"
+            except ValueError:
+                pass
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)

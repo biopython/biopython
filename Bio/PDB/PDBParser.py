@@ -24,7 +24,6 @@ from Bio.PDB.PDBExceptions import PDBConstructionWarning
 from Bio.PDB.StructureBuilder import StructureBuilder
 from Bio.PDB.parse_pdb_header import _parse_pdb_header_list
 
-__docformat__ = "restructuredtext en"
 
 # If PDB spec says "COLUMNS 18-20" this means line[17:20]
 

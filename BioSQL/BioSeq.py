@@ -1,5 +1,5 @@
 # Copyright 2002 by Andrew Dalke.  All rights reserved.
-# Revisions 2007-2009 copyright by Peter Cock.  All rights reserved.
+# Revisions 2007-2016 copyright by Peter Cock.  All rights reserved.
 # Revisions 2008-2009 copyright by Cymon J. Cox.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -22,8 +22,6 @@ from Bio import Alphabet
 from Bio.Seq import Seq, UnknownSeq
 from Bio.SeqRecord import SeqRecord, _RestrictedDict
 from Bio import SeqFeature
-
-__docformat__ = "restructuredtext en"
 
 
 class DBSeq(Seq):
@@ -287,8 +285,8 @@ def _retrieve_features(adaptor, primary_id):
                 v = "%s.%s" % (accession, version)
             else:
                 v = accession
-            # subfeature remote location db_ref are stored as a empty string when
-            # not present
+            # subfeature remote location db_ref are stored as a empty string
+            # when not present
             if dbname == "":
                 dbname = None
             lookup[location_id] = (dbname, v)
@@ -311,39 +309,28 @@ def _retrieve_features(adaptor, primary_id):
             feature.ref_db = dbname
             feature.ref = version
         else:
-            sub_features = feature.sub_features
-            assert sub_features == []
+            locs = []
             for location in locations:
                 location_id, start, end, strand = location
                 dbname, version = lookup.get(location_id, (None, None))
-                subfeature = SeqFeature.SeqFeature()
-                subfeature.type = seqfeature_type
-                subfeature.location = SeqFeature.FeatureLocation(start, end)
-                # subfeature.location_operator = \
-                #    _retrieve_location_qualifier_value(adaptor, location_id)
-                subfeature.strand = strand
-                subfeature.ref_db = dbname
-                subfeature.ref = version
-                sub_features.append(subfeature)
-            # Locations are in order, but because of remote locations for
+                locs.append(SeqFeature.FeatureLocation(start, end,
+                                                       strand=strand,
+                                                       ref=version,
+                                                       ref_db=dbname))
+            # Locations are typically in biological in order (see negative
+            # strands below), but because of remote locations for
             # sub-features they are not necessarily in numerical order:
-            strands = set(sf.strand for sf in sub_features)
+            strands = set(l.strand for l in locs)
             if len(strands) == 1 and -1 in strands:
                 # Evil hack time for backwards compatibility
                 # TODO - Check if BioPerl and (old) Biopython did the same,
                 # we may have an existing incompatibility lurking here...
-                locs = [f.location for f in sub_features[::-1]]
-            else:
-                # All forward, or mixed strands
-                locs = [f.location for f in sub_features]
-            feature.location = SeqFeature.CompoundLocation(
-                locs, seqfeature_type)
-            # TODO - See Bug 2677 - we don't yet record location_operator,
+                locs = locs[::-1]
+            feature.location = SeqFeature.CompoundLocation(locs, "join")
+            # TODO - See Bug 2677 - we don't yet record location operator,
             # so for consistency with older versions of Biopython default
             # to assuming its a join.
-            feature.location_operator = "join"
         seq_feature_list.append(feature)
-
     return seq_feature_list
 
 

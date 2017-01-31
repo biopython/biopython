@@ -18,6 +18,7 @@ from Bio.Graphics.ColorSpiral import ColorSpiral
 # Do we have ReportLab?  Raise error if not present.
 from Bio import MissingExternalDependencyError
 try:
+    # Not actually using these imports directly:
     from reportlab.pdfgen.canvas import Canvas
     from reportlab.lib.pagesizes import A4
     from reportlab.lib.colors import HexColor
@@ -26,7 +27,7 @@ except ImportError:
         "Install reportlab if you want to use Bio.Graphics.")
 
 try:
-   c = HexColor('#8080F780')
+    c = HexColor('#8080F780')
 except TypeError:
     # Known to fail under ReportLab 2.6 with:
     # unsupported operand type(s) for &: 'int' and 'float'
@@ -66,8 +67,8 @@ class PathwayData(object):
 class KGMLPathwayTest(unittest.TestCase):
     """Import XML file and write KGML
 
-    Import the ko01100 metabolic map from a local .xml KGML file, 
-    and write valid KGML output for each
+    Import the ko01100 metabolic map from a local .xml KGML file,
+    and write valid KGML output for each.
     """
     def setUp(self):
         # Does our output directory exist?  If not, create it
@@ -180,7 +181,6 @@ class KGMLPathwayTest(unittest.TestCase):
             pathway.image = p[1].pathway_image
             kgml_map.import_imagemap = p[1].show_pathway_image
             kgml_map.draw(p[1].output_stem + '_transparency.pdf')
-
 
 
 if __name__ == '__main__':

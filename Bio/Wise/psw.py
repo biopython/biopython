@@ -21,7 +21,6 @@ import sys
 
 from Bio import Wise
 
-__docformat__ = "restructuredtext en"
 
 _CMDLINE_PSW = ["psw", "-l", "-F"]
 _OPTION_GAP_START = "-g"

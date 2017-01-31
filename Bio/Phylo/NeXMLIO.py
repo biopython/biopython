@@ -11,7 +11,6 @@
 See: http://www.nexml.org
 """
 
-__docformat__ = "restructuredtext en"
 
 from Bio._py3k import StringIO
 
@@ -185,8 +184,8 @@ class Parser(object):
                     # with the first node that's not a child of any other nodes
                     rooted = False
                     possible_roots = (node.attrib['id'] for node in nodes
-                                      if node.attrib['id'] in srcs
-                                      and not node.attrib['id'] in tars)
+                                      if node.attrib['id'] in srcs and
+                                      node.attrib['id'] not in tars)
                     root = next(possible_roots)
                 else:
                     rooted = True

@@ -9,8 +9,6 @@ import math
 from .CodonUsageIndices import SharpEcoliIndex
 from Bio import SeqIO  # To parse a FASTA file
 
-__docformat__ = "restructuredtext en"
-
 
 CodonsDict = {'TTT': 0, 'TTC': 0, 'TTA': 0, 'TTG': 0, 'CTT': 0,
 'CTC': 0, 'CTA': 0, 'CTG': 0, 'ATT': 0, 'ATC': 0,
@@ -108,8 +106,8 @@ class CodonAdaptationIndex(object):
 
             # now generate the index W=RCSUi/RCSUmax:
             rcsu_max = max(rcsu)
-            for i in range(len(codons)):
-                self.index[codons[i]] = rcsu[i] / rcsu_max
+            for codon_index, codon in enumerate(codons):
+                self.index[codon] = rcsu[codon_index] / rcsu_max
 
     def cai_for_gene(self, dna_sequence):
         """Calculate the CAI (float) for the provided DNA sequence (string).

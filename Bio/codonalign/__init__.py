@@ -7,14 +7,9 @@
 """Code for dealing with Codon Alignment.
 """
 from __future__ import print_function
-__docformat__ = "restructuredtext en"  # Don't just use plain text in epydoc API pages!
 
+from Bio import BiopythonWarning
 from Bio import BiopythonExperimentalWarning
-
-import warnings
-warnings.warn('Bio.codonalign is an experimental module which may undergo '
-              'significant changes prior to its future official release.',
-              BiopythonExperimentalWarning)
 
 try:
     from itertools import izip
@@ -29,6 +24,11 @@ from Bio.codonalign.codonalignment import CodonAlignment, mktest
 from Bio.codonalign.codonalphabet import CodonAlphabet
 from Bio.codonalign.codonalphabet import default_codon_table, default_codon_alphabet
 from Bio.codonalign.codonalphabet import get_codon_alphabet as _get_codon_alphabet
+
+import warnings
+warnings.warn('Bio.codonalign is an experimental module which may undergo '
+              'significant changes prior to its future official release.',
+              BiopythonExperimentalWarning)
 
 
 def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X',
@@ -141,7 +141,7 @@ def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X',
     # corr_method = 1, keyword pairing
     elif corr_method == 1:
         nucl_id = set(nucl_seqs.keys())
-        pro_id = set([i.id for i in pro_align])
+        pro_id = set(i.id for i in pro_align)
         # check if there is pro_id that does not have a nucleotide match
         if pro_id - nucl_id:
             diff = pro_id - nucl_id
@@ -245,7 +245,7 @@ def _check_corr(pro, nucl, gap_char='-', codon_table=default_codon_table,
     import re
     from Bio.Alphabet import NucleotideAlphabet
 
-    if not all([isinstance(pro, SeqRecord), isinstance(nucl, SeqRecord)]):
+    if not isinstance(pro, SeqRecord) or not isinstance(nucl, SeqRecord):
         raise TypeError("_check_corr accepts two SeqRecord object. Please "
                         "check your input.")
 
@@ -364,7 +364,7 @@ def _check_corr(pro, nucl, gap_char='-', codon_table=default_codon_table,
                         break
                 if qcodon == -1:
                     warnings.warn("first frameshift detection failed for "
-                                  "{0}".format(nucl.id))
+                                  "{0}".format(nucl.id), BiopythonWarning)
             # check anchors in the middle
             for i in range(len(anchor_pos) - 1):
                 shift_val = (anchor_pos[i + 1][0] - anchor_pos[i][0]) % \
@@ -383,7 +383,7 @@ def _check_corr(pro, nucl, gap_char='-', codon_table=default_codon_table,
                     qcodon = None
                 elif qcodon == -1:
                     warnings.warn("middle frameshift detection failed for "
-                                  "{0}".format(nucl.id))
+                                  "{0}".format(nucl.id), BiopythonWarning)
             # check the last anchor
             if anchor_pos[-1][2] + 1 == len(anchors) - 1:
                 sh_anc = anchors[-1]
@@ -414,7 +414,7 @@ def _check_corr(pro, nucl, gap_char='-', codon_table=default_codon_table,
                         break
                 if qcodon == -1:
                     warnings.warn("last frameshift detection failed for "
-                                  "{0}".format(nucl.id))
+                                  "{0}".format(nucl.id), BiopythonWarning)
             # try global match
             full_pro_re = "".join(pro_re)
             match = re.search(full_pro_re, nucl_seq)
@@ -569,8 +569,8 @@ def _get_codon_rec(pro, nucl, span_mode, alphabet, gap_char="-",
                     warnings.warn("start codon of {0} ({1} {2}) does not "
                                   "correspond to {3} "
                                   "({4})".format(pro.id, aa, aa_num,
-                                                 nucl.id, this_codon)
-                                  )
+                                                 nucl.id, this_codon),
+                                  BiopythonWarning)
                 if max_score == 0:
                     raise RuntimeError("max_score reached for {0}! Please "
                                        "raise up the tolerance to get an "
@@ -583,7 +583,8 @@ def _get_codon_rec(pro, nucl, span_mode, alphabet, gap_char="-",
                 if not str(Seq(this_codon.upper()).translate(table=codon_table)) == aa:
                     max_score -= 1
                     warnings.warn("%s(%s %d) does not correspond to %s(%s)"
-                                  % (pro.id, aa, aa_num, nucl.id, this_codon))
+                                  % (pro.id, aa, aa_num, nucl.id, this_codon),
+                                  BiopythonWarning)
                 if max_score == 0:
                     raise RuntimeError("max_score reached for {0}! Please "
                                        "raise up the tolerance to get an "
@@ -630,8 +631,8 @@ def _get_codon_rec(pro, nucl, span_mode, alphabet, gap_char="-",
                     max_score -= 1
                     warnings.warn("start codon of {0}({1} {2}) does not "
                                   "correspond to {3}({4})".format(
-                                      pro.id, aa, aa_num, nucl.id, this_codon)
-                                  )
+                                      pro.id, aa, aa_num, nucl.id, this_codon),
+                                  BiopythonWarning)
                     codon_seq += this_codon
                     aa_num += 1
             else:
@@ -658,8 +659,8 @@ def _get_codon_rec(pro, nucl, span_mode, alphabet, gap_char="-",
                         warnings.warn("Codon of {0}({1} {2}) does not "
                                       "correspond to {3}({4})".format(
                                           pro.id, aa, aa_num, nucl.id,
-                                          this_codon)
-                                      )
+                                          this_codon),
+                                      BiopythonWarning)
                 if max_score == 0:
                     raise RuntimeError("max_score reached for {0}! Please "
                                        "raise up the tolerance to get an "

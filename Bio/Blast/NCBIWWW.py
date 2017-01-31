@@ -9,8 +9,7 @@
 """Code to invoke the NCBI BLAST server over the internet.
 
 This module provides code to work with the WWW version of BLAST
-provided by the NCBI.
-http://blast.ncbi.nlm.nih.gov/
+provided by the NCBI. https://blast.ncbi.nlm.nih.gov/
 """
 
 from __future__ import print_function
@@ -21,9 +20,9 @@ from Bio._py3k import urlopen as _urlopen
 from Bio._py3k import urlencode as _urlencode
 from Bio._py3k import Request as _Request
 
-__docformat__ = "restructuredtext en"
 
-NCBI_BLAST_URL = "http://blast.ncbi.nlm.nih.gov/Blast.cgi"
+NCBI_BLAST_URL = "https://blast.ncbi.nlm.nih.gov/Blast.cgi"
+
 
 def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
            auto_format=None, composition_based_statistics=None,
@@ -48,8 +47,8 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
     Please note that BLAST on the cloud supports the NCBI-BLAST Common
     URL API (http://ncbi.github.io/blast-cloud/dev/api.html). To
     use this feature, please set url_base to
-    'http://host.my.cloud.service.provider.com/cgi-bin/blast.cgi' and 
-    format_object='Alignment'. For more details, please see 
+    'http://host.my.cloud.service.provider.com/cgi-bin/blast.cgi' and
+    format_object='Alignment'. For more details, please see
     https://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE_TYPE=BlastDocs&DOC_TYPE=CloudBlast
 
     Some useful parameters:

@@ -39,7 +39,8 @@ else:
 for folder in likely_dirs:
     if not os.path.isdir(folder):
         continue
-    for name in wanted:
+    # Loop over copy as will remove entries from wanted:
+    for name in wanted[:]:
         if sys.platform == "win32":
             exe_name = os.path.join(folder, name + ".exe")
         else:
@@ -61,12 +62,14 @@ for folder in likely_dirs:
             if name == "blast_formatter" and " -archive " not in output:
                 continue
             exe_names[name] = exe_name
+            wanted.remove(name)  # can stop search for this now
         # else:
         #    print("Rejecting %r" % exe_name)
         del exe_name, name
 
 # To avoid the name clash with legacy BLAST, Debian introduced rpsblast+ alias
-wanted.remove("rpsblast+")
+if "rpsblast+" in wanted:
+    wanted.remove("rpsblast+")
 if "rpsblast+" in exe_names:
     exe_names["rpsblast"] = exe_names["rpsblast+"]
     del exe_names["rpsblast+"]
@@ -88,9 +91,9 @@ class Pairwise(unittest.TestCase):
                         query="Fasta/rose.pro",
                         subject="GenBank/NC_005816.faa",
                         evalue=1)
-        self.assertEqual(str(cline), _escape_filename(exe_names["blastp"])
-                         + " -query Fasta/rose.pro -evalue 1"
-                         + " -subject GenBank/NC_005816.faa")
+        self.assertEqual(str(cline), _escape_filename(exe_names["blastp"]) +
+                         " -query Fasta/rose.pro -evalue 1" +
+                         " -subject GenBank/NC_005816.faa")
         child = subprocess.Popen(str(cline),
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
@@ -100,12 +103,18 @@ class Pairwise(unittest.TestCase):
         return_code = child.returncode
         self.assertEqual(return_code, 0, "Got error code %i back from:\n%s"
                          % (return_code, cline))
-        self.assertEqual(10, stdoutdata.count("Query= "))
-        if stdoutdata.count("***** No hits found *****") == 7:
-            # This happens with BLAST 2.2.26+ which is potentially a bug
-            pass
+        # Used to get 10 matches from 10 pairwise searches,
+        # as of NCBI BLAST+ 2.3.0 only get 1 Query= line:
+        if stdoutdata.count("Query= ") == 10:
+            if stdoutdata.count("***** No hits found *****") == 7:
+                # This happens with BLAST 2.2.26+ which is potentially a bug
+                pass
+            else:
+                self.assertEqual(9, stdoutdata.count("***** No hits found *****"))
         else:
-            self.assertEqual(9, stdoutdata.count("***** No hits found *****"))
+            # Assume this is NCBI BLAST+ 2.3.0 or later,
+            self.assertEqual(1, stdoutdata.count("Query= "))
+            self.assertEqual(0, stdoutdata.count("***** No hits found *****"))
 
         # TODO - Parse it? I think we'd need to update this obsole code :(
         # records = list(NCBIStandalone.Iterator(StringIO(stdoutdata),
@@ -118,9 +127,9 @@ class Pairwise(unittest.TestCase):
                         query="GenBank/NC_005816.ffn",
                         subject="GenBank/NC_005816.fna",
                         evalue="0.000001")
-        self.assertEqual(str(cline), _escape_filename(exe_names["blastn"])
-                         + " -query GenBank/NC_005816.ffn -evalue 0.000001"
-                         + " -subject GenBank/NC_005816.fna")
+        self.assertEqual(str(cline), _escape_filename(exe_names["blastn"]) +
+                         " -query GenBank/NC_005816.ffn -evalue 0.000001" +
+                         " -subject GenBank/NC_005816.fna")
         child = subprocess.Popen(str(cline),
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
@@ -141,9 +150,9 @@ class Pairwise(unittest.TestCase):
                         query="GenBank/NC_005816.faa",
                         subject="GenBank/NC_005816.fna",
                         evalue="1e-6")
-        self.assertEqual(str(cline), _escape_filename(exe_names["tblastn"])
-                         + " -query GenBank/NC_005816.faa -evalue 1e-6"
-                         + " -subject GenBank/NC_005816.fna")
+        self.assertEqual(str(cline), _escape_filename(exe_names["tblastn"]) +
+                         " -query GenBank/NC_005816.faa -evalue 1e-6" +
+                         " -subject GenBank/NC_005816.fna")
         child = subprocess.Popen(str(cline),
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
@@ -269,6 +278,9 @@ class CheckCompleteArgList(unittest.TestCase):
                         "rpstblastn", "rpsblast", "tblastn", "tblastx"]:
             # New in BLAST+ 2.2.30 so will look like extra args on BLAST+ 2.2.29 etc
             extra = extra.difference(["-line_length", "-qcov_hsp_perc", "-sum_stats"])
+        if exe_name in ["deltablast", "psiblast"]:
+            # New in BLAST+ 2.3.0 so will look like extra args on older verions
+            extra = extra.difference(["-save_each_pssm", "-save_pssm_after_last_round"])
 
         if extra or missing:
             import warnings

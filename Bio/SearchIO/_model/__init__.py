@@ -51,8 +51,6 @@ from .hsp import HSP, HSPFragment
 
 __all__ = ['QueryResult', 'Hit', 'HSP', 'HSPFragment']
 
-__docformat__ = "restructuredtext en"
-
 
 # if not used as a module, run the doctest
 if __name__ == "__main__":

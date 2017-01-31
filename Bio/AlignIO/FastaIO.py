@@ -27,8 +27,6 @@ from Bio.Align import MultipleSeqAlignment
 from Bio.Alphabet import single_letter_alphabet, generic_dna, generic_protein
 from Bio.Alphabet import Gapped
 
-__docformat__ = "restructuredtext en"
-
 
 def _extract_alignment_region(alignment_seq_with_flanking, annotation):
     """Helper function for the main parsing code (PRIVATE).

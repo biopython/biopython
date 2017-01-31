@@ -21,8 +21,6 @@ Partially inspired on MedLine Code.
 """
 from copy import deepcopy
 
-__docformat__ = "restructuredtext en"
-
 
 def get_indiv(line):
     def int_no_zero(val):

@@ -13,8 +13,45 @@ from Bio._py3k import range
 
 from Bio.Seq import Seq
 from Bio.Alphabet import IUPAC
+from Bio import Alphabet
 
-__docformat__ = "restructuredtext en"
+
+# Make sure that we use C-accelerated PWM calculations if running under CPython.
+# Fall back to the slower Python implementation if Jython or IronPython.
+try:
+    from . import _pwm
+
+    def _calculate(score_dict, sequence, m, n):
+        """Calculate scores using C code (PRIVATE)."""
+        logodds = [[score_dict[letter][i] for letter in "ACGT"] for i in range(m)]
+        return _pwm.calculate(sequence, logodds)
+
+except ImportError:
+    if platform.python_implementation() == 'CPython':
+        import warnings
+        from Bio import BiopythonWarning
+        warnings.warn("Using pure-Python as missing Biopython's C code for PWM. "
+                      "This can happen if Biopython was installed without NumPy. "
+                      "Try re-installing NumPy and then Biopython.")
+
+    def _calculate(score_dict, sequence, m, n):
+        """Calculate scores using Python code (PRIVATE).
+
+        The C code handles mixed case so Python version must too.
+        """
+        sequence = sequence.upper()
+        scores = []
+        for i in range(n - m + 1):
+            score = 0.0
+            for position in range(m):
+                letter = sequence[i + position]
+                try:
+                    score += score_dict[letter][position]
+                except KeyError:
+                    score = float("nan")
+                    break
+            scores.append(score)
+        return scores
 
 
 class GenericPositionMatrix(dict):
@@ -201,9 +238,17 @@ class GenericPositionMatrix(dict):
                 key = "".join(sorted(nucleotides[:3]))
             else:
                 key = "ACGT"
-            nucleotide = degenerate_nucleotide[key]
+            nucleotide = degenerate_nucleotide.get(key, key)
             sequence += nucleotide
-        return Seq(sequence, alphabet=IUPAC.ambiguous_dna)
+        if isinstance(self.alphabet, Alphabet.DNAAlphabet):
+            alpha = IUPAC.ambiguous_dna
+        elif isinstance(self.alphabet, Alphabet.RNAAlphabet):
+            alpha = IUPAC.ambiguous_rna
+        elif isinstance(self.alphabet, Alphabet.ProteinAlphabet):
+            alpha = IUPAC.protein
+        else:
+            raise Exception("Unknown alphabet")
+        return Seq(sequence, alphabet=alpha)
 
     @property
     def gc_content(self):
@@ -316,34 +361,6 @@ class PositionWeightMatrix(GenericPositionMatrix):
 
 class PositionSpecificScoringMatrix(GenericPositionMatrix):
 
-    # Make sure that we use C-accelerated PWM calculations if running under CPython.
-    # Fall back to the slower Python implementation if Jython or IronPython.
-    try:
-        from . import _pwm
-
-        def _calculate(self, sequence, m, n):
-            logodds = [[self[letter][i] for letter in "ACGT"] for i in range(m)]
-            return self._pwm.calculate(sequence, logodds)
-    except ImportError:
-        if platform.python_implementation() == 'CPython':
-            raise
-        else:
-            def _calculate(self, sequence, m, n):
-                # The C code handles mixed case so Python version must too:
-                sequence = sequence.upper()
-                scores = []
-                for i in range(n - m + 1):
-                    score = 0.0
-                    for position in range(m):
-                        letter = sequence[i + position]
-                        try:
-                            score += self[letter][position]
-                        except KeyError:
-                            score = float("nan")
-                            break
-                    scores.append(score)
-                return scores
-
     def calculate(self, sequence):
         """Returns the PWM score for a given sequence for all positions.
 
@@ -363,13 +380,14 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
             raise ValueError("Sequence has wrong alphabet: %r - Use only with DNA sequences"
                                  % sequence.alphabet)
 
-        # TODO - Force uppercase here and optimise switch statement in C
-        # by assuming upper case?
+        # NOTE: The C code handles mixed case input as this could be large
+        # (e.g. contig or chromosome), so requiring it be all upper or lower
+        # case would impose an overhead to allocate the extra memory.
         sequence = str(sequence)
         m = self.length
         n = len(sequence)
 
-        scores = self._calculate(sequence, m, n)
+        scores = _calculate(self, sequence, m, n)
 
         if len(scores) == 1:
             return scores[0]

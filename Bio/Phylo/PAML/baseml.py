@@ -8,8 +8,6 @@ import os.path
 from ._paml import Paml, _relpath
 from . import _parse_baseml
 
-__docformat__ = "restructuredtext en"
-
 
 class BasemlError(EnvironmentError):
     """BASEML has failed. Run with verbose = True to view BASEML's error

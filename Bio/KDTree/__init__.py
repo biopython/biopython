@@ -14,5 +14,3 @@ Otfried Schwarzkopf).
 """
 
 from .KDTree import KDTree
-
-__docformat__ = "restructuredtext en"

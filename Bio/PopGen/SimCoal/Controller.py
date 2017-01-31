@@ -5,16 +5,11 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""
-This module allows you to control Simcoal2 and FastSimcoal
-
-"""
+"""This module allows you to control Simcoal2 and FastSimcoal (DEPRECATED)."""
 
 import os
 import sys
 from Bio.Application import AbstractCommandline, _Option, _Switch
-
-__docformat__ = "restructuredtext en"
 
 
 class SimCoalController(object):
@@ -201,7 +196,7 @@ class FastSimCoalController(object):
         if not os.access(os.path.join(self.fastsimcoal_dir, self.bin_name), os.X_OK):
             raise IOError("Fastsimcoal not executable")
 
-    def run_fastsimcoal(self, par_file, num_sims, par_dir='.', opts={}):
+    def run_fastsimcoal(self, par_file, num_sims, par_dir='.', opts=None):
         """Executes Fastsimcoal.
 
         par_file is the input parameter file (--ifile) for fastsimcoal.
@@ -209,6 +204,8 @@ class FastSimCoalController(object):
         par_dir is the directory where par_file is and where output will be written.
         opts is a dictionary of additional options to fastsimcoal.
         """
+        if opts is None:
+            opts = {}
         if par_dir is None:
             par_dir = os.sep.join([".", "Fastsimcoal", "runs"])
             if not os.path.exists(par_dir):

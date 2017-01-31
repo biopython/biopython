@@ -3,12 +3,18 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Support for asynchronous execution."""
+"""Support for asynchronous execution (DEPRECATED)."""
 
 import os
 import threading
+import warnings
 
-__docformat__ = "restructuredtext en"
+from Bio import BiopythonDeprecationWarning
+
+warnings.warn("Bio.PopGen.Async has been deprecated, and we intend to remove"
+              " it in a future release of Biopython. If you would like to"
+              " continue using it, please contact the Biopython developers"
+              " via the mailing list.", BiopythonDeprecationWarning)
 
 
 class Async(object):

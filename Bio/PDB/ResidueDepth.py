@@ -48,8 +48,6 @@ from Bio.PDB import Selection
 from Bio.PDB.AbstractPropertyMap import AbstractPropertyMap
 from Bio.PDB.Polypeptide import is_aa
 
-__docformat__ = "restructuredtext en"
-
 
 def _read_vertex_array(filename):
     """

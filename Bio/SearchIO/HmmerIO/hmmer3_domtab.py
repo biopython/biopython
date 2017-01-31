@@ -13,9 +13,6 @@ from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 from .hmmer3_tab import Hmmer3TabParser, Hmmer3TabIndexer
 
 
-__docformat__ = "restructuredtext en"
-
-
 class Hmmer3DomtabParser(Hmmer3TabParser):
 
     """Base hmmer3-domtab iterator."""

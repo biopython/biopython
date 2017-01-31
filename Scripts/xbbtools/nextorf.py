@@ -23,8 +23,6 @@ from Bio import Alphabet
 from Bio.Alphabet import IUPAC
 from Bio.Data import IUPACData, CodonTable
 
-__docformat__ = "restructuredtext en"
-
 
 class ProteinX(Alphabet.ProteinAlphabet):
     letters = IUPACData.extended_protein_letters + "X"
@@ -47,9 +45,9 @@ class MissingTable(object):
 def makeTableX(table):
     assert table.protein_alphabet == IUPAC.extended_protein
     return CodonTable.CodonTable(table.nucleotide_alphabet, proteinX,
-                                MissingTable(table.forward_table),
-                                table.back_table, table.start_codons,
-                                table.stop_codons)
+                                 MissingTable(table.forward_table),
+                                 table.back_table, table.start_codons,
+                                 table.stop_codons)
 
 
 class NextOrf(object):
@@ -87,7 +85,8 @@ class NextOrf(object):
             self.Output(CDS)
 
     def ToFasta(self, header, seq):
-        seq = re.sub('(............................................................)', '\\1\n', seq)
+        seq = re.sub('(............................................................)',
+                     '\\1\n', seq)
         return '>%s\n%s' % (header, seq)
 
     def Gc(self, seq):
@@ -182,7 +181,8 @@ class NextOrf(object):
                         if nostart == '1' and start_site == 1:
                             start_site = start_site + f - 1
                         if codon == 'XXX':
-                            stop = start_site + 3 * ((int((stop - 1) - start_site) // 3))
+                            stop = start_site \
+                                + 3 * ((int((stop - 1) - start_site) // 3))
                         s = seq[start_site - 1:stop]
                         CDS.append((start_site, stop, length, s, strand * f))
                         start_site = 0
@@ -202,9 +202,13 @@ class NextOrf(object):
         for start, stop, length, subs, strand in CDS:
             self.counter += 1
             if strand > 0:
-                head = 'orf_%s:%s:%d:%d:%d' % (self.counter, self.header, strand, start, stop)
+                head = 'orf_%s:%s:%d:%d:%d' % (self.counter, self.header,
+                                               strand, start, stop)
             if strand < 0:
-                head = 'orf_%s:%s:%d:%d:%d' % (self.counter, self.header, strand, n - stop + 1, n - start + 1)
+                head = 'orf_%s:%s:%d:%d:%d' % (self.counter, self.header,
+                                               strand,
+                                               n - stop + 1,
+                                               n - start + 1)
             if self.options['gc']:
                 head = '%s:%s' % (head, self.Gc2(subs.data))
 
@@ -239,7 +243,8 @@ def help():
     print("\nNCBI's Codon Tables:")
     for key, table in CodonTable.ambiguous_dna_by_id.items():
         print('\t%s %s' % (key, table._codon_table.names[0]))
-    print('\ne.g.\n./nextorf.py --minlength 5 --strand plus --output nt --gc 1 testjan.fas')
+    print('\ne.g.')
+    print('./nextorf.py --minlength 5 --strand plus --output nt --gc 1 testjan.fas')
     sys.exit(0)
 
 
@@ -254,7 +259,7 @@ options = {
     'gc': 0,
     'nostart': 0,
     'table': 1,
-    }
+}
 
 if __name__ == '__main__':
     args = sys.argv[1:]

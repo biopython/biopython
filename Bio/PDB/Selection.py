@@ -13,8 +13,6 @@ from Bio.PDB.Atom import Atom
 from Bio.PDB.Entity import Entity
 from Bio.PDB.PDBExceptions import PDBException
 
-__docformat__ = "restructuredtext en"
-
 
 entity_levels = ["A", "R", "C", "M", "S"]
 
@@ -79,13 +77,6 @@ def unfold_entities(entity_list, target_level):
     return list(entity_list)
 
 
-def _test():
-    """Run the Bio.PDB.Selection module's doctests (PRIVATE)."""
-    import doctest
-    print("Running doctests ...")
-    doctest.testmod()
-    print("Done")
-
-
 if __name__ == "__main__":
-    _test()
+    from Bio._utils import run_doctest
+    run_doctest()

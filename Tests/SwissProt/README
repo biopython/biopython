@@ -16,7 +16,7 @@ sp003  37        143E_HUMAN
 sp004  38        NDOA_PSEPU  broken RC line
 sp005  38        NU3M_BALPH  broken RC line
 sp006  37        TCMO_STRGA  comment with no topic
-sp007  39        CLD1_HUMAN  broken RX line, broken DR lines 
+sp007  39        CLD1_HUMAN  broken RX line, broken DR lines
                              (from katel@worldpath.net)
 sp008  39        1A02_HUMAN  contains 2 AC lines
 sp009            CHS3_BROFI  contains an OX line
@@ -28,6 +28,7 @@ sp014  SP 39.14  PSBL_ORYSA  OX spans 2 lines
 sp015  IPI    IPI00383150.2  Only two DT lines, strange format of DT lines
                              Dot versions in DT lines, no DE line
 sp016            FOS_HUMAN   New PE line from UniProtKB rel 12.0, 24-Jul-2007
+P84001.xml                   Mass spec struct comment with unknown loc
 
 
 KEYWLIST TEST FILE

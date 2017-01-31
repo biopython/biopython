@@ -34,8 +34,6 @@ from functools import reduce
 
 from Bio.Pathway.Rep.MultiGraph import *
 
-__docformat__ = "restructuredtext en"
-
 
 class Reaction(object):
     """Abstraction for a biochemical transformation.
@@ -163,7 +161,7 @@ class System(object):
     None
     """
 
-    def __init__(self, reactions=[]):
+    def __init__(self, reactions=()):
         """Initializes a new System object."""
         self.__reactions = set(reactions)
 
@@ -265,7 +263,7 @@ class Network(object):
     None
     """
 
-    def __init__(self, species=[]):
+    def __init__(self, species=()):
         """Initializes a new Network object."""
         self.__graph = MultiGraph(species)
 

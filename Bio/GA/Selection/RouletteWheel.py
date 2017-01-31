@@ -16,8 +16,6 @@ import copy
 # local modules
 from .Abstract import AbstractSelection
 
-__docformat__ = "restructuredtext en"
-
 
 class RouletteWheelSelection(AbstractSelection):
     """Roulette wheel selection proportional to individuals fitness.

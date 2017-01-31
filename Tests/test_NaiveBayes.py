@@ -12,6 +12,43 @@ except ImportError:
 from Bio import NaiveBayes
 
 
+class CarTest(unittest.TestCase):
+    def test_car_data(self):
+        """Simple example using car data."""
+        # Car data from example 'Naive Bayes Classifier example'
+        # by Eric Meisner November 22, 2003
+        # http://www.inf.u-szeged.hu/~ormandi/teaching/mi2/02-naiveBayes-example.pdf
+        xcar = [
+            ['Red', 'Sports', 'Domestic'],
+            ['Red', 'Sports', 'Domestic'],
+            ['Red', 'Sports', 'Domestic'],
+            ['Yellow', 'Sports', 'Domestic'],
+            ['Yellow', 'Sports', 'Imported'],
+            ['Yellow', 'SUV', 'Imported'],
+            ['Yellow', 'SUV', 'Imported'],
+            ['Yellow', 'SUV', 'Domestic'],
+            ['Red', 'SUV', 'Imported'],
+            ['Red', 'Sports', 'Imported'],
+            ]
+
+        ycar = [
+            'Yes',
+            'No',
+            'Yes',
+            'No',
+            'Yes',
+            'No',
+            'Yes',
+            'No',
+            'No',
+            'Yes',
+            ]
+
+        carmodel = NaiveBayes.train(xcar, ycar)
+        self.assertEqual("Yes", NaiveBayes.classify(carmodel, ['Red', 'Sports', 'Domestic']))
+        self.assertEqual("No", NaiveBayes.classify(carmodel, ['Red', 'SUV', 'Domestic']))
+
+
 class NaiveBayesTest(unittest.TestCase):
     def setUp(self):
         # Using example from https://en.wikipedia.org/wiki/Naive_Bayes_classifier

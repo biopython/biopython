@@ -1,21 +1,38 @@
 # Special configuration file to run tests on Travis-CI via GitHub notifications
 # See https://travis-ci.org/biopython/biopython/builds for results
 #
-# The tests are run via the coverage script, and if the tests pass the coverage
-# information is pushed to https://codecov.io/github/biopython/biopython
+# Using TravisCI's configuration alone became too complicated once we wanted
+# to cover more than just running the unit tests on different versions of
+# Python, so this now does all the complicated test configuration via TOX
+# See file .travis-tox.ini
 #
-# Note when testing Python 3, the 'python' command will invoke Python 3
-# and similarly for PyPy too.
+# Environment variables setup here:
+# - TOXENV = environment used in Tox (conventionally uses py35 etc)
+#
 
 language: python
-python:
-  - "2.6"
-  - "2.7"
-  - "3.3"
-  - "3.4"
-  - "3.5"
-  - "pypy"
-  - "pypy3"
+matrix:
+  include:
+    - env: TOXENV=pep8
+    - env: TOXENV=sdist
+    - env: TOXENV=bdist_wheel
+    - python: 2.7
+      env: TOXENV=py27-cover
+    - python: 3.3
+      env: TOXENV=py33-cover
+    - python: 3.4
+      env: TOXENV=py34-cover
+    - python: 3.5
+      env: TOXENV=py35-cover
+    - python: 3.6
+      env: TOXENV=py36-cover
+    - python: pypy
+      env: TOXENV=pypy-nocov
+    - python: pypy3
+      env: TOXENV=pypy3-nocov
+  allow_failures:
+    - python: pypy3
+      env: TOXENV=pypy3-nocov
 
 sudo: false
 addons:
@@ -27,59 +44,30 @@ addons:
     - emboss
     - mafft
     - muscle
+    - paml
+    - phyml
     - probcons
     - samtools
     - wise
 
+#There is a phyml Ubuntu package, but currently too old
 before_install:
-  - pip install --upgrade pip
-  - "export PY3=yes"
-  - "if [[ $TRAVIS_PYTHON_VERSION == '2.6' ]]; then export PY3=no; fi"
-  - "if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then export PY3=no; fi"
-  - "if [[ $TRAVIS_PYTHON_VERSION == 'pypy' ]]; then export PY3=no; fi"
-  - "export PYPY=no"
-  - "if [[ $TRAVIS_PYTHON_VERSION == 'pypy' ]]; then export PYPY=yes; fi"
-  - "if [[ $TRAVIS_PYTHON_VERSION == 'pypy3' ]]; then export PYPY=yes; fi"
-#Misc python modules we can use as soft dependencies
-  - "if [[ $PYPY != 'yes' ]]; then pip install reportlab; fi"
-  - "pip install rdflib"
-#Not hosted on PyPI so this need allow external switch:
-#Currently pypy3-2.4.0 self reports as Python 3.2,
-#which is not supported by mysql-connector-python
-  - "if [[ $TRAVIS_PYTHON_VERSION != 'pypy3' ]]; then pip install --allow-all-external mysql-connector-python-rf; fi"
-#Installing psycopg2 does not work under PyPy or Jython
-  - "export PG=yes"
-  - "if [[ $PYPY == 'yes' ]]; then export PG=no; fi"
-  - "if [[ $PG == 'yes' ]]; then pip install psycopg2; fi"
-#Installing mysql-python does not work under Python 3
-  - "export MSQL=$PG"
-  - "if [[ $PY3 == 'yes' ]]; then export MSQL=no; fi"
-  - "if [[ $MSQL == 'yes' ]]; then pip install mysql-python; fi"
-#Lib unittest2 is needed for some assertRaises tests under Python 2.6
-  - "if [[ $TRAVIS_PYTHON_VERSION == '2.6' ]]; then pip install unittest2; fi"
-#Used to record test coverage information; running PyPy3 via coverage is very slow
-  - "export COV=yes"
-  - "if [[ $TRAVIS_PYTHON_VERSION == 'pypy3' ]]; then export COV=no; fi"
-  - "if [[ $COV == 'yes' ]]; then pip install coverage; fi"
-
+  - cd $HOME
+  - mkdir bin
+  - export PATH=$HOME/bin:$PATH
+  - curl -L -O http://www.atgc-montpellier.fr/download/binaries/phyml/PhyML-3.1.zip
+  - unzip PhyML-3.1.zip
+  - mv PhyML-3.1/PhyML-3.1_linux64 bin/phyml
+  - cd $TRAVIS_BUILD_DIR
 
 install:
-#The yes is in case we get our prompt about missing NumPy
-  - "/usr/bin/yes | python setup.py install"
-
-before_script:
-  - cd Tests
+  - "cp Tests/biosql.ini.sample Tests/biosql.ini"
+  - "pip install --upgrade pip setuptools"
+  - "pip install tox"
+  - "tox -c .travis-tox.ini -e $TOXENV --notest"
 
 script:
-#Using just coverage should match up to the current Python version:
-  - "if [[ $COV == 'yes' ]]; then coverage run --source=Bio,BioSQL run_tests.py --offline; fi"
-  - "if [[ $COV != 'yes' ]]; then python run_tests.py --offline; fi"
+  - "tox -c .travis-tox.ini -e $TOXENV"
 
-after_success:
-#See https://codecov.io/ and https://github.com/codecov/example-python
-  - "if [[ $COV == 'yes' ]]; then pip install codecov; fi"
-  - "if [[ $COV == 'yes' ]]; then codecov; fi"
-
-#The email defaults are too talkative
 notifications:
   email: false

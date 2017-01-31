@@ -28,8 +28,6 @@ from Bio.Alphabet import IUPAC
 from Bio.Data import IUPACData
 from Bio.SeqUtils import molecular_weight
 
-__docformat__ = "restructuredtext en"
-
 
 class ProteinAnalysis(object):
     """Class containing methods for protein analysis.

@@ -51,7 +51,7 @@ class TestPdbSeqres(unittest.TestCase):
 
     def test_seqres_missing(self):
         """Parse a PDB with no SEQRES entries."""
-        chains = list(SeqIO.parse('PDB/1MOT.pdb', 'pdb-seqres'))
+        chains = list(SeqIO.parse('PDB/a_structure.pdb', 'pdb-seqres'))
         self.assertEqual(len(chains), 0)
 
 
@@ -102,10 +102,14 @@ class TestPdbAtom(unittest.TestCase):
 
     def test_atom_noheader(self):
         """Parse a PDB with no HEADER line."""
-        warnings.simplefilter('ignore', UserWarning)
-        chains = list(SeqIO.parse('PDB/1MOT.pdb', 'pdb-atom'))
+
+        with warnings.catch_warnings():
+            warnings.simplefilter('ignore', PDBConstructionWarning)
+            warnings.simplefilter('ignore', UserWarning)
+            chains = list(SeqIO.parse('PDB/1LCD.pdb', 'pdb-atom'))
+
         self.assertEqual(len(chains), 1)
-        self.assertEqual(str(chains[0].seq), 'APARVGLGITTVLTMTTQSSGSRASLPK')
+        self.assertEqual(str(chains[0].seq), 'MKPVTLYDVAEYAGVSYQTVSRVVNQASHVSAKTREKVEAAMAELNYIPNR')
 
 
 if __name__ == "__main__":

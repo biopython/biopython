@@ -20,7 +20,6 @@ http://fields.scripps.edu/DTASelect/20010710-pI-Algorithm.pdf
 
 """
 
-__docformat__ = "restructuredtext en"
 
 positive_pKs = {'Nterm': 7.5, 'K': 10.0, 'R': 12.0, 'H': 5.98}
 negative_pKs = {'Cterm': 3.55, 'D': 4.05, 'E': 4.45, 'C': 9.0, 'Y': 10.0}

@@ -1,1 +1,1 @@
-__docformat__ = "restructuredtext en"
+# Python module

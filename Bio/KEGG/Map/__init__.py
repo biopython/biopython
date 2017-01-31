@@ -20,8 +20,6 @@ EC number of the enzyme that catalyze the reaction.
 
 from Bio.Pathway import Reaction
 
-__docformat__ = "restructuredtext en"
-
 
 def parse(handle):
     for line in handle:

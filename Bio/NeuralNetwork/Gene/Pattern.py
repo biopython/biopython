@@ -17,8 +17,6 @@ import random
 from Bio.Alphabet import _verify_alphabet
 from Bio.Seq import Seq, MutableSeq
 
-__docformat__ = "restructuredtext en"
-
 
 class PatternIO(object):
     """Allow reading and writing of patterns to files.

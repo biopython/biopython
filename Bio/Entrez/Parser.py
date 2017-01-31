@@ -33,7 +33,7 @@ XML, the parser analyzes the DTD referred at the top of (almost) every
 XML file returned by the Entrez Utilities. This is preferred over a hand-
 written solution, since the number of DTDs is rather large and their
 contents may change over time. About half the code in this parser deals
-wih parsing the DTD, and the other half with the XML itself.
+with parsing the DTD, and the other half with the XML itself.
 """
 import sys
 import re
@@ -48,7 +48,6 @@ from Bio._py3k import urlopen as _urlopen
 from Bio._py3k import urlparse as _urlparse
 from Bio._py3k import unicode
 
-__docformat__ = "restructuredtext en"
 
 # The following four classes are used to add a member .attributes to integers,
 # strings, lists, and dictionaries, respectively.
@@ -146,12 +145,20 @@ class CorruptedXMLError(ValueError):
 
 
 class ValidationError(ValueError):
-    """Validating parsers raise this error if the parser finds a tag in the XML that is not defined in the DTD. Non-validating parsers do not raise this error. The Bio.Entrez.read and Bio.Entrez.parse functions use validating parsers by default (see those functions for more information)"""
+    """XML tag found which was not defined in the DTD.
+
+    Validating parsers raise this error if the parser finds a tag in the XML
+    that is not defined in the DTD. Non-validating parsers do not raise this
+    error. The Bio.Entrez.read and Bio.Entrez.parse functions use validating
+    parsers by default (see those functions for more information).
+    """
     def __init__(self, name):
         self.name = name
 
     def __str__(self):
-        return "Failed to find tag '%s' in the DTD. To skip all tags that are not represented in the DTD, please call Bio.Entrez.read or Bio.Entrez.parse with validate=False." % self.name
+        return ("Failed to find tag '%s' in the DTD. To skip all tags that "
+                "are not represented in the DTD, please call Bio.Entrez.read "
+                "or Bio.Entrez.parse with validate=False." % self.name)
 
 
 class DataHandler(object):
@@ -462,10 +469,10 @@ class DataHandler(object):
             return
         # First, remove ignorable parentheses around declarations
         while (model[0] in (expat.model.XML_CTYPE_SEQ,
-                            expat.model.XML_CTYPE_CHOICE)
-          and model[1] in (expat.model.XML_CQUANT_NONE,
-                           expat.model.XML_CQUANT_OPT)
-          and len(model[3]) == 1):
+                            expat.model.XML_CTYPE_CHOICE) and
+               model[1] in (expat.model.XML_CQUANT_NONE,
+                           expat.model.XML_CQUANT_OPT) and
+               len(model[3]) == 1):
             model = model[3][0]
         # PCDATA declarations correspond to strings
         if model[0] in (expat.model.XML_CTYPE_MIXED,

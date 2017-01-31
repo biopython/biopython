@@ -32,8 +32,6 @@ from ._Track import Track
 
 from Bio.Graphics import _write
 
-__docformat__ = "restructuredtext en"
-
 
 class Diagram(object):
     """Diagram container.

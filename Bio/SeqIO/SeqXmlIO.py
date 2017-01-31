@@ -28,8 +28,6 @@ from Bio.Seq import UnknownSeq
 from Bio.SeqRecord import SeqRecord
 from .Interfaces import SequentialSequenceWriter
 
-__docformat__ = "restructuredtext en"
-
 
 class XMLRecordIterator(object):
     """Base class for building iterators for record style XML formats.
@@ -50,9 +48,12 @@ class XMLRecordIterator(object):
         self._namespace = namespace
         self._events = pulldom.parse(handle)
 
+    # TODO: Implement __next__ in order for Python to treat this class as
+    # an interator and not just as an iterable. The SequenceIterator API
+    # expects base implementation of __iter__ to call __next__ internally.
+
     def __iter__(self):
-        """Iterate over the records in the XML file.
-        Returns the last parsed record."""
+        """Iterate over the records in the XML file."""
 
         record = None
         try:
@@ -420,25 +421,3 @@ class SeqXmlWriter(SequentialSequenceWriter):
                     self.xml_generator.startElement(
                         "property", AttributesImpl(attr))
                     self.xml_generator.endElement("property")
-
-if __name__ == "__main__":
-    print("Running quick self test")
-
-    from Bio import SeqIO
-    import sys
-
-    with open("Tests/SeqXML/protein_example.xml", "r") as fileHandle:
-        records = list(SeqIO.parse(fileHandle, "seqxml"))
-
-    from Bio._py3k import StringIO
-    stringHandle = StringIO()
-
-    SeqIO.write(records, stringHandle, "seqxml")
-    SeqIO.write(records, sys.stdout, "seqxml")
-    print("")
-
-    stringHandle.seek(0)
-    records = list(SeqIO.parse(stringHandle, "seqxml"))
-
-    SeqIO.write(records, sys.stdout, "seqxml")
-    print("")

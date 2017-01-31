@@ -195,7 +195,7 @@ tophits_s report:
      Total hits:           4
      Satisfying E cutoff:  4
      Total memory:         20K
-"""
+"""  # noqa for pep8 W291 trailing whitespace
         self.check_raw(filename, 'Peptidase_C1', raw)
 
     def test_hmmer2text_22_single_hmmpfam(self):
@@ -251,7 +251,7 @@ Methylase_M: domain 1 of 1, from 280 to 481: score -105.2, E = 0.0022
   gi|1522636   464 ---------RFKEIIK--NWKINDINF----ST    481  
 
 //
-"""
+"""  # noqa for pep8 W291 trailing whitespace
         self.check_raw(filename, 'gi|1522636|gb|AAC37060.1|', raw)
 
     def test_hmmer2text_22_multiple_first_hmmpfam(self):
@@ -283,7 +283,7 @@ Model           Domain  seq-f seq-t    hmm-f hmm-t      score  E-value
 Alignments of top-scoring domains:
 	[no hits above thresholds]
 //
-"""
+"""  # noqa for pep8 W291 trailing whitespace
         self.check_raw(filename, 'random_s00', raw)
 
     def test_hmmer2text_22_multiple_middle_hmmpfam(self):
@@ -352,7 +352,7 @@ Rotavirus_VP3: domain 1 of 1, from 134 to 147: score -1.2, E = 7.9
   gi|4885477   134    -KALELFRKDMASNY    147  
 
 //
-"""
+"""  # noqa for pep8 W291 trailing whitespace
         self.check_raw(filename, 'gi|4885477|ref|NP_005359.1|', raw)
 
     def test_hmmer2text_22_multiple_last_hmmpfam(self):
@@ -473,7 +473,7 @@ TFIIB: domain 1 of 1, from 253 to 268: score 2.6, E = 6.1
   gi|1254903   253    ITHIANQLGLEK---DVVR    268  
 
 //
-"""
+"""  # noqa for pep8 W291 trailing whitespace
         self.check_raw(filename, 'gi|125490392|ref|NP_038661.2|', raw)
 
 

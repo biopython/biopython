@@ -40,7 +40,7 @@ class AppTests(unittest.TestCase):
                                sequences=EX_PHYLIP, model="PROTCATWAG",
                                name="test")
         # The parsimony seed should be set automatically
-        self.assertTrue('-p' in str(cmd))
+        self.assertIn('-p', str(cmd))
         # Smoke test
         try:
             out, err = cmd()
@@ -58,7 +58,7 @@ class AppTests(unittest.TestCase):
                           'RAxML_result.test',
                           # Present in 7.2.X+  but not 7.0.4:
                           'RAxML_bestTree.test',
-                         ]:
+                          ]:
                 if os.path.isfile(fname):
                     os.remove(fname)
 

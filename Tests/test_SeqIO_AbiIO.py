@@ -50,7 +50,7 @@ test_data = {
                                     'User1', 'phAR1', 'phCH1', 'phDY1',
                                     'phQL1', 'phTR1', 'phTR2', 'AUDT1',
                                     'PXLB1', 'RMdV1', 'DATA9', 'RGNm1',
-                                    'DATA11', 'DATA10', 'DATA12' ]),
+                                    'DATA11', 'DATA10', 'DATA12']),
               },
 'data_3730': {
              'path': ['Abi', '3730.ab1'],
@@ -227,7 +227,7 @@ class TestAbi(unittest.TestCase):
             record = SeqIO.read(test_data[trace]['handle'], 'abi-trim')
             if trace != 'data_empty':
                 self.assertNotEqual(str(record.seq), test_data[trace]['seq'])
-                self.assertTrue(str(record.seq) in test_data[trace]['seq'])
+                self.assertIn(str(record.seq), test_data[trace]['seq'])
             else:
                 self.assertEqual(str(record.seq), test_data[trace]['seq'])
 

@@ -214,21 +214,21 @@ class ModTest(unittest.TestCase):
             # There are 6 top-levels: parameters, tree, lnL, version,
             # tree length and lnL max
             self.assertEqual(len(results), 6, version_msg)
-            self.assertTrue("parameters" in results, version_msg)
+            self.assertIn("parameters", results, version_msg)
             params = results["parameters"]
-            self.assertTrue("alpha" in params, version_msg)
-            self.assertTrue("rates" in params, version_msg)
-            self.assertTrue("parameter list" in params, version_msg)
-            self.assertTrue("rate frequencies" in params, version_msg)
+            self.assertIn("alpha", params, version_msg)
+            self.assertIn("rates", params, version_msg)
+            self.assertIn("parameter list", params, version_msg)
+            self.assertIn("rate frequencies", params, version_msg)
             if model in ["1", "3", "4", "5", "6"]:
-                self.assertTrue("kappa" in params, version_msg)
+                self.assertIn("kappa", params, version_msg)
             if model in ["7", "8"]:
-                self.assertTrue("base frequencies" in params, version_msg)
-                self.assertTrue("rate parameters" in params, version_msg)
-                self.assertTrue("Q matrix" in params, version_msg)
+                self.assertIn("base frequencies", params, version_msg)
+                self.assertIn("rate parameters", params, version_msg)
+                self.assertIn("Q matrix", params, version_msg)
                 qmat = params["Q matrix"]
                 self.assertEqual(len(qmat), 2, version_msg)
-                self.assertTrue("matrix" in qmat)
+                self.assertIn("matrix", qmat)
                 matrix = qmat["matrix"]
                 self.assertEqual(len(matrix), 4, version_msg)
                 self.assertEqual(len(matrix[0]), 4, version_msg)
@@ -248,10 +248,10 @@ class ModTest(unittest.TestCase):
             # There are 6 top-levels: parameters, tree, lnL, version,
             # tree length and lnL max
             self.assertEqual(len(results), 6, version_msg)
-            self.assertTrue("parameters" in results, version_msg)
+            self.assertIn("parameters", results, version_msg)
             params = results["parameters"]
-            self.assertTrue("rho" in params, version_msg)
-            self.assertTrue("transition probs." in params, version_msg)
+            self.assertIn("rho", params, version_msg)
+            self.assertIn("transition probs.", params, version_msg)
             trans_p = params["transition probs."]
             self.assertEqual(len(trans_p), 5, version_msg)
             self.assertEqual(len(trans_p[0]), 5, version_msg)
@@ -268,12 +268,12 @@ class ModTest(unittest.TestCase):
             # There are 6 top-levels: parameters, tree, lnL, version,
             # tree length and lnL max
             self.assertEqual(len(results), 6, version_msg)
-            self.assertTrue("parameters" in results, version_msg)
+            self.assertIn("parameters", results, version_msg)
             params = results["parameters"]
             if n == "1":
-                self.assertTrue("base frequencies" in params, version_msg)
+                self.assertIn("base frequencies", params, version_msg)
             else:
-                self.assertTrue("nodes" in params)
+                self.assertIn("nodes", params)
                 nodes = params["nodes"]
                 self.assertEqual(len(nodes), 8, version_msg)
                 self.assertEqual(len(nodes[1]), 2, version_msg)
@@ -289,9 +289,9 @@ class ModTest(unittest.TestCase):
             # There are 6 top-levels: parameters, tree, lnL, version,
             # tree length and lnL max
             self.assertEqual(len(results), 6, version_msg)
-            self.assertTrue("parameters" in results, version_msg)
+            self.assertIn("parameters", results, version_msg)
             params = results["parameters"]
-            self.assertTrue("SEs" in params, version_msg)
+            self.assertIn("SEs", params, version_msg)
 
 
 if __name__ == "__main__":

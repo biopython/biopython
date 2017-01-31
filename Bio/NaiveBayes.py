@@ -30,11 +30,6 @@ from __future__ import print_function
 
 import numpy
 
-__docformat__ = "restructuredtext en"
-
-
-__docformat__ = "restructuredtext en"
-
 
 def _contents(items):
     term = 1.0 / len(items)
@@ -208,38 +203,3 @@ def train(training_set, results, priors=None, typecode=None):
             # Estimate P(value|class,dim)
             nb.p_conditional[i][j] = _contents(values)
     return nb
-
-if __name__ == "__main__":
-    # Car data from example 'Naive Bayes Classifier example' by Eric Meisner November 22, 2003
-    # http://www.inf.u-szeged.hu/~ormandi/teaching/mi2/02-naiveBayes-example.pdf
-    xcar = [
-        ['Red',    'Sports', 'Domestic'],
-        ['Red',    'Sports', 'Domestic'],
-        ['Red',    'Sports', 'Domestic'],
-        ['Yellow', 'Sports', 'Domestic'],
-        ['Yellow', 'Sports', 'Imported'],
-        ['Yellow', 'SUV',    'Imported'],
-        ['Yellow', 'SUV',    'Imported'],
-        ['Yellow', 'SUV',    'Domestic'],
-        ['Red',    'SUV',    'Imported'],
-        ['Red',    'Sports', 'Imported']
-    ]
-
-    ycar = [
-        'Yes',
-        'No',
-        'Yes',
-        'No',
-        'Yes',
-        'No',
-        'Yes',
-        'No',
-        'No',
-        'Yes'
-    ]
-
-    carmodel = train(xcar, ycar)
-    carresult = classify(carmodel, ['Red', 'Sports', 'Domestic'])
-    print('Is Yes? %s' % carresult)
-    carresult = classify(carmodel, ['Red', 'SUV', 'Domestic'])
-    print('Is No? %s' % carresult)

@@ -17,8 +17,6 @@ from Bio._py3k import range
 
 from Bio.Seq import MutableSeq
 
-__docformat__ = "restructuredtext en"
-
 
 def _gen_random_array(n):
     """ Return an array of n random numbers, where the elements of the array sum

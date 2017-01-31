@@ -1,4 +1,4 @@
-# Copyright (C) 2012, 2013 by Brandon Invergo (b.invergo@gmail.com)
+# Copyright (C) 2012, 2013, 2016 by Brandon Invergo (b.invergo@gmail.com)
 # This code is part of the Biopython distribution and governed by its
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
@@ -11,7 +11,7 @@ import sys
 from Bio._py3k import range
 
 
-VERSIONS = ["4_1", "4_3", "4_4", "4_4c", "4_5", "4_6", "4_7"]
+VERSIONS = ["4_1", "4_3", "4_4", "4_4c", "4_5", "4_6", "4_7", "4_8", "4_9a"]
 
 
 def codeml(vers=None, verbose=False):
@@ -29,7 +29,8 @@ def codeml(vers=None, verbose=False):
             ("ngene2_mgene02", "lysinYangSwanson2002.nuc", "lysin.trees"),
             ("ngene2_mgene34", "lysinYangSwanson2002.nuc", "lysin.trees"),
             ("pairwise", "alignment.phylip", "species.tree"),
-            ("SE", "alignment.phylip", "species.tree")]
+            ("SE", "alignment.phylip", "species.tree"),
+            ("m2a_rel", "alignment.phylip", "species.tree")]
 
     for test in tests:
         print(test[0])
@@ -44,6 +45,9 @@ def codeml(vers=None, verbose=False):
         cml.alignment = alignment
         cml.tree = tree
         for version in versions:
+            # M2a_rel (NSsites 22) was introduced in PAML 4.6
+            if test[0] == "m2a_rel" and int(version.split("_")[1][0]) < 6:
+                continue
             print("\t{0}".format(version.replace('_', '.')))
             if test[0] in ["ngene2_mgene02", "ngene2_mgene34"] and \
                version == "4_6":
@@ -107,8 +111,7 @@ def yn00(vers=None, verbose=False):
         versions = [vers]
     else:
         versions = VERSIONS
-    tests = ["yn00"]
-    alignment = os.path.join("Alignments", "alignment.phylip")
+    tests = ["yn00", "yn00_long"]
     for test in tests:
         print(test[0])
         yn = yn00.Yn00()
@@ -117,17 +120,16 @@ def yn00(vers=None, verbose=False):
             ctl_file = os.path.join("Control_files", "yn00",
                 "{0}.ctl".format(test))
             yn.read_ctl_file(ctl_file)
-            yn.alignment = alignment
             out_file = "{0}-{1}.out".format(test, version)
-            yn.out_file = os.path.join("Results", "yn00", out_file)
+            yn.out_file = os.path.join("Results", 'yn00', out_file)
             bin = "yn00{0}".format(version)
             yn.run(command=bin, verbose=verbose)
 
 
 def print_usage():
     versions = ", ".join(vers.replace("_", ".") for vers in VERSIONS)
-    usage = \
-'''Usage: gen_results.py [-v] PROGRAM [VERSION]
+    usage = """Usage: gen_results.py [-v] PROGRAM [VERSION]
+
 Generate result files to be used in Bio.Phylo.PAML unit tests.
 
   -v         Use verbose output
@@ -138,7 +140,7 @@ To use this, the PAML programs must be in your executable path and
 they must be named programX_Y, where X and Y are the version numbers
 (i.e. baseml4_5 or codeml4_4c). If VERSION is not specified, test
 results will be generated for all versions listed above.
-'''%(versions)
+""" % (versions)
     sys.exit(usage)
 
 if __name__ == "__main__":

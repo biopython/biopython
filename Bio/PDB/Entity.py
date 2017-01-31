@@ -13,8 +13,6 @@ from copy import copy
 
 from Bio.PDB.PDBExceptions import PDBConstructionException
 
-__docformat__ = "restructuredtext en"
-
 
 class Entity(object):
     """
@@ -22,7 +20,7 @@ class Entity(object):
     are subclasses of Entity. It deals with storage and lookup.
     """
     def __init__(self, id):
-        self.id = id
+        self._id = id
         self.full_id = None
         self.parent = None
         self.child_list = []
@@ -53,7 +51,50 @@ class Entity(object):
         for child in self.child_list:
             yield child
 
+    # Private methods
+
+    def _reset_full_id(self):
+        """Reset the full_id.
+
+        Sets the full_id of this entity and
+        recursively of all its children to None.
+        This means that it will be newly generated
+        at the next call to get_full_id.
+        """
+        for child in self:
+            try:
+                child._reset_full_id()
+            except AttributeError:
+                pass  # Atoms do not cache their full ids.
+        self.full_id = None
+
     # Public methods
+
+    @property
+    def id(self):
+        return self._id
+
+    @id.setter
+    def id(self, value):
+        """
+        Change the id of this entity.
+
+        This will update the child_dict of this entity's parent
+        and invalidate all cached full ids involving this entity.
+
+        @raises: ValueError
+        """
+        if self.parent:
+            if value in self.parent.child_dict:
+                raise ValueError(
+                              "Cannot change id from `{}` to `{}`. "
+                              "The id `{}` is already used for a sibling of"
+                              " this entity.".format(self._id, value, value))
+            del self.parent.child_dict[self._id]
+            self.parent.child_dict[value] = self
+
+        self._id = value
+        self._reset_full_id()
 
     def get_level(self):
         """Return level in hierarchy.

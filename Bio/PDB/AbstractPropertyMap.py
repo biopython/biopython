@@ -7,8 +7,6 @@
 
 from __future__ import print_function
 
-__docformat__ = "restructuredtext en"
-
 
 class AbstractPropertyMap(object):
     def __init__(self, property_dict, property_keys, property_list):

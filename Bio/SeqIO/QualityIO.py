@@ -363,8 +363,6 @@ are approximately equal.
 """
 from __future__ import print_function
 
-__docformat__ = "restructuredtext en"  # Don't just use plain text in epydoc API pages!
-
 from Bio.Alphabet import single_letter_alphabet
 from Bio.Seq import Seq, UnknownSeq
 from Bio.SeqRecord import SeqRecord
@@ -954,7 +952,6 @@ def FastqGeneralIterator(handle):
 
         # Return the record and then continue...
         yield (title_line, seq_string, quality_string)
-    raise StopIteration
 
 
 def FastqPhredIterator(handle, alphabet=single_letter_alphabet, title2ids=None):

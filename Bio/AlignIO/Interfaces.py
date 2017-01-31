@@ -14,8 +14,6 @@ import sys  # for checking if Python 2
 
 from Bio.Alphabet import single_letter_alphabet
 
-__docformat__ = "restructuredtext en"
-
 
 class AlignmentIterator(object):
     """Base class for building MultipleSeqAlignment iterators.

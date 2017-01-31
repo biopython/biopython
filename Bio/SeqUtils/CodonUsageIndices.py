@@ -7,8 +7,6 @@ Currently this module only defines a single codon adaption index from
 Sharp & Li, Nucleic Acids Res. 1987.
 """
 
-__docformat__ = "restructuredtext en"
-
 
 SharpEcoliIndex = {
 'GCA': 0.586, 'GCC': 0.122, 'GCG': 0.424, 'GCT': 1, 'AGA': 0.004, 'AGG': 0.002, 'CGA': 0.004,

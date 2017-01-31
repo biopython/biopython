@@ -39,7 +39,6 @@ from Bio._py3k import _binary_to_string_handle, _as_bytes
 from Bio._py3k import urlopen as _urlopen
 from Bio._py3k import quote as _quote
 
-__docformat__ = "restructuredtext en"
 
 # Constant
 _BASE_URL = "http://togows.dbcls.jp"

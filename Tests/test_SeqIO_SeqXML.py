@@ -17,9 +17,10 @@ test_files = {
     "globalSpecies": ["SeqXML/global_species_example.xml", 2],
 }
 
-corrupt_files = ["SeqXML/corrupt_example1.xml",
-                 "SeqXML/corrupt_example2.xml",
-                ]
+corrupt_files = [
+    "SeqXML/corrupt_example1.xml",
+    "SeqXML/corrupt_example2.xml",
+]
 
 
 def assert_equal_records(testCase, record_a, record_b):
@@ -152,8 +153,8 @@ class TestReadAndWrite(unittest.TestCase):
         SeqIO.write(record, handle, "seqxml")
         handle.seek(0)
         output = handle.getvalue()
-        self.assertTrue("Homo sapiens (Human)" in output)
-        self.assertTrue("9606" in output)
+        self.assertIn("Homo sapiens (Human)", output)
+        self.assertIn("9606", output)
         if '<species name="Homo sapiens (Human)" ncbiTaxID="9606"/>' in output:
             # Good, but don't get this (do we?)
             pass

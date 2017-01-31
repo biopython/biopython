@@ -10,12 +10,9 @@ from __future__ import print_function
 
 import os
 import tempfile
-from itertools import chain
 from io import BytesIO
 
-from reportlab.lib import pagesizes
 from reportlab.lib import colors
-from reportlab.lib.utils import ImageReader
 from reportlab.graphics.shapes import *
 from reportlab.pdfgen import canvas
 
@@ -24,8 +21,6 @@ from PIL import Image
 from Bio._py3k import urlopen as _urlopen
 
 from Bio.KEGG.KGML.KGML_pathway import Pathway
-
-__docformat__ = "restructuredtext en"
 
 
 def darken(color, factor=0.7):

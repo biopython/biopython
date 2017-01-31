@@ -11,8 +11,6 @@ algorithms that can be used generally.
 
 from Bio._py3k import range
 
-__docformat__ = "restructuredtext en"
-
 
 class AbstractDPAlgorithms(object):
     """An abstract class to calculate forward and backward probabilities.
@@ -141,7 +139,7 @@ class AbstractDPAlgorithms(object):
         # b_{k}(L) = a_{k0} for all k
         for state in state_letters:
             backward_var[(state, len(self._seq.emissions) - 1)] = \
-              self._mm.transition_prob[(state, state_letters[0])]
+                self._mm.transition_prob[(state, state_letters[0])]
 
         # -- recursion
         # first loop over the training sequence backwards
@@ -247,7 +245,7 @@ class ScaledDPAlgorithms(AbstractDPAlgorithms):
         # a previous forward or backward recursion)
         if sequence_pos not in self._s_values:
             self._s_values[sequence_pos] = \
-              self._calculate_s_value(sequence_pos, forward_vars)
+                self._calculate_s_value(sequence_pos, forward_vars)
 
         # e_{l}(x_{i})
         seq_letter = self._seq.emissions[sequence_pos]
@@ -294,7 +292,7 @@ class ScaledDPAlgorithms(AbstractDPAlgorithms):
         # a previous forward or backward recursion)
         if sequence_pos not in self._s_values:
             self._s_values[sequence_pos] = \
-              self._calculate_s_value(sequence_pos, backward_vars)
+                self._calculate_s_value(sequence_pos, backward_vars)
 
         # loop over all of the possible states at the position
         state_pos_sum = 0

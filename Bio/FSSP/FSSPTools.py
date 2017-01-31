@@ -19,8 +19,6 @@ from Bio import Alphabet
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
-__docformat__ = "restructuredtext en"
-
 
 class FSSPAlign(MultipleSeqAlignment):
     def _add_numbering_table(self, new_record):

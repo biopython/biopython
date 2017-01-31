@@ -19,8 +19,6 @@ from Bio._py3k import range
 
 import math
 
-__docformat__ = "restructuredtext en"
-
 
 def create(instances, alphabet=None):
     instances = Instances(instances, alphabet)
@@ -305,7 +303,10 @@ class Motif(object):
             self._background = dict.fromkeys(self.alphabet.letters, 1.0)
         else:
             if sorted(self.alphabet.letters) != ["A", "C", "G", "T"]:
-                raise Exception("Setting the background to a single value only works for DNA motifs (in which case the value is interpreted as the GC content")
+                # TODO - Should this be a ValueError?
+                raise Exception("Setting the background to a single value only "
+                                "works for DNA motifs (in which case the value "
+                                "is interpreted as the GC content")
             self._background['A'] = (1.0 - value) / 2.0
             self._background['C'] = value / 2.0
             self._background['G'] = value / 2.0
@@ -440,6 +441,16 @@ class Motif(object):
 
         """
         from Bio._py3k import urlopen, urlencode, Request
+        from Bio import Alphabet
+
+        if isinstance(self.alphabet, Alphabet.ProteinAlphabet):
+            alpha = "alphabet_protein"
+        elif isinstance(self.alphabet, Alphabet.RNAAlphabet):
+            alpha = "alphabet_rna"
+        elif isinstance(self.alphabet, Alphabet.DNAAlphabet):
+            alpha = "alphabet_dna"
+        else:
+            alpha = "auto"
 
         frequencies = self.format('transfac')
         url = 'http://weblogo.threeplusone.com/create.cgi'
@@ -447,7 +458,7 @@ class Motif(object):
                   'format': format.lower(),
                   'stack_width': 'medium',
                   'stack_per_line': '40',
-                  'alphabet': 'alphabet_dna',
+                  'alphabet': alpha,
                   'ignore_lower_case': True,
                   'unit_name': "bits",
                   'first_index': '1',

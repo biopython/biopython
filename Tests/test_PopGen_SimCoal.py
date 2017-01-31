@@ -5,9 +5,15 @@
 
 import os
 import unittest
-from Bio.PopGen import SimCoal
-from Bio.PopGen.SimCoal.Controller import SimCoalController
+import warnings
+
 from Bio import MissingExternalDependencyError
+from Bio import BiopythonDeprecationWarning
+
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore", BiopythonDeprecationWarning)
+    from Bio.PopGen import SimCoal
+    from Bio.PopGen.SimCoal.Controller import SimCoalController
 
 # Tests simcoal related code. Note: this case requires simcoal
 # test_PopGen_SimCoal_nodepend tests code that does not require simcoal

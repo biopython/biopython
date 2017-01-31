@@ -104,65 +104,62 @@ class ParseTests(unittest.TestCase):
 
     test_shape_apaf = _test_shape_factory(EX_APAF,
             # lvl-2 clades, sub-clade counts, lvl-3 clades
-                ( ( (2, (2, 2)),
+                (((2, (2, 2)),
                     (2, (2, 2)),
                   ),
-                ),
+                 ),
             )
     test_shape_bcl2 = _test_shape_factory(EX_BCL2,
-                ( ( (2, (2, 2)),
+                (((2, (2, 2)),
                     (2, (2, 2)),
                   ),
-                ),
+                 ),
             )
     test_shape_phylo = _test_shape_factory(EX_PHYLO,
-                ( ( (2, (0, 0)),
+                (((2, (0, 0)),
                     (0, ()),
                   ),
-                  ( (2, (0, 0)),
+                  ((2, (0, 0)),
                     (0, ()),
-                  ),
-                  ( (2, (0, 0)),
+                   ),
+                  ((2, (0, 0)),
                     (0, ()),
-                  ),
-                  ( (2, (0, 0)),
+                   ),
+                  ((2, (0, 0)),
                     (0, ()),
-                  ),
-                  ( (2, (0, 0)),
+                   ),
+                  ((2, (0, 0)),
                     (0, ()),
-                  ),
-                  ( (2, (0, 0)),
+                   ),
+                  ((2, (0, 0)),
                     (0, ()),
-                  ),
-                  ( (2, (0, 0)),
+                   ),
+                  ((2, (0, 0)),
                     (0, ()),
-                  ),
-                  ( (2, (0, 0)),
+                   ),
+                  ((2, (0, 0)),
                     (0, ()),
-                  ),
-                  ( (2, (0, 0)),
+                   ),
+                  ((2, (0, 0)),
                     (0, ()),
-                  ),
-                  ( (0, ()),
+                   ),
+                  ((0, ()),
                     (2, (0, 0)),
-                  ),
-                  ( (3, (0, 0, 0)),
+                   ),
+                  ((3, (0, 0, 0)),
                     (0, ()),
-                  ),
-                  ( (2, (0, 0)),
+                   ),
+                  ((2, (0, 0)),
                     (0, ()),
-                  ),
-                  ( (2, (0, 0)),
+                   ),
+                  ((2, (0, 0)),
                     (0, ()),
-                  ),
-                ),
+                   ),
+                 ),
             )
     test_shape_dollo = _test_shape_factory(EX_DOLLO,
-                ( ( (2, (2, 2)),
-                    (2, (2, 2)),
-                  ),
-                ),
-            )
+                                           (((2, (2, 2)),
+                                             (2, (2, 2)),),),)
 
 
 class TreeTests(unittest.TestCase):
@@ -186,9 +183,11 @@ class TreeTests(unittest.TestCase):
         self.assertEqual(otr.tag, 'alignment')
         self.assertEqual(otr.namespace, 'http://example.org/align')
         self.assertEqual(len(otr.children), 3)
-        for child, name, value in zip(otr, ('A', 'B', 'C'), (
-          'acgtcgcggcccgtggaagtcctctcct', 'aggtcgcggcctgtggaagtcctctcct',
-          'taaatcgc--cccgtgg-agtccc-cct')):
+        for child, name, value in zip(otr,
+                                      ('A', 'B', 'C'),
+                                      ('acgtcgcggcccgtggaagtcctctcct',
+                                       'aggtcgcggcctgtggaagtcctctcct',
+                                       'taaatcgc--cccgtgg-agtccc-cct')):
             self.assertEqual(child.tag, 'seq')
             self.assertEqual(child.attributes['name'], name)
             self.assertEqual(child.value, value)
@@ -202,7 +201,6 @@ class TreeTests(unittest.TestCase):
                 'a pylogeny of some monitor lizards')
         self.assertEqual(trees[9].rooted, True)
         # Network (unrooted)
-        tree6 = trees[6]
         self.assertEqual(trees[6].name,
                 'network, node B is connected to TWO nodes: AB and C')
         self.assertEqual(trees[6].rooted, False)
@@ -233,19 +231,16 @@ class TreeTests(unittest.TestCase):
 
     def test_BinaryCharacters(self):
         """Instantiation of BinaryCharacters objects."""
-        # Because we short circult interation, must close handle explicitly
-        # to avoid a ResourceWarning
-        handle = open(EX_DOLLO)
-        tree = next(PhyloXMLIO.parse(handle))
-        handle.close()
+        with open(EX_DOLLO) as handle:
+            tree = next(PhyloXMLIO.parse(handle))
         bchars = tree.clade[0, 0].binary_characters
         self.assertTrue(isinstance(bchars, PX.BinaryCharacters))
         self.assertEqual(bchars.type, 'parsimony inferred')
         for name, count, value in (
-                ('gained',  2, ['Cofilin_ADF', 'Gelsolin']),
-                ('lost',    0, []),
+                ('gained', 2, ['Cofilin_ADF', 'Gelsolin']),
+                ('lost', 0, []),
                 ('present', 2, ['Cofilin_ADF', 'Gelsolin']),
-                ('absent',  None, []),
+                ('absent', None, []),
                 ):
             self.assertEqual(getattr(bchars, name + '_count'), count)
             self.assertEqual(getattr(bchars, name), value)
@@ -344,9 +339,9 @@ class TreeTests(unittest.TestCase):
                 (6, 109, 605, 647, 689, 733, 872, 993, 1075, 1117, 1168),
                 (90, 414, 643, 685, 729, 771, 910, 1031, 1113, 1155, 1204),
                 (7.0e-26, 7.2e-117, 2.4e-6, 1.1e-12, 2.4e-7, 4.7e-14, 2.5e-8,
-                    4.6e-6, 6.3e-7, 1.4e-7, 0.3),
+                 4.6e-6, 6.3e-7, 1.4e-7, 0.3),
                 ('CARD', 'NB-ARC', 'WD40', 'WD40', 'WD40', 'WD40', 'WD40',
-                    'WD40', 'WD40', 'WD40', 'WD40')):
+                 'WD40', 'WD40', 'WD40', 'WD40')):
             self.assertTrue(isinstance(domain, PX.ProteinDomain))
             self.assertEqual(domain.start + 1, start)
             self.assertEqual(domain.end, end)
@@ -574,13 +569,13 @@ class WriterTests(unittest.TestCase):
                 (ParseTests, [
                     'test_read_phylo', 'test_parse_phylo', 'test_shape_phylo']),
                 (TreeTests, [
-                    'test_Phyloxml',   'test_Other',
-                    'test_Phylogeny',  'test_Clade',
+                    'test_Phyloxml', 'test_Other',
+                    'test_Phylogeny', 'test_Clade',
                     'test_Annotation', 'test_CladeRelation',
-                    'test_Date',       'test_Distribution',
-                    'test_Events',     'test_Property',
-                    'test_Sequence',   'test_SequenceRelation',
-                    'test_Taxonomy',   'test_Uri',
+                    'test_Date', 'test_Distribution',
+                    'test_Events', 'test_Property',
+                    'test_Sequence', 'test_SequenceRelation',
+                    'test_Taxonomy', 'test_Uri',
                     ]),
                 ))
         finally:
@@ -639,11 +634,11 @@ class MethodTests(unittest.TestCase):
             domain_architecture=PX.DomainArchitecture(
                 length=50,
                 domains=[PX.ProteinDomain(*args) for args in (
-                    # value,   start,   end,    confidence
-                    ('FOO',     0,      5,      7.0e-26),
-                    ('BAR',     8,      13,     7.2e-117),
-                    ('A-OK',    21,     34,     2.4e-06),
-                    ('WD40',    40,     50,     0.3))],
+                    # value, start, end, confidence
+                    ('FOO', 0, 5, 7.0e-26),
+                    ('BAR', 8, 13, 7.2e-117),
+                    ('A-OK', 21, 34, 2.4e-06),
+                    ('WD40', 40, 50, 0.3))],
                 ))
         srec = pseq.to_seqrecord()
         # TODO: check seqrec-specific traits (see args)

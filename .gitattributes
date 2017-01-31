@@ -18,3 +18,6 @@ Tests/Blast/wnts.xml binary
 # _pickle.UnpicklingError: the STRING opcode argument must be quoted
 
 Tests/SubsMat/acc_rep_mat.pik binary
+
+# MMTF is a binary file format,
+Tests/PDB/4CUP.mmtf binary

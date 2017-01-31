@@ -18,8 +18,6 @@ from Bio.Alphabet import single_letter_alphabet
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
-__docformat__ = "restructuredtext en"
-
 
 def IgIterator(handle, alphabet=single_letter_alphabet):
     """Iterate over IntelliGenetics records (as SeqRecord objects).

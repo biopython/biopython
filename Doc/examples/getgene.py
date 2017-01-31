@@ -4,29 +4,32 @@
 # thomas@cbs.dtu.dk, http://www.cbs.dtu.dk/thomas
 # File: getgene.py
 
-""" Example code to index a non-reduntant protein database of
-    SwissProt + TrEMBL for fast lookup and retrieval.
+"""Example indexing plain text SwissProt files.
 
-    To build the database and index it:
-        cd /opt/bio/data/
-        wget -N -nd -r -l1 -A'.dat.Z' ftp://expasy.cbr.nrc.ca/databases/sp_tr_nrdb/
-        zcat *.dat.Z > nr.dat
-        ./getgene.py --index nr.dat
-        setenv PYPHY '/opt/bio/data'
+Example code to index a non-reduntant protein database of
+SwissProt + TrEMBL for fast lookup and retrieval.
 
-    To retrieve entries from the command line:
+To build the database and index it::
+
+    cd /opt/bio/data/
+    wget -N -nd -r -l1 -A'.dat.Z' ftp://expasy.cbr.nrc.ca/databases/sp_tr_nrdb/
+    zcat *.dat.Z > nr.dat
+    ./getgene.py --index nr.dat
+    setenv PYPHY '/opt/bio/data'
+
+To retrieve entries from the command line::
+
     ./getgene.py EFTU_ECOLI
 
-    To use from a python script:
+To use from a python script::
+
     from getgene import DB_Index
-
     db_index = DB_Index()
-
     # retrieve a complete entry:
     db_index.Get('EFTU_ECOLI')
-
     # get organism, lineage and gene
     db_index.Get_OS_OC_GN('EFTU_ECOLI')
+
 """
 
 from __future__ import print_function
@@ -75,7 +78,8 @@ class DB_Index(object):
                         db[acc] = value
                         id, acc, start, stop = None, None, None, None
                     except:
-                        print("AARRGGGG %d %d %s %s" % (start, stop, type(start), type(stop)))
+                        print("AARRGGGG %d %d %s %s" %
+                              (start, stop, type(start), type(stop)))
                         print("%s %s" % (id, acc))
 
             db.close()
@@ -264,7 +268,7 @@ class DB_Index(object):
         return keywords
 
 
-def help(exit=0):
+def usage(exit=0):
     name = os.path.basename(sys.argv[0])
     print('Usage: %s <db> <gene ID>' % name)
     print('  or   %s --index <db.dat>' % name)
@@ -275,7 +279,7 @@ if __name__ == '__main__':
     pyphy_home = os.environ.get('PYPHY')
 
     if len(sys.argv) == 1:
-        help(exit=1)
+        usage(exit=1)
     db_index = DB_Index(open=0)
     func = db_index.Get
     for arg in sys.argv[1:]:
@@ -291,7 +295,7 @@ if __name__ == '__main__':
             func = getattr(db_index, arg[1:])
 
         elif arg == '-h' or arg == '--help':
-            help(exit=1)
+            usage(exit=1)
 
     db = 'nr.dat'
     if len(sys.argv) == 2:
@@ -302,7 +306,7 @@ if __name__ == '__main__':
             db = sys.argv[1]
             ids = sys.argv[2:]
         except:
-            help(exit=1)
+            usage(exit=1)
 
     dbfile = os.path.join(pyphy_home, db + '.indexed')
     db_index.Open(dbfile)

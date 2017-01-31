@@ -9,7 +9,6 @@
 
 import re
 
-__docformat__ = "restructuredtext en"
 
 _pdbid_re = re.compile(r"^(\w\w\w\w)(?:$|\s+|_)(.*)")
 _fragment_re = re.compile(r"\(?(\w:)?(-?\w*)-?(-?\w*)\)?(.*)")

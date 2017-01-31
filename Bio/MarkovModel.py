@@ -8,7 +8,6 @@ This is an implementation of a state-emitting MarkovModel.  I am using
 terminology similar to Manning and Schutze.
 
 
-
 Functions:
 train_bw        Train a markov model using the Baum-Welch algorithm.
 train_visible   Train a visible markov model using MLE.
@@ -23,7 +22,6 @@ MarkovModel     Holds the description of a markov model
 
 import numpy
 
-__docformat__ = "restructuredtext en"
 
 try:
     logaddexp = numpy.logaddexp
@@ -286,10 +284,10 @@ def _baum_welch_one(N, M, outputs,
                 # P(making this transition)
                 # P(emitting this character)
                 # P(going to the end)
-                lp = fmat[i][t] + \
-                     lp_transition[i][j] + \
-                     lp_emission[i][k] + \
-                     bmat[j][t + 1]
+                lp = (fmat[i][t] +
+                      lp_transition[i][j] +
+                      lp_emission[i][k] +
+                      bmat[j][t + 1])
                 lp_traverse[i][j] = lp
         # Normalize the probability for this time step.
         lp_arc[:, :, t] = lp_traverse - _logsum(lp_traverse)
@@ -362,9 +360,7 @@ def _forward(N, T, lp_initial, lp_transition, lp_emission, outputs):
             # transitions from all the states from time t-1.
             lprob = LOG0
             for i in range(N):
-                lp = matrix[i][t - 1] + \
-                     lp_transition[i][j] + \
-                     lp_emission[i][k]
+                lp = matrix[i][t - 1] + lp_transition[i][j] + lp_emission[i][k]
                 lprob = logaddexp(lprob, lp)
             matrix[j][t] = lprob
     return matrix
@@ -379,9 +375,9 @@ def _backward(N, T, lp_transition, lp_emission, outputs):
             # transitions from all the states from time t+1.
             lprob = LOG0
             for j in range(N):
-                lp = matrix[j][t + 1] + \
-                     lp_transition[i][j] + \
-                     lp_emission[i][k]
+                lp = (matrix[j][t + 1] +
+                      lp_transition[i][j] +
+                      lp_emission[i][k])
                 lprob = logaddexp(lprob, lp)
             matrix[i][t] = lprob
     return matrix
@@ -524,9 +520,9 @@ def _viterbi(N, lp_initial, lp_transition, lp_emission, output):
         k = output[t]
         for j in range(N):
             # Find the most likely place it came from.
-            i_scores = scores[:, t - 1] + \
-                       lp_transition[:, j] + \
-                       lp_emission[j, k]
+            i_scores = (scores[:, t - 1] +
+                        lp_transition[:, j] +
+                        lp_emission[j, k])
             indexes = _argmaxes(i_scores)
             scores[j, t] = i_scores[indexes[0]]
             backtrace[j][t] = indexes

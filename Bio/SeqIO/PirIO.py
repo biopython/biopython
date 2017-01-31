@@ -93,7 +93,6 @@ from Bio.Alphabet import single_letter_alphabet, generic_protein, \
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
-__docformat__ = "restructuredtext en"
 
 _pir_alphabets = {"P1": generic_protein,
                   "F1": generic_protein,

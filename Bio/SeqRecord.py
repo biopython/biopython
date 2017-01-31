@@ -10,8 +10,6 @@
 
 from Bio._py3k import basestring
 
-__docformat__ = "restructuredtext en"  # Simple markup to show doctests nicely
-
 # NEEDS TO BE SYNCH WITH THE REST OF BIOPYTHON AND BIOPERL
 # In particular, the SeqRecord and BioSQL.BioSeq.DBSeqRecord classes
 # need to be in sync (this is the BioSQL "Database SeqRecord", see
@@ -294,19 +292,28 @@ class SeqRecord(object):
         >>> sub_record.letter_annotations = {}
         >>> sub_record.letter_annotations
         {}
+
+        Note that if replacing the record's sequence with a sequence of a
+        different length you must first clear the letter_annotations dict.
         """)
 
     def _set_seq(self, value):
         # TODO - Add a deprecation warning that the seq should be write only?
         if self._per_letter_annotations:
-            # TODO - Make this a warning? Silently empty the dictionary?
-            raise ValueError("You must empty the letter annotations first!")
-        self._seq = value
-        try:
-            self._per_letter_annotations = _RestrictedDict(length=len(self.seq))
-        except AttributeError:
-            # e.g. seq is None
-            self._per_letter_annotations = _RestrictedDict(length=0)
+            if len(self) != len(value):
+                # TODO - Make this a warning? Silently empty the dictionary?
+                raise ValueError("You must empty the letter annotations first!")
+            else:
+                # Leave the existing per letter annotations unchanged:
+                self._seq = value
+        else:
+            self._seq = value
+            # Reset the (empty) letter annotations dict with new length:
+            try:
+                self._per_letter_annotations = _RestrictedDict(length=len(self.seq))
+            except AttributeError:
+                # e.g. seq is None
+                self._per_letter_annotations = _RestrictedDict(length=0)
 
     seq = property(fget=lambda self: self._seq,
                    fset=_set_seq,
@@ -359,8 +366,8 @@ class SeqRecord(object):
         Number of features: 1
         Per letter annotation for: secondary_structure
         Seq('MAAGVKQLADDRTLLMAGVSHDLRTPLTRIRLATEMMSEQDGYLAESINKDIEE...YLR', IUPACProtein())
-        >>> print(rec.letter_annotations["secondary_structure"])
-          S  SSSSSSHHHHHTTTHHHHHHHHHHHHHHHHHHHHHHTHHHHHHHHHHHHHHHHHHHHHTT  
+        >>> rec.letter_annotations["secondary_structure"]
+        '  S  SSSSSSHHHHHTTTHHHHHHHHHHHHHHHHHHHHHHTHHHHHHHHHHHHHHHHHHHHHTT  '
         >>> print(rec.features[0].location)
         [20:21]
 
@@ -375,8 +382,8 @@ class SeqRecord(object):
         Number of features: 1
         Per letter annotation for: secondary_structure
         Seq('RTLLMAGVSHDLRTPLTRIRLATEMMSEQD', IUPACProtein())
-        >>> print(sub.letter_annotations["secondary_structure"])
-        HHHHHTTTHHHHHHHHHHHHHHHHHHHHHH
+        >>> sub.letter_annotations["secondary_structure"]
+        'HHHHHTTTHHHHHHHHHHHHHHHHHHHHHH'
         >>> print(sub.features[0].location)
         [9:10]
 
@@ -429,10 +436,17 @@ class SeqRecord(object):
             if self.seq is None:
                 raise ValueError("If the sequence is None, we cannot slice it.")
             parent_length = len(self)
-            answer = self.__class__(self.seq[index],
-                                    id=self.id,
-                                    name=self.name,
-                                    description=self.description)
+            from BioSQL.BioSeq import DBSeqRecord
+            if isinstance(self, DBSeqRecord):
+                answer = SeqRecord(self.seq[index],
+                                        id=self.id,
+                                        name=self.name,
+                                        description=self.description)
+            else:
+                answer = self.__class__(self.seq[index],
+                                        id=self.id,
+                                        name=self.name,
+                                        description=self.description)
             # TODO - The description may no longer apply.
             # It would be safer to change it to something
             # generic like "edited" or the default value.

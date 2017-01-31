@@ -45,14 +45,12 @@
 # ***** LOAD MODULES *****
 
 from __future__ import print_function
-import getopt
 import string
-import sys
 
 # -- don't need to modify sys.path with the *tools in Biopython
 # -- just need Biopython installed somewhere in the PYTHONPATH
-#sys.path=[sys.path,"./"]
-#sys.path=[sys.path,"/usr/people/robert/development/xpktools"]
+# sys.path=[sys.path,"./"]
+# sys.path=[sys.path,"/usr/people/robert/development/xpktools"]
 from Bio.NMR import xpktools  # Contains data classes and functions for .xpk files
 from Bio.NMR import NOEtools  # A module specific for generate NOE predictions
 
@@ -67,70 +65,69 @@ detectatom = "H1"           # Directly detected atom
 relayatom = "N15"           # J-coupling from here to detected atom
 fromatom = "15N2"           # The other labelled nucleus
 
-# *-*-*  First the peaklist is read into a data class from xpktools
-# *-*-*  that contains methods for easily extracting information from
-# *-*-*  the peaklist file
+#  First the peaklist is read into a data class from xpktools
+#  that contains methods for easily extracting information from
+#  the peaklist file
 
 peaklist = xpktools.Peaklist(infn)  # infn is the name of the xpk file
 
-# *-*-* The class attribute residue_dict allows the data lines
-# *-*-* to be separated from the header and returned here to
-# *-*-* the dictionary <dict> as a list indexed by the assignment
-# *-*-* of any of the nuclei in the file -- here, the detected atom
-# *-*-* is used
+# The class attribute residue_dict allows the data lines
+# to be separated from the header and returned here to
+# the dictionary <dict> as a list indexed by the assignment
+# of any of the nuclei in the file -- here, the detected atom
+# is used
 
 dict = peaklist.residue_dict(detectatom)
 
-# *-*-* As well as the data, the dictionary contains two other entries,
-# *-*-* corresponding to the maximum and minimum residues indexed
+# As well as the data, the dictionary contains two other entries,
+# corresponding to the maximum and minimum residues indexed
 
 MAXRES = dict["maxres"]
 MINRES = dict["minres"]
 
-#****** CALCULATE AND WRITE CROSSPEAK PEAKLIST *****
+# ****** CALCULATE AND WRITE CROSSPEAK PEAKLIST *****
 
-# *-*-* The peaklist class has a method for writing out the header
-# *-*-* information in a format recognizable by nmrview
+# The peaklist class has a method for writing out the header
+# information in a format recognizable by nmrview
 
 peaklist.write_header(outfn)  # Write the header to the output file
 
-# *-*-* Predict the i->i+inc and i->i-inc noe positions if possible
-# *-*-* Write each one to the output file as they are calculated
+# Predict the i->i+inc and i->i-inc noe positions if possible
+# Write each one to the output file as they are calculated
 
 count = 0     # A counter that number the output data lines in order
 res = MINRES  # minimum residue number in the set
 outlist = []  # Holds the output data
 
 while (res <= MAXRES):
-
-# *-*-* Predicting the NOE positions based on peak assignment data
-# *-*-* is done by supplying the peaklist to and specifying the label
-# *-*-* of the origin and detected atom in the NOE transfer as well as
-# *-*-* the residues between which the NOE transfer takes places.
+    # Predicting the NOE positions based on peak assignment data
+    # is done by supplying the peaklist to and specifying the label
+    # of the origin and detected atom in the NOE transfer as well as
+    # the residues between which the NOE transfer takes places.
 
     noe1 = NOEtools.predictNOE(peaklist, "15N2", "H1", res, res + inc)
     noe2 = NOEtools.predictNOE(peaklist, "15N2", "H1", res, res - inc)
 
-# *-*-* The output of predictNOE is in the form of an xpk entry line
-# *-*-* suitable for printing to an output file
-# *-*-* Additionally, it is possible to extract information easily from
-# *-*-* these output lines by using the xpktools.XpkEntry class
+    # The output of predictNOE is in the form of an xpk entry line
+    # suitable for printing to an output file
+    # Additionally, it is possible to extract information easily from
+    # these output lines by using the xpktools.XpkEntry class
 
     entry1 = xpktools.XpkEntry(noe1, peaklist.datalabels)
 
     if noe1 != "":
 
-  # *-*-* Here I'm using the XpkEntry class to gain access to
-  # *-*-* specific fields in the that make the information
-  # *-*-* more readable and suitable for creating data tables
-  # *-*-* This output will be printed to the screen.
-  # *-*-* The data table contains the assignment, coordinates and
-  # *-*-* intensity of the resonance.
+        # Here I'm using the XpkEntry class to gain access to
+        # specific fields in the that make the information
+        # more readable and suitable for creating data tables
+        # This output will be printed to the screen.
+        # The data table contains the assignment, coordinates and
+        # intensity of the resonance.
 
-        print(string.split(entry1.fields["15N2.L"], ".")[0], "-->", \
-            string.split(entry1.fields["N15.L"], ".")[0], "\t", \
-            entry1.fields["H1.P"], entry1.fields["N15.P"], \
-            entry1.fields["15N2.P"], entry1.fields["int"])
+        print(string.split(entry1.fields["15N2.L"], ".")[0], "-->",
+              string.split(entry1.fields["N15.L"], ".")[0], "\t",
+              entry1.fields["H1.P"], entry1.fields["N15.P"],
+              entry1.fields["15N2.P"], entry1.fields["int"])
 
         noe1 = noe1 + "\012"
         noe1 = xpktools.replace_entry(noe1, 1, count)

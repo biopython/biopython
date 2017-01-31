@@ -5,7 +5,6 @@
 
 """Base selection class from which all Selectors should derive.
 """
-__docformat__ = "restructuredtext en"
 
 
 class AbstractSelection(object):
