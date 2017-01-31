@@ -274,7 +274,7 @@ class PDBList(object):
         """
         entries = self.get_all_entries()
         for pdb_code in entries:
-            self.retrieve_pdb_file(pdb_code)
+            self.retrieve_pdb_file(pdb_code.decode('utf-8'))
         # Write the list
         if listfile:
             with open(listfile, 'w') as outfile:
