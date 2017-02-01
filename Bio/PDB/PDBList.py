@@ -459,15 +459,15 @@ if __name__ == '__main__':
         if sys.argv[1] == 'update':
             # update PDB
             print("updating local PDB at " + pdb_path)
-            pl.update_pdb()
+            pl.update_pdb(file_format=file_format)
 
         elif sys.argv[1] == 'all':
             # get the entire PDB
-            pl.download_entire_pdb()
+            pl.download_entire_pdb(file_format=file_format)
 
         elif sys.argv[1] == 'obsol':
             # get all obsolete entries
-            pl.download_obsolete_entries(pdb_path)
+            pl.download_obsolete_entries(pdb_path, file_format=file_format)
 
         elif len(sys.argv[1]) == 4 and sys.argv[1][0].isdigit():
             # get single PDB entry
