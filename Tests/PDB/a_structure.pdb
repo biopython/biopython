@@ -10,7 +10,7 @@ HETATM    1  N   PCA A   1       0.525   2.690  13.317  1.00 20.26      A
 HETATM    2  CA  PCA A   1      -0.993   2.924  13.160  1.00 21.23      A
 HETATM    3  CB  PCA A   1      -1.783   1.879  14.043  1.00 24.73           C
 HETATM    4  CG  PCA A   1      -0.609   1.208  14.621  1.00 22.31           C
-HETATM    5  CD  PCA A   1       0.869   1.560  14.229  1.00 23.27           C
+HETATM    5  DA  PCA A   1       0.869   1.560  14.229  1.00 23.27           D
 HETATM    6  OE  PCA A   1       2.053   1.323  14.293  1.00 26.24           O
 HETATM    7  C   PCA A   1      -1.375   4.270  13.719  1.00 19.21           C
 HETATM    8  O   PCA A   1      -0.389   5.021  14.230  1.00 18.05           O

@@ -57,7 +57,7 @@ We currently recommend using Python 3.5 from http://www.python.org
 Biopython is currently supported and tested on the following Python
 implementations:
 
-- Python 2.7, 3.3, 3.4, 3.5 -- see http://www.python.org
+- Python 2.7, 3.3, 3.4, 3.5, 3.6 -- see http://www.python.org
 
   This is the primary development platform for Biopython.
 
@@ -163,6 +163,7 @@ Biopython includes a suite of regression tests to check if everything is
 running correctly. To run the tests, go to the biopython source code
 directory and type::
 
+    python setup.py build
     python setup.py test
 
 Do not panic if you see messages warning of skipped tests::
@@ -173,6 +174,10 @@ This most likely means that a package is not installed.  You can
 ignore this if it occurs in the tests for a module that you were not
 planning on using.  If you did want to use that module, please install
 the required dependency and re-run the tests.
+
+Some of the tests may fail due to network issues, this is often down to
+chance or a service outage. If the problem does not go away on
+re-running the tests, it is possible to run only the offline tests.
 
 There is more testing information in the Biopython Tutorial & Cookbook.
 

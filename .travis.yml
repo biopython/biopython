@@ -24,6 +24,8 @@ matrix:
       env: TOXENV=py34-cover
     - python: 3.5
       env: TOXENV=py35-cover
+    - python: 3.6
+      env: TOXENV=py36-cover
     - python: pypy
       env: TOXENV=pypy-nocov
     - python: pypy3
