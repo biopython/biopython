@@ -1,6 +1,6 @@
 # Copyright 2000-2002 Andrew Dalke.
 # Copyright 2002-2004 Brad Chapman.
-# Copyright 2006-2010 by Peter Cock.
+# Copyright 2006-2017 by Peter Cock.
 # All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -986,6 +986,10 @@ class SeqRecord(object):
                            letter_annotations=True, dbxrefs=False):
         """Returns new SeqRecord with reverse complement sequence.
 
+        By default the new record does NOT preserve the sequence identifier,
+        name, description, general annotation or database cross-references -
+        these are unlikely to apply to the reversed sequence.
+
         You can specify the returned record's id, name and description as
         strings, or True to keep that of the parent, or False for a default.
 
@@ -1012,9 +1016,10 @@ class SeqRecord(object):
         >>> print(record.letter_annotations["solexa_quality"])
         [40, 39, 38, 37, 36, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, -1, -2, -3, -4, -5]
 
-        Now take the reverse complement,
+        Now take the reverse complement, here we explicitly give a new
+        identifier (the old identifier with a suffix):
 
-        >>> rc_record = record.reverse_complement(id=record.id+"_rc")
+        >>> rc_record = record.reverse_complement(id=record.id + "_rc")
         >>> print("%s %s" % (rc_record.id, rc_record.seq))
         slxa_0001_1_0001_01_rc NNNNNNACGTACGTACGTACGTACGTACGTACGTACGTACGTACGT
 
