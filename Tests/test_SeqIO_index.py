@@ -619,6 +619,29 @@ class IndexOrderingSingleFile(unittest.TestCase):
         d = SeqIO.to_dict(SeqIO.parse(self.f, "fasta"))
         self.assertEqual(self.ids, list(d))
 
+    def test_order_index(self):
+        """Check index preserves order in indexed file."""
+        d = SeqIO.index(self.f, "fasta")
+        self.assertEqual(self.ids, list(d))
+
+    if sqlite3:
+        def test_order_index_db(self):
+            """Check index_db preserves ordering indexed file."""
+            d = SeqIO.index_db(":memory:", [self.f], "fasta")
+            self.assertEqual(self.ids, list(d))
+
+
+if sqlite3:
+    class IndexOrderingManyFiles(unittest.TestCase):
+        def test_order_index_db(self):
+            """Check index_db preserves order in multiple indexed files."""
+            files = ["GenBank/NC_000932.faa", "GenBank/NC_005816.faa"]
+            ids = []
+            for f in files:
+                ids.extend(r.id for r in SeqIO.parse(f, "fasta"))
+            d = SeqIO.index_db(":memory:", files, "fasta")
+            self.assertEqual(ids, list(d))
+
 
 tests = [
     ("Ace/contig1.ace", "ace", generic_dna),
