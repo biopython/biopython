@@ -816,14 +816,17 @@ def index(filename, format, alphabet=None, key_function=None):
        dictionary.
 
     This indexing function will return a dictionary like object, giving the
-    SeqRecord objects as values:
+    SeqRecord objects as values.
+
+    As of Biopython 1.69, this will preserve the ordering of the records in
+    file when iterating over the entries.
 
     >>> from Bio import SeqIO
     >>> records = SeqIO.index("Quality/example.fastq", "fastq")
     >>> len(records)
     3
-    >>> sorted(records)
-    ['EAS54_6_R1_2_1_413_324', 'EAS54_6_R1_2_1_443_348', 'EAS54_6_R1_2_1_540_792']
+    >>> list(records)  # make a list of the keys
+    ['EAS54_6_R1_2_1_413_324', 'EAS54_6_R1_2_1_540_792', 'EAS54_6_R1_2_1_443_348']
     >>> print(records["EAS54_6_R1_2_1_540_792"].format("fasta"))
     >EAS54_6_R1_2_1_540_792
     TTGGCAGGCCAAGGCCGATGGATCA
@@ -846,8 +849,8 @@ def index(filename, format, alphabet=None, key_function=None):
     >>> records.close()
 
     Note that this pseudo dictionary will not support all the methods of a
-    true Python dictionary, for example values() is not defined since this
-    would require loading all of the records into memory at once.
+    true Python dictionary, for example values() is not defined as in Python 2
+    since this would require loading all of the records into memory at once.
 
     When you call the index function, it will scan through the file, noting
     the location of each record. When you access a particular record via the
@@ -866,8 +869,8 @@ def index(filename, format, alphabet=None, key_function=None):
     >>> records = SeqIO.to_dict(SeqIO.parse("Quality/example.fastq", "fastq"))
     >>> len(records)
     3
-    >>> sorted(records)
-    ['EAS54_6_R1_2_1_413_324', 'EAS54_6_R1_2_1_443_348', 'EAS54_6_R1_2_1_540_792']
+    >>> list(records)  # make a list of the keys
+    ['EAS54_6_R1_2_1_413_324', 'EAS54_6_R1_2_1_540_792', 'EAS54_6_R1_2_1_443_348']
     >>> print(records["EAS54_6_R1_2_1_540_792"].format("fasta"))
     >EAS54_6_R1_2_1_540_792
     TTGGCAGGCCAAGGCCGATGGATCA
@@ -885,8 +888,8 @@ def index(filename, format, alphabet=None, key_function=None):
     ...                       key_function=make_tuple)
     >>> len(records)
     3
-    >>> sorted(records)
-    [(413, 324), (443, 348), (540, 792)]
+    >>> list(records)  # make a list of the keys
+    [(413, 324), (540, 792), (443, 348)]
     >>> print(records[(540, 792)].format("fasta"))
     >EAS54_6_R1_2_1_540_792
     TTGGCAGGCCAAGGCCGATGGATCA
