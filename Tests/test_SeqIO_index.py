@@ -1,4 +1,4 @@
-# Copyright 2009-2016 by Peter Cock.  All rights reserved.
+# Copyright 2009-2017 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -608,6 +608,16 @@ class IndexDictTests(unittest.TestCase):
         iterator = SeqIO.parse(handle, "fasta")
         self.assertRaises(ValueError, SeqIO.to_dict, iterator)
         handle.close()
+
+
+class IndexOrderingSingleFile(unittest.TestCase):
+    f = "GenBank/NC_000932.faa"
+    ids = [r.id for r in SeqIO.parse(f, "fasta")]
+
+    def test_order_to_dict(self):
+        """Check to_dict preserves order in indexed file."""
+        d = SeqIO.to_dict(SeqIO.parse(self.f, "fasta"))
+        self.assertEqual(self.ids, list(d))
 
 
 tests = [
