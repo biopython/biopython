@@ -199,6 +199,7 @@ from __future__ import print_function
 from Bio._py3k import basestring
 
 import sys
+from collections import OrderedDict
 
 from Bio.File import as_handle
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
@@ -378,8 +379,8 @@ def to_dict(qresults, key_function=lambda rec: rec.id):
     >>> from Bio import SearchIO
     >>> qresults = SearchIO.parse('Blast/wnts.xml', 'blast-xml')
     >>> search_dict = SearchIO.to_dict(qresults)
-    >>> sorted(search_dict)
-    ['gi|156630997:105-1160', ..., 'gi|371502086:108-1205', 'gi|53729353:216-1313']
+    >>> list(search_dict)
+    ['gi|195230749:301-1383', 'gi|325053704:108-1166', ..., 'gi|53729353:216-1313']
     >>> search_dict['gi|156630997:105-1160']
     QueryResult(id='gi|156630997:105-1160', 5 hits)
 
@@ -392,8 +393,8 @@ def to_dict(qresults, key_function=lambda rec: rec.id):
     >>> qresults = SearchIO.parse('Blast/wnts.xml', 'blast-xml')
     >>> key_func = lambda qresult: qresult.id.split('|')[1]
     >>> search_dict = SearchIO.to_dict(qresults, key_func)
-    >>> sorted(search_dict)
-    ['156630997:105-1160', ..., '371502086:108-1205', '53729353:216-1313']
+    >>> list(search_dict)
+    ['195230749:301-1383', '325053704:108-1166', ..., '53729353:216-1313']
     >>> search_dict['156630997:105-1160']
     QueryResult(id='gi|156630997:105-1160', 5 hits)
 
@@ -404,8 +405,11 @@ def to_dict(qresults, key_function=lambda rec: rec.id):
     unsuitable for dealing with files containing many queries. In that case, it
     is recommended that you use either `index` or `index_db`.
 
+    As of Biopython 1.69, this will return an OrderedDict, where the record
+    order provided is preserved. Earlier versions of Python used the typical
+    built-in dictionary class, which as of Python 3.6 also preserves the order.
     """
-    qdict = {}
+    qdict = OrderedDict()
     for qresult in qresults:
         key = key_function(qresult)
         if key in qdict:

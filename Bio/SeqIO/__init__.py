@@ -332,6 +332,9 @@ making up each alignment as SeqRecords.
 """
 
 from __future__ import print_function
+
+from collections import OrderedDict
+
 from Bio._py3k import basestring
 
 # TODO
@@ -740,14 +743,18 @@ def to_dict(sequences, key_function=None):
 
     If there are duplicate keys, an error is raised.
 
+    As of Biopython 1.69, this will return an OrderedDict, where the record
+    order provided is preserved. Earlier versions of Python used the typical
+    built-in dictionary class, which as of Python 3.6 also preserves the order.
+
     Example usage, defaulting to using the record.id as key:
 
     >>> from Bio import SeqIO
     >>> filename = "GenBank/cor6_6.gb"
     >>> format = "genbank"
     >>> id_dict = SeqIO.to_dict(SeqIO.parse(filename, format))
-    >>> print(sorted(id_dict))
-    ['AF297471.1', 'AJ237582.1', 'L31939.1', 'M81224.1', 'X55053.1', 'X62281.1']
+    >>> print(list(id_dict))
+    ['X55053.1', 'X62281.1', 'M81224.1', 'AJ237582.1', 'L31939.1', 'AF297471.1']
     >>> print(id_dict["L31939.1"].description)
     Brassica rapa (clone bif72) kin mRNA, complete cds
 
@@ -776,7 +783,7 @@ def to_dict(sequences, key_function=None):
     if key_function is None:
         key_function = lambda rec: rec.id
 
-    d = dict()
+    d = OrderedDict()
     for record in sequences:
         key = key_function(record)
         if key in d:
