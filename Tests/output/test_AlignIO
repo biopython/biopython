@@ -414,7 +414,6 @@ Testing reading emboss format file Emboss/needle_asis.txt with 1 alignments
   ------------------------------------...GAA asis
  Checking can write/read as 'clustal' format
  Checking can write/read as 'maf' format
- Failed: Identifiers in each MultipleSeqAlignment must be unique
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip' format
@@ -447,7 +446,6 @@ Testing reading emboss format file Emboss/water2.txt with 1 alignments
   CGTTTGAGTACTGGGATG asis
  Checking can write/read as 'clustal' format
  Checking can write/read as 'maf' format
- Failed: Identifiers in each MultipleSeqAlignment must be unique
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip' format
