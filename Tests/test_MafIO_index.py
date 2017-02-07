@@ -22,7 +22,8 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
 from seq_tests_common import compare_record
-        
+
+
 class StaticMethodTest(unittest.TestCase):
     """Test static UCSC binning-related functions"""
 
@@ -43,7 +44,7 @@ class StaticMethodTest(unittest.TestCase):
 
         for x, y, z in data:
             self.assertRaises(TypeError, MafIndex._region2bin, str(x), str(y))
-    
+
     def test_ucscbin(self):
         data = [(25079603, 25079787, 776),
                 (25128173, 25128248, 776),
@@ -97,21 +98,21 @@ if sqlite3:
                               "MAF/wrong_version.idx",
                               "MAF/ucsc_mm9_chr10.maf",
                               "mm9.chr10")
-        
+
         def test_old_unfinished_index(self):
             self.assertRaises(ValueError,
                               MafIndex,
                               "MAF/unfinished.idx",
                               "MAF/ucsc_mm9_chr10.maf",
                               "mm9.chr10")
-        
+
         def test_old_corrupt_index(self):
             self.assertRaises(ValueError,
                               MafIndex,
                               "MAF/corrupt.idx",
                               "MAF/ucsc_mm9_chr10.maf",
                               "mm9.chr10")
-        
+
         def test_old_invalid_sqlite(self):
             self.assertRaises(ValueError,
                               MafIndex,
@@ -129,11 +130,11 @@ if sqlite3:
         def tearDown(self):
             if os.path.isdir(self.tmpdir):
                 shutil.rmtree(self.tmpdir)
-            
+
         def test_good_small(self):
             idx = MafIndex(self.tmpfile, "MAF/ucsc_mm9_chr10.maf", "mm9.chr10")
             self.assertEquals(len(idx), 48)
-            
+
         def test_good_big(self):
             idx = MafIndex(self.tmpfile, "MAF/ucsc_mm9_chr10_big.maf", "mm9.chr10")
             self.assertEquals(len(idx), 983)
@@ -271,44 +272,44 @@ if sqlite3:
         def test_invalid_exon_count(self):
             search = self.idx.search((0, 1000, 2000), (500, 1500))
             self.assertRaises(ValueError, next, search)
-        
+
         def test_invalid_exon_schema(self):
             search = self.idx.search((0, 1000, 2000), (250, 500, 2500))
             self.assertRaises(ValueError, next, search)
-        
+
         def test_correct_retrieval_1(self):
             search = self.idx.search((3014742, 3018161), (3015028, 3018644))
             results = [x for x in search]
-            
+
             self.assertEqual(len(results), 12)
-            
+
             self.assertEqual(set([len(x) for x in results]),
                              set([5, 10, 7, 6, 3, 1, 1, 1, 2, 4, 4, 9]))
 
-            self.assertEqual(set([x.annotations["start"] for y in results 
+            self.assertEqual(set([x.annotations["start"] for y in results
                                      for x in y]),
-                             set([3018359, 16390338, 15871771, 184712, 
-                                  16169512, 16169976, 3014842, 1371, 7842, 
-                                  171548, 16389874, 15871306, 6404, 184317, 
-                                  14750994, 3015028, 1616, 8040, 171763, 
-                                  16169731, 6627, 184539, 3014689, 15870832, 
-                                  16389401, 6228, 184148,1201, 3018230, 
+                             set([3018359, 16390338, 15871771, 184712,
+                                  16169512, 16169976, 3014842, 1371, 7842,
+                                  171548, 16389874, 15871306, 6404, 184317,
+                                  14750994, 3015028, 1616, 8040, 171763,
+                                  16169731, 6627, 184539, 3014689, 15870832,
+                                  16389401, 6228, 184148, 1201, 3018230,
                                   15871676, 16390243, 3014778, 3018482, 3017743,
-                                  3018644, 78070420, 3014742, 6283, 184202, 
-                                  1257, 3018161, 16390178, 15871611, 16169818, 
-                                  3014795, 184257, 6365, 15871286, 16389854, 
+                                  3018644, 78070420, 3014742, 6283, 184202,
+                                  1257, 3018161, 16390178, 15871611, 16169818,
+                                  3014795, 184257, 6365, 15871286, 16389854,
                                   16169492, 171521, 7816, 1309]))
-        
+
         def test_correct_retrieval_2(self):
             search = self.idx.search((3009319, 3021421), (3012566, 3021536))
             results = [x for x in search]
-            
+
             self.assertEqual(len(results), 8)
-            
+
             self.assertEqual(set([len(x) for x in results]),
                              set([14, 5, 2, 6, 7, 15, 6, 4]))
 
-            self.assertEqual(set([x.annotations["start"] for y in results 
+            self.assertEqual(set([x.annotations["start"] for y in results
                                   for x in y]),
                              set([3021421, 9910, 996, 16173434, 16393782,
                                   15875216, 11047, 175213, 3552, 677, 78072203,
@@ -329,7 +330,7 @@ if sqlite3:
         def setUp(self):
             self.idx = MafIndex("MAF/ucsc_mm9_chr10_bad.mafindex", "MAF/ucsc_mm9_chr10_bad.maf", "mm9.chr10")
             self.assertEqual(len(self.idx), 48)
-        
+
         def test_incorrect_bundle_coords(self):
             search = self.idx.search((3013219,), (3013319,))
             self.assertRaises(ValueError, next, search)
@@ -348,7 +349,7 @@ if sqlite3:
 
         def test_no_alignment(self):
             result = self.idx.get_spliced((0, 1000), (500, 1500), 1)
-            
+
             self.assertEqual(len(result), 1)
             self.assertEqual(len(result[0].seq), 1000)
             self.assertEqual(str(result[0].seq), "N" * 1000)
@@ -359,7 +360,7 @@ if sqlite3:
             an actual gene (Cnksr3) in mouse. It should perfectly match the
             spliced transcript pulled independently from UCSC.
             """
-            
+
             result = self.idx.get_spliced((3134303, 3185733, 3192055, 3193589,
                                            3203538, 3206102, 3208126, 3211424,
                                            3211872, 3217393, 3219697, 3220356,
