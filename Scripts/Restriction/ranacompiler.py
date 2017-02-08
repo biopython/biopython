@@ -68,7 +68,6 @@ from Bio.Restriction.Restriction import Commercially_available, Not_available
 
 import Bio.Restriction.RanaConfig as config
 from rebase_update import RebaseUpdate
-from Bio.Restriction.Restriction import *
 
 __docformat__ = "restructuredtext en"
 
