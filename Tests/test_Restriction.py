@@ -6,8 +6,6 @@
 """Testing code for Restriction enzyme classes of Biopython.
 """
 
-import unittest
-
 from Bio.Restriction import Analysis, Restriction, RestrictionBatch
 from Bio.Restriction import Acc65I, Asp718I, EcoRI, EcoRV, KpnI, SmaI
 from Bio.Seq import Seq
