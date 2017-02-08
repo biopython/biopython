@@ -117,8 +117,7 @@ class XXmotifTestErrorConditions(XXmotifTestCase):
         input_file = self.copy_and_mark_for_cleanup("Fasta/f002")
 
         try:
-            cline = XXmotifCommandline(outdir=temp_out_dir,
-                                       seqfile=input_file)
+            XXmotifCommandline(outdir=temp_out_dir, seqfile=input_file)
         except ValueError:
             pass
         else:
