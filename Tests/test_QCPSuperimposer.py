@@ -5,8 +5,7 @@
 from __future__ import print_function
 
 try:
-    # TODO - Don't use "from XXX import *"
-    from numpy import *
+    from numpy import array
     from numpy import dot  # missing in old PyPy's micronumpy
 except ImportError:
     from Bio import MissingPythonDependencyError
