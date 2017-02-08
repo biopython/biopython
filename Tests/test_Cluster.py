@@ -110,7 +110,6 @@ class TestCluster(unittest.TestCase):
             self.fail("treecluster failed to accept matrix data2")
 
         self.assertRaises(TypeError, treecluster, data3)
-        self.assertRaises(TypeError, treecluster, data3)
         self.assertRaises(TypeError, treecluster, data4)
         self.assertRaises(TypeError, treecluster, data5)
         self.assertRaises(TypeError, treecluster, data6)
