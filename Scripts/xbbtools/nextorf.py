@@ -63,7 +63,6 @@ class NextOrf(object):
         handle = open(self.file)
         for record in SeqIO.parse(handle, "fasta"):
             self.header = record.id
-            frame_coordinates = ''
             dir = self.options['strand']
             plus = dir in ['both', 'plus']
             minus = dir in ['both', 'minus']
@@ -132,9 +131,6 @@ class NextOrf(object):
 
     def GetOrfCoordinates(self, seq):
         s = str(seq)
-        letters = []
-        table = self.table
-        get = self.table.forward_table.get
         n = len(seq)
         start_codons = self.table.start_codons
         stop_codons = self.table.stop_codons
@@ -197,7 +193,6 @@ class NextOrf(object):
 
     def Output(self, CDS):
         out = self.options['output']
-        seqs = (self.seq, self.rseq)
         n = len(self.seq)
         for start, stop, length, subs, strand in CDS:
             self.counter += 1
