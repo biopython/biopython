@@ -289,7 +289,6 @@ class TypeCompiler(object):
         ovT = (Unknown, Blunt, Ov5, Ov3)
         deT = (NotDefined, Defined, Ambiguous)
         coT = (Commercially_available, Not_available)
-        All = (baT, cuT, meT, paT, ovT, deT, coT)
         #
         #   Now build the types. Only the most obvious are left out.
         #   Modified even the most obvious are not so obvious.
@@ -439,7 +438,6 @@ class DictionaryBuilder(object):
                 enzlst.append(name)
                 typedict[typename] = (bases, enzlst)
             for letter in cls.__dict__['suppl']:
-                supplier = suppliersdict[letter]
                 suppliersdict[letter][1].append(name)
         if not classdict or not suppliersdict or not typedict:
             print('One of the new dictionaries is empty.')
