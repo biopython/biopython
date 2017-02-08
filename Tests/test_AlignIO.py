@@ -67,6 +67,10 @@ test_files = [
     ("fasta-m10", 2, 12, 'Fasta/output008.m10'),
     ("ig", 16, 1, 'IntelliGenetics/VIF_mase-pro.txt'),
     ("pir", 2, 1, 'NBRF/clustalw.pir'),
+    ("maf", 3, 2, 'MAF/humor.maf'),
+    ("maf", None, 3, "MAF/bug2453.maf"), #Have 5, 5, 4 sequences
+    ("maf", None, 3, "MAF/ucsc_test.maf"), #Have 5, 5, 4 sequences
+    ("maf", None, 48, "MAF/ucsc_mm9_chr10.maf")
     ]
 
 
@@ -162,7 +166,7 @@ def check_simple_write_read(alignments, indent=" "):
         if len(alignments) > 1:
             # Try writing just one Alignment (not a list)
             handle = StringIO()
-            SeqIO.write(alignments[0], handle, format)
+            AlignIO.write(alignments[0:1], handle, format)
             assert handle.getvalue() == alignments[0].format(format)
 
 
@@ -189,7 +193,7 @@ def simple_alignment_comparison(alignments, alignments2, format):
             elif format == "clustal":
                 assert r1.id.replace(" ", "_")[:30] == r2.id, \
                        "'%s' vs '%s'" % (r1.id, r2.id)
-            elif format == "stockholm":
+            elif format in ["stockholm", "maf"]:
                 assert r1.id.replace(" ", "_") == r2.id, \
                        "'%s' vs '%s'" % (r1.id, r2.id)
             elif format == "fasta":
@@ -197,6 +201,18 @@ def simple_alignment_comparison(alignments, alignments2, format):
             else:
                 assert r1.id == r2.id, \
                        "'%s' vs '%s'" % (r1.id, r2.id)
+
+            #Check the sequence
+            if format == "stockholm":
+                #We map dot to dash in the stockholm parser, since
+                #both are gaps (but technically different kinds in HMM)
+                assert r1.seq.tostring().replace(".","-") == r2.seq.tostring(), \
+                    "Seq does not match %s vs %s (%s vs %s)" \
+                    % (r1.seq, r2.seq, r1.id, r2.id)
+            else:
+                assert r1.seq.tostring() == r2.seq.tostring(), \
+                    "Seq does not match %s vs %s (%s vs %s)" \
+                    % (r1.seq, r2.seq, r1.id, r2.id)
     return True
 
 
@@ -261,10 +277,11 @@ for (t_format, t_per, t_count, t_filename) in test_files:
         alignments = list(AlignIO.parse(handle, format=t_format))
     assert len(alignments) == t_count, \
          "Found %i alignments but expected %i" % (len(alignments), t_count)
-    for alignment in alignments:
-        assert len(alignment) == t_per, \
-            "Expected %i records per alignment, got %i" \
-            % (t_per, len(alignment))
+    if t_per is not None:
+        for alignment in alignments:
+            assert len(alignment) == t_per, \
+                "Expected %i records per alignment, got %i" \
+                % (t_per, len(alignment))
 
     # Try using the iterator with a for loop and a filename not handle
     alignments2 = []

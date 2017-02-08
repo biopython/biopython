@@ -137,8 +137,9 @@ def FastaM10Iterator(handle, alphabet=single_letter_alphabet):
         assert alphabet is not None
         alignment = MultipleSeqAlignment([], alphabet)
 
-        # TODO - Introduce an annotated alignment class?
-        # For now, store the annotation a new private property:
+        #TODO - Introduce an annotated alignment class?
+        #See also Bio/AlignIO/MafIO.py for same requirement.
+        #For now, store the annotation a new private property:
         alignment._annotations = {}
 
         # Want to record both the query header tags, and the alignment tags.
