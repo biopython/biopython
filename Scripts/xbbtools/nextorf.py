@@ -131,7 +131,7 @@ class NextOrf(object):
         return res
 
     def GetOrfCoordinates(self, seq):
-        s = seq.data
+        s = str(seq)
         letters = []
         table = self.table
         get = self.table.forward_table.get
@@ -210,13 +210,13 @@ class NextOrf(object):
                                                n - stop + 1,
                                                n - start + 1)
             if self.options['gc']:
-                head = '%s:%s' % (head, self.Gc2(subs.data))
+                head = '%s:%s' % (head, self.Gc2(subs))
 
             if out == 'aa':
                 orf = subs.translate(table=self.genetic_code)
-                print(self.ToFasta(head, orf.data))
+                print(self.ToFasta(head, str(orf)))
             elif out == 'nt':
-                print(self.ToFasta(head, subs.data))
+                print(self.ToFasta(head, str(subs)))
             elif out == 'pos':
                 print(head)
 
