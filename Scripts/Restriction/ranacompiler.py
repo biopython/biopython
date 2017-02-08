@@ -501,7 +501,6 @@ class DictionaryBuilder(object):
             # but that pushed the code size just over the Jython JVM limit. We
             # include one the final "del _temp" to clean up the namespace.
             results.write("del _temp\n")
-            results.write("\n")
             print('OK.\n')
         return
 
