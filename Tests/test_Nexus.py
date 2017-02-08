@@ -13,7 +13,8 @@ import tempfile
 import sys
 from Bio._py3k import StringIO
 from Bio._py3k import range
-from Bio.AlignIO.NexusIO import NexusIterator
+from Bio.Align import MultipleSeqAlignment
+from Bio.AlignIO.NexusIO import NexusIterator, NexusWriter
 from Bio.SeqRecord import SeqRecord
 from Bio.Nexus import Nexus, Trees
 from Bio.Seq import Seq
@@ -490,25 +491,29 @@ class TestSelf(unittest.TestCase):
                 print("%r %s %s" % (r.seq, r.name, r.id))
         print("Done")
 
-        def test_empty_file(self):
+    def test_empty_file_read(self):
+        self.assertEqual([], list(NexusIterator(StringIO())))
 
-            print("Reading an empty file")
-            assert 0 == len(list(NexusIterator(StringIO())))
-            print("Done")
-            print("")
-            print("Writing...")
+    def test_multiple_output(self):
+        records = [SeqRecord(Seq("ATGCTGCTGAT", alphabet=ambiguous_dna), id="foo"),
+                   SeqRecord(Seq("ATGCTGCAGAT", alphabet=ambiguous_dna), id="bar"),
+                   SeqRecord(Seq("ATGCTGCGGAT", alphabet=ambiguous_dna), id="baz")]
+        a = MultipleSeqAlignment(records, alphabet=ambiguous_dna)
 
-            handle = StringIO()
-            NexusWriter(handle).write_file([a])
-            handle.seek(0)
-            print(handle.read())
+        handle = StringIO()
+        NexusWriter(handle).write_file([a])
+        handle.seek(0)
+        data = handle.read()
+        self.assertTrue(data.startswith("#NEXUS\nbegin data;\n"), data)
+        self.assertTrue(data.endswith("end;\n"), data)
 
-            handle = StringIO()
-            try:
-                NexusWriter(handle).write_file([a, a])
-                assert False, "Should have rejected more than one alignment!"
-            except ValueError:
-                pass
+        handle = StringIO()
+        try:
+            NexusWriter(handle).write_file([a, a])
+            assert False, "Should have rejected more than one alignment!"
+        except ValueError:
+            pass
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
