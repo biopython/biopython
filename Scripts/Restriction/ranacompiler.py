@@ -934,6 +934,7 @@ class DictionaryBuilder(object):
         supplier = self.removestart(file3)
 
         i1, i2 = 0, 0
+        oldblock = None
         try:
             while True:
                 block, i1 = self.getblock(methfile, i1)
