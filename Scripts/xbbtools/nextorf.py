@@ -27,6 +27,7 @@ from Bio.Data import IUPACData, CodonTable
 class ProteinX(Alphabet.ProteinAlphabet):
     letters = IUPACData.extended_protein_letters + "X"
 
+
 proteinX = ProteinX()
 
 

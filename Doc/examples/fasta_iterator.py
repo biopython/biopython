@@ -22,6 +22,7 @@ def extract_organisms(file_to_parse, format):
 
     return all_species
 
+
 if __name__ == "__main__":
     print("Using Bio.SeqIO on a FASTA file")
     all_species = extract_organisms("ls_orchid.fasta", "fasta")

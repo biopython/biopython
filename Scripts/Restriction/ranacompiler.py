@@ -332,6 +332,7 @@ class TypeCompiler(object):
             yield klass()
             n += 1
 
+
 start = """#!/usr/bin/env python
 #
 #      Restriction Analysis Libraries.
@@ -1020,6 +1021,7 @@ def standalone():
         help="set the proxy to be used by the ftp connection.")
     options, args = parser.parse_args()
     return options, args
+
 
 if __name__ == '__main__':
     options, args = standalone()
