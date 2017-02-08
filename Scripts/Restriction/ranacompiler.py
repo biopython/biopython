@@ -468,6 +468,7 @@ class DictionaryBuilder(object):
                     results.write("        %s: %s,\n" %
                                   (repr(key), repr(value)))
                 results.write("    }\n")
+                results.write("\n\n")
                 results.write("rest_dict[%s] = _temp()\n" % repr(name))
                 results.write("\n\n")
             print('OK.\n')
@@ -480,6 +481,7 @@ class DictionaryBuilder(object):
                 for value in suppliersdict[name]:
                     results.write("        %s,\n" % repr(value))
                 results.write("    )\n")
+                results.write("\n\n")
                 results.write("suppliers[%s] = _temp()\n" % repr(name))
                 results.write("\n\n")
             print('OK.\n')
@@ -492,6 +494,7 @@ class DictionaryBuilder(object):
                 for value in typedict[name]:
                     results.write("        %s,\n" % repr(value))
                 results.write("    )\n")
+                results.write("\n\n")
                 results.write("typedict[%s] = _temp()\n" % repr(name))
                 results.write("\n\n")
             # I had wanted to do "del _temp" at each stage (just for clarity),
