@@ -99,7 +99,7 @@ def test_blast_output(outfile):
     print("I'm going to run the data through the parser to see what happens...")
     parser = parser_class()
     try:
-        rec = parser.parse_file(outfile)
+        parser.parse_file(outfile)
     except (KeyboardInterrupt, SystemExit):
         raise
     except Exception as x:
