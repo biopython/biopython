@@ -118,9 +118,10 @@ def extract_doctests(latex_filename):
     This is a generator, yielding one tuple per doctest.
     """
     base_name = os.path.splitext(os.path.basename(latex_filename))[0]
+    deps = ""
+    folder = ""
     with open(latex_filename, _universal_read_mode) as handle:
         line_number = 0
-        in_test = False
         lines = []
         name = None
         while True:
@@ -172,6 +173,7 @@ def check_deps(dependencies):
         except ImportError:
             missing.append(lib)
     return missing
+
 
 # Create dummy methods on the object purely to hold doctests
 missing_deps = set()
@@ -236,7 +238,6 @@ if __name__ == "__main__":
         for dep in sorted(missing_deps):
             print(" - %s" % dep)
     print("Running Tutorial doctests...")
-    import doctest
     tests = doctest.testmod()
     if tests.failed:
         raise RuntimeError("%i/%i tests failed" % tests)
