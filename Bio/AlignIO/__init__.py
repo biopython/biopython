@@ -1,4 +1,4 @@
-# Copyright 2008-2016 by Peter Cock.  All rights reserved.
+# Copyright 2008-2017 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -160,8 +160,8 @@ _FormatToIterator = {  # "fasta" is done via Bio.SeqIO
                      "clustal": ClustalIO.ClustalIterator,
                      "emboss": EmbossIO.EmbossIterator,
                      "fasta-m10": FastaIO.FastaM10Iterator,
-                     "nexus": NexusIO.NexusIterator,
                      "maf": MafIO.MafIterator,
+                     "nexus": NexusIO.NexusIterator,
                      "phylip": PhylipIO.PhylipIterator,
                      "phylip-sequential": PhylipIO.SequentialPhylipIterator,
                      "phylip-relaxed": PhylipIO.RelaxedPhylipIterator,
@@ -170,8 +170,8 @@ _FormatToIterator = {  # "fasta" is done via Bio.SeqIO
 
 _FormatToWriter = {  # "fasta" is done via Bio.SeqIO
                      # "emboss" : EmbossIO.EmbossWriter, (unfinished)
-                   "nexus": NexusIO.NexusWriter,
                    "maf": MafIO.MafWriter,
+                   "nexus": NexusIO.NexusWriter,
                    "phylip": PhylipIO.PhylipWriter,
                    "phylip-sequential": PhylipIO.SequentialPhylipWriter,
                    "phylip-relaxed": PhylipIO.RelaxedPhylipWriter,
