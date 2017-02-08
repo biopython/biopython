@@ -464,7 +464,7 @@ class DictionaryBuilder(object):
             for name in sorted(classdict):
                 results.write("def _temp():\n")
                 results.write("    return {\n")
-                for key, value in classdict[name].items():
+                for key, value in sorted(classdict[name].items()):
                     results.write("        %s: %s,\n" %
                                   (repr(key), repr(value)))
                 results.write("    }\n")
