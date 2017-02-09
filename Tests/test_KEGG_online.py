@@ -8,9 +8,7 @@
 """Tests for online functionality of the KEGG module."""
 
 # Builtins
-import os
 import unittest
-import tempfile
 
 import requires_internet
 requires_internet.check()
