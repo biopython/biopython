@@ -39,14 +39,26 @@ class DistanceMatrixTest(unittest.TestCase):
         self.assertEqual(dm.names[0], 'Alpha')
         self.assertEqual(dm.matrix[2][1], 3)
         self.assertEqual(len(dm), 4)
-        self.assertEqual(repr(dm), "_DistanceMatrix(names=['Alpha', 'Beta', 'Gamma', 'Delta'], matrix=[[0], [1, 0], [2, 3, 0], [4, 5, 6, 0]])")
+        self.assertEqual(repr(dm),
+                         "_DistanceMatrix(names=['Alpha', 'Beta', 'Gamma', 'Delta'], "
+                         "matrix=[[0], [1, 0], [2, 3, 0], [4, 5, 6, 0]])")
 
     def test_bad_construction(self):
-        self.assertRaises(TypeError, _DistanceMatrix, ['Alpha', 100, 'Gamma', 'Delta'], [[0], [0.1, 0], [0.2, 0.3, 0], [0.4, 0.5, 0.6, 0]])
-        self.assertRaises(TypeError, _DistanceMatrix, ['Alpha', 'Beta', 'Gamma', 'Delta'], [[0], ['a'], [0.2, 0.3], [0.4, 0.5, 0.6]])
-        self.assertRaises(ValueError, _DistanceMatrix, ['Alpha', 'Alpha', 'Gamma', 'Delta'], [[0], [0.1], [0.2, 0.3], [0.4, 0.5, 0.6]])
-        self.assertRaises(ValueError, _DistanceMatrix, ['Alpha', 'Beta', 'Gamma', 'Delta'], [[0], [0.2, 0], [0.4, 0.5, 0.6]])
-        self.assertRaises(ValueError, _DistanceMatrix, ['Alpha', 'Beta', 'Gamma', 'Delta'], [[0], [0.1], [0.2, 0.3, 0.4], [0.4, 0.5, 0.6]])
+        self.assertRaises(TypeError, _DistanceMatrix,
+                          ['Alpha', 100, 'Gamma', 'Delta'],
+                          [[0], [0.1, 0], [0.2, 0.3, 0], [0.4, 0.5, 0.6, 0]])
+        self.assertRaises(TypeError, _DistanceMatrix,
+                          ['Alpha', 'Beta', 'Gamma', 'Delta'],
+                          [[0], ['a'], [0.2, 0.3], [0.4, 0.5, 0.6]])
+        self.assertRaises(ValueError, _DistanceMatrix,
+                          ['Alpha', 'Alpha', 'Gamma', 'Delta'],
+                          [[0], [0.1], [0.2, 0.3], [0.4, 0.5, 0.6]])
+        self.assertRaises(ValueError, _DistanceMatrix,
+                          ['Alpha', 'Beta', 'Gamma', 'Delta'],
+                          [[0], [0.2, 0], [0.4, 0.5, 0.6]])
+        self.assertRaises(ValueError, _DistanceMatrix,
+                          ['Alpha', 'Beta', 'Gamma', 'Delta'],
+                          [[0], [0.1], [0.2, 0.3, 0.4], [0.4, 0.5, 0.6]])
 
     def test_good_manipulation(self):
         dm = _DistanceMatrix(self.names, self.matrix)
@@ -120,11 +132,7 @@ class DistanceCalculatorTest(unittest.TestCase):
         self.assertEqual(dm['Alpha', 'Beta'], 1 - (53 * 1.0 / 84))
 
     def test_nonmatching_seqs(self):
-        aln = AlignIO.read(
-                StringIO('\n'.join(
-                    [">Alpha", "A-A--",
-                     ">Gamma", "-Y-Y-"])),
-                "fasta")
+        aln = AlignIO.read(StringIO(">Alpha\nA-A--\n>Gamma\n-Y-Y-"), "fasta")
         # With a proper scoring matrix -- no matches
         dmat = DistanceCalculator('blosum62').get_distance(aln)
         self.assertEqual(dmat['Alpha', 'Alpha'], 0.)
@@ -191,7 +199,8 @@ class ParsimonyScorerTest(unittest.TestCase):
         score = scorer.get_score(tree, aln)
         self.assertEqual(score, 3.5 + 2.5 + 3.5 + 3.5 + 2.5 + 1 + 2.5 + 4.5)
 
-        alphabet = ['A', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', '1', '2', 'T', 'V', 'W', 'Y', '*', '-']
+        alphabet = ['A', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'K', 'L', 'M', 'N',
+                    'P', 'Q', 'R', '1', '2', 'T', 'V', 'W', 'Y', '*', '-']
         step_matrix = [[0],
                        [2, 0],
                        [1, 2, 0],
@@ -264,6 +273,7 @@ class ParsimonyTreeConstructorTest(unittest.TestCase):
         constructor.starting_tree = None
         best_tree = constructor.build_tree(aln)
         Phylo.write(best_tree, os.path.join(temp_dir, 'pars3.tre'), 'newick')
+
 
 if __name__ == '__main__':
     runner = unittest.TextTestRunner(verbosity=2)
