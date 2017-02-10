@@ -10,13 +10,14 @@
 # Builtins
 import unittest
 
-import requires_internet
-requires_internet.check()
-
 from Bio.KEGG.KGML import KGML_parser
-from Bio.KEGG.REST import *
+from Bio.KEGG.REST import kegg_conv, kegg_find, kegg_get
+from Bio.KEGG.REST import kegg_info, kegg_link, kegg_list
 
 from Bio import SeqIO
+
+import requires_internet
+requires_internet.check()
 
 # TODO - revert to using with statements once we drop
 # Python 2.6 and 2.7, see http://bugs.python.org/issue12487

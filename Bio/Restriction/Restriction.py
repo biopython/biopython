@@ -93,13 +93,13 @@ import re
 import itertools
 
 from Bio.Seq import Seq, MutableSeq
-from Bio.Alphabet import IUPAC
 
 from Bio.Restriction.Restriction_Dictionary import rest_dict as enzymedict
 from Bio.Restriction.Restriction_Dictionary import typedict
 from Bio.Restriction.Restriction_Dictionary import suppliers as suppliers_dict
-# TODO: Consider removing this wildcard import.
-from Bio.Restriction.RanaConfig import *
+from Bio.Restriction.RanaConfig import ConsoleWidth, NameWidth, Indent, MaxSize
+from Bio.Restriction.RanaConfig import ftp_proxy, ftp_Rebase
+from Bio.Restriction.RanaConfig import ftp_emb_e, ftp_emb_s, ftp_emb_r
 from Bio.Restriction.PrintFormat import PrintFormat
 from Bio import BiopythonWarning
 
@@ -1594,7 +1594,7 @@ class Ambiguous(AbstractCut):
         if cls.dna.is_linear():
             cls.results = [x for x in drop(lambda x: x < 1, cls.results)]
             cls.results = [x for x in take(lambda x: x <
-                                            length, cls.results)]
+                                           length, cls.results)]
         else:
             for index, location in enumerate(cls.results):
                 if location < 1:
@@ -2578,7 +2578,7 @@ AllEnzymes = CommOnly | NonComm
 #
 names = [str(x) for x in AllEnzymes]
 try:
-    del x
+    del x  # noqa
 except NameError:
     # Scoping changed in Python 3, the variable isn't leaked
     pass

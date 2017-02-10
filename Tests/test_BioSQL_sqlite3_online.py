@@ -4,9 +4,10 @@
 # as part of this package.
 
 """Run BioSQL tests using SQLite"""
+import unittest
 
 from common_BioSQL import temp_db_filename
-from common_BioSQL_online import *
+from common_BioSQL_online import check_config, share_config
 
 import requires_internet
 requires_internet.check()
