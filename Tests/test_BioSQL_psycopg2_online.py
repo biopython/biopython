@@ -5,8 +5,10 @@
 
 """Run BioSQL tests using PostgreSQL"""
 
-from common_BioSQL import load_biosql_ini
-from common_BioSQL_online import *
+import unittest
+
+from common_BioSQL import *  # noqa
+from common_BioSQL_online import *  # noqa
 
 import requires_internet
 requires_internet.check()

@@ -6,8 +6,8 @@
 """Run BioSQL tests using SQLite"""
 import unittest
 
-from common_BioSQL import temp_db_filename
-from common_BioSQL_online import check_config, share_config
+from common_BioSQL import *  # noqa
+from common_BioSQL_online import *  # noqa
 
 import requires_internet
 requires_internet.check()

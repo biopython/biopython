@@ -5,12 +5,12 @@
 
 """Run BioSQL tests using SQLite"""
 import os
+import unittest
 
-from Bio import MissingExternalDependencyError
 from Bio import SeqIO
 from BioSQL import BioSeqDatabase
 
-from common_BioSQL import *
+from common_BioSQL import *  # noqa
 
 # Constants for the database driver
 DBDRIVER = 'sqlite3'
@@ -69,6 +69,7 @@ class BackwardsCompatibilityTest(unittest.TestCase):
             del r.annotations["molecule_type"]
         self.assertTrue(compare_records(original_records, biosql_records))
         server.close()
+
 
 if __name__ == "__main__":
     # Run the test cases
