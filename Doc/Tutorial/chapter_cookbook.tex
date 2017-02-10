@@ -118,7 +118,7 @@ use the built in Python \verb|random| module for this, in particular the functio
 \begin{verbatim}
 >>> import random
 >>> nuc_list = list(original_rec.seq)
->>> random.shuffle(nuc_list) #acts in situ!
+>>> random.shuffle(nuc_list)  # acts in situ!
 \end{verbatim}
 
 Now, in order to use \verb|Bio.SeqIO| to output the shuffled sequence, we need
@@ -133,6 +133,7 @@ this is with the string object's join method.
 >>> from Bio.SeqRecord import SeqRecord
 >>> shuffled_rec = SeqRecord(Seq("".join(nuc_list), original_rec.seq.alphabet),
 ...                          id="Shuffled", description="Based on %s" % original_rec.id)
+...
 \end{verbatim}
 
 Let's put all these pieces together to make a complete Python script which
@@ -151,15 +152,14 @@ from Bio import SeqIO
 
 original_rec = SeqIO.read("NC_005816.gb","genbank")
 
-handle = open("shuffled.fasta", "w")
-for i in range(30):
-    nuc_list = list(original_rec.seq)
-    random.shuffle(nuc_list)
-    shuffled_rec = SeqRecord(Seq("".join(nuc_list), original_rec.seq.alphabet), \
-                             id="Shuffled%i" % (i+1), \
-                             description="Based on %s" % original_rec.id)
-    handle.write(shuffled_rec.format("fasta"))
-handle.close()
+with open("shuffled.fasta", "w") as output_handle:
+    for i in range(30):
+        nuc_list = list(original_rec.seq)
+        random.shuffle(nuc_list)
+        shuffled_rec = SeqRecord(Seq("".join(nuc_list), original_rec.seq.alphabet),
+                                 id="Shuffled%i" % (i+1),
+                                 description="Based on %s" % original_rec.id)
+        out_handle.write(shuffled_rec.format("fasta"))
 \end{verbatim}
 
 Personally I prefer the following version using a function to shuffle the record
@@ -174,15 +174,13 @@ from Bio import SeqIO
 def make_shuffle_record(record, new_id):
     nuc_list = list(record.seq)
     random.shuffle(nuc_list)
-    return SeqRecord(Seq("".join(nuc_list), record.seq.alphabet), \
-           id=new_id, description="Based on %s" % original_rec.id)
+    return SeqRecord(Seq("".join(nuc_list), record.seq.alphabet),
+                     id=new_id, description="Based on %s" % original_rec.id)
 
 original_rec = SeqIO.read("NC_005816.gb","genbank")
-shuffled_recs = (make_shuffle_record(original_rec, "Shuffled%i" % (i+1)) \
+shuffled_recs = (make_shuffle_record(original_rec, "Shuffled%i" % (i+1))
                  for i in range(30))
-handle = open("shuffled.fasta", "w")
-SeqIO.write(shuffled_recs, handle, "fasta")
-handle.close()
+SeqIO.write(shuffled_recs, "shuffled.fasta", "fasta")
 \end{verbatim}
 
 \subsection{Translating a FASTA file of CDS entries}
@@ -731,10 +729,9 @@ pair of FASTA and QUAL files into a single FASTQ files:
 \begin{verbatim}
 from Bio import SeqIO
 from Bio.SeqIO.QualityIO import PairedFastaQualIterator
-handle = open("temp.fastq", "w") #w=write
-records = PairedFastaQualIterator(open("example.fasta"), open("example.qual"))
-count = SeqIO.write(records, handle, "fastq")
-handle.close()
+with open("example.fasta") as f_handle, open("example.qual") as q_handle:
+    records = PairedFastaQualIterator(f_handle, q_handle)
+    count = SeqIO.write(records, "temp.fastq", "fastq")
 print("Converted %i records" % count)
 \end{verbatim}
 
@@ -1145,11 +1142,10 @@ the first two from our orchid FASTA file \href{https://raw.githubusercontent.com
 
 \begin{verbatim}
 from Bio import SeqIO
-handle = open("ls_orchid.fasta")
-record_iterator = SeqIO.parse(handle, "fasta")
-rec_one = next(record_iterator)
-rec_two = next(record_iterator)
-handle.close()
+with open("ls_orchid.fasta") as in_handle:
+    record_iterator = SeqIO.parse(in_handle, "fasta")
+    rec_one = next(record_iterator)
+    rec_two = next(record_iterator)
 \end{verbatim}
 
 We're going to show two approaches.  Firstly, a simple naive implementation
@@ -1162,9 +1158,9 @@ comprehension:
 window = 7
 seq_one = str(rec_one.seq).upper()
 seq_two = str(rec_two.seq).upper()
-data = [[(seq_one[i:i+window] <> seq_two[j:j+window]) \
-        for j in range(len(seq_one)-window)] \
-       for i in range(len(seq_two)-window)]
+data = [[(seq_one[i:i+window] <> seq_two[j:j+window])
+         for j in range(len(seq_one)-window)]
+        for i in range(len(seq_two)-window)]
 \end{verbatim}
 
 Note that we have \emph{not} checked for reverse complement matches here.
