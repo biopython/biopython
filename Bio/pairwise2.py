@@ -387,6 +387,8 @@ alignment occurs.
 
     def __getattr__(self, attr):
         return self.alignment_function(attr)
+
+
 align = align()
 
 
@@ -986,8 +988,10 @@ def format_alignment(align1, align2, score, begin, end):
 
 # Try and load C implementations of functions. If I can't,
 # then throw a warning and use the pure Python implementations.
+# The redefinition is deliberate, thus the no quality assurance
+# flag for when using flake8:
 try:
-    from .cpairwise2 import rint, _make_score_matrix_fast
+    from .cpairwise2 import rint, _make_score_matrix_fast  # noqa
 except ImportError:
     warnings.warn('Import of C module failed. Falling back to pure Python ' +
                   'implementation. This may be slooow...', BiopythonWarning)
