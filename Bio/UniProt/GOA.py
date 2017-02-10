@@ -175,7 +175,8 @@ def gpi_iterator(handle):
         return _gpi10iterator(handle)
     elif inline.strip() == '!gpi-version: 2.1':
         # sys.stderr.write("gpi 2.1\n")
-        return _gpi20iterator(handle)
+        # return _gpi20iterator(handle)
+        raise NotImplementedError("Sorry, parsing GPI version 2 not implemented yet.")
     else:
         raise ValueError('Unknown GPI version {0}\n'.format(inline))
 
