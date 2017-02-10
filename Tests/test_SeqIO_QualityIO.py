@@ -175,6 +175,7 @@ class TestFastqErrors(unittest.TestCase):
         self.check_fails(filename, good_count)
         self.check_general_passes(filename, count)
 
+
 # Now add methods at run time... these FASTQ files will be rejected
 # by both the low level parser AND the high level SeqRecord parser:
 tests = [("diff_ids", 2),
@@ -735,6 +736,7 @@ class TestSFF(unittest.TestCase):
         # Save the clipped record...
         h = BytesIO()
         count = SeqIO.write(record, h, "sff")
+        self.assertEqual(count, 1)
         # Now reload it...
         h.seek(0)
         with warnings.catch_warnings(record=True) as w:
