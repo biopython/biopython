@@ -134,9 +134,9 @@ read the BLAST output only once -- calling \verb|result_handle.read()| again
 returns an empty string.
 
 \begin{verbatim}
->>> save_file = open("my_blast.xml", "w")
->>> save_file.write(result_handle.read())
->>> save_file.close()
+>>> with open("my_blast.xml", "w") as out_handle:
+...     out_handle.write(result_handle.read())
+...
 >>> result_handle.close()
 \end{verbatim}
 
