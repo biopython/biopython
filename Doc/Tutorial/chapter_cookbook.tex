@@ -319,23 +319,43 @@ in Biopython 1.54 (see Section~\ref{sec:seqio-index-getraw}).
 
 \begin{verbatim}
 from Bio import SeqIO
+
 # Get the lengths and ids, and sort on length
 len_and_ids = sorted((len(rec), rec.id) for rec in
                      SeqIO.parse("ls_orchid.fasta", "fasta"))
 ids = reversed([id for (length, id) in len_and_ids])
 del len_and_ids  # free this memory
+
 record_index = SeqIO.index("ls_orchid.fasta", "fasta")
-handle = open("sorted.fasta", "wb")
-for id in ids:
-    handle.write(record_index.get_raw(id))
-handle.close()
+with open("sorted.fasta", "wb") as out_handle:
+    for id in ids:
+        out_handle.write(record_index.get_raw(id))
 \end{verbatim}
 
 Note with Python 3 onwards, we have to open the file for writing in
 binary mode because the \verb|get_raw()| method returns bytes strings.
 
 As a bonus, because it doesn't parse the data into \verb|SeqRecord| objects
-a second time it should be faster.
+a second time it should be faster. If you only want to use this with FASTA
+format, we can speed this up one step further by using the low-level FASTA
+parser to get the record identifiers and lengths:
+
+\begin{verbatim}
+from Bio.SeqIO.FastaIO import SimpleFastaParser
+from Bio import SeqIO
+
+# Get the lengths and ids, and sort on length
+with open("ls_orchid.fasta") as in_handle:
+    len_and_ids = sorted((len(seq), title.split(None, 1)[0]) for
+                         title, seq in SimpleFastaParser(in_handle))
+ids = reversed([id for (length, id) in len_and_ids])
+del len_and_ids  # free this memory
+
+record_index = SeqIO.index("ls_orchid.fasta", "fasta")
+with open("sorted.fasta", "wb") as out_handle:
+    for id in ids:
+        out_handle.write(record_index.get_raw(id))
+\end{verbatim}
 
 \subsection{Simple quality filtering for FASTQ files}
 \label{sec:FASTQ-filtering-example}
