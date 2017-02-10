@@ -2294,11 +2294,9 @@ class Analysis(RestrictionBatch, PrintFormat):
                 setattr(self, k, v)
             elif k in ('Cmodulo', 'PrefWidth'):
                 raise AttributeError(
-                    'To change %s, change NameWidth and/or ConsoleWidth'
-                    % name)
+                    'To change %s, change NameWidth and/or ConsoleWidth' % k)
             else:
-                raise AttributeError(
-                    'Analysis has no attribute %s' % name)
+                raise AttributeError('Analysis has no attribute %s' % k)
         return
 
     def full(self, linear=True):
@@ -2383,7 +2381,8 @@ class Analysis(RestrictionBatch, PrintFormat):
          """
         for i, enzyme in enumerate(names):
             if enzyme not in AllEnzymes:
-                warnings.warn("no data for the enzyme: %s" % enzyme, BiopythonWarning)
+                warnings.warn("no data for the enzyme: %s" % enzyme,
+                              BiopythonWarning)
                 del names[i]
         if not dct:
             return RestrictionBatch(names).search(self.sequence, self.linear)
@@ -2447,10 +2446,10 @@ class Analysis(RestrictionBatch, PrintFormat):
         d = []
         if start <= end:
             d = [(k, [vv for vv in v if start <= vv <= end])
-                 for v in self.between(start, end, dct)]
+                 for k, v in self.between(start, end, dct).items()]
         else:
             d = [(k, [vv for vv in v if start <= vv or vv <= end])
-                 for v in self.between(start, end, dct)]
+                 for k, v in self.between(start, end, dct).items()]
         return dict(d)
 
     def only_outside(self, start, end, dct=None):
@@ -2504,6 +2503,7 @@ class Analysis(RestrictionBatch, PrintFormat):
         d = self.without_site()
         d.update(self.only_outside(start, end, dct))
         return d
+
 
 #
 #   The restriction enzyme classes are created dynamically when the module is
