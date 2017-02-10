@@ -13,7 +13,6 @@ import tempfile
 from io import BytesIO
 
 from reportlab.lib import colors
-from reportlab.graphics.shapes import *
 from reportlab.pdfgen import canvas
 
 from PIL import Image
