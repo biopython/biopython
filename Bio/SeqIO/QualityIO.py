@@ -116,7 +116,7 @@ EAS54_6_R1_2_1_413_324 CCCTTCTTGTCTTCAGCGTTTCTCC
 EAS54_6_R1_2_1_540_792 TTGGCAGGCCAAGGCCGATGGATCA
 EAS54_6_R1_2_1_443_348 GTTGCTTCTGGCGTGGGTGGGGGGG
 
-The qualities are held as a list of integers in each record's annotation:
+The qualities are held as an array of integers in each record's annotation:
 
 >>> print(record)
 ID: EAS54_6_R1_2_1_443_348
@@ -126,7 +126,7 @@ Number of features: 0
 Per letter annotation for: phred_quality
 Seq('GTTGCTTCTGGCGTGGGTGGGGGGG')
 >>> print(record.letter_annotations["phred_quality"])
-[26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 24, 26, 22, 26, 26, 13, 22, 26, 18, 24, 18, 18, 18, 18]
+array('b', [26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 24, 26, 22, 26, 26, 13, 22, 26, 18, 24, 18, 18, 18, 18])
 
 You can use the SeqRecord format method to show this in the QUAL format:
 
@@ -183,7 +183,7 @@ Number of features: 0
 Per letter annotation for: phred_quality
 Seq('TTCTGGCGTG')
 >>> print(sub_rec.letter_annotations["phred_quality"])
-[26, 26, 26, 26, 26, 26, 24, 26, 22, 26]
+array('b', [26, 26, 26, 26, 26, 26, 24, 26, 22, 26])
 >>> print(sub_rec.format("fastq"))
 @EAS54_6_R1_2_1_443_348
 TTCTGGCGTG
@@ -272,8 +272,9 @@ Traceback (most recent call last):
 ValueError: No suitable quality scores found in letter_annotations of SeqRecord (id=Test).
 
 We created a sample SeqRecord, and can show it in FASTA format - but for QUAL
-or FASTQ format we need to provide some quality scores. These are held as a
-list of integers (one for each base) in the letter_annotations dictionary:
+or FASTQ format we need to provide some quality scores. These can be held as a
+list of integers, or an array of signed byte integers (one for each base) in
+the letter_annotations dictionary:
 
 >>> test.letter_annotations["phred_quality"] = [0, 1, 2, 3, 4, 5, 10, 20, 30, 40]
 >>> print(test.format("qual"))
@@ -357,6 +358,7 @@ the Illumina 1.3 to 1.7 format - high quality PHRED scores and Solexa scores
 are approximately equal.
 
 """
+import array
 import warnings
 
 from math import log
@@ -819,7 +821,6 @@ def _get_solexa_quality_str(record):
     )
 
 
-# TODO - Default to nucleotide or even DNA?
 def FastqGeneralIterator(source):
     """Iterate over Fastq records as string tuples (not as SeqRecord objects).
 
@@ -832,7 +833,7 @@ def FastqGeneralIterator(source):
 
     Our SeqRecord based FASTQ iterators call this function internally, and then
     turn the strings into a SeqRecord objects, mapping the quality string into
-    a list of numerical scores.  If you want to do a custom quality mapping,
+    an array of numerical scores.  If you want to do a custom quality mapping,
     then you might consider calling this function directly.
 
     For parsing FASTQ files, the title string from the "@" line at the start
@@ -1052,10 +1053,10 @@ class FastqPhredIterator(SequenceIterator):
         EAS54_6_R1_2_1_443_348 GTTGCTTCTGGCGTGGGTGGGGGGG
 
         If you want to look at the qualities, they are record in each record's
-        per-letter-annotation dictionary as a simple list of integers:
+        per-letter-annotation dictionary as a Python array of integers:
 
         >>> print(record.letter_annotations["phred_quality"])
-        [26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 24, 26, 22, 26, 26, 13, 22, 26, 18, 24, 18, 18, 18, 18]
+        array('b', [26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 24, 26, 22, 26, 26, 13, 22, 26, 18, 24, 18, 18, 18, 18])
 
         """
         if alphabet is not None:
@@ -1091,7 +1092,9 @@ class FastqPhredIterator(SequenceIterator):
                 name = id
             record = SeqRecord(Seq(seq_string), id=id, name=name, description=descr)
             try:
-                qualities = [q_mapping[letter] for letter in quality_string]
+                qualities = array.array(
+                    "b", [q_mapping[letter] for letter in quality_string]
+                )
             except KeyError:
                 raise ValueError("Invalid character in quality string") from None
             # For speed, will now use a dirty trick to speed up assigning the
@@ -1164,10 +1167,10 @@ def FastqSolexaIterator(source, alphabet=None, title2ids=None):
     SLXA-B3_649_FC8437_R1_1_1_183_714 GTATTATTTAATGGCATACACTCAA
 
     If you want to look at the qualities, they are recorded in each record's
-    per-letter-annotation dictionary as a simple list of integers:
+    per-letter-annotation dictionary as an array of signed byte integers:
 
     >>> print(record.letter_annotations["solexa_quality"])
-    [25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 23, 25, 25, 25, 25, 23, 25, 23, 23, 21, 23, 23, 23, 17, 17]
+    array('b', [25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 23, 25, 25, 25, 25, 23, 25, 23, 23, 21, 23, 23, 23, 17, 17])
 
     These scores aren't very good, but they are high enough that they map
     almost exactly onto PHRED scores:
@@ -1195,7 +1198,7 @@ def FastqSolexaIterator(source, alphabet=None, title2ids=None):
     >>> print("%s %s" % (record.id, record.seq))
     slxa_0001_1_0001_01 ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTNNNNNN
     >>> print(record.letter_annotations["solexa_quality"])
-    [40, 39, 38, 37, 36, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, -1, -2, -3, -4, -5]
+    array('b', [40, 39, 38, 37, 36, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, -1, -2, -3, -4, -5])
 
     These quality scores are so low that when converted from the Solexa scheme
     into PHRED scores they look quite different:
@@ -1254,7 +1257,9 @@ def FastqSolexaIterator(source, alphabet=None, title2ids=None):
             name = id
         record = SeqRecord(Seq(seq_string), id=id, name=name, description=descr)
         try:
-            qualities = [q_mapping[letter] for letter in quality_string]
+            qualities = array.array(
+                "b", (q_mapping[letter] for letter in quality_string)
+            )
         # DO NOT convert these into PHRED qualities automatically!
         except KeyError:
             raise ValueError("Invalid character in quality string") from None
@@ -1310,7 +1315,9 @@ def FastqIlluminaIterator(source, alphabet=None, title2ids=None):
             name = id
         record = SeqRecord(Seq(seq_string), id=id, name=name, description=descr)
         try:
-            qualities = [q_mapping[letter] for letter in quality_string]
+            qualities = array.array(
+                "b", (q_mapping[letter] for letter in quality_string)
+            )
         except KeyError:
             raise ValueError("Invalid character in quality string") from None
         # Dirty trick to speed up this line:
@@ -1360,8 +1367,8 @@ class QualPhredIterator(SequenceIterator):
         Only the sequence length is known, as the QUAL file does not contain
         the sequence string itself.
 
-        The quality scores themselves are available as a list of integers
-        in each record's per-letter-annotation:
+        The quality scores themselves are available as a list of integers in
+        each record's per-letter-annotation:
 
         >>> print(record.letter_annotations["phred_quality"])
         [26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 24, 26, 22, 26, 26, 13, 22, 26, 18, 24, 18, 18, 18, 18]
@@ -1921,8 +1928,8 @@ def PairedFastaQualIterator(fasta_source, qual_source, alphabet=None, title2ids=
     EAS54_6_R1_2_1_443_348 GTTGCTTCTGGCGTGGGTGGGGGGG
 
     As with the FASTQ or QUAL parsers, if you want to look at the qualities,
-    they are in each record's per-letter-annotation dictionary as a simple
-    list of integers:
+    they are in each record's per-letter-annotation dictionary as an array
+    of integers:
 
     >>> print(record.letter_annotations["phred_quality"])
     [26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 24, 26, 22, 26, 26, 13, 22, 26, 18, 24, 18, 18, 18, 18]

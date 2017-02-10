@@ -274,7 +274,7 @@ class SeqRecord:
         >>> print(list(record.letter_annotations))
         ['solexa_quality']
         >>> print(record.letter_annotations["solexa_quality"])
-        [40, 39, 38, 37, 36, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, -1, -2, -3, -4, -5]
+        array('b', [40, 39, 38, 37, 36, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, -1, -2, -3, -4, -5])
 
         The letter_annotations get sliced automatically if you slice the
         parent SeqRecord, for example taking the last ten bases:
@@ -283,7 +283,7 @@ class SeqRecord:
         >>> print("%s %s" % (sub_record.id, sub_record.seq))
         slxa_0001_1_0001_01 ACGTNNNNNN
         >>> print(sub_record.letter_annotations["solexa_quality"])
-        [4, 3, 2, 1, 0, -1, -2, -3, -4, -5]
+        array('b', [4, 3, 2, 1, 0, -1, -2, -3, -4, -5])
 
         Any python sequence (i.e. list, tuple or string) can be recorded in
         the SeqRecord's letter_annotations dictionary as long as the length
@@ -1089,7 +1089,7 @@ class SeqRecord:
         >>> print(list(record.letter_annotations))
         ['solexa_quality']
         >>> print(record.letter_annotations["solexa_quality"])
-        [40, 39, 38, 37, 36, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, -1, -2, -3, -4, -5]
+        array('b', [40, 39, 38, 37, 36, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, -1, -2, -3, -4, -5])
 
         Now take the reverse complement, here we explicitly give a new
         identifier (the old identifier with a suffix):
@@ -1102,7 +1102,7 @@ class SeqRecord:
         although this may not be appropriate for all cases.
 
         >>> print(rc_record.letter_annotations["solexa_quality"])
-        [-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]
+        array('b', [-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40])
 
         Now for the features, we need a different example. Parsing a GenBank
         file is probably the easiest way to get an nice example with features

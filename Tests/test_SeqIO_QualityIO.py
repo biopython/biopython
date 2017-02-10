@@ -51,7 +51,7 @@ class QualityIOTestBaseClass(SeqIOTestBaseClass):
             err_msg = f"mismatch in {keyword}"
             if msg is not None:
                 err_msg = f"{msg}: {err_msg}"
-            self.assertEqual(q_old, q_new, msg=err_msg)
+            self.assertEqual(list(q_old), list(q_new), msg=err_msg)
 
         q_old = old.letter_annotations.get("phred_quality")
         q_new = new.letter_annotations.get("solexa_quality")
@@ -64,7 +64,7 @@ class QualityIOTestBaseClass(SeqIOTestBaseClass):
             err_msg = f"mismatch converting phred_quality {q_old} to solexa_quality"
             if msg is not None:
                 err_msg = f"{msg}: {err_msg}"
-            self.assertEqual(converted, q_new, msg=err_msg)
+            self.assertEqual(converted, list(q_new), msg=err_msg)
 
         q_old = old.letter_annotations.get("solexa_quality")
         q_new = new.letter_annotations.get("phred_quality")
@@ -77,7 +77,7 @@ class QualityIOTestBaseClass(SeqIOTestBaseClass):
             err_msg = f"mismatch converting solexa_quality {q_old} to phred_quality"
             if msg is not None:
                 err_msg = f"{msg}: {err_msg}"
-            self.assertEqual(converted, q_new, msg=err_msg)
+            self.assertEqual(converted, list(q_new), msg=err_msg)
 
 
 class TestFastqErrors(unittest.TestCase):
@@ -883,7 +883,9 @@ class MappingTests(unittest.TestCase):
         out_handle.seek(0)
         record = SeqIO.read(out_handle, "fastq-solexa")
         self.assertEqual(record.seq, seq)
-        self.assertEqual(record.letter_annotations["solexa_quality"], expected_sol)
+        self.assertEqual(
+            list(record.letter_annotations["solexa_quality"]), expected_sol
+        )
 
     def test_solexa_to_sanger(self):
         """Mapping check for FASTQ Solexa (-5 to 62) to Sanger (0 to 62)."""
@@ -901,7 +903,9 @@ class MappingTests(unittest.TestCase):
         out_handle.seek(0)
         record = SeqIO.read(out_handle, "fastq-sanger")
         self.assertEqual(record.seq, seq)
-        self.assertEqual(record.letter_annotations["phred_quality"], expected_phred)
+        self.assertEqual(
+            list(record.letter_annotations["phred_quality"]), expected_phred
+        )
 
     def test_sanger_to_illumina(self):
         """Mapping check for FASTQ Sanger (0 to 93) to Illumina (0 to 62)."""
@@ -919,7 +923,9 @@ class MappingTests(unittest.TestCase):
         out_handle.seek(0)
         record = SeqIO.read(out_handle, "fastq-illumina")
         self.assertEqual(record.seq, seq)
-        self.assertEqual(record.letter_annotations["phred_quality"], expected_phred)
+        self.assertEqual(
+            list(record.letter_annotations["phred_quality"]), expected_phred
+        )
 
     def test_illumina_to_sanger(self):
         """Mapping check for FASTQ Illumina (0 to 62) to Sanger (0 to 62)."""
@@ -934,7 +940,9 @@ class MappingTests(unittest.TestCase):
         out_handle.seek(0)
         record = SeqIO.read(out_handle, "fastq-sanger")
         self.assertEqual(record.seq, seq)
-        self.assertEqual(record.letter_annotations["phred_quality"], expected_phred)
+        self.assertEqual(
+            list(record.letter_annotations["phred_quality"]), expected_phred
+        )
 
 
 class TestSFF(unittest.TestCase):

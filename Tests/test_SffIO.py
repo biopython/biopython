@@ -407,16 +407,14 @@ class TestSelf(unittest.TestCase):
             self.assertEqual(len({s.id, f.id, q.id}), 1)  # All values are the same
             self.assertEqual(s.seq, f.seq)
             self.assertEqual(
-                s.letter_annotations["phred_quality"],
-                q.letter_annotations["phred_quality"],
+                list(s.letter_annotations["phred_quality"]),
+                list(q.letter_annotations["phred_quality"]),
             )
-            self.assertEqual(
-                len({s.id, sT.id, fT.id, qT.id}), 1
-            )  # All values are the same
+            self.assertEqual(len({s.id, sT.id, fT.id, qT.id}), 1)  # values all same
             self.assertEqual(sT.seq, fT.seq)
             self.assertEqual(
-                sT.letter_annotations["phred_quality"],
-                qT.letter_annotations["phred_quality"],
+                list(sT.letter_annotations["phred_quality"]),
+                list(qT.letter_annotations["phred_quality"]),
             )
 
     def test_write(self):
