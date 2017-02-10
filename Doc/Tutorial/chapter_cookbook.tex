@@ -36,20 +36,55 @@ Try something like this:
 %makes it easier to copy and paste the example to a script file.
 \begin{verbatim}
 from Bio import SeqIO
+
 input_file = "big_file.sff"
 id_file = "short_list.txt"
 output_file = "short_list.sff"
-wanted = set(line.rstrip("\n").split(None,1)[0] for line in open(id_file))
+
+with open(id_file) as id_handle:
+    wanted = set(line.rstrip("\n").split(None,1)[0] for line in id_handle)
 print("Found %i unique identifiers in %s" % (len(wanted), id_file))
+
 records = (r for r in SeqIO.parse(input_file, "sff") if r.id in wanted)
 count = SeqIO.write(records, output_file, "sff")
 print("Saved %i records from %s to %s" % (count, input_file, output_file))
 if count < len(wanted):
-    print("Warning %i IDs not found in %s" % (len(wanted)-count, input_file))
+    print("Warning %i IDs not found in %s" % (len(wanted) - count, input_file))
 \end{verbatim}
 
 Note that we use a Python \verb|set| rather than a \verb|list|, this makes
 testing membership faster.
+
+As discussed in Section~\ref{sec:low-level-fasta-fastq}, for a large FASTA
+or FASTQ file for speed you would be better off not using the high-level
+\verb|SeqIO| interface, but working directly with strings. This next
+example shows how to do this with FASTQ files -- it is more complicated:
+
+%not a doctest to avoid temp files being left behind, also no >>>
+%makes it easier to copy and paste the example to a script file.
+\begin{verbatim}
+from Bio.SeqIO.QualityIO import FastqGeneralIterator
+
+input_file = "big_file.fastq"
+id_file = "short_list.txt"
+output_file = "short_list.fastq"
+
+with open(id_file) as id_handle:
+    wanted = set(line.rstrip("\n").split(None,1)[0] for line in id_handle)
+print("Found %i unique identifiers in %s" % (len(wanted), id_file))
+
+with open(input_file) as in_handle:
+    with open(output_file, "w") as out_handle:
+        for title, seq, qual in FastqGeneralIterator(in_handle):
+            # The ID is the first word in the title line (after the @ sign):
+            if title.split(None, 1) in wanted:
+                # This produces a standard 4-line FASTQ entry:
+                out_handle.write("@%s\n%s\n+\n%s\n" % (title, seq, qual))
+                count += 1
+print("Saved %i records from %s to %s" % (count, input_file, output_file))
+if count < len(wanted):
+    print("Warning %i IDs not found in %s" % (len(wanted) - count, input_file))
+\end{verbatim}
 
 \subsection{Producing randomised genomes}
 
@@ -357,6 +392,10 @@ them all into memory at once.  This example uses a generator expression, which
 means only one \verb|SeqRecord| is created at a time - avoiding any memory
 limitations.
 
+Note that it would be faster to use the low-level \verb|FastqGeneralIterator|
+parser here (see Section~\ref{sec:low-level-fasta-fastq}), but that does not
+turn the quality string into integer scores.
+
 \subsection{Trimming off primer sequences}
 \label{sec:FASTQ-slicing-off-primer}
 
@@ -364,7 +403,11 @@ For this example we're going to pretend that \texttt{GATGACGGTGT} is a 5' primer
 sequence we want to look for in some FASTQ formatted read data.  As in the example
 above, we'll use the \texttt{SRR020192.fastq} file downloaded from the ENA
 (\url{ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR020/SRR020192/SRR020192.fastq.gz}).
-The same approach would work with any other supported file format (e.g. FASTA files).
+
+By using the main \verb|Bio.SeqIO| interface, the same approach would work with
+any other supported file format (e.g. FASTA files). However, for large FASTQ
+files it would be faster the low-level \verb|FastqGeneralIterator| parser here
+(see the earlier example, and Section~\ref{sec:low-level-fasta-fastq}).
 
 This code uses \verb|Bio.SeqIO| with a generator expression (to avoid loading
 all the sequences into memory at once), and the \verb|Seq| object's
@@ -400,7 +443,7 @@ print("Saved %i reads" % count)
 but this time strip off the first ten characters, and save them to another new
 FASTQ file, \texttt{with\_primer\_trimmed.fastq}.
 
-Finally, suppose you want to create a new FASTQ file where these reads have
+Now, suppose you want to create a new FASTQ file where these reads have
 their primer removed, but all the other reads are kept as they were?
 If we want to still use a generator expression, it is probably clearest to
 define our own trim function:
