@@ -268,20 +268,20 @@ as a list of \verb|SeqRecord| objects, sort the list, and save it:
 
 \begin{verbatim}
 from Bio import SeqIO
-records = list(SeqIO.parse("ls_orchid.fasta","fasta"))
-records.sort(cmp=lambda x,y: cmp(len(x),len(y)))
+records = list(SeqIO.parse("ls_orchid.fasta", "fasta"))
+records.sort(key=lambda r: len(r))
 SeqIO.write(records, "sorted_orchids.fasta", "fasta")
 \end{verbatim}
 
-The only clever bit is specifying a comparison function for how to
+The only clever bit is specifying a comparison method for how to
 sort the records (here we sort them by length). If you wanted the
 longest records first, you could flip the comparison or use the
 reverse argument:
 
 \begin{verbatim}
 from Bio import SeqIO
-records = list(SeqIO.parse("ls_orchid.fasta","fasta"))
-records.sort(cmp=lambda x,y: cmp(len(y),len(x)))
+records = list(SeqIO.parse("ls_orchid.fasta", "fasta"))
+records.sort(key=lambda r: -len(r))
 SeqIO.write(records, "sorted_orchids.fasta", "fasta")
 \end{verbatim}
 
@@ -294,8 +294,8 @@ to sort by length. This can be solved using the
 \begin{verbatim}
 from Bio import SeqIO
 # Get the lengths and ids, and sort on length
-len_and_ids = sorted((len(rec), rec.id) for rec in \
-                     SeqIO.parse("ls_orchid.fasta","fasta"))
+len_and_ids = sorted((len(rec), rec.id) for rec in
+                     SeqIO.parse("ls_orchid.fasta", "fasta"))
 ids = reversed([id for (length, id) in len_and_ids])
 del len_and_ids  # free this memory
 record_index = SeqIO.index("ls_orchid.fasta", "fasta")
@@ -320,8 +320,8 @@ in Biopython 1.54 (see Section~\ref{sec:seqio-index-getraw}).
 \begin{verbatim}
 from Bio import SeqIO
 # Get the lengths and ids, and sort on length
-len_and_ids = sorted((len(rec), rec.id) for rec in \
-                     SeqIO.parse("ls_orchid.fasta","fasta"))
+len_and_ids = sorted((len(rec), rec.id) for rec in
+                     SeqIO.parse("ls_orchid.fasta", "fasta"))
 ids = reversed([id for (length, id) in len_and_ids])
 del len_and_ids  # free this memory
 record_index = SeqIO.index("ls_orchid.fasta", "fasta")
