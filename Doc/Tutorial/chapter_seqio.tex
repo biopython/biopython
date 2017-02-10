@@ -384,9 +384,8 @@ only one record, use the \verb|Bio.SeqIO.read()| function:
 from Bio import Entrez
 from Bio import SeqIO
 Entrez.email = "A.N.Other@example.com"
-handle = Entrez.efetch(db="nucleotide", rettype="fasta", retmode="text", id="6273291")
-seq_record = SeqIO.read(handle, "fasta")
-handle.close()
+with Entrez.efetch(db="nucleotide", rettype="fasta", retmode="text", id="6273291") as handle:
+    seq_record = SeqIO.read(handle, "fasta")
 print("%s with %i features" % (seq_record.id, len(seq_record.features)))
 \end{verbatim}
 
@@ -409,9 +408,8 @@ alias for ``genbank'' in \verb|Bio.SeqIO|.
 from Bio import Entrez
 from Bio import SeqIO
 Entrez.email = "A.N.Other@example.com"
-handle = Entrez.efetch(db="nucleotide", rettype="gb", retmode="text", id="6273291")
-seq_record = SeqIO.read(handle, "gb") #using "gb" as an alias for "genbank"
-handle.close()
+with Entrez.efetch(db="nucleotide", rettype="gb", retmode="text", id="6273291") as handle
+    seq_record = SeqIO.read(handle, "gb") #using "gb" as an alias for "genbank"
 print("%s with %i features" % (seq_record.id, len(seq_record.features)))
 \end{verbatim}
 
@@ -430,13 +428,12 @@ so we must use the \verb|Bio.SeqIO.parse()| function:
 from Bio import Entrez
 from Bio import SeqIO
 Entrez.email = "A.N.Other@example.com"
-handle = Entrez.efetch(db="nucleotide", rettype="gb", retmode="text",
-                       id="6273291,6273290,6273289")
-for seq_record in SeqIO.parse(handle, "gb"):
-    print("%s %s..." % (seq_record.id, seq_record.description[:50]))
-    print("Sequence length %i, %i features, from: %s"
-          % (len(seq_record), len(seq_record.features), seq_record.annotations["source"]))
-handle.close()
+with Entrez.efetch(db="nucleotide", rettype="gb", retmode="text",
+                   id="6273291,6273290,6273289") as handle:
+    for seq_record in SeqIO.parse(handle, "gb"):
+        print("%s %s..." % (seq_record.id, seq_record.description[:50]))
+        print("Sequence length %i, %i features, from: %s"
+              % (len(seq_record), len(seq_record.features), seq_record.annotations["source"]))
 \end{verbatim}
 
 \noindent That should give the following output:
@@ -462,9 +459,8 @@ use the \verb|Bio.SeqIO.read()| function:
 \begin{verbatim}
 from Bio import ExPASy
 from Bio import SeqIO
-handle = ExPASy.get_sprot_raw("O23729")
-seq_record = SeqIO.read(handle, "swiss")
-handle.close()
+with ExPASy.get_sprot_raw("O23729") as handle:
+    seq_record = SeqIO.read(handle, "swiss")
 print(seq_record.id)
 print(seq_record.name)
 print(seq_record.description)
@@ -778,10 +774,10 @@ want to extract just a few records from it:
 \begin{verbatim}
 >>> from Bio import SeqIO
 >>> uniprot = SeqIO.index("uniprot_sprot.dat", "swiss")
->>> handle = open("selected.dat", "wb")
->>> for acc in ["P33487", "P19801", "P13689", "Q8JZQ5", "Q9TRC7"]:
-...     handle.write(uniprot.get_raw(acc))
->>> handle.close()
+>>> with open("selected.dat", "wb") as out_handle:
+...     for acc in ["P33487", "P19801", "P13689", "Q8JZQ5", "Q9TRC7"]:
+...         out_handle.write(uniprot.get_raw(acc))
+...
 \end{verbatim}
 
 Note with Python 3 onwards, we have to open the file for writing in
@@ -1229,11 +1225,10 @@ This isn't entirely straightforward the first time you see it!  On the bright si
 Note that although we don't encourage it, you \emph{can} use the \verb|format()| method to write to a file, for example something like this:
 \begin{verbatim}
 from Bio import SeqIO
-out_handle = open("ls_orchid_long.tab", "w")
-for record in SeqIO.parse("ls_orchid.gbk", "genbank"):
-    if len(record) > 100:
-        out_handle.write(record.format("tab"))
-out_handle.close()
+with open("ls_orchid_long.tab", "w") as out_handle:
+    for record in SeqIO.parse("ls_orchid.gbk", "genbank"):
+        if len(record) > 100:
+            out_handle.write(record.format("tab"))
 \end{verbatim}
 \noindent While this style of code will work for a simple sequential file format like FASTA or the simple tab separated format used here, it will \emph{not} work for more complex or interlaced file formats.  This is why we still recommend using \verb|Bio.SeqIO.write()|, as in the following example:
 \begin{verbatim}
