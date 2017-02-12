@@ -1,7 +1,8 @@
 # Copyright 2005 by Iddo Friedberg.  All rights reserved.
-# Revisions copyright 2006-2013 by Peter Cock. All rights reserved.
+# Revisions copyright 2006-2013,2017 by Peter Cock. All rights reserved.
 # Revisions copyright 2008 by Frank Kauff. All rights reserved.
 # Revisions copyright 2009 by Michiel de Hoon. All rights reserved.
+# Revisions copyright 2015 by Joe Cora. All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -20,6 +21,41 @@ from Bio.Nexus import Nexus, Trees
 from Bio.Seq import Seq
 from Bio.Alphabet.IUPAC import ambiguous_dna
 from Bio import SeqIO
+
+
+class OldSelfTests(unittest.TestCase):
+    """Test cases originally in Nexus.py via __main__"""
+
+    def test_trees_and_taxa_block(self):
+        """Basic tree file with TREES and TAXA block"""
+        nexus1 = Nexus.Nexus()
+        nexus1.read('Nexus/bats.nex')
+
+    def test_data_and_codons_block(self):
+        """Simple sequence data file with DATA and CODONS block"""
+        nexus2 = Nexus.Nexus()
+        nexus2.read('Nexus/codonposset.nex')
+
+    def test_data_sets_trees_unknown_block(self):
+        """Sequence data file with DATA, SETS, TREES and an unknown block"""
+        nexus3 = Nexus.Nexus()
+        nexus3.read('Nexus/test_Nexus_input.nex')
+
+    def test_taxa_and_characters_block(self):
+        """Taxa and characters multi-state block"""
+        nexus4 = Nexus.Nexus()
+        nexus4.read('Nexus/vSysLab_Ganaspidium_multistate.nex')
+
+    def test_taxa_and_characters_with_many_codings_one_without_state(self):
+        """Taxa and chr blocks, over 9 codings, 1 character without states"""
+        nexus5 = Nexus.Nexus()
+        nexus5.read('Nexus/vSysLab_Heptascelio_no-states_10+chars.nex')
+
+    # TODO: Bio.Nexus.Nexus.NexusError: Unsupported datatype: continuous
+    # def test_taxa_and_characters_with_many_codings_two_without_state(self):
+    #     """Taxa and chr blocks, over 9 codings, 2 character without states"""
+    #     nexus6 = Nexus.Nexus()
+    #     nexus6.read('Nexus/vSysLab_Oreiscelio_discrete+continuous.nex')
 
 
 class NexusTest1(unittest.TestCase):
