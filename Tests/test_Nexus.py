@@ -51,11 +51,14 @@ class OldSelfTests(unittest.TestCase):
         nexus5 = Nexus.Nexus()
         nexus5.read('Nexus/vSysLab_Heptascelio_no-states_10+chars.nex')
 
-    # TODO: Bio.Nexus.Nexus.NexusError: Unsupported datatype: continuous
-    # def test_taxa_and_characters_with_many_codings_two_without_state(self):
-    #     """Taxa and chr blocks, over 9 codings, 2 character without states"""
-    #     nexus6 = Nexus.Nexus()
-    #     nexus6.read('Nexus/vSysLab_Oreiscelio_discrete+continuous.nex')
+    def test_taxa_and_characters_with_many_codings_two_without_state(self):
+        """Taxa and chr blocks, over 9 codings, 2 character without states"""
+        nexus6 = Nexus.Nexus()
+        # TODO: Implement continuous datatype:
+        # Bio.Nexus.Nexus.NexusError: Unsupported datatype: continuous
+        self.assertRaises(Nexus.NexusError,
+                          nexus6.read,
+                          'Nexus/vSysLab_Oreiscelio_discrete+continuous.nex')
 
 
 class NexusTest1(unittest.TestCase):
