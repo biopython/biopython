@@ -210,11 +210,7 @@ class MafIndex(object):
         self._target_seqname = target_seqname
         self._maf_file = maf_file
 
-        # make sure maf_file exists, then open it up
-        if os.path.isfile(self._maf_file):
-            self._maf_fp = open(self._maf_file, "r")
-        else:
-            raise ValueError("Error opening %s -- file not found" % (self._maf_file,))
+        self._maf_fp = open(self._maf_file, "r")
 
         # if sqlite_file exists, use the existing db, otherwise index the file
         if os.path.isfile(sqlite_file):
