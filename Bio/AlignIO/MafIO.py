@@ -11,12 +11,22 @@ You are expected to use this module via the Bio.AlignIO functions(or the
 Bio.SeqIO functions if you want to work directly with the gapped sequences).
 
 """
+import os
+import itertools
+
+try:
+    from sqlite3 import dbapi2 as _sqlite
+except ImportError:
+    # Not present on Jython, but should be included in Python 2.5
+    # or later (unless compiled from source without its dependencies)
+    # Still want to offer simple parsing/output
+    _sqlite = None
+
 from Bio.Alphabet import single_letter_alphabet
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
 from .Interfaces import SequentialAlignmentWriter
-import shlex
 
 MAFINDEX_VERSION = 1
 
@@ -190,15 +200,6 @@ class MafIndex(object):
     def __init__(self, sqlite_file, maf_file, target_seqname):
         """Indexes or loads the index of a MAF file"""
 
-        import os
-
-        try:
-            from sqlite3 import dbapi2 as _sqlite
-        except ImportError:
-            from Bio import MissingPythonDependencyError
-            raise MissingPythonDependencyError("Requires sqlite3, which is "
-                                               "included Python 2.5+")
-
         self._target_seqname = target_seqname
         self._maf_file = maf_file
 
@@ -222,10 +223,6 @@ class MafIndex(object):
     def __check_existing_db(self):
         """Basic sanity checks upon loading an existing index"""
 
-        import os
-        from sqlite3 import OperationalError as _OperationalError
-        from sqlite3 import DatabaseError as _DatabaseError
-
         try:
             idx_version = int(self._con.execute("SELECT value FROM meta_data WHERE key = 'version'").fetchone()[0])
             if idx_version != MAFINDEX_VERSION:
@@ -248,13 +245,11 @@ class MafIndex(object):
                 raise ValueError("Expected %s records, found %s.  Corrupt index?" % (record_count, records_found))
 
             return records_found
-        except (_OperationalError, _DatabaseError) as err:
+        except (_sqlite.OperationalError, _sqlite.DatabaseError) as err:
             raise ValueError("Problem with SQLite database: %s" % err)
 
     def __make_new_index(self):
         """Read MAF file and generate SQLite index"""
-
-        import itertools
 
         # make the tables
         self._con.execute("CREATE TABLE meta_data (key TEXT, value TEXT);")
