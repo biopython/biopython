@@ -7,6 +7,13 @@
 # as part of this package.
 """Bio.AlignIO support for the "maf" multiple alignment format.
 
+The Multiple Alignment Format, described by UCSC, stores a series of
+multiple alignments in a single file. It is suitable for whole-genome
+to whole-genome alignments, metadata such as source chromosome, start
+position, size, and strand can be stored.
+
+See http://genome.ucsc.edu/FAQ/FAQformat.html#format5
+
 You are expected to use this module via the Bio.AlignIO functions(or the
 Bio.SeqIO functions if you want to work directly with the gapped sequences).
 
