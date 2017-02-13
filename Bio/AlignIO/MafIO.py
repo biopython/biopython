@@ -164,10 +164,19 @@ def MafIterator(handle, seq_count=None, alphabet=single_letter_alphabet):
                                name=line_split[1],
                                description="",
                                annotations=anno))
-            elif line.startswith("e") or \
-                 line.startswith("i") or \
-                 line.startswith("q"):
-                # not implemented
+            elif line.startswith("i"):
+                # TODO: information about what is in the aligned species DNA before
+                # and after the immediately preceding "s" line
+                pass
+            elif line.startswith("e"):
+                # TODO: information about the size of the gap between the alignments
+                # that span the current block
+                pass
+            elif line.startswith("q"):
+                # TODO: quality of each aligned base for the species.
+                # Need to find documentation on this, looks like ASCII 0-9 or gap?
+                # Can then store in each SeqRecord's .letter_annotations dictionary,
+                # perhaps as the raw string or turned into integers / None for gap?
                 pass
             elif not line.strip():
                 # end a bundle of records
