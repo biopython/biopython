@@ -23,6 +23,11 @@ are explicitly available under either license, but most of the code remains
 under the "Biopython License Agreement" only. See the LICENSE file for more
 details.
 
+Bio.AlignIO now supports the UCSC Multiple Alignment Format (MAF) under the
+format name "maf", using new module Bio.AlignIO.MafIO which also offers
+indexed access to these potentially large files using SQLite3 (contributed by
+Andrew Sczesnak, with additional refinements from Adam Novak).
+
 The Uniprot parser is now able to parse "submittedName" elements in XML files.
 
 The NEXUS parser handling of internal node comments has been improved, which
@@ -69,6 +74,7 @@ Adam Novak (first contribution)
 Adrian Altenhoff (first contribution)
 Allis Tauri (first contribution)
 Andrew Guy (first contribution)
+Andrew Sczesnak (first contribution)
 Bernhard Thiel (first contribution)
 Bertrand Néron
 Blaise Li (first contribution)
