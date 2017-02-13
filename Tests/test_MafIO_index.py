@@ -88,7 +88,11 @@ if sqlite3:
                               "mm9.chr10")
 
         def test_old_file_not_found(self):
-            self.assertRaises(ValueError,
+            # TODO: Switch to FileNotFoundError once we drop Python 2 support
+            # Under Python 2, we expect IOError.
+            # Under Python 3, we expect FileNotFoundError which is a subclass
+            # of OSError, and that has IOError as an alias so this works.
+            self.assertRaises(IOError,
                               MafIndex,
                               "MAF/ucsc_mm9_chr11.mafindex",
                               "MAF/ucsc_mm9_chr11.maf",
