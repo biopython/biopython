@@ -63,12 +63,14 @@ class StaticMethodTest(unittest.TestCase):
         for x, y, z in data:
             self.assertRaises(TypeError, MafIndex._ucscbin, str(x), str(y))
 
+
 if sqlite3:
     class PreBuiltIndexTest(unittest.TestCase):
         """Test loading of prebuilt indices"""
 
         def test_old(self):
-            idx = MafIndex("MAF/ucsc_mm9_chr10.mafindex", "MAF/ucsc_mm9_chr10.maf", "mm9.chr10")
+            idx = MafIndex("MAF/ucsc_mm9_chr10.mafindex",
+                           "MAF/ucsc_mm9_chr10.maf", "mm9.chr10")
             self.assertEqual(len(idx), 48)
 
         def test_old_wrong_target_seqname(self):
@@ -157,7 +159,8 @@ if sqlite3:
         """Make sure we can seek and fetch records properly"""
 
         def setUp(self):
-            self.idx = MafIndex("MAF/ucsc_mm9_chr10.mafindex", "MAF/ucsc_mm9_chr10.maf", "mm9.chr10")
+            self.idx = MafIndex("MAF/ucsc_mm9_chr10.mafindex",
+                                "MAF/ucsc_mm9_chr10.maf", "mm9.chr10")
             self.assertEqual(len(self.idx), 48)
 
         def test_records_begin(self):
@@ -258,7 +261,8 @@ if sqlite3:
         """Test index searching on a properly-formatted MAF"""
 
         def setUp(self):
-            self.idx = MafIndex("MAF/ucsc_mm9_chr10.mafindex", "MAF/ucsc_mm9_chr10.maf", "mm9.chr10")
+            self.idx = MafIndex("MAF/ucsc_mm9_chr10.mafindex",
+                                "MAF/ucsc_mm9_chr10.maf", "mm9.chr10")
             self.assertEqual(len(self.idx), 48)
 
         def test_invalid_type_1(self):
@@ -287,7 +291,7 @@ if sqlite3:
                              set([5, 10, 7, 6, 3, 1, 1, 1, 2, 4, 4, 9]))
 
             self.assertEqual(set([x.annotations["start"] for y in results
-                                     for x in y]),
+                                  for x in y]),
                              set([3018359, 16390338, 15871771, 184712,
                                   16169512, 16169976, 3014842, 1371, 7842,
                                   171548, 16389874, 15871306, 6404, 184317,
@@ -328,7 +332,8 @@ if sqlite3:
         """Test index searching on an incorrectly-formatted MAF"""
 
         def setUp(self):
-            self.idx = MafIndex("MAF/ucsc_mm9_chr10_bad.mafindex", "MAF/ucsc_mm9_chr10_bad.maf", "mm9.chr10")
+            self.idx = MafIndex("MAF/ucsc_mm9_chr10_bad.mafindex",
+                                "MAF/ucsc_mm9_chr10_bad.maf", "mm9.chr10")
             self.assertEqual(len(self.idx), 48)
 
         def test_incorrect_bundle_coords(self):
@@ -339,7 +344,8 @@ if sqlite3:
         """Test in silico splicing on a correctly-formatted MAF"""
 
         def setUp(self):
-            self.idx = MafIndex("MAF/ucsc_mm9_chr10_big.mafindex", "MAF/ucsc_mm9_chr10_big.maf", "mm9.chr10")
+            self.idx = MafIndex("MAF/ucsc_mm9_chr10_big.mafindex",
+                                "MAF/ucsc_mm9_chr10_big.maf", "mm9.chr10")
             self.assertEqual(len(self.idx), 983)
 
         def test_invalid_strand(self):
@@ -371,7 +377,8 @@ if sqlite3:
                                            3227479), 1)
 
             cnksr3 = str(SeqIO.read("MAF/cnksr3.fa", "fasta").seq).upper()
-            mm9_seq = "".join([str(x.seq) for x in result if x.id.startswith("mm9")]).replace("-", "")
+            mm9_seq = "".join([str(x.seq) for x in result
+                               if x.id.startswith("mm9")]).replace("-", "")
 
             self.assertEqual(mm9_seq, cnksr3)
 
@@ -379,7 +386,8 @@ if sqlite3:
         """Test in silico splicing on an incorrectly-formatted MAF"""
 
         def setUp(self):
-            self.idx = MafIndex("MAF/ucsc_mm9_chr10_bad.mafindex", "MAF/ucsc_mm9_chr10_bad.maf", "mm9.chr10")
+            self.idx = MafIndex("MAF/ucsc_mm9_chr10_bad.mafindex",
+                                "MAF/ucsc_mm9_chr10_bad.maf", "mm9.chr10")
             self.assertEqual(len(self.idx), 48)
 
         def test_inconsistent_strand(self):
