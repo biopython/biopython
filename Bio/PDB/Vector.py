@@ -127,11 +127,13 @@ def refmat(p, q):
     @type p,q: L{Vector}
     @return: The mirror operation, a 3x3 Numeric array.
     """
-    p.normalize()
-    q.normalize()
-    if (p - q).norm() < 1e-5:
+    _p = p.copy()
+    _q = q.copy()
+    _p.normalize()
+    _q.normalize()
+    if (_p - _q).norm() < 1e-5:
         return numpy.identity(3)
-    pq = p - q
+    pq = _p - _q
     pq.normalize()
     b = pq.get_array()
     b.shape = (3, 1)
@@ -284,7 +286,8 @@ class Vector(object):
 
     def normalize(self):
         "Normalize the Vector"
-        self._ar = self._ar / self.norm()
+        if self.norm():
+            self._ar = self._ar / self.norm()
 
     def normalized(self):
         "Return a normalized copy of the Vector"
