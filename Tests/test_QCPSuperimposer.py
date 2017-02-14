@@ -12,7 +12,13 @@ except ImportError:
     raise MissingPythonDependencyError(
         "Install NumPy if you want to use Bio.QCPSuperimposer.")
 
-from Bio.PDB.QCPSuperimposer import QCPSuperimposer
+try:
+    from Bio.PDB.QCPSuperimposer import QCPSuperimposer
+except ImportError:
+    from Bio import MissingExternalDependencyError
+    raise MissingExternalDependencyError(
+        "C module in Bio.QCPSuperimposer not compiled")
+
 
 # start with two coordinate sets (Nx3 arrays - Float0)
 
