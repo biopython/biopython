@@ -642,32 +642,3 @@ def parse(handle, debug=0):
     assert text == ""
     assert pending == ""
     assert len(blast_parser._records) == 0
-
-if __name__ == '__main__':
-    import sys
-    with open(sys.argv[1]) as handle:
-        r_list = parse(handle)
-
-    for r in r_list:
-        # Small test
-        print('Blast of %s' % r.query)
-        print('Found %s alignments with a total of %s HSPs'
-                  % (len(r.alignments),
-                     reduce(lambda a, b: a + b,
-                            [len(a.hsps) for a in r.alignments])))
-
-        for al in r.alignments:
-            print("%s %i bp %i HSPs" % (al.title[:50], al.length, len(al.hsps)))
-
-        # Cookbook example
-        E_VALUE_THRESH = 0.04
-        for alignment in r.alignments:
-            for hsp in alignment.hsps:
-                if hsp.expect < E_VALUE_THRESH:
-                    print('*****')
-                    print('sequence %s' % alignment.title)
-                    print('length %i' % alignment.length)
-                    print('e value %f' % hsp.expect)
-                    print(hsp.query[:75] + '...')
-                    print(hsp.match[:75] + '...')
-                    print(hsp.sbjct[:75] + '...')
