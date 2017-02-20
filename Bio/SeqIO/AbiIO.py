@@ -414,8 +414,8 @@ def AbiIterator(handle, alphabet=None, trim=False):
         except AttributeError:
             file_name = ""
 
-        sample_id = annot['abif_raw']['LIMS1']
-        description = annot['abif_raw']['CTID1']
+        sample_id = raw['LIMS1']
+        description = raw['CTID1']
         record = SeqRecord(Seq(''),
                            id=sample_id,
                            name=file_name,
