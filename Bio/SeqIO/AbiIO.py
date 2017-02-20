@@ -413,9 +413,10 @@ def AbiIterator(handle, alphabet=None, trim=False):
             file_name = basename(handle.name).replace('.fsa', '')
         except AttributeError:
             file_name = ""
-
-        sample_id = raw['LIMS1']
-        description = raw['CTID1']
+        print(raw)
+        if('LIMS1' in raw and 'CTID1' in raw):
+            sample_id = raw['LIMS1']
+            description = raw['CTID1']
         record = SeqRecord(Seq(''),
                            id=sample_id,
                            name=file_name,
