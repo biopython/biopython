@@ -408,7 +408,7 @@ def AbiIterator(handle, alphabet=None, trim=False):
         file_name = ""
 
     # fsa check
-    if('SpNm1' in raw and 'APFN2' not in raw):
+    if('SpNm1' in raw and 'APFN2' not in raw and not trim):
         try:
             file_name = basename(handle.name).replace('.fsa', '')
         except AttributeError:
