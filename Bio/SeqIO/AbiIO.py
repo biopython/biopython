@@ -408,14 +408,13 @@ def AbiIterator(handle, alphabet=None, trim=False):
         file_name = ""
 
     # fsa check
-    if('SpNm1' in raw and 'APFN1' not in raw):
+    if('SpNm1' in raw and 'APFN2' not in raw):
         try:
             file_name = basename(handle.name).replace('.fsa', '')
         except AttributeError:
             file_name = ""
 
         sample_id = annot['abif_raw']['LIMS1']
-        file_name = basename(handle.name).replace('.fsa', '')
         description = annot['abif_raw']['CTID1']
         record = SeqRecord(Seq(''),
                            id=sample_id,
