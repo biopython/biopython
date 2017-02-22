@@ -1,3 +1,6 @@
+.. image:: https://travis-ci.org/biopython/biopython.svg?branch=master
+.. image:: https://img.shields.io/codecov/c/github/biopython/biopython/master.svg
+
 Biopython README file
 =====================
 
