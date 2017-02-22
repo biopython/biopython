@@ -145,10 +145,9 @@ Cluster/TreeView program. A Record has the following members:
     def __init__(self, handle=None):
         """Read gene expression data from the file handle and return a Record.
 
-The file should be in the format defined for Michael Eisen's
-Cluster/TreeView program.
-
-"""
+        The file should be in the format defined for Michael Eisen's
+        Cluster/TreeView program.
+        """
         self.data = None
         self.mask = None
         self.geneid = None
@@ -638,8 +637,7 @@ Arguments:
 def read(handle):
     """Read gene expression data from the file handle and return a Record.
 
-The file should be in the file format defined for Michael Eisen's
-Cluster/TreeView program.
-
-"""
+    The file should be in the file format defined for Michael Eisen's
+    Cluster/TreeView program.
+    """
     return Record(handle)
