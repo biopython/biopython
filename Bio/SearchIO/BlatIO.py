@@ -190,7 +190,7 @@ from Bio.SearchIO._index import SearchIndexer
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 
 
-__all__ = ['BlatPslParser', 'BlatPslIndexer', 'BlatPslWriter']
+__all__ = ('BlatPslParser', 'BlatPslIndexer', 'BlatPslWriter')
 
 
 # precompile regex patterns

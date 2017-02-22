@@ -14,7 +14,7 @@ from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 
 from ._base import _BaseHmmerTextIndexer
 
-__all__ = ['Hmmer3TextParser', 'Hmmer3TextIndexer']
+__all__ = ('Hmmer3TextParser', 'Hmmer3TextIndexer')
 
 
 # precompile regex patterns for faster processing

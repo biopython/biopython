@@ -14,7 +14,7 @@ from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 
 from ._base import _BaseHmmerTextIndexer
 
-__all__ = ['Hmmer2TextParser', 'Hmmer2TextIndexer']
+__all__ = ('Hmmer2TextParser', 'Hmmer2TextIndexer')
 
 
 _HSP_ALIGN_LINE = re.compile(r'(\S+):\s+domain (\d+) of (\d+)')

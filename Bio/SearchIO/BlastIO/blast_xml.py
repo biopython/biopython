@@ -33,7 +33,7 @@ from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 from Bio._py3k import _as_bytes, _bytes_to_string, unicode
 _empty_bytes_string = _as_bytes("")
 
-__all__ = ['BlastXmlParser', 'BlastXmlIndexer', 'BlastXmlWriter']
+__all__ = ('BlastXmlParser', 'BlastXmlIndexer', 'BlastXmlWriter')
 
 
 # element - optional qresult attribute name mapping
