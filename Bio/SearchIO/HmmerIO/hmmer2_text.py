@@ -136,7 +136,6 @@ class Hmmer2TextParser(object):
 
     def parse_hits(self):
         """Parse a HMMER2 hit block, beginning with the hit table."""
-
         hit_placeholders = []
         while self.read_next():
             if self.line.startswith('Parsed'):

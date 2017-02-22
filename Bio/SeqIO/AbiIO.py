@@ -479,7 +479,6 @@ def _abi_trim(seq_record):
     http://www.phrap.org/phredphrap/phred.html
     http://www.clcbio.com/manual/genomics/Quality_abif_trimming.html
     """
-
     start = False   # flag for starting position of trimmed sequence
     segment = 20    # minimum sequence length
     trim_start = 0  # init start index

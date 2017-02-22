@@ -23,7 +23,6 @@ class ClustalWriter(SequentialAlignmentWriter):
 
     def write_alignment(self, alignment):
         """Use this to write (another) single alignment to an open file."""
-
         if len(alignment) == 0:
             raise ValueError("Must have at least one sequence")
         if alignment.get_alignment_length() == 0:

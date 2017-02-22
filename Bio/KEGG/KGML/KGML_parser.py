@@ -112,7 +112,6 @@ class KGMLParser(object):
 
     def parse(self):
         """Parse the input elements."""
-
         def _parse_pathway(attrib):
             for k, v in attrib.items():
                 self.pathway.__setattr__(k, v)

@@ -35,7 +35,6 @@ class DifferentialCutsite(object):
         Each member (as listed in the class description) should be included as a
         keyword.
         """
-
         self.start = int(kwds["start"])
         self.enzyme = kwds["enzyme"]
         self.cuts_in = kwds["cuts_in"]

@@ -517,7 +517,6 @@ class StockholmIterator(AlignmentIterator):
         """Adds meta-date to a SecRecord's annotations dictionary.
 
         This function applies the PFAM conventions."""
-
         seq_data = self._get_meta_data(identifier, self.seq_annotation)
         for feature in seq_data:
             # Note this dictionary contains lists!

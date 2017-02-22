@@ -120,7 +120,6 @@ def _num_difference(obj_a, obj_b):
 
 def compare_search_obj(obj_a, obj_b):
     """Compares attribute values of two QueryResult objects."""
-
     # check that both qresults contain the same instance attributes
     assert _num_difference(obj_a, obj_b) == 0
 

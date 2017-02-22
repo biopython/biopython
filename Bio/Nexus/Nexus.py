@@ -302,7 +302,6 @@ def _compact4nexus(orig_list):
     """Transform [1 2 3 5 6 7 8 12 15 18 20] (baseindex 0, used in the Nexus class)
     into '2-4 6-9 13-19\\3 21' (baseindex 1, used in programs like Paup or MrBayes.).
     """
-
     if not orig_list:
         return ''
     orig_list = sorted(set(orig_list))
@@ -339,7 +338,6 @@ def combine(matrices):
     Character sets, character partitions and taxon sets are prefixed, readjusted
     and present in the combined matrix.
     """
-
     if not matrices:
         return None
     name = matrices[0][0]
@@ -502,7 +500,6 @@ def _adjust_lines(lines):
 
 def _replace_parenthesized_ambigs(seq, rev_ambig_values):
     """Replaces ambigs in xxx(ACG)xxx format by IUPAC ambiguity code."""
-
     opening = seq.find('(')
     while opening > -1:
         closing = seq.find(')')
@@ -617,7 +614,6 @@ class Nexus(object):
 
     def read(self, input):
         """Read and parse NEXUS input (a filename, file-handle, or string)."""
-
         # 1. Assume we have the name of a file in the execution dir or a
         # file-like object.
         # Note we need to add parsing of the path to dir/filename
@@ -1139,7 +1135,6 @@ class Nexus(object):
         Here codonposset is just a fancy name for a character partition with
         the name CodonPositions and the partitions N,1,2,3
         """
-
         prev_partitions = list(self.charpartitions.keys())
         self._charpartition(options)
         # mcclade calls it CodonPositions, but you never know...
@@ -1342,7 +1337,6 @@ class Nexus(object):
         Only non-excluded characters and non-deleted taxa are included,
         just the data block is written.
         """
-
         if not matrix:
             matrix = self.matrix
         if not matrix:
@@ -1729,7 +1723,6 @@ class Nexus(object):
 
     def add_sequence(self, name, sequence):
         """Adds a sequence (string) to the matrix."""
-
         if not name:
             raise NexusError('New sequence must have a name')
 
@@ -1759,7 +1752,6 @@ class Nexus(object):
         pos=0: first position
         pos=nchar: last position
         """
-
         def _adjust(set, x, d, leftgreedy=False):
             """Adjusts character sets if gaps are inserted, taking care of
             new gaps within a coherent character set."""
@@ -1844,8 +1836,8 @@ class Nexus(object):
     def terminal_gap_to_missing(self, missing=None, skip_n=True):
         """Replaces all terminal gaps with missing character.
 
-        Mixtures like ???------??------- are properly resolved."""
-
+        Mixtures like ???------??------- are properly resolved.
+        """
         if not missing:
             missing = self.missing
         replace = [self.missing, self.gap]

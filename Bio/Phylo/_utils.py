@@ -326,7 +326,6 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True,
             If the tip label can't be found in the dict or label_colors is
             None, the label will be shown in black.
     """
-
     try:
         import matplotlib.pyplot as plt
     except ImportError:

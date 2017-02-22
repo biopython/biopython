@@ -107,9 +107,7 @@ def cmp_sccs(sccs1, sccs2):
     A sccs (e.g. a.4.5.11) compactly represents a domain's classification.
     The letter represents the class, and the numbers are the fold,
     superfamily, and family, respectively.
-
     """
-
     s1 = sccs1.split(".")
     s2 = sccs2.split(".")
 
@@ -138,7 +136,6 @@ def parse_domain(str):
     A typical ASTRAL header looks like --
     >d1tpt_1 a.46.2.1 (1-70) Thymidine phosphorylase {Escherichia coli}
     """
-
     m = _domain_re.match(str)
     if (not m):
         raise ValueError("Domain: " + str)
@@ -676,8 +673,7 @@ class Astral(object):
 
     def __init__(self, dir_path=None, version=None, scop=None,
                   astral_file=None, db_handle=None):
-        """
-        Initialise the astral database.
+        """Initialise the astral database.
 
         You must provide either a directory of SCOP files:
 
@@ -695,7 +691,6 @@ class Astral(object):
               'astral' with the astral data in it.  This can be created
               using writeToSQL.
         """
-
         if astral_file is None and dir_path is None and db_handle is None:
             raise RuntimeError("Need either file handle, or (dir_path + version),"
                                " or database handle to construct Astral")

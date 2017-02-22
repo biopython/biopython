@@ -311,7 +311,6 @@ Return values:
   - nfound:    the number of times this solution was found.
 
 """
-
         if transpose == 0:
             weight = self.eweight
         else:
@@ -358,7 +357,6 @@ Return values:
       the SOM grid cell with coordinates (ix, iy).
 
 """
-
         if transpose == 0:
             weight = self.eweight
         else:
@@ -435,7 +433,6 @@ Return values:
     if equal to 1: clusters of microarrays (columns) are considered.
 
 """
-
         if transpose == 0:
             weight = self.eweight
         else:

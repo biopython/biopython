@@ -130,7 +130,6 @@ class Parser(object):
 
     def parse(self, values_are_confidence=False, rooted=False):
         """Parse the text stream this object was initialized with."""
-
         nexml_doc = ElementTree.iterparse(self.handle, events=('end',))
 
         for event, node in nexml_doc:
@@ -200,7 +199,6 @@ class Parser(object):
         traversing the  entire tree and creating a nested structure of NeXML.Clade
         objects.
         """
-
         this_node = node_dict[node]
         clade = NeXML.Clade(**this_node)
 
@@ -231,7 +229,6 @@ class Writer(object):
 
     def write(self, handle, cdao_to_obo=True, **kwargs):
         """Write this instance's trees to a file handle."""
-
         self.cdao_to_obo = cdao_to_obo
 
         # set XML namespaces

@@ -99,7 +99,6 @@ class Hmmer3TextParser(object):
 
     def _parse_qresult(self):
         """Parses a HMMER3 query block."""
-
         self._read_until(lambda line: line.startswith('Query:'))
 
         while self.line:

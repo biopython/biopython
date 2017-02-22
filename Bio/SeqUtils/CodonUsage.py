@@ -81,7 +81,6 @@ class CodonAdaptationIndex(object):
         (which must all have a whole number of codons) and generates a codon
         usage index.
         """
-
         # first make sure we're not overwriting an existing index:
         if self.index != {} or self.codon_count != {}:
             raise ValueError("an index has already been set or a codon count has been done. cannot overwrite either.")

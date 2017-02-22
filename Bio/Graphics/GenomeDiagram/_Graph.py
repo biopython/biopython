@@ -112,7 +112,6 @@ class GraphData(object):
             o center Value at which x-axis crosses y-axis.
 
         """
-
         # Let the UK spelling (colour) override the USA spelling (color)
         if colour is not None:
             color = colour

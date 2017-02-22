@@ -224,7 +224,6 @@ class Hmmer3DomtabHmmhitWriter(object):
 
     def _build_header(self, first_qresult=None):
         """Returns the header string of a domain HMMER table output."""
-
         # calculate whitespace required
         # adapted from HMMER's source: src/p7_tophits.c#L1157
         if first_qresult:
