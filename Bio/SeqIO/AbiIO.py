@@ -401,12 +401,6 @@ def AbiIterator(handle, alphabet=None, trim=False):
     # raw data (for advanced end users benefit)
     annot['abif_raw'] = raw
 
-    # use the file name as SeqRecord.name if available
-    try:
-        file_name = basename(handle.name).replace('.ab1', '')
-    except AttributeError:
-        file_name = ""
-
     # fsa check
     if('SpNm1' in raw):
         try:
@@ -422,6 +416,12 @@ def AbiIterator(handle, alphabet=None, trim=False):
                            annotations=annot)
 
     else:
+        # use the file name as SeqRecord.name if available
+        try:
+            file_name = basename(handle.name).replace('.ab1', '')
+        except AttributeError:
+            file_name = ""
+            
         record = SeqRecord(Seq(seq, alphabet),
                            id=sample_id, name=file_name,
                            description='',
