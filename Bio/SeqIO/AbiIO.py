@@ -408,7 +408,7 @@ def AbiIterator(handle, alphabet=None, trim=False):
         file_name = ""
 
     # fsa check
-    if('SpNm1' in raw and 'APFN2' not in raw and not trim):
+    if('SpNm1' in raw):
         try:
             file_name = basename(handle.name).replace('.fsa', '')
         except AttributeError:
@@ -428,9 +428,7 @@ def AbiIterator(handle, alphabet=None, trim=False):
                            annotations=annot,
                            letter_annotations={'phred_quality': qual})
 
-
-
-    if not trim:
+    if not trim or 'SpNm1' in raw:
         yield record
     else:
         yield _abi_trim(record)
