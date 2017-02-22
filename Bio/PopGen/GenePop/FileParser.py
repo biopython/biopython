@@ -3,8 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""
-This class provides code to parse BIG GenePop files.
+"""This class provides code to parse BIG GenePop files.
 
 The difference between this class and the standard Bio.PopGen.GenePop.Record
 class is that this one does not read the whole file to memory.
@@ -155,7 +154,7 @@ class FileRecord(object):
             indiv -= 1
 
     def skip_population(self):
-        "Skips the current population. Returns true if there is another pop."
+        """Skips the current population. Returns true if there is another pop."""
         for line in self._handle:
             if line == "":
                 return False
