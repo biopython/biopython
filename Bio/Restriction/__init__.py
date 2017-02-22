@@ -54,7 +54,7 @@ Example:
 
 """
 
-from Bio.Restriction.Restriction import *
+from Bio.Restriction.Restriction import *  # noqa (legacy module arrangement)
 
 
 #

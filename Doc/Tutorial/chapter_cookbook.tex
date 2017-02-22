@@ -36,20 +36,56 @@ Try something like this:
 %makes it easier to copy and paste the example to a script file.
 \begin{verbatim}
 from Bio import SeqIO
+
 input_file = "big_file.sff"
 id_file = "short_list.txt"
 output_file = "short_list.sff"
-wanted = set(line.rstrip("\n").split(None,1)[0] for line in open(id_file))
+
+with open(id_file) as id_handle:
+    wanted = set(line.rstrip("\n").split(None,1)[0] for line in id_handle)
 print("Found %i unique identifiers in %s" % (len(wanted), id_file))
+
 records = (r for r in SeqIO.parse(input_file, "sff") if r.id in wanted)
 count = SeqIO.write(records, output_file, "sff")
 print("Saved %i records from %s to %s" % (count, input_file, output_file))
 if count < len(wanted):
-    print("Warning %i IDs not found in %s" % (len(wanted)-count, input_file))
+    print("Warning %i IDs not found in %s" % (len(wanted) - count, input_file))
 \end{verbatim}
 
 Note that we use a Python \verb|set| rather than a \verb|list|, this makes
 testing membership faster.
+
+As discussed in Section~\ref{sec:low-level-fasta-fastq}, for a large FASTA
+or FASTQ file for speed you would be better off not using the high-level
+\verb|SeqIO| interface, but working directly with strings. This next
+example shows how to do this with FASTQ files -- it is more complicated:
+
+%not a doctest to avoid temp files being left behind, also no >>>
+%makes it easier to copy and paste the example to a script file.
+\begin{verbatim}
+from Bio.SeqIO.QualityIO import FastqGeneralIterator
+
+input_file = "big_file.fastq"
+id_file = "short_list.txt"
+output_file = "short_list.fastq"
+
+with open(id_file) as id_handle:
+    # Taking first word on each line as an identifer
+    wanted = set(line.rstrip("\n").split(None,1)[0] for line in id_handle)
+print("Found %i unique identifiers in %s" % (len(wanted), id_file))
+
+with open(input_file) as in_handle:
+    with open(output_file, "w") as out_handle:
+        for title, seq, qual in FastqGeneralIterator(in_handle):
+            # The ID is the first word in the title line (after the @ sign):
+            if title.split(None, 1)[0] in wanted:
+                # This produces a standard 4-line FASTQ entry:
+                out_handle.write("@%s\n%s\n+\n%s\n" % (title, seq, qual))
+                count += 1
+print("Saved %i records from %s to %s" % (count, input_file, output_file))
+if count < len(wanted):
+    print("Warning %i IDs not found in %s" % (len(wanted) - count, input_file))
+\end{verbatim}
 
 \subsection{Producing randomised genomes}
 
@@ -83,7 +119,7 @@ use the built in Python \verb|random| module for this, in particular the functio
 \begin{verbatim}
 >>> import random
 >>> nuc_list = list(original_rec.seq)
->>> random.shuffle(nuc_list) #acts in situ!
+>>> random.shuffle(nuc_list)  # acts in situ!
 \end{verbatim}
 
 Now, in order to use \verb|Bio.SeqIO| to output the shuffled sequence, we need
@@ -98,6 +134,7 @@ this is with the string object's join method.
 >>> from Bio.SeqRecord import SeqRecord
 >>> shuffled_rec = SeqRecord(Seq("".join(nuc_list), original_rec.seq.alphabet),
 ...                          id="Shuffled", description="Based on %s" % original_rec.id)
+...
 \end{verbatim}
 
 Let's put all these pieces together to make a complete Python script which
@@ -116,15 +153,14 @@ from Bio import SeqIO
 
 original_rec = SeqIO.read("NC_005816.gb","genbank")
 
-handle = open("shuffled.fasta", "w")
-for i in range(30):
-    nuc_list = list(original_rec.seq)
-    random.shuffle(nuc_list)
-    shuffled_rec = SeqRecord(Seq("".join(nuc_list), original_rec.seq.alphabet), \
-                             id="Shuffled%i" % (i+1), \
-                             description="Based on %s" % original_rec.id)
-    handle.write(shuffled_rec.format("fasta"))
-handle.close()
+with open("shuffled.fasta", "w") as output_handle:
+    for i in range(30):
+        nuc_list = list(original_rec.seq)
+        random.shuffle(nuc_list)
+        shuffled_rec = SeqRecord(Seq("".join(nuc_list), original_rec.seq.alphabet),
+                                 id="Shuffled%i" % (i+1),
+                                 description="Based on %s" % original_rec.id)
+        out_handle.write(shuffled_rec.format("fasta"))
 \end{verbatim}
 
 Personally I prefer the following version using a function to shuffle the record
@@ -139,15 +175,13 @@ from Bio import SeqIO
 def make_shuffle_record(record, new_id):
     nuc_list = list(record.seq)
     random.shuffle(nuc_list)
-    return SeqRecord(Seq("".join(nuc_list), record.seq.alphabet), \
-           id=new_id, description="Based on %s" % original_rec.id)
+    return SeqRecord(Seq("".join(nuc_list), record.seq.alphabet),
+                     id=new_id, description="Based on %s" % original_rec.id)
 
 original_rec = SeqIO.read("NC_005816.gb","genbank")
-shuffled_recs = (make_shuffle_record(original_rec, "Shuffled%i" % (i+1)) \
+shuffled_recs = (make_shuffle_record(original_rec, "Shuffled%i" % (i+1))
                  for i in range(30))
-handle = open("shuffled.fasta", "w")
-SeqIO.write(shuffled_recs, handle, "fasta")
-handle.close()
+SeqIO.write(shuffled_recs, "shuffled.fasta", "fasta")
 \end{verbatim}
 
 \subsection{Translating a FASTA file of CDS entries}
@@ -233,20 +267,20 @@ as a list of \verb|SeqRecord| objects, sort the list, and save it:
 
 \begin{verbatim}
 from Bio import SeqIO
-records = list(SeqIO.parse("ls_orchid.fasta","fasta"))
-records.sort(cmp=lambda x,y: cmp(len(x),len(y)))
+records = list(SeqIO.parse("ls_orchid.fasta", "fasta"))
+records.sort(key=lambda r: len(r))
 SeqIO.write(records, "sorted_orchids.fasta", "fasta")
 \end{verbatim}
 
-The only clever bit is specifying a comparison function for how to
+The only clever bit is specifying a comparison method for how to
 sort the records (here we sort them by length). If you wanted the
 longest records first, you could flip the comparison or use the
 reverse argument:
 
 \begin{verbatim}
 from Bio import SeqIO
-records = list(SeqIO.parse("ls_orchid.fasta","fasta"))
-records.sort(cmp=lambda x,y: cmp(len(y),len(x)))
+records = list(SeqIO.parse("ls_orchid.fasta", "fasta"))
+records.sort(key=lambda r: -len(r))
 SeqIO.write(records, "sorted_orchids.fasta", "fasta")
 \end{verbatim}
 
@@ -259,8 +293,8 @@ to sort by length. This can be solved using the
 \begin{verbatim}
 from Bio import SeqIO
 # Get the lengths and ids, and sort on length
-len_and_ids = sorted((len(rec), rec.id) for rec in \
-                     SeqIO.parse("ls_orchid.fasta","fasta"))
+len_and_ids = sorted((len(rec), rec.id) for rec in
+                     SeqIO.parse("ls_orchid.fasta", "fasta"))
 ids = reversed([id for (length, id) in len_and_ids])
 del len_and_ids  # free this memory
 record_index = SeqIO.index("ls_orchid.fasta", "fasta")
@@ -284,23 +318,43 @@ in Biopython 1.54 (see Section~\ref{sec:seqio-index-getraw}).
 
 \begin{verbatim}
 from Bio import SeqIO
+
 # Get the lengths and ids, and sort on length
-len_and_ids = sorted((len(rec), rec.id) for rec in \
-                     SeqIO.parse("ls_orchid.fasta","fasta"))
+len_and_ids = sorted((len(rec), rec.id) for rec in
+                     SeqIO.parse("ls_orchid.fasta", "fasta"))
 ids = reversed([id for (length, id) in len_and_ids])
 del len_and_ids  # free this memory
+
 record_index = SeqIO.index("ls_orchid.fasta", "fasta")
-handle = open("sorted.fasta", "wb")
-for id in ids:
-    handle.write(record_index.get_raw(id))
-handle.close()
+with open("sorted.fasta", "wb") as out_handle:
+    for id in ids:
+        out_handle.write(record_index.get_raw(id))
 \end{verbatim}
 
 Note with Python 3 onwards, we have to open the file for writing in
 binary mode because the \verb|get_raw()| method returns bytes strings.
 
 As a bonus, because it doesn't parse the data into \verb|SeqRecord| objects
-a second time it should be faster.
+a second time it should be faster. If you only want to use this with FASTA
+format, we can speed this up one step further by using the low-level FASTA
+parser to get the record identifiers and lengths:
+
+\begin{verbatim}
+from Bio.SeqIO.FastaIO import SimpleFastaParser
+from Bio import SeqIO
+
+# Get the lengths and ids, and sort on length
+with open("ls_orchid.fasta") as in_handle:
+    len_and_ids = sorted((len(seq), title.split(None, 1)[0]) for
+                         title, seq in SimpleFastaParser(in_handle))
+ids = reversed([id for (length, id) in len_and_ids])
+del len_and_ids  # free this memory
+
+record_index = SeqIO.index("ls_orchid.fasta", "fasta")
+with open("sorted.fasta", "wb") as out_handle:
+    for id in ids:
+        out_handle.write(record_index.get_raw(id))
+\end{verbatim}
 
 \subsection{Simple quality filtering for FASTQ files}
 \label{sec:FASTQ-filtering-example}
@@ -357,6 +411,10 @@ them all into memory at once.  This example uses a generator expression, which
 means only one \verb|SeqRecord| is created at a time - avoiding any memory
 limitations.
 
+Note that it would be faster to use the low-level \verb|FastqGeneralIterator|
+parser here (see Section~\ref{sec:low-level-fasta-fastq}), but that does not
+turn the quality string into integer scores.
+
 \subsection{Trimming off primer sequences}
 \label{sec:FASTQ-slicing-off-primer}
 
@@ -364,7 +422,11 @@ For this example we're going to pretend that \texttt{GATGACGGTGT} is a 5' primer
 sequence we want to look for in some FASTQ formatted read data.  As in the example
 above, we'll use the \texttt{SRR020192.fastq} file downloaded from the ENA
 (\url{ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR020/SRR020192/SRR020192.fastq.gz}).
-The same approach would work with any other supported file format (e.g. FASTA files).
+
+By using the main \verb|Bio.SeqIO| interface, the same approach would work with
+any other supported file format (e.g. FASTA files). However, for large FASTQ
+files it would be faster the low-level \verb|FastqGeneralIterator| parser here
+(see the earlier example, and Section~\ref{sec:low-level-fasta-fastq}).
 
 This code uses \verb|Bio.SeqIO| with a generator expression (to avoid loading
 all the sequences into memory at once), and the \verb|Seq| object's
@@ -400,7 +462,7 @@ print("Saved %i reads" % count)
 but this time strip off the first ten characters, and save them to another new
 FASTQ file, \texttt{with\_primer\_trimmed.fastq}.
 
-Finally, suppose you want to create a new FASTQ file where these reads have
+Now, suppose you want to create a new FASTQ file where these reads have
 their primer removed, but all the other reads are kept as they were?
 If we want to still use a generator expression, it is probably clearest to
 define our own trim function:
@@ -668,10 +730,9 @@ pair of FASTA and QUAL files into a single FASTQ files:
 \begin{verbatim}
 from Bio import SeqIO
 from Bio.SeqIO.QualityIO import PairedFastaQualIterator
-handle = open("temp.fastq", "w") #w=write
-records = PairedFastaQualIterator(open("example.fasta"), open("example.qual"))
-count = SeqIO.write(records, handle, "fastq")
-handle.close()
+with open("example.fasta") as f_handle, open("example.qual") as q_handle:
+    records = PairedFastaQualIterator(f_handle, q_handle)
+    count = SeqIO.write(records, "temp.fastq", "fastq")
 print("Converted %i records" % count)
 \end{verbatim}
 
@@ -1082,11 +1143,10 @@ the first two from our orchid FASTA file \href{https://raw.githubusercontent.com
 
 \begin{verbatim}
 from Bio import SeqIO
-handle = open("ls_orchid.fasta")
-record_iterator = SeqIO.parse(handle, "fasta")
-rec_one = next(record_iterator)
-rec_two = next(record_iterator)
-handle.close()
+with open("ls_orchid.fasta") as in_handle:
+    record_iterator = SeqIO.parse(in_handle, "fasta")
+    rec_one = next(record_iterator)
+    rec_two = next(record_iterator)
 \end{verbatim}
 
 We're going to show two approaches.  Firstly, a simple naive implementation
@@ -1099,9 +1159,9 @@ comprehension:
 window = 7
 seq_one = str(rec_one.seq).upper()
 seq_two = str(rec_two.seq).upper()
-data = [[(seq_one[i:i+window] <> seq_two[j:j+window]) \
-        for j in range(len(seq_one)-window)] \
-       for i in range(len(seq_two)-window)]
+data = [[(seq_one[i:i+window] <> seq_two[j:j+window])
+         for j in range(len(seq_one)-window)]
+        for i in range(len(seq_two)-window)]
 \end{verbatim}
 
 Note that we have \emph{not} checked for reverse complement matches here.

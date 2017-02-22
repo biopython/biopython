@@ -33,6 +33,10 @@ Python 3.3
 Still suported but deprecated as of Release 1.67, triggering a warning
 at installation time.
 
+Bio.DocSQL
+==========
+This was deprecated in Biopython 1.69.
+
 Bio.CodonAlign
 ==============
 This new experimental module included in Biopython 1.64 was renamed to

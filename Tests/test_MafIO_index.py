@@ -68,7 +68,8 @@ if sqlite3:
         """Test loading of prebuilt indices"""
 
         def test_old(self):
-            idx = MafIndex("MAF/ucsc_mm9_chr10.mafindex", "MAF/ucsc_mm9_chr10.maf", "mm9.chr10")
+            idx = MafIndex("MAF/ucsc_mm9_chr10.mafindex",
+                           "MAF/ucsc_mm9_chr10.maf", "mm9.chr10")
             self.assertEqual(len(idx), 48)
 
         def test_old_wrong_target_seqname(self):
@@ -86,7 +87,11 @@ if sqlite3:
                               "mm9.chr10")
 
         def test_old_file_not_found(self):
-            self.assertRaises(ValueError,
+            # TODO: Switch to FileNotFoundError once we drop Python 2 support
+            # Under Python 2, we expect IOError.
+            # Under Python 3, we expect FileNotFoundError which is a subclass
+            # of OSError, and that has IOError as an alias so this works.
+            self.assertRaises(IOError,
                               MafIndex,
                               "MAF/ucsc_mm9_chr11.mafindex",
                               "MAF/ucsc_mm9_chr11.maf",
@@ -392,7 +397,6 @@ if sqlite3:
             cnksr3 = str(SeqIO.read("MAF/cnksr3.fa", "fasta").seq).upper()
             mm9_seq = "".join([
                 str(x.seq) for x in result if x.id.startswith("mm9")]).replace("-", "")
-
             self.assertEqual(mm9_seq, cnksr3)
 
     class TestSpliceBadMAF(unittest.TestCase):

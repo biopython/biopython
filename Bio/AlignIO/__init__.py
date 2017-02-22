@@ -1,4 +1,4 @@
-# Copyright 2008-2016 by Peter Cock.  All rights reserved.
+# Copyright 2008-2017 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.

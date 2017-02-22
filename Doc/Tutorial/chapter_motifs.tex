@@ -575,9 +575,9 @@ matrix            T  aa:1::9::11:
 To parse this file (stored as \verb+meme.dna.oops.txt+), use
 %cont-doctest
 \begin{verbatim}
->>> handle = open("meme.dna.oops.txt")
->>> record = motifs.parse(handle, "meme")
->>> handle.close()
+>>> with open("meme.dna.oops.txt") as handle:
+...     record = motifs.parse(handle, "meme")
+...
 \end{verbatim}
 The \verb+motifs.parse+ command reads the complete file directly, so you can
 close the file after calling \verb+motifs.parse+.
@@ -705,9 +705,9 @@ P0      A      C      G      T
 To parse a TRANSFAC file, use
 %cont-doctest
 \begin{verbatim}
->>> handle = open("transfac.dat")
->>> record = motifs.parse(handle, "TRANSFAC")
->>> handle.close()
+>>> with open("transfac.dat") as handle:
+...     record = motifs.parse(handle, "TRANSFAC")
+...
 \end{verbatim}
 The overall version number, if available, is stored as \verb+record.version+:
 %cont-doctest
@@ -822,9 +822,9 @@ You can export the motifs in the TRANSFAC format by capturing this output
 in a string and saving it in a file:
 \begin{verbatim}
 >>> text = str(record)
->>> handle = open("mytransfacfile.dat", 'w')
->>> handle.write(text)
->>> handle.close()
+>>> with open("mytransfacfile.dat", 'w') as out_handle:
+...     out_handle.write(text)
+...
 \end{verbatim}
 
 \section{Writing motifs}

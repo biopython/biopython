@@ -24,7 +24,7 @@ except:
 
 # local stuff
 from Bio.Graphics.Distribution import BarChartDistribution
-from Bio.Graphics.Distribution import LineDistribution
+# TODO from Bio.Graphics.Distribution import LineDistribution
 from Bio.Graphics.Distribution import DistributionPage
 
 

@@ -5,15 +5,20 @@
 from __future__ import print_function
 
 try:
-    # TODO - Don't use "from XXX import *"
-    from numpy import *
+    from numpy import array
     from numpy import dot  # missing in old PyPy's micronumpy
 except ImportError:
     from Bio import MissingPythonDependencyError
     raise MissingPythonDependencyError(
         "Install NumPy if you want to use Bio.QCPSuperimposer.")
 
-from Bio.PDB.QCPSuperimposer import QCPSuperimposer
+try:
+    from Bio.PDB.QCPSuperimposer import QCPSuperimposer
+except ImportError:
+    from Bio import MissingExternalDependencyError
+    raise MissingExternalDependencyError(
+        "C module in Bio.QCPSuperimposer not compiled")
+
 
 # start with two coordinate sets (Nx3 arrays - Float0)
 

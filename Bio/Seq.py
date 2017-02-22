@@ -2271,14 +2271,10 @@ def complement(sequence):
 
 def _test():
     """Run the Bio.Seq module's doctests (PRIVATE)."""
-    if sys.version_info[0:2] == (3, 1):
-        print("Not running Bio.Seq doctest on Python 3.1")
-        print("See http://bugs.python.org/issue7490")
-    else:
-        print("Running doctests...")
-        import doctest
-        doctest.testmod(optionflags=doctest.IGNORE_EXCEPTION_DETAIL)
-        print("Done")
+    print("Running doctests...")
+    import doctest
+    doctest.testmod(optionflags=doctest.IGNORE_EXCEPTION_DETAIL)
+    print("Done")
 
 if __name__ == "__main__":
     _test()

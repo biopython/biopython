@@ -32,7 +32,8 @@ except ImportError:
         from Bio import BiopythonWarning
         warnings.warn("Using pure-Python as missing Biopython's C code for PWM. "
                       "This can happen if Biopython was installed without NumPy. "
-                      "Try re-installing NumPy and then Biopython.")
+                      "Try re-installing NumPy and then Biopython.",
+                      BiopythonWarning)
 
     def _calculate(score_dict, sequence, m, n):
         """Calculate scores using Python code (PRIVATE).

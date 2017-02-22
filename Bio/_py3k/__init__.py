@@ -37,6 +37,11 @@ Instead, we can do this under either Python 2 or 3:
 Once we drop support for Python 2, the whole of Bio._py3k will
 go away.
 """
+
+# From the point of view of pep8 and flake8, there are lots of issues with
+# this file. This line tells flake8 to ignore it for quality assurance:
+# flake8: noqa
+
 import sys
 
 

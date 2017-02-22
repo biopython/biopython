@@ -1032,12 +1032,6 @@ def Tm_staluc(s, dnac=50, saltc=50, rna=0):
         raise ValueError("rna={0} not supported".format(rna))
 
 
-def _test():
-    """Run the module's doctests (PRIVATE)."""
-    import doctest
-    print("Running doctests...")
-    doctest.testmod()
-    print("Done")
-
 if __name__ == "__main__":
-    _test()
+    from Bio._utils import run_doctest
+    run_doctest()

@@ -97,12 +97,6 @@ def lowess(x, y, f=2. / 3., iter=3):
     return yest
 
 
-def _test():
-    """Run the Bio.Statistics.lowess module's doctests."""
-    print("Running doctests...")
-    import doctest
-    doctest.testmod()
-    print("Done")
-
 if __name__ == "__main__":
-    _test()
+    from Bio._utils import run_doctest
+    run_doctest()

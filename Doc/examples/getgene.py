@@ -275,6 +275,7 @@ def usage(exit=0):
     if exit:
         sys.exit(0)
 
+
 if __name__ == '__main__':
     pyphy_home = os.environ.get('PYPHY')
 

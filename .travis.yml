@@ -24,11 +24,10 @@ matrix:
       env: TOXENV=py34-cover
     - python: 3.5
       env: TOXENV=py35-cover
+    - python: 3.6
+      env: TOXENV=py36-cover
     - python: pypy
       env: TOXENV=pypy-nocov
-    - python: pypy3
-      env: TOXENV=pypy3-nocov
-  allow_failures:
     - python: pypy3
       env: TOXENV=pypy3-nocov
 
@@ -48,7 +47,9 @@ addons:
     - samtools
     - wise
 
-#There is a phyml Ubuntu package, but currently too old
+# There is a phyml Ubuntu package, but currently too old
+# There are TravisCI provided versions of PyPy and PyPy3, but currently too old.
+# We therefore deactivate that, and download and unzip portable PyPy binaries.
 before_install:
   - cd $HOME
   - mkdir bin
@@ -56,6 +57,9 @@ before_install:
   - curl -L -O http://www.atgc-montpellier.fr/download/binaries/phyml/PhyML-3.1.zip
   - unzip PhyML-3.1.zip
   - mv PhyML-3.1/PhyML-3.1_linux64 bin/phyml
+  - cd $HOME
+  - "if [[ $TRAVIS_PYTHON_VERSION == 'pypy' ]]; then deactivate && wget https://bitbucket.org/squeaky/portable-pypy/downloads/pypy-5.6-linux_x86_64-portable.tar.bz2 && tar -jxvf pypy-5.6-linux_x86_64-portable.tar.bz2 && echo 'Setting up aliases...' && export PATH=$HOME/pypy-5.6-linux_x86_64-portable/bin/:$PATH && ln -s ~/pypy-5.6-linux_x86_64-portable/bin/pypy ~/bin/python && echo 'Setting up pip...' && pypy-5.6-linux_x86_64-portable/bin/pypy -m ensurepip ; fi"
+  - "if [[ $TRAVIS_PYTHON_VERSION == 'pypy3' ]]; then deactivate && wget https://bitbucket.org/squeaky/portable-pypy/downloads/pypy3.3-5.5-alpha-20161013-linux_x86_64-portable.tar.bz2 && tar -jxvf pypy3.3-5.5-alpha-20161013-linux_x86_64-portable.tar.bz2 && echo 'Setting up aliases...' && export PATH=$HOME/pypy3.3-5.5-alpha-20161013-linux_x86_64-portable/bin/:$PATH && ln -s ~/pypy3.3-5.5-alpha-20161013-linux_x86_64-portable/bin/pypy3.3 ~/bin/python && echo 'Setting up pip...' && pypy3.3-5.5-alpha-20161013-linux_x86_64-portable/bin/pypy -m ensurepip && ln -s ~/pypy3.3-5.5-alpha-20161013-linux_x86_64-portable/bin/pip3.3 ~/bin/pip ; fi"
   - cd $TRAVIS_BUILD_DIR
 
 install:

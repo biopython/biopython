@@ -12,9 +12,21 @@ The latest news is at the top of this file.
   
 (In progress, not yet released) Biopython 1.69
 
-This release of Biopython supports Python 2.7, 3.3, 3.4 and 3.5 (we have now
-dropped support for Python 2.6). It has also been tested on PyPy 5.0, PyPy3
-version 2.4, and Jython 2.7.
+This release of Biopython supports Python 2.7, 3.3, 3.4, 3.5 and 3.6 (we have
+now dropped support for Python 2.6). It has also been tested on PyPy v5.6,
+PyPy3.3 v5.5 alpha, and Jython 2.7.
+
+We have started to dual-license Biopython under both our original liberal
+"Biopython License Agreement", and the very similar but more commonly used
+"3-Clause BSD License". In this release a small number of the Python files
+are explicitly available under either license, but most of the code remains
+under the "Biopython License Agreement" only. See the LICENSE file for more
+details.
+
+Bio.AlignIO now supports the UCSC Multiple Alignment Format (MAF) under the
+format name "maf", using new module Bio.AlignIO.MafIO which also offers
+indexed access to these potentially large files using SQLite3 (contributed by
+Andrew Sczesnak, with additional refinements from Adam Novak).
 
 The Uniprot parser is now able to parse "submittedName" elements in XML files.
 
@@ -45,6 +57,9 @@ The GenBank output now uses colon space to match current NCBI DBLINK lines.
 The Bio.Affy package supports Affymetrix version 4 of the CEL file format,
 in addition to version 3.
 
+The restriction enzyme list in Bio.Restriction has been updated to the
+February 2017 release of REBASE.
+
 Additionally, a number of small bugs have been fixed with further additions
 to the test suite, and there has been further work to follow the Python PEP8,
 PEP257 and best practice standard coding style.
@@ -55,20 +70,28 @@ possible, especially the following contributors:
 
 Aaron Rosenfeld
 Adam Kurkiewicz (first contribution)
+Adam Novak (first contribution)
 Adrian Altenhoff (first contribution)
 Allis Tauri (first contribution)
+Andrew Guy (first contribution)
+Andrew Sczesnak (first contribution)
 Bernhard Thiel (first contribution)
 Bertrand Néron
+Blaise Li (first contribution)
 Brandon Invergo
 Carlos Pena
 Carlos Ríos
 Chris Warth
 Emmanuel Noutahi
+Jack Twilley (first contribution)
+Jeroen Van Goey (first contribution)
 Lenna Peterson
+Leonhard Heizinger (first contribution)
 Markus Piotrowski
 Michiel de Hoon
 Milind Luthra (first contribution)
 Oscar G. Garcia (first contribution)
+Owen Solberg
 Peter Cock
 Richard Neher (first contribution)
 Sourav Singh (first contribution)

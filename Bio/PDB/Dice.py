@@ -7,7 +7,7 @@ import re
 import warnings
 
 from Bio.PDB.PDBIO import PDBIO
-
+from Bio import BiopythonWarning
 
 _hydrogen = re.compile("[123 ]*H.*")
 
@@ -42,8 +42,8 @@ class ChainSelector(object):
             # skip HETATMS
             return 0
         if icode != " ":
-            warnings.warn("WARNING: Icode at %s" % residue.get_id(),
-                          RuntimeWarning)
+            warnings.warn("WARNING: Icode %s at position %s"
+                          % (icode, resseq), BiopythonWarning)
         if self.start <= resseq <= self.end:
             return 1
         return 0

@@ -12,9 +12,8 @@ from Bio import BiopythonWarning
 from Bio import SeqIO
 from Bio import AlignIO
 from Bio.SeqRecord import SeqRecord
-from Bio.Seq import Seq, UnknownSeq
+from Bio.Seq import Seq
 from Bio import Alphabet
-from Bio.Align import MultipleSeqAlignment
 
 
 # List of formats including alignment only file formats we can read AND write.

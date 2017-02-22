@@ -3,29 +3,10 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Use the DSSP program to calculate secondary structure and accessibility.
+r"""Use the DSSP program to calculate secondary structure and accessibility.
 
 You need to have a working version of DSSP (and a license, free for academic
-use) in order to use this. For DSSP, see U{http://swift.cmbi.ru.nl/gv/dssp/}.
-
-The DSSP codes for secondary structure used here are:
-
-    H
-        Alpha helix (4-12)
-    B
-        Isolated beta-bridge residue
-    E
-        Strand
-    G
-        3-10 helix
-    I
-        pi helix
-    T
-        Turn
-    S
-        Bend
-    \-
-        None
+use) in order to use this. For DSSP, see http://swift.cmbi.ru.nl/gv/dssp/.
 
 The following Accessible surface area (ASA) values can be used, defaulting
 to the Sander and Rost values:
@@ -36,6 +17,74 @@ to the Sander and Rost values:
         Sander and Rost 1994 http://dx.doi.org/10.1002/prot.340200303
     Wilke
         Tien et al. 2013 http://dx.doi.org/10.1371/journal.pone.0080635
+
+The DSSP codes for secondary structure used here are:
+
+    =====     ====
+    Code      Structure
+    =====     ====
+     H        Alpha helix (4-12)
+     B        Isolated beta-bridge residue
+     E        Strand
+     G        3-10 helix
+     I        Pi helix
+     T        Turn
+     S        Bend
+     \-       None
+    =====     ====
+
+Usage
+-----
+
+The DSSP class can be used to run DSSP on a pdb file, and provides a
+handle to the DSSP secondary structure and accessibility.
+
+**Note** that DSSP can only handle one model, and will only run
+calculations on the first model in the provided PDB file.
+
+Example:
+--------
+
+>>> p = PDBParser()
+>>> structure = p.get_structure("1MOT", "1mot.pdb")
+>>> model = structure[0]
+>>> dssp = DSSP(model, "1mot.pdb")
+
+Note that the recent DSSP executable from the DSSP-2 package was
+renamed from `dssp` to `mkdssp`. If using a recent DSSP release,
+you may need to provide the name of your DSSP executable:
+
+>>> dssp = DSSP(model, '1mot.pdb', dssp='mkdssp')
+
+DSSP data is accessed by a tuple - (chain id, residue id):
+
+>>> a_key = list(dssp.keys())[2]
+>>> a_key
+('A', (' ', 251, ' '))
+>>> dssp[a_key]
+(3, 'A', 'H', 0.7075471698113207, -61.2, -42.4,
+ -2, -0.7, 4, -3.0, 1, -0.2, 5, -0.2)
+
+The dssp data returned for a single residue is a tuple in the form:
+
+    ============ ===
+    Tuple Index  Value
+    ============ ===
+    0            DSSP index
+    1            Amino acid
+    2            Secondary structure
+    3            Relative ASA
+    4            Phi
+    5            Psi
+    6            NH-->O_1_relidx
+    7            NH-->O_1_energy
+    8            O-->NH_1_relidx
+    9            O-->NH_1_energy
+    10           NH-->O_2_relidx
+    11           NH-->O_2_energy
+    12           O-->NH_2_relidx
+    13           O-->NH_2_energy
+    ============ ===
 
 """
 
@@ -128,8 +177,17 @@ def dssp_dict_from_pdb_file(in_file, DSSP="dssp"):
     """
     # Using universal newlines is important on Python 3, this
     # gives unicode handles rather than bytes handles.
-    p = subprocess.Popen([DSSP, in_file], universal_newlines=True,
-                         stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    # Newer version of DSSP executable is named 'mkdssp',
+    # and calling 'dssp' will hence not work in some operating systems
+    # (Debian distribution of DSSP includes a symlink for 'dssp' argument)
+    try:
+        p = subprocess.Popen([DSSP, in_file], universal_newlines=True,
+                             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    except FileNotFoundError:
+        if DSSP == "mkdssp":
+            raise
+        p = subprocess.Popen(["mkdssp", in_file], universal_newlines=True,
+                             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out, err = p.communicate()
 
     # Alert user for errors
@@ -251,20 +309,17 @@ class DSSP(AbstractResiduePropertyMap):
     --------
 
     >>> p = PDBParser()
-    >>> structure = p.get_structure("1MOT", "1MOT.pdb")
+    >>> structure = p.get_structure("1MOT", "1mot.pdb")
     >>> model = structure[0]
-    >>> dssp = DSSP(model, "1MOT.pdb")
+    >>> dssp = DSSP(model, "1mot.pdb")
     >>> # DSSP data is accessed by a tuple (chain_id, res_id)
     >>> a_key = list(dssp.keys())[2]
-    >>> # residue object, secondary structure, solvent accessibility,
-    >>> # relative accessiblity, phi, psi
+    >>> # (dssp index, amino acid, secondary structure, relative ASA, phi, psi,
+    >>> # NH_O_1_relidx, NH_O_1_energy, O_NH_1_relidx, O_NH_1_energy,
+    >>> # NH_O_2_relidx, NH_O_2_energy, O_NH_2_relidx, O_NH_2_energy)
     >>> dssp[a_key]
-    (<Residue ALA het=  resseq=251 icode= >,
-    'H',
-    72,
-    0.67924528301886788,
-    -61.200000000000003,
-    -42.399999999999999)
+    (3, 'A', 'H', 0.7075471698113207, -61.2, -42.4,
+     -2, -0.7, 4, -3.0, 1, -0.2, 5, -0.2)
     """
 
     def __init__(self, model, in_file, dssp="dssp", acc_array="Sander", file_type='PDB'):
@@ -293,7 +348,19 @@ class DSSP(AbstractResiduePropertyMap):
         assert(file_type in ['PDB', 'DSSP'])
         # If the input file is a PDB file run DSSP and parse output:
         if file_type == 'PDB':
-            dssp_dict, dssp_keys = dssp_dict_from_pdb_file(in_file, dssp)
+            # Newer versions of DSSP program call the binary 'mkdssp', so
+            # calling 'dssp' will not work in some operating systems
+            # (Debian distribution of DSSP includes a symlink for 'dssp' argument)
+            try:
+                dssp_dict, dssp_keys = dssp_dict_from_pdb_file(pdb_file, dssp)
+            except FileNotFoundError:
+                if dssp == 'dssp':
+                    dssp = 'mkdssp'
+                elif dssp == 'mkdssp':
+                    dssp = 'dssp'
+                else:
+                    raise
+            dssp_dict, dssp_keys = dssp_dict_from_pdb_file(pdb_file, dssp)
         # If the input file is a DSSP file just parse it directly:
         elif file_type == 'DSSP':
             dssp_dict, dssp_keys = make_dssp_dict(in_file)

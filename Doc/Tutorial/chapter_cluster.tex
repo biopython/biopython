@@ -677,18 +677,19 @@ An object of the class \verb|Record| contains all information stored in a Cluste
 
 \begin{verbatim}
 >>> from Bio import Cluster
->>> handle = open("mydatafile.txt")
->>> record = Cluster.read(handle)
->>> handle.close()
+>>> with open("mydatafile.txt") as handle:
+...     record = Cluster.read(handle)
+...
 \end{verbatim}
 This two-step process gives you some flexibility in the source of the data.
 For example, you can use
 
 \begin{verbatim}
 >>> import gzip # Python standard library
->>> handle = gzip.open("mydatafile.txt.gz")
+>>> handle = gzip.open("mydatafile.txt.gz", "rt")
 \end{verbatim}
 to open a gzipped file, or
+% TODO: The urlopen example needs to be in text mode for Python 3..
 \begin{verbatim}
 >>> import urllib # Python standard library
 >>> handle = urllib.urlopen("http://somewhere.org/mydatafile.txt")
@@ -934,9 +935,9 @@ This is an example of a hierarchical clustering calculation, using single linkag
 
 \begin{verbatim}
 >>> from Bio import Cluster
->>> handle = open("cyano.txt")
->>> record = Cluster.read(handle)
->>> handle.close()
+>>> with open("cyano.txt") as handle:
+...     record = Cluster.read(handle)
+...
 >>> genetree = record.treecluster(method='s')
 >>> genetree.scale()
 >>> exptree = record.treecluster(dist='u', transpose=1)
@@ -949,9 +950,9 @@ Similarly, we can save a $k$-means clustering solution:
 
 \begin{verbatim}
 >>> from Bio import Cluster
->>> handle = open("cyano.txt")
->>> record = Cluster.read(handle)
->>> handle.close()
+>>> with open("cyano.txt") as handle:
+...     record = Cluster.read(handle)
+...
 >>> (geneclusters, error, ifound) = record.kcluster(nclusters=5, npass=1000)
 >>> (expclusters, error, ifound) = record.kcluster(nclusters=2, npass=100, transpose=1)
 >>> record.save("cyano_result", geneclusters, expclusters)

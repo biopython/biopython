@@ -50,9 +50,9 @@ The dictionary can also be created without creating a \texttt{Structure}
 object, ie. directly from the PDB file:
 
 \begin{verbatim}
->>> file = open(filename, 'r')
->>> header_dict = parse_pdb_header(file)
->>> file.close()
+>>> with open(filename, 'r') as handle:
+...     header_dict = parse_pdb_header(handle)
+...
 \end{verbatim}
 
 \subsection{Reading an mmCIF file}

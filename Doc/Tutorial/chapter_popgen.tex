@@ -29,9 +29,8 @@ example GenePop data files in the Test/PopGen directory of Biopython):
 \begin{verbatim}
 from Bio.PopGen import GenePop
 
-handle = open("example.gen")
-rec = GenePop.read(handle)
-handle.close()
+with open("example.gen") as handle:
+    rec = GenePop.read(handle)
 \end{verbatim}
 
 This will read a file called example.gen and parse it. If you

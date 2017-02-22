@@ -6,12 +6,14 @@
 
 try:
     import numpy
+    del numpy
 except ImportError:
     from Bio import MissingExternalDependencyError
     raise MissingExternalDependencyError(
         "Install NumPy if you want to use Bio.phenotype.")
 try:
     import scipy
+    del scipy
     from scipy.optimize import OptimizeWarning
 except ImportError:
     from Bio import MissingExternalDependencyError
@@ -51,7 +53,7 @@ class TestPhenoMicro(unittest.TestCase):
         self.assertEqual(w.model, 'gompertz')
         self.assertAlmostEqual(w.lag, 6.0425868725090357, places=5)
         self.assertAlmostEqual(w.plateau, 188.51404344898586, places=5)
-        self.assertAlmostEqual(w.slope, 48.190618284831132, places=5)
+        self.assertAlmostEqual(w.slope, 48.190618284831132, places=4)
         self.assertAlmostEqual(w.v, 0.10000000000000001, places=5)
         self.assertAlmostEqual(w.y0, 45.879770069807989, places=5)
         self.assertEqual(w.max, 313.0)

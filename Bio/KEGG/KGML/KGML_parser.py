@@ -27,7 +27,8 @@ except ImportError:
 
 from Bio._py3k import StringIO
 
-from Bio.KEGG.KGML.KGML_pathway import *
+from Bio.KEGG.KGML.KGML_pathway import Component, Entry, Graphics
+from Bio.KEGG.KGML.KGML_pathway import Pathway, Reaction, Relation
 
 
 def read(handle, debug=0):

@@ -1,11 +1,19 @@
-# Copyright 2011 by Andrew Sczesnak.  All rights reserved.
-# Revisions Copyright 2011 by Peter Cock.  All rights reserved.
-# More revisions by Adam Novak and Blaise Li.
+# Copyright 2011, 2012 by Andrew Sczesnak.  All rights reserved.
+# Revisions Copyright 2011, 2017 by Peter Cock.  All rights reserved.
+# Revisions Copyright 2014, 2015 by Adam Novak.  All rights reserved.
+# Revisions Copyright 2015, 2017 by Blaise Li.  All rights reserved.
 #
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """Bio.AlignIO support for the "maf" multiple alignment format.
+
+The Multiple Alignment Format, described by UCSC, stores a series of
+multiple alignments in a single file. It is suitable for whole-genome
+to whole-genome alignments, metadata such as source chromosome, start
+position, size, and strand can be stored.
+
+See http://genome.ucsc.edu/FAQ/FAQformat.html#format5
 
 You are expected to use this module via the Bio.AlignIO functions(or the
 Bio.SeqIO functions if you want to work directly with the gapped sequences).
@@ -59,8 +67,19 @@ python list slice boundaries.
 
 If we want an inclusive end coordinate, we need to use end = start + size - 1:
 a 1-column wide alignment would have start == end.
-
 """
+
+import os
+from itertools import islice
+
+try:
+    from sqlite3 import dbapi2 as _sqlite
+except ImportError:
+    # Not present on Jython, but should be included in Python 2.5
+    # or later (unless compiled from source without its dependencies)
+    # Still want to offer simple parsing/output
+    _sqlite = None
+
 from Bio.Alphabet import single_letter_alphabet
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
@@ -118,10 +137,8 @@ class MafWriter(SequentialAlignmentWriter):
         if len(set([len(x) for x in alignment])) > 1:
             raise ValueError("Sequences must all be the same length")
 
-        all_ids = [x.id for x in alignment]
-
-        if len(all_ids) != len(set(all_ids)):
-            raise ValueError("Identifiers in each MultipleSeqAlignment must be unique")
+        # We allow multiple sequences with the same IDs; for example, there may
+        # be a MAF aligning the + and - strands of the same sequence together.
 
         # for now, use ._annotations private property, but restrict keys to those
         # specifically supported by the MAF format, according to spec
@@ -199,6 +216,7 @@ def MafIterator(handle, seq_count=None, alphabet=single_letter_alphabet):
                     ref = str(records[0].seq)
                     new = []
 
+
                     for (letter, ref_letter) in zip(sequence, ref):
                         new.append(ref_letter if letter == "." else letter)
 
@@ -210,11 +228,19 @@ def MafIterator(handle, seq_count=None, alphabet=single_letter_alphabet):
                     name=line_split[1],
                     description="",
                     annotations=anno))
-            elif (STARTSWITH(line, "e") or
-                  STARTSWITH(line, "i") or
-                  STARTSWITH(line, "q")):
-                # not implemented
-                # TODO: issue warning?
+            elif STARTSWITH(line, "i"):
+                # TODO: information about what is in the aligned species DNA before
+                # and after the immediately preceding "s" line
+                pass
+            elif STARTSWITH(line, "e"):
+                # TODO: information about the size of the gap between the alignments
+                # that span the current block
+                pass
+            elif STARTSWITH(line, "q"):
+                # TODO: quality of each aligned base for the species.
+                # Need to find documentation on this, looks like ASCII 0-9 or gap?
+                # Can then store in each SeqRecord's .letter_annotations dictionary,
+                # perhaps as the raw string or turned into integers / None for gap?
                 pass
             elif STARTSWITH(line, "#"):
                 # ignore comments
@@ -265,15 +291,6 @@ class MafIndex(object):
     def __init__(self, sqlite_file, maf_file, target_seqname):
         """Indexes or loads the index of a MAF file"""
 
-        import os
-
-        try:
-            from sqlite3 import dbapi2 as _sqlite
-        except ImportError:
-            from Bio import MissingPythonDependencyError
-            raise MissingPythonDependencyError(
-                "Requires sqlite3, which is included in Python 2.5+")
-
         self._target_seqname = target_seqname
         self._maf_file = maf_file
 
@@ -297,9 +314,6 @@ class MafIndex(object):
     def __check_existing_db(self):
         """Basic sanity checks upon loading an existing index"""
 
-        import os
-        from sqlite3 import OperationalError as _OperationalError
-        from sqlite3 import DatabaseError as _DatabaseError
 
         try:
             idx_version = int(self._db_con.execute(
@@ -335,13 +349,12 @@ class MafIndex(object):
                         record_count, records_found))
 
             return records_found
-        except (_OperationalError, _DatabaseError) as err:
+
+        except (_sqlite.OperationalError, _sqlite.DatabaseError) as err:
             raise ValueError("Problem with SQLite database: %s" % err)
 
     def __make_new_index(self):
         """Read MAF file and generate SQLite index"""
-
-        from itertools import islice
 
         # make the tables
         self._db_con.execute("CREATE TABLE meta_data (key TEXT, value TEXT);")
@@ -370,7 +383,6 @@ class MafIndex(object):
             self._db_con.executemany(
                 "INSERT INTO offset_data (bin, start, end, offset) VALUES (?,?,?,?);", batch)
             self._db_con.commit()
-
             insert_count += len(batch)
 
         # then make indexes on the relevant fields
@@ -386,14 +398,14 @@ class MafIndex(object):
         return insert_count
 
     def __maf_indexer(self):
-        """Generator function, yields index information for each bundle. in the
+        """Generator function, yields index information for each bundle in the
         form of (bin, start, end, offset) tuples where start and end are
         0-based inclusive coordinates"""
 
         line = self._maf_fp.readline()
 
         while line:
-            if STARTSWITH(line, "a"):
+            if STARTSWITH(li
                 # note the offset
                 offset = self._maf_fp.tell() - len(line)
 
@@ -422,6 +434,7 @@ class MafIndex(object):
 
                             # "inclusive" end position is start + length - 1
                             end = start + size - 1
+
                             yield (self._ucscbin(start, end), start, end, offset)
 
                             break
@@ -450,6 +463,7 @@ class MafIndex(object):
     def _ucscbin(start, end):
         """Returns the smallest bin a given region will fit into.
 
+
         Adapted from http://genomewiki.ucsc.edu/index.php/Bin_indexing_system
         """
 
@@ -477,11 +491,11 @@ class MafIndex(object):
         """Retrieves a single MAF record located at the offset provided."""
 
         self._maf_fp.seek(offset)
-
         return next(self._mafiter)
 
     def search(self, starts, ends):
         """Searches index database for MAF records overlapping ranges provided.
+
         Returns *MultipleSeqAlignment* results in order by start, then end, then
         internal offset field.
 
@@ -496,11 +510,11 @@ class MafIndex(object):
             raise ValueError("Every position in starts must have a match in ends")
 
         for exonstart, exonend in zip(starts, ends):
+
             exonlen = exonend - exonstart
             if exonlen < 1:
                 raise ValueError("Exon coordinates (%d, %d) invalid: exon length (%d) < 1" % (
                     exonstart, exonend, exonlen))
-
         db_con = self._db_con
 
         # search for every exon
@@ -541,6 +555,7 @@ class MafIndex(object):
             # rows come from the sqlite index,
             # which should have been written using __maf_new_index,
             # so rec_start and rec_end should be zero-based "inclusive" coordinates
+
             for rec_start, rec_end, offset in rows:
                 # Iterate through hits, fetching alignments from the MAF file
                 # and checking to be sure we've retrieved the expected record.
@@ -634,20 +649,14 @@ class MafIndex(object):
                     except KeyError:
                         raise ValueError("No strand information for target seqname (%s)" % (
                             self._target_seqname,))
-
                     # length including gaps (i.e. alignment length)
                     rec_length = len(seqrec)
                     rec_start = seqrec.annotations["start"]
-                    # rec_end = seqrec.annotations["start"] + seqrec.annotations["size"]
                     ungapped_length = seqrec.annotations["size"]
                     # Exclusive end in zero-based coordinates of the reference
                     rec_end = rec_start + ungapped_length
-
-                    # total_rec_length += rec_end - rec_start
                     # This is length in terms of actual letters in the reference
                     total_rec_length += ungapped_length
-                    # This would be total alignment length (with gaps)
-                    # total_rec_length += rec_length
 
                     # blank out these positions for every seqname
                     for seqrec in multiseq:
@@ -741,6 +750,7 @@ class MafIndex(object):
                 len(subseq[self._target_seqname].replace("-", "")),
                 self._target_seqname, expected_letters))
 
+
         # check to make sure all sequences are the same length as the target seqname
         ref_subseq_len = len(subseq[self._target_seqname])
 
@@ -748,6 +758,7 @@ class MafIndex(object):
             if len(seq) != ref_subseq_len:
                 raise ValueError("Returning length %s for %s, expected %s" % (
                     len(seq), seqid, ref_subseq_len))
+
 
         # finally, build a MultipleSeqAlignment object for our final sequences
         result_multiseq = []
@@ -757,11 +768,13 @@ class MafIndex(object):
 
             seq = seq if strand == ref_first_strand else seq.reverse_complement()
 
+
             result_multiseq.append(SeqRecord(
                 seq,
                 id=seqid,
                 name=seqid,
                 description=""))
+
 
         return MultipleSeqAlignment(result_multiseq)
 
@@ -769,6 +782,7 @@ class MafIndex(object):
         return "MafIO.MafIndex(%r, target_seqname=%r)" % (
             self._maf_fp.name,
             self._target_seqname)
+
 
     def __len__(self):
         return self._record_count

@@ -1,8 +1,10 @@
 # Copyright 2006-2016 by Peter Cock.  All rights reserved.
 # Revisions copyright 2011 Brandon Invergo. All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """AlignIO support for "phylip" format from Joe Felsenstein's PHYLIP tools.
 
 You are expected to use this module via the Bio.AlignIO functions (or the

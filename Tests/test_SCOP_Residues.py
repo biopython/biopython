@@ -6,7 +6,7 @@
 """Unit test for Residues"""
 
 import unittest
-from Bio.SCOP.Residues import *
+from Bio.SCOP.Residues import Residues
 
 
 class ResiduesTests(unittest.TestCase):

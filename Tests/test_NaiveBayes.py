@@ -4,6 +4,7 @@ import unittest
 
 try:
     import numpy
+    del numpy
 except ImportError:
     from Bio import MissingPythonDependencyError
     raise MissingPythonDependencyError(

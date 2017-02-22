@@ -49,7 +49,7 @@ class CreatePopulationTest(unittest.TestCase):
                                                num_orgs, fitness_calculator)
 
         assert len(new_pop) == num_orgs, "Expected %s organisms, got %s" \
-               % (num_orgs, len(new_pops))
+               % (num_orgs, len(new_pop))
 
         for org in new_pop:
             assert isinstance(org, Organism.Organism), \
@@ -68,7 +68,7 @@ class CreatePopulationTest(unittest.TestCase):
                                              num_orgs, fitness_calculator)
 
         assert len(new_pop) == num_orgs, "Expected %s organisms, got %s" \
-               % (num_orgs, len(new_pops))
+               % (num_orgs, len(new_pop))
 
         for org in new_pop:
             assert isinstance(org, Organism.Organism), \

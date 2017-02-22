@@ -68,7 +68,6 @@ from Bio.Restriction.Restriction import Commercially_available, Not_available
 
 import Bio.Restriction.RanaConfig as config
 from rebase_update import RebaseUpdate
-from Bio.Restriction.Restriction import *
 
 __docformat__ = "restructuredtext en"
 
@@ -290,7 +289,6 @@ class TypeCompiler(object):
         ovT = (Unknown, Blunt, Ov5, Ov3)
         deT = (NotDefined, Defined, Ambiguous)
         coT = (Commercially_available, Not_available)
-        All = (baT, cuT, meT, paT, ovT, deT, coT)
         #
         #   Now build the types. Only the most obvious are left out.
         #   Modified even the most obvious are not so obvious.
@@ -331,6 +329,7 @@ class TypeCompiler(object):
 
             yield klass()
             n += 1
+
 
 start = """#!/usr/bin/env python
 #
@@ -439,7 +438,6 @@ class DictionaryBuilder(object):
                 enzlst.append(name)
                 typedict[typename] = (bases, enzlst)
             for letter in cls.__dict__['suppl']:
-                supplier = suppliersdict[letter]
                 suppliersdict[letter][1].append(name)
         if not classdict or not suppliersdict or not typedict:
             print('One of the new dictionaries is empty.')
@@ -466,10 +464,11 @@ class DictionaryBuilder(object):
             for name in sorted(classdict):
                 results.write("def _temp():\n")
                 results.write("    return {\n")
-                for key, value in classdict[name].items():
+                for key, value in sorted(classdict[name].items()):
                     results.write("        %s: %s,\n" %
                                   (repr(key), repr(value)))
                 results.write("    }\n")
+                results.write("\n\n")
                 results.write("rest_dict[%s] = _temp()\n" % repr(name))
                 results.write("\n\n")
             print('OK.\n')
@@ -482,6 +481,7 @@ class DictionaryBuilder(object):
                 for value in suppliersdict[name]:
                     results.write("        %s,\n" % repr(value))
                 results.write("    )\n")
+                results.write("\n\n")
                 results.write("suppliers[%s] = _temp()\n" % repr(name))
                 results.write("\n\n")
             print('OK.\n')
@@ -494,13 +494,13 @@ class DictionaryBuilder(object):
                 for value in typedict[name]:
                     results.write("        %s,\n" % repr(value))
                 results.write("    )\n")
+                results.write("\n\n")
                 results.write("typedict[%s] = _temp()\n" % repr(name))
                 results.write("\n\n")
             # I had wanted to do "del _temp" at each stage (just for clarity),
             # but that pushed the code size just over the Jython JVM limit. We
             # include one the final "del _temp" to clean up the namespace.
             results.write("del _temp\n")
-            results.write("\n")
             print('OK.\n')
         return
 
@@ -933,6 +933,7 @@ class DictionaryBuilder(object):
         supplier = self.removestart(file3)
 
         i1, i2 = 0, 0
+        oldblock = None
         try:
             while True:
                 block, i1 = self.getblock(methfile, i1)
@@ -1020,6 +1021,7 @@ def standalone():
         help="set the proxy to be used by the ftp connection.")
     options, args = parser.parse_args()
     return options, args
+
 
 if __name__ == '__main__':
     options, args = standalone()

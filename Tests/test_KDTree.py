@@ -6,6 +6,7 @@ import unittest
 
 try:
     import numpy
+    del numpy
 except ImportError:
     from Bio import MissingExternalDependencyError
     raise MissingExternalDependencyError(
@@ -13,6 +14,7 @@ except ImportError:
 
 try:
     from Bio.KDTree import _CKDTree
+    del _CKDTree
 except ImportError:
     from Bio import MissingExternalDependencyError
     raise MissingExternalDependencyError(

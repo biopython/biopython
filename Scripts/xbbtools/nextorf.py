@@ -14,7 +14,6 @@ from __future__ import print_function
 
 import re
 import sys
-import os
 import getopt
 
 from Bio import SeqIO
@@ -26,6 +25,7 @@ from Bio.Data import IUPACData, CodonTable
 
 class ProteinX(Alphabet.ProteinAlphabet):
     letters = IUPACData.extended_protein_letters + "X"
+
 
 proteinX = ProteinX()
 
@@ -63,7 +63,6 @@ class NextOrf(object):
         handle = open(self.file)
         for record in SeqIO.parse(handle, "fasta"):
             self.header = record.id
-            frame_coordinates = ''
             dir = self.options['strand']
             plus = dir in ['both', 'plus']
             minus = dir in ['both', 'minus']
@@ -131,10 +130,7 @@ class NextOrf(object):
         return res
 
     def GetOrfCoordinates(self, seq):
-        s = seq.data
-        letters = []
-        table = self.table
-        get = self.table.forward_table.get
+        s = str(seq)
         n = len(seq)
         start_codons = self.table.start_codons
         stop_codons = self.table.stop_codons
@@ -197,7 +193,6 @@ class NextOrf(object):
 
     def Output(self, CDS):
         out = self.options['output']
-        seqs = (self.seq, self.rseq)
         n = len(self.seq)
         for start, stop, length, subs, strand in CDS:
             self.counter += 1
@@ -210,13 +205,13 @@ class NextOrf(object):
                                                n - stop + 1,
                                                n - start + 1)
             if self.options['gc']:
-                head = '%s:%s' % (head, self.Gc2(subs.data))
+                head = '%s:%s' % (head, self.Gc2(subs))
 
             if out == 'aa':
                 orf = subs.translate(table=self.genetic_code)
-                print(self.ToFasta(head, orf.data))
+                print(self.ToFasta(head, str(orf)))
             elif out == 'nt':
-                print(self.ToFasta(head, subs.data))
+                print(self.ToFasta(head, str(subs)))
             elif out == 'pos':
                 print(head)
 

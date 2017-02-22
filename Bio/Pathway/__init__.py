@@ -32,7 +32,7 @@ Note: This module should be regarded as a prototype only. API changes are likely
 
 from functools import reduce
 
-from Bio.Pathway.Rep.MultiGraph import *
+from Bio.Pathway.Rep.MultiGraph import MultiGraph, bf_search, df_search
 
 
 class Reaction(object):

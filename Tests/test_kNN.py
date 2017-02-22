@@ -10,6 +10,7 @@ import unittest
 
 try:
     import numpy
+    del numpy
     from numpy import asarray
     del asarray
 except ImportError:

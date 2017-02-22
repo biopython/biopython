@@ -5,7 +5,6 @@
 
 """Unit tests for Bio.Phylo.Applications wrappers."""
 
-import sys
 import os
 import unittest
 

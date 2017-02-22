@@ -381,11 +381,6 @@ class TestUniprot(unittest.TestCase):
             self.assertEqual(entry.id, "R5HY77")
             self.assertEqual(entry.description, "Elongation factor Ts")
 
-    def test_submittedName_allowed(self):
-        """Checks if parser supports new XML Element (submittedName)."""
-        for entry in SeqIO.parse(open("SwissProt/R5HY77.xml"), "uniprot-xml"):
-            self.assertEqual(entry.id, "R5HY77")
-            self.assertEqual(entry.description, "Elongation factor Ts")
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
