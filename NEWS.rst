@@ -1714,11 +1714,11 @@ CHANGED: Bio.PDB -- thanks to Thomas Hamelryck.
 
 CHANGED: MutableSeq -- thanks to Michiel De Hoon
 Added the functions 'complement' and 'reverse_complement' to Bio.Seq's Seq and
-MutableSeq objects. Similar functions previous existed in various locations in
-BioPython:
+MutableSeq objects. Similar functions previously existed in various locations
+in BioPython:
 
-  - forward_complement, reverse_complement in Bio.GFF.easy
-  - complement, antiparallel in Bio.SeqUtils
+- forward_complement, reverse_complement in Bio.GFF.easy
+- complement, antiparallel in Bio.SeqUtils
 
 These functions have now been deprecated, and will generate a DeprecationWarning
 when used.
@@ -1996,11 +1996,15 @@ Nov 10, 2000: Biopython 0.90d04
 Sept 6, 2000: Biopython 0.90d03
 
 - Blast updates:
-    - bug fixes in NCBIStandalone, NCBIWWW
-    - some __str__ methods in Record.py implemented (incomplete)
-- Tests
-    - new BLAST regression tests
-    - prosite tests fixed
+
+  - bug fixes in NCBIStandalone, NCBIWWW
+  - some __str__ methods in Record.py implemented (incomplete)
+
+- Tests:
+
+  - new BLAST regression tests
+  - prosite tests fixed
+
 - New parsers for Rebase, Gobase
 - pure python implementation of C-based tools
 - Thomas Sicheritz-Ponten's xbbtools
