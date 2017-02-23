@@ -421,7 +421,6 @@ def AbiIterator(handle, alphabet=None, trim=False):
             file_name = basename(handle.name).replace('.ab1', '')
         except AttributeError:
             file_name = ""
-            
         record = SeqRecord(Seq(seq, alphabet),
                            id=sample_id, name=file_name,
                            description='',
