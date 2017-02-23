@@ -490,7 +490,7 @@ This release of Biopython supports Python 2.6 and 2.7, and also Python
 The Biopython Tutorial & Cookbook, and the docstring examples in the source
 code, now use the Python 3 style print function in place of the Python 2
 style print statement. This language feature is available under Python 2.6
-and 2.7 via:
+and 2.7 via::
 
     from __future__ import print_function
 
