@@ -1302,6 +1302,7 @@ April 20, 2009: Biopython 1.50 released.
 
 See the notes below for the Biopython 1.50 beta release for more details,
 but the highlights are:
+
 * The SeqRecord supports slicing and per-letter-annotation
 * Bio.SeqIO can read and write FASTQ and QUAL files
 * Bio.Seq now has an UnknownSeq object
@@ -1311,6 +1312,7 @@ but the highlights are:
 * This will be the final release with Martel and Bio.Mindy
 
 Since the 1.50 beta release:
+
 * The NCBI's Entrez EFetch no longer supports rettype="genbank"
   and "gb" (or "gp") should be used instead.
 * Bio.SeqIO now supports "gb" as an alias for "genbank".
@@ -1366,10 +1368,12 @@ November 21, 2008: Biopython 1.49 released.
 
 See the notes below for the Biopython 1.49 beta release for more details,
 but the highlights are:
+
 * Biopython has transitioned from Numeric to NumPy
 * Martel and Bio.Mindy are now deprecated
 
 Since the 1.49 beta release:
+
 * A couple of NumPy issues have been resolved
 * Further small improvements to BioSQL
 * Bio.PopGen.SimCoal should now work on Windows
@@ -1433,6 +1437,7 @@ The SeqRecord and Alignment objects have a new method to format the object as
 a string in a requested file format (handled via Bio.SeqIO and Bio.AlignIO).
 
 Additional file formats supported in Bio.SeqIO and Bio.AlignIO:
+
 - reading and writing "tab" format (simple tab separated)
 - writing "nexus" files.
 - reading "pir" files (NBRF/PIR)
@@ -1646,6 +1651,7 @@ Lots of bug fixes, and updates to the documentation.
 ===================================================================
 
 October 28, 2005: Biopython 1.41 released.
+
 Major changes:
 
 NEW: Bio.MEME -- thanks to Jason Hackney
@@ -1684,32 +1690,36 @@ IMPORTANT: Biopython now works with Python version >= 2.3
 NEW: Bio.Nexus -- thanks to Frank Kauff
 Bio.Nexus is a Nexus file parser. Nexus is a common format for phylogenetic trees.
 
-NEW: CAPS module -- Thanks to Jonathan Taylor
+NEW: CAPS module -- Thanks to Jonathan Taylor.
 
 NEW: Restriction enzyme package contributed by Frederic Sohm. This includes classes for
 manipulating enzymes, updating from Rebase, as well as documentation and Tests.
-CHANGED: Bio.PDB -- thanks to Thomas Hamelryck
-Added atom serial number.
-Epydoc style documentation.
-Added secondary structure support (through DSSP)
-Added Accessible Surface Area support (through DSSP)
-Added Residue Depth support (through MSMS)
-Added Half Sphere Exposure.
-Added Fragment classification of the protein backbone (see Kolodny et al.,
-JMB, 2002)
-Corrected problem on Windows with PDBList (thanks to Matt Dimmic)
-Added StructureAlignment module to superimpose structures based on a FASTA
-sequence alignment.
-Various additions to Polypeptide.
-Various bug corrections in Vector.
-Lots of smaller bug corrections and additional features
+
+CHANGED: Bio.PDB -- thanks to Thomas Hamelryck.
+
+- Added atom serial number.
+- Epydoc style documentation.
+- Added secondary structure support (through DSSP).
+- Added Accessible Surface Area support (through DSSP).
+- Added Residue Depth support (through MSMS).
+- Added Half Sphere Exposure.
+- Added Fragment classification of the protein backbone (see Kolodny et al.,
+- JMB, 2002).
+- Corrected problem on Windows with PDBList (thanks to Matt Dimmic)
+- Added StructureAlignment module to superimpose structures based on a FASTA
+  sequence alignment.
+- Various additions to Polypeptide.
+- Various bug corrections in Vector.
+- Lots of smaller bug corrections and additional features
 
 CHANGED: MutableSeq -- thanks to Michiel De Hoon
 Added the functions 'complement' and 'reverse_complement' to Bio.Seq's Seq and
 MutableSeq objects. Similar functions previous existed in various locations in
 BioPython:
-- forward_complement, reverse_complement in Bio.GFF.easy
-- complement, antiparallel in Bio.SeqUtils
+
+  - forward_complement, reverse_complement in Bio.GFF.easy
+  - complement, antiparallel in Bio.SeqUtils
+
 These functions have now been deprecated, and will generate a DeprecationWarning
 when used.
 The functions complement and reverse_complement, when applied to a Seq object,
@@ -1720,274 +1730,313 @@ will modify the MutableSeq object itself, and don't return anything.
 ===================================================================
 
 May 14, 2004: Biopython 1.30
- Affy package added for dealing with Affymetrix cel files -- thanks to Harry
+
+- Affy package added for dealing with Affymetrix cel files -- thanks to Harry
   Zuzan.
- Added code for parsing Blast XML output -- thanks to Bertrand Frottier.
- Added code for parsing Compass output -- thanks to James Casbon.
- New melting temperature calculation module -- thanks to Sebastian Bassi.
- Added lowess function for non-parameteric regression -- thanks to Michiel.
- Reduced protein alphabet supported added -- thanks to Iddo.
+- Added code for parsing Blast XML output -- thanks to Bertrand Frottier.
+- Added code for parsing Compass output -- thanks to James Casbon.
+- New melting temperature calculation module -- thanks to Sebastian Bassi.
+- Added lowess function for non-parameteric regression -- thanks to Michiel.
+- Reduced protein alphabet supported added -- thanks to Iddo.
 
- Added documentation for Logistic Regression and Bio.PDB -- thanks to Michiel
+- Added documentation for Logistic Regression and Bio.PDB -- thanks to Michiel
   and Thomas.
- Documentation added for converting between file formats.
- Updates to install documentation for non-root users -- thanks to Jakob
+- Documentation added for converting between file formats.
+- Updates to install documentation for non-root users -- thanks to Jakob
   Fredslund.
- epydoc now used for automatic generation of documentation.
+- epydoc now used for automatic generation of documentation.
 
- Fasta parser updated to use Martel for parsing and indexing, allowing better
+- Fasta parser updated to use Martel for parsing and indexing, allowing better
   speed and dealing with large data files.
- Updated to Registry code. Now 'from Bio import db' gives you a number of new
+- Updated to Registry code. Now 'from Bio import db' gives you a number of new
   retrieval options, including embl, fasta, genbak, interpro, prodoc and swissprot.
- GenBank parser uses new Martel format. GenBank retrieval now uses EUtils instead
+- GenBank parser uses new Martel format. GenBank retrieval now uses EUtils instead
   of the old non-working entrez scripts. GenBank indexing uses standard Mindy
   indexing. Fix for valueless qualifiers in feature keys -- thanks to Leighton
   Pritchard.
- Numerous updated to Bio.PDB modules -- thanks to Thomas. PDB can now parse headers
+- Numerous updated to Bio.PDB modules -- thanks to Thomas. PDB can now parse headers
   -- thanks to Kristian Rother.
- Updates to the Ace parser -- thanks to Frank Kauff and Leighton Pritchard.
+- Updates to the Ace parser -- thanks to Frank Kauff and Leighton Pritchard.
 
- Added pgdb (PyGreSQL) support to BioSQL -- thanks to Marc Colosimo.
- Fix problems with using py2exe and Biopython -- thanks to Michael Cariaso.
- PSIBlast parser fixes -- thanks to Jer-Yee John Chuang and James Casbon.
- Fix to NCBIWWW retrieval so that HTML results are returned correctly.
- Fix to Clustalw to handle question marks in title names -- thanks to Ashleigh
+- Added pgdb (PyGreSQL) support to BioSQL -- thanks to Marc Colosimo.
+- Fix problems with using py2exe and Biopython -- thanks to Michael Cariaso.
+- PSIBlast parser fixes -- thanks to Jer-Yee John Chuang and James Casbon.
+- Fix to NCBIWWW retrieval so that HTML results are returned correctly.
+- Fix to Clustalw to handle question marks in title names -- thanks to Ashleigh
   Smythe.
- Fix to NBRF parsing to it accepts files produced by Clustalw -- thanks to
+- Fix to NBRF parsing to it accepts files produced by Clustalw -- thanks to
   Ashleigh Smythe.
- Fixes to the Enyzme module -- thanks to Marc Colosimo.
- Fix for bugs in SeqUtils -- thanks to Frank Kauff.
- Fix for optional hsps in ncbiblast Martel format -- thanks to Heiko.
- Fix to Fasta parsing to allow # comment lines -- thanks to Karl Diedrich.
- Updates to the C clustering library -- thanks to Michiel.
- Fixes for breakage in the SCOP module and addition of regression tests to
+- Fixes to the Enyzme module -- thanks to Marc Colosimo.
+- Fix for bugs in SeqUtils -- thanks to Frank Kauff.
+- Fix for optional hsps in ncbiblast Martel format -- thanks to Heiko.
+- Fix to Fasta parsing to allow # comment lines -- thanks to Karl Diedrich.
+- Updates to the C clustering library -- thanks to Michiel.
+- Fixes for breakage in the SCOP module and addition of regression tests to
   framework -- thanks to Gavin.
- Various fixes to Bio.Wise -- thanks to Michael.
- Fix for bug in FastaReader -- thanks to Micheal.
- Fix EUtils bug where efetch would only return 500 sequences.
- Updates for Emboss commandlines, water and tranalign.
- Fixes to the FormatIO system of file conversion.
+- Various fixes to Bio.Wise -- thanks to Michael.
+- Fix for bug in FastaReader -- thanks to Micheal.
+- Fix EUtils bug where efetch would only return 500 sequences.
+- Updates for Emboss commandlines, water and tranalign.
+- Fixes to the FormatIO system of file conversion.
 
- C++ code (KDTree, Affy) now compiled by default on most platforms -- thanks to
+- C++ code (KDTree, Affy) now compiled by default on most platforms -- thanks to
   Michael for some nice distutils hacks and many people for testing.
- Deprecated Bio.sequtils -- use Bio.SeqUtils instead.
- Deprecated Bio.SVM -- use libsvm instead.
- Deprecated Bio.kMeans and Bio.xkMeans -- use Bio.cluster instead.
- Deprecated RecordFile -- doesn't appear to be finished code.
+- Deprecated Bio.sequtils -- use Bio.SeqUtils instead.
+- Deprecated Bio.SVM -- use libsvm instead.
+- Deprecated Bio.kMeans and Bio.xkMeans -- use Bio.cluster instead.
+- Deprecated RecordFile -- doesn't appear to be finished code.
 
+===================================================================
 
 Feb 16, 2004: Biopython 1.24
- New parsers for Phred and Ace format files -- thanks to Frank Kauff
- New Code for dealing with NMR data -- thanks to Bob Bussell
- New SeqUtils modules for codon usage, isoelectric points and other
-  protein properties -- thanks to Yair Benita
- New code for dealing with Wise contributed by Michael
- EZ-Retrieve sequence retrieval now supported thanks to Jeff
- Bio.Cluster updated along with documentation by Michiel
- BioSQL fixed so it now works with the current SQL schema -- thanks to Yves
-  Bastide for patches
- Patches to Bio/__init__ to make it compatible with py2exe -- thanks to
-  Leighton Pritchard
- Added __iter__ to all Biopython Iterators to make them Python 2.2 compatible
- Fixes to NCBIWWW for retrieving from NCBI -- thanks to Chris Wroe
- Retrieval of multiple alignment objects from BLAST records -- thanks to
-  James Casbon
- Fixes to GenBank format for new tags by Peter
- Parsing fixes in clustalw parsed -- thanks to Greg Singer and Iddo
- Fasta Indexes can have a specified filename -- thanks to Chunlei Wu
- Fix to Prosite parser -- thanks to Mike Liang
- Fix in GenBank parsing -- mRNAs now get strand information
 
+- New parsers for Phred and Ace format files -- thanks to Frank Kauff
+- New Code for dealing with NMR data -- thanks to Bob Bussell
+- New SeqUtils modules for codon usage, isoelectric points and other
+  protein properties -- thanks to Yair Benita
+- New code for dealing with Wise contributed by Michael
+- EZ-Retrieve sequence retrieval now supported thanks to Jeff
+- Bio.Cluster updated along with documentation by Michiel
+- BioSQL fixed so it now works with the current SQL schema -- thanks to Yves
+  Bastide for patches
+- Patches to Bio/__init__ to make it compatible with py2exe -- thanks to
+  Leighton Pritchard
+- Added __iter__ to all Biopython Iterators to make them Python 2.2 compatible
+- Fixes to NCBIWWW for retrieving from NCBI -- thanks to Chris Wroe
+- Retrieval of multiple alignment objects from BLAST records -- thanks to
+  James Casbon
+- Fixes to GenBank format for new tags by Peter
+- Parsing fixes in clustalw parsed -- thanks to Greg Singer and Iddo
+- Fasta Indexes can have a specified filename -- thanks to Chunlei Wu
+- Fix to Prosite parser -- thanks to Mike Liang
+- Fix in GenBank parsing -- mRNAs now get strand information
+
+===================================================================
 
 Oct 18, 2003: Biopython 1.23
-  Fixed distribution of files in Bio/Cluster
-  Now distributing Bio/KDTree/_KDTree.swig.C
-  minor updates in installation code
-  added mmCIF support for PDB files
+
+- Fixed distribution of files in Bio/Cluster
+- Now distributing Bio/KDTree/_KDTree.swig.C
+- minor updates in installation code
+- added mmCIF support for PDB files
+
+===================================================================
 
 Oct 9, 2003: Biopython 1.22
-  Added Peter Slicker's patches for speeding up modules under Python 2.3
-  Fixed Martel installation.
-  Does not install Bio.Cluster without Numeric.
-  Distribute EUtils DTDs.
-  Yves Bastide patched NCBIStandalone.Iterator to be Python 2.0 iterator
-  Ashleigh's string coersion fixes in Clustalw.
-  Yair Benita added precision to the protein molecular weights.
-  Bartek updated AlignAce.Parser and added Motif.sim method
-  bug fixes in Michiel De Hoon's clustering library
-  Iddo's bug fixes to Bio.Enzyme and new RecordConsumer
-  Guido Draheim added patches for fixing import path to xbb scripts
-  regression tests updated to be Python 2.3 compatible
-  GenBank.NCBIDictionary is smarter about guessing the format
+
+- Added Peter Slicker's patches for speeding up modules under Python 2.3
+- Fixed Martel installation.
+- Does not install Bio.Cluster without Numeric.
+- Distribute EUtils DTDs.
+- Yves Bastide patched NCBIStandalone.Iterator to be Python 2.0 iterator
+- Ashleigh's string coersion fixes in Clustalw.
+- Yair Benita added precision to the protein molecular weights.
+- Bartek updated AlignAce.Parser and added Motif.sim method
+- bug fixes in Michiel De Hoon's clustering library
+- Iddo's bug fixes to Bio.Enzyme and new RecordConsumer
+- Guido Draheim added patches for fixing import path to xbb scripts
+- regression tests updated to be Python 2.3 compatible
+- GenBank.NCBIDictionary is smarter about guessing the format
+
+===================================================================
 
 Jul 28, 2003: Biopython 1.21
-  Martel added back into the released package
-  new AlignACE module by Bartek Wilczynski
-  Andreas Kuntzagk fix for GenBank Iterator on empty files
+
+- Martel added back into the released package
+- new AlignACE module by Bartek Wilczynski
+- Andreas Kuntzagk fix for GenBank Iterator on empty files
+
+===================================================================
 
 Jul 27, 2003: Biopython 1.20
-  added Andrew Dalke's EUtils library
-  added Michiel de Hoon's gene expression analysis package
-  updates to setup code, now smarter about dependencies
-  updates to test suite, now smarter about code that is imported
-  Michael Hoffman's fixes to DocSQL
-  syntax fixes in triemodule.c to compile on SGI, Python 2.1 compatible
-  updates in NCBIStandalone, short query error
-  Sebastian Bassi submitted code to calculate LCC complexity
-  Greg Kettler's NCBIStandalone fix for long query lengths
-  slew of miscellaneous fixes from George Paci
-  miscellaneous cleanups and updates from Andreas Kuntzagk
-  Peter Bienstman's fixes to Genbank code -- now parses whole database
-  Kayte Lindner's LocusLink package
-  miscellaneous speedups and code cleanup in ParserSupport by Brad Chapman
-  miscellaneous BLAST fixes and updates
-  Iddo added new code to parse BLAST table output format
-  Karl Diedrich's patch to read T_Coffee files
-  Larry Heisler's fix for primer3 output
-  Bio.Medline now uses proper iterator objects
-  copen now handles SIGTERM correctly
-  small bugfixes and updates in Thomas Hamelryck's PDB package
-  bugfixes and updates to SeqIO.FASTA reader
-  updates to Registry system, conforms to 2003 hackathon OBDA spec
-  Yu Huang patch to support tblastn in wublast expression
+
+- added Andrew Dalke's EUtils library
+- added Michiel de Hoon's gene expression analysis package
+- updates to setup code, now smarter about dependencies
+- updates to test suite, now smarter about code that is imported
+- Michael Hoffman's fixes to DocSQL
+- syntax fixes in triemodule.c to compile on SGI, Python 2.1 compatible
+- updates in NCBIStandalone, short query error
+- Sebastian Bassi submitted code to calculate LCC complexity
+- Greg Kettler's NCBIStandalone fix for long query lengths
+- slew of miscellaneous fixes from George Paci
+- miscellaneous cleanups and updates from Andreas Kuntzagk
+- Peter Bienstman's fixes to Genbank code -- now parses whole database
+- Kayte Lindner's LocusLink package
+- miscellaneous speedups and code cleanup in ParserSupport by Brad Chapman
+- miscellaneous BLAST fixes and updates
+- Iddo added new code to parse BLAST table output format
+- Karl Diedrich's patch to read T_Coffee files
+- Larry Heisler's fix for primer3 output
+- Bio.Medline now uses proper iterator objects
+- copen now handles SIGTERM correctly
+- small bugfixes and updates in Thomas Hamelryck's PDB package
+- bugfixes and updates to SeqIO.FASTA reader
+- updates to Registry system, conforms to 2003 hackathon OBDA spec
+- Yu Huang patch to support tblastn in wublast expression
+
+===================================================================
 
 Dec 17, 2002: Biopython 1.10
-  Python requirement bumped up to 2.2
-  hierarchy reorg, many things moved upwards into Bio namespace
-  pairwise2 replaces fastpairwise and pairwise
-  removed deprecated Sequence.py package
-  minor bug fix in File.SGMLStripper
-  added Scripts/debug/debug_blast_parser.py to diagnose blast parsing errors
-  IPI supported by SwissProt/SProt.py parser
-  large speedup for kmeans
-  new registry framework for generic access to databases and parsers
-  small bug fix in stringfns.split
-  scripts that access NCBI moved over to new EUtils system
-  new crc module
-  biblio.py supports the EBI Bibliographic database
-  new CDD parser
-  new Ndb parser
-  new ECell parser
-  new Geo parser
-  access to GFF databases
-  new KDTree data structure
-  new LocusLink parser
-  new MarkovModel algorithm
-  new Saf parser
-  miscellaneous sequence handling functions in sequtils
-  new SVDSuperimpose algorithm
 
+- Python requirement bumped up to 2.2
+- hierarchy reorg, many things moved upwards into Bio namespace
+- pairwise2 replaces fastpairwise and pairwise
+- removed deprecated Sequence.py package
+- minor bug fix in File.SGMLStripper
+- added Scripts/debug/debug_blast_parser.py to diagnose blast parsing errors
+- IPI supported by SwissProt/SProt.py parser
+- large speedup for kmeans
+- new registry framework for generic access to databases and parsers
+- small bug fix in stringfns.split
+- scripts that access NCBI moved over to new EUtils system
+- new crc module
+- biblio.py supports the EBI Bibliographic database
+- new CDD parser
+- new Ndb parser
+- new ECell parser
+- new Geo parser
+- access to GFF databases
+- new KDTree data structure
+- new LocusLink parser
+- new MarkovModel algorithm
+- new Saf parser
+- miscellaneous sequence handling functions in sequtils
+- new SVDSuperimpose algorithm
+
+===================================================================
 
 Dec 18, 2001: Biopython1.00a4
-  minor bug fix in NCBIStandalone.blastall
-  optimization in dynamic programming code
-  new modules for logistic regression and maximum entropy
-  minor bug fix in ParserSupport
-  minor bug fixes in SCOP package
-  minor updates in the kMeans cluster selection code
-  minor bug fixes in SubsMat code
-  support for XML-formatted MEDLINE files
-  added MultiProc.run to simplify splitting code across processors
-  listfns.items now supports lists with unhashable items
-  new data type for pathways
-  new support for intelligenetics format
-  new support for metatool format
-  new support for NBRF format
-  new support for generalized launching of applications
-  new support for genetic algorithms
-  minor bug fixes in GenBank parsing
-  new support for Primer in the Emboss package
-  new support for chromosome graphics
-  new support for HMMs
-  new support for NeuralNetwork
-  slew of Martel fixes (see Martel docs)
+
+- minor bug fix in NCBIStandalone.blastall
+- optimization in dynamic programming code
+- new modules for logistic regression and maximum entropy
+- minor bug fix in ParserSupport
+- minor bug fixes in SCOP package
+- minor updates in the kMeans cluster selection code
+- minor bug fixes in SubsMat code
+- support for XML-formatted MEDLINE files
+- added MultiProc.run to simplify splitting code across processors
+- listfns.items now supports lists with unhashable items
+- new data type for pathways
+- new support for intelligenetics format
+- new support for metatool format
+- new support for NBRF format
+- new support for generalized launching of applications
+- new support for genetic algorithms
+- minor bug fixes in GenBank parsing
+- new support for Primer in the Emboss package
+- new support for chromosome graphics
+- new support for HMMs
+- new support for NeuralNetwork
+- slew of Martel fixes (see Martel docs)
+
+===================================================================
 
 Sept 3, 2001: Biopython1.00a3
-  added package to support KEGG
-  added sequtils module for computations on sequences
-  added pairwise sequence alignment algorithm
-  major bug fixes in UndoHandle
-  format updates in PubMed
-  Tk interface to kMeans clustering
+
+- added package to support KEGG
+- added sequtils module for computations on sequences
+- added pairwise sequence alignment algorithm
+- major bug fixes in UndoHandle
+- format updates in PubMed
+- Tk interface to kMeans clustering
+
+===================================================================
 
 July 5, 2001: Biopython1.00a2
-  deprecated old regression testing frameworks
-  deprecated Sequence.py
-  Swiss-Prot parser bug fixes
-  GenBank parser bug fixes
-  Can now output GenBank format
-  can now download many sequences at a time from GenBank
-  kMeans clustering algorithm
-  Kabat format now supported
-  FSSP format now supported
-  more functionality for alignment code
-  SubsMat bug fixes and updates
-  fixed memory leak in listfns bug fixes
-  Martel bundled and part of the install procedure
-  Medline.Parser bug fixes
-  PubMed.download_many handles broken IDs better
 
+- deprecated old regression testing frameworks
+- deprecated Sequence.py
+- Swiss-Prot parser bug fixes
+- GenBank parser bug fixes
+- Can now output GenBank format
+- can now download many sequences at a time from GenBank
+- kMeans clustering algorithm
+- Kabat format now supported
+- FSSP format now supported
+- more functionality for alignment code
+- SubsMat bug fixes and updates
+- fixed memory leak in listfns bug fixes
+- Martel bundled and part of the install procedure
+- Medline.Parser bug fixes
+- PubMed.download_many handles broken IDs better
+
+===================================================================
 
 Mar 3, 2001: Biopython 1.00a1
-  Refactoring of modules.  X/X.py moved to X/__init__.py.
-  Can search sequences for Prosite patterns at ExPASy
-  Can do BLAST searches against stable URL at NCBI
-  Prosite Pattern bug fixes
-  GenBank parser
-  Complete Seq and SeqFeatures framework
-  distutils cleanup
-  compile warning cleanups
-  support for UniGene
-  code for working with substitution matrices
-  Tools.MultiProc package for rudimentary multiprocessing stuff
 
+- Refactoring of modules.  X/X.py moved to X/__init__.py.
+- Can search sequences for Prosite patterns at ExPASy
+- Can do BLAST searches against stable URL at NCBI
+- Prosite Pattern bug fixes
+- GenBank parser
+- Complete Seq and SeqFeatures framework
+- distutils cleanup
+- compile warning cleanups
+- support for UniGene
+- code for working with substitution matrices
+- Tools.MultiProc package for rudimentary multiprocessing stuff
+
+===================================================================
 
 Nov 10, 2000: Biopython 0.90d04
-  Added support for multiple alignments, ClustalW
-  BLAST updates, bug fixes, and BlastErrorParser
-  Fixes for PSI-BLAST in master-slave mode
-  Minor update in stringfns, split separators can be negated
-  Added download_many function to PubMed
-  xbbtools updates
-  Prodoc parser now accepts a copyright at the end of a record
-  Swiss-Prot parser now handles taxonomy ID tag
 
+- Added support for multiple alignments, ClustalW
+- BLAST updates, bug fixes, and BlastErrorParser
+- Fixes for PSI-BLAST in master-slave mode
+- Minor update in stringfns, split separators can be negated
+- Added download_many function to PubMed
+- xbbtools updates
+- Prodoc parser now accepts a copyright at the end of a record
+- Swiss-Prot parser now handles taxonomy ID tag
+
+===================================================================
 
 Sept 6, 2000: Biopython 0.90d03
-  Blast updates:
+
+- Blast updates:
     - bug fixes in NCBIStandalone, NCBIWWW
     - some __str__ methods in Record.py implemented (incomplete)
-  Tests
+- Tests
     - new BLAST regression tests
     - prosite tests fixed
-  New parsers for Rebase, Gobase
-  pure python implementation of C-based tools
-  Thomas Sicheritz-Ponten's xbbtools
-  can now generate documentation from docstrings using HappyDoc
+- New parsers for Rebase, Gobase
+- pure python implementation of C-based tools
+- Thomas Sicheritz-Ponten's xbbtools
+- can now generate documentation from docstrings using HappyDoc
 
+===================================================================
 
 Aug17-18, 2000: Bioinformatics Open Source Conference 2000
+
 We had a very good Birds-of-a-Feather meeting:
 http://www.biopython.org/pipermail/biopython/2000-August/000360.html
 
+===================================================================
 
 Aug 2, 2000: Biopython 0.90d02 is released.
-  Blast updates:
-    - now works with v2.0.14
-    - HSP.identities and HSP.positives now tuples
-    - HSP.gaps added
-  SCOP updates:
-    - Lin.Iterator now works with release 50
-  Starting a tutorial
-  New regression tests for Prodoc
+
+- Blast updates:
+  - now works with v2.0.14
+  - HSP.identities and HSP.positives now tuples
+  - HSP.gaps added
+- SCOP updates:
+  - Lin.Iterator now works with release 50
+- Starting a tutorial
+- New regression tests for Prodoc
+
+===================================================================
 
 July 6, 2000: Biopython 0.90d01 is released.
 
+===================================================================
+
 February 8, 2000: Anonymous CVS made available.
 
+===================================================================
 
-August 1999
-Biopython project founded.
+August 1999: Biopython project founded.
 
 Call for Participation sent out to relevant mailing lists, news
 groups.
