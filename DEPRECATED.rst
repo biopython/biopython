@@ -113,6 +113,21 @@ Declared obsolete with a PendingDeprecationWarning in Release 1.61, formally
 deprecated in Release 1.62, removed in Release 1.67. Please use the newer
 Bio.motifs module instead.
 
+Before this, ``CompareAceParser`` and ``CompareAceConsumer`` from
+``Bio.Motif.Parsers.AlignAce`` were declared obsolete in Release 1.53,
+deprecated in Release 1.55 final, and removed in Release 1.57.
+
+``AlignAceConsumer``, ``AlignAceParser``, and ``AlignAceScanner`` were
+declared obsolete in Release 1.53 and deprecated in Release 1.55 final;
+their functionality is now available through a read() function in
+``Bio.Motif.Parsers.AlignAce``.
+
+``MEMEParser``, ``_MEMEScanner``, ``_MEMEConsumer``, ``_MASTConsumer``,
+``MASTParser``, ``_MASTScanner``, and ``MASTRecord`` were declared obsolete in
+Release 1.54 and deprecated in Release 1.55 final; their functionality is now
+available through a ``read()`` function in ``Bio.Motif.Parsers.MEME`` and
+``Bio.Motif.Parsers.MAST``, respectively.
+
 AlignAceCommandline and CompareAceCommandline
 =============================================
 Deprecated in release 1.62, removed in Release 1.67. An up to date version of
@@ -159,6 +174,9 @@ Bio.InterPro
 This module was a parser for the EBI InterPro webpages, but no longer worked
 with their current website. Deprecated in Release 1.55, and removed in
 Release 1.58.
+
+Earlier the function ``pairlist_to_dict`` was deprecated in Release 1.45, and
+removed in Release 1.53.
 
 Bio.GenBank.LocationParser
 ==========================
@@ -292,7 +310,7 @@ Declared obsolete in Release 1.49, deprecated in Release 1.51, and removed
 in Release 1.57. Please use the methods or functions in Bio.Seq instead.
 
 Bio.mathfns, Bio.stringfns and Bio.listfns (and their C code variants)
-==========================================
+======================================================================
 Declared obsolete in Release 1.49. Bio.mathfns and Bio.stringfns were
 deprecated in Release 1.50, Bio.listfns was deprecated in Release 1.53.
 The three C implementations were all removed in Release 1.53. Bio.mathfns
@@ -336,7 +354,7 @@ in Release 1.55 final. Please use the "fasta" support in Bio.SeqIO or
 Bio.AlignIO instead.
 
 Note that ``Bio.Fasta`` could be used with a ``RecordParser`` which gave
-``FastaRecord`` objects, for example:
+``FastaRecord`` objects, for example::
 
     # Old code which won't work	any more
     from Bio import Fasta
@@ -348,7 +366,7 @@ Note that ``Bio.Fasta`` could be used with a ``RecordParser`` which gave
     handle.close()
 
 Alternatively using the old ``SequenceParser`` would give ``SeqRecord``
-objects like those from the new ``Bio.SeqIO`` code, for example:
+objects like those from the new ``Bio.SeqIO`` code, for example::
 
     # Old code which won't work any more
     from Bio import Fasta
@@ -358,7 +376,7 @@ objects like those from the new ``Bio.SeqIO`` code, for example:
         print str(seq_record.seq) # The sequence as a string
     handle.close()
 
-Either of those examples using ``Bio.SeqIO`` becomes just:
+Either of those examples using ``Bio.SeqIO`` becomes just::
 
     # Updated versions of above examples using Bio.SeqIO instead
     from Bio import SeqIO
@@ -559,19 +577,20 @@ list(SimpleFastaParser(handle)) from Bio.SeqIO.FastaIO instead (but
 ideally convert your code to using an iterator approach).
 
 Bio.GFF (for accessing a MySQL database created with BioPerl, etc)
-=======
-The functions 'forward_complement' and 'antiparallel' in Bio.GFF.easy have
-been deprecated as of Release 1.31, and removed in Release 1.43.
-Use the functions 'complement' and 'reverse_complement' in Bio.Seq instead.
+==================================================================
+The functions ``forward_complement`` and ``antiparallel`` in ``Bio.GFF.easy``
+have been deprecated as of Release 1.31, and removed in Release 1.43.
+Use the functions ``complement`` and ``reverse_complement`` in ``Bio.Seq``
+instead.
 
-The whole of the old Bio.GFF module was deprecated in Release 1.53, and removed
-in Release 1.57 (with the intention of reusing this name space for a GFF
-parser).
+The whole of the old ``Bio.GFF`` module was deprecated in Release 1.53, and
+removed in Release 1.57 (with the intention of reusing this name space for a
+GFF parser).
 
 Bio.sequtils
 ============
-Deprecated as of Release 1.30, removed in Release 1.42.
-Use Bio.SeqUtils instead.
+Deprecated as of Release 1.30, removed in Release 1.42. Use ``Bio.SeqUtils``
+instead.
 
 Bio.SVM
 =======
@@ -593,11 +612,6 @@ Deprecated as of Release 1.30, removed in Release 1.42.  Instead, please use
 the function kcluster in Bio.Cluster which performs k-means or k-medians
 clustering.
 
-Bio.InterPro
-============
-The function pairlist_to_dict was deprecated in Release 1.45, and removed in
-Release 1.53.
-
 Bio.SCOP
 ========
 The module Bio.SCOP.FileIndex was deprecated in Release 1.46, and removed in
@@ -617,20 +631,6 @@ and 'back_transcribe' were deprecated in Release 1.49, and removed in Release
 The whole of Bio.utils was declared obsolete in Release 1.55, deprecated in
 Release 1.56, and removed in Release 1.57.
 
-Bio.Motif
-=========
-CompareAceParser and CompareAceConsumer from Bio.Motif.Parsers.AlignAce were
-declared obsolete in Release 1.53, deprecated in Release 1.55 final, and removed
-in Release 1.57.
-AlignAceConsumer, AlignAceParser, and AlignAceScanner were declared obsolete
-in Release 1.53 and deprecated in Release 1.55 final; their functionality is
-now available through a read() function in Bio.Motif.Parsers.AlignAce.
-MEMEParser, _MEMEScanner, _MEMEConsumer, _MASTConsumer, MASTParser,
-_MASTScanner, and MASTRecord were declared obsolete in Release 1.54 and
-deprecated in Release 1.55 final; their functionality is now available through
-a read() function in Bio.Motif.Parsers.MEME and Bio.Motif.Parsers.MAST,
-respectively.
-
 Bio.Compass
 ===========
 The RecordParser and Iterator classes were declared obsolete in Release 1.54,
@@ -643,11 +643,25 @@ The CelScanner, CelConsumer, CelRecord, and CelParser were declared obsolete
 in Release 1.54, deprecated in Release 1.55 and removed in Release 1.59.
 Their functionality is now available through a read() function.
 
+Bio.PopGen.Async
+================
+``Bio.PopGen.Async`` was deprecated in Release 1.68. It will be removed in
+Release 1.70.
+
 Bio.PopGen.FDist
 ================
-The RecordParser, _Scanner, and _RecordConsumer classes were declared obsolete
-in Release 1.54, deprecated in Release 1.55, and removed in Release 1.58.
-Their functionality is now available through a read() function.
+``Bio.PopGen.FDist`` was deprecated in Release 1.68. It will be removed in
+Release 1.70.
+
+Prior to this, the ``RecordParser``, ``_Scanner``, and ``_RecordConsumer``
+classes were declared obsolete in Release 1.54, deprecated in Release 1.55,
+and removed in Release 1.58. Their functionality is now available through
+a ``read()`` function.
+
+Bio.PopGen.SimCoal
+==================
+``Bio.PopGen.SimCoal`` was deprecated in Release 1.68. It will be removed in
+Release 1.70.
 
 Bio.UniGene
 ===========
@@ -677,23 +691,8 @@ deprecated in Release 1.57 and removed in Release 1.69.
 
 Bio.ParserSupport
 =================
-Bio.ParserSupport was declared obsolete in Release 1.59, and deprecated in
-Release 1.63. The Martel specific EventGenerator was removed in Release 1.67.
+``Bio.ParserSupport`` was declared obsolete in Release 1.59, and deprecated in
+Release 1.63. The Martel specific ``EventGenerator`` was removed in Release 1.67.
 
-Bio.ParserSupport.SGMLStrippingConsumer was deprecated in Release 1.59, and
+``Bio.ParserSupport.SGMLStrippingConsumer`` was deprecated in Release 1.59, and
 removed in Release 1.61.
-
-Bio.PopGen.Async
-================
-Bio.PopGen.Async was deprecated in Release 1.68. It will be removed in
-Release 1.70.
-
-Bio.PopGen.FDist
-================
-Bio.PopGen.FDist was deprecated in Release 1.68. It will be removed in
-Release 1.70.
-
-Bio.PopGen.SimCoal
-==================
-Bio.PopGen.SimCoal was deprecated in Release 1.68. It will be removed in
-Release 1.70.
