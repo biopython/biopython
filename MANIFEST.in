@@ -2,12 +2,12 @@
 #
 # This tells distutils what files to distribute.
 
-include CONTRIB
-include LICENSE
-include NEWS
-include README
-include DEPRECATED
-include CONTRIBUTING
+include CONTRIB.rst
+include LICENSE.rst
+include NEWS.rst
+include README.rst
+include DEPRECATED.rst
+include CONTRIBUTING.rst
 include MANIFEST.in
 
 recursive-include Scripts *    # Include scripts.
