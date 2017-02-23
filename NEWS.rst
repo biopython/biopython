@@ -8,9 +8,9 @@ http://news.open-bio.org/news/category/obf-projects/biopython/
 
 The latest news is at the top of this file.
 
-===================================================================
   
 (In progress, not yet released) Biopython 1.69
+==============================================
 
 This release of Biopython supports Python 2.7, 3.3, 3.4, 3.5 and 3.6 (we have
 now dropped support for Python 2.6). It has also been tested on PyPy v5.6,
@@ -103,9 +103,9 @@ possible, especially the following contributors:
 - Vincent Davis
 - Wibowo 'Bow' Arindrarto
 
-===================================================================
 
 25 August 2016: Biopython 1.68
+==============================
 
 This release of Biopython supports Python 2.6, 2.7, 3.3, 3.4 and 3.5, but
 this will be our final release to run on Python 2.6. It has also been tested
@@ -161,9 +161,9 @@ possible, especially the following contributors:
 - Uwe Schmitt (first contribution)
 - Xiaoyu Zhuo (first contribution)
 
-===================================================================
 
 8 June 2016: Biopython 1.67
+===========================
 
 This release of Biopython supports Python 2.6, 2.7, 3.3, 3.4 and 3.5, but
 support for Python 2.6 is considered to be deprecated. It has also been
@@ -261,9 +261,9 @@ possible, especially the following contributors:
 - Vincent Davis
 - Zheng Ruan
 
-===================================================================
 
 21 October 2015: Biopython 1.66
+===============================
 
 This release of Biopython supports Python 2.6, 2.7, 3.3, 3.4 and 3.5, but
 support for Python 2.6 is considered to be deprecated. It has also been
@@ -334,9 +334,9 @@ possible, especially the following contributors:
 - Tiago Antao
 - Vincent Davis
 
-===================================================================
 
 17 December 2014: Biopython 1.65 released.
+==========================================
 
 The Biopython sequence objects now use string comparison, rather than Python's
 object comparison. This has been planned for a long time with warning messages
@@ -401,9 +401,9 @@ possible, especially the following contributors:
 - Wibowo 'Bow' Arindrarto
 - Zheng Ruan
 
-===================================================================
 
 29 May 2014: Biopython 1.64 released.
+=====================================
 
 This release of Biopython supports Python 2.6 and 2.7, 3.3 and also the
 new 3.4 version. It is also tested on PyPy 2.0 to 2.3, and Jython 2.7b2.
@@ -460,9 +460,9 @@ possible, especially the following contributors:
 - Yanbo Ye (first contribution)
 - Zheng Ruan (first contribution)
 
-===================================================================
 
 4 December 2013: Biopython 1.63 released.
+=========================================
 
 This release supports Python 3.3 onwards without conversion via the 2to3
 library. See the Biopython 1.63 beta release notes below for details. Since
@@ -475,9 +475,9 @@ Additional contributors since the beta:
 
 - Gokcen Eraslan (first contribution)
 
-===================================================================
 
 12 November 2013: Biopython 1.63 beta released.
+===============================================
 
 This is a beta release for testing purposes, the main reason for a
 beta version is the large amount of changes imposed by the removal of
@@ -515,9 +515,9 @@ possible, especially the following contributors:
 - Wayne Decatur (first contribution)
 - Wibowo 'Bow' Arindrarto
 
-===================================================================
 
 28 August 2013: Biopython 1.62 released.
+========================================
 
 This is our first release to officially support Python 3, however it is
 also our final release supporting Python 2.5. Specifically this release
@@ -533,9 +533,9 @@ Additional contributors since the beta:
 - Martin Mokrejs
 - Matsuyuki Shirota (first contribution)
 
-===================================================================
 
 15 July 2013: Biopython 1.62 beta released.
+===========================================
 
 This is a beta release for testing purposes, both for new features added,
 and changes to location parsing, but more importantly Biopython 1.62 will
@@ -610,9 +610,9 @@ possible, especially the following contributors:
 - Wibowo 'Bow' Arindrarto
 - Xabier Bello (first contribution)
 
-===================================================================
 
 5 February 2013: Biopython 1.61 released.
+=========================================
 
 GenomeDiagram has three new sigils (shapes to illustrate features). OCTO shows
 an octagonal shape, like the existing BOX sigil but with the corners cut off.
@@ -696,9 +696,9 @@ possible, especially the following contributors:
 - Tiago Antao
 - Wibowo 'Bow' Arindrarto
 
-===================================================================
 
 25 June 2012: Biopython 1.60 released.
+======================================
 
 New module Bio.bgzf supports reading and writing BGZF files (Blocked GNU
 Zip Format), a variant of GZIP with efficient random access, most commonly
@@ -742,9 +742,9 @@ possible, especially the following contributors:
 - Paul T. Bathen
 - Wibowo Arindrarto
 
-===================================================================
 
 24 February 2012: Biopython 1.59 released.
+==========================================
 
 Please note that this release will *not* work on Python 2.4 (while the recent
 releases have worked despite us not officially supporting this).
@@ -810,9 +810,9 @@ possible, especially the following contributors:
 - Leighton Pritchard
 - Peter Cock
 
-===================================================================
 
 18 August 2011: Biopython 1.58 released.
+========================================
 
 A new interface and parsers for the PAML (Phylogenetic Analysis by Maximum
 Likelihood) package of programs, supporting codeml, baseml and yn00 as well
@@ -861,9 +861,9 @@ possible, especially the following contributors:
 - Walter Gillett
 - Wibowo Arindrarto (first contribution)
 
-===================================================================
 
 2 April 2011: Biopython 1.57 released.
+======================================
 
 Bio.SeqIO now includes an index_db() function which extends the existing
 indexing functionality to allow indexing many files, and more importantly
@@ -917,9 +917,9 @@ possible, especially the following contributors:
 - Phillip Garland
 - Walter Gillett (first contribution)
 
-===================================================================
 
 26 November 2010: Biopython 1.56 released.
+==========================================
 
 This is planned to be our last release to support Python 2.4, however this
 could be delayed given immediate feedback from our users (e.g. if this proves
@@ -972,9 +972,9 @@ Bio.Motif now has a chapter in the Tutorial.
 - Tiago Antao
 - Uri Laserson (first contribution)
 
-===================================================================
 
 31 August 2010: Biopython 1.55 released.
+========================================
 
 See the notes below for the Biopython 1.55 beta release for changes since
 Biopython 1.54 was released. Since the beta release we have marked a few
@@ -997,9 +997,9 @@ improvements.
 - Peter Cock
 - Tiago Antao
 
-===================================================================
 
 18 August 2010: Biopython 1.55 beta released.
+=============================================
 
 This is a beta release for testing purposes, both for new features added,
 and more importantly updates to avoid code deprecated in Python 2.7 or in
@@ -1045,18 +1045,18 @@ This avoids having to worry about the details of how best to use subprocess.
 - Peter Cock
 - Tiago Antao
 
-===================================================================
 
 May 20, 2010: Biopython 1.54 released.
+======================================
 
 See the notes below for the Biopython 1.54 beta release for changes since
 Biopython 1.53 was released. Since then there have been some changes to
 the new Bio.Phylo module, more documentation, and a number of smaller
 bug fixes.
 
-===================================================================
 
 April 2, 2010: Biopython 1.54 beta released.
+============================================
 
 We are phasing out support for Python 2.4. We will continue to support it
 for at least two further releases, and at least one year (whichever takes
@@ -1110,9 +1110,9 @@ old class but should otherwise be backwards compatible.
 - Peter Cock
 - Thomas Holder (first contribution)
 
-===================================================================
 
 December 15, 2009: Biopython 1.53 released.
+===========================================
 
 Biopython is now using git for source code control, currently on github. Our
 old CVS repository will remain on the OBF servers in the short/medium term
@@ -1189,9 +1189,9 @@ from testing Jython 2.5.0 and 2.5.1.
 - Paul Bathen (first contribution)
 - Peter Cock
 
-===================================================================
 
 September 22, 2009: Biopython 1.52 released.
+============================================
 
 The Population Genetics module now allows the calculation of several tests,
 and statistical estimators via a wrapper to GenePop. Supported are tests for
@@ -1225,9 +1225,9 @@ been removed (e.g. Bio.EUtils which had been replaced by Bio.Entrez).
 On a technical note, this will be the last release using CVS for source code
 control. Biopython is moving from CVS to git.
 
-===================================================================
 
 August 17, 2009: Biopython 1.51 released.
+=========================================
 
 FASTQ support in Bio.SeqIO has been improved, extended and sped up since
 Biopython 1.50. Support for Illumina 1.3+ style FASTQ files was added in the
@@ -1253,9 +1253,9 @@ hence removing any dependence on mxTextTools.
 Additionally, since the beta, a number of small bugs have been fixed, and
 there have been further additions to the test suite and documentation.
 
-===================================================================
 
 June 23, 2009: Biopython 1.51 beta released.
+============================================
 
 Biopython no longer supports Python 2.3.  Currently we support Python 2.4,
 2.5 and 2.6.
@@ -1296,9 +1296,9 @@ There have also been additions to the tutorial, such as the new alignment
 wrappers, with a whole chapter for the SeqRecord object. We have also added
 to the unit test coverage.
 
-===================================================================
 
 April 20, 2009: Biopython 1.50 released.
+========================================
 
 See the notes below for the Biopython 1.50 beta release for more details,
 but the highlights are:
@@ -1321,9 +1321,9 @@ Since the 1.50 beta release:
 * A few more unit tests were added
 * More documentation
 
-===================================================================
 
 April 3, 2009: Biopython 1.50 beta released.
+============================================
 
 The SeqRecord object has a new dictionary attribute, letter_annotations,
 which is for holding per-letter-annotation information like sequence
@@ -1362,9 +1362,9 @@ We've also made some changes to our test framework, which is now given a
 whole chapter in the tutorial.  This intended to help new developers or
 contributors wanting to improve our unit test coverage.
 
-===================================================================
 
 November 21, 2008: Biopython 1.49 released.
+===========================================
 
 See the notes below for the Biopython 1.49 beta release for more details,
 but the highlights are:
@@ -1379,9 +1379,9 @@ Since the 1.49 beta release:
 * Bio.PopGen.SimCoal should now work on Windows
 * A few more unit tests were added
 
-===================================================================
 
 November 7, 2008: Biopython 1.49 beta released.
+===============================================
 
 Biopython has transitioned from Numeric to NumPy.  Please move to NumPy.
 
@@ -1429,9 +1429,9 @@ argument to specify the expected sequence alphabet.
 The somewhat quirky unit test GUI has been removed, the unit tests are now
 run via the command line by default.
 
-===================================================================
 
 September 8, 2008: Biopython 1.48 released.
+===========================================
 
 The SeqRecord and Alignment objects have a new method to format the object as
 a string in a requested file format (handled via Bio.SeqIO and Bio.AlignIO).
@@ -1464,9 +1464,9 @@ In addition a number of other modules have been deprecated, including:
 Bio.MetaTool, Bio.EUtils, Bio.Saf, Bio.NBRF, and Bio.IntelliGenetics
 See the DEPRECATED file for full details.
 
-===================================================================
 
 July 5, 2008: Biopython 1.47 released.
+======================================
 
 Improved handling of ambiguous nucleotides in Bio.Seq.Translate().
 Better handling of stop codons in the alphabet from a translation.
@@ -1482,9 +1482,9 @@ nucleotide database.
 
 Added IntelliGenetics/MASE parsing to Bio.SeqIO (as the "ig" format).
 
-===================================================================
 
 June 29, 2008: Biopython 1.46 released.
+=======================================
 
 Bio.Entrez now has several Entrez format XML parsers, and a chapter
 in the tutorial.
@@ -1513,9 +1513,9 @@ Phylip export added to Bio.Nexus.
 Improved handling of ambiguous nucleotides and stop codons in
 Bio.Seq.Translate (plus introduced a regression fixed in Biopython 1.47).
 
-===================================================================
 
 March 22, 2008: Biopython 1.45 released.
+========================================
 
 The Seq and MutableSeq objects act more like python strings, in particular
 str(object) now returns the full sequence as a plain string.  The existing
@@ -1543,9 +1543,9 @@ Bio.Entrez.
 
 Bio.biblio was deprecated.
 
-===================================================================
 
 October 28, 2007: Biopython 1.44 released.
+==========================================
 
 NOTE: This release includes some rather drastic code changes, which were
 necessary to get Biopython to work with the new release of mxTextTools.
@@ -1599,9 +1599,9 @@ Tiago Antao has started work on a Population Genetics module, Bio.PopGen
 Updates to the tutorial, including giving Bio.Seq and Bio.SeqIO a whole
 chapter each.
 
-===================================================================
 
 March 17, 2007: Biopython 1.43 released.
+========================================
 
 New Bio.SeqIO module for reading and writing biological sequence files
 in various formats, based on SeqRecord objects.  This includes a new fasta
@@ -1636,9 +1636,9 @@ Nominating Bio.Kabat for removal.
 
 Believe it or not, even the documentation was updated.
 
-===================================================================
 
 July 16, 2006: Biopython 1.42 released.
+=======================================
 
 Bio.GenBank: New parser by Peter, which doesn't rely on Martel.
 
@@ -1648,9 +1648,9 @@ Bio.Cluster became (somewhat) object-oriented.
 
 Lots of bug fixes, and updates to the documentation.
 
-===================================================================
 
 October 28, 2005: Biopython 1.41 released.
+==========================================
 
 Major changes:
 
@@ -1680,9 +1680,9 @@ Lots of fixes in the documentation.
 
 March 29, 2005: MEME parser added. Thanks to Jason Hackney
 
-===================================================================
 
 Feb 18, 2005: Biopython 1.40 beta
+=================================
 Major Changes since v1.30. For a full list of changes please see the CVS
 
 IMPORTANT: Biopython now works with Python version >= 2.3
@@ -1727,9 +1727,9 @@ will return a new Seq object. The same function applied to a MutableSeq object
 will modify the MutableSeq object itself, and don't return anything.
 
 
-===================================================================
 
 May 14, 2004: Biopython 1.30
+============================
 
 - Affy package added for dealing with Affymetrix cel files -- thanks to Harry
   Zuzan.
@@ -1786,9 +1786,9 @@ May 14, 2004: Biopython 1.30
 - Deprecated Bio.kMeans and Bio.xkMeans -- use Bio.cluster instead.
 - Deprecated RecordFile -- doesn't appear to be finished code.
 
-===================================================================
 
 Feb 16, 2004: Biopython 1.24
+============================
 
 - New parsers for Phred and Ace format files -- thanks to Frank Kauff
 - New Code for dealing with NMR data -- thanks to Bob Bussell
@@ -1811,18 +1811,18 @@ Feb 16, 2004: Biopython 1.24
 - Fix to Prosite parser -- thanks to Mike Liang
 - Fix in GenBank parsing -- mRNAs now get strand information
 
-===================================================================
 
 Oct 18, 2003: Biopython 1.23
+============================
 
 - Fixed distribution of files in Bio/Cluster
 - Now distributing Bio/KDTree/_KDTree.swig.C
 - minor updates in installation code
 - added mmCIF support for PDB files
 
-===================================================================
 
 Oct 9, 2003: Biopython 1.22
+===========================
 
 - Added Peter Slicker's patches for speeding up modules under Python 2.3
 - Fixed Martel installation.
@@ -1838,17 +1838,17 @@ Oct 9, 2003: Biopython 1.22
 - regression tests updated to be Python 2.3 compatible
 - GenBank.NCBIDictionary is smarter about guessing the format
 
-===================================================================
 
 Jul 28, 2003: Biopython 1.21
+============================
 
 - Martel added back into the released package
 - new AlignACE module by Bartek Wilczynski
 - Andreas Kuntzagk fix for GenBank Iterator on empty files
 
-===================================================================
 
 Jul 27, 2003: Biopython 1.20
+============================
 
 - added Andrew Dalke's EUtils library
 - added Michiel de Hoon's gene expression analysis package
@@ -1875,9 +1875,9 @@ Jul 27, 2003: Biopython 1.20
 - updates to Registry system, conforms to 2003 hackathon OBDA spec
 - Yu Huang patch to support tblastn in wublast expression
 
-===================================================================
 
 Dec 17, 2002: Biopython 1.10
+============================
 
 - Python requirement bumped up to 2.2
 - hierarchy reorg, many things moved upwards into Bio namespace
@@ -1904,9 +1904,9 @@ Dec 17, 2002: Biopython 1.10
 - miscellaneous sequence handling functions in sequtils
 - new SVDSuperimpose algorithm
 
-===================================================================
 
 Dec 18, 2001: Biopython1.00a4
+=============================
 
 - minor bug fix in NCBIStandalone.blastall
 - optimization in dynamic programming code
@@ -1931,9 +1931,9 @@ Dec 18, 2001: Biopython1.00a4
 - new support for NeuralNetwork
 - slew of Martel fixes (see Martel docs)
 
-===================================================================
 
 Sept 3, 2001: Biopython1.00a3
+=============================
 
 - added package to support KEGG
 - added sequtils module for computations on sequences
@@ -1942,9 +1942,9 @@ Sept 3, 2001: Biopython1.00a3
 - format updates in PubMed
 - Tk interface to kMeans clustering
 
-===================================================================
 
 July 5, 2001: Biopython1.00a2
+=============================
 
 - deprecated old regression testing frameworks
 - deprecated Sequence.py
@@ -1962,9 +1962,9 @@ July 5, 2001: Biopython1.00a2
 - Medline.Parser bug fixes
 - PubMed.download_many handles broken IDs better
 
-===================================================================
 
 Mar 3, 2001: Biopython 1.00a1
+=============================
 
 - Refactoring of modules.  X/X.py moved to X/__init__.py.
 - Can search sequences for Prosite patterns at ExPASy
@@ -1978,9 +1978,9 @@ Mar 3, 2001: Biopython 1.00a1
 - code for working with substitution matrices
 - Tools.MultiProc package for rudimentary multiprocessing stuff
 
-===================================================================
 
 Nov 10, 2000: Biopython 0.90d04
+===============================
 
 - Added support for multiple alignments, ClustalW
 - BLAST updates, bug fixes, and BlastErrorParser
@@ -1991,9 +1991,9 @@ Nov 10, 2000: Biopython 0.90d04
 - Prodoc parser now accepts a copyright at the end of a record
 - Swiss-Prot parser now handles taxonomy ID tag
 
-===================================================================
 
 Sept 6, 2000: Biopython 0.90d03
+===============================
 
 - Blast updates:
 
@@ -2010,16 +2010,16 @@ Sept 6, 2000: Biopython 0.90d03
 - Thomas Sicheritz-Ponten's xbbtools
 - can now generate documentation from docstrings using HappyDoc
 
-===================================================================
 
 Aug17-18, 2000: Bioinformatics Open Source Conference 2000
+==========================================================
 
 We had a very good Birds-of-a-Feather meeting:
 http://www.biopython.org/pipermail/biopython/2000-August/000360.html
 
-===================================================================
 
 Aug 2, 2000: Biopython 0.90d02 is released.
+===========================================
 
 - Blast updates:
   - now works with v2.0.14
@@ -2030,17 +2030,17 @@ Aug 2, 2000: Biopython 0.90d02 is released.
 - Starting a tutorial
 - New regression tests for Prodoc
 
-===================================================================
 
 July 6, 2000: Biopython 0.90d01 is released.
+============================================
 
-===================================================================
 
 February 8, 2000: Anonymous CVS made available.
+===============================================
 
-===================================================================
 
 August 1999: Biopython project founded.
+=======================================
 
 Call for Participation sent out to relevant mailing lists, news
 groups.
