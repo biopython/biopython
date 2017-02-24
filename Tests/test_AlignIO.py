@@ -115,7 +115,7 @@ def check_simple_write_read(alignments, indent=" "):
                 records_per_alignment = None
         # Can we expect this format to work?
         if not records_per_alignment \
-        and format not in test_write_read_alignment_formats:
+                and format not in test_write_read_alignment_formats:
             continue
 
         print(indent + "Checking can write/read as '%s' format" % format)
@@ -212,10 +212,6 @@ def simple_alignment_comparison(alignments, alignments2, format):
                 assert str(r1.seq).replace(".", "-") == str(r2.seq), \
                     "Seq does not match %s vs %s (%s vs %s)" \
                     % (r1.seq, r2.seq, r1.id, r2.id)
-            else:
-                assert str(r1.seq) == str(r2.seq), \
-                    "Seq does not match %s vs %s (%s vs %s)" \
-                    % (r1.seq, r2.seq, r1.id, r2.id)
     return True
 
 
@@ -238,8 +234,8 @@ def check_phylip_reject_duplicate():
         # Expected - check the error
         assert "Repeated name 'longsequen'" in str(err)
 
-check_phylip_reject_duplicate()
 
+check_phylip_reject_duplicate()
 
 # Check parsers can cope with an empty file
 for t_format in AlignIO._FormatToIterator:
@@ -277,8 +273,9 @@ for (t_format, t_per, t_count, t_filename) in test_files:
     # Try as an iterator using handle
     with open(t_filename, "r") as handle:
         alignments = list(AlignIO.parse(handle, format=t_format))
-    assert len(alignments) == t_count, \
-         "Found %i alignments but expected %i" % (len(alignments), t_count)
+    msg = "Found %i alignments but expected %i" % (
+        len(alignments), t_count)
+    assert len(alignments) == t_count, msg
     if t_per is not None:
         for alignment in alignments:
             assert len(alignment) == t_per, \
@@ -367,7 +364,6 @@ for (t_format, t_per, t_count, t_filename) in test_files:
         except ValueError as err:
             if str(err) != "Error in alphabet: not Nucleotide or Protein, supply expected frequencies":
                 raise err
-            pass
 
     if t_count == 1 and t_format not in ["nexus", "emboss", "fasta-m10"]:
         # print(" Trying to read a triple concatenation of the input file")
@@ -376,7 +372,8 @@ for (t_format, t_per, t_count, t_filename) in test_files:
         handle = StringIO()
         handle.write(data + "\n\n" + data + "\n\n" + data)
         handle.seek(0)
-        assert len(list(AlignIO.parse(handle=handle, format=t_format, seq_count=t_per))) == 3
+        assert len(list(AlignIO.parse(
+            handle=handle, format=t_format, seq_count=t_per))) == 3
         handle.close()
 
     # Some alignment file formats have magic characters which mean
