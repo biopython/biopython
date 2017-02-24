@@ -275,7 +275,7 @@ def MafIterator(handle, seq_count=None, alphabet=single_letter_alphabet):
 class MafIndex(object):
     """This is used as an index for a MAF file.
 
-    The index is a sqlite3 database that is build upon creation of the object
+    The index is a sqlite3 database that is built upon creation of the object
     if necessary, and queried when methods *search* or *get_spliced* are
     used."""
 
@@ -540,7 +540,7 @@ class MafIndex(object):
             rows = result.fetchall()
 
             # rows come from the sqlite index,
-            # which should have been written using __maf_new_index,
+            # which should have been written using __make_new_index,
             # so rec_start and rec_end should be zero-based "inclusive" coordinates
 
             for rec_start, rec_end, offset in rows:
@@ -639,14 +639,14 @@ class MafIndex(object):
                     rec_length = len(seqrec)
                     rec_start = seqrec.annotations["start"]
                     ungapped_length = seqrec.annotations["size"]
-                    # Exclusive end in zero-based coordinates of the reference
-                    rec_end = rec_start + ungapped_length
+                    # Inclusive end in zero-based coordinates of the reference
+                    rec_end = rec_start + ungapped_length - 1
                     # This is length in terms of actual letters in the reference
                     total_rec_length += ungapped_length
 
                     # blank out these positions for every seqname
                     for seqrec in multiseq:
-                        for pos in range(rec_start, rec_end):
+                        for pos in range(rec_start, rec_end + 1):
                             split_by_position[seqrec.id][pos] = ""
 
                     break
@@ -672,7 +672,7 @@ class MafIndex(object):
 
                 # increment the real_pos counter only when non-gaps are found in
                 # the target_seqname, and we haven't reached the end of the record
-                if track_val != "-" and real_pos < rec_end - 1:
+                if track_val != "-" and real_pos < rec_end:
                     real_pos += 1
 
         # make sure the number of bp entries equals the sum of the record lengths
@@ -718,7 +718,7 @@ class MafIndex(object):
                     # Aren't all positions in realpos_to_len also in seq_split?
                     # realpos_to_len has its keys from split_by_position[self._target_seqname]
                     # The keys in split_by_position.items()
-                    # are all from range(rec_start, rec_end)
+                    # are all from range(rec_start, rec_end + 1)
                     # Yes, but this is for a given aligment block in the maf file.
                     # split_by_position.items() may have missing entries
                     # if the sequence was not that block.
