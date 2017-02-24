@@ -21,6 +21,13 @@ Git Usage
 
 We have a git introduction online at http://biopython.org/wiki/GitUsage
 
+In order to help follow our coding conventions, please install our git
+pre-commit hook as follows::
+
+   $ git clone git@github.com:biopython/biopython.git
+   $ cd biopython
+   $ ln -s Scripts/git_pre_commit_hook.py .git/hooks/pre-commit
+
 If you are planning to make a pull request, start by creating a new branch
 with a short but descriptive name (rather than using your master branch).
 
@@ -40,9 +47,8 @@ like *italics* and **bold** once rendered into HTML webpages for our online
 API documentation.
 
 Tools like ``pycodestyle`` (formerly ``pep8``), ``flake8`` and ``pydocstyle``
-are very useful. We currently suggest you install this git pre-commit hook
-which will check our basic coding conventions as you work:
-https://github.com/biopython/biopython/issues/493
+are very useful. We now encourage all our contributors to install out git
+pre-commit hook as described above.
 
 We also use continuous integration service TravisCI to enforce some of these
 checks (see below).
