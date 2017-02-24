@@ -84,7 +84,7 @@ else:
     cwd = tempdir
 
 # We run all the checks up front so user doesn't get a false sense of
-# what is wrong if we just showed problems from the first too.
+# what is wrong if we just showed problems from the first tool.
 failed = False
 for x_files, x_templates in ((py_files, python_check_templates),
                              (rst_files, rst_check_templates)):
