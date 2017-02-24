@@ -86,11 +86,6 @@ from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
 from .Interfaces import SequentialAlignmentWriter
 
-# To avoid method lookup
-STARTSWITH = str.startswith
-STRIP = str.strip
-SPLIT = str.split
-
 MAFINDEX_VERSION = 1
 
 
@@ -181,9 +176,9 @@ def MafIterator(handle, seq_count=None, alphabet=single_letter_alphabet):
             line = ""
 
         if in_a_bundle:
-            if STARTSWITH(line, "s"):
+            if line.startswith("s"):
                 # add a SeqRecord to the bundle
-                line_split = SPLIT(STRIP(line))
+                line_split = line.strip().split()
 
                 if len(line_split) != 7:
                     raise ValueError("Error parsing alignment - 's' line must have 7 fields")
@@ -213,7 +208,6 @@ def MafIterator(handle, seq_count=None, alphabet=single_letter_alphabet):
                     ref = str(records[0].seq)
                     new = []
 
-
                     for (letter, ref_letter) in zip(sequence, ref):
                         new.append(ref_letter if letter == "." else letter)
 
@@ -225,26 +219,26 @@ def MafIterator(handle, seq_count=None, alphabet=single_letter_alphabet):
                     name=line_split[1],
                     description="",
                     annotations=anno))
-            elif STARTSWITH(line, "i"):
+            elif line.startswith("i"):
                 # TODO: information about what is in the aligned species DNA before
                 # and after the immediately preceding "s" line
                 pass
-            elif STARTSWITH(line, "e"):
+            elif line.startswith("e"):
                 # TODO: information about the size of the gap between the alignments
                 # that span the current block
                 pass
-            elif STARTSWITH(line, "q"):
+            elif line.startswith("q"):
                 # TODO: quality of each aligned base for the species.
                 # Need to find documentation on this, looks like ASCII 0-9 or gap?
                 # Can then store in each SeqRecord's .letter_annotations dictionary,
                 # perhaps as the raw string or turned into integers / None for gap?
                 pass
-            elif STARTSWITH(line, "#"):
+            elif line.startswith("#"):
                 # ignore comments
                 # (not sure whether comments
                 # are in the maf specification, though)
                 pass
-            elif not STRIP(line):
+            elif not line.strip():
                 # end a bundle of records
                 if seq_count is not None:
                     assert len(records) == seq_count
@@ -263,15 +257,15 @@ def MafIterator(handle, seq_count=None, alphabet=single_letter_alphabet):
                 records = []
             else:
                 raise ValueError("Error parsing alignment - unexpected line:\n%s" % (line,))
-        elif STARTSWITH(line, "a"):
+        elif line.startswith("a"):
             # start a bundle of records
             in_a_bundle = True
-            annot_strings = SPLIT(STRIP(line))[1:]
+            annot_strings = line.strip().split()[1:]
             if len(annot_strings) != line.count("="):
                 raise ValueError("Error parsing alignment - invalid key in 'a' line")
 
-            annotations = dict([SPLIT(a_string, "=") for a_string in annot_strings])
-        elif STARTSWITH(line, "#"):
+            annotations = dict([a_string.split("=") for a_string in annot_strings])
+        elif line.startswith("#"):
             # ignore comments
             pass
         elif not line:
@@ -399,7 +393,7 @@ class MafIndex(object):
         line = self._maf_fp.readline()
 
         while line:
-            if STARTSWITH(li
+            if line.startswith("a"):
                 # note the offset
                 offset = self._maf_fp.tell() - len(line)
 
@@ -407,13 +401,13 @@ class MafIndex(object):
                 while True:
                     line = self._maf_fp.readline()
 
-                    if not STRIP(line) or STARTSWITH(line, "a"):
+                    if not line.strip() or line.startswith("a"):
                         # Empty line or new alignment record
                         raise ValueError("Target for indexing (%s) not found in this bundle" % (
                             self._target_seqname,))
-                    elif STARTSWITH(line, "s"):
+                    elif line.startswith("s"):
                         # s (literal), src (ID), start, size, strand, srcSize, text (sequence)
-                        line_split = SPLIT(STRIP(line))
+                        line_split = line.strip().split()
 
                         if line_split[1] == self._target_seqname:
                             start = int(line_split[2])
@@ -742,7 +736,6 @@ class MafIndex(object):
                 len(subseq[self._target_seqname].replace("-", "")),
                 self._target_seqname, expected_letters))
 
-
         # check to make sure all sequences are the same length as the target seqname
         ref_subseq_len = len(subseq[self._target_seqname])
 
@@ -750,7 +743,6 @@ class MafIndex(object):
             if len(seq) != ref_subseq_len:
                 raise ValueError("Returning length %s for %s, expected %s" % (
                     len(seq), seqid, ref_subseq_len))
-
 
         # finally, build a MultipleSeqAlignment object for our final sequences
         result_multiseq = []
@@ -760,13 +752,11 @@ class MafIndex(object):
 
             seq = seq if strand == ref_first_strand else seq.reverse_complement()
 
-
             result_multiseq.append(SeqRecord(
                 seq,
                 id=seqid,
                 name=seqid,
                 description=""))
-
 
         return MultipleSeqAlignment(result_multiseq)
 
@@ -774,7 +764,6 @@ class MafIndex(object):
         return "MafIO.MafIndex(%r, target_seqname=%r)" % (
             self._maf_fp.name,
             self._target_seqname)
-
 
     def __len__(self):
         return self._record_count
