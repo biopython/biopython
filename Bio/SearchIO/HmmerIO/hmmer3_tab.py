@@ -13,11 +13,10 @@ from Bio.SearchIO._index import SearchIndexer
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 
 
-__all__ = ['Hmmer3TabParser', 'Hmmer3TabIndexer', 'Hmmer3TabWriter']
+__all__ = ('Hmmer3TabParser', 'Hmmer3TabIndexer', 'Hmmer3TabWriter')
 
 
 class Hmmer3TabParser(object):
-
     """Parser for the HMMER table format."""
 
     def __init__(self, handle):
@@ -257,7 +256,6 @@ class Hmmer3TabWriter(object):
 
     def _build_header(self, first_qresult=None):
         """Returns the header string of a HMMER table output."""
-
         # calculate whitespace required
         # adapted from HMMER's source: src/p7_tophits.c#L1083
         if first_qresult is not None:

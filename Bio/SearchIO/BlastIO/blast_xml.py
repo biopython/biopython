@@ -33,7 +33,7 @@ from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 from Bio._py3k import _as_bytes, _bytes_to_string, unicode
 _empty_bytes_string = _as_bytes("")
 
-__all__ = ['BlastXmlParser', 'BlastXmlIndexer', 'BlastXmlWriter']
+__all__ = ('BlastXmlParser', 'BlastXmlIndexer', 'BlastXmlWriter')
 
 
 # element - optional qresult attribute name mapping
@@ -890,7 +890,6 @@ class BlastXmlWriter(object):
 
     def _adjust_output(self, hsp, elem, attr):
         """Adjusts output to mimic native BLAST+ XML as much as possible."""
-
         # adjust coordinates
         if attr in ('query_start', 'query_end', 'hit_start', 'hit_end',
                 'pattern_start', 'pattern_end'):

@@ -97,7 +97,8 @@ def parse_line(line):
 
 
 def parse(iterable):
-    """
+    """Parse a file.
+
     format
 
     Column 0:
@@ -106,7 +107,6 @@ def parse(iterable):
 
     means that seq1[0] == seq2[86] (0-based)
     """
-
     alignment = Alignment()
     for line in iterable:
         try:

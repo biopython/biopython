@@ -188,7 +188,6 @@ def _gpa10iterator(handle):
     file which is in the GPA 1.0 format. Do not call directly. Rather,
     use the gpaiterator function.
     """
-
     for inline in handle:
         if inline[0] == '!':
             continue

@@ -159,7 +159,6 @@ class MarkovModelBuilder(object):
         Each markov model returned by a call to this function is unique
         (ie. they don't influence each other).
         """
-
         # user must set initial probabilities
         if not self.initial_prob:
             raise Exception("set_initial_probabilities must be called to " +
@@ -233,7 +232,6 @@ class MarkovModelBuilder(object):
         emissions to total up to 1, so it doesn't ensure that the sum of
         each set of transitions adds up to 1.
         """
-
         # set initial state probabilities
         new_initial_prob = float(1) / float(len(self.transition_prob))
         for state in self._state_alphabet.letters:
@@ -261,9 +259,9 @@ class MarkovModelBuilder(object):
 
     def set_random_transition_probabilities(self):
         """Set all allowed transition probabilities to a randomly generated distribution.
+
         Returns the dictionary containing the transition probabilities.
         """
-
         if not self.transition_prob:
             raise Exception("No transitions have been allowed yet. " +
                             "Allow some or all transitions by calling " +
@@ -278,11 +276,10 @@ class MarkovModelBuilder(object):
         return self.transition_prob
 
     def set_random_emission_probabilities(self):
-        """Set all allowed emission probabilities to a randomly generated
-        distribution.  Returns the dictionary containing the emission
-        probabilities.
-        """
+        """Set all allowed emission probabilities to a randomly generated distribution.
 
+        Returns the dictionary containing the emission probabilities.
+        """
         if not self.emission_prob:
             raise Exception("No emissions have been allowed yet. " +
                             "Allow some or all emissions.")
@@ -443,8 +440,8 @@ class MarkovModelBuilder(object):
 
 
 class HiddenMarkovModel(object):
-    """Represent a hidden markov model that can be used for state estimation.
-    """
+    """Represent a hidden markov model that can be used for state estimation."""
+
     def __init__(self, initial_prob, transition_prob, emission_prob,
                  transition_pseudo, emission_pseudo):
         """Initialize a Markov Model.
@@ -468,7 +465,6 @@ class HiddenMarkovModel(object):
         o emission_pseudo -- Pseudo-counts to be used for the emissions,
         when counting for purposes of estimating emission probabilities.
         """
-
         self.initial_prob = initial_prob
 
         self._transition_pseudo = transition_pseudo
@@ -550,7 +546,6 @@ class HiddenMarkovModel(object):
         o state_alphabet -- The alphabet of the possible state sequences
         that can be generated.
         """
-
         # calculate logarithms of the initial, transition, and emission probs
         log_initial = self._log_transform(self.initial_prob)
         log_trans = self._log_transform(self.transition_prob)

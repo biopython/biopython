@@ -2583,6 +2583,6 @@ except NameError:
     # Scoping changed in Python 3, the variable isn't leaked
     pass
 locals().update(dict(zip(names, AllEnzymes)))
-__all__ = ['FormattedSeq', 'Analysis', 'RestrictionBatch', 'AllEnzymes',
-           'CommOnly', 'NonComm'] + names
+__all__ = ('FormattedSeq', 'Analysis', 'RestrictionBatch', 'AllEnzymes',
+           'CommOnly', 'NonComm') + tuple(names)
 del k, enzymes, TYPE, bases, names

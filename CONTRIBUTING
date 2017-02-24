@@ -78,8 +78,8 @@ be run, and their results reported on the pull request.
 
 We use TravisCI to run most of the Biopython tests (although currently only
 under Linux, and not with all the optional dependencies included), plus also
-check the Python coding style using the ``pep8`` and ``flake8`` tools. This
-must pass before your pull request will be merged.
+check Python coding style using the ``pep8``, ``flake8`` and ``pydocstyle``
+tools. This must pass before your pull request will be merged.
 https://travis-ci.org/biopython/biopython
 
 Some of the TravisCI runs collect test coverage information via CodeCov:

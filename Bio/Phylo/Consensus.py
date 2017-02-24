@@ -538,7 +538,6 @@ def bootstrap(msa, times):
         times : int
             number of bootstrap times.
     """
-
     length = len(msa[0])
     i = 0
     while i < times:
@@ -564,7 +563,6 @@ def bootstrap_trees(msa, times, tree_constructor):
         tree_constructor : TreeConstructor
             tree constructor to be used to build trees.
     """
-
     msas = bootstrap(msa, times)
     for aln in msas:
         tree = tree_constructor.build_tree(aln)

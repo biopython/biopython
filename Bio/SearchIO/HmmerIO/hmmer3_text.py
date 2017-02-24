@@ -14,7 +14,7 @@ from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 
 from ._base import _BaseHmmerTextIndexer
 
-__all__ = ['Hmmer3TextParser', 'Hmmer3TextIndexer']
+__all__ = ('Hmmer3TextParser', 'Hmmer3TextIndexer')
 
 
 # precompile regex patterns for faster processing
@@ -99,7 +99,6 @@ class Hmmer3TextParser(object):
 
     def _parse_qresult(self):
         """Parses a HMMER3 query block."""
-
         self._read_until(lambda line: line.startswith('Query:'))
 
         while self.line:

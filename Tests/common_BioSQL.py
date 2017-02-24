@@ -226,7 +226,6 @@ def load_database(gb_filename_or_handle):
 
     This is useful for running tests against a newly created database.
     """
-
     TESTDB = create_database()
     # now open a connection to load the database
     db_name = "biosql-test"
@@ -249,7 +248,6 @@ def load_multi_database(gb_filename_or_handle, gb_filename_or_handle2):
 
     This is useful for running tests against a newly created database.
     """
-
     TESTDB = create_database()
     # now open a connection to load the database
     db_name = "biosql-test"

@@ -320,7 +320,6 @@ def read(handle):
     ...
     6.2.1.25 benzoate---CoA ligase
     """
-
     iterator = parse(handle)
     try:
         first = next(iterator)

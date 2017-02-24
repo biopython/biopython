@@ -19,7 +19,7 @@ from ._base import _BaseExonerateParser, _BaseExonerateIndexer, _STRAND_MAP, \
 from .exonerate_vulgar import _RE_VULGAR
 
 
-__all__ = ['ExonerateTextParser', 'ExonerateTextIndexer']
+__all__ = ('ExonerateTextParser', 'ExonerateTextIndexer')
 
 
 # for capturing sequences in alignment blocks

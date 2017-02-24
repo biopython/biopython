@@ -86,9 +86,7 @@ def parse_basics(lines, results):
 
 
 def parse_nssites(lines, results, multi_models, multi_genes):
-    """Determine which NSsites models are present and parse them.
-    """
-
+    """Determine which NSsites models are present and parse them."""
     ns_sites = {}
     model_re = re.compile("Model (\d+):\s+(.+)")
     gene_re = re.compile("Gene\s+([0-9]+)\s+.+")
