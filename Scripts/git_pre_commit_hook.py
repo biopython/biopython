@@ -9,8 +9,10 @@ copy of Biopyton, e.g.::
     $ ln -s Scripts/git_pre_commit_hook.py .git/hooks/pre-commit
 
 This script will by default (such as when run by git when you run the
-``git commit`` command) determine all new of changed files according
-to git, and apply our style checks to them.
+``git commit`` command) determine all new or changed files according
+to git, and apply our style checks to the version staged in git. (Note
+it will not lint the current version of the file on disk, which might
+be newer if you've edited a file but not yet done "git add").
 
 The script can alternatively be run with filenames or folders to check,
 in which case the git status of the files is ignored. This can be used
