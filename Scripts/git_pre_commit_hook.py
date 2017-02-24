@@ -39,18 +39,27 @@ python_check_templates = (
     ("flake8", "--ignore", "E121,E122,E123,E124,E125,E126,E127,E128,E129,E131,E501"),
     ("pydocstyle", "--ignore", "D100,D101,D102,D103,D104,D105,D200,D203,D204,D205,D207,D208,D209,D210,D211,D212,D213,D301,D302,D400,D401,D402,D403,D404"),
 )
+rst_check_templates = (
+    ("rst-lint", "--level", "warning"),
+)
 
 # TODO - Implement a proper API for this?
 if len(sys.argv) > 1:
     # assume called with list of local directories and/or files to lint
     files = tuple(sys.argv[1:])
+    # The python linters accept directories, rst-lint does not
+    py_files = tuple(f for f in files if not f.endswith(".rst"))
+    rst_files = tuple(f for f in files if f.endswith(".rst"))
     tempdir = None
     cwd = "."
 else:
     # Assume called via 'git commit' and ask git for changed/new files
-    modified = re.compile("^[AM]+\s+(?P<name>.*\.py)", re.MULTILINE)
+    modified_py = re.compile("^[AM]+\s+(?P<name>.*\.py)", re.MULTILINE)
+    modified_rst = re.compile("^[AM]+\s+(?P<name>.*\.rst)", re.MULTILINE)
     files = getoutput("git status --porcelain")
-    files = tuple(modified.findall(files))
+    py_files = tuple(modified_py.findall(files))
+    rst_files = tuple(modified_rst.findall(files))
+    files = tuple(py_files + rst_files)
     if not files:
         sys.stderr.write("Seems nothing has changed which needs linting...\n")
         sys.exit(0)
@@ -75,12 +84,17 @@ else:
 # We run all the checks up front so user doesn't get a false sense of
 # what is wrong if we just showed problems from the first too.
 failed = False
-for cmd_template in python_check_templates:
-    child = subprocess.Popen(cmd_template + files, cwd=cwd)
-    child.communicate()
-    return_code = child.returncode
-    if return_code:
-        failed = True
+for x_files, x_templates in ((py_files, python_check_templates),
+                             (rst_files, rst_check_templates)):
+    if not x_files:
+        continue
+    for cmd_template in x_templates:
+        child = subprocess.Popen(cmd_template + x_files, cwd=cwd)
+        child.communicate()
+        return_code = child.returncode
+        if return_code:
+            sys.stderr.write("Return code %i from %s\n" % (return_code, cmd_template[0]))
+            failed = True
 
 if tempdir:
     shutil.rmtree(tempdir)
