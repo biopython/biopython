@@ -68,7 +68,6 @@ python list slice boundaries.
 If we want an inclusive end coordinate, we need to use end = start + size - 1:
 a 1-column wide alignment would have start == end.
 """
-
 import os
 from itertools import islice
 
@@ -91,7 +90,6 @@ MAFINDEX_VERSION = 1
 
 class MafWriter(SequentialAlignmentWriter):
     """Accepts a MultipleSeqAlignment object, writes a MAF file"""
-
     def write_header(self):
         """Writes the MAF header"""
         self.handle.write("##maf version=1 scoring=none\n")
@@ -123,7 +121,6 @@ class MafWriter(SequentialAlignmentWriter):
         Writes every SeqRecord in a MultipleSeqAlignment object to its own
         MAF block (beginning with an 'a' line, containing 's' lines)
         """
-
         if not isinstance(alignment, MultipleSeqAlignment):
             raise TypeError("Expected an alignment object")
 
@@ -278,17 +275,12 @@ class MafIndex(object):
     The index is a sqlite3 database that is built upon creation of the object
     if necessary, and queried when methods *search* or *get_spliced* are
     used."""
-
     def __init__(self, sqlite_file, maf_file, target_seqname):
         """Indexes or loads the index of a MAF file"""
         self._target_seqname = target_seqname
         self._maf_file = maf_file
 
-        # make sure maf_file exists, then open it up
-        if os.path.isfile(self._maf_file):
-            self._maf_fp = open(self._maf_file, "r")
-        else:
-            raise ValueError("Error opening %s -- file not found" % (self._maf_file,))
+        self._maf_fp = open(self._maf_file, "r")
 
         # if sqlite_file exists, use the existing db, otherwise index the file
         if os.path.isfile(sqlite_file):
@@ -303,7 +295,6 @@ class MafIndex(object):
 
     def __check_existing_db(self):
         """Basic sanity checks upon loading an existing index"""
-
         try:
             idx_version = int(self._db_con.execute(
                 "SELECT value FROM meta_data WHERE key = 'version'").fetchone()[0])
@@ -389,7 +380,6 @@ class MafIndex(object):
         """Generator function, yields index information for each bundle in the
         form of (bin, start, end, offset) tuples where start and end are
         0-based inclusive coordinates"""
-
         line = self._maf_fp.readline()
 
         while line:
@@ -454,7 +444,6 @@ class MafIndex(object):
 
         Adapted from http://genomewiki.ucsc.edu/index.php/Bin_indexing_system
         """
-
         bin_offsets = [512 + 64 + 8 + 1, 64 + 8 + 1, 8 + 1, 1, 0]
 
         _bin_first_shift = 17
@@ -491,7 +480,6 @@ class MafIndex(object):
         (in the half-open UCSC convention:
         http://genome.ucsc.edu/blog/the-ucsc-genome-browser-coordinate-counting-systems/).
         """
-
         # verify the provided exon coordinates
         if len(starts) != len(ends):
             raise ValueError("Every position in starts must have a match in ends")

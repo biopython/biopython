@@ -301,6 +301,8 @@ if sqlite3:
             self.assertEqual(set([len(x) for x in results]),
                              set([4, 1, 9, 10, 4, 3, 5, 1]))
 
+            # Code formatting note:
+            # Expected start coordinates are grouped by alignment blocks
             self.assertEqual(
                 set([x.annotations["start"] for y in results for x in y]),
                 set([
@@ -321,6 +323,8 @@ if sqlite3:
             self.assertEqual(set([len(x) for x in results]),
                              set([2, 4, 5, 14, 7, 6]))
 
+            # Code formatting note:
+            # Expected start coordinates are grouped by alignment blocks
             self.assertEqual(
                 set([x.annotations["start"] for y in results for x in y]),
                 set([
