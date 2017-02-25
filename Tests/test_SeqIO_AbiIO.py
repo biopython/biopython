@@ -164,7 +164,7 @@ test_data = {
                                   'phQL1', 'phTR1', 'phTR2', 'DyeS2', 'DyeS3',
                                   'DyeS1', 'DyeS4', 'DATA11', 'DATA10',
                                   'DATA12', 'CCDF4', 'CCDF1', 'CCDF3', 'CCDF2',
-                                  'THUM2', 'THUM1', 'MTXF2', 'MTRX1',
+                                  'THUM2', 'THUM1', 'MTXF2', 'MTRX1', 'SpNm1',
                                   'MTRD101', 'MTRD103', 'MTRD102', 'MTRX101',
                                   'MTRX103', 'MTRX102', 'MTRD1', 'MTXF1',
                                   'OFFS1', 'DyeZ1', 'DyeZ3', 'DyeZ2', 'DyeZ4',
