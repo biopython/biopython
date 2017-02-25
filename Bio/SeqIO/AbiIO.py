@@ -402,7 +402,7 @@ def AbiIterator(handle, alphabet=None, trim=False):
     annot['abif_raw'] = raw
 
     # fsa check
-    if (set(['SpNm1','LIMS1', 'CTID1']).issubset(raw)):
+    if (set(['SpNm1', 'LIMS1', 'CTID1']).issubset(raw)):
         print("test")
         try:
             file_name = basename(handle.name).replace('.fsa', '')
