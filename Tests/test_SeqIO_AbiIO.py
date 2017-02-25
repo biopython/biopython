@@ -206,7 +206,6 @@ class TestAbi(unittest.TestCase):
                 self.assertEqual(basename(test_data[trace]["path"][-1]).replace('.ab1', ''), record.name)
                 self.assertEqual(test_data[trace]['seq'], str(record.seq))
                 self.assertEqual(test_data[trace]['qual'], record.letter_annotations['phred_quality'])
-            print(record)
             self.assertEqual(test_data[trace]['sample'], record.id)
             self.assertEqual(test_data[trace]['sample_well'], record.annotations['sample_well'])
             self.assertEqual(test_data[trace]['machine_model'], record.annotations['machine_model'])
