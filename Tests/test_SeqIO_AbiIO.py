@@ -91,46 +91,37 @@ test_data = {
                                    'AUDT1', 'PXLB1', 'RMdV1', 'DATA9', 'RGNm1',
                                    'DATA11', 'DATA10', 'DATA12']),
             },
-'data_3100': {
-             'path': ['Abi', '3100.ab1'],
-             'seq':
-'CAAGATTGCATTCATGATCTACGATTACTAGCGATTCCAGCTTCATATAGTCGAGTTGCAGACTACAATCCGAACTGAGAACAACTTTATGGGATTTGCTTGACCTCGCGGTTTCGCTGCCCTTTGTATTGTCCATTGTAGCACGTGTGTAGCCCAAATCATAAGGGGCATGATGATTTGACGTCATCCCCACCTTCCTCCGGTTTGTCACCGGCAGTCAACTTAGAGTGCCCAACTTAATGATGGCAACTAAGCTTAAGGGTTGCGCTCGTTGCGGGACTTAACCCAACATCTCACGACACGAGCTGACGACAACCATGCACCACCTGTCACTCTGTCCCCCGAAGGGGAAAACTCTATCTCTAGAGGAGTCAGAGGATGTCAAGATTTGGTAAGGTTCTTCGCGTTGCTTCGAATTAAACCACATGCTCCACCGCTTGTGCGGGTCCCCGTCAATTCCTTTGAGTTTCAACCTTGCGGTCGTACTCCCCAGGCGGAGTGCTTAATGCGTTAGCTGCAGCACTAAGGGGCGGAAACCCCCTAACACTTAGCACTCATCGTTTACGGCGTGGACTACCAGGGTATCTAATCCTGTTTGATCCCCACGCTTTCGCACATCAGCGTCAGTTACAGACCAGAAAGTCGCCTTCGCCACTGGTGTTCCTCCATATCTCTGCGCATTTCACCGCTACACATGGAAATTCCACTTTCCTCTTCTGCACTCAAGTTTTCCAGATTTCGATGAACCTTCAACGATGGAGGCCCGTGGCTTTTCACCATTCAAGGAACCTTTTA',
-             'qual':
-[5, 3, 4, 4, 4, 5, 9, 4, 4, 4, 5, 4, 4, 4, 4, 4, 6, 13, 23, 20, 15, 17, 10, 9, 13, 23, 18, 14, 19, 34, 15, 24, 34, 18, 30, 35, 41, 34, 22, 39, 53, 58, 35, 46, 24, 42, 46, 46, 54, 42, 53, 58, 52, 41, 22, 62, 52, 62, 52, 62, 41, 38, 16, 42, 62, 56, 62, 62, 62, 62, 62, 62, 54, 56, 39, 62, 49, 35, 19, 44, 44, 42, 62, 62, 62, 62, 54, 62, 62, 62, 62, 49, 49, 43, 39, 62, 62, 62, 62, 62, 62, 62, 59, 43, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 49, 59, 62, 62, 59, 59, 62, 62, 62, 62, 62, 59, 62, 62, 62, 62, 62, 62, 59, 59, 62, 62, 62, 62, 62, 59, 62, 62, 59, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 59, 59, 62, 59, 59, 62, 62, 62, 59, 59, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 50, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 59, 59, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 54, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 59, 59, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 59, 59, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 49, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 42, 31, 31, 26, 18, 24, 33, 56, 56, 62, 56, 62, 47, 39, 62, 62, 62, 62, 62, 62, 49, 47, 62, 62, 62, 49, 62, 62, 62, 62, 49, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 58, 58, 58, 58, 58, 58, 58, 58, 58, 54, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 54, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 53, 58, 58, 58, 51, 49, 58, 58, 58, 58, 50, 58, 58, 58, 58, 58, 58, 51, 32, 58, 58, 42, 58, 51, 58, 49, 39, 58, 58, 51, 58, 53, 58, 50, 58, 58, 58, 53, 54, 53, 58, 54, 53, 58, 53, 58, 32, 58, 44, 46, 50, 58, 54, 58, 58, 49, 41, 58, 58, 58, 54, 54, 54, 51, 52, 53, 51, 54, 54, 54, 38, 52, 53, 47, 54, 54, 53, 54, 54, 54, 52, 54, 42, 47, 35, 42, 54, 45, 54, 53, 54, 23, 34, 24, 51, 52, 33, 46, 44, 33, 49, 51, 45, 53, 32, 52, 53, 52, 51, 36, 52, 53, 52, 52, 37, 53, 52, 40, 27, 24, 46, 16, 33, 45, 51, 43, 51, 51, 46, 46, 45, 42, 31, 43, 41, 43, 35, 43, 43, 42, 31, 46, 46, 32, 46, 35, 42, 46, 42, 31, 31, 43, 42, 35, 21, 42, 35, 28, 46, 47, 37, 41, 29, 39, 31, 32, 39, 31, 41, 43, 34, 43, 36, 27, 31, 27, 35, 36, 24, 44, 33, 31, 32, 38, 35, 31, 32, 29, 31, 31, 31, 38, 38, 36, 31, 34, 30, 21, 28, 32, 32, 47, 31, 33, 30, 23, 22, 25, 25, 26, 30, 30, 21, 28, 31, 21, 14, 5, 3, 16, 9, 18, 27, 8, 19, 4, 5, 13, 47, 27, 14, 21, 9, 17, 21, 17, 27, 14, 23, 23, 14, 15, 28, 15, 12, 8, 5, 3, 17, 28, 16, 13, 17, 11, 2, 2, 3, 29, 7, 3, 1, 3, 3, 8, 7, 7, 24, 12, 3, 4, 15, 3, 4, 7, 5, 1, 2, 2, 8, 24, 6, 4, 11, 23, 9, 6, 4, 3, 5, 3, 5, 17, 17, 22, 11, 4, 5, 8, 16, 10, 6, 11, 6, 11, 5, 5, 27, 18, 7, 15, 16, 30, 21, 14, 7],
-             'sample': '16S_S2_1387R',
-             'sample_well': 'H3',
-             'dye': 'Z-BigDyeV3',
+'test_fsa': {
+             'path': ['Abi', 'test.fsa'],
+             'seq': '',
+             'sample': 'ae524aa33cc011d9990900087493610c',
+             'sample_well': 'E1',
+             'dye': 'F',
              'polymer': 'POP7                            ',
              'machine_model': '3100',
-             'run_start': '2010-01-27 09:52:45',
-             'run_finish': '2010-01-27 10:41:07',
-             'abif_raw_keys': set(['AEPt1', 'AEPt2', 'APFN2', 'APXV1', 'APrN1',
-                                   'APrV1', 'APrX1', 'ARTN1', 'ASPF1', 'ASPt1',
-                                   'ASPt2', 'B1Pt1', 'B1Pt2', 'BCTS1', 'CTID1',
-                                   'CTNM1', 'CTOw1', 'CTTL1', 'CpEP1', 'DATA1',
-                                   'DATA2', 'DATA3', 'DATA4', 'DATA5', 'DATA6',
-                                   'DATA7', 'DATA8', 'DCHT1', 'DSam1', 'DySN1',
-                                   'Dye#1', 'DyeN1', 'DyeN2', 'DyeN3', 'DyeN4',
-                                   'DyeW1', 'DyeW2', 'DyeW3', 'DyeW4', 'EPVt1',
-                                   'EVNT1', 'EVNT2', 'EVNT3', 'EVNT4', 'FTab1',
-                                   'FVoc1', 'FWO_1', 'Feat1', 'GTyp1', 'HCFG1',
-                                   'HCFG2', 'HCFG3', 'HCFG4', 'InSc1', 'InVt1',
-                                   'LANE1', 'LAST1', 'LIMS1', 'LNTD1', 'LsrP1',
-                                   'MCHN1', 'MODF1', 'MODL1', 'NAVG1', 'NLNE1',
-                                   'NOIS1', 'OfSc1', 'P1AM1', 'P1RL1', 'P1WD1',
-                                   'P2AM1', 'P2BA1', 'P2RL1', 'PBAS1', 'PBAS2',
-                                   'PCON1', 'PCON2', 'PDMF1', 'PDMF2', 'PLOC1',
-                                   'PLOC2', 'PSZE1', 'PTYP1', 'RGOw1', 'RMXV1',
-                                   'RMdN1', 'RMdX1', 'RPrN1', 'RPrV1', 'RUND1',
-                                   'RUND2', 'RUND3', 'RUND4', 'RUNT1', 'RUNT2',
-                                   'RUNT3', 'RUNT4', 'Rate1', 'RunN1', 'S/N%1',
-                                   'Satd1', 'SCAN1', 'SMED1', 'SMLt1', 'SMPL1',
-                                   'SPAC1', 'SPAC2', 'SPAC3', 'SVER1', 'SVER2',
-                                   'SVER3', 'Scal1', 'Scan1', 'TUBE1', 'Tmpr1',
-                                   'User1', 'phAR1', 'phCH1', 'phDY1', 'phQL1',
-                                   'phTR1', 'phTR2', 'AUDT1', 'PXLB1', 'RMdV1',
-                                   'DATA9', 'RGNm1', 'DATA11', 'DATA10',
-                                   'DATA12']),
+             'run_start': '2004-11-22 11:58:35',
+             'run_finish': '2004-11-22 12:42:08',
+             'abif_raw_keys': set(['RGNm1', 'MCHN1', 'DyeW1', 'Dye#1',
+                                   'InVt1', 'EVNT4', 'HCFG1', 'RunN1',
+                                   'PXLB1', 'DyeB1', 'DCHT1', 'DyeN3',
+                                   'DyeW2', 'DyeW3', 'DyeN2', 'SVER3',
+                                   'MODL1', 'SpNm1', 'HCFG2', 'RMdX1',
+                                   'LANE1', 'DATA5', 'EVNT2', 'DATA7',
+                                   'SVER4', 'RMdV1', 'RUND1', 'HCFG3',
+                                   'RUNT1', 'RUNT2', 'DyeB4', 'User1',
+                                   'RGOw1', 'DyeW4', 'DATA1', 'CTID1',
+                                   'DyeB3', 'DATA2', 'HCFG4', 'SMLt1',
+                                   'EVNT3', 'CpEP1', 'EVNT1', 'Tmpr1',
+                                   'Satd1', 'GTyp1', 'DySN1', 'Scan1',
+                                   'CTTL1', 'RUNT3', 'RPrV1', 'RUND4',
+                                   'LIMS1', 'DATA4', 'DATA6', 'DyeB2',
+                                   'DyeN4', 'NLNE1', 'InSc1', 'OfSc1',
+                                   'RMdN1', 'DATA3', 'MODF1', 'NAVG1',
+                                   'Rate1', 'SMED1', 'RUNT4', 'LNTD1',
+                                   'SVER1', 'RUND2', 'DSam1', 'CTNM1',
+                                   'Scal1', 'SCAN1', 'TUBE1', 'DyeN1',
+                                   'CTOw1', 'RUND3', 'RMXV1', 'EPVt1',
+                                   'LsrP1', 'RPrN1', 'DATA8']),
             },
 'data_310': {
             'path': ['Abi', '310.ab1'],
@@ -211,9 +202,11 @@ class TestAbi(unittest.TestCase):
         """Test if the extracted seqrecords data are equal to expected values."""
         for trace in test_data:
             record = SeqIO.read(test_data[trace]['handle'], 'abi')
-            self.assertEqual(basename(test_data[trace]["path"][-1]).replace('.ab1', ''), record.name)
-            self.assertEqual(test_data[trace]['seq'], str(record.seq))
-            self.assertEqual(test_data[trace]['qual'], record.letter_annotations['phred_quality'])
+            if(trace != 'test_fsa'):
+                self.assertEqual(basename(test_data[trace]["path"][-1]).replace('.ab1', ''), record.name)
+                self.assertEqual(test_data[trace]['seq'], str(record.seq))
+                self.assertEqual(test_data[trace]['qual'], record.letter_annotations['phred_quality'])
+            print(record)
             self.assertEqual(test_data[trace]['sample'], record.id)
             self.assertEqual(test_data[trace]['sample_well'], record.annotations['sample_well'])
             self.assertEqual(test_data[trace]['machine_model'], record.annotations['machine_model'])
@@ -225,7 +218,7 @@ class TestAbi(unittest.TestCase):
         """Test if trim works."""
         for trace in test_data:
             record = SeqIO.read(test_data[trace]['handle'], 'abi-trim')
-            if trace != 'data_empty':
+            if trace != 'data_empty' and trace != 'test_fsa':
                 self.assertNotEqual(str(record.seq), test_data[trace]['seq'])
                 self.assertIn(str(record.seq), test_data[trace]['seq'])
             else:
