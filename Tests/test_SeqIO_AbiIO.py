@@ -202,7 +202,7 @@ class TestAbi(unittest.TestCase):
         """Test if the extracted seqrecords data are equal to expected values."""
         for trace in test_data:
             record = SeqIO.read(test_data[trace]['handle'], 'abi')
-            if(trace != 'test_fsa'):
+            if trace != 'test_fsa':
                 self.assertEqual(basename(test_data[trace]["path"][-1]).replace('.ab1', ''), record.name)
                 self.assertEqual(test_data[trace]['seq'], str(record.seq))
                 self.assertEqual(test_data[trace]['qual'], record.letter_annotations['phred_quality'])

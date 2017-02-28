@@ -402,7 +402,9 @@ def AbiIterator(handle, alphabet=None, trim=False):
     annot['abif_raw'] = raw
 
     # fsa check
-    if (set(['SpNm1', 'LIMS1', 'CTID1']).issubset(raw)):
+    is_fsa_file = set(['SpNm1', 'LIMS1', 'CTID1']).issubset(raw)
+
+    if is_fsa_file:
         try:
             file_name = basename(handle.name).replace('.fsa', '')
         except AttributeError:
@@ -427,7 +429,7 @@ def AbiIterator(handle, alphabet=None, trim=False):
                            annotations=annot,
                            letter_annotations={'phred_quality': qual})
 
-    if not trim or set(['SpNm1', 'LIMS1', 'CTID1']).issubset(raw):
+    if not trim or is_fsa_file:
         yield record
     else:
         yield _abi_trim(record)
