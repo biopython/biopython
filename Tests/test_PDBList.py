@@ -48,8 +48,8 @@ class TestPDBListGetStructure(unittest.TestCase):
     """Test methods responsible for getting structures."""
 
     @contextlib.contextmanager
-    def make_temp_directory(self, dir):
-        temp_dir = tempfile.mkdtemp(dir=dir)
+    def make_temp_directory(self, directory):
+        temp_dir = tempfile.mkdtemp(directory=directory)
         try:
             yield temp_dir
         finally:
