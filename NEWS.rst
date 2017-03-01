@@ -84,6 +84,7 @@ possible, especially the following contributors:
 - Chris Warth
 - Emmanuel Noutahi
 - FGastaldello (first contribution)
+- Jacek Śmietański
 - Jack Twilley (first contribution)
 - Jeroen Van Goey (first contribution)
 - Lenna Peterson
