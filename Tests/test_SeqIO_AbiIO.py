@@ -170,6 +170,38 @@ test_data = {
                                   'OFFS1', 'DyeZ1', 'DyeZ3', 'DyeZ2', 'DyeZ4',
                                   'DATA9']),
            },
+'test_fsa': {
+             'path': ['Abi', 'test.fsa'],
+             'seq': '',
+             'sample': 'ae524aa33cc011d9990900087493610c',
+             'sample_well': 'E1',
+             'dye': 'F',
+             'polymer': 'POP7                            ',
+             'machine_model': '3100',
+             'run_start': '2004-11-22 11:58:35',
+             'run_finish': '2004-11-22 12:42:08',
+             'abif_raw_keys': set(['RGNm1', 'MCHN1', 'DyeW1', 'Dye#1',
+                                   'InVt1', 'EVNT4', 'HCFG1', 'RunN1',
+                                   'PXLB1', 'DyeB1', 'DCHT1', 'DyeN3',
+                                   'DyeW2', 'DyeW3', 'DyeN2', 'SVER3',
+                                   'MODL1', 'SpNm1', 'HCFG2', 'RMdX1',
+                                   'LANE1', 'DATA5', 'EVNT2', 'DATA7',
+                                   'SVER4', 'RMdV1', 'RUND1', 'HCFG3',
+                                   'RUNT1', 'RUNT2', 'DyeB4', 'User1',
+                                   'RGOw1', 'DyeW4', 'DATA1', 'CTID1',
+                                   'DyeB3', 'DATA2', 'HCFG4', 'SMLt1',
+                                   'EVNT3', 'CpEP1', 'EVNT1', 'Tmpr1',
+                                   'Satd1', 'GTyp1', 'DySN1', 'Scan1',
+                                   'CTTL1', 'RUNT3', 'RPrV1', 'RUND4',
+                                   'LIMS1', 'DATA4', 'DATA6', 'DyeB2',
+                                   'DyeN4', 'NLNE1', 'InSc1', 'OfSc1',
+                                   'RMdN1', 'DATA3', 'MODF1', 'NAVG1',
+                                   'Rate1', 'SMED1', 'RUNT4', 'LNTD1',
+                                   'SVER1', 'RUND2', 'DSam1', 'CTNM1',
+                                   'Scal1', 'SCAN1', 'TUBE1', 'DyeN1',
+                                   'CTOw1', 'RUND3', 'RMXV1', 'EPVt1',
+                                   'LsrP1', 'RPrN1', 'DATA8']),
+            },
 }
 
 test_data_fake = {
@@ -211,9 +243,10 @@ class TestAbi(unittest.TestCase):
         """Test if the extracted seqrecords data are equal to expected values."""
         for trace in test_data:
             record = SeqIO.read(test_data[trace]['handle'], 'abi')
-            self.assertEqual(basename(test_data[trace]["path"][-1]).replace('.ab1', ''), record.name)
-            self.assertEqual(test_data[trace]['seq'], str(record.seq))
-            self.assertEqual(test_data[trace]['qual'], record.letter_annotations['phred_quality'])
+            if trace != 'test_fsa':
+                self.assertEqual(basename(test_data[trace]["path"][-1]).replace('.ab1', ''), record.name)
+                self.assertEqual(test_data[trace]['seq'], str(record.seq))
+                self.assertEqual(test_data[trace]['qual'], record.letter_annotations['phred_quality'])
             self.assertEqual(test_data[trace]['sample'], record.id)
             self.assertEqual(test_data[trace]['sample_well'], record.annotations['sample_well'])
             self.assertEqual(test_data[trace]['machine_model'], record.annotations['machine_model'])
@@ -225,7 +258,7 @@ class TestAbi(unittest.TestCase):
         """Test if trim works."""
         for trace in test_data:
             record = SeqIO.read(test_data[trace]['handle'], 'abi-trim')
-            if trace != 'data_empty':
+            if trace != 'data_empty' and trace != 'test_fsa':
                 self.assertNotEqual(str(record.seq), test_data[trace]['seq'])
                 self.assertIn(str(record.seq), test_data[trace]['seq'])
             else:
