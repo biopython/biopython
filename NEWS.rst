@@ -28,6 +28,12 @@ format name "maf", using new module Bio.AlignIO.MafIO which also offers
 indexed access to these potentially large files using SQLite3 (contributed by
 Andrew Sczesnak, with additional refinements from Adam Novak).
 
+Bio.SearchIO.AbiIO has been extended to support parsing FSA files. The
+underlying format (ABIF) remains the same as AB1 files and so the string
+'abif' is the expected format argument in the main SeqIO functions. AbiIO
+determines whether the file is AB1 or FSA based on the presence of specific
+tags.
+
 The Uniprot parser is now able to parse "submittedName" elements in XML files.
 
 The NEXUS parser handling of internal node comments has been improved, which
@@ -87,6 +93,7 @@ possible, especially the following contributors:
 - Jacek Śmietański
 - Jack Twilley (first contribution)
 - Jeroen Van Goey (first contribution)
+- Kurt Graff (first contribution)
 - Lenna Peterson
 - Leonhard Heizinger (first contribution)
 - Markus Piotrowski

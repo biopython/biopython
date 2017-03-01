@@ -117,6 +117,7 @@ This is certainly not comprehensive, and if you've been overlooked
 - Kozo Nishida <https://github.com/kozo2>
 - Kristian Davidsen <https://github.com/krdav>
 - Kuan-Yi Li <https://github.com/kuanyili>
+- Kurt Graff <https://github.com/graph1994>
 - Kyle Ellrott <https://github.com/kellrott>
 - Leighton Pritchard <lpritc at domain scri.sari.ac.uk>
 - Lenna Peterson <ark first-name at gmail dot com>
