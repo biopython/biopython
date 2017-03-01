@@ -230,7 +230,6 @@ class PDBList(object):
         @return: filename
         @rtype: string
         """
-
         file_format = self._print_default_format_warning(file_format)  # Deprecation warning
 
         # Get the compressed PDB structure
