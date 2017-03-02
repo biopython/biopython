@@ -13,7 +13,7 @@ E_VALUE_THRESH = 1e-10
 class TestNCBIXML(unittest.TestCase):
 
     def test_xml_2212L_blastp_001(self):
-        "Parsing BLASTP 2.2.12, gi|49176427|ref|NP_418280.3| (xml_2212L_blastp_001)"
+       "Parsing BLASTP 2.2.12,gi|49176427|ref|NP_418280.3| (xml_2212L_blastp_001)"
 
         filename = 'xml_2212L_blastp_001.xml'
         datafile = os.path.join("Blast", filename)
@@ -1864,7 +1864,7 @@ class TestNCBIXML(unittest.TestCase):
         # <Iteration_message>CONVERGED</Iteration_message>
         self.assertRaises(StopIteration, next, records)
         handle.close()
-    
+
     def test_xml_2226_blastn_001(self):
         "Parsing BLASTN 2.2.26+, Query_1 (xml_2226_blastn_001)"
 
@@ -1877,7 +1877,7 @@ class TestNCBIXML(unittest.TestCase):
 
         self.assertEqual(record.query_id, "Query_1")
         self.assertEqual(len(alignments), 0)
-        
+
         record = next(records)
         alignments = record.alignments
 
@@ -1904,8 +1904,7 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(alignments[4].length, 1077)
         self.assertEqual(len(alignments[0].hsps), 1)
         self.assertFalse(alignments[4].hsps[0].expect > E_VALUE_THRESH)
-        
-		
+
         record = next(records)
         alignments = record.alignments
         self.assertEqual(record.query_id, "Query_3")
@@ -1935,7 +1934,7 @@ class TestNCBIXML(unittest.TestCase):
 
         self.assertRaises(StopIteration, next, records)
         handle.close()
-		
+
     def test_xml_2226_blastn_002(self):
         "Parsing BLASTN 2.2.26+, Query_1 (xml_2226_blastn_002)"
 
@@ -1951,7 +1950,7 @@ class TestNCBIXML(unittest.TestCase):
 
         self.assertRaises(StopIteration, next, records)
         handle.close()
-    
+
     def test_xml_2226_blastn_003(self):
         "Parsing BLASTN 2.2.26+, Query_1 (xml_2226_blastn_003)"
 
@@ -1987,7 +1986,7 @@ class TestNCBIXML(unittest.TestCase):
         self.assertFalse(alignments[4].hsps[0].expect > E_VALUE_THRESH)
 
         self.assertRaises(StopIteration, next, records)
-        handle.close()	
+        handle.close()
 
     def test_xml_2226_blastn_004(self):
         "Parsing BLASTN 2.2.26+, hg19_dna range=chr1:1207307-1207372 5'pad=0 3'pad=0 strand=+ repeatMasking=none (xml_2226_blastn_004)"
@@ -2026,7 +2025,7 @@ class TestNCBIXML(unittest.TestCase):
 
         self.assertRaises(StopIteration, next, records)
         handle.close()
-		
+
     def test_xml_2226_blastn_005(self):
         "Parsing BLASTN 2.2.26+, Query_1 (xml_2226_blastn_005)"
 
@@ -2039,7 +2038,7 @@ class TestNCBIXML(unittest.TestCase):
 
         self.assertEqual(record.query_id, "Query_1")
         self.assertEqual(len(alignments), 0)
-		
+
         record = next(records)
         alignments = record.alignments
         self.assertEqual(record.query_id, "Query_2")
@@ -2065,7 +2064,7 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(alignments[4].length, 1077)
         self.assertEqual(len(alignments[4].hsps), 1)
         self.assertFalse(alignments[4].hsps[0].expect > E_VALUE_THRESH)
-		
+
         record = next(records)
         alignments = record.alignments
         self.assertEqual(record.query_id, "Query_3")
@@ -2135,11 +2134,11 @@ class TestNCBIXML(unittest.TestCase):
         alignments = record.alignments
         self.assertEqual(record.query_id, "Query_1")
         self.assertEqual(len(alignments), 0)
-        
+
         record = next(records)
         alignments = record.alignments
         self.assertEqual(record.query_id, "Query_2")
-        self.assertEqual(len(alignments), 5)		
+        self.assertEqual(len(alignments), 5)
         self.assertEqual(sum([len(a.hsps) for a in alignments]), 5)
         self.assertEqual(alignments[0].title[:50], "gnl|BL_ORD_ID|1 gi|308175296|ref|YP_003922001.1| m")
         self.assertEqual(alignments[0].length, 100)
@@ -2161,11 +2160,11 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(alignments[4].length, 132)
         self.assertEqual(len(alignments[4].hsps), 1)
         self.assertTrue(alignments[4].hsps[0].expect > E_VALUE_THRESH)
-        
+
         record = next(records)
         alignments = record.alignments
         self.assertEqual(record.query_id, "Query_3")
-        self.assertEqual(len(alignments), 5)		
+        self.assertEqual(len(alignments), 5)
         self.assertEqual(sum([len(a.hsps) for a in alignments]), 10)
         self.assertEqual(alignments[0].title[:50], "gnl|BL_ORD_ID|5 gi|11464971|ref|NP_062422.1| pleck")
         self.assertEqual(alignments[0].length, 350)
@@ -2195,7 +2194,7 @@ class TestNCBIXML(unittest.TestCase):
 
         self.assertRaises(StopIteration, next, records)
         handle.close()
-		
+
     def test_xml_2226_blastp_002(self):
         "Parsing BLASTP 2.2.26+,random_s00 (xml_2226_blastp_002)"
         # NOTE - no date in version field, downloaded 2008/05/08
@@ -2213,7 +2212,7 @@ class TestNCBIXML(unittest.TestCase):
 
         self.assertRaises(StopIteration, next, records)
         handle.close()
-		
+
     def test_xml_2226_blastp_003(self):
         "Parsing BLASTP 2.2.26+, gi|16080617|ref|NP_391444.1| membrane bound lipoprotein [Bacillus subtilis subsp. subtilis str. 168]  (xml_2226_blastp_003)"
         # NOTE - no date in version field, downloaded 2008/05/08
@@ -2227,7 +2226,7 @@ class TestNCBIXML(unittest.TestCase):
         record = next(records)
         alignments = record.alignments
         self.assertEqual(record.query_id, "Query_1")
-        self.assertEqual(len(alignments), 5)		
+        self.assertEqual(len(alignments), 5)
         self.assertEqual(sum([len(a.hsps) for a in alignments]), 5)
         self.assertEqual(alignments[0].title[:50], "gnl|BL_ORD_ID|1 gi|308175296|ref|YP_003922001.1| m")
         self.assertEqual(alignments[0].length, 100)
@@ -2249,10 +2248,10 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(alignments[4].length, 132)
         self.assertEqual(len(alignments[4].hsps), 1)
         self.assertTrue(alignments[4].hsps[0].expect > E_VALUE_THRESH)
-        
+
         self.assertRaises(StopIteration, next, records)
         handle.close()
-		
+
     def test_xml_2226_blastp_004(self):
         "Parsing BLASTP 2.2.26+, gi|11464971:4-101 pleckstrin [Mus musculus]  (xml_2226_blastp_004)"
         # NOTE - no date in version field, downloaded 2008/05/08
@@ -2266,7 +2265,7 @@ class TestNCBIXML(unittest.TestCase):
         record = next(records)
         alignments = record.alignments
         self.assertEqual(record.query_id, "Query_1")
-        self.assertEqual(len(alignments), 5)		
+        self.assertEqual(len(alignments), 5)
         self.assertEqual(sum([len(a.hsps) for a in alignments]), 10)
         self.assertEqual(alignments[0].title[:50], "gnl|BL_ORD_ID|5 gi|11464971|ref|NP_062422.1| pleck")
         self.assertEqual(alignments[0].length, 350)
@@ -2293,10 +2292,10 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(len(alignments[4].hsps), 2)
         self.assertFalse(alignments[4].hsps[0].expect > E_VALUE_THRESH)
         self.assertTrue(alignments[4].hsps[1].expect > E_VALUE_THRESH)
-        
+
         self.assertRaises(StopIteration, next, records)
         handle.close()
-		
+
     def test_xml_2226_blastp_005(self):
         "Parsing BLASTP 2.2.26+, random_s00 (xml_2226_blastp_005)"
         # NOTE - no date in version field, downloaded 2008/05/08
@@ -2337,11 +2336,11 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(alignments[4].length, 105)
         self.assertEqual(len(alignments[4].hsps), 1)
         self.assertFalse(alignments[4].hsps[0].expect > E_VALUE_THRESH)
-		
+
         record = next(records)
         alignments = record.alignments
         self.assertEqual(record.query_id, "Query_3")
-        self.assertEqual(len(alignments), 5)		
+        self.assertEqual(len(alignments), 5)
         self.assertEqual(sum([len(a.hsps) for a in alignments]), 10)
         self.assertEqual(alignments[0].title[:50], "gi|11464971|ref|NP_062422.1| pleckstrin [Mus muscu")
         self.assertEqual(alignments[0].length, 350)
@@ -2368,10 +2367,10 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(len(alignments[4].hsps), 2)
         self.assertFalse(alignments[4].hsps[0].expect > E_VALUE_THRESH)
         self.assertTrue(alignments[4].hsps[1].expect > E_VALUE_THRESH)
-        
+
         self.assertRaises(StopIteration, next, records)
         handle.close()
-		
+
     def test_xml_2226_blastx_001(self):
         "Parsing BLASTX 2.2.26+, random_s00 (xml_2226_blastx_001)"
         # NOTE - no date in version field, downloaded 2008/05/08
@@ -2424,10 +2423,10 @@ class TestNCBIXML(unittest.TestCase):
         self.assertTrue(alignments[4].hsps[3].expect > E_VALUE_THRESH)
         self.assertTrue(alignments[4].hsps[4].expect > E_VALUE_THRESH)
         self.assertTrue(alignments[4].hsps[5].expect > E_VALUE_THRESH)
-		
+
         self.assertRaises(StopIteration, next, records)
         handle.close()
-		
+
     def test_xml_2226_blastx_002(self):
         "Parsing BLASTX 2.2.26+, random_s00 (xml_2226_blastx_002)"
         # NOTE - no date in version field, downloaded 2008/05/08
@@ -2442,10 +2441,10 @@ class TestNCBIXML(unittest.TestCase):
         alignments = record.alignments
         self.assertEqual(record.query_id, "Query_1")
         self.assertEqual(len(alignments), 0)
-		
+
         self.assertRaises(StopIteration, next, records)
         handle.close()
-		
+
     def test_xml_2226_blastx_003(self):
         "Parsing BLASTX 2.2.26+, hg19_dna range=chr1:1207057-1207541 5'pad=0 3'pad=0 strand=+ repeatMasking=none (xml_2226_blastx_003)"
         # NOTE - no date in version field, downloaded 2008/05/08
@@ -2493,10 +2492,10 @@ class TestNCBIXML(unittest.TestCase):
         self.assertTrue(alignments[4].hsps[3].expect > E_VALUE_THRESH)
         self.assertTrue(alignments[4].hsps[4].expect > E_VALUE_THRESH)
         self.assertTrue(alignments[4].hsps[5].expect > E_VALUE_THRESH)
-		
+
         self.assertRaises(StopIteration, next, records)
         handle.close()
-		
+
     def test_xml_2226_blastx_004(self):
         "Parsing BLASTX 2.2.26+, random_s00 (xml_2226_blastx_004)"
         # NOTE - no date in version field, downloaded 2008/05/08
@@ -2511,7 +2510,7 @@ class TestNCBIXML(unittest.TestCase):
         alignments = record.alignments
         self.assertEqual(record.query_id, "Query_1")
         self.assertEqual(len(alignments), 0)
-		
+
         record = next(records)
         alignments = record.alignments
         self.assertEqual(record.query_id, "Query_2")
@@ -2541,10 +2540,10 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(len(alignments[4].hsps), 2)
         self.assertFalse(alignments[4].hsps[0].expect > E_VALUE_THRESH)
         self.assertTrue(alignments[4].hsps[1].expect > E_VALUE_THRESH)
-		
+
         self.assertRaises(StopIteration, next, records)
         handle.close()
-		
+
     def test_xml_2226_tblastn_001(self):
         "Parsing TBLASTN 2.2.26+, random_s00 (xml_2226_tblastn_001)"
         # NOTE - no date in version field, downloaded 2008/05/08
@@ -2559,7 +2558,7 @@ class TestNCBIXML(unittest.TestCase):
         alignments = record.alignments
         self.assertEqual(record.query_id, "Query_1")
         self.assertEqual(len(alignments), 0)
-		
+
         record = next(records)
         alignments = record.alignments
         self.assertEqual(record.query_id, "Query_2")
@@ -2577,7 +2576,7 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(alignments[2].length, 1593)
         self.assertEqual(len(alignments[2].hsps), 1)
         self.assertTrue(alignments[2].hsps[0].expect > E_VALUE_THRESH)
-        
+
         record = next(records)
         alignments = record.alignments
         self.assertEqual(record.query_id, "Query_3")
@@ -2607,10 +2606,10 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(alignments[4].length, 4932)
         self.assertEqual(len(alignments[4].hsps), 1)
         self.assertTrue(alignments[4].hsps[0].expect > E_VALUE_THRESH)
-		
+
         self.assertRaises(StopIteration, next, records)
         handle.close()
-		
+
     def test_xml_2226_tblastn_002(self):
         "Parsing TBLASTN 2.2.26+, random_s00 (xml_2226_tblastn_002)"
         # NOTE - no date in version field, downloaded 2008/05/08
@@ -2625,10 +2624,10 @@ class TestNCBIXML(unittest.TestCase):
         alignments = record.alignments
         self.assertEqual(record.query_id, "Query_1")
         self.assertEqual(len(alignments), 0)
-		
+
         self.assertRaises(StopIteration, next, records)
         handle.close()
-		
+
     def test_xml_2226_tblastn_003(self):
         "Parsing TBLASTN 2.2.26+, random_s00 (xml_2226_tblastn_003)"
         # NOTE - no date in version field, downloaded 2008/05/08
@@ -2656,10 +2655,10 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(alignments[2].length, 1593)
         self.assertEqual(len(alignments[2].hsps), 1)
         self.assertTrue(alignments[2].hsps[0].expect > E_VALUE_THRESH)
-		
+
         self.assertRaises(StopIteration, next, records)
         handle.close()
-		
+
     def test_xml_2226_tblastn_004(self):
         "Parsing TBLASTN 2.2.26+, gi|11464971:4-101 pleckstrin [Mus musculus] (xml_2226_tblastn_004)"
         # NOTE - no date in version field, downloaded 2008/05/08
@@ -2699,10 +2698,10 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(alignments[4].length, 4932)
         self.assertEqual(len(alignments[4].hsps), 1)
         self.assertTrue(alignments[4].hsps[0].expect > E_VALUE_THRESH)
-		
+
         self.assertRaises(StopIteration, next, records)
         handle.close()
-		
+
     def test_xml_2226_tblastn_005(self):
         "Parsing TBLASTN 2.2.26+, random_s00 (xml_2226_tblastn_005)"
         # NOTE - no date in version field, downloaded 2008/05/08
@@ -2717,7 +2716,7 @@ class TestNCBIXML(unittest.TestCase):
         alignments = record.alignments
         self.assertEqual(record.query_id, "Query_1")
         self.assertEqual(len(alignments), 0)
-		
+
         record = next(records)
         alignments = record.alignments
         self.assertEqual(record.query_id, "Query_2")
@@ -2735,7 +2734,7 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(alignments[2].length, 4149)
         self.assertEqual(len(alignments[0].hsps), 1)
         self.assertTrue(alignments[2].hsps[0].expect > E_VALUE_THRESH)
-		
+
         record = next(records)
         alignments = record.alignments
         self.assertEqual(record.query_id, "Query_3")
@@ -2766,10 +2765,10 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(len(alignments[4].hsps), 2)
         self.assertFalse(alignments[4].hsps[0].expect > E_VALUE_THRESH)
         self.assertTrue(alignments[4].hsps[1].expect > E_VALUE_THRESH)
-		
+
         self.assertRaises(StopIteration, next, records)
         handle.close()
-		
+
     def test_xml_2226_tblastx_001(self):
         "Parsing TBLASTX 2.2.26+, random_s00 (xml_2226_tblastx_001)"
         # NOTE - no date in version field, downloaded 2008/05/08
@@ -2784,7 +2783,7 @@ class TestNCBIXML(unittest.TestCase):
         alignments = record.alignments
         self.assertEqual(record.query_id, "Query_1")
         self.assertEqual(len(alignments), 0)
-		
+
         record = next(records)
         alignments = record.alignments
         self.assertEqual(record.query_id, "Query_2")
@@ -2842,10 +2841,10 @@ class TestNCBIXML(unittest.TestCase):
         self.assertTrue(alignments[4].hsps[3].expect > E_VALUE_THRESH)
         self.assertTrue(alignments[4].hsps[4].expect > E_VALUE_THRESH)
         self.assertTrue(alignments[4].hsps[5].expect > E_VALUE_THRESH)
-        		
+
         self.assertRaises(StopIteration, next, records)
         handle.close()
-		
+
     def test_xml_2226_tblastx_002(self):
         "Parsing TBLASTX 2.2.26+, random_s00 (xml_2226_tblastx_002)"
         # NOTE - no date in version field, downloaded 2008/05/08
@@ -2860,10 +2859,10 @@ class TestNCBIXML(unittest.TestCase):
         alignments = record.alignments
         self.assertEqual(record.query_id, "Query_1")
         self.assertEqual(len(alignments), 0)
-		
+
         self.assertRaises(StopIteration, next, records)
         handle.close()
-		
+
     def test_xml_2226_tblastx_003(self):
         "Parsing TBLASTN 2.2.26+, gi|296147483:1-350 Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds (xml_2226_tblastx_003)"
         # NOTE - no date in version field, downloaded 2008/05/08
@@ -2931,10 +2930,10 @@ class TestNCBIXML(unittest.TestCase):
         self.assertTrue(alignments[4].hsps[3].expect > E_VALUE_THRESH)
         self.assertTrue(alignments[4].hsps[4].expect > E_VALUE_THRESH)
         self.assertTrue(alignments[4].hsps[5].expect > E_VALUE_THRESH)
-        
+
         self.assertRaises(StopIteration, next, records)
         handle.close()
-		
+
     def test_xml_2226_tblastx_004(self):
         "Parsing TBLASTX 2.2.26+, random_s00 (xml_2226_tblastx_004)"
         # NOTE - no date in version field, downloaded 2008/05/08
@@ -2949,7 +2948,7 @@ class TestNCBIXML(unittest.TestCase):
         alignments = record.alignments
         self.assertEqual(record.query_id, "Query_1")
         self.assertEqual(len(alignments), 0)
-		
+
         record = next(records)
         alignments = record.alignments
         self.assertEqual(record.query_id, "Query_2")
@@ -2993,10 +2992,10 @@ class TestNCBIXML(unittest.TestCase):
         self.assertFalse(alignments[4].hsps[1].expect > E_VALUE_THRESH)
         self.assertFalse(alignments[4].hsps[2].expect > E_VALUE_THRESH)
         self.assertTrue(alignments[4].hsps[3].expect > E_VALUE_THRESH)
-              
+
         self.assertRaises(StopIteration, next, records)
         handle.close()
-		
+
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)
