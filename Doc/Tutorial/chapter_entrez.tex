@@ -282,6 +282,12 @@ For most of their databases, the NCBI support several different file formats. Re
 One common usage is downloading sequences in the FASTA or GenBank/GenPept plain text formats (which can then be parsed with \verb|Bio.SeqIO|, see Sections~\ref{sec:SeqIO_GenBank_Online} and~\ref{sec:efetch}). From the \emph{Cypripedioideae} example above, we can download GenBank record EU490707 using \verb+Bio.Entrez.efetch+:
 
 \begin{verbatim}
+>>> from Bio import Entrez
+>>> Entrez.email = "A.N.Other@example.com"     # Always tell NCBI who you are
+>>> handle = Entrez.efetch(db="nucleotide", id="EU490707", rettype="gb", retmode="text")
+>>> print(handle.read())
+
+
 LOCUS       EU490707                1302 bp    DNA     linear   PLN 26-JUL-2016
 DEFINITION  Selenipedium aequinoctiale maturase K (matK) gene, partial cds;
             chloroplast.
@@ -295,9 +301,9 @@ SOURCE      chloroplast Selenipedium aequinoctiale
             Cypripedioideae; Selenipedium.
 REFERENCE   1  (bases 1 to 1302)
   AUTHORS   Neubig,K.M., Whitten,W.M., Carlsward,B.S., Blanco,M.A., Endara,L.,
-			Williams,N.H. and Moore,M.
+            Williams,N.H. and Moore,M.
   TITLE     Phylogenetic utility of ycf1 in orchids: a plastid gene more
-			variable than matK
+            variable than matK
   JOURNAL   Plant Syst. Evol. 277 (1-2), 75-84 (2009)
 REFERENCE   2  (bases 1 to 1302)
   AUTHORS   Neubig,K.M., Whitten,W.M., Carlsward,B.S., Blanco,M.A.,
@@ -306,51 +312,51 @@ REFERENCE   2  (bases 1 to 1302)
   JOURNAL   Submitted (14-FEB-2008) Department of Botany, University of
             Florida, 220 Bartram Hall, Gainesville, FL 32611-8526, USA
 FEATURES             Location/Qualifiers
-  source          1..1302
-                  /organism="Selenipedium aequinoctiale"
-                  /organelle="plastid:chloroplast"
-                  /mol_type="genomic DNA"
-                  /specimen_voucher="FLAS:Blanco 2475"
-                  /db_xref="taxon:256374"
-  gene            <1..>1302
-                  /gene="matK"
-  CDS             <1..>1302
-                  /gene="matK"
-                  /codon_start=1
-                  /transl_table=11
-                  /product="maturase K"
-                  /protein_id="ACC99456.1"
-                  /translation="IFYEPVEIFGYDNKSSLVLVKRLITRMYQQNFLISSVNDSNQKG
-                  FWGHKHFFSSHFSSQMVSEGFGVILEIPFSSQLVSSLEEKKIPKYQNLRSIHSIFPFL
-                  EDKFLHLNYVSDLLIPHPIHLEILVQILQCRIKDVPSLHLLRLLFHEYHNLNSLITSK
-                  KFIYAFSKRKKRFLWLLYNSYVYECEYLFQFLRKQSSYLRSTSSGVFLERTHLYVKIE
-                  HLLVVCCNSFQRILCFLKDPFMHYVRYQGKAILASKGTLILMKKWKFHLVNFWQSYFH
-                  FWSQPYRIHIKQLSNYSFSFLGYFSSVLENHLVVRNQMLENSFIINLLTKKFDTIAPV
-                  ISLIGSLSKAQFCTVLGHPISKPIWTDFSDSDILDRFCRICRNLCRYHSGSSKKQVLY
-                  RIKYILRLSCARTLARKHKSTVRTFMRRLGSGLLEEFFMEEE"
-  ORIGIN      
-      1 attttttacg aacctgtgga aatttttggt tatgacaata aatctagttt agtacttgtg
-     61 aaacgtttaa ttactcgaat gtatcaacag aattttttga tttcttcggt taatgattct
-    121 aaccaaaaag gattttgggg gcacaagcat tttttttctt ctcatttttc ttctcaaatg
-    181 gtatcagaag gttttggagt cattctggaa attccattct cgtcgcaatt agtatcttct
-    241 cttgaagaaa aaaaaatacc aaaatatcag aatttacgat ctattcattc aatatttccc
-    301 tttttagaag acaaattttt acatttgaat tatgtgtcag atctactaat accccatccc
-    361 atccatctgg aaatcttggt tcaaatcctt caatgccgga tcaaggatgt tccttctttg
-    421 catttattgc gattgctttt ccacgaatat cataatttga atagtctcat tacttcaaag
-    481 aaattcattt acgccttttc aaaaagaaag aaaagattcc tttggttact atataattct
-    541 tatgtatatg aatgcgaata tctattccag tttcttcgta aacagtcttc ttatttacga
-    601 tcaacatctt ctggagtctt tcttgagcga acacatttat atgtaaaaat agaacatctt
-    661 ctagtagtgt gttgtaattc ttttcagagg atcctatgct ttctcaagga tcctttcatg
-    721 cattatgttc gatatcaagg aaaagcaatt ctggcttcaa agggaactct tattctgatg
-    781 aagaaatgga aatttcatct tgtgaatttt tggcaatctt attttcactt ttggtctcaa
-    841 ccgtatagga ttcatataaa gcaattatcc aactattcct tctcttttct ggggtatttt
-    901 tcaagtgtac tagaaaatca tttggtagta agaaatcaaa tgctagagaa ttcatttata
-    961 ataaatcttc tgactaagaa attcgatacc atagccccag ttatttctct tattggatca
-   1021 ttgtcgaaag ctcaattttg tactgtattg ggtcatccta ttagtaaacc gatctggacc
-   1081 gatttctcgg attctgatat tcttgatcga ttttgccgga tatgtagaaa tctttgtcgt
-   1141 tatcacagcg gatcctcaaa aaaacaggtt ttgtatcgta taaaatatat acttcgactt
-   1201 tcgtgtgcta gaactttggc acggaaacat aaaagtacag tacgcacttt tatgcgaaga
-   1261 ttaggttcgg gattattaga agaattcttt atggaagaag aa
+     source          1..1302
+                     /organism="Selenipedium aequinoctiale"
+                     /organelle="plastid:chloroplast"
+                     /mol_type="genomic DNA"
+                     /specimen_voucher="FLAS:Blanco 2475"
+                     /db_xref="taxon:256374"
+     gene            <1..>1302
+                     /gene="matK"
+     CDS             <1..>1302
+                     /gene="matK"
+                     /codon_start=1
+                     /transl_table=11
+                     /product="maturase K"
+                     /protein_id="ACC99456.1"
+                     /translation="IFYEPVEIFGYDNKSSLVLVKRLITRMYQQNFLISSVNDSNQKG
+                     FWGHKHFFSSHFSSQMVSEGFGVILEIPFSSQLVSSLEEKKIPKYQNLRSIHSIFPFL
+                     EDKFLHLNYVSDLLIPHPIHLEILVQILQCRIKDVPSLHLLRLLFHEYHNLNSLITSK
+                     KFIYAFSKRKKRFLWLLYNSYVYECEYLFQFLRKQSSYLRSTSSGVFLERTHLYVKIE
+                     HLLVVCCNSFQRILCFLKDPFMHYVRYQGKAILASKGTLILMKKWKFHLVNFWQSYFH
+                     FWSQPYRIHIKQLSNYSFSFLGYFSSVLENHLVVRNQMLENSFIINLLTKKFDTIAPV
+                     ISLIGSLSKAQFCTVLGHPISKPIWTDFSDSDILDRFCRICRNLCRYHSGSSKKQVLY
+                     RIKYILRLSCARTLARKHKSTVRTFMRRLGSGLLEEFFMEEE"
+ORIGIN      
+        1 attttttacg aacctgtgga aatttttggt tatgacaata aatctagttt agtacttgtg
+       61 aaacgtttaa ttactcgaat gtatcaacag aattttttga tttcttcggt taatgattct
+      121 aaccaaaaag gattttgggg gcacaagcat tttttttctt ctcatttttc ttctcaaatg
+      181 gtatcagaag gttttggagt cattctggaa attccattct cgtcgcaatt agtatcttct
+      241 cttgaagaaa aaaaaatacc aaaatatcag aatttacgat ctattcattc aatatttccc
+      301 tttttagaag acaaattttt acatttgaat tatgtgtcag atctactaat accccatccc
+      361 atccatctgg aaatcttggt tcaaatcctt caatgccgga tcaaggatgt tccttctttg
+      421 catttattgc gattgctttt ccacgaatat cataatttga atagtctcat tacttcaaag
+      481 aaattcattt acgccttttc aaaaagaaag aaaagattcc tttggttact atataattct
+      541 tatgtatatg aatgcgaata tctattccag tttcttcgta aacagtcttc ttatttacga
+      601 tcaacatctt ctggagtctt tcttgagcga acacatttat atgtaaaaat agaacatctt
+      661 ctagtagtgt gttgtaattc ttttcagagg atcctatgct ttctcaagga tcctttcatg
+      721 cattatgttc gatatcaagg aaaagcaatt ctggcttcaa agggaactct tattctgatg
+      781 aagaaatgga aatttcatct tgtgaatttt tggcaatctt attttcactt ttggtctcaa
+      841 ccgtatagga ttcatataaa gcaattatcc aactattcct tctcttttct ggggtatttt
+      901 tcaagtgtac tagaaaatca tttggtagta agaaatcaaa tgctagagaa ttcatttata
+      961 ataaatcttc tgactaagaa attcgatacc atagccccag ttatttctct tattggatca
+     1021 ttgtcgaaag ctcaattttg tactgtattg ggtcatccta ttagtaaacc gatctggacc
+     1081 gatttctcgg attctgatat tcttgatcga ttttgccgga tatgtagaaa tctttgtcgt
+     1141 tatcacagcg gatcctcaaa aaaacaggtt ttgtatcgta taaaatatat acttcgactt
+     1201 tcgtgtgcta gaactttggc acggaaacat aaaagtacag tacgcacttt tatgcgaaga
+     1261 ttaggttcgg gattattaga agaattcttt atggaagaag aa
 //
 
 \end{verbatim}
