@@ -11,7 +11,9 @@ results are parseable. Detailed tests on each Entrez service are not within the
 scope of this file as they are already covered in test_Entrez.py.
 
 """
+import doctest
 import os
+import sys
 import unittest
 
 import requires_internet
@@ -211,5 +213,11 @@ class EntrezOnlineCase(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity=2)
-    unittest.main(testRunner=runner)
+    # When running test_Entrez.py directly, will also iunclude the
+    # Bio.Entrez doctests.
+    # TODO: Include the doctests via run_tests.py when online.
+    unittest_suite = unittest.TestLoader().loadTestsFromName("test_Entrez_online")
+    doctest_suite = doctest.DocTestSuite(Entrez)
+    suite = unittest.TestSuite((unittest_suite, doctest_suite))
+    runner = unittest.TextTestRunner(sys.stdout, verbosity=2)
+    runner.run(suite)
