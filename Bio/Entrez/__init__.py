@@ -146,7 +146,7 @@ def efetch(db, **keywords):
 
     >>> from Bio import Entrez
     >>> Entrez.email = "Your.Name.Here@example.org"
-    >>> handle = Entrez.efetch(db="nucleotide", id="57240072", rettype="gb", retmode="text")
+    >>> handle = Entrez.efetch(db="nucleotide", id="AY851612", rettype="gb", retmode="text")
     >>> print(handle.readline().strip())
     LOCUS       AY851612                 892 bp    DNA     linear   PLN 10-APR-2007
     >>> handle.close()
@@ -198,14 +198,14 @@ def esearch(db, term, **keywds):
 
     >>> from Bio import Entrez
     >>> Entrez.email = "Your.Name.Here@example.org"
-    >>> handle = Entrez.esearch(db="nucleotide", retmax=10, term="opuntia[ORGN] accD")
+    >>> handle = Entrez.esearch(db="nucleotide", retmax=10, term="opuntia[ORGN] accD", idtype="acc")
     >>> record = Entrez.read(handle)
     >>> handle.close()
     >>> int(record["Count"]) >= 2
     True
-    >>> "156535671" in record["IdList"]
+    >>> "EF590893.1" in record["IdList"]
     True
-    >>> "156535673" in record["IdList"]
+    >>> "EF590892.1" in record["IdList"]
     True
 
     """
