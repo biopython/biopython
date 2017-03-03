@@ -81,6 +81,7 @@ possible, especially the following contributors:
 - Allis Tauri (first contribution)
 - Andrew Guy (first contribution)
 - Andrew Sczesnak (first contribution)
+- Ben Fulton
 - Bernhard Thiel (first contribution)
 - Bertrand Néron
 - Blaise Li (first contribution)
