@@ -90,6 +90,12 @@ class AppTest(unittest.TestCase):
         nms = self.ctrl.estimate_nm()
         self.assertEqual(nms[0], 28.0)
 
+    def test_hwe_excess(self):
+        """Test Hardy-Weinberg Equilibrium.
+        """
+        hwe_excess = self.ctrl.test_hw_pop(0, "excess")
+        self.assertEqual(hwe_excess["Locus1"], (0.4955, None, -0.16, -0.1623, 5))
+
 # These tests are frequently failing, possibly due to a Genepop problem.
 #    def test_get_avg_fst_pair_locus(self):
 #        """Test get average Fst for pairwise pops on a locus.
