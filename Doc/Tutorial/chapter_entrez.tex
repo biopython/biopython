@@ -596,16 +596,13 @@ Three things can go wrong when parsing an XML file:
 \end{itemize}
 
 The first case occurs if, for example, you try to parse a Fasta file as if it were an XML file:
+%doctest ../Tests/GenBank
 \begin{verbatim}
 >>> from Bio import Entrez
 >>> handle = open("NC_005816.fna") # a Fasta file
 >>> record = Entrez.read(handle)
 Traceback (most recent call last):
-  File "<stdin>", line 1, in <module>
-  File "/usr/local/lib/python2.7/site-packages/Bio/Entrez/__init__.py", line 257, in read
-    record = handler.read(handle)
-  File "/usr/local/lib/python2.7/site-packages/Bio/Entrez/Parser.py", line 164, in read
-    raise NotXMLError(e)
+  ...
 Bio.Entrez.Parser.NotXMLError: Failed to parse the XML data (syntax error: line 1, column 0). Please make sure that the input data are in XML format.
 \end{verbatim}
 Here, the parser didn't find the \verb|<?xml ...| tag with which an XML file is supposed to start, and therefore decides (correctly) that the file is not an XML file.
@@ -633,14 +630,8 @@ which will generate the following traceback:
 \begin{verbatim}
 >>> Entrez.read(handle)
 Traceback (most recent call last):
-  File "<stdin>", line 1, in <module>
-  File "/usr/local/lib/python2.7/site-packages/Bio/Entrez/__init__.py", line 257, in read
-    record = handler.read(handle)
-  File "/usr/local/lib/python2.7/site-packages/Bio/Entrez/Parser.py", line 160, in read
-    raise CorruptedXMLError(e)
+  ...
 Bio.Entrez.Parser.CorruptedXMLError: Failed to parse the XML data (no element found: line 16, column 0). Please make sure that the input data are not corrupted.
-
->>>
 \end{verbatim}
 Note that the error message tells you at what point in the XML file the error was detected.
 
@@ -676,26 +667,21 @@ The third type of error occurs if the XML file contains tags that do not have a 
 
 In this file, for some reason the tag \verb|<DocsumList>| (and several others) are not listed in the DTD file \verb|eInfo_020511.dtd|, which is specified on the second line as the DTD for this XML file. By default, the parser will stop and raise a ValidationError if it cannot find some tag in the DTD:
 
+%doctest ../Tests/Entrez/
 \begin{verbatim}
 >>> from Bio import Entrez
 >>> handle = open("einfo3.xml")
 >>> record = Entrez.read(handle)
 Traceback (most recent call last):
-  File "<stdin>", line 1, in <module>
-  File "/usr/local/lib/python2.7/site-packages/Bio/Entrez/__init__.py", line 257, in read
-    record = handler.read(handle)
-  File "/usr/local/lib/python2.7/site-packages/Bio/Entrez/Parser.py", line 154, in read
-    self.parser.ParseFile(handle)
-  File "/usr/local/lib/python2.7/site-packages/Bio/Entrez/Parser.py", line 246, in startElementHandler
-    raise ValidationError(name)
+  ...
 Bio.Entrez.Parser.ValidationError: Failed to find tag 'DocsumList' in the DTD. To skip all tags that are not represented in the DTD, please call Bio.Entrez.read or Bio.Entrez.parse with validate=False.
 \end{verbatim}
 Optionally, you can instruct the parser to skip such tags instead of raising a ValidationError. This is done by calling \verb|Entrez.read| or \verb|Entrez.parse| with the argument \verb|validate| equal to False:
+%doctest ../Tests/Entrez/
 \begin{verbatim}
 >>> from Bio import Entrez
 >>> handle = open("einfo3.xml")
 >>> record = Entrez.read(handle, validate=False)
->>>
 \end{verbatim}
 Of course, the information contained in the XML tags that are not in the DTD are not present in the record returned by \verb|Entrez.read|.
 
