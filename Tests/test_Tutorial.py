@@ -74,6 +74,7 @@ warnings.simplefilter('ignore', BiopythonExperimentalWarning)
 
 if sys.version_info[0] >= 3:
     from lib2to3 import refactor
+    from lib2to3.pgen2.tokenize import TokenError
     fixers = refactor.get_fixers_from_package("lib2to3.fixes")
     fixers.remove("lib2to3.fixes.fix_print")  # Already using print function
     rt = refactor.RefactoringTool(fixers)
@@ -210,7 +211,10 @@ for latex in files:
 
         if sys.version_info[0] >= 3:
             example = ">>> from __future__ import print_function\n" + example
-            example = rt.refactor_docstring(example, name)
+            try:
+                example = rt.refactor_docstring(example, name)
+            except TokenError:
+                raise ValueError("Problem with %s:\n%s" % (name, example))
 
         def funct(n, d, f):
             global tutorial_base
