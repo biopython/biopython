@@ -28,8 +28,6 @@ import xml.etree.ElementTree as ET
 
 from Bio._py3k import _is_int_or_long, _as_string
 
-__docformat__ = "restructuredtext en"
-
 
 # Pathway
 class Pathway(object):
@@ -707,11 +705,6 @@ class Reaction(object):
     def reactant_ids(self):
         """Return a list of substrate and product reactant IDs."""
         return self._products.union(self._substrates)
-
-    @property
-    def entry(self):
-        """Return the Entry corresponding to this reaction."""
-        return self._pathway.entries[self._id]
 
     @property
     def element(self):

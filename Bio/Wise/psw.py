@@ -3,13 +3,15 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 #
-# Bio.Wise contains modules for running and processing the output of
-# some of the models in the Wise2 package by Ewan Birney available from:
-# ftp://ftp.ebi.ac.uk/pub/software/unix/wise2/
-# http://www.ebi.ac.uk/Wise2/
-#
-# Bio.Wise.psw is for protein Smith-Waterman alignments
-# Bio.Wise.dnal is for Smith-Waterman DNA alignments
+"""
+Bio.Wise contains modules for running and processing the output of
+some of the models in the Wise2 package by Ewan Birney available from:
+ftp://ftp.ebi.ac.uk/pub/software/unix/wise2/
+http://www.ebi.ac.uk/Wise2/
+
+Bio.Wise.psw is for protein Smith-Waterman alignments
+Bio.Wise.dnal is for Smith-Waterman DNA alignments
+"""
 
 from __future__ import print_function
 
@@ -18,6 +20,7 @@ import re
 import sys
 
 from Bio import Wise
+
 
 _CMDLINE_PSW = ["psw", "-l", "-F"]
 _OPTION_GAP_START = "-g"
@@ -94,7 +97,8 @@ def parse_line(line):
 
 
 def parse(iterable):
-    """
+    """Parse a file.
+
     format
 
     Column 0:
@@ -103,7 +107,6 @@ def parse(iterable):
 
     means that seq1[0] == seq2[86] (0-based)
     """
-
     alignment = Alignment()
     for line in iterable:
         try:

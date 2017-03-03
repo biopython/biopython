@@ -12,7 +12,7 @@ import unittest
 from Bio import MissingExternalDependencyError
 from Bio import SeqIO
 from Bio.Application import ApplicationError
-from Bio.Motif.Applications import XXmotifCommandline
+from Bio.motifs.applications import XXmotifCommandline
 
 
 # Try to avoid problems when the OS is in another language
@@ -117,8 +117,7 @@ class XXmotifTestErrorConditions(XXmotifTestCase):
         input_file = self.copy_and_mark_for_cleanup("Fasta/f002")
 
         try:
-            cline = XXmotifCommandline(outdir=temp_out_dir,
-                                       seqfile=input_file)
+            XXmotifCommandline(outdir=temp_out_dir, seqfile=input_file)
         except ValueError:
             pass
         else:

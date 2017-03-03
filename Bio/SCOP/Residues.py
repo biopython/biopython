@@ -5,10 +5,10 @@
 
 # Gavin E. Crooks 2001-11-03
 # Minor extensions, some bug fixes, and major changes to the interface
+"""A collection of residues from a PDB structure."""
 
 import re
 
-"""A collection of residues from a PDB structure."""
 
 _pdbid_re = re.compile(r"^(\w\w\w\w)(?:$|\s+|_)(.*)")
 _fragment_re = re.compile(r"\(?(\w:)?(-?\w*)-?(-?\w*)\)?(.*)")

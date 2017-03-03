@@ -9,6 +9,8 @@
 #                L.Pritchard@scri.ac.uk
 # #############################################################################
 
+"""GenomeDiagram module integrated into Biopython."""
+
 # Local imports, to make these classes available directly under the
 # Bio.Graphics.GenomeDiagram namespace:
 
@@ -19,6 +21,6 @@ from ._GraphSet import GraphSet
 from ._CrossLink import CrossLink
 
 # Not (currently) made public,
-# from _Colors import ColorTranslator
-# from _Feature import Feature
-# from _Graph import GraphData
+# from ._Colors import ColorTranslator
+# from ._Feature import Feature
+# from ._Graph import GraphData

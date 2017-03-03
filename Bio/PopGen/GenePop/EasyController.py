@@ -13,8 +13,6 @@ This interface is less efficient than the standard GenePopControler
 from .Controller import GenePopController
 from Bio.PopGen import GenePop
 
-__docformat__ = "restructuredtext en"
-
 
 class EasyController(object):
     def __init__(self, fname, genepop_dir=None):

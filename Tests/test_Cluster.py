@@ -101,21 +101,21 @@ class TestCluster(unittest.TestCase):
 
         try:
             treecluster(data1)
-        except:
+        except Exception:  # TODO - Which exceptions?
             self.fail("treecluster failed to accept matrix data1")
 
         try:
             treecluster(data2)
-        except:
+        except Exception:  # TODO - Which exceptions?
             self.fail("treecluster failed to accept matrix data2")
 
-        self.assertRaises(TypeError, lambda: treecluster(data3))
-        self.assertRaises(TypeError, lambda: treecluster(data4))
-        self.assertRaises(TypeError, lambda: treecluster(data5))
-        self.assertRaises(TypeError, lambda: treecluster(data6))
-        self.assertRaises(TypeError, lambda: treecluster(data7))
-        self.assertRaises(TypeError, lambda: treecluster(data8))
-        self.assertRaises(TypeError, lambda: treecluster(data9))
+        self.assertRaises(TypeError, treecluster, data3)
+        self.assertRaises(TypeError, treecluster, data4)
+        self.assertRaises(TypeError, treecluster, data5)
+        self.assertRaises(TypeError, treecluster, data6)
+        self.assertRaises(TypeError, treecluster, data7)
+        self.assertRaises(TypeError, treecluster, data8)
+        self.assertRaises(TypeError, treecluster, data9)
 
     def test_kcluster(self):
         if TestCluster.module == 'Bio.Cluster':
@@ -766,7 +766,7 @@ class TestCluster(unittest.TestCase):
                             [5.1, 5.5],
                             [5.0, 5.5],
                             [5.1, 5.2],
-                           ])
+                            ])
 
         mean, coordinates, pc, eigenvalues = pca(data)
         self.assertAlmostEqual(mean[0], 3.5461538461538464)

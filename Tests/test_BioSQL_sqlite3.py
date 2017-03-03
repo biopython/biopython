@@ -5,30 +5,28 @@
 
 """Run BioSQL tests using SQLite"""
 import os
+import unittest
 
-from Bio import MissingExternalDependencyError
 from Bio import SeqIO
 from BioSQL import BioSeqDatabase
 
-from common_BioSQL import *
+from common_BioSQL import *  # noqa
 
 # Constants for the database driver
-DBHOST = 'localhost'
-DBUSER = 'root'
-DBPASSWD = ''
-
 DBDRIVER = 'sqlite3'
 DBTYPE = 'sqlite'
 
+DBHOST = None
+DBUSER = 'root'
+DBPASSWD = None
 TESTDB = temp_db_filename()
-
 
 # This will abort if driver not installed etc:
 check_config(DBDRIVER, DBTYPE, DBHOST, DBUSER, DBPASSWD, TESTDB)
 
 # Some of the unit tests don't create their own database,
 # so just in case there is no database already:
-create_database()
+TESTDB = create_database()
 
 
 if False:
@@ -65,7 +63,13 @@ class BackwardsCompatibilityTest(unittest.TestCase):
         biosql_records = [db.lookup(name=rec.name)
                           for rec in original_records]
         # And check they agree
+        # Note the old parser used to create BioSQL/cor6_6.db
+        # did not record the molecule_type, so remove it here:
+        for r in original_records:
+            del r.annotations["molecule_type"]
         self.assertTrue(compare_records(original_records, biosql_records))
+        server.close()
+
 
 if __name__ == "__main__":
     # Run the test cases

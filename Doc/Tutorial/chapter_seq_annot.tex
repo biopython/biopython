@@ -574,6 +574,63 @@ the difference between the start and end positions. However,
 for a \verb|CompoundLocation| the length is the sum of the
 constituent regions.
 
+\section{Comparison}
+
+The \verb|SeqRecord| objects can be very complex, but here's a simple example:
+
+%doctest
+\begin{verbatim}
+>>> from Bio.Seq import Seq
+>>> from Bio.SeqRecord import SeqRecord
+>>> record1 = SeqRecord(Seq("ACGT"), id="test")
+>>> record2 = SeqRecord(Seq("ACGT"), id="test")
+\end{verbatim}
+
+What happens when you try to compare these ``identical'' records?
+
+%this is not a doctest:
+\begin{verbatim}
+>>> record1 == record2
+...
+\end{verbatim}
+
+Perhaps surprisingly older versions of Biopython would use Python's default object
+comparison for the \verb|SeqRecord|, meaning \verb|record1 == record2| would
+only return \verb|True| if these variables pointed at the same object in memory.
+In this example, \verb|record1 == record2| would have returned \verb|False|
+here!
+
+%this is not a doctest:
+\begin{verbatim}
+>>> record1 == record2  # on old versions of Biopython!
+False
+\end{verbatim}
+
+As of Biopython 1.67, \verb|SeqRecord| comparison like \verb|record1 == record2|
+will instead raise an explicit error to avoid people being caught out by this:
+
+%cont-doctest
+\begin{verbatim}
+>>> record1 == record2
+Traceback (most recent call last):
+...
+NotImplementedError: SeqRecord comparison is deliberately not implemented. Explicitly compare the attributes of interest.
+\end{verbatim}
+
+Instead you should check the attributes you are interested in, for example the
+identifier and the sequence:
+
+%cont-doctest
+\begin{verbatim}
+>>> record1.id == record2.id
+True
+>>> record1.seq == record2.seq
+True
+\end{verbatim}
+
+Beware that comparing complex objects quickly gets complicated (see also
+Section~\ref{sec:seq-comparison}).
+
 \section{References}
 
 Another common annotation related to a sequence is a reference to a journal or other published work dealing with the sequence. We have a fairly simple way of representing a Reference in Biopython -- we have a \verb|Bio.SeqFeature.Reference| class that stores the relevant information about a reference as attributes of an object.
@@ -641,8 +698,8 @@ For example, taking the same GenBank file used earlier:
 >>> record
 SeqRecord(seq=Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG',
 IUPACAmbiguousDNA()), id='NC_005816.1', name='NC_005816',
-description='Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence.',
-dbxrefs=['Project:10638'])
+description='Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence',
+dbxrefs=['Project:58037'])
 \end{verbatim}
 %cont-doctest
 \begin{verbatim}
@@ -724,8 +781,9 @@ qualifiers:
     Key: locus_tag, Value: ['YP_pPCP05']
 <BLANKLINE>
 \end{verbatim}
+%As above, output is truncated so cannot test this as a doctest:
 \begin{verbatim}
->>> print(sub_record.features[20])
+>>> print(sub_record.features[1])
 type: CDS
 location: [42:480](+)
 qualifiers:
@@ -766,7 +824,7 @@ and \texttt{description}, but for practicality these are preserved:
 >>> sub_record.name
 'NC_005816'
 >>> sub_record.description
-'Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence.'
+'Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence'
 \end{verbatim}
 
 \noindent This illustrates the problem nicely though, our new sub-record is
@@ -970,7 +1028,7 @@ Consider this example record:
 >>> from Bio import SeqIO
 >>> record = SeqIO.read("NC_005816.gb", "genbank")
 >>> print("%s %i %i %i %i" % (record.id, len(record), len(record.features), len(record.dbxrefs), len(record.annotations)))
-NC_005816.1 9609 41 1 11
+NC_005816.1 9609 41 1 13
 \end{verbatim}
 
 Here we take the reverse complement and specify a new identifier -- but notice

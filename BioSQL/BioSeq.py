@@ -1,5 +1,5 @@
 # Copyright 2002 by Andrew Dalke.  All rights reserved.
-# Revisions 2007-2009 copyright by Peter Cock.  All rights reserved.
+# Revisions 2007-2016 copyright by Peter Cock.  All rights reserved.
 # Revisions 2008-2009 copyright by Cymon J. Cox.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -135,6 +135,17 @@ class DBSeq(Seq):
     def __radd__(self, other):
         # Let the Seq object deal with the alphabet issues etc
         return other + self.toseq()
+
+
+def _retrieve_seq_len(adaptor, primary_id):
+    # The database schema ensures there will be only one matching row
+    seqs = adaptor.execute_and_fetchall(
+        "SELECT length FROM biosequence WHERE bioentry_id = %s", (primary_id,))
+    if not seqs:
+        return None
+    assert len(seqs) == 1
+    given_length, = seqs[0]
+    return int(given_length)
 
 
 def _retrieve_seq(adaptor, primary_id):
@@ -274,8 +285,8 @@ def _retrieve_features(adaptor, primary_id):
                 v = "%s.%s" % (accession, version)
             else:
                 v = accession
-            # subfeature remote location db_ref are stored as a empty string when
-            # not present
+            # subfeature remote location db_ref are stored as a empty string
+            # when not present
             if dbname == "":
                 dbname = None
             lookup[location_id] = (dbname, v)
@@ -298,39 +309,28 @@ def _retrieve_features(adaptor, primary_id):
             feature.ref_db = dbname
             feature.ref = version
         else:
-            sub_features = feature.sub_features
-            assert sub_features == []
+            locs = []
             for location in locations:
                 location_id, start, end, strand = location
                 dbname, version = lookup.get(location_id, (None, None))
-                subfeature = SeqFeature.SeqFeature()
-                subfeature.type = seqfeature_type
-                subfeature.location = SeqFeature.FeatureLocation(start, end)
-                # subfeature.location_operator = \
-                #    _retrieve_location_qualifier_value(adaptor, location_id)
-                subfeature.strand = strand
-                subfeature.ref_db = dbname
-                subfeature.ref = version
-                sub_features.append(subfeature)
-            # Locations are in order, but because of remote locations for
+                locs.append(SeqFeature.FeatureLocation(start, end,
+                                                       strand=strand,
+                                                       ref=version,
+                                                       ref_db=dbname))
+            # Locations are typically in biological in order (see negative
+            # strands below), but because of remote locations for
             # sub-features they are not necessarily in numerical order:
-            strands = set(sf.strand for sf in sub_features)
+            strands = set(l.strand for l in locs)
             if len(strands) == 1 and -1 in strands:
                 # Evil hack time for backwards compatibility
                 # TODO - Check if BioPerl and (old) Biopython did the same,
                 # we may have an existing incompatibility lurking here...
-                locs = [f.location for f in sub_features[::-1]]
-            else:
-                # All forward, or mixed strands
-                locs = [f.location for f in sub_features]
-            feature.location = SeqFeature.CompoundLocation(
-                locs, seqfeature_type)
-            # TODO - See Bug 2677 - we don't yet record location_operator,
+                locs = locs[::-1]
+            feature.location = SeqFeature.CompoundLocation(locs, "join")
+            # TODO - See Bug 2677 - we don't yet record location operator,
             # so for consistency with older versions of Biopython default
             # to assuming its a join.
-            feature.location_operator = "join"
         seq_feature_list.append(feature)
-
     return seq_feature_list
 
 
@@ -510,11 +510,8 @@ class DBSeqRecord(SeqRecord):
         # We don't yet record any per-letter-annotations in the
         # BioSQL database, but we should set this property up
         # for completeness (and the __str__ method).
-        try:
-            length = len(self.seq)
-        except:
-            # Could be no sequence in the database!
-            length = 0
+        # We do NOT want to load the sequence from the DB here!
+        length = _retrieve_seq_len(adaptor, primary_id)
         self._per_letter_annotations = _RestrictedDict(length=length)
 
     def __get_seq(self):
@@ -523,6 +520,7 @@ class DBSeqRecord(SeqRecord):
         return self._seq
 
     def __set_seq(self, seq):
+        # TODO - Check consistent with self._per_letter_annotations
         self._seq = seq
 
     def __del_seq(self):

@@ -39,7 +39,6 @@ from Bio._py3k import _binary_to_string_handle, _as_bytes
 from Bio._py3k import urlopen as _urlopen
 from Bio._py3k import quote as _quote
 
-__docformat__ = "restructuredtext en"
 
 # Constant
 _BASE_URL = "http://togows.dbcls.jp"
@@ -317,7 +316,7 @@ def _open(url, post=None):
 
     Open a handle to TogoWS, will raise an IOError if it encounters an error.
 
-    In the absense of clear guidelines, this function enforces a limit of
+    In the absence of clear guidelines, this function enforces a limit of
     "up to three queries per second" to avoid abusing the TogoWS servers.
     """
     delay = 0.333333333  # one third of a second

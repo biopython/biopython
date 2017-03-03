@@ -2476,8 +2476,8 @@ py_clusterdistance(PyObject* self, PyObject* args, PyObject* keywords)
 
 /* clustercentroids */
 static char clustercentroids__doc__[] =
-"clustercentroids(data, mask=None, transport=0, clusterid,\n"
-"                 method='a') -> cdata, cmask\n"
+"clustercentroids(data, mask=None, clusterid=None, method='a',\n"
+"                 transpose=0) -> cdata, cmask\n"
 "\n"
 "The clustercentroids routine calculates the cluster centroids, given to\n"
 "which cluster each element belongs. The centroid is defined as either\n"
@@ -2487,13 +2487,13 @@ static char clustercentroids__doc__[] =
 " - data: nrows x ncolumns array containing the expression data\n"
 " - mask: nrows x ncolumns array of integers, showing which data are\n"
 "   missing. If mask[i][j]==0, then data[i][j] is missing.\n"
-" - transpose: if equal to 0, gene (row) clusters are considered;\n"
-"   if equal to 1, microarray (column) clusters are considered.\n"
 " - clusterid: array containing the cluster number for each gene or\n"
 "   microarray. The cluster number should be non-negative.\n"
 " - method: specifies whether the centroid is calculated from the\n"
 "   arithmetic mean (method=='a', default) or the median\n"
 "   (method=='m') over each dimension.\n"
+" - transpose: if equal to 0, gene (row) clusters are considered;\n"
+"   if equal to 1, microarray (column) clusters are considered.\n"
 "\n"
 "Return values:\n"
 " - cdata: 2D array containing the cluster centroids. If transpose==0,\n"

@@ -1,4 +1,4 @@
-# Copyright 2008 by Peter Cock.  All rights reserved.
+# Copyright 2008-2016 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -18,14 +18,14 @@ import unittest
 from Bio._py3k import HTTPError
 from Bio._py3k import StringIO
 
-import requires_internet
-requires_internet.check()
 from Bio import MissingExternalDependencyError
 
 # We want to test these:
 from Bio.Blast import NCBIWWW
 from Bio.Blast import NCBIXML
 
+import requires_internet
+requires_internet.check()
 
 #####################################################################
 
@@ -43,15 +43,19 @@ print("Checking Bio.Blast.NCBIWWW.qblast() with various queries")
 class TestQblast(unittest.TestCase):
 
     def test_blastp_nr_actin(self):
-        # Simple protein blast filtered for rat only, using protein GI:160837788
+        # Simple protein blast filtered for rat only, using protein
+        # GI:160837788 aka NP_075631.2
         # the actin related protein 2/3 complex, subunit 1B [Mus musculus]
-        self.run_qblast("blastp", "nr", "160837788", 0.001,
+        self.run_qblast("blastp", "nr", "NP_075631.2", 0.001,
                         "rat [ORGN]", ['9506405', '13592137', '37589612', '149064087', '56912225'])
 
     def test_pcr_primers(self):
         # This next example finds PCR primer matches in Chimpanzees, e.g. BRCA1:
         self.run_qblast("blastn", "nr", "GTACCTTGATTTCGTATTC" + ("N" * 30) + "GACTCTACTACCTTTACCC",
-                        10, "pan [ORGN]", ["37953274", "51104367", "51104367", "51104367"])
+                        10, "pan [ORGN]", ["XM_009432096.2", "XM_009432102.2", "XM_009432101.2",
+                                           "XM_016930487.1", "XM_009432104.2", "XM_009432099.2",
+                                           "XR_001710553.1", "XM_016930485.1", "XM_009432089.2",
+                                           "XM_016930484.1"])
 
     def test_orchid_est(self):
         # Try an orchid EST (nucleotide) sequence against NR using BLASTX
@@ -95,21 +99,25 @@ class TestQblast(unittest.TestCase):
             # We used a FASTA record as the query
             expected = query[1:].split("\n", 1)[0]
             self.assertEqual(expected, record.query)
+        elif record.query_id.startswith("Query_") and len(query) == record.query_letters:
+            # We used a sequence as the entry and it was given a placeholder name
+            pass
         else:
             # We used an identifier as the query
-            self.assertTrue(query in record.query_id.split("|"))
+            self.assertIn(query, record.query_id.split("|"),
+                          "Expected %r within query_id %r" % (query, record.query_id))
 
         # Check the recorded input parameters agree with those requested
         self.assertEqual(float(record.expect), e_value)
         self.assertEqual(record.application.lower(), program)
-        self.assertLessEqual(len(record.alignments), 10)
-        self.assertLessEqual(len(record.descriptions), 10)
+        self.assertTrue(len(record.alignments) <= 10)
+        self.assertTrue(len(record.descriptions) <= 10)
 
         # Check the expected result(s) are found in the alignments
         if expected_hits is None:
             self.assertEqual(len(record.alignments), 0)  # Expected no alignments!
         else:
-            self.assertGreater(len(record.alignments), 0)  # Expected some alignments!
+            self.assertTrue(len(record.alignments) > 0)  # Expected some alignments!
             found_result = False
             for expected_hit in expected_hits:
                 for alignment in record.alignments:
@@ -129,7 +137,7 @@ class TestQblast(unittest.TestCase):
         if expected_hits is None:
             self.assertEqual(len(record.descriptions), 0)  # Expected no descriptions!
         else:
-            self.assertGreater(len(record.descriptions), 0)  # Expected some descriptions!
+            self.assertTrue(len(record.descriptions) > 0)  # Expected some descriptions!
             found_result = False
             for expected_hit in expected_hits:
                 for descr in record.descriptions:

@@ -27,12 +27,28 @@ import sys
 import os
 import shutil
 
-from distutils.core import setup
-from distutils.core import Command
-from distutils.command.install import install
-from distutils.command.build_py import build_py
-from distutils.command.build_ext import build_ext
-from distutils.extension import Extension
+if "bdist_wheel" in sys.argv:
+    try:
+        import setuptools
+        import wheel
+    except ImportError:
+        sys.exit("We need both setuptools AND wheel packages installed for bdist_wheel to work")
+    # Import specific bits of setuptools ...
+    from setuptools import setup
+    from setuptools import Command
+    from setuptools.command.install import install
+    from setuptools.command.build_py import build_py
+    from setuptools.command.build_ext import build_ext
+    from setuptools import Extension
+else:
+    # Except for wheels, stick with standard library's distutils
+    from distutils.core import setup
+    from distutils.core import Command
+    from distutils.command.install import install
+    from distutils.command.build_py import build_py
+    from distutils.command.build_ext import build_ext
+    from distutils.extension import Extension
+
 
 _CHECKED = None
 
@@ -122,8 +138,8 @@ def get_yes_or_no(question, default):
 
 
 # Make sure we have the right Python version.
-if sys.version_info[:2] < (2, 6):
-    print("Biopython requires Python 2.6 or 2.7 (or Python 3.3 or later). "
+if sys.version_info[:2] < (2, 7):
+    print("Biopython requires Python 2.7, or Python 3.3 or later. "
           "Python %d.%d detected" % sys.version_info[:2])
     sys.exit(1)
 elif is_pypy() and sys.version_info[0] == 3 and sys.version_info[:2] == (3, 2):
@@ -134,6 +150,8 @@ elif sys.version_info[0] == 3 and sys.version_info[:2] < (3, 3):
     print("Biopython requires Python 3.3 or later (or Python 2.6 or 2.7). "
           "Python %d.%d detected" % sys.version_info[:2])
     sys.exit(1)
+elif sys.version_info[:2] == (3, 3):
+    print("WARNING: Biopython support for Python 3.3 is now deprecated.")
 
 
 def check_dependencies_once():
@@ -335,11 +353,9 @@ PACKAGES = [
     'Bio.KEGG.Compound',
     'Bio.KEGG.Enzyme',
     'Bio.KEGG.Map',
+    'Bio.PDB.mmtf',
     'Bio.KEGG.KGML',
     'Bio.Medline',
-    'Bio.Motif',
-    'Bio.Motif.Parsers',
-    'Bio.Motif.Applications',
     'Bio.motifs',
     'Bio.motifs.applications',
     'Bio.motifs.jaspar',
@@ -389,6 +405,7 @@ NUMPY_PACKAGES = [
     'Bio.Affy',
     'Bio.Cluster',
     'Bio.KDTree',
+    'Bio.phenotype',
 ]
 
 if os.name == 'java':
@@ -426,11 +443,6 @@ if is_Numpy_installed():
         Extension('Bio.KDTree._CKDTree',
                   ["Bio/KDTree/KDTree.c",
                    "Bio/KDTree/KDTreemodule.c"],
-                  include_dirs=[numpy_include_dir],
-                  ))
-    EXTENSIONS.append(
-        Extension('Bio.Motif._pwm',
-                  ["Bio/Motif/_pwm.c"],
                   include_dirs=[numpy_include_dir],
                   ))
     EXTENSIONS.append(

@@ -123,8 +123,7 @@ def parse_pdb_header(infile):
     with File.as_handle(infile, 'r') as f:
         for l in f:
             record_type = l[0:6]
-            if (record_type == 'ATOM  ' or record_type == 'HETATM' or
-                record_type == 'MODEL '):
+            if record_type in ("ATOM  ", "HETATM", "MODEL "):
                 break
             else:
                 header.append(l)

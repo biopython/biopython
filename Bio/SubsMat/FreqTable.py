@@ -1,56 +1,53 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-#
+# Copyright Iddo Friedberg idoerg@cc.huji.ac.il
+"""A class to handle frequency tables
+
+Methods to read a letter frequency or a letter count file:
+Example files for a DNA alphabet:
+
+A count file (whitespace separated):
+
+A  50
+C  37
+G  23
+T  58
+
+The same info as a frequency file:
+
+A 0.2976
+C 0.2202
+G 0.1369
+T 0.3452
+
+Functions:
+  read_count(f): read a count file from stream f. Then convert to
+  frequencies
+  read_freq(f): read a frequency data file from stream f. Of course, we then
+  don't have the counts, but it is usually the letter frquencies which are
+  interesting.
+
+Methods:
+  (all internal)
+Attributes:
+  alphabet: The IUPAC alphabet set (or any other) whose letters you are
+  using. Common sets are: IUPAC.protein (20-letter protein),
+  IUPAC.unambiguous_dna (4-letter DNA). See Bio/alphabet for more.
+  data: frequency dictionary.
+  count: count dictionary. Empty if no counts are provided.
+
+Example of use:
+  >>> from SubsMat import FreqTable
+  >>> ftab = FreqTable.FreqTable(my_frequency_dictionary,FreqTable.FREQ)
+  >>> ftab = FreqTable.FreqTable(my_count_dictionary,FreqTable.COUNT)
+  >>> ftab = FreqTable.read_count(open('myDNACountFile'))
+
+"""
 
 from Bio import Alphabet
 COUNT = 1
 FREQ = 2
-##################################################################
-# A class to handle frequency tables
-# Copyright Iddo Friedberg idoerg@cc.huji.ac.il
-# Biopython (http://biopython.org) license applies
-# Methods to read a letter frequency or a letter count file:
-# Example files for a DNA alphabet:
-#
-# A count file (whitespace separated):
-#
-# A  50
-# C  37
-# G  23
-# T  58
-#
-# The same info as a frequency file:
-#
-# A 0.2976
-# C 0.2202
-# G 0.1369
-# T 0.3452
-#
-# Functions:
-#   read_count(f): read a count file from stream f. Then convert to
-#   frequencies
-#   read_freq(f): read a frequency data file from stream f. Of course, we then
-#   don't have the counts, but it is usually the letter frquencies which are
-#   interesting.
-#
-# Methods:
-#   (all internal)
-# Attributes:
-#   alphabet: The IUPAC alphabet set (or any other) whose letters you are
-#   using. Common sets are: IUPAC.protein (20-letter protein),
-#   IUPAC.unambiguous_dna (4-letter DNA). See Bio/alphabet for more.
-#   data: frequency dictionary.
-#   count: count dictionary. Empty if no counts are provided.
-#
-# Example of use:
-#   >>> from SubsMat import FreqTable
-#   >>> ftab = FreqTable.FreqTable(my_frequency_dictionary,FreqTable.FREQ)
-#   >>> ftab = FreqTable.FreqTable(my_count_dictionary,FreqTable.COUNT)
-#   >>> ftab = FreqTable.read_count(open('myDNACountFile'))
-#
-#
-##################################################################
 
 
 class FreqTable(dict):

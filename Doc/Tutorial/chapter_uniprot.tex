@@ -11,14 +11,17 @@ In Section~\ref{sec:SeqIO_ExPASy_and_SwissProt}, we described how to extract the
 
 To parse a Swiss-Prot record, we first get a handle to a Swiss-Prot record. There are several ways to do so, depending on where and how the Swiss-Prot record is stored:
 \begin{itemize}
-\item Open a Swiss-Prot file locally: \newline
-\verb|>>> handle = open("myswissprotfile.dat")|
+\item Open a Swiss-Prot file locally:
+\begin{verbatim}
+\verb|>>> handle = open("myswissprotfile.dat")
+\end{verbatim} 
 \item Open a gzipped Swiss-Prot file:
 \begin{verbatim}
 >>> import gzip
->>> handle = gzip.open("myswissprotfile.dat.gz")
+>>> handle = gzip.open("myswissprotfile.dat.gz", "rt")
 \end{verbatim}
 \item Open a Swiss-Prot file over the internet:
+% TODO: Need to ensure text mode on Python 3 with urlopen
 \begin{verbatim}
 >>> import urllib
 >>> handle = urllib.urlopen("http://www.somelocation.org/data/someswissprotfile.dat")
@@ -66,7 +69,7 @@ As described at the start of this section, you can use the Python library \verb|
 
 \begin{verbatim}
 >>> import gzip
->>> handle = gzip.open("uniprot_sprot.dat.gz")
+>>> handle = gzip.open("uniprot_sprot.dat.gz", "rt")
 \end{verbatim}
 
 However, uncompressing a large file takes time, and each time you open the file for reading in this way, it has to be decompressed on the fly.  So, if you can spare the disk space you'll save time in the long run if you first decompress the file to disk, to get the \verb|uniprot_sprot.dat| file inside.  Then you can open the file for reading as usual:
@@ -426,9 +429,9 @@ The functions \verb|get_prosite_entry()| and \verb|get_prodoc_entry()| are used 
 >>> from Bio import ExPASy
 >>> handle = ExPASy.get_prosite_entry('PS00001')
 >>> html = handle.read()
->>> output = open("myprositerecord.html", "w")
->>> output.write(html)
->>> output.close()
+>>> with open("myprositerecord.html", "w") as out_handle:
+...     out_handle.write(html)
+...
 \end{verbatim}
 
 and similarly for a Prosite documentation record:
@@ -437,9 +440,9 @@ and similarly for a Prosite documentation record:
 >>> from Bio import ExPASy
 >>> handle = ExPASy.get_prodoc_entry('PDOC00001')
 >>> html = handle.read()
->>> output = open("myprodocrecord.html", "w")
->>> output.write(html)
->>> output.close()
+>>> with open("myprodocrecord.html", "w") as out_handle:
+...     out_handle.write(html)
+...
 \end{verbatim}
 
 For these functions, an invalid accession number returns an error message in HTML format.

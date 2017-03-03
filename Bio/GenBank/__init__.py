@@ -1,5 +1,5 @@
 # Copyright 2000 by Jeffrey Chang, Brad Chapman.  All rights reserved.
-# Copyright 2006-2013 by Peter Cock.  All rights reserved.
+# Copyright 2006-2016 by Peter Cock.  All rights reserved.
 #
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -13,7 +13,7 @@ SeqRecord and SeqFeature objects (see the Biopython tutorial for details).
 
 Using Bio.GenBank directly to parse GenBank files is only useful if you want
 to obtain GenBank-specific Record objects, which is a much closer
-representation to the raw file contents that the SeqRecord alternative from
+representation to the raw file contents than the SeqRecord alternative from
 the FeatureParser (used in Bio.SeqIO).
 
 To use the Bio.GenBank parser, there are two helper functions:
@@ -37,7 +37,7 @@ Exceptions:
 
     - ParserFailureError    Exception indicating a failure in the parser (ie.
       scanner or consumer)
-    - LocationParserError   Exception indiciating a problem with the spark based
+    - LocationParserError   Exception indicating a problem with the spark based
       location parser.
 
 """
@@ -53,7 +53,6 @@ from Bio import SeqFeature
 from .utils import FeatureValueCleaner
 from .Scanner import GenBankScanner
 
-__docformat__ = "restructuredtext en"
 
 # Constants used to parse GenBank header lines
 GENBANK_INDENT = 12
@@ -97,15 +96,15 @@ _simple_location = r"\d+\.\.\d+"
 _re_simple_location = re.compile(r"^%s$" % _simple_location)
 _re_simple_compound = re.compile(r"^(join|order|bond)\(%s(,%s)*\)$"
                                  % (_simple_location, _simple_location))
-_complex_location = r"([a-zA-z][a-zA-Z0-9_]*(\.[a-zA-Z0-9]+)?\:)?(%s|%s|%s|%s|%s)" \
+_complex_location = r"([a-zA-Z][a-zA-Z0-9_\.\|]*[a-zA-Z0-9]?\:)?(%s|%s|%s|%s|%s)" \
                     % (_pair_location, _solo_location, _between_location,
                        _within_location, _oneof_location)
 _re_complex_location = re.compile(r"^%s$" % _complex_location)
 _possibly_complemented_complex_location = r"(%s|complement\(%s\))" \
                                           % (_complex_location, _complex_location)
 _re_complex_compound = re.compile(r"^(join|order|bond)\(%s(,%s)*\)$"
-                                 % (_possibly_complemented_complex_location,
-                                    _possibly_complemented_complex_location))
+                                  % (_possibly_complemented_complex_location,
+                                     _possibly_complemented_complex_location))
 
 
 assert _re_simple_location.match("104..160")
@@ -132,10 +131,12 @@ assert _re_complex_location.match("41^42")  # between
 assert _re_complex_location.match("AL121804:41^42")
 assert _re_complex_location.match("AL121804:41..610")
 assert _re_complex_location.match("AL121804.2:41..610")
+assert _re_complex_location.match("AL358792.24.1.166931:3274..3461")  # lots of dots in external reference
 assert _re_complex_location.match("one-of(3,6)..101")
 assert _re_complex_compound.match("join(153490..154269,AL121804.2:41..610,AL121804.2:672..1487)")
 assert not _re_simple_compound.match("join(153490..154269,AL121804.2:41..610,AL121804.2:672..1487)")
 assert _re_complex_compound.match("join(complement(69611..69724),139856..140650)")
+assert _re_complex_compound.match("join(complement(AL354868.10.1.164018:80837..81016),complement(AL354868.10.1.164018:80539..80835))")
 
 # Trans-spliced example from NC_016406, note underscore in reference name:
 assert _re_complex_location.match("NC_016402.1:6618..6676")
@@ -273,7 +274,17 @@ def _loc(loc_str, expected_seq_length, strand):
     Traceback (most recent call last):
        ...
     ValueError: Invalid between location '123^456'
+
+    You can optionally provide a reference name:
+
+    >>> _loc("AL391218.9:105173..108462", 2000000, 1)
+    FeatureLocation(ExactPosition(105172), ExactPosition(108462), strand=1, ref='AL391218.9')
+
     """
+    if ":" in loc_str:
+        ref, loc_str = loc_str.split(":")
+    else:
+        ref = None
     try:
         s, e = loc_str.split("..")
     except ValueError:
@@ -293,12 +304,12 @@ def _loc(loc_str, expected_seq_length, strand):
                 pos = _pos(s)
             else:
                 raise ValueError("Invalid between location %s" % repr(loc_str))
-            return SeqFeature.FeatureLocation(pos, pos, strand)
+            return SeqFeature.FeatureLocation(pos, pos, strand, ref=ref)
         else:
             # e.g. "123"
             s = loc_str
             e = loc_str
-    return SeqFeature.FeatureLocation(_pos(s, -1), _pos(e), strand)
+    return SeqFeature.FeatureLocation(_pos(s, -1), _pos(e), strand, ref=ref)
 
 
 def _split_compound_loc(compound_loc):
@@ -455,10 +466,10 @@ class FeatureParser(object):
     def parse(self, handle):
         """Parse the specified handle.
         """
-        self._consumer = _FeatureConsumer(self.use_fuzziness,
-                                          self._cleaner)
-        self._scanner.feed(handle, self._consumer)
-        return self._consumer.data
+        _consumer = _FeatureConsumer(self.use_fuzziness,
+                                     self._cleaner)
+        self._scanner.feed(handle, _consumer)
+        return _consumer.data
 
 
 class RecordParser(object):
@@ -485,10 +496,10 @@ class RecordParser(object):
     def parse(self, handle):
         """Parse the specified handle into a GenBank record.
         """
-        self._consumer = _RecordConsumer()
+        _consumer = _RecordConsumer()
 
-        self._scanner.feed(handle, self._consumer)
-        return self._consumer.data
+        self._scanner.feed(handle, _consumer)
+        return _consumer.data
 
 
 class _BaseGenBankConsumer(object):
@@ -512,7 +523,8 @@ class _BaseGenBankConsumer(object):
     def __getattr__(self, attr):
         return self._unhandled
 
-    def _split_keywords(self, keyword_string):
+    @staticmethod
+    def _split_keywords(keyword_string):
         """Split a string of keywords into a nice clean list.
         """
         # process the keywords into a python list
@@ -526,7 +538,8 @@ class _BaseGenBankConsumer(object):
         clean_keyword_list = [x.strip() for x in keyword_list]
         return clean_keyword_list
 
-    def _split_accessions(self, accession_string):
+    @staticmethod
+    def _split_accessions(accession_string):
         """Split a string of accession numbers into a list.
         """
         # first replace all line feeds with spaces
@@ -535,7 +548,8 @@ class _BaseGenBankConsumer(object):
 
         return [x.strip() for x in accession.split() if x.strip()]
 
-    def _split_taxonomy(self, taxonomy_string):
+    @staticmethod
+    def _split_taxonomy(taxonomy_string):
         """Split a string with taxonomy info into a list.
         """
         if not taxonomy_string or taxonomy_string == ".":
@@ -557,7 +571,8 @@ class _BaseGenBankConsumer(object):
 
         return clean_tax_list
 
-    def _clean_location(self, location_string):
+    @staticmethod
+    def _clean_location(location_string):
         """Clean whitespace out of a location string.
 
         The location parser isn't a fan of whitespace, so we clean it out
@@ -568,7 +583,8 @@ class _BaseGenBankConsumer(object):
         # the string - and this avoids importing string too.  See Bug 2684.
         return ''.join(location_string.split())
 
-    def _remove_newlines(self, text):
+    @staticmethod
+    def _remove_newlines(text):
         """Remove any newlines in the passed text, returning the new string.
         """
         # get rid of newlines in the qualifier value
@@ -578,18 +594,21 @@ class _BaseGenBankConsumer(object):
 
         return text
 
-    def _normalize_spaces(self, text):
+    @staticmethod
+    def _normalize_spaces(text):
         """Replace multiple spaces in the passed text with single spaces.
         """
         # get rid of excessive spaces
         return ' '.join(x for x in text.split(" ") if x)
 
-    def _remove_spaces(self, text):
+    @staticmethod
+    def _remove_spaces(text):
         """Remove all spaces from the passed text.
         """
         return text.replace(" ", "")
 
-    def _convert_to_python_numbers(self, start, end):
+    @staticmethod
+    def _convert_to_python_numbers(start, end):
         """Convert a start and end range to python notation.
 
         In GenBank, starts and ends are defined in "biological" coordinates,
@@ -644,9 +663,27 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         self._expected_size = int(content)
 
     def residue_type(self, type):
-        """Record the sequence type so we can choose an appropriate alphabet.
+        """Record the sequence type (SEMI-OBSOLETE).
+
+        This reflects the fact that the topology (linear/circular) and
+        molecule type (e.g. DNA vs RNA) were a single field in early
+        files. Current GenBank/EMBL files have two fields.
         """
         self._seq_type = type.strip()
+
+    def topology(self, topology):
+        """Record the topology (linear or circular as strings)."""
+        if topology:
+            if topology not in ['linear', 'circular']:
+                raise ParserFailureError("Unexpected topology %r should be linear or circular" % topology)
+            self.data.annotations['topology'] = topology
+
+    def molecule_type(self, mol_type):
+        """Record the molecule type (for round-trip etc)."""
+        if mol_type:
+            if "circular" in mol_type or 'linear' in mol_type:
+                raise ParserFailureError("Molecule type %r should not include topology" % mol_type)
+            self.data.annotations['molecule_type'] = mol_type
 
     def data_file_division(self, division):
         self.data.annotations['data_file_division'] = division
@@ -722,7 +759,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             PROJECT     GenomeProject:28471
 
         or::
-            
+
             PROJECT     GenomeProject:13543  GenomeProject:99999
 
         This is stored as dbxrefs in the SeqRecord to be consistent with the
@@ -769,7 +806,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
     def version_suffix(self, version):
         """Set the version to overwrite the id.
 
-        Since the verison provides the same information as the accession
+        Since the version provides the same information as the accession
         number, plus some extra info, we set this as the id if we have
         a version.
         """
@@ -848,7 +885,8 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         (bases 1 to 105654; 110423 to 111122)
         1  (residues 1 to 182)
         """
-        # first remove the parentheses or other junk
+        # first remove the parentheses
+        assert content.endswith(")"), content
         ref_base_info = content[1:-1]
 
         all_locations = []
@@ -894,8 +932,8 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         for base_info in all_base_info:
             start, end = base_info.split('to')
             new_start, new_end = \
-              self._convert_to_python_numbers(int(start.strip()),
-                                              int(end.strip()))
+                self._convert_to_python_numbers(int(start.strip()),
+                                                int(end.strip()))
             this_location = SeqFeature.FeatureLocation(new_start, new_end)
             new_locations.append(this_location)
         return new_locations
@@ -947,6 +985,9 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             self.data.annotations['comment'] += "\n" + "\n".join(content)
         except KeyError:
             self.data.annotations['comment'] = "\n".join(content)
+
+    def structured_comment(self, content):
+        self.data.annotations['structured_comment'] = content
 
     def features_line(self, content):
         """Get ready for the feature table when we reach the FEATURE line.
@@ -1009,6 +1050,13 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                                                               strand)
             return
 
+        if ",)" in location_line:
+            import warnings
+            from Bio import BiopythonParserWarning
+            warnings.warn("Dropping trailing comma in malformed feature location",
+                          BiopythonParserWarning)
+            location_line = location_line.replace(",)", ")")
+
         if _solo_bond.search(location_line):
             # e.g. bond(196)
             # e.g. join(bond(284),bond(305),bond(309),bond(305))
@@ -1025,43 +1073,39 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             i = location_line.find("(")
             # cur_feature.location_operator = location_line[:i]
             # we can split on the comma because these are simple locations
-            sub_features = cur_feature.sub_features
+            locs = []
             for part in location_line[i + 1:-1].split(","):
                 s, e = part.split("..")
-                f = SeqFeature.SeqFeature(SeqFeature.FeatureLocation(int(s) - 1,
-                                                                     int(e),
-                                                                     strand),
-                        location_operator=cur_feature.location_operator,
-                        type=cur_feature.type)
-                sub_features.append(f)
-            # s = cur_feature.sub_features[0].location.start
-            # e = cur_feature.sub_features[-1].location.end
-            # cur_feature.location = SeqFeature.FeatureLocation(s,e, strand)
-            # TODO - Remove use of sub_features
+                locs.append(SeqFeature.FeatureLocation(int(s) - 1,
+                                                       int(e),
+                                                       strand))
+            if len(locs) < 2:
+                # The CompoundLocation will raise a ValueError here!
+                import warnings
+                from Bio import BiopythonParserWarning
+                warnings.warn("Should have at least 2 parts for compound location",
+                              BiopythonParserWarning)
+                cur_feature.location = None
+                return
             if strand == -1:
-                cur_feature.location = SeqFeature.CompoundLocation([f.location for f in sub_features[::-1]],
+                cur_feature.location = SeqFeature.CompoundLocation(locs[::-1],
                                                                    operator=location_line[:i])
             else:
-                cur_feature.location = SeqFeature.CompoundLocation([f.location for f in sub_features],
+                cur_feature.location = SeqFeature.CompoundLocation(locs,
                                                                    operator=location_line[:i])
             return
 
         # Handle the general case with more complex regular expressions
         if _re_complex_location.match(location_line):
             # e.g. "AL121804.2:41..610"
-            if ":" in location_line:
-                location_ref, location_line = location_line.split(":")
-                cur_feature.location = _loc(location_line, self._expected_size, strand)
-                cur_feature.location.ref = location_ref
-            else:
-                cur_feature.location = _loc(location_line, self._expected_size, strand)
+            cur_feature.location = _loc(location_line, self._expected_size, strand)
             return
 
         if _re_complex_compound.match(location_line):
             i = location_line.find("(")
             # cur_feature.location_operator = location_line[:i]
             # Can't split on the comma because of positions like one-of(1,2,3)
-            sub_features = cur_feature.sub_features
+            locs = []
             for part in _split_compound_loc(location_line[i + 1:-1]):
                 if part.startswith("complement("):
                     assert part[-1] == ")"
@@ -1070,39 +1114,29 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                     part_strand = -1
                 else:
                     part_strand = strand
-                if ":" in part:
-                    ref, part = part.split(":")
-                else:
-                    ref = None
                 try:
                     loc = _loc(part, self._expected_size, part_strand)
                 except ValueError as err:
                     print(location_line)
                     print(part)
                     raise err
-                f = SeqFeature.SeqFeature(location=loc, ref=ref,
-                        location_operator=cur_feature.location_operator,
-                        type=cur_feature.type)
-                sub_features.append(f)
+                locs.append(loc)
             # Historically a join on the reverse strand has been represented
             # in Biopython with both the parent SeqFeature and its children
             # (the exons for a CDS) all given a strand of -1.  Likewise, for
             # a join feature on the forward strand they all have strand +1.
             # However, we must also consider evil mixed strand examples like
             # this, join(complement(69611..69724),139856..140087,140625..140650)
-            #
-            # TODO - Remove use of sub_features
-            strands = set(sf.strand for sf in sub_features)
-            if len(strands) == 1:
-                strand = sub_features[0].strand
-            else:
-                strand = None  # i.e. mixed strands
             if strand == -1:
+                # Whole thing was wrapped in complement(...)
+                for l in locs:
+                    assert l.strand == -1
                 # Reverse the backwards order used in GenBank files
-                cur_feature.location = SeqFeature.CompoundLocation([f.location for f in sub_features[::-1]],
+                # with complement(join(...))
+                cur_feature.location = SeqFeature.CompoundLocation(locs[::-1],
                                                                    operator=location_line[:i])
             else:
-                cur_feature.location = SeqFeature.CompoundLocation([f.location for f in sub_features],
+                cur_feature.location = SeqFeature.CompoundLocation(locs,
                                                                    operator=location_line[:i])
             return
         # Not recognised
@@ -1116,7 +1150,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         import warnings
         from Bio import BiopythonParserWarning
         warnings.warn(BiopythonParserWarning("Couldn't parse feature location: %r"
-                                             % (location_line)))
+                                             % location_line))
 
     def feature_qualifier(self, key, value):
         """When we get a qualifier key and its value.
@@ -1217,8 +1251,8 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         sequence = "".join(self._seq_data)
 
         if self._expected_size is not None \
-        and len(sequence) != 0 \
-        and self._expected_size != len(sequence):
+                and len(sequence) != 0 \
+                and self._expected_size != len(sequence):
             import warnings
             from Bio import BiopythonParserWarning
             warnings.warn("Expected sequence length %i, found %i (%s)."
@@ -1238,7 +1272,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                 else:
                     seq_alphabet = IUPAC.ambiguous_rna
             elif 'PROTEIN' in self._seq_type.upper() \
-            or self._seq_type == "PRT":  # PRT is used in EMBL-bank for patents
+                    or self._seq_type == "PRT":  # PRT is used in EMBL-bank for patents
                 seq_alphabet = IUPAC.protein  # or extended protein?
             # work around ugly GenBank records which have circular or
             # linear but no indication of sequence type
@@ -1382,6 +1416,9 @@ class _RecordConsumer(_BaseGenBankConsumer):
 
     def comment(self, content):
         self.data.comment += "\n".join(content)
+
+    def structured_comment(self, content):
+        self.data.structured_comment = content
 
     def primary_ref_line(self, content):
         """Data for the PRIMARY line"""
@@ -1542,26 +1579,6 @@ def read(handle):
     return first
 
 
-def _test():
-    """Run the Bio.GenBank module's doctests."""
-    import doctest
-    import os
-    if os.path.isdir(os.path.join("..", "..", "Tests")):
-        print("Running doctests...")
-        cur_dir = os.path.abspath(os.curdir)
-        os.chdir(os.path.join("..", "..", "Tests"))
-        doctest.testmod()
-        os.chdir(cur_dir)
-        del cur_dir
-        print("Done")
-    elif os.path.isdir(os.path.join("Tests")):
-        print("Running doctests...")
-        cur_dir = os.path.abspath(os.curdir)
-        os.chdir(os.path.join("Tests"))
-        doctest.testmod()
-        os.chdir(cur_dir)
-        del cur_dir
-        print("Done")
-
 if __name__ == "__main__":
-    _test()
+    from Bio._utils import run_doctest
+    run_doctest()

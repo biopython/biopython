@@ -20,9 +20,7 @@ with warnings.catch_warnings():
     from Bio.Blast import NCBIStandalone
 
 
-__all__ = ['BlastTextParser']
-
-__docformat__ = "restructuredtext en"
+__all__ = ('BlastTextParser', )
 
 
 class BlastTextParser(object):

@@ -10,8 +10,6 @@ from Bio._py3k import urlencode as _urlencode
 from xml.sax import handler
 from xml.sax.expatreader import ExpatParser
 
-__docformat__ = "restructuredtext en"
-
 
 class Record(list):
     """Represents search results returned by ScanProsite.

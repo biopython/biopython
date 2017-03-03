@@ -7,34 +7,52 @@ and position-specific scoring matrices.
 """
 
 import math
+import platform
 
 from Bio._py3k import range
 
 from Bio.Seq import Seq
 from Bio.Alphabet import IUPAC
+from Bio import Alphabet
 
-# Hack for Python 2.5, isnan and isinf were new in Python 2.6
+
+# Make sure that we use C-accelerated PWM calculations if running under CPython.
+# Fall back to the slower Python implementation if Jython or IronPython.
 try:
-    from math import isnan as _isnan
+    from . import _pwm
+
+    def _calculate(score_dict, sequence, m, n):
+        """Calculate scores using C code (PRIVATE)."""
+        logodds = [[score_dict[letter][i] for letter in "ACGT"] for i in range(m)]
+        return _pwm.calculate(sequence, logodds)
+
 except ImportError:
-    def _isnan(value):
-        # This is tricky due to cross platform float differences
-        if str(value).lower() == "nan":
-            return True
-        return value != value
-try:
-    from math import isinf as _isinf
-except ImportError:
-    def _isinf(value):
-        # This is tricky due to cross platform float differences
-        if str(value).lower().endswith("inf"):
-            return True
-        return False
-# Hack for Python 2.5 on Windows:
-try:
-    _nan = float("nan")
-except ValueError:
-    _nan = 1e1000 / 1e1000
+    if platform.python_implementation() == 'CPython':
+        import warnings
+        from Bio import BiopythonWarning
+        warnings.warn("Using pure-Python as missing Biopython's C code for PWM. "
+                      "This can happen if Biopython was installed without NumPy. "
+                      "Try re-installing NumPy and then Biopython.",
+                      BiopythonWarning)
+
+    def _calculate(score_dict, sequence, m, n):
+        """Calculate scores using Python code (PRIVATE).
+
+        The C code handles mixed case so Python version must too.
+        """
+        sequence = sequence.upper()
+        scores = []
+        for i in range(n - m + 1):
+            score = 0.0
+            for position in range(m):
+                letter = sequence[i + position]
+                try:
+                    score += score_dict[letter][position]
+                except KeyError:
+                    score = float("nan")
+                    break
+            scores.append(score)
+        return scores
 
 
 class GenericPositionMatrix(dict):
@@ -221,9 +239,17 @@ class GenericPositionMatrix(dict):
                 key = "".join(sorted(nucleotides[:3]))
             else:
                 key = "ACGT"
-            nucleotide = degenerate_nucleotide[key]
+            nucleotide = degenerate_nucleotide.get(key, key)
             sequence += nucleotide
-        return Seq(sequence, alphabet=IUPAC.ambiguous_dna)
+        if isinstance(self.alphabet, Alphabet.DNAAlphabet):
+            alpha = IUPAC.ambiguous_dna
+        elif isinstance(self.alphabet, Alphabet.RNAAlphabet):
+            alpha = IUPAC.ambiguous_rna
+        elif isinstance(self.alphabet, Alphabet.ProteinAlphabet):
+            alpha = IUPAC.protein
+        else:
+            raise Exception("Unknown alphabet")
+        return Seq(sequence, alphabet=alpha)
 
     @property
     def gc_content(self):
@@ -328,7 +354,7 @@ class PositionWeightMatrix(GenericPositionMatrix):
                     if p > 0:
                         logodds = float("inf")
                     else:
-                        logodds = _nan
+                        logodds = float("nan")
                 values[letter].append(logodds)
         pssm = PositionSpecificScoringMatrix(alphabet, values)
         return pssm
@@ -355,35 +381,15 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
             raise ValueError("Sequence has wrong alphabet: %r - Use only with DNA sequences"
                                  % sequence.alphabet)
 
-        # TODO - Force uppercase here and optimise switch statement in C
-        # by assuming upper case?
+        # NOTE: The C code handles mixed case input as this could be large
+        # (e.g. contig or chromosome), so requiring it be all upper or lower
+        # case would impose an overhead to allocate the extra memory.
         sequence = str(sequence)
         m = self.length
         n = len(sequence)
 
-        scores = []
-        # check if the fast C code can be used
-        try:
-            import _pwm
-        except ImportError:
-            # use the slower Python code otherwise
-            # The C code handles mixed case so Python version must too:
-            sequence = sequence.upper()
-            for i in range(n - m + 1):
-                score = 0.0
-                for position in range(m):
-                    letter = sequence[i + position]
-                    try:
-                        score += self[letter][position]
-                    except KeyError:
-                        score = _nan
-                        break
-                scores.append(score)
-        else:
-            # get the log-odds matrix into a proper shape
-            # (each row contains sorted (ACGT) log-odds values)
-            logodds = [[self[letter][i] for letter in "ACGT"] for i in range(m)]
-            scores = _pwm.calculate(sequence, logodds)
+        scores = _calculate(self, sequence, m, n)
+
         if len(scores) == 1:
             return scores[0]
         else:
@@ -451,9 +457,9 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
         for i in range(self.length):
             for letter in self._letters:
                 logodds = self[letter, i]
-                if _isnan(logodds):
+                if math.isnan(logodds):
                     continue
-                if _isinf(logodds) and logodds < 0:
+                if math.isinf(logodds) and logodds < 0:
                     continue
                 b = background[letter]
                 p = b * math.pow(2, logodds)
@@ -475,9 +481,9 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
             sxx = 0.0
             for letter in self._letters:
                 logodds = self[letter, i]
-                if _isnan(logodds):
+                if math.isnan(logodds):
                     continue
-                if _isinf(logodds) and logodds < 0:
+                if math.isinf(logodds) and logodds < 0:
                     continue
                 b = background[letter]
                 p = b * math.pow(2, logodds)

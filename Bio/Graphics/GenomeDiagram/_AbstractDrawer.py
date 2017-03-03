@@ -46,7 +46,6 @@ from reportlab.graphics.shapes import Polygon
 
 from math import pi, sin, cos
 
-__docformat__ = "restructuredtext en"
 
 ################################################################################
 # METHODS
@@ -273,7 +272,7 @@ def draw_arrow(point1, point2, color=colors.lightgreen, border=None,
 
 
 def angle2trig(theta):
-    """Convert anngle to a reportlab ready tuple.
+    """Convert angle to a reportlab ready tuple.
 
     Arguments:
 
@@ -346,7 +345,7 @@ class AbstractDrawer(object):
 
         Attributes:
 
-            - tracklines    Boolean for whether to draw lines dilineating tracks
+            - tracklines    Boolean for whether to draw lines delineating tracks
 
             - pagesize      Tuple describing the size of the page in pixels
 
@@ -512,7 +511,7 @@ class AbstractDrawer(object):
         self.length = self.end - self.start + 1
 
     def is_in_bounds(self, value):
-        """Check if given value is withing the region selected for drawing,
+        """Check if given value is within the region selected for drawing,
 
         Arguments:
 

@@ -4,7 +4,6 @@
 # as part of this package.
 
 """Classes and methods for tree construction"""
-__docformat__ = "restructuredtext en"
 
 import itertools
 import copy
@@ -103,10 +102,10 @@ class _Matrix(object):
             self.matrix = matrix
         else:
             # check if all elements are numbers
-            if (isinstance(matrix, list)
-                and all(isinstance(l, list) for l in matrix)
-                and all(_is_numeric(n) for n in [item for sublist in matrix
-                                                 for item in sublist])):
+            if (isinstance(matrix, list) and
+                all(isinstance(l, list) for l in matrix) and
+                all(_is_numeric(n) for n in [item for sublist in matrix
+                                             for item in sublist])):
                 # check if the same length with names
                 if len(matrix) == len(names):
                     # check if is lower triangle format
@@ -181,7 +180,6 @@ class _Matrix(object):
             dm[i, j] = 2            set the value from 'i' to 'j'
 
         """
-
         # Handle single indexing
         if isinstance(item, (int, str)):
             index = None
@@ -375,15 +373,15 @@ class DistanceCalculator(object):
 
     # BLAST nucleic acid scoring matrix
     blastn = [[5],
-              [-4,  5],
-              [-4, -4,  5],
-              [-4, -4, -4,  5]]
+              [-4, 5],
+              [-4, -4, 5],
+              [-4, -4, -4, 5]]
 
     # transition/transversion scoring matrix
     trans = [[6],
-             [-5,  6],
-             [-5, -1,  6],
-             [-1, -5, -5,  6]]
+             [-5, 6],
+             [-5, -1, 6],
+             [-1, -5, -5, 6]]
 
     protein_alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'K', 'L',
                         'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'V', 'W', 'X', 'Y',
@@ -400,8 +398,7 @@ class DistanceCalculator(object):
     models = ['identity'] + dna_models + protein_models
 
     def __init__(self, model='identity'):
-        """Initialize with a distance model"""
-
+        """Initialize with a distance model."""
         if model == 'identity':
             self.scoring_matrix = None
         elif model in self.dna_models:
@@ -411,8 +408,8 @@ class DistanceCalculator(object):
             self.scoring_matrix = self._build_protein_matrix(
                 self.protein_matrices[model])
         else:
-            raise ValueError("Model not supported. Available models: "
-                             + ", ".join(self.models))
+            raise ValueError("Model not supported. Available models: " +
+                             ", ".join(self.models))
 
     def _pairwise(self, seq1, seq2):
         """Calculate pairwise distance from two sequences.
@@ -463,7 +460,6 @@ class DistanceCalculator(object):
                 DNA or Protein multiple sequence alignment.
 
         """
-
         if not isinstance(msa, MultipleSeqAlignment):
             raise TypeError("Must provide a MultipleSeqAlignment object.")
 
@@ -543,8 +539,8 @@ class DistanceTreeConstructor(TreeConstructor):
     methods = ['nj', 'upgma']
 
     def __init__(self, distance_calculator=None, method="nj"):
-        if (distance_calculator is None
-                or isinstance(distance_calculator, DistanceCalculator)):
+        if (distance_calculator is None or
+            isinstance(distance_calculator, DistanceCalculator)):
             self.distance_calculator = distance_calculator
         else:
             raise TypeError("Must provide a DistanceCalculator object.")
@@ -640,7 +636,6 @@ class DistanceTreeConstructor(TreeConstructor):
             distance_matrix : _DistanceMatrix
                 The distance matrix for tree construction.
         """
-
         if not isinstance(distance_matrix, _DistanceMatrix):
             raise TypeError("Must provide a _DistanceMatrix object.")
 
@@ -681,8 +676,8 @@ class DistanceTreeConstructor(TreeConstructor):
             inner_clade.clades.append(clade1)
             inner_clade.clades.append(clade2)
             # assign branch length
-            clade1.branch_length = (dm[min_i, min_j] + node_dist[min_i]
-                                    - node_dist[min_j]) / 2.0
+            clade1.branch_length = (dm[min_i, min_j] + node_dist[min_i] -
+                                    node_dist[min_j]) / 2.0
             clade2.branch_length = dm[min_i, min_j] - clade1.branch_length
 
             # update node list
@@ -693,8 +688,8 @@ class DistanceTreeConstructor(TreeConstructor):
             # set the distances of new node at the index of min_j
             for k in range(0, len(dm)):
                 if k != min_i and k != min_j:
-                    dm[min_j, k] = (dm[min_i, k] + dm[min_j, k]
-                                    - dm[min_i, min_j]) / 2.0
+                    dm[min_j, k] = (dm[min_i, k] + dm[min_j, k] -
+                                    dm[min_i, min_j]) / 2.0
 
             dm.names[min_j] = "Inner" + str(inner_count)
             del dm[min_i]
@@ -732,7 +727,8 @@ class Scorer(object):
     def get_score(self, tree, alignment):
         """Caller to get the score of a tree for the given alignment.
 
-        This should be implemented in subclass"""
+        This should be implemented in subclass.
+        """
         raise NotImplementedError("Method not implemented!")
 
 
@@ -742,7 +738,8 @@ class TreeSearcher(object):
     def search(self, starting_tree, alignment):
         """Caller to search the best tree with a starting tree.
 
-        This should be implemented in subclass"""
+        This should be implemented in subclass.
+        """
         raise NotImplementedError("Method not implemented!")
 
 
@@ -771,7 +768,6 @@ class NNITreeSearcher(TreeSearcher):
                multiple sequence alignment used to calculate parsimony
                score of different NNI trees.
         """
-
         return self._nni(starting_tree, alignment)
 
     def _nni(self, starting_tree, alignment):
@@ -924,7 +920,7 @@ class ParsimonyScorer(Scorer):
         terms = tree.get_terminals()
         terms.sort(key=lambda term: term.name)
         alignment.sort()
-        if not all([t.name == a.id for t, a in zip(terms, alignment)]):
+        if not all(t.name == a.id for t, a in zip(terms, alignment)):
             raise ValueError(
                 "Taxon names of the input tree should be the same with the alignment.")
         # term_align = dict(zip(terms, alignment))

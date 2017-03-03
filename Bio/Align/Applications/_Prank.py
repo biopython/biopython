@@ -7,7 +7,6 @@
 
 from __future__ import print_function
 
-__docformat__ = "restructuredtext en"  # Don't just use plain text in epydoc API pages!
 
 from Bio.Application import _Option, _Switch, AbstractCommandline
 
@@ -159,13 +158,13 @@ class PrankCommandline(AbstractCommandline):
             _Switch(["-printnodes", "printnodes"],
                     "Output each node; mostly for debugging"),
             # -matresize=# [matrix resizing multiplier]
-            # Doesnt specify type but Float and Int work
+            # Doesn't specify type but Float and Int work
             _Option(["-matresize", "matresize"],
                     "Matrix resizing multiplier",
                     checker_function=lambda x: isinstance(x, float) or
                                                isinstance(x, int)),
             # -matinitsize=# [matrix initial size multiplier]
-            # Doesnt specify type but Float and Int work
+            # Doesn't specify type but Float and Int work
             _Option(["-matinitsize", "matinitsize"],
                     "Matrix initial size multiplier",
                     checker_function=lambda x: isinstance(x, float) or
@@ -207,12 +206,6 @@ class PrankCommandline(AbstractCommandline):
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
 
-def _test():
-    """Run the module's doctests (PRIVATE)."""
-    print("Running modules doctests...")
-    import doctest
-    doctest.testmod()
-    print("Done")
-
 if __name__ == "__main__":
-    _test()
+    from Bio._utils import run_doctest
+    run_doctest()

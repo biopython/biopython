@@ -11,9 +11,7 @@ import numpy
 
 
 def m2rotaxis(m):
-    """
-    Return angles, axis pair that corresponds to rotation matrix m.
-    """
+    """Return angles, axis pair that corresponds to rotation matrix m."""
     # Angle always between 0 and pi
     # Sense of rotation is defined by axis orientation
     t = 0.5 * (numpy.trace(m) - 1)
@@ -54,10 +52,9 @@ def m2rotaxis(m):
 
 
 def vector_to_axis(line, point):
-    """
-    Returns the vector between a point and
-    the closest point on a line (ie. the perpendicular
-    projection of the point on the line).
+    """Returns the vector between a point and the closest point on a line
+
+    i.e. the perpendicular projection of the point on the line.
 
     @type line: L{Vector}
     @param line: vector defining a line
@@ -72,8 +69,7 @@ def vector_to_axis(line, point):
 
 
 def rotaxis2m(theta, vector):
-    """
-    Calculate a left multiplying rotation matrix that rotates
+    """Calculate a left multiplying rotation matrix that rotates
     theta rad around vector.
 
     Example:
@@ -111,12 +107,12 @@ def rotaxis2m(theta, vector):
     rot[2, 2] = t * z * z + c
     return rot
 
+
 rotaxis = rotaxis2m
 
 
 def refmat(p, q):
-    """
-    Return a (left multiplying) matrix that mirrors p onto q.
+    """Return a (left multiplying) matrix that mirrors p onto q.
 
     Example:
         >>> mirror=refmat(p, q)
@@ -141,8 +137,7 @@ def refmat(p, q):
 
 
 def rotmat(p, q):
-    """
-    Return a (left multiplying) matrix that rotates p onto q.
+    """Return a (left multiplying) matrix that rotates p onto q.
 
     Example:
         >>> r=rotmat(p, q)
@@ -163,9 +158,7 @@ def rotmat(p, q):
 
 
 def calc_angle(v1, v2, v3):
-    """
-    Calculate the angle between 3 vectors
-    representing 3 connected points.
+    """Calculate the angle between 3 vectors representing 3 connected points.
 
     @param v1, v2, v3: the tree points that define the angle
     @type v1, v2, v3: L{Vector}
@@ -179,10 +172,9 @@ def calc_angle(v1, v2, v3):
 
 
 def calc_dihedral(v1, v2, v3, v4):
-    """
-    Calculate the dihedral angle between 4 vectors
-    representing 4 connected points. The angle is in
-    ]-pi, pi].
+    """Calculate the dihedral angle between 4 vectors representing 4 connected points.
+
+    The angle is in ]-pi, pi].
 
     @param v1, v2, v3, v4: the four points that define the dihedral angle
     @type v1, v2, v3, v4: L{Vector}
@@ -205,7 +197,7 @@ def calc_dihedral(v1, v2, v3, v4):
 
 
 class Vector(object):
-    "3D vector"
+    """3D vector."""
 
     def __init__(self, x, y=None, z=None):
         if y is None and z is None:
@@ -223,12 +215,12 @@ class Vector(object):
         return "<Vector %.2f, %.2f, %.2f>" % (x, y, z)
 
     def __neg__(self):
-        "Return Vector(-x, -y, -z)"
+        """Return Vector(-x, -y, -z)."""
         a = -self._ar
         return Vector(a)
 
     def __add__(self, other):
-        "Return Vector+other Vector or scalar"
+        """Return Vector+other Vector or scalar."""
         if isinstance(other, Vector):
             a = self._ar + other._ar
         else:
@@ -236,7 +228,7 @@ class Vector(object):
         return Vector(a)
 
     def __sub__(self, other):
-        "Return Vector-other Vector or scalar"
+        """Return Vector-other Vector or scalar."""
         if isinstance(other, Vector):
             a = self._ar - other._ar
         else:
@@ -244,16 +236,16 @@ class Vector(object):
         return Vector(a)
 
     def __mul__(self, other):
-        "Return Vector.Vector (dot product)"
+        """Return Vector.Vector (dot product)."""
         return sum(self._ar * other._ar)
 
     def __div__(self, x):
-        "Return Vector(coords/a)"
+        """Return Vector(coords/a)."""
         a = self._ar / numpy.array(x)
         return Vector(a)
 
     def __pow__(self, other):
-        "Return VectorxVector (cross product) or Vectorxscalar"
+        """Return VectorxVector (cross product) or Vectorxscalar."""
         if isinstance(other, Vector):
             a, b, c = self._ar
             d, e, f = other._ar
@@ -275,25 +267,25 @@ class Vector(object):
         return (i in self._ar)
 
     def norm(self):
-        "Return vector norm"
+        """Return vector norm."""
         return numpy.sqrt(sum(self._ar * self._ar))
 
     def normsq(self):
-        "Return square of vector norm"
+        """Return square of vector norm"""
         return abs(sum(self._ar * self._ar))
 
     def normalize(self):
-        "Normalize the Vector"
+        """Normalize the Vector"""
         self._ar = self._ar / self.norm()
 
     def normalized(self):
-        "Return a normalized copy of the Vector"
+        """Return a normalized copy of the Vector"""
         v = self.copy()
         v.normalize()
         return v
 
     def angle(self, other):
-        "Return angle between two vectors"
+        """Return angle between two vectors"""
         n1 = self.norm()
         n2 = other.norm()
         c = (self * other) / (n1 * n2)
@@ -303,22 +295,23 @@ class Vector(object):
         return numpy.arccos(c)
 
     def get_array(self):
-        "Return (a copy of) the array of coordinates"
+        """Return (a copy of) the array of coordinates"""
         return numpy.array(self._ar)
 
     def left_multiply(self, matrix):
-        "Return Vector=Matrix x Vector"
+        """Return Vector=Matrix x Vector"""
         a = numpy.dot(matrix, self._ar)
         return Vector(a)
 
     def right_multiply(self, matrix):
-        "Return Vector=Vector x Matrix"
+        """Return Vector=Vector x Matrix"""
         a = numpy.dot(self._ar, matrix)
         return Vector(a)
 
     def copy(self):
-        "Return a deep copy of the Vector"
+        """Return a deep copy of the Vector"""
         return Vector(self._ar)
+
 
 if __name__ == "__main__":
 

@@ -43,9 +43,16 @@ Tests/Graphics/*.eps
 Tests/Graphics/*.svg
 Tests/Graphics/*.png
 
+#Ignore the local BioSQL test settings:
+Tests/biosql.ini
+
 #TODO - The unit tests shouldn't leave temp files after running:
 Tests/BioSQL/temp_sqlite.db
 Tests/BioSQL/temp_sqlite.db-journal
+
+#TODO - The Tutorial doctests should leave example files after
+#running Tests/test_Tutorial.py
+Doc/examples/other_trees.nwk
 
 #Ignore LaTeX temp files, and compiled output
 Doc/*.aux

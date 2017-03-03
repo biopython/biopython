@@ -242,6 +242,8 @@ The following SearchIO objects attributes are provided:
 |                 | evalue                  | hit-level e-value                |
 |                 +-------------------------+----------------------------------+
 |                 | id                      | hit sequence ID                  |
+|                 +-------------------------+----------------------------------+
+|                 | seq_len                 | length of hit sequence or HMM    |
 +-----------------+-------------------------+----------------------------------+
 | HSP             | acc_avg                 | expected accuracy per alignment  |
 |                 |                         | residue (acc column)             |
@@ -289,9 +291,6 @@ from .hmmer3_domtab import Hmmer3DomtabHmmhitIndexer, Hmmer3DomtabHmmqueryIndexe
 from .hmmer3_domtab import Hmmer3DomtabHmmhitWriter, Hmmer3DomtabHmmqueryWriter
 from .hmmer3_text import Hmmer3TextParser, Hmmer3TextIndexer
 from .hmmer3_tab import Hmmer3TabParser, Hmmer3TabIndexer, Hmmer3TabWriter
-
-
-__docformat__ = "restructuredtext en"
 
 
 # if not used as a module, run the doctest

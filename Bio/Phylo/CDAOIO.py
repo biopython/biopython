@@ -19,8 +19,6 @@ the CDAOIO.Writer can store triples in a triple store instead of serializing
 them to a file.
 """
 
-__docformat__ = "restructuredtext en"
-
 from Bio._py3k import StringIO
 
 from Bio.Phylo import CDAO
@@ -104,7 +102,6 @@ class Parser(object):
     def parse_handle_to_graph(self, rooted=False,
                               parse_format='turtle', context=None, **kwargs):
         """Parse self.handle into RDF model self.model."""
-
         if self.graph is None:
             self.graph = rdflib.Graph()
         graph = self.graph
@@ -117,7 +114,8 @@ class Parser(object):
         if 'base_uri' in kwargs:
             base_uri = kwargs['base_uri']
         else:
-            base_uri = "file://" + os.path.abspath(self.handle.name)
+            # Windows style slashes cannot be used in an RDF URI
+            base_uri = "file://" + os.path.abspath(self.handle.name).replace("\\", "/")
 
         graph.parse(file=self.handle, publicID=base_uri, format=parse_format)
 
@@ -125,7 +123,6 @@ class Parser(object):
 
     def parse_graph(self, graph=None, context=None):
         """Generator that yields CDAO.Tree instances from an RDF model."""
-
         if graph is None:
             graph = self.graph
 
@@ -139,7 +136,6 @@ class Parser(object):
 
     def new_clade(self, node):
         """Returns a CDAO.Clade object for a given named node."""
-
         result = self.node_info[node]
 
         kwargs = {}
@@ -156,7 +152,6 @@ class Parser(object):
 
     def get_node_info(self, graph, context=None):
         """Creates a dictionary containing information about all nodes in the tree."""
-
         self.node_info = {}
         self.obj_info = {}
         self.children = {}
@@ -234,7 +229,6 @@ class Parser(object):
         traversing the entire tree and creating a nested structure of CDAO.Clade
         objects.
         """
-
         clade = self.new_clade(node)
 
         children = self.children[node] if node in self.children else []
@@ -262,7 +256,6 @@ class Writer(object):
     def write(self, handle, tree_uri='', record_complete_ancestry=False,
               rooted=False, **kwargs):
         """Write this instance's trees to a file handle."""
-
         self.rooted = rooted
         self.record_complete_ancestry = record_complete_ancestry
 
@@ -315,7 +308,6 @@ class Writer(object):
 
     def process_clade(self, clade, parent=None, root=False):
         """recursively generate triples describing a tree of clades"""
-
         self.node_counter += 1
         clade.uri = 'node%s' % str(self.node_counter).zfill(ZEROES)
         if parent:

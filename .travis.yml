@@ -1,57 +1,75 @@
-#Special configuration file to run tests on Travis-CI via GitHub notifications
-#See http://travis-ci.org/ for details
+# Special configuration file to run tests on Travis-CI via GitHub notifications
+# See https://travis-ci.org/biopython/biopython/builds for results
 #
-#Note when testing Python 3, the 'python' command will invoke Python 3
-#and similarly for PyPy too.
+# Using TravisCI's configuration alone became too complicated once we wanted
+# to cover more than just running the unit tests on different versions of
+# Python, so this now does all the complicated test configuration via TOX
+# See file .travis-tox.ini
+#
+# Environment variables setup here:
+# - TOXENV = environment used in Tox (conventionally uses py35 etc)
+#
 
 language: python
-python:
-  - "2.6"
-  - "2.7"
-  - "3.3"
-  - "3.4"
-  - "pypy"
-  - "pypy3"
+matrix:
+  include:
+    - env: TOXENV=style
+    - env: TOXENV=sdist
+    - env: TOXENV=bdist_wheel
+    - python: 2.7
+      env: TOXENV=py27-cover
+    - python: 3.3
+      env: TOXENV=py33-cover
+    - python: 3.4
+      env: TOXENV=py34-cover
+    - python: 3.5
+      env: TOXENV=py35-cover
+    - python: 3.6
+      env: TOXENV=py36-cover
+    - python: pypy
+      env: TOXENV=pypy-nocov
+    - python: pypy3
+      env: TOXENV=pypy3-nocov
 
+sudo: false
+addons:
+  apt:
+    packages:
+    - bwa
+    - clustalo
+    - clustalw
+    - emboss
+    - mafft
+    - muscle
+    - paml
+    - phyml
+    - probcons
+    - samtools
+    - wise
+
+# There is a phyml Ubuntu package, but currently too old
+# There are TravisCI provided versions of PyPy and PyPy3, but currently too old.
+# We therefore deactivate that, and download and unzip portable PyPy binaries.
 before_install:
-  - "export PY3=yes"
-  - "if [[ $TRAVIS_PYTHON_VERSION == '2.6' ]]; then export PY3=no; fi"
-  - "if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then export PY3=no; fi"
-  - "if [[ $TRAVIS_PYTHON_VERSION == 'pypy' ]]; then export PY3=no; fi"
-  - "export PYPY=no"
-  - "if [[ $TRAVIS_PYTHON_VERSION == 'pypy' ]]; then export PYPY=yes; fi"
-  - "if [[ $TRAVIS_PYTHON_VERSION == 'pypy3' ]]; then export PYPY=yes; fi"
-#Misc command line tools we can call
-  - "sudo apt-get install clustalw clustalo"
-  - "sudo apt-get install muscle mafft probcons wise emboss"
-#Suspect an update of t-coffee is causing the test run to stall...
-#  - "sudo apt-get install --no-install-recommends t-coffee"
-  - "sudo apt-get install samtools bwa"
-#Misc python modules we can use as soft dependencies
-  - "if [[ $PYPY != 'yes' ]]; then pip install reportlab; fi"
-  - "pip install rdflib"
-#Not hosted on PyPI so this need allow external switch:
-#Currently pypy3-2.4.0 self reports as Python 3.2,
-#which is not supported by mysql-connector-python
-  - "if [[ $TRAVIS_PYTHON_VERSION != 'pypy3' ]]; then pip install --allow-all-external mysql-connector-python; fi"
-#Installing psycopg2 does not work under PyPy or Jython
-  - "export PG=yes"
-  - "if [[ $PYPY == 'yes' ]]; then export PG=no; fi"
-  - "if [[ $PG == 'yes' ]]; then pip install psycopg2 --use-mirrors; fi"
-#Installing mysql-python does not work under Python 3
-  - "export MSQL=$PG"
-  - "if [[ $PY3 == 'yes' ]]; then export MSQL=no; fi"
-  - "if [[ $MSQL == 'yes' ]]; then pip install mysql-python --use-mirrors; fi"
+  - cd $HOME
+  - mkdir bin
+  - export PATH=$HOME/bin:$PATH
+  - curl -L -O http://www.atgc-montpellier.fr/download/binaries/phyml/PhyML-3.1.zip
+  - unzip PhyML-3.1.zip
+  - mv PhyML-3.1/PhyML-3.1_linux64 bin/phyml
+  - cd $HOME
+  - "if [[ $TRAVIS_PYTHON_VERSION == 'pypy' ]]; then deactivate && wget https://bitbucket.org/squeaky/portable-pypy/downloads/pypy-5.6-linux_x86_64-portable.tar.bz2 && tar -jxvf pypy-5.6-linux_x86_64-portable.tar.bz2 && echo 'Setting up aliases...' && export PATH=$HOME/pypy-5.6-linux_x86_64-portable/bin/:$PATH && ln -s ~/pypy-5.6-linux_x86_64-portable/bin/pypy ~/bin/python && echo 'Setting up pip...' && pypy-5.6-linux_x86_64-portable/bin/pypy -m ensurepip ; fi"
+  - "if [[ $TRAVIS_PYTHON_VERSION == 'pypy3' ]]; then deactivate && wget https://bitbucket.org/squeaky/portable-pypy/downloads/pypy3.3-5.5-alpha-20161013-linux_x86_64-portable.tar.bz2 && tar -jxvf pypy3.3-5.5-alpha-20161013-linux_x86_64-portable.tar.bz2 && echo 'Setting up aliases...' && export PATH=$HOME/pypy3.3-5.5-alpha-20161013-linux_x86_64-portable/bin/:$PATH && ln -s ~/pypy3.3-5.5-alpha-20161013-linux_x86_64-portable/bin/pypy3.3 ~/bin/python && echo 'Setting up pip...' && pypy3.3-5.5-alpha-20161013-linux_x86_64-portable/bin/pypy -m ensurepip && ln -s ~/pypy3.3-5.5-alpha-20161013-linux_x86_64-portable/bin/pip3.3 ~/bin/pip ; fi"
+  - cd $TRAVIS_BUILD_DIR
 
 install:
-  - "/usr/bin/yes | python setup.py install"
-
-before_script:
-  - cd Tests
+  - "cp Tests/biosql.ini.sample Tests/biosql.ini"
+  - "pip install --upgrade pip setuptools"
+  - "pip install tox"
+  - "tox -c .travis-tox.ini -e $TOXENV --notest"
 
 script:
-  - python run_tests.py --offline
+  - "tox -c .travis-tox.ini -e $TOXENV"
 
-#The email defaults are too talkative while we're getting Travis working nicely.
 notifications:
   email: false

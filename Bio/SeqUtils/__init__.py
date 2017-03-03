@@ -3,7 +3,7 @@
 # thomas@cbs.dtu.dk, Cecilia.Alsmark@ebc.uu.se
 # Copyright 2001 by Thomas Sicheritz-Ponten and Cecilia Alsmark.
 # Revisions copyright 2014 by Markus Piotrowski.
-# Revisions copyright 2014 by Peter Cock.
+# Revisions copyright 2014-2016 by Peter Cock.
 # All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -18,10 +18,8 @@ from math import pi, sin, cos
 
 from Bio.Seq import Seq, MutableSeq
 from Bio import Alphabet
-from Bio.Alphabet import IUPAC
 from Bio.Data import IUPACData
 
-__docformat__ = "restructuredtext en"
 
 ######################################
 # DNA
@@ -81,7 +79,7 @@ def GC123(seq):
         try:
             n = d['G'][i] + d['C'][i] + d['T'][i] + d['A'][i]
             gc[i] = (d['G'][i] + d['C'][i]) * 100.0 / n
-        except:
+        except Exception:  # TODO - ValueError?
             gc[i] = 0
 
         gcall = gcall + d['G'][i] + d['C'][i]
@@ -209,18 +207,19 @@ def nt_search(seq, subseq):
 # {{{
 
 
-def seq3(seq, custom_map={'*': 'Ter'}, undef_code='Xaa'):
+def seq3(seq, custom_map=None, undef_code='Xaa'):
     """Turn a one letter code protein sequence into one with three letter codes.
 
-    The single input argument 'seq' should be a protein sequence using single
-    letter codes, either as a python string or as a Seq or MutableSeq object.
+    The single required input argument 'seq' should be a protein sequence using
+    single letter codes, either as a python string or as a Seq or MutableSeq
+    object.
 
     This function returns the amino acid sequence as a string using the three
     letter amino acid codes. Output follows the IUPAC standard (including
     ambiguous characters B for "Asx", J for "Xle" and X for "Xaa", and also U
     for "Sel" and O for "Pyl") plus "Ter" for a terminator given as an asterisk.
     Any unknown character (including possible gap characters), is changed into
-    'Xaa'.
+    'Xaa' by default.
 
     e.g.
 
@@ -229,7 +228,7 @@ def seq3(seq, custom_map={'*': 'Ter'}, undef_code='Xaa'):
     'MetAlaIleValMetGlyArgTrpLysGlyAlaArgTer'
 
     You can set a custom translation of the codon termination code using the
-    "custom_map" argument, e.g.
+    dictionary "custom_map" argument (which defaults to {'*': 'Ter'}), e.g.
 
     >>> seq3("MAIVMGRWKGAR*", custom_map={"*": "***"})
     'MetAlaIleValMetGlyArgTrpLysGlyAlaArg***'
@@ -247,6 +246,8 @@ def seq3(seq, custom_map={'*': 'Ter'}, undef_code='Xaa'):
 
     This function was inspired by BioPerl's seq3.
     """
+    if custom_map is None:
+        custom_map = {'*': 'Ter'}
     # not doing .update() on IUPACData dict with custom_map dict
     # to preserve its initial state (may be imported in other modules)
     threecode = dict(list(IUPACData.protein_letters_1to3_extended.items()) +
@@ -256,18 +257,19 @@ def seq3(seq, custom_map={'*': 'Ter'}, undef_code='Xaa'):
     return ''.join(threecode.get(aa, undef_code) for aa in seq)
 
 
-def seq1(seq, custom_map={'Ter': '*'}, undef_code='X'):
+def seq1(seq, custom_map=None, undef_code='X'):
     """Turns a three-letter code protein sequence into one with single letter codes.
 
-    The single input argument 'seq' should be a protein sequence using three-
-    letter codes, either as a python string or as a Seq or MutableSeq object.
+    The single required input argument 'seq' should be a protein sequence
+    using three-letter codes, either as a python string or as a Seq or
+    MutableSeq object.
 
     This function returns the amino acid sequence as a string using the one
     letter amino acid codes. Output follows the IUPAC standard (including
     ambiguous characters "B" for "Asx", "J" for "Xle", "X" for "Xaa", "U" for
     "Sel", and "O" for "Pyl") plus "*" for a terminator given the "Ter" code.
-    Any unknown character (including possible gap characters), is changed into
-    '-'.
+    Any unknown character (including possible gap characters), is changed
+    into '-' by default.
 
     e.g.
 
@@ -282,7 +284,7 @@ def seq1(seq, custom_map={'Ter': '*'}, undef_code='X'):
     'MAIVMGRWKGAR*'
 
     You can set a custom translation of the codon termination code using the
-    "custom_map" argument, e.g.
+    dictionary "custom_map" argument (defaulting to {'Ter': '*'}), e.g.
 
     >>> seq1("MetAlaIleValMetGlyArgTrpLysGlyAlaArg***", custom_map={"***": "*"})
     'MAIVMGRWKGAR*'
@@ -299,6 +301,8 @@ def seq1(seq, custom_map={'Ter': '*'}, undef_code='X'):
     'MAIVMGRWKGAXXR*'
 
     """
+    if custom_map is None:
+        custom_map = {'Ter': '*'}
     # reverse map of threecode
     # upper() on all keys to enable caps-insensitive input seq handling
     onecode = dict((k.upper(), v) for k, v in
@@ -376,7 +380,7 @@ def molecular_weight(seq, seq_type=None, double_stranded=False, circular=False,
 
     # Find the alphabet type
     tmp_type = ''
-    if isinstance(seq, Seq) or isinstance(seq, MutableSeq):
+    if isinstance(seq, (Seq, MutableSeq)):
         base_alphabet = Alphabet._get_base_alphabet(seq.alphabet)
         if isinstance(base_alphabet, Alphabet.DNAAlphabet):
             tmp_type = 'DNA'
@@ -474,7 +478,7 @@ def six_frame_translations(seq, genetic_code=1):
     <BLANKLINE>
     <BLANKLINE>
 
-    """
+    """  # noqa for pep8 W291 trailing whitespace
     from Bio.Seq import reverse_complement, translate
     anti = reverse_complement(seq)
     comp = anti[::-1]
@@ -516,78 +520,7 @@ def six_frame_translations(seq, genetic_code=1):
 
 # }}}
 
-######################################
-# FASTA file utilities
-######################
-# {{{
-
-
-def quick_FASTA_reader(file):
-    """Simple FASTA reader, returning a list of string tuples (DEPRECATED).
-
-    The single argument 'file' should be the filename of a FASTA format file.
-    This function will open and read in the entire file, constructing a list
-    of all the records, each held as a tuple of strings (the sequence name or
-    title, and its sequence).
-
-    >>> seqs = quick_FASTA_reader("Fasta/dups.fasta")
-    >>> for title, sequence in seqs:
-    ...     print("%s %s" % (title, sequence))
-    alpha ACGTA
-    beta CGTC
-    gamma CCGCC
-    alpha (again - this is a duplicate entry to test the indexing code) ACGTA
-    delta CGCGC
-
-    This function was is fast, but because it returns the data as a single in
-    memory list, is unsuitable for large files where an iterator approach is
-    preferable.
-
-    You are generally encouraged to use Bio.SeqIO.parse(handle, "fasta") which
-    allows you to iterate over the records one by one (avoiding having all the
-    records in memory at once).  Using Bio.SeqIO also makes it easy to switch
-    between different input file formats.  However, please note that rather
-    than simple strings, Bio.SeqIO uses SeqRecord objects for each record.
-
-    If you want to use simple strings, use the function SimpleFastaParser
-    added to Bio.SeqIO.FastaIO in Biopython 1.61 instead.
-    """
-    import warnings
-    from Bio import BiopythonDeprecationWarning
-    warnings.warn("The quick_FASTA_reader has been deprecated and will be "
-                  "removed in a future release of Biopython. Please try "
-                  "function SimpleFastaParser from Bio.SeqIO.FastaIO "
-                  "instead.", BiopythonDeprecationWarning)
-    from Bio.SeqIO.FastaIO import SimpleFastaParser
-    with open(file) as handle:
-        entries = list(SimpleFastaParser(handle))
-    return entries
-
-
-# }}}
-
-
-def _test():
-    """Run the module's doctests (PRIVATE)."""
-    import os
-    import doctest
-    if os.path.isdir(os.path.join("..", "Tests")):
-        print("Running doctests...")
-        cur_dir = os.path.abspath(os.curdir)
-        os.chdir(os.path.join("..", "Tests"))
-        doctest.testmod()
-        os.chdir(cur_dir)
-        del cur_dir
-        print("Done")
-    elif os.path.isdir(os.path.join("Tests")):
-        print("Running doctests...")
-        cur_dir = os.path.abspath(os.curdir)
-        os.chdir(os.path.join("Tests"))
-        doctest.testmod()
-        os.chdir(cur_dir)
-        del cur_dir
-        print("Done")
-
 
 if __name__ == "__main__":
-    _test()
+    from Bio._utils import run_doctest
+    run_doctest()

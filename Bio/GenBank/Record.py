@@ -17,8 +17,6 @@ classes:
 # local stuff
 import Bio.GenBank
 
-__docformat__ = "restructuredtext en"
-
 
 def _wrapped_genbank(information, indent, wrap_space=1, split_char=" "):
     """Write a line of GenBank info that can wrap over multiple lines.
@@ -167,33 +165,33 @@ class Record(object):
     SEQUENCE_FORMAT = "%" + str(GB_SEQUENCE_INDENT) + "s"
 
     def __init__(self):
-        self.locus = ''
-        self.size = ''
-        self.residue_type = ''
+        self.accession = []
+        self.base_counts = ''
+        self.comment = ''
+        self.contig = ''
         self.data_file_division = ''
         self.date = ''
-        self.definition = ''
-        self.accession = []
-        self.nid = ''
-        self.pid = ''
-        self.version = ''
-        self.projects = []
-        self.dblinks = []
         self.db_source = ''
+        self.dblinks = []
+        self.definition = ''
+        self.features = []
         self.gi = ''
         self.keywords = []
-        self.segment = ''
-        self.source = ''
+        self.locus = ''
+        self.nid = ''
         self.organism = ''
-        self.taxonomy = []
-        self.references = []
-        self.comment = ''
-        self.features = []
-        self.base_counts = ''
         self.origin = ''
-        self.sequence = ''
-        self.contig = ''
+        self.pid = ''
         self.primary = []
+        self.projects = []
+        self.references = []
+        self.residue_type = ''
+        self.segment = ''
+        self.sequence = ''
+        self.size = ''
+        self.source = ''
+        self.taxonomy = []
+        self.version = ''
         self.wgs = ''
         self.wgs_scafld = []
 
@@ -275,7 +273,7 @@ class Record(object):
         """Provide output for the DEFINITION line.
         """
         output = Record.BASE_FORMAT % "DEFINITION"
-        output += _wrapped_genbank(self.definition, Record.GB_BASE_INDENT)
+        output += _wrapped_genbank(self.definition + ".", Record.GB_BASE_INDENT)
         return output
 
     def _accession_line(self):

@@ -57,8 +57,9 @@ Usage: scop_pdb [-h] [-i file] [-o file] [-p pdb_url_prefix]
   sid      -- A SCOP domain identifier. e.g. d3hbib_
 """)
 
+
 default_pdb_url = "http://www.rcsb.org/pdb/cgi/export.cgi/somefile.pdb?" \
-                      "format=PDB&pdbId=%s&compression=None"
+    "format=PDB&pdbId=%s&compression=None"
 # default_pdb_url = "file://usr/local/db/pdb/data/010331/snapshot/all/pdb%s.ent"
 
 
@@ -73,7 +74,7 @@ def open_pdb(pdbid, pdb_url=None):
 def main():
     try:
         opts, args = getopt.getopt(sys.argv[1:], "hp:o:i:",
-             ["help", "usage", "pdb=", "output=", "input="])
+                                   ["help", "usage", "pdb=", "output=", "input="])
     except getopt.GetoptError:
         # show help information and exit:
         usage()

@@ -6,10 +6,12 @@
 
 import os
 import unittest
+import math
 
+from Bio.Alphabet import generic_dna
+from Bio.Alphabet import Gapped
 from Bio.Alphabet import IUPAC
 from Bio import motifs
-from Bio.motifs.matrix import _isnan
 from Bio.Seq import Seq
 
 
@@ -412,6 +414,35 @@ class MotifTestsBasic(unittest.TestCase):
         output_handle = open(self.TFout, "w")
         output_handle.write(self.m.format("transfac"))
         output_handle.close()
+
+    def test_format(self):
+        self.m.name = 'Foo'
+        s1 = self.m.format('pfm')
+        expected_pfm = """  1.00   0.00   1.00   0.00  1.00
+  0.00   0.00   0.00   0.00  0.00
+  0.00   0.00   0.00   0.00  0.00
+  0.00   1.00   0.00   1.00  0.00
+"""
+        s2 = self.m.format('jaspar')
+        expected_jaspar = """>None Foo
+A [  1.00   0.00   1.00   0.00   1.00]
+C [  0.00   0.00   0.00   0.00   0.00]
+G [  0.00   0.00   0.00   0.00   0.00]
+T [  0.00   1.00   0.00   1.00   0.00]
+"""
+        self.assertEqual(s2, expected_jaspar)
+        s3 = self.m.format('transfac')
+        expected_transfac = """P0      A      C      G      T
+01      1      0      0      0      A
+02      0      0      0      1      T
+03      1      0      0      0      A
+04      0      0      0      1      T
+05      1      0      0      0      A
+XX
+//
+"""
+        self.assertEqual(s3, expected_transfac)
+        self.assertRaises(ValueError, self.m.format, 'foo_bar')
 
 
 class TestMEME(unittest.TestCase):
@@ -1657,7 +1688,20 @@ class MotifTestPWM(unittest.TestCase):
         self.assertAlmostEqual(result[3], -38.04542542, places=5)
         self.assertAlmostEqual(result[4], -20.3014183, places=5)
         self.assertAlmostEqual(result[5], -25.18009186, places=5)
-        self.assertTrue(_isnan(result[6]), "Expected nan, not %r" % result[6])
+        self.assertTrue(math.isnan(result[6]), "Expected nan, not %r" % result[6])
+
+    def test_mixed_alphabets(self):
+        """Test creating motif with mixed alphabets."""
+        # TODO - Can we support this?
+        seqs = [Seq("TACAA", IUPAC.unambiguous_dna),
+                Seq("TACGC", IUPAC.ambiguous_dna),
+                Seq("TACAC", IUPAC.extended_dna),
+                Seq("TACCC", Gapped(IUPAC.unambiguous_dna)),
+                Seq("AACCC", IUPAC.unambiguous_dna),
+                Seq("AATGC", IUPAC.unambiguous_dna),
+                Seq("AATGC", generic_dna)]
+        # ValueError: Alphabets are inconsistent
+        self.assertRaises(ValueError, motifs.create, seqs)
 
 
 if __name__ == "__main__":

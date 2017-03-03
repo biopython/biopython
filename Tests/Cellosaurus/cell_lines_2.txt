@@ -1,0 +1,63 @@
+ID   XP3OS
+AC   CVCL_3245
+AS   CVCL_F511
+SY   XP30S; GM04314
+DR   CLO; CLO_0019557
+DR   Coriell; GM04314
+DR   JCRB; JCRB0303
+DR   JCRB; KURB1002
+DR   JCRB; KURB1003
+DR   JCRB; KURB1004
+RX   PubMed=1372102;
+ST   Source(s): JCRB
+ST   Amelogenin: X
+ST   CSF1PO: 10,11
+ST   D13S317: 9,11
+ST   D16S539: 9,12
+ST   D5S818: 10,11
+ST   D7S820: 11,12
+ST   TH01: 7
+ST   TPOX: 8,11
+ST   vWA: 14,16
+DI   NCIt; C3965; Xeroderma pigmentosum, complementation group A
+OX   NCBI_TaxID=9606; ! Homo sapiens
+SX   Female
+CA   Finite cell line
+//
+ID   1-5c-4
+AC   CVCL_2260
+SY   Clone 1-5c-4; Clone 1-5c-4 WKD of Chang Conjunctiva; Wong-Kilbourne derivative of Chang conjunctiva; ChWK
+DR   CLO; CLO_0002500
+DR   CLO; CLO_0002501
+DR   CLDB; cl793
+DR   CLDB; cl794
+DR   CLDB; cl795
+DR   ATCC; CCL-20.2
+DR   BioSample; SAMN03151673
+DR   ECACC; 88021103
+DR   IZSLER; BS CL 93
+DR   KCLB; 10020.2
+RX   PubMed=566722;
+RX   PubMed=19630270;
+RX   PubMed=20143388;
+WW   http://iclac.org/wp-content/uploads/Cross-Contaminations-v7_2.pdf
+CC   Problematic cell line: Contaminated. Shown to be a HeLa derivative (PubMed 566722, PubMed 20143388).
+CC   Omics: Transcriptome analysis.
+ST   Source(s): ATCC; KCLB
+ST   Amelogenin: X
+ST   CSF1PO: 9,10
+ST   D13S317: 12,13.3
+ST   D16S539: 9,10
+ST   D3S1358: 15,18
+ST   D5S818: 11,12
+ST   D7S820: 8,12
+ST   FGA: 18,21
+ST   TH01: 7
+ST   TPOX: 8,12
+ST   vWA: 16,18
+DI   NCIt; C4029; Cervical adenocarcinoma
+OX   NCBI_TaxID=9606; ! Homo sapiens
+HI   CVCL_0030 ! HeLa
+SX   Female
+CA   Cancer cell line
+//

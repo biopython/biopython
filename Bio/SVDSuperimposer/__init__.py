@@ -2,7 +2,8 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""
+"""Align on protein structure onto another using SVD alignment.
+
 SVDSuperimposer finds the best rotation and translation to put
 two point sets on top of each other (minimizing the RMSD). This is
 eg. useful to superimpose crystal structures. SVD stands for singular
@@ -11,12 +12,18 @@ value decomposition, which is used in the algorithm.
 
 from __future__ import print_function
 
-from numpy import dot, transpose, sqrt, array
-from numpy.linalg import svd, det
+try:
+    from numpy import dot, transpose, sqrt
+    from numpy.linalg import svd, det
+except ImportError:
+    from Bio import MissingPythonDependencyError
+    raise MissingPythonDependencyError(
+        "Install NumPy if you want to use Bio.SVDSuperimposer.")
 
 
 class SVDSuperimposer(object):
-    """
+    """Class to run SVD alignment,
+
     SVDSuperimposer finds the best rotation and translation to put
     two point sets on top of each other (minimizing the RMSD). This is
     eg. useful to superimpose crystal structures.
@@ -28,6 +35,64 @@ class SVDSuperimposer(object):
 
     Matrix computations, 2nd ed. Golub, G. & Van Loan, CF., The Johns
     Hopkins University Press, Baltimore, 1989
+
+    start with two coordinate sets (Nx3 arrays - float)
+
+    >>> from Bio.SVDSuperimposer import SVDSuperimposer
+    >>> from numpy import array, dot, set_printoptions
+    >>>
+    >>> x = array([[51.65, -1.90, 50.07],
+    ...      [50.40, -1.23, 50.65],
+    ...      [50.68, -0.04, 51.54],
+    ...      [50.22, -0.02, 52.85]], 'f')
+    >>>
+    >>> y = array([[51.30, -2.99, 46.54],
+    ...      [51.09, -1.88, 47.58],
+    ...      [52.36, -1.20, 48.03],
+    ...      [52.71, -1.18, 49.38]], 'f')
+
+    start
+
+    >>> sup = SVDSuperimposer()
+
+    set the coords y will be rotated and translated on x
+
+    >>> sup.set(x, y)
+
+    do the lsq fit
+
+    >>> sup.run()
+
+    get the rmsd
+
+    >>> rms = sup.get_rms()
+
+    get rotation (right multiplying!) and the translation
+
+    >>> rot, tran = sup.get_rotran()
+
+    rotate y on x
+
+    >>> y_on_x1 = dot(y, rot) + tran
+
+    same thing
+
+    >>> y_on_x2 = sup.get_transformed()
+
+    >>> set_printoptions(precision=2)
+    >>> print(y_on_x1)
+    [[  5.17e+01  -1.90e+00   5.01e+01]
+     [  5.04e+01  -1.23e+00   5.06e+01]
+     [  5.07e+01  -4.16e-02   5.15e+01]
+     [  5.02e+01  -1.94e-02   5.29e+01]]
+    >>> print(y_on_x2)
+    [[  5.17e+01  -1.90e+00   5.01e+01]
+     [  5.04e+01  -1.23e+00   5.06e+01]
+     [  5.07e+01  -4.16e-02   5.15e+01]
+     [  5.02e+01  -1.94e-02   5.29e+01]]
+    >>> print("%.2f" % rms)
+    0.00
+
     """
     def __init__(self):
         self._clear()
@@ -44,7 +109,7 @@ class SVDSuperimposer(object):
         self.init_rms = None
 
     def _rms(self, coords1, coords2):
-        "Return rms deviations between coords1 and coords2."
+        """Return rms deviations between coords1 and coords2."""
         diff = coords1 - coords2
         l = coords1.shape[0]
         return sqrt(sum(sum(diff * diff)) / l)
@@ -52,12 +117,12 @@ class SVDSuperimposer(object):
     # Public methods
 
     def set(self, reference_coords, coords):
-        """
-        Set the coordinates to be superimposed.
+        """Set the coordinates to be superimposed.
+
         coords will be put on top of reference_coords.
 
-        o reference_coords: an NxDIM array
-        o coords: an NxDIM array
+        - reference_coords: an NxDIM array
+        - coords: an NxDIM array
 
         DIM is the dimension of the points, N is the number
         of points to be superimposed.
@@ -74,7 +139,7 @@ class SVDSuperimposer(object):
         self.n = n[0]
 
     def run(self):
-        "Superimpose the coordinate sets."
+        """Superimpose the coordinate sets."""
         if self.coords is None or self.reference_coords is None:
             raise Exception("No coordinates set.")
         coords = self.coords
@@ -95,7 +160,7 @@ class SVDSuperimposer(object):
         self.tran = av2 - dot(av1, self.rot)
 
     def get_transformed(self):
-        "Get the transformed coordinate set."
+        """Get the transformed coordinate set."""
         if self.coords is None or self.reference_coords is None:
             raise Exception("No coordinates set.")
         if self.rot is None:
@@ -105,13 +170,13 @@ class SVDSuperimposer(object):
         return self.transformed_coords
 
     def get_rotran(self):
-        "Right multiplying rotation matrix and translation."
+        """Right multiplying rotation matrix and translation."""
         if self.rot is None:
             raise Exception("Nothing superimposed yet.")
         return self.rot, self.tran
 
     def get_init_rms(self):
-        "Root mean square deviation of untransformed coordinates."
+        """Root mean square deviation of untransformed coordinates."""
         if self.coords is None:
             raise Exception("No coordinates set yet.")
         if self.init_rms is None:
@@ -119,7 +184,7 @@ class SVDSuperimposer(object):
         return self.init_rms
 
     def get_rms(self):
-        "Root mean square deviation of superimposed coordinates."
+        """Root mean square deviation of superimposed coordinates."""
         if self.rms is None:
             transformed_coords = self.get_transformed()
             self.rms = self._rms(transformed_coords, self.reference_coords)
@@ -127,43 +192,5 @@ class SVDSuperimposer(object):
 
 
 if __name__ == "__main__":
-
-    # start with two coordinate sets (Nx3 arrays - float)
-
-    x = array([[51.65, -1.90, 50.07],
-         [50.40, -1.23, 50.65],
-         [50.68, -0.04, 51.54],
-         [50.22, -0.02, 52.85]], 'f')
-
-    y = array([[51.30, -2.99, 46.54],
-         [51.09, -1.88, 47.58],
-         [52.36, -1.20, 48.03],
-         [52.71, -1.18, 49.38]], 'f')
-
-    # start!
-    sup = SVDSuperimposer()
-
-    # set the coords
-    # y will be rotated and translated on x
-    sup.set(x, y)
-
-    # do the lsq fit
-    sup.run()
-
-    # get the rmsd
-    rms = sup.get_rms()
-
-    # get rotation (right multiplying!) and the translation
-    rot, tran = sup.get_rotran()
-
-    # rotate y on x
-    y_on_x1 = dot(y, rot) + tran
-
-    # same thing
-    y_on_x2 = sup.get_transformed()
-
-    print(y_on_x1)
-    print("")
-    print(y_on_x2)
-    print("")
-    print("%.2f" % rms)
+    from Bio._utils import run_doctest
+    run_doctest(verbose=0)

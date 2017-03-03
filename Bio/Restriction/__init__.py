@@ -13,7 +13,7 @@ Example:
 
     >>> from Rana.fts import fts    #
     >>> from Rana.Vector import *   # Just a way to get a sequence.
-    >>> from Bio.Seq import Seq     # Use your prefered method here.
+    >>> from Bio.Seq import Seq     # Use your preferred method here.
     >>> pbr = fts(pBR322)           #
     >>> seq = Seq(str(pbr))         #
     >>>
@@ -54,9 +54,8 @@ Example:
 
 """
 
-from Bio.Restriction.Restriction import *
+from Bio.Restriction.Restriction import *  # noqa (legacy module arrangement)
 
-__docformat__ = "restructuredtext en"
 
 #
 #   OK can't put the following code in Bio.Restriction.__init__ unless
@@ -106,7 +105,7 @@ __docformat__ = "restructuredtext en"
 #   3) I prefer to keep all the code together.
 #   4) and 5) both are OK. Only a matter of preference.
 #
-#   So the following code has been moved back to Bio.Restricion.Restriction
+#   So the following code has been moved back to Bio.Restriction.Restriction
 #   For the user the results is transparent:
 #   from Bio.Restriction import * works as before.
 #

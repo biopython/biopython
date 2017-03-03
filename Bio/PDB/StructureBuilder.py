@@ -20,20 +20,19 @@ from Bio.PDB.Atom import Atom, DisorderedAtom
 from Bio.PDB.PDBExceptions import PDBConstructionException
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
 
-__docformat__ = "restructuredtext en"
-
 
 class StructureBuilder(object):
-    """
-    Deals with contructing the Structure object. The StructureBuilder class is used
-    by the PDBParser classes to translate a file to a Structure object.
+    """Deals with contructing the Structure object.
+
+    The StructureBuilder class is used by the PDBParser classes to
+    translate a file to a Structure object.
     """
     def __init__(self):
         self.line_counter = 0
         self.header = {}
 
     def _is_completely_disordered(self, residue):
-        "Return 1 if all atoms in the residue have a non blank altloc."
+        """Return 1 if all atoms in the residue have a non blank altloc."""
         atom_list = residue.get_unpacked_list()
         for atom in atom_list:
             altloc = atom.get_altloc()
@@ -47,9 +46,7 @@ class StructureBuilder(object):
         self.header = header
 
     def set_line_counter(self, line_counter):
-        """
-        The line counter keeps track of the line in the PDB file that
-        is being parsed.
+        """Tracks line in the PDB file that is being parsed.
 
         Arguments:
         o line_counter - int
@@ -98,11 +95,10 @@ class StructureBuilder(object):
         self.segid = segid
 
     def init_residue(self, resname, field, resseq, icode):
-        """
-        Initiate a new Residue object.
+        """Initiate a new Residue object.
 
         Arguments:
-        
+
             - resname - string, e.g. "ASN"
             - field - hetero flag, "W" for waters, "H" for
               hetero residues, otherwise blank.
@@ -138,6 +134,13 @@ class StructureBuilder(object):
                         self.residue = duplicate_residue
                         return
                 else:
+                    if resname == duplicate_residue.resname:
+                        warnings.warn("WARNING: Residue ('%s', %i, '%s','%s')"
+                                      " already defined with the same name at line  %i."
+                              % (field, resseq, icode, resname, self.line_counter),
+                              PDBConstructionWarning)
+                        self.residue = duplicate_residue
+                        return
                     # Make a new DisorderedResidue object and put all
                     # the Residue objects with the id (field, resseq, icode) in it.
                     # These residues each should have non-blank altlocs for all their atoms.
@@ -161,8 +164,7 @@ class StructureBuilder(object):
 
     def init_atom(self, name, coord, b_factor, occupancy, altloc, fullname,
                   serial_number=None, element=None):
-        """
-        Initiate a new Atom object.
+        """Initiate a new Atom object.
 
         Arguments:
         o name - string, atom name, e.g. CA, spaces should be stripped
@@ -234,19 +236,19 @@ class StructureBuilder(object):
             residue.add(self.atom)
 
     def set_anisou(self, anisou_array):
-        "Set anisotropic B factor of current Atom."
+        """Set anisotropic B factor of current Atom."""
         self.atom.set_anisou(anisou_array)
 
     def set_siguij(self, siguij_array):
-        "Set standard deviation of anisotropic B factor of current Atom."
+        """Set standard deviation of anisotropic B factor of current Atom."""
         self.atom.set_siguij(siguij_array)
 
     def set_sigatm(self, sigatm_array):
-        "Set standard deviation of atom position of current Atom."
+        """Set standard deviation of atom position of current Atom."""
         self.atom.set_sigatm(sigatm_array)
 
     def get_structure(self):
-        "Return the structure."
+        """Return the structure."""
         # first sort everything
         # self.structure.sort()
         # Add the header dict

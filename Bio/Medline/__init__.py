@@ -13,8 +13,6 @@ Functions:
  - parse            Allows you to iterate over a bunch of Medline records
 """
 
-__docformat__ = "restructuredtext en"
-
 
 class Record(dict):
     """A dictionary holding information from a Medline record.
@@ -112,7 +110,7 @@ def parse(handle):
         from Bio import Medline
         with open("mymedlinefile") as handle:
             records = Medline.parse(handle)
-            for record in record:
+            for record in records:
                 print(record['TI'])
 
     """

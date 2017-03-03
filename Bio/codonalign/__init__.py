@@ -7,14 +7,9 @@
 """Code for dealing with Codon Alignment.
 """
 from __future__ import print_function
-__docformat__ = "restructuredtext en"  # Don't just use plain text in epydoc API pages!
 
+from Bio import BiopythonWarning
 from Bio import BiopythonExperimentalWarning
-
-import warnings
-warnings.warn('Bio.codonalign is an experimental module which may undergo '
-              'significant changes prior to its future official release.',
-              BiopythonExperimentalWarning)
 
 try:
     from itertools import izip
@@ -30,6 +25,11 @@ from Bio.codonalign.codonalphabet import CodonAlphabet
 from Bio.codonalign.codonalphabet import default_codon_table, default_codon_alphabet
 from Bio.codonalign.codonalphabet import get_codon_alphabet as _get_codon_alphabet
 
+import warnings
+warnings.warn('Bio.codonalign is an experimental module which may undergo '
+              'significant changes prior to its future official release.',
+              BiopythonExperimentalWarning)
+
 
 def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X',
           codon_table=default_codon_table, alphabet=None,
@@ -40,12 +40,12 @@ def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X',
     Arguments:
         - pro_align  - a protein MultipleSeqAlignment object
         - nucl_align - an object returned by SeqIO.parse or SeqIO.index
-          or a colloction of SeqRecord.
+          or a collection of SeqRecord.
         - alphabet   - alphabet for the returned codon alignment
         - corr_dict  - a dict that maps protein id to nucleotide id
         - complete_protein - whether the sequence begins with a start
           codon
-        - frameshift - whether to appply frameshift detection
+        - frameshift - whether to apply frameshift detection
 
     Return a CodonAlignment object
 
@@ -93,12 +93,12 @@ def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X',
             nucl_seqs = tuple(nucl_seqs)
         nucl_num = len(nucl_seqs)
         if pro_num > nucl_num:
-            raise ValueError("More Number of SeqRecords in Protein Alignment "
+            raise ValueError("Higher Number of SeqRecords in Protein Alignment "
                              "({0}) than the Number of Nucleotide SeqRecords "
                              "({1}) are found!".format(pro_num, nucl_num))
 
         # Determine the protein sequences and nucl sequences
-        # correspondance. If nucl_seqs is a list, tuple or read by
+        # correspondence. If nucl_seqs is a list, tuple or read by
         # SeqIO.parse(), we assume the order of sequences in pro_align
         # and nucl_seqs are the same. If nucl_seqs is a dict or read by
         # SeqIO.index(), we match seqs in pro_align and those in
@@ -109,7 +109,7 @@ def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X',
             corr_method = 0
         else:
             raise TypeError("Nucl Sequences Error, Unknown type to assign "
-                            "correspondance method")
+                            "correspondence method")
     else:
         if not isinstance(corr_dict, dict):
             raise TypeError("corr_dict should be a dict that corresponds "
@@ -134,14 +134,14 @@ def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X',
                                "than number of protein records "
                                "({1})".format(len(corr_dict), pro_num))
 
-    # set up pro-nucl correspondance based on corr_method
+    # set up pro-nucl correspondence based on corr_method
     # corr_method = 0, consecutive pairing
     if corr_method == 0:
         pro_nucl_pair = izip(pro_align, nucl_seqs)
     # corr_method = 1, keyword pairing
     elif corr_method == 1:
         nucl_id = set(nucl_seqs.keys())
-        pro_id = set([i.id for i in pro_align])
+        pro_id = set(i.id for i in pro_align)
         # check if there is pro_id that does not have a nucleotide match
         if pro_id - nucl_id:
             diff = pro_id - nucl_id
@@ -164,9 +164,9 @@ def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X',
             pro_nucl_pair.append((pro_rec, nucl_seqs[nucl_id]))
 
     codon_aln = []
-    shift = None
+    shift = False
     for pair in pro_nucl_pair:
-        # Beaware that the following span corresponds to an ungapped
+        # Beware that the following span corresponds to an ungapped
         # nucleotide sequence.
         corr_span = _check_corr(pair[0], pair[1], gap_char=gap_char,
                                 codon_table=codon_table,
@@ -184,7 +184,7 @@ def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X',
             codon_aln.append(codon_rec)
             if corr_span[1] == 2:
                 shift = True
-    if shift is True:
+    if shift:
         return CodonAlignment(_align_shift_recs(codon_aln), alphabet=alphabet)
     else:
         return CodonAlignment(codon_aln, alphabet=alphabet)
@@ -204,7 +204,7 @@ def _codons2re(codons):
 
 def _get_aa_regex(codon_table, stop='*', unknown='X'):
     """Set up the regular expression of a given CodonTable for
-    futher use.
+    further use.
 
     >>> from Bio.Data.CodonTable import generic_by_id
     >>> p = generic_by_id[1]
@@ -245,8 +245,8 @@ def _check_corr(pro, nucl, gap_char='-', codon_table=default_codon_table,
     import re
     from Bio.Alphabet import NucleotideAlphabet
 
-    if not all([isinstance(pro, SeqRecord), isinstance(nucl, SeqRecord)]):
-        raise TypeError("_check_corr accept two SeqRecord object. Please "
+    if not isinstance(pro, SeqRecord) or not isinstance(nucl, SeqRecord):
+        raise TypeError("_check_corr accepts two SeqRecord object. Please "
                         "check your input.")
 
     def get_alpha(alpha):
@@ -299,7 +299,7 @@ def _check_corr(pro, nucl, gap_char='-', codon_table=default_codon_table,
             # pro_re
             if this_anchor_len == anchor_len:
                 for aa in anchor:
-                    if complete_protein is True and i == 0:
+                    if complete_protein and i == 0:
                         qcodon += _codons2re(codon_table.start_codons)
                         fncodon += aa2re['X']
                         continue
@@ -336,7 +336,7 @@ def _check_corr(pro, nucl, gap_char='-', codon_table=default_codon_table,
             first_anchor = True
             shift_id_pos = 0
             # check the first anchor
-            if first_anchor is True and anchor_pos[0][2] != 0:
+            if first_anchor and anchor_pos[0][2] != 0:
                 shift_val_lst = [1, 2, 3 * anchor_len - 2, 3 * anchor_len - 1, 0]
                 sh_anc = anchors[0]
                 for shift_val in shift_val_lst:
@@ -364,7 +364,7 @@ def _check_corr(pro, nucl, gap_char='-', codon_table=default_codon_table,
                         break
                 if qcodon == -1:
                     warnings.warn("first frameshift detection failed for "
-                                  "{0}".format(nucl.id))
+                                  "{0}".format(nucl.id), BiopythonWarning)
             # check anchors in the middle
             for i in range(len(anchor_pos) - 1):
                 shift_val = (anchor_pos[i + 1][0] - anchor_pos[i][0]) % \
@@ -383,7 +383,7 @@ def _check_corr(pro, nucl, gap_char='-', codon_table=default_codon_table,
                     qcodon = None
                 elif qcodon == -1:
                     warnings.warn("middle frameshift detection failed for "
-                                  "{0}".format(nucl.id))
+                                  "{0}".format(nucl.id), BiopythonWarning)
             # check the last anchor
             if anchor_pos[-1][2] + 1 == len(anchors) - 1:
                 sh_anc = anchors[-1]
@@ -414,7 +414,7 @@ def _check_corr(pro, nucl, gap_char='-', codon_table=default_codon_table,
                         break
                 if qcodon == -1:
                     warnings.warn("last frameshift detection failed for "
-                                  "{0}".format(nucl.id))
+                                  "{0}".format(nucl.id), BiopythonWarning)
             # try global match
             full_pro_re = "".join(pro_re)
             match = re.search(full_pro_re, nucl_seq)
@@ -561,7 +561,7 @@ def _get_codon_rec(pro, nucl, span_mode, alphabet, gap_char="-",
         for aa in pro.seq:
             if aa == "-":
                 codon_seq += "---"
-            elif complete_protein is True and aa_num == 0:
+            elif complete_protein and aa_num == 0:
                 this_codon = nucl_seq._data[span[0]:span[0] + 3]
                 if not re.search(_codons2re[codon_table.start_codons],
                                  this_codon.upper()):
@@ -569,8 +569,8 @@ def _get_codon_rec(pro, nucl, span_mode, alphabet, gap_char="-",
                     warnings.warn("start codon of {0} ({1} {2}) does not "
                                   "correspond to {3} "
                                   "({4})".format(pro.id, aa, aa_num,
-                                                 nucl.id, this_codon)
-                                  )
+                                                 nucl.id, this_codon),
+                                  BiopythonWarning)
                 if max_score == 0:
                     raise RuntimeError("max_score reached for {0}! Please "
                                        "raise up the tolerance to get an "
@@ -583,7 +583,8 @@ def _get_codon_rec(pro, nucl, span_mode, alphabet, gap_char="-",
                 if not str(Seq(this_codon.upper()).translate(table=codon_table)) == aa:
                     max_score -= 1
                     warnings.warn("%s(%s %d) does not correspond to %s(%s)"
-                                  % (pro.id, aa, aa_num, nucl.id, this_codon))
+                                  % (pro.id, aa, aa_num, nucl.id, this_codon),
+                                  BiopythonWarning)
                 if max_score == 0:
                     raise RuntimeError("max_score reached for {0}! Please "
                                        "raise up the tolerance to get an "
@@ -623,15 +624,15 @@ def _get_codon_rec(pro, nucl, span_mode, alphabet, gap_char="-",
         for aa in pro.seq:
             if aa == "-":
                 codon_seq += "---"
-            elif complete_protein is True and aa_num == 0:
+            elif complete_protein and aa_num == 0:
                 this_codon = nucl_seq._data[rf_table[0]:rf_table[0] + 3]
                 if not re.search(_codons2re[codon_table.start_codons],
                                  this_codon.upper()):
                     max_score -= 1
                     warnings.warn("start codon of {0}({1} {2}) does not "
                                   "correspond to {3}({4})".format(
-                                      pro.id, aa, aa_num, nucl.id, this_codon)
-                                  )
+                                      pro.id, aa, aa_num, nucl.id, this_codon),
+                                  BiopythonWarning)
                     codon_seq += this_codon
                     aa_num += 1
             else:
@@ -658,8 +659,8 @@ def _get_codon_rec(pro, nucl, span_mode, alphabet, gap_char="-",
                         warnings.warn("Codon of {0}({1} {2}) does not "
                                       "correspond to {3}({4})".format(
                                           pro.id, aa, aa_num, nucl.id,
-                                          this_codon)
-                                      )
+                                          this_codon),
+                                      BiopythonWarning)
                 if max_score == 0:
                     raise RuntimeError("max_score reached for {0}! Please "
                                        "raise up the tolerance to get an "

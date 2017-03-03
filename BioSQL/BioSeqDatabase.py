@@ -1,5 +1,5 @@
 # Copyright 2002 by Andrew Dalke.  All rights reserved.
-# Revisions 2007-2014 copyright by Peter Cock.  All rights reserved.
+# Revisions 2007-2016 copyright by Peter Cock.  All rights reserved.
 # Revisions 2009 copyright by Cymon J. Cox.  All rights reserved.
 # Revisions 2013-2014 copyright by Tiago Antao.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
@@ -23,6 +23,7 @@ from Bio import BiopythonDeprecationWarning
 from . import BioSeq
 from . import Loader
 from . import DBUtils
+
 
 _POSTGRES_RULES_PRESENT = False  # Hack for BioSQL Bug 2839
 
@@ -112,16 +113,22 @@ def open_database(driver="MySQLdb", **kwargs):
         if server.adaptor.execute_and_fetchall(sql):
             import warnings
             from Bio import BiopythonWarning
-            warnings.warn("Your BioSQL PostgreSQL schema includes some "
-                          "rules currently required for bioperl-db but "
-                          "which may cause problems loading data using "
-                          "Biopython (see BioSQL Bug 2839). If you do not "
-                          "use BioPerl, please remove these rules. "
-                          "Biopython should cope with the rules present, "
-                          "but with a performance penalty when loading "
-                          "new records.", BiopythonWarning)
+            warnings.warn("Your BioSQL PostgreSQL schema includes some rules "
+                          "currently required for bioperl-db but which may"
+                          "cause problems loading data using Biopython (see "
+                          "BioSQL's RedMine Bug 2839 aka GitHub Issue 4 "
+                          "https://github.com/biosql/biosql/issues/4). "
+                          "If you do not use BioPerl, please remove these "
+                          "rules. Biopython should cope with the rules "
+                          "present, but with a performance penalty when "
+                          "loading new records.", BiopythonWarning)
             global _POSTGRES_RULES_PRESENT
             _POSTGRES_RULES_PRESENT = True
+
+    elif driver == 'sqlite3':
+        # Tell SQLite that we want to use foreign keys
+        # https://www.sqlite.org/foreignkeys.html#fk_enable
+        server.adaptor.execute('PRAGMA foreign_keys = ON')
 
     return server
 
@@ -179,7 +186,7 @@ class DBServer(object):
             return [self[key] for key in self]
 
         def items(self):
-            """List of (namespace, BioSeqDatabase) for entries in the database."""
+            """List of (namespace, BioSeqDatabase) for entries in database."""
             return [(key, self[key]) for key in self]
 
         def iterkeys(self):
@@ -304,9 +311,18 @@ class _CursorWrapper(object):
         self.real_cursor = real_cursor
 
     def execute(self, operation, params=None, multi=False):
+        """Execute a sql statement
+        """
         self.real_cursor.execute(operation, params, multi)
 
+    def executemany(self, operation, params):
+        """Execute many sql statements
+        """
+        self.real_cursor.executemany(operation, params)
+
     def _convert_tuple(self, tuple_):
+        """Decode any bytestrings present in the row
+        """
         tuple_list = list(tuple_)
         for i, elem in enumerate(tuple_list):
             if type(elem) is bytes:
@@ -482,6 +498,13 @@ class Adaptor(object):
             sql = sql.replace("%s", "?")
         self.dbutils.execute(self.cursor, sql, args)
 
+    def executemany(self, sql, args):
+        """Execute many sql commands.
+        """
+        if os.name == "java":
+            sql = sql.replace("%s", "?")
+        self.dbutils.executemany(self.cursor, sql, args)
+
     def get_subseq_as_string(self, seqid, start, end):
         length = end - start
         # XXX Check this on MySQL and PostgreSQL. substr should be general,
@@ -499,10 +522,14 @@ class Adaptor(object):
             (start + 1, length, seqid))[0])
 
     def execute_and_fetch_col0(self, sql, args=None):
+        """Return a list of values from the first column in the row
+        """
         self.execute(sql, args or ())
         return [field[0] for field in self.cursor.fetchall()]
 
     def execute_and_fetchall(self, sql, args=None):
+        """Return a list of tuples of all rows
+        """
         self.execute(sql, args or ())
         return self.cursor.fetchall()
 
@@ -622,12 +649,16 @@ class BioSeqDatabase(object):
         return list(self.keys())
 
     def __getitem__(self, key):
-        return BioSeq.DBSeqRecord(self.adaptor, key)
+        record = BioSeq.DBSeqRecord(self.adaptor, key)
+        if record._biodatabase_id != self.dbid:
+            raise KeyError("Entry %r does exist, but not in current name space" % key)
+        return record
 
     def __delitem__(self, key):
         """Remove an entry and all its annotation."""
         if key not in self:
-            raise KeyError(key)
+            raise KeyError("Entry %r cannot be deleted. "
+                           "It was not found or is invalid" % key)
         # Assuming this will automatically cascade to the other tables...
         sql = "DELETE FROM bioentry " + \
               "WHERE biodatabase_id=%s AND bioentry_id=%s;"
@@ -765,15 +796,16 @@ class BioSeqDatabase(object):
                 else:
                     accession = cur_record.id
                     version = 0
-                gi = cur_record.annotations.get("gi", None)
+                gi = cur_record.annotations.get("gi")
                 sql = "SELECT bioentry_id FROM bioentry WHERE (identifier " + \
                       "= '%s' AND biodatabase_id = '%s') OR (accession = " + \
                       "'%s' AND version = '%s' AND biodatabase_id = '%s')"
                 self.adaptor.execute(
                     sql % (gi, self.dbid, accession, version, self.dbid))
                 if self.adaptor.cursor.fetchone():
-                    raise self.adaptor.conn.IntegrityError("Duplicate record "
-                                                           "detected: record has not been inserted")
+                    raise self.adaptor.conn.IntegrityError(
+                        "Duplicate record detected: "
+                        "record has not been inserted")
             # End of hack
             db_loader.load_seqrecord(cur_record)
         return num_records

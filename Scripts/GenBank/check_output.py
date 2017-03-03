@@ -16,9 +16,9 @@ import os
 import gzip
 
 try:
-    from StringIO import StringIO # Python 2
+    from StringIO import StringIO  # Python 2
 except ImportError:
-    from io import StringIO # Python 3
+    from io import StringIO  # Python 3
 
 # biopython
 from Bio import GenBank
@@ -49,8 +49,8 @@ def do_comparison(good_record, test_record):
                                      % good_line)
 
         assert test_line == good_line, \
-               "Expected does not match Test.\nExpect:`%s`\nTest  :`%s`\n" % \
-               (good_line, test_line)
+            "Expected does not match Test.\nExpect:`%s`\nTest  :`%s`\n" % \
+            (good_line, test_line)
 
 
 def write_format(file):
@@ -86,6 +86,7 @@ def write_format(file):
 
     cur_handle.close()
     compare_handle.close()
+
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:

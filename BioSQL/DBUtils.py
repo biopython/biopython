@@ -10,6 +10,7 @@
 # available and licensed separately.  Please consult www.biosql.org
 import os
 
+
 _dbutils = {}
 
 
@@ -38,6 +39,11 @@ class Generic_dbutils(object):
         """
         cursor.execute(sql, args or ())
 
+    def executemany(self, cursor, sql, seq):
+        """Execute many sql commands
+        """
+        cursor.executemany(sql, seq)
+
     def autocommit(self, conn, y=1):
         # Let's hope it was not really needed
         pass
@@ -46,10 +52,21 @@ class Generic_dbutils(object):
 class Sqlite_dbutils(Generic_dbutils):
     """Custom database utilities for SQLite."""
 
+    def _sub_placeholder(self, sql):
+        """Format the argument placeholders for sqlite
+        """
+        return sql.replace("%s", "?")
+
     def execute(self, cursor, sql, args=None):
         """Execute SQL command, replacing %s with ? for variable substitution in sqlite3.
         """
-        cursor.execute(sql.replace("%s", "?"), args or ())
+        sql = self._sub_placeholder(sql)
+        cursor.execute(sql, args or ())
+
+    def executemany(self, cursor, sql, seq):
+        sql = self._sub_placeholder(sql)
+        cursor.executemany(sql, seq)
+
 
 _dbutils["sqlite3"] = Sqlite_dbutils
 
@@ -68,6 +85,7 @@ class Mysql_dbutils(Generic_dbutils):
             # Google suggests this is the new way,
             # same fix also suggested by Eric Gibert:
             return cursor.lastrowid
+
 
 _dbutils["MySQLdb"] = Mysql_dbutils
 
@@ -105,6 +123,7 @@ class Psycopg2_dbutils(_PostgreSQL_dbutils):
             else:
                 conn.set_isolation_level(1)
 
+
 _dbutils["psycopg2"] = Psycopg2_dbutils
 
 
@@ -113,6 +132,7 @@ class Pgdb_dbutils(_PostgreSQL_dbutils):
 
     def autocommit(self, conn, y=True):
         raise NotImplementedError("pgdb does not support this!")
+
 
 _dbutils["pgdb"] = Pgdb_dbutils
 

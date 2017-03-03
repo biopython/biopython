@@ -5,6 +5,7 @@
 
 import xml.etree.ElementTree as ET
 
+
 cdao_namespaces = {
     'cdao': 'http://purl.obolibrary.org/obo/cdao.owl#',
     'obo': 'http://purl.obolibrary.org/obo/',
@@ -16,7 +17,6 @@ def resolve_uri(s, namespaces=cdao_namespaces, cdao_to_obo=True, xml_style=False
 
     Optionally, converts CDAO named identifiers to OBO numeric identifiers.
     """
-
     if cdao_to_obo and s.startswith('cdao:'):
         return resolve_uri('obo:%s' % cdao_elements[s[5:]], namespaces, cdao_to_obo)
 
@@ -60,7 +60,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <owl:versionIRI rdf:resource="&obo;cdao/2012-06-06/cdao.owl"/>
         <owl:imports rdf:resource="&obo;iao/ontology-metadata.owl"/>
     </owl:Ontology>
-    
+
 
 
     <!--
@@ -81,10 +81,10 @@ cdao_owl = '''<?xml version="1.0"?>
     <owl:AnnotationProperty rdf:about="&dc;source"/>
     <owl:AnnotationProperty rdf:about="&dc;title"/>
     <owl:AnnotationProperty rdf:about="&dc;rights"/>
-    
 
 
-    
+
+
 
 
     <!--
@@ -95,7 +95,7 @@ cdao_owl = '''<?xml version="1.0"?>
     ///////////////////////////////////////////////////////////////////////////////////////
      -->
 
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000142 -->
@@ -107,7 +107,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:range rdf:resource="&obo;CDAO_0000071"/>
         <rdfs:subPropertyOf rdf:resource="&obo;CDAO_0000178"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000143 -->
@@ -120,7 +120,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:subPropertyOf rdf:resource="&obo;CDAO_0000146"/>
         <owl:inverseOf rdf:resource="&obo;CDAO_0000209"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000144 -->
@@ -134,7 +134,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <owl:inverseOf rdf:resource="&obo;CDAO_0000174"/>
         <rdfs:subPropertyOf rdf:resource="&obo;CDAO_0000178"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000145 -->
@@ -153,7 +153,7 @@ cdao_owl = '''<?xml version="1.0"?>
             </owl:Class>
         </rdfs:range>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000146 -->
@@ -165,7 +165,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:domain rdf:resource="&obo;CDAO_0000140"/>
         <rdfs:subPropertyOf rdf:resource="&obo;CDAO_0000190"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000147 -->
@@ -183,7 +183,7 @@ cdao_owl = '''<?xml version="1.0"?>
             </owl:Class>
         </rdfs:domain>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000148 -->
@@ -196,7 +196,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:range rdf:resource="&obo;CDAO_0000140"/>
         <rdfs:subPropertyOf rdf:resource="&obo;CDAO_0000178"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000149 -->
@@ -213,7 +213,7 @@ cdao_owl = '''<?xml version="1.0"?>
             <rdf:Description rdf:about="&obo;CDAO_0000209"/>
         </owl:propertyChainAxiom>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000150 -->
@@ -232,7 +232,7 @@ cdao_owl = '''<?xml version="1.0"?>
             </owl:Class>
         </rdfs:range>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000151 -->
@@ -243,7 +243,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:domain rdf:resource="&obo;CDAO_0000098"/>
         <rdfs:subPropertyOf rdf:resource="&obo;CDAO_0000178"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000152 -->
@@ -255,7 +255,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:range rdf:resource="&obo;CDAO_0000068"/>
         <rdfs:subPropertyOf rdf:resource="&obo;CDAO_0000205"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000153 -->
@@ -274,7 +274,7 @@ cdao_owl = '''<?xml version="1.0"?>
             </owl:Class>
         </rdfs:domain>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000154 -->
@@ -292,7 +292,7 @@ cdao_owl = '''<?xml version="1.0"?>
             </owl:Class>
         </rdfs:domain>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000155 -->
@@ -303,7 +303,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:range rdf:resource="&obo;CDAO_0000006"/>
         <rdfs:domain rdf:resource="&obo;CDAO_0000006"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000156 -->
@@ -322,7 +322,7 @@ cdao_owl = '''<?xml version="1.0"?>
             </owl:Class>
         </rdfs:range>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000157 -->
@@ -332,7 +332,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:domain rdf:resource="&obo;CDAO_0000040"/>
         <rdfs:range rdf:resource="&owl;Thing"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000158 -->
@@ -341,7 +341,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">has_RNA_Datum</rdfs:label>
         <rdfs:subPropertyOf rdf:resource="&obo;CDAO_0000206"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000159 -->
@@ -353,7 +353,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:domain rdf:resource="&obo;CDAO_0000097"/>
         <rdfs:subPropertyOf rdf:resource="&obo;CDAO_0000182"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000160 -->
@@ -361,7 +361,7 @@ cdao_owl = '''<?xml version="1.0"?>
     <owl:ObjectProperty rdf:about="&obo;CDAO_0000160">
         <rdfs:label rdf:datatype="&xsd;string">precedes</rdfs:label>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000161 -->
@@ -369,7 +369,7 @@ cdao_owl = '''<?xml version="1.0"?>
     <owl:ObjectProperty rdf:about="&obo;CDAO_0000161">
         <rdfs:label rdf:datatype="&xsd;string">exclude</rdfs:label>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000162 -->
@@ -381,7 +381,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:range rdf:resource="&obo;CDAO_0000140"/>
         <rdfs:subPropertyOf rdf:resource="&obo;CDAO_0000178"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000163 -->
@@ -391,7 +391,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:range rdf:resource="&obo;CDAO_0000059"/>
         <rdfs:domain rdf:resource="&obo;CDAO_0000140"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000164 -->
@@ -402,7 +402,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:domain rdf:resource="&obo;CDAO_0000138"/>
         <rdfs:range rdf:resource="&owl;Thing"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000165 -->
@@ -413,7 +413,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:domain rdf:resource="&obo;CDAO_0000022"/>
         <rdfs:range rdf:resource="&obo;CDAO_0000104"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000166 -->
@@ -425,7 +425,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:range rdf:resource="&obo;CDAO_0000094"/>
         <rdfs:subPropertyOf rdf:resource="&obo;CDAO_0000205"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000167 -->
@@ -435,7 +435,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">connects_to</rdfs:label>
         <owl:inverseOf rdf:resource="&obo;CDAO_0000167"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000168 -->
@@ -454,7 +454,7 @@ cdao_owl = '''<?xml version="1.0"?>
             </owl:Class>
         </rdfs:domain>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000169 -->
@@ -464,7 +464,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <dc:description rdf:datatype="&xsd;string">This property relates a type of evolutionary change (an Edge_Transformation) to the character that undergoes the change.  The change is a transformation_of the affected character.</dc:description>
         <rdfs:range rdf:resource="&obo;CDAO_0000071"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000170 -->
@@ -483,7 +483,7 @@ cdao_owl = '''<?xml version="1.0"?>
             </owl:Class>
         </rdfs:domain>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000171 -->
@@ -494,7 +494,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:domain rdf:resource="&obo;CDAO_0000080"/>
         <rdfs:subPropertyOf rdf:resource="&obo;CDAO_0000178"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000172 -->
@@ -504,7 +504,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:domain rdf:resource="&obo;CDAO_0000030"/>
         <rdfs:range rdf:resource="&obo;CDAO_0000110"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000173 -->
@@ -516,7 +516,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:range rdf:resource="&obo;CDAO_0000131"/>
         <rdfs:subPropertyOf rdf:resource="&obo;CDAO_0000205"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000174 -->
@@ -529,7 +529,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:range rdf:resource="&obo;CDAO_0000140"/>
         <rdfs:subPropertyOf rdf:resource="&obo;CDAO_0000178"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000175 -->
@@ -541,7 +541,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:range rdf:resource="&obo;CDAO_0000031"/>
         <rdfs:subPropertyOf rdf:resource="&obo;CDAO_0000184"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000176 -->
@@ -550,7 +550,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">has_Type</rdfs:label>
         <rdfs:subPropertyOf rdf:resource="&obo;CDAO_0000178"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000177 -->
@@ -563,7 +563,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:subPropertyOf rdf:resource="&obo;CDAO_0000146"/>
         <owl:inverseOf rdf:resource="&obo;CDAO_0000201"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000178 -->
@@ -572,7 +572,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">has</rdfs:label>
         <dc:description>Generic &#39;has&#39; property.</dc:description>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000179 -->
@@ -588,7 +588,7 @@ cdao_owl = '''<?xml version="1.0"?>
             <rdf:Description rdf:about="&obo;CDAO_0000201"/>
         </owl:propertyChainAxiom>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000180 -->
@@ -599,7 +599,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:domain rdf:resource="&obo;CDAO_0000136"/>
         <rdfs:subPropertyOf rdf:resource="&obo;CDAO_0000205"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000181 -->
@@ -610,7 +610,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:domain rdf:resource="&obo;CDAO_0000098"/>
         <rdfs:range rdf:resource="&obo;CDAO_0000098"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000182 -->
@@ -621,7 +621,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:domain rdf:resource="&obo;CDAO_0000097"/>
         <rdfs:subPropertyOf rdf:resource="&obo;CDAO_0000178"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000183 -->
@@ -630,7 +630,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">has_Categorical_Datum</rdfs:label>
         <rdfs:subPropertyOf rdf:resource="&obo;CDAO_0000153"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000184 -->
@@ -642,7 +642,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:domain rdf:resource="&obo;CDAO_0000098"/>
         <rdfs:subPropertyOf rdf:resource="&obo;CDAO_0000178"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000185 -->
@@ -654,7 +654,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:range rdf:resource="&obo;CDAO_0000140"/>
         <rdfs:subPropertyOf rdf:resource="&obo;CDAO_0000182"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000186 -->
@@ -666,7 +666,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:domain rdf:resource="&obo;CDAO_0000097"/>
         <rdfs:subPropertyOf rdf:resource="&obo;CDAO_0000182"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000187 -->
@@ -678,7 +678,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:range rdf:resource="&obo;CDAO_0000138"/>
         <rdfs:domain rdf:resource="&obo;CDAO_0000140"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000188 -->
@@ -688,7 +688,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:range rdf:resource="&obo;CDAO_0000140"/>
         <rdfs:subPropertyOf rdf:resource="&obo;CDAO_0000161"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000189 -->
@@ -707,7 +707,7 @@ cdao_owl = '''<?xml version="1.0"?>
             </owl:Class>
         </rdfs:range>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000190 -->
@@ -719,7 +719,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:range rdf:resource="&owl;Thing"/>
         <rdfs:domain rdf:resource="&owl;Thing"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000191 -->
@@ -732,7 +732,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:range rdf:resource="&obo;CDAO_0000138"/>
         <rdfs:subPropertyOf rdf:resource="&obo;CDAO_0000190"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000192 -->
@@ -750,7 +750,7 @@ cdao_owl = '''<?xml version="1.0"?>
             </owl:Class>
         </rdfs:domain>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000193 -->
@@ -762,7 +762,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:subPropertyOf rdf:resource="&obo;CDAO_0000178"/>
         <rdfs:domain rdf:resource="&owl;Thing"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000194 -->
@@ -771,7 +771,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">part_of</rdfs:label>
         <owl:inverseOf rdf:resource="&obo;CDAO_0000178"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000195 -->
@@ -790,7 +790,7 @@ cdao_owl = '''<?xml version="1.0"?>
             </owl:Class>
         </rdfs:domain>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000196 -->
@@ -802,7 +802,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:range rdf:resource="&obo;CDAO_0000140"/>
         <owl:inverseOf rdf:resource="&obo;CDAO_0000187"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000197 -->
@@ -814,7 +814,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:domain rdf:resource="&obo;CDAO_0000092"/>
         <rdfs:subPropertyOf rdf:resource="&obo;CDAO_0000178"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000198 -->
@@ -824,7 +824,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:domain rdf:resource="&obo;CDAO_0000118"/>
         <rdfs:subPropertyOf rdf:resource="&obo;CDAO_0000178"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000199 -->
@@ -834,7 +834,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:range rdf:resource="&obo;CDAO_0000070"/>
         <rdfs:subPropertyOf rdf:resource="&obo;CDAO_0000161"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000200 -->
@@ -852,7 +852,7 @@ cdao_owl = '''<?xml version="1.0"?>
             </owl:Class>
         </rdfs:domain>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000201 -->
@@ -865,7 +865,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:range rdf:resource="&obo;CDAO_0000140"/>
         <rdfs:subPropertyOf rdf:resource="&obo;CDAO_0000162"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000202 -->
@@ -876,7 +876,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:range rdf:resource="&obo;CDAO_0000140"/>
         <rdfs:subPropertyOf rdf:resource="&obo;CDAO_0000178"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000203 -->
@@ -888,7 +888,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <owl:inverseOf rdf:resource="&obo;CDAO_0000148"/>
         <rdfs:subPropertyOf rdf:resource="&obo;CDAO_0000190"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000204 -->
@@ -899,7 +899,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:domain rdf:resource="&obo;CDAO_0000099"/>
         <rdfs:subPropertyOf rdf:resource="&obo;CDAO_0000178"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000205 -->
@@ -911,7 +911,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:domain rdf:resource="&obo;CDAO_0000098"/>
         <rdfs:subPropertyOf rdf:resource="&obo;CDAO_0000190"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000206 -->
@@ -929,7 +929,7 @@ cdao_owl = '''<?xml version="1.0"?>
             </owl:Class>
         </rdfs:domain>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000207 -->
@@ -948,7 +948,7 @@ cdao_owl = '''<?xml version="1.0"?>
             </owl:Class>
         </rdfs:domain>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000208 -->
@@ -960,7 +960,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:range rdf:resource="&obo;CDAO_0000138"/>
         <rdfs:subPropertyOf rdf:resource="&obo;CDAO_0000178"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000209 -->
@@ -973,7 +973,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:range rdf:resource="&obo;CDAO_0000140"/>
         <rdfs:subPropertyOf rdf:resource="&obo;CDAO_0000162"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000210 -->
@@ -985,7 +985,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:range rdf:resource="&obo;CDAO_0000140"/>
         <rdfs:subPropertyOf rdf:resource="&obo;CDAO_0000182"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!--
@@ -996,7 +996,7 @@ cdao_owl = '''<?xml version="1.0"?>
     ///////////////////////////////////////////////////////////////////////////////////////
      -->
 
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000211 -->
@@ -1005,7 +1005,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">has_Precision</rdfs:label>
         <rdfs:range rdf:resource="&xsd;float"/>
     </owl:DatatypeProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000212 -->
@@ -1015,7 +1015,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:domain rdf:resource="&obo;CDAO_0000003"/>
         <rdfs:range rdf:resource="&xsd;integer"/>
     </owl:DatatypeProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000213 -->
@@ -1025,7 +1025,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:subPropertyOf rdf:resource="&obo;CDAO_0000215"/>
         <rdfs:range rdf:resource="&xsd;int"/>
     </owl:DatatypeProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000214 -->
@@ -1034,7 +1034,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">has_Support_Value</rdfs:label>
         <rdfs:range rdf:resource="&xsd;float"/>
     </owl:DatatypeProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000215 -->
@@ -1042,7 +1042,7 @@ cdao_owl = '''<?xml version="1.0"?>
     <owl:DatatypeProperty rdf:about="&obo;CDAO_0000215">
         <rdfs:label rdf:datatype="&xsd;string">has_Value</rdfs:label>
     </owl:DatatypeProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000216 -->
@@ -1051,7 +1051,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">has_Uncertainty_Factor</rdfs:label>
         <rdfs:range rdf:resource="&xsd;float"/>
     </owl:DatatypeProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000217 -->
@@ -1061,7 +1061,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:domain rdf:resource="&obo;CDAO_0000095"/>
         <rdfs:range rdf:resource="&xsd;integer"/>
     </owl:DatatypeProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000218 -->
@@ -1071,7 +1071,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:subPropertyOf rdf:resource="&obo;CDAO_0000215"/>
         <rdfs:range rdf:resource="&xsd;float"/>
     </owl:DatatypeProperty>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000219 -->
@@ -1081,7 +1081,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:domain rdf:resource="&obo;CDAO_0000095"/>
         <rdfs:range rdf:resource="&xsd;integer"/>
     </owl:DatatypeProperty>
-    
+
 
 
     <!--
@@ -1092,7 +1092,7 @@ cdao_owl = '''<?xml version="1.0"?>
     ///////////////////////////////////////////////////////////////////////////////////////
      -->
 
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000002 -->
@@ -1101,7 +1101,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">DesoxiRibonucleotideResidueStateDatum</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000050"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000003 -->
@@ -1110,7 +1110,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">CoordinatePoint</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000022"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000004 -->
@@ -1125,7 +1125,7 @@ cdao_owl = '''<?xml version="1.0"?>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000005 -->
@@ -1134,7 +1134,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">Phylo4Tree</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000074"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000006 -->
@@ -1156,7 +1156,7 @@ cdao_owl = '''<?xml version="1.0"?>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000007 -->
@@ -1167,7 +1167,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <dc:description>Description of a model of transformations.</dc:description>
         <rdfs:comment>This is a non-computible description of a model, not the fully specified mathematical model, which typically relates the probability of a transformation to various parameters.</rdfs:comment>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000008 -->
@@ -1176,7 +1176,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">StandardStateDatum</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000089"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000009 -->
@@ -1185,7 +1185,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">ContinuousCharacterLengthType</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000063"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000010 -->
@@ -1194,7 +1194,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">ContinuousCharBayesianLengthType</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000009"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000011 -->
@@ -1203,7 +1203,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">NEXUSTreeBlock</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000074"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000012 -->
@@ -1239,7 +1239,7 @@ cdao_owl = '''<?xml version="1.0"?>
         </rdfs:subClassOf>
         <owl:disjointWith rdf:resource="&obo;CDAO_0000088"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000013 -->
@@ -1248,7 +1248,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">Kimura2Parameters</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000020"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000014 -->
@@ -1257,7 +1257,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">TreeProcedure</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000044"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000015 -->
@@ -1277,7 +1277,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:comment>This class should be renamed.  These are not generic states but non-concrete states including gap, unknown and missing.</rdfs:comment>
         <dc:description>This concept is tied to the verbally ambiguous &#39;gap&#39; concept and to the use of a gap character (often the en dash &#39;-&#39;) in text representations of sequence alignments. In general, this represents the absence of any positively diagnosed Character-State. As such, the gap may be interpreted as an additional Character-State, as the absence of the Character, or as an unknown value.  In some cases it is helpful to separate these.</dc:description>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000016 -->
@@ -1286,7 +1286,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">UnrootedSubtree</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000070"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000017 -->
@@ -1295,7 +1295,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">UnresolvedTree</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000110"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000018 -->
@@ -1305,7 +1305,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <owl:equivalentClass rdf:resource="&obo;CDAO_0000130"/>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000110"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000019 -->
@@ -1314,7 +1314,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">ContinuousStateDatum</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000098"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000020 -->
@@ -1323,7 +1323,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">SubstitutionModel</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000007"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000021 -->
@@ -1332,7 +1332,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">JukesKantor</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000020"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000022 -->
@@ -1350,7 +1350,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <dc:description>A positional coordinate giving the source of a character state, used for molecular sequences.</dc:description>
         <rdfs:comment>drawing from seqloc categories from NCBI at http://www.ncbi.nlm.nih.gov/IEB/ToolBox/SDKDOCS/SEQLOC.HTML#_Seq-loc:_Locations_on</rdfs:comment>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000023 -->
@@ -1360,7 +1360,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000012"/>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000017"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000024 -->
@@ -1370,7 +1370,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <owl:equivalentClass rdf:resource="&obo;CDAO_0000099"/>
         <dc:description>&#39;Branch&#39; is the domain-specific synonym for an edge of a (Phylogenetic) Tree or Network.  Branches may have properties such as length and degree of support.</dc:description>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000025 -->
@@ -1380,7 +1380,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000040"/>
         <dc:description>Meta-information associated with a character matrix, such as, for the case of a sequence alignment, the method of alignment.</dc:description>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000026 -->
@@ -1402,7 +1402,7 @@ cdao_owl = '''<?xml version="1.0"?>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000027 -->
@@ -1412,7 +1412,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000017"/>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000088"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000029 -->
@@ -1427,7 +1427,7 @@ cdao_owl = '''<?xml version="1.0"?>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000030 -->
@@ -1443,7 +1443,7 @@ cdao_owl = '''<?xml version="1.0"?>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000031 -->
@@ -1459,7 +1459,7 @@ cdao_owl = '''<?xml version="1.0"?>
         </rdfs:subClassOf>
         <dc:description>This class describes a continuous value. The link to the actual float value is through the property has_Value. It could have also other properties attached (e.g., has_Precision).</dc:description>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000032 -->
@@ -1468,7 +1468,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">AlignmentProcedure</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000025"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000033 -->
@@ -1479,7 +1479,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000026"/>
         <owl:disjointWith rdf:resource="&obo;CDAO_0000042"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000034 -->
@@ -1488,7 +1488,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">Molecular</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000039"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000035 -->
@@ -1497,7 +1497,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">ContinuousCharParsimonyLengthType</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000009"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000039 -->
@@ -1506,7 +1506,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">Categorical</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000091"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000040 -->
@@ -1517,7 +1517,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:comment>Its possible that this base class should be discarded and that annotations should inherit from an imported base class if one exists.</rdfs:comment>
         <dc:description>The base class of annotations in CDAO.</dc:description>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000041 -->
@@ -1531,7 +1531,7 @@ cdao_owl = '''<?xml version="1.0"?>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000042 -->
@@ -1547,7 +1547,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000026"/>
         <owl:disjointWith rdf:resource="&obo;CDAO_0000124"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000043 -->
@@ -1562,7 +1562,7 @@ cdao_owl = '''<?xml version="1.0"?>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000044 -->
@@ -1577,7 +1577,7 @@ cdao_owl = '''<?xml version="1.0"?>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000045 -->
@@ -1586,7 +1586,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">Standard</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000039"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000046 -->
@@ -1609,7 +1609,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:comment>Its possible that this should not be classed as an &#39;annotation&#39; since it contains data rather than meta-data.</rdfs:comment>
         <dc:description>The length of an edge (branch) of a Tree or Network, typically in units of evolutionary changes in character-state per character.</dc:description>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000047 -->
@@ -1618,7 +1618,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">RibonucleotideResidue</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000034"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000048 -->
@@ -1628,7 +1628,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <owl:equivalentClass rdf:resource="&obo;CDAO_0000129"/>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000110"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000049 -->
@@ -1637,7 +1637,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">DiscreteCharParsimonyLengthType</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000100"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000050 -->
@@ -1646,7 +1646,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">MolecularStateDatum</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000089"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000051 -->
@@ -1662,7 +1662,7 @@ cdao_owl = '''<?xml version="1.0"?>
         </rdfs:subClassOf>
         <owl:disjointWith rdf:resource="&obo;CDAO_0000127"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000052 -->
@@ -1671,7 +1671,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">NexusDataBlock</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000107"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000053 -->
@@ -1686,7 +1686,7 @@ cdao_owl = '''<?xml version="1.0"?>
         </owl:equivalentClass>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000026"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000055 -->
@@ -1695,7 +1695,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">Compound</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000039"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000056 -->
@@ -1723,7 +1723,7 @@ cdao_owl = '''<?xml version="1.0"?>
         </rdfs:subClassOf>
         <dc:description>A matrix of character-state data, typically containing observed data, though in some cases the states in the matrix might be simulated or hypothetical. Synonyms: character Data matrix, character-state matrix</dc:description>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000057 -->
@@ -1732,7 +1732,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">RibonucleotideResidueStateDatum</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000050"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000058 -->
@@ -1741,7 +1741,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">TimeCalibratedLengthType</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000063"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000059 -->
@@ -1756,7 +1756,7 @@ cdao_owl = '''<?xml version="1.0"?>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000060 -->
@@ -1772,7 +1772,7 @@ cdao_owl = '''<?xml version="1.0"?>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000061 -->
@@ -1781,7 +1781,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">FASTADataMatrix</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000107"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000062 -->
@@ -1812,7 +1812,7 @@ cdao_owl = '''<?xml version="1.0"?>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000063 -->
@@ -1821,7 +1821,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">EdgeLengthType</rdfs:label>
         <rdfs:subClassOf rdf:resource="&owl;Thing"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000064 -->
@@ -1830,7 +1830,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">cladogeneticChange</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000097"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000065 -->
@@ -1839,7 +1839,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">anageneticChange</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000097"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000066 -->
@@ -1848,7 +1848,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">TUAnnotation</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000040"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000067 -->
@@ -1857,7 +1857,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">PhyloTree</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000074"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000068 -->
@@ -1878,7 +1878,7 @@ cdao_owl = '''<?xml version="1.0"?>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000069 -->
@@ -1887,7 +1887,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">PHYLIPTree</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000074"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000070 -->
@@ -1902,7 +1902,7 @@ cdao_owl = '''<?xml version="1.0"?>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000071 -->
@@ -1917,7 +1917,7 @@ cdao_owl = '''<?xml version="1.0"?>
         </rdfs:subClassOf>
         <rdfs:comment rdf:datatype="&xsd;string">Traits shown to be relevant for phylogenetic classification</rdfs:comment>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000072 -->
@@ -1926,7 +1926,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">GalledTree</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000006"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000073 -->
@@ -1935,7 +1935,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">SpeciesTree</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000110"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000074 -->
@@ -1944,7 +1944,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">TreeFormat</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000044"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000075 -->
@@ -1953,7 +1953,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">StandardCharacter</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000111"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000076 -->
@@ -1963,7 +1963,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000034"/>
         <dc:description>This class will be declared equivalent ot the amino acid class description imported</dc:description>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000077 -->
@@ -1972,7 +1972,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">geneDuplication</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000064"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000078 -->
@@ -2000,7 +2000,7 @@ cdao_owl = '''<?xml version="1.0"?>
         </rdfs:subClassOf>
         <dc:description>A character that could be divided into separate characters but is not due to the non-independence of changes that would result, e.g., as in the case of a subsequence that is either present or absent as a block.</dc:description>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000079 -->
@@ -2009,7 +2009,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">SIMMAPTree</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000074"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000080 -->
@@ -2029,7 +2029,7 @@ cdao_owl = '''<?xml version="1.0"?>
             </owl:Class>
         </rdfs:subClassOf>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000081 -->
@@ -2038,7 +2038,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">NewickTree</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000074"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000082 -->
@@ -2047,7 +2047,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">TimeProportionalLengthType</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000063"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000083 -->
@@ -2056,7 +2056,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">DiscreteCharDistanceLengthType</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000100"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000084 -->
@@ -2071,7 +2071,7 @@ cdao_owl = '''<?xml version="1.0"?>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000085 -->
@@ -2081,7 +2081,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000018"/>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000088"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000086 -->
@@ -2097,7 +2097,7 @@ cdao_owl = '''<?xml version="1.0"?>
         </rdfs:subClassOf>
         <owl:disjointWith rdf:resource="&obo;CDAO_0000129"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000087 -->
@@ -2106,7 +2106,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">geneticEvent</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000041"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000088 -->
@@ -2115,7 +2115,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">UnrootedTree</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000110"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000089 -->
@@ -2124,7 +2124,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">CategoricalStateDatum</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000098"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000090 -->
@@ -2133,7 +2133,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">DiscreteCharLikelihoodLengthType</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000100"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000091 -->
@@ -2142,7 +2142,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">CharacterStateDomain</rdfs:label>
         <dc:description>The universe of possible states for a particular type of character, e.g., the states of an Amino_Acid character come from the Amino_Acid domain.</dc:description>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000092 -->
@@ -2151,7 +2151,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">CoordinateList</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000022"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000093 -->
@@ -2160,7 +2160,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">GammaDistribution</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000020"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000094 -->
@@ -2181,7 +2181,7 @@ cdao_owl = '''<?xml version="1.0"?>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000095 -->
@@ -2190,7 +2190,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">CoordinateRange</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000022"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000096 -->
@@ -2199,7 +2199,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">ReticulateEvolution</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000006"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000097 -->
@@ -2228,7 +2228,7 @@ cdao_owl = '''<?xml version="1.0"?>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000098 -->
@@ -2252,7 +2252,7 @@ cdao_owl = '''<?xml version="1.0"?>
         </rdfs:subClassOf>
         <dc:description>The instance of a given character for a given TU.  Its state is an object property drawn from a particular character state domain, e.g., the state of an Amino_Acid_State_Datum is an object property drawn from the domain Amino_Acid.</dc:description>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000099 -->
@@ -2275,7 +2275,7 @@ cdao_owl = '''<?xml version="1.0"?>
         </rdfs:subClassOf>
         <dc:description>An edge connecting two nodes in a (Phylogenetic) Tree or Network, also known as a &#39;branch&#39;.  Edges may have attributes such as length, degree of support, and direction.  An edge can be a surrogate for a &#39;split&#39; or bipartition, since each edge in a tree divides the terminal nodes into two sets.</dc:description>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000100 -->
@@ -2284,7 +2284,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">DiscreteCharacterLengthType</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000063"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000101 -->
@@ -2293,7 +2293,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">EdgeAnnotation</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000040"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000102 -->
@@ -2317,7 +2317,7 @@ cdao_owl = '''<?xml version="1.0"?>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000103 -->
@@ -2326,7 +2326,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">GrafenLengthType</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000063"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000104 -->
@@ -2336,7 +2336,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:subClassOf rdf:resource="&owl;Thing"/>
         <dc:description>A reference to an external coordinate system.  Coordinates for data must refer to some such external coordinate system.</dc:description>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000105 -->
@@ -2345,7 +2345,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">GenBankDataMatrix</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000107"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000107 -->
@@ -2354,7 +2354,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">DataMatrixFormat</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000025"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000108 -->
@@ -2378,7 +2378,7 @@ cdao_owl = '''<?xml version="1.0"?>
         </owl:equivalentClass>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000140"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000109 -->
@@ -2393,7 +2393,7 @@ cdao_owl = '''<?xml version="1.0"?>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000110 -->
@@ -2402,7 +2402,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">Tree</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000006"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000111 -->
@@ -2411,7 +2411,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">CategoricalCharacter</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000071"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000112 -->
@@ -2420,7 +2420,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">AminoAcidResidueStateDatum</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000050"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000113 -->
@@ -2429,7 +2429,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">PHYLIPDataMatrix</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000107"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000114 -->
@@ -2438,7 +2438,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">ContinuousCharLikelihoodLengthType</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000009"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000115 -->
@@ -2447,7 +2447,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">MolecularCharacter</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000111"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000116 -->
@@ -2461,7 +2461,7 @@ cdao_owl = '''<?xml version="1.0"?>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000117 -->
@@ -2470,7 +2470,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">SetOfCharacters</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000118"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000118 -->
@@ -2493,7 +2493,7 @@ cdao_owl = '''<?xml version="1.0"?>
         </rdfs:subClassOf>
         <dc:description>The class is used to describe either colletions of characters or higher order grouping (e.g., groups of groups of characters). This extends the CharSet block of NEXUS.</dc:description>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000120 -->
@@ -2521,7 +2521,7 @@ cdao_owl = '''<?xml version="1.0"?>
         </rdfs:subClassOf>
         <dc:description>A set of ordered states, typically the residues in a macromolecular sequence.</dc:description>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000121 -->
@@ -2531,7 +2531,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <owl:equivalentClass rdf:resource="&obo;CDAO_0000122"/>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000064"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000122 -->
@@ -2540,7 +2540,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">cladogenesis</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000064"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000124 -->
@@ -2555,7 +2555,7 @@ cdao_owl = '''<?xml version="1.0"?>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000125 -->
@@ -2564,7 +2564,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">DiscreteCharBayesianLengthType</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000100"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000126 -->
@@ -2574,7 +2574,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000066"/>
         <dc:description>Link to an externally defined taxonomic hierarchy.</dc:description>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000127 -->
@@ -2583,7 +2583,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">MonophyleticGroup</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000006"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000128 -->
@@ -2592,7 +2592,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">molecularRecombination</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000132"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000129 -->
@@ -2601,7 +2601,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">HolophyleticGroup</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000127"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000130 -->
@@ -2610,7 +2610,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">FullyResolvedTree</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000110"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000131 -->
@@ -2631,7 +2631,7 @@ cdao_owl = '''<?xml version="1.0"?>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000132 -->
@@ -2640,7 +2640,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">recombination</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000087"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000133 -->
@@ -2649,7 +2649,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">DesoxiRibonucleotideResidue</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000034"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000134 -->
@@ -2659,7 +2659,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000012"/>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000070"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000136 -->
@@ -2668,7 +2668,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">CompoundStateDatum</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000089"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000137 -->
@@ -2677,7 +2677,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">GapCost</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000007"/>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000138 -->
@@ -2687,7 +2687,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:subClassOf rdf:resource="&owl;Thing"/>
         <dc:description>A unit of analysis that may be tied to a node in a tree and to a row in a character matrix.  It subsumes the traditional concepts of &#39;OTU&#39; and &#39;HTU&#39;.</dc:description>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000139 -->
@@ -2713,7 +2713,7 @@ cdao_owl = '''<?xml version="1.0"?>
         </owl:equivalentClass>
         <dc:description>A directed edge. Rooted trees have directed edges. The direction is specified by way of the parent and child relationships of nodes that the edge connects.</dc:description>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000140 -->
@@ -2736,7 +2736,7 @@ cdao_owl = '''<?xml version="1.0"?>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000141 -->
@@ -2745,7 +2745,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdfs:label rdf:datatype="&xsd;string">ContinuousCharDistanceLengthType</rdfs:label>
         <rdfs:subClassOf rdf:resource="&obo;CDAO_0000009"/>
     </owl:Class>
-    
+
 
 
     <!--
@@ -2756,7 +2756,7 @@ cdao_owl = '''<?xml version="1.0"?>
     ///////////////////////////////////////////////////////////////////////////////////////
      -->
 
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000220 -->
@@ -2766,7 +2766,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdf:type rdf:resource="&owl;NamedIndividual"/>
         <rdfs:label rdf:datatype="&xsd;string">dA</rdfs:label>
     </owl:Thing>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000221 -->
@@ -2776,7 +2776,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdf:type rdf:resource="&owl;NamedIndividual"/>
         <rdfs:label rdf:datatype="&xsd;string">absent</rdfs:label>
     </owl:Thing>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000222 -->
@@ -2786,7 +2786,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdf:type rdf:resource="&owl;NamedIndividual"/>
         <rdfs:label rdf:datatype="&xsd;string">unknown</rdfs:label>
     </owl:Thing>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000223 -->
@@ -2796,7 +2796,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdf:type rdf:resource="&owl;NamedIndividual"/>
         <rdfs:label rdf:datatype="&xsd;string">gap</rdfs:label>
     </owl:Thing>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000224 -->
@@ -2806,7 +2806,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdf:type rdf:resource="&owl;NamedIndividual"/>
         <rdfs:label rdf:datatype="&xsd;string">dG</rdfs:label>
     </owl:Thing>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000225 -->
@@ -2816,7 +2816,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdf:type rdf:resource="&owl;NamedIndividual"/>
         <rdfs:label rdf:datatype="&xsd;string">rU</rdfs:label>
     </owl:Thing>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000226 -->
@@ -2826,7 +2826,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdf:type rdf:resource="&owl;NamedIndividual"/>
         <rdfs:label rdf:datatype="&xsd;string">dC</rdfs:label>
     </owl:Thing>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/CDAO_0000227 -->
@@ -2836,7 +2836,7 @@ cdao_owl = '''<?xml version="1.0"?>
         <rdf:type rdf:resource="&owl;NamedIndividual"/>
         <rdfs:label rdf:datatype="&xsd;string">dT</rdfs:label>
     </owl:Thing>
-    
+
 
 
     <!--

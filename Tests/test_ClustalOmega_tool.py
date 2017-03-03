@@ -21,14 +21,14 @@ from Bio.Application import ApplicationError
 os.environ['LANG'] = 'C'
 
 clustalo_exe = None
-if sys.platform == "win32":
-    # TODO
-    raise MissingExternalDependencyError("Testing this on Windows not implemented yet")
-else:
-    from Bio._py3k import getoutput
+from Bio._py3k import getoutput
+try:
     output = getoutput("clustalo --help")
     if output.startswith("Clustal Omega"):
         clustalo_exe = "clustalo"
+except OSError:
+    # TODO: Use FileNotFoundError once we drop Python 2
+    pass
 
 if not clustalo_exe:
     raise MissingExternalDependencyError(
@@ -109,7 +109,7 @@ class ClustalOmegaTestErrorConditions(ClustalOmegaTestCase):
         try:
             stdout, stderr = cline()
         except ApplicationError as err:
-            self.assertTrue("contains 1 sequence, nothing to align" in str(err))
+            self.assertIn("contains 1 sequence, nothing to align", str(err))
         else:
             self.fail("Should have failed, returned:\n%s\n%s" % (stdout, stderr))
 
@@ -123,7 +123,7 @@ class ClustalOmegaTestErrorConditions(ClustalOmegaTestCase):
         except ApplicationError as err:
             # Ideally we'd catch the return code and raise the specific
             # error for "invalid format".
-            self.assertTrue("Can't determine format of sequence file" in str(err))
+            self.assertIn("Can't determine format of sequence file", str(err))
         else:
             self.fail("Should have failed, returned:\n%s\n%s" % (stdout, stderr))
 

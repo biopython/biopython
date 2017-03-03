@@ -22,8 +22,6 @@ Functions:
 
 from __future__ import print_function
 
-__docformat__ = "restructuredtext en"
-
 
 class Record(dict):
     """

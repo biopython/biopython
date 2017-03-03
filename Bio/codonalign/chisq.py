@@ -4,9 +4,6 @@ Adapted from SciPy: scipy/special/cephes/{chdtr,igam}.
 """
 
 import math
-import sys
-
-__docformat__ = "restructuredtext en"
 
 # Cephes Math Library Release 2.0:  April, 1987
 # Copyright 1985, 1987 by Stephen L. Moshier
@@ -122,7 +119,6 @@ def _igam(a, x):
                   -     -
                 k=0   | (a+k+1)
     """
-
     # Compute  x**a * exp(-x) / Gamma(a)
     ax = math.exp(a * math.log(x) - x - math.lgamma(a))
 

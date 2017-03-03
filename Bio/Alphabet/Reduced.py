@@ -27,7 +27,6 @@ the tables here, or a user-defined table.
 
 from Bio import Alphabet
 
-__docformat__ = "restructuredtext en"
 
 murphy_15_tab = {"L": "L",
                  "V": "L",
@@ -48,8 +47,7 @@ murphy_15_tab = {"L": "L",
                  "Q": "Q",
                  "K": "K",
                  "R": "K",
-                 "H": "H",
-}
+                 "H": "H"}
 
 
 class Murphy15(Alphabet.ProteinAlphabet):

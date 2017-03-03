@@ -60,7 +60,6 @@ from . import Residues
 from Bio import SeqIO
 from Bio.Seq import Seq
 
-__docformat__ = "restructuredtext en"
 
 nodeCodeDict = {'cl': 'class', 'cf': 'fold', 'sf': 'superfamily',
                 'fa': 'family', 'dm': 'protein', 'sp': 'species', 'px': 'domain'}
@@ -108,9 +107,7 @@ def cmp_sccs(sccs1, sccs2):
     A sccs (e.g. a.4.5.11) compactly represents a domain's classification.
     The letter represents the class, and the numbers are the fold,
     superfamily, and family, respectively.
-
     """
-
     s1 = sccs1.split(".")
     s2 = sccs2.split(".")
 
@@ -139,7 +136,6 @@ def parse_domain(str):
     A typical ASTRAL header looks like --
     >d1tpt_1 a.46.2.1 (1-70) Thymidine phosphorylase {Escherichia coli}
     """
-
     m = _domain_re.match(str)
     if (not m):
         raise ValueError("Domain: " + str)
@@ -319,7 +315,7 @@ class Scop(object):
 
     def write_des(self, handle):
         """Build a DES SCOP parsable file from this object"""
-        # Origional SCOP file is not ordered?
+        # Original SCOP file is not ordered?
         for n in sorted(self._sunidDict.values(), key=lambda n: n.sunid):
             if n != self.root:
                 handle.write(str(n.toDesRecord()))
@@ -574,7 +570,7 @@ class Node(object):
             return self.scop.getNodeBySunid(self.parent)
 
     def getDescendents(self, node_type):
-        """ Return a list of all decendent nodes of the given type. Node type can a
+        """ Return a list of all descendant nodes of the given type. Node type can a
         two letter code or longer description. e.g. 'fa' or 'family'
         """
         if node_type in _nodetype_to_code:
@@ -677,8 +673,7 @@ class Astral(object):
 
     def __init__(self, dir_path=None, version=None, scop=None,
                   astral_file=None, db_handle=None):
-        """
-        Initialise the astral database.
+        """Initialise the astral database.
 
         You must provide either a directory of SCOP files:
 
@@ -696,10 +691,9 @@ class Astral(object):
               'astral' with the astral data in it.  This can be created
               using writeToSQL.
         """
-
         if astral_file is None and dir_path is None and db_handle is None:
-            raise RuntimeError("Need either file handle, or (dir_path + "
-                       + "version) or database handle to construct Astral")
+            raise RuntimeError("Need either file handle, or (dir_path + version),"
+                               " or database handle to construct Astral")
         if not scop:
             raise RuntimeError("Must provide a Scop instance to construct")
 
@@ -872,8 +866,8 @@ def search(pdb=None, key=None, sid=None, disp=None, dir=None, loc=None,
     return _open(cgi, variables)
 
 
-def _open(cgi, params={}, get=1):
-    """_open(cgi, params={}, get=1) -> UndoHandle
+def _open(cgi, params=None, get=1):
+    """Open a hnadle to SCOP, returns an UndoHandle
 
     Open a handle to SCOP.  cgi is the URL for the cgi script to access.
     params is a dictionary with the options to pass to it.  get is a boolean
@@ -884,6 +878,8 @@ def _open(cgi, params={}, get=1):
     from Bio._py3k import urlopen, urlencode
 
     # Open a handle to SCOP.
+    if params is None:
+        params = {}
     options = urlencode(params)
     if get:  # do a GET
         if options:

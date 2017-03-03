@@ -38,8 +38,6 @@ from Bio.GA.Repair.Stabilizing import AmbiguousRepair
 from Bio.GA.Selection.Tournament import TournamentSelection
 from Bio.GA.Selection.Diversity import DiversitySelection
 
-__docformat__ = "restructuredtext en"
-
 
 class Schema(object):
     """Deal with motifs that have ambiguity characters in it.
@@ -129,7 +127,7 @@ class Schema(object):
         """Return all non-overlapping motif matches in the query string.
 
         This utilizes the regular expression findall function, and will
-        return a list of all non-overlapping occurances in query that
+        return a list of all non-overlapping occurrences in query that
         match the ambiguous motif.
         """
         try:
@@ -292,8 +290,8 @@ class DifferentialSchemaFitness(object):
     def calculate_fitness(self, genome):
         """Calculate the fitness for a given schema.
 
-        Fitness is specified by the number of occurances of the schema in
-        the positive sequences minus the number of occurances in the
+        Fitness is specified by the number of occurrences of the schema in
+        the positive sequences minus the number of occurrences in the
         negative examples.
 
         This fitness is then modified by multiplying by the length of the

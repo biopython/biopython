@@ -22,28 +22,13 @@ For drawing capabilities, this module uses reportlab to draw and write
 the diagram: http://www.reportlab.com
 """
 
-# -----------------------------------------------------------------------------
-# IMPORTS
-
-# ReportLab
 from __future__ import print_function
-
-from reportlab.pdfbase import _fontdata
-from reportlab.lib import colors
 
 # GenomeDiagram
 from ._Feature import Feature
 
 # Builtins
 import re
-
-__docformat__ = "restructuredtext en"
-
-# ------------------------------------------------------------------------------
-# CLASSES
-
-# ------------------------------------------------------------
-# FeatureSet
 
 
 class FeatureSet(object):
@@ -122,7 +107,7 @@ class FeatureSet(object):
         #    self.set_all_feature("color",value)
 
     def get_features(self, attribute=None, value=None, comparator=None):
-        """Retreive features.
+        """Retrieve features.
 
         Arguments:
          - attribute: String, attribute of a Feature object

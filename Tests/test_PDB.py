@@ -13,6 +13,7 @@
 from __future__ import print_function
 
 import os
+import sys
 import tempfile
 import unittest
 import warnings
@@ -37,6 +38,7 @@ from Bio.PDB.PDBExceptions import PDBConstructionException, PDBConstructionWarni
 from Bio.PDB import rotmat, Vector
 from Bio.PDB import Residue, Atom
 from Bio.PDB import make_dssp_dict
+from Bio.PDB import DSSP
 from Bio.PDB.NACCESS import process_asa_data, process_rsa_data
 
 
@@ -48,47 +50,33 @@ class A_ExceptionTest(unittest.TestCase):
     works -- a warning is only logged the first time it is encountered.
     """
     def test_1_warnings(self):
-        """Check warnings: Parse a flawed PDB file in permissive mode.
+        """Check warnings: Parse a flawed PDB file in permissive mode."""
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter('always', PDBConstructionWarning)
 
-        NB: The try/finally block is adapted from the warnings.catch_warnings
-        context manager in the Python 2.6 standard library.
-
-        TODO: Now we require Python 2.6, switch to using warnings.catch_warnings
-        """
-        warnings.simplefilter('always', PDBConstructionWarning)
-        try:
-            # Equivalent to warnings.catch_warnings -- hackmagic
-            orig_showwarning = warnings.showwarning
-            all_warns = []
-
-            def showwarning(*args, **kwargs):
-                all_warns.append(args[0])
-
-            warnings.showwarning = showwarning
             # Trigger warnings
             p = PDBParser(PERMISSIVE=True)
             p.get_structure("example", "PDB/a_structure.pdb")
-            self.assertEqual(len(all_warns), 14)
-            for wrn, msg in zip(all_warns, [
-              # Expected warning messages:
-              "Used element 'N' for Atom (name=N) with given element ''",
-              "Used element 'C' for Atom (name=CA) with given element ''",
-              "Atom names ' CA ' and 'CA  ' differ only in spaces at line 17.",
-              "Used element 'CA' for Atom (name=CA  ) with given element ''",
-              'Atom N defined twice in residue <Residue ARG het=  resseq=2 icode= > at line 21.',
-              'disordered atom found with blank altloc before line 33.',
-              "Residue (' ', 4, ' ') redefined at line 43.",
-              "Blank altlocs in duplicate residue SER (' ', 4, ' ') at line 43.",
-              "Residue (' ', 10, ' ') redefined at line 75.",
-              "Residue (' ', 14, ' ') redefined at line 106.",
-              "Residue (' ', 16, ' ') redefined at line 135.",
-              "Residue (' ', 80, ' ') redefined at line 633.",
-              "Residue (' ', 81, ' ') redefined at line 646.",
-              'Atom O defined twice in residue <Residue HOH het=W resseq=67 icode= > at line 822.'
-              ]):
-                self.assertTrue(msg in str(wrn), str(wrn))
-        finally:
-            warnings.showwarning = orig_showwarning
+
+            self.assertEqual(len(w), 14)
+            for wrn, msg in zip(w, [
+                    # Expected warning messages:
+                    "Used element 'N' for Atom (name=N) with given element ''",
+                    "Used element 'C' for Atom (name=CA) with given element ''",
+                    "Atom names ' CA ' and 'CA  ' differ only in spaces at line 17.",
+                    "Used element 'CA' for Atom (name=CA  ) with given element ''",
+                    'Atom N defined twice in residue <Residue ARG het=  resseq=2 icode= > at line 21.',
+                    'disordered atom found with blank altloc before line 33.',
+                    "Residue (' ', 4, ' ') redefined at line 43.",
+                    "Blank altlocs in duplicate residue SER (' ', 4, ' ') at line 43.",
+                    "Residue (' ', 10, ' ') redefined at line 75.",
+                    "Residue (' ', 14, ' ') redefined at line 106.",
+                    "Residue (' ', 16, ' ') redefined at line 135.",
+                    "Residue (' ', 80, ' ') redefined at line 633.",
+                    "Residue (' ', 81, ' ') redefined at line 646.",
+                    'Atom O defined twice in residue <Residue HOH het=W resseq=67 icode= > at line 822.'
+                    ]):
+                self.assertIn(msg, str(wrn))
 
     def test_2_strict(self):
         """Check error: Parse a flawed PDB file in strict mode."""
@@ -106,7 +94,7 @@ class A_ExceptionTest(unittest.TestCase):
         s = parser.get_structure("example", StringIO(data))
         data = "ATOM      9  N   ASP A 152      21.ish  34.953  27.691  1.00 19.26           N\n"
         self.assertRaises(PDBConstructionException,
-                parser.get_structure, "example", StringIO(data))
+                          parser.get_structure, "example", StringIO(data))
 
     def test_4_occupancy(self):
         """Parse file with missing occupancy"""
@@ -136,16 +124,16 @@ class HeaderTests(unittest.TestCase):
         self.assertAlmostEqual(struct.header['resolution'], 1.7)
         # Case-insensitive string comparisons
         known_strings = {
-                'author': 'T.R.Gamble,S.Yoo,F.F.Vajdos,U.K.Von Schwedler,D.K.Worthylake,H.Wang,J.P.Mccutcheon,W.I.Sundquist,C.P.Hill',
-                'deposition_date': '1998-03-27',
-                'head': 'viral protein',
-                'journal': 'AUTH   T.R.GAMBLE,S.YOO,F.F.VAJDOS,U.K.VON SCHWEDLER,AUTH 2 D.K.WORTHYLAKE,H.WANG,J.P.MCCUTCHEON,W.I.SUNDQUIST,AUTH 3 C.P.HILLTITL   STRUCTURE OF THE CARBOXYL-TERMINAL DIMERIZATIONTITL 2 DOMAIN OF THE HIV-1 CAPSID PROTEIN.REF    SCIENCE                       V. 278   849 1997REFN                   ISSN 0036-8075PMID   9346481DOI    10.1126/SCIENCE.278.5339.849',
-                'journal_reference': 't.r.gamble,s.yoo,f.f.vajdos,u.k.von schwedler, d.k.worthylake,h.wang,j.p.mccutcheon,w.i.sundquist, c.p.hill structure of the carboxyl-terminal dimerization domain of the hiv-1 capsid protein. science v. 278 849 1997 issn 0036-8075 9346481 10.1126/science.278.5339.849 ',
-                'keywords': 'capsid, core protein, hiv, c-terminal domain, viral protein',
-                'name': ' hiv capsid c-terminal domain',
-                'release_date': '1998-10-14',
-                'structure_method': 'x-ray diffraction',
-                }
+            'author': 'T.R.Gamble,S.Yoo,F.F.Vajdos,U.K.Von Schwedler,D.K.Worthylake,H.Wang,J.P.Mccutcheon,W.I.Sundquist,C.P.Hill',
+            'deposition_date': '1998-03-27',
+            'head': 'viral protein',
+            'journal': 'AUTH   T.R.GAMBLE,S.YOO,F.F.VAJDOS,U.K.VON SCHWEDLER,AUTH 2 D.K.WORTHYLAKE,H.WANG,J.P.MCCUTCHEON,W.I.SUNDQUIST,AUTH 3 C.P.HILLTITL   STRUCTURE OF THE CARBOXYL-TERMINAL DIMERIZATIONTITL 2 DOMAIN OF THE HIV-1 CAPSID PROTEIN.REF    SCIENCE                       V. 278   849 1997REFN                   ISSN 0036-8075PMID   9346481DOI    10.1126/SCIENCE.278.5339.849',
+            'journal_reference': 't.r.gamble,s.yoo,f.f.vajdos,u.k.von schwedler, d.k.worthylake,h.wang,j.p.mccutcheon,w.i.sundquist, c.p.hill structure of the carboxyl-terminal dimerization domain of the hiv-1 capsid protein. science v. 278 849 1997 issn 0036-8075 9346481 10.1126/science.278.5339.849 ',
+            'keywords': 'capsid, core protein, hiv, c-terminal domain, viral protein',
+            'name': ' hiv capsid c-terminal domain',
+            'release_date': '1998-10-14',
+            'structure_method': 'x-ray diffraction',
+        }
         for key, expect in known_strings.items():
             self.assertEqual(struct.header[key].lower(), expect.lower())
 
@@ -154,16 +142,16 @@ class HeaderTests(unittest.TestCase):
         parser = PDBParser()
         struct = parser.get_structure('2BEG', 'PDB/2BEG.pdb')
         known_strings = {
-                'author': 'T.Luhrs,C.Ritter,M.Adrian,D.Riek-Loher,B.Bohrmann,H.Dobeli,D.Schubert,R.Riek',
-                'deposition_date': '2005-10-24',
-                'head': 'protein fibril',
-                'journal': "AUTH   T.LUHRS,C.RITTER,M.ADRIAN,D.RIEK-LOHER,B.BOHRMANN,AUTH 2 H.DOBELI,D.SCHUBERT,R.RIEKTITL   3D STRUCTURE OF ALZHEIMER'S AMYLOID-{BETA}(1-42)TITL 2 FIBRILS.REF    PROC.NATL.ACAD.SCI.USA        V. 102 17342 2005REFN                   ISSN 0027-8424PMID   16293696DOI    10.1073/PNAS.0506723102",
-                'journal_reference': "t.luhrs,c.ritter,m.adrian,d.riek-loher,b.bohrmann, h.dobeli,d.schubert,r.riek 3d structure of alzheimer's amyloid-{beta}(1-42) fibrils. proc.natl.acad.sci.usa v. 102 17342 2005 issn 0027-8424 16293696 10.1073/pnas.0506723102 ",
-                'keywords': "alzheimer's, fibril, protofilament, beta-sandwich, quenched hydrogen/deuterium exchange, pairwise mutagenesis, protein fibril",
-                'name': " 3d structure of alzheimer's abeta(1-42) fibrils",
-                'release_date': '2005-11-22',
-                'structure_method': 'solution nmr',
-                }
+            'author': 'T.Luhrs,C.Ritter,M.Adrian,D.Riek-Loher,B.Bohrmann,H.Dobeli,D.Schubert,R.Riek',
+            'deposition_date': '2005-10-24',
+            'head': 'protein fibril',
+            'journal': "AUTH   T.LUHRS,C.RITTER,M.ADRIAN,D.RIEK-LOHER,B.BOHRMANN,AUTH 2 H.DOBELI,D.SCHUBERT,R.RIEKTITL   3D STRUCTURE OF ALZHEIMER'S AMYLOID-{BETA}(1-42)TITL 2 FIBRILS.REF    PROC.NATL.ACAD.SCI.USA        V. 102 17342 2005REFN                   ISSN 0027-8424PMID   16293696DOI    10.1073/PNAS.0506723102",
+            'journal_reference': "t.luhrs,c.ritter,m.adrian,d.riek-loher,b.bohrmann, h.dobeli,d.schubert,r.riek 3d structure of alzheimer's amyloid-{beta}(1-42) fibrils. proc.natl.acad.sci.usa v. 102 17342 2005 issn 0027-8424 16293696 10.1073/pnas.0506723102 ",
+            'keywords': "alzheimer's, fibril, protofilament, beta-sandwich, quenched hydrogen/deuterium exchange, pairwise mutagenesis, protein fibril",
+            'name': " 3d structure of alzheimer's abeta(1-42) fibrils",
+            'release_date': '2005-11-22',
+            'structure_method': 'solution nmr',
+        }
         for key, expect in known_strings.items():
             self.assertEqual(struct.header[key].lower(), expect.lower())
 
@@ -398,7 +386,7 @@ class ParseTest(unittest.TestCase):
                        (('W', 75, ' '), 1),
                        (('W', 77, ' '), 1),
                        ])
-            ]
+        ]
 
         for c_idx, chn in enumerate(chain_data):
             # Check chain ID and length
@@ -437,9 +425,9 @@ class ParseTest(unittest.TestCase):
         self.assertEqual(len(chain), 1)
         self.assertEqual(" ".join(residue.resname for residue in chain), "PCA")
         self.assertEqual(" ".join(atom.name for atom in chain.get_atoms()),
-                         "N CA CB CG CD OE C O CA  ")
+                         "N CA CB CG DA OE C O CA  ")
         self.assertEqual(" ".join(atom.element for atom in chain.get_atoms()),
-                         "N C C C C O C O CA")
+                         "N C C C D O C O CA")
         # Second model
         model = structure[1]
         self.assertEqual(model.id, 1)
@@ -518,6 +506,24 @@ class ParseTest(unittest.TestCase):
                          "O C S N C C O C O N C C O N C C O N C C O C C O N N "
                          "C C O C S N C C O C C C O N N C C O C C C C C C C O "
                          "N C C O C C C N C N N N C C O C S")
+
+    def test_pdbio_write_truncated(self):
+        """Test parsing of truncated lines"""
+        io = PDBIO()
+        struct = self.structure
+        # Write to temp file
+        io.set_structure(struct)
+        filenumber, filename = tempfile.mkstemp()
+        os.close(filenumber)
+        try:
+            io.save(filename)
+            # Check if there are lines besides 'ATOM', 'TER' and 'END'
+            with open(filename, 'rU') as handle:
+                record_set = set(l[0:6] for l in handle)
+            record_set -= set(('ATOM  ', 'HETATM', 'MODEL ', 'ENDMDL', 'TER\n', 'END\n'))
+            self.assertEqual(record_set, set())
+        finally:
+            os.remove(filename)
 
 
 class ParseReal(unittest.TestCase):
@@ -684,13 +690,25 @@ class ParseReal(unittest.TestCase):
     def test_model_numbering(self):
         """Preserve model serial numbers during I/O."""
         def confirm_numbering(struct):
-            self.assertEqual(len(struct), 20)
+            self.assertEqual(len(struct), 3)
             for idx, model in enumerate(struct):
-                self.assertTrue(model.serial_num, idx + 1)
-                self.assertTrue(model.serial_num, model.id + 1)
-        parser = PDBParser()
-        struct1 = parser.get_structure("1mot", "PDB/1MOT.pdb")
+                self.assertEqual(model.serial_num, idx + 1)
+                self.assertEqual(model.serial_num, model.id + 1)
+
+        def confirm_single_end(fname):
+            """Ensure there is only one END statement in multi-model files"""
+            with open(fname) as handle:
+                end_stment = []
+                for iline, line in enumerate(handle):
+                    if line.strip() == 'END':
+                        end_stment.append((line, iline))
+            self.assertEqual(len(end_stment), 1)  # Only one?
+            self.assertEqual(end_stment[0][1], iline)  # Last line of the file?
+
+        parser = PDBParser(QUIET=1)
+        struct1 = parser.get_structure("1lcd", "PDB/1LCD.pdb")
         confirm_numbering(struct1)
+
         # Round trip: serialize and parse again
         io = PDBIO()
         io.set_structure(struct1)
@@ -698,8 +716,9 @@ class ParseReal(unittest.TestCase):
         os.close(filenumber)
         try:
             io.save(filename)
-            struct2 = parser.get_structure("1mot", filename)
+            struct2 = parser.get_structure("1lcd", filename)
             confirm_numbering(struct2)
+            confirm_single_end(filename)
         finally:
             os.remove(filename)
 
@@ -916,6 +935,7 @@ class Atom_Element(unittest.TestCase):
         self.assertEqual('N', atoms[0].element)  # N
         self.assertEqual('C', atoms[1].element)  # Alpha Carbon
         self.assertEqual('CA', atoms[8].element)  # Calcium
+        self.assertEqual('D', atoms[4].element)  # Deuterium
 
     def test_ions(self):
         """Element for magnesium is assigned correctly."""
@@ -956,7 +976,9 @@ class Atom_Element(unittest.TestCase):
 class IterationTests(unittest.TestCase):
 
     def setUp(self):
-        self.struc = PDBParser(PERMISSIVE=True).get_structure('X', "PDB/a_structure.pdb")
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", PDBConstructionWarning)
+            self.struc = PDBParser(PERMISSIVE=True).get_structure('X', "PDB/a_structure.pdb")
 
     def test_get_chains(self):
         """Yields chains from different models separately."""
@@ -973,6 +995,97 @@ class IterationTests(unittest.TestCase):
         atoms = ["%12s" % str((atom.id, atom.altloc)) for atom in self.struc.get_atoms()]
         self.assertEqual(len(atoms), 756)
 
+
+class ChangingIdTests(unittest.TestCase):
+
+    def setUp(self):
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", PDBConstructionWarning)
+            self.struc = PDBParser(PERMISSIVE=True).get_structure(
+                                                  'X', "PDB/a_structure.pdb")
+
+    def test_change_model_id(self):
+        """Change the id of a model"""
+        for model in self.struc:
+            break  # Get first model in structure
+        model.id = 2
+        self.assertEqual(model.id, 2)
+        self.assertIn(2, self.struc)
+        self.assertNotIn(0, self.struc)
+
+    def test_change_model_id_raises(self):
+        """Cannot change id to a value already in use by another child"""
+        model = next(iter(self.struc))
+        with self.assertRaises(ValueError):
+            model.id = 1
+        # Make sure nothing was changed
+        self.assertEqual(model.id, 0)
+        self.assertIn(0, self.struc)
+        self.assertIn(1, self.struc)
+
+    def test_change_chain_id(self):
+        """Change the id of a model"""
+        chain = next(iter(self.struc.get_chains()))
+        chain.id = "R"
+        self.assertEqual(chain.id, "R")
+        model = next(iter(self.struc))
+        self.assertIn("R", model)
+
+    def test_change_residue_id(self):
+        """Change the id of a residue"""
+        chain = next(iter(self.struc.get_chains()))
+        res = chain[('H_PCA', 1, ' ')]
+        res.id = (' ', 1, ' ')
+
+        self.assertEqual(res.id, (' ', 1, ' '))
+        self.assertIn((' ', 1, ' '), chain)
+        self.assertNotIn(('H_PCA', 1, ' '), chain)
+        self.assertEqual(chain[(' ', 1, ' ')], res)
+
+    def test_full_id_is_updated_residue(self):
+        """
+        Invalidate cached full_ids if an id is changed.
+        """
+        atom = next(iter(self.struc.get_atoms()))
+
+        # Generate the original full id.
+        original_id = atom.get_full_id()
+        self.assertEqual(original_id,
+                         ('X', 0, 'A', ('H_PCA', 1, ' '), ('N', ' ')))
+        residue = next(iter(self.struc.get_residues()))
+
+        # Make sure the full id was in fact cached,
+        # so we need to invalidate it later.
+        self.assertEqual(residue.full_id, ('X', 0, 'A', ('H_PCA', 1, ' ')))
+
+        # Changing the residue's id should lead to an updated full id.
+        residue.id = (' ', 1, ' ')
+        new_id = atom.get_full_id()
+        self.assertNotEqual(original_id, new_id)
+        self.assertEqual(new_id, ('X', 0, 'A', (' ', 1, ' '), ('N', ' ')))
+
+    def test_full_id_is_updated_chain(self):
+        """
+        Invalidate cached full_ids if an id is changed.
+        """
+        atom = next(iter(self.struc.get_atoms()))
+
+        # Generate the original full id.
+        original_id = atom.get_full_id()
+        self.assertEqual(original_id,
+                         ('X', 0, 'A', ('H_PCA', 1, ' '), ('N', ' ')))
+        residue = next(iter(self.struc.get_residues()))
+
+        # Make sure the full id was in fact cached,
+        # so we need to invalidate it later.
+        self.assertEqual(residue.full_id, ('X', 0, 'A', ('H_PCA', 1, ' ')))
+        chain = next(iter(self.struc.get_chains()))
+
+        # Changing the chain's id should lead to an updated full id.
+        chain.id = 'Q'
+        new_id = atom.get_full_id()
+        self.assertNotEqual(original_id, new_id)
+        self.assertEqual(new_id, ('X', 0, 'Q', ('H_PCA', 1, ' '), ('N', ' ')))
 
 # class RenumberTests(unittest.TestCase):
 #    """Tests renumbering of structures."""
@@ -993,8 +1106,10 @@ class IterationTests(unittest.TestCase):
 class TransformTests(unittest.TestCase):
 
     def setUp(self):
-        self.s = PDBParser(PERMISSIVE=True).get_structure(
-            'X', "PDB/a_structure.pdb")
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", PDBConstructionWarning)
+            self.s = PDBParser(PERMISSIVE=True).get_structure(
+                'X', "PDB/a_structure.pdb")
         self.m = self.s.get_list()[0]
         self.c = self.m.get_list()[0]
         self.r = self.c.get_list()[0]
@@ -1038,8 +1153,10 @@ class TransformTests(unittest.TestCase):
 class CopyTests(unittest.TestCase):
 
     def setUp(self):
-        self.s = PDBParser(PERMISSIVE=True).get_structure(
-            'X', "PDB/a_structure.pdb")
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", PDBConstructionWarning)
+            self.s = PDBParser(PERMISSIVE=True).get_structure(
+                'X', "PDB/a_structure.pdb")
         self.m = self.s.get_list()[0]
         self.c = self.m.get_list()[0]
         self.r = self.c.get_list()[0]
@@ -1056,6 +1173,21 @@ class CopyTests(unittest.TestCase):
             ee = e.copy()
             self.assertFalse(e is ee)
             self.assertFalse(e.get_list()[0] is ee.get_list()[0])
+
+
+def eprint(*args, **kwargs):
+    '''Helper function that prints to stderr.'''
+    print(*args, file=sys.stderr, **kwargs)
+
+
+def will_it_float(s):
+    '''
+    Helper function that converts the input into a float if it is a number.
+    Otherwise if the input is a string it is returned as it is.'''
+    try:
+        return float(s)
+    except ValueError:
+        return(s)
 
 
 class DsspTests(unittest.TestCase):
@@ -1093,6 +1225,86 @@ class DsspTests(unittest.TestCase):
 
         # Check if all h-bond partner indices were successfully parsed.
         self.assertEqual((dssp_indices & hb_indices), hb_indices)
+
+    def test_DSSP_in_model_obj(self):
+        '''
+        Test that all the elements are added correctly to the xtra attribute of the input model object.
+        '''
+        p = PDBParser()
+        s = p.get_structure("example", "PDB/2BEG.pdb")
+        m = s[0]
+        # Read the DSSP data into the pdb object:
+        trash_var = DSSP(m, "PDB/2BEG.dssp", 'dssp', 'Sander', 'DSSP')
+        # Now compare the xtra attribute of the pdb object
+        # residue by residue with the pre-computed values:
+        i = 0
+        with open("PDB/dssp_xtra_Sander.txt", 'r') as fh_ref:
+            ref_lines = fh_ref.readlines()
+            for chain in m:
+                for res in chain:
+                    # Split the pre-computed values into a list:
+                    xtra_list_ref = ref_lines[i].rstrip().split('\t')
+                    # Then convert each element to float where possible:
+                    xtra_list_ref = list(map(will_it_float, xtra_list_ref))
+                    # The xtra attribute is a dict.
+                    # To compare with the pre-comouted values first sort according to keys:
+                    xtra_itemts = sorted(res.xtra.items(), key=lambda s: s[0])
+                    # Then extract the list of xtra values for the residue
+                    # and convert to floats where possible:
+                    xtra_list = [t[1] for t in xtra_itemts]
+                    xtra_list = list(map(will_it_float, xtra_list))
+                    # The reason for converting to float is, that casting a float to a string in python2.6
+                    # will include fewer decimals than python3 and an assertion error will be thrown.
+                    self.assertEqual(xtra_list, xtra_list_ref)
+                    i += 1
+
+    def test_DSSP_RSA(self):
+        """Tests the usage of different ASA tables."""
+        # Tests include Sander/default, Wilke and Miller
+        p = PDBParser()
+        # Sander/default:
+        s = p.get_structure("example", "PDB/2BEG.pdb")
+        m = s[0]
+        # Read the DSSP data into the pdb object:
+        trash_var = DSSP(m, "PDB/2BEG.dssp", 'dssp', 'Sander', 'DSSP')
+        # Then compare the RASA values for each residue with the pre-computed values:
+        i = 0
+        with open("PDB/Sander_RASA.txt", 'r') as fh_ref:
+            ref_lines = fh_ref.readlines()
+            for chain in m:
+                for res in chain:
+                    rasa_ref = float(ref_lines[i].rstrip())
+                    rasa = float(res.xtra['EXP_DSSP_RASA'])
+                    self.assertAlmostEqual(rasa, rasa_ref)
+                    i += 1
+
+        # Wilke (procedure similar as for the Sander values above):
+        s = p.get_structure("example", "PDB/2BEG.pdb")
+        m = s[0]
+        trash_var = DSSP(m, "PDB/2BEG.dssp", 'dssp', 'Wilke', 'DSSP')
+        i = 0
+        with open("PDB/Wilke_RASA.txt", 'r') as fh_ref:
+            ref_lines = fh_ref.readlines()
+            for chain in m:
+                for res in chain:
+                    rasa_ref = float(ref_lines[i].rstrip())
+                    rasa = float(res.xtra['EXP_DSSP_RASA'])
+                    self.assertAlmostEqual(rasa, rasa_ref)
+                    i += 1
+
+        # Miller (procedure similar as for the Sander values above):
+        s = p.get_structure("example", "PDB/2BEG.pdb")
+        m = s[0]
+        trash_var = DSSP(m, "PDB/2BEG.dssp", 'dssp', 'Miller', 'DSSP')
+        i = 0
+        with open("PDB/Miller_RASA.txt", 'r') as fh_ref:
+            ref_lines = fh_ref.readlines()
+            for chain in m:
+                for res in chain:
+                    rasa_ref = float(ref_lines[i].rstrip())
+                    rasa = float(res.xtra['EXP_DSSP_RASA'])
+                    self.assertAlmostEqual(rasa, rasa_ref)
+                    i += 1
 
 
 class NACCESSTests(unittest.TestCase):

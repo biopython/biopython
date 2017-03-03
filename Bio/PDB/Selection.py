@@ -54,7 +54,7 @@ def unfold_entities(entity_list, target_level):
         raise PDBException("%s: Not an entity level." % target_level)
     if entity_list == []:
         return []
-    if isinstance(entity_list, Entity) or isinstance(entity_list, Atom):
+    if isinstance(entity_list, (Entity, Atom)):
         entity_list = [entity_list]
 
     level = entity_list[0].get_level()
@@ -77,13 +77,6 @@ def unfold_entities(entity_list, target_level):
     return list(entity_list)
 
 
-def _test():
-    """Run the Bio.PDB.Selection module's doctests (PRIVATE)."""
-    import doctest
-    print("Running doctests ...")
-    doctest.testmod()
-    print("Done")
-
-
 if __name__ == "__main__":
-    _test()
+    from Bio._utils import run_doctest
+    run_doctest()

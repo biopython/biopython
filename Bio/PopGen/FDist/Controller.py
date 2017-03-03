@@ -3,7 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""This module allows you to control fdist.
+"""This module allows you to control fdist (DEPRECATED).
 
 This will allow you to call fdist and associated programs (cplot,
 datacal, pv) by Mark Beaumont.
@@ -18,8 +18,6 @@ import sys
 from random import randint
 from time import strftime, clock
 # from logging import debug
-
-__docformat__ = "restructuredtext en"
 
 
 def my_float(f):
@@ -36,7 +34,6 @@ class FDistController(object):
         fdist_dir is the directory where fdist2 is.
         ext is the extension of binaries (.exe on windows,
         none on Unix)
-
         """
         self.tmp_idx = 0
         self.fdist_dir = fdist_dir
@@ -53,7 +50,7 @@ class FDistController(object):
     def _get_path(self, app):
         """Returns the path to an fdist application.
 
-           Includes Path where fdist can be found plus executable extension.
+        Includes Path where fdist can be found plus executable extension.
         """
         if self.fdist_dir == '':
             return app + self.ext
@@ -63,8 +60,8 @@ class FDistController(object):
     def _get_temp_file(self):
         """Gets a temporary file name.
 
-           Returns a temporary file name, if executing inside jython
-           tries to replace unexisting tempfile.mkstemp().
+        Returns a temporary file name, if executing inside jython
+        tries to replace unexisting tempfile.mkstemp().
         """
         self.tmp_idx += 1
         return strftime("%H%M%S") + str(int(clock() * 100)) + str(randint(0, 1000)) + str(self.tmp_idx)
@@ -73,7 +70,7 @@ class FDistController(object):
                     crit_freq=0.99, p=0.5, beta=(0.25, 0.25)):
         """Executes datacal.
 
-           data_dir - Where the data is found.
+        data_dir - Where the data is found.
         """
         if version == 1:
             datacal_name = "datacal"
@@ -111,8 +108,8 @@ class FDistController(object):
     def _generate_intfile(self, data_dir):
         """Generates an INTFILE.
 
-           Parameter:
-           data_dir - data directory
+        Parameter:
+         - data_dir - data directory
         """
         inf = open(data_dir + os.sep + 'INTFILE', 'w')
         for i in range(98):
@@ -202,7 +199,7 @@ class FDistController(object):
             - try_runs - Number of simulations on the part trying to get
                        Fst correct
             - limit - Interval limit
-            
+
         Other parameters can be seen on run_fdist.
         """
         max_run_fst = 1
@@ -240,7 +237,6 @@ class FDistController(object):
         ci - Confidence interval.
         data_dir - Where the data is found.
         """
-
         self._generate_intfile(data_dir)
         if version == 1:
             cplot_name = "cplot"
@@ -278,7 +274,6 @@ class FDistController(object):
         out_file - Name of output file.
         data_dir - Where the data is found.
         """
-
         self._generate_intfile(data_dir)
 
         if version == 1:

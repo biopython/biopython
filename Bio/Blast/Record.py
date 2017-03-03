@@ -24,8 +24,6 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
 
-__docformat__ = "restructuredtext en"
-
 
 class Header(object):
     """Saves information from a blast header.
@@ -112,13 +110,13 @@ class HSP(object):
         - expect          Expect value.  (float)
         - num_alignments  Number of alignments for same subject.  (int)
         - identities      Number of identities (int) if using the XML parser.
-          Tuple of numer of identities/total aligned (int, int)
+          Tuple of number of identities/total aligned (int, int)
           if using the (obsolete) plain text parser.
         - positives       Number of positives (int) if using the XML parser.
-          Tuple of numer of positives/total aligned (int, int)
+          Tuple of number of positives/total aligned (int, int)
           if using the (obsolete) plain text parser.
         - gaps            Number of gaps (int) if using the XML parser.
-          Tuple of numer of gaps/total aligned (int, int) if
+          Tuple of number of gaps/total aligned (int, int) if
           using the (obsolete) plain text parser.
         - align_length    Length of the alignment. (int)
         - strand          Tuple of (query, target) strand.
@@ -133,7 +131,7 @@ class HSP(object):
         - sbjct_end       The end residue for the sbjct sequence.  (1-based)
 
     Not all flavors of BLAST return values for every attribute::
-    
+
                   score     expect     identities   positives    strand  frame
         BLASTP     X          X            X            X
         BLASTN     X          X            X            X          X

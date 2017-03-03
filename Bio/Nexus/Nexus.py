@@ -1,4 +1,5 @@
 # Copyright 2005-2008 by Frank Kauff & Cymon J. Cox. All rights reserved.
+#           2014-2015 by Joe Cora (standard data)
 # This code is part of the Biopython distribution and governed by its
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
@@ -26,16 +27,16 @@ from Bio.Alphabet import IUPAC
 from Bio.Data import IUPACData
 from Bio.Seq import Seq
 
-from .Trees import Tree
+from Bio.Nexus.StandardData import StandardData
+from Bio.Nexus.Trees import Tree
 
-__docformat__ = "restructuredtext en"
 
 INTERLEAVE = 70
 SPECIAL_COMMANDS = ['charstatelabels', 'charlabels', 'taxlabels', 'taxset',
                     'charset', 'charpartition', 'taxpartition', 'matrix',
                     'tree', 'utree', 'translate', 'codonposset', 'title']
 KNOWN_NEXUS_BLOCKS = ['trees', 'data', 'characters', 'taxa', 'sets', 'codons']
-PUNCTUATION = '()[]{}/\,;:=*\'"`+-<>'
+PUNCTUATION = '()[]{}\,;:=*\'"`+-<>'
 MRBAYESSAFE = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_'
 WHITESPACE = ' \t\n'
 # SPECIALCOMMENTS = ['!','&','%','/','\\','@'] # original list of special comments
@@ -119,18 +120,20 @@ class CharBuffer(object):
 
         This deals with single and double quotes, whitespace and punctuation.
         """
-
         word = []
         quoted = False
-        first = self.next_nonwhitespace()                   # get first character
-        if not first:                                       # return empty if only whitespace left
+        # get first character
+        first = self.next_nonwhitespace()
+        if not first:
+            # return empty if only whitespace left
             return None
         word.append(first)
-        if first == "'":                                    # word starts with a quote
+        if first == "'":
             quoted = "'"
         elif first == '"':
             quoted = '"'
-        elif first in PUNCTUATION:                          # if it's punctuation, return immediately
+        elif first in PUNCTUATION:
+            # if it's non-quote punctuation, return immediately
             return first
         while True:
             c = self.peek()
@@ -141,7 +144,8 @@ class CharBuffer(object):
                 elif quoted:                                # second single quote ends word
                     break
             elif quoted:
-                word.append(next(self))                              # if quoted, then add anything
+                # if quoted, then add anything
+                word.append(next(self))
             elif not c or c in PUNCTUATION or c in WHITESPACE:
                 # if not quoted and special character, stop
                 break
@@ -159,7 +163,6 @@ class StepMatrix(object):
 
     See Wheeler (1990), Cladistics 6:269-275.
     """
-
     def __init__(self, symbols, gap):
         self.data = {}
         self.symbols = sorted(symbols)
@@ -245,14 +248,11 @@ def quotestrip(word):
     return word
 
 
-def get_start_end(sequence, skiplist=None):
+def get_start_end(sequence, skiplist=('-', '?')):
     """Return position of first and last character which is not in skiplist.
 
     Skiplist defaults to ['-','?'].
     """
-    if skiplist is None:
-        skiplist = ["-", "?"]
-
     length = len(sequence)
     if length == 0:
         return None, None
@@ -281,9 +281,13 @@ def _make_unique(l):
 def _unique_label(previous_labels, label):
     """Returns a unique name if label is already in previous_labels."""
     while label in previous_labels:
-        if label.split('.')[-1].startswith('copy'):
-            label = '.'.join(label.split('.')[:-1]) \
-                  + '.copy' + str(eval('0' + label.split('.')[-1][4:]) + 1)
+        label_split = label.split('.')
+        if label_split[-1].startswith('copy'):
+            copy_num = 1
+            if label_split[-1] != "copy":
+                copy_num = int(label_split[-1][4:]) + 1
+            new_label = "%s.copy%s" % ('.'.join(label_split[:-1]), copy_num)
+            label = new_label
         else:
             label += '.copy'
     return label
@@ -298,7 +302,6 @@ def _compact4nexus(orig_list):
     """Transform [1 2 3 5 6 7 8 12 15 18 20] (baseindex 0, used in the Nexus class)
     into '2-4 6-9 13-19\\3 21' (baseindex 1, used in programs like Paup or MrBayes.).
     """
-
     if not orig_list:
         return ''
     orig_list = sorted(set(orig_list))
@@ -335,7 +338,6 @@ def combine(matrices):
     Character sets, character partitions and taxon sets are prefixed, readjusted
     and present in the combined matrix.
     """
-
     if not matrices:
         return None
     name = matrices[0][0]
@@ -367,13 +369,21 @@ def combine(matrices):
         m_only = [t for t in m.taxlabels if t not in both]
         for t in both:
             # concatenate sequences and unify gap and missing character symbols
-            combined.matrix[t] += Seq(str(m.matrix[t]).replace(m.gap, combined.gap).replace(m.missing, combined.missing), combined.alphabet)
+            combined.matrix[t] += Seq(str(m.matrix[t])
+                                      .replace(m.gap, combined.gap)
+                                      .replace(m.missing, combined.missing),
+                                      combined.alphabet)
         # replace date of missing taxa with symbol for missing data
         for t in combined_only:
-            combined.matrix[t] += Seq(combined.missing * m.nchar, combined.alphabet)
+            combined.matrix[t] += Seq(combined.missing * m.nchar,
+                                      combined.alphabet)
         for t in m_only:
-            combined.matrix[t] = Seq(combined.missing * combined.nchar, combined.alphabet) + \
-                Seq(str(m.matrix[t]).replace(m.gap, combined.gap).replace(m.missing, combined.missing), combined.alphabet)
+            combined.matrix[t] = Seq(combined.missing * combined.nchar,
+                                     combined.alphabet) + \
+                                Seq(str(m.matrix[t])
+                                    .replace(m.gap, combined.gap)
+                                    .replace(m.missing, combined.missing),
+                                    combined.alphabet)
         combined.taxlabels.extend(m_only)    # new taxon list
         for cn, cs in m.charsets.items():  # adjust character sets for new matrix
             combined.charsets['%s.%s' % (n, cn)] = [x + combined.nchar for x in cs]
@@ -490,7 +500,6 @@ def _adjust_lines(lines):
 
 def _replace_parenthesized_ambigs(seq, rev_ambig_values):
     """Replaces ambigs in xxx(ACG)xxx format by IUPAC ambiguity code."""
-
     opening = seq.find('(')
     while opening > -1:
         closing = seq.find(')')
@@ -605,7 +614,6 @@ class Nexus(object):
 
     def read(self, input):
         """Read and parse NEXUS input (a filename, file-handle, or string)."""
-
         # 1. Assume we have the name of a file in the execution dir or a
         # file-like object.
         # Note we need to add parsing of the path to dir/filename
@@ -614,7 +622,7 @@ class Nexus(object):
                 file_contents = fp.read()
                 self.filename = getattr(fp, 'name', 'Unknown_nexus_file')
         except (TypeError, IOError, AttributeError):
-            # 2 Assume we have a string from a fh.read()
+            # 2. Assume we have a string from a fh.read()
             if isinstance(input, basestring):
                 file_contents = input
                 self.filename = 'input_string'
@@ -630,7 +638,7 @@ class Nexus(object):
             try:
                 if cl[:6].upper() == '#NEXUS':
                     commandlines[i] = cl[6:].strip()
-            except:
+            except IndexError:
                 pass
         # now loop through blocks (we parse only data in known blocks, thus ignoring non-block commands
         nexus_block_gen = self._get_nexus_block(commandlines)
@@ -674,10 +682,10 @@ class Nexus(object):
 
     def _parse_nexus_block(self, title, contents):
         """Parse a known Nexus Block (PRIVATE)."""
-        # attached the structered block representation
+        # attached the structured block representation
         self._apply_block_structure(title, contents)
         # now check for taxa,characters,data blocks. If this stuff is defined more than once
-        # the later occurences will override the previous ones.
+        # the later occurrences will override the previous ones.
         block = self.structured[-1]
         for line in block.commandlines:
             try:
@@ -706,15 +714,17 @@ class Nexus(object):
             self.respectcase = True
         # adjust symbols to for respectcase
         if 'symbols' in options:
-            self.symbols = options['symbols']
-            if (self.symbols.startswith('"') and self.symbols.endswith('"')) or\
-            (self.symbols.startswith("'") and self.symbols.endswith("'")):
-                self.symbols = self.symbols[1:-1].replace(' ', '')
+            self.symbols = ''.join(options['symbols'].split())
+            if (self.symbols.startswith('"') and self.symbols.endswith('"')) or \
+                    (self.symbols.startswith("'") and self.symbols.endswith("'")):
+                self.symbols = self.symbols[1:-1]
             if not self.respectcase:
-                self.symbols = self.symbols.lower() + self.symbols.upper()
-                self.symbols = list(set(self.symbols))
+                self.symbols = list(self.symbols.upper())
+                # self.symbols = self.symbols.lower() + self.symbols.upper()
+                # self.symbols = list(set(self.symbols))
         if 'datatype' in options:
             self.datatype = options['datatype'].lower()
+
             if self.datatype == 'dna' or self.datatype == 'nucleotide':
                 self.alphabet = IUPAC.IUPACAmbiguousDNA()  # fresh instance!
                 self.ambiguous_values = IUPACData.ambiguous_dna_values.copy()
@@ -726,16 +736,29 @@ class Nexus(object):
             elif self.datatype == 'protein':
                 # TODO - Should this not be ExtendedIUPACProtein?
                 self.alphabet = IUPAC.IUPACProtein()  # fresh instance
-                self.ambiguous_values = {'B': 'DN', 'Z': 'EQ', 'X': IUPACData.protein_letters}
+                self.ambiguous_values = {'B': 'DN',
+                                         'Z': 'EQ',
+                                         'X': IUPACData.protein_letters}
                 # that's how PAUP handles it
                 self.unambiguous_letters = IUPACData.protein_letters + '*'  # stop-codon
             elif self.datatype == 'standard':
-                raise NexusError('Datatype standard is not yet supported.')
-                # self.alphabet = None
-                # self.ambiguous_values = {}
-                # if not self.symbols:
-                #    self.symbols = '01' # if nothing else defined, then 0 and 1 are the default states
-                # self.unambiguous_letters = self.symbols
+                self.alphabet = None
+                self.ambiguous_values = {}
+                if not self.symbols:
+                    # PARSER BUG ##
+                    # This error arises when symbols are absent or when
+                    # whitespace is located within the SYMBOLS command values.
+                    # The Nexus parser quits reading the SYMBOLS line upon
+                    # finding a whitespace character.
+                    raise NexusError(
+                        "Symbols must be defined when using standard datatype. "
+                        "Please remove any whitespace (spaces, tabs, etc.) "
+                        "between values for symbols as this confuses the Nexus "
+                        "parser.")
+
+                self.unambiguous_letters = ''.join(self.symbols)
+                if not self.respectcase:
+                    self.unambiguous_letters += self.unambiguous_letters.lower()
             else:
                 raise NexusError('Unsupported datatype: ' + self.datatype)
             self.valid_characters = ''.join(self.ambiguous_values) + self.unambiguous_letters
@@ -754,9 +777,9 @@ class Nexus(object):
             if self.missing not in self.ambiguous_values:
                 self.ambiguous_values[self.missing] = self.unambiguous_letters + self.gap
             self.ambiguous_values[self.gap] = self.gap
-        elif self.datatype == 'standard':
-            if not self.symbols:
-                self.symbols = ['1', '0']
+        # elif self.datatype == 'standard':
+        #    if not self.symbols:
+        #        self.symbols = ['0', '1']
         if 'missing' in options:
             self.missing = options['missing'][0]
         if 'gap' in options:
@@ -831,8 +854,65 @@ class Nexus(object):
                 raise NexusError('Missing \',\' in line %s.' % options)
 
     def _charstatelabels(self, options):
-        # warning: charstatelabels supports only charlabels-syntax!
-        self._charlabels(options)
+        self.charlabels = {}
+        self.statelabels = {}
+        opts = CharBuffer(options)
+
+        # Make sure symbols are defined
+        if not self.symbols:
+            raise NexusError(
+                'Symbols must be defined when using character states')
+
+        while True:
+            # get id and character name
+            w = opts.next_word()
+
+            # McClade saves and reads charlabel-lists with terminal comma?!
+            if w is None:
+                break
+
+            identifier = self._resolve(w, set_type=CHARSET)
+            character = quotestrip(opts.next_word())
+
+            self.charlabels[identifier] = character
+            self.statelabels[identifier] = []
+
+            # check for comma, slash or end of command
+            c = opts.next_nonwhitespace()
+
+            if c is None:
+                break
+            elif c != ',':
+                # Check if states are defined, otherwise report error
+                if c != '/':
+                    raise NexusError('Missing \',\' in line %s.' % options)
+
+                # Get the first state
+                state = quotestrip(opts.next_word())
+
+                if state is None:
+                    raise NexusError(
+                        'Missing character state in line %s.' % options)
+
+                while True:
+                    # Make sure current state does not exceed number of
+                    # available symbols
+                    if len(self.statelabels[identifier]) > len(self.symbols):
+                        raise NexusError(
+                            'Character states exceed number of available symbols in line %s.' % options)
+
+                    # Add the character state to the statelabels
+                    self.statelabels[identifier].append(state)
+
+                    # Check for another state or comma to end states (last
+                    # character should not have comma at end of states - but
+                    # we'll ignore)
+                    state = quotestrip(opts.next_word())
+
+                    if state is None:
+                        return
+                    elif state is ',':
+                        break
 
     def _statelabels(self, options):
         # self.charlabels = options
@@ -861,7 +941,6 @@ class Nexus(object):
                     break
             # count the taxa and check for interleaved matrix
             taxcount += 1
-            # print taxcount
             if taxcount > self.ntax:
                 if not self.interleave:
                     raise NexusError('Too many taxa in matrix - should matrix be interleaved?')
@@ -875,7 +954,6 @@ class Nexus(object):
             chars = ''
             if self.interleave:
                 # interleaved matrix
-                # print 'In interleave'
                 if l:
                     chars = ''.join(l.split())
                 else:
@@ -886,22 +964,42 @@ class Nexus(object):
                 while len(chars) < self.nchar:
                     l = next(lineiter)
                     chars += ''.join(l.split())
-            iupac_seq = Seq(_replace_parenthesized_ambigs(chars, self.rev_ambiguous_values), self.alphabet)
-            # first taxon has the reference sequence if matchhar is used
-            if taxcount == 1:
-                refseq = iupac_seq
+
+            # Reformat sequence for non-standard datatypes
+            if self.datatype != 'standard':
+                iupac_seq = Seq(_replace_parenthesized_ambigs(
+                    chars, self.rev_ambiguous_values), self.alphabet)
+                # first taxon has the reference sequence if matchhar is used
+                if taxcount == 1:
+                    refseq = iupac_seq
+                else:
+                    if self.matchchar:
+                        while True:
+                            p = str(iupac_seq).find(self.matchchar)
+                            if p == -1:
+                                break
+                            iupac_seq = Seq(str(iupac_seq)[:p] + refseq[
+                                            p] + str(iupac_seq)[p + 1:], self.alphabet)
+
+                # Check for invalid characters
+                for i, c in enumerate(str(iupac_seq)):
+                    if c not in self.valid_characters and c != self.gap and c != self.missing:
+                        raise NexusError("Taxon %s: Illegal character %s in sequence %s "
+                                         "(check dimensions/interleaving)" % (id, c, iupac_seq))
             else:
-                if self.matchchar:
-                    while True:
-                        p = str(iupac_seq).find(self.matchchar)
-                        if p == -1:
-                            break
-                        iupac_seq = Seq(str(iupac_seq)[:p] + refseq[p] + str(iupac_seq)[p + 1:], self.alphabet)
-            # check for invalid characters
-            for c in str(iupac_seq):
-                if c not in self.valid_characters and c != self.gap and c != self.missing:
-                    raise NexusError("Taxon %s: Illegal character %s in sequence %s "
-                                     "(check dimensions/interleaving)" % (id, c, iupac_seq))
+                iupac_seq = StandardData(chars)
+
+                # Check for invalid characters
+                for i, c in enumerate(iupac_seq):
+                    # Go through each coding for each character
+                    for coding in c['d']:
+                        if coding not in self.valid_characters:
+                            if coding != self.gap and coding != self.missing:
+                                raise NexusError("Taxon %s: Illegal character %s "
+                                                 "in sequence %s "
+                                                 "(check dimensions/interleaving)"
+                                                 % (id, coding, iupac_seq))
+
             # add sequence to matrix
             if first_matrix_block:
                 self.unaltered_taxlabels.append(id)
@@ -946,7 +1044,7 @@ class Nexus(object):
                     raise NexusError('Missing \',\' in line %s.' % options)
             except NexusError:
                 raise
-            except:
+            except Exception:  # TODO: ValueError?
                 raise NexusError('Format error in line %s.' % options)
 
     def _utree(self, options):
@@ -979,7 +1077,8 @@ class Nexus(object):
                 rooted = False
             elif special == 'W':
                 weight = float(value)
-        tree = Tree(name=name, weight=weight, rooted=rooted, tree=opts.rest().strip())
+        tree = Tree(name=name, weight=weight, rooted=rooted,
+                    tree=opts.rest().strip())
         # if there's an active translation table, translate
         if self.translate:
             for n in tree.get_terminals():
@@ -1036,7 +1135,6 @@ class Nexus(object):
         Here codonposset is just a fancy name for a character partition with
         the name CodonPositions and the partitions N,1,2,3
         """
-
         prev_partitions = list(self.charpartitions.keys())
         self._charpartition(options)
         # mcclade calls it CodonPositions, but you never know...
@@ -1056,8 +1154,9 @@ class Nexus(object):
         name = self._name_n_vector(opts)
         if not name:
             raise NexusError('Formatting error in charpartition: %s ' % options)
-        # now collect thesubbpartitions and parse them
-        # subpartitons separated by commas - which unfortunately could be part of a quoted identifier...
+        # now collect the subpartitions and parse them
+        # subpartitions separated by commas - which unfortunately could be part
+        # of a quoted identifier...
         sub = ''
         while True:
             w = next(opts)
@@ -1146,9 +1245,11 @@ class Nexus(object):
                             taxrange = self.taxlabels[start:end + 1]
                             plain_list.extend(taxrange)
                     else:
-                        if isinstance(start, list):           # start was the name of charset or taxset
+                        if isinstance(start, list):
+                            # start was the name of charset or taxset
                             plain_list.extend(start)
-                        else:                           # start was an ordinary identifier
+                        else:
+                            # start was an ordinary identifier
                             plain_list.append(start)
             except NexusError:
                 raise
@@ -1229,14 +1330,13 @@ class Nexus(object):
         pass
 
     def write_nexus_data_partitions(self, matrix=None, filename=None, blocksize=None,
-                                    interleave=False, exclude=[], delete=[],
+                                    interleave=False, exclude=(), delete=(),
                                     charpartition=None, comment='', mrbayes=False):
         """Writes a nexus file for each partition in charpartition.
 
         Only non-excluded characters and non-deleted taxa are included,
         just the data block is written.
         """
-
         if not matrix:
             matrix = self.matrix
         if not matrix:
@@ -1246,7 +1346,7 @@ class Nexus(object):
         if charpartition:
             pfilenames = {}
             for p in charpartition:
-                total_exclude = [] + exclude
+                total_exclude = list(exclude)
                 total_exclude.extend(c for c in range(self.nchar) if c not in charpartition[p])
                 total_exclude = _make_unique(total_exclude)
                 pcomment = comment + '\nPartition: ' + p + '\n'
@@ -1267,7 +1367,7 @@ class Nexus(object):
                                   comment=comment, append_sets=False, mrbayes=mrbayes)
             return fn
 
-    def write_nexus_data(self, filename=None, matrix=None, exclude=[], delete=[],
+    def write_nexus_data(self, filename=None, matrix=None, exclude=(), delete=(),
                          blocksize=None, interleave=False, interleave_by_partition=False,
                          comment=None, omit_NEXUS=False, append_sets=True, mrbayes=False,
                          codons_block=True):
@@ -1301,7 +1401,8 @@ class Nexus(object):
                 raise NexusError('Unknown partition: %r' % interleave_by_partition)
             else:
                 partition = self.charpartitions[interleave_by_partition]
-                # we need to sort the partition names by starting position before we exclude characters
+                # we need to sort the partition names by starting position
+                # before we exclude characters
                 names = _sort_keys_by_values(partition)
                 newpartition = {}
                 for p in partition:
@@ -1342,9 +1443,9 @@ class Nexus(object):
             if self.charlabels:
                 newcharlabels = self._adjust_charlabels(exclude=exclude)
                 clkeys = sorted(newcharlabels)
-                fh.write('charlabels '
-                         + ', '.join("%s %s" % (k + 1, safename(newcharlabels[k])) for k in clkeys)
-                         + ';\n')
+                fh.write('charlabels ' +
+                         ', '.join("%s %s" % (k + 1, safename(newcharlabels[k])) for k in clkeys) +
+                         ';\n')
             fh.write('matrix\n')
             if not blocksize:
                 if interleave:
@@ -1354,7 +1455,8 @@ class Nexus(object):
             # delete deleted taxa and ecxclude excluded characters...
             namelength = max(len(safename(t, mrbayes=mrbayes)) for t in undelete)
             if interleave_by_partition:
-                # interleave by partitions, but adjust partitions with regard to excluded characters
+                # interleave by partitions, but adjust partitions with regard
+                # to excluded characters
                 seek = 0
                 for p in names:
                     fh.write('[%s: %s]\n' % (interleave_by_partition, p))
@@ -1391,7 +1493,7 @@ class Nexus(object):
                     fh.write(self.append_sets(exclude=exclude, delete=delete, mrbayes=mrbayes))
         return filename
 
-    def append_sets(self, exclude=[], delete=[], mrbayes=False, include_codons=True, codons_only=False):
+    def append_sets(self, exclude=(), delete=(), mrbayes=False, include_codons=True, codons_only=False):
         """Returns a sets block."""
         if not self.charsets and not self.taxsets and not self.charpartitions:
             return ''
@@ -1493,7 +1595,7 @@ class Nexus(object):
                 fh.write('%s %s\n' % (safename(taxon), str(self.matrix[taxon])))
         return filename
 
-    def constant(self, matrix=None, delete=[], exclude=[]):
+    def constant(self, matrix=None, delete=(), exclude=()):
         """Return a list with all constant characters."""
         if not matrix:
             matrix = self.matrix
@@ -1512,14 +1614,15 @@ class Nexus(object):
                 # print '%d (paup=%d)' % (site[0],site[0]+1),
                 seqsite = matrix[taxon][site[0]].upper()
                 # print seqsite,'checked against',site[1],'\t',
-                if seqsite == self.missing \
-                or (seqsite == self.gap and self.options['gapmode'].lower() == 'missing') \
-                or seqsite == site[1]:
+                if seqsite == self.missing or \
+                   (seqsite == self.gap and self.options['gapmode'].lower() == 'missing') or \
+                   seqsite == site[1]:
                     # missing or same as before  -> ok
                     newconstant.append(site)
-                elif seqsite in site[1] \
-                or site[1] == self.missing \
-                or (self.options['gapmode'].lower() == 'missing' and site[1] == self.gap):
+                elif (seqsite in site[1] or
+                      site[1] == self.missing or
+                      (self.options['gapmode'].lower() == 'missing' and
+                       site[1] == self.gap)):
                     # subset of an ambig or only missing in previous -> take subset
                     newconstant.append((site[0], self.ambiguous_values.get(seqsite, seqsite)))
                 elif seqsite in self.ambiguous_values:
@@ -1536,7 +1639,7 @@ class Nexus(object):
         cpos = [s[0] for s in constant]
         return cpos
 
-    def cstatus(self, site, delete=[], narrow=True):
+    def cstatus(self, site, delete=(), narrow=True):
         """Summarize character.
 
         narrow=True:  paup-mode (a c ? --> ac; ? ? ? --> ?)
@@ -1560,7 +1663,7 @@ class Nexus(object):
         cstatus.sort()
         return cstatus
 
-    def weighted_stepmatrix(self, name='your_name_here', exclude=[], delete=[]):
+    def weighted_stepmatrix(self, name='your_name_here', exclude=(), delete=()):
         """Calculates a stepmatrix for weighted parsimony.
 
         See Wheeler (1990), Cladistics 6:269-275 and
@@ -1574,7 +1677,7 @@ class Nexus(object):
                     m.add(b1.upper(), b2.upper(), 1)
         return m.transformation().weighting().smprint(name=name)
 
-    def crop_matrix(self, matrix=None, delete=[], exclude=[]):
+    def crop_matrix(self, matrix=None, delete=(), exclude=()):
         """Return a matrix without deleted taxa and excluded characters."""
         if not matrix:
             matrix = self.matrix
@@ -1595,7 +1698,7 @@ class Nexus(object):
         else:
             return dict((t, matrix[t]) for t in self.taxlabels if t in matrix and t not in delete)
 
-    def bootstrap(self, matrix=None, delete=[], exclude=[]):
+    def bootstrap(self, matrix=None, delete=(), exclude=()):
         """Return a bootstrapped matrix."""
         if not matrix:
             matrix = self.matrix
@@ -1611,7 +1714,8 @@ class Nexus(object):
             alphabet = matrix[list(matrix.keys())[0]].alphabet
         else:
             sitesm = list(zip(*[cm[t] for t in undelete]))
-        bootstrapsitesm = [sitesm[random.randint(0, len(sitesm) - 1)] for i in range(len(sitesm))]
+        bootstrapsitesm = [sitesm[random.randint(0, len(sitesm) - 1)]
+                           for i in range(len(sitesm))]
         bootstrapseqs = [''.join(x) for x in zip(*bootstrapsitesm)]
         if seqobjects:
             bootstrapseqs = [Seq(s, alphabet) for s in bootstrapseqs]
@@ -1619,7 +1723,6 @@ class Nexus(object):
 
     def add_sequence(self, name, sequence):
         """Adds a sequence (string) to the matrix."""
-
         if not name:
             raise NexusError('New sequence must have a name')
 
@@ -1635,7 +1738,8 @@ class Nexus(object):
         else:
             unique_name = name
 
-        assert unique_name not in self.matrix, "ERROR. There is a discrepancy between taxlabels and matrix keys. Report this as a bug."
+        assert unique_name not in self.matrix, \
+            "ERROR. There is a discrepancy between taxlabels and matrix keys. Report this as a bug."
 
         self.matrix[unique_name] = Seq(sequence, self.alphabet)
         self.ntax += 1
@@ -1648,7 +1752,6 @@ class Nexus(object):
         pos=0: first position
         pos=nchar: last position
         """
-
         def _adjust(set, x, d, leftgreedy=False):
             """Adjusts character sets if gaps are inserted, taking care of
             new gaps within a coherent character set."""
@@ -1675,7 +1778,8 @@ class Nexus(object):
         sitesm = list(zip(*[str(self.matrix[t]) for t in self.taxlabels]))
         sitesm[pos:pos] = [['-'] * len(self.taxlabels)] * n
         mapped = [''.join(x) for x in zip(*sitesm)]
-        listed = [(taxon, Seq(mapped[i], self.alphabet)) for i, taxon in enumerate(self.taxlabels)]
+        listed = [(taxon, Seq(mapped[i], self.alphabet))
+                  for i, taxon in enumerate(self.taxlabels)]
         self.matrix = dict(listed)
         self.nchar += n
         # now adjust character sets
@@ -1732,8 +1836,8 @@ class Nexus(object):
     def terminal_gap_to_missing(self, missing=None, skip_n=True):
         """Replaces all terminal gaps with missing character.
 
-        Mixtures like ???------??------- are properly resolved."""
-
+        Mixtures like ???------??------- are properly resolved.
+        """
         if not missing:
             missing = self.missing
         replace = [self.missing, self.gap]
@@ -1748,7 +1852,8 @@ class Nexus(object):
             else:
                 sequence = sequence[:end + 1] + missing * (length - end - 1)
                 sequence = start * missing + sequence[start:]
-            assert length == len(sequence), 'Illegal sequence manipulation in Nexus.terminal_gap_to_missing in taxon %s' % taxon
+            assert length == len(sequence), \
+                "Illegal sequence manipulation in Nexus.terminal_gap_to_missing in taxon %s" % taxon
             self.matrix[taxon] = Seq(sequence, self.alphabet)
 
 

@@ -14,9 +14,7 @@ from Bio.SearchIO._index import SearchIndexer
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 
 
-__all__ = ['BlastTabIndexer', 'BlastTabParser', 'BlastTabWriter']
-
-__docformat__ = "restructuredtext en"
+__all__ = ('BlastTabIndexer', 'BlastTabParser', 'BlastTabWriter')
 
 
 # longname-shortname map
@@ -602,7 +600,7 @@ class BlastTabIndexer(SearchIndexer):
                 break
 
     def get_raw(self, offset):
-        """Returns the raw string of a QueryResult object from the given offset."""
+        """Returns the raw bytes string of a QueryResult object from the given offset."""
         if self._kwargs['comments']:
             getfunc = self._get_raw_qresult_commented
         else:
@@ -611,7 +609,7 @@ class BlastTabIndexer(SearchIndexer):
         return getfunc(offset)
 
     def _get_raw_qresult(self, offset):
-        """Returns the raw string of a single QueryResult from a noncommented file."""
+        """Returns the raw bytes string of a single QueryResult from a noncommented file."""
         handle = self._handle
         handle.seek(offset)
         qresult_raw = _as_bytes('')
@@ -638,7 +636,7 @@ class BlastTabIndexer(SearchIndexer):
         return qresult_raw
 
     def _get_raw_qresult_commented(self, offset):
-        """Returns the raw string of a single QueryResult from a commented file."""
+        """Returns the bytes raw string of a single QueryResult from a commented file."""
         handle = self._handle
         handle.seek(offset)
         qresult_raw = _as_bytes('')

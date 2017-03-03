@@ -7,7 +7,6 @@
 
 from __future__ import print_function
 
-__docformat__ = "restructuredtext en"  # Don't just use plain text in epydoc API pages!
 
 from Bio.Application import _Option, _Argument, _Switch, AbstractCommandline
 
@@ -103,7 +102,7 @@ class DialignCommandline(AbstractCommandline):
             _Switch(["-lo", "lo"],
                     "(Long Output) Additional file *.log with information "
                     "about fragments selected for pairwise alignment and "
-                    "about consistency in multi-alignment proceedure."),
+                    "about consistency in multi-alignment procedure."),
             _Switch(["-ma", "ma"],
                     "`mixed alignments' consisting of P-fragments and "
                     "N-fragments if nucleic acid sequences are aligned."),
@@ -137,7 +136,7 @@ class DialignCommandline(AbstractCommandline):
             _Switch(["-nta", "nta"],
                     "`no textual alignment' - textual alignment suppressed. "
                     "This option makes sense if other output files are of "
-                    "intrest -- e.g. the fragment files created with -ff, "
+                    "interest -- e.g. the fragment files created with -ff, "
                     "-fop, -fsm or -lo."),
             _Switch(["-o", "o"],
                     "Fast version, resulting alignments may be slightly "
@@ -161,7 +160,7 @@ class DialignCommandline(AbstractCommandline):
                     "Maximum number of `*' characters indicating degree "
                     "of local similarity among sequences. By default, no "
                     "stars are used but numbers between 0 and 9, instead.",
-                    checker_function = lambda x: x in range(0, 10),
+                    checker_function=lambda x: x in range(0, 10),
                     equate=False),
             _Switch(["-stdo", "stdo"],
                     "Results written to standard output."),
@@ -171,7 +170,7 @@ class DialignCommandline(AbstractCommandline):
                     "options, e.g. -lgs)"),
             _Option(["-thr", "thr"],
                     "Threshold T = x.",
-                    checker_function = lambda x: isinstance(x, int),
+                    checker_function=lambda x: isinstance(x, int),
                     equate=False),
             _Switch(["-xfr", "xfr"],
                     "'exclude fragments' - list of fragments can be "
@@ -184,12 +183,6 @@ class DialignCommandline(AbstractCommandline):
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
 
-def _test():
-    """Run the module's doctests (PRIVATE)."""
-    print("Running modules doctests...")
-    import doctest
-    doctest.testmod()
-    print("Done")
-
 if __name__ == "__main__":
-    _test()
+    from Bio._utils import run_doctest
+    run_doctest()

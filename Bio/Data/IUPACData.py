@@ -4,8 +4,6 @@
 
 """Information about the IUPAC alphabets."""
 
-__docformat__ = "restructuredtext en"
-
 
 protein_letters = "ACDEFGHIKLMNPQRSTVWY"
 extended_protein_letters = "ACDEFGHIKLMNPQRSTVWYBXZJUO"
@@ -299,6 +297,7 @@ extended_protein_weight_ranges, avg_extended_protein_weights = \
 # Taken from http://www.chem.qmul.ac.uk/iupac/AtWt/ & PyMol
 atom_weights = {
     'H': 1.00794,
+    'D': 2.01410,
     'He': 4.002602,
     'Li': 6.941,
     'Be': 9.012182,

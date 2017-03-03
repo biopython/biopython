@@ -14,8 +14,6 @@ from Bio.Data import SCOPData
 from Bio.PDB import Selection
 from Bio.PDB.Polypeptide import is_aa
 
-__docformat__ = "restructuredtext en"
-
 
 class StructureAlignment(object):
     """
@@ -25,7 +23,7 @@ class StructureAlignment(object):
     def __init__(self, fasta_align, m1, m2, si=0, sj=1):
         """
         Attributes:
-    
+
             - fasta_align --- Alignment object
             - m1, m2 --- two models
             - si, sj --- the sequences in the Alignment object that
@@ -82,7 +80,7 @@ class StructureAlignment(object):
         self.duos = duos
 
     def _test_equivalence(self, r1, aa1):
-        "Test if aa in sequence fits aa in structure."
+        """Test if aa in sequence fits aa in structure."""
         resname = r1.get_resname()
         resname = SCOPData.protein_letters_3to1[resname]
         assert(aa1 == resname)

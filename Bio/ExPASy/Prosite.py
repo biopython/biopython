@@ -24,8 +24,6 @@ Classes:
     - Record                Holds Prosite data.
 """
 
-__docformat__ = "restructuredtext en"
-
 
 def parse(handle):
     """Parse Prosite records.
@@ -33,7 +31,8 @@ def parse(handle):
     This function is for parsing Prosite files containing multiple
     records.
 
-    handle   - handle to the file."""
+    handle   - handle to the file.
+    """
     while True:
         record = __read(handle)
         if not record:
@@ -47,8 +46,8 @@ def read(handle):
     This function is for parsing Prosite files containing
     exactly one record.
 
-    handle   - handle to the file."""
-
+    handle   - handle to the file.
+    """
     record = __read(handle)
     # We should have reached the end of the record by now
     remainder = handle.read()

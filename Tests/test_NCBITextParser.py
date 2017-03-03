@@ -14228,10 +14228,10 @@ class TestNCBITextParser(unittest.TestCase):
         descrs = [
         ("sp|P85309.2|CASPD_HPVKA RecName: Full=Capsid protein; AltName: F...", 152, 8e-35),
         ("sp|P83664.2|CAPSD_HPVCO RecName: Full=Capsid protein; AltName: F...", 146, 6e-33),
-        ("gb|AAB03575.1| nucleoprotein",                                        146, 6e-33),
-        ("gb|ABH05070.1| putative nucleocapsid protein [European mountain ...",  83, 8e-14),
-        ("gb|AAW12704.1| nucleoprotein [High Plains virus]",                     73, 8e-11),
-        ("gb|AAW12703.1| nucleoprotein [High Plains virus]",                     73, 8e-11),
+        ("gb|AAB03575.1| nucleoprotein", 146, 6e-33),
+        ("gb|ABH05070.1| putative nucleocapsid protein [European mountain ...", 83, 8e-14),
+        ("gb|AAW12704.1| nucleoprotein [High Plains virus]", 73, 8e-11),
+        ("gb|AAW12703.1| nucleoprotein [High Plains virus]", 73, 8e-11),
         ]
         for (a, b) in zip(record.descriptions, descrs):
             self.assertEqual((a.title, a.score, a.e), b)
@@ -14971,7 +14971,7 @@ class TestNCBITextParser(unittest.TestCase):
             self.assertEqual(len(record.alignments), 1)
             self.assertEqual(len(record.alignments[0].hsps), 3)
             h = record.alignments[0].hsps[0]
-            self.assertTrue("PTSP" + ("-" * 79) + "AYSP" in h.query)
+            self.assertIn("PTSP" + ("-" * 79) + "AYSP", h.query)
             h = record.alignments[0].hsps[1]
             self.assertTrue(h.query.startswith("AYSPTSPAYSPTSPAYSPTSPAYSPTSPAYS----------PTSPAYSPTSPAYSPTSPA"))
             h = record.alignments[0].hsps[2]

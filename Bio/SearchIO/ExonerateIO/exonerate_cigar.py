@@ -7,13 +7,13 @@
 
 import re
 
-from Bio._py3k import _as_bytes, _bytes_to_string
+from Bio._py3k import _bytes_to_string
 
 from ._base import _BaseExonerateParser, _STRAND_MAP
 from .exonerate_vulgar import ExonerateVulgarIndexer
 
 
-__all__ = ['ExonerateCigarParser', 'ExonerateCigarIndexer']
+__all__ = ('ExonerateCigarParser', 'ExonerateCigarIndexer')
 
 
 # precompile regex
@@ -89,7 +89,7 @@ class ExonerateCigarIndexer(ExonerateVulgarIndexer):
     """Indexer class for exonerate cigar lines."""
 
     _parser = ExonerateCigarParser
-    _query_mark = _as_bytes('cigar')
+    _query_mark = b"cigar"
 
     def get_qresult_id(self, pos):
         """Returns the query ID of the nearest cigar line."""

@@ -83,8 +83,11 @@ class MafftApplication(unittest.TestCase):
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         stdoutdata, stderrdata = cmdline()
         self.assertTrue(stdoutdata.startswith(">gi|1348912|gb|G26680|G26680"))
-        self.assertTrue("Progressive alignment ..." in stderrdata, stderrdata)
-        self.assertTrue("$#=0" not in stderrdata)
+        # Used to get "Progressive alignment ..." but in v7.245
+        # became "Progressive alignment 1/2..." and "Progressive alignment 2/2..."
+        self.assertTrue(("Progressive alignment ..." in stderrdata) or
+                        ("Progressive alignment 1/" in stderrdata), stderrdata)
+        self.assertNotIn("$#=0", stderrdata)
 
     def test_Mafft_with_options(self):
         """Simple round-trip through app with infile and options.
@@ -97,7 +100,7 @@ class MafftApplication(unittest.TestCase):
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         stdoutdata, stderrdata = cmdline()
         self.assertTrue(stdoutdata.startswith(">gi|1348912|gb|G26680|G26680"))
-        self.assertTrue("$#=0" not in stderrdata)
+        self.assertNotIn("$#=0", stderrdata)
 
     def test_Mafft_with_Clustalw_output(self):
         """Simple round-trip through app with clustal output"""
@@ -110,7 +113,7 @@ class MafftApplication(unittest.TestCase):
         # e.g. "CLUSTAL format alignment by MAFFT ..."
         # or "CLUSTAL (-like) formatted alignment by MAFFT FFT-NS-2 (v6.240)"
         self.assertTrue(stdoutdata.startswith("CLUSTAL"), stdoutdata)
-        self.assertTrue("$#=0" not in stderrdata)
+        self.assertNotIn("$#=0", stderrdata)
 
     if version_major >= 7:
         def test_Mafft_with_PHYLIP_output(self):
@@ -127,7 +130,7 @@ class MafftApplication(unittest.TestCase):
                             stdoutdata)
             self.assertTrue("gi|1348912|gb|G26680|G26680" not in stdoutdata,
                             stdoutdata)
-            self.assertTrue("$#=0" not in stderrdata)
+            self.assertNotIn("$#=0", stderrdata)
 
         def test_Mafft_with_PHYLIP_namelength(self):
             """Check PHYLIP with --namelength"""
@@ -141,7 +144,7 @@ class MafftApplication(unittest.TestCase):
                             stdoutdata.startswith(" 3 70"), stdoutdata)
             self.assertTrue("gi|1348912|gb|G26680|G26680" in stdoutdata,
                             stdoutdata)
-            self.assertTrue("$#=0" not in stderrdata)
+            self.assertNotIn("$#=0", stderrdata)
 
     def test_Mafft_with_complex_command_line(self):
         """Round-trip with complex command line."""
@@ -160,14 +163,14 @@ class MafftApplication(unittest.TestCase):
         cmdline.set_parameter("--treeout", True)
         cmdline.set_parameter("nuc", True)
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
-        self.assertEqual(str(cmdline), mafft_exe
-                         + " --localpair --weighti 4.2 --retree 5 "
-                         + "--maxiterate 200 --nofft --op 2.04 --ep 0.51"
-                         + " --lop 0.233 --lep 0.2 --reorder --treeout"
-                         + " --nuc Fasta/f002")
+        self.assertEqual(str(cmdline), mafft_exe +
+                         " --localpair --weighti 4.2 --retree 5 " +
+                         "--maxiterate 200 --nofft --op 2.04 --ep 0.51" +
+                         " --lop 0.233 --lep 0.2 --reorder --treeout" +
+                         " --nuc Fasta/f002")
         stdoutdata, stderrdata = cmdline()
         self.assertTrue(stdoutdata.startswith(">gi|1348912|gb|G26680|G26680"))
-        self.assertTrue("$#=0" not in stderrdata)
+        self.assertNotIn("$#=0", stderrdata)
 
 
 if __name__ == "__main__":

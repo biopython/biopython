@@ -1,0 +1,110 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<uniprot xmlns="http://uniprot.org/uniprot" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://uniprot.org/uniprot http://www.uniprot.org/support/docs/uniprot.xsd">
+<entry dataset="Swiss-Prot" created="2004-07-19" modified="2015-01-07" version="25">
+<accession>P84001</accession>
+<name>29C0_ANCSP</name>
+<protein>
+<recommendedName>
+<fullName>U3-ctenitoxin-Asp1a</fullName>
+<shortName>U3-CNTX-Asp1a</shortName>
+</recommendedName>
+<alternativeName>
+<fullName>Venom protein ANC29C0</fullName>
+</alternativeName>
+</protein>
+<organism>
+<name type="scientific">Ancylometes sp.</name>
+<name type="common">South American fishing spider</name>
+<dbReference type="NCBI Taxonomy" id="280265"/>
+<lineage>
+<taxon>Eukaryota</taxon>
+<taxon>Metazoa</taxon>
+<taxon>Ecdysozoa</taxon>
+<taxon>Arthropoda</taxon>
+<taxon>Chelicerata</taxon>
+<taxon>Arachnida</taxon>
+<taxon>Araneae</taxon>
+<taxon>Araneomorphae</taxon>
+<taxon>Entelegynae</taxon>
+<taxon>Lycosoidea</taxon>
+<taxon>Ctenidae</taxon>
+<taxon>Ancylometes</taxon>
+</lineage>
+</organism>
+<reference key="1" evidence="3">
+<citation type="submission" date="2004-06" db="UniProtKB">
+<title>Protein ANC29C0 from venom of South American fishing spider (Ancylometes spp.) has sequence similarities to neurotoxic peptide Caeron precursor from Bark spider (Caerostris extrusa).</title>
+<authorList>
+<person name="Richardson M."/>
+<person name="Pimenta A.M.C."/>
+<person name="Bemquerer M.P."/>
+<person name="Santoro M.M."/>
+<person name="Figueiredo S.G."/>
+<person name="Cordeiro M.N."/>
+</authorList>
+</citation>
+<scope>PROTEIN SEQUENCE</scope>
+<scope>SUBCELLULAR LOCATION</scope>
+<scope>TISSUE SPECIFICITY</scope>
+<scope>MASS SPECTROMETRY</scope>
+<source>
+<tissue>Venom</tissue>
+</source>
+</reference>
+<comment type="function">
+<text evidence="2">Possible neurotoxin.</text>
+</comment>
+<comment type="subcellular location">
+<subcellularLocation>
+<location evidence="1">Secreted</location>
+</subcellularLocation>
+</comment>
+<comment type="tissue specificity">
+<text evidence="1">Expressed by the venom gland.</text>
+</comment>
+<comment type="mass spectrometry" mass="9571" method="Electrospray" evidence="1">
+<location>
+<begin position="1"/>
+<end status="unknown"/>
+</location>
+</comment>
+<dbReference type="ArachnoServer" id="AS000014">
+<property type="toxin name" value="U3-ctenitoxin-Asp1a"/>
+</dbReference>
+<dbReference type="GO" id="GO:0005576">
+<property type="term" value="C:extracellular region"/>
+<property type="evidence" value="ECO:0000501"/>
+<property type="project" value="UniProtKB-SubCell"/>
+</dbReference>
+<proteinExistence type="evidence at protein level"/>
+<keyword id="KW-0903">Direct protein sequencing</keyword>
+<keyword id="KW-0528">Neurotoxin</keyword>
+<keyword id="KW-0964">Secreted</keyword>
+<keyword id="KW-0800">Toxin</keyword>
+<feature type="chain" description="U3-ctenitoxin-Asp1a" id="PRO_0000087682">
+<location>
+<begin position="1"/>
+<end position="50" status="greater than"/>
+</location>
+</feature>
+<feature type="non-terminal residue" evidence="2">
+<location>
+<position position="50"/>
+</location>
+</feature>
+<evidence key="1" type="ECO:0000269">
+<source ref="1"/>
+</evidence>
+<evidence key="2" type="ECO:0000303">
+<source ref="1"/>
+</evidence>
+<evidence key="3" type="ECO:0000305"/>
+<sequence length="50" mass="5679" checksum="3B06738CA0940B53" modified="2004-07-19" version="1" fragment="single">
+ANACTKQADCAEDECCLDNLFFKRPYCEMRYGAGKRCAAASVYKEDKDLY
+</sequence>
+</entry>
+<copyright>
+Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
+Distributed under the Creative Commons Attribution-NoDerivs License
+</copyright>
+</uniprot>

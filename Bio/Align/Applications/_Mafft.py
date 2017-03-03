@@ -7,7 +7,6 @@
 
 from __future__ import print_function
 
-__docformat__ = "restructuredtext en"
 
 import os
 from Bio.Application import _Option, _Switch, _Argument, AbstractCommandline
@@ -143,6 +142,11 @@ class MafftCommandline(AbstractCommandline):
             _Option(["--maxiterate", "maxiterate"],
                     "Number cycles of iterative refinement are performed. "
                     "Default: 0",
+                    checker_function=lambda x: isinstance(x, int),
+                    equate=False),
+            # Number of threads to use. Default: 1
+            _Option(["--thread", "thread"],
+                    "Number of threads to use. Default: 1",
                     checker_function=lambda x: isinstance(x, int),
                     equate=False),
             # Use FFT approximation in group-to-group alignment. Default: on

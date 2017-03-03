@@ -114,9 +114,7 @@ from Bio.SearchIO._index import SearchIndexer
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 
 
-__all__ = ['FastaM10Parser', 'FastaM10Indexer']
-
-__docformat__ = "restructuredtext en"
+__all__ = ('FastaM10Parser', 'FastaM10Indexer')
 
 
 # precompile regex patterns
@@ -153,7 +151,7 @@ _STATE_HIT_BLOCK = 2
 _STATE_CONS_BLOCK = 3
 
 
-def _set_qresult_hits(qresult, hit_rows=[]):
+def _set_qresult_hits(qresult, hit_rows=()):
     """Helper function for appending Hits without alignments into QueryResults."""
     for hit_row in hit_rows:
         hit_id, remainder = hit_row.split(' ', 1)
@@ -523,7 +521,7 @@ class FastaM10Indexer(SearchIndexer):
         handle.seek(0)
         start_offset = handle.tell()
         qresult_key = None
-        query_mark = _as_bytes('>>>')
+        query_mark = b">>>"
 
         while True:
             line = handle.readline()
@@ -536,17 +534,18 @@ class FastaM10Indexer(SearchIndexer):
                 start_offset = end_offset - len(line)
             # yield whenever we encounter a new query or at the end of the file
             if qresult_key is not None:
-                if (not peekline.startswith(query_mark)
-                        and query_mark in peekline) or not line:
+                if (not peekline.startswith(query_mark) and
+                    query_mark in peekline) or not line:
                     yield qresult_key, start_offset, end_offset - start_offset
                     if not line:
                         break
                     start_offset = end_offset
 
     def get_raw(self, offset):
+        """Return the raw record from the file as a bytes string."""
         handle = self._handle
-        qresult_raw = _as_bytes('')
-        query_mark = _as_bytes('>>>')
+        qresult_raw = b""
+        query_mark = b">>>"
 
         # read header first
         handle.seek(0)
@@ -571,7 +570,7 @@ class FastaM10Indexer(SearchIndexer):
                 break
 
         # append mock end marker to qresult_raw, since it's not always present
-        return qresult_raw + _as_bytes('>>><<<\n')
+        return qresult_raw + b">>><<<\n"
 
 
 # if not used as a module, run the doctest

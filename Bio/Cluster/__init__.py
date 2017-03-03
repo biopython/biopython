@@ -5,9 +5,7 @@
 
 import numpy
 
-from Bio.Cluster.cluster import *
-
-__docformat__ = "restructuredtext en"
+from Bio.Cluster.cluster import *  # noqa - lots coming from C code
 
 
 def _treesort(order, nodeorder, nodecounts, tree):
@@ -147,10 +145,9 @@ Cluster/TreeView program. A Record has the following members:
     def __init__(self, handle=None):
         """Read gene expression data from the file handle and return a Record.
 
-The file should be in the format defined for Michael Eisen's
-Cluster/TreeView program.
-
-"""
+        The file should be in the format defined for Michael Eisen's
+        Cluster/TreeView program.
+        """
         self.data = None
         self.mask = None
         self.geneid = None
@@ -313,7 +310,6 @@ Return values:
   - nfound:    the number of times this solution was found.
 
 """
-
         if transpose == 0:
             weight = self.eweight
         else:
@@ -360,7 +356,6 @@ Return values:
       the SOM grid cell with coordinates (ix, iy).
 
 """
-
         if transpose == 0:
             weight = self.eweight
         else:
@@ -397,7 +392,7 @@ Return values:
         return clustercentroids(self.data, self.mask, clusterid, method,
                                 transpose)
 
-    def clusterdistance(self, index1=[0], index2=[0], method='a', dist='e',
+    def clusterdistance(self, index1=0, index2=0, method='a', dist='e',
                         transpose=0):
         """Calculate the distance between two clusters.
 
@@ -437,7 +432,6 @@ Return values:
     if equal to 1: clusters of microarrays (columns) are considered.
 
 """
-
         if transpose == 0:
             weight = self.eweight
         else:
@@ -526,8 +520,8 @@ Arguments:
         if geneclusters is not None and expclusters is not None and \
            type(geneclusters) != type(expclusters):
             raise ValueError("found one k-means and one hierarchical "
-                           + "clustering solution in geneclusters and "
-                           + "expclusters")
+                             "clustering solution in geneclusters and "
+                             "expclusters")
         gid = 0
         aid = 0
         filename = jobname
@@ -643,8 +637,7 @@ Arguments:
 def read(handle):
     """Read gene expression data from the file handle and return a Record.
 
-The file should be in the file format defined for Michael Eisen's
-Cluster/TreeView program.
-
-"""
+    The file should be in the file format defined for Michael Eisen's
+    Cluster/TreeView program.
+    """
     return Record(handle)

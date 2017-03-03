@@ -28,7 +28,6 @@ class Motif(motifs.Motif):
                  species=None, tax_group=None, acc=None, data_type=None,
                  medline=None, pazar_id=None, comment=None):
         """Construct a JASPAR Motif instance."""
-
         motifs.Motif.__init__(self, alphabet, instances, counts)
         self.name = name
         self.matrix_id = matrix_id
@@ -127,7 +126,7 @@ class Record(list):
         return "\n".join(str(the_motif) for the_motif in self)
 
     def to_dict(self):
-        """Return the list of matrices as a dictionnary of matrices."""
+        """Return the list of matrices as a dictionary of matrices."""
         dic = {}
         for motif in self:
             dic[motif.matrix_id] = motif
@@ -168,7 +167,11 @@ def write(motifs, format):
     elif format == 'jaspar':
         for m in motifs:
             counts = m.counts
-            line = ">{0} {1}\n".format(m.matrix_id, m.name)
+            try:
+                matrix_id = m.matrix_id
+            except AttributeError:
+                matrix_id = None
+            line = ">{0} {1}\n".format(matrix_id, m.name)
             lines.append(line)
             for letter in letters:
                 terms = ["{0:6.2f}".format(value) for value in counts[letter]]
@@ -255,7 +258,6 @@ def _read_jaspar(handle):
                 2	19	11	50	29	47	22	81	1	6
 
     """
-
     alphabet = dna
     counts = {}
 
@@ -344,7 +346,6 @@ def split_jaspar_id(id):
     Components are base ID and version number, e.g. 'MA0047.2' is returned as
     ('MA0047', 2).
     """
-
     id_split = id.split('.')
 
     base_id = None

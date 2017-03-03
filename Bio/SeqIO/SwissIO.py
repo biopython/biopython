@@ -23,8 +23,6 @@ from Bio import Alphabet
 from Bio import SeqFeature
 from Bio import SwissProt
 
-__docformat__ = "restructuredtext en"
-
 
 def _make_position(location_string, offset=0):
     """Turn a Swiss location position into a SeqFeature position object (PRIVATE).
@@ -79,6 +77,9 @@ def SwissIterator(handle):
 
     For consistency with BioPerl and EMBOSS we call this the "swiss"
     format. See also the SeqIO support for "uniprot-xml" format.
+
+    Rather than calling it directly, you are expected to use this
+    parser via Bio.SeqIO.parse(..., format="swiss") instead.
     """
     swiss_records = SwissProt.parse(handle)
     for swiss_record in swiss_records:
@@ -143,24 +144,3 @@ def SwissIterator(handle):
         if swiss_record.keywords:
             record.annotations['keywords'] = swiss_record.keywords
         yield record
-
-if __name__ == "__main__":
-    print("Quick self test...")
-
-    example_filename = "../../Tests/SwissProt/sp008"
-
-    import os
-    if not os.path.isfile(example_filename):
-        print("Missing test file %s" % example_filename)
-    else:
-        # Try parsing it!
-        with open(example_filename) as handle:
-            records = SwissIterator(handle)
-            for record in records:
-                print(record.name)
-                print(record.id)
-                print(record.annotations['keywords'])
-                print(repr(record.annotations['organism']))
-                print(str(record.seq)[:20] + "...")
-                for f in record.features:
-                    print(f)

@@ -11,7 +11,6 @@
 See: http://www.nexml.org
 """
 
-__docformat__ = "restructuredtext en"
 
 from Bio._py3k import StringIO
 
@@ -131,7 +130,6 @@ class Parser(object):
 
     def parse(self, values_are_confidence=False, rooted=False):
         """Parse the text stream this object was initialized with."""
-
         nexml_doc = ElementTree.iterparse(self.handle, events=('end',))
 
         for event, node in nexml_doc:
@@ -185,8 +183,8 @@ class Parser(object):
                     # with the first node that's not a child of any other nodes
                     rooted = False
                     possible_roots = (node.attrib['id'] for node in nodes
-                                      if node.attrib['id'] in srcs
-                                      and not node.attrib['id'] in tars)
+                                      if node.attrib['id'] in srcs and
+                                      node.attrib['id'] not in tars)
                     root = next(possible_roots)
                 else:
                     rooted = True
@@ -201,7 +199,6 @@ class Parser(object):
         traversing the  entire tree and creating a nested structure of NeXML.Clade
         objects.
         """
-
         this_node = node_dict[node]
         clade = NeXML.Clade(**this_node)
 
@@ -232,7 +229,6 @@ class Writer(object):
 
     def write(self, handle, cdao_to_obo=True, **kwargs):
         """Write this instance's trees to a file handle."""
-
         self.cdao_to_obo = cdao_to_obo
 
         # set XML namespaces

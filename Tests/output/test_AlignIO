@@ -4,6 +4,7 @@ Testing reading clustal format file Clustalw/cw02.aln with 1 alignments
   MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVN...SVV gi|4959044|gb|AAD34209.1|AF069
   ---------MSPQTETKASVGFKAGVKEYKLTYYTP...--- gi|671626|emb|CAA85685.1|
  Checking can write/read as 'clustal' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip' format
@@ -22,6 +23,7 @@ Testing reading clustal format file Clustalw/opuntia.aln with 1 alignments
   ||||||| ...
   AAAAAAA alignment column 155
  Checking can write/read as 'clustal' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip' format
@@ -40,6 +42,7 @@ Testing reading clustal format file Clustalw/hedgehog.aln with 1 alignments
   ||||| ...
   ---SS alignment column 446
  Checking can write/read as 'clustal' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip' format
@@ -53,6 +56,7 @@ Testing reading clustal format file Clustalw/odd_consensus.aln with 1 alignments
   ------------------------------------...TAG AT3G20900.1-CDS
   ATGAACAAAGTAGCGAGGAAGAACAAAACATCAGGT...TAG AT3G20900.1-SEQ
  Checking can write/read as 'clustal' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip' format
@@ -73,6 +77,7 @@ Testing reading clustal format file Clustalw/protein.aln with 1 alignments
   |||||||||||||||||||| ...
   -------------------T alignment column 410
  Checking can write/read as 'clustal' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip' format
@@ -93,6 +98,7 @@ Testing reading clustal format file Clustalw/promals3d.aln with 1 alignments
   |||||||||||||||||||| ...
   -T------------------ alignment column 413
  Checking can write/read as 'clustal' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip' format
@@ -109,6 +115,7 @@ Testing reading fasta format file GFF/multi.fna with 1 alignments
   GGGGCCCC test2
   AAACACAC test3
  Checking can write/read as 'clustal' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip' format
@@ -127,6 +134,7 @@ Testing reading nexus format file Nexus/test_Nexus_input.nex with 1 alignments
   ||||||||| ...
   tt--?ag?c alignment column 47
  Checking can write/read as 'clustal' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'phylip-relaxed' format
@@ -140,6 +148,7 @@ Testing reading nexus format file Nexus/codonposset.nex with 1 alignments
   AAAAAGGCATTGTGGTGGGAAT Aegotheles
   ?????????TTGTGGTGGGAAT Aerodramus
  Checking can write/read as 'clustal' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'phylip-relaxed' format
@@ -152,6 +161,7 @@ Testing reading stockholm format file Stockholm/simple.sth with 1 alignments
   UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-UCA...UGU AP001509.1
   AAAAUUGAAUAUCGUUUUACUUGUUUAU-GUCGUGA...GAU AE007476.1
  Checking can write/read as 'clustal' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip' format
@@ -170,6 +180,7 @@ Testing reading stockholm format file Stockholm/funny.sth with 1 alignments
   |||||| ...
   SYSEEE alignment column 42
  Checking can write/read as 'clustal' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip' format
@@ -188,6 +199,7 @@ Testing reading phylip format file Phylip/reference_dna.phy with 1 alignments
   |||||| ...
   CTTTTC alignment column 12
  Checking can write/read as 'clustal' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip' format
@@ -207,6 +219,7 @@ Testing reading phylip format file Phylip/reference_dna2.phy with 1 alignments
   |||||| ...
   CTTTTC alignment column 38
  Checking can write/read as 'clustal' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip' format
@@ -226,6 +239,7 @@ Testing reading phylip format file Phylip/hennigian.phy with 1 alignments
   |||||||||| ...
   AAAAAAAAAA alignment column 39
  Checking can write/read as 'clustal' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip' format
@@ -244,6 +258,7 @@ Testing reading phylip format file Phylip/horses.phy with 1 alignments
   |||||||||| ...
   AAAAAAAAAA alignment column 39
  Checking can write/read as 'clustal' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip' format
@@ -263,6 +278,7 @@ Testing reading phylip format file Phylip/random.phy with 1 alignments
   |||||||||| ...
   AAAAAAAAAA alignment column 39
  Checking can write/read as 'clustal' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip' format
@@ -277,6 +293,7 @@ Testing reading phylip format file Phylip/interlaced.phy with 1 alignments
   MAHARVLLLALAVLATAAVAVASSSSFADSNPIRPV...VAA ALEU_HORVU
   ------MWATLPLLCAGAWLLGV--------PVCGA...PLV CATH_HUMAN
  Checking can write/read as 'clustal' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip' format
@@ -292,6 +309,7 @@ Testing reading phylip format file Phylip/interlaced2.phy with 1 alignments
   TSPASIRPPAGPSSRPAMVSSR--RPSPPPPRRPPG...SHE IXI_236
   TSPASLRPPAGPSSRPAMVSSRR-RPSPPGPRRPT-...SHE IXI_237
  Checking can write/read as 'clustal' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip' format
@@ -310,6 +328,7 @@ Testing reading phylip-relaxed format file ExtendedPhylip/primates.phyx with 1 a
   |||||||||||| ...
   TTTTTTTTTTTT alignment column 897
  Checking can write/read as 'clustal' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip' format
@@ -324,6 +343,7 @@ Testing reading phylip-sequential format file Phylip/sequential.phy with 1 align
   MAHARVLLLALAVLATAAVAVASSSSFADSNPIRPV...VAA ALEU_HORVU
   ------MWATLPLLCAGAWLLGV--------PVCGA...PLV CATH_HUMAN
  Checking can write/read as 'clustal' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip' format
@@ -339,6 +359,7 @@ Testing reading phylip-sequential format file Phylip/sequential2.phy with 1 alig
   TSPASIRPPAGPSSRPAMVSSR--RPSPPPPRRPPG...SHE IXI_236
   TSPASLRPPAGPSSRPAMVSSRR-RPSPPGPRRPT-...SHE IXI_237
  Checking can write/read as 'clustal' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip' format
@@ -354,6 +375,7 @@ Testing reading emboss format file Emboss/alignret.txt with 1 alignments
   TSPASIRPPAGPSSRPAMVSSR--RPSPPPPRRPPG...SHE IXI_236
   TSPASLRPPAGPSSRPAMVSSRR-RPSPPGPRRPT-...SHE IXI_237
  Checking can write/read as 'clustal' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip' format
@@ -377,6 +399,7 @@ Testing reading emboss format file Emboss/needle.txt with 5 alignments
   KILIVDDQYGIRILLNEVFNKEGYQTFQAANGLQAL...--- ref_rec
   TVLLVEDEEGVRKLVRGILSRQGYHVLEATSGEEAL...KRQ gi|94970041|receiver
  Checking can write/read as 'clustal' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: We can only write one Alignment to a Nexus file.
  Checking can write/read as 'phylip' format
@@ -390,6 +413,7 @@ Testing reading emboss format file Emboss/needle_asis.txt with 1 alignments
   TATTTTTTGGATTTTTTTCTAGATTTTCTAGGTTAT...GAA asis
   ------------------------------------...GAA asis
  Checking can write/read as 'clustal' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip' format
@@ -407,6 +431,7 @@ Testing reading emboss format file Emboss/water.txt with 1 alignments
   TSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTG...SHE IXI_234
   TSPASIRPPAGPSSR---------RPSPPGPRRPTG...SHE IXI_235
  Checking can write/read as 'clustal' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip' format
@@ -420,6 +445,7 @@ Testing reading emboss format file Emboss/water2.txt with 1 alignments
   CGTTTGAGT-CTGGGATG asis
   CGTTTGAGTACTGGGATG asis
  Checking can write/read as 'clustal' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip' format
@@ -437,6 +463,7 @@ Testing reading emboss format file Emboss/matcher_simple.txt with 1 alignments
   GPPPQSPDENRAGESS AF069992_1
   GVPPEEAGAAVAAESS CAA85685.1
  Checking can write/read as 'clustal' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip' format
@@ -460,6 +487,7 @@ Testing reading emboss format file Emboss/matcher_pair.txt with 5 alignments
   VKAAWGKVGA HBA_HUMAN
   VQAAYQKVVA HBB_HUMAN
  Checking can write/read as 'clustal' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: We can only write one Alignment to a Nexus file.
  Checking can write/read as 'phylip' format
@@ -482,6 +510,7 @@ Testing reading fasta-m10 format file Fasta/output001.m10 with 4 alignments
   SELHSKLPKSIDKIHEDIKKQLSC-SLIMKKIDVEM...TYC gi|10955265|ref|NP_052606.1|
   SRINSDVARRIPGIHRDPKDRLSSLKQVEEALDMLI...EYC gi|152973545|ref|YP_001338596.1|
  Checking can write/read as 'clustal' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: We can only write one Alignment to a Nexus file.
  Checking can write/read as 'phylip' format
@@ -505,6 +534,7 @@ Testing reading fasta-m10 format file Fasta/output002.m10 with 6 alignments
   QYIMTTSNGDRVRAKIYKRGSIQFQGKYLQIASLIN...REI gi|10955265|ref|NP_052606.1|
   EFIRLLSDHDQFEKDQISELTVAANALKLEVAK--N...KKV gi|15833861|ref|NP_312634.1|
  Checking can write/read as 'clustal' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: We can only write one Alignment to a Nexus file.
  Checking can write/read as 'phylip' format
@@ -524,6 +554,7 @@ Testing reading fasta-m10 format file Fasta/output003.m10 with 3 alignments
   VFGSFEQPKGEHLSGQVSEQ--RDTAFADQNEQVIR...QAM gi|152973841|ref|YP_001338878.1|
   VYTSFN---GEKFSSYTLNKVTKTDEYNDLSELSAS...KGI gi|10955264|ref|NP_052605.1|
  Checking can write/read as 'clustal' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: We can only write one Alignment to a Nexus file.
  Checking can write/read as 'phylip' format
@@ -537,6 +568,7 @@ Testing reading fasta-m10 format file Fasta/output004.m10 with 1 alignments
   AAAAAAGATAAAAAATATCAAATAGAAGCAATAAAA...TCA ref|NC_002127.1|:c1351-971
   AGAGAAAATAAAACAAGTAATAAAATATTAATGGAA...ACA ref|NC_002695.1|:1970775-1971404
  Checking can write/read as 'clustal' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip' format
@@ -552,6 +584,7 @@ Testing reading fasta-m10 format file Fasta/output005.m10 with 1 alignments
   IKNKDKTLFIVYAT-DIYSPSEFFSKIESDLKKKKS...LSK gi|10955264|ref|NP_052605.1|
   IKDELPVAFCSWASLDLECEVKYINDVTSLYAKDWM...MSE gi|10955282|ref|NP_052623.1|
  Checking can write/read as 'clustal' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip' format
@@ -565,6 +598,7 @@ Testing reading fasta-m10 format file Fasta/output006.m10 with 1 alignments
   GCAACGCTTCAAGAACTGGAATTAGGAACCGTGACA...CAT query
   GCAACGCTTCAAGAACTGGAATTAGGAACCGTGACA...CAT gi|116660610|gb|EG558221.1|EG558221
  Checking can write/read as 'clustal' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip' format
@@ -588,6 +622,7 @@ Testing reading fasta-m10 format file Fasta/output007.m10 with 9 alignments
   ISGTYKGIDFLIKLMPSGGNTTIGRASGQNNTYFDE...FSD gi|10955265|ref|NP_052606.1|
   IDGVITAFD-LRTGMNISKDKVVAQIQGMDPVW---...YPD gi|152973505|ref|YP_001338556.1|
  Checking can write/read as 'clustal' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: We can only write one Alignment to a Nexus file.
  Checking can write/read as 'phylip' format
@@ -611,6 +646,7 @@ Testing reading fasta-m10 format file Fasta/output008.m10 with 12 alignments
   AQQQESATTQKAEKEVTRMVIIMVIAFLICW sp|P08100|OPSD_HUMAN
   SQQIRNATTMMMTMRVTSFSAFWVVADSCCW gi|283855822|gb|GQ290312.1|
  Checking can write/read as 'clustal' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: We can only write one Alignment to a Nexus file.
  Checking can write/read as 'phylip' format
@@ -629,6 +665,7 @@ Testing reading ig format file IntelliGenetics/VIF_mase-pro.txt with 1 alignment
   |||||||||||||||| ...
   HHHHHHH-AAAAL-R- alignment column 297
  Checking can write/read as 'clustal' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip' format
@@ -642,6 +679,7 @@ Testing reading pir format file NBRF/clustalw.pir with 1 alignments
   ------------------------------------...--- 804Angiostrongylus_cantonensis
   ------------------------------------...--- 815Parelaphostrongylus_odocoil
  Checking can write/read as 'clustal' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'phylip-relaxed' format
@@ -649,4 +687,117 @@ Testing reading pir format file NBRF/clustalw.pir with 1 alignments
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'fasta' format
  Checking can write/read as 'tab' format
+Testing reading maf format file MAF/humor.maf with 2 alignments
+ Alignment 0, with 3 sequences of length 5486
+  gcacagcctttactccctgactgcgtttatattctg...CCG NM_006987
+  gcacagcctttactccctgactgcgtttatattctg...TTG mm3
+  gcacagcctttactccctgactgcgtttatattctg...CCG rn3
+ Alignment 1, with 3 sequences of length 5753
+  tttgtccatgttggtcaggctggtctcgaactcccc...GGT NM_018289
+  tttgtccatgttggtcaggctggtctcgaactcccc...GGT mm3
+  tttgtccatgttggtcaggctggtctcgaactcccc...GGT rn3
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'maf' format
+ Checking can write/read as 'nexus' format
+ Failed: We can only write one Alignment to a Nexus file.
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'phylip-relaxed' format
+ Checking can write/read as 'phylip-sequential' format
+ Checking can write/read as 'stockholm' format
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'tab' format
+Testing reading maf format file MAF/bug2453.maf with 3 alignments
+ Alignment 0, with 5 sequences of length 42
+  AAA-- alignment column 0
+  AAAAA alignment column 1
+  AAAAA alignment column 2
+  ---T- alignment column 3
+  GGGGG alignment column 4
+  ||||| ...
+  GGGGG alignment column 41
+ Alignment 1, with 5 sequences of length 6
+  TTTTt alignment column 0
+  AAAAa alignment column 1
+  AAAAa alignment column 2
+  AAAAg alignment column 3
+  GGGGg alignment column 4
+  ||||| ...
+  AAAAa alignment column 5
+ Alignment 2, with 4 sequences of length 13
+  gcagctgaaaaca hg16.chr7
+  gcagctgaaaaca panTro1.chr6
+  gcagctgaaaaca baboon
+  ACAGCTGAAAATA mm4.chr6
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'maf' format
+ Checking can write/read as 'nexus' format
+ Failed: We can only write one Alignment to a Nexus file.
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'phylip-relaxed' format
+ Checking can write/read as 'phylip-sequential' format
+ Checking can write/read as 'stockholm' format
+Testing reading maf format file MAF/ucsc_test.maf with 3 alignments
+ Alignment 0, with 5 sequences of length 42
+  AAA-- alignment column 0
+  AAAAA alignment column 1
+  AAAAA alignment column 2
+  ---T- alignment column 3
+  GGGGG alignment column 4
+  ||||| ...
+  GGGGG alignment column 41
+ Alignment 1, with 5 sequences of length 6
+  TTTTt alignment column 0
+  AAAAa alignment column 1
+  AAAAa alignment column 2
+  AAAAg alignment column 3
+  GGGGg alignment column 4
+  ||||| ...
+  AAAAa alignment column 5
+ Alignment 2, with 4 sequences of length 13
+  gcagctgaaaaca hg16.chr7
+  gcagctgaaaaca panTro1.chr6
+  gcagctgaaaaca baboon
+  ACAGCTGAAAATA mm4.chr6
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'maf' format
+ Checking can write/read as 'nexus' format
+ Failed: We can only write one Alignment to a Nexus file.
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'phylip-relaxed' format
+ Checking can write/read as 'phylip-sequential' format
+ Checking can write/read as 'stockholm' format
+Testing reading maf format file MAF/ucsc_mm9_chr10.maf with 48 alignments
+ Alignment 0, with 2 sequences of length 164
+  TCATAGGTATTTATTTTTAAATATGGTTTGCTTTAT...GTT mm9.chr10
+  TCACAGATATTTACTATTAAATATGGTTTGTTATAT...GTT oryCun1.scaffold_133159
+ Alignment 1, with 4 sequences of length 466
+  AGTCTTTCCAATGGGACCTGTGAGTCCTAACTATGC...CTG mm9.chr10
+  AGTCTTCATAAGTGGAAATATAAGTTTTAATTATTC...TTC ponAbe2.chr6
+  AGTCTTCATAAGTGGAAATATAAGTTTTAATTATTC...TTC panTro2.chr6
+  AGTCTTCATAAGTGGAAATATAAGTTTTAATTATTC...TTC hg18.chr6
+ Alignment 2, with 5 sequences of length 127
+  TTTTT alignment column 0
+  GGGGG alignment column 1
+  GGGGG alignment column 2
+  GGGGG alignment column 3
+  TTTTC alignment column 4
+  ||||| ...
+  CCCCC alignment column 126
+ ...
+ Alignment 47, with 6 sequences of length 46
+  TTTTTT alignment column 0
+  GGGGGG alignment column 1
+  TTTTTT alignment column 2
+  TTTTTT alignment column 3
+  TGGGAT alignment column 4
+  |||||| ...
+  tTTTT- alignment column 45
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'maf' format
+ Checking can write/read as 'nexus' format
+ Failed: We can only write one Alignment to a Nexus file.
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'phylip-relaxed' format
+ Checking can write/read as 'phylip-sequential' format
+ Checking can write/read as 'stockholm' format
 Finished tested reading files

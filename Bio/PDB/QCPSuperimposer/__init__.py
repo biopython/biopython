@@ -11,20 +11,13 @@ Quaternion Characteristic Polynomial, which is used in the algorithm.
 
 from __future__ import print_function
 
-import warnings
-
-from Bio import BiopythonExperimentalWarning
 from numpy import dot, sqrt, array, matrix, inner, zeros
 from .qcprotmodule import FastCalcRMSDAndRotation
 
-warnings.warn('Bio.PDB.QCPSuperimposer is an experimental submodule which may undergo '
-              'significant changes prior to its future official release.',
-              BiopythonExperimentalWarning)
-
 
 class QCPSuperimposer(object):
+    """Quaternion Characteristic Polynomial (QCP) Superimposer.
 
-    """
     QCPSuperimposer finds the best rotation and translation to put
     two point sets on top of each other (minimizing the RMSD). This is
     eg. useful to superimposing 3D structures of proteins.
@@ -54,7 +47,7 @@ class QCPSuperimposer(object):
         self.init_rms = None
 
     def _rms(self, coords1, coords2):
-        "Return rms deviations between coords1 and coords2."
+        """Return rms deviations between coords1 and coords2."""
         diff = coords1 - coords2
         l = coords1.shape[0]
         return sqrt(sum(dot(diff, diff)) / l)
@@ -68,19 +61,20 @@ class QCPSuperimposer(object):
     def _align(self, centered_coords1, centered_coords2):
         (E0, A) = self._inner_product(centered_coords1, centered_coords2)
         (rmsd, r0, r1, r2, r3, r4, r5, r6, r7, r8, q1, q2, q3, q4) = FastCalcRMSDAndRotation(
-            A[0][0], A[0][1], A[0][2], A[1][0], A[1][1], A[1][2], A[2][0], A[2][1], A[2][2], E0, len(centered_coords1), -1.0)
+            A[0][0], A[0][1], A[0][2], A[1][0], A[1][1], A[1][2], A[2][0], A[2][1], A[2][2],
+            E0, len(centered_coords1), -1.0)
         rot = array([r0, r1, r2, r3, r4, r5, r6, r7, r8]).reshape(3, 3)
         return (rmsd, rot.T, [q1, q2, q3, q4])
 
     # Public methods
 
     def set(self, reference_coords, coords):
-        """
-        Set the coordinates to be superimposed.
+        """Set the coordinates to be superimposed.
+
         coords will be put on top of reference_coords.
 
-        o reference_coords: an NxDIM array
-        o coords: an NxDIM array
+        - reference_coords: an NxDIM array
+        - coords: an NxDIM array
 
         DIM is the dimension of the points, N is the number
         of points to be superimposed.
@@ -97,7 +91,7 @@ class QCPSuperimposer(object):
         self.n = n[0]
 
     def run(self):
-        "Superimpose the coordinate sets."
+        """Superimpose the coordinate sets."""
         if self.coords is None or self.reference_coords is None:
             raise Exception("No coordinates set.")
         coords = self.coords
@@ -113,7 +107,7 @@ class QCPSuperimposer(object):
         self.tran = av2 - dot(av1, self.rot)
 
     def get_transformed(self):
-        "Get the transformed coordinate set."
+        """Get the transformed coordinate set."""
         if self.coords is None or self.reference_coords is None:
             raise Exception("No coordinates set.")
         if self.rot is None:
@@ -123,13 +117,13 @@ class QCPSuperimposer(object):
         return self.transformed_coords
 
     def get_rotran(self):
-        "Right multiplying rotation matrix and translation."
+        """Right multiplying rotation matrix and translation."""
         if self.rot is None:
             raise Exception("Nothing superimposed yet.")
         return self.rot, self.tran
 
     def get_init_rms(self):
-        "Root mean square deviation of untransformed coordinates."
+        """Root mean square deviation of untransformed coordinates."""
         if self.coords is None:
             raise Exception("No coordinates set yet.")
         if self.init_rms is None:
@@ -137,7 +131,7 @@ class QCPSuperimposer(object):
         return self.init_rms
 
     def get_rms(self):
-        "Root mean square deviation of superimposed coordinates."
+        """Root mean square deviation of superimposed coordinates."""
         if self.rms is None:
             raise Exception("Nothing superimposed yet.")
         return self.rms

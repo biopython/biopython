@@ -17,13 +17,11 @@ import random
 from Bio.Alphabet import _verify_alphabet
 from Bio.Seq import Seq, MutableSeq
 
-__docformat__ = "restructuredtext en"
-
 
 class PatternIO(object):
     """Allow reading and writing of patterns to files.
 
-    This just defines a simple persistance class for patterns, making
+    This just defines a simple persistence class for patterns, making
     it easy to write them to a file and read 'em back.
     """
     def __init__(self, alphabet=None):
@@ -50,7 +48,7 @@ class PatternIO(object):
         """
         for pattern in pattern_list:
             # deal with signatures, concatentate them with the separator
-            if isinstance(pattern, list) or isinstance(pattern, tuple):
+            if isinstance(pattern, (list, tuple)):
                 string_pattern = self.separator.join(pattern)
             # deal with the normal cases
             else:

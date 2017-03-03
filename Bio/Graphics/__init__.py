@@ -17,7 +17,6 @@ except ImportError:
         "to use Bio.Graphics. You can find ReportLab at "
         "http://www.reportlab.com/software/opensource/")
 
-__docformat__ = "restructuredtext en"
 
 # The following code is to allow all the Bio.Graphics
 # code to deal with the different ReportLab renderers
@@ -59,7 +58,7 @@ def _write(drawing, output_file, format, dpi=72):
                   'PNG': renderPM,
                   'TIFF': renderPM,
                   'TIF': renderPM
-                 }
+                  }
     try:
         # If output is not a string, then .upper() will trigger
         # an attribute error...

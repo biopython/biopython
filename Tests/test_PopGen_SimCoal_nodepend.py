@@ -7,8 +7,13 @@ from Bio._py3k import _universal_read_mode
 
 import os
 import unittest
-from Bio.PopGen import SimCoal
-from Bio.PopGen.SimCoal.Template import generate_simcoal_from_template
+import warnings
+
+from Bio import BiopythonDeprecationWarning
+
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore", BiopythonDeprecationWarning)
+    from Bio.PopGen.SimCoal.Template import generate_simcoal_from_template
 
 # Tests simcoal related code. Note: this case doesn't require simcoal
 # test_PopGen_SimCoal tests code that requires simcoal
@@ -25,12 +30,10 @@ class TemplateTest(unittest.TestCase):
             'PopGen')
         # Confirm the files match (ignoring any switch of line endings
         # possible if the input file used a different OS convention)
-        handle = open(os.path.join('PopGen', 'simple.par'), _universal_read_mode)
-        old = handle.readlines()
-        handle.close()
-        handle = open(os.path.join('PopGen', 'simple_100_30.par'))
-        new = handle.readlines()
-        handle.close()
+        with open(os.path.join('PopGen', 'simple.par'), _universal_read_mode) as handle:
+            old = handle.readlines()
+        with open(os.path.join('PopGen', 'simple_100_30.par')) as handle:
+            new = handle.readlines()
         assert old == new, "Error - Old:\n%s\n\nNew:\n%s\n" % (old, new)
         # assert(os.stat('PopGen' + os.sep + 'simple.par').st_size ==
         #       os.stat('PopGen' + os.sep + 'simple_100_30.par').st_size)

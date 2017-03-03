@@ -16,7 +16,6 @@ About capitalization:
   `Bio.Phylo.read`!), containing a list of Phylogenies (objects derived from
   `BaseTree.Tree`)
 """
-__docformat__ = "restructuredtext en"
 
 import sys
 
@@ -35,6 +34,7 @@ try:
         from xml.etree import cElementTree as ElementTree
 except ImportError:
     from xml.etree import ElementTree as ElementTree
+
 
 # Recognize the phyloXML namespace when parsing
 # See http://effbot.org/zone/element-namespaces.htm
@@ -120,8 +120,7 @@ def write(obj, file, encoding=DEFAULT_ENCODING, indent=True):
 
     if isinstance(obj, PX.Phyloxml):
         pass
-    elif (isinstance(obj, PX.BaseTree.Tree) or
-          isinstance(obj, PX.BaseTree.Clade)):
+    elif isinstance(obj, (PX.BaseTree.Tree, PX.BaseTree.Clade)):
         obj = fix_single(obj).to_phyloxml()
     elif hasattr(obj, '__iter__'):
         obj = PX.Phyloxml({}, phylogenies=(fix_single(t) for t in obj))

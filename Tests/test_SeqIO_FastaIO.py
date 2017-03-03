@@ -11,7 +11,7 @@ from Bio._py3k import StringIO
 
 from Bio import SeqIO
 from Bio.SeqIO.FastaIO import FastaIterator
-from Bio.Alphabet import generic_protein, generic_nucleotide, generic_dna
+from Bio.Alphabet import generic_nucleotide, generic_dna
 
 
 def title_to_ids(title):
@@ -44,29 +44,27 @@ def title_to_ids(title):
 
 def read_single_with_titles(filename, alphabet):
     global title_to_ids
-    handle = open(filename)
-    iterator = FastaIterator(handle, alphabet, title_to_ids)
-    record = next(iterator)
-    try:
-        second = next(iterator)
-    except StopIteration:
-        second = None
-    handle.close()
+    with open(filename) as handle:
+        iterator = FastaIterator(handle, alphabet, title_to_ids)
+        record = next(iterator)
+        try:
+            second = next(iterator)
+        except StopIteration:
+            second = None
     assert record is not None and second is None
     return record
 
 
 def read_title_and_seq(filename):
     """Crude parser that gets the first record from a FASTA file."""
-    handle = open(filename)
-    title = handle.readline().rstrip()
-    assert title.startswith(">")
-    seq = ""
-    for line in handle:
-        if line.startswith(">"):
-            break
-        seq += line.strip()
-    handle.close()
+    with open(filename) as handle:
+        title = handle.readline().rstrip()
+        assert title.startswith(">")
+        seq = ""
+        for line in handle:
+            if line.startswith(">"):
+                break
+            seq += line.strip()
     return title[1:], seq
 
 

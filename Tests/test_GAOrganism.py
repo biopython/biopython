@@ -49,7 +49,7 @@ class CreatePopulationTest(unittest.TestCase):
                                                num_orgs, fitness_calculator)
 
         assert len(new_pop) == num_orgs, "Expected %s organisms, got %s" \
-               % (num_orgs, len(new_pops))
+               % (num_orgs, len(new_pop))
 
         for org in new_pop:
             assert isinstance(org, Organism.Organism), \
@@ -68,7 +68,7 @@ class CreatePopulationTest(unittest.TestCase):
                                              num_orgs, fitness_calculator)
 
         assert len(new_pop) == num_orgs, "Expected %s organisms, got %s" \
-               % (num_orgs, len(new_pops))
+               % (num_orgs, len(new_pop))
 
         for org in new_pop:
             assert isinstance(org, Organism.Organism), \
@@ -85,13 +85,13 @@ class CreatePopulationTest(unittest.TestCase):
     def test_random_population_types(self):
         """Creating a random population with different types of alphabets.
         """
-        class DoubleAlphabet:
+        class DoubleAlphabet(object):
             letters = [1.0, 2.0]
 
-        class CharacterAlphabet:
+        class CharacterAlphabet(object):
             letters = ["a", "b"]
 
-        class IntegerAlphabet:
+        class IntegerAlphabet(object):
             letters = [1, 2]
 
         def test_fitness(genome):

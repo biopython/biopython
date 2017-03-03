@@ -12,8 +12,6 @@ be found in the paper `Konieczny and Ausubel (1993)`_ (PMID 8106085).
 .. _`Konieczny and Ausubel (1993)`: http://dx.doi.org/10.1046/j.1365-313X.1993.04020403.x
 """
 
-__docformat__ = "restructuredtext en"
-
 
 class DifferentialCutsite(object):
     """Differential enzyme cutsite in an alignment.
@@ -37,7 +35,6 @@ class DifferentialCutsite(object):
         Each member (as listed in the class description) should be included as a
         keyword.
         """
-
         self.start = int(kwds["start"])
         self.enzyme = kwds["enzyme"]
         self.cuts_in = kwds["cuts_in"]
