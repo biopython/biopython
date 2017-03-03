@@ -30,13 +30,18 @@
 #
 # %doctest examples lib:numpy lib:scipy
 #
-# Note if using lib:XXX you must include a relative path to the
-# working directory, just use . for the default path, e.g.
+# Additionally after the path, special keyword 'internet' is
+# used to flag online tests.
+#
+# Note if using lib:XXX or special value 'internet' you must
+# include a relative path to the working directory, just use '.'
+# for the default path, e.g.
 #
 # %doctest . lib:reportlab
 #
+# %doctest . internet
+#
 # TODO: Adding bin:XXX for checking binary XXX is on $PATH?
-# TODO: Adding way to specify the doctest needs the network?
 #
 # See also "Writing doctests in the Tutorial" in the Tutorial
 # itself.
@@ -51,7 +56,19 @@ import doctest
 import os
 import sys
 import warnings
-from Bio import BiopythonExperimentalWarning
+from Bio import BiopythonExperimentalWarning, MissingExternalDependencyError
+
+# This is the same mechanism used for run_tests.py --offline
+# to skip tests requiring the network.
+import requires_internet
+try:
+    requires_internet.check()
+    online = True
+except MissingExternalDependencyError:
+    online = False
+if "--offline" in sys.argv:
+    # Allow manual override via "python test_Tutorial.py --offline"
+    online = False
 
 warnings.simplefilter('ignore', BiopythonExperimentalWarning)
 
@@ -164,15 +181,20 @@ class TutorialDocTestHolder(object):
 
 
 def check_deps(dependencies):
+    """Check 'lib:XXX' and 'internet' dependencies are met."""
     missing = []
     for dep in dependencies:
-        assert dep.startswith("lib:"), dep
-        lib = dep[4:]
-        try:
-            tmp = __import__(lib)
-            del tmp
-        except ImportError:
-            missing.append(lib)
+        if dep == "internet":
+            if not online:
+                missing.append("internet")
+        else:
+            assert dep.startswith("lib:"), dep
+            lib = dep[4:]
+            try:
+                tmp = __import__(lib)
+                del tmp
+            except ImportError:
+                missing.append(lib)
     return missing
 
 
