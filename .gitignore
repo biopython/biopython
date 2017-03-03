@@ -30,6 +30,9 @@ dist
 #Ignore all Jython class files (present if using Jython)
 *.class
 
+#Ignore the .tox directory from running tox locally
+.tox/
+
 #Ignore the MANIFEST file created automatically from MANIFEST.in
 MANIFEST
 
