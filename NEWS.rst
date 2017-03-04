@@ -79,6 +79,7 @@ possible, especially the following contributors:
 - Adam Novak (first contribution)
 - Adrian Altenhoff (first contribution)
 - Allis Tauri (first contribution)
+- Andrew Dalke
 - Andrew Guy (first contribution)
 - Andrew Sczesnak (first contribution)
 - Ben Fulton

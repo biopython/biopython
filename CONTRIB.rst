@@ -23,7 +23,7 @@ This is certainly not comprehensive, and if you've been overlooked
 - Andrea Rizzi <https://github.com/andrrizzi>
 - Andreas Kuntzagk <andreas.kuntzagk at domain mdc-berlin.de>
 - Andres Colubri <andres dot colubri at gmail dot com>
-- Andrew Dalke <dalke at domain acm.org>
+- Andrew Dalke <dalke at domain dalke scientific dot com>
 - Andrew Guy <https://github.com/andrewguy>
 - Andrew Sczesnak <https://github.com/polyatail>
 - Anne Pajon <ap one two at sanger ac uk>
