@@ -13,8 +13,7 @@ E_VALUE_THRESH = 1e-10
 class TestNCBIXML(unittest.TestCase):
 
     def test_xml_2212L_blastp_001(self):
-       "Parsing BLASTP 2.2.12,gi|49176427|ref|NP_418280.3| (xml_2212L_blastp_001)"
-
+        "Parsing BLASTP 2.2.12,gi|49176427|ref|NP_418280.3| (xml_2212L_blastp_001)"
         filename = 'xml_2212L_blastp_001.xml'
         datafile = os.path.join("Blast", filename)
         handle = open(datafile)
@@ -2768,6 +2767,108 @@ class TestNCBIXML(unittest.TestCase):
 
         self.assertRaises(StopIteration, next, records)
         handle.close()
+        
+    def test_xml_2226_tblastn_006(self):
+        "Parsing TBLASTN 2.2.26+, random_s00 (xml_2226_tblastn_006)"
+        # NOTE - no date in version field, downloaded 2008/05/08
+
+        filename = 'xml_2226_tblastn_006.xml'
+        datafile = os.path.join("Blast", filename)
+
+        handle = open(datafile)
+        self.assertRaises(ValueError,NCBIXML.read,handle)
+        handle.close()
+        
+    def test_xml_2226_tblastn_007(self):
+        "Parsing TBLASTN 2.2.26+, random_s00 (xml_2226_tblastn_007)"
+        # NOTE - no date in version field, downloaded 2008/05/08
+
+        filename = 'xml_2226_tblastn_007.xml'
+        datafile = os.path.join("Blast", filename)
+
+        handle = open(datafile)
+        records=NCBIXML.parse(handle)
+        self.assertRaises(ValueError, next, records)
+        handle.close()
+        
+    def test_xml_2226_tblastn_008(self):
+        "Parsing TBLASTN 2.2.26+, random_s00 (xml_2226_tblastn_008)"
+        # NOTE - no date in version field, downloaded 2008/05/08
+
+        filename = 'xml_2226_tblastn_008.xml'
+        datafile = os.path.join("Blast", filename)
+
+        handle = open(datafile)
+        records=NCBIXML.parse(handle)
+        self.assertRaises(ValueError, next, records)
+        handle.close()
+        
+    def test_xml_2226_tblastn_009(self):
+        "Parsing TBLASTN 2.2.26+, random_s00 (xml_2226_tblastn_009)"
+        # NOTE - no date in version field, downloaded 2008/05/08
+
+        filename = 'xml_2226_tblastn_009.xml'
+        datafile = os.path.join("Blast", filename)
+
+        handle = open(datafile)
+        records = NCBIXML.parse(handle)
+
+        record = next(records)
+        alignments = record.alignments
+        self.assertEqual(record.query_id, "Query_1")
+        self.assertEqual(len(alignments), 0)
+
+        record = next(records)
+        alignments = record.alignments
+        self.assertEqual(record.query_id, "Query_2")
+        self.assertEqual(len(alignments), 3)
+        self.assertEqual(sum([len(a.hsps) for a in alignments]), 3)
+        self.assertEqual(alignments[0].title[:50], "gi|145479850|ref|XM_001425911.1| Paramecium tetrau")
+        self.assertEqual(alignments[0].length, 4632)
+        self.assertEqual(len(alignments[0].hsps), 1)
+        self.assertTrue(alignments[0].hsps[0].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[1].title[:50], "gi|115975252|ref|XM_001180111.1| PREDICTED: Strong")
+        self.assertEqual(alignments[1].length, 1593)
+        self.assertEqual(len(alignments[0].hsps), 1)
+        self.assertTrue(alignments[1].hsps[0].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[2].title[:50], "gi|390342090|ref|XM_777959.2| PREDICTED: Strongylo")
+        self.assertEqual(alignments[2].length, 4149)
+        self.assertEqual(len(alignments[0].hsps), 1)
+        self.assertTrue(alignments[2].hsps[0].expect > E_VALUE_THRESH)
+
+        record = next(records)
+        alignments = record.alignments
+        self.assertEqual(record.query_id, "Query_3")
+        self.assertEqual(len(alignments), 5)
+        self.assertEqual(sum([len(a.hsps) for a in alignments]), 10)
+        self.assertEqual(alignments[0].title[:50], "gi|354480463|ref|XM_003502378.1| PREDICTED: Cricet")
+        self.assertEqual(alignments[0].length, 1119)
+        self.assertEqual(len(alignments[0].hsps), 2)
+        self.assertFalse(alignments[0].hsps[0].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[0].hsps[1].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[1].title[:50], "gi|350596019|ref|XM_003360601.2| PREDICTED: Sus sc")
+        self.assertEqual(alignments[1].length, 772)
+        self.assertEqual(len(alignments[1].hsps), 2)
+        self.assertFalse(alignments[1].hsps[0].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[1].hsps[1].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[2].title[:50], "gi|301779869|ref|XM_002925302.1| PREDICTED: Ailuro")
+        self.assertEqual(alignments[2].length, 1144)
+        self.assertEqual(len(alignments[2].hsps), 2)
+        self.assertFalse(alignments[2].hsps[0].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[2].hsps[1].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[3].title[:50], "gi|338714227|ref|XM_001492113.3| PREDICTED: Equus ")
+        self.assertEqual(alignments[3].length, 1390)
+        self.assertEqual(len(alignments[3].hsps), 2)
+        self.assertFalse(alignments[3].hsps[0].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[3].hsps[1].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[4].title[:50], "gi|390474391|ref|XM_002757683.2| PREDICTED: Callit")
+        self.assertEqual(alignments[4].length, 1402)
+        self.assertEqual(len(alignments[4].hsps), 2)
+        self.assertFalse(alignments[4].hsps[0].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[4].hsps[1].expect > E_VALUE_THRESH)
+
+        self.assertRaises(StopIteration, next, records)
+        handle.close()
 
     def test_xml_2226_tblastx_001(self):
         "Parsing TBLASTX 2.2.26+, random_s00 (xml_2226_tblastx_001)"
@@ -2940,6 +3041,10 @@ class TestNCBIXML(unittest.TestCase):
 
         filename = 'xml_2226_tblastx_004.xml'
         datafile = os.path.join("Blast", filename)
+        
+        handle = open(datafile)
+        self.assertRaises(ValueError,NCBIXML.read,handle)
+        handle.close()
 
         handle = open(datafile)
         records = NCBIXML.parse(handle)
