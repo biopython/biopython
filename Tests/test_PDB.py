@@ -12,6 +12,7 @@
 """Unit tests for the Bio.PDB module."""
 from __future__ import print_function
 
+from copy import deepcopy
 import os
 import sys
 import tempfile
@@ -525,6 +526,11 @@ class ParseTest(unittest.TestCase):
         finally:
             os.remove(filename)
 
+    def test_deepcopy_of_structure_with_disorder(self):
+        """Test deepcopy of a structure with disordered atoms.
+        Shouldn't cause recursion.
+        """
+        _ = deepcopy(self.structure)
 
 class ParseReal(unittest.TestCase):
     """Testing with real PDB files."""
