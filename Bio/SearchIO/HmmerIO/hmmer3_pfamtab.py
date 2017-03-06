@@ -5,11 +5,11 @@
 
 """Bio.SearchIO parser for HMMER pfam table output format."""
 
+from collections import OrderedDict
 from itertools import chain
 
 from Bio.Alphabet import generic_protein
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
-from Bio._py3k import OrderedDict
 
 
 class Hmmer3PfamtabParser(object):
