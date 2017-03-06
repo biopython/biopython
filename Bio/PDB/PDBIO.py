@@ -13,7 +13,6 @@ from Bio.Data.IUPACData import atom_weights  # Allowed Elements
 
 _ATOM_FORMAT_STRING = "%s%5i %-4s%c%3s %c%4i%c   %8.3f%8.3f%8.3f%s%6.2f      %4s%2s%2s\n"
 
-
 class Select(object):
     """Select everything fo PDB output (for use as a bas class).
 
@@ -69,6 +68,7 @@ class PDBIO(object):
             record_type = "HETATM"
         else:
             record_type = "ATOM  "
+
         if atom.element:
             element = atom.element.strip().upper()
             if element.capitalize() not in atom_weights:
@@ -76,7 +76,16 @@ class PDBIO(object):
             element = element.rjust(2)
         else:
             element = "  "
-        name = atom.get_fullname()
+
+        name = atom.get_fullname().strip()
+        # Pad atom name if:
+        #     - smaller than 4 characters
+        # AND - is not C, N, O, S, H, F, P, ..., one letter elements
+        # AND - first character is NOT numeric (funky hydrogen naming rules)
+        if len(name) < 4 and name[:1].isalpha() and len(element.strip()) < 2:
+            print('Padding name ' + name + str(atom.parent.id))
+            name = " " + name
+
         altloc = atom.get_altloc()
         x, y, z = atom.get_coord()
         bfactor = atom.get_bfactor()
