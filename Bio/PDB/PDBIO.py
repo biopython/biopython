@@ -13,6 +13,7 @@ from Bio.Data.IUPACData import atom_weights  # Allowed Elements
 
 _ATOM_FORMAT_STRING = "%s%5i %-4s%c%3s %c%4i%c   %8.3f%8.3f%8.3f%s%6.2f      %4s%2s%2s\n"
 
+
 class Select(object):
     """Select everything fo PDB output (for use as a bas class).
 
@@ -83,7 +84,6 @@ class PDBIO(object):
         # AND - is not C, N, O, S, H, F, P, ..., one letter elements
         # AND - first character is NOT numeric (funky hydrogen naming rules)
         if len(name) < 4 and name[:1].isalpha() and len(element.strip()) < 2:
-            print('Padding name ' + name + str(atom.parent.id))
             name = " " + name
 
         altloc = atom.get_altloc()
@@ -215,7 +215,7 @@ class PDBIO(object):
                             if preserve_atom_numbering:
                                 atom_number = atom.get_serial_number()
                             s = get_atom_line(atom, hetfield, segid, atom_number, resname,
-                                resseq, icode, chain_id)
+                                              resseq, icode, chain_id)
                             fp.write(s)
                             if not preserve_atom_numbering:
                                 atom_number += 1
