@@ -50,6 +50,10 @@ addons:
 # There is a phyml Ubuntu package, but currently too old
 # There are TravisCI provided versions of PyPy and PyPy3, but currently too old.
 # We therefore deactivate that, and download and unzip portable PyPy binaries.
+#
+# We also need DSSP for testing but it is not available in the repositories.
+# Try to download the binary for Linux and place it in /usr/bin
+# 
 before_install:
   - cd $HOME
   - mkdir bin
@@ -60,6 +64,10 @@ before_install:
   - cd $HOME
   - "if [[ $TRAVIS_PYTHON_VERSION == 'pypy' ]]; then deactivate && wget https://bitbucket.org/squeaky/portable-pypy/downloads/pypy-5.6-linux_x86_64-portable.tar.bz2 && tar -jxvf pypy-5.6-linux_x86_64-portable.tar.bz2 && echo 'Setting up aliases...' && export PATH=$HOME/pypy-5.6-linux_x86_64-portable/bin/:$PATH && ln -s ~/pypy-5.6-linux_x86_64-portable/bin/pypy ~/bin/python && echo 'Setting up pip...' && pypy-5.6-linux_x86_64-portable/bin/pypy -m ensurepip ; fi"
   - "if [[ $TRAVIS_PYTHON_VERSION == 'pypy3' ]]; then deactivate && wget https://bitbucket.org/squeaky/portable-pypy/downloads/pypy3.3-5.5-alpha-20161013-linux_x86_64-portable.tar.bz2 && tar -jxvf pypy3.3-5.5-alpha-20161013-linux_x86_64-portable.tar.bz2 && echo 'Setting up aliases...' && export PATH=$HOME/pypy3.3-5.5-alpha-20161013-linux_x86_64-portable/bin/:$PATH && ln -s ~/pypy3.3-5.5-alpha-20161013-linux_x86_64-portable/bin/pypy3.3 ~/bin/python && echo 'Setting up pip...' && pypy3.3-5.5-alpha-20161013-linux_x86_64-portable/bin/pypy -m ensurepip && ln -s ~/pypy3.3-5.5-alpha-20161013-linux_x86_64-portable/bin/pip3.3 ~/bin/pip ; fi"
+  - cd $HOME
+  - curl -L -O ftp://ftp.cmbi.ru.nl/pub/software/dssp/dssp-2.0.4-linux-amd64
+  - mv dssp-2.0.4-linux-amd64 bin/dssp
+  - chmod a+x bin/dssp
   - cd $TRAVIS_BUILD_DIR
 
 install:
