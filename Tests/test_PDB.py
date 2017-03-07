@@ -532,6 +532,7 @@ class ParseTest(unittest.TestCase):
         """
         _ = deepcopy(self.structure)
 
+
 class ParseReal(unittest.TestCase):
     """Testing with real PDB files."""
 
