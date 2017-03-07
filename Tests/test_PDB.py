@@ -528,7 +528,7 @@ class ParseTest(unittest.TestCase):
 
     def test_deepcopy_of_structure_with_disorder(self):
         """Test deepcopy of a structure with disordered atoms.
-        
+
         Shouldn't cause recursion.
         """
         _ = deepcopy(self.structure)
