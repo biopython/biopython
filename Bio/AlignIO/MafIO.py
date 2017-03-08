@@ -85,7 +85,7 @@ from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
 from .Interfaces import SequentialAlignmentWriter
 
-MAFINDEX_VERSION = 1
+MAFINDEX_VERSION = 2
 
 
 class MafWriter(SequentialAlignmentWriter):
@@ -337,7 +337,7 @@ class MafIndex(object):
         """Read MAF file and generate SQLite index"""
         # make the tables
         self._db_con.execute("CREATE TABLE meta_data (key TEXT, value TEXT);")
-        self._db_con.execute("INSERT INTO meta_data (key, value) VALUES ('version', 1);")
+        self._db_con.execute("INSERT INTO meta_data (key, value) VALUES ('version', %s);" % MAFINDEX_VERSION)
         self._db_con.execute("INSERT INTO meta_data (key, value) VALUES ('record_count', -1);")
         self._db_con.execute(
             "INSERT INTO meta_data (key, value) VALUES ('target_seqname', '%s');" % (
