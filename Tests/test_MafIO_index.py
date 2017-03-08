@@ -352,6 +352,16 @@ if sqlite3:
                     3012076, 16160203, 16379004, 15860456,
                     3012441, 15860899, 16379447, 16160646, 180525]))
 
+        def test_correct_block_boundary(self):
+            search = self.idx.search([3014688], [3014689])
+            self.assertEqual(len(list(search)), 1)
+
+            search = self.idx.search([3014689], [3014690])
+            self.assertEqual(len(list(search)), 1)
+
+            search = self.idx.search([3014688], [3014690])
+            self.assertEqual(len(list(search)), 2)
+
     class TestSearchBadMAF(unittest.TestCase):
         """Test index searching on an incorrectly-formatted MAF"""
 
