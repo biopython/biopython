@@ -332,6 +332,23 @@ if sqlite3:
                                   15875298, 78072287, 14757144, 3012076,
                                   16160203, 16379004, 15860456]))
 
+        def test_correct_retrieval_3(self):
+            search = self.idx.search((3012076, 3012076 + 300), (3012076 + 100, 3012076 + 400))
+            results = [x for x in search]
+
+            self.assertEqual(len(results), 2)
+
+            self.assertEqual(set([len(x) for x in results]),
+                             set([4, 5]))
+
+            # Code formatting note:
+            # Expected start coordinates are grouped by alignment blocks
+            self.assertEqual(
+                set([x.annotations["start"] for y in results for x in y]),
+                set([
+                    3012076, 16160203, 16379004, 15860456,
+                    3012441, 15860899, 16379447, 16160646, 180525]))
+
     class TestSearchBadMAF(unittest.TestCase):
         """Test index searching on an incorrectly-formatted MAF"""
 

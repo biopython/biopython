@@ -477,6 +477,10 @@ class MafIndex(object):
                 raise ValueError("Exon coordinates invalid (%s >= %s)" % (exonstart, exonend))
         con = self._con
 
+        # Keep track of what blocks have already been yielded
+        # in order to avoid duplicating them
+        # (see https://github.com/biopython/biopython/issues/1083)
+        yielded_rec_coords = set([])
         # search for every exon
         for exonstart, exonend in zip(starts, ends):
             try:
@@ -506,6 +510,11 @@ class MafIndex(object):
             rows = result.fetchall()
 
             for rec_start, rec_end, offset in rows:
+                # Avoid yielding multiple time the same block
+                if (rec_start, rec_end) in yielded_rec_coords:
+                    continue
+                else:
+                    yielded_rec_coords.add((rec_start, rec_end))
                 # Iterate through hits, fetching alignments from the MAF file
                 # and checking to be sure we've retrieved the expected record.
 
