@@ -47,12 +47,15 @@ addons:
     - samtools
     - wise
 
-# There is a phyml Ubuntu package, but currently too old
+# We setup $HOME/bin and add it to the $PATH for extra binaries we're using.
+#
+# There is a phyml Ubuntu package, but currently too old.
+#
 # There are TravisCI provided versions of PyPy and PyPy3, but currently too old.
 # We therefore deactivate that, and download and unzip portable PyPy binaries.
 #
 # We also need DSSP for testing but it is not available in the repositories.
-# Try to download the binary for Linux and place it in /usr/bin
+# Try to download the binary for Linux and place it in $HOME/bin
 # 
 before_install:
   - cd $HOME
