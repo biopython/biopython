@@ -355,9 +355,12 @@ class ComparisonTestCase(unittest.TestCase):
             # otherwise make sure the two lines are the same
             elif expected_line != output_line:
                 expected.close()
-                raise ValueError("\nOutput  : %s\nExpected: %s\n%s line %s"
-                                 % (repr(output_line), repr(expected_line),
-                                    outputfile, line_number))
+                raise ValueError(
+                    "\nOutput  : %s\nExpected: %s\n%s line %s" % (
+                        repr(output_line),
+                        repr(expected_line),
+                        outputfile,
+                        line_number))
 
         expected.close()
 
