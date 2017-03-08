@@ -2767,7 +2767,7 @@ class TestNCBIXML(unittest.TestCase):
 
         self.assertRaises(StopIteration, next, records)
         handle.close()
-        
+
     def test_xml_2226_tblastn_006_err(self):
         "Parsing TBLASTN 2.2.26+, random_s00 (xml_2226_tblastn_006_err)"
         # NOTE - no date in version field, downloaded 2008/05/08
@@ -2776,9 +2776,9 @@ class TestNCBIXML(unittest.TestCase):
         datafile = os.path.join("Blast", filename)
 
         handle = open(datafile)
-        self.assertRaises(ValueError,NCBIXML.read,handle)
+        self.assertRaises(ValueError, NCBIXML.read, handle)
         handle.close()
-        
+
     def test_xml_2226_tblastn_007_err(self):
         "Parsing TBLASTN 2.2.26+, random_s00 (xml_2226_tblastn_007_err)"
         # NOTE - no date in version field, downloaded 2008/05/08
@@ -2787,10 +2787,10 @@ class TestNCBIXML(unittest.TestCase):
         datafile = os.path.join("Blast", filename)
 
         handle = open(datafile)
-        records=NCBIXML.parse(handle)
+        records = NCBIXML.parse(handle)
         self.assertRaises(ValueError, next, records)
         handle.close()
-        
+
     def test_xml_2226_tblastn_008_err(self):
         "Parsing TBLASTN 2.2.26+, random_s00 (xml_2226_tblastn_008_err)"
         # NOTE - no date in version field, downloaded 2008/05/08
@@ -2799,10 +2799,10 @@ class TestNCBIXML(unittest.TestCase):
         datafile = os.path.join("Blast", filename)
 
         handle = open(datafile)
-        records=NCBIXML.parse(handle)
+        records = NCBIXML.parse(handle)
         self.assertRaises(ValueError, next, records)
         handle.close()
-        
+
     def test_xml_2226_tblastn_009_err(self):
         "Parsing TBLASTN 2.2.26+, random_s00 (xml_2226_tblastn_009_err)"
         # NOTE - no date in version field, downloaded 2008/05/08
@@ -3041,9 +3041,9 @@ class TestNCBIXML(unittest.TestCase):
 
         filename = 'xml_2226_tblastx_004.xml'
         datafile = os.path.join("Blast", filename)
-        
+
         handle = open(datafile)
-        self.assertRaises(ValueError,NCBIXML.read,handle)
+        self.assertRaises(ValueError, NCBIXML.read, handle)
         handle.close()
 
         handle = open(datafile)
