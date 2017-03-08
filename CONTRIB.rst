@@ -45,6 +45,8 @@ This is certainly not comprehensive, and if you've been overlooked
 - Bob Bussell <rgb2003 at domain med.cornell.edu>
 - Bogdan T. <bogdan at pearlgen dot com>
 - Brad Chapman <https://github.com/chapmanb>
+- Brandon Carter  <https://github.com/b-carter>
+- Brandon Invergo <https://github.com/brandoninvergo>
 - Brian Osborne <https://github.com/bosborne>
 - Bryan Lunt <https://github.com/bryan-lunt>
 - Carlos Pena <https://github.com/carlosp420>

@@ -86,6 +86,7 @@ possible, especially the following contributors:
 - Bernhard Thiel (first contribution)
 - Bertrand Néron
 - Blaise Li (first contribution)
+- Brandon Carter (first contribution)
 - Brandon Invergo
 - Carlos Pena
 - Carlos Ríos
