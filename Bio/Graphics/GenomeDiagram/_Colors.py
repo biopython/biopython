@@ -30,6 +30,31 @@ from reportlab.lib import colors
 class ColorTranslator(object):
     """ Class providing methods for translating representations of color into
     """
+
+    """
+    Example:
+
+    >>> from Bio.Graphics import GenomeDiagram
+    >>> gdct=GenomeDiagram._Colors.ColorTranslator()
+    >>> print(gdct.float1_color((0.5, 0.5, 0.5)))
+    Color(.5,.5,.5,1)
+    >>> print(gdct.int255_color((1, 75, 240)))
+    Color(.003922,.294118,.941176,1)
+    >>> print(gdct.artemis_color(7))
+    Color(1,1,0,1)
+    >>> print(gdct.scheme_color(2))
+    Color(1,0,0,1)
+
+    >>> print(gdct.translate((0.5, 0.5, 0.5)))
+    Color(.5,.5,.5,1)
+    >>> print(gdct.translate((1, 75, 240)))
+    Color(.003922,.294118,.941176,1)
+    >>>print(gdct.translate(7))
+    Color(1,1,0,1)
+    >>> print(gdct.translate(2))
+    Color(1,0,0,1)
+
+    """
     def __init__(self, filename=None):
         """ __init__(self, filename)
 
@@ -199,20 +224,7 @@ class ColorTranslator(object):
         return colors.Color(red, green, blue)
 
 
-################################################################################
-# RUN AS SCRIPT
-################################################################################
-
 if __name__ == '__main__':
 
-    # Test code
-    gdct = ColorTranslator()
-    print(gdct.float1_color((0.5, 0.5, 0.5)))
-    print(gdct.int255_color((1, 75, 240)))
-    print(gdct.artemis_color(7))
-    print(gdct.scheme_color(2))
-
-    print(gdct.translate((0.5, 0.5, 0.5)))
-    print(gdct.translate((1, 75, 240)))
-    print(gdct.translate(7))
-    print(gdct.translate(2))
+    from Bio._utils import run_doctest
+    run_doctest(verbose=0)
