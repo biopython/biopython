@@ -48,7 +48,7 @@ from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
 from .Interfaces import SequentialAlignmentWriter
 
-MAFINDEX_VERSION = 1
+MAFINDEX_VERSION = 2
 
 
 class MafWriter(SequentialAlignmentWriter):
@@ -317,7 +317,7 @@ class MafIndex(object):
         """Read MAF file and generate SQLite index (PRIVATE)."""
         # make the tables
         self._con.execute("CREATE TABLE meta_data (key TEXT, value TEXT);")
-        self._con.execute("INSERT INTO meta_data (key, value) VALUES ('version', 1);")
+        self._con.execute("INSERT INTO meta_data (key, value) VALUES ('version', %s);" % MAFINDEX_VERSION)
         self._con.execute("INSERT INTO meta_data (key, value) VALUES ('record_count', -1);")
         self._con.execute("INSERT INTO meta_data (key, value) VALUES ('target_seqname', '%s');" %
                           (self._target_seqname,))
@@ -356,6 +356,7 @@ class MafIndex(object):
                 break
 
             # batch is made from self.__maf_indexer(),
+            # which yields zero-based "inclusive" start and end coordinates
             self._con.executemany(
                 "INSERT INTO offset_data (bin, start, end, offset) VALUES (?,?,?,?);", batch)
             self._con.commit()
@@ -401,13 +402,18 @@ class MafIndex(object):
 
                         if line_split[1] == self._target_seqname:
                             start = int(line_split[2])
-                            end = int(line_split[2]) + int(line_split[3])
+                            size = int(line_split[3])
+                            if size != len(line_split[6].replace("-", "")):
+                                raise ValueError(
+                                    "Invalid length for target coordinates "
+                                    "(expected %s, found %s)" % (
+                                        size, len(line_split[6].replace("-", ""))))
 
-                            if end - start != len(line_split[6].replace("-", "")):
-                                raise ValueError("Invalid length for target coordinates (expected %s, found %s)" %
-                                                 (end - start, len(line_split[6].replace("-", ""))))
+                            # "inclusive" end position is start + length - 1
+                            end = start + size - 1
 
-                            yield (self._ucscbin(start, end), start, end, offset)
+                            # _ucscbin takes end-exclusive coordinates
+                            yield (self._ucscbin(start, end + 1), start, end, offset)
 
                             break
 
@@ -475,9 +481,12 @@ class MafIndex(object):
         if len(starts) != len(ends):
             raise ValueError("Every position in starts must have a match in ends")
 
+        # Could it be safer to sort the (exonstart, exonend) pairs?
         for exonstart, exonend in zip(starts, ends):
-            if exonstart >= exonend:
-                raise ValueError("Exon coordinates invalid (%s >= %s)" % (exonstart, exonend))
+            exonlen = exonend - exonstart
+            if exonlen < 1:
+                raise ValueError("Exon coordinates (%d, %d) invalid: exon length (%d) < 1" % (
+                    exonstart, exonend, exonlen))
         con = self._con
 
         # Keep track of what blocks have already been yielded
@@ -504,14 +513,25 @@ class MafIndex(object):
             # right.
             # -----
 
-            result = con.execute("SELECT DISTINCT start, end, offset FROM "
-                                 "offset_data WHERE bin IN (%s) AND (end BETWEEN %s AND %s "
-                                 "OR %s BETWEEN start AND end) ORDER BY start, end, "
-                                 "offset ASC;"
-                                 % (possible_bins, exonstart, exonend, exonend))
+            # We are testing overlap between the query segment and records in
+            # the index, using non-strict coordinates comparisons.
+            # The query segment end must be passed as end-inclusive
+            # The index should also have been build with end-inclusive
+            # end coordinates.
+            # See https://github.com/biopython/biopython/pull/1086#issuecomment-285069073
+
+            result = con.execute(
+                "SELECT DISTINCT start, end, offset FROM offset_data "
+                "WHERE bin IN (%s) "
+                "AND (end BETWEEN %s AND %s OR %s BETWEEN start AND end) "
+                "ORDER BY start, end, offset ASC;" %
+                (possible_bins, exonstart, exonend - 1, exonend - 1))
 
             rows = result.fetchall()
 
+            # rows come from the sqlite index,
+            # which should have been written using __make_new_index,
+            # so rec_start and rec_end should be zero-based "inclusive" coordinates
             for rec_start, rec_end, offset in rows:
                 # Avoid yielding multiple time the same block
                 if (rec_start, rec_end) in yielded_rec_coords:
@@ -527,7 +547,8 @@ class MafIndex(object):
                     if record.id == self._target_seqname:
                         # start and size come from the maf lines
                         start = record.annotations["start"]
-                        end = record.annotations["start"] + record.annotations["size"]
+                        # "inclusive" end is start + length - 1
+                        end = start + record.annotations["size"] - 1
 
                         if not (start == rec_start and end == rec_end):
                             raise ValueError("Expected %s-%s @ offset %s, found %s-%s" %
@@ -608,16 +629,20 @@ class MafIndex(object):
                     # length including gaps (i.e. alignment length)
                     rec_length = len(seqrec)
                     rec_start = seqrec.annotations["start"]
-                    rec_end = seqrec.annotations["start"] + seqrec.annotations["size"]
-
-                    total_rec_length += rec_end - rec_start
+                    ungapped_length = seqrec.annotations["size"]
+                    # inclusive end in zero-based coordinates of the reference
+                    rec_end = rec_start + ungapped_length - 1
+                    # This is length in terms of actual letters in the reference
+                    total_rec_length += ungapped_length
 
                     # blank out these positions for every seqname
                     for seqrec in multiseq:
-                        for pos in range(rec_start, rec_end):
+                        for pos in range(rec_start, rec_end + 1):
                             split_by_position[seqrec.id][pos] = ""
 
                     break
+            # http://psung.blogspot.fr/2007/12/for-else-in-python.html
+            # https://docs.python.org/2/tutorial/controlflow.html#break-and-continue-statements-and-else-clauses-on-loops
             else:
                 raise ValueError("Did not find %s in alignment bundle" % (self._target_seqname,))
 
@@ -638,7 +663,7 @@ class MafIndex(object):
 
                 # increment the real_pos counter only when non-gaps are found in
                 # the target_seqname, and we haven't reached the end of the record
-                if track_val != "-" and real_pos < rec_end - 1:
+                if track_val != "-" and real_pos < rec_end:
                     real_pos += 1
 
         # make sure the number of bp entries equals the sum of the record lengths
@@ -649,9 +674,9 @@ class MafIndex(object):
                               total_rec_length))
 
         # translates a position in the target_seqname sequence to its gapped length
-        realpos_to_len = dict([(x, len(y))
-                               for x, y in split_by_position[self._target_seqname].items()
-                               if len(y) > 1])
+        realpos_to_len = dict([(pos, len(gapped_fragment))
+                               for pos, gapped_fragment in split_by_position[self._target_seqname].items()
+                               if len(gapped_fragment) > 1])
 
         # splice together the exons
         subseq = {}
@@ -667,6 +692,7 @@ class MafIndex(object):
             append = seq_splice.append
 
             for exonstart, exonend in zip(starts, ends):
+                # exonend is exclusive
                 for real_pos in range(exonstart, exonend):
                     # if this seqname has this position, add it
                     if real_pos in seq_split:
