@@ -29,9 +29,7 @@ from reportlab.lib import colors
 
 class ColorTranslator(object):
     """ Class providing methods for translating representations of color into
-    """
 
-    """
     Example:
 
     >>> from Bio.Graphics import GenomeDiagram
@@ -44,12 +42,14 @@ class ColorTranslator(object):
     Color(1,1,0,1)
     >>> print(gdct.scheme_color(2))
     Color(1,0,0,1)
+    >>> gdct.get_artemis_colorscheme()
+    {0: (Color(1,1,1,1), 'pathogenicity, adaptation, chaperones'), 1: (Color(.39,.39,.39,1), 'energy metabolism'), 2: (Color(1,0,0,1), 'information transfer'), 3: (Color(0,1,0,1), 'surface'), 4: (Color(0,0,1,1), 'stable RNA'), 5: (Color(0,1,1,1), 'degradation of large molecules'), 6: (Color(1,0,1,1), 'degradation of small molecules'), 7: (Color(1,1,0,1), 'central/intermediary/miscellaneous metabolism'), 8: (Color(.6,.98,.6,1), 'unknown'), 9: (Color(.53,.81,.98,1), 'regulators'), 10: (Color(1,.65,0,1), 'conserved hypotheticals'), 11: (Color(.78,.59,.39,1), 'pseudogenes and partial genes'), 12: (Color(1,.78,.78,1), 'phage/IS elements'), 13: (Color(.7,.7,.7,1), 'some miscellaneous information'), 14: (Color(0,0,0,1), ''), 15: (Color(1,.25,.25,1), 'secondary metabolism'), 16: (Color(1,.5,.5,1), ''), 17: (Color(1,.75,.75,1), '')}
 
     >>> print(gdct.translate((0.5, 0.5, 0.5)))
     Color(.5,.5,.5,1)
     >>> print(gdct.translate((1, 75, 240)))
     Color(.003922,.294118,.941176,1)
-    >>>print(gdct.translate(7))
+    >>> print(gdct.translate(7))
     Color(1,1,0,1)
     >>> print(gdct.translate(2))
     Color(1,0,0,1)
@@ -227,4 +227,4 @@ class ColorTranslator(object):
 if __name__ == '__main__':
 
     from Bio._utils import run_doctest
-    run_doctest(verbose=0)
+    run_doctest(verbose=2)
