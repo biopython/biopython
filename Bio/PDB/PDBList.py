@@ -39,6 +39,7 @@ import gzip
 import os
 import shutil
 import re
+import sys
 
 # Importing these functions with leading underscore as not intended for reuse
 from Bio._py3k import _as_string
