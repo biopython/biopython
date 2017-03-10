@@ -94,6 +94,7 @@ possible, especially the following contributors:
 - Emmanuel Noutahi
 - FGastaldello (first contribution)
 - Francisco Pina-Martins (first contribution)
+- Hector Martinez (first contribution)
 - Jacek Śmietański
 - Jack Twilley (first contribution)
 - Jeroen Van Goey (first contribution)

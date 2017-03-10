@@ -91,6 +91,7 @@ This is certainly not comprehensive, and if you've been overlooked
 - Gleb Kuznetsov <https://github.com/glebkuznetsov>
 - Gokcen Eraslan <https://github.com/gokceneraslan>
 - Harry Zuzan <iliketobicycle at domain yahoo.ca>
+- Hector Martinez <https://github.com/hmarlo>
 - Hongbo Zhu <https://github.com/hongbo-zhu-cn>
 - Hye-Shik Chang <perky at domain fallin.lv>
 - Iddo Friedberg <idoerg at domain burnham.org>
