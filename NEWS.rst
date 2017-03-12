@@ -108,6 +108,7 @@ possible, especially the following contributors:
 - Owen Solberg
 - Peter Cock
 - Richard Neher (first contribution)
+- Sebastian Bassi
 - Sourav Singh (first contribution)
 - Stefans Mezulis
 - Steve Bond
