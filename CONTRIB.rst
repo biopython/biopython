@@ -154,7 +154,7 @@ This is certainly not comprehensive, and if you've been overlooked
 - Phillip Garland <pgarland at gmail>
 - Richard Neher <https://github.com/rneher>
 - Saket Choudhary <https://github.com/saketkc>
-- Sebastian Bassi <sbassi at domain asalup.org>
+- Sebastian Bassi <https://about.me/bassi>
 - Sergei Lebedev <https://github.com/superbobry>
 - Seth Sims <seth.sims at gmail>
 - Siong Kong
