@@ -66,6 +66,11 @@ in addition to version 3.
 The restriction enzyme list in Bio.Restriction has been updated to the
 February 2017 release of REBASE.
 
+Bio.PDB.PDBList now can download PDBx/mmCif (new default), PDB (old default),
+PDBML/XML and mmtf format protein structures.  This is inline with the RCSB
+recommendation to use PDBx/mmCif and deprecate the PDB file format. Biopython
+already has support for parsing mmCif files.
+
 Additionally, a number of small bugs have been fixed with further additions
 to the test suite, and there has been further work to follow the Python PEP8,
 PEP257 and best practice standard coding style.
