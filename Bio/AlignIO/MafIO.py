@@ -277,6 +277,11 @@ class MafIndex(object):
     def __init__(self, sqlite_file, maf_file, target_seqname):
         """Indexes or loads the index of a MAF file"""
         self._target_seqname = target_seqname
+        # example: Tests/MAF/ucsc_mm9_chr10.mafindex
+        self._index_filename = sqlite_file
+        # example: /home/bli/src/biopython/Tests/MAF
+        self._relative_path = os.path.abspath(os.path.dirname(sqlite_file))
+        # example: Tests/MAF/ucsc_mm9_chr10.maf
         self._maf_file = maf_file
 
         self._maf_fp = open(self._maf_file, "r")
@@ -303,7 +308,18 @@ class MafIndex(object):
 
             filename = self._con.execute(
                 "SELECT value FROM meta_data WHERE key = 'filename'").fetchone()[0]
-            if filename != self._maf_file:
+            # Compute absolute path of the original maf file
+            if os.path.isabs(filename):
+                # It was already stored as absolute
+                tmp_mafpath = filename
+            else:
+                # It should otherwise have been stored as relative to the index
+                # Would be stored with Unix / path separator, so convert
+                # it to the local OS path separator here:
+                tmp_mafpath = os.path.join(
+                    self._relative_path, filename.replace("/", os.path.sep))
+            if tmp_mafpath != os.path.abspath(self._maf_file):
+                # Original and given absolute paths differ.
                 raise ValueError("Index uses a different file (%s != %s)"
                                  % (filename, self._maf_file))
 
@@ -337,8 +353,28 @@ class MafIndex(object):
         self._con.execute("INSERT INTO meta_data (key, value) VALUES ('record_count', -1);")
         self._con.execute("INSERT INTO meta_data (key, value) VALUES ('target_seqname', '%s');" %
                           (self._target_seqname,))
+        # Determine whether to store maf file as relative to the index or absolute
+        # See https://github.com/biopython/biopython/pull/381
+        if not os.path.isabs(self._maf_file) and not os.path.isabs(self._index_filename):
+            # Since the user gave both maf file and index as relative paths,
+            # we will store the maf file relative to the index.
+            # Note for cross platform use (e.g. shared drive over SAMBA),
+            # convert any Windows slash into Unix style for rel paths.
+            # example: ucsc_mm9_chr10.maf
+            mafpath = os.path.relpath(
+                self._maf_file, self._relative_path).replace(os.path.sep, "/")
+        elif (os.path.dirname(os.path.abspath(self._maf_file)) +
+              os.path.sep).startswith(self._relative_path + os.path.sep):
+            # Since maf file is in same directory or sub directory,
+            # might as well make this into a relative path:
+            mafpath = os.path.relpath(
+                self._maf_file, self._relative_path).replace(os.path.sep, "/")
+        else:
+            # Default to storing as an absolute path
+            # example: /home/bli/src/biopython/Tests/MAF/ucsc_mm9_chr10.maf
+            mafpath = os.path.abspath(self._maf_file)
         self._con.execute("INSERT INTO meta_data (key, value) VALUES ('filename', '%s');" %
-                          (self._maf_file,))
+                          (mafpath,))
         self._con.execute("CREATE TABLE offset_data (bin INTEGER, start INTEGER, end INTEGER, offset INTEGER);")
 
         insert_count = 0
