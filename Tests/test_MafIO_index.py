@@ -440,12 +440,12 @@ e ponAbe2.chr6                     16161448 8044 - 174210431 I
             ali = self.idx.get_spliced([3014689], [3014689 + 53])
             seq_dict = dict([(seqrec.id, seqrec.seq) for seqrec in ali])
             correct_lengths = {
-                "mm9.chr10" : 53,
-                "hg18.chr6" : 53,
-                "panTro2.chr6" : 53,
-                "calJac1.Contig6394" : 53,
-                "otoGar1.scaffold_334.1-359464" : 52,
-                "loxAfr1.scaffold_75566" : 54}
+                "mm9.chr10": 53,
+                "hg18.chr6": 53,
+                "panTro2.chr6": 53,
+                "calJac1.Contig6394": 53,
+                "otoGar1.scaffold_334.1-359464": 52,
+                "loxAfr1.scaffold_75566": 54}
             for seq_id, length in correct_lengths.items():
                 self.assertEqual(len(seq_dict[seq_id].ungap('-')), length)
 
@@ -475,12 +475,12 @@ e ponAbe2.chr6                     16161448 8044 - 174210431 I
             ali = self.idx.get_spliced([3014689], [3014689 + 53])
             seq_dict = dict([(seqrec.id, seqrec.seq) for seqrec in ali])
             correct_sequences = {
-                "mm9.chr10" : "GGGAGCATAAAACTCTAAATCTGCTAAATGTCTTGTCCCTTTGGAAAGAGTTG",
-                "hg18.chr6" : "GGGATCATAAACCATTTAATCTGTGAAATATCTAATCTTTTGGGAAATAGTGG",
-                "panTro2.chr6" : "GGGATCATAAACCATTTAATCTGTGAAATATCTAATCTTTTGGGAAATAGTGG",
-                "calJac1.Contig6394" : "GGGATCATAAGCCATTTAATCTGTGAAATGTGAAATCTTTTGGGAAACAGTGG",
-                "otoGar1.scaffold_334.1-359464" : "GGAAGCATAAACTTTTAATCTATGAAATATCAAATCACTTGGGCAATAGCTG",
-                "loxAfr1.scaffold_75566" : "GGGAGTATAAACCATTTAGTCTGCGAAATGCCAAATCTTCAGGGGAAAAAGCTG"}
+                "mm9.chr10": "GGGAGCATAAAACTCTAAATCTGCTAAATGTCTTGTCCCTTTGGAAAGAGTTG",
+                "hg18.chr6": "GGGATCATAAACCATTTAATCTGTGAAATATCTAATCTTTTGGGAAATAGTGG",
+                "panTro2.chr6": "GGGATCATAAACCATTTAATCTGTGAAATATCTAATCTTTTGGGAAATAGTGG",
+                "calJac1.Contig6394": "GGGATCATAAGCCATTTAATCTGTGAAATGTGAAATCTTTTGGGAAACAGTGG",
+                "otoGar1.scaffold_334.1-359464": "GGAAGCATAAACTTTTAATCTATGAAATATCAAATCACTTGGGCAATAGCTG",
+                "loxAfr1.scaffold_75566": "GGGAGTATAAACCATTTAGTCTGCGAAATGCCAAATCTTCAGGGGAAAAAGCTG"}
             for seq_id, sequence in correct_sequences.items():
                 self.assertEqual(seq_dict[seq_id].ungap('-'), sequence)
 
@@ -527,12 +527,12 @@ e ponAbe2.chr6                     16161448 8044 - 174210431 I
             ali = self.idx.get_spliced([3014644, 3014689], [3014644 + 45, 3014689 + 53])
             seq_dict = dict([(seqrec.id, seqrec.seq) for seqrec in ali])
             correct_sequences = {
-                "mm9.chr10" : "CCTGTACCCTTTGGTGAGAATTTTTGTTTCAGTGTTAAAAGTTTGGGGAGCATAAAACTCTAAATCTGCTAAATGTCTTGTCCCTTTGGAAAGAGTTG",
-                "hg18.chr6" : "CCTATACCTTTCTTTTATGAGAATTTTGTTTTAATCCTAAACTTTTGGGATCATAAACCATTTAATCTGTGAAATATCTAATCTTTTGGGAAATAGTGG",
-                "panTro2.chr6" : "CCTATACCTTTCTTTTATGAGAATTTTGTTTTAATCCTAAACTTTTGGGATCATAAACCATTTAATCTGTGAAATATCTAATCTTTTGGGAAATAGTGG",
-                "calJac1.Contig6394" : "CCTATACCTTTCTTTCATGAGAATTTTGTTTGAATCCTAAACTTTTGGGATCATAAGCCATTTAATCTGTGAAATGTGAAATCTTTTGGGAAACAGTGG",
-                "otoGar1.scaffold_334.1-359464" : "GGAAGCATAAACTTTTAATCTATGAAATATCAAATCACTTGGGCAATAGCTG",
-                "loxAfr1.scaffold_75566" : "TTTGGTTAGAATTATGCTTTAATTCAAAACTTCCGGGAGTATAAACCATTTAGTCTGCGAAATGCCAAATCTTCAGGGGAAAAAGCTG"}
+                "mm9.chr10": "CCTGTACCCTTTGGTGAGAATTTTTGTTTCAGTGTTAAAAGTTTGGGGAGCATAAAACTCTAAATCTGCTAAATGTCTTGTCCCTTTGGAAAGAGTTG",
+                "hg18.chr6": "CCTATACCTTTCTTTTATGAGAATTTTGTTTTAATCCTAAACTTTTGGGATCATAAACCATTTAATCTGTGAAATATCTAATCTTTTGGGAAATAGTGG",
+                "panTro2.chr6": "CCTATACCTTTCTTTTATGAGAATTTTGTTTTAATCCTAAACTTTTGGGATCATAAACCATTTAATCTGTGAAATATCTAATCTTTTGGGAAATAGTGG",
+                "calJac1.Contig6394": "CCTATACCTTTCTTTCATGAGAATTTTGTTTGAATCCTAAACTTTTGGGATCATAAGCCATTTAATCTGTGAAATGTGAAATCTTTTGGGAAACAGTGG",
+                "otoGar1.scaffold_334.1-359464": "GGAAGCATAAACTTTTAATCTATGAAATATCAAATCACTTGGGCAATAGCTG",
+                "loxAfr1.scaffold_75566": "TTTGGTTAGAATTATGCTTTAATTCAAAACTTCCGGGAGTATAAACCATTTAGTCTGCGAAATGCCAAATCTTCAGGGGAAAAAGCTG"}
             for seq_id, sequence in correct_sequences.items():
                 self.assertEqual(seq_dict[seq_id].ungap('-'), sequence)
 
