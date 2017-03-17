@@ -128,6 +128,11 @@ class MuscleCommandline(AbstractCommandline):
                     "Distance measure for iteration 2",
                     checker_function=lambda x: x in DISTANCE_MEASURES_ITER2,
                     equate=False),
+            # gapextend       Floating point       [1]                The gap extend score.
+            _Option(["-gapextend", "gapextend"],
+                    "Gap extension penalty",
+                    checker_function=lambda x: isinstance(x, float),
+                    equate=False),
             # gapopen         Floating point       [1]                The gap open score.
             #                                                        Must be negative.
             _Option(["-gapopen", "gapopen"],
@@ -160,12 +165,26 @@ class MuscleCommandline(AbstractCommandline):
                     "Log file name (append to existing file)",
                     filename=True,
                     equate=False),
-            # maxdiagbreak    Integer              1                  Maximum distance
+            # matrix          File name            None.              File name for 
+            #                                                        substitution matrix in
+            #                                                        NCBI or WU-BLAST 
+            #                                                        format. If you specify
+            #                                                        your own matrix, you 
+            #                                                        should also specify:
+            #                                                        -gapopen <g>
+            #                                                        -gapextend <e>
+            #                                                        -center 0.0
+            _Option(["-matrix", "matrix"],
+                    "path to NCBI or WU-BLAST format protein substitution matrix "
+                    "also set -gapopen, -gapextend and -center",
+                    filename=True,
+                    equate=False),
+            # diagbreak    Integer              1                  Maximum distance
             #                                                        between two diagonals
             #                                                        that allows them to
             #                                                        merge into one
             #                                                        diagonal.
-            _Option(["-maxdiagbreak", "maxdiagbreak"],
+            _Option(["-diagbreak", "diagbreak"],
                     "Maximum distance between two diagonals that allows "
                     "them to merge into one diagonal",
                     checker_function=lambda x: isinstance(x, int),
@@ -227,6 +246,12 @@ class MuscleCommandline(AbstractCommandline):
                     "Objective score used by tree dependent refinement",
                     checker_function=lambda x: x in OBJECTIVE_SCORES,
                     equate=False),
+            # refinewindow    Integer              200                Length of window for
+            #                                                         -refinew.
+            _Option(["-refinewindow", "refinewindow"],
+                    "Length of window for -refinew",
+                    checker_function=lambda x: isinstance(x, int),
+                    equate=False),
             # root1           pseudo               pseudo             Method used to root
             _Option(["-root1", "root1"],
                     "Method used to root tree in iteration 1",
@@ -239,6 +264,21 @@ class MuscleCommandline(AbstractCommandline):
             _Option(["-root2", "root2"],
                     "Method used to root tree in iteration 2",
                     checker_function=lambda x: x in TREE_ROOT_METHODS,
+                    equate=False),
+            # scorefile       File name            None               File name where to
+            #                                                        write a score file. This
+            #                                                        contains one line for
+            #                                                        each column in the
+            #                                                        alignment. The line
+            #                                                        contains the letters in
+            #                                                        the column followed by
+            #                                                        the average BLOSUM62
+            #                                                        score over pairs of 
+            #                                                        letters in the column.
+            _Option(["-scorefile", "scorefile"],
+                    "Score file name, contains one line for each column"
+                    " in the alignment with average BLOSUM62 score",
+                    filename=True,
                     equate=False),
             # seqtype         protein              auto               Sequence type.
             #                nucleo
@@ -259,6 +299,13 @@ class MuscleCommandline(AbstractCommandline):
             _Option(["-smoothwindow", "smoothwindow"],
                     "Window used for anchor column smoothing",
                     checker_function=lambda x: isinstance(x, int),
+                    equate=False),
+            # spscore         File name                               Compute SP objective 
+            #                                                        score of multiple 
+            #                                                        alignment.
+            _Option(["-spscore", "spscore"],
+                    "Compute SP objective score of multiple alignment",
+                    filename=True,
                     equate=False),
             # SUEFF           Floating point value 0.1                Constant used in UPGMB
             #                between 0 and 1.                        clustering. Determines
@@ -281,6 +328,14 @@ class MuscleCommandline(AbstractCommandline):
             #                                                        compatible) format.
             _Option(["-tree2", "tree2"],
                     "Save Newick tree from iteration 2",
+                    equate=False),
+            # usetree         File name            None               Use given tree as guide
+            #                                                        tree. Must by in Newick
+            #                                                        (Phyip-compatible)
+            #                                                        format.
+            _Option(["-usetree", "usetree"],
+                    "Use given Newick tree as guide tree",
+                    filename=True,
                     equate=False),
             # weight1         none                 clustalw           Sequence weighting
             _Option(["-weight1", "weight1"],
@@ -389,16 +444,23 @@ class MuscleCommandline(AbstractCommandline):
             _Switch(["-noanchors", "noanchors"],
                     "Do not use anchor optimisation in tree dependent "
                     "refinement iterations"),
+            # brenner            no              Use Steven Brenner's method for computing
+            #                                   the root alignment.
+            _Switch(["-brenner", "brenner"],
+                    "Use Steve Brenner's root alignment method"),
+            # cluster            no              Perform fast clustering of input sequences.
+            #                                   Use the tree1 option to save the tree.
+            _Switch(["-cluster", "cluster"],
+                    "Perform fast clustering of input sequences, use -tree1 to save tree"),
+            # dimer              no              Use dimer approximation for the SP score 
+            #                                   (faster, slightly less accurate).
+            _Switch(["-dimer", "dimer"],
+                    "Use faster (slightly less accurate) dimer approximation for the SP score"),
             # group              yes             Group similar sequences together in the
             #                                   output. This is the default. See also
             #                                   stable.
             _Switch(["-group", "group"],
                     "Group similar sequences in output"),
-            # stable             no              Preserve input order of sequences in output
-            #                                   file. Default is to group sequences by
-            #                                   similarity (group).
-            _Switch(["-stable", "stable"],
-                    "Do not group similar sequences in output (not supported in v3.8)"),
             # ############# log-expectation profile score ######################
             # One of either -le, -sp, or -sv
             #
@@ -429,20 +491,35 @@ class MuscleCommandline(AbstractCommandline):
             # ############# END log-expectation profile score ######################
             # quiet              no              Do not display progress messages.
             _Switch(["-quiet", "quiet"],
-                    "Use sum-of-pairs protein nucleotide profile score"),
+                    "Do not display progress messages"),
             # refine             no              Input file is already aligned, skip first
             #                                   two iterations and begin tree dependent
             #                                   refinement.
             _Switch(["-refine", "refine"],
                     "Only do tree dependent refinement"),
+            # refinew            no              Refine an alignment by dividing it into  
+            #                                   non-overlapping windows and re-aligning 
+            #                                   each window. Typically used for whole-genome 
+            #                                   nucleotide alignments.
+            _Switch(["-refinew", "refinew"],
+                    "Only do tree dependent refinement using sliding window approach"),
             # core               yes in muscle,  Do not catch exceptions.
             #                   no in muscled.
             _Switch(["-core", "core"],
-                    "Catch exceptions"),
+                    "Do not catch exceptions"),
             # nocore             no in muscle,   Catch exceptions and give an error message
             #                   yes in muscled. if possible.
             _Switch(["-nocore", "nocore"],
-                    "Do not catch exceptions"),
+                    "Catch exceptions"),
+            # stable             no              Preserve input order of sequences in output
+            #                                   file. Default is to group sequences by
+            #                                   similarity (group).
+            _Switch(["-stable", "stable"],
+                    "Do not group similar sequences in output (not supported in v3.8)"),
+
+            # termgaps4          yes             Use 4-way test for treatment of terminal 
+            #                                    gaps. (Cannot be disabled in this version).
+            #
             # termgapsfull       no              Terminal gaps penalized with full penalty.
             #                                   [1] Not fully supported in this version.
             #
