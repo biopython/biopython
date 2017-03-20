@@ -267,7 +267,6 @@ def parse(handle):
 
     where each record is a Contig object.
     """
-
     handle = iter(handle)
 
     line = ""
@@ -462,8 +461,8 @@ def parse(handle):
 
 
 class ACEFileRecord(object):
-    """Holds data of an ACE file.
-    """
+    """Holds data of an ACE file."""
+
     def __init__(self):
         self.ncontigs = None
         self.nreads = None
@@ -472,7 +471,6 @@ class ACEFileRecord(object):
 
     def sort(self):
         """Sorts wr, rt and ct tags into the appropriate contig / read instance, if possible."""
-
         ct = []
         rt = []
         wr = []
@@ -524,10 +522,7 @@ class ACEFileRecord(object):
 
 
 def read(handle):
-    """Parses the full ACE file in list of contigs.
-
-    """
-
+    """Parses the full ACE file in list of contigs."""
     handle = iter(handle)
 
     record = ACEFileRecord()

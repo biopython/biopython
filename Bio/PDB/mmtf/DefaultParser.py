@@ -101,7 +101,6 @@ class StructureDecoder(object):
         :param secondary_structure_type: the type of secondary structure used (types are according to DSSP and
         number to type mappings are defined in the specification)
         """
-
         # MMTF uses a NUL character to indicate a blank insertion code, but
         # StructureBuilder expects a space instead.
         if insertion_code == "\x00":

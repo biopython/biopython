@@ -21,7 +21,7 @@ To parse a Swiss-Prot record, we first get a handle to a Swiss-Prot record. Ther
 >>> handle = gzip.open("myswissprotfile.dat.gz", "rt")
 \end{verbatim}
 \item Open a Swiss-Prot file over the internet:
-# TODO: Need to ensure text mode on Python 3 with urlopen
+% TODO: Need to ensure text mode on Python 3 with urlopen
 \begin{verbatim}
 >>> import urllib
 >>> handle = urllib.urlopen("http://www.somelocation.org/data/someswissprotfile.dat")
@@ -429,9 +429,9 @@ The functions \verb|get_prosite_entry()| and \verb|get_prodoc_entry()| are used 
 >>> from Bio import ExPASy
 >>> handle = ExPASy.get_prosite_entry('PS00001')
 >>> html = handle.read()
->>> output = open("myprositerecord.html", "w")
->>> output.write(html)
->>> output.close()
+>>> with open("myprositerecord.html", "w") as out_handle:
+...     out_handle.write(html)
+...
 \end{verbatim}
 
 and similarly for a Prosite documentation record:
@@ -440,9 +440,9 @@ and similarly for a Prosite documentation record:
 >>> from Bio import ExPASy
 >>> handle = ExPASy.get_prodoc_entry('PDOC00001')
 >>> html = handle.read()
->>> output = open("myprodocrecord.html", "w")
->>> output.write(html)
->>> output.close()
+>>> with open("myprodocrecord.html", "w") as out_handle:
+...     out_handle.write(html)
+...
 \end{verbatim}
 
 For these functions, an invalid accession number returns an error message in HTML format.

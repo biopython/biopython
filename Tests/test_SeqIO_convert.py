@@ -14,7 +14,7 @@ from Bio import SeqIO
 from Bio.SeqIO import QualityIO
 from Bio.SeqIO._convert import _converter as converter_dict
 from Bio._py3k import StringIO
-from Bio.Alphabet import generic_protein, generic_nucleotide, generic_dna
+from Bio.Alphabet import generic_nucleotide, generic_dna
 
 
 # TODO - share this with the QualityIO tests...
@@ -110,7 +110,7 @@ def compare_record(old, new, truncate=None):
                         [min(q, truncate) for q in new.letter_annotations["phred_quality"]]:
             pass
         else:
-            raise ValuerError("Mismatch in phred_quality")
+            raise ValueError("Mismatch in phred_quality")
     if "solexa_quality" in old.letter_annotations \
     and "solexa_quality" in new.letter_annotations \
     and old.letter_annotations["solexa_quality"] != new.letter_annotations["solexa_quality"]:

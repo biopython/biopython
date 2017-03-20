@@ -58,7 +58,7 @@ def _alb_line2coords(line):
 
 
 def _get_coords(filename):
-    alb = file(filename)
+    alb = open(filename)
 
     start_line = None
     end_line = None

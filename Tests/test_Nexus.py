@@ -1,7 +1,8 @@
 # Copyright 2005 by Iddo Friedberg.  All rights reserved.
-# Revisions copyright 2006-2013 by Peter Cock. All rights reserved.
+# Revisions copyright 2006-2013,2017 by Peter Cock. All rights reserved.
 # Revisions copyright 2008 by Frank Kauff. All rights reserved.
 # Revisions copyright 2009 by Michiel de Hoon. All rights reserved.
+# Revisions copyright 2015 by Joe Cora. All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -13,12 +14,51 @@ import tempfile
 import sys
 from Bio._py3k import StringIO
 from Bio._py3k import range
-from Bio.AlignIO.NexusIO import NexusIterator
+from Bio.Align import MultipleSeqAlignment
+from Bio.AlignIO.NexusIO import NexusIterator, NexusWriter
 from Bio.SeqRecord import SeqRecord
 from Bio.Nexus import Nexus, Trees
 from Bio.Seq import Seq
 from Bio.Alphabet.IUPAC import ambiguous_dna
 from Bio import SeqIO
+
+
+class OldSelfTests(unittest.TestCase):
+    """Test cases originally in Nexus.py via __main__"""
+
+    def test_trees_and_taxa_block(self):
+        """Basic tree file with TREES and TAXA block"""
+        nexus1 = Nexus.Nexus()
+        nexus1.read('Nexus/bats.nex')
+
+    def test_data_and_codons_block(self):
+        """Simple sequence data file with DATA and CODONS block"""
+        nexus2 = Nexus.Nexus()
+        nexus2.read('Nexus/codonposset.nex')
+
+    def test_data_sets_trees_unknown_block(self):
+        """Sequence data file with DATA, SETS, TREES and an unknown block"""
+        nexus3 = Nexus.Nexus()
+        nexus3.read('Nexus/test_Nexus_input.nex')
+
+    def test_taxa_and_characters_block(self):
+        """Taxa and characters multi-state block"""
+        nexus4 = Nexus.Nexus()
+        nexus4.read('Nexus/vSysLab_Ganaspidium_multistate.nex')
+
+    def test_taxa_and_characters_with_many_codings_one_without_state(self):
+        """Taxa and chr blocks, over 9 codings, 1 character without states"""
+        nexus5 = Nexus.Nexus()
+        nexus5.read('Nexus/vSysLab_Heptascelio_no-states_10+chars.nex')
+
+    def test_taxa_and_characters_with_many_codings_two_without_state(self):
+        """Taxa and chr blocks, over 9 codings, 2 character without states"""
+        nexus6 = Nexus.Nexus()
+        # TODO: Implement continuous datatype:
+        # Bio.Nexus.Nexus.NexusError: Unsupported datatype: continuous
+        self.assertRaises(Nexus.NexusError,
+                          nexus6.read,
+                          'Nexus/vSysLab_Oreiscelio_discrete+continuous.nex')
 
 
 class NexusTest1(unittest.TestCase):
@@ -490,25 +530,29 @@ class TestSelf(unittest.TestCase):
                 print("%r %s %s" % (r.seq, r.name, r.id))
         print("Done")
 
-        def test_empty_file(self):
+    def test_empty_file_read(self):
+        self.assertEqual([], list(NexusIterator(StringIO())))
 
-            print("Reading an empty file")
-            assert 0 == len(list(NexusIterator(StringIO())))
-            print("Done")
-            print("")
-            print("Writing...")
+    def test_multiple_output(self):
+        records = [SeqRecord(Seq("ATGCTGCTGAT", alphabet=ambiguous_dna), id="foo"),
+                   SeqRecord(Seq("ATGCTGCAGAT", alphabet=ambiguous_dna), id="bar"),
+                   SeqRecord(Seq("ATGCTGCGGAT", alphabet=ambiguous_dna), id="baz")]
+        a = MultipleSeqAlignment(records, alphabet=ambiguous_dna)
 
-            handle = StringIO()
-            NexusWriter(handle).write_file([a])
-            handle.seek(0)
-            print(handle.read())
+        handle = StringIO()
+        NexusWriter(handle).write_file([a])
+        handle.seek(0)
+        data = handle.read()
+        self.assertTrue(data.startswith("#NEXUS\nbegin data;\n"), data)
+        self.assertTrue(data.endswith("end;\n"), data)
 
-            handle = StringIO()
-            try:
-                NexusWriter(handle).write_file([a, a])
-                assert False, "Should have rejected more than one alignment!"
-            except ValueError:
-                pass
+        handle = StringIO()
+        try:
+            NexusWriter(handle).write_file([a, a])
+            assert False, "Should have rejected more than one alignment!"
+        except ValueError:
+            pass
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)

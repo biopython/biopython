@@ -86,6 +86,7 @@ class Mysql_dbutils(Generic_dbutils):
             # same fix also suggested by Eric Gibert:
             return cursor.lastrowid
 
+
 _dbutils["MySQLdb"] = Mysql_dbutils
 
 
@@ -122,6 +123,7 @@ class Psycopg2_dbutils(_PostgreSQL_dbutils):
             else:
                 conn.set_isolation_level(1)
 
+
 _dbutils["psycopg2"] = Psycopg2_dbutils
 
 
@@ -130,6 +132,7 @@ class Pgdb_dbutils(_PostgreSQL_dbutils):
 
     def autocommit(self, conn, y=True):
         raise NotImplementedError("pgdb does not support this!")
+
 
 _dbutils["pgdb"] = Pgdb_dbutils
 

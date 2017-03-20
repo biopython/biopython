@@ -248,7 +248,6 @@ class PlateRecord(object):
         This should all seem familiar to anyone who has used the NumPy
         array or matrix objects.
         """
-
         # Well identifier access
         if isinstance(index, basestring):
             try:

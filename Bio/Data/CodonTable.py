@@ -75,7 +75,6 @@ class CodonTable(object):
         >>> print(Bio.Data.CodonTable.standard_dna_table)
         >>> print(Bio.Data.CodonTable.generic_by_id[1])
         """
-
         if self.id:
             answer = "Table %i" % self.id
         else:
@@ -230,7 +229,6 @@ def list_ambiguous_codons(codons, ambiguous_nucleotide_values):
 
     Returns a new (longer) list of codon strings.
     """
-
     # Note ambiguous_nucleotide_values['R'] = 'AG' (etc)
     # This will generate things like 'TRR' from ['TAG', 'TGA'], which
     # we don't want to include:

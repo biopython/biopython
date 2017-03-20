@@ -479,6 +479,7 @@ class xbb_widget(object):
         self.sequence_id.mark_set('insert', '1.%d' % start)
         self.sequence_id.tag_add('sel', '1.%d' % start, '1.%d' % stop)
 
+
 if __name__ == '__main__':
     win = tk.Tk()
     xbbtools = xbb_widget()

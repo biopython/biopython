@@ -216,7 +216,6 @@ class Parser(object):
                 "mass spectrometry"
                 "interaction"
             """
-
             simple_comments = ["allergen",
                                "biotechnology",
                                "biophysicochemical properties",

@@ -13,7 +13,6 @@ import sys
 from Bio import BiopythonWarning
 from Bio.Alphabet import generic_protein, generic_nucleotide
 from Bio.Alphabet import generic_dna, generic_rna
-from Bio.Alphabet import _check_type_compatible
 from Bio.Alphabet.IUPAC import protein, extended_protein
 from Bio.Alphabet.IUPAC import unambiguous_dna, ambiguous_dna, ambiguous_rna
 from Bio.Data.IUPACData import ambiguous_dna_values, ambiguous_rna_values

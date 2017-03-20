@@ -180,7 +180,6 @@ class _Matrix(object):
             dm[i, j] = 2            set the value from 'i' to 'j'
 
         """
-
         # Handle single indexing
         if isinstance(item, (int, str)):
             index = None
@@ -399,8 +398,7 @@ class DistanceCalculator(object):
     models = ['identity'] + dna_models + protein_models
 
     def __init__(self, model='identity'):
-        """Initialize with a distance model"""
-
+        """Initialize with a distance model."""
         if model == 'identity':
             self.scoring_matrix = None
         elif model in self.dna_models:
@@ -462,7 +460,6 @@ class DistanceCalculator(object):
                 DNA or Protein multiple sequence alignment.
 
         """
-
         if not isinstance(msa, MultipleSeqAlignment):
             raise TypeError("Must provide a MultipleSeqAlignment object.")
 
@@ -639,7 +636,6 @@ class DistanceTreeConstructor(TreeConstructor):
             distance_matrix : _DistanceMatrix
                 The distance matrix for tree construction.
         """
-
         if not isinstance(distance_matrix, _DistanceMatrix):
             raise TypeError("Must provide a _DistanceMatrix object.")
 
@@ -731,7 +727,8 @@ class Scorer(object):
     def get_score(self, tree, alignment):
         """Caller to get the score of a tree for the given alignment.
 
-        This should be implemented in subclass"""
+        This should be implemented in subclass.
+        """
         raise NotImplementedError("Method not implemented!")
 
 
@@ -741,7 +738,8 @@ class TreeSearcher(object):
     def search(self, starting_tree, alignment):
         """Caller to search the best tree with a starting tree.
 
-        This should be implemented in subclass"""
+        This should be implemented in subclass.
+        """
         raise NotImplementedError("Method not implemented!")
 
 
@@ -770,7 +768,6 @@ class NNITreeSearcher(TreeSearcher):
                multiple sequence alignment used to calculate parsimony
                score of different NNI trees.
         """
-
         return self._nni(starting_tree, alignment)
 
     def _nni(self, starting_tree, alignment):

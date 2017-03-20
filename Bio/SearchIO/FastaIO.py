@@ -114,7 +114,7 @@ from Bio.SearchIO._index import SearchIndexer
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 
 
-__all__ = ['FastaM10Parser', 'FastaM10Indexer']
+__all__ = ('FastaM10Parser', 'FastaM10Indexer')
 
 
 # precompile regex patterns

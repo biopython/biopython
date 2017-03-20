@@ -37,6 +37,11 @@ Instead, we can do this under either Python 2 or 3:
 Once we drop support for Python 2, the whole of Bio._py3k will
 go away.
 """
+
+# From the point of view of pep8 and flake8, there are lots of issues with
+# this file. This line tells flake8 to ignore it for quality assurance:
+# flake8: noqa
+
 import sys
 
 
@@ -162,7 +167,7 @@ if sys.version_info[0] >= 3:
     from io import StringIO
 
     # On Python 3 urllib, urllib2, and urlparse were merged:
-    from urllib.request import urlopen, Request, urlretrieve, urlparse
+    from urllib.request import urlopen, Request, urlretrieve, urlparse, urlcleanup
     from urllib.parse import urlencode, quote
     from urllib.error import HTTPError
 
@@ -219,7 +224,7 @@ else:
 
     # Under urllib.request on Python 3:
     from urllib2 import urlopen, Request
-    from urllib import urlretrieve
+    from urllib import urlretrieve, urlcleanup
     from urlparse import urlparse
 
     # Under urllib.parse on Python 3:

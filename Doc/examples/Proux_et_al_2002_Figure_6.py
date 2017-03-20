@@ -113,6 +113,7 @@ def get_feature(features, id, tags=("locus_tag", "gene", "old_locus_tag")):
                     return f
     raise KeyError(id)
 
+
 gd_diagram = GenomeDiagram.Diagram(name)
 feature_sets = {}
 max_len = 0

@@ -104,9 +104,8 @@ class TestQblast(unittest.TestCase):
             pass
         else:
             # We used an identifier as the query
-            self.assertTrue(query,
-                            record.query_id.split("|"),
-                            "Expected %r within query_id %r" % (query, record.query_id))
+            self.assertIn(query, record.query_id.split("|"),
+                          "Expected %r within query_id %r" % (query, record.query_id))
 
         # Check the recorded input parameters agree with those requested
         self.assertEqual(float(record.expect), e_value)

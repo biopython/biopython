@@ -13,7 +13,7 @@ from ._base import _BaseExonerateParser, _STRAND_MAP
 from .exonerate_vulgar import ExonerateVulgarIndexer
 
 
-__all__ = ['ExonerateCigarParser', 'ExonerateCigarIndexer']
+__all__ = ('ExonerateCigarParser', 'ExonerateCigarIndexer')
 
 
 # precompile regex

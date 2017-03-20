@@ -5,7 +5,7 @@
 
 import numpy
 
-from Bio.Cluster.cluster import *
+from Bio.Cluster.cluster import *  # noqa - lots coming from C code
 
 
 def _treesort(order, nodeorder, nodecounts, tree):
@@ -145,10 +145,9 @@ Cluster/TreeView program. A Record has the following members:
     def __init__(self, handle=None):
         """Read gene expression data from the file handle and return a Record.
 
-The file should be in the format defined for Michael Eisen's
-Cluster/TreeView program.
-
-"""
+        The file should be in the format defined for Michael Eisen's
+        Cluster/TreeView program.
+        """
         self.data = None
         self.mask = None
         self.geneid = None
@@ -311,7 +310,6 @@ Return values:
   - nfound:    the number of times this solution was found.
 
 """
-
         if transpose == 0:
             weight = self.eweight
         else:
@@ -358,7 +356,6 @@ Return values:
       the SOM grid cell with coordinates (ix, iy).
 
 """
-
         if transpose == 0:
             weight = self.eweight
         else:
@@ -435,7 +432,6 @@ Return values:
     if equal to 1: clusters of microarrays (columns) are considered.
 
 """
-
         if transpose == 0:
             weight = self.eweight
         else:
@@ -641,8 +637,7 @@ Arguments:
 def read(handle):
     """Read gene expression data from the file handle and return a Record.
 
-The file should be in the file format defined for Michael Eisen's
-Cluster/TreeView program.
-
-"""
+    The file should be in the file format defined for Michael Eisen's
+    Cluster/TreeView program.
+    """
     return Record(handle)

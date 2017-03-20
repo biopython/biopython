@@ -84,7 +84,7 @@ def compare_record(old, new, truncate=None):
                         [min(q, truncate) for q in new.letter_annotations["phred_quality"]]:
             pass
         else:
-            raise ValuerError("Mismatch in phred_quality")
+            raise ValueError("Mismatch in phred_quality")
     if "solexa_quality" in old.letter_annotations \
     and "solexa_quality" in new.letter_annotations \
     and old.letter_annotations["solexa_quality"] != new.letter_annotations["solexa_quality"]:
@@ -174,6 +174,7 @@ class TestFastqErrors(unittest.TestCase):
     def check_qual_char(self, filename, good_count, count):
         self.check_fails(filename, good_count)
         self.check_general_passes(filename, count)
+
 
 # Now add methods at run time... these FASTQ files will be rejected
 # by both the low level parser AND the high level SeqRecord parser:
@@ -735,6 +736,7 @@ class TestSFF(unittest.TestCase):
         # Save the clipped record...
         h = BytesIO()
         count = SeqIO.write(record, h, "sff")
+        self.assertEqual(count, 1)
         # Now reload it...
         h.seek(0)
         with warnings.catch_warnings(record=True) as w:

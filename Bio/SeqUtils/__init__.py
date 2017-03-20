@@ -18,7 +18,6 @@ from math import pi, sin, cos
 
 from Bio.Seq import Seq, MutableSeq
 from Bio import Alphabet
-from Bio.Alphabet import IUPAC
 from Bio.Data import IUPACData
 
 

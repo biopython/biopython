@@ -1,4 +1,4 @@
-# Copyright 2008-2016 by Peter Cock.  All rights reserved.
+# Copyright 2008-2017 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -151,6 +151,7 @@ from . import NexusIO
 from . import PhylipIO
 from . import EmbossIO
 from . import FastaIO
+from . import MafIO
 
 # Convention for format names is "mainname-subtype" in lower case.
 # Please use the same names as BioPerl and EMBOSS where possible.
@@ -159,6 +160,7 @@ _FormatToIterator = {  # "fasta" is done via Bio.SeqIO
                      "clustal": ClustalIO.ClustalIterator,
                      "emboss": EmbossIO.EmbossIterator,
                      "fasta-m10": FastaIO.FastaM10Iterator,
+                     "maf": MafIO.MafIterator,
                      "nexus": NexusIO.NexusIterator,
                      "phylip": PhylipIO.PhylipIterator,
                      "phylip-sequential": PhylipIO.SequentialPhylipIterator,
@@ -168,6 +170,7 @@ _FormatToIterator = {  # "fasta" is done via Bio.SeqIO
 
 _FormatToWriter = {  # "fasta" is done via Bio.SeqIO
                      # "emboss" : EmbossIO.EmbossWriter, (unfinished)
+                   "maf": MafIO.MafWriter,
                    "nexus": NexusIO.NexusWriter,
                    "phylip": PhylipIO.PhylipWriter,
                    "phylip-sequential": PhylipIO.SequentialPhylipWriter,

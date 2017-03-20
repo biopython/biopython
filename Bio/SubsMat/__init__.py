@@ -115,10 +115,8 @@ import re
 import sys
 import copy
 import math
-import warnings
 
 # BioPython imports
-import Bio
 from Bio import Alphabet
 from Bio.SubsMat import FreqTable
 
@@ -285,11 +283,14 @@ class SeqMat(dict):
 
     def print_mat(self, f=None, format="%4d", bottomformat="%4s",
                 alphabet=None, factor=1):
-        """Print a nice half-matrix. f=sys.stdout to see on the screen
+        """Print a nice half-matrix.
+
+        f=sys.stdout to see on the screen.
+
         User may pass own alphabet, which should contain all letters in the
         alphabet of the matrix, but may be in a different order. This
-        order will be the order of the letters on the axes"""
-
+        order will be the order of the letters on the axes.
+        """
         f = f or sys.stdout
         if not alphabet:
             alphabet = self.ab_list

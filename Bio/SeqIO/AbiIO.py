@@ -401,18 +401,35 @@ def AbiIterator(handle, alphabet=None, trim=False):
     # raw data (for advanced end users benefit)
     annot['abif_raw'] = raw
 
-    # use the file name as SeqRecord.name if available
-    try:
-        file_name = basename(handle.name).replace('.ab1', '')
-    except AttributeError:
-        file_name = ""
-    record = SeqRecord(Seq(seq, alphabet),
-                       id=sample_id, name=file_name,
-                       description='',
-                       annotations=annot,
-                       letter_annotations={'phred_quality': qual})
+    # fsa check
+    is_fsa_file = set(['SpNm1', 'LIMS1', 'CTID1']).issubset(raw)
 
-    if not trim:
+    if is_fsa_file:
+        try:
+            file_name = basename(handle.name).replace('.fsa', '')
+        except AttributeError:
+            file_name = ""
+        sample_id = raw['LIMS1']
+        description = raw['CTID1']
+        record = SeqRecord(Seq(''),
+                           id=sample_id,
+                           name=file_name,
+                           description=description,
+                           annotations=annot)
+
+    else:
+        # use the file name as SeqRecord.name if available
+        try:
+            file_name = basename(handle.name).replace('.ab1', '')
+        except AttributeError:
+            file_name = ""
+        record = SeqRecord(Seq(seq, alphabet),
+                           id=sample_id, name=file_name,
+                           description='',
+                           annotations=annot,
+                           letter_annotations={'phred_quality': qual})
+
+    if not trim or is_fsa_file:
         yield record
     else:
         yield _abi_trim(record)
@@ -479,7 +496,6 @@ def _abi_trim(seq_record):
     http://www.phrap.org/phredphrap/phred.html
     http://www.clcbio.com/manual/genomics/Quality_abif_trimming.html
     """
-
     start = False   # flag for starting position of trimmed sequence
     segment = 20    # minimum sequence length
     trim_start = 0  # init start index

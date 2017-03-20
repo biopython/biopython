@@ -1,8 +1,9 @@
 # Copyright 2006-2016 by Peter Cock.  All rights reserved.
 #
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Bio.AlignIO support for "clustal" output from CLUSTAL W and other tools.
 
 You are expected to use this module via the Bio.AlignIO functions (or the
@@ -22,7 +23,6 @@ class ClustalWriter(SequentialAlignmentWriter):
 
     def write_alignment(self, alignment):
         """Use this to write (another) single alignment to an open file."""
-
         if len(alignment) == 0:
             raise ValueError("Must have at least one sequence")
         if alignment.get_alignment_length() == 0:

@@ -146,7 +146,7 @@ def efetch(db, **keywords):
 
     >>> from Bio import Entrez
     >>> Entrez.email = "Your.Name.Here@example.org"
-    >>> handle = Entrez.efetch(db="nucleotide", id="57240072", rettype="gb", retmode="text")
+    >>> handle = Entrez.efetch(db="nucleotide", id="AY851612", rettype="gb", retmode="text")
     >>> print(handle.readline().strip())
     LOCUS       AY851612                 892 bp    DNA     linear   PLN 10-APR-2007
     >>> handle.close()
@@ -198,14 +198,14 @@ def esearch(db, term, **keywds):
 
     >>> from Bio import Entrez
     >>> Entrez.email = "Your.Name.Here@example.org"
-    >>> handle = Entrez.esearch(db="nucleotide", retmax=10, term="opuntia[ORGN] accD")
+    >>> handle = Entrez.esearch(db="nucleotide", retmax=10, term="opuntia[ORGN] accD", idtype="acc")
     >>> record = Entrez.read(handle)
     >>> handle.close()
-    >>> record["Count"] >= 2
+    >>> int(record["Count"]) >= 2
     True
-    >>> "156535671" in record["IdList"]
+    >>> "EF590893.1" in record["IdList"]
     True
-    >>> "156535673" in record["IdList"]
+    >>> "EF590892.1" in record["IdList"]
     True
 
     """
@@ -296,17 +296,18 @@ def esummary(**keywds):
 
     Raises an IOError exception if there's a network error.
 
-    This example discovers more about entry 30367 in the journals database:
+    This example discovers more about entry 19923 in the structure
+    database:
 
     >>> from Bio import Entrez
     >>> Entrez.email = "Your.Name.Here@example.org"
-    >>> handle = Entrez.esummary(db="journals", id="30367")
+    >>> handle = Entrez.esummary(db="structure", id="19923")
     >>> record = Entrez.read(handle)
     >>> handle.close()
     >>> print(record[0]["Id"])
-    30367
-    >>> print(record[0]["Title"])
-    Computational biology and chemistry
+    19923
+    >>> print(record[0]["PdbDescr"])
+    Crystal Structure Of E. Coli Aconitase B
 
     """
     cgi = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi'
@@ -339,7 +340,7 @@ def egquery(**keywds):
     >>> handle.close()
     >>> for row in record["eGQueryResult"]:
     ...     if "pmc" in row["DbName"]:
-    ...         print(row["Count"] > 60)
+    ...         print(int(row["Count"]) > 60)
     True
 
     """
@@ -413,12 +414,14 @@ def ecitmatch(**keywds):
 
     >>> from Bio import Entrez
     >>> Entrez.email = "Your.Name.Here@example.org"
-    >>> citation_1 = {
-    ...    "journal_title": "proc natl acad sci u s a",
-    ...    "year": "1991", "volume": "88", "first_page": "3248",
-    ...    "author_name": "mann bj", "key": "citation_1"}
-    >>> record = Entrez.ecitmatch(db="pubmed", bdata=[citation_1])
-    >>> print(record["Query"])
+    >>> citation_1 = {"journal_title": "proc natl acad sci u s a",
+    ...               "year": "1991", "volume": "88", "first_page": "3248",
+    ...               "author_name": "mann bj", "key": "citation_1"}
+    >>> handle = Entrez.ecitmatch(db="pubmed", bdata=[citation_1])
+    >>> print(handle.read().strip().split("|"))
+    ['proc natl acad sci u s a', '1991', '88', '3248', 'mann bj', 'citation_1', '2014248']
+    >>> handle.close()
+
     """
     cgi = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/ecitmatch.cgi'
     variables = _update_ecitmatch_variables(keywds)

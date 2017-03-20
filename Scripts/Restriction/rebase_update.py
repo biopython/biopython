@@ -25,7 +25,8 @@ except ImportError:
     # Python 3
     from urllib.request import FancyURLopener
 
-from Bio.Restriction.RanaConfig import *
+from Bio.Restriction.RanaConfig import ftp_proxy, ftp_Rebase, Rebase_name
+from Bio.Restriction.RanaConfig import ftp_emb_e, ftp_emb_s, ftp_emb_r
 
 
 class RebaseUpdate(FancyURLopener):

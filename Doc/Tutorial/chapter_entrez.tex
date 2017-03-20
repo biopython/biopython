@@ -34,12 +34,14 @@ To paraphrase:
 \item Use the \url{http://eutils.ncbi.nlm.nih.gov} address, not the standard NCBI Web address.  Biopython uses this web address.
 \item Make no more than three requests every seconds (relaxed from at most one request every three seconds in early 2009).  This is automatically enforced by Biopython.
 \item Use the optional email parameter so the NCBI can contact you if there is a problem.  You can either explicitly set this as a parameter with each call to Entrez (e.g. include {\tt email="A.N.Other@example.com"} in the argument list), or you can set a global email address:
+%doctest
 \begin{verbatim}
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com"
 \end{verbatim}
 {\tt Bio.Entrez} will then use this email address with each call to Entrez.  The {\tt example.com} address is a reserved domain name specifically for documentation (RFC 2606).  Please DO NOT use a random email -- it's better not to give an email at all. The email parameter has been mandatory since June 1, 2010. In case of excessive usage, NCBI will attempt to contact a user at the e-mail address provided prior to blocking access to the E-utilities.
 \item If you are using Biopython within some larger software suite, use the tool parameter to specify this.  You can either explicitly set the tool name as a parameter with each call to Entrez (e.g. include {\tt tool="MyLocalScript"} in the argument list), or you can set a global tool name:
+%doctest
 \begin{verbatim}
 >>> from Bio import Entrez
 >>> Entrez.tool = "MyLocalScript"
@@ -58,6 +60,7 @@ EInfo provides field index term counts, last update, and available links for eac
 >>> Entrez.email = "A.N.Other@example.com"     # Always tell NCBI who you are
 >>> handle = Entrez.einfo()
 >>> result = handle.read()
+>>> handle.close()
 \end{verbatim}
 The variable \verb+result+ now contains a list of databases in XML format:
 \begin{verbatim}
@@ -185,15 +188,15 @@ search for the \emph{matK} gene in \emph{Cypripedioideae} orchids
 find out which fields you can search in each Entrez database):
 
 \begin{verbatim}
->>> handle = Entrez.esearch(db="nucleotide", term="Cypripedioideae[Orgn] AND matK[Gene]")
+>>> handle = Entrez.esearch(db="nucleotide", term="Cypripedioideae[Orgn] AND matK[Gene]", idtype="acc")
 >>> record = Entrez.read(handle)
 >>> record["Count"]
-'25'
+'348'
 >>> record["IdList"]
-['126789333', '37222967', '37222966', '37222965', ..., '61585492']
+['JQ660909.1', 'JQ660908.1', 'JQ660907.1', 'JQ660906.1', ..., 'JQ660890.1']
 \end{verbatim}
 
-\noindent Each of the IDs (126789333, 37222967, 37222966, \ldots) is a GenBank identifier.
+\noindent Each of the IDs (JQ660909.1, JQ660908.1, JQ660907.1, \ldots) is a GenBank identifier (Accession number).
 See section~\ref{sec:efetch} for information on how to actually download these GenBank records.
 
 Note that instead of a species name like \texttt{Cypripedioideae[Orgn]}, you can restrict the search using an NCBI taxon identifier, here this would be \texttt{txid158330[Orgn]}.  This isn't currently documented on the ESearch help page - the NCBI explained this in reply to an email query.  You can often deduce the search term formatting by playing with the Entrez web interface.  For example, including \texttt{complete[prop]} in a genome search restricts to just completed genomes.
@@ -279,18 +282,20 @@ This covers several possible databases, as described on the main \href{http://eu
 
 For most of their databases, the NCBI support several different file formats. Requesting a specific file format from Entrez using \verb|Bio.Entrez.efetch()| requires specifying the \verb|rettype| and/or \verb|retmode| optional arguments.  The different combinations are described for each database type on the pages linked to on \href{http://www.ncbi.nlm.nih.gov/entrez/query/static/efetch_help.html}{NCBI efetch webpage} (e.g. \href{http://eutils.ncbi.nlm.nih.gov/corehtml/query/static/efetchlit_help.html}{literature}, \href{http://eutils.ncbi.nlm.nih.gov/corehtml/query/static/efetchseq_help.html}{sequences} and \href{http://eutils.ncbi.nlm.nih.gov/corehtml/query/static/efetchtax_help.html}{taxonomy}).
 
-One common usage is downloading sequences in the FASTA or GenBank/GenPept plain text formats (which can then be parsed with \verb|Bio.SeqIO|, see Sections~\ref{sec:SeqIO_GenBank_Online} and~\ref{sec:efetch}). From the \emph{Cypripedioideae} example above, we can download GenBank record 186972394 using \verb+Bio.Entrez.efetch+:
+One common usage is downloading sequences in the FASTA or GenBank/GenPept plain text formats (which can then be parsed with \verb|Bio.SeqIO|, see Sections~\ref{sec:SeqIO_GenBank_Online} and~\ref{sec:efetch}). From the \emph{Cypripedioideae} example above, we can download GenBank record EU490707 using \verb+Bio.Entrez.efetch+:
 
 \begin{verbatim}
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com"     # Always tell NCBI who you are
->>> handle = Entrez.efetch(db="nucleotide", id="186972394", rettype="gb", retmode="text")
+>>> handle = Entrez.efetch(db="nucleotide", id="EU490707", rettype="gb", retmode="text")
 >>> print(handle.read())
-LOCUS       EU490707                1302 bp    DNA     linear   PLN 05-MAY-2008
+
+
+LOCUS       EU490707                1302 bp    DNA     linear   PLN 26-JUL-2016
 DEFINITION  Selenipedium aequinoctiale maturase K (matK) gene, partial cds;
             chloroplast.
 ACCESSION   EU490707
-VERSION     EU490707.1  GI:186972394
+VERSION     EU490707.1
 KEYWORDS    .
 SOURCE      chloroplast Selenipedium aequinoctiale
   ORGANISM  Selenipedium aequinoctiale
@@ -298,10 +303,11 @@ SOURCE      chloroplast Selenipedium aequinoctiale
             Spermatophyta; Magnoliophyta; Liliopsida; Asparagales; Orchidaceae;
             Cypripedioideae; Selenipedium.
 REFERENCE   1  (bases 1 to 1302)
-  AUTHORS   Neubig,K.M., Whitten,W.M., Carlsward,B.S., Blanco,M.A.,
-            Endara,C.L., Williams,N.H. and Moore,M.J.
-  TITLE     Phylogenetic utility of ycf1 in orchids
-  JOURNAL   Unpublished
+  AUTHORS   Neubig,K.M., Whitten,W.M., Carlsward,B.S., Blanco,M.A., Endara,L.,
+            Williams,N.H. and Moore,M.
+  TITLE     Phylogenetic utility of ycf1 in orchids: a plastid gene more
+            variable than matK
+  JOURNAL   Plant Syst. Evol. 277 (1-2), 75-84 (2009)
 REFERENCE   2  (bases 1 to 1302)
   AUTHORS   Neubig,K.M., Whitten,W.M., Carlsward,B.S., Blanco,M.A.,
             Endara,C.L., Williams,N.H. and Moore,M.J.
@@ -323,7 +329,6 @@ FEATURES             Location/Qualifiers
                      /transl_table=11
                      /product="maturase K"
                      /protein_id="ACC99456.1"
-                     /db_xref="GI:186972395"
                      /translation="IFYEPVEIFGYDNKSSLVLVKRLITRMYQQNFLISSVNDSNQKG
                      FWGHKHFFSSHFSSQMVSEGFGVILEIPFSSQLVSSLEEKKIPKYQNLRSIHSIFPFL
                      EDKFLHLNYVSDLLIPHPIHLEILVQILQCRIKDVPSLHLLRLLFHEYHNLNSLITSK
@@ -332,7 +337,7 @@ FEATURES             Location/Qualifiers
                      FWSQPYRIHIKQLSNYSFSFLGYFSSVLENHLVVRNQMLENSFIINLLTKKFDTIAPV
                      ISLIGSLSKAQFCTVLGHPISKPIWTDFSDSDILDRFCRICRNLCRYHSGSSKKQVLY
                      RIKYILRLSCARTLARKHKSTVRTFMRRLGSGLLEEFFMEEE"
-ORIGIN
+ORIGIN      
         1 attttttacg aacctgtgga aatttttggt tatgacaata aatctagttt agtacttgtg
        61 aaacgtttaa ttactcgaat gtatcaacag aattttttga tttcttcggt taatgattct
       121 aaccaaaaag gattttgggg gcacaagcat tttttttctt ctcatttttc ttctcaaatg
@@ -356,7 +361,10 @@ ORIGIN
      1201 tcgtgtgcta gaactttggc acggaaacat aaaagtacag tacgcacttt tatgcgaaga
      1261 ttaggttcgg gattattaga agaattcttt atggaagaag aa
 //
+
 \end{verbatim}
+
+Please be aware that as of October 2016 GI identifiers are discontinued in favour of accession numbers. You can still fetch sequences based on their GI, but new sequences are no longer given this identifier. You should instead refer to them by the ``Accession number'' as done in the example.
 
 The arguments \verb+rettype="gb"+ and \verb+retmode="text"+ let us download this record in the GenBank format.
 
@@ -372,7 +380,7 @@ If you fetch the record in one of the formats accepted by \verb+Bio.SeqIO+ (see 
 
 \begin{verbatim}
 >>> from Bio import Entrez, SeqIO
->>> handle = Entrez.efetch(db="nucleotide", id="186972394", rettype="gb", retmode="text")
+>>> handle = Entrez.efetch(db="nucleotide", id="EU490707", rettype="gb", retmode="text")
 >>> record = SeqIO.read(handle, "genbank")
 >>> handle.close()
 >>> print(record)
@@ -391,10 +399,10 @@ import os
 from Bio import SeqIO
 from Bio import Entrez
 Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
-filename = "gi_186972394.gbk"
+filename = "EU490707.gbk"
 if not os.path.isfile(filename):
     # Downloading...
-    net_handle = Entrez.efetch(db="nucleotide", id="186972394", rettype="gb", retmode="text")
+    net_handle = Entrez.efetch(db="nucleotide", id="EU490707", rettype="gb", retmode="text")
     out_handle = open(filename, "w")
     out_handle.write(net_handle.read())
     out_handle.close()
@@ -410,7 +418,7 @@ To get the output in XML format, which you can parse using the \verb+Bio.Entrez.
 
 \begin{verbatim}
 >>> from Bio import Entrez
->>> handle = Entrez.efetch(db="nucleotide", id="186972394", retmode="xml")
+>>> handle = Entrez.efetch(db="nucleotide", id="EU490707", retmode="xml")
 >>> record = Entrez.read(handle)
 >>> handle.close()
 >>> record[0]["GBSeq_definition"]
@@ -591,16 +599,13 @@ Three things can go wrong when parsing an XML file:
 \end{itemize}
 
 The first case occurs if, for example, you try to parse a Fasta file as if it were an XML file:
+%doctest ../Tests/GenBank
 \begin{verbatim}
 >>> from Bio import Entrez
 >>> handle = open("NC_005816.fna") # a Fasta file
 >>> record = Entrez.read(handle)
 Traceback (most recent call last):
-  File "<stdin>", line 1, in <module>
-  File "/usr/local/lib/python2.7/site-packages/Bio/Entrez/__init__.py", line 257, in read
-    record = handler.read(handle)
-  File "/usr/local/lib/python2.7/site-packages/Bio/Entrez/Parser.py", line 164, in read
-    raise NotXMLError(e)
+  ...
 Bio.Entrez.Parser.NotXMLError: Failed to parse the XML data (syntax error: line 1, column 0). Please make sure that the input data are in XML format.
 \end{verbatim}
 Here, the parser didn't find the \verb|<?xml ...| tag with which an XML file is supposed to start, and therefore decides (correctly) that the file is not an XML file.
@@ -628,14 +633,8 @@ which will generate the following traceback:
 \begin{verbatim}
 >>> Entrez.read(handle)
 Traceback (most recent call last):
-  File "<stdin>", line 1, in <module>
-  File "/usr/local/lib/python2.7/site-packages/Bio/Entrez/__init__.py", line 257, in read
-    record = handler.read(handle)
-  File "/usr/local/lib/python2.7/site-packages/Bio/Entrez/Parser.py", line 160, in read
-    raise CorruptedXMLError(e)
+  ...
 Bio.Entrez.Parser.CorruptedXMLError: Failed to parse the XML data (no element found: line 16, column 0). Please make sure that the input data are not corrupted.
-
->>>
 \end{verbatim}
 Note that the error message tells you at what point in the XML file the error was detected.
 
@@ -671,26 +670,21 @@ The third type of error occurs if the XML file contains tags that do not have a 
 
 In this file, for some reason the tag \verb|<DocsumList>| (and several others) are not listed in the DTD file \verb|eInfo_020511.dtd|, which is specified on the second line as the DTD for this XML file. By default, the parser will stop and raise a ValidationError if it cannot find some tag in the DTD:
 
+%doctest ../Tests/Entrez/
 \begin{verbatim}
 >>> from Bio import Entrez
 >>> handle = open("einfo3.xml")
 >>> record = Entrez.read(handle)
 Traceback (most recent call last):
-  File "<stdin>", line 1, in <module>
-  File "/usr/local/lib/python2.7/site-packages/Bio/Entrez/__init__.py", line 257, in read
-    record = handler.read(handle)
-  File "/usr/local/lib/python2.7/site-packages/Bio/Entrez/Parser.py", line 154, in read
-    self.parser.ParseFile(handle)
-  File "/usr/local/lib/python2.7/site-packages/Bio/Entrez/Parser.py", line 246, in startElementHandler
-    raise ValidationError(name)
+  ...
 Bio.Entrez.Parser.ValidationError: Failed to find tag 'DocsumList' in the DTD. To skip all tags that are not represented in the DTD, please call Bio.Entrez.read or Bio.Entrez.parse with validate=False.
 \end{verbatim}
 Optionally, you can instruct the parser to skip such tags instead of raising a ValidationError. This is done by calling \verb|Entrez.read| or \verb|Entrez.parse| with the argument \verb|validate| equal to False:
+%doctest ../Tests/Entrez/
 \begin{verbatim}
 >>> from Bio import Entrez
 >>> handle = open("einfo3.xml")
 >>> record = Entrez.read(handle, validate=False)
->>>
 \end{verbatim}
 Of course, the information contained in the XML tags that are not in the DTD are not present in the record returned by \verb|Entrez.read|.
 
@@ -1070,7 +1064,7 @@ First, we use EGQuery to find out the number of results we will get before actua
 So, we expect to find 814 Entrez Nucleotide records (this is the number I obtained in 2008; it is likely to increase in the future). If you find some ridiculously high number of hits, you may want to reconsider if you really want to download all of them, which is our next step:
 \begin{verbatim}
 >>> from Bio import Entrez
->>> handle = Entrez.esearch(db="nucleotide", term="Cypripedioideae", retmax=814)
+>>> handle = Entrez.esearch(db="nucleotide", term="Cypripedioideae", retmax=814, idtype="acc")
 >>> record = Entrez.read(handle)
 \end{verbatim}
 
@@ -1092,7 +1086,7 @@ which is the number we expected. The 814 results are stored in \verb+record['IdL
 Let's look at the first five results:
 \begin{verbatim}
 >>> record["IdList"][:5]
-['187237168', '187372713', '187372690', '187372688', '187372686']
+['KX265015.1', 'KX265014.1', 'KX265013.1', 'KX265012.1', 'KX265011.1']
 \end{verbatim}
 
 \label{sec:entrez-batched-efetch}
@@ -1103,7 +1097,7 @@ However, in this situation you should ideally be using the history feature descr
 \begin{verbatim}
 >>> idlist = ",".join(record["IdList"][:5])
 >>> print(idlist)
-187237168,187372713,187372690,187372688,187372686
+KX265015.1, KX265014.1, KX265013.1, KX265012.1, KX265011.1]
 >>> handle = Entrez.efetch(db="nucleotide", id=idlist, retmode="xml")
 >>> records = Entrez.read(handle)
 >>> len(records)
@@ -1275,7 +1269,7 @@ to the session (instead of the identifiers).
 Suppose we want to search and download all the \textit{Opuntia} rpl16
 nucleotide sequences, and store them in a FASTA file.  As shown in
 Section~\ref{sec:entrez-search-fetch-genbank}, we can naively combine
-\verb|Bio.Entrez.esearch()| to get a list of GI numbers, and then call
+\verb|Bio.Entrez.esearch()| to get a list of Accession numbers, and then call
 \verb|Bio.Entrez.efetch()| to download them all.
 
 However, the approved approach is to run the search with the history
@@ -1289,7 +1283,7 @@ additional argument of \verb|usehistory="y"|,
 >>> from Bio import Entrez
 >>> Entrez.email = "history.user@example.com"
 >>> search_handle = Entrez.esearch(db="nucleotide",term="Opuntia[orgn] and rpl16",
-                                   usehistory="y")
+                                   usehistory="y", idtype="acc")
 >>> search_results = Entrez.read(search_handle)
 >>> search_handle.close()
 \end{verbatim}
@@ -1297,9 +1291,9 @@ additional argument of \verb|usehistory="y"|,
 \noindent When you get the XML output back, it will still include the usual search results:
 
 \begin{verbatim}
->>> gi_list = search_results["IdList"]
+>>> acc_list = search_results["IdList"]
 >>> count = int(search_results["Count"])
->>> assert count == len(gi_list)
+>>> assert count == len(acc_list)
 \end{verbatim}
 
 \noindent However, you also get given two additional pieces of information, the {\tt WebEnv} session cookie, and the {\tt QueryKey}:
@@ -1335,7 +1329,8 @@ for start in range(0, count, batch_size):
             fetch_handle = Entrez.efetch(db="nucleotide",
                                          rettype="fasta", retmode="text",
                                          retstart=start, retmax=batch_size,
-                                         webenv=webenv, query_key=query_key)
+                                         webenv=webenv, query_key=query_key,
+                                         idtype="acc")
         except HTTPError as err:
             if 500 <= err.code <= 599:
                 print("Received error from server %s" % err)

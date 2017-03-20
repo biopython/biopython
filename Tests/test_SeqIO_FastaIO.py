@@ -11,7 +11,7 @@ from Bio._py3k import StringIO
 
 from Bio import SeqIO
 from Bio.SeqIO.FastaIO import FastaIterator
-from Bio.Alphabet import generic_protein, generic_nucleotide, generic_dna
+from Bio.Alphabet import generic_nucleotide, generic_dna
 
 
 def title_to_ids(title):

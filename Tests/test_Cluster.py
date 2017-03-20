@@ -109,13 +109,13 @@ class TestCluster(unittest.TestCase):
         except Exception:  # TODO - Which exceptions?
             self.fail("treecluster failed to accept matrix data2")
 
-        self.assertRaises(TypeError, lambda: treecluster(data3))
-        self.assertRaises(TypeError, lambda: treecluster(data4))
-        self.assertRaises(TypeError, lambda: treecluster(data5))
-        self.assertRaises(TypeError, lambda: treecluster(data6))
-        self.assertRaises(TypeError, lambda: treecluster(data7))
-        self.assertRaises(TypeError, lambda: treecluster(data8))
-        self.assertRaises(TypeError, lambda: treecluster(data9))
+        self.assertRaises(TypeError, treecluster, data3)
+        self.assertRaises(TypeError, treecluster, data4)
+        self.assertRaises(TypeError, treecluster, data5)
+        self.assertRaises(TypeError, treecluster, data6)
+        self.assertRaises(TypeError, treecluster, data7)
+        self.assertRaises(TypeError, treecluster, data8)
+        self.assertRaises(TypeError, treecluster, data9)
 
     def test_kcluster(self):
         if TestCluster.module == 'Bio.Cluster':

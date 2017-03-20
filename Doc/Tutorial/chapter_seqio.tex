@@ -11,6 +11,8 @@ See also the \verb|Bio.SeqIO| wiki page (\url{http://biopython.org/wiki/SeqIO}),
 \end{verbatim}
 
 The ``catch'' is that you have to work with \verb|SeqRecord| objects (see Chapter~\ref{chapter:SeqRecord}), which contain a \verb|Seq| object (see Chapter~\ref{chapter:Bio.Seq}) plus annotation like an identifier and description.
+Note that when dealing with very large FASTA or FASTQ files, the overhead of working with all these objects can make scripts too slow.
+In this case consider the low-level \verb|SimpleFastaParser| and \verb|FastqGeneralIterator| parsers which return just a tuple of strings for each record (see Section~\ref{sec:low-level-fasta-fastq}).
 
 \section{Parsing or Reading Sequences}
 \label{sec:Bio.SeqIO-input}
@@ -382,9 +384,8 @@ only one record, use the \verb|Bio.SeqIO.read()| function:
 from Bio import Entrez
 from Bio import SeqIO
 Entrez.email = "A.N.Other@example.com"
-handle = Entrez.efetch(db="nucleotide", rettype="fasta", retmode="text", id="6273291")
-seq_record = SeqIO.read(handle, "fasta")
-handle.close()
+with Entrez.efetch(db="nucleotide", rettype="fasta", retmode="text", id="6273291") as handle:
+    seq_record = SeqIO.read(handle, "fasta")
 print("%s with %i features" % (seq_record.id, len(seq_record.features)))
 \end{verbatim}
 
@@ -407,9 +408,8 @@ alias for ``genbank'' in \verb|Bio.SeqIO|.
 from Bio import Entrez
 from Bio import SeqIO
 Entrez.email = "A.N.Other@example.com"
-handle = Entrez.efetch(db="nucleotide", rettype="gb", retmode="text", id="6273291")
-seq_record = SeqIO.read(handle, "gb") #using "gb" as an alias for "genbank"
-handle.close()
+with Entrez.efetch(db="nucleotide", rettype="gb", retmode="text", id="6273291") as handle
+    seq_record = SeqIO.read(handle, "gb") #using "gb" as an alias for "genbank"
 print("%s with %i features" % (seq_record.id, len(seq_record.features)))
 \end{verbatim}
 
@@ -428,13 +428,12 @@ so we must use the \verb|Bio.SeqIO.parse()| function:
 from Bio import Entrez
 from Bio import SeqIO
 Entrez.email = "A.N.Other@example.com"
-handle = Entrez.efetch(db="nucleotide", rettype="gb", retmode="text",
-                       id="6273291,6273290,6273289")
-for seq_record in SeqIO.parse(handle, "gb"):
-    print("%s %s..." % (seq_record.id, seq_record.description[:50]))
-    print("Sequence length %i, %i features, from: %s"
-          % (len(seq_record), len(seq_record.features), seq_record.annotations["source"]))
-handle.close()
+with Entrez.efetch(db="nucleotide", rettype="gb", retmode="text",
+                   id="6273291,6273290,6273289") as handle:
+    for seq_record in SeqIO.parse(handle, "gb"):
+        print("%s %s..." % (seq_record.id, seq_record.description[:50]))
+        print("Sequence length %i, %i features, from: %s"
+              % (len(seq_record), len(seq_record.features), seq_record.annotations["source"]))
 \end{verbatim}
 
 \noindent That should give the following output:
@@ -460,9 +459,8 @@ use the \verb|Bio.SeqIO.read()| function:
 \begin{verbatim}
 from Bio import ExPASy
 from Bio import SeqIO
-handle = ExPASy.get_sprot_raw("O23729")
-seq_record = SeqIO.read(handle, "swiss")
-handle.close()
+with ExPASy.get_sprot_raw("O23729") as handle:
+    seq_record = SeqIO.read(handle, "swiss")
 print(seq_record.id)
 print(seq_record.name)
 print(seq_record.description)
@@ -776,10 +774,10 @@ want to extract just a few records from it:
 \begin{verbatim}
 >>> from Bio import SeqIO
 >>> uniprot = SeqIO.index("uniprot_sprot.dat", "swiss")
->>> handle = open("selected.dat", "wb")
->>> for acc in ["P33487", "P19801", "P13689", "Q8JZQ5", "Q9TRC7"]:
-...     handle.write(uniprot.get_raw(acc))
->>> handle.close()
+>>> with open("selected.dat", "wb") as out_handle:
+...     for acc in ["P33487", "P19801", "P13689", "Q8JZQ5", "Q9TRC7"]:
+...         out_handle.write(uniprot.get_raw(acc))
+...
 \end{verbatim}
 
 Note with Python 3 onwards, we have to open the file for writing in
@@ -1227,11 +1225,10 @@ This isn't entirely straightforward the first time you see it!  On the bright si
 Note that although we don't encourage it, you \emph{can} use the \verb|format()| method to write to a file, for example something like this:
 \begin{verbatim}
 from Bio import SeqIO
-out_handle = open("ls_orchid_long.tab", "w")
-for record in SeqIO.parse("ls_orchid.gbk", "genbank"):
-    if len(record) > 100:
-        out_handle.write(record.format("tab"))
-out_handle.close()
+with open("ls_orchid_long.tab", "w") as out_handle:
+    for record in SeqIO.parse("ls_orchid.gbk", "genbank"):
+        if len(record) > 100:
+            out_handle.write(record.format("tab"))
 \end{verbatim}
 \noindent While this style of code will work for a simple sequential file format like FASTA or the simple tab separated format used here, it will \emph{not} work for more complex or interlaced file formats.  This is why we still recommend using \verb|Bio.SeqIO.write()|, as in the following example:
 \begin{verbatim}
@@ -1242,3 +1239,71 @@ SeqIO.write(records, "ls_orchid.tab", "tab")
 \noindent Making a single call to \verb|SeqIO.write(...)| is also much quicker than
 multiple calls to the \verb|SeqRecord.format(...)| method.
 
+\section{Low level FASTA and FASTQ parsers}
+\label{sec:low-level-fasta-fastq}
+
+Working with the low-level \verb|SimpleFastaParser| or
+\verb|FastqGeneralIterator| is often more practical than
+\verb|Bio.SeqIO.parse| when dealing with large high-throughput FASTA
+or FASTQ sequencing files where speed matters.
+As noted in the introduction to this chapter, the file-format neutral
+\verb|Bio.SeqIO| interface has the overhead of creating many objects
+even for simple formats like FASTA.
+
+When parsing FASTA files, internally \verb|Bio.SeqIO.parse()| calls
+the low-level \verb|SimpleFastaParser| with the file handle.
+You can use this directly - it iterates over the file handle returning
+each record as a tuple of two strings, the title line (everything after
+the \verb|>| character) and the sequence (as a plain string):
+
+%doctest examples
+\begin{verbatim}
+>>> from Bio.SeqIO.FastaIO import SimpleFastaParser
+>>> count = 0
+>>> total_len = 0
+>>> with open("ls_orchid.fasta") as in_handle:
+...     for title, seq in SimpleFastaParser(in_handle):
+...         count += 1
+...         total_len += len(seq)
+...
+>>> print("%i records with total sequence length %i" % (count, total_len))
+94 records with total sequence length 67518
+\end{verbatim}
+
+As long as you don't care about line wrapping (and you probably don't
+for short read high-througput data), then outputing FASTA format from
+these strings is also very fast:
+
+\begin{verbatim}
+...
+out_handle.write(">%s\n%s\n" % (title, seq))
+...
+\end{verbatim}
+
+Likewise, when parsing FASTQ files, internally \verb|Bio.SeqIO.parse()|
+calls the low-level \verb|FastqGeneralIterator| with the file handle.
+If you don't need the quality scores turned into integers,
+or can work with them as ASCII strings this is ideal:
+
+%doctest ../Tests/Quality
+\begin{verbatim}
+>>> from Bio.SeqIO.QualityIO import FastqGeneralIterator
+>>> count = 0
+>>> total_len = 0
+>>> with open("example.fastq") as in_handle:
+...     for title, seq, qual in FastqGeneralIterator(in_handle):
+...         count += 1
+...         total_len += len(seq)
+...
+>>> print("%i records with total sequence length %i" % (count, total_len))
+3 records with total sequence length 75
+\end{verbatim}
+
+There are more examples of this in the Cookbook (Chapter~\ref{chapter:cookbook}),
+including how to output FASTQ efficiently from strings using this code snippet:
+
+\begin{verbatim}
+...
+out_handle.write("@%s\n%s\n+\n%s\n" % (title, seq, qual))
+...
+\end{verbatim}

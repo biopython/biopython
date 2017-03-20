@@ -340,7 +340,6 @@ class DSSP(AbstractResiduePropertyMap):
         file_type: string
             File type switch, either PDB or DSSP with PDB as default.
         """
-
         self.residue_max_acc = residue_max_acc[acc_array]
 
         # create DSSP dictionary
@@ -352,7 +351,7 @@ class DSSP(AbstractResiduePropertyMap):
             # calling 'dssp' will not work in some operating systems
             # (Debian distribution of DSSP includes a symlink for 'dssp' argument)
             try:
-                dssp_dict, dssp_keys = dssp_dict_from_pdb_file(pdb_file, dssp)
+                dssp_dict, dssp_keys = dssp_dict_from_pdb_file(in_file, dssp)
             except FileNotFoundError:
                 if dssp == 'dssp':
                     dssp = 'mkdssp'
@@ -360,7 +359,7 @@ class DSSP(AbstractResiduePropertyMap):
                     dssp = 'dssp'
                 else:
                     raise
-            dssp_dict, dssp_keys = dssp_dict_from_pdb_file(pdb_file, dssp)
+            dssp_dict, dssp_keys = dssp_dict_from_pdb_file(in_file, dssp)
         # If the input file is a DSSP file just parse it directly:
         elif file_type == 'DSSP':
             dssp_dict, dssp_keys = make_dssp_dict(in_file)

@@ -6,12 +6,14 @@
 
 try:
     import numpy
+    del numpy
 except ImportError:
     from Bio import MissingExternalDependencyError
     raise MissingExternalDependencyError(
         "Install NumPy if you want to use Bio.phenotype.")
 try:
     import scipy
+    del scipy
     from scipy.optimize import OptimizeWarning
 except ImportError:
     from Bio import MissingExternalDependencyError

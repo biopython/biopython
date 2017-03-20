@@ -346,7 +346,7 @@ Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX', ProteinAlphabet())"""
         s = SeqRecord(MutableSeq("ACTG"))
         self.assertEqual("CAGT", str(s.reverse_complement().seq))
 
-    def test_gt_exception(self):
+    def test_lt_exception(self):
         def lt():
             SeqRecord(Seq("A")) < SeqRecord(Seq("A"))
         self.assertRaises(NotImplementedError, lt)

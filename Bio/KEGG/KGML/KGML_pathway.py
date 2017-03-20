@@ -707,11 +707,6 @@ class Reaction(object):
         return self._products.union(self._substrates)
 
     @property
-    def entry(self):
-        """Return the Entry corresponding to this reaction."""
-        return self._pathway.entries[self._id]
-
-    @property
     def element(self):
         """Return KGML element describing the Reaction."""
         # The root is this Relation element

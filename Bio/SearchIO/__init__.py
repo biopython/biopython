@@ -211,7 +211,7 @@ warnings.warn('Bio.SearchIO is an experimental submodule which may undergo '
         BiopythonExperimentalWarning)
 
 
-__all__ = ['read', 'parse', 'to_dict', 'index', 'index_db', 'write', 'convert']
+__all__ = ('read', 'parse', 'to_dict', 'index', 'index_db', 'write', 'convert')
 
 
 # dictionary of supported formats for parse() and read()

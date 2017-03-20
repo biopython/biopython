@@ -49,7 +49,7 @@ from .hit import Hit
 from .hsp import HSP, HSPFragment
 
 
-__all__ = ['QueryResult', 'Hit', 'HSP', 'HSPFragment']
+__all__ = ('QueryResult', 'Hit', 'HSP', 'HSPFragment')
 
 
 # if not used as a module, run the doctest

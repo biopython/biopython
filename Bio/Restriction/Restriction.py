@@ -93,13 +93,13 @@ import re
 import itertools
 
 from Bio.Seq import Seq, MutableSeq
-from Bio.Alphabet import IUPAC
 
 from Bio.Restriction.Restriction_Dictionary import rest_dict as enzymedict
 from Bio.Restriction.Restriction_Dictionary import typedict
 from Bio.Restriction.Restriction_Dictionary import suppliers as suppliers_dict
-# TODO: Consider removing this wildcard import.
-from Bio.Restriction.RanaConfig import *
+from Bio.Restriction.RanaConfig import ConsoleWidth, NameWidth, Indent, MaxSize
+from Bio.Restriction.RanaConfig import ftp_proxy, ftp_Rebase
+from Bio.Restriction.RanaConfig import ftp_emb_e, ftp_emb_s, ftp_emb_r
 from Bio.Restriction.PrintFormat import PrintFormat
 from Bio import BiopythonWarning
 
@@ -1594,7 +1594,7 @@ class Ambiguous(AbstractCut):
         if cls.dna.is_linear():
             cls.results = [x for x in drop(lambda x: x < 1, cls.results)]
             cls.results = [x for x in take(lambda x: x <
-                                            length, cls.results)]
+                                           length, cls.results)]
         else:
             for index, location in enumerate(cls.results):
                 if location < 1:
@@ -2255,15 +2255,24 @@ class Analysis(RestrictionBatch, PrintFormat):
         """
         return start <= site <= len(self.sequence) or 1 <= site < end
 
-    def print_that(self, dct=None, title='', s1=''):
-        """A.print_that([dct[, title[, s1]]]) -> print the results from dct.
+    def format_output(self, dct=None, title='', s1=''):
+        """A.format_output([dct[, title[, s1]]]) -> dct.
 
         If dct is not given the full dictionary is used.
         """
         if not dct:
             dct = self.mapping
-        print("")
-        return PrintFormat.print_that(self, dct, title, s1)
+        return PrintFormat.format_output(self, dct, title, s1)
+
+    def print_that(self, dct=None, title='', s1=''):
+        """A.print_that([dct[, title[, s1[,print_]]]]) -> print the results
+        from dct.
+
+        If dct is not given the full dictionary is used.
+        This method prints the output of A.format_output() and it is here
+        for backwards compatibility.
+        """
+        print(self.format_output(dct, title, s1))
 
     def change(self, **what):
         """A.change(**attribute_name) -> Change attribute of Analysis.
@@ -2294,11 +2303,9 @@ class Analysis(RestrictionBatch, PrintFormat):
                 setattr(self, k, v)
             elif k in ('Cmodulo', 'PrefWidth'):
                 raise AttributeError(
-                    'To change %s, change NameWidth and/or ConsoleWidth'
-                    % name)
+                    'To change %s, change NameWidth and/or ConsoleWidth' % k)
             else:
-                raise AttributeError(
-                    'Analysis has no attribute %s' % name)
+                raise AttributeError('Analysis has no attribute %s' % k)
         return
 
     def full(self, linear=True):
@@ -2383,7 +2390,8 @@ class Analysis(RestrictionBatch, PrintFormat):
          """
         for i, enzyme in enumerate(names):
             if enzyme not in AllEnzymes:
-                warnings.warn("no data for the enzyme: %s" % enzyme, BiopythonWarning)
+                warnings.warn("no data for the enzyme: %s" % enzyme,
+                              BiopythonWarning)
                 del names[i]
         if not dct:
             return RestrictionBatch(names).search(self.sequence, self.linear)
@@ -2447,10 +2455,10 @@ class Analysis(RestrictionBatch, PrintFormat):
         d = []
         if start <= end:
             d = [(k, [vv for vv in v if start <= vv <= end])
-                 for v in self.between(start, end, dct)]
+                 for k, v in self.between(start, end, dct).items()]
         else:
             d = [(k, [vv for vv in v if start <= vv or vv <= end])
-                 for v in self.between(start, end, dct)]
+                 for k, v in self.between(start, end, dct).items()]
         return dict(d)
 
     def only_outside(self, start, end, dct=None):
@@ -2504,6 +2512,7 @@ class Analysis(RestrictionBatch, PrintFormat):
         d = self.without_site()
         d.update(self.only_outside(start, end, dct))
         return d
+
 
 #
 #   The restriction enzyme classes are created dynamically when the module is
@@ -2578,11 +2587,11 @@ AllEnzymes = CommOnly | NonComm
 #
 names = [str(x) for x in AllEnzymes]
 try:
-    del x
+    del x  # noqa
 except NameError:
     # Scoping changed in Python 3, the variable isn't leaked
     pass
 locals().update(dict(zip(names, AllEnzymes)))
-__all__ = ['FormattedSeq', 'Analysis', 'RestrictionBatch', 'AllEnzymes',
-           'CommOnly', 'NonComm'] + names
+__all__ = ('FormattedSeq', 'Analysis', 'RestrictionBatch', 'AllEnzymes',
+           'CommOnly', 'NonComm') + tuple(names)
 del k, enzymes, TYPE, bases, names

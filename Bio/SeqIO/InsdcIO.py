@@ -578,7 +578,6 @@ class GenBankWriter(_InsdcWriter):
 
     def _write_the_first_line(self, record):
         """Write the LOCUS line."""
-
         locus = record.name
         if not locus or locus == "<unknown name>":
             locus = record.id
@@ -1190,7 +1189,6 @@ class EmblWriter(_InsdcWriter):
 
     def write_record(self, record):
         """Write a single record to the output file."""
-
         handle = self.handle
         self._write_the_first_lines(record)
 

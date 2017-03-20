@@ -17,8 +17,6 @@ from __future__ import print_function
 
 from Bio._py3k import range
 
-import math
-
 
 def create(instances, alphabet=None):
     instances = Instances(instances, alphabet)
@@ -508,7 +506,6 @@ class Motif(object):
          - jaspar : JASPAR multiple Position Frequency Matrix
          - transfac : TRANSFAC like files
         """
-
         if format in ('pfm', 'jaspar'):
             from Bio.motifs import jaspar
             motifs = [self]
@@ -529,7 +526,6 @@ def write(motifs, format):
      - jaspar : JASPAR multiple PFM format
      - transfac : TRANSFAC like files
     """
-
     format = format.lower()
     if format in ("pfm", "jaspar"):
         from Bio.motifs import jaspar

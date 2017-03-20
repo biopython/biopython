@@ -22,16 +22,17 @@ from Bio.PDB.PDBExceptions import PDBConstructionWarning
 
 
 class StructureBuilder(object):
-    """
-    Deals with contructing the Structure object. The StructureBuilder class is used
-    by the PDBParser classes to translate a file to a Structure object.
+    """Deals with contructing the Structure object.
+
+    The StructureBuilder class is used by the PDBParser classes to
+    translate a file to a Structure object.
     """
     def __init__(self):
         self.line_counter = 0
         self.header = {}
 
     def _is_completely_disordered(self, residue):
-        "Return 1 if all atoms in the residue have a non blank altloc."
+        """Return 1 if all atoms in the residue have a non blank altloc."""
         atom_list = residue.get_unpacked_list()
         for atom in atom_list:
             altloc = atom.get_altloc()
@@ -45,9 +46,7 @@ class StructureBuilder(object):
         self.header = header
 
     def set_line_counter(self, line_counter):
-        """
-        The line counter keeps track of the line in the PDB file that
-        is being parsed.
+        """Tracks line in the PDB file that is being parsed.
 
         Arguments:
         o line_counter - int
@@ -96,8 +95,7 @@ class StructureBuilder(object):
         self.segid = segid
 
     def init_residue(self, resname, field, resseq, icode):
-        """
-        Initiate a new Residue object.
+        """Initiate a new Residue object.
 
         Arguments:
 
@@ -166,8 +164,7 @@ class StructureBuilder(object):
 
     def init_atom(self, name, coord, b_factor, occupancy, altloc, fullname,
                   serial_number=None, element=None):
-        """
-        Initiate a new Atom object.
+        """Initiate a new Atom object.
 
         Arguments:
         o name - string, atom name, e.g. CA, spaces should be stripped
@@ -239,19 +236,19 @@ class StructureBuilder(object):
             residue.add(self.atom)
 
     def set_anisou(self, anisou_array):
-        "Set anisotropic B factor of current Atom."
+        """Set anisotropic B factor of current Atom."""
         self.atom.set_anisou(anisou_array)
 
     def set_siguij(self, siguij_array):
-        "Set standard deviation of anisotropic B factor of current Atom."
+        """Set standard deviation of anisotropic B factor of current Atom."""
         self.atom.set_siguij(siguij_array)
 
     def set_sigatm(self, sigatm_array):
-        "Set standard deviation of atom position of current Atom."
+        """Set standard deviation of atom position of current Atom."""
         self.atom.set_sigatm(sigatm_array)
 
     def get_structure(self):
-        "Return the structure."
+        """Return the structure."""
         # first sort everything
         # self.structure.sort()
         # Add the header dict

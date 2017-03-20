@@ -7,8 +7,6 @@
 
 from __future__ import print_function
 
-import sys
-
 
 HEADERLEN = 6
 
@@ -143,7 +141,6 @@ class Peaklist(object):
         ['8  10.hn   7.663   0.021   0.010   ++   0.000   10.n   118.341   0.324   0.010   +E   0.000   10.n   118.476   0.324   0.010   +E   0.000  0.49840 0.49840 0']
 
         """
-
         maxres = -1
         minres = -1
 

@@ -12,9 +12,8 @@ from Bio import BiopythonWarning
 from Bio import SeqIO
 from Bio import AlignIO
 from Bio.SeqRecord import SeqRecord
-from Bio.Seq import Seq, UnknownSeq
+from Bio.Seq import Seq
 from Bio import Alphabet
-from Bio.Align import MultipleSeqAlignment
 
 
 # List of formats including alignment only file formats we can read AND write.
@@ -51,23 +50,24 @@ test_records = [
                 description="an%sevil\rdescription right\nhere" % os.linesep),
       SeqRecord(Seq("TTTCCTCGGAGGCCAATCTGGATCAAGACCAT", Alphabet.generic_dna), id="Z")],
      "3 DNA seq alignment with CR/LF in name/descr",
-      [(["genbank"], ValueError, r"Invalid whitespace in 'The\nMystery\rSequece:\r\nX' for LOCUS line")]),
+     [(["genbank"], ValueError, r"Invalid whitespace in 'The\nMystery\rSequece:\r\nX' for LOCUS line")]),
     ([SeqRecord(Seq("CHSMAIKLSSEHNIPSGIANAL", Alphabet.generic_protein), id="Alpha"),
       SeqRecord(Seq("VHGMAHPLGAFYNTPHGVANAI", Alphabet.generic_protein), id="Beta"),
       SeqRecord(Seq("VHGMAHPLGAFYNTPHGVANAI", Alphabet.generic_protein), id="Beta"),
       SeqRecord(Seq("HNGFTALEGEIHHLTHGEKVAF", Alphabet.generic_protein), id="Gamma")],
      "alignment with repeated record",
      [(["stockholm"], ValueError, "Duplicate record identifier: Beta"),
+      (["maf"], ValueError, "Identifiers in each MultipleSeqAlignment must be unique"),
       (["phylip", "phylip-relaxed", "phylip-sequential"], ValueError, "Repeated name 'Beta' (originally 'Beta'), possibly due to truncation")]),
     ]
 # Meddle with the annotation too:
 assert test_records[4][1] == "3 DNA seq alignment with CR/LF in name/descr"
 # Add a list of strings,
-test_records[4][0][2].annotations["note"] = ["Note%salso" % os.linesep +
-                                             "\r\nhas\n evil line\rbreaks!", "Wow"]
+test_records[4][0][2].annotations["note"] = [
+    "Note%salso" % os.linesep + "\r\nhas\n evil line\rbreaks!", "Wow"]
 # Add a simple string
-test_records[4][0][2].annotations["comment"] = ("More%sof" % os.linesep +
-                                               "\r\nthese\n evil line\rbreaks!")
+test_records[4][0][2].annotations["comment"] = (
+    "More%sof" % os.linesep + "\r\nthese\n evil line\rbreaks!")
 # Add a float too:
 test_records[4][0][2].annotations["weight"] = 2.5
 
@@ -164,8 +164,11 @@ for (records, descr, errs) in test_records:
         for err_formats, err_type, err_msg in errs:
             if format in err_formats:
                 def funct_e(records, format, descr, err_type, err_msg):
-                    f = lambda x: x.check_write_fails(records, format,
-                                                       err_type, err_msg)
+                    f = lambda x: x.check_write_fails(
+                        records,
+                        format,
+                        err_type,
+                        err_msg)
                     f.__doc__ = "%s for %s" % (format, descr)
                     return f
                 setattr(WriterTests,
