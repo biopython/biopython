@@ -1,4 +1,4 @@
-# Copyright 2008-2015 by Peter Cock.  All rights reserved.
+# Copyright 2008-2017 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -37,6 +37,7 @@ from Bio.Alphabet import single_letter_alphabet
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqIO.Interfaces import SequentialSequenceWriter
+from Bio.SeqIO.Interfaces import _clean, _get_seq_string
 
 
 def TabIterator(handle, alphabet=single_letter_alphabet):
@@ -111,6 +112,18 @@ class TabWriter(SequentialSequenceWriter):
         assert "\n" not in seq
         assert "\r" not in seq
         self.handle.write("%s\t%s\n" % (title, seq))
+
+
+def as_tab(record):
+    title = _clean(record.id)
+    seq = _get_seq_string(record)  # Catches sequence being None
+    assert "\t" not in title
+    assert "\n" not in title
+    assert "\r" not in title
+    assert "\t" not in seq
+    assert "\n" not in seq
+    assert "\r" not in seq
+    return "%s\t%s\n" % (title, seq)
 
 
 if __name__ == "__main__":

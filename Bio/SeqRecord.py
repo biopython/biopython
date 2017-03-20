@@ -708,6 +708,12 @@ class SeqRecord(object):
             # Follow python convention and default to using __str__
             return str(self)
         from Bio import SeqIO
+
+        # Easy case, can call string-building function directly
+        if format_spec in SeqIO._FormatToString:
+            return SeqIO._FormatToString[format_spec](self)
+
+        # Harder case, make a temp handle instead
         if format_spec in SeqIO._BinaryFormats:
             # Return bytes on Python 3
             from io import BytesIO
