@@ -74,6 +74,26 @@ class SequenceIterator(object):
         return iter(self.__next__, None)
 
 
+# Function variant of the SequenceWriter method.
+def _get_seq_string(record):
+    """Use this to catch errors like the sequence being None."""
+    if not isinstance(record, SeqRecord):
+        raise TypeError("Expected a SeqRecord object")
+    if record.seq is None:
+        raise TypeError("SeqRecord (id=%s) has None for its sequence."
+                        % record.id)
+    elif not isinstance(record.seq, (Seq, MutableSeq)):
+        raise TypeError("SeqRecord (id=%s) has an invalid sequence."
+                        % record.id)
+    return str(record.seq)
+
+
+# Function variant of the SequenceWriter method.
+def _clean(text):
+    """Use this to avoid getting newlines in the output."""
+    return text.replace("\n", " ").replace("\r", " ").replace("  ", " ")
+
+
 class SequenceWriter(object):
     """Base class for building SeqRecord writers.
 
