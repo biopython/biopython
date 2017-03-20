@@ -120,6 +120,7 @@ possible, especially the following contributors:
 - Steve Bond
 - Steve Marshall (first contribution)
 - Uri Laserson
+- Veronika Berman (first contribution)
 - Vincent Davis
 - Wibowo 'Bow' Arindrarto
 

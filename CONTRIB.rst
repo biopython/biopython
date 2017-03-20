@@ -177,6 +177,7 @@ This is certainly not comprehensive, and if you've been overlooked
 - Tyghe Vallard <https://github.com/necrolyte2>
 - Uri Laserson <https://github.com/laserson>
 - Uwe Schmitt <https://github.com/uweschmitt>
+- Veronika Berman <https://github.com/NikiB>
 - Walter Gillett <https://github.com/wgillett>
 - Wayne Decatur <https://github.com/fomightez>
 - Wibowo Arindrarto <https://github.com/bow>
