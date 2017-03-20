@@ -9,7 +9,6 @@
 
 from Bio import MissingExternalDependencyError
 import sys
-import subprocess
 import os
 import unittest
 
