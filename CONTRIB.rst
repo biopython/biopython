@@ -129,6 +129,7 @@ This is certainly not comprehensive, and if you've been overlooked
 - Leszek Pryszcz <https://github.com/lpryszcz>
 - Lucas Sinclair <https://github.com/xapple>
 - Marc Colosimo <mcolosimo at domain mitre.org>
+- Marcin Magnus <https://github.com/mmagnus>
 - Marco Galardini <https://github.com/mgalardini>
 - Markus Piotrowski <https://github.com/MarkusPiotrowski>
 - Matt Ruffalo <https://github.com/mruffalo>

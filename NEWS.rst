@@ -106,6 +106,7 @@ possible, especially the following contributors:
 - Kurt Graff (first contribution)
 - Lenna Peterson
 - Leonhard Heizinger (first contribution)
+- Marcin Magnus (first contribution)
 - Markus Piotrowski
 - Michiel de Hoon
 - Milind Luthra (first contribution)
