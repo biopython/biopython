@@ -1375,13 +1375,14 @@ def QualPhredIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
 
 
 class FastqPhredWriter(SequentialSequenceWriter):
-    """Class to write standard FASTQ format files (using PHRED quality scores).
+    """Class to write standard FASTQ format files (using PHRED quality scores) (OBSOLETE).
 
     Although you can use this class directly, you are strongly encouraged
-    to use the Bio.SeqIO.write() function instead via the format name "fastq"
-    or the alias "fastq-sanger".  For example, this code reads in a standard
-    Sanger style FASTQ file (using PHRED scores) and re-saves it as another
-    Sanger style FASTQ file:
+    to use the ``as_fastq`` function, or top level ``Bio.SeqIO.write()``
+    function instead via the format name "fastq" or the alias "fastq-sanger".
+
+    For example, this code reads in a standard Sanger style FASTQ file
+    (using PHRED scores) and re-saves it as another Sanger style FASTQ file:
 
     >>> from Bio import SeqIO
     >>> record_iterator = SeqIO.parse("Quality/example.fastq", "fastq")
@@ -1474,11 +1475,14 @@ def as_fastq(record):
 
 
 class QualPhredWriter(SequentialSequenceWriter):
-    """Class to write QUAL format files (using PHRED quality scores).
+    """Class to write QUAL format files (using PHRED quality scores) (OBSOLETE).
 
     Although you can use this class directly, you are strongly encouraged
-    to use the Bio.SeqIO.write() function instead.  For example, this code
-    reads in a FASTQ file and saves the quality scores into a QUAL file:
+    to use the ``as_qual`` function, or top level ``Bio.SeqIO.write()``
+    function instead.
+
+    For example, this code reads in a FASTQ file and saves the quality scores
+    into a QUAL file:
 
     >>> from Bio import SeqIO
     >>> record_iterator = SeqIO.parse("Quality/example.fastq", "fastq")
@@ -1622,7 +1626,7 @@ def as_qual(record):
 
 
 class FastqSolexaWriter(SequentialSequenceWriter):
-    r"""Write old style Solexa/Illumina FASTQ format files (with Solexa qualities).
+    r"""Write old style Solexa/Illumina FASTQ format files (with Solexa qualities) (OBSOLETE).
 
     This outputs FASTQ files like those from the early Solexa/Illumina
     pipeline, using Solexa scores and an ASCII offset of 64. These are
@@ -1634,8 +1638,9 @@ class FastqSolexaWriter(SequentialSequenceWriter):
     of quality scores are present, an exception is raised.
 
     Although you can use this class directly, you are strongly encouraged
-    to use the Bio.SeqIO.write() function instead.  For example, this code
-    reads in a FASTQ file and re-saves it as another FASTQ file:
+    to use the ``as_fastq_solexa`` function, or top-level ``Bio.SeqIO.write()``
+    function instead.  For example, this code reads in a FASTQ file and re-saves
+    it as another FASTQ file:
 
     >>> from Bio import SeqIO
     >>> record_iterator = SeqIO.parse("Quality/solexa_example.fastq", "fastq-solexa")
@@ -1724,7 +1729,7 @@ def as_fastq_solexa(record):
 
 
 class FastqIlluminaWriter(SequentialSequenceWriter):
-    r"""Write Illumina 1.3+ FASTQ format files (with PHRED quality scores).
+    r"""Write Illumina 1.3+ FASTQ format files (with PHRED quality scores) (OBSOLETE).
 
     This outputs FASTQ files like those from the Solexa/Illumina 1.3+ pipeline,
     using PHRED scores and an ASCII offset of 64. Note these files are NOT
@@ -1732,9 +1737,9 @@ class FastqIlluminaWriter(SequentialSequenceWriter):
     ASCII offset of 32.
 
     Although you can use this class directly, you are strongly encouraged to
-    use the Bio.SeqIO.write() function with format name "fastq-illumina"
-    instead. This code is also called if you use the .format("fastq-illumina")
-    method of a SeqRecord. For example,
+    use the ``as_fastq_illumina`` or top-level ``Bio.SeqIO.write()`` function
+    with format name "fastq-illumina" instead. This code is also called if you
+    use the .format("fastq-illumina") method of a SeqRecord. For example,
 
     >>> from Bio import SeqIO
     >>> record = SeqIO.read("Quality/sanger_faked.fastq", "fastq-sanger")
