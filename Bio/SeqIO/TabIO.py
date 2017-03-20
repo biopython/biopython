@@ -90,11 +90,14 @@ def TabIterator(handle, alphabet=single_letter_alphabet):
 
 
 class TabWriter(SequentialSequenceWriter):
-    """Class to write simple tab separated format files.
+    """Class to write simple tab separated format files (OBSOLETE).
 
     Each line consists of "id(tab)sequence" only.
 
     Any description, name or other annotation is not recorded.
+
+    This class is now obsolete. Please use the function ``as_tab`` instead,
+    or the top level ``Bio.SeqIO.write()`` function with ``format="tab"``.
     """
 
     def write_record(self, record):
@@ -102,16 +105,7 @@ class TabWriter(SequentialSequenceWriter):
         assert self._header_written
         assert not self._footer_written
         self._record_written = True
-
-        title = self.clean(record.id)
-        seq = self._get_seq_string(record)  # Catches sequence being None
-        assert "\t" not in title
-        assert "\n" not in title
-        assert "\r" not in title
-        assert "\t" not in seq
-        assert "\n" not in seq
-        assert "\r" not in seq
-        self.handle.write("%s\t%s\n" % (title, seq))
+        self.handle.write(as_tab(record))
 
 
 def as_tab(record):

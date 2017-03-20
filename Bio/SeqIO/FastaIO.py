@@ -217,10 +217,14 @@ def FastaTwoLineIterator(handle, alphabet=single_letter_alphabet):
 
 
 class FastaWriter(SequentialSequenceWriter):
-    """Class to write Fasta format files."""
+    """Class to write Fasta format files (OBSOLETE).
+
+    Please use the ``as_fasta`` function instead, or the top level
+    ``Bio.SeqIO.write()`` function instead using ``format="fasta"``.
+    """
 
     def __init__(self, handle, wrap=60, record2title=None):
-        """Create a Fasta writer.
+        """Create a Fasta writer (OBSOLETE).
 
         Arguments:
          - handle - Handle to an output file, e.g. as returned
@@ -298,7 +302,7 @@ class FastaWriter(SequentialSequenceWriter):
 
 
 class FastaTwoLineWriter(FastaWriter):
-    """Class to write 2-line per record Fasta format files.
+    """Class to write 2-line per record Fasta format files (OBSOLETE).
 
     This means we write the sequence information  without line
     wrapping, and will always write a blank line for an empty
@@ -306,7 +310,7 @@ class FastaTwoLineWriter(FastaWriter):
     """
 
     def __init__(self, handle, record2title=None):
-        """Create a Fasta writer.
+        """Create a 2-line per record Fasta writer (OBSOLETE).
 
         Arguments:
          - handle - Handle to an output file, e.g. as returned
