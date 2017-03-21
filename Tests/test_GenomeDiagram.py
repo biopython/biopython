@@ -48,7 +48,7 @@ from Bio.Graphics.GenomeDiagram import CrossLink
 from Bio.Graphics.GenomeDiagram._Graph import GraphData
 from Bio.Graphics.GenomeDiagram._Colors import ColorTranslator
 
-NC_005812_text = '''LOCUS       NC_005213             490885 bp    DNA     circular CON 16-DEC-2014
+NC_005213_text = '''LOCUS       NC_005213             490885 bp    DNA     circular CON 16-DEC-2014
 DEFINITION  Nanoarchaeum equitans Kin4-M chromosome, complete genome.
 ACCESSION   NC_005213
 VERSION     NC_005213.1
@@ -19611,7 +19611,7 @@ class DiagramTest(unittest.TestCase):
 
     def test_circular_genome_diagram_NC_005213_pdf(self):
         """Construct and draw PDF using NC_005213 genome."""
-        handle = io.StringIO(NC_005812_text)
+        handle = io.StringIO(NC_005213_text)
         genbank_entry = SeqIO.read(handle, "genbank")
         gdd = Diagram('Test Diagram')
 
