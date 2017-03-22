@@ -22,11 +22,9 @@ class MuscleCommandline(AbstractCommandline):
     >>> muscle_exe = r"C:\Program Files\Aligments\muscle3.8.31_i86win32.exe"
     >>> in_file = r"C:\My Documents\unaligned.fasta"
     >>> out_file = r"C:\My Documents\aligned.fasta"
-    >>> muscle_cline=MuscleCommandline(muscle_exe,input=in_file,out=out_file)
+    >>> muscle_cline = MuscleCommandline(muscle_exe,input=in_file,out=out_file)
     >>> print(muscle_cline)
-    "C:\Program Files\Aligments\muscle3.8.31_i86win32.exe"
-    -in "C:\My Documents\unaligned.fasta" -out "C:\My Documents\aligned.fasta"
-
+    "C:\Program Files\Aligments\muscle3.8.31_i86win32.exe" -in "C:\My Documents\unaligned.fasta" -out "C:\My Documents\aligned.fasta"
     You would typically run the command line with muscle_cline() or via
     the Python subprocess module, as described in the Biopython tutorial.
 
@@ -200,8 +198,7 @@ class MuscleCommandline(AbstractCommandline):
                     checker_function=lambda x: isinstance(x, int),
                     equate=False),
             _Option(["-maxdiagbreak", "maxdiagbreak"],      # deprecated 3.8
-                    "Maximum distance between two diagonals that allows "
-                    "them to merge into one diagonal",
+                    "Deprecated in v3.8, use -diagbreak instead.",
                     checker_function=lambda x: isinstance(x, int),
                     equate=False),
             # maxhours        Floating point       None.    Maximum time to
