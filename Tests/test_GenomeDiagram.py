@@ -10,10 +10,10 @@ from __future__ import print_function
 import os
 import unittest
 import math
-import io
 
 from Bio._py3k import zip
 from Bio._py3k import range
+from Bio._py3k import StringIO
 
 
 # Do we have ReportLab?  Raise error if not present.
@@ -19611,7 +19611,7 @@ class DiagramTest(unittest.TestCase):
 
     def test_circular_genome_diagram_NC_005213_pdf(self):
         """Construct and draw PDF using NC_005213 genome."""
-        handle = io.StringIO(NC_005213_text)
+        handle = StringIO(NC_005213_text)
         genbank_entry = SeqIO.read(handle, "genbank")
         gdd = Diagram('Test Diagram')
 
