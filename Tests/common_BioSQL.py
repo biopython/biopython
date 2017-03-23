@@ -753,8 +753,11 @@ class DupLoadTest(unittest.TestCase):
 class ClosedLoopTest(unittest.TestCase):
     """Test file -> BioSQL -> file."""
 
-    # NOTE - For speed I don't bother to create a new database each time,
-    # simply a new unique namespace is used for each test.
+    @classmethod
+    def setUpClass(cls):
+        # NOTE - For speed I don't bother to create a new database each time,
+        # simply a new unique namespace is used for each test.
+        TESTDB = create_database()
 
     def test_NC_005816(self):
         """GenBank file to BioSQL and back to a GenBank file, NC_005816."""
@@ -1034,6 +1037,11 @@ class AutoSeqIOTests(unittest.TestCase):
 
     server = None
     db = None
+
+    @classmethod
+    def setUpClass(cls):
+        # Create and reuse on database for all tests in this class
+        TESTDB = create_database()
 
     def setUp(self):
         """Connect to the database."""
