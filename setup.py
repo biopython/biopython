@@ -205,8 +205,6 @@ def check_dependencies():
         return True  # For automated builds go ahead with installed packages
     if os.name == 'java':
         return True  # NumPy is not avaliable for Jython (for now)
-    if is_pypy():
-        return True  # Full NumPy not available for PyPy (for now)
     if is_ironpython():
         return True  # We're ignoring NumPy under IronPython (for now)
 
@@ -316,8 +314,6 @@ def can_import(module_name):
 
 
 def is_Numpy_installed():
-    if is_pypy():
-        return False
     return bool(can_import("numpy"))
 
 # --- set up the packages we are going to install
