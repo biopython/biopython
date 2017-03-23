@@ -109,6 +109,7 @@ This is certainly not comprehensive, and if you've been overlooked
 - Johann Visagie <wjv at domain cityip.co.za>
 - John Bradley <https://github.com/johnbradley>
 - Jose Blanca <https://github.com/JoseBlanca>
+- Joshua Meyers <https://github.com/JoshuaMeyers> 
 - João D Ferreira <https://github.com/jdferreira>
 - Kai Blin <https://github.com/kblin>
 - Kamil Slowikowski <k no dot slowikowski at gmail dot com>

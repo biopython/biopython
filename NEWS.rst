@@ -103,6 +103,7 @@ possible, especially the following contributors:
 - Jacek Śmietański
 - Jack Twilley (first contribution)
 - Jeroen Van Goey (first contribution)
+- Joshua Meyers (first contribution)
 - Kurt Graff (first contribution)
 - Lenna Peterson
 - Leonhard Heizinger (first contribution)
