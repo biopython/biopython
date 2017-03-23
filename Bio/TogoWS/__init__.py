@@ -167,6 +167,8 @@ def search_count(db, query):
     handle = _open(url)
     data = handle.read()
     handle.close()
+    if not data:
+        raise ValueError("TogoWS returned no data from URL %s" % url)
     try:
         count = int(data.strip())
     except ValueError:
