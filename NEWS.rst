@@ -13,8 +13,8 @@ The latest news is at the top of this file.
 ==============================================
 
 This release of Biopython supports Python 2.7, 3.3, 3.4, 3.5 and 3.6 (we have
-now dropped support for Python 2.6). It has also been tested on PyPy v5.6,
-PyPy3.3 v5.5 alpha, and Jython 2.7.
+now dropped support for Python 2.6). It has also been tested on PyPy v5.7,
+PyPy3.5 v5.7 beta, and Jython 2.7.
 
 We have started to dual-license Biopython under both our original liberal
 "Biopython License Agreement", and the very similar but more commonly used

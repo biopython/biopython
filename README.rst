@@ -61,11 +61,11 @@ implementations:
 
   This is the primary development platform for Biopython.
 
-- PyPy v5.6 and also PyPy3.3 v5.5 alpha -- see http://www.pypy.org
+- PyPy v5.7 and also PyPy3.5 v5.7 beta -- see http://www.pypy.org
 
   Aside from modules with C code or dependent on NumPy, everything should
-  work. PyPy's NumPy reimplementation NumPyPy is still in progress. Older
-  versions of PyPy mostly work too.
+  work. PyPy's support of NumPy has improved but we have not reviewed how
+  well that works for Biopython. Older versions of PyPy mostly work too.
 
 - Jython 2.7 -- see http://www.jython.org
 
