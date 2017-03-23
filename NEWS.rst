@@ -109,6 +109,7 @@ possible, especially the following contributors:
 - Leonhard Heizinger (first contribution)
 - Marcin Magnus (first contribution)
 - Markus Piotrowski
+- Maximilian Greil (first contribution)
 - Michiel de Hoon
 - Milind Luthra (first contribution)
 - Oscar G. Garcia (first contribution)
