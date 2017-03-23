@@ -403,9 +403,20 @@ NUMPY_PACKAGES = [
 if os.name == 'java':
     # Jython doesn't support C extensions
     EXTENSIONS = []
-elif is_pypy() or is_ironpython():
+elif is_ironpython():
     # Skip C extensions for now
     EXTENSIONS = []
+elif is_pypy():
+    # Two out of three ain't bad?
+    EXTENSIONS = [
+    Extension('Bio.cpairwise2',
+              ['Bio/cpairwise2module.c'],
+              ),
+    # Bio.trie has a problem under PyPy2 v5.6 and 5.7
+    Extension('Bio.Nexus.cnexus',
+              ['Bio/Nexus/cnexus.c']
+              ),
+    ]
 else:
     EXTENSIONS = [
     Extension('Bio.cpairwise2',
