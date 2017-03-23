@@ -420,31 +420,36 @@ class TogoSearch(unittest.TestCase):
         self.assertRaises(ValueError, TogoWS.search,
                           "pubmed", "lung+cancer", offset=1, limit="lots")
 
-    def test_pubmed_search_togows(self):
-        """Bio.TogoWS.search_iter("pubmed", "TogoWS") etc"""
-        self.check("pubmed", "TogoWS", ["20472643"])
+# TogoWS search for PubMed currently unavailable
+#    def test_pubmed_search_togows(self):
+#        """Bio.TogoWS.search_iter("pubmed", "TogoWS") etc"""
+#        self.check("pubmed", "TogoWS", ["20472643"])
 
-    def test_pubmed_search_bioruby(self):
-        """Bio.TogoWS.search_iter("pubmed", "BioRuby") etc"""
-        self.check("pubmed", "BioRuby", ["22994508", "22399473",
-                                         "20739307", "20015970", "14693808"])
+# TogoWS search for PubMed currently unavailable
+#    def test_pubmed_search_bioruby(self):
+#        """Bio.TogoWS.search_iter("pubmed", "BioRuby") etc"""
+#        self.check("pubmed", "BioRuby", ["22994508", "22399473",
+#                                         "20739307", "20015970", "14693808"])
 
-    def test_pubmed_search_porin(self):
-        """Bio.TogoWS.search_iter("pubmed", "human porin") etc
+# TogoWS search for PubMed currently unavailable
+#    def test_pubmed_search_porin(self):
+#        """Bio.TogoWS.search_iter("pubmed", "human porin") etc
+#
+#        Count was 357 at time of writing, this was choosen to
+#        be larger than the default chunk size for iteration,
+#        but still not too big to download the full list.
+#        """
+#        self.check("pubmed", "human porin", ["21189321", "21835183"])
 
-        Count was 357 at time of writing, this was choosen to
-        be larger than the default chunk size for iteration,
-        but still not too big to download the full list.
-        """
-        self.check("pubmed", "human porin", ["21189321", "21835183"])
+# TogoWS search for PDBj currently unavailable
+#    def test_pdb_search_porin(self):
+#        """Bio.TogoWS.search_iter("pdb", "porin") etc
+#
+#        Count was about 161 at time of writing.
+#        """
+#        self.check("pdb", "porin", ["2j1n", "2vqg", "3m8b", "2k0l"])
 
-    def test_pdb_search_porin(self):
-        """Bio.TogoWS.search_iter("pdb", "porin") etc
-
-        Count was about 161 at time of writing.
-        """
-        self.check("pdb", "porin", ["2j1n", "2vqg", "3m8b", "2k0l"])
-
+# TogoWS currently does not support the EMBL database
 #    def test_embl_search_porin(self):
 #        """Bio.TogoWS.search_iter("embl", "human pore", limit=200) etc
 #
@@ -452,15 +457,16 @@ class TogoSearch(unittest.TestCase):
 #        """
 #        self.check("embl", "human pore", limit=200)
 
-    def test_uniprot_search_lung_cancer(self):
-        """Bio.TogoWS.search_iter("uniprot", "terminal+lung+cancer", limit=150) etc
-
-        Search count was 211 at time of writing, a bit large to
-        download all the results in a unit test. Want to use a limit
-        larger than the batch size (100) to ensure at least two
-        batches.
-        """
-        self.check("uniprot", "terminal+lung+cancer", limit=150)
+# TogoWS search for UniProt currently unavailable
+#    def test_uniprot_search_lung_cancer(self):
+#        """Bio.TogoWS.search_iter("uniprot", "terminal+lung+cancer", limit=150) etc
+#
+#        Search count was 211 at time of writing, a bit large to
+#        download all the results in a unit test. Want to use a limit
+#        larger than the batch size (100) to ensure at least two
+#        batches.
+#        """
+#        self.check("uniprot", "terminal+lung+cancer", limit=150)
 
     def check(self, database, search_term, expected_matches=(), limit=None):
         if expected_matches and limit:
