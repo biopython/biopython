@@ -98,6 +98,7 @@ possible, especially the following contributors:
 - Chris Warth
 - Emmanuel Noutahi
 - FGastaldello (first contribution)
+- Foen Peng (first contribution)
 - Francisco Pina-Martins (first contribution)
 - Hector Martinez (first contribution)
 - Jacek Śmietański
