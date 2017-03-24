@@ -140,6 +140,7 @@ This is certainly not comprehensive, and if you've been overlooked
 - Melissa Gymrek <https://github.com/mgymrek>
 - Michael Hoffman <hoffman+biopython at domain ebi.ac.uk>
 - Michal Kurowski <michal at domain genesilico.pl>
+- Michał J. Gajda <https://github.com/mgajda>
 - Michiel de Hoon <mdehoon at domain c2b2.columbia.edu>
 - Mike Poidinger <Michael.Poidinger at domain eBioinformatics.com>
 - Milind Luthra <https://github.com/milindl>

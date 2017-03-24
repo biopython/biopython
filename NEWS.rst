@@ -110,6 +110,7 @@ possible, especially the following contributors:
 - Marcin Magnus (first contribution)
 - Markus Piotrowski
 - Maximilian Greil (first contribution)
+- Michał J. Gajda (first contribution)
 - Michiel de Hoon
 - Milind Luthra (first contribution)
 - Oscar G. Garcia (first contribution)
