@@ -69,6 +69,7 @@ class Atom(object):
         assert not element or element == element.upper(), element
         self.element = self._assign_element(element)
         self.mass = self._assign_atom_mass()
+        self.radius=self._assign_atom_radius()
 
     def _assign_element(self, element):
         """Tries to guess element from atom name if not recognised."""
@@ -98,7 +99,11 @@ class Atom(object):
             warnings.warn(msg, PDBConstructionWarning)
 
         return element
-
+    def _assign_atom_radius(self):
+        if self.element:
+            return IUPACData.atom_radius[self.element.capitalize()]
+        else:
+            return float('NaN')
     def _assign_atom_mass(self):
         # Needed for Bio/Struct/Geometry.py C.O.M. function
         if self.element:
