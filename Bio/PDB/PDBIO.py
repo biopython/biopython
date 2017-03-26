@@ -220,24 +220,6 @@ class PDBIO(object):
             fp.close()
 
 if __name__ == "__main__":
-
-    from Bio.PDB.PDBParser import PDBParser
-
-    import sys
-
-    p = PDBParser(PERMISSIVE=True)
-
-    s = p.get_structure("test", sys.argv[1])
-
-    io = PDBIO()
-    io.set_structure(s)
-    io.save("out1.pdb")
-
-    with open("out2.pdb", "w") as fp:
-        s1 = p.get_structure("test1", sys.argv[1])
-        s2 = p.get_structure("test2", sys.argv[2])
-        io = PDBIO(1)
-        io.set_structure(s1)
-        io.save(fp)
-        io.set_structure(s2)
-        io.save(fp, write_end=1)
+    from Bio._utils import run_doctest
+    run_doctest(verbose=2)
+    
