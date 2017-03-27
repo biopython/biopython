@@ -19,6 +19,7 @@ import tempfile
 import unittest
 import warnings
 from Bio._py3k import StringIO
+from Bio.PDB.PDBParser import PDBParser
 
 try:
     import numpy
@@ -1332,16 +1333,15 @@ class NACCESSTests(unittest.TestCase):
             naccess = process_asa_data(asa)
         self.assertEqual(len(naccess), 524)
 
-class TestSelf(unittest.TestCase):
+class TestPDBIO(unittest.TestCase):
     
     def test_example(self):
-        from Bio.PDB.PDBParser import PDBParser
-        import sys
         p = PDBParser(PERMISSIVE=True)
         s = p.get_structure("test", sys.argv[1])
         io = PDBIO()
         io.set_structure(s)
-        io.save("out1.pdb")
+        filenumber, filename = tempfile.mkstemp()
+        os.close(filenumber)
         with open("out2.pdb", "w") as fp:
             s1 = p.get_structure("test1", sys.argv[1])
             s2 = p.get_structure("test2", sys.argv[2])
