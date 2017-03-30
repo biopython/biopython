@@ -12,13 +12,13 @@
 """Unit tests for the Bio.PDB module."""
 from __future__ import print_function
 
-from copy import deepcopy
 import os
 import sys
 import tempfile
 import unittest
 import warnings
 from Bio._py3k import StringIO
+from numpy.random import random
 
 try:
     import numpy
@@ -525,13 +525,6 @@ class ParseTest(unittest.TestCase):
             self.assertEqual(record_set, set())
         finally:
             os.remove(filename)
-
-    def test_deepcopy_of_structure_with_disorder(self):
-        """Test deepcopy of a structure with disordered atoms.
-
-        Shouldn't cause recursion.
-        """
-        _ = deepcopy(self.structure)
 
 
 class ParseReal(unittest.TestCase):
@@ -1156,6 +1149,221 @@ class TransformTests(unittest.TestCase):
             newpos_check = numpy.dot(oldpos, rotation) + translation
             for i in range(0, 3):
                 self.assertAlmostEqual(newpos[i], newpos_check[i])
+
+    def m2rotaxis(self, m):
+        """
+        Return angles, axis pair that corresponds to rotation matrix m.
+        """
+        # Angle always between 0 and pi
+        # Sense of rotation is defined by axis orientation
+        t = 0.5 * (numpy.trace(m) - 1)
+        t = max(-1, t)
+        t = min(1, t)
+        angle = numpy.arccos(t)
+        if angle < 1e-15:
+            # Angle is 0
+            return 0.0, Vector(1, 0, 0)
+        elif angle < numpy.pi:
+            # Angle is smaller than pi
+            x = m[2, 1] - m[1, 2]
+            y = m[0, 2] - m[2, 0]
+            z = m[1, 0] - m[0, 1]
+            axis = Vector(x, y, z)
+            axis.normalize()
+            return angle, axis
+        else:
+            # Angle is pi - special case!
+            m00 = m[0, 0]
+            m11 = m[1, 1]
+            m22 = m[2, 2]
+            if m00 > m11 and m00 > m22:
+                x = numpy.sqrt(m00 - m11 - m22 + 0.5)
+                y = m[0, 1] / (2 * x)
+                z = m[0, 2] / (2 * x)
+            elif m11 > m00 and m11 > m22:
+                y = numpy.sqrt(m11 - m00 - m22 + 0.5)
+                x = m[0, 1] / (2 * y)
+                z = m[1, 2] / (2 * y)
+            else:
+                z = numpy.sqrt(m22 - m00 - m11 + 0.5)
+                x = m[0, 2] / (2 * z)
+                y = m[1, 2] / (2 * z)
+            axis = Vector(x, y, z)
+            axis.normalize()
+            return numpy.pi, axis
+
+    def vector_to_axis(self, line, point):
+        """
+        Returns the vector between a point and
+        the closest point on a line (ie. the perpendicular
+        projection of the point on the line).
+
+        @type line: L{Vector}
+        @param line: vector defining a line
+
+        @type point: L{Vector}
+        @param point: vector defining the point
+        """
+        line = line.normalized()
+        np = point.norm()
+        angle = line.angle(point)
+        return point - line ** (np * numpy.cos(angle))
+
+    def rotaxis2m(self, theta, vector):
+        """
+        Calculate a left multiplying rotation matrix that rotates
+        theta rad around vector.
+
+        Example:
+
+            >>> m=rotaxis(pi, Vector(1, 0, 0))
+            >>> rotated_vector=any_vector.left_multiply(m)
+
+        @type theta: float
+        @param theta: the rotation angle
+
+
+        @type vector: L{Vector}
+        @param vector: the rotation axis
+
+        @return: The rotation matrix, a 3x3 Numeric array.
+        """
+        vector = vector.copy()
+        vector.normalize()
+        c = numpy.cos(theta)
+        s = numpy.sin(theta)
+        t = 1 - c
+        x, y, z = vector.get_array()
+        rot = numpy.zeros((3, 3))
+        # 1st row
+        rot[0, 0] = t * x * x + c
+        rot[0, 1] = t * x * y - s * z
+        rot[0, 2] = t * x * z + s * y
+        # 2nd row
+        rot[1, 0] = t * x * y + s * z
+        rot[1, 1] = t * y * y + c
+        rot[1, 2] = t * y * z - s * x
+        # 3rd row
+        rot[2, 0] = t * x * z - s * y
+        rot[2, 1] = t * y * z + s * x
+        rot[2, 2] = t * z * z + c
+        return rot
+
+    rotaxis = rotaxis2m
+
+    def refmat(self, p, q):
+        """
+        Return a (left multiplying) matrix that mirrors p onto q.
+
+        Example:
+            >>> mirror=refmat(p, q)
+            >>> qq=p.left_multiply(mirror)
+            >>> print(q)
+            >>> print(qq) # q and qq should be the same
+
+        @type p,q: L{Vector}
+        @return: The mirror operation, a 3x3 Numeric array.
+        """
+        p.normalize()
+        q.normalize()
+        if (p - q).norm() < 1e-5:
+            return numpy.identity(3)
+        pq = p - q
+        pq.normalize()
+        b = pq.get_array()
+        b.shape = (3, 1)
+        i = numpy.identity(3)
+        ref = i - 2 * numpy.dot(b, numpy.transpose(b))
+        return ref
+
+    def rotmat(self, p, q):
+        """
+        Return a (left multiplying) matrix that rotates p onto q.
+
+        Example:
+            >>> r=rotmat(p, q)
+            >>> print(q)
+            >>> print(p.left_multiply(r))
+
+        @param p: moving vector
+        @type p: L{Vector}
+
+        @param q: fixed vector
+        @type q: L{Vector}
+
+        @return: rotation matrix that rotates p onto q
+        @rtype: 3x3 Numeric array
+        """
+        rot = numpy.dot(self.refmat(q, -p), self.refmat(p, -p))
+        return rot
+
+    def calc_angle(self, v1, v2, v3):
+        """
+        Calculate the angle between 3 vectors
+        representing 3 connected points.
+
+        @param v1, v2, v3: the tree points that define the angle
+        @type v1, v2, v3: L{Vector}
+
+        @return: angle
+        @rtype: float
+        """
+        v1 = v1 - v2
+        v3 = v3 - v2
+        return v1.angle(v3)
+
+    def calc_dihedral(self, v1, v2, v3, v4):
+        """
+        Calculate the dihedral angle between 4 vectors
+        representing 4 connected points. The angle is in
+        ]-pi, pi].
+
+        @param v1, v2, v3, v4: the four points that define the dihedral angle
+        @type v1, v2, v3, v4: L{Vector}
+        """
+        ab = v1 - v2
+        cb = v3 - v2
+        db = v4 - v3
+        u = ab ** cb
+        v = db ** cb
+        w = u ** v
+        angle = u.angle(v)
+        # Determine sign of angle
+        try:
+            if cb.angle(w) > 0.001:
+                angle = -angle
+        except ZeroDivisionError:
+            # dihedral=pi
+            pass
+        return angle
+
+    def test_Vector(self):
+        """Test Vector object"""
+        v1 = Vector(0, 0, 1)
+        v2 = Vector(0, 0, 0)
+        v3 = Vector(0, 1, 0)
+        v4 = Vector(1, 1, 0)
+
+        self.assertEqual(self.calc_angle(v1, v2, v3), 1.5707963267948966)
+        self.assertEqual(self.calc_dihedral(v1, v2, v3, v4), 1.5707963267948966)
+        ref = self.refmat(v1, v3)
+        rot = self.rotmat(v1, v3)
+        self.assertEqual(ref[0].all(), numpy.array([1.0, 0.0, 0.0]).all())
+        self.assertEqual(ref[1].all(), numpy.array([0.0, 2.220446049250313e-16, 0.9999999999999998]).all())
+        self.assertEqual(ref[2].all(), numpy.array([0.0, 0.9999999999999998, 2.220446049250313e-16]).all())
+        self.assertEqual(rot[0].all(), numpy.array([1.0, 0.0, 0.0]).all())
+        self.assertEqual(rot[1].all(), numpy.array([0.0, 2.220446049250313e-16, 0.9999999999999998]).all())
+        self.assertEqual(rot[2].all(), numpy.array([0.0, -0.9999999999999998, -2.220446049250313e-16]).all())
+        self.assertEqual(v1.right_multiply(numpy.transpose(rot)).get_array().all(), numpy.array([0.0, 0.9999999999999998, -2.220446049250313e-16]).all())
+        v1[2] = 10
+        self.assertEqual(v1.__getitem__(2), 10)
+        angle = random() * numpy.pi
+        axis = Vector(random(3) - random(3))
+        axis.normalize()
+        m = self.rotaxis(angle, axis)
+        cangle, caxis = self.m2rotaxis(m)
+        self.assertAlmostEqual((angle - cangle), 0.0)
+        self.assertEqual((axis - caxis).get_array().all(), numpy.array([0, 0, 0]).all())
 
 
 class CopyTests(unittest.TestCase):
