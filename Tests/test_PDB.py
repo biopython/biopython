@@ -18,7 +18,6 @@ import tempfile
 import unittest
 import warnings
 from Bio._py3k import StringIO
-from numpy.random import random
 
 try:
     import numpy
@@ -41,6 +40,7 @@ from Bio.PDB import Residue, Atom
 from Bio.PDB import make_dssp_dict
 from Bio.PDB import DSSP
 from Bio.PDB.NACCESS import process_asa_data, process_rsa_data
+from numpy.random import random
 
 
 # NB: the 'A_' prefix ensures this test case is run first
