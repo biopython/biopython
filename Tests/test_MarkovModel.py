@@ -334,12 +334,12 @@ class TestMarkovModel(unittest.TestCase):
                         [-16.11809565, -2.4079455, -3.27544608, -4.5847794]])
         self.assertTrue(
             array_equal(around(
-                MarkovModel._forward(len(states),len(outputs),
+                MarkovModel._forward(len(states), len(outputs),
                                                     lp_initial,
                                                     lp_transition,
                                                     lp_emission,
-                                                    outputs),decimals=3),
-                around(matrix,decimals=3)))
+                                                    outputs), decimals=3),
+                around(matrix, decimals=3)))
 
     def test_backward(self):
         states = ["CP", "IP"]
