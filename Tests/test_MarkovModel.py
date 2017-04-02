@@ -9,6 +9,11 @@
 # Please see the LICENSE file that should have been included as part of this
 # package.
 
+import warnings
+import unittest
+
+from Bio._py3k import StringIO
+
 try:
     from numpy import array
     from numpy import random  # missing in PyPy's micronumpy
@@ -20,17 +25,11 @@ except ImportError:
     raise MissingPythonDependencyError(
         "Install NumPy if you want to use Bio.MarkovModel.")
 
-import unittest
-
-import warnings
-
 with warnings.catch_warnings():
     # Silence this warning:
     # For optimal speed, please update to Numpy version 1.3 or later
     warnings.simplefilter("ignore", UserWarning)
     from Bio import MarkovModel
-
-from Bio._py3k import StringIO
 
 
 class TestMarkovModel(unittest.TestCase):
