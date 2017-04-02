@@ -318,10 +318,9 @@ class TestMarkovModel(unittest.TestCase):
         self.assertTrue(array_equal(around(
             markov_model.p_transition, decimals=3),
             around(output_p_transition, decimals=3)))
-        self.assertTrue(
-            array_equal(around(
-                        markov_model.p_emission, decimals=3),
-                        around(output_p_emission, decimals=3)))
+        self.assertTrue(array_equal(around(
+            markov_model.p_emission, decimals=3),
+            around(output_p_emission, decimals=3)))
 
     def test_forward(self):
         states = ["CP", "IP"]
@@ -333,13 +332,12 @@ class TestMarkovModel(unittest.TestCase):
         matrix = array([[0., -1.5606477, -3.07477539, -3.84932984],
                         [-16.11809565, -2.4079455, -3.27544608, -4.5847794]])
         self.assertTrue(
-            array_equal(around(
-                MarkovModel._forward(len(states), len(outputs),
+            array_equal(around(MarkovModel._forward(len(states), len(outputs),
                                                     lp_initial,
                                                     lp_transition,
                                                     lp_emission,
                                                     outputs), decimals=3),
-                around(matrix, decimals=3)))
+                        around(matrix, decimals=3)))
 
     def test_backward(self):
         states = ["CP", "IP"]
