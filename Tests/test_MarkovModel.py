@@ -1,6 +1,7 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
+# Copyright 2017 by Maximilian Greil. All rights reserved.
 
 try:
     from numpy import array
@@ -23,10 +24,7 @@ with warnings.catch_warnings():
     warnings.simplefilter("ignore", UserWarning)
     from Bio import MarkovModel
 
-try:
-    from StringIO import StringIO
-except ImportError:
-    from io import StringIO
+from Bio._py3k import StringIO
 
 
 class TestMarkovModel(unittest.TestCase):
@@ -242,11 +240,6 @@ class TestMarkovModel(unittest.TestCase):
         state_list, state_float = states[0]
         self.assertEqual(state_list, ["N"])
 
-# Copyright 2017 by Maximilian Greil. All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-
     def test_readline_and_check_start(self):
         states = "NR"
         alphabet = "AGTC"
@@ -340,15 +333,13 @@ class TestMarkovModel(unittest.TestCase):
         matrix = array([[0., -1.5606477, -3.07477539, -3.84932984],
                         [-16.11809565, -2.4079455, -3.27544608, -4.5847794]])
         self.assertTrue(
-            array_equal(around(MarkovModel._forward(len(states),
-                                                    len(outputs),
+            array_equal(around(
+                MarkovModel._forward(len(states),len(outputs),
                                                     lp_initial,
                                                     lp_transition,
                                                     lp_emission,
-                                                    outputs),
-                               decimals=3),
-                        around(matrix,
-                               decimals=3)))
+                                                    outputs),decimals=3),
+                around(matrix,decimals=3)))
 
     def test_backward(self):
         states = ["CP", "IP"]
