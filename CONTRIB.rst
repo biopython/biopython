@@ -165,6 +165,7 @@ This is certainly not comprehensive, and if you've been overlooked
 - Siong Kong
 - Sjoerd de Vries <sjoerd at domain nmr.chem.uu.nl>
 - Sourav Singh <https://github.com/souravsingh>
+- Spencer Bliven <https://github.com/sbliven>
 - Stefans Mezulis <https://github.com/StefansM/>
 - Steve Bond <https://github.com/biologyguy>
 - Steve Marshall <https://github.com/hungryhoser>

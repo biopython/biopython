@@ -123,6 +123,7 @@ possible, especially the following contributors:
 - Richard Neher (first contribution)
 - Sebastian Bassi
 - Sourav Singh (first contribution)
+- Spencer Bliven (first contribution)
 - Stefans Mezulis
 - Steve Bond
 - Steve Marshall (first contribution)
