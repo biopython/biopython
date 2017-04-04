@@ -23,7 +23,8 @@ try:
     import numpy
     from numpy import dot  # Missing on old PyPy's micronumpy
     del dot
-    from numpy.linalg import svd, det  # Missing in PyPy 2.0 numpypy
+    from numpy.linalg import svd, det # Missing in PyPy 2.0 numpypy
+    from numpy.random import random
 except ImportError:
     from Bio import MissingPythonDependencyError
     raise MissingPythonDependencyError(
@@ -40,7 +41,6 @@ from Bio.PDB import Residue, Atom
 from Bio.PDB import make_dssp_dict
 from Bio.PDB import DSSP
 from Bio.PDB.NACCESS import process_asa_data, process_rsa_data
-from numpy.random import random
 
 
 # NB: the 'A_' prefix ensures this test case is run first
@@ -526,7 +526,12 @@ class ParseTest(unittest.TestCase):
         finally:
             os.remove(filename)
 
-
+    def test_deepcopy_of_structure_with_disorder(self):
+            """Test deepcopy of a structure with disordered atoms.
+            Shouldn't cause recursion.
+            """
+            _ = deepcopy(self.structure)
+        
 class ParseReal(unittest.TestCase):
     """Testing with real PDB files."""
 
@@ -1161,36 +1166,38 @@ class TransformTests(unittest.TestCase):
         self.assertEqual(calc_dihedral(v1, v2, v3, v4), 1.5707963267948966)
         ref = refmat(v1, v3)
         rot = rotmat(v1, v3)
-        self.assertEqual(ref[0].all(), numpy.array([1.0, 0.0, 0.0]).all())
-        self.assertEqual(ref[1].all(), numpy.array([0.0, 2.220446049250313e-16, 0.9999999999999998]).all())
-        self.assertEqual(ref[2].all(), numpy.array([0.0, 0.9999999999999998, 2.220446049250313e-16]).all())
-        self.assertEqual(rot[0].all(), numpy.array([1.0, 0.0, 0.0]).all())
-        self.assertEqual(rot[1].all(), numpy.array([0.0, 2.220446049250313e-16, 0.9999999999999998]).all())
-        self.assertEqual(rot[2].all(), numpy.array([0.0, -0.9999999999999998, -2.220446049250313e-16]).all())
-        self.assertEqual(v1.left_multiply(ref).get_array().all(), numpy.array([0.0, 0.9999999999999998, 2.220446049250313e-16]).all())
-        self.assertEqual(v1.left_multiply(rot).get_array().all(), numpy.array([0.0, 0.9999999999999998, -2.220446049250313e-16]).all())
-        self.assertEqual(v1.right_multiply(numpy.transpose(rot)).get_array().all(), numpy.array([0.0, 0.9999999999999998, -2.220446049250313e-16]).all())
-        self.assertEqual((v1 - v2).get_array().all(), numpy.array([0.0, 0.0, 1.0]).all())
-        self.assertEqual((v1 - 1).get_array().all(), numpy.array([-1.0, -1.0, 0.0]).all())
-        self.assertEqual((v1 - (1, 2, 3)).get_array().all(), numpy.array([-1.0, -2.0, -2.0]).all())
-        self.assertEqual((v1 + v2).get_array().all(), numpy.array([0.0, 0.0, 1.0]).all())
-        self.assertEqual((v1 + 3).get_array().all(), numpy.array([3.0, 3.0, 4.0]).all())
-        self.assertEqual((v1 + (1, 2, 3)).get_array().all(), numpy.array([1.0, 2.0, 4.0]).all())
+        self.assertEqual(ref[0], numpy.array([1.0, 0.0, 0.0]))
+        self.assertEqual(ref[1], numpy.array([0.0, 2.220446049250313e-16, 0.9999999999999998]))
+        self.assertEqual(ref[2], numpy.array([0.0, 0.9999999999999998, 2.220446049250313e-16]))
+        self.assertEqual(rot[0], numpy.array([1.0, 0.0, 0.0]))
+        self.assertEqual(rot[1], numpy.array([0.0, 2.220446049250313e-16, 0.9999999999999998]))
+        self.assertEqual(rot[2], numpy.array([0.0, -0.9999999999999998, -2.220446049250313e-16]))
+        self.assertEqual(v1.left_multiply(ref).get_array(), numpy.array([0.0, 0.9999999999999998, 2.220446049250313e-16]))
+        self.assertEqual(v1.left_multiply(rot).get_array(), numpy.array([0.0, 0.9999999999999998, -2.220446049250313e-16]))
+        self.assertEqual(v1.right_multiply(numpy.transpose(rot)).get_array(), numpy.array([0.0, 0.9999999999999998, -2.220446049250313e-16]))
+        self.assertEqual((v1 - v2).get_array(), numpy.array([0.0, 0.0, 1.0]))
+        self.assertEqual((v1 - 1).get_array(), numpy.array([-1.0, -1.0, 0.0]))
+        self.assertEqual((v1 - (1, 2, 3)).get_array(), numpy.array([-1.0, -2.0, -2.0]))
+        self.assertEqual((v1 + v2).get_array(), numpy.array([0.0, 0.0, 1.0]))
+        self.assertEqual((v1 + 3).get_array(), numpy.array([3.0, 3.0, 4.0]))
+        self.assertEqual((v1 + (1, 2, 3)).get_array(), numpy.array([1.0, 2.0, 4.0]))
         self.assertEqual(v1 * v2, 0.0)
-        self.assertEqual((v1 ** v2).get_array().all(), numpy.array([0.0, -0.0, 0.0]).all())
-        self.assertEqual((v1 ** 2).get_array().all(), numpy.array([0.0, 0.0, 2.0]).all())
-        self.assertEqual((v1 ** (1, 2, 3)).get_array().all(), numpy.array([0.0, 0.0, 3.0]).all())
+        self.assertEqual((v1 ** v2).get_array(), numpy.array([0.0, -0.0, 0.0]))
+        self.assertEqual((v1 ** 2).get_array(), numpy.array([0.0, 0.0, 2.0]))
+        self.assertEqual((v1 ** (1, 2, 3)).get_array(), numpy.array([0.0, 0.0, 3.0]))
         self.assertEqual(v1.norm(), 1.0)
         self.assertEqual(v1.normsq(), 1.0)
         v1[2] = 10
         self.assertEqual(v1.__getitem__(2), 10)
+        
+    def test_Vector_angles(self):      
         angle = random() * numpy.pi
         axis = Vector(random(3) - random(3))
         axis.normalize()
         m = rotaxis(angle, axis)
         cangle, caxis = m2rotaxis(m)
         self.assertAlmostEqual((angle - cangle), 0.0)
-        self.assertEqual((axis - caxis).get_array().all(), numpy.array([0, 0, 0]).all())
+        self.assertEqual((axis - caxis).get_array(), numpy.array([0, 0, 0]))
 
 
 class CopyTests(unittest.TestCase):
