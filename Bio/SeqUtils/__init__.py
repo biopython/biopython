@@ -94,7 +94,9 @@ def GC_skew(seq, window=100):
 
     Returns a list of ratios (floats), controlled by the length of the sequence
     and the size of the window.
-
+    
+    If the number of G and C is equal, returns 0. Fixes the issue when the window is devoid of G/Cs.
+    
     Does NOT look at any ambiguous nucleotides.
     """
     # 8/19/03: Iddo: added lowercase
