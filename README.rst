@@ -8,6 +8,10 @@
    :alt: TravisCI test coverage
    :target: https://codecov.io/github/biopython/biopython/
 
+.. image:: https://github.com/biopython/biopython/raw/master/Doc/images/biopython.jpg
+   :alt: The Biopython Project
+   :target: http://biopython.org
+   :width: 100%
 
 Biopython README file
 =====================
