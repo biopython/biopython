@@ -23,6 +23,9 @@ are explicitly available under either license, but most of the code remains
 under the "Biopython License Agreement" only. See the LICENSE file for more
 details.
 
+We now expect and take advantage of NumPy under PyPy, and compile most of the
+Biopython C code modules as well.
+
 Bio.AlignIO now supports the UCSC Multiple Alignment Format (MAF) under the
 format name "maf", using new module Bio.AlignIO.MafIO which also offers
 indexed access to these potentially large files using SQLite3 (contributed by
