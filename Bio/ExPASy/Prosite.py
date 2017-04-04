@@ -9,7 +9,7 @@
 
 Tested with:
 Release 20.43, 10-Feb-2009
-
+Release 2017_03 of 15-Mar-2017.
 
 Functions:
 
@@ -61,7 +61,8 @@ class Record(object):
         - name           ID of the record.  e.g. ADH_ZINC
         - type           Type of entry.  e.g. PATTERN, MATRIX, or RULE
         - accession      e.g. PS00387
-        - created        Date the entry was created.  (MMM-YYYY)
+        - created        Date the entry was created.  (MMM-YYYY for releases
+                         before January 2017, DD-MMM-YYYY since January 2017)
         - data_update    Date the 'primary' data was last updated.
         - info_update    Date data other than 'primary' data was last updated.
         - pdoc           ID of the PROSITE DOCumentation.
@@ -166,9 +167,9 @@ def __read(handle):
         elif keyword == 'AC':
             record.accession = value.rstrip(';')
         elif keyword == 'DT':
-            # e.g. from 2017,
+            # e.g. from January 2017,
             # DT   01-APR-1990 CREATED; 01-APR-1990 DATA UPDATE; 01-APR-1990 INFO UPDATE.
-            # Older files had brackets round the date descriptions.
+            # Older files had brackets round the date descriptions and used MMM-YYYY
             dates = value.rstrip('.').split("; ")
             if dates[0].endswith((' (CREATED)', ' CREATED')):
                 # Remove last word
