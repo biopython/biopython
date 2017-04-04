@@ -4,11 +4,20 @@ import unittest
 
 try:
     import numpy
-    del numpy
 except ImportError:
     from Bio import MissingPythonDependencyError
     raise MissingPythonDependencyError(
         "Install NumPy if you want to use Bio.NaiveBayes.")
+try:
+    hash(numpy.float64(123.456))
+except TypeError:
+    # Due to a bug in NumPy 1.12.1, this is unhashable under
+    # PyPy3.5 v5.7 beta - it has been fixed in NumPy
+    from Bio import MissingPythonDependencyError
+    raise MissingPythonDependencyError(
+        "Please update NumPy if you want to use Bio.NaiveBayes "
+        "(under this version numpy.float64 is unhashable).")
+del numpy
 
 from Bio import NaiveBayes
 
