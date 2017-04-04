@@ -103,7 +103,10 @@ def GC_skew(seq, window=100):
         s = seq[i: i + window]
         g = s.count('G') + s.count('g')
         c = s.count('C') + s.count('c')
-        skew = (g - c) / float(g + c)
+        if g == c:
+            skew = 0
+        else:
+            skew = (g - c) / float(g + c)
         values.append(skew)
     return values
 
