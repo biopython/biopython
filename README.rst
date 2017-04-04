@@ -52,7 +52,7 @@ Here you can replace ``python`` with a specific version, e.g. ``python3.5``.
 Python Requirements
 ===================
 
-We currently recommend using Python 3.5 from http://www.python.org
+We currently recommend using Python 3.6 from http://www.python.org
 
 Biopython is currently supported and tested on the following Python
 implementations:
@@ -63,9 +63,9 @@ implementations:
 
 - PyPy v5.7 and also PyPy3.5 v5.7 beta -- see http://www.pypy.org
 
-  Aside from modules with C code or dependent on NumPy, everything should
-  work. PyPy's support of NumPy has improved but we have not reviewed how
-  well that works for Biopython. Older versions of PyPy mostly work too.
+  Aside from ``Bio.trie`` (which does not compile as ``marshal.h`` is
+  currently missing under PyPy), everything should work. Older versions
+  of PyPy mostly work too.
 
 - Jython 2.7 -- see http://www.jython.org
 
