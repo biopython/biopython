@@ -1,3 +1,14 @@
+.. image:: https://img.shields.io/pypi/v/biopython.svg
+   :alt: Biopython on the Python Package Index (PyPI)
+   :target: https://pypi.python.org/pypi/biopython
+.. image:: https://img.shields.io/travis/biopython/biopython/master.svg
+   :alt: Testing with TravisCI
+   :target: https://travis-ci.org/biopython/biopython/
+.. image:: https://img.shields.io/codecov/c/github/biopython/biopython/master.svg
+   :alt: TravisCI test coverage
+   :target: https://codecov.io/github/biopython/biopython/
+
+
 Biopython README file
 =====================
 
