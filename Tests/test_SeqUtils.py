@@ -140,6 +140,10 @@ class SeqUtilsTests(unittest.TestCase):
         seq = "ACGGGCTACCGTATAGGCAAGAGATGATGCCC"
         self.assertEqual(GC(seq), 56.25)
 
+    def test_GC_skew(self):
+        seq = "A"*50
+        self.assertEqual(GC_skew(seq)[0], 0)
+
     def test_seq1_seq3(self):
         s3 = "MetAlaTyrtrpcysthrLYSLEUILEGlYPrOGlNaSnaLapRoTyRLySSeRHisTrpLysThr"
         s1 = "MAYWCTKLIGPQNAPYKSHWKT"
