@@ -12,6 +12,7 @@
 """Unit tests for the Bio.PDB module."""
 from __future__ import print_function
 
+from copy import deepcopy
 import os
 import sys
 import tempfile
@@ -1166,25 +1167,27 @@ class TransformTests(unittest.TestCase):
         self.assertEqual(calc_dihedral(v1, v2, v3, v4), 1.5707963267948966)
         ref = refmat(v1, v3)
         rot = rotmat(v1, v3)
-        self.assertEqual(ref[0], numpy.array([1.0, 0.0, 0.0]))
-        self.assertEqual(ref[1], numpy.array([0.0, 2.220446049250313e-16, 0.9999999999999998]))
-        self.assertEqual(ref[2], numpy.array([0.0, 0.9999999999999998, 2.220446049250313e-16]))
-        self.assertEqual(rot[0], numpy.array([1.0, 0.0, 0.0]))
-        self.assertEqual(rot[1], numpy.array([0.0, 2.220446049250313e-16, 0.9999999999999998]))
-        self.assertEqual(rot[2], numpy.array([0.0, -0.9999999999999998, -2.220446049250313e-16]))
-        self.assertEqual(v1.left_multiply(ref).get_array(), numpy.array([0.0, 0.9999999999999998, 2.220446049250313e-16]))
-        self.assertEqual(v1.left_multiply(rot).get_array(), numpy.array([0.0, 0.9999999999999998, -2.220446049250313e-16]))
-        self.assertEqual(v1.right_multiply(numpy.transpose(rot)).get_array(), numpy.array([0.0, 0.9999999999999998, -2.220446049250313e-16]))
-        self.assertEqual((v1 - v2).get_array(), numpy.array([0.0, 0.0, 1.0]))
-        self.assertEqual((v1 - 1).get_array(), numpy.array([-1.0, -1.0, 0.0]))
-        self.assertEqual((v1 - (1, 2, 3)).get_array(), numpy.array([-1.0, -2.0, -2.0]))
-        self.assertEqual((v1 + v2).get_array(), numpy.array([0.0, 0.0, 1.0]))
-        self.assertEqual((v1 + 3).get_array(), numpy.array([3.0, 3.0, 4.0]))
-        self.assertEqual((v1 + (1, 2, 3)).get_array(), numpy.array([1.0, 2.0, 4.0]))
+        self.assertTrue(numpy.array_equal(ref[0], numpy.array([1.0, 0.0, 0.0])))
+        self.assertTrue(numpy.array_equal(ref[1], numpy.array([0.0, 2.220446049250313e-16, 0.9999999999999998])))
+        self.assertTrue(numpy.array_equal(ref[2], numpy.array([0.0, 0.9999999999999998, 2.220446049250313e-16])))
+        self.assertTrue(numpy.array_equal(rot[0], numpy.array([1.0, 0.0, 0.0])))
+        self.assertTrue(numpy.array_equal(rot[1], numpy.array([0.0, 2.220446049250313e-16, 0.9999999999999998])))
+        self.assertTrue(numpy.array_equal(rot[2], numpy.array([0.0, -0.9999999999999998, -2.220446049250313e-16])))
+        self.assertTrue(numpy.array_equal(v1.left_multiply(ref).get_array(), numpy.array([0.0, 0.9999999999999998, 2.220446049250313e-16])))
+        self.assertTrue(numpy.array_equal(v1.left_multiply(rot).get_array(), numpy.array([0.0, 0.9999999999999998, -2.220446049250313e-16])))
+        self.assertTrue(numpy.array_equal(v1.right_multiply(numpy.transpose(rot)).get_array(), numpy.array([0.0, 0.9999999999999998, -2.220446049250313e-16])))
+        self.assertTrue(numpy.array_equal((v1 - v2).get_array(), numpy.array([0.0, 0.0, 1.0])))
+        self.assertTrue(numpy.array_equal((v1 - 1).get_array(), numpy.array([-1.0, -1.0, 0.0])))
+        self.assertTrue(numpy.array_equal((v1 - (1, 2, 3)).get_array(), numpy.array([-1.0, -2.0, -2.0])))
+        self.assertTrue(numpy.array_equal((v1 + v2).get_array(), numpy.array([0.0, 0.0, 1.0])))
+        self.assertTrue(numpy.array_equal((v1 + 3).get_array(), numpy.array([3.0, 3.0, 4.0])))
+        self.assertTrue(numpy.array_equal((v1 + (1, 2, 3)).get_array(), numpy.array([1.0, 2.0, 4.0])))
+        self.assertTrue(numpy.array_equal(v1.get_array() / 2, numpy.array([0, 0, 0.5])))
+        self.assertTrue(numpy.array_equal(v1.get_array() / 2, numpy.array([0, 0, 0.5])))  
         self.assertEqual(v1 * v2, 0.0)
-        self.assertEqual((v1 ** v2).get_array(), numpy.array([0.0, -0.0, 0.0]))
-        self.assertEqual((v1 ** 2).get_array(), numpy.array([0.0, 0.0, 2.0]))
-        self.assertEqual((v1 ** (1, 2, 3)).get_array(), numpy.array([0.0, 0.0, 3.0]))
+        self.assertTrue(numpy.array_equal((v1 ** v2).get_array(), numpy.array([0.0, -0.0, 0.0])))
+        self.assertTrue(numpy.array_equal((v1 ** 2).get_array(), numpy.array([0.0, 0.0, 2.0])))
+        self.assertTrue(numpy.array_equal((v1 ** (1, 2, 3)).get_array(), numpy.array([0.0, 0.0, 3.0])))
         self.assertEqual(v1.norm(), 1.0)
         self.assertEqual(v1.normsq(), 1.0)
         v1[2] = 10
@@ -1196,8 +1199,9 @@ class TransformTests(unittest.TestCase):
         axis.normalize()
         m = rotaxis(angle, axis)
         cangle, caxis = m2rotaxis(m)
-        self.assertAlmostEqual((angle - cangle), 0.0)
-        self.assertEqual((axis - caxis).get_array(), numpy.array([0, 0, 0]))
+        self.assertAlmostEqual(angle, cangle, places = 3)
+        self.assertTrue(numpy.array_equal(axis.get_array(), caxis.get_array()),
+                    "Expected zero vector, got %r" % (axis - caxis).get_array())
 
 
 class CopyTests(unittest.TestCase):
