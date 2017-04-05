@@ -255,6 +255,11 @@ class build_py_biopython(build_py):
     def run(self):
         if not check_dependencies_once():
             return
+        if os.name == "java" and "Bio.Restriction" in self.packages:
+            # Evil hack to work on Jython 2.7
+            # This is to avoid java.lang.RuntimeException: Method code too large!
+            # from Bio/Restriction/Restriction_Dictionary.py
+            self.packages.remove("Bio.Restriction")
         # Add software that requires Numpy to be installed.
         if is_Numpy_installed():
             self.packages.extend(NUMPY_PACKAGES)
@@ -391,6 +396,13 @@ PACKAGES = [
     # Other top level packages,
     'BioSQL',
     ]
+
+if os.name == 'jython':
+    # Evil hack to work on Jython 2.7
+    # This is to avoid java.lang.RuntimeException: Method code too large!
+    # from Bio/Restriction/Restriction_Dictionary.py
+    PACKAGES.remove('Bio.Restriction')
+
 
 # packages that require Numeric Python
 NUMPY_PACKAGES = [

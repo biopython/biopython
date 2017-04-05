@@ -84,9 +84,10 @@ implementations:
 
 - Jython 2.7 -- see http://www.jython.org
 
-  We provide limited support for Jython, but aside from modules with C code,
-  or dependent on SQLite3 or NumPy, everything should work. There are some
-  known issues with test failures which have not yet been resolved.
+  We provide limited support for Jython, but aside from ``Bio.Restriction``,
+  modules with C code, or dependent on SQLite3 or NumPy, everything should
+  work. There are some known issues with test failures which have not yet
+  been resolved.
 
 Please note that support for Python 3.3 is deprecated as of Biopython 1.67.
 Biopython 1.68 was our final release to support Python 2.6.
