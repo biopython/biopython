@@ -53,7 +53,7 @@ def m2rotaxis(m):
 
 def vector_to_axis(line, point):
     """Vector to axis method.
-    
+
     Return the vector between a point and
     the closest point on a line (ie. the perpendicular
     projection of the point on the line).
@@ -71,8 +71,8 @@ def vector_to_axis(line, point):
 
 
 def rotaxis2m(theta, vector):
-    """Rotaxi2m method.
-    
+    """Calculate left multiplying rotation matrix.
+
     Calculate a left multiplying rotation matrix that rotates
     theta rad around vector.
 
@@ -111,12 +111,12 @@ def rotaxis2m(theta, vector):
     rot[2, 2] = t * z * z + c
     return rot
 
+
 rotaxis = rotaxis2m
 
 
 def refmat(p, q):
-    """
-    Return a (left multiplying) matrix that mirrors p onto q.
+    """Return a (left multiplying) matrix that mirrors p onto q.
 
     Example:
         >>> mirror=refmat(p, q)
@@ -181,7 +181,7 @@ def calc_angle(v1, v2, v3):
 
 def calc_dihedral(v1, v2, v3, v4):
     """Calculate dihedral angle method.
-    
+
     Calculate the dihedral angle between 4 vectors
     representing 4 connected points. The angle is in
     ]-pi, pi].
