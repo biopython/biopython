@@ -1,0 +1,2 @@
+# We want NumPy under CPython or PyPy, but not Jython
+numpy; platform_python_implementation != 'Jython'
