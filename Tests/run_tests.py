@@ -98,7 +98,6 @@ DOCTEST_MODULES = [
     "Bio.Blast.Applications",
     "Bio.Emboss.Applications",
     "Bio.GenBank",
-    "Bio.Graphics.GenomeDiagram._Colors",
     "Bio.KEGG.Compound",
     "Bio.KEGG.Enzyme",
     "Bio.KEGG.KGML.KGML_parser",
