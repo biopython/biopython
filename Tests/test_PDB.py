@@ -24,7 +24,7 @@ try:
     import numpy
     from numpy import dot  # Missing on old PyPy's micronumpy
     del dot
-    from numpy.linalg import svd, det # Missing in PyPy 2.0 numpypy
+    from numpy.linalg import svd, det  # Missing in PyPy 2.0 numpypy
     from numpy.random import random
 except ImportError:
     from Bio import MissingPythonDependencyError
@@ -532,7 +532,8 @@ class ParseTest(unittest.TestCase):
             Shouldn't cause recursion.
             """
             _ = deepcopy(self.structure)
-        
+
+
 class ParseReal(unittest.TestCase):
     """Testing with real PDB files."""
 
@@ -1183,7 +1184,7 @@ class TransformTests(unittest.TestCase):
         self.assertTrue(numpy.array_equal((v1 + 3).get_array(), numpy.array([3.0, 3.0, 4.0])))
         self.assertTrue(numpy.array_equal((v1 + (1, 2, 3)).get_array(), numpy.array([1.0, 2.0, 4.0])))
         self.assertTrue(numpy.array_equal(v1.get_array() / 2, numpy.array([0, 0, 0.5])))
-        self.assertTrue(numpy.array_equal(v1.get_array() / 2, numpy.array([0, 0, 0.5])))  
+        self.assertTrue(numpy.array_equal(v1.get_array() / 2, numpy.array([0, 0, 0.5])))
         self.assertEqual(v1 * v2, 0.0)
         self.assertTrue(numpy.array_equal((v1 ** v2).get_array(), numpy.array([0.0, -0.0, 0.0])))
         self.assertTrue(numpy.array_equal((v1 ** 2).get_array(), numpy.array([0.0, 0.0, 2.0])))
@@ -1192,16 +1193,16 @@ class TransformTests(unittest.TestCase):
         self.assertEqual(v1.normsq(), 1.0)
         v1[2] = 10
         self.assertEqual(v1.__getitem__(2), 10)
-        
-    def test_Vector_angles(self):      
+
+    def test_Vector_angles(self):
         angle = random() * numpy.pi
         axis = Vector(random(3) - random(3))
         axis.normalize()
         m = rotaxis(angle, axis)
         cangle, caxis = m2rotaxis(m)
-        self.assertAlmostEqual(angle, cangle, places = 3)
-        self.assertTrue(numpy.array_equal(axis.get_array(), caxis.get_array()),
-                    "Expected zero vector, got %r" % (axis - caxis).get_array())
+        self.assertAlmostEqual(angle, cangle, places=3)
+        self.assertTrue(numpy.allclose(list(map(int, (axis-caxis).get_array())), [0, 0, 0]),
+                        "Want %r and %r to be almost equal" % (axis.get_array(), caxis.get_array()))
 
 
 class CopyTests(unittest.TestCase):
