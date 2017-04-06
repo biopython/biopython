@@ -3,7 +3,7 @@
    :target: https://pypi.python.org/pypi/biopython
 .. image:: https://img.shields.io/travis/biopython/biopython/master.svg
    :alt: Testing with TravisCI
-   :target: https://travis-ci.org/biopython/biopython/
+   :target: https://travis-ci.org/biopython/biopython/branches
 .. image:: https://img.shields.io/codecov/c/github/biopython/biopython/master.svg
    :alt: TravisCI test coverage
    :target: https://codecov.io/github/biopython/biopython/
