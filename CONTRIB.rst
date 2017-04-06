@@ -78,8 +78,8 @@ This is certainly not comprehensive, and if you've been overlooked
 - Eric Rasche <https://github.com/erasche>
 - Eric Talevich <https://github.com/etal>
 - Erick Matsen <surname at fhcrc dot org>
-- Francesco Gastaldello <https://github.com/Gasta88>
 - Foen Peng <https://github.com/foenpeng>
+- Francesco Gastaldello <https://github.com/Gasta88>
 - Francisco Pina-Martins <https://github.com/StuntsPT>
 - Franco Caramia <https://github.com/fcaramia>
 - Frank Kauff <fkauff at domain duke.edu>

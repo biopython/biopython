@@ -100,8 +100,8 @@ possible, especially the following contributors:
 - Carlos Ríos
 - Chris Warth
 - Emmanuel Noutahi
-- Francesco Gastaldello (first contribution)
 - Foen Peng (first contribution)
+- Francesco Gastaldello (first contribution)
 - Francisco Pina-Martins (first contribution)
 - Hector Martinez (first contribution)
 - Jacek Śmietański
