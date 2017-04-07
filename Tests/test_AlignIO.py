@@ -70,7 +70,7 @@ test_files = [
     ("maf", 3, 2, 'MAF/humor.maf'),
     ("maf", None, 3, "MAF/bug2453.maf"),  # Have 5, 5, 4 sequences
     ("maf", None, 3, "MAF/ucsc_test.maf"),  # Have 5, 5, 4 sequences
-    ("maf", None, 48, "MAF/ucsc_mm9_chr10.maf")
+    ("maf", None, 48, "MAF/ucsc_mm9_chr10.maf"),
     ]
 
 
