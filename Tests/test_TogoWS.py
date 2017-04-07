@@ -438,13 +438,15 @@ class TogoSearch(unittest.TestCase):
         """
         self.check("pubmed", "human porin", ["21189321", "21835183"])
 
-    def test_pdb_search_porin(self):
-        """Bio.TogoWS.search_iter("pdb", "porin") etc
+# TogoWS search for PDBj currently unavailable
+#    def test_pdb_search_porin(self):
+#        """Bio.TogoWS.search_iter("pdb", "porin") etc
+#
+#        Count was about 161 at time of writing.
+#        """
+#        self.check("pdb", "porin", ["2j1n", "2vqg", "3m8b", "2k0l"])
 
-        Count was about 161 at time of writing.
-        """
-        self.check("pdb", "porin", ["2j1n", "2vqg", "3m8b", "2k0l"])
-
+# TogoWS currently does not support the EMBL database
 #    def test_embl_search_porin(self):
 #        """Bio.TogoWS.search_iter("embl", "human pore", limit=200) etc
 #

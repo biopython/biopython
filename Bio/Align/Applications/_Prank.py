@@ -129,9 +129,8 @@ class PrankCommandline(AbstractCommandline):
                     "Purine/pyrimidine ratio. Default: 1",
                     checker_function=lambda x: isinstance(x, int)),
             # -codon [for DNA: use empirical codon model]
-            # Assuming this is an input file as in -m
-            _Option(["-codon", "codon"],
-                    "Codon model filename. Default: empirical codon model"),
+            _Switch(["-codon", "codon"],
+                    "Codon aware alignment or not"),
             # -termgap [penalise terminal gaps normally]
             _Switch(["-termgap", "termgap"],
                     "Penalise terminal gaps normally"),

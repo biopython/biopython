@@ -295,8 +295,9 @@ class StockholmIterator(AlignmentIterator):
     a single line.  However, interlaced sequences should work.
 
     For more information on the file format, please see:
-    http://www.bioperl.org/wiki/Stockholm_multiple_alignment_format
-    http://www.cgb.ki.se/cgb/groups/sonnhammer/Stockholm.html
+    http://sonnhammer.sbc.su.se/Stockholm.html
+    https://en.wikipedia.org/wiki/Stockholm_format
+    http://bioperl.org/formats/alignment_formats/Stockholm_multiple_alignment_format.html
 
     For consistency with BioPerl and EMBOSS we call this the "stockholm"
     format.

@@ -8,13 +8,13 @@ http://news.open-bio.org/news/category/obf-projects/biopython/
 
 The latest news is at the top of this file.
 
-  
-(In progress, not yet released) Biopython 1.69
-==============================================
+
+6 April 2017: Biopython 1.69
+============================
 
 This release of Biopython supports Python 2.7, 3.3, 3.4, 3.5 and 3.6 (we have
-now dropped support for Python 2.6). It has also been tested on PyPy v5.6,
-PyPy3.3 v5.5 alpha, and Jython 2.7.
+now dropped support for Python 2.6). It has also been tested on PyPy v5.7,
+PyPy3.5 v5.7 beta, and Jython 2.7.
 
 We have started to dual-license Biopython under both our original liberal
 "Biopython License Agreement", and the very similar but more commonly used
@@ -22,6 +22,9 @@ We have started to dual-license Biopython under both our original liberal
 are explicitly available under either license, but most of the code remains
 under the "Biopython License Agreement" only. See the LICENSE file for more
 details.
+
+We now expect and take advantage of NumPy under PyPy, and compile most of the
+Biopython C code modules as well.
 
 Bio.AlignIO now supports the UCSC Multiple Alignment Format (MAF) under the
 format name "maf", using new module Bio.AlignIO.MafIO which also offers
@@ -66,6 +69,11 @@ in addition to version 3.
 The restriction enzyme list in Bio.Restriction has been updated to the
 February 2017 release of REBASE.
 
+Bio.PDB.PDBList now can download PDBx/mmCif (new default), PDB (old default),
+PDBML/XML and mmtf format protein structures.  This is inline with the RCSB
+recommendation to use PDBx/mmCif and deprecate the PDB file format. Biopython
+already has support for parsing mmCif files.
+
 Additionally, a number of small bugs have been fixed with further additions
 to the test suite, and there has been further work to follow the Python PEP8,
 PEP257 and best practice standard coding style.
@@ -92,26 +100,35 @@ possible, especially the following contributors:
 - Carlos Ríos
 - Chris Warth
 - Emmanuel Noutahi
-- FGastaldello (first contribution)
+- Foen Peng (first contribution)
+- Francesco Gastaldello (first contribution)
 - Francisco Pina-Martins (first contribution)
+- Hector Martinez (first contribution)
 - Jacek Śmietański
 - Jack Twilley (first contribution)
 - Jeroen Van Goey (first contribution)
+- Joshua Meyers (first contribution)
 - Kurt Graff (first contribution)
 - Lenna Peterson
 - Leonhard Heizinger (first contribution)
+- Marcin Magnus (first contribution)
 - Markus Piotrowski
+- Maximilian Greil (first contribution)
+- Michał J. Gajda (first contribution)
 - Michiel de Hoon
 - Milind Luthra (first contribution)
 - Oscar G. Garcia (first contribution)
 - Owen Solberg
 - Peter Cock
 - Richard Neher (first contribution)
+- Sebastian Bassi
 - Sourav Singh (first contribution)
+- Spencer Bliven (first contribution)
 - Stefans Mezulis
 - Steve Bond
 - Steve Marshall (first contribution)
 - Uri Laserson
+- Veronika Berman (first contribution)
 - Vincent Davis
 - Wibowo 'Bow' Arindrarto
 
