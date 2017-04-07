@@ -173,14 +173,14 @@ _FormatToIterator = {  # "fasta" is done via Bio.SeqIO
 
 _FormatToWriter = {  # "fasta" is done via Bio.SeqIO
                      # "emboss" : EmbossIO.EmbossWriter, (unfinished)
+                   "clustal": ClustalIO.ClustalWriter,
                    "maf": MafIO.MafWriter,
+                   "mauve": MauveIO.MauveWriter,
                    "nexus": NexusIO.NexusWriter,
                    "phylip": PhylipIO.PhylipWriter,
                    "phylip-sequential": PhylipIO.SequentialPhylipWriter,
                    "phylip-relaxed": PhylipIO.RelaxedPhylipWriter,
                    "stockholm": StockholmIO.StockholmWriter,
-                   "clustal": ClustalIO.ClustalWriter,
-                   "mauve": MauveIO.MauveWriter,
                    }
 
 
