@@ -101,7 +101,6 @@ class MauveWriter(SequentialAlignmentWriter):
         self._wrote_header = False
         self._wrote_first = False
 
-
     def write_alignment(self, alignment):
         """Use this to write (another) single alignment to an open file.
 
@@ -198,7 +197,6 @@ class MauveWriter(SequentialAlignmentWriter):
                 self.handle.write("%s\n" % str(record.seq[i:i + 80]))
 
 
-
 class MauveIterator(AlignmentIterator):
     """Mauve xmfa alignment iterator."""
 
@@ -244,7 +242,8 @@ class MauveIterator(AlignmentIterator):
                         if key == 'start':
                             value = int(value)
                             # Convert to zero based counting
-                            if value > 0: value -= 1
+                            if value > 0:
+                                value -= 1
 
                         if key == 'end':
                             value = int(value)
