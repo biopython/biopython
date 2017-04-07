@@ -486,18 +486,6 @@ for line in open('Bio/__init__.py'):
 with open("README.rst") as handle:
     readme_rst = handle.read()
 
-# Simple trick to use the 2to3 converted source under Python 3,
-# change the current directory before/after running setup.
-# Note as a side effect there will be a build folder underneath
-# the python3_source folder.
-old_path = os.getcwd()
-try:
-    src_path = python3_source
-except NameError:
-    src_path = os.path.dirname(os.path.abspath(sys.argv[0]))
-os.chdir(src_path)
-sys.path.insert(0, src_path)
-
 setup_args = {
     "name": 'biopython',
     "version": __version__,
@@ -521,8 +509,4 @@ setup_args = {
          },
    }
 
-try:
-    setup(**setup_args)
-finally:
-    del sys.path[0]
-    os.chdir(old_path)
+setup(**setup_args)
