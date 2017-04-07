@@ -249,13 +249,23 @@ def draw_arrow(point1, point2, color=colors.lightgreen, border=None,
     shaftbase = boxheight - shafttop
     headbase = boxwidth - headlength
     midheight = 0.5 * boxheight
-    return Polygon([x1, y1 + shafttop,
-                    x1 + headbase, y1 + shafttop,
-                    x1 + headbase, y2,
-                    x2, y1 + midheight,
-                    x1 + headbase, y1,
-                    x1 + headbase, y1 + shaftbase,
-                    x1, y1 + shaftbase],
+    
+    if headbase > 0:
+        # Full arrow
+        points = [x1, y1 + shafttop,
+            x1 + headbase, y1 + shafttop,
+            x1 + headbase, y2,
+            x2, y1 + midheight,
+            x1 + headbase, y1,
+            x1 + headbase, y1 + shaftbase,
+            x1, y1 + shaftbase]
+    else:
+        # Triangle
+        points = [x1, y2,
+            x2, y1 + midheight,
+            x1, y1,
+            x1, y2]
+    return Polygon(points,
                    strokeColor=strokecolor,
                    # strokeWidth=max(1, int(boxheight/40.)),
                    strokeWidth=1,
