@@ -10,7 +10,7 @@ from Bio import SeqIO
 from Bio.Alphabet import single_letter_alphabet
 from Bio.Seq import Seq, MutableSeq
 from Bio.SeqRecord import SeqRecord
-from Bio.SeqUtils import GC, seq1, seq3
+from Bio.SeqUtils import GC, seq1, seq3, GC_skew
 from Bio.SeqUtils.lcc import lcc_simp, lcc_mult
 from Bio.SeqUtils.CheckSum import crc32, crc64, gcg, seguid
 from Bio.SeqUtils.CodonUsage import CodonAdaptationIndex
@@ -139,6 +139,10 @@ class SeqUtilsTests(unittest.TestCase):
     def test_GC(self):
         seq = "ACGGGCTACCGTATAGGCAAGAGATGATGCCC"
         self.assertEqual(GC(seq), 56.25)
+
+    def test_GC_skew(self):
+        seq = "A" * 50
+        self.assertEqual(GC_skew(seq)[0], 0)
 
     def test_seq1_seq3(self):
         s3 = "MetAlaTyrtrpcysthrLYSLEUILEGlYPrOGlNaSnaLapRoTyRLySSeRHisTrpLysThr"
