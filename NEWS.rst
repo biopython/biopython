@@ -26,8 +26,8 @@ We have started to dual-license Biopython under both our original liberal
 "Biopython License Agreement", and the very similar but more commonly used
 "3-Clause BSD License". In this release a small number of the Python files
 are explicitly available under either license, but most of the code remains
-under the "Biopython License Agreement" only. See the LICENSE file for more
-details.
+under the "Biopython License Agreement" only. See the ``LICENSE.rst`` file
+for more details.
 
 We now expect and take advantage of NumPy under PyPy, and compile most of the
 Biopython C code modules as well.
