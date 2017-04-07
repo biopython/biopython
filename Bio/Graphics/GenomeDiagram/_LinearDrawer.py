@@ -29,7 +29,7 @@ from reportlab.lib import colors
 # GenomeDiagram imports
 from ._AbstractDrawer import AbstractDrawer, draw_box, draw_arrow
 from ._AbstractDrawer import draw_cut_corner_box, _stroke_and_fill_colors
-from ._AbstractDrawer import intermediate_points, angle2trig
+from ._AbstractDrawer import intermediate_points, angle2trig, deduplicate
 from ._FeatureSet import FeatureSet
 from ._GraphSet import GraphSet
 
@@ -117,7 +117,6 @@ class LinearDrawer(AbstractDrawer):
            should be taken up in drawing
          - cross_track_links List of tuples each with four entries (track A,
            feature A, track B, feature B) to be linked.
-
         """
         # Use the superclass' instantiation method
         AbstractDrawer.__init__(self, parent, pagesize, orientation,
@@ -782,7 +781,7 @@ class LinearDrawer(AbstractDrawer):
                     else:
                         extra = [self.x0, 0.3 * yA + 0.7 * yB,
                                  self.x0, 0.7 * yA + 0.3 * yB]
-                answer.append(Polygon([xAs, yA, xAe, yA] + extra,
+                answer.append(Polygon(deduplicate([xAs, yA, xAe, yA] + extra),
                                strokeColor=strokecolor,
                                fillColor=fillcolor,
                                # default is mitre/miter which can stick out too much:
@@ -802,7 +801,7 @@ class LinearDrawer(AbstractDrawer):
                     else:
                         extra = [self.x0, 0.7 * yA + 0.3 * yB,
                                  self.x0, 0.3 * yA + 0.7 * yB]
-                answer.append(Polygon([xBs, yB, xBe, yB] + extra,
+                answer.append(Polygon(deduplicate([xBs, yB, xBe, yB] + extra),
                                strokeColor=strokecolor,
                                fillColor=fillcolor,
                                # default is mitre/miter which can stick out too much:
@@ -811,9 +810,9 @@ class LinearDrawer(AbstractDrawer):
             elif cross_link.flip and ((crop_leftA and not crop_rightA) or
                                     (crop_leftB and not crop_rightB)):
                 # On left end of fragment... force "crossing" to margin
-                answer.append(Polygon([xAs, yA, xAe, yA,
+                answer.append(Polygon(deduplicate([xAs, yA, xAe, yA,
                                        self.x0, 0.5 * (yA + yB),
-                                       xBe, yB, xBs, yB],
+                                       xBe, yB, xBs, yB]),
                                strokeColor=strokecolor,
                                fillColor=fillcolor,
                                # default is mitre/miter which can stick out too much:
@@ -822,23 +821,23 @@ class LinearDrawer(AbstractDrawer):
             elif cross_link.flip and ((crop_rightA and not crop_leftA) or
                                       (crop_rightB and not crop_leftB)):
                 # On right end... force "crossing" to margin
-                answer.append(Polygon([xAs, yA, xAe, yA,
+                answer.append(Polygon(deduplicate([xAs, yA, xAe, yA,
                                        xBe, yB, xBs, yB,
-                                       self.x0 + self.pagewidth, 0.5 * (yA + yB)],
+                                       self.x0 + self.pagewidth, 0.5 * (yA + yB)]),
                                strokeColor=strokecolor,
                                fillColor=fillcolor,
                                # default is mitre/miter which can stick out too much:
                                strokeLineJoin=1,  # 1=round
                                strokewidth=0))
             elif cross_link.flip:
-                answer.append(Polygon([xAs, yA, xAe, yA, xBs, yB, xBe, yB],
+                answer.append(Polygon(deduplicate([xAs, yA, xAe, yA, xBs, yB, xBe, yB]),
                                strokeColor=strokecolor,
                                fillColor=fillcolor,
                                # default is mitre/miter which can stick out too much:
                                strokeLineJoin=1,  # 1=round
                                strokewidth=0))
             else:
-                answer.append(Polygon([xAs, yA, xAe, yA, xBe, yB, xBs, yB],
+                answer.append(Polygon(deduplicate([xAs, yA, xAe, yA, xBe, yB, xBs, yB]),
                                strokeColor=strokecolor,
                                fillColor=fillcolor,
                                # default is mitre/miter which can stick out too much:
@@ -1267,7 +1266,7 @@ class LinearDrawer(AbstractDrawer):
             points.extend((xmax, y1 + (teeth - i) * height / teeth,
                            xmax - headlength, y1 + (teeth - i - 1) * height / teeth))
 
-        return Polygon(points,
+        return Polygon(deduplicate(points),
                        strokeColor=strokecolor,
                        strokeWidth=1,
                        strokeLineJoin=1,  # 1=round
