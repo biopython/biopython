@@ -13,7 +13,7 @@ The latest news is at the top of this file.
 ==============================================
 
 This release of Biopython supports Python 2.7, 3.3, 3.4, 3.5 and 3.6 (although
-support for Pytohn 3.3 is deprecated). It has also been tested on PyPy v5.7,
+support for Python 3.3 is deprecated). It has also been tested on PyPy v5.7,
 PyPy3.5 v5.7 beta, and Jython 2.7.
 
 Bio.AlignIO now supports Mauve's eXtended Multi-FastA (XMFA) file format
