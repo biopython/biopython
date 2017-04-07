@@ -12,7 +12,15 @@ The latest news is at the top of this file.
 (In progress, not yet released) Biopython 1.70
 ==============================================
 
-Nothing to report as yet.
+This release of Biopython supports Python 2.7, 3.3, 3.4, 3.5 and 3.6 (although
+support for Pytohn 3.3 is deprecated). It has also been tested on PyPy v5.7,
+PyPy3.5 v5.7 beta, and Jython 2.7.
+
+Many thanks to the Biopython developers and community for making this release
+possible, especially the following contributors:
+
+- Peter Cock
+- Sacha Laurent (first contribution)
 
 
 6 April 2017: Biopython 1.69
@@ -86,7 +94,6 @@ PEP257 and best practice standard coding style.
 
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
-
 
 - Aaron Rosenfeld
 - Adam Kurkiewicz (first contribution)

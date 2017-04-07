@@ -158,6 +158,7 @@ This is certainly not comprehensive, and if you've been overlooked
 - Peter Slickers <piet at domain clondiag.com>
 - Phillip Garland <pgarland at gmail>
 - Richard Neher <https://github.com/rneher>
+- Sacha Laurent <https://github.com/Cashalow>
 - Saket Choudhary <https://github.com/saketkc>
 - Sebastian Bassi <https://about.me/bassi>
 - Sergei Lebedev <https://github.com/superbobry>
