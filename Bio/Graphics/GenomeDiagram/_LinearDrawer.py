@@ -80,7 +80,7 @@ class LinearDrawer(AbstractDrawer):
     def __init__(self, parent=None, pagesize='A3', orientation='landscape',
                  x=0.05, y=0.05, xl=None, xr=None, yt=None, yb=None,
                  start=None, end=None, tracklines=0, fragments=10,
-                 fragment_size=0.9, track_size=0.75, cross_track_links=None):
+                 fragment_size=None, track_size=0.75, cross_track_links=None):
         """Initialize.
 
         Arguments:
@@ -115,7 +115,6 @@ class LinearDrawer(AbstractDrawer):
            should be taken up in drawing
          - cross_track_links List of tuples each with four entries (track A,
            feature A, track B, feature B) to be linked.
-
         """
         # Use the superclass' instantiation method
         AbstractDrawer.__init__(self, parent, pagesize, orientation,
@@ -124,7 +123,15 @@ class LinearDrawer(AbstractDrawer):
 
         # Useful measurements on the page
         self.fragments = fragments
-        self.fragment_size = fragment_size
+        if fragment_size is not None:
+            self.fragment_size = fragment_size
+        else:
+            if self.fragments == 1:
+                # For single fragments, default to full height
+                self.fragment_size = 1
+            else:
+                # Otherwise keep a 10% gap between fragments
+                self.fragment_size = .9
         self.track_size = track_size
 
     def draw(self):
