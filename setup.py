@@ -480,6 +480,12 @@ for line in open('Bio/__init__.py'):
     if (line.startswith('__version__')):
         exec(line.strip())
 
+# We now load in our reStructuredText README.rst file to pass
+# explicitly in the metadata since at time of writing PyPI
+# did not do this for us:
+with open("README.rst") as handle:
+    readme_rst = handle.read()
+
 # Simple trick to use the 2to3 converted source under Python 3,
 # change the current directory before/after running setup.
 # Note as a side effect there will be a build folder underneath
@@ -499,6 +505,7 @@ setup_args = {
     "author_email": 'biopython@biopython.org',
     "url": 'http://www.biopython.org/',
     "description": 'Freely available tools for computational molecular biology.',
+    "long_description": readme_rst,
     "download_url": 'http://biopython.org/DIST/',
     "cmdclass": {
         "install": install_biopython,
