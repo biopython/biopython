@@ -30,8 +30,13 @@ with the Biopython source code, either one of the releases from the
 http://biopython.org website, or from our repository on GitHub
 https://github.com/biopython/biopython
 
-This Biopython package is open source software made available under generous
-terms. Please see the ``LICENSE.rst`` file for further details.
+The `NEWS <https://github.com/biopython/biopython/blob/master/NEWS.rst>`_
+file summarises the changes in each release of Biopython.
+
+The Biopython package is open source software made available under generous
+terms. Please see the `LICENSE
+<https://github.com/biopython/biopython/blob/master/LICENSE.rst>`_ file for
+further details.
 
 If you use Biopython in work contributing to a scientific publication, we ask
 that you cite our application note (below) or one of the module specific
