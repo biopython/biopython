@@ -4,7 +4,11 @@
 
 from __future__ import print_function
 
-import Bio.DocSQL
+import warnings
+from Bio import BiopythonDeprecationWarning
+with warnings.catch_warnings():
+    warnings.simplefilter('ignore', BiopythonDeprecationWarning)
+    import Bio.DocSQL
 
 print("Skipping Bio.DocSQL doctests.")
 # print("Running Bio.DocSQL doctests...")

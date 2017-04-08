@@ -1,3 +1,18 @@
+.. image:: https://img.shields.io/pypi/v/biopython.svg
+   :alt: Biopython on the Python Package Index (PyPI)
+   :target: https://pypi.python.org/pypi/biopython
+.. image:: https://img.shields.io/travis/biopython/biopython/master.svg
+   :alt: Testing with TravisCI
+   :target: https://travis-ci.org/biopython/biopython/branches
+.. image:: https://img.shields.io/codecov/c/github/biopython/biopython/master.svg
+   :alt: TravisCI test coverage
+   :target: https://codecov.io/github/biopython/biopython/
+
+.. image:: https://github.com/biopython/biopython/raw/master/Doc/images/biopython.jpg
+   :alt: The Biopython Project
+   :target: http://biopython.org
+   :width: 100%
+
 Biopython README file
 =====================
 
@@ -15,8 +30,13 @@ with the Biopython source code, either one of the releases from the
 http://biopython.org website, or from our repository on GitHub
 https://github.com/biopython/biopython
 
-This Biopython package is open source software made available under generous
-terms. Please see the LICENSE file for further details.
+The `NEWS <https://github.com/biopython/biopython/blob/master/NEWS.rst>`_
+file summarises the changes in each release of Biopython.
+
+The Biopython package is open source software made available under generous
+terms. Please see the `LICENSE
+<https://github.com/biopython/biopython/blob/master/LICENSE.rst>`_ file for
+further details.
 
 If you use Biopython in work contributing to a scientific publication, we ask
 that you cite our application note (below) or one of the module specific
@@ -52,7 +72,7 @@ Here you can replace ``python`` with a specific version, e.g. ``python3.5``.
 Python Requirements
 ===================
 
-We currently recommend using Python 3.5 from http://www.python.org
+We currently recommend using Python 3.6 from http://www.python.org
 
 Biopython is currently supported and tested on the following Python
 implementations:
@@ -63,15 +83,16 @@ implementations:
 
 - PyPy v5.7 and also PyPy3.5 v5.7 beta -- see http://www.pypy.org
 
-  Aside from modules with C code or dependent on NumPy, everything should
-  work. PyPy's support of NumPy has improved but we have not reviewed how
-  well that works for Biopython. Older versions of PyPy mostly work too.
+  Aside from ``Bio.trie`` (which does not compile as ``marshal.h`` is
+  currently missing under PyPy), everything should work. Older versions
+  of PyPy mostly work too.
 
 - Jython 2.7 -- see http://www.jython.org
 
-  We provide limited support for Jython, but aside from modules with C code,
-  or dependent on SQLite3 or NumPy, everything should work. There are some
-  known issues with test failures which have not yet been resolved.
+  We provide limited support for Jython, but aside from ``Bio.Restriction``,
+  modules with C code, or dependent on SQLite3 or NumPy, everything should
+  work. There are some known issues with test failures which have not yet
+  been resolved.
 
 Please note that support for Python 3.3 is deprecated as of Biopython 1.67.
 Biopython 1.68 was our final release to support Python 2.6.
@@ -80,47 +101,48 @@ Biopython 1.68 was our final release to support Python 2.6.
 Dependencies
 ============
 
-Depending on which parts of Biopython you plan to use, there are a
-number of other optional Python dependencies - which can in general
-be installed after Biopython.
+Depending on which parts of Biopython you plan to use, there are a number of
+other optional Python dependencies, which (other than NumPy) can be installed
+after Biopython.
 
 - NumPy, see http://www.numpy.org (optional, but strongly recommended)
-  This package is only used in the computationally-oriented modules.
-  It is required for Bio.Cluster, Bio.PDB and a few other modules.  If you
+  This package is only used in the computationally-oriented modules. It is
+  required for ``Bio.Cluster``, ``Bio.PDB`` and a few other modules.  If you
   think you might need these modules, then please install NumPy first BEFORE
   installing Biopython. The older Numeric library is no longer supported in
   Biopython.
 
 - ReportLab, see http://www.reportlab.com/opensource/ (optional)
-  This package is only used in Bio.Graphics, so if you do not need this
+  This package is only used in ``Bio.Graphics``, so if you do not need this
   functionality, you will not need to install this package.  You can install
   it later if needed.
 
 - matplotlib, see http://matplotlib.org/ (optional)
-  Bio.Phylo uses this package to plot phylogenetic trees. As with ReportLab,
-  you can install this at any time to enable the plotting functionality.
+  ``Bio.Phylo`` uses this package to plot phylogenetic trees. As with
+  ReportLab, you can install this at any time to enable the plotting
+  functionality.
 
 - networkx, see http://networkx.lanl.gov/ (optional) and
   pygraphviz or pydot, see http://networkx.lanl.gov/pygraphviz/ and
   http://code.google.com/p/pydot/ (optional)
-  These packages are used for certain niche functions in Bio.Phylo.
+  These packages are used for certain niche functions in ``Bio.Phylo``.
   Again, they are only needed to enable these functions and can be installed
   later if needed.
 
 - rdflib, see https://github.com/RDFLib/rdflib (optional)
-  This package is used in the CDAO parser under Bio.Phylo, and can be installed
-  as needed.
+  This package is used in the CDAO parser under ``Bio.Phylo``, and can be
+  installed as needed.
 
 - psycopg2, see http://initd.org/psycopg/ (optional) or
   PyGreSQL (pgdb), see http://www.pygresql.org/ (optional)
-  These packages are used by BioSQL to access a PostgreSQL database.
+  These packages are used by ``BioSQL`` to access a PostgreSQL database.
 
 - MySQL Connector/Python, see http://dev.mysql.com/downloads/connector/python/
-  This package is used by BioSQL to access a MySQL database, and is
+  This package is used by ``BioSQL`` to access a MySQL database, and is
   supported on Python 2 and 3 and PyPy too.
 
 - MySQLdb, see http://sourceforge.net/projects/mysql-python (optional)
-  This is an older alternative package used by BioSQL to access a MySQL
+  This is an older alternative package used by ``BioSQL`` to access a MySQL
   database, but it is not available for Python 3 or PyPy.
 
 Note that some of these libraries are not available for Jython or PyPy,
@@ -150,7 +172,7 @@ Substitute `python` with your specific version, for example `python3`,
 `jython` or `pypy`.
 
 If you need to do additional configuration, e.g. changing the base
-directory, please type `python setup.py`, or see the documentation here:
+directory, please type ``python setup.py``, or see the documentation here:
 
 * HTML - http://biopython.org/DIST/docs/install/Installation.html
 * PDF - http://biopython.org/DIST/docs/install/Installation.pdf
@@ -185,7 +207,7 @@ There is more testing information in the Biopython Tutorial & Cookbook.
 Experimental code
 =================
 
-Biopython 1.61 introduced a new warning, `Bio.BiopythonExperimentalWarning`,
+Biopython 1.61 introduced a new warning, ``Bio.BiopythonExperimentalWarning``,
 which is used to mark any experimental code included in the otherwise
 stable Biopython releases. Such 'beta' level code is ready for wider
 testing, but still likely to change, and should only be tried by early
@@ -215,12 +237,13 @@ format has changed and broken the parsing code.  (The text BLAST and GenBank
 formats seem to be particularly fragile.)  Thus, the parsing code in
 Biopython is sometimes updated faster than we can build Biopython releases.
 You can get the most recent parser by pulling the relevant files (e.g. the
-ones in `Bio.SeqIO` or `Bio.Blast`) from our git repository. However, be
+ones in ``Bio.SeqIO`` or ``Bio.Blast``) from our git repository. However, be
 careful when doing this, because the code in github is not as well-tested
 as released code, and may contain new dependencies.
 
 Finally, you can send a bug report to the bug database or the mailing list at
-biopython@biopython.org.  In the bug report, please let us know:
+biopython@biopython.org (subscription required).  In the bug report, please
+let us know:
 
 1. Which operating system and hardware (32 bit or 64 bit) you are using
 2. Python version

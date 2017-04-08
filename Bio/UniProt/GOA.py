@@ -362,13 +362,23 @@ def gafiterator(handle):
     >>> Synonym = {'Synonym': set(['YA19A_YEAST', 'YAL019W-A'])}
     >>> Taxon_ID = {'Taxon_ID': set(['taxon:559292'])}
     >>> with open('UniProt/goa_yeast.gaf', 'r') as handle:
-    ...     for inrec in gafiterator(handle):
-    ...         if record_has(inrec, Taxon_ID) and record_has(inrec, Evidence) and record_has(inrec, Synonym):
-    ...             print(inrec['DB_Object_Name'], inrec['Evidence'], inrec['Synonym'], inrec['Taxon_ID'])
+    ...     for rec in gafiterator(handle):
+    ...         if record_has(rec, Taxon_ID) and record_has(rec, Evidence) and record_has(rec, Synonym):
+    ...             for key in ('DB_Object_Name', 'Evidence', 'Synonym', 'Taxon_ID'):
+    ...                 print(rec[key])
     ...
-    Putative uncharacterized protein YAL019W-A ND ['YA19A_YEAST', 'YAL019W-A'] ['taxon:559292']
-    Putative uncharacterized protein YAL019W-A ND ['YA19A_YEAST', 'YAL019W-A'] ['taxon:559292']
-    Putative uncharacterized protein YAL019W-A ND ['YA19A_YEAST', 'YAL019W-A'] ['taxon:559292']
+    Putative uncharacterized protein YAL019W-A
+    ND
+    ['YA19A_YEAST', 'YAL019W-A']
+    ['taxon:559292']
+    Putative uncharacterized protein YAL019W-A
+    ND
+    ['YA19A_YEAST', 'YAL019W-A']
+    ['taxon:559292']
+    Putative uncharacterized protein YAL019W-A
+    ND
+    ['YA19A_YEAST', 'YAL019W-A']
+    ['taxon:559292']
 
     """
     inline = handle.readline()

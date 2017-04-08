@@ -204,7 +204,7 @@ def make_dssp_dict(filename):
     """DSSP dictionary mapping identifers to properties.
 
     Return a DSSP dictionary that maps (chainid, resid) to
-    aa, ss and accessibility, from a DSSP file. ::
+    aa, ss and accessibility, from a DSSP file.
 
     Parameters
     ----------
@@ -221,7 +221,7 @@ def _make_dssp_dict(handle):
     Return a DSSP dictionary that maps (chainid, resid) to an amino acid,
     secondary structure symbol, solvent accessibility value, and hydrogen bond
     information (relative dssp indices and hydrogen bond energies) from an open
-    DSSP file object. ::
+    DSSP file object.
 
     Parameters
     ----------

@@ -78,8 +78,8 @@ This is certainly not comprehensive, and if you've been overlooked
 - Eric Rasche <https://github.com/erasche>
 - Eric Talevich <https://github.com/etal>
 - Erick Matsen <surname at fhcrc dot org>
-- FGastaldello <https://github.com/Gasta88>
 - Foen Peng <https://github.com/foenpeng>
+- Francesco Gastaldello <https://github.com/Gasta88>
 - Francisco Pina-Martins <https://github.com/StuntsPT>
 - Franco Caramia <https://github.com/fcaramia>
 - Frank Kauff <fkauff at domain duke.edu>
@@ -158,6 +158,7 @@ This is certainly not comprehensive, and if you've been overlooked
 - Peter Slickers <piet at domain clondiag.com>
 - Phillip Garland <pgarland at gmail>
 - Richard Neher <https://github.com/rneher>
+- Sacha Laurent <https://github.com/Cashalow>
 - Saket Choudhary <https://github.com/saketkc>
 - Sebastian Bassi <https://about.me/bassi>
 - Sergei Lebedev <https://github.com/superbobry>
@@ -165,6 +166,7 @@ This is certainly not comprehensive, and if you've been overlooked
 - Siong Kong
 - Sjoerd de Vries <sjoerd at domain nmr.chem.uu.nl>
 - Sourav Singh <https://github.com/souravsingh>
+- Spencer Bliven <https://github.com/sbliven>
 - Stefans Mezulis <https://github.com/StefansM/>
 - Steve Bond <https://github.com/biologyguy>
 - Steve Marshall <https://github.com/hungryhoser>

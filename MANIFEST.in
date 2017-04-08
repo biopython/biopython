@@ -18,6 +18,7 @@ include README
 include DEPRECATED
 
 include MANIFEST.in
+include requirements.txt
 
 recursive-include Scripts *    # Include scripts.
 recursive-include Tests *      # Include regression tests.

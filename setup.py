@@ -139,19 +139,15 @@ def get_yes_or_no(question, default):
 
 # Make sure we have the right Python version.
 if sys.version_info[:2] < (2, 7):
-    print("Biopython requires Python 2.7, or Python 3.3 or later. "
-          "Python %d.%d detected" % sys.version_info[:2])
+    sys.stderr.write("Biopython requires Python 2.7, or Python 3.3 or later. "
+                     "Python %d.%d detected.\n" % sys.version_info[:2])
     sys.exit(1)
-elif is_pypy() and sys.version_info[0] == 3 and sys.version_info[:2] == (3, 2):
-    # PyPy3 2.4.0 is compatibile with Python 3.2.5 plus unicode literals
-    # so ought to work with Biopython
-    pass
 elif sys.version_info[0] == 3 and sys.version_info[:2] < (3, 3):
-    print("Biopython requires Python 3.3 or later (or Python 2.6 or 2.7). "
-          "Python %d.%d detected" % sys.version_info[:2])
+    sys.stderr.write("Biopython requires Python 3.3 or later (or Python 2.7). "
+                     "Python %d.%d detected.\n" % sys.version_info[:2])
     sys.exit(1)
 elif sys.version_info[:2] == (3, 3):
-    print("WARNING: Biopython support for Python 3.3 is now deprecated.")
+    sys.stderr.write("WARNING: Biopython support for Python 3.3 is now deprecated.\n")
 
 
 def check_dependencies_once():
@@ -205,8 +201,6 @@ def check_dependencies():
         return True  # For automated builds go ahead with installed packages
     if os.name == 'java':
         return True  # NumPy is not avaliable for Jython (for now)
-    if is_pypy():
-        return True  # Full NumPy not available for PyPy (for now)
     if is_ironpython():
         return True  # We're ignoring NumPy under IronPython (for now)
 
@@ -261,6 +255,11 @@ class build_py_biopython(build_py):
     def run(self):
         if not check_dependencies_once():
             return
+        if os.name == "java" and "Bio.Restriction" in self.packages:
+            # Evil hack to work on Jython 2.7
+            # This is to avoid java.lang.RuntimeException: Method code too large!
+            # from Bio/Restriction/Restriction_Dictionary.py
+            self.packages.remove("Bio.Restriction")
         # Add software that requires Numpy to be installed.
         if is_Numpy_installed():
             self.packages.extend(NUMPY_PACKAGES)
@@ -316,8 +315,6 @@ def can_import(module_name):
 
 
 def is_Numpy_installed():
-    if is_pypy():
-        return False
     return bool(can_import("numpy"))
 
 # --- set up the packages we are going to install
@@ -400,6 +397,13 @@ PACKAGES = [
     'BioSQL',
     ]
 
+if os.name == 'jython':
+    # Evil hack to work on Jython 2.7
+    # This is to avoid java.lang.RuntimeException: Method code too large!
+    # from Bio/Restriction/Restriction_Dictionary.py
+    PACKAGES.remove('Bio.Restriction')
+
+
 # packages that require Numeric Python
 NUMPY_PACKAGES = [
     'Bio.Affy',
@@ -411,9 +415,20 @@ NUMPY_PACKAGES = [
 if os.name == 'java':
     # Jython doesn't support C extensions
     EXTENSIONS = []
-elif is_pypy() or is_ironpython():
+elif is_ironpython():
     # Skip C extensions for now
     EXTENSIONS = []
+elif is_pypy():
+    # Two out of three ain't bad?
+    EXTENSIONS = [
+    Extension('Bio.cpairwise2',
+              ['Bio/cpairwise2module.c'],
+              ),
+    # Bio.trie has a problem under PyPy2 v5.6 and 5.7
+    Extension('Bio.Nexus.cnexus',
+              ['Bio/Nexus/cnexus.c']
+              ),
+    ]
 else:
     EXTENSIONS = [
     Extension('Bio.cpairwise2',
@@ -465,17 +480,11 @@ for line in open('Bio/__init__.py'):
     if (line.startswith('__version__')):
         exec(line.strip())
 
-# Simple trick to use the 2to3 converted source under Python 3,
-# change the current directory before/after running setup.
-# Note as a side effect there will be a build folder underneath
-# the python3_source folder.
-old_path = os.getcwd()
-try:
-    src_path = python3_source
-except NameError:
-    src_path = os.path.dirname(os.path.abspath(sys.argv[0]))
-os.chdir(src_path)
-sys.path.insert(0, src_path)
+# We now load in our reStructuredText README.rst file to pass
+# explicitly in the metadata since at time of writing PyPI
+# did not do this for us:
+with open("README.rst") as handle:
+    readme_rst = handle.read()
 
 setup_args = {
     "name": 'biopython',
@@ -484,6 +493,7 @@ setup_args = {
     "author_email": 'biopython@biopython.org',
     "url": 'http://www.biopython.org/',
     "description": 'Freely available tools for computational molecular biology.',
+    "long_description": readme_rst,
     "download_url": 'http://biopython.org/DIST/',
     "cmdclass": {
         "install": install_biopython,
@@ -499,8 +509,4 @@ setup_args = {
          },
    }
 
-try:
-    setup(**setup_args)
-finally:
-    del sys.path[0]
-    os.chdir(old_path)
+setup(**setup_args)

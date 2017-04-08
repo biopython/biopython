@@ -18,55 +18,18 @@ See http://genome.ucsc.edu/FAQ/FAQformat.html#format5
 You are expected to use this module via the Bio.AlignIO functions(or the
 Bio.SeqIO functions if you want to work directly with the gapped sequences).
 
-According to the MAF format documentation
-(https://genome.ucsc.edu/FAQ/FAQformat.html#format5), alignment blocks are
-composed of sequence lines:
------
- Lines starting with 's' -- a sequence within an alignment block
-
-  s hg16.chr7    27707221 13 + 158545518 gcagctgaaaaca
-  s panTro1.chr6 28869787 13 + 161576975 gcagctgaaaaca
-  s baboon         249182 13 +   4622798 gcagctgaaaaca
-  s mm4.chr6     53310102 13 + 151104725 ACAGCTGAAAATA
-
- The 's' lines together with the 'a' lines define a multiple alignment. The 's'
- lines have the following fields which are defined by position rather than
- name=value pairs.
-
-  * src -- The name of one of the source sequences for the alignment. For
-  sequences that are resident in a browser assembly, the form
-  'database.chromosome' allows automatic creation of links to other assemblies.
-  Non-browser sequences are typically reference by the species name alone.
-
-  * start -- The start of the aligning region in the source sequence. This is a
-  zero-based number. If the strand field is '-' then this is the start relative
-  to the reverse-complemented source sequence (see Coordinate Transforms).
-
-  * size -- The size of the aligning region in the source sequence. This number
-  is equal to the number of non-dash characters in the alignment text field
-  below.
-
-  * strand -- Either '+' or '-'. If '-', then the alignment is to the
-  reverse-complemented source.
-
-  * srcSize -- The size of the entire source sequence, not just the parts
-  involved in the alignment.
-
-  * text -- The nucleotides (or amino acids) in the alignment and any insertions (dashes) as well.
------
-
-We see that the coordinates in the MAF format are defined in terms of
-zero-based start positions and aligning region sizes.
+Coordinates in the MAF format are defined in terms of zero-based start
+positions (like Python) and aligning region sizes.
 
 A minimal aligned region of length one and starting at first position in the
-source sequence would have start == 0 and size == 1.
+source sequence would have ``start == 0`` and ``size == 1``.
 
-As we can see on this example, start + size will give one more than the
-zero-based end position. We can therefore manipulate start and start + size as
-python list slice boundaries.
+As we can see on this example, ``start + size`` will give one more than the
+zero-based end position. We can therefore manipulate ``start`` and
+``start + size`` as python list slice boundaries.
 
-If we want an inclusive end coordinate, we need to use end = start + size - 1:
-a 1-column wide alignment would have start == end.
+For an inclusive end coordinate, we need to use ``end = start + size - 1``.
+A 1-column wide alignment would have ``start == end``.
 """
 import os
 from itertools import islice
