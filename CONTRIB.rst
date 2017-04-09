@@ -134,10 +134,10 @@ This is certainly not comprehensive, and if you've been overlooked
 - Marcin Magnus <https://github.com/mmagnus>
 - Marco Galardini <https://github.com/mgalardini>
 - Markus Piotrowski <https://github.com/MarkusPiotrowski>
+- Mateusz Korycinski <https://github.com/mkorycinski>
 - Matt Ruffalo <https://github.com/mruffalo>
 - Matt Shirley <https://github.com/mdshw5>
 - Matteo Sticco <https://github.com/sticken88/>
-- Mateusz Korycinski <https://github.com/mkorycinski>
 - Maximilian Greil <https://github.com/MaxGreil>
 - Melissa Gymrek <https://github.com/mgymrek>
 - Michael Hoffman <hoffman+biopython at domain ebi.ac.uk>
