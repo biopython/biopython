@@ -1555,6 +1555,37 @@ class HmmscanCases(unittest.TestCase):
 
 class HmmersearchCases(unittest.TestCase):
 
+    def test_31b2_hmmsearch_001(self):
+        """Test parsing hmmsearch 3.1b2 (text_31b2_hmmsearch_001)"""
+
+        txt_file = get_file('text_31b2_hmmsearch_001.out')
+        qresults = list(parse(txt_file, FMT))
+
+        # Assert we deal with only 1 query
+        self.assertEqual(len(qresults), 1)
+
+        # Test whether proper query id is read
+        self.assertEqual(qresults[0].id, 'infile_sto')
+
+        # Test if proper number of hits is read
+        self.assertEqual(len(qresults[0].hits), 10)
+
+    def test_31b2_hmmsearch_002(self):
+        """Test parsing hmmsearch 3.1b2 (text_31b2_hmmsearch_002)"""
+
+        txt_file = get_file('text_31b2_hmmsearch_002.out')
+        qresults = list(parse(txt_file, FMT))
+
+        # Assert we deal with 2 queries
+        self.assertEqual(len(qresults), 2)
+
+        # Test whether proper query id is read
+        self.assertListEqual([x.id for x in qresults], ['infile_sto',
+                                                        'infile_sto2'])
+
+        # Test if proper number of hits is read
+        self.assertListEqual([len(x.hits) for x in qresults], [10, 10])
+
     def test_31b2_hmmscan_001(self):
         """Test parsing hmmscan 3.1b2 (text_31b2_hmmscan_001)"""
 

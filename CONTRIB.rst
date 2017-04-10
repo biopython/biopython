@@ -78,7 +78,8 @@ This is certainly not comprehensive, and if you've been overlooked
 - Eric Rasche <https://github.com/erasche>
 - Eric Talevich <https://github.com/etal>
 - Erick Matsen <surname at fhcrc dot org>
-- FGastaldello <https://github.com/Gasta88>
+- Foen Peng <https://github.com/foenpeng>
+- Francesco Gastaldello <https://github.com/Gasta88>
 - Francisco Pina-Martins <https://github.com/StuntsPT>
 - Franco Caramia <https://github.com/fcaramia>
 - Frank Kauff <fkauff at domain duke.edu>
@@ -108,7 +109,9 @@ This is certainly not comprehensive, and if you've been overlooked
 - Joe Cora <https://github.com/JoeCora>
 - Johann Visagie <wjv at domain cityip.co.za>
 - John Bradley <https://github.com/johnbradley>
+- John Kern <https://github.com/kern3020>
 - Jose Blanca <https://github.com/JoseBlanca>
+- Joshua Meyers <https://github.com/JoshuaMeyers> 
 - João D Ferreira <https://github.com/jdferreira>
 - Kai Blin <https://github.com/kblin>
 - Kamil Slowikowski <k no dot slowikowski at gmail dot com>
@@ -129,14 +132,18 @@ This is certainly not comprehensive, and if you've been overlooked
 - Leszek Pryszcz <https://github.com/lpryszcz>
 - Lucas Sinclair <https://github.com/xapple>
 - Marc Colosimo <mcolosimo at domain mitre.org>
+- Marcin Magnus <https://github.com/mmagnus>
 - Marco Galardini <https://github.com/mgalardini>
 - Markus Piotrowski <https://github.com/MarkusPiotrowski>
+- Mateusz Korycinski <https://github.com/mkorycinski>
 - Matt Ruffalo <https://github.com/mruffalo>
 - Matt Shirley <https://github.com/mdshw5>
 - Matteo Sticco <https://github.com/sticken88/>
+- Maximilian Greil <https://github.com/MaxGreil>
 - Melissa Gymrek <https://github.com/mgymrek>
 - Michael Hoffman <hoffman+biopython at domain ebi.ac.uk>
 - Michal Kurowski <michal at domain genesilico.pl>
+- Michał J. Gajda <https://github.com/mgajda>
 - Michiel de Hoon <mdehoon at domain c2b2.columbia.edu>
 - Mike Poidinger <Michael.Poidinger at domain eBioinformatics.com>
 - Milind Luthra <https://github.com/milindl>
@@ -153,6 +160,7 @@ This is certainly not comprehensive, and if you've been overlooked
 - Peter Slickers <piet at domain clondiag.com>
 - Phillip Garland <pgarland at gmail>
 - Richard Neher <https://github.com/rneher>
+- Sacha Laurent <https://github.com/Cashalow>
 - Saket Choudhary <https://github.com/saketkc>
 - Sebastian Bassi <https://about.me/bassi>
 - Sergei Lebedev <https://github.com/superbobry>
@@ -160,6 +168,7 @@ This is certainly not comprehensive, and if you've been overlooked
 - Siong Kong
 - Sjoerd de Vries <sjoerd at domain nmr.chem.uu.nl>
 - Sourav Singh <https://github.com/souravsingh>
+- Spencer Bliven <https://github.com/sbliven>
 - Stefans Mezulis <https://github.com/StefansM/>
 - Steve Bond <https://github.com/biologyguy>
 - Steve Marshall <https://github.com/hungryhoser>
@@ -176,6 +185,7 @@ This is certainly not comprehensive, and if you've been overlooked
 - Tyghe Vallard <https://github.com/necrolyte2>
 - Uri Laserson <https://github.com/laserson>
 - Uwe Schmitt <https://github.com/uweschmitt>
+- Veronika Berman <https://github.com/NikiB>
 - Walter Gillett <https://github.com/wgillett>
 - Wayne Decatur <https://github.com/fomightez>
 - Wibowo Arindrarto <https://github.com/bow>

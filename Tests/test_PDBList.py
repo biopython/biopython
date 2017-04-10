@@ -49,7 +49,7 @@ class TestPDBListGetStructure(unittest.TestCase):
 
     @contextlib.contextmanager
     def make_temp_directory(self, directory):
-        temp_dir = tempfile.mkdtemp(directory=directory)
+        temp_dir = tempfile.mkdtemp(dir=directory)
         try:
             yield temp_dir
         finally:
@@ -110,3 +110,8 @@ class TestPDBListGetStructure(unittest.TestCase):
         structure = "127d"
         self.check(structure, os.path.join("a", "%s.cif" % structure), "mmCif", pdir="a")
         self.check(structure, os.path.join("b", "%s.cif" % structure), "mmCif", pdir="b")
+
+
+if __name__ == "__main__":
+    runner = unittest.TextTestRunner(verbosity=2)
+    unittest.main(testRunner=runner)

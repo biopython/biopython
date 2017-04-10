@@ -123,6 +123,11 @@ and HTML formats
   The correct capitalization is ``Biopython'', not ``BioPython'' (even though
   that would have matched BioPerl, BioJava and BioRuby).
 
+  \item \emph{Do you have a change-log listing what's new in each release?} \\
+  See the file \verb|NEWS.rst| included with the source code (originally called
+  just \verb|NEWS|), or read the
+  \href{https://github.com/biopython/biopython/blob/master/NEWS.rst}{latest NEWS file on GitHub}.
+
   \item \emph{What is going wrong with my print commands?} \\
   This tutorial now uses the Python 3 style print \emph{function}.
   As of Biopython 1.62, we support both Python 2 and Python 3.
@@ -275,9 +280,8 @@ from __future__ import print_function
   In late September 2009, just after the release of Biopython 1.52, we switched from using CVS to git, a distributed version control system. The old CVS server will remain available as a static and read only backup, but if you want to grab the latest code, you'll need to use git instead. See our website for more details.
 
   \item \emph{Why doesn't} \verb|Bio.Fasta| \emph{work?} \\
-  We deprecated the \verb|Bio.Fasta| module in Biopython 1.51 (August 2009) and removed it in Biopython 1.55 (August 2010). There is a brief example showing how to convert old code to use \verb|Bio.SeqIO| instead in the \href{http://biopython.org/SRC/biopython/DEPRECATED}{DEPRECATED} file.
+  We deprecated the \verb|Bio.Fasta| module in Biopython 1.51 (August 2009) and removed it in Biopython 1.55 (August 2010). There is a brief example showing how to convert old code to use \verb|Bio.SeqIO| instead in the \href{https://github.com/biopython/biopython/blob/master/DEPRECATED.rst}{DEPRECATED.rst} file.
 
 \end{enumerate}
 
 \noindent For more general questions, the Python FAQ pages \url{http://www.python.org/doc/faq/} may be useful.
-

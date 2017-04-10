@@ -103,8 +103,13 @@ class Hmmer3TextParser(object):
 
         while self.line:
 
-            # get query id and length
             regx = re.search(_QRE_ID_LEN, self.line)
+
+            while not regx:
+                self.line = read_forward(self.handle)
+                regx = re.search(_QRE_ID_LEN, self.line)
+
+            # get query id and length
             qid = regx.group(1).strip()
             # store qresult attributes
             qresult_attrs = {
@@ -146,7 +151,7 @@ class Hmmer3TextParser(object):
 
             # Skip line beginning with '# Alignment of', which are output
             # when running phmmer with the '-A' flag.
-            if self.line.startswith('# Alignment of'):
+            if self.line.startswith('#'):
                 self.line = self.handle.readline()
 
             # HMMER >= 3.1 outputs '[ok]' at the end of all results file,

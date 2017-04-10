@@ -211,7 +211,9 @@ class PDBIO(object):
                             if not preserve_atom_numbering:
                                 atom_number += 1
                 if chain_residues_written:
-                    fp.write("TER\n")
+                    fp.write("TER   %5i      %3s %c%4i%c                                                      \n"
+                             % (atom_number, resname, chain_id, resseq, icode))
+
             if model_flag and model_residues_written:
                 fp.write("ENDMDL\n")
         if write_end:

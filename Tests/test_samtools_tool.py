@@ -21,6 +21,7 @@ from Bio.Sequencing.Applications import SamtoolsIdxstatsCommandline
 from Bio.Sequencing.Applications import SamtoolsIndexCommandline
 from Bio.Sequencing.Applications import SamtoolsMergeCommandline
 from Bio.Sequencing.Applications import SamtoolsMpileupCommandline
+from Bio.Sequencing.Applications import SamtoolsVersion1xSortCommandline
 from Bio.Sequencing.Applications import SamtoolsSortCommandline
 # TODO from Bio.Sequencing.Applications import SamtoolsPhaseCommandline
 # TODO from Bio.Sequencing.Applications import SamtoolsReheaderCommandline
@@ -28,7 +29,7 @@ from Bio.Sequencing.Applications import SamtoolsSortCommandline
 # TODO from Bio.Sequencing.Applications import SamtoolsTargetcutCommandline
 # TODO from Bio.Sequencing.Applications import SamtoolsFixmateCommandline
 #################################################################
-
+SamtoolsVersion0xSortCommandline = SamtoolsSortCommandline
 # Try to avoid problems when the OS is in another language
 os.environ['LANG'] = 'C'
 
@@ -101,11 +102,11 @@ class SamtoolsTestCase(unittest.TestCase):
                                           "SamBam",
                                           "bam1.bam.bai")
         self.sortedbamfile1 = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                          "SamBam",
-                                          "bam1_sorted.bam")
+                                           "SamBam",
+                                           "bam1_sorted.bam")
         self.sortedbamfile2 = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                          "SamBam",
-                                          "bam2_sorted.bam")
+                                           "SamBam",
+                                           "bam2_sorted.bam")
         self.files_to_clean = [self.referenceindexfile, self.bamindexfile1, self.outbamfile]
 
     def tearDown(self):
@@ -179,15 +180,23 @@ class SamtoolsTestCase(unittest.TestCase):
     # TODO: def test_fixmate(self):
 
     def test_sort(self):
-        cmdline = SamtoolsSortCommandline(samtools_exe)
-        cmdline.set_parameter("input_bam", self.bamfile1)
+
+        cmdline = SamtoolsVersion0xSortCommandline(samtools_exe)
+        cmdline.set_parameter("input", self.bamfile1)
         cmdline.set_parameter("out_prefix", "SamBam/out")
+
         try:
             stdout, stderr = cmdline()
         except ApplicationError as err:
             if "[bam_sort] Use -T PREFIX / -o FILE to specify temporary and final output files" in str(err):
-                # TODO: The samtools sort API changed...
-                return
+                cmdline = SamtoolsVersion1xSortCommandline(samtools_exe)
+                cmdline.set_parameter("input", self.bamfile1)
+                cmdline.set_parameter("-T", "out")
+                cmdline.set_parameter("-o", "out.bam")
+                try:
+                    stdout, stderr = cmdline()
+                except ApplicationError:
+                    raise
             else:
                 raise
         self.assertFalse(stderr,
@@ -221,8 +230,8 @@ class SamtoolsTestCase(unittest.TestCase):
         # Worked up to v1.2, then there was a regression failing with message
         # but as of v1.3 expect a warning: [W::bam_merge_core2] No @HD tag found.
         self.assertTrue(not stderr or stderr.strip() == "[W::bam_merge_core2] No @HD tag found.",
-                         "Samtools merge failed:\n%s\nStderr:%s"
-                         % (cmdline, stderr))
+                        "Samtools merge failed:\n%s\nStderr:%s"
+                        % (cmdline, stderr))
         self.assertTrue(os.path.exists(self.outbamfile))
 
     def test_mpileup(self):

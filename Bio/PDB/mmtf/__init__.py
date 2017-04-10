@@ -20,7 +20,7 @@ class MMTFParser(object):
         """Get a structure from a URL - given a PDB id.
 
         :param pdb_id: the input PDB id
-        :return the structure
+        :return: the structure
         """
         decoder = fetch(pdb_id)
         return get_from_decoded(decoder)
@@ -30,7 +30,7 @@ class MMTFParser(object):
         """Get a structrue from a file - given a file path.
 
         :param file_path: the input file path
-        :return the structure
+        :return: the structure
         """
         decoder = parse(file_path)
         return get_from_decoded(decoder)
