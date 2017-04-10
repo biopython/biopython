@@ -23,6 +23,7 @@ Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
 - Eric Rasche
+- John Kern (first contribution)
 - Mateusz Korycinski (first contribution)
 - Peter Cock
 - Sacha Laurent (first contribution)

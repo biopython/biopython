@@ -109,6 +109,7 @@ This is certainly not comprehensive, and if you've been overlooked
 - Joe Cora <https://github.com/JoeCora>
 - Johann Visagie <wjv at domain cityip.co.za>
 - John Bradley <https://github.com/johnbradley>
+- John Kern <https://github.com/kern3020>
 - Jose Blanca <https://github.com/JoseBlanca>
 - Joshua Meyers <https://github.com/JoshuaMeyers> 
 - João D Ferreira <https://github.com/jdferreira>
