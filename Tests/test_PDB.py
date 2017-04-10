@@ -19,7 +19,6 @@ import tempfile
 import unittest
 import warnings
 from Bio._py3k import StringIO
-from Bio.PDB.PDBParser import PDBParser
 
 try:
     import numpy
@@ -1337,11 +1336,10 @@ class TestPDBIO(unittest.TestCase):
     
     def test_example(self):
         p = PDBParser(PERMISSIVE=True)
-        s = p.get_structure("test", sys.argv[1])
-        io = PDBIO()
-        io.set_structure(s)
         filenumber, filename = tempfile.mkstemp()
         os.close(filenumber)
+        io = PDBIO()
+        io.set_structure(s)
         with open("out2.pdb", "w") as fp:
             s1 = p.get_structure("test1", sys.argv[1])
             s2 = p.get_structure("test2", sys.argv[2])
