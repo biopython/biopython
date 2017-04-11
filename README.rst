@@ -59,14 +59,7 @@ system "pip" which should allow you to install Biopython with just::
     pip install numpy
     pip install biopython
 
-Otherwise you may have to build and install Biopython. Download and unzip the
-source code, go to this directory at the command line, and type::
-
-    python setup.py build
-    python setup.py test
-    sudo python setup.py install
-
-Here you can replace ``python`` with a specific version, e.g. ``python3.5``.
+Otherwise you may have to build and install Biopython, which is described below.
 
 
 Python Requirements
