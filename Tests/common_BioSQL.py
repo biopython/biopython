@@ -624,7 +624,7 @@ class LoaderTest(unittest.TestCase):
         from Bio import Entrez
         Entrez.email = "biopython-dev@biopython.org"
 
-        handle = Entrez.efetch( db="taxonomy", id=3702, retmode="XML")
+        handle = Entrez.efetch(db="taxonomy", id=3702, retmode="XML")
 
         taxon_record = Entrez.read(handle)
         entrez_tax = []
@@ -639,7 +639,6 @@ class LoaderTest(unittest.TestCase):
         self.assertEqual(len(items), 6)
         self.assertEqual(len(self.db), 6)
 
-
         test_record = self.db.lookup(accession="X55053")
 
         # make sure that the ncbi taxonomy id is corrent
@@ -648,7 +647,6 @@ class LoaderTest(unittest.TestCase):
         # using the Entrez module
         self.assertEqual(test_record.annotations['taxonomy'],
                 entrez_tax)
-
 
 
 class DeleteTest(unittest.TestCase):
