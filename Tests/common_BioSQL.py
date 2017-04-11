@@ -620,16 +620,27 @@ class LoaderTest(unittest.TestCase):
     def test_load_database_with_tax_lookup(self):
         """Load SeqRecord objects and fetch the taxonomy information from NCBI.
         """
-
-        from Bio import Entrez
-        Entrez.email = "biopython-dev@biopython.org"
-
-        handle = Entrez.efetch(db="taxonomy", id=3702, retmode="XML")
-
-        taxon_record = Entrez.read(handle)
-        entrez_tax = []
-        for t in taxon_record[0]['LineageEx']:
-            entrez_tax.append(t['ScientificName'])
+        tax = ['cellular organisms',
+               'Eukaryota',
+               'Viridiplantae',
+               'Streptophyta',
+               'Streptophytina',
+               'Embryophyta',
+               'Tracheophyta',
+               'Euphyllophyta',
+               'Spermatophyta',
+               'Magnoliophyta',
+               'Mesangiospermae',
+               'eudicotyledons',
+               'Gunneridae',
+               'Pentapetalae',
+               'rosids',
+               'malvids',
+               'Brassicales',
+               'Brassicaceae',
+               'Camelineae',
+               'Arabidopsis',
+               'Arabidopsis thaliana']
 
         self.db.load(self.iterator, True)
 
@@ -645,8 +656,7 @@ class LoaderTest(unittest.TestCase):
         self.assertEqual(test_record.annotations['ncbi_taxid'], 3702)
         # make sure that the taxonomic lineage is the same as reported
         # using the Entrez module
-        self.assertEqual(test_record.annotations['taxonomy'],
-                entrez_tax)
+        self.assertEqual(test_record.annotations['taxonomy'], tax)
 
 
 class DeleteTest(unittest.TestCase):
