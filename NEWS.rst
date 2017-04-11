@@ -25,6 +25,7 @@ possible, especially the following contributors:
 - Eric Rasche
 - John Kern (first contribution)
 - Mateusz Korycinski (first contribution)
+- Noam Kremen (first contribution)
 - Peter Cock
 - Sacha Laurent (first contribution)
 

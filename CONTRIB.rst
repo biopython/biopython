@@ -151,6 +151,7 @@ This is certainly not comprehensive, and if you've been overlooked
 - Nate Sutton <https://github.com/nmsutton>
 - Nathan J. Edwards <nje5 at edu domain georgetown>
 - Nigel Delaney <https://github.com/evolvedmicrobe/>
+- Noam Kremen <https://github.com/noamkremen>
 - Olivier Morelle <https://github.com/Oli4>
 - Oscar G. Garcia <https://github.com/oscarmaestre>
 - Owen Solberg <https://github.com/odoublewen>
