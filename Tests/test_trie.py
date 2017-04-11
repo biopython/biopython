@@ -4,11 +4,15 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+import random
+import tempfile
 import unittest
+from string import ascii_lowercase
 from io import BytesIO
 
 try:
     from Bio import trie
+    from Bio import triefind
 except ImportError:
     import os
     from Bio import MissingPythonDependencyError
@@ -130,15 +134,12 @@ class TestTrie(unittest.TestCase):
                          set(trieobj.with_prefix("AN")))
 
     def test_large_save_load(self):
-        """ Generate random key/val pairs in three length categories.
+        """Generate random key/val pairs in three length categories.
 
         100 items in each category. Insert them into a trie and into a reference dict.
         Write the trie to a temp file and read it back, verify that trie entries match
         the reference dict.
         """
-        import random
-        import tempfile
-        from string import ascii_lowercase
         cmp_dict = {}
         trieobj = trie.trie()
         self.assertEqual(trieobj.get("foobar"), None)
@@ -163,7 +164,6 @@ class TestTrie(unittest.TestCase):
 class TestTrieFind(unittest.TestCase):
 
     def test_find(self):
-        from Bio import triefind
         trieobj = trie.trie()
         trieobj["hello"] = 5
         trieobj["he"] = 7
