@@ -618,7 +618,6 @@ class LoaderTest(unittest.TestCase):
                                     'M81224.1', 'X55053.1', 'X62281.1'])
 
 
-
 class DeleteTest(unittest.TestCase):
     """Test proper deletion of entries from a database."""
 
