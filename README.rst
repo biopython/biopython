@@ -7,6 +7,9 @@
 .. image:: https://img.shields.io/codecov/c/github/biopython/biopython/master.svg
    :alt: TravisCI test coverage
    :target: https://codecov.io/github/biopython/biopython/
+.. image:: https://landscape.io/github/biopython/biopython/master/landscape.svg?style=flat
+   :alt: Landscape Code Metrics
+   :target: https://landscape.io/github/biopython/biopython
 
 .. image:: https://github.com/biopython/biopython/raw/master/Doc/images/biopython.jpg
    :alt: The Biopython Project
