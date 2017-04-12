@@ -42,7 +42,7 @@ class StructureAlignment(object):
         # List of residue pairs (None if -)
         duos = []
         for i in range(0, l):
-            column = fasta_align.get_column(i)
+            column = fasta_align[:, i]
             aa1 = column[si]
             aa2 = column[sj]
             if aa1 != "-":
