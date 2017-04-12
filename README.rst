@@ -10,6 +10,9 @@
 .. image:: https://landscape.io/github/biopython/biopython/master/landscape.svg?style=flat
    :alt: Landscape Code Metrics
    :target: https://landscape.io/github/biopython/biopython
+.. image:: http://depsy.org/api/package/pypi/biopython/badge.svg
+   :alt: Research software impact on Depsy
+   :target: http://depsy.org/package/python/biopyton
 
 .. image:: https://github.com/biopython/biopython/raw/master/Doc/images/biopython.jpg
    :alt: The Biopython Project
