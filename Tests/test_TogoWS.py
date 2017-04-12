@@ -78,12 +78,6 @@ class TogoFields(unittest.TestCase):
                                            'taxonomy', 'comment', 'seq']),
                                            fields)
 
-#    def test_embl(self):
-#        """Check supported fields for embl database"""
-#        fields = set(TogoWS._get_entry_fields("embl"))
-#        self.assertTrue(fields.issuperset(["definition", "entry_id", "seq"]),
-#                        fields)
-
     def test_uniprot(self):
         """Check supported fields for uniprot database"""
         fields = set(TogoWS._get_entry_fields("uniprot"))
@@ -300,38 +294,6 @@ class TogoEntry(unittest.TestCase):
         handle.close()
         self.assertTrue(data.startswith("##gff-version 3\nX52960\tGenbank\t"), data)
 
-#    def test_embl_AM905444_gff3(self):
-#        """Bio.TogoWS.entry("embl", "AM905444", format="gff")"""
-#        handle = TogoWS.entry("embl", "AM905444", format="gff")
-#        data = handle.read()
-#        handle.close()
-# self.assertTrue(data.startswith("##gff-version 3\nAM905444\tembl\t"), data)
-
-#    def test_embl_AM905444_seq(self):
-#        """Bio.TogoWS.entry("embl", "AM905444", field="seq")"""
-#        handle = TogoWS.entry("embl", "AM905444", field="seq")
-# data = handle.read().strip()  # ignore any trailing \n
-#        handle.close()
-#        self.assertEqual(seguid(data), "G0HtLpwF7i4FXUaUjDUPTjok79c")
-
-#    def test_embl_AM905444_definition(self):
-#        """Bio.TogoWS.entry("embl", "AM905444", field="definition")"""
-#        handle = TogoWS.entry("embl", "AM905444", field="definition")
-# data = handle.read().strip()  # ignore any trailing \n
-#        handle.close()
-#        self.assertEqual(data, "Herbaspirillum seropedicae locus tag HS193.0074 for porin")
-
-#    def test_embl_AM905444(self):
-#        """Bio.TogoWS.entry("embl", "AM905444")"""
-#        handle = TogoWS.entry("embl", "AM905444")
-#        record = SeqIO.read(handle, "embl")
-#        handle.close()
-#        self.assertIn("AM905444", record.id)
-#        self.assertIn("AM905444", record.name)
-#        self.assertIn("porin", record.description)
-#        self.assertEqual(len(record), 1164)
-#        self.assertEqual(seguid(record.seq), "G0HtLpwF7i4FXUaUjDUPTjok79c")
-
     def test_ddbj_fasta(self):
         """Bio.TogoWS.entry("ddbj", "X52960", "fasta")"""
         handle = TogoWS.entry("ddbj", "X52960", "fasta")
@@ -445,14 +407,6 @@ class TogoSearch(unittest.TestCase):
 #        Count was about 161 at time of writing.
 #        """
 #        self.check("pdb", "porin", ["2j1n", "2vqg", "3m8b", "2k0l"])
-
-# TogoWS currently does not support the EMBL database
-#    def test_embl_search_porin(self):
-#        """Bio.TogoWS.search_iter("embl", "human pore", limit=200) etc
-#
-#        Count was about 297 at time of writing.
-#        """
-#        self.check("embl", "human pore", limit=200)
 
     def test_uniprot_search_lung_cancer(self):
         """Bio.TogoWS.search_iter("uniprot", "terminal+lung+cancer", limit=150) etc
