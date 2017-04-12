@@ -31,7 +31,8 @@ except ImportError:
     raise MissingPythonDependencyError(
         "Install NumPy if you want to use Bio.PDB.")
 
-from Bio import BiopythonWarning, AlignIO
+from Bio import BiopythonWarning
+from Bio import AlignIO
 from Bio.Seq import Seq
 from Bio.Alphabet import generic_protein
 from Bio.PDB import PDBParser, PPBuilder, CaPPBuilder, PDBIO, Select
@@ -1262,9 +1263,9 @@ def eprint(*args, **kwargs):
 
 
 def will_it_float(s):
-    """
-    Helper function that converts the input into a float if it is a number.
-    Otherwise if the input is a string it is returned as it is."""
+    """ Helper function that converts the input into a float if it is a number.
+
+    If the input is a string, the output does not change."""
     try:
         return float(s)
     except ValueError:
