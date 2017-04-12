@@ -10,6 +10,7 @@ from __future__ import print_function
 
 import unittest
 from Bio._py3k import StringIO
+from Bio._py3k import HTTPError
 
 import requires_internet
 requires_internet.check()
@@ -421,7 +422,10 @@ class TogoSearch(unittest.TestCase):
     def check(self, database, search_term, expected_matches=(), limit=None):
         if expected_matches and limit:
             raise ValueError("Bad test - TogoWS makes no promises about order")
-        search_count = TogoWS.search_count(database, search_term)
+        try:
+            search_count = TogoWS.search_count(database, search_term)
+        except HTTPError as err:
+            raise ValueError("%s from %s" % (err, err.url))
         if expected_matches and search_count < len(expected_matches):
             raise ValueError("Only %i matches, expected at least %i"
                              % (search_count, len(expected_matches)))
