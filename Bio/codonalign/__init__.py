@@ -17,6 +17,7 @@ except ImportError:
     izip = zip
 # from itertools import izip
 
+from Bio.Alphabet import _get_base_alphabet
 from Bio.SeqRecord import SeqRecord
 
 from Bio.codonalign.codonseq import CodonSeq
@@ -79,7 +80,7 @@ def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X',
                         "object")
     # check the alphabet of pro_align
     for pro in pro_align:
-        if not isinstance(pro.seq.alphabet, ProteinAlphabet):
+        if not isinstance(_get_base_alphabet(pro.seq.alphabet), ProteinAlphabet):
             raise TypeError("Alphabet Error!\nThe input alignment should be "
                             "a *PROTEIN* alignment")
     if alphabet is None:
@@ -255,7 +256,8 @@ def _check_corr(pro, nucl, gap_char='-', codon_table=default_codon_table,
         else:
             return alpha
 
-    if not isinstance(get_alpha(nucl.seq.alphabet), NucleotideAlphabet):
+    if not isinstance(_get_base_alphabet(get_alpha(nucl.seq.alphabet)),
+                      NucleotideAlphabet):
         raise TypeError("Alphabet for nucl should be an instance of "
                         "NucleotideAlphabet, {0} "
                         "detected".format(str(nucl.seq.alphabet)))
