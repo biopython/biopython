@@ -303,6 +303,10 @@ Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX', ProteinAlphabet())"""
             self.assertEqual(rec.letter_annotations, {"fake": "X" * 26})
             self.assertTrue(len(rec.features) <= len(self.record.features))
 
+class SeqRecordMethodsMore(unittest.TestCase):
+    """Test SeqRecord methods cont."""
+    # This class does not have a setUp defining self.record
+
     def test_reverse_complement_seq(self):
         s = SeqRecord(Seq("ACTG"), id="TestID", name="TestName",
                       description="TestDescription", dbxrefs=["TestDbxrefs"],
