@@ -32,13 +32,14 @@ except ImportError:
         "Install NumPy if you want to use Bio.PDB.")
 
 from Bio import BiopythonWarning
+from Bio import AlignIO
 from Bio.Seq import Seq
 from Bio.Alphabet import generic_protein
 from Bio.PDB import PDBParser, PPBuilder, CaPPBuilder, PDBIO, Select
 from Bio.PDB import HSExposureCA, HSExposureCB, ExposureCN
 from Bio.PDB.PDBExceptions import PDBConstructionException, PDBConstructionWarning
 from Bio.PDB import rotmat, Vector, refmat, calc_angle, calc_dihedral, rotaxis, m2rotaxis
-from Bio.PDB import Residue, Atom
+from Bio.PDB import Residue, Atom, StructureAlignment, Superimposer, Selection
 from Bio.PDB import make_dssp_dict
 from Bio.PDB import DSSP
 from Bio.PDB.NACCESS import process_asa_data, process_rsa_data
@@ -797,7 +798,6 @@ class WriteTest(unittest.TestCase):
 
     def test_pdbio_select(self):
         """Write a selection of the structure using a Select subclass"""
-
         # Selection class to filter all alpha carbons
         class CAonly(Select):
             """
@@ -845,7 +845,7 @@ class WriteTest(unittest.TestCase):
 
 
 class Exposure(unittest.TestCase):
-    "Testing Bio.PDB.HSExposure."
+    """Testing Bio.PDB.HSExposure."""
     def setUp(self):
         pdb_filename = "PDB/a_structure.pdb"
         with warnings.catch_warnings():
@@ -1205,6 +1205,118 @@ class TransformTests(unittest.TestCase):
                         "Want %r and %r to be almost equal" % (axis.get_array(), caxis.get_array()))
 
 
+class StructureAlignTests(unittest.TestCase):
+
+    def test_StructAlign(self):
+        """Tests on module to align two proteins according to a FASTA alignment file."""
+        al_file = "PDB/alignment_file.fa"
+        pdb2 = "PDB/1A8O.pdb"
+        pdb1 = "PDB/2XHE.pdb"
+        with open(al_file, 'r') as handle:
+            records = AlignIO.read(handle, "fasta")
+        p = PDBParser()
+        s1 = p.get_structure('1', pdb1)
+        p = PDBParser()
+        s2 = p.get_structure('2', pdb2)
+        m1 = s1[0]
+        m2 = s2[0]
+        al = StructureAlignment(records, m1, m2)
+        self.assertFalse(al.map12 == al.map21)
+        self.assertTrue(len(al.map12), 566)
+        self.assertTrue(len(al.map21), 70)
+        chain1_A = m1["A"]
+        chain2_A = m2["A"]
+        self.assertEqual(chain1_A[202].get_resname(), 'ILE')
+        self.assertEqual(chain2_A[202].get_resname(), 'LEU')
+        self.assertEqual(chain1_A[291].get_resname(), chain2_A[180].get_resname())
+        self.assertNotEqual(chain1_A[291].get_resname(), chain2_A[181].get_resname())
+
+
+class SuperimposerTests(unittest.TestCase):
+
+    def test_Superimposer(self):
+        """Test on module that superimpose two protein structures."""
+        pdb1 = "PDB/1A8O.pdb"
+        p = PDBParser()
+        s1 = p.get_structure("FIXED", pdb1)
+        fixed = Selection.unfold_entities(s1, "A")
+        s2 = p.get_structure("MOVING", pdb1)
+        moving = Selection.unfold_entities(s2, "A")
+        rot = numpy.identity(3).astype('f')
+        tran = numpy.array((1.0, 2.0, 3.0), 'f')
+        for atom in moving:
+            atom.transform(rot, tran)
+        sup = Superimposer()
+        sup.set_atoms(fixed, moving)
+        self.assertTrue(numpy.array_equal(sup.rotran[0], numpy.array([[1.0000000000000002, -3.8823044778979465e-10, -1.278846473162787e-10], [3.8823072881499776e-10, 1.0, -5.086249268981824e-10], [1.278846473162787e-10, 5.086251524122343e-10, 1.0000000000000002]])))
+        self.assertTrue(numpy.array_equal(sup.rotran[1], numpy.array([-1.0000000256926143, -1.9999999990010409, -2.9999999879063353])))
+        self.assertAlmostEqual(sup.rms, 4.7597824285176668e-07, places=3)
+        atom_list = ['N', 'C', 'C', 'O', 'C', 'C', 'SE', 'C', 'N', 'C', 'C',
+                     'O', 'C', 'C', 'O', 'O', 'N', 'C', 'C', 'O', 'C', 'C',
+                     'C', 'C', 'N', 'C', 'C', 'O', 'C', 'C', 'C', 'N', 'C',
+                     'N', 'N', 'N', 'C', 'C', 'O', 'C', 'C', 'C', 'O', 'N',
+                     'N', 'C', 'C', 'O', 'N', 'C', 'C', 'O', 'C', 'C', 'C',
+                     'N', 'C', 'C', 'O', 'C', 'C', 'C', 'C', 'N', 'N', 'C',
+                     'C', 'O', 'C', 'C', 'C', 'O', 'O', 'N', 'C', 'C', 'O',
+                     'C', 'C', 'C', 'N', 'C', 'C', 'O', 'C', 'C', 'C', 'C',
+                     'C', 'C', 'C', 'N', 'C', 'C', 'O', 'C', 'C', 'C', 'N',
+                     'C', 'N', 'N', 'N', 'C', 'C', 'O', 'C', 'C', 'O', 'O',
+                     'N', 'C', 'C', 'O', 'C', 'C', 'C', 'C', 'C', 'C', 'C',
+                     'O', 'N', 'C', 'C', 'O', 'C', 'C', 'C', 'N', 'C', 'C',
+                     'O', 'C', 'C', 'O', 'O', 'N', 'C', 'C', 'O', 'C', 'C',
+                     'C', 'N', 'C', 'N', 'N', 'N', 'C', 'C', 'O', 'C', 'C',
+                     'C', 'C', 'C', 'C', 'C', 'N', 'C', 'C', 'O', 'C', 'C',
+                     'C', 'C', 'C', 'C', 'C', 'O', 'N', 'C', 'C', 'O', 'C',
+                     'C', 'C', 'C', 'N', 'N', 'C', 'C', 'O', 'C', 'O', 'C',
+                     'N', 'C', 'C', 'O', 'C', 'C', 'C', 'C', 'N', 'C', 'C',
+                     'O', 'C', 'C', 'C', 'N', 'C', 'N', 'N', 'N', 'C', 'C',
+                     'O', 'C', 'N', 'C', 'C', 'O', 'C', 'C', 'C', 'O', 'O',
+                     'N', 'C', 'C', 'O', 'C', 'C', 'C', 'O', 'N', 'N', 'C',
+                     'C', 'O', 'C', 'N', 'C', 'C', 'O', 'C', 'O', 'N', 'C',
+                     'C', 'O', 'C', 'C', 'C', 'O', 'N', 'N', 'C', 'C', 'O',
+                     'C', 'C', 'C', 'O', 'O', 'N', 'C', 'C', 'O', 'C', 'C',
+                     'C', 'N', 'C', 'C', 'O', 'C', 'C', 'C', 'C', 'N', 'N',
+                     'C', 'C', 'O', 'C', 'C', 'O', 'N', 'N', 'C', 'C', 'O',
+                     'C', 'C', 'C', 'C', 'N', 'C', 'C', 'C', 'C', 'C', 'N',
+                     'C', 'C', 'O', 'C', 'C', 'SE', 'C', 'N', 'C', 'C', 'O',
+                     'C', 'O', 'C', 'N', 'C', 'C', 'O', 'C', 'C', 'C', 'O',
+                     'O', 'N', 'C', 'C', 'O', 'C', 'O', 'C', 'N', 'C', 'C',
+                     'O', 'C', 'C', 'C', 'C', 'N', 'C', 'C', 'O', 'C', 'C',
+                     'C', 'C', 'N', 'C', 'C', 'O', 'C', 'C', 'C', 'N', 'C',
+                     'C', 'O', 'C', 'C', 'C', 'O', 'N', 'N', 'C', 'C', 'O',
+                     'C', 'C', 'O', 'N', 'N', 'C', 'C', 'O', 'C', 'N', 'C',
+                     'C', 'O', 'C', 'C', 'O', 'N', 'N', 'C', 'C', 'O', 'C',
+                     'C', 'C', 'N', 'C', 'C', 'O', 'C', 'C', 'O', 'O', 'N',
+                     'C', 'C', 'O', 'C', 'S', 'N', 'C', 'C', 'O', 'C', 'C',
+                     'C', 'C', 'N', 'N', 'C', 'C', 'O', 'C', 'O', 'C', 'N',
+                     'C', 'C', 'O', 'C', 'C', 'C', 'C', 'N', 'C', 'C', 'O',
+                     'C', 'C', 'C', 'C', 'N', 'C', 'C', 'O', 'C', 'C', 'C',
+                     'C', 'N', 'N', 'C', 'C', 'O', 'C', 'N', 'C', 'C', 'O',
+                     'C', 'C', 'C', 'C', 'N', 'C', 'C', 'O', 'N', 'C', 'C',
+                     'O', 'C', 'C', 'C', 'N', 'C', 'C', 'O', 'N', 'C', 'C',
+                     'O', 'C', 'N', 'C', 'C', 'O', 'C', 'O', 'C', 'N', 'C',
+                     'C', 'O', 'C', 'C', 'C', 'C', 'N', 'C', 'C', 'O', 'C',
+                     'C', 'C', 'O', 'O', 'N', 'C', 'C', 'O', 'C', 'C', 'C',
+                     'O', 'O', 'N', 'C', 'C', 'O', 'C', 'C', 'SE', 'C', 'N',
+                     'C', 'C', 'O', 'C', 'C', 'SE', 'C', 'N', 'C', 'C', 'O',
+                     'C', 'O', 'C', 'N', 'C', 'C', 'O', 'C', 'N', 'C', 'C',
+                     'O', 'C', 'S', 'N', 'C', 'C', 'O', 'C', 'C', 'C', 'O',
+                     'N', 'N', 'C', 'C', 'O', 'O', 'O', 'O', 'O', 'O', 'O',
+                     'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O',
+                     'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O',
+                     'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O',
+                     'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O',
+                     'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O',
+                     'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O',
+                     'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O',
+                     'O', 'O', 'O', 'O', 'O', 'O']
+        sup.apply(moving)
+        atom_moved = []
+        for aa in moving:
+            atom_moved.append(aa.element)
+        self.assertEqual(atom_moved, atom_list)
+
+
 class CopyTests(unittest.TestCase):
 
     def setUp(self):
@@ -1231,14 +1343,14 @@ class CopyTests(unittest.TestCase):
 
 
 def eprint(*args, **kwargs):
-    '''Helper function that prints to stderr.'''
+    """Helper function that prints to stderr."""
     print(*args, file=sys.stderr, **kwargs)
 
 
 def will_it_float(s):
-    '''
-    Helper function that converts the input into a float if it is a number.
-    Otherwise if the input is a string it is returned as it is.'''
+    """ Helper function that converts the input into a float if it is a number.
+
+    If the input is a string, the output does not change."""
     try:
         return float(s)
     except ValueError:
@@ -1282,9 +1394,7 @@ class DsspTests(unittest.TestCase):
         self.assertEqual((dssp_indices & hb_indices), hb_indices)
 
     def test_DSSP_in_model_obj(self):
-        '''
-        Test that all the elements are added correctly to the xtra attribute of the input model object.
-        '''
+        """ Test that all the elements are added correctly to the xtra attribute of the input model object."""
         p = PDBParser()
         s = p.get_structure("example", "PDB/2BEG.pdb")
         m = s[0]
