@@ -78,7 +78,7 @@ def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X',
     for pro in pro_align:
         if not isinstance(_get_base_alphabet(pro.seq.alphabet), ProteinAlphabet):
             raise TypeError("Alphabet Error!\nThe input alignment should be "
-                            "a *PROTEIN* alignment")
+                            "a *PROTEIN* alignemnt, found %r" % pro.seq.alphabet)
     if alphabet is None:
         alphabet = _get_codon_alphabet(codon_table, gap_char=gap_char)
     # check whether the number of seqs in pro_align and nucl_seqs is
