@@ -11,11 +11,7 @@ from __future__ import print_function
 from Bio import BiopythonWarning
 from Bio import BiopythonExperimentalWarning
 
-try:
-    from itertools import izip
-except ImportError:
-    izip = zip
-# from itertools import izip
+from Bio._py3k import zip
 
 from Bio.Alphabet import _get_base_alphabet
 from Bio.SeqRecord import SeqRecord
@@ -138,7 +134,7 @@ def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X',
     # set up pro-nucl correspondence based on corr_method
     # corr_method = 0, consecutive pairing
     if corr_method == 0:
-        pro_nucl_pair = izip(pro_align, nucl_seqs)
+        pro_nucl_pair = zip(pro_align, nucl_seqs)
     # corr_method = 1, keyword pairing
     elif corr_method == 1:
         nucl_id = set(nucl_seqs.keys())
@@ -195,7 +191,7 @@ def _codons2re(codons):
     """Generate regular expression based on a given list of codons
     """
     reg = ''
-    for i in izip(*codons):
+    for i in zip(*codons):
         if len(set(i)) == 1:
             reg += ''.join(set(i))
         else:
