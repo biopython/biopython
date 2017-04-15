@@ -1248,9 +1248,9 @@ class SuperimposerTests(unittest.TestCase):
             atom.transform(rot, tran)
         sup = Superimposer()
         sup.set_atoms(fixed, moving)
-        self.assertTrue(numpy.array_equal(sup.rotran[0], numpy.array([[1.0000000000000002, -3.8823044778979465e-10, -1.278846473162787e-10], [3.8823072881499776e-10, 1.0, -5.086249268981824e-10], [1.278846473162787e-10, 5.086251524122343e-10, 1.0000000000000002]])))
-        self.assertTrue(numpy.array_equal(sup.rotran[1], numpy.array([-1.0000000256926143, -1.9999999990010409, -2.9999999879063353])))
-        self.assertAlmostEqual(sup.rms, 4.7597824285176668e-07, places=3)
+        self.assertTrue(numpy.allclose(sup.rotran[0], numpy.identity(3)))
+        self.assertTrue(numpy.allclose(sup.rotran[1], numpy.array([-1.0, -2.0, -3.0])))
+        self.assertAlmostEqual(sup.rms, 0.0, places=3)
         atom_list = ['N', 'C', 'C', 'O', 'C', 'C', 'SE', 'C', 'N', 'C', 'C',
                      'O', 'C', 'C', 'O', 'O', 'N', 'C', 'C', 'O', 'C', 'C',
                      'C', 'C', 'N', 'C', 'C', 'O', 'C', 'C', 'C', 'N', 'C',
