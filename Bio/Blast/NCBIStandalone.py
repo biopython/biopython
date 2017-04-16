@@ -43,6 +43,7 @@ warnings.warn("This module has been deprecated. Consider Bio.SearchIO for "
 
 _score_e_re = re.compile(r'Score +E')
 
+_score_e_re = re.compile(r'Score +E')
 
 class LowQualityBlastError(Exception):
     """Error caused by running a low quality sequence through BLAST.
