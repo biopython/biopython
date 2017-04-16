@@ -461,7 +461,7 @@ def get_surface(model, MSMS="msms"):
     with open(xyz_tmp, 'w') as pdb_to_xyzr:
         for atom in atom_list:
             x, y, z = atom.coord
-            radius = _get_atom_radius(atom, rtype='explicit')
+            radius = _get_atom_radius(atom, rtype='united')
             print('{:6.3f}\t{:6.3f}\t{:6.3f}\t{:1.2f}'.format(x, y, z, radius), file=pdb_to_xyzr)
 
     # make surface
