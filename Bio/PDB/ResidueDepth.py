@@ -6,9 +6,8 @@
 
 """Calculation of residue depth using command line tool MSMS.
 
-This module uses Michel Sanner's MSMS program for the surface calculation
-(specifically commands msms and pdb_to_xyzr). See:
-http://mgltools.scripps.edu/packages/MSMS
+This module uses Michel Sanner's MSMS program for the surface calculation.
+See: http://mgltools.scripps.edu/packages/MSMS
 
 Residue depth is the average distance of the atoms of a residue from
 the solvent accessible surface.
@@ -45,6 +44,7 @@ from __future__ import print_function
 
 import os
 import tempfile
+import warnings
 
 import numpy
 
@@ -53,6 +53,8 @@ from Bio.PDB import Selection
 from Bio.PDB.AbstractPropertyMap import AbstractPropertyMap
 from Bio.PDB.Polypeptide import is_aa
 
+from Bio import BiopythonWarning
+from Bio import BiopythonDeprecationWarning
 
 # PDB_TO_XYZR is a BASH script and will not run on Windows
 # Since it only reads atmtypenumbers to a mapping structure we can replicate
@@ -425,7 +427,8 @@ def _get_atom_radius(atom, rtype='united'):
     elif resname in set(('FAD', 'NAD', 'AMX', 'APU')) and at_name.startswith('H'):  # noqa: E501
         return _atomic_radii[15][typekey]
     else:
-        print('Warning: {}:{} not in radii library.'.format(at_name, resname))
+        warnings.warn('{}:{} not in radii library.'.format(at_name, resname),
+                      BiopythonWarning)
         return 0.01
 
 
@@ -445,13 +448,19 @@ def _read_vertex_array(filename):
     return numpy.array(vertex_list)
 
 
-def get_surface(model, MSMS="msms"):
+def get_surface(model, PDB_TO_XYZR=None, MSMS="msms"):
     """
     Return a Numpy array that represents
     the vertex list of the molecular surface.
 
     MSMS --- msms executable (arg. to os.system)
     """
+
+    # Issue warning if PDB_TO_XYZR is given
+    if PDB_TO_XYZR is not None:
+        warnings.warn(("PDB_TO_XYZR argument will be deprecated soon"
+                       " in favor of an internal mapping algorithm."),
+                      BiopythonDeprecationWarning)
 
     # Replace pdb_to_xyzr
     # Make x,y,z,radius file
@@ -462,7 +471,8 @@ def get_surface(model, MSMS="msms"):
         for atom in atom_list:
             x, y, z = atom.coord
             radius = _get_atom_radius(atom, rtype='united')
-            print('{:6.3f}\t{:6.3f}\t{:6.3f}\t{:1.2f}'.format(x, y, z, radius), file=pdb_to_xyzr)
+            print('{:6.3f}\t{:6.3f}\t{:6.3f}\t{:1.2f}'.format(x, y, z, radius),
+                  file=pdb_to_xyzr)
 
     # make surface
     surface_tmp = tempfile.mktemp()
@@ -514,7 +524,15 @@ class ResidueDepth(AbstractPropertyMap):
     """
     Calculate residue and CA depth for all residues.
     """
-    def __init__(self, model):
+    def __init__(self, model, pdb_file=None):
+
+        # Issue warning if pdb_file is given
+        if pdb_file is not None:
+            warnings.warn(("ResidueDepth no longer requires a pdb file."
+                           " This argument will be removed in a future release"
+                           " of Biopython."),
+                           BiopythonDeprecationWarning)
+
         depth_dict = {}
         depth_list = []
         depth_keys = []
@@ -543,7 +561,6 @@ class ResidueDepth(AbstractPropertyMap):
 if __name__ == "__main__":
 
     import sys
-    from Bio.PDB import PDBParser
 
     p = PDBParser()
     s = p.get_structure("X", sys.argv[1])
