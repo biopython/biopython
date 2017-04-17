@@ -7,8 +7,8 @@ People are listed alphabetically, as verfied with Unix sort::
 
     $ grep "^- " CONTRIB.rst | LC_ALL=C sort -u -c
 
-This is certainly not comprehensive, and if you've been overlooked
-(sorry!), please mention it on the development mailing list.
+This is certainly not comprehensive, and if you've been overlooked (sorry!),
+please open an issue on GitHub or mention it on the development mailing list.
 
 - Aaron Gallagher <habnabit at gmail>
 - Aaron Rosenfeld <https://github.com/arosenfeld>
