@@ -285,11 +285,20 @@ class Vector(object):
         return abs(sum(self._ar * self._ar))
 
     def normalize(self):
-        """Normalize the Vector."""
+        """
+        Normalize the Vector object. 
+
+        Changes the state of `self` and doesn't return a value. If you need to chain function
+        calls or create a new object use the `normalized` method.
+        """
         self._ar = self._ar / self.norm()
 
     def normalized(self):
-        """Return a normalized copy of the Vector."""
+        """
+        Return a normalized copy of the Vector.
+
+        To avoid allocating new objects use the `normalize` method.
+        """
         v = self.copy()
         v.normalize()
         return v
