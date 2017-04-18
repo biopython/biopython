@@ -9,6 +9,7 @@
 
 """Unit tests for the MMCIF portion of the Bio.PDB module."""
 
+import tempfile
 import unittest
 import warnings
 
@@ -29,6 +30,7 @@ from Bio.PDB.PDBExceptions import PDBConstructionException, PDBConstructionWarni
 
 from Bio.PDB import PPBuilder, CaPPBuilder
 from Bio.PDB.MMCIFParser import MMCIFParser, FastMMCIFParser
+from Bio.PDB import PDBParser, PDBIO
 
 
 class ParseReal(unittest.TestCase):
@@ -251,6 +253,36 @@ class ParseReal(unittest.TestCase):
         self.assertAlmostEqual(
             res_1["CA"].get_occupancy(),
             0.17, 2, "Residue 1 serine occupancy correcy")
+
+
+class CIFtoPDB(unittest.TestCase):
+    """Testing conversion between formats: CIF to PDB"""
+
+    def test_conversion(self):
+        """Parse 1A8O.cif, write 1A8O.pdb, parse again and compare"""
+
+        cif_parser = MMCIFParser(QUIET=1)
+        cif_struct = cif_parser.get_structure("example", "PDB/1LCD.cif")
+
+        pdb_writer = PDBIO()
+        pdb_writer.set_structure(cif_struct)
+        filenumber, filename = tempfile.mkstemp()
+        pdb_writer.save(filename)
+
+        pdb_parser = PDBParser(QUIET=1)
+        pdb_struct = pdb_parser.get_structure('example_pdb', filename)
+
+        # comparisons
+        self.assertEqual(len(pdb_struct), len(cif_struct))
+
+        pdb_atom_names = [a.name for a in pdb_struct.get_atoms()]
+        cif_atom_names = [a.name for a in pdb_struct.get_atoms()]
+        self.assertEqual(len(pdb_atom_names), len(cif_atom_names))
+        self.assertSequenceEqual(pdb_atom_names, cif_atom_names)
+
+        pdb_atom_elems = [a.element for a in pdb_struct.get_atoms()]
+        cif_atom_elems = [a.element for a in pdb_struct.get_atoms()]
+        self.assertSequenceEqual(pdb_atom_elems, cif_atom_elems)
 
 if __name__ == '__main__':
     runner = unittest.TextTestRunner(verbosity=2)

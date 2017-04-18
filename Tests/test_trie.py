@@ -4,11 +4,15 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+import random
+import tempfile
 import unittest
+from string import ascii_lowercase
 from io import BytesIO
 
 try:
     from Bio import trie
+    from Bio import triefind
 except ImportError:
     import os
     from Bio import MissingPythonDependencyError
@@ -129,11 +133,37 @@ class TestTrie(unittest.TestCase):
         self.assertEqual(set(['ANA', 'ANANA']),
                          set(trieobj.with_prefix("AN")))
 
+    def test_large_save_load(self):
+        """Generate random key/val pairs in three length categories.
+
+        100 items in each category. Insert them into a trie and into a reference dict.
+        Write the trie to a temp file and read it back, verify that trie entries match
+        the reference dict.
+        """
+        cmp_dict = {}
+        trieobj = trie.trie()
+        self.assertEqual(trieobj.get("foobar"), None)
+        for max_str_len in [100, 1000, 10000]:
+            cmp_dict = {}
+            for i in range(1000):
+                key = ''.join([random.choice(ascii_lowercase) for _ in range(max_str_len)])
+                val = ''.join([random.choice(ascii_lowercase) for _ in range(max_str_len)])
+                trieobj[key] = val
+                cmp_dict[key] = val
+            for key in cmp_dict:
+                self.assertEqual(trieobj[key], cmp_dict[key])
+
+        with tempfile.TemporaryFile(mode='w+b') as f:
+            trie.save(f, trieobj)
+            f.seek(0)
+            trieobj = trie.load(f)
+        for key in cmp_dict:
+            self.assertEqual(trieobj[key], cmp_dict[key])
+
 
 class TestTrieFind(unittest.TestCase):
 
     def test_find(self):
-        from Bio import triefind
         trieobj = trie.trie()
         trieobj["hello"] = 5
         trieobj["he"] = 7

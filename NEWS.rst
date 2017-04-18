@@ -9,6 +9,30 @@ http://news.open-bio.org/news/category/obf-projects/biopython/
 The latest news is at the top of this file.
 
 
+(In progress, not yet released) Biopython 1.70
+==============================================
+
+This release of Biopython supports Python 2.7, 3.3, 3.4, 3.5 and 3.6 (although
+support for Python 3.3 is deprecated). It has also been tested on PyPy v5.7,
+PyPy3.5 v5.7 beta, and Jython 2.7.
+
+Bio.AlignIO now supports Mauve's eXtended Multi-FastA (XMFA) file format
+under the format name "mauve" (contributed by Eric Rasche).
+
+Many thanks to the Biopython developers and community for making this release
+possible, especially the following contributors:
+
+- Eric Rasche
+- Francesco Gastaldello
+- Jimmy O'Donnell (first contribution)
+- John Kern (first contribution)
+- João Rodrigues
+- Mateusz Korycinski (first contribution)
+- Noam Kremen (first contribution)
+- Peter Cock
+- Sacha Laurent (first contribution)
+
+
 6 April 2017: Biopython 1.69
 ============================
 
@@ -20,8 +44,8 @@ We have started to dual-license Biopython under both our original liberal
 "Biopython License Agreement", and the very similar but more commonly used
 "3-Clause BSD License". In this release a small number of the Python files
 are explicitly available under either license, but most of the code remains
-under the "Biopython License Agreement" only. See the LICENSE file for more
-details.
+under the "Biopython License Agreement" only. See the ``LICENSE.rst`` file
+for more details.
 
 We now expect and take advantage of NumPy under PyPy, and compile most of the
 Biopython C code modules as well.
@@ -80,7 +104,6 @@ PEP257 and best practice standard coding style.
 
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
-
 
 - Aaron Rosenfeld
 - Adam Kurkiewicz (first contribution)

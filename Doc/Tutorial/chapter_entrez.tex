@@ -371,7 +371,7 @@ The arguments \verb+rettype="gb"+ and \verb+retmode="text"+ let us download this
 Note that until Easter 2009, the Entrez EFetch API let you use ``genbank'' as the
 return type, however the NCBI now insist on using the official return types of
 ``gb'' or ``gbwithparts'' (or ``gp'' for proteins) as described on online.
-Also not that until Feb 2012, the Entrez EFetch API would default to returning
+Also note that until Feb 2012, the Entrez EFetch API would default to returning
 plain text files, but now defaults to XML.
 
 Alternatively, you could for example use \verb+rettype="fasta"+ to get the Fasta-format; see the \href{http://www.ncbi.nlm.nih.gov/entrez/query/static/efetchseq\_help.html}{EFetch Sequences Help page} for other options. Remember -- the available formats depend on which database you are downloading from - see the main \href{http://eutils.ncbi.nlm.nih.gov/entrez/query/static/efetch\_help.html}{EFetch Help page}.
@@ -1058,10 +1058,11 @@ First, we use EGQuery to find out the number of results we will get before actua
 >>> for row in record["eGQueryResult"]:
 ...     if row["DbName"]=="nuccore":
 ...         print(row["Count"])
-814
+4457
 \end{verbatim}
 
-So, we expect to find 814 Entrez Nucleotide records (this is the number I obtained in 2008; it is likely to increase in the future). If you find some ridiculously high number of hits, you may want to reconsider if you really want to download all of them, which is our next step:
+So, we expect to find 4457 Entrez Nucleotide records (this increased from 814 records in 2008; it is likely to continue to increase in the future). If you find some ridiculously high number of hits, you may want to reconsider if you really want to download all of them, which is our next step. 
+Let's use the \verb+retmax+ argument to restrict the maximum number of records retrieved to the number available in 2008:
 \begin{verbatim}
 >>> from Bio import Entrez
 >>> handle = Entrez.esearch(db="nucleotide", term="Cypripedioideae", retmax=814, idtype="acc")
@@ -1076,9 +1077,11 @@ Here, \verb+record+ is a Python dictionary containing the search results and som
 First, let's check how many results were found:
 \begin{verbatim}
 >>> print(record["Count"])
-'814'
+'4457'
 \end{verbatim}
-which is the number we expected. The 814 results are stored in \verb+record['IdList']+:
+You might have expected this to be 814, the maximum number of records we asked to retrieve. 
+However, \verb+Count+ represents the total number of records available for that search, not how many were retrieved.
+The retrieved records are stored in \verb+record['IdList']+, which should contain the total number we asked for:
 \begin{verbatim}
 >>> len(record["IdList"])
 814
@@ -1288,12 +1291,14 @@ additional argument of \verb|usehistory="y"|,
 >>> search_handle.close()
 \end{verbatim}
 
-\noindent When you get the XML output back, it will still include the usual search results:
+\noindent When you get the XML output back, it will still include the usual search results. Remember from 
+Section~\ref{subsec:entrez_example_genbank} that the number of records retrieved will not necessarily be the same as the \verb+Count+, especially if the argument \verb+retmax+ is used.
 
 \begin{verbatim}
 >>> acc_list = search_results["IdList"]
 >>> count = int(search_results["Count"])
->>> assert count == len(acc_list)
+>>> count == len(acc_list)
+False
 \end{verbatim}
 
 \noindent However, you also get given two additional pieces of information, the {\tt WebEnv} session cookie, and the {\tt QueryKey}:

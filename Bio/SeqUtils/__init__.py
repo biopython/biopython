@@ -95,6 +95,8 @@ def GC_skew(seq, window=100):
     Returns a list of ratios (floats), controlled by the length of the sequence
     and the size of the window.
 
+    Returns 0 for windows without any G/C by handling zero division errors.
+
     Does NOT look at any ambiguous nucleotides.
     """
     # 8/19/03: Iddo: added lowercase
@@ -103,7 +105,10 @@ def GC_skew(seq, window=100):
         s = seq[i: i + window]
         g = s.count('G') + s.count('g')
         c = s.count('C') + s.count('c')
-        skew = (g - c) / float(g + c)
+        try:
+            skew = (g - c) / float(g + c)
+        except ZeroDivisionError:
+            skew = 0.0
         values.append(skew)
     return values
 

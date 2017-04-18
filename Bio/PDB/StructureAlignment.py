@@ -42,7 +42,7 @@ class StructureAlignment(object):
         # List of residue pairs (None if -)
         duos = []
         for i in range(0, l):
-            column = fasta_align.get_column(i)
+            column = fasta_align[:, i]
             aa1 = column[si]
             aa2 = column[sj]
             if aa1 != "-":
@@ -98,39 +98,3 @@ class StructureAlignment(object):
         """
         for i in range(0, len(self.duos)):
             yield self.duos[i]
-
-
-if __name__ == "__main__":
-    import sys
-    from Bio.Alphabet import generic_protein
-    from Bio import AlignIO
-    from Bio.PDB import PDBParser
-
-    if len(sys.argv) != 4:
-        print("Expects three arguments,")
-        print(" - FASTA alignment filename (expect two sequences)")
-        print(" - PDB file one")
-        print(" - PDB file two")
-        sys.exit()
-
-    # The alignment
-    fa = AlignIO.read(open(sys.argv[1]), "fasta", generic_protein)
-
-    pdb_file1 = sys.argv[2]
-    pdb_file2 = sys.argv[3]
-
-    # The structures
-    p = PDBParser()
-    s1 = p.get_structure('1', pdb_file1)
-    p = PDBParser()
-    s2 = p.get_structure('2', pdb_file2)
-
-    # Get the models
-    m1 = s1[0]
-    m2 = s2[0]
-
-    al = StructureAlignment(fa, m1, m2)
-
-    # Print aligned pairs (r is None if gap)
-    for (r1, r2) in al.get_iterator():
-        print("%s %s" % (r1, r2))

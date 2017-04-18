@@ -480,17 +480,11 @@ for line in open('Bio/__init__.py'):
     if (line.startswith('__version__')):
         exec(line.strip())
 
-# Simple trick to use the 2to3 converted source under Python 3,
-# change the current directory before/after running setup.
-# Note as a side effect there will be a build folder underneath
-# the python3_source folder.
-old_path = os.getcwd()
-try:
-    src_path = python3_source
-except NameError:
-    src_path = os.path.dirname(os.path.abspath(sys.argv[0]))
-os.chdir(src_path)
-sys.path.insert(0, src_path)
+# We now load in our reStructuredText README.rst file to pass
+# explicitly in the metadata since at time of writing PyPI
+# did not do this for us:
+with open("README.rst") as handle:
+    readme_rst = handle.read()
 
 setup_args = {
     "name": 'biopython',
@@ -499,6 +493,7 @@ setup_args = {
     "author_email": 'biopython@biopython.org',
     "url": 'http://www.biopython.org/',
     "description": 'Freely available tools for computational molecular biology.',
+    "long_description": readme_rst,
     "download_url": 'http://biopython.org/DIST/',
     "cmdclass": {
         "install": install_biopython,
@@ -514,8 +509,4 @@ setup_args = {
          },
    }
 
-try:
-    setup(**setup_args)
-finally:
-    del sys.path[0]
-    os.chdir(old_path)
+setup(**setup_args)

@@ -69,6 +69,7 @@ class PDBIO(object):
             record_type = "HETATM"
         else:
             record_type = "ATOM  "
+
         if atom.element:
             element = atom.element.strip().upper()
             if element.capitalize() not in atom_weights:
@@ -76,7 +77,15 @@ class PDBIO(object):
             element = element.rjust(2)
         else:
             element = "  "
-        name = atom.get_fullname()
+
+        name = atom.get_fullname().strip()
+        # Pad atom name if:
+        #     - smaller than 4 characters
+        # AND - is not C, N, O, S, H, F, P, ..., one letter elements
+        # AND - first character is NOT numeric (funky hydrogen naming rules)
+        if len(name) < 4 and name[:1].isalpha() and len(element.strip()) < 2:
+            name = " " + name
+
         altloc = atom.get_altloc()
         x, y, z = atom.get_coord()
         bfactor = atom.get_bfactor()
@@ -206,7 +215,7 @@ class PDBIO(object):
                             if preserve_atom_numbering:
                                 atom_number = atom.get_serial_number()
                             s = get_atom_line(atom, hetfield, segid, atom_number, resname,
-                                resseq, icode, chain_id)
+                                              resseq, icode, chain_id)
                             fp.write(s)
                             if not preserve_atom_numbering:
                                 atom_number += 1

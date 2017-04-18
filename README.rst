@@ -7,6 +7,12 @@
 .. image:: https://img.shields.io/codecov/c/github/biopython/biopython/master.svg
    :alt: TravisCI test coverage
    :target: https://codecov.io/github/biopython/biopython/
+.. image:: https://landscape.io/github/biopython/biopython/master/landscape.svg?style=flat
+   :alt: Landscape Code Metrics
+   :target: https://landscape.io/github/biopython/biopython
+.. image:: http://depsy.org/api/package/pypi/biopython/badge.svg
+   :alt: Research software impact on Depsy
+   :target: http://depsy.org/package/python/biopython
 
 .. image:: https://github.com/biopython/biopython/raw/master/Doc/images/biopython.jpg
    :alt: The Biopython Project
@@ -30,8 +36,13 @@ with the Biopython source code, either one of the releases from the
 http://biopython.org website, or from our repository on GitHub
 https://github.com/biopython/biopython
 
-This Biopython package is open source software made available under generous
-terms. Please see the ``LICENSE.rst`` file for further details.
+The `NEWS <https://github.com/biopython/biopython/blob/master/NEWS.rst>`_
+file summarises the changes in each release of Biopython.
+
+The Biopython package is open source software made available under generous
+terms. Please see the `LICENSE
+<https://github.com/biopython/biopython/blob/master/LICENSE.rst>`_ file for
+further details.
 
 If you use Biopython in work contributing to a scientific publication, we ask
 that you cite our application note (below) or one of the module specific
@@ -54,14 +65,7 @@ system "pip" which should allow you to install Biopython with just::
     pip install numpy
     pip install biopython
 
-Otherwise you may have to build and install Biopython. Download and unzip the
-source code, go to this directory at the command line, and type::
-
-    python setup.py build
-    python setup.py test
-    sudo python setup.py install
-
-Here you can replace ``python`` with a specific version, e.g. ``python3.5``.
+Otherwise you may have to build and install Biopython, which is described below.
 
 
 Python Requirements

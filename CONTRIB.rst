@@ -7,8 +7,8 @@ People are listed alphabetically, as verfied with Unix sort::
 
     $ grep "^- " CONTRIB.rst | LC_ALL=C sort -u -c
 
-This is certainly not comprehensive, and if you've been overlooked
-(sorry!), please mention it on the development mailing list.
+This is certainly not comprehensive, and if you've been overlooked (sorry!),
+please open an issue on GitHub or mention it on the development mailing list.
 
 - Aaron Gallagher <habnabit at gmail>
 - Aaron Rosenfeld <https://github.com/arosenfeld>
@@ -104,11 +104,13 @@ This is certainly not comprehensive, and if you've been overlooked
 - Jeffrey Chang <jchang at domain smi.stanford.edu>
 - Jeffrey Finkelstein <jeffrey.finkelstein at domain gmail.com>
 - Jeroen Van Goey <https://github.com/BioGeek>
+- Jimmy O'Donnell <https://github.com/jimmyodonnell>
 - Joanna & Dominik Kasprzak
 - Joao Rodrigues <anaryin at the domain gmail dot com>
 - Joe Cora <https://github.com/JoeCora>
 - Johann Visagie <wjv at domain cityip.co.za>
 - John Bradley <https://github.com/johnbradley>
+- John Kern <https://github.com/kern3020>
 - Jose Blanca <https://github.com/JoseBlanca>
 - Joshua Meyers <https://github.com/JoshuaMeyers> 
 - João D Ferreira <https://github.com/jdferreira>
@@ -134,6 +136,7 @@ This is certainly not comprehensive, and if you've been overlooked
 - Marcin Magnus <https://github.com/mmagnus>
 - Marco Galardini <https://github.com/mgalardini>
 - Markus Piotrowski <https://github.com/MarkusPiotrowski>
+- Mateusz Korycinski <https://github.com/mkorycinski>
 - Matt Ruffalo <https://github.com/mruffalo>
 - Matt Shirley <https://github.com/mdshw5>
 - Matteo Sticco <https://github.com/sticken88/>
@@ -149,6 +152,7 @@ This is certainly not comprehensive, and if you've been overlooked
 - Nate Sutton <https://github.com/nmsutton>
 - Nathan J. Edwards <nje5 at edu domain georgetown>
 - Nigel Delaney <https://github.com/evolvedmicrobe/>
+- Noam Kremen <https://github.com/noamkremen>
 - Olivier Morelle <https://github.com/Oli4>
 - Oscar G. Garcia <https://github.com/oscarmaestre>
 - Owen Solberg <https://github.com/odoublewen>
@@ -158,6 +162,7 @@ This is certainly not comprehensive, and if you've been overlooked
 - Peter Slickers <piet at domain clondiag.com>
 - Phillip Garland <pgarland at gmail>
 - Richard Neher <https://github.com/rneher>
+- Sacha Laurent <https://github.com/Cashalow>
 - Saket Choudhary <https://github.com/saketkc>
 - Sebastian Bassi <https://about.me/bassi>
 - Sergei Lebedev <https://github.com/superbobry>
