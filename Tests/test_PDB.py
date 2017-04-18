@@ -1489,6 +1489,23 @@ class NACCESSTests(unittest.TestCase):
             naccess = process_asa_data(asa)
         self.assertEqual(len(naccess), 524)
 
+class TestPDBIO(unittest.TestCase):
+    
+    def test_example(self):
+        p = PDBParser(PERMISSIVE=True)
+        filenumber, filename = tempfile.mkstemp()
+        os.close(filenumber)
+        io = PDBIO()
+        io.set_structure(s)
+        with open("out2.pdb", "w") as fp:
+            s1 = p.get_structure("test1", sys.argv[1])
+            s2 = p.get_structure("test2", sys.argv[2])
+            io = PDBIO(1)
+            io.set_structure(s1)
+            io.save(fp)
+            io.set_structure(s2)
+            io.save(fp, write_end=1)
+    
 if __name__ == '__main__':
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)
