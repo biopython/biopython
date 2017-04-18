@@ -104,6 +104,7 @@ please open an issue on GitHub or mention it on the development mailing list.
 - Jeffrey Chang <jchang at domain smi.stanford.edu>
 - Jeffrey Finkelstein <jeffrey.finkelstein at domain gmail.com>
 - Jeroen Van Goey <https://github.com/BioGeek>
+- Jimmy O'Donnell <https://github.com/jimmyodonnell>
 - Joanna & Dominik Kasprzak
 - Joao Rodrigues <anaryin at the domain gmail dot com>
 - Joe Cora <https://github.com/JoeCora>

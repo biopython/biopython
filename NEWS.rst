@@ -24,6 +24,7 @@ possible, especially the following contributors:
 
 - Eric Rasche
 - Francesco Gastaldello
+- Jimmy O'Donnell (first contribution)
 - John Kern (first contribution)
 - João Rodrigues
 - Mateusz Korycinski (first contribution)
