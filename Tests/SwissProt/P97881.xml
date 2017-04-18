@@ -1,0 +1,303 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<uniprot xmlns="http://uniprot.org/uniprot" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://uniprot.org/uniprot http://www.uniprot.org/support/docs/uniprot.xsd">
+<entry dataset="Swiss-Prot" created="2004-07-19" modified="2017-03-15" version="93">
+<accession>P97881</accession>
+<name>MUC13_RAT</name>
+<protein>
+<recommendedName>
+<fullName>Mucin-13</fullName>
+<shortName>MUC-13</shortName>
+</recommendedName>
+</protein>
+<gene>
+<name type="primary">Muc13</name>
+</gene>
+<organism>
+<name type="scientific">Rattus norvegicus</name>
+<name type="common">Rat</name>
+<dbReference type="NCBI Taxonomy" id="10116"/>
+<lineage>
+<taxon>Eukaryota</taxon>
+<taxon>Metazoa</taxon>
+<taxon>Chordata</taxon>
+<taxon>Craniata</taxon>
+<taxon>Vertebrata</taxon>
+<taxon>Euteleostomi</taxon>
+<taxon>Mammalia</taxon>
+<taxon>Eutheria</taxon>
+<taxon>Euarchontoglires</taxon>
+<taxon>Glires</taxon>
+<taxon>Rodentia</taxon>
+<taxon>Sciurognathi</taxon>
+<taxon>Muroidea</taxon>
+<taxon>Muridae</taxon>
+<taxon>Murinae</taxon>
+<taxon>Rattus</taxon>
+</lineage>
+</organism>
+<reference key="1">
+<citation type="submission" date="1997-02" db="EMBL/GenBank/DDBJ databases">
+<authorList>
+<person name="Hajdu A."/>
+<person name="Flanagan P.R."/>
+</authorList>
+</citation>
+<scope>NUCLEOTIDE SEQUENCE [MRNA]</scope>
+<source>
+<tissue>Intestine</tissue>
+</source>
+</reference>
+<comment type="function">
+<text>Epithelial and hemopoietic transmembrane mucin that may play a role in cell signaling.</text>
+</comment>
+<comment type="subunit">
+<text evidence="1">Homodimer of beta subunits.</text>
+</comment>
+<comment type="subcellular location">
+<subcellularLocation>
+<location evidence="5">Cell membrane</location>
+<topology evidence="5">Single-pass type I membrane protein</topology>
+</subcellularLocation>
+<subcellularLocation>
+<location evidence="1">Secreted</location>
+</subcellularLocation>
+<text evidence="1">Also exists as a soluble form.</text>
+</comment>
+<comment type="PTM">
+<text evidence="1">Cleaved into two subunits, alpha and beta, probably between the first EGF domain and the SEA domain. Beta subunit contains the cytoplasmic tail and alpha subunit the extracellular tail. The homooligomerization into dimers is dependent on intrachain disulfide bonds (By similarity).</text>
+</comment>
+<comment type="PTM">
+<text evidence="1">Highly glycosylated.</text>
+</comment>
+<dbReference type="EMBL" id="U89744">
+<property type="protein sequence ID" value="AAB49894.1"/>
+<property type="molecule type" value="mRNA"/>
+</dbReference>
+<dbReference type="UniGene" id="Rn.10719"/>
+<dbReference type="PRIDE" id="P97881"/>
+<dbReference type="UCSC" id="RGD:708547">
+<property type="organism name" value="rat"/>
+</dbReference>
+<dbReference type="RGD" id="708547">
+<property type="gene designation" value="Muc13"/>
+</dbReference>
+<dbReference type="HOVERGEN" id="HBG052532"/>
+<dbReference type="InParanoid" id="P97881"/>
+<dbReference type="PhylomeDB" id="P97881"/>
+<dbReference type="PRO" id="PR:P97881"/>
+<dbReference type="Proteomes" id="UP000002494">
+<property type="component" value="Unplaced"/>
+</dbReference>
+<dbReference type="GO" id="GO:0016324">
+<property type="term" value="C:apical plasma membrane"/>
+<property type="evidence" value="ECO:0000314"/>
+<property type="project" value="RGD"/>
+</dbReference>
+<dbReference type="GO" id="GO:0005576">
+<property type="term" value="C:extracellular region"/>
+<property type="evidence" value="ECO:0000501"/>
+<property type="project" value="UniProtKB-SubCell"/>
+</dbReference>
+<dbReference type="GO" id="GO:0016021">
+<property type="term" value="C:integral component of membrane"/>
+<property type="evidence" value="ECO:0000501"/>
+<property type="project" value="UniProtKB-KW"/>
+</dbReference>
+<dbReference type="GO" id="GO:0030277">
+<property type="term" value="P:maintenance of gastrointestinal epithelium"/>
+<property type="evidence" value="ECO:0000318"/>
+<property type="project" value="GO_Central"/>
+</dbReference>
+<dbReference type="InterPro" id="IPR000742">
+<property type="entry name" value="EGF-like_dom"/>
+</dbReference>
+<dbReference type="InterPro" id="IPR000082">
+<property type="entry name" value="SEA_dom"/>
+</dbReference>
+<dbReference type="SMART" id="SM00181">
+<property type="entry name" value="EGF"/>
+<property type="match status" value="3"/>
+</dbReference>
+<dbReference type="SMART" id="SM00200">
+<property type="entry name" value="SEA"/>
+<property type="match status" value="1"/>
+</dbReference>
+<dbReference type="PROSITE" id="PS01186">
+<property type="entry name" value="EGF_2"/>
+<property type="match status" value="2"/>
+</dbReference>
+<dbReference type="PROSITE" id="PS50026">
+<property type="entry name" value="EGF_3"/>
+<property type="match status" value="1"/>
+</dbReference>
+<dbReference type="PROSITE" id="PS50024">
+<property type="entry name" value="SEA"/>
+<property type="match status" value="1"/>
+</dbReference>
+<proteinExistence type="evidence at transcript level"/>
+<keyword id="KW-1003">Cell membrane</keyword>
+<keyword id="KW-0181">Complete proteome</keyword>
+<keyword id="KW-1015">Disulfide bond</keyword>
+<keyword id="KW-0245">EGF-like domain</keyword>
+<keyword id="KW-0325">Glycoprotein</keyword>
+<keyword id="KW-0472">Membrane</keyword>
+<keyword id="KW-1185">Reference proteome</keyword>
+<keyword id="KW-0677">Repeat</keyword>
+<keyword id="KW-0964">Secreted</keyword>
+<keyword id="KW-0732">Signal</keyword>
+<keyword id="KW-0812">Transmembrane</keyword>
+<keyword id="KW-1133">Transmembrane helix</keyword>
+<feature type="signal peptide">
+<location>
+<begin position="1"/>
+<end status="unknown"/>
+</location>
+</feature>
+<feature type="chain" description="Mucin-13" id="PRO_0000019286">
+<location>
+<begin status="unknown"/>
+<end position="547"/>
+</location>
+</feature>
+<feature type="transmembrane region" description="Helical" evidence="2">
+<location>
+<begin position="459"/>
+<end position="479"/>
+</location>
+</feature>
+<feature type="topological domain" description="Cytoplasmic" evidence="2">
+<location>
+<begin position="480"/>
+<end position="547"/>
+</location>
+</feature>
+<feature type="domain" description="EGF-like 1" evidence="3">
+<location>
+<begin position="210"/>
+<end position="249"/>
+</location>
+</feature>
+<feature type="domain" description="SEA" evidence="4">
+<location>
+<begin position="250"/>
+<end position="366"/>
+</location>
+</feature>
+<feature type="domain" description="EGF-like 2" evidence="3">
+<location>
+<begin position="361"/>
+<end position="401"/>
+</location>
+</feature>
+<feature type="domain" description="EGF-like 3" evidence="3">
+<location>
+<begin position="401"/>
+<end position="441"/>
+</location>
+</feature>
+<feature type="compositionally biased region" description="Thr-rich">
+<location>
+<begin position="8"/>
+<end position="208"/>
+</location>
+</feature>
+<feature type="compositionally biased region" description="Poly-Ser">
+<location>
+<begin position="204"/>
+<end position="207"/>
+</location>
+</feature>
+<feature type="glycosylation site" description="N-linked (GlcNAc...)" evidence="2">
+<location>
+<position position="243"/>
+</location>
+</feature>
+<feature type="glycosylation site" description="N-linked (GlcNAc...)" evidence="2">
+<location>
+<position position="244"/>
+</location>
+</feature>
+<feature type="glycosylation site" description="N-linked (GlcNAc...)" evidence="2">
+<location>
+<position position="263"/>
+</location>
+</feature>
+<feature type="disulfide bond" evidence="3">
+<location>
+<begin position="214"/>
+<end position="225"/>
+</location>
+</feature>
+<feature type="disulfide bond" evidence="3">
+<location>
+<begin position="219"/>
+<end position="234"/>
+</location>
+</feature>
+<feature type="disulfide bond" evidence="3">
+<location>
+<begin position="236"/>
+<end position="248"/>
+</location>
+</feature>
+<feature type="disulfide bond" evidence="3">
+<location>
+<begin position="365"/>
+<end position="378"/>
+</location>
+</feature>
+<feature type="disulfide bond" evidence="3">
+<location>
+<begin position="370"/>
+<end position="384"/>
+</location>
+</feature>
+<feature type="disulfide bond" evidence="3">
+<location>
+<begin position="386"/>
+<end position="400"/>
+</location>
+</feature>
+<feature type="disulfide bond" evidence="3">
+<location>
+<begin position="409"/>
+<end position="427"/>
+</location>
+</feature>
+<feature type="disulfide bond" evidence="3">
+<location>
+<begin position="429"/>
+<end position="440"/>
+</location>
+</feature>
+<evidence key="1" type="ECO:0000250"/>
+<evidence key="2" type="ECO:0000255"/>
+<evidence key="3" type="ECO:0000255">
+<source>
+<dbReference type="PROSITE-ProRule" id="PRU00076"/>
+</source>
+</evidence>
+<evidence key="4" type="ECO:0000255">
+<source>
+<dbReference type="PROSITE-ProRule" id="PRU00188"/>
+</source>
+</evidence>
+<evidence key="5" type="ECO:0000305"/>
+<sequence length="547" mass="57652" checksum="EA86608C704080CF" modified="1997-05-01" version="1" precursor="true">
+MSQSSGGTSTPTTTATQPTSTSTQTPGTTQLLSTTSTPTTTATQPTSTSTQTPGTTQLPS
+TTSTPTTTATQPTXTSTQTPGTTQLPGTTSTPTTTATQPTSTSFQTPGTTQLPSSTSTPT
+TTATQPTSTASQTPGTTQPPGGASSPTTTVTQPTGSSSQTPGTTQPPGGASTPTTTVTQP
+TGSSSQTSGTTQPPGGASSSTVTSSSSTGSNDPCNSNPCKSPASCVKLYDSYFCLCLEGY
+YYNNSSSCVKGTTFPGEIGMSVNETTDLEDKNSVNYQTLHSSVVKFFENTFKKTDYGQTV
+ILKVSKDSLMSSRSVMRAATQTVYVSVVNMFGENTKEDEESVASVIKEAVKTDNNVERYF
+QQDRCDYYGCVKSGSNVCRNGLQCTCKPGLERLNPQVPFCVAPTCSEPCSAEKKQLCLKK
+DNGAMECGCMAGYRKANGKCEECPFGYSGMDCKDQFQLILTIVGTIAGAFILILLIVFIV
+SMRSKNKKKSGEEQNLIEDDFHNLRMRPTGFSNFGADTSIFPKVKTGVPSQTSNPYANHR
+SMPRPDY
+</sequence>
+</entry>
+<copyright>
+Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
+Distributed under the Creative Commons Attribution-NoDerivs License
+</copyright>
+</uniprot>

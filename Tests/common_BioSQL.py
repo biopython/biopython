@@ -27,7 +27,7 @@ from Bio import BiopythonWarning
 # local stuff
 from Bio import MissingExternalDependencyError
 from Bio.Seq import Seq, MutableSeq
-from Bio.SeqFeature import SeqFeature
+from Bio.SeqFeature import SeqFeature, UnknownPosition, ExactPosition
 from Bio import Alphabet
 from Bio import SeqIO
 from Bio.SeqRecord import SeqRecord
@@ -1167,3 +1167,40 @@ class AutoSeqIOTests(unittest.TestCase):
         self.check('embl', 'EMBL/SC10H5.embl')
         self.check('embl', 'EMBL/U87107.embl')
         self.assertEqual(len(self.db), 66)
+
+
+class SwissProtUnknownPositionTest(unittest.TestCase):
+    """Handle SwissProt unknown position by setting value to null in database."""
+
+    def setUp(self):
+        # drop any old database and create a new one:
+        TESTDB = create_database()
+        # connect to new database:
+        self.server = BioSeqDatabase.open_database(driver=DBDRIVER,
+                                                   user=DBUSER, passwd=DBPASSWD,
+                                                   host=DBHOST, db=TESTDB)
+        # Create new namespace within new empty database:
+        self.db = self.server.new_database("biosql-test")
+
+    def tearDown(self):
+        self.server.rollback()
+        self.server.close()
+        destroy_database()
+        del self.db
+        del self.server
+
+    def test_ambiguous_location(self):
+        """Parse a uniprot-xml file that includes ambiguous location, save it, and then return"""
+
+        id = 'P97881'
+        seqiter = SeqIO.parse("SwissProt/%s.xml" % id,"uniprot-xml")
+        self.assertTrue(self.db.load(seqiter) == 1)
+
+        dbrecord = self.db.lookup(primary_id=id)
+        for feature in dbrecord.features:
+            if feature.type == 'signal peptide':
+                self.assertTrue(isinstance(feature.location.end,UnknownPosition))
+            elif feature.type == 'chain':
+                self.assertTrue(isinstance(feature.location.start,UnknownPosition))
+            else:
+                self.assertTrue(isinstance(feature.location.start,ExactPosition))
