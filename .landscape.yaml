@@ -1,0 +1,3 @@
+doc-warnings: yes
+strictness: veryhigh
+ignore-paths: Bio/_py3k/__init__.py
