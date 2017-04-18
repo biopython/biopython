@@ -56,6 +56,7 @@ class FileRecord(object):
     if the list ended).
     Each individual is a pair composed by individual
     name and a list of alleles (2 per marker or 1 for haploid data).
+
     Examples::
 
         ('Ind1', [(1,2),    (3,3), (200,201)]

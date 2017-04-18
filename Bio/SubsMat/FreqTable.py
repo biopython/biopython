@@ -2,9 +2,8 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 # Copyright Iddo Friedberg idoerg@cc.huji.ac.il
-"""A class to handle frequency tables
+"""A class to handle frequency tables or letter count files.
 
-Methods to read a letter frequency or a letter count file:
 Example files for a DNA alphabet:
 
 A count file (whitespace separated):
@@ -30,6 +29,7 @@ Functions:
 
 Methods:
   (all internal)
+
 Attributes:
   alphabet: The IUPAC alphabet set (or any other) whose letters you are
   using. Common sets are: IUPAC.protein (20-letter protein),

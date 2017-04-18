@@ -1572,6 +1572,7 @@ class Ambiguous(AbstractCut):
 
     Typical example : BstXI -> CCAN_NNNN^NTGG
                       The overhang can be any sequence of 4 bases.
+
     Notes:
         Blunt enzymes are always defined. even if there site is GGATCCNNN^_N
         There overhang is always the same : blunt!
