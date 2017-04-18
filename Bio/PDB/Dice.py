@@ -8,6 +8,10 @@ import warnings
 
 from Bio.PDB.PDBIO import PDBIO
 from Bio import BiopythonWarning
+from Bio import BiopythonDeprecationWarning
+
+warnings.warn("Bio.PDB.Dice is now deprecated will be removed in a "
+              "future release of Biopython.", BiopythonDeprecationWarning)
 
 _hydrogen = re.compile("[123 ]*H.*")
 
