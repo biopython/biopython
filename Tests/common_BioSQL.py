@@ -1193,14 +1193,14 @@ class SwissProtUnknownPositionTest(unittest.TestCase):
         """Parse a uniprot-xml file that includes ambiguous location, save it, and then return"""
 
         id = 'P97881'
-        seqiter = SeqIO.parse("SwissProt/%s.xml" % id,"uniprot-xml")
+        seqiter = SeqIO.parse("SwissProt/%s.xml" % id, "uniprot-xml")
         self.assertTrue(self.db.load(seqiter) == 1)
 
         dbrecord = self.db.lookup(primary_id=id)
         for feature in dbrecord.features:
             if feature.type == 'signal peptide':
-                self.assertTrue(isinstance(feature.location.end,UnknownPosition))
+                self.assertTrue(isinstance(feature.location.end, UnknownPosition))
             elif feature.type == 'chain':
-                self.assertTrue(isinstance(feature.location.start,UnknownPosition))
+                self.assertTrue(isinstance(feature.location.start, UnknownPosition))
             else:
-                self.assertTrue(isinstance(feature.location.start,ExactPosition))
+                self.assertTrue(isinstance(feature.location.start, ExactPosition))
