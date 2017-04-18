@@ -56,31 +56,3 @@ class Superimposer(object):
         tran = tran.astype('f')
         for atom in atom_list:
             atom.transform(rot, tran)
-
-
-if __name__ == "__main__":
-    import sys
-
-    from Bio.PDB import PDBParser, Selection
-
-    p = PDBParser()
-    s1 = p.get_structure("FIXED", sys.argv[1])
-    fixed = Selection.unfold_entities(s1, "A")
-
-    s2 = p.get_structure("MOVING", sys.argv[1])
-    moving = Selection.unfold_entities(s2, "A")
-
-    rot = numpy.identity(3).astype('f')
-    tran = numpy.array((1.0, 2.0, 3.0), 'f')
-
-    for atom in moving:
-        atom.transform(rot, tran)
-
-    sup = Superimposer()
-
-    sup.set_atoms(fixed, moving)
-
-    print(sup.rotran)
-    print(sup.rms)
-
-    sup.apply(moving)
