@@ -1191,7 +1191,6 @@ class SwissProtUnknownPositionTest(unittest.TestCase):
 
     def test_ambiguous_location(self):
         """Parse a uniprot-xml file that includes ambiguous location, save it, and then return"""
-
         id = 'P97881'
         seqiter = SeqIO.parse("SwissProt/%s.xml" % id, "uniprot-xml")
         self.assertTrue(self.db.load(seqiter) == 1)
