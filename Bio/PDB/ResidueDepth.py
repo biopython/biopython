@@ -118,7 +118,6 @@ def _get_atom_radius(atom, rtype='united'):
         - explicit (reads hydrogens)
         - united (default)
     """
-
     if rtype == 'explicit':
         typekey = 1
     elif rtype == 'united':
@@ -455,7 +454,6 @@ def get_surface(model, PDB_TO_XYZR=None, MSMS="msms"):
 
     MSMS --- msms executable (arg. to os.system)
     """
-
     # Issue warning if PDB_TO_XYZR is given
     if PDB_TO_XYZR is not None:
         warnings.warn(("PDB_TO_XYZR argument will be deprecated soon"
