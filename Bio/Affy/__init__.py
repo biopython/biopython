@@ -3,5 +3,4 @@
 # as part of this package.
 #
 
-"""Deal with Affymetrix related data such as cel files.
-"""
+"""Deal with Affymetrix related data such as cel files."""

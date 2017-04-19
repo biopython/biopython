@@ -1,8 +1,7 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""Tests for dealing with storage of biopython objects in a relational db.
-"""
+"""Test storing biopython objects in a BioSQL relational db."""
 from __future__ import print_function
 
 import os

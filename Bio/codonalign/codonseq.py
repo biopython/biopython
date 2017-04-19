@@ -106,8 +106,7 @@ class CodonSeq(Seq):
         return Seq(self._data[index], alphabet=generic_dna)
 
     def get_codon(self, index):
-        """get the `index`-th codon from the self.seq
-        """
+        """get the `index`-th codon from the sequence."""
         if len(set(i % 3 for i in self.rf_table)) != 1:
             raise RuntimeError("frameshift detected. "
                                "CodonSeq object is not able to deal "

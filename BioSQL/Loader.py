@@ -332,8 +332,7 @@ class DatabaseLoader(object):
         return answer
 
     def _update_left_right_taxon_values(self, left_value):
-        """update the left and right values in the table
-        """
+        """Update the left and right taxon values in the table."""
         if not left_value:
             return
         # Due to the UNIQUE constraint on the left and right values in the taxon
