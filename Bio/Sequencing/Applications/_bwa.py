@@ -63,7 +63,7 @@ class BwaIndexCommandline(AbstractCommandline):
 
 
 class BwaAlignCommandline(AbstractCommandline):
-    """Command line wrapper for Burrows Wheeler Aligner (BWA) aln.
+    r"""Command line wrapper for Burrows Wheeler Aligner (BWA) aln.
 
     Run a BWA alignment, equivalent to::
 
@@ -219,7 +219,7 @@ class BwaSamseCommandline(AbstractCommandline):
 
 
 class BwaSampeCommandline(AbstractCommandline):
-    """Command line wrapper for Burrows Wheeler Aligner (BWA) sampe.
+    r"""Command line wrapper for Burrows Wheeler Aligner (BWA) sampe.
 
     Generate alignments in the SAM format given paired-end reads.
     Equivalent to::
