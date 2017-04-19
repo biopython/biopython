@@ -2,8 +2,7 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""Tools to manipulate data from nmrview .xpk peaklist files.
-"""
+"""Tools to manipulate data from nmrview .xpk peaklist files."""
 
 from __future__ import print_function
 

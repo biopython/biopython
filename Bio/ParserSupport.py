@@ -33,9 +33,7 @@ warnings.warn("Bio.ParserSupport is now deprecated will be removed in a "
 
 
 class AbstractParser(object):
-    """Base class for other parsers.
-
-    """
+    """Base class for other parsers."""
     def parse(self, handle):
         raise NotImplementedError("Please implement in a derived class")
 

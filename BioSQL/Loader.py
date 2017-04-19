@@ -30,6 +30,8 @@ from Bio._py3k import _is_int_or_long
 from Bio._py3k import range
 from Bio._py3k import basestring
 
+from Bio.SeqFeature import UnknownPosition
+
 
 class DatabaseLoader(object):
     """Object used to load SeqRecord objects into a BioSQL database."""
@@ -330,8 +332,7 @@ class DatabaseLoader(object):
         return answer
 
     def _update_left_right_taxon_values(self, left_value):
-        """update the left and right values in the table
-        """
+        """Update the left and right taxon values in the table."""
         if not left_value:
             return
         # Due to the UNIQUE constraint on the left and right values in the taxon
@@ -908,8 +909,24 @@ class DatabaseLoader(object):
         # convert biopython locations to the 1-based location system
         # used in bioSQL
         # XXX This could also handle fuzzies
-        start = int(location.start) + 1
-        end = int(location.end)
+
+        try:
+            start = int(location.start) + 1
+        except TypeError:
+            # Handle SwissProt unknown position (?)
+            if isinstance(location.start, UnknownPosition):
+                start = None
+            else:
+                raise
+
+        try:
+            end = int(location.end)
+        except TypeError:
+            # Handle SwissProt unknown position (?)
+            if isinstance(location.end, UnknownPosition):
+                end = None
+            else:
+                raise
 
         # Biopython uses None when we don't know strand information but
         # BioSQL requires something (non null) and sets this as zero
