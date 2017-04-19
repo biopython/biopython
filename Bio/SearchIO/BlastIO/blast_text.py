@@ -24,7 +24,6 @@ __all__ = ('BlastTextParser', )
 
 
 class BlastTextParser(object):
-
     """Parser for the BLAST text format."""
 
     def __init__(self, handle):
