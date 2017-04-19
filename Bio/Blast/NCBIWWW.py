@@ -62,7 +62,7 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
      - expect         An expect value cutoff.  Def 10.0.
      - matrix         Specify an alt. One of "BLOSUM45", "BLOSUM50", "BLOSUM62", "BLOSUM80", "BLOSUM90",
                       "PAM250", "PAM30" or "PAM70".
-     - filter         "F" turns off filtering. "T" or "L" to enable. Prepend "m" for mask at 
+     - filter         "F" turns off filtering. "T" or "L" to enable. Prepend "m" for mask at
                       lookup (e.g., mL). Def "F".
      - format_type    "HTML", "Text", "XML", "XML2", "JSON2", or "Tabular".  Def "XML".
      - entrez_query   Entrez query to limit Blast search.
@@ -79,7 +79,7 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
 
     assert program in ['blastn', 'megablast', 'blastp', 'blastx', 'tblastn', 'tblastx']
     if url_base == NCBI_BLAST_URL:
-        assert num_threads == None
+        assert num_threads is None
 
     # Format the "Put" command, which sends search requests to qblast.
     # Parameters taken from http://www.ncbi.nlm.nih.gov/BLAST/Doc/node5.html on 9 July 2007
@@ -88,13 +88,13 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
     # (e.g. psi_blast = NCBIWWW.qblast("blastp", "refseq_protein", input_sequence, service="psi"))
     # ---------
     # Updates on 12 Apr 2017:
-    # The webpages aforementioned are not valid any more. Parameters were taken from 
+    # The webpages aforementioned are not valid any more. Parameters were taken from
     # https://ncbi.github.io/blast-cloud/dev/api.html
     # Additional parameters may still work, but no detailed documentation was found on NCBI website.
     # Simple perl code is available provided by NCBI (https://blast.ncbi.nlm.nih.gov/docs/web_blast.pl).
     # Note that ONLY https is supported at the NCBI server after 30 Sep 2016.
     # Note that do NOT overload the NCBI servers.
-    
+
     parameters = [
         ('AUTO_FORMAT', auto_format),
         ('COMPOSITION_BASED_STATISTICS', composition_based_statistics),
@@ -149,7 +149,7 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
     # Parameters taken from http://www.ncbi.nlm.nih.gov/BLAST/Doc/node6.html on 9 July 2007
     # The above webpage is not valid any more on 12 Apr 2017.
     # Parameters taken from https://ncbi.github.io/blast-cloud/dev/api.html on 12 Apr 2017
-    
+
     rid, rtoe = _parse_qblast_ref_page(handle)
     parameters = [
         ('ALIGNMENTS', alignments),
