@@ -19,14 +19,9 @@ def m2rotaxis(m):
     eps = 1e-5
 
     # Check for singularities a la http://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToAngle/
-    if (abs(m[0, 1] - m[1, 0]) < eps and
-        abs(m[0, 2] - m[2, 0]) < eps and
-        abs(m[1, 2] - m[2, 1]) < eps):
+    if abs(m[0, 1] - m[1, 0]) < eps and abs(m[0, 2] - m[2, 0]) < eps and abs(m[1, 2] - m[2, 1]) < eps:
         # Singularity encountered. Check if its 0 or 180 deg
-        if (abs(m[0, 1] + m[1, 0]) < eps and
-            abs(m[0, 2] + m[2, 0]) < eps and
-            abs(m[1, 2] + m[2, 1]) < eps and
-            abs(m[0, 0] + m[1, 1] + m[2, 2] - 3) < eps):
+        if abs(m[0, 1] + m[1, 0]) < eps and abs(m[0, 2] + m[2, 0]) < eps and abs(m[1, 2] + m[2, 1]) < eps and abs(m[0, 0] + m[1, 1] + m[2, 2] - 3) < eps:
             angle = 0
         else:
             angle = numpy.pi
