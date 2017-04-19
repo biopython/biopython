@@ -234,11 +234,6 @@ def _get_codon2codon_matrix(codon_table=default_codon_table):
     Elements in the matrix are number of synonymous and nonsynonymous
     substitutions required for the substitution.
     """
-    import platform
-    if platform.python_implementation() == 'PyPy':
-        import numpypy as np
-    else:
-        import numpy as np
     base_tuple = ('A', 'T', 'C', 'G')
     codons = [i for i in list(codon_table.forward_table.keys()) +
               codon_table.stop_codons if 'U' not in i]
