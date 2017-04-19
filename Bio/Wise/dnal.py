@@ -3,7 +3,8 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 #
-"""
+"""Run and process output from the Wise2 package tool dnal.
+
 Bio.Wise contains modules for running and processing the output of
 some of the models in the Wise2 package by Ewan Birney available from:
 ftp://ftp.ebi.ac.uk/pub/software/unix/wise2/
@@ -77,9 +78,8 @@ def _get_coords(filename):
 
 
 class Statistics(object):
-    """
-    Calculate statistics from an ALB report
-    """
+    """Calculate statistics from an ALB report."""
+
     def __init__(self, filename, match, mismatch, gap, extension):
         self.matches = _fgrep_count('"SEQUENCE" %s' % match, filename)
         self.mismatches = _fgrep_count('"SEQUENCE" %s' % mismatch, filename)

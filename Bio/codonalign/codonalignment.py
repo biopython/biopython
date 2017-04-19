@@ -72,8 +72,7 @@ class CodonAlignment(MultipleSeqAlignment):
         return "\n".join(lines)
 
     def __getitem__(self, index, alphabet=None):
-        """Return a CodonAlignment object for single indexing
-        """
+        """Return a CodonAlignment object for single indexing."""
         if isinstance(index, int):
             return self._records[index]
         elif isinstance(index, slice):
@@ -111,8 +110,7 @@ class CodonAlignment(MultipleSeqAlignment):
         return MultipleSeqAlignment(alignments)
 
     def get_dn_ds_matrix(self, method="NG86"):
-        """Available methods include NG86, LWL85, YN00 and ML.
-        """
+        """Available methods include NG86, LWL85, YN00 and ML."""
         from Bio.Phylo.TreeConstruction import _DistanceMatrix as DM
         names = [i.id for i in self._records]
         size = len(self._records)
@@ -231,15 +229,11 @@ def mktest(codon_alns, codon_table=default_codon_table, alpha=0.05):
 
 
 def _get_codon2codon_matrix(codon_table=default_codon_table):
-    """Function to get codon codon substitution matrix. Elements
-    in the matrix are number of synonymous and nonsynonymous
-    substitutions required for the substitution (PRIVATE).
+    """Function to get codon codon substitution matrix (PRIVATE).
+
+    Elements in the matrix are number of synonymous and nonsynonymous
+    substitutions required for the substitution.
     """
-    import platform
-    if platform.python_implementation() == 'PyPy':
-        import numpypy as np
-    else:
-        import numpy as np
     base_tuple = ('A', 'T', 'C', 'G')
     codons = [i for i in list(codon_table.forward_table.keys()) +
               codon_table.stop_codons if 'U' not in i]
@@ -349,8 +343,7 @@ def _dijkstra(graph, start, end):
 
 
 def _count_replacement(codon_set, G):
-    """Count replacement needed for a given codon_set (PRIVATE).
-    """
+    """Count replacement needed for a given codon_set (PRIVATE)."""
     from math import floor
     if len(codon_set) == 1:
         return 0, 0
@@ -363,9 +356,10 @@ def _count_replacement(codon_set, G):
 
 
 def _prim(G):
-    """Prim's algorithm to find minimum spanning tree. Code is adapted from
+    """Prim's algorithm to find minimum spanning tree (PRIVATE).
+
+    Code is adapted from
     http://programmingpraxis.com/2010/04/09/minimum-spanning-tree-prims-algorithm/
-    (PRIVATE).
     """
     from math import floor
     from collections import defaultdict
