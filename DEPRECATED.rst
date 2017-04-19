@@ -36,7 +36,7 @@ at installation time.
 Bio.PDB.Dice
 ============
 This was deprecated in Biopython 1.70, it was likely intended as an example
-script using PDBIO for select parts of a PDB file.
+script using PDBIO for selecting parts of a PDB file.
 
 Bio.DocSQL
 ==========
