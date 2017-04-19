@@ -110,8 +110,11 @@ class CodonAlignment(MultipleSeqAlignment):
                 rec in self._records]
         return MultipleSeqAlignment(alignments)
 
-    def get_dn_ds_matrix(self, method="NG86"):
+    def get_dn_ds_matrix(self, method="NG86", codon_table=default_codon_table):
         """Available methods include NG86, LWL85, YN00 and ML.
+        Argument:
+            - method       - Available methods include NG86, LWL85, YN00 and ML.
+            - codon_table  - Codon table to use for forward translation.
         """
         from Bio.Phylo.TreeConstruction import _DistanceMatrix as DM
         names = [i.id for i in self._records]
@@ -124,7 +127,7 @@ class CodonAlignment(MultipleSeqAlignment):
             for j in range(i + 1):
                 if i != j:
                     dn, ds = cal_dn_ds(self._records[i], self._records[j],
-                                       method=method)
+                                       method=method, codon_table=codon_table)
                     dn_matrix[i].append(dn)
                     ds_matrix[i].append(ds)
                 else:
@@ -134,16 +137,17 @@ class CodonAlignment(MultipleSeqAlignment):
         ds_dm = DM(names, matrix=ds_matrix)
         return dn_dm, ds_dm
 
-    def get_dn_ds_tree(self, dn_ds_method="NG86", tree_method="UPGMA"):
+    def get_dn_ds_tree(self, dn_ds_method="NG86", tree_method="UPGMA", codon_table=default_codon_table):
         """Method for constructing dn tree and ds tree.
 
         Argument:
 
             - dn_ds_method - Available methods include NG86, LWL85, YN00 and ML.
             - tree_method  - Available methods include UPGMA and NJ.
+            - codon_table  - Codon table to use for forward translation.
         """
         from Bio.Phylo.TreeConstruction import DistanceTreeConstructor
-        dn_dm, ds_dm = self.get_dn_ds_matrix(method=dn_ds_method)
+        dn_dm, ds_dm = self.get_dn_ds_matrix(method=dn_ds_method, codon_table=codon_table)
         dn_constructor = DistanceTreeConstructor()
         ds_constructor = DistanceTreeConstructor()
         if tree_method == "UPGMA":
