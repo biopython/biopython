@@ -11,13 +11,34 @@ import numpy
 
 
 def m2rotaxis(m):
-    """Return angles, axis pair that corresponds to rotation matrix m."""
-    # Angle always between 0 and pi
-    # Sense of rotation is defined by axis orientation
-    t = 0.5 * (numpy.trace(m) - 1)
-    t = max(-1, t)
-    t = min(1, t)
-    angle = numpy.arccos(t)
+    """
+    Return angles, axis pair that corresponds to rotation matrix m.
+
+    The case where `m` is the identity matrix corresponds to a singularity where any 
+    rotation axis is valid. In that case, `Vector([1,0,0])`, is returned. 
+    """
+    eps = 1e-5
+
+    #Check for singularities a la http://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToAngle/
+    if ( abs(m[0,1]-m[1,0]) < eps and 
+         abs(m[0,2]-m[2,0]) < eps and 
+         abs(m[1,2]-m[2,1]) < eps  ):
+        #Singularity encountered. Check if its 0 or 180 deg
+        if ( abs(m[0,1]+m[1,0]) < eps and 
+             abs(m[0,2]+m[2,0]) < eps and 
+             abs(m[1,2]+m[2,1]) < eps and
+             abs(m[0,0]+m[1,1]+m[2,2]-3) < eps ):
+            angle = 0
+        else:
+            angle = numpy.pi
+    else:
+        # Angle always between 0 and pi
+        # Sense of rotation is defined by axis orientation
+        t = 0.5 * (numpy.trace(m) - 1)
+        t = max(-1, t)
+        t = min(1, t)
+        angle = numpy.arccos(t)
+
     if angle < 1e-15:
         # Angle is 0
         return 0.0, Vector(1, 0, 0)
