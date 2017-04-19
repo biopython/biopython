@@ -12,6 +12,7 @@ please open an issue on GitHub or mention it on the development mailing list.
 
 - Aaron Gallagher <habnabit at gmail>
 - Aaron Rosenfeld <https://github.com/arosenfeld>
+- Aaron Kitzmiller <https://github.com/aaronk>
 - Adam Kurkiewicz <adam@kurkiewicz.pl>
 - Adam Novak <https://github.com/AdamNovak>
 - Adrian Altenhoff <https://github.com/alpae>

@@ -22,6 +22,7 @@ under the format name "mauve" (contributed by Eric Rasche).
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+- Aaron Kitzmiller (first contribution)
 - Eric Rasche
 - Francesco Gastaldello
 - Jimmy O'Donnell (first contribution)
