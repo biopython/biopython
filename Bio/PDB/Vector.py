@@ -111,8 +111,7 @@ def rotaxis2m(theta, vector):
 
     @return: The rotation matrix, a 3x3 Numeric array.
     """
-    vector = vector.copy()
-    vector.normalize()
+    vector = vector.normalized()
     c = numpy.cos(theta)
     s = numpy.sin(theta)
     t = 1 - c
@@ -148,8 +147,8 @@ def refmat(p, q):
     @type p,q: L{Vector}
     @return: The mirror operation, a 3x3 Numeric array.
     """
-    p.normalize()
-    q.normalize()
+    p = p.normalized()
+    q = q.normalized()
     if (p - q).norm() < 1e-5:
         return numpy.identity(3)
     pq = p - q
