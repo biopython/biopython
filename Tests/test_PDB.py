@@ -1185,22 +1185,22 @@ class TransformTests(unittest.TestCase):
 
         #Vector normalization
         v1 = Vector([2,0,0])
-        self.assertTrue(numpy.array_equal(v1.normalized().get_array(), numpy.array([1,0,0])) 
+        self.assertTrue(numpy.array_equal(v1.normalized().get_array(), numpy.array([1,0,0])))
         # State of v1 should not be affected by `normalized`
-        self.assertTrue(numpy.array_equal(v1.get_array(), numpy.array([2,0,0])) 
+        self.assertTrue(numpy.array_equal(v1.get_array(), numpy.array([2,0,0]))) 
         v1.normalize()
         # State of v1 should be affected by `normalize`
-        self.assertTrue(numpy.array_equal(v1.get_array(), numpy.array([1,0,0])) 
+        self.assertTrue(numpy.array_equal(v1.get_array(), numpy.array([1,0,0]))) 
         
         
     def test_refmat(self):
         v1 = Vector(0, 0, 1)
         v2 = Vector(0, 1, 0)
         ref = refmat(v1, v2)
-        self.assertTrue(numpy.array_equal(ref[0], numpy.array([1.0, 0.0, 0.0])))
-        self.assertTrue(numpy.array_equal(ref[1], numpy.array([0.0, 2.220446049250313e-16, 0.9999999999999998])))
-        self.assertTrue(numpy.array_equal(ref[2], numpy.array([0.0, 0.9999999999999998, 2.220446049250313e-16])))
-        self.assertTrue(numpy.array_equal(v1.left_multiply(ref).get_array(), numpy.array([0.0, 0.9999999999999998, 2.220446049250313e-16])))
+        self.assertTrue(numpy.allclose(ref[0], [1.0, 0.0, 0.0]))
+        self.assertTrue(numpy.allclose(ref[1], [0.0, 0.0, 1.0]))
+        self.assertTrue(numpy.allclose(ref[2], [0.0, 1.0, 0.0]))
+        self.assertTrue(numpy.allclose(v1.left_multiply(ref).get_array(), [0.0, 1.0, 0.0]))
 
 
     def test_rotmat(self):
@@ -1219,14 +1219,14 @@ class TransformTests(unittest.TestCase):
         v2 = Vector([-1.0, -0.8, 0])
         rot = rotmat(v1,v2)
         v3 = v1.left_multiply(rot)
-        self.assertTrue( numpy.allclose(v2, v3) )
+        self.assertTrue( numpy.allclose(v2.get_array(), v3.get_array()) )
 
         #Applying rotmat works when the rotation is 0 deg (singularity)
         v1 = Vector([1.0, 0.8, 0])
         v2 = Vector([1.0, 0.8, 0])
         rot = rotmat(v1,v2)
         v3 = v1.left_multiply(rot)
-        self.assertTrue( numpy.allclose(v1, v3) )
+        self.assertTrue( numpy.allclose(v1.get_array(), v3.get_array()) )
         
     def test_m2rotaxis(self):
         #Regular 90 deg rotation
@@ -1234,7 +1234,7 @@ class TransformTests(unittest.TestCase):
         v2 = Vector(0, 1, 0)
         rot = rotmat(v1, v2)
         angle, axis = m2rotaxis(rot)
-        self.assertTrue(numpy.allclose(axis, [-1.0, 0, 0]))
+        self.assertTrue(numpy.allclose(axis.get_array(), [-1.0, 0.0, 0.0]))
         self.assertTrue(abs(angle-numpy.pi/2)<1e-5)
 
         #180 deg rotation
@@ -1250,7 +1250,7 @@ class TransformTests(unittest.TestCase):
         v2 = Vector([1.0, 0.8, 0])
         rot = rotmat(v1,v2)
         angle, axis = m2rotaxis(rot)
-        self.assertTrue(numpy.all_close(axis, [1,0,0]))
+        self.assertTrue(numpy.allclose(axis.get_array(), [1,0,0]))
         self.assertTrue(abs(angle)<1e-5)
 
         
