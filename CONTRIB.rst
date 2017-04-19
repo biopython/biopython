@@ -39,6 +39,7 @@ please open an issue on GitHub or mention it on the development mailing list.
 - Ben Morris <https://github.com/bendmorris>
 - Ben Woodcroft <https://github.com/wwood>
 - Bernhard Thiel <https://github.com/Bernhard10>
+- Bertrand Caron <https://github.com/bertrand-caron>
 - Bertrand Frottier <bertrand.frottier at domain free.fr>
 - Bertrand Néron <https://github.com/bneron>
 - Bill Barnard <bill at domain barnard-engineering.com>
