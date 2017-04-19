@@ -3,10 +3,10 @@
 # as part of this package.
 #
 
-r"""Deal with Motifs or Signatures allowing ambiguity in the sequences.
+"""Deal with Motifs or Signatures allowing ambiguity in the sequences.
 
 This class contains Schema which deal with Motifs and Signatures at
-a higher level, by introducing \`don't care\` (ambiguity) symbols into
+a higher level, by introducing `don't care` (ambiguity) symbols into
 the sequences. For instance, you could combine the following Motifs:
 
 'GATC', 'GATG', 'GATG', 'GATT'

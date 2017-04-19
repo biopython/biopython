@@ -122,7 +122,7 @@ class ColorTranslator(object):
         return color
 
     def read_colorscheme(self, filename):
-        r""" read_colorscheme(self, filename)
+        r"""read_colorscheme(self, filename)
 
             o filename      The location of a file defining colors in tab-separated
                             format plaintext as:
