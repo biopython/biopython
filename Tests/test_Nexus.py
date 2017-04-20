@@ -361,7 +361,7 @@ usertype matrix_test stepmatrix=5
 [T]    2.43     2.12     2.31      .       2.14     
 [-]    2.43     2.14     2.31     2.14      .       
 ;
-""")  # noqa for pep8 W291 trailing whitespace
+""")  # noqa : W291
 
     def test_TreeTest1(self):
         """Test Tree module."""
@@ -495,7 +495,7 @@ class TestSelf(unittest.TestCase):
         CYS1_DICDI          -----MKVIL LFVLAVFTVF VSS------- --------RG IPPEEQ---X
         ;
         end;
-        """)  # noqa for pep8 W291 trailing whitespace
+        """)  # noqa : W291
         for a in NexusIterator(handle):
             print(a)
             for r in a:
@@ -523,7 +523,7 @@ class TestSelf(unittest.TestCase):
         CYS1_DICDI          -----MKVIL LFVLAVFTVF VSS------- --------RG IPPEEQ---X
         ;
         end;
-        """)  # noqa for pep8 W291 trailing whitespace
+        """)  # noqa : W291
         for a in NexusIterator(handle):
             print(a)
             for r in a:
