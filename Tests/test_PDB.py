@@ -1576,6 +1576,7 @@ class ResidueDepthTests(unittest.TestCase):
         assert len(msms_radii) == len(biopy_radii)
         self.assertSequenceEqual(msms_radii, biopy_radii)
 
+
 if __name__ == '__main__':
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

@@ -26,6 +26,7 @@ class ModTest(unittest.TestCase):
         self.assertAlmostEqual(chi2._incomplete_gamma(0.5, 0.5), 0.6826895,
                                places=5)
 
+
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

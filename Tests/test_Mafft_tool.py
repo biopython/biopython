@@ -61,6 +61,7 @@ def check_mafft_version(mafft_exe):
         return (major, version)
     raise MissingExternalDependencyError("Couldn't determine MAFFT version.")
 
+
 # This also checks it actually runs!
 version_major, version_string = check_mafft_version(mafft_exe)
 

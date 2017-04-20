@@ -33,6 +33,7 @@ def is_pypy():
         pass
     return False
 
+
 wanted = dict()
 for path in os.environ['PATH'].split(os.pathsep):
     try:

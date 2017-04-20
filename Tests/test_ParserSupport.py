@@ -25,12 +25,14 @@ def pb(b):
 
 # TaggingConsumer
 
+
 print("Running tests on TaggingConsumer")
 
 
 class TestHandle(object):
     def write(self, s):
         print(s)
+
 
 h = TestHandle()
 tc = ParserSupport.TaggingConsumer(handle=h, colwidth=5)
@@ -126,6 +128,7 @@ lines = []
 def m(line):
     lines.append(line)
 
+
 rac(h, m)
 print(lines[-1][:10])   # '>gi|132871'
 rac(h, m, start='MAKLE', end='KEQ', contains='SVIG')
@@ -188,6 +191,7 @@ lines = []
 
 def m(line):
     lines.append(line)
+
 
 print(arac(h, m, contains="RIBOSOMAL PROTEIN"))   # 1
 print(arac(h, m, start="foobar"))                 # 0

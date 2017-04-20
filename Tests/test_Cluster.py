@@ -852,6 +852,7 @@ class TestCluster(unittest.TestCase):
         self.assertAlmostEqual(eigenvalues[2], 1.8775592718563467)
         self.assertAlmostEqual(eigenvalues[3], 0.0)
 
+
 if __name__ == "__main__":
     TestCluster.module = 'Bio.Cluster'
     runner = unittest.TextTestRunner(verbosity=2)

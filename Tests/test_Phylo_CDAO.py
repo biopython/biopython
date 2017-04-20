@@ -82,6 +82,7 @@ def _test_write_factory(source):
 class ParseTests(unittest.TestCase):
     """Tests for proper parsing of example CDAO files."""
 
+
 for n, ex in enumerate(cdao_files):
     parse_test = _test_parse_factory(ex)
     parse_test.__name__ = 'test_parse_%s' % n
@@ -90,6 +91,7 @@ for n, ex in enumerate(cdao_files):
 
 class WriterTests(unittest.TestCase):
     pass
+
 
 for n, ex in enumerate(cdao_files):
     write_test = _test_write_factory(ex)

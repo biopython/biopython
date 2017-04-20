@@ -35,6 +35,7 @@ def _have_bug17666():
         # TypeError: integer argument expected, got 'tuple'
         return True
 
+
 if _have_bug17666():
     from Bio import MissingPythonDependencyError
     raise MissingPythonDependencyError("Your Python has a broken gzip library, see "

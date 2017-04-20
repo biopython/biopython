@@ -649,6 +649,7 @@ class SignatureCoderTest(unittest.TestCase):
                              "Non-expected representation %s for %s, wanted %s"
                              % (predicted, seq_string, expected))
 
+
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

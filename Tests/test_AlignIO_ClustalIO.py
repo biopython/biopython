@@ -227,6 +227,7 @@ class TestClustalIO(unittest.TestCase):
         alignments = next(ClustalIterator(StringIO(aln_example4)))
         self.assertEqual(2, len(alignments))
 
+
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

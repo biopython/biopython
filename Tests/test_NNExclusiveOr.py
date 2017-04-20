@@ -59,4 +59,5 @@ def stopping_criteria(num_iterations, validation_error, training_error):
         return True
     return False
 
+
 main()

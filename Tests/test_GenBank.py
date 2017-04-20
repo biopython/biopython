@@ -180,6 +180,7 @@ def t_write_format():
         cur_handle.close()
         compare_handle.close()
 
+
 t_write_format()
 
 
@@ -199,6 +200,7 @@ def t_cleaning_features():
     assert "\012" not in test_trans, "Did not clean newlines out of the translation"
 
     handle.close()
+
 
 print("Testing feature cleaning...")
 t_cleaning_features()
@@ -234,6 +236,7 @@ def t_ensembl_locus():
     assert c._expected_size == 1219964, c._expected_size
 
     print("Done")
+
 
 print("Testing EnsEMBL LOCUS lines...")
 t_ensembl_locus()

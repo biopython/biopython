@@ -387,6 +387,7 @@ class QueensMutation(object):
 
         return new_org
 
+
 num_queens = 5
 
 
@@ -395,6 +396,7 @@ class QueensTest(unittest.TestCase):
     def test_queens(self):
         """Place five queens with a GA"""
         main(num_queens)
+
 
 if __name__ == "__main__":
     if len(sys.argv) == 1:

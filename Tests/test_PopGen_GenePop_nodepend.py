@@ -146,6 +146,7 @@ class UtilsTest(unittest.TestCase):
         rec.remove_locus_by_position(0)
         assert len(rec.loci_list) == initial_loci - 2
 
+
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

@@ -89,6 +89,7 @@ class AppTest(unittest.TestCase):
         assert len(litr) == 37
         assert litr[36][0] == "Locus37"
 
+
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

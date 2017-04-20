@@ -80,6 +80,7 @@ class BarChartTest(unittest.TestCase):
 
         dist_page.draw(self.multi_page, "Test Multi Bar Chart")
 
+
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

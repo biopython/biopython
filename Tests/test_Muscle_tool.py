@@ -367,6 +367,7 @@ class SimpleAlignTest(unittest.TestCase):
         os.remove(output_html)
         os.remove(output_clwstrict)
 
+
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

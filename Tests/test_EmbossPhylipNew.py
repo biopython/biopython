@@ -290,6 +290,7 @@ class TreeComparisonTests(unittest.TestCase):
         stdout, stderr = cline()
         self.assertTrue(os.path.isfile("test_file"))
 
+
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

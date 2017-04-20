@@ -116,6 +116,7 @@ class TestKNN(unittest.TestCase):
                 correct += 1
         self.assertEqual(correct, 13)
 
+
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

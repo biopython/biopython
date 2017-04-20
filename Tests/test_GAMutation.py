@@ -195,6 +195,7 @@ class SafeFitnessTest(unittest.TestCase):
         assert (new_org.fitness > self.org.fitness), \
                 "Did not get new organism under higher fitness conditions."
 
+
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)
