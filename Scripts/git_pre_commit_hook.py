@@ -40,7 +40,7 @@ except ImportError:
 # .flake8 and .pydocstyle, which are used via TravisCI/Tox
 python_check_templates = (
     ("flake8", "--ignore", "E122,E123,E126,E127,E128,E501"),
-    ("pydocstyle", "--ignore", "D100,D101,D102,D103,D104,D105,D200,D203,D204,D205,D207,D208,D209,D210,D211,D212,D213,D301,D302,D400,D401,D402,D403,D404"),
+    ("pydocstyle", "--ignore", "D100,D101,D102,D103,D104,D105,D200,D203,D204,D205,D207,D208,D209,D210,D211,D212,D213,D301,D302,D400,D401,D402,D403,D404,D405,D406,D407,D413"),
 )
 rst_check_templates = (
     ("rst-lint", "--level", "warning"),
