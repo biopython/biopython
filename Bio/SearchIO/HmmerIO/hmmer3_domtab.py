@@ -6,10 +6,8 @@
 """Bio.SearchIO parser for HMMER domain table output format."""
 
 from itertools import chain
-
 from Bio.Alphabet import generic_protein
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
-
 from .hmmer3_tab import Hmmer3TabParser, Hmmer3TabIndexer
 
 
@@ -69,6 +67,7 @@ class Hmmer3DomtabParser(Hmmer3TabParser):
                     frag['query_start'], frag['hit_start']
 
         return {'qresult': qresult, 'hit': hit, 'hsp': hsp, 'frag': frag}
+
 
     def _parse_qresult(self):
         """Generator function that returns QueryResult objects."""
@@ -187,6 +186,7 @@ class Hmmer3DomtabHmmhitWriter(object):
     def __init__(self, handle):
         self.handle = handle
 
+
     def write_file(self, qresults):
         """Writes to the handle.
 
@@ -213,6 +213,7 @@ class Hmmer3DomtabHmmhitWriter(object):
                     frag_counter += sum(len(hit.fragments) for hit in qresult)
 
         return qresult_counter, hit_counter, hsp_counter, frag_counter
+
 
     def _build_header(self, first_qresult=None):
         """Returns the header string of a domain HMMER table output."""
