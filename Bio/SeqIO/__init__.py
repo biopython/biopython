@@ -684,13 +684,17 @@ def read(handle, format, alphabet=None):
     return first
 
 
-def to_dict(sequences, key_function=None):
+def to_dict(sequences, key_function=None, idcheck='max'):
     """Turns a sequence iterator or list into a dictionary.
 
         - sequences  - An iterator that returns SeqRecord objects,
           or simply a list of SeqRecord objects.
         - key_function - Optional callback function which when given a
           SeqRecord should return a unique key for the dictionary.
+        - idcheck  - Optional for check Dict keys, default max,
+          if idcheck is True, will raise Duplicate Key error,
+          if idcheck is max, will ignore Duplicate error and get the max length
+          sequence,
 
     e.g. key_function = lambda rec : rec.name
     or,  key_function = lambda rec : rec.description.split()[0]
@@ -735,12 +739,19 @@ def to_dict(sequences, key_function=None):
     """
     if key_function is None:
         key_function = lambda rec: rec.id
-
+    if isinstance(sequences, str):
+        sequences = parse(sequences, 'fasta')
     d = dict()
     for record in sequences:
         key = key_function(record)
         if key in d:
-            raise ValueError("Duplicate key '%s'" % key)
+            if idcheck == 'true':
+                raise ValueError("Duplicate key '%s'" % key)
+            elif idcheck == 'max':
+                pre_record = d[key]
+                record = record if len(pre_record) <= len(record) else pre_record
+            else:
+                raise ValueError('idcheck should be true or max, you chouse %s' % idcheck)
         d[key] = record
     return d
 
