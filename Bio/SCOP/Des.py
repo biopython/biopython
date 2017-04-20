@@ -19,7 +19,6 @@ class Record(object):
     """Holds information for one node in the SCOP hierarchy.
 
     Attributes:
-
      - sunid - SCOP unique identifiers
      - nodetype - One of 'cl' (class), 'cf' (fold), 'sf' (superfamily),
        'fa' (family), 'dm' (protein), 'sp' (species), 'px' (domain).

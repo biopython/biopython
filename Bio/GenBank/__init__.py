@@ -631,7 +631,6 @@ class _FeatureConsumer(_BaseGenBankConsumer):
     """Create a SeqRecord object with Features to return (PRIVATE).
 
     Attributes:
-
      - use_fuzziness - specify whether or not to parse with fuzziness in
        feature locations.
      - feature_cleaner - a class that will be used to provide specialized

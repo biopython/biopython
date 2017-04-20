@@ -56,7 +56,6 @@ class GenerationEvolver(object):
         the evolution process.
 
         Returns:
-
         o The final evolved population.
         """
         while not(stopping_criteria(self._population)):
