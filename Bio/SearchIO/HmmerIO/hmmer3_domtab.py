@@ -68,7 +68,6 @@ class Hmmer3DomtabParser(Hmmer3TabParser):
 
         return {'qresult': qresult, 'hit': hit, 'hsp': hsp, 'frag': frag}
 
-
     def _parse_qresult(self):
         """Generator function that returns QueryResult objects."""
         # state values, determines what to do for each line
@@ -149,18 +148,19 @@ class Hmmer3DomtabParser(Hmmer3TabParser):
             self.line = self.handle.readline()
 
 
-
 class Hmmer3DomtabHmmhitParser(Hmmer3DomtabParser):
     """Parser for the HMMER domain table format that assumes HMM profile
     coordinates are hit coordinates."""
 
     hmm_as_hit = True
 
+
 class Hmmer3DomtabHmmqueryParser(Hmmer3DomtabParser):
     """Parser for the HMMER domain table format that assumes HMM profile
     coordinates are query coordinates."""
 
     hmm_as_hit = False
+
 
 class Hmmer3DomtabHmmhitIndexer(Hmmer3TabIndexer):
     """Indexer class for HMMER domain table output that assumes HMM profile
@@ -186,7 +186,6 @@ class Hmmer3DomtabHmmhitWriter(object):
 
     def __init__(self, handle):
         self.handle = handle
-
 
     def write_file(self, qresults):
         """Writes to the handle.
@@ -214,7 +213,6 @@ class Hmmer3DomtabHmmhitWriter(object):
                     frag_counter += sum(len(hit.fragments) for hit in qresult)
 
         return qresult_counter, hit_counter, hsp_counter, frag_counter
-
 
     def _build_header(self, first_qresult=None):
         """Returns the header string of a domain HMMER table output."""
