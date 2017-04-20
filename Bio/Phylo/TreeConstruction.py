@@ -539,8 +539,7 @@ class DistanceTreeConstructor(TreeConstructor):
     methods = ['nj', 'upgma']
 
     def __init__(self, distance_calculator=None, method="nj"):
-        if (distance_calculator is None or
-            isinstance(distance_calculator, DistanceCalculator)):
+        if (distance_calculator is None or isinstance(distance_calculator, DistanceCalculator)):
             self.distance_calculator = distance_calculator
         else:
             raise TypeError("Must provide a DistanceCalculator object.")

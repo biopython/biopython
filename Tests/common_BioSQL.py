@@ -1,8 +1,7 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""Tests for dealing with storage of biopython objects in a relational db.
-"""
+"""Dealing with storage of biopython objects in a BioSQL relational db."""
 from __future__ import print_function
 
 import os
@@ -279,8 +278,7 @@ class MultiReadTest(unittest.TestCase):
     loaded_db = 0
 
     def setUp(self):
-        """Connect to and load up the database.
-        """
+        """Connect to and load up the database."""
         load_multi_database("GenBank/cor6_6.gb", "GenBank/NC_000932.gb")
 
         self.server = BioSeqDatabase.open_database(driver=DBDRIVER,
@@ -300,7 +298,7 @@ class MultiReadTest(unittest.TestCase):
         del self.server
 
     def test_server(self):
-        """Check BioSeqDatabase methods"""
+        """Check BioSeqDatabase methods."""
         server = self.server
         self.assertIn("biosql-test", server)
         self.assertIn("biosql-test2", server)
@@ -317,7 +315,7 @@ class MultiReadTest(unittest.TestCase):
             pass
 
     def test_get_db_items(self):
-        """Check list, keys, length etc"""
+        """Check list, keys, length etc."""
         db = self.db
         items = list(db.values())
         keys = list(db)
@@ -339,8 +337,7 @@ class MultiReadTest(unittest.TestCase):
             pass
 
     def test_cross_retrieval_of_items(self):
-        """Test that valid ids can't be retrieved between namespaces.
-        """
+        """Test that valid ids can't be retrieved between namespaces."""
         db = self.db
         db2 = self.db2
         for db2_id in db2.keys():
@@ -357,8 +354,7 @@ class ReadTest(unittest.TestCase):
     loaded_db = 0
 
     def setUp(self):
-        """Connect to and load up the database.
-        """
+        """Connect to and load up the database."""
         load_database("GenBank/cor6_6.gb")
 
         self.server = BioSeqDatabase.open_database(driver=DBDRIVER,
@@ -376,7 +372,7 @@ class ReadTest(unittest.TestCase):
         del self.server
 
     def test_server(self):
-        """Check BioSeqDatabase methods"""
+        """Check BioSeqDatabase methods."""
         server = self.server
         self.assertIn("biosql-test", server)
         self.assertEqual(1, len(server))
@@ -391,7 +387,7 @@ class ReadTest(unittest.TestCase):
             pass
 
     def test_get_db_items(self):
-        """Check list, keys, length etc"""
+        """Check list, keys, length etc."""
         db = self.db
         items = list(db.values())
         keys = list(db)
@@ -413,8 +409,7 @@ class ReadTest(unittest.TestCase):
             pass
 
     def test_lookup_items(self):
-        """Test retrieval of items using various ids.
-        """
+        """Test retrieval of items using various ids."""
         self.db.lookup(accession="X62281")
         try:
             self.db.lookup(accession="Not real")
@@ -441,8 +436,7 @@ class SeqInterfaceTest(unittest.TestCase):
     """Make sure the BioSQL objects implement the expected biopython interface."""
 
     def setUp(self):
-        """Load a database.
-        """
+        """Load a database."""
         load_database("GenBank/cor6_6.gb")
 
         self.server = BioSeqDatabase.open_database(driver=DBDRIVER,
@@ -459,8 +453,7 @@ class SeqInterfaceTest(unittest.TestCase):
         del self.server
 
     def test_seq_record(self):
-        """Make sure SeqRecords from BioSQL implement the right interface.
-        """
+        """Make sure SeqRecords from BioSQL implement the right interface."""
         test_record = self.item
         self.assertTrue(isinstance(test_record.seq, BioSeq.DBSeq))
         self.assertEqual(test_record.id, "X62281.1", test_record.id)
@@ -475,8 +468,7 @@ class SeqInterfaceTest(unittest.TestCase):
         self.assertTrue(isinstance(str(test_record), basestring))
 
     def test_seq(self):
-        """Make sure Seqs from BioSQL implement the right interface.
-        """
+        """Make sure Seqs from BioSQL implement the right interface."""
         test_seq = self.item.seq
         alphabet = test_seq.alphabet
         self.assertTrue(isinstance(alphabet, Alphabet.Alphabet))
@@ -515,8 +507,7 @@ class SeqInterfaceTest(unittest.TestCase):
             self.assertEqual(str(test), str(other) + str(test_seq))
 
     def test_seq_slicing(self):
-        """Check that slices of sequences are retrieved properly.
-        """
+        """Check that slices of sequences are retrieved properly."""
         test_seq = self.item.seq
         new_seq = test_seq[:10]
         self.assertTrue(isinstance(new_seq, BioSeq.DBSeq))
@@ -533,16 +524,14 @@ class SeqInterfaceTest(unittest.TestCase):
         self.assertEqual(str(test_seq[-10:][5:]), "TTATA")
 
     def test_record_slicing(self):
-        """Check that slices of DBSeqRecord are retrieved properly.
-        """
+        """Check that slices of DBSeqRecord are retrieved properly."""
         new_rec = self.item[400:]
         self.assertTrue(isinstance(new_rec, SeqRecord))
         self.assertEqual(len(new_rec), 480)
         self.assertEqual(len(new_rec.features), 5)
 
     def test_seq_features(self):
-        """Check SeqFeatures of a sequence.
-        """
+        """Check SeqFeatures of a sequence."""
         test_features = self.item.features
         cds_feature = test_features[6]
         self.assertEqual(cds_feature.type, "CDS")
@@ -596,8 +585,7 @@ class LoaderTest(unittest.TestCase):
         del self.server
 
     def test_load_database(self):
-        """Load SeqRecord objects into a BioSQL database.
-        """
+        """Load SeqRecord objects into a BioSQL database."""
         self.db.load(self.iterator)
 
         # do some simple tests to make sure we actually loaded the right
@@ -624,8 +612,7 @@ class DeleteTest(unittest.TestCase):
     loaded_db = 0
 
     def setUp(self):
-        """Connect to and load up the database.
-        """
+        """Connect to and load up the database."""
         load_database("GenBank/cor6_6.gb")
 
         self.server = BioSeqDatabase.open_database(driver=DBDRIVER,
@@ -964,8 +951,7 @@ class InDepthLoadTest(unittest.TestCase):
         raise Exception("Should have failed! Loaded %i records" % count)
 
     def test_record_loading(self):
-        """Make sure all records are correctly loaded.
-        """
+        """Make sure all records are correctly loaded."""
         test_record = self.db.lookup(accession="X55053")
         self.assertEqual(test_record.name, "ATCOR66M")
         self.assertEqual(test_record.id, "X55053.1")
@@ -981,8 +967,7 @@ class InDepthLoadTest(unittest.TestCase):
         self.assertEqual(str(test_record.seq[:10]), 'ATTTGGCCTA')
 
     def test_seq_feature(self):
-        """In depth check that SeqFeatures are transmitted through the db.
-        """
+        """In depth check that SeqFeatures are transmitted through the db."""
         test_record = self.db.lookup(accession="AJ237582")
         features = test_record.features
         self.assertEqual(len(features), 7)

@@ -199,7 +199,6 @@ def _augment_blast_hsp(hsp, attr):
 
 
 class BlastTabParser(object):
-
     """Parser for the BLAST tabular format."""
 
     def __init__(self, handle, comments=False, fields=_DEFAULT_FIELDS):
@@ -505,7 +504,6 @@ class BlastTabParser(object):
 
 
 class BlastTabIndexer(SearchIndexer):
-
     """Indexer class for BLAST+ tab output."""
 
     _parser = BlastTabParser
@@ -662,7 +660,6 @@ class BlastTabIndexer(SearchIndexer):
 
 
 class BlastTabWriter(object):
-
     """Writer for blast-tab output format."""
 
     def __init__(self, handle, comments=False, fields=_DEFAULT_FIELDS):

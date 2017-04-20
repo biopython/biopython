@@ -315,7 +315,6 @@ def _comp_split_codons(hsp, seq_type, scodon_moves):
 
 
 class ExonerateTextParser(_BaseExonerateParser):
-
     """Parser for Exonerate plain text output."""
 
     _ALN_MARK = 'C4 Alignment:'
@@ -476,7 +475,6 @@ class ExonerateTextParser(_BaseExonerateParser):
 
 
 class ExonerateTextIndexer(_BaseExonerateIndexer):
-
     """Indexer class for Exonerate plain text."""
 
     _parser = ExonerateTextParser

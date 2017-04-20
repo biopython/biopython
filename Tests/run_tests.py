@@ -363,8 +363,7 @@ class ComparisonTestCase(unittest.TestCase):
         expected.close()
 
     def generate_output(self):
-        """Generate the golden output for the specified test.
-        """
+        """Generate the golden output for the specified test."""
         outputdir = os.path.join(TestRunner.testdir, "output")
         outputfile = os.path.join(outputdir, self.name)
 

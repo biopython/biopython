@@ -2064,8 +2064,7 @@ class RestrictionBatch(set):
         return set.add(self, self.format(other))
 
     def add_nocheck(self, other):
-        """B.add_nocheck(other) -> add other to B. don't check type of other.
-        """
+        """B.add_nocheck(other) -> add other to B. don't check type of other."""
         return set.add(self, other)
 
     def format(self, y):
