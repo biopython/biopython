@@ -20,7 +20,6 @@ class Local(Async):
         """Constructor.
 
         parameters:
-
          - num_cores - Number of cores (for multiprocessor machines,
            multiply accordingly)
         """

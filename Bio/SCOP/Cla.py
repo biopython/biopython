@@ -24,7 +24,6 @@ class Record(object):
     """Holds information for one SCOP domain.
 
     Attributes:
-
      - sid - SCOP identifier. e.g. d1danl2
      - residues - The domain definition as a Residues object
      - sccs - SCOP concise classification strings.  e.g. b.1.2.1

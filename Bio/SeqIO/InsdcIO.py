@@ -11,7 +11,6 @@ Note that internally this module calls Bio.GenBank to do the actual
 parsing of GenBank, EMBL and IMGT files.
 
 See also:
-
 International Nucleotide Sequence Database Collaboration
 http://www.insdc.org/
 

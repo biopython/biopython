@@ -41,7 +41,6 @@ class ExampleManager(object):
         """Initialize the manager with the training examples.
 
         Arguments:
-
         o training_percent - The percentage of the training examples that
         should be used for training the network.
 
@@ -49,7 +48,6 @@ class ExampleManager(object):
         a network during training.
 
         Attributes:
-
         o train_examples - A randomly chosen set of examples for training
         purposes.
 
