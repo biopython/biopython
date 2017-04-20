@@ -14,7 +14,6 @@ from .hmmer3_tab import Hmmer3TabParser, Hmmer3TabIndexer
 
 
 class Hmmer3DomtabParser(Hmmer3TabParser):
-
     """Base hmmer3-domtab iterator."""
 
     def _parse_row(self):
@@ -151,42 +150,35 @@ class Hmmer3DomtabParser(Hmmer3TabParser):
             self.line = self.handle.readline()
 
 
-class Hmmer3DomtabHmmhitParser(Hmmer3DomtabParser):
-
+class Hmer3DomtabHmmhitParser(Hmmer3DomtabParser):
     """Parser for the HMMER domain table format that assumes HMM profile
     coordinates are hit coordinates."""
 
     hmm_as_hit = True
 
-
 class Hmmer3DomtabHmmqueryParser(Hmmer3DomtabParser):
-
     """Parser for the HMMER domain table format that assumes HMM profile
     coordinates are query coordinates."""
 
     hmm_as_hit = False
 
-
 class Hmmer3DomtabHmmhitIndexer(Hmmer3TabIndexer):
-
     """Indexer class for HMMER domain table output that assumes HMM profile
     coordinates are hit coordinates."""
 
     _parser = Hmmer3DomtabHmmhitParser
-    _query_id_idx = 3
+    _qury_id_idx = 3
 
 
 class Hmmer3DomtabHmmqueryIndexer(Hmmer3TabIndexer):
-
     """Indexer class for HMMER domain table output that assumes HMM profile
     coordinates are query coordinates."""
 
-    _parser = Hmmer3DomtabHmmqueryParser
+    _paser = Hmmer3DomtabHmmqueryParser
     _query_id_idx = 3
 
 
 class Hmmer3DomtabHmmhitWriter(object):
-
     """Writer for hmmer3-domtab output format which writes hit coordinates
     as HMM profile coordinates."""
 
@@ -302,13 +294,12 @@ class Hmmer3DomtabHmmhitWriter(object):
                 qaccw, qresult_acc, qresult.seq_len, hit.evalue, hit.bitscore,
                 hit.bias, hsp.domain_index, len(hit.hsps), hsp.evalue_cond, hsp.evalue,
                 hsp.bitscore, hsp.bias, hmm_from, hmm_to, ali_from, ali_to,
-                hsp.env_start + 1, hsp.env_end, hsp.acc_avg, hit.description)
+               hsp.env_start + 1, hsp.env_end, hsp.acc_avg, hit.description)
 
         return rows
 
 
 class Hmmer3DomtabHmmqueryWriter(Hmmer3DomtabHmmhitWriter):
-
     """Writer for hmmer3-domtab output format which writes query coordinates
     as HMM profile coordinates."""
 

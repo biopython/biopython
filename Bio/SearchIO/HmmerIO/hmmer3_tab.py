@@ -146,7 +146,6 @@ class Hmmer3TabParser(object):
 
 
 class Hmmer3TabIndexer(SearchIndexer):
-
     """Indexer class for HMMER table output."""
 
     _parser = Hmmer3TabParser
@@ -221,7 +220,6 @@ class Hmmer3TabIndexer(SearchIndexer):
 
 
 class Hmmer3TabWriter(object):
-
     """Writer for hmmer3-tab output format."""
 
     def __init__(self, handle):
