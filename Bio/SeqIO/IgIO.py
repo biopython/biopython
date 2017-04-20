@@ -110,6 +110,7 @@ def IgIterator(handle, alphabet=single_letter_alphabet):
     # We should be at the end of the file now
     assert not line
 
+
 if __name__ == "__main__":
     from Bio._utils import run_doctest
     run_doctest(verbose=0)

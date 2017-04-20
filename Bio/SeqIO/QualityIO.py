@@ -536,6 +536,7 @@ def _get_phred_quality(record):
                          "letter_annotations of SeqRecord (id=%s)."
                          % record.id)
 
+
 # Only map 0 to 93, we need to give a warning on truncating at 93
 _phred_to_sanger_quality_str = dict((qp, chr(min(126, qp + SANGER_SCORE_OFFSET)))
                                     for qp in range(0, 93 + 1))
@@ -655,6 +656,7 @@ def _get_sanger_quality_str(record):
     return "".join(chr(min(126, int(round(phred_quality_from_solexa(qs))) + SANGER_SCORE_OFFSET))
                    for qs in qualities)
 
+
 # Only map 0 to 62, we need to give a warning on truncating at 62
 assert 62 + SOLEXA_SCORE_OFFSET == 126
 _phred_to_illumina_quality_str = dict((qp, chr(qp + SOLEXA_SCORE_OFFSET))
@@ -722,6 +724,7 @@ def _get_illumina_quality_str(record):
     # This will apply the truncation at 62, giving max ASCII 126
     return "".join(chr(min(126, int(round(phred_quality_from_solexa(qs))) + SOLEXA_SCORE_OFFSET))
                    for qs in qualities)
+
 
 # Only map 0 to 62, we need to give a warning on truncating at 62
 assert 62 + SOLEXA_SCORE_OFFSET == 126

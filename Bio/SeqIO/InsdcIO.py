@@ -1268,6 +1268,7 @@ class ImgtWriter(EmblWriter):
     QUALIFIER_INDENT_TMP = "FT   %s                    "  # 25 if %s is empty
     FEATURE_HEADER = "FH   Key                 Location/Qualifiers\nFH\n"
 
+
 if __name__ == "__main__":
     from Bio._utils import run_doctest
     run_doctest(verbose=0)

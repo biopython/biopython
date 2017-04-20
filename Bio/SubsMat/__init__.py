@@ -543,6 +543,7 @@ def read_text_matrix(data_file):
     ret_mat = SeqMat(matrix)
     return ret_mat
 
+
 diagNO = 1
 diagONLY = 2
 diagALL = 3
@@ -618,6 +619,7 @@ def two_mat_DJS(mat_1, mat_2, pi_1=0.5, pi_2=0.5):
     # print(mat_1.entropy, mat_2.entropy)
     dJS = sum_mat.entropy - pi_1 * mat_1.entropy - pi_2 * mat_2.entropy
     return dJS
+
 
 """
 This isn't working yet. Boo hoo!

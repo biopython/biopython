@@ -529,6 +529,8 @@ def _open(cgi, params=None, post=None, ecitmatch=False):
         raise exception
 
     return _binary_to_string_handle(handle)
+
+
 _open.previous = 0
 
 

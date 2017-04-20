@@ -140,6 +140,7 @@ def _test(*args, **keywds):
     import doctest
     doctest.testmod(sys.modules[__name__], *args, **keywds)
 
+
 if __name__ == "__main__":
     if __debug__:
         _test()

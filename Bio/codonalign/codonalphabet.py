@@ -38,6 +38,7 @@ def get_codon_alphabet(alphabet, gap="-", stop="*"):
         raise TypeError("Only Nuclteotide Alphabet is accepted!")
     return alpha
 
+
 default_alphabet = get_codon_alphabet(IUPAC.unambiguous_dna)
 
 
@@ -62,6 +63,7 @@ def get_codon_alphabet(codon_table, gap_char="-"):
     generic_codon_alphabet.gap_char = '-'
     generic_codon_alphabet.names = codon_table.names
     return generic_codon_alphabet
+
 
 default_codon_alphabet = get_codon_alphabet(default_codon_table)
 

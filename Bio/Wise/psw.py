@@ -77,6 +77,7 @@ class ColumnUnit(object):
 
     __repr__ = __str__
 
+
 _re_unit = re.compile(r"^Unit +([01])- \[ *(-?\d+)- *(-?\d+)\] \[(\w+)\]$")
 
 
@@ -148,6 +149,7 @@ def main():
 def _test(*args, **keywds):
     import doctest
     doctest.testmod(sys.modules[__name__], *args, **keywds)
+
 
 if __name__ == "__main__":
     if __debug__:

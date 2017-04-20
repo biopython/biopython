@@ -256,6 +256,7 @@ def _parse_pdb_header_list(header):
             dict['structure_method'] = 'x-ray diffraction'
     return dict
 
+
 if __name__ == '__main__':
     # Reads a PDB file passed as argument, parses its header, extracts
     # some data and returns it as a dictionary.
