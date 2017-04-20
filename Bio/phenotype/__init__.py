@@ -95,7 +95,6 @@ from . import phen_micro
 
 import warnings
 
-__docformat__ = "epytext en"  # not just plaintext
 
 warnings.warn('Bio.phenotype is an experimental submodule which may undergo '
         'significant changes prior to its future official release.',

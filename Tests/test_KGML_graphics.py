@@ -48,8 +48,6 @@ except ImportError:
 from Bio.KEGG.KGML.KGML_parser import read
 from Bio.Graphics.KGML_vis import KGMLCanvas
 
-__docformat__ = "restructuredtext en"
-
 
 # The PathwayData class is also imported by the online test module in
 # test_KGML_graphics_online.py

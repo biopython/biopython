@@ -69,8 +69,6 @@ from Bio.Restriction.Restriction import Commercially_available, Not_available
 import Bio.Restriction.RanaConfig as config
 from rebase_update import RebaseUpdate
 
-__docformat__ = "restructuredtext en"
-
 
 enzymedict = {}
 suppliersdict = {}

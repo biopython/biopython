@@ -158,8 +158,7 @@ class SeqMap(object):
             self._process(line)
 
     def _process(self, line):
-        """Parses a RAF record into a SeqMap object.
-        """
+        """Parses a RAF record into a SeqMap object."""
         header_len = 38
 
         line = line.rstrip()  # no trailing whitespace
