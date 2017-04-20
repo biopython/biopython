@@ -6,6 +6,7 @@
 """Bio.SearchIO parser for HMMER domain table output format."""
 
 from itertools import chain
+
 from Bio.Alphabet import generic_protein
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 from .hmmer3_tab import Hmmer3TabParser, Hmmer3TabIndexer
@@ -167,14 +168,14 @@ class Hmmer3DomtabHmmhitIndexer(Hmmer3TabIndexer):
     coordinates are hit coordinates."""
 
     _parser = Hmmer3DomtabHmmhitParser
-    _qury_id_idx = 3
+    _query_id_idx = 3
 
 
 class Hmmer3DomtabHmmqueryIndexer(Hmmer3TabIndexer):
     """Indexer class for HMMER domain table output that assumes HMM profile
     coordinates are query coordinates."""
 
-    _paser = Hmmer3DomtabHmmqueryParser
+    _parser = Hmmer3DomtabHmmqueryParser
     _query_id_idx = 3
 
 
@@ -294,7 +295,7 @@ class Hmmer3DomtabHmmhitWriter(object):
                 qaccw, qresult_acc, qresult.seq_len, hit.evalue, hit.bitscore,
                 hit.bias, hsp.domain_index, len(hit.hsps), hsp.evalue_cond, hsp.evalue,
                 hsp.bitscore, hsp.bias, hmm_from, hmm_to, ali_from, ali_to,
-               hsp.env_start + 1, hsp.env_end, hsp.acc_avg, hit.description)
+                hsp.env_start + 1, hsp.env_end, hsp.acc_avg, hit.description)
 
         return rows
 
