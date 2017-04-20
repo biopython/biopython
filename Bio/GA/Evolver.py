@@ -53,7 +53,7 @@ class GenerationEvolver(object):
 
         Arguments:
 
-        - stoppping_criteria - A function which, when passed the current
+        - stopping_criteria - A function which, when passed the current
           individuals in the population, will determine when to stop
           the evolution process.
 
