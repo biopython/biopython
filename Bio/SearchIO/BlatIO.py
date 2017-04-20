@@ -314,9 +314,10 @@ def _create_hsp(hid, qid, psl):
     # set query and hit coords
     # this assumes each block has no gaps (which seems to be the case)
     assert len(qstarts) == len(hstarts) == len(psl['blocksizes'])
+    blocksize_multiplier = 3 if is_protein else 1
     query_range_all = list(zip(qstarts, [x + y for x, y in
                                          zip(qstarts, psl['blocksizes'])]))
-    hit_range_all = list(zip(hstarts, [x + y for x, y in
+    hit_range_all = list(zip(hstarts, [x + y * blocksize_multiplier for x, y in
                                        zip(hstarts, psl['blocksizes'])]))
     # check length of sequences and coordinates, all must match
     if 'tseqs' in psl and 'qseqs' in psl:
@@ -353,7 +354,8 @@ def _create_hsp(hid, qid, psl):
     assert hsp.hit_start == psl['tstart']
     assert hsp.hit_end == psl['tend']
     # and check block spans as well
-    assert hsp.query_span_all == hsp.hit_span_all == psl['blocksizes']
+    hit_spans = [span / blocksize_multiplier for span in hsp.hit_span_all]
+    assert hit_spans == hsp.query_span_all == psl['blocksizes']
     # set its attributes
     hsp.match_num = psl['matches']
     hsp.mismatch_num = psl['mismatches']
