@@ -36,6 +36,7 @@ possible, especially the following contributors:
 - Mateusz Korycinski (first contribution)
 - Noam Kremen (first contribution)
 - Peter Cock
+- Rasmus Fonseca (first contribution)
 - Sacha Laurent (first contribution)
 
 
