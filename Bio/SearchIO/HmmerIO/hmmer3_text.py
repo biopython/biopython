@@ -425,6 +425,7 @@ class Hmmer3TextIndexer(_BaseHmmerTextIndexer):
             elif not line:
                 break
 
+
 # if not used as a module, run the doctest
 if __name__ == "__main__":
     from Bio._utils import run_doctest
