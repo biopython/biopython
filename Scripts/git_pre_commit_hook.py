@@ -37,7 +37,6 @@ except ImportError:
 
 # These assume we can append one or more filenames/directories to the end...
 python_check_templates = (
-    ("pep8", "--ignore", "E121,E122,E123,E124,E125,E126,E127,E128,E129,E131,E501"),
     ("flake8", "--ignore", "E121,E122,E123,E124,E125,E126,E127,E128,E129,E131,E501"),
     ("pydocstyle", "--ignore", "D100,D101,D102,D103,D104,D105,D200,D203,D204,D205,D207,D208,D209,D210,D211,D212,D213,D301,D302,D400,D401,D402,D403,D404"),
 )
