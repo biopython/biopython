@@ -4,9 +4,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""
-Reading information from Affymetrix CEL files version 3 and 4.
-"""
+"""Reading information from Affymetrix CEL files version 3 and 4."""
 
 from __future__ import print_function
 import sys

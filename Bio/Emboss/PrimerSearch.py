@@ -3,8 +3,7 @@
 # as part of this package.
 #
 
-"""Code to interact with the primersearch program from EMBOSS.
-"""
+"""Code to interact with the primersearch program from EMBOSS."""
 
 
 class InputRecord(object):
@@ -41,16 +40,14 @@ class OutputRecord(object):
 
 
 class Amplifier(object):
-    """Represent a single amplification from a primer.
-    """
+    """Represent a single amplification from a primer."""
     def __init__(self):
         self.hit_info = ""
         self.length = 0
 
 
 def read(handle):
-    """Get output from primersearch into a PrimerSearchOutputRecord
-    """
+    """Get output from primersearch into a PrimerSearchOutputRecord."""
     record = OutputRecord()
 
     for line in handle:

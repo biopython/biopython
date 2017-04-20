@@ -784,8 +784,7 @@ class FConsenseCommandline(_EmbossCommandLine):
 
 
 class WaterCommandline(_EmbossCommandLine):
-    """Commandline object for the water program from EMBOSS.
-    """
+    """Commandline object for the water program from EMBOSS."""
     def __init__(self, cmd="water", **kwargs):
         self.parameters = [
             _Option(["-asequence", "asequence"],

@@ -87,8 +87,7 @@ class Primers(object):
 
 
 def parse(handle):
-    """Iterate over primer3 output as Bio.Emboss.Primer3.Record objects.
-    """
+    """Iterate over primer3 output as Bio.Emboss.Primer3.Record objects."""
     # Skip blank lines at head of file
     while True:
         line = handle.readline()

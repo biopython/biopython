@@ -149,7 +149,8 @@ class Hmmer3DomtabParser(Hmmer3TabParser):
             self.line = self.handle.readline()
 
 
-class Hmer3DomtabHmmhitParser(Hmmer3DomtabParser):
+
+class Hmmer3DomtabHmmhitParser(Hmmer3DomtabParser):
     """Parser for the HMMER domain table format that assumes HMM profile
     coordinates are hit coordinates."""
 
