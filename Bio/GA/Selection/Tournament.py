@@ -10,6 +10,7 @@ selection, two individuals are randomly chosen from the population, and
 the organism with the higher fitness is considered the 'winner' and moves
 to the next generation.
 """
+
 # standard modules
 import random
 
@@ -18,14 +19,14 @@ from .Abstract import AbstractSelection
 
 
 class TournamentSelection(AbstractSelection):
-    """Implement tournament style selection.
-    """
+    """Implement tournament style selection."""
+
     def __init__(self, mutator, crossover, repairer, num_competitors=2):
         """Initialize the tournament selector.
 
         Arguments:
 
-        o num_competitors-- The number of individiuals that should be
+        - num_competitors - The number of individiuals that should be
         involved in a selection round. By default we just have two
         individuals (head to head!).
 
@@ -44,7 +45,7 @@ class TournamentSelection(AbstractSelection):
 
         Arguments:
 
-        o population -- A population of organisms on which we will perform
+        - population - A population of organisms on which we will perform
         selection. The individuals are assumed to have fitness values which
         are due to their current genome (ie. the fitness is up to date).
         """
