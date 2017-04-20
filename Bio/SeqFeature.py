@@ -253,8 +253,7 @@ class SeqFeature(object):
         return answer
 
     def __str__(self):
-        """A readable summary of the feature intended to be printed to screen.
-        """
+        """A readable summary of the feature intended to be printed to screen."""
         out = "type: %s\n" % self.type
         out += "location: %s\n" % self.location
         if self.id and self.id != "<unknown id>":
@@ -487,8 +486,7 @@ class Reference(object):
         self.comment = ''
 
     def __str__(self):
-        """Output an informative string for debugging.
-        """
+        """Output an informative string for debugging."""
         out = ""
         for single_location in self.location:
             out += "location: %s\n" % single_location
@@ -1884,8 +1882,7 @@ class PositionGap(object):
     """Simple class to hold information about a gap between positions."""
 
     def __init__(self, gap_size):
-        """Intialize with a position object containing the gap information.
-        """
+        """Intialize with a position object containing the gap information."""
         self.gap_size = gap_size
 
     def __repr__(self):
