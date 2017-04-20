@@ -54,7 +54,6 @@ class Reaction(object):
     the future.
 
     Attributes:
-
         - reactants   -- dict of involved species to their stochiometric coefficients:
           reactants[S] = stochiometric constant for S
         - catalysts   -- list/tuple of tuples of catalysts required for this reaction
@@ -157,7 +156,6 @@ class System(object):
     collection of reactions without explicitly defined links.
 
     Attributes:
-
     None
     """
 
@@ -230,7 +228,6 @@ class Interaction(object):
     be implemented and extended by more specific abstractions.
 
     Attributes:
-
         - data      -- reference to arbitrary additional data
     """
 
@@ -259,7 +256,6 @@ class Network(object):
     object.
 
     Attributes:
-
     None
     """
 

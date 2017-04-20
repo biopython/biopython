@@ -58,7 +58,6 @@ class FileRecord(object):
     name and a list of alleles (2 per marker or 1 for haploid data).
 
     Examples::
-
         ('Ind1', [(1,2),    (3,3), (200,201)]
         ('Ind2', [(2,None), (3,3), (None,None)]
         ('Other1', [(1,1),  (4,3), (200,200)]

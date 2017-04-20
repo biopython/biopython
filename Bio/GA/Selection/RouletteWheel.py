@@ -94,7 +94,6 @@ class RouletteWheelSelection(AbstractSelection):
         selecting based on random numbers.
 
         Returns:
-
         o A dictionary where the keys are the 'high' value that an
         individual will be selected. The low value is determined by
         the previous key in a sorted list of keys. For instance, if we

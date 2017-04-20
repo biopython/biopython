@@ -91,7 +91,6 @@ class Organism(object):
     """Represent a single individual in a population.
 
     Attributes:
-
     o genome -- The genome of the organism. This is a Bio.MutableSeq
     object that has the sequence of the genome, and the alphabet
     describing all elements that can be a part of the genome.
