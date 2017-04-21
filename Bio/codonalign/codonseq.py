@@ -17,7 +17,7 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Alphabet import generic_dna, _ungap
 
-from Bio.codonalign.codonalphabet import default_codon_alphabet, default_codon_table
+from Bio.codonalign.codonalphabet import CodonAlphabet, default_codon_alphabet, default_codon_table
 
 
 class CodonSeq(Seq):
@@ -70,6 +70,8 @@ class CodonSeq(Seq):
         Seq.__init__(self, data.upper(), alphabet=alphabet)
         self.gap_char = gap_char
 
+        if not isinstance(alphabet, CodonAlphabet):
+            raise TypeError("Input alphabet should be a CodonAlphabet object.")
         # check the length of the alignment to be a triple
         if rf_table is None:
             seq_ungapped = self._data.replace(gap_char, "")
@@ -81,8 +83,7 @@ class CodonSeq(Seq):
             # only works for single alphabet
             for i in self.rf_table:
                 if self._data[i:i + 3] not in alphabet.letters:
-                    raise ValueError("Sequence contain undefined letters from"
-                                     " alphabet "
+                    raise ValueError("Sequence contain codon not in the alphabet "
                                      "({0})! ".format(self._data[i:i + 3]))
         else:
             # if gap_char in self._data:
