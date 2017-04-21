@@ -200,3 +200,4 @@ please open an issue on GitHub or mention it on the development mailing list.
 - Yanbo Ye <https://github.com/lijax>
 - Yu Huang <krocea at domain yahoo.com.cn>
 - Yves Bastide <ybastide at domain irisa.fr>
+- Zheng Ruan <https://github.com/zruan>
