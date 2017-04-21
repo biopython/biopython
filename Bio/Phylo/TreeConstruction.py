@@ -310,7 +310,7 @@ class _DistanceMatrix(_Matrix):
         self._set_zero_diagonal()
 
     def _set_zero_diagonal(self):
-        """set all diagonal elements to zero"""
+        """Set all diagonal elements to zero"""
         for i in range(0, len(self)):
             self.matrix[i][i] = 0
 
@@ -709,7 +709,7 @@ class DistanceTreeConstructor(TreeConstructor):
         return BaseTree.Tree(root, rooted=False)
 
     def _height_of(self, clade):
-        """calculate clade height -- the longest path to any terminal."""
+        """Calculate clade height -- the longest path to any terminal."""
         height = 0
         if clade.is_terminal():
             height = clade.branch_length

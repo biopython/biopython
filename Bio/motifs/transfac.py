@@ -86,7 +86,7 @@ Attributes:
 
 
 def read(handle):
-    """record = read(handle)"""
+    """Record = read(handle)"""
     annotations = {}
     references = []
     counts = None

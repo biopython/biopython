@@ -107,7 +107,7 @@ class CodonSeq(Seq):
         return Seq(self._data[index], alphabet=generic_dna)
 
     def get_codon(self, index):
-        """get the `index`-th codon from the sequence."""
+        """Get the `index`-th codon from the sequence."""
         if len(set(i % 3 for i in self.rf_table)) != 1:
             raise RuntimeError("frameshift detected. "
                                "CodonSeq object is not able to deal "
@@ -387,7 +387,7 @@ def _ng86(seq1, seq2, k, codon_table):
 
 
 def _count_site_NG86(codon_lst, k=1, codon_table=default_codon_table):
-    """count synonymous and non-synonymous sites of a list of codons (PRIVATE).
+    """Count synonymous and non-synonymous sites of a list of codons (PRIVATE).
 
     Arguments:
         - codon_lst - A three letter codon list from a CodonSeq object.

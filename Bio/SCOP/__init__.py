@@ -720,7 +720,7 @@ class Astral(object):
         self.IdDatahash = {}
 
     def domainsClusteredByEv(self, id):
-        """get domains clustered by evalue"""
+        """Get domains clustered by evalue"""
         if id not in self.EvDatasets:
             if self.db_handle:
                 self.EvDatasets[id] = self.getAstralDomainsFromSQL(astralEv_to_sql[id])
@@ -737,7 +737,7 @@ class Astral(object):
         return self.EvDatasets[id]
 
     def domainsClusteredById(self, id):
-        """get domains clustered by percent id"""
+        """Get domains clustered by percent id"""
         if id not in self.IdDatasets:
             if self.db_handle:
                 self.IdDatasets[id] = self.getAstralDomainsFromSQL("id" + str(id))
@@ -782,7 +782,7 @@ class Astral(object):
         return data
 
     def getSeqBySid(self, domain):
-        """get the seq record of a given domain from its sid"""
+        """Get the seq record of a given domain from its sid"""
         if self.db_handle is None:
             return self.fasta_dict[domain].seq
         else:
