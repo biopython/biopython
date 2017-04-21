@@ -20,6 +20,7 @@ from Bio.Data.CodonTable import generic_by_id
 
 default_codon_table = copy.deepcopy(generic_by_id[1])
 
+
 class CodonAlphabet(Alphabet):
     """Generic Codon Alphabet with a size of three"""
     size = 3
