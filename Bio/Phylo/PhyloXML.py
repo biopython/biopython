@@ -241,7 +241,7 @@ class Phylogeny(PhyloElement, BaseTree.Tree):
     def _get_confidence(self):
         """Equivalent to self.confidences[0] if there is only 1 value.
 
-        See also: `Clade.confidence`, `Clade.taxonomy`
+        See Also: `Clade.confidence`, `Clade.taxonomy`
         """
         if len(self.confidences) == 0:
             return None

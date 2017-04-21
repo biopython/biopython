@@ -10,7 +10,7 @@ You are expected to use this module via the Bio.SeqIO functions.
 Note that internally this module calls Bio.GenBank to do the actual
 parsing of GenBank, EMBL and IMGT files.
 
-See also:
+See Also:
 International Nucleotide Sequence Database Collaboration
 http://www.insdc.org/
 
