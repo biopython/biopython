@@ -23,6 +23,8 @@ Parameters         Holds information from the parameters.
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
+from Bio import BiopythonDeprecationWarning
+import warnings
 
 
 class Header(object):
@@ -54,7 +56,15 @@ class Header(object):
         self.database = ''
         self.database_sequences = None
         self.database_letters = None
-
+        
+        @property
+        def database_letters(self):
+            
+            warnings.warn("Accessing the .database_letters will "
+                          "be deprecated in the next " 
+                          "version of Biopython. ", BiopythonDeprecationWarning)
+            
+            return str(self)
 
 class Description(object):
     """Stores information about one hit in the descriptions section.
