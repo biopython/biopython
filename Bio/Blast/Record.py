@@ -56,18 +56,17 @@ class Header(object):
         self.database = ''
         self.database_sequences = None
         self.database_letters = None
-        
         @property
         def database_letters(self):
-            
             warnings.warn("Accessing the .database_letters will "
                           "be deprecated in the next " 
-                          "version of Biopython. ", BiopythonDeprecationWarning)
+                          "version of Biopython. ",BiopythonDeprecationWarning)
             
-            return str(self)
+            return self._database_letters
 
 class Description(object):
     """Stores information about one hit in the descriptions section.
+
 
     Members:
     title           Title of the hit.
