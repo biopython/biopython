@@ -111,7 +111,7 @@ class CodonAlignment(MultipleSeqAlignment):
 
     def get_dn_ds_matrix(self, method="NG86", codon_table=default_codon_table):
         """Available methods include NG86, LWL85, YN00 and ML.
-        
+
         Argument:
             - method       - Available methods include NG86, LWL85, YN00 and ML.
             - codon_table  - Codon table to use for forward translation.
