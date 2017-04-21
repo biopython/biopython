@@ -84,13 +84,14 @@ class SummaryInfo(object):
                 # make sure we haven't run past the end of any sequences
                 # if they are of different lengths
                 if n < len(record.seq):
+                    # Count atoms here or a position with 1 residue and 99 gaps
+                    # will be treated as 100% conserved instead of 1%
+                    num_atoms += 1
                     if record.seq[n] != '-' and record.seq[n] != '.':
                         if record.seq[n] not in atom_dict:
                             atom_dict[record.seq[n]] = 1
                         else:
                             atom_dict[record.seq[n]] += 1
-
-                        num_atoms = num_atoms + 1
 
             max_atoms = []
             max_size = 0
@@ -142,12 +143,11 @@ class SummaryInfo(object):
                 # make sure we haven't run past the end of any sequences
                 # if they are of different lengths
                 if n < len(record.seq):
+                    num_atoms += 1
                     if record.seq[n] not in atom_dict:
                         atom_dict[record.seq[n]] = 1
                     else:
                         atom_dict[record.seq[n]] += 1
-
-                    num_atoms += 1
 
             max_atoms = []
             max_size = 0
