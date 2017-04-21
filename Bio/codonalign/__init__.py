@@ -234,7 +234,7 @@ def _get_aa_regex(codon_table, stop='*', unknown='X'):
 
 def _check_corr(pro, nucl, gap_char='-', codon_table=default_codon_table,
                 complete_protein=False, anchor_len=10):
-    """check if a give protein SeqRecord can be translated by another
+    """Check if a given protein SeqRecord can be translated by another
     nucleotide SeqRecord.
     """
     import re

@@ -333,7 +333,7 @@ class InsdcScanner(object):
                              % (feature_key, "\n".join(lines)))
 
     def parse_footer(self):
-        """returns a tuple containing a list of any misc strings, and the sequence"""
+        """Returns a tuple containing a list of any misc strings, and the sequence"""
         # This is a basic bit of code to scan and discard the sequence,
         # which was useful when developing the sub classes.
         if self.line in self.FEATURE_END_MARKERS:
@@ -585,7 +585,7 @@ class EmblScanner(InsdcScanner):
     EMBL_SPACER = " " * EMBL_INDENT
 
     def parse_footer(self):
-        """returns a tuple containing a list of any misc strings, and the sequence"""
+        """Returns a tuple containing a list of any misc strings, and the sequence"""
         assert self.line[:self.HEADER_WIDTH].rstrip() in self.SEQUENCE_HEADERS, \
             "Eh? '%s'" % self.line
 
@@ -1089,7 +1089,7 @@ class GenBankScanner(InsdcScanner):
     STRUCTURED_COMMENT_DELIM = " :: "
 
     def parse_footer(self):
-        """returns a tuple containing a list of any misc strings, and the sequence"""
+        """Returns a tuple containing a list of any misc strings, and the sequence"""
         assert self.line[:self.HEADER_WIDTH].rstrip() in self.SEQUENCE_HEADERS, \
             "Eh? '%s'" % self.line
 

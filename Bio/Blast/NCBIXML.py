@@ -306,7 +306,7 @@ class BlastParser(_XMLparser):
 
     # Parameters
     def _end_Parameters_matrix(self):
-        """matrix used (-M on legacy BLAST) (PRIVATE)."""
+        """Matrix used (-M on legacy BLAST) (PRIVATE)."""
         self._parameters.matrix = self._value
 
     def _end_Parameters_expect(self):
@@ -459,19 +459,19 @@ class BlastParser(_XMLparser):
         self._hsp.positives = int(self._value)
 
     def _end_Hsp_gaps(self):
-        """number of gaps in the alignment (PRIVATE)."""
+        """Number of gaps in the alignment (PRIVATE)."""
         self._hsp.gaps = int(self._value)
 
     def _end_Hsp_align_len(self):
-        """length of the alignment (PRIVATE)."""
+        """Length of the alignment (PRIVATE)."""
         self._hsp.align_length = int(self._value)
 
     # def _en_Hsp_density(self):
-    #     """score density (PRIVATE)."""
+    #     """Score density (PRIVATE)."""
     #     pass # XXX ???
 
     def _end_Hsp_qseq(self):
-        """alignment string for the query (PRIVATE)."""
+        """Alignment string for the query (PRIVATE)."""
         self._hsp.query = self._value
 
     def _end_Hsp_hseq(self):
@@ -486,19 +486,19 @@ class BlastParser(_XMLparser):
 
     # Statistics
     def _end_Statistics_db_num(self):
-        """number of sequences in the database (PRIVATE)."""
+        """Number of sequences in the database (PRIVATE)."""
         self._blast.num_sequences_in_database = int(self._value)
 
     def _end_Statistics_db_len(self):
-        """number of letters in the database (PRIVATE)."""
+        """Number of letters in the database (PRIVATE)."""
         self._blast.num_letters_in_database = int(self._value)
 
     def _end_Statistics_hsp_len(self):
-        """the effective HSP length (PRIVATE)."""
+        """The effective HSP length (PRIVATE)."""
         self._blast.effective_hsp_length = int(self._value)
 
     def _end_Statistics_eff_space(self):
-        """the effective search space (PRIVATE)."""
+        """The effective search space (PRIVATE)."""
         self._blast.effective_search_space = float(self._value)
 
     def _end_Statistics_kappa(self):

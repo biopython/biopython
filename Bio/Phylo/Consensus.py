@@ -119,7 +119,7 @@ class _BitString(str):
     """
 
     def __new__(cls, strdata):
-        """init from a binary string data"""
+        """Init from a binary string data"""
         if (isinstance(strdata, str) and
                 len(strdata) == strdata.count('0') + strdata.count('1')):
             return str.__new__(cls, strdata)
@@ -381,7 +381,7 @@ def adam_consensus(trees):
 
 
 def _part(clades):
-    """recursive function of adam consensus algorithm"""
+    """Recursive function of adam consensus algorithm"""
     new_clade = None
     terms = clades[0].get_terminals()
     term_names = [term.name for term in terms]
@@ -440,7 +440,7 @@ def _part(clades):
 
 
 def _sub_clade(clade, term_names):
-    """extract a compatible subclade that only contains the given terminal names"""
+    """Extract a compatible subclade that only contains the given terminal names"""
     term_clades = [clade.find_any(name) for name in term_names]
     sub_clade = clade.common_ancestor(term_clades)
     if len(term_names) != sub_clade.count_terminals():
