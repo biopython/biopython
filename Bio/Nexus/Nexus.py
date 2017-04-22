@@ -1583,7 +1583,8 @@ class Nexus(object):
         """Writes matrix into a PHYLIP file.
 
         Note that this writes a relaxed PHYLIP format file, where the names
-        are not truncated, nor checked for invalid characters."""
+        are not truncated, nor checked for invalid characters.
+        """
         if not filename:
             if '.' in self.filename and self.filename.split('.')[-1].lower() in ['paup', 'nexus', 'nex', 'dat']:
                 filename = '.'.join(self.filename.split('.')[:-1]) + '.phy'
@@ -1754,7 +1755,8 @@ class Nexus(object):
         """
         def _adjust(set, x, d, leftgreedy=False):
             """Adjusts character sets if gaps are inserted, taking care of
-            new gaps within a coherent character set."""
+            new gaps within a coherent character set.
+            """
             # if 3 gaps are inserted at pos. 9 in a set that looks like 1 2 3  8 9 10 11 13 14 15
             # then the adjusted set will be 1 2 3  8 9 10 11 12 13 14 15 16 17 18
             # but inserting into position 8 it will stay like 1 2 3 11 12 13 14 15 16 17 18

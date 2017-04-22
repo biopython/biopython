@@ -45,7 +45,8 @@ class InsdcScanner(object):
     same "Feature Table" layout in their plain text flat file formats.
 
     However, the header and sequence sections of an EMBL file are very
-    different in layout to those produced by GenBank/DDBJ."""
+    different in layout to those produced by GenBank/DDBJ.
+    """
 
     # These constants get redefined with sensible values in the sub classes:
     RECORD_START = "XXX"  # "LOCUS       " or "ID   "
@@ -73,7 +74,8 @@ class InsdcScanner(object):
         """Read in lines until find the ID/LOCUS line, which is returned.
 
         Any preamble (such as the header used by the NCBI on ``*.seq.gz`` archives)
-        will we ignored."""
+        will we ignored.
+        """
         while True:
             if self.line:
                 line = self.line

@@ -13,7 +13,8 @@ from . import _parse_codeml
 
 class CodemlError(EnvironmentError):
     """CODEML has failed. Run with verbose = True to view CODEML's error
-    message"""
+    message.
+    """
 
 
 class Codeml(Paml):

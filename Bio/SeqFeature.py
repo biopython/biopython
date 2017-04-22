@@ -266,7 +266,8 @@ class SeqFeature(object):
     def _shift(self, offset):
         """Returns a copy of the feature with its location shifted (PRIVATE).
 
-        The annotation qaulifiers are copied."""
+        The annotation qaulifiers are copied.
+        """
         return SeqFeature(location=self.location._shift(offset),
                           type=self.type,
                           location_operator=self.location_operator,

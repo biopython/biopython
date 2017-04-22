@@ -146,7 +146,8 @@ class StructureDecoder(object):
 
         :param bio_assembly_index: the integer index of the bioassembly
         :param input_chain_indices: the list of integer indices for the chains of this bioassembly
-        :param input_transform: the list of doubles for  the transform of this bioassmbly transform"""
+        :param input_transform: the list of doubles for  the transform of this bioassmbly transform.
+        """
         pass
 
     def finalize_structure(self):

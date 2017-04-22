@@ -146,7 +146,8 @@ def ImgtIterator(handle):
     a single SeqRecord with associated annotation and features.
 
     Note that for genomes or chromosomes, there is typically only
-    one record."""
+    one record.
+    """
     # This calls a generator function:
     return _ImgtScanner(debug=0).parse_records(handle)
 
@@ -371,7 +372,8 @@ class _InsdcWriter(SequentialSequenceWriter):
 
         Some entries are lists, in which case if just_first=True the first entry
         is returned.  If just_first=False (default) this verifies there is only
-        one entry before returning it."""
+        one entry before returning it.
+        """
         try:
             answer = record.annotations[key]
         except KeyError:

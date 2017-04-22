@@ -297,7 +297,8 @@ class MultipleSeqAlignment(object):
         This method supports the python format() function added in
         Python 2.6/3.0.  The format_spec should be a lower case
         string supported by Bio.AlignIO as an output file format.
-        See also the alignment's format() method."""
+        See also the alignment's format() method.
+        """
         if format_spec:
             from Bio._py3k import StringIO
             from Bio import AlignIO

@@ -15,7 +15,8 @@ richards           Richards growth model.
 guess_plateau      Guess the plateau point to improve sigmoid fitting.
 guess_lag          Guess the lag point to improve sigmoid fitting.
 fit                Sigmoid functions fit.
-get_area           Calculate the area under the PM curve."""
+get_area           Calculate the area under the PM curve.
+"""
 
 import numpy as np
 
@@ -119,7 +120,8 @@ def guess_plateau(x, y):
 def fit(function, x, y):
     """Fit the provided functrion to the x and y values.
 
-    The function parameters and the parameters covariance."""
+    The function parameters and the parameters covariance.
+    """
     # Compute guesses for the parameters
     # This is necessary to get significant fits
     p0 = [guess_plateau(x, y), 4.0, guess_lag(x, y), 0.1, min(y)]
