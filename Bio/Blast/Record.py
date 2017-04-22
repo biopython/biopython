@@ -55,9 +55,18 @@ class Header(object):
 
         self.database = ''
         self.database_sequences = None
-        self.database_letters = None
+        self._database_letters = None
         @property
         def database_letters(self):
+            """ Database length info of the plain text BLAST format(DEPRECATED).
+            
+            This is a read only property provided by Biopython to access the
+            actual database size from a plain text BLAST file. 
+            
+            It is preferred that users use num_letters_in_database from
+            Bio.Record.DatabaseReport instead of database_letters.
+            """
+            
             warnings.warn("Accessing the .database_letters will "
                           "be deprecated in the next " 
                           "version of Biopython. ",BiopythonDeprecationWarning)
