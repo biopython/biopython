@@ -34,6 +34,7 @@ possible, especially the following contributors:
 - John Kern (first contribution)
 - João Rodrigues
 - Mateusz Korycinski (first contribution)
+- Maximilian Greil
 - Noam Kremen (first contribution)
 - Peter Cock
 - Rasmus Fonseca (first contribution)
