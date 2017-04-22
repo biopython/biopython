@@ -14,7 +14,8 @@ from . import _parse_yn00
 
 class Yn00Error(EnvironmentError):
     """yn00 has failed. Run with verbose = True to view yn00's error
-    message"""
+    message.
+    """
 
 
 class Yn00(Paml):

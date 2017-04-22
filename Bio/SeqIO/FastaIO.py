@@ -9,7 +9,8 @@
 
 """Bio.SeqIO support for the "fasta" (aka FastA or Pearson) file format.
 
-You are expected to use this module via the Bio.SeqIO functions."""
+You are expected to use this module via the Bio.SeqIO functions.
+"""
 
 from __future__ import print_function
 

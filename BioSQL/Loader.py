@@ -1102,7 +1102,8 @@ class DatabaseLoader(object):
     def _load_dbxrefs(self, record, bioentry_id):
         """Load any sequence level cross references into the database (PRIVATE).
 
-        See table bioentry_dbxref."""
+        See table bioentry_dbxref.
+        """
         for rank, value in enumerate(record.dbxrefs):
             # Split the DB:accession string at first colon.
             # We have to cope with things like:

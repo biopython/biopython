@@ -499,7 +499,8 @@ class StockholmIterator(AlignmentIterator):
             #=GS Q9PN73_CAMJE OS Campylobacter jejuni
             #=GS Q9PN73_CAMJE OC Bacteria
 
-        This function will return an empty dictionary if no data is found."""
+        This function will return an empty dictionary if no data is found.
+        """
         name, start, end = self._identifier_split(identifier)
         if name == identifier:
             identifier_keys = [identifier]
@@ -517,7 +518,8 @@ class StockholmIterator(AlignmentIterator):
     def _populate_meta_data(self, identifier, record):
         """Adds meta-date to a SecRecord's annotations dictionary.
 
-        This function applies the PFAM conventions."""
+        This function applies the PFAM conventions.
+        """
         seq_data = self._get_meta_data(identifier, self.seq_annotation)
         for feature in seq_data:
             # Note this dictionary contains lists!

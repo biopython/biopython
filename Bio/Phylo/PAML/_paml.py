@@ -43,7 +43,8 @@ except ImportError:
 
 class PamlError(EnvironmentError):
     """paml has failed. Run with verbose = True to view the error
-    message"""
+    message
+    """
 
 
 class Paml(object):

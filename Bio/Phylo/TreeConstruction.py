@@ -85,7 +85,8 @@ class _Matrix(object):
 
     def __init__(self, names, matrix=None):
         """Initialize matrix by a list of names and a list of
-        lower triangular matrix data"""
+        lower triangular matrix data.
+        """
         # check names
         if isinstance(names, list) and all(isinstance(s, str) for s in names):
             if len(set(names)) == len(names):
@@ -484,7 +485,8 @@ class TreeConstructor(object):
     def build_tree(self, msa):
         """Caller to built the tree from a MultipleSeqAlignment object.
 
-        This should be implemented in subclass"""
+        This should be implemented in subclass.
+        """
         raise NotImplementedError("Method not implemented!")
 
 
@@ -909,7 +911,8 @@ class ParsimonyScorer(Scorer):
     def get_score(self, tree, alignment):
         """Calculate and return the parsimony score given a tree and
         the MSA using the Fitch algorithm without the penalty matrix
-        the Sankoff algorithm with the matrix"""
+        the Sankoff algorithm with the matrix.
+        """
         # make sure the tree is rooted and bifurcating
         if not tree.is_bifurcating():
             raise ValueError("The tree provided should be bifurcating.")

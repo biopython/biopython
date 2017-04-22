@@ -106,7 +106,8 @@ class DBSeq(Seq):
         """Returns the full sequence as a python string (DEPRECATED).
 
         You are now encouraged to use str(my_seq) instead of
-        my_seq.tostring()."""
+        my_seq.tostring().
+        """
         import warnings
         warnings.warn("This method is obsolete; please use str(my_seq) "
                       "instead of my_seq.tostring().",

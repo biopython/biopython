@@ -52,7 +52,8 @@ class AlignmentIterator(object):
         """Return the next alignment in the file.
 
         This method should be replaced by any derived class to do something
-        useful."""
+        useful.
+        """
         raise NotImplementedError("This object should be subclassed")
         #####################################################
         # You SHOULD subclass this, to split the file up    #
@@ -84,7 +85,8 @@ class AlignmentWriter(object):
     """Base class for building MultipleSeqAlignment writers.
 
     You should write a write_alignment() method.
-    You may wish to redefine the __init__ method as well"""
+    You may wish to redefine the __init__ method as well.
+    """
 
     def __init__(self, handle):
         self.handle = handle
@@ -97,7 +99,8 @@ class AlignmentWriter(object):
         In general, this method can only be called once per file.
 
         This method should be replaced by any derived class to do something
-        useful.  It should return the number of alignments"""
+        useful.  It should return the number of alignments..
+        """
         raise NotImplementedError("This object should be subclassed")
         #####################################################
         # You SHOULD subclass this, to write the alignment  #
@@ -114,7 +117,8 @@ class SequentialAlignmentWriter(AlignmentWriter):
 
     This assumes each alignment can be simply appended to the file.
     You should write a write_alignment() method.
-    You may wish to redefine the __init__ method as well"""
+    You may wish to redefine the __init__ method as well.
+    """
 
     def __init__(self, handle):
         self.handle = handle
@@ -124,7 +128,8 @@ class SequentialAlignmentWriter(AlignmentWriter):
 
         alignments - A list or iterator returning MultipleSeqAlignment objects
 
-        In general, this method can only be called once per file."""
+        In general, this method can only be called once per file.
+        """
         self.write_header()
         count = 0
         for alignment in alignments:
@@ -137,21 +142,24 @@ class SequentialAlignmentWriter(AlignmentWriter):
         """Use this to write any header.
 
         This method should be replaced by any derived class to do something
-        useful."""
+        useful.
+        """
         pass
 
     def write_footer(self):
         """Use this to write any footer.
 
         This method should be replaced by any derived class to do something
-        useful."""
+        useful.
+        """
         pass
 
     def write_alignment(self, alignment):
         """Use this to write a single alignment.
 
         This method should be replaced by any derived class to do something
-        useful."""
+        useful.
+        """
         raise NotImplementedError("This object should be subclassed")
         #####################################################
         # You SHOULD subclass this, to write the alignment  #

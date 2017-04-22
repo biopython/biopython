@@ -98,7 +98,8 @@ class PrintFormat(object):
            those without sites.
          - s1 must be a formatted string as well.
 
-        The format of print_that is a list."""
+        The format of print_that is a list.
+        """
         if not dct:
             dct = self.results
         ls, nc = [], []
@@ -121,7 +122,8 @@ class PrintFormat(object):
          - s1 must be a formatted string as well.
 
         This method prints the output of A.format_output() and it is here
-        for backwards compatibility."""
+        for backwards compatibility.
+        """
         print(format_output(dct, title, s1))
         return
 

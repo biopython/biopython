@@ -123,7 +123,8 @@ class NexusWriter(AlignmentWriter):
     def _classify_alphabet_for_nexus(self, alphabet):
         """Returns 'protein', 'dna', 'rna' based on the alphabet (PRIVATE).
 
-        Raises an exception if this is not possible."""
+        Raises an exception if this is not possible.
+        """
         # Get the base alphabet (underneath any Gapped or StopCodon encoding)
         a = Alphabet._get_base_alphabet(alphabet)
 
