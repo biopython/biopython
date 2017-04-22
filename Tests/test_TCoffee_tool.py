@@ -103,6 +103,7 @@ class TCoffeeApplication(unittest.TestCase):
             self.assertEqual(old.id, new.id)
             self.assertEqual(str(new.seq).replace("-", ""), str(old.seq).replace("-", ""))
 
+
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

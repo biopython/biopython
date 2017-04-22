@@ -140,6 +140,7 @@ class NexusWriter(AlignmentWriter):
             # just the generic Alphabet (default for fasta files)
             raise ValueError("Need a DNA, RNA or Protein alphabet")
 
+
 if __name__ == "__main__":
     from Bio._utils import run_doctest
     run_doctest(verbose=0)

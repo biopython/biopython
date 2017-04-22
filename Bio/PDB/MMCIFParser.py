@@ -428,6 +428,7 @@ class FastMMCIFParser(object):
                 anisou_array = numpy.array(mapped_anisou, 'f')
                 structure_builder.set_anisou(anisou_array)
 
+
 if __name__ == "__main__":
     import sys
 

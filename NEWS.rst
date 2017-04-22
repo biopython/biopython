@@ -36,7 +36,9 @@ possible, especially the following contributors:
 - Mateusz Korycinski (first contribution)
 - Noam Kremen (first contribution)
 - Peter Cock
+- Rasmus Fonseca (first contribution)
 - Sacha Laurent (first contribution)
+- Zheng Ruan
 
 
 6 April 2017: Biopython 1.69

@@ -84,7 +84,6 @@ class Peaklist(object):
 
     Examples
     --------
-
     >>> from Bio.NMR.xpktools import Peaklist
     >>> peaklist = Peaklist('../Doc/examples/nmr/noed.xpk')
     >>> peaklist.firstline
@@ -130,7 +129,6 @@ class Peaklist(object):
 
         Examples
         --------
-
         >>> from Bio.NMR.xpktools import Peaklist
         >>> peaklist = Peaklist('../Doc/examples/nmr/noed.xpk')
         >>> residue_d = peaklist.residue_dict('H1')

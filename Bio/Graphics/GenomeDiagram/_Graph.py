@@ -41,7 +41,6 @@ class GraphData(object):
         Provides:
 
         Methods:
-
         o __init__(self, id=None, data=None, name=None, style='bar',
                  color=colors.lightgreen, altcolor=colors.darkseagreen)
                  Called on instantiation
@@ -70,7 +69,6 @@ class GraphData(object):
         o __str__(self) Returns a formatted string describing the graph data
 
         Attributes:
-
         o id    Unique identifier for the data
 
         o data  Dictionary of describing the data, keyed by position

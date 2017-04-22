@@ -10,8 +10,7 @@ You are expected to use this module via the Bio.SeqIO functions.
 Note that internally this module calls Bio.GenBank to do the actual
 parsing of GenBank, EMBL and IMGT files.
 
-See also:
-
+See Also:
 International Nucleotide Sequence Database Collaboration
 http://www.insdc.org/
 
@@ -1268,6 +1267,7 @@ class ImgtWriter(EmblWriter):
     QUALIFIER_INDENT_STR = "FT" + " " * (QUALIFIER_INDENT - 2)
     QUALIFIER_INDENT_TMP = "FT   %s                    "  # 25 if %s is empty
     FEATURE_HEADER = "FH   Key                 Location/Qualifiers\nFH\n"
+
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest

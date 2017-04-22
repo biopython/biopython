@@ -54,6 +54,7 @@ def _init_table_h():
         _table_h.append(part_h)
     return _table_h
 
+
 # Initialisation
 _table_h = _init_table_h()
 

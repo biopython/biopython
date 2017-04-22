@@ -570,5 +570,6 @@ def _parse_tag_data(elem_code, elem_num, raw_data):
     else:
         return None
 
+
 if __name__ == '__main__':
     pass

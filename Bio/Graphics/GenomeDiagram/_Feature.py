@@ -36,7 +36,6 @@ class Feature(object):
         Provides:
 
         Methods:
-
         o __init__(self, parent=None, feature_id=None, feature=None,
                  color=colors.lightgreen) Called when the feature is
                  instantiated
@@ -55,7 +54,6 @@ class Feature(object):
                 the wrapped Bio.SeqFeature object
 
         Attributes:
-
         o parent    FeatureSet, container for the object
 
         o id        Unique id

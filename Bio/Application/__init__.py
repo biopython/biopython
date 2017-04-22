@@ -539,7 +539,6 @@ class _Option(_AbstractParameter):
     take a value, use the _Switch object instead.
 
     Attributes:
-
     o names -- a list of string names (typically two entries) by which
     the parameter can be set via the legacy set_parameter method
     (eg ["-a", "--append", "append"]). The first name in list is used
@@ -748,6 +747,7 @@ def _test():
     """Run the Bio.Application module's doctests."""
     import doctest
     doctest.testmod(verbose=1)
+
 
 if __name__ == "__main__":
     # Run the doctests

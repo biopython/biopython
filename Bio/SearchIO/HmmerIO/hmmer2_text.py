@@ -341,6 +341,7 @@ class Hmmer2TextIndexer(_BaseHmmerTextIndexer):
 
             line = read_forward(handle)
 
+
 # if not used as a module, run the doctest
 if __name__ == "__main__":
     from Bio._utils import run_doctest

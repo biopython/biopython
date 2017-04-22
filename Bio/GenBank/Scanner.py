@@ -1641,6 +1641,7 @@ class GenBankScanner(InsdcScanner):
         except StopIteration:
             raise ValueError("Problem in misc lines before sequence")
 
+
 if __name__ == "__main__":
     from Bio._py3k import StringIO
 

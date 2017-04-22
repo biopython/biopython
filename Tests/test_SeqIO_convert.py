@@ -167,6 +167,7 @@ class ConvertTests(unittest.TestCase):
     def failure_check(self, filename, in_format, out_format, alphabet):
         check_convert_fails(filename, in_format, out_format, alphabet)
 
+
 tests = [
     ("Quality/example.fastq", "fastq", None),
     ("Quality/example.fastq", "fastq-sanger", generic_dna),

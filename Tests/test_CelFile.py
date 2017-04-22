@@ -89,6 +89,7 @@ class testCelFile(unittest.TestCase):
             self.assertEqual(nmodified, cel.nmodified)
             assert_array_equal(modified, cel.modified)
 
+
 if __name__ == '__main__':
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

@@ -324,7 +324,6 @@ class AbstractDrawer(object):
         Provides:
 
         Methods:
-
             - __init__(self, parent, pagesize='A3', orientation='landscape',
               x=0.05, y=0.05, xl=None, xr=None, yt=None, yb=None,
               start=None, end=None, tracklines=0) Called on instantiation
@@ -344,7 +343,6 @@ class AbstractDrawer(object):
             - __len__(self)     Returns the length of sequence that will be drawn
 
         Attributes:
-
             - tracklines    Boolean for whether to draw lines delineating tracks
 
             - pagesize      Tuple describing the size of the page in pixels

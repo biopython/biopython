@@ -5,6 +5,7 @@
 
 """Perform uniform crossovers between the genomes of two organisms.
 
+Example::
 
     | genome 1 --       A B C D E F G
     |                   .   . .   .
@@ -29,16 +30,15 @@ class UniformCrossover(object):
     defined frequency. The location of the crossover is chosen randomly
     if the crossover meets the probability to occur.
     """
+
     def __init__(self, crossover_prob=.1, uniform_prob=0.7):
-        """Initialize to do uniform crossover at the specified probability and frequency.
-        """
+        """Initialize to do uniform crossover at the specified probability and frequency."""
         self._crossover_prob = crossover_prob
         self._uniform_prob = uniform_prob
         return
 
     def do_crossover(self, org_1, org_2):
-        """Potentially do a crossover between the two organisms.
-        """
+        """Potentially do a crossover between the two organisms."""
         new_org_1 = org_1.copy()
         new_org_2 = org_2.copy()
 

@@ -108,6 +108,7 @@ class DictTest(unittest.TestCase):
                     'D: (0.50, 0.00, 0.00)']
         self.assertEqual(cstr, expected)
 
+
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

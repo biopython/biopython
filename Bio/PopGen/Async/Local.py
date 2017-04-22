@@ -19,8 +19,7 @@ class Local(Async):
     def __init__(self, num_cores=1):
         """Constructor.
 
-        parameters:
-
+        Parameters:
          - num_cores - Number of cores (for multiprocessor machines,
            multiply accordingly)
         """

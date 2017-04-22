@@ -143,4 +143,5 @@ class _InMemoryIndex(dict):
         intlist = array.array('b', intlist)
         return pickle.loads(''.join(chr(i) for i in intlist))
 
+
 Index = _InMemoryIndex

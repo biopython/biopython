@@ -57,7 +57,6 @@ class _ChromosomeComponent(Widget):
         """Initialize a chromosome component.
 
         Attributes:
-
         o _sub_components -- Any components which are contained under
         this parent component. This attribute should be accessed through
         the add() and remove() functions.
@@ -194,7 +193,6 @@ class Chromosome(_ChromosomeComponent):
         o chromosome_name - The label for the chromosome.
 
         Attributes:
-
         o start_x_position, end_x_position - The x positions on the page
         where the chromosome should be drawn. This allows multiple
         chromosomes to be drawn on a single page.

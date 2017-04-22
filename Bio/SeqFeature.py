@@ -65,7 +65,6 @@ class SeqFeature(object):
     """Represent a Sequence Feature on an object.
 
     Attributes:
-
         - location - the location of the feature on the sequence (FeatureLocation)
         - type - the specified type of the feature (ie. CDS, exon, repeat...)
         - location_operator - a string specifying how this SeqFeature may

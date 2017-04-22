@@ -88,6 +88,7 @@ class TestEnzyme(unittest.TestCase):
         self.assertEqual(record["CA"], "(S)-lactate = (R)-lactate.")
         self.assertEqual(len(record["DR"]), 0)
 
+
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

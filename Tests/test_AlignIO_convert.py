@@ -45,6 +45,7 @@ class ConvertTests(unittest.TestCase):
     def simple_check(self, filename, in_format, out_format, alphabet):
         check_convert(filename, in_format, out_format, alphabet)
 
+
 tests = [
     ('Clustalw/hedgehog.aln', "clustal", None),
     ('Nexus/test_Nexus_input.nex', "nexus", None),

@@ -107,6 +107,7 @@ def real_test():
 
     return True
 
+
 # Run the actual test BEFORE the unittest stuff gets called
 real_test()
 
@@ -117,6 +118,7 @@ class ComparativeTest(unittest.TestCase):
         """Test creation of a simple PNG scatter plot."""
         # Dummy method to show up via run_tests.py
         pass
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)

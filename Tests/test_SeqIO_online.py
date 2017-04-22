@@ -73,6 +73,7 @@ class EntrezTests(unittest.TestCase):
             self.assertEqual(len(record), length)
             self.assertEqual(seguid(record.seq), checksum)
 
+
 for database, formats, entry, length, checksum in [
         ("nuccore", ["fasta", "gb"], "X52960", 248,
          "Ktxz0HgMlhQmrKTuZpOxPZJ6zGU"),

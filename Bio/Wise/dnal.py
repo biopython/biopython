@@ -43,11 +43,13 @@ def _build_dnal_cmdline(match, mismatch, gap, extension):
 
     return res
 
+
 _CMDLINE_FGREP_COUNT = "fgrep -c '%s' %s"
 
 
 def _fgrep_count(pattern, file):
     return int(_getoutput(_CMDLINE_FGREP_COUNT % (pattern, file)))
+
 
 _re_alb_line2coords = re.compile(r"^\[([^:]+):[^\[]+\[([^:]+):")
 
@@ -137,6 +139,7 @@ def _test(*args, **keywds):
     import doctest
     import sys
     doctest.testmod(sys.modules[__name__], *args, **keywds)
+
 
 if __name__ == "__main__":
     if __debug__:

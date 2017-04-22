@@ -232,6 +232,7 @@ class KDTree(object):
         """
         return [neighbor.radius for neighbor in self.neighbors]
 
+
 if __name__ == "__main__":
 
     nr_points = 100000

@@ -22,6 +22,7 @@ class ParserError(ValueError):
     def __init__(self, *args):
         super(ParserError, self).__init__(*args)
 
+
 _modeError = ParserError("You're trying to open an Affymetrix v4"
                          " CEL file. You have to use a read binary mode,"
                          " like this `open(filename \"rb\")`.")
@@ -391,6 +392,7 @@ def read_v3(handle):
         else:
             continue
     return record
+
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest

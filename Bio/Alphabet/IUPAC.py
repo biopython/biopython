@@ -36,6 +36,7 @@ class ExtendedIUPACProtein(Alphabet.ProteinAlphabet):
     """
     letters = IUPACData.extended_protein_letters
 
+
 extended_protein = ExtendedIUPACProtein()
 
 assert IUPACData.protein_letters == IUPACData.protein_letters.upper()
@@ -44,6 +45,7 @@ assert IUPACData.protein_letters == IUPACData.protein_letters.upper()
 class IUPACProtein(ExtendedIUPACProtein):
     """Uppercase IUPAC protein single letter alphabet of the 20 standard amino acids."""
     letters = IUPACData.protein_letters
+
 
 protein = IUPACProtein()
 
@@ -56,12 +58,14 @@ class IUPACAmbiguousDNA(Alphabet.DNAAlphabet):
     """Uppercase IUPAC ambiguous DNA."""
     letters = IUPACData.ambiguous_dna_letters
 
+
 ambiguous_dna = IUPACAmbiguousDNA()
 
 
 class IUPACUnambiguousDNA(IUPACAmbiguousDNA):
     """Uppercase IUPAC unambiguous DNA (letters GATC only)."""
     letters = IUPACData.unambiguous_dna_letters
+
 
 unambiguous_dna = IUPACUnambiguousDNA()
 
@@ -79,6 +83,7 @@ class ExtendedIUPACDNA(Alphabet.DNAAlphabet):
     """
     letters = IUPACData.extended_dna_letters
 
+
 extended_dna = ExtendedIUPACDNA()
 
 # #################### RNA
@@ -88,12 +93,14 @@ class IUPACAmbiguousRNA(Alphabet.RNAAlphabet):
     """Uppercase IUPAC ambiguous RNA."""
     letters = IUPACData.ambiguous_rna_letters
 
+
 ambiguous_rna = IUPACAmbiguousRNA()
 
 
 class IUPACUnambiguousRNA(IUPACAmbiguousRNA):
     """Uppercase IUPAC unambiguous RNA (letters GAUC only)."""
     letters = IUPACData.unambiguous_rna_letters
+
 
 unambiguous_rna = IUPACUnambiguousRNA()
 

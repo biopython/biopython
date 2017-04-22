@@ -124,7 +124,6 @@ class FDistController(object):
         """Executes (d)fdist.
 
         Parameters:
-
             - npops - Number of populations
             - nsamples - Number of populations sampled
             - fst - expected Fst
@@ -139,7 +138,6 @@ class FDistController(object):
             - max_freq - Maximum allowed frequency of the commonest allele
 
         Returns:
-
         - fst - Average Fst
 
         Important Note: This can take quite a while to run!
@@ -195,7 +193,6 @@ class FDistController(object):
         """Executes fdist trying to force Fst.
 
         Parameters:
-
             - try_runs - Number of simulations on the part trying to get
                        Fst correct
             - limit - Interval limit

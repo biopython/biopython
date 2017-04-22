@@ -125,7 +125,6 @@ class JASPAR5(object):
               returned.
 
         Returns:
-
             - A Bio.motifs.jaspar.Motif object
 
         **NOTE:** The perl TFBS module allows you to specify the type of matrix
@@ -233,7 +232,6 @@ class JASPAR5(object):
                           motifs are returned.
 
         Returns:
-
             - A Bio.motifs.jaspar.Record (list) of motifs.
         """
         # Fetch the internal IDs of the motifs using the criteria provided

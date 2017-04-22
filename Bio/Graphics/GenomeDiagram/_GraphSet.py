@@ -43,7 +43,6 @@ class GraphSet(object):
         Provides:
 
         Methods:
-
         o __init__(self, set_id=None, name=None)    Called on instantiation
 
         o new_graph(self, data, name, style='bar', color=colors.lightgreen,
@@ -67,7 +66,6 @@ class GraphSet(object):
         o __str__(self)     Returns a string describing the set
 
         Attributes:
-
         o id        Unique identifier for the set
 
         o name      String describing the set

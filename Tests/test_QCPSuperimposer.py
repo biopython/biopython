@@ -172,6 +172,7 @@ class QCPSuperimposerTest(unittest.TestCase):
         self.assertTrue(
             array_equal(around(y_on_x2, decimals=3), around(y_x_solution, decimals=3)))
 
+
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

@@ -163,6 +163,7 @@ please open an issue on GitHub or mention it on the development mailing list.
 - Peter Cock <https://github.com/peterjc>
 - Peter Slickers <piet at domain clondiag.com>
 - Phillip Garland <pgarland at gmail>
+- Rasmus Fonseca <https://github.com/RasmusFonseca>
 - Richard Neher <https://github.com/rneher>
 - Sacha Laurent <https://github.com/Cashalow>
 - Saket Choudhary <https://github.com/saketkc>
@@ -199,3 +200,4 @@ please open an issue on GitHub or mention it on the development mailing list.
 - Yanbo Ye <https://github.com/lijax>
 - Yu Huang <krocea at domain yahoo.com.cn>
 - Yves Bastide <ybastide at domain irisa.fr>
+- Zheng Ruan <https://github.com/zruan>
