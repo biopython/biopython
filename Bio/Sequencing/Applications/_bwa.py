@@ -242,7 +242,7 @@ class BwaSampeCommandline(AbstractCommandline):
     ...                                 read_file1=read_file1, read_file2=read_file2,
     ...                                 r=read_group)
     >>> print(sampe_cmd)
-    bwa sampe /path/to/reference_genome.fasta /path/to/read_1.sai /path/to/read_2.sai /path/to/read_1.fq /path/to/read_2.fq -r @RG       ID:foo  SM:bar
+    bwa sampe /path/to/reference_genome.fasta   /path/to/read_1.sai   /path/to/read_2.sai /path/to/read_1.fq  /path/to/read_2.fq -r @RG       ID:foo  SM:bar
 
     You would typically run the command line using sampe_cmd(stdout=output_sam_file)
     or via the Python subprocess module, as described in the Biopython tutorial.
