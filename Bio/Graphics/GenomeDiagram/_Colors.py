@@ -136,7 +136,6 @@ class ColorTranslator(object):
 
             2 \t 255 \t 0 \t 0 \t Red: Information transfer
         """
-
         with open(filename, 'r').readlines() as lines:
             for line in lines:
                 data = line.strip().split('\t')
