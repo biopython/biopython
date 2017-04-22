@@ -450,7 +450,8 @@ class DataHandler(object):
         <!ELEMENT       name          (...)>
         encountered in a DTD. The purpose of this function is to determine
         whether this element should be regarded as a string, integer, list
-        dictionary, structure, or error."""
+        dictionary, structure, or error.
+        """
         if name.upper() == "ERROR":
             self.errors.append(name)
             return
@@ -583,7 +584,8 @@ class DataHandler(object):
         of downloading it from the URL specified in the XML. Using the local
         DTD results in much faster parsing. If the DTD is not found locally,
         we try to download it. If new DTDs become available from NCBI,
-        putting them in Bio/Entrez/DTDs will allow the parser to see them."""
+        putting them in Bio/Entrez/DTDs will allow the parser to see them.
+        """
         urlinfo = _urlparse(systemId)
         # Following attribute requires Python 2.5+
         # if urlinfo.scheme=='http':

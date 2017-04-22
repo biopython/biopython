@@ -516,7 +516,8 @@ class Node(object):
         """Create a Node in the scop hierarchy.  If a Scop instance is provided to the
         constructor, this will be used to lookup related references using the SQL
         methods.  If no instance is provided, it is assumed the whole tree exists
-        and is connected."""
+        and is connected.
+        """
         self.sunid = ''
         self.parent = None
         self.children = []
@@ -592,7 +593,8 @@ class Node(object):
 
     def getAscendent(self, node_type):
         """ Return the ancenstor node of the given type, or None.Node type can a
-        two letter code or longer description. e.g. 'fa' or 'family'"""
+        two letter code or longer description. e.g. 'fa' or 'family'.
+        """
         if node_type in _nodetype_to_code:
             node_type = _nodetype_to_code[node_type]
 
@@ -773,7 +775,8 @@ class Astral(object):
 
     def getAstralDomainsFromSQL(self, column):
         """Load a set of astral domains from a column in the astral table of a MYSQL
-        database (which can be created with writeToSQL(...)"""
+        database (which can be created with writeToSQL(...).
+        """
         cur = self.db_handle.cursor()
         cur.execute("SELECT sid FROM astral WHERE " + column + "=1")
         data = cur.fetchall()

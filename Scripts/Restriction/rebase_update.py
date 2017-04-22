@@ -9,7 +9,8 @@
 #
 
 """Update the Rebase emboss files used by Restriction to build the
-Restriction_Dictionary.py module."""
+Restriction_Dictionary.py module.
+"""
 
 from __future__ import print_function
 

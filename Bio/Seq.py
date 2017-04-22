@@ -339,7 +339,8 @@ class Seq(object):
         """Returns the full sequence as a python string (DEPRECATED).
 
         You are now encouraged to use str(my_seq) instead of
-        my_seq.tostring()."""
+        my_seq.tostring().
+        """
         from Bio import BiopythonDeprecationWarning
         warnings.warn("This method is obsolete; please use str(my_seq) "
                       "instead of my_seq.tostring().",
@@ -1730,7 +1731,8 @@ class MutableSeq(object):
     def __add__(self, other):
         """Add another sequence or string to this sequence.
 
-        Returns a new MutableSeq object."""
+        Returns a new MutableSeq object.
+        """
         if hasattr(other, "alphabet"):
             # other should be a Seq or a MutableSeq
             if not Alphabet._check_type_compatible([self.alphabet,
