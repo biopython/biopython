@@ -8,7 +8,7 @@
 
 """Bio.SeqIO support for the "uniprot-xml" file format.
 
-See also:
+See Also:
 http://www.uniprot.org
 
 The UniProt XML format essentially replaces the old plain text file format
