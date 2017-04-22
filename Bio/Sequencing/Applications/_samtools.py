@@ -122,7 +122,6 @@ class SamtoolsMpileupCommandline(AbstractCommandline):
     >>> samtools_mpileup_cmd = SamtoolsMpileupCommandline(input_file=input)
     >>> print(samtools_mpileup_cmd)
     samtools mpileup /path/to/sam_or_bam_file
-
     """
     def __init__(self, cmd="samtools", **kwargs):
         self.program_name = cmd
@@ -586,7 +585,7 @@ class SamtoolsFixmateCommandline(AbstractCommandline):
 
 
 class SamtoolsRmdupCommandline(AbstractCommandline):
-    r"""Command line wrapper for samtools rmdup.
+    """Command line wrapper for samtools rmdup.
 
     Remove potential PCR duplicates, equivalent to::
 
