@@ -5,7 +5,7 @@ This is a list of people who have made contributions to Biopython.
 
 People are listed alphabetically, as verfied with Unix sort::
 
-    $ grep "^- " CONTRIB.rst | LC_ALL=C sort -u -c
+    $ grep "^- " CONTRIB.rst | LC_ALL=C sort -u -c -f
 
 This is certainly not comprehensive, and if you've been overlooked (sorry!),
 please open an issue on GitHub or mention it on the development mailing list.
@@ -150,6 +150,7 @@ please open an issue on GitHub or mention it on the development mailing list.
 - Michiel de Hoon <mdehoon at domain c2b2.columbia.edu>
 - Mike Poidinger <Michael.Poidinger at domain eBioinformatics.com>
 - Milind Luthra <https://github.com/milindl>
+- morrme <https://github.com/morrme>
 - Nader Morshed <https://github.com/naderm>
 - Nate Sutton <https://github.com/nmsutton>
 - Nathan J. Edwards <nje5 at edu domain georgetown>

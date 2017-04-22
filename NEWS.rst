@@ -35,6 +35,7 @@ possible, especially the following contributors:
 - João Rodrigues
 - Mateusz Korycinski (first contribution)
 - Maximilian Greil
+- morrme (first contribution)
 - Noam Kremen (first contribution)
 - Peter Cock
 - Rasmus Fonseca (first contribution)
