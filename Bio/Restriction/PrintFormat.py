@@ -281,8 +281,7 @@ class PrintFormat(object):
         """
         if not ls:
             return title
-        # TODO: Use key to sort!
-        ls.sort(lambda x, y: cmp(len(x[1]), len(y[1])))
+        ls.sort(key=lambda x: len(x[1]))
         iterator = iter(ls)
         cur_len = 1
         new_sect = []
