@@ -161,7 +161,7 @@ def read(handle):
             index = int(index[1:-1])
             assert len(references) == index - 1, \
                 'The index "{0:d}" of the TRANSFAC RN line does not match the current number ' \
-                'of seen references "{1:d}": "{2:s}"'.format(index, len(reference) + 1, line)
+                'of seen references "{1:d}": "{2:s}"'.format(index, len(references) + 1, line)
             reference = {key: value}
             references.append(reference)
         elif key == '//':
