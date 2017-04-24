@@ -300,8 +300,8 @@ def train(training_set, results, feature_fns, update_fn=None,
         nalphas = _train_iis(xs, classes, features, f_sharp,
                              alphas, e_empirical,
                              max_newton_iterations, newton_converge)
-        diff = map(lambda x, y: numpy.fabs(x - y), alphas, nalphas)
-        diff = reduce(lambda x, y: x + y, diff, 0)
+        diff = [numpy.fabs(x - y) for x, y in zip(alphas, nalphas)]
+        diff = reduce(numpy.add, diff, 0)
         alphas = nalphas
 
         me = MaxEntropy()
