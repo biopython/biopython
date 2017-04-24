@@ -124,7 +124,7 @@ class PrintFormat(object):
         This method prints the output of A.format_output() and it is here
         for backwards compatibility.
         """
-        print(format_output(dct, title, s1))
+        print(self.format_output(dct, title, s1))
         return
 
     def make_format(self, cut=(), title='', nc=(), s1=''):
