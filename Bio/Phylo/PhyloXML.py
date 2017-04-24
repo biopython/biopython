@@ -14,6 +14,7 @@ Journal article:
 """
 
 import re
+import sys
 import warnings
 
 from Bio._py3k import basestring
@@ -673,7 +674,8 @@ class Confidence(PhyloElement):
     def __abs__(self):
         return abs(self.value)
 
-    # Explicit coercion to numeric types: int, long, float
+    # Explicit coercion to numeric types: float, int
+    # (and under Python 2 only long)
 
     def __float__(self):
         return float(self.value)
@@ -681,8 +683,9 @@ class Confidence(PhyloElement):
     def __int__(self):
         return int(self.value)
 
-    def __long__(self):
-        return long(self.value)
+    if sys.version_info[0] < 3:
+        def __long__(self):
+            return long(self.value)  # noqa : F821
 
 
 class Date(PhyloElement):
