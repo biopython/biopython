@@ -39,9 +39,10 @@ using reStructuredText (RST) markup language which allows basic formatting
 like *italics* and **bold** once rendered into HTML webpages for our online
 API documentation.
 
-Tools like ``pep8`` and ``flake8`` are very useful. We currently suggest you
-install this git pre-commit hook which will check our basic coding conventions
-as you work: https://github.com/biopython/biopython/issues/493
+Tools like ``pycodestyle`` (formerly ``pep8``), ``flake8`` and ``pydocstyle``
+are very useful. We currently suggest you install this git pre-commit hook
+which will check our basic coding conventions as you work:
+https://github.com/biopython/biopython/issues/493
 
 We also use continuous integration service TravisCI to enforce some of these
 checks (see below).
@@ -78,9 +79,9 @@ be run, and their results reported on the pull request.
 
 We use TravisCI to run most of the Biopython tests (although currently only
 under Linux, and not with all the optional dependencies included), plus also
-check Python coding style using the ``pep8``, ``flake8`` and ``pydocstyle``
-tools. This must pass before your pull request will be merged.
-https://travis-ci.org/biopython/biopython
+check Python coding style using the ``flake8`` and ``pydocstyle`` tools, and
+reStructuredText using ``rst-lint``. These checks must pass before your pull
+request will be merged. https://travis-ci.org/biopython/biopython
 
 Some of the TravisCI runs collect test coverage information via CodeCov:
 https://codecov.io/github/biopython/biopython/
