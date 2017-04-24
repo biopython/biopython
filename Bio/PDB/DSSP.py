@@ -183,7 +183,7 @@ def dssp_dict_from_pdb_file(in_file, DSSP="dssp"):
     try:
         p = subprocess.Popen([DSSP, in_file], universal_newlines=True,
                              stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    except FileNotFoundError:
+    except OSError:  # TODO: Use FileNotFoundError once drop Python 2
         if DSSP == "mkdssp":
             raise
         p = subprocess.Popen(["mkdssp", in_file], universal_newlines=True,
@@ -352,7 +352,7 @@ class DSSP(AbstractResiduePropertyMap):
             # (Debian distribution of DSSP includes a symlink for 'dssp' argument)
             try:
                 dssp_dict, dssp_keys = dssp_dict_from_pdb_file(in_file, dssp)
-            except FileNotFoundError:
+            except OSError:  # TODO: Use FileNotFoundError once drop Python 2
                 if dssp == 'dssp':
                     dssp = 'mkdssp'
                 elif dssp == 'mkdssp':
