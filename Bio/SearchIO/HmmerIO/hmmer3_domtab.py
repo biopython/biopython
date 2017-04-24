@@ -88,7 +88,8 @@ class Hmmer3DomtabParser(Hmmer3TabParser):
         # dummies for initial parsed value containers
         cur, prev = None, None
         hit_list, hsp_list = [], []
-
+        cur_qid = None
+        cur_hid = None
         while True:
             # store previous line's parsed values, for every line after the 1st
             if cur is not None:

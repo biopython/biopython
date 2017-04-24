@@ -107,10 +107,12 @@ def parse_nssites(lines, results, multi_models, multi_genes):
             genes = results["genes"]
             current_gene = None
             gene_start = None
+            model_results = None
             for line_num, line in enumerate(lines):
                 gene_res = gene_re.match(line)
                 if gene_res:
                     if current_gene is not None:
+                        assert model_results is not None
                         parse_model(lines[gene_start:line_num], model_results)
                         genes[current_gene - 1] = model_results
                     gene_start = line_num
