@@ -23,6 +23,8 @@ def read(handle):
     record.version = line.strip()
     line = next(handle)
     record.command = line.strip()
+    mask = None
+    number = None
     for line in handle:
         line = line.strip()
         if line == "":
