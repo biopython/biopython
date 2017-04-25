@@ -1577,17 +1577,17 @@ class ResidueDepthTests(unittest.TestCase):
         self.assertSequenceEqual(msms_radii, biopy_radii)
 
 class FragmentMapperTests(unittest.TestCase):
-    """ Tests for FragmentMapper module.""""
+    """Tests for FragmentMapper module."""
     
     def self_test(self):
-        """ Self test for FragmentMapper module."""
+        """Self test for FragmentMapper module."""
         p = PDBParser()
         pdb1= "PDB/1A8O.pdb"
         s = p.get_structure("X", pdb1)
         self.assertEqual(m, s[0])
         fm = FragmentMapper(m, 10, 5, "levitt_data")
         for r in Selection.unfold_entities(m, "R"):
-            print("%s:" % r)
+            self.assertEqual(str(r), "R")
             if r in fm:
                 print(fm[r])
 
