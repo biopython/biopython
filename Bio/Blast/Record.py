@@ -68,9 +68,9 @@ class Header(object):
             Bio.Record.DatabaseReport instead of database_letters.
             """
             
-            warnings.warn("Accessing the .database_letters will"
-                          "be deprecated in the next" 
-                          "version of Biopython. ", BiopythonDeprecationWarning)
+            warnings.warn("Accessing the .database_letters will "
+                          "be deprecated in the next " 
+                          "version of Biopython .", BiopythonDeprecationWarning)
             
             return self._database_letters
 
