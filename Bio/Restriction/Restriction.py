@@ -431,7 +431,6 @@ class RestrictionType(type):
                     2. if equal size, alphabetical order of the names.
 
         """
-
         if not isinstance(other, RestrictionType):
             raise NotImplementedError
         if len(cls) > len(other):
@@ -1870,7 +1869,6 @@ class NotDefined(AbstractCut):
             RE.is_ambiguous()
 
             """
-
         return True
 
     @classmethod
