@@ -54,6 +54,7 @@ class Async(object):
         The input_files hash key is the path that is passed
         to the program. It should always be relative.
         Value is a stream.
+
         """
         if program in self.hooks:
             self.access_ds.acquire()
@@ -82,6 +83,7 @@ class Async(object):
 
         The output_files hash key is a relative file name, and the value a
         output stream.
+
         """
         self.access_ds.acquire()
         if id in self.done:

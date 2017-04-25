@@ -567,6 +567,7 @@ class _Option(_AbstractParameter):
     o is_set -- if the parameter has been set
 
     o value -- the value of a parameter
+
     """
     def __init__(self, names, description, filename=False, checker_function=None,
                  is_required=False, equate=True):

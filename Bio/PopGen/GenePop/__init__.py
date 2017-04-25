@@ -162,6 +162,7 @@ class Record(object):
 
             Parameters:
             pop_names - Population names
+
         """
         gp_pops = {}
         for i in range(len(self.populations)):

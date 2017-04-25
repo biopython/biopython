@@ -174,6 +174,7 @@ def dssp_dict_from_pdb_file(in_file, DSSP="dssp"):
         a dictionary that maps (chainid, resid) to
         amino acid type, secondary structure code and
         accessibility.
+
     """
     # Using universal newlines is important on Python 3, this
     # gives unicode handles rather than bytes handles.
@@ -210,6 +211,7 @@ def make_dssp_dict(filename):
     ----------
     filename : string
         the DSSP output file
+
     """
     with open(filename, "r") as handle:
         return _make_dssp_dict(handle)
@@ -227,6 +229,7 @@ def _make_dssp_dict(handle):
     ----------
     handle : file
         the open DSSP output file handle
+
     """
     dssp = {}
     start = 0
@@ -339,6 +342,7 @@ class DSSP(AbstractResiduePropertyMap):
             Sander/Wilke/Miller. Defaults to Sander.
         file_type: string
             File type switch, either PDB or DSSP with PDB as default.
+
         """
         self.residue_max_acc = residue_max_acc[acc_array]
 

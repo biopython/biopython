@@ -28,6 +28,7 @@ graph theoretic and numeric analysis.
 
 Note: This module should be regarded as a prototype only. API changes are likely.
       Comments and feature requests are most welcome.
+
 """
 
 from functools import reduce
@@ -157,6 +158,7 @@ class System(object):
 
     Attributes:
     None
+
     """
 
     def __init__(self, reactions=()):
@@ -229,6 +231,7 @@ class Interaction(object):
 
     Attributes:
         - data      -- reference to arbitrary additional data
+
     """
 
     def __init_(self, data):
@@ -257,6 +260,7 @@ class Network(object):
 
     Attributes:
     None
+
     """
 
     def __init__(self, species=()):

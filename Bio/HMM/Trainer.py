@@ -88,6 +88,7 @@ class AbstractTrainer(object):
         Returns:
         Transition and emission dictionaries containing the maximum
         likelihood estimators.
+
         """
         # now calculate the information
         ml_transitions = self.ml_estimator(transition_counts)

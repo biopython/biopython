@@ -21,6 +21,7 @@ class Alphabet(object):
                Usually it is a string when letters are single characters.
         - size    - size of the alphabet's letters (e.g. 1 when letters are
                single characters).
+
     """
 
     size = None     # default to no fixed size for words

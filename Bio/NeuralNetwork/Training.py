@@ -55,6 +55,7 @@ class ExampleManager(object):
         use in validation of a network during training.
 
         o test_examples - Examples for training purposes.
+
         """
         assert training_percent + validation_percent <= 1.0, \
             "Training and validation percentages more than 100 percent"

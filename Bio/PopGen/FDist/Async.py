@@ -32,6 +32,7 @@ class FDistAsync(FDistController):
               should be on the path.
           - ext - Extension of binary names (e.g. nothing on Unix,
                 ".exe" on Windows
+
         """
         FDistController.__init__(self, fdist_dir, ext)
 
@@ -85,6 +86,7 @@ class SplitFDist(object):
              - split_size - Size that a full simulation will be split in.
              - ext - Binary extension name (e.g. nothing on Unix, '.exe' on
                Windows).
+
         """
         self.async = Local.Local(num_thr)
         self.async.hooks['fdist'] = FDistAsync(fdist_dir, ext)

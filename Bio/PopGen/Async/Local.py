@@ -22,6 +22,7 @@ class Local(Async):
         Parameters:
          - num_cores - Number of cores (for multiprocessor machines,
            multiply accordingly)
+
         """
         Async.__init__(self)
         self.num_cores = num_cores

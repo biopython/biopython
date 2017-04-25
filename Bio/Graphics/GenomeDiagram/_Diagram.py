@@ -173,6 +173,7 @@ class Diagram(object):
             No return value.
 
         write(self, filename='test1.ps', output='PS', dpi=72)
+
         """
         return _write(self.drawing, filename, output, dpi=dpi)
 
@@ -188,6 +189,7 @@ class Diagram(object):
         Returns:
             Return the completed drawing as a bytes string in a prescribed
             format.
+
         """
         # The ReportLab drawToString method, which this function used to call,
         # just used a cStringIO or StringIO handle with the drawToFile method.

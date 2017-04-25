@@ -22,6 +22,7 @@ def convert_genepop_to_fdist(gp_rec, report_pops=None):
 
        Returns:
        FDist record.
+
     """
     if hasattr(gp_rec, "populations"):
         return _convert_genepop_to_fdist(gp_rec)
@@ -37,6 +38,7 @@ def _convert_genepop_to_fdist(gp_rec):
 
        Returns:
        FDist record.
+
     """
     fd_rec = Bio.PopGen.FDist.Record()
 
@@ -77,6 +79,7 @@ def _convert_genepop_to_fdist_big(gp_rec, report_pops=None):
 
        Returns:
        FDist record.
+
     """
     fd_rec = Bio.PopGen.FDist.Record()
 
@@ -137,6 +140,7 @@ def _convert_genepop_to_fdist_big_old(gp_rec, report_loci=None):
 
        Returns:
        FDist record.
+
     """
     fd_rec = Bio.PopGen.FDist.Record()
 

@@ -78,6 +78,7 @@ class _Scanner(object):
 
     Methods:
      - feed     Feed data into the scanner.
+
     """
     def feed(self, handle, consumer):
         """S.feed(handle, consumer)
@@ -1602,6 +1603,7 @@ class Iterator(object):
 
     Methods:
     next   Return the next record from the stream, or None.
+
     """
     def __init__(self, handle, parser=None):
         """__init__(self, handle, parser=None)

@@ -342,6 +342,7 @@ class MarkovModelBuilder(object):
 
         Raises:
         KeyError -- if the two states already have an allowed transition.
+
         """
         # check the sanity of adding these states
         for state in [from_state, to_state]:
@@ -369,6 +370,7 @@ class MarkovModelBuilder(object):
 
         Raises:
         KeyError if the transition is not currently allowed.
+
         """
         try:
             del self.transition_prob[(from_state, to_state)]
@@ -382,6 +384,7 @@ class MarkovModelBuilder(object):
 
         Raises:
         KeyError if the transition is not allowed.
+
         """
         if (from_state, to_state) in self.transition_prob:
             self.transition_prob[(from_state, to_state)] = probability
@@ -400,6 +403,7 @@ class MarkovModelBuilder(object):
 
         Raises:
         KeyError if the transition is not allowed.
+
         """
         if (from_state, to_state) in self.transition_pseudo:
             self.transition_pseudo[(from_state, to_state)] = count
@@ -414,6 +418,7 @@ class MarkovModelBuilder(object):
 
         Raises:
         KeyError if the emission from the given state is not allowed.
+
         """
         if (seq_state, emission_state) in self.emission_prob:
             self.emission_prob[(seq_state, emission_state)] = probability
@@ -432,6 +437,7 @@ class MarkovModelBuilder(object):
 
         Raises:
         KeyError if the emission from the given state is not allowed.
+
         """
         if (seq_state, emission_state) in self.emission_pseudo:
             self.emission_pseudo[(seq_state, emission_state)] = count

@@ -215,6 +215,7 @@ def _find_start_entry(line, n):
     -------
     starting character : str
         The starting character for entry `n`.
+
     """
     # This function is used by replace_entry
 

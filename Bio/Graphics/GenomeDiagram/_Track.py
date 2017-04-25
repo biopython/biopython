@@ -132,6 +132,7 @@ class Track(object):
 
         o axis_labels       Boolean describing whether the value labels should
                             be placed on the Y axes
+
     """
     def __init__(self, name=None, height=1, hide=0, greytrack=0,
                  greytrack_labels=5, greytrack_fontsize=8,

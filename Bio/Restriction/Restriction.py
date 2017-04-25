@@ -429,6 +429,7 @@ class RestrictionType(type):
         sorting order:
                     1. size of the recognition site.
                     2. if equal size, alphabetical order of the names.
+
         """
         if not isinstance(other, RestrictionType):
             raise NotImplementedError
@@ -991,6 +992,7 @@ class Unknown(AbstractCut):
             RE.is_3overhang()
             RE.is_5overhang()
             RE.is_unknown()
+
         """
         return False
 
@@ -1004,6 +1006,7 @@ class Unknown(AbstractCut):
             RE.is_3overhang()
             RE.is_blunt()
             RE.is_unknown()
+
         """
         return False
 
@@ -1017,6 +1020,7 @@ class Unknown(AbstractCut):
             RE.is_5overhang()
             RE.is_blunt()
             RE.is_unknown()
+
         """
         return False
 
@@ -1117,6 +1121,7 @@ class Blunt(AbstractCut):
             RE.is_3overhang()
             RE.is_5overhang()
             RE.is_unknown()
+
         """
         return True
 
@@ -1130,6 +1135,7 @@ class Blunt(AbstractCut):
             RE.is_3overhang()
             RE.is_blunt()
             RE.is_unknown()
+
         """
         return False
 
@@ -1143,6 +1149,7 @@ class Blunt(AbstractCut):
             RE.is_5overhang()
             RE.is_blunt()
             RE.is_unknown()
+
         """
         return False
 
@@ -1245,6 +1252,7 @@ class Ov5(AbstractCut):
             RE.is_3overhang()
             RE.is_5overhang()
             RE.is_unknown()
+
         """
         return False
 
@@ -1258,6 +1266,7 @@ class Ov5(AbstractCut):
             RE.is_3overhang()
             RE.is_blunt()
             RE.is_unknown()
+
         """
         return True
 
@@ -1271,6 +1280,7 @@ class Ov5(AbstractCut):
             RE.is_5overhang()
             RE.is_blunt()
             RE.is_unknown()
+
         """
         return False
 
@@ -1377,6 +1387,7 @@ class Ov3(AbstractCut):
             RE.is_3overhang()
             RE.is_5overhang()
             RE.is_unknown()
+
         """
         return False
 
@@ -1390,6 +1401,7 @@ class Ov3(AbstractCut):
             RE.is_3overhang()
             RE.is_blunt()
             RE.is_unknown()
+
         """
         return False
 
@@ -1403,6 +1415,7 @@ class Ov3(AbstractCut):
             RE.is_5overhang()
             RE.is_blunt()
             RE.is_unknown()
+
         """
         return True
 
@@ -1503,6 +1516,7 @@ class Defined(AbstractCut):
         See Also:
             RE.is_ambiguous()
             RE.is_unknown()
+
         """
         return True
 
@@ -1517,6 +1531,7 @@ class Defined(AbstractCut):
         See Also:
             RE.is_defined()
             RE.is_unknown()
+
         """
         return False
 
@@ -1530,6 +1545,7 @@ class Defined(AbstractCut):
         See Also:
             RE.is_defined()
             RE.is_ambiguous()
+
         """
         return False
 
@@ -1602,6 +1618,7 @@ class Ambiguous(AbstractCut):
         There overhang is always the same : blunt!
 
     Internal use only. Not meant to be instantiated.
+
     """
 
     @classmethod
@@ -1644,6 +1661,7 @@ class Ambiguous(AbstractCut):
         See Also:
             RE.is_ambiguous()
             RE.is_unknown()
+
         """
         return False
 
@@ -1658,6 +1676,7 @@ class Ambiguous(AbstractCut):
         See Also:
             RE.is_defined()
             RE.is_unknown()
+
         """
         return True
 
@@ -1671,6 +1690,7 @@ class Ambiguous(AbstractCut):
         See Also:
             RE.is_defined()
             RE.is_ambiguous()
+
         """
         return False
 
@@ -1789,6 +1809,7 @@ class NotDefined(AbstractCut):
 
         drop the site that are situated outside the sequence in linear
         sequence. modify the index for site in circular sequences.
+
         """
         if cls.dna.is_linear():
             return
@@ -1817,6 +1838,7 @@ class NotDefined(AbstractCut):
         See Also:
             RE.is_ambiguous()
             RE.is_unknown()
+
         """
         return False
 
@@ -1831,6 +1853,7 @@ class NotDefined(AbstractCut):
         See Also:
             RE.is_defined()
             RE.is_unknown()
+
         """
         return False
 
@@ -1844,6 +1867,7 @@ class NotDefined(AbstractCut):
         See Also:
             RE.is_defined()
             RE.is_ambiguous()
+
             """
         return True
 

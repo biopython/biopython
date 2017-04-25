@@ -141,6 +141,7 @@ class FDistController(object):
         - fst - Average Fst
 
         Important Note: This can take quite a while to run!
+
         """
         if fst >= 0.9:
             # Lets not joke
@@ -198,6 +199,7 @@ class FDistController(object):
             - limit - Interval limit
 
         Other parameters can be seen on run_fdist.
+
         """
         max_run_fst = 1
         min_run_fst = 0
