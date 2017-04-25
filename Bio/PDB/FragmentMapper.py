@@ -323,4 +323,7 @@ class FragmentMapper(object):
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+    model = structure[0]
+    fm = FragmentMapper(model, lsize=10, flength=5, dir="fragment_data")
+    fragment = fm[residue]
     run_doctest(verbose=0)
