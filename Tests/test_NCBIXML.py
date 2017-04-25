@@ -1875,13 +1875,13 @@ class TestNCBIXML(unittest.TestCase):
             with open(os.path.join("Blast", filename)) as handle:
                 try:
                     records = NCBIXML.parse(handle)
-                except BiopythonDeprecationWarning as de:
+                except BiopythonDeprecationWarning as e:
                     self.assertEqual(str(e),
-                                     "Accessing the .database_letters will" 
-                                     "be deprecated in the next" 
+                                     "Accessing the .database_letters will 
+                                     "be deprecated in the next 
                                      "version of Biopython.")
                 else:
-                    elf.assertTrue(False, "Expected BiopythonDeprecationWarning here.")
+                    self.assertTrue(False, "Expected BiopythonDeprecationWarning here.")
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
