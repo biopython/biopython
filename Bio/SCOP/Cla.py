@@ -33,7 +33,7 @@ class Record(object):
        the Scop module for a description of nodetypes. This used to be a
        list of (key,value) tuples in older versions of Biopython (see
        Bug 3109).
-       
+
     """
     def __init__(self, line=None):
         self.sid = ''

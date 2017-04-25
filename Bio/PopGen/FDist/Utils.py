@@ -140,7 +140,7 @@ def _convert_genepop_to_fdist_big_old(gp_rec, report_loci=None):
 
        Returns:
        FDist record.
-       
+
     """
     fd_rec = Bio.PopGen.FDist.Record()
 

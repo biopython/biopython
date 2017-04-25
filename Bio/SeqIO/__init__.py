@@ -928,7 +928,7 @@ def index_db(index_filename, filenames=None, format=None, alphabet=None,
 
     See Also: Bio.SeqIO.index() and Bio.SeqIO.to_dict(), and the Python module
     glob which is useful for building lists of files.
-    
+
     """
     # Try and give helpful error messages:
     if not isinstance(index_filename, basestring):

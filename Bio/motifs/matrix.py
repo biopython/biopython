@@ -371,7 +371,7 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
          - if the sequence and the motif have the same length, a single
            number is returned
          - otherwise, the result is a one-dimensional list or numpy array
- 
+
         """
         # TODO - Code itself tolerates ambiguous bases (as NaN).
         if not isinstance(self.alphabet, IUPAC.IUPACUnambiguousDNA):

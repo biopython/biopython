@@ -342,7 +342,7 @@ class DSSP(AbstractResiduePropertyMap):
             Sander/Wilke/Miller. Defaults to Sander.
         file_type: string
             File type switch, either PDB or DSSP with PDB as default.
-            
+
         """
         self.residue_max_acc = residue_max_acc[acc_array]
 
