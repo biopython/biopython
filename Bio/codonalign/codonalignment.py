@@ -72,8 +72,7 @@ class CodonAlignment(MultipleSeqAlignment):
         return "\n".join(lines)
 
     def __getitem__(self, index, alphabet=None):
-        """Return a CodonAlignment object for single indexing
-        """
+        """Return a CodonAlignment object for single indexing."""
         if isinstance(index, int):
             return self._records[index]
         elif isinstance(index, slice):
@@ -110,8 +109,12 @@ class CodonAlignment(MultipleSeqAlignment):
                 rec in self._records]
         return MultipleSeqAlignment(alignments)
 
-    def get_dn_ds_matrix(self, method="NG86"):
+    def get_dn_ds_matrix(self, method="NG86", codon_table=default_codon_table):
         """Available methods include NG86, LWL85, YN00 and ML.
+
+        Argument:
+            - method       - Available methods include NG86, LWL85, YN00 and ML.
+            - codon_table  - Codon table to use for forward translation.
         """
         from Bio.Phylo.TreeConstruction import _DistanceMatrix as DM
         names = [i.id for i in self._records]
@@ -124,7 +127,7 @@ class CodonAlignment(MultipleSeqAlignment):
             for j in range(i + 1):
                 if i != j:
                     dn, ds = cal_dn_ds(self._records[i], self._records[j],
-                                       method=method)
+                                       method=method, codon_table=codon_table)
                     dn_matrix[i].append(dn)
                     ds_matrix[i].append(ds)
                 else:
@@ -134,7 +137,7 @@ class CodonAlignment(MultipleSeqAlignment):
         ds_dm = DM(names, matrix=ds_matrix)
         return dn_dm, ds_dm
 
-    def get_dn_ds_tree(self, dn_ds_method="NG86", tree_method="UPGMA"):
+    def get_dn_ds_tree(self, dn_ds_method="NG86", tree_method="UPGMA", codon_table=default_codon_table):
         """Method for constructing dn tree and ds tree.
 
         Argument:
@@ -143,7 +146,7 @@ class CodonAlignment(MultipleSeqAlignment):
             - tree_method  - Available methods include UPGMA and NJ.
         """
         from Bio.Phylo.TreeConstruction import DistanceTreeConstructor
-        dn_dm, ds_dm = self.get_dn_ds_matrix(method=dn_ds_method)
+        dn_dm, ds_dm = self.get_dn_ds_matrix(method=dn_ds_method, codon_table=codon_table)
         dn_constructor = DistanceTreeConstructor()
         ds_constructor = DistanceTreeConstructor()
         if tree_method == "UPGMA":
@@ -231,15 +234,11 @@ def mktest(codon_alns, codon_table=default_codon_table, alpha=0.05):
 
 
 def _get_codon2codon_matrix(codon_table=default_codon_table):
-    """Function to get codon codon substitution matrix. Elements
-    in the matrix are number of synonymous and nonsynonymous
-    substitutions required for the substitution (PRIVATE).
+    """Function to get codon codon substitution matrix (PRIVATE).
+
+    Elements in the matrix are number of synonymous and nonsynonymous
+    substitutions required for the substitution.
     """
-    import platform
-    if platform.python_implementation() == 'PyPy':
-        import numpypy as np
-    else:
-        import numpy as np
     base_tuple = ('A', 'T', 'C', 'G')
     codons = [i for i in list(codon_table.forward_table.keys()) +
               codon_table.stop_codons if 'U' not in i]
@@ -349,8 +348,7 @@ def _dijkstra(graph, start, end):
 
 
 def _count_replacement(codon_set, G):
-    """Count replacement needed for a given codon_set (PRIVATE).
-    """
+    """Count replacement needed for a given codon_set (PRIVATE)."""
     from math import floor
     if len(codon_set) == 1:
         return 0, 0
@@ -363,9 +361,10 @@ def _count_replacement(codon_set, G):
 
 
 def _prim(G):
-    """Prim's algorithm to find minimum spanning tree. Code is adapted from
+    """Prim's algorithm to find minimum spanning tree (PRIVATE).
+
+    Code is adapted from
     http://programmingpraxis.com/2010/04/09/minimum-spanning-tree-prims-algorithm/
-    (PRIVATE).
     """
     from math import floor
     from collections import defaultdict

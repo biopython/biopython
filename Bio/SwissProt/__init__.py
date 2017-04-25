@@ -600,6 +600,7 @@ def _read_ft(record, line):
                 description = first_seq + " -> " + second_seq + extra_info
     record.features.append((name, from_res, to_res, description, ft_id))
 
+
 if __name__ == "__main__":
     from Bio._utils import run_doctest
     run_doctest(verbose=0)

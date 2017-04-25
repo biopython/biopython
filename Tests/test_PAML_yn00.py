@@ -153,6 +153,7 @@ class ModTest(unittest.TestCase):
             # ...each of which has five measures.
             self.assertEqual(set([len(v) for taxa in results.values() for v in taxa.values()]), set([5]))
 
+
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

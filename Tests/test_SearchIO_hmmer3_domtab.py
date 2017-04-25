@@ -646,6 +646,7 @@ class HmmersearchCases(unittest.TestCase):
         self.assertEqual(318, hsp.env_end)
         self.assertEqual(0.95, hsp.acc_avg)
 
+
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

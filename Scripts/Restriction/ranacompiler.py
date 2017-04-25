@@ -69,8 +69,6 @@ from Bio.Restriction.Restriction import Commercially_available, Not_available
 import Bio.Restriction.RanaConfig as config
 from rebase_update import RebaseUpdate
 
-__docformat__ = "restructuredtext en"
-
 
 enzymedict = {}
 suppliersdict = {}
@@ -281,7 +279,8 @@ class TypeCompiler(object):
         """TC.buildtype() -> generator.
 
         build the new types that will be needed for constructing the
-        restriction enzymes."""
+        restriction enzymes.
+        """
         baT = (AbstractCut, RestrictionType)
         cuT = (NoCut, OneCut, TwoCuts)
         meT = (Meth_Dep, Meth_Undep)

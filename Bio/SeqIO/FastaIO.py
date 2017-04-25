@@ -9,7 +9,8 @@
 
 """Bio.SeqIO support for the "fasta" (aka FastA or Pearson) file format.
 
-You are expected to use this module via the Bio.SeqIO functions."""
+You are expected to use this module via the Bio.SeqIO functions.
+"""
 
 from __future__ import print_function
 
@@ -209,6 +210,7 @@ class FastaWriter(SequentialSequenceWriter):
                 self.handle.write(data[i:i + self.wrap] + "\n")
         else:
             self.handle.write(data + "\n")
+
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest

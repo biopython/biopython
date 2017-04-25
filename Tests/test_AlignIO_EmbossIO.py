@@ -104,7 +104,7 @@ IXI_235           82 SRPNRFAPTLMSSCITSTTGPPAWAGDRSHE    112
 #---------------------------------------       
 
 
-"""  # noqa for pep8 W291 trailing whitespace
+"""  # noqa : W291
 
 pair_example2 = \
 """########################################
@@ -276,7 +276,7 @@ gi|94970041|r     97 AEFLQKPFTSDSLLRKVRAVLQKRQ    121
 #---------------------------------------
 #---------------------------------------
 
-"""  # noqa for pep8 W291 trailing whitespace
+"""  # noqa : W291
 
 pair_example3 = """########################################
 # Program: needle
@@ -365,7 +365,7 @@ asis             311 -----------------    311
 
 
 #---------------------------------------
-#---------------------------------------"""  # noqa for pep8 W291 trailing whitespace
+#---------------------------------------"""  # noqa : W291
 
 
 class TestEmbossIO(unittest.TestCase):

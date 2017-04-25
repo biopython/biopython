@@ -691,7 +691,6 @@ class SchemaFactory(object):
         """Create a schema from a given starting motif.
 
         Arguments:
-
         o motif - A motif with the pattern we will start from.
 
         o motif_list - The total motifs we have.to match to.
@@ -700,7 +699,6 @@ class SchemaFactory(object):
         be present in the schema.
 
         Returns:
-
         o A string representing the newly generated schema.
 
         o A list of all of the motifs in motif_list that match the schema.

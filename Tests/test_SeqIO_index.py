@@ -600,6 +600,7 @@ class IndexDictTests(unittest.TestCase):
         self.assertRaises(ValueError, SeqIO.to_dict, iterator)
         handle.close()
 
+
 tests = [
     ("Ace/contig1.ace", "ace", generic_dna),
     ("Ace/consed_sample.ace", "ace", None),

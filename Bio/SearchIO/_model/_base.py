@@ -10,7 +10,6 @@ from Bio._utils import getattr_str, trim_str
 
 
 class _BaseSearchObject(object):
-
     """Abstract class for SearchIO objects."""
 
     _NON_STICKY_ATTRS = ()
@@ -36,7 +35,6 @@ class _BaseSearchObject(object):
 
 
 class _BaseHSP(_BaseSearchObject):
-
     """Abstract base class for HSP objects."""
 
     def _str_hsp_header(self):

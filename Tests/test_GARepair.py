@@ -67,6 +67,7 @@ class AmbiguousRepairTest(unittest.TestCase):
             assert new_genome_seq.count("*") == 0, \
                    "Did not repair genome, got %s" % str(new_genome_seq)
 
+
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

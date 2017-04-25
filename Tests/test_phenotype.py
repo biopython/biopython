@@ -299,6 +299,7 @@ class TestPhenoMicro(unittest.TestCase):
 
         w[1] = 1
 
+
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

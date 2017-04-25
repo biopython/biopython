@@ -90,9 +90,7 @@ class QueryRow(list):
 
 
 class Query(object):
-    """
-    SHOW TABLES
-    """
+    """SHOW TABLES."""
     MSG_FAILURE = "Failure"
     MSG_SUCCESS = "Success"
     message = "not executed"
@@ -226,6 +224,7 @@ class Insert(Create):
 def _test(*args, **keywds):
     import doctest
     doctest.testmod(sys.modules[__name__], *args, **keywds)
+
 
 if __name__ == "__main__":
     if __debug__:

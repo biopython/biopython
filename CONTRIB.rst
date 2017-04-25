@@ -5,14 +5,14 @@ This is a list of people who have made contributions to Biopython.
 
 People are listed alphabetically, as verfied with Unix sort::
 
-    $ grep "^- " CONTRIB.rst | LC_ALL=C sort -u -c
+    $ grep "^- " CONTRIB.rst | LC_ALL=C sort -u -c -f
 
 This is certainly not comprehensive, and if you've been overlooked (sorry!),
 please open an issue on GitHub or mention it on the development mailing list.
 
 - Aaron Gallagher <habnabit at gmail>
-- Aaron Rosenfeld <https://github.com/arosenfeld>
 - Aaron Kitzmiller <https://github.com/aaronk>
+- Aaron Rosenfeld <https://github.com/arosenfeld>
 - Adam Kurkiewicz <adam@kurkiewicz.pl>
 - Adam Novak <https://github.com/AdamNovak>
 - Adrian Altenhoff <https://github.com/alpae>
@@ -39,6 +39,7 @@ please open an issue on GitHub or mention it on the development mailing list.
 - Ben Morris <https://github.com/bendmorris>
 - Ben Woodcroft <https://github.com/wwood>
 - Bernhard Thiel <https://github.com/Bernhard10>
+- Bertrand Caron <https://github.com/bertrand-caron>
 - Bertrand Frottier <bertrand.frottier at domain free.fr>
 - Bertrand Néron <https://github.com/bneron>
 - Bill Barnard <bill at domain barnard-engineering.com>
@@ -149,6 +150,7 @@ please open an issue on GitHub or mention it on the development mailing list.
 - Michiel de Hoon <mdehoon at domain c2b2.columbia.edu>
 - Mike Poidinger <Michael.Poidinger at domain eBioinformatics.com>
 - Milind Luthra <https://github.com/milindl>
+- morrme <https://github.com/morrme>
 - Nader Morshed <https://github.com/naderm>
 - Nate Sutton <https://github.com/nmsutton>
 - Nathan J. Edwards <nje5 at edu domain georgetown>
@@ -162,6 +164,7 @@ please open an issue on GitHub or mention it on the development mailing list.
 - Peter Cock <https://github.com/peterjc>
 - Peter Slickers <piet at domain clondiag.com>
 - Phillip Garland <pgarland at gmail>
+- Rasmus Fonseca <https://github.com/RasmusFonseca>
 - Richard Neher <https://github.com/rneher>
 - Sacha Laurent <https://github.com/Cashalow>
 - Saket Choudhary <https://github.com/saketkc>
@@ -198,3 +201,4 @@ please open an issue on GitHub or mention it on the development mailing list.
 - Yanbo Ye <https://github.com/lijax>
 - Yu Huang <krocea at domain yahoo.com.cn>
 - Yves Bastide <ybastide at domain irisa.fr>
+- Zheng Ruan <https://github.com/zruan>

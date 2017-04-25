@@ -78,7 +78,6 @@ from Bio.Align import MultipleSeqAlignment
 from .Interfaces import AlignmentIterator
 from .Interfaces import SequentialAlignmentWriter
 
-__docformat__ = "restructuredtext en"
 
 XMFA_HEADER_REGEX = re.compile("> (?P<id>\d+):(?P<start>\d+)-(?P<end>\d+) (?P<strand>[+-]) (?P<name>.*)")
 XMFA_HEADER_REGEX_BIOPYTHON = re.compile("> (?P<id>\d+):(?P<start>\d+)-(?P<end>\d+) (?P<strand>[+-]) (?P<name>[^#]*) # (?P<realname>.*)")

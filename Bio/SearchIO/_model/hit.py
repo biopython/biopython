@@ -19,7 +19,6 @@ from .hsp import HSP
 
 
 class Hit(_BaseSearchObject):
-
     """Class representing a single database hit of a search result.
 
     Hit objects are the second-level container in the SearchIO module. They

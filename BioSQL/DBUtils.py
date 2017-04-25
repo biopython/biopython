@@ -35,13 +35,11 @@ class Generic_dbutils(object):
         return rv[0]
 
     def execute(self, cursor, sql, args=None):
-        """Just execute an sql command.
-        """
+        """Just execute an sql command."""
         cursor.execute(sql, args or ())
 
     def executemany(self, cursor, sql, seq):
-        """Execute many sql commands
-        """
+        """Execute many sql commands."""
         cursor.executemany(sql, seq)
 
     def autocommit(self, conn, y=1):
@@ -53,12 +51,13 @@ class Sqlite_dbutils(Generic_dbutils):
     """Custom database utilities for SQLite."""
 
     def _sub_placeholder(self, sql):
-        """Format the argument placeholders for sqlite
-        """
+        """Format the argument placeholders for sqlite."""
         return sql.replace("%s", "?")
 
     def execute(self, cursor, sql, args=None):
-        """Execute SQL command, replacing %s with ? for variable substitution in sqlite3.
+        """Execute SQL command.
+
+        Replaces %s with ? for variable substitution in sqlite3.
         """
         sql = self._sub_placeholder(sql)
         cursor.execute(sql, args or ())

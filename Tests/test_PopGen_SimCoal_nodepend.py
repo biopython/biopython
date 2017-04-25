@@ -47,6 +47,7 @@ class TemplateTest(unittest.TestCase):
             # This won't exist if the template generation failed:
             os.remove(os.path.join('PopGen', 'simple_100_30.par'))
 
+
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

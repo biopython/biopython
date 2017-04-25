@@ -134,9 +134,11 @@ EPSILON = 0.00000000000001
 
 class SeqMat(dict):
     """A Generic sequence matrix class
+
     The key is a 2-tuple containing the letter indices of the matrix. Those
     should be sorted in the tuple (low, high). Because each matrix is dealt
-    with as a half-matrix."""
+    with as a half-matrix.
+    """
 
     def _alphabet_from_matrix(self):
         ab_dict = {}
@@ -204,9 +206,7 @@ class SeqMat(dict):
                 del self[key]
 
     def _full_to_half(self):
-        """
-        Convert a full-matrix to a half-matrix
-        """
+        """Convert a full-matrix to a half-matrix."""
         # For instance: two entries ('A','C'):13 and ('C','A'):20 will be summed
         # into ('A','C'): 33 and the index ('C','A') will be deleted
         # alphabet.letters:('A','A') and ('C','C') will remain the same.
@@ -339,15 +339,18 @@ class SeqMat(dict):
         return output
 
     def __sub__(self, other):
-        """ returns a number which is the subtraction product of the two matrices"""
+        """Returns a number which is the subtraction product of the two matrices."""
         mat_diff = 0
         for i in self:
             mat_diff += (self[i] - other[i])
         return mat_diff
 
     def __mul__(self, other):
-        """ returns a matrix for which each entry is the multiplication product of the
-        two matrices passed"""
+        """Matrix multiplication.
+
+        Returns a matrix for which each entry is the multiplication product of
+        the two matrices passed.
+        """
         new_mat = copy.copy(self)
         for i in self:
             new_mat[i] *= other[i]
@@ -361,23 +364,22 @@ class SeqMat(dict):
 
 
 class AcceptedReplacementsMatrix(SeqMat):
-    """Accepted replacements matrix"""
+    """Accepted replacements matrix."""
 
 
 class ObservedFrequencyMatrix(SeqMat):
-    """Observed frequency matrix"""
+    """Observed frequency matrix."""
 
 
 class ExpectedFrequencyMatrix(SeqMat):
-    """Expected frequency matrix"""
+    """Expected frequency matrix."""
 
 
 class SubstitutionMatrix(SeqMat):
-    """Substitution matrix"""
+    """Substitution matrix."""
 
     def calculate_relative_entropy(self, obs_freq_mat):
-        """Calculate and return the relative entropy with respect to an
-        observed frequency matrix"""
+        """Calculate and return relative entropy w.r.t. observed frequency matrix."""
         relative_entropy = 0.
         for key, value in self.items():
             if value > EPSILON:
@@ -390,8 +392,7 @@ class LogOddsMatrix(SeqMat):
     """Log odds matrix"""
 
     def calculate_relative_entropy(self, obs_freq_mat):
-        """Calculate and return the relative entropy with respect to an
-        observed frequency matrix"""
+        """Calculate and return relative entropy w.r.t. observed frequency matrix."""
         relative_entropy = 0.
         for key, value in self.items():
             relative_entropy += obs_freq_mat[key] * value / log(2)
@@ -542,6 +543,7 @@ def read_text_matrix(data_file):
     ret_mat = SeqMat(matrix)
     return ret_mat
 
+
 diagNO = 1
 diagONLY = 2
 diagALL = 3
@@ -617,6 +619,7 @@ def two_mat_DJS(mat_1, mat_2, pi_1=0.5, pi_2=0.5):
     # print(mat_1.entropy, mat_2.entropy)
     dJS = sum_mat.entropy - pi_1 * mat_1.entropy - pi_2 * mat_2.entropy
     return dJS
+
 
 """
 This isn't working yet. Boo hoo!

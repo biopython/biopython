@@ -4,8 +4,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Code for dealing with Codon Alignment.
-"""
+"""Code for dealing with Codon Alignments."""
 from __future__ import print_function
 
 from Bio import BiopythonWarning
@@ -188,8 +187,7 @@ def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X',
 
 
 def _codons2re(codons):
-    """Generate regular expression based on a given list of codons
-    """
+    """Generate regular expression based on a given list of codons (PRIVATE)."""
     reg = ''
     for i in zip(*codons):
         if len(set(i)) == 1:
@@ -236,7 +234,7 @@ def _get_aa_regex(codon_table, stop='*', unknown='X'):
 
 def _check_corr(pro, nucl, gap_char='-', codon_table=default_codon_table,
                 complete_protein=False, anchor_len=10):
-    """check if a give protein SeqRecord can be translated by another
+    """Check if a given protein SeqRecord can be translated by another
     nucleotide SeqRecord.
     """
     import re

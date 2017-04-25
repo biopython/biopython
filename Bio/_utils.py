@@ -54,7 +54,8 @@ def trim_str(string, max_len, concat_char):
 
 def getattr_str(obj, attr, fmt=None, fallback='?'):
     """Returns a string of the given object's attribute, defaulting to the
-    fallback value if attribute is not present."""
+    fallback value if attribute is not present.
+    """
     if hasattr(obj, attr):
         if fmt is not None:
             return fmt % getattr(obj, attr)
@@ -115,6 +116,7 @@ def run_doctest(target_dir=None, *args, **kwargs):
         # and revert back to initial directory
         os.chdir(cur_dir)
     print("Done")
+
 
 if __name__ == "__main__":
     run_doctest()

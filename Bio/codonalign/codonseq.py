@@ -17,7 +17,7 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Alphabet import generic_dna, _ungap
 
-from Bio.codonalign.codonalphabet import default_codon_alphabet, default_codon_table
+from Bio.codonalign.codonalphabet import CodonAlphabet, default_codon_alphabet, default_codon_table
 
 
 class CodonSeq(Seq):
@@ -70,6 +70,8 @@ class CodonSeq(Seq):
         Seq.__init__(self, data.upper(), alphabet=alphabet)
         self.gap_char = gap_char
 
+        if not isinstance(alphabet, CodonAlphabet):
+            raise TypeError("Input alphabet should be a CodonAlphabet object.")
         # check the length of the alignment to be a triple
         if rf_table is None:
             seq_ungapped = self._data.replace(gap_char, "")
@@ -81,8 +83,7 @@ class CodonSeq(Seq):
             # only works for single alphabet
             for i in self.rf_table:
                 if self._data[i:i + 3] not in alphabet.letters:
-                    raise ValueError("Sequence contain undefined letters from"
-                                     " alphabet "
+                    raise ValueError("Sequence contain codon not in the alphabet "
                                      "({0})! ".format(self._data[i:i + 3]))
         else:
             # if gap_char in self._data:
@@ -106,8 +107,7 @@ class CodonSeq(Seq):
         return Seq(self._data[index], alphabet=generic_dna)
 
     def get_codon(self, index):
-        """get the `index`-th codon from the self.seq
-        """
+        """Get the `index`-th codon from the sequence."""
         if len(set(i % 3 for i in self.rf_table)) != 1:
             raise RuntimeError("frameshift detected. "
                                "CodonSeq object is not able to deal "
@@ -387,7 +387,7 @@ def _ng86(seq1, seq2, k, codon_table):
 
 
 def _count_site_NG86(codon_lst, k=1, codon_table=default_codon_table):
-    """count synonymous and non-synonymous sites of a list of codons (PRIVATE).
+    """Count synonymous and non-synonymous sites of a list of codons (PRIVATE).
 
     Arguments:
         - codon_lst - A three letter codon list from a CodonSeq object.

@@ -92,6 +92,7 @@ class KeyWListTest(unittest.TestCase):
 
         handle.close()
 
+
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

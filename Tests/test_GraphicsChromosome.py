@@ -114,6 +114,7 @@ def load_chromosome(chr_name):
 
     return cur_chromosome
 
+
 # --- stuff for generating random organisms
 color_choices = (colors.red, colors.blue)
 letter_choices = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
@@ -457,6 +458,7 @@ class ChromosomeCountTest(unittest.TestCase):
                "Did not set and retrieve counts correctly."
         assert seg_info[test_label_num][1] == test_label_value, \
                "Did not set and retrieve label correctly."
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)

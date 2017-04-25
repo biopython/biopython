@@ -22,7 +22,6 @@ from .hit import Hit
 
 
 class QueryResult(_BaseSearchObject):
-
     """Class representing search results from a single query.
 
     QueryResult is the container object that stores all search hits from a

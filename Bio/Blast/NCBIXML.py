@@ -216,7 +216,7 @@ class BlastParser(_XMLparser):
         self._header.application = self._value.upper()
 
     def _end_BlastOutput_version(self):
-        """version number and date of the BLAST engine.
+        """Version number and date of the BLAST engine.
 
         e.g. "BLASTX 2.2.12 [Aug-07-2005]" but there can also be
         variants like "BLASTP 2.2.18+" without the date.
@@ -239,21 +239,21 @@ class BlastParser(_XMLparser):
                 self._header.date = parts[2]
 
     def _end_BlastOutput_reference(self):
-        """a reference to the article describing the algorithm (PRIVATE).
+        """A reference to the article describing the algorithm (PRIVATE).
 
         Save this to put on each blast record object
         """
         self._header.reference = self._value
 
     def _end_BlastOutput_db(self):
-        """the database(s) searched (PRIVATE).
+        """The database(s) searched (PRIVATE).
 
         Save this to put on each blast record object
         """
         self._header.database = self._value
 
     def _end_BlastOutput_query_ID(self):
-        """the identifier of the query (PRIVATE).
+        """The identifier of the query (PRIVATE).
 
         Important in old pre 2.2.14 BLAST, for recent versions
         <Iteration_query-ID> is enough
@@ -261,7 +261,7 @@ class BlastParser(_XMLparser):
         self._header.query_id = self._value
 
     def _end_BlastOutput_query_def(self):
-        """the definition line of the query (PRIVATE).
+        """The definition line of the query (PRIVATE).
 
         Important in old pre 2.2.14 BLAST, for recent versions
         <Iteration_query-def> is enough
@@ -269,7 +269,7 @@ class BlastParser(_XMLparser):
         self._header.query = self._value
 
     def _end_BlastOutput_query_len(self):
-        """the length of the query (PRIVATE).
+        """The length of the query (PRIVATE).
 
         Important in old pre 2.2.14 BLAST, for recent versions
         <Iteration_query-len> is enough
@@ -277,27 +277,27 @@ class BlastParser(_XMLparser):
         self._header.query_letters = int(self._value)
 
     def _end_Iteration_query_ID(self):
-        """the identifier of the query (PRIVATE)."""
+        """The identifier of the query (PRIVATE)."""
         self._blast.query_id = self._value
 
     def _end_Iteration_query_def(self):
-        """the definition line of the query (PRIVATE)."""
+        """The definition line of the query (PRIVATE)."""
         self._blast.query = self._value
 
     def _end_Iteration_query_len(self):
-        """the length of the query (PRIVATE)."""
+        """The length of the query (PRIVATE)."""
         self._blast.query_letters = int(self._value)
 
     # def _end_BlastOutput_query_seq(self):
-    #     """the query sequence (PRIVATE)."""
+    #     """The query sequence (PRIVATE)."""
     #     pass # XXX Missing in Record.Blast ?
 
     # def _end_BlastOutput_iter_num(self):
-    #     """the psi-blast iteration number (PRIVATE)."""
+    #     """The psi-blast iteration number (PRIVATE)."""
     #     pass # XXX TODO PSI
 
     def _end_BlastOutput_hits(self):
-        """hits to the database sequences, one for every sequence (PRIVATE)."""
+        """Hits to the database sequences, one for every sequence (PRIVATE)."""
         self._blast.num_hits = int(self._value)
 
     # def _end_BlastOutput_message(self):
@@ -306,11 +306,11 @@ class BlastParser(_XMLparser):
 
     # Parameters
     def _end_Parameters_matrix(self):
-        """matrix used (-M on legacy BLAST) (PRIVATE)."""
+        """Matrix used (-M on legacy BLAST) (PRIVATE)."""
         self._parameters.matrix = self._value
 
     def _end_Parameters_expect(self):
-        """expect values cutoff (PRIVATE)."""
+        """Expect values cutoff (PRIVATE)."""
         # NOTE: In old text output there was a line:
         # Number of sequences better than 1.0e-004: 1
         # As far as I can see, parameters.num_seqs_better_e
@@ -321,37 +321,37 @@ class BlastParser(_XMLparser):
         self._parameters.expect = self._value
 
     # def _end_Parameters_include(self):
-    #     """inclusion threshold for a psi-blast iteration (-h) (PRIVATE)."""
+    #     """Inclusion threshold for a psi-blast iteration (-h) (PRIVATE)."""
     #     pass # XXX TODO PSI
 
     def _end_Parameters_sc_match(self):
-        """match score for nucleotide-nucleotide comparison (-r) (PRIVATE)."""
+        """Match score for nucleotide-nucleotide comparison (-r) (PRIVATE)."""
         self._parameters.sc_match = int(self._value)
 
     def _end_Parameters_sc_mismatch(self):
-        """mismatch penalty for nucleotide-nucleotide comparison (-r) (PRIVATE)."""
+        """Mismatch penalty for nucleotide-nucleotide comparison (-r) (PRIVATE)."""
         self._parameters.sc_mismatch = int(self._value)
 
     def _end_Parameters_gap_open(self):
-        """gap existence cost (-G) (PRIVATE)."""
+        """Gap existence cost (-G) (PRIVATE)."""
         self._parameters.gap_penalties = int(self._value)
 
     def _end_Parameters_gap_extend(self):
-        """gap extension cose (-E) (PRIVATE)."""
+        """Gap extension cose (-E) (PRIVATE)."""
         self._parameters.gap_penalties = (self._parameters.gap_penalties,
                                          int(self._value))
 
     def _end_Parameters_filter(self):
-        """filtering options (-F) (PRIVATE)."""
+        """Filtering options (-F) (PRIVATE)."""
         self._parameters.filter = self._value
 
     # def _end_Parameters_pattern(self):
-    #     """pattern used for phi-blast search
+    #     """Pattern used for phi-blast search
     #     """
     #     pass # XXX TODO PSI
 
     # def _end_Parameters_entrez_query(self):
-    #     """entrez query used to limit search
+    #     """Entrez query used to limit search
     #     """
     #     pass # XXX TODO PSI
 
@@ -371,18 +371,18 @@ class BlastParser(_XMLparser):
         self._descr = None
 
     def _end_Hit_id(self):
-        """identifier of the database sequence (PRIVATE)."""
+        """Identifier of the database sequence (PRIVATE)."""
         self._hit.hit_id = self._value
         self._hit.title = self._value + ' '
 
     def _end_Hit_def(self):
-        """definition line of the database sequence (PRIVATE)."""
+        """Definition line of the database sequence (PRIVATE)."""
         self._hit.hit_def = self._value
         self._hit.title += self._value
         self._descr.title = self._hit.title
 
     def _end_Hit_accession(self):
-        """accession of the database sequence (PRIVATE)."""
+        """Accession of the database sequence (PRIVATE)."""
         self._hit.accession = self._value
         self._descr.accession = self._value
 
@@ -401,81 +401,81 @@ class BlastParser(_XMLparser):
 
     # Hsp_num is useless
     def _end_Hsp_score(self):
-        """raw score of HSP (PRIVATE)."""
+        """Raw score of HSP (PRIVATE)."""
         self._hsp.score = float(self._value)
         if self._descr.score is None:
             self._descr.score = float(self._value)
 
     def _end_Hsp_bit_score(self):
-        """bit score of HSP (PRIVATE)."""
+        """Bit score of HSP (PRIVATE)."""
         self._hsp.bits = float(self._value)
         if self._descr.bits is None:
             self._descr.bits = float(self._value)
 
     def _end_Hsp_evalue(self):
-        """expect value of the HSP (PRIVATE)."""
+        """Expect value of the HSP (PRIVATE)."""
         self._hsp.expect = float(self._value)
         if self._descr.e is None:
             self._descr.e = float(self._value)
 
     def _end_Hsp_query_from(self):
-        """offset of query at the start of the alignment (one-offset) (PRIVATE)."""
+        """Offset of query at the start of the alignment (one-offset) (PRIVATE)."""
         self._hsp.query_start = int(self._value)
 
     def _end_Hsp_query_to(self):
-        """offset of query at the end of the alignment (one-offset) (PRIVATE)."""
+        """Offset of query at the end of the alignment (one-offset) (PRIVATE)."""
         self._hsp.query_end = int(self._value)
 
     def _end_Hsp_hit_from(self):
-        """offset of the database at the start of the alignment (one-offset) (PRIVATE)."""
+        """Offset of the database at the start of the alignment (one-offset) (PRIVATE)."""
         self._hsp.sbjct_start = int(self._value)
 
     def _end_Hsp_hit_to(self):
-        """offset of the database at the end of the alignment (one-offset) (PRIVATE)."""
+        """Offset of the database at the end of the alignment (one-offset) (PRIVATE)."""
         self._hsp.sbjct_end = int(self._value)
 
     # def _end_Hsp_pattern_from(self):
-    #     """start of phi-blast pattern on the query (one-offset) (PRIVATE)."""
+    #     """Start of phi-blast pattern on the query (one-offset) (PRIVATE)."""
     #     pass # XXX TODO PSI
 
     # def _end_Hsp_pattern_to(self):
-    #     """end of phi-blast pattern on the query (one-offset) (PRIVATE)."""
+    #     """End of phi-blast pattern on the query (one-offset) (PRIVATE)."""
     #     pass # XXX TODO PSI
 
     def _end_Hsp_query_frame(self):
-        """frame of the query if applicable (PRIVATE)."""
+        """Frame of the query if applicable (PRIVATE)."""
         self._hsp.frame = (int(self._value),)
 
     def _end_Hsp_hit_frame(self):
-        """frame of the database sequence if applicable (PRIVATE)."""
+        """Frame of the database sequence if applicable (PRIVATE)."""
         self._hsp.frame += (int(self._value),)
 
     def _end_Hsp_identity(self):
-        """number of identities in the alignment (PRIVATE)."""
+        """Number of identities in the alignment (PRIVATE)."""
         self._hsp.identities = int(self._value)
 
     def _end_Hsp_positive(self):
-        """number of positive (conservative) substitutions in the alignment (PRIVATE)."""
+        """Number of positive (conservative) substitutions in the alignment (PRIVATE)."""
         self._hsp.positives = int(self._value)
 
     def _end_Hsp_gaps(self):
-        """number of gaps in the alignment (PRIVATE)."""
+        """Number of gaps in the alignment (PRIVATE)."""
         self._hsp.gaps = int(self._value)
 
     def _end_Hsp_align_len(self):
-        """length of the alignment (PRIVATE)."""
+        """Length of the alignment (PRIVATE)."""
         self._hsp.align_length = int(self._value)
 
     # def _en_Hsp_density(self):
-    #     """score density (PRIVATE)."""
+    #     """Score density (PRIVATE)."""
     #     pass # XXX ???
 
     def _end_Hsp_qseq(self):
-        """alignment string for the query (PRIVATE)."""
+        """Alignment string for the query (PRIVATE)."""
         self._hsp.query = self._value
 
     def _end_Hsp_hseq(self):
-        """alignment string for the database (PRIVATE)."""
+        """Alignment string for the database (PRIVATE)."""
         self._hsp.sbjct = self._value
 
     def _end_Hsp_midline(self):
@@ -486,19 +486,19 @@ class BlastParser(_XMLparser):
 
     # Statistics
     def _end_Statistics_db_num(self):
-        """number of sequences in the database (PRIVATE)."""
+        """Number of sequences in the database (PRIVATE)."""
         self._blast.num_sequences_in_database = int(self._value)
 
     def _end_Statistics_db_len(self):
-        """number of letters in the database (PRIVATE)."""
+        """Number of letters in the database (PRIVATE)."""
         self._blast.num_letters_in_database = int(self._value)
 
     def _end_Statistics_hsp_len(self):
-        """the effective HSP length (PRIVATE)."""
+        """The effective HSP length (PRIVATE)."""
         self._blast.effective_hsp_length = int(self._value)
 
     def _end_Statistics_eff_space(self):
-        """the effective search space (PRIVATE)."""
+        """The effective search space (PRIVATE)."""
         self._blast.effective_search_space = float(self._value)
 
     def _end_Statistics_kappa(self):

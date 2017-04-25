@@ -40,7 +40,8 @@ class Alphabet(object):
         Returns a boolean.  This relies on the Alphabet subclassing
         hierarchy only, and does not check the letters property.
         This isn't ideal, and doesn't seem to work as intended
-        with the AlphabetEncoder classes."""
+        with the AlphabetEncoder classes.
+        """
         return isinstance(other, self.__class__)
 
     def _case_less(self):
@@ -77,6 +78,7 @@ class Alphabet(object):
             # TODO - Raise NotImplementedError and handle via subclass?
             return self._case_less()
 
+
 generic_alphabet = Alphabet()
 
 
@@ -84,6 +86,7 @@ class SingleLetterAlphabet(Alphabet):
     """Generic alphabet with letters of size one."""
     size = 1
     letters = None   # string of all letters in the alphabet
+
 
 single_letter_alphabet = SingleLetterAlphabet()
 
@@ -94,6 +97,7 @@ class ProteinAlphabet(SingleLetterAlphabet):
     """Generic single letter protein alphabet."""
     pass
 
+
 generic_protein = ProteinAlphabet()
 
 # ########## DNA
@@ -103,12 +107,14 @@ class NucleotideAlphabet(SingleLetterAlphabet):
     """Generic single letter nucleotide alphabet."""
     pass
 
+
 generic_nucleotide = NucleotideAlphabet()
 
 
 class DNAAlphabet(NucleotideAlphabet):
     """Generic single letter DNA alphabet."""
     pass
+
 
 generic_dna = DNAAlphabet()
 
@@ -119,6 +125,7 @@ generic_dna = DNAAlphabet()
 class RNAAlphabet(NucleotideAlphabet):
     """Generic single letter RNA alphabet."""
     pass
+
 
 generic_rna = RNAAlphabet()
 
@@ -175,7 +182,8 @@ class AlphabetEncoder(object):
         """Does this alphabet 'contain' the other (OBSOLETE?).
 
         This is isn't implemented for the base AlphabetEncoder,
-        which will always return 0 (False)."""
+        which will always return 0 (False).
+        """
         return 0
 
     def _upper(self):
@@ -266,7 +274,8 @@ def _consensus_base_alphabet(alphabets):
     This throws away any AlphabetEncoder information, e.g. Gapped alphabets.
 
     Note that DNA+RNA -> Nucleotide, and Nucleotide+Protein-> generic single
-    letter.  These DO NOT raise an exception!"""
+    letter.  These DO NOT raise an exception!
+    """
     common = None
     for alpha in alphabets:
         a = _get_base_alphabet(alpha)
@@ -385,7 +394,8 @@ def _check_type_compatible(alphabets):
     True
 
     This relies on the Alphabet subclassing hierarchy.  It does not
-    check things like gap characters or stop symbols."""
+    check things like gap characters or stop symbols.
+    """
     dna, rna, nucl, protein = False, False, False, False
     for alpha in alphabets:
         a = _get_base_alphabet(alpha)

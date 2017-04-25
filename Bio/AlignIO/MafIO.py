@@ -236,7 +236,8 @@ class MafIndex(object):
 
     The index is a sqlite3 database that is built upon creation of the object
     if necessary, and queried when methods *search* or *get_spliced* are
-    used."""
+    used.
+    """
     def __init__(self, sqlite_file, maf_file, target_seqname):
         """Indexes or loads the index of a MAF file"""
         self._target_seqname = target_seqname

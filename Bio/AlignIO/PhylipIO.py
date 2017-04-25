@@ -272,14 +272,10 @@ class PhylipIterator(AlignmentIterator):
 
 # Relaxed Phylip
 class RelaxedPhylipWriter(PhylipWriter):
-    """
-    Relaxed Phylip format writer
-    """
+    """Relaxed Phylip format writer."""
 
     def write_alignment(self, alignment):
-        """
-        Write a relaxed phylip alignment
-        """
+        """Write a relaxed phylip alignment."""
         # Check inputs
         for name in (s.id.strip() for s in alignment):
             if any(c in name for c in string.whitespace):

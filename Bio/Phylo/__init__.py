@@ -5,7 +5,7 @@
 
 """Package for working with phylogenetic trees.
 
-See also: http://biopython.org/wiki/Phylo
+See Also: http://biopython.org/wiki/Phylo
 
 """
 

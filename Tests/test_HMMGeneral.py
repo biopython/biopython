@@ -428,6 +428,7 @@ class AbstractTrainerTest(unittest.TestCase):
         assert abs(expected_log_prob - log_prob) < 0.1, \
           "Bad probability calculated: %s" % log_prob
 
+
 # run the tests
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)

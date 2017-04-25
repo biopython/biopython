@@ -50,6 +50,7 @@ def itemindex(values):
         d[key] = n - index
     return d
 
+
 numpy.random.seed()
 
 VERY_SMALL_NUMBER = 1E-300
@@ -197,6 +198,7 @@ def train_bw(states, alphabet, training_data,
                     update_fn=update_fn)
     p_initial, p_transition, p_emission = x
     return MarkovModel(states, alphabet, p_initial, p_transition, p_emission)
+
 
 MAX_ITERATIONS = 1000
 

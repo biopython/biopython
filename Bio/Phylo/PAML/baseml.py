@@ -11,7 +11,8 @@ from . import _parse_baseml
 
 class BasemlError(EnvironmentError):
     """BASEML has failed. Run with verbose = True to view BASEML's error
-    message"""
+    message.
+    """
 
 
 class Baseml(Paml):

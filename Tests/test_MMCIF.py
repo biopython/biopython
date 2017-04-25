@@ -284,6 +284,7 @@ class CIFtoPDB(unittest.TestCase):
         cif_atom_elems = [a.element for a in pdb_struct.get_atoms()]
         self.assertSequenceEqual(pdb_atom_elems, cif_atom_elems)
 
+
 if __name__ == '__main__':
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

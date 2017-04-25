@@ -85,7 +85,8 @@ class _Matrix(object):
 
     def __init__(self, names, matrix=None):
         """Initialize matrix by a list of names and a list of
-        lower triangular matrix data"""
+        lower triangular matrix data.
+        """
         # check names
         if isinstance(names, list) and all(isinstance(s, str) for s in names):
             if len(set(names)) == len(names):
@@ -310,7 +311,7 @@ class _DistanceMatrix(_Matrix):
         self._set_zero_diagonal()
 
     def _set_zero_diagonal(self):
-        """set all diagonal elements to zero"""
+        """Set all diagonal elements to zero"""
         for i in range(0, len(self)):
             self.matrix[i][i] = 0
 
@@ -484,7 +485,8 @@ class TreeConstructor(object):
     def build_tree(self, msa):
         """Caller to built the tree from a MultipleSeqAlignment object.
 
-        This should be implemented in subclass"""
+        This should be implemented in subclass.
+        """
         raise NotImplementedError("Method not implemented!")
 
 
@@ -539,8 +541,7 @@ class DistanceTreeConstructor(TreeConstructor):
     methods = ['nj', 'upgma']
 
     def __init__(self, distance_calculator=None, method="nj"):
-        if (distance_calculator is None or
-            isinstance(distance_calculator, DistanceCalculator)):
+        if (distance_calculator is None or isinstance(distance_calculator, DistanceCalculator)):
             self.distance_calculator = distance_calculator
         else:
             raise TypeError("Must provide a DistanceCalculator object.")
@@ -710,7 +711,7 @@ class DistanceTreeConstructor(TreeConstructor):
         return BaseTree.Tree(root, rooted=False)
 
     def _height_of(self, clade):
-        """calculate clade height -- the longest path to any terminal."""
+        """Calculate clade height -- the longest path to any terminal."""
         height = 0
         if clade.is_terminal():
             height = clade.branch_length
@@ -910,7 +911,8 @@ class ParsimonyScorer(Scorer):
     def get_score(self, tree, alignment):
         """Calculate and return the parsimony score given a tree and
         the MSA using the Fitch algorithm without the penalty matrix
-        the Sankoff algorithm with the matrix"""
+        the Sankoff algorithm with the matrix.
+        """
         # make sure the tree is rooted and bifurcating
         if not tree.is_bifurcating():
             raise ValueError("The tree provided should be bifurcating.")

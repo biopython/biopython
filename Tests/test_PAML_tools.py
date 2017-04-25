@@ -41,6 +41,7 @@ def which(program):
             return exe_file
     return None
 
+
 # Find the PAML binaries
 if sys.platform == "win32":
     binaries = ["codeml.exe", "baseml.exe", "yn00.exe"]

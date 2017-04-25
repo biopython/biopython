@@ -301,7 +301,6 @@ class Hmmer2TextParser(object):
 
 
 class Hmmer2TextIndexer(_BaseHmmerTextIndexer):
-
     """Indexer for hmmer2-text format."""
 
     _parser = Hmmer2TextParser
@@ -341,6 +340,7 @@ class Hmmer2TextIndexer(_BaseHmmerTextIndexer):
                 break
 
             line = read_forward(handle)
+
 
 # if not used as a module, run the doctest
 if __name__ == "__main__":

@@ -20,7 +20,6 @@ class Record(object):
     """Holds information for one node in the SCOP hierarchy.
 
     Attributes:
-
      - sunid - SCOP unique identifiers of this node
      - parent - Parents sunid
      - children - Sequence of childrens sunids

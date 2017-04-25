@@ -332,8 +332,7 @@ class DatabaseLoader(object):
         return answer
 
     def _update_left_right_taxon_values(self, left_value):
-        """update the left and right values in the table
-        """
+        """Update the left and right taxon values in the table."""
         if not left_value:
             return
         # Due to the UNIQUE constraint on the left and right values in the taxon
@@ -1103,7 +1102,8 @@ class DatabaseLoader(object):
     def _load_dbxrefs(self, record, bioentry_id):
         """Load any sequence level cross references into the database (PRIVATE).
 
-        See table bioentry_dbxref."""
+        See table bioentry_dbxref.
+        """
         for rank, value in enumerate(record.dbxrefs):
             # Split the DB:accession string at first colon.
             # We have to cope with things like:

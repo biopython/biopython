@@ -27,9 +27,7 @@ except ImportError:
 
 
 class _ShelveIndex(dict):
-    """An index file wrapped around shelve.
-
-    """
+    """An index file wrapped around shelve."""
     # Without a good dbm module installed, this is pretty slow and
     # generates large files.  When generating an index on a FASTA-
     # formatted file with 82000 sequences (37Mb), the
@@ -72,9 +70,7 @@ class _ShelveIndex(dict):
 
 
 class _InMemoryIndex(dict):
-    """This creates an in-memory index file.
-
-    """
+    """This creates an in-memory index file."""
     # File Format:
     # version
     # key value
@@ -146,5 +142,6 @@ class _InMemoryIndex(dict):
         intlist = [int(i) for i in str.split(',')]
         intlist = array.array('b', intlist)
         return pickle.loads(''.join(chr(i) for i in intlist))
+
 
 Index = _InMemoryIndex

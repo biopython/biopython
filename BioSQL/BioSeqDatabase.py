@@ -244,8 +244,7 @@ class DBServer(object):
         self.__delitem__(db_name)
 
     def new_database(self, db_name, authority=None, description=None):
-        """Add a new database to the server and return it.
-        """
+        """Add a new database to the server and return it."""
         # make the database
         sql = r"INSERT INTO biodatabase (name, authority, description)" \
               r" VALUES (%s, %s, %s)"
@@ -311,18 +310,15 @@ class _CursorWrapper(object):
         self.real_cursor = real_cursor
 
     def execute(self, operation, params=None, multi=False):
-        """Execute a sql statement
-        """
+        """Execute a sql statement."""
         self.real_cursor.execute(operation, params, multi)
 
     def executemany(self, operation, params):
-        """Execute many sql statements
-        """
+        """Execute many sql statements."""
         self.real_cursor.executemany(operation, params)
 
     def _convert_tuple(self, tuple_):
-        """Decode any bytestrings present in the row
-        """
+        """Decode any bytestrings present in the row."""
         tuple_list = list(tuple_)
         for i, elem in enumerate(tuple_list):
             if type(elem) is bytes:
@@ -492,15 +488,13 @@ class Adaptor(object):
         return rv[0]
 
     def execute(self, sql, args=None):
-        """Just execute an sql command.
-        """
+        """Just execute an sql command."""
         if os.name == "java":
             sql = sql.replace("%s", "?")
         self.dbutils.execute(self.cursor, sql, args)
 
     def executemany(self, sql, args):
-        """Execute many sql commands.
-        """
+        """Execute many sql commands."""
         if os.name == "java":
             sql = sql.replace("%s", "?")
         self.dbutils.executemany(self.cursor, sql, args)
@@ -522,14 +516,12 @@ class Adaptor(object):
             (start + 1, length, seqid))[0])
 
     def execute_and_fetch_col0(self, sql, args=None):
-        """Return a list of values from the first column in the row
-        """
+        """Return a list of values from the first column in the row."""
         self.execute(sql, args or ())
         return [field[0] for field in self.cursor.fetchall()]
 
     def execute_and_fetchall(self, sql, args=None):
-        """Return a list of tuples of all rows
-        """
+        """Return a list of tuples of all rows."""
         self.execute(sql, args or ())
         return self.cursor.fetchall()
 
@@ -589,7 +581,7 @@ class BioSeqDatabase(object):
         return "BioSeqDatabase(%r, %r)" % (self.adaptor, self.name)
 
     def get_Seq_by_id(self, name):
-        """Gets a DBSeqRecord object by its name
+        """Gets a DBSeqRecord object by its name.
 
         Example: seq_rec = db.get_Seq_by_id('ROA1_HUMAN')
 
@@ -600,7 +592,7 @@ class BioSeqDatabase(object):
         return BioSeq.DBSeqRecord(self.adaptor, seqid)
 
     def get_Seq_by_acc(self, name):
-        """Gets a DBSeqRecord object by accession number
+        """Gets a DBSeqRecord object by accession number.
 
         Example: seq_rec = db.get_Seq_by_acc('X77802')
 
@@ -611,7 +603,7 @@ class BioSeqDatabase(object):
         return BioSeq.DBSeqRecord(self.adaptor, seqid)
 
     def get_Seq_by_ver(self, name):
-        """Gets a DBSeqRecord object by version number
+        """Gets a DBSeqRecord object by version number.
 
         Example: seq_rec = db.get_Seq_by_ver('X77802.1')
 
@@ -622,7 +614,7 @@ class BioSeqDatabase(object):
         return BioSeq.DBSeqRecord(self.adaptor, seqid)
 
     def get_Seqs_by_acc(self, name):
-        """Gets a list of DBSeqRecord objects by accession number
+        """Gets a list of DBSeqRecord objects by accession number.
 
         Example: seq_recs = db.get_Seq_by_acc('X77802')
 

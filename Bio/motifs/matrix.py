@@ -366,7 +366,6 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
         """Returns the PWM score for a given sequence for all positions.
 
         Notes:
-
          - the sequence can only be a DNA sequence
          - the search is performed only on one strand
          - if the sequence and the motif have the same length, a single
@@ -540,7 +539,7 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
         return numerator / denominator
 
     def distribution(self, background=None, precision=10 ** 3):
-        """calculate the distribution of the scores at the given precision."""
+        """Calculate the distribution of the scores at the given precision."""
         from .thresholds import ScoreDistribution
         if background is None:
             background = dict.fromkeys(self._letters, 1.0)

@@ -11,7 +11,6 @@ from Bio.Application import _StaticArgument
 
 
 class SamtoolsViewCommandline(AbstractCommandline):
-
     """Command line wrapper for samtools view.
 
     Extract/print all or sub alignments in SAM or BAM format, equivalent to::

@@ -429,7 +429,9 @@ class RestrictionType(type):
         sorting order:
                     1. size of the recognition site.
                     2. if equal size, alphabetical order of the names.
-                    """
+
+        """
+
         if not isinstance(other, RestrictionType):
             raise NotImplementedError
         if len(cls) > len(other):
@@ -886,7 +888,8 @@ class Palindromic(AbstractCut):
                   of the sites that it will recognise are not.
                   for example here : CGAACG
 
-    Internal use only. Not meant to be instantiated."""
+    Internal use only. Not meant to be instantiated.
+    """
 
     @classmethod
     def _search(cls):
@@ -917,7 +920,8 @@ class NonPalindromic(AbstractCut):
     palindromic means : the recognition site and its reverse complement are
                         identical.
 
-    Internal use only. Not meant to be instantiated."""
+    Internal use only. Not meant to be instantiated.
+    """
 
     @classmethod
     def _search(cls):
@@ -985,7 +989,7 @@ class Unknown(AbstractCut):
 
         True if the enzyme produces blunt end.
 
-        see also:
+        See Also:
             RE.is_3overhang()
             RE.is_5overhang()
             RE.is_unknown()
@@ -999,7 +1003,7 @@ class Unknown(AbstractCut):
 
         True if the enzyme produces 5' overhang sticky end.
 
-        see also:
+        See Also:
             RE.is_3overhang()
             RE.is_blunt()
             RE.is_unknown()
@@ -1013,7 +1017,7 @@ class Unknown(AbstractCut):
 
         True if the enzyme produces 3' overhang sticky end.
 
-        see also:
+        See Also:
             RE.is_5overhang()
             RE.is_blunt()
             RE.is_unknown()
@@ -1114,7 +1118,7 @@ class Blunt(AbstractCut):
 
         True if the enzyme produces blunt end.
 
-        see also:
+        See Also:
             RE.is_3overhang()
             RE.is_5overhang()
             RE.is_unknown()
@@ -1128,7 +1132,7 @@ class Blunt(AbstractCut):
 
         True if the enzyme produces 5' overhang sticky end.
 
-        see also:
+        See Also:
             RE.is_3overhang()
             RE.is_blunt()
             RE.is_unknown()
@@ -1142,7 +1146,7 @@ class Blunt(AbstractCut):
 
         True if the enzyme produces 3' overhang sticky end.
 
-        see also:
+        See Also:
             RE.is_5overhang()
             RE.is_blunt()
             RE.is_unknown()
@@ -1245,7 +1249,7 @@ class Ov5(AbstractCut):
 
         True if the enzyme produces blunt end.
 
-        see also:
+        See Also:
             RE.is_3overhang()
             RE.is_5overhang()
             RE.is_unknown()
@@ -1259,7 +1263,7 @@ class Ov5(AbstractCut):
 
         True if the enzyme produces 5' overhang sticky end.
 
-        see also:
+        See Also:
             RE.is_3overhang()
             RE.is_blunt()
             RE.is_unknown()
@@ -1273,7 +1277,7 @@ class Ov5(AbstractCut):
 
         True if the enzyme produces 3' overhang sticky end.
 
-        see also:
+        See Also:
             RE.is_5overhang()
             RE.is_blunt()
             RE.is_unknown()
@@ -1380,7 +1384,7 @@ class Ov3(AbstractCut):
 
         True if the enzyme produces blunt end.
 
-        see also:
+        See Also:
             RE.is_3overhang()
             RE.is_5overhang()
             RE.is_unknown()
@@ -1394,7 +1398,7 @@ class Ov3(AbstractCut):
 
         True if the enzyme produces 5' overhang sticky end.
 
-        see also:
+        See Also:
             RE.is_3overhang()
             RE.is_blunt()
             RE.is_unknown()
@@ -1408,7 +1412,7 @@ class Ov3(AbstractCut):
 
         True if the enzyme produces 3' overhang sticky end.
 
-        see also:
+        See Also:
             RE.is_5overhang()
             RE.is_blunt()
             RE.is_unknown()
@@ -1510,7 +1514,7 @@ class Defined(AbstractCut):
         i.e. the recognition site is not degenerated AND the enzyme cut inside
         the site.
 
-        see also:
+        See Also:
             RE.is_ambiguous()
             RE.is_unknown()
 
@@ -1525,7 +1529,7 @@ class Defined(AbstractCut):
         i.e. the recognition site is degenerated AND/OR the enzyme cut outside
         the site.
 
-        see also:
+        See Also:
             RE.is_defined()
             RE.is_unknown()
 
@@ -1539,7 +1543,7 @@ class Defined(AbstractCut):
         True if the sequence is unknown,
         i.e. the recognition site has not been characterised yet.
 
-        see also:
+        See Also:
             RE.is_defined()
             RE.is_ambiguous()
 
@@ -1655,7 +1659,7 @@ class Ambiguous(AbstractCut):
         i.e. the recognition site is not degenerated AND the enzyme cut inside
         the site.
 
-        see also:
+        See Also:
             RE.is_ambiguous()
             RE.is_unknown()
 
@@ -1670,7 +1674,7 @@ class Ambiguous(AbstractCut):
         i.e. the recognition site is degenerated AND/OR the enzyme cut outside
         the site.
 
-        see also:
+        See Also:
             RE.is_defined()
             RE.is_unknown()
 
@@ -1684,7 +1688,7 @@ class Ambiguous(AbstractCut):
         True if the sequence is unknown,
         i.e. the recognition site has not been characterised yet.
 
-        see also:
+        See Also:
             RE.is_defined()
             RE.is_ambiguous()
 
@@ -1832,7 +1836,7 @@ class NotDefined(AbstractCut):
         i.e. the recognition site is not degenerated AND the enzyme cut inside
         the site.
 
-        see also:
+        See Also:
             RE.is_ambiguous()
             RE.is_unknown()
 
@@ -1847,7 +1851,7 @@ class NotDefined(AbstractCut):
         i.e. the recognition site is degenerated AND/OR the enzyme cut outside
         the site.
 
-        see also:
+        See Also:
             RE.is_defined()
             RE.is_unknown()
 
@@ -1861,11 +1865,12 @@ class NotDefined(AbstractCut):
         True if the sequence is unknown,
         i.e. the recognition site has not been characterised yet.
 
-        see also:
+        See Also:
             RE.is_defined()
             RE.is_ambiguous()
 
-        """
+            """
+
         return True
 
     @classmethod
@@ -2110,8 +2115,7 @@ class RestrictionBatch(set):
         return set.add(self, self.format(other))
 
     def add_nocheck(self, other):
-        """B.add_nocheck(other) -> add other to B. don't check type of other.
-        """
+        """B.add_nocheck(other) -> add other to B. don't check type of other."""
         return set.add(self, other)
 
     def format(self, y):
@@ -2243,7 +2247,8 @@ class Analysis(RestrictionBatch, PrintFormat):
         For most of the method of this class if a dictionary is given it will
         be used as the base to calculate the results.
         If no dictionary is given a new analysis using the Restriction Batch
-        which has been given when the Analysis class has been instantiated."""
+        which has been given when the Analysis class has been instantiated.
+        """
         RestrictionBatch.__init__(self, restrictionbatch)
         self.rb = restrictionbatch
         self.sequence = sequence

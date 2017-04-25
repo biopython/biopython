@@ -71,6 +71,7 @@ def find(string, trie):
         start += 1
     return results
 
+
 DEFAULT_BOUNDARY_CHARS = string.punctuation + string.whitespace
 
 

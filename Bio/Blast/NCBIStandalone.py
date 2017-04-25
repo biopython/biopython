@@ -800,9 +800,7 @@ class _Scanner(object):
 
 
 class BlastParser(AbstractParser):
-    """Parses BLAST data into a Record.Blast object.
-
-    """
+    """Parses BLAST data into a Record.Blast object."""
     def __init__(self):
         """__init__(self)"""
         self._scanner = _Scanner()
@@ -815,9 +813,7 @@ class BlastParser(AbstractParser):
 
 
 class PSIBlastParser(AbstractParser):
-    """Parses BLAST data into a Record.PSIBlast object.
-
-    """
+    """Parses BLAST data into a Record.PSIBlast object."""
     def __init__(self):
         """__init__(self)"""
         self._scanner = _Scanner()
@@ -1607,7 +1603,6 @@ class Iterator(object):
 
     Methods:
     next   Return the next record from the stream, or None.
-
     """
     def __init__(self, handle, parser=None):
         """__init__(self, handle, parser=None)
@@ -1632,7 +1627,6 @@ class Iterator(object):
 
         Return the next Blast record from the file.  If no more records,
         return None.
-
         """
         lines = []
         query = False
@@ -1797,8 +1791,7 @@ class BlastErrorParser(AbstractParser):
         self._consumer = _BlastErrorConsumer()
 
     def parse(self, handle):
-        """Parse a handle, attempting to diagnose errors.
-        """
+        """Parse a handle, attempting to diagnose errors."""
         results = handle.read()
 
         try:

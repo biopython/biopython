@@ -5,7 +5,10 @@
 
 import numpy
 
-from Bio.Cluster.cluster import *  # noqa - lots coming from C code
+from Bio.Cluster.cluster import version, kcluster, kmedoids, treecluster
+from Bio.Cluster.cluster import somcluster, median, mean, clusterdistance
+from Bio.Cluster.cluster import clustercentroids, distancematrix, pca
+from Bio.Cluster.cluster import Node, Tree
 
 
 def _treesort(order, nodeorder, nodecounts, tree):

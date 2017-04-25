@@ -69,6 +69,7 @@ def is_numpy():
     except ImportError:
         return False
 
+
 # The default verbosity (not verbose)
 VERBOSITY = 0
 
@@ -196,6 +197,8 @@ def _have_bug17666():
         # TypeError: integer argument expected, got 'tuple'
         handle.close()
         return True
+
+
 if _have_bug17666():
     DOCTEST_MODULES.remove("Bio.bgzf")
 
@@ -363,8 +366,7 @@ class ComparisonTestCase(unittest.TestCase):
         expected.close()
 
     def generate_output(self):
-        """Generate the golden output for the specified test.
-        """
+        """Generate the golden output for the specified test."""
         outputdir = os.path.join(TestRunner.testdir, "output")
         outputfile = os.path.join(outputdir, self.name)
 

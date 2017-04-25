@@ -3,8 +3,7 @@
 # as part of this package.
 #
 
-"""Command line wrapper for bwa
-"""
+"""Command line wrapper for bwa."""
 
 from __future__ import print_function
 from Bio._py3k import basestring

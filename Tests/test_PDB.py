@@ -1167,17 +1167,6 @@ class TransformTests(unittest.TestCase):
 
         self.assertEqual(calc_angle(v1, v2, v3), 1.5707963267948966)
         self.assertEqual(calc_dihedral(v1, v2, v3, v4), 1.5707963267948966)
-        ref = refmat(v1, v3)
-        rot = rotmat(v1, v3)
-        self.assertTrue(numpy.array_equal(ref[0], numpy.array([1.0, 0.0, 0.0])))
-        self.assertTrue(numpy.array_equal(ref[1], numpy.array([0.0, 2.220446049250313e-16, 0.9999999999999998])))
-        self.assertTrue(numpy.array_equal(ref[2], numpy.array([0.0, 0.9999999999999998, 2.220446049250313e-16])))
-        self.assertTrue(numpy.array_equal(rot[0], numpy.array([1.0, 0.0, 0.0])))
-        self.assertTrue(numpy.array_equal(rot[1], numpy.array([0.0, 2.220446049250313e-16, 0.9999999999999998])))
-        self.assertTrue(numpy.array_equal(rot[2], numpy.array([0.0, -0.9999999999999998, -2.220446049250313e-16])))
-        self.assertTrue(numpy.array_equal(v1.left_multiply(ref).get_array(), numpy.array([0.0, 0.9999999999999998, 2.220446049250313e-16])))
-        self.assertTrue(numpy.array_equal(v1.left_multiply(rot).get_array(), numpy.array([0.0, 0.9999999999999998, -2.220446049250313e-16])))
-        self.assertTrue(numpy.array_equal(v1.right_multiply(numpy.transpose(rot)).get_array(), numpy.array([0.0, 0.9999999999999998, -2.220446049250313e-16])))
         self.assertTrue(numpy.array_equal((v1 - v2).get_array(), numpy.array([0.0, 0.0, 1.0])))
         self.assertTrue(numpy.array_equal((v1 - 1).get_array(), numpy.array([-1.0, -1.0, 0.0])))
         self.assertTrue(numpy.array_equal((v1 - (1, 2, 3)).get_array(), numpy.array([-1.0, -2.0, -2.0])))
@@ -1194,6 +1183,74 @@ class TransformTests(unittest.TestCase):
         self.assertEqual(v1.normsq(), 1.0)
         v1[2] = 10
         self.assertEqual(v1.__getitem__(2), 10)
+
+        # Vector normalization
+        v1 = Vector([2, 0, 0])
+        self.assertTrue(numpy.array_equal(v1.normalized().get_array(), numpy.array([1, 0, 0])))
+        # State of v1 should not be affected by `normalized`
+        self.assertTrue(numpy.array_equal(v1.get_array(), numpy.array([2, 0, 0])))
+        v1.normalize()
+        # State of v1 should be affected by `normalize`
+        self.assertTrue(numpy.array_equal(v1.get_array(), numpy.array([1, 0, 0])))
+
+    def test_refmat(self):
+        v1 = Vector(0, 0, 1)
+        v2 = Vector(0, 1, 0)
+        ref = refmat(v1, v2)
+        self.assertTrue(numpy.allclose(ref[0], [1.0, 0.0, 0.0]))
+        self.assertTrue(numpy.allclose(ref[1], [0.0, 0.0, 1.0]))
+        self.assertTrue(numpy.allclose(ref[2], [0.0, 1.0, 0.0]))
+        self.assertTrue(numpy.allclose(v1.left_multiply(ref).get_array(), [0.0, 1.0, 0.0]))
+
+    def test_rotmat(self):
+        # Regular 90 deg rotation
+        v1 = Vector(0, 0, 1)
+        v2 = Vector(0, 1, 0)
+        rot = rotmat(v1, v2)
+        self.assertTrue(numpy.allclose(rot[0], numpy.array([1.0, 0.0, 0.0])))
+        self.assertTrue(numpy.allclose(rot[1], numpy.array([0.0, 0.0, 1.0])))
+        self.assertTrue(numpy.allclose(rot[2], numpy.array([0.0, -1.0, 0.0])))
+        self.assertTrue(numpy.allclose(v1.left_multiply(rot).get_array(), [0.0, 1.0, 0.0]))
+        self.assertTrue(numpy.allclose(v1.right_multiply(numpy.transpose(rot)).get_array(), [0.0, 1.0, 0.0]))
+
+        # Applying rotmat works when the rotation is 180 deg (singularity)
+        v1 = Vector([1.0, 0.8, 0])
+        v2 = Vector([-1.0, -0.8, 0])
+        rot = rotmat(v1, v2)
+        v3 = v1.left_multiply(rot)
+        self.assertTrue(numpy.allclose(v2.get_array(), v3.get_array()))
+
+        # Applying rotmat works when the rotation is 0 deg (singularity)
+        v1 = Vector([1.0, 0.8, 0])
+        v2 = Vector([1.0, 0.8, 0])
+        rot = rotmat(v1, v2)
+        v3 = v1.left_multiply(rot)
+        self.assertTrue(numpy.allclose(v1.get_array(), v3.get_array()))
+
+    def test_m2rotaxis(self):
+        # Regular 90 deg rotation
+        v1 = Vector(0, 0, 1)
+        v2 = Vector(0, 1, 0)
+        rot = rotmat(v1, v2)
+        angle, axis = m2rotaxis(rot)
+        self.assertTrue(numpy.allclose(axis.get_array(), [-1.0, 0.0, 0.0]))
+        self.assertTrue(abs(angle - numpy.pi / 2) < 1e-5)
+
+        # 180 deg rotation
+        v1 = Vector([1.0, 0.8, 0])
+        v2 = Vector([-1.0, -0.8, 0])
+        rot = rotmat(v1, v2)
+        angle, axis = m2rotaxis(rot)
+        self.assertTrue(abs(axis * v1) < 1e-5)  # axis orthogonal to v1
+        self.assertTrue(abs(angle - numpy.pi) < 1e-5)
+
+        # 0 deg rotation. Axis must be [1, 0, 0] as per Vector documentation
+        v1 = Vector([1.0, 0.8, 0])
+        v2 = Vector([1.0, 0.8, 0])
+        rot = rotmat(v1, v2)
+        angle, axis = m2rotaxis(rot)
+        self.assertTrue(numpy.allclose(axis.get_array(), [1, 0, 0]))
+        self.assertTrue(abs(angle) < 1e-5)
 
     def test_Vector_angles(self):
         angle = random() * numpy.pi
@@ -1518,6 +1575,7 @@ class ResidueDepthTests(unittest.TestCase):
 
         assert len(msms_radii) == len(biopy_radii)
         self.assertSequenceEqual(msms_radii, biopy_radii)
+
 
 if __name__ == '__main__':
     runner = unittest.TextTestRunner(verbosity=2)

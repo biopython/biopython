@@ -118,6 +118,7 @@ def generate_rolls(num_rolls):
 
     return roll_seq.toseq(), state_seq.toseq()
 
+
 # -- build a MarkovModel
 mm_builder = MarkovModel.MarkovModelBuilder(DiceTypeAlphabet(),
                                             DiceRollAlphabet())
@@ -168,6 +169,7 @@ def stop_training(log_likelihood_change, num_iterations):
         return 1
     else:
         return 0
+
 
 # -- Standard Training with known states
 print("Training with the Standard Trainer...")

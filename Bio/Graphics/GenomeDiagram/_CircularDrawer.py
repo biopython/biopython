@@ -99,7 +99,6 @@ class CircularDrawer(AbstractDrawer):
                     color)    Return a drawable element describing an arc
 
         Attributes:
-
         o tracklines    Boolean for whether to draw lines dilineating tracks
 
         o pagesize      Tuple describing the size of the page in pixels
