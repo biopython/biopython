@@ -141,6 +141,7 @@ class Record(object):
           (will be replaced by the dblink cross-references in 2009).
         - dblinks - The genome sequencing project number(s) and other links.
           (will replace the project information in 2009).
+
     """
     # constants for outputting GenBank information
     GB_LINE_LENGTH = 79
@@ -522,6 +523,7 @@ class Reference(object):
         - medline_id - The medline id for the reference.
         - pubmed_id - The pubmed_id for the reference.
         - remark - Free-form remarks about the reference.
+
     """
     def __init__(self):
         self.number = ''
@@ -632,6 +634,7 @@ class Feature(object):
         - key - The key name of the featue (ie. source)
         - location - The string specifying the location of the feature.
         - qualfiers - A listing Qualifier objects in the feature.
+
     """
     def __init__(self):
         self.key = ''
@@ -664,6 +667,7 @@ class Qualifier(object):
 
         - key - The key name of the qualifier (ie. /organism=)
         - value - The value of the qualifier ("Dictyostelium discoideum").
+
     """
     def __init__(self):
         self.key = ''

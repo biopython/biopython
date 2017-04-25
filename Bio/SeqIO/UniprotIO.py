@@ -14,6 +14,7 @@ http://www.uniprot.org
 
 The UniProt XML format essentially replaces the old plain text file format
 originally introduced by SwissProt ("swiss" format in Bio.SeqIO).
+
 """
 import sys
 

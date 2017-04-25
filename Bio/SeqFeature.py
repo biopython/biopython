@@ -88,6 +88,7 @@ class SeqFeature(object):
           analogous to the qualifiers from a GenBank feature table. The keys of
           the dictionary are qualifier names, the values are the qualifier
           values. As of Biopython 1.69 this is an ordered dictionary.
+
     """
 
     def __init__(self, location=None, type='', location_operator='',
@@ -474,6 +475,7 @@ class Reference(object):
     o medline_id - A medline reference for the article.
     o pubmed_id - A pubmed reference for the article.
     o comment - A place to stick any comments about the reference.
+
     """
 
     def __init__(self):

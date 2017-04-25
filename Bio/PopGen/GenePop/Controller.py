@@ -549,6 +549,7 @@ class GenePopController(object):
             - number of genes
 
         Will create a file called fname.INF
+        
         """
         self._run_genepop(["INF"], [5, 1], fname)
         # First pass, general information
@@ -723,6 +724,7 @@ class GenePopController(object):
         Will create a file called fname.FST .
 
         This does not return the genotype frequencies.
+        
         """
         self._run_genepop([".FST"], [6, 1], fname)
         with open(fname + ".FST") as f:

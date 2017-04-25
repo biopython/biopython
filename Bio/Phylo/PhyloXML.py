@@ -11,6 +11,7 @@ Official specification:
    http://phyloxml.org/
 Journal article:
     Han and Zmasek (2009), doi:10.1186/1471-2105-10-356
+
 """
 
 import re
@@ -242,6 +243,7 @@ class Phylogeny(PhyloElement, BaseTree.Tree):
         """Equivalent to self.confidences[0] if there is only 1 value.
 
         See also: `Clade.confidence`, `Clade.taxonomy`
+
         """
         if len(self.confidences) == 0:
             return None

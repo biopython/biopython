@@ -172,6 +172,7 @@ class SignatureCoder(object):
         list corresponds to the signature passed in to the initializer and
         is the number of times that the signature was found, divided by the
         total number of signatures found in the sequence.
+ 
         """
         # check to be sure we have signatures to deal with,
         # otherwise just return an empty list

@@ -60,6 +60,7 @@ class AbstractDPAlgorithms(object):
         containing the calculated forward variable.
 
         o The calculated probability of the sequence.
+
         """
         # all of the different letters that the state path can be in
         state_letters = self._seq.states.alphabet.letters
@@ -123,6 +124,7 @@ class AbstractDPAlgorithms(object):
         o A dictionary containing the backwards variables. This has keys
         of the form (state letter, position in the training sequence),
         and values containing the calculated backward variable.
+
         """
         # all of the different letters that the state path can be in
         state_letters = self._seq.states.alphabet.letters
@@ -203,6 +205,7 @@ class ScaledDPAlgorithms(AbstractDPAlgorithms):
         Returns:
 
         o The calculated scaling variable for the sequence item.
+
         """
         # all of the different letters the state can have
         state_letters = self._seq.states.alphabet.letters

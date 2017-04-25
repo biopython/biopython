@@ -220,7 +220,8 @@ class FormattedSeq(object):
     def is_linear(self):
         """FS.is_linear() -> bool.
 
-        True if the sequence will analysed as a linear sequence."""
+        True if the sequence will analysed as a linear sequence.
+        """
         return self.linear
 
     def finditer(self, pattern, size):
@@ -257,7 +258,8 @@ class RestrictionType(type):
         Not intended to be used in normal operation. The enzymes are
         instantiated when importing the module.
 
-        see below."""
+        see below.
+        """
         if "-" in name:
             raise ValueError("Problem with hyphen in %s as enzyme name"
                              % repr(name))
@@ -287,60 +289,69 @@ class RestrictionType(type):
         """RE.__div__(other) -> list.
 
         RE/other
-        returns RE.search(other)."""
+        returns RE.search(other).
+        """
         return cls.search(other)
 
     def __rdiv__(cls, other):
         """RE.__rdiv__(other) -> list.
 
         other/RE
-        returns RE.search(other)."""
+        returns RE.search(other).
+        """
         return cls.search(other)
 
     def __truediv__(cls, other):
         """RE.__truediv__(other) -> list.
 
         RE/other
-        returns RE.search(other)."""
+        returns RE.search(other).
+        """
         return cls.search(other)
 
     def __rtruediv__(cls, other):
         """RE.__rtruediv__(other) -> list.
 
         other/RE
-        returns RE.search(other)."""
+        returns RE.search(other).
+        """
         return cls.search(other)
 
     def __floordiv__(cls, other):
         """RE.__floordiv__(other) -> list.
 
         RE//other
-        returns RE.catalyse(other)."""
+        returns RE.catalyse(other).
+        """
         return cls.catalyse(other)
 
     def __rfloordiv__(cls, other):
         """RE.__rfloordiv__(other) -> list.
 
         other//RE
-        returns RE.catalyse(other)."""
+        returns RE.catalyse(other).
+        """
         return cls.catalyse(other)
 
     def __str__(cls):
         """RE.__str__() -> str.
 
-        return the name of the enzyme."""
+        return the name of the enzyme.
+        """
         return cls.__name__
 
     def __repr__(cls):
         """RE.__repr__() -> str.
 
-        used with eval or exec will instantiate the enzyme."""
+        used with eval or exec will instantiate the enzyme.
+        """
         return "%s" % cls.__name__
 
     def __len__(cls):
         """RE.__len__() -> int.
 
-        length of the recognition site."""
+        length of the recognition site.
+        """
         return cls.size
 
     def __hash__(cls):
@@ -401,7 +412,8 @@ class RestrictionType(type):
 
         a is greater or equal than b if the a site is longer than b site.
         if their site have the same length sort by alphabetical order of their
-        names."""
+        names.
+        """
         if not isinstance(other, RestrictionType):
             raise NotImplementedError
         if len(cls) > len(other):
@@ -416,7 +428,8 @@ class RestrictionType(type):
 
         sorting order:
                     1. size of the recognition site.
-                    2. if equal size, alphabetical order of the names."""
+                    2. if equal size, alphabetical order of the names.
+                    """
         if not isinstance(other, RestrictionType):
             raise NotImplementedError
         if len(cls) > len(other):
@@ -532,7 +545,8 @@ class AbstractCut(RestrictionType):
         True if other is an isoschizomer of RE.
         False else.
 
-        isoschizomer <=> same site."""
+        isoschizomer <=> same site.
+        """
         return (not cls != other) or cls >> other
 
     @classmethod
@@ -559,7 +573,8 @@ class AbstractCut(RestrictionType):
         return a tuple of all the neoschizomers of RE.
         if batch is supplied it is used instead of the default AllEnzymes.
 
-        neoschizomer <=> same site, different position of restriction."""
+        neoschizomer <=> same site, different position of restriction.
+        """
         if not batch:
             batch = AllEnzymes
         r = sorted(x for x in batch if cls >> x)
@@ -584,7 +599,8 @@ class AbstractCut(RestrictionType):
     def frequency(cls):
         """RE.frequency() -> int.
 
-        frequency of the site."""
+        frequency of the site.
+        """
         return cls.freq
 
 
@@ -610,14 +626,16 @@ class NoCut(AbstractCut):
     def cut_once(cls):
         """RE.cut_once() -> bool.
 
-        True if the enzyme cut the sequence one time on each strand."""
+        True if the enzyme cut the sequence one time on each strand.
+        """
         return False
 
     @classmethod
     def cut_twice(cls):
         """RE.cut_twice() -> bool.
 
-        True if the enzyme cut the sequence twice on each strand."""
+        True if the enzyme cut the sequence twice on each strand.
+        """
         return False
 
     @classmethod
@@ -755,13 +773,15 @@ class TwoCuts(AbstractCut):
 
     Correspond to ncuts values of 4 in emboss_e.###
 
-    Internal use only. Not meant to be instantiated."""
+    Internal use only. Not meant to be instantiated.
+    """
 
     @classmethod
     def cut_once(cls):
         """RE.cut_once() -> bool.
 
-        True if the enzyme cut the sequence one time on each strand."""
+        True if the enzyme cut the sequence one time on each strand.
+        """
         return False
 
     @classmethod
@@ -969,6 +989,7 @@ class Unknown(AbstractCut):
             RE.is_3overhang()
             RE.is_5overhang()
             RE.is_unknown()
+
         """
         return False
 
@@ -982,6 +1003,7 @@ class Unknown(AbstractCut):
             RE.is_3overhang()
             RE.is_blunt()
             RE.is_unknown()
+
         """
         return False
 
@@ -995,6 +1017,7 @@ class Unknown(AbstractCut):
             RE.is_5overhang()
             RE.is_blunt()
             RE.is_unknown()
+
         """
         return False
 
@@ -1095,6 +1118,7 @@ class Blunt(AbstractCut):
             RE.is_3overhang()
             RE.is_5overhang()
             RE.is_unknown()
+
         """
         return True
 
@@ -1108,6 +1132,7 @@ class Blunt(AbstractCut):
             RE.is_3overhang()
             RE.is_blunt()
             RE.is_unknown()
+
         """
         return False
 
@@ -1121,6 +1146,7 @@ class Blunt(AbstractCut):
             RE.is_5overhang()
             RE.is_blunt()
             RE.is_unknown()
+
         """
         return False
 
@@ -1223,6 +1249,7 @@ class Ov5(AbstractCut):
             RE.is_3overhang()
             RE.is_5overhang()
             RE.is_unknown()
+
         """
         return False
 
@@ -1236,6 +1263,7 @@ class Ov5(AbstractCut):
             RE.is_3overhang()
             RE.is_blunt()
             RE.is_unknown()
+
         """
         return True
 
@@ -1249,6 +1277,7 @@ class Ov5(AbstractCut):
             RE.is_5overhang()
             RE.is_blunt()
             RE.is_unknown()
+
         """
         return False
 
@@ -1264,7 +1293,8 @@ class Ov5(AbstractCut):
     def compatible_end(cls, batch=None):
         """RE.compatible_end() -> list.
 
-        list of all the enzymes that share compatible end with RE."""
+        list of all the enzymes that share compatible end with RE.
+        """
         if not batch:
             batch = AllEnzymes
         r = sorted(x for x in iter(AllEnzymes) if x.is_5overhang() and
@@ -1354,6 +1384,7 @@ class Ov3(AbstractCut):
             RE.is_3overhang()
             RE.is_5overhang()
             RE.is_unknown()
+
         """
         return False
 
@@ -1367,6 +1398,7 @@ class Ov3(AbstractCut):
             RE.is_3overhang()
             RE.is_blunt()
             RE.is_unknown()
+
         """
         return False
 
@@ -1380,6 +1412,7 @@ class Ov3(AbstractCut):
             RE.is_5overhang()
             RE.is_blunt()
             RE.is_unknown()
+
         """
         return True
 
@@ -1430,7 +1463,8 @@ class Defined(AbstractCut):
         Blunt enzymes are always defined. even if there site is GGATCCNNN^_N
         There overhang is always the same : blunt!
 
-    Internal use only. Not meant to be instantiated."""
+    Internal use only. Not meant to be instantiated.
+    """
 
     @classmethod
     def _drop(cls):
@@ -1479,6 +1513,7 @@ class Defined(AbstractCut):
         see also:
             RE.is_ambiguous()
             RE.is_unknown()
+
         """
         return True
 
@@ -1493,6 +1528,7 @@ class Defined(AbstractCut):
         see also:
             RE.is_defined()
             RE.is_unknown()
+
         """
         return False
 
@@ -1506,6 +1542,7 @@ class Defined(AbstractCut):
         see also:
             RE.is_defined()
             RE.is_ambiguous()
+
         """
         return False
 
@@ -1578,6 +1615,7 @@ class Ambiguous(AbstractCut):
         There overhang is always the same : blunt!
 
     Internal use only. Not meant to be instantiated.
+
     """
 
     @classmethod
@@ -1620,6 +1658,7 @@ class Ambiguous(AbstractCut):
         see also:
             RE.is_ambiguous()
             RE.is_unknown()
+
         """
         return False
 
@@ -1634,6 +1673,7 @@ class Ambiguous(AbstractCut):
         see also:
             RE.is_defined()
             RE.is_unknown()
+
         """
         return True
 
@@ -1647,6 +1687,7 @@ class Ambiguous(AbstractCut):
         see also:
             RE.is_defined()
             RE.is_ambiguous()
+
         """
         return False
 
@@ -1765,6 +1806,7 @@ class NotDefined(AbstractCut):
 
         drop the site that are situated outside the sequence in linear
         sequence. modify the index for site in circular sequences.
+
         """
         if cls.dna.is_linear():
             return
@@ -1793,6 +1835,7 @@ class NotDefined(AbstractCut):
         see also:
             RE.is_ambiguous()
             RE.is_unknown()
+
         """
         return False
 
@@ -1807,6 +1850,7 @@ class NotDefined(AbstractCut):
         see also:
             RE.is_defined()
             RE.is_unknown()
+
         """
         return False
 
@@ -1819,7 +1863,9 @@ class NotDefined(AbstractCut):
 
         see also:
             RE.is_defined()
-            RE.is_ambiguous()"""
+            RE.is_ambiguous()
+
+        """
         return True
 
     @classmethod

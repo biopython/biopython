@@ -38,6 +38,7 @@ class PatternIO(object):
         when it is written to a file and read back. This character should
         not be in the possible alphabet of the sequences, or there will
         be trouble.
+
         """
         self._alphabet = alphabet
 

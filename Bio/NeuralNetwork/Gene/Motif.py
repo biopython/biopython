@@ -48,6 +48,7 @@ class MotifFinder(object):
         Returns:
         A PatternRepository object that contains all of the motifs (and their
         counts) found in the training sequences).
+
         """
         motif_info = self._get_motif_dict(seq_records, motif_size)
 
@@ -108,6 +109,7 @@ class MotifFinder(object):
         A PatternRepository object that has motifs, but instead of their
         raw counts, this has the counts in the first set of records
         subtracted from the counts in the second set.
+
         """
         first_motifs = self._get_motif_dict(first_records, motif_size)
         second_motifs = self._get_motif_dict(second_records, motif_size)

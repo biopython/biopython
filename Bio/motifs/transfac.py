@@ -77,6 +77,7 @@ motifs.
 Attributes:
     o version:   The version number, corresponding to the 'VV' field
                  in the TRANSFAC file;
+
 """
     def __init__(self):
         self.version = None

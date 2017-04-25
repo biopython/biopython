@@ -185,6 +185,7 @@ class _BitString(str):
 
         Be careful, "011011" also contains "000000". Actually, all _BitString
         objects contain all-zero _BitString of the same length.
+
         """
         xorbit = self ^ other
         return (xorbit.count('1') == self.count('1') - other.count('1'))
@@ -223,6 +224,7 @@ def strict_consensus(trees):
     :Parameters:
         trees : iterable
             iterable of trees to produce consensus tree.
+
     """
     trees_iter = iter(trees)
     first_tree = next(trees_iter)

@@ -85,6 +85,7 @@ class GraphData(object):
         o negcolor     colors.Color for drawing low values (some styles)
 
         o linewidth     Int, thickness to draw the line in 'line' styles
+
     """
     def __init__(self, id=None, data=None, name=None, style='bar',
                  color=colors.lightgreen, altcolor=colors.darkseagreen,

@@ -67,6 +67,7 @@ def calculate(nb, observation, scale=False):
     Returns:
         A dictionary where the keys is the class and the value is the log
         probability of the class.
+
     """
     # P(class|observation) = P(observation|class)*P(class)/P(observation)
     # Taking the log:

@@ -60,6 +60,7 @@ class Pathway(object):
     Reactions are held in a dictionary, keyed by node ID for the path.
     The elements referred to in the reaction must be added before the
     reaction itself.
+
     """
     def __init__(self):
         self._name = ''
@@ -268,6 +269,7 @@ class Entry(object):
 
     NOTE: The alt attribute represents a subelement of the substrate and
     product elements in the KGML file
+
     """
     def __init__(self):
         self._id = None
@@ -458,6 +460,7 @@ class Graphics(object):
     We permit non-DTD attributes and attribute settings, such as
 
     dash         List of ints, describing an on/off pattern for dashes
+
     """
     def __init__(self, parent):
         self.name = ''
@@ -622,6 +625,7 @@ class Reaction(object):
     type           String: reversible or irreversible
     substrate      Entry object of the substrate
     product        Entry object of the product
+
     """
     def __init__(self):
         self._id = None
@@ -744,6 +748,7 @@ class Relation(object):
         - type         The relation type
         - subtypes     List of subtypes for the relation, as a list of
                        (name, value) tuples
+
     """
     def __init__(self):
         self._entry1 = None

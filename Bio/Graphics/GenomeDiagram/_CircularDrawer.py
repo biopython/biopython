@@ -145,6 +145,7 @@ class CircularDrawer(AbstractDrawer):
 
         o cross_track_links List of tuples each with four entries (track A,
                             feature A, track B, feature B) to be linked.
+
     """
     def __init__(self, parent=None, pagesize='A3', orientation='landscape',
                  x=0.05, y=0.05, xl=None, xr=None, yt=None, yb=None,

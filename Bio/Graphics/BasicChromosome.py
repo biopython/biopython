@@ -61,6 +61,7 @@ class _ChromosomeComponent(Widget):
         o _sub_components -- Any components which are contained under
         this parent component. This attribute should be accessed through
         the add() and remove() functions.
+
         """
         self._sub_components = []
 
@@ -211,6 +212,7 @@ class Chromosome(_ChromosomeComponent):
         same scale. If this is not set, then the chromosome drawing will
         be scaled by the number of segements in the chromosome (so each
         chromosome will be the exact same final size).
+
         """
         _ChromosomeComponent.__init__(self)
 
@@ -397,6 +399,7 @@ class ChromosomeSegment(_ChromosomeComponent):
 
         o chr_percent - The percentage of area that the chromosome
         segment takes up.
+
         """
         _ChromosomeComponent.__init__(self)
 

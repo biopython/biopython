@@ -78,6 +78,7 @@ class _Scanner(object):
 
     Methods:
      - feed     Feed data into the scanner.
+
     """
     def feed(self, handle, consumer):
         """S.feed(handle, consumer)

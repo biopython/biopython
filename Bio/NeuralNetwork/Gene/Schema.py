@@ -74,6 +74,7 @@ class Schema(object):
         Returns:
         A compiled regular expression pattern object that can be used
         for searching strings.
+
         """
         regexp_string = ""
 
@@ -703,6 +704,7 @@ class SchemaFactory(object):
         o A string representing the newly generated schema.
 
         o A list of all of the motifs in motif_list that match the schema.
+
         """
         assert motif in motif_list, \
                "Expected starting motif present in remaining motifs."

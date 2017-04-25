@@ -286,6 +286,7 @@ class SummaryInfo(object):
         Returns:
             - A replacment dictionary which is modified from initial_dict with
               the information from the sequence comparison.
+
         """
         # loop through each residue in the sequences
         for residue_num in range(len(seq1)):
@@ -345,6 +346,7 @@ class SummaryInfo(object):
               characters, but maybe X's or something else might be useful later.
               This will also include any characters that are specified to be
               skipped.) Defaults to an empty list.
+
         """
         if skip_items is None:
             skip_items = []
@@ -385,6 +387,7 @@ class SummaryInfo(object):
 
         Returns:
             - A PSSM (position specific score matrix) object.
+
         """
         # determine all of the letters we have to deal with
         all_letters = self._get_all_letters()
@@ -483,6 +486,7 @@ class SummaryInfo(object):
 
         Please see the Biopython manual for more information on how information
         content is calculated.
+
         """
         # if no end was specified, then we default to the end of the sequence
         if end is None:

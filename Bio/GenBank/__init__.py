@@ -636,6 +636,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
        feature locations.
      - feature_cleaner - a class that will be used to provide specialized
        cleaning-up of feature values.
+
     """
     def __init__(self, use_fuzziness, feature_cleaner=None):
         from Bio.SeqRecord import SeqRecord

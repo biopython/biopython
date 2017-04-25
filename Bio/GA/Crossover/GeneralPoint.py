@@ -111,6 +111,7 @@ class GeneralPointCrossover(object):
            returns: [0]+x_0...x_n+[bound]
              where n=self._npoints-1
                and 0 < x_0 < x_1 ... < bound
+
         """
         results = []
         for increment in range(self._npoints):

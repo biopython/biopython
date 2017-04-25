@@ -39,6 +39,7 @@ class ComparativeScatterPlot(object):
     If everything is just one set of points, display_info can look like::
 
         display_info = [[(1, 2), (3, 4), (5, 6)]]
+
     """
     def __init__(self, output_format='pdf'):
         # customizable attributes

@@ -107,6 +107,7 @@ class RouletteWheelSelection(AbstractSelection):
         be selected if the number is between .1 and .3, and so on.
 
         The values of the dictionary are the organism instances.
+
         """
         # first sum up the total fitness in the population
         total_fitness = 0

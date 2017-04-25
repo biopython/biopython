@@ -182,6 +182,7 @@ def draw_polygon(list_of_points,
 
     Returns a closed path object, beginning at (x1,y1) going round
     the four points in order, and filling with the passed colour.
+
     """
     # Let the UK spelling (colour) override the USA spelling (color)
     if colour is not None:
@@ -373,6 +374,7 @@ class AbstractDrawer(object):
 
             - cross_track_links List of tuples each with four entries (track A,
               feature A, track B, feature B) to be linked.
+
     """
     def __init__(self, parent, pagesize='A3', orientation='landscape',
                  x=0.05, y=0.05, xl=None, xr=None, yt=None, yb=None,
