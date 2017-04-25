@@ -1877,8 +1877,8 @@ class TestNCBIXML(unittest.TestCase):
                     records = NCBIXML.parse(handle)
                 except BiopythonDeprecationWarning as e:
                     self.assertEqual(str(e),
-                                     "Accessing the .database_letters will 
-                                     "be deprecated in the next 
+                                     "Accessing the .database_letters will " 
+                                     "be deprecated in the next " 
                                      "version of Biopython.")
                 else:
                     self.assertTrue(False, "Expected BiopythonDeprecationWarning here.")
