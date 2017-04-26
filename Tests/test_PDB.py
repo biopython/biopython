@@ -42,6 +42,7 @@ from Bio.PDB import rotmat, Vector, refmat, calc_angle, calc_dihedral, rotaxis, 
 from Bio.PDB import Residue, Atom, StructureAlignment, Superimposer, Selection
 from Bio.PDB import make_dssp_dict
 from Bio.PDB import DSSP
+from Bio.PDB import FragmentMapper
 from Bio.PDB.NACCESS import process_asa_data, process_rsa_data
 from Bio.PDB.ResidueDepth import _get_atom_radius
 
