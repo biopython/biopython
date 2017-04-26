@@ -1585,7 +1585,7 @@ class FragmentMapperTests(unittest.TestCase):
         p = PDBParser()
         pdb1 = "PDB/1A8O.pdb"
         s = p.get_structure("X", pdb1)
-        self.assertEqual(m, s[0])
+        m = s[0]
         fm = FragmentMapper(m, 10, 5, "levitt_data")
         for r in Selection.unfold_entities(m, "R"):
             self.assertEqual(str(r), "R")
