@@ -1589,7 +1589,7 @@ class FragmentMapperTests(unittest.TestCase):
         for r in Selection.unfold_entities(m, "R"):
             self.assertEqual(str(r), "R")
             if r in fm:
-                print(fm[r])
+                self.assertTrue(str(fm[r]).startswith("<Fragment length=5 id="))
 
 if __name__ == '__main__':
     runner = unittest.TextTestRunner(verbosity=2)
