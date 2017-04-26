@@ -68,7 +68,6 @@ class Header(object):
             It is preferred that users use num_letters_in_database from
             Bio.Record.DatabaseReport instead of database_letters.
             """
-
             warnings.warn(
                 "Accessing the .database_letters will "
                 "be deprecated in the next "
