@@ -13,6 +13,7 @@ psl_34_002.psl      PSL format, single query, no hits
 psl_34_003.psl      PSL format, single query, hits with single HSP
 psl_34_004.psl      PSL format, single query, hits with multiple HSPs
 psl_34_005.psl      PSL format, multiple queries, no header
+psl_35_001.psl      PSL format, protein query
 
 pslx_34_001.pslx      PSLX format, multiple queries
 pslx_34_002.pslx      PSLX format, single query, no hits
