@@ -1582,7 +1582,7 @@ class FragmentMapperTests(unittest.TestCase):
     def self_test(self):
         """Self test for FragmentMapper module."""
         p = PDBParser()
-        pdb1= "PDB/1A8O.pdb"
+        pdb1 = "PDB/1A8O.pdb"
         s = p.get_structure("X", pdb1)
         self.assertEqual(m, s[0])
         fm = FragmentMapper(m, 10, 5, "levitt_data")
@@ -1590,6 +1590,7 @@ class FragmentMapperTests(unittest.TestCase):
             self.assertEqual(str(r), "R")
             if r in fm:
                 self.assertTrue(str(fm[r]).startswith("<Fragment length=5 id="))
+
 
 if __name__ == '__main__':
     runner = unittest.TextTestRunner(verbosity=2)
