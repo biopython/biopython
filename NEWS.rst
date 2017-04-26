@@ -33,6 +33,7 @@ possible, especially the following contributors:
 - Jimmy O'Donnell (first contribution)
 - John Kern (first contribution)
 - João Rodrigues
+- Markus Piotrowski
 - Mateusz Korycinski (first contribution)
 - Maximilian Greil
 - morrme (first contribution)
