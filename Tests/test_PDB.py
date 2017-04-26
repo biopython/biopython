@@ -43,7 +43,7 @@ from Bio.PDB import Residue, Atom, StructureAlignment, Superimposer, Selection
 from Bio.PDB import make_dssp_dict
 from Bio.PDB import DSSP
 from Bio.PDB.NACCESS import process_asa_data, process_rsa_data
-from Bio.PDB.ResidueDepth import _get_atom_radius
+import Bio.PDB.Polypeptide
 
 
 # NB: the 'A_' prefix ensures this test case is run first
@@ -1167,6 +1167,17 @@ class TransformTests(unittest.TestCase):
 
         self.assertEqual(calc_angle(v1, v2, v3), 1.5707963267948966)
         self.assertEqual(calc_dihedral(v1, v2, v3, v4), 1.5707963267948966)
+        ref = refmat(v1, v3)
+        rot = rotmat(v1, v3)
+        self.assertTrue(numpy.array_equal(ref[0], numpy.array([1.0, 0.0, 0.0])))
+        self.assertTrue(numpy.array_equal(ref[1], numpy.array([0.0, 2.220446049250313e-16, 0.9999999999999998])))
+        self.assertTrue(numpy.array_equal(ref[2], numpy.array([0.0, 0.9999999999999998, 2.220446049250313e-16])))
+        self.assertTrue(numpy.array_equal(rot[0], numpy.array([1.0, 0.0, 0.0])))
+        self.assertTrue(numpy.array_equal(rot[1], numpy.array([0.0, 2.220446049250313e-16, 0.9999999999999998])))
+        self.assertTrue(numpy.array_equal(rot[2], numpy.array([0.0, -0.9999999999999998, -2.220446049250313e-16])))
+        self.assertTrue(numpy.array_equal(v1.left_multiply(ref).get_array(), numpy.array([0.0, 0.9999999999999998, 2.220446049250313e-16])))
+        self.assertTrue(numpy.array_equal(v1.left_multiply(rot).get_array(), numpy.array([0.0, 0.9999999999999998, -2.220446049250313e-16])))
+        self.assertTrue(numpy.array_equal(v1.right_multiply(numpy.transpose(rot)).get_array(), numpy.array([0.0, 0.9999999999999998, -2.220446049250313e-16])))
         self.assertTrue(numpy.array_equal((v1 - v2).get_array(), numpy.array([0.0, 0.0, 1.0])))
         self.assertTrue(numpy.array_equal((v1 - 1).get_array(), numpy.array([-1.0, -1.0, 0.0])))
         self.assertTrue(numpy.array_equal((v1 - (1, 2, 3)).get_array(), numpy.array([-1.0, -2.0, -2.0])))
@@ -1183,74 +1194,6 @@ class TransformTests(unittest.TestCase):
         self.assertEqual(v1.normsq(), 1.0)
         v1[2] = 10
         self.assertEqual(v1.__getitem__(2), 10)
-
-        # Vector normalization
-        v1 = Vector([2, 0, 0])
-        self.assertTrue(numpy.array_equal(v1.normalized().get_array(), numpy.array([1, 0, 0])))
-        # State of v1 should not be affected by `normalized`
-        self.assertTrue(numpy.array_equal(v1.get_array(), numpy.array([2, 0, 0])))
-        v1.normalize()
-        # State of v1 should be affected by `normalize`
-        self.assertTrue(numpy.array_equal(v1.get_array(), numpy.array([1, 0, 0])))
-
-    def test_refmat(self):
-        v1 = Vector(0, 0, 1)
-        v2 = Vector(0, 1, 0)
-        ref = refmat(v1, v2)
-        self.assertTrue(numpy.allclose(ref[0], [1.0, 0.0, 0.0]))
-        self.assertTrue(numpy.allclose(ref[1], [0.0, 0.0, 1.0]))
-        self.assertTrue(numpy.allclose(ref[2], [0.0, 1.0, 0.0]))
-        self.assertTrue(numpy.allclose(v1.left_multiply(ref).get_array(), [0.0, 1.0, 0.0]))
-
-    def test_rotmat(self):
-        # Regular 90 deg rotation
-        v1 = Vector(0, 0, 1)
-        v2 = Vector(0, 1, 0)
-        rot = rotmat(v1, v2)
-        self.assertTrue(numpy.allclose(rot[0], numpy.array([1.0, 0.0, 0.0])))
-        self.assertTrue(numpy.allclose(rot[1], numpy.array([0.0, 0.0, 1.0])))
-        self.assertTrue(numpy.allclose(rot[2], numpy.array([0.0, -1.0, 0.0])))
-        self.assertTrue(numpy.allclose(v1.left_multiply(rot).get_array(), [0.0, 1.0, 0.0]))
-        self.assertTrue(numpy.allclose(v1.right_multiply(numpy.transpose(rot)).get_array(), [0.0, 1.0, 0.0]))
-
-        # Applying rotmat works when the rotation is 180 deg (singularity)
-        v1 = Vector([1.0, 0.8, 0])
-        v2 = Vector([-1.0, -0.8, 0])
-        rot = rotmat(v1, v2)
-        v3 = v1.left_multiply(rot)
-        self.assertTrue(numpy.allclose(v2.get_array(), v3.get_array()))
-
-        # Applying rotmat works when the rotation is 0 deg (singularity)
-        v1 = Vector([1.0, 0.8, 0])
-        v2 = Vector([1.0, 0.8, 0])
-        rot = rotmat(v1, v2)
-        v3 = v1.left_multiply(rot)
-        self.assertTrue(numpy.allclose(v1.get_array(), v3.get_array()))
-
-    def test_m2rotaxis(self):
-        # Regular 90 deg rotation
-        v1 = Vector(0, 0, 1)
-        v2 = Vector(0, 1, 0)
-        rot = rotmat(v1, v2)
-        angle, axis = m2rotaxis(rot)
-        self.assertTrue(numpy.allclose(axis.get_array(), [-1.0, 0.0, 0.0]))
-        self.assertTrue(abs(angle - numpy.pi / 2) < 1e-5)
-
-        # 180 deg rotation
-        v1 = Vector([1.0, 0.8, 0])
-        v2 = Vector([-1.0, -0.8, 0])
-        rot = rotmat(v1, v2)
-        angle, axis = m2rotaxis(rot)
-        self.assertTrue(abs(axis * v1) < 1e-5)  # axis orthogonal to v1
-        self.assertTrue(abs(angle - numpy.pi) < 1e-5)
-
-        # 0 deg rotation. Axis must be [1, 0, 0] as per Vector documentation
-        v1 = Vector([1.0, 0.8, 0])
-        v2 = Vector([1.0, 0.8, 0])
-        rot = rotmat(v1, v2)
-        angle, axis = m2rotaxis(rot)
-        self.assertTrue(numpy.allclose(axis.get_array(), [1, 0, 0]))
-        self.assertTrue(abs(angle) < 1e-5)
 
     def test_Vector_angles(self):
         angle = random() * numpy.pi
@@ -1373,6 +1316,31 @@ class SuperimposerTests(unittest.TestCase):
         for aa in moving:
             atom_moved.append(aa.element)
         self.assertEqual(atom_moved, atom_list)
+
+
+class PolypeptideTests(unittest.TestCase):
+
+    def test_polypeptide(self):
+        """Tests on polypetide class and methods."""
+        p = PDBParser(PERMISSIVE=True)
+        pdb1 = "PDB/1A8O.pdb"
+        s = p.get_structure("scr", pdb1)
+        ppb = PPBuilder()
+        pp = ppb.build_peptides(s)
+        self.assertEqual(str(pp[0].get_sequence()), "DIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNW")
+        self.assertEqual(str(pp[1].get_sequence()), "TETLLVQNANPDCKTILKALGPGATLEE")
+        self.assertEqual(str(pp[2].get_sequence()), "TACQG")
+        self.assertEqual(pp[0].get_phi_psi_list(), [(None, -0.46297171497725553), (-1.0873937604007962, 2.1337707832637109), (-2.4052232743651878, 2.3807316946081554), (-1.1914372943688751, 2.2161228118006582), (-1.167611340740029, 2.63504626551578), (-0.99335831029928112, -0.40970857682803996), (-2.1102229342150527, 0.17890937328728854), (-1.4642755598371093, 2.2293202325745112), (-1.0140706072511441, 2.4596685907543421), (-0.9494747453388499, -0.73900573394588254), (-1.0520382830532629, -0.66228271877762757), (-1.1604702715237931, -0.71144976594057274), (-1.1433895379832477, -0.73988272191856985), (-1.0116813564889713, -0.76732761159664509), (-1.1245049821816666, -0.73669003771671482), (-1.1188875868971477, -0.77208804536726727), (-0.99944855432402901, -0.86199347028496931), (-1.2218445209967945, -0.41278852848807851), (-1.1797523232298848, -0.74792816563896825), (-1.2158962804334972, -0.60538112130585664), (-1.2012963395236214, -0.66151598677994561), (-1.098286327338313, -0.59288000176128175), (-1.0587237360099631, -0.32715161475523252), (-1.8180488653266087, 0.076317023651986796), (0.81096454256933281, 0.8307201820816954), (-1.0858318540132235, 2.4421060464231292), (-1.317788406220783, 3.1054909566220061), (-1.0724955936835108, -0.80881499531395828), (-1.0310715826779675, -0.74074258319072428), (-1.1338479074559662, -0.69806535315597451), (-1.0773262480370305, -0.74961850479413727), (-1.0646491069070618, -0.79609255605099349), (-1.079209857767184, None)])
+        self.assertEqual(pp[1].get_phi_psi_list(), [(None, -0.6810077089092923), (-1.2654003477656888, -0.58689987042756309), (-1.7467679151684763, -1.5655066256698336), (-0.93222202050010861, -0.69091768014353938), (-1.0699693497627973, -0.68572701018064663), (-1.321250172105257, -0.83547928112583147), (-1.1295030381766575, -0.45919650281636204), (-1.6998384679629563, 0.087487744110158971), (-1.3328935739528038, 2.7493784036212072), (-1.2085848379992596, 2.8824061114380322), (-0.78835169335812194, -0.88865925863187734), (-1.0368047825251516, -1.0126440282933373), (-1.1788424258727219, -0.62512258207729066), (-1.0006257355194528, -0.70383479861453324), (-1.1425458156816359, -0.80884032198946154), (-1.0340265770430699, -0.79095347672696326), (-1.1300398003294936, -0.66742335177097456), (-1.1765784546440818, -0.57468097451203259), (-1.3051983648370169, 0.096266553983964609), (-1.5795127381270151, -0.4424072820306057), (1.477283457431094, 3.0591799014706211), (-1.1404746234694785, 2.669830861488288), (1.3614994234410869, 0.041141112376985041), (-1.137263053786199, 2.2787650941964221), (-1.3782294896316221, 2.8403186820081854), (-1.0032808391039103, -0.662685839253501), (-1.0799976189959077, -0.78481017705166978), (-1.1480760290712395, None)])
+        self.assertEqual(pp[2].get_phi_psi_list(), [(None, -0.73222884210889716), (-1.1044740234566259, -0.69681334592782884), (-1.8497413300164958, 0.34762889834809058), (-1.1005541061077939, 2.5928546525702081), (2.6691630180526547, None)])
+        ppb = CaPPBuilder()
+        pp = ppb.build_peptides(s)
+        self.assertEqual(str(pp[0].get_sequence()), "DIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNW")
+        self.assertEqual(str(pp[1].get_sequence()), "TETLLVQNANPDCKTILKALGPGATLEE")
+        self.assertEqual(str(pp[2].get_sequence()), "TACQG")
+        self.assertEqual([ca.serial_number for ca in pp[0].get_ca_list()], [10, 18, 26, 37, 46, 50, 57, 66, 75, 82, 93, 104, 112, 124, 131, 139, 150, 161, 173, 182, 189, 197, 208, 213, 222, 231, 236, 242, 251, 260, 267, 276, 284])
+        self.assertEqual(pp[1].get_tau_list(), [0.3597907225123525, 0.43239284636769254, 0.99820157492712114, 0.6404992574459768, 0.86291043834277825, 0.8364364007031726, 1.9208425755291829, -1.6418305724904823, -1.6531461925249447, 0.8152943543297706, 0.62166174974010979, 1.1296800024708877, 0.85274229666614465, 0.84910125014427418, 0.8792136402844658, 0.89561671990228009, 1.0813933217353846, 1.2736678454416308, -2.5364947072163697, -0.50581980381973402, 0.48324880548682114, 2.6915888387001483, -2.2407955990017334, -1.938889842362177, 0.97306623802066594])
+        self.assertEqual(pp[2].get_theta_list(), [1.6610069445335354, 1.7491703334817772, 2.0702447422720143])
 
 
 class CopyTests(unittest.TestCase):
@@ -1546,36 +1514,6 @@ class NACCESSTests(unittest.TestCase):
         with open("PDB/1A8O.asa") as asa:
             naccess = process_asa_data(asa)
         self.assertEqual(len(naccess), 524)
-
-
-class ResidueDepthTests(unittest.TestCase):
-    """Tests for ResidueDepth module, except for running MSMS itself.
-    """
-
-    def test_pdb_to_xyzr(self):
-        """Test generation of xyzr (atomic radii) file"""
-
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", PDBConstructionWarning)
-            p = PDBParser(PERMISSIVE=1)
-            structure = p.get_structure("example", "PDB/1A8O.pdb")
-
-        # Read radii produced with original shell script
-        with open('PDB/1A8O.xyzr') as handle:
-            msms_radii = []
-            for line in handle:
-                fields = line.split()
-                radius = float(fields[3])
-                msms_radii.append(radius)
-
-        model = structure[0]
-        biopy_radii = []
-        for atom in model.get_atoms():
-            biopy_radii.append(_get_atom_radius(atom, rtype='united'))
-
-        assert len(msms_radii) == len(biopy_radii)
-        self.assertSequenceEqual(msms_radii, biopy_radii)
-
 
 if __name__ == '__main__':
     runner = unittest.TextTestRunner(verbosity=2)

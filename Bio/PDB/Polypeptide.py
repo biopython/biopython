@@ -451,36 +451,3 @@ class PPBuilder(_PPBuilder):
             return 1
         else:
             return 0
-
-
-if __name__ == "__main__":
-    import sys
-    from Bio.PDB.PDBParser import PDBParser
-
-    p = PDBParser(PERMISSIVE=True)
-
-    s = p.get_structure("scr", sys.argv[1])
-
-    ppb = PPBuilder()
-
-    print("C-N")
-    for pp in ppb.build_peptides(s):
-        print(pp.get_sequence())
-    for pp in ppb.build_peptides(s[0]):
-        print(pp.get_sequence())
-    for pp in ppb.build_peptides(s[0]["A"]):
-        print(pp.get_sequence())
-
-    for pp in ppb.build_peptides(s):
-        for phi, psi in pp.get_phi_psi_list():
-            print("%f %f" % (phi, psi))
-
-    ppb = CaPPBuilder()
-
-    print("CA-CA")
-    for pp in ppb.build_peptides(s):
-        print(pp.get_sequence())
-    for pp in ppb.build_peptides(s[0]):
-        print(pp.get_sequence())
-    for pp in ppb.build_peptides(s[0]["A"]):
-        print(pp.get_sequence())
