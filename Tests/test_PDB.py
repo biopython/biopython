@@ -1578,8 +1578,8 @@ class ResidueDepthTests(unittest.TestCase):
 
 
 class FragmentMapperTests(unittest.TestCase):
-    """Tests for FragmentMapper module.
-    """
+    """Tests for FragmentMapper module."""
+    
     def self_test(self):
         """Self test for FragmentMapper module."""
         p = PDBParser()
