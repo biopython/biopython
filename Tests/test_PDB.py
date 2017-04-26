@@ -1576,9 +1576,10 @@ class ResidueDepthTests(unittest.TestCase):
         assert len(msms_radii) == len(biopy_radii)
         self.assertSequenceEqual(msms_radii, biopy_radii)
 
+
 class FragmentMapperTests(unittest.TestCase):
-    """Tests for FragmentMapper module."""
-    
+    """Tests for FragmentMapper module.
+    """
     def self_test(self):
         """Self test for FragmentMapper module."""
         p = PDBParser()
