@@ -472,11 +472,8 @@ def _retrieve_taxon(adaptor, primary_id, taxon_id):
             # load_ncbi_taxonomy.pl this is how top parent nodes are stored.
             # Personally, I would have used a NULL parent_taxon_id here.
             break
-        if rank != "no rank":
-            # For consistency with older versions of Biopython, we are only
-            # interested in taxonomy entries with a stated rank.
-            # Add this to the start of the lineage list.
-            taxonomy.insert(0, name)
+
+        taxonomy.insert(0, name)
         taxon_id = parent_taxon_id
 
     if taxonomy:
