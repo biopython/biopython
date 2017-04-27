@@ -95,12 +95,15 @@ from Bio._py3k import StringIO
 import subprocess
 import warnings
 
-from Bio.Data import SCOPData
+from Bio.Data import IUPACData
 
 from Bio.PDB.AbstractPropertyMap import AbstractResiduePropertyMap
 from Bio.PDB.PDBExceptions import PDBException
 from Bio.PDB.PDBParser import PDBParser
 
+# Protein 3-letter codes are uppercase in PDB files
+protein_letters_3to1 = {key.upper(): value for key, value in
+                        IUPACData.protein_letters_3to1.items()}
 
 # Match C in DSSP
 _dssp_cys = re.compile('[a-z]')
@@ -475,7 +478,7 @@ class DSSP(AbstractResiduePropertyMap):
             # Verify if AA in DSSP == AA in Structure
             # Something went wrong if this is not true!
             # NB: DSSP uses X often
-            resname = SCOPData.protein_letters_3to1.get(resname, 'X')
+            resname = protein_letters_3to1.get(resname, 'X')
             if resname == "C":
                 # DSSP renames C in C-bridges to a,b,c,d,...
                 # - we rename it back to 'C'
