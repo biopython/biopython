@@ -28,6 +28,7 @@ possible, especially the following contributors:
 
 - Aaron Kitzmiller (first contribution)
 - Bertrand Caron (first contribution)
+- Connor T. Skennerton
 - Eric Rasche
 - Francesco Gastaldello
 - Jimmy O'Donnell (first contribution)
