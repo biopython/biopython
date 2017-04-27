@@ -238,7 +238,7 @@ def _make_dssp_dict(handle):
         sl = l.split()
         if len(sl) < 2:
             continue
-        if sl[1] == "RESIDUE":
+        if len(sl) >= 2 and sl[1] == "RESIDUE":
             # Start parsing from here
             start = 1
             continue
