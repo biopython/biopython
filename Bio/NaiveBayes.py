@@ -3,7 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""This provides code for a general Naive Bayes learner.
+"""General Naive Bayes learner.
 
 Naive Bayes is a supervised classification algorithm that uses Bayes
 rule to compute the fit between a new observation and some previously

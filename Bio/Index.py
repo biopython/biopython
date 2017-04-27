@@ -70,7 +70,7 @@ class _ShelveIndex(dict):
 
 
 class _InMemoryIndex(dict):
-    """This creates an in-memory index file."""
+    """Creates an in-memory index file (PRIVATE)."""
     # File Format:
     # version
     # key value

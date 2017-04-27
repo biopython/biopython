@@ -1969,7 +1969,7 @@ class Not_available(AbstractCut):
 
 
 class RestrictionBatch(set):
-    """This class holds methods for operations with more than one enzyme."""
+    """Class for operations on more than one enzyme."""
 
     def __init__(self, first=(), suppliers=()):
         """Initialize empty RB or pre-fill with enzymes (from supplier)."""

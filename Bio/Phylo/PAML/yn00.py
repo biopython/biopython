@@ -13,13 +13,11 @@ from . import _parse_yn00
 
 
 class Yn00Error(EnvironmentError):
-    """yn00 has failed. Run with verbose = True to view yn00's error
-    message.
-    """
+    """yn00 failed. Run with verbose=True to view yn00's error message."""
 
 
 class Yn00(Paml):
-    """This class implements an interface to yn00, part of the PAML package."""
+    """An interface to yn00, part of the PAML package."""
 
     def __init__(self, alignment=None, working_dir=None, out_file=None):
         """Initialize the Yn00 instance.

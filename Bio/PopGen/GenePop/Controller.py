@@ -3,10 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""
-This module allows to control GenePop.
-
-"""
+"""Module to control GenePop."""
 
 import os
 import re

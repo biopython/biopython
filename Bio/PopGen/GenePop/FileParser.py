@@ -3,7 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""This class provides code to parse BIG GenePop files.
+"""Code to parse BIG GenePop files.
 
 The difference between this class and the standard Bio.PopGen.GenePop.Record
 class is that this one does not read the whole file to memory.
@@ -26,7 +26,7 @@ from Bio.PopGen.GenePop import get_indiv
 def read(fname):
     """Parses a file containing a GenePop file.
 
-       fname is a file name that contains a GenePop record.
+    fname is a file name that contains a GenePop record.
     """
     record = FileRecord(fname)
     return record
@@ -58,10 +58,10 @@ class FileRecord(object):
     name and a list of alleles (2 per marker or 1 for haploid data).
 
     Examples::
+
         ('Ind1', [(1,2),    (3,3), (200,201)]
         ('Ind2', [(2,None), (3,3), (None,None)]
         ('Other1', [(1,1),  (4,3), (200,200)]
-
 
     """
     def __init__(self, fname):
@@ -73,8 +73,8 @@ class FileRecord(object):
     def __str__(self):
         """Returns (reconstructs) a GenePop textual representation.
 
-           This might take a lot of memory.
-           Marker length will be 3.
+        This might take a lot of memory.
+        Marker length will be 3.
         """
         marker_len = 3
         rep = [self.comment_line + '\n']
@@ -141,8 +141,8 @@ class FileRecord(object):
     def seek_position(self, pop, indiv):
         """Seeks a certain position in the file.
 
-           pop   - pop position (0 is first)
-           indiv - individual in pop
+        - pop - pop position (0 is first)
+        - indiv - individual in pop
         """
         self._handle.seek(0)
         self.skip_header()
@@ -167,12 +167,12 @@ class FileRecord(object):
     def get_individual(self):
         """Gets the next individual.
 
-           Returns individual information if there are more individuals
-           in the current population.
-           Returns True if there are no more individuals in the current
-           population, but there are more populations. Next read will
-           be of the following pop.
-           Returns False if at end of file.
+        Returns individual information if there are more individuals
+        in the current population.
+        Returns True if there are no more individuals in the current
+        population, but there are more populations. Next read will
+        be of the following pop.
+        Returns False if at end of file.
         """
         for line in self._handle:
             line = line.rstrip()
@@ -189,8 +189,8 @@ class FileRecord(object):
     def remove_population(self, pos, fname):
         """Removes a population (by position).
 
-           pos - position
-           fname - file to be created with population removed
+        - pos - position
+        - fname - file to be created with population removed
         """
         old_rec = read(self.fname)
         with open(fname, "w") as f:
@@ -230,8 +230,9 @@ class FileRecord(object):
     def remove_locus_by_position(self, pos, fname):
         """Removes a locus by position.
 
-           pos - position
-           fname - file to be created with locus removed
+        - pos - position
+        - fname - file to be created with locus removed
+
         """
         old_rec = read(self.fname)
         with open(fname, "w") as f:
@@ -269,8 +270,9 @@ class FileRecord(object):
     def remove_loci_by_position(self, positions, fname):
         """Removes a set of loci by position.
 
-           positions - positions
-           fname - file to be created with locus removed
+        - positions - positions
+        - fname - file to be created with locus removed
+
         """
         old_rec = read(self.fname)
         with open(fname, "w") as f:
@@ -313,8 +315,9 @@ class FileRecord(object):
     def remove_locus_by_name(self, name, fname):
         """Removes a locus by name.
 
-           name - name
-           fname - file to be created with locus removed
+        - name - name
+        - fname - file to be created with locus removed
+
         """
         for i in range(len(self.loci_list)):
             if self.loci_list[i] == name:
@@ -326,8 +329,9 @@ class FileRecord(object):
     def remove_loci_by_name(self, names, fname):
         """Removes a loci list (by name).
 
-           names - names
-           fname - file to be created with loci removed
+        - names - names
+        - fname - file to be created with loci removed
+
         """
         positions = []
         for i in range(len(self.loci_list)):

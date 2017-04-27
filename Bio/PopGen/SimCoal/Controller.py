@@ -5,7 +5,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""This module allows you to control Simcoal2 and FastSimcoal (DEPRECATED)."""
+"""Control Simcoal2 and FastSimcoal (DEPRECATED)."""
 
 import os
 import sys
@@ -14,7 +14,7 @@ from Bio.Application import AbstractCommandline, _Option, _Switch
 
 class SimCoalController(object):
     def __init__(self, simcoal_dir):
-        """Initializes the controller. (DEPRECATED)
+        """Initializes the controller (DEPRECATED).
 
         simcoal_dir is the directory where simcoal is.
 
@@ -39,8 +39,7 @@ class SimCoalController(object):
             raise IOError("SimCoal not executable")
 
     def run_simcoal(self, par_file, num_sims, ploydi='1', par_dir='.'):
-        """Executes SimCoal.
-        """
+        """Executes SimCoal."""
         if par_dir is None:
             par_dir = os.sep.join([".", 'SimCoal', 'runs'])
         curr_dir = os.getcwd()
@@ -61,8 +60,8 @@ class SimCoalController(object):
 
 
 class _FastSimCoalCommandLine(AbstractCommandline):
-    """ Command Line Wrapper for Fastsimcoal
-    """
+    """Command Line Wrapper for Fastsimcoal (PRIVATE)."""
+
     def __init__(self, fastsimcoal_dir=None, cmd='fastsimcoal', **kwargs):
         self.parameters = [
             _Option(["-i", "--ifile", "parfile"], "Name of the parameter file",

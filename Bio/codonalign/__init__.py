@@ -424,8 +424,7 @@ def _check_corr(pro, nucl, gap_char='-', codon_table=default_codon_table,
 
 def _get_shift_anchor_re(sh_anc, sh_nuc, shift_val, aa2re, anchor_len,
                          shift_id_pos):
-    """This function tries all the best to come up with an re that
-    matches a potentially shifted anchor.
+    """Finds an re that matches a potentially shifted anchor.
 
     Arguments:
         - sh_anc    - shifted anchor sequence
@@ -668,8 +667,7 @@ def _get_codon_rec(pro, nucl, span_mode, alphabet, gap_char="-",
 
 
 def _align_shift_recs(recs):
-    """This function is useful to build alignment according to the
-    frameshift detected by _check_corr.
+    """Build alignment according to the frameshift detected by _check_corr (PRIVATE).
 
     Argument:
         - recs - a list of SeqRecords containing a CodonSeq dictated

@@ -3,9 +3,9 @@
 # as part of this package.
 #
 
-"""
-This is an implementation of a state-emitting MarkovModel.  I am using
-terminology similar to Manning and Schutze.
+"""A state-emitting MarkovModel.
+
+Note terminology similar to Manning and Schutze is used.
 
 
 Functions:

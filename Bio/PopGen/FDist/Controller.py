@@ -3,7 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""This module allows you to control fdist (DEPRECATED).
+"""Code to control fdist (DEPRECATED).
 
 This will allow you to call fdist and associated programs (cplot,
 datacal, pv) by Mark Beaumont.

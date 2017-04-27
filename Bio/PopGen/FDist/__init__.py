@@ -3,7 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""This module provides code to work with FDist (DEPRECATED).
+"""Code to work with FDist (DEPRECATED).
 
 See http://www.rubic.rdg.ac.uk/~mab/software.html (old) and
 http://www.maths.bris.ac.uk/~mamab/ (new) for downloading the
@@ -14,7 +14,6 @@ Record           Holds FDist data.
 
 Functions:
 read             Parses a FDist record (file) into a Record object.
-
 
 """
 
@@ -31,7 +30,7 @@ warnings.warn("Bio.PopGen.FDist has been deprecated, and we intend to remove"
 def read(handle):
     """Parses FDist data into a Record object.
 
-       handle is a file-like object that contains a FDist record.
+    handle is a file-like object that contains a FDist record.
     """
     record = Record()
     record.data_org = int(str(next(handle)).rstrip())
@@ -57,14 +56,11 @@ class Record(object):
 
     Members:
 
-        - data_org    Data organization (0 pops by rows, 1 alleles by rows).
-          The Record will behave as if data was 0 (converting if needed)
-
-        - num_pops       Number of populations
-
-        - num_loci       Number of loci
-
-        - loci_data      Loci data
+    - data_org - Data organization (0 pops by rows, 1 alleles by rows).
+      The Record will behave as if data was 0 (converting if needed)
+    - num_pops - Number of populations
+    - num_loci - Number of loci
+    - loci_data - Loci data
 
     loci_data is a list, where each element represents a locus. Each element
     is a tuple, the first element is the number of alleles, the second

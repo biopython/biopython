@@ -123,7 +123,7 @@ class SequenceWriter(object):
 
 
 class SequentialSequenceWriter(SequenceWriter):
-    """This class should be subclassed.
+    """Base class for sequence writers. This class should be subclassed.
 
     It is intended for sequential file formats with an (optional)
     header, repeated records, and an (optional) footer.

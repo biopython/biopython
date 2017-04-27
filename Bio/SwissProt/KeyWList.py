@@ -24,7 +24,8 @@ from __future__ import print_function
 
 
 class Record(dict):
-    """
+    """Store information of one keyword or category from the keywords list.
+
     This record stores the information of one keyword or category in the
     keywlist.txt as a Python dictionary. The keys in this dictionary are
     the line codes that can appear in the keywlist.txt file::

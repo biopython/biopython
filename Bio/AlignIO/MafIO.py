@@ -232,7 +232,7 @@ def MafIterator(handle, seq_count=None, alphabet=single_letter_alphabet):
 
 
 class MafIndex(object):
-    """This is used as an index for a MAF file.
+    """Index for a MAF file.
 
     The index is a sqlite3 database that is built upon creation of the object
     if necessary, and queried when methods *search* or *get_spliced* are

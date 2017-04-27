@@ -5,10 +5,7 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""
-This module provides code to work with the prosite dat file from
-Prosite.
-http://www.expasy.ch/prosite/
+"""Parser for the prosite dat file from Prosite, http://www.expasy.ch/prosite/
 
 Tested with:
 Release 20.43, 10-Feb-2009

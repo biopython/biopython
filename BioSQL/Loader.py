@@ -502,7 +502,7 @@ class DatabaseLoader(object):
         return taxon_id
 
     def _get_taxon_id_from_ncbi_lineage(self, taxonomic_lineage):
-        """This is recursive! (PRIVATE).
+        """Recursive method to get taxon ID from NCBI lineage (PRIVATE).
 
         taxonomic_lineage - list of taxonomy dictionaries from Bio.Entrez
 

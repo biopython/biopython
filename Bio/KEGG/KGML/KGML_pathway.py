@@ -3,7 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""This module provides classes to represent a KGML Pathway Map.
+"""Classes to represent a KGML Pathway Map.
 
 The KGML definition is as of release KGML v0.7.1
 (http://www.kegg.jp/kegg/xml/docs/)

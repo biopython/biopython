@@ -227,7 +227,8 @@ class Entity(object):
 
 
 class DisorderedEntityWrapper(object):
-    """
+    """Wrapper class to group equivalent Entities.
+
     This class is a simple wrapper class that groups a number of equivalent
     Entities and forwards all method calls to one of them (the currently selected
     object). DisorderedResidue and DisorderedAtom are subclasses of this class.
@@ -315,7 +316,10 @@ class DisorderedEntityWrapper(object):
         self.selected_child = self.child_dict[id]
 
     def disordered_add(self, child):
-        """This is implemented by DisorderedAtom and DisorderedResidue."""
+        """Add disordered entry.
+
+        This is implemented by DisorderedAtom and DisorderedResidue.
+        """
         raise NotImplementedError
 
     def is_disordered(self):

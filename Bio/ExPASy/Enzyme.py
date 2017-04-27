@@ -4,10 +4,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""
-This module provides code to work with the enzyme.dat file from
-Enzyme.
-http://www.expasy.ch/enzyme/
+"""Parse the enzyme.dat file from Enzyme, http://www.expasy.ch/enzyme/
 
 Tested with the release of 03-Mar-2009.
 

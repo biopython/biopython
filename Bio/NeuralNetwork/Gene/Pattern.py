@@ -112,7 +112,7 @@ class PatternIO(object):
 
 
 class PatternRepository(object):
-    """This holds a list of specific patterns found in sequences.
+    """Hold a list of specific patterns found in sequences.
 
     This is designed to be a general holder for a set of patterns and
     should be subclassed for specific implementations (ie. holding Motifs

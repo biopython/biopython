@@ -1,4 +1,4 @@
-""" This module provides classes and functions to visualise a KGML Pathway Map
+"""Classes and functions to visualise a KGML Pathway Map.
 
 The KGML definition is as of release KGML v0.7.1
 (http://www.kegg.jp/kegg/xml/docs/)

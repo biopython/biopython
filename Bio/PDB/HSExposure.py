@@ -17,8 +17,7 @@ from Bio.PDB.Vector import rotaxis
 
 
 class _AbstractHSExposure(AbstractPropertyMap):
-    """
-    Abstract class to calculate Half-Sphere Exposure (HSE).
+    """Abstract class to calculate Half-Sphere Exposure (HSE).
 
     The HSE can be calculated based on the CA-CB vector, or the pseudo CB-CA
     vector based on three consecutive CA atoms. This is done by two separate
@@ -104,12 +103,12 @@ class _AbstractHSExposure(AbstractPropertyMap):
         AbstractPropertyMap.__init__(self, hse_map, hse_keys, hse_list)
 
     def _get_cb(self, r1, r2, r3):
-        """This method is provided by the subclasses to calculate HSE."""
+        """Method is provided by the subclasses to calculate HSE (PRIVATE)."""
         return NotImplemented
 
     def _get_gly_cb_vector(self, residue):
-        """
-        Return a pseudo CB vector for a Gly residue.
+        """Return a pseudo CB vector for a Gly residue (PRIVATE).
+
         The pseudoCB vector is centered at the origin.
 
         CB coord=N coord rotated over -120 degrees
@@ -135,12 +134,13 @@ class _AbstractHSExposure(AbstractPropertyMap):
 
 
 class HSExposureCA(_AbstractHSExposure):
-    """
-    Class to calculate HSE based on the approximate CA-CB vectors,
-    using three consecutive CA positions.
+    """Class to calculate HSE based on the approximate CA-CB vectors.
+
+    Uses three consecutive CA positions.
     """
     def __init__(self, model, radius=12, offset=0):
-        """
+        """Initialse class.
+
         @param model: the model that contains the residues
         @type model: L{Model}
 
@@ -154,7 +154,8 @@ class HSExposureCA(_AbstractHSExposure):
                 'EXP_HSE_A_U', 'EXP_HSE_A_D', 'EXP_CB_PCB_ANGLE')
 
     def _get_cb(self, r1, r2, r3):
-        """
+        """Calculate approx CA-CB direction (PRIVATE).
+
         Calculate the approximate CA-CB direction for a central
         CA atom based on the two flanking CA positions, and the angle
         with the real CA-CB vector.
@@ -199,7 +200,8 @@ class HSExposureCA(_AbstractHSExposure):
         return b, angle
 
     def pcb_vectors_pymol(self, filename="hs_exp.py"):
-        """
+        """Write PyMol script for visualization.
+
         Write a PyMol script that visualizes the pseudo CB-CA directions
         at the CA coordinates.
 
@@ -225,11 +227,11 @@ class HSExposureCA(_AbstractHSExposure):
 
 
 class HSExposureCB(_AbstractHSExposure):
-    """
-    Class to calculate HSE based on the real CA-CB vectors.
-    """
+    """Class to calculate HSE based on the real CA-CB vectors."""
+
     def __init__(self, model, radius=12, offset=0):
-        """
+        """Initialise class.
+
         @param model: the model that contains the residues
         @type model: L{Model}
 
@@ -243,8 +245,7 @@ class HSExposureCB(_AbstractHSExposure):
                 'EXP_HSE_B_U', 'EXP_HSE_B_D')
 
     def _get_cb(self, r1, r2, r3):
-        """
-        Method to calculate CB-CA vector.
+        """Method to calculate CB-CA vector.
 
         @param r1, r2, r3: three consecutive residues (only r2 is used)
         @type r1, r2, r3: L{Residue}
@@ -260,8 +261,11 @@ class HSExposureCB(_AbstractHSExposure):
 
 
 class ExposureCN(AbstractPropertyMap):
+    """Residue exposure as number of CA atoms around its CA atom."""
+
     def __init__(self, model, radius=12.0, offset=0):
-        """
+        """Initialise.
+
         A residue's exposure is defined as the number of CA atoms around
         that residues CA atom. A dictionary is returned that uses a L{Residue}
         object as key, and the residue exposure as corresponding value.

@@ -446,11 +446,15 @@ class DataHandler(object):
                 self.lists.append(name)
 
     def elementDecl(self, name, model):
-        """This callback function is called for each element declaration:
-        <!ELEMENT       name          (...)>
-        encountered in a DTD. The purpose of this function is to determine
-        whether this element should be regarded as a string, integer, list
-        dictionary, structure, or error.
+        """Callback function is called for each element declaration in a DTD.
+
+        This is used for each element declaration in a DTD like::
+
+            <!ELEMENT       name          (...)>
+
+        The purpose of this function is to determine whether this element
+        should be regarded as a string, integer, list, dictionary, structure,
+        or error.
         """
         if name.upper() == "ERROR":
             self.errors.append(name)

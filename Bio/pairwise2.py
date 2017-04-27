@@ -5,8 +5,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""This package implements pairwise sequence alignment using a dynamic
-programming algorithm.
+"""Pairwise sequence alignment using a dynamic programming algorithm.
 
 This provides functions to get global and local alignments between two
 sequences. A global alignment finds the best concordance between all
@@ -227,10 +226,11 @@ MAX_ALIGNMENTS = 1000   # maximum alignments recovered in traceback
 
 
 class align(object):
-    """This class provides functions that do alignments."""
+    """Class providing functions that do alignments."""
 
     class alignment_function(object):
-        """This class is callable impersonates an alignment function.
+        """Callable class which impersonates an alignment function.
+
         The constructor takes the name of the function.  This class
         will decode the name of the function to figure out how to
         interpret the parameters.
