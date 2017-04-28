@@ -74,7 +74,7 @@ class Header(object):
             "version of Biopython .",
             BiopythonDeprecationWarning)
 
-        return self._database_letters
+        return self.database_letters
 
 
 class Description(object):
