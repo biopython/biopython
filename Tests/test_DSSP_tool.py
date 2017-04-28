@@ -14,7 +14,7 @@ import unittest
 
 
 from Bio import MissingExternalDependencyError
-from Bio.PDB import PDBParser
+from Bio.PDB import PDBParser, MMCIFParser
 from Bio.PDB import DSSP
 
 # Check if DSSP is installed
@@ -44,6 +44,22 @@ class DSSP_test(unittest.TestCase):
         model = p.get_structure("2BEG", pdbfile)[0]
         dssp = DSSP(model, pdbfile)
         self.assertEqual(len(dssp), 130)
+
+    def test_dssp_with_mmcif_file(self):
+        """Test DSSP generationg from MMCIF"""
+        p = MMCIFParser()
+        pdbfile = "PDB/2BEG.cif"
+        model = p.get_structure("2BEG", pdbfile)[0]
+        dssp = DSSP(model, pdbfile)
+        self.assertEqual(len(dssp), 130)
+
+    def test_dssp_with_mmcif_file_and_nonstandard_residues(self):
+        """Test DSSP generationg from MMCIF"""
+        p = MMCIFParser()
+        pdbfile = "PDB/1AS5.cif"
+        model = p.get_structure("1AS5", pdbfile)[0]
+        dssp = DSSP(model, pdbfile)
+        self.assertEqual(len(dssp), 24)
 
 
 if __name__ == '__main__':
