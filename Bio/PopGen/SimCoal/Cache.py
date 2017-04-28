@@ -54,9 +54,7 @@ class SimCoalCache(object):
         tf.close()
 
     def listSimulations(self, ploidy='1'):
-        """
-           Lists available simulations.
-        """
+        """Lists available simulations."""
         files = os.listdir(self.cacheDir + os.sep + ploidy)
         sims = []
         for file in files:

@@ -155,8 +155,7 @@ def refmat(p, q):
 
 
 def rotmat(p, q):
-    """
-    Return a (left multiplying) matrix that rotates p onto q.
+    """Return a (left multiplying) matrix that rotates p onto q.
 
     Example:
         >>> r=rotmat(p, q)
