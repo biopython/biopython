@@ -37,8 +37,7 @@ class Chain(Entity):
         return cmp(icode1, icode2)
 
     def _translate_id(self, id):
-        """
-        A residue id is normally a tuple (hetero flag, sequence identifier,
+        """A residue id is normally a tuple (hetero flag, sequence identifier,
         insertion code). Since for most residues the hetero flag and the
         insertion code are blank (i.e. " "), you can just use the sequence
         identifier to index a residue in a chain. The _translate_id method
@@ -77,8 +76,7 @@ class Chain(Entity):
         return Entity.__contains__(self, id)
 
     def __delitem__(self, id):
-        """
-        Arguments:
+        """Arguments:
         o id - (string, int, string) or int
         """
         id = self._translate_id(id)

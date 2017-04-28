@@ -9,16 +9,14 @@ from Bio.PDB.Entity import Entity
 
 
 class Model(Entity):
-    """
-    The object representing a model in a structure. In a structure
+    """The object representing a model in a structure. In a structure
     derived from an X-ray crystallography experiment, only a single
     model will be present (with some exceptions). NMR structures
     normally contain many different models.
     """
 
     def __init__(self, id, serial_num=None):
-        """
-        Arguments:
+        """Arguments:
         o id - int
         o serial_num - int
         """

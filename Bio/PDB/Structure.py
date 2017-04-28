@@ -9,9 +9,7 @@ from Bio.PDB.Entity import Entity
 
 
 class Structure(Entity):
-    """
-    The Structure class contains a collection of Model instances.
-    """
+    """The Structure class contains a collection of Model instances."""
     def __init__(self, id):
         self.level = "S"
         Entity.__init__(self, id)

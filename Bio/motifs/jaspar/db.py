@@ -81,8 +81,7 @@ JASPAR_DFLT_COLLECTION = 'CORE'
 
 
 class JASPAR5(object):
-    """
-    Class representing a JASPAR5 DB. The methods within are loosely based
+    """Class representing a JASPAR5 DB. The methods within are loosely based
     on the perl TFBS::DB::JASPAR5 module.
 
     Note: We will only implement reading of JASPAR motifs from the DB.
@@ -92,8 +91,7 @@ class JASPAR5(object):
     """
 
     def __init__(self, host=None, name=None, user=None, password=None):
-        """
-        Construct a JASPAR5 instance and connect to specified DB
+        """Construct a JASPAR5 instance and connect to specified DB
 
         Arguments:
         host - host name of the the JASPAR DB server

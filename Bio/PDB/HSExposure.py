@@ -25,9 +25,8 @@ class _AbstractHSExposure(AbstractPropertyMap):
     """
     def __init__(self, model, radius, offset, hse_up_key, hse_down_key,
             angle_key=None):
-        """
-        @param model: model
-        @type model: L{Model}
+        """@param model: model
+           @type model: L{Model}
 
         @param radius: HSE radius
         @type radius: float

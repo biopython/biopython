@@ -307,9 +307,8 @@ class _PPBuilder(object):
     This assumes you want both standard and non-standard amino acids.
     """
     def __init__(self, radius):
-        """
-        @param radius: distance
-        @type radius: float
+        """@param radius: distance
+           @type radius: float
         """
         self.radius = radius
 

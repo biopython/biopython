@@ -432,9 +432,7 @@ def _get_atom_radius(atom, rtype='united'):
 
 
 def _read_vertex_array(filename):
-    """
-    Read the vertex list into a Numeric array.
-    """
+    """Read the vertex list into a Numeric array."""
     with open(filename, "r") as fp:
         vertex_list = []
         for l in fp:
@@ -448,8 +446,7 @@ def _read_vertex_array(filename):
 
 
 def get_surface(model, PDB_TO_XYZR=None, MSMS="msms"):
-    """
-    Return a Numpy array that represents
+    """Return a Numpy array that represents
     the vertex list of the molecular surface.
 
     MSMS --- msms executable (arg. to os.system)
@@ -487,18 +484,14 @@ def get_surface(model, PDB_TO_XYZR=None, MSMS="msms"):
 
 
 def min_dist(coord, surface):
-    """
-    Return minimum distance between coord
-    and surface.
-    """
+    """Return minimum distance between coord and surface."""
     d = surface - coord
     d2 = numpy.sum(d * d, 1)
     return numpy.sqrt(min(d2))
 
 
 def residue_depth(residue, surface):
-    """
-    Return average distance to surface for all
+    """Return average distance to surface for all
     atoms in a residue, ie. the residue depth.
     """
     atom_list = residue.get_unpacked_list()
@@ -519,9 +512,7 @@ def ca_depth(residue, surface):
 
 
 class ResidueDepth(AbstractPropertyMap):
-    """
-    Calculate residue and CA depth for all residues.
-    """
+    """Calculate residue and CA depth for all residues."""
     def __init__(self, model, pdb_file=None):
 
         # Issue warning if pdb_file is given

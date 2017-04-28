@@ -293,8 +293,7 @@ class PDBList(object):
         return final_file
 
     def update_pdb(self, file_format=None):
-        """
-        I guess this is the 'most wanted' function from this module.
+        """I guess this is the 'most wanted' function from this module.
         It gets the weekly lists of new and modified pdb entries and
         automatically downloads the according PDB files.
         You can call this module as a weekly cron job.

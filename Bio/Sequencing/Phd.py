@@ -6,8 +6,7 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""
-Parser for PHD files output by PHRED and used by PHRAP and CONSED.
+"""Parser for PHD files output by PHRED and used by PHRAP and CONSED.
 
 This module can be used directly which will return Record objects
 which should contain all the original data in the file.
