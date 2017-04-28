@@ -75,7 +75,7 @@ class Header(object):
             BiopythonDeprecationWarning)
 
         return self._database_letters
-    
+
     @database_letters.setter
     def database_letters(self, value):
         self._database_letters = value
