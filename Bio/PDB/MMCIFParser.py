@@ -150,7 +150,10 @@ class MMCIFParser(object):
                 raise PDBConstructionException("Invalid or missing occupancy")
             fieldname = fieldname_list[i]
             if fieldname == "HETATM":
-                hetatm_flag = "H"
+                if resname == "HOH" or resname == "WAT":
+                    hetatm_flag = "W"
+                else:
+                    hetatm_flag = "H"
             else:
                 hetatm_flag = " "
 
