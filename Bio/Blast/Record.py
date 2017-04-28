@@ -74,7 +74,11 @@ class Header(object):
             "version of Biopython .",
             BiopythonDeprecationWarning)
 
-        return self.database_letters
+        return self._database_letters
+    
+    @database_letters.setter
+    def database_letters(self, value):
+        self._database_letters = value
 
 
 class Description(object):
