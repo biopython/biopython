@@ -696,3 +696,7 @@ Release 1.63. The Martel specific ``EventGenerator`` was removed in Release 1.67
 
 ``Bio.ParserSupport.SGMLStrippingConsumer`` was deprecated in Release 1.59, and
 removed in Release 1.61.
+
+Bio.Blast.Record
+================
+The attribute ``database_letters`` is now deprecated as of Release 1.69.
