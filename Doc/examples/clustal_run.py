@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""clustal_run.py
+"""Run clustalw and parse the output.
 
 Example code to show how to create a clustalw command line, run clustalw
 and parse the results into an object that can be dealt with easily.
