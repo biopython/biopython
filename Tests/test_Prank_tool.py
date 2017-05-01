@@ -55,7 +55,8 @@ class PrankApplication(unittest.TestCase):
         self.infile1 = "Fasta/fa01"
 
     def tearDown(self):
-        """
+        """Remove generated files.
+
         output.1.dnd  output.1.fas  output.1.xml  output.2.dnd  output.2.fas  output.2.xml
         """
         if os.path.isfile("output.1.dnd"):
@@ -77,6 +78,7 @@ class PrankApplication(unittest.TestCase):
 
     def test_Prank_simple(self):
         """Simple round-trip through app with infile.
+
         output.?.??? files written to cwd - no way to redirect
         """
         cmdline = PrankCommandline(prank_exe)
@@ -89,7 +91,8 @@ class PrankApplication(unittest.TestCase):
         self.assertIn("Total time", output)
 
     def test_Prank_simple_with_NEXUS_output(self):
-        """Simple round-trip through app with infile, output in NEXUS
+        """Simple round-trip through app with infile, output in NEXUS.
+
         output.?.??? files written to cwd - no way to redirect
         """
         records = list(SeqIO.parse(self.infile1, "fasta"))

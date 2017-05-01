@@ -48,7 +48,7 @@ class XXmotifTestCase(unittest.TestCase):
             shutil.rmtree(self.out_dir)
 
     def standard_test_procedure(self, cline):
-        """Standard testing procedure used by all tests."""
+        """Standard test procedure used by all tests."""
         output, error = cline()
 
         self.assertTrue(os.path.isdir(self.out_dir))
@@ -63,7 +63,8 @@ class XXmotifTestCase(unittest.TestCase):
         # MEME parser does not like what XXmotif produces yet.
 
     def copy_and_mark_for_cleanup(self, path):
-        """
+        """Copy file to working directory and marks it for removal.
+
         XXmotif currently only handles a canonical filename as input, no paths.
         This method copies the specified file in the specified path to the
         current working directory and marks it for removal.
@@ -76,7 +77,7 @@ class XXmotifTestCase(unittest.TestCase):
         return filename
 
     def add_file_to_clean(self, filename):
-        """Adds a file for deferred removal by the tearDown routine."""
+        """Add a file for deferred removal by the tearDown routine."""
         self.files_to_clean.add(filename)
 
 

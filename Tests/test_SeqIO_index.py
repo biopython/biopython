@@ -98,6 +98,7 @@ if sqlite3:
         >>> len(d)
         54
         """
+
         def setUp(self):
             os.chdir(CUR_DIR)
 
@@ -178,6 +179,7 @@ if sqlite3:
 
     class NewIndexTest(unittest.TestCase):
         """Check paths etc in newly built index."""
+
         def setUp(self):
             os.chdir(CUR_DIR)
 
@@ -295,6 +297,7 @@ if sqlite3:
 
 class IndexDictTests(unittest.TestCase):
     """Cunning unit test where methods are added at run time."""
+
     def setUp(self):
         os.chdir(CUR_DIR)
         h, self.index_tmp = tempfile.mkstemp("_idx.tmp")

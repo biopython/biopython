@@ -76,9 +76,7 @@ class MafftApplication(unittest.TestCase):
             os.remove("Fasta/f002.tree")
 
     def test_Mafft_simple(self):
-        """Simple round-trip through app with infile.
-        Result passed to stdout.
-        """
+        """Simple round-trip through app with infile, result passed to stdout."""
         # Use a keyword argument at init,
         cmdline = MafftCommandline(mafft_exe, input=self.infile1)
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
@@ -91,9 +89,7 @@ class MafftApplication(unittest.TestCase):
         self.assertNotIn("$#=0", stderrdata)
 
     def test_Mafft_with_options(self):
-        """Simple round-trip through app with infile and options.
-        Result passed to stdout.
-        """
+        """Simple round-trip through app with infile and options, result passed to stdout."""
         cmdline = MafftCommandline(mafft_exe)
         cmdline.set_parameter("input", self.infile1)
         cmdline.set_parameter("maxiterate", 100)
@@ -104,7 +100,7 @@ class MafftApplication(unittest.TestCase):
         self.assertNotIn("$#=0", stderrdata)
 
     def test_Mafft_with_Clustalw_output(self):
-        """Simple round-trip through app with clustal output"""
+        """Simple round-trip through app with clustal output."""
         cmdline = MafftCommandline(mafft_exe)
         # Use some properties:
         cmdline.input = self.infile1
@@ -118,7 +114,7 @@ class MafftApplication(unittest.TestCase):
 
     if version_major >= 7:
         def test_Mafft_with_PHYLIP_output(self):
-            """Simple round-trip through app with PHYLIP output"""
+            """Simple round-trip through app with PHYLIP output."""
             cmdline = MafftCommandline(mafft_exe, input=self.infile1,
                                        phylipout=True)
             self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
@@ -134,7 +130,7 @@ class MafftApplication(unittest.TestCase):
             self.assertNotIn("$#=0", stderrdata)
 
         def test_Mafft_with_PHYLIP_namelength(self):
-            """Check PHYLIP with --namelength"""
+            """Check PHYLIP with --namelength."""
             cmdline = MafftCommandline(mafft_exe, input=self.infile1,
                                        phylipout=True, namelength=50)
             self.assertEqual(str(eval(repr(cmdline))), str(cmdline))

@@ -154,14 +154,13 @@ class TestSeq(unittest.TestCase):
         self.assertEqual(str(self.s) + "T", str(u))
 
     def test_concatenation_error(self):
-        """Test DNA Seq objects cannot be concatenated with Protein Seq
-        objects"""
+        """DNA Seq objects cannot be concatenated with Protein Seq objects."""
+
         with self.assertRaises(TypeError):
             self.s + Seq.Seq("T", IUPAC.protein)
 
     def test_concatenation_of_ambiguous_and_unambiguous_dna(self):
-        """Test concatenated Seq object with ambiguous and unambiguous DNA
-        returns ambiguous Seq"""
+        """Concatenate Seq object with ambiguous and unambiguous DNA returns ambiguous Seq."""
         t = Seq.Seq("T", IUPAC.ambiguous_dna)
         u = self.s + t
         self.assertEqual("IUPACAmbiguousDNA()", str(u.alphabet))
@@ -681,8 +680,6 @@ class TestMutableSeq(unittest.TestCase):
             seq.reverse_complement()
 
     def test_to_string_method(self):
-        """This method is currently deprecated, probably will need to remove
-        this test soon"""
         with self.assertWarns(BiopythonWarning):
             self.mutable_s.tostring()
 
@@ -940,8 +937,10 @@ class TestDoubleReverseComplement(unittest.TestCase):
 
 class TestSequenceAlphabets(unittest.TestCase):
     def test_sequence_alphabets(self):
-        """Sanity test on the test sequence alphabets (see also enhancement
-        bug 2597)"""
+        """Sanity test on the test sequence alphabets.
+
+        See also enhancement bug 2597.
+        """
         for nucleotide_seq in test_seqs:
             if "U" in str(nucleotide_seq).upper():
                 self.assertNotIsInstance(nucleotide_seq.alphabet,
