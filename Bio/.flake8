@@ -7,7 +7,7 @@ ignore =
     # flake8 v3.3.0 default ignore is      E121,E123,E126,E226,E24,E704,W503,W504
     E122,E123,E126,E127,E128,E501,E731,F401,F812,F841,
     # =====================================
-    # pydocstyle: D### - Missing Docstrings
+    # pydocstyle: D1## - Missing Docstrings
     # =====================================
     # D100	Missing docstring in public module
     # D101	Missing docstring in public class
@@ -18,7 +18,7 @@ ignore =
     # TODO: Fix some of these?
     D100,D101,D102,D103,D104,D105,
     # ====================================
-    # pydocstyle: D### - Whitespace Issues
+    # pydocstyle: D2## - Whitespace Issues
     # ====================================
     # D200	One-line docstring should fit on one line with quotes
     # D202	No blank lines allowed after function docstring
@@ -28,13 +28,10 @@ ignore =
     # D207	Docstring is under-indented
     # D208	Docstring is over-indented
     # D210	No whitespaces allowed surrounding docstring text
-    # D412	No blank lines allowed between a section header and its content
     # TODO: Fix these:
     D200,D202,D204,D205,D207,D208,D210,
     # We ignore	D203 deliberately in favour of passing D211,
     D203,
-    # We ignore D412 deliberately:
-    D412,
     # ================================
     # pydocstyle: D3## - Quotes Issues
     # ================================
@@ -42,29 +39,20 @@ ignore =
     # D301	Use r""" if any backslashes in a docstring
     # TODO: Fix this?:
     D301,
-    # ====================================
-    # pydocstyle: Docstring Content Issues
-    # ====================================
+    # ===========================================
+    # pydocstyle: D4## - Docstring Content Issues
+    # ===========================================
     # D400	First line should end with a period
     # D401	First line should be in imperative mood
-    # D401	First line should be in imperative mood; try rephrasing
-    # D402	First line should not be the function’s “signature”
+    # D402	First line should not be the function’s "signature"
     # D403	First word of the first line should be properly capitalized
-    # D404	First word of the docstring should not be This
-    # D405	Section name should be properly capitalized
-    # D406	Section name should end with a newline
-    # D407	Missing dashed underline after section
-    # D408	Section underline should be in the line following the section’s name
-    # D409	Section underline should match the length of its name
-    # D410	Missing blank line after section
-    # D411	Missing blank line before section
     # D412	No blank lines allowed between a section header and its content
-    # D413	Missing blank line after last section
-    # D414	Section has no content
     D400,D401,D402,D403,
-    # =========================================
-    # flake8-commas (in case installed locally)
-    # =========================================
+    # We ignore D412 deliberately:
+    D412,
+    # ================================================
+    # flake8-commas: C#### (in case installed locally)
+    # ================================================
     # C812	missing trailing comma
     # C815	missing trailing comma in Python 3.5+
     C812,C815
