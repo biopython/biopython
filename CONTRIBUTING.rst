@@ -79,9 +79,10 @@ be run, and their results reported on the pull request.
 
 We use TravisCI to run most of the Biopython tests (although currently only
 under Linux, and not with all the optional dependencies included), plus also
-check Python coding style using the ``flake8`` and ``pydocstyle`` tools, and
-reStructuredText using ``rst-lint``. These checks must pass before your pull
-request will be merged. https://travis-ci.org/biopython/biopython
+check Python coding style using the ``flake8`` tool with the ``pydocstyle``
+pluging (``flake8-docstrings``), and reStructuredText using ``rst-lint``.
+These checks must pass before your pull request will be merged.
+https://travis-ci.org/biopython/biopython
 
 Some of the TravisCI runs collect test coverage information via CodeCov:
 https://codecov.io/github/biopython/biopython/
