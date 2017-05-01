@@ -3,7 +3,7 @@
 # as part of this package.
 #
 
-"""GenomeDiagram script to mimic Proux et al 2002 Figure 6
+"""GenomeDiagram script to mimic Proux et al 2002 Figure 6.
 
 You can use the Entrez module to download the 3 required GenBank files
 
