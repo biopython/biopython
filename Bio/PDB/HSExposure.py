@@ -313,38 +313,3 @@ class ExposureCN(AbstractPropertyMap):
                 # Add to xtra
                 r1.xtra['EXP_CN'] = fs
         AbstractPropertyMap.__init__(self, fs_map, fs_keys, fs_list)
-
-
-if __name__ == "__main__":
-
-    import sys
-
-    p = PDBParser()
-    s = p.get_structure('X', sys.argv[1])
-    model = s[0]
-
-    # Neighbor sphere radius
-    RADIUS = 13.0
-    OFFSET = 0
-
-    hse = HSExposureCA(model, radius=RADIUS, offset=OFFSET)
-    for l in hse:
-        print(l)
-    print("")
-
-    hse = HSExposureCB(model, radius=RADIUS, offset=OFFSET)
-    for l in hse:
-        print(l)
-    print("")
-
-    hse = ExposureCN(model, radius=RADIUS, offset=OFFSET)
-    for l in hse:
-        print(l)
-    print("")
-
-    for c in model:
-        for r in c:
-            try:
-                print(r.xtra['PCB_CB_ANGLE'])
-            except:
-                pass
