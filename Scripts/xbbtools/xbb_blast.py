@@ -174,7 +174,7 @@ class BlastIt(object):
             self.ok.config(state='disabled')
 
     def _Run(self):
-        """Setup options for Blast commandline (PRIVATE)."""
+        """Initialise options for Blast commandline (PRIVATE)."""
         command_options = self.option.get()
         options = ''
         if len(command_options.strip()):
