@@ -1,6 +1,0 @@
-[pydocstyle]
-# pydocstyle v2.0.0 default is ignore=D101,D2
-# where D2 mean D200, D201, etc.
-# We ignore D412 as it seems to block valid RST bullet point
-# lists of arguments or attributes
-ignore = D100,D101,D102,D103,D104,D105,D200,D203,D204,D205,D207,D208,D210,D212,D213,D214,D301,D302,D400,D401,D402,D403,D406,D407,D412
