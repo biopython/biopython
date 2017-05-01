@@ -8,6 +8,8 @@
 #
 # Note that BioSQL (including the database schema and scripts) is
 # available and licensed separately.  Please consult www.biosql.org
+"""Helper code for Biopython's BioSQL code (for internal use)."""
+
 import os
 
 

@@ -103,7 +103,7 @@ class DBSeq(Seq):
             return Seq(full[::index.step], self.alphabet)
 
     def tostring(self):
-        """Returns the full sequence as a python string (DEPRECATED).
+        """Return the full sequence as a python string (DEPRECATED).
 
         You are now encouraged to use str(my_seq) instead of
         my_seq.tostring().
@@ -117,7 +117,7 @@ class DBSeq(Seq):
                                                  self.start + self._length)
 
     def __str__(self):
-        """Returns the full sequence as a python string."""
+        """Return the full sequence as a python string."""
         return self.adaptor.get_subseq_as_string(self.primary_id,
                                                  self.start,
                                                  self.start + self._length)
@@ -125,7 +125,7 @@ class DBSeq(Seq):
     data = property(tostring, doc="Sequence as string (DEPRECATED)")
 
     def toseq(self):
-        """Returns the full sequence as a Seq object."""
+        """Return the full sequence as a Seq object."""
         # Note - the method name copies that of the MutableSeq object
         return Seq(str(self), self.alphabet)
 

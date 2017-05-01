@@ -29,7 +29,7 @@ _POSTGRES_RULES_PRESENT = False  # Hack for BioSQL Bug 2839
 
 
 def open_database(driver="MySQLdb", **kwargs):
-    """Main interface for loading a existing BioSQL-style database.
+    """Load an existing BioSQL-style database.
 
     This function is the easiest way to retrieve a connection to a
     database, doing something like:
@@ -38,6 +38,7 @@ def open_database(driver="MySQLdb", **kwargs):
         >>> server = BioSeqDatabase.open_database(user="root", db="minidb")
 
     Arguments:
+
      - driver - The name of the database driver to use for connecting. The
        driver should implement the python DB API. By default, the MySQLdb
        driver is used.
@@ -45,6 +46,7 @@ def open_database(driver="MySQLdb", **kwargs):
      - password, passwd - the password to connect with
      - host - the hostname of the database
      - database or db - the name of the database
+
     """
     if driver == "psycopg":
         raise ValueError("Using BioSQL with psycopg (version one) is no "
@@ -161,7 +163,7 @@ class DBServer(object):
         return BioSeqDatabase(self.adaptor, name)
 
     def __len__(self):
-        """Number of namespaces (sub-databases) in this database."""
+        """Return number of namespaces (sub-databases) in this database."""
         sql = "SELECT COUNT(name) FROM biodatabase;"
         return int(self.adaptor.execute_and_fetch_col0(sql)[0])
 
@@ -229,13 +231,14 @@ class DBServer(object):
     def remove_database(self, db_name):
         """Remove a namespace and all its entries (OBSOLETE).
 
-        Try to remove all references to items in a database.
+        Try to remove all references to items in a database:
 
-        server.remove_database(name)
+        >>> server.remove_database(name)
 
         In keeping with the dictionary interface, you can now do this:
 
-        del server[name]
+        >>> del server[name]
+
         """
         import warnings
         warnings.warn("This method is deprecated.  In keeping with the "
@@ -291,11 +294,11 @@ class DBServer(object):
                              (self.module_name))
 
     def commit(self):
-        """Commits the current transaction to the database."""
+        """Commit the current transaction to the database."""
         return self.adaptor.commit()
 
     def rollback(self):
-        """Rolls backs the current transaction."""
+        """Roll-back the current transaction."""
         return self.adaptor.rollback()
 
     def close(self):
@@ -342,7 +345,7 @@ class _CursorWrapper(object):
 
 
 class Adaptor(object):
-    """High level wrapper for a database connection and cursor
+    """High level wrapper for a database connection and cursor.
 
     Most database calls in BioSQL are done indirectly though this adaptor
     class. This provides helper methods for fetching data and executing
@@ -365,11 +368,11 @@ class Adaptor(object):
         return self.dbutils.autocommit(self.conn, y)
 
     def commit(self):
-        """Commits the current transaction."""
+        """Commit the current transaction."""
         return self.conn.commit()
 
     def rollback(self):
-        """Rolls backs the current transaction."""
+        """Roll-back the current transaction."""
         return self.conn.rollback()
 
     def close(self):
@@ -481,7 +484,7 @@ class Adaptor(object):
         return self.execute_and_fetch_col0(sql, args)
 
     def execute_one(self, sql, args=None):
-        """Execute sql that returns 1 record, and return the record"""
+        """Execute sql that returns 1 record, and return the record."""
         self.execute(sql, args or ())
         rv = self.cursor.fetchall()
         assert len(rv) == 1, "Expected 1 response, got %d" % len(rv)
@@ -527,7 +530,7 @@ class Adaptor(object):
 
 
 class MysqlConnectorAdaptor(Adaptor):
-    """A BioSQL Adaptor class with fixes for the MySQL interface
+    """A BioSQL Adaptor class with fixes for the MySQL interface.
 
     BioSQL was failing due to returns of bytearray objects from
     the mysql-connector-python database connector. This adaptor
@@ -536,6 +539,7 @@ class MysqlConnectorAdaptor(Adaptor):
     response to backwards incompatible changes added to
     mysql-connector-python in release 2.0.0 of the package.
     """
+
     def execute_one(self, sql, args=None):
         out = super(MysqlConnectorAdaptor, self).execute_one(sql, args)
         return tuple(bytearray_to_str(v) for v in out)
@@ -551,7 +555,7 @@ class MysqlConnectorAdaptor(Adaptor):
 
 _interface_specific_adaptors = {
     # If SQL interfaces require a specific adaptor, use this to map the adaptor
-    "mysql.connector": MysqlConnectorAdaptor
+    "mysql.connector": MysqlConnectorAdaptor,
 }
 
 _allowed_lookups = {
@@ -581,7 +585,7 @@ class BioSeqDatabase(object):
         return "BioSeqDatabase(%r, %r)" % (self.adaptor, self.name)
 
     def get_Seq_by_id(self, name):
-        """Gets a DBSeqRecord object by its name.
+        """Get a DBSeqRecord object by its name.
 
         Example: seq_rec = db.get_Seq_by_id('ROA1_HUMAN')
 
@@ -592,7 +596,7 @@ class BioSeqDatabase(object):
         return BioSeq.DBSeqRecord(self.adaptor, seqid)
 
     def get_Seq_by_acc(self, name):
-        """Gets a DBSeqRecord object by accession number.
+        """Get a DBSeqRecord object by accession number.
 
         Example: seq_rec = db.get_Seq_by_acc('X77802')
 
@@ -603,7 +607,7 @@ class BioSeqDatabase(object):
         return BioSeq.DBSeqRecord(self.adaptor, seqid)
 
     def get_Seq_by_ver(self, name):
-        """Gets a DBSeqRecord object by version number.
+        """Get a DBSeqRecord object by version number.
 
         Example: seq_rec = db.get_Seq_by_ver('X77802.1')
 
@@ -614,7 +618,7 @@ class BioSeqDatabase(object):
         return BioSeq.DBSeqRecord(self.adaptor, seqid)
 
     def get_Seqs_by_acc(self, name):
-        """Gets a list of DBSeqRecord objects by accession number.
+        """Get a list of DBSeqRecord objects by accession number.
 
         Example: seq_recs = db.get_Seq_by_acc('X77802')
 
@@ -657,7 +661,7 @@ class BioSeqDatabase(object):
         self.adaptor.execute(sql, (self.dbid, key))
 
     def __len__(self):
-        """Number of records in this namespace (sub database)."""
+        """Return number of records in this namespace (sub database)."""
         sql = "SELECT COUNT(bioentry_id) FROM bioentry " + \
               "WHERE biodatabase_id=%s;"
         return int(self.adaptor.execute_and_fetch_col0(sql, (self.dbid, ))[0])
