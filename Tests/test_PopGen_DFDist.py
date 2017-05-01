@@ -56,8 +56,8 @@ if not is_pypy() and sys.version_info[0] == 3 and sys.version_info < (3, 2, 4):
 
 
 class AppTest(unittest.TestCase):
-    """Tests the Dfdist suite of applications.
-    """
+    """Tests the Dfdist suite of applications."""
+
     def _copyfile(self, inname, outname):
         shutil.copyfile(
             'PopGen' + os.sep + inname,
@@ -80,8 +80,7 @@ class AppTest(unittest.TestCase):
             os.rmdir(self.dirname)
 
     def test_ddatacal(self):
-        """Test Ddatacal execution.
-        """
+        """Test Ddatacal execution."""
         fst, samp_size, loci, pops, F, obs = \
             self.ctrl.run_datacal(data_dir=self.dirname, version=2)
         self.assertTrue(fst - 0.23 < 0.02)
@@ -92,8 +91,7 @@ class AppTest(unittest.TestCase):
         self.assertEqual(obs, 300)
 
     def test_dfdist(self):
-        """Test Dfdist execution.
-        """
+        """Test Dfdist execution."""
         # The number of simulations in real life should be at least 10000,
         # see the fdist2 documentation.
         fst = self.ctrl.run_fdist(npops=15, nsamples=10, fst=0.1,
@@ -104,7 +102,8 @@ class AppTest(unittest.TestCase):
 
     def atest_dfdist_force_fst(self):
         """Test dfdist execution approximating Fst.
-           THIS IS TOO SLOW
+
+        THIS IS TOO SLOW
         """
         # The number of simulations in real life should be at least 10000,
         # see the fdist2 documentation.
@@ -116,14 +115,12 @@ class AppTest(unittest.TestCase):
                         "Stochastic result, expected %f close to 0.09" % fst)
 
     def test_cplot2(self):
-        """Test cplot2 execution.
-        """
+        """Test cplot2 execution."""
         cpl_interval = self.ctrl.run_cplot(data_dir=self.dirname, version=2)
         self.assertEqual(len(cpl_interval), 300)
 
     def test_pv2(self):
-        """Test pv2 execution.
-        """
+        """Test pv2 execution."""
         pv_data = self.ctrl.run_pv(data_dir=self.dirname, version=2)
         self.assertEqual(len(pv_data), 300)
 

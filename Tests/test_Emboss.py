@@ -893,7 +893,8 @@ class TranslationTests(unittest.TestCase):
     def check(self, sequence):
         """Compare our translation to EMBOSS's using all tables.
 
-        Takes a Seq object (and a filename containing it)."""
+        Takes a Seq object (and a filename containing it).
+        """
         translation = emboss_translate(sequence)
         self.assertTrue(check_translation(sequence, translation))
 

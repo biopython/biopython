@@ -116,7 +116,7 @@ def queens_fitness(genome):
 
     Arguments:
 
-    o genome -- A MutableSeq object specifying an organism genome.
+    - genome - A MutableSeq object specifying an organism genome.
 
     The number returned is the number of unattacked queens on the board.
     """
@@ -151,8 +151,7 @@ def queens_fitness(genome):
 
 class QueensAlphabet(Alphabet.Alphabet):
     def __init__(self, num_queens):
-        """Initialize with the number of queens we are calculating for.
-        """
+        """Initialize with the number of queens we are calculating for."""
         # set up the letters for the alphabet
         assert 0 < num_queens <= 9
         self.letters = "".join(str(i) for i in range(num_queens))
@@ -176,7 +175,8 @@ class QueensRepair(object):
 
         Arguments:
 
-        o repair_prob -- The probability that we'll repair a genome.
+        - repair_prob -- The probability that we'll repair a genome.
+
         By default, we always repair.
         """
         self._repair_prob = repair_prob
@@ -213,8 +213,9 @@ class QueensRepair(object):
 
         Arguments:
 
-        o organism -- The Organism object we are going to perform the
-        repair on.
+        - organism -- The Organism object we are going to perform the
+          repair on.
+
         """
         # check if we should repair or not
         repair_chance = random.random()
@@ -256,22 +257,19 @@ class QueensCrossover(object):
 
         Arguments:
 
-        o fitness_func -- A function that can calculate the fitness of
-        a genome.
-
-        o crossover_prob -- The probability of having a crossover
-        between two passed in organisms.
-
-        o max_crossover_size -- The maximum crossover size of the 'best' region
-        to search for.
+        - fitness_func -- A function that can calculate the fitness of
+          a genome.
+        - crossover_prob -- The probability of having a crossover
+          between two passed in organisms.
+        - max_crossover_size -- The maximum crossover size of the 'best' region
+          to search for.
         """
         self._crossover_prob = crossover_prob
         self._fitness_calc = fitness_func
         self._max_crossover_size = max_crossover_size
 
     def do_crossover(self, org_1, org_2):
-        """Perform a crossover between two organisms.
-        """
+        """Perform a crossover between two organisms."""
         new_org_1 = org_1.copy()
         new_org_2 = org_2.copy()
 
@@ -297,18 +295,19 @@ class QueensCrossover(object):
 
         Arguments:
 
-        o genome -- A MutableSeq object specifying the genome of an organism
-
-        o make_best_larger -- A flag to determine whether the best region
-        we should search for should be the larger region of the split
-        caused by crossover or the smaller region. This makes it easy
-        to split two genomes, recombine them, and get a solution that
-        makes sense.
+        - genome - A MutableSeq object specifying the genome of an organism
+        - make_best_larger - A flag to determine whether the best region
+          we should search for should be the larger region of the split
+          caused by crossover or the smaller region. This makes it easy
+          to split two genomes, recombine them, and get a solution that
+          makes sense.
 
         Returns:
-        o Two MutableSeq objects. They are both half of the size of the passed
-        genome. The first is the highest fitness region of the genome and the
-        second is the rest of the genome.
+
+        - Two MutableSeq objects. They are both half of the size of the passed
+          genome. The first is the highest fitness region of the genome and the
+          second is the rest of the genome.
+
         """
         first_region = max(len(genome) / 2, self._max_crossover_size)
         second_region = len(genome) - first_region
@@ -353,14 +352,14 @@ class QueensMutation(object):
 
         Arguments:
 
-        o mutation_rate -- The change of a mutation happening at any
-        position in the genome.
+        - mutation_rate - The change of a mutation happening at any
+          position in the genome.
+
         """
         self._mutation_rate = mutation_rate
 
     def mutate(self, organism):
-        """Mutate the genome trying to put in 'helpful' mutations.
-        """
+        """Mutate the genome trying to put in 'helpful' mutations."""
         new_org = organism.copy()
         gene_choices = list(new_org.genome.alphabet.letters)
 
@@ -394,7 +393,7 @@ num_queens = 5
 # Class defined for use via run_tests.py
 class QueensTest(unittest.TestCase):
     def test_queens(self):
-        """Place five queens with a GA"""
+        """Place five queens with a GA."""
         main(num_queens)
 
 

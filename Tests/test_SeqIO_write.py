@@ -75,6 +75,7 @@ test_records[4][0][2].annotations["weight"] = 2.5
 
 class WriterTests(unittest.TestCase):
     """Cunning unit test where methods are added at run time."""
+
     def check(self, records, format):
         """General test function with with a little format specific information.
 

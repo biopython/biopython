@@ -34,8 +34,8 @@ if not found:
 
 
 class AppTest(unittest.TestCase):
-    """Tests fastsimcoal execution via biopython.
-    """
+    """Tests fastsimcoal execution via biopython."""
+
     def setUp(self):
         self.tidy()
 
@@ -50,8 +50,7 @@ class AppTest(unittest.TestCase):
         shutil.rmtree(os.path.join('PopGen', 'simple'))
 
     def test_fastsimcoal(self):
-        """Test fastsimcoal execution.
-        """
+        """Test fastsimcoal execution."""
         ctrl = FastSimCoalController(fastsimcoal_dir=fastsimcoal_dir)
         ctrl.run_fastsimcoal('simple.par', 50, par_dir='PopGen')
         assert os.path.isdir(os.path.join('PopGen', 'simple')), \

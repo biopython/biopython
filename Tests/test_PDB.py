@@ -53,6 +53,7 @@ class A_ExceptionTest(unittest.TestCase):
     These tests must be executed because of the way Python's warnings module
     works -- a warning is only logged the first time it is encountered.
     """
+
     def test_1_warnings(self):
         """Check warnings: Parse a flawed PDB file in permissive mode."""
         with warnings.catch_warnings(record=True) as w:
@@ -530,10 +531,11 @@ class ParseTest(unittest.TestCase):
             os.remove(filename)
 
     def test_deepcopy_of_structure_with_disorder(self):
-            """Test deepcopy of a structure with disordered atoms.
-            Shouldn't cause recursion.
-            """
-            _ = deepcopy(self.structure)
+        """Test deepcopy of a structure with disordered atoms.
+
+        Shouldn't cause recursion.
+        """
+        _ = deepcopy(self.structure)
 
 
 class ParseReal(unittest.TestCase):
@@ -939,7 +941,7 @@ class Atom_Element(unittest.TestCase):
         self.residue = structure[0]['A'][('H_PCA', 1, ' ')]
 
     def test_AtomElement(self):
-        """ Atom Element """
+        """Atom Element."""
         atoms = self.residue.child_list
         self.assertEqual('N', atoms[0].element)  # N
         self.assertEqual('C', atoms[1].element)  # Alpha Carbon
@@ -1125,10 +1127,7 @@ class TransformTests(unittest.TestCase):
         self.a = self.r.get_list()[0]
 
     def get_total_pos(self, o):
-        """
-        Returns the sum of the positions of atoms in an entity along
-        with the number of atoms.
-        """
+        """Sum of positions of atoms in an entity along with the number of atoms."""
         if hasattr(o, "get_coord"):
             return o.get_coord(), 1
         total_pos = numpy.array((0.0, 0.0, 0.0))
@@ -1140,9 +1139,7 @@ class TransformTests(unittest.TestCase):
         return total_pos, total_count
 
     def get_pos(self, o):
-        """
-        Returns the average atom position in an entity.
-        """
+        """Average atom position in an entity."""
         pos, count = self.get_total_pos(o)
         return 1.0 * pos / count
 
@@ -1455,9 +1452,10 @@ def eprint(*args, **kwargs):
 
 
 def will_it_float(s):
-    """ Helper function that converts the input into a float if it is a number.
+    """Helper function that converts the input into a float if it is a number.
 
-    If the input is a string, the output does not change."""
+    If the input is a string, the output does not change.
+    """
     try:
         return float(s)
     except ValueError:
@@ -1469,13 +1467,14 @@ class DsspTests(unittest.TestCase):
 
     See also test_DSSP_tool.py for run time testing with the tool.
     """
+
     def test_DSSP_file(self):
-        """Test parsing of pregenerated DSSP"""
+        """Test parsing of pregenerated DSSP."""
         dssp, keys = make_dssp_dict("PDB/2BEG.dssp")
         self.assertEqual(len(dssp), 130)
 
     def test_DSSP_noheader_file(self):
-        """Test parsing of pregenerated DSSP missing header information"""
+        """Test parsing of pregenerated DSSP missing header information."""
         # New DSSP prints a line containing only whitespace and "."
         dssp, keys = make_dssp_dict("PDB/2BEG_noheader.dssp")
         self.assertEqual(len(dssp), 130)
@@ -1501,7 +1500,7 @@ class DsspTests(unittest.TestCase):
         self.assertEqual((dssp_indices & hb_indices), hb_indices)
 
     def test_DSSP_in_model_obj(self):
-        """ Test that all the elements are added correctly to the xtra attribute of the input model object."""
+        """All elements correctly added to xtra attribute of input model object."""
         p = PDBParser()
         s = p.get_structure("example", "PDB/2BEG.pdb")
         m = s[0]
