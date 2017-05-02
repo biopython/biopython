@@ -74,35 +74,3 @@ class MMCIF2Dict(dict):
                 tokens = shlex.split(line)
                 for token in tokens:
                     yield token
-
-
-if __name__ == "__main__":
-
-    import sys
-
-    if len(sys.argv) != 2:
-        print("Usage: python MMCIF2Dict filename.")
-
-    filename = sys.argv[1]
-
-    mmcif_dict = MMCIF2Dict(filename)
-
-    entry = ""
-    print("Now type a key ('q' to end, 'k' for a list of all keys):")
-    while(entry != "q"):
-        entry = _input("MMCIF dictionary key ==> ")
-        if entry == "q":
-            sys.exit()
-        if entry == "k":
-            for key in mmcif_dict:
-                print(key)
-            continue
-        try:
-            value = mmcif_dict[entry]
-            if isinstance(value, list):
-                for item in value:
-                    print(item)
-            else:
-                print(value)
-        except KeyError:
-            print("No such key found.")
