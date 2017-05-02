@@ -53,19 +53,18 @@ class DSSP_test(unittest.TestCase):
         dssp = DSSP(model, pdbfile)
         self.assertEqual(len(dssp), 130)
 
-    def test_dssp_with_mmcif_file(self):
-        """Test DSSP generation from MMCIF"""
-        # Only run tests if DSSP version installed supports mmcif
-        if StrictVersion(dssp_version) >= StrictVersion('2.2.0'):
+    # Only run mmCIF tests if DSSP version installed supports mmcif
+    if StrictVersion(dssp_version) >= StrictVersion('2.2.0'):
+        def test_dssp_with_mmcif_file(self):
+            """Test DSSP generation from MMCIF"""
             p = MMCIFParser()
             pdbfile = "PDB/2BEG.cif"
             model = p.get_structure("2BEG", pdbfile)[0]
             dssp = DSSP(model, pdbfile)
             self.assertEqual(len(dssp), 130)
 
-    def test_dssp_with_mmcif_file_and_nonstandard_residues(self):
-        """Test DSSP generation from MMCIF with non-standard residues"""
-        if StrictVersion(dssp_version) >= StrictVersion('2.2.0'):
+        def test_dssp_with_mmcif_file_and_nonstandard_residues(self):
+            """Test DSSP generation from MMCIF with non-standard residues"""
             p = MMCIFParser()
             pdbfile = "PDB/1AS5.cif"
             model = p.get_structure("1AS5", pdbfile)[0]
