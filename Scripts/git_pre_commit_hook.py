@@ -2,7 +2,7 @@
 """Biopython's pre-commit git hook.
 
 This is intended to be installed as part of setting up a development
-copy of Biopyton, e.g.::
+copy of Biopython, e.g.::
 
     $ git clone git@github.com:biopython/biopython.git
     $ cd biopython
@@ -36,11 +36,8 @@ except ImportError:
     from commands import getoutput
 
 # These assume we can append one or more filenames/directories to the end...
-# These should be as strict or stricter than set in the tool config files,
-# .flake8 and .pydocstyle, which are used via TravisCI/Tox
 python_check_templates = (
-    ("flake8", "--ignore", "E122,E123,E126,E127,E128,E501"),
-    ("pydocstyle", "--ignore", "D100,D101,D102,D103,D104,D105,D200,D203,D204,D205,D207,D208,D209,D210,D211,D212,D213,D301,D302,D400,D401,D402,D403,D404,D405,D406,D407,D413"),
+    ("flake8",),
 )
 rst_check_templates = (
     ("rst-lint", "--level", "warning"),
@@ -62,14 +59,18 @@ else:
     files = getoutput("git status --porcelain")
     py_files = tuple(modified_py.findall(files))
     rst_files = tuple(modified_rst.findall(files))
-    files = tuple(py_files + rst_files)
+    files = set(py_files + rst_files)
     if not files:
         sys.stderr.write("Seems nothing has changed which needs linting...\n")
         sys.exit(0)
     elif len(files) <= 5:
-        sys.stderr.write("Linting files: %s\n" % " ".join(files))
+        sys.stderr.write("Linting files: %s\n" % " ".join(sorted(files)))
     else:
         sys.stderr.write("Linting %i files...\n" % len(files))
+
+    # Also include the linting tool configurations,
+    for f in ("Bio", "BioSQL", "Scripts", "Tests", "Doc/examples"):
+        files.add(f + "/.flake8")
 
     # Prepare temp directory of the files as staged in git
     # Can't just lint in place as would see changes pending git add
@@ -102,5 +103,6 @@ for x_files, x_templates in ((py_files, python_check_templates),
 if tempdir:
     shutil.rmtree(tempdir)
 if failed:
-    sys.stderr.write("Style validation failed. Please fix, or force with 'git commit --no-verify'\n")
+    sys.stderr.write("Style validation failed. Please fix, "
+                     "or force with 'git commit --no-verify'\n")
     sys.exit(1)
