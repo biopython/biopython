@@ -382,7 +382,7 @@ if sqlite3:
             self.assertEqual(str(result[0].seq), "N" * 1000)
 
         def test_correct_retrieval_1(self):
-            """Correct retrievel of Cnksr3 in mouse.
+            """Correct retrieval of Cnksr3 in mouse.
 
             This is the real thing. We're pulling the spliced alignment of
             an actual gene (Cnksr3) in mouse. It should perfectly match the
