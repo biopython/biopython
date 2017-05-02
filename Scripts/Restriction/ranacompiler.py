@@ -104,7 +104,7 @@ def regex(site):
 
 
 def is_palindrom(sequence):
-    """Is the sequence (Seq objecT) as a palindrom."""
+    """Check whether the sequence is a palindrome or not."""
     return str(sequence) == str(sequence.reverse_complement())
 
 
