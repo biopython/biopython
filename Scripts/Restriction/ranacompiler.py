@@ -104,6 +104,19 @@ def regex(site):
 
 
 def is_palindrom(sequence):
+    """Check whether the sequence is a palindrome or not (DEPRECATED).
+
+    Deprecated alias for is_palindrome (with e at end).
+    """
+    import warnings
+    from Bio import BiopythonDeprecationWarning
+    warnings.warn("is_palindrom is deprecated, please use "
+                  "is_palindrome instead.",
+                  BiopythonDeprecationWarning)
+    return is_palindrome(sequence)
+
+
+def is_palindrome(sequence):
     """Check whether the sequence is a palindrome or not."""
     return str(sequence) == str(sequence.reverse_complement())
 
