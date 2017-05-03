@@ -195,10 +195,38 @@ class Instances(list):
                 counts[letter][position] += 1
         return counts
 
-    def search(self, sequence):
+    def search(self, sequence, case_sensitive=True):
         """
-        a generator function, returning found positions of motif instances in a given sequence
+        A generator function, returning found positions of 
+        motif instances in a given sequence.
+
+            - case_sensitive: ignore case of instances and sequence
+
+        >>> from Bio import motifs
+        >>> from Bio.Seq import Seq
+
+        Let's create a motif with two instances:
+        >>> mymot = motifs.create([Seq('ACT'), Seq('ATT')])
+        
+        A search with default options will give a match for each instance:
+        >>> matches = mymot.instances.search(Seq('gggggACTggggATTggggact'))
+        >>> print(list(matches))
+        [(5, Seq('ACT', Alphabet())), (12, Seq('ATT', Alphabet()))]
+
+        Use the case_sensitive option to ignore the case of both sequences:
+        >>> print(list(mymot.instances.search(Seq('gggggAcTggggATtt'), 
+        ... case_sensitive=False)))
+        [(5, Seq('ACT', Alphabet())), (12, Seq('ATT', Alphabet()))]
+
+
+        See also pairwise2.align.globalxx for aligning each instance to 
+        a sequence.
         """
+
+        sequence = str(sequence)
+        if case_sensitive is False:
+            sequence = sequence.upper()
+
         for pos in range(0, len(sequence) - self.length + 1):
             for instance in self:
                 if str(instance) == str(sequence[pos:pos + self.length]):
