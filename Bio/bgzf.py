@@ -404,7 +404,7 @@ def BgzfBlocks(handle):
 
 
 def _load_bgzf_block(handle, text_mode=False):
-    """Load the next BGZF function (INTERNAL PRIVATE)."""
+    """Load the next BGZF function (PRIVATE)."""
     magic = handle.read(4)
     if not magic:
         # End of file
@@ -658,7 +658,7 @@ class BgzfReader(object):
                 return data
 
     def readline(self):
-        """Read single line for the BGZF module."""
+        """Read a single line for the BGZF file."""
         i = self._buffer.find(self._newline, self._within_block_offset)
         # Three cases to consider,
         if i == -1:
@@ -685,7 +685,7 @@ class BgzfReader(object):
             return data
 
     def __next__(self):
-        """Return the next value."""
+        """Return the next line."""
         line = self.readline()
         if not line:
             raise StopIteration
@@ -697,7 +697,7 @@ class BgzfReader(object):
             return self.__next__()
 
     def __iter__(self):
-        """Iterate elements of the BGZF class."""
+        """Iterate over the lines in the BGZF file."""
         return self
 
     def close(self):
@@ -708,6 +708,7 @@ class BgzfReader(object):
         self._buffers = None
 
     def seekable(self):
+        """Return True indicating the BGZF supports random access."""
         return True
 
     def isatty(self):
@@ -748,7 +749,7 @@ class BgzfWriter(object):
         self.compresslevel = compresslevel
 
     def _write_block(self, block):
-        """Write the datablock into the open file."""
+        """Write the datablock into the open file (PRIVATE)."""
         # print("Saving %i bytes" % len(block))
         start_offset = self._handle.tell()
         assert len(block) <= 65536
@@ -828,6 +829,7 @@ class BgzfWriter(object):
         return make_virtual_offset(self._handle.tell(), len(self._buffer))
 
     def seekable(self):
+        """Return True indicating the BGZF supports random access."""
         # Not seekable, but we do support tell...
         return False
 
