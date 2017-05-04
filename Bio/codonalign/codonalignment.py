@@ -280,8 +280,7 @@ def _get_codon2codon_matrix(codon_table=default_codon_table):
 
 
 def _dijkstra(graph, start, end):
-    """
-    Dijkstra's algorithm Python implementation.
+    """Dijkstra's algorithm Python implementation.
     Algorithm adapted from
     http://thomas.pelletier.im/2010/02/dijkstras-algorithm-python-implementation/.
     However, an obvious bug in::

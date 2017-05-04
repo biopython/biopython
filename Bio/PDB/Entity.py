@@ -195,8 +195,7 @@ class Entity(object):
         return self.full_id
 
     def transform(self, rot, tran):
-        """
-        Apply rotation and translation to the atomic coordinates.
+        """Apply rotation and translation to the atomic coordinates.
 
         Example:
                 >>> rotation=rotmat(pi, Vector(1, 0, 0))

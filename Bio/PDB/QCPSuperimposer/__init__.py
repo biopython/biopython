@@ -2,8 +2,7 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""
-QCPSuperimposer finds the best rotation and translation to put
+"""QCPSuperimposer finds the best rotation and translation to put
 two point sets on top of each other (minimizing the RMSD). This is
 eg. useful to superimpose crystal structures. QCP stands for
 Quaternion Characteristic Polynomial, which is used in the algorithm.

@@ -80,8 +80,7 @@ class MafWriter(SequentialAlignmentWriter):
         self.handle.write("%s\n" % " ".join(fields))
 
     def write_alignment(self, alignment):
-        """
-        Writes every SeqRecord in a MultipleSeqAlignment object to its own
+        """Writes every SeqRecord in a MultipleSeqAlignment object to its own
         MAF block (beginning with an 'a' line, containing 's' lines)
         """
         if not isinstance(alignment, MultipleSeqAlignment):
@@ -119,8 +118,7 @@ class MafWriter(SequentialAlignmentWriter):
 # Invalid function name according to pylint, but kept for compatibility
 # with Bio* conventions.
 def MafIterator(handle, seq_count=None, alphabet=single_letter_alphabet):
-    """
-    Iterates over lines in a MAF file-like object (handle), yielding
+    """Iterates over lines in a MAF file-like object (handle), yielding
     MultipleSeqAlignment objects. SeqRecord IDs generally correspond to
     species names
     """

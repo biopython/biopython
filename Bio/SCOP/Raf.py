@@ -60,10 +60,9 @@ class SeqMapIndex(dict):
     """
 
     def __init__(self, filename):
-        """
-        Arguments:
+        """Arguments:
 
-          filename  -- The file to index
+            filename  -- The file to index
         """
         dict.__init__(self)
         self.filename = filename

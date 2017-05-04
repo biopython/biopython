@@ -57,8 +57,7 @@ def read(handle):
 
 
 class Record(dict):
-    """
-    Holds information from an ExPASy Cellosaurus record as a Python dictionary.
+    """Holds information from an ExPASy Cellosaurus record as a Python dictionary.
 
     Each record contains the following keys:
      ---------  ---------------------------     ----------------------
