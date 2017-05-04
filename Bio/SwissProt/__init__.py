@@ -537,9 +537,11 @@ def _read_dr(record, value):
     cols = value.rstrip(".").split('; ')
     record.cross_references.append(tuple(cols))
 
+
 def _read_pe(record, value):
     pe = value.split(":")
     record.protein_existence = int(pe[0])
+
 
 def _read_kw(record, value):
     # Old style - semi-colon separated, multi-line. e.g. Q13639.txt
