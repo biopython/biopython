@@ -58,6 +58,7 @@ class Record(object):
         - features          List of tuples (key name, from, to, description).
           from and to can be either integers for the residue
           numbers, '<', '>', or '?'
+        - protein_existence Numerical value describing the evidence for the existence of the protein.
 
         - seqinfo           tuple of (length, molecular weight, CRC32 value)
         - sequence          The sequence.
@@ -106,6 +107,7 @@ class Record(object):
         self.cross_references = []
         self.keywords = []
         self.features = []
+        self.protein_existence = ''
 
         self.seqinfo = None
         self.sequence = ''
@@ -244,8 +246,7 @@ def _read(handle):
         elif key == 'DR':
             _read_dr(record, value)
         elif key == 'PE':
-            # TODO - Record this information?
-            pass
+            _read_pe(record, value)
         elif key == 'KW':
             _read_kw(record, value)
         elif key == 'FT':
@@ -382,7 +383,10 @@ def _read_dt(record, line):
         # Get the version number if there is one.
         # For the three DT lines above: 0, 3, 14
         try:
-            version = int(cols[-1])
+            version = 0
+            for s in cols[-1].split('.'):
+                if s.isdigit():
+                        version = int(s)
         except ValueError:
             version = 0
         date = cols[0].rstrip(",")
@@ -533,6 +537,9 @@ def _read_dr(record, value):
     cols = value.rstrip(".").split('; ')
     record.cross_references.append(tuple(cols))
 
+def _read_pe(record, value):
+    pe = value.split(":")
+    record.protein_existence = int(pe[0])
 
 def _read_kw(record, value):
     # Old style - semi-colon separated, multi-line. e.g. Q13639.txt
