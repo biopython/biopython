@@ -52,10 +52,10 @@ def read(handle):
 
 
 class Record(dict):
-    """\
-Holds information from an ExPASy ENZYME record as a Python dictionary.
+    """Holds information from an ExPASy ENZYME record as a Python dictionary.
 
-Each record contains the following keys:
+    Each record contains the following keys:
+
     - ID: EC number
     - DE: Recommended name
     - AN: Alternative names (if any)
@@ -66,7 +66,8 @@ Each record contains the following keys:
     - DR: Pointers to the Swiss-Prot protein sequence entrie(s)
       that correspond to the enzyme (if any)
     - CC: Comments
-"""
+
+    """
 
     def __init__(self):
         dict.__init__(self)
