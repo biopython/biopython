@@ -749,7 +749,7 @@ class BgzfWriter(object):
         self.compresslevel = compresslevel
 
     def _write_block(self, block):
-        """Write the datablock into the open file (PRIVATE)."""
+        """Write provided data to file as a single BGZF compressed block (PRIVATE)."""
         # print("Saving %i bytes" % len(block))
         start_offset = self._handle.tell()
         assert len(block) <= 65536
