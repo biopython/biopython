@@ -62,7 +62,7 @@ class BwaIndexCommandline(AbstractCommandline):
 
 
 class BwaAlignCommandline(AbstractCommandline):
-    """Command line wrapper for Burrows Wheeler Aligner (BWA) aln.
+    r"""Command line wrapper for Burrows Wheeler Aligner (BWA) aln.
 
     Run a BWA alignment, equivalent to::
 
@@ -218,7 +218,7 @@ class BwaSamseCommandline(AbstractCommandline):
 
 
 class BwaSampeCommandline(AbstractCommandline):
-    """Command line wrapper for Burrows Wheeler Aligner (BWA) sampe.
+    r"""Command line wrapper for Burrows Wheeler Aligner (BWA) sampe.
 
     Generate alignments in the SAM format given paired-end reads.
     Equivalent to::
@@ -242,7 +242,7 @@ class BwaSampeCommandline(AbstractCommandline):
     ...                                 read_file1=read_file1, read_file2=read_file2,
     ...                                 r=read_group)
     >>> print(sampe_cmd)
-    bwa sampe /path/to/reference_genome.fasta /path/to/read_1.sai /path/to/read_2.sai /path/to/read_1.fq /path/to/read_2.fq -r @RG       ID:foo  SM:bar
+    bwa sampe /path/to/reference_genome.fasta   /path/to/read_1.sai   /path/to/read_2.sai /path/to/read_1.fq  /path/to/read_2.fq -r @RG       ID:foo  SM:bar
 
     You would typically run the command line using sampe_cmd(stdout=output_sam_file)
     or via the Python subprocess module, as described in the Biopython tutorial.

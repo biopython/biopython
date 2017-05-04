@@ -122,18 +122,19 @@ class ColorTranslator(object):
         return color
 
     def read_colorscheme(self, filename):
-        """ read_colorscheme(self, filename)
+        r"""Load colour scheme from file.
 
-            o filename      The location of a file defining colors in tab-separated
-                            format plaintext as:
-                            INT \t RED \t GREEN \t BLUE \t Comment
-                            Where RED, GREEN and BLUE are intensities in the range
-                            0 -> 255
-                            e.g.
-                            2 \t 255 \t 0 \t 0 \t Red: Information transfer
+        Reads information from a file containing color information and stores it
+        internally.
 
-            Reads information from a file containing color information and
-            stores it internally
+        Argument filename is the location of a file defining colors in tab-separated
+        format plaintext as::
+
+            INT \t RED \t GREEN \t BLUE \t Comment
+
+        Where RED, GREEN and BLUE are intensities in the range 0 -> 255, e.g.::
+
+            2 \t 255 \t 0 \t 0 \t Red: Information transfer
         """
         with open(filename, 'r').readlines() as lines:
             for line in lines:

@@ -52,8 +52,7 @@ def read(handle):
 
 
 class Record(dict):
-    """\
-Holds information from an ExPASy ENZYME record as a Python dictionary.
+    """Holds information from an ExPASy ENZYME record as a Python dictionary.
 
 Each record contains the following keys:
     - ID: EC number

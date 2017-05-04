@@ -122,7 +122,6 @@ class SamtoolsMpileupCommandline(AbstractCommandline):
     >>> samtools_mpileup_cmd = SamtoolsMpileupCommandline(input_file=input)
     >>> print(samtools_mpileup_cmd)
     samtools mpileup /path/to/sam_or_bam_file
-
     """
     def __init__(self, cmd="samtools", **kwargs):
         self.program_name = cmd
@@ -242,7 +241,7 @@ class SamtoolsMpileupCommandline(AbstractCommandline):
 
 
 class SamtoolsReheaderCommandline(AbstractCommandline):
-    """Command line wrapper for samtools reheader.
+    r"""Command line wrapper for samtools reheader.
 
     Replace the header in in.bam with the header
     in in.header.sam, equivalent to::
@@ -407,7 +406,7 @@ class SamtoolsVersion1xSortCommandline(AbstractCommandline):
 
 
 class SamtoolsMergeCommandline(AbstractCommandline):
-    """Command line wrapper for samtools merge.
+    r"""Command line wrapper for samtools merge.
 
     Merge multiple sorted alignments, equivalent to::
 
@@ -549,7 +548,7 @@ class SamtoolsFaidxCommandline(AbstractCommandline):
 
 
 class SamtoolsFixmateCommandline(AbstractCommandline):
-    """Command line wrapper for samtools fixmate.
+    r"""Command line wrapper for samtools fixmate.
 
     Fill in mate coordinates, ISIZE and mate related
     flags from a name-sorted alignment, equivalent to::
@@ -629,7 +628,7 @@ class SamtoolsRmdupCommandline(AbstractCommandline):
 
 
 class SamtoolsCalmdCommandline(AbstractCommandline):
-    """Command line wrapper for samtools calmd.
+    r"""Command line wrapper for samtools calmd.
 
     Generate the MD tag, equivalent to::
 

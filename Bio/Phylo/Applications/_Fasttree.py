@@ -24,7 +24,7 @@ def _is_numeric(x):
 
 
 class FastTreeCommandline(AbstractCommandline):
-    """Command-line wrapper for FastTree.
+    r"""Command-line wrapper for FastTree.
 
     Homepage: http://www.microbesonline.org/fasttree/
 

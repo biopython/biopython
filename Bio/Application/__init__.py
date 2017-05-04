@@ -95,7 +95,7 @@ class ApplicationError(_ProcessCalledError):
 
 
 class AbstractCommandline(object):
-    """Generic interface for constructing command line strings.
+    r"""Generic interface for constructing command line strings.
 
     This class shouldn't be called directly; it should be subclassed to
     provide an implementation for a specific application.
