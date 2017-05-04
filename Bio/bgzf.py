@@ -404,7 +404,7 @@ def BgzfBlocks(handle):
 
 
 def _load_bgzf_block(handle, text_mode=False):
-    """Internal function to load the next BGZF function (PRIVATE)."""
+    """Load the next BGZF function (INTERNAL PRIVATE)."""
     magic = handle.read(4)
     if not magic:
         # End of file
@@ -521,6 +521,7 @@ class BgzfReader(object):
     """
 
     def __init__(self, filename=None, mode="r", fileobj=None, max_cache=100):
+        """Initialize the class."""
         # TODO - Assuming we can seek, check for 28 bytes EOF empty block
         # and if missing warn about possible truncation (as in samtools)?
         if max_cache < 1:
@@ -587,7 +588,7 @@ class BgzfReader(object):
         self._buffers[self._block_start_offset] = self._buffer, block_size
 
     def tell(self):
-        """Returns a 64-bit unsigned BGZF virtual offset."""
+        """Return a 64-bit unsigned BGZF virtual offset."""
         if 0 < self._within_block_offset and \
                 self._within_block_offset == len(self._buffer):
             # Special case where we're right at the end of a (non empty) block.
@@ -626,6 +627,7 @@ class BgzfReader(object):
         return virtual_offset
 
     def read(self, size=-1):
+        """Read method for the BGZF module."""
         if size < 0:
             raise NotImplementedError("Don't be greedy, that could be massive!")
         elif size == 0:
@@ -656,6 +658,7 @@ class BgzfReader(object):
                 return data
 
     def readline(self):
+        """Read single line for the BGZF module."""
         i = self._buffer.find(self._newline, self._within_block_offset)
         # Three cases to consider,
         if i == -1:
@@ -682,6 +685,7 @@ class BgzfReader(object):
             return data
 
     def __next__(self):
+        """Return the next value."""
         line = self.readline()
         if not line:
             raise StopIteration
@@ -693,9 +697,11 @@ class BgzfReader(object):
             return self.__next__()
 
     def __iter__(self):
+        """Iterate elements of the BGZF class."""
         return self
 
     def close(self):
+        """Close BGZF file."""
         self._handle.close()
         self._buffer = None
         self._block_start_offset = None
@@ -705,21 +711,27 @@ class BgzfReader(object):
         return True
 
     def isatty(self):
+        """Return True if connected to a TTY device."""
         return False
 
     def fileno(self):
+        """Return integer file descriptor."""
         return self._handle.fileno()
 
     def __enter__(self):
+        """Open a file operable with WITH statement."""
         return self
 
     def __exit__(self, type, value, traceback):
+        """Close a file with WITH statement."""
         self.close()
 
 
 class BgzfWriter(object):
+    """Define a BGZFWriter object."""
 
     def __init__(self, filename=None, mode="w", fileobj=None, compresslevel=6):
+        """Initilize the class."""
         if fileobj:
             assert filename is None
             handle = fileobj
@@ -736,6 +748,7 @@ class BgzfWriter(object):
         self.compresslevel = compresslevel
 
     def _write_block(self, block):
+        """Write the datablock into the open file."""
         # print("Saving %i bytes" % len(block))
         start_offset = self._handle.tell()
         assert len(block) <= 65536
@@ -771,6 +784,7 @@ class BgzfWriter(object):
         self._handle.write(data)
 
     def write(self, data):
+        """Write method for the class."""
         # TODO - Check bytes vs unicode
         data = _as_bytes(data)
         # block_size = 2**16 = 65536
@@ -787,6 +801,7 @@ class BgzfWriter(object):
                 self._buffer = self._buffer[65536:]
 
     def flush(self):
+        """Flush data explicitally."""
         while len(self._buffer) >= 65536:
             self._write_block(self._buffer[:65535])
             self._buffer = self._buffer[65535:]
@@ -809,7 +824,7 @@ class BgzfWriter(object):
         self._handle.close()
 
     def tell(self):
-        """Returns a BGZF 64-bit virtual offset."""
+        """Return a BGZF 64-bit virtual offset."""
         return make_virtual_offset(self._handle.tell(), len(self._buffer))
 
     def seekable(self):
@@ -817,15 +832,19 @@ class BgzfWriter(object):
         return False
 
     def isatty(self):
+        """Return True if connected to a TTY device."""
         return False
 
     def fileno(self):
+        """Return integer file descriptor."""
         return self._handle.fileno()
 
     def __enter__(self):
+        """Open a file operable with WITH statement."""
         return self
 
     def __exit__(self, type, value, traceback):
+        """Close a file with WITH statement."""
         self.close()
 
 
