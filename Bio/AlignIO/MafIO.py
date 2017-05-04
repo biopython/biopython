@@ -118,9 +118,11 @@ class MafWriter(SequentialAlignmentWriter):
 # Invalid function name according to pylint, but kept for compatibility
 # with Bio* conventions.
 def MafIterator(handle, seq_count=None, alphabet=single_letter_alphabet):
-    """Iterates over lines in a MAF file-like object (handle), yielding
+    """Iterates over a MAF file handle as MultipleSeqAlignment objects.
+
+    Iterates over lines in a MAF file-like object (handle), yielding
     MultipleSeqAlignment objects. SeqRecord IDs generally correspond to
-    species names
+    species names.
     """
     in_a_bundle = False
 

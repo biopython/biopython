@@ -91,12 +91,15 @@ class AbstractPropertyMap(object):
         return self.property_keys
 
     def __iter__(self):
-        """Iterate over the (entity, property) list. Handy alternative to
-        the dictionary-like access.
+        """Iterate over the (entity, property) list.
+
+        Handy alternative to the dictionary-like access.
 
         Example:
+
             >>> for (res, property) in iter(map):
             ...     print(res, property)
+            ...
 
         @return: iterator
         """

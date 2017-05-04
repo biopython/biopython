@@ -84,7 +84,7 @@ class ScoreDistribution(object):
         return self.min_score + i * self.step
 
     def threshold_balanced(self, rate_proportion=1.0, return_rate=False):
-        """Approximate the log-odds threshold which makes FNR equal to FPR times rate_proportion"""
+        """Approximate log-odds threshold making FNR equal to FPR times rate_proportion."""
         i = self.n_points
         fpr = 0.0
         fnr = 1.0

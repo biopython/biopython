@@ -194,7 +194,9 @@ class Instances(list):
         return counts
 
     def search(self, sequence):
-        """a generator function, returning found positions of motif 
+        """Find positions of motifs in a given sequence.
+
+        This is a generator function, returning found positions of motif
         instances in a given sequence.
         """
         for pos in range(0, len(sequence) - self.length + 1):

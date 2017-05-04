@@ -17,9 +17,9 @@ _hydrogen = re.compile("[123 ]*H.*")
 
 
 class ChainSelector(object):
-    """Only accepts residues with right chainid
-    and between start and end. Remove hydrogens, waters and ligands.
-    Only use model 0 by default.
+    """Only accepts residues with right chainid, between start and end.
+
+    Remove hydrogens, waters and ligands. Only use model 0 by default.
     """
     def __init__(self, chain_id, start, end, model_id=0):
         self.chain_id = chain_id

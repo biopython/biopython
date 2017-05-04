@@ -446,10 +446,16 @@ def _read_vertex_array(filename):
 
 
 def get_surface(model, PDB_TO_XYZR=None, MSMS="msms"):
-    """Return a Numpy array that represents
-    the vertex list of the molecular surface.
+    """Represent molecular surface as a vertex list array.
 
-    MSMS --- msms executable (arg. to os.system)
+    Return a Numpy array that represents the vertex list of the
+    molecular surface.
+
+    Arguments:
+
+    - PDB_TO_XYZR - deprecated, ignore this.
+    - MSMS - msms executable (used as argument to os.system)
+
     """
     # Issue warning if PDB_TO_XYZR is given
     if PDB_TO_XYZR is not None:
@@ -491,8 +497,10 @@ def min_dist(coord, surface):
 
 
 def residue_depth(residue, surface):
-    """Return average distance to surface for all
-    atoms in a residue, ie. the residue depth.
+    """Residue depth as average depth of all its atoms.
+
+    Return average distance to surface for all atoms in a residue,
+    ie. the residue depth.
     """
     atom_list = residue.get_unpacked_list()
     length = len(atom_list)
