@@ -85,6 +85,7 @@ please open an issue on GitHub or mention it on the development mailing list.
 - Francisco Pina-Martins <https://github.com/StuntsPT>
 - Franco Caramia <https://github.com/fcaramia>
 - Frank Kauff <fkauff at domain duke.edu>
+- Frederic Sapet <https://github.com/FredericBGA>
 - Frederic Sohm <fsms at domain users.sourceforge.net>
 - Frederik Gwinner
 - Fábio Madeira <https://github.com/biomadeira>

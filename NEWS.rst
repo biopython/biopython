@@ -32,6 +32,7 @@ possible, especially the following contributors:
 - Connor T. Skennerton
 - Eric Rasche
 - Francesco Gastaldello
+- Frederic Sapet (first contribution)
 - Jimmy O'Donnell (first contribution)
 - John Kern (first contribution)
 - João Rodrigues
