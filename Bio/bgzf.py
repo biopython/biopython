@@ -404,7 +404,7 @@ def BgzfBlocks(handle):
 
 
 def _load_bgzf_block(handle, text_mode=False):
-    """Load the next BGZF function (PRIVATE)."""
+    """Load the next BGZF block of compressed data (PRIVATE)."""
     magic = handle.read(4)
     if not magic:
         # End of file
