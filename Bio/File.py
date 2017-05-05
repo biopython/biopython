@@ -146,13 +146,13 @@ class UndoHandle(object):
             return self.__next__()
 
     def readlines(self, *args, **keywds):
-        """Read lines for the File."""
+        """Read all the lines from the file as a list of strings."""
         lines = self._saved + self._handle.readlines(*args, **keywds)
         self._saved = []
         return lines
 
     def readline(self, *args, **keywds):
-        """Read a single line for the File."""
+        """Read the next line from the file as string."""
         if self._saved:
             line = self._saved.pop(0)
         else:
@@ -182,7 +182,7 @@ class UndoHandle(object):
             self._saved = [line] + self._saved
 
     def peekline(self):
-        """Look at the first line saved in memory."""
+        """Return the next line in the file, but do not move forward though the file."""
         if self._saved:
             line = self._saved[0]
         else:
@@ -204,11 +204,11 @@ class UndoHandle(object):
         return getattr(self._handle, attr)
 
     def __enter__(self):
-        """Open File handle with WITH statement."""
+        """Call special method when opening the file using a with-statement."""
         return self
 
     def __exit__(self, type, value, traceback):
-        """Close File handle with WITH statement."""
+        """Call special method when closing the file using a with-statement."""
         self._handle.close()
 
 
@@ -274,7 +274,7 @@ class _IndexedSeqFileDict(_dict_base):
     Note that this dictionary is essentially read only. You cannot
     add or change values, pop values, nor clear the dictionary.
     """
-    
+
     def __init__(self, random_access_proxy, key_function,
                  repr, obj_repr):
         """Initialize the class."""
@@ -323,7 +323,7 @@ class _IndexedSeqFileDict(_dict_base):
         return key in self._offsets
 
     def __len__(self):
-        """How many records are there."""
+        """Retun the number of records."""
         return len(self._offsets)
 
     def items(self):
@@ -373,7 +373,7 @@ class _IndexedSeqFileDict(_dict_base):
         return iter(self._offsets)
 
     def __getitem__(self, key):
-        """Return the item when key is specified."""
+        """Return record for the specified key."""
         # Pass the offset to the proxy
         record = self._proxy.get(self._offsets[key])
         if self._key_function:
@@ -386,9 +386,9 @@ class _IndexedSeqFileDict(_dict_base):
 
     def get(self, k, d=None):
         """Return the value in the dictionary.
-        
-        If key not found the second
-        attribute is returned. By default it is None.
+
+        If the key (k) is not found, this returns None unless a specified
+        default (d) is specified.
         """
         try:
             return self.__getitem__(k)
@@ -404,32 +404,60 @@ class _IndexedSeqFileDict(_dict_base):
         return self._proxy.get_raw(self._offsets[key])
 
     def __setitem__(self, key, value):
-        """Would allow setting or replacing records, but not implemented."""
+        """Would allow setting or replacing records, but not implemented.
+
+        Python dictionaries provide this method for modifying data in the
+        dictionary. This class mimics the dictionary interface but is read only.
+        """
         raise NotImplementedError("An indexed a sequence file is read only.")
 
     def update(self, *args, **kwargs):
-        """Would allow adding more values, but not implemented."""
+        """Would allow adding more values, but not implemented.
+
+        Python dictionaries provide this method for modifying data in the
+        dictionary. This class mimics the dictionary interface but is read only.
+        """
         raise NotImplementedError("An indexed a sequence file is read only.")
 
     def pop(self, key, default=None):
-        """Would remove specified record, but not implemented."""
+        """Would remove specified record, but not implemented.
+
+        Python dictionaries provide this method for modifying data in the
+        dictionary. This class mimics the dictionary interface but is read only.
+        """
         raise NotImplementedError("An indexed a sequence file is read only.")
 
     def popitem(self):
-        """Would remove and return a SeqRecord, but not implemented."""
+        """Would remove and return a SeqRecord, but not implemented.
+
+        Python dictionaries provide this method for modifying data in the
+        dictionary. This class mimics the dictionary interface but is read only.
+        """
         raise NotImplementedError("An indexed a sequence file is read only.")
 
     def clear(self):
-        """Would clear dictionary, but not implemented."""
+        """Would clear dictionary, but not implemented.
+
+        Python dictionaries provide this method for modifying data in the
+        dictionary. This class mimics the dictionary interface but is read only.
+        """
         raise NotImplementedError("An indexed a sequence file is read only.")
 
     def fromkeys(self, keys, value=None):
-        """A dictionary method which we don't implement."""
+        """Would return a new dictionary with keys and values, but not implemented.
+
+        Python dictionaries provide this method for modifying data in the
+        dictionary. This class mimics the dictionary interface but is read only.
+        """
         raise NotImplementedError("An indexed a sequence file doesn't "
                                   "support this.")
 
     def copy(self):
-        """A dictionary method which we don't implement."""
+        """Would copy a dictionary, but not implemented.
+
+        Python dictionaries provide this method for modifying data in the
+        dictionary. This class mimics the dictionary interface but is read only.
+        """
         raise NotImplementedError("An indexed a sequence file doesn't "
                                   "support this.")
 
@@ -458,7 +486,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
     so a pool are kept. If a record is required from a closed file, then
     one of the open handles is closed first.
     """
-   
+
     def __init__(self, index_filename, filenames,
                  proxy_factory, format,
                  key_function, repr, max_open=10):
@@ -684,7 +712,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
                               (key,)).fetchone())
 
     def __len__(self):
-        """Return length of the iterable."""
+        """Return the number of records indexed."""
         return self._length
         # return self._con.execute("SELECT COUNT(key) FROM offset_data;").fetchone()[0]
 
@@ -706,7 +734,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
                     self._con.execute("SELECT key FROM offset_data;").fetchall()]
 
     def __getitem__(self, key):
-        """Return the item when key is specified."""
+        """Return record for the specified key."""
         # Pass the offset to the proxy
         row = self._con.execute(
             "SELECT file_number, offset FROM offset_data WHERE key=?;",
@@ -735,9 +763,9 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
 
     def get(self, k, d=None):
         """Return the value in the dictionary.
-        
-        If key not found the second
-        attribute is returned. By default it is None.
+
+        If the key (k) is not found, this returns None unless a specified
+        default (d) is specified.
         """
         try:
             return self.__getitem__(k)
