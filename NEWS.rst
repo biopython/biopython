@@ -27,6 +27,7 @@ Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
 - Aaron Kitzmiller (first contribution)
+- Allis Tauri
 - Andrew Guy
 - Bertrand Caron (first contribution)
 - Connor T. Skennerton
