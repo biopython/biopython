@@ -177,7 +177,10 @@ class UndoHandle(object):
         return saved + self._handle.read(size)
 
     def saveline(self, line):
-        """Save the line of the File in memory."""
+        """Store a line in the cache memory for later use.
+
+        This acts to undo a readline, reflecting the name of the class: UndoHandle.
+        """
         if line:
             self._saved = [line] + self._saved
 
@@ -323,7 +326,7 @@ class _IndexedSeqFileDict(_dict_base):
         return key in self._offsets
 
     def __len__(self):
-        """Retun the number of records."""
+        """Return the number of records."""
         return len(self._offsets)
 
     def items(self):
@@ -387,7 +390,7 @@ class _IndexedSeqFileDict(_dict_base):
     def get(self, k, d=None):
         """Return the value in the dictionary.
 
-        If the key (k) is not found, this returns None unless a specified
+        If the key (k) is not found, this returns None unless a
         default (d) is specified.
         """
         try:
@@ -764,7 +767,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
     def get(self, k, d=None):
         """Return the value in the dictionary.
 
-        If the key (k) is not found, this returns None unless a specified
+        If the key (k) is not found, this returns None unless a
         default (d) is specified.
         """
         try:
