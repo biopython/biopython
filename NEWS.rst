@@ -19,6 +19,9 @@ PyPy3.5 v5.7 beta, and Jython 2.7.
 Bio.AlignIO now supports Mauve's eXtended Multi-FastA (XMFA) file format
 under the format name "mauve" (contributed by Eric Rasche).
 
+Bio.ExPASy was updated to fix fetching PROSITE and PRODOC records, and return
+text-mode handles for use under Python 3.
+
 Additionally, a number of small bugs have been fixed with further additions
 to the test suite, and there has been further work to follow the Python PEP8,
 PEP257 and best practice standard coding style.
