@@ -166,14 +166,25 @@ def __read(handle):
         elif keyword == 'AC':
             record.accession = value.rstrip(';')
         elif keyword == 'DT':
+            # e.g. from 2017,
+            # DT   01-APR-1990 CREATED; 01-APR-1990 DATA UPDATE; 01-APR-1990 INFO UPDATE.
+            # Older files had brackets round the date descriptions.
             dates = value.rstrip('.').split("; ")
-            if (not dates[0].endswith('(CREATED)')) or \
-               (not dates[1].endswith('(DATA UPDATE)')) or \
-               (not dates[2].endswith('(INFO UPDATE)')):
+            if dates[0].endswith((' (CREATED)', ' CREATED')):
+                # Remove last word
+                record.created = dates[0].rsplit(" ", 1)[0]
+            else:
                 raise ValueError("I don't understand date line\n%s" % line)
-            record.created = dates[0].rstrip(' (CREATED)')
-            record.data_update = dates[1].rstrip(' (DATA UPDATE)')
-            record.info_update = dates[2].rstrip(' (INFO UPDATE)')
+            if dates[1].endswith((' (DATA UPDATE)', ' DATA UPDATE')):
+                # Remove last two words
+                record.data_update = dates[1].rsplit(" ", 2)[0]
+            else:
+                raise ValueError("I don't understand date line\n%s" % line)
+            if dates[2].endswith((' (INFO UPDATE)', ' INFO UPDATE')):
+                # Remove last two words
+                record.info_update = dates[2].rsplit(" ", 2)[0]
+            else:
+                raise ValueError("I don't understand date line\n%s" % line)
         elif keyword == 'DE':
             record.description = value
         elif keyword == 'PA':
