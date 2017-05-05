@@ -421,7 +421,7 @@ The same function can be used to retrieve a Prosite documentation record and par
 >>> record = Prodoc.read(handle)
 \end{verbatim}
 
-For non-existing accession numbers, \verb|ExPASy.get_prosite_raw| returns a handle to an emptry string. When faced with an empty string, \verb|Prosite.read| and \verb|Prodoc.read| will raise a ValueError. You can catch these exceptions to detect invalid accession numbers.
+For non-existing accession numbers, \verb|ExPASy.get_prosite_raw| returns a handle to an empty string. When faced with an empty string, \verb|Prosite.read| and \verb|Prodoc.read| will raise a ValueError. You can catch these exceptions to detect invalid accession numbers.
 
 The functions \verb|get_prosite_entry()| and \verb|get_prodoc_entry()| are used to download Prosite and Prosite documentation records in HTML format. To create a web page showing one Prosite record, you can use
 
