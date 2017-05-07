@@ -105,8 +105,7 @@ class SignatureFinder(object):
         return all_sigs
 
     def _add_sig(self, sig_dict, sig_to_add):
-        """Add a signature to the given dictionary.
-        """
+        """Add a signature to the given dictionary."""
         # incrememt the count of the signature if it is already present
         if sig_to_add in sig_dict:
             sig_dict[sig_to_add] += 1

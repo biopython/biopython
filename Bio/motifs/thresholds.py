@@ -65,8 +65,7 @@ class ScoreDistribution(object):
         self.bg_density = bg_new
 
     def threshold_fpr(self, fpr):
-        """Approximate the log-odds threshold which makes the type I error (false positive rate).
-        """
+        """Approximate the log-odds threshold which makes the type I error (false positive rate)."""
         i = self.n_points
         prob = 0.0
         while prob < fpr:
