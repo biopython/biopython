@@ -388,7 +388,7 @@ def _read_dt(record, line):
             version = 0
             for s in cols[-1].split('.'):
                 if s.isdigit():
-                        version = int(s)
+                    version = int(s)
         except ValueError:
             version = 0
         date = cols[0].rstrip(",")
