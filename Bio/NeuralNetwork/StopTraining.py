@@ -54,8 +54,7 @@ class ValidationIncreaseStop(object):
 
     def stopping_criteria(self, num_iterations, training_error,
                           validation_error):
-        """Define when to stop iterating.
-        """
+        """Define when to stop iterating."""
         if num_iterations % 10 == 0:
             if self.verbose:
                 print("%s; Training Error:%s; Validation Error:%s"

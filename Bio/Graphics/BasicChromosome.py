@@ -65,8 +65,7 @@ class _ChromosomeComponent(Widget):
         self._sub_components = []
 
     def add(self, component):
-        """Add a sub_component to the list of components under this item.
-        """
+        """Add a sub_component to the list of components under this item."""
         assert isinstance(component, _ChromosomeComponent), \
             "Expected a _ChromosomeComponent object, got %s" % component
 
@@ -85,8 +84,7 @@ class _ChromosomeComponent(Widget):
                              component)
 
     def draw(self):
-        """Draw the specified component.
-        """
+        """Draw the specified component."""
         raise AssertionError("Subclasses must implement.")
 
 
@@ -161,8 +159,7 @@ class Organism(_ChromosomeComponent):
         return _write(cur_drawing, output_file, self.output_format)
 
     def _draw_title(self, cur_drawing, title, width, height):
-        """Write out the title of the organism figure.
-        """
+        """Write out the title of the organism figure."""
         title_string = String(width / 2, height - inch, title)
         title_string.fontName = 'Helvetica-Bold'
         title_string.fontSize = self.title_size
@@ -230,8 +227,7 @@ class Chromosome(_ChromosomeComponent):
         self._color_labels = False
 
     def subcomponent_size(self):
-        """Return the scaled size of all subcomponents of this component.
-        """
+        """Return the scaled size of all subcomponents of this component."""
         total_sub = 0
         for sub_component in self._sub_components:
             total_sub += sub_component.scale
@@ -286,8 +282,7 @@ class Chromosome(_ChromosomeComponent):
         self._draw_label(cur_drawing, self._name)
 
     def _draw_label(self, cur_drawing, label_name):
-        """Draw a label for the chromosome.
-        """
+        """Draw a label for the chromosome."""
         x_position = 0.5 * (self.start_x_position + self.end_x_position)
         y_position = self.end_y_position
 
@@ -436,8 +431,7 @@ class ChromosomeSegment(_ChromosomeComponent):
         pass
 
     def _draw_segment(self, cur_drawing):
-        """Draw the current chromosome segment.
-        """
+        """Draw the current chromosome segment."""
         # set the coordinates of the segment -- it'll take up the MIDDLE part
         # of the space we have.
         segment_y = self.end_y_position
@@ -743,8 +737,7 @@ class TelomereSegment(ChromosomeSegment):
         self._inverted = inverted
 
     def _draw_segment(self, cur_drawing):
-        """Draw a half circle representing the end of a linear chromosome.
-        """
+        """Draw a half circle representing the end of a linear chromosome."""
         # set the coordinates of the segment -- it'll take up the MIDDLE part
         # of the space we have.
         width = (self.end_x_position - self.start_x_position) \

@@ -398,8 +398,7 @@ def _prim(G):
 
 
 def _get_subgraph(codons, G):
-    """Get the subgraph that contains all codons in list (PRIVATE).
-    """
+    """Get the subgraph that contains all codons in list (PRIVATE)."""
     subgraph = {}
     for i in codons:
         subgraph[i] = {}

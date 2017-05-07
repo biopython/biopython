@@ -3,8 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Parsing AlignACE output files
-"""
+"""Parsing AlignACE output files."""
 
 from Bio.motifs import Motif, Instances
 from Bio.Alphabet import IUPAC

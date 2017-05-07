@@ -21,8 +21,7 @@ from .Pattern import PatternRepository
 
 
 class MotifFinder(object):
-    """Find motifs in a set of Sequence Records.
-    """
+    """Find motifs in a set of Sequence Records."""
     def __init__(self, alphabet_strict=1):
         """Initialize a finder to get motifs.
 
@@ -140,8 +139,7 @@ class MotifFinder(object):
         return PatternRepository(motif_diffs)
 
     def _add_motif(self, motif_dict, motif_to_add):
-        """Add a motif to the given dictionary.
-        """
+        """Add a motif to the given dictionary."""
         # incrememt the count of the motif if it is already present
         if motif_to_add in motif_dict:
             motif_dict[motif_to_add] += 1

@@ -109,8 +109,7 @@ class FileRecord(object):
         return "".join(rep)
 
     def start_read(self):
-        """Starts parsing a file containing a GenePop file.
-        """
+        """Starts parsing a file containing a GenePop file."""
         self._handle = open(self.fname)
         self.comment_line = self._handle.readline().rstrip()
         # We can now have one loci per line or all loci in a single line

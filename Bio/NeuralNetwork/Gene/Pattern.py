@@ -45,8 +45,7 @@ class PatternIO(object):
         self.separator = ";"
 
     def write(self, pattern_list, output_handle):
-        """Write a list of patterns to the given handle.
-        """
+        """Write a list of patterns to the given handle."""
         for pattern in pattern_list:
             # deal with signatures, concatentate them with the separator
             if isinstance(pattern, (list, tuple)):
@@ -78,8 +77,7 @@ class PatternIO(object):
         self.write(all_patterns, output_handle)
 
     def read(self, input_handle):
-        """Read patterns from the specified handle.
-        """
+        """Read patterns from the specified handle."""
         all_patterns = []
 
         while True:
@@ -145,8 +143,7 @@ class PatternRepository(object):
         self._pattern_list.reverse()
 
     def get_all(self):
-        """Retrieve all of the patterns in the repository.
-        """
+        """Retrieve all of the patterns in the repository."""
         patterns = []
         for pattern_info in self._pattern_list:
             patterns.append(pattern_info[1])
@@ -252,8 +249,7 @@ class PatternRepository(object):
             self._pattern_list.remove(to_remove)
 
     def count(self, pattern):
-        """Return the number of times the specified pattern is found.
-        """
+        """Return the number of times the specified pattern is found."""
         try:
             return self._pattern_dict[pattern]
         except KeyError:
