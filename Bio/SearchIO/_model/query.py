@@ -435,7 +435,7 @@ class QueryResult(_BaseSearchObject):
                 del self.__alt_hit_ids[key]
                 deleted = True
             if not deleted:
-                raise KeyError('%r'.format(key))
+                raise KeyError(repr(key))
         return
 
     # properties #
