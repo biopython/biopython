@@ -123,8 +123,8 @@ def _get_atom_radius(atom, rtype='united'):
     elif rtype == 'united':
         typekey = 2
     else:
-        raise ValueError('Radius type (\'{}\') not understood.',
-                         ' Must be \'explicit\' or \'united\''.format(rtype))
+        raise ValueError("Radius type (%r) not understood. "
+                         "Must be 'explicit' or 'united'" % rtype)
 
     resname = atom.parent.resname
     het_atm = atom.parent.id[0]
