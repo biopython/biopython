@@ -170,7 +170,6 @@ class FastaWriter(SequentialSequenceWriter):
             handle.close()
 
         """
-
         SequentialSequenceWriter.__init__(self, handle)
         self.wrap = None
         if wrap:
