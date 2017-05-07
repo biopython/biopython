@@ -832,10 +832,8 @@ def _count_site_YN00(codon_lst1, codon_lst2, pi, k,
     """
     if len(codon_lst1) != len(codon_lst2):
         raise RuntimeError("Length of two codon_lst should be the same "
-                           "(%d and %d detected)".format(
-                                                    len(codon_lst1),
-                                                    len(codon_lst2))
-                           )
+                           "(%d and %d detected)" %
+                           (len(codon_lst1), len(codon_lst2)))
     else:
         length = len(codon_lst1)
     purine = ('A', 'G')
