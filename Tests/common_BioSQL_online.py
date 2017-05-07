@@ -59,6 +59,7 @@ def share_config(dbdriver, dbtype, dbhost, dbuser, dbpasswd, testdb):
 
 class TaxonomyTest(unittest.TestCase):
     """Test proper insertion and retrieval of taxonomy data."""
+
     def setUp(self):
         global DBDRIVER, DBTYPE, DBHOST, DBUSER, DBPASSWD, TESTDB, DBSCHEMA
         global SYSTEM, SQL_FILE
@@ -111,7 +112,6 @@ class TaxonomyTest(unittest.TestCase):
 
     def test_load_database_with_tax_lookup(self):
         """Load SeqRecord objects and fetch the taxonomy information from NCBI."""
-
         handle = Entrez.efetch(db="taxonomy", id=3702, retmode="XML")
 
         taxon_record = Entrez.read(handle)
