@@ -227,7 +227,6 @@ class DataHandler(object):
             # since the Entrez XML parser expects binary data (bytes)
             from io import StringIO
             if isinstance(handle, StringIO):
-                from io import BytesIO
                 from Bio._py3k import _as_bytes
                 handle = BytesIO(_as_bytes(handle.read()))
         try:
