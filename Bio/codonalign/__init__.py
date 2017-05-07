@@ -170,7 +170,7 @@ def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X',
                                 anchor_len=anchor_len)
         if not corr_span:
             raise ValueError("Protein Record {0} and Nucleotide Record {1} do"
-                             " not match!".format((pair[0].id, pair[1].id)))
+                             " not match!".format(pair[0].id, pair[1].id))
         else:
             codon_rec = _get_codon_rec(pair[0], pair[1], corr_span,
                                        alphabet=alphabet,
@@ -419,7 +419,7 @@ def _check_corr(pro, nucl, gap_char='-', codon_table=default_codon_table,
             else:
                 raise RuntimeError("Protein SeqRecord ({0}) and Nucleotide "
                                    "SeqRecord ({1}) do not "
-                                   "match!".format((pro.id, nucl.id)))
+                                   "match!".format(pro.id, nucl.id))
 
 
 def _get_shift_anchor_re(sh_anc, sh_nuc, shift_val, aa2re, anchor_len,
@@ -551,7 +551,7 @@ def _get_codon_rec(pro, nucl, span_mode, alphabet, gap_char="-",
     if mode in (0, 1):
         if len(pro.seq.ungap(gap_char)) * 3 != (span[1] - span[0]):
             raise ValueError("Protein Record {0} and Nucleotide Record {1} "
-                             "do not match!".format((pro.id, nucl.id)))
+                             "do not match!".format(pro.id, nucl.id))
         aa_num = 0
         for aa in pro.seq:
             if aa == "-":
