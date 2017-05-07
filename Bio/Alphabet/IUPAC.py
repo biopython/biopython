@@ -34,6 +34,7 @@ class ExtendedIUPACProtein(Alphabet.ProteinAlphabet):
     This alphabet is not intended to be used with X for Selenocysteine
     (an ad-hoc standard prior to the IUPAC adoption of U instead).
     """
+    
     letters = IUPACData.extended_protein_letters
 
 
@@ -44,6 +45,7 @@ assert IUPACData.protein_letters == IUPACData.protein_letters.upper()
 
 class IUPACProtein(ExtendedIUPACProtein):
     """Uppercase IUPAC protein single letter alphabet of the 20 standard amino acids."""
+
     letters = IUPACData.protein_letters
 
 
@@ -56,6 +58,7 @@ protein = IUPACProtein()
 #   http://www.chem.qmw.ac.uk/iubmb/misc/naseq.html
 class IUPACAmbiguousDNA(Alphabet.DNAAlphabet):
     """Uppercase IUPAC ambiguous DNA."""
+
     letters = IUPACData.ambiguous_dna_letters
 
 
@@ -64,6 +67,7 @@ ambiguous_dna = IUPACAmbiguousDNA()
 
 class IUPACUnambiguousDNA(IUPACAmbiguousDNA):
     """Uppercase IUPAC unambiguous DNA (letters GATC only)."""
+
     letters = IUPACData.unambiguous_dna_letters
 
 
@@ -81,6 +85,7 @@ class ExtendedIUPACDNA(Alphabet.DNAAlphabet):
      - S = thiouridine
      - W = wyosine
     """
+    
     letters = IUPACData.extended_dna_letters
 
 
@@ -91,6 +96,7 @@ extended_dna = ExtendedIUPACDNA()
 
 class IUPACAmbiguousRNA(Alphabet.RNAAlphabet):
     """Uppercase IUPAC ambiguous RNA."""
+    
     letters = IUPACData.ambiguous_rna_letters
 
 
@@ -99,6 +105,7 @@ ambiguous_rna = IUPACAmbiguousRNA()
 
 class IUPACUnambiguousRNA(IUPACAmbiguousRNA):
     """Uppercase IUPAC unambiguous RNA (letters GAUC only)."""
+    
     letters = IUPACData.unambiguous_rna_letters
 
 

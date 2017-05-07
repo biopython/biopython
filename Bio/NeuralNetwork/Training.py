@@ -37,6 +37,7 @@ class ExampleManager(object):
     provide a completely independent method of testing how well a network
     performs.
     """
+    
     def __init__(self, training_percent=.4, validation_percent=.4):
         """Initialize the manager with the training examples.
 

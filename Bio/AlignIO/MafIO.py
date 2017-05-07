@@ -53,6 +53,7 @@ MAFINDEX_VERSION = 1
 
 class MafWriter(SequentialAlignmentWriter):
     """Accepts a MultipleSeqAlignment object, writes a MAF file"""
+
     def write_header(self):
         """Writes the MAF header"""
         self.handle.write("##maf version=1 scoring=none\n")
@@ -238,6 +239,7 @@ class MafIndex(object):
     if necessary, and queried when methods *search* or *get_spliced* are
     used.
     """
+    
     def __init__(self, sqlite_file, maf_file, target_seqname):
         """Indexes or loads the index of a MAF file"""
         self._target_seqname = target_seqname

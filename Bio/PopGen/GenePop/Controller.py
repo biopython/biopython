@@ -138,6 +138,7 @@ class _FileIterator(object):
     The generator function is expected to yield a tuple, while
     consuming input
     """
+    
     def __init__(self, func, fname, handle=None):
         self.func = func
         if handle is None:
@@ -815,8 +816,7 @@ class GenePopController(object):
         raise NotImplementedError
 
     def _calc_ibd(self, fname, sub, stat="a", scale="Log", min_dist=0.00001):
-        """Calculates isolation by distance statistics
-        """
+        """Calculates isolation by distance statistics."""
         self._run_genepop([".GRA", ".MIG", ".ISO"], [6, sub],
                           fname, opts={
                               "MinimalDistance": min_dist,

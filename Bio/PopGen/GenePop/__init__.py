@@ -122,6 +122,7 @@ class Record(object):
         ]
 
     """
+    
     def __init__(self):
         self.marker_len = 0
         self.comment_line = ""
@@ -200,8 +201,7 @@ class Record(object):
         del self.populations[pos]
 
     def remove_locus_by_position(self, pos):
-        """Removes a locus by position.
-        """
+        """Removes a locus by position."""
         del self.loci_list[pos]
         for pop in self.populations:
             for indiv in pop:

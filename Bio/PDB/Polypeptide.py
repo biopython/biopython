@@ -189,6 +189,7 @@ def is_aa(residue, standard=False):
 
 class Polypeptide(list):
     """A polypeptide is simply a list of L{Residue} objects."""
+
     def get_ca_list(self):
         """Get list of C-alpha atoms in the polypeptide.
 
@@ -306,6 +307,7 @@ class _PPBuilder(object):
 
     This assumes you want both standard and non-standard amino acids.
     """
+
     def __init__(self, radius):
         """@param radius: distance
            @type radius: float
@@ -379,6 +381,7 @@ class _PPBuilder(object):
 
 class CaPPBuilder(_PPBuilder):
     """Use CA--CA distance to find polypeptides."""
+
     def __init__(self, radius=4.3):
         _PPBuilder.__init__(self, radius)
 
@@ -406,6 +409,7 @@ class CaPPBuilder(_PPBuilder):
 
 class PPBuilder(_PPBuilder):
     """Use C--N distance to find polypeptides."""
+
     def __init__(self, radius=1.8):
         _PPBuilder.__init__(self, radius)
 

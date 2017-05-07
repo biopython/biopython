@@ -34,6 +34,7 @@ class CodonAlignment(MultipleSeqAlignment):
     AAAAGGTGG Gamma
 
     """
+    
     def __init__(self, records='', name=None, alphabet=default_codon_alphabet):
 
         MultipleSeqAlignment.__init__(self, records, alphabet=alphabet)
@@ -398,8 +399,7 @@ def _prim(G):
 
 
 def _get_subgraph(codons, G):
-    """Get the subgraph that contains all codons in list (PRIVATE).
-    """
+    """Get the subgraph that contains all codons in list (PRIVATE)."""
     subgraph = {}
     for i in codons:
         subgraph[i] = {}

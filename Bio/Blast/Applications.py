@@ -38,6 +38,7 @@ class _NcbibaseblastCommandline(AbstractCommandline):
     common to all the BLAST tools (blastn, rpsblast, rpsblast, etc
     AND blast_formatter).
     """
+    
     def __init__(self, cmd=None, **kwargs):
         assert cmd is not None
         extra_parameters = [
@@ -113,6 +114,7 @@ class _NcbiblastCommandline(_NcbibaseblastCommandline):
     This is provided for subclassing, it deals with shared options
     common to all the BLAST tools (blastn, rpsblast, rpsblast, etc).
     """
+    
     def __init__(self, cmd=None, **kwargs):
         assert cmd is not None
         extra_parameters = [
@@ -264,6 +266,7 @@ class _Ncbiblast2SeqCommandline(_NcbiblastCommandline):
     common to all the BLAST tools supporting two-sequence BLAST
     (blastn, psiblast, etc) but not rpsblast or rpstblastn.
     """
+    
     def __init__(self, cmd=None, **kwargs):
         assert cmd is not None
         extra_parameters = [
@@ -339,6 +342,7 @@ class _NcbiblastMain2SeqCommandline(_Ncbiblast2SeqCommandline):
     common to the main BLAST tools blastp, blastn, blastx, tblastx, tblastn
     but not psiblast, rpsblast or rpstblastn.
     """
+    
     def __init__(self, cmd=None, **kwargs):
         assert cmd is not None
         extra_parameters = [
@@ -392,6 +396,7 @@ class NcbiblastpCommandline(_NcbiblastMain2SeqCommandline):
     You would typically run the command line with cline() or via the Python
     subprocess module, as described in the Biopython tutorial.
     """
+    
     def __init__(self, cmd="blastp", **kwargs):
         self.parameters = [
             # General search options:
@@ -455,6 +460,7 @@ class NcbiblastnCommandline(_NcbiblastMain2SeqCommandline):
     You would typically run the command line with cline() or via the Python
     subprocess module, as described in the Biopython tutorial.
     """
+    
     def __init__(self, cmd="blastn", **kwargs):
         self.parameters = [
             # Input query options:
@@ -571,6 +577,7 @@ class NcbiblastxCommandline(_NcbiblastMain2SeqCommandline):
     You would typically run the command line with cline() or via the Python
     subprocess module, as described in the Biopython tutorial.
     """
+    
     def __init__(self, cmd="blastx", **kwargs):
         self.parameters = [
             # Input query options:
@@ -656,6 +663,7 @@ class NcbitblastnCommandline(_NcbiblastMain2SeqCommandline):
     You would typically run the command line with cline() or via the Python
     subprocess module, as described in the Biopython tutorial.
     """
+    
     def __init__(self, cmd="tblastn", **kwargs):
         self.parameters = [
             # General search options:
@@ -739,6 +747,7 @@ class NcbitblastxCommandline(_NcbiblastMain2SeqCommandline):
     You would typically run the command line with cline() or via the Python
     subprocess module, as described in the Biopython tutorial.
     """
+    
     def __init__(self, cmd="tblastx", **kwargs):
         self.parameters = [
             # Input query options:
@@ -797,6 +806,7 @@ class NcbipsiblastCommandline(_Ncbiblast2SeqCommandline):
     You would typically run the command line with cline() or via the Python
     subprocess module, as described in the Biopython tutorial.
     """
+    
     def __init__(self, cmd="psiblast", **kwargs):
         self.parameters = [
             # General search options:
@@ -925,6 +935,7 @@ class NcbirpsblastCommandline(_NcbiblastCommandline):
     You would typically run the command line with cline() or via the Python
     subprocess module, as described in the Biopython tutorial.
     """
+    
     def __init__(self, cmd="rpsblast", **kwargs):
         # TODO - remove the -word_size argument as per BLAST+ 2.2.30
         # (BLAST team say it should never have been included, since
@@ -1004,6 +1015,7 @@ class NcbirpstblastnCommandline(_NcbiblastCommandline):
     You would typically run the command line with cline() or via the Python
     subprocess module, as described in the Biopython tutorial.
     """
+    
     def __init__(self, cmd="rpstblastn", **kwargs):
         # TODO - remove the -word_size argument as per BLAST+ 2.2.30
         # (BLAST team say it should never have been included, since
@@ -1080,6 +1092,7 @@ class NcbiblastformatterCommandline(_NcbibaseblastCommandline):
     (instead -rid is a mandatory argument), and is not supported by this
     wrapper.
     """
+    
     def __init__(self, cmd="blast_formatter", **kwargs):
         self.parameters = [
             # Input options
@@ -1121,6 +1134,7 @@ class NcbideltablastCommandline(_Ncbiblast2SeqCommandline):
     You would typically run the command line with cline() or via the Python
     subprocess module, as described in the Biopython tutorial.
     """
+    
     def __init__(self, cmd="deltablast", **kwargs):
         self.parameters = [
             # General search options:

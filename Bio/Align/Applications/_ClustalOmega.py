@@ -8,8 +8,7 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""Command line wrapper for the multiple alignment program Clustal Omega.
-"""
+"""Command line wrapper for the multiple alignment program Clustal Omega."""
 
 from __future__ import print_function
 
@@ -46,6 +45,7 @@ class ClustalOmegaCommandline(AbstractCommandline):
 
     Last checked against versions: 1.2.0
     """
+    
     def __init__(self, cmd="clustalo", **kwargs):
         # order parameters in the same order as clustalo --help
         self.parameters = \

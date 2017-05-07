@@ -108,6 +108,7 @@ class Record(object):
         - pdb_structs    List of PDB entries.
 
     """
+    
     def __init__(self):
         self.name = ''
         self.type = ''

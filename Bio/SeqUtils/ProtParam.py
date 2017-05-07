@@ -45,6 +45,7 @@ class ProteinAnalysis(object):
     molecular mass will be used for the calculation.
 
     """
+    
     def __init__(self, prot_sequence, monoisotopic=False):
         if prot_sequence.islower():
             self.sequence = Seq(prot_sequence.upper(), IUPAC.protein)

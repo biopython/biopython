@@ -146,6 +146,7 @@ def read(handle, format):
 
 class Instances(list):
     """A class representing instances of sequence motifs."""
+
     def __init__(self, instances=None, alphabet=None):
         from Bio.Alphabet import IUPAC
         from Bio.Seq import Seq
@@ -216,6 +217,7 @@ class Instances(list):
 
 class Motif(object):
     """A class representing sequence motifs."""
+    
     def __init__(self, alphabet=None, instances=None, counts=None):
         from . import matrix
         from Bio.Alphabet import IUPAC
@@ -324,8 +326,7 @@ class Motif(object):
         return self.pwm.log_odds(self._background)
 
     def __str__(self, masked=False):
-        """ string representation of a motif.
-        """
+        """ String representation of a motif."""
         text = ""
         if self.instances is not None:
             text += str(self.instances)

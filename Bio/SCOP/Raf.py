@@ -297,6 +297,7 @@ class Res(object):
 
     seqres  -- amino acid one-letter code from SEQRES records.
     """
+    
     def __init__(self):
         self.chainid = ''
         self.resid = ''

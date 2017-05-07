@@ -71,6 +71,7 @@ class Diagram(object):
         - circular       - a boolean, True if the genome/sequence to be drawn
           is, in reality, circular.
     """
+    
     def __init__(self, name=None, format='circular', pagesize='A3',
                  orientation='landscape', x=0.05, y=0.05, xl=None,
                  xr=None, yt=None, yb=None, start=None, end=None,

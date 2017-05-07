@@ -76,6 +76,7 @@ class MaxEntropy(object):
     Pred: ['Red', 'Sports', 'Imported'] gives No y is Yes
 
     """
+
     def __init__(self):
         self.classes = []
         self.alphas = []

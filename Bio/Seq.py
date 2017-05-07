@@ -81,6 +81,7 @@ class Seq(object):
     reverse_complement, transcribe, back_transcribe and translate (which are
     not applicable to sequences with a protein alphabet).
     """
+    
     def __init__(self, data, alphabet=Alphabet.generic_alphabet):
         """Create a Seq object.
 
@@ -1188,6 +1189,7 @@ class UnknownSeq(Seq):
     >>> known_seq + unk_four
     Seq('ACGT????', Alphabet())
     """
+    
     def __init__(self, length, alphabet=Alphabet.generic_alphabet,
                  character=None):
         """Create a new UnknownSeq object.
@@ -1581,6 +1583,7 @@ class MutableSeq(object):
     Note that the MutableSeq object does not support as many string-like
     or biological methods as the Seq object.
     """
+    
     def __init__(self, data, alphabet=Alphabet.generic_alphabet):
         if sys.version_info[0] == 3:
             self.array_indicator = "u"

@@ -30,6 +30,7 @@ class AbstractDPAlgorithms(object):
     o _backward_recursion -- Calculate the backward values in the recursion
     step using some technique to prevent underflow errors.
     """
+    
     def __init__(self, markov_model, sequence):
         """Initialize to calculate forward and backward probabilities.
 
@@ -43,8 +44,7 @@ class AbstractDPAlgorithms(object):
         self._seq = sequence
 
     def _forward_recursion(self, cur_state, sequence_pos, forward_vars):
-        """Calculate the forward recursion value.
-        """
+        """Calculate the forward recursion value."""
         raise NotImplementedError("Subclasses must implement")
 
     def forward_algorithm(self):
@@ -108,8 +108,7 @@ class AbstractDPAlgorithms(object):
         return forward_var, seq_prob
 
     def _backward_recursion(self, cur_state, sequence_pos, forward_vars):
-        """Calculate the backward recursion value.
-        """
+        """Calculate the backward recursion value."""
         raise NotImplementedError("Subclasses must implement")
 
     def backward_algorithm(self):
@@ -174,6 +173,7 @@ class ScaledDPAlgorithms(AbstractDPAlgorithms):
     but may still give underflow errors for some types of models. In these
     cases, the LogDPAlgorithms class should be used.
     """
+    
     def __init__(self, markov_model, sequence):
         """Initialize the scaled approach to calculating probabilities.
         Arguments:
@@ -331,5 +331,6 @@ class LogDPAlgorithms(AbstractDPAlgorithms):
 
     XXX This is not implemented yet!
     """
+    
     def __init__(self, markov_model, sequence):
         raise NotImplementedError("Haven't coded this yet...")

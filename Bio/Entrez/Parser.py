@@ -152,6 +152,7 @@ class ValidationError(ValueError):
     error. The Bio.Entrez.read and Bio.Entrez.parse functions use validating
     parsers by default (see those functions for more information).
     """
+    
     def __init__(self, name):
         self.name = name
 

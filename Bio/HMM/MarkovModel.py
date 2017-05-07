@@ -3,8 +3,7 @@
 # as part of this package.
 #
 
-"""Deal with representations of Markov Models.
-"""
+"""Deal with representations of Markov Models."""
 # standard modules
 import copy
 import math
@@ -30,8 +29,7 @@ def _gen_random_array(n):
 
 
 def _calculate_emissions(emission_probs):
-    """Calculate which symbols can be emitted in each state
-    """
+    """Calculate which symbols can be emitted in each state."""
     # loop over all of the state-symbol duples, mapping states to
     # lists of emitted symbols
     emissions = dict()
@@ -92,6 +90,7 @@ class MarkovModelBuilder(object):
     So, this builder class should be used to create Markov models instead
     of trying to initiate a Markov Model directly.
     """
+    
     # the default pseudo counts to use
     DEFAULT_PSEUDO = 1
 

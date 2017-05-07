@@ -1,4 +1,4 @@
-# Copyright 2007-2016 by Peter Cock.  All rights reserved.
+# Copyright 2007-2017 by Peter Cock.  All rights reserved.
 # Revisions copyright 2010 by Uri Laserson.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -1075,6 +1075,7 @@ class _ImgtScanner(EmblScanner):
 
 class GenBankScanner(InsdcScanner):
     """For extracting chunks of information in GenBank files"""
+
     RECORD_START = "LOCUS       "
     HEADER_WIDTH = 12
     FEATURE_START_MARKERS = ["FEATURES             Location/Qualifiers", "FEATURES"]

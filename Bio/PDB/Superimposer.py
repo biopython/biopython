@@ -17,6 +17,7 @@ class Superimposer(object):
     """Rotate/translate one set of atoms on top of another,
     thereby minimizing the RMSD.
     """
+    
     def __init__(self):
         self.rotran = None
         self.rms = None

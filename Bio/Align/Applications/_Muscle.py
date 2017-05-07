@@ -2,8 +2,7 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""Command line wrapper for the multiple alignment program MUSCLE.
-"""
+"""Command line wrapper for the multiple alignment program MUSCLE."""
 
 from __future__ import print_function
 
@@ -40,6 +39,7 @@ class MuscleCommandline(AbstractCommandline):
 
     Last checked against version: 3.7, briefly against 3.8
     """
+    
     def __init__(self, cmd="muscle", **kwargs):
         CLUSTERING_ALGORITHMS = ["upgma", "upgmb", "neighborjoining"]
         DISTANCE_MEASURES_ITER1 = ["kmer6_6", "kmer20_3", "kmer20_4",

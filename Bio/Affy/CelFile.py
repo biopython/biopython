@@ -63,6 +63,7 @@ class Record(object):
      [25 25 25 25 25]]
 
     """
+    
     def __init__(self):
         self.version = None
         self.GridCornerUL = None

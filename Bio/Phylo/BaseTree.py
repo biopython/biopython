@@ -262,6 +262,7 @@ class TreeMixin(object):
     required to have all of Tree's attributes -- just ``root`` (a Clade
     instance) and ``is_terminal``.
     """
+
     # Traversal methods
 
     def _filter_search(self, filter_func, order, follow_attrs):

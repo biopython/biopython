@@ -53,6 +53,7 @@ class CodonSeq(Seq):
     [0, 3.0, 6.0, 9.0, 12.0, 15]
 
     """
+    
     def __init__(self, data='', alphabet=default_codon_alphabet,
                  gap_char="-", rf_table=None):
         # rf_table should be a tuple or list indicating the every

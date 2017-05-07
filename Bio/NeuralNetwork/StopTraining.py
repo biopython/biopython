@@ -31,6 +31,7 @@ class ValidationIncreaseStop(object):
     set. This stopping criterion function will stop when the validation
     error increases.
     """
+    
     def __init__(self, max_iterations=None, min_iterations=0,
                  verbose=0):
         """Initialize the stopping criterion class.
@@ -54,8 +55,7 @@ class ValidationIncreaseStop(object):
 
     def stopping_criteria(self, num_iterations, training_error,
                           validation_error):
-        """Define when to stop iterating.
-        """
+        """Define when to stop iterating."""
         if num_iterations % 10 == 0:
             if self.verbose:
                 print("%s; Training Error:%s; Validation Error:%s"

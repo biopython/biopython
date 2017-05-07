@@ -39,6 +39,7 @@ class ChromosomeCounts(object):
     the chromosome will be especially abundant in the counts, and you
     want to pick those out.
     """
+    
     def __init__(self, segment_names, color_scheme=RAINBOW_COLORS):
         """Initialize a representation of chromosome counts.
 
@@ -177,8 +178,7 @@ class ChromosomeCounts(object):
         return chromosome
 
     def _color_from_count(self, count):
-        """Translate the given count into a color using the color scheme.
-        """
+        """Translate the given count into a color using the color scheme."""
         for count_start, count_end in self._color_scheme:
             if count >= count_start and count <= count_end:
                 return self._color_scheme[(count_start, count_end)]

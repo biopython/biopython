@@ -21,8 +21,7 @@ from Bio.PopGen.FDist.Controller import FDistController
 
 
 class FDistAsync(FDistController):
-    """Asynchronous FDist execution.
-    """
+    """Asynchronous FDist execution."""
 
     def __init__(self, fdist_dir="", ext=None):
         """Constructor.
@@ -74,6 +73,7 @@ class SplitFDist(object):
        Each SplitFDist object can only be used to run a single FDist
        simulation.
     """
+    
     def __init__(self, report_fun=None,
                  num_thr=2, split_size=1000, fdist_dir='', ext=None):
         """Constructor.
@@ -131,13 +131,11 @@ class SplitFDist(object):
             self.async.access_ds.release()
 
     def acquire(self):
-        """Allows the external acquisition of the lock.
-        """
+        """Allows the external acquisition of the lock."""
         self.async.access_ds.acquire()
 
     def release(self):
-        """Allows the external release of the lock.
-        """
+        """Allows the external release of the lock."""
         self.async.access_ds.release()
 
     # You can only run a fdist case at a time

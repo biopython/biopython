@@ -25,8 +25,8 @@ def logistic_function(value):
 
 
 class AbstractLayer(object):
-    """Abstract base class for all layers.
-    """
+    """Abstract base class for all layers."""
+    
     def __init__(self, num_nodes, has_bias_node):
         """Initialize the layer.
 
@@ -49,8 +49,7 @@ class AbstractLayer(object):
         self.weights = {}
 
     def __str__(self):
-        """Debugging output.
-        """
+        """Debugging output."""
         return "weights: %s" % self.weights
 
     def set_weight(self, this_node, next_node, value):
@@ -328,8 +327,7 @@ class OutputLayer(AbstractLayer):
         return errors
 
     def get_error(self, real_value, node_number):
-        """Return the error value at a particular node.
-        """
+        """Return the error value at a particular node."""
         predicted_value = self.values[node_number]
         return 0.5 * math.pow((real_value - predicted_value), 2)
 

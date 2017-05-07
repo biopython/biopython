@@ -46,6 +46,7 @@ class TranslationError(Exception):
 
 class CodonTable(object):
     """A codon-table, or genetic code."""
+    
     nucleotide_alphabet = Alphabet.generic_nucleotide
     protein_alphabet = Alphabet.generic_protein
 

@@ -3,8 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Parsing TRANSFAC files
-"""
+"""Parsing TRANSFAC files."""
 
 import warnings
 
@@ -63,6 +62,7 @@ class Motif(motifs.Motif, dict):
 
     For more information, see the TRANSFAC documentation.
     """
+    
     multiple_value_keys = set(['BF', 'OV', 'HP', 'BS', 'HC', 'DT', 'DR'])
     # These keys can occur multiple times for one motif
 
@@ -188,8 +188,7 @@ def read(handle):
 
 
 def write(motifs):
-    """Write the representation of a motif in TRANSFAC format
-    """
+    """Write the representation of a motif in TRANSFAC format."""
     blocks = []
     try:
         version = motifs.version

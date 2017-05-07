@@ -110,8 +110,8 @@ class TaxonomyTest(unittest.TestCase):
         self.assertEqual(set([3704, 3711, 3708, 3702]), set(values))
 
     def test_load_database_with_tax_lookup(self):
-        """Load SeqRecord objects and fetch the taxonomy information from NCBI.
-        """
+        """Load SeqRecord objects and fetch the taxonomy information from NCBI."""
+
         handle = Entrez.efetch(db="taxonomy", id=3702, retmode="XML")
 
         taxon_record = Entrez.read(handle)
