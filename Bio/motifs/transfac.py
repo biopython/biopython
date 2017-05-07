@@ -3,8 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Parsing TRANSFAC files
-"""
+"""Parsing TRANSFAC files."""
 
 import warnings
 
@@ -188,8 +187,7 @@ def read(handle):
 
 
 def write(motifs):
-    """Write the representation of a motif in TRANSFAC format
-    """
+    """Write the representation of a motif in TRANSFAC format."""
     blocks = []
     try:
         version = motifs.version
