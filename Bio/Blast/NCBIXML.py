@@ -14,7 +14,6 @@ from __future__ import print_function
 from Bio.Blast import Record
 import xml.sax
 from xml.sax.handler import ContentHandler
-from functools import reduce
 
 
 class _XMLparser(ContentHandler):

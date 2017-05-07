@@ -12,8 +12,6 @@ Uses Improved Iterative Scaling.
 from __future__ import print_function
 from functools import reduce
 
-from Bio._py3k import map
-
 try:
     import numpy
 except ImportError:

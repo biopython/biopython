@@ -7,10 +7,9 @@
 
 from __future__ import print_function
 
-from Bio.File import as_handle
-from Bio._py3k import input as _input
-
 import shlex
+
+from Bio.File import as_handle
 
 
 class MMCIF2Dict(dict):
