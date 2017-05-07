@@ -34,6 +34,7 @@ class DistributionPage(object):
     This organizes Distributions, and will display them nicely
     on a single page.
     """
+
     def __init__(self, output_format='pdf'):
         self.distributions = []
 
@@ -236,6 +237,7 @@ class LineDistribution(object):
     lines. This also allows multiple distributions to be displayed on a
     single graph.
     """
+
     def __init__(self):
         pass
 

@@ -26,6 +26,7 @@ def logistic_function(value):
 
 class AbstractLayer(object):
     """Abstract base class for all layers."""
+
     def __init__(self, num_nodes, has_bias_node):
         """Initialize the layer.
 

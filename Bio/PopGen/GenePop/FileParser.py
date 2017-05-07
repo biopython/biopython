@@ -64,6 +64,7 @@ class FileRecord(object):
         ('Other1', [(1,1),  (4,3), (200,200)]
 
     """
+
     def __init__(self, fname):
         self.comment_line = ""
         self.loci_list = []

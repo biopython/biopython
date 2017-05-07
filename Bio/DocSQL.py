@@ -91,6 +91,7 @@ class QueryRow(list):
 
 class Query(object):
     """SHOW TABLES."""
+
     MSG_FAILURE = "Failure"
     MSG_SUCCESS = "Success"
     message = "not executed"

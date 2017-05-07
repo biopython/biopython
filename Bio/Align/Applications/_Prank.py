@@ -47,6 +47,7 @@ class PrankCommandline(AbstractCommandline):
 
     Last checked against version: 081202
     """
+
     def __init__(self, cmd="prank", **kwargs):
         OUTPUT_FORMAT_VALUES = list(range(1, 18))
         self.parameters = [

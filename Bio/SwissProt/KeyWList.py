@@ -44,6 +44,7 @@ class Record(dict):
         CA         Category                        Once per keyword entry; absent
                                                    in category entries
     """
+
     def __init__(self):
         dict.__init__(self)
         for keyword in ("DE", "SY", "GO", "HI", "WW"):

@@ -231,6 +231,7 @@ def _map_fragment_list(flist, reflist):
 
 class FragmentMapper(object):
     """Map polypeptides in a model to lists of representative fragments."""
+
     def __init__(self, model, lsize=20, flength=5, fdir="."):
         """Create instance of FragmentMapper
 

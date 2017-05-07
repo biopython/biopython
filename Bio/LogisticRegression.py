@@ -29,6 +29,7 @@ class LogisticRegression(object):
     beta    List of the weights for each dimension.
 
     """
+
     def __init__(self):
         """LogisticRegression()"""
         self.beta = []

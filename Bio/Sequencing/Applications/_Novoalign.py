@@ -38,6 +38,7 @@ class NovoalignCommandline(AbstractCommandline):
 
     Last checked against version: 2.05.04
     """
+
     def __init__(self, cmd="novoalign", **kwargs):
 
         READ_FORMAT = ['FA', 'SLXFQ', 'STDFQ', 'ILMFQ', 'PRB', 'PRBnSEQ']

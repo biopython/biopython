@@ -34,6 +34,7 @@ class CodonAlignment(MultipleSeqAlignment):
     AAAAGGTGG Gamma
 
     """
+
     def __init__(self, records='', name=None, alphabet=default_codon_alphabet):
 
         MultipleSeqAlignment.__init__(self, records, alphabet=alphabet)

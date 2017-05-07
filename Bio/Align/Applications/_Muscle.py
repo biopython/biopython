@@ -39,6 +39,7 @@ class MuscleCommandline(AbstractCommandline):
 
     Last checked against version: 3.7, briefly against 3.8
     """
+
     def __init__(self, cmd="muscle", **kwargs):
         CLUSTERING_ALGORITHMS = ["upgma", "upgmb", "neighborjoining"]
         DISTANCE_MEASURES_ITER1 = ["kmer6_6", "kmer20_3", "kmer20_4",

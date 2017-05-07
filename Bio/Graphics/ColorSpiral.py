@@ -47,6 +47,7 @@ class ColorSpiral(object):
     V-space, to aid in distinguishing consecutive colour points on the
     path.
     """
+
     def __init__(self, a=1, b=0.33, v_init=0.85, v_final=0.5,
                  jitter=0.05):
         """Initialise a logarithmic spiral path through HSV colour space

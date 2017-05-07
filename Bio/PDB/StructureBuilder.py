@@ -27,6 +27,7 @@ class StructureBuilder(object):
     The StructureBuilder class is used by the PDBParser classes to
     translate a file to a Structure object.
     """
+
     def __init__(self):
         self.line_counter = 0
         self.header = {}

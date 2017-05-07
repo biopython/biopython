@@ -19,6 +19,7 @@ class Entity(object):
     Structure, Model, Chain and Residue are subclasses of Entity.
     It deals with storage and lookup.
     """
+
     def __init__(self, id):
         self._id = id
         self.full_id = None
@@ -236,6 +237,7 @@ class DisorderedEntityWrapper(object):
     where each Atom object represents a specific position of a disordered
     atom in the structure.
     """
+
     def __init__(self, id):
         self.id = id
         self.child_dict = {}

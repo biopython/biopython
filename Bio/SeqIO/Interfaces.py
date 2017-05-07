@@ -23,6 +23,7 @@ class SequenceIterator(object):
     You should write a __next__ method to return SeqRecord  objects.  You may
     wish to redefine the __init__ method as well.
     """
+
     def __init__(self, handle, alphabet=generic_alphabet):
         """Create a SequenceIterator object.
 
@@ -82,6 +83,7 @@ class SequenceWriter(object):
     Sequential file formats (e.g. Fasta, GenBank) should subclass the
     SequentialSequenceWriter class instead.
     """
+
     def __init__(self, handle):
         """Creates the writer object.
 
@@ -143,6 +145,7 @@ class SequentialSequenceWriter(SequenceWriter):
     Note that write_header() cannot require any assumptions about
     the number of records.
     """
+
     def __init__(self, handle):
         self.handle = handle
         self._header_written = False

@@ -28,6 +28,7 @@ class Record(object):
      - description - e.g. "All beta proteins","Fibronectin type III",
 
     """
+
     def __init__(self, line=None):
         self.sunid = ''
         self.nodetype = ''

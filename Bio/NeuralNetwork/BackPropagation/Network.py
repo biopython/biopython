@@ -31,6 +31,7 @@ class BasicNetwork(object):
 
     o Output Layer
     """
+
     def __init__(self, input_layer, hidden_layer, output_layer):
         """Initialize the network with the three layers."""
         self._input = input_layer

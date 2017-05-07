@@ -70,6 +70,7 @@ class NexusWriter(AlignmentWriter):
     You are expected to call this class via the Bio.AlignIO.write() or
     Bio.SeqIO.write() functions.
     """
+
     def write_file(self, alignments):
         """Use this to write an entire file containing the given alignments.
 

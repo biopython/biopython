@@ -62,6 +62,7 @@ class Pathway(object):
     reaction itself.
 
     """
+
     def __init__(self):
         self._name = ''
         self.org = ''
@@ -271,6 +272,7 @@ class Entry(object):
     product elements in the KGML file
 
     """
+
     def __init__(self):
         self._id = None
         self._names = []
@@ -411,6 +413,7 @@ class Component(object):
     The Component acts as a collection (with type 'group', and typically
     its own Graphics subelement), having only an ID.
     """
+
     def __init__(self, parent):
         self._id = None
         self._parent = parent
@@ -462,6 +465,7 @@ class Graphics(object):
     dash         List of ints, describing an on/off pattern for dashes
 
     """
+
     def __init__(self, parent):
         self.name = ''
         self._x = None
@@ -627,6 +631,7 @@ class Reaction(object):
     product        Entry object of the product
 
     """
+
     def __init__(self):
         self._id = None
         self._names = []
@@ -749,6 +754,7 @@ class Relation(object):
                        (name, value) tuples
 
     """
+
     def __init__(self):
         self._entry1 = None
         self._entry2 = None

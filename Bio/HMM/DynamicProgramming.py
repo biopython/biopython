@@ -30,6 +30,7 @@ class AbstractDPAlgorithms(object):
     o _backward_recursion -- Calculate the backward values in the recursion
     step using some technique to prevent underflow errors.
     """
+
     def __init__(self, markov_model, sequence):
         """Initialize to calculate forward and backward probabilities.
 
@@ -172,6 +173,7 @@ class ScaledDPAlgorithms(AbstractDPAlgorithms):
     but may still give underflow errors for some types of models. In these
     cases, the LogDPAlgorithms class should be used.
     """
+
     def __init__(self, markov_model, sequence):
         """Initialize the scaled approach to calculating probabilities.
         Arguments:
@@ -329,5 +331,6 @@ class LogDPAlgorithms(AbstractDPAlgorithms):
 
     XXX This is not implemented yet!
     """
+
     def __init__(self, markov_model, sequence):
         raise NotImplementedError("Haven't coded this yet...")

@@ -53,6 +53,7 @@ class _ChromosomeComponent(Widget):
     This class should not be instantiated directly, but should be used
     from derived classes.
     """
+
     def __init__(self):
         """Initialize a chromosome component.
 
@@ -98,6 +99,7 @@ class Organism(_ChromosomeComponent):
     Chromosomes should be added and removed from the Organism via the
     add and remove functions.
     """
+
     def __init__(self, output_format='pdf'):
         _ChromosomeComponent.__init__(self)
 
@@ -183,6 +185,7 @@ class Chromosome(_ChromosomeComponent):
     class can be instantiated directly, but the draw method makes the
     most sense to be called in the context of an organism.
     """
+
     def __init__(self, chromosome_name):
         """Initialize a Chromosome for drawing.
 
@@ -366,6 +369,7 @@ class ChromosomeSegment(_ChromosomeComponent):
     be subclassed to define additional functionality. Most of the interesting
     drawing stuff is likely to happen at the ChromosomeSegment level.
     """
+
     def __init__(self):
         """Initialize a ChromosomeSegment.
 
@@ -721,6 +725,7 @@ class TelomereSegment(ChromosomeSegment):
     _draw_segment class of ChromosomeSegment to provide that specialized
     drawing.
     """
+
     def __init__(self, inverted=0):
         """Initialize a segment at the end of a chromosome.
 

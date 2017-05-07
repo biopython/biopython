@@ -45,6 +45,7 @@ class ClustalOmegaCommandline(AbstractCommandline):
 
     Last checked against versions: 1.2.0
     """
+
     def __init__(self, cmd="clustalo", **kwargs):
         # order parameters in the same order as clustalo --help
         self.parameters = \

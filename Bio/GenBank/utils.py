@@ -27,6 +27,7 @@ class FeatureValueCleaner(object):
     (as in translations), or combining things with spaces (as might be
     the case with /notes).
     """
+
     keys_to_process = ["translation"]
 
     def __init__(self, to_process=keys_to_process):

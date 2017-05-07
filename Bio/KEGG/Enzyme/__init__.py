@@ -53,6 +53,7 @@ class Record(object):
     structures  A list of 2-tuples: (database, list of struct ids)
     dblinks     A list of 2-tuples: (database, list of db ids)
     """
+
     def __init__(self):
         """__init___(self)
 

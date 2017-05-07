@@ -38,6 +38,7 @@ class DialignCommandline(AbstractCommandline):
 
     Last checked against version: 2.2
     """
+
     def __init__(self, cmd="dialign2-2", **kwargs):
         self.program_name = cmd
         self.parameters = \
