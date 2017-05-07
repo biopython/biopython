@@ -90,6 +90,7 @@ class MarkovModelBuilder(object):
     So, this builder class should be used to create Markov models instead
     of trying to initiate a Markov Model directly.
     """
+
     # the default pseudo counts to use
     DEFAULT_PSEUDO = 1
 

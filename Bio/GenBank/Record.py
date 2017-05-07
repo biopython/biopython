@@ -142,6 +142,7 @@ class Record(object):
           (will replace the project information in 2009).
 
     """
+
     # constants for outputting GenBank information
     GB_LINE_LENGTH = 79
     GB_BASE_INDENT = 12
@@ -506,6 +507,7 @@ class Reference(object):
         - remark - Free-form remarks about the reference.
 
     """
+
     def __init__(self):
         self.number = ''
         self.bases = ''
@@ -608,6 +610,7 @@ class Feature(object):
         - qualfiers - A listing Qualifier objects in the feature.
 
     """
+
     def __init__(self):
         self.key = ''
         self.location = ''
@@ -640,6 +643,7 @@ class Qualifier(object):
         - value - The value of the qualifier ("Dictyostelium discoideum").
 
     """
+
     def __init__(self):
         self.key = ''
         self.value = ''

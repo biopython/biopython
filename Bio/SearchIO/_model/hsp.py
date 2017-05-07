@@ -245,6 +245,7 @@ class HSP(_BaseHSP):
     .. [1] may be used in HSPs with multiple fragments
 
     """
+
     # attributes we don't want to transfer when creating a new Hit class
     # from this one
     _NON_STICKY_ATTRS = ('_items', )

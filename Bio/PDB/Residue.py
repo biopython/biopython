@@ -119,6 +119,7 @@ class DisorderedResidue(DisorderedEntityWrapper):
     It is used to represent point mutations (e.g. there is a Ser 60 and a Cys 60
     residue, each with 50 % occupancy).
     """
+
     def __init__(self, id):
         DisorderedEntityWrapper.__init__(self, id)
 

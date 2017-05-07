@@ -21,6 +21,7 @@ class ChainSelector(object):
 
     Remove hydrogens, waters and ligands. Only use model 0 by default.
     """
+
     def __init__(self, chain_id, start, end, model_id=0):
         self.chain_id = chain_id
         self.start = start

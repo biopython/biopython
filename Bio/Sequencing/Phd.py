@@ -26,6 +26,7 @@ CKEYWORDS = ['CHROMAT_FILE', 'ABI_THUMBPRINT', 'PHRED_VERSION', 'CALL_METHOD',
 
 class Record(object):
     """Hold information from a PHD file."""
+
     def __init__(self):
         self.file_name = ''
         self.comments = {}

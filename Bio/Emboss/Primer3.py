@@ -31,6 +31,7 @@ class Record(object):
         - comments - the comment line(s) for the record
 
     """
+
     def __init__(self):
         self.comments = ""
         self.primers = []
@@ -63,6 +64,7 @@ class Primers(object):
         - internal_gc
 
     """
+
     def __init__(self):
         self.size = 0
         self.forward_seq = ""

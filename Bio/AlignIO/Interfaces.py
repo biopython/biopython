@@ -22,6 +22,7 @@ class AlignmentIterator(object):
     objects.  You may wish to redefine the __init__
     method as well.
     """
+
     # TODO - Should the default be Gapped(single_letter_alphabet) instead?
     def __init__(self, handle, seq_count=None,
                  alphabet=single_letter_alphabet):

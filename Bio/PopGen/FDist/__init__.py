@@ -67,6 +67,7 @@ class Record(object):
     element a list. Each element of the list is the count of each allele
     per population.
     """
+
     def __init__(self):
         self.data_org = 0
         self.num_pops = 0

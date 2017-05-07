@@ -24,6 +24,7 @@ class PatternIO(object):
     This just defines a simple persistence class for patterns, making
     it easy to write them to a file and read 'em back.
     """
+
     def __init__(self, alphabet=None):
         """Intialize the reader and writer class.
 
@@ -116,6 +117,7 @@ class PatternRepository(object):
     should be subclassed for specific implementations (ie. holding Motifs
     or Signatures.
     """
+
     def __init__(self, pattern_info):
         """Initialize a repository with patterns,
 

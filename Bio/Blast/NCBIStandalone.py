@@ -53,6 +53,7 @@ class LowQualityBlastError(Exception):
     search. This error should be raised for the BLAST reports produced
     in this case.
     """
+
     pass
 
 
@@ -68,6 +69,7 @@ class ShortQueryBlastError(Exception):
 
     This exception is raised when that condition is detected.
     """
+
     pass
 
 
@@ -80,6 +82,7 @@ class _Scanner(object):
      - feed     Feed data into the scanner.
 
     """
+
     def feed(self, handle, consumer):
         """S.feed(handle, consumer)
 
@@ -801,6 +804,7 @@ class _Scanner(object):
 
 class BlastParser(AbstractParser):
     """Parses BLAST data into a Record.Blast object."""
+
     def __init__(self):
         """__init__(self)"""
         self._scanner = _Scanner()
@@ -814,6 +818,7 @@ class BlastParser(AbstractParser):
 
 class PSIBlastParser(AbstractParser):
     """Parses BLAST data into a Record.PSIBlast object."""
+
     def __init__(self):
         """__init__(self)"""
         self._scanner = _Scanner()
@@ -1605,6 +1610,7 @@ class Iterator(object):
     next   Return the next record from the stream, or None.
 
     """
+
     def __init__(self, handle, parser=None):
         """__init__(self, handle, parser=None)
 
@@ -1776,6 +1782,7 @@ class BlastErrorParser(AbstractParser):
     ValueError to a LowQualityBlastError and attempt to provide useful
     information.
     """
+
     def __init__(self, bad_report_handle=None):
         """Initialize a parser that tries to catch BlastErrors.
 

@@ -41,6 +41,7 @@ class Hetero(object):
     Supports only the 3 alphameric code.
     The annotation is available from http://alpha2.bmc.uu.se/hicup/
     """
+
     def __init__(self, data):
         # Enforce string storage
         if not isinstance(data, str):

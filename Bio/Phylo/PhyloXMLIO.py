@@ -67,6 +67,7 @@ class PhyloXMLError(Exception):
     module; this exception is for valid XML that breaks the phyloXML
     specification.
     """
+
     pass
 
 

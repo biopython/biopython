@@ -44,6 +44,7 @@ class kNN(object):
         - k        Number of neighbors to look at.
 
     """
+
     def __init__(self):
         """kNN()"""
         self.classes = set()

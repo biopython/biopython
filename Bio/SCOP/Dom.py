@@ -27,6 +27,7 @@ class Record(object):
      - residues - The domain definition as a Residues object
      - hierarchy - A string specifying where this domain is in the hierarchy.
     """
+
     def __init__(self, line=None):
         self.sid = ''
         self.residues = []

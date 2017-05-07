@@ -24,6 +24,7 @@ class _XMLparser(ContentHandler):
 
     Redefine the methods startElement, characters and endElement.
     """
+
     def __init__(self, debug=0):
         """Constructor.
 

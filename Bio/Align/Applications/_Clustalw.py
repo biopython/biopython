@@ -37,6 +37,7 @@ class ClustalwCommandline(AbstractCommandline):
 
     Last checked against versions: 1.83 and 2.1
     """
+
     # TODO - Should we default to cmd="clustalw2" now?
     def __init__(self, cmd="clustalw", **kwargs):
         self.parameters = \

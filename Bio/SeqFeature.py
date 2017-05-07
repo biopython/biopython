@@ -1357,6 +1357,7 @@ class ExactPosition(int, AbstractPosition):
     15
 
     """
+
     def __new__(cls, position, extension=0):
         if extension != 0:
             raise AttributeError("Non-zero extension %s for exact position."
@@ -1392,6 +1393,7 @@ class UncertainPosition(ExactPosition):
     This is used in UniProt, e.g. ?222 for uncertain position 222, or in the
     XML format explicitly marked as uncertain. Does not apply to GenBank/EMBL.
     """
+
     pass
 
 
@@ -1509,6 +1511,7 @@ class WithinPosition(int, AbstractPosition):
     True
 
     """
+
     def __new__(cls, position, left, right):
         assert position == left or position == right, \
             "WithinPosition: %r should match left %r or right %r" \
@@ -1613,6 +1616,7 @@ class BetweenPosition(int, AbstractPosition):
     i.e. For equality (and sorting) the position objects behave like
     integers.
     """
+
     def __new__(cls, position, left, right):
         assert position == left or position == right
         obj = int.__new__(cls, position)
@@ -1682,6 +1686,7 @@ class BeforePosition(int, AbstractPosition):
     Just remember that for equality and sorting the position objects act
     like integers.
     """
+
     # Subclasses int so can't use __init__
     def __new__(cls, position, extension=0):
         if extension != 0:
@@ -1752,6 +1757,7 @@ class AfterPosition(int, AbstractPosition):
     Just remember that for equality and sorting the position objects act
     like integers.
     """
+
     # Subclasses int so can't use __init__
     def __new__(cls, position, extension=0):
         if extension != 0:
@@ -1833,6 +1839,7 @@ class OneOfPosition(int, AbstractPosition):
     True
 
     """
+
     def __new__(cls, position, choices):
         """Initialize with a set of posssible positions.
 

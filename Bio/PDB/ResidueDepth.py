@@ -521,6 +521,7 @@ def ca_depth(residue, surface):
 
 class ResidueDepth(AbstractPropertyMap):
     """Calculate residue and CA depth for all residues."""
+
     def __init__(self, model, pdb_file=None):
 
         # Issue warning if pdb_file is given

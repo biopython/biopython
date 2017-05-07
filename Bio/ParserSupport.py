@@ -34,6 +34,7 @@ warnings.warn("Bio.ParserSupport is now deprecated will be removed in a "
 
 class AbstractParser(object):
     """Base class for other parsers."""
+
     def parse(self, handle):
         raise NotImplementedError("Please implement in a derived class")
 
@@ -53,6 +54,7 @@ class AbstractConsumer(object):
     methods for each event that you want to receive.
 
     """
+
     def _unhandled_section(self):
         pass
 
@@ -72,6 +74,7 @@ class TaggingConsumer(AbstractConsumer):
     prints it to a handle.  Useful for debugging.
 
     """
+
     def __init__(self, handle=None, colwidth=15, maxwidth=80):
         """TaggingConsumer(handle=sys.stdout, colwidth=15, maxwidth=80)"""
         # I can't assign sys.stdout to handle in the argument list.

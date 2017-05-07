@@ -236,6 +236,7 @@ class align(object):
         interpret the parameters.
 
         """
+
         # match code -> tuple of (parameters, docstring)
         match2args = {
             'x': ([], ''),
@@ -896,6 +897,7 @@ class identity_match(object):
     mismatch are the scores to give when two residues are equal or
     unequal.  By default, match is 1 and mismatch is 0.
     """
+
     def __init__(self, match=1, mismatch=0):
         self.match = match
         self.mismatch = mismatch
@@ -916,6 +918,7 @@ class dictionary_match(object):
     true, then if (res 1, res 2) doesn't exist, I will use the score
     at (res 2, res 1).
     """
+
     def __init__(self, score_dict, symmetric=1):
         self.score_dict = score_dict
         self.symmetric = symmetric
@@ -933,6 +936,7 @@ class affine_penalty(object):
 
     Create a gap function for use in an alignment.
     """
+
     def __init__(self, open, extend, penalize_extend_when_opening=0):
         if open > 0 or extend > 0:
             raise ValueError("Gap penalties should be non-positive.")

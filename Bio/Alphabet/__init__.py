@@ -84,6 +84,7 @@ generic_alphabet = Alphabet()
 
 class SingleLetterAlphabet(Alphabet):
     """Generic alphabet with letters of size one."""
+
     size = 1
     letters = None   # string of all letters in the alphabet
 
@@ -95,6 +96,7 @@ single_letter_alphabet = SingleLetterAlphabet()
 
 class ProteinAlphabet(SingleLetterAlphabet):
     """Generic single letter protein alphabet."""
+
     pass
 
 
@@ -105,6 +107,7 @@ generic_protein = ProteinAlphabet()
 
 class NucleotideAlphabet(SingleLetterAlphabet):
     """Generic single letter nucleotide alphabet."""
+
     pass
 
 
@@ -113,6 +116,7 @@ generic_nucleotide = NucleotideAlphabet()
 
 class DNAAlphabet(NucleotideAlphabet):
     """Generic single letter DNA alphabet."""
+
     pass
 
 
@@ -124,6 +128,7 @@ generic_dna = DNAAlphabet()
 
 class RNAAlphabet(NucleotideAlphabet):
     """Generic single letter RNA alphabet."""
+
     pass
 
 
@@ -137,11 +142,13 @@ class SecondaryStructure(SingleLetterAlphabet):
 
     Letters are 'H' (helix), 'S' (strand), 'T' (turn) and 'C' (coil).
     """
+
     letters = "HSTC"
 
 
 class ThreeLetterProtein(Alphabet):
     """Three letter protein alphabet."""
+
     size = 3
     letters = [
         "Ala", "Asx", "Cys", "Asp", "Glu", "Phe", "Gly", "His", "Ile",

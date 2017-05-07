@@ -1,4 +1,4 @@
-# Copyright 2011 by Peter Cock.  All rights reserved.
+# Copyright 2011-2017 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -11,6 +11,7 @@ from reportlab.lib import colors
 
 class CrossLink(object):
     """Hold information for drawing a cross link between features."""
+
     def __init__(self, featureA, featureB,
                  color=colors.lightgreen, border=None, flip=False):
         """Create a new cross link.

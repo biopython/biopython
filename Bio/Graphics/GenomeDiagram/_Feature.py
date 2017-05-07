@@ -108,6 +108,7 @@ class Feature(object):
         o strand    Int describing the strand on which the feature is found
 
     """
+
     def __init__(self, parent=None, feature_id=None, feature=None,
                  color=colors.lightgreen, label=0, border=None, colour=None):
         """ __init__(self, parent=None, feature_id=None, feature=None,

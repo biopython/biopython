@@ -13,6 +13,7 @@ class ScoreDistribution(object):
     scores with a predefined precision. Provides a number of methods for calculating
     thresholds for motif occurrences.
     """
+
     def __init__(self, motif=None, precision=10 ** 3, pssm=None, background=None):
         if pssm is None:
             self.min_score = min(0.0, motif.min_score())

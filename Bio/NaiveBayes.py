@@ -49,6 +49,7 @@ class NaiveBayes(object):
         - dimensionality - Dimensionality of the data.
 
     """
+
     def __init__(self):
         self.classes = []
         self.p_conditional = None
