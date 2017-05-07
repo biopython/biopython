@@ -73,6 +73,7 @@ class SplitFDist(object):
        Each SplitFDist object can only be used to run a single FDist
        simulation.
     """
+    
     def __init__(self, report_fun=None,
                  num_thr=2, split_size=1000, fdist_dir='', ext=None):
         """Constructor.

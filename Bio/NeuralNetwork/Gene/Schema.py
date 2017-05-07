@@ -48,6 +48,7 @@ class Schema(object):
     This is likely to be a replacement for the Schema representation,
     since it allows multiple ambiguity characters to be used.
     """
+
     def __init__(self, ambiguity_info):
         """Initialize with ambiguity information.
 
@@ -170,6 +171,7 @@ class SchemaDNAAlphabet(Alphabet.Alphabet):
 
     o * - Any letter
     """
+
     letters = ["G", "A", "T", "C", "*"]
 
     alphabet_matches = {"G": "G",
@@ -192,6 +194,7 @@ class GeneticAlgorithmFinder(object):
     can be overridden easily by creating a GeneticAlgorithmFinder
     with a different alphabet.
     """
+
     def __init__(self, alphabet=SchemaDNAAlphabet()):
         """Initialize a finder to get schemas using Genetic Algorithms.
 
@@ -266,6 +269,7 @@ class GeneticAlgorithmFinder(object):
 
 class DifferentialSchemaFitness(object):
     """Calculate fitness for schemas that differentiate between sequences."""
+
     def __init__(self, positive_seqs, negative_seqs, schema_evaluator):
         """Initialize with different sequences to evaluate
 
@@ -336,6 +340,7 @@ class MostCountSchemaFitness(object):
     This fitness function tries to maximize schemas which are found many
     times in a group of sequences.
     """
+
     def __init__(self, seq_records, schema_evaluator):
         """Initialize with sequences to evaluate.
 
@@ -374,6 +379,7 @@ class MostCountSchemaFitness(object):
 # -- Helper classes
 class RandomMotifGenerator(object):
     """Generate a random motif within given parameters."""
+
     def __init__(self, alphabet, min_size=12, max_size=17):
         """Initialize with the motif parameters.
 
@@ -412,6 +418,7 @@ class SimpleFinisher(object):
     GA has proceeded for a specified number of generations and has
     a given number of unique schema with positive fitness.
     """
+
     def __init__(self, num_schemas, min_generations=100):
         """Initialize the finisher with its parameters.
 
@@ -459,6 +466,7 @@ class SchemaFinder(object):
     in a set of DNA sequences, but the finder can be customized to deal
     with any type of data.
     """
+
     def __init__(self, num_schemas=100,
                  schema_finder=GeneticAlgorithmFinder()):
         self.num_schemas = num_schemas
@@ -491,6 +499,7 @@ class SchemaCoder(object):
     motifs are found in the sequence. This lets you represent a sequence
     as just a count of (possibly ambiguous) motifs.
     """
+
     def __init__(self, schemas, ambiguous_converter):
         """Initialize the coder to convert sequences
 
@@ -567,6 +576,7 @@ def matches_schema(pattern, schema, ambiguity_character='*'):
 
 class SchemaFactory(object):
     """Generate Schema from inputs of Motifs or Signatures."""
+
     def __init__(self, ambiguity_symbol='*'):
         """Initialize the SchemaFactory
 

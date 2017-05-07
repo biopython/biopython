@@ -138,6 +138,7 @@ class _FileIterator(object):
     The generator function is expected to yield a tuple, while
     consuming input
     """
+    
     def __init__(self, func, fname, handle=None):
         self.func = func
         if handle is None:

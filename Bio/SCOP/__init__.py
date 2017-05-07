@@ -162,6 +162,7 @@ class Scop(object):
 
     root -- The root node of the hierarchy
     """
+    
     def __init__(self, cla_handle=None, des_handle=None, hie_handle=None,
                  dir_path=None, db_handle=None, version=None):
         """Build the SCOP hierarchy from the SCOP parsable files, or a sql backend.
@@ -512,6 +513,7 @@ class Node(object):
     description --
 
     """
+    
     def __init__(self, scop=None):
         """Create a Node in the scop hierarchy.  If a Scop instance is provided to the
         constructor, this will be used to lookup related references using the SQL
@@ -621,6 +623,7 @@ class Domain(Node):
         - residues -- A Residue object. It defines the collection
           of PDB atoms that make up this domain.
     """
+    
     def __init__(self, scop=None):
         Node.__init__(self, scop=scop)
         self.sid = ''

@@ -27,6 +27,7 @@ class NeighborSearch(object):
 
     NeighborSearch makes use of the Bio.KDTree C++ module, so it's fast.
     """
+ 
     def __init__(self, atom_list, bucket_size=10):
         """Create the object.
 

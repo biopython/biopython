@@ -31,6 +31,7 @@ class SamtoolsViewCommandline(AbstractCommandline):
     samtools view /path/to/sam_or_bam_file
 
     """
+    
     def __init__(self, cmd="samtools", **kwargs):
         self.program_name = cmd
         self.parameters = [
@@ -124,6 +125,7 @@ class SamtoolsMpileupCommandline(AbstractCommandline):
     samtools mpileup /path/to/sam_or_bam_file
 
     """
+    
     def __init__(self, cmd="samtools", **kwargs):
         self.program_name = cmd
         self.parameters = [
@@ -263,6 +265,7 @@ class SamtoolsReheaderCommandline(AbstractCommandline):
     samtools reheader /path/to/header_sam_file /path/to/input_bam_file
 
     """
+    
     def __init__(self, cmd="samtools", **kwargs):
         self.program_name = cmd
         self.parameters = [
@@ -297,6 +300,7 @@ class SamtoolsCatCommandline(AbstractCommandline):
     samtools cat /path/to/input_bam1 /path/to/input_bam2
 
      """
+    
     def __init__(self, cmd="samtools", **kwargs):
         self.program_name = cmd
         self.parameters = [
@@ -334,6 +338,7 @@ class SamtoolsVersion0xSortCommandline(AbstractCommandline):
     samtools sort /path/to/input_bam /path/to/out_prefix
 
     """
+    
     def __init__(self, cmd="samtools", **kwargs):
         self.program_name = cmd
 
@@ -376,6 +381,7 @@ class SamtoolsVersion1xSortCommandline(AbstractCommandline):
     samtools sort -o /path/to/out_file -T /path/to/out_prefix /path/to/input_bam
 
     """
+    
     def __init__(self, cmd="samtools", **kwargs):
         self.program_name = cmd
 
@@ -429,6 +435,7 @@ class SamtoolsMergeCommandline(AbstractCommandline):
     samtools merge /path/to/out_bam /path/to/input_bam1 /path/to/input_bam2
 
     """
+    
     def __init__(self, cmd="samtools", **kwargs):
         self.program_name = cmd
         self.parameters = [
@@ -479,6 +486,7 @@ class SamtoolsIndexCommandline(AbstractCommandline):
     samtools index /path/to/aln_bam
 
     """
+    
     def __init__(self, cmd="samtools", **kwargs):
         self.program_name = cmd
         self.parameters = [
@@ -507,6 +515,7 @@ class SamtoolsIdxstatsCommandline(AbstractCommandline):
     samtools idxstats /path/to/aln_bam
 
     """
+    
     def __init__(self, cmd="samtools", **kwargs):
         self.program_name = cmd
         self.parameters = [
@@ -536,6 +545,7 @@ class SamtoolsFaidxCommandline(AbstractCommandline):
     samtools faidx /path/to/reference.fasta
 
     """
+    
     def __init__(self, cmd="samtools", **kwargs):
         self.program_name = cmd
         self.parameters = [
@@ -570,6 +580,7 @@ class SamtoolsFixmateCommandline(AbstractCommandline):
     samtools fixmate /path/to/in.nameSrt.bam /path/to/out.bam
 
     """
+    
     def __init__(self, cmd="samtools", **kwargs):
         self.program_name = cmd
         self.parameters = [
@@ -606,6 +617,7 @@ class SamtoolsRmdupCommandline(AbstractCommandline):
     samtools rmdup /path/to/input.srt.bam /path/to/out.bam
 
     """
+    
     def __init__(self, cmd="samtools", **kwargs):
         self.program_name = cmd
         self.parameters = [
@@ -649,6 +661,7 @@ class SamtoolsCalmdCommandline(AbstractCommandline):
     samtools calmd /path/to/aln.bam /path/to/reference.fasta
 
     """
+    
     def __init__(self, cmd="samtools", **kwargs):
         self.program_name = cmd
         self.parameters = [
@@ -709,6 +722,7 @@ class SamtoolsTargetcutCommandline(AbstractCommandline):
     samtools targetcut /path/to/aln.bam
 
     """
+    
     def __init__(self, cmd="samtools", **kwargs):
         self.program_name = cmd
         self.parameters = [
@@ -755,6 +769,7 @@ class SamtoolsPhaseCommandline(AbstractCommandline):
     samtools phase /path/to/in.bam
 
     """
+    
     def __init__(self, cmd="samtools", **kwargs):
         self.program_name = cmd
         self.parameters = [

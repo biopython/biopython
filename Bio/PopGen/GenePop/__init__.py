@@ -122,6 +122,7 @@ class Record(object):
         ]
 
     """
+    
     def __init__(self):
         self.marker_len = 0
         self.comment_line = ""

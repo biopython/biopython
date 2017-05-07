@@ -26,6 +26,7 @@ class SignatureFinder(object):
     two motifs separated by a gap. We need something a lot smarter than
     this to find more complicated signatures.
     """
+
     def __init__(self, alphabet_strict=1):
         """Initialize a finder to get signatures.
 
@@ -124,6 +125,7 @@ class SignatureCoder(object):
     each signature is seen in the sequence. This allows a sequence to
     serve as input into a neural network.
     """
+
     def __init__(self, signatures, max_gap):
         """Initialize with the signatures to look for.
 

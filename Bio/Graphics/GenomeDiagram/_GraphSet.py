@@ -71,6 +71,7 @@ class GraphSet(object):
         o name      String describing the set
 
     """
+    
     def __init__(self, name=None):
         """ __init__(self, name=None)
 

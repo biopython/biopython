@@ -287,6 +287,7 @@ def _insdc_location_string(location, rec_length):
 
 class _InsdcWriter(SequentialSequenceWriter):
     """Base class for GenBank and EMBL writers (PRIVATE)."""
+    
     MAX_WIDTH = 80
     QUALIFIER_INDENT = 21
     QUALIFIER_INDENT_STR = " " * QUALIFIER_INDENT

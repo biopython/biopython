@@ -133,6 +133,7 @@ def FastaIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
 
 class FastaWriter(SequentialSequenceWriter):
     """Class to write Fasta format files."""
+
     def __init__(self, handle, wrap=60, record2title=None):
         """Create a Fasta writer.
 
@@ -169,6 +170,7 @@ class FastaWriter(SequentialSequenceWriter):
             handle.close()
 
         """
+        
         SequentialSequenceWriter.__init__(self, handle)
         self.wrap = None
         if wrap:

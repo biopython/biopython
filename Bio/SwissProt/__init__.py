@@ -83,6 +83,7 @@ class Record(object):
     MAVMAPRTLVLLLSGALALT...
 
     """
+    
     def __init__(self):
         self.entry_name = None
         self.data_class = None
@@ -127,6 +128,7 @@ class Reference(object):
     location    A citation for the work.
 
     """
+    
     def __init__(self):
         self.number = None
         self.positions = []

@@ -12,6 +12,7 @@ class InputRecord(object):
     This makes it easy to add primer information and write it out to the
     simple primer file format.
     """
+    
     def __init__(self):
         self.primer_info = []
 
@@ -34,12 +35,14 @@ class OutputRecord(object):
     amplifiers is a dictionary where the keys are the primer names and
     the values are a list of PrimerSearchAmplifier objects.
     """
+    
     def __init__(self):
         self.amplifiers = {}
 
 
 class Amplifier(object):
     """Represent a single amplification from a primer."""
+    
     def __init__(self):
         self.hit_info = ""
         self.length = 0

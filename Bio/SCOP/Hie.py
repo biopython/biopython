@@ -25,6 +25,7 @@ class Record(object):
      - children - Sequence of childrens sunids
 
     """
+    
     def __init__(self, line=None):
         self.sunid = ''
         self.parent = ''

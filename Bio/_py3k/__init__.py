@@ -120,6 +120,7 @@ if sys.version_info[0] >= 3:
             #
             class EvilHandleHack(object):
                 """Biopython internal class to work around bugs in early versions of Python 3."""
+                
                 def __init__(self, handle):
                     self._handle = handle
                     try:

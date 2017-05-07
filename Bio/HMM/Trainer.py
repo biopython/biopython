@@ -26,6 +26,7 @@ from .DynamicProgramming import ScaledDPAlgorithms
 
 class TrainingSequence(object):
     """Hold a training sequence with emissions and optionally, a state path."""
+
     def __init__(self, emissions, state_path):
         """Initialize a training sequence.
 
@@ -47,6 +48,7 @@ class TrainingSequence(object):
 
 class AbstractTrainer(object):
     """Provide generic functionality needed in all trainers."""
+
     def __init__(self, markov_model):
         self._markov_model = markov_model
 
@@ -160,6 +162,7 @@ class BaumWelchTrainer(AbstractTrainer):
     This algorithm is guaranteed to converge to a local maximum, but not
     necessarily to the global maxima, so use with care!
     """
+    
     def __init__(self, markov_model):
         """Initialize the trainer.
 
@@ -352,6 +355,7 @@ class KnownStateTrainer(AbstractTrainer):
     probabilities when both the state path and emission sequence are
     known for the training examples.
     """
+    
     def __init__(self, markov_model):
         AbstractTrainer.__init__(self, markov_model)
 

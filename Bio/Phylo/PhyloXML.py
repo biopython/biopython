@@ -32,6 +32,7 @@ from Bio.Phylo import BaseTree
 
 class PhyloXMLWarning(BiopythonWarning):
     """Warning for non-compliance with the phyloXML specification."""
+    
     pass
 
 
@@ -478,6 +479,7 @@ class Annotation(PhyloElement):
         uri : Uri
             link
     """
+    
     re_ref = re.compile(r'[a-zA-Z0-9_]+:[a-zA-Z0-9_\.\-\s]+')
 
     def __init__(self,
@@ -769,6 +771,7 @@ class Events(PhyloElement):
     treated as a dictionary, in which case None values are treated as missing
     keys and deleting a key resets that attribute's value back to None.
     """
+    
     ok_type = set(('transfer', 'fusion', 'speciation_or_duplication', 'other',
                    'mixed', 'unassigned'))
 
@@ -842,6 +845,7 @@ class MolSeq(PhyloElement):
             True if this sequence is aligned with the others (usually meaning
             all aligned seqs are the same length and gaps may be present)
     """
+    
     re_value = re.compile(r'[a-zA-Z\.\-\?\*_]+')
 
     def __init__(self, value, is_aligned=None):
@@ -918,6 +922,7 @@ class Property(PhyloElement):
             allows to attached a property specifically to one element (on the
             xml-level)
     """
+    
     re_ref = re.compile(r'[a-zA-Z0-9_]+:[a-zA-Z0-9_\.\-\s]+')
     ok_applies_to = set(('phylogeny', 'clade', 'node', 'annotation',
                          'parent_branch', 'other'))
@@ -992,6 +997,7 @@ class Reference(PhyloElement):
     NB: Whenever possible, use the ``doi`` attribute instead of the free-text
     ``desc`` element.
     """
+    
     re_doi = re.compile(r'[a-zA-Z0-9_\.]+/[a-zA-Z0-9_\.]+')
 
     def __init__(self, doi=None, desc=None):
@@ -1033,6 +1039,7 @@ class Sequence(PhyloElement):
         other : list of Other objects
             non-phyloXML elements
     """
+    
     alphabets = {'dna': Alphabet.generic_dna,
                  'rna': Alphabet.generic_rna,
                  'protein': Alphabet.generic_protein}
@@ -1212,6 +1219,7 @@ class SequenceRelation(PhyloElement):
         confidence : Confidence
             confidence value for this relation
     """
+    
     ok_type = set(('orthology', 'one_to_one_orthology', 'super_orthology',
                    'paralogy', 'ultra_paralogy', 'xenology', 'unknown', 'other'))
 
@@ -1254,6 +1262,7 @@ class Taxonomy(PhyloElement):
         other : list of Other objects
             non-phyloXML elements
     """
+    
     re_code = re.compile(r'[a-zA-Z0-9_]{2,10}')
     ok_rank = set(('domain', 'kingdom', 'subkingdom', 'branch', 'infrakingdom',
                    'superphylum', 'phylum', 'subphylum', 'infraphylum', 'microphylum',

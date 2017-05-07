@@ -67,6 +67,7 @@ class Motif(motifs.Motif):
     This includes the motif name, the evalue for a motif, and its number
     of occurrences.
     """
+    
     def __init__(self, alphabet=None, instances=None):
         motifs.Motif.__init__(self, alphabet, instances)
         self.evalue = 0.0
@@ -76,6 +77,7 @@ class Motif(motifs.Motif):
 
 class Instance(Seq.Seq):
     """A class describing the instances of a MEME motif, and the data thereof."""
+    
     def __init__(self, *args, **kwds):
         Seq.Seq.__init__(self, *args, **kwds)
         self.sequence_name = ""

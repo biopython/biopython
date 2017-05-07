@@ -300,6 +300,7 @@ class DisorderedAtom(DisorderedEntityWrapper):
     different Atom object can be selected by using the disordered_select(altloc)
     method.
     """
+
     def __init__(self, id):
         """Create DisorderedAtom.
 

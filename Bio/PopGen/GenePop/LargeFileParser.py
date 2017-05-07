@@ -85,6 +85,7 @@ class Record(object):
     is unknown.
 
     """
+    
     def __init__(self, handle):
         self.handle = handle
         self.marker_len = 0

@@ -1420,6 +1420,7 @@ class FastqPhredWriter(SequentialSequenceWriter):
     >>> import os
     >>> os.remove("Quality/temp.fastq")
     """
+    
     assert SANGER_SCORE_OFFSET == ord("!")
 
     def write_record(self, record):
@@ -1472,6 +1473,7 @@ class QualPhredWriter(SequentialSequenceWriter):
     >>> import os
     >>> os.remove("Quality/temp.qual")
     """
+    
     def __init__(self, handle, wrap=60, record2title=None):
         """Create a QUAL writer.
 
@@ -1609,6 +1611,7 @@ class FastqSolexaWriter(SequentialSequenceWriter):
     >>> import os
     >>> os.remove("Quality/temp.fastq")
     """
+    
     def write_record(self, record):
         """Write a single FASTQ record to the file."""
         assert self._header_written
@@ -1665,6 +1668,7 @@ class FastqIlluminaWriter(SequentialSequenceWriter):
     encoded as ASCII 126, the tilde. If your quality scores are truncated to fit, a
     warning is issued.
     """
+    
     def write_record(self, record):
         """Write a single FASTQ record to the file."""
         assert self._header_written

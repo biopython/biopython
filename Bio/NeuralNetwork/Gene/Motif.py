@@ -22,6 +22,7 @@ from .Pattern import PatternRepository
 
 class MotifFinder(object):
     """Find motifs in a set of Sequence Records."""
+
     def __init__(self, alphabet_strict=1):
         """Initialize a finder to get motifs.
 
@@ -157,6 +158,7 @@ class MotifCoder(object):
     can be fed as an input into a neural network. It does this by
     representing a sequence based the motifs present.
     """
+
     def __init__(self, motifs):
         """Initialize an input producer with motifs to look for.
 

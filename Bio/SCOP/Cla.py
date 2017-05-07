@@ -35,6 +35,7 @@ class Record(object):
        Bug 3109).
 
     """
+    
     def __init__(self, line=None):
         self.sid = ''
         self.residues = None
@@ -87,6 +88,7 @@ def parse(handle):
 
 class Index(dict):
     """A CLA file indexed by SCOP identifiers for rapid random access."""
+    
     def __init__(self, filename):
         """Create CLA index.
 

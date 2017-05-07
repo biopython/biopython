@@ -55,6 +55,7 @@ class ProbconsCommandline(AbstractCommandline):
 
     Last checked against version: 1.12
     """
+    
     def __init__(self, cmd="probcons", **kwargs):
         self.parameters = \
             [

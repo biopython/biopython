@@ -23,6 +23,7 @@ class _AbstractHSExposure(AbstractPropertyMap):
     vector based on three consecutive CA atoms. This is done by two separate
     subclasses.
     """
+ 
     def __init__(self, model, radius, offset, hse_up_key, hse_down_key,
             angle_key=None):
         """@param model: model
@@ -137,6 +138,7 @@ class HSExposureCA(_AbstractHSExposure):
 
     Uses three consecutive CA positions.
     """
+
     def __init__(self, model, radius=12, offset=0):
         """Initialse class.
 

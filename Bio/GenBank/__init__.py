@@ -1,5 +1,5 @@
 # Copyright 2000 by Jeffrey Chang, Brad Chapman.  All rights reserved.
-# Copyright 2006-2016 by Peter Cock.  All rights reserved.
+# Copyright 2006-2017 by Peter Cock.  All rights reserved.
 #
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -381,6 +381,7 @@ class Iterator(object):
     Please use Bio.SeqIO.parse(..., format="gb") or Bio.GenBank.parse(...)
     for SeqRecord and GenBank specific Record objects respectively instead.
     """
+    
     def __init__(self, handle, parser=None):
         """Initialize the iterator.
 
@@ -424,11 +425,13 @@ class Iterator(object):
 
 class ParserFailureError(Exception):
     """Failure caused by some kind of problem in the parser."""
+
     pass
 
 
 class LocationParserError(Exception):
     """Could not Properly parse out a location from a GenBank file."""
+
     pass
 
 
@@ -440,6 +443,7 @@ class FeatureParser(object):
 
     Please use Bio.SeqIO.parse(...) or Bio.SeqIO.read(...) instead.
     """
+    
     def __init__(self, debug_level=0, use_fuzziness=1,
                  feature_cleaner=FeatureValueCleaner()):
         """Initialize a GenBank parser and Feature consumer.
@@ -478,6 +482,7 @@ class RecordParser(object):
     Please use the Bio.GenBank.parse(...) or Bio.GenBank.read(...) functions
     instead.
     """
+    
     def __init__(self, debug_level=0):
         """Initialize the parser.
 
@@ -504,6 +509,7 @@ class _BaseGenBankConsumer(object):
     This just helps to eliminate some duplication in things that most
     GenBank consumers want to do.
     """
+    
     # Special keys in GenBank records that we should remove spaces from
     # For instance, \translation keys have values which are proteins and
     # should have spaces and newlines removed from them. This class
@@ -627,6 +633,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
        cleaning-up of feature values.
 
     """
+    
     def __init__(self, use_fuzziness, feature_cleaner=None):
         from Bio.SeqRecord import SeqRecord
         _BaseGenBankConsumer.__init__(self)
@@ -1274,6 +1281,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
 
 class _RecordConsumer(_BaseGenBankConsumer):
     """Create a GenBank Record object from scanner generated information (PRIVATE)."""
+
     def __init__(self):
         _BaseGenBankConsumer.__init__(self)
         from . import Record

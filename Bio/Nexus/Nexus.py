@@ -56,6 +56,7 @@ class CharBuffer(object):
 
     This class is not intended for public use (any more).
     """
+
     def __init__(self, string):
         if string:
             self.buffer = list(string)
@@ -163,6 +164,7 @@ class StepMatrix(object):
 
     See Wheeler (1990), Cladistics 6:269-275.
     """
+
     def __init__(self, symbols, gap):
         self.data = {}
         self.symbols = sorted(symbols)
@@ -555,6 +557,7 @@ class Commandline(object):
 
 class Block(object):
     """Represent a NEXUS block with block name and list of commandlines."""
+
     def __init__(self, title=None):
         self.title = title
         self.commandlines = []
