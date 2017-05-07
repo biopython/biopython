@@ -48,7 +48,7 @@ import warnings
 
 import numpy
 
-from Bio.PDB import PDBParser, PDBIO
+from Bio.PDB import PDBParser
 from Bio.PDB import Selection
 from Bio.PDB.AbstractPropertyMap import AbstractPropertyMap
 from Bio.PDB.Polypeptide import is_aa
