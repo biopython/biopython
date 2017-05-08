@@ -464,16 +464,16 @@ class Reference(object):
     """Represent a Generic Reference object.
 
     Attributes:
-    o location - A list of Location objects specifying regions of
+    - location - A list of Location objects specifying regions of
     the sequence that the references correspond to. If no locations are
     specified, the entire sequence is assumed.
-    o authors - A big old string, or a list split by author, of authors
+    - authors - A big old string, or a list split by author, of authors
     for the reference.
-    o title - The title of the reference.
-    o journal - Journal the reference was published in.
-    o medline_id - A medline reference for the article.
-    o pubmed_id - A pubmed reference for the article.
-    o comment - A place to stick any comments about the reference.
+    - title - The title of the reference.
+    - journal - Journal the reference was published in.
+    - medline_id - A medline reference for the article.
+    - pubmed_id - A pubmed reference for the article.
+    - comment - A place to stick any comments about the reference.
 
     """
 
@@ -1327,8 +1327,8 @@ class AbstractPosition(object):
 class ExactPosition(int, AbstractPosition):
     """Specify the specific position of a boundary.
 
-    o position - The position of the boundary.
-    o extension - An optional argument which must be zero since we don't
+    - position - The position of the boundary.
+    - extension - An optional argument which must be zero since we don't
     have an extension. The argument is provided so that the same number of
     arguments can be passed to all position types.
 
@@ -1431,9 +1431,9 @@ class WithinPosition(int, AbstractPosition):
     """Specify the position of a boundary within some coordinates.
 
     Arguments:
-    o position - The default integer position
-    o left - The start (left) position of the boundary
-    o right - The end (right) position of the boundary
+    - position - The default integer position
+    - left - The start (left) position of the boundary
+    - right - The end (right) position of the boundary
 
     This allows dealing with a position like ((1.4)..100). This
     indicates that the start of the sequence is somewhere between 1
@@ -1555,9 +1555,9 @@ class BetweenPosition(int, AbstractPosition):
     """Specify the position of a boundary between two coordinates (OBSOLETE?).
 
     Arguments:
-    o position - The default integer position
-    o left - The start (left) position of the boundary
-    o right - The end (right) position of the boundary
+    - position - The default integer position
+    - left - The start (left) position of the boundary
+    - right - The end (right) position of the boundary
 
     This allows dealing with a position like 123^456. This
     indicates that the start of the sequence is somewhere between
@@ -1658,8 +1658,8 @@ class BeforePosition(int, AbstractPosition):
     """Specify a position where the actual location occurs before it.
 
     Arguments:
-    o position - The upper boundary of where the location can occur.
-    o extension - An optional argument which must be zero since we don't
+    - position - The upper boundary of where the location can occur.
+    - extension - An optional argument which must be zero since we don't
     have an extension. The argument is provided so that the same number of
     arguments can be passed to all position types.
 
@@ -1722,8 +1722,8 @@ class AfterPosition(int, AbstractPosition):
     """Specify a position where the actual location is found after it.
 
     Arguments:
-    o position - The lower boundary of where the location can occur.
-    o extension - An optional argument which must be zero since we don't
+    - position - The lower boundary of where the location can occur.
+    - extension - An optional argument which must be zero since we don't
     have an extension. The argument is provided so that the same number of
     arguments can be passed to all position types.
 

@@ -13,7 +13,7 @@
 
     Provides:
 
-    o GraphData - Contains data from which a graph will be drawn, and
+    - GraphData - Contains data from which a graph will be drawn, and
                     information about its presentation
 
     For drawing capabilities, this module uses reportlab to draw and write
@@ -41,48 +41,48 @@ class GraphData(object):
         Provides:
 
         Methods:
-        o __init__(self, id=None, data=None, name=None, style='bar',
+        - __init__(self, id=None, data=None, name=None, style='bar',
                  color=colors.lightgreen, altcolor=colors.darkseagreen)
                  Called on instantiation
 
-        o set_data(self, data)  Load the object with data to be plotted
+        - set_data(self, data)  Load the object with data to be plotted
 
-        o get_data(self)    Returns the data to be plotted as a list of
+        - get_data(self)    Returns the data to be plotted as a list of
                             (position, value) tuples
 
-        o add_point(self, point)    Add a single point to the data set
+        - add_point(self, point)    Add a single point to the data set
 
-        o quartiles(self)   Returns a tuple of the data quartiles
+        - quartiles(self)   Returns a tuple of the data quartiles
 
-        o range(self)   Returns a tuple of the base range covered by the graph
+        - range(self)   Returns a tuple of the base range covered by the graph
                         data
 
-        o mean(self)    Returns a float of the mean data point value
+        - mean(self)    Returns a float of the mean data point value
 
-        o stdev(self)   Returns the sample standard deviation of the data values
+        - stdev(self)   Returns the sample standard deviation of the data values
 
-        o __len__(self) Returns the length of sequence covered by the data
+        - __len__(self) Returns the length of sequence covered by the data
 
-        o __getitem__(self, index)  Returns the value at the base specified,
+        - __getitem__(self, index)  Returns the value at the base specified,
                                     or graph data in the base range
 
-        o __str__(self) Returns a formatted string describing the graph data
+        - __str__(self) Returns a formatted string describing the graph data
 
         Attributes:
-        o id    Unique identifier for the data
+        - id    Unique identifier for the data
 
-        o data  Dictionary of describing the data, keyed by position
+        - data  Dictionary of describing the data, keyed by position
 
-        o name  String describing the data
+        - name  String describing the data
 
-        o style String ('bar', 'heat', 'line') describing how to draw the data
+        - style String ('bar', 'heat', 'line') describing how to draw the data
 
-        o poscolor     colors.Color for drawing high (some styles) or all
+        - poscolor     colors.Color for drawing high (some styles) or all
                         values
 
-        o negcolor     colors.Color for drawing low values (some styles)
+        - negcolor     colors.Color for drawing low values (some styles)
 
-        o linewidth     Int, thickness to draw the line in 'line' styles
+        - linewidth     Int, thickness to draw the line in 'line' styles
 
     """
 
@@ -92,24 +92,24 @@ class GraphData(object):
         """__init__(self, id=None, data=None, name=None, style='bar',
                  color=colors.lightgreen, altcolor=colors.darkseagreen)
 
-            o id    Unique ID for the graph
+            - id    Unique ID for the graph
 
-            o data  List of (position, value) tuples
+            - data  List of (position, value) tuples
 
-            o name  String describing the graph
+            - name  String describing the graph
 
-            o style String describing the presentation style ('bar', 'line',
+            - style String describing the presentation style ('bar', 'line',
                     'heat')
 
-            o color   colors.Color describing the color to draw all or the
+            - color   colors.Color describing the color to draw all or the
                       'high' (some styles) values (overridden by backwards
                       compatible argument with UK spelling, colour).
 
-            o altcolor colors.Color describing the color to draw the 'low'
+            - altcolor colors.Color describing the color to draw the 'low'
                        values (some styles only) (overridden by backwards
                        compatible argument with UK spelling, colour).
 
-            o center Value at which x-axis crosses y-axis.
+            - center Value at which x-axis crosses y-axis.
 
         """
         # Let the UK spelling (colour) override the USA spelling (color)
@@ -134,7 +134,7 @@ class GraphData(object):
     def set_data(self, data):
         """set_data(self, data)
 
-            o data      List of (position, value) tuples
+            - data      List of (position, value) tuples
 
             Add data with a list of (position, value) tuples
         """
@@ -156,7 +156,7 @@ class GraphData(object):
     def add_point(self, point):
         """add_point(self, point)
 
-            o point     (position, value) tuple
+            - point     (position, value) tuple
 
             Add a single point to the set of data
         """

@@ -24,10 +24,10 @@ class AbstractDPAlgorithms(object):
 
     Derived class of this must implement:
 
-    o _forward_recursion -- Calculate the forward values in the recursion
+    - _forward_recursion -- Calculate the forward values in the recursion
     using some kind of technique for preventing underflow errors.
 
-    o _backward_recursion -- Calculate the backward values in the recursion
+    - _backward_recursion -- Calculate the backward values in the recursion
     step using some technique to prevent underflow errors.
     """
 
@@ -36,9 +36,9 @@ class AbstractDPAlgorithms(object):
 
         Arguments:
 
-        o markov_model -- The current Markov model we are working with.
+        - markov_model -- The current Markov model we are working with.
 
-        o sequence -- A training sequence containing a set of emissions.
+        - sequence -- A training sequence containing a set of emissions.
         """
         self._mm = markov_model
         self._seq = sequence
@@ -54,11 +54,11 @@ class AbstractDPAlgorithms(object):
         Durbin et al.
 
         Returns:
-        o A dictionary containing the forward variables. This has keys of the
+        - A dictionary containing the forward variables. This has keys of the
         form (state letter, position in the training sequence), and values
         containing the calculated forward variable.
 
-        o The calculated probability of the sequence.
+        - The calculated probability of the sequence.
 
         """
         # all of the different letters that the state path can be in
@@ -118,7 +118,7 @@ class AbstractDPAlgorithms(object):
         Durbin et al.
 
         Returns:
-        o A dictionary containing the backwards variables. This has keys
+        - A dictionary containing the backwards variables. This has keys
         of the form (state letter, position in the training sequence),
         and values containing the calculated backward variable.
 
@@ -178,9 +178,9 @@ class ScaledDPAlgorithms(AbstractDPAlgorithms):
         """Initialize the scaled approach to calculating probabilities.
         Arguments:
 
-        o markov_model -- The current Markov model we are working with.
+        - markov_model -- The current Markov model we are working with.
 
-        o sequence -- A TrainingSequence object that must have a
+        - sequence -- A TrainingSequence object that must have a
         set of emissions to work with.
         """
         AbstractDPAlgorithms.__init__(self, markov_model, sequence)
@@ -195,13 +195,13 @@ class ScaledDPAlgorithms(AbstractDPAlgorithms):
 
         Arguments:
 
-        o seq_pos -- The current position we are at in the sequence.
+        - seq_pos -- The current position we are at in the sequence.
 
-        o previous_vars -- All of the forward or backward variables
+        - previous_vars -- All of the forward or backward variables
         calculated so far.
 
         Returns:
-        o The calculated scaling variable for the sequence item.
+        - The calculated scaling variable for the sequence item.
 
         """
         # all of the different letters the state can have
@@ -234,12 +234,12 @@ class ScaledDPAlgorithms(AbstractDPAlgorithms):
 
         Arguments:
 
-        o cur_state -- The letter of the state we are calculating the
+        - cur_state -- The letter of the state we are calculating the
         forward variable for.
 
-        o sequence_pos -- The position we are at in the training seq.
+        - sequence_pos -- The position we are at in the training seq.
 
-        o forward_vars -- The current set of forward variables
+        - forward_vars -- The current set of forward variables
         """
         # calculate the s value, if we haven't done so already (ie. during
         # a previous forward or backward recursion)
@@ -281,12 +281,12 @@ class ScaledDPAlgorithms(AbstractDPAlgorithms):
 
         Arguments:
 
-        o cur_state -- The letter of the state we are calculating the
+        - cur_state -- The letter of the state we are calculating the
         forward variable for.
 
-        o sequence_pos -- The position we are at in the training seq.
+        - sequence_pos -- The position we are at in the training seq.
 
-        o backward_vars -- The current set of backward variables
+        - backward_vars -- The current set of backward variables
         """
         # calculate the s value, if we haven't done so already (ie. during
         # a previous forward or backward recursion)

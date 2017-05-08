@@ -58,7 +58,7 @@ class _ChromosomeComponent(Widget):
         """Initialize a chromosome component.
 
         Attributes:
-        o _sub_components -- Any components which are contained under
+        - _sub_components -- Any components which are contained under
         this parent component. This attribute should be accessed through
         the add() and remove() functions.
 
@@ -118,14 +118,14 @@ class Organism(_ChromosomeComponent):
 
         Arguments:
 
-        o output_file -- The name of a file specifying where the
+        - output_file -- The name of a file specifying where the
         document should be saved, or a handle to be written to.
         The output format is set when creating the Organism object.
         Alternatively, output_file=None will return the drawing using
         the low-level ReportLab objects (for further processing, such
         as adding additional graphics, before writing).
 
-        o title -- The output title of the produced document.
+        - title -- The output title of the produced document.
         """
         width, height = self.page_size
         cur_drawing = Drawing(width, height)
@@ -191,21 +191,21 @@ class Chromosome(_ChromosomeComponent):
 
         Arguments:
 
-        o chromosome_name - The label for the chromosome.
+        - chromosome_name - The label for the chromosome.
 
         Attributes:
-        o start_x_position, end_x_position - The x positions on the page
+        - start_x_position, end_x_position - The x positions on the page
         where the chromosome should be drawn. This allows multiple
         chromosomes to be drawn on a single page.
 
-        o start_y_position, end_y_position - The y positions on the page
+        - start_y_position, end_y_position - The y positions on the page
         where the chromosome should be contained.
 
         Configuration Attributes:
 
-        o title_size - The size of the chromosome title.
+        - title_size - The size of the chromosome title.
 
-        o scale_num - A number of scale the drawing by. This is useful if
+        - scale_num - A number of scale the drawing by. This is useful if
         you want to draw multiple chromosomes of different sizes at the
         same scale. If this is not set, then the chromosome drawing will
         be scaled by the number of segements in the chromosome (so each
@@ -374,27 +374,27 @@ class ChromosomeSegment(_ChromosomeComponent):
         """Initialize a ChromosomeSegment.
 
         Attributes:
-        o start_x_position, end_x_position - Defines the x range we have
+        - start_x_position, end_x_position - Defines the x range we have
         to draw things in.
 
-        o start_y_position, end_y_position - Defines the y range we have
+        - start_y_position, end_y_position - Defines the y range we have
         to draw things in.
 
         Configuration Attributes:
 
-        o scale - A scaling value for the component. By default this is
+        - scale - A scaling value for the component. By default this is
         set at 1 (ie -- has the same scale as everything else). Higher
         values give more size to the component, smaller values give less.
 
-        o fill_color - A color to fill in the segment with. Colors are
+        - fill_color - A color to fill in the segment with. Colors are
         available in reportlab.lib.colors
 
-        o label - A label to place on the chromosome segment. This should
+        - label - A label to place on the chromosome segment. This should
         be a text string specifying what is to be included in the label.
 
-        o label_size - The size of the label.
+        - label_size - The size of the label.
 
-        o chr_percent - The percentage of area that the chromosome
+        - chr_percent - The percentage of area that the chromosome
         segment takes up.
 
         """
@@ -734,7 +734,7 @@ class TelomereSegment(ChromosomeSegment):
 
         Arguments:
 
-        o inverted -- Whether or not the telomere should be inverted
+        - inverted -- Whether or not the telomere should be inverted
         (ie. drawn on the bottom of a chromosome)
         """
         ChromosomeSegment.__init__(self)

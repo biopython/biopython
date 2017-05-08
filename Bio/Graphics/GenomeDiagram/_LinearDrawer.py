@@ -13,7 +13,7 @@
 
     Provides:
 
-    o LinearDrawer -  Drawing object for linear diagrams
+    - LinearDrawer -  Drawing object for linear diagrams
 
     For drawing capabilities, this module uses reportlab to draw and write
     the diagram:
@@ -47,135 +47,135 @@ class LinearDrawer(AbstractDrawer):
 
         Inherits from:
 
-        o AbstractDrawer
+        - AbstractDrawer
 
         Provides:
 
         Methods:
-        o __init__(self, ...) Called on instantiation
+        - __init__(self, ...) Called on instantiation
 
-        o set_page_size(self, pagesize, orientation)    Set the page size to the
+        - set_page_size(self, pagesize, orientation)    Set the page size to the
                                                     passed size and orientation
 
-        o set_margins(self, x, y, xl, xr, yt, yb)   Set the drawable area of the
+        - set_margins(self, x, y, xl, xr, yt, yb)   Set the drawable area of the
                                                     page
 
-        o set_bounds(self, start, end)  Set the bounds for the elements to be
+        - set_bounds(self, start, end)  Set the bounds for the elements to be
                                         drawn
 
-        o is_in_bounds(self, value)     Returns a boolean for whether the position
+        - is_in_bounds(self, value)     Returns a boolean for whether the position
                                         is actually to be drawn
 
-        o __len__(self)     Returns the length of sequence that will be drawn
+        - __len__(self)     Returns the length of sequence that will be drawn
 
 
-        o draw(self)    Place the drawing elements on the diagram
+        - draw(self)    Place the drawing elements on the diagram
 
-        o init_fragments(self)  Calculate information
+        - init_fragments(self)  Calculate information
                                 about sequence fragment locations on the drawing
 
-        o set_track_heights(self)   Calculate information about the offset of
+        - set_track_heights(self)   Calculate information about the offset of
                                     each track from the fragment base
 
-        o draw_test_tracks(self)    Add lines demarcating each track to the
+        - draw_test_tracks(self)    Add lines demarcating each track to the
                                     drawing
 
-        o draw_track(self, track)   Return the contents of the passed track as
+        - draw_track(self, track)   Return the contents of the passed track as
                                     drawing elements
 
-        o draw_scale(self, track)   Return a scale for the passed track as
+        - draw_scale(self, track)   Return a scale for the passed track as
                                     drawing elements
 
-        o draw_tick(self, tickpos, ctr, ticklen, track, draw_label) Return a
+        - draw_tick(self, tickpos, ctr, ticklen, track, draw_label) Return a
                                     tick line and possibly a label
 
-        o draw_greytrack(self, track)   Return a grey background and superposed
+        - draw_greytrack(self, track)   Return a grey background and superposed
                                         label for the passed track as drawing
                                         elements
 
-        o draw_feature_set(self, set)   Return the features in the passed set as
+        - draw_feature_set(self, set)   Return the features in the passed set as
                                         drawing elements
 
-        o draw_feature(self, feature)   Return a single feature as drawing
+        - draw_feature(self, feature)   Return a single feature as drawing
                                         elements
 
-        o get_feature_sigil(self, feature, x0, x1, fragment)    Return a single
+        - get_feature_sigil(self, feature, x0, x1, fragment)    Return a single
                                         feature as its sigil in drawing elements
 
-        o draw_graph_set(self, set)     Return the data in a set of graphs as
+        - draw_graph_set(self, set)     Return the data in a set of graphs as
                                         drawing elements
 
-        o draw_line_graph(self, graph)  Return the data in a graph as a line
+        - draw_line_graph(self, graph)  Return the data in a graph as a line
                                         graph in drawing elements
 
-        o draw_heat_graph(self, graph)  Return the data in a graph as a heat
+        - draw_heat_graph(self, graph)  Return the data in a graph as a heat
                                         graph in drawing elements
 
-        o draw_bar_graph(self, graph)   Return the data in a graph as a bar
+        - draw_bar_graph(self, graph)   Return the data in a graph as a bar
                                         graph in drawing elements
 
-        o canvas_location(self, base)   Return the fragment, and the offset from
+        - canvas_location(self, base)   Return the fragment, and the offset from
                                         the left margin, of a passed position
                                         in the sequence, on the diagram.
 
         Attributes:
-        o tracklines    Boolean for whether to draw lines delineating tracks
+        - tracklines    Boolean for whether to draw lines delineating tracks
 
-        o pagesize      Tuple describing the size of the page in pixels
+        - pagesize      Tuple describing the size of the page in pixels
 
-        o x0            Float X co-ord for leftmost point of drawable area
+        - x0            Float X co-ord for leftmost point of drawable area
 
-        o xlim          Float X co-ord for rightmost point of drawable area
+        - xlim          Float X co-ord for rightmost point of drawable area
 
-        o y0            Float Y co-ord for lowest point of drawable area
+        - y0            Float Y co-ord for lowest point of drawable area
 
-        o ylim          Float Y co-ord for topmost point of drawable area
+        - ylim          Float Y co-ord for topmost point of drawable area
 
-        o pagewidth     Float pixel width of drawable area
+        - pagewidth     Float pixel width of drawable area
 
-        o pageheight    Float pixel height of drawable area
+        - pageheight    Float pixel height of drawable area
 
-        o xcenter       Float X co-ord of center of drawable area
+        - xcenter       Float X co-ord of center of drawable area
 
-        o ycenter       Float Y co-ord of center of drawable area
+        - ycenter       Float Y co-ord of center of drawable area
 
-        o start         Int, base to start drawing from
+        - start         Int, base to start drawing from
 
-        o end           Int, base to stop drawing at
+        - end           Int, base to stop drawing at
 
-        o length        Int, size of sequence to be drawn
+        - length        Int, size of sequence to be drawn
 
-        o fragments     Int, number of fragments into which to divide the
+        - fragments     Int, number of fragments into which to divide the
                         drawn sequence
 
-        o fragment_size Float (0->1) the proportion of the fragment height to
+        - fragment_size Float (0->1) the proportion of the fragment height to
                         draw in
 
-        o track_size    Float (0->1) the proportion of the track height to
+        - track_size    Float (0->1) the proportion of the track height to
                         draw in
 
-        o drawing       Drawing canvas
+        - drawing       Drawing canvas
 
-        o drawn_tracks  List of ints denoting which tracks are to be drawn
+        - drawn_tracks  List of ints denoting which tracks are to be drawn
 
-        o current_track_level   Int denoting which track is currently being
+        - current_track_level   Int denoting which track is currently being
                                 drawn
 
-        o fragment_height   Float total fragment height in pixels
+        - fragment_height   Float total fragment height in pixels
 
-        o fragment_bases    Int total fragment length in bases
+        - fragment_bases    Int total fragment length in bases
 
-        o fragment_lines    Dictionary of top and bottom y-coords of fragment,
+        - fragment_lines    Dictionary of top and bottom y-coords of fragment,
                             keyed by fragment number
 
-        o fragment_limits   Dictionary of start and end bases of each fragment,
+        - fragment_limits   Dictionary of start and end bases of each fragment,
                             keyed by fragment number
 
-        o track_offsets     Dictionary of number of pixels that each track top,
+        - track_offsets     Dictionary of number of pixels that each track top,
                             center and bottom is offset from the base of a
                             fragment, keyed by track
 
-        o cross_track_links List of tuples each with four entries (track A,
+        - cross_track_links List of tuples each with four entries (track A,
                             feature A, track B, feature B) to be linked.
 
     """
@@ -189,53 +189,53 @@ class LinearDrawer(AbstractDrawer):
                      start=None, end=None, tracklines=0, fragments=10,
                      fragment_size=0.9, track_size=0.75)
 
-            o parent    Diagram object containing the data that the drawer
+            - parent    Diagram object containing the data that the drawer
                         draws
 
-            o pagesize  String describing the ISO size of the image, or a tuple
+            - pagesize  String describing the ISO size of the image, or a tuple
                         of pixels
 
-            o orientation   String describing the required orientation of the
+            - orientation   String describing the required orientation of the
                             final drawing ('landscape' or 'portrait')
 
-            o x         Float (0->1) describing the relative size of the X
+            - x         Float (0->1) describing the relative size of the X
                         margins to the page
 
-            o y         Float (0->1) describing the relative size of the Y
+            - y         Float (0->1) describing the relative size of the Y
                         margins to the page
 
-            o xl        Float (0->1) describing the relative size of the left X
+            - xl        Float (0->1) describing the relative size of the left X
                         margin to the page (overrides x)
 
-            o xl        Float (0->1) describing the relative size of the left X
+            - xl        Float (0->1) describing the relative size of the left X
                         margin to the page (overrides x)
 
-            o xr        Float (0->1) describing the relative size of the right X
+            - xr        Float (0->1) describing the relative size of the right X
                         margin to the page (overrides x)
 
-            o yt        Float (0->1) describing the relative size of the top Y
+            - yt        Float (0->1) describing the relative size of the top Y
                         margin to the page (overrides y)
 
-            o yb        Float (0->1) describing the relative size of the lower Y
+            - yb        Float (0->1) describing the relative size of the lower Y
                         margin to the page (overrides y)
 
-            o start     Int, the position to begin drawing the diagram at
+            - start     Int, the position to begin drawing the diagram at
 
-            o end       Int, the position to stop drawing the diagram at
+            - end       Int, the position to stop drawing the diagram at
 
-            o tracklines    Boolean flag to show (or not) lines delineating tracks
+            - tracklines    Boolean flag to show (or not) lines delineating tracks
                             on the diagram
 
-            o fragments Int, the number of equal fragments into which the
+            - fragments Int, the number of equal fragments into which the
                         sequence should be divided for drawing
 
-            o fragment_size Float(0->1) The proportion of the available height
+            - fragment_size Float(0->1) The proportion of the available height
                             for the fragment that should be taken up in drawing
 
-            o track_size    The proportion of the available track height that
+            - track_size    The proportion of the available track height that
                             should be taken up in drawing
 
-            o cross_track_links List of tuples each with four entries (track A,
+            - cross_track_links List of tuples each with four entries (track A,
                                 feature A, track B, feature B) to be linked.
         """
         # Use the superclass' instantiation method
@@ -402,7 +402,7 @@ class LinearDrawer(AbstractDrawer):
     def draw_track(self, track):
         """draw_track(self, track) -> ([element, element,...], [element, element,...])
 
-            o track     Track object
+            - track     Track object
 
             Returns a tuple (list of elements in the track, list of labels in
             the track)
@@ -424,15 +424,15 @@ class LinearDrawer(AbstractDrawer):
     def draw_tick(self, tickpos, ctr, ticklen, track, draw_label):
         """draw_tick(self, tickpos, ctr, ticklen) -> (element, element)
 
-            o tickpos   Int, position of the tick on the sequence
+            - tickpos   Int, position of the tick on the sequence
 
-            o ctr       Float, Y co-ord of the center of the track
+            - ctr       Float, Y co-ord of the center of the track
 
-            o ticklen   How long to draw the tick
+            - ticklen   How long to draw the tick
 
-            o track     Track, the track the tick is drawn on
+            - track     Track, the track the tick is drawn on
 
-            o draw_label    Boolean, write the tick label?
+            - draw_label    Boolean, write the tick label?
 
             Returns a drawing element that is the tick on the scale
         """
@@ -475,7 +475,7 @@ class LinearDrawer(AbstractDrawer):
     def draw_scale(self, track):
         """draw_scale(self, track) -> ([element, element,...], [element, element,...])
 
-            o track     Track object
+            - track     Track object
 
             Returns a tuple of (list of elements in the scale, list of labels
             in the scale)
@@ -604,7 +604,7 @@ class LinearDrawer(AbstractDrawer):
     def draw_greytrack(self, track):
         """draw_greytrack(self) -> ([element, element,...], [element, element,...])
 
-            o track     Track object
+            - track     Track object
 
             Put in a grey background to the current track in all fragments,
             if track specifies that we should
@@ -663,7 +663,7 @@ class LinearDrawer(AbstractDrawer):
     def draw_feature_set(self, set):
         """draw_feature_set(self, set) -> ([element, element,...], [element, element,...])
 
-            o set       FeatureSet object
+            - set       FeatureSet object
 
             Returns a tuple (list of elements describing features, list of
             labels for elements)
@@ -684,7 +684,7 @@ class LinearDrawer(AbstractDrawer):
     def draw_feature(self, feature):
         """draw_feature(self, feature, parent_feature=None) -> ([element, element,...], [element, element,...])
 
-            o feature           Feature containing location info
+            - feature           Feature containing location info
 
             Returns tuple of (list of elements describing single feature, list
             of labels for those elements)
@@ -971,13 +971,13 @@ class LinearDrawer(AbstractDrawer):
     def get_feature_sigil(self, feature, x0, x1, fragment, **kwargs):
         """get_feature_sigil(self, feature, x0, x1, fragment) -> (element, element, element)
 
-            o feature       Feature object
+            - feature       Feature object
 
-            o x0            Start X co-ordinate on diagram
+            - x0            Start X co-ordinate on diagram
 
-            o x1            End X co-ordinate on diagram
+            - x1            End X co-ordinate on diagram
 
-            o fragment      The fragment on which the feature appears
+            - fragment      The fragment on which the feature appears
 
             Returns a drawable indicator of the feature, and any required label
             for it
@@ -1065,7 +1065,7 @@ class LinearDrawer(AbstractDrawer):
     def draw_graph_set(self, set):
         """draw_graph_set(self, set) -> ([element, element,...], [element, element,...])
 
-            o set       GraphSet object
+            - set       GraphSet object
 
             Returns tuple (list of graph elements, list of graph labels)
         """
@@ -1086,7 +1086,7 @@ class LinearDrawer(AbstractDrawer):
     def draw_line_graph(self, graph):
         """draw_line_graph(self, graph) -> [element, element,...]
 
-            o graph     Graph object
+            - graph     Graph object
 
             Returns a line graph as a list of drawable elements
         """
@@ -1151,7 +1151,7 @@ class LinearDrawer(AbstractDrawer):
     def draw_heat_graph(self, graph):
         """draw_heat_graph(self, graph) -> [element, element,...]
 
-            o graph     Graph object
+            - graph     Graph object
 
             Returns a list of drawable elements for the heat graph
         """
@@ -1228,7 +1228,7 @@ class LinearDrawer(AbstractDrawer):
     def draw_bar_graph(self, graph):
         """draw_bar_graph(self, graph) -> [element, element,...]
 
-            o graph     Graph object
+            - graph     Graph object
 
             Returns a list of drawable elements for a bar graph of the passed
             Graph object
@@ -1315,7 +1315,7 @@ class LinearDrawer(AbstractDrawer):
     def canvas_location(self, base):
         """canvas_location(self, base) -> (int, float)
 
-            o base      The base number on the genome sequence
+            - base      The base number on the genome sequence
 
             Returns the x-coordinate and fragment number of a base on the
             genome sequence, in the context of the current drawing setup

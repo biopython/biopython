@@ -32,7 +32,7 @@ class SignatureFinder(object):
 
         Arguments:
 
-        o alphabet_strict - Specify whether signatures should be required
+        - alphabet_strict - Specify whether signatures should be required
         to have all letters in the signature be consistent with the
         alphabet of the original sequence. This requires that all Seqs
         used have a consistent alphabet. This helps protect against getting
@@ -45,13 +45,13 @@ class SignatureFinder(object):
 
         Arguments:
 
-        o seq_records - A list of SeqRecord objects we'll use the sequences
+        - seq_records - A list of SeqRecord objects we'll use the sequences
         from to find signatures.
 
-        o signature_size - The size of each half of a signature (ie. if this
+        - signature_size - The size of each half of a signature (ie. if this
         is set at 3, then the signature could be AGC-----GAC)
 
-        o max_gap - The maximum gap size between two parts of a signature.
+        - max_gap - The maximum gap size between two parts of a signature.
         """
         sig_info = self._get_signature_dict(seq_records, signature_size,
                                             max_gap)
@@ -131,12 +131,12 @@ class SignatureCoder(object):
 
         Arguments:
 
-        o signatures - A complete list of signatures, in order, that
+        - signatures - A complete list of signatures, in order, that
         are to be searched for in the sequences. The signatures should
         be represented as a tuple of (first part of the signature,
         second_part of the signature) -- ('GATC', 'GATC').
 
-        o max_gap - The maximum gap we can have between the two
+        - max_gap - The maximum gap we can have between the two
         elements of the signature.
         """
         self._signatures = signatures
@@ -165,7 +165,7 @@ class SignatureCoder(object):
 
         Arguments:
 
-        o sequence - A Seq object we are going to convert into a set of
+        - sequence - A Seq object we are going to convert into a set of
         signatures.
 
         Returns:

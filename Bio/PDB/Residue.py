@@ -44,7 +44,7 @@ class Residue(Entity):
         but N, CA, C, O always come first.
 
         Arguments:
-        o a1, a2 - Atom objects
+        - a1, a2 - Atom objects
         """
         name1 = a1.get_name()
         name2 = a2.get_name()
@@ -152,7 +152,7 @@ class DisorderedResidue(DisorderedEntityWrapper):
         """Add a residue object and use its resname as key.
 
         Arguments:
-        o residue - Residue object
+        - residue - Residue object
         """
         resname = residue.get_resname()
         # add chain parent to residue

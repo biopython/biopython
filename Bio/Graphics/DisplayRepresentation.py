@@ -45,11 +45,11 @@ class ChromosomeCounts(object):
 
         Arguments:
 
-        o segment_names - An ordered list of all segment names along
+        - segment_names - An ordered list of all segment names along
         the chromosome. The count and other information will be added to
         these.
 
-        o color_scheme - A coloring scheme to use in the counts. This should
+        - color_scheme - A coloring scheme to use in the counts. This should
         be a dictionary mapping count ranges to colors (specified in
         reportlab.lib.colors).
         """
@@ -69,10 +69,10 @@ class ChromosomeCounts(object):
 
         Arguments:
 
-        o segment_name - The name of the segment we should add counts to.
+        - segment_name - The name of the segment we should add counts to.
         If the name is not present, a KeyError will be raised.
 
-        o count - The counts to add the current segment. This defaults to
+        - count - The counts to add the current segment. This defaults to
         a single count.
         """
         try:
@@ -136,7 +136,7 @@ class ChromosomeCounts(object):
 
         Arguments:
 
-        o chromosome - A Chromosome graphics object that we can add
+        - chromosome - A Chromosome graphics object that we can add
         chromosome segments to.
 
         This creates ChromosomeSegment (and TelomereSegment) objects to

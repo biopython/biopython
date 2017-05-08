@@ -542,7 +542,7 @@ class _Option(_AbstractParameter):
     take a value, use the _Switch object instead.
 
     Attributes:
-    o names -- a list of string names (typically two entries) by which
+    - names -- a list of string names (typically two entries) by which
     the parameter can be set via the legacy set_parameter method
     (eg ["-a", "--append", "append"]). The first name in list is used
     when building the command line. The last name in the list is a
@@ -551,25 +551,25 @@ class _Option(_AbstractParameter):
     name and as a keyword argument, and should therefore follow PEP8
     naming.
 
-    o description -- a description of the option. This is used as
+    - description -- a description of the option. This is used as
     the property docstring.
 
-    o filename -- True if this argument is a filename and should be
+    - filename -- True if this argument is a filename and should be
     automatically quoted if it contains spaces.
 
-    o checker_function -- a reference to a function that will determine
+    - checker_function -- a reference to a function that will determine
     if a given value is valid for this parameter. This function can either
     raise an error when given a bad value, or return a [0, 1] decision on
     whether the value is correct.
 
-    o equate -- should an equals sign be inserted if a value is used?
+    - equate -- should an equals sign be inserted if a value is used?
 
-    o is_required -- a flag to indicate if the parameter must be set for
+    - is_required -- a flag to indicate if the parameter must be set for
     the program to be run.
 
-    o is_set -- if the parameter has been set
+    - is_set -- if the parameter has been set
 
-    o value -- the value of a parameter
+    - value -- the value of a parameter
 
     """
 
@@ -615,7 +615,7 @@ class _Switch(_AbstractParameter):
     take a value, they are either included in the command string
     or omitted.
 
-    o names -- a list of string names (typically two entries) by which
+    - names -- a list of string names (typically two entries) by which
     the parameter can be set via the legacy set_parameter method
     (eg ["-a", "--append", "append"]). The first name in list is used
     when building the command line. The last name in the list is a
@@ -624,10 +624,10 @@ class _Switch(_AbstractParameter):
     name and as a keyword argument, and should therefore follow PEP8
     naming.
 
-    o description -- a description of the option. This is used as
+    - description -- a description of the option. This is used as
     the property docstring.
 
-    o is_set -- if the parameter has been set
+    - is_set -- if the parameter has been set
 
     NOTE - There is no value attribute, see is_set instead,
     """

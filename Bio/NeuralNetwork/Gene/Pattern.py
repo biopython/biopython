@@ -30,12 +30,12 @@ class PatternIO(object):
 
         Arguments:
 
-        o alphabet - An optional argument specifying the alphabet
+        - alphabet - An optional argument specifying the alphabet
         which patterns should follow. If an alphabet is set it'll be used
         to verify that all patterns follow it.
 
         Attributes:
-        o separator - A character to use in separating items in a signature
+        - separator - A character to use in separating items in a signature
         when it is written to a file and read back. This character should
         not be in the possible alphabet of the sequences, or there will
         be trouble.
@@ -159,7 +159,7 @@ class PatternRepository(object):
 
         Arguments:
 
-        o num_patterns - The total number of patterns to return.
+        - num_patterns - The total number of patterns to return.
         """
         all_patterns = []
 
@@ -189,7 +189,7 @@ class PatternRepository(object):
 
         Arguments:
 
-        o num_patterns - The number of patterns to return.
+        - num_patterns - The number of patterns to return.
         """
         all_patterns = []
         for pattern_info in self._pattern_list[:num_patterns]:
@@ -207,9 +207,9 @@ class PatternRepository(object):
 
         Arguments:
 
-        o top_num - The number of patterns to take from the top of the list.
+        - top_num - The number of patterns to take from the top of the list.
 
-        o bottom_num - The number of patterns to take from the bottom of
+        - bottom_num - The number of patterns to take from the bottom of
         the list.
         """
         all_patterns = []
@@ -236,7 +236,7 @@ class PatternRepository(object):
 
         Arguments:
 
-        o at_percentage - The percentage of A and T residues in a pattern
+        - at_percentage - The percentage of A and T residues in a pattern
         that qualifies it for being removed.
         """
         remove_list = []
