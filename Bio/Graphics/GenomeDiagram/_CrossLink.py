@@ -38,6 +38,7 @@ class CrossLink(object):
 
     @property
     def startA(self):
+        """Start position of Feature A."""
         try:
             return self.featureA.start
         except AttributeError:
@@ -46,6 +47,7 @@ class CrossLink(object):
 
     @property
     def endA(self):
+        """End position of Feature A."""
         try:
             return self.featureA.end
         except AttributeError:
@@ -67,6 +69,7 @@ class CrossLink(object):
 
     @property
     def startB(self):
+        """Start position of Feature B."""
         try:
             return self.featureB.start
         except AttributeError:
@@ -75,6 +78,7 @@ class CrossLink(object):
 
     @property
     def endB(self):
+        """End position of Feature B."""
         try:
             return self.featureB.end
         except AttributeError:

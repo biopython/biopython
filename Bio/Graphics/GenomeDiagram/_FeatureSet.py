@@ -13,7 +13,7 @@
 #
 ################################################################################
 
-"""FeatureSet module
+"""FeatureSet module.
 
 Provides:
  - FeatureSet - container for Feature objects
@@ -155,7 +155,7 @@ class FeatureSet(object):
         return list(self.features.keys())
 
     def range(self):
-        """Returns the lowest and highest base (or mark) numbers as a tuple."""
+        """Return the lowest and highest base (or mark) numbers as a tuple."""
         lows, highs = [], []
         for feature in self.features.values():
             for start, end in feature.locations:
@@ -166,11 +166,13 @@ class FeatureSet(object):
         return 0, 0
 
     def to_string(self, verbose=0):
-        """Returns a formatted string with information about the set
+        """Return a formatted string with information about the set.
 
         Arguments:
-         - verbose: Boolean indicating whether a short (default) or
-           complete account of the set is required
+
+        - verbose: Boolean indicating whether a short (default) or
+          complete account of the set is required
+
         """
         if not verbose:         # Short account only required
             return "%s" % self
@@ -190,7 +192,7 @@ class FeatureSet(object):
         return self.features[key]
 
     def __str__(self):
-        """Returns a formatted string with information about the feature set."""
+        """Return a formatted string with information about the feature set."""
         outstr = ["\n<%s: %s %d features>" % (self.__class__, self.name,
                                               len(self.features))]
         return "\n".join(outstr)
