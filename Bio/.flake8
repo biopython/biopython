@@ -29,7 +29,7 @@ ignore =
     # D208	Docstring is over-indented
     # D210	No whitespaces allowed surrounding docstring text
     # TODO: Fix these:
-    D205,D208,D210,
+    D205,D208,
     # We ignore	D203 deliberately in favour of passing D211,
     D203,
     # ================================
