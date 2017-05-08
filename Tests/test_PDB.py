@@ -513,7 +513,7 @@ class ParseTest(unittest.TestCase):
                          "N C C O C C C N C N N N C C O C S")
 
     def test_pdbio_write_truncated(self):
-        """Test parsing of truncated lines"""
+        """Test parsing of truncated lines."""
         io = PDBIO()
         struct = self.structure
         # Write to temp file
@@ -708,7 +708,7 @@ class ParseReal(unittest.TestCase):
                 self.assertEqual(model.serial_num, model.id + 1)
 
         def confirm_single_end(fname):
-            """Ensure there is only one END statement in multi-model files"""
+            """Ensure there is only one END statement in multi-model files."""
             with open(fname) as handle:
                 end_stment = []
                 for iline, line in enumerate(handle):
@@ -736,6 +736,7 @@ class ParseReal(unittest.TestCase):
 
 
 class WriteTest(unittest.TestCase):
+
     def setUp(self):
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", PDBConstructionWarning)
@@ -743,7 +744,7 @@ class WriteTest(unittest.TestCase):
             self.structure = self.parser.get_structure("example", "PDB/1A8O.pdb")
 
     def test_pdbio_write_structure(self):
-        """Write a full structure using PDBIO"""
+        """Write a full structure using PDBIO."""
         io = PDBIO()
         struct1 = self.structure
         # Write full model to temp file
@@ -777,7 +778,7 @@ class WriteTest(unittest.TestCase):
             os.remove(filename)
 
     def test_pdbio_write_custom_residue(self):
-        """Write a chainless residue using PDBIO"""
+        """Write a chainless residue using PDBIO."""
         io = PDBIO()
 
         res = Residue.Residue((' ', 1, ' '), 'DUM', '')
@@ -800,12 +801,11 @@ class WriteTest(unittest.TestCase):
             os.remove(filename)
 
     def test_pdbio_select(self):
-        """Write a selection of the structure using a Select subclass"""
+        """Write a selection of the structure using a Select subclass."""
         # Selection class to filter all alpha carbons
         class CAonly(Select):
-            """
-            Accepts only CA residues
-            """
+            """Accepts only CA residues."""
+
             def accept_atom(self, atom):
                 if atom.name == "CA" and atom.element == "C":
                     return 1
@@ -825,7 +825,7 @@ class WriteTest(unittest.TestCase):
             os.remove(filename)
 
     def test_pdbio_missing_occupancy(self):
-        """Write PDB file with missing occupancy"""
+        """Write PDB file with missing occupancy."""
         io = PDBIO()
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", PDBConstructionWarning)
@@ -849,6 +849,7 @@ class WriteTest(unittest.TestCase):
 
 class Exposure(unittest.TestCase):
     """Testing Bio.PDB.HSExposure."""
+
     def setUp(self):
         pdb_filename = "PDB/a_structure.pdb"
         with warnings.catch_warnings():
@@ -931,7 +932,7 @@ class Exposure(unittest.TestCase):
 
 
 class Atom_Element(unittest.TestCase):
-    """induces Atom Element from Atom Name"""
+    """induces Atom Element from Atom Name."""
 
     def setUp(self):
         pdb_filename = "PDB/a_structure.pdb"
@@ -1016,7 +1017,7 @@ class ChangingIdTests(unittest.TestCase):
                                                   'X', "PDB/a_structure.pdb")
 
     def test_change_model_id(self):
-        """Change the id of a model"""
+        """Change the id of a model."""
         for model in self.struc:
             break  # Get first model in structure
         model.id = 2
@@ -1025,7 +1026,7 @@ class ChangingIdTests(unittest.TestCase):
         self.assertNotIn(0, self.struc)
 
     def test_change_model_id_raises(self):
-        """Cannot change id to a value already in use by another child"""
+        """Cannot change id to a value already in use by another child."""
         model = next(iter(self.struc))
         with self.assertRaises(ValueError):
             model.id = 1
@@ -1035,7 +1036,7 @@ class ChangingIdTests(unittest.TestCase):
         self.assertIn(1, self.struc)
 
     def test_change_chain_id(self):
-        """Change the id of a model"""
+        """Change the id of a model."""
         chain = next(iter(self.struc.get_chains()))
         chain.id = "R"
         self.assertEqual(chain.id, "R")
@@ -1043,7 +1044,7 @@ class ChangingIdTests(unittest.TestCase):
         self.assertIn("R", model)
 
     def test_change_residue_id(self):
-        """Change the id of a residue"""
+        """Change the id of a residue."""
         chain = next(iter(self.struc.get_chains()))
         res = chain[('H_PCA', 1, ' ')]
         res.id = (' ', 1, ' ')
@@ -1054,9 +1055,7 @@ class ChangingIdTests(unittest.TestCase):
         self.assertEqual(chain[(' ', 1, ' ')], res)
 
     def test_full_id_is_updated_residue(self):
-        """
-        Invalidate cached full_ids if an id is changed.
-        """
+        """Invalidate cached full_ids if an id is changed."""
         atom = next(iter(self.struc.get_atoms()))
 
         # Generate the original full id.
@@ -1076,9 +1075,7 @@ class ChangingIdTests(unittest.TestCase):
         self.assertEqual(new_id, ('X', 0, 'A', (' ', 1, ' '), ('N', ' ')))
 
     def test_full_id_is_updated_chain(self):
-        """
-        Invalidate cached full_ids if an id is changed.
-        """
+        """Invalidate cached full_ids if an id is changed."""
         atom = next(iter(self.struc.get_atoms()))
 
         # Generate the original full id.
@@ -1156,7 +1153,7 @@ class TransformTests(unittest.TestCase):
                 self.assertAlmostEqual(newpos[i], newpos_check[i])
 
     def test_Vector(self):
-        """Test Vector object"""
+        """Test Vector object."""
         v1 = Vector(0, 0, 1)
         v2 = Vector(0, 0, 0)
         v3 = Vector(0, 1, 0)
