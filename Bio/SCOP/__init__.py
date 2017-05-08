@@ -571,9 +571,9 @@ class Node(object):
             return self.scop.getNodeBySunid(self.parent)
 
     def getDescendents(self, node_type):
-        """Return a list of all descendant nodes of the given type. 
+        """Return a list of all descendant nodes of the given type.
 
-        Node type can be a two letter code or longer description. 
+        Node type can be a two letter code or longer description,
         e.g. 'fa' or 'family'.
         """
         if node_type in _nodetype_to_code:
@@ -596,8 +596,8 @@ class Node(object):
     def getAscendent(self, node_type):
         """Return the ancenstor node of the given type, or None.
 
-        Node type can a
-        two letter code or longer description. e.g. 'fa' or 'family'.
+        Node type can be a two letter code or longer description,
+        e.g. 'fa' or 'family'.
         """
         if node_type in _nodetype_to_code:
             node_type = _nodetype_to_code[node_type]
