@@ -497,7 +497,7 @@ class Scop(object):
 
 
 class Node(object):
-    """A node in the Scop hierarchy
+    """A node in the Scop hierarchy.
 
     sunid  -- SCOP unique identifiers. e.g. '14986'
 
@@ -571,8 +571,10 @@ class Node(object):
             return self.scop.getNodeBySunid(self.parent)
 
     def getDescendents(self, node_type):
-        """Return a list of all descendant nodes of the given type. Node type can be a
-        two letter code or longer description. e.g. 'fa' or 'family'.
+        """Return a list of all descendant nodes of the given type. 
+
+        Node type can be a two letter code or longer description. 
+        e.g. 'fa' or 'family'.
         """
         if node_type in _nodetype_to_code:
             node_type = _nodetype_to_code[node_type]
@@ -592,7 +594,9 @@ class Node(object):
         return nodes
 
     def getAscendent(self, node_type):
-        """Return the ancenstor node of the given type, or None.Node type can a
+        """Return the ancenstor node of the given type, or None.
+
+        Node type can a
         two letter code or longer description. e.g. 'fa' or 'family'.
         """
         if node_type in _nodetype_to_code:
@@ -617,7 +621,7 @@ class Domain(Node):
     """A SCOP domain. A leaf node in the Scop hierarchy.
 
         - sid      -- The SCOP domain identifier. e.g. ``"d5hbib_"``
-        
+
         - residues -- A Residue object. It defines the collection
           of PDB atoms that make up this domain.
     """
