@@ -9,21 +9,14 @@
 #                L.Pritchard@scri.ac.uk
 ################################################################################
 
-"""LinearDrawer module
+"""Linear Drawer module.
 
-    Provides:
+Provides:
 
-    - LinearDrawer -  Drawing object for linear diagrams
+- LinearDrawer -  Drawing object for linear diagrams
 
-    For drawing capabilities, this module uses reportlab to draw and write
-    the diagram:
-
-    http://www.reportlab.com
-
-    For dealing with biological information, the package expects BioPython
-    objects:
-
-    http://www.biopython.org
+For drawing capabilities, this module uses reportlab to draw and write
+the diagram: http://www.reportlab.com
 """
 
 # ReportLab imports
@@ -43,140 +36,47 @@ from math import ceil
 
 
 class LinearDrawer(AbstractDrawer):
-    """LinearDrawer(AbstractDrawer)
+    """Linear Drawer.
 
-        Inherits from:
+    Inherits from:
 
-        - AbstractDrawer
+    - AbstractDrawer
 
-        Provides:
+    Attributes:
 
-        Methods:
-        - __init__(self, ...) Called on instantiation
-
-        - set_page_size(self, pagesize, orientation)    Set the page size to the
-                                                    passed size and orientation
-
-        - set_margins(self, x, y, xl, xr, yt, yb)   Set the drawable area of the
-                                                    page
-
-        - set_bounds(self, start, end)  Set the bounds for the elements to be
-                                        drawn
-
-        - is_in_bounds(self, value)     Returns a boolean for whether the position
-                                        is actually to be drawn
-
-        - __len__(self)     Returns the length of sequence that will be drawn
-
-
-        - draw(self)    Place the drawing elements on the diagram
-
-        - init_fragments(self)  Calculate information
-                                about sequence fragment locations on the drawing
-
-        - set_track_heights(self)   Calculate information about the offset of
-                                    each track from the fragment base
-
-        - draw_test_tracks(self)    Add lines demarcating each track to the
-                                    drawing
-
-        - draw_track(self, track)   Return the contents of the passed track as
-                                    drawing elements
-
-        - draw_scale(self, track)   Return a scale for the passed track as
-                                    drawing elements
-
-        - draw_tick(self, tickpos, ctr, ticklen, track, draw_label) Return a
-                                    tick line and possibly a label
-
-        - draw_greytrack(self, track)   Return a grey background and superposed
-                                        label for the passed track as drawing
-                                        elements
-
-        - draw_feature_set(self, set)   Return the features in the passed set as
-                                        drawing elements
-
-        - draw_feature(self, feature)   Return a single feature as drawing
-                                        elements
-
-        - get_feature_sigil(self, feature, x0, x1, fragment)    Return a single
-                                        feature as its sigil in drawing elements
-
-        - draw_graph_set(self, set)     Return the data in a set of graphs as
-                                        drawing elements
-
-        - draw_line_graph(self, graph)  Return the data in a graph as a line
-                                        graph in drawing elements
-
-        - draw_heat_graph(self, graph)  Return the data in a graph as a heat
-                                        graph in drawing elements
-
-        - draw_bar_graph(self, graph)   Return the data in a graph as a bar
-                                        graph in drawing elements
-
-        - canvas_location(self, base)   Return the fragment, and the offset from
-                                        the left margin, of a passed position
-                                        in the sequence, on the diagram.
-
-        Attributes:
-        - tracklines    Boolean for whether to draw lines delineating tracks
-
-        - pagesize      Tuple describing the size of the page in pixels
-
-        - x0            Float X co-ord for leftmost point of drawable area
-
-        - xlim          Float X co-ord for rightmost point of drawable area
-
-        - y0            Float Y co-ord for lowest point of drawable area
-
-        - ylim          Float Y co-ord for topmost point of drawable area
-
-        - pagewidth     Float pixel width of drawable area
-
-        - pageheight    Float pixel height of drawable area
-
-        - xcenter       Float X co-ord of center of drawable area
-
-        - ycenter       Float Y co-ord of center of drawable area
-
-        - start         Int, base to start drawing from
-
-        - end           Int, base to stop drawing at
-
-        - length        Int, size of sequence to be drawn
-
-        - fragments     Int, number of fragments into which to divide the
-                        drawn sequence
-
-        - fragment_size Float (0->1) the proportion of the fragment height to
-                        draw in
-
-        - track_size    Float (0->1) the proportion of the track height to
-                        draw in
-
-        - drawing       Drawing canvas
-
-        - drawn_tracks  List of ints denoting which tracks are to be drawn
-
-        - current_track_level   Int denoting which track is currently being
-                                drawn
-
-        - fragment_height   Float total fragment height in pixels
-
-        - fragment_bases    Int total fragment length in bases
-
-        - fragment_lines    Dictionary of top and bottom y-coords of fragment,
-                            keyed by fragment number
-
-        - fragment_limits   Dictionary of start and end bases of each fragment,
-                            keyed by fragment number
-
-        - track_offsets     Dictionary of number of pixels that each track top,
-                            center and bottom is offset from the base of a
-                            fragment, keyed by track
-
-        - cross_track_links List of tuples each with four entries (track A,
-                            feature A, track B, feature B) to be linked.
+    - tracklines    Boolean for whether to draw lines delineating tracks
+    - pagesize      Tuple describing the size of the page in pixels
+    - x0            Float X co-ord for leftmost point of drawable area
+    - xlim          Float X co-ord for rightmost point of drawable area
+    - y0            Float Y co-ord for lowest point of drawable area
+    - ylim          Float Y co-ord for topmost point of drawable area
+    - pagewidth     Float pixel width of drawable area
+    - pageheight    Float pixel height of drawable area
+    - xcenter       Float X co-ord of center of drawable area
+    - ycenter       Float Y co-ord of center of drawable area
+    - start         Int, base to start drawing from
+    - end           Int, base to stop drawing at
+    - length        Int, size of sequence to be drawn
+    - fragments     Int, number of fragments into which to divide the
+      drawn sequence
+    - fragment_size Float (0->1) the proportion of the fragment height to
+      draw in
+    - track_size    Float (0->1) the proportion of the track height to
+      draw in
+    - drawing       Drawing canvas
+    - drawn_tracks  List of ints denoting which tracks are to be drawn
+    - current_track_level   Int denoting which track is currently being
+      drawn
+    - fragment_height   Float total fragment height in pixels
+    - fragment_bases    Int total fragment length in bases
+    - fragment_lines    Dictionary of top and bottom y-coords of fragment,
+      keyed by fragment number
+    - fragment_limits   Dictionary of start and end bases of each fragment,
+      keyed by fragment number
+    - track_offsets     Dictionary of number of pixels that each track top,
+      center and bottom is offset from the base of a fragment, keyed by track
+    - cross_track_links List of tuples each with four entries (track A,
+      feature A, track B, feature B) to be linked.
 
     """
 
@@ -184,59 +84,42 @@ class LinearDrawer(AbstractDrawer):
                  x=0.05, y=0.05, xl=None, xr=None, yt=None, yb=None,
                  start=None, end=None, tracklines=0, fragments=10,
                  fragment_size=0.9, track_size=0.75, cross_track_links=None):
-        """__init__(self, parent, pagesize='A3', orientation='landscape',
-                     x=0.05, y=0.05, xl=None, xr=None, yt=None, yb=None,
-                     start=None, end=None, tracklines=0, fragments=10,
-                     fragment_size=0.9, track_size=0.75)
+        """Initialize.
 
-            - parent    Diagram object containing the data that the drawer
-                        draws
+        Arguments:
 
-            - pagesize  String describing the ISO size of the image, or a tuple
-                        of pixels
+        - parent    Diagram object containing the data that the drawer draws
+        - pagesize  String describing the ISO size of the image, or a tuple
+          of pixels
+        - orientation   String describing the required orientation of the
+          final drawing ('landscape' or 'portrait')
+        - x         Float (0->1) describing the relative size of the X
+          margins to the page
+        - y         Float (0->1) describing the relative size of the Y
+          margins to the page
+        - xl        Float (0->1) describing the relative size of the left X
+          margin to the page (overrides x)
+        - xl        Float (0->1) describing the relative size of the left X
+          margin to the page (overrides x)
+        - xr        Float (0->1) describing the relative size of the right X
+          margin to the page (overrides x)
+        - yt        Float (0->1) describing the relative size of the top Y
+          margin to the page (overrides y)
+        - yb        Float (0->1) describing the relative size of the lower Y
+          margin to the page (overrides y)
+        - start     Int, the position to begin drawing the diagram at
+        - end       Int, the position to stop drawing the diagram at
+        - tracklines    Boolean flag to show (or not) lines delineating tracks
+          on the diagram
+        - fragments Int, the number of equal fragments into which the
+          sequence should be divided for drawing
+        - fragment_size Float(0->1) The proportion of the available height
+          for the fragment that should be taken up in drawing
+        - track_size    The proportion of the available track height that
+          should be taken up in drawing
+        - cross_track_links List of tuples each with four entries (track A,
+          feature A, track B, feature B) to be linked.
 
-            - orientation   String describing the required orientation of the
-                            final drawing ('landscape' or 'portrait')
-
-            - x         Float (0->1) describing the relative size of the X
-                        margins to the page
-
-            - y         Float (0->1) describing the relative size of the Y
-                        margins to the page
-
-            - xl        Float (0->1) describing the relative size of the left X
-                        margin to the page (overrides x)
-
-            - xl        Float (0->1) describing the relative size of the left X
-                        margin to the page (overrides x)
-
-            - xr        Float (0->1) describing the relative size of the right X
-                        margin to the page (overrides x)
-
-            - yt        Float (0->1) describing the relative size of the top Y
-                        margin to the page (overrides y)
-
-            - yb        Float (0->1) describing the relative size of the lower Y
-                        margin to the page (overrides y)
-
-            - start     Int, the position to begin drawing the diagram at
-
-            - end       Int, the position to stop drawing the diagram at
-
-            - tracklines    Boolean flag to show (or not) lines delineating tracks
-                            on the diagram
-
-            - fragments Int, the number of equal fragments into which the
-                        sequence should be divided for drawing
-
-            - fragment_size Float(0->1) The proportion of the available height
-                            for the fragment that should be taken up in drawing
-
-            - track_size    The proportion of the available track height that
-                            should be taken up in drawing
-
-            - cross_track_links List of tuples each with four entries (track A,
-                                feature A, track B, feature B) to be linked.
         """
         # Use the superclass' instantiation method
         AbstractDrawer.__init__(self, parent, pagesize, orientation,
@@ -249,10 +132,7 @@ class LinearDrawer(AbstractDrawer):
         self.track_size = track_size
 
     def draw(self):
-        """draw(self)
-
-            Draw a linear diagram of the data in the parent Diagram object
-        """
+        """Draw a linear diagram of the data in the parent Diagram object."""
         # Instantiate the drawing canvas
         self.drawing = Drawing(self.pagesize[0], self.pagesize[1])
 
@@ -311,11 +191,7 @@ class LinearDrawer(AbstractDrawer):
             self.draw_test_tracks()
 
     def init_fragments(self):
-        """init_fragments(self)
-
-            Initialises useful values for calculating the positioning of
-            diagram elements
-        """
+        """Initialise useful values for positioning diagram elements."""
         # Set basic heights, lengths etc
         self.fragment_height = 1. * self.pageheight / self.fragments     # total fragment height in pixels
         self.fragment_bases = ceil(1. * self.length / self.fragments)    # fragment length in bases
@@ -340,11 +216,11 @@ class LinearDrawer(AbstractDrawer):
             fragment_count += 1
 
     def set_track_heights(self):
-        """set_track_heights(self)
+        """Set track heights.
 
-            Since tracks may not be of identical heights, the bottom and top
-            offsets of each track relative to the fragment top and bottom is
-            stored in a dictionary - self.track_offsets, keyed by track number
+        Since tracks may not be of identical heights, the bottom and top
+        offsets of each track relative to the fragment top and bottom is
+        stored in a dictionary - self.track_offsets, keyed by track number.
         """
         bot_track = min(min(self.drawn_tracks), 1)
         top_track = max(self.drawn_tracks)     # The 'highest' track number to draw
@@ -375,10 +251,10 @@ class LinearDrawer(AbstractDrawer):
         self.track_offsets = track_offsets
 
     def draw_test_tracks(self):
-        """draw_test_tracks(self)
+        """Draw test tracks.
 
-            Draw red lines indicating the top and bottom of each fragment,
-            and blue ones indicating tracks to be drawn.
+        Draw red lines indicating the top and bottom of each fragment,
+        and blue ones indicating tracks to be drawn.
         """
         # Add lines for each fragment
         for fbtm, ftop in self.fragment_lines.values():
@@ -400,12 +276,14 @@ class LinearDrawer(AbstractDrawer):
                                       strokeColor=colors.blue))  # bottom line
 
     def draw_track(self, track):
-        """draw_track(self, track) -> ([element, element,...], [element, element,...])
+        """Draw track.
 
-            - track     Track object
+        Arguments:
 
-            Returns a tuple (list of elements in the track, list of labels in
-            the track)
+        - track     Track object
+
+        Returns a tuple (list of elements in the track, list of labels in
+        the track).
         """
         track_elements = []     # Holds elements from features and graphs
         track_labels = []       # Holds labels from features and graphs
@@ -422,19 +300,17 @@ class LinearDrawer(AbstractDrawer):
         return track_elements, track_labels
 
     def draw_tick(self, tickpos, ctr, ticklen, track, draw_label):
-        """draw_tick(self, tickpos, ctr, ticklen) -> (element, element)
+        """Draw tick.
 
-            - tickpos   Int, position of the tick on the sequence
+        Arguments:
 
-            - ctr       Float, Y co-ord of the center of the track
+        - tickpos   Int, position of the tick on the sequence
+        - ctr       Float, Y co-ord of the center of the track
+        - ticklen   How long to draw the tick
+        - track     Track, the track the tick is drawn on
+        - draw_label    Boolean, write the tick label?
 
-            - ticklen   How long to draw the tick
-
-            - track     Track, the track the tick is drawn on
-
-            - draw_label    Boolean, write the tick label?
-
-            Returns a drawing element that is the tick on the scale
+        Returns a drawing element that is the tick on the scale
         """
         assert self.start <= tickpos and tickpos <= self.end, \
                "Tick at %i, but showing %i to %i" \
@@ -473,12 +349,14 @@ class LinearDrawer(AbstractDrawer):
         return tick, labelgroup
 
     def draw_scale(self, track):
-        """draw_scale(self, track) -> ([element, element,...], [element, element,...])
+        """Draw scale.
 
-            - track     Track object
+        Argument:
 
-            Returns a tuple of (list of elements in the scale, list of labels
-            in the scale)
+        - track     Track object
+
+        Returns a tuple of (list of elements in the scale, list of labels
+        in the scale).
         """
         scale_elements = []     # Holds axes and ticks
         scale_labels = []       # Holds labels
@@ -602,12 +480,14 @@ class LinearDrawer(AbstractDrawer):
         return scale_elements, scale_labels
 
     def draw_greytrack(self, track):
-        """draw_greytrack(self) -> ([element, element,...], [element, element,...])
+        """Draw greytrack.
 
-            - track     Track object
+        Arguments:
 
-            Put in a grey background to the current track in all fragments,
-            if track specifies that we should
+        - track     Track object
+
+        Put in a grey background to the current track in all fragments,
+        if track specifies that we should.
         """
         greytrack_bgs = []      # Holds grey track backgrounds
         greytrack_labels = []   # Holds grey foreground labels
@@ -661,12 +541,14 @@ class LinearDrawer(AbstractDrawer):
         return greytrack_bgs, greytrack_labels
 
     def draw_feature_set(self, set):
-        """draw_feature_set(self, set) -> ([element, element,...], [element, element,...])
+        """Draw feature set.
 
-            - set       FeatureSet object
+        Arguments:
 
-            Returns a tuple (list of elements describing features, list of
-            labels for elements)
+        - set       FeatureSet object
+
+        Returns a tuple (list of elements describing features, list of
+        labels for elements).
         """
         # print 'draw feature set'
         feature_elements = []   # Holds diagram elements belonging to the features
@@ -682,12 +564,14 @@ class LinearDrawer(AbstractDrawer):
         return feature_elements, label_elements
 
     def draw_feature(self, feature):
-        """draw_feature(self, feature, parent_feature=None) -> ([element, element,...], [element, element,...])
+        """Draw feature.
 
-            - feature           Feature containing location info
+        Arguments:
 
-            Returns tuple of (list of elements describing single feature, list
-            of labels for those elements)
+        - feature           Feature containing location info
+
+        Returns tuple of (list of elements describing single feature, list
+        of labels for those elements).
         """
         if feature.hide:        # Feature hidden, don't draw it...
             return [], []
@@ -713,6 +597,7 @@ class LinearDrawer(AbstractDrawer):
         return feature_elements, label_elements
 
     def draw_feature_location(self, feature, locstart, locend):
+        """Draw feature location."""
         feature_boxes = []
         # Get start and end positions for feature/subfeatures
         start_fragment, start_offset = self.canvas_location(locstart)
@@ -763,6 +648,7 @@ class LinearDrawer(AbstractDrawer):
         return feature_boxes
 
     def draw_cross_link(self, cross_link):
+        """Draw cross-link between two features."""
         startA = cross_link.startA
         startB = cross_link.startB
         endA = cross_link.endA
@@ -969,18 +855,17 @@ class LinearDrawer(AbstractDrawer):
         return answer
 
     def get_feature_sigil(self, feature, x0, x1, fragment, **kwargs):
-        """get_feature_sigil(self, feature, x0, x1, fragment) -> (element, element, element)
+        """Get feature sigil.
 
-            - feature       Feature object
+        Arguments:
 
-            - x0            Start X co-ordinate on diagram
+        - feature       Feature object
+        - x0            Start X co-ordinate on diagram
+        - x1            End X co-ordinate on diagram
+        - fragment      The fragment on which the feature appears
 
-            - x1            End X co-ordinate on diagram
-
-            - fragment      The fragment on which the feature appears
-
-            Returns a drawable indicator of the feature, and any required label
-            for it
+        Returns a drawable indicator of the feature, and any required label
+        for it.
         """
         # Establish co-ordinates for drawing
         x0, x1 = self.x0 + x0, self.x0 + x1
@@ -1063,11 +948,13 @@ class LinearDrawer(AbstractDrawer):
         return sigil, labelgroup
 
     def draw_graph_set(self, set):
-        """draw_graph_set(self, set) -> ([element, element,...], [element, element,...])
+        """Draw graph set.
 
-            - set       GraphSet object
+        Arguments:
 
-            Returns tuple (list of graph elements, list of graph labels)
+        - set       GraphSet object
+
+        Returns tuple (list of graph elements, list of graph labels).
         """
         # print 'draw graph set'
         elements = []   # Holds graph elements
@@ -1084,11 +971,12 @@ class LinearDrawer(AbstractDrawer):
         return elements, []
 
     def draw_line_graph(self, graph):
-        """draw_line_graph(self, graph) -> [element, element,...]
+        """Return a line graph as a list of drawable elements.
 
-            - graph     Graph object
+        Arguments:
 
-            Returns a line graph as a list of drawable elements
+        - graph     Graph object
+
         """
         # print '\tdraw_line_graph'
         line_elements = []                  # Holds drawable elements
@@ -1149,12 +1037,7 @@ class LinearDrawer(AbstractDrawer):
         return line_elements
 
     def draw_heat_graph(self, graph):
-        """draw_heat_graph(self, graph) -> [element, element,...]
-
-            - graph     Graph object
-
-            Returns a list of drawable elements for the heat graph
-        """
+        """Return a list of drawable elements for the heat graph."""
         # print '\tdraw_heat_graph'
         # At each point contained in the graph data, we draw a box that is the
         # full height of the track, extending from the midpoint between the
@@ -1226,13 +1109,7 @@ class LinearDrawer(AbstractDrawer):
         return heat_elements
 
     def draw_bar_graph(self, graph):
-        """draw_bar_graph(self, graph) -> [element, element,...]
-
-            - graph     Graph object
-
-            Returns a list of drawable elements for a bar graph of the passed
-            Graph object
-        """
+        """Return list of drawable elements for a bar graph."""
         # print '\tdraw_bar_graph'
         # At each point contained in the graph data, we draw a vertical bar
         # from the track center to the height of the datapoint value (positive
@@ -1313,12 +1190,14 @@ class LinearDrawer(AbstractDrawer):
         return bar_elements
 
     def canvas_location(self, base):
-        """canvas_location(self, base) -> (int, float)
+        """Canvas location of a base on the genome.
 
-            - base      The base number on the genome sequence
+        Arguments:
 
-            Returns the x-coordinate and fragment number of a base on the
-            genome sequence, in the context of the current drawing setup
+        - base      The base number on the genome sequence
+
+        Returns the x-coordinate and fragment number of a base on the
+        genome sequence, in the context of the current drawing setup
         """
         base = int(base - self.start)   # number of bases we are from the start
         fragment = int(base / self.fragment_bases)
