@@ -32,117 +32,117 @@ from math import pi, cos, sin
 class CircularDrawer(AbstractDrawer):
     """Object for drawing circular diagrams.
 
-        o __init__(self, ...) Called on instantiation
+        - __init__(self, ...) Called on instantiation
 
-        o set_page_size(self, pagesize, orientation)    Set the page size to the
+        - set_page_size(self, pagesize, orientation)    Set the page size to the
                                                     passed size and orientation
 
-        o set_margins(self, x, y, xl, xr, yt, yb)   Set the drawable area of the
+        - set_margins(self, x, y, xl, xr, yt, yb)   Set the drawable area of the
                                                     page
 
-        o set_bounds(self, start, end)  Set the bounds for the elements to be
+        - set_bounds(self, start, end)  Set the bounds for the elements to be
                                         drawn
 
-        o is_in_bounds(self, value)     Returns a boolean for whether the position
+        - is_in_bounds(self, value)     Returns a boolean for whether the position
                                         is actually to be drawn
 
-        o __len__(self)     Returns the length of sequence that will be drawn
+        - __len__(self)     Returns the length of sequence that will be drawn
 
 
-        o draw(self)    Place the drawing elements on the diagram
+        - draw(self)    Place the drawing elements on the diagram
 
-        o init_fragments(self)  Calculate information
+        - init_fragments(self)  Calculate information
                                 about sequence fragment locations on the drawing
 
-        o set_track_heights(self)   Calculate information about the offset of
+        - set_track_heights(self)   Calculate information about the offset of
                                     each track from the fragment base
 
-        o draw_test_tracks(self)    Add lines demarcating each track to the
+        - draw_test_tracks(self)    Add lines demarcating each track to the
                                     drawing
 
-        o draw_track(self, track)   Return the contents of the passed track as
+        - draw_track(self, track)   Return the contents of the passed track as
                                     drawing elements
 
-        o draw_scale(self, track)   Return a scale for the passed track as
+        - draw_scale(self, track)   Return a scale for the passed track as
                                     drawing elements
 
-        o draw_greytrack(self, track)   Return a grey background and superposed
+        - draw_greytrack(self, track)   Return a grey background and superposed
                                         label for the passed track as drawing
                                         elements
 
-        o draw_feature_set(self, set)   Return the features in the passed set as
+        - draw_feature_set(self, set)   Return the features in the passed set as
                                         drawing elements
 
-        o draw_feature(self, feature)   Return a single feature as drawing
+        - draw_feature(self, feature)   Return a single feature as drawing
                                         elements
 
-        o get_feature_sigil(self, feature, x0, x1, fragment)    Return a single
+        - get_feature_sigil(self, feature, x0, x1, fragment)    Return a single
                                         feature as its sigil in drawing elements
 
-        o draw_graph_set(self, set)     Return the data in a set of graphs as
+        - draw_graph_set(self, set)     Return the data in a set of graphs as
                                         drawing elements
 
-        o draw_line_graph(self, graph)  Return the data in a graph as a line
+        - draw_line_graph(self, graph)  Return the data in a graph as a line
                                         graph in drawing elements
 
-        o draw_heat_graph(self, graph)  Return the data in a graph as a heat
+        - draw_heat_graph(self, graph)  Return the data in a graph as a heat
                                         graph in drawing elements
 
-        o draw_bar_graph(self, graph)   Return the data in a graph as a bar
+        - draw_bar_graph(self, graph)   Return the data in a graph as a bar
                                         graph in drawing elements
 
-        o canvas_angle(self, base)      Return the angle, and cos and sin of
+        - canvas_angle(self, base)      Return the angle, and cos and sin of
                                         that angle, subtended by the passed
                                         base position at the diagram center
 
-        o draw_arc(self, inner_radius, outer_radius, startangle, endangle,
+        - draw_arc(self, inner_radius, outer_radius, startangle, endangle,
                     color)    Return a drawable element describing an arc
 
         Attributes:
-        o tracklines    Boolean for whether to draw lines dilineating tracks
+        - tracklines    Boolean for whether to draw lines dilineating tracks
 
-        o pagesize      Tuple describing the size of the page in pixels
+        - pagesize      Tuple describing the size of the page in pixels
 
-        o x0            Float X co-ord for leftmost point of drawable area
+        - x0            Float X co-ord for leftmost point of drawable area
 
-        o xlim          Float X co-ord for rightmost point of drawable area
+        - xlim          Float X co-ord for rightmost point of drawable area
 
-        o y0            Float Y co-ord for lowest point of drawable area
+        - y0            Float Y co-ord for lowest point of drawable area
 
-        o ylim          Float Y co-ord for topmost point of drawable area
+        - ylim          Float Y co-ord for topmost point of drawable area
 
-        o pagewidth     Float pixel width of drawable area
+        - pagewidth     Float pixel width of drawable area
 
-        o pageheight    Float pixel height of drawable area
+        - pageheight    Float pixel height of drawable area
 
-        o xcenter       Float X co-ord of center of drawable area
+        - xcenter       Float X co-ord of center of drawable area
 
-        o ycenter       Float Y co-ord of center of drawable area
+        - ycenter       Float Y co-ord of center of drawable area
 
-        o start         Int, base to start drawing from
+        - start         Int, base to start drawing from
 
-        o end           Int, base to stop drawing at
+        - end           Int, base to stop drawing at
 
-        o length        Size of sequence to be drawn
+        - length        Size of sequence to be drawn
 
-        o track_size    Float (0->1) the proportion of the track height to
+        - track_size    Float (0->1) the proportion of the track height to
                         draw in
 
-        o drawing       Drawing canvas
+        - drawing       Drawing canvas
 
-        o drawn_tracks  List of ints denoting which tracks are to be drawn
+        - drawn_tracks  List of ints denoting which tracks are to be drawn
 
-        o current_track_level   Int denoting which track is currently being
+        - current_track_level   Int denoting which track is currently being
                                 drawn
 
-        o track_offsets     Dictionary of number of pixels that each track top,
+        - track_offsets     Dictionary of number of pixels that each track top,
                             center and bottom is offset from the base of a
                             fragment, keyed by track
 
-        o sweep     Float (0->1) the proportion of the circle circumference to
+        - sweep     Float (0->1) the proportion of the circle circumference to
                     use for the diagram
 
-        o cross_track_links List of tuples each with four entries (track A,
+        - cross_track_links List of tuples each with four entries (track A,
                             feature A, track B, feature B) to be linked.
 
     """
@@ -153,53 +153,53 @@ class CircularDrawer(AbstractDrawer):
                  circular=1, circle_core=0.0, cross_track_links=None):
         """Create CircularDrawer object.
 
-            o parent    Diagram object containing the data that the drawer
+            - parent    Diagram object containing the data that the drawer
                         draws
 
-            o pagesize  String describing the ISO size of the image, or a tuple
+            - pagesize  String describing the ISO size of the image, or a tuple
                         of pixels
 
-            o orientation   String describing the required orientation of the
+            - orientation   String describing the required orientation of the
                             final drawing ('landscape' or 'portrait')
 
-            o x         Float (0->1) describing the relative size of the X
+            - x         Float (0->1) describing the relative size of the X
                         margins to the page
 
-            o y         Float (0->1) describing the relative size of the Y
+            - y         Float (0->1) describing the relative size of the Y
                         margins to the page
 
-            o xl        Float (0->1) describing the relative size of the left X
+            - xl        Float (0->1) describing the relative size of the left X
                         margin to the page (overrides x)
 
-            o xl        Float (0->1) describing the relative size of the left X
+            - xl        Float (0->1) describing the relative size of the left X
                         margin to the page (overrides x)
 
-            o xr        Float (0->1) describing the relative size of the right X
+            - xr        Float (0->1) describing the relative size of the right X
                         margin to the page (overrides x)
 
-            o yt        Float (0->1) describing the relative size of the top Y
+            - yt        Float (0->1) describing the relative size of the top Y
                         margin to the page (overrides y)
 
-            o yb        Float (0->1) describing the relative size of the lower Y
+            - yb        Float (0->1) describing the relative size of the lower Y
                         margin to the page (overrides y)
 
-            o start     Int, the position to begin drawing the diagram at
+            - start     Int, the position to begin drawing the diagram at
 
-            o end       Int, the position to stop drawing the diagram at
+            - end       Int, the position to stop drawing the diagram at
 
-            o tracklines    Boolean flag to show (or not) lines delineating tracks
+            - tracklines    Boolean flag to show (or not) lines delineating tracks
                             on the diagram
 
-            o track_size    The proportion of the available track height that
+            - track_size    The proportion of the available track height that
                             should be taken up in drawing
 
-            o circular      Boolean flaw to show whether the passed sequence is
+            - circular      Boolean flaw to show whether the passed sequence is
                             circular or not
 
-            o circle_core   The proportion of the available radius to leave
+            - circle_core   The proportion of the available radius to leave
                             empty at the center of a circular diagram (0 to 1).
 
-            o cross_track_links List of tuples each with four entries (track A,
+            - cross_track_links List of tuples each with four entries (track A,
                                 feature A, track B, feature B) to be linked.
         """
         # Use the superclass' instantiation method
@@ -368,11 +368,11 @@ class CircularDrawer(AbstractDrawer):
     def get_feature_sigil(self, feature, locstart, locend, **kwargs):
         """Returns graphics for feature, and any required label for it.
 
-            o feature       Feature object
+            - feature       Feature object
 
-            o locstart      The start position of the feature
+            - locstart      The start position of the feature
 
-            o locend        The end position of the feature
+            - locend        The end position of the feature
         """
         # Establish the co-ordinates for the sigil
         btm, ctr, top = self.track_radii[self.current_track_level]
@@ -551,7 +551,7 @@ class CircularDrawer(AbstractDrawer):
     def draw_graph_set(self, set):
         """Returns list of graph elements and list of their labels.
 
-            o set       GraphSet object
+            - set       GraphSet object
         """
         # print 'draw graph set'
         elements = []  # Holds graph elements
@@ -570,7 +570,7 @@ class CircularDrawer(AbstractDrawer):
     def draw_line_graph(self, graph):
         """Returns line graph as list of drawable elements.
 
-            o graph     GraphData object
+            - graph     GraphData object
         """
         line_elements = []  # holds drawable elements
 
@@ -621,7 +621,7 @@ class CircularDrawer(AbstractDrawer):
     def draw_bar_graph(self, graph):
         """Returns list of drawable elements for a bar graph.
 
-            o graph     Graph object
+            - graph     Graph object
         """
         # At each point contained in the graph data, we draw a vertical bar
         # from the track center to the height of the datapoint value (positive
@@ -680,7 +680,7 @@ class CircularDrawer(AbstractDrawer):
     def draw_heat_graph(self, graph):
         """Returns list of drawable elements for the heat graph.
 
-            o graph     Graph object
+            - graph     Graph object
         """
         # At each point contained in the graph data, we draw a box that is the
         # full height of the track, extending from the midpoint between the
@@ -719,7 +719,7 @@ class CircularDrawer(AbstractDrawer):
     def draw_scale(self, track):
         """Returns list of elements in the scale and list of their labels.
 
-            o track     Track object
+            - track     Track object
         """
         scale_elements = []  # holds axes and ticks
         scale_labels = []  # holds labels
@@ -874,15 +874,15 @@ class CircularDrawer(AbstractDrawer):
     def draw_tick(self, tickpos, ctr, ticklen, track, draw_label):
         """Returns drawing element for a tick on the scale.
 
-            o tickpos   Int, position of the tick on the sequence
+            - tickpos   Int, position of the tick on the sequence
 
-            o ctr       Float, Y co-ord of the center of the track
+            - ctr       Float, Y co-ord of the center of the track
 
-            o ticklen   How long to draw the tick
+            - ticklen   How long to draw the tick
 
-            o track     Track, the track the tick is drawn on
+            - track     Track, the track the tick is drawn on
 
-            o draw_label    Boolean, write the tick label?
+            - draw_label    Boolean, write the tick label?
         """
         # Calculate tick co-ordinates
         tickangle, tickcos, ticksin = self.canvas_angle(tickpos)
@@ -939,7 +939,7 @@ class CircularDrawer(AbstractDrawer):
     def draw_greytrack(self, track):
         """Drawing element for grey background to passed track.
 
-            o track     Track object
+            - track     Track object
         """
         greytrack_bgs = []  # Holds track backgrounds
         greytrack_labels = []  # Holds track foreground labels
@@ -1020,17 +1020,17 @@ class CircularDrawer(AbstractDrawer):
                  color, border=None, colour=None, **kwargs):
         """Returns close path describing an arc box.
 
-            o inner_radius  Float distance of inside of arc from drawing center
+            - inner_radius  Float distance of inside of arc from drawing center
 
-            o outer_radius  Float distance of outside of arc from drawing center
+            - outer_radius  Float distance of outside of arc from drawing center
 
-            o startangle    Float angle subtended by start of arc at drawing center
+            - startangle    Float angle subtended by start of arc at drawing center
                             (in radians)
 
-            o endangle      Float angle subtended by end of arc at drawing center
+            - endangle      Float angle subtended by end of arc at drawing center
                             (in radians)
 
-            o color        colors.Color object for arc (overridden by backwards
+            - color        colors.Color object for arc (overridden by backwards
                            compatible argument with UK spelling, colour).
 
         Returns a closed path object describing an arced box corresponding to

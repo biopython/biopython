@@ -12,7 +12,7 @@
 
     Provides:
 
-    o Track - Container for a single track on the diagram, containing
+    - Track - Container for a single track on the diagram, containing
                 FeatureSet and GraphSet objects
 
     For drawing capabilities, this module uses reportlab to draw and write
@@ -44,93 +44,93 @@ class Track(object):
         Provides:
 
         Methods:
-        o __init__(self, name=None, ...) Called on instantiation
+        - __init__(self, name=None, ...) Called on instantiation
 
-        o add_set(self, set)    Add a FeatureSet or GraphSet to the diagram
+        - add_set(self, set)    Add a FeatureSet or GraphSet to the diagram
 
-        o del_set(self, set_id) Delete a FeatureSet or GraphSet from the
+        - del_set(self, set_id) Delete a FeatureSet or GraphSet from the
                                 diagram
 
-        o get_sets(self)    Returns a list of the sets in the track
+        - get_sets(self)    Returns a list of the sets in the track
 
-        o get_ids(self)     Returns a list of the ids for sets in the track
+        - get_ids(self)     Returns a list of the ids for sets in the track
 
-        o range(self)   Returns the base/position range covered by the data in
+        - range(self)   Returns the base/position range covered by the data in
                         the track
 
-        o to_string(self, verbose=0)    Returns a string describing the data in
+        - to_string(self, verbose=0)    Returns a string describing the data in
                                         the track
 
-        o __getitem__(self, key)    Returns the set with the passed id
+        - __getitem__(self, key)    Returns the set with the passed id
 
-        o __str__(self) Returns a formatted string describing the track
+        - __str__(self) Returns a formatted string describing the track
 
         Attributes:
-        o height    Int describing the relative height to other trackscale_fontsizes in the
+        - height    Int describing the relative height to other trackscale_fontsizes in the
                     diagram
 
-        o name      String describing the track
+        - name      String describing the track
 
-        o hide      Boolean, 0 if the track is not to be drawn
+        - hide      Boolean, 0 if the track is not to be drawn
 
-        o start, end    Integers (or None) specifying start/end to draw just
+        - start, end    Integers (or None) specifying start/end to draw just
                         a partial track.
 
-        o greytrack     Boolean, 1 if a grey background to the track is to be
+        - greytrack     Boolean, 1 if a grey background to the track is to be
                         drawn
 
-        o greytrack_labels  Int describing how many track-identifying labels
+        - greytrack_labels  Int describing how many track-identifying labels
                             should be placed on the track at regular intervals
 
-        o greytrack_font    String describing the font to use for the greytrack
+        - greytrack_font    String describing the font to use for the greytrack
                             labels
 
-        o greytrack_fontsize    Int describing the font size to display the
+        - greytrack_fontsize    Int describing the font size to display the
                                 labels on the grey track
 
-        o greytrack_font_rotation   Int describing the angle through which to
+        - greytrack_font_rotation   Int describing the angle through which to
                                     rotate the grey track labels (Linear only)
 
-        o greytrack_font_color     colors.Color describing the color to draw
+        - greytrack_font_color     colors.Color describing the color to draw
                                     the grey track labels
 
-        o scale     Boolean, 1 if a scale is to be drawn on the track
+        - scale     Boolean, 1 if a scale is to be drawn on the track
 
-        o scale_format  String, defaults to None, when scale values are written
+        - scale_format  String, defaults to None, when scale values are written
                         as numerals.  Setting this to 'SInt' invokes SI
                         unit-like multiples, such as Mbp, Kbp and so on.
 
-        o scale_color  colors.Color to draw the elements of the scale
+        - scale_color  colors.Color to draw the elements of the scale
 
-        o scale_font    String describing the font to use for the scale labels
+        - scale_font    String describing the font to use for the scale labels
 
-        o scale_fontsize    Int describing the size of the scale label font
+        - scale_fontsize    Int describing the size of the scale label font
 
-        o scale_fontangle   Int describing the angle at which to draw the scale
+        - scale_fontangle   Int describing the angle at which to draw the scale
                             labels (linear only)
 
-        o scale_ticks       Boolean, 1 if ticks should be drawn at all on the
+        - scale_ticks       Boolean, 1 if ticks should be drawn at all on the
                             scale
 
-        o scale_largeticks  Float (0->1) describing the height of large
+        - scale_largeticks  Float (0->1) describing the height of large
                             scale ticks relative to the track height.
 
-        o scale_smallticks  Float (0->1) describing the height of large
+        - scale_smallticks  Float (0->1) describing the height of large
                             scale ticks relative to the track height.
 
-        o scale_largetick_interval  Int, describing the number of bases that
+        - scale_largetick_interval  Int, describing the number of bases that
                                     should separate large ticks
 
-        o scale_smalltick_interval  Int, describing the number of bases that
+        - scale_smalltick_interval  Int, describing the number of bases that
                                     should separate small ticks
 
-        o scale_largetick_labels    Boolean describing whether position labels
+        - scale_largetick_labels    Boolean describing whether position labels
                                     should be written over large ticks
 
-        o scale_smalltick_labels    Boolean describing whether position labels
+        - scale_smalltick_labels    Boolean describing whether position labels
                                     should be written over small ticks
 
-        o axis_labels       Boolean describing whether the value labels should
+        - axis_labels       Boolean describing whether the value labels should
                             be placed on the Y axes
 
     """
@@ -149,72 +149,72 @@ class Track(object):
                  greytrack_font_colour=None, scale_colour=None):
         """__init__(self, name=None, ...)
 
-            o height    Int describing the relative height to other tracks in the
+            - height    Int describing the relative height to other tracks in the
                         diagram
 
-            o name      String describing the track
+            - name      String describing the track
 
-            o hide      Boolean, 0 if the track is not to be drawn
+            - hide      Boolean, 0 if the track is not to be drawn
 
-            o greytrack     Boolean, 1 if a grey background to the track is to be
+            - greytrack     Boolean, 1 if a grey background to the track is to be
                             drawn
 
-            o greytrack_labels  Int describing how many track-identifying labels
+            - greytrack_labels  Int describing how many track-identifying labels
                                 should be placed on the track at regular intervals
 
-            o greytrack_font    String describing the font to use for the greytrack
+            - greytrack_font    String describing the font to use for the greytrack
                                 labels
 
-            o greytrack_fontsize    Int describing the font size to display the
+            - greytrack_fontsize    Int describing the font size to display the
                                     labels on the grey track
 
-            o greytrack_font_rotation   Int describing the angle through which to
+            - greytrack_font_rotation   Int describing the angle through which to
                                         rotate the grey track labels (Linear only)
 
-            o greytrack_font_color     colors.Color describing the color to draw
+            - greytrack_font_color     colors.Color describing the color to draw
                                        the grey track labels (overridden by
                                        backwards compatible argument with UK
                                        spelling, colour).
 
-            o scale     Boolean, 1 if a scale is to be drawn on the track
+            - scale     Boolean, 1 if a scale is to be drawn on the track
 
-            o scale_color  colors.Color to draw the elements of the scale
+            - scale_color  colors.Color to draw the elements of the scale
                            (overridden by backwards compatible argument with UK
                            spelling, colour).
 
-            o scale_font    String describing the font to use for the scale labels
+            - scale_font    String describing the font to use for the scale labels
 
-            o scale_fontsize    Int describing the size of the scale label font
+            - scale_fontsize    Int describing the size of the scale label font
 
-            o scale_fontangle   Int describing the angle at which to draw the scale
+            - scale_fontangle   Int describing the angle at which to draw the scale
                                 labels (linear only)
 
-            o scale_ticks       Boolean, 1 if ticks should be drawn at all on the
+            - scale_ticks       Boolean, 1 if ticks should be drawn at all on the
                                 scale
 
-            o scale_largeticks  Float (0->1) describing the height of large
+            - scale_largeticks  Float (0->1) describing the height of large
                                 scale ticks relative to the track height.
 
-            o scale_smallticks  Float (0->1) describing the height of large
+            - scale_smallticks  Float (0->1) describing the height of large
                                 scale ticks relative to the track height.
 
-            o scale_largetick_interval  Int, describing the number of bases that
+            - scale_largetick_interval  Int, describing the number of bases that
                                         should separate large ticks
 
-            o scale_smalltick_interval  Int, describing the number of bases that
+            - scale_smalltick_interval  Int, describing the number of bases that
                                         should separate small ticks
 
-            o scale_largetick_labels    Boolean describing whether position labels
+            - scale_largetick_labels    Boolean describing whether position labels
                                         should be written over large ticks
 
-            o scale_smalltick_labels    Boolean describing whether position labels
+            - scale_smalltick_labels    Boolean describing whether position labels
                                         should be written over small ticks
 
-            o name          String to help identify the track
+            - name          String to help identify the track
 
-            o height        Relative height to draw the track
+            - height        Relative height to draw the track
 
-            o axis_labels       Boolean describing whether the value labels should
+            - axis_labels       Boolean describing whether the value labels should
                                 be placed on the Y axes
         """
         # Let the UK spelling (colour) override the USA spelling (color)
@@ -263,7 +263,7 @@ class Track(object):
     def add_set(self, set):
         """add_set(self, set)
 
-            o set       A FeatureSet or GraphSet object
+            - set       A FeatureSet or GraphSet object
 
             Add a preexisting FeatureSet or GraphSet object to the track
         """
@@ -293,7 +293,7 @@ class Track(object):
     def del_set(self, set_id):
         """del_set(self, set_id)
 
-            o set_id        The unique id for the set in this track
+            - set_id        The unique id for the set in this track
 
             Remove the set with the passed id from the track
         """
@@ -340,7 +340,7 @@ class Track(object):
     def to_string(self, verbose=0):
         """to_string(self, verbose=0) -> ""
 
-            o verbose       Boolean indicating whether a short or complete
+            - verbose       Boolean indicating whether a short or complete
                             account of the track is required
 
             Returns a formatted string with information about the track
@@ -357,7 +357,7 @@ class Track(object):
     def __getitem__(self, key):
         """__getitem__(self, key) -> int
 
-            o key       The id of a set in the track
+            - key       The id of a set in the track
 
             Return the set with the passed id
         """

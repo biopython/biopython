@@ -16,7 +16,7 @@
 
     Provides:
 
-    o GraphSet - container for GraphData objects
+    - GraphSet - container for GraphData objects
 
     For drawing capabilities, this module uses reportlab to draw and write
     the diagram:
@@ -43,39 +43,39 @@ class GraphSet(object):
         Provides:
 
         Methods:
-        o __init__(self, set_id=None, name=None)    Called on instantiation
+        - __init__(self, set_id=None, name=None)    Called on instantiation
 
-        o new_graph(self, data, name, style='bar', color=colors.lightgreen,
+        - new_graph(self, data, name, style='bar', color=colors.lightgreen,
                   altcolor=colors.darkseagreen)    Create new graph in the set
                           from the passed data, with the passed parameters
 
-        o del_graph(self, graph_id) Delete graph with the passed id
+        - del_graph(self, graph_id) Delete graph with the passed id
 
-        o get_graphs(self)  Returns a list of all graphs
+        - get_graphs(self)  Returns a list of all graphs
 
-        o get_ids(self)     Returns a list of graph ids
+        - get_ids(self)     Returns a list of graph ids
 
-        o range(self)       Returns the range covered by the graphs in the set
+        - range(self)       Returns the range covered by the graphs in the set
 
-        o to_string(self, verbose=0)    Returns a string describing the set
+        - to_string(self, verbose=0)    Returns a string describing the set
 
-        o __len__(self)     Returns the length of sequence covered by the set
+        - __len__(self)     Returns the length of sequence covered by the set
 
-        o __getitem__(self, key)    Returns the graph with the id of the passed key
+        - __getitem__(self, key)    Returns the graph with the id of the passed key
 
-        o __str__(self)     Returns a string describing the set
+        - __str__(self)     Returns a string describing the set
 
         Attributes:
-        o id        Unique identifier for the set
+        - id        Unique identifier for the set
 
-        o name      String describing the set
+        - name      String describing the set
 
     """
 
     def __init__(self, name=None):
         """__init__(self, name=None)
 
-            o name      String identifying the graph set sensibly
+            - name      String identifying the graph set sensibly
         """
         self.id = id            # Unique identifier for the set
         self._next_id = 0       # Holds unique ids for graphs
@@ -88,24 +88,24 @@ class GraphSet(object):
         """new_graph(self, data, name=None, style='bar', color=colors.lightgreen,
                   altcolor=colors.darkseagreen)
 
-            o data      List of (position, value) int tuples
+            - data      List of (position, value) int tuples
 
-            o name      String, description of the graph
+            - name      String, description of the graph
 
-            o style     String ('bar', 'heat', 'line') describing how the graph
+            - style     String ('bar', 'heat', 'line') describing how the graph
                         will be drawn
 
-            o color    colors.Color describing the color to draw all or 'high'
+            - color    colors.Color describing the color to draw all or 'high'
                        (some styles) data (overridden by backwards compatible
                        argument with UK spelling, colour).
 
-            o altcolor  colors.Color describing the color to draw 'low' (some
+            - altcolor  colors.Color describing the color to draw 'low' (some
                         styles) data (overridden by backwards compatible argument
                         with UK spelling, colour).
 
-            o linewidth     Float describing linewidth for graph
+            - linewidth     Float describing linewidth for graph
 
-            o center        Float setting the value at which the x-axis
+            - center        Float setting the value at which the x-axis
                             crosses the y-axis (overridden by backwards
                             compatible argument with UK spelling, centre)
 
@@ -130,7 +130,7 @@ class GraphSet(object):
     def del_graph(self, graph_id):
         """del_graph(self, graph_id)
 
-            o graph_id        Identifying value of the graph
+            - graph_id        Identifying value of the graph
 
             Remove a graph from the set, indicated by its id
         """
@@ -180,7 +180,7 @@ class GraphSet(object):
     def to_string(self, verbose=0):
         """to_string(self, verbose=0) -> ""
 
-            o verbose       Flag indicating whether a short or complete account
+            - verbose       Flag indicating whether a short or complete account
                             of the set is required
 
             Returns a formatted string with information about the set

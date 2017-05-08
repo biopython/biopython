@@ -99,10 +99,10 @@ class MarkovModelBuilder(object):
 
         Arguments:
 
-        o state_alphabet -- An alphabet containing all of the letters that
+        - state_alphabet -- An alphabet containing all of the letters that
         can appear in the states
 
-        o emission_alphabet -- An alphabet containing all of the letters for
+        - emission_alphabet -- An alphabet containing all of the letters for
         states that can be emitted by the HMM.
         """
         self._state_alphabet = state_alphabet
@@ -457,18 +457,18 @@ class HiddenMarkovModel(object):
 
         Arguments:
 
-        o initial_prob - A dictionary of initial probabilities for all states.
+        - initial_prob - A dictionary of initial probabilities for all states.
 
-        o transition_prob -- A dictionary of transition probabilities for all
+        - transition_prob -- A dictionary of transition probabilities for all
         possible transitions in the sequence.
 
-        o emission_prob -- A dictionary of emission probabilities for all
+        - emission_prob -- A dictionary of emission probabilities for all
         possible emissions from the sequence states.
 
-        o transition_pseudo -- Pseudo-counts to be used for the transitions,
+        - transition_pseudo -- Pseudo-counts to be used for the transitions,
         when counting for purposes of estimating transition probabilities.
 
-        o emission_pseudo -- Pseudo-counts to be used for the emissions,
+        - emission_pseudo -- Pseudo-counts to be used for the emissions,
         when counting for purposes of estimating emission probabilities.
         """
         self.initial_prob = initial_prob
@@ -546,10 +546,10 @@ class HiddenMarkovModel(object):
 
         Arguments:
 
-        o sequence -- A Seq object with the emission sequence that we
+        - sequence -- A Seq object with the emission sequence that we
         want to decode.
 
-        o state_alphabet -- The alphabet of the possible state sequences
+        - state_alphabet -- The alphabet of the possible state sequences
         that can be generated.
         """
         # calculate logarithms of the initial, transition, and emission probs

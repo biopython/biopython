@@ -38,13 +38,13 @@ class ValidationIncreaseStop(object):
 
         Arguments:
 
-        o max_iterations - The maximum number of iterations that
+        - max_iterations - The maximum number of iterations that
         should be performed, regardless of error.
 
-        o min_iterations - The minimum number of iterations to perform,
+        - min_iterations - The minimum number of iterations to perform,
         to prevent premature stoppage of training.
 
-        o verbose - Whether or not the error should be printed during
+        - verbose - Whether or not the error should be printed during
         training.
         """
         self.verbose = verbose

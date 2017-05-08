@@ -24,15 +24,15 @@ class ExampleManager(object):
     This is meant to make it easy to split a bunch of training examples
     into three types of data:
 
-    o Training Data -- These are the data used to do the actual training
+    - Training Data -- These are the data used to do the actual training
     of the network.
 
-    o Validation Data -- These data are used to validate the network
+    - Validation Data -- These data are used to validate the network
     while training. They provide an independent method to evaluate how
     the network is doing, and make sure the network gets trained independent
     of noise in the training data set.
 
-    o Testing Data -- The data which are used to verify how well a network
+    - Testing Data -- The data which are used to verify how well a network
     works. They should not be used at all in the training process, so they
     provide a completely independent method of testing how well a network
     performs.
@@ -42,20 +42,20 @@ class ExampleManager(object):
         """Initialize the manager with the training examples.
 
         Arguments:
-        o training_percent - The percentage of the training examples that
+        - training_percent - The percentage of the training examples that
         should be used for training the network.
 
-        o validation_percent - Percent of training examples for validating
+        - validation_percent - Percent of training examples for validating
         a network during training.
 
         Attributes:
-        o train_examples - A randomly chosen set of examples for training
+        - train_examples - A randomly chosen set of examples for training
         purposes.
 
-        o valdiation_examples - Randomly chosesn set of examples for
+        - valdiation_examples - Randomly chosesn set of examples for
         use in validation of a network during training.
 
-        o test_examples - Examples for training purposes.
+        - test_examples - Examples for training purposes.
 
         """
         assert training_percent + validation_percent <= 1.0, \
@@ -73,7 +73,7 @@ class ExampleManager(object):
 
         Arguments:
 
-        o training_examples - A list of TrainingExamples to manage.
+        - training_examples - A list of TrainingExamples to manage.
         """
         placement_rand = random.Random()
 
