@@ -8,7 +8,7 @@
 #                L.Pritchard@scri.ac.uk
 ################################################################################
 
-""" Track module
+"""Track module
 
     Provides:
 
@@ -39,7 +39,7 @@ from ._GraphSet import GraphSet
 
 
 class Track(object):
-    """ Track
+    """Track
 
         Provides:
 
@@ -147,7 +147,7 @@ class Track(object):
                  scale_smalltick_labels=0, axis_labels=1,
                  start=None, end=None,
                  greytrack_font_colour=None, scale_colour=None):
-        """ __init__(self, name=None, ...)
+        """__init__(self, name=None, ...)
 
             o height    Int describing the relative height to other tracks in the
                         diagram
@@ -261,7 +261,7 @@ class Track(object):
         self.axis_labels = axis_labels
 
     def add_set(self, set):
-        """ add_set(self, set)
+        """add_set(self, set)
 
             o set       A FeatureSet or GraphSet object
 
@@ -273,7 +273,7 @@ class Track(object):
         self._next_id += 1              # Increment unique set ids
 
     def new_set(self, type='feature', **args):
-        """ new_set(self, type='feature') -> FeatureSet or GraphSet
+        """new_set(self, type='feature') -> FeatureSet or GraphSet
 
             Create a new FeatureSet or GraphSet object, add it to the
             track, and return for user manipulation
@@ -291,7 +291,7 @@ class Track(object):
         return set
 
     def del_set(self, set_id):
-        """ del_set(self, set_id)
+        """del_set(self, set_id)
 
             o set_id        The unique id for the set in this track
 
@@ -300,21 +300,21 @@ class Track(object):
         del self._sets[set_id]
 
     def get_sets(self):
-        """ get_sets(self) -> FeatureSet or GraphSet
+        """get_sets(self) -> FeatureSet or GraphSet
 
             Return the sets contained in this track
         """
         return list(self._sets.values())
 
     def get_ids(self):
-        """ get_ids(self) -> [int, int, ...]
+        """get_ids(self) -> [int, int, ...]
 
             Return the ids of all sets contained in this track
         """
         return list(self._sets.keys())
 
     def range(self):
-        """ range(self) -> (int, int)
+        """range(self) -> (int, int)
 
             Returns the lowest and highest base (or mark) numbers as a tuple
         """
@@ -338,7 +338,7 @@ class Track(object):
         return low, high  # Return lowest and highest values
 
     def to_string(self, verbose=0):
-        """ to_string(self, verbose=0) -> ""
+        """to_string(self, verbose=0) -> ""
 
             o verbose       Boolean indicating whether a short or complete
                             account of the track is required
@@ -355,7 +355,7 @@ class Track(object):
             return "\n".join(outstr)
 
     def __getitem__(self, key):
-        """ __getitem__(self, key) -> int
+        """__getitem__(self, key) -> int
 
             o key       The id of a set in the track
 
@@ -364,7 +364,7 @@ class Track(object):
         return self._sets[key]
 
     def __str__(self):
-        """ __str__(self) -> ""
+        """__str__(self) -> ""
 
             Returns a formatted string with information about the Track
         """

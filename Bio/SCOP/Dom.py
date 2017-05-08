@@ -7,7 +7,7 @@
 #     Interface and comments modified to reflect changes to the SCOP
 #     module, and to SCOP itself.
 
-""" Handle the SCOP DOMain file.
+"""Handle the SCOP DOMain file.
 
 The DOM file has been officially deprecated. For more information see
 the SCOP"release notes.":http://scop.berkeley.edu/release-notes-1.55.html

@@ -73,7 +73,7 @@ class Async(object):
         raise NotImplementedError("This object should be subclassed")
 
     def get_result(self, id):
-        """ Returns results for a certain Id, the info for that Id is forgotten.
+        """Returns results for a certain Id, the info for that Id is forgotten.
 
         Parameters:
         id Id of the task.

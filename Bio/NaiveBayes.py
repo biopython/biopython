@@ -110,7 +110,7 @@ def calculate(nb, observation, scale=False):
 
 
 def classify(nb, observation):
-    """ Classify an observation into a class.
+    """Classify an observation into a class.
 
     ``classify(nb, observation) -> class``
 
@@ -125,7 +125,7 @@ def classify(nb, observation):
 
 
 def train(training_set, results, priors=None, typecode=None):
-    """ Train a naive bayes classifier on a training set.
+    """Train a naive bayes classifier on a training set.
 
     ``train(training_set, results[, priors]) -> NaiveBayes``
 

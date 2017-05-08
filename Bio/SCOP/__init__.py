@@ -15,7 +15,7 @@
 # was previously in Bio.WWW.SCOP, has now been merged into this module.
 
 
-""" SCOP: Structural Classification of Proteins.
+"""SCOP: Structural Classification of Proteins.
 
 The SCOP database aims to provide a manually constructed classification of
 all know protein structures into a hierarchy, the main levels of which
@@ -45,7 +45,6 @@ This module also provides code to access SCOP over the WWW.
 Functions:
 search        -- Access the main CGI script.
 _open         -- Internally used function.
-
 """
 
 from __future__ import print_function
@@ -498,7 +497,7 @@ class Scop(object):
 
 
 class Node(object):
-    """ A node in the Scop hierarchy
+    """A node in the Scop hierarchy
 
     sunid  -- SCOP unique identifiers. e.g. '14986'
 
@@ -511,7 +510,6 @@ class Node(object):
     type     -- A 2 letter node type code. e.g. 'px' for domains
 
     description --
-
     """
 
     def __init__(self, scop=None):
@@ -573,8 +571,8 @@ class Node(object):
             return self.scop.getNodeBySunid(self.parent)
 
     def getDescendents(self, node_type):
-        """ Return a list of all descendant nodes of the given type. Node type can a
-        two letter code or longer description. e.g. 'fa' or 'family'
+        """Return a list of all descendant nodes of the given type. Node type can be a
+        two letter code or longer description. e.g. 'fa' or 'family'.
         """
         if node_type in _nodetype_to_code:
             node_type = _nodetype_to_code[node_type]
@@ -594,7 +592,7 @@ class Node(object):
         return nodes
 
     def getAscendent(self, node_type):
-        """ Return the ancenstor node of the given type, or None.Node type can a
+        """Return the ancenstor node of the given type, or None.Node type can a
         two letter code or longer description. e.g. 'fa' or 'family'.
         """
         if node_type in _nodetype_to_code:
@@ -616,10 +614,10 @@ class Node(object):
 
 
 class Domain(Node):
-    """ A SCOP domain. A leaf node in the Scop hierarchy.
+    """A SCOP domain. A leaf node in the Scop hierarchy.
 
         - sid      -- The SCOP domain identifier. e.g. ``"d5hbib_"``
-
+        
         - residues -- A Residue object. It defines the collection
           of PDB atoms that make up this domain.
     """

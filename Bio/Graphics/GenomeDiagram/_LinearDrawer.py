@@ -9,7 +9,7 @@
 #                L.Pritchard@scri.ac.uk
 ################################################################################
 
-""" LinearDrawer module
+"""LinearDrawer module
 
     Provides:
 
@@ -43,7 +43,7 @@ from math import ceil
 
 
 class LinearDrawer(AbstractDrawer):
-    """ LinearDrawer(AbstractDrawer)
+    """LinearDrawer(AbstractDrawer)
 
         Inherits from:
 
@@ -184,7 +184,7 @@ class LinearDrawer(AbstractDrawer):
                  x=0.05, y=0.05, xl=None, xr=None, yt=None, yb=None,
                  start=None, end=None, tracklines=0, fragments=10,
                  fragment_size=0.9, track_size=0.75, cross_track_links=None):
-        """ __init__(self, parent, pagesize='A3', orientation='landscape',
+        """__init__(self, parent, pagesize='A3', orientation='landscape',
                      x=0.05, y=0.05, xl=None, xr=None, yt=None, yb=None,
                      start=None, end=None, tracklines=0, fragments=10,
                      fragment_size=0.9, track_size=0.75)
@@ -249,7 +249,7 @@ class LinearDrawer(AbstractDrawer):
         self.track_size = track_size
 
     def draw(self):
-        """ draw(self)
+        """draw(self)
 
             Draw a linear diagram of the data in the parent Diagram object
         """
@@ -311,7 +311,7 @@ class LinearDrawer(AbstractDrawer):
             self.draw_test_tracks()
 
     def init_fragments(self):
-        """ init_fragments(self)
+        """init_fragments(self)
 
             Initialises useful values for calculating the positioning of
             diagram elements
@@ -340,7 +340,7 @@ class LinearDrawer(AbstractDrawer):
             fragment_count += 1
 
     def set_track_heights(self):
-        """ set_track_heights(self)
+        """set_track_heights(self)
 
             Since tracks may not be of identical heights, the bottom and top
             offsets of each track relative to the fragment top and bottom is
@@ -375,7 +375,7 @@ class LinearDrawer(AbstractDrawer):
         self.track_offsets = track_offsets
 
     def draw_test_tracks(self):
-        """ draw_test_tracks(self)
+        """draw_test_tracks(self)
 
             Draw red lines indicating the top and bottom of each fragment,
             and blue ones indicating tracks to be drawn.
@@ -400,7 +400,7 @@ class LinearDrawer(AbstractDrawer):
                                       strokeColor=colors.blue))  # bottom line
 
     def draw_track(self, track):
-        """ draw_track(self, track) -> ([element, element,...], [element, element,...])
+        """draw_track(self, track) -> ([element, element,...], [element, element,...])
 
             o track     Track object
 
@@ -422,7 +422,7 @@ class LinearDrawer(AbstractDrawer):
         return track_elements, track_labels
 
     def draw_tick(self, tickpos, ctr, ticklen, track, draw_label):
-        """ draw_tick(self, tickpos, ctr, ticklen) -> (element, element)
+        """draw_tick(self, tickpos, ctr, ticklen) -> (element, element)
 
             o tickpos   Int, position of the tick on the sequence
 
@@ -473,7 +473,7 @@ class LinearDrawer(AbstractDrawer):
         return tick, labelgroup
 
     def draw_scale(self, track):
-        """ draw_scale(self, track) -> ([element, element,...], [element, element,...])
+        """draw_scale(self, track) -> ([element, element,...], [element, element,...])
 
             o track     Track object
 
@@ -602,7 +602,7 @@ class LinearDrawer(AbstractDrawer):
         return scale_elements, scale_labels
 
     def draw_greytrack(self, track):
-        """ draw_greytrack(self) -> ([element, element,...], [element, element,...])
+        """draw_greytrack(self) -> ([element, element,...], [element, element,...])
 
             o track     Track object
 
@@ -661,7 +661,7 @@ class LinearDrawer(AbstractDrawer):
         return greytrack_bgs, greytrack_labels
 
     def draw_feature_set(self, set):
-        """ draw_feature_set(self, set) -> ([element, element,...], [element, element,...])
+        """draw_feature_set(self, set) -> ([element, element,...], [element, element,...])
 
             o set       FeatureSet object
 
@@ -682,7 +682,7 @@ class LinearDrawer(AbstractDrawer):
         return feature_elements, label_elements
 
     def draw_feature(self, feature):
-        """ draw_feature(self, feature, parent_feature=None) -> ([element, element,...], [element, element,...])
+        """draw_feature(self, feature, parent_feature=None) -> ([element, element,...], [element, element,...])
 
             o feature           Feature containing location info
 
@@ -969,7 +969,7 @@ class LinearDrawer(AbstractDrawer):
         return answer
 
     def get_feature_sigil(self, feature, x0, x1, fragment, **kwargs):
-        """ get_feature_sigil(self, feature, x0, x1, fragment) -> (element, element, element)
+        """get_feature_sigil(self, feature, x0, x1, fragment) -> (element, element, element)
 
             o feature       Feature object
 
@@ -1063,7 +1063,7 @@ class LinearDrawer(AbstractDrawer):
         return sigil, labelgroup
 
     def draw_graph_set(self, set):
-        """ draw_graph_set(self, set) -> ([element, element,...], [element, element,...])
+        """draw_graph_set(self, set) -> ([element, element,...], [element, element,...])
 
             o set       GraphSet object
 
@@ -1084,7 +1084,7 @@ class LinearDrawer(AbstractDrawer):
         return elements, []
 
     def draw_line_graph(self, graph):
-        """ draw_line_graph(self, graph) -> [element, element,...]
+        """draw_line_graph(self, graph) -> [element, element,...]
 
             o graph     Graph object
 
@@ -1149,7 +1149,7 @@ class LinearDrawer(AbstractDrawer):
         return line_elements
 
     def draw_heat_graph(self, graph):
-        """ draw_heat_graph(self, graph) -> [element, element,...]
+        """draw_heat_graph(self, graph) -> [element, element,...]
 
             o graph     Graph object
 
@@ -1226,7 +1226,7 @@ class LinearDrawer(AbstractDrawer):
         return heat_elements
 
     def draw_bar_graph(self, graph):
-        """ draw_bar_graph(self, graph) -> [element, element,...]
+        """draw_bar_graph(self, graph) -> [element, element,...]
 
             o graph     Graph object
 
@@ -1313,7 +1313,7 @@ class LinearDrawer(AbstractDrawer):
         return bar_elements
 
     def canvas_location(self, base):
-        """ canvas_location(self, base) -> (int, float)
+        """canvas_location(self, base) -> (int, float)
 
             o base      The base number on the genome sequence
 

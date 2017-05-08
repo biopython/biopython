@@ -8,7 +8,7 @@
 #                L.Pritchard@scri.ac.uk
 ################################################################################
 
-""" Feature module
+"""Feature module
 
     Provides:
 
@@ -31,7 +31,7 @@ from ._Colors import ColorTranslator
 
 
 class Feature(object):
-    """ Class to wrap Bio.SeqFeature objects for GenomeDiagram
+    """Class to wrap Bio.SeqFeature objects for GenomeDiagram
 
         Provides:
 
@@ -111,7 +111,7 @@ class Feature(object):
 
     def __init__(self, parent=None, feature_id=None, feature=None,
                  color=colors.lightgreen, label=0, border=None, colour=None):
-        """ __init__(self, parent=None, feature_id=None, feature=None,
+        """__init__(self, parent=None, feature_id=None, feature=None,
                  color=colors.lightgreen, label=0)
 
             o parent    FeatureSet containing the feature
@@ -159,7 +159,7 @@ class Feature(object):
             self.set_feature(feature)
 
     def set_feature(self, feature):
-        """ set_feature(self, feature)
+        """set_feature(self, feature)
 
             o feature   Bio.SeqFeature object to be wrapped
 
@@ -169,7 +169,7 @@ class Feature(object):
         self.__process_feature()
 
     def __process_feature(self):
-        """ __process_feature(self)
+        """__process_feature(self)
 
             Examine the feature to be wrapped, and set some of the Feature's
             properties accordingly
@@ -204,7 +204,7 @@ class Feature(object):
         self.start, self.end = min(bounds), max(bounds)
 
     def get_feature(self):
-        """ get_feature(self) -> Bio.SeqFeature
+        """get_feature(self) -> Bio.SeqFeature
 
             Returns the unwrapped Bio.SeqFeature object
         """
@@ -216,7 +216,7 @@ class Feature(object):
         self.color = color
 
     def set_color(self, color):
-        """ set_color(self, color)
+        """set_color(self, color)
 
             o color    The color to draw the feature - either a colors.Color
                        object, an RGB tuple of floats, or an integer
@@ -229,7 +229,7 @@ class Feature(object):
         self.color = color
 
     def __getattr__(self, name):
-        """ __getattr__(self, name) -> various
+        """__getattr__(self, name) -> various
 
             If the Feature class doesn't have the attribute called for,
             check in self._feature for it
