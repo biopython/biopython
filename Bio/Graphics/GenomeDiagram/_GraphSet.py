@@ -12,7 +12,7 @@
 # TODO: Make representation of Ymax and Ymin values at this level, so that
 #       calculation of graph/axis drawing is simplified
 
-""" GraphSet module
+"""GraphSet module
 
     Provides:
 
@@ -38,7 +38,7 @@ from ._Graph import GraphData
 
 
 class GraphSet(object):
-    """ GraphSet
+    """GraphSet
 
         Provides:
 
@@ -73,7 +73,7 @@ class GraphSet(object):
     """
 
     def __init__(self, name=None):
-        """ __init__(self, name=None)
+        """__init__(self, name=None)
 
             o name      String identifying the graph set sensibly
         """
@@ -85,7 +85,7 @@ class GraphSet(object):
     def new_graph(self, data, name=None, style='bar', color=colors.lightgreen,
                   altcolor=colors.darkseagreen, linewidth=1, center=None,
                   colour=None, altcolour=None, centre=None):
-        """ new_graph(self, data, name=None, style='bar', color=colors.lightgreen,
+        """new_graph(self, data, name=None, style='bar', color=colors.lightgreen,
                   altcolor=colors.darkseagreen)
 
             o data      List of (position, value) int tuples
@@ -128,7 +128,7 @@ class GraphSet(object):
         return graph
 
     def del_graph(self, graph_id):
-        """ del_graph(self, graph_id)
+        """del_graph(self, graph_id)
 
             o graph_id        Identifying value of the graph
 
@@ -137,7 +137,7 @@ class GraphSet(object):
         del self._graphs[graph_id]
 
     def get_graphs(self):
-        """ get_graphs(self) -> [Graph, Graph, ...]
+        """get_graphs(self) -> [Graph, Graph, ...]
 
             Return a list of all graphs in the graph set, sorted by id (for
             reliable stacking...)
@@ -145,14 +145,14 @@ class GraphSet(object):
         return [self._graphs[id] for id in sorted(self._graphs)]
 
     def get_ids(self):
-        """ get_ids(self) -> [int, int, ...]
+        """get_ids(self) -> [int, int, ...]
 
             Return a list of all ids for the graph set
         """
         return list(self._graphs.keys())
 
     def range(self):
-        """ range(self) -> (int, int)
+        """range(self) -> (int, int)
 
             Returns the lowest and highest base (or mark) numbers as a tuple
         """
@@ -164,7 +164,7 @@ class GraphSet(object):
         return (min(lows), max(highs))
 
     def data_quartiles(self):
-        """ data_quartiles(self) -> (float, float, float, float, float)
+        """data_quartiles(self) -> (float, float, float, float, float)
 
             Returns the (minimum, lowerQ, medianQ, upperQ, maximum) values as
             a tuple
@@ -178,7 +178,7 @@ class GraphSet(object):
                data[3 * datalen / 4], data[-1])
 
     def to_string(self, verbose=0):
-        """ to_string(self, verbose=0) -> ""
+        """to_string(self, verbose=0) -> ""
 
             o verbose       Flag indicating whether a short or complete account
                             of the set is required
@@ -195,21 +195,21 @@ class GraphSet(object):
             return "\n".join(outstr)
 
     def __len__(self):
-        """ __len__(self) -> int
+        """__len__(self) -> int
 
             Return the number of graphs in the set
         """
         return len(self._graphs)
 
     def __getitem__(self, key):
-        """ __getitem__(self, key) -> Graph
+        """__getitem__(self, key) -> Graph
 
             Return a graph, keyed by id
         """
         return self._graphs[key]
 
     def __str__(self):
-        """ __str__(self) -> ""
+        """__str__(self) -> ""
 
             Returns a formatted string with information about the feature set
         """

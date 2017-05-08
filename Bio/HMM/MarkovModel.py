@@ -18,7 +18,7 @@ from Bio.Seq import MutableSeq
 
 
 def _gen_random_array(n):
-    """ Return an array of n random numbers, where the elements of the array sum
+    """Return an array of n random numbers, where the elements of the array sum
     to 1.0.
     """
     randArray = [random.random() for i in range(n)]

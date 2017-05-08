@@ -9,7 +9,7 @@
 #                L.Pritchard@scri.ac.uk
 ################################################################################
 
-""" Graph module
+"""Graph module
 
     Provides:
 
@@ -36,7 +36,7 @@ from math import sqrt
 
 
 class GraphData(object):
-    """ GraphData
+    """GraphData
 
         Provides:
 
@@ -132,7 +132,7 @@ class GraphData(object):
         self.center = center        # value at which x-axis crosses y-axis
 
     def set_data(self, data):
-        """ set_data(self, data)
+        """set_data(self, data)
 
             o data      List of (position, value) tuples
 
@@ -142,7 +142,7 @@ class GraphData(object):
             self.data[pos] = val
 
     def get_data(self):
-        """ get_data(self) -> [(int, float), (int, float), ...]
+        """get_data(self) -> [(int, float), (int, float), ...]
 
             Return data as a list of sorted (position, value) tuples
         """
@@ -154,7 +154,7 @@ class GraphData(object):
         return data
 
     def add_point(self, point):
-        """ add_point(self, point)
+        """add_point(self, point)
 
             o point     (position, value) tuple
 
@@ -164,7 +164,7 @@ class GraphData(object):
         self.data[pos] = val
 
     def quartiles(self):
-        """ quartiles(self) -> (float, float, float, float, float)
+        """quartiles(self) -> (float, float, float, float, float)
 
             Returns the (minimum, lowerQ, medianQ, upperQ, maximum) values as
             a tuple
@@ -175,7 +175,7 @@ class GraphData(object):
                data[3 * datalen // 4], data[-1])
 
     def range(self):
-        """ range(self) -> (int, int)
+        """range(self) -> (int, int)
 
             Returns the range of the data, i.e. its start and end points on
             the genome as a (start, end) tuple
@@ -186,7 +186,7 @@ class GraphData(object):
         return (positions[0], positions[-1])
 
     def mean(self):
-        """ mean(self) -> Float
+        """mean(self) -> Float
 
             Returns the mean value for the data points
         """
@@ -197,7 +197,7 @@ class GraphData(object):
         return sum / len(data)
 
     def stdev(self):
-        """ stdev(self) -> Float
+        """stdev(self) -> Float
 
             Returns the sample standard deviation for the data
         """
@@ -211,14 +211,14 @@ class GraphData(object):
         return sqrt(runtotal / (len(data) - 1))
 
     def __len__(self):
-        """ __len__(self) -> Int
+        """__len__(self) -> Int
 
             Returns the number of points in the data set
         """
         return len(self.data)
 
     def __getitem__(self, index):
-        """ __getitem__(self, index) -> Float or list of tuples
+        """__getitem__(self, index) -> Float or list of tuples
 
             Given an integer representing position on the sequence
             returns a float - the data value at the passed position.
@@ -246,7 +246,7 @@ class GraphData(object):
             raise TypeError("Need an integer or a slice")
 
     def __str__(self):
-        """ __str__(self) -> ""
+        """__str__(self) -> ""
 
             Returns a string describing the graph data
         """
