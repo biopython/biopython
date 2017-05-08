@@ -264,7 +264,7 @@ class ForwardOnlyHandle(object):
 
 
 def compare_record(record_one, record_two):
-    """This is meant to be a strict comparison for exact agreement..."""
+    """Attempt strict SeqRecord comparison."""
     assert isinstance(record_one, SeqRecord)
     assert isinstance(record_two, SeqRecord)
     assert record_one.seq is not None
