@@ -326,7 +326,7 @@ class Motif(object):
         return self.pwm.log_odds(self._background)
 
     def __str__(self, masked=False):
-        """ String representation of a motif."""
+        """String representation of a motif."""
         text = ""
         if self.instances is not None:
             text += str(self.instances)

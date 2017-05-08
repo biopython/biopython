@@ -1256,7 +1256,7 @@ class SeqretCommandline(_EmbossMinimalCommandLine):
 
 
 class SeqmatchallCommandline(_EmbossCommandLine):
-    """ Commandline object for the seqmatchall program from EMBOSS
+    """Commandline object for the seqmatchall program from EMBOSS
 
     e.g.
     >>> cline = SeqmatchallCommandline(sequence="opuntia.fasta", outfile="opuntia.txt")

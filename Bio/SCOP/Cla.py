@@ -5,7 +5,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-""" Handle the SCOP CLAssification file, which describes SCOP domains.
+"""Handle the SCOP CLAssification file, which describes SCOP domains.
 
 The file format is described in the scop
 "release notes.":http://scop.mrc-lmb.cam.ac.uk/scop/release-notes.html

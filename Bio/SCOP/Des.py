@@ -4,7 +4,7 @@
 # as part of this package.
 
 
-""" Handle the SCOP DEScription file.
+"""Handle the SCOP DEScription file.
 
 The file format is described in the scop
 "release notes.":http://scop.berkeley.edu/release-notes-1.55.html

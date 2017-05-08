@@ -3,7 +3,7 @@
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
 
-""" Classes and methods for finding consensus trees.
+"""Classes and methods for finding consensus trees.
 
 This module contains a ``_BitString`` class to assist the consensus tree
 searching and some common consensus algorithms such as strict, majority rule and

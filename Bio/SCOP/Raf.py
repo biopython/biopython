@@ -79,7 +79,7 @@ class SeqMapIndex(dict):
                 position = f.tell()
 
     def __getitem__(self, key):
-        """ Return an item from the indexed file. """
+        """Return an item from the indexed file."""
         position = dict.__getitem__(self, key)
 
         with open(self.filename, _universal_read_mode) as f:
@@ -287,7 +287,7 @@ class SeqMap(object):
 
 
 class Res(object):
-    """ A single residue mapping from a RAF record.
+    """A single residue mapping from a RAF record.
 
     chainid -- A single character chain ID.
 
