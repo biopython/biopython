@@ -12,6 +12,7 @@ from Bio._py3k import StringIO
 
 E_VALUE_THRESH = 1e-10
 
+
 class TestNCBIXML(unittest.TestCase):
     """Test different XML files generated via different version of BLAST."""
 
@@ -1746,7 +1747,7 @@ class TestNCBIXML(unittest.TestCase):
         handle.close()
 
     def test_xml_2218L_rpsblast_001(self):
-        """Parse PSI-BLASTP 2.2.18, single query which converges in 3 iterations (xml_2218L_rpsblast_001)."""
+        """Parse RSP-BLAST 2.2.18, single query which converges in 3 iterations (xml_2218L_rpsblast_001)."""
         # This is from old pgpblast command line tool, NOT new psiblast
         # NOTE - The parser currently returns three BLAST record objects.
         # The old text parser would return a single PSI BLAST record object with three rounds.
