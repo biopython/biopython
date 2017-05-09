@@ -1,9 +1,3 @@
-# Copyright 2017 by Francesco Gastaldello. All rights reserved.
-# Revisions copyright 2017 by Peter Cock.  All rights reserved.
-#
-# Converted by Francesco Gastaldello from an older unit test copyright 2002
-# by Thomas Hamelryck.
-#
 # This file is part of the Biopython distribution and governed by your
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
 # Please see the LICENSE file that should have been included as part of this
@@ -24,7 +18,7 @@ from Bio.PDB import MMCIFParser, FastMMCIFParser
 
 class MMCIFParserTests(unittest.TestCase):
     r"""Test module MMCIFParser with CIF files located in TEst\PDB."""
-    
+
     def test_MMCIFParser(self):
         """Test method MMCIFParser when reading a CIF file."""
         filename = "PDB/1A8O.cif"
