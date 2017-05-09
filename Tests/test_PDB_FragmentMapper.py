@@ -1,0 +1,40 @@
+# Copyright 2017 by Sourav Singh. All rights reserved.
+# Revisions copyright 2017 by Peter Cock.  All rights reserved.
+#
+# Converted by Francesco Gastaldello from an older unit test copyright 2002
+# by Thomas Hamelryck.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
+
+import unittest
+
+try:
+    import numpy
+except ImportError:
+    from Bio import MissingPythonDependencyError
+    raise MissingPythonDependencyError(
+        "Install NumPy if you want to use Bio.PDB.")
+
+from Bio.PDB import FragmentMapper
+
+class FragmentMapperTests(unittest.TestCase):
+    """Tests for FragmentMapper module."""
+    
+    def test_fragment_mapper(self):
+        """Self test for FragmentMapper module."""
+        p = PDBParser()
+        pdb1 = "PDB/1A8O.pdb"
+        s = p.get_structure("X", pdb1)
+        m = s[0]
+        fm = FragmentMapper(m, 10, 5, "levitt_data")
+        for r in Selection.unfold_entities(m, "R"):
+            self.assertEqual(str(r), "R")
+            if r in fm:
+                self.assertTrue(str(fm[r]).startswith("<Fragment length=5 id="))
+                
+if __name__ == '__main__':
+    runner = unittest.TextTestRunner(verbosity=2)
+    unittest.main(testRunner=runner) 
