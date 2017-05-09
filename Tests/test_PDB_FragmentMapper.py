@@ -18,6 +18,7 @@ except ImportError:
     raise MissingPythonDependencyError(
         "Install NumPy if you want to use Bio.PDB.")
 
+from Bio.PDB import PDBParser
 from Bio.PDB import FragmentMapper
 
 class FragmentMapperTests(unittest.TestCase):
