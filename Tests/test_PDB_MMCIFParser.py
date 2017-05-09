@@ -17,7 +17,7 @@ from Bio.PDB import MMCIFParser, FastMMCIFParser
 
 
 class MMCIFParserTests(unittest.TestCase):
-    r"""Test module MMCIFParser with CIF files located in TEst\PDB."""
+    """Test for MMCIFParser."""
 
     def test_MMCIFParser(self):
         """Test method MMCIFParser when reading a CIF file."""
@@ -29,7 +29,7 @@ class MMCIFParserTests(unittest.TestCase):
         self.assertEqual("-".join(res_list), 'MSE-ASP-ILE-ARG-GLN-GLY-PRO-LYS-GLU-PRO-PHE-ARG-ASP-TYR-VAL-ASP-ARG-PHE-TYR-LYS-THR-LEU-ARG-ALA-GLU-GLN-ALA-SER-GLN-GLU-VAL-LYS-ASN-TRP-MSE-THR-GLU-THR-LEU-LEU-VAL-GLN-ASN-ALA-ASN-PRO-ASP-CYS-LYS-THR-ILE-LEU-LYS-ALA-LEU-GLY-PRO-GLY-ALA-THR-LEU-GLU-GLU-MSE-MSE-THR-ALA-CYS-GLN-GLY-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH-HOH')
 
     def test_FastMMCIFParser(self):
-        """Test alternative version of the previous method when reading a CIF file."""
+        """Test FastMMCIFParser when reading a CIF file."""
         filename = "PDB/1A8O.cif"
         p = FastMMCIFParser()
         structure = p.get_structure("test", filename)
