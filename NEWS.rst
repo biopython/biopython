@@ -11,7 +11,8 @@ The latest news is at the top of this file.
 (In progress, not yet released) Biopython 1.71
 ==============================================
 
-Nothing note worthy as yet.
+Internal changes to Bio.SeqIO have sped up the SeqRecord .format method and
+SeqIO.write (especially when used in a for loop).
 
 
 3 April 2018: Biopython 1.71
@@ -121,7 +122,6 @@ possible, especially the following contributors:
 - Yasar L. Ahmed (first contribution)
 - Zachary Sailer (first contribution)
 - Zaid Ur-Rehman (first contribution)
-
 
 
 10 July 2017: Biopython 1.70
