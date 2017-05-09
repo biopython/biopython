@@ -3,17 +3,20 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+"""Module to handle XML file generated via NCBI BLAST."""
+
 import os
 import unittest
 from Bio.Blast import NCBIXML
+from Bio._py3k import StringIO
 
 E_VALUE_THRESH = 1e-10
 
-
 class TestNCBIXML(unittest.TestCase):
+    """Test different XML files generated via different version of BLAST."""
 
     def test_xml_2212L_blastp_001(self):
-        "Parsing BLASTP 2.2.12,gi|49176427|ref|NP_418280.3| (xml_2212L_blastp_001)"
+        """Parse BLASTP 2.2.12,gi|49176427|ref|NP_418280.3| (xml_2212L_blastp_001)."""
         filename = 'xml_2212L_blastp_001.xml'
         datafile = os.path.join("Blast", filename)
         handle = open(datafile)
@@ -1397,8 +1400,7 @@ class TestNCBIXML(unittest.TestCase):
         handle.close()
 
     def test_xml_2212L_blastn_001(self):
-        "Parsing BLASTN 2.2.12, gi|1348916|gb|G26684.1|G26684 (xml_2212L_blastn_001)"
-
+        """Parse BLASTN 2.2.12, gi|1348916|gb|G26684.1|G26684 (xml_2212L_blastn_001)."""
         filename = 'xml_2212L_blastn_001.xml'
         datafile = os.path.join("Blast", filename)
         handle = open(datafile)
@@ -1426,8 +1428,7 @@ class TestNCBIXML(unittest.TestCase):
         handle.close()
 
     def test_xml_2212L_blastx_001(self):
-        "Parsing BLASTX 2.2.12, gi|1347369|gb|G25137.1|G25137 (xml_2212L_blastx_001)"
-
+        """Parse BLASTX 2.2.12, gi|1347369|gb|G25137.1|G25137 (xml_2212L_blastx_001)."""
         filename = 'xml_2212L_blastx_001.xml'
         datafile = os.path.join("Blast", filename)
 
@@ -1446,8 +1447,7 @@ class TestNCBIXML(unittest.TestCase):
         handle.close()
 
     def test_xml_2212L_tblastn_001(self):
-        "Parsing TBLASTN 2.2.12, gi|729325|sp|P39483|DHG2_BACME (xml_2212L_tblastn_001)"
-
+        """Parse TBLASTN 2.2.12, gi|729325|sp|P39483|DHG2_BACME (xml_2212L_tblastn_001)."""
         filename = 'xml_2212L_tblastn_001.xml'
         datafile = os.path.join("Blast", filename)
 
@@ -1466,8 +1466,7 @@ class TestNCBIXML(unittest.TestCase):
         handle.close()
 
     def test_xml_2212L_tblastx_001(self):
-        "Parsing TBLASTX 2.2.12, gi|1348853|gb|G26621.1|G26621, BLOSUM80 (xml_2212L_tblastx_001)"
-
+        """Parse TBLASTX 2.2.12, gi|1348853|gb|G26621.1|G26621, BLOSUM80 (xml_2212L_tblastx_001)."""
         filename = 'xml_2212L_tblastx_001.xml'
         datafile = os.path.join("Blast", filename)
 
@@ -1486,9 +1485,8 @@ class TestNCBIXML(unittest.TestCase):
         handle.close()
 
     def test_xml_2218_blastp_001(self):
-        "Parsing BLASTP 2.2.18+, gi|160837788|ref|NP_075631.2| (xml_2218_blastp_001)"
+        """Parse BLASTP 2.2.18+, gi|160837788|ref|NP_075631.2| (xml_2218_blastp_001)."""
         # NOTE - no date in version field, downloaded 2008/05/08
-
         filename = 'xml_2218_blastp_001.xml'
         datafile = os.path.join("Blast", filename)
 
@@ -1553,8 +1551,7 @@ class TestNCBIXML(unittest.TestCase):
         handle.close()
 
     def test_xml_2218_blastp_002(self):
-        "Parsing BLASTP 2.2.18+, SwissProt Q08386 and P07175, no hits (xml_2218_blastp_002)"
-
+        """Parse BLASTP 2.2.18+, SwissProt Q08386 and P07175, no hits (xml_2218_blastp_002)."""
         filename = 'xml_2218_blastp_002.xml'
         datafile = os.path.join("Blast", filename)
         handle = open(datafile)
@@ -1569,8 +1566,7 @@ class TestNCBIXML(unittest.TestCase):
         handle.close()
 
     def test_xml_2218L_blastp_001(self):
-        "Parsing BLASTP 2.2.18, Fake query (xml_2218L_blastp_001)"
-
+        """Parse BLASTP 2.2.18, Fake query (xml_2218L_blastp_001)."""
         filename = 'xml_2218L_blastp_001.xml'
         datafile = os.path.join("Blast", filename)
 
@@ -1588,9 +1584,8 @@ class TestNCBIXML(unittest.TestCase):
         handle.close()
 
     def test_xml_2222_blastx_001(self):
-        "Parsing BLASTX 2.2.22+, multiple queries against NR (xml_2222_blastx_001)"
+        """Parse BLASTX 2.2.22+, multiple queries against NR (xml_2222_blastx_001)."""
         # See also plain text file bt081.txt (matching output from blastx tool)
-
         filename = 'xml_2222_blastx_001.xml'
         datafile = os.path.join("Blast", filename)
 
@@ -1712,9 +1707,8 @@ class TestNCBIXML(unittest.TestCase):
         handle.close()
 
     def test_xml_2222_blastp_001(self):
-        "Parsing BLASTP 2.2.22+, multiple queries against NR (xml_2222_blastp_001)"
+        """Parse BLASTP 2.2.22+, multiple queries against NR (xml_2222_blastp_001)."""
         # This is from blastp NOT blastall
-
         filename = 'xml_2222_blastp_001.xml'
         datafile = os.path.join("Blast", filename)
 
@@ -1752,12 +1746,11 @@ class TestNCBIXML(unittest.TestCase):
         handle.close()
 
     def test_xml_2218L_rpsblast_001(self):
-        "Parsing PSI-BLASTP 2.2.18, single query which converges in 3 iterations (xml_2218L_rpsblast_001)"
+        """Parse PSI-BLASTP 2.2.18, single query which converges in 3 iterations (xml_2218L_rpsblast_001)."""
         # This is from old pgpblast command line tool, NOT new psiblast
         # NOTE - The parser currently returns three BLAST record objects.
         # The old text parser would return a single PSI BLAST record object with three rounds.
         # This may change... although it may require a PSI BLAST specific XML parser.
-
         filename = 'xml_2218L_rpsblast_001.xml'
         datafile = os.path.join("Blast", filename)
 
@@ -1865,8 +1858,7 @@ class TestNCBIXML(unittest.TestCase):
         handle.close()
 
     def test_xml_2226_blastn_001(self):
-        "Parsing BLASTN 2.2.26+, Query_1 (xml_2226_blastn_001)"
-
+        """Parse BLASTN 2.2.26+, Query_1 (xml_2226_blastn_001)."""
         filename = 'xml_2226_blastn_001.xml'
         datafile = os.path.join("Blast", filename)
         handle = open(datafile)
@@ -1935,8 +1927,7 @@ class TestNCBIXML(unittest.TestCase):
         handle.close()
 
     def test_xml_2226_blastn_002(self):
-        "Parsing BLASTN 2.2.26+, Query_1 (xml_2226_blastn_002)"
-
+        """Parse BLASTN 2.2.26+, Query_1 (xml_2226_blastn_002)."""
         filename = 'xml_2226_blastn_002.xml'
         datafile = os.path.join("Blast", filename)
         handle = open(datafile)
@@ -1951,8 +1942,7 @@ class TestNCBIXML(unittest.TestCase):
         handle.close()
 
     def test_xml_2226_blastn_003(self):
-        "Parsing BLASTN 2.2.26+, Query_1 (xml_2226_blastn_003)"
-
+        """Parse BLASTN 2.2.26+, Query_1 (xml_2226_blastn_003)."""
         filename = 'xml_2226_blastn_003.xml'
         datafile = os.path.join("Blast", filename)
         handle = open(datafile)
@@ -1988,8 +1978,7 @@ class TestNCBIXML(unittest.TestCase):
         handle.close()
 
     def test_xml_2226_blastn_004(self):
-        "Parsing BLASTN 2.2.26+, hg19_dna range=chr1:1207307-1207372 5'pad=0 3'pad=0 strand=+ repeatMasking=none (xml_2226_blastn_004)"
-
+        """Parse BLASTN 2.2.26+, hg19_dna range=chr1:1207307-1207372 5'pad=0 3'pad=0 strand=+ repeatMasking=none (xml_2226_blastn_004)."""
         filename = 'xml_2226_blastn_004.xml'
         datafile = os.path.join("Blast", filename)
         handle = open(datafile)
@@ -2026,8 +2015,7 @@ class TestNCBIXML(unittest.TestCase):
         handle.close()
 
     def test_xml_2226_blastn_005(self):
-        "Parsing BLASTN 2.2.26+, Query_1 (xml_2226_blastn_005)"
-
+        """Parse BLASTN 2.2.26+, Query_1 (xml_2226_blastn_005)."""
         filename = 'xml_2226_blastn_005.xml'
         datafile = os.path.join("Blast", filename)
         handle = open(datafile)
@@ -2095,8 +2083,7 @@ class TestNCBIXML(unittest.TestCase):
         handle.close()
 
     def test_xml_2226_blastn_006(self):
-        "Parsing BLASTN 2.2.26+, Query_1 (xml_2226_blastn_006)"
-
+        """Parse BLASTN 2.2.26+, Query_1 (xml_2226_blastn_006)."""
         filename = 'xml_2226_blastn_006.xml'
         datafile = os.path.join("Blast", filename)
         handle = open(datafile)
@@ -2120,9 +2107,8 @@ class TestNCBIXML(unittest.TestCase):
         handle.close()
 
     def test_xml_2226_blastp_001(self):
-        "Parsing BLASTP 2.2.26+, gi|11464971:4-101 pleckstrin [Mus musculus]  (xml_2226_blastp_001)"
+        """Parse BLASTP 2.2.26+, gi|11464971:4-101 pleckstrin [Mus musculus]  (xml_2226_blastp_001)."""
         # NOTE - no date in version field, downloaded 2008/05/08
-
         filename = 'xml_2226_blastp_001.xml'
         datafile = os.path.join("Blast", filename)
 
@@ -2195,9 +2181,8 @@ class TestNCBIXML(unittest.TestCase):
         handle.close()
 
     def test_xml_2226_blastp_002(self):
-        "Parsing BLASTP 2.2.26+,random_s00 (xml_2226_blastp_002)"
+        """Parse BLASTP 2.2.26+,random_s00 (xml_2226_blastp_002)."""
         # NOTE - no date in version field, downloaded 2008/05/08
-
         filename = 'xml_2226_blastp_002.xml'
         datafile = os.path.join("Blast", filename)
 
@@ -2213,9 +2198,8 @@ class TestNCBIXML(unittest.TestCase):
         handle.close()
 
     def test_xml_2226_blastp_003(self):
-        "Parsing BLASTP 2.2.26+, gi|16080617|ref|NP_391444.1| membrane bound lipoprotein [Bacillus subtilis subsp. subtilis str. 168]  (xml_2226_blastp_003)"
+        """Parse BLASTP 2.2.26+, gi|16080617|ref|NP_391444.1| membrane bound lipoprotein [Bacillus subtilis subsp. subtilis str. 168]  (xml_2226_blastp_003)."""
         # NOTE - no date in version field, downloaded 2008/05/08
-
         filename = 'xml_2226_blastp_003.xml'
         datafile = os.path.join("Blast", filename)
 
@@ -2252,9 +2236,8 @@ class TestNCBIXML(unittest.TestCase):
         handle.close()
 
     def test_xml_2226_blastp_004(self):
-        "Parsing BLASTP 2.2.26+, gi|11464971:4-101 pleckstrin [Mus musculus]  (xml_2226_blastp_004)"
+        """Parse BLASTP 2.2.26+, gi|11464971:4-101 pleckstrin [Mus musculus]  (xml_2226_blastp_004)."""
         # NOTE - no date in version field, downloaded 2008/05/08
-
         filename = 'xml_2226_blastp_004.xml'
         datafile = os.path.join("Blast", filename)
 
@@ -2296,9 +2279,8 @@ class TestNCBIXML(unittest.TestCase):
         handle.close()
 
     def test_xml_2226_blastp_005(self):
-        "Parsing BLASTP 2.2.26+, random_s00 (xml_2226_blastp_005)"
+        """Parse BLASTP 2.2.26+, random_s00 (xml_2226_blastp_005)."""
         # NOTE - no date in version field, downloaded 2008/05/08
-
         filename = 'xml_2226_blastp_005.xml'
         datafile = os.path.join("Blast", filename)
 
@@ -2371,9 +2353,8 @@ class TestNCBIXML(unittest.TestCase):
         handle.close()
 
     def test_xml_2226_blastx_001(self):
-        "Parsing BLASTX 2.2.26+, random_s00 (xml_2226_blastx_001)"
+        """Parse BLASTX 2.2.26+, random_s00 (xml_2226_blastx_001)."""
         # NOTE - no date in version field, downloaded 2008/05/08
-
         filename = 'xml_2226_blastx_001.xml'
         datafile = os.path.join("Blast", filename)
 
@@ -2427,9 +2408,8 @@ class TestNCBIXML(unittest.TestCase):
         handle.close()
 
     def test_xml_2226_blastx_002(self):
-        "Parsing BLASTX 2.2.26+, random_s00 (xml_2226_blastx_002)"
+        """Parse BLASTX 2.2.26+, random_s00 (xml_2226_blastx_002)."""
         # NOTE - no date in version field, downloaded 2008/05/08
-
         filename = 'xml_2226_blastx_002.xml'
         datafile = os.path.join("Blast", filename)
 
@@ -2445,9 +2425,8 @@ class TestNCBIXML(unittest.TestCase):
         handle.close()
 
     def test_xml_2226_blastx_003(self):
-        "Parsing BLASTX 2.2.26+, hg19_dna range=chr1:1207057-1207541 5'pad=0 3'pad=0 strand=+ repeatMasking=none (xml_2226_blastx_003)"
+        """Parse BLASTX 2.2.26+, hg19_dna range=chr1:1207057-1207541 5'pad=0 3'pad=0 strand=+ repeatMasking=none (xml_2226_blastx_003)."""
         # NOTE - no date in version field, downloaded 2008/05/08
-
         filename = 'xml_2226_blastx_003.xml'
         datafile = os.path.join("Blast", filename)
 
@@ -2496,9 +2475,8 @@ class TestNCBIXML(unittest.TestCase):
         handle.close()
 
     def test_xml_2226_blastx_004(self):
-        "Parsing BLASTX 2.2.26+, random_s00 (xml_2226_blastx_004)"
+        """Parse BLASTX 2.2.26+, random_s00 (xml_2226_blastx_004)."""
         # NOTE - no date in version field, downloaded 2008/05/08
-
         filename = 'xml_2226_blastx_004.xml'
         datafile = os.path.join("Blast", filename)
 
@@ -2544,9 +2522,8 @@ class TestNCBIXML(unittest.TestCase):
         handle.close()
 
     def test_xml_2226_tblastn_001(self):
-        "Parsing TBLASTN 2.2.26+, random_s00 (xml_2226_tblastn_001)"
+        """Parse TBLASTN 2.2.26+, random_s00 (xml_2226_tblastn_001)."""
         # NOTE - no date in version field, downloaded 2008/05/08
-
         filename = 'xml_2226_tblastn_001.xml'
         datafile = os.path.join("Blast", filename)
 
@@ -2610,9 +2587,8 @@ class TestNCBIXML(unittest.TestCase):
         handle.close()
 
     def test_xml_2226_tblastn_002(self):
-        "Parsing TBLASTN 2.2.26+, random_s00 (xml_2226_tblastn_002)"
+        """Parse TBLASTN 2.2.26+, random_s00 (xml_2226_tblastn_002)."""
         # NOTE - no date in version field, downloaded 2008/05/08
-
         filename = 'xml_2226_tblastn_002.xml'
         datafile = os.path.join("Blast", filename)
 
@@ -2628,9 +2604,8 @@ class TestNCBIXML(unittest.TestCase):
         handle.close()
 
     def test_xml_2226_tblastn_003(self):
-        "Parsing TBLASTN 2.2.26+, random_s00 (xml_2226_tblastn_003)"
+        """Parse TBLASTN 2.2.26+, random_s00 (xml_2226_tblastn_003)."""
         # NOTE - no date in version field, downloaded 2008/05/08
-
         filename = 'xml_2226_tblastn_003.xml'
         datafile = os.path.join("Blast", filename)
 
@@ -2659,7 +2634,7 @@ class TestNCBIXML(unittest.TestCase):
         handle.close()
 
     def test_xml_2226_tblastn_004(self):
-        "Parsing TBLASTN 2.2.26+, gi|11464971:4-101 pleckstrin [Mus musculus] (xml_2226_tblastn_004)"
+        """Parse TBLASTN 2.2.26+, gi|11464971:4-101 pleckstrin [Mus musculus] (xml_2226_tblastn_004)."""
         # NOTE - no date in version field, downloaded 2008/05/08
 
         filename = 'xml_2226_tblastn_004.xml'
@@ -2702,9 +2677,8 @@ class TestNCBIXML(unittest.TestCase):
         handle.close()
 
     def test_xml_2226_tblastn_005(self):
-        "Parsing TBLASTN 2.2.26+, random_s00 (xml_2226_tblastn_005)"
+        """Parse TBLASTN 2.2.26+, random_s00 (xml_2226_tblastn_005)."""
         # NOTE - no date in version field, downloaded 2008/05/08
-
         filename = 'xml_2226_tblastn_005.xml'
         datafile = os.path.join("Blast", filename)
 
@@ -2769,48 +2743,509 @@ class TestNCBIXML(unittest.TestCase):
         handle.close()
 
     def test_xml_2226_tblastn_006_err(self):
-        "Parsing TBLASTN 2.2.26+, random_s00 (xml_2226_tblastn_006_err)"
-        # NOTE - no date in version field, downloaded 2008/05/08
+        """Parse TBLASTN 2.2.26+."""
+        handle = StringIO("""<?xml version="1.0"?>
+                      <!DOCTYPE BlastOutput PUBLIC "-//NCBI//NCBI BlastOutput/EN" "http://www.ncbi.nlm.nih.gov/dtd/NCBI_BlastOutput.dtd">
+                        <BlastOutput>
+                          <BlastOutput_program>tblastn</BlastOutput_program>
+                          <BlastOutput_version>TBLASTN 2.2.26+</BlastOutput_version>
+                          <BlastOutput_reference>Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&amp;auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), &quot;Gapped BLAST and PSI-BLAST: a new generation of protein database search programs&quot;, Nucleic Acids Res. 25:3389-3402.</BlastOutput_reference>
+                          <BlastOutput_db>db/minirefseq_mrna</BlastOutput_db>
+                          <BlastOutput_query-ID>Query_1</BlastOutput_query-ID>
+                          <BlastOutput_query-def>random_s00</BlastOutput_query-def>
+                          <BlastOutput_query-len>32</BlastOutput_query-len>
+                          <BlastOutput_param>
+                            <Parameters>
+                              <Parameters_matrix>BLOSUM62</Parameters_matrix>
+                              <Parameters_expect>10</Parameters_expect>
+                              <Parameters_gap-open>11</Parameters_gap-open>
+                              <Parameters_gap-extend>1</Parameters_gap-extend>
+                              <Parameters_filter>L;</Parameters_filter>
+                            </Parameters>
+                          </BlastOutput_param>
+                          <BlastOutput_iterations>
+                          </BlastOutput_iterations>
+                        </BlastOutput>
+                        """)
 
-        filename = 'xml_2226_tblastn_006_err.xml'
-        datafile = os.path.join("Blast", filename)
-
-        handle = open(datafile)
         self.assertRaises(ValueError, NCBIXML.read, handle)
         handle.close()
 
     def test_xml_2226_tblastn_007_err(self):
-        "Parsing TBLASTN 2.2.26+, random_s00 (xml_2226_tblastn_007_err)"
-        # NOTE - no date in version field, downloaded 2008/05/08
-
-        filename = 'xml_2226_tblastn_007_err.xml'
-        datafile = os.path.join("Blast", filename)
-
-        handle = open(datafile)
+        """Parse TBLASTN 2.2.26+."""
+        handle = StringIO("""this is an empty file to test the method NCBIXML.handle()
+                            <?xml version="1.0"?>
+                            <!DOCTYPE BlastOutput PUBLIC "-//NCBI//NCBI BlastOutput/EN" "http://www.ncbi.nlm.nih.gov/dtd/NCBI_BlastOutput.dtd">
+                            <BlastOutput>
+                              <BlastOutput_program>tblastn</BlastOutput_program>
+                              <BlastOutput_version>TBLASTN 2.2.26+</BlastOutput_version>
+                              <BlastOutput_reference>Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&amp;auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), &quot;Gapped BLAST and PSI-BLAST: a new generation of protein database search programs&quot;, Nucleic Acids Res. 25:3389-3402.</BlastOutput_reference>
+                              <BlastOutput_db>db/minirefseq_mrna</BlastOutput_db>
+                              <BlastOutput_query-ID>Query_1</BlastOutput_query-ID>
+                              <BlastOutput_query-def>random_s00</BlastOutput_query-def>
+                              <BlastOutput_query-len>32</BlastOutput_query-len>
+                              <BlastOutput_param>
+                                <Parameters>
+                                  <Parameters_matrix>BLOSUM62</Parameters_matrix>
+                                  <Parameters_expect>10</Parameters_expect>
+                                  <Parameters_gap-open>11</Parameters_gap-open>
+                                  <Parameters_gap-extend>1</Parameters_gap-extend>
+                                  <Parameters_filter>L;</Parameters_filter>
+                                </Parameters>
+                              </BlastOutput_param>
+                              <BlastOutput_iterations>
+                              </BlastOutput_iterations>
+                            </BlastOutput>
+                            """)
         records = NCBIXML.parse(handle)
         self.assertRaises(ValueError, next, records)
         handle.close()
 
     def test_xml_2226_tblastn_008_err(self):
-        "Parsing TBLASTN 2.2.26+, random_s00 (xml_2226_tblastn_008_err)"
-        # NOTE - no date in version field, downloaded 2008/05/08
-
-        filename = 'xml_2226_tblastn_008_err.xml'
-        datafile = os.path.join("Blast", filename)
-
-        handle = open(datafile)
+        """Parse TBLASTN 2.2.26+."""
+        handle = StringIO("")
         records = NCBIXML.parse(handle)
         self.assertRaises(ValueError, next, records)
         handle.close()
 
     def test_xml_2226_tblastn_009_err(self):
-        "Parsing TBLASTN 2.2.26+, random_s00 (xml_2226_tblastn_009_err)"
-        # NOTE - no date in version field, downloaded 2008/05/08
-
-        filename = 'xml_2226_tblastn_009_err.xml'
-        datafile = os.path.join("Blast", filename)
-
-        handle = open(datafile)
+        """Parse TBLASTN 2.2.26+."""
+        handle = StringIO("""<?xml version="1.0"?>
+                                <!DOCTYPE BlastOutput PUBLIC "-//NCBI//NCBI BlastOutput/EN" "http://www.ncbi.nlm.nih.gov/dtd/NCBI_BlastOutput.dtd">
+                                <BlastOutput>
+                                  <BlastOutput_program>tblastn</BlastOutput_program>
+                                  <BlastOutput_version>TBLASTN 2.2.26+</BlastOutput_version>
+                                  <BlastOutput_reference>Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&amp;auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), &quot;Gapped BLAST and PSI-BLAST: a new generation of protein database search programs&quot;, Nucleic Acids Res. 25:3389-3402.</BlastOutput_reference>
+                                  <BlastOutput_db>refseq_rna</BlastOutput_db>
+                                  <BlastOutput_query-ID>Query_1</BlastOutput_query-ID>
+                                  <BlastOutput_query-def>random_s00</BlastOutput_query-def>
+                                  <BlastOutput_query-len>32</BlastOutput_query-len>
+                                  <BlastOutput_param>
+                                    <Parameters>
+                                      <Parameters_matrix>BLOSUM62</Parameters_matrix>
+                                      <Parameters_expect>10</Parameters_expect>
+                                      <Parameters_gap-open>11</Parameters_gap-open>
+                                      <Parameters_gap-extend>1</Parameters_gap-extend>
+                                      <Parameters_filter>L;</Parameters_filter>
+                                    </Parameters>
+                                  </BlastOutput_param>
+                                  <BlastOutput_iterations>
+                                    <Iteration>
+                                      <Iteration_iter-num>1</Iteration_iter-num>
+                                      <Iteration_query-ID>Query_1</Iteration_query-ID>
+                                      <Iteration_query-def>random_s00</Iteration_query-def>
+                                      <Iteration_query-len>32</Iteration_query-len>
+                                      <Iteration_hits></Iteration_hits>
+                                      <Iteration_stat>
+                                        <Statistics>
+                                          <Statistics_db-num>2933984</Statistics_db-num>
+                                          <Statistics_db-len>4726730735</Statistics_db-len>
+                                          <Statistics_hsp-len>0</Statistics_hsp-len>
+                                          <Statistics_eff-space>0</Statistics_eff-space>
+                                          <Statistics_kappa>0.041</Statistics_kappa>
+                                          <Statistics_lambda>0.267</Statistics_lambda>
+                                          <Statistics_entropy>0.14</Statistics_entropy>
+                                        </Statistics>
+                                      </Iteration_stat>
+                                      <Iteration_message>Warning: conversion_warning: Could not calculate ungapped Karlin-Altschul parameters due to an invalid query sequence or its translation. Please verify the query sequence(s) and/or filtering options Warning: conversion_warning: Query &apos;lcl|Query_1 random_s00&apos; (# 1): Warning: Could not calculate ungapped Karlin-Altschul parameters due to an invalid query sequence or its translation. Please verify the query sequence(s) and/or filtering options  No hits found</Iteration_message>
+                                    </Iteration>
+                                  </BlastOutput_iterations>
+                                  <BlastOutput_program>tblastn</BlastOutput_program>
+                                  <BlastOutput_version>TBLASTN 2.2.26+</BlastOutput_version>
+                                  <BlastOutput_reference>Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&amp;auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), &quot;Gapped BLAST and PSI-BLAST: a new generation of protein database search programs&quot;, Nucleic Acids Res. 25:3389-3402.</BlastOutput_reference>
+                                  <BlastOutput_db>refseq_rna</BlastOutput_db>
+                                  <BlastOutput_query-ID>Query_1</BlastOutput_query-ID>
+                                  <BlastOutput_query-def>random_s00</BlastOutput_query-def>
+                                  <BlastOutput_query-len>32</BlastOutput_query-len>
+                                  <BlastOutput_param>
+                                    <Parameters>
+                                      <Parameters_matrix>BLOSUM62</Parameters_matrix>
+                                      <Parameters_expect>10</Parameters_expect>
+                                      <Parameters_gap-open>11</Parameters_gap-open>
+                                      <Parameters_gap-extend>1</Parameters_gap-extend>
+                                      <Parameters_filter>L;</Parameters_filter>
+                                    </Parameters>
+                                  </BlastOutput_param>
+                                  <BlastOutput_iterations>
+                                  <Iteration>
+                                      <Iteration_iter-num>2</Iteration_iter-num>
+                                      <Iteration_query-ID>Query_2</Iteration_query-ID>
+                                      <Iteration_query-def>gi|16080617|ref|NP_391444.1| membrane bound lipoprotein [Bacillus subtilis subsp. subtilis str. 168]</Iteration_query-def>
+                                      <Iteration_query-len>102</Iteration_query-len>
+                                      <Iteration_hits>
+                                        <Hit>
+                                          <Hit_num>1</Hit_num>
+                                          <Hit_id>gi|145479850|ref|XM_001425911.1|</Hit_id>
+                                          <Hit_def>Paramecium tetraurelia hypothetical protein (GSPATT00004923001) partial mRNA</Hit_def>
+                                          <Hit_accession>XM_001425911</Hit_accession>
+                                          <Hit_len>4632</Hit_len>
+                                          <Hit_hsps>
+                                            <Hsp>
+                                              <Hsp_num>1</Hsp_num>
+                                              <Hsp_bit-score>34.6538</Hsp_bit-score>
+                                              <Hsp_score>78</Hsp_score>
+                                              <Hsp_evalue>0.755176</Hsp_evalue>
+                                              <Hsp_query-from>31</Hsp_query-from>
+                                              <Hsp_query-to>73</Hsp_query-to>
+                                              <Hsp_hit-from>1744</Hsp_hit-from>
+                                              <Hsp_hit-to>1872</Hsp_hit-to>
+                                              <Hsp_query-frame>0</Hsp_query-frame>
+                                              <Hsp_hit-frame>1</Hsp_hit-frame>
+                                              <Hsp_identity>15</Hsp_identity>
+                                              <Hsp_positive>26</Hsp_positive>
+                                              <Hsp_gaps>0</Hsp_gaps>
+                                              <Hsp_align-len>43</Hsp_align-len>
+                                              <Hsp_qseq>PDSNIETKEGTYVGLADTHTIEVTVDNEPVSLDITEESTSDLD</Hsp_qseq>
+                                              <Hsp_hseq>PKTATGTKKGTIIGLLSIHTILFILTSHALSLEVKEQT*KDID</Hsp_hseq>
+                                              <Hsp_midline>P +   TK+GT +GL   HTI   + +  +SL++ E++  D+D</Hsp_midline>
+                                            </Hsp>
+                                          </Hit_hsps>
+                                        </Hit>
+                                        <Hit>
+                                          <Hit_num>2</Hit_num>
+                                          <Hit_id>gi|115975252|ref|XM_001180111.1|</Hit_id>
+                                          <Hit_def>PREDICTED: Strongylocentrotus purpuratus hypothetical LOC577746 (LOC577746), mRNA</Hit_def>
+                                          <Hit_accession>XM_001180111</Hit_accession>
+                                          <Hit_len>1593</Hit_len>
+                                          <Hit_hsps>
+                                            <Hsp>
+                                              <Hsp_num>1</Hsp_num>
+                                              <Hsp_bit-score>31.5722</Hsp_bit-score>
+                                              <Hsp_score>70</Hsp_score>
+                                              <Hsp_evalue>7.17606</Hsp_evalue>
+                                              <Hsp_query-from>44</Hsp_query-from>
+                                              <Hsp_query-to>94</Hsp_query-to>
+                                              <Hsp_hit-from>1057</Hsp_hit-from>
+                                              <Hsp_hit-to>1233</Hsp_hit-to>
+                                              <Hsp_query-frame>0</Hsp_query-frame>
+                                              <Hsp_hit-frame>1</Hsp_hit-frame>
+                                              <Hsp_identity>20</Hsp_identity>
+                                              <Hsp_positive>29</Hsp_positive>
+                                              <Hsp_gaps>8</Hsp_gaps>
+                                              <Hsp_align-len>59</Hsp_align-len>
+                                              <Hsp_qseq>GLADTHTIEVTVDNEPVSLDITEESTSDLDKFNSG--------DKVTITYEKNDEGQLL</Hsp_qseq>
+                                              <Hsp_hseq>GLVPDHTLILPVGHYQSMLDLTEEVQTELDQFKSALRKYYLSKGKTCVIYERNFRTQHL</Hsp_hseq>
+                                              <Hsp_midline>GL   HT+ + V +    LD+TEE  ++LD+F S          K  + YE+N   Q L</Hsp_midline>
+                                            </Hsp>
+                                          </Hit_hsps>
+                                        </Hit>
+                                        <Hit>
+                                          <Hit_num>3</Hit_num>
+                                          <Hit_id>gi|390342090|ref|XM_777959.2|</Hit_id>
+                                          <Hit_def>PREDICTED: Strongylocentrotus purpuratus CWF19-like protein 1-like (LOC577746), mRNA</Hit_def>
+                                          <Hit_accession>XM_777959</Hit_accession>
+                                          <Hit_len>4149</Hit_len>
+                                          <Hit_hsps>
+                                            <Hsp>
+                                              <Hsp_num>1</Hsp_num>
+                                              <Hsp_bit-score>31.5722</Hsp_bit-score>
+                                              <Hsp_score>70</Hsp_score>
+                                              <Hsp_evalue>7.61765</Hsp_evalue>
+                                              <Hsp_query-from>44</Hsp_query-from>
+                                              <Hsp_query-to>94</Hsp_query-to>
+                                              <Hsp_hit-from>1267</Hsp_hit-from>
+                                              <Hsp_hit-to>1443</Hsp_hit-to>
+                                              <Hsp_query-frame>0</Hsp_query-frame>
+                                              <Hsp_hit-frame>1</Hsp_hit-frame>
+                                              <Hsp_identity>20</Hsp_identity>
+                                              <Hsp_positive>29</Hsp_positive>
+                                              <Hsp_gaps>8</Hsp_gaps>
+                                              <Hsp_align-len>59</Hsp_align-len>
+                                              <Hsp_qseq>GLADTHTIEVTVDNEPVSLDITEESTSDLDKFNSG--------DKVTITYEKNDEGQLL</Hsp_qseq>
+                                              <Hsp_hseq>GLVPDHTLILPVGHYQSMLDLTEEVQTELDQFKSALRKYYLSKGKTCVIYERNFRTQHL</Hsp_hseq>
+                                              <Hsp_midline>GL   HT+ + V +    LD+TEE  ++LD+F S          K  + YE+N   Q L</Hsp_midline>
+                                            </Hsp>
+                                          </Hit_hsps>
+                                        </Hit>
+                                      </Iteration_hits>
+                                      <Iteration_stat>
+                                        <Statistics>
+                                          <Statistics_db-num>2933984</Statistics_db-num>
+                                          <Statistics_db-len>4726730735</Statistics_db-len>
+                                          <Statistics_hsp-len>0</Statistics_hsp-len>
+                                          <Statistics_eff-space>0</Statistics_eff-space>
+                                          <Statistics_kappa>0.041</Statistics_kappa>
+                                          <Statistics_lambda>0.267</Statistics_lambda>
+                                          <Statistics_entropy>0.14</Statistics_entropy>
+                                        </Statistics>
+                                      </Iteration_stat>
+                                      <Iteration_message>Warning: conversion_warning: Could not calculate ungapped Karlin-Altschul parameters due to an invalid query sequence or its translation. Please verify the query sequence(s) and/or filtering options Warning: conversion_warning: Query &apos;lcl|Query_1 random_s00&apos; (# 1): Warning: Could not calculate ungapped Karlin-Altschul parameters due to an invalid query sequence or its translation. Please verify the query sequence(s) and/or filtering options </Iteration_message>
+                                    </Iteration>
+                                  </BlastOutput_iterations>
+                                  <BlastOutput_program>tblastn</BlastOutput_program>
+                                  <BlastOutput_version>TBLASTN 2.2.26+</BlastOutput_version>
+                                  <BlastOutput_reference>Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&amp;auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), &quot;Gapped BLAST and PSI-BLAST: a new generation of protein database search programs&quot;, Nucleic Acids Res. 25:3389-3402.</BlastOutput_reference>
+                                  <BlastOutput_db>refseq_rna</BlastOutput_db>
+                                  <BlastOutput_query-ID>Query_1</BlastOutput_query-ID>
+                                  <BlastOutput_query-def>random_s00</BlastOutput_query-def>
+                                  <BlastOutput_query-len>32</BlastOutput_query-len>
+                                  <BlastOutput_param>
+                                    <Parameters>
+                                      <Parameters_matrix>BLOSUM62</Parameters_matrix>
+                                      <Parameters_expect>10</Parameters_expect>
+                                      <Parameters_gap-open>11</Parameters_gap-open>
+                                      <Parameters_gap-extend>1</Parameters_gap-extend>
+                                      <Parameters_filter>L;</Parameters_filter>
+                                    </Parameters>
+                                  </BlastOutput_param>
+                                  <BlastOutput_iterations>
+                                  <Iteration>
+                                      <Iteration_iter-num>3</Iteration_iter-num>
+                                      <Iteration_query-ID>Query_3</Iteration_query-ID>
+                                      <Iteration_query-def>gi|11464971:4-101 pleckstrin [Mus musculus]</Iteration_query-def>
+                                      <Iteration_query-len>98</Iteration_query-len>
+                                      <Iteration_hits>
+                                        <Hit>
+                                          <Hit_num>1</Hit_num>
+                                          <Hit_id>gi|354480463|ref|XM_003502378.1|</Hit_id>
+                                          <Hit_def>PREDICTED: Cricetulus griseus pleckstrin-like (LOC100773128), mRNA</Hit_def>
+                                          <Hit_accession>XM_003502378</Hit_accession>
+                                          <Hit_len>1119</Hit_len>
+                                          <Hit_hsps>
+                                            <Hsp>
+                                              <Hsp_num>1</Hsp_num>
+                                              <Hsp_bit-score>205.297</Hsp_bit-score>
+                                              <Hsp_score>521</Hsp_score>
+                                              <Hsp_evalue>1.46172e-63</Hsp_evalue>
+                                              <Hsp_query-from>1</Hsp_query-from>
+                                              <Hsp_query-to>98</Hsp_query-to>
+                                              <Hsp_hit-from>76</Hsp_hit-from>
+                                              <Hsp_hit-to>369</Hsp_hit-to>
+                                              <Hsp_query-frame>0</Hsp_query-frame>
+                                              <Hsp_hit-frame>1</Hsp_hit-frame>
+                                              <Hsp_identity>98</Hsp_identity>
+                                              <Hsp_positive>98</Hsp_positive>
+                                              <Hsp_gaps>0</Hsp_gaps>
+                                              <Hsp_align-len>98</Hsp_align-len>
+                                              <Hsp_qseq>KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK</Hsp_qseq>
+                                              <Hsp_hseq>KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK</Hsp_hseq>
+                                              <Hsp_midline>KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK</Hsp_midline>
+                                            </Hsp>
+                                            <Hsp>
+                                              <Hsp_num>2</Hsp_num>
+                                              <Hsp_bit-score>43.8986</Hsp_bit-score>
+                                              <Hsp_score>102</Hsp_score>
+                                              <Hsp_evalue>0.00054161</Hsp_evalue>
+                                              <Hsp_query-from>3</Hsp_query-from>
+                                              <Hsp_query-to>96</Hsp_query-to>
+                                              <Hsp_hit-from>802</Hsp_hit-from>
+                                              <Hsp_hit-to>1101</Hsp_hit-to>
+                                              <Hsp_query-frame>0</Hsp_query-frame>
+                                              <Hsp_hit-frame>1</Hsp_hit-frame>
+                                              <Hsp_identity>30</Hsp_identity>
+                                              <Hsp_positive>50</Hsp_positive>
+                                              <Hsp_gaps>6</Hsp_gaps>
+                                              <Hsp_align-len>100</Hsp_align-len>
+                                              <Hsp_qseq>IREGYLVKKGSVFNTWKPMWVVLLEDG--IEFYKKKSDNSPKGMIPLKGSTLTSPCQDF-GKRM---FVLKITTTKQQDHFFQAAFLEERDAWVRDIKKA</Hsp_qseq>
+                                              <Hsp_hseq>IKQGCLLKQGHRRKNWKVRKFILREDPAYLHYYDPAGGEDPLGAIHLRGCVVTSVESNHDGKKSDDENLFEIITADEVHYYLQAAAPKERTEWIKAIQVA</Hsp_hseq>
+                                              <Hsp_midline>I++G L+K+G     WK    +L ED   + +Y       P G I L+G  +TS   +  GK+     + +I T  +  ++ QAA  +ER  W++ I+ A</Hsp_midline>
+                                            </Hsp>
+                                          </Hit_hsps>
+                                        </Hit>
+                                        <Hit>
+                                          <Hit_num>2</Hit_num>
+                                          <Hit_id>gi|350596019|ref|XM_003360601.2|</Hit_id>
+                                          <Hit_def>PREDICTED: Sus scrofa pleckstrin-like (LOC100626968), mRNA</Hit_def>
+                                          <Hit_accession>XM_003360601</Hit_accession>
+                                          <Hit_len>772</Hit_len>
+                                          <Hit_hsps>
+                                            <Hsp>
+                                              <Hsp_num>1</Hsp_num>
+                                              <Hsp_bit-score>199.519</Hsp_bit-score>
+                                              <Hsp_score>506</Hsp_score>
+                                              <Hsp_evalue>1.0971e-62</Hsp_evalue>
+                                              <Hsp_query-from>1</Hsp_query-from>
+                                              <Hsp_query-to>98</Hsp_query-to>
+                                              <Hsp_hit-from>95</Hsp_hit-from>
+                                              <Hsp_hit-to>388</Hsp_hit-to>
+                                              <Hsp_query-frame>0</Hsp_query-frame>
+                                              <Hsp_hit-frame>2</Hsp_hit-frame>
+                                              <Hsp_identity>94</Hsp_identity>
+                                              <Hsp_positive>96</Hsp_positive>
+                                              <Hsp_gaps>0</Hsp_gaps>
+                                              <Hsp_align-len>98</Hsp_align-len>
+                                              <Hsp_qseq>KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK</Hsp_qseq>
+                                              <Hsp_hseq>KRIREGYLVKKGSMFNTWKPMWVILLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVFKITTTKQQDHFFQAAFLEERDGWVRDIKKAIK</Hsp_hseq>
+                                              <Hsp_midline>KRIREGYLVKKGS+FNTWKPMWV+LLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFV KITTTKQQDHFFQAAFLEERD WVRDIKKAIK</Hsp_midline>
+                                            </Hsp>
+                                            <Hsp>
+                                              <Hsp_num>2</Hsp_num>
+                                              <Hsp_bit-score>32.7278</Hsp_bit-score>
+                                              <Hsp_score>73</Hsp_score>
+                                              <Hsp_evalue>2.84318</Hsp_evalue>
+                                              <Hsp_query-from>30</Hsp_query-from>
+                                              <Hsp_query-to>96</Hsp_query-to>
+                                              <Hsp_hit-from>542</Hsp_hit-from>
+                                              <Hsp_hit-to>754</Hsp_hit-to>
+                                              <Hsp_query-frame>0</Hsp_query-frame>
+                                              <Hsp_hit-frame>2</Hsp_hit-frame>
+                                              <Hsp_identity>21</Hsp_identity>
+                                              <Hsp_positive>33</Hsp_positive>
+                                              <Hsp_gaps>4</Hsp_gaps>
+                                              <Hsp_align-len>71</Hsp_align-len>
+                                              <Hsp_qseq>IEFYKKKSDNSPKGMIPLKGSTLTS-PCQDFGKRMFVLK---ITTTKQQDHFFQAAFLEERDAWVRDIKKA</Hsp_qseq>
+                                              <Hsp_hseq>LHYYDPAGGEDPLGAIHLRGCVVTSVESNTDGKNGFLWERAXXITADEVHYFLQAANPKERTEWIKAIQVA</Hsp_hseq>
+                                              <Hsp_midline>+ +Y       P G I L+G  +TS      GK  F+ +     T  +  +F QAA  +ER  W++ I+ A</Hsp_midline>
+                                            </Hsp>
+                                          </Hit_hsps>
+                                        </Hit>
+                                        <Hit>
+                                          <Hit_num>3</Hit_num>
+                                          <Hit_id>gi|301779869|ref|XM_002925302.1|</Hit_id>
+                                          <Hit_def>PREDICTED: Ailuropoda melanoleuca pleckstrin-like (LOC100466932), mRNA</Hit_def>
+                                          <Hit_accession>XM_002925302</Hit_accession>
+                                          <Hit_len>1144</Hit_len>
+                                          <Hit_hsps>
+                                            <Hsp>
+                                              <Hsp_num>1</Hsp_num>
+                                              <Hsp_bit-score>202.986</Hsp_bit-score>
+                                              <Hsp_score>515</Hsp_score>
+                                              <Hsp_evalue>1.58807e-62</Hsp_evalue>
+                                              <Hsp_query-from>1</Hsp_query-from>
+                                              <Hsp_query-to>98</Hsp_query-to>
+                                              <Hsp_hit-from>78</Hsp_hit-from>
+                                              <Hsp_hit-to>371</Hsp_hit-to>
+                                              <Hsp_query-frame>0</Hsp_query-frame>
+                                              <Hsp_hit-frame>3</Hsp_hit-frame>
+                                              <Hsp_identity>96</Hsp_identity>
+                                              <Hsp_positive>97</Hsp_positive>
+                                              <Hsp_gaps>0</Hsp_gaps>
+                                              <Hsp_align-len>98</Hsp_align-len>
+                                              <Hsp_qseq>KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK</Hsp_qseq>
+                                              <Hsp_hseq>KRIREGYLVKRGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVFKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK</Hsp_hseq>
+                                              <Hsp_midline>KRIREGYLVK+GSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFV KITTTKQQDHFFQAAFLEERDAWVRDIKKAIK</Hsp_midline>
+                                            </Hsp>
+                                            <Hsp>
+                                              <Hsp_num>2</Hsp_num>
+                                              <Hsp_bit-score>45.0542</Hsp_bit-score>
+                                              <Hsp_score>105</Hsp_score>
+                                              <Hsp_evalue>0.000221018</Hsp_evalue>
+                                              <Hsp_query-from>3</Hsp_query-from>
+                                              <Hsp_query-to>96</Hsp_query-to>
+                                              <Hsp_hit-from>804</Hsp_hit-from>
+                                              <Hsp_hit-to>1103</Hsp_hit-to>
+                                              <Hsp_query-frame>0</Hsp_query-frame>
+                                              <Hsp_hit-frame>3</Hsp_hit-frame>
+                                              <Hsp_identity>30</Hsp_identity>
+                                              <Hsp_positive>48</Hsp_positive>
+                                              <Hsp_gaps>6</Hsp_gaps>
+                                              <Hsp_align-len>100</Hsp_align-len>
+                                              <Hsp_qseq>IREGYLVKKGSVFNTWKPMWVVLLEDG--IEFYKKKSDNSPKGMIPLKGSTLTS----PCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKA</Hsp_qseq>
+                                              <Hsp_hseq>IKQGCLLKQGHRRKNWKVRKFILREDPAYLHYYDPAGGEDPLGAIHLRGCVVTSVESNPDVRKSEEENLFEIITADEVHYFLQAATPKERTEWIKAIQVA</Hsp_hseq>
+                                              <Hsp_midline>I++G L+K+G     WK    +L ED   + +Y       P G I L+G  +TS    P     +   + +I T  +  +F QAA  +ER  W++ I+ A</Hsp_midline>
+                                            </Hsp>
+                                          </Hit_hsps>
+                                        </Hit>
+                                        <Hit>
+                                          <Hit_num>4</Hit_num>
+                                          <Hit_id>gi|338714227|ref|XM_001492113.3|</Hit_id>
+                                          <Hit_def>PREDICTED: Equus caballus pleckstrin-like (LOC100051039), mRNA</Hit_def>
+                                          <Hit_accession>XM_001492113</Hit_accession>
+                                          <Hit_len>1390</Hit_len>
+                                          <Hit_hsps>
+                                            <Hsp>
+                                              <Hsp_num>1</Hsp_num>
+                                              <Hsp_bit-score>202.986</Hsp_bit-score>
+                                              <Hsp_score>515</Hsp_score>
+                                              <Hsp_evalue>1.06193e-61</Hsp_evalue>
+                                              <Hsp_query-from>1</Hsp_query-from>
+                                              <Hsp_query-to>98</Hsp_query-to>
+                                              <Hsp_hit-from>173</Hsp_hit-from>
+                                              <Hsp_hit-to>466</Hsp_hit-to>
+                                              <Hsp_query-frame>0</Hsp_query-frame>
+                                              <Hsp_hit-frame>2</Hsp_hit-frame>
+                                              <Hsp_identity>96</Hsp_identity>
+                                              <Hsp_positive>97</Hsp_positive>
+                                              <Hsp_gaps>0</Hsp_gaps>
+                                              <Hsp_align-len>98</Hsp_align-len>
+                                              <Hsp_qseq>KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK</Hsp_qseq>
+                                              <Hsp_hseq>KRIREGYLVKRGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVFKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK</Hsp_hseq>
+                                              <Hsp_midline>KRIREGYLVK+GSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFV KITTTKQQDHFFQAAFLEERDAWVRDIKKAIK</Hsp_midline>
+                                            </Hsp>
+                                            <Hsp>
+                                              <Hsp_num>2</Hsp_num>
+                                              <Hsp_bit-score>46.595</Hsp_bit-score>
+                                              <Hsp_score>109</Hsp_score>
+                                              <Hsp_evalue>8.5186e-05</Hsp_evalue>
+                                              <Hsp_query-from>3</Hsp_query-from>
+                                              <Hsp_query-to>96</Hsp_query-to>
+                                              <Hsp_hit-from>899</Hsp_hit-from>
+                                              <Hsp_hit-to>1198</Hsp_hit-to>
+                                              <Hsp_query-frame>0</Hsp_query-frame>
+                                              <Hsp_hit-frame>2</Hsp_hit-frame>
+                                              <Hsp_identity>31</Hsp_identity>
+                                              <Hsp_positive>48</Hsp_positive>
+                                              <Hsp_gaps>6</Hsp_gaps>
+                                              <Hsp_align-len>100</Hsp_align-len>
+                                              <Hsp_qseq>IREGYLVKKGSVFNTWKPMWVVLLEDG--IEFYKKKSDNSPKGMIPLKGSTLTS----PCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKA</Hsp_qseq>
+                                              <Hsp_hseq>IKQGCLLKQGHRRKNWKVRKFVLREDPAYVHYYDPAGGEEPLGAIHLRGCVVTSVEGNPDGKKSEEENLFEIITADEVHYFLQAATPKERTEWIKAIQVA</Hsp_hseq>
+                                              <Hsp_midline>I++G L+K+G     WK    VL ED   + +Y       P G I L+G  +TS    P     +   + +I T  +  +F QAA  +ER  W++ I+ A</Hsp_midline>
+                                            </Hsp>
+                                          </Hit_hsps>
+                                        </Hit>
+                                        <Hit>
+                                          <Hit_num>5</Hit_num>
+                                          <Hit_id>gi|390474391|ref|XM_002757683.2|</Hit_id>
+                                          <Hit_def>PREDICTED: Callithrix jacchus pleckstrin (PLEK), mRNA</Hit_def>
+                                          <Hit_accession>XM_002757683</Hit_accession>
+                                          <Hit_len>1402</Hit_len>
+                                          <Hit_hsps>
+                                            <Hsp>
+                                              <Hsp_num>1</Hsp_num>
+                                              <Hsp_bit-score>202.986</Hsp_bit-score>
+                                              <Hsp_score>515</Hsp_score>
+                                              <Hsp_evalue>1.27031e-61</Hsp_evalue>
+                                              <Hsp_query-from>1</Hsp_query-from>
+                                              <Hsp_query-to>98</Hsp_query-to>
+                                              <Hsp_hit-from>161</Hsp_hit-from>
+                                              <Hsp_hit-to>454</Hsp_hit-to>
+                                              <Hsp_query-frame>0</Hsp_query-frame>
+                                              <Hsp_hit-frame>2</Hsp_hit-frame>
+                                              <Hsp_identity>96</Hsp_identity>
+                                              <Hsp_positive>97</Hsp_positive>
+                                              <Hsp_gaps>0</Hsp_gaps>
+                                              <Hsp_align-len>98</Hsp_align-len>
+                                              <Hsp_qseq>KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK</Hsp_qseq>
+                                              <Hsp_hseq>KRIREGYLVKKGSMFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVFKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK</Hsp_hseq>
+                                              <Hsp_midline>KRIREGYLVKKGS+FNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFV KITTTKQQDHFFQAAFLEERDAWVRDIKKAIK</Hsp_midline>
+                                            </Hsp>
+                                            <Hsp>
+                                              <Hsp_num>2</Hsp_num>
+                                              <Hsp_bit-score>45.0542</Hsp_bit-score>
+                                              <Hsp_score>105</Hsp_score>
+                                              <Hsp_evalue>0.000256</Hsp_evalue>
+                                              <Hsp_query-from>3</Hsp_query-from>
+                                              <Hsp_query-to>96</Hsp_query-to>
+                                              <Hsp_hit-from>866</Hsp_hit-from>
+                                              <Hsp_hit-to>1165</Hsp_hit-to>
+                                              <Hsp_query-frame>0</Hsp_query-frame>
+                                              <Hsp_hit-frame>2</Hsp_hit-frame>
+                                              <Hsp_identity>30</Hsp_identity>
+                                              <Hsp_positive>48</Hsp_positive>
+                                              <Hsp_gaps>6</Hsp_gaps>
+                                              <Hsp_align-len>100</Hsp_align-len>
+                                              <Hsp_qseq>IREGYLVKKGSVFNTWKPMWVVLLEDG--IEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMF----VLKITTTKQQDHFFQAAFLEERDAWVRDIKKA</Hsp_qseq>
+                                              <Hsp_hseq>IKQGCLLKQGHRRKNWKVRKFILREDPAYLHYYDPAGGEDPLGAIHLRGCVVTSVESNSDGRKSEEENLFEIITADEVHYFLQAATPKERTEWIKAIQVA</Hsp_hseq>
+                                              <Hsp_midline>I++G L+K+G     WK    +L ED   + +Y       P G I L+G  +TS   +   R      + +I T  +  +F QAA  +ER  W++ I+ A</Hsp_midline>
+                                            </Hsp>
+                                          </Hit_hsps>
+                                        </Hit>
+                                      </Iteration_hits>
+                                      <Iteration_stat>
+                                        <Statistics>
+                                          <Statistics_db-num>2933984</Statistics_db-num>
+                                          <Statistics_db-len>4726730735</Statistics_db-len>
+                                          <Statistics_hsp-len>0</Statistics_hsp-len>
+                                          <Statistics_eff-space>0</Statistics_eff-space>
+                                          <Statistics_kappa>0.041</Statistics_kappa>
+                                          <Statistics_lambda>0.267</Statistics_lambda>
+                                          <Statistics_entropy>0.14</Statistics_entropy>
+                                        </Statistics>
+                                      </Iteration_stat>
+                                      <Iteration_message>Warning: conversion_warning: Could not calculate ungapped Karlin-Altschul parameters due to an invalid query sequence or its translation. Please verify the query sequence(s) and/or filtering options Warning: conversion_warning: Query &apos;lcl|Query_1 random_s00&apos; (# 1): Warning: Could not calculate ungapped Karlin-Altschul parameters due to an invalid query sequence or its translation. Please verify the query sequence(s) and/or filtering options </Iteration_message>
+                                    </Iteration>
+                                  </BlastOutput_iterations>
+                                </BlastOutput>""")
         records = NCBIXML.parse(handle)
 
         record = next(records)
@@ -2871,9 +3306,8 @@ class TestNCBIXML(unittest.TestCase):
         handle.close()
 
     def test_xml_2226_tblastx_001(self):
-        "Parsing TBLASTX 2.2.26+, random_s00 (xml_2226_tblastx_001)"
+        """Parse TBLASTX 2.2.26+, random_s00 (xml_2226_tblastx_001)."""
         # NOTE - no date in version field, downloaded 2008/05/08
-
         filename = 'xml_2226_tblastx_001.xml'
         datafile = os.path.join("Blast", filename)
 
@@ -2947,9 +3381,8 @@ class TestNCBIXML(unittest.TestCase):
         handle.close()
 
     def test_xml_2226_tblastx_002(self):
-        "Parsing TBLASTX 2.2.26+, random_s00 (xml_2226_tblastx_002)"
+        """Parse TBLASTX 2.2.26+, random_s00 (xml_2226_tblastx_002)."""
         # NOTE - no date in version field, downloaded 2008/05/08
-
         filename = 'xml_2226_tblastx_002.xml'
         datafile = os.path.join("Blast", filename)
 
@@ -2965,9 +3398,8 @@ class TestNCBIXML(unittest.TestCase):
         handle.close()
 
     def test_xml_2226_tblastx_003(self):
-        "Parsing TBLASTN 2.2.26+, gi|296147483:1-350 Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds (xml_2226_tblastx_003)"
+        """Parse TBLASTN 2.2.26+, gi|296147483:1-350 Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds (xml_2226_tblastx_003)."""
         # NOTE - no date in version field, downloaded 2008/05/08
-
         filename = 'xml_2226_tblastx_003.xml'
         datafile = os.path.join("Blast", filename)
 
@@ -3036,9 +3468,8 @@ class TestNCBIXML(unittest.TestCase):
         handle.close()
 
     def test_xml_2226_tblastx_004(self):
-        "Parsing TBLASTX 2.2.26+, random_s00 (xml_2226_tblastx_004)"
+        """Parse TBLASTX 2.2.26+, random_s00 (xml_2226_tblastx_004)."""
         # NOTE - no date in version field, downloaded 2008/05/08
-
         filename = 'xml_2226_tblastx_004.xml'
         datafile = os.path.join("Blast", filename)
 
@@ -3100,6 +3531,7 @@ class TestNCBIXML(unittest.TestCase):
 
         self.assertRaises(StopIteration, next, records)
         handle.close()
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
