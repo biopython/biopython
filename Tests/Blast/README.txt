@@ -73,10 +73,7 @@ xml_2226_tblastn_002.xml     single query, no hits
 xml_2226_tblastn_003.xml     single query, hits @ single hsp
 xml_2226_tblastn_004.xml     single query, multiple hsps per hit present
 xml_2226_tblastn_005.xml     multiple queries, remote search on NCBI's database
-xml_2226_tblastn_006_err.xml     broken file to test NCBIXML.read() exception when there is no content for query
-xml_2226_tblastn_007_err.xml     broken file to test NCBIXML.read() exception when the file doesn't start with <?xml...
-xml_2226_tblastn_008_err.xml     broken file to test NCBIXML.handle() exception when file is empty
-xml_2226_tblastn_009_err.xml     broken file to test NCBIXML.handle() exception when query are separated in multiple XML chuncks
+xml_2226_tblastn_009_err.xml     custom XML having several bodies into one single file source
 xml_2226_tblastx_001.xml     multiple queries
 xml_2226_tblastx_002.xml     single query, no hits
 xml_2226_tblastx_003.xml     single query, multiple hsps per hit present
