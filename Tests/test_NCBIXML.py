@@ -1748,10 +1748,6 @@ class TestNCBIXML(unittest.TestCase):
 
     def test_xml_2218L_rpsblast_001(self):
         """Parse RSP-BLAST 2.2.18, single query which converges in 3 iterations (xml_2218L_rpsblast_001)."""
-        # This is from old pgpblast command line tool, NOT new psiblast
-        # NOTE - The parser currently returns three BLAST record objects.
-        # The old text parser would return a single PSI BLAST record object with three rounds.
-        # This may change... although it may require a PSI BLAST specific XML parser.
         filename = 'xml_2218L_rpsblast_001.xml'
         datafile = os.path.join("Blast", filename)
 
