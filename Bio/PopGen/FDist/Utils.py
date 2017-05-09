@@ -17,11 +17,11 @@ import Bio.PopGen.FDist
 def convert_genepop_to_fdist(gp_rec, report_pops=None):
     """Converts a GenePop record to a FDist one.
 
-       Parameters:
-       gp_rec - Genepop Record (either standard or big)
+    Parameters:
+    gp_rec - Genepop Record (either standard or big)
 
-       Returns:
-       FDist record.
+    Returns:
+    FDist record.
 
     """
     if hasattr(gp_rec, "populations"):
@@ -33,11 +33,11 @@ def convert_genepop_to_fdist(gp_rec, report_pops=None):
 def _convert_genepop_to_fdist(gp_rec):
     """Converts a standard GenePop record to a FDist one.
 
-       Parameters:
-       gp_rec - Genepop Record (Standard)
+    Parameters:
+    gp_rec - Genepop Record (Standard)
 
-       Returns:
-       FDist record.
+    Returns:
+    FDist record.
 
     """
     fd_rec = Bio.PopGen.FDist.Record()
@@ -74,11 +74,11 @@ def _convert_genepop_to_fdist(gp_rec):
 def _convert_genepop_to_fdist_big(gp_rec, report_pops=None):
     """Converts a big GenePop record to a FDist one.
 
-       Parameters:
-       gp_rec - Genepop Record (Big)
+    Parameters:
+    gp_rec - Genepop Record (Big)
 
-       Returns:
-       FDist record.
+    Returns:
+    FDist record.
 
     """
     fd_rec = Bio.PopGen.FDist.Record()
@@ -135,11 +135,11 @@ def _convert_genepop_to_fdist_big(gp_rec, report_pops=None):
 def _convert_genepop_to_fdist_big_old(gp_rec, report_loci=None):
     """Converts a big GenePop record to a FDist one.
 
-       Parameters:
-       gp_rec - Genepop Record (Big)
+    Parameters:
+    gp_rec - Genepop Record (Big)
 
-       Returns:
-       FDist record.
+    Returns:
+    FDist record.
 
     """
     fd_rec = Bio.PopGen.FDist.Record()
@@ -204,9 +204,7 @@ def _convert_genepop_to_fdist_big_old(gp_rec, report_loci=None):
 
 def approximate_fst(desired_fst, simulated_fst, parameter_fst,
            max_run_fst=1, min_run_fst=0, limit=0.005):
-    """Calculates the next Fst attempt in order to approximate a
-       desired Fst.
-    """
+    """Calculates next Fst attempt to approximate a desired Fst."""
     if abs(simulated_fst - desired_fst) < limit:
         return parameter_fst, max_run_fst, min_run_fst
     if simulated_fst > desired_fst:

@@ -27,10 +27,11 @@ class FDistAsync(FDistController):
         """Constructor.
 
         Parameters:
-          - fdist_dir - Where fdist can be found, if = "", then it
-              should be on the path.
-          - ext - Extension of binary names (e.g. nothing on Unix,
-                ".exe" on Windows
+
+        - fdist_dir - Where fdist can be found, if = "", then it
+          should be on the path.
+        - ext - Extension of binary names (e.g. nothing on Unix,
+          ".exe" on Windows
 
         """
         FDistController.__init__(self, fdist_dir, ext)
@@ -38,9 +39,9 @@ class FDistAsync(FDistController):
     def run_job(self, parameters, input_files):
         """Runs FDist asynchronously.
 
-           Gets typical Fdist parameters from a dictionary and
-           makes a "normal" call. This is run, normally, inside
-           a separate thread.
+        Gets typical Fdist parameters from a dictionary and
+        makes a "normal" call. This is run, normally, inside
+        a separate thread.
         """
         npops = parameters['npops']
         nsamples = parameters['nsamples']
@@ -65,27 +66,28 @@ class FDistAsync(FDistController):
 class SplitFDist(object):
     """Splits a FDist run.
 
-       The idea is to split a certain number of simulations in smaller
-       numbers (e.g. 30.000 sims split in 30 packets of 1.000). This
-       allows to run simulations in parallel, thus taking advantage
-       of multi-core CPUs.
+    The idea is to split a certain number of simulations in smaller
+    numbers (e.g. 30.000 sims split in 30 packets of 1.000). This
+    allows to run simulations in parallel, thus taking advantage
+    of multi-core CPUs.
 
-       Each SplitFDist object can only be used to run a single FDist
-       simulation.
+    Each SplitFDist object can only be used to run a single FDist
+    simulation.
     """
 
     def __init__(self, report_fun=None,
                  num_thr=2, split_size=1000, fdist_dir='', ext=None):
         """Constructor.
 
-           Parameters:
-             - report_fun - Function that is called when a single packet is
-               run, it should have a single parameter: Fst.
-             - num_thr - Number of desired threads, typically the number
-               of cores.
-             - split_size - Size that a full simulation will be split in.
-             - ext - Binary extension name (e.g. nothing on Unix, '.exe' on
-               Windows).
+        Parameters:
+
+        - report_fun - Function that is called when a single packet is
+          run, it should have a single parameter: Fst.
+        - num_thr - Number of desired threads, typically the number
+          of cores.
+        - split_size - Size that a full simulation will be split in.
+        - ext - Binary extension name (e.g. nothing on Unix, '.exe' on
+          Windows).
 
         """
         self.async = Local.Local(num_thr)
@@ -97,12 +99,12 @@ class SplitFDist(object):
     def monitor(self):
         """Monitors and reports (using report_fun) execution.
 
-           Every time a partial simulation ends, calls report_fun.
-           IMPORTANT: monitor calls can be concurrent with other
-           events, ie, a tasks might end while report_fun is being
-           called. This means that report_fun should be consider that
-           other events might be happening while it is running (it
-           can call acquire/release if necessary).
+        Every time a partial simulation ends, calls report_fun.
+        IMPORTANT: monitor calls can be concurrent with other
+        events, ie, a tasks might end while report_fun is being
+        called. This means that report_fun should be consider that
+        other events might be happening while it is running (it
+        can call acquire/release if necessary).
         """
         while(True):
             sleep(1)
@@ -145,10 +147,10 @@ class SplitFDist(object):
                   max_freq=0.99):
         """Runs FDist.
 
-           Parameters can be seen on FDistController.run_fdist.
+        Parameters can be seen on FDistController.run_fdist.
 
-           It will split a single execution in several parts and
-           create separated data directories.
+        It will split a single execution in several parts and
+        create separated data directories.
         """
         num_parts = num_sims // self.split_size
         self.parts = {}
