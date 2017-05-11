@@ -108,7 +108,7 @@ class Residue(Entity):
     def get_segid(self):
         return self.segid
 
-    def get_atom(self):
+    def get_atoms(self):
         for a in self:
             yield a
 
