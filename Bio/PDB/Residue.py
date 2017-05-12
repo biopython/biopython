@@ -113,10 +113,11 @@ class Residue(Entity):
     def get_atoms(self):
         for a in self:
             yield a
-            
+
     def get_atom(self):
         warnings.warn("`get_atom` has been depcreated and we intend to remove it"
-                      " in a future release of Biopython. Please use `get_atoms` instead.")
+                      " in a future release of Biopython. Please use `get_atoms` instead.",
+                     BiopythonDeprecationWarning)
         for a in self:
             yield a
 
