@@ -6,6 +6,8 @@
 """Residue class, used by Structure objects."""
 
 # My Stuff
+import warnings
+from Bio import BiopythonDeprecationWarning
 from Bio.PDB.PDBExceptions import PDBConstructionException
 from Bio.PDB.Entity import Entity, DisorderedEntityWrapper
 
@@ -109,6 +111,12 @@ class Residue(Entity):
         return self.segid
 
     def get_atoms(self):
+        for a in self:
+            yield a
+            
+    def get_atom(self):
+        warnings.warn("`get_atom` has been depcreated and we intend to remove it"
+                      " in a future release of Biopython. Please use `get_atoms` instead.")
         for a in self:
             yield a
 
