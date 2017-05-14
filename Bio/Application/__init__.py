@@ -574,7 +574,7 @@ class _Option(_AbstractParameter):
     """
 
     def __init__(self, names, description, filename=False, checker_function=None,
-                 is_required=False, equate=True):
+                 is_required=False, equate=True, non_space=False):
         self.names = names
         assert isinstance(description, basestring), \
                "%r for %s" % (description, names[-1])
@@ -583,7 +583,7 @@ class _Option(_AbstractParameter):
         self.description = description
         self.equate = equate
         self.is_required = is_required
-
+        self.non_space = non_space
         self.is_set = False
         self.value = None
 
@@ -602,6 +602,8 @@ class _Option(_AbstractParameter):
             v = _escape_filename(self.value)
         else:
             v = str(self.value)
+        if self.non_space:
+            return "%s%s " % (self.names[0], v)
         if self.equate:
             return "%s=%s " % (self.names[0], v)
         else:

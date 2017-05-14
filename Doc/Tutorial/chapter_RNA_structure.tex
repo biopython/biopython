@@ -1,0 +1,153 @@
+\chapter{Bio.RNA_structure}
+
+RNA_structure could become a Biopython module supporting RNA structure search, download,
+prediction and comparison.
+
+The medium term objective for the module is to support two internet databases
+for RNA sequences and structures, offer 2D RNA structure prediction
+and comparison of both 3D and 2D RNA structures.
+
+\section{APIs for RNA databases}
+
+As a first element of our package we have prepared APIs to access two RNA
+databases. After presenting both of them, we will also introduce a unified
+way to use them.
+
+\subsection{API_NDB}
+
+Nucleic Acid Database (\url{http://ndbserver.rutgers.edu/}) is the biggest
+and the most well known database storing both DNA and RNA molecules and complexes.
+The biggest advantage of the database beside number of stored structure
+is its link with PDB, enabling easy access and unified ID type.
+
+Therefore, we have decided to write an API to access the RNA part of the database,
+search through it and download data. It is possible to search the database using
+both PDB ID of a RNA molecule and part of a seqence. Second functionality
+uses blasting to give user 3 best matches. After finding the desired RNA
+it is possible to save its sequence in FASTA format, structure in PDB format
+and metadata, including data about experiments to obtain structure, publication
+details etc.
+
+\begin{verbatim}
+>>> from RNA_structure import API_NDB
+>>> sample = Nucleic_scid_database(pdb_id = "5SWE")
+>>> sample.download_fasta_sequence()
+>>> sample.download_pdb_structure()
+>>> sample.metadata_to_file()
+\end{verbatim}
+
+As you can see in the above example, you need to first define a class of your
+request and afterwards use single functions to download the data.
+
+\subsection{API_RNA_STRAND}
+
+RNA Strand database (\url{http://www.rnasoft.ca/strand/}) is another
+database storing RNA molecules. It contains known RNA secondary structures
+of any type and organism gathering data from a lot of smaller 2D RNA structure
+databases. Searching the database is rather simple, however data download
+is not so straight forward. The downside of the database is a totally different
+system of IDs created here de novo for all of the molecules.
+
+Our API searches through the database using a sequence given as an argument.
+It finds at most 100 similar molecules and enables user to choose the desired
+RNA. Afterwards, easy functions let download of sequence, structure or metadata.
+Sequence is saved in FASTA format, whereas for structure we have chosen
+the BPSEQ format.
+
+\begin{verbatim}
+>>> from RNA_structure import API_RNA_STRAND
+>>> sample = RNA_STRAND(sequence = 'UAAGCCCUA')
+>>> sample.download_fasta_sequence()
+>>> sample.download_pdb_structure()
+>>> sample.metadata_to_file()
+\end{verbatim}
+
+As you can see in the above example, names of functions are the same as in the
+API for Nucleic Acid Database.
+
+\subsection{API_function}
+
+The similarity of both API classes let us prepare the small class to unify
+the usage of both databases. User needs to define the desired database,
+recquired output and searched query. Additionally, user can specify the path,
+where the output data will be saved.
+
+In the below example we present a very siple use of our unified interface for both APIs.
+
+\begin{verbatim}
+>>> from RNA_structure import API_function
+>>> x = RNA_API("ndb","sequence","ACCGUACG")
+>>> x.use_API()
+\end{verbatim}
+
+\section{RNAfold_wrapper}
+
+For RNA 2D structure prediction we have decided to use a part of very well known
+Vienna Package (\url{http://www.tbi.univie.ac.at/RNA/}). It consists of multiple
+tools, however to wrap it we have chosen only one part - RNAfold. It calculates minimum
+free energy secondary structures and partition function of RNAs. The basic use of
+this software is described on the webpage of Vienna University
+(\url{http://www.tbi.univie.ac.at/RNA/}).
+
+All the possible options provided for the RNAfold were wrapped using Python module
+Bio.Application. Therefore, all the options usually inherit names from original ones.
+The whole wrapper is fully documented with the docstrings describing single options.
+
+Below in the example we present a basic usege of the wrapper.
+
+\begin{verbatim}
+>>> cline = RNAfoldCommandLine(infile="~/Desktop/TMR_00200_sequence.fasta",energyModel=0, dangles=2,maxBPspan=1)
+>>> std_output, err_output = cline()
+\end{verbatim}
+
+The infile has to be always specified and all of the additional details are optional
+and they don't have to be defined.
+
+Wrapper itsel returns only the output which will be normally observed in command line.
+However, we have written simple functions to return structure and free energy value.
+
+\begin{verbatim}
+>>> print(dot_parenthesis(std_output))
+>>> print(energy(std_output))
+\end{verbatim}
+
+\section{dot2bpseq_converter}
+
+According to very different formats of RNA secondary structures, we were searching for
+a simple converter. However, there was nothing that stood out to our expectations.
+Therefore we have decided to prepare a converter to change the output of RNAfold to
+the file format that our secondary structure comparison will support. We have written
+a script to convert dot-paretheses notation (which is typical for Vienna Package) to
+bpseq format.
+
+It is compatible with our output from RNAfold and it is a part of our pipline:
+it takes the output from RNAfold wrapper and bypasses it to the RBP_score algorithm.
+
+\section{RNA structures comparison}
+
+Next part of our package is responsible for comparison of 3D and 2D RNA structures.
+
+\subsection{RBP_score}
+
+To compare RNA secondary structures we have implemented an algorithm - 
+relaxed base pair score described in a publication from 2010
+"Comparing RNA secondary structures using a relaxed base-pair score" written by
+Phaedra Agius, Kristin P. Bennett, and Michael Zuker and published in RNA journal.
+It is a very simple but powerful modification of previously described and widely used
+base pair score. Base pair score was simply counting the base pairs which
+were present in only one structure from two compared ones. Relaxed base pair score
+needs one additional parameter (chosen by the algorithm user). It is named
+relaxation parameter. According to this one the relaxed base pair score is calculated.
+
+Our implementation is flexible and user can choose both - base pair score and
+relaxed base pair score. In the second case program will ask about the desired
+value of the relaxation parameter.
+
+\subsection{RMSD}
+
+RMSD which stands for root-mean-square deviation is the measure of average distance
+between atoms and serves widely for the comparison of 3D RNA structures.
+
+We have used an already written script found on GitHub (\url{https://github.com/charnley/rmsd})
+written by Jimmy Charnley Kromann and Lars Andersen Bratholm
+which takes two file paths and calculates RMSD between files present there.

@@ -1,0 +1,82 @@
+Molecule ID : TMR_00273
+Molecule name : Jann.spec._TRW-290400_1-317
+Reference : Zwieb, C., Gorodkin, J., Knudsen B., Burks, J., and Wower, J. (2003) tmRDB (tmRNA database) Nucleic Acids Res,  31, 446-447.
+Type : Transfer Messenger RNA
+Organism : N/A
+Validated by NMR or X-Ray : No
+Method for secondary structure determination : Comparative sequence analysis
+Number of molecules : 1
+Length : 317
+Fragments used : No
+Duplicated sequence : No other molecule in the database has the same sequence
+Number of 
+domains : 1
+Number of unpaired bases : 175
+Number of paired bases : 142
+Number of stems : 15
+Number of base pairs in stems : 53
+Maximum length of a stem : 8
+Average length of a stem : 3.53
+Minimum length of a stem : 1
+Maximum estimated free energy : 0
+Average estimated free energy : -6.05
+Minimum estimated free energy : -15.6
+Number of hairpin loops : 4
+Maximum number of free bases in hairpin loops : 7
+Average number of free bases in hairpin loops : 4.75
+Minimum number of free bases in hairpin loop : 2
+Number of bulge loops : 1
+Maximum number of free bases in bulge loops : 3
+Average number of free bases in bulge loops : 1.5
+Minimum number of free bases in bulge loop : 0
+Number of internal loops : 8
+Maximum number of free bases in internal loops: : 3
+Average number of free bases in internal loops: : 1.62
+Minimum number of free bases in internal loop: : 1
+Maximum internal loop absolute asymmetry: : 2
+Average internal loop absolute asymmetry: : 0.5
+Minimum internal loop absolute asymmetry: : 0
+Maximum internal loop relative asymmetry: : 3
+Average internal loop relative asymmetry: : 1.5
+Minimum internal loop relative asymmetry: : 1
+Number of multi-loops : 2
+Maximum number of free bases in multi-loops: : 39
+Average number of free bases in multi-loops: : 11.22
+Minimum number of free bases in multi-loop: : 0
+Maximum multi-loop absolute asymmetry: : 39
+Average multi-loop absolute asymmetry: : 13.47
+Minimum multi-loop absolute asymmetry: : 1
+Maximum multi-loop relative asymmetry: : 19.5
+Average multi-loop relative asymmetry: : 2.09
+Minimum multi-loop relative asymmetry: : 0
+Maximum number of branches in multi-loops: : 6
+Average number of branches in multi-loops: : 4.5
+Minimum number of branches in multi-loops: : 3
+Total number of non-canonical base pairs : 0
+Number of pseudoknots : 2
+Number of bands: : 4
+Number of base pairs in bands: : 18
+Maximum band length: : 6
+Average band length: : 4.5
+Minimum band length: : 3
+Maximum number of bands per pseudoknot: : 2
+Average number of bands per pseudoknot: : 2
+Minimum number of bands per pseudoknot: : 2
+Maximum number of un-bands: : 0
+Average number of un-bands: : 0
+Minimum number of un-bands: : 0
+Maximum number of in-bands: : 0
+Average number of in-bands: : 0
+Minimum number of in-bands: : 0
+Maximum number of unpaired bases: : 12
+Average number of unpaired bases: : 11
+Minimum number of unpaired bases: : 10
+Several ways to remove minimum number of base pairs, per molecule: : No
+Minimum number of base pairs to remove, per molecule: : 7
+Maximum number of base pairs to remove, per pseudoknot: : 4
+Average number of base pairs to remove, per pseudoknot: : 3.5
+Minimum number of base pairs to remove, per pseudoknot: : 3
+Minimum number of bands to remove, per molecule: : 2
+Maximum number of bands to remove, per pseudoknot: : 1
+Average number of bands to remove, per pseudoknot: : 1
+Minimum number of bands to remove, per pseudoknot: : 1

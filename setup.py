@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """Distutils based setup script for Biopython.
 
 This uses Distutils (http://python.org/sigs/distutils-sig/) the standard
@@ -26,6 +27,18 @@ from __future__ import print_function
 import sys
 import os
 import shutil
+
+def is_prettytable():
+    try:
+        import prettytable
+        return True
+    except ImportError:
+        return False
+
+if is_prettytable() == False:
+    "Please install prettytable module"
+    sys.exit()
+
 
 if "bdist_wheel" in sys.argv:
     try:
@@ -113,6 +126,7 @@ def is_pypy():
 def is_ironpython():
     return sys.platform == "cli"
     # TODO - Use platform as in Pypy test?
+
 
 
 def get_yes_or_no(question, default):
@@ -395,6 +409,10 @@ PACKAGES = [
     'Bio._py3k',
     # Other top level packages,
     'BioSQL',
+    'Bio.RNA_Structure',
+    'Bio.RNA_Structure.API',
+    'Bio.RNA_Structure.RBP_score',
+    'Bio.RNA_Structure.RNAfold',
     ]
 
 if os.name == 'jython':
