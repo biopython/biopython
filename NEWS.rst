@@ -44,6 +44,7 @@ possible, especially the following contributors:
 - Noam Kremen (first contribution)
 - Peter Cock
 - Rasmus Fonseca (first contribution)
+- Rodrigo Dorantes-Gilardi (first contribution)
 - Sacha Laurent (first contribution)
 - Wibowo 'Bow' Arindrarto
 - Zheng Ruan
