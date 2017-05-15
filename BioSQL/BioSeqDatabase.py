@@ -38,14 +38,14 @@ def open_database(driver="MySQLdb", **kwargs):
         >>> server = BioSeqDatabase.open_database(user="root", db="minidb")
 
     Arguments:
+         - driver - The name of the database driver to use for connecting. The
+           driver should implement the python DB API. By default, the MySQLdb
+           driver is used.
+         - user -the username to connect to the database with.
+         - password, passwd - the password to connect with
+         - host - the hostname of the database
+         - database or db - the name of the database
 
-     - driver - The name of the database driver to use for connecting. The
-       driver should implement the python DB API. By default, the MySQLdb
-       driver is used.
-     - user -the username to connect to the database with.
-     - password, passwd - the password to connect with
-     - host - the hostname of the database
-     - database or db - the name of the database
     """
     if driver == "psycopg":
         raise ValueError("Using BioSQL with psycopg (version one) is no "
@@ -415,10 +415,10 @@ class Adaptor(object):
     def fetch_seqid_by_display_id(self, dbid, name):
         """Return the internal id for a sequence using its display id.
 
-        Argunments:
+        Arguments:
             - dbid - the internal id for the sub-database
             - name - the name of the sequence. Corresponds to the
-            name column of the bioentry table of the SQL schema
+              name column of the bioentry table of the SQL schema
         """
         sql = r"select bioentry_id from bioentry where name = %s"
         fields = [name]
@@ -436,10 +436,10 @@ class Adaptor(object):
     def fetch_seqid_by_accession(self, dbid, name):
         """Return the internal id for a sequence using its accession.
 
-        Argunments:
+        Arguments:
             - dbid - the internal id for the sub-database
             - name - the accession of the sequence. Corresponds to the
-            accession column of the bioentry table of the SQL schema
+              accession column of the bioentry table of the SQL schema
         """
         sql = r"select bioentry_id from bioentry where accession = %s"
         fields = [name]
@@ -457,10 +457,10 @@ class Adaptor(object):
     def fetch_seqids_by_accession(self, dbid, name):
         """Return a list internal ids using an accession.
 
-        Argunments:
+        Arguments:
             - dbid - the internal id for the sub-database
             - name - the accession of the sequence. Corresponds to the
-            accession column of the bioentry table of the SQL schema
+              accession column of the bioentry table of the SQL schema
         """
         sql = r"select bioentry_id from bioentry where accession = %s"
         fields = [name]
@@ -472,10 +472,10 @@ class Adaptor(object):
     def fetch_seqid_by_version(self, dbid, name):
         """Return the internal id for a sequence using its accession and version.
 
-        Argunments:
+        Arguments:
             - dbid - the internal id for the sub-database
             - name - the accession of the sequence containing a version number.
-            Must correspond to <accession>.<version>
+              Must correspond to <accession>.<version>
         """
         acc_version = name.split(".")
         if len(acc_version) > 2:
@@ -502,10 +502,10 @@ class Adaptor(object):
     def fetch_seqid_by_identifier(self, dbid, identifier):
         """Return the internal id for a sequence using its identifier.
 
-        Argunments:
+        Arguments:
             - dbid - the internal id for the sub-database
             - identifier - the identifier of the sequence. Corresponds to
-            the identifier column of the bioentry table in the SQL schema.
+              the identifier column of the bioentry table in the SQL schema.
         """
         # YB: was fetch_seqid_by_seqid
         sql = "SELECT bioentry_id FROM bioentry WHERE identifier = %s"
@@ -824,7 +824,7 @@ class BioSeqDatabase(object):
 
         Arguments:
             - kwargs - A single key-value pair where the key is one
-            of primary_id, gi, display_id, name, accession, version
+              of primary_id, gi, display_id, name, accession, version
         """
         if len(kwargs) != 1:
             raise TypeError("single key/value parameter expected")

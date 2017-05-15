@@ -134,8 +134,8 @@ class DBSeq(Seq):
     def __add__(self, other):
         """Add another sequence or string to this sequence.
 
-        The sequence is first converted to a Bio.Seq object before the addition.
-        The returned object is a Bio.Seq, not a BioSQL.DBSeq
+        The sequence is first converted to a Seq object before the addition.
+        The returned object is a Seq object, not a DBSeq object
         """
         # Let the Seq object deal with the alphabet issues etc
         return self.toseq() + other
@@ -143,8 +143,8 @@ class DBSeq(Seq):
     def __radd__(self, other):
         """Add another sequence or string to the left.
 
-        The sequence is first converted to a Bio.Seq object before the addition.
-        The returned object is a Bio.Seq, not a BioSQL.DBSeq
+        The sequence is first converted to a Seq object before the addition.
+        The returned object is a Seq object, not a DBSeq object
         """
         # Let the Seq object deal with the alphabet issues etc
         return other + self.toseq()
