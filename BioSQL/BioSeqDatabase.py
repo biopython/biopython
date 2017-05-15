@@ -520,7 +520,7 @@ class Adaptor(object):
         return rv[0][0]
 
     def list_biodatabase_names(self):
-        """Returns a list of all of the sub-databases."""
+        """Return a list of all of the sub-databases."""
         return self.execute_and_fetch_col0(
             "SELECT name FROM biodatabase")
 
