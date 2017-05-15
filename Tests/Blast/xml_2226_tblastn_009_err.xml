@@ -38,6 +38,10 @@
       <Iteration_message>Warning: conversion_warning: Could not calculate ungapped Karlin-Altschul parameters due to an invalid query sequence or its translation. Please verify the query sequence(s) and/or filtering options Warning: conversion_warning: Query &apos;lcl|Query_1 random_s00&apos; (# 1): Warning: Could not calculate ungapped Karlin-Altschul parameters due to an invalid query sequence or its translation. Please verify the query sequence(s) and/or filtering options  No hits found</Iteration_message>
     </Iteration>
   </BlastOutput_iterations>
+</BlastOutput>		
+<?xml version="1.0"?>		
+<!DOCTYPE BlastOutput PUBLIC "-//NCBI//NCBI BlastOutput/EN" "http://www.ncbi.nlm.nih.gov/dtd/NCBI_BlastOutput.dtd">
+<BlastOutput>
   <BlastOutput_program>tblastn</BlastOutput_program>
   <BlastOutput_version>TBLASTN 2.2.26+</BlastOutput_version>
   <BlastOutput_reference>Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&amp;auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), &quot;Gapped BLAST and PSI-BLAST: a new generation of protein database search programs&quot;, Nucleic Acids Res. 25:3389-3402.</BlastOutput_reference>
@@ -160,6 +164,10 @@
       <Iteration_message>Warning: conversion_warning: Could not calculate ungapped Karlin-Altschul parameters due to an invalid query sequence or its translation. Please verify the query sequence(s) and/or filtering options Warning: conversion_warning: Query &apos;lcl|Query_1 random_s00&apos; (# 1): Warning: Could not calculate ungapped Karlin-Altschul parameters due to an invalid query sequence or its translation. Please verify the query sequence(s) and/or filtering options </Iteration_message>
     </Iteration>
   </BlastOutput_iterations>
+</BlastOutput>		
+<?xml version="1.0"?>		
+<!DOCTYPE BlastOutput PUBLIC "-//NCBI//NCBI BlastOutput/EN" "http://www.ncbi.nlm.nih.gov/dtd/NCBI_BlastOutput.dtd">		
+<BlastOutput>
   <BlastOutput_program>tblastn</BlastOutput_program>
   <BlastOutput_version>TBLASTN 2.2.26+</BlastOutput_version>
   <BlastOutput_reference>Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&amp;auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), &quot;Gapped BLAST and PSI-BLAST: a new generation of protein database search programs&quot;, Nucleic Acids Res. 25:3389-3402.</BlastOutput_reference>
