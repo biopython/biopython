@@ -121,7 +121,7 @@ class CharBuffer(object):
             return None
 
     def peek_word(self, word):
-        """ Returns a word stored in the buffer."""
+        """Returns a word stored in the buffer."""
         return ''.join(self.buffer[:len(word)]) == word
 
     def next_word(self):
@@ -183,7 +183,7 @@ class StepMatrix(object):
                 self.set(x, y, 0)
 
     def set(self, x, y, value):
-        """ Swaps the value."""
+        """Swaps the value."""
         if x > y:
             x, y = y, x
         self.data[x + y] = value
@@ -934,7 +934,7 @@ class Nexus(object):
         pass
 
     def _matrix(self, options):
-        """ Creates a matrix for NEXUS object."""
+        """Creates a matrix for NEXUS object."""
         if not self.ntax or not self.nchar:
             raise NexusError('Dimensions must be specified before matrix!')
         self.matrix = {}
