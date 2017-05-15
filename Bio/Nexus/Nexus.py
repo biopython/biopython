@@ -76,6 +76,7 @@ class CharBuffer(object):
             return None
 
     def __next__(self):
+      """Iterates over NEXUS characters in the file."""
         if self.buffer:
             return self.buffer.pop(0)
         else:
@@ -87,6 +88,7 @@ class CharBuffer(object):
             return self.__next__()
 
     def next_nonwhitespace(self):
+      """Checks for next non whitespace character in NEXUS file."""
         while True:
             p = next(self)
             if p is None:
@@ -96,10 +98,15 @@ class CharBuffer(object):
         return None
 
     def skip_whitespace(self):
+      """Skips whitespace characters in NEXUS file."""
         while self.buffer[0] in WHITESPACE:
             self.buffer = self.buffer[1:]
 
     def next_until(self, target):
+      """Keeps iterating the NEXUS file until it reaches a target character.
+      
+      Returns the word found in the NEXUS file.
+      """ 
         for t in target:
             try:
                 pos = self.buffer.index(t)
@@ -113,6 +120,7 @@ class CharBuffer(object):
             return None
 
     def peek_word(self, word):
+      """ Returns a word stored in the buffer."""
         return ''.join(self.buffer[:len(word)]) == word
 
     def next_word(self):
@@ -173,6 +181,7 @@ class StepMatrix(object):
                 self.set(x, y, 0)
 
     def set(self, x, y, value):
+      """ Swaps the value."""
         if x > y:
             x, y = y, x
         self.data[x + y] = value
@@ -199,6 +208,7 @@ class StepMatrix(object):
         return self
 
     def smprint(self, name='your_name_here'):
+      """Prints a stepmatrix."""
         matrix = 'usertype %s stepmatrix=%d\n' % (name, len(self.symbols))
         matrix += '        %s\n' % '        '.join(self.symbols)
         for x in self.symbols:
@@ -836,6 +846,7 @@ class Nexus(object):
         return nextaxa.get(nexid)
 
     def _charlabels(self, options):
+      """Get labels for characters."""
         self.charlabels = {}
         opts = CharBuffer(options)
         while True:
@@ -920,6 +931,7 @@ class Nexus(object):
         pass
 
     def _matrix(self, options):
+      """ Creates a matrix for NEXUS object."""
         if not self.ntax or not self.nchar:
             raise NexusError('Dimensions must be specified before matrix!')
         self.matrix = {}
