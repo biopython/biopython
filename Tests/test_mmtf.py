@@ -37,8 +37,8 @@ class ParseMMTF(unittest.TestCase):
             self.assertEqual(mmtf_r.disordered, mmcif_r.disordered)
             self.assertEqual(mmtf_r.resname, mmcif_r.resname)
             self.assertEqual(mmtf_r.segid, mmcif_r.segid)
-            self.mmcif_atoms = [x for x in mmcif_r.get_atom()]
-            self.mmtf_atoms = [x for x in mmtf_r.get_atom()]
+            self.mmcif_atoms = [x for x in mmcif_r.get_atoms()]
+            self.mmtf_atoms = [x for x in mmtf_r.get_atoms()]
             self.check_atoms()
 
     def check_mmtf_vs_cif(self, mmtf_filename, cif_filename):

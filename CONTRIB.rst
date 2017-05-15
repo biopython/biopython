@@ -167,6 +167,7 @@ please open an issue on GitHub or mention it on the development mailing list.
 - Phillip Garland <pgarland at gmail>
 - Rasmus Fonseca <https://github.com/RasmusFonseca>
 - Richard Neher <https://github.com/rneher>
+- Rodrigo Dorantes-Gilardi <https://github.com/rodogi>
 - Sacha Laurent <https://github.com/Cashalow>
 - Saket Choudhary <https://github.com/saketkc>
 - Sebastian Bassi <https://about.me/bassi>
