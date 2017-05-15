@@ -56,6 +56,7 @@ class CharBuffer(object):
 
     This class is not intended for public use (any more).
     """
+
     def __init__(self, string):
         if string:
             self.buffer = list(string)
@@ -104,9 +105,9 @@ class CharBuffer(object):
 
     def next_until(self, target):
         """Keeps iterating the NEXUS file until it reaches a target character.
-      
+
         Returns the word found in the NEXUS file.
-        """ 
+        """
         for t in target:
             try:
                 pos = self.buffer.index(t)
@@ -171,6 +172,7 @@ class StepMatrix(object):
 
     See Wheeler (1990), Cladistics 6:269-275.
     """
+
     def __init__(self, symbols, gap):
         self.data = {}
         self.symbols = sorted(symbols)
@@ -390,10 +392,10 @@ def combine(matrices):
         for t in m_only:
             combined.matrix[t] = Seq(combined.missing * combined.nchar,
                                      combined.alphabet) + \
-                                Seq(str(m.matrix[t])
-                                    .replace(m.gap, combined.gap)
-                                    .replace(m.missing, combined.missing),
-                                    combined.alphabet)
+                Seq(str(m.matrix[t])
+                    .replace(m.gap, combined.gap)
+                    .replace(m.missing, combined.missing),
+                    combined.alphabet)
         combined.taxlabels.extend(m_only)    # new taxon list
         for cn, cs in m.charsets.items():  # adjust character sets for new matrix
             combined.charsets['%s.%s' % (n, cn)] = [x + combined.nchar for x in cs]
@@ -565,6 +567,7 @@ class Commandline(object):
 
 class Block(object):
     """Represent a NEXUS block with block name and list of commandlines."""
+
     def __init__(self, title=None):
         self.title = title
         self.commandlines = []
@@ -1567,9 +1570,9 @@ class Nexus(object):
                     newpartition[sn] = nsp
             if newpartition:
                 setsb.append('taxpartition %s = %s' % (safename(n),
-                             ', '.join('%s: %s' % (safename(sn),
-                                                   ' '.join(safename(x) for x in newpartition[sn]))
-                                       for sn in names if sn in newpartition)))
+                                                       ', '.join('%s: %s' % (safename(sn),
+                                                                             ' '.join(safename(x) for x in newpartition[sn]))
+                                                                 for sn in names if sn in newpartition)))
         # add 'end' and return everything
         setsb.append('end;\n')
         if len(setsb) == 2:  # begin and end only
