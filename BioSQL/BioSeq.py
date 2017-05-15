@@ -135,6 +135,7 @@ class DBSeq(Seq):
         """Add another sequence or string to this sequence.
 
         The sequence is first converted to a Bio.Seq object before the addition.
+        The returned object is a Bio.Seq, not a BioSQL.DBSeq
         """
         # Let the Seq object deal with the alphabet issues etc
         return self.toseq() + other
@@ -143,6 +144,7 @@ class DBSeq(Seq):
         """Add another sequence or string to the left.
 
         The sequence is first converted to a Bio.Seq object before the addition.
+        The returned object is a Bio.Seq, not a BioSQL.DBSeq
         """
         # Let the Seq object deal with the alphabet issues etc
         return other + self.toseq()
