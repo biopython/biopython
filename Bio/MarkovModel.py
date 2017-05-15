@@ -44,7 +44,7 @@ except AttributeError:
 
 
 def itemindex(values):
-    """Return a dictionary that hold values and their position inside the sequence as key."""
+    """Return a dictionary of values with their sequence offset as keys."""
     d = {}
     entries = enumerate(values[::-1])
     n = len(values) - 1
@@ -61,7 +61,7 @@ LOG0 = numpy.log(VERY_SMALL_NUMBER)
 
 class MarkovModel(object):
     """Create a state-emitting MarkovModel object."""
-    
+
     def __init__(self, states, alphabet,
                  p_initial=None, p_transition=None, p_emission=None):
         """Initialize the class."""
@@ -89,7 +89,7 @@ def _readline_and_check_start(handle, start):
 
 
 def load(handle):
-    """Load(handle) -> MarkovModel()."""
+    """Parse a file handle into a MarkovModel object."""
     # Load the states.
     line = _readline_and_check_start(handle, "STATES:")
     states = line.split()[1:]
@@ -147,7 +147,23 @@ def train_bw(states, alphabet, training_data,
              pseudo_initial=None, pseudo_transition=None, pseudo_emission=None,
              update_fn=None,
              ):
-    """Train a MarkovModel using the Baum-Welch algorithm."""
+    """Train a MarkovModel using the Baum-Welch algorithm.
+
+    Train a MarkovModel using the Baum-Welch algorithm.  states is a list
+    of strings that describe the names of each state.  alphabet is a
+    list of objects that indicate the allowed outputs.  training_data
+    is a list of observations.  Each observation is a list of objects
+    from the alphabet.
+
+    pseudo_initial, pseudo_transition, and pseudo_emission are
+    optional parameters that you can use to assign pseudo-counts to
+    different matrices.  They should be matrices of the appropriate
+    size that contain numbers to add to each parameter matrix, before
+    normalization.
+
+    update_fn is an optional callback that takes parameters
+    (iteration, log_likelihood).  It is called once per iteration.
+    """
     N, M = len(states), len(alphabet)
     if not training_data:
         raise ValueError("No training data given.")
@@ -373,7 +389,21 @@ def _backward(N, T, lp_transition, lp_emission, outputs):
 def train_visible(states, alphabet, training_data,
                   pseudo_initial=None, pseudo_transition=None,
                   pseudo_emission=None):
-    """Train a visible MarkovModel using maximum likelihoood estimates for each of the parameters."""
+    """Train a visible MarkovModel using maximum likelihoood estimates for each of the parameters.
+
+    Train a visible MarkovModel using maximum likelihoood estimates
+    for each of the parameters.  states is a list of strings that
+    describe the names of each state.  alphabet is a list of objects
+    that indicate the allowed outputs.  training_data is a list of
+    (outputs, observed states) where outputs is a list of the emission
+    from the alphabet, and observed states is a list of states from
+    states.
+
+    pseudo_initial, pseudo_transition, and pseudo_emission are
+    optional parameters that you can use to assign pseudo-counts to
+    different matrices.  They should be matrices of the appropriate
+    size that contain numbers to add to each parameter matrix.
+    """
     N, M = len(states), len(alphabet)
     if pseudo_initial is not None:
         pseudo_initial = numpy.asarray(pseudo_initial)
@@ -454,7 +484,10 @@ def _argmaxes(vector, allowance=None):
 
 
 def find_states(markov_model, output):
-    """Find_states(markov_model, output) -> list of (states, score)."""
+    """Find states in the given Markov model output.
+
+    Returns a list of (states, score) tuples.
+    """
     mm = markov_model
     N = len(mm.states)
 
