@@ -1,4 +1,3 @@
-
 # Copyright 2005 by Michiel de Hoon.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -2776,8 +2775,8 @@ class TestNCBIXML(unittest.TestCase):
 
         with open(datafile) as handle:
             xml = handle.read()
-        handle = StringIO("random text before the genuine XML\n"+xml)
-        
+        handle = StringIO("random text before the genuine XML\n" + xml)
+
         records = NCBIXML.parse(handle)
         self.assertRaises(ValueError, next, records)
         handle.close()
