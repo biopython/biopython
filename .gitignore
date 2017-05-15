@@ -3,6 +3,9 @@ build
 
 #Ignore the distribution directory
 dist
+
+#Ignore the directory created by tox (http://tox.testrun.org/)
+.tox
  
 #Ignore backup files from some Unix editors,
 *~
