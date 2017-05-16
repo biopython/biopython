@@ -934,7 +934,7 @@ class Nexus(object):
         pass
 
     def _matrix(self, options):
-        """Creates a matrix for NEXUS object (PRIVATE)"""
+        """Creates a matrix for NEXUS object (PRIVATE)."""
         if not self.ntax or not self.nchar:
             raise NexusError('Dimensions must be specified before matrix!')
         self.matrix = {}
@@ -1106,6 +1106,7 @@ class Nexus(object):
         self.trees.append(tree)
 
     def _apply_block_structure(self, title, lines):
+        """Applies Block structure to the NEXUS file (PRIVATE).""" 
         block = Block('')
         block.title = title
         for line in lines:
@@ -1113,14 +1114,17 @@ class Nexus(object):
         self.structured.append(block)
 
     def _taxset(self, options):
+        """Creates unique taxset (PRIVATE)."""
         name, taxa = self._get_indices(options, set_type=TAXSET)
         self.taxsets[name] = _make_unique(taxa)
 
     def _charset(self, options):
+        """Creates unique character set (PRIVATE).""" 
         name, sites = self._get_indices(options, set_type=CHARSET)
         self.charsets[name] = _make_unique(sites)
 
     def _taxpartition(self, options):
+        """Collects taxpartition from a NEXUS file (PRIVATE)."""
         taxpartition = {}
         quotelevel = False
         opts = CharBuffer(options)
@@ -1164,6 +1168,7 @@ class Nexus(object):
         pass
 
     def _charpartition(self, options):
+        """ Collects character partition from NEXUS file (PRIVATE)."""
         charpartition = {}
         quotelevel = False
         opts = CharBuffer(options)
