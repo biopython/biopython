@@ -272,7 +272,11 @@ def _baum_welch(N, M, training_outputs,
 def _baum_welch_one(N, M, outputs,
                     lp_initial, lp_transition, lp_emission,
                     lpseudo_initial, lpseudo_transition, lpseudo_emission):
-    """Execute one step for Baum-Welch algorithm, changing the value for lp_initial, lp_transition and lp_emission in place (PRIVATE)."""
+    """Execute one step for Baum-Welch algorithm (PRIVATE).
+
+    Do one iteration of Baum-Welch based on a sequence of output.
+    Changes the value for lp_initial, lp_transition and lp_emission in place.
+    """
     T = len(outputs)
     fmat = _forward(N, T, lp_initial, lp_transition, lp_emission, outputs)
     bmat = _backward(N, T, lp_transition, lp_emission, outputs)
@@ -350,7 +354,11 @@ def _baum_welch_one(N, M, outputs,
 
 
 def _forward(N, T, lp_initial, lp_transition, lp_emission, outputs):
-    """Implement forward algorithm (PRIVATE)."""
+    """Implement forward algorithm (PRIVATE).
+
+    Calculate a Nx(T+1) matrix, where the last column is the total
+    probability of the output.
+    """
     matrix = numpy.zeros((N, T + 1))
 
     # Initialize the first column to be the initial values.
