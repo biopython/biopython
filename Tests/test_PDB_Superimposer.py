@@ -19,7 +19,7 @@ from Bio.PDB import PDBParser
 
 class SuperimposerTests(unittest.TestCase):
     """Test Superimposer module."""
-    
+
     def test_Superimposer(self):
         """Test on module that superimpose two protein structures."""
         pdb1 = "PDB/1A8O.pdb"
