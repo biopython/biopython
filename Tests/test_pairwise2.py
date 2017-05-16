@@ -4,16 +4,18 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 import unittest
+import warnings
 
 from Bio import pairwise2
 from Bio.SubsMat.MatrixInfo import blosum62
+from Bio import BiopythonWarning
 
 
 class TestPairwiseErrorConditions(unittest.TestCase):
-    """Test several error conditions"""
+    """Test several error conditions."""
 
     def test_function_name(self):
-        """Test for wrong function names"""
+        """Test for wrong function names."""
         # Function name pattern must be globalXX or localXX
         self.assertRaises(AttributeError, lambda: pairwise2.align.globalxxx)
         self.assertRaises(AttributeError, lambda: pairwise2.align.localxxx)
@@ -23,7 +25,7 @@ class TestPairwiseErrorConditions(unittest.TestCase):
         self.assertRaises(AttributeError, lambda: pairwise2.align.globalxa)
 
     def test_function_parameters(self):
-        """Test for number of parameteres"""
+        """Test for number of parameters."""
         # globalxx takes two parameters
         self.assertRaises(TypeError, pairwise2.align.globalxx, 'A')
         # matrix_only is no keyword argument
@@ -46,6 +48,18 @@ class TestPairwiseErrorConditions(unittest.TestCase):
         # Gap open penalty must be higher than gap extension penalty
         self.assertRaises(ValueError, pairwise2.align.globalxs, 'A', 'C',
                           -1, -5)
+
+    def test_warnings(self):
+        """Test for warnings."""
+        with warnings.catch_warnings(record=True) as w:
+            # Cause all warnings to always be triggered.
+            warnings.simplefilter('always')
+            # Trigger a warning.
+            pairwise2.align.localxx('GA', 'CGA', penalize_end_gaps=True)
+            # Verify some things
+            self.assertEqual(len(w), 1)
+            self.assertEqual(w[-1].category, BiopythonWarning)
+            self.assertIn('should not', str(w[-1].message))
 
 
 class TestPairwiseGlobal(unittest.TestCase):
@@ -72,7 +86,7 @@ GA--T
 """)
 
     def test_globalxx_simple2(self):
-        """Do the same test with sequence order reversed"""
+        """Do the same test with sequence order reversed."""
         aligns = pairwise2.align.globalxx("GAT", "GAACT")
         self.assertEqual(len(aligns), 2)
         aligns.sort()
@@ -92,6 +106,17 @@ GA--T
 GAACT
   Score=3
 """)
+
+    def test_list_input(self):
+        """Do a global aligment with sequences supplied as lists."""
+        aligns = pairwise2.align.globalxx(['Gly', 'Ala', 'Thr'],
+                                          ['Gly', 'Ala', 'Ala', 'Cys', 'Thr'],
+                                          gap_char=['---'])
+        aligns.sort()
+        seq1, seq2, score, begin, end = aligns[0]
+        self.assertEqual(score, 3)
+        self.assertEqual(seq1, ['Gly', '---', 'Ala', '---', 'Thr'])
+        self.assertEqual(seq2, ['Gly', 'Ala', 'Ala', 'Cys', 'Thr'])
 
 
 class TestPairwiseLocal(unittest.TestCase):
@@ -116,7 +141,7 @@ zA-Bz
 """)
 
     def test_localms(self):
-        """Two different local alignments"""
+        """Two different local alignments."""
         aligns = sorted(pairwise2.align.localms("xxxABCDxxx", "zzzABzzCDz", 1,
                                                 -0.5, -3, -1))
         alignment = pairwise2.format_alignment(*aligns[0])
@@ -147,16 +172,16 @@ zzzABzzCDz
 
 
 class TestScoreOnly(unittest.TestCase):
-    """Test paramater ``score_only``"""
+    """Test paramater ``score_only``."""
 
     def test_score_only_global(self):
-        """Test ``score_only`` in a global alignment"""
+        """Test ``score_only`` in a global alignment."""
         aligns1 = pairwise2.align.globalxx("GAACT", "GAT")
         aligns2 = pairwise2.align.globalxx("GAACT", "GAT", score_only=True)
         self.assertEqual(aligns1[0][2], aligns2)
 
     def test_score_only_local(self):
-        """Test ``score_only`` in a local alignment"""
+        """Test ``score_only`` in a local alignment."""
         aligns1 = pairwise2.align.localms("xxxABCDxxx", "zzzABzzCDz", 1, -0.5,
                                           -3, -1)
         aligns2 = pairwise2.align.localms("xxxABCDxxx", "zzzABzzCDz", 1, -0.5,
@@ -310,7 +335,7 @@ GT--
 """)
 
     def test_penalize_end_gaps2(self):
-        """Do the same, but use the generic method (with the same resutlt)"""
+        """Do the same, but use the generic method (with the same result)."""
         aligns = pairwise2.align.globalxs("GACT", "GT", -0.8, -0.2,
                                           penalize_end_gaps=0,
                                           force_generic=True)
@@ -527,12 +552,11 @@ class TestPersiteGapPenalties(unittest.TestCase):
 
         def no_gaps(x, y):
             """Very expensive to open a gap in seq1."""
-
             x = 0  # fool QuantifiedCode, x is not used here
             return -2000 - y
 
         def specific_gaps(x, y):
-            """Very expensive to open a gap in seq2
+            """Very expensive to open a gap in seq2.
 
             ...unless it is in one of the allowed positions:
             """
@@ -566,7 +590,7 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
             return -2000 - y
 
         def specific_gaps(x, y):
-            """Very expensive to open a gap in seq2
+            """Very expensive to open a gap in seq2.
 
             ...unless it is in one of the allowed positions:
             """
