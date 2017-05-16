@@ -201,7 +201,7 @@ def _calc_f_sharp(N, nclasses, features):
 
 def _iis_solve_delta(N, feature, f_sharp, empirical, prob_yx,
                      max_newton_iterations, newton_converge):
-    r"""Solve delta using Newton's method (PRIVATE)."""
+    """Solve delta using Newton's method (PRIVATE)."""
     # SUM_x P(x) * SUM_c P(c|x) f_i(x, c) e^[delta_i * f#(x, c)] = 0
     delta = 0.0
     iters = 0
