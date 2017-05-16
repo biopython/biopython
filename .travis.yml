@@ -68,10 +68,9 @@ before_install:
   - "if [[ $TRAVIS_PYTHON_VERSION == 'pypy' ]]; then deactivate && wget https://bitbucket.org/squeaky/portable-pypy/downloads/pypy-5.7.1-linux_x86_64-portable.tar.bz2 && tar -jxvf pypy-5.7.1-linux_x86_64-portable.tar.bz2 && echo 'Setting up aliases...' && cd pypy-5.7.1-linux_x86_64-portable/bin/ && export PATH=$PWD:$PATH && ln -s pypy python && echo 'Setting up pip...' && ./pypy -m ensurepip ; fi"
   - "if [[ $TRAVIS_PYTHON_VERSION == 'pypy3' ]]; then deactivate && wget https://bitbucket.org/squeaky/portable-pypy/downloads/pypy3.5-5.7.1-beta-linux_x86_64-portable.tar.bz2 && tar -jxvf pypy3.5-5.7.1-beta-linux_x86_64-portable.tar.bz2 && echo 'Setting up aliases...' && cd pypy3.5-5.7.1-beta-linux_x86_64-portable/bin/ && export PATH=$PWD:$PATH && ln -s pypy3 python && echo 'Setting up pip...' && ./pypy3 -m ensurepip && ln -s pip3 pip ; fi"
   - cd $HOME
-# TODO - renable this once their FTP site is working again...
-#  - curl -L -O ftp://ftp.cmbi.ru.nl/pub/software/dssp/dssp-2.0.4-linux-amd64
-#  - mv dssp-2.0.4-linux-amd64 bin/dssp
-#  - chmod a+x bin/dssp
+  - curl -L -O ftp://ftp.cmbi.ru.nl/pub/software/dssp/dssp-2.0.4-linux-amd64
+  - mv dssp-2.0.4-linux-amd64 bin/dssp
+  - chmod a+x bin/dssp
   - cd $TRAVIS_BUILD_DIR
 
 install:
