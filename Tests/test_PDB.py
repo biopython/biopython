@@ -32,14 +32,13 @@ except ImportError:
         "Install NumPy if you want to use Bio.PDB.")
 
 from Bio import BiopythonWarning
-from Bio import AlignIO
 from Bio.Seq import Seq
 from Bio.Alphabet import generic_protein
 from Bio.PDB import PDBParser, PPBuilder, CaPPBuilder, PDBIO, Select
 from Bio.PDB import HSExposureCA, HSExposureCB, ExposureCN
 from Bio.PDB.PDBExceptions import PDBConstructionException, PDBConstructionWarning
 from Bio.PDB import rotmat, Vector, refmat, calc_angle, calc_dihedral, rotaxis, m2rotaxis
-from Bio.PDB import Residue, Atom, StructureAlignment, Superimposer, Selection
+from Bio.PDB import Residue, Atom
 from Bio.PDB import make_dssp_dict
 from Bio.PDB import DSSP
 from Bio.PDB.NACCESS import process_asa_data, process_rsa_data
@@ -1255,167 +1254,6 @@ class TransformTests(unittest.TestCase):
         self.assertAlmostEqual(angle, cangle, places=3)
         self.assertTrue(numpy.allclose(list(map(int, (axis - caxis).get_array())), [0, 0, 0]),
                         "Want %r and %r to be almost equal" % (axis.get_array(), caxis.get_array()))
-
-
-class StructureAlignTests(unittest.TestCase):
-
-    def test_StructAlign(self):
-        """Tests on module to align two proteins according to a FASTA alignment file."""
-        al_file = "PDB/alignment_file.fa"
-        pdb2 = "PDB/1A8O.pdb"
-        pdb1 = "PDB/2XHE.pdb"
-        with open(al_file, 'r') as handle:
-            records = AlignIO.read(handle, "fasta")
-        p = PDBParser()
-        s1 = p.get_structure('1', pdb1)
-        p = PDBParser()
-        s2 = p.get_structure('2', pdb2)
-        m1 = s1[0]
-        m2 = s2[0]
-        al = StructureAlignment(records, m1, m2)
-        self.assertFalse(al.map12 == al.map21)
-        self.assertTrue(len(al.map12), 566)
-        self.assertTrue(len(al.map21), 70)
-        chain1_A = m1["A"]
-        chain2_A = m2["A"]
-        self.assertEqual(chain1_A[202].get_resname(), 'ILE')
-        self.assertEqual(chain2_A[202].get_resname(), 'LEU')
-        self.assertEqual(chain1_A[291].get_resname(), chain2_A[180].get_resname())
-        self.assertNotEqual(chain1_A[291].get_resname(), chain2_A[181].get_resname())
-
-
-class SuperimposerTests(unittest.TestCase):
-
-    def test_Superimposer(self):
-        """Test on module that superimpose two protein structures."""
-        pdb1 = "PDB/1A8O.pdb"
-        p = PDBParser()
-        s1 = p.get_structure("FIXED", pdb1)
-        fixed = Selection.unfold_entities(s1, "A")
-        s2 = p.get_structure("MOVING", pdb1)
-        moving = Selection.unfold_entities(s2, "A")
-        rot = numpy.identity(3).astype('f')
-        tran = numpy.array((1.0, 2.0, 3.0), 'f')
-        for atom in moving:
-            atom.transform(rot, tran)
-        sup = Superimposer()
-        sup.set_atoms(fixed, moving)
-        self.assertTrue(numpy.allclose(sup.rotran[0], numpy.identity(3)))
-        self.assertTrue(numpy.allclose(sup.rotran[1], numpy.array([-1.0, -2.0, -3.0])))
-        self.assertAlmostEqual(sup.rms, 0.0, places=3)
-        atom_list = ['N', 'C', 'C', 'O', 'C', 'C', 'SE', 'C', 'N', 'C', 'C',
-                     'O', 'C', 'C', 'O', 'O', 'N', 'C', 'C', 'O', 'C', 'C',
-                     'C', 'C', 'N', 'C', 'C', 'O', 'C', 'C', 'C', 'N', 'C',
-                     'N', 'N', 'N', 'C', 'C', 'O', 'C', 'C', 'C', 'O', 'N',
-                     'N', 'C', 'C', 'O', 'N', 'C', 'C', 'O', 'C', 'C', 'C',
-                     'N', 'C', 'C', 'O', 'C', 'C', 'C', 'C', 'N', 'N', 'C',
-                     'C', 'O', 'C', 'C', 'C', 'O', 'O', 'N', 'C', 'C', 'O',
-                     'C', 'C', 'C', 'N', 'C', 'C', 'O', 'C', 'C', 'C', 'C',
-                     'C', 'C', 'C', 'N', 'C', 'C', 'O', 'C', 'C', 'C', 'N',
-                     'C', 'N', 'N', 'N', 'C', 'C', 'O', 'C', 'C', 'O', 'O',
-                     'N', 'C', 'C', 'O', 'C', 'C', 'C', 'C', 'C', 'C', 'C',
-                     'O', 'N', 'C', 'C', 'O', 'C', 'C', 'C', 'N', 'C', 'C',
-                     'O', 'C', 'C', 'O', 'O', 'N', 'C', 'C', 'O', 'C', 'C',
-                     'C', 'N', 'C', 'N', 'N', 'N', 'C', 'C', 'O', 'C', 'C',
-                     'C', 'C', 'C', 'C', 'C', 'N', 'C', 'C', 'O', 'C', 'C',
-                     'C', 'C', 'C', 'C', 'C', 'O', 'N', 'C', 'C', 'O', 'C',
-                     'C', 'C', 'C', 'N', 'N', 'C', 'C', 'O', 'C', 'O', 'C',
-                     'N', 'C', 'C', 'O', 'C', 'C', 'C', 'C', 'N', 'C', 'C',
-                     'O', 'C', 'C', 'C', 'N', 'C', 'N', 'N', 'N', 'C', 'C',
-                     'O', 'C', 'N', 'C', 'C', 'O', 'C', 'C', 'C', 'O', 'O',
-                     'N', 'C', 'C', 'O', 'C', 'C', 'C', 'O', 'N', 'N', 'C',
-                     'C', 'O', 'C', 'N', 'C', 'C', 'O', 'C', 'O', 'N', 'C',
-                     'C', 'O', 'C', 'C', 'C', 'O', 'N', 'N', 'C', 'C', 'O',
-                     'C', 'C', 'C', 'O', 'O', 'N', 'C', 'C', 'O', 'C', 'C',
-                     'C', 'N', 'C', 'C', 'O', 'C', 'C', 'C', 'C', 'N', 'N',
-                     'C', 'C', 'O', 'C', 'C', 'O', 'N', 'N', 'C', 'C', 'O',
-                     'C', 'C', 'C', 'C', 'N', 'C', 'C', 'C', 'C', 'C', 'N',
-                     'C', 'C', 'O', 'C', 'C', 'SE', 'C', 'N', 'C', 'C', 'O',
-                     'C', 'O', 'C', 'N', 'C', 'C', 'O', 'C', 'C', 'C', 'O',
-                     'O', 'N', 'C', 'C', 'O', 'C', 'O', 'C', 'N', 'C', 'C',
-                     'O', 'C', 'C', 'C', 'C', 'N', 'C', 'C', 'O', 'C', 'C',
-                     'C', 'C', 'N', 'C', 'C', 'O', 'C', 'C', 'C', 'N', 'C',
-                     'C', 'O', 'C', 'C', 'C', 'O', 'N', 'N', 'C', 'C', 'O',
-                     'C', 'C', 'O', 'N', 'N', 'C', 'C', 'O', 'C', 'N', 'C',
-                     'C', 'O', 'C', 'C', 'O', 'N', 'N', 'C', 'C', 'O', 'C',
-                     'C', 'C', 'N', 'C', 'C', 'O', 'C', 'C', 'O', 'O', 'N',
-                     'C', 'C', 'O', 'C', 'S', 'N', 'C', 'C', 'O', 'C', 'C',
-                     'C', 'C', 'N', 'N', 'C', 'C', 'O', 'C', 'O', 'C', 'N',
-                     'C', 'C', 'O', 'C', 'C', 'C', 'C', 'N', 'C', 'C', 'O',
-                     'C', 'C', 'C', 'C', 'N', 'C', 'C', 'O', 'C', 'C', 'C',
-                     'C', 'N', 'N', 'C', 'C', 'O', 'C', 'N', 'C', 'C', 'O',
-                     'C', 'C', 'C', 'C', 'N', 'C', 'C', 'O', 'N', 'C', 'C',
-                     'O', 'C', 'C', 'C', 'N', 'C', 'C', 'O', 'N', 'C', 'C',
-                     'O', 'C', 'N', 'C', 'C', 'O', 'C', 'O', 'C', 'N', 'C',
-                     'C', 'O', 'C', 'C', 'C', 'C', 'N', 'C', 'C', 'O', 'C',
-                     'C', 'C', 'O', 'O', 'N', 'C', 'C', 'O', 'C', 'C', 'C',
-                     'O', 'O', 'N', 'C', 'C', 'O', 'C', 'C', 'SE', 'C', 'N',
-                     'C', 'C', 'O', 'C', 'C', 'SE', 'C', 'N', 'C', 'C', 'O',
-                     'C', 'O', 'C', 'N', 'C', 'C', 'O', 'C', 'N', 'C', 'C',
-                     'O', 'C', 'S', 'N', 'C', 'C', 'O', 'C', 'C', 'C', 'O',
-                     'N', 'N', 'C', 'C', 'O', 'O', 'O', 'O', 'O', 'O', 'O',
-                     'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O',
-                     'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O',
-                     'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O',
-                     'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O',
-                     'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O',
-                     'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O',
-                     'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O',
-                     'O', 'O', 'O', 'O', 'O', 'O']
-        sup.apply(moving)
-        atom_moved = []
-        for aa in moving:
-            atom_moved.append(aa.element)
-        self.assertEqual(atom_moved, atom_list)
-
-
-class PolypeptideTests(unittest.TestCase):
-
-    def test_polypeptide(self):
-        """Tests on polypetide class and methods."""
-        p = PDBParser(PERMISSIVE=True)
-        pdb1 = "PDB/1A8O.pdb"
-        s = p.get_structure("scr", pdb1)
-        ppb = PPBuilder()
-        pp = ppb.build_peptides(s)
-        self.assertEqual(str(pp[0].get_sequence()), "DIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNW")
-        self.assertEqual(str(pp[1].get_sequence()), "TETLLVQNANPDCKTILKALGPGATLEE")
-        self.assertEqual(str(pp[2].get_sequence()), "TACQG")
-        phi_psi = pp[0].get_phi_psi_list()
-        self.assertEqual(phi_psi[0][0], None)
-        self.assertAlmostEqual(phi_psi[0][1], -0.46297171497725553, places=3)
-        self.assertAlmostEqual(phi_psi[1][0], -1.0873937604007962, places=3)
-        self.assertAlmostEqual(phi_psi[1][1], 2.1337707832637109, places=3)
-        self.assertAlmostEqual(phi_psi[2][0], -2.4052232743651878, places=3)
-        self.assertAlmostEqual(phi_psi[2][1], 2.3807316946081554, places=3)
-        phi_psi = pp[1].get_phi_psi_list()
-        self.assertEqual(phi_psi[0][0], None)
-        self.assertAlmostEqual(phi_psi[0][1], -0.6810077089092923, places=3)
-        self.assertAlmostEqual(phi_psi[1][0], -1.2654003477656888, places=3)
-        self.assertAlmostEqual(phi_psi[1][1], -0.58689987042756309, places=3)
-        self.assertAlmostEqual(phi_psi[2][0], -1.7467679151684763, places=3)
-        self.assertAlmostEqual(phi_psi[2][1], -1.5655066256698336, places=3)
-        phi_psi = pp[2].get_phi_psi_list()
-        self.assertEqual(phi_psi[0][0], None)
-        self.assertAlmostEqual(phi_psi[0][1], -0.73222884210889716, places=3)
-        self.assertAlmostEqual(phi_psi[1][0], -1.1044740234566259, places=3)
-        self.assertAlmostEqual(phi_psi[1][1], -0.69681334592782884, places=3)
-        self.assertAlmostEqual(phi_psi[2][0], -1.8497413300164958, places=3)
-        self.assertAlmostEqual(phi_psi[2][1], 0.34762889834809058, places=3)
-        ppb = CaPPBuilder()
-        pp = ppb.build_peptides(s)
-        self.assertEqual(str(pp[0].get_sequence()), "DIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNW")
-        self.assertEqual(str(pp[1].get_sequence()), "TETLLVQNANPDCKTILKALGPGATLEE")
-        self.assertEqual(str(pp[2].get_sequence()), "TACQG")
-        self.assertEqual([ca.serial_number for ca in pp[0].get_ca_list()], [10, 18, 26, 37, 46, 50, 57, 66, 75, 82, 93, 104, 112, 124, 131, 139, 150, 161, 173, 182, 189, 197, 208, 213, 222, 231, 236, 242, 251, 260, 267, 276, 284])
-        taus = pp[1].get_tau_list()
-        self.assertAlmostEqual(taus[0], 0.3597907225123525, places=3)
-        self.assertAlmostEqual(taus[1], 0.43239284636769254, places=3)
-        self.assertAlmostEqual(taus[2], 0.99820157492712114, places=3)
-        thetas = pp[2].get_theta_list()
-        self.assertAlmostEqual(thetas[0], 1.6610069445335354, places=3)
-        self.assertAlmostEqual(thetas[1], 1.7491703334817772, places=3)
-        self.assertAlmostEqual(thetas[2], 2.0702447422720143, places=3)
 
 
 class CopyTests(unittest.TestCase):
