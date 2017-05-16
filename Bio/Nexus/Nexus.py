@@ -934,7 +934,7 @@ class Nexus(object):
         pass
 
     def _matrix(self, options):
-        """Creates a matrix for NEXUS object."""
+        """Creates a matrix for NEXUS object (PRIVATE)"""
         if not self.ntax or not self.nchar:
             raise NexusError('Dimensions must be specified before matrix!')
         self.matrix = {}
@@ -1043,6 +1043,7 @@ class Nexus(object):
             "Please Report this as a bug, and send in data file."
 
     def _translate(self, options):
+        """Translates a Nexus file (PRIVATE).""""
         self.translate = {}
         opts = CharBuffer(options)
         while True:
