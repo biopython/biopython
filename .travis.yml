@@ -9,26 +9,42 @@
 # Environment variables setup here:
 # - TOXENV = environment used in Tox (conventionally uses py35 etc)
 #
+# TravisCI build stages used here:
+# - basics - quick things like style and packaging
+# - test - the actual functional tests which are slow
 
 language: python
 matrix:
   include:
-    - env: TOXENV=style
-    - env: TOXENV=sdist
-    - env: TOXENV=bdist_wheel
-    - python: 2.7
+    - stage: basics
+      env: TOXENV=style
+      before_install: echo "Going to run basic checks"
+    - stage: basics
+      env: TOXENV=sdist
+      before_install: echo "Going to run basic checks"
+    - stage: basics
+      env: TOXENV=bdist_wheel
+      before_install: echo "Going to run basic checks"
+    - stage: test
+      python: 2.7
       env: TOXENV=py27-cover
-    - python: 3.3
+    - stage: test
+      python: 3.3
       env: TOXENV=py33-cover
-    - python: 3.4
+    - stage: test
+      python: 3.4
       env: TOXENV=py34-cover
-    - python: 3.5
+    - stage: test
+      python: 3.5
       env: TOXENV=py35-cover
-    - python: 3.6
+    - stage: test
+      python: 3.6
       env: TOXENV=py36-cover
-    - python: pypy
+    - stage: test
+      python: pypy
       env: TOXENV=pypy-nocov
-    - python: pypy3
+    - stage: test
+      python: pypy3
       env: TOXENV=pypy3-nocov
 
 sudo: false
@@ -56,7 +72,8 @@ addons:
 #
 # We also need DSSP for testing but it is not available in the repositories.
 # Try to download the binary for Linux and place it in $HOME/bin
-# 
+#
+# This before_install list is only used for the test stage.
 before_install:
   - cd $HOME
   - mkdir bin
@@ -72,9 +89,11 @@ before_install:
   - mv dssp-2.0.4-linux-amd64 bin/dssp
   - chmod a+x bin/dssp
   - cd $TRAVIS_BUILD_DIR
-
-install:
   - "cp Tests/biosql.ini.sample Tests/biosql.ini"
+
+
+# This is minimal and used under all stages
+install:
   - "pip install --upgrade pip setuptools"
   - "pip install tox"
   - "tox -c .travis-tox.ini -e $TOXENV --notest"
