@@ -38,14 +38,13 @@ def open_database(driver="MySQLdb", **kwargs):
         >>> server = BioSeqDatabase.open_database(user="root", db="minidb")
 
     Arguments:
-
-     - driver - The name of the database driver to use for connecting. The
-       driver should implement the python DB API. By default, the MySQLdb
-       driver is used.
-     - user -the username to connect to the database with.
-     - password, passwd - the password to connect with
-     - host - the hostname of the database
-     - database or db - the name of the database
+         - driver - The name of the database driver to use for connecting. The
+           driver should implement the python DB API. By default, the MySQLdb
+           driver is used.
+         - user -the username to connect to the database with.
+         - password, passwd - the password to connect with
+         - host - the hostname of the database
+         - database or db - the name of the database
 
     """
     if driver == "psycopg":
@@ -143,6 +142,16 @@ class DBServer(object):
     """
 
     def __init__(self, conn, module, module_name=None):
+        """Create a DBServer object.
+
+        Arguments:
+            - conn - A database connection object
+            - module - The module used to create the database connection
+            - module_name - Optionally, the name of the module. Default: module.__name__
+
+        Normally you would not want to create a DBServer object yourself.
+        Instead use the open_database function, which returns an instance of DBServer.
+        """
         self.module = module
         if module_name is None:
             module_name = module.__name__
@@ -157,9 +166,15 @@ class DBServer(object):
         self.module_name = module_name
 
     def __repr__(self):
+        """Return a short description of the class name and database connection."""
         return self.__class__.__name__ + "(%r)" % self.adaptor.conn
 
     def __getitem__(self, name):
+        """Return a BioSeqDatabase object.
+
+        Arguments:
+            - name - The name of the BioSeqDatabase
+        """
         return BioSeqDatabase(self.adaptor, name)
 
     def __len__(self):
@@ -353,6 +368,13 @@ class Adaptor(object):
     """
 
     def __init__(self, conn, dbutils, wrap_cursor=False):
+        """Create an Adaptor object.
+
+        Arguments:
+            - conn - A database connection
+            - dbutils - A BioSQL.DBUtils object
+            - wrap_cursor - Optional, whether to wrap the cursor object
+        """
         self.conn = conn
         if wrap_cursor:
             self.cursor = _CursorWrapper(conn.cursor())
@@ -361,6 +383,7 @@ class Adaptor(object):
         self.dbutils = dbutils
 
     def last_id(self, table):
+        """Return the last row id for the selected table."""
         return self.dbutils.last_id(self.cursor, table)
 
     def autocommit(self, y=True):
@@ -380,6 +403,7 @@ class Adaptor(object):
         return self.conn.close()
 
     def fetch_dbid_by_dbname(self, dbname):
+        """Return the internal id for the sub-database using its name."""
         self.execute(
             r"select biodatabase_id from biodatabase where name = %s",
             (dbname,))
@@ -389,6 +413,13 @@ class Adaptor(object):
         return rv[0][0]
 
     def fetch_seqid_by_display_id(self, dbid, name):
+        """Return the internal id for a sequence using its display id.
+
+        Arguments:
+            - dbid - the internal id for the sub-database
+            - name - the name of the sequence. Corresponds to the
+              name column of the bioentry table of the SQL schema
+        """
         sql = r"select bioentry_id from bioentry where name = %s"
         fields = [name]
         if dbid:
@@ -403,6 +434,13 @@ class Adaptor(object):
         return rv[0][0]
 
     def fetch_seqid_by_accession(self, dbid, name):
+        """Return the internal id for a sequence using its accession.
+
+        Arguments:
+            - dbid - the internal id for the sub-database
+            - name - the accession of the sequence. Corresponds to the
+              accession column of the bioentry table of the SQL schema
+        """
         sql = r"select bioentry_id from bioentry where accession = %s"
         fields = [name]
         if dbid:
@@ -417,6 +455,13 @@ class Adaptor(object):
         return rv[0][0]
 
     def fetch_seqids_by_accession(self, dbid, name):
+        """Return a list internal ids using an accession.
+
+        Arguments:
+            - dbid - the internal id for the sub-database
+            - name - the accession of the sequence. Corresponds to the
+              accession column of the bioentry table of the SQL schema
+        """
         sql = r"select bioentry_id from bioentry where accession = %s"
         fields = [name]
         if dbid:
@@ -425,6 +470,13 @@ class Adaptor(object):
         return self.execute_and_fetch_col0(sql, fields)
 
     def fetch_seqid_by_version(self, dbid, name):
+        """Return the internal id for a sequence using its accession and version.
+
+        Arguments:
+            - dbid - the internal id for the sub-database
+            - name - the accession of the sequence containing a version number.
+              Must correspond to <accession>.<version>
+        """
         acc_version = name.split(".")
         if len(acc_version) > 2:
             raise IndexError("Bad version %r" % name)
@@ -448,6 +500,13 @@ class Adaptor(object):
         return rv[0][0]
 
     def fetch_seqid_by_identifier(self, dbid, identifier):
+        """Return the internal id for a sequence using its identifier.
+
+        Arguments:
+            - dbid - the internal id for the sub-database
+            - identifier - the identifier of the sequence. Corresponds to
+              the identifier column of the bioentry table in the SQL schema.
+        """
         # YB: was fetch_seqid_by_seqid
         sql = "SELECT bioentry_id FROM bioentry WHERE identifier = %s"
         fields = [identifier]
@@ -461,15 +520,26 @@ class Adaptor(object):
         return rv[0][0]
 
     def list_biodatabase_names(self):
+        """Return a list of all of the sub-databases."""
         return self.execute_and_fetch_col0(
             "SELECT name FROM biodatabase")
 
     def list_bioentry_ids(self, dbid):
+        """Return a list of internal ids for all of the sequences in a sub-databae.
+
+        Arguments:
+            - dbid - The internal id for a sub-database
+        """
         return self.execute_and_fetch_col0(
             "SELECT bioentry_id FROM bioentry WHERE biodatabase_id = %s",
             (dbid,))
 
     def list_bioentry_display_ids(self, dbid):
+        """Return a list of all sequence names in a sub-databae.
+
+        Arguments:
+            - dbid - The internal id for a sub-database
+        """
         return self.execute_and_fetch_col0(
             "SELECT name FROM bioentry WHERE biodatabase_id = %s",
             (dbid,))
@@ -503,6 +573,13 @@ class Adaptor(object):
         self.dbutils.executemany(self.cursor, sql, args)
 
     def get_subseq_as_string(self, seqid, start, end):
+        """Return a substring of a sequence.
+
+        Arguments:
+            - seqid - The internal id for the sequence
+            - start - The start position of the sequence; 0-indexed
+            - end - The end position of the sequence
+        """
         length = end - start
         # XXX Check this on MySQL and PostgreSQL. substr should be general,
         # does it need dbutils?
@@ -541,14 +618,17 @@ class MysqlConnectorAdaptor(Adaptor):
     """
 
     def execute_one(self, sql, args=None):
+        """Execute sql that returns 1 record, and return the record."""
         out = super(MysqlConnectorAdaptor, self).execute_one(sql, args)
         return tuple(bytearray_to_str(v) for v in out)
 
     def execute_and_fetch_col0(self, sql, args=None):
+        """Return a list of values from the first column in the row."""
         out = super(MysqlConnectorAdaptor, self).execute_and_fetch_col0(sql, args)
         return [bytearray_to_str(column) for column in out]
 
     def execute_and_fetchall(self, sql, args=None):
+        """Return a list of tuples of all rows."""
         out = super(MysqlConnectorAdaptor, self).execute_and_fetchall(sql, args)
         return [tuple(bytearray_to_str(v) for v in o) for o in out]
 
@@ -577,11 +657,18 @@ class BioSeqDatabase(object):
     """
 
     def __init__(self, adaptor, name):
+        """Create a BioDatabase object.
+
+        Arguments:
+            - adaptor - A BioSQL.Adaptor object
+            - name - The name of the sub-database (namespace)
+        """
         self.adaptor = adaptor
         self.name = name
         self.dbid = self.adaptor.fetch_dbid_by_dbname(name)
 
     def __repr__(self):
+        """Return a short summary of the BioSeqDatabase."""
         return "BioSeqDatabase(%r, %r)" % (self.adaptor, self.name)
 
     def get_Seq_by_id(self, name):
@@ -645,6 +732,11 @@ class BioSeqDatabase(object):
         return list(self.keys())
 
     def __getitem__(self, key):
+        """Return a DBSeqRecord for one of the sequences in the sub-database.
+
+        Arguments:
+            - key - The internal id for the sequence
+        """
         record = BioSeq.DBSeqRecord(self.adaptor, key)
         if record._biodatabase_id != self.dbid:
             raise KeyError("Entry %r does exist, but not in current name space" % key)
@@ -728,6 +820,12 @@ class BioSeqDatabase(object):
                 yield key, self[key]
 
     def lookup(self, **kwargs):
+        """Return a DBSeqRecord using an acceptable identifier.
+
+        Arguments:
+            - kwargs - A single key-value pair where the key is one
+              of primary_id, gi, display_id, name, accession, version
+        """
         if len(kwargs) != 1:
             raise TypeError("single key/value parameter expected")
         k, v = list(kwargs.items())[0]

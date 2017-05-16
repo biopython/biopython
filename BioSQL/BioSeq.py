@@ -40,9 +40,11 @@ class DBSeq(Seq):
         self.start = start
 
     def __len__(self):
+        """Return the length of the sequence."""
         return self._length
 
     def __getitem__(self, index):  # Seq API requirement
+        """Return a subsequence or single letter."""
         # Note since Python 2.0, __getslice__ is deprecated
         # and __getitem__ is used instead.
         # See http://docs.python.org/ref/sequence-methods.html
@@ -130,10 +132,20 @@ class DBSeq(Seq):
         return Seq(str(self), self.alphabet)
 
     def __add__(self, other):
+        """Add another sequence or string to this sequence.
+
+        The sequence is first converted to a Seq object before the addition.
+        The returned object is a Seq object, not a DBSeq object
+        """
         # Let the Seq object deal with the alphabet issues etc
         return self.toseq() + other
 
     def __radd__(self, other):
+        """Add another sequence or string to the left.
+
+        The sequence is first converted to a Seq object before the addition.
+        The returned object is a Seq object, not a DBSeq object
+        """
         # Let the Seq object deal with the alphabet issues etc
         return other + self.toseq()
 
@@ -498,6 +510,15 @@ class DBSeqRecord(SeqRecord):
     """BioSQL equivalent of the Biopython SeqRecord object."""
 
     def __init__(self, adaptor, primary_id):
+        """Create a DBSeqRecord object.
+
+        Arguments:
+            - adaptor - A BioSQL.BioSeqDatabase.Adaptor object
+            - primary_id - An internal integer ID used by BioSQL
+
+        You wouldn't normally create a DBSeqRecord object yourself,
+        this is done for you when using a BioSeqDatabase object
+        """
         self._adaptor = adaptor
         self._primary_id = primary_id
 
