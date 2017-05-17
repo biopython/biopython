@@ -32,6 +32,7 @@ import numpy
 
 
 def _contents(items):
+    """Return a dictionary where the key is the item and the value is the probablity associated (PRIVATE)."""
     term = 1.0 / len(items)
     counts = {}
     for item in items:
@@ -40,7 +41,7 @@ def _contents(items):
 
 
 class NaiveBayes(object):
-    """Holds information for a NaiveBayes classifier.
+    """Hold information for a NaiveBayes classifier.
 
     Attributes:
         - classes        - List of the possible classes of data.
@@ -51,6 +52,7 @@ class NaiveBayes(object):
     """
 
     def __init__(self):
+        """Initialize the class."""
         self.classes = []
         self.p_conditional = None
         self.p_prior = []
@@ -58,16 +60,15 @@ class NaiveBayes(object):
 
 
 def calculate(nb, observation, scale=False):
-    """Calculate ``log P(class|observation)`` for each class.
+    """Calculate the logarithmic conditional probability for each class.
 
-        - nb          - A NaiveBayes classifier that has been trained.
-        - observation - A list representing the observed data.
-        - scale       - Boolean to indicate whether the probability should be
-          scaled by ``P(observation)``.  By default, no scaling is done.
+    - nb          - A NaiveBayes classifier that has been trained.
+    - observation - A list representing the observed data.
+    - scale       - Boolean to indicate whether the probability should be
+    scaled by ``P(observation)``.  By default, no scaling is done.
 
-    Returns:
-        A dictionary where the keys is the class and the value is the log
-        probability of the class.
+    A dictionary is returned where the key is the class and the value is the log
+    probability of the class.
 
     """
     # P(class|observation) = P(observation|class)*P(class)/P(observation)
@@ -110,11 +111,7 @@ def calculate(nb, observation, scale=False):
 
 
 def classify(nb, observation):
-    """Classify an observation into a class.
-
-    ``classify(nb, observation) -> class``
-
-    """
+    """Classify an observation into a class."""
     # The class is the one with the highest probability.
     probs = calculate(nb, observation, scale=False)
     max_prob = max_class = None
@@ -127,14 +124,12 @@ def classify(nb, observation):
 def train(training_set, results, priors=None, typecode=None):
     """Train a naive bayes classifier on a training set.
 
-    ``train(training_set, results[, priors]) -> NaiveBayes``
-
-        - training_set - List of observations.
-        - results      - List of the class assignments for each observation.
-          Thus, training_set and results must be the same length.
-        - priors       - Optional dictionary specifying the prior probabilities
-          for each type of result.  If not specified, the priors will be
-          estimated from the training results.
+    - training_set - List of observations.
+    - results      - List of the class assignments for each observation.
+    Thus, training_set and results must be the same length.
+    - priors       - Optional dictionary specifying the prior probabilities
+    for each type of result.  If not specified, the priors will be
+    estimated from the training results.
 
     """
     if not len(training_set):
