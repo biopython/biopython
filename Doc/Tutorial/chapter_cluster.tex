@@ -931,7 +931,9 @@ This argument describes the (column-wise) clustering result for the experimental
 This method writes the text file \verb|jobname.cdt|, \verb|jobname.gtr|, \verb|jobname.atr|, \verb|jobname*.kgg|, and/or \verb|jobname*.kag| for subsequent reading by the Java TreeView program. If \verb|geneclusters| and \verb|expclusters| are both \verb|None|, this method only writes the text file \verb|jobname.cdt|; this file can subsequently be read into a new \verb|Record| object.
 \section{Example calculation}
 
-This is an example of a hierarchical clustering calculation, using single linkage clustering for genes and maximum linkage clustering for experimental conditions. As the Euclidean distance is being used for gene clustering, it is necessary to scale the node distances \verb|genetree| such that they are all between zero and one. This is needed for the Java TreeView code to display the tree diagram correctly. To cluster the experimental conditions, the uncentered correlation is being used. No scaling is needed in this case, as the distances in \verb|exptree| are already between zero and two. The example data \verb|cyano.txt| can be found in Biopython's \verb|Tests/Cluster| subdirectory.
+This is an example of a hierarchical clustering calculation, using single linkage clustering for genes and maximum linkage clustering for experimental conditions. As the Euclidean distance is being used for gene clustering, it is necessary to scale the node distances \verb|genetree| such that they are all between zero and one. This is needed for the Java TreeView code to display the tree diagram correctly. To cluster the experimental conditions, the uncentered correlation is being used. No scaling is needed in this case, as the distances in \verb|exptree| are already between zero and two.
+
+The example data \verb|cyano.txt| can be found in Biopython's \verb|Tests/Cluster| subdirectory and is from the paper \cite[Hihara \textit{et al.}, 2001]{hihara2001}.
 
 %doctest ../Tests/Cluster lib:numpy
 \begin{verbatim}
