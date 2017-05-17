@@ -1256,6 +1256,28 @@ class TransformTests(unittest.TestCase):
                         "Want %r and %r to be almost equal" % (axis.get_array(), caxis.get_array()))
 
 
+class PDBParserTests(unittest.TestCase):
+    """Test PDBParser module."""
+
+    def test_PDBParser(self):
+        """Walk down the structure hierarchy and test parser reliability."""
+        p = PDBParser(PERMISSIVE=True)
+        filename = "PDB/1A8O.pdb"
+        s = p.get_structure("scr", filename)
+        for m in s:
+            p = m.get_parent()
+            self.assertEqual(s, p)
+            for c in m:
+                p = c.get_parent()
+                self.assertEqual(m, p)
+                for r in c:
+                    p = r.get_parent()
+                    self.assertEqual(c, p)
+                    for a in r:
+                        p = a.get_parent()
+                        self.assertEqual(r.get_resname(), p.get_resname())
+
+
 class CopyTests(unittest.TestCase):
 
     def setUp(self):
