@@ -66,7 +66,7 @@ def calculate(nb, observation, scale=False):
     - nb          - A NaiveBayes classifier that has been trained.
     - observation - A list representing the observed data.
     - scale       - Boolean to indicate whether the probability should be
-            scaled by ``P(observation)``.  By default, no scaling is done.
+      scaled by ``P(observation)``.  By default, no scaling is done.
 
     A dictionary is returned where the key is the class and the value is
     the log probability of the class.
@@ -127,10 +127,10 @@ def train(training_set, results, priors=None, typecode=None):
 
     - training_set - List of observations.
     - results      - List of the class assignments for each observation.
-                    Thus, training_set and results must be the same length.
+      Thus, training_set and results must be the same length.
     - priors       - Optional dictionary specifying the prior probabilities
-                    for each type of result. If not specified, the priors will
-                    be estimated from the training results.
+      for each type of result. If not specified, the priors will
+      be estimated from the training results.
 
     """
     if not len(training_set):
