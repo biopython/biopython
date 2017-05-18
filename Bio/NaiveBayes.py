@@ -22,7 +22,7 @@ Classes:
 Functions:
     - train     - Train a new naive Bayes classifier.
     - calculate - Calculate the probabilities of each class,
-                  given an observation.
+      given an observation.
     - classify  - Classify an observation into a class.
 
 """
