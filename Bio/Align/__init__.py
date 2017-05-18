@@ -209,8 +209,21 @@ class MultipleSeqAlignment(object):
             self._per_col_annotations = None
             if value:
                 raise ValueError("Can't set per-column-annotations without an alignment")
+
+    def _get_per_column_annotations(self):
+        if self._per_col_annotations is None:
+            # This happens if empty at initialisation
+            if len(self):
+                # Use the standard method to get the length
+                expected_length = self.get_alignment_length()
+            else:
+                # Should this raise an exception? Compare SeqRecord behaviour...
+                expected_length = 0
+            self._per_col_annotations = _RestrictedDict(length=expected_length)
+        return self._per_col_annotations
+
     column_annotations = property(
-        fget=lambda self: self._per_col_annotations,
+        fget=_get_per_column_annotations,
         fset=_set_per_column_annotations,
         doc="""Dictionary of per-letter-annotation for the sequence.""")
 
