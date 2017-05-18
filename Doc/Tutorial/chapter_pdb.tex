@@ -44,7 +44,20 @@ Example:
 >>> resolution = structure.header["resolution"]
 >>> keywords = structure.header["keywords"]
 \end{verbatim}
-The available keys are \verb+name+, \verb+head+, \verb+deposition_date+, \verb+release_date+, \verb+structure_method+, \verb+resolution+, \verb+structure_reference+ (which maps to a list of references), \verb+journal_reference+, \verb+author+, and \verb+compound+ (which maps to a dictionary with various information about the crystallized compound).
+The available keys are \verb+name+, \verb+head+, \verb+deposition_date+, 
+\verb+release_date+, \verb+structure_method+, \verb+resolution+, 
+\verb+structure_reference+ (which maps to a list of references), 
+\verb+journal_reference+, \verb+author+, \verb+compound+ (which maps to a dictionary with various information about the crystallized compound),
+\verb+has_missing_residues+, and \verb+missing_residues+.
+
+\verb+has_missing_residues+ maps to a bool that is True if at least
+one non-empty \verb+REMARK 465+ header line was found. In this case
+you should assume that the molecule used in the experiment has some 
+residues for which no ATOM coordinates could be determined. 
+\verb+missing_residues+ maps to a list of dictionaries with information
+about the missing residues. \emph{The list of missing residues will be
+empty or incomplete if the PDB header does not follow the template from
+the PDB specification.}
 
 The dictionary can also be created without creating a \texttt{Structure}
 object, ie. directly from the PDB file:

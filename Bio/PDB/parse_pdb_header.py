@@ -131,6 +131,7 @@ def parse_pdb_header(infile):
                 header.append(l)
     return _parse_pdb_header_list(header)
 
+
 def _parse_remark_465(line, out_dict):
     """Parse missing residue remarks.
 
@@ -149,15 +150,14 @@ def _parse_remark_465(line, out_dict):
     """
     if line:
         out_dict["has_missing_residues"] = True
-
-    # Note that line has been stripped.
-    assert  not line or (line[0]!=" " and line[-1] not in "\n "), "line has to be stripped"
-    #Optional model number and residue name with 1 (e.g. for RNA) to 3 characters
+        # Note that line has been stripped.
+        assert line[0] != " " and line[-1] not in "\n ", "line has to be stripped"
+    # Optional model number and residue name with 1 (e.g. for RNA) to 3 characters
     modelnr_and_resname = "(\d+\s[\sA-Z][\sA-Z][A-Z]|[A-Z]?[A-Z]?[A-Z])"
-    chain="\s([A-Za-z0-9])"
-    #Digit followed by optional insertion code.
-    #Note: Hetero-flags make no sense in contexty with missing residues.
-    ssseq="\s+(\d+[A-Za-z]?)$"
+    chain = "\s([A-Za-z0-9])"
+    # Digit followed by optional insertion code.
+    # Note: Hetero-flags make no sense in contexty with missing residues.
+    ssseq = "\s+(\d+[A-Za-z]?)$"
     pattern = modelnr_and_resname + chain + ssseq
     match = re.match(pattern, line)
     if match is not None:
@@ -192,8 +192,7 @@ def _parse_pdb_header_list(header):
         'author': "",
         'compound': {'1': {'misc': ''}}, 'source': {'1': {'misc': ''}},
         'has_missing_residues': False,
-        'missing_residues' : []
-        }
+        'missing_residues' : []}
 
     dict['structure_reference'] = _get_references(header)
     dict['journal_reference'] = _get_journal(header)
@@ -300,7 +299,7 @@ def _parse_pdb_header_list(header):
                     # print('nonstandard resolution %r' % r)
                     dict['resolution'] = None
             elif hh.startswith("REMARK 465"):
-                #Update the dictionary with content of the remark 465 line (Missing residues)
+                # Update the dictionary with content of the remark 465 line (Missing residues)
                 _parse_remark_465(tail, dict)
         else:
             # print(key)
