@@ -21,7 +21,7 @@ Classes:
 
 Functions:
     - train     - Train a new naive Bayes classifier.
-    - calculate - Calculate the probabilities of each class, 
+    - calculate - Calculate the probabilities of each class,
                   given an observation.
     - classify  - Classify an observation into a class.
 
@@ -68,7 +68,7 @@ def calculate(nb, observation, scale=False):
     - scale       - Boolean to indicate whether the probability should be
             scaled by ``P(observation)``.  By default, no scaling is done.
 
-    A dictionary is returned where the key is the class and the value is 
+    A dictionary is returned where the key is the class and the value is
     the log probability of the class.
 
     """
