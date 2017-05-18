@@ -302,19 +302,20 @@ def _create_hsp(hid, qid, psl):
     except IndexError:
         hstrand = 1  # hit strand defaults to plus
 
+    blocksize_multiplier = 3 if is_protein else 1
     # query block starts
     qstarts = _reorient_starts(psl['qstarts'],
             psl['blocksizes'], psl['qsize'], qstrand)
     # hit block starts
     if len(psl['strand']) == 2:
         hstarts = _reorient_starts(psl['tstarts'],
-                psl['blocksizes'], psl['tsize'], hstrand)
+                [blocksize_multiplier * i for i in psl['blocksizes']],
+                psl['tsize'], hstrand)
     else:
         hstarts = psl['tstarts']
     # set query and hit coords
     # this assumes each block has no gaps (which seems to be the case)
     assert len(qstarts) == len(hstarts) == len(psl['blocksizes'])
-    blocksize_multiplier = 3 if is_protein else 1
     query_range_all = list(zip(qstarts, [x + y for x, y in
                                          zip(qstarts, psl['blocksizes'])]))
     hit_range_all = list(zip(hstarts, [x + y * blocksize_multiplier for x, y in
