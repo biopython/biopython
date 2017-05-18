@@ -32,7 +32,7 @@ Biopython tries to follow the coding conventions laid out in PEP8 and PEP257,
 with the notable exception of existing module names which are not lower case.
 
  - http://www.python.org/dev/peps/pep-0008/
- - http://www.python.org/dev/peps/pep-0275/
+ - http://www.python.org/dev/peps/pep-0257/
 
 For docstrings (Python's in-code documentation) in addition to PEP257 we are
 using reStructuredText (RST) markup language which allows basic formatting
