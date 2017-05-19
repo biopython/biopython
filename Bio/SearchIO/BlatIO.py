@@ -642,6 +642,9 @@ class BlatPslWriter(object):
         for hit in qresult:
             for hsp in hit.hsps:
 
+                query_is_protein = getattr(hsp, "query_is_protein", False)
+                blocksize_multiplier = 3 if query_is_protein else 1
+
                 line = []
                 line.append(hsp.match_num)
                 line.append(hsp.mismatch_num)
@@ -653,7 +656,8 @@ class BlatPslWriter(object):
                 line.append(hsp.hit_gap_num)
 
                 # check spans
-                assert hsp.query_span_all == hsp.hit_span_all
+                eff_query_spans = [blocksize_multiplier * s for s in hsp.query_span_all]
+                assert hsp.hit_span_all == eff_query_spans
                 block_sizes = hsp.query_span_all
 
                 # set strand and starts
