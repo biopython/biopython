@@ -657,7 +657,8 @@ class BlatPslWriter(object):
 
                 # check spans
                 eff_query_spans = [blocksize_multiplier * s for s in hsp.query_span_all]
-                assert hsp.hit_span_all == eff_query_spans
+                if hsp.hit_span_all != eff_query_spans:
+                    raise ValueError("HSP hit span and query span values do not match.")
                 block_sizes = hsp.query_span_all
 
                 # set strand and starts
