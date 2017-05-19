@@ -9,7 +9,7 @@
 
 Tested with:
 Release 20.43, 10-Feb-2009
-
+Release 2017_03 of 15-Mar-2017.
 
 Functions:
 
@@ -61,7 +61,7 @@ class Record(object):
         - name           ID of the record.  e.g. ADH_ZINC
         - type           Type of entry.  e.g. PATTERN, MATRIX, or RULE
         - accession      e.g. PS00387
-        - created        Date the entry was created.  (MMM-YYYY)
+        - created        Date the entry was created.  (MMM-YYYY for releases before January 2017, DD-MMM-YYYY since January 2017)
         - data_update    Date the 'primary' data was last updated.
         - info_update    Date data other than 'primary' data was last updated.
         - pdoc           ID of the PROSITE DOCumentation.
@@ -167,13 +167,22 @@ def __read(handle):
             record.accession = value.rstrip(';')
         elif keyword == 'DT':
             dates = value.rstrip('.').split("; ")
-            if (not dates[0].endswith('(CREATED)')) or \
-               (not dates[1].endswith('(DATA UPDATE)')) or \
-               (not dates[2].endswith('(INFO UPDATE)')):
+            # Format < January 2017 (dates are then MMM-YYYY)
+            if (dates[0].endswith('(CREATED)')) and \
+               (dates[1].endswith('(DATA UPDATE)')) and \
+               (dates[2].endswith('(INFO UPDATE)')):
+                record.created = dates[0].rstrip(' (CREATED)')
+                record.data_update = dates[1].rstrip(' (DATA UPDATE)')
+                record.info_update = dates[2].rstrip(' (INFO UPDATE)')
+            # Format >= January 2017 (dates are then DD-MMM-YYYY)
+            elif (dates[0].endswith('CREATED')) and \
+               (dates[1].endswith('DATA UPDATE')) and \
+               (dates[2].endswith('INFO UPDATE')):
+                record.created = dates[0].rstrip(' CREATED')
+                record.data_update = dates[1].rstrip(' DATA UPDATE')
+                record.info_update = dates[2].rstrip(' INFO UPDATE')
+            else:
                 raise ValueError("I don't understand date line\n%s" % line)
-            record.created = dates[0].rstrip(' (CREATED)')
-            record.data_update = dates[1].rstrip(' (DATA UPDATE)')
-            record.info_update = dates[2].rstrip(' (INFO UPDATE)')
         elif keyword == 'DE':
             record.description = value
         elif keyword == 'PA':
