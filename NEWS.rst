@@ -50,6 +50,7 @@ possible, especially the following contributors:
 - Rasmus Fonseca (first contribution)
 - Rodrigo Dorantes-Gilardi (first contribution)
 - Sacha Laurent (first contribution)
+- Sourav Singh
 - Wibowo 'Bow' Arindrarto
 - Zheng Ruan
 
