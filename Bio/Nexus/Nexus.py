@@ -1168,7 +1168,7 @@ class Nexus(object):
         pass
 
     def _charpartition(self, options):
-        """ Collects character partition from NEXUS file (PRIVATE)."""
+        """Collects character partition from NEXUS file (PRIVATE)."""
         charpartition = {}
         quotelevel = False
         opts = CharBuffer(options)
