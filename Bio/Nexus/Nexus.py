@@ -1043,7 +1043,7 @@ class Nexus(object):
             "Please Report this as a bug, and send in data file."
 
     def _translate(self, options):
-        """Translates a Nexus file (PRIVATE).""""
+        """Translates a Nexus file (PRIVATE)."""
         self.translate = {}
         opts = CharBuffer(options)
         while True:
@@ -1106,7 +1106,7 @@ class Nexus(object):
         self.trees.append(tree)
 
     def _apply_block_structure(self, title, lines):
-        """Applies Block structure to the NEXUS file (PRIVATE).""" 
+        """Applies Block structure to the NEXUS file (PRIVATE)."""
         block = Block('')
         block.title = title
         for line in lines:
@@ -1119,7 +1119,7 @@ class Nexus(object):
         self.taxsets[name] = _make_unique(taxa)
 
     def _charset(self, options):
-        """Creates unique character set (PRIVATE).""" 
+        """Creates unique character set (PRIVATE)."""
         name, sites = self._get_indices(options, set_type=CHARSET)
         self.charsets[name] = _make_unique(sites)
 
