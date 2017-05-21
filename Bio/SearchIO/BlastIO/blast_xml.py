@@ -410,9 +410,9 @@ class BlastXmlParser(object):
             raw_hit_id = hit_elem.findtext('Hit_id')
             raw_hit_desc = hit_elem.findtext('Hit_def')
             if not self._use_raw_hit_ids:
-                ids, descs, blast_id = _extract_ids_and_descs(raw_hit_id, raw_hit_desc)
+                ids, descs, blast_hit_id = _extract_ids_and_descs(raw_hit_id, raw_hit_desc)
             else:
-                ids, descs, blast_id = [raw_hit_id], [raw_hit_desc], raw_hit_id
+                ids, descs, blast_hit_id = [raw_hit_id], [raw_hit_desc], raw_hit_id
 
             hit_id, alt_hit_ids = ids[0], ids[1:]
             hit_desc, alt_hit_descs = descs[0], descs[1:]
@@ -425,7 +425,7 @@ class BlastXmlParser(object):
             hit.description = hit_desc
             hit._id_alt = alt_hit_ids
             hit._description_alt = alt_hit_descs
-            hit.blast_id = blast_id
+            hit.blast_id = blast_hit_id
 
             for key, val_info in _ELEM_HIT.items():
                 value = hit_elem.findtext(key)
@@ -862,11 +862,22 @@ class BlastXmlWriter(object):
             # use custom hit_id and hit_def mapping if the hit has a
             # BLAST-generated ID
             opt_dict = {}
-            if hit.blast_id:
-                opt_dict = {
-                    'Hit_id': hit.blast_id,
-                    'Hit_def': ' '.join([hit.id, hit.description]).strip(),
-                }
+
+            if hit.blast_id is not None:
+                hit_id = hit.blast_id
+                hit_desc = ' >'.join(
+                    ['{} {}'.format(x, y)
+                     for x, y in zip(hit.id_all, hit.description_all)])
+            else:
+                hit_id = hit.id
+                hit_desc = hit.description + ' >'.join(
+                    ['{} {}'.format(x, y)
+                     for x, y in zip(hit.id_all[1:], hit.description_all[1:])])
+
+            opt_dict = {
+                'Hit_id': hit_id,
+                'Hit_def': hit_desc,
+            }
             self._write_elem_block('Hit_', 'hit', hit, opt_dict)
             xml.startParent('Hit_hsps')
             self._write_hsps(hit.hsps)
