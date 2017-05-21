@@ -189,18 +189,21 @@ _RE_ID_DESC_PATTERN = re.compile(" +")
 
 
 def _extract_ids_and_descs(raw_id, raw_desc):
-    # Given values of the `Hit_id` and `Hit_def` elements, return a tuple
-    # three elements: all IDs, all descriptions, and the BLAST-generated ID.
-    # The BLAST-generated ID is set to `None` if no BLAST-generated IDs are
-    # present.
+    """Extract IDs, descriptions, and raw ID from raw values (PRIVATE).
+
+    Given values of the `Hit_id` and `Hit_def` elements, this function returns
+    a tuple of three elements: all IDs, all descriptions, and the
+    BLAST-generated ID. The BLAST-generated ID is set to `None` if no
+    BLAST-generated IDs are present.
+
+    """
     ids = []
     descs = []
 
+    blast_gen_id = raw_id
     if raw_id.startswith('gnl|BL_ORD_ID|'):
-        blast_gen_id = raw_id
         id_desc_line = raw_desc
     else:
-        blast_gen_id = None
         id_desc_line = raw_id + ' ' + raw_desc
 
     # create a list of lists, each list containing an ID and description
@@ -729,8 +732,10 @@ class _BlastXmlGenerator(XMLGenerator):
 class BlastXmlWriter(object):
     """Stream-based BLAST+ XML Writer."""
 
-    def __init__(self, handle):
+    def __init__(self, handle, use_raw_query_ids=True, use_raw_hit_ids=True):
         self.xml = _BlastXmlGenerator(handle, 'utf-8')
+        self._use_raw_query_ids = use_raw_query_ids
+        self._use_raw_hit_ids = use_raw_hit_ids
 
     def write_file(self, qresults):
         """Writes the XML contents to the output handle."""
@@ -825,14 +830,17 @@ class BlastXmlWriter(object):
             xml.startParent('Iteration')
             xml.simpleElement('Iteration_iter-num', str(num + 1))
             opt_dict = {}
-            # use custom Iteration_query-ID and Iteration_query-def mapping
-            # if the query has a BLAST-generated ID
-            if qresult.blast_id:
-                opt_dict = {
-                    'Iteration_query-ID': qresult.blast_id,
-                    'Iteration_query-def': ' '.join([qresult.id,
-                            qresult.description]).strip(),
-                }
+            if self._use_raw_query_ids:
+                query_id = qresult.blast_id
+                query_desc = qresult.id + ' ' + qresult.description
+            else:
+                query_id = qresult.id
+                query_desc = qresult.description
+
+            opt_dict = {
+                'Iteration_query-ID': query_id,
+                'Iteration_query-def': query_desc,
+            }
             self._write_elem_block('Iteration_', 'qresult', qresult, opt_dict)
             # the Iteration_hits tag only has children if there are hits
             if qresult:
@@ -863,7 +871,7 @@ class BlastXmlWriter(object):
             # BLAST-generated ID
             opt_dict = {}
 
-            if hit.blast_id is not None:
+            if self._use_raw_hit_ids:
                 hit_id = hit.blast_id
                 hit_desc = ' >'.join(
                     ['{} {}'.format(x, y)
