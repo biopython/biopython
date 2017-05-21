@@ -3177,8 +3177,31 @@ class BlastXmlSpecialCases(unittest.TestCase):
         # test the Hit IDs only, since this is a special case
         hit1 = qresult[0]
         hit2 = qresult[1]
+        self.assertEqual('gnl|BL_ORD_ID|18', hit1.blast_id)
         self.assertEqual('gi|347972582|ref|XM_309352.4|', hit1.id)
         self.assertEqual('Anopheles gambiae str. PEST AGAP011294-PA (DEFI_ANOGA) mRNA, complete cds', hit1.description)
+        self.assertEqual('gnl|BL_ORD_ID|17', hit2.blast_id)
+        self.assertEqual('gnl|BL_ORD_ID|17', hit2.id)
+        self.assertEqual('gi|347972582|ref|XM_309352.4| Anopheles gambiae str. PEST AGAP011294-PA (DEFI_ANOGA) mRNA, complete cds', hit2.description)
+
+    def test_xml_2226_blastn_006_use_raw_hit_ids(self):
+        xml_file = get_file('xml_2226_blastn_006.xml')
+        qresults = parse(xml_file, FMT, use_raw_hit_ids=True)
+
+        exp_warning = 0
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter('always', BiopythonParserWarning)
+            qresult = next(qresults)
+            self.assertEqual(exp_warning, len(w), "Expected {0} warning(s), got"
+                    " {1}".format(exp_warning, len(w)))
+
+        # test the Hit IDs only, since this is a special case
+        hit1 = qresult[0]
+        hit2 = qresult[1]
+        self.assertEqual('gnl|BL_ORD_ID|18', hit1.blast_id)
+        self.assertEqual('gnl|BL_ORD_ID|18', hit1.id)
+        self.assertEqual('gi|347972582|ref|XM_309352.4| Anopheles gambiae str. PEST AGAP011294-PA (DEFI_ANOGA) mRNA, complete cds', hit1.description)
+        self.assertEqual('gnl|BL_ORD_ID|17', hit2.blast_id)
         self.assertEqual('gnl|BL_ORD_ID|17', hit2.id)
         self.assertEqual('gi|347972582|ref|XM_309352.4| Anopheles gambiae str. PEST AGAP011294-PA (DEFI_ANOGA) mRNA, complete cds', hit2.description)
 
