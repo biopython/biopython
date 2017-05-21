@@ -587,7 +587,7 @@ def _make_score_matrix_fast(sequenceA, sequenceB, match_fn, open_A, extend_A,
                             open_B, extend_B, penalize_extend_when_opening,
                             penalize_end_gaps, align_globally, score_only):
     """Generate a score and traceback matrix according to Gotoh (PRIVATE).
-    
+
     This is an implementation of the Needleman-Wunsch dynamic programming
     algorithm as modified by Gotoh, implementing affine gap penalties.
     In short, we have three matrices, holding scores for alignments ending
@@ -716,7 +716,7 @@ def _recover_alignments(sequenceA, sequenceB, starts, score_matrix,
                         trace_matrix, align_globally, gap_char,
                         one_alignment_only, gap_A_fn, gap_B_fn):
     """Do the backtracing and return a list of alignments (PRIVATE).
-    
+
     Recover the alignments by following the traceback matrix.  This
     is a recursive procedure, but it's implemented here iteratively
     with a stack.
@@ -864,7 +864,7 @@ def _find_start(score_matrix, align_globally):
 
 def _clean_alignments(alignments):
     """Take a list of alignments and return a cleaned version (PRIVATE).
-    
+
     Remove duplicates, make sure begin and end are set correctly, remove
     empty alignments.
     """
@@ -960,9 +960,9 @@ class identity_match(object):
 class dictionary_match(object):
     """Create a match function for use in an alignment.
 
-    - score_dict     - A dictionary where the keys are tuples (residue 1, 
-      residue 2) and the values are the match scores between those residues.  
-    - symmetric      - A flag that indicates whether the scores are symmetric.  
+    - score_dict     - A dictionary where the keys are tuples (residue 1,
+      residue 2) and the values are the match scores between those residues.
+    - symmetric      - A flag that indicates whether the scores are symmetric.
     """
 
     def __init__(self, score_dict, symmetric=1):
