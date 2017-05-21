@@ -220,8 +220,9 @@ def _extract_ids_and_descs(raw_id, raw_desc):
 class BlastXmlParser(object):
     """Parser for the BLAST XML format"""
 
-    def __init__(self, handle, use_raw_hit_ids=False):
+    def __init__(self, handle, use_raw_query_ids=False, use_raw_hit_ids=False):
         self.xml_iter = iter(ElementTree.iterparse(handle, events=('start', 'end')))
+        self._use_raw_query_ids = use_raw_query_ids
         self._use_raw_hit_ids = use_raw_hit_ids
         self._meta, self._fallback = self._parse_preamble()
 
@@ -305,20 +306,19 @@ class BlastXmlParser(object):
                 if query_len is None:
                     query_len = self._fallback['len']
 
+                blast_query_id = query_id
                 # handle blast searches against databases with Blast's IDs
                 # 'Query_' marks the beginning of a BLAST+-generated ID,
                 # 'lcl|' marks the beginning of a BLAST legacy-generated ID
-                if query_id.startswith('Query_') or query_id.startswith('lcl|'):
+                if not self._use_raw_query_ids and \
+                        (query_id.startswith('Query_') or query_id.startswith('lcl|')):
                     # store the Blast-generated query ID
-                    blast_query_id = query_id
                     id_desc = query_desc.split(' ', 1)
                     query_id = id_desc[0]
                     try:
                         query_desc = id_desc[1]
                     except IndexError:
                         query_desc = ''
-                else:
-                    blast_query_id = ''
 
                 hit_list, key_list = [], []
                 for hit in self._parse_hit(qresult_elem.find('Iteration_hits'),
