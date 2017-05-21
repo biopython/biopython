@@ -4,6 +4,7 @@ from Bio.PDB.mmtf import MMTFParser
 from Bio.PDB.MMCIFParser import MMCIFParser
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
 
+
 class ParseMicrohet(unittest.TestCase):
     """Just parse some Microheterogenous files"""
 
@@ -16,12 +17,11 @@ class ParseMicrohet(unittest.TestCase):
     def test_mmtf(self):
         """Parse mmCIF file """
         with warnings.catch_warnings():
-	    mmcif_parser = MMCIFParser()
+            mmcif_parser = MMCIFParser()
             warnings.simplefilter('ignore', PDBConstructionWarning)
-            structure = mmcif_parser.get_structure("MICR","PDB/1EJG.cif")
+            structure = mmcif_parser.get_structure("MICR", "PDB/1EJG.cif")
 
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)
-
