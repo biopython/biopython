@@ -188,19 +188,33 @@ _RE_ID_DESC_PAIRS_PATTERN = re.compile(" +>")
 _RE_ID_DESC_PATTERN = re.compile(" +")
 
 
-def _extract_ids_and_descs(concat_str):
-    # Given a string space-separate string of IDs and descriptions,
-    # return a list of tuples, each tuple containing an ID and
-    # a description string (which may be empty)
+def _extract_ids_and_descs(raw_id, raw_desc):
+    # Given values of the `Hit_id` and `Hit_def` elements, return a tuple
+    # three elements: all IDs, all descriptions, and the BLAST-generated ID.
+    # The BLAST-generated ID is set to `None` if no BLAST-generated IDs are
+    # present.
+    ids = []
+    descs = []
+
+    if raw_id.startswith('gnl|BL_ORD_ID|'):
+        blast_gen_id = raw_id
+        id_desc_line = raw_desc
+    else:
+        blast_gen_id = None
+        id_desc_line = raw_id + ' ' + raw_desc
 
     # create a list of lists, each list containing an ID and description
     # or just an ID, if description is not present
     id_desc_pairs = [re.split(_RE_ID_DESC_PATTERN, x, 1)
-                     for x in re.split(_RE_ID_DESC_PAIRS_PATTERN, concat_str)]
+                     for x in re.split(_RE_ID_DESC_PAIRS_PATTERN, id_desc_line)]
     # make sure empty descriptions are added as empty strings
     # also, we return lists for compatibility reasons between Py2 and Py3
     add_descs = lambda x: x if len(x) == 2 else x + [""]
-    return [pair for pair in map(add_descs, id_desc_pairs)]
+    for pair in (add_descs(p) for p in id_desc_pairs):
+        ids.append(pair[0])
+        descs.append(pair[1])
+
+    return (ids, descs, blast_gen_id)
 
 
 class BlastXmlParser(object):
@@ -390,25 +404,14 @@ class BlastXmlParser(object):
 
         for hit_elem in root_hit_elem:
 
-            # create empty hit object
-            hit_id = hit_elem.findtext('Hit_id')
-            hit_desc = hit_elem.findtext('Hit_def')
-            # handle blast searches against databases with Blast's IDs
-            if hit_id.startswith('gnl|BL_ORD_ID|'):
-                blast_hit_id = hit_id
-                id_desc = hit_desc.split(' ', 1)
-                hit_id = id_desc[0]
-                try:
-                    hit_desc = id_desc[1]
-                except IndexError:
-                    hit_desc = ''
-            else:
-                blast_hit_id = ''
+            # BLAST sometimes mangles the sequence IDs and descriptions, so we need
+            # to extract the actual values.
+            raw_hit_id = hit_elem.findtext('Hit_id')
+            raw_hit_desc = hit_elem.findtext('Hit_def')
+            ids, descs, blast_id = _extract_ids_and_descs(raw_hit_id, raw_hit_desc)
 
-            # combine primary ID and defline first before splitting
-            full_id_desc = hit_id + ' ' + hit_desc
-            id_descs = _extract_ids_and_descs(full_id_desc)
-            hit_id, hit_desc = id_descs[0]
+            hit_id, alt_hit_ids = ids[0], ids[1:]
+            hit_desc, alt_hit_descs = descs[0], descs[1:]
 
             hsps = [hsp for hsp in
                     self._parse_hsp(hit_elem.find('Hit_hsps'),
@@ -416,10 +419,9 @@ class BlastXmlParser(object):
 
             hit = Hit(hsps)
             hit.description = hit_desc
-            hit._id_alt = [x[0] for x in id_descs[1:]]
-            hit._description_alt = [x[1] for x in id_descs[1:]]
-            # blast_hit_id is only set if the hit ID is Blast-generated
-            hit._blast_id = blast_hit_id
+            hit._id_alt = alt_hit_ids
+            hit._description_alt = alt_hit_descs
+            hit._blast_id = blast_id
 
             for key, val_info in _ELEM_HIT.items():
                 value = hit_elem.findtext(key)
