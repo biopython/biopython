@@ -501,7 +501,7 @@ class TestRunner(unittest.TextTestRunner):
             # Want to allow this, and abort the test
             # (see below for special case)
             raise err
-        except:
+        except:  # noqa: B901
             # This happens in Jython with java.lang.ClassFormatError:
             # Invalid method Code length ...
             sys.stderr.write("ERROR\n")
