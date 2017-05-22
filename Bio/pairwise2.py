@@ -402,7 +402,7 @@ alignment occurs.
             return keywds
 
         def __call__(self, *args, **keywds):
-            """Call the the alignment instance already created."""
+            """Call the alignment instance already created."""
             keywds = self.decode(*args, **keywds)
             return _align(**keywds)
 
@@ -720,6 +720,7 @@ def _recover_alignments(sequenceA, sequenceB, starts, score_matrix,
     Recover the alignments by following the traceback matrix.  This
     is a recursive procedure, but it's implemented here iteratively
     with a stack.
+
     sequenceA and sequenceB may be sequences, including strings,
     lists, or list-like objects.  In order to preserve the type of
     the object, we need to use slices on the sequences instead of
@@ -971,7 +972,7 @@ class dictionary_match(object):
         self.symmetric = symmetric
 
     def __call__(self, charA, charB):
-        """Call a dictionary match itance already created."""
+        """Call a dictionary match instance already created."""
         if self.symmetric and (charA, charB) not in self.score_dict:
             # If the score dictionary is symmetric, then look up the
             # score both ways.
