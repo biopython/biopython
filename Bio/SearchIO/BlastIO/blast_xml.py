@@ -329,11 +329,11 @@ class BlastXmlParser(object):
                     if hit:
                         # need to keep track of hit IDs, since there could be duplicates,
                         if hit.id in key_list:
-                            warnings.warn("Adding hit with BLAST-generated ID "
-                                    "%r since hit ID %r is already present "
-                                    "in query %r. Your BLAST database may contain "
+                            warnings.warn("Renaming hit ID %r to a BLAST-generated ID "
+                                    "%r since the ID was already matched "
+                                    "by your query %r. Your BLAST database may contain "
                                     "duplicate entries." %
-                                    (hit.blast_id, hit.id, query_id), BiopythonParserWarning)
+                                    (hit.id, hit.blast_id, query_id), BiopythonParserWarning)
                             # fallback to Blast-generated IDs, if the ID is already present
                             # and restore the desc, too
                             hit.description = '%s %s' % (hit.id, hit.description)
