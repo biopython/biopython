@@ -21,13 +21,15 @@ them to a file.
 
 from Bio._py3k import StringIO
 
+from Bio import MissingPythonDependencyError
+
 from Bio.Phylo import CDAO
 from ._cdao_owl import cdao_elements, cdao_namespaces, resolve_uri
 import os
 
 
 class CDAOError(Exception):
-    """Exception raised when CDAO object construction cannot continue."""
+    """Exception raised when CDAO object construction cannot continue (DEPRECATED)."""
 
     pass
 
@@ -36,10 +38,11 @@ try:
     import rdflib
     rdfver = rdflib.__version__
     if rdfver[0] in ["1", "2"] or (rdfver in ["3.0.0", "3.1.0", "3.2.0"]):
-        raise CDAOError(
+        raise MissingPythonDependencyError(
             'Support for CDAO tree format requires RDFlib v3.2.1 or later.')
 except ImportError:
-    raise CDAOError('Support for CDAO tree format requires RDFlib.')
+    raise MissingPythonDependencyError(
+        'Support for CDAO tree format requires RDFlib.')
 
 RDF_NAMESPACES = {
     'owl': 'http://www.w3.org/2002/07/owl#',
