@@ -63,7 +63,7 @@ _rna_complement_table = _maketrans(ambiguous_rna_complement)
 
 
 class Seq(object):
-    """Create a read-only sequence object (essentially a string with an alphabet).
+    """Read-only sequence object (essentially a string with an alphabet).
 
     Like normal python strings, our basic sequence object is immutable.
     This prevents you from doing my_seq[5] = "A" for example, but does allow
@@ -199,12 +199,12 @@ class Seq(object):
         return str(self) == str(other)
 
     def __ne__(self, other):
-        """Compare sequences with a not-equal operand, see __eq__ documentation."""
+        """Implement the not-equal operand."""
         # Seem to require this method for Python 2 but not needed on Python 3?
         return not (self == other)
 
     def __lt__(self, other):
-        """Compare sequences with a less-than operand, see __eq__ documentation."""
+        """Implement the less-than operand."""
         if hasattr(other, "alphabet"):
             if not Alphabet._check_type_compatible([self.alphabet,
                                                     other.alphabet]):
@@ -214,7 +214,7 @@ class Seq(object):
         return str(self) < str(other)
 
     def __le__(self, other):
-        """Compare sequences with a less-than or equal operand, see __eq__ documentation."""
+        """Implement the less-than or equal operand."""
         if hasattr(other, "alphabet"):
             if not Alphabet._check_type_compatible([self.alphabet,
                                                     other.alphabet]):
@@ -514,7 +514,7 @@ class Seq(object):
         return str(self).rfind(sub_str, start, end)
 
     def startswith(self, prefix, start=0, end=sys.maxsize):
-        """Reurn True if the Seq starts with the given prefix, False otherwise.
+        """Return True if the Seq starts with the given prefix, False otherwise.
 
         This behaves like the python string method of the same name.
 
@@ -545,7 +545,7 @@ class Seq(object):
             return str(self).startswith(prefix_str, start, end)
 
     def endswith(self, suffix, start=0, end=sys.maxsize):
-        """Return True if the Seq end with the given suffix, False otherwise.
+        """Return True if the Seq ends with the given suffix, False otherwise.
 
         This behaves like the python string method of the same name.
 
@@ -1140,7 +1140,7 @@ class Seq(object):
 
 
 class UnknownSeq(Seq):
-    """Create a read-only sequence object of known length but unknown contents.
+    """Read-only sequence object of known length but unknown contents.
 
     If you have an unknown sequence, you can represent this with a normal
     Seq object, for example:
@@ -1394,17 +1394,17 @@ class UnknownSeq(Seq):
         return self
 
     def reverse_complement(self):
-        """Return the reverse complement of an unknown nucleotide equals itself.
+        """Return the reverse complement of an unknown sequence.
 
-        >>> my_nuc = UnknownSeq(10)
-        >>> my_nuc
-        UnknownSeq(10, alphabet = Alphabet(), character = '?')
-        >>> print(my_nuc)
-        ??????????
-        >>> my_nuc.reverse_complement()
-        UnknownSeq(10, alphabet = Alphabet(), character = '?')
-        >>> print(my_nuc.reverse_complement())
-        ??????????
+        The reverse complement of an unknown nucleotide equals itself:
+
+        >>> from Bio.Seq import UnknownSeq
+        >>> from Bio.Alphabet import generic_dna
+        >>> example = UnknownSeq(6, generic_dna)
+        >>> print(example)
+        NNNNNN
+        >>> print(example.reverse_complement())
+        NNNNNN
         """
         if isinstance(Alphabet._get_base_alphabet(self.alphabet),
                       Alphabet.ProteinAlphabet):
@@ -1559,7 +1559,7 @@ class UnknownSeq(Seq):
 
 
 class MutableSeq(object):
-    """Create an editable sequence object (with an alphabet).
+    """An editable sequence object (with an alphabet).
 
     Unlike normal python strings and our basic sequence object (the Seq class)
     which are immutable, the MutableSeq lets you edit the sequence in place.
@@ -1668,12 +1668,12 @@ class MutableSeq(object):
         return str(self) == str(other)
 
     def __ne__(self, other):
-        """Compare sequences with a not-equal operand, see __eq__ documentation."""
+        """Implement the not-equal operand."""
         # Seem to require this method for Python 2 but not needed on Python 3?
         return not (self == other)
 
     def __lt__(self, other):
-        """Compare sequences with a less-than operand, see __eq__ documentation."""
+        """Implement the less-than operand."""
         if hasattr(other, "alphabet"):
             if not Alphabet._check_type_compatible([self.alphabet,
                                                     other.alphabet]):
@@ -1685,7 +1685,7 @@ class MutableSeq(object):
         return str(self) < str(other)
 
     def __le__(self, other):
-        """Compare sequences with a less-than or equal operand, see __eq__ documentation."""
+        """Implement the less-than or equal operand."""
         if hasattr(other, "alphabet"):
             if not Alphabet._check_type_compatible([self.alphabet,
                                                     other.alphabet]):
@@ -2001,7 +2001,7 @@ def transcribe(dna):
 
 
 def back_transcribe(rna):
-    """Return the RNA back-transcribed sequence into DNA.
+    """Return the RNA sequence back-transcribed into DNA.
 
     If given a string, returns a new string object.
 
@@ -2024,7 +2024,7 @@ def back_transcribe(rna):
 
 def _translate_str(sequence, table, stop_symbol="*", to_stop=False,
                    cds=False, pos_stop="X", gap=None):
-    """Translate a nucleotide to string (PRIVATE).
+    """Translate nucleotide string into a protein string (PRIVATE).
 
     Arguments:
         - sequence - a string
