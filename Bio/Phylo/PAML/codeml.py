@@ -119,7 +119,7 @@ class Codeml(Paml):
                             for n in range(len(site_classes)):
                                 try:
                                     site_classes[n] = int(site_classes[n])
-                                except:
+                                except ValueError:
                                     raise TypeError(
                                         "Invalid site class: %s" % site_classes[n])
                             temp_options["NSsites"] = site_classes
@@ -129,12 +129,12 @@ class Codeml(Paml):
                             if "." in value:
                                 try:
                                     converted_value = float(value)
-                                except:
+                                except ValueError:
                                     converted_value = value
                             else:
                                 try:
                                     converted_value = int(value)
-                                except:
+                                except ValueError:
                                     converted_value = value
                             temp_options[option] = converted_value
         for option in self._options:

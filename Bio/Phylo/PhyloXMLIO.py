@@ -145,7 +145,7 @@ def _split_namespace(tag):
     """Split a tag into namespace and local tag strings."""
     try:
         return tag[1:].split('}', 1)
-    except:
+    except ValueError:
         return ('', tag)
 
 

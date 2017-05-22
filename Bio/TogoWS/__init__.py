@@ -265,11 +265,11 @@ def search(db, query, offset=None, limit=None, format=None):
     if offset is not None and limit is not None:
         try:
             offset = int(offset)
-        except:
+        except ValueError:
             raise ValueError("Offset should be an integer (at least one), not %r" % offset)
         try:
             limit = int(limit)
-        except:
+        except ValueError:
             raise ValueError("Limit should be an integer (at least one), not %r" % limit)
         if offset <= 0:
             raise ValueError("Offset should be at least one, not %i" % offset)

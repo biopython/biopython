@@ -69,7 +69,7 @@ from Bio import MissingPythonDependencyError
 
 try:
     import MySQLdb as mdb
-except:
+except ImportError:
     raise MissingPythonDependencyError("Install MySQLdb if you want to use "
                                        "Bio.motifs.jaspar.db")
 

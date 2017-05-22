@@ -364,7 +364,7 @@ class Tree(Nodes.Chain):
         else:
             try:
                 return frozenset(self.set_subtree(n) for n in self.node(node).succ)
-            except:
+            except Exception:
                 print(node)
                 print(self.node(node).succ)
                 for n in self.node(node).succ:
@@ -763,7 +763,7 @@ class Tree(Nodes.Chain):
                 succnodes = self.node(self.root).succ
                 smallest = min((len(self.get_taxa(n)), n) for n in succnodes)
                 outgroup = self.get_taxa(smallest[1])
-            except:
+            except Exception:
                 raise TreeError("Error determining outgroup.")
         else:  # root with user specified outgroup
             self.root_with_outgroup(outgroup)
