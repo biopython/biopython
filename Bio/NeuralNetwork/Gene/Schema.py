@@ -466,6 +466,13 @@ class SchemaFinder(object):
     """
     def __init__(self, num_schemas=100,
                  schema_finder=GeneticAlgorithmFinder()):
+        """Initialize the Schema Finder with its parameters.
+
+        Arguments:
+
+        o num_schemas -- the number of useful (positive fitness) schemas
+        we want to generation
+        """
         self.num_schemas = num_schemas
         self._finder = schema_finder
 
