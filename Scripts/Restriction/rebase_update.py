@@ -52,7 +52,7 @@ class RebaseUpdate(FancyURLopener):
         print('\n Please wait, trying to connect to Rebase\n')
         try:
             self.open(name)
-        except:
+        except Exception:
             raise ConnectionError('Rebase')
         return
 

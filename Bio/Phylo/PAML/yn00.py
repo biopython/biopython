@@ -80,12 +80,12 @@ class Yn00(Paml):
                             if "." in value or "e-" in value:
                                 try:
                                     converted_value = float(value)
-                                except:
+                                except ValueError:
                                     converted_value = value
                             else:
                                 try:
                                     converted_value = int(value)
-                                except:
+                                except ValueError:
                                     converted_value = value
                             temp_options[option] = converted_value
         for option in self._options:

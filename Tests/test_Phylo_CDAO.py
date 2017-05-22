@@ -16,7 +16,7 @@ import Bio.Phylo as bp
 from Bio.Phylo import CDAO
 try:
     from Bio.Phylo import CDAOIO
-except:
+except ImportError:
     raise MissingExternalDependencyError('Install RDFlib if you want to use the CDAO tree format.')
 
 # Example CDAO files

@@ -1274,7 +1274,7 @@ class Nexus(object):
                             plain_list.append(start)
             except NexusError:
                 raise
-            except:
+            except Exception:  # FIXME - this seems unwise
                 return None
         return plain_list
 

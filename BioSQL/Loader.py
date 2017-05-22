@@ -1065,7 +1065,7 @@ class DatabaseLoader(object):
                 dbxref_data = value.replace(' ', '').replace('\n', '').split(':')
                 db = dbxref_data[0]
                 accessions = dbxref_data[1:]
-            except:
+            except Exception:
                 raise ValueError("Parsing of db_xref failed: '%s'" % value)
             # Loop over all the grabbed accessions, and attempt to fill the
             # table
@@ -1146,7 +1146,7 @@ class DatabaseLoader(object):
                 db, accession = value.split(':', 1)
                 db = db.strip()
                 accession = accession.strip()
-            except:
+            except Exception:
                 raise ValueError(
                     "Parsing of dbxrefs list failed: '%s'" % value)
             # Get the dbxref_id value for the dbxref data

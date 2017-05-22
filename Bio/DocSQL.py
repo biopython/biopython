@@ -36,7 +36,7 @@ warnings.warn("Bio.DocSQL is now deprecated will be removed in a "
 
 try:
     import MySQLdb
-except:
+except ImportError:
     raise MissingPythonDependencyError("Install MySQLdb if you want to use "
                                        "Bio.DocSQL.")
 
