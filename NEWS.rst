@@ -16,6 +16,12 @@ This release of Biopython supports Python 2.7, 3.3, 3.4, 3.5 and 3.6 (although
 support for Python 3.3 is deprecated). It has also been tested on PyPy v5.7,
 PyPy3.5 v5.7 beta, and Jython 2.7.
 
+Two new arguments for reading and writing blast-xml files have been added
+to the Bio.SearchIO functions (read/parse and write, respectively). They
+are 'use_raw_hit_ids' and 'use_raw_query_ids'. Check out the relevant
+SearchIO.BlastIO documentation for a complete description of what these
+arguments do.
+
 Bio.AlignIO now supports Mauve's eXtended Multi-FastA (XMFA) file format
 under the format name "mauve" (contributed by Eric Rasche).
 
