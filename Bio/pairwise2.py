@@ -226,7 +226,7 @@ MAX_ALIGNMENTS = 1000   # maximum alignments recovered in traceback
 
 
 class align(object):
-    """Class providing functions that do alignments.
+    """Provide functions that do alignments.
 
     Alignment functions are called as:
 
@@ -402,6 +402,7 @@ alignment occurs.
             return keywds
 
         def __call__(self, *args, **keywds):
+            """Call the alignment instance already created."""
             keywds = self.decode(*args, **keywds)
             return _align(**keywds)
 
@@ -426,7 +427,7 @@ def _align(sequenceA, sequenceB, match_fn, gap_A_fn, gap_B_fn,
            penalize_extend_when_opening, penalize_end_gaps,
            align_globally, gap_char, force_generic, score_only,
            one_alignment_only):
-    """Return a list of alignments between two sequences or its score."""
+    """Return a list of alignments between two sequences or its score (PRIVATE)."""
     if not sequenceA or not sequenceB:
         return []
     try:
@@ -488,7 +489,7 @@ def _align(sequenceA, sequenceB, match_fn, gap_A_fn, gap_B_fn,
 def _make_score_matrix_generic(sequenceA, sequenceB, match_fn, gap_A_fn,
                                gap_B_fn, penalize_end_gaps, align_globally,
                                score_only):
-    """Generate a score and traceback matrix according to Needleman-Wunsch.
+    """Generate a score and traceback matrix according to Needleman-Wunsch (PRIVATE).
 
     This implementation allows the usage of general gap functions and is rather
     slow. It is automatically called if you define your own gap functions. You
@@ -585,16 +586,17 @@ def _make_score_matrix_generic(sequenceA, sequenceB, match_fn, gap_A_fn,
 def _make_score_matrix_fast(sequenceA, sequenceB, match_fn, open_A, extend_A,
                             open_B, extend_B, penalize_extend_when_opening,
                             penalize_end_gaps, align_globally, score_only):
-    """Generate a score and traceback matrix according to Gotoh."""
-    # This is an implementation of the Needleman-Wunsch dynamic programming
-    # algorithm as modified by Gotoh, implementing affine gap penalties.
-    # In short, we have three matrices, holding scores for alignments ending
-    # in (1) a match/mismatch, (2) a gap in sequence A, and (3) a gap in
-    # sequence B, respectively. However, we can combine them in one matrix,
-    # which holds the best scores, and store only those values from the
-    # other matrices that are actually used for the next step of calculation.
-    # The traceback matrix holds the positions for backtracing the alignment.
+    """Generate a score and traceback matrix according to Gotoh (PRIVATE).
 
+    This is an implementation of the Needleman-Wunsch dynamic programming
+    algorithm as modified by Gotoh, implementing affine gap penalties.
+    In short, we have three matrices, holding scores for alignments ending
+    in (1) a match/mismatch, (2) a gap in sequence A, and (3) a gap in
+    sequence B, respectively. However, we can combine them in one matrix,
+    which holds the best scores, and store only those values from the
+    other matrices that are actually used for the next step of calculation.
+    The traceback matrix holds the positions for backtracing the alignment.
+    """
     first_A_gap = calc_affine_penalty(1, open_A, extend_A,
                                       penalize_extend_when_opening)
     first_B_gap = calc_affine_penalty(1, open_B, extend_B,
@@ -713,18 +715,21 @@ def _make_score_matrix_fast(sequenceA, sequenceB, match_fn, open_A, extend_A,
 def _recover_alignments(sequenceA, sequenceB, starts, score_matrix,
                         trace_matrix, align_globally, gap_char,
                         one_alignment_only, gap_A_fn, gap_B_fn):
-    """Do the backtracing and return a list of alignments."""
-    # Recover the alignments by following the traceback matrix.  This
-    # is a recursive procedure, but it's implemented here iteratively
-    # with a stack.
-    # sequenceA and sequenceB may be sequences, including strings,
-    # lists, or list-like objects.  In order to preserve the type of
-    # the object, we need to use slices on the sequences instead of
-    # indexes.  For example, sequenceA[row] may return a type that's
-    # not compatible with sequenceA, e.g. if sequenceA is a list and
-    # sequenceA[row] is a string.  Thus, avoid using indexes and use
-    # slices, e.g. sequenceA[row:row+1].  Assume that client-defined
-    # sequence classes preserve these semantics.
+    """Do the backtracing and return a list of alignments (PRIVATE).
+
+    Recover the alignments by following the traceback matrix.  This
+    is a recursive procedure, but it's implemented here iteratively
+    with a stack.
+
+    sequenceA and sequenceB may be sequences, including strings,
+    lists, or list-like objects.  In order to preserve the type of
+    the object, we need to use slices on the sequences instead of
+    indexes.  For example, sequenceA[row] may return a type that's
+    not compatible with sequenceA, e.g. if sequenceA is a list and
+    sequenceA[row] is a string.  Thus, avoid using indexes and use
+    slices, e.g. sequenceA[row:row+1].  Assume that client-defined
+    sequence classes preserve these semantics.
+    """
     lenA, lenB = len(sequenceA), len(sequenceB)
     ali_seqA, ali_seqB = sequenceA[0:0], sequenceB[0:0]
     tracebacks = []
@@ -840,7 +845,7 @@ def _recover_alignments(sequenceA, sequenceB, starts, score_matrix,
 
 
 def _find_start(score_matrix, align_globally):
-    """Return a list of starting points (score, (row, col)).
+    """Return a list of starting points (score, (row, col)) (PRIVATE).
 
     Indicating every possible place to start the tracebacks.
     """
@@ -859,9 +864,11 @@ def _find_start(score_matrix, align_globally):
 
 
 def _clean_alignments(alignments):
-    """Take a list of alignments and return a cleaned version."""
-    # Remove duplicates, make sure begin and end are set correctly, remove
-    # empty alignments.
+    """Take a list of alignments and return a cleaned version (PRIVATE).
+
+    Remove duplicates, make sure begin and end are set correctly, remove
+    empty alignments.
+    """
     unique_alignments = []
     for align in alignments:
         if align not in unique_alignments:
@@ -885,7 +892,7 @@ def _clean_alignments(alignments):
 
 def _finish_backtrace(sequenceA, sequenceB, ali_seqA, ali_seqB, row, col,
                       gap_char):
-    """Add remaining sequences and fill with gaps if neccessary."""
+    """Add remaining sequences and fill with gaps if neccessary (PRIVATE)."""
     if row:
         ali_seqA += sequenceA[row - 1::-1]
     if col:
@@ -900,7 +907,7 @@ def _finish_backtrace(sequenceA, sequenceB, ali_seqA, ali_seqB, row, col,
 def _find_gap_open(sequenceA, sequenceB, ali_seqA, ali_seqB, end, row, col,
                    col_gap, gap_char, score_matrix, trace_matrix, in_process,
                    gap_fn, target, index, direction):
-    """Find the starting point(s) of the extended gap."""
+    """Find the starting point(s) of the extended gap (PRIVATE)."""
     dead_end = False
     target_score = score_matrix[row][col]
     for n in range(target):
@@ -928,23 +935,24 @@ _PRECISION = 1000
 
 
 def rint(x, precision=_PRECISION):
+    """Print number with declared precision."""
     return int(x * precision + 0.5)
 
 
 class identity_match(object):
     """Create a match function for use in an alignment.
 
-    identity_match([match][, mismatch]) -> match_fn
-
     match and mismatch are the scores to give when two residues are equal
     or unequal.  By default, match is 1 and mismatch is 0.
     """
 
     def __init__(self, match=1, mismatch=0):
+        """Initialize the class."""
         self.match = match
         self.mismatch = mismatch
 
     def __call__(self, charA, charB):
+        """Call a match function instance already created."""
         if charA == charB:
             return self.match
         return self.mismatch
@@ -953,19 +961,18 @@ class identity_match(object):
 class dictionary_match(object):
     """Create a match function for use in an alignment.
 
-    dictionary_match(score_dict[, symmetric]) -> match_fn
-
-    score_dict is a dictionary where the keys are tuples (residue 1, residue 2)
-    and the values are the match scores between those residues.  symmetric
-    is a flag that indicates whether the scores are symmetric.  If true, then
-    if (res 1, res 2) doesn't exist, I will use the score at (res 2, res 1).
+    - score_dict     - A dictionary where the keys are tuples (residue 1,
+      residue 2) and the values are the match scores between those residues.
+    - symmetric      - A flag that indicates whether the scores are symmetric.
     """
 
     def __init__(self, score_dict, symmetric=1):
+        """Initialize the class."""
         self.score_dict = score_dict
         self.symmetric = symmetric
 
     def __call__(self, charA, charB):
+        """Call a dictionary match instance already created."""
         if self.symmetric and (charA, charB) not in self.score_dict:
             # If the score dictionary is symmetric, then look up the
             # score both ways.
@@ -974,12 +981,10 @@ class dictionary_match(object):
 
 
 class affine_penalty(object):
-    """Create a gap function for use in an alignment.
-
-    affine_penalty(open, extend[, penalize_extend_when_opening]) -> gap_fn
-    """
+    """Create a gap function for use in an alignment."""
 
     def __init__(self, open, extend, penalize_extend_when_opening=0):
+        """Initialize the class."""
         if open > 0 or extend > 0:
             raise ValueError("Gap penalties should be non-positive.")
         if not penalize_extend_when_opening and (extend < open):
@@ -989,11 +994,13 @@ class affine_penalty(object):
         self.penalize_extend_when_opening = penalize_extend_when_opening
 
     def __call__(self, index, length):
+        """Call a gap function instance already created."""
         return calc_affine_penalty(
             length, self.open, self.extend, self.penalize_extend_when_opening)
 
 
 def calc_affine_penalty(length, open, extend, penalize_extend_when_opening):
+    """Calculate a penality score for the gap function."""
     if length <= 0:
         return 0
     penalty = open + extend * length
@@ -1003,7 +1010,7 @@ def calc_affine_penalty(length, open, extend, penalize_extend_when_opening):
 
 
 def print_matrix(matrix):
-    """Print out a matrix.  For debugging purposes."""
+    """Print out a matrix for debugging purposes."""
     # Transpose the matrix and get the length of the values in each column.
     matrixT = [[] for x in range(len(matrix[0]))]
     for i in range(len(matrix)):
@@ -1017,10 +1024,7 @@ def print_matrix(matrix):
 
 
 def format_alignment(align1, align2, score, begin, end):
-    """Format the alignment prettily into a string.
-
-    format_alignment(align1, align2, score, begin, end) -> string
-    """
+    """Format the alignment prettily into a string."""
     s = []
     s.append("%s\n" % align1)
     s.append("%s%s\n" % (" " * begin, "|" * (end - begin)))
