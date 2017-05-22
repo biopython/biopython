@@ -74,7 +74,7 @@ def TabIterator(handle, alphabet=single_letter_alphabet):
     for line in handle:
         try:
             title, seq = line.split("\t")  # will fail if more than one tab!
-        except:
+        except ValueError:
             if line.strip() == "":
                 # It's a blank line, ignore it
                 continue

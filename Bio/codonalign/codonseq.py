@@ -1050,7 +1050,7 @@ def _ml(seq1, seq2, cmethod, codon_table):
                     else:
                         # nonsynonymous count
                         Nd += pi[c1] * Q[i, j]
-                except:
+                except KeyError:
                     # This is probably due to stop codons
                     pass
     Sd *= t
@@ -1073,7 +1073,7 @@ def _ml(seq1, seq2, cmethod, codon_table):
                     else:
                         # nonsynonymous count
                         rhoN += pi[c1] * Q[i, j]
-                except:
+                except KeyError:
                     # This is probably due to stop codons
                     pass
     rhoS *= 3

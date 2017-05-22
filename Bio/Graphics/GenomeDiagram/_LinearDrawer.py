@@ -874,7 +874,7 @@ class LinearDrawer(AbstractDrawer):
             btm += self.fragment_lines[fragment][0]
             ctr += self.fragment_lines[fragment][0]
             top += self.fragment_lines[fragment][0]
-        except:     # Only called if the method screws up big time
+        except Exception:     # Only called if the method screws up big time
             print("We've got a screw-up")
             print("%s %s" % (self.start, self.end))
             print(self.fragment_bases)

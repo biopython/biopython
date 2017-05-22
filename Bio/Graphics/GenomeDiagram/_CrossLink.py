@@ -59,7 +59,7 @@ class CrossLink(object):
             track, start, end = self.featureA
             assert track in tracks
             return track
-        except Exception:  # TODO: ValueError?
+        except TypeError:
             for track in tracks:
                 for feature_set in track.get_sets():
                     if hasattr(feature_set, "features"):
@@ -90,7 +90,7 @@ class CrossLink(object):
             track, start, end = self.featureB
             assert track in tracks
             return track
-        except:
+        except TypeError:
             for track in tracks:
                 for feature_set in track.get_sets():
                     if hasattr(feature_set, "features"):

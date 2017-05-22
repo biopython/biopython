@@ -27,7 +27,7 @@ try:
     # Skip the test if reportlab is not installed
     import reportlab as r
     del r
-except:
+except ImportError:
     raise MissingExternalDependencyError(
         "Install reportlab if you want to use Bio.Graphics.")
 

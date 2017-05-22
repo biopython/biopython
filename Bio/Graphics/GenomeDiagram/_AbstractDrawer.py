@@ -77,7 +77,7 @@ def page_sizes(size):
              }
     try:
         return sizes[size]
-    except:
+    except KeyError:
         raise ValueError("%s not in list of page sizes" % size)
 
 

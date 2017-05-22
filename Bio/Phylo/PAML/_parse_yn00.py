@@ -133,7 +133,7 @@ def parse_others(lines, results, sequences):
                     value = stat_pair.split('=')[1].strip()
                     try:
                         stats[stat] = float(value)
-                    except:
+                    except ValueError:
                         stats[stat] = None
                 if "LWL85:" in line:
                     results[seq_name1][seq_name2]["LWL85"] = stats

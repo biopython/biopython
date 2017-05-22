@@ -182,7 +182,7 @@ def create_database():
         if os.path.exists(TESTDB):
             try:
                 os.remove(TESTDB)
-            except:
+            except Exception:
                 time.sleep(1)
                 try:
                     os.remove(TESTDB)
@@ -205,7 +205,7 @@ def create_database():
         server.load_database_sql(SQL_FILE)
         server.commit()
         server.close()
-    except:
+    except Exception:
         # Failed, but must close the handle...
         server.close()
         raise
