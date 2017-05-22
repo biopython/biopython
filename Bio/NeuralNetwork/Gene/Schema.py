@@ -470,7 +470,7 @@ class SchemaFinder(object):
 
         Arguments:
 
-        o num_schemas -- the number of useful (positive fitness) schemas
+        * num_schemas -- the number of useful (positive fitness) schemas
         we want to generation
         """
         self.num_schemas = num_schemas
