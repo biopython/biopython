@@ -33,6 +33,11 @@ Python 3.3
 Still suported but deprecated as of Release 1.67, triggering a warning
 at installation time.
 
+Bio.Phylo.CDAOIO.CDAOError
+==========================
+This exception was deprecated as of Release 1.70, and is no longer used
+within Biopython.
+
 Bio.PDB.Dice
 ============
 This was deprecated in Biopython 1.70, it was likely intended as an example
