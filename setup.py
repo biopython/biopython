@@ -365,10 +365,7 @@ PACKAGES = [
     'Bio.Pathway.Rep',
     'Bio.PDB',
     'Bio.PopGen',
-    'Bio.PopGen.Async',
-    'Bio.PopGen.FDist',
     'Bio.PopGen.GenePop',
-    'Bio.PopGen.SimCoal',
     'Bio.Restriction',
     'Bio.SCOP',
     'Bio.SearchIO',
@@ -505,7 +502,6 @@ setup_args = {
     "ext_modules": EXTENSIONS,
     "package_data": {
         'Bio.Entrez': ['DTDs/*.dtd', 'DTDs/*.ent', 'DTDs/*.mod'],
-        'Bio.PopGen': ['SimCoal/data/*.par'],
          },
    }
 
