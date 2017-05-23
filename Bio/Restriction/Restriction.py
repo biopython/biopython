@@ -200,7 +200,7 @@ class FormattedSeq(object):
         return
 
     def to_linear(self):
-        """Make a new instnace of sequence as linear."""
+        """Make a new instance of sequence as linear."""
         new = self.__class__(self)
         new.linear = True
         return new
@@ -929,18 +929,23 @@ class NonPalindromic(AbstractCut):
 
         Implement the search method for non palindromic enzymes.
         """
-        iterator = cls.dna.finditer(cls.compsite, cls.size)
+        compsite_for, compsite_rev = cls.compsite.pattern.split('|')
+        iterator_for = cls.dna.finditer(compsite_for, cls.size)
+        iterator_rev = cls.dna.finditer(compsite_rev, cls.size)
         cls.results = []
         modif = cls._modify
         revmodif = cls._rev_modify
         s = str(cls)
         cls.on_minus = []
-        for start, group in iterator:
+
+        for start, group in iterator_for:
             if group(s):
                 cls.results += [r for r in modif(start)]
-            else:
-                cls.on_minus += [r for r in revmodif(start)]
-        cls.results += cls.on_minus
+        s += '_as'
+        for start, group in iterator_rev:
+            if group(s):
+                cls.results += [r for r in revmodif(start)]
+
         if cls.results:
             cls.results.sort()
             cls._drop()
@@ -984,11 +989,10 @@ class Unknown(AbstractCut):
 
         True if the enzyme produces blunt end.
 
-        See Also:
+        Related methods:
             RE.is_3overhang()
             RE.is_5overhang()
             RE.is_unknown()
-
         """
         return False
 
@@ -998,11 +1002,10 @@ class Unknown(AbstractCut):
 
         True if the enzyme produces 5' overhang sticky end.
 
-        See Also:
+        Related methods:
             RE.is_3overhang()
             RE.is_blunt()
             RE.is_unknown()
-
         """
         return False
 
@@ -1012,11 +1015,10 @@ class Unknown(AbstractCut):
 
         True if the enzyme produces 3' overhang sticky end.
 
-        See Also:
+        Related methods:
             RE.is_5overhang()
             RE.is_blunt()
             RE.is_unknown()
-
         """
         return False
 
@@ -1110,11 +1112,10 @@ class Blunt(AbstractCut):
 
         True if the enzyme produces blunt end.
 
-        See Also:
+        Related methods:
             RE.is_3overhang()
             RE.is_5overhang()
             RE.is_unknown()
-
         """
         return True
 
@@ -1124,11 +1125,10 @@ class Blunt(AbstractCut):
 
         True if the enzyme produces 5' overhang sticky end.
 
-        See Also:
+        Related methods:
             RE.is_3overhang()
             RE.is_blunt()
             RE.is_unknown()
-
         """
         return False
 
@@ -1138,11 +1138,10 @@ class Blunt(AbstractCut):
 
         True if the enzyme produces 3' overhang sticky end.
 
-        See Also:
+        Related methods:
             RE.is_5overhang()
             RE.is_blunt()
             RE.is_unknown()
-
         """
         return False
 
@@ -1238,11 +1237,10 @@ class Ov5(AbstractCut):
 
         True if the enzyme produces blunt end.
 
-        See Also:
+        Related methods:
             RE.is_3overhang()
             RE.is_5overhang()
             RE.is_unknown()
-
         """
         return False
 
@@ -1252,11 +1250,10 @@ class Ov5(AbstractCut):
 
         True if the enzyme produces 5' overhang sticky end.
 
-        See Also:
+        Related methods:
             RE.is_3overhang()
             RE.is_blunt()
             RE.is_unknown()
-
         """
         return True
 
@@ -1266,11 +1263,10 @@ class Ov5(AbstractCut):
 
         True if the enzyme produces 3' overhang sticky end.
 
-        See Also:
+        Related methods:
             RE.is_5overhang()
             RE.is_blunt()
             RE.is_unknown()
-
         """
         return False
 
@@ -1370,11 +1366,10 @@ class Ov3(AbstractCut):
 
         True if the enzyme produces blunt end.
 
-        See Also:
+        Related methods:
             RE.is_3overhang()
             RE.is_5overhang()
             RE.is_unknown()
-
         """
         return False
 
@@ -1384,11 +1379,10 @@ class Ov3(AbstractCut):
 
         True if the enzyme produces 5' overhang sticky end.
 
-        See Also:
+        Related methods:
             RE.is_3overhang()
             RE.is_blunt()
             RE.is_unknown()
-
         """
         return False
 
@@ -1398,11 +1392,10 @@ class Ov3(AbstractCut):
 
         True if the enzyme produces 3' overhang sticky end.
 
-        See Also:
+        Related methods:
             RE.is_5overhang()
             RE.is_blunt()
             RE.is_unknown()
-
         """
         return True
 
@@ -1473,7 +1466,7 @@ class Defined(AbstractCut):
         drop = itertools.dropwhile
         take = itertools.takewhile
         if cls.dna.is_linear():
-            cls.results = [x for x in drop(lambda x:x < 1, cls.results)]
+            cls.results = [x for x in drop(lambda x:x <= 1, cls.results)]
             cls.results = [x for x in take(lambda x:x <= length, cls.results)]
         else:
             for index, location in enumerate(cls.results):
@@ -1496,10 +1489,9 @@ class Defined(AbstractCut):
         i.e. the recognition site is not degenerated AND the enzyme cut inside
         the site.
 
-        See Also:
+        Related methods:
             RE.is_ambiguous()
             RE.is_unknown()
-
         """
         return True
 
@@ -1511,10 +1503,9 @@ class Defined(AbstractCut):
         i.e. the recognition site is degenerated AND/OR the enzyme cut outside
         the site.
 
-        See Also:
+        Related methods:
             RE.is_defined()
             RE.is_unknown()
-
         """
         return False
 
@@ -1525,10 +1516,9 @@ class Defined(AbstractCut):
         True if the sequence is unknown,
         i.e. the recognition site has not been characterised yet.
 
-        See Also:
+        Related methods:
             RE.is_defined()
             RE.is_ambiguous()
-
         """
         return False
 
@@ -1616,7 +1606,7 @@ class Ambiguous(AbstractCut):
         drop = itertools.dropwhile
         take = itertools.takewhile
         if cls.dna.is_linear():
-            cls.results = [x for x in drop(lambda x: x < 1, cls.results)]
+            cls.results = [x for x in drop(lambda x: x <= 1, cls.results)]
             cls.results = [x for x in take(lambda x: x <= length, cls.results)]
         else:
             for index, location in enumerate(cls.results):
@@ -1639,10 +1629,9 @@ class Ambiguous(AbstractCut):
         i.e. the recognition site is not degenerated AND the enzyme cut inside
         the site.
 
-        See Also:
+        Related methods:
             RE.is_ambiguous()
             RE.is_unknown()
-
         """
         return False
 
@@ -1654,10 +1643,9 @@ class Ambiguous(AbstractCut):
         i.e. the recognition site is degenerated AND/OR the enzyme cut outside
         the site.
 
-        See Also:
+        Related methods:
             RE.is_defined()
             RE.is_unknown()
-
         """
         return True
 
@@ -1668,10 +1656,9 @@ class Ambiguous(AbstractCut):
         True if the sequence is unknown,
         i.e. the recognition site has not been characterised yet.
 
-        See Also:
+        Related methods:
             RE.is_defined()
             RE.is_ambiguous()
-
         """
         return False
 
@@ -1814,10 +1801,9 @@ class NotDefined(AbstractCut):
         i.e. the recognition site is not degenerated AND the enzyme cut inside
         the site.
 
-        See Also:
+        Related methods:
             RE.is_ambiguous()
             RE.is_unknown()
-
         """
         return False
 
@@ -1829,10 +1815,9 @@ class NotDefined(AbstractCut):
         i.e. the recognition site is degenerated AND/OR the enzyme cut outside
         the site.
 
-        See Also:
+        Related methods:
             RE.is_defined()
             RE.is_unknown()
-
         """
         return False
 
@@ -1843,10 +1828,9 @@ class NotDefined(AbstractCut):
         True if the sequence is unknown,
         i.e. the recognition site has not been characterised yet.
 
-        See Also:
+        Related methods:
             RE.is_defined()
             RE.is_ambiguous()
-
         """
         return True
 
@@ -2164,7 +2148,7 @@ class RestrictionBatch(set):
         return new
 
     def elements(self):
-        """List the enzymes of the RestrictionBatch as tuple.
+        """List the enzymes of the RestrictionBatch as list of strings.
 
         Give all the names of the enzymes in B sorted alphabetically.
         """
@@ -2351,12 +2335,12 @@ class Analysis(RestrictionBatch, PrintFormat):
                 setattr(self, k, v)
                 self.Cmodulo = self.ConsoleWidth % self.NameWidth
                 self.PrefWidth = self.ConsoleWidth - self.Cmodulo
-            elif k is 'sequence':
+            elif k == 'sequence':
                 setattr(self, 'sequence', v)
                 self.search(self.sequence, self.linear)
-            elif k is 'rb':
+            elif k == 'rb':
                 self = Analysis.__init__(self, v, self.sequence, self.linear)
-            elif k is 'linear':
+            elif k == 'linear':
                 setattr(self, 'linear', v)
                 self.search(self.sequence, v)
             elif k in ('Indent', 'Maxsize'):
@@ -2611,7 +2595,7 @@ for TYPE, (bases, enzymes) in typedict.items():
 #
 #   AllEnzymes is a RestrictionBatch with all the enzymes from Rebase.
 #
-AllEnzymes = CommOnly
+AllEnzymes = RestrictionBatch(CommOnly)
 AllEnzymes.update(NonComm)
 #
 #   Now, place the enzymes in locals so they can be imported.
