@@ -323,7 +323,8 @@ Now, suppose we have a gzip compressed file instead? These are very
 commonly used on Linux. We can use Python's \verb|gzip| module to open
 the compressed file for reading - which gives us a handle object:
 
-%doctest examples
+%TODO: Can we make the doctest code Python version specific?
+%This doctest fails on Python 2.7 due to http://bugs.python.org/issue30012
 \begin{verbatim}
 >>> import gzip
 >>> from Bio import SeqIO
