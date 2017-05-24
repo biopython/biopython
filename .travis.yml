@@ -67,6 +67,8 @@ addons:
 #
 # There is a phyml Ubuntu package, but currently too old.
 #
+# There is no GenePop Ubuntu pacakge, although it is in BioConda.
+#
 # There are TravisCI provided versions of PyPy and PyPy3, but currently too old.
 # We therefore deactivate that, and download and unzip portable PyPy binaries.
 #
@@ -78,6 +80,7 @@ before_install:
   - cd $HOME
   - mkdir bin
   - export PATH=$HOME/bin:$PATH
+  - echo "Installing PhyML"
   - curl -L -O http://www.atgc-montpellier.fr/download/binaries/phyml/PhyML-3.1.zip
   - unzip PhyML-3.1.zip
   - mv PhyML-3.1/PhyML-3.1_linux64 bin/phyml
@@ -85,9 +88,15 @@ before_install:
   - "if [[ $TRAVIS_PYTHON_VERSION == 'pypy' ]]; then deactivate && wget https://bitbucket.org/squeaky/portable-pypy/downloads/pypy-5.7.1-linux_x86_64-portable.tar.bz2 && tar -jxvf pypy-5.7.1-linux_x86_64-portable.tar.bz2 && echo 'Setting up aliases...' && cd pypy-5.7.1-linux_x86_64-portable/bin/ && export PATH=$PWD:$PATH && ln -s pypy python && echo 'Setting up pip...' && ./pypy -m ensurepip ; fi"
   - "if [[ $TRAVIS_PYTHON_VERSION == 'pypy3' ]]; then deactivate && wget https://bitbucket.org/squeaky/portable-pypy/downloads/pypy3.5-5.7.1-beta-linux_x86_64-portable.tar.bz2 && tar -jxvf pypy3.5-5.7.1-beta-linux_x86_64-portable.tar.bz2 && echo 'Setting up aliases...' && cd pypy3.5-5.7.1-beta-linux_x86_64-portable/bin/ && export PATH=$PWD:$PATH && ln -s pypy3 python && echo 'Setting up pip...' && ./pypy3 -m ensurepip && ln -s pip3 pip ; fi"
   - cd $HOME
+  - echo "Installing dssp"
   - curl -L -O ftp://ftp.cmbi.ru.nl/pub/software/dssp/dssp-2.0.4-linux-amd64
   - mv dssp-2.0.4-linux-amd64 bin/dssp
   - chmod a+x bin/dssp
+  - echo "Installing Genepop"
+  - curl -L -O http://kimura.univ-montp2.fr/~rousset/sources.tar.gz
+  - tar -xxvf sources.tar.gz
+  - cd Cpp
+  - g++ -DNO_MODULES -o ~/bin/Genepop GenepopS.cpp -O3
   - cd $TRAVIS_BUILD_DIR
   - "cp Tests/biosql.ini.sample Tests/biosql.ini"
 
