@@ -650,13 +650,11 @@ Their functionality is now available through a read() function.
 
 Bio.PopGen.Async
 ================
-``Bio.PopGen.Async`` was deprecated in Release 1.68. It will be removed in
-Release 1.70.
+``Bio.PopGen.Async`` was deprecated in Release 1.68, removed in Release 1.70.
 
 Bio.PopGen.FDist
 ================
-``Bio.PopGen.FDist`` was deprecated in Release 1.68. It will be removed in
-Release 1.70.
+``Bio.PopGen.FDist`` was deprecated in Release 1.68, removed in Release 1.70.
 
 Prior to this, the ``RecordParser``, ``_Scanner``, and ``_RecordConsumer``
 classes were declared obsolete in Release 1.54, deprecated in Release 1.55,
@@ -665,8 +663,8 @@ a ``read()`` function.
 
 Bio.PopGen.SimCoal
 ==================
-``Bio.PopGen.SimCoal`` was deprecated in Release 1.68. It will be removed in
-Release 1.70.
+``Bio.PopGen.SimCoal`` was deprecated in Release 1.68, and removed in Release
+1.70.
 
 Bio.UniGene
 ===========
