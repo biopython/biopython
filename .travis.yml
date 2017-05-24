@@ -93,10 +93,9 @@ before_install:
   - mv dssp-2.0.4-linux-amd64 bin/dssp
   - chmod a+x bin/dssp
   - echo "Installing Genepop"
-  - curl -L -O http://kimura.univ-montp2.fr/~rousset/sources.tar.gz
-  - tar -xxvf sources.tar.gz
-  - cd Cpp
-  - g++ -DNO_MODULES -o ~/bin/Genepop GenepopS.cpp -O3
+  - curl -L -O https://anaconda.org/bioconda/genepop/4.5.1/download/linux-64/genepop-4.5.1-0.tar.bz2
+  # This will create ./bin/Genepop and a harmless ./info/ folder.
+  - tar -jxvf genepop-4.5.1-0.tar.bz2
   - cd $TRAVIS_BUILD_DIR
   - "cp Tests/biosql.ini.sample Tests/biosql.ini"
 
