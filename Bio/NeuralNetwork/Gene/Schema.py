@@ -425,7 +425,7 @@ class SimpleFinisher(object):
         Arguments:
 
         - num_schemas -- the number of useful (positive fitness) schemas
-          we want to generation
+          we want to generate.
 
         - min_generations -- The minimum number of generations to allow
           the GA to proceed.
@@ -474,7 +474,7 @@ class SchemaFinder(object):
         Arguments:
 
         - num_schemas -- the number of useful (positive fitness) schemas
-          we want to generation
+          we want to generate.
         """
         self.num_schemas = num_schemas
         self._finder = schema_finder
