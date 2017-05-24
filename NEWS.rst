@@ -50,6 +50,7 @@ possible, especially the following contributors:
 - Markus Piotrowski
 - Mateusz Korycinski (first contribution)
 - Maximilian Greil
+- Michiel de Hoon
 - morrme (first contribution)
 - Noam Kremen (first contribution)
 - Peter Cock
