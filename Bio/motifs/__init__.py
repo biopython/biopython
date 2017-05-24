@@ -145,9 +145,8 @@ def read(handle, format):
 
 
 class Instances(list):
-    """
-    A class representing instances of sequence motifs.
-    """
+    """A class representing instances of sequence motifs."""
+
     def __init__(self, instances=None, alphabet=None):
         from Bio.Alphabet import IUPAC
         from Bio.Seq import Seq
@@ -196,8 +195,10 @@ class Instances(list):
         return counts
 
     def search(self, sequence):
-        """
-        a generator function, returning found positions of motif instances in a given sequence
+        """Find positions of motifs in a given sequence.
+
+        This is a generator function, returning found positions of motif
+        instances in a given sequence.
         """
         for pos in range(0, len(sequence) - self.length + 1):
             for instance in self:
@@ -215,9 +216,8 @@ class Instances(list):
 
 
 class Motif(object):
-    """
-    A class representing sequence motifs.
-    """
+    """A class representing sequence motifs."""
+
     def __init__(self, alphabet=None, instances=None, counts=None):
         from . import matrix
         from Bio.Alphabet import IUPAC
@@ -326,8 +326,7 @@ class Motif(object):
         return self.pwm.log_odds(self._background)
 
     def __str__(self, masked=False):
-        """ string representation of a motif.
-        """
+        """String representation of a motif."""
         text = ""
         if self.instances is not None:
             text += str(self.instances)

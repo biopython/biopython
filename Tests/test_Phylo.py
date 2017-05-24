@@ -181,6 +181,7 @@ class IOTests(unittest.TestCase):
 
 class TreeTests(unittest.TestCase):
     """Tests for methods on BaseTree.Tree objects."""
+
     def test_randomized(self):
         """Tree.randomized: generate a new randomized tree."""
         for N in (2, 5, 20):
@@ -260,6 +261,7 @@ class TreeTests(unittest.TestCase):
 
 class MixinTests(unittest.TestCase):
     """Tests for TreeMixin methods."""
+
     def setUp(self):
         self.phylogenies = list(Phylo.parse(EX_PHYLO, 'phyloxml'))
 

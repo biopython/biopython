@@ -10,12 +10,11 @@ from . import _parse_baseml
 
 
 class BasemlError(EnvironmentError):
-    """BASEML has failed. Run with verbose = True to view BASEML's error
-    message"""
+    """BASEML failed. Run with verbose=True to view BASEML's error message."""
 
 
 class Baseml(Paml):
-    """This class implements an interface to BASEML, part of the PAML package."""
+    """An interface to BASEML, part of the PAML package."""
 
     def __init__(self, alignment=None, tree=None, working_dir=None,
                 out_file=None):
@@ -92,8 +91,7 @@ class Baseml(Paml):
                     ctl_handle.write("%s = %s\n" % (option[0], option[1]))
 
     def read_ctl_file(self, ctl_file):
-        """Parse a control file and load the options into the Baseml instance.
-        """
+        """Parse a control file and load the options into the Baseml instance."""
         temp_options = {}
         if not os.path.isfile(ctl_file):
             raise IOError("File not found: %r" % ctl_file)

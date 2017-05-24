@@ -156,10 +156,18 @@ The blast-xml parser is aware of these modifications and will attempt to extract
 the true sequence IDs out of the descriptions. So when accessing QueryResult or
 Hit objects, you will use the non-BLAST-generated IDs.
 
-Conversely, the blast-xml writer will try to concatenate the true sequence IDs
-with their descriptions and use the BLAST-generated IDs. This enables you to
-write BLAST XML files using SearchIO as if they were written by a real BLAST
-program.
+This behavior on the query IDs can be disabled using the 'use_raw_query_ids'
+parameter while the behavior on the hit IDs can be disabled using the
+'use_raw_hit_ids' parameter. Both are boolean values that can be supplied
+to SearchIO.read or SearchIO.parse, with the default values set to 'False'.
+
+In any case, the raw BLAST IDs can always be accessed using the query or hit
+object's 'blast_id' attribute.
+
+The blast-xml write function also accepts 'use_raw_query_ids' and
+'use_raw_hit_ids' parameters. However, note that the default values for the
+writer are set to 'True'. This is because the writer is meant to mimic native
+BLAST result as much as possible.
 
 
 blast-tab

@@ -2,8 +2,7 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""Command line wrapper for the multiple alignment programme MAFFT.
-"""
+"""Command line wrapper for the multiple alignment programme MAFFT."""
 
 from __future__ import print_function
 
@@ -79,6 +78,7 @@ class MafftCommandline(AbstractCommandline):
 
     Last checked against version: MAFFT v6.717b (2009/12/03)
     """
+
     def __init__(self, cmd="mafft", **kwargs):
         BLOSUM_MATRICES = ["30", "45", "62", "80"]
         self.parameters = \

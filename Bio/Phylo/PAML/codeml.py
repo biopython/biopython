@@ -12,12 +12,11 @@ from . import _parse_codeml
 
 
 class CodemlError(EnvironmentError):
-    """CODEML has failed. Run with verbose = True to view CODEML's error
-    message"""
+    """CODEML failed. Run with verbose=True to view CODEML's error message."""
 
 
 class Codeml(Paml):
-    """This class implements an interface to CODEML, part of the PAML package."""
+    """An interface to CODEML, part of the PAML package."""
 
     def __init__(self, alignment=None, tree=None, working_dir=None,
                  out_file=None):
@@ -94,8 +93,7 @@ class Codeml(Paml):
                         ctl_handle.write("%s = %s\n" % (option[0], option[1]))
 
     def read_ctl_file(self, ctl_file):
-        """Parse a control file and load the options into the Codeml instance.
-        """
+        """Parse a control file and load the options into the Codeml instance."""
         temp_options = {}
         if not os.path.isfile(ctl_file):
             raise IOError("File not found: %r" % ctl_file)

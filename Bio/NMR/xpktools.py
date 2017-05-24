@@ -35,6 +35,7 @@ class XpkEntry(object):
         self.field["entrynum"] returns the line number (1st field of line)
 
     """
+
     def __init__(self, entry, headline):
         # Holds all fields from input line in a dictionary
         # keys are data labels from the .xpk header
@@ -96,6 +97,7 @@ class Peaklist(object):
     ' H1.L  H1.P  H1.W  H1.B  H1.E  H1.J  15N2.L  15N2.P  15N2.W  15N2.B  15N2.E  15N2.J  N15.L  N15.P  N15.W  N15.B  N15.E  N15.J  vol  int  stat '
 
     """
+
     def __init__(self, infn):
 
         with open(infn, 'r') as infile:
@@ -215,6 +217,7 @@ def _find_start_entry(line, n):
     -------
     starting character : str
         The starting character for entry `n`.
+
     """
     # This function is used by replace_entry
 

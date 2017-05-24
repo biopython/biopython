@@ -10,7 +10,7 @@ You are expected to use this module via the Bio.SeqIO functions.
 Note that internally this module calls Bio.GenBank to do the actual
 parsing of GenBank, EMBL and IMGT files.
 
-See also:
+See Also:
 International Nucleotide Sequence Database Collaboration
 http://www.insdc.org/
 
@@ -146,7 +146,8 @@ def ImgtIterator(handle):
     a single SeqRecord with associated annotation and features.
 
     Note that for genomes or chromosomes, there is typically only
-    one record."""
+    one record.
+    """
     # This calls a generator function:
     return _ImgtScanner(debug=0).parse_records(handle)
 
@@ -286,6 +287,7 @@ def _insdc_location_string(location, rec_length):
 
 class _InsdcWriter(SequentialSequenceWriter):
     """Base class for GenBank and EMBL writers (PRIVATE)."""
+
     MAX_WIDTH = 80
     QUALIFIER_INDENT = 21
     QUALIFIER_INDENT_STR = " " * QUALIFIER_INDENT
@@ -371,7 +373,8 @@ class _InsdcWriter(SequentialSequenceWriter):
 
         Some entries are lists, in which case if just_first=True the first entry
         is returned.  If just_first=False (default) this verifies there is only
-        one entry before returning it."""
+        one entry before returning it.
+        """
         try:
             answer = record.annotations[key]
         except KeyError:

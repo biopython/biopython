@@ -78,15 +78,17 @@ typedict = {}
 
 class OverhangError(ValueError):
     """Exception for dealing with overhang."""
+
     pass
 
 
 def regex(site):
-    """regex(site) -> string.
+    """Construct a regular expression (string) from a DNA sequence.
 
-    Construct a regular expression from a DNA sequence.
-    i.e.:
+    i.e.::
+
         site = 'ABCGN'   -> 'A[CGT]CG.'
+
     """
     reg_ex = str(site)
     for base in reg_ex:
@@ -102,20 +104,25 @@ def regex(site):
 
 
 def is_palindrom(sequence):
-    """is_palindrom(sequence) -> bool.
+    """Check whether the sequence is a palindrome or not (DEPRECATED).
 
-    True is the sequence is a palindrom.
-    sequence is a Seq object.
+    Deprecated alias for is_palindrome (with e at end).
     """
+    import warnings
+    from Bio import BiopythonDeprecationWarning
+    warnings.warn("is_palindrom is deprecated, please use "
+                  "is_palindrome instead.",
+                  BiopythonDeprecationWarning)
+    return is_palindrome(sequence)
+
+
+def is_palindrome(sequence):
+    """Check whether the sequence is a palindrome or not."""
     return str(sequence) == str(sequence.reverse_complement())
 
 
 def LocalTime():
-    """LocalTime() -> string.
-
-    LocalTime calculate the extension for emboss file for the current year and
-    month.
-    """
+    """Extension for emboss file for the current year and month."""
     t = time.gmtime()
     year = str(t.tm_year)[-1]
     month = str(t.tm_mon)
@@ -126,6 +133,7 @@ def LocalTime():
 
 class newenzyme(object):
     """construct the attributes of the enzyme corresponding to 'name'."""
+
     def __init__(cls, name):
         cls.opt_temp = 37
         cls.inact_temp = 65
@@ -269,17 +277,14 @@ class newenzyme(object):
 
 
 class TypeCompiler(object):
-    """Build the different types possible for Restriction Enzymes"""
+    """Build the different types possible for Restriction Enzymes."""
 
     def __init__(self):
         """TypeCompiler() -> new TypeCompiler instance."""
         pass
 
     def buildtype(self):
-        """TC.buildtype() -> generator.
-
-        build the new types that will be needed for constructing the
-        restriction enzymes."""
+        """Build new types that will be needed for constructing the enzymes."""
         baT = (AbstractCut, RestrictionType)
         cuT = (NoCut, OneCut, TwoCuts)
         meT = (Meth_Dep, Meth_Undep)
@@ -365,11 +370,7 @@ class DictionaryBuilder(object):
         self.proxy = ftp_proxy or config.ftp_proxy
 
     def build_dict(self):
-        """DB.build_dict() -> None.
-
-        Construct the dictionary and build the files containing the new
-        dictionaries.
-        """
+        """Construct dictionary and build files containing new dictionaries."""
         #
         #   first parse the emboss files.
         #
@@ -503,9 +504,7 @@ class DictionaryBuilder(object):
         return
 
     def install_dict(self):
-        """DB.install_dict() -> None.
-
-        Install the newly created dictionary in the site-packages folder.
+        """Install the newly created dictionary in the site-packages folder.
 
         May need super user privilege on some architectures.
         """
@@ -555,10 +554,7 @@ class DictionaryBuilder(object):
         return
 
     def no_install(self):
-        """BD.no_install() -> None.
-
-        build the new dictionary but do not install the dictionary.
-        """
+        """Build the new dictionary but do not install the dictionary."""
         print('\n ' + '*' * 78 + '\n')
         # update = config.updatefolder
         try:
@@ -591,10 +587,7 @@ class DictionaryBuilder(object):
         return
 
     def lastrebasefile(self):
-        """BD.lastrebasefile() -> None.
-
-        Check the emboss files are up to date and download them if not.
-        """
+        """Check the emboss files are up to date and download them if not."""
         embossnames = ('emboss_e', 'emboss_r', 'emboss_s')
         #
         #   first check if we have the last update:

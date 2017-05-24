@@ -3,8 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""
-This module allows to control GenePop through an easier interface.
+"""Control GenePop through an easier interface.
 
 This interface is less efficient than the standard GenePopControler
 
@@ -62,15 +61,14 @@ class EasyController(object):
                 return result
 
     def estimate_nm(self):
-        """ Estimate Nm. Just a simple bridge.
-        """
+        """Estimate Nm. Just a simple bridge."""
         return self._controller.estimate_nm(self._fname)
 
     def get_heterozygosity_info(self, pop_pos, locus_name):
         """Returns the heterozygosity info for a certain locus on a population.
 
-           Returns (Expected homozygotes, observed homozygotes,
-                    Expected heterozygotes, observed heterozygotes)
+        Returns (Expected homozygotes, observed homozygotes,
+        Expected heterozygotes, observed heterozygotes)
         """
         geno_freqs = self._controller.calc_allele_genotype_freqs(self._fname)
         pop_iter, loc_iter = geno_freqs
@@ -78,25 +76,22 @@ class EasyController(object):
         return pops[pop_pos][1][locus_name][1]
 
     def get_genotype_count(self, pop_pos, locus_name):
-        """Returns the genotype counts for a certain population and locus
-
-        """
+        """Returns the genotype counts for a certain population and locus."""
         geno_freqs = self._controller.calc_allele_genotype_freqs(self._fname)
         pop_iter, loc_iter = geno_freqs
         pop_iter = list(pop_iter)
         return pop_iter[pop_pos][1][locus_name][0]
 
     def get_fis(self, pop_pos, locus_name):
-        """Returns the Fis for a certain population and locus
+        """Returns the Fis for a certain population and locus.
 
-           Below CW means Cockerham and Weir and RH means Robertson and Hill.
+        Below CW means Cockerham and Weir and RH means Robertson and Hill.
 
-           Returns a pair:
+        Returns a pair:
 
-                - dictionary [allele] = (repetition count, frequency, Fis CW )
-                  with information for each allele
-                - a triple with total number of alleles, Fis CW, Fis RH
-
+        - dictionary [allele] = (repetition count, frequency, Fis CW )
+          with information for each allele
+        - a triple with total number of alleles, Fis CW, Fis RH
 
         """
         geno_freqs = self._controller.calc_allele_genotype_freqs(self._fname)
@@ -105,18 +100,14 @@ class EasyController(object):
         return pops[pop_pos][1][locus_name][2:]
 
     def get_alleles(self, pop_pos, locus_name):
-        """Returns the alleles for a certain population and locus.
-
-        """
+        """Returns the alleles for a certain population and locus."""
         geno_freqs = self._controller.calc_allele_genotype_freqs(self._fname)
         pop_iter, loc_iter = geno_freqs
         pop_iter = list(pop_iter)
         return list(pop_iter[pop_pos][1][locus_name][2].keys())
 
     def get_alleles_all_pops(self, locus_name):
-        """Returns the alleles for a certain population and locus.
-
-        """
+        """Returns the alleles for a certain population and locus."""
         geno_freqs = self._controller.calc_allele_genotype_freqs(self._fname)
         pop_iter, loc_iter = geno_freqs
         for locus_info in loc_iter:
@@ -141,17 +132,17 @@ class EasyController(object):
         return total, allele_freq
 
     def get_multilocus_f_stats(self):
-        """ Returns the multilocus F stats
+        """Returns the multilocus F stats.
 
-            Explain averaging.
-            Returns Fis(CW), Fst, Fit
+        Explain averaging.
+        Returns Fis(CW), Fst, Fit
         """
         return self._controller.calc_fst_all(self._fname)[0]
 
     def get_f_stats(self, locus_name):
-        """ Returns F stats for a locus
+        """Returns F stats for a locus.
 
-            Returns Fis(CW), Fst, Fit, Qintra, Qinter
+        Returns Fis(CW), Fst, Fit, Qintra, Qinter
         """
         loci_iter = self._controller.calc_fst_all(self._fname)[1]
         for name, fis, fst, fit, qintra, qinter in loci_iter:

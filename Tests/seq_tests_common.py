@@ -13,6 +13,7 @@ from Bio.SeqRecord import SeqRecord
 
 
 def checksum_summary(record):
+    """Abbreviated string showing sequence, checksum, and length."""
     if isinstance(record.seq, UnknownSeq):
         return repr(record.seq)
     if len(record.seq) < 25:
@@ -25,7 +26,7 @@ def checksum_summary(record):
 
 
 def compare_reference(old_r, new_r):
-    """Compare two Reference objects
+    """Compare two Reference objects.
 
     Note new_r is assumed to be a BioSQL DBSeqRecord, due to limitations
     of the BioSQL table structure.
@@ -71,7 +72,7 @@ def compare_reference(old_r, new_r):
 
 
 def compare_feature(old_f, new_f):
-    """Compare two SeqFeature objects"""
+    """Compare two SeqFeature objects."""
     assert isinstance(old_f, SeqFeature)
     assert isinstance(new_f, SeqFeature)
 
@@ -147,7 +148,7 @@ def compare_feature(old_f, new_f):
 
 
 def compare_sequence(old, new):
-    """Compare two Seq or DBSeq objects"""
+    """Compare two Seq or DBSeq objects."""
     assert len(old) == len(new), "%i vs %i" % (len(old), len(new))
     assert str(old) == str(new)
 
@@ -208,6 +209,7 @@ def compare_sequence(old, new):
 
 
 def compare_features(old_list, new_list):
+    """Compare two lists of SeqFeature objects."""
     assert isinstance(old_list, list)
     assert isinstance(new_list, list)
     assert len(old_list) == len(new_list)
@@ -218,7 +220,7 @@ def compare_features(old_list, new_list):
 
 
 def compare_record(old, new):
-    """Compare two SeqRecord or DBSeqRecord objects"""
+    """Compare two SeqRecord or DBSeqRecord objects."""
     assert isinstance(old, SeqRecord)
     assert isinstance(new, SeqRecord)
     # Sequence:
@@ -301,6 +303,7 @@ def compare_record(old, new):
 
 
 def compare_records(old_list, new_list):
+    """Compare two lists of SeqRecord objects."""
     assert isinstance(old_list, list)
     assert isinstance(new_list, list)
     assert len(old_list) == len(new_list)

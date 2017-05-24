@@ -11,7 +11,6 @@ from search_tests_common import CheckRaw, CheckIndex
 
 
 class BlastXmlRawCases(CheckRaw):
-
     """Check BLAST XML get_raw method."""
 
     fmt = 'blast-xml'

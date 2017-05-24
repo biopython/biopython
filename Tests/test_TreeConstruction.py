@@ -29,6 +29,7 @@ temp_dir = tempfile.mkdtemp()
 
 class DistanceMatrixTest(unittest.TestCase):
     """Test for _DistanceMatrix construction and manipulation"""
+
     def setUp(self):
         self.names = ['Alpha', 'Beta', 'Gamma', 'Delta']
         self.matrix = [[0], [1, 0], [2, 3, 0], [4, 5, 6, 0]]
@@ -145,6 +146,7 @@ class DistanceCalculatorTest(unittest.TestCase):
 
 class DistanceTreeConstructorTest(unittest.TestCase):
     """Test DistanceTreeConstructor"""
+
     def setUp(self):
         self.aln = AlignIO.read('TreeConstruction/msa.phy', 'phylip')
         calculator = DistanceCalculator('blosum62')

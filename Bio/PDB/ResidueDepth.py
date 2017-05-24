@@ -48,7 +48,7 @@ import warnings
 
 import numpy
 
-from Bio.PDB import PDBParser, PDBIO
+from Bio.PDB import PDBParser
 from Bio.PDB import Selection
 from Bio.PDB.AbstractPropertyMap import AbstractPropertyMap
 from Bio.PDB.Polypeptide import is_aa
@@ -123,8 +123,8 @@ def _get_atom_radius(atom, rtype='united'):
     elif rtype == 'united':
         typekey = 2
     else:
-        raise ValueError('Radius type (\'{}\') not understood.',
-                         ' Must be \'explicit\' or \'united\''.format(rtype))
+        raise ValueError("Radius type (%r) not understood. "
+                         "Must be 'explicit' or 'united'" % rtype)
 
     resname = atom.parent.resname
     het_atm = atom.parent.id[0]
@@ -432,9 +432,7 @@ def _get_atom_radius(atom, rtype='united'):
 
 
 def _read_vertex_array(filename):
-    """
-    Read the vertex list into a Numeric array.
-    """
+    """Read the vertex list into a Numeric array."""
     with open(filename, "r") as fp:
         vertex_list = []
         for l in fp:
@@ -448,11 +446,16 @@ def _read_vertex_array(filename):
 
 
 def get_surface(model, PDB_TO_XYZR=None, MSMS="msms"):
-    """
-    Return a Numpy array that represents
-    the vertex list of the molecular surface.
+    """Represent molecular surface as a vertex list array.
 
-    MSMS --- msms executable (arg. to os.system)
+    Return a Numpy array that represents the vertex list of the
+    molecular surface.
+
+    Arguments:
+
+    - PDB_TO_XYZR - deprecated, ignore this.
+    - MSMS - msms executable (used as argument to os.system)
+
     """
     # Issue warning if PDB_TO_XYZR is given
     if PDB_TO_XYZR is not None:
@@ -487,19 +490,17 @@ def get_surface(model, PDB_TO_XYZR=None, MSMS="msms"):
 
 
 def min_dist(coord, surface):
-    """
-    Return minimum distance between coord
-    and surface.
-    """
+    """Return minimum distance between coord and surface."""
     d = surface - coord
     d2 = numpy.sum(d * d, 1)
     return numpy.sqrt(min(d2))
 
 
 def residue_depth(residue, surface):
-    """
-    Return average distance to surface for all
-    atoms in a residue, ie. the residue depth.
+    """Residue depth as average depth of all its atoms.
+
+    Return average distance to surface for all atoms in a residue,
+    ie. the residue depth.
     """
     atom_list = residue.get_unpacked_list()
     length = len(atom_list)
@@ -519,9 +520,8 @@ def ca_depth(residue, surface):
 
 
 class ResidueDepth(AbstractPropertyMap):
-    """
-    Calculate residue and CA depth for all residues.
-    """
+    """Calculate residue and CA depth for all residues."""
+
     def __init__(self, model, pdb_file=None):
 
         # Issue warning if pdb_file is given

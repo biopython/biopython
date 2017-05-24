@@ -34,6 +34,7 @@ class CodonAlignment(MultipleSeqAlignment):
     AAAAGGTGG Gamma
 
     """
+
     def __init__(self, records='', name=None, alphabet=default_codon_alphabet):
 
         MultipleSeqAlignment.__init__(self, records, alphabet=alphabet)
@@ -280,8 +281,7 @@ def _get_codon2codon_matrix(codon_table=default_codon_table):
 
 
 def _dijkstra(graph, start, end):
-    """
-    Dijkstra's algorithm Python implementation.
+    """Dijkstra's algorithm Python implementation.
     Algorithm adapted from
     http://thomas.pelletier.im/2010/02/dijkstras-algorithm-python-implementation/.
     However, an obvious bug in::
@@ -399,8 +399,7 @@ def _prim(G):
 
 
 def _get_subgraph(codons, G):
-    """Get the subgraph that contains all codons in list (PRIVATE).
-    """
+    """Get the subgraph that contains all codons in list (PRIVATE)."""
     subgraph = {}
     for i in codons:
         subgraph[i] = {}

@@ -9,7 +9,8 @@
 
 """Bio.SeqIO support for the "fasta" (aka FastA or Pearson) file format.
 
-You are expected to use this module via the Bio.SeqIO functions."""
+You are expected to use this module via the Bio.SeqIO functions.
+"""
 
 from __future__ import print_function
 
@@ -132,6 +133,7 @@ def FastaIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
 
 class FastaWriter(SequentialSequenceWriter):
     """Class to write Fasta format files."""
+
     def __init__(self, handle, wrap=60, record2title=None):
         """Create a Fasta writer.
 

@@ -7,7 +7,7 @@
 """Reading information from Affymetrix CEL files version 3 and 4."""
 
 from __future__ import print_function
-import sys
+
 import struct
 
 try:
@@ -63,6 +63,7 @@ class Record(object):
      [25 25 25 25 25]]
 
     """
+
     def __init__(self):
         self.version = None
         self.GridCornerUL = None
@@ -86,7 +87,7 @@ class Record(object):
 
 
 def read(handle):
-    """ Reads Affymetrix CEL file and returns Record object.
+    """Reads Affymetrix CEL file and returns Record object.
 
     CEL files version 3 and 4 are supported, and the parser attempts version detection.
 
@@ -134,7 +135,7 @@ def read(handle):
 
 # read Affymetrix files version 4.
 def read_v4(f):
-    """ Reads Affymetrix CEL file, version 4, and returns a corresponding Record
+    """Reads Affymetrix CEL file, version 4, and returns a corresponding Record
     object.
 
     Most importantly record.intensities correspond to intensities from the CEL
@@ -277,7 +278,7 @@ def read_v4(f):
 
 
 def read_v3(handle):
-    """ Reads Affymetrix CEL file, version 3, and returns a corresponding Record object.
+    """Reads Affymetrix CEL file, version 3, and returns a corresponding Record object.
 
     Example Usage:
 

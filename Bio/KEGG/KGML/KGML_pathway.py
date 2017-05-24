@@ -3,7 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""This module provides classes to represent a KGML Pathway Map.
+"""Classes to represent a KGML Pathway Map.
 
 The KGML definition is as of release KGML v0.7.1
 (http://www.kegg.jp/kegg/xml/docs/)
@@ -60,7 +60,9 @@ class Pathway(object):
     Reactions are held in a dictionary, keyed by node ID for the path.
     The elements referred to in the reaction must be added before the
     reaction itself.
+
     """
+
     def __init__(self):
         self._name = ''
         self.org = ''
@@ -268,7 +270,9 @@ class Entry(object):
 
     NOTE: The alt attribute represents a subelement of the substrate and
     product elements in the KGML file
+
     """
+
     def __init__(self):
         self._id = None
         self._names = []
@@ -409,6 +413,7 @@ class Component(object):
     The Component acts as a collection (with type 'group', and typically
     its own Graphics subelement), having only an ID.
     """
+
     def __init__(self, parent):
         self._id = None
         self._parent = parent
@@ -458,7 +463,9 @@ class Graphics(object):
     We permit non-DTD attributes and attribute settings, such as
 
     dash         List of ints, describing an on/off pattern for dashes
+
     """
+
     def __init__(self, parent):
         self.name = ''
         self._x = None
@@ -622,7 +629,9 @@ class Reaction(object):
     type           String: reversible or irreversible
     substrate      Entry object of the substrate
     product        Entry object of the product
+
     """
+
     def __init__(self):
         self._id = None
         self._names = []
@@ -743,7 +752,9 @@ class Relation(object):
         - type         The relation type
         - subtypes     List of subtypes for the relation, as a list of
                        (name, value) tuples
+
     """
+
     def __init__(self):
         self._entry1 = None
         self._entry2 = None

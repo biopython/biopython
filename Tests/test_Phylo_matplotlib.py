@@ -52,8 +52,11 @@ class UtilTests(unittest.TestCase):
         Phylo.draw(apaf, do_show=False, branch_labels=lambda c: c.branch_length)
 
     def test_draw_with_label_colors_dict(self):
-        """Run the tree layout algorithm with a label_colors argument passed in
-        as a dictionary. Don't display tree."""
+        """Layout tree with label colors as dict.
+
+        Run the tree layout algorithm with a label_colors argument passed in
+        as a dictionary. Don't display tree.
+        """
         pyplot.ioff()   # Turn off interactive display
         dollo = Phylo.read(EX_DOLLO, 'phyloxml')
         apaf = Phylo.read(EX_APAF, 'phyloxml')
@@ -69,8 +72,11 @@ class UtilTests(unittest.TestCase):
         Phylo.draw(apaf, label_colors=label_colors_apaf, do_show=False)
 
     def test_draw_with_label_colors_callable(self):
-        """Run the tree layout algorithm with a label_colors argument passed in
-        as a callable. Don't display tree."""
+        """Layout tree with label colors as callable.
+
+        Run the tree layout algorithm with a label_colors argument passed in
+        as a callable. Don't display tree.
+        """
         pyplot.ioff()   # Turn off interactive display
         dollo = Phylo.read(EX_DOLLO, 'phyloxml')
         apaf = Phylo.read(EX_APAF, 'phyloxml')

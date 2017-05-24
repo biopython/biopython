@@ -3,7 +3,7 @@
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
 
-""" Classes and methods for finding consensus trees.
+"""Classes and methods for finding consensus trees.
 
 This module contains a ``_BitString`` class to assist the consensus tree
 searching and some common consensus algorithms such as strict, majority rule and
@@ -119,7 +119,7 @@ class _BitString(str):
     """
 
     def __new__(cls, strdata):
-        """init from a binary string data"""
+        """Init from a binary string data"""
         if (isinstance(strdata, str) and
                 len(strdata) == strdata.count('0') + strdata.count('1')):
             return str.__new__(cls, strdata)
@@ -185,6 +185,7 @@ class _BitString(str):
 
         Be careful, "011011" also contains "000000". Actually, all _BitString
         objects contain all-zero _BitString of the same length.
+
         """
         xorbit = self ^ other
         return (xorbit.count('1') == self.count('1') - other.count('1'))
@@ -223,6 +224,7 @@ def strict_consensus(trees):
     :Parameters:
         trees : iterable
             iterable of trees to produce consensus tree.
+
     """
     trees_iter = iter(trees)
     first_tree = next(trees_iter)
@@ -381,7 +383,7 @@ def adam_consensus(trees):
 
 
 def _part(clades):
-    """recursive function of adam consensus algorithm"""
+    """Recursive function of adam consensus algorithm"""
     new_clade = None
     terms = clades[0].get_terminals()
     term_names = [term.name for term in terms]
@@ -440,7 +442,7 @@ def _part(clades):
 
 
 def _sub_clade(clade, term_names):
-    """extract a compatible subclade that only contains the given terminal names"""
+    """Extract a compatible subclade that only contains the given terminal names"""
     term_clades = [clade.find_any(name) for name in term_names]
     sub_clade = clade.common_ancestor(term_clades)
     if len(term_names) != sub_clade.count_terminals():
@@ -610,7 +612,8 @@ def _bitstring_topology(tree):
     """Generates a branch length dict for a tree, keyed by BitStrings.
 
     Create a dict of all clades' BitStrings to the corresponding branch
-    lengths (rounded to 5 decimal places)."""
+    lengths (rounded to 5 decimal places).
+    """
     bitstrs = {}
     for clade, bitstr in _tree_to_bitstrs(tree).items():
         bitstrs[bitstr] = round(clade.branch_length or 0.0, 5)

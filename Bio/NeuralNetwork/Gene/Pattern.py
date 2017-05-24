@@ -24,28 +24,29 @@ class PatternIO(object):
     This just defines a simple persistence class for patterns, making
     it easy to write them to a file and read 'em back.
     """
+
     def __init__(self, alphabet=None):
         """Intialize the reader and writer class.
 
         Arguments:
 
-        o alphabet - An optional argument specifying the alphabet
+        - alphabet - An optional argument specifying the alphabet
         which patterns should follow. If an alphabet is set it'll be used
         to verify that all patterns follow it.
 
         Attributes:
-        o separator - A character to use in separating items in a signature
+        - separator - A character to use in separating items in a signature
         when it is written to a file and read back. This character should
         not be in the possible alphabet of the sequences, or there will
         be trouble.
+
         """
         self._alphabet = alphabet
 
         self.separator = ";"
 
     def write(self, pattern_list, output_handle):
-        """Write a list of patterns to the given handle.
-        """
+        """Write a list of patterns to the given handle."""
         for pattern in pattern_list:
             # deal with signatures, concatentate them with the separator
             if isinstance(pattern, (list, tuple)):
@@ -77,8 +78,7 @@ class PatternIO(object):
         self.write(all_patterns, output_handle)
 
     def read(self, input_handle):
-        """Read patterns from the specified handle.
-        """
+        """Read patterns from the specified handle."""
         all_patterns = []
 
         while True:
@@ -111,12 +111,13 @@ class PatternIO(object):
 
 
 class PatternRepository(object):
-    """This holds a list of specific patterns found in sequences.
+    """Hold a list of specific patterns found in sequences.
 
     This is designed to be a general holder for a set of patterns and
     should be subclassed for specific implementations (ie. holding Motifs
     or Signatures.
     """
+
     def __init__(self, pattern_info):
         """Initialize a repository with patterns,
 
@@ -144,8 +145,7 @@ class PatternRepository(object):
         self._pattern_list.reverse()
 
     def get_all(self):
-        """Retrieve all of the patterns in the repository.
-        """
+        """Retrieve all of the patterns in the repository."""
         patterns = []
         for pattern_info in self._pattern_list:
             patterns.append(pattern_info[1])
@@ -159,7 +159,7 @@ class PatternRepository(object):
 
         Arguments:
 
-        o num_patterns - The total number of patterns to return.
+        - num_patterns - The total number of patterns to return.
         """
         all_patterns = []
 
@@ -189,7 +189,7 @@ class PatternRepository(object):
 
         Arguments:
 
-        o num_patterns - The number of patterns to return.
+        - num_patterns - The number of patterns to return.
         """
         all_patterns = []
         for pattern_info in self._pattern_list[:num_patterns]:
@@ -207,9 +207,9 @@ class PatternRepository(object):
 
         Arguments:
 
-        o top_num - The number of patterns to take from the top of the list.
+        - top_num - The number of patterns to take from the top of the list.
 
-        o bottom_num - The number of patterns to take from the bottom of
+        - bottom_num - The number of patterns to take from the bottom of
         the list.
         """
         all_patterns = []
@@ -236,7 +236,7 @@ class PatternRepository(object):
 
         Arguments:
 
-        o at_percentage - The percentage of A and T residues in a pattern
+        - at_percentage - The percentage of A and T residues in a pattern
         that qualifies it for being removed.
         """
         remove_list = []
@@ -251,8 +251,7 @@ class PatternRepository(object):
             self._pattern_list.remove(to_remove)
 
     def count(self, pattern):
-        """Return the number of times the specified pattern is found.
-        """
+        """Return the number of times the specified pattern is found."""
         try:
             return self._pattern_dict[pattern]
         except KeyError:

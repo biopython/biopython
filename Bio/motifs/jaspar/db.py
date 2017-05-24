@@ -81,25 +81,26 @@ JASPAR_DFLT_COLLECTION = 'CORE'
 
 
 class JASPAR5(object):
-    """
+    """Class representing a JASPAR5 database.
+
     Class representing a JASPAR5 DB. The methods within are loosely based
     on the perl TFBS::DB::JASPAR5 module.
 
     Note: We will only implement reading of JASPAR motifs from the DB.
     Unlike the perl module, we will not attempt to implement any methods to
     store JASPAR motifs or create a new DB at this time.
-
     """
 
     def __init__(self, host=None, name=None, user=None, password=None):
-        """
-        Construct a JASPAR5 instance and connect to specified DB
+        """Construct a JASPAR5 instance and connect to specified DB.
 
         Arguments:
-        host - host name of the the JASPAR DB server
-        name - name of the JASPAR database
-        user - user name to connect to the JASPAR DB
-        password - JASPAR DB password
+
+        - host - host name of the the JASPAR DB server
+        - name - name of the JASPAR database
+        - user - user name to connect to the JASPAR DB
+        - password - JASPAR DB password
+
         """
         self.name = name
         self.host = host
@@ -132,6 +133,7 @@ class JASPAR5(object):
         PFMs so this does not really belong here. Once a PFM is fetched the
         pwm() and pssm() methods can be called to return the normalized and
         log-odds matrices.
+
         """
         # separate stable ID and version number
         (base_id, version) = jaspar.split_jaspar_id(id)
@@ -169,6 +171,7 @@ class JASPAR5(object):
         get_Matrix_by_name() method which always returns a single matrix,
         issuing a warning message and returning the first matrix retrieved
         in the case where multiple matrices have the same name.
+
         """
         return self.fetch_motifs(collection=None, tf_name=name)
 
@@ -233,6 +236,7 @@ class JASPAR5(object):
 
         Returns:
             - A Bio.motifs.jaspar.Record (list) of motifs.
+
         """
         # Fetch the internal IDs of the motifs using the criteria provided
         int_ids = self._fetch_internal_id_list(
@@ -473,6 +477,7 @@ class JASPAR5(object):
         For the surviving matrices, the responsibility to do matrix-based
         feature filtering such as ic, number of sites etc, fall on the
         calling fetch_motifs() method.
+
         """
         int_ids = []
 

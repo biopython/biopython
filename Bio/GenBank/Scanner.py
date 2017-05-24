@@ -1,4 +1,4 @@
-# Copyright 2007-2016 by Peter Cock.  All rights reserved.
+# Copyright 2007-2017 by Peter Cock.  All rights reserved.
 # Revisions copyright 2010 by Uri Laserson.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -45,7 +45,8 @@ class InsdcScanner(object):
     same "Feature Table" layout in their plain text flat file formats.
 
     However, the header and sequence sections of an EMBL file are very
-    different in layout to those produced by GenBank/DDBJ."""
+    different in layout to those produced by GenBank/DDBJ.
+    """
 
     # These constants get redefined with sensible values in the sub classes:
     RECORD_START = "XXX"  # "LOCUS       " or "ID   "
@@ -73,7 +74,8 @@ class InsdcScanner(object):
         """Read in lines until find the ID/LOCUS line, which is returned.
 
         Any preamble (such as the header used by the NCBI on ``*.seq.gz`` archives)
-        will we ignored."""
+        will we ignored.
+        """
         while True:
             if self.line:
                 line = self.line
@@ -333,7 +335,7 @@ class InsdcScanner(object):
                              % (feature_key, "\n".join(lines)))
 
     def parse_footer(self):
-        """returns a tuple containing a list of any misc strings, and the sequence"""
+        """Returns a tuple containing a list of any misc strings, and the sequence"""
         # This is a basic bit of code to scan and discard the sequence,
         # which was useful when developing the sub classes.
         if self.line in self.FEATURE_END_MARKERS:
@@ -585,7 +587,7 @@ class EmblScanner(InsdcScanner):
     EMBL_SPACER = " " * EMBL_INDENT
 
     def parse_footer(self):
-        """returns a tuple containing a list of any misc strings, and the sequence"""
+        """Returns a tuple containing a list of any misc strings, and the sequence"""
         assert self.line[:self.HEADER_WIDTH].rstrip() in self.SEQUENCE_HEADERS, \
             "Eh? '%s'" % self.line
 
@@ -1073,6 +1075,7 @@ class _ImgtScanner(EmblScanner):
 
 class GenBankScanner(InsdcScanner):
     """For extracting chunks of information in GenBank files"""
+
     RECORD_START = "LOCUS       "
     HEADER_WIDTH = 12
     FEATURE_START_MARKERS = ["FEATURES             Location/Qualifiers", "FEATURES"]
@@ -1089,7 +1092,7 @@ class GenBankScanner(InsdcScanner):
     STRUCTURED_COMMENT_DELIM = " :: "
 
     def parse_footer(self):
-        """returns a tuple containing a list of any misc strings, and the sequence"""
+        """Returns a tuple containing a list of any misc strings, and the sequence"""
         assert self.line[:self.HEADER_WIDTH].rstrip() in self.SEQUENCE_HEADERS, \
             "Eh? '%s'" % self.line
 

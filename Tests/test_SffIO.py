@@ -368,7 +368,7 @@ class TestConcatenated(unittest.TestCase):
 
 
 class TestSelf(unittest.TestCase):
-    """ These tests were originally self-tests run in SffIO.py """
+    """These tests were originally defined in SffIO.py as self-tests."""
 
     def test_read(self):
         filename = "Roche/E3MFGYR02_random_10_reads.sff"

@@ -48,6 +48,7 @@ class Schema(object):
     This is likely to be a replacement for the Schema representation,
     since it allows multiple ambiguity characters to be used.
     """
+
     def __init__(self, ambiguity_info):
         """Initialize with ambiguity information.
 
@@ -74,6 +75,7 @@ class Schema(object):
         Returns:
         A compiled regular expression pattern object that can be used
         for searching strings.
+
         """
         regexp_string = ""
 
@@ -118,8 +120,7 @@ class Schema(object):
         return ambig_positions
 
     def num_ambiguous(self, motif):
-        """Return the number of ambiguous letters in a given motif.
-        """
+        """Return the number of ambiguous letters in a given motif."""
         ambig_positions = self.find_ambiguous(motif)
         return len(ambig_positions)
 
@@ -139,14 +140,12 @@ class Schema(object):
         return motif_pattern.findall(query)
 
     def num_matches(self, motif, query):
-        """Find the number of non-overlapping times motif occurs in query.
-        """
+        """Find the number of non-overlapping times motif occurs in query."""
         all_matches = self.find_matches(motif, query)
         return len(all_matches)
 
     def all_unambiguous(self):
-        """Return a listing of all unambiguous letters allowed in motifs.
-        """
+        """Return a listing of all unambiguous letters allowed in motifs."""
         all_letters = sorted(self._ambiguity_info)
         unambig_letters = []
 
@@ -172,6 +171,7 @@ class SchemaDNAAlphabet(Alphabet.Alphabet):
 
     - * - Any letter
     """
+
     letters = ["G", "A", "T", "C", "*"]
 
     alphabet_matches = {"G": "G",
@@ -194,16 +194,17 @@ class GeneticAlgorithmFinder(object):
     can be overridden easily by creating a GeneticAlgorithmFinder
     with a different alphabet.
     """
+
     def __init__(self, alphabet=SchemaDNAAlphabet()):
         """Initialize a finder to get schemas using Genetic Algorithms.
 
         Arguments:
 
         - alphabet -- The alphabet which specifies the contents of the
-          schemas we'll be generating. This alphabet must contain the
-          attribute 'alphabet_matches', which is a dictionary specifying
-          the potential ambiguities of each letter in the alphabet. These
-          ambiguities will be used in building up the schema.
+        schemas we'll be generating. This alphabet must contain the
+        attribute 'alphabet_matches', which is a dictionary specifying
+        the potential ambiguities of each letter in the alphabet. These
+        ambiguities will be used in building up the schema.
         """
         self.alphabet = alphabet
 
@@ -241,7 +242,7 @@ class GeneticAlgorithmFinder(object):
           the fitness of a motif.
 
         - num_schemas - The number of unique schemas with good fitness
-          that we want to generate.
+        that we want to generate.
         """
         start_population = \
            Organism.function_population(self.motif_generator.random_motif,
@@ -267,8 +268,8 @@ class GeneticAlgorithmFinder(object):
 
 
 class DifferentialSchemaFitness(object):
-    """Calculate fitness for schemas that differentiate between sequences.
-    """
+    """Calculate fitness for schemas that differentiate between sequences."""
+
     def __init__(self, positive_seqs, negative_seqs, schema_evaluator):
         """Initialize with different sequences to evaluate
 
@@ -278,10 +279,10 @@ class DifferentialSchemaFitness(object):
           sequences -- the ones we want to select for.
 
         - negative_seq - A list of SeqRecord objects which are the 'negative'
-          sequences that we want to avoid selecting.
+        sequences that we want to avoid selecting.
 
         - schema_evaluator - An Schema class which can be used to
-          evaluate find motif matches in sequences.
+        evaluate find motif matches in sequences.
         """
         self._pos_seqs = positive_seqs
         self._neg_seqs = negative_seqs
@@ -339,6 +340,7 @@ class MostCountSchemaFitness(object):
     This fitness function tries to maximize schemas which are found many
     times in a group of sequences.
     """
+
     def __init__(self, seq_records, schema_evaluator):
         """Initialize with sequences to evaluate.
 
@@ -348,7 +350,7 @@ class MostCountSchemaFitness(object):
           calculate the fitness.
 
         - schema_evaluator - An Schema class which can be used to
-          evaluate find motif matches in sequences.
+        evaluate find motif matches in sequences.
         """
         self._records = seq_records
         self._evaluator = schema_evaluator
@@ -376,8 +378,8 @@ class MostCountSchemaFitness(object):
 
 # -- Helper classes
 class RandomMotifGenerator(object):
-    """Generate a random motif within given parameters.
-    """
+    """Generate a random motif within given parameters."""
+
     def __init__(self, alphabet, min_size=12, max_size=17):
         """Initialize with the motif parameters.
 
@@ -416,16 +418,17 @@ class SimpleFinisher(object):
     GA has proceeded for a specified number of generations and has
     a given number of unique schema with positive fitness.
     """
+
     def __init__(self, num_schemas, min_generations=100):
         """Initialize the finisher with its parameters.
 
         Arguments:
 
         - num_schemas -- the number of useful (positive fitness) schemas
-          we want to generation
+         we want to generation
 
         - min_generations -- The minimum number of generations to allow
-          the GA to proceed.
+        the GA to proceed.
         """
         self.num_generations = 0
 
@@ -433,8 +436,7 @@ class SimpleFinisher(object):
         self.min_generations = min_generations
 
     def is_finished(self, organisms):
-        """Determine when we can stop evolving the population.
-        """
+        """Determine when we can stop evolving the population."""
         self.num_generations += 1
         # print "generation %s" % self.num_generations
 
@@ -464,6 +466,7 @@ class SchemaFinder(object):
     in a set of DNA sequences, but the finder can be customized to deal
     with any type of data.
     """
+
     def __init__(self, num_schemas=100,
                  schema_finder=GeneticAlgorithmFinder()):
         """Initialize the Schema Finder with its parameters.
@@ -479,8 +482,7 @@ class SchemaFinder(object):
         self.evaluator = Schema(self._finder.alphabet.alphabet_matches)
 
     def find(self, seq_records):
-        """Find well-represented schemas in the given set of SeqRecords.
-        """
+        """Find well-represented schemas in the given set of SeqRecords."""
         fitness_evaluator = MostCountSchemaFitness(seq_records,
                                                    self.evaluator)
 
@@ -488,8 +490,7 @@ class SchemaFinder(object):
                                          self.num_schemas)
 
     def find_differences(self, first_records, second_records):
-        """Find schemas which differentiate between the two sets of SeqRecords.
-        """
+        """Find schemas which differentiate between the two sets of SeqRecords."""
         fitness_evaluator = DifferentialSchemaFitness(first_records,
                                                       second_records,
                                                       self.evaluator)
@@ -505,6 +506,7 @@ class SchemaCoder(object):
     motifs are found in the sequence. This lets you represent a sequence
     as just a count of (possibly ambiguous) motifs.
     """
+
     def __init__(self, schemas, ambiguous_converter):
         """Initialize the coder to convert sequences
 
@@ -580,8 +582,8 @@ def matches_schema(pattern, schema, ambiguity_character='*'):
 
 
 class SchemaFactory(object):
-    """Generate Schema from inputs of Motifs or Signatures.
-    """
+    """Generate Schema from inputs of Motifs or Signatures."""
+
     def __init__(self, ambiguity_symbol='*'):
         """Initialize the SchemaFactory
 
@@ -644,8 +646,7 @@ class SchemaFactory(object):
         return PatternRepository(schema_info)
 
     def _get_num_motifs(self, repository, motif_list):
-        """Return the number of motif counts for the list of motifs.
-        """
+        """Return the number of motif counts for the list of motifs."""
         motif_count = 0
         for motif in motif_list:
             motif_count += repository.count(motif)

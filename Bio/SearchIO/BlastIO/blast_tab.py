@@ -305,7 +305,8 @@ class BlastTabParser(object):
 
     def _parse_fields_line(self):
         """Returns a list of column short names from the 'Fields'
-        comment line."""
+        comment line.
+        """
         raw_field_str = self.line[len('# Fields: '):]
         long_fields = raw_field_str.split(', ')
         fields = [_LONG_SHORT_MAP[long_name] for long_name in long_fields]
@@ -471,7 +472,8 @@ class BlastTabParser(object):
 
     def _get_frag_frame(self, frag, seq_type, parsedict):
         """Returns `HSPFragment` frame given the object, its sequence type,
-        and its parsed dictionary values."""
+        and its parsed dictionary values.
+        """
         assert seq_type in ('query', 'hit')
         frame = getattr(frag, '%s_frame' % seq_type, None)
         if frame is not None:
@@ -485,7 +487,8 @@ class BlastTabParser(object):
 
     def _get_frag_strand(self, frag, seq_type, parsedict):
         """Returns `HSPFragment` strand given the object, its sequence type,
-        and its parsed dictionary values."""
+        and its parsed dictionary values.
+        """
         # NOTE: this will never set the strands as 0 for protein
         # queries / hits, since we can't detect the blast flavors
         # from the columns alone.

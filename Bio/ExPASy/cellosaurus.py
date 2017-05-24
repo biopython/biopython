@@ -3,11 +3,9 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""
-This module provides code to work with the cellosaurus.txt file from
-http://web.expasy.org/cellosaurus/
+"""Parser for the cellosaurus.txt file from http://web.expasy.org/cellosaurus/
 
-Tested with the release of Version 18 (July 2016)
+Tested with the release of Version 18 (July 2016).
 
 Functions:
 
@@ -18,9 +16,11 @@ Classes:
 
     - Record     Holds cell line data.
 
-from Bio.ExPASy import Cellosaurus
-handle = open("cellosaurus.txt")
-records = Cellosaurus.parse(handle)
+Example:
+
+>>> from Bio.ExPASy import Cellosaurus
+>>> handle = open("cellosaurus.txt")
+>>> records = Cellosaurus.parse(handle)
 
 """
 
@@ -57,8 +57,7 @@ def read(handle):
 
 
 class Record(dict):
-    """
-    Holds information from an ExPASy Cellosaurus record as a Python dictionary.
+    """Holds information from an ExPASy Cellosaurus record as a Python dictionary.
 
     Each record contains the following keys:
      ---------  ---------------------------     ----------------------

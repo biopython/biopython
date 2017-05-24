@@ -49,8 +49,7 @@ class TCoffeeApplication(unittest.TestCase):
             os.remove(self.outfile4)
 
     def test_TCoffee_1(self):
-        """Round-trip through app and read clustal alignment from file
-        """
+        """Round-trip through app and read clustal alignment from file."""
         cmdline = TCoffeeCommandline(t_coffee_exe, infile=self.infile1)
         self.assertEqual(str(cmdline), t_coffee_exe + " -infile Fasta/fa01")
         stdout, stderr = cmdline()
@@ -63,8 +62,7 @@ class TCoffeeApplication(unittest.TestCase):
             self.assertEqual(str(new.seq).replace("-", ""), str(old.seq).replace("-", ""))
 
     def test_TCoffee_2(self):
-        """Round-trip through app and read pir alignment from file
-        """
+        """Round-trip through app and read pir alignment from file."""
         cmdline = TCoffeeCommandline(t_coffee_exe, quiet=True)
         cmdline.infile = self.infile1
         cmdline.outfile = self.outfile3
@@ -82,8 +80,7 @@ class TCoffeeApplication(unittest.TestCase):
             self.assertEqual(str(new.seq).replace("-", ""), str(old.seq).replace("-", ""))
 
     def test_TCoffee_3(self):
-        """Round-trip through app and read clustalw alignment from file
-        """
+        """Round-trip through app and read clustalw alignment from file."""
         cmdline = TCoffeeCommandline(t_coffee_exe, gapopen=-2)
         cmdline.infile = self.infile1
         cmdline.outfile = self.outfile4

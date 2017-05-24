@@ -16,8 +16,17 @@ This release of Biopython supports Python 2.7, 3.3, 3.4, 3.5 and 3.6 (although
 support for Python 3.3 is deprecated). It has also been tested on PyPy v5.7,
 PyPy3.5 v5.7 beta, and Jython 2.7.
 
+Two new arguments for reading and writing blast-xml files have been added
+to the Bio.SearchIO functions (read/parse and write, respectively). They
+are 'use_raw_hit_ids' and 'use_raw_query_ids'. Check out the relevant
+SearchIO.BlastIO documentation for a complete description of what these
+arguments do.
+
 Bio.AlignIO now supports Mauve's eXtended Multi-FastA (XMFA) file format
 under the format name "mauve" (contributed by Eric Rasche).
+
+Bio.ExPASy was updated to fix fetching PROSITE and PRODOC records, and return
+text-mode handles for use under Python 3.
 
 Additionally, a number of small bugs have been fixed with further additions
 to the test suite, and there has been further work to follow the Python PEP8,
@@ -27,17 +36,30 @@ Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
 - Aaron Kitzmiller (first contribution)
+- Allis Tauri
+- Andrew Guy
 - Bertrand Caron (first contribution)
+- Connor T. Skennerton
 - Eric Rasche
 - Francesco Gastaldello
+- François Coste (first contribution)
+- Frederic Sapet (first contribution)
 - Jimmy O'Donnell (first contribution)
 - John Kern (first contribution)
 - João Rodrigues
+- Markus Piotrowski
 - Mateusz Korycinski (first contribution)
+- Maximilian Greil
+- morrme (first contribution)
 - Noam Kremen (first contribution)
 - Peter Cock
 - Rasmus Fonseca (first contribution)
+- Rodrigo Dorantes-Gilardi (first contribution)
 - Sacha Laurent (first contribution)
+- Sourav Singh
+- Tiago Antao
+- Wibowo 'Bow' Arindrarto
+- Zheng Ruan
 
 
 6 April 2017: Biopython 1.69

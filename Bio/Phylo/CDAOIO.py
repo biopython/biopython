@@ -28,6 +28,7 @@ import os
 
 class CDAOError(Exception):
     """Exception raised when CDAO object construction cannot continue."""
+
     pass
 
 
@@ -244,6 +245,7 @@ class Parser(object):
 
 class Writer(object):
     """Based on the writer in Bio.Nexus.Trees (str, to_string)."""
+
     prefixes = RDF_NAMESPACES
 
     def __init__(self, trees):

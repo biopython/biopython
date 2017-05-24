@@ -102,7 +102,6 @@ class TestPdbAtom(unittest.TestCase):
 
     def test_atom_noheader(self):
         """Parse a PDB with no HEADER line."""
-
         with warnings.catch_warnings():
             warnings.simplefilter('ignore', PDBConstructionWarning)
             warnings.simplefilter('ignore', UserWarning)
