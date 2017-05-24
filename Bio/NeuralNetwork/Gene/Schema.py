@@ -6,7 +6,7 @@
 """Deal with Motifs or Signatures allowing ambiguity in the sequences.
 
 This class contains Schema which deal with Motifs and Signatures at
-a higher level, by introducing \`don't care\` (ambiguity) symbols into
+a higher level, by introducing "don't care" (ambiguity) symbols into
 the sequences. For instance, you could combine the following Motifs:
 
 'GATC', 'GATG', 'GATG', 'GATT'
@@ -214,7 +214,7 @@ class GeneticAlgorithmFinder(object):
         self._set_up_genetic_algorithm()
 
     def _set_up_genetic_algorithm(self):
-        """Overrideable function to set up the genetic algorithm parameters.
+        """Set up the genetic algorithm parameters (PRIVATE).
 
         This functions sole job is to set up the different genetic
         algorithm functionality. Since this can be quite complicated, this
@@ -234,7 +234,7 @@ class GeneticAlgorithmFinder(object):
                                            self.motif_generator.random_motif)
 
     def find_schemas(self, fitness, num_schemas):
-        """Find the given number of unique schemas using a genetic algorithm
+        """Find the given number of unique schemas using a genetic algorithm.
 
         Arguments:
 
@@ -271,7 +271,7 @@ class DifferentialSchemaFitness(object):
     """Calculate fitness for schemas that differentiate between sequences."""
 
     def __init__(self, positive_seqs, negative_seqs, schema_evaluator):
-        """Initialize with different sequences to evaluate
+        """Initialize with different sequences to evaluate.
 
         Arguments:
 
@@ -508,7 +508,7 @@ class SchemaCoder(object):
     """
 
     def __init__(self, schemas, ambiguous_converter):
-        """Initialize the coder to convert sequences
+        """Initialize the coder to convert sequences.
 
         Arguments:
 
@@ -585,7 +585,7 @@ class SchemaFactory(object):
     """Generate Schema from inputs of Motifs or Signatures."""
 
     def __init__(self, ambiguity_symbol='*'):
-        """Initialize the SchemaFactory
+        """Initialize the SchemaFactory.
 
         Arguments:
 
@@ -709,6 +709,7 @@ class SchemaFactory(object):
         - A string representing the newly generated schema.
 
         - A list of all of the motifs in motif_list that match the schema.
+
         """
         assert motif in motif_list, \
                "Expected starting motif present in remaining motifs."
@@ -739,4 +740,5 @@ class SchemaFactory(object):
         return new_schema, matched_motifs
 
     def from_signatures(self, signature_repository, num_ambiguous):
+        """Initialise from a signature repository (not implemented yet)."""
         raise NotImplementedError("Still need to code this.")
