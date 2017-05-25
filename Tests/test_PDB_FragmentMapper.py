@@ -28,7 +28,7 @@ class FragmentMapperTests(unittest.TestCase):
         pdb1 = "PDB/1A8O.pdb"
         s = p.get_structure("X", pdb1)
         m = s[0]
-        fm = FragmentMapper(m, 10, 5, "Tests/PDB")
+        fm = FragmentMapper(m, 10, 5, "PDB")
         for r in Selection.unfold_entities(m, "R"):
             self.assertEqual(str(r), "R")
             if r in fm:
