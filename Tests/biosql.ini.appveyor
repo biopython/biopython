@@ -1,0 +1,27 @@
+# We provide biosql.ini.appveyor as an example preconfigured
+# to work on the virtual machines used for automated testing
+# at www.appveyor.com
+#
+# Please copy this to biosql.ini and edit it match your local
+# system if you want to run the Biopython BioSQL tests locally
+# yourself.
+#
+# To disable testing against any specific back-end, set dbuser
+# to an empty string. There is no configuration entry needed
+# for sqlite3.
+#
+# Values match https://www.appveyor.com/docs/services-databases/
+
+[mysql]
+# Covers DBDRIVER="MySQLdb" and "mysql.connector" etc
+dbhost=localhost
+dbuser=root
+dbpasswd=Password12!
+testdb=biosql_test
+
+[pg]
+# Covers DBDRIVER="psycopg2" etc
+dbhost=localhost
+dbuser=postgres
+dbpasswd=Password12!
+testdb=biosql_test
