@@ -19,6 +19,7 @@ from Bio.PDB import PDBParser
 from Bio.PDB import FragmentMapper
 from Bio.PDB import Selection
 
+
 class FragmentMapperTests(unittest.TestCase):
     """Tests for FragmentMapper module."""
 
