@@ -13,9 +13,6 @@ from Bio.cathdb import retrieve_results
 from Bio.cathdb import search_by_sequence
 
 
-
-# TODO - Use with statement when drop Python 2
-
 class cathdbOnlineTests(unittest.TestCase):
     """Test cathdb online resources."""
 
@@ -39,7 +36,8 @@ class cathdbOnlineTests(unittest.TestCase):
             progress_response = check_progress(task_id)
             time.sleep(2)
         results = retrieve_results(task_id)
-        self.assertEqual(results['query_fasta'].strip(), self.fasta.strip().replace(' ',''))
+        self.assertEqual(results['query_fasta'].strip(), self.fasta.strip().replace(' ', ''))
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
