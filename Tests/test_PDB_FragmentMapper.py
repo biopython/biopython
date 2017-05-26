@@ -31,7 +31,6 @@ class FragmentMapperTests(unittest.TestCase):
         m = s[0]
         fm = FragmentMapper(m, 10, 5, "PDB")
         for r in Selection.unfold_entities(m, "R"):
-            self.assertEqual(str(r), "<Residue MSE het=H_MSE resseq=151 icode= >")
             if r in fm:
                 self.assertTrue(str(fm[r]).startswith("<Fragment length=5 id="))
 
