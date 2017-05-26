@@ -18,12 +18,13 @@ from Bio._py3k import urlencode as _urlencode
 
 
 def _make_json_request(url, data=None):
-    """Make an application/json accepting request """
+    """Make an application/json accepting request"""
     if data:
         req = _request(url, _as_bytes(data), {'Accept': 'application/json'})
     else:
-        req = _request(url, headers = {'Accept': 'application/json'})
+        req = _request(url, headers={'Accept': 'application/json'})
     return req
+
 
 def search_by_sequence(fasta, url='http://www.cathdb.info/search/by_funfhmmer'):
     """Search CATH by sequence fasta"""
@@ -32,7 +33,7 @@ def search_by_sequence(fasta, url='http://www.cathdb.info/search/by_funfhmmer'):
     req = _make_json_request(url, data)
     response = _urlopen(req)
     try:
-        json_response = json.load(response)#.read())
+        json_response = json.load(response)
     except AttributeError as err:
         raise ValueError('Error receiving json response from {}. Received response: {}'.format(url, response.read()))
     return json_response['task_id']
@@ -43,18 +44,18 @@ def check_progress(task_id, url='http://www.cathdb.info/search/by_funfhmmer/chec
     url = '{}/{}'.format(url, task_id)
     response = _urlopen(_make_json_request(url))
     try:
-        json_response = json.load(response)#.read())
+        json_response = json.load(response)
     except AttributeError as err:
         raise ValueError('Error receiving json response from {}. Received response: {}'.format(url, response.read()))
     return json_response
+
 
 def retrieve_results(task_id, url='http://www.cathdb.info/search/by_funfhmmer/results'):
     """Retrieve the results of search job."""
     url = '{}/{}'.format(url, task_id)
     response = _urlopen(_make_json_request(url))
     try:
-        json_response = json.load(response)#.read())
+        json_response = json.load(response)
     except AttributeError as err:
         raise ValueError('Error receiving json response from {}. Received response: {}'.format(url, response.read()))
     return json_response
-
