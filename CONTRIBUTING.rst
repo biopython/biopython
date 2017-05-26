@@ -46,7 +46,7 @@ You can run the tool ``flake8`` directly as follows. This includes the checks
 from  ``pycodestyle`` (formerly ``pep8``) and uses the ``pydocstyle`` plugin
 (``flake8-docstrings``) for checking the docstrings within the Python code::
 
-    $ pip install flake8 flake8-docstrings
+    $ pip install flake8 flake8-docstrings flake8-blind-except
     $ flake8 Bio/
     $ flake8 BioSQL/
     $ flake8 Tests/
