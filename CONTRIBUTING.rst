@@ -39,13 +39,33 @@ using reStructuredText (RST) markup language which allows basic formatting
 like *italics* and **bold** once rendered into HTML webpages for our online
 API documentation.
 
-Tools like ``pycodestyle`` (formerly ``pep8``), ``flake8`` and ``pydocstyle``
-are very useful. We currently suggest you install this git pre-commit hook
-which will check our basic coding conventions as you work:
+We use the continuous integration service TravisCI to enforce some of these
+checks, so if you are making a contribution it is best to check this locally.
+
+You can run the tool ``flake8`` directly as follows. This includes the checks
+from  ``pycodestyle`` (formerly ``pep8``) and uses the ``pydocstyle`` plugin
+(``flake8-docstrings``) for checking the docstrings within the Python code::
+
+    $ pip install flake8 flake8-docstrings
+    $ flake8 Bio/
+    $ flake8 BioSQL/
+    $ flake8 Tests/
+    $ flake8 Scripts/
+    $ flake8 Doc/examples/
+
+Each of these folders has its own flake8 settings file, in the long term we
+would like all the code to follow the same strict settings.
+
+You can run the reStructuredText checks with the ``restructuredtext-lint``
+tool (also known as ``rst-lint``)::
+
+    $ pip install restructuredtext_lint
+    $ rst-lint --level warning *.rst
+
+More simply we currently suggest you install the git pre-commit hook described
+here which will check our basic coding conventions as you work:
 https://github.com/biopython/biopython/issues/493
 
-We also use continuous integration service TravisCI to enforce some of these
-checks (see below).
 
 
 Testing
@@ -60,8 +80,8 @@ http://biopython.org/DIST/docs/tutorial/Tutorial.html
 Local Testing
 -------------
 
-Please always run the full test suite on your local computer before
-submitting a pull request, e.g.::
+Please always run the style checks (see above) and the full test suite on
+your local computer before submitting a pull request, e.g.::
 
     $ git commit Bio/XXX.py Tests/test_XXX.py  -m "Fixed bug 123"
     $ python3.5 setup.py build
