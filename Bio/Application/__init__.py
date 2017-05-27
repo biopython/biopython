@@ -70,6 +70,7 @@ class ApplicationError(_ProcessCalledError):
     Non-zero return code -11 from 'helloworld', message 'Some error text'
 
     """
+
     def __init__(self, returncode, cmd, stdout="", stderr=""):
         self.returncode = returncode
         self.cmd = cmd
@@ -170,6 +171,7 @@ class AbstractCommandline(object):
     been quoted.
 
     """
+
     # TODO - Replace the above example since EMBOSS doesn't work properly
     # if installed into a folder with a space like "C:\Program Files\EMBOSS"
     #
@@ -522,6 +524,7 @@ class _AbstractParameter(object):
 
     Do not use this directly, instead use one of the subclasses.
     """
+
     def __init__(self):
         raise NotImplementedError
 
@@ -539,7 +542,7 @@ class _Option(_AbstractParameter):
     take a value, use the _Switch object instead.
 
     Attributes:
-    o names -- a list of string names (typically two entries) by which
+    - names -- a list of string names (typically two entries) by which
     the parameter can be set via the legacy set_parameter method
     (eg ["-a", "--append", "append"]). The first name in list is used
     when building the command line. The last name in the list is a
@@ -548,26 +551,28 @@ class _Option(_AbstractParameter):
     name and as a keyword argument, and should therefore follow PEP8
     naming.
 
-    o description -- a description of the option. This is used as
+    - description -- a description of the option. This is used as
     the property docstring.
 
-    o filename -- True if this argument is a filename and should be
+    - filename -- True if this argument is a filename and should be
     automatically quoted if it contains spaces.
 
-    o checker_function -- a reference to a function that will determine
+    - checker_function -- a reference to a function that will determine
     if a given value is valid for this parameter. This function can either
     raise an error when given a bad value, or return a [0, 1] decision on
     whether the value is correct.
 
-    o equate -- should an equals sign be inserted if a value is used?
+    - equate -- should an equals sign be inserted if a value is used?
 
-    o is_required -- a flag to indicate if the parameter must be set for
+    - is_required -- a flag to indicate if the parameter must be set for
     the program to be run.
 
-    o is_set -- if the parameter has been set
+    - is_set -- if the parameter has been set
 
-    o value -- the value of a parameter
+    - value -- the value of a parameter
+
     """
+
     def __init__(self, names, description, filename=False, checker_function=None,
                  is_required=False, equate=True):
         self.names = names
@@ -610,7 +615,7 @@ class _Switch(_AbstractParameter):
     take a value, they are either included in the command string
     or omitted.
 
-    o names -- a list of string names (typically two entries) by which
+    - names -- a list of string names (typically two entries) by which
     the parameter can be set via the legacy set_parameter method
     (eg ["-a", "--append", "append"]). The first name in list is used
     when building the command line. The last name in the list is a
@@ -619,13 +624,14 @@ class _Switch(_AbstractParameter):
     name and as a keyword argument, and should therefore follow PEP8
     naming.
 
-    o description -- a description of the option. This is used as
+    - description -- a description of the option. This is used as
     the property docstring.
 
-    o is_set -- if the parameter has been set
+    - is_set -- if the parameter has been set
 
     NOTE - There is no value attribute, see is_set instead,
     """
+
     def __init__(self, names, description):
         self.names = names
         self.description = description
@@ -652,6 +658,7 @@ class _Argument(_AbstractParameter):
     property name and as a keyword argument, and should therefore
     follow PEP8 naming.
     """
+
     def __init__(self, names, description, filename=False,
                  checker_function=None, is_required=False):
         # if len(names) != 1:
@@ -678,6 +685,7 @@ class _Argument(_AbstractParameter):
 
 class _ArgumentList(_Argument):
     """Represent a variable list of arguments on a command line, e.g. multiple filenames."""
+
     # TODO - Option to require at least one value? e.g. min/max count?
 
     def __str__(self):
@@ -700,6 +708,7 @@ class _StaticArgument(_AbstractParameter):
     This is not intended to be exposed as a named argument or
     property of a command line wrapper object.
     """
+
     def __init__(self, value):
         self.names = []
         self.is_required = False

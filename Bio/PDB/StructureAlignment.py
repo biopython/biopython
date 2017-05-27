@@ -3,9 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Map the residues of two structures to each other based on a FASTA alignment
-file.
-"""
+"""Map residues of two structures to each other based on a FASTA alignment."""
 
 from __future__ import print_function
 
@@ -16,18 +14,18 @@ from Bio.PDB.Polypeptide import is_aa
 
 
 class StructureAlignment(object):
-    """
-    This class aligns two structures based on an alignment of their
-    sequences.
-    """
+    """Class to align two structures based on an alignment of their sequences."""
+
     def __init__(self, fasta_align, m1, m2, si=0, sj=1):
-        """
+        """Initialise.
+
         Attributes:
 
-            - fasta_align --- Alignment object
-            - m1, m2 --- two models
-            - si, sj --- the sequences in the Alignment object that
-              correspond to the structures
+        - fasta_align - Alignment object
+        - m1, m2 - two models
+        - si, sj - the sequences in the Alignment object that
+          correspond to the structures
+
         """
         l = fasta_align.get_alignment_length()
         # Get the residues in the models
@@ -86,15 +84,14 @@ class StructureAlignment(object):
         assert(aa1 == resname)
 
     def get_maps(self):
-        """
+        """Map residues between the structures.
+
         Return two dictionaries that map a residue in one structure to
         the equivealent residue in the other structure.
         """
         return self.map12, self.map21
 
     def get_iterator(self):
-        """
-        Iterator over all residue pairs.
-        """
+        """Iterator over all residue pairs."""
         for i in range(0, len(self.duos)):
             yield self.duos[i]

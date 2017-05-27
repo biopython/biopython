@@ -156,6 +156,12 @@ class BlatPslWriteCases(WriteCases):
         self.parse_write_and_compare(source, self.fmt, self.out, self.fmt)
         self.read_write_and_compare(source, self.fmt, self.out, self.fmt)
 
+    def test_write_single_from_blatpsl_protein_query(self):
+        """Test blat-psl writing from blat-psl, single query (psl_35_002.psl)"""
+        source = os.path.join('Blat', 'psl_35_002.psl')
+        self.parse_write_and_compare(source, self.fmt, self.out, self.fmt)
+        self.read_write_and_compare(source, self.fmt, self.out, self.fmt)
+
     def test_write_multiple_from_blatpsl(self):
         """Test blat-psl writing from blat-psl, multiple queries (psl_34_001.psl)"""
         source = os.path.join('Blat', 'psl_34_001.psl')
@@ -164,6 +170,12 @@ class BlatPslWriteCases(WriteCases):
     def test_write_single_from_blatpslx(self):
         """Test blat-pslx writing from blat-pslx, single query (pslx_34_004.pslx)"""
         source = os.path.join('Blat', 'pslx_34_004.pslx')
+        self.parse_write_and_compare(source, self.fmt, self.out, self.fmt, pslx=True)
+        self.read_write_and_compare(source, self.fmt, self.out, self.fmt, pslx=True)
+
+    def test_write_single_from_blatpslx_protein_query(self):
+        """Test blat-pslx writing from blat-pslx, single query (pslx_35_002.pslx)"""
+        source = os.path.join('Blat', 'pslx_35_002.pslx')
         self.parse_write_and_compare(source, self.fmt, self.out, self.fmt, pslx=True)
         self.read_write_and_compare(source, self.fmt, self.out, self.fmt, pslx=True)
 

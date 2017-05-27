@@ -94,6 +94,7 @@ class SVDSuperimposer(object):
     0.00
 
     """
+
     def __init__(self):
         self._clear()
 

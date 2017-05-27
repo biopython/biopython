@@ -16,7 +16,7 @@ class Chain(Entity):
     # Private methods
 
     def _sort(self, r1, r2):
-        """Sort function for residues in a chain
+        """Sort function for residues in a chain (PRIVATE).
 
         Residues are first sorted according to their hetatm records.
         Protein and nucleic acid residues first, hetatm residues next,
@@ -26,7 +26,8 @@ class Chain(Entity):
 
         Arguments:
 
-            - r1, r2 - Residue objects
+        - r1, r2 - Residue objects
+
         """
         hetflag1, resseq1, icode1 = r1.id
         hetflag2, resseq2, icode2 = r2.id
@@ -37,7 +38,8 @@ class Chain(Entity):
         return cmp(icode1, icode2)
 
     def _translate_id(self, id):
-        """
+        """Translate sequence identifer to tuple form (PRIVATE).
+
         A residue id is normally a tuple (hetero flag, sequence identifier,
         insertion code). Since for most residues the hetero flag and the
         insertion code are blank (i.e. " "), you can just use the sequence
@@ -46,7 +48,9 @@ class Chain(Entity):
         " ") tuple.
 
         Arguments:
-        o id - int, residue resseq
+
+        - id - int, residue resseq
+
         """
         if isinstance(id, int):
             id = (' ', id, ' ')
@@ -62,7 +66,9 @@ class Chain(Entity):
         method.
 
         Arguments:
-        o id - (string, int, string) or int
+
+        - id - (string, int, string) or int
+
         """
         id = self._translate_id(id)
         return Entity.__getitem__(self, id)
@@ -71,15 +77,20 @@ class Chain(Entity):
         """True if a residue with given id is present in this chain.
 
         Arguments:
-        o id - (string, int, string) or int
+
+        - id - (string, int, string) or int
+
         """
         id = self._translate_id(id)
         return Entity.__contains__(self, id)
 
     def __delitem__(self, id):
-        """
+        """Delete item.
+
         Arguments:
-        o id - (string, int, string) or int
+
+        - id - (string, int, string) or int
+
         """
         id = self._translate_id(id)
         return Entity.__delitem__(self, id)
@@ -115,7 +126,8 @@ class Chain(Entity):
 
         Arguments:
 
-            - id - (string, int, string) or int
+        - id - (string, int, string) or int
+
         """
         id = self._translate_id(id)
         return Entity.has_id(self, id)

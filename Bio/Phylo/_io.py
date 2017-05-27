@@ -29,7 +29,7 @@ supported_formats = {
 try:
     from Bio.Phylo import CDAOIO
     supported_formats['cdao'] = CDAOIO
-except:
+except ImportError:
     pass
 
 

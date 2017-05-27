@@ -2,8 +2,7 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""Command line wrapper for the multiple alignment program Clustal W.
-"""
+"""Command line wrapper for the multiple alignment program Clustal W."""
 
 from __future__ import print_function
 
@@ -38,6 +37,7 @@ class ClustalwCommandline(AbstractCommandline):
 
     Last checked against versions: 1.83 and 2.1
     """
+
     # TODO - Should we default to cmd="clustalw2" now?
     def __init__(self, cmd="clustalw", **kwargs):
         self.parameters = \

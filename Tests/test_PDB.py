@@ -32,14 +32,13 @@ except ImportError:
         "Install NumPy if you want to use Bio.PDB.")
 
 from Bio import BiopythonWarning
-from Bio import AlignIO
 from Bio.Seq import Seq
 from Bio.Alphabet import generic_protein
 from Bio.PDB import PDBParser, PPBuilder, CaPPBuilder, PDBIO, Select
 from Bio.PDB import HSExposureCA, HSExposureCB, ExposureCN
 from Bio.PDB.PDBExceptions import PDBConstructionException, PDBConstructionWarning
 from Bio.PDB import rotmat, Vector, refmat, calc_angle, calc_dihedral, rotaxis, m2rotaxis
-from Bio.PDB import Residue, Atom, StructureAlignment, Superimposer, Selection
+from Bio.PDB import Residue, Atom
 from Bio.PDB import make_dssp_dict
 from Bio.PDB import DSSP
 from Bio.PDB.NACCESS import process_asa_data, process_rsa_data
@@ -53,6 +52,7 @@ class A_ExceptionTest(unittest.TestCase):
     These tests must be executed because of the way Python's warnings module
     works -- a warning is only logged the first time it is encountered.
     """
+
     def test_1_warnings(self):
         """Check warnings: Parse a flawed PDB file in permissive mode."""
         with warnings.catch_warnings(record=True) as w:
@@ -512,7 +512,7 @@ class ParseTest(unittest.TestCase):
                          "N C C O C C C N C N N N C C O C S")
 
     def test_pdbio_write_truncated(self):
-        """Test parsing of truncated lines"""
+        """Test parsing of truncated lines."""
         io = PDBIO()
         struct = self.structure
         # Write to temp file
@@ -530,10 +530,11 @@ class ParseTest(unittest.TestCase):
             os.remove(filename)
 
     def test_deepcopy_of_structure_with_disorder(self):
-            """Test deepcopy of a structure with disordered atoms.
-            Shouldn't cause recursion.
-            """
-            _ = deepcopy(self.structure)
+        """Test deepcopy of a structure with disordered atoms.
+
+        Shouldn't cause recursion.
+        """
+        _ = deepcopy(self.structure)
 
 
 class ParseReal(unittest.TestCase):
@@ -706,7 +707,7 @@ class ParseReal(unittest.TestCase):
                 self.assertEqual(model.serial_num, model.id + 1)
 
         def confirm_single_end(fname):
-            """Ensure there is only one END statement in multi-model files"""
+            """Ensure there is only one END statement in multi-model files."""
             with open(fname) as handle:
                 end_stment = []
                 for iline, line in enumerate(handle):
@@ -734,6 +735,7 @@ class ParseReal(unittest.TestCase):
 
 
 class WriteTest(unittest.TestCase):
+
     def setUp(self):
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", PDBConstructionWarning)
@@ -741,7 +743,7 @@ class WriteTest(unittest.TestCase):
             self.structure = self.parser.get_structure("example", "PDB/1A8O.pdb")
 
     def test_pdbio_write_structure(self):
-        """Write a full structure using PDBIO"""
+        """Write a full structure using PDBIO."""
         io = PDBIO()
         struct1 = self.structure
         # Write full model to temp file
@@ -775,7 +777,7 @@ class WriteTest(unittest.TestCase):
             os.remove(filename)
 
     def test_pdbio_write_custom_residue(self):
-        """Write a chainless residue using PDBIO"""
+        """Write a chainless residue using PDBIO."""
         io = PDBIO()
 
         res = Residue.Residue((' ', 1, ' '), 'DUM', '')
@@ -798,12 +800,11 @@ class WriteTest(unittest.TestCase):
             os.remove(filename)
 
     def test_pdbio_select(self):
-        """Write a selection of the structure using a Select subclass"""
+        """Write a selection of the structure using a Select subclass."""
         # Selection class to filter all alpha carbons
         class CAonly(Select):
-            """
-            Accepts only CA residues
-            """
+            """Accepts only CA residues."""
+
             def accept_atom(self, atom):
                 if atom.name == "CA" and atom.element == "C":
                     return 1
@@ -823,7 +824,7 @@ class WriteTest(unittest.TestCase):
             os.remove(filename)
 
     def test_pdbio_missing_occupancy(self):
-        """Write PDB file with missing occupancy"""
+        """Write PDB file with missing occupancy."""
         io = PDBIO()
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", PDBConstructionWarning)
@@ -847,6 +848,7 @@ class WriteTest(unittest.TestCase):
 
 class Exposure(unittest.TestCase):
     """Testing Bio.PDB.HSExposure."""
+
     def setUp(self):
         pdb_filename = "PDB/a_structure.pdb"
         with warnings.catch_warnings():
@@ -929,7 +931,7 @@ class Exposure(unittest.TestCase):
 
 
 class Atom_Element(unittest.TestCase):
-    """induces Atom Element from Atom Name"""
+    """induces Atom Element from Atom Name."""
 
     def setUp(self):
         pdb_filename = "PDB/a_structure.pdb"
@@ -939,7 +941,7 @@ class Atom_Element(unittest.TestCase):
         self.residue = structure[0]['A'][('H_PCA', 1, ' ')]
 
     def test_AtomElement(self):
-        """ Atom Element """
+        """Atom Element."""
         atoms = self.residue.child_list
         self.assertEqual('N', atoms[0].element)  # N
         self.assertEqual('C', atoms[1].element)  # Alpha Carbon
@@ -1014,7 +1016,7 @@ class ChangingIdTests(unittest.TestCase):
                                                   'X', "PDB/a_structure.pdb")
 
     def test_change_model_id(self):
-        """Change the id of a model"""
+        """Change the id of a model."""
         for model in self.struc:
             break  # Get first model in structure
         model.id = 2
@@ -1023,7 +1025,7 @@ class ChangingIdTests(unittest.TestCase):
         self.assertNotIn(0, self.struc)
 
     def test_change_model_id_raises(self):
-        """Cannot change id to a value already in use by another child"""
+        """Cannot change id to a value already in use by another child."""
         model = next(iter(self.struc))
         with self.assertRaises(ValueError):
             model.id = 1
@@ -1033,7 +1035,7 @@ class ChangingIdTests(unittest.TestCase):
         self.assertIn(1, self.struc)
 
     def test_change_chain_id(self):
-        """Change the id of a model"""
+        """Change the id of a model."""
         chain = next(iter(self.struc.get_chains()))
         chain.id = "R"
         self.assertEqual(chain.id, "R")
@@ -1041,7 +1043,7 @@ class ChangingIdTests(unittest.TestCase):
         self.assertIn("R", model)
 
     def test_change_residue_id(self):
-        """Change the id of a residue"""
+        """Change the id of a residue."""
         chain = next(iter(self.struc.get_chains()))
         res = chain[('H_PCA', 1, ' ')]
         res.id = (' ', 1, ' ')
@@ -1052,9 +1054,7 @@ class ChangingIdTests(unittest.TestCase):
         self.assertEqual(chain[(' ', 1, ' ')], res)
 
     def test_full_id_is_updated_residue(self):
-        """
-        Invalidate cached full_ids if an id is changed.
-        """
+        """Invalidate cached full_ids if an id is changed."""
         atom = next(iter(self.struc.get_atoms()))
 
         # Generate the original full id.
@@ -1074,9 +1074,7 @@ class ChangingIdTests(unittest.TestCase):
         self.assertEqual(new_id, ('X', 0, 'A', (' ', 1, ' '), ('N', ' ')))
 
     def test_full_id_is_updated_chain(self):
-        """
-        Invalidate cached full_ids if an id is changed.
-        """
+        """Invalidate cached full_ids if an id is changed."""
         atom = next(iter(self.struc.get_atoms()))
 
         # Generate the original full id.
@@ -1125,10 +1123,7 @@ class TransformTests(unittest.TestCase):
         self.a = self.r.get_list()[0]
 
     def get_total_pos(self, o):
-        """
-        Returns the sum of the positions of atoms in an entity along
-        with the number of atoms.
-        """
+        """Sum of positions of atoms in an entity along with the number of atoms."""
         if hasattr(o, "get_coord"):
             return o.get_coord(), 1
         total_pos = numpy.array((0.0, 0.0, 0.0))
@@ -1140,9 +1135,7 @@ class TransformTests(unittest.TestCase):
         return total_pos, total_count
 
     def get_pos(self, o):
-        """
-        Returns the average atom position in an entity.
-        """
+        """Average atom position in an entity."""
         pos, count = self.get_total_pos(o)
         return 1.0 * pos / count
 
@@ -1159,7 +1152,7 @@ class TransformTests(unittest.TestCase):
                 self.assertAlmostEqual(newpos[i], newpos_check[i])
 
     def test_Vector(self):
-        """Test Vector object"""
+        """Test Vector object."""
         v1 = Vector(0, 0, 1)
         v2 = Vector(0, 0, 0)
         v3 = Vector(0, 1, 0)
@@ -1263,116 +1256,26 @@ class TransformTests(unittest.TestCase):
                         "Want %r and %r to be almost equal" % (axis.get_array(), caxis.get_array()))
 
 
-class StructureAlignTests(unittest.TestCase):
+class PDBParserTests(unittest.TestCase):
+    """Test PDBParser module."""
 
-    def test_StructAlign(self):
-        """Tests on module to align two proteins according to a FASTA alignment file."""
-        al_file = "PDB/alignment_file.fa"
-        pdb2 = "PDB/1A8O.pdb"
-        pdb1 = "PDB/2XHE.pdb"
-        with open(al_file, 'r') as handle:
-            records = AlignIO.read(handle, "fasta")
-        p = PDBParser()
-        s1 = p.get_structure('1', pdb1)
-        p = PDBParser()
-        s2 = p.get_structure('2', pdb2)
-        m1 = s1[0]
-        m2 = s2[0]
-        al = StructureAlignment(records, m1, m2)
-        self.assertFalse(al.map12 == al.map21)
-        self.assertTrue(len(al.map12), 566)
-        self.assertTrue(len(al.map21), 70)
-        chain1_A = m1["A"]
-        chain2_A = m2["A"]
-        self.assertEqual(chain1_A[202].get_resname(), 'ILE')
-        self.assertEqual(chain2_A[202].get_resname(), 'LEU')
-        self.assertEqual(chain1_A[291].get_resname(), chain2_A[180].get_resname())
-        self.assertNotEqual(chain1_A[291].get_resname(), chain2_A[181].get_resname())
-
-
-class SuperimposerTests(unittest.TestCase):
-
-    def test_Superimposer(self):
-        """Test on module that superimpose two protein structures."""
-        pdb1 = "PDB/1A8O.pdb"
-        p = PDBParser()
-        s1 = p.get_structure("FIXED", pdb1)
-        fixed = Selection.unfold_entities(s1, "A")
-        s2 = p.get_structure("MOVING", pdb1)
-        moving = Selection.unfold_entities(s2, "A")
-        rot = numpy.identity(3).astype('f')
-        tran = numpy.array((1.0, 2.0, 3.0), 'f')
-        for atom in moving:
-            atom.transform(rot, tran)
-        sup = Superimposer()
-        sup.set_atoms(fixed, moving)
-        self.assertTrue(numpy.allclose(sup.rotran[0], numpy.identity(3)))
-        self.assertTrue(numpy.allclose(sup.rotran[1], numpy.array([-1.0, -2.0, -3.0])))
-        self.assertAlmostEqual(sup.rms, 0.0, places=3)
-        atom_list = ['N', 'C', 'C', 'O', 'C', 'C', 'SE', 'C', 'N', 'C', 'C',
-                     'O', 'C', 'C', 'O', 'O', 'N', 'C', 'C', 'O', 'C', 'C',
-                     'C', 'C', 'N', 'C', 'C', 'O', 'C', 'C', 'C', 'N', 'C',
-                     'N', 'N', 'N', 'C', 'C', 'O', 'C', 'C', 'C', 'O', 'N',
-                     'N', 'C', 'C', 'O', 'N', 'C', 'C', 'O', 'C', 'C', 'C',
-                     'N', 'C', 'C', 'O', 'C', 'C', 'C', 'C', 'N', 'N', 'C',
-                     'C', 'O', 'C', 'C', 'C', 'O', 'O', 'N', 'C', 'C', 'O',
-                     'C', 'C', 'C', 'N', 'C', 'C', 'O', 'C', 'C', 'C', 'C',
-                     'C', 'C', 'C', 'N', 'C', 'C', 'O', 'C', 'C', 'C', 'N',
-                     'C', 'N', 'N', 'N', 'C', 'C', 'O', 'C', 'C', 'O', 'O',
-                     'N', 'C', 'C', 'O', 'C', 'C', 'C', 'C', 'C', 'C', 'C',
-                     'O', 'N', 'C', 'C', 'O', 'C', 'C', 'C', 'N', 'C', 'C',
-                     'O', 'C', 'C', 'O', 'O', 'N', 'C', 'C', 'O', 'C', 'C',
-                     'C', 'N', 'C', 'N', 'N', 'N', 'C', 'C', 'O', 'C', 'C',
-                     'C', 'C', 'C', 'C', 'C', 'N', 'C', 'C', 'O', 'C', 'C',
-                     'C', 'C', 'C', 'C', 'C', 'O', 'N', 'C', 'C', 'O', 'C',
-                     'C', 'C', 'C', 'N', 'N', 'C', 'C', 'O', 'C', 'O', 'C',
-                     'N', 'C', 'C', 'O', 'C', 'C', 'C', 'C', 'N', 'C', 'C',
-                     'O', 'C', 'C', 'C', 'N', 'C', 'N', 'N', 'N', 'C', 'C',
-                     'O', 'C', 'N', 'C', 'C', 'O', 'C', 'C', 'C', 'O', 'O',
-                     'N', 'C', 'C', 'O', 'C', 'C', 'C', 'O', 'N', 'N', 'C',
-                     'C', 'O', 'C', 'N', 'C', 'C', 'O', 'C', 'O', 'N', 'C',
-                     'C', 'O', 'C', 'C', 'C', 'O', 'N', 'N', 'C', 'C', 'O',
-                     'C', 'C', 'C', 'O', 'O', 'N', 'C', 'C', 'O', 'C', 'C',
-                     'C', 'N', 'C', 'C', 'O', 'C', 'C', 'C', 'C', 'N', 'N',
-                     'C', 'C', 'O', 'C', 'C', 'O', 'N', 'N', 'C', 'C', 'O',
-                     'C', 'C', 'C', 'C', 'N', 'C', 'C', 'C', 'C', 'C', 'N',
-                     'C', 'C', 'O', 'C', 'C', 'SE', 'C', 'N', 'C', 'C', 'O',
-                     'C', 'O', 'C', 'N', 'C', 'C', 'O', 'C', 'C', 'C', 'O',
-                     'O', 'N', 'C', 'C', 'O', 'C', 'O', 'C', 'N', 'C', 'C',
-                     'O', 'C', 'C', 'C', 'C', 'N', 'C', 'C', 'O', 'C', 'C',
-                     'C', 'C', 'N', 'C', 'C', 'O', 'C', 'C', 'C', 'N', 'C',
-                     'C', 'O', 'C', 'C', 'C', 'O', 'N', 'N', 'C', 'C', 'O',
-                     'C', 'C', 'O', 'N', 'N', 'C', 'C', 'O', 'C', 'N', 'C',
-                     'C', 'O', 'C', 'C', 'O', 'N', 'N', 'C', 'C', 'O', 'C',
-                     'C', 'C', 'N', 'C', 'C', 'O', 'C', 'C', 'O', 'O', 'N',
-                     'C', 'C', 'O', 'C', 'S', 'N', 'C', 'C', 'O', 'C', 'C',
-                     'C', 'C', 'N', 'N', 'C', 'C', 'O', 'C', 'O', 'C', 'N',
-                     'C', 'C', 'O', 'C', 'C', 'C', 'C', 'N', 'C', 'C', 'O',
-                     'C', 'C', 'C', 'C', 'N', 'C', 'C', 'O', 'C', 'C', 'C',
-                     'C', 'N', 'N', 'C', 'C', 'O', 'C', 'N', 'C', 'C', 'O',
-                     'C', 'C', 'C', 'C', 'N', 'C', 'C', 'O', 'N', 'C', 'C',
-                     'O', 'C', 'C', 'C', 'N', 'C', 'C', 'O', 'N', 'C', 'C',
-                     'O', 'C', 'N', 'C', 'C', 'O', 'C', 'O', 'C', 'N', 'C',
-                     'C', 'O', 'C', 'C', 'C', 'C', 'N', 'C', 'C', 'O', 'C',
-                     'C', 'C', 'O', 'O', 'N', 'C', 'C', 'O', 'C', 'C', 'C',
-                     'O', 'O', 'N', 'C', 'C', 'O', 'C', 'C', 'SE', 'C', 'N',
-                     'C', 'C', 'O', 'C', 'C', 'SE', 'C', 'N', 'C', 'C', 'O',
-                     'C', 'O', 'C', 'N', 'C', 'C', 'O', 'C', 'N', 'C', 'C',
-                     'O', 'C', 'S', 'N', 'C', 'C', 'O', 'C', 'C', 'C', 'O',
-                     'N', 'N', 'C', 'C', 'O', 'O', 'O', 'O', 'O', 'O', 'O',
-                     'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O',
-                     'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O',
-                     'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O',
-                     'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O',
-                     'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O',
-                     'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O',
-                     'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O',
-                     'O', 'O', 'O', 'O', 'O', 'O']
-        sup.apply(moving)
-        atom_moved = []
-        for aa in moving:
-            atom_moved.append(aa.element)
-        self.assertEqual(atom_moved, atom_list)
+    def test_PDBParser(self):
+        """Walk down the structure hierarchy and test parser reliability."""
+        p = PDBParser(PERMISSIVE=True)
+        filename = "PDB/1A8O.pdb"
+        s = p.get_structure("scr", filename)
+        for m in s:
+            p = m.get_parent()
+            self.assertEqual(s, p)
+            for c in m:
+                p = c.get_parent()
+                self.assertEqual(m, p)
+                for r in c:
+                    p = r.get_parent()
+                    self.assertEqual(c, p)
+                    for a in r:
+                        p = a.get_parent()
+                        self.assertEqual(r.get_resname(), p.get_resname())
 
 
 class CopyTests(unittest.TestCase):
@@ -1406,9 +1309,10 @@ def eprint(*args, **kwargs):
 
 
 def will_it_float(s):
-    """ Helper function that converts the input into a float if it is a number.
+    """Helper function that converts the input into a float if it is a number.
 
-    If the input is a string, the output does not change."""
+    If the input is a string, the output does not change.
+    """
     try:
         return float(s)
     except ValueError:
@@ -1420,13 +1324,14 @@ class DsspTests(unittest.TestCase):
 
     See also test_DSSP_tool.py for run time testing with the tool.
     """
+
     def test_DSSP_file(self):
-        """Test parsing of pregenerated DSSP"""
+        """Test parsing of pregenerated DSSP."""
         dssp, keys = make_dssp_dict("PDB/2BEG.dssp")
         self.assertEqual(len(dssp), 130)
 
     def test_DSSP_noheader_file(self):
-        """Test parsing of pregenerated DSSP missing header information"""
+        """Test parsing of pregenerated DSSP missing header information."""
         # New DSSP prints a line containing only whitespace and "."
         dssp, keys = make_dssp_dict("PDB/2BEG_noheader.dssp")
         self.assertEqual(len(dssp), 130)
@@ -1452,7 +1357,7 @@ class DsspTests(unittest.TestCase):
         self.assertEqual((dssp_indices & hb_indices), hb_indices)
 
     def test_DSSP_in_model_obj(self):
-        """ Test that all the elements are added correctly to the xtra attribute of the input model object."""
+        """All elements correctly added to xtra attribute of input model object."""
         p = PDBParser()
         s = p.get_structure("example", "PDB/2BEG.pdb")
         m = s[0]
@@ -1549,12 +1454,9 @@ class NACCESSTests(unittest.TestCase):
 
 
 class ResidueDepthTests(unittest.TestCase):
-    """Tests for ResidueDepth module, except for running MSMS itself.
-    """
-
+    """Tests for ResidueDepth module, except for running MSMS itself."""
     def test_pdb_to_xyzr(self):
         """Test generation of xyzr (atomic radii) file"""
-
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", PDBConstructionWarning)
             p = PDBParser(PERMISSIVE=1)

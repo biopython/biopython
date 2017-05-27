@@ -5,7 +5,7 @@ This is a list of people who have made contributions to Biopython.
 
 People are listed alphabetically, as verfied with Unix sort::
 
-    $ grep "^- " CONTRIB.rst | LC_ALL=C sort -u -c
+    $ grep "^- " CONTRIB.rst | LC_ALL=C sort -u -c -f
 
 This is certainly not comprehensive, and if you've been overlooked (sorry!),
 please open an issue on GitHub or mention it on the development mailing list.
@@ -85,6 +85,8 @@ please open an issue on GitHub or mention it on the development mailing list.
 - Francisco Pina-Martins <https://github.com/StuntsPT>
 - Franco Caramia <https://github.com/fcaramia>
 - Frank Kauff <fkauff at domain duke.edu>
+- François Coste <https://github.com/francoiscoste>
+- Frederic Sapet <https://github.com/FredericBGA>
 - Frederic Sohm <fsms at domain users.sourceforge.net>
 - Frederik Gwinner
 - Fábio Madeira <https://github.com/biomadeira>
@@ -150,6 +152,7 @@ please open an issue on GitHub or mention it on the development mailing list.
 - Michiel de Hoon <mdehoon at domain c2b2.columbia.edu>
 - Mike Poidinger <Michael.Poidinger at domain eBioinformatics.com>
 - Milind Luthra <https://github.com/milindl>
+- morrme <https://github.com/morrme>
 - Nader Morshed <https://github.com/naderm>
 - Nate Sutton <https://github.com/nmsutton>
 - Nathan J. Edwards <nje5 at edu domain georgetown>
@@ -165,6 +168,7 @@ please open an issue on GitHub or mention it on the development mailing list.
 - Phillip Garland <pgarland at gmail>
 - Rasmus Fonseca <https://github.com/RasmusFonseca>
 - Richard Neher <https://github.com/rneher>
+- Rodrigo Dorantes-Gilardi <https://github.com/rodogi>
 - Sacha Laurent <https://github.com/Cashalow>
 - Saket Choudhary <https://github.com/saketkc>
 - Sebastian Bassi <https://about.me/bassi>
@@ -200,3 +204,4 @@ please open an issue on GitHub or mention it on the development mailing list.
 - Yanbo Ye <https://github.com/lijax>
 - Yu Huang <krocea at domain yahoo.com.cn>
 - Yves Bastide <ybastide at domain irisa.fr>
+- Zheng Ruan <https://github.com/zruan>

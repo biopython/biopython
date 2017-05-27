@@ -1,4 +1,4 @@
-"""This module contains indices to be used with ProtParam."""
+"""Indices to be used with ProtParam."""
 
 
 # Kyte & Doolittle index of hydrophobicity

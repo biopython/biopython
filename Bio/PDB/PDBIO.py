@@ -52,6 +52,7 @@ class PDBIO(object):
         >>> io.set_structure(s)
         >>> io.save("out.pdb")
     """
+
     def __init__(self, use_model_flag=0):
         """Creat the PDBIO object.
 
@@ -150,8 +151,7 @@ class PDBIO(object):
         self.structure = structure
 
     def save(self, file, select=Select(), write_end=True, preserve_atom_numbering=False):
-        """
-        @param file: output file
+        """@param file: output file
         @type file: string or filehandle
 
         @param select: selects which entities will be written.

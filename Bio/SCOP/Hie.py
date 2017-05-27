@@ -23,7 +23,9 @@ class Record(object):
      - sunid - SCOP unique identifiers of this node
      - parent - Parents sunid
      - children - Sequence of childrens sunids
+
     """
+
     def __init__(self, line=None):
         self.sunid = ''
         self.parent = ''

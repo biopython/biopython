@@ -53,6 +53,7 @@ class CodonSeq(Seq):
     [0, 3.0, 6.0, 9.0, 12.0, 15]
 
     """
+
     def __init__(self, data='', alphabet=default_codon_alphabet,
                  gap_char="-", rf_table=None):
         # rf_table should be a tuple or list indicating the every
@@ -107,7 +108,7 @@ class CodonSeq(Seq):
         return Seq(self._data[index], alphabet=generic_dna)
 
     def get_codon(self, index):
-        """get the `index`-th codon from the sequence."""
+        """Get the `index`-th codon from the sequence."""
         if len(set(i % 3 for i in self.rf_table)) != 1:
             raise RuntimeError("frameshift detected. "
                                "CodonSeq object is not able to deal "
@@ -387,7 +388,7 @@ def _ng86(seq1, seq2, k, codon_table):
 
 
 def _count_site_NG86(codon_lst, k=1, codon_table=default_codon_table):
-    """count synonymous and non-synonymous sites of a list of codons (PRIVATE).
+    """Count synonymous and non-synonymous sites of a list of codons (PRIVATE).
 
     Arguments:
         - codon_lst - A three letter codon list from a CodonSeq object.
@@ -831,10 +832,8 @@ def _count_site_YN00(codon_lst1, codon_lst2, pi, k,
     """
     if len(codon_lst1) != len(codon_lst2):
         raise RuntimeError("Length of two codon_lst should be the same "
-                           "(%d and %d detected)".format(
-                                                    len(codon_lst1),
-                                                    len(codon_lst2))
-                           )
+                           "(%d and %d detected)" %
+                           (len(codon_lst1), len(codon_lst2)))
     else:
         length = len(codon_lst1)
     purine = ('A', 'G')
@@ -1051,7 +1050,7 @@ def _ml(seq1, seq2, cmethod, codon_table):
                     else:
                         # nonsynonymous count
                         Nd += pi[c1] * Q[i, j]
-                except:
+                except KeyError:
                     # This is probably due to stop codons
                     pass
     Sd *= t
@@ -1074,7 +1073,7 @@ def _ml(seq1, seq2, cmethod, codon_table):
                     else:
                         # nonsynonymous count
                         rhoN += pi[c1] * Q[i, j]
-                except:
+                except KeyError:
                     # This is probably due to stop codons
                     pass
     rhoS *= 3

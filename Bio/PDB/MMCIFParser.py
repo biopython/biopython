@@ -3,7 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""mmCIF parsers"""
+"""mmCIF parsers."""
 
 from __future__ import print_function
 
@@ -150,7 +150,10 @@ class MMCIFParser(object):
                 raise PDBConstructionException("Invalid or missing occupancy")
             fieldname = fieldname_list[i]
             if fieldname == "HETATM":
-                hetatm_flag = "H"
+                if resname == "HOH" or resname == "WAT":
+                    hetatm_flag = "W"
+                else:
+                    hetatm_flag = "H"
             else:
                 hetatm_flag = " "
 
@@ -427,22 +430,3 @@ class FastMMCIFParser(object):
                 mapped_anisou = [float(x) for x in u]
                 anisou_array = numpy.array(mapped_anisou, 'f')
                 structure_builder.set_anisou(anisou_array)
-
-
-if __name__ == "__main__":
-    import sys
-
-    if len(sys.argv) != 2:
-        print("Usage: python MMCIFparser.py filename")
-        raise SystemExit
-    filename = sys.argv[1]
-
-    p = MMCIFParser()
-
-    structure = p.get_structure("test", filename)
-
-    for model in structure.get_list():
-        print(model)
-        for chain in model.get_list():
-            print(chain)
-            print("Found %d residues." % len(chain.get_list()))

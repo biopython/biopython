@@ -53,19 +53,20 @@ class _ChromosomeComponent(Widget):
     This class should not be instantiated directly, but should be used
     from derived classes.
     """
+
     def __init__(self):
         """Initialize a chromosome component.
 
         Attributes:
-        o _sub_components -- Any components which are contained under
+        - _sub_components -- Any components which are contained under
         this parent component. This attribute should be accessed through
         the add() and remove() functions.
+
         """
         self._sub_components = []
 
     def add(self, component):
-        """Add a sub_component to the list of components under this item.
-        """
+        """Add a sub_component to the list of components under this item."""
         assert isinstance(component, _ChromosomeComponent), \
             "Expected a _ChromosomeComponent object, got %s" % component
 
@@ -84,8 +85,7 @@ class _ChromosomeComponent(Widget):
                              component)
 
     def draw(self):
-        """Draw the specified component.
-        """
+        """Draw the specified component."""
         raise AssertionError("Subclasses must implement.")
 
 
@@ -99,6 +99,7 @@ class Organism(_ChromosomeComponent):
     Chromosomes should be added and removed from the Organism via the
     add and remove functions.
     """
+
     def __init__(self, output_format='pdf'):
         _ChromosomeComponent.__init__(self)
 
@@ -117,14 +118,14 @@ class Organism(_ChromosomeComponent):
 
         Arguments:
 
-        o output_file -- The name of a file specifying where the
+        - output_file -- The name of a file specifying where the
         document should be saved, or a handle to be written to.
         The output format is set when creating the Organism object.
         Alternatively, output_file=None will return the drawing using
         the low-level ReportLab objects (for further processing, such
         as adding additional graphics, before writing).
 
-        o title -- The output title of the produced document.
+        - title -- The output title of the produced document.
         """
         width, height = self.page_size
         cur_drawing = Drawing(width, height)
@@ -160,8 +161,7 @@ class Organism(_ChromosomeComponent):
         return _write(cur_drawing, output_file, self.output_format)
 
     def _draw_title(self, cur_drawing, title, width, height):
-        """Write out the title of the organism figure.
-        """
+        """Write out the title of the organism figure."""
         title_string = String(width / 2, height - inch, title)
         title_string.fontName = 'Helvetica-Bold'
         title_string.fontSize = self.title_size
@@ -185,30 +185,32 @@ class Chromosome(_ChromosomeComponent):
     class can be instantiated directly, but the draw method makes the
     most sense to be called in the context of an organism.
     """
+
     def __init__(self, chromosome_name):
         """Initialize a Chromosome for drawing.
 
         Arguments:
 
-        o chromosome_name - The label for the chromosome.
+        - chromosome_name - The label for the chromosome.
 
         Attributes:
-        o start_x_position, end_x_position - The x positions on the page
+        - start_x_position, end_x_position - The x positions on the page
         where the chromosome should be drawn. This allows multiple
         chromosomes to be drawn on a single page.
 
-        o start_y_position, end_y_position - The y positions on the page
+        - start_y_position, end_y_position - The y positions on the page
         where the chromosome should be contained.
 
         Configuration Attributes:
 
-        o title_size - The size of the chromosome title.
+        - title_size - The size of the chromosome title.
 
-        o scale_num - A number of scale the drawing by. This is useful if
+        - scale_num - A number of scale the drawing by. This is useful if
         you want to draw multiple chromosomes of different sizes at the
         same scale. If this is not set, then the chromosome drawing will
         be scaled by the number of segements in the chromosome (so each
         chromosome will be the exact same final size).
+
         """
         _ChromosomeComponent.__init__(self)
 
@@ -228,8 +230,7 @@ class Chromosome(_ChromosomeComponent):
         self._color_labels = False
 
     def subcomponent_size(self):
-        """Return the scaled size of all subcomponents of this component.
-        """
+        """Return the scaled size of all subcomponents of this component."""
         total_sub = 0
         for sub_component in self._sub_components:
             total_sub += sub_component.scale
@@ -284,8 +285,7 @@ class Chromosome(_ChromosomeComponent):
         self._draw_label(cur_drawing, self._name)
 
     def _draw_label(self, cur_drawing, label_name):
-        """Draw a label for the chromosome.
-        """
+        """Draw a label for the chromosome."""
         x_position = 0.5 * (self.start_x_position + self.end_x_position)
         y_position = self.end_y_position
 
@@ -369,32 +369,34 @@ class ChromosomeSegment(_ChromosomeComponent):
     be subclassed to define additional functionality. Most of the interesting
     drawing stuff is likely to happen at the ChromosomeSegment level.
     """
+
     def __init__(self):
         """Initialize a ChromosomeSegment.
 
         Attributes:
-        o start_x_position, end_x_position - Defines the x range we have
+        - start_x_position, end_x_position - Defines the x range we have
         to draw things in.
 
-        o start_y_position, end_y_position - Defines the y range we have
+        - start_y_position, end_y_position - Defines the y range we have
         to draw things in.
 
         Configuration Attributes:
 
-        o scale - A scaling value for the component. By default this is
+        - scale - A scaling value for the component. By default this is
         set at 1 (ie -- has the same scale as everything else). Higher
         values give more size to the component, smaller values give less.
 
-        o fill_color - A color to fill in the segment with. Colors are
+        - fill_color - A color to fill in the segment with. Colors are
         available in reportlab.lib.colors
 
-        o label - A label to place on the chromosome segment. This should
+        - label - A label to place on the chromosome segment. This should
         be a text string specifying what is to be included in the label.
 
-        o label_size - The size of the label.
+        - label_size - The size of the label.
 
-        o chr_percent - The percentage of area that the chromosome
+        - chr_percent - The percentage of area that the chromosome
         segment takes up.
+
         """
         _ChromosomeComponent.__init__(self)
 
@@ -433,8 +435,7 @@ class ChromosomeSegment(_ChromosomeComponent):
         pass
 
     def _draw_segment(self, cur_drawing):
-        """Draw the current chromosome segment.
-        """
+        """Draw the current chromosome segment."""
         # set the coordinates of the segment -- it'll take up the MIDDLE part
         # of the space we have.
         segment_y = self.end_y_position
@@ -724,6 +725,7 @@ class TelomereSegment(ChromosomeSegment):
     _draw_segment class of ChromosomeSegment to provide that specialized
     drawing.
     """
+
     def __init__(self, inverted=0):
         """Initialize a segment at the end of a chromosome.
 
@@ -732,7 +734,7 @@ class TelomereSegment(ChromosomeSegment):
 
         Arguments:
 
-        o inverted -- Whether or not the telomere should be inverted
+        - inverted -- Whether or not the telomere should be inverted
         (ie. drawn on the bottom of a chromosome)
         """
         ChromosomeSegment.__init__(self)
@@ -740,8 +742,7 @@ class TelomereSegment(ChromosomeSegment):
         self._inverted = inverted
 
     def _draw_segment(self, cur_drawing):
-        """Draw a half circle representing the end of a linear chromosome.
-        """
+        """Draw a half circle representing the end of a linear chromosome."""
         # set the coordinates of the segment -- it'll take up the MIDDLE part
         # of the space we have.
         width = (self.end_x_position - self.start_x_position) \

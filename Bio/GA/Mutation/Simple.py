@@ -71,7 +71,7 @@ class ConversionMutation(object):
 
         Arguments:
 
-        o mutation_rate -- The chance of a mutation happening at any
+        - mutation_rate -- The chance of a mutation happening at any
         position in the genome.
         """
         self._mutation_rate = mutation_rate

@@ -2,8 +2,7 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""
-This module provides code for doing k-nearest-neighbors classification.
+"""Code for doing k-nearest-neighbors classification.
 
 k Nearest Neighbors is a supervised learning algorithm that classifies
 a new observation based the classes in its surrounding neighborhood.
@@ -45,6 +44,7 @@ class kNN(object):
         - k        Number of neighbors to look at.
 
     """
+
     def __init__(self):
         """kNN()"""
         self.classes = set()

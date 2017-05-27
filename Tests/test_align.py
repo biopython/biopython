@@ -5,14 +5,15 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""test_align.py
-
-A script to test alignment stuff.
+"""Test alignment stuff.
 
 Right now we've got tests for:
-o Reading and Writing clustal format
-o Reading and Writing fasta format
-o Converting between formats"""
+
+- Reading and Writing clustal format
+- Reading and Writing fasta format
+- Converting between formats
+
+"""
 
 # standard library
 from __future__ import print_function

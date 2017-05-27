@@ -3,8 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""
-Module to represent the NDB Atlas structure (a minimal subset of PDB format).
+"""Represent the NDB Atlas structure (a minimal subset of PDB format).
 
 Hetero, Crystal and Chain exist to represent the NDB Atlas structure.  Atlas
 is a minimal subset of the PDB format.  Heteo supports a 3 alphameric code.
@@ -37,11 +36,12 @@ def validate_key(key):
 
 
 class Hetero(object):
-    """This class exists to support the PDB hetero codes.
+    """Class to support the PDB hetero codes.
 
     Supports only the 3 alphameric code.
     The annotation is available from http://alpha2.bmc.uu.se/hicup/
     """
+
     def __init__(self, data):
         # Enforce string storage
         if not isinstance(data, str):
@@ -73,7 +73,7 @@ class Hetero(object):
 
 
 class Chain(object):
-    """This class represents a sequence of Hetero elements."""
+    """Class representing a sequence of Hetero elements."""
 
     def __init__(self, residues=''):
         self.data = []

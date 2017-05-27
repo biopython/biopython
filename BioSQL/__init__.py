@@ -6,9 +6,11 @@
 #
 # Note that BioSQL (including the database schema and scripts) is
 # available and licensed separately.  Please consult www.biosql.org
-"""Code for storing and retrieving biological sequences from a BioSQL
-relational database.  See:
+"""Storing and retrieve biological sequences in a BioSQL relational database.
 
-http://biopython.org/wiki/BioSQL
-http://www.biosql.org/
+See:
+
+- http://biopython.org/wiki/BioSQL
+- http://www.biosql.org/
+
 """

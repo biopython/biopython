@@ -40,9 +40,11 @@ class DBSeq(Seq):
         self.start = start
 
     def __len__(self):
+        """Return the length of the sequence."""
         return self._length
 
     def __getitem__(self, index):  # Seq API requirement
+        """Return a subsequence or single letter."""
         # Note since Python 2.0, __getslice__ is deprecated
         # and __getitem__ is used instead.
         # See http://docs.python.org/ref/sequence-methods.html
@@ -103,10 +105,11 @@ class DBSeq(Seq):
             return Seq(full[::index.step], self.alphabet)
 
     def tostring(self):
-        """Returns the full sequence as a python string (DEPRECATED).
+        """Return the full sequence as a python string (DEPRECATED).
 
         You are now encouraged to use str(my_seq) instead of
-        my_seq.tostring()."""
+        my_seq.tostring().
+        """
         import warnings
         warnings.warn("This method is obsolete; please use str(my_seq) "
                       "instead of my_seq.tostring().",
@@ -116,7 +119,7 @@ class DBSeq(Seq):
                                                  self.start + self._length)
 
     def __str__(self):
-        """Returns the full sequence as a python string."""
+        """Return the full sequence as a python string."""
         return self.adaptor.get_subseq_as_string(self.primary_id,
                                                  self.start,
                                                  self.start + self._length)
@@ -124,15 +127,25 @@ class DBSeq(Seq):
     data = property(tostring, doc="Sequence as string (DEPRECATED)")
 
     def toseq(self):
-        """Returns the full sequence as a Seq object."""
+        """Return the full sequence as a Seq object."""
         # Note - the method name copies that of the MutableSeq object
         return Seq(str(self), self.alphabet)
 
     def __add__(self, other):
+        """Add another sequence or string to this sequence.
+
+        The sequence is first converted to a Seq object before the addition.
+        The returned object is a Seq object, not a DBSeq object
+        """
         # Let the Seq object deal with the alphabet issues etc
         return self.toseq() + other
 
     def __radd__(self, other):
+        """Add another sequence or string to the left.
+
+        The sequence is first converted to a Seq object before the addition.
+        The returned object is a Seq object, not a DBSeq object
+        """
         # Let the Seq object deal with the alphabet issues etc
         return other + self.toseq()
 
@@ -471,11 +484,8 @@ def _retrieve_taxon(adaptor, primary_id, taxon_id):
             # load_ncbi_taxonomy.pl this is how top parent nodes are stored.
             # Personally, I would have used a NULL parent_taxon_id here.
             break
-        if rank != "no rank":
-            # For consistency with older versions of Biopython, we are only
-            # interested in taxonomy entries with a stated rank.
-            # Add this to the start of the lineage list.
-            taxonomy.insert(0, name)
+
+        taxonomy.insert(0, name)
         taxon_id = parent_taxon_id
 
     if taxonomy:
@@ -500,6 +510,15 @@ class DBSeqRecord(SeqRecord):
     """BioSQL equivalent of the Biopython SeqRecord object."""
 
     def __init__(self, adaptor, primary_id):
+        """Create a DBSeqRecord object.
+
+        Arguments:
+            - adaptor - A BioSQL.BioSeqDatabase.Adaptor object
+            - primary_id - An internal integer ID used by BioSQL
+
+        You wouldn't normally create a DBSeqRecord object yourself,
+        this is done for you when using a BioSeqDatabase object
+        """
         self._adaptor = adaptor
         self._primary_id = primary_id
 

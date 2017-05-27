@@ -2,8 +2,7 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""Command line wrapper for the multiple alignment program PRANK.
-"""
+"""Command line wrapper for the multiple alignment program PRANK."""
 
 from __future__ import print_function
 
@@ -48,6 +47,7 @@ class PrankCommandline(AbstractCommandline):
 
     Last checked against version: 081202
     """
+
     def __init__(self, cmd="prank", **kwargs):
         OUTPUT_FORMAT_VALUES = list(range(1, 18))
         self.parameters = [

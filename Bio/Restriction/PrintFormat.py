@@ -98,7 +98,8 @@ class PrintFormat(object):
            those without sites.
          - s1 must be a formatted string as well.
 
-        The format of print_that is a list."""
+        The format of print_that is a list.
+        """
         if not dct:
             dct = self.results
         ls, nc = [], []
@@ -121,8 +122,9 @@ class PrintFormat(object):
          - s1 must be a formatted string as well.
 
         This method prints the output of A.format_output() and it is here
-        for backwards compatibility."""
-        print(format_output(dct, title, s1))
+        for backwards compatibility.
+        """
+        print(self.format_output(dct, title, s1))
         return
 
     def make_format(self, cut=(), title='', nc=(), s1=''):
@@ -279,8 +281,7 @@ class PrintFormat(object):
         """
         if not ls:
             return title
-        # TODO: Use key to sort!
-        ls.sort(lambda x, y: cmp(len(x[1]), len(y[1])))
+        ls.sort(key=lambda x: len(x[1]))
         iterator = iter(ls)
         cur_len = 1
         new_sect = []

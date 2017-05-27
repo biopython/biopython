@@ -3,17 +3,17 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""Approximate calculation of appropriate thresholds for motif finding
-"""
+"""Approximate calculation of appropriate thresholds for motif finding."""
 
 
 class ScoreDistribution(object):
-    """ Class representing approximate score distribution for a given motif.
+    """Class representing approximate score distribution for a given motif.
 
     Utilizes a dynamic programming approach to calculate the distribution of
     scores with a predefined precision. Provides a number of methods for calculating
     thresholds for motif occurrences.
     """
+
     def __init__(self, motif=None, precision=10 ** 3, pssm=None, background=None):
         if pssm is None:
             self.min_score = min(0.0, motif.min_score())
@@ -66,9 +66,7 @@ class ScoreDistribution(object):
         self.bg_density = bg_new
 
     def threshold_fpr(self, fpr):
-        """
-        Approximate the log-odds threshold which makes the type I error (false positive rate).
-        """
+        """Approximate the log-odds threshold which makes the type I error (false positive rate)."""
         i = self.n_points
         prob = 0.0
         while prob < fpr:
@@ -77,9 +75,7 @@ class ScoreDistribution(object):
         return self.min_score + i * self.step
 
     def threshold_fnr(self, fnr):
-        """
-        Approximate the log-odds threshold which makes the type II error (false negative rate).
-        """
+        """Approximate the log-odds threshold which makes the type II error (false negative rate)."""
         i = -1
         prob = 0.0
         while prob < fnr:
@@ -88,9 +84,7 @@ class ScoreDistribution(object):
         return self.min_score + i * self.step
 
     def threshold_balanced(self, rate_proportion=1.0, return_rate=False):
-        """
-        Approximate the log-odds threshold which makes FNR equal to FPR times rate_proportion
-        """
+        """Approximate log-odds threshold making FNR equal to FPR times rate_proportion."""
         i = self.n_points
         fpr = 0.0
         fnr = 1.0

@@ -113,7 +113,7 @@ def _extract(handle):
 
 
 def extract_doctests(latex_filename):
-    """Scans LaTeX file and pulls out marked doctests as strings.
+    """Scan LaTeX file and pull out marked doctests as strings.
 
     This is a generator, yielding one tuple per doctest.
     """
@@ -159,6 +159,7 @@ def extract_doctests(latex_filename):
 
 class TutorialDocTestHolder(object):
     """Python doctests extracted from the Biopython Tutorial."""
+
     pass
 
 
@@ -210,6 +211,7 @@ for latex in files:
 # This is a TestCase class so it is found by run_tests.py
 class TutorialTestCase(unittest.TestCase):
     """Python doctests extracted from the Biopython Tutorial."""
+
     # Single method to be invoked by run_tests.py
     def test_doctests(self):
         """Run tutorial doctests."""

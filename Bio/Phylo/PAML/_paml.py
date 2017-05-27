@@ -9,41 +9,11 @@ import os
 import subprocess
 
 
-try:
-    from os.path import relpath as _relpath
-except ImportError:
-    # New in Python 2.6
-    def _relpath(path, start=None):
-        """Return a relative version of a path.
-
-        Implementation by James Gardner in his BareNecessities
-        package, under MIT licence.
-
-        With a fix for Windows where posixpath.sep (and functions like
-        join) use the Unix slash not the Windows slash.
-        """
-        import posixpath
-        if start is None:
-            start = posixpath.curdir
-        else:
-            start = start.replace(os.path.sep, posixpath.sep)
-        if not path:
-            raise ValueError("no path specified")
-        else:
-            path = path.replace(os.path.sep, posixpath.sep)
-        start_list = posixpath.abspath(start).split(posixpath.sep)
-        path_list = posixpath.abspath(path).split(posixpath.sep)
-        # Work out how much of the filepath is shared by start and path.
-        i = len(posixpath.commonprefix([start_list, path_list]))
-        rel_list = [posixpath.pardir] * (len(start_list) - i) + path_list[i:]
-        if not rel_list:
-            return posixpath.curdir.replace(posixpath.sep, os.path.sep)
-        return posixpath.join(*rel_list).replace(posixpath.sep, os.path.sep)
-
-
 class PamlError(EnvironmentError):
-    """paml has failed. Run with verbose = True to view the error
-    message"""
+    """paml has failed.
+
+    Run with verbose=True to view the error message.
+    """
 
 
 class Paml(object):
@@ -104,12 +74,12 @@ class Paml(object):
         absolute paths.
         """
         if self.working_dir is not None:
-            self._rel_working_dir = _relpath(self.working_dir)
+            self._rel_working_dir = os.path.relpath(self.working_dir)
         if self.alignment is not None:
-            self._rel_alignment = _relpath(self.alignment,
+            self._rel_alignment = os.path.relpath(self.alignment,
                 self.working_dir)
         if self.out_file is not None:
-            self._rel_out_file = _relpath(self.out_file, self.working_dir)
+            self._rel_out_file = os.path.relpath(self.out_file, self.working_dir)
 
     def run(self, ctl_file, verbose, command):
         """Run a paml program using the current configuration and then parse the results.

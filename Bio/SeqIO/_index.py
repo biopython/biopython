@@ -74,6 +74,7 @@ class SeqFileRandomAccess(_IndexedSeqFileProxy):
 # number of flows.
 class SffRandomAccess(SeqFileRandomAccess):
     """Random access to a Standard Flowgram Format (SFF) file."""
+
     def __init__(self, filename, format, alphabet):
         SeqFileRandomAccess.__init__(self, filename, format, alphabet)
         header_length, index_offset, index_length, number_of_reads, \
@@ -234,6 +235,7 @@ class SequentialSeqFileRandomAccess(SeqFileRandomAccess):
 
 class GenBankRandomAccess(SequentialSeqFileRandomAccess):
     """Indexed dictionary like access to a GenBank file."""
+
     def __iter__(self):
         handle = self._handle
         handle.seek(0)
@@ -275,6 +277,7 @@ class GenBankRandomAccess(SequentialSeqFileRandomAccess):
 
 class EmblRandomAccess(SequentialSeqFileRandomAccess):
     """Indexed dictionary like access to an EMBL file."""
+
     def __iter__(self):
         handle = self._handle
         handle.seek(0)
@@ -335,6 +338,7 @@ class EmblRandomAccess(SequentialSeqFileRandomAccess):
 
 class SwissRandomAccess(SequentialSeqFileRandomAccess):
     """Random access to a SwissProt file."""
+
     def __iter__(self):
         handle = self._handle
         handle.seek(0)
@@ -367,6 +371,7 @@ class SwissRandomAccess(SequentialSeqFileRandomAccess):
 
 class UniprotRandomAccess(SequentialSeqFileRandomAccess):
     """Random access to a UniProt XML file."""
+
     def __iter__(self):
         handle = self._handle
         handle.seek(0)
@@ -449,6 +454,7 @@ class UniprotRandomAccess(SequentialSeqFileRandomAccess):
 
 class IntelliGeneticsRandomAccess(SeqFileRandomAccess):
     """Random access to a IntelliGenetics file."""
+
     def __init__(self, filename, format, alphabet):
         SeqFileRandomAccess.__init__(self, filename, format, alphabet)
         self._marker_re = re.compile(b"^;")
@@ -501,6 +507,7 @@ class IntelliGeneticsRandomAccess(SeqFileRandomAccess):
 
 class TabRandomAccess(SeqFileRandomAccess):
     """Random access to a simple tabbed file."""
+
     def __iter__(self):
         handle = self._handle
         handle.seek(0)
@@ -538,6 +545,7 @@ class FastqRandomAccess(SeqFileRandomAccess):
     With FASTQ the records all start with a "@" line, but so can quality lines.
     Note this will cope with line-wrapped FASTQ files.
     """
+
     def __iter__(self):
         handle = self._handle
         handle.seek(0)

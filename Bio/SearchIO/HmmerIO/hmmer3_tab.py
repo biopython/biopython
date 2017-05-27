@@ -89,7 +89,7 @@ class Hmmer3TabParser(object):
         cur, prev = None, None
         # container for Hit objects, used to create QueryResult
         hit_list = []
-
+        cur_qid = None
         while True:
             # store previous line's parsed values for all lines after the first
             if cur is not None:

@@ -119,7 +119,7 @@ class NextOrf(object):
             try:
                 n = d['G'][i] + d['C'][i] + d['T'][i] + d['A'][i]
                 gc[i] = (d['G'][i] + d['C'][i]) * 100.0 / n
-            except:
+            except KeyError:
                 gc[i] = 0
 
             gcall = gcall + d['G'][i] + d['C'][i]

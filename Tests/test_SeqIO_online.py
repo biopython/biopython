@@ -36,6 +36,7 @@ Entrez.email = "biopython-dev@biopython.org"
 
 class ExPASyTests(unittest.TestCase):
     """Tests for Bio.ExPASy module."""
+
     def test_get_sprot_raw(self):
         """Bio.ExPASy.get_sprot_raw("O23729")"""
         identifier = "O23729"

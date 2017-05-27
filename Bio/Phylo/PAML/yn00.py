@@ -13,12 +13,11 @@ from . import _parse_yn00
 
 
 class Yn00Error(EnvironmentError):
-    """yn00 has failed. Run with verbose = True to view yn00's error
-    message"""
+    """yn00 failed. Run with verbose=True to view yn00's error message."""
 
 
 class Yn00(Paml):
-    """This class implements an interface to yn00, part of the PAML package."""
+    """An interface to yn00, part of the PAML package."""
 
     def __init__(self, alignment=None, working_dir=None, out_file=None):
         """Initialize the Yn00 instance.
@@ -55,8 +54,7 @@ class Yn00(Paml):
                 ctl_handle.write("%s = %s\n" % (option[0], option[1]))
 
     def read_ctl_file(self, ctl_file):
-        """Parse a control file and load the options into the yn00 instance.
-        """
+        """Parse a control file and load the options into the yn00 instance."""
         temp_options = {}
         if not os.path.isfile(ctl_file):
             raise IOError("File not found: %r" % ctl_file)
@@ -82,12 +80,12 @@ class Yn00(Paml):
                             if "." in value or "e-" in value:
                                 try:
                                     converted_value = float(value)
-                                except:
+                                except ValueError:
                                     converted_value = value
                             else:
                                 try:
                                     converted_value = int(value)
-                                except:
+                                except ValueError:
                                     converted_value = value
                             temp_options[option] = converted_value
         for option in self._options:

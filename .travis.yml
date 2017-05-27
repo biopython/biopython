@@ -9,26 +9,42 @@
 # Environment variables setup here:
 # - TOXENV = environment used in Tox (conventionally uses py35 etc)
 #
+# TravisCI build stages used here:
+# - basics - quick things like style and packaging
+# - test - the actual functional tests which are slow
 
 language: python
 matrix:
   include:
-    - env: TOXENV=style
-    - env: TOXENV=sdist
-    - env: TOXENV=bdist_wheel
-    - python: 2.7
+    - stage: basics
+      env: TOXENV=style
+      before_install: echo "Going to run basic checks"
+    - stage: basics
+      env: TOXENV=sdist
+      before_install: echo "Going to run basic checks"
+    - stage: basics
+      env: TOXENV=bdist_wheel
+      before_install: echo "Going to run basic checks"
+    - stage: test
+      python: 2.7
       env: TOXENV=py27-cover
-    - python: 3.3
+    - stage: test
+      python: 3.3
       env: TOXENV=py33-cover
-    - python: 3.4
+    - stage: test
+      python: 3.4
       env: TOXENV=py34-cover
-    - python: 3.5
+    - stage: test
+      python: 3.5
       env: TOXENV=py35-cover
-    - python: 3.6
+    - stage: test
+      python: 3.6
       env: TOXENV=py36-cover
-    - python: pypy
+    - stage: test
+      python: pypy
       env: TOXENV=pypy-nocov
-    - python: pypy3
+    - stage: test
+      python: pypy3
       env: TOXENV=pypy3-nocov
 
 sudo: false
@@ -51,16 +67,20 @@ addons:
 #
 # There is a phyml Ubuntu package, but currently too old.
 #
+# There is no GenePop Ubuntu pacakge, although it is in BioConda.
+#
 # There are TravisCI provided versions of PyPy and PyPy3, but currently too old.
 # We therefore deactivate that, and download and unzip portable PyPy binaries.
 #
 # We also need DSSP for testing but it is not available in the repositories.
 # Try to download the binary for Linux and place it in $HOME/bin
-# 
+#
+# This before_install list is only used for the test stage.
 before_install:
   - cd $HOME
   - mkdir bin
   - export PATH=$HOME/bin:$PATH
+  - echo "Installing PhyML"
   - curl -L -O http://www.atgc-montpellier.fr/download/binaries/phyml/PhyML-3.1.zip
   - unzip PhyML-3.1.zip
   - mv PhyML-3.1/PhyML-3.1_linux64 bin/phyml
@@ -68,14 +88,20 @@ before_install:
   - "if [[ $TRAVIS_PYTHON_VERSION == 'pypy' ]]; then deactivate && wget https://bitbucket.org/squeaky/portable-pypy/downloads/pypy-5.7.1-linux_x86_64-portable.tar.bz2 && tar -jxvf pypy-5.7.1-linux_x86_64-portable.tar.bz2 && echo 'Setting up aliases...' && cd pypy-5.7.1-linux_x86_64-portable/bin/ && export PATH=$PWD:$PATH && ln -s pypy python && echo 'Setting up pip...' && ./pypy -m ensurepip ; fi"
   - "if [[ $TRAVIS_PYTHON_VERSION == 'pypy3' ]]; then deactivate && wget https://bitbucket.org/squeaky/portable-pypy/downloads/pypy3.5-5.7.1-beta-linux_x86_64-portable.tar.bz2 && tar -jxvf pypy3.5-5.7.1-beta-linux_x86_64-portable.tar.bz2 && echo 'Setting up aliases...' && cd pypy3.5-5.7.1-beta-linux_x86_64-portable/bin/ && export PATH=$PWD:$PATH && ln -s pypy3 python && echo 'Setting up pip...' && ./pypy3 -m ensurepip && ln -s pip3 pip ; fi"
   - cd $HOME
-# TODO - renable this once their FTP site is working again...
-#  - curl -L -O ftp://ftp.cmbi.ru.nl/pub/software/dssp/dssp-2.0.4-linux-amd64
-#  - mv dssp-2.0.4-linux-amd64 bin/dssp
-#  - chmod a+x bin/dssp
+  - echo "Installing dssp"
+  - curl -L -O ftp://ftp.cmbi.ru.nl/pub/software/dssp/dssp-2.0.4-linux-amd64
+  - mv dssp-2.0.4-linux-amd64 bin/dssp
+  - chmod a+x bin/dssp
+  - echo "Installing Genepop"
+  - curl -L -O https://anaconda.org/bioconda/genepop/4.5.1/download/linux-64/genepop-4.5.1-0.tar.bz2
+  # This will create ./bin/Genepop and a harmless ./info/ folder.
+  - tar -jxvf genepop-4.5.1-0.tar.bz2
   - cd $TRAVIS_BUILD_DIR
-
-install:
   - "cp Tests/biosql.ini.sample Tests/biosql.ini"
+
+
+# This is minimal and used under all stages
+install:
   - "pip install --upgrade pip setuptools"
   - "pip install tox"
   - "tox -c .travis-tox.ini -e $TOXENV --notest"

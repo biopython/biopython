@@ -152,6 +152,7 @@ class ValidationError(ValueError):
     error. The Bio.Entrez.read and Bio.Entrez.parse functions use validating
     parsers by default (see those functions for more information).
     """
+
     def __init__(self, name):
         self.name = name
 
@@ -226,7 +227,6 @@ class DataHandler(object):
             # since the Entrez XML parser expects binary data (bytes)
             from io import StringIO
             if isinstance(handle, StringIO):
-                from io import BytesIO
                 from Bio._py3k import _as_bytes
                 handle = BytesIO(_as_bytes(handle.read()))
         try:
@@ -446,11 +446,16 @@ class DataHandler(object):
                 self.lists.append(name)
 
     def elementDecl(self, name, model):
-        """This callback function is called for each element declaration:
-        <!ELEMENT       name          (...)>
-        encountered in a DTD. The purpose of this function is to determine
-        whether this element should be regarded as a string, integer, list
-        dictionary, structure, or error."""
+        """Callback function is called for each element declaration in a DTD.
+
+        This is used for each element declaration in a DTD like::
+
+            <!ELEMENT       name          (...)>
+
+        The purpose of this function is to determine whether this element
+        should be regarded as a string, integer, list, dictionary, structure,
+        or error.
+        """
         if name.upper() == "ERROR":
             self.errors.append(name)
             return
@@ -583,7 +588,8 @@ class DataHandler(object):
         of downloading it from the URL specified in the XML. Using the local
         DTD results in much faster parsing. If the DTD is not found locally,
         we try to download it. If new DTDs become available from NCBI,
-        putting them in Bio/Entrez/DTDs will allow the parser to see them."""
+        putting them in Bio/Entrez/DTDs will allow the parser to see them.
+        """
         urlinfo = _urlparse(systemId)
         # Following attribute requires Python 2.5+
         # if urlinfo.scheme=='http':

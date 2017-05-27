@@ -53,6 +53,7 @@ class Record(object):
     structures  A list of 2-tuples: (database, list of struct ids)
     dblinks     A list of 2-tuples: (database, list of db ids)
     """
+
     def __init__(self):
         """__init___(self)
 
@@ -260,7 +261,7 @@ def parse(handle):
         elif keyword == "EFFECTOR    ":
             record.effector.append(data.strip(";"))
         elif keyword == "GENES       ":
-            if data[3:5] == ': ':
+            if data[3:5] == ': ' or data[4:6] == ': ':
                 key, values = data.split(":", 1)
                 values = [value.split("(")[0] for value in values.split()]
                 row = (key, values)

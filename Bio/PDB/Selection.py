@@ -41,8 +41,8 @@ def unfold_entities(entity_list, target_level):
     list of modules -> list of atoms
     list of residues -> list of chains
 
-    o entity_list - list of entities or a single entity
-    o target_level - char (A, R, C, M, S)
+    - entity_list - list of entities or a single entity
+    - target_level - char (A, R, C, M, S)
 
     Note that if entity_list is an empty list, you get an empty list back:
 

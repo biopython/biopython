@@ -93,9 +93,7 @@ class PSEA(object):
         self.ss_seq = ss_seq
 
     def get_seq(self):
-        """
-        Return secondary structure string.
-        """
+        """Return secondary structure string."""
         return self.ss_seq
 
 

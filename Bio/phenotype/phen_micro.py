@@ -2,7 +2,7 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""This module provides classes to work with Phenotype Microarray data.
+"""Classes to work with Phenotype Microarray data.
 
 More information on the single plates can be found here: http://www.biolog.com/
 

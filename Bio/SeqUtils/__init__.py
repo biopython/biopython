@@ -445,8 +445,6 @@ def molecular_weight(seq, seq_type=None, double_stranded=False, circular=False,
     except KeyError as e:
         raise ValueError('%s is not a valid unambiguous letter for %s'
                          % (e, seq_type))
-    except:
-        raise
 
     if seq_type in ('DNA', 'RNA') and double_stranded:
         seq = str(Seq(seq).complement())

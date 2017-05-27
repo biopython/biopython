@@ -87,6 +87,7 @@ class SeqFeature(object):
           analogous to the qualifiers from a GenBank feature table. The keys of
           the dictionary are qualifier names, the values are the qualifier
           values. As of Biopython 1.69 this is an ordered dictionary.
+
     """
 
     def __init__(self, location=None, type='', location_operator='',
@@ -266,7 +267,8 @@ class SeqFeature(object):
     def _shift(self, offset):
         """Returns a copy of the feature with its location shifted (PRIVATE).
 
-        The annotation qaulifiers are copied."""
+        The annotation qaulifiers are copied.
+        """
         return SeqFeature(location=self.location._shift(offset),
                           type=self.type,
                           location_operator=self.location_operator,
@@ -462,16 +464,17 @@ class Reference(object):
     """Represent a Generic Reference object.
 
     Attributes:
-    o location - A list of Location objects specifying regions of
+    - location - A list of Location objects specifying regions of
     the sequence that the references correspond to. If no locations are
     specified, the entire sequence is assumed.
-    o authors - A big old string, or a list split by author, of authors
+    - authors - A big old string, or a list split by author, of authors
     for the reference.
-    o title - The title of the reference.
-    o journal - Journal the reference was published in.
-    o medline_id - A medline reference for the article.
-    o pubmed_id - A pubmed reference for the article.
-    o comment - A place to stick any comments about the reference.
+    - title - The title of the reference.
+    - journal - Journal the reference was published in.
+    - medline_id - A medline reference for the article.
+    - pubmed_id - A pubmed reference for the article.
+    - comment - A place to stick any comments about the reference.
+
     """
 
     def __init__(self):
@@ -1324,8 +1327,8 @@ class AbstractPosition(object):
 class ExactPosition(int, AbstractPosition):
     """Specify the specific position of a boundary.
 
-    o position - The position of the boundary.
-    o extension - An optional argument which must be zero since we don't
+    - position - The position of the boundary.
+    - extension - An optional argument which must be zero since we don't
     have an extension. The argument is provided so that the same number of
     arguments can be passed to all position types.
 
@@ -1354,6 +1357,7 @@ class ExactPosition(int, AbstractPosition):
     15
 
     """
+
     def __new__(cls, position, extension=0):
         if extension != 0:
             raise AttributeError("Non-zero extension %s for exact position."
@@ -1389,6 +1393,7 @@ class UncertainPosition(ExactPosition):
     This is used in UniProt, e.g. ?222 for uncertain position 222, or in the
     XML format explicitly marked as uncertain. Does not apply to GenBank/EMBL.
     """
+
     pass
 
 
@@ -1426,9 +1431,9 @@ class WithinPosition(int, AbstractPosition):
     """Specify the position of a boundary within some coordinates.
 
     Arguments:
-    o position - The default integer position
-    o left - The start (left) position of the boundary
-    o right - The end (right) position of the boundary
+    - position - The default integer position
+    - left - The start (left) position of the boundary
+    - right - The end (right) position of the boundary
 
     This allows dealing with a position like ((1.4)..100). This
     indicates that the start of the sequence is somewhere between 1
@@ -1506,6 +1511,7 @@ class WithinPosition(int, AbstractPosition):
     True
 
     """
+
     def __new__(cls, position, left, right):
         assert position == left or position == right, \
             "WithinPosition: %r should match left %r or right %r" \
@@ -1549,9 +1555,9 @@ class BetweenPosition(int, AbstractPosition):
     """Specify the position of a boundary between two coordinates (OBSOLETE?).
 
     Arguments:
-    o position - The default integer position
-    o left - The start (left) position of the boundary
-    o right - The end (right) position of the boundary
+    - position - The default integer position
+    - left - The start (left) position of the boundary
+    - right - The end (right) position of the boundary
 
     This allows dealing with a position like 123^456. This
     indicates that the start of the sequence is somewhere between
@@ -1610,6 +1616,7 @@ class BetweenPosition(int, AbstractPosition):
     i.e. For equality (and sorting) the position objects behave like
     integers.
     """
+
     def __new__(cls, position, left, right):
         assert position == left or position == right
         obj = int.__new__(cls, position)
@@ -1651,8 +1658,8 @@ class BeforePosition(int, AbstractPosition):
     """Specify a position where the actual location occurs before it.
 
     Arguments:
-    o position - The upper boundary of where the location can occur.
-    o extension - An optional argument which must be zero since we don't
+    - position - The upper boundary of where the location can occur.
+    - extension - An optional argument which must be zero since we don't
     have an extension. The argument is provided so that the same number of
     arguments can be passed to all position types.
 
@@ -1679,6 +1686,7 @@ class BeforePosition(int, AbstractPosition):
     Just remember that for equality and sorting the position objects act
     like integers.
     """
+
     # Subclasses int so can't use __init__
     def __new__(cls, position, extension=0):
         if extension != 0:
@@ -1714,8 +1722,8 @@ class AfterPosition(int, AbstractPosition):
     """Specify a position where the actual location is found after it.
 
     Arguments:
-    o position - The lower boundary of where the location can occur.
-    o extension - An optional argument which must be zero since we don't
+    - position - The lower boundary of where the location can occur.
+    - extension - An optional argument which must be zero since we don't
     have an extension. The argument is provided so that the same number of
     arguments can be passed to all position types.
 
@@ -1749,6 +1757,7 @@ class AfterPosition(int, AbstractPosition):
     Just remember that for equality and sorting the position objects act
     like integers.
     """
+
     # Subclasses int so can't use __init__
     def __new__(cls, position, extension=0):
         if extension != 0:
@@ -1830,6 +1839,7 @@ class OneOfPosition(int, AbstractPosition):
     True
 
     """
+
     def __new__(cls, position, choices):
         """Initialize with a set of posssible positions.
 
