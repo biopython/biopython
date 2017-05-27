@@ -95,7 +95,7 @@ class Parser(object):
 
     @classmethod
     def from_string(cls, treetext):
-        """Convert File handle to StringIO obejct."""
+        """Instantiate the Newick Tree class from the given string."""
         handle = StringIO(treetext)
         return cls(handle)
 

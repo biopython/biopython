@@ -26,7 +26,7 @@ class Clade(BaseTree.Clade):
 
     def __init__(self, branch_length=None, name=None, clades=None,
                  confidence=None, comment=None):
-        """Initialize parametrs for a Newick Clade object."""
+        """Initialize parameters for a Newick Clade object."""
         BaseTree.Clade.__init__(self, branch_length=branch_length,
                                 name=name, clades=clades, confidence=confidence)
         self.comment = comment

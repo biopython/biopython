@@ -99,7 +99,7 @@ class Parser(object):
 
     @classmethod
     def from_string(cls, treetext):
-        """Convert the text to StringIO format."""
+        """Instantiate the class from the given string."""
         handle = StringIO(treetext)
         return cls(handle)
 
