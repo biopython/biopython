@@ -757,7 +757,7 @@ def _pick_one(probability_table):
 
 def _add_messenger_parts(seq, size, alphabet, codon_set):
     """Generate and add the 5' UTR, 3' UTR, and PolyA-Tail to an RNA sequence. (PRIVATE)"""
-    utr_size = int(size/3)
+    utr_size = int(size / 3)
     utr5 = ""
     for i in range(utr_size):
         roll = randint(0, len(alphabet.letters) - 1)
@@ -785,6 +785,7 @@ def _add_messenger_parts(seq, size, alphabet, codon_set):
 
 class _SeqType(object):
     """Evaluate alphabet to determine Seq type and return boolean values. (PRIVATE)"""
+    
     def __init__(self, alphabet):
         self.dna = isinstance(alphabet, Alphabet.DNAAlphabet)
         self.rna = isinstance(alphabet, Alphabet.RNAAlphabet)
@@ -801,6 +802,7 @@ class _SeqType(object):
 
 class _CodonSet(object):
     """Populate lists of codons from appropriate codon table. Return lists. (PRIVATE)"""
+    
     def __init__(self, alphabet=IUPAC.unambiguous_dna, table=1, stop_symbol="*"):
         self.alphabet = alphabet
         self.table = table
@@ -813,7 +815,7 @@ class _CodonSet(object):
         self.nonstart = self._get_non_codons(self.start)
         if self.typeof.protein:
             self._translate_codon_sets()
-        del self.alphabet, self.table,  self.stop_symbol, self.typeof
+        del self.alphabet, self.table, self.stop_symbol, self.typeof
 
     def _get_codon_table(self):
         """Retrieve codon data from Bio.Data.CodonTable. (PRIVATE)"""
@@ -868,13 +870,14 @@ class _CodonSet(object):
 
 class _Letter(object):
     """Pair a letter with its probability of being chosen. (PRIVATE)"""
+    
     def __init__(self, letter=None, value=None):
         self.letter = letter
         self.probability_value = value
 
     def __repr__(self):
         return "<" + str(self.letter) + " : " + str(self.probability_value) + ">"
-    
+
 # }}}
 
 
