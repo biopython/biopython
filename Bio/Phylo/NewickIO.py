@@ -244,7 +244,7 @@ class Writer(object):
     """Based on the writer in Bio.Nexus.Trees (str, to_string)."""
 
     def __init__(self, trees):
-        """Initialize parameter for Tree Writer object.""" 
+        """Initialize parameter for Tree Writer object."""
         self.trees = trees
 
     def write(self, handle, **kwargs):
