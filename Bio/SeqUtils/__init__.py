@@ -785,7 +785,7 @@ def _add_messenger_parts(seq, size, alphabet, codon_set):
 
 class _SeqType(object):
     """Evaluate alphabet to determine Seq type and return boolean values. (PRIVATE)"""
-    
+
     def __init__(self, alphabet):
         self.dna = isinstance(alphabet, Alphabet.DNAAlphabet)
         self.rna = isinstance(alphabet, Alphabet.RNAAlphabet)
@@ -802,7 +802,7 @@ class _SeqType(object):
 
 class _CodonSet(object):
     """Populate lists of codons from appropriate codon table. Return lists. (PRIVATE)"""
-    
+
     def __init__(self, alphabet=IUPAC.unambiguous_dna, table=1, stop_symbol="*"):
         self.alphabet = alphabet
         self.table = table
@@ -870,7 +870,7 @@ class _CodonSet(object):
 
 class _Letter(object):
     """Pair a letter with its probability of being chosen. (PRIVATE)"""
-    
+
     def __init__(self, letter=None, value=None):
         self.letter = letter
         self.probability_value = value
