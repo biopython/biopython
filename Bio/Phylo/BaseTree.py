@@ -24,6 +24,7 @@ from Bio import _utils
 import sys
 if sys.version_info[0] < 3:
     def as_string(s):
+        """Encode string to UTF-8."""
         if isinstance(s, unicode):
             return s.encode('utf-8')
         return str(s)
@@ -723,6 +724,7 @@ class Tree(TreeElement, TreeMixin):
     """
 
     def __init__(self, root=None, rooted=True, id=None, name=None):
+        """Initialize parameter for phylogenetic tree."""
         self.root = root or Clade()
         self.rooted = rooted
         self.id = id
@@ -1012,6 +1014,7 @@ class Clade(TreeElement, TreeMixin):
 
     def __init__(self, branch_length=None, name=None, clades=None,
                  confidence=None, color=None, width=None):
+        """Define parameters for the Clade tree."""
         self.branch_length = branch_length
         self.name = name
         self.clades = clades or []
@@ -1060,6 +1063,7 @@ class Clade(TreeElement, TreeMixin):
     __nonzero__ = __bool__
 
     def __str__(self):
+        """Return name of the class instance."""
         if self.name:
             return _utils.trim_str(self.name, 40, '...')
         return self.__class__.__name__
@@ -1139,6 +1143,7 @@ class BranchColor(object):
         }
 
     def __init__(self, red, green, blue):
+        """Initialize BranchColor for a tree."""
         for color in (red, green, blue):
             assert (isinstance(color, int) and
                     0 <= color <= 255
