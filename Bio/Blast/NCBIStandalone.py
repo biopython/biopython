@@ -53,6 +53,7 @@ class LowQualityBlastError(Exception):
     search. This error should be raised for the BLAST reports produced
     in this case.
     """
+
     pass
 
 
@@ -68,6 +69,7 @@ class ShortQueryBlastError(Exception):
 
     This exception is raised when that condition is detected.
     """
+
     pass
 
 
@@ -78,7 +80,9 @@ class _Scanner(object):
 
     Methods:
      - feed     Feed data into the scanner.
+
     """
+
     def feed(self, handle, consumer):
         """S.feed(handle, consumer)
 
@@ -800,6 +804,7 @@ class _Scanner(object):
 
 class BlastParser(AbstractParser):
     """Parses BLAST data into a Record.Blast object."""
+
     def __init__(self):
         """__init__(self)"""
         self._scanner = _Scanner()
@@ -813,6 +818,7 @@ class BlastParser(AbstractParser):
 
 class PSIBlastParser(AbstractParser):
     """Parses BLAST data into a Record.PSIBlast object."""
+
     def __init__(self):
         """__init__(self)"""
         self._scanner = _Scanner()
@@ -1602,7 +1608,9 @@ class Iterator(object):
 
     Methods:
     next   Return the next record from the stream, or None.
+
     """
+
     def __init__(self, handle, parser=None):
         """__init__(self, handle, parser=None)
 
@@ -1766,7 +1774,7 @@ class BlastErrorParser(AbstractParser):
     that may actually indicate problems during BLAST parsing.
 
     Current BLAST problems this detects are:
-    o LowQualityBlastError - When BLASTing really low quality sequences
+    - LowQualityBlastError - When BLASTing really low quality sequences
     (ie. some GenBank entries which are just short stretches of a single
     nucleotide), BLAST will report an error with the sequence and be
     unable to search with this. This will lead to a badly formatted
@@ -1774,11 +1782,12 @@ class BlastErrorParser(AbstractParser):
     ValueError to a LowQualityBlastError and attempt to provide useful
     information.
     """
+
     def __init__(self, bad_report_handle=None):
         """Initialize a parser that tries to catch BlastErrors.
 
         Arguments:
-        o bad_report_handle - An optional argument specifying a handle
+        - bad_report_handle - An optional argument specifying a handle
         where bad reports should be sent. This would allow you to save
         all of the bad reports to a file, for instance. If no handle
         is specified, the bad reports will not be saved.
@@ -1814,8 +1823,8 @@ class BlastErrorParser(AbstractParser):
         """Attempt to diagnose an error in the passed handle.
 
         Arguments:
-        o handle - The handle potentially containing the error
-        o data_record - The data record partially created by the consumer.
+        - handle - The handle potentially containing the error
+        - data_record - The data record partially created by the consumer.
         """
         line = handle.readline()
 

@@ -5,19 +5,17 @@
 
 from __future__ import print_function
 
-import os
 import os.path
-from ._paml import Paml, _relpath
+from ._paml import Paml
 from . import _parse_codeml
 
 
 class CodemlError(EnvironmentError):
-    """CODEML has failed. Run with verbose = True to view CODEML's error
-    message"""
+    """CODEML failed. Run with verbose=True to view CODEML's error message."""
 
 
 class Codeml(Paml):
-    """This class implements an interface to CODEML, part of the PAML package."""
+    """An interface to CODEML, part of the PAML package."""
 
     def __init__(self, alignment=None, tree=None, working_dir=None,
                  out_file=None):
@@ -94,8 +92,7 @@ class Codeml(Paml):
                         ctl_handle.write("%s = %s\n" % (option[0], option[1]))
 
     def read_ctl_file(self, ctl_file):
-        """Parse a control file and load the options into the Codeml instance.
-        """
+        """Parse a control file and load the options into the Codeml instance."""
         temp_options = {}
         if not os.path.isfile(ctl_file):
             raise IOError("File not found: %r" % ctl_file)
@@ -122,7 +119,7 @@ class Codeml(Paml):
                             for n in range(len(site_classes)):
                                 try:
                                     site_classes[n] = int(site_classes[n])
-                                except:
+                                except ValueError:
                                     raise TypeError(
                                         "Invalid site class: %s" % site_classes[n])
                             temp_options["NSsites"] = site_classes
@@ -132,12 +129,12 @@ class Codeml(Paml):
                             if "." in value:
                                 try:
                                     converted_value = float(value)
-                                except:
+                                except ValueError:
                                     converted_value = value
                             else:
                                 try:
                                     converted_value = int(value)
-                                except:
+                                except ValueError:
                                     converted_value = value
                             temp_options[option] = converted_value
         for option in self._options:
@@ -168,7 +165,7 @@ class Codeml(Paml):
         """
         Paml._set_rel_paths(self)
         if self.tree is not None:
-            self._rel_tree = _relpath(self.tree, self.working_dir)
+            self._rel_tree = os.path.relpath(self.tree, self.working_dir)
 
     def run(self, ctl_file=None, verbose=False, command="codeml", parse=True):
         """Run codeml using the current configuration and then parse the results.

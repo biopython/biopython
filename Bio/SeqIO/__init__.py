@@ -851,7 +851,8 @@ def index(filename, format, alphabet=None, key_function=None):
     to be completely parsed while building the index. Right now this is
     usually avoided.
 
-    See also: Bio.SeqIO.index_db() and Bio.SeqIO.to_dict()
+    See Also: Bio.SeqIO.index_db() and Bio.SeqIO.to_dict()
+
     """
     # Try and give helpful error messages:
     if not isinstance(filename, basestring):
@@ -925,8 +926,9 @@ def index_db(index_filename, filenames=None, format=None, alphabet=None,
     BGZF compressed files are supported, and detected automatically. Ordinary
     GZIP compressed files are not supported.
 
-    See also: Bio.SeqIO.index() and Bio.SeqIO.to_dict(), and the Python module
+    See Also: Bio.SeqIO.index() and Bio.SeqIO.to_dict(), and the Python module
     glob which is useful for building lists of files.
+
     """
     # Try and give helpful error messages:
     if not isinstance(index_filename, basestring):

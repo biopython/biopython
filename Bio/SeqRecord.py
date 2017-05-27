@@ -218,7 +218,7 @@ class SeqRecord(object):
                 try:
                     self._per_letter_annotations = \
                         _RestrictedDict(length=len(seq))
-                except:
+                except TypeError:
                     raise TypeError("seq argument should be a Seq object or similar")
         else:
             # This will be handled via the property set function, which will

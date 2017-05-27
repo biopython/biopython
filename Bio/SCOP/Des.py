@@ -4,7 +4,7 @@
 # as part of this package.
 
 
-""" Handle the SCOP DEScription file.
+"""Handle the SCOP DEScription file.
 
 The file format is described in the scop
 "release notes.":http://scop.berkeley.edu/release-notes-1.55.html
@@ -28,6 +28,7 @@ class Record(object):
      - description - e.g. "All beta proteins","Fibronectin type III",
 
     """
+
     def __init__(self, line=None):
         self.sunid = ''
         self.nodetype = ''

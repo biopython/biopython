@@ -88,9 +88,9 @@ def generate_rolls(num_rolls):
 
     Returns:
 
-    o The generate roll sequence
+    - The generate roll sequence
+    - The state sequence that generated the roll.
 
-    o The state sequence that generated the roll.
     """
     # start off in the fair state
     cur_state = 'F'

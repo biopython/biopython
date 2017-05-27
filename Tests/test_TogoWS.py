@@ -3,8 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Testing Bio.TogoWS online code.
-"""
+"""Testing Bio.TogoWS online code."""
 
 from __future__ import print_function
 

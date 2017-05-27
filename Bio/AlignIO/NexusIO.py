@@ -70,6 +70,7 @@ class NexusWriter(AlignmentWriter):
     You are expected to call this class via the Bio.AlignIO.write() or
     Bio.SeqIO.write() functions.
     """
+
     def write_file(self, alignments):
         """Use this to write an entire file containing the given alignments.
 
@@ -123,7 +124,8 @@ class NexusWriter(AlignmentWriter):
     def _classify_alphabet_for_nexus(self, alphabet):
         """Returns 'protein', 'dna', 'rna' based on the alphabet (PRIVATE).
 
-        Raises an exception if this is not possible."""
+        Raises an exception if this is not possible.
+        """
         # Get the base alphabet (underneath any Gapped or StopCodon encoding)
         a = Alphabet._get_base_alphabet(alphabet)
 

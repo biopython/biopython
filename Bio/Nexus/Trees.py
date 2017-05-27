@@ -31,6 +31,7 @@ class TreeError(Exception):
 
 class NodeData(object):
     """Stores tree-relevant data associated with nodes (e.g. branches or otus)."""
+
     def __init__(self, taxon=None, branchlength=0.0, support=None, comment=None):
         self.taxon = taxon
         self.branchlength = branchlength
@@ -42,6 +43,7 @@ class Tree(Nodes.Chain):
     """Represents a tree using a chain of nodes with on predecessor (=ancestor)
     and multiple successors (=subclades).
     """
+
     # A newick tree is parsed into nested list and then converted to a node list in two stages
     # mostly due to historical reasons. This could be done in one swoop). Note: parentheses ( ) and
     # colon : are not allowed in taxon names. This is against NEXUS standard, but makes life much
@@ -362,7 +364,7 @@ class Tree(Nodes.Chain):
         else:
             try:
                 return frozenset(self.set_subtree(n) for n in self.node(node).succ)
-            except:
+            except Exception:
                 print(node)
                 print(self.node(node).succ)
                 for n in self.node(node).succ:
@@ -761,7 +763,7 @@ class Tree(Nodes.Chain):
                 succnodes = self.node(self.root).succ
                 smallest = min((len(self.get_taxa(n)), n) for n in succnodes)
                 outgroup = self.get_taxa(smallest[1])
-            except:
+            except Exception:
                 raise TreeError("Error determining outgroup.")
         else:  # root with user specified outgroup
             self.root_with_outgroup(outgroup)

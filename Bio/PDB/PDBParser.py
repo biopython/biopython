@@ -288,28 +288,3 @@ class PDBParser(object):
         else:
             # exceptions are fatal - raise again with new message (including line nr)
             raise PDBConstructionException(message)
-
-
-if __name__ == "__main__":
-
-    import sys
-
-    p = PDBParser(PERMISSIVE=True)
-
-    filename = sys.argv[1]
-    s = p.get_structure("scr", filename)
-
-    for m in s:
-        p = m.get_parent()
-        assert(p is s)
-        for c in m:
-            p = c.get_parent()
-            assert(p is m)
-            for r in c:
-                print(r)
-                p = r.get_parent()
-                assert(p is c)
-                for a in r:
-                    p = a.get_parent()
-                    if p is not r:
-                        print("%s %s" % (p, r))

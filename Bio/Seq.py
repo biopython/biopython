@@ -5,7 +5,7 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""Provides objects to represent biological sequences with alphabets.
+"""Provide objects to represent biological sequences with alphabets.
 
 See also the Seq_ wiki and the chapter in our tutorial:
     - `HTML Tutorial`_
@@ -14,6 +14,7 @@ See also the Seq_ wiki and the chapter in our tutorial:
 .. _Seq: http://biopython.org/wiki/Seq
 .. _`HTML Tutorial`: http://biopython.org/DIST/docs/tutorial/Tutorial.html
 .. _`PDF Tutorial`: http://biopython.org/DIST/docs/tutorial/Tutorial.pdf
+
 """
 from __future__ import print_function
 
@@ -34,7 +35,7 @@ from Bio.Data import CodonTable
 
 
 def _maketrans(complement_mapping):
-    """Makes a python string translation table (PRIVATE).
+    """Make a python string translation table (PRIVATE).
 
     Arguments:
         - complement_mapping - a dictionary such as ambiguous_dna_complement
@@ -62,7 +63,7 @@ _rna_complement_table = _maketrans(ambiguous_rna_complement)
 
 
 class Seq(object):
-    """A read-only sequence object (essentially a string with an alphabet).
+    """Read-only sequence object (essentially a string with an alphabet).
 
     Like normal python strings, our basic sequence object is immutable.
     This prevents you from doing my_seq[5] = "A" for example, but does allow
@@ -81,6 +82,7 @@ class Seq(object):
     reverse_complement, transcribe, back_transcribe and translate (which are
     not applicable to sequences with a protein alphabet).
     """
+
     def __init__(self, data, alphabet=Alphabet.generic_alphabet):
         """Create a Seq object.
 
@@ -129,7 +131,7 @@ class Seq(object):
                                               self.alphabet)
 
     def __str__(self):
-        """Returns the full sequence as a python string, use str(my_seq).
+        """Return the full sequence as a python string, use str(my_seq).
 
         Note that Biopython 1.44 and earlier would give a truncated
         version of repr(my_seq) for str(my_seq).  If you are writing code
@@ -197,12 +199,12 @@ class Seq(object):
         return str(self) == str(other)
 
     def __ne__(self, other):
-        """Not equal, see __eq__ documentation."""
+        """Implement the not-equal operand."""
         # Seem to require this method for Python 2 but not needed on Python 3?
         return not (self == other)
 
     def __lt__(self, other):
-        """Less than, see __eq__ documentation."""
+        """Implement the less-than operand."""
         if hasattr(other, "alphabet"):
             if not Alphabet._check_type_compatible([self.alphabet,
                                                     other.alphabet]):
@@ -212,7 +214,7 @@ class Seq(object):
         return str(self) < str(other)
 
     def __le__(self, other):
-        """Less than or equal, see __eq__ documentation."""
+        """Implement the less-than or equal operand."""
         if hasattr(other, "alphabet"):
             if not Alphabet._check_type_compatible([self.alphabet,
                                                     other.alphabet]):
@@ -222,11 +224,11 @@ class Seq(object):
         return str(self) <= str(other)
 
     def __len__(self):
-        """Returns the length of the sequence, use len(my_seq)."""
+        """Return the length of the sequence, use len(my_seq)."""
         return len(self._data)  # Seq API requirement
 
     def __getitem__(self, index):  # Seq API requirement
-        """Returns a subsequence of single letter, use my_seq[index]."""
+        """Return a subsequence of single letter, use my_seq[index]."""
         # Note since Python 2.0, __getslice__ is deprecated
         # and __getitem__ is used instead.
         # See http://docs.python.org/ref/sequence-methods.html
@@ -308,7 +310,7 @@ class Seq(object):
             raise TypeError
 
     def __radd__(self, other):
-        """Adding a sequence on the left.
+        """Add a sequence on the left.
 
         If adding a string to a Seq, the alphabet is preserved:
 
@@ -336,10 +338,11 @@ class Seq(object):
             raise TypeError
 
     def tostring(self):  # Seq API requirement
-        """Returns the full sequence as a python string (DEPRECATED).
+        """Return the full sequence as a python string (DEPRECATED).
 
         You are now encouraged to use str(my_seq) instead of
-        my_seq.tostring()."""
+        my_seq.tostring().
+        """
         from Bio import BiopythonDeprecationWarning
         warnings.warn("This method is obsolete; please use str(my_seq) "
                       "instead of my_seq.tostring().",
@@ -347,7 +350,7 @@ class Seq(object):
         return str(self)
 
     def tomutable(self):  # Needed?  Or use a function?
-        """Returns the full sequence as a MutableSeq object.
+        """Return the full sequence as a MutableSeq object.
 
         >>> from Bio.Seq import Seq
         >>> from Bio.Alphabet import IUPAC
@@ -363,7 +366,7 @@ class Seq(object):
         return MutableSeq(str(self), self.alphabet)
 
     def _get_seq_str_and_check_alphabet(self, other_sequence):
-        """string/Seq/MutableSeq to string, checking alphabet (PRIVATE).
+        """Convert string/Seq/MutableSeq to string, checking alphabet (PRIVATE).
 
         For a string argument, returns the string.
 
@@ -384,7 +387,7 @@ class Seq(object):
         return str(other_sequence)
 
     def count(self, sub, start=0, end=sys.maxsize):
-        """Non-overlapping count method, like that of a python string.
+        """Return a non-overlapping count, like that of a python string.
 
         This behaves like the python string method of the same name,
         which does a non-overlapping count!
@@ -428,7 +431,7 @@ class Seq(object):
         return str(self).count(sub_str, start, end)
 
     def __contains__(self, char):
-        """Implements the 'in' keyword, like a python string.
+        """Implement the 'in' keyword, like a python string.
 
         e.g.
 
@@ -511,7 +514,7 @@ class Seq(object):
         return str(self).rfind(sub_str, start, end)
 
     def startswith(self, prefix, start=0, end=sys.maxsize):
-        """Does the Seq start with the given prefix?  Returns True/False.
+        """Return True if the Seq starts with the given prefix, False otherwise.
 
         This behaves like the python string method of the same name.
 
@@ -542,7 +545,7 @@ class Seq(object):
             return str(self).startswith(prefix_str, start, end)
 
     def endswith(self, suffix, start=0, end=sys.maxsize):
-        """Does the Seq end with the given suffix?  Returns True/False.
+        """Return True if the Seq ends with the given suffix, False otherwise.
 
         This behaves like the python string method of the same name.
 
@@ -618,7 +621,7 @@ class Seq(object):
                 for part in str(self).split(sep_str, maxsplit)]
 
     def rsplit(self, sep=None, maxsplit=-1):
-        """Right split method, like that of a python string.
+        """Do a right split method, like that of a python string.
 
         This behaves like the python string method of the same name.
 
@@ -641,7 +644,7 @@ class Seq(object):
                 for part in str(self).rsplit(sep_str, maxsplit)]
 
     def strip(self, chars=None):
-        """Returns a new Seq object with leading and trailing ends stripped.
+        """Return a new Seq object with leading and trailing ends stripped.
 
         This behaves like the python string method of the same name.
 
@@ -658,7 +661,7 @@ class Seq(object):
         return Seq(str(self).strip(strip_str), self.alphabet)
 
     def lstrip(self, chars=None):
-        """Returns a new Seq object with leading (left) end stripped.
+        """Return a new Seq object with leading (left) end stripped.
 
         This behaves like the python string method of the same name.
 
@@ -675,7 +678,7 @@ class Seq(object):
         return Seq(str(self).lstrip(strip_str), self.alphabet)
 
     def rstrip(self, chars=None):
-        """Returns a new Seq object with trailing (right) end stripped.
+        """Return a new Seq object with trailing (right) end stripped.
 
         This behaves like the python string method of the same name.
 
@@ -700,7 +703,7 @@ class Seq(object):
         return Seq(str(self).rstrip(strip_str), self.alphabet)
 
     def upper(self):
-        """Returns an upper case copy of the sequence.
+        """Return an upper case copy of the sequence.
 
         >>> from Bio.Alphabet import HasStopCodon, generic_protein
         >>> from Bio.Seq import Seq
@@ -717,7 +720,7 @@ class Seq(object):
         return Seq(str(self).upper(), self.alphabet._upper())
 
     def lower(self):
-        """Returns a lower case copy of the sequence.
+        """Return a lower case copy of the sequence.
 
         This will adjust the alphabet if required. Note that the IUPAC
         alphabets are upper case only, and thus a generic alphabet must be
@@ -738,7 +741,7 @@ class Seq(object):
         return Seq(str(self).lower(), self.alphabet._lower())
 
     def complement(self):
-        """Returns the complement sequence. New Seq object.
+        """Return the complement sequence by creating a new Seq object.
 
         >>> from Bio.Seq import Seq
         >>> from Bio.Alphabet import IUPAC
@@ -789,7 +792,7 @@ class Seq(object):
         return Seq(str(self).translate(ttable), self.alphabet)
 
     def reverse_complement(self):
-        """Returns the reverse complement sequence. New Seq object.
+        """Return the reverse complement sequence by creating a new Seq object.
 
         >>> from Bio.Seq import Seq
         >>> from Bio.Alphabet import IUPAC
@@ -824,7 +827,7 @@ class Seq(object):
         return self.complement()[::-1]
 
     def transcribe(self):
-        """Returns the RNA sequence from a DNA sequence. New Seq object.
+        """Return the RNA sequence from a DNA sequence by creating a new Seq object.
 
         >>> from Bio.Seq import Seq
         >>> from Bio.Alphabet import IUPAC
@@ -858,7 +861,7 @@ class Seq(object):
         return Seq(str(self).replace('T', 'U').replace('t', 'u'), alphabet)
 
     def back_transcribe(self):
-        """Returns the DNA sequence from an RNA sequence. New Seq object.
+        """Return the DNA sequence from an RNA sequence by creating a new Seq object.
 
         >>> from Bio.Seq import Seq
         >>> from Bio.Alphabet import IUPAC
@@ -894,7 +897,7 @@ class Seq(object):
 
     def translate(self, table="Standard", stop_symbol="*", to_stop=False,
                   cds=False, gap=None):
-        """Turns a nucleotide sequence into a protein sequence. New Seq object.
+        """Turn a nucleotide sequence into a protein sequence by creating a new Seq object.
 
         This method will translate DNA or RNA sequences, and those with a
         nucleotide or generic alphabet.  Trying to translate a protein
@@ -1137,7 +1140,7 @@ class Seq(object):
 
 
 class UnknownSeq(Seq):
-    """A read-only sequence object of known length but unknown contents.
+    """Read-only sequence object of known length but unknown contents.
 
     If you have an unknown sequence, you can represent this with a normal
     Seq object, for example:
@@ -1187,6 +1190,7 @@ class UnknownSeq(Seq):
     >>> known_seq + unk_four
     Seq('ACGT????', Alphabet())
     """
+
     def __init__(self, length, alphabet=Alphabet.generic_alphabet,
                  character=None):
         """Create a new UnknownSeq object.
@@ -1216,14 +1220,15 @@ class UnknownSeq(Seq):
                 self._character = "?"
 
     def __len__(self):
-        """Returns the stated length of the unknown sequence."""
+        """Return the stated length of the unknown sequence."""
         return self._length
 
     def __str__(self):
-        """Returns the unknown sequence as full string of the given length."""
+        """Return the unknown sequence as full string of the given length."""
         return self._character * self._length
 
     def __repr__(self):
+        """Return (truncated) representation of the sequence for debugging."""
         return "UnknownSeq({0}, alphabet = {1!r}, character = {2!r})".format(
             self._length, self.alphabet, self._character)
 
@@ -1264,6 +1269,7 @@ class UnknownSeq(Seq):
         return Seq(str(self), self.alphabet) + other
 
     def __radd__(self, other):
+        """Add a sequence on the left."""
         # If other is an UnknownSeq, then __add__ would be called.
         # Offload to the base class...
         return other + Seq(str(self), self.alphabet)
@@ -1314,7 +1320,7 @@ class UnknownSeq(Seq):
         return UnknownSeq(new_length, self.alphabet, self._character)
 
     def count(self, sub, start=0, end=sys.maxsize):
-        """Non-overlapping count method, like that of a python string.
+        """Return a non-overlapping count, like that of a python string.
 
         This behaves like the python string (and Seq object) method of the
         same name, which does a non-overlapping count!
@@ -1370,7 +1376,7 @@ class UnknownSeq(Seq):
                 return 0
 
     def complement(self):
-        """The complement of an unknown nucleotide equals itself.
+        """Return the complement of an unknown nucleotide equals itself.
 
         >>> my_nuc = UnknownSeq(8)
         >>> my_nuc
@@ -1388,17 +1394,17 @@ class UnknownSeq(Seq):
         return self
 
     def reverse_complement(self):
-        """The reverse complement of an unknown nucleotide equals itself.
+        """Return the reverse complement of an unknown sequence.
 
-        >>> my_nuc = UnknownSeq(10)
-        >>> my_nuc
-        UnknownSeq(10, alphabet = Alphabet(), character = '?')
-        >>> print(my_nuc)
-        ??????????
-        >>> my_nuc.reverse_complement()
-        UnknownSeq(10, alphabet = Alphabet(), character = '?')
-        >>> print(my_nuc.reverse_complement())
-        ??????????
+        The reverse complement of an unknown nucleotide equals itself:
+
+        >>> from Bio.Seq import UnknownSeq
+        >>> from Bio.Alphabet import generic_dna
+        >>> example = UnknownSeq(6, generic_dna)
+        >>> print(example)
+        NNNNNN
+        >>> print(example.reverse_complement())
+        NNNNNN
         """
         if isinstance(Alphabet._get_base_alphabet(self.alphabet),
                       Alphabet.ProteinAlphabet):
@@ -1406,7 +1412,7 @@ class UnknownSeq(Seq):
         return self
 
     def transcribe(self):
-        """Returns unknown RNA sequence from an unknown DNA sequence.
+        """Return an unknown RNA sequence from an unknown DNA sequence.
 
         >>> my_dna = UnknownSeq(10, character="N")
         >>> my_dna
@@ -1424,7 +1430,7 @@ class UnknownSeq(Seq):
         return UnknownSeq(self._length, s.alphabet, self._character)
 
     def back_transcribe(self):
-        """Returns unknown DNA sequence from an unknown RNA sequence.
+        """Return an unknown DNA sequence from an unknown RNA sequence.
 
         >>> my_rna = UnknownSeq(20, character="N")
         >>> my_rna
@@ -1442,7 +1448,7 @@ class UnknownSeq(Seq):
         return UnknownSeq(self._length, s.alphabet, self._character)
 
     def upper(self):
-        """Returns an upper case copy of the sequence.
+        """Return an upper case copy of the sequence.
 
         >>> from Bio.Alphabet import generic_dna
         >>> from Bio.Seq import UnknownSeq
@@ -1462,7 +1468,7 @@ class UnknownSeq(Seq):
                           self._character.upper())
 
     def lower(self):
-        """Returns a lower case copy of the sequence.
+        """Return a lower case copy of the sequence.
 
         This will adjust the alphabet if required:
 
@@ -1580,7 +1586,9 @@ class MutableSeq(object):
     Note that the MutableSeq object does not support as many string-like
     or biological methods as the Seq object.
     """
+
     def __init__(self, data, alphabet=Alphabet.generic_alphabet):
+        """Initialize the class."""
         if sys.version_info[0] == 3:
             self.array_indicator = "u"
         else:
@@ -1607,7 +1615,7 @@ class MutableSeq(object):
                                               self.alphabet)
 
     def __str__(self):
-        """Returns the full sequence as a python string.
+        """Return the full sequence as a python string.
 
         Note that Biopython 1.44 and earlier would give a truncated
         version of repr(my_seq) for str(my_seq).  If you are writing code
@@ -1660,12 +1668,12 @@ class MutableSeq(object):
         return str(self) == str(other)
 
     def __ne__(self, other):
-        """Not equal, see __eq__ documentation."""
+        """Implement the not-equal operand."""
         # Seem to require this method for Python 2 but not needed on Python 3?
         return not (self == other)
 
     def __lt__(self, other):
-        """Less than, see __eq__ documentation."""
+        """Implement the less-than operand."""
         if hasattr(other, "alphabet"):
             if not Alphabet._check_type_compatible([self.alphabet,
                                                     other.alphabet]):
@@ -1677,7 +1685,7 @@ class MutableSeq(object):
         return str(self) < str(other)
 
     def __le__(self, other):
-        """Less than or equal, see __eq__ documentation."""
+        """Implement the less-than or equal operand."""
         if hasattr(other, "alphabet"):
             if not Alphabet._check_type_compatible([self.alphabet,
                                                     other.alphabet]):
@@ -1689,9 +1697,11 @@ class MutableSeq(object):
         return str(self) <= str(other)
 
     def __len__(self):
+        """Return the length of the sequence, use len(my_seq)."""
         return len(self.data)
 
     def __getitem__(self, index):
+        """Return a subsequence of single letter, use my_seq[index]."""
         # Note since Python 2.0, __getslice__ is deprecated
         # and __getitem__ is used instead.
         # See http://docs.python.org/ref/sequence-methods.html
@@ -1703,6 +1713,7 @@ class MutableSeq(object):
             return MutableSeq(self.data[index], self.alphabet)
 
     def __setitem__(self, index, value):
+        """Set a subsequence of single letter via value parameter."""
         # Note since Python 2.0, __setslice__ is deprecated
         # and __setitem__ is used instead.
         # See http://docs.python.org/ref/sequence-methods.html
@@ -1720,6 +1731,7 @@ class MutableSeq(object):
                                                str(value))
 
     def __delitem__(self, index):
+        """Delete a subsequence of single letter."""
         # Note since Python 2.0, __delslice__ is deprecated
         # and __delitem__ is used instead.
         # See http://docs.python.org/ref/sequence-methods.html
@@ -1730,7 +1742,8 @@ class MutableSeq(object):
     def __add__(self, other):
         """Add another sequence or string to this sequence.
 
-        Returns a new MutableSeq object."""
+        Returns a new MutableSeq object.
+        """
         if hasattr(other, "alphabet"):
             # other should be a Seq or a MutableSeq
             if not Alphabet._check_type_compatible([self.alphabet,
@@ -1753,6 +1766,7 @@ class MutableSeq(object):
             raise TypeError
 
     def __radd__(self, other):
+        """Add a sequence on the left."""
         if hasattr(other, "alphabet"):
             # other should be a Seq or a MutableSeq
             if not Alphabet._check_type_compatible([self.alphabet,
@@ -1775,17 +1789,21 @@ class MutableSeq(object):
             raise TypeError
 
     def append(self, c):
+        """Add a subsequence to the mutable sequence object."""
         self.data.append(c)
 
     def insert(self, i, c):
+        """Add a subsequence to the mutable sequence object at a given index."""
         self.data.insert(i, c)
 
     def pop(self, i=(-1)):
+        """Remove a subsequence of a single letter at given index."""
         c = self.data[i]
         del self.data[i]
         return c
 
     def remove(self, item):
+        """Remove a subsequence of a single letter from mutable sequence."""
         for i in range(len(self.data)):
             if self.data[i] == item:
                 del self.data[i]
@@ -1793,7 +1811,7 @@ class MutableSeq(object):
         raise ValueError("MutableSeq.remove(x): x not in list")
 
     def count(self, sub, start=0, end=sys.maxsize):
-        """Non-overlapping count method, like that of a python string.
+        """Return a non-overlapping count, like that of a python string.
 
         This behaves like the python string method of the same name,
         which does a non-overlapping count!
@@ -1853,6 +1871,7 @@ class MutableSeq(object):
             return str(self).count(search, start, end)
 
     def index(self, item):
+        """Return the position of a subsequence of a single letter."""
         for i in range(len(self.data)):
             if self.data[i] == item:
                 return i
@@ -1905,6 +1924,7 @@ class MutableSeq(object):
     # def sort(self, *args): self.data.sort(*args)
 
     def extend(self, other):
+        """Add a sequence to the original mutable sequence object."""
         if isinstance(other, MutableSeq):
             for c in other.data:
                 self.data.append(c)
@@ -1913,7 +1933,7 @@ class MutableSeq(object):
                 self.data.append(c)
 
     def tostring(self):
-        """Returns the full sequence as a python string (DEPRECATED).
+        """Return the full sequence as a python string (DEPRECATED).
 
         You are now encouraged to use str(my_seq) instead of my_seq.tostring()
         as this method is officially deprecated.
@@ -1938,7 +1958,7 @@ class MutableSeq(object):
         return "".join(self.data)
 
     def toseq(self):
-        """Returns the full sequence as a new immutable Seq object.
+        """Return the full sequence as a new immutable Seq object.
 
         >>> from Bio.Seq import Seq
         >>> from Bio.Alphabet import IUPAC
@@ -1959,7 +1979,7 @@ class MutableSeq(object):
 # and Bio.Translate. The functions work both on Seq objects, and on strings.
 
 def transcribe(dna):
-    """Transcribes a DNA sequence into RNA.
+    """Transcribe a DNA sequence into RNA.
 
     If given a string, returns a new string object.
 
@@ -1981,7 +2001,7 @@ def transcribe(dna):
 
 
 def back_transcribe(rna):
-    """Back-transcribes an RNA sequence into DNA.
+    """Return the RNA sequence back-transcribed into DNA.
 
     If given a string, returns a new string object.
 
@@ -2004,7 +2024,7 @@ def back_transcribe(rna):
 
 def _translate_str(sequence, table, stop_symbol="*", to_stop=False,
                    cds=False, pos_stop="X", gap=None):
-    """Helper function to translate a nucleotide string (PRIVATE).
+    """Translate nucleotide string into a protein string (PRIVATE).
 
     Arguments:
         - sequence - a string
@@ -2216,7 +2236,7 @@ def translate(sequence, table="Standard", stop_symbol="*", to_stop=False,
 
 
 def reverse_complement(sequence):
-    """Returns the reverse complement sequence of a nucleotide string.
+    """Return the reverse complement sequence of a nucleotide string.
 
     If given a string, returns a new string object.
     Given a Seq or a MutableSeq, returns a new Seq object with the same
@@ -2233,7 +2253,7 @@ def reverse_complement(sequence):
 
 
 def complement(sequence):
-    """Returns the complement sequence of a nucleotide string.
+    """Return the complement sequence of a nucleotide string.
 
     If given a string, returns a new string object.
     Given a Seq or a MutableSeq, returns a new Seq object with the same

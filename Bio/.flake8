@@ -1,5 +1,58 @@
 [flake8]
-# pycodestyle v2.3.1 default ignore is E121,E123,E126,E226,E24,E704,W503
-# flake8 v3.3.0 default ignore is      E121,E123,E126,E226,E24,E704,W503,W504
-# where ignoring E24 means all E240, E241, etc
-ignore = E122,E123,E126,E127,E128,E501,E731,F401,F405,F812,F821,F841
+ignore =
+    # =======================
+    # flake: E###, F###, W###
+    # =======================
+    # pycodestyle v2.3.1 default ignore is E121,E123,E126,E226,E24,E704,W503
+    # flake8 v3.3.0 default ignore is      E121,E123,E126,E226,E24,E704,W503,W504
+    E122,E123,E126,E127,E128,E501,E731,F401,F812,F841,
+    # =====================================
+    # pydocstyle: D1## - Missing Docstrings
+    # =====================================
+    # D100	Missing docstring in public module
+    # D101	Missing docstring in public class
+    # D102	Missing docstring in public method
+    # D103	Missing docstring in public function
+    # D104	Missing docstring in public package
+    # D105	Missing docstring in magic method
+    # TODO: Fix some of these?
+    D100,D101,D102,D103,D104,D105,
+    # ====================================
+    # pydocstyle: D2## - Whitespace Issues
+    # ====================================
+    # D200	One-line docstring should fit on one line with quotes
+    # D202	No blank lines allowed after function docstring
+    # D203	1 blank line required before class docstring
+    # D204	1 blank line required after class docstring
+    # D205	1 blank line required between summary line and description
+    # D207	Docstring is under-indented
+    # D208	Docstring is over-indented
+    # D210	No whitespaces allowed surrounding docstring text
+    # TODO: Fix these:
+    D205,D208,
+    # We ignore	D203 deliberately in favour of passing D211,
+    D203,
+    # ================================
+    # pydocstyle: D3## - Quotes Issues
+    # ================================
+    # D300	Use """triple double quotes"""
+    # D301	Use r""" if any backslashes in a docstring
+    # TODO: Fix this?:
+    D301,
+    # ===========================================
+    # pydocstyle: D4## - Docstring Content Issues
+    # ===========================================
+    # D400	First line should end with a period
+    # D401	First line should be in imperative mood
+    # D402	First line should not be the function’s "signature"
+    # D403	First word of the first line should be properly capitalized
+    # D412	No blank lines allowed between a section header and its content
+    D400,D401,D402,D403,
+    # We ignore D412 deliberately:
+    D412,
+    # ================================================
+    # flake8-commas: C#### (in case installed locally)
+    # ================================================
+    # C812	missing trailing comma
+    # C815	missing trailing comma in Python 3.5+
+    C812,C815

@@ -49,9 +49,10 @@ _FRAGMENT_FILE = "lib_%s_z_%s.txt"
 
 
 def _read_fragments(size, length, dir="."):
-    """
-    Read a fragment spec file (available from
-    U{http://csb.stanford.edu/rachel/fragments/}
+    """Read a fragment spec file (PRIVATE).
+
+    Read a fragment spec file available from
+    http://csb.stanford.edu/rachel/fragments/
     and return a list of Fragment objects.
 
     @param size: number of fragments in the library
@@ -88,11 +89,11 @@ def _read_fragments(size, length, dir="."):
 
 
 class Fragment(object):
-    """
-    Represent a polypeptide C-alpha fragment.
-    """
+    """Represent a polypeptide C-alpha fragment."""
+
     def __init__(self, length, fid):
-        """
+        """Initialize fragment object.
+
         @param length: length of the fragment
         @type length: int
 
@@ -109,28 +110,32 @@ class Fragment(object):
         self.fid = fid
 
     def get_resname_list(self):
-        """
+        """Get residue list.
+
         @return: the residue names
         @rtype: [string, string,...]
         """
         return self.resname_list
 
     def get_id(self):
-        """
+        """Get identifier for the fragment.
+
         @return: id for the fragment
         @rtype: int
         """
         return self.fid
 
     def get_coords(self):
-        """
+        """Get the CA coordinates in the fragment.
+
         @return: the CA coords in the fragment
         @rtype: Numeric (Nx3) array
         """
         return self.coords_ca
 
     def add_residue(self, resname, ca_coord):
-        """
+        """Add a residue.
+
         @param resname: residue name (eg. GLY).
         @type resname: string
 
@@ -144,17 +149,14 @@ class Fragment(object):
         self.counter = self.counter + 1
 
     def __len__(self):
-        """
-        @return: length of fragment
-        @rtype: int
-        """
+        """Return lengt of the fragment."""
         return self.length
 
     def __sub__(self, other):
-        """
-        Return rmsd between two fragments.
+        """Return rmsd between two fragments.
 
         Example:
+
             >>> rmsd=fragment1-fragment2
 
         @return: rmsd between fragments
@@ -166,7 +168,8 @@ class Fragment(object):
         return sup.get_rms()
 
     def __repr__(self):
-        """
+        """String representing the fragment object.
+
         Returns <Fragment length=L id=ID> where L=length of fragment
         and ID the identifier (rank in the library).
         """
@@ -174,8 +177,7 @@ class Fragment(object):
 
 
 def _make_fragment_list(pp, length):
-    """
-    Dice up a peptide in fragments of length "length".
+    """Dice up a peptide in fragments of length "length".
 
     @param pp: a list of residues (part of one peptide)
     @type pp: [L{Residue}, L{Residue}, ...]
@@ -202,9 +204,9 @@ def _make_fragment_list(pp, length):
 
 
 def _map_fragment_list(flist, reflist):
-    """
-    Map all frgaments in flist to the closest
-    (in RMSD) fragment in reflist.
+    """Map flist fragments to closest entry in reflist (PRIVATE).
+
+    Map all frgaments in flist to the closest (in RMSD) fragment in reflist.
 
     Returns a list of reflist indices.
 
@@ -228,9 +230,8 @@ def _map_fragment_list(flist, reflist):
 
 
 class FragmentMapper(object):
-    """
-    Map polypeptides in a model to lists of representative fragments.
-    """
+    """Map polypeptides in a model to lists of representative fragments."""
+
     def __init__(self, model, lsize=20, flength=5, fdir="."):
         """Create instance of FragmentMapper
 
@@ -260,8 +261,7 @@ class FragmentMapper(object):
         self.fd = self._map(self.model)
 
     def _map(self, model):
-        """
-        @param model: the model that will be mapped
+        """@param model: the model that will be mapped
         @type model: L{Model}
         """
         ppb = PPBuilder()
@@ -312,11 +312,10 @@ class FragmentMapper(object):
         return (res in self.fd)
 
     def __getitem__(self, res):
-        """
-        @type res: L{Residue}
+        """@type res: L{Residue}
 
-        @return: fragment classification
-        @rtype: L{Fragment}
+          @return: fragment classification
+          @rtype: L{Fragment}
         """
         return self.fd[res]
 

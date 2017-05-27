@@ -34,8 +34,7 @@ class AbstractPropertyMap(object):
         return (translated_id in self.property_dict)
 
     def __getitem__(self, key):
-        """
-        Return property for a residue.
+        """Return property for a residue.
 
         @param chain_id: chain id
         @type chain_id: char
@@ -50,8 +49,7 @@ class AbstractPropertyMap(object):
         return self.property_dict[translated_id]
 
     def __len__(self):
-        """
-        Return number of residues for which the property is available.
+        """Return number of residues for which the property is available.
 
         @return: number of residues
         @rtype: int
@@ -85,8 +83,7 @@ class AbstractPropertyMap(object):
         return (id in self)
 
     def keys(self):
-        """
-        Return the list of residues.
+        """Return the list of residues.
 
         @return: list of residues for which the property was calculated
         @rtype: [(chain_id, res_id), (chain_id, res_id),...]
@@ -94,13 +91,15 @@ class AbstractPropertyMap(object):
         return self.property_keys
 
     def __iter__(self):
-        """
-        Iterate over the (entity, property) list. Handy alternative to
-        the dictionary-like access.
+        """Iterate over the (entity, property) list.
+
+        Handy alternative to the dictionary-like access.
 
         Example:
+
             >>> for (res, property) in iter(map):
             ...     print(res, property)
+            ...
 
         @return: iterator
         """

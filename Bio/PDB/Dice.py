@@ -8,16 +8,20 @@ import warnings
 
 from Bio.PDB.PDBIO import PDBIO
 from Bio import BiopythonWarning
+from Bio import BiopythonDeprecationWarning
+
+warnings.warn("Bio.PDB.Dice is now deprecated will be removed in a "
+              "future release of Biopython.", BiopythonDeprecationWarning)
 
 _hydrogen = re.compile("[123 ]*H.*")
 
 
 class ChainSelector(object):
+    """Only accepts residues with right chainid, between start and end.
+
+    Remove hydrogens, waters and ligands. Only use model 0 by default.
     """
-    Only accepts residues with right chainid
-    and between start and end. Remove hydrogens, waters and ligands.
-    Only use model 0 by default.
-    """
+
     def __init__(self, chain_id, start, end, model_id=0):
         self.chain_id = chain_id
         self.start = start
@@ -58,9 +62,7 @@ class ChainSelector(object):
 
 
 def extract(structure, chain_id, start, end, filename):
-    """
-    Write out selected portion to filename.
-    """
+    """Write out selected portion to filename."""
     sel = ChainSelector(chain_id, start, end)
     io = PDBIO()
     io.set_structure(structure)

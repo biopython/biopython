@@ -302,13 +302,15 @@ def _create_hsp(hid, qid, psl):
     except IndexError:
         hstrand = 1  # hit strand defaults to plus
 
+    blocksize_multiplier = 3 if is_protein else 1
     # query block starts
     qstarts = _reorient_starts(psl['qstarts'],
             psl['blocksizes'], psl['qsize'], qstrand)
     # hit block starts
     if len(psl['strand']) == 2:
         hstarts = _reorient_starts(psl['tstarts'],
-                psl['blocksizes'], psl['tsize'], hstrand)
+                [blocksize_multiplier * i for i in psl['blocksizes']],
+                psl['tsize'], hstrand)
     else:
         hstarts = psl['tstarts']
     # set query and hit coords
@@ -316,7 +318,7 @@ def _create_hsp(hid, qid, psl):
     assert len(qstarts) == len(hstarts) == len(psl['blocksizes'])
     query_range_all = list(zip(qstarts, [x + y for x, y in
                                          zip(qstarts, psl['blocksizes'])]))
-    hit_range_all = list(zip(hstarts, [x + y for x, y in
+    hit_range_all = list(zip(hstarts, [x + y * blocksize_multiplier for x, y in
                                        zip(hstarts, psl['blocksizes'])]))
     # check length of sequences and coordinates, all must match
     if 'tseqs' in psl and 'qseqs' in psl:
@@ -353,7 +355,8 @@ def _create_hsp(hid, qid, psl):
     assert hsp.hit_start == psl['tstart']
     assert hsp.hit_end == psl['tend']
     # and check block spans as well
-    assert hsp.query_span_all == hsp.hit_span_all == psl['blocksizes']
+    hit_spans = [span / blocksize_multiplier for span in hsp.hit_span_all]
+    assert hit_spans == hsp.query_span_all == psl['blocksizes']
     # set its attributes
     hsp.match_num = psl['matches']
     hsp.mismatch_num = psl['mismatches']
@@ -639,6 +642,9 @@ class BlatPslWriter(object):
         for hit in qresult:
             for hsp in hit.hsps:
 
+                query_is_protein = getattr(hsp, "query_is_protein", False)
+                blocksize_multiplier = 3 if query_is_protein else 1
+
                 line = []
                 line.append(hsp.match_num)
                 line.append(hsp.mismatch_num)
@@ -650,7 +656,9 @@ class BlatPslWriter(object):
                 line.append(hsp.hit_gap_num)
 
                 # check spans
-                assert hsp.query_span_all == hsp.hit_span_all
+                eff_query_spans = [blocksize_multiplier * s for s in hsp.query_span_all]
+                if hsp.hit_span_all != eff_query_spans:
+                    raise ValueError("HSP hit span and query span values do not match.")
                 block_sizes = hsp.query_span_all
 
                 # set strand and starts

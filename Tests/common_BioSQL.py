@@ -182,7 +182,7 @@ def create_database():
         if os.path.exists(TESTDB):
             try:
                 os.remove(TESTDB)
-            except:
+            except Exception:
                 time.sleep(1)
                 try:
                     os.remove(TESTDB)
@@ -205,7 +205,7 @@ def create_database():
         server.load_database_sql(SQL_FILE)
         server.commit()
         server.close()
-    except:
+    except Exception:
         # Failed, but must close the handle...
         server.close()
         raise
@@ -630,7 +630,7 @@ class DeleteTest(unittest.TestCase):
         del self.server
 
     def test_server(self):
-        """Check BioSeqDatabase methods"""
+        """Check BioSeqDatabase methods."""
         server = self.server
         self.assertIn("biosql-test", server)
         self.assertEqual(1, len(server))
@@ -645,7 +645,7 @@ class DeleteTest(unittest.TestCase):
             pass
 
     def test_del_db_items(self):
-        """Check all associated data is deleted from an item"""
+        """Check all associated data is deleted from an item."""
         db = self.db
         items = list(db.values())
         keys = list(db)
@@ -747,41 +747,41 @@ class ClosedLoopTest(unittest.TestCase):
         TESTDB = create_database()
 
     def test_NC_005816(self):
-        """GenBank file to BioSQL and back to a GenBank file, NC_005816."""
+        """From GenBank file to BioSQL and back to a GenBank file, NC_005816."""
         with warnings.catch_warnings():
             # BiopythonWarning: order location operators are not fully supported
             warnings.simplefilter('ignore', BiopythonWarning)
             self.loop("GenBank/NC_005816.gb", "gb")
 
     def test_NC_000932(self):
-        """GenBank file to BioSQL and back to a GenBank file, NC_000932."""
+        """From GenBank file to BioSQL and back to a GenBank file, NC_000932."""
         self.loop("GenBank/NC_000932.gb", "gb")
 
     def test_NT_019265(self):
-        """GenBank file to BioSQL and back to a GenBank file, NT_019265."""
+        """From GenBank file to BioSQL and back to a GenBank file, NT_019265."""
         self.loop("GenBank/NT_019265.gb", "gb")
 
     def test_protein_refseq2(self):
-        """GenBank file to BioSQL and back to a GenBank file, protein_refseq2."""
+        """From GenBank file to BioSQL and back to a GenBank file, protein_refseq2."""
         with warnings.catch_warnings():
             # BiopythonWarning: order location operators are not fully supported
             warnings.simplefilter('ignore', BiopythonWarning)
             self.loop("GenBank/protein_refseq2.gb", "gb")
 
     def test_no_ref(self):
-        """GenBank file to BioSQL and back to a GenBank file, noref."""
+        """From GenBank file to BioSQL and back to a GenBank file, noref."""
         self.loop("GenBank/noref.gb", "gb")
 
     def test_one_of(self):
-        """GenBank file to BioSQL and back to a GenBank file, one_of."""
+        """From GenBank file to BioSQL and back to a GenBank file, one_of."""
         self.loop("GenBank/one_of.gb", "gb")
 
     def test_cor6_6(self):
-        """GenBank file to BioSQL and back to a GenBank file, cor6_6."""
+        """From GenBank file to BioSQL and back to a GenBank file, cor6_6."""
         self.loop("GenBank/cor6_6.gb", "gb")
 
     def test_arab1(self):
-        """GenBank file to BioSQL and back to a GenBank file, arab1."""
+        """From GenBank file to BioSQL and back to a GenBank file, arab1."""
         self.loop("GenBank/arab1.gb", "gb")
 
     def loop(self, filename, format):
@@ -829,41 +829,41 @@ class TransferTest(unittest.TestCase):
         TESTDB = create_database()
 
     def test_NC_005816(self):
-        """GenBank file to BioSQL, then again to a new namespace, NC_005816."""
+        """From GenBank file to BioSQL, then again to a new namespace, NC_005816."""
         with warnings.catch_warnings():
             # BiopythonWarning: order location operators are not fully supported
             warnings.simplefilter('ignore', BiopythonWarning)
             self.trans("GenBank/NC_005816.gb", "gb")
 
     def test_NC_000932(self):
-        """GenBank file to BioSQL, then again to a new namespace, NC_000932."""
+        """From GenBank file to BioSQL, then again to a new namespace, NC_000932."""
         self.trans("GenBank/NC_000932.gb", "gb")
 
     def test_NT_019265(self):
-        """GenBank file to BioSQL, then again to a new namespace, NT_019265."""
+        """From GenBank file to BioSQL, then again to a new namespace, NT_019265."""
         self.trans("GenBank/NT_019265.gb", "gb")
 
     def test_protein_refseq2(self):
-        """GenBank file to BioSQL, then again to a new namespace, protein_refseq2."""
+        """From GenBank file to BioSQL, then again to a new namespace, protein_refseq2."""
         with warnings.catch_warnings():
             # BiopythonWarning: order location operators are not fully supported
             warnings.simplefilter('ignore', BiopythonWarning)
             self.trans("GenBank/protein_refseq2.gb", "gb")
 
     def test_no_ref(self):
-        """GenBank file to BioSQL, then again to a new namespace, noref."""
+        """From GenBank file to BioSQL, then again to a new namespace, noref."""
         self.trans("GenBank/noref.gb", "gb")
 
     def test_one_of(self):
-        """GenBank file to BioSQL, then again to a new namespace, one_of."""
+        """From GenBank file to BioSQL, then again to a new namespace, one_of."""
         self.trans("GenBank/one_of.gb", "gb")
 
     def test_cor6_6(self):
-        """GenBank file to BioSQL, then again to a new namespace, cor6_6."""
+        """From GenBank file to BioSQL, then again to a new namespace, cor6_6."""
         self.trans("GenBank/cor6_6.gb", "gb")
 
     def test_arab1(self):
-        """GenBank file to BioSQL, then again to a new namespace, arab1."""
+        """From GenBank file to BioSQL, then again to a new namespace, arab1."""
         self.trans("GenBank/arab1.gb", "gb")
 
     def trans(self, filename, format):
@@ -1175,7 +1175,7 @@ class SwissProtUnknownPositionTest(unittest.TestCase):
         del self.server
 
     def test_ambiguous_location(self):
-        """Parse a uniprot-xml file that includes ambiguous location, save it, and then return"""
+        """Loaded uniprot-xml with ambiguous location in BioSQL."""
         id = 'P97881'
         seqiter = SeqIO.parse("SwissProt/%s.xml" % id, "uniprot-xml")
         self.assertTrue(self.db.load(seqiter) == 1)

@@ -390,6 +390,10 @@ class FastaM10Parser(object):
         state = _STATE_NONE
         strand = None
         hsp_list = []
+        hsp = None
+        parsed_hsp = None
+        hit_desc = None
+        seq_len = None
         while True:
             peekline = self.handle.peekline()
             # yield hit if we've reached the start of a new query or

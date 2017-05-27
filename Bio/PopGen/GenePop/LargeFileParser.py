@@ -3,8 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""
-Large file parsing of Genepop files
+"""Large file parsing of Genepop files
 
 The standard parser loads the whole file into memory. This parser
 provides an iterator over data.
@@ -86,6 +85,7 @@ class Record(object):
     is unknown.
 
     """
+
     def __init__(self, handle):
         self.handle = handle
         self.marker_len = 0

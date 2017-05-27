@@ -102,7 +102,7 @@ class PatternIOTest(unittest.TestCase):
             raise AssertionError("Did not report error on bad alphabet.")
         except ValueError:
             pass  # expected behavior
-        except:
+        except Exception:
             raise AssertionError("Got unexpected error while reading.")
         input_handle.close()
 

@@ -301,10 +301,7 @@ class HiddenMarkovModelTest(unittest.TestCase):
         test_assertion("log probability", round(prob, 11), round(max_prob, 11))
 
     def test_non_ergodic(self):
-        """Test a non-ergodic model (meaning that some transitions are not
-        allowed).
-        """
-
+        """Non-ergodic model (meaning that some transitions are not allowed)."""
         # make state '1' the initial state
         prob_1_initial = 1.0
         self.mm_builder.set_initial_probabilities(

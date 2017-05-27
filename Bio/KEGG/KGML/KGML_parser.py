@@ -3,7 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""This module provides classes and functions to parse a KGML pathway map.
+"""Classes and functions to parse a KGML pathway map.
 
 The KGML pathway map is parsed into the object structure defined in
 KGML_Pathway.py in this module.

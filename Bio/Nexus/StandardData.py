@@ -22,6 +22,7 @@ class StandardData(object):
     Each coding specifies t [type] => (std [standard], multi [multistate] or
     uncer [uncertain]) and d [data]
     """
+
     def __init__(self, data):
         self._data = []
         self._current_pos = 0
@@ -87,7 +88,7 @@ class StandardData(object):
     def __next__(self):
         try:
             return_coding = self._data[self._current_pos]
-        except:
+        except IndexError:
             self._current_pos = 0
             raise StopIteration
         else:

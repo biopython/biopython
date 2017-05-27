@@ -15,7 +15,7 @@
 # was previously in Bio.WWW.SCOP, has now been merged into this module.
 
 
-""" SCOP: Structural Classification of Proteins.
+"""SCOP: Structural Classification of Proteins.
 
 The SCOP database aims to provide a manually constructed classification of
 all know protein structures into a hierarchy, the main levels of which
@@ -45,7 +45,6 @@ This module also provides code to access SCOP over the WWW.
 Functions:
 search        -- Access the main CGI script.
 _open         -- Internally used function.
-
 """
 
 from __future__ import print_function
@@ -162,6 +161,7 @@ class Scop(object):
 
     root -- The root node of the hierarchy
     """
+
     def __init__(self, cla_handle=None, des_handle=None, hie_handle=None,
                  dir_path=None, db_handle=None, version=None):
         """Build the SCOP hierarchy from the SCOP parsable files, or a sql backend.
@@ -497,7 +497,7 @@ class Scop(object):
 
 
 class Node(object):
-    """ A node in the Scop hierarchy
+    """A node in the Scop hierarchy.
 
     sunid  -- SCOP unique identifiers. e.g. '14986'
 
@@ -510,13 +510,14 @@ class Node(object):
     type     -- A 2 letter node type code. e.g. 'px' for domains
 
     description --
-
     """
+
     def __init__(self, scop=None):
         """Create a Node in the scop hierarchy.  If a Scop instance is provided to the
         constructor, this will be used to lookup related references using the SQL
         methods.  If no instance is provided, it is assumed the whole tree exists
-        and is connected."""
+        and is connected.
+        """
         self.sunid = ''
         self.parent = None
         self.children = []
@@ -570,8 +571,10 @@ class Node(object):
             return self.scop.getNodeBySunid(self.parent)
 
     def getDescendents(self, node_type):
-        """ Return a list of all descendant nodes of the given type. Node type can a
-        two letter code or longer description. e.g. 'fa' or 'family'
+        """Return a list of all descendant nodes of the given type.
+
+        Node type can be a two letter code or longer description,
+        e.g. 'fa' or 'family'.
         """
         if node_type in _nodetype_to_code:
             node_type = _nodetype_to_code[node_type]
@@ -591,8 +594,11 @@ class Node(object):
         return nodes
 
     def getAscendent(self, node_type):
-        """ Return the ancenstor node of the given type, or None.Node type can a
-        two letter code or longer description. e.g. 'fa' or 'family'"""
+        """Return the ancenstor node of the given type, or None.
+
+        Node type can be a two letter code or longer description,
+        e.g. 'fa' or 'family'.
+        """
         if node_type in _nodetype_to_code:
             node_type = _nodetype_to_code[node_type]
 
@@ -612,13 +618,14 @@ class Node(object):
 
 
 class Domain(Node):
-    """ A SCOP domain. A leaf node in the Scop hierarchy.
+    """A SCOP domain. A leaf node in the Scop hierarchy.
 
         - sid      -- The SCOP domain identifier. e.g. ``"d5hbib_"``
 
         - residues -- A Residue object. It defines the collection
           of PDB atoms that make up this domain.
     """
+
     def __init__(self, scop=None):
         Node.__init__(self, scop=scop)
         self.sid = ''
@@ -720,7 +727,7 @@ class Astral(object):
         self.IdDatahash = {}
 
     def domainsClusteredByEv(self, id):
-        """get domains clustered by evalue"""
+        """Get domains clustered by evalue"""
         if id not in self.EvDatasets:
             if self.db_handle:
                 self.EvDatasets[id] = self.getAstralDomainsFromSQL(astralEv_to_sql[id])
@@ -737,7 +744,7 @@ class Astral(object):
         return self.EvDatasets[id]
 
     def domainsClusteredById(self, id):
-        """get domains clustered by percent id"""
+        """Get domains clustered by percent id"""
         if id not in self.IdDatasets:
             if self.db_handle:
                 self.IdDatasets[id] = self.getAstralDomainsFromSQL("id" + str(id))
@@ -773,7 +780,8 @@ class Astral(object):
 
     def getAstralDomainsFromSQL(self, column):
         """Load a set of astral domains from a column in the astral table of a MYSQL
-        database (which can be created with writeToSQL(...)"""
+        database (which can be created with writeToSQL(...).
+        """
         cur = self.db_handle.cursor()
         cur.execute("SELECT sid FROM astral WHERE " + column + "=1")
         data = cur.fetchall()
@@ -782,7 +790,7 @@ class Astral(object):
         return data
 
     def getSeqBySid(self, domain):
-        """get the seq record of a given domain from its sid"""
+        """Get the seq record of a given domain from its sid"""
         if self.db_handle is None:
             return self.fasta_dict[domain].seq
         else:

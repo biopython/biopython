@@ -53,6 +53,7 @@ class Record(object):
     references     List of reference objects.
 
     """
+
     def __init__(self):
         self.accession = ''
         self.prosite_refs = []
@@ -69,6 +70,7 @@ class Reference(object):
      - citation   Describes the citation.
 
     """
+
     def __init__(self):
         self.number = ''
         self.authors = ''

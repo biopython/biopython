@@ -3,7 +3,7 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""This module deals with CAPS markers.
+"""Cleaved amplified polymorphic sequence (CAPS) markers.
 
 A CAPS marker is a location a DifferentialCutsite as described below and a
 set of primers that can be used to visualize this.  More information can

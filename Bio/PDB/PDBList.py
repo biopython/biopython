@@ -30,7 +30,7 @@
 # Any maintainer of the Biopython code may change this notice
 # when appropriate.
 
-""" Access the PDB over the internet (e.g. to download structures). """
+"""Access the PDB over the internet (e.g. to download structures)."""
 
 from __future__ import print_function
 
@@ -49,7 +49,8 @@ from Bio._py3k import urlcleanup as _urlcleanup
 
 
 class PDBList(object):
-    """
+    """Quick access to the structure lists on the PDB or its mirrors.
+
     This class provides quick access to the structure lists on the
     PDB server or its mirrors. The structure lists contain
     four-letter PDB codes, indicating that structures are
@@ -292,7 +293,8 @@ class PDBList(object):
         return final_file
 
     def update_pdb(self, file_format=None):
-        """
+        """Update your local copy of the PDB files.
+
         I guess this is the 'most wanted' function from this module.
         It gets the weekly lists of new and modified pdb entries and
         automatically downloads the according PDB files.

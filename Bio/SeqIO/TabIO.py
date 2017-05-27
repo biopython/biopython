@@ -74,7 +74,7 @@ def TabIterator(handle, alphabet=single_letter_alphabet):
     for line in handle:
         try:
             title, seq = line.split("\t")  # will fail if more than one tab!
-        except:
+        except ValueError:
             if line.strip() == "":
                 # It's a blank line, ignore it
                 continue
@@ -95,6 +95,7 @@ class TabWriter(SequentialSequenceWriter):
 
     Any description, name or other annotation is not recorded.
     """
+
     def write_record(self, record):
         """Write a single tab line to the file."""
         assert self._header_written
