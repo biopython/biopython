@@ -1242,7 +1242,7 @@ class SeqRecord(object):
         if isinstance(annotations, dict):
             answer.annotations = annotations
         elif annotations:
-            # Copy the old annotations,
+            # Copy the old annotations
             answer.annotations = self.annotations.copy()
         if isinstance(letter_annotations, dict):
             answer.letter_annotations = letter_annotations
