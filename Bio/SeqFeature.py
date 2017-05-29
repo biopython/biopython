@@ -164,9 +164,11 @@ class SeqFeature(object):
             self.ref_db = ref_db
 
     def _get_strand(self):
+        """Get function for the strand property (PRIVATE)."""
         return self.location.strand
 
     def _set_strand(self, value):
+        """Set function for the strand property (PRIVATE)."""
         try:
             self.location.strand = value
         except AttributeError:
@@ -183,12 +185,14 @@ class SeqFeature(object):
                           """)
 
     def _get_ref(self):
+        """Get function for the reference property (PRIVATE)."""
         try:
             return self.location.ref
         except AttributeError:
             return None
 
     def _set_ref(self, value):
+        """Set function for the reference property (PRIVATE)."""
         try:
             self.location.ref = value
         except AttributeError:
@@ -204,12 +208,14 @@ class SeqFeature(object):
                        """)
 
     def _get_ref_db(self):
+        """Get function for the database reference property (PRIVATE)."""
         try:
             return self.location.ref_db
         except AttributeError:
             return None
 
     def _set_ref_db(self, value):
+        """Set function for the database reference property (PRIVATE)."""
         self.location.ref_db = value
     ref_db = property(fget=_get_ref_db, fset=_set_ref_db,
                       doc="""Feature location reference's database.
@@ -218,12 +224,14 @@ class SeqFeature(object):
                           """)
 
     def _get_location_operator(self):
+        """Get function for the location operator property (PRIVATE)."""
         try:
             return self.location.operator
         except AttributeError:
             return None
 
     def _set_location_operator(self, value):
+        """Set function for the location operator property."""
         if value:
             if isinstance(self.location, CompoundLocation):
                 self.location.operator = value
@@ -237,7 +245,7 @@ class SeqFeature(object):
                                  doc="Location operator for compound locations (e.g. join).")
 
     def __repr__(self):
-        """A string representation of the record for debugging."""
+        """Represent the feature as a string for debugging."""
         answer = "%s(%s" % (self.__class__.__name__, repr(self.location))
         if self.type:
             answer += ", type=%s" % repr(self.type)
@@ -253,7 +261,7 @@ class SeqFeature(object):
         return answer
 
     def __str__(self):
-        """A readable summary of the feature intended to be printed to screen."""
+        """Return the full feature as a python string."""
         out = "type: %s\n" % self.type
         out += "location: %s\n" % self.location
         if self.id and self.id != "<unknown id>":
@@ -265,7 +273,7 @@ class SeqFeature(object):
         return out
 
     def _shift(self, offset):
-        """Returns a copy of the feature with its location shifted (PRIVATE).
+        """Return a copy of the feature with its location shifted (PRIVATE).
 
         The annotation qaulifiers are copied.
         """
@@ -276,7 +284,7 @@ class SeqFeature(object):
                           qualifiers=OrderedDict(self.qualifiers.items()))
 
     def _flip(self, length):
-        """Returns a copy of the feature with its location flipped (PRIVATE).
+        """Return a copy of the feature with its location flipped (PRIVATE).
 
         The argument length gives the length of the parent sequence. For
         example a location 0..20 (+1 strand) with parent length 30 becomes
@@ -292,7 +300,7 @@ class SeqFeature(object):
                           qualifiers=OrderedDict(self.qualifiers.items()))
 
     def extract(self, parent_sequence):
-        """Extract feature sequence from the supplied parent sequence.
+        """Extract the feature's sequence from supplied parent sequence.
 
         The parent_sequence can be a Seq like object or a string, and will
         generally return an object of the same type. The exception to this is
@@ -349,7 +357,7 @@ class SeqFeature(object):
     __nonzero__ = __bool__
 
     def __len__(self):
-        """Returns the length of the region described by a feature.
+        """Return the length of the region where the feature is located.
 
         >>> from Bio.Seq import Seq
         >>> from Bio.Alphabet import generic_protein
@@ -478,6 +486,7 @@ class Reference(object):
     """
 
     def __init__(self):
+        """Initialize the class."""
         self.location = []
         self.authors = ''
         self.consrtm = ''
@@ -488,7 +497,7 @@ class Reference(object):
         self.comment = ''
 
     def __str__(self):
-        """Output an informative string for debugging."""
+        """Return the full Reference object as a python string."""
         out = ""
         for single_location in self.location:
             out += "location: %s\n" % single_location
@@ -503,12 +512,13 @@ class Reference(object):
         return out
 
     def __repr__(self):
+        """Represent the Reference object as a string for debugging."""
         # TODO - Update this is __init__ later accpets values
         return "%s(title=%s, ...)" % (self.__class__.__name__,
                                       repr(self.title))
 
     def __eq__(self, other):
-        """Check if two Reference objects should be considered equal
+        """Check if two Reference objects should be considered equal.
 
         Note that the location is not compared, as __eq__ for the
         FeatureLocation class is not defined.
@@ -589,7 +599,7 @@ class FeatureLocation(object):
     """
 
     def __init__(self, start, end, strand=None, ref=None, ref_db=None):
-        """Specify the start, end, strand etc of a sequence feature.
+        """Initialize the class.
 
         start and end arguments specify the values where the feature begins
         and ends. These can either by any of the ``*Position`` objects that
@@ -661,9 +671,11 @@ class FeatureLocation(object):
         self.ref_db = ref_db
 
     def _get_strand(self):
+        """Get function for the strand property (PRIVATE)."""
         return self._strand
 
     def _set_strand(self, value):
+        """Set function for the strand property (PRIVATE)."""
         if value not in [+1, -1, 0, None]:
             raise ValueError("Strand should be +1, -1, 0 or None, not %r"
                              % value)
@@ -673,7 +685,7 @@ class FeatureLocation(object):
                       doc="Strand of the location (+1, -1, 0 or None).")
 
     def __str__(self):
-        """Returns a representation of the location (with python counting).
+        """Return a representation of the FeatureLocation object (with python counting).
 
         For the simple case this uses the python splicing syntax, [122:150]
         (zero based counting) which GenBank would call 123..150 (one based
@@ -696,7 +708,7 @@ class FeatureLocation(object):
             return answer + "(?)"
 
     def __repr__(self):
-        """A string representation of the location for debugging."""
+        """Represent the FeatureLocation object as a string for debugging."""
         optional = ""
         if self.strand is not None:
             optional += ", strand=%r" % self.strand
@@ -708,7 +720,7 @@ class FeatureLocation(object):
             % (self.__class__.__name__, self.start, self.end, optional)
 
     def __add__(self, other):
-        """Combine location with another feature location, or shift it.
+        """Combine location with another FeatureLocation object, or shift it.
 
         You can add two feature locations to make a join CompoundLocation:
 
@@ -756,13 +768,14 @@ class FeatureLocation(object):
             return NotImplemented
 
     def __radd__(self, other):
+        """Add a feature locationanother FeatureLocation object to the left."""
         if _is_int_or_long(other):
             return self._shift(other)
         else:
             return NotImplemented
 
     def __nonzero__(self):
-        """Returns True regardless of the length of the feature.
+        """Return True regardless of the length of the feature.
 
         This behaviour is for backwards compatibility, since until the
         __len__ method was added, a FeatureLocation always evaluated as True.
@@ -776,7 +789,7 @@ class FeatureLocation(object):
         return True
 
     def __len__(self):
-        """Returns the length of the region described by the FeatureLocation.
+        """Return the length of the region described by the FeatureLocation object.
 
         Note that extra care may be needed for fuzzy locations, e.g.
 
@@ -789,7 +802,7 @@ class FeatureLocation(object):
         return int(self._end) - int(self._start)
 
     def __contains__(self, value):
-        """Check if an integer position is within the FeatureLocation.
+        """Check if an integer position is within the FeatureLocation object.
 
         Note that extra care may be needed for fuzzy locations, e.g.
 
@@ -810,7 +823,7 @@ class FeatureLocation(object):
             return True
 
     def __iter__(self):
-        """Iterate over the parent positions within the FeatureLocation.
+        """Iterate over the parent positions within the FeatureLocation object.
 
         >>> from Bio.SeqFeature import FeatureLocation
         >>> from Bio.SeqFeature import BeforePosition, AfterPosition
@@ -842,7 +855,7 @@ class FeatureLocation(object):
                 yield i
 
     def _shift(self, offset):
-        """Returns a copy of the location shifted by the offset (PRIVATE)."""
+        """Return a copy of the FeatureLocation shifted by an offset (PRIVATE)."""
         # TODO - What if offset is a fuzzy position?
         if self.ref or self.ref_db:
             # TODO - Return self?
@@ -852,7 +865,7 @@ class FeatureLocation(object):
                                strand=self.strand)
 
     def _flip(self, length):
-        """Returns a copy of the location after the parent is reversed (PRIVATE)."""
+        """Return a copy of the location after the parent is reversed (PRIVATE)."""
         if self.ref or self.ref_db:
             # TODO - Return self?
             raise ValueError("Feature references another sequence.")
@@ -870,7 +883,7 @@ class FeatureLocation(object):
 
     @property
     def parts(self):
-        """Read only list of parts (always one, the Feature Location).
+        """Read only list of sections (always one, the FeatureLocation object).
 
         This is a convenience property allowing you to write code handling
         both simple FeatureLocation objects (with one part) and more complex
@@ -927,7 +940,21 @@ class FeatureLocation(object):
             raise
 
     def extract(self, parent_sequence):
-        """Extract feature sequence from the supplied parent sequence."""
+        """Extract the sequence from supplied parent sequence using the FeatureLocation object.
+
+        The parent_sequence can be a Seq like object or a string, and will
+        generally return an object of the same type. The exception to this is
+        a MutableSeq as the parent sequence will return a Seq object.
+
+        >>> from Bio.Seq import Seq
+        >>> from Bio.Alphabet import generic_protein
+        >>> from Bio.SeqFeature import FeatureLocation
+        >>> seq = Seq("MKQHKAMIVALIVICITAVVAAL", generic_protein)
+        >>> feature_loc = FeatureLocation(8, 15)
+        >>> feature_loc.extract(seq)
+        Seq('VALIVIC', ProteinAlphabet())
+
+        """
         if self.ref or self.ref_db:
             # TODO - Take a dictionary as an optional argument?
             raise ValueError("Feature references another sequence.")
@@ -949,7 +976,7 @@ class CompoundLocation(object):
     """For handling joins etc where a feature location has several parts."""
 
     def __init__(self, parts, operator="join"):
-        """Create a compound location with several parts.
+        """Initialize the class.
 
         >>> from Bio.SeqFeature import FeatureLocation, CompoundLocation
         >>> f1 = FeatureLocation(10, 40, strand=+1)
@@ -1021,15 +1048,16 @@ class CompoundLocation(object):
                 "CompoundLocation should have at least 2 parts, not %r" % parts)
 
     def __str__(self):
-        """Returns a representation of the location (with python counting)."""
+        """Return a representation of the CompoundLocation object (with python counting)."""
         return "%s{%s}" % (self.operator, ", ".join(str(loc) for loc in self.parts))
 
     def __repr__(self):
-        """String representation of the location for debugging."""
+        """Represent the CompoundLocation object as string for debugging."""
         return "%s(%r, %r)" % (self.__class__.__name__,
                                self.parts, self.operator)
 
     def _get_strand(self):
+        """Get function for the strand property (PRIVATE)."""
         # Historically a join on the reverse strand has been represented
         # in Biopython with both the parent SeqFeature and its children
         # (the exons for a CDS) all given a strand of -1.  Likewise, for
@@ -1042,6 +1070,7 @@ class CompoundLocation(object):
             return None  # i.e. mixed strands
 
     def _set_strand(self, value):
+        """Set function for the strand property (PRIVATE)."""
         # Should this be allowed/encouraged?
         for loc in self.parts:
             loc.strand = value
@@ -1123,7 +1152,7 @@ class CompoundLocation(object):
             raise NotImplementedError
 
     def __radd__(self, other):
-        """Combine locations."""
+        """Add a feature to the left."""
         if isinstance(other, FeatureLocation):
             return CompoundLocation([other] + self.parts, self.operator)
         elif _is_int_or_long(other):
@@ -1132,14 +1161,14 @@ class CompoundLocation(object):
             raise NotImplementedError
 
     def __contains__(self, value):
-        """Check if an integer position is within the location."""
+        """Check if an integer position is within the CompoundLocation object."""
         for loc in self.parts:
             if value in loc:
                 return True
         return False
 
     def __nonzero__(self):
-        """Returns True regardless of the length of the feature.
+        """Return True regardless of the length of the feature.
 
         This behaviour is for backwards compatibility, since until the
         __len__ method was added, a FeatureLocation always evaluated as True.
@@ -1153,20 +1182,22 @@ class CompoundLocation(object):
         return True
 
     def __len__(self):
+        """Return the length of the CompoundLocation object."""
         return sum(len(loc) for loc in self.parts)
 
     def __iter__(self):
+        """Iterate over the parent positions within the CompoundLocation object."""
         for loc in self.parts:
             for pos in loc:
                 yield pos
 
     def _shift(self, offset):
-        """Returns a copy of the location shifted by the offset (PRIVATE)."""
+        """Return a copy of the CompoundLocation shifted by an offset (PRIVATE)."""
         return CompoundLocation([loc._shift(offset) for loc in self.parts],
                                 self.operator)
 
     def _flip(self, length):
-        """Returns a copy of the location after the parent is reversed (PRIVATE).
+        """Return a copy of the locations after the parent is reversed (PRIVATE).
 
         Note that the order of the parts is NOT reversed too. Consider a CDS
         on the forward strand with exons small, medium and large (in length).
@@ -1297,16 +1328,32 @@ class CompoundLocation(object):
 
     @property
     def ref(self):
-        """CompoundLocation's don't have a ref (dummy method for API compatibility)."""
+        """Not present in CompoundLocation, dummy method for API compatibility."""
         return None
 
     @property
     def ref_db(self):
-        """CompoundLocation's don't have a ref_db (dummy method for API compatibility)."""
+        """Not present in CompoundLocation, dummy method for API compatibility."""
         return None
 
     def extract(self, parent_sequence):
-        """Extract feature sequence from the supplied parent sequence."""
+        """Extract the sequence from supplied parent sequence using the CompoundLocation object.
+
+        The parent_sequence can be a Seq like object or a string, and will
+        generally return an object of the same type. The exception to this is
+        a MutableSeq as the parent sequence will return a Seq object.
+
+        >>> from Bio.Seq import Seq
+        >>> from Bio.Alphabet import generic_protein
+        >>> from Bio.SeqFeature import FeatureLocation, CompoundLocation
+        >>> seq = Seq("MKQHKAMIVALIVICITAVVAAL", generic_protein)
+        >>> fl1 = FeatureLocation(2, 8)
+        >>> fl2 = FeatureLocation(10, 15)
+        >>> fl3 = CompoundLocation([fl1,fl2])
+        >>> fl3.extract(seq)
+        Seq('QHKAMILIVIC', ProteinAlphabet())
+
+        """
         # This copes with mixed strand features & all on reverse:
         parts = [loc.extract(parent_sequence) for loc in self.parts]
         # We use addition rather than a join to avoid alphabet issues:
@@ -1320,7 +1367,7 @@ class AbstractPosition(object):
     """Abstract base class representing a position."""
 
     def __repr__(self):
-        """String representation of the location for debugging."""
+        """Represent the AbstractPosition object as a string for debugging."""
         return "%s(...)" % (self.__class__.__name__)
 
 
@@ -1359,13 +1406,14 @@ class ExactPosition(int, AbstractPosition):
     """
 
     def __new__(cls, position, extension=0):
+        """Create an ExactPosition object."""
         if extension != 0:
             raise AttributeError("Non-zero extension %s for exact position."
                                  % extension)
         return int.__new__(cls, position)
 
     def __repr__(self):
-        """String representation of the ExactPosition location for debugging."""
+        """Represent the ExactPosition object as a string for debugging."""
         return "%s(%i)" % (self.__class__.__name__, int(self))
 
     @property
@@ -1375,14 +1423,16 @@ class ExactPosition(int, AbstractPosition):
 
     @property
     def extension(self):
-        """Legacy attribute to get extension (zero) as integer (OBSOLETE)."""
+        """Not present in this object, return zero (OBSOLETE)."""
         return 0
 
     def _shift(self, offset):
+        """Return a copy of the position object with its location shifted (PRIVATE)."""
         # By default preserve any subclass
         return self.__class__(int(self) + offset)
 
     def _flip(self, length):
+        """Return a copy of the location after the parent is reversed (PRIVATE)."""
         # By default perserve any subclass
         return self.__class__(length - int(self))
 
@@ -1404,15 +1454,16 @@ class UnknownPosition(AbstractPosition):
     """
 
     def __repr__(self):
-        """String representation of the UnknownPosition location for debugging."""
+        """Represent the UnknownPosition object as a string for debugging."""
         return "%s()" % self.__class__.__name__
 
     def __hash__(self):
+        """Return the hash value of the UnknownPosition object."""
         return hash(None)
 
     @property
     def position(self):
-        """Legacy attribute to get position (None) (OBSOLETE)."""
+        """Legacy attribute to get location (None) (OBSOLETE)."""
         return None
 
     @property
@@ -1421,9 +1472,11 @@ class UnknownPosition(AbstractPosition):
         return 0
 
     def _shift(self, offset):
+        """Return a copy of the position object with its location shifted (PRIVATE)."""
         return self
 
     def _flip(self, length):
+        """Return a copy of the location after the parent is reversed (PRIVATE)."""
         return self
 
 
@@ -1513,6 +1566,7 @@ class WithinPosition(int, AbstractPosition):
     """
 
     def __new__(cls, position, left, right):
+        """Create a WithinPosition object."""
         assert position == left or position == right, \
             "WithinPosition: %r should match left %r or right %r" \
             % (position, left, right)
@@ -1522,12 +1576,13 @@ class WithinPosition(int, AbstractPosition):
         return obj
 
     def __repr__(self):
-        """String representation of the WithinPosition location for debugging."""
+        """Represent the WithinPosition object as a string for debugging."""
         return "%s(%i, left=%i, right=%i)" \
                % (self.__class__.__name__, int(self),
                   self._left, self._right)
 
     def __str__(self):
+        """Return a representation of the WithinPosition object (with python counting)."""
         return "(%s.%s)" % (self._left, self._right)
 
     @property
@@ -1541,11 +1596,13 @@ class WithinPosition(int, AbstractPosition):
         return self._right - self._left
 
     def _shift(self, offset):
+        """Return a copy of the position object with its location shifted (PRIVATE)."""
         return self.__class__(int(self) + offset,
                               self._left + offset,
                               self._right + offset)
 
     def _flip(self, length):
+        """Return a copy of the location after the parent is reversed (PRIVATE)."""
         return self.__class__(length - int(self),
                               length - self._right,
                               length - self._left)
@@ -1618,6 +1675,7 @@ class BetweenPosition(int, AbstractPosition):
     """
 
     def __new__(cls, position, left, right):
+        """Create a new instance in BetweenPosition object."""
         assert position == left or position == right
         obj = int.__new__(cls, position)
         obj._left = left
@@ -1625,12 +1683,13 @@ class BetweenPosition(int, AbstractPosition):
         return obj
 
     def __repr__(self):
-        """String representation of the WithinPosition location for debugging."""
+        """Represent the BetweenPosition object as a string for debugging."""
         return "%s(%i, left=%i, right=%i)" \
                % (self.__class__.__name__, int(self),
                   self._left, self._right)
 
     def __str__(self):
+        """Return a representation of the BetweenPosition object (with python counting)."""
         return "(%s^%s)" % (self._left, self._right)
 
     @property
@@ -1644,11 +1703,13 @@ class BetweenPosition(int, AbstractPosition):
         return self._right - self._left
 
     def _shift(self, offset):
+        """Return a copy of the position object with its location shifted (PRIVATE)."""
         return self.__class__(int(self) + offset,
                               self._left + offset,
                               self._right + offset)
 
     def _flip(self, length):
+        """Return a copy of the location after the parent is reversed (PRIVATE)."""
         return self.__class__(length - int(self),
                               length - self._right,
                               length - self._left)
@@ -1689,6 +1750,7 @@ class BeforePosition(int, AbstractPosition):
 
     # Subclasses int so can't use __init__
     def __new__(cls, position, extension=0):
+        """Create a new instance in BeforePosition object."""
         if extension != 0:
             raise AttributeError("Non-zero extension %s for exact position."
                                  % extension)
@@ -1705,16 +1767,19 @@ class BeforePosition(int, AbstractPosition):
         return 0
 
     def __repr__(self):
-        """A string representation of the location for debugging."""
+        """Represent the location as a string for debugging."""
         return "%s(%i)" % (self.__class__.__name__, int(self))
 
     def __str__(self):
+        """Return a representation of the BeforePosition object (with python counting)."""
         return "<%s" % self.position
 
     def _shift(self, offset):
+        """Return a copy of the position object with its location shifted (PRIVATE)."""
         return self.__class__(int(self) + offset)
 
     def _flip(self, length):
+        """Return a copy of the location after the parent is reversed (PRIVATE)."""
         return AfterPosition(length - int(self))
 
 
@@ -1760,6 +1825,7 @@ class AfterPosition(int, AbstractPosition):
 
     # Subclasses int so can't use __init__
     def __new__(cls, position, extension=0):
+        """Create a new instance of the AfterPosition object."""
         if extension != 0:
             raise AttributeError("Non-zero extension %s for exact position."
                                  % extension)
@@ -1776,16 +1842,19 @@ class AfterPosition(int, AbstractPosition):
         return 0
 
     def __repr__(self):
-        """A string representation of the location for debugging."""
+        """Represent the location as a string for debugging."""
         return "%s(%i)" % (self.__class__.__name__, int(self))
 
     def __str__(self):
+        """Return a representation of the AfterPosition object (with python counting)."""
         return ">%s" % self.position
 
     def _shift(self, offset):
+        """Return a copy of the position object with its location shifted (PRIVATE)."""
         return self.__class__(int(self) + offset)
 
     def _flip(self, length):
+        """Return a copy of the location after the parent is reversed (PRIVATE)."""
         return BeforePosition(length - int(self))
 
 
@@ -1841,7 +1910,7 @@ class OneOfPosition(int, AbstractPosition):
     """
 
     def __new__(cls, position, choices):
-        """Initialize with a set of posssible positions.
+        """Initialize with a set of possible positions.
 
         position_list is a list of AbstractPosition derived objects,
         specifying possible locations.
@@ -1866,11 +1935,12 @@ class OneOfPosition(int, AbstractPosition):
         return max(positions) - min(positions)
 
     def __repr__(self):
-        """String representation of the OneOfPosition location for debugging."""
+        """Represent the OneOfPosition object as a string for debugging."""
         return "%s(%i, choices=%r)" % (self.__class__.__name__,
                                        int(self), self.position_choices)
 
     def __str__(self):
+        """Return a representation of the OneOfPosition object (with python counting)."""
         out = "one-of("
         for position in self.position_choices:
             out += "%s," % position
@@ -1879,10 +1949,12 @@ class OneOfPosition(int, AbstractPosition):
         return out
 
     def _shift(self, offset):
+        """Return a copy of the position object with its location shifted (PRIVATE)."""
         return self.__class__(int(self) + offset,
                               [p._shift(offset) for p in self.position_choices])
 
     def _flip(self, length):
+        """Return a copy of the location after the parent is reversed (PRIVATE)."""
         return self.__class__(length - int(self),
                               [p._flip(length) for p in self.position_choices[::-1]])
 
@@ -1895,10 +1967,11 @@ class PositionGap(object):
         self.gap_size = gap_size
 
     def __repr__(self):
-        """A string representation of the position gap for debugging."""
+        """Represent the position gap as a string for debugging."""
         return "%s(%s)" % (self.__class__.__name__, repr(self.gap_size))
 
     def __str__(self):
+        """Return a representation of the PositionGap object (with python counting)."""
         out = "gap(%s)" % self.gap_size
         return out
 
