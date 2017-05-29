@@ -15,7 +15,7 @@ from __future__ import print_function
 
 import re
 from math import pi, sin, cos
-from random import random, randint
+from random import random, randint, seed
 
 from Bio.Seq import Seq, MutableSeq
 from Bio import Alphabet
@@ -525,11 +525,14 @@ def six_frame_translations(seq, genetic_code=1):
     return res
 
 
-def testseq(size=30, alphabet=IUPAC.unambiguous_dna, table=1, gc_target=None, persistent=True, from_start=True, to_stop=True, stop_symbol="*", truncate=True, messenger=False):
+shuffle_seed = randint(1, 9000)
+
+
+def testseq(size=30, alphabet=IUPAC.unambiguous_dna, table=1, gc_target=None, persistent=True, from_start=True, to_stop=True, stop_symbol="*", truncate=True, messenger=False, shuffle=False, rand_seed=9001):
     """Generate and return a Seq object.
 
     This function will generate and return a custom Seq object
-    using any IUPAC alphabet. These sequences are a representation
+    using any IUPAC alphabet. These sequences are a faux representation
     of biological data and can be used for testing/demonstration purposes.
 
     Arguments:
@@ -538,10 +541,9 @@ def testseq(size=30, alphabet=IUPAC.unambiguous_dna, table=1, gc_target=None, pe
         to convert any input to an integer.
         - alphabet - Any IUPAC alphabet can be used to generate
         the sequence. Defaults to unambiguous DNA.
-        - table - Which codon table to use?  This can be either a name
-        (string), an NCBI identifier (integer), or a CodonTable
-        object (useful for non-standard genetic codes).  This
-        defaults to the "Standard" table.
+        - table - Select which codon table you would like to use.  
+        This preferably accepts an integer value and will attempt
+        to convert any input to an integer. 
         - gc_target - The function will attempt to generate a sequence
         with a GC-content equal to the 'gc_target' argument. The argument will
         accept any integer between 0 and 100. Alternatively, if 'gc_target'
@@ -553,20 +555,25 @@ def testseq(size=30, alphabet=IUPAC.unambiguous_dna, table=1, gc_target=None, pe
         that the first codon in the generated sequence is a start codon.
         - to_stop - A boolean that, if set to True, will ensure
         that the last codon in the generated sequence is a stop codon.
-        - stop_symbol - Single character string, what to use for
-        terminators.  This defaults to the asterisk, "*".
+        - stop_symbol - Single character string representing a translated
+        stop codon.  This defaults to the asterisk, "*".
         - truncate - A boolean that, if set to True, will ensure that
         the size of any generated (non-protein) sequence is a multiple of three (3).
         - messenger - A boolean that, if set to True, will ensure that
         any RNA sequence generated will additionally have a 5'-UTR,
         3'-UTR, and a poly-A tail.
+        - shuffle - A boolean that, if set to True, will ensure that every
+        sequence generated is different from the last.
+        - rand_seed - The seed used to generate the randomized sequence.
+        This preferably accepts an integer value and will attempt
+        to convert any input to an integer.
 
     Hey there! We can use the 'testseq' function to quickly generate sequences:
 
     >>> from Bio.SeqUtils import testseq
     >>> my_seq = testseq()
     >>> my_seq
-    Seq('ATGGACTTGTCCAATGTATATTTTTCTTAG', IUPACUnambiguousDNA())
+    Seq('ATGGTGTTTGCACCAACAATACTATCGTAA', IUPACUnambiguousDNA())
 
     The default size of the generated sequence is 30 letters,
     but you can change that at any time, like so:
@@ -578,9 +585,9 @@ def testseq(size=30, alphabet=IUPAC.unambiguous_dna, table=1, gc_target=None, pe
     You can generate your sequence using any IUPAC alphabet, like so:
 
     >>> from Bio.Alphabet import IUPAC
-    >>> my_seq = testseq(alphabet = IUPAC.extended_protein)
+    >>> my_seq = testseq(alphabet=IUPAC.extended_protein)
     >>> my_seq
-    Seq('MBNNPFSIPFVVUQRATMDDDIGMQNPSR*', HasStopCodon(ExtendedIUPACProtein(), '*'))
+    Seq('MLKDWKWYTCZXKYBVBUUNLWTDVRJUI*', HasStopCodon(ExtendedIUPACProtein(), '*'))
 
     You may have noticed that the above sequence starts with Methionine(M) and
     ends in an asterisk(*). That's because of the two arguments 'from_start'
@@ -588,25 +595,24 @@ def testseq(size=30, alphabet=IUPAC.unambiguous_dna, table=1, gc_target=None, pe
     within the sequence either; this is due to the 'persistent' argument.
     The 'from_start', 'to_stop', and 'persistent' arguments are all set to True by default.
     You can read more about what they do in the "Arguments" section above. It's
-    useful to note that all three of those arguments involve the use of codons!
-
+    useful to note that all three of those arguments involve the use of codon tables!
     When generating your sequence, you can set which codon table you'd like to use:
 
     >>> my_seq = testseq(table=5)
     >>> my_seq
-    Seq('ATCGCTCGACTTCATGTGCATTTTGCTTAG', IUPACUnambiguousDNA())
+    Seq('ATGGTGTTTGCACCAACAATACTATCGTAA', IUPACUnambiguousDNA())
 
     Now we can translate our sequence with ease!
 
     >>> my_seq.translate(table=6)
-    Seq('IARLHVHFAQ', IUPACProtein())
+    Seq('MVFAPTILSQ', IUPACProtein())
 
     Oops! We're missing a stop codon. We've generated a sequence using Table 5,
     but translated it using Table 6. Those tables don't share a common stop codon!
     Let's fix that...
 
     >>> my_seq.translate(table=5)
-    Seq('IARLHVHFA*', HasStopCodon(IUPACProtein(), '*'))
+    Seq('MVFAPTMLS*', HasStopCodon(IUPACProtein(), '*'))
 
     That's better!
 
@@ -617,16 +623,16 @@ def testseq(size=30, alphabet=IUPAC.unambiguous_dna, table=1, gc_target=None, pe
     >>> my_seq = testseq(gc_target=60)
     >>> from Bio.SeqUtils import GC
     >>> GC(my_seq)
-    73.33333333333333
+    46.666666666666664
 
-    What happened?! Note that in the above example, the sequence is at the
+    What happened? Note that in the above example, the sequence is at the
     default size of 30 letters. Since the sequence is generated letter by letter,
     larger sequences will have a tendency to be closer to the desired GC-content
     than smaller sequences. Let's try that again with a much larger sequence:
 
     >>> my_seq = testseq(size=10000, gc_target=60)
     >>> GC(my_seq)
-    60.426042604260424
+    59.665966596659665
 
     Much better! It's also worth noting that the 'gc_target' argument is ignored
     when generating protein sequences.
@@ -648,27 +654,69 @@ def testseq(size=30, alphabet=IUPAC.unambiguous_dna, table=1, gc_target=None, pe
     >>> len(my_seq)
     10000
 
-    The result above seems cleaner, but would result in a 'BiopythonWarning' if you
-    translated that sequence. So please be careful when altering the truncate argument.
+    The result above seems cleaner, but would result in a 'BiopythonWarning' if
+    you translated that sequence. So please be careful when altering the
+    'truncate' argument.
 
-    Finally, I'd like to briefly discuss the 'messenger' argument. You can use it to add
-    messenger RNA components to a generated RNA sequence. Though, it has two caveats...
-
-    First, the messenger argument is ignored unless an RNA alphabet is declared.
-    More importantly though, all mRNA compenents are added to the sequence addtionally.
-    Let's look at an example:
+    Let us briefly discuss the 'messenger' argument. You can use it to add
+    messenger RNA components to a generated RNA sequence. Though, it has
+    two caveats. First, the messenger argument is ignored unless an RNA alphabet
+    is declared. More importantly though, all mRNA compenents are added to
+    the sequence addtionally. Let's look at an example:
 
     >>> my_seq = testseq(300, alphabet=IUPAC.unambiguous_rna, messenger=True)
     >>> len(my_seq)
-    639
+    726
 
     Notice that the sequence requested was 300 letters, however the final length of
-    the sequence is 639 letters. Those extra letters are the mRNA components.
+    the sequence is 726 letters. Those extra letters are the mRNA components. The
+    generated sequence is buried in there, somewhere.
+
+    Lastly, lets discuss the sequence generator itself. The sequence is created
+    using a pseudo-random number generator which relies on a seed to process
+    and spit out random numbers.
+
+    Lets look at an example:
+
+    >>> a = testseq()
+    >>> b = testseq()
+    >>> a == b
+    True
+
+    Since sequence "a" and sequence "b" were both generated using the same seed,
+    they ended up being the exact same sequence. We can change that behavior
+    to shuffle the seed every time the function is called by altering
+    the 'shuffle' argument, like so:
+
+    >>> a = testseq(shuffle=True)
+    >>> b = testseq(shuffle=True)
+    >>> a == b
+    False
+
+    If you'd like even more control over which sequence is generated, you
+    can alter the 'rand_seed' arguement to manually change the seed:
+
+    >>> a = testseq(rand_seed=12345)
+    >>> b = testseq(rand_seed=67890)
+    >>> a == b
+    False
+    
+    Please note that if the 'shuffle' arguement is set to True,
+    the 'rand_seed' arguement will be ignored.
 
     This concludes our discussion. Thanks again for using Biopython!
     Contribution by Adil Iqbal (2017).
     """
-    # Pre-processing of function logic, data gathering, and argument validation.
+    # Set seed, gather data, clean-up logic, validate arguments.
+    if shuffle:
+        global shuffle_seed
+        shuffle_seed += 1
+        if shuffle_seed > 9000:
+            shuffle_seed = 1
+        seed(shuffle_seed)
+    else:
+        rand_seed = int(rand_seed)
+        seed(rand_seed)
     typeof = _SeqType(alphabet)
     if not typeof.rna:
         messenger = False
@@ -689,7 +737,7 @@ def testseq(size=30, alphabet=IUPAC.unambiguous_dna, table=1, gc_target=None, pe
     size = int(size)
     if not typeof.protein and truncate:
         size -= size % 3
-    # Generate Sequence
+    # Begin generating sequence.
     seq = ""
     for i in range(size):
         if gc_target is not None and not typeof.protein:
@@ -709,8 +757,18 @@ def testseq(size=30, alphabet=IUPAC.unambiguous_dna, table=1, gc_target=None, pe
     if typeof.protein:
         x = 1
     if from_start:
-        roll = randint(0, len(codon_set.start) - 1)
-        start = codon_set.start[roll]
+        aug = None
+        if typeof.dna:
+            aug = "ATG"
+        elif typeof.rna:
+            aug = "AUG"
+        elif typeof.protein:
+            aug = "M"
+        if aug is not None and aug in codon_set.start:
+            start = aug
+        else:
+            roll = randint(0, len(codon_set.start) - 1)
+            start = codon_set.start[roll]
         seq = start + seq[x:]
     if to_stop:
         roll = randint(0, len(codon_set.stop) - 1)
