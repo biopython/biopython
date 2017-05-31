@@ -111,7 +111,7 @@ class Parser(object):
     """
 
     def __init__(self, handle):
-        """Initialize parameters fo NeXML file parser."""
+        """Initialize parameters for NeXML file parser."""
         self.handle = handle
 
     @classmethod
