@@ -90,10 +90,12 @@ class Parser(object):
     """
 
     def __init__(self, handle):
+        """Initialize file handle for the Newick Tree."""
         self.handle = handle
 
     @classmethod
     def from_string(cls, treetext):
+        """Instantiate the Newick Tree class from the given string."""
         handle = StringIO(treetext)
         return cls(handle)
 
@@ -242,6 +244,7 @@ class Writer(object):
     """Based on the writer in Bio.Nexus.Trees (str, to_string)."""
 
     def __init__(self, trees):
+        """Initialize parameter for Tree Writer object."""
         self.trees = trees
 
     def write(self, handle, **kwargs):

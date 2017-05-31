@@ -111,14 +111,17 @@ class Parser(object):
     """
 
     def __init__(self, handle):
+        """Initialize parameters for NeXML file parser."""
         self.handle = handle
 
     @classmethod
     def from_string(cls, treetext):
+        """Convert file handle to StringIO object."""
         handle = StringIO(treetext)
         return cls(handle)
 
     def add_annotation(self, node_dict, meta_node):
+        """Add annotations for the NeXML parser."""
         if 'property' in meta_node.attrib:
             prop = meta_node.attrib['property']
         else:
@@ -217,6 +220,7 @@ class Writer(object):
     """Based on the writer in Bio.Nexus.Trees (str, to_string)."""
 
     def __init__(self, trees):
+        """Initialize parameters for NeXML writer."""
         self.trees = trees
 
         self.node_counter = 0
@@ -224,6 +228,7 @@ class Writer(object):
         self.tree_counter = 0
 
     def new_label(self, obj_type):
+        """Create new labels for the NeXML writer."""
         counter = '%s_counter' % obj_type
         setattr(self, counter, getattr(self, counter) + 1)
         return '%s%s' % (obj_type, getattr(self, counter))
