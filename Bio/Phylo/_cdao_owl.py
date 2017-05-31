@@ -13,7 +13,7 @@ cdao_namespaces = {
 
 
 def resolve_uri(s, namespaces=cdao_namespaces, cdao_to_obo=True, xml_style=False):
-    """Converts prefixed URIs to full URIs.
+    """Convert prefixed URIs to full URIs.
 
     Optionally, converts CDAO named identifiers to OBO numeric identifiers.
     """

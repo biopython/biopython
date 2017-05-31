@@ -55,10 +55,12 @@ ZEROES = 8
 
 
 def qUri(x):
+    """Resolve URI for librdf."""
     return resolve_uri(x, namespaces=RDF_NAMESPACES)
 
 
 def format_label(x):
+    """Format label for librdf."""
     return x.replace('_', ' ')
 
 
@@ -88,6 +90,7 @@ class Parser(object):
     """Parse a CDAO tree given a file handle."""
 
     def __init__(self, handle=None):
+        """initialize the value for CDAO tree parser."""
         self.handle = handle
         self.graph = None
         self.node_info = None
@@ -96,6 +99,7 @@ class Parser(object):
 
     @classmethod
     def from_string(cls, treetext):
+        """Instantiate the class from the given string."""
         handle = StringIO(treetext)
         return cls(handle)
 
@@ -252,6 +256,7 @@ class Writer(object):
     prefixes = RDF_NAMESPACES
 
     def __init__(self, trees):
+        """initialize parameters for writing a CDAO tree."""
         self.trees = trees
 
         self.node_counter = 0
@@ -287,6 +292,7 @@ class Writer(object):
                 self.add_stmt_to_handle(handle, stmt)
 
     def add_stmt_to_handle(self, handle, stmt):
+        """Add URI prefix to handle."""
         # apply URI prefixes
         stmt_strings = []
         for n, part in enumerate(stmt):
@@ -313,7 +319,7 @@ class Writer(object):
         handle.write('%s .\n' % ' '.join(stmt_strings))
 
     def process_clade(self, clade, parent=None, root=False):
-        """recursively generate triples describing a tree of clades"""
+        """recursively generate triples describing a tree of clades."""
         self.node_counter += 1
         clade.uri = 'node%s' % str(self.node_counter).zfill(ZEROES)
         if parent:

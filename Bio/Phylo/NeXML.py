@@ -16,6 +16,7 @@ class Tree(BaseTree.Tree):
     """NeXML Tree object."""
 
     def __init__(self, root=None, rooted=False, id=None, name=None, weight=1.0):
+        """Instantiate a NeXML tree object with the given parameters."""
         BaseTree.Tree.__init__(self, root=root or Clade(),
                                rooted=rooted, id=id, name=name)
         self.weight = weight
@@ -26,6 +27,7 @@ class Clade(BaseTree.Clade):
 
     def __init__(self, branch_length=1.0, name=None, clades=None,
                  confidence=None, comment=None, **kwargs):
+        """Initialize parameters for NeXML Clade object."""
         BaseTree.Clade.__init__(self, branch_length=branch_length,
                                 name=name, clades=clades, confidence=confidence)
         self.comment = comment
