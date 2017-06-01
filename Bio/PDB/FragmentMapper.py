@@ -18,7 +18,7 @@ J Mol Biol. 2002 323(2):297-307.
 
 The definition files of the fragments can be obtained from:
 
-U{http://csb.stanford.edu/~rachel/fragments/}
+U{http://github.com/csblab/fragments/}
 
 You need these files to use this module.
 
@@ -52,7 +52,7 @@ def _read_fragments(size, length, dir="."):
     """Read a fragment spec file (PRIVATE).
 
     Read a fragment spec file available from
-    http://csb.stanford.edu/rachel/fragments/
+    http://github.com/csblab/fragments/
     and return a list of Fragment objects.
 
     @param size: number of fragments in the library
