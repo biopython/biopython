@@ -18,7 +18,7 @@ J Mol Biol. 2002 323(2):297-307.
 
 The definition files of the fragments can be obtained from:
 
-U{http://github.com/csblab/fragments/}
+http://github.com/csblab/fragments/
 
 You need these files to use this module.
 
