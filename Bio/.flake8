@@ -48,8 +48,6 @@ ignore =
     # D403	First word of the first line should be properly capitalized
     # D412	No blank lines allowed between a section header and its content
     D400,D401,D402,D403,
-    # We ignore D412 deliberately:
-    D412,
     # ================================================
     # flake8-commas: C#### (in case installed locally)
     # ================================================
