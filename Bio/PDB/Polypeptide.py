@@ -309,8 +309,10 @@ class _PPBuilder(object):
     """
 
     def __init__(self, radius):
-        """@param radius: distance
-           @type radius: float
+        """Initialise the base class.
+
+        @param radius: distance
+        @type radius: float
         """
         self.radius = radius
 

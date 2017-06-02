@@ -312,9 +312,11 @@ class FragmentMapper(object):
         return (res in self.fd)
 
     def __getitem__(self, res):
-        """@type res: L{Residue}
+        """Get an entry.
 
-          @return: fragment classification
-          @rtype: L{Fragment}
+        @type res: L{Residue}
+
+        @return: fragment classification
+        @rtype: L{Fragment}
         """
         return self.fd[res]
