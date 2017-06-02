@@ -17,13 +17,10 @@ def function_population(new_genome, num_organisms, fitness_calculator):
     """Generate a population given a function to create genomes.
 
     Arguments:
-
     - new_genome - A function or callable object that will return
       a genome that can be used for a new organism. This new genome
       should be a MutableSeq object with a specified alphabet.
-
     - num_organisms - The number of individuals we want in the population.
-
     - fitness_calculator -- A function that will calculate the fitness
       of the organism when given the organisms genome.
     """
@@ -41,15 +38,11 @@ def random_population(genome_alphabet, genome_size, num_organisms,
     """Generate a population of individuals with randomly set genomes.
 
     Arguments:
-
     - genome_alphabet -- An Alphabet object describing all of the
       possible letters that could potentially be in the genome of an
       organism.
-
     - genome_size -- The size of each organisms genome.
-
     - num_organism -- The number of organisms we want in the population.
-
     - fitness_calculator -- A function that will calculate the fitness
       of the organism when given the organisms genome.
     """
@@ -90,11 +83,9 @@ class Organism(object):
     """Represent a single individual in a population.
 
     Attributes:
-
     - genome -- The genome of the organism. This is a Bio.MutableSeq
       object that has the sequence of the genome, and the alphabet
       describing all elements that can be a part of the genome.
-
     - fitness -- The calculate fitness of the organism. This fitness is
       based on the last time it was calculated using the fitness_calculator.
       So... the fitness could potentially be out of date with the real genome
@@ -107,13 +98,10 @@ class Organism(object):
         """Initialize an organism.
 
         Arguments:
-
         - genome -- A MutableSeq object representing the sequence of the
           genome.
-
         - fitness_calculator -- A function that will calculate the fitness
           of the organism when given the organisms genome.
-
         - start_fitness - the starting fitness corresponding with the
           given genome. If not supplied, the fitness will be calculated
           using fitness_calculator.

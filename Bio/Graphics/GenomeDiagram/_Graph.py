@@ -12,7 +12,6 @@
 """Graph module.
 
 Provides:
-
 - GraphData - Contains data from which a graph will be drawn, and
   information about its presentation
 
@@ -32,7 +31,6 @@ class GraphData(object):
     """Graph Data.
 
     Attributes:
-
     - id    Unique identifier for the data
     - data  Dictionary of describing the data, keyed by position
     - name  String describing the data
@@ -50,7 +48,6 @@ class GraphData(object):
         """Initialize.
 
         Arguments:
-
         - id    Unique ID for the graph
         - data  List of (position, value) tuples
         - name  String describing the graph

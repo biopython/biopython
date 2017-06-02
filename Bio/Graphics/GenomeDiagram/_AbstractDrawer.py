@@ -12,7 +12,6 @@
 """AbstractDrawer module (considered to be a private module, the API may change!).
 
 Provides:
-
 - AbstractDrawer -    Superclass for methods common to the Drawer objects
 - page_sizes -          Method that returns a ReportLab pagesize when passed
   a valid ISO size
@@ -53,7 +52,6 @@ def page_sizes(size):
     """Convert size string into a Reportlab pagesize.
 
     Arguments:
-
     - size - A string representing a standard page size, eg 'A4' or 'LETTER'
 
     """
@@ -107,11 +105,10 @@ def draw_box(point1, point2,
     """Draw a box.
 
     Arguments:
-
     - point1, point2 - coordinates for opposite corners of the box
       (x,y tuples)
-    - color /colour - The color for the box
-      (colour takes priority over color)
+    - color /colour - The color for the box (colour takes priority
+      over color)
     - border - Border color for the box
 
     Returns a closed path object, beginning at (x1,y1) going round
@@ -173,7 +170,6 @@ def draw_polygon(list_of_points,
     """Draw polygon.
 
     Arguments:
-
     - list_of_point - list of (x,y) tuples for the corner coordinates
     - color / colour - The color for the box
 
@@ -273,7 +269,6 @@ def angle2trig(theta):
     """Convert angle to a reportlab ready tuple.
 
     Arguments:
-
     - theta -  Angle in degrees, counter clockwise from horizontal
 
     Returns a representation of the passed angle in a format suitable
@@ -320,7 +315,6 @@ class AbstractDrawer(object):
     """Abstract Drawer.
 
     Attributes:
-
     - tracklines    Boolean for whether to draw lines delineating tracks
     - pagesize      Tuple describing the size of the page in pixels
     - x0            Float X co-ord for leftmost point of drawable area
@@ -345,7 +339,6 @@ class AbstractDrawer(object):
         """Create the object.
 
         Arguments:
-
         - parent    Diagram object containing the data that the drawer draws
         - pagesize  String describing the ISO size of the image, or a tuple
           of pixels
@@ -389,10 +382,9 @@ class AbstractDrawer(object):
         """Set page size of the drawing..
 
         Arguments:
-
         - pagesize      Size of the output image, a tuple of pixels (width,
-           height, or a string in the reportlab.lib.pagesizes
-           set of ISO sizes.
+          height, or a string in the reportlab.lib.pagesizes
+          set of ISO sizes.
         - orientation   String: 'landscape' or 'portrait'
 
         """
@@ -416,7 +408,6 @@ class AbstractDrawer(object):
         """Set page margins.
 
         Arguments:
-
         - x         Float(0->1), Absolute X margin as % of page
         - y         Float(0->1), Absolute Y margin as % of page
         - xl        Float(0->1), Left X margin as % of page
@@ -445,7 +436,6 @@ class AbstractDrawer(object):
         """Set start and end points for the drawing as a whole.
 
         Arguments:
-
         - start - The first base (or feature mark) to draw from
         - end - The last base (or feature mark) to draw to
 
@@ -467,7 +457,6 @@ class AbstractDrawer(object):
         """Check if given value is within the region selected for drawing.
 
         Arguments:
-
         - value - A base position
 
         """

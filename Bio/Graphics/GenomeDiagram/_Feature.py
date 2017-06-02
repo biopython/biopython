@@ -11,7 +11,6 @@
 """Feature module.
 
 Provides:
-
 - Feature - class to wrap Bio.SeqFeature objects with drawing information
 
 For drawing capabilities, this module uses reportlab to define colors:
@@ -29,7 +28,6 @@ class Feature(object):
     """Class to wrap Bio.SeqFeature objects for GenomeDiagram.
 
     Attributes:
-
     - parent    FeatureSet, container for the object
     - id        Unique id
     - color    color.Color, color to draw the feature
@@ -72,7 +70,6 @@ class Feature(object):
         """Initialize.
 
         Arguments:
-
         - parent    FeatureSet containing the feature
         - feature_id    Unique id for the feature
         - feature   Bio.SeqFeature object to be wrapped
@@ -162,10 +159,9 @@ class Feature(object):
         """Set the color in which the feature will be drawn.
 
         Arguments:
-
         - color    The color to draw the feature - either a colors.Color
-          object, an RGB tuple of floats, or an integer
-          corresponding to colors in colors.txt
+          object, an RGB tuple of floats, or an integer corresponding a
+          colors in colors.txt
 
         """
         # TODO - Make this into the set method for a color property?
