@@ -36,9 +36,8 @@ except ImportError as x:
 
 
 def lowess(x, y, f=2. / 3., iter=3):
-    """lowess(x, y, f=2./3., iter=3) -> yest
+    """Lowess smoother: Robust locally weighted regression.
 
-    Lowess smoother: Robust locally weighted regression.
     The lowess function fits a nonparametric regression curve to a scatterplot.
     The arrays x and y contain an equal number of elements; each pair
     (x[i], y[i]) defines a data point in the scatterplot. The function returns
@@ -52,6 +51,7 @@ def lowess(x, y, f=2. / 3., iter=3):
     also a numpy float array of that length.
 
     e.g.
+
     >>> import numpy
     >>> x = numpy.array([4,  4,  7,  7,  8,  9, 10, 10, 10, 11, 11, 12, 12, 12,
     ...                 12, 13, 13, 13, 13, 14, 14, 14, 14, 15, 15, 15, 16, 16,
