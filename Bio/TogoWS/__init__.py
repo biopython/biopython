@@ -52,7 +52,7 @@ _convert_formats = []
 
 
 def _get_fields(url):
-    """Queries a TogoWS URL for a plain text list of values (PRIVATE)."""
+    """Query a TogoWS URL for a plain text list of values (PRIVATE)."""
     handle = _open(url)
     fields = handle.read().strip().split()
     handle.close()
@@ -77,15 +77,16 @@ def _get_convert_formats():
 
 
 def entry(db, id, format=None, field=None):
-    """TogoWS fetch entry (returns a handle).
+    """Call TogoWS 'entry' to fetch a record.
 
-        - db - database (string), see list below.
-        - id - identier (string) or a list of identifiers (either as a list of
-          strings or a single string with comma separators).
-        - format - return data file format (string), options depend on the database
-          e.g. "xml", "json", "gff", "fasta", "ttl" (RDF Turtle)
-        - field - specific field from within the database record (string)
-          e.g. "au" or "authors" for pubmed.
+    Arguments:
+    - db - database (string), see list below.
+    - id - identier (string) or a list of identifiers (either as a list of
+      strings or a single string with comma separators).
+    - format - return data file format (string), options depend on the database
+      e.g. "xml", "json", "gff", "fasta", "ttl" (RDF Turtle)
+    - field - specific field from within the database record (string)
+      e.g. "au" or "authors" for pubmed.
 
     At the time of writing, this includes the following::
 
@@ -145,7 +146,7 @@ def entry(db, id, format=None, field=None):
 
 
 def search_count(db, query):
-    """TogoWS search count (returns an integer).
+    """Call TogoWS search count to see how many matches a search gives.
 
     db - database (string), see http://togows.dbcls.jp/search
     query - search term (string)
@@ -177,13 +178,14 @@ def search_count(db, query):
 
 
 def search_iter(db, query, limit=None, batch=100):
-    """TogoWS search iteratating over the results (generator function).
+    """Call TogoWS search iteratating over the results (generator function).
 
-        - db - database (string), see http://togows.dbcls.jp/search
-        - query - search term (string)
-        - limit - optional upper bound on number of search results
-        - batch - number of search results to pull back each time talk to
-          TogoWS (currently limited to 100).
+    Arguments:
+    - db - database (string), see http://togows.dbcls.jp/search
+    - query - search term (string)
+    - limit - optional upper bound on number of search results
+    - batch - number of search results to pull back each time talk to
+      TogoWS (currently limited to 100).
 
     You would use this function within a for loop, e.g.
 
@@ -222,18 +224,19 @@ def search_iter(db, query, limit=None, batch=100):
 
 
 def search(db, query, offset=None, limit=None, format=None):
-    """TogoWS search (returns a handle).
+    """Call TogoWS search.
 
     This is a low level wrapper for the TogoWS search function, which
     can return results in a several formats. In general, the search_iter
     function is more suitable for end users.
 
-        - db - database (string), see http://togows.dbcls.jp/search/
-        - query - search term (string)
-        - offset, limit - optional integers specifying which result to start from
-          (1 based) and the number of results to return.
-        - format - return data file format (string), e.g. "json", "ttl" (RDF)
-          By default plain text is returned, one result per line.
+    Arguments:
+    - db - database (string), see http://togows.dbcls.jp/search/
+    - query - search term (string)
+    - offset, limit - optional integers specifying which result to start from
+      (1 based) and the number of results to return.
+    - format - return data file format (string), e.g. "json", "ttl" (RDF)
+      By default plain text is returned, one result per line.
 
     At the time of writing, TogoWS applies a default count limit of 100
     search results, and this is an upper bound. To access more results,
@@ -285,11 +288,12 @@ def search(db, query, offset=None, limit=None, format=None):
 
 
 def convert(data, in_format, out_format):
-    """TogoWS convert (returns a handle).
+    """Call TogoWS for file format convertion.
 
-    data - string or handle containing input record(s)
-    in_format - string describing the input file format (e.g. "genbank")
-    out_format - string describing the requested output format (e.g. "fasta")
+    Arguments:
+    - data - string or handle containing input record(s)
+    - in_format - string describing the input file format (e.g. "genbank")
+    - out_format - string describing the requested output format (e.g. "fasta")
 
     For a list of supported conversions (e.g. "genbank" to "fasta"), see
     http://togows.dbcls.jp/convert/
@@ -314,7 +318,7 @@ def convert(data, in_format, out_format):
 
 
 def _open(url, post=None):
-    """Helper function to build the URL and open a handle to it (PRIVATE).
+    """Build the URL and open a handle to it (PRIVATE).
 
     Open a handle to TogoWS, will raise an IOError if it encounters an error.
 
