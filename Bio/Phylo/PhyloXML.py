@@ -65,6 +65,7 @@ class Phyloxml(PhyloElement):
     """
 
     def __init__(self, attributes, phylogenies=None, other=None):
+        """Initialize parameters for PhyloXML object."""
         self.attributes = {
             # standard
             "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
@@ -97,6 +98,7 @@ class Phyloxml(PhyloElement):
         return len(self.phylogenies)
 
     def __str__(self):
+        """Return name of phylogenies in the object."""
         return '%s([%s])' % (self.__class__.__name__,
                              ',\n'.join(map(str, self.phylogenies)))
 
@@ -123,6 +125,7 @@ class Other(PhyloElement):
 
     def __init__(self, tag, namespace=None, attributes=None, value=None,
                  children=None):
+        """Initialize values for non-phyloXML elements."""
         self.tag = tag
         self.namespace = namespace
         self.attributes = attributes or {}
@@ -174,6 +177,7 @@ class Phylogeny(PhyloElement, BaseTree.Tree):
                  confidences=None, clade_relations=None, sequence_relations=None,
                  properties=None, other=None,
                  ):
+        """Initialize values for phylogenetic tree object."""
         assert isinstance(rooted, bool)
         self.root = root
         self.rooted = rooted
@@ -336,6 +340,7 @@ class Clade(PhyloElement, BaseTree.Clade):
                  distributions=None, references=None, properties=None, clades=None,
                  other=None,
                  ):
+        """Initialize value for the Clade object."""
         self.branch_length = branch_length
         self.id_source = id_source
         self.name = name
@@ -436,6 +441,7 @@ class Clade(PhyloElement, BaseTree.Clade):
 class BranchColor(PhyloElement, BaseTree.BranchColor):
 
     def __init__(self, *args, **kwargs):
+        """Initialize parameters for the BranchColor object."""
         BaseTree.BranchColor.__init__(self, *args, **kwargs)
 
 
@@ -449,6 +455,7 @@ class Accession(PhyloElement):
     """
 
     def __init__(self, value, source):
+        """Initialize value for Accession object."""
         self.value = value
         self.source = source
 
@@ -489,6 +496,7 @@ class Annotation(PhyloElement):
                  desc=None, confidence=None, uri=None,
                  # Collection
                  properties=None):
+        """Initialize value for the Annotation object."""
         _check_str(ref, self.re_ref.match)
         self.ref = ref
         self.source = source
@@ -513,6 +521,7 @@ class BinaryCharacters(PhyloElement):
                  absent_count=None,
                  # Child nodes (flattened into collections)
                  gained=None, lost=None, present=None, absent=None):
+        """Initialize values for the BinaryCharacters object."""
         self.type = type
         self.gained_count = gained_count
         self.lost_count = lost_count
@@ -539,6 +548,7 @@ class CladeRelation(PhyloElement):
 
     def __init__(self, type, id_ref_0, id_ref_1,
                  distance=None, confidence=None):
+        """Initialize values for the CladeRelation object."""
         self.distance = distance
         self.type = type
         self.id_ref_0 = id_ref_0
@@ -560,6 +570,7 @@ class Confidence(PhyloElement):
     """
 
     def __init__(self, value, type='unknown'):
+        """Initialize values for the Confidence object."""
         self.value = value
         self.type = type
 
@@ -576,11 +587,23 @@ class Confidence(PhyloElement):
         return id(self)
 
     def __eq__(self, other):
+        """Checks for equality between Confidence objects.
+
+        Returns:
+            value : float
+                confidence value
+        """
         if isinstance(other, Confidence):
             return self.value == other.value
         return self.value == other
 
     def __ne__(self, other):
+        """Checks for inequality between two Confidence objects.
+
+        Returns:
+        value : float
+            confidence value.
+        """
         if isinstance(other, Confidence):
             return self.value != other.value
         return self.value != other
@@ -604,24 +627,28 @@ class Confidence(PhyloElement):
     # Arithmetic operators, including reverse
 
     def __add__(self, other):
+        """Conducts additions between value of two Confidence objects."""
         return self.value + other
 
     def __radd__(self, other):
         return other + self.value
 
     def __sub__(self, other):
+        """Conduct subtraction between value of two Confidence objects."""
         return self.value - other
 
     def __rsub__(self, other):
         return other - self.value
 
     def __mul__(self, other):
+        """Conduct multiplication between value of two Confidence objects."""
         return self.value * other
 
     def __rmul__(self, other):
         return other * self.value
 
     def __div__(self, other):
+        """Conduct division between value of two Confidence objects."""
         return self.value.__div__(other)
 
     def __rdiv__(self, other):
@@ -648,6 +675,7 @@ class Confidence(PhyloElement):
         return other.__floordiv__(self.value)
 
     def __mod__(self, other):
+        """Conducts modulus between value of two Confidence objects."""
         return self.value % other
 
     def __rmod__(self, other):
@@ -670,21 +698,25 @@ class Confidence(PhyloElement):
     # Unary arithmetic operations: -, +, abs()
 
     def __neg__(self):
+        """Conducts negation of a Confidence object."""
         return -self.value
 
     def __pos__(self):
         return self.value
 
     def __abs__(self):
+        """Return absolute value of Confidence object."""
         return abs(self.value)
 
     # Explicit coercion to numeric types: float, int
     # (and under Python 2 only long)
 
     def __float__(self):
+        """Returns float value of Confidence object."""
         return float(self.value)
 
     def __int__(self):
+        """Returns integer value of Confidence object."""
         return int(self.value)
 
     if sys.version_info[0] < 3:
@@ -714,6 +746,7 @@ class Date(PhyloElement):
 
     def __init__(self, value=None, unit=None, desc=None,
                  minimum=None, maximum=None):
+        """Initialize values of the Date object."""
         self.value = value
         self.unit = unit
         self.desc = desc
@@ -744,6 +777,7 @@ class Distribution(PhyloElement):
     """
 
     def __init__(self, desc=None, points=None, polygons=None):
+        """Initialize values of Distribution object."""
         self.desc = desc
         self.points = points or []
         self.polygons = polygons or []
@@ -760,6 +794,7 @@ class DomainArchitecture(PhyloElement):
     """
 
     def __init__(self, length=None, domains=None):
+        """Initialize values of the DomainArchitecture object."""
         self.length = length
         self.domains = domains
 
@@ -777,6 +812,7 @@ class Events(PhyloElement):
 
     def __init__(self, type=None, duplications=None, speciations=None,
                  losses=None, confidence=None):
+        """Initialize values of the Events object."""
         _check_str(type, self.ok_type.__contains__)
         self.type = type
         self.duplications = duplications
@@ -826,6 +862,7 @@ class Id(PhyloElement):
     """
 
     def __init__(self, value, provider=None):
+        """Initialize vakues for the identifier object."""
         self.value = value
         self.provider = provider
 
@@ -849,6 +886,7 @@ class MolSeq(PhyloElement):
     re_value = re.compile(r'[a-zA-Z\.\-\?\*_]+')
 
     def __init__(self, value, is_aligned=None):
+        """Initialize parameters for the MolSeq object."""
         _check_str(value, self.re_value.match)
         self.value = value
         self.is_aligned = is_aligned
@@ -877,6 +915,7 @@ class Point(PhyloElement):
     """
 
     def __init__(self, geodetic_datum, lat, long, alt=None, alt_unit=None):
+        """Initialize value for the Point object."""
         self.geodetic_datum = geodetic_datum
         self.lat = lat
         self.long = long
@@ -891,6 +930,7 @@ class Polygon(PhyloElement):
     """
 
     def __init__(self, points=None):
+        """Initialize value for the Polygon object."""
         self.points = points or []
 
     def __str__(self):
@@ -938,6 +978,7 @@ class Property(PhyloElement):
 
     def __init__(self, value, ref, applies_to, datatype,
                  unit=None, id_ref=None):
+        """Initialize value for the Property object."""
         _check_str(ref, self.re_ref.match)
         _check_str(applies_to, self.ok_applies_to.__contains__)
         _check_str(datatype, self.ok_datatype.__contains__)
