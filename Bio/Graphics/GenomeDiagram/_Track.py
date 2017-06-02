@@ -11,7 +11,6 @@
 """Track module.
 
 Provides:
-
 - Track - Container for a single track on the diagram, containing
   FeatureSet and GraphSet objects
 
@@ -34,7 +33,6 @@ class Track(object):
     """Track.
 
     Attributes:
-
     - height    Int describing the relative height to other trackscale_fontsizes
       in the diagram
     - name      String describing the track
@@ -96,7 +94,6 @@ class Track(object):
         """Initialize.
 
         Arguments:
-
         - height    Int describing the relative height to other tracks in the
           diagram
         - name      String describing the track
@@ -247,7 +244,6 @@ class Track(object):
         """Return a formatted string with information about the track.
 
         Arguments:
-
         - verbose       Boolean indicating whether a short or complete
           account of the track is required
 

@@ -29,17 +29,15 @@ class RouletteWheelSelection(AbstractSelection):
         """Initialize the selector.
 
         Arguments:
-
         - mutator - A Mutation object which will perform mutation
           on an individual.
-
         - crossover - A Crossover object which will take two
           individuals and produce two new individuals which may
           have had crossover occur.
-
         - repairer - A class which can do repair on rearranged genomes
           to eliminate infeasible individuals. If set at None, so repair
           will be done.
+
         """
         AbstractSelection.__init__(self, mutator, crossover, repairer)
 
@@ -47,10 +45,10 @@ class RouletteWheelSelection(AbstractSelection):
         """Perform selection on the population based using a Roulette model.
 
         Arguments:
-
         - population - A population of organisms on which we will perform
           selection. The individuals are assumed to have fitness values which
           are due to their current genome.
+
         """
         # set up the current probabilities for selecting organisms
         # from the population
@@ -94,7 +92,7 @@ class RouletteWheelSelection(AbstractSelection):
         This creates a fitness proportional 'wheel' that will be used for
         selecting based on random numbers.
 
-        Returns:
+        Return value:
 
         A dictionary where the keys are the 'high' value that an
         individual will be selected. The low value is determined by

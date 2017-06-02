@@ -39,11 +39,9 @@ class LinearDrawer(AbstractDrawer):
     """Linear Drawer.
 
     Inherits from:
-
     - AbstractDrawer
 
     Attributes:
-
     - tracklines    Boolean for whether to draw lines delineating tracks
     - pagesize      Tuple describing the size of the page in pixels
     - x0            Float X co-ord for leftmost point of drawable area
@@ -87,7 +85,6 @@ class LinearDrawer(AbstractDrawer):
         """Initialize.
 
         Arguments:
-
         - parent    Diagram object containing the data that the drawer draws
         - pagesize  String describing the ISO size of the image, or a tuple
           of pixels
@@ -279,7 +276,6 @@ class LinearDrawer(AbstractDrawer):
         """Draw track.
 
         Arguments:
-
         - track     Track object
 
         Returns a tuple (list of elements in the track, list of labels in
@@ -303,7 +299,6 @@ class LinearDrawer(AbstractDrawer):
         """Draw tick.
 
         Arguments:
-
         - tickpos   Int, position of the tick on the sequence
         - ctr       Float, Y co-ord of the center of the track
         - ticklen   How long to draw the tick
@@ -352,7 +347,6 @@ class LinearDrawer(AbstractDrawer):
         """Draw scale.
 
         Argument:
-
         - track     Track object
 
         Returns a tuple of (list of elements in the scale, list of labels
@@ -483,7 +477,6 @@ class LinearDrawer(AbstractDrawer):
         """Draw greytrack.
 
         Arguments:
-
         - track     Track object
 
         Put in a grey background to the current track in all fragments,
@@ -544,7 +537,6 @@ class LinearDrawer(AbstractDrawer):
         """Draw feature set.
 
         Arguments:
-
         - set       FeatureSet object
 
         Returns a tuple (list of elements describing features, list of
@@ -567,7 +559,6 @@ class LinearDrawer(AbstractDrawer):
         """Draw feature.
 
         Arguments:
-
         - feature           Feature containing location info
 
         Returns tuple of (list of elements describing single feature, list
@@ -858,7 +849,6 @@ class LinearDrawer(AbstractDrawer):
         """Get feature sigil.
 
         Arguments:
-
         - feature       Feature object
         - x0            Start X co-ordinate on diagram
         - x1            End X co-ordinate on diagram
@@ -951,7 +941,6 @@ class LinearDrawer(AbstractDrawer):
         """Draw graph set.
 
         Arguments:
-
         - set       GraphSet object
 
         Returns tuple (list of graph elements, list of graph labels).
@@ -974,7 +963,6 @@ class LinearDrawer(AbstractDrawer):
         """Return a line graph as a list of drawable elements.
 
         Arguments:
-
         - graph     Graph object
 
         """
@@ -1193,7 +1181,6 @@ class LinearDrawer(AbstractDrawer):
         """Canvas location of a base on the genome.
 
         Arguments:
-
         - base      The base number on the genome sequence
 
         Returns the x-coordinate and fragment number of a base on the

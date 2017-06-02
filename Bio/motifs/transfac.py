@@ -76,8 +76,7 @@ class Record(list):
     The record inherits from a list containing the individual motifs.
 
     Attributes:
-
-    - version:   The version number, corresponding to the 'VV' field
+    - version - The version number, corresponding to the 'VV' field
       in the TRANSFAC file;
 
     """

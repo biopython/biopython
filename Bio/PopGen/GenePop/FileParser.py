@@ -36,17 +36,12 @@ class FileRecord(object):
     """Holds information from a GenePop record.
 
     Members:
-
     - marker_len         The marker length (2 or 3 digit code per allele).
-
     - comment_line       Comment line.
-
     - loci_list          List of loci names.
 
     Functions:
-
     - get_individual     Returns the next individual of the current population.
-
     - skip_population    Skips the current population.
 
     skip_population skips the individuals of the current population, returns
@@ -54,10 +49,9 @@ class FileRecord(object):
 
     get_individual returns an individual of the current population (or None
     if the list ended).
-    Each individual is a pair composed by individual
-    name and a list of alleles (2 per marker or 1 for haploid data).
 
-    Examples::
+    Each individual is a pair composed by individual name and a list of alleles
+    (2 per marker or 1 for haploid data). Examples::
 
         ('Ind1', [(1,2),    (3,3), (200,201)]
         ('Ind2', [(2,None), (3,3), (None,None)]

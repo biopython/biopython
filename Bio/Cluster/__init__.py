@@ -133,7 +133,6 @@ class Record(object):
     Cluster/TreeView program.
 
     Attributes:
-
     - data:     a matrix containing the gene expression data
     - mask:     a matrix containing only 1's and 0's, denoting which values
       are present (1) or missing (0). If all elements of mask are
@@ -248,6 +247,7 @@ class Record(object):
         The pairwise single, complete, centroid, and average linkage
         hierarchical clustering methods are available.
 
+        Arguments:
         - transpose: if equal to 0, genes (rows) are clustered;
           if equal to 1, microarrays (columns) are clustered.
         - dist     : specifies the distance function to be used:
@@ -284,6 +284,7 @@ class Record(object):
 
         This method returns a tuple (clusterid, error, nfound).
 
+        Arguments:
         - nclusters: number of clusters (the 'k' in k-means)
         - transpose: if equal to 0, genes (rows) are clustered;
           if equal to 1, microarrays (columns) are clustered.
@@ -315,7 +316,6 @@ class Record(object):
           matrix). In that case, the k-means algorithm is fully deterministic.
 
         Return values:
-
         - clusterid: array containing the number of the cluster to which each
           gene/microarray was assigned in the best k-means clustering
           solution that was found in the npass runs;
@@ -337,6 +337,7 @@ class Record(object):
 
         The somcluster method returns a tuple (clusterid, celldata).
 
+        Arguments:
         - transpose: if equal to 0, genes (rows) are clustered;
           if equal to 1, microarrays (columns) are clustered.
         - nxgrid   : the horizontal dimension of the rectangular SOM map
@@ -355,7 +356,6 @@ class Record(object):
             - dist=='k': Kendall's tau
 
         Return values:
-
         - clusterid: array with two columns, while the number of rows is equal
           to the number of genes or the number of microarrays depending on
           whether genes or microarrays are being clustered. Each row in
@@ -382,6 +382,7 @@ class Record(object):
         The centroid is defined as either the mean or the median over all
         elements for each dimension.
 
+        Arguments:
         - data     : nrows x ncolumns array containing the expression data
         - mask     : nrows x ncolumns array of integers, showing which data
           are missing. If mask[i][j]==0, then data[i][j] is missing.
@@ -395,7 +396,6 @@ class Record(object):
             - method=='m': median over each dimension.
 
         Return values:
-
         - cdata    : 2D array containing the cluster centroids. If transpose==0,
           then the dimensions of cdata are nclusters x ncolumns. If
           transpose==1, then the dimensions of cdata are nrows x nclusters.
@@ -410,6 +410,7 @@ class Record(object):
                         transpose=0):
         """Calculate the distance between two clusters.
 
+        Arguments:
         - index1   : 1D array identifying which genes/microarrays belong to the
           first cluster. If the cluster contains only one gene, then
           index1 can also be written as a single integer.
@@ -455,6 +456,7 @@ class Record(object):
     def distancematrix(self, transpose=0, dist='e'):
         """Calculate the distance matrix and return it as a list of arrays.
 
+        Arguments:
         - transpose: if equal to 0: calculate the distances between genes
           (rows); if equal to 1: calculate the distances beteeen microarrays
           (columns).
@@ -502,7 +504,6 @@ class Record(object):
         which can therefore be used to view the clustering result.
 
         Arguments:
-
         - jobname:   The base name of the files to be saved. The filenames
           are jobname.cdt, jobname.gtr, and jobname.atr for hierarchical
           clustering, and jobname-K*.cdt, jobname-K*.kgg, jobname-K*.kag

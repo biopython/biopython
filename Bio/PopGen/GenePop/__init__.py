@@ -159,9 +159,8 @@ class Record(object):
         of records (key pop_name) where each item is a record
         with a single pop and m loci.
 
-        Parameters:
-
-         - pop_names - Population names
+        Arguments:
+        - pop_names - Population names
 
         """
         gp_pops = {}

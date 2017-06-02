@@ -33,7 +33,6 @@ class CircularDrawer(AbstractDrawer):
     """Object for drawing circular diagrams.
 
     Attributes:
-
     - tracklines    Boolean for whether to draw lines dilineating tracks
     - pagesize      Tuple describing the size of the page in pixels
     - x0            Float X co-ord for leftmost point of drawable area
@@ -67,7 +66,6 @@ class CircularDrawer(AbstractDrawer):
         """Create CircularDrawer object.
 
         Arguments:
-
         - parent    Diagram object containing the data that the drawer
          draws
         - pagesize  String describing the ISO size of the image, or a tuple
@@ -269,7 +267,6 @@ class CircularDrawer(AbstractDrawer):
         """Return graphics for feature, and any required label for it.
 
         Arguments:
-
         - feature       Feature object
         - locstart      The start position of the feature
         - locend        The end position of the feature
@@ -454,7 +451,6 @@ class CircularDrawer(AbstractDrawer):
         """Return list of graph elements and list of their labels.
 
         Arguments:
-
         - set       GraphSet object
 
         """
@@ -476,7 +472,6 @@ class CircularDrawer(AbstractDrawer):
         """Return line graph as list of drawable elements.
 
         Arguments:
-
         - graph     GraphData object
 
         """
@@ -530,7 +525,6 @@ class CircularDrawer(AbstractDrawer):
         """Return list of drawable elements for a bar graph.
 
         Arguments:
-
         - graph     Graph object
 
         """
@@ -592,7 +586,6 @@ class CircularDrawer(AbstractDrawer):
         """Return list of drawable elements for the heat graph.
 
         Arguments:
-
         - graph     Graph object
 
         """
@@ -634,7 +627,6 @@ class CircularDrawer(AbstractDrawer):
         """Return list of elements in the scale and list of their labels.
 
         Arguments:
-
         - track     Track object
 
         """
@@ -792,7 +784,6 @@ class CircularDrawer(AbstractDrawer):
         """Return drawing element for a tick on the scale.
 
         Arguments:
-
         - tickpos   Int, position of the tick on the sequence
         - ctr       Float, Y co-ord of the center of the track
         - ticklen   How long to draw the tick
@@ -934,7 +925,6 @@ class CircularDrawer(AbstractDrawer):
         """Return closed path describing an arc box.
 
         Arguments:
-
         - inner_radius  Float distance of inside of arc from drawing center
         - outer_radius  Float distance of outside of arc from drawing center
         - startangle    Float angle subtended by start of arc at drawing center

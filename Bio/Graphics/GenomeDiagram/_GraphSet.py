@@ -15,7 +15,6 @@
 """GraphSet module.
 
 Provides:
-
 - GraphSet - container for GraphData objects
 
 For drawing capabilities, this module uses reportlab to draw and write
@@ -34,7 +33,6 @@ class GraphSet(object):
     """Graph Set.
 
     Attributes:
-
     - id        Unique identifier for the set
     - name      String describing the set
 
@@ -44,7 +42,6 @@ class GraphSet(object):
         """Initialise.
 
         Arguments:
-
         - name      String identifying the graph set sensibly
 
         """
@@ -59,7 +56,6 @@ class GraphSet(object):
         """Add a GraphData object to the diagram.
 
         Arguments:
-
         - data      List of (position, value) int tuples
         - name      String, description of the graph
         - style     String ('bar', 'heat', 'line') describing how the graph
@@ -130,7 +126,6 @@ class GraphSet(object):
         """Return a formatted string with information about the set.
 
         Arguments:
-
         - verbose       Flag indicating whether a short or complete account
           of the set is required
 
