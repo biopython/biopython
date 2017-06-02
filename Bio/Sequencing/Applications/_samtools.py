@@ -285,7 +285,7 @@ class SamtoolsCatCommandline(AbstractCommandline):
 
     Concatenate BAMs, equivalent to::
 
-    $ samtools cat [-h header.sam] [-o out.bam] <in1.bam> <in2.bam> [ ... ]
+        $ samtools cat [-h header.sam] [-o out.bam] <in1.bam> <in2.bam> [ ... ]
 
     See http://samtools.sourceforge.net/samtools.shtml for more details
 
@@ -299,7 +299,7 @@ class SamtoolsCatCommandline(AbstractCommandline):
     >>> print(samtools_cat_cmd)
     samtools cat /path/to/input_bam1 /path/to/input_bam2
 
-     """
+    """
 
     def __init__(self, cmd="samtools", **kwargs):
         self.program_name = cmd

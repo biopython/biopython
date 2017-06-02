@@ -202,9 +202,7 @@ class Pathway(object):
 
     @property
     def reaction_entries(self):
-        """Get a list of entries corresponding to each reaction
-           in the pathway.
-        """
+        """List of entries corresponding to each reaction in the pathway."""
         return [self.entries[i] for i in self._reactions]
 
     @property
