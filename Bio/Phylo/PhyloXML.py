@@ -593,6 +593,7 @@ class Confidence(PhyloElement):
             value : float
                 confidence value
         """
+        
         if isinstance(other, Confidence):
             return self.value == other.value
         return self.value == other
@@ -604,6 +605,7 @@ class Confidence(PhyloElement):
         value : float
             confidence value.
         """
+        
         if isinstance(other, Confidence):
             return self.value != other.value
         return self.value != other
