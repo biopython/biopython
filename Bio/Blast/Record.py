@@ -23,6 +23,8 @@ Parameters         Holds information from the parameters.
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
+from Bio import BiopythonDeprecationWarning
+import warnings
 
 
 class Header(object):
@@ -54,11 +56,33 @@ class Header(object):
 
         self.database = ''
         self.database_sequences = None
-        self.database_letters = None
+        self._database_letters = None
+
+    @property
+    def database_letters(self):
+        """Database length info of the plain text BLAST format (DEPRECATED).
+
+        This is a property provided by Biopython to access the actual 
+        database size from a plain text BLAST file.
+
+        It is now preferred that users use num_letters_in_database from
+        Bio.Record.DatabaseReport instead of database_letters.
+        """
+        warnings.warn(
+            "Accessing the .database_letters is "
+            "now deprecated in Biopython.",
+            BiopythonDeprecationWarning)
+
+        return self._database_letters
+
+    @database_letters.setter
+    def database_letters(self, value):
+        self._database_letters = value
 
 
 class Description(object):
     """Stores information about one hit in the descriptions section.
+
 
     Members:
     title           Title of the hit.
@@ -178,13 +202,13 @@ class HSP(object):
                  % (self.score, self.bits, self.expect, self.align_length)]
         if self.align_length < 50:
             lines.append("Query:%s %s %s" % (str(self.query_start).rjust(8),
-                                       str(self.query),
-                                       str(self.query_end)))
+                                             str(self.query),
+                                             str(self.query_end)))
             lines.append("               %s"
                          % (str(self.match)))
             lines.append("Sbjct:%s %s %s" % (str(self.sbjct_start).rjust(8),
-                                       str(self.sbjct),
-                                       str(self.sbjct_end)))
+                                             str(self.sbjct),
+                                             str(self.sbjct_end)))
         else:
             lines.append("Query:%s %s...%s %s"
                          % (str(self.query_start).rjust(8),

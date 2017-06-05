@@ -6,6 +6,8 @@
 import os
 import unittest
 from Bio.Blast import NCBIXML
+from Bio import BiopythonDeprecationWarning
+import warnings
 
 E_VALUE_THRESH = 1e-10
 
@@ -1865,7 +1867,20 @@ class TestNCBIXML(unittest.TestCase):
         # <Iteration_message>CONVERGED</Iteration_message>
         self.assertRaises(StopIteration, next, records)
         handle.close()
-
+    
+    def test_database_letters_deprecation(self):
+        with warnings.catch_warnings():
+            warnings.simplefilter("error", BiopythonDeprecationWarning)
+            filename = 'xml_2212L_blastp_001.xml'
+            with open(os.path.join("Blast", filename)) as handle:
+                try:
+                    records = NCBIXML.parse(handle)
+                except BiopythonDeprecationWarning as e:
+                    self.assertEqual(str(e),
+                                     "Accessing the .database_letters is " 
+                                     "now deprecated in Biopython.")
+                else:
+                    self.assertTrue(False, "Expected BiopythonDeprecationWarning here.")
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
