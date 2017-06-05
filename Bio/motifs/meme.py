@@ -227,7 +227,7 @@ def __read_motif_statistics(line):
     words = line.split()
     assert words[0] == 'MOTIF'
     if words[2][:5] == 'MEME-':
-	    motif_number = int(words[2].split('-')[1]) 
+        motif_number = int(words[2].split('-')[1]) 
     else:
         motif_number = int(words[1])
     if words[2].startswith('MEME'):
