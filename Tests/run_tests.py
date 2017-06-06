@@ -143,6 +143,7 @@ DOCTEST_MODULES = [
     "Bio.UniProt.GOA",
     "Bio.Wise",
     "Bio.Wise.psw",
+    "Scripts.testseq",
 ]
 # Silently ignore any doctests for modules requiring numpy!
 if is_numpy():
