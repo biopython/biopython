@@ -46,7 +46,7 @@ class TestTestseq(unittest.TestCase):
         seq = testseq()
         self.assertEqual(len(seq), 30)
 
-        seq = testseq(100) 
+        seq = testseq(100)
         self.assertEqual(len(seq), 99)
 
         seq = testseq(100, alphabet=IUPAC.protein)
