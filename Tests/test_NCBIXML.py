@@ -13,8 +13,7 @@ E_VALUE_THRESH = 1e-10
 class TestNCBIXML(unittest.TestCase):
 
     def test_xml_2212L_blastp_001(self):
-        "Parsing BLASTP 2.2.12, gi|49176427|ref|NP_418280.3| (xml_2212L_blastp_001)"
-
+        "Parsing BLASTP 2.2.12,gi|49176427|ref|NP_418280.3| (xml_2212L_blastp_001)"
         filename = 'xml_2212L_blastp_001.xml'
         datafile = os.path.join("Blast", filename)
         handle = open(datafile)
@@ -1562,7 +1561,6 @@ class TestNCBIXML(unittest.TestCase):
         records = NCBIXML.parse(handle)
         record = next(records)
         self.assertEqual(record.query_id, "gi|585505|sp|Q08386|MOPB_RHOCA")
-        alignments = record.alignments
         self.assertEqual(len(record.alignments), 0)
         record = next(records)
         self.assertEqual(record.query_id, "gi|129628|sp|P07175.1|PARA_AGRTU")
@@ -1866,6 +1864,1242 @@ class TestNCBIXML(unittest.TestCase):
         self.assertRaises(StopIteration, next, records)
         handle.close()
 
+    def test_xml_2226_blastn_001(self):
+        "Parsing BLASTN 2.2.26+, Query_1 (xml_2226_blastn_001)"
+
+        filename = 'xml_2226_blastn_001.xml'
+        datafile = os.path.join("Blast", filename)
+        handle = open(datafile)
+        records = NCBIXML.parse(handle)
+        record = next(records)
+        alignments = record.alignments
+
+        self.assertEqual(record.query_id, "Query_1")
+        self.assertEqual(len(alignments), 0)
+
+        record = next(records)
+        alignments = record.alignments
+
+        self.assertEqual(record.query_id, "Query_2")
+        self.assertEqual(len(alignments), 5)
+        self.assertEqual(sum([len(a.hsps) for a in alignments]), 5)
+        self.assertEqual(alignments[0].title[:50], "gnl|BL_ORD_ID|0 gi|356995852|ref|NM_013633.3| Mus ")
+        self.assertEqual(alignments[0].length, 1353)
+        self.assertEqual(len(alignments[0].hsps), 1)
+        self.assertFalse(alignments[0].hsps[0].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[1].title[:50], "gnl|BL_ORD_ID|1 gi|377833530|ref|XR_141831.1| PRED")
+        self.assertEqual(alignments[1].length, 570)
+        self.assertEqual(len(alignments[0].hsps), 1)
+        self.assertFalse(alignments[1].hsps[0].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[2].title[:50], "gnl|BL_ORD_ID|2 gi|260269517|ref|NM_001009178.2| R")
+        self.assertEqual(alignments[2].length, 1388)
+        self.assertEqual(len(alignments[0].hsps), 1)
+        self.assertFalse(alignments[2].hsps[0].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[3].title[:50], "gnl|BL_ORD_ID|3 gi|295390144|ref|NR_033594.1| Mus ")
+        self.assertEqual(alignments[3].length, 1040)
+        self.assertEqual(len(alignments[0].hsps), 1)
+        self.assertFalse(alignments[3].hsps[0].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[4].title[:50], "gnl|BL_ORD_ID|4 gi|354487499|ref|XM_003505863.1| P")
+        self.assertEqual(alignments[4].length, 1077)
+        self.assertEqual(len(alignments[0].hsps), 1)
+        self.assertFalse(alignments[4].hsps[0].expect > E_VALUE_THRESH)
+
+        record = next(records)
+        alignments = record.alignments
+        self.assertEqual(record.query_id, "Query_3")
+        self.assertEqual(len(alignments), 5)
+        self.assertEqual(sum([len(a.hsps) for a in alignments]), 6)
+        self.assertEqual(alignments[0].title[:50], "gnl|BL_ORD_ID|6 gi|94721341|ref|NM_001040441.1| Ho")
+        self.assertEqual(alignments[0].length, 7333)
+        self.assertEqual(len(alignments[0].hsps), 2)
+        self.assertFalse(alignments[0].hsps[0].expect > E_VALUE_THRESH)
+        self.assertFalse(alignments[0].hsps[1].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[1].title[:50], "gnl|BL_ORD_ID|5 gi|332237160|ref|XM_003267724.1| P")
+        self.assertEqual(alignments[1].length, 4771)
+        self.assertEqual(len(alignments[1].hsps), 1)
+        self.assertFalse(alignments[1].hsps[0].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[2].title[:50], "gnl|BL_ORD_ID|9 gi|332254616|ref|XM_003276378.1| P")
+        self.assertEqual(alignments[2].length, 4345)
+        self.assertEqual(len(alignments[2].hsps), 1)
+        self.assertFalse(alignments[2].hsps[0].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[3].title[:50], "gnl|BL_ORD_ID|8 gi|332865370|ref|XM_527768.3| PRED")
+        self.assertEqual(alignments[3].length, 4335)
+        self.assertEqual(len(alignments[3].hsps), 1)
+        self.assertFalse(alignments[3].hsps[0].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[4].title[:50], "gnl|BL_ORD_ID|7 gi|332865372|ref|XM_003318468.1| P")
+        self.assertEqual(alignments[4].length, 4430)
+        self.assertEqual(len(alignments[4].hsps), 1)
+        self.assertFalse(alignments[4].hsps[0].expect > E_VALUE_THRESH)
+
+        self.assertRaises(StopIteration, next, records)
+        handle.close()
+
+    def test_xml_2226_blastn_002(self):
+        "Parsing BLASTN 2.2.26+, Query_1 (xml_2226_blastn_002)"
+
+        filename = 'xml_2226_blastn_002.xml'
+        datafile = os.path.join("Blast", filename)
+        handle = open(datafile)
+        records = NCBIXML.parse(handle)
+        record = next(records)
+        alignments = record.alignments
+
+        self.assertEqual(record.query_id, "Query_1")
+        self.assertEqual(len(alignments), 0)
+
+        self.assertRaises(StopIteration, next, records)
+        handle.close()
+
+    def test_xml_2226_blastn_003(self):
+        "Parsing BLASTN 2.2.26+, Query_1 (xml_2226_blastn_003)"
+
+        filename = 'xml_2226_blastn_003.xml'
+        datafile = os.path.join("Blast", filename)
+        handle = open(datafile)
+        records = NCBIXML.parse(handle)
+        record = next(records)
+        alignments = record.alignments
+
+        self.assertEqual(record.query_id, "Query_1")
+        self.assertEqual(len(alignments), 5)
+        self.assertEqual(sum([len(a.hsps) for a in alignments]), 5)
+        self.assertEqual(alignments[0].title[:50], "gnl|BL_ORD_ID|0 gi|356995852|ref|NM_013633.3| Mus ")
+        self.assertEqual(alignments[0].length, 1353)
+        self.assertEqual(len(alignments[0].hsps), 1)
+        self.assertFalse(alignments[0].hsps[0].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[1].title[:50], "gnl|BL_ORD_ID|1 gi|377833530|ref|XR_141831.1| PRED")
+        self.assertEqual(alignments[1].length, 570)
+        self.assertEqual(len(alignments[1].hsps), 1)
+        self.assertFalse(alignments[1].hsps[0].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[2].title[:50], "gnl|BL_ORD_ID|2 gi|260269517|ref|NM_001009178.2| R")
+        self.assertEqual(alignments[2].length, 1388)
+        self.assertEqual(len(alignments[2].hsps), 1)
+        self.assertFalse(alignments[2].hsps[0].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[3].title[:50], "gnl|BL_ORD_ID|3 gi|295390144|ref|NR_033594.1| Mus ")
+        self.assertEqual(alignments[3].length, 1040)
+        self.assertEqual(len(alignments[3].hsps), 1)
+        self.assertFalse(alignments[3].hsps[0].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[4].title[:50], "gnl|BL_ORD_ID|4 gi|354487499|ref|XM_003505863.1| P")
+        self.assertEqual(alignments[4].length, 1077)
+        self.assertEqual(len(alignments[4].hsps), 1)
+        self.assertFalse(alignments[4].hsps[0].expect > E_VALUE_THRESH)
+
+        self.assertRaises(StopIteration, next, records)
+        handle.close()
+
+    def test_xml_2226_blastn_004(self):
+        "Parsing BLASTN 2.2.26+, hg19_dna range=chr1:1207307-1207372 5'pad=0 3'pad=0 strand=+ repeatMasking=none (xml_2226_blastn_004)"
+
+        filename = 'xml_2226_blastn_004.xml'
+        datafile = os.path.join("Blast", filename)
+        handle = open(datafile)
+        records = NCBIXML.parse(handle)
+        record = next(records)
+        alignments = record.alignments
+
+        self.assertEqual(record.query_id, "Query_1")
+        self.assertEqual(len(alignments), 5)
+        self.assertEqual(sum([len(a.hsps) for a in alignments]), 6)
+        self.assertEqual(alignments[0].title[:50], "gnl|BL_ORD_ID|6 gi|94721341|ref|NM_001040441.1| Ho")
+        self.assertEqual(alignments[0].length, 7333)
+        self.assertEqual(len(alignments[0].hsps), 2)
+        self.assertFalse(alignments[0].hsps[0].expect > E_VALUE_THRESH)
+        self.assertFalse(alignments[0].hsps[1].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[1].title[:50], "gnl|BL_ORD_ID|5 gi|332237160|ref|XM_003267724.1| P")
+        self.assertEqual(alignments[1].length, 4771)
+        self.assertEqual(len(alignments[1].hsps), 1)
+        self.assertFalse(alignments[1].hsps[0].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[2].title[:50], "gnl|BL_ORD_ID|9 gi|332254616|ref|XM_003276378.1| P")
+        self.assertEqual(alignments[2].length, 4345)
+        self.assertEqual(len(alignments[2].hsps), 1)
+        self.assertFalse(alignments[2].hsps[0].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[3].title[:50], "gnl|BL_ORD_ID|8 gi|332865370|ref|XM_527768.3| PRED")
+        self.assertEqual(alignments[3].length, 4335)
+        self.assertEqual(len(alignments[3].hsps), 1)
+        self.assertFalse(alignments[3].hsps[0].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[4].title[:50], "gnl|BL_ORD_ID|7 gi|332865372|ref|XM_003318468.1| P")
+        self.assertEqual(alignments[4].length, 4430)
+        self.assertEqual(len(alignments[4].hsps), 1)
+        self.assertFalse(alignments[4].hsps[0].expect > E_VALUE_THRESH)
+
+        self.assertRaises(StopIteration, next, records)
+        handle.close()
+
+    def test_xml_2226_blastn_005(self):
+        "Parsing BLASTN 2.2.26+, Query_1 (xml_2226_blastn_005)"
+
+        filename = 'xml_2226_blastn_005.xml'
+        datafile = os.path.join("Blast", filename)
+        handle = open(datafile)
+        records = NCBIXML.parse(handle)
+        record = next(records)
+        alignments = record.alignments
+
+        self.assertEqual(record.query_id, "Query_1")
+        self.assertEqual(len(alignments), 0)
+
+        record = next(records)
+        alignments = record.alignments
+        self.assertEqual(record.query_id, "Query_2")
+        self.assertEqual(len(alignments), 5)
+        self.assertEqual(sum([len(a.hsps) for a in alignments]), 5)
+        self.assertEqual(alignments[0].title[:50], "gi|356995852|ref|NM_013633.3| Mus musculus POU dom")
+        self.assertEqual(alignments[0].length, 1353)
+        self.assertEqual(len(alignments[0].hsps), 1)
+        self.assertFalse(alignments[0].hsps[0].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[1].title[:50], "gi|377833530|ref|XR_141831.1| PREDICTED: Mus muscu")
+        self.assertEqual(alignments[1].length, 570)
+        self.assertEqual(len(alignments[1].hsps), 1)
+        self.assertFalse(alignments[1].hsps[0].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[2].title[:50], "gi|260269517|ref|NM_001009178.2| Rattus norvegicus")
+        self.assertEqual(alignments[2].length, 1388)
+        self.assertEqual(len(alignments[2].hsps), 1)
+        self.assertFalse(alignments[2].hsps[0].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[3].title[:50], "gi|295390144|ref|NR_033594.1| Mus musculus predict")
+        self.assertEqual(alignments[3].length, 1040)
+        self.assertEqual(len(alignments[3].hsps), 1)
+        self.assertFalse(alignments[3].hsps[0].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[4].title[:50], "gi|354487499|ref|XM_003505863.1| PREDICTED: Cricet")
+        self.assertEqual(alignments[4].length, 1077)
+        self.assertEqual(len(alignments[4].hsps), 1)
+        self.assertFalse(alignments[4].hsps[0].expect > E_VALUE_THRESH)
+
+        record = next(records)
+        alignments = record.alignments
+        self.assertEqual(record.query_id, "Query_3")
+        self.assertEqual(len(alignments), 5)
+        self.assertEqual(sum([len(a.hsps) for a in alignments]), 6)
+        self.assertEqual(alignments[0].title[:50], "gi|332237160|ref|XM_003267724.1| PREDICTED: Nomasc")
+        self.assertEqual(alignments[0].length, 4771)
+        self.assertEqual(len(alignments[0].hsps), 1)
+        self.assertFalse(alignments[0].hsps[0].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[1].title[:50], "gi|94721341|ref|NM_001040441.1| Homo sapiens zinc ")
+        self.assertEqual(alignments[1].length, 7333)
+        self.assertEqual(len(alignments[1].hsps), 2)
+        self.assertFalse(alignments[1].hsps[0].expect > E_VALUE_THRESH)
+        self.assertFalse(alignments[1].hsps[1].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[2].title[:50], "gi|332865372|ref|XM_003318468.1| PREDICTED: Pan tr")
+        self.assertEqual(alignments[2].length, 4430)
+        self.assertEqual(len(alignments[2].hsps), 1)
+        self.assertFalse(alignments[2].hsps[0].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[3].title[:50], "gi|332865370|ref|XM_527768.3| PREDICTED: Pan trogl")
+        self.assertEqual(alignments[3].length, 4335)
+        self.assertEqual(len(alignments[3].hsps), 1)
+        self.assertFalse(alignments[3].hsps[0].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[4].title[:50], "gi|332254616|ref|XM_003276378.1| PREDICTED: Nomasc")
+        self.assertEqual(alignments[4].length, 4345)
+        self.assertEqual(len(alignments[4].hsps), 1)
+        self.assertFalse(alignments[4].hsps[0].expect > E_VALUE_THRESH)
+
+        self.assertRaises(StopIteration, next, records)
+        handle.close()
+
+    def test_xml_2226_blastn_006(self):
+        "Parsing BLASTN 2.2.26+, Query_1 (xml_2226_blastn_006)"
+
+        filename = 'xml_2226_blastn_006.xml'
+        datafile = os.path.join("Blast", filename)
+        handle = open(datafile)
+        records = NCBIXML.parse(handle)
+        record = next(records)
+        alignments = record.alignments
+
+        self.assertEqual(record.query_id, "Query_1")
+        self.assertEqual(len(alignments), 2)
+        self.assertEqual(sum([len(a.hsps) for a in alignments]), 2)
+        self.assertEqual(alignments[0].title[:50], "gnl|BL_ORD_ID|18 gi|347972582|ref|XM_309352.4| Ano")
+        self.assertEqual(alignments[0].length, 309)
+        self.assertEqual(len(alignments[0].hsps), 1)
+        self.assertFalse(alignments[0].hsps[0].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[1].title[:50], "gnl|BL_ORD_ID|17 gi|347972582|ref|XM_309352.4| Ano")
+        self.assertEqual(alignments[1].length, 309)
+        self.assertEqual(len(alignments[1].hsps), 1)
+        self.assertFalse(alignments[1].hsps[0].expect > E_VALUE_THRESH)
+
+        self.assertRaises(StopIteration, next, records)
+        handle.close()
+
+    def test_xml_2226_blastp_001(self):
+        "Parsing BLASTP 2.2.26+, gi|11464971:4-101 pleckstrin [Mus musculus]  (xml_2226_blastp_001)"
+        # NOTE - no date in version field, downloaded 2008/05/08
+
+        filename = 'xml_2226_blastp_001.xml'
+        datafile = os.path.join("Blast", filename)
+
+        handle = open(datafile)
+        records = NCBIXML.parse(handle)
+
+        record = next(records)
+        alignments = record.alignments
+        self.assertEqual(record.query_id, "Query_1")
+        self.assertEqual(len(alignments), 0)
+
+        record = next(records)
+        alignments = record.alignments
+        self.assertEqual(record.query_id, "Query_2")
+        self.assertEqual(len(alignments), 5)
+        self.assertEqual(sum([len(a.hsps) for a in alignments]), 5)
+        self.assertEqual(alignments[0].title[:50], "gnl|BL_ORD_ID|1 gi|308175296|ref|YP_003922001.1| m")
+        self.assertEqual(alignments[0].length, 100)
+        self.assertEqual(len(alignments[0].hsps), 1)
+        self.assertFalse(alignments[0].hsps[0].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[1].title[:50], "gnl|BL_ORD_ID|2 gi|375363999|ref|YP_005132038.1| l")
+        self.assertEqual(alignments[1].length, 105)
+        self.assertEqual(len(alignments[1].hsps), 1)
+        self.assertFalse(alignments[1].hsps[0].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[2].title[:50], "gnl|BL_ORD_ID|3 gi|154687679|ref|YP_001422840.1| L")
+        self.assertEqual(alignments[2].length, 105)
+        self.assertEqual(len(alignments[2].hsps), 1)
+        self.assertFalse(alignments[2].hsps[0].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[3].title[:50], "gnl|BL_ORD_ID|4 gi|311070071|ref|YP_003974994.1| u")
+        self.assertEqual(alignments[3].length, 105)
+        self.assertEqual(len(alignments[3].hsps), 1)
+        self.assertFalse(alignments[3].hsps[0].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[4].title[:50], "gnl|BL_ORD_ID|15 gi|332258565|ref|XP_003278367.1| ")
+        self.assertEqual(alignments[4].length, 132)
+        self.assertEqual(len(alignments[4].hsps), 1)
+        self.assertTrue(alignments[4].hsps[0].expect > E_VALUE_THRESH)
+
+        record = next(records)
+        alignments = record.alignments
+        self.assertEqual(record.query_id, "Query_3")
+        self.assertEqual(len(alignments), 5)
+        self.assertEqual(sum([len(a.hsps) for a in alignments]), 10)
+        self.assertEqual(alignments[0].title[:50], "gnl|BL_ORD_ID|5 gi|11464971|ref|NP_062422.1| pleck")
+        self.assertEqual(alignments[0].length, 350)
+        self.assertEqual(len(alignments[0].hsps), 2)
+        self.assertFalse(alignments[0].hsps[0].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[0].hsps[1].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[1].title[:50], "gnl|BL_ORD_ID|6 gi|354480464|ref|XP_003502426.1| P")
+        self.assertEqual(alignments[1].length, 350)
+        self.assertEqual(len(alignments[1].hsps), 2)
+        self.assertFalse(alignments[1].hsps[0].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[1].hsps[1].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[2].title[:50], "gnl|BL_ORD_ID|7 gi|156616273|ref|NP_002655.2| plec")
+        self.assertEqual(alignments[2].length, 350)
+        self.assertEqual(len(alignments[2].hsps), 2)
+        self.assertFalse(alignments[2].hsps[0].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[2].hsps[1].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[3].title[:50], "gnl|BL_ORD_ID|8 gi|297667453|ref|XP_002811995.1| P")
+        self.assertEqual(alignments[3].length, 350)
+        self.assertEqual(len(alignments[3].hsps), 2)
+        self.assertFalse(alignments[3].hsps[0].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[3].hsps[1].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[4].title[:50], "gnl|BL_ORD_ID|9 gi|350596020|ref|XP_003360649.2| P")
+        self.assertEqual(alignments[4].length, 228)
+        self.assertEqual(len(alignments[4].hsps), 2)
+        self.assertFalse(alignments[4].hsps[0].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[4].hsps[1].expect > E_VALUE_THRESH)
+
+        self.assertRaises(StopIteration, next, records)
+        handle.close()
+
+    def test_xml_2226_blastp_002(self):
+        "Parsing BLASTP 2.2.26+,random_s00 (xml_2226_blastp_002)"
+        # NOTE - no date in version field, downloaded 2008/05/08
+
+        filename = 'xml_2226_blastp_002.xml'
+        datafile = os.path.join("Blast", filename)
+
+        handle = open(datafile)
+        records = NCBIXML.parse(handle)
+
+        record = next(records)
+        alignments = record.alignments
+        self.assertEqual(record.query_id, "Query_1")
+        self.assertEqual(len(alignments), 0)
+
+        self.assertRaises(StopIteration, next, records)
+        handle.close()
+
+    def test_xml_2226_blastp_003(self):
+        "Parsing BLASTP 2.2.26+, gi|16080617|ref|NP_391444.1| membrane bound lipoprotein [Bacillus subtilis subsp. subtilis str. 168]  (xml_2226_blastp_003)"
+        # NOTE - no date in version field, downloaded 2008/05/08
+
+        filename = 'xml_2226_blastp_003.xml'
+        datafile = os.path.join("Blast", filename)
+
+        handle = open(datafile)
+        records = NCBIXML.parse(handle)
+
+        record = next(records)
+        alignments = record.alignments
+        self.assertEqual(record.query_id, "Query_1")
+        self.assertEqual(len(alignments), 5)
+        self.assertEqual(sum([len(a.hsps) for a in alignments]), 5)
+        self.assertEqual(alignments[0].title[:50], "gnl|BL_ORD_ID|1 gi|308175296|ref|YP_003922001.1| m")
+        self.assertEqual(alignments[0].length, 100)
+        self.assertEqual(len(alignments[0].hsps), 1)
+        self.assertFalse(alignments[0].hsps[0].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[1].title[:50], "gnl|BL_ORD_ID|2 gi|375363999|ref|YP_005132038.1| l")
+        self.assertEqual(alignments[1].length, 105)
+        self.assertEqual(len(alignments[1].hsps), 1)
+        self.assertFalse(alignments[1].hsps[0].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[2].title[:50], "gnl|BL_ORD_ID|3 gi|154687679|ref|YP_001422840.1| L")
+        self.assertEqual(alignments[2].length, 105)
+        self.assertEqual(len(alignments[2].hsps), 1)
+        self.assertFalse(alignments[2].hsps[0].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[3].title[:50], "gnl|BL_ORD_ID|4 gi|311070071|ref|YP_003974994.1| u")
+        self.assertEqual(alignments[3].length, 105)
+        self.assertEqual(len(alignments[3].hsps), 1)
+        self.assertFalse(alignments[3].hsps[0].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[4].title[:50], "gnl|BL_ORD_ID|15 gi|332258565|ref|XP_003278367.1| ")
+        self.assertEqual(alignments[4].length, 132)
+        self.assertEqual(len(alignments[4].hsps), 1)
+        self.assertTrue(alignments[4].hsps[0].expect > E_VALUE_THRESH)
+
+        self.assertRaises(StopIteration, next, records)
+        handle.close()
+
+    def test_xml_2226_blastp_004(self):
+        "Parsing BLASTP 2.2.26+, gi|11464971:4-101 pleckstrin [Mus musculus]  (xml_2226_blastp_004)"
+        # NOTE - no date in version field, downloaded 2008/05/08
+
+        filename = 'xml_2226_blastp_004.xml'
+        datafile = os.path.join("Blast", filename)
+
+        handle = open(datafile)
+        records = NCBIXML.parse(handle)
+
+        record = next(records)
+        alignments = record.alignments
+        self.assertEqual(record.query_id, "Query_1")
+        self.assertEqual(len(alignments), 5)
+        self.assertEqual(sum([len(a.hsps) for a in alignments]), 10)
+        self.assertEqual(alignments[0].title[:50], "gnl|BL_ORD_ID|5 gi|11464971|ref|NP_062422.1| pleck")
+        self.assertEqual(alignments[0].length, 350)
+        self.assertEqual(len(alignments[0].hsps), 2)
+        self.assertFalse(alignments[0].hsps[0].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[0].hsps[1].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[1].title[:50], "gnl|BL_ORD_ID|6 gi|354480464|ref|XP_003502426.1| P")
+        self.assertEqual(alignments[1].length, 350)
+        self.assertEqual(len(alignments[1].hsps), 2)
+        self.assertFalse(alignments[1].hsps[0].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[1].hsps[1].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[2].title[:50], "gnl|BL_ORD_ID|7 gi|156616273|ref|NP_002655.2| plec")
+        self.assertEqual(alignments[2].length, 350)
+        self.assertEqual(len(alignments[2].hsps), 2)
+        self.assertFalse(alignments[2].hsps[0].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[2].hsps[1].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[3].title[:50], "gnl|BL_ORD_ID|8 gi|297667453|ref|XP_002811995.1| P")
+        self.assertEqual(alignments[3].length, 350)
+        self.assertEqual(len(alignments[3].hsps), 2)
+        self.assertFalse(alignments[3].hsps[0].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[3].hsps[1].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[4].title[:50], "gnl|BL_ORD_ID|9 gi|350596020|ref|XP_003360649.2| P")
+        self.assertEqual(alignments[4].length, 228)
+        self.assertEqual(len(alignments[4].hsps), 2)
+        self.assertFalse(alignments[4].hsps[0].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[4].hsps[1].expect > E_VALUE_THRESH)
+
+        self.assertRaises(StopIteration, next, records)
+        handle.close()
+
+    def test_xml_2226_blastp_005(self):
+        "Parsing BLASTP 2.2.26+, random_s00 (xml_2226_blastp_005)"
+        # NOTE - no date in version field, downloaded 2008/05/08
+
+        filename = 'xml_2226_blastp_005.xml'
+        datafile = os.path.join("Blast", filename)
+
+        handle = open(datafile)
+        records = NCBIXML.parse(handle)
+
+        record = next(records)
+        alignments = record.alignments
+        self.assertEqual(record.query_id, "Query_1")
+        self.assertEqual(len(alignments), 0)
+
+        record = next(records)
+        alignments = record.alignments
+        self.assertEqual(record.query_id, "Query_2")
+        self.assertEqual(len(alignments), 5)
+        self.assertEqual(sum([len(a.hsps) for a in alignments]), 5)
+        self.assertEqual(alignments[0].title[:50], "gi|16080617|ref|NP_391444.1| membrane bound lipopr")
+        self.assertEqual(alignments[0].length, 102)
+        self.assertEqual(len(alignments[0].hsps), 1)
+        self.assertFalse(alignments[0].hsps[0].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[1].title[:50], "gi|308175296|ref|YP_003922001.1| membrane bound li")
+        self.assertEqual(alignments[1].length, 100)
+        self.assertEqual(len(alignments[1].hsps), 1)
+        self.assertFalse(alignments[1].hsps[0].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[2].title[:50], "gi|375363999|ref|YP_005132038.1| lytA gene product")
+        self.assertEqual(alignments[2].length, 105)
+        self.assertEqual(len(alignments[2].hsps), 1)
+        self.assertFalse(alignments[2].hsps[0].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[3].title[:50], "gi|154687679|ref|YP_001422840.1| LytA [Bacillus am")
+        self.assertEqual(alignments[3].length, 105)
+        self.assertEqual(len(alignments[3].hsps), 1)
+        self.assertFalse(alignments[3].hsps[0].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[4].title[:50], "gi|311070071|ref|YP_003974994.1| unnamed protein p")
+        self.assertEqual(alignments[4].length, 105)
+        self.assertEqual(len(alignments[4].hsps), 1)
+        self.assertFalse(alignments[4].hsps[0].expect > E_VALUE_THRESH)
+
+        record = next(records)
+        alignments = record.alignments
+        self.assertEqual(record.query_id, "Query_3")
+        self.assertEqual(len(alignments), 5)
+        self.assertEqual(sum([len(a.hsps) for a in alignments]), 10)
+        self.assertEqual(alignments[0].title[:50], "gi|11464971|ref|NP_062422.1| pleckstrin [Mus muscu")
+        self.assertEqual(alignments[0].length, 350)
+        self.assertEqual(len(alignments[0].hsps), 2)
+        self.assertFalse(alignments[0].hsps[0].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[0].hsps[1].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[1].title[:50], "gi|354480464|ref|XP_003502426.1| PREDICTED: plecks")
+        self.assertEqual(alignments[1].length, 350)
+        self.assertEqual(len(alignments[1].hsps), 2)
+        self.assertFalse(alignments[1].hsps[0].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[1].hsps[1].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[2].title[:50], "gi|156616273|ref|NP_002655.2| pleckstrin [Homo sap")
+        self.assertEqual(alignments[2].length, 350)
+        self.assertEqual(len(alignments[2].hsps), 2)
+        self.assertFalse(alignments[2].hsps[0].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[2].hsps[1].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[3].title[:50], "gi|297667453|ref|XP_002811995.1| PREDICTED: plecks")
+        self.assertEqual(alignments[3].length, 350)
+        self.assertEqual(len(alignments[3].hsps), 2)
+        self.assertFalse(alignments[3].hsps[0].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[3].hsps[1].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[4].title[:50], "gi|350596020|ref|XP_003360649.2| PREDICTED: plecks")
+        self.assertEqual(alignments[4].length, 228)
+        self.assertEqual(len(alignments[4].hsps), 2)
+        self.assertFalse(alignments[4].hsps[0].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[4].hsps[1].expect > E_VALUE_THRESH)
+
+        self.assertRaises(StopIteration, next, records)
+        handle.close()
+
+    def test_xml_2226_blastx_001(self):
+        "Parsing BLASTX 2.2.26+, random_s00 (xml_2226_blastx_001)"
+        # NOTE - no date in version field, downloaded 2008/05/08
+
+        filename = 'xml_2226_blastx_001.xml'
+        datafile = os.path.join("Blast", filename)
+
+        handle = open(datafile)
+        records = NCBIXML.parse(handle)
+
+        record = next(records)
+        alignments = record.alignments
+        self.assertEqual(record.query_id, "Query_1")
+        self.assertEqual(len(alignments), 0)
+
+        record = next(records)
+        alignments = record.alignments
+        self.assertEqual(record.query_id, "Query_2")
+        self.assertEqual(len(alignments), 5)
+        self.assertEqual(sum([len(a.hsps) for a in alignments]), 17)
+        self.assertEqual(alignments[0].title[:50], "gnl|BL_ORD_ID|15 gi|332258565|ref|XP_003278367.1| ")
+        self.assertEqual(alignments[0].length, 132)
+        self.assertEqual(len(alignments[0].hsps), 2)
+        self.assertFalse(alignments[0].hsps[0].expect > E_VALUE_THRESH)
+        self.assertFalse(alignments[0].hsps[1].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[1].title[:50], "gnl|BL_ORD_ID|16 gi|374093214|ref|NP_001243358.1| ")
+        self.assertEqual(alignments[1].length, 136)
+        self.assertEqual(len(alignments[1].hsps), 2)
+        self.assertFalse(alignments[1].hsps[0].expect > E_VALUE_THRESH)
+        self.assertFalse(alignments[1].hsps[1].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[2].title[:50], "gnl|BL_ORD_ID|17 gi|297669362|ref|XP_002812869.1| ")
+        self.assertEqual(alignments[2].length, 110)
+        self.assertEqual(len(alignments[2].hsps), 1)
+        self.assertFalse(alignments[2].hsps[0].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[3].title[:50], "gnl|BL_ORD_ID|18 gi|57113895|ref|NP_001009002.1| h")
+        self.assertEqual(alignments[3].length, 1079)
+        self.assertEqual(len(alignments[3].hsps), 6)
+        self.assertFalse(alignments[3].hsps[0].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[3].hsps[1].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[3].hsps[2].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[3].hsps[3].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[3].hsps[4].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[3].hsps[5].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[4].title[:50], "gnl|BL_ORD_ID|19 gi|33188429|ref|NP_872601.1| hist")
+        self.assertEqual(alignments[4].length, 1079)
+        self.assertEqual(len(alignments[4].hsps), 6)
+        self.assertFalse(alignments[4].hsps[0].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[4].hsps[1].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[4].hsps[2].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[4].hsps[3].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[4].hsps[4].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[4].hsps[5].expect > E_VALUE_THRESH)
+
+        self.assertRaises(StopIteration, next, records)
+        handle.close()
+
+    def test_xml_2226_blastx_002(self):
+        "Parsing BLASTX 2.2.26+, random_s00 (xml_2226_blastx_002)"
+        # NOTE - no date in version field, downloaded 2008/05/08
+
+        filename = 'xml_2226_blastx_002.xml'
+        datafile = os.path.join("Blast", filename)
+
+        handle = open(datafile)
+        records = NCBIXML.parse(handle)
+
+        record = next(records)
+        alignments = record.alignments
+        self.assertEqual(record.query_id, "Query_1")
+        self.assertEqual(len(alignments), 0)
+
+        self.assertRaises(StopIteration, next, records)
+        handle.close()
+
+    def test_xml_2226_blastx_003(self):
+        "Parsing BLASTX 2.2.26+, hg19_dna range=chr1:1207057-1207541 5'pad=0 3'pad=0 strand=+ repeatMasking=none (xml_2226_blastx_003)"
+        # NOTE - no date in version field, downloaded 2008/05/08
+
+        filename = 'xml_2226_blastx_003.xml'
+        datafile = os.path.join("Blast", filename)
+
+        handle = open(datafile)
+        records = NCBIXML.parse(handle)
+
+        record = next(records)
+        alignments = record.alignments
+        self.assertEqual(record.query_id, "Query_1")
+        self.assertEqual(len(alignments), 5)
+        self.assertEqual(sum([len(a.hsps) for a in alignments]), 17)
+        self.assertEqual(alignments[0].title[:50], "gnl|BL_ORD_ID|15 gi|332258565|ref|XP_003278367.1| ")
+        self.assertEqual(alignments[0].length, 132)
+        self.assertEqual(len(alignments[0].hsps), 2)
+        self.assertFalse(alignments[0].hsps[0].expect > E_VALUE_THRESH)
+        self.assertFalse(alignments[0].hsps[1].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[1].title[:50], "gnl|BL_ORD_ID|16 gi|374093214|ref|NP_001243358.1| ")
+        self.assertEqual(alignments[1].length, 136)
+        self.assertEqual(len(alignments[1].hsps), 2)
+        self.assertFalse(alignments[1].hsps[0].expect > E_VALUE_THRESH)
+        self.assertFalse(alignments[1].hsps[1].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[2].title[:50], "gnl|BL_ORD_ID|17 gi|297669362|ref|XP_002812869.1| ")
+        self.assertEqual(alignments[2].length, 110)
+        self.assertEqual(len(alignments[2].hsps), 1)
+        self.assertFalse(alignments[2].hsps[0].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[3].title[:50], "gnl|BL_ORD_ID|18 gi|57113895|ref|NP_001009002.1| h")
+        self.assertEqual(alignments[3].length, 1079)
+        self.assertEqual(len(alignments[3].hsps), 6)
+        self.assertFalse(alignments[3].hsps[0].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[3].hsps[1].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[3].hsps[2].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[3].hsps[3].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[3].hsps[4].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[3].hsps[5].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[4].title[:50], "gnl|BL_ORD_ID|19 gi|33188429|ref|NP_872601.1| hist")
+        self.assertEqual(alignments[4].length, 1079)
+        self.assertEqual(len(alignments[4].hsps), 6)
+        self.assertFalse(alignments[4].hsps[0].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[4].hsps[1].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[4].hsps[2].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[4].hsps[3].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[4].hsps[4].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[4].hsps[5].expect > E_VALUE_THRESH)
+
+        self.assertRaises(StopIteration, next, records)
+        handle.close()
+
+    def test_xml_2226_blastx_004(self):
+        "Parsing BLASTX 2.2.26+, random_s00 (xml_2226_blastx_004)"
+        # NOTE - no date in version field, downloaded 2008/05/08
+
+        filename = 'xml_2226_blastx_004.xml'
+        datafile = os.path.join("Blast", filename)
+
+        handle = open(datafile)
+        records = NCBIXML.parse(handle)
+
+        record = next(records)
+        alignments = record.alignments
+        self.assertEqual(record.query_id, "Query_1")
+        self.assertEqual(len(alignments), 0)
+
+        record = next(records)
+        alignments = record.alignments
+        self.assertEqual(record.query_id, "Query_2")
+        self.assertEqual(len(alignments), 5)
+        self.assertEqual(sum([len(a.hsps) for a in alignments]), 9)
+        self.assertEqual(alignments[0].title[:50], "gi|332258565|ref|XP_003278367.1| PREDICTED: UPF076")
+        self.assertEqual(alignments[0].length, 132)
+        self.assertEqual(len(alignments[0].hsps), 2)
+        self.assertFalse(alignments[0].hsps[0].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[0].hsps[1].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[1].title[:50], "gi|374093214|ref|NP_001243358.1| PDZ and LIM domai")
+        self.assertEqual(alignments[1].length, 136)
+        self.assertEqual(len(alignments[1].hsps), 2)
+        self.assertFalse(alignments[1].hsps[0].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[1].hsps[1].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[2].title[:50], "gi|390474341|ref|XP_003734767.1| PREDICTED: histon")
+        self.assertEqual(alignments[2].length, 100)
+        self.assertEqual(len(alignments[2].hsps), 2)
+        self.assertFalse(alignments[2].hsps[0].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[2].hsps[1].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[3].title[:50], "gi|297669362|ref|XP_002812869.1| PREDICTED: histon")
+        self.assertEqual(alignments[3].length, 110)
+        self.assertEqual(len(alignments[3].hsps), 1)
+        self.assertFalse(alignments[3].hsps[0].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[4].title[:50], "gi|332815399|ref|XP_003309509.1| PREDICTED: histon")
+        self.assertEqual(alignments[4].length, 101)
+        self.assertEqual(len(alignments[4].hsps), 2)
+        self.assertFalse(alignments[4].hsps[0].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[4].hsps[1].expect > E_VALUE_THRESH)
+
+        self.assertRaises(StopIteration, next, records)
+        handle.close()
+
+    def test_xml_2226_tblastn_001(self):
+        "Parsing TBLASTN 2.2.26+, random_s00 (xml_2226_tblastn_001)"
+        # NOTE - no date in version field, downloaded 2008/05/08
+
+        filename = 'xml_2226_tblastn_001.xml'
+        datafile = os.path.join("Blast", filename)
+
+        handle = open(datafile)
+        records = NCBIXML.parse(handle)
+
+        record = next(records)
+        alignments = record.alignments
+        self.assertEqual(record.query_id, "Query_1")
+        self.assertEqual(len(alignments), 0)
+
+        record = next(records)
+        alignments = record.alignments
+        self.assertEqual(record.query_id, "Query_2")
+        self.assertEqual(len(alignments), 3)
+        self.assertEqual(sum([len(a.hsps) for a in alignments]), 3)
+        self.assertEqual(alignments[0].title[:50], "gnl|BL_ORD_ID|10 gi|145479850|ref|XM_001425911.1| ")
+        self.assertEqual(alignments[0].length, 4632)
+        self.assertEqual(len(alignments[0].hsps), 1)
+        self.assertTrue(alignments[0].hsps[0].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[1].title[:50], "gnl|BL_ORD_ID|12 gi|72012412|ref|XM_777959.1| PRED")
+        self.assertEqual(alignments[1].length, 1593)
+        self.assertEqual(len(alignments[1].hsps), 1)
+        self.assertTrue(alignments[1].hsps[0].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[2].title[:50], "gnl|BL_ORD_ID|11 gi|115975252|ref|XM_001180111.1| ")
+        self.assertEqual(alignments[2].length, 1593)
+        self.assertEqual(len(alignments[2].hsps), 1)
+        self.assertTrue(alignments[2].hsps[0].expect > E_VALUE_THRESH)
+
+        record = next(records)
+        alignments = record.alignments
+        self.assertEqual(record.query_id, "Query_3")
+        self.assertEqual(len(alignments), 5)
+        self.assertEqual(sum([len(a.hsps) for a in alignments]), 9)
+        self.assertEqual(alignments[0].title[:50], "gnl|BL_ORD_ID|13 gi|350596019|ref|XM_003360601.2| ")
+        self.assertEqual(alignments[0].length, 772)
+        self.assertEqual(len(alignments[0].hsps), 2)
+        self.assertFalse(alignments[0].hsps[0].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[0].hsps[1].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[1].title[:50], "gnl|BL_ORD_ID|14 gi|301779869|ref|XM_002925302.1| ")
+        self.assertEqual(alignments[1].length, 1144)
+        self.assertEqual(len(alignments[1].hsps), 2)
+        self.assertFalse(alignments[1].hsps[0].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[1].hsps[1].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[2].title[:50], "gnl|BL_ORD_ID|15 gi|296223671|ref|XM_002757683.1| ")
+        self.assertEqual(alignments[2].length, 1183)
+        self.assertEqual(len(alignments[2].hsps), 2)
+        self.assertFalse(alignments[2].hsps[0].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[2].hsps[1].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[3].title[:50], "gnl|BL_ORD_ID|16 gi|338714227|ref|XM_001492113.3| ")
+        self.assertEqual(alignments[3].length, 1390)
+        self.assertEqual(len(alignments[3].hsps), 2)
+        self.assertFalse(alignments[3].hsps[0].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[3].hsps[1].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[4].title[:50], "gnl|BL_ORD_ID|19 gi|365982352|ref|XM_003667962.1| ")
+        self.assertEqual(alignments[4].length, 4932)
+        self.assertEqual(len(alignments[4].hsps), 1)
+        self.assertTrue(alignments[4].hsps[0].expect > E_VALUE_THRESH)
+
+        self.assertRaises(StopIteration, next, records)
+        handle.close()
+
+    def test_xml_2226_tblastn_002(self):
+        "Parsing TBLASTN 2.2.26+, random_s00 (xml_2226_tblastn_002)"
+        # NOTE - no date in version field, downloaded 2008/05/08
+
+        filename = 'xml_2226_tblastn_002.xml'
+        datafile = os.path.join("Blast", filename)
+
+        handle = open(datafile)
+        records = NCBIXML.parse(handle)
+
+        record = next(records)
+        alignments = record.alignments
+        self.assertEqual(record.query_id, "Query_1")
+        self.assertEqual(len(alignments), 0)
+
+        self.assertRaises(StopIteration, next, records)
+        handle.close()
+
+    def test_xml_2226_tblastn_003(self):
+        "Parsing TBLASTN 2.2.26+, random_s00 (xml_2226_tblastn_003)"
+        # NOTE - no date in version field, downloaded 2008/05/08
+
+        filename = 'xml_2226_tblastn_003.xml'
+        datafile = os.path.join("Blast", filename)
+
+        handle = open(datafile)
+        records = NCBIXML.parse(handle)
+
+        record = next(records)
+        alignments = record.alignments
+        self.assertEqual(record.query_id, "Query_1")
+        self.assertEqual(len(alignments), 3)
+        self.assertEqual(sum([len(a.hsps) for a in alignments]), 3)
+        self.assertEqual(alignments[0].title[:50], "gnl|BL_ORD_ID|10 gi|145479850|ref|XM_001425911.1| ")
+        self.assertEqual(alignments[0].length, 4632)
+        self.assertEqual(len(alignments[0].hsps), 1)
+        self.assertTrue(alignments[0].hsps[0].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[1].title[:50], "gnl|BL_ORD_ID|12 gi|72012412|ref|XM_777959.1| PRED")
+        self.assertEqual(alignments[1].length, 1593)
+        self.assertEqual(len(alignments[1].hsps), 1)
+        self.assertTrue(alignments[1].hsps[0].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[2].title[:50], "gnl|BL_ORD_ID|11 gi|115975252|ref|XM_001180111.1| ")
+        self.assertEqual(alignments[2].length, 1593)
+        self.assertEqual(len(alignments[2].hsps), 1)
+        self.assertTrue(alignments[2].hsps[0].expect > E_VALUE_THRESH)
+
+        self.assertRaises(StopIteration, next, records)
+        handle.close()
+
+    def test_xml_2226_tblastn_004(self):
+        "Parsing TBLASTN 2.2.26+, gi|11464971:4-101 pleckstrin [Mus musculus] (xml_2226_tblastn_004)"
+        # NOTE - no date in version field, downloaded 2008/05/08
+
+        filename = 'xml_2226_tblastn_004.xml'
+        datafile = os.path.join("Blast", filename)
+
+        handle = open(datafile)
+        records = NCBIXML.parse(handle)
+
+        record = next(records)
+        alignments = record.alignments
+        self.assertEqual(record.query_id, "Query_1")
+        self.assertEqual(len(alignments), 5)
+        self.assertEqual(sum([len(a.hsps) for a in alignments]), 9)
+        self.assertEqual(alignments[0].title[:50], "gnl|BL_ORD_ID|13 gi|350596019|ref|XM_003360601.2| ")
+        self.assertEqual(alignments[0].length, 772)
+        self.assertEqual(len(alignments[0].hsps), 2)
+        self.assertFalse(alignments[0].hsps[0].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[0].hsps[1].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[1].title[:50], "gnl|BL_ORD_ID|14 gi|301779869|ref|XM_002925302.1| ")
+        self.assertEqual(alignments[1].length, 1144)
+        self.assertEqual(len(alignments[1].hsps), 2)
+        self.assertFalse(alignments[1].hsps[0].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[1].hsps[1].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[2].title[:50], "gnl|BL_ORD_ID|15 gi|296223671|ref|XM_002757683.1| ")
+        self.assertEqual(alignments[2].length, 1183)
+        self.assertEqual(len(alignments[2].hsps), 2)
+        self.assertFalse(alignments[2].hsps[0].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[2].hsps[1].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[3].title[:50], "gnl|BL_ORD_ID|16 gi|338714227|ref|XM_001492113.3| ")
+        self.assertEqual(alignments[3].length, 1390)
+        self.assertEqual(len(alignments[3].hsps), 2)
+        self.assertFalse(alignments[3].hsps[0].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[3].hsps[1].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[4].title[:50], "gnl|BL_ORD_ID|19 gi|365982352|ref|XM_003667962.1| ")
+        self.assertEqual(alignments[4].length, 4932)
+        self.assertEqual(len(alignments[4].hsps), 1)
+        self.assertTrue(alignments[4].hsps[0].expect > E_VALUE_THRESH)
+
+        self.assertRaises(StopIteration, next, records)
+        handle.close()
+
+    def test_xml_2226_tblastn_005(self):
+        "Parsing TBLASTN 2.2.26+, random_s00 (xml_2226_tblastn_005)"
+        # NOTE - no date in version field, downloaded 2008/05/08
+
+        filename = 'xml_2226_tblastn_005.xml'
+        datafile = os.path.join("Blast", filename)
+
+        handle = open(datafile)
+        records = NCBIXML.parse(handle)
+
+        record = next(records)
+        alignments = record.alignments
+        self.assertEqual(record.query_id, "Query_1")
+        self.assertEqual(len(alignments), 0)
+
+        record = next(records)
+        alignments = record.alignments
+        self.assertEqual(record.query_id, "Query_2")
+        self.assertEqual(len(alignments), 3)
+        self.assertEqual(sum([len(a.hsps) for a in alignments]), 3)
+        self.assertEqual(alignments[0].title[:50], "gi|145479850|ref|XM_001425911.1| Paramecium tetrau")
+        self.assertEqual(alignments[0].length, 4632)
+        self.assertEqual(len(alignments[0].hsps), 1)
+        self.assertTrue(alignments[0].hsps[0].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[1].title[:50], "gi|115975252|ref|XM_001180111.1| PREDICTED: Strong")
+        self.assertEqual(alignments[1].length, 1593)
+        self.assertEqual(len(alignments[0].hsps), 1)
+        self.assertTrue(alignments[1].hsps[0].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[2].title[:50], "gi|390342090|ref|XM_777959.2| PREDICTED: Strongylo")
+        self.assertEqual(alignments[2].length, 4149)
+        self.assertEqual(len(alignments[0].hsps), 1)
+        self.assertTrue(alignments[2].hsps[0].expect > E_VALUE_THRESH)
+
+        record = next(records)
+        alignments = record.alignments
+        self.assertEqual(record.query_id, "Query_3")
+        self.assertEqual(len(alignments), 5)
+        self.assertEqual(sum([len(a.hsps) for a in alignments]), 10)
+        self.assertEqual(alignments[0].title[:50], "gi|354480463|ref|XM_003502378.1| PREDICTED: Cricet")
+        self.assertEqual(alignments[0].length, 1119)
+        self.assertEqual(len(alignments[0].hsps), 2)
+        self.assertFalse(alignments[0].hsps[0].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[0].hsps[1].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[1].title[:50], "gi|350596019|ref|XM_003360601.2| PREDICTED: Sus sc")
+        self.assertEqual(alignments[1].length, 772)
+        self.assertEqual(len(alignments[1].hsps), 2)
+        self.assertFalse(alignments[1].hsps[0].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[1].hsps[1].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[2].title[:50], "gi|301779869|ref|XM_002925302.1| PREDICTED: Ailuro")
+        self.assertEqual(alignments[2].length, 1144)
+        self.assertEqual(len(alignments[2].hsps), 2)
+        self.assertFalse(alignments[2].hsps[0].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[2].hsps[1].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[3].title[:50], "gi|338714227|ref|XM_001492113.3| PREDICTED: Equus ")
+        self.assertEqual(alignments[3].length, 1390)
+        self.assertEqual(len(alignments[3].hsps), 2)
+        self.assertFalse(alignments[3].hsps[0].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[3].hsps[1].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[4].title[:50], "gi|390474391|ref|XM_002757683.2| PREDICTED: Callit")
+        self.assertEqual(alignments[4].length, 1402)
+        self.assertEqual(len(alignments[4].hsps), 2)
+        self.assertFalse(alignments[4].hsps[0].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[4].hsps[1].expect > E_VALUE_THRESH)
+
+        self.assertRaises(StopIteration, next, records)
+        handle.close()
+        
+    def test_xml_2226_tblastn_006(self):
+        "Parsing TBLASTN 2.2.26+, random_s00 (xml_2226_tblastn_006)"
+        # NOTE - no date in version field, downloaded 2008/05/08
+
+        filename = 'xml_2226_tblastn_006.xml'
+        datafile = os.path.join("Blast", filename)
+
+        handle = open(datafile)
+        self.assertRaises(ValueError,NCBIXML.read,handle)
+        handle.close()
+        
+    def test_xml_2226_tblastn_007(self):
+        "Parsing TBLASTN 2.2.26+, random_s00 (xml_2226_tblastn_007)"
+        # NOTE - no date in version field, downloaded 2008/05/08
+
+        filename = 'xml_2226_tblastn_007.xml'
+        datafile = os.path.join("Blast", filename)
+
+        handle = open(datafile)
+        records=NCBIXML.parse(handle)
+        self.assertRaises(ValueError, next, records)
+        handle.close()
+        
+    def test_xml_2226_tblastn_008(self):
+        "Parsing TBLASTN 2.2.26+, random_s00 (xml_2226_tblastn_008)"
+        # NOTE - no date in version field, downloaded 2008/05/08
+
+        filename = 'xml_2226_tblastn_008.xml'
+        datafile = os.path.join("Blast", filename)
+
+        handle = open(datafile)
+        records=NCBIXML.parse(handle)
+        self.assertRaises(ValueError, next, records)
+        handle.close()
+        
+    def test_xml_2226_tblastn_009(self):
+        "Parsing TBLASTN 2.2.26+, random_s00 (xml_2226_tblastn_009)"
+        # NOTE - no date in version field, downloaded 2008/05/08
+
+        filename = 'xml_2226_tblastn_009.xml'
+        datafile = os.path.join("Blast", filename)
+
+        handle = open(datafile)
+        records = NCBIXML.parse(handle)
+
+        record = next(records)
+        alignments = record.alignments
+        self.assertEqual(record.query_id, "Query_1")
+        self.assertEqual(len(alignments), 0)
+
+        record = next(records)
+        alignments = record.alignments
+        self.assertEqual(record.query_id, "Query_2")
+        self.assertEqual(len(alignments), 3)
+        self.assertEqual(sum([len(a.hsps) for a in alignments]), 3)
+        self.assertEqual(alignments[0].title[:50], "gi|145479850|ref|XM_001425911.1| Paramecium tetrau")
+        self.assertEqual(alignments[0].length, 4632)
+        self.assertEqual(len(alignments[0].hsps), 1)
+        self.assertTrue(alignments[0].hsps[0].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[1].title[:50], "gi|115975252|ref|XM_001180111.1| PREDICTED: Strong")
+        self.assertEqual(alignments[1].length, 1593)
+        self.assertEqual(len(alignments[0].hsps), 1)
+        self.assertTrue(alignments[1].hsps[0].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[2].title[:50], "gi|390342090|ref|XM_777959.2| PREDICTED: Strongylo")
+        self.assertEqual(alignments[2].length, 4149)
+        self.assertEqual(len(alignments[0].hsps), 1)
+        self.assertTrue(alignments[2].hsps[0].expect > E_VALUE_THRESH)
+
+        record = next(records)
+        alignments = record.alignments
+        self.assertEqual(record.query_id, "Query_3")
+        self.assertEqual(len(alignments), 5)
+        self.assertEqual(sum([len(a.hsps) for a in alignments]), 10)
+        self.assertEqual(alignments[0].title[:50], "gi|354480463|ref|XM_003502378.1| PREDICTED: Cricet")
+        self.assertEqual(alignments[0].length, 1119)
+        self.assertEqual(len(alignments[0].hsps), 2)
+        self.assertFalse(alignments[0].hsps[0].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[0].hsps[1].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[1].title[:50], "gi|350596019|ref|XM_003360601.2| PREDICTED: Sus sc")
+        self.assertEqual(alignments[1].length, 772)
+        self.assertEqual(len(alignments[1].hsps), 2)
+        self.assertFalse(alignments[1].hsps[0].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[1].hsps[1].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[2].title[:50], "gi|301779869|ref|XM_002925302.1| PREDICTED: Ailuro")
+        self.assertEqual(alignments[2].length, 1144)
+        self.assertEqual(len(alignments[2].hsps), 2)
+        self.assertFalse(alignments[2].hsps[0].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[2].hsps[1].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[3].title[:50], "gi|338714227|ref|XM_001492113.3| PREDICTED: Equus ")
+        self.assertEqual(alignments[3].length, 1390)
+        self.assertEqual(len(alignments[3].hsps), 2)
+        self.assertFalse(alignments[3].hsps[0].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[3].hsps[1].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[4].title[:50], "gi|390474391|ref|XM_002757683.2| PREDICTED: Callit")
+        self.assertEqual(alignments[4].length, 1402)
+        self.assertEqual(len(alignments[4].hsps), 2)
+        self.assertFalse(alignments[4].hsps[0].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[4].hsps[1].expect > E_VALUE_THRESH)
+
+        self.assertRaises(StopIteration, next, records)
+        handle.close()
+
+    def test_xml_2226_tblastx_001(self):
+        "Parsing TBLASTX 2.2.26+, random_s00 (xml_2226_tblastx_001)"
+        # NOTE - no date in version field, downloaded 2008/05/08
+
+        filename = 'xml_2226_tblastx_001.xml'
+        datafile = os.path.join("Blast", filename)
+
+        handle = open(datafile)
+        records = NCBIXML.parse(handle)
+
+        record = next(records)
+        alignments = record.alignments
+        self.assertEqual(record.query_id, "Query_1")
+        self.assertEqual(len(alignments), 0)
+
+        record = next(records)
+        alignments = record.alignments
+        self.assertEqual(record.query_id, "Query_2")
+        self.assertEqual(len(alignments), 5)
+        self.assertEqual(sum([len(a.hsps) for a in alignments]), 37)
+        self.assertEqual(alignments[0].title[:50], "gnl|BL_ORD_ID|18 gi|296147483|ref|NM_001183135.1| ")
+        self.assertEqual(alignments[0].length, 4911)
+        self.assertEqual(len(alignments[0].hsps), 8)
+        self.assertFalse(alignments[0].hsps[0].expect > E_VALUE_THRESH)
+        self.assertFalse(alignments[0].hsps[1].expect > E_VALUE_THRESH)
+        self.assertFalse(alignments[0].hsps[2].expect > E_VALUE_THRESH)
+        self.assertFalse(alignments[0].hsps[3].expect > E_VALUE_THRESH)
+        self.assertFalse(alignments[0].hsps[4].expect > E_VALUE_THRESH)
+        self.assertFalse(alignments[0].hsps[5].expect > E_VALUE_THRESH)
+        self.assertFalse(alignments[0].hsps[6].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[0].hsps[7].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[1].title[:50], "gnl|BL_ORD_ID|19 gi|365982352|ref|XM_003667962.1| ")
+        self.assertEqual(alignments[1].length, 4932)
+        self.assertEqual(len(alignments[1].hsps), 10)
+        self.assertFalse(alignments[1].hsps[0].expect > E_VALUE_THRESH)
+        self.assertFalse(alignments[1].hsps[1].expect > E_VALUE_THRESH)
+        self.assertFalse(alignments[1].hsps[2].expect > E_VALUE_THRESH)
+        self.assertFalse(alignments[1].hsps[3].expect > E_VALUE_THRESH)
+        self.assertFalse(alignments[1].hsps[4].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[1].hsps[5].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[1].hsps[6].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[1].hsps[7].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[1].hsps[8].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[1].hsps[9].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[2].title[:50], "gnl|BL_ORD_ID|20 gi|366988334|ref|XM_003673886.1| ")
+        self.assertEqual(alignments[2].length, 4938)
+        self.assertEqual(len(alignments[2].hsps), 8)
+        self.assertFalse(alignments[2].hsps[0].expect > E_VALUE_THRESH)
+        self.assertFalse(alignments[2].hsps[1].expect > E_VALUE_THRESH)
+        self.assertFalse(alignments[2].hsps[2].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[2].hsps[3].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[2].hsps[4].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[2].hsps[5].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[2].hsps[6].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[2].hsps[7].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[3].title[:50], "gnl|BL_ORD_ID|21 gi|255710474|ref|XM_002551475.1| ")
+        self.assertEqual(alignments[3].length, 4845)
+        self.assertEqual(len(alignments[3].hsps), 5)
+        self.assertFalse(alignments[3].hsps[0].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[3].hsps[1].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[3].hsps[2].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[3].hsps[3].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[3].hsps[4].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[4].title[:50], "gnl|BL_ORD_ID|22 gi|254579534|ref|XM_002495708.1| ")
+        self.assertEqual(alignments[4].length, 4866)
+        self.assertEqual(len(alignments[4].hsps), 6)
+        self.assertFalse(alignments[4].hsps[0].expect > E_VALUE_THRESH)
+        self.assertFalse(alignments[4].hsps[1].expect > E_VALUE_THRESH)
+        self.assertFalse(alignments[4].hsps[2].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[4].hsps[3].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[4].hsps[4].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[4].hsps[5].expect > E_VALUE_THRESH)
+
+        self.assertRaises(StopIteration, next, records)
+        handle.close()
+
+    def test_xml_2226_tblastx_002(self):
+        "Parsing TBLASTX 2.2.26+, random_s00 (xml_2226_tblastx_002)"
+        # NOTE - no date in version field, downloaded 2008/05/08
+
+        filename = 'xml_2226_tblastx_002.xml'
+        datafile = os.path.join("Blast", filename)
+
+        handle = open(datafile)
+        records = NCBIXML.parse(handle)
+
+        record = next(records)
+        alignments = record.alignments
+        self.assertEqual(record.query_id, "Query_1")
+        self.assertEqual(len(alignments), 0)
+
+        self.assertRaises(StopIteration, next, records)
+        handle.close()
+
+    def test_xml_2226_tblastx_003(self):
+        "Parsing TBLASTN 2.2.26+, gi|296147483:1-350 Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds (xml_2226_tblastx_003)"
+        # NOTE - no date in version field, downloaded 2008/05/08
+
+        filename = 'xml_2226_tblastx_003.xml'
+        datafile = os.path.join("Blast", filename)
+
+        handle = open(datafile)
+        records = NCBIXML.parse(handle)
+
+        record = next(records)
+        alignments = record.alignments
+        self.assertEqual(record.query_id, "Query_1")
+        self.assertEqual(len(alignments), 5)
+        self.assertEqual(sum([len(a.hsps) for a in alignments]), 37)
+        self.assertEqual(alignments[0].title[:50], "gnl|BL_ORD_ID|18 gi|296147483|ref|NM_001183135.1| ")
+        self.assertEqual(alignments[0].length, 4911)
+        self.assertEqual(len(alignments[0].hsps), 8)
+        self.assertFalse(alignments[0].hsps[0].expect > E_VALUE_THRESH)
+        self.assertFalse(alignments[0].hsps[1].expect > E_VALUE_THRESH)
+        self.assertFalse(alignments[0].hsps[2].expect > E_VALUE_THRESH)
+        self.assertFalse(alignments[0].hsps[3].expect > E_VALUE_THRESH)
+        self.assertFalse(alignments[0].hsps[4].expect > E_VALUE_THRESH)
+        self.assertFalse(alignments[0].hsps[5].expect > E_VALUE_THRESH)
+        self.assertFalse(alignments[0].hsps[6].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[0].hsps[7].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[1].title[:50], "gnl|BL_ORD_ID|19 gi|365982352|ref|XM_003667962.1| ")
+        self.assertEqual(alignments[1].length, 4932)
+        self.assertEqual(len(alignments[1].hsps), 10)
+        self.assertFalse(alignments[1].hsps[0].expect > E_VALUE_THRESH)
+        self.assertFalse(alignments[1].hsps[1].expect > E_VALUE_THRESH)
+        self.assertFalse(alignments[1].hsps[2].expect > E_VALUE_THRESH)
+        self.assertFalse(alignments[1].hsps[3].expect > E_VALUE_THRESH)
+        self.assertFalse(alignments[1].hsps[4].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[1].hsps[5].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[1].hsps[6].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[1].hsps[7].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[1].hsps[8].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[1].hsps[9].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[2].title[:50], "gnl|BL_ORD_ID|20 gi|366988334|ref|XM_003673886.1| ")
+        self.assertEqual(alignments[2].length, 4938)
+        self.assertEqual(len(alignments[2].hsps), 8)
+        self.assertFalse(alignments[2].hsps[0].expect > E_VALUE_THRESH)
+        self.assertFalse(alignments[2].hsps[1].expect > E_VALUE_THRESH)
+        self.assertFalse(alignments[2].hsps[2].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[2].hsps[3].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[2].hsps[4].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[2].hsps[5].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[2].hsps[6].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[2].hsps[7].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[3].title[:50], "gnl|BL_ORD_ID|21 gi|255710474|ref|XM_002551475.1| ")
+        self.assertEqual(alignments[3].length, 4845)
+        self.assertEqual(len(alignments[3].hsps), 5)
+        self.assertFalse(alignments[3].hsps[0].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[3].hsps[1].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[3].hsps[2].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[3].hsps[3].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[3].hsps[4].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[4].title[:50], "gnl|BL_ORD_ID|22 gi|254579534|ref|XM_002495708.1| ")
+        self.assertEqual(alignments[4].length, 4866)
+        self.assertEqual(len(alignments[4].hsps), 6)
+        self.assertFalse(alignments[4].hsps[0].expect > E_VALUE_THRESH)
+        self.assertFalse(alignments[4].hsps[1].expect > E_VALUE_THRESH)
+        self.assertFalse(alignments[4].hsps[2].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[4].hsps[3].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[4].hsps[4].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[4].hsps[5].expect > E_VALUE_THRESH)
+
+        self.assertRaises(StopIteration, next, records)
+        handle.close()
+
+    def test_xml_2226_tblastx_004(self):
+        "Parsing TBLASTX 2.2.26+, random_s00 (xml_2226_tblastx_004)"
+        # NOTE - no date in version field, downloaded 2008/05/08
+
+        filename = 'xml_2226_tblastx_004.xml'
+        datafile = os.path.join("Blast", filename)
+        
+        handle = open(datafile)
+        self.assertRaises(ValueError,NCBIXML.read,handle)
+        handle.close()
+
+        handle = open(datafile)
+        records = NCBIXML.parse(handle)
+
+        record = next(records)
+        alignments = record.alignments
+        self.assertEqual(record.query_id, "Query_1")
+        self.assertEqual(len(alignments), 0)
+
+        record = next(records)
+        alignments = record.alignments
+        self.assertEqual(record.query_id, "Query_2")
+        self.assertEqual(len(alignments), 5)
+        self.assertEqual(sum([len(a.hsps) for a in alignments]), 23)
+        self.assertEqual(alignments[0].title[:50], "gi|296147483|ref|NM_001183135.1| Saccharomyces cer")
+        self.assertEqual(alignments[0].length, 4911)
+        self.assertEqual(len(alignments[0].hsps), 7)
+        self.assertFalse(alignments[0].hsps[0].expect > E_VALUE_THRESH)
+        self.assertFalse(alignments[0].hsps[1].expect > E_VALUE_THRESH)
+        self.assertFalse(alignments[0].hsps[2].expect > E_VALUE_THRESH)
+        self.assertFalse(alignments[0].hsps[3].expect > E_VALUE_THRESH)
+        self.assertFalse(alignments[0].hsps[4].expect > E_VALUE_THRESH)
+        self.assertFalse(alignments[0].hsps[5].expect > E_VALUE_THRESH)
+        self.assertFalse(alignments[0].hsps[6].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[1].title[:50], "gi|365982352|ref|XM_003667962.1| Naumovozyma daire")
+        self.assertEqual(alignments[1].length, 4932)
+        self.assertEqual(len(alignments[1].hsps), 6)
+        self.assertFalse(alignments[1].hsps[0].expect > E_VALUE_THRESH)
+        self.assertFalse(alignments[1].hsps[1].expect > E_VALUE_THRESH)
+        self.assertFalse(alignments[1].hsps[2].expect > E_VALUE_THRESH)
+        self.assertFalse(alignments[1].hsps[3].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[1].hsps[4].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[1].hsps[5].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[2].title[:50], "gi|366988334|ref|XM_003673886.1| Naumovozyma caste")
+        self.assertEqual(alignments[2].length, 4938)
+        self.assertEqual(len(alignments[2].hsps), 4)
+        self.assertFalse(alignments[2].hsps[0].expect > E_VALUE_THRESH)
+        self.assertFalse(alignments[2].hsps[1].expect > E_VALUE_THRESH)
+        self.assertFalse(alignments[2].hsps[2].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[2].hsps[3].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[3].title[:50], "gi|255710474|ref|XM_002551475.1| Lachancea thermot")
+        self.assertEqual(alignments[3].length, 4845)
+        self.assertEqual(len(alignments[3].hsps), 2)
+        self.assertFalse(alignments[3].hsps[0].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[3].hsps[1].expect > E_VALUE_THRESH)
+        self.assertEqual(alignments[4].title[:50], "gi|254579534|ref|XM_002495708.1| Zygosaccharomyces")
+        self.assertEqual(alignments[4].length, 4866)
+        self.assertEqual(len(alignments[4].hsps), 4)
+        self.assertFalse(alignments[4].hsps[0].expect > E_VALUE_THRESH)
+        self.assertFalse(alignments[4].hsps[1].expect > E_VALUE_THRESH)
+        self.assertFalse(alignments[4].hsps[2].expect > E_VALUE_THRESH)
+        self.assertTrue(alignments[4].hsps[3].expect > E_VALUE_THRESH)
+
+        self.assertRaises(StopIteration, next, records)
+        handle.close()
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
