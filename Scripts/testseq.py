@@ -86,10 +86,10 @@ def testseq(size=30, alphabet=IUPAC.unambiguous_dna, table=1, gc_target=None,
     ends in an asterisk(*). That's because of the two arguments 'from_start'
     and 'to_stop' respectively. Curiously, there are no asterisks (or terminators)
     within the sequence either; this is due to the 'persistent' argument.
-    The 'from_start', 'to_stop', and 'persistent' arguments are all set to True 
-    by default. You can read more about what they do in the "Arguments" section 
-    above. It's useful to note that all three of those arguments involve the use 
-    of codon tables! When generating your sequence, you can set which codon table 
+    The 'from_start', 'to_stop', and 'persistent' arguments are all set to True
+    by default. You can read more about what they do in the "Arguments" section
+    above. It's useful to note that all three of those arguments involve the use
+    of codon tables! When generating your sequence, you can set which codon table
     you'd like to use:
 
     >>> my_seq = testseq(table=5)
