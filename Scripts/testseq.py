@@ -1,7 +1,10 @@
 # Copyright 2017 by Adil Iqbal.
 # All rights reserved.
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
 
-"""Provide a tool for testing/demonstrating a Seq object"""
+"""Provide a tool for testing/demonstrating a Seq object."""
 
 import warnings
 from random import Random
@@ -83,10 +86,11 @@ def testseq(size=30, alphabet=IUPAC.unambiguous_dna, table=1, gc_target=None,
     ends in an asterisk(*). That's because of the two arguments 'from_start'
     and 'to_stop' respectively. Curiously, there are no asterisks (or terminators)
     within the sequence either; this is due to the 'persistent' argument.
-    The 'from_start', 'to_stop', and 'persistent' arguments are all set to True by default.
-    You can read more about what they do in the "Arguments" section above. It's
-    useful to note that all three of those arguments involve the use of codon tables!
-    When generating your sequence, you can set which codon table you'd like to use:
+    The 'from_start', 'to_stop', and 'persistent' arguments are all set to True 
+    by default. You can read more about what they do in the "Arguments" section 
+    above. It's useful to note that all three of those arguments involve the use 
+    of codon tables! When generating your sequence, you can set which codon table 
+    you'd like to use:
 
     >>> my_seq = testseq(table=5)
     >>> my_seq
@@ -160,7 +164,7 @@ def testseq(size=30, alphabet=IUPAC.unambiguous_dna, table=1, gc_target=None,
 
     Notice that the sequence requested was 300 letters, however the final length of
     the sequence is 561 letters. Those extra letters are the mRNA components. The
-    generated sequence is buried in there, somewhere - and it's exactly 300 letters in size!
+    generated sequence is buried in there and it is exactly 300 letters in size!
 
     Lastly, lets discuss the sequence generator itself. The sequence is created
     using a pseudo-random number generator which relies on a seed to process
@@ -199,7 +203,7 @@ def testseq(size=30, alphabet=IUPAC.unambiguous_dna, table=1, gc_target=None,
     random_instance.seed(rand_seed)
     typeof = _SeqType(alphabet)
     if not typeof.rna and messenger:
-        warnings.warn("The 'messenger' argument can only be used on RNA alphabets.", BiopythonWarning)
+        warnings.warn("Only RNA sequences can be messengers.", BiopythonWarning)
         messenger = False
     if typeof.rna and messenger:
         from_start = True
@@ -209,18 +213,16 @@ def testseq(size=30, alphabet=IUPAC.unambiguous_dna, table=1, gc_target=None,
         stop_symbol = str(stop_symbol)[0]
         codon_set = _CodonSet(alphabet, table, stop_symbol)
     if gc_target is not None and typeof.protein:
-        warnings.warn("The 'gc_target' argument cannot be used with proteins.", BiopythonWarning)
+        warnings.warn("Proteins do not have a GC-content.", BiopythonWarning)
     if gc_target is not None and not typeof.protein:
         gc_target = int(gc_target)
         if gc_target < 0:
-            warnings.warn("The 'gc_target' argument must be an integer between 0 and 100."
-                          "It's current value '{0}' is invalid and has been set to 0.".format(gc_target),
-                          BiopythonWarning)
+            warnings.warn("Argument 'gc_target' must be an integer between 0 and 100."
+                          "It has been set to 0.", BiopythonWarning)
             gc_target = 0
         if gc_target > 100:
-            warnings.warn("The 'gc_target' argument must be an integer between 0 and 100."
-                          "It's current value '{0}' is invalid and has been set to 100.".format(gc_target),
-                          BiopythonWarning)
+            warnings.warn("Argument 'gc_target' must be an integer between 0 and 100."
+                          "It has been set to 100.", BiopythonWarning)
             gc_target = 100
         probability_table = _construct_probability_table(alphabet, gc_target)
     size = int(size)
@@ -271,7 +273,7 @@ def testseq(size=30, alphabet=IUPAC.unambiguous_dna, table=1, gc_target=None,
 
 
 def _construct_probability_table(alphabet, gc_target):
-    """Assign a probability of being chosen to each nucleotide based on desired GC-content. (PRIVATE)"""
+    """Assign a probability to nucleotides based on target GC-content. (PRIVATE)."""
     gc_nt_total = 2
     if alphabet == IUPAC.ambiguous_dna or alphabet == IUPAC.ambiguous_rna:
         gc_nt_total = 3
@@ -292,7 +294,7 @@ def _construct_probability_table(alphabet, gc_target):
 
 
 def _pick_one(probability_table):
-    """Choose a nucleotide based on its probability of being chosen. (PRIVATE)"""
+    """Choose a nucleotide based on its probability of being chosen. (PRIVATE)."""
     roll = random_instance.random()
     index = 0
     while roll > 0:
@@ -303,7 +305,7 @@ def _pick_one(probability_table):
 
 
 def _add_messenger_parts(seq, size, alphabet, codon_set):
-    """Generate and add the 5' UTR, 3' UTR, and PolyA-Tail to an RNA sequence. (PRIVATE)"""
+    """Generate and add messenger RNA components to an RNA sequence. (PRIVATE)."""
     utr_size = int(size / 3)
     utr5 = ""
     for i in range(utr_size):
@@ -331,7 +333,7 @@ def _add_messenger_parts(seq, size, alphabet, codon_set):
 
 
 class _SeqType(object):
-    """Evaluate alphabet to determine Seq type and return boolean values. (PRIVATE)"""
+    """Evaluate alphabet to determine Seq type and return boolean values. (PRIVATE)."""
 
     def __init__(self, alphabet):
         self.dna = isinstance(alphabet, Alphabet.DNAAlphabet)
@@ -348,7 +350,7 @@ class _SeqType(object):
 
 
 class _CodonSet(object):
-    """Populate lists of codons from appropriate codon table. Return lists. (PRIVATE)"""
+    """Populate lists of codons from appropriate codon table. Return lists. (PRIVATE)."""
 
     def __init__(self, alphabet=IUPAC.unambiguous_dna, table=1, stop_symbol="*"):
         self.alphabet = alphabet
@@ -365,7 +367,7 @@ class _CodonSet(object):
         del self.alphabet, self.table, self.stop_symbol, self.typeof
 
     def _get_codon_table(self):
-        """Retrieve codon data from Bio.Data.CodonTable. (PRIVATE)"""
+        """Retrieve codon data from Bio.Data.CodonTable. (PRIVATE)."""
         if self.alphabet == IUPAC.unambiguous_dna or self.typeof.protein:
             codon_table = CodonTable.unambiguous_dna_by_id[self.table]
         elif self.alphabet == IUPAC.ambiguous_dna:
@@ -379,7 +381,7 @@ class _CodonSet(object):
         return codon_table
 
     def _get_non_codons(self, exceptions):
-        """Return a list of all codons in a table that are not exception codons. (PRIVATE)"""
+        """Return a list of all non-exception codons in a table. (PRIVATE)."""
         if self.typeof.rna:
             letters = IUPAC.unambiguous_rna.letters
         else:
@@ -397,14 +399,15 @@ class _CodonSet(object):
         return non_codons
 
     def _translate_codon_sets(self):
-        """Replace all codons in codon sets with corresponding amino acids. (PRIVATE)"""
+        """Replace all codons in codon sets with corresponding amino acids. (PRIVATE)."""
         def translate_set(codon_set):
             amino_acids = []
             for codon in codon_set:
                 if codon_set == self.stop:
                     translation = self.stop_symbol
                 else:
-                    translation = Seq(codon, IUPAC.unambiguous_dna).translate(table=self.table.id)._data
+                    translation = Seq(codon, IUPAC.unambiguous_dna)
+                    translation = translation.translate(table=self.table.id)._data
                 this_amino_acid = translation
                 amino_acids.append(this_amino_acid)
             return amino_acids
@@ -416,7 +419,7 @@ class _CodonSet(object):
 
 
 class _Letter(object):
-    """Pair a letter with its probability of being chosen. (PRIVATE)"""
+    """Pair a letter with its probability of being chosen. (PRIVATE)."""
 
     def __init__(self, letter=None, value=None):
         self.letter = letter
