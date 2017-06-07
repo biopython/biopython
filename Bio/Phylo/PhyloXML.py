@@ -587,25 +587,13 @@ class Confidence(PhyloElement):
         return id(self)
 
     def __eq__(self, other):
-        """Checks for equality between Confidence objects.
-
-        Returns:
-            value : float
-                confidence value
-        """
-        
+        """Checks for equality between Confidence objects."""
         if isinstance(other, Confidence):
             return self.value == other.value
         return self.value == other
 
     def __ne__(self, other):
-        """Checks for inequality between two Confidence objects.
-
-        Returns:
-        value : float
-            confidence value.
-        """
-        
+        """Checks for inequality between two Confidence objects."""
         if isinstance(other, Confidence):
             return self.value != other.value
         return self.value != other
@@ -723,6 +711,7 @@ class Confidence(PhyloElement):
 
     if sys.version_info[0] < 3:
         def __long__(self):
+            """Returns long value of Confidence object."""
             return long(self.value)  # noqa : F821
 
 
@@ -829,6 +818,7 @@ class Events(PhyloElement):
         return [k for k, v in self.__dict__.items() if v is not None]
 
     def values(self):
+        """Returns values from a key-value pair in an Events dict."""
         return [v for v in self.__dict__.values() if v is not None]
 
     def __len__(self):
@@ -850,6 +840,7 @@ class Events(PhyloElement):
         setattr(self, key, None)
 
     def __iter__(self):
+        """Iterates over the keys present in a Events dict."""
         return iter(self.keys())
 
     def __contains__(self, key):
@@ -894,6 +885,7 @@ class MolSeq(PhyloElement):
         self.is_aligned = is_aligned
 
     def __str__(self):
+        """Returns the value of the Molecular Sequence object."""
         return self.value
 
 
@@ -1013,6 +1005,7 @@ class ProteinDomain(PhyloElement):
     """
 
     def __init__(self, value, start, end, confidence=None, id=None):
+        """Initialize value for a ProteinDomain object."""
         self.value = value
         self.start = start
         self.end = end
@@ -1027,6 +1020,7 @@ class ProteinDomain(PhyloElement):
                              confidence=feat.qualifiers.get('confidence'))
 
     def to_seqfeature(self):
+        """Create a SeqFeature from the ProteinDomain Object."""
         feat = SeqFeature(location=FeatureLocation(self.start, self.end),
                           id=self.value)
         if hasattr(self, 'confidence'):
@@ -1044,6 +1038,7 @@ class Reference(PhyloElement):
     re_doi = re.compile(r'[a-zA-Z0-9_\.]+/[a-zA-Z0-9_\.]+')
 
     def __init__(self, doi=None, desc=None):
+        """Initialize elements of the Reference class object."""
         _check_str(doi, self.re_doi.match)
         self.doi = doi
         self.desc = desc
@@ -1097,6 +1092,7 @@ class Sequence(PhyloElement):
                  # Collections
                  annotations=None, other=None,
                  ):
+        """Initialize value for a Sequence object."""
         _check_str(type, self.alphabets.__contains__)
         _check_str(symbol, self.re_symbol.match)
         self.type = type
