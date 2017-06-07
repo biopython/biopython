@@ -3,7 +3,7 @@
 # as part of this package.
 
 import unittest
-from Scripts.testseq import testseq
+from ..Scripts.testseq import testseq
 from Bio.Alphabet import IUPAC, NucleotideAlphabet
 from Bio.SeqUtils import GC
 
