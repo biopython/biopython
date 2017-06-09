@@ -197,7 +197,7 @@ class QueryResult(_BaseSearchObject):
         """
         # default values
         self._id = id
-        self._hit_key_function = hit_key_function or QueryResult._hit_key_func
+        self._hit_key_function = hit_key_function or _hit_key_func
         self._items = OrderedDict()
         self._description = None
         self.__alt_hit_ids = {}
@@ -761,10 +761,10 @@ class QueryResult(_BaseSearchObject):
             self._transfer_attrs(obj)
             return obj
 
-    # Default function for hit_key_function argument in QueryResult.__init__
-    @staticmethod
-    def _hit_key_func(hit):
-        return hit.id
+
+# Default function for hit_key_function argument in QueryResult.__init__
+def _hit_key_func(hit):
+    return hit.id
 
 
 # if not used as a module, run the doctest
