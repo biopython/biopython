@@ -764,7 +764,8 @@ class QueryResult(_BaseSearchObject):
 
 def _hit_key_func(hit):
     """Default function for hit_key_function argument in QueryResult.__init__
-    (PRIVATE)."""
+    (PRIVATE).
+    """
     return hit.id
 
 
