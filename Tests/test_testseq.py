@@ -16,17 +16,16 @@ from Bio.SeqUtils import GC
 # Find file path to 'testseq' module.
 file_path = os.getcwd()
 cwd_path = file_path
-file_path = file_path.split("//")
+file_path = file_path.split("/")
 for i in reversed(range(len(file_path))):
     if file_path[i] == "Tests":
-        file_path[i] = "Scripts//testseq.py"
+        file_path[i] = "Scripts/testseq.py"
         break
     else:
         del file_path[i]
     if len(file_path) == 0:
-        raise ImportError("Could not find file path from", cwd_path)
-file_path = "//".join(file_path)
-del cwd_path
+        raise ImportError("Could not find file path from " + cwd_path)
+file_path = "/".join(file_path)
 
 # Import module manually
 if sys.version_info[0] < 3:
