@@ -89,7 +89,7 @@ class TestTestseq(unittest.TestCase):
         self.assertEqual(len(seq), 100)
 
         seq = foo.testseq(100, truncate=False)
-        self.assertEqual(len(sfoo.eq), 100)
+        self.assertEqual(len(seq), 100)
 
     def test_gc_target(self):
         """Testing 'gc_target'foo. argument..."""
