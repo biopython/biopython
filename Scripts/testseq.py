@@ -6,6 +6,7 @@
 
 """Provide a tool for testing/demonstrating a Seq object."""
 
+import sys
 import warnings
 from random import Random
 
@@ -430,7 +431,11 @@ class _Letter(object):
 
 
 if __name__ == "__main__":
-    print("Running doctests...")
-    import doctest
-    doctest.testmod()
-    print("Done")
+    try:
+        if sys.argv[1] is 'unittest':
+            pass
+    except:
+        print("Running doctests...")
+        import doctest
+        doctest()
+        print("Done")
