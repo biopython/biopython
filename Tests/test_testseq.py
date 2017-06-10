@@ -6,6 +6,9 @@
 
 import unittest
 
+if __name__ == '__main__' and __package__ is None:
+    __package__ = 'test_testseq'
+
 from ..Scripts.testseq import testseq
 from Bio.Alphabet import IUPAC, NucleotideAlphabet
 from Bio.SeqUtils import GC
@@ -99,7 +102,6 @@ class TestTestseq(unittest.TestCase):
         self.assertTrue(seq1 == seq2)
 
 
-if __name__ == '__main__' and __package__ is None:
-    __package__ = 'test_testseq'
+if __name__ == '__main__':
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)
