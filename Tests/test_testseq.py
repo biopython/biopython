@@ -1,26 +1,14 @@
+# Copyright 2017 by Adil Iqbal.
+# All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-import os
 import unittest
 
+from ..Scripts.testseq import testseq
 from Bio.Alphabet import IUPAC, NucleotideAlphabet
 from Bio.SeqUtils import GC
-
-file_path = os.getcwd()
-file_path = file_path.split("/")
-for i in reversed(range(len(file_path))):
-    if file_path[i] == 'Tests':
-        file_path[i] = 'Scripts/testseq.py'
-        break
-    else:
-        del file_path[i]
-    if len(file_path) == 0:
-        raise ImportError('File path not found.')
-file_path = "/".join(file_path)
-run_testseq = "python " + file_path + " unittest"
-os.system(run_testseq)
 
 
 class TestTestseq(unittest.TestCase):
@@ -111,6 +99,7 @@ class TestTestseq(unittest.TestCase):
         self.assertTrue(seq1 == seq2)
 
 
-if __name__ == '__main__':
+if __name__ == '__main__' and __package__ is None:
+    __package__ = 'Tests.test_testseq.py'
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)
