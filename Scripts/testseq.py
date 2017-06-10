@@ -437,5 +437,5 @@ if __name__ == "__main__":
     except:
         print("Running doctests...")
         import doctest
-        doctest()
+        doctest.testmod()
         print("Done")
