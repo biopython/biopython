@@ -2,11 +2,25 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+import os
 import unittest
-from .Scripts.testseq import testseq
+
 from Bio.Alphabet import IUPAC, NucleotideAlphabet
 from Bio.SeqUtils import GC
 
+file_path = os.getcwd()
+file_path = file_path.split("/")
+for i in reversed(range(len(file_path))):
+    if file_path[i] == 'Tests':
+        file_path[i] = 'Scripts/testseq.py'
+        break
+    else:
+        del file_path[i]
+    if len(file_path) == 0:
+        raise ImportError('Unexpected file path.')
+file_path = "/".join(file_path)
+run_testseq = "python " + file_path + " unittest"
+os.system(run_testseq)
 
 class TestTestseq(unittest.TestCase):
 
