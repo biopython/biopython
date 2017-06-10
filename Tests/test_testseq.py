@@ -100,6 +100,6 @@ class TestTestseq(unittest.TestCase):
 
 
 if __name__ == '__main__' and __package__ is None:
-    __package__ = 'Tests.test_testseq.py'
+    __package__ = 'test_testseq'
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)
