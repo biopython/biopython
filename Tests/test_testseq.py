@@ -5,10 +5,8 @@
 # as part of this package.
 
 import os
+import sys
 import unittest
-
-if __name__ == '__main__' and __package__ is None:
-    __package__ = 'test_testseq'
 
 from Bio.Alphabet import IUPAC, NucleotideAlphabet
 from Bio.SeqUtils import GC
