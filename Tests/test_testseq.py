@@ -4,6 +4,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+import os
 import unittest
 
 if __name__ == '__main__' and __package__ is None:
