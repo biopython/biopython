@@ -17,14 +17,16 @@ for i in reversed(range(len(file_path))):
     else:
         del file_path[i]
     if len(file_path) == 0:
-        raise ImportError('Unexpected file path.')
+        raise ImportError('File path not found.')
 file_path = "/".join(file_path)
 run_testseq = "python " + file_path + " unittest"
 os.system(run_testseq)
 
+
 class TestTestseq(unittest.TestCase):
 
     def test_alphabet(self):
+        """Testing 'alphabet' argument..."""
         seq = testseq()
         seq = seq._data
         self.assertEqual(seq, "ATGTCCTCTAATAGTATGGTCGTCTACTGA")
@@ -57,6 +59,7 @@ class TestTestseq(unittest.TestCase):
             testseq(alphabet=NucleotideAlphabet)
 
     def test_size(self):
+        """Testing 'size' and 'truncate' arguments..."""
         seq = testseq()
         self.assertEqual(len(seq), 30)
 
@@ -70,10 +73,12 @@ class TestTestseq(unittest.TestCase):
         self.assertEqual(len(seq), 100)
 
     def test_gc_target(self):
+        """Testing 'gc_target' argument..."""
         seq = testseq(1000, gc_target=90)
         self.assertEqual(GC(seq), 89.48948948948949)
 
     def test_codon_tables(self):
+        """Testing codon sets..."""
         seq = testseq(table=5)
         seq1 = seq.translate(table=5)._data
         seq2 = seq.translate(table=6)._data
@@ -91,10 +96,12 @@ class TestTestseq(unittest.TestCase):
         self.assertTrue("*" in seq[1:-1])
 
     def test_messenger(self):
+        """Testing 'messenger' argument..."""
         seq = testseq(alphabet=IUPAC.unambiguous_rna, messenger=True)._data
         self.assertTrue("A" * 20 == seq[-20:])
 
     def test_seeding(self):
+        """Testing 'rand_seed' argument..."""
         seq1 = testseq(rand_seed=None)
         seq2 = testseq(rand_seed=None)
         self.assertFalse(seq1 == seq2)
