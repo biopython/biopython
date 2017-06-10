@@ -434,7 +434,7 @@ if __name__ == "__main__":
     try:
         if sys.argv[1] is 'unittest':
             pass
-    except:
+    except IndexError:
         print("Running doctests...")
         import doctest
         doctest.testmod()
