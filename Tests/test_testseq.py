@@ -79,7 +79,7 @@ class TestTestseq(unittest.TestCase):
         with self.assertRaises(TypeError):
             foo.testseq(alphabet=NucleotideAlphabet)
 
-    def test_size(sefoo.lf):
+    def test_size(self):
         """Testing 'size' and 'truncate' arguments..."""
         seq = foo.testseq()
         self.assertEqual(len(seq), 30)
