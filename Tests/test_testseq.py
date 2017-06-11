@@ -8,8 +8,7 @@ import os
 import sys
 import unittest
 
-from Bio.Alphabet import NucleotideAlphabet
-from Bio.Alphabet.IUPAC import *
+from Bio.Alphabet import IUPAC, NucleotideAlphabet
 from Bio.SeqUtils import GC
 
 # Find file path to 'testseq' module.
@@ -45,16 +44,17 @@ else:
 
 
 class TestTestseq(unittest.TestCase):
+    """Perform unit test for 'testseq' function."""
 
     def test_alphabet(self):
         """Testing 'alphabet' argument..."""
-        alphabets = [unambiguous_dna, ambiguous_dna, extended_dna, unambiguous_rna,
-                     ambiguous_rna, protein, extended_protein]
+        alphabets = [IUPAC.unambiguous_dna, IUPAC.ambiguous_dna, IUPAC.extended_dna,
+                     IUPAC.unambiguous_rna, IUPAC.ambiguous_rna, IUPAC.protein, IUPAC.extended_protein]
 
         for i in alphabets:
             seq = foo.testseq(alphabet=i)._data
-            for j in range(len(seq)):
-                self.assertTrue(seq[j] in i.letters)
+            for j, k in enumerate(seq):
+                self.assertTrue(k in i.letters)
 
         with self.assertRaises(TypeError):
             foo.testseq(alphabet=NucleotideAlphabet)
@@ -67,7 +67,7 @@ class TestTestseq(unittest.TestCase):
         seq = foo.testseq(100)
         self.assertEqual(len(seq), 99)
 
-        seq = foo.testseq(100, alphabet=protein)
+        seq = foo.testseq(100, alphabet=IUPAC.protein)
         self.assertEqual(len(seq), 100)
 
         seq = foo.testseq(100, truncate=False)
@@ -99,7 +99,7 @@ class TestTestseq(unittest.TestCase):
 
     def test_messenger(self):
         """Testing 'messenger' argument..."""
-        seq = foo.testseq(alphabet=unambiguous_rna, messenger=True)._data
+        seq = foo.testseq(alphabet=IUPAC.unambiguous_rna, messenger=True)._data
         self.assertTrue("A" * 20 == seq[-20:])
 
     def test_seeding(self):
