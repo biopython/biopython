@@ -21,7 +21,7 @@ if file_path[1] == "Tests":
 else:
     raise ImportError("File path could not be derived from: " + cwd_path)
 
-# Import module manually
+# Import 'testseq' module manually
 if sys.version_info[0] < 3:
     # Python version 2.7
     import imp
@@ -49,8 +49,9 @@ class TestTestseq(unittest.TestCase):
 
         for i in alphabets:
             seq = foo.testseq(alphabet=i)._data
-            for j, k in enumerate(seq):
-                self.assertTrue(k in i.letters)
+            seq = seq[10:20]
+            for j, letter in enumerate(seq):
+                self.assertTrue(letter in i.letters)
 
         with self.assertRaises(TypeError):
             foo.testseq(alphabet=NucleotideAlphabet)
