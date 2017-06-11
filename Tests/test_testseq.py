@@ -15,15 +15,11 @@ from Bio.SeqUtils import GC
 file_path = os.getcwd()
 cwd_path = file_path
 file_path = os.path.split(file_path)
-while len(file_path[0]) is not 0:
-    if file_path[1] is "Tests":
-        file_path = os.path.join(file_path[0], "Scripts")
-        file_path = os.path.join(file_path, "testseq.py")
-        break
-    else:
-        file_path = os.path.split(file_path[0])
+if file_path[1] == "Tests":
+    file_path = os.path.join(file_path[0], "Scripts")
+    file_path = os.path.join(file_path, "testseq.py")
 else:
-    raise ImportError("File path could not be found from: " + cwd_path)
+    raise ImportError("File path could not be derived from: " + cwd_path)
 
 # Import module manually
 if sys.version_info[0] < 3:
