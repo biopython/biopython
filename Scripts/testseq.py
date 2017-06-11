@@ -6,7 +6,6 @@
 
 """Provide a tool for testing/demonstrating a Seq object."""
 
-import sys
 import warnings
 from random import Random
 
@@ -62,12 +61,12 @@ def testseq(size=30, alphabet=IUPAC.unambiguous_dna, table=1, gc_target=None,
         argument is set to None, the sequence will be re-seeded with every
         function call.
 
-    Hey there! We can use the 'testseq' function to quickly generate sequences:
+    Hey there! We can use the 'testseq' function to quickly generate sequences.
 
     >>> from Scripts.testseq import testseq
     >>> my_seq = testseq()
-    >>> my_seq
-    Seq('ATGTCCTCTAATAGTATGGTCGTCTACTGA', IUPACUnambiguousDNA())
+    >>> type(my_seq) == Bio.Seq.Seq
+    True
 
     The default size of the generated sequence is 30 letters,
     but you can change that at any time, like so:
@@ -80,8 +79,8 @@ def testseq(size=30, alphabet=IUPAC.unambiguous_dna, table=1, gc_target=None,
 
     >>> from Bio.Alphabet import IUPAC
     >>> my_seq = testseq(alphabet=IUPAC.extended_protein)
-    >>> my_seq
-    Seq('MUQCKTSPOLSNWHTFLFUEYOKVZOYFL*', HasStopCodon(ExtendedIUPACProtein(), '*'))
+    >>> my_seq.alphabet
+    HasStopCodon(ExtendedIUPACProtein(), '*')
 
     You may have noticed that the above sequence starts with Methionine(M) and
     ends in an asterisk(*). That's because of the two arguments 'from_start'
