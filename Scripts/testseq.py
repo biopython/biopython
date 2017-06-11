@@ -276,7 +276,7 @@ def testseq(size=30, alphabet=IUPAC.unambiguous_dna, table=1, gc_target=None,
 def _construct_probability_table(alphabet, gc_target):
     """Assign a probability to nucleotides based on target GC-content. (PRIVATE)."""
     gc_nt_total = 2
-    if alphabet == IUPAC.ambiguous_dna or alphabet == IUPAC.ambiguous_rna:
+    if alphabet in [IUPAC.ambiguous_dna, IUPAC.ambiguous_rna]:
         gc_nt_total = 3
     probability_table = []
     total = len(alphabet.letters) - gc_nt_total
@@ -287,10 +287,10 @@ def _construct_probability_table(alphabet, gc_target):
             value = (100 - gc_target) / total
         probability_table.append(_Letter(letter, value))
     sum_ = 0
-    for letter in range(len(probability_table)):
-        sum_ += probability_table[letter].probability_value
-    for letter in range(len(probability_table)):
-        probability_table[letter].probability_value /= sum_
+    for i, letter in enumerate(probability_table):
+        sum_ += letter.probability_value
+    for i, letter in enumerate(probability_table):
+        letter.probability_value /= sum_
     return probability_table
 
 
@@ -431,11 +431,7 @@ class _Letter(object):
 
 
 if __name__ == "__main__":
-    try:
-        if sys.argv[1] is 'unittest':
-            pass
-    except IndexError:
-        print("Running doctests...")
-        import doctest
-        doctest.testmod()
-        print("Done")
+    print("Running doctests...")
+    import doctest
+    doctest.testmod()
+    print("Done")
