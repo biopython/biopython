@@ -65,8 +65,8 @@ def testseq(size=30, alphabet=IUPAC.unambiguous_dna, table=1, gc_target=None,
 
     >>> from Scripts.testseq import testseq
     >>> my_seq = testseq()
-    >>> type(my_seq) == Bio.Seq.Seq
-    True
+    >>> type(my_seq)
+    <class 'Bio.Seq.Seq'>
 
     The default size of the generated sequence is 30 letters,
     but you can change that at any time, like so:
