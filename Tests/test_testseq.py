@@ -8,22 +8,23 @@ import os
 import sys
 import unittest
 
-from Bio.Alphabet import IUPAC, NucleotideAlphabet
+from Bio.Alphabet import NucleotideAlphabet
+from Bio.Alphabet.IUPAC import *
 from Bio.SeqUtils import GC
 
 # Find file path to 'testseq' module.
 file_path = os.getcwd()
 cwd_path = file_path
-file_path = file_path.split("/")
-for i in reversed(range(len(file_path))):
-    if file_path[i] == "Tests":
-        file_path[i] = "Scripts/testseq.py"
+file_path = os.path.split(file_path)
+while len(file_path[0]) is not 0:
+    if file_path[1] is "Tests":
+        file_path = os.path.join(file_path[0], "Scripts")
+        file_path = os.path.join(file_path, "testseq.py")
         break
     else:
-        del file_path[i]
-    if len(file_path) == 0:
-        raise ImportError("Could not find file path from " + cwd_path)
-file_path = "/".join(file_path)
+        file_path = os.path.split(file_path[0])
+else:
+    raise ImportError("File path could not be found from: " + cwd_path)
 
 # Import module manually
 if sys.version_info[0] < 3:
@@ -40,39 +41,20 @@ else:
         from importlib.util import spec_from_file_location, module_from_spec
         spec = spec_from_file_location('testseq', file_path)
         foo = module_from_spec(spec)
+        spec.loader.exec_module(foo)
 
 
 class TestTestseq(unittest.TestCase):
 
     def test_alphabet(self):
         """Testing 'alphabet' argument..."""
-        seq = foo.testseq()
-        seq = seq._data
-        self.assertEqual(seq, "ATGTCCTCTAATAGTATGGTCGTCTACTGA")
+        alphabets = [unambiguous_dna, ambiguous_dna, extended_dna, unambiguous_rna,
+                     ambiguous_rna, protein, extended_protein]
 
-        seq = foo.testseq(alphabet=IUPAC.ambiguous_dna)
-        seq = seq._data
-        self.assertEqual(seq, "ATGNWGRMSWNVDRSYKNNCMTRTVAKTRA")
-
-        seq = foo.testseq(alphabet=IUPAC.extended_dna)
-        seq = seq._data
-        self.assertEqual(seq, "ATGBWSBWDCTBTABTBAADWADSDCWTGA")
-
-        seq = foo.testseq(alphabet=IUPAC.unambiguous_rna)
-        seq = seq._data
-        self.assertEqual(seq, "AUGUCCUCUAAUAGUAUGGUCGUCUACUGA")
-
-        seq = foo.testseq(alphabet=IUPAC.ambiguous_rna)
-        seq = seq._data
-        self.assertEqual(seq, "AUGNWGRMSWNVDRSYKNNCMURUVAKURA")
-
-        seq = foo.testseq(alphabet=IUPAC.protein)
-        seq = seq._data
-        self.assertEqual(seq, "MQCKTSPLSNWHTFLFEYKVYFLEDMSVE*")
-
-        seq = foo.testseq(alphabet=IUPAC.extended_protein)
-        seq = seq._data
-        self.assertEqual(seq, "MUQCKTSPOLSNWHTFLFUEYOKVZOYFL*")
+        for i in alphabets:
+            seq = foo.testseq(alphabet=i)._data
+            for j in range(len(seq)):
+                self.assertTrue(seq[j] in i.letters)
 
         with self.assertRaises(TypeError):
             foo.testseq(alphabet=NucleotideAlphabet)
@@ -85,19 +67,20 @@ class TestTestseq(unittest.TestCase):
         seq = foo.testseq(100)
         self.assertEqual(len(seq), 99)
 
-        seq = foo.testseq(100, alphabet=IUPAC.protein)
+        seq = foo.testseq(100, alphabet=protein)
         self.assertEqual(len(seq), 100)
 
         seq = foo.testseq(100, truncate=False)
         self.assertEqual(len(seq), 100)
 
     def test_gc_target(self):
-        """Testing 'gc_target'foo. argument..."""
+        """Testing 'gc_target' argument..."""
         seq = foo.testseq(1000, gc_target=90)
-        self.assertEqual(GC(seq), 89.48948948948949)
+        error = 90 - GC(seq)
+        self.assertTrue(-5 < error < 5)
 
     def test_codon_tables(self):
-        """Testing codon sets.foo..."""
+        """Testing codon sets..."""
         seq = foo.testseq(table=5)
         seq1 = seq.translate(table=5)._data
         seq2 = seq.translate(table=6)._data
@@ -116,7 +99,7 @@ class TestTestseq(unittest.TestCase):
 
     def test_messenger(self):
         """Testing 'messenger' argument..."""
-        seq = foo.testseq(alphabet=IUPAC.unambiguous_rna, messenger=True)._data
+        seq = foo.testseq(alphabet=unambiguous_rna, messenger=True)._data
         self.assertTrue("A" * 20 == seq[-20:])
 
     def test_seeding(self):
