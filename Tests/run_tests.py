@@ -3,13 +3,10 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """Run a set of PyUnit-based regression tests.
-
 This will find all modules whose name is "test_*.py" in the test
 directory, and run them.  Various command line options provide
 additional facilities.
-
 Command line options:
-
 --help        -- show usage info
 --offline     -- skip tests which require internet access
 -g;--generate -- write the output file for a test instead of comparing it.
@@ -20,7 +17,6 @@ Command line options:
 <test_name>   -- supply the name of one (or more) tests to be run.
                  The .py file extension is optional.
 doctest       -- run the docstring tests.
-
 By default, all tests are run.
 """
 
@@ -174,7 +170,6 @@ if sys.version_info[0] == 3:
 # Skip Bio.bgzf doctest for broken gzip, see http://bugs.python.org/issue17666
 def _have_bug17666():
     """Debug function to check if Python's gzip is broken (PRIVATE).
-
     Checks for http://bugs.python.org/issue17666 expected in Python 2.7.4,
     3.2.4 and 3.3.1 only.
     """
@@ -202,6 +197,42 @@ def _have_bug17666():
 
 if _have_bug17666():
     DOCTEST_MODULES.remove("Bio.bgzf")
+
+
+def manual_import(name):
+    """Find, manually import, and return python module."""
+    # Find the path from parent 'biopython' folder.
+    cwd_path = os.getcwd()
+    module_path = cwd_path
+    module_path = os.path.split(module_path)
+    name = name.split(".")
+    name[-1] += ".py"
+    if module_path[1] == "Tests":
+        module_path = os.path.join(module_path[0], name.pop(0))
+    else:
+        raise ImportError
+    for i, step in enumerate(name):
+        module_path = os.path.join(module_path, step)
+
+    # Manually import and return module.
+    name = name[-1][:-3]
+    if sys.version_info[0] < 3:
+        # Python version 2.7
+        import imp
+        return imp.load_source(name, module_path)
+    else:
+        if sys.version_info[1] <= 4:
+            # Python version 3.3 and 3.4
+            from importlib.machinery import SourceFileLoader
+            return SourceFileLoader(name, module_path).load_module()
+        else:
+            # Python version 3.5+
+            from importlib.util import spec_from_file_location, module_from_spec
+            spec = spec_from_file_location(name, module_path)
+            module = module_from_spec(spec)
+            spec.loader.exec_module(module)
+            return module
+
 
 SYSTEM_LANG = os.environ.get('LANG', 'C')  # Cache this
 
@@ -291,7 +322,6 @@ class ComparisonTestCase(unittest.TestCase):
 
     def __init__(self, name, output=None):
         """Initialize with the test to run.
-
         Arguments:
         o name - The name of the test. The expected output should be
           stored in the file output/name.
@@ -461,7 +491,10 @@ class TestRunner(unittest.TextTestRunner):
             else:
                 # It's a doc test
                 sys.stderr.write("%s docstring test ... " % name)
-                module = __import__(name, fromlist=name.split("."))
+                try:
+                    module = __import__(name, fromlist=name.split("."))
+                except ImportError:
+                    module = manual_import(name)
                 suite = doctest.DocTestSuite(module,
                                              optionflags=doctest.ELLIPSIS)
                 del module
