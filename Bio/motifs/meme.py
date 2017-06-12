@@ -145,7 +145,9 @@ def __read_datafile(record, handle):
         if line.startswith('TRAINING SET'):
             break
     else:
-        raise ValueError("Unexpected end of stream: 'TRAINING SET' not found.")
+        raise ValueError(
+            "Unexpected end of stream: 'TRAINING SET' not found. This can happen with " +
+            "minimal MEME files (MEME databases) which are not supported yet.")
     try:
         line = next(handle)
     except StopIteration:
