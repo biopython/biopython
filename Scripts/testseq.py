@@ -82,10 +82,18 @@ def testseq(size=30, alphabet=IUPAC.unambiguous_dna, table=1, gc_target=None,
     >>> my_seq.alphabet
     HasStopCodon(ExtendedIUPACProtein(), '*')
 
-    You may have noticed that the above sequence starts with Methionine(M) and
+    Please notice below that this sequence starts with Methionine(M) and
     ends in an asterisk(*). That's because of the two arguments 'from_start'
     and 'to_stop' respectively. Curiously, there are no asterisks (or terminators)
     within the sequence either; this is due to the 'persistent' argument.
+
+    >>> my_seq[0]
+    'M'
+    >>> my_seq[-1]
+    '*'
+    >>> "*" in my_seq[1:-1]
+    False
+
     The 'from_start', 'to_stop', and 'persistent' arguments are all set to True
     by default. You can read more about what they do in the "Arguments" section
     above. It's useful to note that all three of those arguments involve the use
@@ -93,20 +101,20 @@ def testseq(size=30, alphabet=IUPAC.unambiguous_dna, table=1, gc_target=None,
     you'd like to use:
 
     >>> my_seq = testseq(table=5)
-    >>> my_seq
-    Seq('ATGTCCTCTAATAGTATGGTCGTCTACTAA', IUPACUnambiguousDNA())
 
     Now we can translate our sequence with ease!
 
-    >>> my_seq.translate(table=6)
-    Seq('MSSNSMVVYQ', IUPACProtein())
+    >>> new_seq = my_seq.translate(table=6)
+    >>> new_seq.alphabet
+    IUPACProtein()
 
     Oops! We're missing a stop codon. We've generated a sequence using Table 5,
     but translated it using Table 6. Those tables don't share a common stop codon!
     Let's fix that...
 
-    >>> my_seq.translate(table=5)
-    Seq('MSSNSMVVY*', HasStopCodon(IUPACProtein(), '*'))
+    >>> new_seq = my_seq.translate(table=5)
+    >>> new_seq.alphabet
+    HasStopCodon(IUPACProtein(), '*')
 
     That's better!
 
@@ -116,8 +124,9 @@ def testseq(size=30, alphabet=IUPAC.unambiguous_dna, table=1, gc_target=None,
 
     >>> my_seq = testseq(gc_target=60)
     >>> from Bio.SeqUtils import GC
-    >>> GC(my_seq)
-    50.0
+    >>> error = 60 - GC(my_seq)
+    >>> -5 < error < 5
+    False
 
     What happened? Note that in the above example, the sequence is at the
     default size of 30 letters. Since the sequence is generated letter by letter,
@@ -125,8 +134,9 @@ def testseq(size=30, alphabet=IUPAC.unambiguous_dna, table=1, gc_target=None,
     than smaller sequences. Let's try that again with a much larger sequence:
 
     >>> my_seq = testseq(size=10000, gc_target=60)
-    >>> GC(my_seq)
-    61.37613761376138
+    >>> error = 60 - GC(my_seq)
+    >>> -5 < error < 5
+    True
 
     Much better! It's also worth noting that the 'gc_target' argument is ignored
     when generating protein sequences.
@@ -159,11 +169,13 @@ def testseq(size=30, alphabet=IUPAC.unambiguous_dna, table=1, gc_target=None,
     the sequence addtionally. Let's look at an example:
 
     >>> my_seq = testseq(300, alphabet=IUPAC.unambiguous_rna, messenger=True)
-    >>> len(my_seq)
-    561
+    >>> len(my_seq) == 300
+    False
+    >>> len(my_seq) > 300
+    True
 
     Notice that the sequence requested was 300 letters, however the final length of
-    the sequence is 561 letters. Those extra letters are the mRNA components. The
+    the sequence is much larger. Those extra letters are the mRNA components. The
     generated sequence is buried in there and it is exactly 300 letters in size!
 
     Lastly, lets discuss the sequence generator itself. The sequence is created
@@ -300,7 +312,8 @@ def _pick_one(probability_table):
     while roll > 0:
         roll -= probability_table[index].probability_value
         index += 1
-    index -= 1
+    if index > 0:
+        index -= 1
     return probability_table[index].letter
 
 
