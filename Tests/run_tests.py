@@ -36,7 +36,7 @@ import distutils.util
 import gc
 from io import BytesIO
 
-# Note, we want to be able to call pre_test_bio.py BEFORE
+# Note, we want to be able to call run_tests.py BEFORE
 # Biopython is installed, so we can't use this:
 # from Bio._py3k import StringIO
 try:
@@ -465,7 +465,7 @@ class TestRunner(unittest.TextTestRunner):
         # test changed this, e.g. to help with detecting command line tools)
         global SYSTEM_LANG
         os.environ['LANG'] = SYSTEM_LANG
-        # Always run tests from the Tests/ folder where pre_test_bio.py
+        # Always run tests from the Tests/ folder where run_tests.py
         # should be located (as we assume this with relative paths etc)
         os.chdir(self.testdir)
         try:
