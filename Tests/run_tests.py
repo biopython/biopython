@@ -503,7 +503,7 @@ class TestRunner(unittest.TextTestRunner):
                 try:
                     module = __import__(name, fromlist=name.split("."))
                 except ImportError:
-                    module = manual_import(name)
+                    module = manually_import(name)
                 suite = doctest.DocTestSuite(module,
                                              optionflags=doctest.ELLIPSIS)
                 del module
