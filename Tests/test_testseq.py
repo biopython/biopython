@@ -11,32 +11,42 @@ import unittest
 from Bio.Alphabet import IUPAC, NucleotideAlphabet
 from Bio.SeqUtils import GC
 
-# Find file path to 'testseq' module.
-file_path = os.getcwd()
-cwd_path = file_path
-file_path = os.path.split(file_path)
-if file_path[1] == "Tests":
-    file_path = os.path.join(file_path[0], "Scripts")
-    file_path = os.path.join(file_path, "testseq.py")
-else:
-    raise ImportError("File path could not be derived from: " + cwd_path)
-
-# Import 'testseq' module manually
-if sys.version_info[0] < 3:
-    # Python version 2.7
-    import imp
-    foo = imp.load_source('testseq', file_path)
-else:
-    if sys.version_info[1] <= 4:
-        # Python version 3.3 and 3.4
-        from importlib.machinery import SourceFileLoader
-        foo = SourceFileLoader('testseq', file_path).load_module()
+def manual_import(name):
+    """Find, manually import, and return python module."""
+    # Find the path from parent 'biopython' folder.
+    cwd_path = os.getcwd()
+    module_path = cwd_path
+    module_path = os.path.split(module_path)
+    name = name.split(".")
+    name[-1] += ".py"
+    if module_path[1] == "Tests":
+        module_path = os.path.join(module_path[0], name.pop(0))
     else:
-        # Python version 3.5+
-        from importlib.util import spec_from_file_location, module_from_spec
-        spec = spec_from_file_location('testseq', file_path)
-        foo = module_from_spec(spec)
-        spec.loader.exec_module(foo)
+        raise ImportError
+    for i, step in enumerate(name):
+        module_path = os.path.join(module_path, step)
+
+    # Manually import and return module.
+    name = name[-1][:-3]
+    if sys.version_info[0] < 3:
+        # Python version 2.7
+        import imp
+        return imp.load_source(name, module_path)
+    else:
+        if sys.version_info[1] <= 4:
+            # Python version 3.3 and 3.4
+            from importlib.machinery import SourceFileLoader
+            return SourceFileLoader(name, module_path).load_module()
+        else:
+            # Python version 3.5+
+            from importlib.util import spec_from_file_location, module_from_spec
+            spec = spec_from_file_location(name, module_path)
+            module = module_from_spec(spec)
+            spec.loader.exec_module(module)
+            return module
+        
+        
+foo = manual_import("Scripts.testseq")
 
 
 class TestTestseq(unittest.TestCase):
