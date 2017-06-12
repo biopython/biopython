@@ -11,6 +11,7 @@ import unittest
 from Bio.Alphabet import IUPAC, NucleotideAlphabet
 from Bio.SeqUtils import GC
 
+
 def manual_import(name):
     """Find, manually import, and return python module."""
     # Find the path from parent 'biopython' folder.
@@ -44,8 +45,8 @@ def manual_import(name):
             module = module_from_spec(spec)
             spec.loader.exec_module(module)
             return module
-        
-        
+
+
 foo = manual_import("Scripts.testseq")
 
 
