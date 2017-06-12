@@ -80,7 +80,7 @@ implementations:
 
   This is the primary development platform for Biopython.
 
-- PyPy v5.7 and also PyPy3.5 v5.7 beta -- see http://www.pypy.org
+- PyPy v5.7 and also PyPy3.5 v5.8 beta -- see http://www.pypy.org
 
   Aside from ``Bio.trie`` (which does not compile as ``marshal.h`` is
   currently missing under PyPy), everything should work. Older versions
