@@ -170,6 +170,12 @@ except ImportError:
     DOCTEST_MODULES.remove("Bio.SeqIO")
     DOCTEST_MODULES.remove("Bio.SearchIO")
 
+# Skip doctest for all modules outside of 'Bio' package prior to Python 3.3
+if float(sys.version[0:3]) < 3.3:
+    for i, name in enumerate(DOCTEST_MODULES):
+        if is_outside_bio(name):
+            DOCTEST_MODULES.remove(name)
+
 # Skip Bio.Seq doctest under Python 3, see http://bugs.python.org/issue7490
 if sys.version_info[0] == 3:
     DOCTEST_MODULES.remove("Bio.Seq")
@@ -466,19 +472,7 @@ class TestRunner(unittest.TextTestRunner):
             else:
                 # It's a doc test
                 sys.stderr.write("%s docstring test ... " % name)
-                if is_outside_bio(name) and (sys.version_info[0] < 3):
-                    import imp
-                    name = name.split(".")
-                    name[-1] += ".py"
-                    module_path = os.getcwd()
-                    module_path = os.path.split(module_path)
-                    module_path = os.path.join(module_path[0], name.pop(0))
-                    for i, step in enumerate(name):
-                        module_path = os.path.join(module_path, step)
-                    name = name[-1][:-3]
-                    module = imp.load_source(name, module_path)
-                else:
-                    module = __import__(name, fromlist=name.split("."))
+                module = __import__(name, fromlist=name.split("."))
                 suite = doctest.DocTestSuite(module,
                                              optionflags=doctest.ELLIPSIS)
                 del module
