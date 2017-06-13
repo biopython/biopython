@@ -1360,10 +1360,9 @@ class TestMEME(unittest.TestCase):
         self.assertEqual(str(motif.instances[19]), "EVVDPAVDFVLKCY")
         self.assertEqual(str(motif.instances[20]), "IDRKGIYQWLISLK")
         handle.close()
-        
-        def test_meme_parser_4_11_4(self):
-        """Test if Bio.motifs can parse MEME v4.11.4 output files (fifth test)
-        """
+
+    def test_meme_parser_4_11_4(self):
+        """Parse motifs/meme_v_4_11_4.txt file."""
         handle = open("motifs/meme_v_4_11_4.txt")
         record = motifs.parse(handle, 'meme')
         self.assertEqual(record.version, '4.11.4')
@@ -1469,7 +1468,9 @@ class TestMEME(unittest.TestCase):
         self.assertEqual(str(motif.instances[7]), "CTCAATCGTA")
         self.assertEqual(str(motif.instances[8]), "CTCAATCGTA")
         self.assertEqual(str(motif.instances[9]), "CTCAATCGTA")
-        handle.close() 
+        handle.close()
+
+
 class TestMAST(unittest.TestCase):
     """MAST format tests."""
 
