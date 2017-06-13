@@ -65,14 +65,14 @@ def testseq(size=30, alphabet=IUPAC.unambiguous_dna, table=1, gc_target=None,
 
     >>> from Scripts.testseq import testseq
     >>> my_seq = testseq()
-    >>> type(my_seq1)
+    >>> type(my_seq)
     <class 'Bio.Seq.Seq'>
 
     The default size of the generated sequence is 30 letters,
     but you can change that at any time, like so:
 
     >>> my_seq = testseq(1500)
-    >>> len(my_seq2)
+    >>> len(my_seq)
     1500
 
     You can generate your sequence using any IUPAC alphabet, like so:
@@ -105,7 +105,7 @@ def testseq(size=30, alphabet=IUPAC.unambiguous_dna, table=1, gc_target=None,
     Now we can translate our sequence with ease!
 
     >>> my_seq2 = my_seq1.translate(table=6)
-    >>> new_seq2.alphabet
+    >>> my_seq2.alphabet
     IUPACProtein()
 
     Oops! We're missing a stop codon. We've generated a sequence using Table 5,
@@ -122,9 +122,9 @@ def testseq(size=30, alphabet=IUPAC.unambiguous_dna, table=1, gc_target=None,
     custom GC-content. You can alter your desired GC-content by declaring
     it in the 'gc_target' argument, like so:
 
-    >>> my_seq3 = testseq(gc_target=60)
+    >>> my_seq = testseq(gc_target=60)
     >>> from Bio.SeqUtils import GC
-    >>> error = 60 - GC(my_seq3)
+    >>> error = 60 - GC(my_seq)
     >>> -5 < error < 5
     False
 
@@ -133,8 +133,8 @@ def testseq(size=30, alphabet=IUPAC.unambiguous_dna, table=1, gc_target=None,
     larger sequences will have a tendency to be closer to the desired GC-content
     than smaller sequences. Let's try that again with a much larger sequence:
 
-    >>> my_seq4 = testseq(10000, gc_target=60)
-    >>> error = 60 - GC(my_seq4)
+    >>> my_seq = testseq(10000, gc_target=60)
+    >>> error = 60 - GC(my_seq)
     >>> -5 < error < 5
     True
 
@@ -145,7 +145,7 @@ def testseq(size=30, alphabet=IUPAC.unambiguous_dna, table=1, gc_target=None,
     generating the sequence above, I declared a 'size' of 10000. Lets confirm
     whether that was generated as requested:
 
-    >>> len(my_seq4)
+    >>> len(my_seq)
     9999
 
     That may seem like a bug, but it isn't! All non-protein sequences are
@@ -154,8 +154,8 @@ def testseq(size=30, alphabet=IUPAC.unambiguous_dna, table=1, gc_target=None,
     'truncate' argument, which is set to True by default. Let's see what happens
     when we set it to False:
 
-    >>> my_seq5 = testseq(10000, truncate=False)
-    >>> len(my_seq5)
+    >>> my_seq = testseq(10000, truncate=False)
+    >>> len(my_seq)
     10000
 
     The result above seems cleaner, but would result in a 'BiopythonWarning' if
@@ -168,10 +168,10 @@ def testseq(size=30, alphabet=IUPAC.unambiguous_dna, table=1, gc_target=None,
     is declared. More importantly though, all mRNA compenents are added to
     the sequence addtionally. Let's look at an example:
 
-    >>> my_seq6 = testseq(300, alphabet=IUPAC.unambiguous_rna, messenger=True)
-    >>> len(my_seq6) == 300
+    >>> my_seq = testseq(300, alphabet=IUPAC.unambiguous_rna, messenger=True)
+    >>> len(my_seq) == 300
     False
-    >>> len(my_seq6) > 300
+    >>> len(my_seq) > 400
     True
 
     Notice that the sequence requested was 300 letters, however the final length of

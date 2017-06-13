@@ -475,6 +475,7 @@ class TestRunner(unittest.TextTestRunner):
                     module_path = os.path.join(module_path[0], name.pop(0))
                     for i, step in enumerate(name):
                         module_path = os.path.join(module_path, step)
+                    name[-1][:-3]
                     module = imp.load_source(name, module_path)
                 else:
                     module = __import__(name, fromlist=name.split("."))
