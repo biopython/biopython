@@ -12,14 +12,12 @@ from Bio.PopGen.GenePop import FileParser
 
 class RecordTest(unittest.TestCase):
     def test_record_basic(self):
-        """Basic test on Record
-        """
-
+        """Basic test on Record. """
         r = GenePop.Record()
-        assert isinstance(r.marker_len, int)
-        assert isinstance(r.comment_line, str)
-        assert isinstance(r.loci_list, list)
-        assert isinstance(r.populations, list)
+        self.assertIsInstance(r.marker_len, int)
+        self.assertIsInstance(r.comment_line, str)
+        self.assertIsInstance(r.loci_list, list)
+        self.assertIsInstance(r.populations, list)
 
 
 class ParserTest(unittest.TestCase):
@@ -47,23 +45,21 @@ class ParserTest(unittest.TestCase):
             handle.close()
 
     def test_record_parser(self):
-        """Basic operation of the Record Parser.
-        """
+        """Basic operation of the Record Parser."""
         for index in range(len(self.handles)):
             handle = self.handles[index]
             rec = GenePop.read(handle)
-            assert isinstance(rec, GenePop.Record)
-            assert len(rec.loci_list) == self.num_loci[index]
-            assert rec.marker_len == self.marker_len[index]
-            assert len(rec.populations) == self.pops_indivs[index][0]
-            assert rec.pop_list == self.pop_names
+            self.assertIsInstance(rec, GenePop.Record)
+            self.assertEqual(len(rec.loci_list), self.num_loci[index])
+            self.assertEqual(rec.marker_len, self.marker_len[index])
+            self.assertEqual(len(rec.populations), self.pops_indivs[index][0])
+            self.assertEqual(rec.pop_list, self.pop_names)
             for i in range(self.pops_indivs[index][0]):
-                assert len(rec.populations[i]) == \
-                           self.pops_indivs[index][1][i]
+                self.assertEqual(len(rec.populations[i]),
+                                 self.pops_indivs[index][1][i])
 
     def test_wrong_file_parser(self):
-        """Testing the ability to deal with wrongly formatted files
-        """
+        """Testing the ability to deal with wrongly formatted files."""
         with open(os.path.join("PopGen", "README")) as f:
             try:
                 rec = GenePop.read(f)
@@ -88,27 +84,23 @@ class FileParserTest(unittest.TestCase):
         self.num_loci = [3, 3, 3, 3, 3, 3]
 
     def test_file_record_parser(self):
-        """Basic operation of the File Record Parser.
-        """
+        """Basic operation of the File Record Parser."""
         for index in range(len(self.files)):
             fname = self.files[index]
             rec = FileParser.read(fname)
-            assert isinstance(rec, FileParser.FileRecord)
-            assert len(rec.loci_list) == self.num_loci[index]
+            self.assertIsInstance(rec, FileParser.FileRecord)
+            self.assertEqual(len(rec.loci_list), self.num_loci[index])
             for skip in range(self.pops_indivs[index][0]):
                 if rec.skip_population() is False:
                     raise Exception("Not enough populations")
             if rec.skip_population() is True:
-                    raise Exception("Too much populations")
+                raise Exception("Too much populations")
             for i in range(self.pops_indivs[index][0]):
                 continue
-                assert len(rec.populations[i]) == \
-                           self.pops_indivs[index][1][i]
             rec._handle.close()  # TODO - Needs a proper fix
 
     def test_wrong_file_parser(self):
-        """Testing the ability to deal with wrongly formatted files
-        """
+        """Testing the ability to deal with wrongly formatted files."""
         with open(os.path.join("PopGen", "README")) as f:
             try:
                 rec = GenePop.read(f)
@@ -130,8 +122,7 @@ class UtilsTest(unittest.TestCase):
             handle.close()
 
     def test_utils(self):
-        """Basic operation of GenePop Utils.
-        """
+        """Basic operation of GenePop Utils."""
         for index in range(len(self.handles)):
             handle = self.handles[index]
             rec = GenePop.read(handle)
@@ -139,12 +130,12 @@ class UtilsTest(unittest.TestCase):
         initial_loci = len(rec.loci_list)
         first_loci = rec.loci_list[0]
         rec.remove_population(0)
-        assert len(rec.populations) == initial_pops - 1
+        self.assertEqual(len(rec.populations), initial_pops - 1)
         rec.remove_locus_by_name(first_loci)
-        assert len(rec.loci_list) == initial_loci - 1
-        assert rec.loci_list[0] != first_loci
+        self.assertEqual(len(rec.loci_list), initial_loci - 1)
+        self.assertNotEqual(rec.loci_list[0], first_loci)
         rec.remove_locus_by_position(0)
-        assert len(rec.loci_list) == initial_loci - 2
+        self.assertEqual(len(rec.loci_list), initial_loci - 2)
 
 
 if __name__ == "__main__":
