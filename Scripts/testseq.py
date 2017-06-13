@@ -6,6 +6,7 @@
 
 """Provide a tool for testing/demonstrating a Seq object."""
 
+from __future__ import division
 import warnings
 from random import Random
 
