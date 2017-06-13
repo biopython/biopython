@@ -16,6 +16,8 @@ from Bio.Seq import Seq
 
 
 class MotifTestsBasic(unittest.TestCase):
+    """Basic motif tests."""
+
     def setUp(self):
         self.PFMin = open("motifs/SRF.pfm")
         self.SITESin = open("motifs/Arnt.sites")
@@ -35,8 +37,7 @@ class MotifTestsBasic(unittest.TestCase):
             os.remove(self.FAout)
 
     def test_alignace_parsing(self):
-        """Test if Bio.motifs can parse AlignAce output files.
-        """
+        """Test if Bio.motifs can parse AlignAce output files."""
         handle = open("motifs/alignace.out")
         record = motifs.parse(handle, "AlignAce")
         handle.close()
@@ -397,20 +398,17 @@ class MotifTestsBasic(unittest.TestCase):
         self.assertAlmostEqual(record[15].score, 1.0395)
 
     def test_pfm_parsing(self):
-        """Test if Bio.motifs can parse JASPAR-style pfm files.
-        """
+        """Test if Bio.motifs can parse JASPAR-style pfm files."""
         m = motifs.read(self.PFMin, "pfm")
         self.assertEqual(m.length, 12)
 
     def test_sites_parsing(self):
-        """Test if Bio.motifs can parse JASPAR-style sites files.
-        """
+        """Test if Bio.motifs can parse JASPAR-style sites files."""
         m = motifs.read(self.SITESin, "sites")
         self.assertEqual(m.length, 6)
 
     def test_TFoutput(self):
-        """Ensure that we can write proper TransFac output files.
-        """
+        """Ensure that we can write proper TransFac output files."""
         output_handle = open(self.TFout, "w")
         output_handle.write(self.m.format("transfac"))
         output_handle.close()
@@ -448,8 +446,7 @@ XX
 class TestMEME(unittest.TestCase):
 
     def test_meme_parser_1(self):
-        """Test if Bio.motifs can parse MEME output files (first test)
-        """
+        """Parsing motifs/meme.out file."""
         handle = open("motifs/meme.out")
         record = motifs.parse(handle, 'meme')
         self.assertEqual(record.version, '3.5.7')
@@ -558,8 +555,7 @@ class TestMEME(unittest.TestCase):
         handle.close()
 
     def test_meme_parser_2(self):
-        """Test if Bio.motifs can parse MEME output files (second test)
-        """
+        """Parse motifs/meme.dna.oops.txt file."""
         handle = open("motifs/meme.dna.oops.txt")
         record = motifs.parse(handle, 'meme')
         self.assertEqual(record.version, '3.0')
@@ -676,8 +672,7 @@ class TestMEME(unittest.TestCase):
         handle.close()
 
     def test_meme_parser_3(self):
-        """Test if Bio.motifs can parse MEME output files (third test)
-        """
+        """Parse motifs/meme.protein.oops.txt file."""
         handle = open("motifs/meme.protein.oops.txt")
         record = motifs.parse(handle, 'meme')
         self.assertEqual(record.version, '3.0')
@@ -1066,8 +1061,7 @@ class TestMEME(unittest.TestCase):
         handle.close()
 
     def test_meme_parser_4(self):
-        """Test if Bio.motifs can parse MEME output files (fourth test)
-        """
+        """Parse motifs/meme.protein.tcm.txt file."""
         handle = open("motifs/meme.protein.tcm.txt")
         record = motifs.parse(handle, 'meme')
         self.assertEqual(record.version, '3.0')
@@ -1369,10 +1363,10 @@ class TestMEME(unittest.TestCase):
 
 
 class TestMAST(unittest.TestCase):
+    """MAST format tests."""
 
     def test_mast_parser_1(self):
-        """Test if Bio.motifs can parse MAST output files (first test)
-        """
+        """Parse motifs/mast.dna.oops.txt file."""
         handle = open("motifs/mast.dna.oops.txt")
         record = motifs.parse(handle, "MAST")
         self.assertEqual(record.version, "3.0")
@@ -1405,8 +1399,7 @@ class TestMAST(unittest.TestCase):
         handle.close()
 
     def test_mast_parser_2(self):
-        """Test if Bio.motifs can parse MAST output files (second test)
-        """
+        """Parse motifs/mast.protein.oops.txt file."""
         handle = open("motifs/mast.protein.oops.txt")
         record = motifs.parse(handle, "MAST")
         self.assertEqual(record.version, "3.0")
@@ -1491,8 +1484,7 @@ class TestMAST(unittest.TestCase):
         handle.close()
 
     def test_mast_parser_3(self):
-        """Test if Bio.motifs can parse MAST output files (third test)
-        """
+        """Parse motifs/mast.protein.tcm.txt file."""
         handle = open("motifs/mast.protein.tcm.txt")
         record = motifs.parse(handle, "MAST")
         self.assertEqual(record.version, "3.0")
@@ -1522,10 +1514,10 @@ class TestMAST(unittest.TestCase):
 
 
 class TestTransfac(unittest.TestCase):
+    """Transface format tests."""
 
     def test_transfac_parser(self):
-        """Test if Bio.motifs can parse TRANSFAC files
-        """
+        """Parse motifs/transfac.dat file."""
         handle = open("motifs/transfac.dat")
         record = motifs.parse(handle, 'TRANSFAC')
         motif = record[0]
@@ -1630,7 +1622,10 @@ class TestTransfac(unittest.TestCase):
 
 
 class MotifTestPWM(unittest.TestCase):
+    """PWM motif tests."""
+
     def setUp(self):
+        """Define motif and sequence for tests."""
         handle = open("motifs/SRF.pfm")
         self.m = motifs.read(handle, "pfm")
         handle.close()
