@@ -67,6 +67,13 @@ def is_numpy():
         return False
 
 
+def is_outside_bio(name):
+    name = name.split(".")
+    if name[0] == "Bio":
+        return False
+    return True
+
+
 # The default verbosity (not verbose)
 VERBOSITY = 0
 
@@ -459,7 +466,7 @@ class TestRunner(unittest.TextTestRunner):
             else:
                 # It's a doc test
                 sys.stderr.write("%s docstring test ... " % name)
-                if is_pypy() or sys.version_info[0] < 3:
+                if is_outside_bio(name) and (is_pypy() or sys.version_info[0] < 3):
                     import imp
                     name = name.split(".")
                     name[-1] += ".py"

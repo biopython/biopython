@@ -63,6 +63,7 @@ def testseq(size=30, alphabet=IUPAC.unambiguous_dna, table=1, gc_target=None,
 
     Hey there! We can use the 'testseq' function to quickly generate sequences.
 
+    >>> from Scripts.testseq import testseq
     >>> my_seq = testseq()
     >>> type(my_seq1)
     <class 'Bio.Seq.Seq'>
