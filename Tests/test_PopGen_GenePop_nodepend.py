@@ -11,8 +11,10 @@ from Bio.PopGen.GenePop import FileParser
 
 
 class RecordTest(unittest.TestCase):
+    """Record tests."""
+
     def test_record_basic(self):
-        """Basic test on Record. """
+        """Basic test on Record."""
         r = GenePop.Record()
         self.assertIsInstance(r.marker_len, int)
         self.assertIsInstance(r.comment_line, str)
@@ -21,6 +23,8 @@ class RecordTest(unittest.TestCase):
 
 
 class ParserTest(unittest.TestCase):
+    """Parser tests."""
+
     def setUp(self):
         files = ["c2line.gen", "c3line.gen", "c2space.gen", "c3space.gen",
                  "haplo3.gen", "haplo2.gen"]
@@ -75,6 +79,8 @@ class ParserTest(unittest.TestCase):
 
 
 class FileParserTest(unittest.TestCase):
+    """File parser tests."""
+
     def setUp(self):
         self.files = [os.path.join("PopGen", x) for x in
              ["c2line.gen", "c3line.gen", "c2space.gen",
@@ -116,6 +122,8 @@ class FileParserTest(unittest.TestCase):
 
 
 class UtilsTest(unittest.TestCase):
+    """Utils tests."""
+
     def setUp(self):
         # All files have to have at least 3 loci and 2 pops
         files = ["c2line.gen"]
