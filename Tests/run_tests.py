@@ -466,7 +466,7 @@ class TestRunner(unittest.TextTestRunner):
             else:
                 # It's a doc test
                 sys.stderr.write("%s docstring test ... " % name)
-                if is_outside_bio(name) and (is_pypy() or sys.version_info[0] < 3):
+                if is_outside_bio(name) and (sys.version_info[0] < 3):
                     import imp
                     name = name.split(".")
                     name[-1] += ".py"
@@ -475,7 +475,7 @@ class TestRunner(unittest.TextTestRunner):
                     module_path = os.path.join(module_path[0], name.pop(0))
                     for i, step in enumerate(name):
                         module_path = os.path.join(module_path, step)
-                    name[-1][:-3]
+                    name = name[-1][:-3]
                     module = imp.load_source(name, module_path)
                 else:
                     module = __import__(name, fromlist=name.split("."))
