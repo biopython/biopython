@@ -201,47 +201,6 @@ if _have_bug17666():
     DOCTEST_MODULES.remove("Bio.bgzf")
 
 
-def manually_import(name):
-    """Find, manually import, and return a python module.
-
-    This function is intended to help import modules that are
-    not part of the 'Bio' package. For an example of how to use
-    this function, please look at its use in the
-    'test_testseq.py' file in the 'Tests' folder.
-    """
-    # Find the path from 'biopython' folder.
-    name = name.split(".")
-    name[-1] += ".py"
-    module_path = os.getcwd()
-    module_path = os.path.split(module_path)
-    if module_path[1] == "Tests":
-        module_path = os.path.join(module_path[0], name.pop(0))
-    else:
-        raise ImportError("Must call 'manually_import' from inside 'Tests' folder.")
-    for i, step in enumerate(name):
-        module_path = os.path.join(module_path, step)
-
-    # Manually import and return module.
-    name = name[-1][:-3]
-    if 2.7 <= float(sys.version[0:3]) < 3.0:
-        # Python version 2.7
-        import imp
-        return imp.load_source(name, module_path)
-    elif sys.version_info[1] < 5:
-        # Python version 3.3 and 3.4
-        from importlib.machinery import SourceFileLoader
-        return SourceFileLoader(name, module_path).load_module()
-    elif sys.version_info[1] >= 5:
-        # Python version 3.5+
-        from importlib.util import spec_from_file_location, module_from_spec
-        spec = spec_from_file_location(name, module_path)
-        module = module_from_spec(spec)
-        spec.loader.exec_module(module)
-        return module
-    else:
-        raise ImportError("Unsupported python version: %s" % sys.version)
-
-
 SYSTEM_LANG = os.environ.get('LANG', 'C')  # Cache this
 
 
@@ -500,10 +459,18 @@ class TestRunner(unittest.TextTestRunner):
             else:
                 # It's a doc test
                 sys.stderr.write("%s docstring test ... " % name)
-                try:
+                if is_pypy() or sys.version_info[0] < 3:
+                    import imp
+                    name = name.split(".")
+                    name[-1] += ".py"
+                    module_path = os.getcwd()
+                    module_path = os.path.split(module_path)
+                    module_path = os.path.join(module_path[0], name.pop(0))
+                    for i, step in enumerate(name):
+                        module_path = os.path.join(module_path, step)
+                    module = imp.load_source(name, module_path)
+                else:
                     module = __import__(name, fromlist=name.split("."))
-                except ImportError:
-                    module = manually_import(name)
                 suite = doctest.DocTestSuite(module,
                                              optionflags=doctest.ELLIPSIS)
                 del module
