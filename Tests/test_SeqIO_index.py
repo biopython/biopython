@@ -517,16 +517,19 @@ class IndexDictTests(unittest.TestCase):
                 warnings.simplefilter('ignore', BiopythonParserWarning)
                 rec_dict = SeqIO.index(filename, format, alphabet,
                                        key_function=lambda x: x.lower())
-                rec_dict_db = SeqIO.index_db(":memory:", filename, format, alphabet,
-                                             key_function=lambda x: x.lower())
+                if sqlite3:
+                    rec_dict_db = SeqIO.index_db(":memory:", filename, format, alphabet,
+                                                 key_function=lambda x: x.lower())
         else:
             rec_dict = SeqIO.index(filename, format, alphabet,
                                    key_function=lambda x: x.lower())
-            rec_dict_db = SeqIO.index_db(":memory:", filename, format, alphabet,
-                                         key_function=lambda x: x.lower())
+            if sqlite3:
+                rec_dict_db = SeqIO.index_db(":memory:", filename, format, alphabet,
+                                             key_function=lambda x: x.lower())
 
         self.assertEqual(set(id_list), set(rec_dict))
-        self.assertEqual(set(id_list), set(rec_dict_db))
+        if sqlite3:
+            self.assertEqual(set(id_list), set(rec_dict_db))
         self.assertEqual(len(id_list), len(rec_dict))
         for key in id_list:
             self.assertIn(key, rec_dict)
@@ -538,11 +541,12 @@ class IndexDictTests(unittest.TestCase):
             self.assertTrue(raw.strip())
             self.assertIn(raw, raw_file)
 
-            raw_db = rec_dict_db.get_raw(key)
-            # Via index using format-specific get_raw which scans the file,
-            # Via index_db in general using raw length found when indexing.
-            self.assertEqual(raw, raw_db,
-                             "index and index_db .get_raw() different for %s" % format)
+            if sqlite3:
+                raw_db = rec_dict_db.get_raw(key)
+                # Via index using format-specific get_raw which scans the file,
+                # Via index_db in general using raw length found when indexing.
+                self.assertEqual(raw, raw_db,
+                                 "index and index_db .get_raw() different for %s" % format)
 
             rec1 = rec_dict[key]
             # Following isn't very elegant, but it lets me test the
