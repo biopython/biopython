@@ -6,9 +6,11 @@ from __future__ import print_function
 
 import os
 import platform
-import unittest
+import sys
 import tempfile
 import time
+import unittest
+
 try:
     import configparser  # Python 3
 except ImportError:
@@ -321,9 +323,15 @@ class MultiReadTest(unittest.TestCase):
         keys = list(db)
         l = len(items)
         self.assertEqual(l, len(db))
-        self.assertEqual(l, len(list(db.items())))
         self.assertEqual(l, len(list(db)))
+        self.assertEqual(l, len(list(db.items())))
+        self.assertEqual(l, len(list(db.keys())))
         self.assertEqual(l, len(list(db.values())))
+        if sys.version_info[0] == 2:
+            # Check legacy methods for Python 2 as well:
+            self.assertEqual(l, len(list(db.iteritems())))
+            self.assertEqual(l, len(list(db.iterkeys())))
+            self.assertEqual(l, len(list(db.itervalues())))
         for (k1, r1), (k2, r2) in zip(zip(keys, items), db.items()):
             self.assertEqual(k1, k2)
             self.assertEqual(r1.id, r2.id)
