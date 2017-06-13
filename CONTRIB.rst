@@ -174,7 +174,7 @@ please open an issue on GitHub or mention it on the development mailing list.
 - Sebastian Bassi <https://about.me/bassi>
 - Sergei Lebedev <https://github.com/superbobry>
 - Seth Sims <seth.sims at gmail>
-- Siong Kong
+- Siong Kong <https://github.com/siongkong>
 - Sjoerd de Vries <sjoerd at domain nmr.chem.uu.nl>
 - Sourav Singh <https://github.com/souravsingh>
 - Spencer Bliven <https://github.com/sbliven>
