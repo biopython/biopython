@@ -486,6 +486,12 @@ class SeqInterfaceTest(unittest.TestCase):
         self.assertEqual(string_rep, str(test_seq))  # check __str__ too
         self.assertEqual(type(string_rep), type(""))
         self.assertEqual(len(test_seq), 880)
+        self.assertEqual(test_seq[879], "A")
+        self.assertEqual(test_seq[-1], "A")
+        self.assertEqual(test_seq[0], "A")
+        self.assertEqual(test_seq[-880], "A")
+        self.assertRaises(IndexError, test_seq.__getitem__, 880)
+        self.assertRaises(IndexError, test_seq.__getitem__, -881)
 
     def test_convert(self):
         """Check can turn a DBSeq object into a Seq or MutableSeq."""
