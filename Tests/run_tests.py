@@ -7,9 +7,7 @@
 This will find all modules whose name is "test_*.py" in the test
 directory, and run them.  Various command line options provide
 additional facilities.
-
 Command line options:
-
 --help        -- show usage info
 --offline     -- skip tests which require internet access
 -g;--generate -- write the output file for a test instead of comparing it.
@@ -20,7 +18,6 @@ Command line options:
 <test_name>   -- supply the name of one (or more) tests to be run.
                  The .py file extension is optional.
 doctest       -- run the docstring tests.
-
 By default, all tests are run.
 """
 
@@ -68,6 +65,13 @@ def is_numpy():
         return True
     except ImportError:
         return False
+
+
+def is_outside_bio(name):
+    name = name.split(".")
+    if name[0] == "Bio":
+        return False
+    return True
 
 
 # The default verbosity (not verbose)
@@ -143,6 +147,7 @@ DOCTEST_MODULES = [
     "Bio.UniProt.GOA",
     "Bio.Wise",
     "Bio.Wise.psw",
+    "Scripts.testseq",
 ]
 # Silently ignore any doctests for modules requiring numpy!
 if is_numpy():
@@ -164,6 +169,12 @@ except ImportError:
     # Missing on Jython or Python 2.4
     DOCTEST_MODULES.remove("Bio.SeqIO")
     DOCTEST_MODULES.remove("Bio.SearchIO")
+
+# Skip doctest for all modules outside of 'Bio' package prior to Python 3.3
+if float(sys.version[0:3]) < 3.3:
+    for i, name in enumerate(DOCTEST_MODULES):
+        if is_outside_bio(name):
+            DOCTEST_MODULES.remove(name)
 
 # Skip Bio.Seq doctest under Python 3, see http://bugs.python.org/issue7490
 if sys.version_info[0] == 3:
@@ -201,6 +212,7 @@ def _have_bug17666():
 
 if _have_bug17666():
     DOCTEST_MODULES.remove("Bio.bgzf")
+
 
 SYSTEM_LANG = os.environ.get('LANG', 'C')  # Cache this
 
