@@ -24,12 +24,11 @@
 """Convert a series of Rebase files into a Restriction_Dictionary.py module.
 
 The Rebase files are in the emboss format:
+ - `emboss_e.###` - contains information about the restriction sites.
+ - `emboss_r.###` - contains general information about the enzymes.
+ - `emboss_s.###` - contains information about the suppliers.
 
-    emboss_e.###    -> contains information about the restriction sites.
-    emboss_r.###    -> contains general information about the enzymes.
-    emboss_s.###    -> contains information about the suppliers.
-
-Here ### is the 3 digit number REBASE release number (e.g. 312). The first
+Here `###` is the 3 digit number REBASE release number (e.g. 312). The first
 digit is the last digit of the year (e.g. 3 for 2013) and the two last the
 month (e.g. 12 for December).
 
@@ -37,9 +36,8 @@ There files are available by FTP from ftp://ftp.neb.com/pub/rebase/ which
 should allow automated fetching (the the update code and RanaConfig.py).
 In addition there are links on this HTML page which requires manual download
 and renaming of the files: http://rebase.neb.com/rebase/rebase.f37.html
-
 This Python file is intended to be used via the scripts in
-Scripts/Restriction/*.py only.
+`Scripts/Restriction/*.py` only.
 """
 
 from __future__ import print_function
@@ -85,9 +83,10 @@ class OverhangError(ValueError):
 def regex(site):
     """Construct a regular expression (string) from a DNA sequence.
 
-    i.e.::
+    Example:
 
-        site = 'ABCGN'   -> 'A[CGT]CG.'
+        >>> regex('ABCGN')
+        'A[CGT]CG.'
 
     """
     reg_ex = str(site)
