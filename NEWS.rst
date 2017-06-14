@@ -45,6 +45,7 @@ possible, especially the following contributors:
 - François Coste (first contribution)
 - Frederic Sapet (first contribution)
 - Jimmy O'Donnell (first contribution)
+- Jared Andrews (first contribution)
 - John Kern (first contribution)
 - João Rodrigues
 - Markus Piotrowski
