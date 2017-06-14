@@ -106,6 +106,7 @@ DOCTEST_MODULES = [
     "Bio.NMR.xpktools",
     "Bio.motifs",
     "Bio.motifs.applications._xxmotif",
+    "Bio.motifs.consensus",
     "Bio.pairwise2",
     "Bio.Phylo.Applications._Raxml",
     "Bio.Phylo.Consensus",

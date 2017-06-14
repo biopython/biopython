@@ -29,6 +29,7 @@ def parse(handle, format):
     Currently supported formats (case is ignored):
 
         - AlignAce:      AlignAce output file format
+        - consensus:     motif consensus file
         - MEME:          MEME output file motif
         - MAST:          MAST output file motif
         - TRANSFAC:      TRANSFAC database file format
@@ -68,6 +69,10 @@ def parse(handle, format):
     if format == "alignace":
         from Bio.motifs import alignace
         record = alignace.read(handle)
+        return record
+    elif format == "consensus":
+        from Bio.motifs import consensus
+        record = consensus.read(handle)
         return record
     elif format == "meme":
         from Bio.motifs import meme
