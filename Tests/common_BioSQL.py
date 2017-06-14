@@ -492,6 +492,7 @@ class SeqInterfaceTest(unittest.TestCase):
         self.assertEqual(test_seq[-880], "A")
         self.assertRaises(IndexError, test_seq.__getitem__, 880)
         self.assertRaises(IndexError, test_seq.__getitem__, -881)
+        self.assertRaises(TypeError, test_seq.__getitem__, None)
 
     def test_convert(self):
         """Check can turn a DBSeq object into a Seq or MutableSeq."""
