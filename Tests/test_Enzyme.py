@@ -77,7 +77,7 @@ class TestEnzyme(unittest.TestCase):
         self.assertEqual(record["CC"], ["Also acts on L-leucine."])
         self.assertEqual(len(record["DR"]), 0)
         self.assertTrue(str(record).startswith("ID: 4.1.1.14\nDE: Valine decarboxylase.\n"),
-                        "Did not expect:\n%s" %record)
+                        "Did not expect:\n%s" % record)
 
     def test_lactate(self):
         """Parsing ENZYME record for lactate racemase (5.1.2.1)"""
@@ -94,7 +94,7 @@ class TestEnzyme(unittest.TestCase):
         self.assertEqual(record["CA"], "(S)-lactate = (R)-lactate.")
         self.assertEqual(len(record["DR"]), 0)
         self.assertTrue(str(record).startswith("ID: 5.1.2.1\nDE: Lactate racemase.\n"),
-                        "Did not expect:\n%s" %record)
+                        "Did not expect:\n%s" % record)
 
 
 if __name__ == "__main__":
