@@ -61,7 +61,7 @@ class DBSeq(Seq):
                                                      self.start + i,
                                                      self.start + i + 1)
         if not isinstance(index, slice):
-            raise ValueError("Unexpected index type")
+            raise TypeError("Unexpected index type")
 
         # Return the (sub)sequence as another DBSeq or Seq object
         # (see the Seq obect's __getitem__ method)
