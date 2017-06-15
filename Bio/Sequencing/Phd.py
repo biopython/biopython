@@ -134,6 +134,7 @@ def parse(handle):
         records = parse(handle)
         for record in records:
             # do something with the record object
+
     """
     while True:
         record = read(handle)

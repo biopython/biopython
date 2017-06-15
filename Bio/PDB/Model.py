@@ -16,9 +16,12 @@ class Model(Entity):
     """
 
     def __init__(self, id, serial_num=None):
-        """Arguments:
-        - id - int
-        - serial_num - int
+        """Initialize.
+
+        Arguments:
+         - id - int
+         - serial_num - int
+
         """
         self.level = "M"
         if serial_num is None:
@@ -38,7 +41,8 @@ class Model(Entity):
         of waters.
 
         Arguments:
-        - c1, c2 - Chain objects
+         - c1, c2 - Chain objects
+
         """
         id1 = c1.get_id()
         id2 = c2.get_id()

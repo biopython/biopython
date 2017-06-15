@@ -95,6 +95,7 @@ frequency table. The function returns the log-odds matrix.
 
 Methods for subtraction, addition and multiplication of matrices:
 -----------------------------------------------------------------
+
 * Generation of an expected frequency table from an observed frequency
   matrix.
 * Calculation of linear correlation coefficient between two matrices.
@@ -106,6 +107,7 @@ Methods for subtraction, addition and multiplication of matrices:
 * Jensen-Shannon distance between the distributions from which the
   matrices are derived. This is a distance function based on the
   distribution's entropies.
+
 """
 
 

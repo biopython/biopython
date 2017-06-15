@@ -115,8 +115,9 @@ def _get_atom_radius(atom, rtype='united'):
     the atom type.
 
     Returns the radius (float) according to the selected type:
-        - explicit (reads hydrogens)
-        - united (default)
+     - explicit (reads hydrogens)
+     - united (default)
+
     """
     if rtype == 'explicit':
         typekey = 1
@@ -452,9 +453,8 @@ def get_surface(model, PDB_TO_XYZR=None, MSMS="msms"):
     molecular surface.
 
     Arguments:
-
-    - PDB_TO_XYZR - deprecated, ignore this.
-    - MSMS - msms executable (used as argument to os.system)
+     - PDB_TO_XYZR - deprecated, ignore this.
+     - MSMS - msms executable (used as argument to os.system)
 
     """
     # Issue warning if PDB_TO_XYZR is given

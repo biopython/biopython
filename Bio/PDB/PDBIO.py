@@ -51,6 +51,7 @@ class PDBIO(object):
         >>> io=PDBIO()
         >>> io.set_structure(s)
         >>> io.save("out.pdb")
+
     """
 
     def __init__(self, use_model_flag=0):

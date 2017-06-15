@@ -79,8 +79,8 @@ def parse(handle):
     """Iterates over a DES file as a Des record for each line
 
     Arguments:
-
      - handle - file-like object
+
     """
     for line in handle:
         if line.startswith('#'):

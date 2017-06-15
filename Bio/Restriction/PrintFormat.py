@@ -153,6 +153,7 @@ class PrintFormat(object):
          - title is the title.
          - nc is a tuple or list of non cutting enzymes.
          - s1 is the sentence before the non cutting enzymes.
+
         """
         return self._make_list_only(ls, title) + self._make_nocut_only(nc, s1)
 
@@ -174,6 +175,7 @@ class PrintFormat(object):
          - title is the title.
          - nc is a list of non cutting enzymes.
          - s1 is the sentence before the non cutting enzymes.
+
         """
         return self._make_map_only(ls, title) + self._make_nocut_only(nc, s1)
 
@@ -198,6 +200,7 @@ class PrintFormat(object):
          - title is the title.
          - nc is a list of non cutting enzymes.
          - s1 is the sentence before the non cutting enzymes.
+
         """
         return self._make_number_only(ls, title) + self._make_nocut_only(nc, s1)
 
@@ -213,6 +216,7 @@ class PrintFormat(object):
          - title is the title.
          - nc is a list of non cutting enzymes.
          - s1 is the sentence before the non cutting enzymes.
+
         """
         return title + self._make_nocut_only(nc, s1)
 
@@ -224,6 +228,7 @@ class PrintFormat(object):
         Arguments:
          - nc is a tuple or list of non cutting enzymes.
          - s1 is the sentence before the non cutting enzymes.
+
         """
         if not nc:
             return s1
@@ -253,6 +258,7 @@ class PrintFormat(object):
          - ls is a tuple or list of results.
          - title is a string.
          - Non cutting enzymes are not included.
+
         """
         if not ls:
             return title
@@ -278,6 +284,7 @@ class PrintFormat(object):
          - ls is a list of results.
          - title is a string.
          - Non cutting enzymes are not included.
+
         """
         if not ls:
             return title
@@ -313,6 +320,7 @@ class PrintFormat(object):
          - ls is a list of results.
          - title is a string.
          - Non cutting enzymes are not included.
+
         """
         if not ls:
             return title
@@ -407,7 +415,7 @@ class PrintFormat(object):
 # private method to do lists:
 
     def __next_section(self, ls, into):
-        """FP.__next_section(ls, into) -> string.
+        """FP.__next_section(ls, into) -> string (PRIVATE).
 
         Arguments:
          - ls is a tuple/list of tuple (string, [int, int]).

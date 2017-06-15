@@ -36,12 +36,12 @@ class GenerationEvolver(object):
         """Initialize the evolver.
 
         Arguments:
-        - starting_population - An initial set of individuals to begin
-          the evolution process from. This should be a list of Organism
-          objects.
-        - selector - A Selection object that implements selection, along
-          with mutation and crossover to select a new population from a
-          given population.
+         - starting_population - An initial set of individuals to begin
+           the evolution process from. This should be a list of Organism
+           objects.
+         - selector - A Selection object that implements selection, along
+           with mutation and crossover to select a new population from a
+           given population.
 
         """
         self._population = starting_population
@@ -51,12 +51,12 @@ class GenerationEvolver(object):
         """Evolve the population through multiple generations.
 
         Arguments:
-        - stopping_criteria - A function which, when passed the current
-          individuals in the population, will determine when to stop
-          the evolution process.
+         - stopping_criteria - A function which, when passed the current
+           individuals in the population, will determine when to stop
+           the evolution process.
 
         Returns:
-        - The final evolved population.
+         - The final evolved population.
 
         """
         while not(stopping_criteria(self._population)):
