@@ -53,6 +53,7 @@ class DatabaseLoader(object):
             except KeyError:
                 db = server.new_database("test",
                 description="For testing GBrowse")
+
         """
         self.adaptor = adaptor
         self.dbid = dbid
@@ -904,6 +905,7 @@ class DatabaseLoader(object):
             start = 1, end = 2, rank = 1
             start = 3, end = 4, rank = 2
             start = 5, end = 6, rank = 3
+
         """
         # TODO - Record an ontology for the locations (using location.term_id)
         # which for now as in BioPerl we leave defaulting to NULL.
@@ -1079,10 +1081,9 @@ class DatabaseLoader(object):
         """Get DB cross-reference for accession.
 
         Arguments:
-
-        - db - String, the name of the external database containing
-        the accession number
-        - accession - String, the accession of the dbxref data
+         - db - String, the name of the external database containing
+           the accession number
+         - accession - String, the accession of the dbxref data
 
         Finds and returns the dbxref_id for the passed data.  The method
         attempts to find an existing record first, and inserts the data
