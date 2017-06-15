@@ -10,8 +10,9 @@ Uses Bio.SeqIO to parse files downloaded with Bio.GenBank, Bio.WWW.NCBI,
 Bio.ExPASy etc.
 
 Goals:
-    Make sure that all retrieval is working as expected.
-    May catch some format changes early too.
+    - Make sure that all retrieval is working as expected.
+    - May catch some format changes early too.
+
 """
 import unittest
 

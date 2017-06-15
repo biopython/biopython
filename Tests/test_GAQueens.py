@@ -256,13 +256,13 @@ class QueensCrossover(object):
         """Initialize to do N-Queens optimized crossover.
 
         Arguments:
+            - fitness_func -- A function that can calculate the fitness
+              of a genome.
+            - crossover_prob -- The probability of having a crossover
+              between two passed in organisms.
+            - max_crossover_size -- The maximum crossover size of the
+              'best' region to search for.
 
-        - fitness_func -- A function that can calculate the fitness of
-          a genome.
-        - crossover_prob -- The probability of having a crossover
-          between two passed in organisms.
-        - max_crossover_size -- The maximum crossover size of the 'best' region
-          to search for.
         """
         self._crossover_prob = crossover_prob
         self._fitness_calc = fitness_func
