@@ -174,6 +174,7 @@ class DBServer(object):
 
         Arguments:
             - name - The name of the BioSeqDatabase
+
         """
         return BioSeqDatabase(self.adaptor, name)
 
@@ -374,6 +375,7 @@ class Adaptor(object):
             - conn - A database connection
             - dbutils - A BioSQL.DBUtils object
             - wrap_cursor - Optional, whether to wrap the cursor object
+
         """
         self.conn = conn
         if wrap_cursor:
@@ -419,6 +421,7 @@ class Adaptor(object):
             - dbid - the internal id for the sub-database
             - name - the name of the sequence. Corresponds to the
               name column of the bioentry table of the SQL schema
+
         """
         sql = r"select bioentry_id from bioentry where name = %s"
         fields = [name]
@@ -440,6 +443,7 @@ class Adaptor(object):
             - dbid - the internal id for the sub-database
             - name - the accession of the sequence. Corresponds to the
               accession column of the bioentry table of the SQL schema
+
         """
         sql = r"select bioentry_id from bioentry where accession = %s"
         fields = [name]
@@ -461,6 +465,7 @@ class Adaptor(object):
             - dbid - the internal id for the sub-database
             - name - the accession of the sequence. Corresponds to the
               accession column of the bioentry table of the SQL schema
+
         """
         sql = r"select bioentry_id from bioentry where accession = %s"
         fields = [name]
@@ -476,6 +481,7 @@ class Adaptor(object):
             - dbid - the internal id for the sub-database
             - name - the accession of the sequence containing a version number.
               Must correspond to <accession>.<version>
+
         """
         acc_version = name.split(".")
         if len(acc_version) > 2:
@@ -506,6 +512,7 @@ class Adaptor(object):
             - dbid - the internal id for the sub-database
             - identifier - the identifier of the sequence. Corresponds to
               the identifier column of the bioentry table in the SQL schema.
+
         """
         # YB: was fetch_seqid_by_seqid
         sql = "SELECT bioentry_id FROM bioentry WHERE identifier = %s"
@@ -529,6 +536,7 @@ class Adaptor(object):
 
         Arguments:
             - dbid - The internal id for a sub-database
+
         """
         return self.execute_and_fetch_col0(
             "SELECT bioentry_id FROM bioentry WHERE biodatabase_id = %s",
@@ -539,6 +547,7 @@ class Adaptor(object):
 
         Arguments:
             - dbid - The internal id for a sub-database
+
         """
         return self.execute_and_fetch_col0(
             "SELECT name FROM bioentry WHERE biodatabase_id = %s",
@@ -579,6 +588,7 @@ class Adaptor(object):
             - seqid - The internal id for the sequence
             - start - The start position of the sequence; 0-indexed
             - end - The end position of the sequence
+
         """
         length = end - start
         # XXX Check this on MySQL and PostgreSQL. substr should be general,
@@ -662,6 +672,7 @@ class BioSeqDatabase(object):
         Arguments:
             - adaptor - A BioSQL.Adaptor object
             - name - The name of the sub-database (namespace)
+
         """
         self.adaptor = adaptor
         self.name = name
@@ -736,6 +747,7 @@ class BioSeqDatabase(object):
 
         Arguments:
             - key - The internal id for the sequence
+
         """
         record = BioSeq.DBSeqRecord(self.adaptor, key)
         if record._biodatabase_id != self.dbid:
@@ -825,6 +837,7 @@ class BioSeqDatabase(object):
         Arguments:
             - kwargs - A single key-value pair where the key is one
               of primary_id, gi, display_id, name, accession, version
+
         """
         if len(kwargs) != 1:
             raise TypeError("single key/value parameter expected")
@@ -864,9 +877,10 @@ class BioSeqDatabase(object):
         (via Bio.Entrez) to fetch a detailed taxonomy for each
         SeqRecord.
 
-        Example:
-        from Bio import SeqIO
-        count = db.load(SeqIO.parse(open(filename), format))
+        Example::
+
+            from Bio import SeqIO
+            count = db.load(SeqIO.parse(open(filename), format))
 
         Returns the number of records loaded.
         """
