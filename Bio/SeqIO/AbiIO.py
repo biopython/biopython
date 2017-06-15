@@ -532,9 +532,10 @@ def _parse_tag_data(elem_code, elem_num, raw_data):
     """Returns single data value.
 
     Arguments:
-        - elem_code - What kind of data
-        - elem_num - How many data points
-        - raw_data - abi file object from which the tags would be unpacked
+     - elem_code - What kind of data
+     - elem_num - How many data points
+     - raw_data - abi file object from which the tags would be unpacked
+
     """
     if elem_code in _BYTEFMT:
         # because '>1s' unpack differently from '>s'

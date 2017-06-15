@@ -12,8 +12,8 @@
 """Graph module.
 
 Provides:
-- GraphData - Contains data from which a graph will be drawn, and
-  information about its presentation
+ - GraphData - Contains data from which a graph will be drawn, and
+   information about its presentation
 
 For drawing capabilities, this module uses reportlab to draw and write
 the diagram: http://www.reportlab.com
@@ -31,14 +31,14 @@ class GraphData(object):
     """Graph Data.
 
     Attributes:
-    - id    Unique identifier for the data
-    - data  Dictionary of describing the data, keyed by position
-    - name  String describing the data
-    - style String ('bar', 'heat', 'line') describing how to draw the data
-    - poscolor     colors.Color for drawing high (some styles) or all
-      values
-    - negcolor     colors.Color for drawing low values (some styles)
-    - linewidth     Int, thickness to draw the line in 'line' styles
+     - id    Unique identifier for the data
+     - data  Dictionary of describing the data, keyed by position
+     - name  String describing the data
+     - style String ('bar', 'heat', 'line') describing how to draw the data
+     - poscolor     colors.Color for drawing high (some styles) or all
+       values
+     - negcolor     colors.Color for drawing low values (some styles)
+     - linewidth     Int, thickness to draw the line in 'line' styles
 
     """
 
@@ -48,18 +48,18 @@ class GraphData(object):
         """Initialize.
 
         Arguments:
-        - id    Unique ID for the graph
-        - data  List of (position, value) tuples
-        - name  String describing the graph
-        - style String describing the presentation style ('bar', 'line',
-          'heat')
-        - color   colors.Color describing the color to draw all or the
-          'high' (some styles) values (overridden by backwards
-          compatible argument with UK spelling, colour).
-        - altcolor colors.Color describing the color to draw the 'low'
-          values (some styles only) (overridden by backwards
-          compatible argument with UK spelling, colour).
-        - center Value at which x-axis crosses y-axis.
+         - id    Unique ID for the graph
+         - data  List of (position, value) tuples
+         - name  String describing the graph
+         - style String describing the presentation style ('bar', 'line',
+           'heat')
+         - color   colors.Color describing the color to draw all or the
+           'high' (some styles) values (overridden by backwards
+           compatible argument with UK spelling, colour).
+         - altcolor colors.Color describing the color to draw the 'low'
+           values (some styles only) (overridden by backwards
+           compatible argument with UK spelling, colour).
+         - center Value at which x-axis crosses y-axis.
 
         """
         # Let the UK spelling (colour) override the USA spelling (color)

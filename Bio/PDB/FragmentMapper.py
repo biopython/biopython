@@ -28,6 +28,7 @@ The library files can be found in directory 'fragment_data'.
     >>> model = structure[0]
     >>> fm = FragmentMapper(model, lsize=10, flength=5, dir="fragment_data")
     >>> fragment = fm[residue]
+
 """
 
 from __future__ import print_function

@@ -91,8 +91,8 @@ def parse(handle):
     """Iterates over a HIE file as Hie records for each line.
 
     Arguments:
-
      - handle - file-like object.
+
     """
     for line in handle:
         if line.startswith('#'):

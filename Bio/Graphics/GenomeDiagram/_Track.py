@@ -11,8 +11,8 @@
 """Track module.
 
 Provides:
-- Track - Container for a single track on the diagram, containing
-  FeatureSet and GraphSet objects
+ - Track - Container for a single track on the diagram, containing
+   FeatureSet and GraphSet objects
 
 For drawing capabilities, this module uses reportlab to draw and write
 the diagram: http://www.reportlab.com
@@ -33,49 +33,49 @@ class Track(object):
     """Track.
 
     Attributes:
-    - height    Int describing the relative height to other trackscale_fontsizes
-      in the diagram
-    - name      String describing the track
-    - hide      Boolean, 0 if the track is not to be drawn
-    - start, end    Integers (or None) specifying start/end to draw just
-      a partial track.
-    - greytrack     Boolean, 1 if a grey background to the track is to be
-      drawn
-    - greytrack_labels  Int describing how many track-identifying labels
-      should be placed on the track at regular intervals
-    - greytrack_font    String describing the font to use for the greytrack
-      labels
-    - greytrack_fontsize    Int describing the font size to display the
-      labels on the grey track
-    - greytrack_font_rotation   Int describing the angle through which to
-      rotate the grey track labels (Linear only)
-    - greytrack_font_color     colors.Color describing the color to draw
-      the grey track labels
-    - scale     Boolean, 1 if a scale is to be drawn on the track
-    - scale_format  String, defaults to None, when scale values are written
-      as numerals.  Setting this to 'SInt' invokes SI
-      unit-like multiples, such as Mbp, Kbp and so on.
-    - scale_color  colors.Color to draw the elements of the scale
-    - scale_font    String describing the font to use for the scale labels
-    - scale_fontsize    Int describing the size of the scale label font
-    - scale_fontangle   Int describing the angle at which to draw the scale
-      labels (linear only)
-    - scale_ticks       Boolean, 1 if ticks should be drawn at all on the
-      scale
-    - scale_largeticks  Float (0->1) describing the height of large
-      scale ticks relative to the track height.
-    - scale_smallticks  Float (0->1) describing the height of large
-      scale ticks relative to the track height.
-    - scale_largetick_interval  Int, describing the number of bases that
-      should separate large ticks
-    - scale_smalltick_interval  Int, describing the number of bases that
-      should separate small ticks
-    - scale_largetick_labels    Boolean describing whether position labels
-      should be written over large ticks
-    - scale_smalltick_labels    Boolean describing whether position labels
-      should be written over small ticks
-    - axis_labels       Boolean describing whether the value labels should
-      be placed on the Y axes
+     - height    Int describing the relative height to other trackscale_fontsizes
+       in the diagram
+     - name      String describing the track
+     - hide      Boolean, 0 if the track is not to be drawn
+     - start, end    Integers (or None) specifying start/end to draw just
+       a partial track.
+     - greytrack     Boolean, 1 if a grey background to the track is to be
+       drawn
+     - greytrack_labels  Int describing how many track-identifying labels
+       should be placed on the track at regular intervals
+     - greytrack_font    String describing the font to use for the greytrack
+       labels
+     - greytrack_fontsize    Int describing the font size to display the
+       labels on the grey track
+     - greytrack_font_rotation   Int describing the angle through which to
+       rotate the grey track labels (Linear only)
+     - greytrack_font_color     colors.Color describing the color to draw
+       the grey track labels
+     - scale     Boolean, 1 if a scale is to be drawn on the track
+     - scale_format  String, defaults to None, when scale values are written
+       as numerals.  Setting this to 'SInt' invokes SI
+       unit-like multiples, such as Mbp, Kbp and so on.
+     - scale_color  colors.Color to draw the elements of the scale
+     - scale_font    String describing the font to use for the scale labels
+     - scale_fontsize    Int describing the size of the scale label font
+     - scale_fontangle   Int describing the angle at which to draw the scale
+       labels (linear only)
+     - scale_ticks       Boolean, 1 if ticks should be drawn at all on the
+       scale
+     - scale_largeticks  Float (0->1) describing the height of large
+       scale ticks relative to the track height.
+     - scale_smallticks  Float (0->1) describing the height of large
+       scale ticks relative to the track height.
+     - scale_largetick_interval  Int, describing the number of bases that
+       should separate large ticks
+     - scale_smalltick_interval  Int, describing the number of bases that
+       should separate small ticks
+     - scale_largetick_labels    Boolean describing whether position labels
+       should be written over large ticks
+     - scale_smalltick_labels    Boolean describing whether position labels
+       should be written over small ticks
+     - axis_labels       Boolean describing whether the value labels should
+       be placed on the Y axes
 
     """
 
@@ -94,49 +94,49 @@ class Track(object):
         """Initialize.
 
         Arguments:
-        - height    Int describing the relative height to other tracks in the
-          diagram
-        - name      String describing the track
-        - hide      Boolean, 0 if the track is not to be drawn
-        - greytrack     Boolean, 1 if a grey background to the track is to be
-          drawn
-        - greytrack_labels  Int describing how many track-identifying labels
-          should be placed on the track at regular intervals
-        - greytrack_font    String describing the font to use for the greytrack
-          labels
-        - greytrack_fontsize    Int describing the font size to display the
-          labels on the grey track
-        - greytrack_font_rotation   Int describing the angle through which to
-          rotate the grey track labels (Linear only)
-        - greytrack_font_color     colors.Color describing the color to draw
-          the grey track labels (overridden by backwards compatible argument
-          with UK spelling, colour).
-        - scale     Boolean, 1 if a scale is to be drawn on the track
-        - scale_color  colors.Color to draw the elements of the scale
-          (overridden by backwards compatible argument with UK
-          spelling, colour).
-        - scale_font    String describing the font to use for the scale labels
-        - scale_fontsize    Int describing the size of the scale label font
-        - scale_fontangle   Int describing the angle at which to draw the scale
-          labels (linear only)
-        - scale_ticks       Boolean, 1 if ticks should be drawn at all on the
-          scale
-        - scale_largeticks  Float (0->1) describing the height of large
-          scale ticks relative to the track height.
-        - scale_smallticks  Float (0->1) describing the height of large
-          scale ticks relative to the track height.
-        - scale_largetick_interval  Int, describing the number of bases that
-          should separate large ticks
-        - scale_smalltick_interval  Int, describing the number of bases that
-          should separate small ticks
-        - scale_largetick_labels    Boolean describing whether position labels
-          should be written over large ticks
-        - scale_smalltick_labels    Boolean describing whether position labels
-          should be written over small ticks
-        - name          String to help identify the track
-        - height        Relative height to draw the track
-        - axis_labels       Boolean describing whether the value labels should
-          be placed on the Y axes
+         - height    Int describing the relative height to other tracks in the
+           diagram
+         - name      String describing the track
+         - hide      Boolean, 0 if the track is not to be drawn
+         - greytrack     Boolean, 1 if a grey background to the track is to be
+           drawn
+         - greytrack_labels  Int describing how many track-identifying labels
+           should be placed on the track at regular intervals
+         - greytrack_font    String describing the font to use for the greytrack
+           labels
+         - greytrack_fontsize    Int describing the font size to display the
+           labels on the grey track
+         - greytrack_font_rotation   Int describing the angle through which to
+           rotate the grey track labels (Linear only)
+         - greytrack_font_color     colors.Color describing the color to draw
+           the grey track labels (overridden by backwards compatible argument
+           with UK spelling, colour).
+         - scale     Boolean, 1 if a scale is to be drawn on the track
+         - scale_color  colors.Color to draw the elements of the scale
+           (overridden by backwards compatible argument with UK
+           spelling, colour).
+         - scale_font    String describing the font to use for the scale labels
+         - scale_fontsize    Int describing the size of the scale label font
+         - scale_fontangle   Int describing the angle at which to draw the scale
+           labels (linear only)
+         - scale_ticks       Boolean, 1 if ticks should be drawn at all on the
+           scale
+         - scale_largeticks  Float (0->1) describing the height of large
+           scale ticks relative to the track height.
+         - scale_smallticks  Float (0->1) describing the height of large
+           scale ticks relative to the track height.
+         - scale_largetick_interval  Int, describing the number of bases that
+           should separate large ticks
+         - scale_smalltick_interval  Int, describing the number of bases that
+           should separate small ticks
+         - scale_largetick_labels    Boolean describing whether position labels
+           should be written over large ticks
+         - scale_smalltick_labels    Boolean describing whether position labels
+           should be written over small ticks
+         - name          String to help identify the track
+         - height        Relative height to draw the track
+         - axis_labels       Boolean describing whether the value labels should
+           be placed on the Y axes
 
         """
         # Let the UK spelling (colour) override the USA spelling (color)
@@ -244,8 +244,8 @@ class Track(object):
         """Return a formatted string with information about the track.
 
         Arguments:
-        - verbose       Boolean indicating whether a short or complete
-          account of the track is required
+         - verbose - Boolean indicating whether a short or complete
+           account of the track is required
 
         """
         if not verbose:             # Return the short description

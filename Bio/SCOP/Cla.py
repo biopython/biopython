@@ -77,8 +77,8 @@ def parse(handle):
     """Iterates over a CLA file as Cla records for each line.
 
     Arguments:
-
      - handle - file-like object.
+
     """
     for line in handle:
         if line.startswith('#'):
@@ -93,8 +93,8 @@ class Index(dict):
         """Create CLA index.
 
         Arguments:
-
          - filename - The file to index
+
         """
         dict.__init__(self)
         self.filename = filename
