@@ -21,9 +21,9 @@ class SinglePositionMutation(object):
         """Initialize a mutator.
 
         Arguments:
+         - mutation_rate - The chance of a mutation happening once in the
+           genome.
 
-        - mutation_rate - The chance of a mutation happening once in the
-          genome.
         """
         self._mutation_rate = mutation_rate
         # Originally there was an RNG for each case. Python 3.6 was
@@ -70,9 +70,9 @@ class ConversionMutation(object):
         """Inititialize a mutator.
 
         Arguments:
+         - mutation_rate -- The chance of a mutation happening at any
+           position in the genome.
 
-        - mutation_rate -- The chance of a mutation happening at any
-        position in the genome.
         """
         self._mutation_rate = mutation_rate
         # a random number generator to test if we have a mutation

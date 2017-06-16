@@ -20,17 +20,15 @@ class AbstractSelection(object):
         """Initialize a selector.
 
         Arguments:
+         - mutator - A Mutation object which will perform mutation
+           on an individual.
+         - crossover - A Crossover object which will take two
+           individuals and produce two new individuals which may
+           have had crossover occur.
+         - repairer - A class which can do repair on rearranged genomes
+           to eliminate infeasible individuals. If set at None, so repair
+           will be done.
 
-        - mutator - A Mutation object which will perform mutation
-          on an individual.
-
-        - crossover - A Crossover object which will take two
-          individuals and produce two new individuals which may
-          have had crossover occur.
-
-        - repairer - A class which can do repair on rearranged genomes
-          to eliminate infeasible individuals. If set at None, so repair
-          will be done.
         """
         self._mutator = mutator
         self._crossover = crossover

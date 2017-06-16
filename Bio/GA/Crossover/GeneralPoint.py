@@ -34,6 +34,7 @@ and for the drastic (n can be arbitrary to the length of the genome!)::
     | returns: (AbCdEfG, aBcDeFg)
     | (note that points=12 will yield the same result, but 11
     |  may be somewhat faster)
+
 """
 # standard modules
 import random
@@ -158,14 +159,14 @@ class TwoCrossover(GeneralPointCrossover):
     """
 
     def _generate_locs(self, bound):
-        """Replacement generation.
+        """Generate replacement (PRIVATE).
 
         See GeneralPoint._generate_locs documentation for details
         """
         return [0, random.randint(1, bound - 1), bound]
 
     def _crossover(self, x, no, locs):
-        """Replacement crossover.
+        """Crossover replacement (PRIVATE)..
 
         See GeneralPoint._crossover documentation for details
         """
