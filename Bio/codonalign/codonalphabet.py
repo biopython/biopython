@@ -22,7 +22,7 @@ default_codon_table = copy.deepcopy(generic_by_id[1])
 
 
 class CodonAlphabet(Alphabet):
-    """Generic Codon Alphabet with a size of three"""
+    """Generic Codon Alphabet with a size of three."""
 
     size = 3
     letters = None

@@ -30,18 +30,17 @@ warnings.warn('Bio.codonalign is an experimental module which may undergo '
 def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X',
           codon_table=default_codon_table, alphabet=None,
           complete_protein=False, anchor_len=10, max_score=10):
-    """Build a codon alignment from a protein alignment and
-    corresponding nucleotide sequences
+    """Build a codon alignment from protein alignment and corresponding nucleotides.
 
     Arguments:
-        - pro_align  - a protein MultipleSeqAlignment object
-        - nucl_align - an object returned by SeqIO.parse or SeqIO.index
-          or a collection of SeqRecord.
-        - alphabet   - alphabet for the returned codon alignment
-        - corr_dict  - a dict that maps protein id to nucleotide id
-        - complete_protein - whether the sequence begins with a start
-          codon
-        - frameshift - whether to apply frameshift detection
+     - pro_align  - a protein MultipleSeqAlignment object
+     - nucl_align - an object returned by SeqIO.parse or SeqIO.index
+       or a collection of SeqRecord.
+     - alphabet   - alphabet for the returned codon alignment
+     - corr_dict  - a dict that maps protein id to nucleotide id
+     - complete_protein - whether the sequence begins with a start
+       codon
+     - frameshift - whether to apply frameshift detection
 
     Return a CodonAlignment object
 
@@ -198,8 +197,7 @@ def _codons2re(codons):
 
 
 def _get_aa_regex(codon_table, stop='*', unknown='X'):
-    """Set up the regular expression of a given CodonTable for
-    further use.
+    """Set up the regular expression of a given CodonTable.
 
     >>> from Bio.Data.CodonTable import generic_by_id
     >>> p = generic_by_id[1]
@@ -234,8 +232,9 @@ def _get_aa_regex(codon_table, stop='*', unknown='X'):
 
 def _check_corr(pro, nucl, gap_char='-', codon_table=default_codon_table,
                 complete_protein=False, anchor_len=10):
-    """Check if a given protein SeqRecord can be translated by another
-    nucleotide SeqRecord.
+    """Check if the nucleotide can be translated into the protein.
+
+    Expects two SeqRecord objects.
     """
     import re
     from Bio.Alphabet import NucleotideAlphabet
@@ -424,18 +423,19 @@ def _check_corr(pro, nucl, gap_char='-', codon_table=default_codon_table,
 
 def _get_shift_anchor_re(sh_anc, sh_nuc, shift_val, aa2re, anchor_len,
                          shift_id_pos):
-    """Finds an re that matches a potentially shifted anchor.
+    """Find a regular expression matching a potentially shifted anchor.
 
     Arguments:
-        - sh_anc    - shifted anchor sequence
-        - sh_nuc    - potentially corresponding nucleotide sequence
-          of sh_anc
-        - shift_val - 1 or 2 indicates forward frame shift, whereas
-          3*anchor_len-1 or 3*anchor_len-2 indicates
-          backward shift
-        - aa2re     - aa to codon re dict
-        - anchor_len - length of the anchor
-        - shift_id_pos - specify current shift name we are at
+     - sh_anc    - shifted anchor sequence
+     - sh_nuc    - potentially corresponding nucleotide sequence
+       of sh_anc
+     - shift_val - 1 or 2 indicates forward frame shift, whereas
+       3*anchor_len-1 or 3*anchor_len-2 indicates
+       backward shift
+     - aa2re     - aa to codon re dict
+     - anchor_len - length of the anchor
+     - shift_id_pos - specify current shift name we are at
+
     """
     import re
     shift_id = [chr(i) for i in range(97, 107)]
@@ -486,9 +486,7 @@ def _get_shift_anchor_re(sh_anc, sh_nuc, shift_val, aa2re, anchor_len,
 
 
 def _merge_aa2re(aa1, aa2, shift_val, aa2re, reid):
-    """Function to merge two amino acids based on detected frame shift
-    value.
-    """
+    """Merge two amino acids based on detected frame shift value (PRIVATE)."""
     def get_aa_from_codonre(re_aa):
         aas = []
         m = 0
@@ -528,16 +526,16 @@ def _merge_aa2re(aa1, aa2, shift_val, aa2re, reid):
 def _get_codon_rec(pro, nucl, span_mode, alphabet, gap_char="-",
                    codon_table=default_codon_table, complete_protein=False,
                    max_score=10):
-    """Generate codon alignment based on regular re match (PRIVATE)
+    """Generate codon alignment based on regular re match (PRIVATE).
 
     span_mode is a tuple returned by _check_corr. The first element
     is the span of a re search, and the second element is the mode
     for the match.
 
     mode
-        - 0: direct match
-        - 1: mismatch (no indels)
-        - 2: frameshift
+     - 0: direct match
+     - 1: mismatch (no indels)
+     - 2: frameshift
 
     """
     import re
@@ -670,8 +668,9 @@ def _align_shift_recs(recs):
     """Build alignment according to the frameshift detected by _check_corr (PRIVATE).
 
     Argument:
-        - recs - a list of SeqRecords containing a CodonSeq dictated
-          by a rf_table (with frameshift in some of them).
+     - recs - a list of SeqRecords containing a CodonSeq dictated
+       by a rf_table (with frameshift in some of them).
+
     """
     def find_next_int(k, lst):
         idx = lst.index(k)
