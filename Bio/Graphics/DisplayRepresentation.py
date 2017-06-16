@@ -44,14 +44,13 @@ class ChromosomeCounts(object):
         """Initialize a representation of chromosome counts.
 
         Arguments:
+         - segment_names - An ordered list of all segment names along
+           the chromosome. The count and other information will be added
+           to these.
+         - color_scheme - A coloring scheme to use in the counts. This
+           should be a dictionary mapping count ranges to colors (specified
+           in reportlab.lib.colors).
 
-        - segment_names - An ordered list of all segment names along
-        the chromosome. The count and other information will be added to
-        these.
-
-        - color_scheme - A coloring scheme to use in the counts. This should
-        be a dictionary mapping count ranges to colors (specified in
-        reportlab.lib.colors).
         """
         self._names = segment_names
         self._count_info = {}
@@ -68,12 +67,11 @@ class ChromosomeCounts(object):
         """Add counts to the given segment name.
 
         Arguments:
+         - segment_name - The name of the segment we should add counts to.
+           If the name is not present, a KeyError will be raised.
+         - count - The counts to add the current segment. This defaults to
+           a single count.
 
-        - segment_name - The name of the segment we should add counts to.
-        If the name is not present, a KeyError will be raised.
-
-        - count - The counts to add the current segment. This defaults to
-        a single count.
         """
         try:
             self._count_info[segment_name] += count
@@ -135,9 +133,8 @@ class ChromosomeCounts(object):
         """Add the collected segment information to a chromosome for drawing.
 
         Arguments:
-
-        - chromosome - A Chromosome graphics object that we can add
-        chromosome segments to.
+         - chromosome - A Chromosome graphics object that we can add
+           chromosome segments to.
 
         This creates ChromosomeSegment (and TelomereSegment) objects to
         fill in the chromosome. The information is derived from the

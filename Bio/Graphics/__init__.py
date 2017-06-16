@@ -24,7 +24,7 @@ except ImportError:
 
 
 def _write(drawing, output_file, format, dpi=72):
-    """Helper function to standardize output to files (PRIVATE).
+    """Standardize output to files (PRIVATE).
 
     Writes the provided drawing out to a file in a prescribed format.
 
