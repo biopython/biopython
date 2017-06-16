@@ -58,7 +58,7 @@ def scan(seq="", mirror='http://www.expasy.org', output='xml', **keywords):
 
 
 def read(handle):
-    """Parse search results returned by ScanProsite into a Python object"""
+    """Parse search results returned by ScanProsite into a Python object."""
     content_handler = ContentHandler()
     saxparser = Parser()
     saxparser.setContentHandler(content_handler)
