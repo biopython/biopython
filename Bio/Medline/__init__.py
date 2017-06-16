@@ -11,6 +11,7 @@ Classes:
 Functions:
  - read             Reads one Medline record
  - parse            Allows you to iterate over a bunch of Medline records
+
 """
 
 
@@ -96,6 +97,7 @@ class Record(dict):
     SPIN      Summary for patients in
     ORI       Original report in
     ========= ==============================
+
     """
 
 

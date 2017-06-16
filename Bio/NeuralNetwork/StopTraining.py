@@ -37,15 +37,13 @@ class ValidationIncreaseStop(object):
         """Initialize the stopping criterion class.
 
         Arguments:
+         - max_iterations - The maximum number of iterations that
+           should be performed, regardless of error.
+         - min_iterations - The minimum number of iterations to perform,
+           to prevent premature stoppage of training.
+         - verbose - Whether or not the error should be printed during
+           training.
 
-        - max_iterations - The maximum number of iterations that
-        should be performed, regardless of error.
-
-        - min_iterations - The minimum number of iterations to perform,
-        to prevent premature stoppage of training.
-
-        - verbose - Whether or not the error should be printed during
-        training.
         """
         self.verbose = verbose
         self.max_iterations = max_iterations

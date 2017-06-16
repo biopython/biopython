@@ -29,16 +29,15 @@ class PatternIO(object):
         """Intialize the reader and writer class.
 
         Arguments:
-
-        - alphabet - An optional argument specifying the alphabet
-        which patterns should follow. If an alphabet is set it'll be used
-        to verify that all patterns follow it.
+         - alphabet - An optional argument specifying the alphabet
+           which patterns should follow. If an alphabet is set it'll be used
+           to verify that all patterns follow it.
 
         Attributes:
-        - separator - A character to use in separating items in a signature
-        when it is written to a file and read back. This character should
-        not be in the possible alphabet of the sequences, or there will
-        be trouble.
+         - separator - A character to use in separating items in a signature
+           when it is written to a file and read back. This character should
+           not be in the possible alphabet of the sequences, or there will
+           be trouble.
 
         """
         self._alphabet = alphabet
@@ -122,11 +121,10 @@ class PatternRepository(object):
         """Initialize a repository with patterns,
 
         Arguments:
-
-            - pattern_info - A representation of all of the patterns found in
-              a finder search. This should be a dictionary, where the keys
-              are patterns, and the values are the number of times a pattern is
-              found.
+         - pattern_info - A representation of all of the patterns found in
+           a finder search. This should be a dictionary, where the keys
+           are patterns, and the values are the number of times a pattern
+           is found.
 
         The patterns are represented interally as a list of two
         tuples, where the first element is the number of times a pattern
@@ -158,8 +156,8 @@ class PatternRepository(object):
         Randomly selects patterns from the list and returns them.
 
         Arguments:
+         - num_patterns - The total number of patterns to return.
 
-        - num_patterns - The total number of patterns to return.
         """
         all_patterns = []
 
@@ -188,8 +186,8 @@ class PatternRepository(object):
         """Return the specified number of most frequently occurring patterns
 
         Arguments:
+         - num_patterns - The number of patterns to return.
 
-        - num_patterns - The number of patterns to return.
         """
         all_patterns = []
         for pattern_info in self._pattern_list[:num_patterns]:
@@ -206,11 +204,10 @@ class PatternRepository(object):
         two sets of patterns.
 
         Arguments:
+         - top_num - The number of patterns to take from the top of the list.
+         - bottom_num - The number of patterns to take from the bottom of
+           the list.
 
-        - top_num - The number of patterns to take from the top of the list.
-
-        - bottom_num - The number of patterns to take from the bottom of
-        the list.
         """
         all_patterns = []
         # first get from the top of the list
@@ -235,9 +232,9 @@ class PatternRepository(object):
         or something like that?
 
         Arguments:
+         - at_percentage - The percentage of A and T residues in a pattern
+           that qualifies it for being removed.
 
-        - at_percentage - The percentage of A and T residues in a pattern
-        that qualifies it for being removed.
         """
         remove_list = []
         # find all of the really AT rich patterns

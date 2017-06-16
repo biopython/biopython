@@ -62,6 +62,7 @@ class Phyloxml(PhyloElement):
             The phylogenetic trees
         other : list
             Arbitrary non-phyloXML elements, if any
+
     """
 
     def __init__(self, attributes, phylogenies=None, other=None):
@@ -121,6 +122,7 @@ class Other(PhyloElement):
             text contained directly within this XML node
         children : list
             child nodes, if any (also `Other` instances)
+
     """
 
     def __init__(self, tag, namespace=None, attributes=None, value=None,
@@ -167,6 +169,7 @@ class Phylogeny(PhyloElement, BaseTree.Tree):
             Property objects
         other : list
             non-phyloXML elements (type `Other`)
+
     """
 
     def __init__(self, root=None, rooted=True,
@@ -327,6 +330,7 @@ class Clade(PhyloElement, BaseTree.Clade):
             Sub-clades
         other : list of Other objects
             non-phyloXML objects
+
     """
 
     def __init__(self,
@@ -485,6 +489,7 @@ class Annotation(PhyloElement):
             typed and referenced annotations from external resources
         uri : Uri
             link
+
     """
 
     re_ref = re.compile(r'[a-zA-Z0-9_]+:[a-zA-Z0-9_\.\-\s]+')
@@ -567,6 +572,7 @@ class Confidence(PhyloElement):
             confidence value
         type : string
             label for the type of confidence, e.g. 'bootstrap'
+
     """
 
     def __init__(self, value, type='unknown'):
@@ -733,6 +739,7 @@ class Date(PhyloElement):
             lower bound on the date value
         maximum : float
             upper bound on the date value
+
     """
 
     def __init__(self, value=None, unit=None, desc=None,
@@ -765,6 +772,7 @@ class Distribution(PhyloElement):
             coordinates (similar to the 'Point' element in Google's KML format)
         polygons : list of `Polygon` objects
             coordinate sets defining geographic regions
+
     """
 
     def __init__(self, desc=None, points=None, polygons=None):
@@ -782,6 +790,7 @@ class DomainArchitecture(PhyloElement):
             total length of the protein sequence
         domains : list ProteinDomain objects
             the domains within this protein
+
     """
 
     def __init__(self, length=None, domains=None):
@@ -874,6 +883,7 @@ class MolSeq(PhyloElement):
         is_aligned : bool
             True if this sequence is aligned with the others (usually meaning
             all aligned seqs are the same length and gaps may be present)
+
     """
 
     re_value = re.compile(r'[a-zA-Z\.\-\?\*_]+')
@@ -906,6 +916,7 @@ class Point(PhyloElement):
             altitude
         alt_unit : string
             unit for the altitude (e.g. 'meter')
+
     """
 
     def __init__(self, geodetic_datum, lat, long, alt=None, alt_unit=None):
@@ -921,6 +932,7 @@ class Polygon(PhyloElement):
     """A polygon defined by a list of 'Points' (used by element 'Distribution').
 
     :param points: list of 3 or more points representing vertices.
+
     """
 
     def __init__(self, points=None):
@@ -955,6 +967,7 @@ class Property(PhyloElement):
         id_ref : Id (optional)
             allows to attached a property specifically to one element (on the
             xml-level)
+
     """
 
     re_ref = re.compile(r'[a-zA-Z0-9_]+:[a-zA-Z0-9_\.\-\s]+')
@@ -1002,6 +1015,7 @@ class ProteinDomain(PhyloElement):
             can be used to store e.g. E-values
         id : string
             unique identifier/name
+
     """
 
     def __init__(self, value, start, end, confidence=None, id=None):
@@ -1076,6 +1090,7 @@ class Sequence(PhyloElement):
             protein domains on this sequence
         other : list of Other objects
             non-phyloXML elements
+
     """
 
     alphabets = {'dna': Alphabet.generic_dna,
@@ -1186,6 +1201,7 @@ class Sequence(PhyloElement):
                                                for prop in ann.properties],
                               } for ann in self.annotations],
             }
+
         """
         def clean_dict(dct):
             """Remove None-valued items from a dictionary."""
@@ -1257,6 +1273,7 @@ class SequenceRelation(PhyloElement):
             describe the type of relationship
         confidence : Confidence
             confidence value for this relation
+
     """
 
     ok_type = set(('orthology', 'one_to_one_orthology', 'super_orthology',
@@ -1300,6 +1317,7 @@ class Taxonomy(PhyloElement):
             link
         other : list of Other objects
             non-phyloXML elements
+
     """
 
     re_code = re.compile(r'[a-zA-Z0-9_]{2,10}')

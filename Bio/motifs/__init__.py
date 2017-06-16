@@ -27,14 +27,13 @@ def parse(handle, format):
     """Parses an output file of motif finding programs.
 
     Currently supported formats (case is ignored):
-
-        - AlignAce:      AlignAce output file format
-        - MEME:          MEME output file motif
-        - MAST:          MAST output file motif
-        - TRANSFAC:      TRANSFAC database file format
-        - pfm:           JASPAR-style position-frequency matrix
-        - jaspar:        JASPAR-style multiple PFM format
-        - sites:         JASPAR-style sites file
+     - AlignAce:      AlignAce output file format
+     - MEME:          MEME output file motif
+     - MAST:          MAST output file motif
+     - TRANSFAC:      TRANSFAC database file format
+     - pfm:           JASPAR-style position-frequency matrix
+     - jaspar:        JASPAR-style multiple PFM format
+     - sites:         JASPAR-style sites file
 
     As files in the pfm and sites formats contain only a single motif,
     it is easier to use Bio.motifs.read() instead of Bio.motifs.parse()
@@ -504,6 +503,7 @@ class Motif(object):
          - pfm : JASPAR single Position Frequency Matrix
          - jaspar : JASPAR multiple Position Frequency Matrix
          - transfac : TRANSFAC like files
+
         """
         if format in ('pfm', 'jaspar'):
             from Bio.motifs import jaspar
@@ -524,6 +524,7 @@ def write(motifs, format):
      - pfm : JASPAR simple single Position Frequency Matrix
      - jaspar : JASPAR multiple PFM format
      - transfac : TRANSFAC like files
+
     """
     format = format.lower()
     if format in ("pfm", "jaspar"):

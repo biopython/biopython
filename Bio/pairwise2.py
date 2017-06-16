@@ -961,9 +961,11 @@ class identity_match(object):
 class dictionary_match(object):
     """Create a match function for use in an alignment.
 
-    - score_dict     - A dictionary where the keys are tuples (residue 1,
-      residue 2) and the values are the match scores between those residues.
-    - symmetric      - A flag that indicates whether the scores are symmetric.
+    Attributes:
+     - score_dict     - A dictionary where the keys are tuples (residue 1,
+       residue 2) and the values are the match scores between those residues.
+     - symmetric      - A flag that indicates whether the scores are symmetric.
+
     """
 
     def __init__(self, score_dict, symmetric=1):

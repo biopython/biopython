@@ -89,6 +89,7 @@ def parse(handle, **kwargs):
     """Iterate over the trees in a NeXML file handle.
 
     :returns: generator of Bio.Phylo.NeXML.Tree objects.
+
     """
     return Parser(handle).parse(**kwargs)
 
@@ -97,6 +98,7 @@ def write(trees, handle, plain=False, **kwargs):
     """Write a trees in NeXML format to the given file handle.
 
     :returns: number of trees written.
+
     """
     return Writer(trees).write(handle, plain=plain, **kwargs)
 

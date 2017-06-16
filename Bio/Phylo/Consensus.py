@@ -206,9 +206,9 @@ class _BitString(str):
         """Check if current bitstr1 is compatible with another bitstr2.
 
         Two conditions are considered as compatible:
+         1. bitstr1.contain(bitstr2) or vise versa;
+         2. bitstr1.independent(bitstr2).
 
-        1. bitstr1.contain(bitstr2) or vise versa;
-        2. bitstr1.independent(bitstr2).
         """
         return (self.contains(other) or other.contains(self) or
                 self.independent(other))
@@ -284,6 +284,7 @@ def majority_consensus(trees, cutoff=0):
     :Parameters:
         trees : iterable
             iterable of trees to produce consensus tree.
+
     """
     tree_iter = iter(trees)
     first_tree = next(tree_iter)
@@ -377,6 +378,7 @@ def adam_consensus(trees):
     :Parameters:
         trees : list
             list of trees to produce consensus tree.
+
     """
     clades = [tree.root for tree in trees]
     return BaseTree.Tree(root=_part(clades), rooted=True)
@@ -475,6 +477,7 @@ def _count_clades(trees):
     :Parameters:
         trees : iterable
             An iterable that returns the trees to count
+
     """
     bitstrs = {}
     tree_count = 0
@@ -504,6 +507,7 @@ def get_support(target_tree, trees, len_trees=None):
         len_trees : int
             optional count of replicates in trees. len_trees must be provided
             when len(trees) is not a valid operation.
+
     """
     term_names = sorted(term.name
                         for term in target_tree.find_clades(terminal=True))
@@ -539,6 +543,7 @@ def bootstrap(msa, times):
             multiple sequence alignment to generate replicates.
         times : int
             number of bootstrap times.
+
     """
     length = len(msa[0])
     i = 0
@@ -564,6 +569,7 @@ def bootstrap_trees(msa, times, tree_constructor):
             number of bootstrap times.
         tree_constructor : TreeConstructor
             tree constructor to be used to build trees.
+
     """
     msas = bootstrap(msa, times)
     for aln in msas:
@@ -584,6 +590,7 @@ def bootstrap_consensus(msa, times, tree_constructor, consensus):
         consensus : function
             Consensus method in this module: `strict_consensus`,
             `majority_consensus`, `adam_consensus`.
+
     """
     trees = bootstrap_trees(msa, times, tree_constructor)
     tree = consensus(list(trees))

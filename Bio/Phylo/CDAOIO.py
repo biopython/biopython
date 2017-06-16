@@ -71,6 +71,7 @@ def parse(handle, **kwargs):
     """Iterate over the trees in a CDAO file handle.
 
     :returns: generator of Bio.Phylo.CDAO.Tree objects.
+
     """
     return Parser(handle).parse(**kwargs)
 
@@ -79,6 +80,7 @@ def write(trees, handle, plain=False, **kwargs):
     """Write a trees in CDAO format to the given file handle.
 
     :returns: number of trees written.
+
     """
     return Writer(trees).write(handle, plain=plain, **kwargs)
 

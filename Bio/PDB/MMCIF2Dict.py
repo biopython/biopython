@@ -20,6 +20,7 @@ class MMCIF2Dict(dict):
 
         Arguments:
          - file - name of the PDB file OR an open filehandle
+
         """
         with as_handle(filename) as handle:
             loop_flag = False

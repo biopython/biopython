@@ -21,9 +21,9 @@ ascii alphabetic character, a-z, A-Z). e.g. "1", "10A", "1010b", "-1"
 
 See "ASTRAL RAF Sequence Maps":http://astral.stanford.edu/raf.html
 
-protein_letters_3to1 -- A mapping from the 3-letter amino acid codes found
-                        in PDB files to 1-letter codes.  The 3-letter codes
-                        include chemically modified residues.
+Dictionary `protein_letters_3to1` provides a mapping from the 3-letter amino
+acid codes found in PDB files to 1-letter codes.  The 3-letter codes include
+chemically modified residues.
 """
 
 from __future__ import print_function
