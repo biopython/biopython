@@ -5,20 +5,21 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""Parser for the prosite dat file from Prosite, http://www.expasy.ch/prosite/
+"""Parser for the prosite dat file from Prosite at ExPASy.
+
+See http://www.expasy.ch/prosite/
 
 Tested with:
-Release 20.43, 10-Feb-2009
-Release 2017_03 of 15-Mar-2017.
+ - Release 20.43, 10-Feb-2009
+ - Release 2017_03 of 15-Mar-2017.
 
 Functions:
-
-    - read                  Reads a Prosite file containing one Prosite record
-    - parse                 Iterates over records in a Prosite file.
+ - read                  Reads a Prosite file containing one Prosite record
+ - parse                 Iterates over records in a Prosite file.
 
 Classes:
+ - Record                Holds Prosite data.
 
-    - Record                Holds Prosite data.
 """
 
 
@@ -28,7 +29,9 @@ def parse(handle):
     This function is for parsing Prosite files containing multiple
     records.
 
-    handle   - handle to the file.
+    Arguments:
+     - handle   - handle to the file.
+
     """
     while True:
         record = __read(handle)
@@ -43,7 +46,9 @@ def read(handle):
     This function is for parsing Prosite files containing
     exactly one record.
 
-    handle   - handle to the file.
+    Arguments:
+     - handle   - handle to the file.
+
     """
     record = __read(handle)
     # We should have reached the end of the record by now
@@ -56,57 +61,52 @@ def read(handle):
 class Record(object):
     """Holds information from a Prosite record.
 
-    Members:
+    Main attributes:
+     - name           ID of the record.  e.g. ADH_ZINC
+     - type           Type of entry.  e.g. PATTERN, MATRIX, or RULE
+     - accession      e.g. PS00387
+     - created        Date the entry was created.  (MMM-YYYY for releases
+       before January 2017, DD-MMM-YYYY since January 2017)
+     - data_update    Date the 'primary' data was last updated.
+     - info_update    Date data other than 'primary' data was last updated.
+     - pdoc           ID of the PROSITE DOCumentation.
+     - description    Free-format description.
+     - pattern        The PROSITE pattern.  See docs.
+     - matrix         List of strings that describes a matrix entry.
+     - rules          List of rule definitions (from RU lines).  (strings)
+     - prorules       List of prorules (from PR lines). (strings)
 
-        - name           ID of the record.  e.g. ADH_ZINC
-        - type           Type of entry.  e.g. PATTERN, MATRIX, or RULE
-        - accession      e.g. PS00387
-        - created        Date the entry was created.  (MMM-YYYY for releases
-                         before January 2017, DD-MMM-YYYY since January 2017)
-        - data_update    Date the 'primary' data was last updated.
-        - info_update    Date data other than 'primary' data was last updated.
-        - pdoc           ID of the PROSITE DOCumentation.
+    NUMERICAL RESULTS:
+     - nr_sp_release  SwissProt release.
+     - nr_sp_seqs     Number of seqs in that release of Swiss-Prot. (int)
+     - nr_total       Number of hits in Swiss-Prot.  tuple of (hits, seqs)
+     - nr_positive    True positives.  tuple of (hits, seqs)
+     - nr_unknown     Could be positives.  tuple of (hits, seqs)
+     - nr_false_pos   False positives.  tuple of (hits, seqs)
+     - nr_false_neg   False negatives.  (int)
+     - nr_partial     False negatives, because they are fragments. (int)
 
-        - description    Free-format description.
-        - pattern        The PROSITE pattern.  See docs.
-        - matrix         List of strings that describes a matrix entry.
-        - rules          List of rule definitions (from RU lines).  (strings)
-        - prorules       List of prorules (from PR lines). (strings)
-
-    NUMERICAL RESULTS
-
-        - nr_sp_release  SwissProt release.
-        - nr_sp_seqs     Number of seqs in that release of Swiss-Prot. (int)
-        - nr_total       Number of hits in Swiss-Prot.  tuple of (hits, seqs)
-        - nr_positive    True positives.  tuple of (hits, seqs)
-        - nr_unknown     Could be positives.  tuple of (hits, seqs)
-        - nr_false_pos   False positives.  tuple of (hits, seqs)
-        - nr_false_neg   False negatives.  (int)
-        - nr_partial     False negatives, because they are fragments. (int)
-
-    COMMENTS
-
-        - cc_taxo_range  Taxonomic range.  See docs for format
-        - cc_max_repeat  Maximum number of repetitions in a protein
-        - cc_site        Interesting site.  list of tuples (pattern pos, desc.)
-        - cc_skip_flag   Can this entry be ignored?
-        - cc_matrix_type
-        - cc_scaling_db
-        - cc_author
-        - cc_ft_key
-        - cc_ft_desc
-        - cc_version     version number (introduced in release 19.0)
+    COMMENTS:
+     - cc_taxo_range  Taxonomic range.  See docs for format
+     - cc_max_repeat  Maximum number of repetitions in a protein
+     - cc_site        Interesting site.  list of tuples (pattern pos, desc.)
+     - cc_skip_flag   Can this entry be ignored?
+     - cc_matrix_type
+     - cc_scaling_db
+     - cc_author
+     - cc_ft_key
+     - cc_ft_desc
+     - cc_version     version number (introduced in release 19.0)
 
     The following are all lists if tuples (swiss-prot accession, swiss-prot name).
 
-    DATA BANK REFERENCES
-
-        - dr_positive
-        - dr_false_neg
-        - dr_false_pos
-        - dr_potential   Potential hits, but fingerprint region not yet available.
-        - dr_unknown     Could possibly belong
-        - pdb_structs    List of PDB entries.
+    DATA BANK REFERENCES:
+     - dr_positive
+     - dr_false_neg
+     - dr_false_pos
+     - dr_potential   Potential hits, but fingerprint region not yet available.
+     - dr_unknown     Could possibly belong
+     - pdb_structs    List of PDB entries.
 
     """
 
