@@ -1024,7 +1024,7 @@ class SffWriter(SequenceWriter):
     """SFF file writer."""
 
     def __init__(self, handle, index=True, xml=None):
-        """Initialise an SFF writer object.
+        """Initialize an SFF writer object.
 
         Arguments:
             - handle - Output handle, ideally in binary write mode.

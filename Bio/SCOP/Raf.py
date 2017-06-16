@@ -60,7 +60,7 @@ class SeqMapIndex(dict):
     """
 
     def __init__(self, filename):
-        """Initialise the RAF file index.
+        """Initialize the RAF file index.
 
         Arguments:
          - filename  -- The file to index

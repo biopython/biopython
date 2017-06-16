@@ -510,7 +510,7 @@ class Node(object):
     """
 
     def __init__(self, scop=None):
-        """Initialise a Node in the scop hierarchy.
+        """Initialize a Node in the scop hierarchy.
 
         If a Scop instance is provided to the constructor, this will be used
         to lookup related references using the SQL methods.  If no instance
@@ -627,7 +627,7 @@ class Domain(Node):
     """
 
     def __init__(self, scop=None):
-        """Initialise a SCOP Domain object."""
+        """Initialize a SCOP Domain object."""
         Node.__init__(self, scop=scop)
         self.sid = ''
         self.residues = None
@@ -684,7 +684,7 @@ class Astral(object):
 
     def __init__(self, dir_path=None, version=None, scop=None,
                   astral_file=None, db_handle=None):
-        """Initialise the astral database.
+        """Initialize the astral database.
 
         You must provide either a directory of SCOP files:
             - dir_path - string, the path to location of the scopseq-x.xx directory

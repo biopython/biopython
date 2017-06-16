@@ -29,7 +29,7 @@ class CrossLink(object):
         also use a different colour (e.g. red for simple links, blue for any
         flipped links).
         """
-        # Initialise attributes
+        # Initialize attributes
         self.featureA = featureA
         self.featureB = featureB
         self.color = color            # default color to draw the feature

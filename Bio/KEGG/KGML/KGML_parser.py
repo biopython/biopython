@@ -162,7 +162,7 @@ class KGMLParser(object):
             self.pathway.add_relation(new_relation)
 
         # ==========
-        # Initialise Pathway
+        # Initialize Pathway
         self.pathway = Pathway()
         # Get information about the pathway itself
         _parse_pathway(self.entry.attrib)

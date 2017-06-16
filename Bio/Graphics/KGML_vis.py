@@ -87,7 +87,7 @@ class KGMLCanvas(object):
                  fontsize=6, draw_relations=True, show_orthologs=True,
                  show_compounds=True, show_genes=True,
                  show_reaction_entries=True, margins=(0.02, 0.02)):
-        """Initialise."""
+        """Initialize."""
         self.pathway = pathway
         self.show_maps = show_maps
         self.show_orthologs = show_orthologs

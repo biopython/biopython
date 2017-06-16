@@ -76,7 +76,7 @@ class TaggingConsumer(AbstractConsumer):
     """
 
     def __init__(self, handle=None, colwidth=15, maxwidth=80):
-        """Initialise.
+        """Initialize.
 
         Arguments:
          - handle to log to, defaults to `sys.stdout`

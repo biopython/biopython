@@ -724,5 +724,5 @@ class SchemaFactory(object):
         return new_schema, matched_motifs
 
     def from_signatures(self, signature_repository, num_ambiguous):
-        """Initialise from a signature repository (not implemented yet)."""
+        """Initialize from a signature repository (not implemented yet)."""
         raise NotImplementedError("Still need to code this.")

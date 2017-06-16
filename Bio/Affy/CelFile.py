@@ -251,7 +251,7 @@ def read_v4(f):
     # There are 10 bytes in our struct.
     structSize = 10
 
-    # We initialise the most important: intensities, stdevs and npixs.
+    # We initialize the most important: intensities, stdevs and npixs.
     record.intensities = numpy.empty(record.NumberCells, dtype=float)
     record.stdevs = numpy.empty(record.NumberCells, dtype=float)
     record.npix = numpy.empty(record.NumberCells, dtype=int)

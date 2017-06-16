@@ -36,7 +36,7 @@ class DistributionPage(object):
     """
 
     def __init__(self, output_format='pdf'):
-        """Initialise."""
+        """Initialize."""
         self.distributions = []
 
         # customizable attributes
@@ -240,7 +240,7 @@ class LineDistribution(object):
     """
 
     def __init__(self):
-        """Initialise."""
+        """Initialize."""
         pass
 
     def draw(self, cur_drawing, start_x, start_y, end_x, end_y):
