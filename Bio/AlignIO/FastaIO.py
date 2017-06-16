@@ -29,7 +29,9 @@ from Bio.Alphabet import Gapped
 
 
 def _extract_alignment_region(alignment_seq_with_flanking, annotation):
-    """Helper function for the main parsing code (PRIVATE).
+    """Extract alignment region (PRIVATE).
+
+    Helper function for the main parsing code.
 
     To get the actual pairwise alignment sequences, we must first
     translate the un-gapped sequence based coordinates into positions

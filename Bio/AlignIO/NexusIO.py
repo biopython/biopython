@@ -29,7 +29,7 @@ from Bio import Alphabet
 
 # This is a generator function!
 def NexusIterator(handle, seq_count=None):
-    """Returns SeqRecord objects from a Nexus file.
+    """Return SeqRecord objects from a Nexus file.
 
     Thus uses the Bio.Nexus module to do the hard work.
 
@@ -75,9 +75,9 @@ class NexusWriter(AlignmentWriter):
         """Use this to write an entire file containing the given alignments.
 
         Arguments:
-
          - alignments - A list or iterator returning MultipleSeqAlignment objects.
            This should hold ONE and only one alignment.
+
         """
         align_iter = iter(alignments)  # Could have been a list
         try:
@@ -122,7 +122,7 @@ class NexusWriter(AlignmentWriter):
         n.write_nexus_data(self.handle, interleave=(columns > 1000))
 
     def _classify_alphabet_for_nexus(self, alphabet):
-        """Returns 'protein', 'dna', 'rna' based on the alphabet (PRIVATE).
+        """Return 'protein', 'dna', or 'rna' based on the alphabet (PRIVATE).
 
         Raises an exception if this is not possible.
         """

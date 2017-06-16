@@ -28,16 +28,17 @@ class AlignmentIterator(object):
                  alphabet=single_letter_alphabet):
         """Create an AlignmentIterator object.
 
-            - handle   - input file
-            - count    - optional, expected number of records per alignment
-              Recommend for fasta file format.
-            - alphabet - optional, e.g. Bio.Alphabet.generic_protein
+        Arguments:
+         - handle   - input file
+         - count    - optional, expected number of records per alignment
+           Recommend for fasta file format.
+         - alphabet - optional, e.g. Bio.Alphabet.generic_protein
 
         Note when subclassing:
-            - there should be a single non-optional argument, the handle,
-              and optional count and alphabet IN THAT ORDER.
-            - you do not have to require an alphabet (?).
-            - you can add additional optional arguments.
+         - there should be a single non-optional argument, the handle,
+           and optional count and alphabet IN THAT ORDER.
+         - you do not have to require an alphabet (?).
+         - you can add additional optional arguments.
 
         """
         self.handle = handle
@@ -78,6 +79,7 @@ class AlignmentIterator(object):
                     for record in alignment:
                         print record.id
                         print record.seq
+
         """
         return iter(self.__next__, None)
 
@@ -95,7 +97,8 @@ class AlignmentWriter(object):
     def write_file(self, alignments):
         """Use this to write an entire file containing the given alignments.
 
-        alignments - A list or iterator returning MultipleSeqAlignment objects
+        Arguments:
+         - alignments - A list or iterator returning MultipleSeqAlignment objects
 
         In general, this method can only be called once per file.
 
@@ -127,7 +130,8 @@ class SequentialAlignmentWriter(AlignmentWriter):
     def write_file(self, alignments):
         """Use this to write an entire file containing the given alignments.
 
-        alignments - A list or iterator returning MultipleSeqAlignment objects
+        Arguments:
+         - alignments - A list or iterator returning MultipleSeqAlignment objects
 
         In general, this method can only be called once per file.
         """
