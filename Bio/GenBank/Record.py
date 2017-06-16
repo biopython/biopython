@@ -5,12 +5,11 @@
 
 """Hold GenBank data in a straightforward format.
 
-classes:
-
-    - Record - All of the information in a GenBank record.
-    - Reference - hold reference data for a record.
-    - Feature - Hold the information in a Feature Table.
-    - Qualifier - Qualifiers on a Feature.
+Classes:
+ - Record - All of the information in a GenBank record.
+ - Reference - hold reference data for a record.
+ - Feature - Hold the information in a Feature Table.
+ - Qualifier - Qualifiers on a Feature.
 
 17-MAR-2009: added support for WGS and WGS_SCAFLD lines.  Ying Huang & Iddo Friedberg
 """
@@ -26,17 +25,14 @@ def _wrapped_genbank(information, indent, wrap_space=1, split_char=" "):
     indentation so it fits properly into a GenBank record.
 
     Arguments:
+     - information - The string holding the information we want
+       wrapped in GenBank method.
+     - indent - The indentation on the lines we are writing.
+     - wrap_space - Whether or not to wrap only on spaces in the
+       information.
+     - split_char - A specific character to split the lines on. By default
+       spaces are used.
 
-        - information - The string holding the information we want
-          wrapped in GenBank method.
-
-        - indent - The indentation on the lines we are writing.
-
-        - wrap_space - Whether or not to wrap only on spaces in the
-          information.
-
-        - split_char - A specific character to split the lines on. By default
-          spaces are used.
     """
     info_length = Record.GB_LINE_LENGTH - indent
 
@@ -107,39 +103,39 @@ class Record(object):
     just interested in looking at GenBank data.
 
     Attributes:
-        - locus - The name specified after the LOCUS keyword in the GenBank
-          record. This may be the accession number, or a clone id or something else.
-        - size - The size of the record.
-        - residue_type - The type of residues making up the sequence in this
-          record. Normally something like RNA, DNA or PROTEIN, but may be as
-          esoteric as 'ss-RNA circular'.
-        - data_file_division - The division this record is stored under in
-          GenBank (ie. PLN -> plants; PRI -> humans, primates; BCT -> bacteria...)
-        - date - The date of submission of the record, in a form like '28-JUL-1998'
-        - accession - list of all accession numbers for the sequence.
-        - nid - Nucleotide identifier number.
-        - pid - Proteint identifier number
-        - version - The accession number + version (ie. AB01234.2)
-        - db_source - Information about the database the record came from
-        - gi - The NCBI gi identifier for the record.
-        - keywords - A list of keywords related to the record.
-        - segment - If the record is one of a series, this is info about which
-          segment this record is (something like '1 of 6').
-        - source - The source of material where the sequence came from.
-        - organism - The genus and species of the organism (ie. 'Homo sapiens')
-        - taxonomy - A listing of the taxonomic classification of the organism,
-          starting general and getting more specific.
-        - references - A list of Reference objects.
-        - comment - Text with any kind of comment about the record.
-        - features - A listing of Features making up the feature table.
-        - base_counts - A string with the counts of bases for the sequence.
-        - origin - A string specifying info about the origin of the sequence.
-        - sequence - A string with the sequence itself.
-        - contig - A string of location information for a CONTIG in a RefSeq file
-        - project - The genome sequencing project numbers
-          (will be replaced by the dblink cross-references in 2009).
-        - dblinks - The genome sequencing project number(s) and other links.
-          (will replace the project information in 2009).
+     - locus - The name specified after the LOCUS keyword in the GenBank
+       record. This may be the accession number, or a clone id or something else.
+     - size - The size of the record.
+     - residue_type - The type of residues making up the sequence in this
+       record. Normally something like RNA, DNA or PROTEIN, but may be as
+       esoteric as 'ss-RNA circular'.
+     - data_file_division - The division this record is stored under in
+       GenBank (ie. PLN -> plants; PRI -> humans, primates; BCT -> bacteria...)
+     - date - The date of submission of the record, in a form like '28-JUL-1998'
+     - accession - list of all accession numbers for the sequence.
+     - nid - Nucleotide identifier number.
+     - pid - Proteint identifier number
+     - version - The accession number + version (ie. AB01234.2)
+     - db_source - Information about the database the record came from
+     - gi - The NCBI gi identifier for the record.
+     - keywords - A list of keywords related to the record.
+     - segment - If the record is one of a series, this is info about which
+       segment this record is (something like '1 of 6').
+     - source - The source of material where the sequence came from.
+     - organism - The genus and species of the organism (ie. 'Homo sapiens')
+     - taxonomy - A listing of the taxonomic classification of the organism,
+       starting general and getting more specific.
+     - references - A list of Reference objects.
+     - comment - Text with any kind of comment about the record.
+     - features - A listing of Features making up the feature table.
+     - base_counts - A string with the counts of bases for the sequence.
+     - origin - A string specifying info about the origin of the sequence.
+     - sequence - A string with the sequence itself.
+     - contig - A string of location information for a CONTIG in a RefSeq file
+     - project - The genome sequencing project numbers
+       (will be replaced by the dblink cross-references in 2009).
+     - dblinks - The genome sequencing project number(s) and other links.
+       (will replace the project information in 2009).
 
     """
 
@@ -166,6 +162,7 @@ class Record(object):
     SEQUENCE_FORMAT = "%" + str(GB_SEQUENCE_INDENT) + "s"
 
     def __init__(self):
+        """Initialize."""
         self.accession = []
         self.base_counts = ''
         self.comment = ''
@@ -496,19 +493,20 @@ class Reference(object):
     """Hold information from a GenBank reference.
 
     Attributes:
-        - number - The number of the reference in the listing of references.
-        - bases - The bases in the sequence the reference refers to.
-        - authors - String with all of the authors.
-        - consrtm - Consortium the authors belong to.
-        - title - The title of the reference.
-        - journal - Information about the journal where the reference appeared.
-        - medline_id - The medline id for the reference.
-        - pubmed_id - The pubmed_id for the reference.
-        - remark - Free-form remarks about the reference.
+     - number - The number of the reference in the listing of references.
+     - bases - The bases in the sequence the reference refers to.
+     - authors - String with all of the authors.
+     - consrtm - Consortium the authors belong to.
+     - title - The title of the reference.
+     - journal - Information about the journal where the reference appeared.
+     - medline_id - The medline id for the reference.
+     - pubmed_id - The pubmed_id for the reference.
+     - remark - Free-form remarks about the reference.
 
     """
 
     def __init__(self):
+        """Initialize."""
         self.number = ''
         self.bases = ''
         self.authors = ''
@@ -520,6 +518,7 @@ class Reference(object):
         self.remark = ''
 
     def __str__(self):
+        """Convert the reference to a GenBank format string."""
         output = self._reference_line()
         output += self._authors_line()
         output += self._consrtm_line()
@@ -605,18 +604,20 @@ class Feature(object):
     """Hold information about a Feature in the Feature Table of GenBank record.
 
     Attributes:
-        - key - The key name of the featue (ie. source)
-        - location - The string specifying the location of the feature.
-        - qualfiers - A listing Qualifier objects in the feature.
+     - key - The key name of the featue (ie. source)
+     - location - The string specifying the location of the feature.
+     - qualfiers - A listing Qualifier objects in the feature.
 
     """
 
     def __init__(self):
+        """Initialize."""
         self.key = ''
         self.location = ''
         self.qualifiers = []
 
     def __str__(self):
+        """Return feature as a GenBank format string."""
         output = Record.INTERNAL_FEATURE_FORMAT % self.key
         output += _wrapped_genbank(self.location, Record.GB_FEATURE_INDENT,
                                    split_char=',')
@@ -639,11 +640,12 @@ class Qualifier(object):
     """Hold information about a qualifier in a GenBank feature.
 
     Attributes:
-        - key - The key name of the qualifier (ie. /organism=)
-        - value - The value of the qualifier ("Dictyostelium discoideum").
+     - key - The key name of the qualifier (ie. /organism=)
+     - value - The value of the qualifier ("Dictyostelium discoideum").
 
     """
 
     def __init__(self):
+        """Initialize."""
         self.key = ''
         self.value = ''

@@ -27,18 +27,16 @@ The following internal classes are not intended for direct use and may
 be deprecated in a future release.
 
 Classes:
-
-    - Iterator              Iterate through a file of GenBank entries
-    - ErrorFeatureParser    Catch errors caused during parsing.
-    - FeatureParser         Parse GenBank data in SeqRecord and SeqFeature objects.
-    - RecordParser          Parse GenBank data into a Record object.
+ - Iterator              Iterate through a file of GenBank entries
+ - ErrorFeatureParser    Catch errors caused during parsing.
+ - FeatureParser         Parse GenBank data in SeqRecord and SeqFeature objects.
+ - RecordParser          Parse GenBank data into a Record object.
 
 Exceptions:
-
-    - ParserFailureError    Exception indicating a failure in the parser (ie.
-      scanner or consumer)
-    - LocationParserError   Exception indicating a problem with the spark based
-      location parser.
+ - ParserFailureError    Exception indicating a failure in the parser (ie.
+   scanner or consumer)
+ - LocationParserError   Exception indicating a problem with the spark based
+   location parser.
 
 """
 from __future__ import print_function
@@ -241,7 +239,7 @@ def _pos(pos_str, offset=0):
 
 
 def _loc(loc_str, expected_seq_length, strand):
-    """FeatureLocation from non-compound non-complement location (PRIVATE).
+    """Make FeatureLocation from non-compound non-complement location (PRIVATE).
 
     Simple examples,
 
@@ -386,10 +384,10 @@ class Iterator(object):
         """Initialize the iterator.
 
         Arguments:
+         - handle - A handle with GenBank entries to iterate through.
+         - parser - An optional parser to pass the entries through before
+           returning them. If None, then the raw entry will be returned.
 
-            - handle - A handle with GenBank entries to iterate through.
-            - parser - An optional parser to pass the entries through before
-              returning them. If None, then the raw entry will be returned.
         """
         self.handle = handle
         self._parser = parser
@@ -420,6 +418,7 @@ class Iterator(object):
             return self.__next__()
 
     def __iter__(self):
+        """Iterate over the records."""
         return iter(self.__next__, None)
 
 
@@ -449,17 +448,17 @@ class FeatureParser(object):
         """Initialize a GenBank parser and Feature consumer.
 
         Arguments:
+         - debug_level - An optional argument that species the amount of
+           debugging information the parser should spit out. By default we have
+           no debugging info (the fastest way to do things), but if you want
+           you can set this as high as two and see exactly where a parse fails.
+         - use_fuzziness - Specify whether or not to use fuzzy representations.
+           The default is 1 (use fuzziness).
+         - feature_cleaner - A class which will be used to clean out the
+           values of features. This class must implement the function
+           clean_value. GenBank.utils has a "standard" cleaner class, which
+           is used by default.
 
-            - debug_level - An optional argument that species the amount of
-              debugging information the parser should spit out. By default we have
-              no debugging info (the fastest way to do things), but if you want
-              you can set this as high as two and see exactly where a parse fails.
-            - use_fuzziness - Specify whether or not to use fuzzy representations.
-              The default is 1 (use fuzziness).
-            - feature_cleaner - A class which will be used to clean out the
-              values of features. This class must implement the function
-              clean_value. GenBank.utils has a "standard" cleaner class, which
-              is used by default.
         """
         self._scanner = GenBankScanner(debug_level)
         self.use_fuzziness = use_fuzziness
@@ -487,11 +486,11 @@ class RecordParser(object):
         """Initialize the parser.
 
         Arguments:
+         - debug_level - An optional argument that species the amount of
+           debugging information the parser should spit out. By default we have
+           no debugging info (the fastest way to do things), but if you want
+           you can set this as high as two and see exactly where a parse fails.
 
-            - debug_level - An optional argument that species the amount of
-              debugging information the parser should spit out. By default we have
-              no debugging info (the fastest way to do things), but if you want
-              you can set this as high as two and see exactly where a parse fails.
         """
         self._scanner = GenBankScanner(debug_level)
 
@@ -667,15 +666,15 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         """
         self._seq_type = type.strip()
 
-    def topology(self, topology):
-        """Record the topology (linear or circular as strings)."""
+    def topology(self, topology):  # noqa: D402
+        """Validate and record sequence topology (linear or circular as strings)."""
         if topology:
             if topology not in ['linear', 'circular']:
                 raise ParserFailureError("Unexpected topology %r should be linear or circular" % topology)
             self.data.annotations['topology'] = topology
 
     def molecule_type(self, mol_type):
-        """Record the molecule type (for round-trip etc)."""
+        """Validate and record the molecule type (for round-trip etc)."""
         if mol_type:
             if "circular" in mol_type or 'linear' in mol_type:
                 raise ParserFailureError("Molecule type %r should not include topology" % mol_type)
@@ -850,7 +849,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         self.data.annotations['organism'] = content
 
     def taxonomy(self, content):
-        """Records (another line of) the taxonomy lineage."""
+        """Record (another line of) the taxonomy lineage."""
         lineage = self._split_taxonomy(content)
         try:
             self.data.annotations['taxonomy'].extend(lineage)
@@ -909,7 +908,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         self._cur_reference.location = all_locations
 
     def _split_reference_locations(self, location_string):
-        """Get reference locations out of a string of reference information
+        """Get reference locations out of a string of reference information.
 
         The passed string should be of the form::
 
@@ -1410,7 +1409,7 @@ class _RecordConsumer(_BaseGenBankConsumer):
         self.data.structured_comment = content
 
     def primary_ref_line(self, content):
-        """Data for the PRIMARY line"""
+        """Save reference data for the PRIMARY line."""
         self.data.primary.append(content)
 
     def primary(self, content):
@@ -1436,7 +1435,7 @@ class _RecordConsumer(_BaseGenBankConsumer):
         self._cur_feature.key = content
 
     def _add_feature(self):
-        """Utility function to add a feature to the Record.
+        """Add a feature to the record, with relevant checks (PRIVATE).
 
         This does all of the appropriate checking to make sure we haven't
         left any info behind, and that we are only adding info if it
@@ -1460,7 +1459,7 @@ class _RecordConsumer(_BaseGenBankConsumer):
             self.feature_qualifier_description(value)
 
     def feature_qualifier_name(self, content_list):
-        """Deal with qualifier names
+        """Deal with qualifier names.
 
         We receive a list of keys, since you can have valueless keys such as
         /pseudo which would be passed in with the next key (since no other
