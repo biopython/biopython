@@ -50,7 +50,7 @@ class ColorSpiral(object):
 
     def __init__(self, a=1, b=0.33, v_init=0.85, v_final=0.5,
                  jitter=0.05):
-        """Initialise a logarithmic spiral path through HSV colour space.
+        """Initialize a logarithmic spiral path through HSV colour space.
 
         Arguments:
          - a - Parameter a for the spiral, controls the initial spiral
@@ -67,7 +67,7 @@ class ColorSpiral(object):
            and V will be maintained in [0,1].
 
         """
-        # Initialise attributes
+        # Initialize attributes
         self.a = a
         self.b = b
         self.v_init = v_init

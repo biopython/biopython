@@ -342,7 +342,7 @@ class KnownStateTrainer(AbstractTrainer):
     """
 
     def __init__(self, markov_model):
-        """Initialise."""
+        """Initialize."""
         AbstractTrainer.__init__(self, markov_model)
 
     def train(self, training_seqs):

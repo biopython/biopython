@@ -10,7 +10,7 @@ class StructureDecoder(object):
     def init_structure(self, total_num_bonds, total_num_atoms,
                        total_num_groups, total_num_chains, total_num_models,
                        structure_id):
-        """Initialise the structure object.
+        """Initialize the structure object.
 
         :param total_num_bonds: the number of bonds in the structure
         :param total_num_atoms: the number of atoms in the structure

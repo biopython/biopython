@@ -39,7 +39,7 @@ class GraphSet(object):
     """
 
     def __init__(self, name=None):
-        """Initialise.
+        """Initialize.
 
         Arguments:
          - name      String identifying the graph set sensibly

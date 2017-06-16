@@ -114,7 +114,7 @@ class CircularDrawer(AbstractDrawer):
             self.sweep = 1
 
     def set_track_heights(self):
-        """Initialise track heights.
+        """Initialize track heights.
 
         Since tracks may not be of identical heights, the bottom and top
         radius for each track is stored in a dictionary - self.track_radii,

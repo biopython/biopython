@@ -101,7 +101,7 @@ class Organism(_ChromosomeComponent):
     """
 
     def __init__(self, output_format='pdf'):
-        """Initialise."""
+        """Initialize."""
         _ChromosomeComponent.__init__(self)
 
         # customizable attributes

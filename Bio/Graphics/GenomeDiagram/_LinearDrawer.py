@@ -187,7 +187,7 @@ class LinearDrawer(AbstractDrawer):
             self.draw_test_tracks()
 
     def init_fragments(self):
-        """Initialise useful values for positioning diagram elements."""
+        """Initialize useful values for positioning diagram elements."""
         # Set basic heights, lengths etc
         self.fragment_height = 1. * self.pageheight / self.fragments     # total fragment height in pixels
         self.fragment_bases = ceil(1. * self.length / self.fragments)    # fragment length in bases

@@ -88,7 +88,7 @@ class Feature(object):
 
         self._colortranslator = ColorTranslator()
 
-        # Initialise attributes
+        # Initialize attributes
         self.parent = parent
         self.id = feature_id
         self.color = color            # default color to draw the feature
