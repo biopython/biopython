@@ -81,16 +81,17 @@ class CompoundTests(unittest.TestCase):
         with open("KEGG/compound.sample") as handle:
             records = list(Compound.parse(handle))
         self.assertEqual(len(records), 8)
-        self.assertEqual(records[0].entry, "C00023")
-        self.assertEqual(records[0].mass, "")  # Why?
-        self.assertEqual(records[0].formula, "Fe")
-        self.assertEqual(records[0].name,
-                         ['Iron', 'Fe2+', 'Fe(II)', 'Fe3+', 'Fe(III)'])
-        self.assertEqual(records[0].pathway,
-                         [('PATH', 'MAP00860', 'Porphyrin and chlorophyll metabolism')])
-        self.assertEqual(records[0].enzyme[0], ('1.1.3.22', 'C'))
-        self.assertEqual(records[0].structures, [])
-        self.assertEqual(records[0].dblinks[0], ('CAS', ['7439-89-6']))
+        self.assertEqual(records[1].entry, "C00017")
+        self.assertEqual(records[1].mass, "")  # Why?
+        self.assertEqual(records[1].formula, "C2H4NO2R(C2H2NOR)n")
+        self.assertEqual(records[1].name,
+                         ['Protein'])
+        self.assertEqual(records[1].pathway,
+                         [('PATH', 'map00450', 'Selenocompound metabolism')])
+        self.assertEqual(len(records[1].enzyme), 21)
+        self.assertEqual(records[1].enzyme[0], ('2.3.2.6'))
+        self.assertEqual(records[1].structures, [])
+        self.assertEqual(records[1].dblinks[0], ('PubChem', ['3319']))
 
     def test_irregular(self):
         with open("KEGG/compound.irregular") as handle:
