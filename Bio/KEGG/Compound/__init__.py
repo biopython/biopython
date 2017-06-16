@@ -36,8 +36,8 @@ class Record(object):
     name        A list of the compund names.
     formula     The chemical formula for the compound
     mass        The molecular weight for the compound
-    pathway     A list of 2-tuples: (pathway id, pathway)
-    enzyme      A list of 2-tuples: (enzyme id, role)
+    pathway     A list of 3-tuples: ('PATH', pathway id, pathway)
+    enzyme      A list of the EC numbers.
     structures  A list of 2-tuples: (database, list of struct ids)
     dblinks     A list of 2-tuples: (database, list of link ids)
 
@@ -165,15 +165,11 @@ def parse(handle):
             while data:
                 column = data[:16]
                 data = data[16:]
-                if '(' in column:
-                    entry = column.split()
-                    enzyme = (entry[0], entry[1][1:-1])
-                else:
-                    enzyme = (column.strip(), "")
+                enzyme = column.strip()
                 record.enzyme.append(enzyme)
         elif keyword == "PATHWAY     ":
             map, name = data.split("  ")
-            pathway = (map, name)
+            pathway = ('PATH', map, name)
             record.pathway.append(pathway)
         elif keyword == "FORMULA     ":
             record.formula = data
