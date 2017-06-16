@@ -163,6 +163,7 @@ please open an issue on GitHub or mention it on the development mailing list.
 - Olivier Morelle <https://github.com/Oli4>
 - Oscar G. Garcia <https://github.com/oscarmaestre>
 - Owen Solberg <https://github.com/odoublewen>
+- Patrick Kunzmann <https://github.com/padix-key>
 - Paul T. Bathen
 - Peter Bienstman <Peter.Bienstman at domain rug.ac.be>
 - Peter Cock <https://github.com/peterjc>
