@@ -25,20 +25,19 @@ class AbstractDPAlgorithms(object):
     Derived class of this must implement:
 
     - _forward_recursion -- Calculate the forward values in the recursion
-    using some kind of technique for preventing underflow errors.
-
+      using some kind of technique for preventing underflow errors.
     - _backward_recursion -- Calculate the backward values in the recursion
-    step using some technique to prevent underflow errors.
+      step using some technique to prevent underflow errors.
+
     """
 
     def __init__(self, markov_model, sequence):
         """Initialize to calculate forward and backward probabilities.
 
         Arguments:
+         - markov_model -- The current Markov model we are working with.
+         - sequence -- A training sequence containing a set of emissions.
 
-        - markov_model -- The current Markov model we are working with.
-
-        - sequence -- A training sequence containing a set of emissions.
         """
         self._mm = markov_model
         self._seq = sequence
@@ -54,11 +53,10 @@ class AbstractDPAlgorithms(object):
         Durbin et al.
 
         Returns:
-        - A dictionary containing the forward variables. This has keys of the
-        form (state letter, position in the training sequence), and values
-        containing the calculated forward variable.
-
-        - The calculated probability of the sequence.
+         - A dictionary containing the forward variables. This has keys of the
+           form (state letter, position in the training sequence), and values
+           containing the calculated forward variable.
+         - The calculated probability of the sequence.
 
         """
         # all of the different letters that the state path can be in
@@ -118,9 +116,9 @@ class AbstractDPAlgorithms(object):
         Durbin et al.
 
         Returns:
-        - A dictionary containing the backwards variables. This has keys
-        of the form (state letter, position in the training sequence),
-        and values containing the calculated backward variable.
+         - A dictionary containing the backwards variables. This has keys
+           of the form (state letter, position in the training sequence),
+           and values containing the calculated backward variable.
 
         """
         # all of the different letters that the state path can be in
@@ -176,12 +174,12 @@ class ScaledDPAlgorithms(AbstractDPAlgorithms):
 
     def __init__(self, markov_model, sequence):
         """Initialize the scaled approach to calculating probabilities.
+
         Arguments:
+         - markov_model -- The current Markov model we are working with.
+         - sequence -- A TrainingSequence object that must have a
+           set of emissions to work with.
 
-        - markov_model -- The current Markov model we are working with.
-
-        - sequence -- A TrainingSequence object that must have a
-        set of emissions to work with.
         """
         AbstractDPAlgorithms.__init__(self, markov_model, sequence)
 
@@ -194,14 +192,12 @@ class ScaledDPAlgorithms(AbstractDPAlgorithms):
         sum of all of the scaled f values is equal to 1.
 
         Arguments:
-
-        - seq_pos -- The current position we are at in the sequence.
-
-        - previous_vars -- All of the forward or backward variables
-        calculated so far.
+         - seq_pos -- The current position we are at in the sequence.
+         - previous_vars -- All of the forward or backward variables
+           calculated so far.
 
         Returns:
-        - The calculated scaling variable for the sequence item.
+         - The calculated scaling variable for the sequence item.
 
         """
         # all of the different letters the state can have
@@ -233,13 +229,11 @@ class ScaledDPAlgorithms(AbstractDPAlgorithms):
         """Calculate the value of the forward recursion.
 
         Arguments:
+         - cur_state -- The letter of the state we are calculating the
+           forward variable for.
+         - sequence_pos -- The position we are at in the training seq.
+         - forward_vars -- The current set of forward variables
 
-        - cur_state -- The letter of the state we are calculating the
-        forward variable for.
-
-        - sequence_pos -- The position we are at in the training seq.
-
-        - forward_vars -- The current set of forward variables
         """
         # calculate the s value, if we haven't done so already (ie. during
         # a previous forward or backward recursion)
@@ -277,16 +271,14 @@ class ScaledDPAlgorithms(AbstractDPAlgorithms):
             return None
 
     def _backward_recursion(self, cur_state, sequence_pos, backward_vars):
-        """Calculate the value of the backward recursion
+        """Calculate the value of the backward recursion.
 
         Arguments:
+         - cur_state -- The letter of the state we are calculating the
+           forward variable for.
+         - sequence_pos -- The position we are at in the training seq.
+         - backward_vars -- The current set of backward variables
 
-        - cur_state -- The letter of the state we are calculating the
-        forward variable for.
-
-        - sequence_pos -- The position we are at in the training seq.
-
-        - backward_vars -- The current set of backward variables
         """
         # calculate the s value, if we haven't done so already (ie. during
         # a previous forward or backward recursion)
@@ -333,4 +325,5 @@ class LogDPAlgorithms(AbstractDPAlgorithms):
     """
 
     def __init__(self, markov_model, sequence):
+        """Initialise."""
         raise NotImplementedError("Haven't coded this yet...")

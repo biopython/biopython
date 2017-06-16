@@ -18,9 +18,7 @@ from Bio.Seq import MutableSeq
 
 
 def _gen_random_array(n):
-    """Return an array of n random numbers, where the elements of the array sum
-    to 1.0.
-    """
+    """Return an array of n random numbers summing to 1.0 (PRIVATE)."""
     randArray = [random.random() for i in range(n)]
     total = sum(randArray)
     normalizedRandArray = [x / total for x in randArray]
@@ -43,7 +41,7 @@ def _calculate_emissions(emission_probs):
 
 
 def _calculate_from_transitions(trans_probs):
-    """Calculate which 'from transitions' are allowed for each state
+    """Calculate which 'from transitions' are allowed for each state.
 
     This looks through all of the trans_probs, and uses this dictionary
     to determine allowed transitions. It converts this information into
@@ -62,7 +60,7 @@ def _calculate_from_transitions(trans_probs):
 
 
 def _calculate_to_transitions(trans_probs):
-    """Calculate which 'to transitions' are allowed for each state
+    """Calculate which 'to transitions' are allowed for each state.
 
     This looks through all of the trans_probs, and uses this dictionary
     to determine allowed transitions. It converts this information into
@@ -98,12 +96,11 @@ class MarkovModelBuilder(object):
         """Initialize a builder to create Markov Models.
 
         Arguments:
+         - state_alphabet -- An alphabet containing all of the letters that
+           can appear in the states
+         - emission_alphabet -- An alphabet containing all of the letters for
+           states that can be emitted by the HMM.
 
-        - state_alphabet -- An alphabet containing all of the letters that
-        can appear in the states
-
-        - emission_alphabet -- An alphabet containing all of the letters for
-        states that can be emitted by the HMM.
         """
         self._state_alphabet = state_alphabet
         self._emission_alphabet = emission_alphabet
@@ -249,6 +246,7 @@ class MarkovModelBuilder(object):
 
     def set_random_initial_probabilities(self):
         """Set all initial state probabilities to a randomly generated distribution.
+
         Returns the dictionary containing the initial probabilities.
         """
         initial_freqs = _gen_random_array(len(self._state_alphabet.letters))
@@ -305,10 +303,11 @@ class MarkovModelBuilder(object):
     # --- functions to deal with the transitions in the sequence
 
     def allow_all_transitions(self):
-        """A convenience function to create transitions between all states.
+        """Create transitions between all states.
 
-        By default all transitions within the alphabet are disallowed; this
-        is a way to change this to allow all possible transitions.
+        By default all transitions within the alphabet are disallowed;
+        this is a convenience function to change this to allow all
+        possible transitions.
         """
         # first get all probabilities and pseudo counts set
         # to the default values
@@ -456,20 +455,16 @@ class HiddenMarkovModel(object):
         initiating this class directly.
 
         Arguments:
+         - initial_prob - A dictionary of initial probabilities for all states.
+         - transition_prob -- A dictionary of transition probabilities for all
+           possible transitions in the sequence.
+         - emission_prob -- A dictionary of emission probabilities for all
+           possible emissions from the sequence states.
+         - transition_pseudo -- Pseudo-counts to be used for the transitions,
+           when counting for purposes of estimating transition probabilities.
+         - emission_pseudo -- Pseudo-counts to be used for the emissions,
+           when counting for purposes of estimating emission probabilities.
 
-        - initial_prob - A dictionary of initial probabilities for all states.
-
-        - transition_prob -- A dictionary of transition probabilities for all
-        possible transitions in the sequence.
-
-        - emission_prob -- A dictionary of emission probabilities for all
-        possible emissions from the sequence states.
-
-        - transition_pseudo -- Pseudo-counts to be used for the transitions,
-        when counting for purposes of estimating transition probabilities.
-
-        - emission_pseudo -- Pseudo-counts to be used for the emissions,
-        when counting for purposes of estimating emission probabilities.
         """
         self.initial_prob = initial_prob
 
@@ -512,12 +507,12 @@ class HiddenMarkovModel(object):
         return self._emission_pseudo
 
     def transitions_from(self, state_letter):
-        """Get all destination states to which there are transitions from the
-        state_letter source state.
+        """Get all destination states which can transition from source state_letter.
 
         This returns all letters which the given state_letter can transition
-        to. An empty list is returned if state_letter has no outgoing
-        transitions.
+        to, i.e. all the destination states reachable from state_letter.
+
+        An empty list is returned if state_letter has no outgoing transitions.
         """
         if state_letter in self._transitions_from:
             return self._transitions_from[state_letter]
@@ -525,11 +520,12 @@ class HiddenMarkovModel(object):
             return []
 
     def transitions_to(self, state_letter):
-        """Get all source states from which there are transitions to the
-        state_letter destination state.
+        """Get all source states which can transition to destination state_letter.
 
         This returns all letters which the given state_letter is reachable
-        from. An empty list is returned if state_letter is unreachable.
+        from, i.e. all the source states which can reach state_later
+
+        An empty list is returned if state_letter is unreachable.
         """
         if state_letter in self._transitions_to:
             return self._transitions_to[state_letter]
@@ -545,12 +541,11 @@ class HiddenMarkovModel(object):
         of emissions.
 
         Arguments:
+         - sequence -- A Seq object with the emission sequence that we
+           want to decode.
+         - state_alphabet -- The alphabet of the possible state sequences
+           that can be generated.
 
-        - sequence -- A Seq object with the emission sequence that we
-        want to decode.
-
-        - state_alphabet -- The alphabet of the possible state sequences
-        that can be generated.
         """
         # calculate logarithms of the initial, transition, and emission probs
         log_initial = self._log_transform(self.initial_prob)
