@@ -43,6 +43,7 @@ class ComparativeScatterPlot(object):
     """
 
     def __init__(self, output_format='pdf'):
+        """Initialise."""
         # customizable attributes
         self.number_of_columns = 1
         self.page_size = letter
@@ -64,10 +65,10 @@ class ComparativeScatterPlot(object):
         """Write the comparative plot to a file.
 
         Arguments:
-
          - output_file - The name of the file to output the information to,
            or a handle to write to.
          - title - A title to display on the graphic.
+
         """
         width, height = self.page_size
         cur_drawing = Drawing(width, height)
