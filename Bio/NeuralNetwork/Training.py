@@ -25,37 +25,33 @@ class ExampleManager(object):
     into three types of data:
 
     - Training Data -- These are the data used to do the actual training
-    of the network.
-
+      of the network.
     - Validation Data -- These data are used to validate the network
-    while training. They provide an independent method to evaluate how
-    the network is doing, and make sure the network gets trained independent
-    of noise in the training data set.
-
+      while training. They provide an independent method to evaluate how
+      the network is doing, and make sure the network gets trained
+      independent of noise in the training data set.
     - Testing Data -- The data which are used to verify how well a network
-    works. They should not be used at all in the training process, so they
-    provide a completely independent method of testing how well a network
-    performs.
+      works. They should not be used at all in the training process, so they
+      provide a completely independent method of testing how well a network
+      performs.
+
     """
 
     def __init__(self, training_percent=.4, validation_percent=.4):
         """Initialize the manager with the training examples.
 
         Arguments:
-        - training_percent - The percentage of the training examples that
-        should be used for training the network.
-
-        - validation_percent - Percent of training examples for validating
-        a network during training.
+         - training_percent - The percentage of the training examples that
+           should be used for training the network.
+         - validation_percent - Percent of training examples for validating
+           a network during training.
 
         Attributes:
-        - train_examples - A randomly chosen set of examples for training
-        purposes.
-
-        - valdiation_examples - Randomly chosesn set of examples for
-        use in validation of a network during training.
-
-        - test_examples - Examples for training purposes.
+         - train_examples - A randomly chosen set of examples for training
+           purposes.
+         - valdiation_examples - Randomly chosesn set of examples for
+           use in validation of a network during training.
+         - test_examples - Examples for training purposes.
 
         """
         assert training_percent + validation_percent <= 1.0, \
@@ -72,8 +68,8 @@ class ExampleManager(object):
         """Add a set of training examples to the manager.
 
         Arguments:
+         - training_examples - A list of TrainingExamples to manage.
 
-        - training_examples - A list of TrainingExamples to manage.
         """
         placement_rand = random.Random()
 

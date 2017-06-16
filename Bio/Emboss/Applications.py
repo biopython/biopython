@@ -23,6 +23,7 @@ class _EmbossMinimalCommandLine(AbstractCommandline):
     This is provided for subclassing, it deals with shared options
     common to all the EMBOSS tools:
 
+    Attributes:
      - auto               Turn off prompts
      - stdout             Write standard output
      - filter             Read standard input, write standard output
@@ -36,6 +37,7 @@ class _EmbossMinimalCommandLine(AbstractCommandline):
      - error              Report errors
      - fatal              Report fatal errors
      - die                Report dying program messages
+
     """
 
     def __init__(self, cmd=None, **kwargs):

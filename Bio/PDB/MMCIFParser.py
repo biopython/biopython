@@ -35,6 +35,7 @@ class MMCIFParser(object):
          - QUIET - Evaluated as a Boolean. If true, warnings issued in constructing
            the SMCRA data will be suppressed. If false (DEFAULT), they will be shown.
            These warnings might be indicative of problems in the mmCIF file!
+
         """
         if structure_builder is not None:
             self._structure_builder = structure_builder
@@ -54,6 +55,7 @@ class MMCIFParser(object):
         Arguments:
          - structure_id - string, the id that will be used for the structure
          - filename - name of the mmCIF file OR an open filehandle
+
         """
         with warnings.catch_warnings():
             if self.QUIET:
@@ -233,6 +235,7 @@ class FastMMCIFParser(object):
          - QUIET - Evaluated as a Boolean. If true, warnings issued in constructing
            the SMCRA data will be suppressed. If false (DEFAULT), they will be shown.
            These warnings might be indicative of problems in the mmCIF file!
+
         """
         if structure_builder is not None:
             self._structure_builder = structure_builder
@@ -251,6 +254,7 @@ class FastMMCIFParser(object):
         Arguments:
          - structure_id - string, the id that will be used for the structure
          - filename - name of the mmCIF file OR an open filehandle
+
         """
         with warnings.catch_warnings():
             if self.QUIET:

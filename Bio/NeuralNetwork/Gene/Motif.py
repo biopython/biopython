@@ -27,11 +27,11 @@ class MotifFinder(object):
         """Initialize a finder to get motifs.
 
         Arguments:
+         - alphabet_strict - Whether or not motifs should be restricted
+           to having all of there elements within the alphabet of the
+           sequences. This requires that the Sequences have a real
+           alphabet, and that all sequences have the same alphabet.
 
-        - alphabet_strict - Whether or not motifs should be
-        restricted to having all of there elements within the alphabet
-        of the sequences. This requires that the Sequences have a real
-        alphabet, and that all sequences have the same alphabet.
         """
         self.alphabet_strict = alphabet_strict
 
@@ -39,11 +39,9 @@ class MotifFinder(object):
         """Find all motifs of the given size in the passed SeqRecords.
 
         Arguments:
-
-        - seq_records - A list of SeqRecord objects which the motifs
-        will be found from.
-
-        - motif_size - The size of the motifs we want to look for.
+         - seq_records - A list of SeqRecord objects which the motifs
+           will be found from.
+         - motif_size - The size of the motifs we want to look for.
 
         Returns:
         A PatternRepository object that contains all of the motifs (and their
@@ -100,10 +98,10 @@ class MotifFinder(object):
         of the motifs in a set of records, this returns the differences
         between two listings of seq_records.
 
-        - first_records, second_records - Two listings of SeqRecord objects
-        to have their motifs compared.
-
-        - motif_size - The size of the motifs we are looking for.
+        Arguments:
+         - first_records, second_records - Two listings of SeqRecord objects
+           to have their motifs compared.
+         - motif_size - The size of the motifs we are looking for.
 
         Returns:
         A PatternRepository object that has motifs, but instead of their
@@ -163,9 +161,9 @@ class MotifCoder(object):
         """Initialize an input producer with motifs to look for.
 
         Arguments:
+         - motifs - A complete list of motifs, in order, that are to be
+           searched for in a sequence.
 
-        - motifs - A complete list of motifs, in order, that are to be
-        searched for in a sequence.
         """
         self._motifs = motifs
 
@@ -180,8 +178,7 @@ class MotifCoder(object):
         """Represent a sequence as a set of motifs.
 
         Arguments:
-
-        - sequence - A Bio.Seq object to represent as a motif.
+         - sequence - A Bio.Seq object to represent as a motif.
 
         This converts a sequence into a representation based on the motifs.
         The representation is returned as a list of the relative amount of

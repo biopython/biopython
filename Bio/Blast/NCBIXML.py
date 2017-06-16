@@ -27,7 +27,9 @@ class _XMLparser(ContentHandler):
     def __init__(self, debug=0):
         """Constructor.
 
-        debug - integer, amount of debug information to print
+        Arguments:
+         - debug - integer, amount of debug information to print
+
         """
         self._tag = []
         self._value = ''
@@ -37,7 +39,9 @@ class _XMLparser(ContentHandler):
     def _secure_name(self, name):
         """Removes 'dangerous' from tag names.
 
-        name -- name to be 'secured'
+        Arguments:
+         - name -- name to be 'secured'
+
         """
         # Replace '-' with '_' in XML tag names
         return name.replace('-', '_')
@@ -47,9 +51,10 @@ class _XMLparser(ContentHandler):
 
         No real need of attr, BLAST DTD doesn't use them
 
-        name -- name of the tag
+        Arguments:
+         - name -- name of the tag
+         - attr -- tag attributes
 
-        attr -- tag attributes
         """
         self._tag.append(name)
 
@@ -78,14 +83,18 @@ class _XMLparser(ContentHandler):
     def characters(self, ch):
         """Found some text.
 
-        ch -- characters read
+        Arguments:
+         - ch -- characters read
+
         """
         self._value += ch  # You don't ever get the whole string
 
     def endElement(self, name):
         """Found XML end tag.
 
-        name -- tag name
+        Arguments:
+         - name -- tag name
+
         """
         # DON'T strip any white space, we may need it e.g. the hsp-midline
 
@@ -116,14 +125,18 @@ class BlastParser(_XMLparser):
     You are expected to use this via the parse or read functions.
 
     All XML 'action' methods are private methods and may be:
-        - ``_start_TAG`` called when the start tag is found
-        - ``_end_TAG`` called when the end tag is found
+
+    - ``_start_TAG`` called when the start tag is found
+    - ``_end_TAG`` called when the end tag is found
+
     """
 
     def __init__(self, debug=0):
         """Constructor.
 
-        debug - integer, amount of debug information to print
+        Arguments:
+         - debug - integer, amount of debug information to print
+
         """
         # Calling superclass method
         _XMLparser.__init__(self, debug)

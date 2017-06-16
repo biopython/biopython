@@ -130,6 +130,7 @@ class _Matrix(object):
             dm[i, j]                get the value between 'i' and 'j';
             dm['name']              map name to index first
             dm['name1', 'name2']    map name to index first
+
         """
         # Handle single indexing
         if isinstance(item, (int, str)):
@@ -260,6 +261,7 @@ class _Matrix(object):
                 name of a row/col to be inserted
             value : list
                 a row/col of values to be inserted
+
         """
         if isinstance(name, str):
             # insert at the given index or at the end
@@ -368,6 +370,7 @@ class DistanceCalculator(object):
         Delta   0.585365853659  0.547619047619  0.566265060241  0
         Epsilon 0.7             0.355555555556  0.488888888889  0.222222222222  0
                 Alpha           Beta            Gamma           Delta           Epsilon
+
     """
 
     dna_alphabet = ['A', 'T', 'C', 'G']
@@ -572,6 +575,7 @@ class DistanceTreeConstructor(TreeConstructor):
         :Parameters:
             distance_matrix : _DistanceMatrix
                 The distance matrix for tree construction.
+
         """
         if not isinstance(distance_matrix, _DistanceMatrix):
             raise TypeError("Must provide a _DistanceMatrix object.")
@@ -647,6 +651,7 @@ class DistanceTreeConstructor(TreeConstructor):
         :Parameters:
             distance_matrix : _DistanceMatrix
                 The distance matrix for tree construction.
+
         """
         if not isinstance(distance_matrix, _DistanceMatrix):
             raise TypeError("Must provide a _DistanceMatrix object.")
@@ -766,6 +771,7 @@ class NNITreeSearcher(TreeSearcher):
         scorer : ParsimonyScorer
             parsimony scorer to calculate the parsimony score of
             different trees during NNI algorithm.
+
     """
 
     def __init__(self, scorer):
@@ -783,6 +789,7 @@ class NNITreeSearcher(TreeSearcher):
            alignment : MultipleSeqAlignment
                multiple sequence alignment used to calculate parsimony
                score of different NNI trees.
+
         """
         return self._nni(starting_tree, alignment)
 
@@ -915,6 +922,7 @@ class ParsimonyScorer(Scorer):
     :Parameters:
         matrix : _Matrix
             scoring matrix used in parsimony score calculation.
+
     """
 
     def __init__(self, matrix=None):
@@ -924,9 +932,11 @@ class ParsimonyScorer(Scorer):
             raise TypeError("Must provide a _Matrix object.")
 
     def get_score(self, tree, alignment):
-        """Calculate and return the parsimony score given a tree and
-        the MSA using the Fitch algorithm without the penalty matrix
-        the Sankoff algorithm with the matrix.
+        """Calculate parsimony score using the Fitch algorithm
+
+        Calculate and return the parsimony score given a tree and the
+        MSA using either the Fitch algorithm (without a penalty matrix)
+        or the Sankoff algorithm (with a matrix).
         """
         # make sure the tree is rooted and bifurcating
         if not tree.is_bifurcating():
@@ -1015,7 +1025,7 @@ class ParsimonyTreeConstructor(TreeConstructor):
             starting tree provided to the searcher.
 
     Example
-    --------
+    -------
 
     >>> from Bio import AlignIO
     >>> from TreeConstruction import *
@@ -1066,6 +1076,7 @@ class ParsimonyTreeConstructor(TreeConstructor):
         :Parameters:
             alignment : MultipleSeqAlignment
                 multiple sequence alignment to calculate parsimony tree.
+
         """
         # if starting_tree is none,
         # create a upgma tree with 'identity' scoring matrix

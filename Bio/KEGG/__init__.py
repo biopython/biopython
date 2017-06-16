@@ -26,12 +26,12 @@ def _wrap_kegg(line, max_width=KEGG_DATA_LENGTH, wrap_rule=_default_wrap):
     """Wraps the input line  for KEGG output.
 
     Arguments:
+     - info - String holding the information we want wrapped
+       for KEGG output.
+     - max_width - Maximum width of a line.
+     - wrap_rule - A wrap rule (see above) for deciding how to split
+       strings that must be wrapped.
 
-    - info - String holding the information we want wrapped
-    for KEGG output.
-    - max_width - Maximum width of a line.
-    - wrap_rule - A wrap rule (see above) for deciding how to split
-    strings that must be wrapped.
     """
     s = ""
     wrapped_line = ""
@@ -69,10 +69,10 @@ def _write_kegg(item, info, indent=KEGG_ITEM_LENGTH):
     """Write a indented KEGG record item.
 
     Arguments:
+     - item - The name of the item to be written.
+     - info - The (wrapped) information to write.
+     - indent - Width of item field.
 
-    - item - The name of the item to be written.
-    - info - The (wrapped) information to write.
-    - indent - Width of item field.
     """
     s = ""
     for line in info:

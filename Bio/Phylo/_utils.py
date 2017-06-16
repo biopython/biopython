@@ -206,6 +206,7 @@ def draw_ascii(tree, file=None, column_width=80):
             standard output)
         column_width : int
             Total number of text columns used by the drawing.
+
     """
     if file is None:
         file = sys.stdout
@@ -325,6 +326,7 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True,
             A function or a dictionary specifying the color of the tip label.
             If the tip label can't be found in the dict or label_colors is
             None, the label will be shown in black.
+
     """
     try:
         import matplotlib.pyplot as plt

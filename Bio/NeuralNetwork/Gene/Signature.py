@@ -31,12 +31,12 @@ class SignatureFinder(object):
         """Initialize a finder to get signatures.
 
         Arguments:
+         - alphabet_strict - Specify whether signatures should be required
+           to have all letters in the signature be consistent with the
+           alphabet of the original sequence. This requires that all Seqs
+           used have a consistent alphabet. This helps protect against getting
+           useless signatures full of ambiguity signals.
 
-        - alphabet_strict - Specify whether signatures should be required
-        to have all letters in the signature be consistent with the
-        alphabet of the original sequence. This requires that all Seqs
-        used have a consistent alphabet. This helps protect against getting
-        useless signatures full of ambiguity signals.
         """
         self._alphabet_strict = alphabet_strict
 
@@ -44,14 +44,12 @@ class SignatureFinder(object):
         """Find all signatures in a group of sequences.
 
         Arguments:
+         - seq_records - A list of SeqRecord objects we'll use the sequences
+           from to find signatures.
+         - signature_size - The size of each half of a signature (ie. if this
+           is set at 3, then the signature could be AGC-----GAC)
+         - max_gap - The maximum gap size between two parts of a signature.
 
-        - seq_records - A list of SeqRecord objects we'll use the sequences
-        from to find signatures.
-
-        - signature_size - The size of each half of a signature (ie. if this
-        is set at 3, then the signature could be AGC-----GAC)
-
-        - max_gap - The maximum gap size between two parts of a signature.
         """
         sig_info = self._get_signature_dict(seq_records, signature_size,
                                             max_gap)
@@ -130,14 +128,13 @@ class SignatureCoder(object):
         """Initialize with the signatures to look for.
 
         Arguments:
+         - signatures - A complete list of signatures, in order, that
+           are to be searched for in the sequences. The signatures should
+           be represented as a tuple of (first part of the signature,
+           second_part of the signature) -- ('GATC', 'GATC').
+         - max_gap - The maximum gap we can have between the two
+           elements of the signature.
 
-        - signatures - A complete list of signatures, in order, that
-        are to be searched for in the sequences. The signatures should
-        be represented as a tuple of (first part of the signature,
-        second_part of the signature) -- ('GATC', 'GATC').
-
-        - max_gap - The maximum gap we can have between the two
-        elements of the signature.
         """
         self._signatures = signatures
         self._max_gap = max_gap
@@ -164,9 +161,8 @@ class SignatureCoder(object):
         """Convert a sequence into a representation of its signatures.
 
         Arguments:
-
-        - sequence - A Seq object we are going to convert into a set of
-        signatures.
+         - sequence - A Seq object we are going to convert into a set of
+           signatures.
 
         Returns:
         A list of relative signature representations. Each item in the

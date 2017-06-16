@@ -53,12 +53,12 @@ class Schema(object):
         """Initialize with ambiguity information.
 
         Arguments:
+         - ambiguity_info - A dictionary which maps letters in the motifs to
+           the ambiguous characters which they might represent. For example,
+           {'R' : 'AG'} specifies that Rs in the motif can match an A or a G.
+           All letters in the motif must be represented in the ambiguity_info
+           dictionary.
 
-        - ambiguity_info - A dictionary which maps letters in the motifs to
-          the ambiguous characters which they might represent. For example,
-          {'R' : 'AG'} specifies that Rs in the motif can match an A or a G.
-          All letters in the motif must be represented in the ambiguity_info
-          dictionary.
         """
         self._ambiguity_info = ambiguity_info
 
@@ -69,8 +69,7 @@ class Schema(object):
         """Encode the passed motif as a regular expression pattern object.
 
         Arguments:
-
-        - motif - The motif we want to encode. This should be a string.
+         - motif - The motif we want to encode. This should be a string.
 
         Returns:
         A compiled regular expression pattern object that can be used
@@ -165,11 +164,11 @@ class SchemaDNAAlphabet(Alphabet.Alphabet):
     """Alphabet of a simple Schema for DNA sequences.
 
     This defines a simple alphabet for DNA sequences that has a single
-    character which can match any other character.
+    character which can match any other character:
 
-    - G,A,T,C - The standard unambiguous DNA alphabet.
+    - `G`, `A`, `T`, `C` - The standard unambiguous DNA alphabet.
+    - `*` - Any letter
 
-    - * - Any letter
     """
 
     letters = ["G", "A", "T", "C", "*"]
@@ -199,12 +198,12 @@ class GeneticAlgorithmFinder(object):
         """Initialize a finder to get schemas using Genetic Algorithms.
 
         Arguments:
+         - alphabet -- The alphabet which specifies the contents of the
+           schemas we'll be generating. This alphabet must contain the
+           attribute 'alphabet_matches', which is a dictionary specifying
+           the potential ambiguities of each letter in the alphabet. These
+           ambiguities will be used in building up the schema.
 
-        - alphabet -- The alphabet which specifies the contents of the
-          schemas we'll be generating. This alphabet must contain the
-          attribute 'alphabet_matches', which is a dictionary specifying
-          the potential ambiguities of each letter in the alphabet. These
-          ambiguities will be used in building up the schema.
         """
         self.alphabet = alphabet
 
@@ -237,12 +236,11 @@ class GeneticAlgorithmFinder(object):
         """Find the given number of unique schemas using a genetic algorithm.
 
         Arguments:
+         - fitness - A callable object (ie. function) which will evaluate
+           the fitness of a motif.
+         - num_schemas - The number of unique schemas with good fitness
+           that we want to generate.
 
-        - fitness - A callable object (ie. function) which will evaluate
-          the fitness of a motif.
-
-        - num_schemas - The number of unique schemas with good fitness
-          that we want to generate.
         """
         start_population = \
            Organism.function_population(self.motif_generator.random_motif,
@@ -274,15 +272,13 @@ class DifferentialSchemaFitness(object):
         """Initialize with different sequences to evaluate.
 
         Arguments:
+         - positive_seq - A list of SeqRecord objects which are the 'positive'
+           sequences -- the ones we want to select for.
+         - negative_seq - A list of SeqRecord objects which are the 'negative'
+           sequences that we want to avoid selecting.
+         - schema_evaluator - An Schema class which can be used to
+           evaluate find motif matches in sequences.
 
-        - positive_seq - A list of SeqRecord objects which are the 'positive'
-          sequences -- the ones we want to select for.
-
-        - negative_seq - A list of SeqRecord objects which are the 'negative'
-          sequences that we want to avoid selecting.
-
-        - schema_evaluator - An Schema class which can be used to
-          evaluate find motif matches in sequences.
         """
         self._pos_seqs = positive_seqs
         self._neg_seqs = negative_seqs
@@ -345,12 +341,11 @@ class MostCountSchemaFitness(object):
         """Initialize with sequences to evaluate.
 
         Arguments:
+         - seq_records -- A set of SeqRecord objects which we use to
+           calculate the fitness.
+         - schema_evaluator - An Schema class which can be used to
+           evaluate find motif matches in sequences.
 
-        - seq_records -- A set of SeqRecord objects which we use to
-          calculate the fitness.
-
-        - schema_evaluator - An Schema class which can be used to
-          evaluate find motif matches in sequences.
         """
         self._records = seq_records
         self._evaluator = schema_evaluator
@@ -384,11 +379,10 @@ class RandomMotifGenerator(object):
         """Initialize with the motif parameters.
 
         Arguments:
+         - alphabet - An alphabet specifying what letters can be inserted in
+           a motif.
+         - min_size, max_size - Specify the range of sizes for motifs.
 
-        - alphabet - An alphabet specifying what letters can be inserted in
-          a motif.
-
-        - min_size, max_size - Specify the range of sizes for motifs.
         """
         self._alphabet = alphabet
         self._min_size = min_size
@@ -423,12 +417,11 @@ class SimpleFinisher(object):
         """Initialize the finisher with its parameters.
 
         Arguments:
+         - num_schemas -- the number of useful (positive fitness) schemas
+           we want to generate.
+         - min_generations -- The minimum number of generations to allow
+           the GA to proceed.
 
-        - num_schemas -- the number of useful (positive fitness) schemas
-          we want to generate.
-
-        - min_generations -- The minimum number of generations to allow
-          the GA to proceed.
         """
         self.num_generations = 0
 
@@ -472,9 +465,9 @@ class SchemaFinder(object):
         """Initialize the Schema Finder with its parameters.
 
         Arguments:
+         - num_schemas -- the number of useful (positive fitness) schemas
+           we want to generate.
 
-        - num_schemas -- the number of useful (positive fitness) schemas
-          we want to generate.
         """
         self.num_schemas = num_schemas
         self._finder = schema_finder
@@ -511,12 +504,11 @@ class SchemaCoder(object):
         """Initialize the coder to convert sequences.
 
         Arguments:
+         - schema - A list of all of the schemas we want to search for
+           in input sequences.
+         - ambiguous_converter - An Schema class which can be
+           used to convert motifs into regular expressions for searching.
 
-        - schema - A list of all of the schemas we want to search for
-          in input sequences.
-
-        - ambiguous_converter - An Schema class which can be
-          used to convert motifs into regular expressions for searching.
         """
         self._schemas = schemas
         self._converter = ambiguous_converter
@@ -525,8 +517,7 @@ class SchemaCoder(object):
         """Represent the given input sequence as a bunch of motif counts.
 
         Arguments:
-
-        - sequence - A Bio.Seq object we are going to represent as schemas.
+         - sequence - A Bio.Seq object we are going to represent as schemas.
 
         This takes the sequence, searches for the motifs within it, and then
         returns counts specifying the relative number of times each motifs
@@ -557,14 +548,12 @@ def matches_schema(pattern, schema, ambiguity_character='*'):
     """Determine whether or not the given pattern matches the schema.
 
     Arguments:
+     - pattern - A string representing the pattern we want to check for
+       matching. This pattern can contain ambiguity characters (which are
+       assumed to be the same as those in the schema).
+     - schema - A string schema with ambiguity characters.
+     - ambiguity_character - The character used for ambiguity in the schema.
 
-    - pattern - A string representing the pattern we want to check for
-      matching. This pattern can contain ambiguity characters (which are
-      assumed to be the same as those in the schema).
-
-    - schema - A string schema with ambiguity characters.
-
-    - ambiguity_character - The character used for ambiguity in the schema.
     """
     if len(pattern) != len(schema):
         return 0
@@ -588,9 +577,9 @@ class SchemaFactory(object):
         """Initialize the SchemaFactory.
 
         Arguments:
+         - ambiguity_symbol -- The symbol to use when specifying that
+           a position is arbitrary.
 
-        - ambiguity_symbol -- The symbol to use when specifying that
-          a position is arbitrary.
         """
         self._ambiguity_symbol = ambiguity_symbol
 
@@ -598,17 +587,15 @@ class SchemaFactory(object):
         """Generate schema from a list of motifs.
 
         Arguments:
+         - motif_repository - A MotifRepository class that has all of the
+           motifs we want to convert to Schema.
+         - motif_percent - The percentage of motifs in the motif bank which
+           should be matches. We'll try to create schema that match this
+           percentage of motifs.
+         - num_ambiguous - The number of ambiguous characters to include
+           in each schema. The positions of these ambiguous characters will
+           be randomly selected.
 
-        - motif_repository - A MotifRepository class that has all of the
-          motifs we want to convert to Schema.
-
-        - motif_percent - The percentage of motifs in the motif bank which
-          should be matches. We'll try to create schema that match this
-          percentage of motifs.
-
-        - num_ambiguous - The number of ambiguous characters to include
-          in each schema. The positions of these ambiguous characters will
-          be randomly selected.
         """
         # get all of the motifs we can deal with
         all_motifs = motif_repository.get_top_percentage(motif_percent)
@@ -698,17 +685,14 @@ class SchemaFactory(object):
         """Create a schema from a given starting motif.
 
         Arguments:
-        - motif - A motif with the pattern we will start from.
-
-        - motif_list - The total motifs we have.to match to.
-
-        - num_ambiguous - The number of ambiguous characters that should
-        be present in the schema.
+         - motif - A motif with the pattern we will start from.
+         - motif_list - The total motifs we have.to match to.
+         - num_ambiguous - The number of ambiguous characters that should
+           be present in the schema.
 
         Returns:
-        - A string representing the newly generated schema.
-
-        - A list of all of the motifs in motif_list that match the schema.
+         - A string representing the newly generated schema.
+         - A list of all of the motifs in motif_list that match the schema.
 
         """
         assert motif in motif_list, \

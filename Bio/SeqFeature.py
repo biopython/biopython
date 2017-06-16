@@ -18,8 +18,7 @@ Base class to hold a Feature
 ----------------------------
 
 classes:
-
-    - SeqFeature
+ - SeqFeature
 
 Hold information about a Reference
 ----------------------------------
@@ -28,8 +27,7 @@ This is an attempt to create a General class to hold Reference type
 information.
 
 classes:
-
-    - Reference
+ - Reference
 
 Specify locations of a feature on a Sequence
 --------------------------------------------
@@ -39,17 +37,16 @@ This has the advantages of allowing us to handle fuzzy stuff in case anyone
 needs it, and also be compatible with BioPerl etc and BioSQL.
 
 classes:
+ - FeatureLocation - Specify the start and end location of a feature.
+ - CompoundLocation - Collection of FeatureLocation objects (for joins etc).
+ - ExactPosition - Specify the position as being exact.
+ - WithinPosition - Specify a position occurring within some range.
+ - BetweenPosition - Specify a position occurring between a range (OBSOLETE?).
+ - BeforePosition - Specify the position as being found before some base.
+ - AfterPosition - Specify the position as being found after some base.
+ - OneOfPosition - Specify a position where the location can be multiple positions.
+ - UnknownPosition - Represents missing information like '?' in UniProt.
 
-    - FeatureLocation - Specify the start and end location of a feature.
-    - CompoundLocation - Collection of FeatureLocation objects (for joins etc).
-
-    - ExactPosition - Specify the position as being exact.
-    - WithinPosition - Specify a position occurring within some range.
-    - BetweenPosition - Specify a position occurring between a range (OBSOLETE?).
-    - BeforePosition - Specify the position as being found before some base.
-    - AfterPosition - Specify the position as being found after some base.
-    - OneOfPosition - Specify a position where the location can be multiple positions.
-    - UnknownPosition - Represents missing information like '?' in UniProt.
 """
 
 from __future__ import print_function
@@ -65,28 +62,28 @@ class SeqFeature(object):
     """Represent a Sequence Feature on an object.
 
     Attributes:
-        - location - the location of the feature on the sequence (FeatureLocation)
-        - type - the specified type of the feature (ie. CDS, exon, repeat...)
-        - location_operator - a string specifying how this SeqFeature may
-          be related to others. For example, in the example GenBank feature
-          shown below, the location_operator would be "join". This is a proxy
-          for feature.location.operator and only applies to compound locations.
-        - strand - A value specifying on which strand (of a DNA sequence, for
-          instance) the feature deals with. 1 indicates the plus strand, -1
-          indicates the minus strand, 0 indicates stranded but unknown (? in GFF3),
-          while the default of None indicates that strand doesn't apply (dot in GFF3,
-          e.g. features on proteins). Note this is a shortcut for accessing the
-          strand property of the feature's location.
-        - id - A string identifier for the feature.
-        - ref - A reference to another sequence. This could be an accession
-          number for some different sequence. Note this is a shortcut for the
-          reference property of the feature's location.
-        - ref_db - A different database for the reference accession number.
-          Note this is a shortcut for the reference property of the location
-        - qualifiers - A dictionary of qualifiers on the feature. These are
-          analogous to the qualifiers from a GenBank feature table. The keys of
-          the dictionary are qualifier names, the values are the qualifier
-          values. As of Biopython 1.69 this is an ordered dictionary.
+     - location - the location of the feature on the sequence (FeatureLocation)
+     - type - the specified type of the feature (ie. CDS, exon, repeat...)
+     - location_operator - a string specifying how this SeqFeature may
+       be related to others. For example, in the example GenBank feature
+       shown below, the location_operator would be "join". This is a proxy
+       for feature.location.operator and only applies to compound locations.
+     - strand - A value specifying on which strand (of a DNA sequence, for
+       instance) the feature deals with. 1 indicates the plus strand, -1
+       indicates the minus strand, 0 indicates stranded but unknown (? in GFF3),
+       while the default of None indicates that strand doesn't apply (dot in GFF3,
+       e.g. features on proteins). Note this is a shortcut for accessing the
+       strand property of the feature's location.
+     - id - A string identifier for the feature.
+     - ref - A reference to another sequence. This could be an accession
+       number for some different sequence. Note this is a shortcut for the
+       reference property of the feature's location.
+     - ref_db - A different database for the reference accession number.
+       Note this is a shortcut for the reference property of the location
+     - qualifiers - A dictionary of qualifiers on the feature. These are
+       analogous to the qualifiers from a GenBank feature table. The keys of
+       the dictionary are qualifier names, the values are the qualifier
+       values. As of Biopython 1.69 this is an ordered dictionary.
 
     """
 
@@ -1374,10 +1371,11 @@ class AbstractPosition(object):
 class ExactPosition(int, AbstractPosition):
     """Specify the specific position of a boundary.
 
-    - position - The position of the boundary.
-    - extension - An optional argument which must be zero since we don't
-    have an extension. The argument is provided so that the same number of
-    arguments can be passed to all position types.
+    Arguments:
+     - position - The position of the boundary.
+     - extension - An optional argument which must be zero since we don't
+       have an extension. The argument is provided so that the same number
+       of arguments can be passed to all position types.
 
     In this case, there is no fuzziness associated with the position.
 

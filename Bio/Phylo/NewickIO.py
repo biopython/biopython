@@ -44,6 +44,7 @@ def parse(handle, **kwargs):
     """Iterate over the trees in a Newick file handle.
 
     :returns: generator of Bio.Phylo.Newick.Tree objects.
+
     """
     return Parser(handle).parse(**kwargs)
 
@@ -52,6 +53,7 @@ def write(trees, handle, plain=False, **kwargs):
     """Write a trees in Newick format to the given file handle.
 
     :returns: number of trees written.
+
     """
     return Writer(trees).write(handle, plain=plain, **kwargs)
 
