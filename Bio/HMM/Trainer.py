@@ -11,11 +11,11 @@ to work from, these classes will estimate parameters of the model.
 
 This aims to estimate two parameters:
 
-    - a_{kl} -- the number of times there is a transition from k to l in the
-      training data.
+- a_{kl} -- the number of times there is a transition from k to l in the
+  training data.
+- e_{k}(b) -- the number of emissions of the state b from the letter k
+  in the training data.
 
-    - e_{k}(b) -- the number of emissions of the state b from the letter k
-      in the training data.
 """
 # standard modules
 import math
@@ -31,13 +31,12 @@ class TrainingSequence(object):
         """Initialize a training sequence.
 
         Arguments:
+         - emissions - A Seq object containing the sequence of emissions in
+           the training sequence, and the alphabet of the sequence.
+         - state_path - A Seq object containing the sequence of states and
+           the alphabet of the states. If there is no known state path, then
+           the sequence of states should be an empty string.
 
-        - emissions - A Seq object containing the sequence of emissions in
-        the training sequence, and the alphabet of the sequence.
-
-        - state_path - A Seq object containing the sequence of states and
-        the alphabet of the states. If there is no known state path, then
-        the sequence of states should be an empty string.
         """
         if len(state_path) > 0:
             assert len(emissions) == len(state_path), \
@@ -50,16 +49,17 @@ class AbstractTrainer(object):
     """Provide generic functionality needed in all trainers."""
 
     def __init__(self, markov_model):
+        """Initialize."""
         self._markov_model = markov_model
 
     def log_likelihood(self, probabilities):
         """Calculate the log likelihood of the training seqs.
 
         Arguments:
+         - probabilities -- A list of the probabilities of each training
+           sequence under the current parameters, calculated using the
+           forward algorithm.
 
-        - probabilities -- A list of the probabilities of each training
-        sequence under the current parameters, calculated using the forward
-        algorithm.
         """
         total_likelihood = 0
         for probability in probabilities:
@@ -71,19 +71,17 @@ class AbstractTrainer(object):
         """Get a maximum likelihood estimation of transition and emmission.
 
         Arguments:
-
-        - transition_counts -- A dictionary with the total number of counts
-        of transitions between two states.
-
-        - emissions_counts -- A dictionary with the total number of counts
-        of emmissions of a particular emission letter by a state letter.
+         - transition_counts -- A dictionary with the total number of counts
+           of transitions between two states.
+         - emissions_counts -- A dictionary with the total number of counts
+           of emmissions of a particular emission letter by a state letter.
 
         This then returns the maximum likelihood estimators for the
         transitions and emissions, estimated by formulas 3.18 in
-        Durbin et al:
+        Durbin et al::
 
-        a_{kl} = A_{kl} / sum(A_{kl'})
-        e_{k}(b) = E_{k}(b) / sum(E_{k}(b'))
+            a_{kl} = A_{kl} / sum(A_{kl'})
+            e_{k}(b) = E_{k}(b) / sum(E_{k}(b'))
 
         Returns:
         Transition and emission dictionaries containing the maximum
@@ -103,8 +101,7 @@ class AbstractTrainer(object):
         and emissions.
 
         Arguments:
-
-        - counts -- A dictionary of the counts for each item.
+         - counts -- A dictionary of the counts for each item.
 
         See estimate_params for a description of the formula used for
         calculation.
@@ -167,10 +164,10 @@ class BaumWelchTrainer(AbstractTrainer):
         """Initialize the trainer.
 
         Arguments:
+         - markov_model - The model we are going to estimate parameters for.
+           This should have the parameters with some initial estimates, that
+           we can build from.
 
-        - markov_model - The model we are going to estimate parameters for.
-        This should have the parameters with some initial estimates, that
-        we can build from.
         """
         AbstractTrainer.__init__(self, markov_model)
 
@@ -182,17 +179,15 @@ class BaumWelchTrainer(AbstractTrainer):
         is a good place to go for a reference on what is going on.
 
         Arguments:
+         - training_seqs -- A list of TrainingSequence objects to be used
+           for estimating the parameters.
+         - stopping_criteria -- A function, that when passed the change
+           in log likelihood and threshold, will indicate if we should stop
+           the estimation iterations.
+         - dp_method -- A class instance specifying the dynamic programming
+           implementation we should use to calculate the forward and
+           backward variables. By default, we use the scaling method.
 
-        - training_seqs -- A list of TrainingSequence objects to be used
-        for estimating the parameters.
-
-        - stopping_criteria -- A function, that when passed the change
-        in log likelihood and threshold, will indicate if we should stop
-        the estimation iterations.
-
-        - dp_method -- A class instance specifying the dynamic programming
-        implementation we should use to calculate the forward and
-        backward variables. By default, we use the scaling method.
         """
         prev_log_likelihood = None
         num_iterations = 1
@@ -257,19 +252,14 @@ class BaumWelchTrainer(AbstractTrainer):
         """Add the contribution of a new training sequence to the transitions.
 
         Arguments:
-
-        - transition_counts -- A dictionary of the current counts for the
-        transitions
-
-        - training_seq -- The training sequence we are working with
-
-        - forward_vars -- Probabilities calculated using the forward
-        algorithm.
-
-        - backward_vars -- Probabilities calculated using the backwards
-        algorithm.
-
-        - training_seq_prob - The probability of the current sequence.
+         - transition_counts -- A dictionary of the current counts for the
+           transitions
+         - training_seq -- The training sequence we are working with
+         - forward_vars -- Probabilities calculated using the forward
+           algorithm.
+         - backward_vars -- Probabilities calculated using the backwards
+           algorithm.
+         - training_seq_prob - The probability of the current sequence.
 
         This calculates A_{kl} (the estimated transition counts from state
         k to state l) using formula 3.20 in Durbin et al.
@@ -307,22 +297,17 @@ class BaumWelchTrainer(AbstractTrainer):
 
     def update_emissions(self, emission_counts, training_seq,
                            forward_vars, backward_vars, training_seq_prob):
-        """Add the contribution of a new training sequence to the emissions
+        """Add the contribution of a new training sequence to the emissions.
 
         Arguments:
-
-        - emission_counts -- A dictionary of the current counts for the
-        emissions
-
-        - training_seq -- The training sequence we are working with
-
-        - forward_vars -- Probabilities calculated using the forward
-        algorithm.
-
-        - backward_vars -- Probabilities calculated using the backwards
-        algorithm.
-
-        - training_seq_prob - The probability of the current sequence.
+         - emission_counts -- A dictionary of the current counts for the
+           emissions
+         - training_seq -- The training sequence we are working with
+         - forward_vars -- Probabilities calculated using the forward
+           algorithm.
+         - backward_vars -- Probabilities calculated using the backwards
+           algorithm.
+         - training_seq_prob - The probability of the current sequence.
 
         This calculates E_{k}(b) (the estimated emission probability for
         emission letter b from state k) using formula 3.21 in Durbin et al.
@@ -357,6 +342,7 @@ class KnownStateTrainer(AbstractTrainer):
     """
 
     def __init__(self, markov_model):
+        """Initialise."""
         AbstractTrainer.__init__(self, markov_model)
 
     def train(self, training_seqs):
@@ -391,11 +377,10 @@ class KnownStateTrainer(AbstractTrainer):
         """Add emissions from the training sequence to the current counts.
 
         Arguments:
+         - training_seq -- A TrainingSequence with states and emissions
+           to get the counts from
+         - emission_counts -- The current emission counts to add to.
 
-        - training_seq -- A TrainingSequence with states and emissions
-        to get the counts from
-
-        - emission_counts -- The current emission counts to add to.
         """
         for index in range(len(training_seq.emissions)):
             cur_state = training_seq.states[index]
@@ -412,11 +397,10 @@ class KnownStateTrainer(AbstractTrainer):
         """Add transitions from the training sequence to the current counts.
 
         Arguments:
+         - state_seq -- A Seq object with the states of the current training
+           sequence.
+         - transition_counts -- The current transition counts to add to.
 
-        - state_seq -- A Seq object with the states of the current training
-        sequence.
-
-        - transition_counts -- The current transition counts to add to.
         """
         for cur_pos in range(len(state_seq) - 1):
             cur_state = state_seq[cur_pos]
