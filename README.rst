@@ -14,10 +14,9 @@
    :alt: Research software impact on Depsy
    :target: http://depsy.org/package/python/biopython
 
-.. image:: https://github.com/biopython/biopython/raw/master/Doc/images/biopython.jpg
+.. image:: https://github.com/biopython/biopython/raw/master/Doc/images/biopython_logo_m.png
    :alt: The Biopython Project
    :target: http://biopython.org
-   :width: 100%
 
 Biopython README file
 =====================

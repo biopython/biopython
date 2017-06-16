@@ -57,6 +57,7 @@ possible, especially the following contributors:
 - Michiel de Hoon
 - morrme (first contribution)
 - Noam Kremen (first contribution)
+- Patrick Kunzmann
 - Peter Cock
 - Rasmus Fonseca (first contribution)
 - Rodrigo Dorantes-Gilardi (first contribution)
