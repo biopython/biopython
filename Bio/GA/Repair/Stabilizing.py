@@ -28,15 +28,14 @@ class AmbiguousRepair(object):
         """Initialize the repair class.
 
         Arguments:
+         - ambig_finder - A class implementing the function find_ambiguous
+           which will return a list of all ambiguous positions in a sequence.
+           It also must have the function all_unambiguous, which will return
+           all allowed unambiguous letters.
+         - num_ambiguous - The minimum number of ambiguous items that are
+           allowed in a genome. If there are more than this present, repair
+           will be performed.
 
-        - ambig_finder - A class implementing the function find_ambiguous
-          which will return a list of all ambiguous positions in a sequence.
-          It also must have the function all_unambiguous, which will return
-          all allowed unambiguous letters.
-
-        - num_ambiguous - The minimum number of ambiguous items that are
-          allowed in a genome. If there are more than this present, repair
-          will be performed.
         """
         self._ambig_finder = ambig_finder
         self._num_ambiguous = num_ambiguous

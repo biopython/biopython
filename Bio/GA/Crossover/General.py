@@ -28,13 +28,12 @@ class SafeFitnessCrossover(object):
         """Initialize to do safe crossovers.
 
         Arguments:
+         - actual_crossover - A Crossover class which actually implements
+           crossover functionality.
+         - accept_less - A probability to accept crossovers which
+           generate less fitness. This allows you to accept some
+           crossovers which reduce fitness, but not all of them.
 
-        - actual_crossover - A Crossover class which actually implements
-          crossover functionality.
-
-        - accept_less - A probability to accept crossovers which
-          generate less fitness. This allows you to accept some
-          crossovers which reduce fitness, but not all of them.
         """
         self._crossover = actual_crossover
         self._accept_less_percent = accept_less
