@@ -40,10 +40,10 @@ class EnzymeTests(unittest.TestCase):
                           ('PATH', 'ec00071', 'Fatty acid degradation'),
                           ('PATH', 'ec00260', 'Glycine, serine and threonine metabolism'),
                           ('PATH', 'ec00350', 'Tyrosine metabolism'),
-			  ('PATH', 'ec00592', 'alpha-Linolenic acid metabolism'),
-			  ('PATH', 'ec00625', 'Chloroalkane and chloroalkene degradation'),
-			  ('PATH', 'ec00626', 'Naphthalene degradation'),
-			  ('PATH', 'ec00830', 'Retinol metabolism'),
+                          ('PATH', 'ec00592', 'alpha-Linolenic acid metabolism'),
+                          ('PATH', 'ec00625', 'Chloroalkane and chloroalkene degradation'),
+                          ('PATH', 'ec00626', 'Naphthalene degradation'),
+                          ('PATH', 'ec00830', 'Retinol metabolism'),
                           ('PATH', 'ec00980', 'Metabolism of xenobiotics by cytochrome P450'),
                           ('PATH', 'ec00982', 'Drug metabolism - cytochrome P450'),
                           ('PATH', 'ec01100', 'Metabolic pathways'),
@@ -51,11 +51,12 @@ class EnzymeTests(unittest.TestCase):
                           ('PATH', 'ec01120', 'Microbial metabolism in diverse environments'),
                           ('PATH', 'ec01130', 'Biosynthesis of antibiotics')])
         self.assertEqual(records[0].dblinks,
-                         [('IUBMB Enzyme Nomenclature', ['1.1.1.1']),
+                         [('ExplorEnz - The Enzyme Database', ['1.1.1.1']),
+                          ('IUBMB Enzyme Nomenclature', ['1.1.1.1']),
                           ('ExPASy - ENZYME nomenclature database', ['1.1.1.1']),
-                          ('WIT (What Is There) Metabolic Reconstruction', ['1.1.1.1']),
+                          ('UM-BBD (Biocatalysis/Biodegradation Database)', ['1.1.1.1']),
                           ('BRENDA, the Enzyme Database', ['1.1.1.1']),
-                          ('SCOP (Structural Classification of Proteins)', ['1.1.1.1'])])
+                          ('CAS', ['9031-72-5'])])
         self.assertEqual(records[-1].entry, "2.7.2.1")
 
     def test_irregular(self):
