@@ -1,4 +1,5 @@
 [flake8]
+doctests = True
 ignore =
     # =======================
     # flake: E###, F###, W###
