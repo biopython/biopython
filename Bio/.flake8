@@ -1,4 +1,6 @@
 [flake8]
+# Would like to enable this in future...
+# doctests = True
 ignore =
     # =======================
     # flake: E###, F###, W###
