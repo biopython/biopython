@@ -12,8 +12,8 @@ The latest news is at the top of this file.
 (In progress, not yet released) Biopython 1.70
 ==============================================
 
-This release of Biopython supports Python 2.7, 3.3, 3.4, 3.5 and 3.6 (although
-support for Python 3.3 is deprecated). It has also been tested on PyPy v5.7,
+This release of Biopython supports Python 2.7, 3.4, 3.5 and 3.6 (we have now
+dropped support for Python 3.3). It has also been tested on PyPy v5.7,
 PyPy3.5 v5.8 beta, and Jython 2.7.
 
 Two new arguments for reading and writing blast-xml files have been added

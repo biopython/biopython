@@ -139,15 +139,13 @@ def get_yes_or_no(question, default):
 
 # Make sure we have the right Python version.
 if sys.version_info[:2] < (2, 7):
-    sys.stderr.write("Biopython requires Python 2.7, or Python 3.3 or later. "
+    sys.stderr.write("Biopython requires Python 2.7, or Python 3.4 or later. "
                      "Python %d.%d detected.\n" % sys.version_info[:2])
     sys.exit(1)
-elif sys.version_info[0] == 3 and sys.version_info[:2] < (3, 3):
-    sys.stderr.write("Biopython requires Python 3.3 or later (or Python 2.7). "
+elif sys.version_info[0] == 3 and sys.version_info[:2] < (3, 4):
+    sys.stderr.write("Biopython requires Python 3.4 or later (or Python 2.7). "
                      "Python %d.%d detected.\n" % sys.version_info[:2])
     sys.exit(1)
-elif sys.version_info[:2] == (3, 3):
-    sys.stderr.write("WARNING: Biopython support for Python 3.3 is now deprecated.\n")
 
 
 def check_dependencies_once():

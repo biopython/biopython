@@ -30,8 +30,8 @@ installation simply aborts with a error message.
 
 Python 3.3
 ==========
-Still suported but deprecated as of Release 1.67, triggering a warning
-at installation time.
+No longer supported as of Release 1.70, having triggered a warning with
+release 1.67 onwards.
 
 Bio.Phylo.CDAOIO.CDAOError
 ==========================
