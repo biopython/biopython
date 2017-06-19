@@ -105,9 +105,21 @@ def is_pypy():
         if platform.python_implementation() == 'PyPy':
             return True
     except AttributeError:
-        # New in Python 2.6, not in Jython yet either
+        # New in Python 2.6
         pass
     return False
+
+
+def is_jython():
+    import platform
+    try:
+        if platform.python_implementation() == 'Jython':
+            return True
+    except AttributeError:
+        # This was missing prior to ~ Jython 2.7.0
+        pass
+    # Fall back which will work with older Jython:
+    return os.name == "java"
 
 
 def is_ironpython():
@@ -146,6 +158,9 @@ elif sys.version_info[0] == 3 and sys.version_info[:2] < (3, 4):
     sys.stderr.write("Biopython requires Python 3.4 or later (or Python 2.7). "
                      "Python %d.%d detected.\n" % sys.version_info[:2])
     sys.exit(1)
+
+if is_jython():
+    sys.stderr.write("WARNING: Biopython support for Jython is now deprecated.\n")
 
 
 def check_dependencies_once():
@@ -197,7 +212,7 @@ def check_dependencies():
         return True
     if is_automated():
         return True  # For automated builds go ahead with installed packages
-    if os.name == 'java':
+    if is_jython():
         return True  # NumPy is not avaliable for Jython (for now)
     if is_ironpython():
         return True  # We're ignoring NumPy under IronPython (for now)

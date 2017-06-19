@@ -33,6 +33,11 @@ Python 3.3
 No longer supported as of Release 1.70, having triggered a warning with
 release 1.67 onwards.
 
+Jython
+======
+Biopython is mostly working under Jython 2.7.0, but support for Jython
+is deprecated as Release 1.70.
+
 Bio.Phylo.CDAOIO.CDAOError
 ==========================
 This exception was deprecated as of Release 1.70, and is no longer used
