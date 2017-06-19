@@ -50,17 +50,6 @@ class EnzymeTests(unittest.TestCase):
                           ('PATH', 'ec01110', 'Biosynthesis of secondary metabolites'),
                           ('PATH', 'ec01120', 'Microbial metabolism in diverse environments'),
                           ('PATH', 'ec01130', 'Biosynthesis of antibiotics')])
-        self.assertEqual(records[0].structures,
-                         [('PDB', ['1A4U', '1A71', '1A72', '1ADB', '1ADC',
-                                   '1ADF', '1ADG', '1AGN', '1AXE', '1AXG',
-                                   '1B14', '1B15', '1B16', '1B2L', '1BTO',
-                                   '1CDO', '1D1S', '1D1T', '1DDA', '1DEH',
-                                   '1E3E', '1E3I', '1E3L', '1EE2', '1HDX',
-                                   '1HDY', '1HDZ', '1HET', '1HEU', '1HF3',
-                                   '1HLD', '1HSO', '1HSZ', '1HT0', '1HTB',
-                                   '1LDE', '1LDY', '1QLH', '1QLJ', '1TEH',
-                                   '2OHX', '2OXI', '3BTO', '3HUD', '5ADH',
-                                   '6ADH', '7ADH'])])
         self.assertEqual(records[0].dblinks,
                          [('IUBMB Enzyme Nomenclature', ['1.1.1.1']),
                           ('ExPASy - ENZYME nomenclature database', ['1.1.1.1']),
