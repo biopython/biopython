@@ -176,6 +176,8 @@ def __read_alphabet(record, handle):
     line = line.replace('ALPHABET= ', '')
     if line == 'ACGT':
         al = IUPAC.unambiguous_dna
+    elif line == 'ACGU':
+        al = IUPAC.unambiguous_rna
     else:
         al = IUPAC.protein
     record.alphabet = al
