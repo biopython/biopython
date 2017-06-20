@@ -77,7 +77,6 @@ class EnzymeTests(unittest.TestCase):
             records = list(Enzyme.parse(handle))
             self.assertEqual(len(records), 1)
         self.assertEqual(records[0].entry, "5.4.2.2")
-        self.assertEqual(len(records[0].genes), 3776)
         self.assertEqual(records[0].genes[0],
                          ('HSA', ['5236', '55276']))
         self.assertEqual(records[0].genes[8],
