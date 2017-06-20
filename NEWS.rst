@@ -28,6 +28,8 @@ under the format name "mauve" (contributed by Eric Rasche).
 Bio.ExPASy was updated to fix fetching PROSITE and PRODOC records, and return
 text-mode handles for use under Python 3.
 
+Bio.motifs was updated to support changes in MEME v4.11.4 output.
+
 Additionally, a number of small bugs have been fixed with further additions
 to the test suite, and there has been further work to follow the Python PEP8,
 PEP257 and best practice standard coding style.
@@ -38,6 +40,7 @@ possible, especially the following contributors:
 - Aaron Kitzmiller (first contribution)
 - Allis Tauri
 - Andrew Guy
+- Ariel Aptekmann (first contribution)
 - Bertrand Caron (first contribution)
 - Connor T. Skennerton
 - Eric Rasche
