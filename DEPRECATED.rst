@@ -36,7 +36,7 @@ release 1.67 onwards.
 Jython
 ======
 Biopython is mostly working under Jython 2.7.0, but support for Jython
-is deprecated as Release 1.70.
+is deprecated as of Release 1.70.
 
 Bio.Phylo.CDAOIO.CDAOError
 ==========================
