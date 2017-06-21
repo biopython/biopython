@@ -935,7 +935,7 @@ This is an example of a hierarchical clustering calculation, using single linkag
 
 The example data \verb|cyano.txt| can be found in Biopython's \verb|Tests/Cluster| subdirectory and is from the paper \cite[Hihara \textit{et al.}, 2001]{hihara2001}.
 
-%doctest ../Tests/Cluster lib:numpy
+%TODO, Windows: doctest ../Tests/Cluster lib:numpy
 \begin{verbatim}
 >>> from Bio import Cluster
 >>> with open("cyano.txt") as handle:
@@ -951,7 +951,7 @@ This will create the files \verb|cyano_result.cdt|, \verb|cyano_result.gtr|, and
 
 Similarly, we can save a $k$-means clustering solution:
 
-%doctest ../Tests/Cluster lib:numpy
+%TODO, Windows: doctest ../Tests/Cluster lib:numpy
 \begin{verbatim}
 >>> from Bio import Cluster
 >>> with open("cyano.txt") as handle:
@@ -975,7 +975,7 @@ returns the mean of the 1D array \verb|data|.
 \verb|version()|
 returns the version number of the underlying C Clustering Library as a string.
 
-%doctest . lib:numpy
+%TODO, Windows: doctest . lib:numpy
 \begin{verbatim}
 >>> from Bio import Cluster
 >>> print(Cluster.version())
