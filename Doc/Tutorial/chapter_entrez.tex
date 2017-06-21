@@ -124,7 +124,7 @@ Now \verb+record+ is a dictionary with exactly one key:
 %Not continuing doctest due as only Python 2 will show a u'string' prefix...
 \begin{verbatim}
 >>> record.keys()
-[u'DbList']
+['DbList']
 \end{verbatim}
 The values stored in this key is the list of database names shown in the XML above:
 %Line-wrapping for display so not using for doctest
@@ -507,14 +507,14 @@ The actual search results are stored as under the \verb+"Link"+ key.
 Let's now at the first search result:
 \begin{verbatim}
 >>> record[0]["LinkSetDb"][0]["Link"][0]
-{u'Id': '19304878'}
+{'Id': '19304878'}
 \end{verbatim}
 
 \noindent This is the article we searched for, which doesn't help us much, so let's look at the second search result:
 
 \begin{verbatim}
 >>> record[0]["LinkSetDb"][0]["Link"][1]
-{u'Id': '14630660'}
+{'Id': '14630660'}
 \end{verbatim}
 
 \noindent This paper, with PubMed ID 14630660, is about the Biopython PDB parser.
@@ -1118,7 +1118,7 @@ Let's use the \verb+retmax+ argument to restrict the maximum number of records r
 Here, \verb+record+ is a Python dictionary containing the search results and some auxiliary information. Just for information, let's look at what is stored in this dictionary:
 \begin{verbatim}
 >>> print(record.keys())
-[u'Count', u'RetMax', u'IdList', u'TranslationSet', u'RetStart', u'QueryTranslation']
+['Count', 'RetMax', 'IdList', 'TranslationSet', 'RetStart', 'QueryTranslation']
 \end{verbatim}
 First, let's check how many results were found:
 \begin{verbatim}
@@ -1155,12 +1155,12 @@ KX265015.1, KX265014.1, KX265013.1, KX265012.1, KX265011.1]
 Each of these records corresponds to one GenBank record.
 \begin{verbatim}
 >>> print(records[0].keys())
-[u'GBSeq_moltype', u'GBSeq_source', u'GBSeq_sequence',
- u'GBSeq_primary-accession', u'GBSeq_definition', u'GBSeq_accession-version',
- u'GBSeq_topology', u'GBSeq_length', u'GBSeq_feature-table',
- u'GBSeq_create-date', u'GBSeq_other-seqids', u'GBSeq_division',
- u'GBSeq_taxonomy', u'GBSeq_references', u'GBSeq_update-date',
- u'GBSeq_organism', u'GBSeq_locus', u'GBSeq_strandedness']
+['GBSeq_moltype', 'GBSeq_source', 'GBSeq_sequence',
+ 'GBSeq_primary-accession', 'GBSeq_definition', 'GBSeq_accession-version',
+ 'GBSeq_topology', 'GBSeq_length', 'GBSeq_feature-table',
+ 'GBSeq_create-date', 'GBSeq_other-seqids', 'GBSeq_division',
+ 'GBSeq_taxonomy', 'GBSeq_references', 'GBSeq_update-date',
+ 'GBSeq_organism', 'GBSeq_locus', 'GBSeq_strandedness']
 
 >>> print(records[0]["GBSeq_primary-accession"])
 DQ110336
@@ -1288,9 +1288,9 @@ Now, we use \verb+efetch+ to download this entry in the Taxonomy database, and t
 Again, this record stores lots of information:
 \begin{verbatim}
 >>> records[0].keys()
-[u'Lineage', u'Division', u'ParentTaxId', u'PubDate', u'LineageEx',
- u'CreateDate', u'TaxId', u'Rank', u'GeneticCode', u'ScientificName',
- u'MitoGeneticCode', u'UpdateDate']
+['Lineage', 'Division', 'ParentTaxId', 'PubDate', 'LineageEx',
+ 'CreateDate', 'TaxId', 'Rank', 'GeneticCode', 'ScientificName',
+ 'MitoGeneticCode', 'UpdateDate']
 \end{verbatim}
 We can get the lineage directly from this record:
 \begin{verbatim}
