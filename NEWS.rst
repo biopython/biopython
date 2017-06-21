@@ -22,6 +22,10 @@ are 'use_raw_hit_ids' and 'use_raw_query_ids'. Check out the relevant
 SearchIO.BlastIO documentation for a complete description of what these
 arguments do.
 
+Biopython now has a new logo, contributed by Patrick Kunzmann. Drawing on our
+original logo and the current Python logo, this shows a yellow and blue snake
+forming a double helix.
+
 Bio.AlignIO now supports Mauve's eXtended Multi-FastA (XMFA) file format
 under the format name "mauve" (contributed by Eric Rasche).
 
