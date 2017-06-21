@@ -499,6 +499,28 @@ setup_args = {
     "description": 'Freely available tools for computational molecular biology.',
     "long_description": readme_rst,
     "download_url": 'http://biopython.org/DIST/',
+    "classifiers": [
+        'Development Status :: 5 - Production/Stable',
+        'Intended Audience :: Developers',
+        'Intended Audience :: Science/Research',
+        'License :: Freely Distributable',
+        # Technically the "Biopython License Agreement" is not OSI approved,
+        # but is almost https://opensource.org/licenses/HPND so might put:
+        # 'License :: OSI Approved',
+        # To resolve this we are moving to dual-licensing with 3-clause BSD:
+        # 'License :: OSI Approved :: BSD License',
+        'Operating System :: OS Independent',
+        'Programming Language :: Python',
+        'Programming Language :: Python :: 2',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+        'Topic :: Scientific/Engineering',
+        'Topic :: Scientific/Engineering :: Bio-Informatics',
+        'Topic :: Software Development :: Libraries :: Python Modules',
+    ],
     "cmdclass": {
         "install": install_biopython,
         "build_py": build_py_biopython,
