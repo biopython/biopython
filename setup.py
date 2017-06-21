@@ -1,20 +1,21 @@
-"""Distutils based setup script for Biopython.
+"""setuptools based setup script for Biopython.
 
-This uses Distutils (http://python.org/sigs/distutils-sig/) the standard
-python mechanism for installing packages. For the easiest installation
-just type the command:
+This uses setuptools which is now the standard python mechanism for
+installing packages. If you have downloaded and uncompressed the
+Biopython source code, or fetched it from git, for the simplest
+installation just type the command::
 
-python setup.py install
+    python setup.py install
+
+However, you would normally install the latest Biopython release from
+the PyPI archive with::
+
+    pip install biopython
 
 For more in-depth instructions, see the installation section of the
 Biopython manual, linked to from:
 
 http://biopython.org/wiki/Documentation
-
-Or for more details about the options available from distutils, look at
-the 'Installing Python Modules' distutils documentation, available from:
-
-http://python.org/sigs/distutils-sig/doc/
 
 Or, if all else fails, feel free to write to the sign up to the Biopython
 mailing list and ask for help.  See:
@@ -27,28 +28,21 @@ import sys
 import os
 import shutil
 
-if "bdist_wheel" in sys.argv:
-    try:
-        import setuptools
-        import wheel
-    except ImportError:
-        sys.exit("We need both setuptools AND wheel packages installed for bdist_wheel to work")
-    # Import specific bits of setuptools ...
+try:
     from setuptools import setup
     from setuptools import Command
     from setuptools.command.install import install
     from setuptools.command.build_py import build_py
     from setuptools.command.build_ext import build_ext
     from setuptools import Extension
-else:
-    # Except for wheels, stick with standard library's distutils
-    from distutils.core import setup
-    from distutils.core import Command
-    from distutils.command.install import install
-    from distutils.command.build_py import build_py
-    from distutils.command.build_ext import build_ext
-    from distutils.extension import Extension
+except ImportError:
+    sys.exit("We need the Python library setuptools to be installed. Try runnning: python -m ensurepip")
 
+if "bdist_wheel" in sys.argv:
+    try:
+        import wheel
+    except ImportError:
+        sys.exit("We need both setuptools AND wheel packages installed for bdist_wheel to work. Try running: pip install wheel")
 
 _CHECKED = None
 
