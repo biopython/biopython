@@ -513,8 +513,8 @@ class DBSeqRecord(SeqRecord):
         """Create a DBSeqRecord object.
 
         Arguments:
-            - adaptor - A BioSQL.BioSeqDatabase.Adaptor object
-            - primary_id - An internal integer ID used by BioSQL
+         - adaptor - A BioSQL.BioSeqDatabase.Adaptor object
+         - primary_id - An internal integer ID used by BioSQL
 
         You wouldn't normally create a DBSeqRecord object yourself,
         this is done for you when using a BioSeqDatabase object

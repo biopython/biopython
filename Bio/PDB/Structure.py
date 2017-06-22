@@ -30,7 +30,8 @@ class Structure(Entity):
         reflects the order of the models in the PDB file.
 
         Arguments:
-        - m1, m2 - Model instances
+         - m1, m2 - Model instances
+
         """
         return cmp(m1.get_id(), m2.get_id())
 

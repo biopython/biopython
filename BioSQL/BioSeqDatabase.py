@@ -38,13 +38,13 @@ def open_database(driver="MySQLdb", **kwargs):
         >>> server = BioSeqDatabase.open_database(user="root", db="minidb")
 
     Arguments:
-         - driver - The name of the database driver to use for connecting. The
-           driver should implement the python DB API. By default, the MySQLdb
-           driver is used.
-         - user -the username to connect to the database with.
-         - password, passwd - the password to connect with
-         - host - the hostname of the database
-         - database or db - the name of the database
+     - driver - The name of the database driver to use for connecting. The
+       driver should implement the python DB API. By default, the MySQLdb
+       driver is used.
+     - user -the username to connect to the database with.
+     - password, passwd - the password to connect with
+     - host - the hostname of the database
+     - database or db - the name of the database
 
     """
     if driver == "psycopg":
@@ -145,9 +145,9 @@ class DBServer(object):
         """Create a DBServer object.
 
         Arguments:
-            - conn - A database connection object
-            - module - The module used to create the database connection
-            - module_name - Optionally, the name of the module. Default: module.__name__
+         - conn - A database connection object
+         - module - The module used to create the database connection
+         - module_name - Optionally, the name of the module. Default: module.__name__
 
         Normally you would not want to create a DBServer object yourself.
         Instead use the open_database function, which returns an instance of DBServer.
@@ -372,9 +372,9 @@ class Adaptor(object):
         """Create an Adaptor object.
 
         Arguments:
-            - conn - A database connection
-            - dbutils - A BioSQL.DBUtils object
-            - wrap_cursor - Optional, whether to wrap the cursor object
+         - conn - A database connection
+         - dbutils - A BioSQL.DBUtils object
+         - wrap_cursor - Optional, whether to wrap the cursor object
 
         """
         self.conn = conn
@@ -418,9 +418,9 @@ class Adaptor(object):
         """Return the internal id for a sequence using its display id.
 
         Arguments:
-            - dbid - the internal id for the sub-database
-            - name - the name of the sequence. Corresponds to the
-              name column of the bioentry table of the SQL schema
+         - dbid - the internal id for the sub-database
+         - name - the name of the sequence. Corresponds to the
+           name column of the bioentry table of the SQL schema
 
         """
         sql = r"select bioentry_id from bioentry where name = %s"
@@ -440,9 +440,9 @@ class Adaptor(object):
         """Return the internal id for a sequence using its accession.
 
         Arguments:
-            - dbid - the internal id for the sub-database
-            - name - the accession of the sequence. Corresponds to the
-              accession column of the bioentry table of the SQL schema
+         - dbid - the internal id for the sub-database
+         - name - the accession of the sequence. Corresponds to the
+           accession column of the bioentry table of the SQL schema
 
         """
         sql = r"select bioentry_id from bioentry where accession = %s"
@@ -462,9 +462,9 @@ class Adaptor(object):
         """Return a list internal ids using an accession.
 
         Arguments:
-            - dbid - the internal id for the sub-database
-            - name - the accession of the sequence. Corresponds to the
-              accession column of the bioentry table of the SQL schema
+         - dbid - the internal id for the sub-database
+         - name - the accession of the sequence. Corresponds to the
+           accession column of the bioentry table of the SQL schema
 
         """
         sql = r"select bioentry_id from bioentry where accession = %s"
@@ -478,9 +478,9 @@ class Adaptor(object):
         """Return the internal id for a sequence using its accession and version.
 
         Arguments:
-            - dbid - the internal id for the sub-database
-            - name - the accession of the sequence containing a version number.
-              Must correspond to <accession>.<version>
+         - dbid - the internal id for the sub-database
+         - name - the accession of the sequence containing a version number.
+           Must correspond to <accession>.<version>
 
         """
         acc_version = name.split(".")
@@ -509,9 +509,9 @@ class Adaptor(object):
         """Return the internal id for a sequence using its identifier.
 
         Arguments:
-            - dbid - the internal id for the sub-database
-            - identifier - the identifier of the sequence. Corresponds to
-              the identifier column of the bioentry table in the SQL schema.
+         - dbid - the internal id for the sub-database
+         - identifier - the identifier of the sequence. Corresponds to
+           the identifier column of the bioentry table in the SQL schema.
 
         """
         # YB: was fetch_seqid_by_seqid
@@ -535,7 +535,7 @@ class Adaptor(object):
         """Return a list of internal ids for all of the sequences in a sub-databae.
 
         Arguments:
-            - dbid - The internal id for a sub-database
+         - dbid - The internal id for a sub-database
 
         """
         return self.execute_and_fetch_col0(
@@ -546,7 +546,7 @@ class Adaptor(object):
         """Return a list of all sequence names in a sub-databae.
 
         Arguments:
-            - dbid - The internal id for a sub-database
+         - dbid - The internal id for a sub-database
 
         """
         return self.execute_and_fetch_col0(
@@ -585,9 +585,9 @@ class Adaptor(object):
         """Return a substring of a sequence.
 
         Arguments:
-            - seqid - The internal id for the sequence
-            - start - The start position of the sequence; 0-indexed
-            - end - The end position of the sequence
+         - seqid - The internal id for the sequence
+         - start - The start position of the sequence; 0-indexed
+         - end - The end position of the sequence
 
         """
         length = end - start
@@ -670,8 +670,8 @@ class BioSeqDatabase(object):
         """Create a BioDatabase object.
 
         Arguments:
-            - adaptor - A BioSQL.Adaptor object
-            - name - The name of the sub-database (namespace)
+         - adaptor - A BioSQL.Adaptor object
+         - name - The name of the sub-database (namespace)
 
         """
         self.adaptor = adaptor
@@ -746,7 +746,7 @@ class BioSeqDatabase(object):
         """Return a DBSeqRecord for one of the sequences in the sub-database.
 
         Arguments:
-            - key - The internal id for the sequence
+         - key - The internal id for the sequence
 
         """
         record = BioSeq.DBSeqRecord(self.adaptor, key)
@@ -835,8 +835,8 @@ class BioSeqDatabase(object):
         """Return a DBSeqRecord using an acceptable identifier.
 
         Arguments:
-            - kwargs - A single key-value pair where the key is one
-              of primary_id, gi, display_id, name, accession, version
+         - kwargs - A single key-value pair where the key is one
+           of primary_id, gi, display_id, name, accession, version
 
         """
         if len(kwargs) != 1:

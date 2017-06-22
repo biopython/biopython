@@ -12,18 +12,17 @@ the Bayes assumption that the features are independent.  Although this
 is hardly ever true, the classifier works well enough in practice.
 
 Glossary:
-    - observation - A feature vector of discrete data.
-    - class       - A possible classification for an observation.
-
+ - observation - A feature vector of discrete data.
+ - class       - A possible classification for an observation.
 
 Classes:
-    - NaiveBayes - Holds information for a naive Bayes classifier.
+ - NaiveBayes - Holds information for a naive Bayes classifier.
 
 Functions:
-    - train     - Train a new naive Bayes classifier.
-    - calculate - Calculate the probabilities of each class,
-      given an observation.
-    - classify  - Classify an observation into a class.
+ - train     - Train a new naive Bayes classifier.
+ - calculate - Calculate the probabilities of each class,
+   given an observation.
+ - classify  - Classify an observation into a class.
 
 """
 
@@ -45,10 +44,10 @@ class NaiveBayes(object):
     """Hold information for a NaiveBayes classifier.
 
     Attributes:
-    - classes        - List of the possible classes of data.
-    - p_conditional  - CLASS x DIM array of dicts of value -> ``P(value|class,dim)``
-    - p_prior        - List of the prior probabilities for every class.
-    - dimensionality - Dimensionality of the data.
+     - classes        - List of the possible classes of data.
+     - p_conditional  - CLASS x DIM array of dicts of value -> ``P(value|class,dim)``
+     - p_prior        - List of the prior probabilities for every class.
+     - dimensionality - Dimensionality of the data.
 
     """
 
@@ -63,14 +62,14 @@ class NaiveBayes(object):
 def calculate(nb, observation, scale=False):
     """Calculate the logarithmic conditional probability for each class.
 
-    - nb          - A NaiveBayes classifier that has been trained.
-    - observation - A list representing the observed data.
-    - scale       - Boolean to indicate whether the probability should be
-      scaled by ``P(observation)``.  By default, no scaling is done.
+    Arguments:
+     - nb          - A NaiveBayes classifier that has been trained.
+     - observation - A list representing the observed data.
+     - scale       - Boolean to indicate whether the probability should be
+       scaled by ``P(observation)``.  By default, no scaling is done.
 
     A dictionary is returned where the key is the class and the value is
     the log probability of the class.
-
     """
     # P(class|observation) = P(observation|class)*P(class)/P(observation)
     # Taking the log:
@@ -125,12 +124,13 @@ def classify(nb, observation):
 def train(training_set, results, priors=None, typecode=None):
     """Train a NaiveBayes classifier on a training set.
 
-    - training_set - List of observations.
-    - results      - List of the class assignments for each observation.
-      Thus, training_set and results must be the same length.
-    - priors       - Optional dictionary specifying the prior probabilities
-      for each type of result. If not specified, the priors will
-      be estimated from the training results.
+    Arguments:
+     - training_set - List of observations.
+     - results      - List of the class assignments for each observation.
+       Thus, training_set and results must be the same length.
+     - priors       - Optional dictionary specifying the prior probabilities
+       for each type of result. If not specified, the priors will
+       be estimated from the training results.
 
     """
     if not len(training_set):

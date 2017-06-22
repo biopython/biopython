@@ -7,14 +7,12 @@
 More information on the single plates can be found here: http://www.biolog.com/
 
 Classes:
-
  - PlateRecord - Object that contain time course data on each well of the
    plate, as well as metadata (if any).
  - WellRecord - Object that contains the time course data of a single well
  - JsonWriter - Writer of PlateRecord objects in JSON format.
 
 Functions:
-
  - JsonIterator -  Incremental PM JSON parser, this is an iterator that returns
    PlateRecord objects.
  - CsvIterator - Incremental PM CSV parser, this is an iterator that returns
@@ -795,9 +793,9 @@ class WellRecord(object):
         calculated.
 
         By default the following fitting functions will be used in order:
-        * gompertz
-        * logistic
-        * richards
+         - gompertz
+         - logistic
+         - richards
 
         The first function that is succesfuly fitted to the signals will
         be used to extract the curve parameters and update ``.area`` and
@@ -853,7 +851,9 @@ def JsonIterator(handle):
     """Generator function to iterate over PM json records (as PlateRecord
     objects).
 
-    handle - input file
+    Arguments:
+     - handle - input file
+
     """
     try:
         data = json.load(handle)
@@ -931,7 +931,9 @@ def CsvIterator(handle):
     """Generator function to iterate over PM csv records (as PlateRecord
     objects).
 
-    handle - input file
+    Arguments:
+     - handle - input file
+
     """
     plate = None
     data = False

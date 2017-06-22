@@ -20,10 +20,10 @@ class StructureAlignment(object):
         """Initialize.
 
         Attributes:
-            - fasta_align - Alignment object
-            - m1, m2 - two models
-            - si, sj - the sequences in the Alignment object that
-              correspond to the structures
+         - fasta_align - Alignment object
+         - m1, m2 - two models
+         - si, sj - the sequences in the Alignment object that
+           correspond to the structures
 
         """
         l = fasta_align.get_alignment_length()

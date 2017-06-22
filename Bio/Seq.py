@@ -8,8 +8,8 @@
 """Provide objects to represent biological sequences with alphabets.
 
 See also the Seq_ wiki and the chapter in our tutorial:
-    - `HTML Tutorial`_
-    - `PDF Tutorial`_
+ - `HTML Tutorial`_
+ - `PDF Tutorial`_
 
 .. _Seq: http://biopython.org/wiki/Seq
 .. _`HTML Tutorial`: http://biopython.org/DIST/docs/tutorial/Tutorial.html
@@ -38,8 +38,8 @@ def _maketrans(complement_mapping):
     """Make a python string translation table (PRIVATE).
 
     Arguments:
-        - complement_mapping - a dictionary such as ambiguous_dna_complement
-          and ambiguous_rna_complement from Data.IUPACData.
+     - complement_mapping - a dictionary such as ambiguous_dna_complement
+       and ambiguous_rna_complement from Data.IUPACData.
 
     Returns a translation table (a string of length 256) for use with the
     python string's translate method to use in a (reverse) complement.
@@ -87,9 +87,9 @@ class Seq(object):
         """Create a Seq object.
 
         Arguments:
-            - seq - Sequence, required (string)
-            - alphabet - Optional argument, an Alphabet object from
-              Bio.Alphabet
+         - seq - Sequence, required (string)
+         - alphabet - Optional argument, an Alphabet object from
+           Bio.Alphabet
 
         You will typically use Bio.SeqIO to read in sequences from files as
         SeqRecord objects, whose sequence will be exposed as a Seq object via
@@ -398,9 +398,9 @@ class Seq(object):
         notation.
 
         Arguments:
-            - sub - a string or another Seq object to look for
-            - start - optional integer, slice start
-            - end - optional integer, slice end
+         - sub - a string or another Seq object to look for
+         - start - optional integer, slice start
+         - end - optional integer, slice end
 
         e.g.
 
@@ -470,9 +470,9 @@ class Seq(object):
         argument sub in the (sub)sequence given by [start:end].
 
         Arguments:
-            - sub - a string or another Seq object to look for
-            - start - optional integer, slice start
-            - end - optional integer, slice end
+         - sub - a string or another Seq object to look for
+         - start - optional integer, slice start
+         - end - optional integer, slice end
 
         Returns -1 if the subsequence is NOT found.
 
@@ -496,9 +496,9 @@ class Seq(object):
         substring argument sub in the (sub)sequence given by [start:end].
 
         Arguments:
-            - sub - a string or another Seq object to look for
-            - start - optional integer, slice start
-            - end - optional integer, slice end
+         - sub - a string or another Seq object to look for
+         - start - optional integer, slice start
+         - end - optional integer, slice end
 
         Returns -1 if the subsequence is NOT found.
 
@@ -904,26 +904,26 @@ class Seq(object):
         sequence raises an exception.
 
         Arguments:
-            - table - Which codon table to use?  This can be either a name
-              (string), an NCBI identifier (integer), or a CodonTable
-              object (useful for non-standard genetic codes).  This
-              defaults to the "Standard" table.
-            - stop_symbol - Single character string, what to use for
-              terminators.  This defaults to the asterisk, "*".
-            - to_stop - Boolean, defaults to False meaning do a full
-              translation continuing on past any stop codons (translated as the
-              specified stop_symbol).  If True, translation is terminated at
-              the first in frame stop codon (and the stop_symbol is not
-              appended to the returned protein sequence).
-            - cds - Boolean, indicates this is a complete CDS.  If True,
-              this checks the sequence starts with a valid alternative start
-              codon (which will be translated as methionine, M), that the
-              sequence length is a multiple of three, and that there is a
-              single in frame stop codon at the end (this will be excluded
-              from the protein sequence, regardless of the to_stop option).
-              If these tests fail, an exception is raised.
-            - gap - Single character string to denote symbol used for gaps.
-              It will try to guess the gap character from the alphabet.
+         - table - Which codon table to use?  This can be either a name
+           (string), an NCBI identifier (integer), or a CodonTable
+           object (useful for non-standard genetic codes).  This
+           defaults to the "Standard" table.
+         - stop_symbol - Single character string, what to use for
+           terminators.  This defaults to the asterisk, "*".
+         - to_stop - Boolean, defaults to False meaning do a full
+           translation continuing on past any stop codons (translated as the
+           specified stop_symbol).  If True, translation is terminated at
+           the first in frame stop codon (and the stop_symbol is not
+           appended to the returned protein sequence).
+         - cds - Boolean, indicates this is a complete CDS.  If True,
+           this checks the sequence starts with a valid alternative start
+           codon (which will be translated as methionine, M), that the
+           sequence length is a multiple of three, and that there is a
+           single in frame stop codon at the end (this will be excluded
+           from the protein sequence, regardless of the to_stop option).
+           If these tests fail, an exception is raised.
+         - gap - Single character string to denote symbol used for gaps.
+           It will try to guess the gap character from the alphabet.
 
         e.g. Using the standard table:
 
@@ -1331,9 +1331,9 @@ class UnknownSeq(Seq):
         notation.
 
         Arguments:
-            - sub - a string or another Seq object to look for
-            - start - optional integer, slice start
-            - end - optional integer, slice end
+         - sub - a string or another Seq object to look for
+         - start - optional integer, slice start
+         - end - optional integer, slice end
 
         >>> "NNNN".count("N")
         4
@@ -1822,9 +1822,9 @@ class MutableSeq(object):
         notation.
 
         Arguments:
-            - sub - a string or another Seq object to look for
-            - start - optional integer, slice start
-            - end - optional integer, slice end
+         - sub - a string or another Seq object to look for
+         - start - optional integer, slice start
+         - end - optional integer, slice end
 
         e.g.
 
@@ -2027,23 +2027,23 @@ def _translate_str(sequence, table, stop_symbol="*", to_stop=False,
     """Translate nucleotide string into a protein string (PRIVATE).
 
     Arguments:
-        - sequence - a string
-        - table - a CodonTable object (NOT a table name or id number)
-        - stop_symbol - a single character string, what to use for terminators.
-        - to_stop - boolean, should translation terminate at the first
-          in frame stop codon?  If there is no in-frame stop codon
-          then translation continues to the end.
-        - pos_stop - a single character string for a possible stop codon
-          (e.g. TAN or NNN)
-        - cds - Boolean, indicates this is a complete CDS.  If True, this
-          checks the sequence starts with a valid alternative start
-          codon (which will be translated as methionine, M), that the
-          sequence length is a multiple of three, and that there is a
-          single in frame stop codon at the end (this will be excluded
-          from the protein sequence, regardless of the to_stop option).
-          If these tests fail, an exception is raised.
-        - gap - Single character string to denote symbol used for gaps.
-          Defaults to None.
+     - sequence - a string
+     - table - a CodonTable object (NOT a table name or id number)
+     - stop_symbol - a single character string, what to use for terminators.
+     - to_stop - boolean, should translation terminate at the first
+       in frame stop codon?  If there is no in-frame stop codon
+       then translation continues to the end.
+     - pos_stop - a single character string for a possible stop codon
+       (e.g. TAN or NNN)
+     - cds - Boolean, indicates this is a complete CDS.  If True, this
+       checks the sequence starts with a valid alternative start
+       codon (which will be translated as methionine, M), that the
+       sequence length is a multiple of three, and that there is a
+       single in frame stop codon at the end (this will be excluded
+       from the protein sequence, regardless of the to_stop option).
+       If these tests fail, an exception is raised.
+     - gap - Single character string to denote symbol used for gaps.
+       Defaults to None.
 
     Returns a string.
 
@@ -2154,27 +2154,27 @@ def translate(sequence, table="Standard", stop_symbol="*", to_stop=False,
     MutableSeq, returns a Seq object with a protein alphabet.
 
     Arguments:
-        - table - Which codon table to use?  This can be either a name
-          (string), an NCBI identifier (integer), or a CodonTable object
-          (useful for non-standard genetic codes).  Defaults to the "Standard"
-          table.
-        - stop_symbol - Single character string, what to use for any
-          terminators, defaults to the asterisk, "*".
-        - to_stop - Boolean, defaults to False meaning do a full
-          translation continuing on past any stop codons
-          (translated as the specified stop_symbol).  If
-          True, translation is terminated at the first in
-          frame stop codon (and the stop_symbol is not
-          appended to the returned protein sequence).
-        - cds - Boolean, indicates this is a complete CDS.  If True, this
-          checks the sequence starts with a valid alternative start
-          codon (which will be translated as methionine, M), that the
-          sequence length is a multiple of three, and that there is a
-          single in frame stop codon at the end (this will be excluded
-          from the protein sequence, regardless of the to_stop option).
-          If these tests fail, an exception is raised.
-        - gap - Single character string to denote symbol used for gaps.
-          Defaults to None.
+     - table - Which codon table to use?  This can be either a name
+       (string), an NCBI identifier (integer), or a CodonTable object
+       (useful for non-standard genetic codes).  Defaults to the "Standard"
+       table.
+     - stop_symbol - Single character string, what to use for any
+       terminators, defaults to the asterisk, "*".
+     - to_stop - Boolean, defaults to False meaning do a full
+       translation continuing on past any stop codons
+       (translated as the specified stop_symbol).  If
+       True, translation is terminated at the first in
+       frame stop codon (and the stop_symbol is not
+       appended to the returned protein sequence).
+     - cds - Boolean, indicates this is a complete CDS.  If True, this
+       checks the sequence starts with a valid alternative start
+       codon (which will be translated as methionine, M), that the
+       sequence length is a multiple of three, and that there is a
+       single in frame stop codon at the end (this will be excluded
+       from the protein sequence, regardless of the to_stop option).
+       If these tests fail, an exception is raised.
+     - gap - Single character string to denote symbol used for gaps.
+       Defaults to None.
 
     A simple string example using the default (standard) genetic code:
 
