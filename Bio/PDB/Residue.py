@@ -84,7 +84,25 @@ class Residue(Entity):
         Entity.add(self, atom)
 
     def sort(self):
-        self.child_list.sort(self._sort)
+        """Sort child atoms.
+
+        Atoms N, CA, C, O always come first, thereafter alphabetically
+        by name, with any alternative location specifier for disordered
+        atoms (altloc) as a tie-breaker.
+        """
+        # Defining sort key function within the sort method's scope:
+        def sort_index(atom):
+            """Build tuple of (int, name, alt-loc) for sorting.
+
+            The first integer is 0, 1, 2, 3, 4 for atoms N, CA, C, O, other.
+            """
+            try:
+                i = ["N", "CA", "C", "O"].index(atom.name)
+            except ValueError:
+                i = 4
+            return (i, atom.name, atom.altloc)
+
+        self.child_list.sort(key=sort_index)
 
     def flag_disordered(self):
         """Set the disordered flag."""
