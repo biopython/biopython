@@ -19,6 +19,14 @@ cache: pip
 matrix:
   include:
     - stage: basics
+      python: 2.7
+      env: TOXENV=style
+      addons:
+        apt:
+          packages:
+      before_install: echo "Going to run basic checks"
+    - stage: basics
+      python: 3.6
       env: TOXENV=style
       addons:
         apt:
