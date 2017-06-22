@@ -530,11 +530,27 @@ class ParseTest(unittest.TestCase):
             os.remove(filename)
 
     def test_deepcopy_of_structure_with_disorder(self):
-        """Test deepcopy of a structure with disordered atoms.
+        """Test deepcopy of a structure with disordered atoms; and sort it.
 
         Shouldn't cause recursion.
         """
-        _ = deepcopy(self.structure)
+        structure = deepcopy(self.structure)
+        # Sorting a residue modifies it in place, but since we
+        # have made a copy this won't alter the other tests
+        # using self.structure
+        for residue in structure.get_residues():
+            old = [a.name for a in residue]
+            residue.sort()
+            new = [a.name for a in residue]
+            special = []
+            for a in ['N', 'CA', 'C', 'O']:
+                if a in old:
+                    special.append(a)
+            special_len = len(special)
+            self.assertEqual(new[0:special_len], special,
+                             "Sorted residue did not place N, CA, C, O first: %s" % new)
+            self.assertEqual(new[special_len:], sorted(new[special_len:]),
+                                 "After N, CA, C, O should be alphabet: %s" % new)
 
 
 class ParseReal(unittest.TestCase):
@@ -551,6 +567,24 @@ class ParseReal(unittest.TestCase):
             self.assertFalse(len(struct))
         finally:
             os.remove(filename)
+
+    def test_residue_sort(self):
+        """Sorting atoms in residues."""
+        parser = PDBParser(PERMISSIVE=False)
+        structure = parser.get_structure("example", "PDB/1A8O.pdb")
+        for residue in structure.get_residues():
+            old = [a.name for a in residue]
+            residue.sort()
+            new = [a.name for a in residue]
+            special = []
+            for a in ['N', 'CA', 'C', 'O']:
+                if a in old:
+                    special.append(a)
+            special_len = len(special)
+            self.assertEqual(new[0:special_len], special,
+                             "Sorted residue did not place N, CA, C, O first: %s" % new)
+            self.assertEqual(new[special_len:], sorted(new[special_len:]),
+                                 "After N, CA, C, O should be alphabet: %s" % new)
 
     def test_c_n(self):
         """Extract polypeptides from 1A80."""
