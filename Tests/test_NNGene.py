@@ -20,11 +20,15 @@ from Bio import SeqIO
 from Bio.Seq import Seq
 from Bio.Alphabet import IUPAC
 
-# stuff we are testing
-from Bio.NeuralNetwork.Gene import Schema
-from Bio.NeuralNetwork.Gene import Motif
-from Bio.NeuralNetwork.Gene import Signature
-from Bio.NeuralNetwork.Gene import Pattern
+import warnings
+from Bio import BiopythonDeprecationWarning
+with warnings.catch_warnings():
+    warnings.simplefilter('ignore', BiopythonDeprecationWarning)
+    # stuff we are testing
+    from Bio.NeuralNetwork.Gene import Schema
+    from Bio.NeuralNetwork.Gene import Motif
+    from Bio.NeuralNetwork.Gene import Signature
+    from Bio.NeuralNetwork.Gene import Pattern
 
 VERBOSE = 0
 
