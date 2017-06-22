@@ -77,7 +77,6 @@ def FastaIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
     """Generator function to iterate over Fasta records (as SeqRecord objects).
 
     Arguments:
-
      - handle - input file
      - alphabet - optional alphabet
      - title2ids - A function that, when given the title of the FASTA
@@ -138,7 +137,6 @@ class FastaWriter(SequentialSequenceWriter):
         """Create a Fasta writer.
 
         Arguments:
-
          - handle - Handle to an output file, e.g. as returned
            by open(filename, "w")
          - wrap -   Optional line length used to wrap sequence lines.

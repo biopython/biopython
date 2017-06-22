@@ -32,7 +32,6 @@ class NeighborSearch(object):
         """Create the object.
 
         Arguments:
-
          - atom_list - list of atoms. This list is used in the queries.
            It can contain atoms from different structures.
          - bucket_size - bucket size of KD tree. You can play around

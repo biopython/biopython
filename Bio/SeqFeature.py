@@ -17,7 +17,7 @@ What's here:
 Base class to hold a Feature
 ----------------------------
 
-classes:
+Classes:
  - SeqFeature
 
 Hold information about a Reference
@@ -26,7 +26,7 @@ Hold information about a Reference
 This is an attempt to create a General class to hold Reference type
 information.
 
-classes:
+Classes:
  - Reference
 
 Specify locations of a feature on a Sequence
@@ -36,7 +36,7 @@ This aims to handle, in Ewan Birney's words, 'the dreaded fuzziness issue'.
 This has the advantages of allowing us to handle fuzzy stuff in case anyone
 needs it, and also be compatible with BioPerl etc and BioSQL.
 
-classes:
+Classes:
  - FeatureLocation - Specify the start and end location of a feature.
  - CompoundLocation - Collection of FeatureLocation objects (for joins etc).
  - ExactPosition - Specify the position as being exact.
@@ -469,16 +469,16 @@ class Reference(object):
     """Represent a Generic Reference object.
 
     Attributes:
-    - location - A list of Location objects specifying regions of
-    the sequence that the references correspond to. If no locations are
-    specified, the entire sequence is assumed.
-    - authors - A big old string, or a list split by author, of authors
-    for the reference.
-    - title - The title of the reference.
-    - journal - Journal the reference was published in.
-    - medline_id - A medline reference for the article.
-    - pubmed_id - A pubmed reference for the article.
-    - comment - A place to stick any comments about the reference.
+     - location - A list of Location objects specifying regions of
+       the sequence that the references correspond to. If no locations are
+       specified, the entire sequence is assumed.
+     - authors - A big old string, or a list split by author, of authors
+       for the reference.
+     - title - The title of the reference.
+     - journal - Journal the reference was published in.
+     - medline_id - A medline reference for the article.
+     - pubmed_id - A pubmed reference for the article.
+     - comment - A place to stick any comments about the reference.
 
     """
 
@@ -1610,9 +1610,9 @@ class BetweenPosition(int, AbstractPosition):
     """Specify the position of a boundary between two coordinates (OBSOLETE?).
 
     Arguments:
-    - position - The default integer position
-    - left - The start (left) position of the boundary
-    - right - The end (right) position of the boundary
+     - position - The default integer position
+     - left - The start (left) position of the boundary
+     - right - The end (right) position of the boundary
 
     This allows dealing with a position like 123^456. This
     indicates that the start of the sequence is somewhere between
@@ -1717,10 +1717,10 @@ class BeforePosition(int, AbstractPosition):
     """Specify a position where the actual location occurs before it.
 
     Arguments:
-    - position - The upper boundary of where the location can occur.
-    - extension - An optional argument which must be zero since we don't
-    have an extension. The argument is provided so that the same number of
-    arguments can be passed to all position types.
+     - position - The upper boundary of where the location can occur.
+     - extension - An optional argument which must be zero since we don't
+       have an extension. The argument is provided so that the same number
+       of arguments can be passed to all position types.
 
     This is used to specify positions like (<10..100) where the location
     occurs somewhere before position 10.
@@ -1785,10 +1785,10 @@ class AfterPosition(int, AbstractPosition):
     """Specify a position where the actual location is found after it.
 
     Arguments:
-    - position - The lower boundary of where the location can occur.
-    - extension - An optional argument which must be zero since we don't
-    have an extension. The argument is provided so that the same number of
-    arguments can be passed to all position types.
+     - position - The lower boundary of where the location can occur.
+     - extension - An optional argument which must be zero since we don't
+       have an extension. The argument is provided so that the same number
+       of arguments can be passed to all position types.
 
     This is used to specify positions like (>10..100) where the location
     occurs somewhere after position 10.

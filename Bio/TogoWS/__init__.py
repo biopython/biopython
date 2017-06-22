@@ -80,13 +80,13 @@ def entry(db, id, format=None, field=None):
     """Call TogoWS 'entry' to fetch a record.
 
     Arguments:
-        - db - database (string), see list below.
-        - id - identier (string) or a list of identifiers (either as a list of
-          strings or a single string with comma separators).
-        - format - return data file format (string), options depend on the database
-          e.g. "xml", "json", "gff", "fasta", "ttl" (RDF Turtle)
-        - field - specific field from within the database record (string)
-          e.g. "au" or "authors" for pubmed.
+     - db - database (string), see list below.
+     - id - identier (string) or a list of identifiers (either as a list of
+       strings or a single string with comma separators).
+     - format - return data file format (string), options depend on the database
+       e.g. "xml", "json", "gff", "fasta", "ttl" (RDF Turtle)
+     - field - specific field from within the database record (string)
+       e.g. "au" or "authors" for pubmed.
 
     At the time of writing, this includes the following::
 
@@ -148,8 +148,9 @@ def entry(db, id, format=None, field=None):
 def search_count(db, query):
     """Call TogoWS search count to see how many matches a search gives.
 
-    db - database (string), see http://togows.dbcls.jp/search
-    query - search term (string)
+    Arguments:
+     - db - database (string), see http://togows.dbcls.jp/search
+     - query - search term (string)
 
     You could then use the count to download a large set of search results in
     batches using the offset and limit options to Bio.TogoWS.search(). In
@@ -181,11 +182,11 @@ def search_iter(db, query, limit=None, batch=100):
     """Call TogoWS search iteratating over the results (generator function).
 
     Arguments:
-        - db - database (string), see http://togows.dbcls.jp/search
-        - query - search term (string)
-        - limit - optional upper bound on number of search results
-        - batch - number of search results to pull back each time talk to
-          TogoWS (currently limited to 100).
+     - db - database (string), see http://togows.dbcls.jp/search
+     - query - search term (string)
+     - limit - optional upper bound on number of search results
+     - batch - number of search results to pull back each time talk to
+       TogoWS (currently limited to 100).
 
     You would use this function within a for loop, e.g.
 
@@ -231,12 +232,12 @@ def search(db, query, offset=None, limit=None, format=None):
     function is more suitable for end users.
 
     Arguments:
-        - db - database (string), see http://togows.dbcls.jp/search/
-        - query - search term (string)
-        - offset, limit - optional integers specifying which result to start from
-          (1 based) and the number of results to return.
-        - format - return data file format (string), e.g. "json", "ttl" (RDF)
-          By default plain text is returned, one result per line.
+     - db - database (string), see http://togows.dbcls.jp/search/
+     - query - search term (string)
+     - offset, limit - optional integers specifying which result to start from
+       (1 based) and the number of results to return.
+     - format - return data file format (string), e.g. "json", "ttl" (RDF)
+       By default plain text is returned, one result per line.
 
     At the time of writing, TogoWS applies a default count limit of 100
     search results, and this is an upper bound. To access more results,
@@ -291,9 +292,9 @@ def convert(data, in_format, out_format):
     """Call TogoWS for file format convertion.
 
     Arguments:
-    - data - string or handle containing input record(s)
-    - in_format - string describing the input file format (e.g. "genbank")
-    - out_format - string describing the requested output format (e.g. "fasta")
+     - data - string or handle containing input record(s)
+     - in_format - string describing the input file format (e.g. "genbank")
+     - out_format - string describing the requested output format (e.g. "fasta")
 
     For a list of supported conversions (e.g. "genbank" to "fasta"), see
     http://togows.dbcls.jp/convert/

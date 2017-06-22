@@ -133,10 +133,12 @@ class PDBList(object):
         largest numerical name is used.
         Returns None if something goes wrong.
 
-        Contents of the data/status dir (20031013 would be used);
-        drwxrwxr-x   2 1002     sysadmin     512 Oct  6 18:28 20031006
-        drwxrwxr-x   2 1002     sysadmin     512 Oct 14 02:14 20031013
-        -rw-r--r--   1 1002     sysadmin    1327 Mar 12  2001 README
+        Contents of the data/status dir (20031013 would be used);:
+
+            drwxrwxr-x   2 1002     sysadmin     512 Oct  6 18:28 20031006
+            drwxrwxr-x   2 1002     sysadmin     512 Oct 14 02:14 20031013
+            -rw-r--r--   1 1002     sysadmin    1327 Mar 12  2001 README
+
         """
         path = self.pdb_server + '/pub/pdb/data/status/latest/'
 
@@ -147,8 +149,8 @@ class PDBList(object):
         return [added, modified, obsolete]
 
     def get_all_entries(self):
-        """Retrieves a big file containing all the
-        PDB entries and some annotation to them.
+        """Retrieves a big file containing all the PDB entries and some annotation.
+
         Returns a list of PDB codes in the index file.
         """
         url = self.pdb_server + '/pub/pdb/derived_data/index/entries.idx'
@@ -427,9 +429,7 @@ class PDBList(object):
                 outfile.writelines((x + '\n' for x in entries))
 
     def get_seqres_file(self, savefile='pdb_seqres.txt'):
-        """Retrieves a (big) file containing all the sequences of PDB entries
-        and writes it to a file.
-        """
+        """Retrieves and save a (big) file containing all the sequences of PDB entries."""
         print("Retrieving sequence file (takes over 110 MB).")
         url = self.pdb_server + '/pub/pdb/derived_data/pdb_seqres.txt'
         _urlretrieve(url, savefile)
@@ -441,23 +441,24 @@ if __name__ == '__main__':
     (c) Kristian Rother 2003, Wiktoria Karwicka & Jacek Smietanski 2016
     Contributed to Biopython
 
-    Usage:
-    PDBList.py update <pdb_path> [options]   - write weekly PDB updates to
-                                               local pdb tree.
-    PDBList.py all    <pdb_path> [options]   - write all PDB entries to
-                                               local pdb tree.
-    PDBList.py obsol  <pdb_path> [options]   - write all obsolete PDB
-                                               entries to local pdb tree.
-    PDBList.py <PDB-ID> <pdb_path> [options] - retrieve single structure
-    PDBList.py (<PDB-ID1>,<PDB-ID2>,...) <pdb_path> [options] - retrieve a set
-                                               of structures
+    Usage::
+
+        PDBList.py update <pdb_path> [options]   - write weekly PDB updates to
+                                                   local pdb tree.
+        PDBList.py all    <pdb_path> [options]   - write all PDB entries to
+                                                   local pdb tree.
+        PDBList.py obsol  <pdb_path> [options]   - write all obsolete PDB
+                                                   entries to local pdb tree.
+        PDBList.py <PDB-ID> <pdb_path> [options] - retrieve single structure
+        PDBList.py (<PDB-ID1>,<PDB-ID2>,...) <pdb_path> [options] - retrieve a set
+                                                   of structures
 
     Options:
-       -d       A single directory will be used as <pdb_path>, not a tree.
-       -o       Overwrite existing structure files.
-       -pdb     Downloads structures in PDB format
-       -xml     Downloads structures in PDBML (XML) format
-       -mmtf    Downloads structures in mmtf format
+     -d       A single directory will be used as <pdb_path>, not a tree.
+     -o       Overwrite existing structure files.
+     -pdb     Downloads structures in PDB format
+     -xml     Downloads structures in PDBML (XML) format
+     -mmtf    Downloads structures in mmtf format
 
     Maximum one format can be specified simultaneously (if more selected, only
     the last will be considered). By default (no format specified) structures are

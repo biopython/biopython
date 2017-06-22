@@ -960,14 +960,14 @@ def FastqGeneralIterator(handle):
 def FastqPhredIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
     """Generator function to iterate over FASTQ records (as SeqRecord objects).
 
-        - handle - input file
-        - alphabet - optional alphabet
-        - title2ids - A function that, when given the title line from the FASTQ
-          file (without the beginning >), will return the id, name and
-          description (in that order) for the record as a tuple of
-          strings.  If this is not given, then the entire title line
-          will be used as the description, and the first word as the
-          id and name.
+    Arguments:
+     - handle - input file
+     - alphabet - optional alphabet
+     - title2ids - A function that, when given the title line from the FASTQ
+       file (without the beginning >), will return the id, name and
+       description (in that order) for the record as a tuple of strings.
+       If this is not given, then the entire title line will be used as
+       the description, and the first word as the id and name.
 
     Note that use of title2ids matches that of Bio.SeqIO.FastaIO.
 
@@ -1479,16 +1479,16 @@ class QualPhredWriter(SequentialSequenceWriter):
 
         Arguments:
          - handle - Handle to an output file, e.g. as returned
-                    by open(filename, "w")
+           by open(filename, "w")
          - wrap   - Optional line length used to wrap sequence lines.
-                    Defaults to wrapping the sequence at 60 characters
-                    Use zero (or None) for no wrapping, giving a single
-                    long line for the sequence.
+           Defaults to wrapping the sequence at 60 characters. Use
+           zero (or None) for no wrapping, giving a single long line
+           for the sequence.
          - record2title - Optional function to return the text to be
-                    used for the title line of each record.  By default
-                    a combination of the record.id and record.description
-                    is used.  If the record.description starts with the
-                    record.id, then just the record.description is used.
+           used for the title line of each record.  By default a
+           combination of the record.id and record.description is
+           used.  If the record.description starts with the record.id,
+           then just the record.description is used.
 
         The record2title argument is present for consistency with the
         Bio.SeqIO.FastaIO writer class.
