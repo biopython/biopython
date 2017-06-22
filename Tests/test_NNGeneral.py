@@ -8,9 +8,13 @@ libraries.
 import random
 import unittest
 
-# local stuff
-from Bio.NeuralNetwork.Training import TrainingExample, ExampleManager
-from Bio.NeuralNetwork.StopTraining import ValidationIncreaseStop
+import warnings
+from Bio import BiopythonDeprecationWarning
+with warnings.catch_warnings():
+    warnings.simplefilter('ignore', BiopythonDeprecationWarning)
+    # local stuff
+    from Bio.NeuralNetwork.Training import TrainingExample, ExampleManager
+    from Bio.NeuralNetwork.StopTraining import ValidationIncreaseStop
 
 
 class StopTrainingTest(unittest.TestCase):
