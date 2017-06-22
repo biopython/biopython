@@ -16,12 +16,6 @@ This release of Biopython supports Python 2.7, 3.4, 3.5 and 3.6 (we have now
 dropped support for Python 3.3). It has also been tested on PyPy v5.7,
 PyPy3.5 v5.8 beta, and Jython 2.7 (although support for Jython is deprecated)..
 
-Two new arguments for reading and writing blast-xml files have been added
-to the Bio.SearchIO functions (read/parse and write, respectively). They
-are 'use_raw_hit_ids' and 'use_raw_query_ids'. Check out the relevant
-SearchIO.BlastIO documentation for a complete description of what these
-arguments do.
-
 Biopython now has a new logo, contributed by Patrick Kunzmann. Drawing on our
 original logo and the current Python logo, this shows a yellow and blue snake
 forming a double helix.
@@ -31,6 +25,12 @@ under the format name "mauve" (contributed by Eric Rasche).
 
 Bio.ExPASy was updated to fix fetching PROSITE and PRODOC records, and return
 text-mode handles for use under Python 3.
+
+Two new arguments for reading and writing blast-xml files have been added
+to the Bio.SearchIO functions (read/parse and write, respectively). They
+are 'use_raw_hit_ids' and 'use_raw_query_ids'. Check out the relevant
+SearchIO.BlastIO documentation for a complete description of what these
+arguments do.
 
 Bio.motifs was updated to support changes in MEME v4.11.4 output.
 
