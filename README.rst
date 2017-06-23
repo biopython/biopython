@@ -78,7 +78,7 @@ We currently recommend using Python 3.6 from http://www.python.org
 Biopython is currently supported and tested on the following Python
 implementations:
 
-- Python 2.7, 3.3, 3.4, 3.5, 3.6 -- see http://www.python.org
+- Python 2.7, 3.4, 3.5, 3.6 -- see http://www.python.org
 
   This is the primary development platform for Biopython.
 
@@ -90,12 +90,11 @@ implementations:
 
 - Jython 2.7 -- see http://www.jython.org
 
-  We provide limited support for Jython, but aside from ``Bio.Restriction``,
-  modules with C code, or dependent on SQLite3 or NumPy, everything should
-  work. There are some known issues with test failures which have not yet
-  been resolved.
+  We have decided to deprecate support for Jython, but aside from
+  ``Bio.Restriction``, modules with C code, or dependent on SQLite3 or NumPy,
+  everything should work. There are some known issues with test failures
+  which have not yet been resolved.
 
-Please note that support for Python 3.3 is deprecated as of Biopython 1.67.
 Biopython 1.68 was our final release to support Python 2.6.
 
 
