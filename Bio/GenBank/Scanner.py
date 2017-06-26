@@ -299,7 +299,7 @@ class InsdcScanner(object):
                     # New qualifier
                     i = line.find("=")
                     key = line[1:i]  # does not work if i==-1
-                    value = line[i + 1:]  # we ignore 'value' if i==-1
+                    value = line[i + 1:].lstrip()  # we ignore 'value' if i==-1
                     if i == -1:
                         # Qualifier with no key, e.g. /pseudo
                         key = line[1:]
