@@ -279,7 +279,7 @@ Distribution Structure
 - ``DEPRECATED.rst`` -- Contains information about modules in Biopython that are
   removed or no longer recommended for use, and how to update code that uses
   those modules.
-- ``MANIFEST.in`` -- Tells distutils what files to distribute.
+- ``MANIFEST.in`` -- Configures which files to include in releases.
 - ``setup.py``    -- Installation file.
 - ``Bio/``        -- The main code base code.
 - ``BioSQL/``     -- Code for using Biopython with BioSQL databases.
