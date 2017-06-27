@@ -67,10 +67,10 @@ class dbfetchTests(unittest.TestCase):
         self.assertEqual(str(data[0].seq)[:100], 'SSVFVPDEWEVSREKITLLRELGQGSFGMVYEGNARDIIKGEAETRVAVKTVNESASLRERIEFLNEASVMKGFTCHHVVRLLGVVSKGQPTLVVMELMA')
         self.assertEqual(len(str(data[1].seq)), 13)
         self.assertEqual(str(data[1].seq)[:100], 'PATGDFMNMSPVG')
-        
+
     def test_dbfetch_interpro(self):
         """Query InterPro database via module method."""
-        h = dbfetch("interpro", "IPR006212", "tab","raw")
+        h = dbfetch("interpro", "IPR006212", "tab", "raw")
         for line in h.readlines():
             if line[0] != '#':
                 cols = line.split('\t')
@@ -78,7 +78,7 @@ class dbfetchTests(unittest.TestCase):
                 self.assertEqual(cols[1], "Repeat")
                 self.assertEqual(cols[2], "Furin_repeat")
                 self.assertEqual(cols[3][:-1], "Furin-like repeat")
-        h = dbfetch("interpro", "IPR008958,IPR009030", "tab","raw")
+        h = dbfetch("interpro", "IPR008958,IPR009030", "tab", "raw")
         data = h.readlines()
         cols = data[2].split('\t')
         self.assertEqual(cols[0], "IPR008958")
