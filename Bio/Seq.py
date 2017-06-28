@@ -431,7 +431,7 @@ class Seq(object):
         # If it has one, check the alphabet:
         sub_str = self._get_seq_str_and_check_alphabet(sub)
         return str(self).count(sub_str, start, end)
-    
+
     def count_overlap(self, sub, start=0, end=sys.maxsize):
         """Return an overlapping count.
 
@@ -1467,7 +1467,7 @@ class UnknownSeq(Seq):
         count() method is much for efficient.
         """
         # The implementation is currently identical to that of
-        # Seq.count_overlap() 
+        # Seq.count_overlap()
         sub_str = self._get_seq_str_and_check_alphabet(sub)
         self = str(self)
         overlap_count = 0
