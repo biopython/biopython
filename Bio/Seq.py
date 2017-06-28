@@ -392,6 +392,8 @@ class Seq(object):
         This behaves like the python string method of the same name,
         which does a non-overlapping count!
 
+        For an overlapping search use the newer count_overlap() method.
+
         Returns an integer, the number of occurrences of substring
         argument sub in the (sub)sequence given by [start:end].
         Optional arguments start and end are interpreted as in slice
@@ -429,6 +431,58 @@ class Seq(object):
         # If it has one, check the alphabet:
         sub_str = self._get_seq_str_and_check_alphabet(sub)
         return str(self).count(sub_str, start, end)
+    
+    def count_overlap(self, sub, start=0, end=sys.maxsize):
+        """Return an overlapping count.
+
+        For a non-overlapping search use the count() method.
+
+        Returns an integer, the number of occurrences of substring
+        argument sub in the (sub)sequence given by [start:end].
+        Optional arguments start and end are interpreted as in slice
+        notation.
+
+        Arguments:
+         - sub - a string or another Seq object to look for
+         - start - optional integer, slice start
+         - end - optional integer, slice end
+
+        e.g.
+
+        >>> from Bio.Seq import Seq
+        >>> print(Seq("AAAA").count_overlap("AA"))
+        3
+        >>> print(Seq("ATATATATA").count_overlap("ATA"))
+        4
+        >>> print(Seq("ATATATATA").count_overlap("ATA", 3, -1))
+        1
+
+        Where substrings do not overlap, should behave the same as
+        the count() method:
+
+        >>> from Bio.Seq import Seq
+        >>> my_seq = Seq("AAAATGA")
+        >>> print(my_seq.count_overlap("A"))
+        5
+        >>> print(my_seq.count_overlap("ATG"))
+        1
+        >>> print(my_seq.count_overlap(Seq("AT")))
+        1
+        >>> print(my_seq.count_overlap("AT", 2, -1))
+        1
+
+        HOWEVER, do not use this method for such cases because the
+        count() method is much for efficient.
+        """
+        sub_str = self._get_seq_str_and_check_alphabet(sub)
+        self = str(self)
+        overlap_count = 0
+        while True:
+            start = self.find(sub_str, start, end) + 1
+            if start != 0:
+                overlap_count += 1
+            else:
+                return overlap_count
 
     def __contains__(self, char):
         """Implement the 'in' keyword, like a python string.
@@ -1325,6 +1379,8 @@ class UnknownSeq(Seq):
         This behaves like the python string (and Seq object) method of the
         same name, which does a non-overlapping count!
 
+        For an overlapping search use the newer count_overlap() method.
+
         Returns an integer, the number of occurrences of substring
         argument sub in the (sub)sequence given by [start:end].
         Optional arguments start and end are interpreted as in slice
@@ -1374,6 +1430,53 @@ class UnknownSeq(Seq):
                     return str(self).count(sub_str, start, end)
             else:
                 return 0
+
+    def count_overlap(self, sub, start=0, end=sys.maxsize):
+        """Return an overlapping count.
+
+        For a non-overlapping search use the count() method.
+
+        Returns an integer, the number of occurrences of substring
+        argument sub in the (sub)sequence given by [start:end].
+        Optional arguments start and end are interpreted as in slice
+        notation.
+
+        Arguments:
+         - sub - a string or another Seq object to look for
+         - start - optional integer, slice start
+         - end - optional integer, slice end
+
+        e.g.
+
+        >>> UnknownSeq(4, character="N").count_overlap("NN")
+        3
+        >>> UnknownSeq(4, character="N").count_overlap("NNN")
+        2
+
+        Where substrings do not overlap, should behave the same as
+        the count() method:
+
+        >>> UnknownSeq(4, character="N").count_overlap("N")
+        4
+        >>> UnknownSeq(4, character="N").count_overlap("A")
+        0
+        >>> UnknownSeq(4, character="N").count_overlap("AA")
+        0
+
+        HOWEVER, do not use this method for such cases because the
+        count() method is much for efficient.
+        """
+        # The implementation is currently identical to that of
+        # Seq.count_overlap() 
+        sub_str = self._get_seq_str_and_check_alphabet(sub)
+        self = str(self)
+        overlap_count = 0
+        while True:
+            start = self.find(sub_str, start, end) + 1
+            if start != 0:
+                overlap_count += 1
+            else:
+                return overlap_count
 
     def complement(self):
         """Return the complement of an unknown nucleotide equals itself.
@@ -1816,6 +1919,8 @@ class MutableSeq(object):
         This behaves like the python string method of the same name,
         which does a non-overlapping count!
 
+        For an overlapping search use the newer count_overlap() method.
+
         Returns an integer, the number of occurrences of substring
         argument sub in the (sub)sequence given by [start:end].
         Optional arguments start and end are interpreted as in slice
@@ -1869,6 +1974,60 @@ class MutableSeq(object):
         else:
             # TODO - Can we do this more efficiently?
             return str(self).count(search, start, end)
+
+    def count_overlap(self, sub, start=0, end=sys.maxsize):
+        """Return an overlapping count.
+
+        For a non-overlapping search use the count() method.
+
+        Returns an integer, the number of occurrences of substring
+        argument sub in the (sub)sequence given by [start:end].
+        Optional arguments start and end are interpreted as in slice
+        notation.
+
+        Arguments:
+         - sub - a string or another Seq object to look for
+         - start - optional integer, slice start
+         - end - optional integer, slice end
+
+        e.g.
+
+        >>> from Bio.Seq import MutableSeq
+        >>> print(MutableSeq("AAAA").count_overlap("AA"))
+        3
+        >>> print(MutableSeq("ATATATATA").count_overlap("ATA"))
+        4
+        >>> print(MutableSeq("ATATATATA").count_overlap("ATA", 3, -1))
+        1
+
+        Where substrings do not overlap, should behave the same as
+        the count() method:
+
+        >>> from Bio.Seq import MutableSeq
+        >>> my_mseq = MutableSeq("AAAATGA")
+        >>> print(my_mseq.count_overlap("A"))
+        5
+        >>> print(my_mseq.count_overlap("ATG"))
+        1
+        >>> print(my_mseq.count_overlap(Seq("AT")))
+        1
+        >>> print(my_mseq.count_overlap("AT", 2, -1))
+        1
+
+        HOWEVER, do not use this method for such cases because the
+        count() method is much for efficient.
+        """
+        # The implementation is currently identical to that of
+        # Seq.count_overlap() apart from the definition of sub_str
+        sub_str = str(sub)
+        self = str(self)
+        overlap_count = 0
+        while True:
+            start = self.find(sub_str, start, end) + 1
+            if start != 0:
+                overlap_count += 1
+            else:
+                return overlap_count
 
     def index(self, item):
         """Return the position of a subsequence of a single letter."""
