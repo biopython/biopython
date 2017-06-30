@@ -187,6 +187,7 @@ please open an issue on GitHub or mention it on the development mailing list.
 - Sunhwan Jo <https://github.com/sunhwan>
 - Tarcisio Fedrizzi <https://github.com/hcraT>
 - Tarjei Mikkelsen <tarjei at domain genome.wi.mit.edu>
+- Ted Cybulski <https://github.com/tcyb>
 - Terry Jones <https://github.com/terrycojones>
 - Thomas Hamelryck <thamelry at domain binf.ku.dk>
 - Thomas Holder <https://github.com/speleo3>
