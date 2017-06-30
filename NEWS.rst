@@ -67,6 +67,7 @@ possible, especially the following contributors:
 - Rodrigo Dorantes-Gilardi (first contribution)
 - Sacha Laurent (first contribution)
 - Sourav Singh
+- Ted Cybulski (first contribution)
 - Tiago Antao
 - Wibowo 'Bow' Arindrarto
 - Zheng Ruan
