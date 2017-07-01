@@ -9,10 +9,14 @@ from Bio.Seq import MutableSeq
 from Bio.Alphabet import SingleLetterAlphabet
 
 # local stuff
-from Bio.GA.Organism import Organism
-from Bio.GA.Mutation.General import SafeFitnessMutation
-from Bio.GA.Mutation.Simple import ConversionMutation
-from Bio.GA.Mutation.Simple import SinglePositionMutation
+import warnings
+from Bio import BiopythonDeprecationWarning
+with warnings.catch_warnings():
+    warnings.simplefilter('ignore', BiopythonDeprecationWarning)
+    from Bio.GA.Organism import Organism
+    from Bio.GA.Mutation.General import SafeFitnessMutation
+    from Bio.GA.Mutation.Simple import ConversionMutation
+    from Bio.GA.Mutation.Simple import SinglePositionMutation
 
 
 class TestAlphabet(SingleLetterAlphabet):

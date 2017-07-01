@@ -28,12 +28,16 @@ import unittest
 from Bio import Alphabet
 
 # Genetic Algorithm stuff
-from Bio.GA.Evolver import GenerationEvolver
-from Bio.GA import Organism
-from Bio.GA.Mutation.Simple import ConversionMutation
-from Bio.GA.Crossover.Point import SinglePointCrossover
-from Bio.GA.Selection.RouletteWheel import RouletteWheelSelection
-from Bio.GA.Selection.Tournament import TournamentSelection
+import warnings
+from Bio import BiopythonDeprecationWarning
+with warnings.catch_warnings():
+    warnings.simplefilter('ignore', BiopythonDeprecationWarning)
+    from Bio.GA.Evolver import GenerationEvolver
+    from Bio.GA import Organism
+    from Bio.GA.Mutation.Simple import ConversionMutation
+    from Bio.GA.Crossover.Point import SinglePointCrossover
+    from Bio.GA.Selection.RouletteWheel import RouletteWheelSelection
+    from Bio.GA.Selection.Tournament import TournamentSelection
 
 VERBOSE = 0
 

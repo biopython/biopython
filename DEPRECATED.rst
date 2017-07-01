@@ -30,8 +30,23 @@ installation simply aborts with a error message.
 
 Python 3.3
 ==========
-Still suported but deprecated as of Release 1.67, triggering a warning
-at installation time.
+No longer supported as of Release 1.70, having triggered a warning with
+release 1.67 onwards.
+
+Jython
+======
+Biopython is mostly working under Jython 2.7.0, but support for Jython
+is deprecated as of Release 1.70.
+
+Bio.GA
+======
+This was deprecated in Biopython 1.70. Please consider using a dedicated
+genetic algorithm library like DEAP instead.
+
+Bio.NeuralNetwork
+=================
+This was deprecated in Biopython 1.70. Please consider using a dedicated
+machine learning library like scikit-learn or TensorFlow instead.
 
 Bio.Phylo.CDAOIO.CDAOError
 ==========================

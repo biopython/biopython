@@ -8,9 +8,12 @@ import unittest
 from Bio import Alphabet
 from Bio.Seq import MutableSeq
 
-
 # local stuff
-from Bio.GA import Organism
+import warnings
+from Bio import BiopythonDeprecationWarning
+with warnings.catch_warnings():
+    warnings.simplefilter('ignore', BiopythonDeprecationWarning)
+    from Bio.GA import Organism
 
 
 # -- utility functions
