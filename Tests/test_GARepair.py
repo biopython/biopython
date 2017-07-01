@@ -12,14 +12,13 @@ from Bio.Alphabet import Alphabet
 from Bio.Seq import MutableSeq
 
 # local stuff
-from Bio.GA.Organism import Organism
-from Bio.GA.Repair.Stabilizing import AmbiguousRepair
-
 import warnings
 from Bio import BiopythonDeprecationWarning
 with warnings.catch_warnings():
     warnings.simplefilter('ignore', BiopythonDeprecationWarning)
     from Bio.NeuralNetwork.Gene.Schema import Schema
+    from Bio.GA.Organism import Organism
+    from Bio.GA.Repair.Stabilizing import AmbiguousRepair
 
 
 class TestAlphabet(Alphabet):
