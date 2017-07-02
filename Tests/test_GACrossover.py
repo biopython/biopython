@@ -9,13 +9,17 @@ from Bio.Seq import MutableSeq
 from Bio.Alphabet import SingleLetterAlphabet
 
 # local stuff
-from Bio.GA.Organism import Organism
-from Bio.GA.Crossover.General import SafeFitnessCrossover
-from Bio.GA.Crossover.GeneralPoint import GeneralPointCrossover
-from Bio.GA.Crossover.GeneralPoint import InterleaveCrossover
-from Bio.GA.Crossover.TwoPoint import TwoPointCrossover
-from Bio.GA.Crossover.Point import SinglePointCrossover
-from Bio.GA.Crossover.Uniform import UniformCrossover
+import warnings
+from Bio import BiopythonDeprecationWarning
+with warnings.catch_warnings():
+    warnings.simplefilter('ignore', BiopythonDeprecationWarning)
+    from Bio.GA.Organism import Organism
+    from Bio.GA.Crossover.General import SafeFitnessCrossover
+    from Bio.GA.Crossover.GeneralPoint import GeneralPointCrossover
+    from Bio.GA.Crossover.GeneralPoint import InterleaveCrossover
+    from Bio.GA.Crossover.TwoPoint import TwoPointCrossover
+    from Bio.GA.Crossover.Point import SinglePointCrossover
+    from Bio.GA.Crossover.Uniform import UniformCrossover
 
 
 class TestAlphabet(SingleLetterAlphabet):

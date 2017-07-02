@@ -14,10 +14,14 @@ from Bio.Seq import MutableSeq
 from Bio.Alphabet import SingleLetterAlphabet
 
 # local stuff
-from Bio.GA.Organism import Organism
-from Bio.GA.Selection.Diversity import DiversitySelection
-from Bio.GA.Selection.Tournament import TournamentSelection
-from Bio.GA.Selection.RouletteWheel import RouletteWheelSelection
+import warnings
+from Bio import BiopythonDeprecationWarning
+with warnings.catch_warnings():
+    warnings.simplefilter('ignore', BiopythonDeprecationWarning)
+    from Bio.GA.Organism import Organism
+    from Bio.GA.Selection.Diversity import DiversitySelection
+    from Bio.GA.Selection.Tournament import TournamentSelection
+    from Bio.GA.Selection.RouletteWheel import RouletteWheelSelection
 
 
 # --- helper classes and functions
