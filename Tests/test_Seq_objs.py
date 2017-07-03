@@ -181,6 +181,88 @@ class StringMethodTests(unittest.TestCase):
         """Check matches the python string count method."""
         self._test_method("count", start_end=True)
 
+    def test_str_count_overlap_GG(self):
+        """Check our count_overlap method using GG."""
+
+        # Testing with self._examples
+        expected = [3, 3, 3, 3, 1, 1, 1, 1, 0, 0, 0, 0,  # Seq() Tests
+                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]  # UnknownSeq() Tests
+        expected *= 2  # MutableSeq() Tests
+
+        assert len(self._examples) == len(expected)
+
+        for seq, exp in zip(self._examples, expected):
+            # Using search term GG as a string
+            self.assertEqual(seq.count_overlap("GG"), exp)
+            # Using search term GG as a Seq with generic alphabet
+            self.assertEqual(seq.count_overlap(Seq("GG")), exp)
+
+        # Testing Seq() and MutableSeq() with variable start and end arguments
+        start_end_exp = [(1, 7, 3),
+                         (3, None, 3),
+                         (3, 6, 2),
+                         (4, 6, 1),
+                         (4, -1, 2),
+                         (-5, None, 2)]
+
+        testing_seq = "ACGAAAACG"
+
+        for start, end, exp in start_end_exp:
+            self.assertEqual(Seq(testing_seq).count_overlap("AA", start, end), exp)
+            self.assertEqual(MutableSeq(testing_seq).count_overlap("AA", start, end), exp)
+
+        # Testing UnknownSeq() with variable start and end arguments
+        alphabet_char_start_end_exp = [(generic_rna, "N", 1, 7, 0),
+                                       (generic_dna, "N", 1, 7, 0),
+                                       (generic_rna, "N", -4, None, 0),
+                                       (generic_dna, "N", -4, None, 0),
+                                       (generic_protein, "X", 1, 7, 0)]
+
+        for alpha, char, start, end, exp in alphabet_char_start_end_exp:
+            self.assertEqual(UnknownSeq(12, alpha, char).count_overlap("AA", start, end), exp)
+        self.assertEqual(UnknownSeq(12, character="X").count_overlap("AA", 1, 7), 0)
+
+    def test_str_count_overlap_NN(self):
+        """Check our count_overlap method using NN."""
+
+        # Testing with self._examples
+        expected = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  # Seq() Tests
+                    0, 0, 0, 0, 0, 11, 11, 11, 0, 0, 0]  # UnknownSeq() Tests
+        expected *= 2  # MutableSeq() Tests
+
+        assert len(self._examples) == len(expected)
+
+        for seq, exp in zip(self._examples, expected):
+            # Using search term NN as a string
+            self.assertEqual(seq.count_overlap("NN"), exp)
+            # Using search term GG as a Seq with generic alphabet
+            self.assertEqual(seq.count_overlap(Seq("NN")), exp)
+
+        # Testing Seq() and MutableSeq() with variable start and end arguments
+        start_end_exp = [(1, 7, 0),
+                         (3, None, 0),
+                         (3, 6, 0),
+                         (4, 6, 0),
+                         (4, -1, 0),
+                         (-5, None, 0)]
+
+        testing_seq = "ACGAAAACG"
+
+        for start, end, exp in start_end_exp:
+            self.assertEqual(Seq(testing_seq).count_overlap("NN", start, end), exp)
+            self.assertEqual(MutableSeq(testing_seq).count_overlap("NN", start, end), exp)
+
+        # Testing UnknownSeq() with variable start and end arguments
+        alphabet_char_start_end_exp = [(generic_rna, "N", 1, 7, 5),
+                                       (generic_dna, "N", 1, 7, 5),
+                                       (generic_rna, "N", -4, None, 3),
+                                       (generic_dna, "N", -4, None, 3),
+                                       (generic_protein, "X", 1, 7, 0)]
+
+        for alpha, char, start, end, exp in alphabet_char_start_end_exp:
+            self.assertEqual(UnknownSeq(12, alpha, char).count_overlap("NN", start, end), exp)
+        self.assertEqual(UnknownSeq(12, character="X").count_overlap("NN", 1, 7), 0)
+
     def test_str_find(self):
         """Check matches the python string find method."""
         self._test_method("find", start_end=True)
