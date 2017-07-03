@@ -55,12 +55,12 @@ class AppTests(unittest.TestCase):
             # Check the output tree
             outfname = EX_PHYLIP + '_phyml_tree.txt'
             if not os.path.isfile(outfname):
-                # NB: Briefly, Phylip dropped the .txt suffix (#919)
+                # NB: Briefly, PhyML dropped the .txt suffix (#919)
                 outfname = outfname[:-4]
             tree = Phylo.read(outfname, 'newick')
             self.assertEqual(tree.count_terminals(), 4)
         except Exception as exc:
-            self.fail("Phylip wrapper error: %s" % exc)
+            self.fail("PhyML wrapper error: %s" % exc)
         finally:
             # Clean up generated files
             for suffix in ['_phyml_tree.txt', '_phyml_tree',
