@@ -70,13 +70,6 @@ def is_numpy():
         return False
 
 
-def is_outside_bio(name):
-    name = name.split(".")
-    if "Bio" in name[0]:
-        return False
-    return True
-
-
 # The default verbosity (not verbose)
 VERBOSITY = 0
 
@@ -173,10 +166,10 @@ except ImportError:
     DOCTEST_MODULES.remove("Bio.SeqIO")
     DOCTEST_MODULES.remove("Bio.SearchIO")
 
-# Skip doctest for all modules outside of 'Bio' package prior to Python 3.3
+# Skip doctests for all modules outside Bio & BioSQL prior to Python 3.3
 if float(sys.version[:3]) < 3.3:
     for i, name in enumerate(DOCTEST_MODULES):
-        if is_outside_bio(name):
+        if not name.startswith(("Bio.", "BioSQL.")):
             DOCTEST_MODULES.remove(name)
 
 # Skip Bio.Seq doctest under Python 3, see http://bugs.python.org/issue7490

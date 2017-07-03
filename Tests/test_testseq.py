@@ -1,11 +1,9 @@
-# Copyright 2017 by Adil Iqbal.
-# All rights reserved.
+# Copyright 2017 by Adil Iqbal.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
 import os
-import sys
 import unittest
 
 from Bio.Alphabet import IUPAC, NucleotideAlphabet
@@ -13,8 +11,7 @@ from Bio.SeqUtils import GC
 
 
 def manually_import(name):
-    """Find, manually import, and return a python module."""
-    # Find the path from 'biopython' folder.
+    """Find, import, and return a module in Python 2.7."""
     name = name.split(".")
     name[-1] += ".py"
     module_path = os.getcwd()
@@ -26,29 +23,13 @@ def manually_import(name):
     for i, step in enumerate(name):
         module_path = os.path.join(module_path, step)
     name = name[-1][:-3]
-    # Manually import and return module.
-    if 2.7 <= float(sys.version[:3]) < 3.0:
-        # Python version 2.7
-        import imp
-        return imp.load_source(name, module_path)
-    elif sys.version_info[1] < 5:
-        # Python version 3.3 and 3.4
-        from importlib.machinery import SourceFileLoader
-        return SourceFileLoader(name, module_path).load_module()
-    elif sys.version_info[1] >= 5:
-        # Python version 3.5 and 3.6
-        from importlib.util import spec_from_file_location, module_from_spec
-        spec = spec_from_file_location(name, module_path)
-        module = module_from_spec(spec)
-        spec.loader.exec_module(module)
-        return module
-    else:
-        raise ImportError("Unsupported python version: %s" % sys.version)
+    import imp
+    return imp.load_source(name, module_path)
 
 
 try:
     import Scripts.testseq as module
-except (ImportError, ModuleNotFoundError):
+except ImportError:
     module = manually_import("Scripts.testseq")
 
 
