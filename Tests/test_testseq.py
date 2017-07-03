@@ -48,7 +48,10 @@ def manually_import(name):
         raise ImportError("Unsupported python version: %s" % sys.version)
 
 
-module = manually_import("Scripts.testseq")
+try:
+    import Scripts.testseq as module
+except (ImportError, ModuleNotFoundError):
+    module = manually_import("Scripts.testseq")
 
 
 class TestTestseq(unittest.TestCase):
