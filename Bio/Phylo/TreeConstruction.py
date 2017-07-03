@@ -401,8 +401,16 @@ class DistanceCalculator(object):
 
     models = ['identity'] + dna_models + protein_models
 
-    def __init__(self, model='identity'):
+    def __init__(self, model='identity', skip_letters=None):
         """Initialize with a distance model."""
+        # Shim for backward compatibility (#491)
+        if skip_letters:
+            self.skip_letters = skip_letters
+        elif model == 'identity':
+            self.skip_letters = ()
+        else:
+            self.skip_letters = ('-', '*')
+
         if model == 'identity':
             self.scoring_matrix = None
         elif model in self.dna_models:
@@ -426,11 +434,10 @@ class DistanceCalculator(object):
         if self.scoring_matrix:
             max_score1 = 0
             max_score2 = 0
-            skip_letters = ['-', '*']
             for i in range(0, len(seq1)):
                 l1 = seq1[i]
                 l2 = seq2[i]
-                if l1 in skip_letters or l2 in skip_letters:
+                if l1 in self.skip_letters or l2 in self.skip_letters:
                     continue
                 if l1 not in self.scoring_matrix.names:
                     raise ValueError("Bad alphabet '%s' in sequence '%s' at position '%s'"
@@ -445,13 +452,11 @@ class DistanceCalculator(object):
             max_score = max(max_score1, max_score2)
         else:
             # Score by character identity, not skipping any special letters
-            for i in range(0, len(seq1)):
-                l1 = seq1[i]
-                l2 = seq2[i]
-                if l1 == l2:
-                    score += 1
+            score = sum(l1 == l2
+                        for l1, l2 in zip(seq1, seq2)
+                        if l1 not in self.skip_letters
+                        and l2 not in self.skip_letters)
             max_score = len(seq1)
-
         if max_score == 0:
             return 1  # max possible scaled distance
         return 1 - (score * 1.0 / max_score)
