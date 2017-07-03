@@ -20,6 +20,10 @@ Biopython now has a new logo, contributed by Patrick Kunzmann. Drawing on our
 original logo and the current Python logo, this shows a yellow and blue snake
 forming a double helix.
 
+For installation Biopython now assumes ``setuptools`` is present, and takes
+advantage of this to declare we require NumPy at install time (except under
+Jython). This should help ensure ``pip install biopython`` works smoothly.
+
 Bio.AlignIO now supports Mauve's eXtended Multi-FastA (XMFA) file format
 under the format name "mauve" (contributed by Eric Rasche).
 
