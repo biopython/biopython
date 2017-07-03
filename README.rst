@@ -101,37 +101,36 @@ Biopython 1.68 was our final release to support Python 2.6.
 Dependencies
 ============
 
-Depending on which parts of Biopython you plan to use, there are a number of
-other optional Python dependencies, which (other than NumPy) can be installed
-after Biopython.
+The following are required at compile time - unless you are using Jython
+(support for which is deprecated) or IronPython (which we do not officially
+support):
 
-- NumPy, see http://www.numpy.org (optional, but strongly recommended)
-  This package is only used in the computationally-oriented modules. It is
-  required for ``Bio.Cluster``, ``Bio.PDB`` and a few other modules.  If you
-  think you might need these modules, then please install NumPy first BEFORE
-  installing Biopython. The older Numeric library is no longer supported in
-  Biopython.
+- NumPy, see http://www.numpy.org
+  This package is used in ``Bio.Cluster``, ``Bio.PDB`` and a few other modules.
+  We use the NumPy C API, which means it must be installed *before* compiling
+  Biopython's C code.
+
+
+Optional Dependencies
+=====================
+
+Depending on which parts of Biopython you plan to use, there are a number of
+other optional Python dependencies, which can be installed later if needed:
 
 - ReportLab, see http://www.reportlab.com/opensource/ (optional)
   This package is only used in ``Bio.Graphics``, so if you do not need this
-  functionality, you will not need to install this package.  You can install
-  it later if needed.
+  functionality, you will not need to install this package.
 
 - matplotlib, see http://matplotlib.org/ (optional)
-  ``Bio.Phylo`` uses this package to plot phylogenetic trees. As with
-  ReportLab, you can install this at any time to enable the plotting
-  functionality.
+  ``Bio.Phylo`` uses this package to plot phylogenetic trees.
 
 - networkx, see http://networkx.lanl.gov/ (optional) and
   pygraphviz or pydot, see http://networkx.lanl.gov/pygraphviz/ and
   http://code.google.com/p/pydot/ (optional)
   These packages are used for certain niche functions in ``Bio.Phylo``.
-  Again, they are only needed to enable these functions and can be installed
-  later if needed.
 
 - rdflib, see https://github.com/RDFLib/rdflib (optional)
-  This package is used in the CDAO parser under ``Bio.Phylo``, and can be
-  installed as needed.
+  This package is used in the CDAO parser under ``Bio.Phylo``.
 
 - psycopg2, see http://initd.org/psycopg/ (optional) or
   PyGreSQL (pgdb), see http://www.pygresql.org/ (optional)
@@ -155,8 +154,9 @@ install such as standalone NCBI BLAST, EMBOSS or ClustalW.
 Installation
 ============
 
-First, **make sure that Python is installed correctly**. Second, we
-recommend you install NumPy (see above). Then install Biopython.
+First, **make sure that Python is installed correctly**. Second (except
+for Jython or IronPython), **make sure NumPy is installed**. Then
+install Biopython.
 
 Windows users should use the appropriate provided installation package
 from our website (each is specific to a different Python version).
