@@ -426,7 +426,8 @@ class Seq(object):
         >>> print(Seq("AAAA").count("AA"))
         2
 
-        An overlapping search would give the answer as three!
+        An overlapping search, as implemented in .count_overlap(),
+        would give the answer as three!
         """
         # If it has one, check the alphabet:
         sub_str = self._get_seq_str_and_check_alphabet(sub)
@@ -464,12 +465,20 @@ class Seq(object):
         >>> my_seq = Seq("AAAATGA")
         >>> print(my_seq.count_overlap("A"))
         5
+        >>> my_seq.count_overlap("A") == my_seq.count("A")
+        True
         >>> print(my_seq.count_overlap("ATG"))
         1
+        >>> my_seq.count_overlap("ATG") == my_seq.count("ATG")
+        True
         >>> print(my_seq.count_overlap(Seq("AT")))
         1
+        >>> my_seq.count_overlap(Seq("AT")) == my_seq.count(Seq("AT"))
+        True
         >>> print(my_seq.count_overlap("AT", 2, -1))
         1
+        >>> my_seq.count_overlap("AT", 2, -1) == my_seq.count("AT", 2, -1)
+        True
 
         HOWEVER, do not use this method for such cases because the
         count() method is much for efficient.
@@ -1458,10 +1467,16 @@ class UnknownSeq(Seq):
 
         >>> UnknownSeq(4, character="N").count_overlap("N")
         4
+        >>> UnknownSeq(4, character="N").count_overlap("N") == UnknownSeq(4, character="N").count("N")
+        True
         >>> UnknownSeq(4, character="N").count_overlap("A")
         0
+        >>> UnknownSeq(4, character="N").count_overlap("A") == UnknownSeq(4, character="N").count("A")
+        True
         >>> UnknownSeq(4, character="N").count_overlap("AA")
         0
+        >>> UnknownSeq(4, character="N").count_overlap("AA") == UnknownSeq(4, character="N").count("AA")
+        True
 
         HOWEVER, do not use this method for such cases because the
         count() method is much for efficient.
@@ -2007,12 +2022,20 @@ class MutableSeq(object):
         >>> my_mseq = MutableSeq("AAAATGA")
         >>> print(my_mseq.count_overlap("A"))
         5
+        >>> my_mseq.count_overlap("A") == my_mseq.count("A")
+        True
         >>> print(my_mseq.count_overlap("ATG"))
         1
+        >>> my_mseq.count_overlap("ATG") == my_mseq.count("ATG")
+        True
         >>> print(my_mseq.count_overlap(Seq("AT")))
         1
+        >>> my_mseq.count_overlap(Seq("AT")) == my_mseq.count(Seq("AT"))
+        True
         >>> print(my_mseq.count_overlap("AT", 2, -1))
         1
+        >>> my_mseq.count_overlap("AT", 2, -1) == my_mseq.count("AT", 2, -1)
+        True
 
         HOWEVER, do not use this method for such cases because the
         count() method is much for efficient.
