@@ -26,7 +26,6 @@ from __future__ import print_function
 
 import sys
 import os
-import shutil
 
 try:
     from setuptools import setup
@@ -89,6 +88,7 @@ def osx_clang_fix():
             os.environ[flag] = "-Qunused-arguments"
         elif "-Qunused-arguments" not in os.environ[flag]:
             os.environ[flag] += " -Qunused-arguments"
+
 
 osx_clang_fix()
 
@@ -323,6 +323,7 @@ def can_import(module_name):
 
 def is_Numpy_installed():
     return bool(can_import("numpy"))
+
 
 # --- set up the packages we are going to install
 # standard biopython packages
