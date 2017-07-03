@@ -1461,6 +1461,14 @@ class UnknownSeq(Seq):
         3
         >>> UnknownSeq(4, character="N").count_overlap("NNN")
         2
+        >>> UnknownSeq(7, character="N").count_overlap("NN")
+        6
+        >>> UnknownSeq(7, character="N").count_overlap("NNN")
+        5
+        >>> UnknownSeq(7, character="N").count_overlap("NN", 1, 5)
+        3
+        >>> UnknownSeq(7, character="N").count_overlap("NN", -5, -1)
+        3
 
         Where substrings do not overlap, should behave the same as
         the count() method:
@@ -1481,17 +1489,32 @@ class UnknownSeq(Seq):
         HOWEVER, do not use this method for such cases because the
         count() method is much for efficient.
         """
-        # The implementation is currently identical to that of
-        # Seq.count_overlap()
         sub_str = self._get_seq_str_and_check_alphabet(sub)
-        self = str(self)
-        overlap_count = 0
-        while True:
-            start = self.find(sub_str, start, end) + 1
-            if start != 0:
-                overlap_count += 1
+        if len(sub_str) == 1:
+            if str(sub_str) == self._character:
+                if start == 0 and end >= self._length:
+                    return self._length
+                else:
+                    # This could be done more cleverly...
+                    return str(self).count(sub_str, start, end)
             else:
-                return overlap_count
+                return 0
+        else:
+            if set(sub_str) == set(self._character):
+                if start == 0 and end >= self._length:
+                    return self._length - len(sub_str) + 1
+                else:
+                    # This could be done more cleverly...
+                    self = str(self)
+                    overlap_count = 0
+                    while True:
+                        start = self.find(sub_str, start, end) + 1
+                        if start != 0:
+                            overlap_count += 1
+                        else:
+                            return overlap_count
+            else:
+                return 0
 
     def complement(self):
         """Return the complement of an unknown nucleotide equals itself.
