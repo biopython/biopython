@@ -70,6 +70,13 @@ def is_numpy():
         return False
 
 
+def is_outside_bio(name):
+    name = name.split(".")
+    if "Bio" in name[0]:
+        return False
+    return True
+
+
 # The default verbosity (not verbose)
 VERBOSITY = 0
 
@@ -143,6 +150,7 @@ DOCTEST_MODULES = [
     "Bio.UniProt.GOA",
     "Bio.Wise",
     "Bio.Wise.psw",
+    "Scripts.testseq",
 ]
 # Silently ignore any doctests for modules requiring numpy!
 if is_numpy():
@@ -164,6 +172,12 @@ except ImportError:
     # Missing on Jython or Python 2.4
     DOCTEST_MODULES.remove("Bio.SeqIO")
     DOCTEST_MODULES.remove("Bio.SearchIO")
+
+# Skip doctest for all modules outside of 'Bio' package prior to Python 3.3
+if float(sys.version[:3]) < 3.3:
+    for i, name in enumerate(DOCTEST_MODULES):
+        if is_outside_bio(name):
+            DOCTEST_MODULES.remove(name)
 
 # Skip Bio.Seq doctest under Python 3, see http://bugs.python.org/issue7490
 if sys.version_info[0] == 3:
