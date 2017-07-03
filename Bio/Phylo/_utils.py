@@ -149,7 +149,13 @@ def draw_graphviz(tree, label_func=str, prog='twopi', args='',
         int_labels = Gi.node_labels
 
     try:
-        posi = networkx.graphviz_layout(Gi, prog, args=args)
+        if hasattr(networkx, 'graphviz_layout'):
+            # networkx versions before 1.11 (#1247)
+            graphviz_layout = networkx.graphviz_layout
+        else:
+            # networkx version 1.11
+            graphviz_layout = networkx.drawing.nx_agraph.graphviz_layout
+        posi = graphviz_layout(Gi, prog, args=args)
     except ImportError:
         raise MissingPythonDependencyError(
             "Install PyGraphviz or pydot if you want to use draw_graphviz.")
