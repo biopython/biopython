@@ -14,7 +14,6 @@ from Bio.SeqUtils import GC
 
 def manually_import(name):
     """Find, manually import, and return a python module."""
-
     # Find the path from 'biopython' folder.
     name = name.split(".")
     name[-1] += ".py"
@@ -26,9 +25,8 @@ def manually_import(name):
         raise ImportError("Must call 'manually_import' from inside 'Tests' folder.")
     for i, step in enumerate(name):
         module_path = os.path.join(module_path, step)
-
-    # Manually import and return module.
     name = name[-1][:-3]
+    # Manually import and return module.
     if 2.7 <= float(sys.version[:3]) < 3.0:
         # Python version 2.7
         import imp
@@ -38,7 +36,7 @@ def manually_import(name):
         from importlib.machinery import SourceFileLoader
         return SourceFileLoader(name, module_path).load_module()
     elif sys.version_info[1] >= 5:
-        # Python version 3.5+
+        # Python version 3.5 and 3.6
         from importlib.util import spec_from_file_location, module_from_spec
         spec = spec_from_file_location(name, module_path)
         module = module_from_spec(spec)
