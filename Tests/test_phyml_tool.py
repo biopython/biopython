@@ -53,7 +53,7 @@ class AppTests(unittest.TestCase):
             self.assertTrue(len(out) > 0)
             self.assertEqual(len(err), 0)
             # Check the output tree
-            outfname = EX_PHYLIP + '_phyml_tree.txtz'
+            outfname = EX_PHYLIP + '_phyml_tree.txt'
             if not os.path.isfile(outfname):
                 # NB: Briefly, Phylip dropped the .txt suffix (#919)
                 outfname = outfname[:-4]
