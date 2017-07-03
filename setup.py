@@ -262,7 +262,7 @@ class build_py_biopython(build_py):
     def run(self):
         if not check_dependencies_once():
             return
-        if os.name == "java" and "Bio.Restriction" in self.packages:
+        if is_jython() and "Bio.Restriction" in self.packages:
             # Evil hack to work on Jython 2.7
             # This is to avoid java.lang.RuntimeException: Method code too large!
             # from Bio/Restriction/Restriction_Dictionary.py
@@ -402,7 +402,7 @@ PACKAGES = [
     'BioSQL',
     ]
 
-if os.name == 'jython':
+if is_jython():
     # Evil hack to work on Jython 2.7
     # This is to avoid java.lang.RuntimeException: Method code too large!
     # from Bio/Restriction/Restriction_Dictionary.py
@@ -417,7 +417,7 @@ NUMPY_PACKAGES = [
     'Bio.phenotype',
 ]
 
-if os.name == 'java':
+if is_jython():
     # Jython doesn't support C extensions
     EXTENSIONS = []
 elif is_ironpython():
