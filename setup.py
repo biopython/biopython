@@ -267,6 +267,18 @@ def is_Numpy_installed():
     return bool(can_import("numpy"))
 
 
+# Using requirements.txt is preferred for an application
+# (and likely will pin specific version numbers), using
+# setup.py's install_requires is preferred for a library
+# (and should try not to be overly narrow with versions).
+REQUIRES = [
+    'numpy',
+]
+
+if is_jython() or is_ironpython():
+    REQUIRES.remove("numpy")
+
+
 # --- set up the packages we are going to install
 # standard biopython packages
 PACKAGES = [
@@ -474,4 +486,5 @@ setup(name='biopython',
       package_data={
           'Bio.Entrez': ['DTDs/*.dtd', 'DTDs/*.ent', 'DTDs/*.mod'],
       },
+      install_requires=REQUIRES,
       )
