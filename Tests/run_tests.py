@@ -166,8 +166,8 @@ except ImportError:
     DOCTEST_MODULES.remove("Bio.SeqIO")
     DOCTEST_MODULES.remove("Bio.SearchIO")
 
-# Skip doctests for all modules outside Bio & BioSQL prior to Python 3.3
-if float(sys.version[:3]) < 3.3:
+# Skip doctests for all modules outside of Bio & BioSQL prior to Python 3.3
+if sys.version_info < (3, 3):
     for i, name in enumerate(DOCTEST_MODULES):
         if not name.startswith(("Bio.", "BioSQL.")):
             DOCTEST_MODULES.remove(name)
