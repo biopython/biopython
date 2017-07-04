@@ -484,10 +484,10 @@ class Seq(object):
         count() method is much for efficient.
         """
         sub_str = self._get_seq_str_and_check_alphabet(sub)
-        self = str(self)
+        self_str = str(self)
         overlap_count = 0
         while True:
-            start = self.find(sub_str, start, end) + 1
+            start = self_str.find(sub_str, start, end) + 1
             if start != 0:
                 overlap_count += 1
             else:
@@ -1485,9 +1485,6 @@ class UnknownSeq(Seq):
         0
         >>> UnknownSeq(4, character="N").count_overlap("AA") == UnknownSeq(4, character="N").count("AA")
         True
-
-        HOWEVER, do not use this method for such cases because the
-        count() method is much for efficient.
         """
         sub_str = self._get_seq_str_and_check_alphabet(sub)
         if len(sub_str) == 1:
@@ -1505,10 +1502,10 @@ class UnknownSeq(Seq):
                     return self._length - len(sub_str) + 1
                 else:
                     # This could be done more cleverly...
-                    self = str(self)
+                    self_str = str(self)
                     overlap_count = 0
                     while True:
-                        start = self.find(sub_str, start, end) + 1
+                        start = self_str.find(sub_str, start, end) + 1
                         if start != 0:
                             overlap_count += 1
                         else:
