@@ -1464,6 +1464,8 @@ class UnknownSeq(Seq):
         2
         >>> UnknownSeq(4, character="N").count_overlap("NNNNN")
         0
+        >>> UnknownSeq(4,character="N").count_overlap('NNN',1,2)
+        0
         >>> UnknownSeq(7, character="N").count_overlap("NN")
         6
         >>> UnknownSeq(7, character="N").count_overlap("NNN")
@@ -1507,8 +1509,8 @@ class UnknownSeq(Seq):
         """
         sub_str = self._get_seq_str_and_check_alphabet(sub)
         len_self, len_sub_str = self._length, len(sub_str)
-        # Handling some pathological edge cases
-        if len_self < len_sub_str or set(sub_str) != set(self._character):
+        # Handling case where substring not in self
+        if set(sub_str) != set(self._character):
             return 0
         # Setting None to the default arguments
         if start is None:
@@ -1520,11 +1522,12 @@ class UnknownSeq(Seq):
         end = max(min(end, len_self), -len_self)
         # Convert start and ends to positive indexes
         if start < 0:
-            start = start + len_self
+            start += len_self
         if end < 0:
-            end = end + len_self
+            end += len_self
         # Handle case where end <= start (no negative step argument here)
-        if end <= start:
+        # and case where len_sub_str is larger than the search space
+        if end <= start or (end - start) < len_sub_str:
             return 0
         # 'Normal' calculation
         return end - start - len_sub_str + 1
