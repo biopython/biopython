@@ -1457,7 +1457,7 @@ class UnknownSeq(Seq):
 
         e.g.
 
-        >>> from Bio.Seq import UnknownSeq 
+        >>> from Bio.Seq import UnknownSeq
         >>> UnknownSeq(4, character="N").count_overlap("NN")
         3
         >>> UnknownSeq(4, character="N").count_overlap("NNN")
