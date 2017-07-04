@@ -194,10 +194,10 @@ class StringMethodTests(unittest.TestCase):
         for seq, exp in zip(self._examples, expected):
             # Using search term GG as a string
             self.assertEqual(seq.count_overlap("GG"), exp)
-            self.assertEqual(seq.count_overlap("G"*5), 0)
+            self.assertEqual(seq.count_overlap("G" * 5), 0)
             # Using search term GG as a Seq with generic alphabet
             self.assertEqual(seq.count_overlap(Seq("GG")), exp)
-            self.assertEqual(seq.count_overlap(Seq("G"*5)), 0)
+            self.assertEqual(seq.count_overlap(Seq("G" * 5)), 0)
 
     def test_count_overlap_start_end_GG(self):
         """Check our count_overlap method using GG with variable ends and starts."""
@@ -275,10 +275,10 @@ class StringMethodTests(unittest.TestCase):
         for seq, exp in zip(self._examples, expected):
             # Using search term NN as a string
             self.assertEqual(seq.count_overlap("NN"), exp)
-            self.assertEqual(seq.count_overlap("N"*13), 0)
+            self.assertEqual(seq.count_overlap("N" * 13), 0)
             # Using search term NN as a Seq with generic alphabet
             self.assertEqual(seq.count_overlap(Seq("NN")), exp)
-            self.assertEqual(seq.count_overlap(Seq("N"*13)), 0)
+            self.assertEqual(seq.count_overlap(Seq("N" * 13)), 0)
 
     def test_count_overlap_start_end_NN(self):
         """Check our count_overlap method using NN with variable ends and starts."""
