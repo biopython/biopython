@@ -1462,34 +1462,6 @@ class UnknownSeq(Seq):
         3
         >>> UnknownSeq(4, character="N").count_overlap("NNN")
         2
-        >>> UnknownSeq(4, character="N").count_overlap("NNNNN")
-        0
-        >>> UnknownSeq(4,character="N").count_overlap('NNN',1,2)
-        0
-        >>> UnknownSeq(7, character="N").count_overlap("NN")
-        6
-        >>> UnknownSeq(7, character="N").count_overlap("NNN")
-        5
-        >>> UnknownSeq(7, character="N").count_overlap("NN", 1, 5)
-        3
-        >>> UnknownSeq(7, character="N").count_overlap("NN", -5, -1)
-        3
-        >>> UnknownSeq(7, character="N").count_overlap("NN", 8, 2)
-        0
-        >>> UnknownSeq(7, character="N").count_overlap("N", 2, 8)
-        5
-        >>> UnknownSeq(7, character="N").count_overlap("N", 8, 2)
-        0
-        >>> UnknownSeq(7, character="N").count_overlap("N", -2, -8)
-        0
-        >>> UnknownSeq(7, character="N").count_overlap("N", -8, -2)
-        5
-        >>> UnknownSeq(7, character="N").count_overlap("N", 4, -1)
-        2
-        >>> UnknownSeq(7, character="N").count_overlap("N", -1, 4)
-        0
-        >>> UnknownSeq(7, character="N").count_overlap("N", 100, 105)
-        0
 
         Where substrings do not overlap, should behave the same as
         the count() method:
