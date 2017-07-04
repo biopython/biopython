@@ -118,6 +118,7 @@ please open an issue on GitHub or mention it on the development mailing list.
 - Johann Visagie <wjv at domain cityip.co.za>
 - John Bradley <https://github.com/johnbradley>
 - John Kern <https://github.com/kern3020>
+- Jordan Willis <https://github.com/jwillis0720>
 - Jose Blanca <https://github.com/JoseBlanca>
 - Joshua Meyers <https://github.com/JoshuaMeyers> 
 - João D Ferreira <https://github.com/jdferreira>

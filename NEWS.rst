@@ -34,6 +34,10 @@ arguments do.
 
 Bio.motifs was updated to support changes in MEME v4.11.4 output.
 
+In Bio.Phylo.TreeConstruction, the _DistanceMatrix class has a new method
+'format_phylip' to write Phylip-compatible distance matrix files. (Contributed
+by Jordan Willis)
+
 Additionally, a number of small bugs have been fixed with further additions
 to the test suite, and there has been further work to follow the Python PEP8,
 PEP257 and best practice standard coding style.
@@ -49,12 +53,14 @@ possible, especially the following contributors:
 - Bertrand Caron (first contribution)
 - Connor T. Skennerton
 - Eric Rasche
+- Eric Talevich
 - Francesco Gastaldello
 - François Coste (first contribution)
 - Frederic Sapet (first contribution)
 - Jimmy O'Donnell (first contribution)
 - Jared Andrews (first contribution)
 - John Kern (first contribution)
+- Jordan Willis (first contribution)
 - João Rodrigues
 - Markus Piotrowski
 - Mateusz Korycinski (first contribution)
