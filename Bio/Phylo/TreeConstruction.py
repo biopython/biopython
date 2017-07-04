@@ -11,6 +11,7 @@ from Bio.Phylo import BaseTree
 from Bio.Align import MultipleSeqAlignment
 from Bio.SubsMat import MatrixInfo
 from Bio import _py3k
+from Bio._py3k import zip, range
 
 
 def _is_numeric(x):
@@ -316,6 +317,32 @@ class _DistanceMatrix(_Matrix):
         """Set all diagonal elements to zero"""
         for i in range(0, len(self)):
             self.matrix[i][i] = 0
+
+    def format_phylip(self, handle):
+        """Write data in Phylip format to a given file-like object or handle.
+
+        The output stream is the input distance matrix format used with Phylip
+        programs (e.g. 'neighbor'). See:
+        http://evolution.genetics.washington.edu/phylip/doc/neighbor.html
+
+        :Parameters:
+            handle : file or file-like object
+                A writeable file handle or other object supporting the 'write'
+                method, such as StringIO or sys.stdout. On Python 3, should be
+                open in text mode.
+        """
+        handle.write("    {0}\n".format(len(self.names)))
+        # Phylip needs space-separated, vertically aligned columns
+        name_width = max(12, max(map(len, self.names)) + 1)
+        value_fmts = ("{" + str(x) + ":.4f}"
+                      for x in range(1, len(self.matrix) + 1))
+        row_fmt = "{0:" + str(name_width) + "s}" + "  ".join(value_fmts) + "\n"
+        for i, (name, values) in enumerate(zip(self.names, self.matrix)):
+            # Mirror the matrix values across the diagonal
+            mirror_values = (self.matrix[j][i]
+                             for j in range(i + 1, len(self.matrix)))
+            fields = itertools.chain([name], values, mirror_values)
+            handle.write(row_fmt.format(*fields))
 
 
 class DistanceCalculator(object):
