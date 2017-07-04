@@ -34,7 +34,9 @@ class DistributionPage(object):
     This organizes Distributions, and will display them nicely
     on a single page.
     """
+
     def __init__(self, output_format='pdf'):
+        """Initialize."""
         self.distributions = []
 
         # customizable attributes
@@ -48,10 +50,10 @@ class DistributionPage(object):
         """Draw out the distribution information.
 
         Arguments:
-
          - output_file - The name of the file to output the information to,
            or a handle to write to.
          - title - A title to display on the graphic.
+
         """
         width, height = self.page_size
         cur_drawing = Drawing(width, height)
@@ -89,7 +91,6 @@ class DistributionPage(object):
         """Draw all of the distributions on the page.
 
         Arguments:
-
          - cur_drawing - The drawing we are working with.
          - start_x_pos - The x position on the page to start drawing at.
          - x_pos_change - The change in x position between each figure.
@@ -97,6 +98,7 @@ class DistributionPage(object):
          - y_pos_change - The change in y position between each figure.
          - num_y_drawings - The number of drawings we'll have in the y
            (up/down) direction.
+
         """
         for y_drawing in range(int(num_y_drawings)):
             # if we are on the last y position, we may not be able
@@ -135,11 +137,11 @@ class BarChartDistribution(object):
     def __init__(self, display_info=None):
         """Initialize a Bar Chart display of distribution info.
 
-        Class attributes:
-
+        Attributes:
          - display_info - the information to be displayed in the distribution.
            This should be ordered as a list of lists, where each internal list
            is a data set to display in the bar chart.
+
         """
         if display_info is None:
             display_info = []
@@ -236,8 +238,11 @@ class LineDistribution(object):
     lines. This also allows multiple distributions to be displayed on a
     single graph.
     """
+
     def __init__(self):
+        """Initialize."""
         pass
 
     def draw(self, cur_drawing, start_x, start_y, end_x, end_y):
+        """Draw a line distrubution into the current drawing."""
         pass

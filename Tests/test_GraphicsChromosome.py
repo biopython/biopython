@@ -26,7 +26,7 @@ from Bio import MissingPythonDependencyError
 try:
     # reportlab
     from reportlab.lib import colors
-except:
+except ImportError:
     raise MissingPythonDependencyError(
         "Install reportlab if you want to use Bio.Graphics.")
 
@@ -113,6 +113,7 @@ def load_chromosome(chr_name):
     cur_chromosome.scale_num = 19
 
     return cur_chromosome
+
 
 # --- stuff for generating random organisms
 color_choices = (colors.red, colors.blue)
@@ -457,6 +458,7 @@ class ChromosomeCountTest(unittest.TestCase):
                "Did not set and retrieve counts correctly."
         assert seg_info[test_label_num][1] == test_label_value, \
                "Did not set and retrieve label correctly."
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)

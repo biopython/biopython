@@ -88,9 +88,9 @@ def generate_rolls(num_rolls):
 
     Returns:
 
-    o The generate roll sequence
+    - The generate roll sequence
+    - The state sequence that generated the roll.
 
-    o The state sequence that generated the roll.
     """
     # start off in the fair state
     cur_state = 'F'
@@ -117,6 +117,7 @@ def generate_rolls(num_rolls):
                 cur_state = 'F'
 
     return roll_seq.toseq(), state_seq.toseq()
+
 
 # -- build a MarkovModel
 mm_builder = MarkovModel.MarkovModelBuilder(DiceTypeAlphabet(),
@@ -168,6 +169,7 @@ def stop_training(log_likelihood_change, num_iterations):
         return 1
     else:
         return 0
+
 
 # -- Standard Training with known states
 print("Training with the Standard Trainer...")

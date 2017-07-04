@@ -22,7 +22,6 @@ from .hit import Hit
 
 
 class QueryResult(_BaseSearchObject):
-
     """Class representing search results from a single query.
 
     QueryResult is the container object that stores all search hits from a
@@ -185,8 +184,7 @@ class QueryResult(_BaseSearchObject):
     # from this one
     _NON_STICKY_ATTRS = ('_items', '__alt_hit_ids', )
 
-    def __init__(self, hits=(), id=None,
-            hit_key_function=lambda hit: hit.id):
+    def __init__(self, hits=(), id=None, hit_key_function=None):
         """Initializes a QueryResult object.
 
         :param id: query sequence ID
@@ -199,7 +197,7 @@ class QueryResult(_BaseSearchObject):
         """
         # default values
         self._id = id
-        self._hit_key_function = hit_key_function
+        self._hit_key_function = hit_key_function or _hit_key_func
         self._items = OrderedDict()
         self._description = None
         self.__alt_hit_ids = {}
@@ -436,7 +434,7 @@ class QueryResult(_BaseSearchObject):
                 del self.__alt_hit_ids[key]
                 deleted = True
             if not deleted:
-                raise KeyError('%r'.format(key))
+                raise KeyError(repr(key))
         return
 
     # properties #
@@ -762,6 +760,11 @@ class QueryResult(_BaseSearchObject):
             obj = self.__class__(sorted_hits, self.id, self._hit_key_function)
             self._transfer_attrs(obj)
             return obj
+
+
+def _hit_key_func(hit):
+    """Default hit key function for QueryResult.__init__ (PRIVATE)."""
+    return hit.id
 
 
 # if not used as a module, run the doctest

@@ -73,17 +73,17 @@ terminating in an asterisk.  Space separated blocks of ten letters as shown
 above are typical.
 
 Sequence codes and their meanings:
+ - P1 - Protein (complete)
+ - F1 - Protein (fragment)
+ - D1 - DNA (e.g. EMBOSS seqret output)
+ - DL - DNA (linear)
+ - DC - DNA (circular)
+ - RL - RNA (linear)
+ - RC - RNA (circular)
+ - N3 - tRNA
+ - N1 - Other functional RNA
+ - XX - Unknown
 
-  - P1 - Protein (complete)
-  - F1 - Protein (fragment)
-  - D1 - DNA (e.g. EMBOSS seqret output)
-  - DL - DNA (linear)
-  - DC - DNA (circular)
-  - RL - RNA (linear)
-  - RC - RNA (circular)
-  - N3 - tRNA
-  - N1 - Other functional RNA
-  - XX - Unknown
 """
 
 from __future__ import print_function
@@ -181,6 +181,7 @@ def PirIterator(handle):
         if not line:
             return  # StopIteration
     assert False, "Should not reach this line"
+
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest

@@ -30,8 +30,33 @@ installation simply aborts with a error message.
 
 Python 3.3
 ==========
-Still suported but deprecated as of Release 1.67, triggering a warning
-at installation time.
+No longer supported as of Release 1.70, having triggered a warning with
+release 1.67 onwards.
+
+Jython
+======
+Biopython is mostly working under Jython 2.7.0, but support for Jython
+is deprecated as of Release 1.70.
+
+Bio.GA
+======
+This was deprecated in Biopython 1.70. Please consider using a dedicated
+genetic algorithm library like DEAP instead.
+
+Bio.NeuralNetwork
+=================
+This was deprecated in Biopython 1.70. Please consider using a dedicated
+machine learning library like scikit-learn or TensorFlow instead.
+
+Bio.Phylo.CDAOIO.CDAOError
+==========================
+This exception was deprecated as of Release 1.70, and is no longer used
+within Biopython.
+
+Bio.PDB.Dice
+============
+This was deprecated in Biopython 1.70, it was likely intended as an example
+script using PDBIO for selecting parts of a PDB file.
 
 Bio.DocSQL
 ==========
@@ -645,13 +670,11 @@ Their functionality is now available through a read() function.
 
 Bio.PopGen.Async
 ================
-``Bio.PopGen.Async`` was deprecated in Release 1.68. It will be removed in
-Release 1.70.
+``Bio.PopGen.Async`` was deprecated in Release 1.68, removed in Release 1.70.
 
 Bio.PopGen.FDist
 ================
-``Bio.PopGen.FDist`` was deprecated in Release 1.68. It will be removed in
-Release 1.70.
+``Bio.PopGen.FDist`` was deprecated in Release 1.68, removed in Release 1.70.
 
 Prior to this, the ``RecordParser``, ``_Scanner``, and ``_RecordConsumer``
 classes were declared obsolete in Release 1.54, deprecated in Release 1.55,
@@ -660,8 +683,8 @@ a ``read()`` function.
 
 Bio.PopGen.SimCoal
 ==================
-``Bio.PopGen.SimCoal`` was deprecated in Release 1.68. It will be removed in
-Release 1.70.
+``Bio.PopGen.SimCoal`` was deprecated in Release 1.68, and removed in Release
+1.70.
 
 Bio.UniGene
 ===========

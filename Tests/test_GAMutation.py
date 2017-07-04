@@ -9,10 +9,14 @@ from Bio.Seq import MutableSeq
 from Bio.Alphabet import SingleLetterAlphabet
 
 # local stuff
-from Bio.GA.Organism import Organism
-from Bio.GA.Mutation.General import SafeFitnessMutation
-from Bio.GA.Mutation.Simple import ConversionMutation
-from Bio.GA.Mutation.Simple import SinglePositionMutation
+import warnings
+from Bio import BiopythonDeprecationWarning
+with warnings.catch_warnings():
+    warnings.simplefilter('ignore', BiopythonDeprecationWarning)
+    from Bio.GA.Organism import Organism
+    from Bio.GA.Mutation.General import SafeFitnessMutation
+    from Bio.GA.Mutation.Simple import ConversionMutation
+    from Bio.GA.Mutation.Simple import SinglePositionMutation
 
 
 class TestAlphabet(SingleLetterAlphabet):
@@ -194,6 +198,7 @@ class SafeFitnessTest(unittest.TestCase):
         new_org = mutator.mutate(self.org)
         assert (new_org.fitness > self.org.fitness), \
                 "Did not get new organism under higher fitness conditions."
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)

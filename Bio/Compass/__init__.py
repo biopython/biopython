@@ -129,6 +129,7 @@ class Record(object):
 
 # Everything below is private
 
+
 __regex = {"names": re.compile("Ali1:\s+(\S+)\s+Ali2:\s+(\S+)\s+"),
            "threshold": re.compile("Threshold of effective gap content in columns: (\S+)"),
            "lengths": re.compile("length1=(\S+)\s+filtered_length1=(\S+)\s+length2=(\S+)\s+filtered_length2=(\S+)"),

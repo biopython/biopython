@@ -25,6 +25,7 @@ class fff_rec(object):
 
 class align(object):
     """Definition of the align section in a FSSP file."""
+
     abs_res_num = (0, 4)
     pdb_res_num = (4, 9)
     chain_id = 10

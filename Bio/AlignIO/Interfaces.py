@@ -22,21 +22,23 @@ class AlignmentIterator(object):
     objects.  You may wish to redefine the __init__
     method as well.
     """
+
     # TODO - Should the default be Gapped(single_letter_alphabet) instead?
     def __init__(self, handle, seq_count=None,
                  alphabet=single_letter_alphabet):
         """Create an AlignmentIterator object.
 
-            - handle   - input file
-            - count    - optional, expected number of records per alignment
-              Recommend for fasta file format.
-            - alphabet - optional, e.g. Bio.Alphabet.generic_protein
+        Arguments:
+         - handle   - input file
+         - count    - optional, expected number of records per alignment
+           Recommend for fasta file format.
+         - alphabet - optional, e.g. Bio.Alphabet.generic_protein
 
         Note when subclassing:
-            - there should be a single non-optional argument, the handle,
-              and optional count and alphabet IN THAT ORDER.
-            - you do not have to require an alphabet (?).
-            - you can add additional optional arguments.
+         - there should be a single non-optional argument, the handle,
+           and optional count and alphabet IN THAT ORDER.
+         - you do not have to require an alphabet (?).
+         - you can add additional optional arguments.
 
         """
         self.handle = handle
@@ -52,7 +54,8 @@ class AlignmentIterator(object):
         """Return the next alignment in the file.
 
         This method should be replaced by any derived class to do something
-        useful."""
+        useful.
+        """
         raise NotImplementedError("This object should be subclassed")
         #####################################################
         # You SHOULD subclass this, to split the file up    #
@@ -76,6 +79,7 @@ class AlignmentIterator(object):
                     for record in alignment:
                         print record.id
                         print record.seq
+
         """
         return iter(self.__next__, None)
 
@@ -84,7 +88,8 @@ class AlignmentWriter(object):
     """Base class for building MultipleSeqAlignment writers.
 
     You should write a write_alignment() method.
-    You may wish to redefine the __init__ method as well"""
+    You may wish to redefine the __init__ method as well.
+    """
 
     def __init__(self, handle):
         self.handle = handle
@@ -92,12 +97,14 @@ class AlignmentWriter(object):
     def write_file(self, alignments):
         """Use this to write an entire file containing the given alignments.
 
-        alignments - A list or iterator returning MultipleSeqAlignment objects
+        Arguments:
+         - alignments - A list or iterator returning MultipleSeqAlignment objects
 
         In general, this method can only be called once per file.
 
         This method should be replaced by any derived class to do something
-        useful.  It should return the number of alignments"""
+        useful.  It should return the number of alignments..
+        """
         raise NotImplementedError("This object should be subclassed")
         #####################################################
         # You SHOULD subclass this, to write the alignment  #
@@ -114,7 +121,8 @@ class SequentialAlignmentWriter(AlignmentWriter):
 
     This assumes each alignment can be simply appended to the file.
     You should write a write_alignment() method.
-    You may wish to redefine the __init__ method as well"""
+    You may wish to redefine the __init__ method as well.
+    """
 
     def __init__(self, handle):
         self.handle = handle
@@ -122,9 +130,11 @@ class SequentialAlignmentWriter(AlignmentWriter):
     def write_file(self, alignments):
         """Use this to write an entire file containing the given alignments.
 
-        alignments - A list or iterator returning MultipleSeqAlignment objects
+        Arguments:
+         - alignments - A list or iterator returning MultipleSeqAlignment objects
 
-        In general, this method can only be called once per file."""
+        In general, this method can only be called once per file.
+        """
         self.write_header()
         count = 0
         for alignment in alignments:
@@ -137,21 +147,24 @@ class SequentialAlignmentWriter(AlignmentWriter):
         """Use this to write any header.
 
         This method should be replaced by any derived class to do something
-        useful."""
+        useful.
+        """
         pass
 
     def write_footer(self):
         """Use this to write any footer.
 
         This method should be replaced by any derived class to do something
-        useful."""
+        useful.
+        """
         pass
 
     def write_alignment(self, alignment):
         """Use this to write a single alignment.
 
         This method should be replaced by any derived class to do something
-        useful."""
+        useful.
+        """
         raise NotImplementedError("This object should be subclassed")
         #####################################################
         # You SHOULD subclass this, to write the alignment  #

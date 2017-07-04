@@ -2,8 +2,7 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""Command line wrapper for the multiple alignment program PROBCONS.
-"""
+"""Command line wrapper for the multiple alignment program PROBCONS."""
 
 from __future__ import print_function
 
@@ -56,6 +55,7 @@ class ProbconsCommandline(AbstractCommandline):
 
     Last checked against version: 1.12
     """
+
     def __init__(self, cmd="probcons", **kwargs):
         self.parameters = \
             [

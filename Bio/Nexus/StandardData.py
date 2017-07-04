@@ -4,8 +4,7 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""Provides objects to represent NEXUS standard data type matrix coding.
-"""
+"""Objects to represent NEXUS standard data type matrix coding."""
 from __future__ import print_function
 
 import sys
@@ -23,6 +22,7 @@ class StandardData(object):
     Each coding specifies t [type] => (std [standard], multi [multistate] or
     uncer [uncertain]) and d [data]
     """
+
     def __init__(self, data):
         self._data = []
         self._current_pos = 0
@@ -88,7 +88,7 @@ class StandardData(object):
     def __next__(self):
         try:
             return_coding = self._data[self._current_pos]
-        except:
+        except IndexError:
             self._current_pos = 0
             raise StopIteration
         else:

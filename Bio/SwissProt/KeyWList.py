@@ -6,25 +6,25 @@
 """Code to parse the keywlist.txt file from SwissProt/UniProt
 
 See:
-http://www.expasy.ch/sprot/sprot-top.html
-ftp://ftp.expasy.org/databases/uniprot/current_release/knowledgebase/complete/docs/keywlist.txt
+ - http://www.expasy.ch/sprot/sprot-top.html
+ - ftp://ftp.expasy.org/databases/uniprot/current_release/knowledgebase/complete/docs/keywlist.txt
 
 Classes:
-
-    - Record            Stores the information about one keyword or one category
-      in the keywlist.txt file.
+ - Record            Stores the information about one keyword or one category
+   in the keywlist.txt file.
 
 Functions:
+ - parse             Parses the keywlist.txt file and returns an iterator to
+   the records it contains.
 
-    - parse             Parses the keywlist.txt file and returns an iterator to
-      the records it contains.
 """
 
 from __future__ import print_function
 
 
 class Record(dict):
-    """
+    """Store information of one keyword or category from the keywords list.
+
     This record stores the information of one keyword or category in the
     keywlist.txt as a Python dictionary. The keys in this dictionary are
     the line codes that can appear in the keywlist.txt file::
@@ -42,7 +42,9 @@ class Record(dict):
         WW         Relevant WWW site               Optional; once or more
         CA         Category                        Once per keyword entry; absent
                                                    in category entries
+
     """
+
     def __init__(self):
         dict.__init__(self)
         for keyword in ("DE", "SY", "GO", "HI", "WW"):

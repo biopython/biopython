@@ -7,10 +7,3 @@ c3line.gen  - 3 chars per allele, one locus name per line
 c2space.gen - 2 chars per allele, all loci in one line
 c3space.gen - 3 chars per allele, all loci in one line
 
-
-FDist
------
-fdist1           - marker input example
-data_fst_outfile - He and Fst pairs per locus
-out.dat          - simulated dataset
-out.cpl          - confidence interval contour

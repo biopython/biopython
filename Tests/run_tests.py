@@ -8,18 +8,18 @@ This will find all modules whose name is "test_*.py" in the test
 directory, and run them.  Various command line options provide
 additional facilities.
 
-Command line options:
+Command line options::
 
---help        -- show usage info
---offline     -- skip tests which require internet access
--g;--generate -- write the output file for a test instead of comparing it.
-                 The name of the test to write the output for must be
-                 specified.
--v;--verbose  -- run tests with higher verbosity (does not affect our
-                 print-and-compare style unit tests).
-<test_name>   -- supply the name of one (or more) tests to be run.
-                 The .py file extension is optional.
-doctest       -- run the docstring tests.
+    --help        -- show usage info
+    --offline     -- skip tests which require internet access
+    -g;--generate -- write the output file for a test instead of comparing it.
+                     The name of the test to write the output for must be
+                     specified.
+    -v;--verbose  -- run tests with higher verbosity (does not affect our
+                     print-and-compare style unit tests).
+    <test_name>   -- supply the name of one (or more) tests to be run.
+                     The .py file extension is optional.
+    doctest       -- run the docstring tests.
 
 By default, all tests are run.
 """
@@ -68,6 +68,7 @@ def is_numpy():
         return True
     except ImportError:
         return False
+
 
 # The default verbosity (not verbose)
 VERBOSITY = 0
@@ -196,6 +197,8 @@ def _have_bug17666():
         # TypeError: integer argument expected, got 'tuple'
         handle.close()
         return True
+
+
 if _have_bug17666():
     DOCTEST_MODULES.remove("Bio.bgzf")
 
@@ -289,9 +292,10 @@ class ComparisonTestCase(unittest.TestCase):
         """Initialize with the test to run.
 
         Arguments:
-        o name - The name of the test. The expected output should be
-          stored in the file output/name.
-        o output - The output that was generated when this test was run.
+            - name - The name of the test. The expected output should be
+              stored in the file output/name.
+            - output - The output that was generated when this test was run.
+
         """
         unittest.TestCase.__init__(self)
         self.name = name
@@ -363,8 +367,7 @@ class ComparisonTestCase(unittest.TestCase):
         expected.close()
 
     def generate_output(self):
-        """Generate the golden output for the specified test.
-        """
+        """Generate the golden output for the specified test."""
         outputdir = os.path.join(TestRunner.testdir, "output")
         outputfile = os.path.join(outputdir, self.name)
 
@@ -499,7 +502,7 @@ class TestRunner(unittest.TextTestRunner):
             # Want to allow this, and abort the test
             # (see below for special case)
             raise err
-        except:
+        except:  # noqa: B901
             # This happens in Jython with java.lang.ClassFormatError:
             # Invalid method Code length ...
             sys.stderr.write("ERROR\n")

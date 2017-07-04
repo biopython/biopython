@@ -3,8 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Parsing TRANSFAC files
-"""
+"""Parsing TRANSFAC files."""
 
 import warnings
 
@@ -14,54 +13,56 @@ from Bio.Alphabet import IUPAC
 
 
 class Motif(motifs.Motif, dict):
-    """A Bio.motifs.transfac.Motif stores the information in one TRANSFAC
-motif. This class inherits from the Bio.motifs.Motif base class, as well
-as from a Python dictionary. All motif information found by the parser
-is stored as attributes of the base class when possible; see the
-Bio.motifs.Motif base class for a description of these attributes. All
-other information associated with the motif is stored as (key, value)
-pairs in the dictionary, where the key is the two-letter fields as found
-in the TRANSFAC file. References are an exception: These are stored in
-the .references attribute.
+    """Store the information for one TRANSFAC motif.
 
-These fields are commonly found in TRANSFAC files::
+    This class inherits from the Bio.motifs.Motif base class, as well
+    as from a Python dictionary. All motif information found by the parser
+    is stored as attributes of the base class when possible; see the
+    Bio.motifs.Motif base class for a description of these attributes. All
+    other information associated with the motif is stored as (key, value)
+    pairs in the dictionary, where the key is the two-letter fields as found
+    in the TRANSFAC file. References are an exception: These are stored in
+    the .references attribute.
 
-    AC:    Accession number
-    AS:    Accession numbers, secondary
-    BA:    Statistical basis
-    BF:    Binding factors
-    BS:    Factor binding sites underlying the matrix
-           [sequence; SITE accession number; start position for matrix
-            sequence; length of sequence used; number of gaps inserted;
-            strand orientation.]
-    CC:    Comments
-    CO:    Copyright notice
-    DE:    Short factor description
-    DR:    External databases
-           [database name: database accession number]
-    DT:    Date created/updated
-    HC:    Subfamilies
-    HP:    Superfamilies
-    ID:    Identifier
-    NA:    Name of the binding factor
-    OC:    Taxonomic classification
-    OS:    Species/Taxon
-    OV:    Older version
-    PV:    Preferred version
-    TY:    Type
-    XX:    Empty line; these are not stored in the Record.
+    These fields are commonly found in TRANSFAC files::
 
-References are stored in an .references attribute, which is a list of
-dictionaries with the following keys::
+        AC:    Accession number
+        AS:    Accession numbers, secondary
+        BA:    Statistical basis
+        BF:    Binding factors
+        BS:    Factor binding sites underlying the matrix
+               [sequence; SITE accession number; start position for matrix
+               sequence; length of sequence used; number of gaps inserted;
+               strand orientation.]
+        CC:    Comments
+        CO:    Copyright notice
+        DE:    Short factor description
+        DR:    External databases
+               [database name: database accession number]
+        DT:    Date created/updated
+        HC:    Subfamilies
+        HP:    Superfamilies
+        ID:    Identifier
+        NA:    Name of the binding factor
+        OC:    Taxonomic classification
+        OS:    Species/Taxon
+        OV:    Older version
+        PV:    Preferred version
+        TY:    Type
+        XX:    Empty line; these are not stored in the Record.
 
-    RN:    Reference number
-    RA:    Reference authors
-    RL:    Reference data
-    RT:    Reference title
-    RX:    PubMed ID
+    References are stored in an .references attribute, which is a list of
+    dictionaries with the following keys::
 
-For more information, see the TRANSFAC documentation.
-"""
+        RN:    Reference number
+        RA:    Reference authors
+        RL:    Reference data
+        RT:    Reference title
+        RX:    PubMed ID
+
+    For more information, see the TRANSFAC documentation.
+    """
+
     multiple_value_keys = set(['BF', 'OV', 'HP', 'BS', 'HC', 'DT', 'DR'])
     # These keys can occur multiple times for one motif
 
@@ -70,14 +71,16 @@ For more information, see the TRANSFAC documentation.
 
 
 class Record(list):
-    """A Bio.motifs.transfac.Record stores the information in a TRANSFAC
-matrix table. The record inherits from a list containing the individual
-motifs.
+    """Store the information in a TRANSFAC matrix table.
 
-Attributes:
-    o version:   The version number, corresponding to the 'VV' field
-                 in the TRANSFAC file;
-"""
+    The record inherits from a list containing the individual motifs.
+
+    Attributes:
+     - version - The version number, corresponding to the 'VV' field
+       in the TRANSFAC file;
+
+    """
+
     def __init__(self):
         self.version = None
 
@@ -86,7 +89,7 @@ Attributes:
 
 
 def read(handle):
-    """record = read(handle)"""
+    """Record = read(handle)"""
     annotations = {}
     references = []
     counts = None
@@ -161,7 +164,7 @@ def read(handle):
             index = int(index[1:-1])
             assert len(references) == index - 1, \
                 'The index "{0:d}" of the TRANSFAC RN line does not match the current number ' \
-                'of seen references "{1:d}": "{2:s}"'.format(index, len(reference) + 1, line)
+                'of seen references "{1:d}": "{2:s}"'.format(index, len(references) + 1, line)
             reference = {key: value}
             references.append(reference)
         elif key == '//':
@@ -184,8 +187,7 @@ def read(handle):
 
 
 def write(motifs):
-    """Write the representation of a motif in TRANSFAC format
-    """
+    """Write the representation of a motif in TRANSFAC format."""
     blocks = []
     try:
         version = motifs.version

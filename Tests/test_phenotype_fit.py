@@ -60,6 +60,7 @@ class TestPhenoMicro(unittest.TestCase):
         self.assertEqual(w.min, 29.0)
         self.assertEqual(w.average_height, 217.82552083333334)
 
+
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

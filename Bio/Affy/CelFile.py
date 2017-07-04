@@ -4,12 +4,10 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""
-Reading information from Affymetrix CEL files version 3 and 4.
-"""
+"""Reading information from Affymetrix CEL files version 3 and 4."""
 
 from __future__ import print_function
-import sys
+
 import struct
 
 try:
@@ -23,6 +21,7 @@ except ImportError:
 class ParserError(ValueError):
     def __init__(self, *args):
         super(ParserError, self).__init__(*args)
+
 
 _modeError = ParserError("You're trying to open an Affymetrix v4"
                          " CEL file. You have to use a read binary mode,"
@@ -64,6 +63,7 @@ class Record(object):
      [25 25 25 25 25]]
 
     """
+
     def __init__(self):
         self.version = None
         self.GridCornerUL = None
@@ -87,7 +87,7 @@ class Record(object):
 
 
 def read(handle):
-    """ Reads Affymetrix CEL file and returns Record object.
+    """Reads Affymetrix CEL file and returns Record object.
 
     CEL files version 3 and 4 are supported, and the parser attempts version detection.
 
@@ -135,7 +135,7 @@ def read(handle):
 
 # read Affymetrix files version 4.
 def read_v4(f):
-    """ Reads Affymetrix CEL file, version 4, and returns a corresponding Record
+    """Reads Affymetrix CEL file, version 4, and returns a corresponding Record
     object.
 
     Most importantly record.intensities correspond to intensities from the CEL
@@ -251,7 +251,7 @@ def read_v4(f):
     # There are 10 bytes in our struct.
     structSize = 10
 
-    # We initialise the most important: intensities, stdevs and npixs.
+    # We initialize the most important: intensities, stdevs and npixs.
     record.intensities = numpy.empty(record.NumberCells, dtype=float)
     record.stdevs = numpy.empty(record.NumberCells, dtype=float)
     record.npix = numpy.empty(record.NumberCells, dtype=int)
@@ -278,7 +278,7 @@ def read_v4(f):
 
 
 def read_v3(handle):
-    """ Reads Affymetrix CEL file, version 3, and returns a corresponding Record object.
+    """Reads Affymetrix CEL file, version 3, and returns a corresponding Record object.
 
     Example Usage:
 
@@ -393,6 +393,7 @@ def read_v3(handle):
         else:
             continue
     return record
+
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest

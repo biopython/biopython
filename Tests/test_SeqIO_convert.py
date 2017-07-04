@@ -161,11 +161,13 @@ def compare_records(old_list, new_list, truncate_qual=None):
 
 class ConvertTests(unittest.TestCase):
     """Cunning unit test where methods are added at run time."""
+
     def simple_check(self, filename, in_format, out_format, alphabet):
         check_convert(filename, in_format, out_format, alphabet)
 
     def failure_check(self, filename, in_format, out_format, alphabet):
         check_convert_fails(filename, in_format, out_format, alphabet)
+
 
 tests = [
     ("Quality/example.fastq", "fastq", None),

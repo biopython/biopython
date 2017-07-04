@@ -103,6 +103,7 @@ class Motif(motifs.Motif):
         """Return the hash key corresponding to the JASPAR profile.
 
         :note: We assume the unicity of matrix IDs
+
         """
         return self.matrix_id.__hash__()
 
@@ -114,7 +115,6 @@ class Record(list):
     """Represent a list of jaspar motifs.
 
     Attributes:
-
      - version: The JASPAR version used
 
     """

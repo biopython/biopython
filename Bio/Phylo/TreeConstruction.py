@@ -11,6 +11,7 @@ from Bio.Phylo import BaseTree
 from Bio.Align import MultipleSeqAlignment
 from Bio.SubsMat import MatrixInfo
 from Bio import _py3k
+from Bio._py3k import zip, range
 
 
 def _is_numeric(x):
@@ -85,7 +86,8 @@ class _Matrix(object):
 
     def __init__(self, names, matrix=None):
         """Initialize matrix by a list of names and a list of
-        lower triangular matrix data"""
+        lower triangular matrix data.
+        """
         # check names
         if isinstance(names, list) and all(isinstance(s, str) for s in names):
             if len(set(names)) == len(names):
@@ -129,6 +131,7 @@ class _Matrix(object):
             dm[i, j]                get the value between 'i' and 'j';
             dm['name']              map name to index first
             dm['name1', 'name2']    map name to index first
+
         """
         # Handle single indexing
         if isinstance(item, (int, str)):
@@ -259,6 +262,7 @@ class _Matrix(object):
                 name of a row/col to be inserted
             value : list
                 a row/col of values to be inserted
+
         """
         if isinstance(name, str):
             # insert at the given index or at the end
@@ -310,9 +314,35 @@ class _DistanceMatrix(_Matrix):
         self._set_zero_diagonal()
 
     def _set_zero_diagonal(self):
-        """set all diagonal elements to zero"""
+        """Set all diagonal elements to zero"""
         for i in range(0, len(self)):
             self.matrix[i][i] = 0
+
+    def format_phylip(self, handle):
+        """Write data in Phylip format to a given file-like object or handle.
+
+        The output stream is the input distance matrix format used with Phylip
+        programs (e.g. 'neighbor'). See:
+        http://evolution.genetics.washington.edu/phylip/doc/neighbor.html
+
+        :Parameters:
+            handle : file or file-like object
+                A writeable file handle or other object supporting the 'write'
+                method, such as StringIO or sys.stdout. On Python 3, should be
+                open in text mode.
+        """
+        handle.write("    {0}\n".format(len(self.names)))
+        # Phylip needs space-separated, vertically aligned columns
+        name_width = max(12, max(map(len, self.names)) + 1)
+        value_fmts = ("{" + str(x) + ":.4f}"
+                      for x in range(1, len(self.matrix) + 1))
+        row_fmt = "{0:" + str(name_width) + "s}" + "  ".join(value_fmts) + "\n"
+        for i, (name, values) in enumerate(zip(self.names, self.matrix)):
+            # Mirror the matrix values across the diagonal
+            mirror_values = (self.matrix[j][i]
+                             for j in range(i + 1, len(self.matrix)))
+            fields = itertools.chain([name], values, mirror_values)
+            handle.write(row_fmt.format(*fields))
 
 
 class DistanceCalculator(object):
@@ -367,6 +397,7 @@ class DistanceCalculator(object):
         Delta   0.585365853659  0.547619047619  0.566265060241  0
         Epsilon 0.7             0.355555555556  0.488888888889  0.222222222222  0
                 Alpha           Beta            Gamma           Delta           Epsilon
+
     """
 
     dna_alphabet = ['A', 'T', 'C', 'G']
@@ -397,8 +428,16 @@ class DistanceCalculator(object):
 
     models = ['identity'] + dna_models + protein_models
 
-    def __init__(self, model='identity'):
+    def __init__(self, model='identity', skip_letters=None):
         """Initialize with a distance model."""
+        # Shim for backward compatibility (#491)
+        if skip_letters:
+            self.skip_letters = skip_letters
+        elif model == 'identity':
+            self.skip_letters = ()
+        else:
+            self.skip_letters = ('-', '*')
+
         if model == 'identity':
             self.scoring_matrix = None
         elif model in self.dna_models:
@@ -422,11 +461,10 @@ class DistanceCalculator(object):
         if self.scoring_matrix:
             max_score1 = 0
             max_score2 = 0
-            skip_letters = ['-', '*']
             for i in range(0, len(seq1)):
                 l1 = seq1[i]
                 l2 = seq2[i]
-                if l1 in skip_letters or l2 in skip_letters:
+                if l1 in self.skip_letters or l2 in self.skip_letters:
                     continue
                 if l1 not in self.scoring_matrix.names:
                     raise ValueError("Bad alphabet '%s' in sequence '%s' at position '%s'"
@@ -441,13 +479,11 @@ class DistanceCalculator(object):
             max_score = max(max_score1, max_score2)
         else:
             # Score by character identity, not skipping any special letters
-            for i in range(0, len(seq1)):
-                l1 = seq1[i]
-                l2 = seq2[i]
-                if l1 == l2:
-                    score += 1
+            score = sum(l1 == l2
+                        for l1, l2 in zip(seq1, seq2)
+                        if l1 not in self.skip_letters
+                        and l2 not in self.skip_letters)
             max_score = len(seq1)
-
         if max_score == 0:
             return 1  # max possible scaled distance
         return 1 - (score * 1.0 / max_score)
@@ -484,7 +520,8 @@ class TreeConstructor(object):
     def build_tree(self, msa):
         """Caller to built the tree from a MultipleSeqAlignment object.
 
-        This should be implemented in subclass"""
+        This should be implemented in subclass.
+        """
         raise NotImplementedError("Method not implemented!")
 
 
@@ -539,8 +576,7 @@ class DistanceTreeConstructor(TreeConstructor):
     methods = ['nj', 'upgma']
 
     def __init__(self, distance_calculator=None, method="nj"):
-        if (distance_calculator is None or
-            isinstance(distance_calculator, DistanceCalculator)):
+        if (distance_calculator is None or isinstance(distance_calculator, DistanceCalculator)):
             self.distance_calculator = distance_calculator
         else:
             raise TypeError("Must provide a DistanceCalculator object.")
@@ -571,6 +607,7 @@ class DistanceTreeConstructor(TreeConstructor):
         :Parameters:
             distance_matrix : _DistanceMatrix
                 The distance matrix for tree construction.
+
         """
         if not isinstance(distance_matrix, _DistanceMatrix):
             raise TypeError("Must provide a _DistanceMatrix object.")
@@ -635,6 +672,7 @@ class DistanceTreeConstructor(TreeConstructor):
         :Parameters:
             distance_matrix : _DistanceMatrix
                 The distance matrix for tree construction.
+
         """
         if not isinstance(distance_matrix, _DistanceMatrix):
             raise TypeError("Must provide a _DistanceMatrix object.")
@@ -710,7 +748,7 @@ class DistanceTreeConstructor(TreeConstructor):
         return BaseTree.Tree(root, rooted=False)
 
     def _height_of(self, clade):
-        """calculate clade height -- the longest path to any terminal."""
+        """Calculate clade height -- the longest path to any terminal."""
         height = 0
         if clade.is_terminal():
             height = clade.branch_length
@@ -750,6 +788,7 @@ class NNITreeSearcher(TreeSearcher):
         scorer : ParsimonyScorer
             parsimony scorer to calculate the parsimony score of
             different trees during NNI algorithm.
+
     """
 
     def __init__(self, scorer):
@@ -767,6 +806,7 @@ class NNITreeSearcher(TreeSearcher):
            alignment : MultipleSeqAlignment
                multiple sequence alignment used to calculate parsimony
                score of different NNI trees.
+
         """
         return self._nni(starting_tree, alignment)
 
@@ -899,6 +939,7 @@ class ParsimonyScorer(Scorer):
     :Parameters:
         matrix : _Matrix
             scoring matrix used in parsimony score calculation.
+
     """
 
     def __init__(self, matrix=None):
@@ -908,9 +949,12 @@ class ParsimonyScorer(Scorer):
             raise TypeError("Must provide a _Matrix object.")
 
     def get_score(self, tree, alignment):
-        """Calculate and return the parsimony score given a tree and
-        the MSA using the Fitch algorithm without the penalty matrix
-        the Sankoff algorithm with the matrix"""
+        """Calculate parsimony score using the Fitch algorithm
+
+        Calculate and return the parsimony score given a tree and the
+        MSA using either the Fitch algorithm (without a penalty matrix)
+        or the Sankoff algorithm (with a matrix).
+        """
         # make sure the tree is rooted and bifurcating
         if not tree.is_bifurcating():
             raise ValueError("The tree provided should be bifurcating.")
@@ -998,7 +1042,7 @@ class ParsimonyTreeConstructor(TreeConstructor):
             starting tree provided to the searcher.
 
     Example
-    --------
+    -------
 
     >>> from Bio import AlignIO
     >>> from TreeConstruction import *
@@ -1049,6 +1093,7 @@ class ParsimonyTreeConstructor(TreeConstructor):
         :Parameters:
             alignment : MultipleSeqAlignment
                 multiple sequence alignment to calculate parsimony tree.
+
         """
         # if starting_tree is none,
         # create a upgma tree with 'identity' scoring matrix

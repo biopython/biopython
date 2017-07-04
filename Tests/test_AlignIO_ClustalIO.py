@@ -35,7 +35,7 @@ gi|671626|emb|CAA85685.1|           -EKDQCICYVAYPLDLFEEGSVTNMFTSIVGNVFGFKALRALRL
 gi|4959044|gb|AAD34209.1|AF069      VPTTRAQRRA 210
 gi|671626|emb|CAA85685.1|           VAYVKTFQGP 151
                                     *. .:: : .
-"""  # noqa for pep8 W291 trailing whitespace
+"""  # noqa : W291
 
 # This example is a truncated version of the dataset used here:
 # http://virgil.ruc.dk/kurser/Sekvens/Treedraw.htm
@@ -77,7 +77,7 @@ HISJ_E_COLI                    LKAKKIDAIMSSLSITEKRQQEIAFTDKLYAADSRLV
 HISJ_E_COLI                    LKAKKIDAIMSSLSITEKRQQEIAFTDKLYAADSRLV
                                *.: . *        .  *     *:          :
 
-"""  # noqa for pep8 W291 trailing whitespace
+"""  # noqa : W291
 
 
 aln_example3 = \
@@ -143,7 +143,7 @@ Test1seq             GCTGGGGATGGAGAGGGAACAGAGTT-
 AT3G20900.1-SEQ      GCTGGGGATGGAGAGGGAACAGAGTAG
 AT3G20900.1-CDS      GCTGGGGATGGAGAGGGAACAGAGTAG
                      *************************  
-"""  # noqa for pep8 W291 trailing whitespace
+"""  # noqa : W291
 
 aln_example4 = \
 """Kalign (2.0) alignment in ClustalW format
@@ -226,6 +226,7 @@ class TestClustalIO(unittest.TestCase):
         """Make sure we can parse the Kalign header."""
         alignments = next(ClustalIterator(StringIO(aln_example4)))
         self.assertEqual(2, len(alignments))
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)

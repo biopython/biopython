@@ -20,11 +20,12 @@ class Record(object):
     """Holds information for one node in the SCOP hierarchy.
 
     Attributes:
-
      - sunid - SCOP unique identifiers of this node
      - parent - Parents sunid
      - children - Sequence of childrens sunids
+
     """
+
     def __init__(self, line=None):
         self.sunid = ''
         self.parent = ''
@@ -90,8 +91,8 @@ def parse(handle):
     """Iterates over a HIE file as Hie records for each line.
 
     Arguments:
-
      - handle - file-like object.
+
     """
     for line in handle:
         if line.startswith('#'):

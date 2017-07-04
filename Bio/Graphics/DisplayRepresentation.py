@@ -39,18 +39,18 @@ class ChromosomeCounts(object):
     the chromosome will be especially abundant in the counts, and you
     want to pick those out.
     """
+
     def __init__(self, segment_names, color_scheme=RAINBOW_COLORS):
         """Initialize a representation of chromosome counts.
 
         Arguments:
+         - segment_names - An ordered list of all segment names along
+           the chromosome. The count and other information will be added
+           to these.
+         - color_scheme - A coloring scheme to use in the counts. This
+           should be a dictionary mapping count ranges to colors (specified
+           in reportlab.lib.colors).
 
-        o segment_names - An ordered list of all segment names along
-        the chromosome. The count and other information will be added to
-        these.
-
-        o color_scheme - A coloring scheme to use in the counts. This should
-        be a dictionary mapping count ranges to colors (specified in
-        reportlab.lib.colors).
         """
         self._names = segment_names
         self._count_info = {}
@@ -67,12 +67,11 @@ class ChromosomeCounts(object):
         """Add counts to the given segment name.
 
         Arguments:
+         - segment_name - The name of the segment we should add counts to.
+           If the name is not present, a KeyError will be raised.
+         - count - The counts to add the current segment. This defaults to
+           a single count.
 
-        o segment_name - The name of the segment we should add counts to.
-        If the name is not present, a KeyError will be raised.
-
-        o count - The counts to add the current segment. This defaults to
-        a single count.
         """
         try:
             self._count_info[segment_name] += count
@@ -134,9 +133,8 @@ class ChromosomeCounts(object):
         """Add the collected segment information to a chromosome for drawing.
 
         Arguments:
-
-        o chromosome - A Chromosome graphics object that we can add
-        chromosome segments to.
+         - chromosome - A Chromosome graphics object that we can add
+           chromosome segments to.
 
         This creates ChromosomeSegment (and TelomereSegment) objects to
         fill in the chromosome. The information is derived from the
@@ -177,8 +175,7 @@ class ChromosomeCounts(object):
         return chromosome
 
     def _color_from_count(self, count):
-        """Translate the given count into a color using the color scheme.
-        """
+        """Translate the given count into a color using the color scheme."""
         for count_start, count_end in self._color_scheme:
             if count >= count_start and count <= count_end:
                 return self._color_scheme[(count_start, count_end)]

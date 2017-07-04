@@ -20,11 +20,15 @@ from Bio import SeqIO
 from Bio.Seq import Seq
 from Bio.Alphabet import IUPAC
 
-# stuff we are testing
-from Bio.NeuralNetwork.Gene import Schema
-from Bio.NeuralNetwork.Gene import Motif
-from Bio.NeuralNetwork.Gene import Signature
-from Bio.NeuralNetwork.Gene import Pattern
+import warnings
+from Bio import BiopythonDeprecationWarning
+with warnings.catch_warnings():
+    warnings.simplefilter('ignore', BiopythonDeprecationWarning)
+    # stuff we are testing
+    from Bio.NeuralNetwork.Gene import Schema
+    from Bio.NeuralNetwork.Gene import Motif
+    from Bio.NeuralNetwork.Gene import Signature
+    from Bio.NeuralNetwork.Gene import Pattern
 
 VERBOSE = 0
 
@@ -102,7 +106,7 @@ class PatternIOTest(unittest.TestCase):
             raise AssertionError("Did not report error on bad alphabet.")
         except ValueError:
             pass  # expected behavior
-        except:
+        except Exception:
             raise AssertionError("Got unexpected error while reading.")
         input_handle.close()
 
@@ -648,6 +652,7 @@ class SignatureCoderTest(unittest.TestCase):
             self.assertEqual(predicted, expected,
                              "Non-expected representation %s for %s, wanted %s"
                              % (predicted, seq_string, expected))
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)

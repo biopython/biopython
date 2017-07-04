@@ -9,12 +9,12 @@ Instantiates tree elements from a parsed PhyloXML file, and constructs an XML
 file from a `Bio.Phylo.PhyloXML` object.
 
 About capitalization:
+ - phyloXML means the file format specification
+ - PhyloXML means the Biopython module `Bio.Phylo.PhyloXML` and its classes
+ - Phyloxml means the top-level class used by `PhyloXMLIO.read` (but not
+   `Bio.Phylo.read`!), containing a list of Phylogenies (objects derived from
+   `BaseTree.Tree`)
 
-- phyloXML means the file format specification
-- PhyloXML means the Biopython module `Bio.Phylo.PhyloXML` and its classes
-- Phyloxml means the top-level class used by `PhyloXMLIO.read` (but not
-  `Bio.Phylo.read`!), containing a list of Phylogenies (objects derived from
-  `BaseTree.Tree`)
 """
 
 import sys
@@ -67,6 +67,7 @@ class PhyloXMLError(Exception):
     module; this exception is for valid XML that breaks the phyloXML
     specification.
     """
+
     pass
 
 
@@ -80,6 +81,7 @@ def read(file):
     (non-phyloXML) objects.
 
     :returns: a single `Bio.Phylo.PhyloXML.Phyloxml` object.
+
     """
     return Parser(file).read()
 
@@ -91,6 +93,7 @@ def parse(file):
     memory-efficient than the `read` function.
 
     :returns: a generator of `Bio.Phylo.PhyloXML.Phylogeny` objects.
+
     """
     return Parser(file).parse()
 
@@ -105,6 +108,7 @@ def write(obj, file, encoding=DEFAULT_ENCODING, indent=True):
             to a Phyloxml object before serialization.
         file
             either an open handle or a file name.
+
     """
     def fix_single(tree):
         if isinstance(tree, PX.Phylogeny):
@@ -144,7 +148,7 @@ def _split_namespace(tag):
     """Split a tag into namespace and local tag strings."""
     try:
         return tag[1:].split('}', 1)
-    except:
+    except ValueError:
         return ('', tag)
 
 
@@ -196,9 +200,9 @@ def _indent(elem, level=0):
     """Add line breaks and indentation to ElementTree in-place.
 
     Sources:
+     - http://effbot.org/zone/element-lib.htm#prettyprint
+     - http://infix.se/2007/02/06/gentlemen-indent-your-xml
 
-    - http://effbot.org/zone/element-lib.htm#prettyprint
-    - http://infix.se/2007/02/06/gentlemen-indent-your-xml
     """
     i = "\n" + level * "  "
     if len(elem):

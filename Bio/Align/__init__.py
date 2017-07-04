@@ -181,7 +181,7 @@ class MultipleSeqAlignment(object):
         self.annotations = annotations
 
     def _str_line(self, record, length=50):
-        """Returns a truncated string representation of a SeqRecord (PRIVATE).
+        """Return a truncated string representation of a SeqRecord (PRIVATE).
 
         This is a PRIVATE function used by the __str__ method.
         """
@@ -199,7 +199,7 @@ class MultipleSeqAlignment(object):
                     % (record.seq[:length - 6], record.seq[-3:], record.id)
 
     def __str__(self):
-        """Returns a multi-line string summary of the alignment.
+        """Return a multi-line string summary of the alignment.
 
         This output is intended to be readable, but large alignments are
         shown truncated.  A maximum of 20 rows (sequences) and 50 columns
@@ -232,7 +232,7 @@ class MultipleSeqAlignment(object):
         return "\n".join(lines)
 
     def __repr__(self):
-        """Returns a representation of the object for debugging.
+        """Return a representation of the object for debugging.
 
         The representation cannot be used with eval() to recreate the object,
         which is usually possible with simple python ojects.  For example:
@@ -255,7 +255,7 @@ class MultipleSeqAlignment(object):
         #       % (self.__class__, repr(self._records), repr(self._alphabet))
 
     def format(self, format):
-        """Returns the alignment as a string in the specified file format.
+        """Return the alignment as a string in the specified file format.
 
         The format should be a lower case string supported as an output
         format by Bio.AlignIO (such as "fasta", "clustal", "phylip",
@@ -292,12 +292,13 @@ class MultipleSeqAlignment(object):
         return self.__format__(format)
 
     def __format__(self, format_spec):
-        """Returns the alignment as a string in the specified file format.
+        """Return the alignment as a string in the specified file format.
 
         This method supports the python format() function added in
         Python 2.6/3.0.  The format_spec should be a lower case
         string supported by Bio.AlignIO as an output file format.
-        See also the alignment's format() method."""
+        See also the alignment's format() method.
+        """
         if format_spec:
             from Bio._py3k import StringIO
             from Bio import AlignIO
@@ -332,7 +333,7 @@ class MultipleSeqAlignment(object):
         return iter(self._records)
 
     def __len__(self):
-        """Returns the number of sequences in the alignment.
+        """Return the number of sequences in the alignment.
 
         Use len(alignment) to get the number of sequences (i.e. the number of
         rows), and alignment.get_alignment_length() to get the length of the
@@ -535,7 +536,7 @@ class MultipleSeqAlignment(object):
             self._append(record)
 
     def _append(self, record, expected_length=None):
-        """Helper function (PRIVATE)."""
+        """Validate and append a record (PRIVATE)."""
         if not isinstance(record, SeqRecord):
             raise TypeError("New sequence is not a SeqRecord object")
 
@@ -555,7 +556,7 @@ class MultipleSeqAlignment(object):
         self._records.append(record)
 
     def __add__(self, other):
-        """Combines two alignments with the same number of rows by adding them.
+        """Combine two alignments with the same number of rows by adding them.
 
         If you have two multiple sequence alignments (MSAs), there are two ways to think
         about adding them - by row or by column. Using the extend method adds by row.

@@ -85,7 +85,7 @@ class xbb_translations(object):
         return res
 
     def gc(self, seq):
-        """Returns a float between 0 and 100."""
+        """Return a float between 0 and 100."""
         return GC(seq)
 
     def gcframe(self, seq, translation_table=1, direction='both'):

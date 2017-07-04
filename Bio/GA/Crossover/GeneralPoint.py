@@ -3,15 +3,15 @@
 # as part of this package.
 #
 
-"""
-Generalized N-Point Crossover.
+"""Generalized N-Point Crossover.
 
 For even values of N, perform N point crossover
-  (select N/2 points each in the two genomes, and alternate)
-For odd values of N, perform symmetric N+1 point crossover
-  (select N/2 points for both genomes)
+(select N/2 points each in the two genomes, and alternate)
 
-N-Point introduction (my notation):
+For odd values of N, perform symmetric N+1 point crossover
+(select N/2 points for both genomes)
+
+N-Point introduction (my notation)::
 
     | genome 1:    A-----B-----C-----D-----E-----F-----G
     | genome 2:    a=====b=====c=====d=====e=====f=====g
@@ -26,7 +26,7 @@ N-Point introduction (my notation):
     |              a=====b=====c=====d=====e= 2 =f=====g
     | returns: (ABfg, abcdeCDEFG)
 
-and for the drastic (n can be arbitrary to the length of the genome!):
+and for the drastic (n can be arbitrary to the length of the genome!)::
 
     | 12-point, symmetric (points=11):
     |              A- 1 -B- 2 -C- 3 -D- 4 -E- 5 -F- 6 -G
@@ -34,6 +34,7 @@ and for the drastic (n can be arbitrary to the length of the genome!):
     | returns: (AbCdEfG, aBcDeFg)
     | (note that points=12 will yield the same result, but 11
     |  may be somewhat faster)
+
 """
 # standard modules
 import random
@@ -44,27 +45,26 @@ from Bio._py3k import range
 class GeneralPointCrossover(object):
     """Perform n-point crossover between genomes at some defined rates.
 
-       Ideas on how to use this class:
+    Ideas on how to use this class:
+     - Call it directly ( construct, do_crossover )
+     - Use one of the provided subclasses
+     - Inherit from it:
 
-           - Call it directly ( construct, do_crossover )
-           - Use one of the provided subclasses
-           - Inherit from it:
-               * replace _generate_locs with a more domain
-                 specific technique
-               * replace _crossover with a more efficient
-                 technique for your point-count
+       * replace _generate_locs with a more domain specific technique
+       * replace _crossover with a more efficient technique for your
+         point-count
+
     """
+
     def __init__(self, points, crossover_prob=.1):
-        """Initialize to do crossovers at the specified probability.
-        """
+        """Initialize to do crossovers at the specified probability."""
         self._crossover_prob = crossover_prob
 
         self._sym = points % 2  # odd n, gets a symmetry flag
         self._npoints = (points + self._sym) // 2  # (N or N+1)//2
 
     def do_crossover(self, org_1, org_2):
-        """Potentially do a crossover between the two organisms.
-        """
+        """Potentially do a crossover between the two organisms."""
         new_org = (org_1.copy(), org_2.copy())
 
         # determine if we have a crossover
@@ -102,15 +102,14 @@ class GeneralPointCrossover(object):
         return new_org
 
     def _generate_locs(self, bound):
-        """Generalized Location Generator:
+        """Generalized Location Generator.
 
-           arguments:
+        Arguments:
+         - bound (int)   - upper bound
 
-              - bound (int)   - upper bound
+        Returns: [0]+x_0...x_n+[bound] where n=self._npoints-1
+        and 0 < x_0 < x_1 ... < bound
 
-           returns: [0]+x_0...x_n+[bound]
-             where n=self._npoints-1
-               and 0 < x_0 < x_1 ... < bound
         """
         results = []
         for increment in range(self._npoints):
@@ -122,22 +121,22 @@ class GeneralPointCrossover(object):
         return [0] + results + [bound]  # [0, +n points+, bound]
 
     def _crossover(self, x, no, locs):
-        """Generalized Crossover Function:
+        """Generalized Crossover Function.
 
-           arguments:
-               - x (int)        - genome number [0|1]
-               - no (organism,organism)
+        Arguments:
+         - x (int) - genome number [0|1]
+         - no (organism, organism)
 
-                - new organisms
+           - new organisms
+           - locs (int list, int list)
 
-                - locs (int list, int list)
+         - lists of locations,
+           [0, +n points+, bound]
+           for each genome (sync'd with x)
 
-                - lists of locations,
-                  [0, +n points+, bound]
-                  for each genome (sync'd with x)
-
-            return type: sequence (to replace no[x])
+        Return type: sequence (to replace no[x])
         """
+        # TODO: The above docstring is unclear
         s = no[x].genome[:locs[x][1]]
         for n in range(1, self._npoints):
             # flipflop between genome_0 and genome_1
@@ -158,17 +157,18 @@ class TwoCrossover(GeneralPointCrossover):
     Offers more efficient replacements to the GeneralPoint framework
     for single pivot crossovers
     """
+
     def _generate_locs(self, bound):
-        """Replacement generation.
+        """Generate replacement (PRIVATE).
 
         See GeneralPoint._generate_locs documentation for details
         """
         return [0, random.randint(1, bound - 1), bound]
 
     def _crossover(self, x, no, locs):
-        """Replacement crossover
+        """Crossover replacement (PRIVATE)..
 
-           see GeneralPoint._crossover documentation for details
+        See GeneralPoint._crossover documentation for details
         """
         y = (x + 1) % 2
         return no[x].genome[:locs[x][1]] + no[y].genome[locs[y][1]:]
@@ -179,6 +179,7 @@ class InterleaveCrossover(GeneralPointCrossover):
 
     Interleaving:  AbCdEfG, aBcDeFg
     """
+
     def __init__(self, crossover_prob=0.1):
         GeneralPointCrossover.__init__(self, 0, crossover_prob)
 

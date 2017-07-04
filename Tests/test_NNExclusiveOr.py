@@ -3,12 +3,16 @@
 
 This is a very basic test of Neural Network functionality.
 """
-# Neural Network code we'll be using
 from __future__ import print_function
 
-from Bio.NeuralNetwork.Training import TrainingExample
-from Bio.NeuralNetwork.BackPropagation import Layer
-from Bio.NeuralNetwork.BackPropagation.Network import BasicNetwork
+import warnings
+from Bio import BiopythonDeprecationWarning
+with warnings.catch_warnings():
+    warnings.simplefilter('ignore', BiopythonDeprecationWarning)
+    # Neural Network code we'll be using
+    from Bio.NeuralNetwork.Training import TrainingExample
+    from Bio.NeuralNetwork.BackPropagation import Layer
+    from Bio.NeuralNetwork.BackPropagation.Network import BasicNetwork
 
 VERBOSE = 0
 
@@ -58,5 +62,6 @@ def stopping_criteria(num_iterations, validation_error, training_error):
     if num_iterations >= 2000:
         return True
     return False
+
 
 main()

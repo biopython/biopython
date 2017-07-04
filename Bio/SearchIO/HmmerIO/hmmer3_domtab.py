@@ -14,7 +14,6 @@ from .hmmer3_tab import Hmmer3TabParser, Hmmer3TabIndexer
 
 
 class Hmmer3DomtabParser(Hmmer3TabParser):
-
     """Base hmmer3-domtab iterator."""
 
     def _parse_row(self):
@@ -89,7 +88,8 @@ class Hmmer3DomtabParser(Hmmer3TabParser):
         # dummies for initial parsed value containers
         cur, prev = None, None
         hit_list, hsp_list = [], []
-
+        cur_qid = None
+        cur_hid = None
         while True:
             # store previous line's parsed values, for every line after the 1st
             if cur is not None:
@@ -152,43 +152,43 @@ class Hmmer3DomtabParser(Hmmer3TabParser):
 
 
 class Hmmer3DomtabHmmhitParser(Hmmer3DomtabParser):
-
     """Parser for the HMMER domain table format that assumes HMM profile
-    coordinates are hit coordinates."""
+    coordinates are hit coordinates.
+    """
 
     hmm_as_hit = True
 
 
 class Hmmer3DomtabHmmqueryParser(Hmmer3DomtabParser):
-
     """Parser for the HMMER domain table format that assumes HMM profile
-    coordinates are query coordinates."""
+    coordinates are query coordinates.
+    """
 
     hmm_as_hit = False
 
 
 class Hmmer3DomtabHmmhitIndexer(Hmmer3TabIndexer):
-
     """Indexer class for HMMER domain table output that assumes HMM profile
-    coordinates are hit coordinates."""
+    coordinates are hit coordinates.
+    """
 
     _parser = Hmmer3DomtabHmmhitParser
     _query_id_idx = 3
 
 
 class Hmmer3DomtabHmmqueryIndexer(Hmmer3TabIndexer):
-
     """Indexer class for HMMER domain table output that assumes HMM profile
-    coordinates are query coordinates."""
+    coordinates are query coordinates.
+    """
 
     _parser = Hmmer3DomtabHmmqueryParser
     _query_id_idx = 3
 
 
 class Hmmer3DomtabHmmhitWriter(object):
-
     """Writer for hmmer3-domtab output format which writes hit coordinates
-    as HMM profile coordinates."""
+    as HMM profile coordinates.
+    """
 
     hmm_as_hit = True
 
@@ -308,9 +308,9 @@ class Hmmer3DomtabHmmhitWriter(object):
 
 
 class Hmmer3DomtabHmmqueryWriter(Hmmer3DomtabHmmhitWriter):
-
     """Writer for hmmer3-domtab output format which writes query coordinates
-    as HMM profile coordinates."""
+    as HMM profile coordinates.
+    """
 
     hmm_as_hit = False
 

@@ -95,12 +95,10 @@ from Bio._py3k import StringIO
 import subprocess
 import warnings
 
-from Bio.Data import SCOPData
-
 from Bio.PDB.AbstractPropertyMap import AbstractResiduePropertyMap
 from Bio.PDB.PDBExceptions import PDBException
 from Bio.PDB.PDBParser import PDBParser
-
+from Bio.PDB.Polypeptide import three_to_one
 
 # Match C in DSSP
 _dssp_cys = re.compile('[a-z]')
@@ -174,6 +172,7 @@ def dssp_dict_from_pdb_file(in_file, DSSP="dssp"):
         a dictionary that maps (chainid, resid) to
         amino acid type, secondary structure code and
         accessibility.
+
     """
     # Using universal newlines is important on Python 3, this
     # gives unicode handles rather than bytes handles.
@@ -183,7 +182,7 @@ def dssp_dict_from_pdb_file(in_file, DSSP="dssp"):
     try:
         p = subprocess.Popen([DSSP, in_file], universal_newlines=True,
                              stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    except FileNotFoundError:
+    except OSError:  # TODO: Use FileNotFoundError once drop Python 2
         if DSSP == "mkdssp":
             raise
         p = subprocess.Popen(["mkdssp", in_file], universal_newlines=True,
@@ -210,6 +209,7 @@ def make_dssp_dict(filename):
     ----------
     filename : string
         the DSSP output file
+
     """
     with open(filename, "r") as handle:
         return _make_dssp_dict(handle)
@@ -227,6 +227,7 @@ def _make_dssp_dict(handle):
     ----------
     handle : file
         the open DSSP output file handle
+
     """
     dssp = {}
     start = 0
@@ -339,6 +340,7 @@ class DSSP(AbstractResiduePropertyMap):
             Sander/Wilke/Miller. Defaults to Sander.
         file_type: string
             File type switch, either PDB or DSSP with PDB as default.
+
         """
         self.residue_max_acc = residue_max_acc[acc_array]
 
@@ -352,7 +354,7 @@ class DSSP(AbstractResiduePropertyMap):
             # (Debian distribution of DSSP includes a symlink for 'dssp' argument)
             try:
                 dssp_dict, dssp_keys = dssp_dict_from_pdb_file(in_file, dssp)
-            except FileNotFoundError:
+            except OSError:  # TODO: Use FileNotFoundError once drop Python 2
                 if dssp == 'dssp':
                     dssp = 'mkdssp'
                 elif dssp == 'mkdssp':
@@ -471,7 +473,10 @@ class DSSP(AbstractResiduePropertyMap):
             # Verify if AA in DSSP == AA in Structure
             # Something went wrong if this is not true!
             # NB: DSSP uses X often
-            resname = SCOPData.protein_letters_3to1.get(resname, 'X')
+            try:
+                resname = three_to_one(resname)
+            except KeyError:
+                resname = 'X'
             if resname == "C":
                 # DSSP renames C in C-bridges to a,b,c,d,...
                 # - we rename it back to 'C'

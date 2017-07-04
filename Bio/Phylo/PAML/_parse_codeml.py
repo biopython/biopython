@@ -24,8 +24,7 @@ except ValueError:
 
 
 def parse_basics(lines, results):
-    """Parse the basic information that should be present in most codeml output files.
-    """
+    """Parse the basic information that should be present in most codeml output files."""
     # multi_models is used to designate there being results for more than one
     # model in the file
     multi_models = False
@@ -107,10 +106,12 @@ def parse_nssites(lines, results, multi_models, multi_genes):
             genes = results["genes"]
             current_gene = None
             gene_start = None
+            model_results = None
             for line_num, line in enumerate(lines):
                 gene_res = gene_re.match(line)
                 if gene_res:
                     if current_gene is not None:
+                        assert model_results is not None
                         parse_model(lines[gene_start:line_num], model_results)
                         genes[current_gene - 1] = model_results
                     gene_start = line_num
@@ -162,8 +163,7 @@ def parse_nssites(lines, results, multi_models, multi_genes):
 
 
 def parse_model(lines, results):
-    """Parse an individual NSsites model's results.
-    """
+    """Parse an individual NSsites model's results."""
     parameters = {}
     SEs_flag = False
     dS_tree_flag = False
@@ -371,8 +371,7 @@ def parse_siteclass_omegas(line, site_classes):
 
 
 def parse_clademodelc(branch_type_no, line_floats, site_classes):
-    """Parse results specific to the clade model C.
-    """
+    """Parse results specific to the clade model C."""
     if not site_classes or len(line_floats) == 0:
         return
     for n in range(len(line_floats)):
@@ -383,8 +382,7 @@ def parse_clademodelc(branch_type_no, line_floats, site_classes):
 
 
 def parse_branch_site_a(foreground, line_floats, site_classes):
-    """Parse results specific to the branch site A model.
-    """
+    """Parse results specific to the branch site A model."""
     if not site_classes or len(line_floats) == 0:
         return
     for n in range(len(line_floats)):
@@ -398,8 +396,7 @@ def parse_branch_site_a(foreground, line_floats, site_classes):
 
 
 def parse_pairwise(lines, results):
-    """Parse results from pairwise comparisons.
-    """
+    """Parse results from pairwise comparisons."""
     # Find pairwise comparisons
     # Example:
     # 2 (Pan_troglo) ... 1 (Homo_sapie)
@@ -440,8 +437,7 @@ def parse_pairwise(lines, results):
 
 
 def parse_distances(lines, results):
-    """Parse amino acid sequence distance results.
-    """
+    """Parse amino acid sequence distance results."""
     distances = {}
     sequences = []
     raw_aa_distances_flag = False

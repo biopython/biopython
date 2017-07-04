@@ -189,6 +189,7 @@ def is_aa(residue, standard=False):
 
 class Polypeptide(list):
     """A polypeptide is simply a list of L{Residue} objects."""
+
     def get_ca_list(self):
         """Get list of C-alpha atoms in the polypeptide.
 
@@ -306,8 +307,10 @@ class _PPBuilder(object):
 
     This assumes you want both standard and non-standard amino acids.
     """
+
     def __init__(self, radius):
-        """
+        """Initialize the base class.
+
         @param radius: distance
         @type radius: float
         """
@@ -380,6 +383,7 @@ class _PPBuilder(object):
 
 class CaPPBuilder(_PPBuilder):
     """Use CA--CA distance to find polypeptides."""
+
     def __init__(self, radius=4.3):
         _PPBuilder.__init__(self, radius)
 
@@ -407,6 +411,7 @@ class CaPPBuilder(_PPBuilder):
 
 class PPBuilder(_PPBuilder):
     """Use C--N distance to find polypeptides."""
+
     def __init__(self, radius=1.8):
         _PPBuilder.__init__(self, radius)
 
@@ -451,36 +456,3 @@ class PPBuilder(_PPBuilder):
             return 1
         else:
             return 0
-
-
-if __name__ == "__main__":
-    import sys
-    from Bio.PDB.PDBParser import PDBParser
-
-    p = PDBParser(PERMISSIVE=True)
-
-    s = p.get_structure("scr", sys.argv[1])
-
-    ppb = PPBuilder()
-
-    print("C-N")
-    for pp in ppb.build_peptides(s):
-        print(pp.get_sequence())
-    for pp in ppb.build_peptides(s[0]):
-        print(pp.get_sequence())
-    for pp in ppb.build_peptides(s[0]["A"]):
-        print(pp.get_sequence())
-
-    for pp in ppb.build_peptides(s):
-        for phi, psi in pp.get_phi_psi_list():
-            print("%f %f" % (phi, psi))
-
-    ppb = CaPPBuilder()
-
-    print("CA-CA")
-    for pp in ppb.build_peptides(s):
-        print(pp.get_sequence())
-    for pp in ppb.build_peptides(s[0]):
-        print(pp.get_sequence())
-    for pp in ppb.build_peptides(s[0]["A"]):
-        print(pp.get_sequence())

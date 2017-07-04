@@ -12,12 +12,13 @@ TwoPointCrossover is the minimal crossover technique that
 facilitates diverse genome length.  Do not use this if you need to
 maintain consistent genome length.
 
-TwoPointCrossover:
-genome 1 --       A B*C D E F
-genome 2 --       a b c*d e f
+TwoPointCrossover::
 
-new genome 1 --   A B d e f
-new genome 2 --   a b c C D E F
+    genome 1 --       A B*C D E F
+    genome 2 --       a b c*d e f
+
+    new genome 1 --   A B d e f
+    new genome 2 --   a b c C D E F
 
 """
 # standard modules
@@ -31,7 +32,7 @@ class TwoPointCrossover(TwoCrossover):
     The location of the points of crossover are chosen randomly if the
     crossover meets the probability to occur.
     """
+
     def __init__(self, crossover_prob=.1):
-        """Initialize to do crossovers at the specified probability.
-        """
+        """Initialize to do crossovers at the specified probability."""
         TwoCrossover.__init__(self, 2, crossover_prob)

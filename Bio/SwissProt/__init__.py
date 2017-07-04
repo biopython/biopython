@@ -11,14 +11,12 @@ Release 56.9, 03-March-2009.
 
 
 Classes:
-
-    - Record             Holds SwissProt data.
-    - Reference          Holds reference data from a SwissProt record.
+ - Record             Holds SwissProt data.
+ - Reference          Holds reference data from a SwissProt record.
 
 Functions:
-
-    - read               Read one SwissProt record
-    - parse              Read multiple SwissProt records
+ - read               Read one SwissProt record
+ - parse              Read multiple SwissProt records
 
 """
 
@@ -30,37 +28,34 @@ from Bio._py3k import _as_string
 class Record(object):
     """Holds information from a SwissProt record.
 
-    Members:
-
-        - entry_name        Name of this entry, e.g. RL1_ECOLI.
-        - data_class        Either 'STANDARD' or 'PRELIMINARY'.
-        - molecule_type     Type of molecule, 'PRT',
-        - sequence_length   Number of residues.
-
-        - accessions        List of the accession numbers, e.g. ['P00321']
-        - created           A tuple of (date, release).
-        - sequence_update   A tuple of (date, release).
-        - annotation_update A tuple of (date, release).
-
-        - description       Free-format description.
-        - gene_name         Gene name.  See userman.txt for description.
-        - organism          The source of the sequence.
-        - organelle         The origin of the sequence.
-        - organism_classification  The taxonomy classification.  List of strings.
-          (http://www.ncbi.nlm.nih.gov/Taxonomy/)
-        - taxonomy_id       A list of NCBI taxonomy id's.
-        - host_organism     A list of names of the hosts of a virus, if any.
-        - host_taxonomy_id  A list of NCBI taxonomy id's of the hosts, if any.
-        - references        List of Reference objects.
-        - comments          List of strings.
-        - cross_references  List of tuples (db, id1[, id2][, id3]).  See the docs.
-        - keywords          List of the keywords.
-        - features          List of tuples (key name, from, to, description).
-          from and to can be either integers for the residue
-          numbers, '<', '>', or '?'
-
-        - seqinfo           tuple of (length, molecular weight, CRC32 value)
-        - sequence          The sequence.
+    Attributes:
+     - entry_name        Name of this entry, e.g. RL1_ECOLI.
+     - data_class        Either 'STANDARD' or 'PRELIMINARY'.
+     - molecule_type     Type of molecule, 'PRT',
+     - sequence_length   Number of residues.
+     - accessions        List of the accession numbers, e.g. ['P00321']
+     - created           A tuple of (date, release).
+     - sequence_update   A tuple of (date, release).
+     - annotation_update A tuple of (date, release).
+     - description       Free-format description.
+     - gene_name         Gene name.  See userman.txt for description.
+     - organism          The source of the sequence.
+     - organelle         The origin of the sequence.
+     - organism_classification  The taxonomy classification.  List of strings.
+       (http://www.ncbi.nlm.nih.gov/Taxonomy/)
+     - taxonomy_id       A list of NCBI taxonomy id's.
+     - host_organism     A list of names of the hosts of a virus, if any.
+     - host_taxonomy_id  A list of NCBI taxonomy id's of the hosts, if any.
+     - references        List of Reference objects.
+     - comments          List of strings.
+     - cross_references  List of tuples (db, id1[, id2][, id3]).  See the docs.
+     - keywords          List of the keywords.
+     - features          List of tuples (key name, from, to, description).
+       from and to can be either integers for the residue
+       numbers, '<', '>', or '?'
+     - protein_existence Numerical value describing the evidence for the existence of the protein.
+     - seqinfo           tuple of (length, molecular weight, CRC32 value)
+     - sequence          The sequence.
 
     Example:
 
@@ -82,6 +77,7 @@ class Record(object):
     MAVMAPRTLVLLLSGALALT...
 
     """
+
     def __init__(self):
         self.entry_name = None
         self.data_class = None
@@ -106,6 +102,7 @@ class Record(object):
         self.cross_references = []
         self.keywords = []
         self.features = []
+        self.protein_existence = ''
 
         self.seqinfo = None
         self.sequence = ''
@@ -114,17 +111,18 @@ class Record(object):
 class Reference(object):
     """Holds information from one reference in a SwissProt entry.
 
-    Members:
-    number      Number of reference in an entry.
-    evidence    Evidence code.  List of strings.
-    positions   Describes extent of work.  List of strings.
-    comments    Comments.  List of (token, text).
-    references  References.  List of (dbname, identifier).
-    authors     The authors of the work.
-    title       Title of the work.
-    location    A citation for the work.
+    Attribues:
+     - number      Number of reference in an entry.
+     - evidence    Evidence code.  List of strings.
+     - positions   Describes extent of work.  List of strings.
+     - comments    Comments.  List of (token, text).
+     - references  References.  List of (dbname, identifier).
+     - authors     The authors of the work.
+     - title       Title of the work.
+     - location    A citation for the work.
 
     """
+
     def __init__(self):
         self.number = None
         self.positions = []
@@ -244,8 +242,7 @@ def _read(handle):
         elif key == 'DR':
             _read_dr(record, value)
         elif key == 'PE':
-            # TODO - Record this information?
-            pass
+            _read_pe(record, value)
         elif key == 'KW':
             _read_kw(record, value)
         elif key == 'FT':
@@ -382,7 +379,10 @@ def _read_dt(record, line):
         # Get the version number if there is one.
         # For the three DT lines above: 0, 3, 14
         try:
-            version = int(cols[-1])
+            version = 0
+            for s in cols[-1].split('.'):
+                if s.isdigit():
+                    version = int(s)
         except ValueError:
             version = 0
         date = cols[0].rstrip(",")
@@ -534,6 +534,11 @@ def _read_dr(record, value):
     record.cross_references.append(tuple(cols))
 
 
+def _read_pe(record, value):
+    pe = value.split(":")
+    record.protein_existence = int(pe[0])
+
+
 def _read_kw(record, value):
     # Old style - semi-colon separated, multi-line. e.g. Q13639.txt
     # KW   Alternative splicing; Cell membrane; Complete proteome;
@@ -599,6 +604,7 @@ def _read_ft(record, line):
                 # reassemble the description
                 description = first_seq + " -> " + second_seq + extra_info
     record.features.append((name, from_res, to_res, description, ft_id))
+
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest

@@ -6,20 +6,18 @@
 """Code to support writing parsers (DEPRECATED).
 
 Classes:
-
-    - AbstractParser         Base class for parsers.
-    - AbstractConsumer       Base class of all Consumers.
-    - TaggingConsumer        Consumer that tags output with its event.  For debugging
+ - AbstractParser         Base class for parsers.
+ - AbstractConsumer       Base class of all Consumers.
+ - TaggingConsumer        Consumer that tags output with its event.  For debugging
 
 Functions:
-
-    - safe_readline          Read a line from a handle, with check for EOF.
-    - safe_peekline          Peek at next line, with check for EOF.
-    - read_and_call          Read a line from a handle and pass it to a method.
-    - read_and_call_while    Read many lines, as long as a condition is met.
-    - read_and_call_until    Read many lines, until a condition is met.
-    - attempt_read_and_call  Like read_and_call, but forgiving of errors.
-    - is_blank_line          Test whether a line is blank.
+ - safe_readline          Read a line from a handle, with check for EOF.
+ - safe_peekline          Peek at next line, with check for EOF.
+ - read_and_call          Read a line from a handle and pass it to a method.
+ - read_and_call_while    Read many lines, as long as a condition is met.
+ - read_and_call_until    Read many lines, until a condition is met.
+ - attempt_read_and_call  Like read_and_call, but forgiving of errors.
+ - is_blank_line          Test whether a line is blank.
 
 """
 
@@ -33,9 +31,8 @@ warnings.warn("Bio.ParserSupport is now deprecated will be removed in a "
 
 
 class AbstractParser(object):
-    """Base class for other parsers.
+    """Base class for other parsers."""
 
-    """
     def parse(self, handle):
         raise NotImplementedError("Please implement in a derived class")
 
@@ -55,6 +52,7 @@ class AbstractConsumer(object):
     methods for each event that you want to receive.
 
     """
+
     def _unhandled_section(self):
         pass
 
@@ -70,12 +68,22 @@ class AbstractConsumer(object):
 
 
 class TaggingConsumer(AbstractConsumer):
-    """A Consumer that tags the data stream with the event and
+    """Debugging consumer which tags data with the event and logs it.
+
+    This is a Consumer that tags the data stream with the event and
     prints it to a handle.  Useful for debugging.
 
     """
+
     def __init__(self, handle=None, colwidth=15, maxwidth=80):
-        """TaggingConsumer(handle=sys.stdout, colwidth=15, maxwidth=80)"""
+        """Initialize.
+
+        Arguments:
+         - handle to log to, defaults to `sys.stdout`
+         - colwidth for logging to the handle
+         - maxwidth for truncation when logging
+
+        """
         # I can't assign sys.stdout to handle in the argument list.
         # If I do that, handle will be assigned the value of sys.stdout
         # the first time this function is called.  This will fail if
@@ -112,7 +120,7 @@ class TaggingConsumer(AbstractConsumer):
 
 
 def read_and_call(uhandle, method, **keywds):
-    """read_and_call(uhandle, method[, start][, end][, contains][, blank][, has_re])
+    """Read line and pass it to the method.
 
     Read a line from uhandle, check it, and pass it to the method.
     Raises a ValueError if the line does not pass the checks.
@@ -134,7 +142,7 @@ def read_and_call(uhandle, method, **keywds):
 
 
 def read_and_call_while(uhandle, method, **keywds):
-    """read_and_call_while(uhandle, method[, start][, end][, contains][, blank][, has_re]) -> number of lines
+    """Read line and pass it to the method while condition is true.
 
     Read a line from uhandle and pass it to the method as long as
     some condition is true.  Returns the number of lines that were read.
@@ -155,8 +163,7 @@ def read_and_call_while(uhandle, method, **keywds):
 
 
 def read_and_call_until(uhandle, method, **keywds):
-    """read_and_call_until(uhandle, method,
-    start=None, end=None, contains=None, blank=None) -> number of lines
+    """Read line and pass it to the method until condition is true.
 
     Read a line from uhandle and pass it to the method until
     some condition is true.  Returns the number of lines that were read.
@@ -177,7 +184,7 @@ def read_and_call_until(uhandle, method, **keywds):
 
 
 def attempt_read_and_call(uhandle, method, **keywds):
-    """attempt_read_and_call(uhandle, method, **keywds) -> boolean
+    """Attempt read line and call method.
 
     Similar to read_and_call, but returns a boolean specifying
     whether the line has passed the checks.  Does not raise
@@ -222,7 +229,7 @@ def _fails_conditions(line, start=None, end=None, contains=None, blank=None,
 
 
 def is_blank_line(line, allow_spaces=0):
-    """is_blank_line(line, allow_spaces=0) -> boolean
+    """Check if a line is blank.
 
     Return whether a line is blank.  allow_spaces specifies whether to
     allow whitespaces in a blank line.  A true value signifies that a
@@ -238,7 +245,7 @@ def is_blank_line(line, allow_spaces=0):
 
 
 def safe_readline(handle):
-    """safe_readline(handle) -> line
+    """Read a line, otherwise raises ValueError.
 
     Read a line from an UndoHandle and return it.  If there are no more
     lines to read, I will raise a ValueError.
@@ -251,7 +258,7 @@ def safe_readline(handle):
 
 
 def safe_peekline(handle):
-    """safe_peekline(handle) -> line
+    """Peek at the next line if present, otherwise raises ValueError.
 
     Peek at the next line in an UndoHandle and return it.  If there are no
     more lines to peek, I will raise a ValueError.

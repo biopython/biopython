@@ -2,19 +2,17 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""This module provides classes to work with Phenotype Microarray data.
+"""Classes to work with Phenotype Microarray data.
 
 More information on the single plates can be found here: http://www.biolog.com/
 
 Classes:
-
  - PlateRecord - Object that contain time course data on each well of the
    plate, as well as metadata (if any).
  - WellRecord - Object that contains the time course data of a single well
  - JsonWriter - Writer of PlateRecord objects in JSON format.
 
 Functions:
-
  - JsonIterator -  Incremental PM JSON parser, this is an iterator that returns
    PlateRecord objects.
  - CsvIterator - Incremental PM CSV parser, this is an iterator that returns
@@ -625,9 +623,7 @@ class WellRecord(object):
             self._signals = signals
 
     def _interpolate(self, time):
-        """Private method to get a linear interpolation of the signals
-        at certain time points.
-        """
+        """Linear interpolation of the signals at certain time points (PRIVATE)."""
         times = sorted(self._signals.keys())
 
         return np.interp(time,
@@ -636,8 +632,7 @@ class WellRecord(object):
                          left=np.nan, right=np.nan)
 
     def __setitem__(self, time, signal):
-        """Assign a signal at a certain time point.
-        """
+        """Assign a signal at a certain time point."""
         try:
             time = float(time)
         except ValueError:
@@ -650,8 +645,7 @@ class WellRecord(object):
         self._signals[time] = signal
 
     def __getitem__(self, time):
-        """Returns a subset of signals or a single signal.
-        """
+        """Returns a subset of signals or a single signal."""
         if isinstance(time, slice):
             # Fix the missing values in the slice
             if time.start is None:
@@ -799,9 +793,9 @@ class WellRecord(object):
         calculated.
 
         By default the following fitting functions will be used in order:
-        * gompertz
-        * logistic
-        * richards
+         - gompertz
+         - logistic
+         - richards
 
         The first function that is succesfuly fitted to the signals will
         be used to extract the curve parameters and update ``.area`` and
@@ -857,7 +851,9 @@ def JsonIterator(handle):
     """Generator function to iterate over PM json records (as PlateRecord
     objects).
 
-    handle - input file
+    Arguments:
+     - handle - input file
+
     """
     try:
         data = json.load(handle)
@@ -935,7 +931,9 @@ def CsvIterator(handle):
     """Generator function to iterate over PM csv records (as PlateRecord
     objects).
 
-    handle - input file
+    Arguments:
+     - handle - input file
+
     """
     plate = None
     data = False

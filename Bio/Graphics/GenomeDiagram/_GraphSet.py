@@ -12,21 +12,13 @@
 # TODO: Make representation of Ymax and Ymin values at this level, so that
 #       calculation of graph/axis drawing is simplified
 
-""" GraphSet module
+"""GraphSet module.
 
-    Provides:
+Provides:
+ - GraphSet - container for GraphData objects
 
-    o GraphSet - container for GraphData objects
-
-    For drawing capabilities, this module uses reportlab to draw and write
-    the diagram:
-
-    http://www.reportlab.com
-
-    For dealing with biological information, the package expects BioPython
-    objects:
-
-    http://www.biopython.org
+For drawing capabilities, this module uses reportlab to draw and write
+the diagram: http://www.reportlab.com
 """
 
 # ReportLab imports
@@ -38,45 +30,20 @@ from ._Graph import GraphData
 
 
 class GraphSet(object):
-    """ GraphSet
+    """Graph Set.
 
-        Provides:
-
-        Methods:
-
-        o __init__(self, set_id=None, name=None)    Called on instantiation
-
-        o new_graph(self, data, name, style='bar', color=colors.lightgreen,
-                  altcolor=colors.darkseagreen)    Create new graph in the set
-                          from the passed data, with the passed parameters
-
-        o del_graph(self, graph_id) Delete graph with the passed id
-
-        o get_graphs(self)  Returns a list of all graphs
-
-        o get_ids(self)     Returns a list of graph ids
-
-        o range(self)       Returns the range covered by the graphs in the set
-
-        o to_string(self, verbose=0)    Returns a string describing the set
-
-        o __len__(self)     Returns the length of sequence covered by the set
-
-        o __getitem__(self, key)    Returns the graph with the id of the passed key
-
-        o __str__(self)     Returns a string describing the set
-
-        Attributes:
-
-        o id        Unique identifier for the set
-
-        o name      String describing the set
+    Attributes:
+     - id        Unique identifier for the set
+     - name      String describing the set
 
     """
-    def __init__(self, name=None):
-        """ __init__(self, name=None)
 
-            o name      String identifying the graph set sensibly
+    def __init__(self, name=None):
+        """Initialize.
+
+        Arguments:
+         - name      String identifying the graph set sensibly
+
         """
         self.id = id            # Unique identifier for the set
         self._next_id = 0       # Holds unique ids for graphs
@@ -86,32 +53,25 @@ class GraphSet(object):
     def new_graph(self, data, name=None, style='bar', color=colors.lightgreen,
                   altcolor=colors.darkseagreen, linewidth=1, center=None,
                   colour=None, altcolour=None, centre=None):
-        """ new_graph(self, data, name=None, style='bar', color=colors.lightgreen,
-                  altcolor=colors.darkseagreen)
+        """Add a GraphData object to the diagram.
 
-            o data      List of (position, value) int tuples
+        Arguments:
+         - data      List of (position, value) int tuples
+         - name      String, description of the graph
+         - style     String ('bar', 'heat', 'line') describing how the graph
+           will be drawn
+         - color    colors.Color describing the color to draw all or 'high'
+           (some styles) data (overridden by backwards compatible
+           argument with UK spelling, colour).
+         - altcolor  colors.Color describing the color to draw 'low' (some
+           styles) data (overridden by backwards compatible argument
+           with UK spelling, colour).
+         - linewidth     Float describing linewidth for graph
+         - center        Float setting the value at which the x-axis
+           crosses the y-axis (overridden by backwards
+           compatible argument with UK spelling, centre)
 
-            o name      String, description of the graph
-
-            o style     String ('bar', 'heat', 'line') describing how the graph
-                        will be drawn
-
-            o color    colors.Color describing the color to draw all or 'high'
-                       (some styles) data (overridden by backwards compatible
-                       argument with UK spelling, colour).
-
-            o altcolor  colors.Color describing the color to draw 'low' (some
-                        styles) data (overridden by backwards compatible argument
-                        with UK spelling, colour).
-
-            o linewidth     Float describing linewidth for graph
-
-            o center        Float setting the value at which the x-axis
-                            crosses the y-axis (overridden by backwards
-                            compatible argument with UK spelling, centre)
-
-            Add a GraphData object to the diagram (will be stored
-            internally
+        Add a GraphData object to the diagram (will be stored internally).
         """
         # Let the UK spelling (colour) override the USA spelling (color)
         if colour is not None:
@@ -129,34 +89,22 @@ class GraphSet(object):
         return graph
 
     def del_graph(self, graph_id):
-        """ del_graph(self, graph_id)
-
-            o graph_id        Identifying value of the graph
-
-            Remove a graph from the set, indicated by its id
-        """
+        """Remove a graph from the set, indicated by its id."""
         del self._graphs[graph_id]
 
     def get_graphs(self):
-        """ get_graphs(self) -> [Graph, Graph, ...]
+        """Return list of all graphs in the graph set, sorted by id.
 
-            Return a list of all graphs in the graph set, sorted by id (for
-            reliable stacking...)
+        Sorting is to ensure reliable stacking.
         """
         return [self._graphs[id] for id in sorted(self._graphs)]
 
     def get_ids(self):
-        """ get_ids(self) -> [int, int, ...]
-
-            Return a list of all ids for the graph set
-        """
+        """Return a list of all ids for the graph set."""
         return list(self._graphs.keys())
 
     def range(self):
-        """ range(self) -> (int, int)
-
-            Returns the lowest and highest base (or mark) numbers as a tuple
-        """
+        """Return the lowest and highest base (or mark) numbers as a tuple."""
         lows, highs = [], []
         for graph in self._graphs.values():
             low, high = graph.range()
@@ -165,11 +113,7 @@ class GraphSet(object):
         return (min(lows), max(highs))
 
     def data_quartiles(self):
-        """ data_quartiles(self) -> (float, float, float, float, float)
-
-            Returns the (minimum, lowerQ, medianQ, upperQ, maximum) values as
-            a tuple
-        """
+        """Return (minimum, lowerQ, medianQ, upperQ, maximum) values as a tuple."""
         data = []
         for graph in self._graphs.values():
             data += list(graph.data.values())
@@ -179,12 +123,12 @@ class GraphSet(object):
                data[3 * datalen / 4], data[-1])
 
     def to_string(self, verbose=0):
-        """ to_string(self, verbose=0) -> ""
+        """Return a formatted string with information about the set.
 
-            o verbose       Flag indicating whether a short or complete account
-                            of the set is required
+        Arguments:
+            - verbose - Flag indicating whether a short or complete account
+              of the set is required
 
-            Returns a formatted string with information about the set
         """
         if not verbose:
             return "%s" % self
@@ -196,24 +140,15 @@ class GraphSet(object):
             return "\n".join(outstr)
 
     def __len__(self):
-        """ __len__(self) -> int
-
-            Return the number of graphs in the set
-        """
+        """Return the number of graphs in the set."""
         return len(self._graphs)
 
     def __getitem__(self, key):
-        """ __getitem__(self, key) -> Graph
-
-            Return a graph, keyed by id
-        """
+        """Return a graph, keyed by id."""
         return self._graphs[key]
 
     def __str__(self):
-        """ __str__(self) -> ""
-
-            Returns a formatted string with information about the feature set
-        """
+        """Return a formatted string with information about the feature set."""
         outstr = ["\n<%s: %s>" % (self.__class__, self.name)]
         outstr.append("%d graphs" % len(self._graphs))
         outstr = "\n".join(outstr)

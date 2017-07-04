@@ -24,6 +24,7 @@ from Bio import _utils
 import sys
 if sys.version_info[0] < 3:
     def as_string(s):
+        """Encode string to UTF-8."""
         if isinstance(s, unicode):
             return s.encode('utf-8')
         return str(s)
@@ -262,12 +263,14 @@ class TreeMixin(object):
     required to have all of Tree's attributes -- just ``root`` (a Clade
     instance) and ``is_terminal``.
     """
+
     # Traversal methods
 
     def _filter_search(self, filter_func, order, follow_attrs):
         """Perform a BFS or DFS traversal through all elements in this tree.
 
         :returns: generator of all elements for which `filter_func` is True.
+
         """
         order_opts = {'preorder': _preorder_traverse,
                       'postorder': _postorder_traverse,
@@ -354,6 +357,7 @@ class TreeMixin(object):
 
         :returns: an iterable through all matching objects, searching
             depth-first (preorder) by default.
+
         """
         def match_attrs(elem):
             orig_clades = elem.__dict__.pop('clades')
@@ -373,6 +377,7 @@ class TreeMixin(object):
 
         :returns: list of all clade objects along this path, ending with the
             given target, but excluding the root clade.
+
         """
         # Only one path will work -- ignore weights and visits
         path = []
@@ -418,9 +423,10 @@ class TreeMixin(object):
         """Most recent common ancestor (clade) of all the given targets.
 
         Edge cases:
-        - If no target is given, returns self.root
-        - If 1 target is given, returns the target
-        - If any target is not found in this tree, raises a ValueError
+         - If no target is given, returns self.root
+         - If 1 target is given, returns the target
+         - If any target is not found in this tree, raises a ValueError
+
         """
         paths = [self.get_path(t)
                  for t in _combine_args(targets, *more_targets)]
@@ -456,6 +462,7 @@ class TreeMixin(object):
         :returns: dict of {clade: depth}, where keys are all of the Clade
             instances in the tree, and values are the distance from the root to
             each clade (including terminals).
+
         """
         if unit_branch_lengths:
             depth_of = lambda c: 1
@@ -520,6 +527,7 @@ class TreeMixin(object):
         otherwise.
 
         :returns: common ancestor if terminals are monophyletic, otherwise False.
+
         """
         target_set = set(_combine_args(terminals, *more_terminals))
         current = self.root
@@ -564,6 +572,7 @@ class TreeMixin(object):
         """Deletes target from the tree, relinking its children to its parent.
 
         :returns: the parent clade.
+
         """
         path = self.get_path(target, **kwargs)
         if not path:
@@ -649,6 +658,7 @@ class TreeMixin(object):
         longer be a meaningful value.
 
         :returns: parent clade of the pruned target
+
         """
         if 'terminal' in kwargs and kwargs['terminal']:
             raise ValueError("target must be terminal")
@@ -720,9 +730,11 @@ class Tree(TreeElement, TreeMixin):
             The identifier of the tree, if there is one.
         name : str
             The name of the tree, in essence a label.
+
     """
 
     def __init__(self, root=None, rooted=True, id=None, name=None):
+        """Initialize parameter for phylogenetic tree."""
         self.root = root or Clade()
         self.rooted = rooted
         self.id = id
@@ -746,6 +758,7 @@ class Tree(TreeElement, TreeMixin):
             strings.
 
         :returns: a tree of the same type as this class.
+
         """
         if isinstance(taxa, int):
             taxa = ['taxon%s' % (i + 1) for i in range(taxa)]
@@ -795,14 +808,13 @@ class Tree(TreeElement, TreeMixin):
         Operates in-place.
 
         Edge cases:
-
-        - If ``outgroup == self.root``, no change
-        - If outgroup is terminal, create new bifurcating root node with a
-          0-length branch to the outgroup
-        - If outgroup is internal, use the given outgroup node as the new
-          trifurcating root, keeping branches the same
-        - If the original root was bifurcating, drop it from the tree,
-          preserving total branch lengths
+         - If ``outgroup == self.root``, no change
+         - If outgroup is terminal, create new bifurcating root node with a
+           0-length branch to the outgroup
+         - If outgroup is internal, use the given outgroup node as the new
+           trifurcating root, keeping branches the same
+         - If the original root was bifurcating, drop it from the tree,
+           preserving total branch lengths
 
         :param outgroup_branch_length: length of the branch leading to the
             outgroup after rerooting. If not specified (None), then:
@@ -938,6 +950,7 @@ class Tree(TreeElement, TreeMixin):
 
         :param format_spec: a lower-case string supported by `Bio.Phylo.write`
             as an output file format.
+
         """
         if format_spec:
             from Bio._py3k import StringIO
@@ -1008,10 +1021,12 @@ class Clade(TreeElement, TreeMixin):
             The display color of the branch and descendents.
         width : number
             The display width of the branch and descendents.
+
     """
 
     def __init__(self, branch_length=None, name=None, clades=None,
                  confidence=None, color=None, width=None):
+        """Define parameters for the Clade tree."""
         self.branch_length = branch_length
         self.name = name
         self.clades = clades or []
@@ -1060,6 +1075,7 @@ class Clade(TreeElement, TreeMixin):
     __nonzero__ = __bool__
 
     def __str__(self):
+        """Return name of the class instance."""
         if self.name:
             return _utils.trim_str(self.name, 40, '...')
         return self.__class__.__name__
@@ -1139,6 +1155,7 @@ class BranchColor(object):
         }
 
     def __init__(self, red, green, blue):
+        """Initialize BranchColor for a tree."""
         for color in (red, green, blue):
             assert (isinstance(color, int) and
                     0 <= color <= 255
@@ -1178,6 +1195,7 @@ class BranchColor(object):
             >>> bc = BranchColor(12, 200, 100)
             >>> bc.to_hex()
             '#0cc864'
+
         """
         return "#%02x%02x%02x" % (self.red, self.green, self.blue)
 
@@ -1189,6 +1207,7 @@ class BranchColor(object):
             >>> bc = BranchColor(255, 165, 0)
             >>> bc.to_rgb()
             (255, 165, 0)
+
         """
         return (self.red, self.green, self.blue)
 

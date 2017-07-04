@@ -2,16 +2,24 @@
    :alt: Biopython on the Python Package Index (PyPI)
    :target: https://pypi.python.org/pypi/biopython
 .. image:: https://img.shields.io/travis/biopython/biopython/master.svg
-   :alt: Testing with TravisCI
+   :alt: Linux testing with TravisCI
    :target: https://travis-ci.org/biopython/biopython/branches
+.. image:: https://img.shields.io/appveyor/ci/biopython/biopython/master.svg
+   :alt: Windows testing with AppVeyor
+   :target: https://ci.appveyor.com/project/biopython/biopython/history
 .. image:: https://img.shields.io/codecov/c/github/biopython/biopython/master.svg
    :alt: TravisCI test coverage
    :target: https://codecov.io/github/biopython/biopython/
+.. image:: https://landscape.io/github/biopython/biopython/master/landscape.svg?style=flat
+   :alt: Landscape Code Metrics
+   :target: https://landscape.io/github/biopython/biopython
+.. image:: http://depsy.org/api/package/pypi/biopython/badge.svg
+   :alt: Research software impact on Depsy
+   :target: http://depsy.org/package/python/biopython
 
-.. image:: https://github.com/biopython/biopython/raw/master/Doc/images/biopython.jpg
+.. image:: https://github.com/biopython/biopython/raw/master/Doc/images/biopython_logo_m.png
    :alt: The Biopython Project
    :target: http://biopython.org
-   :width: 100%
 
 Biopython README file
 =====================
@@ -59,14 +67,7 @@ system "pip" which should allow you to install Biopython with just::
     pip install numpy
     pip install biopython
 
-Otherwise you may have to build and install Biopython. Download and unzip the
-source code, go to this directory at the command line, and type::
-
-    python setup.py build
-    python setup.py test
-    sudo python setup.py install
-
-Here you can replace ``python`` with a specific version, e.g. ``python3.5``.
+Otherwise you may have to build and install Biopython, which is described below.
 
 
 Python Requirements
@@ -77,11 +78,11 @@ We currently recommend using Python 3.6 from http://www.python.org
 Biopython is currently supported and tested on the following Python
 implementations:
 
-- Python 2.7, 3.3, 3.4, 3.5, 3.6 -- see http://www.python.org
+- Python 2.7, 3.4, 3.5, 3.6 -- see http://www.python.org
 
   This is the primary development platform for Biopython.
 
-- PyPy v5.7 and also PyPy3.5 v5.7 beta -- see http://www.pypy.org
+- PyPy v5.7 and also PyPy3.5 v5.8 beta -- see http://www.pypy.org
 
   Aside from ``Bio.trie`` (which does not compile as ``marshal.h`` is
   currently missing under PyPy), everything should work. Older versions
@@ -89,12 +90,11 @@ implementations:
 
 - Jython 2.7 -- see http://www.jython.org
 
-  We provide limited support for Jython, but aside from ``Bio.Restriction``,
-  modules with C code, or dependent on SQLite3 or NumPy, everything should
-  work. There are some known issues with test failures which have not yet
-  been resolved.
+  We have decided to deprecate support for Jython, but aside from
+  ``Bio.Restriction``, modules with C code, or dependent on SQLite3 or NumPy,
+  everything should work. There are some known issues with test failures
+  which have not yet been resolved.
 
-Please note that support for Python 3.3 is deprecated as of Biopython 1.67.
 Biopython 1.68 was our final release to support Python 2.6.
 
 
@@ -161,15 +161,21 @@ recommend you install NumPy (see above). Then install Biopython.
 Windows users should use the appropriate provided installation package
 from our website (each is specific to a different Python version).
 
-Installation from source should be as simple as going to the Biopython
-source code directory, and typing::
+Python 2.7.9 onwards, and Python 3.4 onwards, include the package management
+system "pip" which should allow you to install Biopython with just::
+
+    pip install numpy
+    pip install biopython
+
+Otherwise you may have to build and install Biopython which should be as
+going to the Biopython source code directory, and typing::
 
     python setup.py build
     python setup.py test
     sudo python setup.py install
 
-Substitute `python` with your specific version, for example `python3`,
-`jython` or `pypy`.
+Substitute ``python`` with your specific version, for example ``python3``,
+``jython`` or `pypy``.
 
 If you need to do additional configuration, e.g. changing the base
 directory, please type ``python setup.py``, or see the documentation here:
@@ -279,7 +285,7 @@ Distribution Structure
 - ``DEPRECATED.rst`` -- Contains information about modules in Biopython that are
   removed or no longer recommended for use, and how to update code that uses
   those modules.
-- ``MANIFEST.in`` -- Tells distutils what files to distribute.
+- ``MANIFEST.in`` -- Configures which files to include in releases.
 - ``setup.py``    -- Installation file.
 - ``Bio/``        -- The main code base code.
 - ``BioSQL/``     -- Code for using Biopython with BioSQL databases.

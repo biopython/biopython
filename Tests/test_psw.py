@@ -111,6 +111,7 @@ def testing_suite():
 
     return big_suite
 
+
 if __name__ == "__main__":
     unittest_suite = unittest.TestLoader().loadTestsFromName("test_psw")
     doctest_suite = doctest.DocTestSuite(psw)

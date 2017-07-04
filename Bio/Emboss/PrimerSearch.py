@@ -3,8 +3,7 @@
 # as part of this package.
 #
 
-"""Code to interact with the primersearch program from EMBOSS.
-"""
+"""Code to interact with the primersearch program from EMBOSS."""
 
 
 class InputRecord(object):
@@ -13,6 +12,7 @@ class InputRecord(object):
     This makes it easy to add primer information and write it out to the
     simple primer file format.
     """
+
     def __init__(self):
         self.primer_info = []
 
@@ -24,8 +24,7 @@ class InputRecord(object):
 
     def add_primer_set(self, primer_name, first_primer_seq,
                        second_primer_seq):
-        """Add primer information to the record.
-        """
+        """Add primer information to the record."""
         self.primer_info.append((primer_name, first_primer_seq,
                                  second_primer_seq))
 
@@ -36,21 +35,21 @@ class OutputRecord(object):
     amplifiers is a dictionary where the keys are the primer names and
     the values are a list of PrimerSearchAmplifier objects.
     """
+
     def __init__(self):
         self.amplifiers = {}
 
 
 class Amplifier(object):
-    """Represent a single amplification from a primer.
-    """
+    """Represent a single amplification from a primer."""
+
     def __init__(self):
         self.hit_info = ""
         self.length = 0
 
 
 def read(handle):
-    """Get output from primersearch into a PrimerSearchOutputRecord
-    """
+    """Get output from primersearch into a PrimerSearchOutputRecord."""
     record = OutputRecord()
 
     for line in handle:

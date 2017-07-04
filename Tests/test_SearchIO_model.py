@@ -11,7 +11,9 @@ to all formats.
 
 """
 
+import pickle
 import unittest
+from io import BytesIO
 from copy import deepcopy
 
 from search_tests_common import compare_search_obj
@@ -66,6 +68,13 @@ class QueryResultCases(unittest.TestCase):
         # set mock attributes
         self.qresult.seq_len = 1102
         self.qresult.target = 'refseq_rna'
+
+    def test_pickle(self):
+        """Test pickling and unpickling of QueryResult"""
+        buf = BytesIO()
+        pickle.dump(self.qresult, buf)
+        unp = pickle.loads(buf.getvalue())
+        self.assertTrue(compare_search_obj(self.qresult, unp))
 
     def test_order(self):
         # added hits should be ordered
@@ -747,6 +756,13 @@ class HitCases(unittest.TestCase):
         self.hit.evalue = 5e-10
         self.hit.name = 'test'
 
+    def test_pickle(self):
+        """Test pickling and unpickling of Hit"""
+        buf = BytesIO()
+        pickle.dump(self.hit, buf)
+        unp = pickle.loads(buf.getvalue())
+        self.assertTrue(compare_search_obj(self.hit, unp))
+
     def test_init_none(self):
         """Test Hit.__init__, no arguments"""
         hit = Hit()
@@ -1122,6 +1138,13 @@ class HSPMultipleFragmentCases(unittest.TestCase):
         self.frag2.hit_end = 161
         self.hsp = HSP([self.frag1, self.frag2])
 
+    def test_pickle(self):
+        """Test pickling and unpickling of HSP"""
+        buf = BytesIO()
+        pickle.dump(self.hsp, buf)
+        unp = pickle.loads(buf.getvalue())
+        self.assertTrue(compare_search_obj(self.hsp, unp))
+
     def test_len(self):
         """Test HSP.__len__"""
         self.assertEqual(2, len(self.hsp))
@@ -1317,6 +1340,13 @@ class HSPFragmentCases(unittest.TestCase):
     def setUp(self):
         self.fragment = HSPFragment('hit_id', 'query_id', 'ATGCTAGCTACA',
                 'ATG--AGCTAGG')
+
+    def test_pickle(self):
+        """Test pickling and unpickling of HSPFragment"""
+        buf = BytesIO()
+        pickle.dump(self.fragment, buf)
+        unp = pickle.loads(buf.getvalue())
+        self.assertTrue(compare_search_obj(self.fragment, unp))
 
     def test_init_with_seqrecord(self):
         """Test HSPFragment.__init__, with SeqRecord"""

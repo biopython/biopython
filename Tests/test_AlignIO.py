@@ -210,10 +210,7 @@ def simple_alignment_comparison(alignments, alignments2, format):
 
 # Check Phylip files reject duplicate identifiers.
 def check_phylip_reject_duplicate():
-    """
-    Ensure that attempting to write sequences with duplicate IDs after
-    truncation fails for Phylip format.
-    """
+    """Writing post-truncation duplicated IDs should fail for PHYLIP."""
     handle = StringIO()
     sequences = [SeqRecord(Seq('AAAA'), id='longsequencename1'),
                  SeqRecord(Seq('AAAA'), id='longsequencename2'),

@@ -42,6 +42,7 @@ class TCoffeeCommandline(AbstractCommandline):
 
     Last checked against: Version_6.92
     """
+
     SEQ_TYPES = ["dna", "protein", "dna_protein"]
 
     def __init__(self, cmd="t_coffee", **kwargs):

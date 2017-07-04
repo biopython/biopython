@@ -2,8 +2,7 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""Command line wrapper for the multiple alignment program DIALIGN2-2.
-"""
+"""Command line wrapper for the multiple alignment program DIALIGN2-2."""
 
 from __future__ import print_function
 
@@ -39,6 +38,7 @@ class DialignCommandline(AbstractCommandline):
 
     Last checked against version: 2.2
     """
+
     def __init__(self, cmd="dialign2-2", **kwargs):
         self.program_name = cmd
         self.parameters = \

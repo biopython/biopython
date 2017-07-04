@@ -973,6 +973,97 @@ class BlatPslCases(unittest.TestCase):
         self.assertEqual([(10, 49)], hsp.query_range_all)
         self.assertEqual([(553742, 553781)], hsp.hit_range_all)
 
+    def test_psl_35_001(self, testf='psl_35_001.psl', pslx=False):
+        """Test parsing blat output (psl_35_001.psl)"""
+        blat_file = get_file(testf)
+        self.qresults = list(parse(blat_file, FMT, pslx=pslx))
+        self.assertEqual(1, len(self.qresults))
+        # check common attributes
+        for qresult in self.qresults:
+            for hit in qresult:
+                self.assertEqual(qresult.id, hit.query_id)
+                for hsp in hit:
+                    self.assertEqual(hit.id, hsp.hit_id)
+                    self.assertEqual(qresult.id, hsp.query_id)
+
+        # test first qresult
+        qresult = self.qresults[0]
+        self.assertEqual('CAG33136.1', qresult.id)
+        self.assertEqual('blat', qresult.program)
+        self.assertEqual(230, qresult.seq_len)
+        self.assertEqual(2, len(qresult))
+        # first qresult, first hit
+        hit = qresult[0]
+        self.assertEqual('chr13', hit.id)
+        self.assertEqual(114364328, hit.seq_len)
+        self.assertEqual(6, len(hit.hsps))
+        # first qresult, first hit, first hsp
+        hsp = qresult[0].hsps[0]
+        self.assertEqual(52, hsp.match_num)
+        self.assertEqual(0, hsp.match_rep_num)
+        self.assertEqual(0, hsp.mismatch_num)
+        self.assertEqual(0, hsp.n_num)
+        self.assertEqual(0, hsp.query_gapopen_num)
+        self.assertEqual(0, hsp.query_gap_num)
+        self.assertEqual(0, hsp.hit_gapopen_num)
+        self.assertEqual(0, hsp.hit_gap_num)
+        self.assertEqual(0, hsp[0].query_strand)
+        self.assertEqual(61, hsp.query_start)
+        self.assertEqual(75566694, hsp.hit_start)
+        self.assertEqual(113, hsp.query_end)
+        self.assertEqual(75566850, hsp.hit_end)
+        self.assertEqual(1, len(hsp))
+        self.assertEqual([52], hsp.query_span_all)
+        self.assertEqual([156], hsp.hit_span_all)
+        self.assertEqual([(61, 113)], hsp.query_range_all)
+        self.assertEqual([(75566694, 75566850)], hsp.hit_range_all)
+
+    def test_psl_35_002(self, testf='psl_35_002.psl', pslx=False):
+        """Test parsing blat output (psl_35_002.psl)"""
+        blat_file = get_file(testf)
+        self.qresults = list(parse(blat_file, FMT, pslx=pslx))
+        self.assertEqual(1, len(self.qresults))
+        # check common attributes
+        for qresult in self.qresults:
+            for hit in qresult:
+                self.assertEqual(qresult.id, hit.query_id)
+                for hsp in hit:
+                    self.assertEqual(hit.id, hsp.hit_id)
+                    self.assertEqual(qresult.id, hsp.query_id)
+
+        # test first qresult
+        qresult = self.qresults[0]
+        self.assertEqual('CAG33136.1', qresult.id)
+        self.assertEqual('blat', qresult.program)
+        self.assertEqual(230, qresult.seq_len)
+        self.assertEqual(3, len(qresult))
+        # first qresult, last hit
+        hit = qresult[-1]
+        self.assertEqual('KI537194', hit.id)
+        self.assertEqual(37111980, hit.seq_len)
+        self.assertEqual(1, len(hit.hsps))
+        # # first qresult, last hit, first hsp
+        hsp = hit.hsps[-1]
+        self.assertEqual(204, hsp.match_num)
+        self.assertEqual(0, hsp.match_rep_num)
+        self.assertEqual(6, hsp.mismatch_num)
+        self.assertEqual(0, hsp.n_num)
+        self.assertEqual(1, hsp.query_gapopen_num)
+        self.assertEqual(20, hsp.query_gap_num)
+        self.assertEqual(1, hsp.hit_gapopen_num)
+        self.assertEqual(1, hsp.hit_gap_num)
+        self.assertEqual(0, hsp[0].query_strand)
+        self.assertEqual(-1, hsp[0].hit_strand)
+        self.assertEqual(0, hsp.query_start)
+        self.assertEqual(20872390, hsp.hit_start)
+        self.assertEqual(230, hsp.query_end)
+        self.assertEqual(20873021, hsp.hit_end)
+        self.assertEqual(2, len(hsp))
+        self.assertEqual([183, 27], hsp.query_span_all)
+        self.assertEqual([549, 81], hsp.hit_span_all)
+        self.assertEqual([(0, 183), (203, 230)], hsp.query_range_all)
+        self.assertEqual([(20872472, 20873021), (20872390, 20872471)], hsp.hit_range_all)
+
 
 class BlatPslxCases(BlatPslCases):
 
@@ -1169,6 +1260,22 @@ class BlatPslxCases(BlatPslCases):
         hsp = qresult[4].hsps[2]
         self.assertEqual('tgggattacaggtgtgagccaccacgcccagcccctttg', str(hsp.query_all[0].seq))
         self.assertEqual('tgggatgacaggggtgaggcaccacgcccagcccctttg', str(hsp.hit_all[0].seq))
+
+    def test_pslx_35_002(self, testf='pslx_35_002.pslx'):
+        """Test parsing blat output (pslx_35_002.pslx)"""
+        BlatPslCases.test_psl_35_002(self, 'pslx_35_002.pslx', pslx=True)
+
+        # first qresult, last hit, first hsp
+        qresult = self.qresults[0]
+        hsp = qresult[-1].hsps[0]
+
+        self.assertEqual('MEGQRWLPLEANPEVTNQFLKQLGLHPNWQFVDVY', str(hsp.query_all[0].seq)[:35])
+        self.assertEqual('ETSAHEGQTEAPSIDEKVDLHFIALVHVDGHLYEL', str(hsp.query_all[0].seq)[-35:])
+        self.assertEqual('DAIEVCKKFMERDPDELRFNAIALSAA', str(hsp.query_all[1].seq))
+
+        self.assertEqual('MESQRWLPLEANPEVTNQFLKQLGLHPNWQCVDVY', str(hsp.hit_all[0].seq)[:35])
+        self.assertEqual('ETSAHEGQTEAPNIDEKVDLHFIALVHVDGHLYEL', str(hsp.hit_all[0].seq)[-35:])
+        self.assertEqual('DAIEVCKKFMERDPDELRFNAIALSAA', str(hsp.hit_all[1].seq))
 
 
 if __name__ == "__main__":

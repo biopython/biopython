@@ -27,15 +27,16 @@ class NeighborSearch(object):
 
     NeighborSearch makes use of the Bio.KDTree C++ module, so it's fast.
     """
+
     def __init__(self, atom_list, bucket_size=10):
         """Create the object.
 
         Arguments:
-
          - atom_list - list of atoms. This list is used in the queries.
            It can contain atoms from different structures.
          - bucket_size - bucket size of KD tree. You can play around
            with this to optimize speed if you feel like it.
+
         """
         self.atom_list = atom_list
         # get the coordinates
@@ -79,10 +80,10 @@ class NeighborSearch(object):
         M=models, S=structures).
 
         Arguments:
-
          - center - Numeric array
          - radius - float
          - level - char (A, R, C, M, S)
+
         """
         if level not in entity_levels:
             raise PDBException("%s: Unknown level" % level)
@@ -105,9 +106,9 @@ class NeighborSearch(object):
         radius.
 
         Arguments:
-
          - radius - float
          - level - char (A, R, C, M, S)
+
         """
         if level not in entity_levels:
             raise PDBException("%s: Unknown level" % level)
@@ -127,6 +128,7 @@ class NeighborSearch(object):
             next_level_pair_list = self._get_unique_parent_pairs(next_level_pair_list)
             if level == l:
                 return next_level_pair_list
+
 
 if __name__ == "__main__":
 

@@ -1,20 +1,21 @@
-"""Distutils based setup script for Biopython.
+"""setuptools based setup script for Biopython.
 
-This uses Distutils (http://python.org/sigs/distutils-sig/) the standard
-python mechanism for installing packages. For the easiest installation
-just type the command:
+This uses setuptools which is now the standard python mechanism for
+installing packages. If you have downloaded and uncompressed the
+Biopython source code, or fetched it from git, for the simplest
+installation just type the command::
 
-python setup.py install
+    python setup.py install
+
+However, you would normally install the latest Biopython release from
+the PyPI archive with::
+
+    pip install biopython
 
 For more in-depth instructions, see the installation section of the
 Biopython manual, linked to from:
 
 http://biopython.org/wiki/Documentation
-
-Or for more details about the options available from distutils, look at
-the 'Installing Python Modules' distutils documentation, available from:
-
-http://python.org/sigs/distutils-sig/doc/
 
 Or, if all else fails, feel free to write to the sign up to the Biopython
 mailing list and ask for help.  See:
@@ -25,30 +26,22 @@ from __future__ import print_function
 
 import sys
 import os
-import shutil
 
-if "bdist_wheel" in sys.argv:
-    try:
-        import setuptools
-        import wheel
-    except ImportError:
-        sys.exit("We need both setuptools AND wheel packages installed for bdist_wheel to work")
-    # Import specific bits of setuptools ...
+try:
     from setuptools import setup
     from setuptools import Command
     from setuptools.command.install import install
     from setuptools.command.build_py import build_py
     from setuptools.command.build_ext import build_ext
     from setuptools import Extension
-else:
-    # Except for wheels, stick with standard library's distutils
-    from distutils.core import setup
-    from distutils.core import Command
-    from distutils.command.install import install
-    from distutils.command.build_py import build_py
-    from distutils.command.build_ext import build_ext
-    from distutils.extension import Extension
+except ImportError:
+    sys.exit("We need the Python library setuptools to be installed. Try runnning: python -m ensurepip")
 
+if "bdist_wheel" in sys.argv:
+    try:
+        import wheel
+    except ImportError:
+        sys.exit("We need both setuptools AND wheel packages installed for bdist_wheel to work. Try running: pip install wheel")
 
 _CHECKED = None
 
@@ -96,6 +89,7 @@ def osx_clang_fix():
         elif "-Qunused-arguments" not in os.environ[flag]:
             os.environ[flag] += " -Qunused-arguments"
 
+
 osx_clang_fix()
 
 
@@ -105,9 +99,21 @@ def is_pypy():
         if platform.python_implementation() == 'PyPy':
             return True
     except AttributeError:
-        # New in Python 2.6, not in Jython yet either
+        # New in Python 2.6
         pass
     return False
+
+
+def is_jython():
+    import platform
+    try:
+        if platform.python_implementation() == 'Jython':
+            return True
+    except AttributeError:
+        # This was missing prior to ~ Jython 2.7.0
+        pass
+    # Fall back which will work with older Jython:
+    return os.name == "java"
 
 
 def is_ironpython():
@@ -139,15 +145,16 @@ def get_yes_or_no(question, default):
 
 # Make sure we have the right Python version.
 if sys.version_info[:2] < (2, 7):
-    sys.stderr.write("Biopython requires Python 2.7, or Python 3.3 or later. "
+    sys.stderr.write("Biopython requires Python 2.7, or Python 3.4 or later. "
                      "Python %d.%d detected.\n" % sys.version_info[:2])
     sys.exit(1)
-elif sys.version_info[0] == 3 and sys.version_info[:2] < (3, 3):
-    sys.stderr.write("Biopython requires Python 3.3 or later (or Python 2.7). "
+elif sys.version_info[0] == 3 and sys.version_info[:2] < (3, 4):
+    sys.stderr.write("Biopython requires Python 3.4 or later (or Python 2.7). "
                      "Python %d.%d detected.\n" % sys.version_info[:2])
     sys.exit(1)
-elif sys.version_info[:2] == (3, 3):
-    sys.stderr.write("WARNING: Biopython support for Python 3.3 is now deprecated.\n")
+
+if is_jython():
+    sys.stderr.write("WARNING: Biopython support for Jython is now deprecated.\n")
 
 
 def check_dependencies_once():
@@ -199,7 +206,7 @@ def check_dependencies():
         return True
     if is_automated():
         return True  # For automated builds go ahead with installed packages
-    if os.name == 'java':
+    if is_jython():
         return True  # NumPy is not avaliable for Jython (for now)
     if is_ironpython():
         return True  # We're ignoring NumPy under IronPython (for now)
@@ -255,7 +262,7 @@ class build_py_biopython(build_py):
     def run(self):
         if not check_dependencies_once():
             return
-        if os.name == "java" and "Bio.Restriction" in self.packages:
+        if is_jython() and "Bio.Restriction" in self.packages:
             # Evil hack to work on Jython 2.7
             # This is to avoid java.lang.RuntimeException: Method code too large!
             # from Bio/Restriction/Restriction_Dictionary.py
@@ -317,6 +324,7 @@ def can_import(module_name):
 def is_Numpy_installed():
     return bool(can_import("numpy"))
 
+
 # --- set up the packages we are going to install
 # standard biopython packages
 PACKAGES = [
@@ -365,10 +373,7 @@ PACKAGES = [
     'Bio.Pathway.Rep',
     'Bio.PDB',
     'Bio.PopGen',
-    'Bio.PopGen.Async',
-    'Bio.PopGen.FDist',
     'Bio.PopGen.GenePop',
-    'Bio.PopGen.SimCoal',
     'Bio.Restriction',
     'Bio.SCOP',
     'Bio.SearchIO',
@@ -397,7 +402,7 @@ PACKAGES = [
     'BioSQL',
     ]
 
-if os.name == 'jython':
+if is_jython():
     # Evil hack to work on Jython 2.7
     # This is to avoid java.lang.RuntimeException: Method code too large!
     # from Bio/Restriction/Restriction_Dictionary.py
@@ -412,7 +417,7 @@ NUMPY_PACKAGES = [
     'Bio.phenotype',
 ]
 
-if os.name == 'java':
+if is_jython():
     # Jython doesn't support C extensions
     EXTENSIONS = []
 elif is_ironpython():
@@ -486,27 +491,45 @@ for line in open('Bio/__init__.py'):
 with open("README.rst") as handle:
     readme_rst = handle.read()
 
-setup_args = {
-    "name": 'biopython',
-    "version": __version__,
-    "author": 'The Biopython Contributors',
-    "author_email": 'biopython@biopython.org',
-    "url": 'http://www.biopython.org/',
-    "description": 'Freely available tools for computational molecular biology.',
-    "long_description": readme_rst,
-    "download_url": 'http://biopython.org/DIST/',
-    "cmdclass": {
-        "install": install_biopython,
-        "build_py": build_py_biopython,
-        "build_ext": build_ext_biopython,
-        "test": test_biopython,
-        },
-    "packages": PACKAGES,
-    "ext_modules": EXTENSIONS,
-    "package_data": {
-        'Bio.Entrez': ['DTDs/*.dtd', 'DTDs/*.ent', 'DTDs/*.mod'],
-        'Bio.PopGen': ['SimCoal/data/*.par'],
-         },
-   }
-
-setup(**setup_args)
+setup(name='biopython',
+      version=__version__,
+      author='The Biopython Contributors',
+      author_email='biopython@biopython.org',
+      url='http://www.biopython.org/',
+      description='Freely available tools for computational molecular biology.',
+      long_description=readme_rst,
+      download_url='http://biopython.org/DIST/',
+      classifiers=[
+          'Development Status :: 5 - Production/Stable',
+          'Intended Audience :: Developers',
+          'Intended Audience :: Science/Research',
+          'License :: Freely Distributable',
+          # Technically the "Biopython License Agreement" is not OSI approved,
+          # but is almost https://opensource.org/licenses/HPND so might put:
+          # 'License :: OSI Approved',
+          # To resolve this we are moving to dual-licensing with 3-clause BSD:
+          # 'License :: OSI Approved :: BSD License',
+          'Operating System :: OS Independent',
+          'Programming Language :: Python',
+          'Programming Language :: Python :: 2',
+          'Programming Language :: Python :: 2.7',
+          'Programming Language :: Python :: 3',
+          'Programming Language :: Python :: 3.4',
+          'Programming Language :: Python :: 3.5',
+          'Programming Language :: Python :: 3.6',
+          'Topic :: Scientific/Engineering',
+          'Topic :: Scientific/Engineering :: Bio-Informatics',
+          'Topic :: Software Development :: Libraries :: Python Modules',
+      ],
+      cmdclass={
+          "install": install_biopython,
+          "build_py": build_py_biopython,
+          "build_ext": build_ext_biopython,
+          "test": test_biopython,
+      },
+      packages=PACKAGES,
+      ext_modules=EXTENSIONS,
+      package_data={
+          'Bio.Entrez': ['DTDs/*.dtd', 'DTDs/*.ent', 'DTDs/*.mod'],
+      },
+      )

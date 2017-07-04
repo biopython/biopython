@@ -3,17 +3,16 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""
-Large file parsing of Genepop files
+"""Large file parsing of Genepop files
 
 The standard parser loads the whole file into memory. This parser
 provides an iterator over data.
 
 Classes:
-LargeRecord           Holds GenePop data.
+- LargeRecord - Holds GenePop data.
 
 Functions:
-read             Parses a GenePop record (file) into a Record object.
+- read - Parses a GenePop record (file) into a Record object.
 
 """
 
@@ -39,7 +38,9 @@ def get_indiv(line):
 def read(handle):
     """Parses a handle containing a GenePop file.
 
-       handle is a file-like object that contains a GenePop record.
+    Arguments:
+    - handle is a file-like object that contains a GenePop record.
+
     """
     record = Record(handle)
     record.comment_line = str(handle.readline()).rstrip()
@@ -86,6 +87,7 @@ class Record(object):
     is unknown.
 
     """
+
     def __init__(self, handle):
         self.handle = handle
         self.marker_len = 0

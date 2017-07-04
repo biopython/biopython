@@ -364,6 +364,7 @@ class PhdTestSolexa(unittest.TestCase):
         # Make sure that no further records are found
         self.assertRaises(StopIteration, next, records)
 
+
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

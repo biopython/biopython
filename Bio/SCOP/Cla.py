@@ -5,7 +5,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-""" Handle the SCOP CLAssification file, which describes SCOP domains.
+"""Handle the SCOP CLAssification file, which describes SCOP domains.
 
 The file format is described in the scop
 "release notes.":http://scop.mrc-lmb.cam.ac.uk/scop/release-notes.html
@@ -24,7 +24,6 @@ class Record(object):
     """Holds information for one SCOP domain.
 
     Attributes:
-
      - sid - SCOP identifier. e.g. d1danl2
      - residues - The domain definition as a Residues object
      - sccs - SCOP concise classification strings.  e.g. b.1.2.1
@@ -34,7 +33,9 @@ class Record(object):
        the Scop module for a description of nodetypes. This used to be a
        list of (key,value) tuples in older versions of Biopython (see
        Bug 3109).
+
     """
+
     def __init__(self, line=None):
         self.sid = ''
         self.residues = None
@@ -76,8 +77,8 @@ def parse(handle):
     """Iterates over a CLA file as Cla records for each line.
 
     Arguments:
-
      - handle - file-like object.
+
     """
     for line in handle:
         if line.startswith('#'):
@@ -87,12 +88,13 @@ def parse(handle):
 
 class Index(dict):
     """A CLA file indexed by SCOP identifiers for rapid random access."""
+
     def __init__(self, filename):
         """Create CLA index.
 
         Arguments:
-
          - filename - The file to index
+
         """
         dict.__init__(self)
         self.filename = filename

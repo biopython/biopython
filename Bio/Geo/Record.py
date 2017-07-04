@@ -29,6 +29,7 @@ class Record(object):
     table_rows
 
     """
+
     def __init__(self):
         self.entity_type = ''
         self.entity_id = ''

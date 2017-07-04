@@ -134,6 +134,7 @@ def __read_section_ii(record, handle):
     line = next(handle)
     if not line.startswith('---'):
         raise ValueError("Line does not start with '---':\n%s" % line)
+    sequence = None
     for line in handle:
         if not line.strip():
             break

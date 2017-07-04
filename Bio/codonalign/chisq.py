@@ -118,6 +118,7 @@ def _igam(a, x):
          x  e     >   ----------
                   -     -
                 k=0   | (a+k+1)
+
     """
     # Compute  x**a * exp(-x) / Gamma(a)
     ax = math.exp(a * math.log(x) - x - math.lgamma(a))

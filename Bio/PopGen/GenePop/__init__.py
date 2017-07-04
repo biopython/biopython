@@ -3,8 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""
-This module provides code to work with GenePop.
+"""Code to work with GenePop.
 
 See http://wbiomed.curtin.edu.au/genepop/ , the format is documented
 here: http://wbiomed.curtin.edu.au/genepop/help_input.html .
@@ -16,7 +15,7 @@ Functions:
 read             Parses a GenePop record (file) into a Record object.
 
 
-Partially inspired on MedLine Code.
+Partially inspired by MedLine Code.
 
 """
 from copy import deepcopy
@@ -48,7 +47,7 @@ def get_indiv(line):
 def read(handle):
     """Parses a handle containing a GenePop file.
 
-       handle is a file-like object that contains a GenePop record.
+    handle is a file-like object that contains a GenePop record.
     """
     record = Record()
     record.comment_line = str(next(handle)).rstrip()
@@ -123,6 +122,7 @@ class Record(object):
         ]
 
     """
+
     def __init__(self):
         self.marker_len = 0
         self.comment_line = ""
@@ -131,8 +131,7 @@ class Record(object):
         self.populations = []
 
     def __str__(self):
-        """Returns (reconstructs) a GenePop textual representation.
-        """
+        """Returns (reconstructs) a GenePop textual representation."""
         rep = [self.comment_line + '\n']
         rep.append('\n'.join(self.loci_list) + '\n')
         for pop in self.populations:
@@ -156,12 +155,13 @@ class Record(object):
     def split_in_pops(self, pop_names):
         """Splits a GP record in a dictionary with 1 pop per entry.
 
-            Given a record with n pops and m loci returns a dictionary
-            of records (key pop_name) where each item is a record
-            with a single pop and m loci.
+        Given a record with n pops and m loci returns a dictionary
+        of records (key pop_name) where each item is a record
+        with a single pop and m loci.
 
-            Parameters:
-            pop_names - Population names
+        Arguments:
+        - pop_names - Population names
+
         """
         gp_pops = {}
         for i in range(len(self.populations)):
@@ -176,9 +176,9 @@ class Record(object):
     def split_in_loci(self, gp):
         """Splits a GP record in a dictionary with 1 locus per entry.
 
-            Given a record with n pops and m loci returns a dictionary
-            of records (key locus name) where each item is a record
-            with a single locus and n pops.
+        Given a record with n pops and m loci returns a dictionary
+        of records (key locus name) where each item is a record
+        with a single locus and n pops.
         """
         gp_loci = {}
         for i in range(len(self.loci_list)):
@@ -196,13 +196,11 @@ class Record(object):
         return gp_loci
 
     def remove_population(self, pos):
-        """Removes a population (by position).
-        """
+        """Removes a population (by position)."""
         del self.populations[pos]
 
     def remove_locus_by_position(self, pos):
-        """Removes a locus by position.
-        """
+        """Removes a locus by position."""
         del self.loci_list[pos]
         for pop in self.populations:
             for indiv in pop:
@@ -210,8 +208,7 @@ class Record(object):
                 del loci[pos]
 
     def remove_locus_by_name(self, name):
-        """Removes a locus by name.
-        """
+        """Removes a locus by name."""
         for i in range(len(self.loci_list)):
             if self.loci_list[i] == name:
                 self.remove_locus_by_position(i)

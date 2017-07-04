@@ -17,9 +17,8 @@ from Bio.Affy import CelFile
 
 
 class testCelFile(unittest.TestCase):
-    """
-    Test reading of CEL file
-    """
+    """Test reading of CEL file."""
+
     def test_read(self):
         version = 3
         GridCornerUL = (206, 129)
@@ -88,6 +87,7 @@ class testCelFile(unittest.TestCase):
             assert_array_equal(outliers, cel.outliers)
             self.assertEqual(nmodified, cel.nmodified)
             assert_array_equal(modified, cel.modified)
+
 
 if __name__ == '__main__':
     runner = unittest.TextTestRunner(verbosity=2)

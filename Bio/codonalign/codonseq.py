@@ -17,7 +17,7 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Alphabet import generic_dna, _ungap
 
-from Bio.codonalign.codonalphabet import default_codon_alphabet, default_codon_table
+from Bio.codonalign.codonalphabet import CodonAlphabet, default_codon_alphabet, default_codon_table
 
 
 class CodonSeq(Seq):
@@ -53,6 +53,7 @@ class CodonSeq(Seq):
     [0, 3.0, 6.0, 9.0, 12.0, 15]
 
     """
+
     def __init__(self, data='', alphabet=default_codon_alphabet,
                  gap_char="-", rf_table=None):
         # rf_table should be a tuple or list indicating the every
@@ -70,6 +71,8 @@ class CodonSeq(Seq):
         Seq.__init__(self, data.upper(), alphabet=alphabet)
         self.gap_char = gap_char
 
+        if not isinstance(alphabet, CodonAlphabet):
+            raise TypeError("Input alphabet should be a CodonAlphabet object.")
         # check the length of the alignment to be a triple
         if rf_table is None:
             seq_ungapped = self._data.replace(gap_char, "")
@@ -81,8 +84,7 @@ class CodonSeq(Seq):
             # only works for single alphabet
             for i in self.rf_table:
                 if self._data[i:i + 3] not in alphabet.letters:
-                    raise ValueError("Sequence contain undefined letters from"
-                                     " alphabet "
+                    raise ValueError("Sequence contain codon not in the alphabet "
                                      "({0})! ".format(self._data[i:i + 3]))
         else:
             # if gap_char in self._data:
@@ -106,8 +108,7 @@ class CodonSeq(Seq):
         return Seq(self._data[index], alphabet=generic_dna)
 
     def get_codon(self, index):
-        """get the `index`-th codon from the self.seq
-        """
+        """Get the `index`-th codon from the sequence."""
         if len(set(i % 3 for i in self.rf_table)) != 1:
             raise RuntimeError("frameshift detected. "
                                "CodonSeq object is not able to deal "
@@ -193,7 +194,7 @@ class CodonSeq(Seq):
         return Seq(self._data, generic_dna)
 
     def get_full_rf_table(self):
-        """Returns full rf_table of the CodonSeq records.
+        """Return full rf_table of the CodonSeq records.
 
         A full rf_table is different from a normal rf_table in that
         it translate gaps in CodonSeq. It is helpful to construct
@@ -308,12 +309,13 @@ def cal_dn_ds(codon_seq1, codon_seq2, method="NG86",
     .. _`Yang and Nielsen (2000)`: http://dx.doi.org/10.1093/oxfordjournals.molbev.a026236
 
     Arguments:
-        - codon_seq1 - CodonSeq or or SeqRecord that contains a CodonSeq
-        - codon_seq2 - CodonSeq or or SeqRecord that contains a CodonSeq
-        - w  - transition/transversion ratio
-        - cfreq - Current codon frequency vector can only be specified
-          when you are using ML method. Possible ways of
-          getting cfreq are: F1x4, F3x4 and F61.
+     - codon_seq1 - CodonSeq or or SeqRecord that contains a CodonSeq
+     - codon_seq2 - CodonSeq or or SeqRecord that contains a CodonSeq
+     - w  - transition/transversion ratio
+     - cfreq - Current codon frequency vector can only be specified
+       when you are using ML method. Possible ways of
+       getting cfreq are: F1x4, F3x4 and F61.
+
     """
     if isinstance(codon_seq1, CodonSeq) and isinstance(codon_seq2, CodonSeq):
         pass
@@ -361,7 +363,7 @@ def cal_dn_ds(codon_seq1, codon_seq2, method="NG86",
 #################################################################
 
 def _ng86(seq1, seq2, k, codon_table):
-    """Main function for NG86 method (PRIVATE)."""
+    """NG86 method main function (PRIVATE)."""
     S_sites1, N_sites1 = _count_site_NG86(seq1,
                                           codon_table=codon_table, k=k)
     S_sites2, N_sites2 = _count_site_NG86(seq2,
@@ -387,12 +389,13 @@ def _ng86(seq1, seq2, k, codon_table):
 
 
 def _count_site_NG86(codon_lst, k=1, codon_table=default_codon_table):
-    """count synonymous and non-synonymous sites of a list of codons (PRIVATE).
+    """Count synonymous and non-synonymous sites of a list of codons (PRIVATE).
 
     Arguments:
-        - codon_lst - A three letter codon list from a CodonSeq object.
-          This can be returned from _get_codon_list method.
-        - k - transition/transversion rate ratio.
+     - codon_lst - A three letter codon list from a CodonSeq object.
+       This can be returned from _get_codon_list method.
+     - k - transition/transversion rate ratio.
+
     """
     S_site = 0  # synonymous sites
     N_site = 0  # non-synonymous sites
@@ -482,7 +485,7 @@ def _count_diff_NG86(codon1, codon2, codon_table=default_codon_table):
 
         def compare_codon(codon1, codon2, codon_table=default_codon_table,
                           weight=1):
-            """Method to compare two codon accounting for different pathways."""
+            """Compare two codon accounting for different pathways."""
             sd = nd = 0
             if len(set(map(codon_table.forward_table.get,
                            [codon1, codon2]))) == 1:
@@ -536,7 +539,7 @@ def _count_diff_NG86(codon1, codon2, codon_table=default_codon_table):
 #################################################################
 
 def _lwl85(seq1, seq2, k, codon_table):
-    """Main function for LWL85 method (PRIVATE).
+    """LWL85 method main function (PRIVATE).
 
     Nomenclature is according to Li et al. (1985), PMID 3916709.
     """
@@ -613,7 +616,7 @@ def _get_codon_fold(codon_table):
 
 
 def _diff_codon(codon1, codon2, fold_dict):
-    """Number of different types substitutions between two codons (PRIVATE).
+    """Count number of different substitution types between two codons (PRIVATE).
 
     returns tuple (P0, P2, P4, Q0, Q2, Q4)
 
@@ -660,7 +663,7 @@ def _diff_codon(codon1, codon2, fold_dict):
 #################################################################
 
 def _yn00(seq1, seq2, k, codon_table):
-    """Main function for yn00 method (PRIVATE).
+    """YN00 method main function (PRIVATE).
 
     Nomenclature is according to Yang and Nielsen (2000), PMID 10666704.
     """
@@ -770,8 +773,9 @@ def _get_TV(codon_lst1, codon_lst2, codon_table=default_codon_table):
     """Get TV (PRIVATE).
 
     Arguments:
-        - T - proportions of transitional differences
-        - V - proportions of transversional differences
+     - T - proportions of transitional differences
+     - V - proportions of transversional differences
+
     """
     purine = ('A', 'G')
     pyrimidine = ('C', 'T')
@@ -794,8 +798,9 @@ def _get_TV(codon_lst1, codon_lst2, codon_table=default_codon_table):
 
 
 def _get_kappa_t(pi, TV, t=False):
-    """The following formula and variable names are according to
-    PMID: 10666704
+    """Calculate kappa (PRIVATE).
+
+    The following formula and variable names are according to PMID: 10666704
     """
     pi['Y'] = pi['T'] + pi['C']
     pi['R'] = pi['A'] + pi['G']
@@ -828,13 +833,12 @@ def _count_site_YN00(codon_lst1, codon_lst2, pi, k,
 
     .. _`Ina (1995)`: http://dx.doi.org/10.1007/BF00167113
     .. _`Yang and Nielsen (2000)`: http://dx.doi.org/10.1093/oxfordjournals.molbev.a026236
+
     """
     if len(codon_lst1) != len(codon_lst2):
         raise RuntimeError("Length of two codon_lst should be the same "
-                           "(%d and %d detected)".format(
-                                                    len(codon_lst1),
-                                                    len(codon_lst2))
-                           )
+                           "(%d and %d detected)" %
+                           (len(codon_lst1), len(codon_lst2)))
     else:
         length = len(codon_lst1)
     purine = ('A', 'G')
@@ -1011,7 +1015,7 @@ def _count_diff_YN00(codon1, codon2, P, codon_lst,
 #################################################################
 
 def _ml(seq1, seq2, cmethod, codon_table):
-    """Main function for ML method (PRIVATE)."""
+    """ML method main function (PRIVATE)."""
     from collections import Counter
     from scipy.optimize import minimize
     codon_cnt = Counter()
@@ -1027,7 +1031,7 @@ def _ml(seq1, seq2, cmethod, codon_table):
     # apply optimization
     def func(params, pi=pi, codon_cnt=codon_cnt, codon_lst=codon_lst,
              codon_table=codon_table):
-        """params = [t, k, w]"""
+        """Temporary function, params = [t, k, w]."""
         return -_likelihood_func(
                     params[0], params[1], params[2], pi,
                     codon_cnt, codon_lst=codon_lst,
@@ -1051,7 +1055,7 @@ def _ml(seq1, seq2, cmethod, codon_table):
                     else:
                         # nonsynonymous count
                         Nd += pi[c1] * Q[i, j]
-                except:
+                except KeyError:
                     # This is probably due to stop codons
                     pass
     Sd *= t
@@ -1074,7 +1078,7 @@ def _ml(seq1, seq2, cmethod, codon_table):
                     else:
                         # nonsynonymous count
                         rhoN += pi[c1] * Q[i, j]
-                except:
+                except KeyError:
                     # This is probably due to stop codons
                     pass
     rhoS *= 3
@@ -1135,14 +1139,15 @@ def _get_pi(seq1, seq2, cmethod, codon_table=default_codon_table):
 
 
 def _q(i, j, pi, k, w, codon_table=default_codon_table):
-    """Q matrix for codon substitution.
+    """Q matrix for codon substitution (PRIVATE).
 
     Arguments:
-        - i, j  : three letter codon string
-        - pi    : expected codon frequency
-        - k     : transition/transversion ratio
-        - w     : nonsynonymous/synonymous rate ratio
-        - codon_table: Bio.Data.CodonTable object
+     - i, j  : three letter codon string
+     - pi    : expected codon frequency
+     - k     : transition/transversion ratio
+     - w     : nonsynonymous/synonymous rate ratio
+     - codon_table: Bio.Data.CodonTable object
+
     """
     if i == j:
         # diagonal elements is the sum of all other elements

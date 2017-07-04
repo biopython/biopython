@@ -149,6 +149,7 @@ class KDTree(object):
          - coords: two dimensional NumPy array. E.g. if the points
            have dimensionality D and there are N points, the coords
            array should be NxD dimensional.
+
         """
         if coords.min() <= -1e6 or coords.max() >= 1e6:
             raise Exception("Points should lie between -1e6 and 1e6")
@@ -166,6 +167,7 @@ class KDTree(object):
          - center: one dimensional NumPy array. E.g. if the points have
            dimensionality D, the center array should be D dimensional.
          - radius: float>0
+
         """
         if not self.built:
             raise Exception("No point set specified")
@@ -208,6 +210,7 @@ class KDTree(object):
 
         Arguments:
          - radius: float (>0)
+
         """
         if not self.built:
             raise Exception("No point set specified")
@@ -231,6 +234,7 @@ class KDTree(object):
         of neighbor pairs..
         """
         return [neighbor.radius for neighbor in self.neighbors]
+
 
 if __name__ == "__main__":
 

@@ -41,6 +41,7 @@ def which(program):
             return exe_file
     return None
 
+
 # Find the PAML binaries
 if sys.platform == "win32":
     binaries = ["codeml.exe", "baseml.exe", "yn00.exe"]
@@ -72,9 +73,7 @@ class CodemlTest(Common):
         self.cml = codeml.Codeml()
 
     def testCodemlBinary(self):
-        """Test that the codeml binary runs and generates correct output
-        and is the correct version.
-        """
+        """codeml runs, generates correct output, and is the correct version."""
         ctl_file = os.path.join("PAML", "Control_files", "codeml", "codeml.ctl")
         self.cml.read_ctl_file(ctl_file)
         self.cml.alignment = os.path.join("PAML", "Alignments", "alignment.phylip")
@@ -95,9 +94,7 @@ class BasemlTest(Common):
         self.bml = baseml.Baseml()
 
     def testBasemlBinary(self):
-        """Test that the baseml binary runs and generates correct output
-        and is the correct version.
-        """
+        """baseml runs, generates correct output, and is the correct version."""
         ctl_file = os.path.join("PAML", "Control_files", "baseml", "baseml.ctl")
         self.bml.read_ctl_file(ctl_file)
         self.bml.alignment = os.path.join("PAML", "Alignments", "alignment.phylip")
@@ -117,7 +114,8 @@ class Yn00Test(Common):
         self.yn = yn00.Yn00()
 
     def testYn00Binary(self):
-        """Test that the yn00 binary runs and generates correct output.
+        """yn00 binary runs and generates correct output.
+
         yn00 output does not specify the version number.
         """
         ctl_file = os.path.join("PAML", "Control_files", "yn00", "yn00.ctl")

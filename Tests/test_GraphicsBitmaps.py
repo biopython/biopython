@@ -23,14 +23,14 @@ try:
     # Skip the test if reportlab is not installed
     import reportlab as r
     del r
-except:
+except Exception:
     raise MissingPythonDependencyError(
         "Install ReportLab if you want to use Bio.Graphics.")
 try:
     # Skip the test if reportlab is not installed
     from reportlab.graphics import renderPM
     del renderPM
-except:
+except Exception:
     raise MissingPythonDependencyError(
         "Install ReportLab's renderPM module if you want to create "
         "bitmaps with Bio.Graphics.")
@@ -42,7 +42,7 @@ try:
     except ImportError:
         import Image as i
     del i
-except:
+except Exception:
     raise MissingPythonDependencyError(
         "Install Pillow or its predecessor PIL (Python Imaging Library) "
         "if you want to create bitmaps with Bio.Graphics.")
@@ -107,6 +107,7 @@ def real_test():
 
     return True
 
+
 # Run the actual test BEFORE the unittest stuff gets called
 real_test()
 
@@ -117,6 +118,7 @@ class ComparativeTest(unittest.TestCase):
         """Test creation of a simple PNG scatter plot."""
         # Dummy method to show up via run_tests.py
         pass
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)

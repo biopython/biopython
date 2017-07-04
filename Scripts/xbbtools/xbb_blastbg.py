@@ -97,7 +97,7 @@ class BlastDisplayer(object):
                 txt = fid.read()
                 self.tid.insert('end', txt)
                 self.tid.update()
-            except:
+            except Exception:
                 # text widget is detroyed, we assume the search
                 # has been cancelled
                 pass

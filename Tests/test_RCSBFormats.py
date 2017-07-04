@@ -65,6 +65,7 @@ class CompareStructures(unittest.TestCase):
         self.assertEqual([i[0] for i in cif_chains], [i[0] for i in pdb_chains])
         self.assertEqual([i[1] for i in cif_chains], [i[1] for i in pdb_chains])
 
+
 if __name__ == '__main__':
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

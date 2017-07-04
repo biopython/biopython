@@ -64,18 +64,20 @@ def fill_and_border(base_color, alpha=0.5):
 
 
 def apply_to_window(sequence, window_size, function, step=None):
-    """Returns a list of (position, value) tuples for fragments of the passed
+    """Apply function to windows of the given sequence.
+
+    Returns a list of (position, value) tuples for fragments of the passed
     sequence of length window_size (stepped by step), calculated by the passed
     function.  Returned positions are the midpoint of each window.
 
     Arguments:
-        - sequence      - Bio.Seq.Seq object.
-        - window_size   - an integer describing the length of sequence to consider.
-        - step          - an integer describing the step to take between windows
-          (default = window_size//2).
 
-        - function      - Method or function that accepts a Bio.Seq.Seq object
-          as its sole argument and returns a single value.
+    - sequence - Bio.Seq.Seq object.
+    - window_size - an integer describing the length of sequence to consider.
+    - step - an integer describing the step to take between windows
+      (default = window_size//2).
+    - function - Method or function that accepts a Bio.Seq.Seq object
+      as its sole argument and returns a single value.
 
     apply_to_window(sequence, window_size, function) -> [(int, float),(int, float),...]
     """
@@ -348,7 +350,8 @@ class LabelTest(unittest.TestCase):
 class SigilsTest(unittest.TestCase):
     """Check the different feature sigils.
 
-    These figures are intended to be used in the Tutorial..."""
+    These figures are intended to be used in the Tutorial...
+    """
     def setUp(self):
         self.gdd = Diagram('Test Diagram', circular=False,
                            y=0.01, yt=0.01, yb=0.01,
@@ -1020,6 +1023,7 @@ class DiagramTest(unittest.TestCase):
                  start=3000, end=6300)
         output_filename = os.path.join('Graphics', 'GD_by_obj_frag_linear.pdf')
         gdd.write(output_filename, 'PDF')
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)

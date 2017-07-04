@@ -107,7 +107,8 @@ def _get_fragments_phase(frags):
 
 def _adjust_aa_seq(fraglist):
     """Transforms three-letter amino acid codes into one-letters in the
-    given HSPFragments."""
+    given HSPFragments.
+    """
     custom_map = {'***': '*', '<->': '-'}
     hsp_hstart = fraglist[0].hit_start
     hsp_qstart = fraglist[0].query_start
@@ -300,7 +301,6 @@ def _parse_hit_or_query_line(line):
 
 
 class _BaseExonerateParser(object):
-
     """Abstract iterator for exonerate format."""
 
     _ALN_MARK = None
@@ -484,7 +484,6 @@ class _BaseExonerateParser(object):
 
 
 class _BaseExonerateIndexer(SearchIndexer):
-
     """Indexer class for Exonerate plain text."""
 
     _parser = None  # should be defined by subclass

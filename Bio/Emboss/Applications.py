@@ -23,6 +23,7 @@ class _EmbossMinimalCommandLine(AbstractCommandline):
     This is provided for subclassing, it deals with shared options
     common to all the EMBOSS tools:
 
+    Attributes:
      - auto               Turn off prompts
      - stdout             Write standard output
      - filter             Read standard input, write standard output
@@ -36,7 +37,9 @@ class _EmbossMinimalCommandLine(AbstractCommandline):
      - error              Report errors
      - fatal              Report fatal errors
      - die                Report dying program messages
+
     """
+
     def __init__(self, cmd=None, **kwargs):
         assert cmd is not None
         extra_parameters = [
@@ -93,6 +96,7 @@ class _EmbossCommandLine(_EmbossMinimalCommandLine):
      - outfile            Output filename
 
     """
+
     def __init__(self, cmd=None, **kwargs):
         assert cmd is not None
         extra_parameters = [
@@ -151,6 +155,7 @@ class Primer3Commandline(_EmbossCommandLine):
     eprimer3 -auto -outfile=myresults.out -sequence=mysequence.fas -hybridprobe=True -productosize=200 -oligosize=20 -explainflag=True
 
     """
+
     def __init__(self, cmd="eprimer3", **kwargs):
         self.parameters = [
             _Option(["-sequence", "sequence"],
@@ -488,6 +493,7 @@ class FDNADistCommandline(_EmbossCommandLine):
     fdnadist is an EMBOSS wrapper for the PHYLIP program dnadist for
     calulating distance matrices from DNA sequence files.
     """
+
     def __init__(self, cmd="fdnadist", **kwargs):
         self.parameters = [
             _Option(["-sequence", "sequence"],
@@ -529,6 +535,7 @@ class FTreeDistCommandline(_EmbossCommandLine):
     ftreedist is an EMBOSS wrapper for the PHYLIP program treedist used for
     calulating distance measures between phylogentic trees.
     """
+
     def __init__(self, cmd="ftreedist", **kwargs):
         self.parameters = [
             _Option(["-intreefile", "intreefile"],
@@ -555,6 +562,7 @@ class FNeighborCommandline(_EmbossCommandLine):
     fneighbor is an EMBOSS wrapper for the PHYLIP program neighbor used for
     calulating neighbor-joining or UPGMA trees from distance matrices.
     """
+
     def __init__(self, cmd="fneighbor", **kwargs):
         self.parameters = [
             _Option(["-datafile", "datafile"],
@@ -589,6 +597,7 @@ class FSeqBootCommandline(_EmbossCommandLine):
     fseqboot is an EMBOSS wrapper for the PHYLIP program seqboot used to
     pseudo-sample alignment files.
     """
+
     def __init__(self, cmd="fseqboot", **kwargs):
         self.parameters = [
             _Option(["-sequence", "sequence"],
@@ -632,6 +641,7 @@ class FDNAParsCommandline(_EmbossCommandLine):
     "interactive mode" (and as a result fail if called with subprocess) if
     "-auto" is not set to true.
     """
+
     def __init__(self, cmd="fdnapars", **kwargs):
         self.parameters = [
             _Option(["-sequence", "sequence"],
@@ -679,6 +689,7 @@ class FProtParsCommandline(_EmbossCommandLine):
     "interactive mode" (and as a result fail if called with subprocess) if
     "-auto" is not set to true.
     """
+
     def __init__(self, cmd="fprotpars", **kwargs):
         self.parameters = [
             _Option(["-sequence", "sequence"],
@@ -719,6 +730,7 @@ class FProtDistCommandline(_EmbossCommandLine):
     fprotdist is an EMBOSS wrapper for the PHYLIP program protdist used to
     estimate trees from protein sequences using parsimony
     """
+
     def __init__(self, cmd="fprotdist", **kwargs):
         self.parameters = [
             _Option(["-sequence", "sequence"],
@@ -761,6 +773,7 @@ class FConsenseCommandline(_EmbossCommandLine):
     fconsense is an EMBOSS wrapper for the PHYLIP program consense used to
     calculate consensus trees.
     """
+
     def __init__(self, cmd="fconsense", **kwargs):
         self.parameters = [
             _Option(["-intreefile", "intreefile"],
@@ -784,8 +797,8 @@ class FConsenseCommandline(_EmbossCommandLine):
 
 
 class WaterCommandline(_EmbossCommandLine):
-    """Commandline object for the water program from EMBOSS.
-    """
+    """Commandline object for the water program from EMBOSS."""
+
     def __init__(self, cmd="water", **kwargs):
         self.parameters = [
             _Option(["-asequence", "asequence"],
@@ -823,6 +836,7 @@ class WaterCommandline(_EmbossCommandLine):
 
 class NeedleCommandline(_EmbossCommandLine):
     """Commandline object for the needle program from EMBOSS."""
+
     def __init__(self, cmd="needle", **kwargs):
         self.parameters = [
             _Option(["-asequence", "asequence"],
@@ -1168,6 +1182,7 @@ class IepCommandline(_EmbossCommandLine):
     You would typically run the command line with iep_cline() or via the
     Python subprocess module, as described in the Biopython tutorial.
     """
+
     def __init__(self, cmd="iep", **kwargs):
         self.parameters = [
             _Option(["-sequence", "sequence"],
@@ -1213,6 +1228,7 @@ class SeqretCommandline(_EmbossMinimalCommandLine):
     This wrapper currently only supports the core functionality, things like
     feature tables (in EMBOSS 6.1.0 onwards) are not yet included.
     """
+
     def __init__(self, cmd="seqret", **kwargs):
         self.parameters = [
             _Option(["-sequence", "sequence"],
@@ -1242,7 +1258,7 @@ class SeqretCommandline(_EmbossMinimalCommandLine):
 
 
 class SeqmatchallCommandline(_EmbossCommandLine):
-    """ Commandline object for the seqmatchall program from EMBOSS
+    """Commandline object for the seqmatchall program from EMBOSS
 
     e.g.
     >>> cline = SeqmatchallCommandline(sequence="opuntia.fasta", outfile="opuntia.txt")
@@ -1253,6 +1269,7 @@ class SeqmatchallCommandline(_EmbossCommandLine):
     seqmatchall -auto -outfile=opuntia.txt -sequence=opuntia.fasta -wordsize=18 -aformat=pair
 
     """
+
     def __init__(self, cmd="seqmatchall", **kwargs):
         self.parameters = [
             _Option(["-sequence", "sequence"],

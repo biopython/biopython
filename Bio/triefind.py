@@ -3,8 +3,7 @@
 # as part of this package.
 #
 
-"""
-Given a trie, find all occurrences of a word in the trie in a string.
+"""Given a trie, find all occurrences of a word in the trie in a string.
 
 Like searching a string for a substring, except that the substring is
 any word in a trie.
@@ -14,7 +13,6 @@ match         Find longest key in a trie matching the beginning of the string.
 match_all     Find all keys in a trie matching the beginning of the string.
 find          Find keys in a trie matching anywhere in a string.
 find_words    Find keys in a trie matching whole words in a string.
-
 """
 
 import string
@@ -70,6 +68,7 @@ def find(string, trie):
             results.append((key, start, start + len(key)))
         start += 1
     return results
+
 
 DEFAULT_BOUNDARY_CHARS = string.punctuation + string.whitespace
 

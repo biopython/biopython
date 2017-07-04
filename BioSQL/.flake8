@@ -1,2 +1,15 @@
 [flake8]
+# Would like to enable this in future...
+# doctests = True
 max-line-length = 92
+ignore =
+    # =====================================
+    # pydocstyle: D### - Missing Docstrings
+    # =====================================
+    # D100	Missing docstring in public module
+    # D101	Missing docstring in public class
+    # D102	Missing docstring in public method
+    # D103	Missing docstring in public function
+    # D104	Missing docstring in public package
+    # D105	Missing docstring in magic method
+    D101,D102,D103,D105

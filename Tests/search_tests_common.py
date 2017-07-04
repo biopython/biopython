@@ -27,10 +27,11 @@ with warnings.catch_warnings():
 
 class CheckRaw(unittest.TestCase):
     """Base class for testing index's get_raw method."""
+
     fmt = None  # define this in subclasses!
 
     def check_raw(self, filename, id, raw, **kwargs):
-        """Index filename using **kwargs, check get_raw(id)==raw."""
+        """Index filename using keyword arguments, check get_raw(id)==raw."""
         idx = SearchIO.index(filename, self.fmt, **kwargs)
         raw = _as_bytes(raw)
         # Anticipate cases where the raw string and/or file uses different
@@ -110,7 +111,7 @@ class CheckIndex(unittest.TestCase):
 
 
 def _num_difference(obj_a, obj_b):
-    """Returns the number of instance attributes presence only in one object."""
+    """Return the number of instance attributes presence only in one object."""
     attrs_a = set(obj_a.__dict__)
     attrs_b = set(obj_b.__dict__)
     diff = attrs_a.symmetric_difference(attrs_b)
@@ -119,7 +120,7 @@ def _num_difference(obj_a, obj_b):
 
 
 def compare_search_obj(obj_a, obj_b):
-    """Compares attribute values of two QueryResult objects."""
+    """Compare attribute values of two QueryResult objects."""
     # check that both qresults contain the same instance attributes
     assert _num_difference(obj_a, obj_b) == 0
 
@@ -139,7 +140,7 @@ def compare_search_obj(obj_a, obj_b):
 
 
 def compare_attrs(obj_a, obj_b, attrs):
-    """Compares attribute values of two objects."""
+    """Compare attribute values of two objects."""
     for attr in attrs:
         # don't check for contained items, they are handled separately
         if attr.startswith('_items'):

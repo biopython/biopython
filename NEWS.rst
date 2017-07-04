@@ -12,21 +12,72 @@ The latest news is at the top of this file.
 (In progress, not yet released) Biopython 1.70
 ==============================================
 
-This release of Biopython supports Python 2.7, 3.3, 3.4, 3.5 and 3.6 (although
-support for Python 3.3 is deprecated). It has also been tested on PyPy v5.7,
-PyPy3.5 v5.7 beta, and Jython 2.7.
+This release of Biopython supports Python 2.7, 3.4, 3.5 and 3.6 (we have now
+dropped support for Python 3.3). It has also been tested on PyPy v5.7,
+PyPy3.5 v5.8 beta, and Jython 2.7 (although support for Jython is deprecated)..
+
+Biopython now has a new logo, contributed by Patrick Kunzmann. Drawing on our
+original logo and the current Python logo, this shows a yellow and blue snake
+forming a double helix.
 
 Bio.AlignIO now supports Mauve's eXtended Multi-FastA (XMFA) file format
 under the format name "mauve" (contributed by Eric Rasche).
 
+Bio.ExPASy was updated to fix fetching PROSITE and PRODOC records, and return
+text-mode handles for use under Python 3.
+
+Two new arguments for reading and writing blast-xml files have been added
+to the Bio.SearchIO functions (read/parse and write, respectively). They
+are 'use_raw_hit_ids' and 'use_raw_query_ids'. Check out the relevant
+SearchIO.BlastIO documentation for a complete description of what these
+arguments do.
+
+Bio.motifs was updated to support changes in MEME v4.11.4 output.
+
+In Bio.Phylo.TreeConstruction, the _DistanceMatrix class has a new method
+'format_phylip' to write Phylip-compatible distance matrix files. (Contributed
+by Jordan Willis)
+
+Additionally, a number of small bugs have been fixed with further additions
+to the test suite, and there has been further work to follow the Python PEP8,
+PEP257 and best practice standard coding style.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+- Aaron Kitzmiller (first contribution)
+- Adil Iqbal (first contribution)
+- Allis Tauri
+- Andrew Guy
+- Ariel Aptekmann (first contribution)
+- Bertrand Caron (first contribution)
+- Connor T. Skennerton
 - Eric Rasche
+- Eric Talevich
+- Francesco Gastaldello
+- François Coste (first contribution)
+- Frederic Sapet (first contribution)
+- Jimmy O'Donnell (first contribution)
+- Jared Andrews (first contribution)
 - John Kern (first contribution)
+- Jordan Willis (first contribution)
+- João Rodrigues
+- Markus Piotrowski
 - Mateusz Korycinski (first contribution)
+- Maximilian Greil
+- Michiel de Hoon
+- morrme (first contribution)
+- Noam Kremen (first contribution)
+- Patrick Kunzmann
 - Peter Cock
+- Rasmus Fonseca (first contribution)
+- Rodrigo Dorantes-Gilardi (first contribution)
 - Sacha Laurent (first contribution)
+- Sourav Singh
+- Ted Cybulski (first contribution)
+- Tiago Antao
+- Wibowo 'Bow' Arindrarto
+- Zheng Ruan
 
 
 6 April 2017: Biopython 1.69

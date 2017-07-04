@@ -1,18 +1,17 @@
-# Copyright 2011 by Peter Cock.  All rights reserved.
+# Copyright 2011-2017 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 ################################################################################
 
-"""Genome Diagram Feature cross-link module
-"""
+"""Genome Diagram Feature cross-link module."""
 
 from reportlab.lib import colors
 
 
 class CrossLink(object):
-    """Hold information for drawing a cross link between features.
-    """
+    """Hold information for drawing a cross link between features."""
+
     def __init__(self, featureA, featureB,
                  color=colors.lightgreen, border=None, flip=False):
         """Create a new cross link.
@@ -30,7 +29,7 @@ class CrossLink(object):
         also use a different colour (e.g. red for simple links, blue for any
         flipped links).
         """
-        # Initialise attributes
+        # Initialize attributes
         self.featureA = featureA
         self.featureB = featureB
         self.color = color            # default color to draw the feature
@@ -39,6 +38,7 @@ class CrossLink(object):
 
     @property
     def startA(self):
+        """Start position of Feature A."""
         try:
             return self.featureA.start
         except AttributeError:
@@ -47,6 +47,7 @@ class CrossLink(object):
 
     @property
     def endA(self):
+        """End position of Feature A."""
         try:
             return self.featureA.end
         except AttributeError:
@@ -58,7 +59,7 @@ class CrossLink(object):
             track, start, end = self.featureA
             assert track in tracks
             return track
-        except Exception:  # TODO: ValueError?
+        except TypeError:
             for track in tracks:
                 for feature_set in track.get_sets():
                     if hasattr(feature_set, "features"):
@@ -68,6 +69,7 @@ class CrossLink(object):
 
     @property
     def startB(self):
+        """Start position of Feature B."""
         try:
             return self.featureB.start
         except AttributeError:
@@ -76,6 +78,7 @@ class CrossLink(object):
 
     @property
     def endB(self):
+        """End position of Feature B."""
         try:
             return self.featureB.end
         except AttributeError:
@@ -87,7 +90,7 @@ class CrossLink(object):
             track, start, end = self.featureB
             assert track in tracks
             return track
-        except:
+        except TypeError:
             for track in tracks:
                 for feature_set in track.get_sets():
                     if hasattr(feature_set, "features"):

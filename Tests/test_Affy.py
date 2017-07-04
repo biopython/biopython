@@ -186,6 +186,7 @@ class AffyTest(unittest.TestCase):
         for i in range(25):
             f.write(packData(float(i), float(-i), 9))
 
+
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=0)
     unittest.main(testRunner=runner)

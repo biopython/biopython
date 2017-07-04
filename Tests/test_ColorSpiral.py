@@ -4,8 +4,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-""" Tests for general functionality of the ColorSpiral utility
-"""
+"""Tests for general functionality of the ColorSpiral utility."""
 
 # Builtins
 import colorsys
@@ -107,6 +106,7 @@ class DictTest(unittest.TestCase):
                     'C: (0.59, 0.13, 0.47)',
                     'D: (0.50, 0.00, 0.00)']
         self.assertEqual(cstr, expected)
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)

@@ -8,12 +8,12 @@
 
 """Bio.SeqIO support for the "uniprot-xml" file format.
 
-See also:
-
+See Also:
 http://www.uniprot.org
 
 The UniProt XML format essentially replaces the old plain text file format
 originally introduced by SwissProt ("swiss" format in Bio.SeqIO).
+
 """
 import sys
 
@@ -86,6 +86,7 @@ class Parser(object):
     return_raw_comments=True to get back the complete comment field in XML format
     alphabet=Alphabet.ProteinAlphabet()    can be modified if needed, default is protein alphabet.
     """
+
     def __init__(self, elem, alphabet=Alphabet.ProteinAlphabet(), return_raw_comments=False):
         self.entry = elem
         self.alphabet = alphabet
@@ -186,35 +187,36 @@ class Parser(object):
             The original XML is returned in the annotation fields.
 
             Available comment types at december 2009:
-                "allergen"
-                "alternative products"
-                "biotechnology"
-                "biophysicochemical properties"
-                "catalytic activity"
-                "caution"
-                "cofactor"
-                "developmental stage"
-                "disease"
-                "domain"
-                "disruption phenotype"
-                "enzyme regulation"
-                "function"
-                "induction"
-                "miscellaneous"
-                "pathway"
-                "pharmaceutical"
-                "polymorphism"
-                "PTM"
-                "RNA editing"
-                "similarity"
-                "subcellular location"
-                "sequence caution"
-                "subunit"
-                "tissue specificity"
-                "toxic dose"
-                "online information"
-                "mass spectrometry"
-                "interaction"
+             - "allergen"
+             - "alternative products"
+             - "biotechnology"
+             - "biophysicochemical properties"
+             - "catalytic activity"
+             - "caution"
+             - "cofactor"
+             - "developmental stage"
+             - "disease"
+             - "domain"
+             - "disruption phenotype"
+             - "enzyme regulation"
+             - "function"
+             - "induction"
+             - "miscellaneous"
+             - "pathway"
+             - "pharmaceutical"
+             - "polymorphism"
+             - "PTM"
+             - "RNA editing"
+             - "similarity"
+             - "subcellular location"
+             - "sequence caution"
+             - "subunit"
+             - "tissue specificity"
+             - "toxic dose"
+             - "online information"
+             - "mass spectrometry"
+             - "interaction"
+
             """
             simple_comments = ["allergen",
                                "biotechnology",

@@ -390,6 +390,10 @@ class FastaM10Parser(object):
         state = _STATE_NONE
         strand = None
         hsp_list = []
+        hsp = None
+        parsed_hsp = None
+        hit_desc = None
+        seq_len = None
         while True:
             peekline = self.handle.peekline()
             # yield hit if we've reached the start of a new query or
@@ -534,8 +538,7 @@ class FastaM10Indexer(SearchIndexer):
                 start_offset = end_offset - len(line)
             # yield whenever we encounter a new query or at the end of the file
             if qresult_key is not None:
-                if (not peekline.startswith(query_mark) and
-                    query_mark in peekline) or not line:
+                if (not peekline.startswith(query_mark) and query_mark in peekline) or not line:
                     yield qresult_key, start_offset, end_offset - start_offset
                     if not line:
                         break

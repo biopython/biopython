@@ -502,8 +502,7 @@ class SeqFeatureCreation(unittest.TestCase):
     """Test basic creation of SeqFeatures."""
 
     def test_qualifiers(self):
-        """Pass in qualifiers to SeqFeatures.
-        """
+        """Pass in qualifiers to SeqFeatures."""
         f = SeqFeature(FeatureLocation(10, 20), strand=+1, type="CDS")
         self.assertEqual(f.qualifiers, {})
         f = SeqFeature(FeatureLocation(10, 20), strand=+1, type="CDS",
@@ -1168,6 +1167,7 @@ class NC_005816(NC_000932):
 
 class TestWriteRead(unittest.TestCase):
     """Test can write and read back files."""
+
     def test_NC_000932(self):
         """Write and read back NC_000932.gb"""
         write_read(os.path.join("GenBank", "NC_000932.gb"), "gb")

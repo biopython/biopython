@@ -23,21 +23,22 @@ class SequenceIterator(object):
     You should write a __next__ method to return SeqRecord  objects.  You may
     wish to redefine the __init__ method as well.
     """
+
     def __init__(self, handle, alphabet=generic_alphabet):
         """Create a SequenceIterator object.
 
-            - handle - input file
-            - alphabet - optional, e.g. Bio.Alphabet.generic_protein
+        Arguments:
+        - handle - input file
+        - alphabet - optional, e.g. Bio.Alphabet.generic_protein
 
         This method MAY be overridden by any subclass, for example if you need
         to process a header or accept additional arguments.
 
         Note when subclassing:
-
-            - there should be a single non-optional argument,
-              the handle.
-            - you do not have to require an alphabet.
-            - you can add additional optional arguments."""
+        - there should be a single non-optional argument, the handle.
+        - you do not have to require an alphabet.
+        - you can add additional optional arguments.
+        """
         self.handle = handle
         self.alphabet = alphabet
 
@@ -81,10 +82,12 @@ class SequenceWriter(object):
     Sequential file formats (e.g. Fasta, GenBank) should subclass the
     SequentialSequenceWriter class instead.
     """
+
     def __init__(self, handle):
         """Creates the writer object.
 
-        Use the method write_file() to actually record your sequence records."""
+        Use the method write_file() to actually record your sequence records.
+        """
         self.handle = handle
 
     def _get_seq_string(self, record):
@@ -110,7 +113,8 @@ class SequenceWriter(object):
 
         Should return the number of records (as an integer).
 
-        This method can only be called once."""
+        This method can only be called once.
+        """
         # Note when implementing this, your writer class should NOT close the
         # file at the end, but the calling code should.
         raise NotImplementedError("This object should be subclassed")
@@ -120,7 +124,7 @@ class SequenceWriter(object):
 
 
 class SequentialSequenceWriter(SequenceWriter):
-    """This class should be subclassed.
+    """Base class for sequence writers. This class should be subclassed.
 
     It is intended for sequential file formats with an (optional)
     header, repeated records, and an (optional) footer.
@@ -140,6 +144,7 @@ class SequentialSequenceWriter(SequenceWriter):
     Note that write_header() cannot require any assumptions about
     the number of records.
     """
+
     def __init__(self, handle):
         self.handle = handle
         self._header_written = False
@@ -165,7 +170,8 @@ class SequentialSequenceWriter(SequenceWriter):
 
         Once you have called write_header() you can call write_record()
         and/or write_records() as many times as needed.  Then call
-        write_footer() and close()."""
+        write_footer() and close().
+        """
         assert self._header_written, "You must call write_header() first"
         assert not self._footer_written, "You have already called write_footer()"
         self._record_written = True

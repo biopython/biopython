@@ -33,6 +33,8 @@ def read(handle):
     for line in handle:
         if line.startswith('MOTIF  1'):
             break
+        if record.version == '4.11.4' and line.startswith('MOTIF '):
+            break
     else:
         raise ValueError('Unexpected end of stream')
     alphabet = record.alphabet
@@ -67,6 +69,7 @@ class Motif(motifs.Motif):
     This includes the motif name, the evalue for a motif, and its number
     of occurrences.
     """
+
     def __init__(self, alphabet=None, instances=None):
         motifs.Motif.__init__(self, alphabet, instances)
         self.evalue = 0.0
@@ -75,8 +78,8 @@ class Motif(motifs.Motif):
 
 
 class Instance(Seq.Seq):
-    """A class describing the instances of a MEME motif, and the data thereof.
-    """
+    """A class describing the instances of a MEME motif, and the data thereof."""
+
     def __init__(self, *args, **kwds):
         Seq.Seq.__init__(self, *args, **kwds)
         self.sequence_name = ""
@@ -144,7 +147,9 @@ def __read_datafile(record, handle):
         if line.startswith('TRAINING SET'):
             break
     else:
-        raise ValueError("Unexpected end of stream: 'TRAINING SET' not found.")
+        raise ValueError(
+            "Unexpected end of stream: 'TRAINING SET' not found. This can happen with " +
+            "minimal MEME files (MEME databases) which are not supported yet.")
     try:
         line = next(handle)
     except StopIteration:
@@ -219,10 +224,15 @@ def __read_motif_statistics(line):
     #    MOTIF  1        width =  19  sites =   3  llr = 43  E-value = 6.9e-002
     # or like
     #    MOTIF  1 MEME    width =  19  sites =   3  llr = 43  E-value = 6.9e-002
+    # or in v 4.11.4
+    #    MOTIF ATTATAAAAAAA MEME-1	width =  12  sites =   5  llr = 43  E-value = 1.9e-003
     words = line.split()
     assert words[0] == 'MOTIF'
-    motif_number = int(words[1])
-    if words[2] == 'MEME':
+    if words[2][:5] == 'MEME-':
+        motif_number = int(words[2].split('-')[1])
+    else:
+        motif_number = int(words[1])
+    if words[2].startswith('MEME'):
         key_values = words[3:]
     else:
         key_values = words[2:]

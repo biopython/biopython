@@ -5,8 +5,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-""" Tests for general functionality of the KGML parser and pathway model
-"""
+"""Tests for general functionality of the KGML parser and pathway model."""
 
 # Builtins
 from __future__ import with_statement
@@ -19,8 +18,7 @@ from Bio.KEGG.KGML.KGML_parser import read
 
 
 class PathwayData(object):
-    """ Convenience structure for testing pathway data
-    """
+    """Convenience structure for testing pathway data."""
     def __init__(self, infilename, outfilename, element_counts,
                  pathway_image, show_pathway_image=False):
         self.infilename = infilename
@@ -31,9 +29,12 @@ class PathwayData(object):
 
 
 class KGMLPathwayTest(unittest.TestCase):
-    """ Import the ko01100 metabolic map from a local .xml KGML file, and from
-        the KEGG site, and write valid KGML output for each
+    """KGML checks using ko01100 metabolic map.
+
+    Import the ko01100 metabolic map from a local .xml KGML file, and from
+    the KEGG site, and write valid KGML output for each
     """
+
     def setUp(self):
         # Does our output director exist?  If not, create it
         if not os.path.isdir('KEGG'):
@@ -75,8 +76,9 @@ class KGMLPathwayTest(unittest.TestCase):
                 os.remove(p.outfilename)
 
     def test_read_and_write_KGML_files(self):
-        """ Read KGML from, and write KGML to, local files.
-            Check we read/write the correct number of elements.
+        """Read KGML from, and write KGML to, local files.
+
+        Check we read/write the correct number of elements.
         """
         for p in self.data:
             # Test opening file

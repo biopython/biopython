@@ -42,6 +42,7 @@ class Record(object):
     dblinks     A list of 2-tuples: (database, list of link ids)
 
     """
+
     def __init__(self):
         """__init___(self)
 

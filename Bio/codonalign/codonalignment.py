@@ -34,6 +34,7 @@ class CodonAlignment(MultipleSeqAlignment):
     AAAAGGTGG Gamma
 
     """
+
     def __init__(self, records='', name=None, alphabet=default_codon_alphabet):
 
         MultipleSeqAlignment.__init__(self, records, alphabet=alphabet)
@@ -72,8 +73,7 @@ class CodonAlignment(MultipleSeqAlignment):
         return "\n".join(lines)
 
     def __getitem__(self, index, alphabet=None):
-        """Return a CodonAlignment object for single indexing
-        """
+        """Return a CodonAlignment object for single indexing."""
         if isinstance(index, int):
             return self._records[index]
         elif isinstance(index, slice):
@@ -102,7 +102,9 @@ class CodonAlignment(MultipleSeqAlignment):
         return self.get_alignment_length() // 3
 
     def toMultipleSeqAlignment(self):
-        """Return a MultipleSeqAlignment containing all the
+        """Convert the CodonAlignment to a MultipleSeqAlignment.
+
+        Return a MultipleSeqAlignment containing all the
         SeqRecord in the CodonAlignment using Seq to store
         sequences
         """
@@ -110,8 +112,13 @@ class CodonAlignment(MultipleSeqAlignment):
                 rec in self._records]
         return MultipleSeqAlignment(alignments)
 
-    def get_dn_ds_matrix(self, method="NG86"):
+    def get_dn_ds_matrix(self, method="NG86", codon_table=default_codon_table):
         """Available methods include NG86, LWL85, YN00 and ML.
+
+        Argument:
+         - method       - Available methods include NG86, LWL85, YN00 and ML.
+         - codon_table  - Codon table to use for forward translation.
+
         """
         from Bio.Phylo.TreeConstruction import _DistanceMatrix as DM
         names = [i.id for i in self._records]
@@ -124,7 +131,7 @@ class CodonAlignment(MultipleSeqAlignment):
             for j in range(i + 1):
                 if i != j:
                     dn, ds = cal_dn_ds(self._records[i], self._records[j],
-                                       method=method)
+                                       method=method, codon_table=codon_table)
                     dn_matrix[i].append(dn)
                     ds_matrix[i].append(ds)
                 else:
@@ -134,16 +141,16 @@ class CodonAlignment(MultipleSeqAlignment):
         ds_dm = DM(names, matrix=ds_matrix)
         return dn_dm, ds_dm
 
-    def get_dn_ds_tree(self, dn_ds_method="NG86", tree_method="UPGMA"):
-        """Method for constructing dn tree and ds tree.
+    def get_dn_ds_tree(self, dn_ds_method="NG86", tree_method="UPGMA", codon_table=default_codon_table):
+        """Cnstruct dn tree and ds tree.
 
         Argument:
+         - dn_ds_method - Available methods include NG86, LWL85, YN00 and ML.
+         - tree_method  - Available methods include UPGMA and NJ.
 
-            - dn_ds_method - Available methods include NG86, LWL85, YN00 and ML.
-            - tree_method  - Available methods include UPGMA and NJ.
         """
         from Bio.Phylo.TreeConstruction import DistanceTreeConstructor
-        dn_dm, ds_dm = self.get_dn_ds_matrix(method=dn_ds_method)
+        dn_dm, ds_dm = self.get_dn_ds_matrix(method=dn_ds_method, codon_table=codon_table)
         dn_constructor = DistanceTreeConstructor()
         ds_constructor = DistanceTreeConstructor()
         if tree_method == "UPGMA":
@@ -159,7 +166,9 @@ class CodonAlignment(MultipleSeqAlignment):
 
     @classmethod
     def from_msa(cls, align, alphabet=default_codon_alphabet):
-        """Function to convert a MultipleSeqAlignment to CodonAlignment.
+        """Convert a MultipleSeqAlignment to CodonAlignment.
+
+        Function to convert a MultipleSeqAlignment to CodonAlignment.
         It is the user's responsibility to ensure all the requirement
         needed by CodonAlignment is met.
         """
@@ -169,15 +178,17 @@ class CodonAlignment(MultipleSeqAlignment):
 
 
 def mktest(codon_alns, codon_table=default_codon_table, alpha=0.05):
-    """McDonald-Kreitman test for neutrality (PMID: 1904993) This method
-    counts changes rather than sites (http://mkt.uab.es/mkt/help_mkt.asp).
+    """McDonald-Kreitman test for neutrality.
+
+    Implement the McDonald-Kreitman test for neutrality (PMID: 1904993)
+    This method counts changes rather than sites
+    (http://mkt.uab.es/mkt/help_mkt.asp).
+
     Arguments:
+     - codon_alns  - list of CodonAlignment to compare (each
+       CodonAlignment object corresponds to gene sampled from a species)
 
-        - codon_alns  - list of CodonAlignment to compare (each
-          CodonAlignment object corresponds to gene
-          sampled from a species)
-
-    Return the p-value of test result
+    Return the p-value of test result.
     """
     import copy
     if not all(isinstance(i, CodonAlignment) for i in codon_alns):
@@ -231,15 +242,11 @@ def mktest(codon_alns, codon_table=default_codon_table, alpha=0.05):
 
 
 def _get_codon2codon_matrix(codon_table=default_codon_table):
-    """Function to get codon codon substitution matrix. Elements
-    in the matrix are number of synonymous and nonsynonymous
-    substitutions required for the substitution (PRIVATE).
+    """Get codon codon substitution matrix (PRIVATE).
+
+    Elements in the matrix are number of synonymous and nonsynonymous
+    substitutions required for the substitution.
     """
-    import platform
-    if platform.python_implementation() == 'PyPy':
-        import numpypy as np
-    else:
-        import numpy as np
     base_tuple = ('A', 'T', 'C', 'G')
     codons = [i for i in list(codon_table.forward_table.keys()) +
               codon_table.stop_codons if 'U' not in i]
@@ -281,8 +288,8 @@ def _get_codon2codon_matrix(codon_table=default_codon_table):
 
 
 def _dijkstra(graph, start, end):
-    """
-    Dijkstra's algorithm Python implementation.
+    """Dijkstra's algorithm Python implementation (PRIVATE).
+
     Algorithm adapted from
     http://thomas.pelletier.im/2010/02/dijkstras-algorithm-python-implementation/.
     However, an obvious bug in::
@@ -293,13 +300,13 @@ def _dijkstra(graph, start, end):
     This function will return the distance between start and end.
 
     Arguments:
-
-        - graph: Dictionary of dictionary (keys are vertices).
-        - start: Start vertex.
-        - end: End vertex.
+     - graph: Dictionary of dictionary (keys are vertices).
+     - start: Start vertex.
+     - end: End vertex.
 
     Output:
-        List of vertices from the beginning to the end.
+       List of vertices from the beginning to the end.
+
     """
     D = {}  # Final distances dict
     P = {}  # Predecessor dict
@@ -349,8 +356,7 @@ def _dijkstra(graph, start, end):
 
 
 def _count_replacement(codon_set, G):
-    """Count replacement needed for a given codon_set (PRIVATE).
-    """
+    """Count replacement needed for a given codon_set (PRIVATE)."""
     from math import floor
     if len(codon_set) == 1:
         return 0, 0
@@ -363,9 +369,10 @@ def _count_replacement(codon_set, G):
 
 
 def _prim(G):
-    """Prim's algorithm to find minimum spanning tree. Code is adapted from
+    """Prim's algorithm to find minimum spanning tree (PRIVATE).
+
+    Code is adapted from
     http://programmingpraxis.com/2010/04/09/minimum-spanning-tree-prims-algorithm/
-    (PRIVATE).
     """
     from math import floor
     from collections import defaultdict
@@ -400,8 +407,7 @@ def _prim(G):
 
 
 def _get_subgraph(codons, G):
-    """Get the subgraph that contains all codons in list (PRIVATE).
-    """
+    """Get the subgraph that contains all codons in list (PRIVATE)."""
     subgraph = {}
     for i in codons:
         subgraph[i] = {}
@@ -413,9 +419,9 @@ def _get_subgraph(codons, G):
 
 def _G_test(site_counts):
     """G test for 2x2 contingency table (PRIVATE).
-    Argument:
 
-        - site_counts - [syn_fix, nonsyn_fix, syn_poly, nonsyn_poly]
+    Arguments:
+     - site_counts - [syn_fix, nonsyn_fix, syn_poly, nonsyn_poly]
 
     >>> print("%0.6f" % _G_test([17, 7, 42, 2]))
     0.004924

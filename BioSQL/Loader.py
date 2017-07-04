@@ -30,6 +30,8 @@ from Bio._py3k import _is_int_or_long
 from Bio._py3k import range
 from Bio._py3k import basestring
 
+from Bio.SeqFeature import UnknownPosition
+
 
 class DatabaseLoader(object):
     """Object used to load SeqRecord objects into a BioSQL database."""
@@ -51,6 +53,7 @@ class DatabaseLoader(object):
             except KeyError:
                 db = server.new_database("test",
                 description="For testing GBrowse")
+
         """
         self.adaptor = adaptor
         self.dbid = dbid
@@ -72,7 +75,7 @@ class DatabaseLoader(object):
             self._load_seqfeature(seq_feature, seq_feature_num, bioentry_id)
 
     def _get_ontology_id(self, name, definition=None):
-        """Returns the identifier for the named ontology (PRIVATE).
+        """Return identifier for the named ontology (PRIVATE).
 
         This looks through the onotology table for a the given entry name.
         If it is not found, a row is added for this ontology (using the
@@ -136,7 +139,8 @@ class DatabaseLoader(object):
     def _get_taxon_id(self, record):
         """Get the taxon id for this record (PRIVATE).
 
-        record - a SeqRecord object
+        Arguments:
+         - record - a SeqRecord object
 
         This searches the taxon/taxon_name tables using the
         NCBI taxon ID, scientific name and common name to find
@@ -305,10 +309,12 @@ class DatabaseLoader(object):
         We need to make this conversion to match the taxon_name.name_class
         values used by the BioSQL load_ncbi_taxonomy.pl script.
 
-        e.g.
-        "ScientificName" -> "scientific name",
-        "EquivalentName" -> "equivalent name",
-        "Synonym" -> "synonym",
+        e.g.::
+
+            "ScientificName" -> "scientific name",
+            "EquivalentName" -> "equivalent name",
+            "Synonym" -> "synonym",
+
         """
         # Add any special cases here:
         #
@@ -320,7 +326,7 @@ class DatabaseLoader(object):
 
         # Try automatically by adding spaces before each capital
         def add_space(letter):
-            """Adds a space before a capital letter."""
+            """Add a space before a capital letter."""
             if letter.isupper():
                 return " " + letter.lower()
             else:
@@ -330,8 +336,7 @@ class DatabaseLoader(object):
         return answer
 
     def _update_left_right_taxon_values(self, left_value):
-        """update the left and right values in the table
-        """
+        """Update the left and right taxon values in the table."""
         if not left_value:
             return
         # Due to the UNIQUE constraint on the left and right values in the taxon
@@ -376,9 +381,11 @@ class DatabaseLoader(object):
                                          common_name=None):
         """Get the taxon id for record from NCBI taxon ID (PRIVATE).
 
-        ncbi_taxon_id - string containing an NCBI taxon id
-        scientific_name - string, used if a stub entry is recorded
-        common_name - string, used if a stub entry is recorded
+        Arguments:
+
+        - ncbi_taxon_id - string containing an NCBI taxon id
+        - scientific_name - string, used if a stub entry is recorded
+        - common_name - string, used if a stub entry is recorded
 
         This searches the taxon table using ONLY the NCBI taxon ID
         to find the matching taxon table entry's ID (database key).
@@ -501,15 +508,18 @@ class DatabaseLoader(object):
         return taxon_id
 
     def _get_taxon_id_from_ncbi_lineage(self, taxonomic_lineage):
-        """This is recursive! (PRIVATE).
+        """Recursive method to get taxon ID from NCBI lineage (PRIVATE).
 
-        taxonomic_lineage - list of taxonomy dictionaries from Bio.Entrez
+        Arguments:
+         - taxonomic_lineage - list of taxonomy dictionaries from Bio.Entrez
 
         First dictionary in list is the taxonomy root, highest would be
         the species. Each dictionary includes:
+
         - TaxID (string, NCBI taxon id)
         - Rank (string, e.g. "species", "genus", ..., "phylum", ...)
         - ScientificName (string)
+
         (and that is all at the time of writing)
 
         This method will record all the lineage given, returning the taxon id
@@ -573,7 +583,9 @@ class DatabaseLoader(object):
     def _load_bioentry_table(self, record):
         """Fill the bioentry table with sequence information (PRIVATE).
 
-        record - SeqRecord object to add to the database.
+        Arguments:
+         - record - SeqRecord object to add to the database.
+
         """
         # get the pertinent info and insert it
 
@@ -665,8 +677,10 @@ class DatabaseLoader(object):
     def _load_biosequence(self, record, bioentry_id):
         """Record SeqRecord's sequence and alphabet in DB (PRIVATE).
 
-        record - a SeqRecord object with a seq property
-        bioentry_id - corresponding database identifier
+        Arguments:
+         - record - a SeqRecord object with a seq property
+         - bioentry_id - corresponding database identifier
+
         """
         if record.seq is None:
             # The biosequence table entry is optional, so if we haven't
@@ -699,8 +713,10 @@ class DatabaseLoader(object):
     def _load_comment(self, record, bioentry_id):
         """Record a SeqRecord's annotated comment in the database (PRIVATE).
 
-        record - a SeqRecord object with an annotated comment
-        bioentry_id - corresponding database identifier
+        Arguments:
+         - record - a SeqRecord object with an annotated comment
+         - bioentry_id - corresponding database identifier
+
         """
         comments = record.annotations.get('comment')
         if not comments:
@@ -724,8 +740,10 @@ class DatabaseLoader(object):
         table, except for special cases like the reference, comment and
         taxonomy which are handled with their own tables.
 
-        record - a SeqRecord object with an annotations dictionary
-        bioentry_id - corresponding database identifier
+        Arguments:
+         - record - a SeqRecord object with an annotations dictionary
+         - bioentry_id - corresponding database identifier
+
         """
         mono_sql = "INSERT INTO bioentry_qualifier_value" \
                    "(bioentry_id, term_id, value)" \
@@ -762,8 +780,10 @@ class DatabaseLoader(object):
     def _load_reference(self, reference, rank, bioentry_id):
         """Record SeqRecord's annotated references in the database (PRIVATE).
 
-        record - a SeqRecord object with annotated references
-        bioentry_id - corresponding database identifier
+        Arguments:
+         - record - a SeqRecord object with annotated references
+         - bioentry_id - corresponding database identifier
+
         """
         refs = None
         if reference.medline_id:
@@ -881,6 +901,7 @@ class DatabaseLoader(object):
             start = 1, end = 2, rank = 1
             start = 3, end = 4, rank = 2
             start = 5, end = 6, rank = 3
+
         """
         # TODO - Record an ontology for the locations (using location.term_id)
         # which for now as in BioPerl we leave defaulting to NULL.
@@ -908,8 +929,24 @@ class DatabaseLoader(object):
         # convert biopython locations to the 1-based location system
         # used in bioSQL
         # XXX This could also handle fuzzies
-        start = int(location.start) + 1
-        end = int(location.end)
+
+        try:
+            start = int(location.start) + 1
+        except TypeError:
+            # Handle SwissProt unknown position (?)
+            if isinstance(location.start, UnknownPosition):
+                start = None
+            else:
+                raise
+
+        try:
+            end = int(location.end)
+        except TypeError:
+            # Handle SwissProt unknown position (?)
+            if isinstance(location.end, UnknownPosition):
+                end = None
+            else:
+                raise
 
         # Biopython uses None when we don't know strand information but
         # BioSQL requires something (non null) and sets this as zero
@@ -961,8 +998,10 @@ class DatabaseLoader(object):
     def _load_seqfeature_qualifiers(self, qualifiers, seqfeature_id):
         """Insert feature's (key, value) pair qualifiers (PRIVATE).
 
-        Qualifiers should be a dictionary of the form:
+        Qualifiers should be a dictionary of the form::
+
             {key : [value1, value2]}
+
         """
         tag_ontology_id = self._get_ontology_id('Annotation Tags')
         for qualifier_key in qualifiers:
@@ -999,18 +1038,18 @@ class DatabaseLoader(object):
     def _load_seqfeature_dbxref(self, dbxrefs, seqfeature_id):
         """Add SeqFeature's DB cross-references to the database (PRIVATE).
 
-            o dbxrefs           List, dbxref data from the source file in the
-                                format <database>:<accession>
+        Arguments:
+         - dbxrefs - List, dbxref data from the source file in the
+           format <database>:<accession>
+         - seqfeature_id - Int, the identifier for the seqfeature in the
+           seqfeature table
 
-            o seqfeature_id     Int, the identifier for the seqfeature in the
-                                seqfeature table
-
-            Insert dbxref qualifier data for a seqfeature into the
-            seqfeature_dbxref and, if required, dbxref tables.
-            The dbxref_id qualifier/value sets go into the dbxref table
-            as dbname, accession, version tuples, with dbxref.dbxref_id
-            being automatically assigned, and into the seqfeature_dbxref
-            table as seqfeature_id, dbxref_id, and rank tuples
+        Insert dbxref qualifier data for a seqfeature into the
+        seqfeature_dbxref and, if required, dbxref tables.
+        The dbxref_id qualifier/value sets go into the dbxref table
+        as dbname, accession, version tuples, with dbxref.dbxref_id
+        being automatically assigned, and into the seqfeature_dbxref
+        table as seqfeature_id, dbxref_id, and rank tuples.
         """
         # NOTE - In older versions of Biopython, we would map the GenBank
         # db_xref "name", for example "GI" to "GeneIndex", and give a warning
@@ -1023,7 +1062,7 @@ class DatabaseLoader(object):
                 dbxref_data = value.replace(' ', '').replace('\n', '').split(':')
                 db = dbxref_data[0]
                 accessions = dbxref_data[1:]
-            except:
+            except Exception:
                 raise ValueError("Parsing of db_xref failed: '%s'" % value)
             # Loop over all the grabbed accessions, and attempt to fill the
             # table
@@ -1034,16 +1073,16 @@ class DatabaseLoader(object):
                 self._get_seqfeature_dbxref(seqfeature_id, dbxref_id, rank + 1)
 
     def _get_dbxref_id(self, db, accession):
-        """ _get_dbxref_id(self, db, accession) -> Int
+        """Get DB cross-reference for accession.
 
-            o db          String, the name of the external database containing
-                          the accession number
+        Arguments:
+         - db - String, the name of the external database containing
+           the accession number
+         - accession - String, the accession of the dbxref data
 
-            o accession   String, the accession of the dbxref data
-
-            Finds and returns the dbxref_id for the passed data.  The method
-            attempts to find an existing record first, and inserts the data
-            if there is no record.
+        Finds and returns the dbxref_id for the passed data.  The method
+        attempts to find an existing record first, and inserts the data
+        if there is no record.
         """
         # Check for an existing record
         sql = r'SELECT dbxref_id FROM dbxref WHERE dbname = %s ' \
@@ -1056,10 +1095,11 @@ class DatabaseLoader(object):
         return self._add_dbxref(db, accession, 0)
 
     def _get_seqfeature_dbxref(self, seqfeature_id, dbxref_id, rank):
-        """ Check for a pre-existing seqfeature_dbxref entry with the passed
-            seqfeature_id and dbxref_id.  If one does not exist, insert new
-            data
+        """Get DB cross-reference, creating it if needed (PRIVATE).
 
+        Check for a pre-existing seqfeature_dbxref entry with the passed
+        seqfeature_id and dbxref_id.  If one does not exist, insert new
+        data.
         """
         # Check for an existing record
         sql = r"SELECT seqfeature_id, dbxref_id FROM seqfeature_dbxref " \
@@ -1073,8 +1113,10 @@ class DatabaseLoader(object):
         return self._add_seqfeature_dbxref(seqfeature_id, dbxref_id, rank)
 
     def _add_seqfeature_dbxref(self, seqfeature_id, dbxref_id, rank):
-        """ Insert a seqfeature_dbxref row and return the seqfeature_id and
-            dbxref_id
+        """Add DB cross-reference (PRIVATE).
+
+        Insert a seqfeature_dbxref row and return the seqfeature_id and
+        dbxref_id
         """
         sql = r'INSERT INTO seqfeature_dbxref ' \
               '(seqfeature_id, dbxref_id, rank) VALUES' \
@@ -1085,7 +1127,8 @@ class DatabaseLoader(object):
     def _load_dbxrefs(self, record, bioentry_id):
         """Load any sequence level cross references into the database (PRIVATE).
 
-        See table bioentry_dbxref."""
+        See table bioentry_dbxref.
+        """
         for rank, value in enumerate(record.dbxrefs):
             # Split the DB:accession string at first colon.
             # We have to cope with things like:
@@ -1099,7 +1142,7 @@ class DatabaseLoader(object):
                 db, accession = value.split(':', 1)
                 db = db.strip()
                 accession = accession.strip()
-            except:
+            except Exception:
                 raise ValueError(
                     "Parsing of dbxrefs list failed: '%s'" % value)
             # Get the dbxref_id value for the dbxref data

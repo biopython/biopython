@@ -51,7 +51,9 @@ class PDBIO(object):
         >>> io=PDBIO()
         >>> io.set_structure(s)
         >>> io.save("out.pdb")
+
     """
+
     def __init__(self, use_model_flag=0):
         """Creat the PDBIO object.
 
@@ -69,6 +71,7 @@ class PDBIO(object):
             record_type = "HETATM"
         else:
             record_type = "ATOM  "
+
         if atom.element:
             element = atom.element.strip().upper()
             if element.capitalize() not in atom_weights:
@@ -76,7 +79,15 @@ class PDBIO(object):
             element = element.rjust(2)
         else:
             element = "  "
-        name = atom.get_fullname()
+
+        name = atom.get_fullname().strip()
+        # Pad atom name if:
+        #     - smaller than 4 characters
+        # AND - is not C, N, O, S, H, F, P, ..., one letter elements
+        # AND - first character is NOT numeric (funky hydrogen naming rules)
+        if len(name) < 4 and name[:1].isalpha() and len(element.strip()) < 2:
+            name = " " + name
+
         altloc = atom.get_altloc()
         x, y, z = atom.get_coord()
         bfactor = atom.get_bfactor()
@@ -141,8 +152,7 @@ class PDBIO(object):
         self.structure = structure
 
     def save(self, file, select=Select(), write_end=True, preserve_atom_numbering=False):
-        """
-        @param file: output file
+        """@param file: output file
         @type file: string or filehandle
 
         @param select: selects which entities will be written.
@@ -206,7 +216,7 @@ class PDBIO(object):
                             if preserve_atom_numbering:
                                 atom_number = atom.get_serial_number()
                             s = get_atom_line(atom, hetfield, segid, atom_number, resname,
-                                resseq, icode, chain_id)
+                                              resseq, icode, chain_id)
                             fp.write(s)
                             if not preserve_atom_numbering:
                                 atom_number += 1
@@ -220,6 +230,7 @@ class PDBIO(object):
             fp.write('END\n')
         if close_file:
             fp.close()
+
 
 if __name__ == "__main__":
 

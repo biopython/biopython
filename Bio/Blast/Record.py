@@ -42,6 +42,7 @@ class Header(object):
     database_letters    Number of letters in the database.  (int)
 
     """
+
     def __init__(self):
         self.application = ''
         self.version = ''
@@ -66,6 +67,7 @@ class Description(object):
     e               E value.  (float)
     num_alignments  Number of alignments for the same subject.  (int)
     """
+
     def __init__(self):
         self.title = ''
         self.score = None
@@ -88,6 +90,7 @@ class Alignment(object):
     hsps       A list of HSP objects.
 
     """
+
     def __init__(self):
         self.title = ''
         self.hit_id = ''
@@ -149,6 +152,7 @@ class HSP(object):
     query_start and counts down.
 
     """
+
     def __init__(self):
         self.score = None
         self.bits = None
@@ -208,6 +212,7 @@ class MultipleAlignment(object):
     not aligned in the multiple alignment.
 
     """
+
     def __init__(self):
         self.alignment = []
 
@@ -257,6 +262,7 @@ class Round(object):
     alignments          A list of Alignment objects.
     multiple_alignment  A MultipleAlignment object.
     """
+
     def __init__(self):
         self.number = None
         self.reused_seqs = []
@@ -278,6 +284,7 @@ class DatabaseReport(object):
     ka_params_gap              A tuple of (lambda, k, h) values.  (floats)
 
     """
+
     def __init__(self):
         self.database_name = []
         self.posted_date = []
@@ -321,6 +328,7 @@ class Parameters(object):
     gap_trigger         Tuple of (score, bits).  (int, float)
     blast_cutoff        Tuple of (score, bits).  (int, float)
     """
+
     def __init__(self):
         self.matrix = ''
         self.gap_penalties = (None, None)
@@ -363,6 +371,7 @@ class Blast(Header, DatabaseReport, Parameters):
     + members inherited from base classes
 
     """
+
     def __init__(self):
         Header.__init__(self)
         DatabaseReport.__init__(self)
@@ -381,6 +390,7 @@ class PSIBlast(Header, DatabaseReport, Parameters):
     + members inherited from base classes
 
     """
+
     def __init__(self):
         Header.__init__(self)
         DatabaseReport.__init__(self)

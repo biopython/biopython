@@ -187,6 +187,7 @@ class Atom(object):
 
         Arguments:
          - parent - Residue object
+
         """
         self.parent = parent
 
@@ -256,9 +257,10 @@ class Atom(object):
         """Apply rotation and translation to the atomic coordinates.
 
         Example:
-                >>> rotation=rotmat(pi, Vector(1, 0, 0))
-                >>> translation=array((0, 0, 1), 'f')
-                >>> atom.transform(rotation, translation)
+
+            >>> rotation=rotmat(pi, Vector(1, 0, 0))
+            >>> translation=array((0, 0, 1), 'f')
+            >>> atom.transform(rotation, translation)
 
         @param rot: A right multiplying rotation matrix
         @type rot: 3x3 Numeric array
@@ -300,11 +302,13 @@ class DisorderedAtom(DisorderedEntityWrapper):
     different Atom object can be selected by using the disordered_select(altloc)
     method.
     """
+
     def __init__(self, id):
         """Create DisorderedAtom.
 
         Arguments:
          - id - string, atom name
+
         """
         # TODO - make this a private attribute?
         self.last_occupancy = -999999

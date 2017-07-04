@@ -21,9 +21,9 @@ ascii alphabetic character, a-z, A-Z). e.g. "1", "10A", "1010b", "-1"
 
 See "ASTRAL RAF Sequence Maps":http://astral.stanford.edu/raf.html
 
-protein_letters_3to1 -- A mapping from the 3-letter amino acid codes found
-                        in PDB files to 1-letter codes.  The 3-letter codes
-                        include chemically modified residues.
+Dictionary `protein_letters_3to1` provides a mapping from the 3-letter amino
+acid codes found in PDB files to 1-letter codes.  The 3-letter codes include
+chemically modified residues.
 """
 
 from __future__ import print_function
@@ -60,10 +60,11 @@ class SeqMapIndex(dict):
     """
 
     def __init__(self, filename):
-        """
-        Arguments:
+        """Initialize the RAF file index.
 
-          filename  -- The file to index
+        Arguments:
+         - filename  -- The file to index
+
         """
         dict.__init__(self)
         self.filename = filename
@@ -80,7 +81,7 @@ class SeqMapIndex(dict):
                 position = f.tell()
 
     def __getitem__(self, key):
-        """ Return an item from the indexed file. """
+        """Return an item from the indexed file."""
         position = dict.__getitem__(self, key)
 
         with open(self.filename, _universal_read_mode) as f:
@@ -92,8 +93,10 @@ class SeqMapIndex(dict):
     def getSeqMap(self, residues):
         """Get the sequence map for a collection of residues.
 
-        residues -- A Residues instance, or a string that can be converted into
-                    a Residues instance.
+        Arguments:
+         - residues -- A Residues instance, or a string that can be
+           converted into a Residues instance.
+
         """
         if isinstance(residues, basestring):
             residues = Residues(residues)
@@ -137,15 +140,13 @@ class SeqMap(object):
     with index(), slice this SeqMap into fragments, and glue fragments back
     together with extend().
 
-    pdbid -- The PDB 4 character ID
+    Attributes:
+     - pdbid -- The PDB 4 character ID
+     - pdb_datestamp -- From the PDB file
+     - version -- The RAF format version. e.g. 0.01
+     - flags -- RAF flags. (See release notes for more information.)
+     - res -- A list of Res objects, one for each residue in this sequence map
 
-    pdb_datestamp -- From the PDB file
-
-    version -- The RAF format version. e.g. 0.01
-
-    flags -- RAF flags. (See release notes for more information.)
-
-    res -- A list of Res objects, one for each residue in this sequence map
     """
 
     def __init__(self, line=None):
@@ -158,8 +159,7 @@ class SeqMap(object):
             self._process(line)
 
     def _process(self, line):
-        """Parses a RAF record into a SeqMap object.
-        """
+        """Parses a RAF record into a SeqMap object."""
         header_len = 38
 
         line = line.rstrip()  # no trailing whitespace
@@ -247,9 +247,10 @@ class SeqMap(object):
         This is typically used to find the coordinates of a domain, or other
         residue subset.
 
-        pdb_handle -- A handle to the relevant PDB file.
+        Arguments:
+         - pdb_handle -- A handle to the relevant PDB file.
+         - out_handle -- All output is written to this file like object.
 
-        out_handle -- All output is written to this file like object.
         """
         # This code should be refactored when (if?) biopython gets a PDB parser
 
@@ -289,16 +290,16 @@ class SeqMap(object):
 
 
 class Res(object):
-    """ A single residue mapping from a RAF record.
+    """A single residue mapping from a RAF record.
 
-    chainid -- A single character chain ID.
+    Attributes:
+     - chainid -- A single character chain ID.
+     - resid   -- The residue ID.
+     - atom    -- amino acid one-letter code from ATOM records.
+     - seqres  -- amino acid one-letter code from SEQRES records.
 
-    resid   -- The residue ID.
-
-    atom    -- amino acid one-letter code from ATOM records.
-
-    seqres  -- amino acid one-letter code from SEQRES records.
     """
+
     def __init__(self):
         self.chainid = ''
         self.resid = ''
@@ -311,8 +312,8 @@ def parse(handle):
     in the file.
 
     Arguments:
+     - handle -- file-like object.
 
-        handle -- file-like object.
     """
     for line in handle:
         yield SeqMap(line)

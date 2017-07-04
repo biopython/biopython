@@ -21,17 +21,17 @@ from .Pattern import PatternRepository
 
 
 class MotifFinder(object):
-    """Find motifs in a set of Sequence Records.
-    """
+    """Find motifs in a set of Sequence Records."""
+
     def __init__(self, alphabet_strict=1):
         """Initialize a finder to get motifs.
 
         Arguments:
+         - alphabet_strict - Whether or not motifs should be restricted
+           to having all of there elements within the alphabet of the
+           sequences. This requires that the Sequences have a real
+           alphabet, and that all sequences have the same alphabet.
 
-        o alphabet_strict - Whether or not motifs should be
-        restricted to having all of there elements within the alphabet
-        of the sequences. This requires that the Sequences have a real
-        alphabet, and that all sequences have the same alphabet.
         """
         self.alphabet_strict = alphabet_strict
 
@@ -39,15 +39,14 @@ class MotifFinder(object):
         """Find all motifs of the given size in the passed SeqRecords.
 
         Arguments:
-
-        o seq_records - A list of SeqRecord objects which the motifs
-        will be found from.
-
-        o motif_size - The size of the motifs we want to look for.
+         - seq_records - A list of SeqRecord objects which the motifs
+           will be found from.
+         - motif_size - The size of the motifs we want to look for.
 
         Returns:
         A PatternRepository object that contains all of the motifs (and their
         counts) found in the training sequences).
+
         """
         motif_info = self._get_motif_dict(seq_records, motif_size)
 
@@ -99,15 +98,16 @@ class MotifFinder(object):
         of the motifs in a set of records, this returns the differences
         between two listings of seq_records.
 
-        o first_records, second_records - Two listings of SeqRecord objects
-        to have their motifs compared.
-
-        o motif_size - The size of the motifs we are looking for.
+        Arguments:
+         - first_records, second_records - Two listings of SeqRecord objects
+           to have their motifs compared.
+         - motif_size - The size of the motifs we are looking for.
 
         Returns:
         A PatternRepository object that has motifs, but instead of their
         raw counts, this has the counts in the first set of records
         subtracted from the counts in the second set.
+
         """
         first_motifs = self._get_motif_dict(first_records, motif_size)
         second_motifs = self._get_motif_dict(second_records, motif_size)
@@ -138,8 +138,7 @@ class MotifFinder(object):
         return PatternRepository(motif_diffs)
 
     def _add_motif(self, motif_dict, motif_to_add):
-        """Add a motif to the given dictionary.
-        """
+        """Add a motif to the given dictionary."""
         # incrememt the count of the motif if it is already present
         if motif_to_add in motif_dict:
             motif_dict[motif_to_add] += 1
@@ -157,13 +156,14 @@ class MotifCoder(object):
     can be fed as an input into a neural network. It does this by
     representing a sequence based the motifs present.
     """
+
     def __init__(self, motifs):
         """Initialize an input producer with motifs to look for.
 
         Arguments:
+         - motifs - A complete list of motifs, in order, that are to be
+           searched for in a sequence.
 
-        o motifs - A complete list of motifs, in order, that are to be
-        searched for in a sequence.
         """
         self._motifs = motifs
 
@@ -178,8 +178,7 @@ class MotifCoder(object):
         """Represent a sequence as a set of motifs.
 
         Arguments:
-
-        o sequence - A Bio.Seq object to represent as a motif.
+         - sequence - A Bio.Seq object to represent as a motif.
 
         This converts a sequence into a representation based on the motifs.
         The representation is returned as a list of the relative amount of

@@ -29,6 +29,7 @@ temp_dir = tempfile.mkdtemp()
 
 class DistanceMatrixTest(unittest.TestCase):
     """Test for _DistanceMatrix construction and manipulation"""
+
     def setUp(self):
         self.names = ['Alpha', 'Beta', 'Gamma', 'Delta']
         self.matrix = [[0], [1, 0], [2, 3, 0], [4, 5, 6, 0]]
@@ -108,6 +109,16 @@ class DistanceMatrixTest(unittest.TestCase):
         self.assertRaises(TypeError, dm.__setitem__, ('Alpha', 'Beta'), 'a')
         self.assertRaises(TypeError, dm.__setitem__, 'Alpha', ['a', 'b', 'c'])
 
+    def test_format_phylip(self):
+        dm = _DistanceMatrix(self.names, self.matrix)
+        handle = StringIO()
+        dm.format_phylip(handle)
+        lines = handle.getvalue().splitlines()
+        self.assertEqual(len(lines), len(dm) + 1)
+        self.assertTrue(lines[0].endswith(str(len(dm))))
+        for name, line in zip(self.names, lines[1:]):
+            self.assertTrue(line.startswith(name))
+
 
 class DistanceCalculatorTest(unittest.TestCase):
     """Test DistanceCalculator"""
@@ -145,6 +156,7 @@ class DistanceCalculatorTest(unittest.TestCase):
 
 class DistanceTreeConstructorTest(unittest.TestCase):
     """Test DistanceTreeConstructor"""
+
     def setUp(self):
         self.aln = AlignIO.read('TreeConstruction/msa.phy', 'phylip')
         calculator = DistanceCalculator('blosum62')

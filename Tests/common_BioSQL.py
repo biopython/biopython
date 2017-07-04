@@ -1,15 +1,16 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""Tests for dealing with storage of biopython objects in a relational db.
-"""
+"""Dealing with storage of biopython objects in a BioSQL relational db."""
 from __future__ import print_function
 
 import os
 import platform
-import unittest
+import sys
 import tempfile
 import time
+import unittest
+
 try:
     import configparser  # Python 3
 except ImportError:
@@ -27,7 +28,7 @@ from Bio import BiopythonWarning
 # local stuff
 from Bio import MissingExternalDependencyError
 from Bio.Seq import Seq, MutableSeq
-from Bio.SeqFeature import SeqFeature
+from Bio.SeqFeature import SeqFeature, UnknownPosition, ExactPosition
 from Bio import Alphabet
 from Bio import SeqIO
 from Bio.SeqRecord import SeqRecord
@@ -183,7 +184,7 @@ def create_database():
         if os.path.exists(TESTDB):
             try:
                 os.remove(TESTDB)
-            except:
+            except Exception:
                 time.sleep(1)
                 try:
                     os.remove(TESTDB)
@@ -206,7 +207,7 @@ def create_database():
         server.load_database_sql(SQL_FILE)
         server.commit()
         server.close()
-    except:
+    except Exception:
         # Failed, but must close the handle...
         server.close()
         raise
@@ -279,8 +280,7 @@ class MultiReadTest(unittest.TestCase):
     loaded_db = 0
 
     def setUp(self):
-        """Connect to and load up the database.
-        """
+        """Connect to and load up the database."""
         load_multi_database("GenBank/cor6_6.gb", "GenBank/NC_000932.gb")
 
         self.server = BioSeqDatabase.open_database(driver=DBDRIVER,
@@ -300,7 +300,7 @@ class MultiReadTest(unittest.TestCase):
         del self.server
 
     def test_server(self):
-        """Check BioSeqDatabase methods"""
+        """Check BioSeqDatabase methods."""
         server = self.server
         self.assertIn("biosql-test", server)
         self.assertIn("biosql-test2", server)
@@ -317,15 +317,21 @@ class MultiReadTest(unittest.TestCase):
             pass
 
     def test_get_db_items(self):
-        """Check list, keys, length etc"""
+        """Check list, keys, length etc."""
         db = self.db
         items = list(db.values())
         keys = list(db)
         l = len(items)
         self.assertEqual(l, len(db))
-        self.assertEqual(l, len(list(db.items())))
         self.assertEqual(l, len(list(db)))
+        self.assertEqual(l, len(list(db.items())))
+        self.assertEqual(l, len(list(db.keys())))
         self.assertEqual(l, len(list(db.values())))
+        if sys.version_info[0] == 2:
+            # Check legacy methods for Python 2 as well:
+            self.assertEqual(l, len(list(db.iteritems())))
+            self.assertEqual(l, len(list(db.iterkeys())))
+            self.assertEqual(l, len(list(db.itervalues())))
         for (k1, r1), (k2, r2) in zip(zip(keys, items), db.items()):
             self.assertEqual(k1, k2)
             self.assertEqual(r1.id, r2.id)
@@ -339,8 +345,7 @@ class MultiReadTest(unittest.TestCase):
             pass
 
     def test_cross_retrieval_of_items(self):
-        """Test that valid ids can't be retrieved between namespaces.
-        """
+        """Test that valid ids can't be retrieved between namespaces."""
         db = self.db
         db2 = self.db2
         for db2_id in db2.keys():
@@ -357,8 +362,7 @@ class ReadTest(unittest.TestCase):
     loaded_db = 0
 
     def setUp(self):
-        """Connect to and load up the database.
-        """
+        """Connect to and load up the database."""
         load_database("GenBank/cor6_6.gb")
 
         self.server = BioSeqDatabase.open_database(driver=DBDRIVER,
@@ -376,7 +380,7 @@ class ReadTest(unittest.TestCase):
         del self.server
 
     def test_server(self):
-        """Check BioSeqDatabase methods"""
+        """Check BioSeqDatabase methods."""
         server = self.server
         self.assertIn("biosql-test", server)
         self.assertEqual(1, len(server))
@@ -391,7 +395,7 @@ class ReadTest(unittest.TestCase):
             pass
 
     def test_get_db_items(self):
-        """Check list, keys, length etc"""
+        """Check list, keys, length etc."""
         db = self.db
         items = list(db.values())
         keys = list(db)
@@ -413,8 +417,7 @@ class ReadTest(unittest.TestCase):
             pass
 
     def test_lookup_items(self):
-        """Test retrieval of items using various ids.
-        """
+        """Test retrieval of items using various ids."""
         self.db.lookup(accession="X62281")
         try:
             self.db.lookup(accession="Not real")
@@ -441,8 +444,7 @@ class SeqInterfaceTest(unittest.TestCase):
     """Make sure the BioSQL objects implement the expected biopython interface."""
 
     def setUp(self):
-        """Load a database.
-        """
+        """Load a database."""
         load_database("GenBank/cor6_6.gb")
 
         self.server = BioSeqDatabase.open_database(driver=DBDRIVER,
@@ -459,8 +461,7 @@ class SeqInterfaceTest(unittest.TestCase):
         del self.server
 
     def test_seq_record(self):
-        """Make sure SeqRecords from BioSQL implement the right interface.
-        """
+        """Make sure SeqRecords from BioSQL implement the right interface."""
         test_record = self.item
         self.assertTrue(isinstance(test_record.seq, BioSeq.DBSeq))
         self.assertEqual(test_record.id, "X62281.1", test_record.id)
@@ -473,10 +474,14 @@ class SeqInterfaceTest(unittest.TestCase):
             self.assertTrue(isinstance(feature, SeqFeature))
         # shouldn't cause any errors!
         self.assertTrue(isinstance(str(test_record), basestring))
+        # Confirm can delete annotations etc to test these properties
+        del test_record.annotations
+        del test_record.dbxrefs
+        del test_record.features
+        del test_record.seq
 
     def test_seq(self):
-        """Make sure Seqs from BioSQL implement the right interface.
-        """
+        """Make sure Seqs from BioSQL implement the right interface."""
         test_seq = self.item.seq
         alphabet = test_seq.alphabet
         self.assertTrue(isinstance(alphabet, Alphabet.Alphabet))
@@ -486,6 +491,13 @@ class SeqInterfaceTest(unittest.TestCase):
         self.assertEqual(string_rep, str(test_seq))  # check __str__ too
         self.assertEqual(type(string_rep), type(""))
         self.assertEqual(len(test_seq), 880)
+        self.assertEqual(test_seq[879], "A")
+        self.assertEqual(test_seq[-1], "A")
+        self.assertEqual(test_seq[0], "A")
+        self.assertEqual(test_seq[-880], "A")
+        self.assertRaises(IndexError, test_seq.__getitem__, 880)
+        self.assertRaises(IndexError, test_seq.__getitem__, -881)
+        self.assertRaises(TypeError, test_seq.__getitem__, None)
 
     def test_convert(self):
         """Check can turn a DBSeq object into a Seq or MutableSeq."""
@@ -515,8 +527,7 @@ class SeqInterfaceTest(unittest.TestCase):
             self.assertEqual(str(test), str(other) + str(test_seq))
 
     def test_seq_slicing(self):
-        """Check that slices of sequences are retrieved properly.
-        """
+        """Check that slices of sequences are retrieved properly."""
         test_seq = self.item.seq
         new_seq = test_seq[:10]
         self.assertTrue(isinstance(new_seq, BioSeq.DBSeq))
@@ -533,16 +544,14 @@ class SeqInterfaceTest(unittest.TestCase):
         self.assertEqual(str(test_seq[-10:][5:]), "TTATA")
 
     def test_record_slicing(self):
-        """Check that slices of DBSeqRecord are retrieved properly.
-        """
+        """Check that slices of DBSeqRecord are retrieved properly."""
         new_rec = self.item[400:]
         self.assertTrue(isinstance(new_rec, SeqRecord))
         self.assertEqual(len(new_rec), 480)
         self.assertEqual(len(new_rec.features), 5)
 
     def test_seq_features(self):
-        """Check SeqFeatures of a sequence.
-        """
+        """Check SeqFeatures of a sequence."""
         test_features = self.item.features
         cds_feature = test_features[6]
         self.assertEqual(cds_feature.type, "CDS")
@@ -596,8 +605,7 @@ class LoaderTest(unittest.TestCase):
         del self.server
 
     def test_load_database(self):
-        """Load SeqRecord objects into a BioSQL database.
-        """
+        """Load SeqRecord objects into a BioSQL database."""
         self.db.load(self.iterator)
 
         # do some simple tests to make sure we actually loaded the right
@@ -624,8 +632,7 @@ class DeleteTest(unittest.TestCase):
     loaded_db = 0
 
     def setUp(self):
-        """Connect to and load up the database.
-        """
+        """Connect to and load up the database."""
         load_database("GenBank/cor6_6.gb")
 
         self.server = BioSeqDatabase.open_database(driver=DBDRIVER,
@@ -643,7 +650,7 @@ class DeleteTest(unittest.TestCase):
         del self.server
 
     def test_server(self):
-        """Check BioSeqDatabase methods"""
+        """Check BioSeqDatabase methods."""
         server = self.server
         self.assertIn("biosql-test", server)
         self.assertEqual(1, len(server))
@@ -658,7 +665,7 @@ class DeleteTest(unittest.TestCase):
             pass
 
     def test_del_db_items(self):
-        """Check all associated data is deleted from an item"""
+        """Check all associated data is deleted from an item."""
         db = self.db
         items = list(db.values())
         keys = list(db)
@@ -760,41 +767,41 @@ class ClosedLoopTest(unittest.TestCase):
         TESTDB = create_database()
 
     def test_NC_005816(self):
-        """GenBank file to BioSQL and back to a GenBank file, NC_005816."""
+        """From GenBank file to BioSQL and back to a GenBank file, NC_005816."""
         with warnings.catch_warnings():
             # BiopythonWarning: order location operators are not fully supported
             warnings.simplefilter('ignore', BiopythonWarning)
             self.loop("GenBank/NC_005816.gb", "gb")
 
     def test_NC_000932(self):
-        """GenBank file to BioSQL and back to a GenBank file, NC_000932."""
+        """From GenBank file to BioSQL and back to a GenBank file, NC_000932."""
         self.loop("GenBank/NC_000932.gb", "gb")
 
     def test_NT_019265(self):
-        """GenBank file to BioSQL and back to a GenBank file, NT_019265."""
+        """From GenBank file to BioSQL and back to a GenBank file, NT_019265."""
         self.loop("GenBank/NT_019265.gb", "gb")
 
     def test_protein_refseq2(self):
-        """GenBank file to BioSQL and back to a GenBank file, protein_refseq2."""
+        """From GenBank file to BioSQL and back to a GenBank file, protein_refseq2."""
         with warnings.catch_warnings():
             # BiopythonWarning: order location operators are not fully supported
             warnings.simplefilter('ignore', BiopythonWarning)
             self.loop("GenBank/protein_refseq2.gb", "gb")
 
     def test_no_ref(self):
-        """GenBank file to BioSQL and back to a GenBank file, noref."""
+        """From GenBank file to BioSQL and back to a GenBank file, noref."""
         self.loop("GenBank/noref.gb", "gb")
 
     def test_one_of(self):
-        """GenBank file to BioSQL and back to a GenBank file, one_of."""
+        """From GenBank file to BioSQL and back to a GenBank file, one_of."""
         self.loop("GenBank/one_of.gb", "gb")
 
     def test_cor6_6(self):
-        """GenBank file to BioSQL and back to a GenBank file, cor6_6."""
+        """From GenBank file to BioSQL and back to a GenBank file, cor6_6."""
         self.loop("GenBank/cor6_6.gb", "gb")
 
     def test_arab1(self):
-        """GenBank file to BioSQL and back to a GenBank file, arab1."""
+        """From GenBank file to BioSQL and back to a GenBank file, arab1."""
         self.loop("GenBank/arab1.gb", "gb")
 
     def loop(self, filename, format):
@@ -842,41 +849,41 @@ class TransferTest(unittest.TestCase):
         TESTDB = create_database()
 
     def test_NC_005816(self):
-        """GenBank file to BioSQL, then again to a new namespace, NC_005816."""
+        """From GenBank file to BioSQL, then again to a new namespace, NC_005816."""
         with warnings.catch_warnings():
             # BiopythonWarning: order location operators are not fully supported
             warnings.simplefilter('ignore', BiopythonWarning)
             self.trans("GenBank/NC_005816.gb", "gb")
 
     def test_NC_000932(self):
-        """GenBank file to BioSQL, then again to a new namespace, NC_000932."""
+        """From GenBank file to BioSQL, then again to a new namespace, NC_000932."""
         self.trans("GenBank/NC_000932.gb", "gb")
 
     def test_NT_019265(self):
-        """GenBank file to BioSQL, then again to a new namespace, NT_019265."""
+        """From GenBank file to BioSQL, then again to a new namespace, NT_019265."""
         self.trans("GenBank/NT_019265.gb", "gb")
 
     def test_protein_refseq2(self):
-        """GenBank file to BioSQL, then again to a new namespace, protein_refseq2."""
+        """From GenBank file to BioSQL, then again to a new namespace, protein_refseq2."""
         with warnings.catch_warnings():
             # BiopythonWarning: order location operators are not fully supported
             warnings.simplefilter('ignore', BiopythonWarning)
             self.trans("GenBank/protein_refseq2.gb", "gb")
 
     def test_no_ref(self):
-        """GenBank file to BioSQL, then again to a new namespace, noref."""
+        """From GenBank file to BioSQL, then again to a new namespace, noref."""
         self.trans("GenBank/noref.gb", "gb")
 
     def test_one_of(self):
-        """GenBank file to BioSQL, then again to a new namespace, one_of."""
+        """From GenBank file to BioSQL, then again to a new namespace, one_of."""
         self.trans("GenBank/one_of.gb", "gb")
 
     def test_cor6_6(self):
-        """GenBank file to BioSQL, then again to a new namespace, cor6_6."""
+        """From GenBank file to BioSQL, then again to a new namespace, cor6_6."""
         self.trans("GenBank/cor6_6.gb", "gb")
 
     def test_arab1(self):
-        """GenBank file to BioSQL, then again to a new namespace, arab1."""
+        """From GenBank file to BioSQL, then again to a new namespace, arab1."""
         self.trans("GenBank/arab1.gb", "gb")
 
     def trans(self, filename, format):
@@ -964,8 +971,7 @@ class InDepthLoadTest(unittest.TestCase):
         raise Exception("Should have failed! Loaded %i records" % count)
 
     def test_record_loading(self):
-        """Make sure all records are correctly loaded.
-        """
+        """Make sure all records are correctly loaded."""
         test_record = self.db.lookup(accession="X55053")
         self.assertEqual(test_record.name, "ATCOR66M")
         self.assertEqual(test_record.id, "X55053.1")
@@ -981,8 +987,7 @@ class InDepthLoadTest(unittest.TestCase):
         self.assertEqual(str(test_record.seq[:10]), 'ATTTGGCCTA')
 
     def test_seq_feature(self):
-        """In depth check that SeqFeatures are transmitted through the db.
-        """
+        """In depth check that SeqFeatures are transmitted through the db."""
         test_record = self.db.lookup(accession="AJ237582")
         features = test_record.features
         self.assertEqual(len(features), 7)
@@ -1167,3 +1172,39 @@ class AutoSeqIOTests(unittest.TestCase):
         self.check('embl', 'EMBL/SC10H5.embl')
         self.check('embl', 'EMBL/U87107.embl')
         self.assertEqual(len(self.db), 66)
+
+
+class SwissProtUnknownPositionTest(unittest.TestCase):
+    """Handle SwissProt unknown position by setting value to null in database."""
+
+    def setUp(self):
+        # drop any old database and create a new one:
+        TESTDB = create_database()
+        # connect to new database:
+        self.server = BioSeqDatabase.open_database(driver=DBDRIVER,
+                                                   user=DBUSER, passwd=DBPASSWD,
+                                                   host=DBHOST, db=TESTDB)
+        # Create new namespace within new empty database:
+        self.db = self.server.new_database("biosql-test")
+
+    def tearDown(self):
+        self.server.rollback()
+        self.server.close()
+        destroy_database()
+        del self.db
+        del self.server
+
+    def test_ambiguous_location(self):
+        """Loaded uniprot-xml with ambiguous location in BioSQL."""
+        id = 'P97881'
+        seqiter = SeqIO.parse("SwissProt/%s.xml" % id, "uniprot-xml")
+        self.assertTrue(self.db.load(seqiter) == 1)
+
+        dbrecord = self.db.lookup(primary_id=id)
+        for feature in dbrecord.features:
+            if feature.type == 'signal peptide':
+                self.assertTrue(isinstance(feature.location.end, UnknownPosition))
+            elif feature.type == 'chain':
+                self.assertTrue(isinstance(feature.location.start, UnknownPosition))
+            else:
+                self.assertTrue(isinstance(feature.location.start, ExactPosition))

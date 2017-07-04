@@ -128,7 +128,7 @@ class BwaTestCase(unittest.TestCase):
     if not skip_aln_tests:
 
         def test_samse(self):
-            """Test for single end sequencing """
+            """Test for single end sequencing."""
             self.create_fasta_index()
             self.do_aln(self.infile1, self.saifile1)
             cmdline = BwaSamseCommandline(bwa_exe)
@@ -144,7 +144,7 @@ class BwaTestCase(unittest.TestCase):
                             % (cmdline, headline))
 
         def test_sampe(self):
-            """Test for generating samfile by paired end sequencing"""
+            """Test for generating samfile by paired end sequencing."""
             self.create_fasta_index()
 
             # Generate sai files from paired end data

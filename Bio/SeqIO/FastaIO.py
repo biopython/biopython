@@ -9,7 +9,8 @@
 
 """Bio.SeqIO support for the "fasta" (aka FastA or Pearson) file format.
 
-You are expected to use this module via the Bio.SeqIO functions."""
+You are expected to use this module via the Bio.SeqIO functions.
+"""
 
 from __future__ import print_function
 
@@ -76,7 +77,6 @@ def FastaIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
     """Generator function to iterate over Fasta records (as SeqRecord objects).
 
     Arguments:
-
      - handle - input file
      - alphabet - optional alphabet
      - title2ids - A function that, when given the title of the FASTA
@@ -132,11 +132,11 @@ def FastaIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
 
 class FastaWriter(SequentialSequenceWriter):
     """Class to write Fasta format files."""
+
     def __init__(self, handle, wrap=60, record2title=None):
         """Create a Fasta writer.
 
         Arguments:
-
          - handle - Handle to an output file, e.g. as returned
            by open(filename, "w")
          - wrap -   Optional line length used to wrap sequence lines.
@@ -209,6 +209,7 @@ class FastaWriter(SequentialSequenceWriter):
                 self.handle.write(data[i:i + self.wrap] + "\n")
         else:
             self.handle.write(data + "\n")
+
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest

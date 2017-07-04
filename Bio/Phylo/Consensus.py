@@ -3,7 +3,7 @@
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
 
-""" Classes and methods for finding consensus trees.
+"""Classes and methods for finding consensus trees.
 
 This module contains a ``_BitString`` class to assist the consensus tree
 searching and some common consensus algorithms such as strict, majority rule and
@@ -119,7 +119,7 @@ class _BitString(str):
     """
 
     def __new__(cls, strdata):
-        """init from a binary string data"""
+        """Init from a binary string data"""
         if (isinstance(strdata, str) and
                 len(strdata) == strdata.count('0') + strdata.count('1')):
             return str.__new__(cls, strdata)
@@ -185,6 +185,7 @@ class _BitString(str):
 
         Be careful, "011011" also contains "000000". Actually, all _BitString
         objects contain all-zero _BitString of the same length.
+
         """
         xorbit = self ^ other
         return (xorbit.count('1') == self.count('1') - other.count('1'))
@@ -205,9 +206,9 @@ class _BitString(str):
         """Check if current bitstr1 is compatible with another bitstr2.
 
         Two conditions are considered as compatible:
+         1. bitstr1.contain(bitstr2) or vise versa;
+         2. bitstr1.independent(bitstr2).
 
-        1. bitstr1.contain(bitstr2) or vise versa;
-        2. bitstr1.independent(bitstr2).
         """
         return (self.contains(other) or other.contains(self) or
                 self.independent(other))
@@ -223,6 +224,7 @@ def strict_consensus(trees):
     :Parameters:
         trees : iterable
             iterable of trees to produce consensus tree.
+
     """
     trees_iter = iter(trees)
     first_tree = next(trees_iter)
@@ -282,6 +284,7 @@ def majority_consensus(trees, cutoff=0):
     :Parameters:
         trees : iterable
             iterable of trees to produce consensus tree.
+
     """
     tree_iter = iter(trees)
     first_tree = next(tree_iter)
@@ -375,13 +378,14 @@ def adam_consensus(trees):
     :Parameters:
         trees : list
             list of trees to produce consensus tree.
+
     """
     clades = [tree.root for tree in trees]
     return BaseTree.Tree(root=_part(clades), rooted=True)
 
 
 def _part(clades):
-    """recursive function of adam consensus algorithm"""
+    """Recursive function of adam consensus algorithm"""
     new_clade = None
     terms = clades[0].get_terminals()
     term_names = [term.name for term in terms]
@@ -440,7 +444,7 @@ def _part(clades):
 
 
 def _sub_clade(clade, term_names):
-    """extract a compatible subclade that only contains the given terminal names"""
+    """Extract a compatible subclade that only contains the given terminal names"""
     term_clades = [clade.find_any(name) for name in term_names]
     sub_clade = clade.common_ancestor(term_clades)
     if len(term_names) != sub_clade.count_terminals():
@@ -473,6 +477,7 @@ def _count_clades(trees):
     :Parameters:
         trees : iterable
             An iterable that returns the trees to count
+
     """
     bitstrs = {}
     tree_count = 0
@@ -502,6 +507,7 @@ def get_support(target_tree, trees, len_trees=None):
         len_trees : int
             optional count of replicates in trees. len_trees must be provided
             when len(trees) is not a valid operation.
+
     """
     term_names = sorted(term.name
                         for term in target_tree.find_clades(terminal=True))
@@ -537,6 +543,7 @@ def bootstrap(msa, times):
             multiple sequence alignment to generate replicates.
         times : int
             number of bootstrap times.
+
     """
     length = len(msa[0])
     i = 0
@@ -562,6 +569,7 @@ def bootstrap_trees(msa, times, tree_constructor):
             number of bootstrap times.
         tree_constructor : TreeConstructor
             tree constructor to be used to build trees.
+
     """
     msas = bootstrap(msa, times)
     for aln in msas:
@@ -582,6 +590,7 @@ def bootstrap_consensus(msa, times, tree_constructor, consensus):
         consensus : function
             Consensus method in this module: `strict_consensus`,
             `majority_consensus`, `adam_consensus`.
+
     """
     trees = bootstrap_trees(msa, times, tree_constructor)
     tree = consensus(list(trees))
@@ -610,7 +619,8 @@ def _bitstring_topology(tree):
     """Generates a branch length dict for a tree, keyed by BitStrings.
 
     Create a dict of all clades' BitStrings to the corresponding branch
-    lengths (rounded to 5 decimal places)."""
+    lengths (rounded to 5 decimal places).
+    """
     bitstrs = {}
     for clade, bitstr in _tree_to_bitstrs(tree).items():
         bitstrs[bitstr] = round(clade.branch_length or 0.0, 5)

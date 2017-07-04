@@ -16,27 +16,24 @@ from Bio._py3k import range
 
 
 def logistic_function(value):
-    """Transform the value with the logistic function.
-
-    XXX This is in the wrong place -- I need to find a place to put it
-    that makes sense.
-    """
+    """Transform the value with the logistic function."""
+    # TODO: This is in the wrong place -- I need to find a place to put it
+    # that makes sense.
     return 1.0 / (1.0 + math.exp(-value))
 
 
 class AbstractLayer(object):
-    """Abstract base class for all layers.
-    """
+    """Abstract base class for all layers."""
+
     def __init__(self, num_nodes, has_bias_node):
         """Initialize the layer.
 
         Arguments:
+         - num_nodes -- The number of nodes that are contained in this layer.
+         - has_bias_node -- Specify whether or not this node has a bias
+           node. This node is not included in the number of nodes in the
+           network, but is used in constructing and dealing with the network.
 
-        o num_nodes -- The number of nodes that are contained in this layer.
-
-        o has_bias_node -- Specify whether or not this node has a bias
-        node. This node is not included in the number of nodes in the network,
-        but is used in constructing and dealing with the network.
         """
         # specify all of the nodes in the network
         if has_bias_node:
@@ -49,8 +46,7 @@ class AbstractLayer(object):
         self.weights = {}
 
     def __str__(self):
-        """Debugging output.
-        """
+        """Debugging output."""
         return "weights: %s" % self.weights
 
     def set_weight(self, this_node, next_node, value):
@@ -70,11 +66,10 @@ class InputLayer(AbstractLayer):
         """Initialize the input layer.
 
         Arguments:
+         - num_nodes -- The number of nodes in the input layer.
+         - next_layer -- The next layer in the neural network this is
+           connected to.
 
-        o num_nodes -- The number of nodes in the input layer.
-
-        o next_layer -- The next layer in the neural network this is
-        connected to.
         """
         AbstractLayer.__init__(self, num_nodes, 1)
 
@@ -107,9 +102,9 @@ class InputLayer(AbstractLayer):
         """Update the values of the nodes using given inputs.
 
         Arguments:
+         - inputs -- A list of inputs into the network -- this must be
+           equal to the number of nodes in the layer.
 
-        o inputs -- A list of inputs into the network -- this must be
-        equal to the number of nodes in the layer.
         """
         if len(inputs) != len(self.values) - 1:
             raise ValueError("Inputs do not match input layer nodes.")
@@ -125,13 +120,11 @@ class InputLayer(AbstractLayer):
         """Recalculate all weights based on the last round of prediction.
 
         Arguments:
+         - learning_rate -- The learning rate of the network
+         - momentum - The amount of weight to place on the previous weight
+           change.
+         - outputs - The output info we are using to calculate error.
 
-        o learning_rate -- The learning rate of the network
-
-        o momentum - The amount of weight to place on the previous weight
-        change.
-
-        o outputs - The output info we are using to calculate error.
         """
         # first backpropagate to the next layers
         next_errors = self._next_layer.backpropagate(outputs, learning_rate,
@@ -157,14 +150,12 @@ class HiddenLayer(AbstractLayer):
         """Initialize a hidden layer.
 
         Arguments:
+         - num_nodes -- The number of nodes in this hidden layer.
+         - next_layer -- The next layer in the neural network that this
+           is connected to.
+         - activation -- The transformation function used to transform
+           predicted values.
 
-        o num_nodes -- The number of nodes in this hidden layer.
-
-        o next_layer -- The next layer in the neural network that this
-        is connected to.
-
-        o activation -- The transformation function used to transform
-        predicted values.
         """
         AbstractLayer.__init__(self, num_nodes, 1)
 
@@ -197,8 +188,8 @@ class HiddenLayer(AbstractLayer):
         """Update the values of nodes from the previous layer info.
 
         Arguments:
+         - previous_layer -- The previous layer in the network.
 
-        o previous_layer -- The previous layer in the network.
         """
         # update each node in this network
         for update_node in self.nodes[1:]:
@@ -217,14 +208,12 @@ class HiddenLayer(AbstractLayer):
         """Recalculate all weights based on the last round of prediction.
 
         Arguments:
+         - learning_rate -- The learning rate of the network
+         - momentum - The amount of weight to place on the previous weight
+           change.
+         - outputs - The output values we are using to see how good our
+           network is at predicting things.
 
-        o learning_rate -- The learning rate of the network
-
-        o momentum - The amount of weight to place on the previous weight
-        change.
-
-        o outputs - The output values we are using to see how good our
-        network is at predicting things.
         """
         # first backpropagate to the next layers
         next_errors = self._next_layer.backpropagate(outputs, learning_rate,
@@ -269,12 +258,11 @@ class OutputLayer(AbstractLayer):
         """Initialize the Output Layer.
 
         Arguments:
+         - num_nodes -- The number of nodes in this layer. This corresponds
+           to the number of outputs in the neural network.
+         - activation -- The transformation function used to transform
+           predicted values.
 
-        o num_nodes -- The number of nodes in this layer. This corresponds
-        to the number of outputs in the neural network.
-
-        o activation -- The transformation function used to transform
-        predicted values.
         """
         AbstractLayer.__init__(self, num_nodes, 0)
 
@@ -288,8 +276,8 @@ class OutputLayer(AbstractLayer):
         """Update the value of output nodes from the previous layers.
 
         Arguments:
+         - previous_layer -- The hidden layer preceding this.
 
-        o previous_layer -- The hidden layer preceding this.
         """
         # update all of the nodes in this layer
         for update_node in self.nodes:
@@ -312,9 +300,9 @@ class OutputLayer(AbstractLayer):
         real value.
 
         Arguments:
+         - outputs - The list of output values we use to calculate the
+           errors in our predictions.
 
-        o outputs - The list of output values we use to calculate the
-        errors in our predictions.
         """
         errors = {}
         for node in self.nodes:
@@ -328,8 +316,7 @@ class OutputLayer(AbstractLayer):
         return errors
 
     def get_error(self, real_value, node_number):
-        """Return the error value at a particular node.
-        """
+        """Return the error value at a particular node."""
         predicted_value = self.values[node_number]
         return 0.5 * math.pow((real_value - predicted_value), 2)
 

@@ -691,6 +691,12 @@ _read_from_handle(void *wasread, const int length, void *handle)
     }
 
     py_retval = PyObject_CallMethod(py_handle, "read", "i", length);
+    if (!py_retval)
+    {
+        PyErr_SetString(PyExc_RuntimeError, "Failed to read from file. "
+                "Verify that you did not open a binary file ('rb') in text mode ('r') or vice versa.");
+        goto error;
+    }
 #ifdef IS_PY3K
     if(!PyBytes_Check(py_retval)) {
 #else

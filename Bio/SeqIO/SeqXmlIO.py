@@ -102,7 +102,8 @@ class XMLRecordIterator(object):
 class SeqXmlIterator(XMLRecordIterator):
     """Breaks seqXML file into SeqRecords.
 
-    Assumes valid seqXML please validate beforehand."""
+    Assumes valid seqXML please validate beforehand.
+    """
 
     def __init__(self, handle):
         """Create the object."""

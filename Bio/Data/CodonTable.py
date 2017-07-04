@@ -46,6 +46,7 @@ class TranslationError(Exception):
 
 class CodonTable(object):
     """A codon-table, or genetic code."""
+
     nucleotide_alphabet = Alphabet.generic_nucleotide
     protein_alphabet = Alphabet.generic_protein
 
@@ -266,6 +267,7 @@ def list_ambiguous_codons(codons, ambiguous_nucleotide_values):
         if wanted:
             answer.append(ambig_codon)
     return answer
+
 
 assert list_ambiguous_codons(['TGA', 'TAA'], IUPACData.ambiguous_dna_values) == ['TGA', 'TAA', 'TRA']
 assert list_ambiguous_codons(['TAG', 'TGA'], IUPACData.ambiguous_dna_values) == ['TAG', 'TGA']

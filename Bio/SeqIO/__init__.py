@@ -448,11 +448,12 @@ _BinaryFormats = ["sff", "sff-trim", "abi", "abi-trim"]
 def write(sequences, handle, format):
     """Write complete set of sequences to a file.
 
-        - sequences - A list (or iterator) of SeqRecord objects, or (if using
-          Biopython 1.54 or later) a single SeqRecord.
-        - handle    - File handle object to write to, or filename as string
-          (note older versions of Biopython only took a handle).
-        - format    - lower case string describing the file format to write.
+    Arguments:
+     - sequences - A list (or iterator) of SeqRecord objects, or (if using
+       Biopython 1.54 or later) a single SeqRecord.
+     - handle    - File handle object to write to, or filename as string
+       (note older versions of Biopython only took a handle).
+     - format    - lower case string describing the file format to write.
 
     You should close the handle after calling this function.
 
@@ -514,12 +515,13 @@ def write(sequences, handle, format):
 def parse(handle, format, alphabet=None):
     r"""Turns a sequence file into an iterator returning SeqRecords.
 
-        - handle   - handle to the file, or the filename as a string
-          (note older versions of Biopython only took a handle).
-        - format   - lower case string describing the file format.
-        - alphabet - optional Alphabet object, useful when the sequence type
-          cannot be automatically inferred from the file itself
-          (e.g. format="fasta" or "tab")
+    Arguments:
+     - handle   - handle to the file, or the filename as a string
+       (note older versions of Biopython only took a handle).
+     - format   - lower case string describing the file format.
+     - alphabet - optional Alphabet object, useful when the sequence type
+       cannot be automatically inferred from the file itself
+       (e.g. format="fasta" or "tab")
 
     Typical usage, opening a file to read in, and looping over the record(s):
 
@@ -628,12 +630,13 @@ def _force_alphabet(record_iterator, alphabet):
 def read(handle, format, alphabet=None):
     """Turns a sequence file into a single SeqRecord.
 
-        - handle   - handle to the file, or the filename as a string
-          (note older versions of Biopython only took a handle).
-        - format   - string describing the file format.
-        - alphabet - optional Alphabet object, useful when the sequence type
-          cannot be automatically inferred from the file itself
-          (e.g. format="fasta" or "tab")
+    Arguments:
+     - handle   - handle to the file, or the filename as a string
+       (note older versions of Biopython only took a handle).
+     - format   - string describing the file format.
+     - alphabet - optional Alphabet object, useful when the sequence type
+       cannot be automatically inferred from the file itself
+       (e.g. format="fasta" or "tab")
 
     This function is for use parsing sequence files containing
     exactly one record.  For example, reading a GenBank file:
@@ -687,10 +690,11 @@ def read(handle, format, alphabet=None):
 def to_dict(sequences, key_function=None):
     """Turns a sequence iterator or list into a dictionary.
 
-        - sequences  - An iterator that returns SeqRecord objects,
-          or simply a list of SeqRecord objects.
-        - key_function - Optional callback function which when given a
-          SeqRecord should return a unique key for the dictionary.
+    Arguments:
+     - sequences  - An iterator that returns SeqRecord objects,
+       or simply a list of SeqRecord objects.
+     - key_function - Optional callback function which when given a
+       SeqRecord should return a unique key for the dictionary.
 
     e.g. key_function = lambda rec : rec.name
     or,  key_function = lambda rec : rec.description.split()[0]
@@ -748,14 +752,15 @@ def to_dict(sequences, key_function=None):
 def index(filename, format, alphabet=None, key_function=None):
     """Indexes a sequence file and returns a dictionary like object.
 
-        - filename - string giving name of file to be indexed
-        - format   - lower case string describing the file format
-        - alphabet - optional Alphabet object, useful when the sequence type
-          cannot be automatically inferred from the file itself
-          (e.g. format="fasta" or "tab")
-        - key_function - Optional callback function which when given a
-          SeqRecord identifier string should return a unique
-          key for the dictionary.
+    Arguments:
+     - filename - string giving name of file to be indexed
+     - format   - lower case string describing the file format
+     - alphabet - optional Alphabet object, useful when the sequence type
+       cannot be automatically inferred from the file itself
+       (e.g. format="fasta" or "tab")
+     - key_function - Optional callback function which when given a
+       SeqRecord identifier string should return a unique key for the
+       dictionary.
 
     This indexing function will return a dictionary like object, giving the
     SeqRecord objects as values:
@@ -851,7 +856,8 @@ def index(filename, format, alphabet=None, key_function=None):
     to be completely parsed while building the index. Right now this is
     usually avoided.
 
-    See also: Bio.SeqIO.index_db() and Bio.SeqIO.to_dict()
+    See Also: Bio.SeqIO.index_db() and Bio.SeqIO.to_dict()
+
     """
     # Try and give helpful error messages:
     if not isinstance(filename, basestring):
@@ -886,18 +892,19 @@ def index_db(index_filename, filenames=None, format=None, alphabet=None,
     The index is stored in an SQLite database rather than in memory (as in the
     Bio.SeqIO.index(...) function).
 
-        - index_filename - Where to store the SQLite index
-        - filenames - list of strings specifying file(s) to be indexed, or when
-          indexing a single file this can be given as a string.
-          (optional if reloading an existing index, but must match)
-        - format   - lower case string describing the file format
-          (optional if reloading an existing index, but must match)
-        - alphabet - optional Alphabet object, useful when the sequence type
-          cannot be automatically inferred from the file itself
-          (e.g. format="fasta" or "tab")
-        - key_function - Optional callback function which when given a
-          SeqRecord identifier string should return a unique
-          key for the dictionary.
+    Arguments:
+     - index_filename - Where to store the SQLite index
+     - filenames - list of strings specifying file(s) to be indexed, or when
+       indexing a single file this can be given as a string.
+       (optional if reloading an existing index, but must match)
+     - format   - lower case string describing the file format
+       (optional if reloading an existing index, but must match)
+     - alphabet - optional Alphabet object, useful when the sequence type
+       cannot be automatically inferred from the file itself
+       (e.g. format="fasta" or "tab")
+     - key_function - Optional callback function which when given a
+       SeqRecord identifier string should return a unique
+       key for the dictionary.
 
     This indexing function will return a dictionary like object, giving the
     SeqRecord objects as values:
@@ -925,8 +932,9 @@ def index_db(index_filename, filenames=None, format=None, alphabet=None,
     BGZF compressed files are supported, and detected automatically. Ordinary
     GZIP compressed files are not supported.
 
-    See also: Bio.SeqIO.index() and Bio.SeqIO.to_dict(), and the Python module
+    See Also: Bio.SeqIO.index() and Bio.SeqIO.to_dict(), and the Python module
     glob which is useful for building lists of files.
+
     """
     # Try and give helpful error messages:
     if not isinstance(index_filename, basestring):
@@ -967,11 +975,12 @@ def index_db(index_filename, filenames=None, format=None, alphabet=None,
 def convert(in_file, in_format, out_file, out_format, alphabet=None):
     """Convert between two sequence file formats, return number of records.
 
-        - in_file - an input handle or filename
-        - in_format - input file format, lower case string
-        - out_file - an output handle or filename
-        - out_format - output file format, lower case string
-        - alphabet - optional alphabet to assume
+    Arguments:
+     - in_file - an input handle or filename
+     - in_format - input file format, lower case string
+     - out_file - an output handle or filename
+     - out_format - output file format, lower case string
+     - alphabet - optional alphabet to assume
 
     **NOTE** - If you provide an output filename, it will be opened which will
     overwrite any existing file without warning. This may happen if even

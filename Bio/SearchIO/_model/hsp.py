@@ -25,7 +25,6 @@ from ._base import _BaseHSP
 
 
 class HSP(_BaseHSP):
-
     """Class representing high-scoring region(s) between query and hit.
 
     HSP (high-scoring pair) objects are contained by Hit objects (see Hit).
@@ -246,6 +245,7 @@ class HSP(_BaseHSP):
     .. [1] may be used in HSPs with multiple fragments
 
     """
+
     # attributes we don't want to transfer when creating a new Hit class
     # from this one
     _NON_STICKY_ATTRS = ('_items', )
@@ -629,7 +629,6 @@ class HSP(_BaseHSP):
 
 
 class HSPFragment(_BaseHSP):
-
     """Class representing a contiguous alignment of hit-query sequence.
 
     HSPFragment forms the core of any parsed search output file. Depending on

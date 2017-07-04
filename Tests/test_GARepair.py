@@ -12,9 +12,13 @@ from Bio.Alphabet import Alphabet
 from Bio.Seq import MutableSeq
 
 # local stuff
-from Bio.NeuralNetwork.Gene.Schema import Schema
-from Bio.GA.Organism import Organism
-from Bio.GA.Repair.Stabilizing import AmbiguousRepair
+import warnings
+from Bio import BiopythonDeprecationWarning
+with warnings.catch_warnings():
+    warnings.simplefilter('ignore', BiopythonDeprecationWarning)
+    from Bio.NeuralNetwork.Gene.Schema import Schema
+    from Bio.GA.Organism import Organism
+    from Bio.GA.Repair.Stabilizing import AmbiguousRepair
 
 
 class TestAlphabet(Alphabet):
@@ -66,6 +70,7 @@ class AmbiguousRepairTest(unittest.TestCase):
 
             assert new_genome_seq.count("*") == 0, \
                    "Did not repair genome, got %s" % str(new_genome_seq)
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
