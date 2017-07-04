@@ -109,6 +109,16 @@ class DistanceMatrixTest(unittest.TestCase):
         self.assertRaises(TypeError, dm.__setitem__, ('Alpha', 'Beta'), 'a')
         self.assertRaises(TypeError, dm.__setitem__, 'Alpha', ['a', 'b', 'c'])
 
+    def test_format_phylip(self):
+        dm = _DistanceMatrix(self.names, self.matrix)
+        handle = StringIO()
+        dm.format_phylip(handle)
+        lines = handle.getvalue().splitlines()
+        self.assertEqual(len(lines), len(dm) + 1)
+        self.assertTrue(lines[0].endswith(str(len(dm))))
+        for name, line in zip(self.names, lines[1:]):
+            self.assertTrue(line.startswith(name))
+
 
 class DistanceCalculatorTest(unittest.TestCase):
     """Test DistanceCalculator"""
