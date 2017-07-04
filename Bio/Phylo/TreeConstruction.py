@@ -330,6 +330,7 @@ class _DistanceMatrix(_Matrix):
                 A writeable file handle or other object supporting the 'write'
                 method, such as StringIO or sys.stdout. On Python 3, should be
                 open in text mode.
+
         """
         handle.write("    {0}\n".format(len(self.names)))
         # Phylip needs space-separated, vertically aligned columns
@@ -481,8 +482,7 @@ class DistanceCalculator(object):
             # Score by character identity, not skipping any special letters
             score = sum(l1 == l2
                         for l1, l2 in zip(seq1, seq2)
-                        if l1 not in self.skip_letters
-                        and l2 not in self.skip_letters)
+                        if l1 not in self.skip_letters and l2 not in self.skip_letters)
             max_score = len(seq1)
         if max_score == 0:
             return 1  # max possible scaled distance
