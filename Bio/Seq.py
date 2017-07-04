@@ -1457,10 +1457,13 @@ class UnknownSeq(Seq):
 
         e.g.
 
+        >>> from Bio.Seq import UnknownSeq 
         >>> UnknownSeq(4, character="N").count_overlap("NN")
         3
         >>> UnknownSeq(4, character="N").count_overlap("NNN")
         2
+        >>> UnknownSeq(4, character="N").count_overlap("NNNNN")
+        0
         >>> UnknownSeq(7, character="N").count_overlap("NN")
         6
         >>> UnknownSeq(7, character="N").count_overlap("NNN")
@@ -1469,6 +1472,22 @@ class UnknownSeq(Seq):
         3
         >>> UnknownSeq(7, character="N").count_overlap("NN", -5, -1)
         3
+        >>> UnknownSeq(7, character="N").count_overlap("NN", 8, 2)
+        0
+        >>> UnknownSeq(7, character="N").count_overlap("N", 2, 8)
+        5
+        >>> UnknownSeq(7, character="N").count_overlap("N", 8, 2)
+        0
+        >>> UnknownSeq(7, character="N").count_overlap("N", -2, -8)
+        0
+        >>> UnknownSeq(7, character="N").count_overlap("N", -8, -2)
+        5
+        >>> UnknownSeq(7, character="N").count_overlap("N", 4, -1)
+        2
+        >>> UnknownSeq(7, character="N").count_overlap("N", -1, 4)
+        0
+        >>> UnknownSeq(7, character="N").count_overlap("N", 100, 105)
+        0
 
         Where substrings do not overlap, should behave the same as
         the count() method:
@@ -1487,31 +1506,28 @@ class UnknownSeq(Seq):
         True
         """
         sub_str = self._get_seq_str_and_check_alphabet(sub)
-        if len(sub_str) == 1:
-            if str(sub_str) == self._character:
-                if start == 0 and end >= self._length:
-                    return self._length
-                else:
-                    # This could be done more cleverly...
-                    return str(self).count(sub_str, start, end)
-            else:
-                return 0
-        else:
-            if set(sub_str) == set(self._character):
-                if start == 0 and end >= self._length:
-                    return self._length - len(sub_str) + 1
-                else:
-                    # This could be done more cleverly...
-                    self_str = str(self)
-                    overlap_count = 0
-                    while True:
-                        start = self_str.find(sub_str, start, end) + 1
-                        if start != 0:
-                            overlap_count += 1
-                        else:
-                            return overlap_count
-            else:
-                return 0
+        len_self, len_sub_str = self._length, len(sub_str)
+        # Handling some pathological edge cases
+        if len_self < len_sub_str or set(sub_str) != set(self._character):
+            return 0
+        # Setting None to the default arguments
+        if start is None:
+            start = 0
+        if end is None:
+            end = sys.maxsize
+        # Truncating start and end to max of self._length and min of -self._length
+        start = max(min(start, len_self), -len_self)
+        end = max(min(end, len_self), -len_self)
+        # Convert start and ends to positive indexes
+        if start < 0:
+            start = start + len_self
+        if end < 0:
+            end = end + len_self
+        # Handle case where end <= start (no negative step argument here)
+        if end <= start:
+            return 0
+        # 'Normal' calculation
+        return end - start - len_sub_str + 1
 
     def complement(self):
         """Return the complement of an unknown nucleotide equals itself.
