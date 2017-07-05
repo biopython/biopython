@@ -55,6 +55,7 @@ possible, especially the following contributors:
 - Andrew Guy
 - Ariel Aptekmann (first contribution)
 - Bertrand Caron (first contribution)
+- Chris Rands
 - Connor T. Skennerton
 - Eric Rasche
 - Eric Talevich
