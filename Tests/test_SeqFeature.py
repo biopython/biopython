@@ -46,6 +46,10 @@ class TestFeatureLocation(unittest.TestCase):
         loc2 = FeatureLocation(23, 42, 1)
         self.assertEqual(loc1, loc2)
 
+        loc1 = FeatureLocation(23, 42, 1, 'foo', 'bar')
+        loc2 = FeatureLocation(23, 42, 1, 'foo', 'bar')
+        self.assertEqual(loc1, loc2)
+
     def test_eq_not_identical(self):
         """Test two different locations are not equal"""
         loc1 = FeatureLocation(22, 42, 1)
@@ -62,6 +66,14 @@ class TestFeatureLocation(unittest.TestCase):
 
         loc1 = FeatureLocation(23, 42, 1)
         loc2 = (23, 42, 1)
+        self.assertNotEqual(loc1, loc2)
+
+        loc1 = FeatureLocation(23, 42, 1, 'foo')
+        loc2 = FeatureLocation(23, 42, 1, 'bar')
+        self.assertNotEqual(loc1, loc2)
+
+        loc1 = FeatureLocation(23, 42, 1, 'foo', 'bar')
+        loc2 = FeatureLocation(23, 42, 1, 'foo', 'baz')
         self.assertNotEqual(loc1, loc2)
 
 

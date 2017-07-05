@@ -852,13 +852,18 @@ class FeatureLocation(object):
                 yield i
 
     def __eq__(self, other):
-        """Check if start, end and strand of this location are the same as in the other location"""
+        """Implement equality by comparing all the location attributes."""
         if not isinstance(other, FeatureLocation):
             return False
-        return self._start == other.start and self._end == other.end and self._strand == other.strand
+        return self._start == other.start and \
+            self._end == other.end and \
+            self._strand == other.strand and \
+            self.ref == other.ref and \
+            self.ref_db == other.ref_db
 
     def __ne__(self, other):
-        """Needed for py2, not needed for py3"""
+        """Implement the not-equal operand."""
+        # This is needed for py2, but not for py3.
         return not (self == other)
 
     def _shift(self, offset):
@@ -1199,21 +1204,21 @@ class CompoundLocation(object):
                 yield pos
 
     def __eq__(self, other):
-        """Check if all parts of CompoundLocation are equal to all parts of other CompoundLocation"""
+        """Check if all parts of CompoundLocation are equal to all parts of other CompoundLocation."""
         if not isinstance(other, CompoundLocation):
             return False
-        if not len(self.parts) == len(other.parts):
+        if len(self.parts) != len(other.parts):
             return False
-        if not self.operator == other.operator:
+        if self.operator != other.operator:
             return False
         identical = True
-        for i, self_part in enumerate(self.parts):
-            other_part = other.parts[i]
+        for self_part, other_part in zip(self.parts, other.parts):
             identical = identical and self_part == other_part
         return identical
 
     def __ne__(self, other):
-        """Needed for py2, not needed for py3"""
+        """Implement the not-equal operand."""
+        # This is needed for py2, but not for py3.
         return not (self == other)
 
     def _shift(self, offset):
