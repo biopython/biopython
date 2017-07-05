@@ -8,7 +8,7 @@
 import unittest
 from os import path
 from Bio import SeqIO
-from Bio.SeqFeature import FeatureLocation, AfterPosition, BeforePosition
+from Bio.SeqFeature import FeatureLocation, AfterPosition, BeforePosition, CompoundLocation
 
 
 class TestReference(unittest.TestCase):
@@ -62,4 +62,37 @@ class TestFeatureLocation(unittest.TestCase):
 
         loc1 = FeatureLocation(23, 42, 1)
         loc2 = (23, 42, 1)
+        self.assertNotEqual(loc1, loc2)
+
+
+class TestCompoundLocation(unittest.TestCase):
+    """Tests for the SeqFeature.CompoundLocation class"""
+
+    def test_eq_identical(self):
+        """Test two identical locations are equal"""
+        loc1 = FeatureLocation(12, 17, 1) + FeatureLocation(23, 42, 1)
+        loc2 = FeatureLocation(12, 17, 1) + FeatureLocation(23, 42, 1)
+        self.assertEqual(loc1, loc2)
+
+        loc1 = FeatureLocation(12, 17, 1) + FeatureLocation(23, 42, 1)
+        loc2 = CompoundLocation([FeatureLocation(12, 17, 1), FeatureLocation(23, 42, 1)])
+        self.assertEqual(loc1, loc2)
+
+    def test_eq_not_identical(self):
+        """Test two different locations are not equal"""
+
+        loc1 = FeatureLocation(12, 17, 1) + FeatureLocation(23, 42, 1)
+        loc2 = FeatureLocation(12, 17, 1) + FeatureLocation(23, 42, 1) + FeatureLocation(50, 60, 1)
+        self.assertNotEqual(loc1, loc2)
+
+        loc1 = FeatureLocation(12, 17, 1) + FeatureLocation(23, 42, 1)
+        loc2 = FeatureLocation(12, 17, -1) + FeatureLocation(23, 42, -1)
+        self.assertNotEqual(loc1, loc2)
+
+        loc1 = CompoundLocation([FeatureLocation(12, 17, 1), FeatureLocation(23, 42, 1)])
+        loc2 = CompoundLocation([FeatureLocation(12, 17, 1), FeatureLocation(23, 42, 1)], 'order')
+        self.assertNotEqual(loc1, loc2)
+
+        loc1 = FeatureLocation(12, 17, 1) + FeatureLocation(23, 42, 1)
+        loc2 = 5
         self.assertNotEqual(loc1, loc2)

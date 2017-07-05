@@ -1198,6 +1198,24 @@ class CompoundLocation(object):
             for pos in loc:
                 yield pos
 
+    def __eq__(self, other):
+        """Check if all parts of CompoundLocation are equal to all parts of other CompoundLocation"""
+        if not isinstance(other, CompoundLocation):
+            return False
+        if not len(self.parts) == len(other.parts):
+            return False
+        if not self.operator == other.operator:
+            return False
+        identical = True
+        for i, self_part in enumerate(self.parts):
+            other_part = other.parts[i]
+            identical = identical and self_part == other_part
+        return identical
+
+    def __ne__(self, other):
+        """Needed for py2, not needed for py3"""
+        return not (self == other)
+
     def _shift(self, offset):
         """Return a copy of the CompoundLocation shifted by an offset (PRIVATE)."""
         return CompoundLocation([loc._shift(offset) for loc in self.parts],
