@@ -34,6 +34,10 @@ arguments do.
 
 Bio.motifs was updated to support changes in MEME v4.11.4 output.
 
+Bio.Phylo.draw_graphviz is now deprecated. We recommend using Bio.Phylo.draw
+instead, or another library or program if more advanced plotting functionality
+is needed.
+
 In Bio.Phylo.TreeConstruction, the DistanceMatrix class (previously
 _DistanceMatrix) has a new method 'format_phylip' to write Phylip-compatible
 distance matrix files. (Contributed by Jordan Willis)
