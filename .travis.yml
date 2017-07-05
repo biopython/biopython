@@ -45,6 +45,21 @@ matrix:
         apt:
           packages:
       before_install: echo "Going to run basic checks"
+    - stage: basics
+      env: TOXENV=docs
+      addons:
+        apt:
+          packages:
+          - texlive
+          - texlive-latex-extra
+          - hevea
+      before_install:
+      - echo "Going to build the LaTeX documentation"
+      install:
+      - echo "Installed pdflatex and hevea via apt-get"
+      script:
+      - cd Doc
+      - make
     - stage: test
       python: 3.7
       env: TOXENV=api
