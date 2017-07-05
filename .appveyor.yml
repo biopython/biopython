@@ -12,6 +12,9 @@ environment:
     - PY_MAJOR_VER: 3
       PYTHON_ARCH: "x86"
 
+matrix:
+  fast_finish: true
+
 # Enable MySQL and PostgreSQL for BioSQL tests
 services:
   - mysql
