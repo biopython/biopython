@@ -34,13 +34,16 @@ arguments do.
 
 Bio.motifs was updated to support changes in MEME v4.11.4 output.
 
+The Bio.Seq sequence objects now have a ``.count_overlap()`` method to
+supplement the Python string like non-overlap based ``.count()`` method.
+
 Bio.Phylo.draw_graphviz is now deprecated. We recommend using Bio.Phylo.draw
 instead, or another library or program if more advanced plotting functionality
 is needed.
 
 In Bio.Phylo.TreeConstruction, the DistanceMatrix class (previously
 _DistanceMatrix) has a new method 'format_phylip' to write Phylip-compatible
-distance matrix files. (Contributed by Jordan Willis)
+distance matrix files (contributed by Jordan Willis).
 
 Additionally, a number of small bugs have been fixed with further additions
 to the test suite, and there has been further work to follow the Python PEP8,
