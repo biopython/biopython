@@ -851,6 +851,16 @@ class FeatureLocation(object):
             for i in range(self._start, self._end):
                 yield i
 
+    def __eq__(self, other):
+        """Check if start, end and strand of this location are the same as in the other location"""
+        if not isinstance(other, FeatureLocation):
+            return False
+        return self._start == other.start and self._end == other.end and self._strand == other.strand
+
+    def __ne__(self, other):
+        """Needed for py2, not needed for py3"""
+        return not (self == other)
+
     def _shift(self, offset):
         """Return a copy of the FeatureLocation shifted by an offset (PRIVATE)."""
         # TODO - What if offset is a fuzzy position?
