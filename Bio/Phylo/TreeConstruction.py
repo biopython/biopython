@@ -345,6 +345,7 @@ class DistanceMatrix(_Matrix):
             fields = itertools.chain([name], values, mirror_values)
             handle.write(row_fmt.format(*fields))
 
+
 # Shim for compatibility with Biopython<1.70 (#1304)
 _DistanceMatrix = DistanceMatrix
 
