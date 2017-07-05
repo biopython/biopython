@@ -59,6 +59,7 @@ please open an issue on GitHub or mention it on the development mailing list.
 - Cheng Soon Ong <chengsoon.ong at tuebingen.mpg.de>
 - Chris Lasher <chris.lasher at gmail.com>
 - Chris Mitchell <https://github.com/chrismit>
+- Chris Rands <https://github.com/chris-rands>
 - Chris Warth <https://github.com/cswarth>
 - Christiam Camacho <https://github.com/christiam>
 - Christian Brueffer <christian at domain brueffer.de>
