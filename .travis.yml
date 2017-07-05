@@ -19,12 +19,21 @@ matrix:
   include:
     - stage: basics
       env: TOXENV=style
+      addons:
+        apt:
+          packages:
       before_install: echo "Going to run basic checks"
     - stage: basics
       env: TOXENV=sdist
+      addons:
+        apt:
+          packages:
       before_install: echo "Going to run basic checks"
     - stage: basics
       env: TOXENV=bdist_wheel
+      addons:
+        apt:
+          packages:
       before_install: echo "Going to run basic checks"
     - stage: test
       python: 2.7
