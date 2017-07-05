@@ -299,7 +299,7 @@ class _Matrix(object):
         return matrix_string
 
 
-class _DistanceMatrix(_Matrix):
+class DistanceMatrix(_Matrix):
     """Distance matrix class that can be used for distance based tree algorithms.
 
     All diagonal elements will be zero no matter what the users provide.
@@ -344,6 +344,9 @@ class _DistanceMatrix(_Matrix):
                              for j in range(i + 1, len(self.matrix)))
             fields = itertools.chain([name], values, mirror_values)
             handle.write(row_fmt.format(*fields))
+
+# Shim for compatibility with Biopython<1.70 (#1304)
+_DistanceMatrix = DistanceMatrix
 
 
 class DistanceCalculator(object):
@@ -489,7 +492,7 @@ class DistanceCalculator(object):
         return 1 - (score * 1.0 / max_score)
 
     def get_distance(self, msa):
-        """Return a _DistanceMatrix for MSA object
+        """Return a DistanceMatrix for MSA object
 
         :Parameters:
             msa : MultipleSeqAlignment
@@ -500,7 +503,7 @@ class DistanceCalculator(object):
             raise TypeError("Must provide a MultipleSeqAlignment object.")
 
         names = [s.id for s in msa]
-        dm = _DistanceMatrix(names)
+        dm = DistanceMatrix(names)
         for seq1, seq2 in itertools.combinations(msa, 2):
             dm[seq1.id, seq2.id] = self._pairwise(seq1, seq2)
         return dm
@@ -605,12 +608,12 @@ class DistanceTreeConstructor(TreeConstructor):
         with Arithmetic mean (UPGMA) tree.
 
         :Parameters:
-            distance_matrix : _DistanceMatrix
+            distance_matrix : DistanceMatrix
                 The distance matrix for tree construction.
 
         """
-        if not isinstance(distance_matrix, _DistanceMatrix):
-            raise TypeError("Must provide a _DistanceMatrix object.")
+        if not isinstance(distance_matrix, DistanceMatrix):
+            raise TypeError("Must provide a DistanceMatrix object.")
 
         # make a copy of the distance matrix to be used
         dm = copy.deepcopy(distance_matrix)
@@ -681,12 +684,12 @@ class DistanceTreeConstructor(TreeConstructor):
         """Construct and return an Neighbor Joining tree.
 
         :Parameters:
-            distance_matrix : _DistanceMatrix
+            distance_matrix : DistanceMatrix
                 The distance matrix for tree construction.
 
         """
-        if not isinstance(distance_matrix, _DistanceMatrix):
-            raise TypeError("Must provide a _DistanceMatrix object.")
+        if not isinstance(distance_matrix, DistanceMatrix):
+            raise TypeError("Must provide a DistanceMatrix object.")
 
         # make a copy of the distance matrix to be used
         dm = copy.deepcopy(distance_matrix)
