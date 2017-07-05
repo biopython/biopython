@@ -200,8 +200,8 @@ class Seq(object):
 
     def __ne__(self, other):
         """Implement the not-equal operand."""
-        # Seem to require this method for Python 2 but not needed on Python 3?
-        return not (self == other)
+        # Require this method for Python 2 but not needed on Python 3
+        return not self == other
 
     def __lt__(self, other):
         """Implement the less-than operand."""
