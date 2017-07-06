@@ -528,6 +528,11 @@ class Reference(object):
             self.pubmed_id == other.pubmed_id and \
             self.comment == other.comment
 
+    def __ne__(self, other):
+        """Implement the not-equal operand."""
+        # This is needed for py2, but not for py3.
+        return not self == other
+
 
 # --- Handling feature locations
 
