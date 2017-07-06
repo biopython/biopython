@@ -93,3 +93,54 @@ The installer is an executable program, so you only need to double click it to r
 ----------------------------------
 
 Apple includes python on Mac OS X, and while you can use this many people have preferred to install the latest version of python as well in parallel. We refer you to `https://www.python.org <https://www.python.org>`_ for more details, although otherwise the UNIX instructions apply.
+
+
+Installing Biopython in your system
+===================================
+
+UNIX/Linux
+----------
+
+For installing Biopython, you will require a software package called ``pip`` to do so. If you are using the latest 3.x version of Python, you will have the package preinstalled in your UNIX/Linux system. You can check the version of the software by doing::
+
+  $ pip --version
+  pip 9.0.1 from /usr/lib/python3.6/site-packages (python 3.6)
+  
+If you don't see an output like the one above, you do not have pip installed in the system. To install pip in your UNIX/Linux system, follow the instructions given in the link here-`https://packaging.python.org/guides/installing-using-linux-tools/ <https://packaging.python.org/guides/installing-using-linux-tools/>`_
+
+
+Once ``pip`` is installed, Go to your terminal and type::
+
+  $ pip install biopython
+  
+This command will fetch the latest version of biopython from Python Package Index and start the installation procedure. The command will also install any of the required dependencies of Biopython which are not available in your system, like `Numpy <http://www.numpy.org/>`_.
+
+Once the installation is done, you can check if the installation is working by firing up the python interpreter in the terminal and doing the following::
+  
+  $ python
+  Python 3.5.1+ (default, Mar 30 2016, 22:46:26) 
+  [GCC 5.3.1 20160330] on linux
+  Type "help", "copyright", "credits" or "license" for more information.
+  >>> import Bio
+  >>> Bio.__version__
+  1.69
+  
+If you see an output like the one above, you have successfully installed Biopython in your system. Otherwise you will notice an error.
+
+If you wish to install a specific version of Biopython for the system, you can type in the terminal::
+
+  $ pip install biopython==1.68
+  
+This command will install 1.68 version of Biopython in your system.
+
+Mac OS X
+--------
+
+To install Biopython in Mac OS X, you will need to first go to `http://biopython.org/wiki/Download <http://biopython.org/wiki/Download>`_ and download the latest gzipped tarball from the link. Once it is done, Extract the tarball and then go to the terminal and type::
+
+  $ python setup.py build 
+  $ python setup.py test
+  $ sudo python setup.py install
+
+This will install the biopython package in your system. To check the installation, follow the steps mentioned in the UNIX/Linux section. To install a specific version of Biopython, search for the tarball in the biopython download link and follow the steps as it is.
+
