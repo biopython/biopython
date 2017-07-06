@@ -41,6 +41,8 @@ Bio.motifs was updated to support changes in MEME v4.11.4 output.
 The Bio.Seq sequence objects now have a ``.count_overlap()`` method to
 supplement the Python string like non-overlap based ``.count()`` method.
 
+The Bio.SeqFeature location objects can now be compared for equality.
+
 Bio.Phylo.draw_graphviz is now deprecated. We recommend using Bio.Phylo.draw
 instead, or another library or program if more advanced plotting functionality
 is needed.
@@ -74,6 +76,7 @@ possible, especially the following contributors:
 - John Kern (first contribution)
 - Jordan Willis (first contribution)
 - João Rodrigues
+- Kai Blin
 - Markus Piotrowski
 - Mateusz Korycinski (first contribution)
 - Maximilian Greil
