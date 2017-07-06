@@ -1211,11 +1211,10 @@ class CompoundLocation(object):
             return False
         if self.operator != other.operator:
             return False
-        identical = True
         for self_part, other_part in zip(self.parts, other.parts):
             if self_part != other_part:
                 return False
-        return identical
+        return True
 
     def __ne__(self, other):
         """Implement the not-equal operand."""
