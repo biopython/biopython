@@ -864,7 +864,7 @@ class FeatureLocation(object):
     def __ne__(self, other):
         """Implement the not-equal operand."""
         # This is needed for py2, but not for py3.
-        return not (self == other)
+        return not self == other
 
     def _shift(self, offset):
         """Return a copy of the FeatureLocation shifted by an offset (PRIVATE)."""
@@ -1213,13 +1213,14 @@ class CompoundLocation(object):
             return False
         identical = True
         for self_part, other_part in zip(self.parts, other.parts):
-            identical = identical and self_part == other_part
+            if self_part != other_part:
+                return False
         return identical
 
     def __ne__(self, other):
         """Implement the not-equal operand."""
         # This is needed for py2, but not for py3.
-        return not (self == other)
+        return not self == other
 
     def _shift(self, offset):
         """Return a copy of the CompoundLocation shifted by an offset (PRIVATE)."""
