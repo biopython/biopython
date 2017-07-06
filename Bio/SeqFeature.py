@@ -851,6 +851,21 @@ class FeatureLocation(object):
             for i in range(self._start, self._end):
                 yield i
 
+    def __eq__(self, other):
+        """Implement equality by comparing all the location attributes."""
+        if not isinstance(other, FeatureLocation):
+            return False
+        return self._start == other.start and \
+            self._end == other.end and \
+            self._strand == other.strand and \
+            self.ref == other.ref and \
+            self.ref_db == other.ref_db
+
+    def __ne__(self, other):
+        """Implement the not-equal operand."""
+        # This is needed for py2, but not for py3.
+        return not self == other
+
     def _shift(self, offset):
         """Return a copy of the FeatureLocation shifted by an offset (PRIVATE)."""
         # TODO - What if offset is a fuzzy position?
@@ -1187,6 +1202,25 @@ class CompoundLocation(object):
         for loc in self.parts:
             for pos in loc:
                 yield pos
+
+    def __eq__(self, other):
+        """Check if all parts of CompoundLocation are equal to all parts of other CompoundLocation."""
+        if not isinstance(other, CompoundLocation):
+            return False
+        if len(self.parts) != len(other.parts):
+            return False
+        if self.operator != other.operator:
+            return False
+        identical = True
+        for self_part, other_part in zip(self.parts, other.parts):
+            if self_part != other_part:
+                return False
+        return identical
+
+    def __ne__(self, other):
+        """Implement the not-equal operand."""
+        # This is needed for py2, but not for py3.
+        return not self == other
 
     def _shift(self, offset):
         """Return a copy of the CompoundLocation shifted by an offset (PRIVATE)."""
