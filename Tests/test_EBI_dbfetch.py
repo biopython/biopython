@@ -7,7 +7,7 @@
 # Builtins
 import unittest
 
-from Bio.EBI.dbfetch import db_info, dbfetch
+from Bio.EBI import db_info, dbfetch
 from Bio import SeqIO
 
 
