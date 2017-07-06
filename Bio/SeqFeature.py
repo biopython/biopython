@@ -517,8 +517,8 @@ class Reference(object):
     def __eq__(self, other):
         """Check if two Reference objects should be considered equal.
 
-        Note that the location is not compared, as __eq__ for the
-        FeatureLocation class is not defined.
+        Note prior to Biopython 1.70 the location was not compared, as
+        until then __eq__ for the FeatureLocation class was not defined.
         """
         return self.authors == other.authors and \
             self.consrtm == other.consrtm and \
@@ -526,7 +526,8 @@ class Reference(object):
             self.journal == other.journal and \
             self.medline_id == other.medline_id and \
             self.pubmed_id == other.pubmed_id and \
-            self.comment == other.comment
+            self.comment == other.comment and \
+            self.location == other.location
 
     def __ne__(self, other):
         """Implement the not-equal operand."""
