@@ -332,6 +332,7 @@ PACKAGES = [
     'Bio.Compass',
     'Bio.Crystal',
     'Bio.Data',
+    'Bio.EBI.dbfetch',
     'Bio.EBI',
     'Bio.Emboss',
     'Bio.Entrez',
