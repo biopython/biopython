@@ -2,16 +2,16 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
+"""Code for chopping up (dicing) a structure.
+
+This module is used internally by the Bio.PDB.extract() function.
+"""
 
 import re
 import warnings
 
 from Bio.PDB.PDBIO import PDBIO
 from Bio import BiopythonWarning
-from Bio import BiopythonDeprecationWarning
-
-warnings.warn("Bio.PDB.Dice is now deprecated will be removed in a "
-              "future release of Biopython.", BiopythonDeprecationWarning)
 
 _hydrogen = re.compile("[123 ]*H.*")
 
