@@ -10,6 +10,7 @@ Bio.PDB is a Biopython module that focuses on working with crystal structures of
 
 First we create a \texttt{PDBParser} object:
 
+%doctest ../Tests/PDB/ lib:numpy
 \begin{verbatim}
 >>> from Bio.PDB.PDBParser import PDBParser
 >>> parser = PDBParser(PERMISSIVE=1)
@@ -19,9 +20,10 @@ The {\tt PERMISSIVE} flag indicates that a number of common problems (see \ref{p
 
 The Structure object is then produced by letting the \texttt{PDBParser} object parse a PDB file (the PDB file in this case is called \verb|pdb1fat.ent|, \verb|1fat| is a user defined name for the structure):
 
+%cont-doctest
 \begin{verbatim}
 >>> structure_id = "1fat"
->>> filename = "pdb1fat.ent"
+>>> filename = "1fat.pdb"
 >>> structure = parser.get_structure(structure_id, filename)
 \end{verbatim}
 
@@ -40,6 +42,7 @@ a Python dictionary that maps header records to their values.
 
 Example:
 
+%cont-doctest
 \begin{verbatim}
 >>> resolution = structure.header['resolution']
 >>> keywords = structure.header['keywords']
@@ -49,8 +52,10 @@ The available keys are \verb+name+, \verb+head+, \verb+deposition_date+, \verb+r
 The dictionary can also be created without creating a \texttt{Structure}
 object, ie. directly from the PDB file:
 
+%doctest ../Tests/PDB/ lib:numpy
 \begin{verbatim}
 >>> from Bio.PDB import parse_pdb_header
+>>> filename = "1fat.pdb"
 >>> with open(filename, 'r') as handle:
 ...     header_dict = parse_pdb_header(handle)
 ...
@@ -60,11 +65,13 @@ object, ie. directly from the PDB file:
 
 Similarly to the case of PDB files, first create an \texttt{MMCIFParser} object:
 
+%doctest ../Tests/PDB/ lib:numpy
 \begin{verbatim}
 >>> from Bio.PDB.MMCIFParser import MMCIFParser
 >>> parser = MMCIFParser()
 \end{verbatim}
 Then use this parser to create a structure object from the mmCIF file:
+%cont-doctest
 \begin{verbatim}
 >>> structure = parser.get_structure('1fat', '1fat.cif')
 \end{verbatim}
@@ -75,17 +82,20 @@ tags in an mmCIF file to their values. If there are multiple values
 the $y$ coordinates of all atoms), the tag is mapped to a list of values.
 The dictionary is created from the mmCIF file as follows:
 
+%doctest ../Tests/PDB/ lib:numpy
 \begin{verbatim}
 >>> from Bio.PDB.MMCIF2Dict import MMCIF2Dict
->>> mmcif_dict = MMCIF2Dict('1FAT.cif')
+>>> mmcif_dict = MMCIF2Dict('1fat.cif')
 \end{verbatim}
 
 Example: get the solvent content from an mmCIF file:
+%cont-doctest
 \begin{verbatim}
 >>> sc = mmcif_dict['_exptl_crystal.density_percent_sol']
 \end{verbatim}
 
 Example: get the list of the $y$ coordinates of all atoms
+%cont-doctest
 \begin{verbatim}
 >>> y_list = mmcif_dict['_atom_site.Cartn_y']
 \end{verbatim}
@@ -102,7 +112,6 @@ You can use the direct MMTFParser to read a structure from a file:
 \end{verbatim}
 
 Or you can use the same class to get a structure by its PDB ID:
-%want online doctest here
 \begin{verbatim}
 >>> structure = MMTFParser.get_structure_from_url("4CUP")
 \end{verbatim}
@@ -111,7 +120,7 @@ This gives you a Structure object as if read from a PDB or mmCIF file.
 
 You can also have access to the underlying data using the external
 MMTF library which Biopython is using internally:
-%want online doctest here
+%doctest . lib:mmtf internet
 \begin{verbatim}
 >>> from mmtf import fetch
 >>> decoded_data = fetch("4CUP")
