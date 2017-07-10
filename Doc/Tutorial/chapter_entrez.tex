@@ -489,12 +489,15 @@ The \verb+"LinkSetDb"+ key contains the search results, stored as a list consist
 \begin{verbatim}
 >>> len(record[0]["LinkSetDb"])
 8
+\end{verbatim}
+\noindent The exact numbers should increase over time:
+\begin{verbatim}
 >>> for linksetdb in record[0]["LinkSetDb"]:
 ...     print(linksetdb["DbTo"], linksetdb["LinkName"], len(linksetdb["Link"]))
 ...
-pubmed pubmed_pubmed 161
+pubmed pubmed_pubmed 162
 pubmed pubmed_pubmed_alsoviewed 3
-pubmed pubmed_pubmed_citedin 423
+pubmed pubmed_pubmed_citedin 430
 pubmed pubmed_pubmed_combined 6
 pubmed pubmed_pubmed_five 6
 pubmed pubmed_pubmed_refs 17
