@@ -2054,10 +2054,10 @@ class MutableSeq(object):
         # The implementation is currently identical to that of
         # Seq.count_overlap() apart from the definition of sub_str
         sub_str = str(sub)
-        self = str(self)
+        self_str = str(self)
         overlap_count = 0
         while True:
-            start = self.find(sub_str, start, end) + 1
+            start = self_str.find(sub_str, start, end) + 1
             if start != 0:
                 overlap_count += 1
             else:
