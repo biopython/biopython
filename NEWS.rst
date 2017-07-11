@@ -62,6 +62,7 @@ possible, especially the following contributors:
 - Allis Tauri
 - Andrew Guy
 - Ariel Aptekmann (first contribution)
+- Ben Fulton
 - Bertrand Caron (first contribution)
 - Chris Rands
 - Connor T. Skennerton
