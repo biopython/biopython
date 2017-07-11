@@ -62,12 +62,13 @@ Windows users are currently recommended to use the installation packages provide
 on our website, http://biopython.org -- further instructions are given below.
 
 Python 2.7.9 onwards, and Python 3.4 onwards, include the package management
-system "pip" which should allow you to install Biopython with just::
+system "pip" which should allow you to install Biopython (and its dependency
+NumPy if needed) with just::
 
-    pip install numpy
     pip install biopython
 
-Otherwise you may have to build and install Biopython, which is described below.
+Otherwise you may have to download, build and install Biopython, which is
+described below.
 
 
 Python Requirements
@@ -162,9 +163,9 @@ Windows users should use the appropriate provided installation package
 from our website (each is specific to a different Python version).
 
 Python 2.7.9 onwards, and Python 3.4 onwards, include the package management
-system "pip" which should allow you to install Biopython with just::
+system "pip" which should allow you to install Biopython (and its dependency
+NumPy if needed) with just::
 
-    pip install numpy
     pip install biopython
 
 Otherwise you may have to build and install Biopython which should be as
