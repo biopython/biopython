@@ -17,7 +17,7 @@ class TestNCBIXML(unittest.TestCase):
 
         filename = 'xml_2212L_blastp_001.xml'
         datafile = os.path.join("Blast", filename)
-        handle = open(datafile)
+        handle = open(datafile, "rb")
         records = NCBIXML.parse(handle)
         record = next(records)
 
@@ -1393,7 +1393,7 @@ class TestNCBIXML(unittest.TestCase):
         self.assertRaises(StopIteration, next, records)
         handle.close()
 
-        handle = open(datafile)
+        handle = open(datafile, "rb")
         record = NCBIXML.read(handle)
         handle.close()
 
@@ -1402,7 +1402,7 @@ class TestNCBIXML(unittest.TestCase):
 
         filename = 'xml_2212L_blastn_001.xml'
         datafile = os.path.join("Blast", filename)
-        handle = open(datafile)
+        handle = open(datafile, "rb")
         records = NCBIXML.parse(handle)
         record = next(records)
         alignments = record.alignments
@@ -1422,7 +1422,7 @@ class TestNCBIXML(unittest.TestCase):
         self.assertRaises(StopIteration, next, records)
         handle.close()
 
-        handle = open(datafile)
+        handle = open(datafile, "rb")
         record = NCBIXML.read(handle)
         handle.close()
 
@@ -1432,7 +1432,7 @@ class TestNCBIXML(unittest.TestCase):
         filename = 'xml_2212L_blastx_001.xml'
         datafile = os.path.join("Blast", filename)
 
-        handle = open(datafile)
+        handle = open(datafile, "rb")
         records = NCBIXML.parse(handle)
         record = next(records)
         alignments = record.alignments
@@ -1442,7 +1442,7 @@ class TestNCBIXML(unittest.TestCase):
         self.assertRaises(StopIteration, next, records)
         handle.close()
 
-        handle = open(datafile)
+        handle = open(datafile, "rb")
         record = NCBIXML.read(handle)
         handle.close()
 
@@ -1452,7 +1452,7 @@ class TestNCBIXML(unittest.TestCase):
         filename = 'xml_2212L_tblastn_001.xml'
         datafile = os.path.join("Blast", filename)
 
-        handle = open(datafile)
+        handle = open(datafile, "rb")
         records = NCBIXML.parse(handle)
         record = next(records)
         alignments = record.alignments
@@ -1462,7 +1462,7 @@ class TestNCBIXML(unittest.TestCase):
         self.assertRaises(StopIteration, next, records)
         handle.close()
 
-        handle = open(datafile)
+        handle = open(datafile, "rb")
         record = NCBIXML.read(handle)
         handle.close()
 
@@ -1472,7 +1472,7 @@ class TestNCBIXML(unittest.TestCase):
         filename = 'xml_2212L_tblastx_001.xml'
         datafile = os.path.join("Blast", filename)
 
-        handle = open(datafile)
+        handle = open(datafile, "rb")
         records = NCBIXML.parse(handle)
         record = next(records)
         alignments = record.alignments
@@ -1482,7 +1482,7 @@ class TestNCBIXML(unittest.TestCase):
         self.assertRaises(StopIteration, next, records)
         handle.close()
 
-        handle = open(datafile)
+        handle = open(datafile, "rb")
         record = NCBIXML.read(handle)
         handle.close()
 
@@ -1493,7 +1493,7 @@ class TestNCBIXML(unittest.TestCase):
         filename = 'xml_2218_blastp_001.xml'
         datafile = os.path.join("Blast", filename)
 
-        handle = open(datafile)
+        handle = open(datafile, "rb")
         records = NCBIXML.parse(handle)
 
         record = next(records)
@@ -1549,7 +1549,7 @@ class TestNCBIXML(unittest.TestCase):
         self.assertRaises(StopIteration, next, records)
         handle.close()
 
-        handle = open(datafile)
+        handle = open(datafile, "rb")
         record = NCBIXML.read(handle)
         handle.close()
 
@@ -1558,7 +1558,7 @@ class TestNCBIXML(unittest.TestCase):
 
         filename = 'xml_2218_blastp_002.xml'
         datafile = os.path.join("Blast", filename)
-        handle = open(datafile)
+        handle = open(datafile, "rb")
         records = NCBIXML.parse(handle)
         record = next(records)
         self.assertEqual(record.query_id, "gi|585505|sp|Q08386|MOPB_RHOCA")
@@ -1576,7 +1576,7 @@ class TestNCBIXML(unittest.TestCase):
         filename = 'xml_2218L_blastp_001.xml'
         datafile = os.path.join("Blast", filename)
 
-        handle = open(datafile)
+        handle = open(datafile, "rb")
         records = NCBIXML.parse(handle)
         record = next(records)
         self.assertEqual(record.query_id, "lcl|1_0")
@@ -1585,7 +1585,7 @@ class TestNCBIXML(unittest.TestCase):
         self.assertRaises(StopIteration, next, records)
         handle.close()
 
-        handle = open(datafile)
+        handle = open(datafile, "rb")
         record = NCBIXML.read(handle)
         handle.close()
 
@@ -1596,7 +1596,7 @@ class TestNCBIXML(unittest.TestCase):
         filename = 'xml_2222_blastx_001.xml'
         datafile = os.path.join("Blast", filename)
 
-        handle = open(datafile)
+        handle = open(datafile, "rb")
         records = NCBIXML.parse(handle)
 
         record = next(records)
@@ -1720,7 +1720,7 @@ class TestNCBIXML(unittest.TestCase):
         filename = 'xml_2222_blastp_001.xml'
         datafile = os.path.join("Blast", filename)
 
-        handle = open(datafile)
+        handle = open(datafile, "rb")
         records = NCBIXML.parse(handle)
 
         record = next(records)
@@ -1763,7 +1763,7 @@ class TestNCBIXML(unittest.TestCase):
         filename = 'xml_2218L_rpsblast_001.xml'
         datafile = os.path.join("Blast", filename)
 
-        handle = open(datafile)
+        handle = open(datafile, "rb")
         records = NCBIXML.parse(handle)
 
         record = next(records)
