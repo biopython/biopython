@@ -442,7 +442,7 @@ _FormatToWriter = {"fasta": FastaIO.FastaWriter,
                    "seqxml": SeqXmlIO.SeqXmlWriter,
                    }
 
-_BinaryFormats = ["sff", "sff-trim", "abi", "abi-trim"]
+_BinaryFormats = ["sff", "sff-trim", "abi", "abi-trim", "seqxml"]
 
 
 def write(sequences, handle, format):
