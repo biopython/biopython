@@ -15,6 +15,18 @@ This release of Biopython supports Python 2.7, 3.4, 3.5 and 3.6.
 It has also been tested on PyPy v5.7, PyPy3.5 v5.8 beta, and Jython 2.7
 (although support for Jython is deprecated).
 
+Encoding issues have been fixed in several parsers when reading data files
+with non-ASCII characters, like accented letters in people's names. This would
+raise ``UnicodeDecodeError: 'ascii' codec can't decode byte ...`` under some
+system locale settings.
+
+Many thanks to the Biopython developers and community for making this release
+possible, especially the following contributors:
+
+- Chris Rands
+- Peter Cock
+
+
 10 July 2017: Biopython 1.70
 ============================
 
