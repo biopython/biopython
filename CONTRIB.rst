@@ -83,6 +83,7 @@ please open an issue on GitHub or mention it on the development mailing list.
 - Eric Rasche <https://github.com/erasche>
 - Eric Talevich <https://github.com/etal>
 - Erick Matsen <surname at fhcrc dot org>
+- Erik Cederstrand <https://github.com/ecederstrand>
 - Foen Peng <https://github.com/foenpeng>
 - Francesco Gastaldello <https://github.com/Gasta88>
 - Francisco Pina-Martins <https://github.com/StuntsPT>
