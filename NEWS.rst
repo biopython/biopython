@@ -26,6 +26,9 @@ system locale settings.
 
 Bio.KEGG can now parse Gene files.
 
+The SeqRecord object now has a translate method, following the approach used
+for its existing reverse_complement method etc.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
