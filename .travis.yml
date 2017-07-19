@@ -13,6 +13,7 @@
 # - basics - quick things like style and packaging
 # - test - the actual functional tests which are slow
 
+dist: trusty
 language: python
 cache: pip
 matrix:
