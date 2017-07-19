@@ -42,19 +42,21 @@ API documentation.
 We use the continuous integration service TravisCI to enforce some of these
 checks, so if you are making a contribution it is best to check this locally.
 
-You can run the tool ``flake8`` directly as follows. This includes the checks
-from  ``pycodestyle`` (formerly ``pep8``) and uses the ``pydocstyle`` plugin
-(``flake8-docstrings``) for checking the docstrings within the Python code::
+We use the tool ``flake8`` for code style checks, together with various
+plugins which can be installed as follows::
 
     $ pip install flake8 flake8-docstrings flake8-blind-except
+
+You can then run ``flake8`` directly as follows:
+
     $ flake8 Bio/
     $ flake8 BioSQL/
     $ flake8 Tests/
     $ flake8 Scripts/
     $ flake8 Doc/examples/
 
-Each of these folders has its own flake8 settings file, in the long term we
-would like all the code to follow the same strict settings.
+Each of these folders has its own flake8 settings file, but in the long term
+we would like all the code to follow the same strict settings.
 
 You can run the reStructuredText checks with the ``restructuredtext-lint``
 tool (also known as ``rst-lint``)::
@@ -62,10 +64,9 @@ tool (also known as ``rst-lint``)::
     $ pip install restructuredtext_lint
     $ rst-lint --level warning *.rst
 
-More simply we currently suggest you install the git pre-commit hook described
+More simply, we currently suggest you install the git pre-commit hook described
 here which will check our basic coding conventions as you work:
 https://github.com/biopython/biopython/issues/493
-
 
 
 Testing
