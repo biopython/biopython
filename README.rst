@@ -58,17 +58,18 @@ http://dx.doi.org/10.1093/bioinformatics/btp163 pmid:19304878
 For the impatient
 =================
 
-Windows users are currently recommended to use the installation packages provided
-on our website, http://biopython.org -- further instructions are given below.
-
 Python 2.7.9 onwards, and Python 3.4 onwards, include the package management
 system "pip" which should allow you to install Biopython (and its dependency
 NumPy if needed) with just::
 
     pip install biopython
 
-Otherwise you may have to download, build and install Biopython, which is
-described below.
+Since Biopython 1.70 we have provided pre-compiled binary wheel packages on
+PyPI for Linux, Mac OS X and Windows. This means pip install should be quick,
+and not require a compiler.
+
+As a developer or potential contributor, you may wish to download, build and
+install Biopython yourself. This is described below.
 
 
 Python Requirements
@@ -105,6 +106,15 @@ Dependencies
 The following are required at compile time - unless you are using Jython
 (support for which is deprecated) or IronPython (which we do not officially
 support):
+
+- Appropriate C compiler for your version of Python, for example GCC on Linux,
+  MSVC on Windows. For Mac OS X, or as it is now branded, macOS, use Apple’s
+  command line tools, which can be installed with the terminal command::
+
+      xcode-select --install
+
+  This will offer to install Apple’s XCode development suite - you can, but it
+  is not needed and takes a lot of disk space.
 
 - NumPy, see http://www.numpy.org
   This package is used in ``Bio.Cluster``, ``Bio.PDB`` and a few other modules.
@@ -152,24 +162,19 @@ In addition there are a number of useful third party tools you may wish to
 install such as standalone NCBI BLAST, EMBOSS or ClustalW.
 
 
-Installation
-============
+Installation From Source
+========================
 
-First, **make sure that Python is installed correctly**. Second (except
-for Jython or IronPython), **make sure NumPy is installed**. Then
-install Biopython.
-
-Windows users should use the appropriate provided installation package
-from our website (each is specific to a different Python version).
-
-Python 2.7.9 onwards, and Python 3.4 onwards, include the package management
-system "pip" which should allow you to install Biopython (and its dependency
-NumPy if needed) with just::
+We recommend using the pre-compiled binary wheels available on PyPI using::
 
     pip install biopython
 
-Otherwise you may have to build and install Biopython which should be as
-going to the Biopython source code directory, and typing::
+However, if you need to compile Biopython yourself, first **make sure that
+Python is installed correctly**. Second (except for Jython or IronPython),
+**make sure NumPy is installed**.
+
+Then either download and decompress our source code, or fetch it using git.
+Now change directory to the Biopython source code folder and run:
 
     python setup.py build
     python setup.py test
@@ -178,8 +183,9 @@ going to the Biopython source code directory, and typing::
 Substitute ``python`` with your specific version, for example ``python3``,
 ``jython`` or `pypy``.
 
-If you need to do additional configuration, e.g. changing the base
-directory, please type ``python setup.py``, or see the documentation here:
+If you need to do additional configuration, e.g. changing the install
+directory prefix, please type ``python setup.py``, or see the documentation
+here:
 
 * HTML - http://biopython.org/DIST/docs/install/Installation.html
 * PDF - http://biopython.org/DIST/docs/install/Installation.pdf
