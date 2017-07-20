@@ -103,7 +103,7 @@ possible, especially the following contributors:
 - Michiel de Hoon
 - morrme (first contribution)
 - Noam Kremen (first contribution)
-- Patrick Kunzmann
+- Patrick Kunzmann (first contribution)
 - Peter Cock
 - Rasmus Fonseca (first contribution)
 - Rodrigo Dorantes-Gilardi (first contribution)
