@@ -249,7 +249,7 @@ def draw_arrow(point1, point2, color=colors.lightgreen, border=None,
     shaftbase = boxheight - shafttop
     headbase = boxwidth - headlength
     midheight = 0.5 * boxheight
-    
+
     if headbase > 0:
         # Full arrow
         points = [x1, y1 + shafttop,

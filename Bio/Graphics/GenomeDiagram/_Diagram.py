@@ -32,12 +32,14 @@ from ._Track import Track
 
 from Bio.Graphics import _write
 
+
 def _first_defined(*args):
     """Return the first non-null argument"""
     for arg in args:
         if arg is not None:
             return arg
     return None
+
 
 class Diagram(object):
     """Diagram container.
