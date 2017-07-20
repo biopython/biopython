@@ -144,3 +144,38 @@ To install Biopython in Mac OS X, you will need to first go to `http://biopython
 
 This will install the biopython package in your system. To check the installation, follow the steps mentioned in the UNIX/Linux section. To install a specific version of Biopython, search for the tarball in the biopython download link and follow the steps as it is.
 
+Installing Biopython using Anaconda
+===================================
+
+For Anaconda users, the Biopython source files are available in the `bioconda <https://bioconda.github.io/>`_ channel. To install Biopython, just do::
+
+  $ conda install -c bioconda biopython
+  
+You will see an output something like this::
+
+  Fetching package metadata ...........
+  Solving package specifications: ..........
+  
+  Package plan for installation in environment Users/username/Miniconda2:
+  
+  The following packages will be downloaded:
+  
+  package                    |            build
+  ---------------------------|-----------------
+  conda-env-2.6.0            |                0          498 B
+  mkl-2017.0.3               |                0       126.3 MB
+  numpy-1.13.1               |           py27_0         3.3 MB
+  biopython-1.69             |      np113py27_0         2.1 MB
+  conda-4.3.22               |           py27_0         520 KB
+  ------------------------------------------------------------
+                                         Total:       132.2 MB
+                                         
+  The following NEW packages will be INSTALLED:
+
+    biopython: 1.68-np113py27_0
+    mkl:       2017.0.3-0
+    numpy:     1.13.1-py27_0
+  
+  Proceed ([y]/n)?
+  
+Type "y" and the installation will start. Once installation is finished, you can check if the installation worked properly by doing the steps mentioned in the UNIX/Linux section above.
