@@ -114,4 +114,3 @@ class Record(object):
                                 mk_real.append(al)
                         clean_list.append(tuple(mk_real))
                     yield indiv_name, clean_list
-        raise StopIteration()
