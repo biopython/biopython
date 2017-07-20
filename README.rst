@@ -174,7 +174,7 @@ Python is installed correctly**. Second (except for Jython or IronPython),
 **make sure NumPy is installed**.
 
 Then either download and decompress our source code, or fetch it using git.
-Now change directory to the Biopython source code folder and run:
+Now change directory to the Biopython source code folder and run::
 
     python setup.py build
     python setup.py test
