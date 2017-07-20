@@ -390,14 +390,14 @@ class BlatPslParser(object):
     def __iter__(self):
         # break out if it's an empty file
         if not self.line:
-            raise StopIteration
+            return
 
         # read through header
         # this assumes that the result row match the regex
         while not re.search(_RE_ROW_CHECK, self.line.strip()):
             self.line = self.handle.readline()
             if not self.line:
-                raise StopIteration
+                return
 
         # parse into query results
         for qresult in self._parse_qresult():
@@ -541,7 +541,7 @@ class BlatPslIndexer(SearchIndexer):
             start_offset = handle.tell()
             line = handle.readline()
             if not line:
-                raise StopIteration
+                return
 
         # and index the qresults
         while True:

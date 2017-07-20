@@ -322,7 +322,7 @@ class _BaseExonerateParser(object):
                     self.line.startswith('cigar:'):
                 break
             elif not self.line or self.line.startswith('-- completed '):
-                raise StopIteration
+                return
 
         for qresult in self._parse_qresult():
             qresult.program = 'exonerate'
