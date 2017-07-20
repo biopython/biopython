@@ -181,7 +181,7 @@ Now change directory to the Biopython source code folder and run::
     sudo python setup.py install
 
 Substitute ``python`` with your specific version, for example ``python3``,
-``jython`` or `pypy``.
+``jython`` or ``pypy``.
 
 If you need to do additional configuration, e.g. changing the install
 directory prefix, please type ``python setup.py``, or see the documentation
