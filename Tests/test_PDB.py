@@ -34,7 +34,7 @@ except ImportError:
 from Bio import BiopythonWarning
 from Bio.Seq import Seq
 from Bio.Alphabet import generic_protein
-from Bio.PDB import PDBParser, PPBuilder, CaPPBuilder, PDBIO, Select
+from Bio.PDB import PDBParser, PPBuilder, CaPPBuilder, PDBIO, Select, PSEA
 from Bio.PDB import HSExposureCA, HSExposureCB, ExposureCN
 from Bio.PDB.PDBExceptions import PDBConstructionException, PDBConstructionWarning
 from Bio.PDB import rotmat, Vector, refmat, calc_angle, calc_dihedral, rotaxis, m2rotaxis
@@ -1478,6 +1478,14 @@ class ResidueDepthTests(unittest.TestCase):
         assert len(msms_radii) == len(biopy_radii)
         self.assertSequenceEqual(msms_radii, biopy_radii)
 
+class PSEATests(unittest.TestCase):
+    """Tests for PSEA module"""
+    def test_psea(self):
+        """Self-test for PSEA"""
+        pdb1 = "PDB/1A8O.pdb"
+        p = PDBParser()
+        s = p.get_structure('X', pdb1)
+        self.assertEqual(PSEA(s[0], pdb1))
 
 if __name__ == '__main__':
     runner = unittest.TextTestRunner(verbosity=2)
