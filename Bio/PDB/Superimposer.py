@@ -30,7 +30,7 @@ class Superimposer(object):
         @param moving: list of (moving) atoms
         @type fixed,moving: [L{Atom}, L{Atom},...]
         """
-        if not (len(fixed) == len(moving)):
+        if not len(fixed) == len(moving):
             raise PDBException("Fixed and moving atom lists differ in size")
         l = len(fixed)
         fixed_coord = numpy.zeros((l, 3))
