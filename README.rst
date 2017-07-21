@@ -82,7 +82,9 @@ implementations:
 
 - Python 2.7, 3.4, 3.5, 3.6 -- see http://www.python.org
 
-  This is the primary development platform for Biopython.
+  Python 3 is the primary development platform for Biopython. We will drop
+  support for Python 2.7 no later than 2020, in line with the end-of-life or
+  sunset date for Python 2.7 itself.
 
 - PyPy v5.7 and also PyPy3.5 v5.8 beta -- see http://www.pypy.org
 
