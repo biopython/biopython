@@ -31,8 +31,7 @@ from Bio.PDB.parse_pdb_header import _parse_pdb_header_list
 class PDBParser(object):
     """Parse a PDB file and return a Structure object."""
 
-    def __init__(self, PERMISSIVE=True, get_header=False,
-                 structure_builder=None, QUIET=False):
+    def __init__(self, PERMISSIVE=True, structure_builder=None, QUIET=False):
         """Create a PDBParser object.
 
         The PDB parser call a number of standard methods in an aggregated
