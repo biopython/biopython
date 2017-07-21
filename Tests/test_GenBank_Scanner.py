@@ -324,6 +324,7 @@ SQ   Sequence 1859 BP; 609 A; 314 C; 355 G; 581 T; 0 other;
 //
 """
 
+
 class TestGenBankScanner(unittest.TestCase):
 
     def test_genbank_scanner(self):
@@ -364,6 +365,7 @@ class TestGenBankScanner(unittest.TestCase):
         for record in e.parse_records(StringIO(embl_example), do_features=True):
             print("%s %s %s" % (record.id, record.name, record.description))
             print(record.seq)
+
 
 if __name__ == '__main__':
     runner = unittest.TextTestRunner(verbosity=2)
