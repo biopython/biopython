@@ -194,7 +194,7 @@ class PDBIO(object):
             if not preserve_atom_numbering:
                 atom_number = 1
             if model_flag:
-                fp.write("MODEL      %s\n" % model.serial_num)
+                fp.write(u"MODEL      %s\n" % model.serial_num)
             for chain in model.get_list():
                 if not select.accept_chain(chain):
                     continue
@@ -217,17 +217,17 @@ class PDBIO(object):
                                 atom_number = atom.get_serial_number()
                             s = get_atom_line(atom, hetfield, segid, atom_number, resname,
                                               resseq, icode, chain_id)
-                            fp.write(s)
+                            fp.write(unicode(s, "utf-8"))
                             if not preserve_atom_numbering:
                                 atom_number += 1
                 if chain_residues_written:
-                    fp.write("TER   %5i      %3s %c%4i%c                                                      \n"
+                    fp.write(u"TER   %5i      %3s %c%4i%c                                                      \n"
                              % (atom_number, resname, chain_id, resseq, icode))
 
             if model_flag and model_residues_written:
-                fp.write("ENDMDL\n")
+                fp.write(u"ENDMDL\n")
         if write_end:
-            fp.write('END\n')
+            fp.write(u'END\n')
         if close_file:
             fp.close()
 
