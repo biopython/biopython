@@ -1,7 +1,7 @@
 This pull request addresses issue #...
 
-I hereby agree to dual licence this any any other previous contributions under
-both the _Biopython License Agreement_ AND the _BSD 3-Clause License_.
+I hereby agree to dual licence this and any previous contributions under both
+the _Biopython License Agreement_ AND the _BSD 3-Clause License_.
 
 I (*am/am not*) happy to be thanked by name in the ``NEWS.rst`` and
 ``CONTRIB.rst`` files.
