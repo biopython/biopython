@@ -6,7 +6,7 @@
 #
 # author: Kristian Rother
 #
-# license: same as BioPython, read LICENSE.TXT from current BioPython release.
+# license: same as Biopython, read LICENSE.TXT from current Biopython release.
 #
 # last modified: 9.2.2004
 #

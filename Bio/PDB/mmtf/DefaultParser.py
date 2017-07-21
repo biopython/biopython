@@ -2,7 +2,7 @@ from Bio.PDB.StructureBuilder import StructureBuilder
 
 
 class StructureDecoder(object):
-    """Class to pass the data from mmtf-python into a BioPython data structure."""
+    """Class to pass the data from mmtf-python into a Biopython data structure."""
 
     def __init__(self):
         self.this_type = ""
@@ -64,7 +64,7 @@ class StructureDecoder(object):
 
         """
         # A Bradley - chose to use chain_name (auth_id) as it complies
-        # with current BioPython. Chain_id might be better.
+        # with current Biopython. Chain_id might be better.
         self.structure_bulder.init_chain(chain_id=chain_name)
         if self.chain_index_to_type_map[self.chain_counter] == "polymer":
             self.this_type = " "
