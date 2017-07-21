@@ -1478,6 +1478,7 @@ class ResidueDepthTests(unittest.TestCase):
         assert len(msms_radii) == len(biopy_radii)
         self.assertSequenceEqual(msms_radii, biopy_radii)
 
+
 class PSEATests(unittest.TestCase):
     """Tests for PSEA module"""
     def test_psea(self):
@@ -1486,6 +1487,7 @@ class PSEATests(unittest.TestCase):
         p = PDBParser()
         s = p.get_structure('X', pdb1)
         self.assertEqual(PSEA(s[0], pdb1))
+
 
 if __name__ == '__main__':
     runner = unittest.TextTestRunner(verbosity=2)
