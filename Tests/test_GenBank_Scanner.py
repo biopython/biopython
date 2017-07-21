@@ -364,3 +364,7 @@ class TestGenBankScanner(unittest.TestCase):
         for record in e.parse_records(StringIO(embl_example), do_features=True):
             print("%s %s %s" % (record.id, record.name, record.description))
             print(record.seq)
+
+if __name__ == '__main__':
+    runner = unittest.TextTestRunner(verbosity=2)
+    unittest.main(testRunner=runner)
