@@ -28,23 +28,21 @@ id_wrap = lambda indent: [indent, "", (" ", "", 1, 0)]
 class Record(object):
     """Holds info from a KEGG Gene record.
 
-    Members:
-    entry       The entry identifier.
-    name        A list of the gene names.
-    definition  The definition for the gene.
-    orthology   A list of 2-tuples: (orthology id, role)
-    organism    A tuple: (organism id, organism)
-    position    The position for the gene
-    motif       A list of 2-tuples: (database, list of link ids)
-    dblinks     A list of 2-tuples: (database, list of link ids)
+    Attributes:
+     - entry       The entry identifier.
+     - name        A list of the gene names.
+     - definition  The definition for the gene.
+     - orthology   A list of 2-tuples: (orthology id, role)
+     - organism    A tuple: (organism id, organism)
+     - position    The position for the gene
+     - motif       A list of 2-tuples: (database, list of link ids)
+     - dblinks     A list of 2-tuples: (database, list of link ids)
 
     """
 
     def __init__(self):
-        """__init__(self)
+        """Initialize new record."""
 
-        Create a new Record.
-        """
         self.entry = ""
         self.name = []
         self.definition = ""
@@ -55,10 +53,8 @@ class Record(object):
         self.dblinks = []
 
     def __str__(self):
-        """__str__(self)
+        """Return a string representation of this Record."""
 
-        Returns a string representation of this Record.
-        """
         return self._entry() + \
                self._name() + \
                self._dblinks() + \
