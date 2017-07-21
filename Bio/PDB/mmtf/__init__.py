@@ -29,7 +29,7 @@ class MMTFParser(object):
 
     @staticmethod
     def get_structure(file_path):
-        """Get a structrue from a file - given a file path.
+        """Get a structure from a file - given a file path.
 
         :param file_path: the input file path
         :return: the structure

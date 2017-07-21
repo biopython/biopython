@@ -93,7 +93,7 @@ class StructureDecoder(object):
                        sequence_index, secondary_structure_type):
         """Set the information for a group
 
-        :param group_name: the name of this group,e.g. LYS
+        :param group_name: the name of this group, e.g. LYS
         :param group_number: the residue number of this group
         :param insertion_code: the insertion code for this group
         :param group_type: a string indicating the type of group (as found in the chemcomp dictionary.
@@ -101,7 +101,7 @@ class StructureDecoder(object):
         :param atom_count: the number of atoms in the group
         :param bond_count: the number of unique bonds in the group
         :param single_letter_code: the single letter code of the group
-        :param sequence_index: the index of this group in the sequence defined by the enttiy
+        :param sequence_index: the index of this group in the sequence defined by the entity
         :param secondary_structure_type: the type of secondary structure used
             (types are according to DSSP and number to type mappings are defined in the specification)
 
@@ -125,7 +125,7 @@ class StructureDecoder(object):
         self.structure_bulder.init_model(model_id)
 
     def set_xtal_info(self, space_group, unit_cell):
-        """Set the crystallographic information for the structure
+        """Set the crystallographic information for the structure.
 
         :param space_group: the space group name, e.g. "P 21 21 21"
         :param unit_cell: an array of length 6 with the unit cell parameters in order: a, b, c, alpha, beta, gamma
@@ -150,7 +150,7 @@ class StructureDecoder(object):
 
     def set_bio_assembly_trans(self, bio_assembly_index, input_chain_indices,
                                input_transform):
-        """Set the Bioassembly transformation information. A single bioassembly can have multiple transforms,
+        """Set the Bioassembly transformation information. A single bioassembly can have multiple transforms.
 
         :param bio_assembly_index: the integer index of the bioassembly
         :param input_chain_indices: the list of integer indices for the chains of this bioassembly
