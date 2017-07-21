@@ -111,7 +111,7 @@ class PDBList(object):
     @staticmethod
     def get_status_list(url):
         """Retrieves a list of pdb codes in the weekly pdb status file
-        from the given URL. Used by get_recent_files.
+        from the given URL. Used by get_recent_changes.
 
         Typical contents of the list files parsed by this method is now
         very simply one PDB name per line.
