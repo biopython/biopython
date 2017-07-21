@@ -1,5 +1,14 @@
+# Copyright 2017 by Sourav Singh. All rights reserved.
+# Revisions copyright 2017 by Peter Cock.  All rights reserved.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
+
 from Bio._py3k import StringIO
 from Bio.GenBank import Scanner
+import unittest
 
 gbk_example = \
     """LOCUS       SCU49845     5028 bp    DNA             PLN       21-JUN-1999
@@ -315,41 +324,43 @@ SQ   Sequence 1859 BP; 609 A; 314 C; 355 G; 581 T; 0 other;
 //
 """
 
-g = Scanner.GenBankScanner()
-for record in g.parse_cds_features(StringIO(gbk_example)):
-    print(record)
+class TestGenBankScanner(unittest.TestCase):
 
-g = Scanner.GenBankScanner()
-for record in g.parse_cds_features(StringIO(gbk_example2),
+    def test_genbank_scanner(self):
+        g = Scanner.GenBankScanner()
+        for record in g.parse_cds_features(StringIO(gbk_example)):
+            print(record)
+
+        for record in g.parse_cds_features(StringIO(gbk_example2),
                                    tags2id=('gene', 'locus_tag', 'product')):
-    print(record)
+            print(record)
 
-for record in g.parse_cds_features(StringIO(gbk_example + "\n" + gbk_example2),
+        for record in g.parse_cds_features(StringIO(gbk_example + "\n" + gbk_example2),
                                    tags2id=('gene', 'locus_tag', 'product')):
-    print(record)
+            print(record)
 
-for record in g.parse_records(StringIO(gbk_example), do_features=False):
-    print("%s %s %s" % (record.id, record.name, record.description))
-    print(record.seq)
+        for record in g.parse_records(StringIO(gbk_example), do_features=False):
+            print("%s %s %s" % (record.id, record.name, record.description))
+            print(record.seq)
 
-for record in g.parse_records(StringIO(gbk_example), do_features=True):
-    print("%s %s %s" % (record.id, record.name, record.description))
-    print(record.seq)
+        for record in g.parse_records(StringIO(gbk_example), do_features=True):
+            print("%s %s %s" % (record.id, record.name, record.description))
+            print(record.seq)
 
-for record in g.parse_records(StringIO(gbk_example2), do_features=False):
-    print("%s %s %s" % (record.id, record.name, record.description))
-    print(record.seq)
+        for record in g.parse_records(StringIO(gbk_example2), do_features=False):
+            print("%s %s %s" % (record.id, record.name, record.description))
+            print(record.seq)
 
-for record in g.parse_records(StringIO(gbk_example2), do_features=True):
-    print("%s %s %s" % (record.id, record.name, record.description))
-    print(record.seq)
+        for record in g.parse_records(StringIO(gbk_example2), do_features=True):
+            print("%s %s %s" % (record.id, record.name, record.description))
+            print(record.seq)
 
+    def test_embl_scanner(self):
+        e = Scanner.EmblScanner()
 
-e = Scanner.EmblScanner()
+        for record in e.parse_cds_features(StringIO(embl_example)):
+            print(record)
 
-for record in e.parse_cds_features(StringIO(embl_example)):
-    print(record)
-
-for record in e.parse_records(StringIO(embl_example), do_features=True):
-    print("%s %s %s" % (record.id, record.name, record.description))
-    print(record.seq)
+        for record in e.parse_records(StringIO(embl_example), do_features=True):
+            print("%s %s %s" % (record.id, record.name, record.description))
+            print(record.seq)
