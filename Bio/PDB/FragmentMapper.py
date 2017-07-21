@@ -37,9 +37,7 @@ import numpy
 
 from Bio.SVDSuperimposer import SVDSuperimposer
 
-from Bio.PDB import Selection
 from Bio.PDB.PDBExceptions import PDBException
-from Bio.PDB.PDBParser import PDBParser
 from Bio.PDB.Polypeptide import PPBuilder
 
 
