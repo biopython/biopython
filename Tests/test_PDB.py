@@ -1486,7 +1486,7 @@ class PSEATests(unittest.TestCase):
         pdb1 = "PDB/1A8O.pdb"
         p = PDBParser()
         s = p.get_structure('X', pdb1)
-        self.assertEqual(PSEA(s[0], pdb1))
+        self.assertEqual(PSEA.PSEA(s[0], pdb1))
 
 
 if __name__ == '__main__':
