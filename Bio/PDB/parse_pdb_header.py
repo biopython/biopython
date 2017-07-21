@@ -145,7 +145,6 @@ def _parse_pdb_header_list(header):
     dict['structure_reference'] = _get_references(header)
     dict['journal_reference'] = _get_journal(header)
     comp_molid = "1"
-    src_molid = "1"
     last_comp_key = "misc"
     last_src_key = "misc"
 
