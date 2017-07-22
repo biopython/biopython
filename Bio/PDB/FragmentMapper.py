@@ -37,9 +37,7 @@ import numpy
 
 from Bio.SVDSuperimposer import SVDSuperimposer
 
-from Bio.PDB import Selection
 from Bio.PDB.PDBExceptions import PDBException
-from Bio.PDB.PDBParser import PDBParser
 from Bio.PDB.Polypeptide import PPBuilder
 
 
@@ -303,14 +301,14 @@ class FragmentMapper(object):
         import warnings
         from Bio import BiopythonDeprecationWarning
         warnings.warn("has_key is deprecated; use 'res in object' instead", BiopythonDeprecationWarning)
-        return (res in self)
+        return res in self
 
     def __contains__(self, res):
         """True if the given residue is in any of the mapped fragments.
 
         @type res: L{Residue}
         """
-        return (res in self.fd)
+        return res in self.fd
 
     def __getitem__(self, res):
         """Get an entry.
