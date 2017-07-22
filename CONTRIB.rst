@@ -152,7 +152,7 @@ please open an issue on GitHub or mention it on the development mailing list.
 - Matteo Sticco <https://github.com/sticken88/>
 - Maximilian Greil <https://github.com/MaxGreil>
 - Melissa Gymrek <https://github.com/mgymrek>
-- Michael Hoffman <hoffman+biopython at domain ebi.ac.uk>
+- Michael Hoffman <https://github.com/michaelmhoffman>
 - Michal Kurowski <michal at domain genesilico.pl>
 - Michał J. Gajda <https://github.com/mgajda>
 - Michiel de Hoon <mdehoon at domain c2b2.columbia.edu>
