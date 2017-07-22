@@ -102,13 +102,17 @@ We use TravisCI to run most of the Biopython tests (although currently only
 under Linux, and not with all the optional dependencies included), plus also
 check Python coding style using the ``flake8`` tool with the ``pydocstyle``
 pluging (``flake8-docstrings``), and reStructuredText using ``rst-lint``.
-These checks must pass before your pull request will be merged.
-https://travis-ci.org/biopython/biopython
+https://travis-ci.org/biopython/biopython/branches
 
-Some of the TravisCI runs collect test coverage information via CodeCov:
-https://codecov.io/github/biopython/biopython/
+We use AppVeyor to run most of the tests under Windows (although currently
+without any optional dependencies).
+https://ci.appveyor.com/project/biopython/biopython/history
 
-We also are using QuantifiedCode which provides an independent code analysis
-which can catch important errors. Some of the issues it flags are subjective,
-so in general we do not require this pass before merging a pull request.
-https://www.quantifiedcode.com/app/project/gh:biopython:biopython
+**The TravisCI and AppVeyor checks must pass before your pull request will
+be merged.**
+
+Some of the TravisCI and AppVeyor runs collect test coverage information via
+CodeCov: https://codecov.io/github/biopython/biopython/
+
+Ideally the CodeCov checks will also pass, but we currently do not insist
+on this when reviewing pull requests.
