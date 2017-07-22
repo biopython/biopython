@@ -397,7 +397,7 @@ class DSSP(AbstractResiduePropertyMap):
                 else:
                     raise KeyError(res_id)
 
-            # For disordered residues of point mutations, BioPython uses the
+            # For disordered residues of point mutations, Biopython uses the
             # last one as default, But DSSP takes the first one (alternative
             # location is blank, A or 1). See 1h9h chain E resi 22.
             # Here we select the res in which all atoms have altloc blank, A or

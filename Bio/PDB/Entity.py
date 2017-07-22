@@ -45,7 +45,7 @@ class Entity(object):
 
     def __contains__(self, id):
         """True if there is a child element with the given id."""
-        return (id in self.child_dict)
+        return id in self.child_dict
 
     def __iter__(self):
         """Iterate over children."""
@@ -153,7 +153,7 @@ class Entity(object):
 
     def has_id(self, id):
         """True if a child with given id exists."""
-        return (id in self.child_dict)
+        return id in self.child_dict
 
     def get_parent(self):
         """Return the parent Entity object."""
@@ -269,7 +269,7 @@ class DisorderedEntityWrapper(object):
 
     def __contains__(self, id):
         """True if the child has the given id."""
-        return (id in self.selected_child)
+        return id in self.selected_child
 
     def __iter__(self):
         """Return the number of children."""
@@ -291,7 +291,7 @@ class DisorderedEntityWrapper(object):
 
     def disordered_has_id(self, id):
         """True if there is an object present associated with this id."""
-        return (id in self.child_dict)
+        return id in self.child_dict
 
     def detach_parent(self):
         """Detach the parent."""

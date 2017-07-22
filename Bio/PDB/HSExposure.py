@@ -208,7 +208,7 @@ class HSExposureCA(_AbstractHSExposure):
         @param filename: the name of the pymol script file
         @type filename: string
         """
-        if len(self.ca_cb_list) == 0:
+        if not self.ca_cb_list:
             warnings.warn("Nothing to draw.", RuntimeWarning)
             return
         with open(filename, "w") as fp:

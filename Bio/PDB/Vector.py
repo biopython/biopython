@@ -287,7 +287,7 @@ class Vector(object):
         self._ar[i] = value
 
     def __contains__(self, i):
-        return (i in self._ar)
+        return i in self._ar
 
     def norm(self):
         """Return vector norm."""

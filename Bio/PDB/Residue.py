@@ -52,7 +52,7 @@ class Residue(Entity):
         name1 = a1.get_name()
         name2 = a2.get_name()
         if name1 == name2:
-            return(cmp(a1.get_altloc(), a2.get_altloc()))
+            return cmp(a1.get_altloc(), a2.get_altloc())
         if name1 in _atom_name_dict:
             index1 = _atom_name_dict[name1]
         else:
