@@ -42,7 +42,6 @@ class Record(object):
 
     def __init__(self):
         """Initialize new record."""
-
         self.entry = ""
         self.name = []
         self.definition = ""
@@ -54,7 +53,6 @@ class Record(object):
 
     def __str__(self):
         """Return a string representation of this Record."""
-
         return self._entry() + \
                self._name() + \
                self._dblinks() + \
