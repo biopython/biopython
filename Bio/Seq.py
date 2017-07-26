@@ -1421,24 +1421,29 @@ class UnknownSeq(Seq):
         1
         """
         sub_str = self._get_seq_str_and_check_alphabet(sub)
-        if len(sub_str) == 1:
-            if str(sub_str) == self._character:
-                if start == 0 and end >= self._length:
-                    return self._length
-                else:
-                    # This could be done more cleverly...
-                    return str(self).count(sub_str, start, end)
-            else:
-                return 0
-        else:
-            if set(sub_str) == set(self._character):
-                if start == 0 and end >= self._length:
-                    return self._length // len(sub_str)
-                else:
-                    # This could be done more cleverly...
-                    return str(self).count(sub_str, start, end)
-            else:
-                return 0
+        len_self, len_sub_str = self._length, len(sub_str)
+        # Handling case where substring not in self
+        if set(sub_str) != set(self._character):
+            return 0
+        # Setting None to the default arguments
+        if start is None:
+            start = 0
+        if end is None:
+            end = sys.maxsize
+        # Truncating start and end to max of self._length and min of -self._length
+        start = max(min(start, len_self), -len_self)
+        end = max(min(end, len_self), -len_self)
+        # Convert start and ends to positive indexes
+        if start < 0:
+            start += len_self
+        if end < 0:
+            end += len_self
+        # Handle case where end <= start (no negative step argument here)
+        # and case where len_sub_str is larger than the search space
+        if end <= start or (end - start) < len_sub_str:
+            return 0
+        # 'Normal' calculation
+        return (end - start) // len_sub_str
 
     def count_overlap(self, sub, start=0, end=sys.maxsize):
         """Return an overlapping count.
