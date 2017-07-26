@@ -97,7 +97,7 @@ class StringMethodTests(unittest.TestCase):
     for seq in _examples[:]:
         if isinstance(seq, Seq):
             _examples.append(seq.tomutable())
-    _start_end_values = [0, 1, 2, 1000, -1, -2, -999]
+    _start_end_values = [0, 1, 2, 1000, -1, -2, -999, None]
 
     def _test_method(self, method_name, pre_comp_function=None,
                      start_end=False):
@@ -490,7 +490,7 @@ class StringMethodTests(unittest.TestCase):
         for example1 in self._examples:
             str1 = str(example1)
             for i in self._start_end_values:
-                if abs(i) < len(example1):
+                if i is not None and abs(i) < len(example1):
                     self.assertEqual(str(example1[i]), str1[i])
                 self.assertEqual(str(example1[:i]), str1[:i])
                 self.assertEqual(str(example1[i:]), str1[i:])
