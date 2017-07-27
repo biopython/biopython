@@ -20,6 +20,8 @@ with non-ASCII characters, like accented letters in people's names. This would
 raise ``UnicodeDecodeError: 'ascii' codec can't decode byte ...`` under some
 system locale settings.
 
+Bio.KEGG can now parse Gene files.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
@@ -27,6 +29,7 @@ possible, especially the following contributors:
 - Christian Brueffer
 - Erik Cederstrand (first contribution)
 - Joe Greener (first contribution)
+- Kozo Nishida
 - Peter Cock
 
 
