@@ -6,10 +6,11 @@
 """Code to work with the KEGG Gene database.
 
 Functions:
-parse - Returns an iterator giving Record objects.
+- parse - Returns an iterator giving Record objects.
 
 Classes:
-Record - A representation of a KEGG Gene.
+- Record - A representation of a KEGG Gene.
+
 """
 
 # other Biopython stuff
