@@ -102,6 +102,7 @@ DOCTEST_MODULES = [
     "Bio.Graphics.GenomeDiagram._Colors",
     "Bio.KEGG.Compound",
     "Bio.KEGG.Enzyme",
+    "Bio.KEGG.Gene",
     "Bio.KEGG.KGML.KGML_parser",
     "Bio.NMR.xpktools",
     "Bio.motifs",
