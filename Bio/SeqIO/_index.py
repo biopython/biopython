@@ -252,15 +252,20 @@ class GenBankRandomAccess(SequentialSeqFileRandomAccess):
         while marker_re.match(line):
             # We cannot assume the record.id is the first word after LOCUS,
             # normally the first entry on the VERSION or ACCESSION line is used.
-            key = None
+            # However if both missing, GenBank parser falls back on LOCUS entry.
+            try:
+                key = line[5:].split(None, 1)[0]
+            except ValueError:
+                # Warning?
+                # No content in LOCUS line
+                key = None
             length = len(line)
             while True:
                 end_offset = handle.tell()
                 line = handle.readline()
                 if marker_re.match(line) or not line:
                     if not key:
-                        raise ValueError(
-                            "Did not find usable ACCESSION/VERSION lines")
+                        raise ValueError("Did not find usable ACCESSION/VERSION/LOCUS lines")
                     yield _bytes_to_string(key), start_offset, length
                     start_offset = end_offset
                     break

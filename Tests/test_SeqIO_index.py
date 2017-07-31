@@ -295,33 +295,6 @@ if sqlite3:
                        expt_sff_files)
 
 
-class Problems(unittest.TestCase):
-    """Corner cases where we expect indexing to fail.
-
-    Goal of these tests is to make sure they fail the right way.
-    """
-
-    def setUp(self):
-        os.chdir(CUR_DIR)
-        h, self.index_tmp = tempfile.mkstemp("_idx.tmp")
-        os.close(h)
-
-    def tearDown(self):
-        os.chdir(CUR_DIR)
-        if os.path.isfile(self.index_tmp):
-            os.remove(self.index_tmp)
-
-    def test_genbank_empty_accession(self):
-        """Test an empty ACCESSION line causes a ValueError."""
-        filename = "GenBank/empty_accession.gbk"
-        self.assertRaises(ValueError, SeqIO.index, filename, 'genbank')
-
-    def test_genbank_empty_version(self):
-        """Test an empty VERSION line causes a ValueError."""
-        filename = "GenBank/empty_version.gbk"
-        self.assertRaises(ValueError, SeqIO.index, filename, 'genbank')
-
-
 class IndexDictTests(unittest.TestCase):
     """Cunning unit test where methods are added at run time."""
 
@@ -664,6 +637,8 @@ tests = [
     ("GenBank/NC_005816.fna", "fasta", generic_dna),
     ("GenBank/NC_005816.gb", "gb", None),
     ("GenBank/cor6_6.gb", "genbank", None),
+    ("GenBank/empty_accession.gbk", "gb", None),
+    ("GenBank/empty_version.gbk", "gb", None),
     ("IntelliGenetics/vpu_nucaligned.txt", "ig", generic_nucleotide),
     ("IntelliGenetics/TAT_mase_nuc.txt", "ig", None),
     ("IntelliGenetics/VIF_mase-pro.txt", "ig", generic_protein),
