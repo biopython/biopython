@@ -38,7 +38,7 @@ class MMCIF2Dict(dict):
                     n = 0
                     continue
                 elif loop_flag:
-                    if token.startswith("_"):
+                    if token.startswith("_") and (n == 0 or i % n == 0):
                         if i > 0:
                             loop_flag = False
                         else:
