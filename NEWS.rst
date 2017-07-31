@@ -29,6 +29,7 @@ possible, especially the following contributors:
 - Christian Brueffer
 - Erik Cederstrand (first contribution)
 - Joe Greener (first contribution)
+- Kai Blin
 - Kozo Nishida
 - Peter Cock
 
