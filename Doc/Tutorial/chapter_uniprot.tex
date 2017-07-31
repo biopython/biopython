@@ -21,15 +21,19 @@ To parse a Swiss-Prot record, we first get a handle to a Swiss-Prot record. Ther
 >>> handle = gzip.open("myswissprotfile.dat.gz", "rt")
 \end{verbatim}
 \item Open a Swiss-Prot file over the internet:
-%doctest . internet
 \begin{verbatim}
->>> from future.standard_library import install_aliases
->>> install_aliases()
+>>> from urllib.request import urlopen # Python 3 only
+>>> from io import TextIOWrapper
 >>> 
->>> from urllib.request import urlopen
->>> from Bio import SwissProt
->>> 
->>> handle=urlopen("https://raw.githubusercontent.com/biopython/biopython/master/Doc/examples/Q9BZS1.dat")
+>>> handle = TextIOWrapper(urlopen("http://example.org/myprositefile.dat"))
+\end{verbatim}
+to open the file stored on the Internet before calling \verb|read|.
+
+Note for Python 2 this can be done by using:
+\begin{verbatim}
+>>> from urllib import urlopen #Python 2 only
+>>>
+>>> handle = urlopen("http://example.org/myprositefile.dat")
 \end{verbatim}
 \item Open a Swiss-Prot file over the internet from the ExPASy database
 (see section \ref{subsec:expasy_swissprot}):
