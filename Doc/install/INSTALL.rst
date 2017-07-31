@@ -159,9 +159,9 @@ This will install the biopython package in your system. For checking the install
 Installing Biopython using Anaconda
 ===================================
 
-For Anaconda users, the Biopython source files are available in the `bioconda <https://bioconda.github.io/>`_ channel. To install Biopython, just do::
+For Anaconda users, the Biopython source files are available in the `conda-forge <https://conda-forge.org/>`_ channel. To install Biopython, just do::
 
-  $ conda install -c bioconda biopython
+  $ conda install -c conda-forge biopython
   
 You will see an output something like this::
 
