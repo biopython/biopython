@@ -296,7 +296,11 @@ if sqlite3:
 
 
 class Problems(unittest.TestCase):
-    """Corner cases where we expect indexing to fail, but want to make sure they fail the right way"""
+    """Corner cases where we expect indexing to fail.
+
+    Goal of these tests is to make sure they fail the right way.
+    """
+
     def setUp(self):
         os.chdir(CUR_DIR)
         h, self.index_tmp = tempfile.mkstemp("_idx.tmp")
@@ -308,12 +312,12 @@ class Problems(unittest.TestCase):
             os.remove(self.index_tmp)
 
     def test_genbank_empty_accession(self):
-        """Test an empty ACCESSION line causes a ValueError"""
+        """Test an empty ACCESSION line causes a ValueError."""
         filename = "GenBank/empty_accession.gbk"
         self.assertRaises(ValueError, SeqIO.index, filename, 'genbank')
 
     def test_genbank_empty_version(self):
-        """Test an empty VERSION line causes a ValueError"""
+        """Test an empty VERSION line causes a ValueError."""
         filename = "GenBank/empty_version.gbk"
         self.assertRaises(ValueError, SeqIO.index, filename, 'genbank')
 
