@@ -260,17 +260,26 @@ class GenBankRandomAccess(SequentialSeqFileRandomAccess):
                 if marker_re.match(line) or not line:
                     if not key:
                         raise ValueError(
-                            "Did not find ACCESSION/VERSION lines")
+                            "Did not find usable ACCESSION/VERSION lines")
                     yield _bytes_to_string(key), start_offset, length
                     start_offset = end_offset
                     break
                 elif line.startswith(accession_marker):
-                    key = line.rstrip().split()[1]
+                    try:
+                        key = line.rstrip().split()[1]
+                    except IndexError:
+                        # No content in ACCESSION line
+                        pass
                 elif line.startswith(version_marker):
-                    version_id = line.rstrip().split()[1]
-                    if version_id.count(b".") == 1 and version_id.split(b".")[1].isdigit():
-                        # This should mimic the GenBank parser...
-                        key = version_id
+                    try:
+                        version_id = line.rstrip().split()[1]
+                        if version_id.count(b".") == 1 and version_id.split(b".")[1].isdigit():
+                            # This should mimic the GenBank parser...
+                            key = version_id
+                    except IndexError:
+                        # No content in VERSION line
+                        pass
+
                 length += len(line)
         assert not line, repr(line)
 
