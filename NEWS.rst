@@ -34,6 +34,7 @@ possible, especially the following contributors:
 - Erik Cederstrand (first contribution)
 - Francesco Gastaldello
 - Joe Greener (first contribution)
+- Jun Aruga (first contribution)
 - Kai Blin
 - Kozo Nishida
 - Peter Cock
