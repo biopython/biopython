@@ -689,12 +689,20 @@ For example, you can use
 >>> handle = gzip.open("mydatafile.txt.gz", "rt")
 \end{verbatim}
 to open a gzipped file, or
-% TODO: The urlopen example needs to be in text mode for Python 3..
 \begin{verbatim}
->>> import urllib # Python standard library
->>> handle = urllib.urlopen("http://example.org/mydatafile.txt")
+>>> from urllib.request import urlopen # Python 3 only
+>>> from io import TextIOWrapper
+>>>
+>>> handle = TextIOWrapper(urlopen("https://raw.githubusercontent.com/biopython/biopython/master/Tests/Cluster/cyano.txt"))
 \end{verbatim}
 to open a file stored on the Internet before calling \verb|read|.
+
+Note for Python 2 this can be done by using:
+\begin{verbatim}
+>>> from urllib import urlopen # Python 2 only
+>>>
+>>> handle = urlopen("https://raw.githubusercontent.com/biopython/biopython/master/Tests/Cluster/cyano.txt")
+\end{verbatim}
 
 The \verb|read| command reads the tab-delimited text file \verb|mydatafile.txt| containing gene expression data in the format specified for Michael Eisen's Cluster/TreeView program. In this file format, rows represent genes and columns represent samples or observations. For a simple time course, a minimal input file would look like this:
 
