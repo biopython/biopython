@@ -12,7 +12,7 @@ import unittest
 
 
 class TestGenBankScanner(unittest.TestCase):
-    
+
     gbk_example = \
         """LOCUS       SCU49845     5028 bp    DNA             PLN       21-JUN-1999
 DEFINITION  Saccharomyces cerevisiae TCP1-beta gene, partial cds, and Axl2p
