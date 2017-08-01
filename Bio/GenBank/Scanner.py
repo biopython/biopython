@@ -1650,5 +1650,3 @@ class GenBankScanner(InsdcScanner):
             return
         except StopIteration:
             raise ValueError("Problem in misc lines before sequence")
-
- 
