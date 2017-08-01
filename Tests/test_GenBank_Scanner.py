@@ -10,6 +10,7 @@ from Bio._py3k import StringIO
 from Bio.GenBank import Scanner
 import unittest
 
+
 class TestGenBankScanner(unittest.TestCase):
     
     gbk_example = \
