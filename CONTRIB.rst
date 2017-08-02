@@ -176,6 +176,7 @@ please open an issue on GitHub or mention it on the development mailing list.
 - Peter Slickers <piet at domain clondiag.com>
 - Phillip Garland <pgarland at gmail>
 - Rasmus Fonseca <https://github.com/RasmusFonseca>
+- rht <https://github.com/rht>
 - Richard Neher <https://github.com/rneher>
 - Rodrigo Dorantes-Gilardi <https://github.com/rodogi>
 - Sacha Laurent <https://github.com/Cashalow>

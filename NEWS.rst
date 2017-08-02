@@ -38,6 +38,7 @@ possible, especially the following contributors:
 - Kai Blin
 - Kozo Nishida
 - Peter Cock
+- rht (first contribution)
 
 
 10 July 2017: Biopython 1.70
