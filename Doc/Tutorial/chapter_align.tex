@@ -1497,7 +1497,7 @@ where again XX stands for a two letter code for the match and gap functions:
 >>> alignments = pairwise2.align.localds("LSPADKTNVKAA", "PEEKSAV", blosum62, -10, -1)
 >>> print(pairwise2.format_alignment(*alignments[0]))
 LSPADKTNVKAA
-  |||||||
+  |..|..|
 --PEEKSAV---
   Score=16
 <BLANKLINE>
@@ -1513,7 +1513,7 @@ of 2/0.5 using \verb|localms|):
 >>> alignments = pairwise2.align.localms("AGAACT", "GAC", 5, -4, -2, -0.5)
 >>> print(pairwise2.format_alignment(*alignments[0]))
 AGAACT
- ||||
+ |.||
 -G-AC-
   Score=13
 <BLANKLINE>

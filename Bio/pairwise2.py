@@ -56,7 +56,7 @@ printout, use the ``format_alignment`` method of the module:
     >>> from Bio.pairwise2 import format_alignment
     >>> print(format_alignment(*alignments[0]))
     ACCGT
-    |||||
+    |.||.
     A-CG-
       Score=3
     <BLANKLINE>
@@ -103,12 +103,12 @@ Some examples:
     >>> for a in pairwise2.align.globalxx("ACCGT", "ACG"):
     ...     print(format_alignment(*a))
     ACCGT
-    |||||
+    |.||.
     A-CG-
       Score=3
     <BLANKLINE>
     ACCGT
-    |||||
+    ||.|.
     AC-G-
       Score=3
     <BLANKLINE>
@@ -118,12 +118,12 @@ Some examples:
     >>> for a in pairwise2.align.localxx("ACCGT", "ACG"):
     ...     print(format_alignment(*a))
     ACCGT
-    ||||
+    |.||
     A-CG-
       Score=3
     <BLANKLINE>
     ACCGT
-    ||||
+    ||.|
     AC-G-
       Score=3
     <BLANKLINE>
@@ -134,12 +134,12 @@ Some examples:
     >>> for a in pairwise2.align.globalmx("ACCGT", "ACG", 2, -1):
     ...     print(format_alignment(*a))
     ACCGT
-    |||||
+    |.||.
     A-CG-
       Score=6
     <BLANKLINE>
     ACCGT
-    |||||
+    ||.|.
     AC-G-
       Score=6
     <BLANKLINE>
@@ -150,12 +150,12 @@ Some examples:
     >>> for a in pairwise2.align.globalms("ACCGT", "ACG", 2, -1, -.5, -.1):
     ...     print(format_alignment(*a))
     ACCGT
-    |||||
+    |.||.
     A-CG-
       Score=5
     <BLANKLINE>
     ACCGT
-    |||||
+    ||.|.
     AC-G-
       Score=5
     <BLANKLINE>
@@ -167,14 +167,14 @@ Some examples:
     >>> for a in pairwise2.align.globalms("A", "T", 5, -4, -1, -.1):
     ...     print(format_alignment(*a))
     A-
-    ||
+    ..
     -T
       Score=-2
     <BLANKLINE>
     >>> for a in pairwise2.align.globalms("A", "T", 5, -4, -3, -.1):
     ...	    print(format_alignment(*a))
     A
-    |
+    .
     T
       Score=-4
     <BLANKLINE>
@@ -187,7 +187,7 @@ Some examples:
     >>> for a in pairwise2.align.globaldx("KEVLA", "EVL", matrix):
     ...     print(format_alignment(*a))
     KEVLA
-    |||||
+    .|||.
     -EVL-
       Score=13
     <BLANKLINE>
@@ -1026,10 +1026,17 @@ def print_matrix(matrix):
 
 
 def format_alignment(align1, align2, score, begin, end):
-    """Format the alignment prettily into a string."""
+    """Format the alignment prettily into a string.
+
+    Since Biopython 1.71 identical matches are shown with a pipe
+    character, with a colon for mismatches. Prior releases always
+    used a pipe.
+    """
     s = []
     s.append("%s\n" % align1)
-    s.append("%s%s\n" % (" " * begin, "|" * (end - begin)))
+    matches = "".join("|" if a == b else "." for a, b in
+                      zip(align1[begin:end], align2[begin:end]))
+    s.append("%s%s\n" % (" " * begin, matches))
     s.append("%s\n" % align2)
     s.append("  Score=%g\n" % score)
     return ''.join(s)
@@ -1044,3 +1051,7 @@ try:
 except ImportError:
     warnings.warn('Import of C module failed. Falling back to pure Python ' +
                   'implementation. This may be slooow...', BiopythonWarning)
+
+if __name__ == "__main__":
+    from Bio._utils import run_doctest
+    run_doctest()
