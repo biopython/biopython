@@ -12,6 +12,14 @@ except ImportError:
     raise MissingExternalDependencyError(
         "Install NumPy if you want to use Bio.KDTree.")
 
+try:
+    from Bio.KDTree import _CKDTree
+    del _CKDTree
+except ImportError:
+    from Bio import MissingExternalDependencyError
+    raise MissingExternalDependencyError(
+            "C module in Bio.KDTree not compiled")
+
 from Bio.KDTree import KDTree, _CKDTree
 from numpy import sum, sqrt, array
 from numpy import random
@@ -105,6 +113,35 @@ def test(nr_points, dim, bucket_size, radius):
         return False
 
 
+def test_search(nr_points, dim, bucket_size, radius):
+    """Test search all points within radius of center.
+
+    Search all point pairs that are within radius.
+
+    Arguments:
+     - nr_points: number of points used in test
+     - dim: dimension of coords
+     - bucket_size: nr of points per tree node
+     - radius: radius of search
+
+    Returns true if the test passes.
+    """
+    kdt = KDTree(dim, bucket_size)
+    coords = random.random((nr_points, dim))
+    kdt.set_coords(coords)
+    kdt.search(coords[0], radius * 100)
+    radii = kdt.get_radii()
+    l1 = 0
+    for i in range(0, nr_points):
+        p = coords[i]
+        if _dist(p, coords[0]) <= radius * 100:
+            l1 = l1 + 1
+    if l1 == len(radii):
+        return True
+    else:
+        return False
+
+
 def test_all_search(nr_points, dim, bucket_size, query_radius):
     """Test fixed neighbor search.
 
@@ -124,19 +161,30 @@ def test_all_search(nr_points, dim, bucket_size, query_radius):
     kdt.all_search(query_radius)
     indices = kdt.all_get_indices()
     radii = kdt.all_get_radii()
-    # prepare list for check
-    l1 = []
-    l2 = [round(r, 4) for r in radii]
-    # take into account the first 100 points
+    l = 0
+    # check first 100 points
     for i in range(0, 100):
-        l1.append(round(_dist(coords[indices[i][0]], coords[indices[i][1]]), 4))
-    if l1 == l2[:100]:
+        if round(_dist(coords[indices[i][0]], coords[indices[i][1]]), 4) == round(radii[i], 4):
+            l = l + 1
+    if l == 100:
         return True
     else:
         return False
 
 
 class KDTreeTest(unittest.TestCase):
+
+    def test_KDTree_exceptions(self):
+        kdt = KDTree(dim, bucket_size)
+        with self.assertRaises(Exception) as context:
+            kdt.set_coords(random.random((nr_points, dim)) * 100000000000000)
+        self.assertTrue("Points should lie between -1e6 and 1e6" in context.exception)
+        with self.assertRaises(Exception) as context:
+            kdt.set_coords(random.random((nr_points, dim - 2)))
+        self.assertTrue("Expected a Nx%i NumPy array" % dim in context.exception)
+        with self.assertRaises(Exception) as context:
+            kdt.search(array([0, 0, 0]), radius)
+        self.assertTrue("No point set specified" in context.exception)
 
     def test_KDTree_neighbour(self):
         for i in range(0, 10):
@@ -147,7 +195,11 @@ class KDTreeTest(unittest.TestCase):
             self.assertTrue(test(nr_points, dim, bucket_size, radius))
 
     def test_all_search(self):
-            self.assertTrue(test_all_search(nr_points, dim, bucket_size, query_radius))
+        self.assertTrue(test_all_search(nr_points, dim, bucket_size, query_radius))
+
+    def test_search(self):
+        for i in range(0, 10):
+            self.assertTrue(test_search(nr_points, dim, bucket_size, radius))
 
 
 if __name__ == "__main__":
