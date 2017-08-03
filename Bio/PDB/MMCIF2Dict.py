@@ -38,6 +38,10 @@ class MMCIF2Dict(dict):
                     n = 0
                     continue
                 elif loop_flag:
+                    # The second condition checks we are in the first column
+                    # Some mmCIF files (e.g. 4q9r) have values in later columns
+                    # starting with an underscore and we don't want to read
+                    # these as keys
                     if token.startswith("_") and (n == 0 or i % n == 0):
                         if i > 0:
                             loop_flag = False
