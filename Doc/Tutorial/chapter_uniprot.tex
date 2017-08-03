@@ -13,7 +13,7 @@ To parse a Swiss-Prot record, we first get a handle to a Swiss-Prot record. Ther
 \begin{itemize}
 \item Open a Swiss-Prot file locally:
 \begin{verbatim}
-\verb|>>> handle = open("myswissprotfile.dat")
+>>> handle = open("myswissprotfile.dat")
 \end{verbatim} 
 \item Open a gzipped Swiss-Prot file:
 \begin{verbatim}
@@ -21,6 +21,7 @@ To parse a Swiss-Prot record, we first get a handle to a Swiss-Prot record. Ther
 >>> handle = gzip.open("myswissprotfile.dat.gz", "rt")
 \end{verbatim}
 \item Open a Swiss-Prot file over the internet:
+%doctest . online
 \begin{verbatim}
 >>> from urllib.request import urlopen # Python 3 only
 >>> from io import TextIOWrapper
