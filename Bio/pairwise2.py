@@ -214,7 +214,7 @@ To see a description of the parameters for a function, please look at
 the docstring for the function via the help function, e.g.
 type ``help(pairwise2.align.localds``) at the Python prompt.
 
-"""
+"""  # noqa: W291
 from __future__ import print_function
 
 import warnings
