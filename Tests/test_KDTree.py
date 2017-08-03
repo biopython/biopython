@@ -178,13 +178,13 @@ class KDTreeTest(unittest.TestCase):
         kdt = KDTree(dim, bucket_size)
         with self.assertRaises(Exception) as context:
             kdt.set_coords(random.random((nr_points, dim)) * 100000000000000)
-        self.assertTrue("Points should lie between -1e6 and 1e6" in context.exception)
+        self.assertTrue("Points should lie between -1e6 and 1e6" in str(context.exception))
         with self.assertRaises(Exception) as context:
             kdt.set_coords(random.random((nr_points, dim - 2)))
-        self.assertTrue("Expected a Nx%i NumPy array" % dim in context.exception)
+        self.assertTrue("Expected a Nx%i NumPy array" % dim in str(context.exception))
         with self.assertRaises(Exception) as context:
             kdt.search(array([0, 0, 0]), radius)
-        self.assertTrue("No point set specified" in context.exception)
+        self.assertTrue("No point set specified" in str(context.exception))
 
     def test_KDTree_neighbour(self):
         for i in range(0, 10):
