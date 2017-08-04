@@ -45,7 +45,7 @@ checks, so if you are making a contribution it is best to check this locally.
 We use the tool ``flake8`` for code style checks, together with various
 plugins which can be installed as follows::
 
-    $ pip install flake8 flake8-docstrings flake8-blind-except
+    $ pip install flake8 flake8-docstrings flake8-blind-except flake8-rst-docstrings
 
 You can then run ``flake8`` directly as follows:
 
