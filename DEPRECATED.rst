@@ -456,12 +456,13 @@ Bio.Sequencing & Bio.Medline
 ============================
 A revised API was added and the old one deprecated in Release 1.48,
 and removed in Biopython 1.52:
-Bio.Sequencing.Ace.RecordParser --> Bio.Sequencing.Ace.read(handle)
-Bio.Sequencing.Ace.Iterator --> Bio.Sequencing.Ace.parse(handle)
-Bio.Sequencing.Phd.RecordParser --> Bio.Sequencing.Phd.read(handle)
-Bio.Sequencing.Phd.Iterator --> Bio.Sequencing.Phd.parse(handle)
-Bio.Medline.RecordParser --> Bio.Medline.read(handle)
-Bio.Medline.Iterator --> Bio.Medline.parse(handle)
+
+* Bio.Sequencing.Ace.RecordParser --> Bio.Sequencing.Ace.read(handle)
+* Bio.Sequencing.Ace.Iterator --> Bio.Sequencing.Ace.parse(handle)
+* Bio.Sequencing.Phd.RecordParser --> Bio.Sequencing.Phd.read(handle)
+* Bio.Sequencing.Phd.Iterator --> Bio.Sequencing.Phd.parse(handle)
+* Bio.Medline.RecordParser --> Bio.Medline.read(handle)
+* Bio.Medline.Iterator --> Bio.Medline.parse(handle)
 
 Bio.Blast.NCBIWWW
 =================
