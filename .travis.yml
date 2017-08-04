@@ -33,13 +33,7 @@ matrix:
           packages:
       before_install: echo "Going to run basic checks"
     - stage: basics
-      env: TOXENV=sdist
-      addons:
-        apt:
-          packages:
-      before_install: echo "Going to run basic checks"
-    - stage: basics
-      env: TOXENV=bdist_wheel
+      env: TOXENV=sdist,bdist_wheel
       addons:
         apt:
           packages:
