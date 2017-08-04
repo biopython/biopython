@@ -22,6 +22,11 @@ Python 2.6
 No longer supported as of Release 1.69, having triggered a warning with
 release 1.66 onwards.
 
+Python 2.7
+==========
+We will drop support for Python 2.7 no later than 2020, in line with the
+end-of-life or sunset date for Python 2.7 itself.
+
 Python 3.0, 3.1, 3.2
 ====================
 Never officially supported, these triggered a warning in Release 1.62
