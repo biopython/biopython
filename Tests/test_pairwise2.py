@@ -210,7 +210,7 @@ AA
 | 
 A-
   Score=1.9
-""")
+""")  # noqa: W291
 
     def test_match_score_open_penalty2(self):
         aligns = pairwise2.align.globalms("GAA", "GA", 1.5, 0, -0.1, 0)
@@ -231,7 +231,7 @@ GAA
 || 
 GA-
   Score=2.9
-""")
+""")  # noqa: W291
 
     def test_match_score_open_penalty3(self):
         aligns = pairwise2.align.globalxs("GAACT", "GAT", -0.1, 0)
@@ -255,7 +255,7 @@ GC-T-
 |  | 
 G-ATA
   Score=1.7
-""")
+""")  # noqa: W291
 
 
 class TestPairwiseExtendPenalty(unittest.TestCase):
@@ -332,7 +332,7 @@ GACT
 |.  
 GT--
   Score=1
-""")
+""")  # noqa: W291
 
     def test_penalize_end_gaps2(self):
         """Do the same, but use the generic method (with the same result)."""
@@ -364,7 +364,7 @@ GACT
 |.  
 GT--
   Score=1
-""")
+""")  # noqa: W291
 
 
 class TestPairwiseSeparateGapPenalties(unittest.TestCase):
@@ -400,7 +400,7 @@ GAT--
 | |
 G-TCT
   Score=1.8
-""")
+""")  # noqa: W291
 
 
 class TestPairwiseSeparateGapPenaltiesWithExtension(unittest.TestCase):
@@ -536,7 +536,7 @@ abcde
   |  
 --c--
   Score=0.2
-""")
+""")  # noqa: W291
 
 
 class TestPersiteGapPenalties(unittest.TestCase):
@@ -572,7 +572,7 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
   |||||||||||          |||||||||||  
 --AABBBAAAACC----------CCAAAABBBAA--
   Score=2
-""")
+""")  # noqa: W291
 
     def test_gap_here_only_2(self):
         """Force a bad alignment.
@@ -606,7 +606,7 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
   |||          ......|||||||||||||  
 --AAB----------BBAAAACCCCAAAABBBAA--
   Score=-10
-""")
+""")  # noqa: W291
 
 
 class TestOtherFunctions(unittest.TestCase):
