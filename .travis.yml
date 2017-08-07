@@ -111,7 +111,7 @@ install:
   - "tox -c .travis-tox.ini -e $TOXENV --notest"
 
 script:
-  - "tox -c .travis-tox.ini -e $TOXENV"
+  - travis_wait tox -c .travis-tox.ini -e $TOXENV
 
 notifications:
   email: false
