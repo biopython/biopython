@@ -58,6 +58,11 @@ class EnzymeTests(unittest.TestCase):
                           ('BRENDA, the Enzyme Database', ['1.1.1.1']),
                           ('CAS', ['9031-72-5'])])
         self.assertEqual(records[-1].entry, "2.7.2.1")
+        self.assertEqual(records[-1].__str__().replace(" ","").split("\n")[:10],
+                         ['ENTRYEC2.7.2.1','NAMEacetatekinase', 'acetokinase',
+                          'AckA', 'AK', 'acetickinase', 'acetatekinase(phosphorylating)',
+                          'CLASSTransferases;', 'Transferringphosphorus-containinggroups;',
+                          'Phosphotransferaseswithacarboxygroupasacceptor'])
 
     def test_irregular(self):
         with open("KEGG/enzyme.irregular") as handle:
@@ -81,6 +86,19 @@ class EnzymeTests(unittest.TestCase):
                          ('HSA', ['5236', '55276']))
         self.assertEqual(records[0].genes[8],
                          ('CSAB', ['103224690', '103246223']))
+        
+    def test_exceptions(self):
+        with open("KEGG/enzyme.sample") as handle:
+            with self.assertRaises(ValueError) as context:
+                list(Enzyme.read(handle))
+            self.assertTrue("More than one record found in handle" in str(context.exception))
+            records = Enzyme.parse(handle)
+            for i in range (0, 6):
+                next(records)
+            self.assertRaises(StopIteration, next, records)
+            
+    
+        
 
 
 class CompoundTests(unittest.TestCase):
