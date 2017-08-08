@@ -56,6 +56,7 @@ class MMCIF2dictTests(unittest.TestCase):
         self.assertEqual(list(mmcif._splitline("foo 'bar a' b")), ["foo", "bar a", "b"])
         self.assertEqual(list(mmcif._splitline("foo 'bar'a' b")), ["foo", "bar'a", "b"])
         self.assertEqual(list(mmcif._splitline("foo \"bar' a\" b")), ["foo", "bar' a", "b"])
+        self.assertEqual(list(mmcif._splitline("foo '' b")), ["foo", "", "b"])
         self.assertRaises(ValueError, list, mmcif._splitline("foo 'bar"))
         self.assertRaises(ValueError, list, mmcif._splitline("foo 'ba'r  "))
         self.assertRaises(ValueError, list, mmcif._splitline("foo \"bar'"))
