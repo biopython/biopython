@@ -1,0 +1,45 @@
+data_1MOM
+loop_
+_struct_conf.conf_type_id
+_struct_conf.id
+_struct_conf.pdbx_PDB_helix_id
+_struct_conf.beg_label_comp_id
+_struct_conf.beg_label_asym_id
+_struct_conf.beg_label_seq_id
+_struct_conf.pdbx_beg_PDB_ins_code
+_struct_conf.end_label_comp_id
+_struct_conf.end_label_asym_id
+_struct_conf.end_label_seq_id
+_struct_conf.pdbx_end_PDB_ins_code
+_struct_conf.beg_auth_comp_id
+_struct_conf.beg_auth_asym_id
+_struct_conf.beg_auth_seq_id
+_struct_conf.end_auth_comp_id
+_struct_conf.end_auth_asym_id
+_struct_conf.end_auth_seq_id
+_struct_conf.pdbx_PDB_helix_class
+_struct_conf.details
+_struct_conf.pdbx_PDB_helix_length
+HELX_P HELX_P1  A     PRO A 11  ? ASN A 23  ? PRO A 11  ASN A 23  1 ?                         13
+HELX_P HELX_P2  "A'"  ALA A 44  ? ARG A 46  ? ALA A 44  ARG A 46  5 ?                         3
+HELX_P HELX_P3  B     PRO A 86  ? SER A 92  ? PRO A 86  SER A 92  1 ?                         7
+HELX_P HELX_P4  C     TYR A 111 ? ALA A 118 ? TYR A 111 ALA A 118 1 ?                         8
+HELX_P HELX_P5  "B'"  ARG A 122 ? LYS A 124 ? ARG A 122 LYS A 124 5 ?                         3
+HELX_P HELX_P6  D     LEU A 129 ? LEU A 139 ? LEU A 129 LEU A 139 1 ?                         11
+HELX_P HELX_P7  E     SER A 144 ? ILE A 155 ? SER A 144 ILE A 155 1 ?                         12
+HELX_P HELX_P8  "C'"  THR A 158 ? ARG A 163 ? THR A 158 ARG A 163 1 ?                         6
+HELX_P HELX_P9  F     LYS A 165 ? GLU A 173 ? LYS A 165 GLU A 173 1 ?                         9
+HELX_P HELX_P10 G     LEU A 183 ? SER A 191 ? LEU A 183 SER A 191 1 ?                         9
+HELX_P HELX_P11 H     TRP A 192 ? LEU A 201 ? TRP A 192 LEU A 201 1 ?                         10
+HELX_P HELX_P12 "D'"  LYS A 231 ? ASN A 236 ? LYS A 231 ASN A 236 3 ?                         6
+HELX_P HELX_P13 "E'"  THR A 243 ? ILE A 246 ? THR A 243 ILE A 246 5 ?                         4
+TURN_P TURN_P1  'A'"' ASP A 1   ? ILE A 34  ? ASP A 1   ILE A 34  5
+;TYPE I'
+;
+?
+TURN_P TURN_P2  BC    ASP A 1   ? GLY A 57  ? ASP A 1   GLY A 57  5 'TYPE I'                  ?
+TURN_P TURN_P3  CD    ASP A 1   ? ASN A 68  ? ASP A 1   ASN A 68  5 'TYPE I (H-BOND O65-N69)' ?
+TURN_P TURN_P4  DE    ASP A 1   ? THR A 79  ? ASP A 1   THR A 79  5
+;TYPE II'
+;
+?
