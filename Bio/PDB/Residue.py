@@ -35,6 +35,48 @@ class Residue(Entity):
         full_id = (resname, hetflag, resseq, icode)
         return "<Residue %s het=%s resseq=%s icode=%s>" % full_id
 
+    # Residue-specific sorting methods
+    # Sort first by HETATM flag, then by resseq, finally by insertion code
+    def __gt__(self, other):
+        hetflag_s, resseq_s, icode_s = self.id
+        hetflag_o, resseq_o, icode_o = other.id
+        if hetflag_o != hetflag_s:
+            return hetflag_s > hetflag_o
+        elif resseq_o != resseq_s:
+            return resseq_s > resseq_o
+        else:
+            return icode_s > icode_o
+
+    def __ge__(self, other):
+        hetflag_s, resseq_s, icode_s = self.id
+        hetflag_o, resseq_o, icode_o = other.id
+        if hetflag_o != hetflag_s:
+            return hetflag_s >= hetflag_o
+        elif resseq_o != resseq_s:
+            return resseq_s >= resseq_o
+        else:
+            return icode_s >= icode_o
+
+    def __lt__(self, other):
+        hetflag_s, resseq_s, icode_s = self.id
+        hetflag_o, resseq_o, icode_o = other.id
+        if hetflag_o != hetflag_s:
+            return hetflag_s < hetflag_o
+        elif resseq_o != resseq_s:
+            return resseq_s < resseq_o
+        else:
+            return icode_s < icode_o
+
+    def __le__(self, other):
+        hetflag_s, resseq_s, icode_s = self.id
+        hetflag_o, resseq_o, icode_o = other.id
+        if hetflag_o != hetflag_s:
+            return hetflag_s < hetflag_o
+        elif resseq_o != resseq_s:
+            return resseq_s < resseq_o
+        else:
+            return icode_s < icode_o
+
     def add(self, atom):
         """Add an Atom object.
 
@@ -54,19 +96,8 @@ class Residue(Entity):
         by name, with any alternative location specifier for disordered
         atoms (altloc) as a tie-breaker.
         """
-        # Defining sort key function within the sort method's scope:
-        def sort_index(atom):
-            """Build tuple of (int, name, alt-loc) for sorting.
 
-            The first integer is 0, 1, 2, 3, 4 for atoms N, CA, C, O, other.
-            """
-            try:
-                i = ["N", "CA", "C", "O"].index(atom.name)
-            except ValueError:
-                i = 4
-            return (i, atom.name, atom.altloc)
-
-        self.child_list.sort(key=sort_index)
+        self.child_list.sort
 
     def flag_disordered(self):
         """Set the disordered flag."""

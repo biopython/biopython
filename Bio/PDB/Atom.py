@@ -70,6 +70,61 @@ class Atom(object):
         self.element = self._assign_element(element)
         self.mass = self._assign_atom_mass()
 
+        # For atom sorting (protein backbone atoms first)
+        self._sorting_keys = {'N': 0, 'CA': 1, 'C': 2, 'O': 3}
+
+    # Sorting Methods
+    # standard across different objects and allows direct comparison
+    def __eq__(self, other):
+        return (self.id, self.altloc) == (other.id, other.altloc)
+
+    def __ne__(self, other):
+        return (self.id, self.altloc) != (other.id, other.altloc)
+
+    def __gt__(self, other):
+        order_s = self._sorting_keys.get(self.name, 4)
+        order_o = self._sorting_keys.get(other.name, 4)
+        if order_s != order_o:
+            return order_s > order_o
+        elif self.name != other.name:
+            return self.name > other.name
+        else:
+            return self.altloc > other.altloc
+
+    def __ge__(self, other):
+        order_s = self._sorting_keys.get(self.name, 4)
+        order_o = self._sorting_keys.get(other.name, 4)
+        if order_s != order_o:
+            return order_s >= order_o
+        elif self.name != other.name:
+            return self.name >= other.name
+        else:
+            return self.altloc >= other.altloc
+
+    def __lt__(self, other):
+        order_s = self._sorting_keys.get(self.name, 4)
+        order_o = self._sorting_keys.get(other.name, 4)
+        if order_s != order_o:
+            return order_s < order_o
+        elif self.name != other.name:
+            return self.name < other.name
+        else:
+            return self.altloc < other.altloc
+
+    def __le__(self, other):
+        order_s = self._sorting_keys.get(self.name, 4)
+        order_o = self._sorting_keys.get(other.name, 4)
+        if order_s != order_o:
+            return order_s <= order_o
+        elif self.name != other.name:
+            return self.name <= other.name
+        else:
+            return self.altloc <= other.altloc
+
+    # Hash method to allow uniqueness (set)
+    def __hash__(self):
+        return hash(self.get_full_id())
+
     def _assign_element(self, element):
         """Tries to guess element from atom name if not recognised."""
         if not element or element.capitalize() not in IUPACData.atom_weights:
@@ -315,6 +370,10 @@ class DisorderedAtom(DisorderedEntityWrapper):
         DisorderedEntityWrapper.__init__(self, id)
 
     # Special methods
+    # Override parent class __iter__ method
+    def __iter__(self):
+        for i in self.disordered_get_list():
+            yield i
 
     def __repr__(self):
         return "<Disordered Atom %s>" % self.get_id()
