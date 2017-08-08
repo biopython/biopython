@@ -78,7 +78,7 @@ class A_ExceptionTest(unittest.TestCase):
                     "Residue (' ', 16, ' ') redefined at line 135.",
                     "Residue (' ', 80, ' ') redefined at line 633.",
                     "Residue (' ', 81, ' ') redefined at line 646.",
-                    'Atom O defined twice in residue <Residue HOH het=W resseq=67 icode= > at line 822.'
+                    'Atom O defined twice in residue <Residue HOH het=W resseq=67 icode= > at line 823.'
                     ]):
                 self.assertIn(msg, str(wrn))
 
@@ -308,10 +308,11 @@ class ParseTest(unittest.TestCase):
                        ((' ', 85, ' '), 11),
                        ((' ', 86, ' '), 6),
                        ]),
-            ('B', 4, [(('H_NAG', 1, ' '), 14),
+            ('B', 5, [(('W', 0, ' '), 1),
+                      (('H_NAG', 1, ' '), 14),
                       (('H_NAG', 2, ' '), 14),
-                      (('H_NAG', 3, ' '), 14),
                       (('H_NAG', 4, ' '), 14),
+                      (('H_NAG', 3, ' '), 14),
                       ]),
             (' ', 76, [(('W', 1, ' '), 1),
                        (('W', 2, ' '), 1),
@@ -450,41 +451,42 @@ class ParseTest(unittest.TestCase):
                          "ASP ARG CYS CYS SER VAL HIS GLY TRP CYS GLY GLY "
                          "GLY ASN ASP TYR CYS SER GLY GLY ASN CYS GLN TYR "
                          "ARG CYS")
+
         self.assertEqual(" ".join(atom.name for atom in chain.get_atoms()),
-                         "C N CA C O CB CG CD NE CZ NH1 NH2 N CA C O CB SG "
-                         "N CA C O N CA C O CB OG N CA C O CB CG CD OE1 NE2 "
-                         "N CA C O N CA C O N CA C O N CA C O CB OG N CA C "
-                         "O CB OG1 CG2 N CA C O CB SG N CA C O CB CG CD N "
-                         "CA C O N CA C O CB CG CD1 CD2 N CA C O CB CG CD NE "
-                         "CZ NH1 NH2 N CA C O CB SG N CA C O CB SG N CA C O "
-                         "CB OG N CA C O CB CG1 CG2 CD1 N CA C O CB CG CD1 "
-                         "CD2 NE1 CE2 CE3 CZ2 CZ3 CH2 N CA C O N CA C O CB "
-                         "CG CD1 CD2 NE1 CE2 CE3 CZ2 CZ3 CH2 N CA C O CB SG "
-                         "N CA C O N CA C O CB CG OD1 OD2 N CA C O CB OG N "
-                         "CA C O CB CG CD OE1 OE2 N CA C O CB CG CD N CA C O "
-                         "CB CG CD1 CD2 CE1 CE2 CZ OH N CA C O CB SG N CA C "
-                         "O N CA C O CB CG CD NE CZ NH1 NH2 N CA C O CB OG1 "
-                         "CG2 N CA C O CB SG N CA C O CB CG CD OE1 OE2 N CA "
-                         "C O CB CG OD1 ND2 N CA C O CB CG CD CE NZ N CA C O "
-                         "CB SG N CA C O CB CG CD1 CD2 NE1 CE2 CE3 CZ2 CZ3 "
-                         "CH2 N CA C O CB OG N CA C O N CA C O CB CG CD OE1 "
-                         "OE2 N CA C O CB CG CD NE CZ NH1 NH2 N CA C O CB OG "
-                         "N CA C O CB CG OD1 OD2 N CA C O CB CG ND1 CD2 CE1 "
-                         "NE2 N CA C O CB CG CD NE CZ NH1 NH2 N CA C O CB SG "
-                         "N CA C O N CA C O CB N CA C O CB N CA C O CB CG1 "
-                         "CG2 N CA C O N CA C O CB CG OD1 ND2 N CA C O CB CG "
-                         "CD N CA C O CB CG CD N CA C O CB SG N CA C O N CA "
-                         "C O CB CG CD OE1 NE2 N CA C O CB CG OD1 OD2 N CA C "
-                         "O CB CG CD NE CZ NH1 NH2 N CA C O CB SG N CA C O "
-                         "CB SG N CA C O CB OG N CA C O CB CG1 CG2 N CA C O "
-                         "CB CG ND1 CD2 CE1 NE2 N CA C O N CA C O CB CG CD1 "
-                         "CD2 NE1 CE2 CE3 CZ2 CZ3 CH2 N CA C O CB SG N CA C "
-                         "O N CA C O N CA C O N CA C O CB CG OD1 ND2 N CA C O "
-                         "CB CG OD1 OD2 N CA C O CB CG CD1 CD2 CE1 CE2 CZ OH "
-                         "N CA C O CB SG N CA C O CB OG N CA C O N CA C O N "
+                         "C N CA C O CB CG CD NE CZ NH1 NH2 N CA C O CB SG N "
+                         "CA C O N CA C O CB OG N CA C O CB CG CD OE1 NE2 N CA "
+                         "C O N CA C O N CA C O N CA C O CB OG N CA C O CB OG1 "
+                         "CG2 N CA C O CB SG N CA C O CB CG CD N CA C O N CA C "
+                         "O CB CG CD1 CD2 N CA C O CB CG CD NE CZ NH1 NH2 N CA "
+                         "C O CB SG N CA C O CB SG N CA C O CB OG N CA C O CB "
+                         "CG1 CG2 CD1 N CA C O CB CG CD1 CD2 NE1 CE2 CE3 CZ2 "
+                         "CZ3 CH2 N CA C O N CA C O CB CG CD1 CD2 NE1 CE2 CE3 "
+                         "CZ2 CZ3 CH2 N CA C O CB SG N CA C O N CA C O CB CG "
+                         "OD1 OD2 N CA C O CB OG N CA C O CB CG CD OE1 OE2 N "
+                         "CA C O CB CG CD N CA C O CB CG CD1 CD2 CE1 CE2 CZ OH "
+                         "N CA C O CB SG N CA C O N CA C O CB CG CD NE CZ NH1 "
+                         "NH2 N CA C O CB OG1 CG2 N CA C O CB SG N CA C O CB "
+                         "CG CD OE1 OE2 N CA C O CB CG OD1 ND2 N CA C O CB CG "
+                         "CD CE NZ N CA C O CB SG N CA C O CB CG CD1 CD2 NE1 "
+                         "CE2 CE3 CZ2 CZ3 CH2 N CA C O CB OG N CA C O N CA C "
+                         "O CB CG CD OE1 OE2 N CA C O CB CG CD NE CZ NH1 NH2 "
+                         "N CA C O CB OG N CA C O CB CG OD1 OD2 N CA C O CB "
+                         "CG ND1 CD2 CE1 NE2 N CA C O CB CG CD NE CZ NH1 NH2 "
+                         "N CA C O CB SG N CA C O N CA C O CB N CA C O CB N "
+                         "CA C O CB CG1 CG2 N CA C O N CA C O CB CG OD1 ND2 "
+                         "N CA C O CB CG CD N CA C O CB CG CD N CA C O CB SG "
+                         "N CA C O N CA C O CB CG CD OE1 NE2 N CA C O CB CG "
+                         "OD1 OD2 N CA C O CB CG CD NE CZ NH1 NH2 N CA C O CB "
+                         "SG N CA C O CB SG N CA C O CB OG N CA C O CB CG1 CG2 "
+                         "N CA C O CB CG ND1 CD2 CE1 NE2 N CA C O N CA C O CB "
+                         "CG CD1 CD2 NE1 CE2 CE3 CZ2 CZ3 CH2 N CA C O CB SG N "
+                         "CA C O N CA C O N CA C O CA N C O CB CG OD1 ND2 N CA "
+                         "C O CB CG OD1 OD2 N CA C O CB CG CD1 CD2 CE1 CE2 CZ "
+                         "OH N CA C O CB SG N CA C O CB OG N CA C O N CA C O N "
                          "CA C O CB CG OD1 ND2 N CA C O CB SG N CA C O CB CG "
-                         "CD OE1 NE2 N CA C O CB CG CD1 CD2 CE1 CE2 CZ OH N "
-                         "CA C O CB CG CD NE CZ NH1 NH2 N CA C O CB SG")
+                         "CD OE1 NE2 N CA C O CB CG CD1 CD2 CE1 CE2 CZ OH N CA "
+                         "C O CB CG CD NE CZ NH1 NH2 N CA C O CB SG")
+
         self.assertEqual(" ".join(atom.element for atom in chain.get_atoms()),
                          "C N C C O C C C N C N N N C C O C S N C C O N C C O "
                          "C O N C C O C C C O N N C C O N C C O N C C O N C C "
@@ -505,7 +507,7 @@ class ParseTest(unittest.TestCase):
                          "N C C O C C C O N N C C O C C O O N C C O C C C N C "
                          "N N N C C O C S N C C O C S N C C O C O N C C O C C "
                          "C N C C O C C N C C N N C C O N C C O C C C C N C C "
-                         "C C C N C C O C S N C C O N C C O N C C O N C C O C "
+                         "C C C N C C O C S N C C O N C C O N C C O C N C O C "
                          "C O N N C C O C C O O N C C O C C C C C C C O N C C "
                          "O C S N C C O C O N C C O N C C O N C C O C C O N N "
                          "C C O C S N C C O C C C O N N C C O C C C C C C C O "
@@ -529,29 +531,46 @@ class ParseTest(unittest.TestCase):
         finally:
             os.remove(filename)
 
-    def test_deepcopy_of_structure_with_disorder(self):
-        """Test deepcopy of a structure with disordered atoms; and sort it.
+    # Tests for sorting methods
+    def test_sort_entities(self):
+        """Test sorting of several entities"""
 
-        Shouldn't cause recursion.
-        """
-        structure = deepcopy(self.structure)
-        # Sorting a residue modifies it in place, but since we
-        # have made a copy this won't alter the other tests
-        # using self.structure
-        for residue in structure.get_residues():
+        struct = self.structure
+
+        # Sort Chains
+        # Same code as for sorting models (direct id comparison)
+        model = struct[1]
+        chains = [c.id for c in sorted(model)]
+        self.assertEqual(chains, ['A', 'B', ' '])
+
+        # Sort Residues
+        residues = [r.id[1] for r in sorted(struct[1]['B'])]
+        self.assertEqual(residues, [1, 2, 3, 4, 0])
+
+        # Sort Atoms
+        for residue in struct.get_residues():
             old = [a.name for a in residue]
-            residue.sort()
-            new = [a.name for a in residue]
-            special = []
-            for a in ['N', 'CA', 'C', 'O']:
-                if a in old:
-                    special.append(a)
-            special_len = len(special)
-            self.assertEqual(new[0:special_len], special,
-                             "Sorted residue did not place N, CA, C, O first: %s" % new)
-            self.assertEqual(new[special_len:], sorted(new[special_len:]),
-                                 "After N, CA, C, O should be alphabet: %s" % new)
+            new = [a.name for a in sorted(residue)]
 
+            special = [a for a in ('N', 'CA', 'C', 'O') if a in old]
+            len_special = len(special)
+            # Placed N, CA, C, O first?
+            self.assertEqual(new[:len_special], special,
+                            "Sorted residue did not place N, CA, C, O first: %s" % new)
+            # Placed everyone else alphabetically?
+            self.assertEqual(new[len_special:], sorted(new[len_special:]),
+                            "After N, CA, C, O order Should be alphabetical: %s" % new)
+        # Test sorting disorder
+        residues = [r.id[1] for r in sorted(struct[1]['A'])][79:81]
+        self.assertEqual(residues, [80, 81])
+
+        atoms = [a.altloc for a in sorted(struct[1]['A'][74]['OD1'])]
+        self.assertEqual(atoms, ['A', 'B'])
+
+
+    def test_deepcopy_of_structure_with_disorder(self):
+        """Test deepcopy of a structure with disordered atoms"""
+        structure = deepcopy(self.structure)
 
 class ParseReal(unittest.TestCase):
     """Testing with real PDB files."""
@@ -574,8 +593,7 @@ class ParseReal(unittest.TestCase):
         structure = parser.get_structure("example", "PDB/1A8O.pdb")
         for residue in structure.get_residues():
             old = [a.name for a in residue]
-            residue.sort()
-            new = [a.name for a in residue]
+            new = [a.name for a in sorted(residue)]
             special = []
             for a in ['N', 'CA', 'C', 'O']:
                 if a in old:
@@ -1033,12 +1051,12 @@ class IterationTests(unittest.TestCase):
     def test_get_residues(self):
         """Yields all residues from all models."""
         residues = [resi.id for resi in self.struc.get_residues()]
-        self.assertEqual(len(residues), 167)
+        self.assertEqual(len(residues), 168)
 
     def test_get_atoms(self):
         """Yields all atoms from the structure, excluding duplicates and ALTLOCs which are not parsed."""
         atoms = ["%12s" % str((atom.id, atom.altloc)) for atom in self.struc.get_atoms()]
-        self.assertEqual(len(atoms), 756)
+        self.assertEqual(len(atoms), 757)
 
 
 class ChangingIdTests(unittest.TestCase):
