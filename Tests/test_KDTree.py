@@ -196,7 +196,7 @@ class KDTreeTest(unittest.TestCase):
 
     def test_all_search(self):
         for i in range(0, 5):
-            self.assertTrue(test_all_search((nr_points / 10), dim, bucket_size, query_radius))
+            self.assertTrue(test_all_search((nr_points // 10), dim, bucket_size, query_radius))
 
     def test_search(self):
         for i in range(0, 5):
