@@ -567,10 +567,10 @@ class ParseTest(unittest.TestCase):
         atoms = [a.altloc for a in sorted(struct[1]['A'][74]['OD1'])]
         self.assertEqual(atoms, ['A', 'B'])
 
-
     def test_deepcopy_of_structure_with_disorder(self):
         """Test deepcopy of a structure with disordered atoms"""
         structure = deepcopy(self.structure)
+
 
 class ParseReal(unittest.TestCase):
     """Testing with real PDB files."""
