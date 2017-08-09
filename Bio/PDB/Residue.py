@@ -96,7 +96,6 @@ class Residue(Entity):
         by name, with any alternative location specifier for disordered
         atoms (altloc) as a tie-breaker.
         """
-
         self.child_list.sort()
 
     def flag_disordered(self):
