@@ -38,44 +38,56 @@ class Residue(Entity):
     # Residue-specific sorting methods
     # Sort first by HETATM flag, then by resseq, finally by insertion code
     def __gt__(self, other):
-        hetflag_s, resseq_s, icode_s = self.id
-        hetflag_o, resseq_o, icode_o = other.id
-        if hetflag_o != hetflag_s:
-            return hetflag_s > hetflag_o
-        elif resseq_o != resseq_s:
-            return resseq_s > resseq_o
+        if isinstance(other, Residue):
+            hetflag_s, resseq_s, icode_s = self.id
+            hetflag_o, resseq_o, icode_o = other.id
+            if hetflag_o != hetflag_s:
+                return hetflag_s > hetflag_o
+            elif resseq_o != resseq_s:
+                return resseq_s > resseq_o
+            else:
+                return icode_s > icode_o
         else:
-            return icode_s > icode_o
+            return NotImplemented
 
     def __ge__(self, other):
-        hetflag_s, resseq_s, icode_s = self.id
-        hetflag_o, resseq_o, icode_o = other.id
-        if hetflag_o != hetflag_s:
-            return hetflag_s >= hetflag_o
-        elif resseq_o != resseq_s:
-            return resseq_s >= resseq_o
+        if isinstance(other, Residue):
+            hetflag_s, resseq_s, icode_s = self.id
+            hetflag_o, resseq_o, icode_o = other.id
+            if hetflag_o != hetflag_s:
+                return hetflag_s >= hetflag_o
+            elif resseq_o != resseq_s:
+                return resseq_s >= resseq_o
+            else:
+                return icode_s >= icode_o
         else:
-            return icode_s >= icode_o
+            return NotImplemented
 
     def __lt__(self, other):
-        hetflag_s, resseq_s, icode_s = self.id
-        hetflag_o, resseq_o, icode_o = other.id
-        if hetflag_o != hetflag_s:
-            return hetflag_s < hetflag_o
-        elif resseq_o != resseq_s:
-            return resseq_s < resseq_o
+        if isinstance(other, Residue):
+            hetflag_s, resseq_s, icode_s = self.id
+            hetflag_o, resseq_o, icode_o = other.id
+            if hetflag_o != hetflag_s:
+                return hetflag_s < hetflag_o
+            elif resseq_o != resseq_s:
+                return resseq_s < resseq_o
+            else:
+                return icode_s < icode_o
         else:
-            return icode_s < icode_o
+            return NotImplemented
 
     def __le__(self, other):
-        hetflag_s, resseq_s, icode_s = self.id
-        hetflag_o, resseq_o, icode_o = other.id
-        if hetflag_o != hetflag_s:
-            return hetflag_s < hetflag_o
-        elif resseq_o != resseq_s:
-            return resseq_s < resseq_o
+        if isinstance(other, Residue):
+            hetflag_s, resseq_s, icode_s = self.id
+            hetflag_o, resseq_o, icode_o = other.id
+            if hetflag_o != hetflag_s:
+                return hetflag_s < hetflag_o
+            elif resseq_o != resseq_s:
+                return resseq_s < resseq_o
+            else:
+                return icode_s < icode_o
         else:
-            return icode_s < icode_o
+            return NotImplemented
 
     def add(self, atom):
         """Add an Atom object.

@@ -55,22 +55,40 @@ class Entity(object):
     # Generic id-based comparison methods
     # Works for Structures and Models (id is numeric)
     def __eq__(self, other):
-        return self.id == other.id
+        if isinstance(other, Entity):
+            return self.id == other.id
+        else:
+            return NotImplemented
 
     def __ne__(self, other):
-        return self.id != other.id
+        if isinstance(other, Entity):
+            return self.id != other.id
+        else:
+            return NotImplemented
 
     def __gt__(self, other):
-        return self.id > other.id
+        if isinstance(other, Entity):
+            return self.id > other.id
+        else:
+            return NotImplemented
 
     def __ge__(self, other):
-        return self.id >= other.id
+        if isinstance(other, Entity):
+            return self.id >= other.id
+        else:
+            return NotImplemented
 
     def __lt__(self, other):
-        return self.id < other.id
+        if isinstance(other, Entity):
+            return self.id < other.id
+        else:
+            return NotImplemented
 
     def __le__(self, other):
-        return self.id <= other.id
+        if isinstance(other, Entity):
+            return self.id <= other.id
+        else:
+            return NotImplemented
 
     # Hash method to allow uniqueness (set)
     def __hash__(self):

@@ -76,50 +76,68 @@ class Atom(object):
     # Sorting Methods
     # standard across different objects and allows direct comparison
     def __eq__(self, other):
-        return (self.id, self.altloc) == (other.id, other.altloc)
+        if isinstance(other, Atom):
+            return (self.id, self.altloc) == (other.id, other.altloc)
+        else:
+            return NotImplemented
 
     def __ne__(self, other):
-        return (self.id, self.altloc) != (other.id, other.altloc)
+        if isinstance(other, Atom):
+            return (self.id, self.altloc) != (other.id, other.altloc)
+        else:
+            return NotImplemented
 
     def __gt__(self, other):
-        order_s = self._sorting_keys.get(self.name, 4)
-        order_o = self._sorting_keys.get(other.name, 4)
-        if order_s != order_o:
-            return order_s > order_o
-        elif self.name != other.name:
-            return self.name > other.name
+        if isinstance(other, Atom):
+            order_s = self._sorting_keys.get(self.name, 4)
+            order_o = self._sorting_keys.get(other.name, 4)
+            if order_s != order_o:
+                return order_s > order_o
+            elif self.name != other.name:
+                return self.name > other.name
+            else:
+                return self.altloc > other.altloc
         else:
-            return self.altloc > other.altloc
+            return NotImplemented
 
     def __ge__(self, other):
-        order_s = self._sorting_keys.get(self.name, 4)
-        order_o = self._sorting_keys.get(other.name, 4)
-        if order_s != order_o:
-            return order_s >= order_o
-        elif self.name != other.name:
-            return self.name >= other.name
+        if isinstance(other, Atom):
+            order_s = self._sorting_keys.get(self.name, 4)
+            order_o = self._sorting_keys.get(other.name, 4)
+            if order_s != order_o:
+                return order_s >= order_o
+            elif self.name != other.name:
+                return self.name >= other.name
+            else:
+                return self.altloc >= other.altloc
         else:
-            return self.altloc >= other.altloc
+            return NotImplemented
 
     def __lt__(self, other):
-        order_s = self._sorting_keys.get(self.name, 4)
-        order_o = self._sorting_keys.get(other.name, 4)
-        if order_s != order_o:
-            return order_s < order_o
-        elif self.name != other.name:
-            return self.name < other.name
+        if isinstance(other, Atom):
+            order_s = self._sorting_keys.get(self.name, 4)
+            order_o = self._sorting_keys.get(other.name, 4)
+            if order_s != order_o:
+                return order_s < order_o
+            elif self.name != other.name:
+                return self.name < other.name
+            else:
+                return self.altloc < other.altloc
         else:
-            return self.altloc < other.altloc
+            return NotImplemented
 
     def __le__(self, other):
-        order_s = self._sorting_keys.get(self.name, 4)
-        order_o = self._sorting_keys.get(other.name, 4)
-        if order_s != order_o:
-            return order_s <= order_o
-        elif self.name != other.name:
-            return self.name <= other.name
+        if isinstance(other, Atom):
+            order_s = self._sorting_keys.get(self.name, 4)
+            order_o = self._sorting_keys.get(other.name, 4)
+            if order_s != order_o:
+                return order_s <= order_o
+            elif self.name != other.name:
+                return self.name <= other.name
+            else:
+                return self.altloc <= other.altloc
         else:
-            return self.altloc <= other.altloc
+            return NotImplemented
 
     # Hash method to allow uniqueness (set)
     def __hash__(self):
