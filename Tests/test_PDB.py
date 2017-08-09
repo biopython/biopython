@@ -572,11 +572,16 @@ class ParseTest(unittest.TestCase):
         self.assertFalse(struct[0] == [])  # __eq__ diff. types
         self.assertFalse(struct == model)
 
-        with self.assertRaises(TypeError):
-            _ = struct > model  # __gt__ diff. types
+        # In Py2 this will be True/False, in Py3 it will raise a TypeError.
+        try:
+            self.assertTrue(struct > model)  # __gt__ diff. types
+        except TypeError:
+            pass
 
-        with self.assertRaises(TypeError):
-            _ = struct <= []  # __le__ diff. types
+        try:
+            self.assertFalse(struct >= [])  # __le__ diff. types
+        except TypeError:
+            pass
 
     def test_deepcopy_of_structure_with_disorder(self):
         """Test deepcopy of a structure with disordered atoms"""
