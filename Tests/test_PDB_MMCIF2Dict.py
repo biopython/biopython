@@ -39,6 +39,28 @@ class MMCIF2dictTests(unittest.TestCase):
         self.assertEqual(len(mmcif.keys()), 5)
         self.assertEqual(mmcif['_pdbx_audit_revision_item.item'], ['_atom_site.B_iso_or_equiv', '_atom_site.Cartn_x', '_atom_site.Cartn_y', '_atom_site.Cartn_z'])
 
+    def test_quotefix(self):
+        # Test quote characters parse correctly
+        filename = "PDB/1MOM_min.cif"
+        mmcif = MMCIF2Dict(filename)
+        self.assertEqual(len(mmcif.keys()), 21)
+        self.assertEqual(mmcif['_struct_conf.pdbx_PDB_helix_id'], ['A', 'A\'', 'B', 'C', 'B\'', 'D', 'E', 'C\'', 'F', 'G', 'H', 'D\'', 'E\'', 'A\'"', 'BC', 'CD', 'DE'])
+
+    def test_splitline(self):
+        filename = "PDB/4Q9R_min.cif"
+        mmcif = MMCIF2Dict(filename)
+        self.assertEqual(list(mmcif._splitline("foo bar")), ["foo", "bar"])
+        self.assertEqual(list(mmcif._splitline("  foo bar  ")), ["foo", "bar"])
+        self.assertEqual(list(mmcif._splitline("'foo' bar")), ["foo", "bar"])
+        self.assertEqual(list(mmcif._splitline("foo \"bar\"")), ["foo", "bar"])
+        self.assertEqual(list(mmcif._splitline("foo 'bar a' b")), ["foo", "bar a", "b"])
+        self.assertEqual(list(mmcif._splitline("foo 'bar'a' b")), ["foo", "bar'a", "b"])
+        self.assertEqual(list(mmcif._splitline("foo \"bar' a\" b")), ["foo", "bar' a", "b"])
+        self.assertEqual(list(mmcif._splitline("foo '' b")), ["foo", "", "b"])
+        self.assertRaises(ValueError, list, mmcif._splitline("foo 'bar"))
+        self.assertRaises(ValueError, list, mmcif._splitline("foo 'ba'r  "))
+        self.assertRaises(ValueError, list, mmcif._splitline("foo \"bar'"))
+
 
 if __name__ == '__main__':
     runner = unittest.TextTestRunner(verbosity=2)
