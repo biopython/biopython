@@ -108,6 +108,10 @@ class Residue(Entity):
         by name, with any alternative location specifier for disordered
         atoms (altloc) as a tie-breaker.
         """
+        warnings.warn("The custom sort() method will be deprecated in the "
+                      "future in favor of rich comparison methods. Use the "
+                      "built-in sorted() function instead.",
+                      BiopythonDeprecationWarning)
         self.child_list.sort()
 
     def flag_disordered(self):
