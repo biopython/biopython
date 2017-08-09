@@ -97,7 +97,7 @@ class Residue(Entity):
         atoms (altloc) as a tie-breaker.
         """
 
-        self.child_list.sort
+        self.child_list.sort()
 
     def flag_disordered(self):
         """Set the disordered flag."""
