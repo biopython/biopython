@@ -532,22 +532,20 @@ class ParseTest(unittest.TestCase):
             os.remove(filename)
 
     # Tests for sorting methods
-    def test_sort_entities(self):
-        """Test sorting of several entities"""
+    def test_comparison_entities(self):
+        """Test comparing and sorting the several SMCRA objects"""
 
         struct = self.structure
 
-        # Sort Chains
-        # Same code as for sorting models (direct id comparison)
+        # Sorting (<, >, <=, <=)
+        # Chains (same code as models)
         model = struct[1]
         chains = [c.id for c in sorted(model)]
         self.assertEqual(chains, ['A', 'B', ' '])
-
-        # Sort Residues
+        # Residues
         residues = [r.id[1] for r in sorted(struct[1]['B'])]
         self.assertEqual(residues, [1, 2, 3, 4, 0])
-
-        # Sort Atoms
+        # Atoms
         for residue in struct.get_residues():
             old = [a.name for a in residue]
             new = [a.name for a in sorted(residue)]
@@ -560,12 +558,25 @@ class ParseTest(unittest.TestCase):
             # Placed everyone else alphabetically?
             self.assertEqual(new[len_special:], sorted(new[len_special:]),
                             "After N, CA, C, O order Should be alphabetical: %s" % new)
-        # Test sorting disorder
+        # DisorderedResidue
         residues = [r.id[1] for r in sorted(struct[1]['A'])][79:81]
         self.assertEqual(residues, [80, 81])
-
+        # DisorderedAtom
         atoms = [a.altloc for a in sorted(struct[1]['A'][74]['OD1'])]
         self.assertEqual(atoms, ['A', 'B'])
+
+        # Comparisons
+        self.assertTrue(model == model)  # __eq__ same type
+        self.assertFalse(struct[0] == struct[1])
+
+        self.assertFalse(struct[0] == [])  # __eq__ diff. types
+        self.assertFalse(struct == model)
+
+        with self.assertRaises(TypeError):
+            _ = struct > model  # __gt__ diff. types
+
+        with self.assertRaises(TypeError):
+            _ = struct <= []  # __le__ diff. types
 
     def test_deepcopy_of_structure_with_disorder(self):
         """Test deepcopy of a structure with disordered atoms"""
