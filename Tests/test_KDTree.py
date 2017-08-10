@@ -160,13 +160,16 @@ def test_all_search(nr_points, dim, bucket_size, query_radius):
     kdt.set_coords(coords)
     kdt.all_search(query_radius)
     indices = kdt.all_get_indices()
+    if indices is None:
+        l1 = 0
+    else:
+        l1 = len(indices)
     radii = kdt.all_get_radii()
-    l = 0
-    # check first 100 points
-    for i in range(0, 100):
-        if round(_dist(coords[indices[i][0]], coords[indices[i][1]]), 4) == round(radii[i], 4):
-            l = l + 1
-    if l == 100:
+    if radii is None:
+        l2 = 0
+    else:
+        l2 = len(radii)
+    if l1 == l2:
         return True
     else:
         return False
