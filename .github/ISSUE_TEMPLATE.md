@@ -5,7 +5,7 @@ system as follows:
 
 ```python
 import sys; print(sys.version)
-import platform; print platform.python_implementation(); print(platform.platform())
+import platform; print(platform.python_implementation()); print(platform.platform())
 import Bio; print(Bio.__version__)
 ```
 
