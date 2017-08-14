@@ -91,10 +91,10 @@ before_install:
   - curl -L -O http://www.atgc-montpellier.fr/download/binaries/phyml/PhyML-3.1.zip
   - unzip PhyML-3.1.zip
   - mv PhyML-3.1/PhyML-3.1_linux64 bin/phyml
-  - echo "Installing dssp"
-  - curl -L -O ftp://ftp.cmbi.ru.nl/pub/software/dssp/dssp-2.0.4-linux-amd64
-  - mv dssp-2.0.4-linux-amd64 bin/dssp
-  - chmod a+x bin/dssp
+  #- echo "Installing dssp"
+  #- curl -L -O ftp://ftp.cmbi.ru.nl/pub/software/dssp/dssp-2.0.4-linux-amd64
+  #- mv dssp-2.0.4-linux-amd64 bin/dssp
+  #- chmod a+x bin/dssp
   - echo "Installing Genepop"
   - curl -L -O https://anaconda.org/bioconda/genepop/4.5.1/download/linux-64/genepop-4.5.1-0.tar.bz2
   # This will create ./bin/Genepop and a harmless ./info/ folder.
