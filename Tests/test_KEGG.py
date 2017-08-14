@@ -58,8 +58,8 @@ class EnzymeTests(unittest.TestCase):
                           ('BRENDA, the Enzyme Database', ['1.1.1.1']),
                           ('CAS', ['9031-72-5'])])
         self.assertEqual(records[-1].entry, "2.7.2.1")
-        self.assertEqual(records[-1].__str__().replace(" ","").split("\n")[:10],
-                         ['ENTRYEC2.7.2.1','NAMEacetatekinase', 'acetokinase',
+        self.assertEqual(records[-1].__str__().replace(" ", "").split("\n")[:10],
+                         ['ENTRYEC2.7.2.1', 'NAMEacetatekinase', 'acetokinase',
                           'AckA', 'AK', 'acetickinase', 'acetatekinase(phosphorylating)',
                           'CLASSTransferases;', 'Transferringphosphorus-containinggroups;',
                           'Phosphotransferaseswithacarboxygroupasacceptor'])
@@ -86,19 +86,16 @@ class EnzymeTests(unittest.TestCase):
                          ('HSA', ['5236', '55276']))
         self.assertEqual(records[0].genes[8],
                          ('CSAB', ['103224690', '103246223']))
-        
+
     def test_exceptions(self):
         with open("KEGG/enzyme.sample") as handle:
             with self.assertRaises(ValueError) as context:
                 list(Enzyme.read(handle))
             self.assertTrue("More than one record found in handle" in str(context.exception))
             records = Enzyme.parse(handle)
-            for i in range (0, 6):
+            for i in range(0, 6):
                 next(records)
             self.assertRaises(StopIteration, next, records)
-            
-    
-        
 
 
 class CompoundTests(unittest.TestCase):
@@ -119,7 +116,7 @@ class CompoundTests(unittest.TestCase):
         self.assertEqual(records[1].enzyme[0], ('2.3.2.6'))
         self.assertEqual(records[1].structures, [])
         self.assertEqual(records[1].dblinks[0], ('PubChem', ['3319']))
-        self.assertEqual(records[-1].__str__().replace(" ","").split("\n")[:10],
+        self.assertEqual(records[-1].__str__().replace(" ", "").split("\n")[:10],
                          ['ENTRYC01386', 'NAMENH2Mec', '7-Amino-4-methylcoumarin',
                           'FORMULAC10H9NO2', 'DBLINKSCAS:26093-31-2',
                           'PubChem:4580', 'ChEBI:51771', 'ChEMBL:CHEMBL270672',
