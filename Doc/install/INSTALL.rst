@@ -2,9 +2,9 @@
 Biopython Installation
 ======================
 
-This document describes installing Biopython on your computer. To make things as simple as possible, 
-it basically assumes you have nothing related to Python or Biopython on your computer and want to 
-end up with a working installation of Biopython. Biopython supports Mac, UNIX/Linux and Windows machines, but the 
+This document describes how to install Biopython in your system. To make things as simple as possible, 
+it basically assumes you have nothing related to Python or Biopython on your computer and want a working 
+installation of Biopython. Biopython supports Mac, UNIX/Linux and Windows machines, but the 
 steps to install biopython vary across the platforms.
 
 
@@ -34,8 +34,8 @@ Python is a interpreted, interactive object-oriented programming language and th
 
 Biopython is designed to work with Python 2.7, Python 3.4, Python 3.5 and 3.6. As of Biopython 1.68, support for Python 3.3 has been removed.
 
-1) Installing Python in UNIX/Linux
-----------------------------------
+1) Installing Python in your UNIX/Linux
+---------------------------------------
 
 Python 2.7 and Python 3.5 usually comes pre-installed with most modern Linux systems like Ubuntu, Fedora. If you would like to check 
 the version present in your system, you can type the command::
@@ -156,8 +156,8 @@ This command will install the software package in your system. To proceed furthe
   
 This will install the biopython package in your system. For checking the installation or installing a specific version of biopython in your system, follow the steps mentioned in the UNIX/Linux section.
 
-Installing Biopython using Anaconda
-===================================
+Bonus: Installing Biopython using Anaconda
+==========================================
 
 For Anaconda users, the Biopython source files are available in the `conda-forge <https://conda-forge.org/>`_ channel. To install Biopython, just do::
 
@@ -177,7 +177,7 @@ You will see an output something like this::
   conda-env-2.6.0            |                0          498 B
   mkl-2017.0.3               |                0       126.3 MB
   numpy-1.13.1               |           py27_0         3.3 MB
-  biopython-1.69             |      np113py27_0         2.1 MB
+  biopython-1.70             |      np113py27_0         2.1 MB
   conda-4.3.22               |           py27_0         520 KB
   ------------------------------------------------------------
                                          Total:       132.2 MB
@@ -191,3 +191,5 @@ You will see an output something like this::
   Proceed ([y]/n)?
   
 Type "y" and the installation will start. Once installation is finished, you can check if the installation worked properly by doing the steps mentioned in the UNIX/Linux section above.
+
+Making use of Anaconda platform will ensure that you get all the dependencies required to run biopython in your system successfully. To get Anaconda on your system, you can refer to the instructions given here- `https://www.continuum.io/downloads <https://www.continuum.io/downloads>`_
