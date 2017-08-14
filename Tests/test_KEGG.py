@@ -58,7 +58,7 @@ class EnzymeTests(unittest.TestCase):
                           ('BRENDA, the Enzyme Database', ['1.1.1.1']),
                           ('CAS', ['9031-72-5'])])
         self.assertEqual(records[-1].entry, "2.7.2.1")
-        self.assertEqual(records[-1].__str__().replace(" ", "").split("\n")[:10],
+        self.assertEqual(str(records[-1]).replace(" ", "").split("\n")[:10],
                          ['ENTRYEC2.7.2.1', 'NAMEacetatekinase', 'acetokinase',
                           'AckA', 'AK', 'acetickinase', 'acetatekinase(phosphorylating)',
                           'CLASSTransferases;', 'Transferringphosphorus-containinggroups;',
@@ -116,7 +116,7 @@ class CompoundTests(unittest.TestCase):
         self.assertEqual(records[1].enzyme[0], ('2.3.2.6'))
         self.assertEqual(records[1].structures, [])
         self.assertEqual(records[1].dblinks[0], ('PubChem', ['3319']))
-        self.assertEqual(records[-1].__str__().replace(" ", "").split("\n")[:10],
+        self.assertEqual(str(records[-1]).replace(" ", "").split("\n")[:10],
                          ['ENTRYC01386', 'NAMENH2Mec', '7-Amino-4-methylcoumarin',
                           'FORMULAC10H9NO2', 'DBLINKSCAS:26093-31-2',
                           'PubChem:4580', 'ChEBI:51771', 'ChEMBL:CHEMBL270672',
