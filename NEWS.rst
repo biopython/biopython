@@ -41,6 +41,7 @@ possible, especially the following contributors:
 - Erik Cederstrand (first contribution)
 - Francesco Gastaldello
 - Joe Greener (first contribution)
+- João Rodrigues
 - Jun Aruga (first contribution)
 - Kai Blin
 - Kozo Nishida
