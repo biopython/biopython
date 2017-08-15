@@ -98,15 +98,9 @@ class Record(object):
                             for l in s])
 
     def _enzyme(self):
-        s = ""
-        for entry in self.enzyme:
-            if entry[1]:
-                t = entry[0] + " (" + entry[1] + ")"
-            else:
-                t = entry[0]
-            s = s + t.ljust(16)
         return _write_kegg("ENZYME",
-                            [_wrap_kegg(s, wrap_rule=id_wrap(0))])
+                           [_wrap_kegg(l, wrap_rule=name_wrap)
+                            for l in self.enzyme])
 
     def _structures(self):
         s = []
