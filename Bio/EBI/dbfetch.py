@@ -34,6 +34,9 @@ from __future__ import print_function
 from Bio._py3k import urlopen as _urlopen
 from Bio._py3k import _binary_to_string_handle
 
+import requires_internet
+requires_internet.check()
+
 
 def _q(arg1, arg2=None, arg3=None, arg4=None):
     URL = "http://www.ebi.ac.uk/Tools/dbfetch/dbfetch%s"
