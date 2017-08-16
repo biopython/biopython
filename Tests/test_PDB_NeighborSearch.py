@@ -14,7 +14,7 @@ class Atom(object):
 
 
 class KDTreeTest(unittest.TestCase):
-    
+
     def test_NeighborSearch():
         for i in range(0, 20):
             al = [Atom() for j in range(100)]
