@@ -13,6 +13,7 @@ from ._Dialign import DialignCommandline
 from ._Probcons import ProbconsCommandline
 from ._TCoffee import TCoffeeCommandline
 from ._MSAProbs import MSAProbsCommandline
+from ._Guidance import GuidanceCommandline
 
 # Make this explicit, then they show up in the API docs
 __all__ = ("MuscleCommandline",
@@ -24,4 +25,5 @@ __all__ = ("MuscleCommandline",
            "ProbconsCommandline",
            "TCoffeeCommandline",
            "MSAProbsCommandline",
+           "GuidanceCommandline"
            )
