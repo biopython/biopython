@@ -25,9 +25,21 @@ class Guidance2Commandline(AbstractCommandline):
     --------
 
     >>> from Bio.Align.Applications import Guidance2Commandline
+    >>> import os
+    >>> seqFile = "HTR1A.ffn"
+    >>> msaProgram = "CLUSTALW"
+    >>> seqType = "codon"
+    >>> outDir = Path(os.getcwd)
+    >>> Guidance2_cline = Guidance2Commandline(seqFile, msaProgram, seqType, str(outDir), bootstraps=20, seqCutoff=0.63,\
+                                    colCutoff=0.9, outOrder='as_input', dataset='HTR1A')
+    >>>> print(Guidance2_cline)
+    perl guidance.pl --seqFile HTR1A.ffn --msaProgram CLUSTALW --seqType codon --outDir C://Users/rgilmore/HTR1A
+    --bootstraps 20 --seqCutoff 0.63 --colCutoff 0.9 --outOrder as_input --dataset HTR1A
 
-    You would typically run the command line with clustalomega_cline() or via
+
+    You would typically run the command line with Guidance2_cline() or via
         the Python subprocess module, as described in the Biopython tutorial.
+
     Citation:
     ---------
         Sela, I., Ashkenazy, H., Katoh, K. and Pupko, T. (2015)
@@ -39,9 +51,7 @@ class Guidance2Commandline(AbstractCommandline):
         Pac Symp Biocomput 13:15-24
     """
 
-    def __init__(self, cmd="guidance", **kwargs):
-        # order parameters in the same order as invoking guidance on the cmd line (e.g. 'perl guidance.pl')
-        if cmd is "guidance":
+    def __init__(self, cmd="perl guidance.pl", **kwargs):
             # TODO-ROB:  Add command lines for the alternative scripts in the guidance package
             self.parameters = \
                 [
@@ -140,3 +150,7 @@ class Guidance2Commandline(AbstractCommandline):
                             checker_function=lambda x: isinstance(x, int))
                 ]
             AbstractCommandline.__init__(self, cmd, **kwargs)
+
+if __name__ == "__main__":
+    from Bio._utils import run_doctest
+    run_doctest()
