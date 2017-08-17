@@ -66,11 +66,11 @@ def db_info():
 def dbfetch(db, ids, format=None, style=None):
     """Create a URL to use the tool via RESTful method.
 
-    db = database to query.
-    ids = single id or list of ids separated by commas. Can be provvided as
-          list or string object.
-    format = output format. Depend on the database queried.
-    style = raw by default, otherwise it can be specified as HTML.
+    - db    - database to query.
+    - ids   - single id or list of ids separated by commas. Can be provvided as
+              list or string object.
+    - format - output format. Depend on the database queried.
+    - style - raw by default, otherwise it can be specified as HTML.
 
     """
     if isinstance(ids, list):
