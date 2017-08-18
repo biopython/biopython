@@ -39,29 +39,28 @@ class Guidance2Commandline(AbstractCommandline):
 
 
     You would typically run the command line with Guidance2_cline() or via
-        the Python subprocess module, as described in the Biopython tutorial.
+    the Python subprocess module, as described in the Biopython tutorial.
 
     Citation:
     ---------
-        Sela, I., Ashkenazy, H., Katoh, K. and Pupko, T. (2015)
-        GUIDANCE2: accurate detection of unreliable alignment regions accounting for the uncertainty of multiple parameters.
-        Nucleic Acids Research, 2015 Jul 1; 43 (Web Server issue): W7-W14.; doi: 10.1093/nar/gkq443
+    Sela, I., Ashkenazy, H., Katoh, K. and Pupko, T. (2015)
+    GUIDANCE2: accurate detection of unreliable alignment regions accounting for the uncertainty of multiple parameters.
+    Nucleic Acids Research, 2015 Jul 1; 43 (Web Server issue): W7-W14.; doi: 10.1093/nar/gkq443
 
-        Landan, G., and D. Graur. (2008).
-        Local reliability measures from sets of co-optimal multiple sequence alignments.
-        Pac Symp Biocomput 13:15-24
-        """
+    Landan, G., and D. Graur. (2008).
+    Local reliability measures from sets of co-optimal multiple sequence alignments.
+    Pac Symp Biocomput 13:15-24
+    """
 
     def __init__(self, cmd="perl guidance.pl", **kwargs):
-            # TODO-ROB:  Add command lines for the alternative scripts in the guidance package
             self.parameters = \
                 [
                     # Required Parameters
                     _Option(['--seqFile', 'seqFile'],
                             "Input sequence file in FASTA format",
                             filename=True, equate=False, is_required=True,
-                            checker_function=lambda x: str(Path(x).suffix) in ['.fasta', 'fna', '.ffn', '.faa', '.fra']
-                                                       and Path(x).is_file()),
+                            checker_function=lambda x:
+                            str(Path(x).suffix) in ['.fasta', 'fna', '.ffn', '.faa', '.fra'] and Path(x).is_file()),
                     _Option(['--msaProgram', 'msaProgram'],
                             "Which MSA program to use",
                             equate=False, is_required=True,
