@@ -1,4 +1,4 @@
-# Copyright 2017 by Peter Cock.  All rights reserved.
+# Copyright 2017 by Sourav Singh.  All rights reserved.
 # Based on code Copyright 2002 by Thomas Hamelryck.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license. Please see the LICENSE file that should have been included
