@@ -168,7 +168,6 @@ class ProtParamTest(unittest.TestCase):
         self.assertAlmostEqual(self.analysis.molar_extinction_coefficient()[1], 17545, places=5)
 
 
-
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)
