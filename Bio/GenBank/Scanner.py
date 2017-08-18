@@ -627,6 +627,10 @@ class EmblScanner(InsdcScanner):
             linersplit = line.rsplit(None, 1)
             if len(linersplit) == 2 and linersplit[1].isdigit():
                 seq_lines.append(linersplit[0])
+            elif line.isdigit():
+                # Special case of final blank line with no bases
+                # just the sequence coordinate
+                pass
             else:
                 warnings.warn("EMBL sequence line missing coordinates",
                               BiopythonParserWarning)
