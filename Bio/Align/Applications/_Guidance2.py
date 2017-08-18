@@ -13,7 +13,8 @@ It weights, filters or masks unreliably aligned positions in multiple sequence a
 """
 
 from __future__ import print_function
-from pathlib import Path
+
+import os
 from Bio.Application import _Option, AbstractCommandline
 
 
@@ -53,14 +54,13 @@ class Guidance2Commandline(AbstractCommandline):
     """
 
     def __init__(self, cmd="perl guidance.pl", **kwargs):
-            self.parameters = \
+        self.parameters = \
                 [
                     # Required Parameters
                     _Option(['--seqFile', 'seqFile'],
                             "Input sequence file in FASTA format",
                             filename=True, equate=False, is_required=True,
-                            checker_function=lambda x:
-                            str(Path(x).suffix) in ['.fasta', 'fna', '.ffn', '.faa', '.fra'] and Path(x).is_file()),
+                            checker_function=lambda x: x in ['.fasta', 'fna', '.ffn', '.faa', '.fra'] and os.path.isfile(x)),
                     _Option(['--msaProgram', 'msaProgram'],
                             "Which MSA program to use",
                             equate=False, is_required=True,
@@ -105,7 +105,7 @@ class Guidance2Commandline(AbstractCommandline):
                     _Option(['--msaFile', 'msaFile'],
                             "Input alignment file - not recommended",
                             filename=True, equate=False,
-                            checker_function=lambda x: Path(x).is_file()),
+                            checker_function=lambda x: os.path.isfile(x)),
                     # Confidence scores
                     _Option(['--seqCutoff', 'seqCutoff'],
                             "Confidence cutoff between 0 to 1. Default=0.6",
@@ -119,23 +119,23 @@ class Guidance2Commandline(AbstractCommandline):
                     _Option(['--mafft', 'mafft'],
                             "path to mafft executable. Default=mafft",
                             filename=True, equate=False,
-                            checker_function=lambda x: Path(x).is_file()),
+                            checker_function=lambda x: os.path.isfile(x)),
                     _Option(['--prank', 'prank'],
                             "path to prank executable. Default=prank",
                             filename=True, equate=False,
-                            checker_function=lambda x: Path(x).is_file()),
+                            checker_function=lambda x: os.path.isfile(x)),
                     _Option(['--muscle', 'muscle'],
                             "path to muscle executable. default=muscle",
                             filename=True, equate=False,
-                            checker_function=lambda x: Path(x).is_file()),
+                            checker_function=lambda x: os.path.isfile(x)),
                     _Option(['--pagan', 'pagan'],
                             "path to pagan executable, default=pagan",
                             filename=True, equate=False,
-                            checker_function=lambda x: Path(x).is_file()),
+                            checker_function=lambda x: os.path.isfile(x)),
                     _Option(['--ruby', 'ruby'],
                             "path to ruby executable. default=ruby",
                             filename=True, equate=False,
-                            checker_function=lambda x: Path(x).is_file()),
+                            checker_function=lambda x: os.path.isfile(x)),
                     # Miscellaneous
                     _Option(['--dataset', 'dataset'],
                             "Unique name for the Dataset - will be used as prefix to outputs (default=MSA)",
@@ -149,7 +149,7 @@ class Guidance2Commandline(AbstractCommandline):
                             equate=False,
                             checker_function=lambda x: isinstance(x, int))
                 ]
-            AbstractCommandline.__init__(self, cmd, **kwargs)
+        AbstractCommandline.__init__(self, cmd, **kwargs)
 
 
 if __name__ == "__main__":
