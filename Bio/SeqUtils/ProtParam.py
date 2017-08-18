@@ -287,7 +287,6 @@ class ProteinAnalysis(object):
         and Cystines-residues (Cys-Cys-bond)
         """
         num_aa = self.count_amino_acids()
-        mec_reduced = num_aa['W']*5500+num_aa['Y']*1490
-        mec_cystines = mec_reduced + (num_aa['C']//2)*125
+        mec_reduced = num_aa['W'] * 5500 + num_aa['Y'] * 1490
+        mec_cystines = mec_reduced + (num_aa['C'] // 2) * 125
         return(mec_reduced, mec_cystines)
-
