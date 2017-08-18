@@ -9,7 +9,8 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """Command line wrapper for the multiple alignment program, GUIDANCE2.
-It weights, filters or masks unreliably aligned positions in multiple sequence alignments."""
+It weights, filters or masks unreliably aligned positions in multiple sequence alignments.
+"""
 
 from __future__ import print_function
 from pathlib import Path
