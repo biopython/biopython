@@ -51,6 +51,7 @@ possible, especially the following contributors:
 - Kozo Nishida
 - Peter Cock
 - rht (first contribution)
+- Yasar L. Ahmed (first contribution)
 
 
 10 July 2017: Biopython 1.70
