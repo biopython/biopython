@@ -625,8 +625,12 @@ class EmblScanner(InsdcScanner):
                 repr(self.line)
             # Remove tailing number now, remove spaces later
             linersplit = line.rsplit(None, 1)
-            if len(linersplit) > 1:
+            if len(linersplit) == 2 and linersplit[1].isdigit():
                 seq_lines.append(linersplit[0])
+            else:
+                warnings.warn("EMBL sequence line missing coordinates",
+                              BiopythonParserWarning)
+                seq_lines.append(line)
             line = self.handle.readline()
         self.line = line
         return misc_lines, "".join(seq_lines).replace(" ", "")
