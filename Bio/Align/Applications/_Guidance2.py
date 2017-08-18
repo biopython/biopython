@@ -18,7 +18,7 @@ from Bio.Application import _Option, AbstractCommandline
 
 
 class Guidance2Commandline(AbstractCommandline):
-    u""""Command line wrapper for GUIDANCE2.
+    u"""Command line wrapper for GUIDANCE2.
 
     http://guidance.tau.ac.il/ver2/
 
@@ -50,7 +50,7 @@ class Guidance2Commandline(AbstractCommandline):
         Landan, G., and D. Graur. (2008).
         Local reliability measures from sets of co-optimal multiple sequence alignments.
         Pac Symp Biocomput 13:15-24
-    """
+        """
 
     def __init__(self, cmd="perl guidance.pl", **kwargs):
             # TODO-ROB:  Add command lines for the alternative scripts in the guidance package
