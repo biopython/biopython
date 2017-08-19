@@ -15,7 +15,7 @@ M. de Hoon et al. (2004) http://dx.doi.org/10.1093/bioinformatics/bth078
 import numpy
 
 from Bio.Cluster.cluster import version, kcluster, kmedoids, treecluster
-from Bio.Cluster.cluster import somcluster, median, mean, clusterdistance
+from Bio.Cluster.cluster import somcluster, clusterdistance
 from Bio.Cluster.cluster import clustercentroids, distancematrix, pca
 from Bio.Cluster.cluster import Node, Tree
 
