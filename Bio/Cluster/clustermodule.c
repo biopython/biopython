@@ -1317,8 +1317,9 @@ static PySequenceMethods PyTree_sequence = {
 
 static char PyTree_scale__doc__[] =
 "mytree.scale()\n"
-"This method scales the node distances in the tree such that they are\n"
-"all between one and zero.\n";
+"\n"
+"Scale the node distances in the tree such that they are all between one\n"
+"and zero.\n";
 
 static PyObject*
 PyTree_scale(PyTree* self)
@@ -1339,11 +1340,13 @@ PyTree_scale(PyTree* self)
 }
 
 static char PyTree_cut__doc__[] =
-"clusterid = mytree.cut(nclusters)\n"
-"Given a hierarchical clustering result mytree, cut() divides the\n"
-"elements in the tree into clusters. The number of clusters is given\n"
-"by nclusters. If nclusters is not specified, it is set equal to the number\n"
-"of elements in the tree.";
+"mytree.cut(nclusters) -> array\n"
+"\n"
+"Divide the elements in a hierarchical clustering result mytree into\n"
+"clusters, and return an array with the number of the cluster to which each\n"
+"element was assigned. The number of clusters is given by nclusters. If\n"
+"nclusters is not specified, it is set equal to the number of elements in\n"
+"the tree.";
 
 static PyObject*
 PyTree_cut(PyTree* self, PyObject* args)
@@ -1390,11 +1393,15 @@ PyTree_cut(PyTree* self, PyObject* args)
 }
 
 static char PyTree_sort__doc__[] =
-"indices = mytree.sort(order)\n"
-"Given a hierarchical clustering result mytree, mytree.sort() returns\n"
-"the indices of the elements in the tree sorted as much as possible by\n"
-"increasing values of order, while maintaining consistency with the\n"
-"hierarchical clustering result.\n";
+"mytree.sort(order) -> array\n"
+"\n"
+"Sort a hierarchical clustering tree by switching the left and right"
+"subnode of nodes such that the elements in the left-to-right order of the"
+"tree tend to have increasing order values.\n"
+"\n"
+"Return the indices of the elements in the left-to-right order in the"
+"hierarchical clustering tree, such that the element with index indices[i]"
+"occurs at position i in the dendrogram.\n";
 
 static PyObject*
 PyTree_sort(PyTree* self, PyObject* args)
