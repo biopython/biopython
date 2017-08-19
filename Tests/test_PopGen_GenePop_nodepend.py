@@ -8,6 +8,7 @@ import os
 import unittest
 from Bio.PopGen import GenePop
 from Bio.PopGen.GenePop import FileParser
+import tempfile
 
 
 class RecordTest(unittest.TestCase):
@@ -125,6 +126,31 @@ class FileParserTest(unittest.TestCase):
                 raise Exception("Should have raised exception")
             except ValueError:
                 pass
+
+    def test_remove_features(self):
+        """Testing the ability to remove population/loci via class methods."""
+        for index in range(len(self.files)):
+            fname = self.files[index]
+            ftemp = tempfile.NamedTemporaryFile("w+")
+            rec = FileParser.read(fname)
+            rec.remove_loci_by_position([0], ftemp.name)
+            ftemp.seek(0)
+            rec2 = GenePop.read(ftemp)
+            self.assertEqual(rec.loci_list[1:], rec2.loci_list)
+            rec.remove_locus_by_position(0, ftemp.name)
+            ftemp.seek(0)
+            rec3 = GenePop.read(ftemp)
+            self.assertEqual(rec.loci_list[1:], rec3.loci_list)
+            rec.remove_locus_by_name(rec.loci_list[0], ftemp.name)
+            ftemp.seek(0)
+            rec4 = GenePop.read(ftemp)
+            self.assertEqual(rec.loci_list[1:], rec4.loci_list)
+            rec.remove_loci_by_name([rec.loci_list[0]], ftemp.name)
+            ftemp.seek(0)
+            rec5 = GenePop.read(ftemp)
+            self.assertEqual(rec.loci_list[1:], rec5.loci_list)
+            ftemp.close()
+            rec._handle.close()
 
 
 class UtilsTest(unittest.TestCase):
