@@ -1395,12 +1395,12 @@ PyTree_cut(PyTree* self, PyObject* args)
 static char PyTree_sort__doc__[] =
 "mytree.sort(order) -> array\n"
 "\n"
-"Sort a hierarchical clustering tree by switching the left and right"
-"subnode of nodes such that the elements in the left-to-right order of the"
+"Sort a hierarchical clustering tree by switching the left and right\n"
+"subnode of nodes such that the elements in the left-to-right order of the\n"
 "tree tend to have increasing order values.\n"
 "\n"
-"Return the indices of the elements in the left-to-right order in the"
-"hierarchical clustering tree, such that the element with index indices[i]"
+"Return the indices of the elements in the left-to-right order in the\n"
+"hierarchical clustering tree, such that the element with index indices[i]\n"
 "occurs at position i in the dendrogram.\n";
 
 static PyObject*
