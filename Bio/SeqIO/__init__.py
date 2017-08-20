@@ -440,6 +440,7 @@ _FormatToWriter = {"fasta": FastaIO.FastaWriter,
                    "qual": QualityIO.QualPhredWriter,
                    "sff": SffIO.SffWriter,
                    "seqxml": SeqXmlIO.SeqXmlWriter,
+                   "pir": PirIO.PirWriter,
                    }
 
 _BinaryFormats = ["sff", "sff-trim", "abi", "abi-trim", "seqxml"]
