@@ -52,6 +52,7 @@ possible, especially the following contributors:
 - Michiel de Hoon
 - Peter Cock
 - rht (first contribution)
+- Shuichiro MAKIGAKI (first contribution)
 - Yasar L. Ahmed (first contribution)
 
 
