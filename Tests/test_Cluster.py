@@ -50,9 +50,9 @@ class TestCluster(unittest.TestCase):
                              [5.1, 5.2]])
 
         # Another normal matrix, no errors; written as a list
-        data2 = [[ 1.1, 2.2, 3.3, 4.4, 5.5],
-                 [ 3.1, 3.2, 1.3, 2.4, 1.5],
-                 [ 4.1, 2.2, 0.3, 5.4, 0.5],
+        data2 = [[1.1, 2.2, 3.3, 4.4, 5.5],
+                 [3.1, 3.2, 1.3, 2.4, 1.5],
+                 [4.1, 2.2, 0.3, 5.4, 0.5],
                  [12.1, 2.0, 0.0, 5.0, 0.0]]
 
         # Ragged matrix
@@ -104,9 +104,9 @@ class TestCluster(unittest.TestCase):
         nclusters = 3
         # First data set
         weight = numpy.array([1, 1, 1, 1, 1])
-        data = numpy.array([[ 1.1, 2.2, 3.3, 4.4, 5.5],
-                            [ 3.1, 3.2, 1.3, 2.4, 1.5],
-                            [ 4.1, 2.2, 0.3, 5.4, 0.5],
+        data = numpy.array([[1.1, 2.2, 3.3, 4.4, 5.5],
+                            [3.1, 3.2, 1.3, 2.4, 1.5],
+                            [4.1, 2.2, 0.3, 5.4, 0.5],
                             [12.1, 2.0, 0.0, 5.0, 0.0]])
         mask = numpy.array([[1, 1, 1, 1, 1],
                             [1, 1, 1, 1, 1],
@@ -197,9 +197,9 @@ class TestCluster(unittest.TestCase):
 
         # First data set
         weight = numpy.array([1, 1, 1, 1, 1])
-        data = numpy.array([[ 1.1, 2.2, 3.3, 4.4, 5.5],
-                            [ 3.1, 3.2, 1.3, 2.4, 1.5],
-                            [ 4.1, 2.2, 0.3, 5.4, 0.5],
+        data = numpy.array([[1.1, 2.2, 3.3, 4.4, 5.5],
+                            [3.1, 3.2, 1.3, 2.4, 1.5],
+                            [4.1, 2.2, 0.3, 5.4, 0.5],
                             [12.1, 2.0, 0.0, 5.0, 0.0]])
         mask = numpy.array([[1, 1, 1, 1, 1],
                             [1, 1, 1, 1, 1],
@@ -307,9 +307,9 @@ class TestCluster(unittest.TestCase):
 
         # First data set
         weight1 = [1, 1, 1, 1, 1]
-        data1 = numpy.array([[ 1.1, 2.2, 3.3, 4.4, 5.5],
-                             [ 3.1, 3.2, 1.3, 2.4, 1.5],
-                             [ 4.1, 2.2, 0.3, 5.4, 0.5],
+        data1 = numpy.array([[1.1, 2.2, 3.3, 4.4, 5.5],
+                             [3.1, 3.2, 1.3, 2.4, 1.5],
+                             [4.1, 2.2, 0.3, 5.4, 0.5],
                              [12.1, 2.0, 0.0, 5.0, 0.0]])
         mask1 = numpy.array([[1, 1, 1, 1, 1],
                              [1, 1, 1, 1, 1],
@@ -586,9 +586,9 @@ class TestCluster(unittest.TestCase):
 
         # First data set
         weight = [1, 1, 1, 1, 1]
-        data = numpy.array([[ 1.1, 2.2, 3.3, 4.4, 5.5],
-                            [ 3.1, 3.2, 1.3, 2.4, 1.5],
-                            [ 4.1, 2.2, 0.3, 5.4, 0.5],
+        data = numpy.array([[1.1, 2.2, 3.3, 4.4, 5.5],
+                            [3.1, 3.2, 1.3, 2.4, 1.5],
+                            [4.1, 2.2, 0.3, 5.4, 0.5],
                             [12.1, 2.0, 0.0, 5.0, 0.0]])
         mask = numpy.array([[1, 1, 1, 1, 1],
                             [1, 1, 1, 1, 1],
