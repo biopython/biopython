@@ -24,11 +24,11 @@ class AbstractPropertyMap(object):
             >>> if (chain_id, res_id) in apmap:
             ...     res, prop = apmap[(chain_id, res_id)]
 
-        @param chain_id: chain id
-        @type chain_id: char
+        :param chain_id: chain id
+        :type chain_id: char
 
-        @param res_id: residue id
-        @type res_id: char
+        :param res_id: residue id
+        :type res_id: char
         """
         translated_id = self._translate_id(id)
         return translated_id in self.property_dict
@@ -36,14 +36,14 @@ class AbstractPropertyMap(object):
     def __getitem__(self, key):
         """Return property for a residue.
 
-        @param chain_id: chain id
-        @type chain_id: char
+        :param chain_id: chain id
+        :type chain_id: char
 
-        @param res_id: residue id
-        @type res_id: int or (char, int, char)
+        :param res_id: residue id
+        :type res_id: int or (char, int, char)
 
-        @return: some residue property
-        @rtype: anything (can be a tuple)
+        :return: some residue property
+        :rtype: anything (can be a tuple)
         """
         translated_id = self._translate_id(key)
         return self.property_dict[translated_id]
@@ -51,8 +51,8 @@ class AbstractPropertyMap(object):
     def __len__(self):
         """Return number of residues for which the property is available.
 
-        @return: number of residues
-        @rtype: int
+        :return: number of residues
+        :rtype: int
         """
         return len(self.property_dict)
 
@@ -71,11 +71,11 @@ class AbstractPropertyMap(object):
             >>> if (chain_id, res_id) in apmap:
             ...     res, prop = apmap[(chain_id, res_id)]
 
-        @param chain_id: chain id
-        @type chain_id: char
+        :param chain_id: chain id
+        :type chain_id: char
 
-        @param res_id: residue id
-        @type res_id: char
+        :param res_id: residue id
+        :type res_id: char
         """
         import warnings
         from Bio import BiopythonDeprecationWarning
@@ -85,8 +85,8 @@ class AbstractPropertyMap(object):
     def keys(self):
         """Return the list of residues.
 
-        @return: list of residues for which the property was calculated
-        @rtype: [(chain_id, res_id), (chain_id, res_id),...]
+        :return: list of residues for which the property was calculated
+        :rtype: [(chain_id, res_id), (chain_id, res_id),...]
         """
         return self.property_keys
 
@@ -101,7 +101,7 @@ class AbstractPropertyMap(object):
             ...     print(res, property)
             ...
 
-        @return: iterator
+        :return: iterator
         """
         for i in range(0, len(self.property_list)):
             yield self.property_list[i]

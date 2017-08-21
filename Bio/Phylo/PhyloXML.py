@@ -543,12 +543,12 @@ class CladeRelation(PhyloElement):
 
     For example, this could be used to describe multiple parents of a clade.
 
-    @type id_ref_0: str
-    @type id_ref_1: str
-    @type distance: str
-    @type type: str
+    :type id_ref_0: str
+    :type id_ref_1: str
+    :type distance: str
+    :type type: str
 
-    @type confidence: Confidence
+    :type confidence: Confidence
     """
 
     def __init__(self, type, id_ref_0, id_ref_1,
