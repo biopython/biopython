@@ -8,7 +8,8 @@
 
 # Created: Sat Dec  2 16:02:17 2000
 # thomas@cbs.dtu.dk, http://www.cbs.dtu.dk/thomas
-# File: xbb_blastbg.py
+
+"""BLAST code for graphical Xbbtools tool."""
 
 from __future__ import print_function
 

@@ -8,7 +8,8 @@
 
 # Created: Thu Jul 13 12:09:58 2000
 # thomas@cbs.dtu.dk, http://www.cbs.dtu.dk/thomas
-# File: xbb_utils.py
+
+"""Utility code for graphical Xbbtools tool."""
 
 try:  # Python 2
     import Tkinter as tk
