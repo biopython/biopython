@@ -25,25 +25,25 @@ class _AbstractHSExposure(AbstractPropertyMap):
 
     def __init__(self, model, radius, offset, hse_up_key, hse_down_key,
             angle_key=None):
-        """@param model: model
-           @type model: L{Model}
+        """:param model: model
+           :type model: L{Model}
 
-        @param radius: HSE radius
-        @type radius: float
+        :param radius: HSE radius
+        :type radius: float
 
-        @param offset: number of flanking residues that are ignored in the calculation
+        :param offset: number of flanking residues that are ignored in the calculation
         of the number of neighbors
-        @type offset: int
+        :type offset: int
 
-        @param hse_up_key: key used to store HSEup in the entity.xtra attribute
-        @type hse_up_key: string
+        :param hse_up_key: key used to store HSEup in the entity.xtra attribute
+        :type hse_up_key: string
 
-        @param hse_down_key: key used to store HSEdown in the entity.xtra attribute
-        @type hse_down_key: string
+        :param hse_down_key: key used to store HSEdown in the entity.xtra attribute
+        :type hse_down_key: string
 
-        @param angle_key: key used to store the angle between CA-CB and CA-pCB in
+        :param angle_key: key used to store the angle between CA-CB and CA-pCB in
         the entity.xtra attribute
-        @type angle_key: string
+        :type angle_key: string
         """
         assert(offset >= 0)
         # For PyMOL visualization
@@ -141,14 +141,14 @@ class HSExposureCA(_AbstractHSExposure):
     def __init__(self, model, radius=12, offset=0):
         """Initialse class.
 
-        @param model: the model that contains the residues
-        @type model: L{Model}
+        :param model: the model that contains the residues
+        :type model: L{Model}
 
-        @param radius: radius of the sphere (centred at the CA atom)
-        @type radius: float
+        :param radius: radius of the sphere (centred at the CA atom)
+        :type radius: float
 
-        @param offset: number of flanking residues that are ignored in the calculation of the number of neighbors
-        @type offset: int
+        :param offset: number of flanking residues that are ignored in the calculation of the number of neighbors
+        :type offset: int
         """
         _AbstractHSExposure.__init__(self, model, radius, offset,
                 'EXP_HSE_A_U', 'EXP_HSE_A_D', 'EXP_CB_PCB_ANGLE')
@@ -162,8 +162,8 @@ class HSExposureCA(_AbstractHSExposure):
 
         The CA-CB vector is centered at the origin.
 
-        @param r1, r2, r3: three consecutive residues
-        @type r1, r2, r3: L{Residue}
+        :param r1, r2, r3: three consecutive residues
+        :type r1, r2, r3: L{Residue}
         """
         if r1 is None or r3 is None:
             return None
@@ -205,8 +205,8 @@ class HSExposureCA(_AbstractHSExposure):
         Write a PyMol script that visualizes the pseudo CB-CA directions
         at the CA coordinates.
 
-        @param filename: the name of the pymol script file
-        @type filename: string
+        :param filename: the name of the pymol script file
+        :type filename: string
         """
         if not self.ca_cb_list:
             warnings.warn("Nothing to draw.", RuntimeWarning)
@@ -232,14 +232,14 @@ class HSExposureCB(_AbstractHSExposure):
     def __init__(self, model, radius=12, offset=0):
         """Initialize class.
 
-        @param model: the model that contains the residues
-        @type model: L{Model}
+        :param model: the model that contains the residues
+        :type model: L{Model}
 
-        @param radius: radius of the sphere (centred at the CA atom)
-        @type radius: float
+        :param radius: radius of the sphere (centred at the CA atom)
+        :type radius: float
 
-        @param offset: number of flanking residues that are ignored in the calculation of the number of neighbors
-        @type offset: int
+        :param offset: number of flanking residues that are ignored in the calculation of the number of neighbors
+        :type offset: int
         """
         _AbstractHSExposure.__init__(self, model, radius, offset,
                 'EXP_HSE_B_U', 'EXP_HSE_B_D')
@@ -247,8 +247,8 @@ class HSExposureCB(_AbstractHSExposure):
     def _get_cb(self, r1, r2, r3):
         """Method to calculate CB-CA vector.
 
-        @param r1, r2, r3: three consecutive residues (only r2 is used)
-        @type r1, r2, r3: L{Residue}
+        :param r1, r2, r3: three consecutive residues (only r2 is used)
+        :type r1, r2, r3: L{Residue}
         """
         if r2.get_resname() == 'GLY':
             return self._get_gly_cb_vector(r2), 0.0
@@ -270,14 +270,14 @@ class ExposureCN(AbstractPropertyMap):
         that residues CA atom. A dictionary is returned that uses a L{Residue}
         object as key, and the residue exposure as corresponding value.
 
-        @param model: the model that contains the residues
-        @type model: L{Model}
+        :param model: the model that contains the residues
+        :type model: L{Model}
 
-        @param radius: radius of the sphere (centred at the CA atom)
-        @type radius: float
+        :param radius: radius of the sphere (centred at the CA atom)
+        :type radius: float
 
-        @param offset: number of flanking residues that are ignored in the calculation of the number of neighbors
-        @type offset: int
+        :param offset: number of flanking residues that are ignored in the calculation of the number of neighbors
+        :type offset: int
 
         """
         assert(offset >= 0)

@@ -26,9 +26,9 @@ class Superimposer(object):
         """Put (translate/rotate) the atoms in fixed on the atoms in
         moving, in such a way that the RMSD is minimized.
 
-        @param fixed: list of (fixed) atoms
-        @param moving: list of (moving) atoms
-        @type fixed,moving: [L{Atom}, L{Atom},...]
+        :param fixed: list of (fixed) atoms
+        :param moving: list of (moving) atoms
+        :type fixed,moving: [L{Atom}, L{Atom},...]
         """
         if not len(fixed) == len(moving):
             raise PDBException("Fixed and moving atom lists differ in size")
