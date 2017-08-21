@@ -7,9 +7,9 @@
 This module aims to make dbfetch easy to use. See:
 http://www.ebi.ac.uk/Tools/dbfetch/
 
-The dbfetch tool from EBI provvides access to different databases via a simple
+The dbfetch tool from EBI provides access to different databases via a simple
 URL that the module constructs. Errors are handled regarding databse access and
-HTPP level.
+HTTP level.
 
 The functionality is somewhat similar to Biopython's Bio.TogoWS, Bio.KEGG.REST
 and Bio.Entrez modules.
@@ -17,6 +17,9 @@ and Bio.Entrez modules.
 EBI provvides extensive guidelines for the databases, their format and the
 syntax necessary to use the tool. See:
 http://www.ebi.ac.uk/Tools/dbfetch/syntax.jsp
+
+This module does not support the SOAP service for dbfetch. See:
+http://www.ebi.ac.uk/Tools/webservices/services/dbfetch
 
 References:
 Lopez R, Cowley A, Li W, McWilliam H.;
@@ -38,18 +41,12 @@ import requires_internet
 requires_internet.check()
 
 
-def _q(arg1, arg2=None, arg3=None, arg4=None):
-    URL = "http://www.ebi.ac.uk/Tools/dbfetch/dbfetch%s"
-    if arg3 and arg4:
-        args = "/%s/%s/%s?%s" % (arg1, arg2, arg3, arg4)
-    elif arg3:
-        args = "/%s/%s/%s" % (arg1, arg2, arg3)
-    elif arg2:
-        args = "/%s/%s" % (arg1, arg2)
-    else:
-        args = "/%s" % (arg1)
-    resp = _urlopen(URL % (args))
+_BASE_URL = "http://www.ebi.ac.uk/Tools/dbfetch/dbfetch%s"
 
+
+def _query_by_url(url):
+    """Use a URL to perform the request to the service."""
+    resp = _urlopen(_BASE_URL % url)
     return _binary_to_string_handle(resp)
 
 
@@ -60,7 +57,7 @@ def db_info():
     here http://www.ebi.ac.uk/Tools/dbfetch/dbfetch/dbfetch.databases
 
     """
-    return _q("dbfetch.databases?style=json")
+    return _query_by_url("dbfetch.databases?style=json")
 
 
 def dbfetch(db, ids, format=None, style=None):
@@ -79,4 +76,16 @@ def dbfetch(db, ids, format=None, style=None):
         ids = str(ids)
     else:
         ids = ids.replace(" ", "")
-    return _q(db, ids, format, style)
+    return _query_by_db(db, ids, format, style)
+
+
+def _query_by_db(db, ids=None, format=None, style=None):
+    """Prepare the URL for the database request to the service."""
+    url = '/%s' % db
+    if ids:
+        url += '/%s' % ids
+    if format:
+        url += '/%s' % format
+    if style:
+        url += '?%s' % style
+    return _query_by_url(url)
