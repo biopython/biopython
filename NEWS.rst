@@ -49,6 +49,7 @@ possible, especially the following contributors:
 - Jun Aruga (first contribution)
 - Kai Blin
 - Kozo Nishida
+- Michiel de Hoon
 - Peter Cock
 - rht (first contribution)
 - Yasar L. Ahmed (first contribution)
