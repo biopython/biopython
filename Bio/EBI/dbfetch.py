@@ -14,7 +14,7 @@ HTTP level.
 The functionality is somewhat similar to Biopython's Bio.TogoWS, Bio.KEGG.REST
 and Bio.Entrez modules.
 
-EBI provvides extensive guidelines for the databases, their format and the
+EBI provides extensive guidelines for the databases, their format and the
 syntax necessary to use the tool. See:
 http://www.ebi.ac.uk/Tools/dbfetch/syntax.jsp
 
@@ -45,7 +45,7 @@ _BASE_URL = "http://www.ebi.ac.uk/Tools/dbfetch/dbfetch%s"
 
 
 def _query_by_url(url):
-    """Use a URL to perform the request to the service."""
+    """Use a URL to perform the request to the service (PRIVATE)."""
     resp = _urlopen(_BASE_URL % url)
     return _binary_to_string_handle(resp)
 
@@ -64,7 +64,7 @@ def dbfetch(db, ids, format=None, style=None):
     """Create a URL to use the tool via RESTful method.
 
     - db    - database to query.
-    - ids   - single id or list of ids separated by commas. Can be provvided as
+    - ids   - single id or list of ids separated by commas. Can be provided as
               list or string object.
     - format - output format. Depend on the database queried.
     - style - raw by default, otherwise it can be specified as HTML.
@@ -80,7 +80,7 @@ def dbfetch(db, ids, format=None, style=None):
 
 
 def _query_by_db(db, ids=None, format=None, style=None):
-    """Prepare the URL for the database request to the service."""
+    """Prepare the URL for the database request to the service (PRIVATE)."""
     url = '/%s' % db
     if ids:
         url += '/%s' % ids
