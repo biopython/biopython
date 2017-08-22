@@ -53,6 +53,7 @@ possible, especially the following contributors:
 - Peter Cock
 - rht (first contribution)
 - Shuichiro MAKIGAKI (first contribution)
+- Spencer Bliven
 - Yasar L. Ahmed (first contribution)
 
 
