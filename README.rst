@@ -82,7 +82,9 @@ implementations:
 
 - Python 2.7, 3.4, 3.5, 3.6 -- see http://www.python.org
 
-  This is the primary development platform for Biopython.
+  Python 3 is the primary development platform for Biopython. We will drop
+  support for Python 2.7 no later than 2020, in line with the end-of-life or
+  sunset date for Python 2.7 itself.
 
 - PyPy v5.7 and also PyPy3.5 v5.8 beta -- see http://www.pypy.org
 
@@ -174,14 +176,14 @@ Python is installed correctly**. Second (except for Jython or IronPython),
 **make sure NumPy is installed**.
 
 Then either download and decompress our source code, or fetch it using git.
-Now change directory to the Biopython source code folder and run:
+Now change directory to the Biopython source code folder and run::
 
     python setup.py build
     python setup.py test
     sudo python setup.py install
 
 Substitute ``python`` with your specific version, for example ``python3``,
-``jython`` or `pypy``.
+``jython`` or ``pypy``.
 
 If you need to do additional configuration, e.g. changing the install
 directory prefix, please type ``python setup.py``, or see the documentation

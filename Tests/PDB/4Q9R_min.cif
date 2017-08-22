@@ -1,0 +1,10 @@
+data_4Q9R
+loop_
+_pdbx_audit_revision_item.ordinal
+_pdbx_audit_revision_item.revision_ordinal
+_pdbx_audit_revision_item.data_content_type
+_pdbx_audit_revision_item.item
+1  5 'Structure model' '_atom_site.B_iso_or_equiv'
+2  5 'Structure model' '_atom_site.Cartn_x'
+3  5 'Structure model' '_atom_site.Cartn_y'
+4  5 'Structure model' '_atom_site.Cartn_z'

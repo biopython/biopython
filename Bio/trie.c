@@ -1,3 +1,17 @@
+/* Copyright 2002-2003, 2013 by Jeff Chang.  All rights reserved.
+ * Revisions copyright 2006, 2010 by Michiel de Hoon.  All rights reserved.
+ * Revisions copyright 2017 by Oscar G. Garcia.  All rights reserved.
+ *
+ * This file is part of the Biopython distribution and governed by your
+ * choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+ * Please see the LICENSE file that should have been included as part of this
+ * package.
+ *
+ * trie.c
+ *
+ * Used by triemodule.c and thus also findtrie.py
+ */
+
 #include <stdio.h>    /* printf */
 #include <stdlib.h>   /* malloc */
 #include <string.h>   /* strcmp, strlen */

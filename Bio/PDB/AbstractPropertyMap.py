@@ -31,7 +31,7 @@ class AbstractPropertyMap(object):
         @type res_id: char
         """
         translated_id = self._translate_id(id)
-        return (translated_id in self.property_dict)
+        return translated_id in self.property_dict
 
     def __getitem__(self, key):
         """Return property for a residue.
@@ -80,7 +80,7 @@ class AbstractPropertyMap(object):
         import warnings
         from Bio import BiopythonDeprecationWarning
         warnings.warn("This function is deprecated; use 'id in mapping' instead", BiopythonDeprecationWarning)
-        return (id in self)
+        return id in self
 
     def keys(self):
         """Return the list of residues.

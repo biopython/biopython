@@ -637,6 +637,8 @@ tests = [
     ("GenBank/NC_005816.fna", "fasta", generic_dna),
     ("GenBank/NC_005816.gb", "gb", None),
     ("GenBank/cor6_6.gb", "genbank", None),
+    ("GenBank/empty_accession.gbk", "gb", None),
+    ("GenBank/empty_version.gbk", "gb", None),
     ("IntelliGenetics/vpu_nucaligned.txt", "ig", generic_nucleotide),
     ("IntelliGenetics/TAT_mase_nuc.txt", "ig", None),
     ("IntelliGenetics/VIF_mase-pro.txt", "ig", generic_protein),

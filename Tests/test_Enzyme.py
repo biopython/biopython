@@ -67,6 +67,8 @@ class TestEnzyme(unittest.TestCase):
         self.assertEqual(record["DR"][8], ["P49923", "LIPL_PIG"])
         self.assertEqual(record["DR"][9], ["Q06000", "LIPL_RAT"])
         self.assertEqual(record["DR"][10], ["Q29524", "LIPL_SHEEP"])
+        self.assertTrue(str(record).startswith("ID: 3.1.1.34\nDE: Lipoprotein lipase.\n"),
+                        "Did not expect:\n%s" % record)
 
     def test_proline(self):
         """Parsing ENZYME record for proline racemase (5.1.1.4)"""
@@ -87,6 +89,8 @@ class TestEnzyme(unittest.TestCase):
         self.assertEqual(record["DR"][6], ["Q9CXA2", "PRCM_MOUSE"])
         self.assertEqual(record["DR"][7], ["Q5RC28", "PRCM_PONAB"])
         self.assertEqual(record["DR"][8], ["Q66II5", "PRCM_XENTR"])
+        self.assertTrue(str(record).startswith("ID: 5.1.1.4\nDE: Proline racemase.\n"),
+                        "Did not expect:\n%s" % record)
 
     def test_valine(self):
         """Parsing ENZYME record for valine decarboxylase (4.1.1.14)"""
@@ -100,6 +104,8 @@ class TestEnzyme(unittest.TestCase):
         self.assertEqual(record["CF"], "Pyridoxal 5'-phosphate.")
         self.assertEqual(record["CC"], ["Also acts on L-leucine."])
         self.assertEqual(len(record["DR"]), 0)
+        self.assertTrue(str(record).startswith("ID: 4.1.1.14\nDE: Valine decarboxylase.\n"),
+                        "Did not expect:\n%s" % record)
 
     def test_lactate(self):
         """Parsing ENZYME record for lactate racemase (5.1.2.1)"""
@@ -115,6 +121,8 @@ class TestEnzyme(unittest.TestCase):
         self.assertEqual(record["AN"][2], "Lacticoracemase.")
         self.assertEqual(record["CA"], "(S)-lactate = (R)-lactate.")
         self.assertEqual(len(record["DR"]), 0)
+        self.assertTrue(str(record).startswith("ID: 5.1.2.1\nDE: Lactate racemase.\n"),
+                        "Did not expect:\n%s" % record)
 
 
 if __name__ == "__main__":

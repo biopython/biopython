@@ -29,47 +29,65 @@ class Residue(Entity):
         self.segid = segid
         Entity.__init__(self, id)
 
-    # Special methods
-
     def __repr__(self):
         resname = self.get_resname()
         hetflag, resseq, icode = self.get_id()
         full_id = (resname, hetflag, resseq, icode)
         return "<Residue %s het=%s resseq=%s icode=%s>" % full_id
 
-    # Private methods
-
-    def _sort(self, a1, a2):
-        """Sort the Atom objects.
-
-        Atoms are sorted alphabetically according to their name,
-        but N, CA, C, O always come first.
-
-        Arguments:
-         - a1, a2 - Atom objects
-
-        """
-        name1 = a1.get_name()
-        name2 = a2.get_name()
-        if name1 == name2:
-            return(cmp(a1.get_altloc(), a2.get_altloc()))
-        if name1 in _atom_name_dict:
-            index1 = _atom_name_dict[name1]
+    # Residue-specific sorting methods
+    # Sort first by HETATM flag, then by resseq, finally by insertion code
+    def __gt__(self, other):
+        if isinstance(other, Residue):
+            hetflag_s, resseq_s, icode_s = self.id
+            hetflag_o, resseq_o, icode_o = other.id
+            if hetflag_o != hetflag_s:
+                return hetflag_s > hetflag_o
+            elif resseq_o != resseq_s:
+                return resseq_s > resseq_o
+            else:
+                return icode_s > icode_o
         else:
-            index1 = None
-        if name2 in _atom_name_dict:
-            index2 = _atom_name_dict[name2]
-        else:
-            index2 = None
-        if index1 and index2:
-            return cmp(index1, index2)
-        if index1:
-            return -1
-        if index2:
-            return 1
-        return cmp(name1, name2)
+            return NotImplemented
 
-    # Public methods
+    def __ge__(self, other):
+        if isinstance(other, Residue):
+            hetflag_s, resseq_s, icode_s = self.id
+            hetflag_o, resseq_o, icode_o = other.id
+            if hetflag_o != hetflag_s:
+                return hetflag_s >= hetflag_o
+            elif resseq_o != resseq_s:
+                return resseq_s >= resseq_o
+            else:
+                return icode_s >= icode_o
+        else:
+            return NotImplemented
+
+    def __lt__(self, other):
+        if isinstance(other, Residue):
+            hetflag_s, resseq_s, icode_s = self.id
+            hetflag_o, resseq_o, icode_o = other.id
+            if hetflag_o != hetflag_s:
+                return hetflag_s < hetflag_o
+            elif resseq_o != resseq_s:
+                return resseq_s < resseq_o
+            else:
+                return icode_s < icode_o
+        else:
+            return NotImplemented
+
+    def __le__(self, other):
+        if isinstance(other, Residue):
+            hetflag_s, resseq_s, icode_s = self.id
+            hetflag_o, resseq_o, icode_o = other.id
+            if hetflag_o != hetflag_s:
+                return hetflag_s < hetflag_o
+            elif resseq_o != resseq_s:
+                return resseq_s < resseq_o
+            else:
+                return icode_s < icode_o
+        else:
+            return NotImplemented
 
     def add(self, atom):
         """Add an Atom object.
@@ -84,7 +102,17 @@ class Residue(Entity):
         Entity.add(self, atom)
 
     def sort(self):
-        self.child_list.sort(self._sort)
+        """Sort child atoms.
+
+        Atoms N, CA, C, O always come first, thereafter alphabetically
+        by name, with any alternative location specifier for disordered
+        atoms (altloc) as a tie-breaker.
+        """
+        warnings.warn("The custom sort() method will be removed in the "
+                      "future in favour of rich comparison methods. Use the "
+                      "built-in sorted() function instead.",
+                      BiopythonDeprecationWarning)
+        self.child_list.sort()
 
     def flag_disordered(self):
         """Set the disordered flag."""

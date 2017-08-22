@@ -107,7 +107,7 @@ class Hmmer2TextParser(object):
         """Parse a HMMER2 query block."""
         while self.read_next():
             if not self.line.startswith('Query'):
-                raise StopIteration()
+                return
             _, id_ = self.parse_key_value()
             self.qresult = QueryResult(id=id_)
 

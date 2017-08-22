@@ -15,7 +15,7 @@ _ATOM_FORMAT_STRING = "%s%5i %-4s%c%3s %c%4i%c   %8.3f%8.3f%8.3f%s%6.2f      %4s
 
 
 class Select(object):
-    """Select everything fo PDB output (for use as a bas class).
+    """Select everything for PDB output (for use as a base class).
 
     Default selection (everything) during writing - can be used as base class
     to implement selective output. This selects which entities will be written out.
@@ -55,7 +55,7 @@ class PDBIO(object):
     """
 
     def __init__(self, use_model_flag=0):
-        """Creat the PDBIO object.
+        """Create the PDBIO object.
 
         @param use_model_flag: if 1, force use of the MODEL record in output.
         @type use_model_flag: int

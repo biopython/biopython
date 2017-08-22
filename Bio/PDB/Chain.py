@@ -13,29 +13,50 @@ class Chain(Entity):
         self.level = "C"
         Entity.__init__(self, id)
 
-    # Private methods
+    # Sorting methods: empty chain IDs come last.
+    def __gt__(self, other):
+        if isinstance(other, Chain):
+            if self.id == ' ' and other.id != ' ':
+                return 0
+            elif self.id != ' ' and other.id == ' ':
+                return 1
+            else:
+                return self.id > other.id
+        else:
+            return NotImplemented
 
-    def _sort(self, r1, r2):
-        """Sort function for residues in a chain (PRIVATE).
+    def __ge__(self, other):
+        if isinstance(other, Chain):
+            if self.id == ' ' and other.id != ' ':
+                return 0
+            elif self.id != ' ' and other.id == ' ':
+                return 1
+            else:
+                return self.id >= other.id
+        else:
+            return NotImplemented
 
-        Residues are first sorted according to their hetatm records.
-        Protein and nucleic acid residues first, hetatm residues next,
-        and waters last. Within each group, the residues are sorted according
-        to their resseq's (sequence identifiers). Finally, residues with the
-        same resseq's are sorted according to icode.
+    def __lt__(self, other):
+        if isinstance(other, Chain):
+            if self.id == ' ' and other.id != ' ':
+                return 0
+            elif self.id != ' ' and other.id == ' ':
+                return 1
+            else:
+                return self.id < other.id
+        else:
+            return NotImplemented
 
-        Arguments:
-
-        - r1, r2 - Residue objects
-
-        """
-        hetflag1, resseq1, icode1 = r1.id
-        hetflag2, resseq2, icode2 = r2.id
-        if hetflag1 != hetflag2:
-            return cmp(hetflag1[0], hetflag2[0])
-        elif resseq1 != resseq2:
-            return cmp(resseq1, resseq2)
-        return cmp(icode1, icode2)
+    def __le__(self, other):
+        if isinstance(other, Chain):
+            if self.id == ' ' and other.id != ' ':
+                return 0
+            elif self.id != ' ' and other.id == ' ':
+                return 1
+            else:
+                return self.id <= other.id
+        else:
+            return NotImplemented
 
     def _translate_id(self, id):
         """Translate sequence identifer to tuple form (PRIVATE).
@@ -55,8 +76,6 @@ class Chain(Entity):
         if isinstance(id, int):
             id = (' ', id, ' ')
         return id
-
-    # Special methods
 
     def __getitem__(self, id):
         """Return the residue with given id.

@@ -8,7 +8,8 @@
 
 # Created: Sun Dec  3 13:38:52 2000
 # thomas@cbs.dtu.dk, http://www.cbs.dtu.dk/thomas
-# File: xbb_search.py
+
+"""Search code for graphical Xbbtools tool."""
 
 import re
 

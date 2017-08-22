@@ -352,7 +352,7 @@ def AbiIterator(handle, alphabet=None, trim=False):
     marker = handle.read(4)
     if not marker:
         # handle empty file gracefully
-        raise StopIteration
+        return
     if marker != b"ABIF":
         raise IOError('File should start ABIF, not %r' % marker)
 

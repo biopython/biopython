@@ -15,17 +15,46 @@ This release of Biopython supports Python 2.7, 3.4, 3.5 and 3.6.
 It has also been tested on PyPy v5.7, PyPy3.5 v5.8 beta, and Jython 2.7
 (although support for Jython is deprecated).
 
+Python 3 is the primary development platform for Biopython. We will drop
+support for Python 2.7 no later than 2020, in line with the end-of-life or
+sunset date for Python 2.7 itself.
+
 Encoding issues have been fixed in several parsers when reading data files
 with non-ASCII characters, like accented letters in people's names. This would
 raise ``UnicodeDecodeError: 'ascii' codec can't decode byte ...`` under some
 system locale settings.
 
+Bio.KEGG can now parse Gene files.
+
+The multiple-sequence-alignment object used by Bio.AlignIO etc now supports
+a per-column annotation dictionary, useful for richly annotated alignments
+in the Stockholm/PFAM format.
+
+The SeqRecord object now has a translate method, following the approach used
+for its existing reverse_complement method etc.
+
+In this release more of our code is now explicitly available under either our
+original "Biopython License Agreement", or the very similar but more commonly
+used "3-Clause BSD License".  See the ``LICENSE.rst`` file for more details.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
 - Chris Rands
+- Christian Brueffer
 - Erik Cederstrand (first contribution)
+- Francesco Gastaldello
+- Joe Greener (first contribution)
+- João Rodrigues
+- Jun Aruga (first contribution)
+- Kai Blin
+- Kozo Nishida
+- Michiel de Hoon
 - Peter Cock
+- rht (first contribution)
+- Shuichiro MAKIGAKI (first contribution)
+- Spencer Bliven
+- Yasar L. Ahmed (first contribution)
 
 
 10 July 2017: Biopython 1.70
@@ -103,7 +132,7 @@ possible, especially the following contributors:
 - Michiel de Hoon
 - morrme (first contribution)
 - Noam Kremen (first contribution)
-- Patrick Kunzmann
+- Patrick Kunzmann (first contribution)
 - Peter Cock
 - Rasmus Fonseca (first contribution)
 - Rodrigo Dorantes-Gilardi (first contribution)
