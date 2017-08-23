@@ -10,7 +10,7 @@ from Bio.Alphabet import IUPAC
 from Bio import Seq
 from Bio import motifs
 
-supported = ['4.11.4', '4.12.0']	#
+supported=['4.11.4','4.12.0']
 def read(handle):
     """Parses the text output of the MEME program into a meme.Record object.
 
