@@ -10,7 +10,7 @@ from Bio.Alphabet import IUPAC
 from Bio import Seq
 from Bio import motifs
 
-
+supported = ['4.11.4', '4.12.0']	#
 def read(handle):
     """Parses the text output of the MEME program into a meme.Record object.
 
@@ -33,7 +33,7 @@ def read(handle):
     for line in handle:
         if line.startswith('MOTIF  1'):
             break
-        if record.version == '4.11.4' and line.startswith('MOTIF '):
+        if record.version in supported and line.startswith('MOTIF '):
             break
     else:
         raise ValueError('Unexpected end of stream')
