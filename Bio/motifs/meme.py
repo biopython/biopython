@@ -10,7 +10,6 @@ from Bio.Alphabet import IUPAC
 from Bio import Seq
 from Bio import motifs
 
-supported=['4.11.4','4.12.0']
 def read(handle):
     """Parses the text output of the MEME program into a meme.Record object.
 
@@ -24,6 +23,7 @@ def read(handle):
     ...         print(instance.motif_name, instance.sequence_name, instance.strand, instance.pvalue)
 
     """
+    supported = ['4.11.4', '4.12.0']
     record = Record()
     __read_version(record, handle)
     __read_datafile(record, handle)
