@@ -40,10 +40,8 @@ ignore =
     # ===========================================
     # D400	First line should end with a period
     # D401	First line should be in imperative mood
-    # D402	First line should not be the function’s "signature"
-    # D403	First word of the first line should be properly capitalized
     # D412	No blank lines allowed between a section header and its content
-    D400,D401,D403,
+    D400,D401
     # We ignore D412 deliberately:
     D412,
     # =========================================
