@@ -92,7 +92,7 @@ class Parser(object):
     """Parse a CDAO tree given a file handle."""
 
     def __init__(self, handle=None):
-        """initialize the value for CDAO tree parser."""
+        """Initialize CDAO tree parser."""
         self.handle = handle
         self.graph = None
         self.node_info = None
@@ -133,7 +133,7 @@ class Parser(object):
         return self.parse_graph(graph, context=context)
 
     def parse_graph(self, graph=None, context=None):
-        """Generator that yields CDAO.Tree instances from an RDF model."""
+        """Iterate over RDF model yielding CDAO.Tree instances."""
         if graph is None:
             graph = self.graph
 
@@ -146,7 +146,7 @@ class Parser(object):
             yield CDAO.Tree(root=clade, rooted=self.rooted)
 
     def new_clade(self, node):
-        """Returns a CDAO.Clade object for a given named node."""
+        """Return a CDAO.Clade object for a given named node."""
         result = self.node_info[node]
 
         kwargs = {}
@@ -162,7 +162,7 @@ class Parser(object):
         return clade
 
     def get_node_info(self, graph, context=None):
-        """Creates a dictionary containing information about all nodes in the tree."""
+        """Create a dictionary containing information about all nodes in the tree."""
         self.node_info = {}
         self.obj_info = {}
         self.children = {}
@@ -258,7 +258,7 @@ class Writer(object):
     prefixes = RDF_NAMESPACES
 
     def __init__(self, trees):
-        """initialize parameters for writing a CDAO tree."""
+        """Initialize parameters for writing a CDAO tree."""
         self.trees = trees
 
         self.node_counter = 0
@@ -321,7 +321,7 @@ class Writer(object):
         handle.write('%s .\n' % ' '.join(stmt_strings))
 
     def process_clade(self, clade, parent=None, root=False):
-        """recursively generate triples describing a tree of clades."""
+        """Recursively generate triples describing a tree of clades."""
         self.node_counter += 1
         clade.uri = 'node%s' % str(self.node_counter).zfill(ZEROES)
         if parent:
