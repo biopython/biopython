@@ -658,7 +658,7 @@ class DiagramTest(unittest.TestCase):
                 pass
 
     def test_partial_diagram(self):
-        """construct and draw SVG and PDF for just part of a SeqRecord."""
+        """Construct and draw SVG and PDF for just part of a SeqRecord."""
         genbank_entry = self.record
         start = 6500
         end = 8750
