@@ -238,6 +238,7 @@ class PDBList(object):
 
         :return: filename
         :rtype: string
+
         """
         file_format = self._print_default_format_warning(file_format)  # Deprecation warning
 
@@ -375,6 +376,7 @@ class PDBList(object):
 
         :return: filenames
         :rtype: string
+
         """
         file_format = self._print_default_format_warning(file_format)  # Deprecation warning
         for pdb_code in pdb_codes:

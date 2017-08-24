@@ -29,6 +29,7 @@ class AbstractPropertyMap(object):
 
         :param res_id: residue id
         :type res_id: char
+
         """
         translated_id = self._translate_id(id)
         return translated_id in self.property_dict
@@ -44,6 +45,7 @@ class AbstractPropertyMap(object):
 
         :return: some residue property
         :rtype: anything (can be a tuple)
+
         """
         translated_id = self._translate_id(key)
         return self.property_dict[translated_id]
@@ -53,6 +55,7 @@ class AbstractPropertyMap(object):
 
         :return: number of residues
         :rtype: int
+
         """
         return len(self.property_dict)
 
@@ -76,6 +79,7 @@ class AbstractPropertyMap(object):
 
         :param res_id: residue id
         :type res_id: char
+
         """
         import warnings
         from Bio import BiopythonDeprecationWarning
@@ -87,6 +91,7 @@ class AbstractPropertyMap(object):
 
         :return: list of residues for which the property was calculated
         :rtype: [(chain_id, res_id), (chain_id, res_id),...]
+
         """
         return self.property_keys
 
@@ -102,6 +107,7 @@ class AbstractPropertyMap(object):
             ...
 
         :return: iterator
+
         """
         for i in range(0, len(self.property_list)):
             yield self.property_list[i]
