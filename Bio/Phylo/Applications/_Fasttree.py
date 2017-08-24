@@ -24,7 +24,7 @@ def _is_numeric(x):
 
 
 class FastTreeCommandline(AbstractCommandline):
-    """Command-line wrapper for FastTree.
+    r"""Command-line wrapper for FastTree.
 
     Homepage: http://www.microbesonline.org/fasttree/
 
@@ -38,19 +38,18 @@ class FastTreeCommandline(AbstractCommandline):
 
     >>> import _Fasttree
     >>> fasttree_exe = r"C:\FasttreeWin32\fasttree.exe"
-    >>> cmd = _Fasttree.FastTreeCommandline(fasttree_exe, input=r'C:\Input\ExampleAlignment.fsa', out='C:\Output\ExampleTree.tree')
+    >>> cmd = _Fasttree.FastTreeCommandline(fasttree_exe,
+    ...                                     input=r'C:\Input\ExampleAlignment.fsa',
+    ...                                     out=r'C:\Output\ExampleTree.tree')
     >>> print(cmd)
     >>> out, err = cmd()
     >>> print(out)
     >>> print(err)
 
-    Usage advice:
-    the only parameters needed are (fasttree_exe, input='<InputFile>' out='<OutputFile>')
+    Only the ``input`` and ``out`` parameters are mandatory.
 
-    parameters that use values are added this way: (fasttree_exe, parameter=value, input='<InputFile>' out='<OutputFile>')
-    parameters that don't use values are added this way: (fasttree_exe, parameter=True, input='<InputFile>' out='<OutputFile>')
-
-    from the command line use 'fasttree.exe -help' or 'fasttree.exe -expert' for more explanation of usage options
+    From the terminal command line use ``fasttree.exe -help`` or ``fasttree.exe -expert``
+    for more explanation of usage options.
     """
 
     def __init__(self, cmd='fasttree', **kwargs):
