@@ -250,6 +250,7 @@ class Entity(object):
 
         :param tran: the translation vector
         :type tran: size 3 Numeric array
+
         """
         for o in self.get_list():
             o.transform(rot, tran)

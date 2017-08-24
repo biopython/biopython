@@ -41,11 +41,12 @@ class Atom(object):
         :type altloc: string
 
         :param fullname: full atom name, including spaces, e.g. " CA ". Normally
-        these spaces are stripped from the atom name.
+                         these spaces are stripped from the atom name.
         :type fullname: string
 
         :param element: atom element, e.g. "C" for Carbon, "HG" for mercury,
         :type element: uppercase string (or None if unknown)
+
         """
         self.level = "A"
         # Reference to the residue
@@ -189,10 +190,12 @@ class Atom(object):
         """Calculate distance between two atoms.
 
         Example:
+
             >>> distance=atom1-atom2
 
         :param other: the other atom
         :type other: L{Atom}
+
         """
         diff = self.coord - other.coord
         return numpy.sqrt(numpy.dot(diff, diff))
@@ -223,6 +226,7 @@ class Atom(object):
 
         :param sigatm_array: standard deviations of atomic parameters.
         :type sigatm_array: Numeric array (length 5)
+
         """
         self.sigatm_array = sigatm_array
 
@@ -231,6 +235,7 @@ class Atom(object):
 
         :param siguij_array: standard deviations of anisotropic temperature factors.
         :type siguij_array: Numeric array (length 6)
+
         """
         self.siguij_array = siguij_array
 
@@ -239,6 +244,7 @@ class Atom(object):
 
         :param anisou_array: anisotropic B factor.
         :type anisou_array: Numeric array (length 6)
+
         """
         self.anisou_array = anisou_array
 
@@ -340,6 +346,7 @@ class Atom(object):
 
         :param tran: the translation vector
         :type tran: size 3 Numeric array
+
         """
         self.coord = numpy.dot(self.coord, rot) + tran
 
@@ -348,6 +355,7 @@ class Atom(object):
 
         :return: coordinates as 3D vector
         :rtype: Vector
+
         """
         x, y, z = self.coord
         return Vector(x, y, z)

@@ -59,6 +59,7 @@ class PDBIO(object):
 
         :param use_model_flag: if 1, force use of the MODEL record in output.
         :type use_model_flag: int
+
         """
         self.use_model_flag = use_model_flag
 
