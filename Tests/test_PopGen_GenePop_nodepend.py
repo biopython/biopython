@@ -131,25 +131,34 @@ class FileParserTest(unittest.TestCase):
         """Testing the ability to remove population/loci via class methods."""
         for index in range(len(self.files)):
             fname = self.files[index]
-            ftemp = tempfile.NamedTemporaryFile("w+")
+            ftemp = tempfile.NamedTemporaryFile(mode="w+", delete=False)
+            ftemp.close()
             rec = FileParser.read(fname)
             rec.remove_loci_by_position([0], ftemp.name)
-            ftemp.seek(0)
-            rec2 = GenePop.read(iter(ftemp))
+            with open(ftemp.name, 'r') as ft:
+                ft.seek(0)
+                rec2 = GenePop.read(iter(ft))
             self.assertEqual(rec.loci_list[1:], rec2.loci_list)
+
             rec.remove_locus_by_position(0, ftemp.name)
-            ftemp.seek(0)
-            rec3 = GenePop.read(iter(ftemp))
+            with open(ftemp.name, 'r') as ft:
+                ft.seek(0)
+                rec3 = GenePop.read(iter(ft))
             self.assertEqual(rec.loci_list[1:], rec3.loci_list)
+
             rec.remove_locus_by_name(rec.loci_list[0], ftemp.name)
-            ftemp.seek(0)
-            rec4 = GenePop.read(iter(ftemp))
+            with open(ftemp.name, 'r') as ft:
+                ft.seek(0)
+                rec4 = GenePop.read(iter(ft))
             self.assertEqual(rec.loci_list[1:], rec4.loci_list)
+
             rec.remove_loci_by_name([rec.loci_list[0]], ftemp.name)
-            ftemp.seek(0)
-            rec5 = GenePop.read(iter(ftemp))
+            with open(ftemp.name, 'r') as ft:
+                ft.seek(0)
+                rec5 = GenePop.read(iter(ft))
             self.assertEqual(rec.loci_list[1:], rec5.loci_list)
-            ftemp.close()
+
+            os.remove(ftemp.name)
             rec._handle.close()
 
 
