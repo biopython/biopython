@@ -29,7 +29,6 @@ class Superimposer(object):
         :param fixed: list of (fixed) atoms
         :param moving: list of (moving) atoms
         :type fixed,moving: [L{Atom}, L{Atom},...]
-
         """
         if not len(fixed) == len(moving):
             raise PDBException("Fixed and moving atom lists differ in size")

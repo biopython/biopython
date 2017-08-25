@@ -46,7 +46,6 @@ class _AbstractHSExposure(AbstractPropertyMap):
         :param angle_key: key used to store the angle between CA-CB and CA-pCB in
                           the entity.xtra attribute
         :type angle_key: string
-
         """
         assert(offset >= 0)
         # For PyMOL visualization
@@ -153,7 +152,6 @@ class HSExposureCA(_AbstractHSExposure):
         :param offset: number of flanking residues that are ignored
                        in the calculation of the number of neighbors
         :type offset: int
-
         """
         _AbstractHSExposure.__init__(self, model, radius, offset,
                 'EXP_HSE_A_U', 'EXP_HSE_A_D', 'EXP_CB_PCB_ANGLE')
@@ -169,7 +167,6 @@ class HSExposureCA(_AbstractHSExposure):
 
         :param r1, r2, r3: three consecutive residues
         :type r1, r2, r3: L{Residue}
-
         """
         if r1 is None or r3 is None:
             return None
@@ -213,7 +210,6 @@ class HSExposureCA(_AbstractHSExposure):
 
         :param filename: the name of the pymol script file
         :type filename: string
-
         """
         if not self.ca_cb_list:
             warnings.warn("Nothing to draw.", RuntimeWarning)
@@ -248,7 +244,6 @@ class HSExposureCB(_AbstractHSExposure):
         :param offset: number of flanking residues that are ignored
                        in the calculation of the number of neighbors
         :type offset: int
-
         """
         _AbstractHSExposure.__init__(self, model, radius, offset,
                 'EXP_HSE_B_U', 'EXP_HSE_B_D')
@@ -258,7 +253,6 @@ class HSExposureCB(_AbstractHSExposure):
 
         :param r1, r2, r3: three consecutive residues (only r2 is used)
         :type r1, r2, r3: L{Residue}
-
         """
         if r2.get_resname() == 'GLY':
             return self._get_gly_cb_vector(r2), 0.0
