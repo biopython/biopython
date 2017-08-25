@@ -78,7 +78,6 @@ def vector_to_axis(line, point):
 
     :type point: L{Vector}
     :param point: vector defining the point
-
     """
     line = line.normalized()
     np = point.norm()
@@ -105,7 +104,6 @@ def rotaxis2m(theta, vector):
     :param vector: the rotation axis
 
     :return: The rotation matrix, a 3x3 Numeric array.
-
     """
     vector = vector.normalized()
     c = numpy.cos(theta)
@@ -142,7 +140,6 @@ def refmat(p, q):
 
     :type p,q: L{Vector}
     :return: The mirror operation, a 3x3 Numeric array.
-
     """
     p = p.normalized()
     q = q.normalized()
@@ -173,7 +170,6 @@ def rotmat(p, q):
 
     :return: rotation matrix that rotates p onto q
     :rtype: 3x3 Numeric array
-
     """
     rot = numpy.dot(refmat(q, -p), refmat(p, -p))
     return rot
@@ -190,7 +186,6 @@ def calc_angle(v1, v2, v3):
 
     :return: angle
     :rtype: float
-
     """
     v1 = v1 - v2
     v3 = v3 - v2
@@ -206,7 +201,6 @@ def calc_dihedral(v1, v2, v3, v4):
 
     :param v1, v2, v3, v4: the four points that define the dihedral angle
     :type v1, v2, v3, v4: L{Vector}
-
     """
     ab = v1 - v2
     cb = v3 - v2

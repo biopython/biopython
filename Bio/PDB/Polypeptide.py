@@ -195,7 +195,6 @@ class Polypeptide(list):
 
         :return: the list of C-alpha atoms
         :rtype: [L{Atom}, L{Atom}, ...]
-
         """
         ca_list = []
         for res in self:
@@ -281,7 +280,6 @@ class Polypeptide(list):
 
         :return: polypeptide sequence
         :rtype: L{Seq}
-
         """
         s = ""
         for res in self:
@@ -315,7 +313,6 @@ class _PPBuilder(object):
 
         :param radius: distance
         :type radius: float
-
         """
         self.radius = radius
 
@@ -342,7 +339,6 @@ class _PPBuilder(object):
 
         :param aa_only: if 1, the residue needs to be a standard AA
         :type aa_only: int
-
         """
         is_connected = self._is_connected
         accept = self._accept

@@ -62,7 +62,6 @@ def _read_fragments(size, length, dir="."):
 
     :param dir: directory where the fragment spec files can be found
     :type dir: string
-
     """
     filename = (dir + "/" + _FRAGMENT_FILE) % (size, length)
     with open(filename, "r") as fp:
@@ -99,7 +98,6 @@ class Fragment(object):
 
         :param fid: id for the fragment
         :type fid: int
-
         """
         # nr of residues in fragment
         self.length = length
@@ -115,7 +113,6 @@ class Fragment(object):
 
         :return: the residue names
         :rtype: [string, string,...]
-
         """
         return self.resname_list
 
@@ -124,7 +121,6 @@ class Fragment(object):
 
         :return: id for the fragment
         :rtype: int
-
         """
         return self.fid
 
@@ -133,7 +129,6 @@ class Fragment(object):
 
         :return: the CA coords in the fragment
         :rtype: Numeric (Nx3) array
-
         """
         return self.coords_ca
 
@@ -145,7 +140,6 @@ class Fragment(object):
 
         :param ca_coord: the c-alpha coorinates of the residues
         :type ca_coord: Numeric array with length 3
-
         """
         if self.counter >= self.length:
             raise PDBException("Fragment boundary exceeded.")
@@ -166,7 +160,6 @@ class Fragment(object):
 
         :return: rmsd between fragments
         :rtype: float
-
         """
         sup = SVDSuperimposer()
         sup.set(self.coords_ca, other.coords_ca)
@@ -190,7 +183,6 @@ def _make_fragment_list(pp, length):
 
     :param length: fragment length
     :type length: int
-
     """
     frag_list = []
     for i in range(0, len(pp) - length + 1):
@@ -222,7 +214,6 @@ def _map_fragment_list(flist, reflist):
 
     :param reflist: list of reference (ie. library) fragments
     :type reflist: [L{Fragment}, L{Fragment}, ...]
-
     """
     mapped = []
     for f in flist:
@@ -255,7 +246,6 @@ class FragmentMapper(object):
         :param fdir: directory where the definition files are
                      found (default=".")
         :type fdir: string
-
         """
         if flength == 5:
             self.edge = 2
@@ -274,7 +264,6 @@ class FragmentMapper(object):
 
         :param model: the model that will be mapped
         :type model: L{Model}
-
         """
         ppb = PPBuilder()
         ppl = ppb.build_peptides(model)
@@ -310,7 +299,6 @@ class FragmentMapper(object):
         """Is this residue present? (DEPRECATED).
 
         :type res: L{Residue}
-
         """
         import warnings
         from Bio import BiopythonDeprecationWarning
@@ -321,7 +309,6 @@ class FragmentMapper(object):
         """True if the given residue is in any of the mapped fragments.
 
         :type res: L{Residue}
-
         """
         return res in self.fd
 
@@ -332,6 +319,5 @@ class FragmentMapper(object):
 
         :return: fragment classification
         :rtype: L{Fragment}
-
         """
         return self.fd[res]

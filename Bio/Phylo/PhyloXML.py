@@ -549,7 +549,6 @@ class CladeRelation(PhyloElement):
     :type type: str
 
     :type confidence: Confidence
-
     """
 
     def __init__(self, type, id_ref_0, id_ref_1,
