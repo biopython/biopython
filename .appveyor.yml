@@ -35,7 +35,7 @@ build_script:
   - conda update conda
   - conda install setuptools numpy mysql-connector-python psycopg2 matplotlib networkx reportlab scipy coverage
   - if "PY_MAJOR_VER"=="2" conda install unittest2
-  - pip install . -vvv
+  - python setup.py build
 
 test_script:
   - python -c "import sys; print(sys.version)"
