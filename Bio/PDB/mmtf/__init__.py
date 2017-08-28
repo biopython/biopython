@@ -43,7 +43,7 @@ class MMTFParser(object):
         """Get a structrue from a gzipped file - given a file path.
 
         :param file_path: the input file path
-        :return the structure
+        :return: the structure
         """
         decoder = parse_gzip(file_path)
         return get_from_decoded(decoder)
