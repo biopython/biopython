@@ -132,6 +132,7 @@ class StructureBuilder(object):
                         # The residue was already made
                         self.residue = duplicate_residue
                         duplicate_residue.disordered_select(resname)
+                        return
                     else:
                         # Make a new residue and add it to the already
                         # present DisorderedResidue
@@ -147,16 +148,6 @@ class StructureBuilder(object):
                               PDBConstructionWarning)
                         self.residue = duplicate_residue
                         return
-                    # Make a new DisorderedResidue object and put all
-                    # the Residue objects with the id (field, resseq, icode) in it.
-                    # These residues each should have non-blank altlocs for all their atoms.
-                    # If not, the PDB file probably contains an error.
-                    if not self._is_completely_disordered(duplicate_residue):
-                        # if this exception is ignored, a residue will be missing
-                        self.residue = None
-                        raise PDBConstructionException(
-                            "Blank altlocs in duplicate residue %s ('%s', %i, '%s')"
-                            % (resname, field, resseq, icode))
                     self.chain.detach_child(res_id)
                     new_residue = Residue(res_id, resname, self.segid)
                     disordered_residue = DisorderedResidue(res_id)

@@ -1,5 +1,5 @@
 try:
-    from mmtf import fetch, parse
+    from mmtf import fetch, parse, parse_gzip
 except ImportError:
     from Bio import MissingPythonDependencyError
     raise MissingPythonDependencyError("Install mmtf to use Bio.PDB.mmtf "
@@ -36,4 +36,14 @@ class MMTFParser(object):
 
         """
         decoder = parse(file_path)
+        return get_from_decoded(decoder)
+
+    @staticmethod
+    def get_structure_gzip(file_path):
+        """Get a structrue from a gzipped file - given a file path.
+
+        :param file_path: the input file path
+        :return: the structure
+        """
+        decoder = parse_gzip(file_path)
         return get_from_decoded(decoder)
