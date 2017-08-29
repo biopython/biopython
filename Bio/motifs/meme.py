@@ -21,7 +21,6 @@ def read(handle):
     ...     for instance in motif.instances:
     ...         print(instance.motif_name, instance.sequence_name, instance.strand, instance.pvalue)
     """
-    supported = ['4.11.4', '4.12.0']
     record = Record()
     __read_version(record, handle)
     __read_datafile(record, handle)
@@ -29,9 +28,7 @@ def read(handle):
     __read_sequences(record, handle)
     __read_command(record, handle)
     for line in handle:
-        if line.startswith('MOTIF  1'):
-            break
-        if record.version in supported and line.startswith('MOTIF '):
+        if line.startswith('MOTIF '):
             break
     else:
         raise ValueError('Unexpected end of stream')
