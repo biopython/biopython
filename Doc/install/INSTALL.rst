@@ -19,7 +19,7 @@ GCC is recommende as the C compiler, which is usually available as part of the s
 2) Mac OS X
 ------------
 
-Install Apple’s XCode suite from the App Store, and then from the Xcode options also install the optional command line utilities.
+Install Apple’s XCode suite from the App Store, and then install the commandline tools using command- ``xcode-select --install`` on the terminal.
 
 3) Windows
 -----------
