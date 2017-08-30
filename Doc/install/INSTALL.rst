@@ -24,7 +24,7 @@ Install Apple’s XCode suite from the App Store, and then from the Xcode option
 3) Windows
 -----------
 
-We recommend you install Biopython and its dependencies using the provided pre-compiled Windows Installers. i.e. You don’t need a C compiler. 
+We recommend you install Biopython and its dependencies using the provided pre-compiled biopython wheels. i.e. You don’t need a C compiler. 
 See subsequent section for more details.
 
 Installing Python
@@ -111,7 +111,7 @@ UNIX/Linux
 For installing Biopython, you will require a software package called ``pip`` to do so. If you are using the latest 3.x version of Python, you will have the package preinstalled in your UNIX/Linux system. You can check the version of the software by doing::
 
   $ pip --version
-  pip 9.0.1 from /usr/lib/python3.6/site-packages (python 3.6)
+  pip 9.0.1 from /usr/lib/python3.6/site-packages (python 3.5)
   
 If you don't see an output like the one above, you do not have pip installed in the system. To install pip in your UNIX/Linux system, you can do::
 
@@ -140,6 +140,43 @@ If you wish to install a specific version of Biopython for the system, you can t
   $ pip install biopython==1.68
   
 This command will install 1.68 version of Biopython in your system. Once you have biopython installed, you can proceed ahead.
+
+Windows
+-------
+
+For installing Biopython, you will require a software package called ``pip`` to do so. If you are using the latest 3.x version of Python, you will have the package preinstalled in your UNIX/Linux system. You can check the version of the software by doing::
+
+  $ pip --version
+  pip 9.0.1 from /usr/lib/python3.6/site-packages (python 3.5)
+  
+If you don't see an output like the one above, you do not have pip installed in the system. To install pip in your UNIX/Linux system, you can do::
+
+  $ python -m ensurepip
+  
+Once ``pip`` is installed, Go to the terminal and type::
+
+  $ pip install biopython
+  
+This command will fetch latest version of biopython from PyPI and start the installation. The command will also install any of the required dependencies of Biopython which are not available in your system, like `Numpy <http://www.numpy.org/>`_.
+
+Once the installation is done, you can check if the installation is working by firing up the python interpreter in the terminal and doing the following::
+  
+  $ python
+  Python 3.5.1+ (default, Mar 30 2016, 22:46:26) 
+  [GCC 5.3.1 20160330] on linux
+  Type "help", "copyright", "credits" or "license" for more information.
+  >>> import Bio
+  >>> Bio.__version__
+  1.69
+  
+If you see an output like the one above, you have successfully installed Biopython in your system. Otherwise you will notice an error.
+
+If you wish to install a specific version of Biopython for the system, you can type in the terminal::
+
+  $ pip install biopython==1.68
+  
+This command will install 1.68 version of Biopython in your system. Once you have biopython installed, you can proceed ahead.
+
 
 Mac OS X
 --------
