@@ -45,7 +45,7 @@ UNIX/Linux
 For installing Biopython, you will require a software package called ``pip`` to do so. If you are using the latest 3.x version of Python, you will have the package preinstalled in your UNIX/Linux system. You can check the version of the software by doing::
 
   $ pip --version
-  pip 9.0.1 from /usr/lib/python3.6/site-packages (python 3.5)
+  pip 9.0.1 from /usr/lib/python3.6/site-packages (python 3.6)
   
 If you don't see an output like the one above, you do not have pip installed in the system. To install pip in your UNIX/Linux system, you can do::
 
@@ -60,7 +60,7 @@ This command will fetch the latest version of biopython from Python Package Inde
 Once the installation is done, you can check if the installation is working by firing up the python interpreter in the terminal and doing the following::
   
   $ python
-  Python 3.5.1+ (default, Mar 30 2016, 22:46:26) 
+  Python 3.6.1+ (default, Mar 30 2016, 22:46:26) 
   [GCC 5.3.1 20160330] on linux
   Type "help", "copyright", "credits" or "license" for more information.
   >>> import Bio
@@ -81,7 +81,7 @@ Windows
 For installing Biopython, you will require a software package called ``pip`` to do so. If you are using the latest 3.x version of Python, you will have the package preinstalled in your UNIX/Linux system. You can check the version of the software by doing::
 
   $ pip --version
-  pip 9.0.1 from /usr/lib/python3.6/site-packages (python 3.5)
+  pip 9.0.1 from /usr/lib/python3.6/site-packages (python 3.6)
   
 If you don't see an output like the one above, you do not have pip installed in the system. To install pip in your UNIX/Linux system, you can do::
 
@@ -96,7 +96,7 @@ This command will fetch latest version of biopython from PyPI and start the inst
 Once the installation is done, you can check if the installation is working by firing up the python interpreter in the terminal and doing the following::
   
   $ python
-  Python 3.5.1+ (default, Mar 30 2016, 22:46:26) 
+  Python 3.6.1+ (default, Mar 30 2016, 22:46:26) 
   [GCC 5.3.1 20160330] on linux
   Type "help", "copyright", "credits" or "license" for more information.
   >>> import Bio
@@ -125,7 +125,7 @@ This command will install the software package in your system. To proceed furthe
 
   $ pip install biopython
   
-This will install the biopython package in your system. For checking the installation or installing a specific version of biopython in your system, follow the steps mentioned in the UNIX/Linux section.
+This will install the biopython package in your system. For checking the installation or installing a specific version of biopython in your system, follow the steps mentioned in the UNIX/Linux section for installing biopython in your system
 
 Bonus: Installing Biopython using Anaconda
 ==========================================
@@ -155,9 +155,9 @@ You will see an output something like this::
                                          
   The following NEW packages will be INSTALLED:
 
-    biopython: 1.68-np113py27_0
+    biopython: 1.68-np113py36_0
     mkl:       2017.0.3-0
-    numpy:     1.13.1-py27_0
+    numpy:     1.13.1-py36_0
   
   Proceed ([y]/n)?
   
