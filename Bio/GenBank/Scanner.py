@@ -300,6 +300,9 @@ class InsdcScanner(object):
                     i = line.find("=")
                     key = line[1:i]  # does not work if i==-1
                     value = line[i + 1:]  # we ignore 'value' if i==-1
+                    if i and value.startswith(' ') and value.lstrip().startswith('"'):
+                        warnings.warn("White space after equals in qualifier", BiopythonParserWarning)
+                        value = value.lstrip()
                     if i == -1:
                         # Qualifier with no key, e.g. /pseudo
                         key = line[1:]
@@ -622,8 +625,16 @@ class EmblScanner(InsdcScanner):
                 repr(self.line)
             # Remove tailing number now, remove spaces later
             linersplit = line.rsplit(None, 1)
-            if len(linersplit) > 1:
+            if len(linersplit) == 2 and linersplit[1].isdigit():
                 seq_lines.append(linersplit[0])
+            elif line.isdigit():
+                # Special case of final blank line with no bases
+                # just the sequence coordinate
+                pass
+            else:
+                warnings.warn("EMBL sequence line missing coordinates",
+                              BiopythonParserWarning)
+                seq_lines.append(line)
             line = self.handle.readline()
         self.line = line
         return misc_lines, "".join(seq_lines).replace(" ", "")

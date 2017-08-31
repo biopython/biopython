@@ -45,12 +45,14 @@ class PDBParser(object):
            constructing the SMCRA data structure are fatal. If true (DEFAULT),
            the exceptions are caught, but some residues or atoms will be missing.
            THESE EXCEPTIONS ARE DUE TO PROBLEMS IN THE PDB FILE!.
+         - get_header - unused argument kept for historical compatibilty.
          - structure_builder - an optional user implemented StructureBuilder class.
          - QUIET - Evaluated as a Boolean. If true, warnings issued in constructing
            the SMCRA data will be suppressed. If false (DEFAULT), they will be shown.
            These warnings might be indicative of problems in the PDB file!
 
         """
+        # get_header is not used but is left in for API compatibility
         if structure_builder is not None:
             self.structure_builder = structure_builder
         else:

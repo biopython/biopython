@@ -252,25 +252,39 @@ class GenBankRandomAccess(SequentialSeqFileRandomAccess):
         while marker_re.match(line):
             # We cannot assume the record.id is the first word after LOCUS,
             # normally the first entry on the VERSION or ACCESSION line is used.
-            key = None
+            # However if both missing, GenBank parser falls back on LOCUS entry.
+            try:
+                key = line[5:].split(None, 1)[0]
+            except ValueError:
+                # Warning?
+                # No content in LOCUS line
+                key = None
             length = len(line)
             while True:
                 end_offset = handle.tell()
                 line = handle.readline()
                 if marker_re.match(line) or not line:
                     if not key:
-                        raise ValueError(
-                            "Did not find ACCESSION/VERSION lines")
+                        raise ValueError("Did not find usable ACCESSION/VERSION/LOCUS lines")
                     yield _bytes_to_string(key), start_offset, length
                     start_offset = end_offset
                     break
                 elif line.startswith(accession_marker):
-                    key = line.rstrip().split()[1]
+                    try:
+                        key = line.rstrip().split()[1]
+                    except IndexError:
+                        # No content in ACCESSION line
+                        pass
                 elif line.startswith(version_marker):
-                    version_id = line.rstrip().split()[1]
-                    if version_id.count(b".") == 1 and version_id.split(b".")[1].isdigit():
-                        # This should mimic the GenBank parser...
-                        key = version_id
+                    try:
+                        version_id = line.rstrip().split()[1]
+                        if version_id.count(b".") == 1 and version_id.split(b".")[1].isdigit():
+                            # This should mimic the GenBank parser...
+                            key = version_id
+                    except IndexError:
+                        # No content in VERSION line
+                        pass
+
                 length += len(line)
         assert not line, repr(line)
 

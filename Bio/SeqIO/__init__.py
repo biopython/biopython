@@ -440,9 +440,10 @@ _FormatToWriter = {"fasta": FastaIO.FastaWriter,
                    "qual": QualityIO.QualPhredWriter,
                    "sff": SffIO.SffWriter,
                    "seqxml": SeqXmlIO.SeqXmlWriter,
+                   "pir": PirIO.PirWriter,
                    }
 
-_BinaryFormats = ["sff", "sff-trim", "abi", "abi-trim"]
+_BinaryFormats = ["sff", "sff-trim", "abi", "abi-trim", "seqxml"]
 
 
 def write(sequences, handle, format):
@@ -1006,14 +1007,12 @@ def convert(in_file, in_format, out_file, out_format, alphabet=None):
     GTTGCTTCTGGCGTGGGTGGGGGGG
     <BLANKLINE>
     """
-    # Hack for SFF, will need to make this more general in future
     if in_format in _BinaryFormats:
         in_mode = 'rb'
     else:
         in_mode = 'rU'
 
-    # Don't open the output file until we've checked the input is OK?
-    if out_format in ["sff", "sff_trim"]:
+    if out_format in _BinaryFormats:
         out_mode = 'wb'
     else:
         out_mode = 'w'

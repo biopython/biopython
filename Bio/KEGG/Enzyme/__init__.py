@@ -206,14 +206,14 @@ def parse(handle):
     ...     for record in parse(handle):
     ...         print("%s %s" % (record.entry, record.name[0]))
     ...
-    1.1.1.1 Alcohol dehydrogenase
-    1.1.1.62 Estradiol 17beta-dehydrogenase
-    1.1.1.68 Transferred to EC 1.7.99.5
-    1.6.5.3 NADH dehydrogenase (ubiquinone)
-    1.14.13.28 3,9-Dihydroxypterocarpan 6a-monooxygenase
-    2.4.1.68 Glycoprotein 6-alpha-L-fucosyltransferase
-    3.1.1.6 Acetylesterase
-    2.7.2.1 Acetate kinase
+    1.1.1.1 alcohol dehydrogenase
+    1.1.1.62 17beta-estradiol 17-dehydrogenase
+    1.1.1.68 Transferred to 1.5.1.20
+    1.6.5.3 NADH:ubiquinone reductase (H+-translocating)
+    1.14.13.28 3,9-dihydroxypterocarpan 6a-monooxygenase
+    2.4.1.68 glycoprotein 6-alpha-L-fucosyltransferase
+    3.1.1.6 acetylesterase
+    2.7.2.1 acetate kinase
 
     """
     record = Record()

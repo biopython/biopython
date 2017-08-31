@@ -6,7 +6,7 @@
 #
 # author: Kristian Rother
 #
-# license: same as BioPython, read LICENSE.TXT from current BioPython release.
+# license: same as Biopython, read LICENSE.TXT from current Biopython release.
 #
 # last modified: 9.2.2004
 #
@@ -145,7 +145,6 @@ def _parse_pdb_header_list(header):
     dict['structure_reference'] = _get_references(header)
     dict['journal_reference'] = _get_journal(header)
     comp_molid = "1"
-    src_molid = "1"
     last_comp_key = "misc"
     last_src_key = "misc"
 

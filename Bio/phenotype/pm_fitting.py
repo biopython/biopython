@@ -48,7 +48,7 @@ def gompertz(x, A, u, d, v, y0):
 
 
 def richards(x, A, u, d, v, y0):
-    """Gompertz growth model (equivalent to Stannard)
+    """Richards growth model (equivalent to Stannard)
 
     Proposed in Zwietering et al., 1990 (PMID: 16348228)
     """
@@ -118,7 +118,7 @@ def guess_plateau(x, y):
 
 
 def fit(function, x, y):
-    """Fit the provided functrion to the x and y values.
+    """Fit the provided function to the x and y values.
 
     The function parameters and the parameters covariance.
     """

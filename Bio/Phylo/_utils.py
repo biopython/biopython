@@ -128,6 +128,12 @@ def draw_graphviz(tree, label_func=str, prog='twopi', args='',
     >>> pylab.show()
     >>> pylab.savefig('apaf.png')
     """
+    # Deprecated in Biopython 1.70 (#1247)
+    import warnings
+    from Bio import BiopythonDeprecationWarning
+    warnings.warn("draw_graphviz is deprecated; use Bio.Phylo.draw instead",
+                  BiopythonDeprecationWarning)
+
     try:
         import networkx
     except ImportError:

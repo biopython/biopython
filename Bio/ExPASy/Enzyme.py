@@ -96,15 +96,15 @@ class Record(dict):
             return "%s ( )" % (self.__class__.__name__)
 
     def __str__(self):
-        output = "ID: " + self["ID"]
-        output += " DE: " + self["DE"]
-        output += " AN: " + repr(self["AN"])
-        output += " CA: '" + self["CA"] + "'"
-        output += " CF: " + self["CF"]
-        output += " CC: " + repr(self["CC"])
-        output += " PR: " + repr(self["PR"])
-        output += " DR: %d Records" % len(self["DR"])
-        return output
+        output = ["ID: " + self["ID"],
+                  "DE: " + self["DE"],
+                  "AN: " + repr(self["AN"]),
+                  "CA: '" + self["CA"] + "'",
+                  "CF: " + self["CF"],
+                  "CC: " + repr(self["CC"]),
+                  "PR: " + repr(self["PR"]),
+                  "DR: %d Records" % len(self["DR"])]
+        return "\n".join(output)
 
 # Everything below is private
 

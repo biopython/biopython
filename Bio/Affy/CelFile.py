@@ -19,7 +19,10 @@ except ImportError:
 
 
 class ParserError(ValueError):
+    """Affymetrix parser error."""
+
     def __init__(self, *args):
+        """Initialise class."""
         super(ParserError, self).__init__(*args)
 
 
@@ -33,7 +36,7 @@ _modeError = ParserError("You're trying to open an Affymetrix v4"
 
 
 class Record(object):
-    """Stores the information in a cel file
+    """Stores the information in a cel file.
 
     Example usage:
 
@@ -65,6 +68,7 @@ class Record(object):
     """
 
     def __init__(self):
+        """Initialize class."""
         self.version = None
         self.GridCornerUL = None
         self.GridCornerUR = None
@@ -87,7 +91,7 @@ class Record(object):
 
 
 def read(handle):
-    """Reads Affymetrix CEL file and returns Record object.
+    """Read Affymetrix CEL file and return Record object.
 
     CEL files version 3 and 4 are supported, and the parser attempts version detection.
 
@@ -99,6 +103,7 @@ def read(handle):
     ...
     >>> c.version == 4
     True
+
     """
     # If we fail to read the magic number, then it will remain None, and thus
     # we will invoke read_v3 (if mode is not strict), or raise IOError if mode
@@ -135,8 +140,7 @@ def read(handle):
 
 # read Affymetrix files version 4.
 def read_v4(f):
-    """Reads Affymetrix CEL file, version 4, and returns a corresponding Record
-    object.
+    """Read verion 4 Affymetrix CEL file, returns corresponding Record object.
 
     Most importantly record.intensities correspond to intensities from the CEL
     file.
@@ -151,8 +155,9 @@ def read_v4(f):
     ...
     >>> c.version == 4
     True
-    >>> print(c.intensities.shape)
-    (5, 5)
+    >>> print("%i by %i array" % c.intensities.shape)
+    5 by 5 array
+
     """
     # We follow the documentation here:
     # http://www.affymetrix.com/estore/support/developer/powertools/changelog/gcos-agcc/cel.html.affx
@@ -278,7 +283,7 @@ def read_v4(f):
 
 
 def read_v3(handle):
-    """Reads Affymetrix CEL file, version 3, and returns a corresponding Record object.
+    """Read version 3 Affymetrix CEL file, and return corresponding Record object.
 
     Example Usage:
 
@@ -288,6 +293,7 @@ def read_v3(handle):
     ...
     >>> c.version == 3
     True
+
     """
     # Needs error handling.
     # Needs to know the chip design.

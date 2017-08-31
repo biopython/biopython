@@ -7,8 +7,6 @@
 
 from __future__ import print_function
 
-import shlex
-
 from Bio.File import as_handle
 
 
@@ -22,6 +20,8 @@ class MMCIF2Dict(dict):
          - file - name of the PDB file OR an open filehandle
 
         """
+        self.quote_chars = ['\'', '\"']
+        self.whitespace_chars = [' ', '\t']
         with as_handle(filename) as handle:
             loop_flag = False
             key = None
@@ -38,7 +38,11 @@ class MMCIF2Dict(dict):
                     n = 0
                     continue
                 elif loop_flag:
-                    if token.startswith("_"):
+                    # The second condition checks we are in the first column
+                    # Some mmCIF files (e.g. 4q9r) have values in later columns
+                    # starting with an underscore and we don't want to read
+                    # these as keys
+                    if token.startswith("_") and (n == 0 or i % n == 0):
                         if i > 0:
                             loop_flag = False
                         else:
@@ -58,6 +62,34 @@ class MMCIF2Dict(dict):
 
     # Private methods
 
+    def _splitline(self, line):
+        # See https://www.iucr.org/resources/cif/spec/version1.1/cifsyntax for the syntax
+        in_token = False
+        # quote character of the currently open quote, or None if no quote open
+        quote_open_char = None
+        start_i = 0
+        for (i, c) in enumerate(line):
+            if c in self.whitespace_chars:
+                if in_token and not quote_open_char:
+                    in_token = False
+                    yield line[start_i:i]
+            elif c in self.quote_chars:
+                if not quote_open_char:
+                    quote_open_char = c
+                    in_token = True
+                    start_i = i + 1
+                elif c == quote_open_char and (i + 1 == len(line) or line[i + 1] in self.whitespace_chars):
+                    quote_open_char = None
+                    in_token = False
+                    yield line[start_i:i]
+            elif not in_token:
+                in_token = True
+                start_i = i
+        if in_token:
+            yield line[start_i:]
+        if quote_open_char:
+            raise ValueError("Line ended with quote open: " + line)
+
     def _tokenize(self, handle):
         for line in handle:
             if line.startswith("#"):
@@ -71,6 +103,5 @@ class MMCIF2Dict(dict):
                     token += line
                 yield token
             else:
-                tokens = shlex.split(line)
-                for token in tokens:
+                for token in self._splitline(line.strip()):
                     yield token

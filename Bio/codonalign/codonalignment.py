@@ -120,7 +120,7 @@ class CodonAlignment(MultipleSeqAlignment):
          - codon_table  - Codon table to use for forward translation.
 
         """
-        from Bio.Phylo.TreeConstruction import _DistanceMatrix as DM
+        from Bio.Phylo.TreeConstruction import DistanceMatrix as DM
         names = [i.id for i in self._records]
         size = len(self._records)
         dn_matrix = []

@@ -1159,6 +1159,98 @@ class SeqRecord(object):
                 answer._per_letter_annotations[key] = value[::-1]
         return answer
 
+    def translate(self,
+                  # Seq translation arguments:
+                  table="Standard", stop_symbol="*", to_stop=False,
+                  cds=False, gap=None,
+                  # SeqRecord annotation arguments:
+                  id=False, name=False, description=False,
+                  features=False, annotations=False,
+                  letter_annotations=False, dbxrefs=False):
+        """Returns new SeqRecord with translated sequence.
+
+        This calls the record's .seq.translate() method (which describes
+        the translation related arguments, like table for the genetic code),
+
+        By default the new record does NOT preserve the sequence identifier,
+        name, description, general annotation or database cross-references -
+        these are unlikely to apply to the translated sequence.
+
+        You can specify the returned record's id, name and description as
+        strings, or True to keep that of the parent, or False for a default.
+
+        You can specify the returned record's features with a list of
+        SeqFeature objects, or False (default) to omit them.
+
+        You can also specify both the returned record's annotations and
+        letter_annotations as dictionaries, True to keep that of the parent
+        (annotations only), or False (default) to omit them.
+
+        e.g. Loading a FASTA gene and translating it,
+
+        >>> from Bio import SeqIO
+        >>> gene_record = SeqIO.read("Fasta/sweetpea.nu", "fasta")
+        >>> print(gene_record.format("fasta"))
+        >gi|3176602|gb|U78617.1|LOU78617 Lathyrus odoratus phytochrome A (PHYA) gene, partial cds
+        CAGGCTGCGCGGTTTCTATTTATGAAGAACAAGGTCCGTATGATAGTTGATTGTCATGCA
+        AAACATGTGAAGGTTCTTCAAGACGAAAAACTCCCATTTGATTTGACTCTGTGCGGTTCG
+        ACCTTAAGAGCTCCACATAGTTGCCATTTGCAGTACATGGCTAACATGGATTCAATTGCT
+        TCATTGGTTATGGCAGTGGTCGTCAATGACAGCGATGAAGATGGAGATAGCCGTGACGCA
+        GTTCTACCACAAAAGAAAAAGAGACTTTGGGGTTTGGTAGTTTGTCATAACACTACTCCG
+        AGGTTTGTT
+        <BLANKLINE>
+
+        And now translating the record, specifying the new ID and description:
+
+        >>> protein_record = gene_record.translate(table=11,
+        ...                                        id="phya",
+        ...                                        description="translation")
+        >>> print(protein_record.format("fasta"))
+        >phya translation
+        QAARFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMANMDSIA
+        SLVMAVVVNDSDEDGDSRDAVLPQKKKRLWGLVVCHNTTPRFV
+        <BLANKLINE>
+
+        """
+        answer = SeqRecord(self.seq.translate(table=table,
+                                              stop_symbol=stop_symbol,
+                                              to_stop=to_stop,
+                                              cds=cds,
+                                              gap=gap))
+        if isinstance(id, basestring):
+            answer.id = id
+        elif id:
+            answer.id = self.id
+        if isinstance(name, basestring):
+            answer.name = name
+        elif name:
+            answer.name = self.name
+        if isinstance(description, basestring):
+            answer.description = description
+        elif description:
+            answer.description = self.description
+        if isinstance(dbxrefs, list):
+            answer.dbxrefs = dbxrefs
+        elif dbxrefs:
+            # Copy the old dbxrefs
+            answer.dbxrefs = self.dbxrefs[:]
+        if isinstance(features, list):
+            answer.features = features
+        elif features:
+            # Does not make sense to copy old features as locations wrong
+            raise TypeError("Unexpected features argument %r" % features)
+        if isinstance(annotations, dict):
+            answer.annotations = annotations
+        elif annotations:
+            # Copy the old annotations
+            answer.annotations = self.annotations.copy()
+        if isinstance(letter_annotations, dict):
+            answer.letter_annotations = letter_annotations
+        elif letter_annotations:
+            # Does not make sense to copy these as length now wrong
+            raise TypeError("Unexpected letter_annotations argument %r" % letter_annotations)
+        return answer
+
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest

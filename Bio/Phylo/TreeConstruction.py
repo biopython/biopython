@@ -299,7 +299,7 @@ class _Matrix(object):
         return matrix_string
 
 
-class _DistanceMatrix(_Matrix):
+class DistanceMatrix(_Matrix):
     """Distance matrix class that can be used for distance based tree algorithms.
 
     All diagonal elements will be zero no matter what the users provide.
@@ -330,6 +330,7 @@ class _DistanceMatrix(_Matrix):
                 A writeable file handle or other object supporting the 'write'
                 method, such as StringIO or sys.stdout. On Python 3, should be
                 open in text mode.
+
         """
         handle.write("    {0}\n".format(len(self.names)))
         # Phylip needs space-separated, vertically aligned columns
@@ -343,6 +344,10 @@ class _DistanceMatrix(_Matrix):
                              for j in range(i + 1, len(self.matrix)))
             fields = itertools.chain([name], values, mirror_values)
             handle.write(row_fmt.format(*fields))
+
+
+# Shim for compatibility with Biopython<1.70 (#1304)
+_DistanceMatrix = DistanceMatrix
 
 
 class DistanceCalculator(object):
@@ -481,15 +486,14 @@ class DistanceCalculator(object):
             # Score by character identity, not skipping any special letters
             score = sum(l1 == l2
                         for l1, l2 in zip(seq1, seq2)
-                        if l1 not in self.skip_letters
-                        and l2 not in self.skip_letters)
+                        if l1 not in self.skip_letters and l2 not in self.skip_letters)
             max_score = len(seq1)
         if max_score == 0:
             return 1  # max possible scaled distance
         return 1 - (score * 1.0 / max_score)
 
     def get_distance(self, msa):
-        """Return a _DistanceMatrix for MSA object
+        """Return a DistanceMatrix for MSA object
 
         :Parameters:
             msa : MultipleSeqAlignment
@@ -500,7 +504,7 @@ class DistanceCalculator(object):
             raise TypeError("Must provide a MultipleSeqAlignment object.")
 
         names = [s.id for s in msa]
-        dm = _DistanceMatrix(names)
+        dm = DistanceMatrix(names)
         for seq1, seq2 in itertools.combinations(msa, 2):
             dm[seq1.id, seq2.id] = self._pairwise(seq1, seq2)
         return dm
@@ -605,12 +609,12 @@ class DistanceTreeConstructor(TreeConstructor):
         with Arithmetic mean (UPGMA) tree.
 
         :Parameters:
-            distance_matrix : _DistanceMatrix
+            distance_matrix : DistanceMatrix
                 The distance matrix for tree construction.
 
         """
-        if not isinstance(distance_matrix, _DistanceMatrix):
-            raise TypeError("Must provide a _DistanceMatrix object.")
+        if not isinstance(distance_matrix, DistanceMatrix):
+            raise TypeError("Must provide a DistanceMatrix object.")
 
         # make a copy of the distance matrix to be used
         dm = copy.deepcopy(distance_matrix)
@@ -670,12 +674,12 @@ class DistanceTreeConstructor(TreeConstructor):
         """Construct and return an Neighbor Joining tree.
 
         :Parameters:
-            distance_matrix : _DistanceMatrix
+            distance_matrix : DistanceMatrix
                 The distance matrix for tree construction.
 
         """
-        if not isinstance(distance_matrix, _DistanceMatrix):
-            raise TypeError("Must provide a _DistanceMatrix object.")
+        if not isinstance(distance_matrix, DistanceMatrix):
+            raise TypeError("Must provide a DistanceMatrix object.")
 
         # make a copy of the distance matrix to be used
         dm = copy.deepcopy(distance_matrix)

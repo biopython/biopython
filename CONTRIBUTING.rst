@@ -42,19 +42,21 @@ API documentation.
 We use the continuous integration service TravisCI to enforce some of these
 checks, so if you are making a contribution it is best to check this locally.
 
-You can run the tool ``flake8`` directly as follows. This includes the checks
-from  ``pycodestyle`` (formerly ``pep8``) and uses the ``pydocstyle`` plugin
-(``flake8-docstrings``) for checking the docstrings within the Python code::
+We use the tool ``flake8`` for code style checks, together with various
+plugins which can be installed as follows::
 
-    $ pip install flake8 flake8-docstrings flake8-blind-except
+    $ pip install flake8 flake8-docstrings flake8-blind-except flake8-rst-docstrings
+
+You can then run ``flake8`` directly as follows:
+
     $ flake8 Bio/
     $ flake8 BioSQL/
     $ flake8 Tests/
     $ flake8 Scripts/
     $ flake8 Doc/examples/
 
-Each of these folders has its own flake8 settings file, in the long term we
-would like all the code to follow the same strict settings.
+Each of these folders has its own flake8 settings file, but in the long term
+we would like all the code to follow the same strict settings.
 
 You can run the reStructuredText checks with the ``restructuredtext-lint``
 tool (also known as ``rst-lint``)::
@@ -62,10 +64,9 @@ tool (also known as ``rst-lint``)::
     $ pip install restructuredtext_lint
     $ rst-lint --level warning *.rst
 
-More simply we currently suggest you install the git pre-commit hook described
+More simply, we currently suggest you install the git pre-commit hook described
 here which will check our basic coding conventions as you work:
 https://github.com/biopython/biopython/issues/493
-
 
 
 Testing
@@ -101,13 +102,17 @@ We use TravisCI to run most of the Biopython tests (although currently only
 under Linux, and not with all the optional dependencies included), plus also
 check Python coding style using the ``flake8`` tool with the ``pydocstyle``
 pluging (``flake8-docstrings``), and reStructuredText using ``rst-lint``.
-These checks must pass before your pull request will be merged.
-https://travis-ci.org/biopython/biopython
+https://travis-ci.org/biopython/biopython/branches
 
-Some of the TravisCI runs collect test coverage information via CodeCov:
-https://codecov.io/github/biopython/biopython/
+We use AppVeyor to run most of the tests under Windows (although currently
+without any optional dependencies).
+https://ci.appveyor.com/project/biopython/biopython/history
 
-We also are using QuantifiedCode which provides an independent code analysis
-which can catch important errors. Some of the issues it flags are subjective,
-so in general we do not require this pass before merging a pull request.
-https://www.quantifiedcode.com/app/project/gh:biopython:biopython
+**The TravisCI and AppVeyor checks must pass before your pull request will
+be merged.**
+
+Some of the TravisCI and AppVeyor runs collect test coverage information via
+CodeCov: https://codecov.io/github/biopython/biopython/
+
+Ideally the CodeCov checks will also pass, but we currently do not insist
+on this when reviewing pull requests.

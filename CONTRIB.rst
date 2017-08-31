@@ -60,6 +60,7 @@ please open an issue on GitHub or mention it on the development mailing list.
 - Cheng Soon Ong <chengsoon.ong at tuebingen.mpg.de>
 - Chris Lasher <chris.lasher at gmail.com>
 - Chris Mitchell <https://github.com/chrismit>
+- Chris Rands <https://github.com/chris-rands>
 - Chris Warth <https://github.com/cswarth>
 - Christiam Camacho <https://github.com/christiam>
 - Christian Brueffer <christian at domain brueffer.de>
@@ -82,6 +83,7 @@ please open an issue on GitHub or mention it on the development mailing list.
 - Eric Rasche <https://github.com/erasche>
 - Eric Talevich <https://github.com/etal>
 - Erick Matsen <surname at fhcrc dot org>
+- Erik Cederstrand <https://github.com/ecederstrand>
 - Foen Peng <https://github.com/foenpeng>
 - Francesco Gastaldello <https://github.com/Gasta88>
 - Francisco Pina-Martins <https://github.com/StuntsPT>
@@ -115,13 +117,16 @@ please open an issue on GitHub or mention it on the development mailing list.
 - Joanna & Dominik Kasprzak
 - Joao Rodrigues <anaryin at the domain gmail dot com>
 - Joe Cora <https://github.com/JoeCora>
+- Joe Greener <https://github.com/jgreener64>
 - Johann Visagie <wjv at domain cityip.co.za>
 - John Bradley <https://github.com/johnbradley>
 - John Kern <https://github.com/kern3020>
+- Jonathan Taylor <jonathan dot taylor at utoronto dot ca>
 - Jordan Willis <https://github.com/jwillis0720>
 - Jose Blanca <https://github.com/JoseBlanca>
 - Joshua Meyers <https://github.com/JoshuaMeyers> 
 - João D Ferreira <https://github.com/jdferreira>
+- Jun Aruga <https://github.com/junaruga>
 - Kai Blin <https://github.com/kblin>
 - Kamil Slowikowski <k no dot slowikowski at gmail dot com>
 - Katharine Lindner <katel at domain worldpath.net>
@@ -150,7 +155,7 @@ please open an issue on GitHub or mention it on the development mailing list.
 - Matteo Sticco <https://github.com/sticken88/>
 - Maximilian Greil <https://github.com/MaxGreil>
 - Melissa Gymrek <https://github.com/mgymrek>
-- Michael Hoffman <hoffman+biopython at domain ebi.ac.uk>
+- Michael Hoffman <https://github.com/michaelmhoffman>
 - Michal Kurowski <michal at domain genesilico.pl>
 - Michał J. Gajda <https://github.com/mgajda>
 - Michiel de Hoon <mdehoon at domain c2b2.columbia.edu>
@@ -172,6 +177,7 @@ please open an issue on GitHub or mention it on the development mailing list.
 - Peter Slickers <piet at domain clondiag.com>
 - Phillip Garland <pgarland at gmail>
 - Rasmus Fonseca <https://github.com/RasmusFonseca>
+- rht <https://github.com/rht>
 - Richard Neher <https://github.com/rneher>
 - Rodrigo Dorantes-Gilardi <https://github.com/rodogi>
 - Sacha Laurent <https://github.com/Cashalow>
@@ -179,6 +185,7 @@ please open an issue on GitHub or mention it on the development mailing list.
 - Sebastian Bassi <https://about.me/bassi>
 - Sergei Lebedev <https://github.com/superbobry>
 - Seth Sims <seth.sims at gmail>
+- Shuichiro MAKIGAKI <https://github.com/shuichiro-makigaki>
 - Siong Kong <https://github.com/siongkong>
 - Sjoerd de Vries <sjoerd at domain nmr.chem.uu.nl>
 - Sourav Singh <https://github.com/souravsingh>
@@ -208,6 +215,7 @@ please open an issue on GitHub or mention it on the development mailing list.
 - Xiaoyu Zhuo <https://github.com/xzhuo>
 - Yair Benita <Y.Benita at domain pharm.uu.nl>
 - Yanbo Ye <https://github.com/lijax>
+- Yasar L. Ahmed <https://github.com/pyahmed>
 - Yu Huang <krocea at domain yahoo.com.cn>
 - Yves Bastide <ybastide at domain irisa.fr>
 - Zheng Ruan <https://github.com/zruan>

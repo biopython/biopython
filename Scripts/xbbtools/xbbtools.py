@@ -8,7 +8,8 @@
 
 # Created: Thu Jul 13 11:09:00 2000
 # thomas@cbs.dtu.dk, http://www.cbs.dtu.dk/thomas
-# File: xbbtools.py
+
+"""Main code entry point for graphical Xbbtools tool."""
 
 import sys
 
