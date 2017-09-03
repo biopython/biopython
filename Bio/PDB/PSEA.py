@@ -19,6 +19,8 @@ import os
 from Bio.PDB.Polypeptide import is_aa
 from Bio import BiopythonDeprecationWarning
 
+import warnings
+
 warnings.warn("Bio.PDB.PSEA has been deprecated, and we intend to remove"
               " it in a future release of Biopython. If you would like to"
               " continue using Bio.PDB.PSEA, please contact the Biopython"
