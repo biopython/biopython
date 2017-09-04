@@ -40,7 +40,7 @@ from reportlab.lib import colors
 from reportlab.graphics.shapes import Polygon
 
 from math import pi, sin, cos
-
+from itertools import islice
 
 ################################################################################
 # METHODS
@@ -250,13 +250,16 @@ def draw_arrow(point1, point2, color=colors.lightgreen, border=None,
     shaftbase = boxheight - shafttop
     headbase = boxwidth - headlength
     midheight = 0.5 * boxheight
-    return Polygon([x1, y1 + shafttop,
-                    x1 + headbase, y1 + shafttop,
-                    x1 + headbase, y2,
-                    x2, y1 + midheight,
-                    x1 + headbase, y1,
-                    x1 + headbase, y1 + shaftbase,
-                    x1, y1 + shaftbase],
+
+    points = [x1, y1 + shafttop,
+              x1 + headbase, y1 + shafttop,
+              x1 + headbase, y2,
+              x2, y1 + midheight,
+              x1 + headbase, y1,
+              x1 + headbase, y1 + shaftbase,
+              x1, y1 + shaftbase]
+
+    return Polygon(_deduplicate(points),
                    strokeColor=strokecolor,
                    # strokeWidth=max(1, int(boxheight/40.)),
                    strokeWidth=1,
@@ -264,6 +267,23 @@ def draw_arrow(point1, point2, color=colors.lightgreen, border=None,
                    strokeLineJoin=1,  # 1=round
                    fillColor=color,
                    **kwargs)
+
+
+def _deduplicate(points, delta=0):
+    """Remove adjacent points that are closer than delta"""
+    assert len(points) % 2 == 0
+    if len(points) < 2:
+        return points
+    newpoints = points[0:2]
+    for x, y in zip(islice(points, 2, None, 2), islice(points, 3, None, 2)):
+        dx = x - newpoints[-2]
+        dy = y - newpoints[-1]
+        if dx * dx + dy * dy > delta * delta:
+            newpoints.append(x)
+            newpoints.append(y)
+        else:
+            print("Removing point %d,%d" % (x, y))
+    return newpoints
 
 
 def angle2trig(theta):

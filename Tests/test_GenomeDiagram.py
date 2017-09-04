@@ -14,7 +14,6 @@ import math
 from Bio._py3k import zip
 from Bio._py3k import range
 
-
 # Do we have ReportLab?  Raise error if not present.
 from Bio import MissingPythonDependencyError
 try:
@@ -46,6 +45,10 @@ from Bio.Graphics.GenomeDiagram import FeatureSet, GraphSet, Track, Diagram
 from Bio.Graphics.GenomeDiagram import CrossLink
 from Bio.Graphics.GenomeDiagram._Graph import GraphData
 from Bio.Graphics.GenomeDiagram._Colors import ColorTranslator
+
+from Bio import Entrez
+# This lets us set the email address to be sent to NCBI Entrez:
+Entrez.email = "biopython-dev@biopython.org"
 
 
 def fill_and_border(base_color, alpha=0.5):
@@ -1070,6 +1073,25 @@ class DiagramTest(unittest.TestCase):
         gdd.write(output_filename, 'PDF')
 
 
+def _check_prereqs():
+    """Check that the input data is available"""
+    if not os.path.exists("Graphics"):
+        os.mkdir("Graphics")
+    if not os.path.exists("GenBank"):
+        os.mkdir("GenBank")
+
+    gbfilename = os.path.join("GenBank", "NC_005816.gb")
+    if not os.path.exists(gbfilename):
+        if not Entrez.email:
+            raise Exception("Entrez.email not configured")
+        with Entrez.efetch(db="nucleotide", id="NC_005816", rettype="gbwithparts", retmode="text") as handle:
+            with open(gbfilename, 'w') as gbfile:
+                gbfile.write(handle.read())
+                # for line in handle:
+                #     gbfile.write(line)
+
+
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
+    _check_prereqs()
     unittest.main(testRunner=runner)

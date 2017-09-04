@@ -33,6 +33,14 @@ from ._Track import Track
 from Bio.Graphics import _write
 
 
+def _first_defined(*args):
+    """Return the first non-null argument"""
+    for arg in args:
+        if arg is not None:
+            return arg
+    return None
+
+
 class Diagram(object):
     """Diagram container.
 
@@ -77,7 +85,7 @@ class Diagram(object):
     def __init__(self, name=None, format='circular', pagesize='A3',
                  orientation='landscape', x=0.05, y=0.05, xl=None,
                  xr=None, yt=None, yb=None, start=None, end=None,
-                 tracklines=False, fragments=10, fragment_size=0.9,
+                 tracklines=False, fragments=10, fragment_size=None,
                  track_size=0.75, circular=True, circle_core=0.0):
         """Initialize.
 
@@ -99,7 +107,15 @@ class Diagram(object):
         self.end = end
         self.tracklines = tracklines
         self.fragments = fragments
-        self.fragment_size = fragment_size
+        if fragment_size is not None:
+            self.fragment_size = fragment_size
+        else:
+            if self.fragments == 1:
+                # For single fragments, default to full height
+                self.fragment_size = 1
+            else:
+                # Otherwise keep a 10% gap between fragments
+                self.fragment_size = .9
         self.track_size = track_size
         self.circular = circular
         self.circle_core = circle_core
@@ -134,29 +150,37 @@ class Diagram(object):
         # Instantiation arguments, but I suspect there's a neater way to do
         # this.
         if format == 'linear':
-            drawer = LinearDrawer(self, pagesize or self.pagesize,
-                                  orientation or self.orientation,
-                                  x or self.x, y or self.y, xl or self.xl,
-                                  xr or self.xr, yt or self.yt,
-                                  yb or self.yb, start or self.start,
-                                  end or self.end,
-                                  tracklines or self.tracklines,
-                                  fragments or self.fragments,
-                                  fragment_size or self.fragment_size,
-                                  track_size or self.track_size,
-                                  cross_track_links or self.cross_track_links)
+            drawer = LinearDrawer(self, _first_defined(pagesize, self.pagesize),
+                                  _first_defined(orientation, self.orientation),
+                                  _first_defined(x, self.x),
+                                  _first_defined(y, self.y),
+                                  _first_defined(xl, self.xl),
+                                  _first_defined(xr, self.xr),
+                                  _first_defined(yt, self.yt),
+                                  _first_defined(yb, self.yb),
+                                  _first_defined(start, self.start),
+                                  _first_defined(end, self.end),
+                                  _first_defined(tracklines, self.tracklines),
+                                  _first_defined(fragments, self.fragments),
+                                  _first_defined(fragment_size, self.fragment_size),
+                                  _first_defined(track_size, self.track_size),
+                                  _first_defined(cross_track_links, self.cross_track_links))
         else:
-            drawer = CircularDrawer(self, pagesize or self.pagesize,
-                                    orientation or self.orientation,
-                                    x or self.x, y or self.y, xl or self.xl,
-                                    xr or self.xr, yt or self.yt,
-                                    yb or self.yb, start or self.start,
-                                    end or self.end,
-                                    tracklines or self.tracklines,
-                                    track_size or self.track_size,
-                                    circular or self.circular,
-                                    circle_core or self.circle_core,
-                                    cross_track_links or self.cross_track_links)
+            drawer = CircularDrawer(self, _first_defined(pagesize, self.pagesize),
+                                    _first_defined(orientation, self.orientation),
+                                    _first_defined(x, self.x),
+                                    _first_defined(y, self.y),
+                                    _first_defined(xl, self.xl),
+                                    _first_defined(xr, self.xr),
+                                    _first_defined(yt, self.yt),
+                                    _first_defined(yb, self.yb),
+                                    _first_defined(start, self.start),
+                                    _first_defined(end, self.end),
+                                    _first_defined(tracklines, self.tracklines),
+                                    _first_defined(track_size, self.track_size),
+                                    _first_defined(circular, self.circular),
+                                    _first_defined(circle_core, self.circle_core),
+                                    _first_defined(cross_track_links, self.cross_track_links))
         drawer.draw()   # Tell the drawer to complete the drawing
         self.drawing = drawer.drawing  # Get the completed drawing
 
