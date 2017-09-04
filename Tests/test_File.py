@@ -47,7 +47,7 @@ class UndoHandleTests(unittest.TestCase):
         self.assertEqual(h.readline(), "")
 
     def test_read(self):
-        """test read method"""
+        """Test read method"""
         h = File.UndoHandle(StringIO("some text"))
         h.saveline("more text")
         self.assertEqual(h.read(), 'more textsome text')

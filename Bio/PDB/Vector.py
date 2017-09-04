@@ -73,11 +73,11 @@ def vector_to_axis(line, point):
     the closest point on a line (ie. the perpendicular
     projection of the point on the line).
 
-    @type line: L{Vector}
-    @param line: vector defining a line
+    :type line: L{Vector}
+    :param line: vector defining a line
 
-    @type point: L{Vector}
-    @param point: vector defining the point
+    :type point: L{Vector}
+    :param point: vector defining the point
     """
     line = line.normalized()
     np = point.norm()
@@ -96,14 +96,14 @@ def rotaxis2m(theta, vector):
         >>> m=rotaxis(pi, Vector(1, 0, 0))
         >>> rotated_vector=any_vector.left_multiply(m)
 
-    @type theta: float
-    @param theta: the rotation angle
+    :type theta: float
+    :param theta: the rotation angle
 
 
-    @type vector: L{Vector}
-    @param vector: the rotation axis
+    :type vector: L{Vector}
+    :param vector: the rotation axis
 
-    @return: The rotation matrix, a 3x3 Numeric array.
+    :return: The rotation matrix, a 3x3 Numeric array.
     """
     vector = vector.normalized()
     c = numpy.cos(theta)
@@ -138,8 +138,8 @@ def refmat(p, q):
         >>> print(q)
         >>> print(qq) # q and qq should be the same
 
-    @type p,q: L{Vector}
-    @return: The mirror operation, a 3x3 Numeric array.
+    :type p,q: L{Vector}
+    :return: The mirror operation, a 3x3 Numeric array.
     """
     p = p.normalized()
     q = q.normalized()
@@ -162,14 +162,14 @@ def rotmat(p, q):
         >>> print(q)
         >>> print(p.left_multiply(r))
 
-    @param p: moving vector
-    @type p: L{Vector}
+    :param p: moving vector
+    :type p: L{Vector}
 
-    @param q: fixed vector
-    @type q: L{Vector}
+    :param q: fixed vector
+    :type q: L{Vector}
 
-    @return: rotation matrix that rotates p onto q
-    @rtype: 3x3 Numeric array
+    :return: rotation matrix that rotates p onto q
+    :rtype: 3x3 Numeric array
     """
     rot = numpy.dot(refmat(q, -p), refmat(p, -p))
     return rot
@@ -181,11 +181,11 @@ def calc_angle(v1, v2, v3):
     Calculate the angle between 3 vectors
     representing 3 connected points.
 
-    @param v1, v2, v3: the tree points that define the angle
-    @type v1, v2, v3: L{Vector}
+    :param v1, v2, v3: the tree points that define the angle
+    :type v1, v2, v3: L{Vector}
 
-    @return: angle
-    @rtype: float
+    :return: angle
+    :rtype: float
     """
     v1 = v1 - v2
     v3 = v3 - v2
@@ -199,8 +199,8 @@ def calc_dihedral(v1, v2, v3, v4):
     representing 4 connected points. The angle is in
     ]-pi, pi].
 
-    @param v1, v2, v3, v4: the four points that define the dihedral angle
-    @type v1, v2, v3, v4: L{Vector}
+    :param v1, v2, v3, v4: the four points that define the dihedral angle
+    :type v1, v2, v3, v4: L{Vector}
     """
     ab = v1 - v2
     cb = v3 - v2

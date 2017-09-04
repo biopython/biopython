@@ -57,8 +57,8 @@ class PDBIO(object):
     def __init__(self, use_model_flag=0):
         """Create the PDBIO object.
 
-        @param use_model_flag: if 1, force use of the MODEL record in output.
-        @type use_model_flag: int
+        :param use_model_flag: if 1, force use of the MODEL record in output.
+        :type use_model_flag: int
         """
         self.use_model_flag = use_model_flag
 
@@ -152,11 +152,11 @@ class PDBIO(object):
         self.structure = structure
 
     def save(self, file, select=Select(), write_end=True, preserve_atom_numbering=False):
-        """@param file: output file
-        @type file: string or filehandle
+        """:param file: output file
+        :type file: string or filehandle
 
-        @param select: selects which entities will be written.
-        @type select: object
+        :param select: selects which entities will be written.
+        :type select: object
 
         Typically select is a subclass of L{Select}, it should
         have the following methods:
