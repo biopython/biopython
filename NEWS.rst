@@ -33,6 +33,9 @@ in the Stockholm/PFAM format.
 The SeqRecord object now has a translate method, following the approach used
 for its existing reverse_complement method etc.
 
+The output of function ``format_alignment`` in ``Bio.pairwise2`` for displaying
+a pairwise sequence alignment as text now indicates gaps and mis-matches.
+
 In this release more of our code is now explicitly available under either our
 original "Biopython License Agreement", or the very similar but more commonly
 used "3-Clause BSD License".  See the ``LICENSE.rst`` file for more details.
