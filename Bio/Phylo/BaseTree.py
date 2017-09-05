@@ -450,7 +450,7 @@ class TreeMixin(object):
         """Counts the number of terminal (leaf) nodes within this tree."""
         return _utils.iterlen(self.find_clades(terminal=True))
 
-    def depths(self, unit_branch_lengths=False):
+    def depths(self, unit_branch_lengths=False):  # noqa: D402
         """Create a mapping of tree clades to depths (by branch length).
 
         :Parameters:
