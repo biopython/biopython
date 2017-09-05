@@ -48,7 +48,7 @@ class Record(list):
 
 
 def read(handle):
-    """read(handle)"""
+    """Parse a MEME format handle as a Record object."""
     record = Record()
     __read_version(record, handle)
     __read_database_and_motifs(record, handle)

@@ -15,10 +15,10 @@ Like searching a string for a substring, except that the substring is
 any word in a trie.
 
 Functions:
-match         Find longest key in a trie matching the beginning of the string.
-match_all     Find all keys in a trie matching the beginning of the string.
-find          Find keys in a trie matching anywhere in a string.
-find_words    Find keys in a trie matching whole words in a string.
+ - match         Find longest key in a trie matching the beginning of the string.
+ - match_all     Find all keys in a trie matching the beginning of the string.
+ - find          Find keys in a trie matching anywhere in a string.
+ - find_words    Find keys in a trie matching whole words in a string.
 """
 
 import string
@@ -26,11 +26,10 @@ import re
 
 
 def match(string, trie):
-    """match(string, trie) -> longest key or None
+    """Find longest key, or return None.
 
     Find the longest key in the trie that matches the beginning of the
     string.
-
     """
     longest = None
     for i in range(len(string)):
@@ -43,11 +42,10 @@ def match(string, trie):
 
 
 def match_all(string, trie):
-    """match_all(string, trie) -> list of keys
+    """Find and return a list of keys.
 
     Find all the keys in the trie that matches the beginning of the
     string.
-
     """
     matches = []
     for i in range(len(string)):
@@ -60,10 +58,9 @@ def match_all(string, trie):
 
 
 def find(string, trie):
-    """find(string, trie) -> list of tuples (key, start, end)
+    """Find all the keys in the trie that match anywhere in the string.
 
-    Find all the keys in the trie that match anywhere in the string.
-
+    Returns a list of tuples (key, start, end).
     """
     results = []
     start = 0     # index to start the search
@@ -80,11 +77,12 @@ DEFAULT_BOUNDARY_CHARS = string.punctuation + string.whitespace
 
 
 def find_words(string, trie):
-    """find_words(string, trie) -> list of tuples (key, start, end)
+    """Find all the keys in the trie that match full words in the string.
 
     Find all the keys in the trie that match full words in the string.
     Word boundaries are defined as any punctuation or whitespace.
 
+    Returns a list of tuples (key, start, end).
     """
     _boundary_re = re.compile(r"[%s]+" % re.escape(DEFAULT_BOUNDARY_CHARS))
 

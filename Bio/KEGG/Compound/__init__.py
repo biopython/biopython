@@ -7,10 +7,10 @@
 """Code to work with the KEGG Ligand/Compound database.
 
 Functions:
-parse - Returns an iterator giving Record objects.
+ - parse - Returns an iterator giving Record objects.
 
 Classes:
-Record - A representation of a KEGG Ligand/Compound.
+ - Record - A representation of a KEGG Ligand/Compound.
 """
 
 # other Biopython stuff
@@ -31,23 +31,20 @@ struct_wrap = lambda indent: [indent, "", ("  ", "", 1, 1)]
 class Record(object):
     """Holds info from a KEGG Ligand/Compound record.
 
-    Members:
-    entry       The entry identifier.
-    name        A list of the compund names.
-    formula     The chemical formula for the compound
-    mass        The molecular weight for the compound
-    pathway     A list of 3-tuples: ('PATH', pathway id, pathway)
-    enzyme      A list of the EC numbers.
-    structures  A list of 2-tuples: (database, list of struct ids)
-    dblinks     A list of 2-tuples: (database, list of link ids)
+    Attributes:
+     - entry       The entry identifier.
+     - name        A list of the compund names.
+     - formula     The chemical formula for the compound
+     - mass        The molecular weight for the compound
+     - pathway     A list of 3-tuples: ('PATH', pathway id, pathway)
+     - enzyme      A list of the EC numbers.
+     - structures  A list of 2-tuples: (database, list of struct ids)
+     - dblinks     A list of 2-tuples: (database, list of link ids)
 
     """
 
     def __init__(self):
-        """__init___(self)
-
-        Create a new Record.
-        """
+        """Initialize as new record."""
         self.entry = ""
         self.name = []
         self.formula = ""
@@ -58,10 +55,7 @@ class Record(object):
         self.dblinks = []
 
     def __str__(self):
-        """__str__(self)
-
-        Returns a string representation of this Record.
-        """
+        """Return a string representation of this Record."""
         return self._entry() + \
                self._name() + \
                self._formula() + \
