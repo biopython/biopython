@@ -12,7 +12,8 @@ from Bio import motifs
 
 
 def read(handle):
-    """Parses the text output of the MEME program into a meme.Record object.
+    """Parse the text output of the MEME program into a meme.Record object.
+
     Example:
     >>> from Bio.motifs import meme
     >>> with open("meme.output.txt") as f:
@@ -107,7 +108,7 @@ class Record(list):
     """
 
     def __init__(self):
-        """__init__ (self)"""
+        """Initialize."""
         self.version = ""
         self.datafile = ""
         self.command = ""

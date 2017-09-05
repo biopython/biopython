@@ -65,11 +65,11 @@ class PrintFormat(object):
     linesize = PrefWidth - NameWidth
 
     def __init__(self):
-        """PrintFormat() -> new PrintFormat Instance"""
+        """Initialise."""
         pass
 
     def print_as(self, what='list'):
-        """PF.print_as([what='list']) -> print the results as specified.
+        """Print the results as specified.
 
         Valid format are:
             'list'      -> alphabetical order
@@ -88,7 +88,7 @@ class PrintFormat(object):
         return
 
     def format_output(self, dct, title='', s1=''):
-        """PF.print_that(dct, [title[, s1]]) -> string nicely formatted.
+        """Summarise results as a nicely formatted string.
 
         Arguments:
          - dct is a dictionary as returned by a RestrictionBatch.search()
@@ -111,7 +111,7 @@ class PrintFormat(object):
         return self.make_format(ls, title, nc, s1)
 
     def print_that(self, dct, title='', s1=''):
-        """PF.print_that(dct, [title[, s1]]) -> string nicely formatted.
+        """Print the output of the format_output method (OBSOLETE).
 
         Arguments:
          - dct is a dictionary as returned by a RestrictionBatch.search()
@@ -128,7 +128,7 @@ class PrintFormat(object):
         return
 
     def make_format(self, cut=(), title='', nc=(), s1=''):
-        """PF.make_format(cut, nc, title, s) -> string
+        """Virtual method used for formatting results.
 
         Virtual method.
         Here to be pointed to one of the _make_* methods.
@@ -139,9 +139,9 @@ class PrintFormat(object):
 # _make_* methods to be used with the virtual method make_format
 
     def _make_list(self, ls, title, nc, s1):
-        """PF._make_number(ls,title, nc,s1) -> string.
+        """Summarise a list of positions by enzyme (PRIVATE).
 
-        return a string of form::
+        Return a string of form::
 
             title.
 
@@ -153,14 +153,13 @@ class PrintFormat(object):
          - title is the title.
          - nc is a tuple or list of non cutting enzymes.
          - s1 is the sentence before the non cutting enzymes.
-
         """
         return self._make_list_only(ls, title) + self._make_nocut_only(nc, s1)
 
     def _make_map(self, ls, title, nc, s1):
-        """PF._make_number(ls,title, nc,s1) -> string.
+        """Summarise mapping information as a string (PRIVATE).
 
-        return a string of form::
+        Return a string of form::
 
             | title.
             |
@@ -175,12 +174,11 @@ class PrintFormat(object):
          - title is the title.
          - nc is a list of non cutting enzymes.
          - s1 is the sentence before the non cutting enzymes.
-
         """
         return self._make_map_only(ls, title) + self._make_nocut_only(nc, s1)
 
     def _make_number(self, ls, title, nc, s1):
-        """PF._make_number(ls,title, nc,s1) -> string.
+        """Format cutting position information as a string (PRIVATE).
 
         Returns a string in the form::
 
@@ -200,14 +198,13 @@ class PrintFormat(object):
          - title is the title.
          - nc is a list of non cutting enzymes.
          - s1 is the sentence before the non cutting enzymes.
-
         """
         return self._make_number_only(ls, title) + self._make_nocut_only(nc, s1)
 
     def _make_nocut(self, ls, title, nc, s1):
-        """PF._make_nocut(ls,title, nc,s1) -> string.
+        """Summarise non-cutting enzymes (PRIVATE).
 
-        return a formatted string of the non cutting enzymes.
+        Return a formatted string of the non cutting enzymes.
 
         ls is a list of cutting enzymes -> will not be used.
         Here for compatibility with make_format.
@@ -216,19 +213,17 @@ class PrintFormat(object):
          - title is the title.
          - nc is a list of non cutting enzymes.
          - s1 is the sentence before the non cutting enzymes.
-
         """
         return title + self._make_nocut_only(nc, s1)
 
     def _make_nocut_only(self, nc, s1, ls=(), title=''):
-        """PF._make_nocut_only(nc, s1) -> string.
+        """Summarise non-cutting enzymes (PRIVATE).
 
-        return a formatted string of the non cutting enzymes.
+        Return a formatted string of the non cutting enzymes.
 
         Arguments:
          - nc is a tuple or list of non cutting enzymes.
          - s1 is the sentence before the non cutting enzymes.
-
         """
         if not nc:
             return s1
@@ -244,9 +239,9 @@ class PrintFormat(object):
         return stringsite
 
     def _make_list_only(self, ls, title, nc=(), s1=''):
-        """PF._make_list_only(ls, title) -> string.
+        """Summarise list of positions per enzyme (PRIVATE).
 
-        return a string of form::
+        Return a string of form::
 
             title.
 
@@ -258,16 +253,15 @@ class PrintFormat(object):
          - ls is a tuple or list of results.
          - title is a string.
          - Non cutting enzymes are not included.
-
         """
         if not ls:
             return title
         return self.__next_section(ls, title)
 
     def _make_number_only(self, ls, title, nc=(), s1=''):
-        """PF._make_number_only(ls, title) -> string.
+        """Summarise number of cuts as a string (PRIVATE).
 
-        return a string of form::
+        Return a string of form::
 
             title.
 
@@ -284,7 +278,6 @@ class PrintFormat(object):
          - ls is a list of results.
          - title is a string.
          - Non cutting enzymes are not included.
-
         """
         if not ls:
             return title
@@ -304,9 +297,9 @@ class PrintFormat(object):
         return self.__next_section(new_sect, title)
 
     def _make_map_only(self, ls, title, nc=(), s1=''):
-        """PF._make_map_only(ls, title) -> string.
+        """Make string describing cutting map (PRIVATE).
 
-        return a string of form::
+        Return a string of form::
 
             | title.
             |
@@ -320,7 +313,6 @@ class PrintFormat(object):
          - ls is a list of results.
          - title is a string.
          - Non cutting enzymes are not included.
-
         """
         if not ls:
             return title
@@ -415,7 +407,7 @@ class PrintFormat(object):
 # private method to do lists:
 
     def __next_section(self, ls, into):
-        """FP.__next_section(ls, into) -> string (PRIVATE).
+        """Next section (PRIVATE).
 
         Arguments:
          - ls is a tuple/list of tuple (string, [int, int]).

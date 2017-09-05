@@ -30,7 +30,7 @@ from Bio.KEGG.KGML.KGML_pathway import Pathway, Reaction, Relation
 
 
 def read(handle, debug=0):
-    """Parses a single KEGG Pathway from given file handle.
+    """Parse a single KEGG Pathway from given file handle.
 
     Returns a single Pathway object.  There should be one and only
     one pathway in each file, but there may well be pathological
@@ -53,7 +53,7 @@ def read(handle, debug=0):
 
 
 def parse(handle, debug=0):
-    """Returns an iterator over Pathway elements.
+    """Return an iterator over Pathway elements.
 
     Arguments:
      - handle - file handle to a KGML file for parsing
@@ -185,5 +185,4 @@ class KGMLParser(object):
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest
-
     run_doctest(verbose=0)
