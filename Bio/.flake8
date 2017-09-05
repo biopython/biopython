@@ -46,9 +46,7 @@ ignore =
     # ===========================================
     # D400	First line should end with a period
     # D401	First line should be in imperative mood
-    # D402	First line should not be the function’s "signature"
-    # D412	No blank lines allowed between a section header and its content
-    D400,D401,D402,
+    D400,D401,
     # ================================================
     # flake8-commas: C#### (in case installed locally)
     # ================================================
