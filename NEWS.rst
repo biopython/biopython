@@ -598,12 +598,12 @@ Bio.PopGen.SimCoal now also supports fastsimcoal.
 SearchIO hmmer3-text, hmmer3-tab, and hmmer3-domtab now support output from
 hmmer3.1b1.
 
-The 'accession' of QueryResult and Hit objects created when using the
-'hmmer3-tab' format are now properly named as 'accession' (previously they
-were acc, deviating from the documentation).
+The ``accession`` of QueryResult and Hit objects created when using the
+'hmmer3-tab' format are now properly named as ``accession`` (previously they
+were ``acc``, deviating from the documentation).
 
-The `homology` key in the `aln_annotation` attribute of an HSP object in
-Bio.SearchIO has been renamed to `similarity`.
+The ``homology` key in the ``aln_annotation`` attribute of an HSP object in
+Bio.SearchIO has been renamed to ``similarity``.
 
 The Bio.SeqUtils masses and molecular_weight function have been updated.
 
