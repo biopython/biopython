@@ -220,7 +220,7 @@ def __read_motif_statistics(line):
     #    MOTIF  1        width =  19  sites =   3  llr = 43  E-value = 6.9e-002
     # or like
     #    MOTIF  1 MEME    width =  19  sites =   3  llr = 43  E-value = 6.9e-002
-    # or in v 4.11.4
+    # or in v 4.11.4 onwards
     #    MOTIF ATTATAAAAAAA MEME-1	width =  12  sites =   5  llr = 43  E-value = 1.9e-003
     words = line.split()
     assert words[0] == 'MOTIF'
