@@ -829,7 +829,7 @@ def consensus(trees, threshold=0.5, outgroup=None):
     consensus.node(consensus.root).data.taxon = alltaxa
     # we sort the nodes by no. of taxa in the clade, so root will be the last
     consensus_ids = consensus.all_ids()
-    consensus_ids.sort(lambda x, y: len(consensus.node(x).data.taxon) - len(consensus.node(y).data.taxon))
+    consensus_ids.sort(key = lambda x: len(consensus.node(x).data.taxon))
     # now we just have to hook each node to the next smallest node that includes all taxa of the current
     for i, current in enumerate(consensus_ids[:-1]):  # skip the last one which is the root
         # print('----')
