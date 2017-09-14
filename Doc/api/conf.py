@@ -81,6 +81,13 @@ pygments_style = 'sphinx'
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = True
 
+# -- Options for autodoc --------------------------------------------------
+
+# Can also set $SPHINX_APIDOC_OPTIONS before running sphinx-apidoc,
+# but this is clearer:
+#autodoc_default_flags = ['members', 'undoc-members', 'private-members', 'special-members', 'inherited-members', 'show-inheritance']
+autodoc_default_flags = ['members', 'undoc-members', 'special-members', 'show-inheritance']
+#autodoc_member_order = 'bysource'
 
 # -- Options for HTML output ----------------------------------------------
 
