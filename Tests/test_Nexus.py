@@ -505,22 +505,22 @@ Root:  16
                   "A 6:0.392496)A:0.0291131, t2:0.497673, ((G 5:0.0984167,"\
                   "G 3:0.488578)E:0.0268148, ((E 0:0.301171, E 7:0.482152)G:0.0349662,"\
                   "F 1:0.130208)F:0.0318288)D:0.0273876);"
-        
+
         tbs2 = "(((B 9:0.385832,A 6:0.392496 C:0.024032)B:0.041436, (C 8:0.445135,"\
                   "C 4:0.41401))A:0.0291131, t2:0.497673, ((E 0:0.301171, E 7:0.482152)"\
                   "E:0.0268148, ((G 5:0.0984167,G 3:0.488578)G:0.0349662,F 1:0.130208)"\
                   "F:0.0318288)D:0.0273876);"
-        
+
         t1 = Trees.Tree(ts1)
         tb1 = Trees.Tree(tbs1)
         tb2 = Trees.Tree(tbs2)
-        
+
         t1.branchlength2support()
         tb1.branchlength2support()
         tb2.branchlength2support()
-        
+
         t1.merge_with_support(bstrees=[tb1, tb2], threshold=0.2)
-        
+
         supports = []
         for i in t1.all_ids():
             node = t1.node(i)
