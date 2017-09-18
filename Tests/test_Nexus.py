@@ -494,8 +494,8 @@ Root:  16
         tree.collapse_genera()
         self.assertEqual(tree.all_ids(), [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 13, 14, 17])
 
-    def test_TreeTest3(self):
-        """Test merge_withSupport and consensus method."""
+    def test_merge_with_support(self):
+        """Test merge_with_support and consensus method."""
         ts1 = "(((B 9:0.385832, (C 8:0.445135, C 4:0.41401)C:0.024032)B:0.041436,"\
           "A 6:0.392496)A:0.0291131, t2:0.497673, ((E 0:0.301171,"\
           "E 7:0.482152)E:0.0268148, ((G 5:0.0984167,G 3:0.488578)G:0.0349662,"\
