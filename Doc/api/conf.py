@@ -88,6 +88,9 @@ todo_include_todos = True
 #autodoc_default_flags = ['members', 'undoc-members', 'private-members', 'special-members', 'inherited-members', 'show-inheritance']
 autodoc_default_flags = ['members', 'undoc-members', 'special-members', 'show-inheritance']
 autodoc_member_order = 'bysource'
+# This is a new setting, see
+# https://github.com/sphinx-doc/sphinx/pull/4076
+autodoc_exclude_members = ['__dict__', '__weakref__', '__module__']
 
 # -- Options for HTML output ----------------------------------------------
 
