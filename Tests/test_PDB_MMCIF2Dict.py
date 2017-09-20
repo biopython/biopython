@@ -60,6 +60,7 @@ class MMCIF2dictTests(unittest.TestCase):
         self.assertRaises(ValueError, list, mmcif._splitline("foo 'bar"))
         self.assertRaises(ValueError, list, mmcif._splitline("foo 'ba'r  "))
         self.assertRaises(ValueError, list, mmcif._splitline("foo \"bar'"))
+        self.assertRaises(ValueError, list, mmcif._splitline("foo b'ar'"))
 
 
 if __name__ == '__main__':
