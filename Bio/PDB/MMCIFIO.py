@@ -1,8 +1,11 @@
 """Write an mmCIF file."""
 
 import re
+from collections import defaultdict
 
+from Bio._py3k import basestring
 from Bio.PDB.StructureBuilder import StructureBuilder
+from Bio.PDB.PDBIO import Select
 
 class MMCIFIO(object):
     """Write a Structure object, a subset of a Structure object or a mmCIF
@@ -62,14 +65,22 @@ class MMCIFIO(object):
     def set_dict(self, dic):
         self.dic = dic
 
-    def save(self, filepath):
+    def save(self, filepath, select=Select(), preserve_atom_numbering=False):
+        if isinstance(filepath, basestring):
+            fp = open(filepath, "w")
+            close_file = True
+        else:
+            fp = filepath
+            close_file = False
         # Decide whether to save a Structure object or an mmCIF dictionary
         if hasattr(self, 'structure'):
-            self._save_structure(filepath)
+            self._save_structure(fp, select, preserve_atom_numbering)
         else:
-            self._save_dict(filepath)
+            self._save_dict(fp)
+        if close_file:
+            fp.close()
 
-    def _save_dict(self, filepath):
+    def _save_dict(self, out_file):
         # Form dictionary where key is first part of mmCIF key and value is list
         # of corresponding second parts
         key_lists = {}
@@ -86,12 +97,11 @@ class MMCIFIO(object):
                 else:
                     raise(ValueError("Invalid key in mmCIF dictionary: "+key))
 
-        out_file = open(filepath, "w")
         if data_val:
             out_file.write("data_"+data_val+"\n")
+            out_file.write("#\n")
 
         for key, key_list in key_lists.items():
-            out_file.write("#\n")
             # Pick a sample mmCIF value, which can be a list or a single value
             sample_val = self.dic[key+"."+key_list[0]]
             val_type = type(sample_val)
@@ -127,7 +137,7 @@ class MMCIFIO(object):
                     out_file.write("\n")
             else:
                 raise(ValueError("Invalid type in mmCIF dictionary: "+str(val_type)))
-        out_file.close()
+            out_file.write("#\n")
 
     def _format_mmcif_col(self, val, col_width):
         # Format a mmCIF data value by enclosing with quotes or semicolon lines
@@ -149,5 +159,57 @@ class MMCIFIO(object):
         else:
             return "{v: <{width}}".format(v=val, width=col_width)
 
-    def _save_structure(self, filepath):
-        pass
+    def _save_structure(self, out_file, select, preserve_atom_numbering):
+        atom_dict = defaultdict(list)
+
+        for model in self.structure.get_list():
+            if not select.accept_model(model):
+                continue
+            model_n = str(model.id)
+            if not preserve_atom_numbering:
+                atom_number = 1
+            for chain in model.get_list():
+                if not select.accept_chain(chain):
+                    continue
+                chain_id = chain.get_id()
+                for residue in chain.get_unpacked_list():
+                    if not select.accept_residue(residue):
+                        continue
+                    hetfield, resseq, icode = residue.get_id()
+                    if hetfield == " ":
+                        residue_type = "ATOM"
+                    else:
+                        residue_type = "HETATM"
+                    resseq = str(resseq)
+                    if icode == " ":
+                        icode = "."
+                    resname = residue.get_resname()
+                    segid = residue.get_segid()
+                    for atom in residue.get_unpacked_list():
+                        if select.accept_atom(atom):
+                            if preserve_atom_numbering:
+                                atom_number = atom.get_serial_number()
+                            if not preserve_atom_numbering:
+                                atom_number += 1
+                            atom_dict["_atom_site.group_PDB"].append(residue_type)
+                            atom_dict["_atom_site.label_atom_id"].append(atom.get_name().strip())
+                            altloc = atom.get_altloc()
+                            if altloc == " ":
+                                atom_dict["_atom_site.label_alt_id"].append(".")
+                            else:
+                                atom_dict["_atom_site.label_alt_id"].append(altloc)
+                            atom_dict["_atom_site.label_comp_id"].append(resname)
+                            atom_dict["_atom_site.pdbx_PDB_ins_code"].append(icode)
+                            coord = atom.get_coord()
+                            atom_dict["_atom_site.Cartn_x"].append(str(round(coord[0], 2)))
+                            atom_dict["_atom_site.Cartn_y"].append(str(round(coord[1], 2)))
+                            atom_dict["_atom_site.Cartn_z"].append(str(round(coord[2], 2)))
+                            atom_dict["_atom_site.occupancy"].append(str(atom.get_occupancy()))
+                            atom_dict["_atom_site.B_iso_or_equiv"].append(str(atom.get_bfactor()))
+                            atom_dict["_atom_site.auth_seq_id"].append(resseq)
+                            atom_dict["_atom_site.auth_asym_id"].append(chain_id)
+                            atom_dict["_atom_site.pdbx_PDB_model_num"].append(model_n)
+
+        atom_dict["data_"] = self.structure.id
+        self.dic = atom_dict
+        self._save_dict(out_file)
