@@ -87,7 +87,7 @@ todo_include_todos = True
 # but this is clearer:
 #autodoc_default_flags = ['members', 'undoc-members', 'private-members', 'special-members', 'inherited-members', 'show-inheritance']
 autodoc_default_flags = ['members', 'undoc-members', 'special-members', 'show-inheritance']
-#autodoc_member_order = 'bysource'
+autodoc_member_order = 'bysource'
 
 # -- Options for HTML output ----------------------------------------------
 
