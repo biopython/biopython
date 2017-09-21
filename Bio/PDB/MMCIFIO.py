@@ -36,6 +36,7 @@ mmcif_order = {
     ]
 }
 
+
 class MMCIFIO(object):
     """Write a Structure object, a subset of a Structure object or a mmCIF
     dictionary as a mmCIF file.
@@ -128,7 +129,7 @@ class MMCIFIO(object):
                     else:
                         key_lists[s[0]] = [s[1]]
                 else:
-                    raise(ValueError("Invalid key in mmCIF dictionary: "+key))
+                    raise(ValueError("Invalid key in mmCIF dictionary: " + key))
 
         # Re-order lists if an order has been specified
         # Not all elements from the specified order are necessarily present
@@ -143,23 +144,23 @@ class MMCIFIO(object):
                         inds.append(len(mmcif_order[key]))
                 z = zip(inds, key_list)
                 z.sort()
-                key_lists[key] = [k for _,k in z]
+                key_lists[key] = [k for _, k in z]
 
         # Write out top data_ line
         if data_val:
-            out_file.write("data_"+data_val+"\n")
+            out_file.write("data_" + data_val + "\n")
             out_file.write("#\n")
 
         for key, key_list in key_lists.items():
             # Pick a sample mmCIF value, which can be a list or a single value
-            sample_val = self.dic[key+"."+key_list[0]]
+            sample_val = self.dic[key + "." + key_list[0]]
             val_type = type(sample_val)
             n_vals = len(sample_val)
             # Check the mmCIF dictionary has consistent list sizes
             for i in key_list:
-                val = self.dic[key+"."+i]
+                val = self.dic[key + "." + i]
                 if type(val) != val_type or (val_type == list and len(val) != n_vals):
-                    raise(ValueError("Inconsistent list sizes in mmCIF dictionary: "+key+"."+i))
+                    raise(ValueError("Inconsistent list sizes in mmCIF dictionary: " + key + "." + i))
             # If the value is a single value, write as key-value pairs
             if val_type == str:
                 m = 0
@@ -168,16 +169,16 @@ class MMCIFIO(object):
                     if len(i) > m:
                         m = len(i)
                 for i in key_list:
-                    out_file.write("{k: <{width}}".format(k=key+"."+i, width=len(key)+m+4) + self._format_mmcif_col(self.dic[key+"."+i], len(self.dic[key+"."+i]))+"\n")
+                    out_file.write("{k: <{width}}".format(k=key + "." + i, width=len(key) + m + 4) + self._format_mmcif_col(self.dic[key + "." + i], len(self.dic[key + "." + i])) + "\n")
             # If the value is a list, write as keys then a value table
             elif val_type == list:
                 out_file.write("loop_\n")
                 col_widths = {}
                 # Write keys and find max widths for each set of values
                 for i in key_list:
-                    out_file.write(key+"."+i+"\n")
+                    out_file.write(key + "." + i + "\n")
                     col_widths[i] = 0
-                    for val in self.dic[key+"."+i]:
+                    for val in self.dic[key + "." + i]:
                         l = len(val)
                         # If the value requires quoting it will add 2 characters
                         if self._requires_quote(val):
@@ -189,10 +190,10 @@ class MMCIFIO(object):
                 # Write the values as rows
                 for i in range(n_vals):
                     for col in key_list:
-                        out_file.write(self._format_mmcif_col(self.dic[key+"."+col][i], col_widths[col]+1))
+                        out_file.write(self._format_mmcif_col(self.dic[key + "." + col][i], col_widths[col] + 1))
                     out_file.write("\n")
             else:
-                raise(ValueError("Invalid type in mmCIF dictionary: "+str(val_type)))
+                raise(ValueError("Invalid type in mmCIF dictionary: " + str(val_type)))
             out_file.write("#\n")
 
     def _format_mmcif_col(self, val, col_width):
@@ -204,14 +205,14 @@ class MMCIFIO(object):
         # If there is a newline or quotes cannot be contained, use semicolon
         # and newline construct
         if self._requires_newline(val):
-            return "\n;"+val+"\n;\n"
+            return "\n;" + val + "\n;\n"
         # Technically these should be case-insensitive
         elif self._requires_quote(val):
             # Choose quote character
             if "' " in val:
-                return "{v: <{width}}".format(v="\""+val+"\"", width=col_width)
+                return "{v: <{width}}".format(v="\"" + val + "\"", width=col_width)
             else:
-                return "{v: <{width}}".format(v="'"+val+"'", width=col_width)
+                return "{v: <{width}}".format(v="'" + val + "'", width=col_width)
         # Safe to not quote
         # Numbers must not be quoted
         else:
