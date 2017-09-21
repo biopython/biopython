@@ -7,6 +7,33 @@ from Bio._py3k import basestring
 from Bio.PDB.StructureBuilder import StructureBuilder
 from Bio.PDB.PDBIO import Select
 
+# If certain entries should have a certain order of keys, that is specified here
+mmcif_order = {
+    "_atom_site": [
+        "group_PDB",
+        "id",
+        "type_symbol",
+        "label_atom_id",
+        "label_alt_id",
+        "label_comp_id",
+        "label_asym_id",
+        "label_entity_id",
+        "label_seq_id",
+        "pdbx_PDB_ins_code",
+        "Cartn_x",
+        "Cartn_y",
+        "Cartn_z",
+        "occupancy",
+        "B_iso_or_equiv",
+        "pdbx_formal_charge",
+        "auth_seq_id",
+        "auth_comp_id",
+        "auth_asym_id",
+        "auth_atom_id",
+        "pdbx_PDB_model_num",
+    ]
+}
+
 class MMCIFIO(object):
     """Write a Structure object, a subset of a Structure object or a mmCIF
     dictionary as a mmCIF file.
@@ -97,6 +124,15 @@ class MMCIFIO(object):
                 else:
                     raise(ValueError("Invalid key in mmCIF dictionary: "+key))
 
+        # Re-order lists if an order has been specified
+        # Not all elements from the specified order are necessarily present
+        for key, key_list in key_lists.items():
+            if key in mmcif_order:
+                inds = [mmcif_order[key].index(i) for i in key_list]
+                z = zip(inds, key_list)
+                z.sort()
+                key_lists[key] = [k for _,k in z]
+
         if data_val:
             out_file.write("data_"+data_val+"\n")
             out_file.write("#\n")
@@ -165,7 +201,11 @@ class MMCIFIO(object):
         for model in self.structure.get_list():
             if not select.accept_model(model):
                 continue
-            model_n = str(model.id)
+            # mmCIF files have a single model specified as 1
+            if model.id == 0:
+                model_n = "1"
+            else:
+                model_n = str(model.id)
             if not preserve_atom_numbering:
                 atom_number = 1
             for chain in model.get_list():
@@ -189,6 +229,7 @@ class MMCIFIO(object):
                         if select.accept_atom(atom):
                             if preserve_atom_numbering:
                                 atom_number = atom.get_serial_number()
+                            atom_dict["_atom_site.id"].append(str(atom_number))
                             if not preserve_atom_numbering:
                                 atom_number += 1
                             atom_dict["_atom_site.group_PDB"].append(residue_type)
@@ -201,9 +242,9 @@ class MMCIFIO(object):
                             atom_dict["_atom_site.label_comp_id"].append(resname)
                             atom_dict["_atom_site.pdbx_PDB_ins_code"].append(icode)
                             coord = atom.get_coord()
-                            atom_dict["_atom_site.Cartn_x"].append(str(round(coord[0], 2)))
-                            atom_dict["_atom_site.Cartn_y"].append(str(round(coord[1], 2)))
-                            atom_dict["_atom_site.Cartn_z"].append(str(round(coord[2], 2)))
+                            atom_dict["_atom_site.Cartn_x"].append("%.3f" % coord[0])
+                            atom_dict["_atom_site.Cartn_y"].append("%.3f" % coord[1])
+                            atom_dict["_atom_site.Cartn_z"].append("%.3f" % coord[2])
                             atom_dict["_atom_site.occupancy"].append(str(atom.get_occupancy()))
                             atom_dict["_atom_site.B_iso_or_equiv"].append(str(atom.get_bfactor()))
                             atom_dict["_atom_site.auth_seq_id"].append(resseq)
