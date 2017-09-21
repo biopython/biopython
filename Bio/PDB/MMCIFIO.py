@@ -142,7 +142,7 @@ class MMCIFIO(object):
                     # Unrecognised key - add at end
                     except ValueError:
                         inds.append(len(mmcif_order[key]))
-                z = zip(inds, key_list)
+                z = list(zip(inds, key_list))
                 z.sort()
                 key_lists[key] = [k for _, k in z]
 
