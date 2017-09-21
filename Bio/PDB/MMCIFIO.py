@@ -134,7 +134,13 @@ class MMCIFIO(object):
         # Not all elements from the specified order are necessarily present
         for key, key_list in key_lists.items():
             if key in mmcif_order:
-                inds = [mmcif_order[key].index(i) for i in key_list]
+                inds = []
+                for i in key_list:
+                    try:
+                        inds.append(mmcif_order[key].index(i))
+                    # Unrecognised key - add at end
+                    except ValueError:
+                        inds.append(len(mmcif_order[key]))
                 z = zip(inds, key_list)
                 z.sort()
                 key_lists[key] = [k for _,k in z]
