@@ -75,7 +75,6 @@ class MMCIFParser(object):
             element_list = mmcif_dict["_atom_site.type_symbol"]
         except KeyError:
             element_list = None
-        seq_id_list = mmcif_dict["_atom_site.label_seq_id"]
         chain_id_list = mmcif_dict["_atom_site.auth_asym_id"]
         x_list = [float(x) for x in mmcif_dict["_atom_site.Cartn_x"]]
         y_list = [float(x) for x in mmcif_dict["_atom_site.Cartn_y"]]
@@ -306,7 +305,6 @@ class FastMMCIFParser(object):
         except KeyError:
             element_list = None
 
-        seq_id_list = mmcif_dict["_atom_site.label_seq_id"]
         chain_id_list = mmcif_dict["_atom_site.auth_asym_id"]
 
         x_list = [float(x) for x in mmcif_dict["_atom_site.Cartn_x"]]
