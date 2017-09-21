@@ -35,6 +35,7 @@ from Bio import BiopythonWarning
 from Bio.Seq import Seq
 from Bio.Alphabet import generic_protein
 from Bio.PDB import PDBParser, PPBuilder, CaPPBuilder, PDBIO, Select, MMCIFParser, MMCIFIO
+from Bio.PDB.MMCIF2Dict import MMCIF2Dict
 from Bio.PDB import HSExposureCA, HSExposureCB, ExposureCN
 from Bio.PDB.PDBExceptions import PDBConstructionException, PDBConstructionWarning
 from Bio.PDB import rotmat, Vector, refmat, calc_angle, calc_dihedral, rotaxis, m2rotaxis
@@ -810,6 +811,7 @@ class WriteTest(unittest.TestCase):
             self.parser = PDBParser(PERMISSIVE=1)
             self.mmcif_parser = MMCIFParser()
             self.structure = self.parser.get_structure("example", "PDB/1A8O.pdb")
+            self.mmcif_file = "PDB/1A8O.cif"
 
     def test_pdbio_write_structure(self):
         """Write a full structure using PDBIO."""
@@ -973,7 +975,23 @@ class WriteTest(unittest.TestCase):
             os.remove(filename)
 
     def test_mmcifio_write_dict(self):
-        pass
+        """Write an mmCIF dictionary out, read it in and compare them."""
+        d1 = MMCIF2Dict(self.mmcif_file)
+        io = MMCIFIO()
+        # Write to temp file
+        io.set_dict(d1)
+        filenumber, filename = tempfile.mkstemp()
+        os.close(filenumber)
+        try:
+            io.save(filename)
+            d2 = MMCIF2Dict(filename)
+            k1 = sorted(d1.keys())
+            k2 = sorted(d2.keys())
+            self.assertEqual(k1, k2)
+            for key in k1:
+                self.assertEqual(d1[key], d2[key])
+        finally:
+            os.remove(filename)
 
 
 class Exposure(unittest.TestCase):
