@@ -255,12 +255,16 @@ class MMCIFIO(object):
                     resname = residue.get_resname()
                     for atom in residue.get_unpacked_list():
                         if select.accept_atom(atom):
+                            atom_dict["_atom_site.group_PDB"].append(residue_type)
                             if preserve_atom_numbering:
                                 atom_number = atom.get_serial_number()
                             atom_dict["_atom_site.id"].append(str(atom_number))
                             if not preserve_atom_numbering:
                                 atom_number += 1
-                            atom_dict["_atom_site.group_PDB"].append(residue_type)
+                            if atom.element:
+                                atom_dict["_atom_site.type_symbol"].append(atom.element)
+                            else:
+                                atom_dict["_atom_site.type_symbol"].append("?")
                             atom_dict["_atom_site.label_atom_id"].append(atom.get_name().strip())
                             altloc = atom.get_altloc()
                             if altloc == " ":
