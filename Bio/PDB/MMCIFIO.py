@@ -283,6 +283,12 @@ class MMCIFIO(object):
                             atom_dict["_atom_site.auth_asym_id"].append(chain_id)
                             atom_dict["_atom_site.pdbx_PDB_model_num"].append(model_n)
 
-        atom_dict["data_"] = self.structure.id
+        # Data block name is the structure ID with special characters removed
+        structure_id = self.structure.id
+        for c in ["#", "$", "'", "\"", "[", "]", " ", "\t", "\n"]:
+            structure_id = structure_id.replace(c, "")
+        atom_dict["data_"] = structure_id
+
+        # Set the dictionary and write out using the generic dictionary method
         self.dic = atom_dict
         self._save_dict(out_file)
