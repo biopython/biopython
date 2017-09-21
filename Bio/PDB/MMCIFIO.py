@@ -52,6 +52,7 @@ class MMCIFIO(object):
 
     def set_structure(self, pdb_object):
         # Check what the user is providing and build a structure appropriately
+        # This is duplicated from the PDBIO class
         if pdb_object.level == "S":
             structure = pdb_object
         else:
@@ -154,7 +155,7 @@ class MMCIFIO(object):
                     if len(i) > m:
                         m = len(i)
                 for i in key_list:
-                    out_file.write("{k: <{width}}".format(k=key+"."+i, width=len(key)+m+4)+ self._format_mmcif_col(self.dic[key+"."+i], len(self.dic[key+"."+i])+2)+"\n")
+                    out_file.write("{k: <{width}}".format(k=key+"."+i, width=len(key)+m+4) + self._format_mmcif_col(self.dic[key+"."+i], len(self.dic[key+"."+i]))+"\n")
             # If the value is a list, write as keys then a value table
             elif val_type == list:
                 out_file.write("loop_\n")
@@ -164,12 +165,17 @@ class MMCIFIO(object):
                     out_file.write(key+"."+i+"\n")
                     col_widths[i] = 0
                     for val in self.dic[key+"."+i]:
-                        if len(val) > col_widths[i]:
-                            col_widths[i] = len(val)
+                        l = len(val)
+                        # If the value requires quoting it will add 2 characters
+                        if self._requires_quote(val):
+                            l += 2
+                        if l > col_widths[i]:
+                            col_widths[i] = l
+                # Technically the max of the sum of the column widths is 2048
                 # Write the values as rows
                 for i in range(n_vals):
                     for col in key_list:
-                        out_file.write(self._format_mmcif_col(self.dic[key+"."+col][i], col_widths[col]+3))
+                        out_file.write(self._format_mmcif_col(self.dic[key+"."+col][i], col_widths[col]+1))
                     out_file.write("\n")
             else:
                 raise(ValueError("Invalid type in mmCIF dictionary: "+str(val_type)))
@@ -180,20 +186,35 @@ class MMCIFIO(object):
         # where appropriate. See
         # https://www.iucr.org/resources/cif/spec/version1.1/cifsyntax for
         # syntax.
-        # Actually any whitespace after quote and below, make this a regex?
-        # If there is a newline or quotes cannot be contained, use semicolon construct
-        if "\n" in val or ("' " in val and "\" " in val):
+
+        # If there is a newline or quotes cannot be contained, use semicolon
+        # and newline construct
+        if self._requires_newline(val):
             return "\n;"+val+"\n;\n"
-        # If quoting is required
-        elif " " in val or "'" in val or "\"" in val or val[0] in ["_", "#", "$", "'", "\"", "[", "]", ";"] or val.startswith("data_") or val.startswith("save_") or val in ["loop_", "stop_", "global_"]:
+        # Technically these should be case-insensitive
+        elif self._requires_quote(val):
             # Choose quote character
             if "' " in val:
                 return "{v: <{width}}".format(v="\""+val+"\"", width=col_width)
             else:
                 return "{v: <{width}}".format(v="'"+val+"'", width=col_width)
         # Safe to not quote
+        # Numbers must not be quoted
         else:
             return "{v: <{width}}".format(v=val, width=col_width)
+
+    def _requires_newline(self, val):
+        # Technically the space can be a tab too
+        if "\n" in val or ("' " in val and "\" " in val):
+            return True
+        else:
+            return False
+
+    def _requires_quote(self, val):
+        if " " in val or "'" in val or "\"" in val or val[0] in ["_", "#", "$", "[", "]", ";"] or val.startswith("data_") or val.startswith("save_") or val in ["loop_", "stop_", "global_"]:
+            return True
+        else:
+            return False
 
     def _save_structure(self, out_file, select, preserve_atom_numbering):
         atom_dict = defaultdict(list)
