@@ -1,4 +1,6 @@
-"""Write an mmCIF file."""
+"""Write an mmCIF file.
+See https://www.iucr.org/resources/cif/spec/version1.1/cifsyntax for syntax.
+"""
 
 import re
 from collections import defaultdict
@@ -91,6 +93,7 @@ class MMCIFIO(object):
         self.structure = structure
 
     def set_dict(self, dic):
+        # Set the mmCIF dictionary to be written out
         self.dic = dic
 
     def save(self, filepath, select=Select(), preserve_atom_numbering=False):
@@ -103,8 +106,10 @@ class MMCIFIO(object):
         # Decide whether to save a Structure object or an mmCIF dictionary
         if hasattr(self, 'structure'):
             self._save_structure(fp, select, preserve_atom_numbering)
-        else:
+        elif hasattr(self, 'dic'):
             self._save_dict(fp)
+        else:
+            raise(ValueError("Use set_structure or set_dict to set a structure or dictionary to write out"))
         if close_file:
             fp.close()
 
@@ -134,6 +139,7 @@ class MMCIFIO(object):
                 z.sort()
                 key_lists[key] = [k for _,k in z]
 
+        # Write out top data_ line
         if data_val:
             out_file.write("data_"+data_val+"\n")
             out_file.write("#\n")
@@ -151,6 +157,7 @@ class MMCIFIO(object):
             # If the value is a single value, write as key-value pairs
             if val_type == str:
                 m = 0
+                # Find the maximum key length
                 for i in key_list:
                     if len(i) > m:
                         m = len(i)
@@ -172,6 +179,7 @@ class MMCIFIO(object):
                         if l > col_widths[i]:
                             col_widths[i] = l
                 # Technically the max of the sum of the column widths is 2048
+
                 # Write the values as rows
                 for i in range(n_vals):
                     for col in key_list:
@@ -222,7 +230,7 @@ class MMCIFIO(object):
         for model in self.structure.get_list():
             if not select.accept_model(model):
                 continue
-            # mmCIF files have a single model specified as 1
+            # mmCIF files with a single model have it specified as model 1
             if model.id == 0:
                 model_n = "1"
             else:
@@ -243,9 +251,8 @@ class MMCIFIO(object):
                         residue_type = "HETATM"
                     resseq = str(resseq)
                     if icode == " ":
-                        icode = "."
+                        icode = "?"
                     resname = residue.get_resname()
-                    segid = residue.get_segid()
                     for atom in residue.get_unpacked_list():
                         if select.accept_atom(atom):
                             if preserve_atom_numbering:
