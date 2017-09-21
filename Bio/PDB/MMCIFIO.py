@@ -110,7 +110,7 @@ class MMCIFIO(object):
         elif hasattr(self, 'dic'):
             self._save_dict(fp)
         else:
-            raise(ValueError("Use set_structure or set_dict to set a structure or dictionary to write out"))
+            raise ValueError("Use set_structure or set_dict to set a structure or dictionary to write out")
         if close_file:
             fp.close()
 
@@ -129,7 +129,7 @@ class MMCIFIO(object):
                     else:
                         key_lists[s[0]] = [s[1]]
                 else:
-                    raise(ValueError("Invalid key in mmCIF dictionary: " + key))
+                    raise ValueError("Invalid key in mmCIF dictionary: " + key)
 
         # Re-order lists if an order has been specified
         # Not all elements from the specified order are necessarily present
@@ -160,7 +160,7 @@ class MMCIFIO(object):
             for i in key_list:
                 val = self.dic[key + "." + i]
                 if type(val) != val_type or (val_type == list and len(val) != n_vals):
-                    raise(ValueError("Inconsistent list sizes in mmCIF dictionary: " + key + "." + i))
+                    raise ValueError("Inconsistent list sizes in mmCIF dictionary: " + key + "." + i)
             # If the value is a single value, write as key-value pairs
             if val_type == str:
                 m = 0
@@ -193,7 +193,7 @@ class MMCIFIO(object):
                         out_file.write(self._format_mmcif_col(self.dic[key + "." + col][i], col_widths[col] + 1))
                     out_file.write("\n")
             else:
-                raise(ValueError("Invalid type in mmCIF dictionary: " + str(val_type)))
+                raise ValueError("Invalid type in mmCIF dictionary: " + str(val_type))
             out_file.write("#\n")
 
     def _format_mmcif_col(self, val, col_width):
