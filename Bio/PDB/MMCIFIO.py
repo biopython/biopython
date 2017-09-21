@@ -237,10 +237,10 @@ class MMCIFIO(object):
             if not select.accept_model(model):
                 continue
             # mmCIF files with a single model have it specified as model 1
-            if model.id == 0:
+            if model.serial_num == 0:
                 model_n = "1"
             else:
-                model_n = str(model.id)
+                model_n = str(model.serial_num)
             if not preserve_atom_numbering:
                 atom_number = 1
             for chain in model.get_list():
