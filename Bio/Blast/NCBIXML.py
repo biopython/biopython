@@ -27,7 +27,9 @@ class _XMLparser(ContentHandler):
     def __init__(self, debug=0):
         """Constructor.
 
-        debug - integer, amount of debug information to print
+        Arguments:
+         - debug - integer, amount of debug information to print
+
         """
         self._tag = []
         self._value = ''
@@ -37,7 +39,9 @@ class _XMLparser(ContentHandler):
     def _secure_name(self, name):
         """Removes 'dangerous' from tag names.
 
-        name -- name to be 'secured'
+        Arguments:
+         - name -- name to be 'secured'
+
         """
         # Replace '-' with '_' in XML tag names
         return name.replace('-', '_')
@@ -47,9 +51,10 @@ class _XMLparser(ContentHandler):
 
         No real need of attr, BLAST DTD doesn't use them
 
-        name -- name of the tag
+        Arguments:
+         - name -- name of the tag
+         - attr -- tag attributes
 
-        attr -- tag attributes
         """
         self._tag.append(name)
 
@@ -78,14 +83,18 @@ class _XMLparser(ContentHandler):
     def characters(self, ch):
         """Found some text.
 
-        ch -- characters read
+        Arguments:
+         - ch -- characters read
+
         """
         self._value += ch  # You don't ever get the whole string
 
     def endElement(self, name):
         """Found XML end tag.
 
-        name -- tag name
+        Arguments:
+         - name -- tag name
+
         """
         # DON'T strip any white space, we may need it e.g. the hsp-midline
 
@@ -116,14 +125,18 @@ class BlastParser(_XMLparser):
     You are expected to use this via the parse or read functions.
 
     All XML 'action' methods are private methods and may be:
-        - ``_start_TAG`` called when the start tag is found
-        - ``_end_TAG`` called when the end tag is found
+
+    - ``_start_TAG`` called when the start tag is found
+    - ``_end_TAG`` called when the end tag is found
+
     """
 
     def __init__(self, debug=0):
         """Constructor.
 
-        debug - integer, amount of debug information to print
+        Arguments:
+         - debug - integer, amount of debug information to print
+
         """
         # Calling superclass method
         _XMLparser.__init__(self, debug)
@@ -566,9 +579,17 @@ def parse(handle, debug=0):
     BLOCK = 1024
     MARGIN = 10  # must be at least length of newline + XML start
     XML_START = "<?xml"
+    NEW_LINE = "\n"
+    NULL = ""
 
-    text = handle.read(BLOCK)
     pending = ""
+    text = handle.read(BLOCK)
+    if isinstance(text, bytes):
+        # Not a text handle, raw bytes mode
+        XML_START = b"<?xml"
+        NEW_LINE = b"\n"
+        NULL = b""
+        pending = b""
 
     if not text:
         # NO DATA FOUND!
@@ -577,9 +598,9 @@ def parse(handle, debug=0):
     while text:
         # We are now starting a new XML file
         if not text.startswith(XML_START):
-            raise ValueError("Your XML file did not start with %s... "
-                             "but instead %s"
-                             % (XML_START, repr(text[:20])))
+            raise ValueError("Your XML file did not start with %r... "
+                             "but instead %r"
+                             % (XML_START, text[:20]))
 
         expat_parser = expat.ParserCreate()
         blast_parser = BlastParser(debug)
@@ -598,14 +619,14 @@ def parse(handle, debug=0):
             text, pending = pending + handle.read(BLOCK), ""
             if not text:
                 # End of the file!
-                expat_parser.Parse("", True)  # End of XML record
+                expat_parser.Parse(NULL, True)  # End of XML record
                 break
 
             # Now read a little bit more so we can check for the
             # start of another XML file...
             pending = handle.read(MARGIN)
 
-            if ("\n" + XML_START) not in (text + pending):
+            if (NEW_LINE + XML_START) not in (text + pending):
                 # Good - still dealing with the same XML file
                 expat_parser.Parse(text, False)
                 while blast_parser._records:
@@ -615,7 +636,7 @@ def parse(handle, debug=0):
                 # one XML file for each query!
 
                 # Finish the old file:
-                text, pending = (text + pending).split("\n" + XML_START, 1)
+                text, pending = (text + pending).split(NEW_LINE + XML_START, 1)
                 pending = XML_START + pending
 
                 expat_parser.Parse(text, True)  # End of XML record
@@ -624,7 +645,7 @@ def parse(handle, debug=0):
 
                 # Now we are going to re-loop, reset the
                 # parsers and start reading the next XML file
-                text, pending = pending, ""
+                text, pending = pending, NULL
                 break
 
         # this was added because it seems that the Jython expat parser
@@ -635,10 +656,10 @@ def parse(handle, debug=0):
         # At this point we have finished the first XML record.
         # If the file is from an old version of blast, it may
         # contain more XML records (check if text=="").
-        assert pending == ""
-        assert len(blast_parser._records) == 0
+        assert not pending, pending
+        assert len(blast_parser._records) == 0, len(blast_parser._records)
 
     # We should have finished the file!
-    assert text == ""
-    assert pending == ""
-    assert len(blast_parser._records) == 0
+    assert not text, text
+    assert not pending, pending
+    assert len(blast_parser._records) == 0, len(blast_parser._records)

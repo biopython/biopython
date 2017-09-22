@@ -18,7 +18,6 @@ include README
 include DEPRECATED
 
 include MANIFEST.in
-include requirements.txt
 
 recursive-include Scripts *    # Include scripts.
 recursive-include Tests *      # Include regression tests.
@@ -41,7 +40,8 @@ recursive-include Doc/examples *.psl
 recursive-include Doc/examples *.dnd
 recursive-include Doc/examples *.csv
 recursive-include Doc/images *.png
-recursive-include Doc/images *.jpg # e.g. the logo for the Tutorial
+recursive-include Doc/images *.jpg # e.g. the old logo for the Tutorial
+recursive-include Doc/images *.svg # e.g. the new logo for the Tutorial
 include Doc/examples/ls_orchid.gbk.gz
 include Doc/examples/ls_orchid.gbk.bz2
 include Doc/examples/ec_5.4.2.2.txt 

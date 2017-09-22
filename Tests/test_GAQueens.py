@@ -28,12 +28,16 @@ import unittest
 from Bio import Alphabet
 
 # Genetic Algorithm stuff
-from Bio.GA.Evolver import GenerationEvolver
-from Bio.GA import Organism
-from Bio.GA.Mutation.Simple import ConversionMutation
-from Bio.GA.Crossover.Point import SinglePointCrossover
-from Bio.GA.Selection.RouletteWheel import RouletteWheelSelection
-from Bio.GA.Selection.Tournament import TournamentSelection
+import warnings
+from Bio import BiopythonDeprecationWarning
+with warnings.catch_warnings():
+    warnings.simplefilter('ignore', BiopythonDeprecationWarning)
+    from Bio.GA.Evolver import GenerationEvolver
+    from Bio.GA import Organism
+    from Bio.GA.Mutation.Simple import ConversionMutation
+    from Bio.GA.Crossover.Point import SinglePointCrossover
+    from Bio.GA.Selection.RouletteWheel import RouletteWheelSelection
+    from Bio.GA.Selection.Tournament import TournamentSelection
 
 VERBOSE = 0
 
@@ -256,13 +260,13 @@ class QueensCrossover(object):
         """Initialize to do N-Queens optimized crossover.
 
         Arguments:
+            - fitness_func -- A function that can calculate the fitness
+              of a genome.
+            - crossover_prob -- The probability of having a crossover
+              between two passed in organisms.
+            - max_crossover_size -- The maximum crossover size of the
+              'best' region to search for.
 
-        - fitness_func -- A function that can calculate the fitness of
-          a genome.
-        - crossover_prob -- The probability of having a crossover
-          between two passed in organisms.
-        - max_crossover_size -- The maximum crossover size of the 'best' region
-          to search for.
         """
         self._crossover_prob = crossover_prob
         self._fitness_calc = fitness_func

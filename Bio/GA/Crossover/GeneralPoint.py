@@ -34,6 +34,7 @@ and for the drastic (n can be arbitrary to the length of the genome!)::
     | returns: (AbCdEfG, aBcDeFg)
     | (note that points=12 will yield the same result, but 11
     |  may be somewhat faster)
+
 """
 # standard modules
 import random
@@ -45,13 +46,14 @@ class GeneralPointCrossover(object):
     """Perform n-point crossover between genomes at some defined rates.
 
     Ideas on how to use this class:
+     - Call it directly ( construct, do_crossover )
+     - Use one of the provided subclasses
+     - Inherit from it:
 
-    - Call it directly ( construct, do_crossover )
-    - Use one of the provided subclasses
-    - Inherit from it:
-      * replace _generate_locs with a more domain specific technique
-      * replace _crossover with a more efficient technique for your
-        point-count
+       * replace _generate_locs with a more domain specific technique
+       * replace _crossover with a more efficient technique for your
+         point-count
+
     """
 
     def __init__(self, points, crossover_prob=.1):
@@ -103,8 +105,7 @@ class GeneralPointCrossover(object):
         """Generalized Location Generator.
 
         Arguments:
-
-        - bound (int)   - upper bound
+         - bound (int)   - upper bound
 
         Returns: [0]+x_0...x_n+[bound] where n=self._npoints-1
         and 0 < x_0 < x_1 ... < bound
@@ -123,14 +124,15 @@ class GeneralPointCrossover(object):
         """Generalized Crossover Function.
 
         Arguments:
+         - x (int) - genome number [0|1]
+         - no (organism, organism)
 
-        - x (int)        - genome number [0|1]
-        - no (organism,organism)
-          - new organisms
-          - locs (int list, int list)
-        - lists of locations,
-          [0, +n points+, bound]
-          for each genome (sync'd with x)
+           - new organisms
+           - locs (int list, int list)
+
+         - lists of locations,
+           [0, +n points+, bound]
+           for each genome (sync'd with x)
 
         Return type: sequence (to replace no[x])
         """
@@ -157,14 +159,14 @@ class TwoCrossover(GeneralPointCrossover):
     """
 
     def _generate_locs(self, bound):
-        """Replacement generation.
+        """Generate replacement (PRIVATE).
 
         See GeneralPoint._generate_locs documentation for details
         """
         return [0, random.randint(1, bound - 1), bound]
 
     def _crossover(self, x, no, locs):
-        """Replacement crossover.
+        """Crossover replacement (PRIVATE)..
 
         See GeneralPoint._crossover documentation for details
         """

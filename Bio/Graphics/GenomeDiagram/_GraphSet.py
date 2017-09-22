@@ -15,8 +15,7 @@
 """GraphSet module.
 
 Provides:
-
-- GraphSet - container for GraphData objects
+ - GraphSet - container for GraphData objects
 
 For drawing capabilities, this module uses reportlab to draw and write
 the diagram: http://www.reportlab.com
@@ -34,18 +33,16 @@ class GraphSet(object):
     """Graph Set.
 
     Attributes:
-
-    - id        Unique identifier for the set
-    - name      String describing the set
+     - id        Unique identifier for the set
+     - name      String describing the set
 
     """
 
     def __init__(self, name=None):
-        """Initialise.
+        """Initialize.
 
         Arguments:
-
-        - name      String identifying the graph set sensibly
+         - name      String identifying the graph set sensibly
 
         """
         self.id = id            # Unique identifier for the set
@@ -59,21 +56,20 @@ class GraphSet(object):
         """Add a GraphData object to the diagram.
 
         Arguments:
-
-        - data      List of (position, value) int tuples
-        - name      String, description of the graph
-        - style     String ('bar', 'heat', 'line') describing how the graph
-          will be drawn
-        - color    colors.Color describing the color to draw all or 'high'
-          (some styles) data (overridden by backwards compatible
-          argument with UK spelling, colour).
-        - altcolor  colors.Color describing the color to draw 'low' (some
-          styles) data (overridden by backwards compatible argument
-          with UK spelling, colour).
-        - linewidth     Float describing linewidth for graph
-        - center        Float setting the value at which the x-axis
-          crosses the y-axis (overridden by backwards
-          compatible argument with UK spelling, centre)
+         - data      List of (position, value) int tuples
+         - name      String, description of the graph
+         - style     String ('bar', 'heat', 'line') describing how the graph
+           will be drawn
+         - color    colors.Color describing the color to draw all or 'high'
+           (some styles) data (overridden by backwards compatible
+           argument with UK spelling, colour).
+         - altcolor  colors.Color describing the color to draw 'low' (some
+           styles) data (overridden by backwards compatible argument
+           with UK spelling, colour).
+         - linewidth     Float describing linewidth for graph
+         - center        Float setting the value at which the x-axis
+           crosses the y-axis (overridden by backwards
+           compatible argument with UK spelling, centre)
 
         Add a GraphData object to the diagram (will be stored internally).
         """
@@ -130,9 +126,8 @@ class GraphSet(object):
         """Return a formatted string with information about the set.
 
         Arguments:
-
-        - verbose       Flag indicating whether a short or complete account
-          of the set is required
+            - verbose - Flag indicating whether a short or complete account
+              of the set is required
 
         """
         if not verbose:

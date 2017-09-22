@@ -58,6 +58,7 @@ class InsdcScanner(object):
     SEQUENCE_HEADERS = ["XXX"]  # with right hand side spaces removed
 
     def __init__(self, debug=0):
+        """Initialize."""
         assert len(self.RECORD_START) == self.HEADER_WIDTH
         for marker in self.SEQUENCE_HEADERS:
             assert marker == marker.rstrip()
@@ -67,6 +68,7 @@ class InsdcScanner(object):
         self.line = None
 
     def set_handle(self, handle):
+        """Set the handle attribute."""
         self.handle = handle
         self.line = ""
 
@@ -105,7 +107,7 @@ class InsdcScanner(object):
         return line
 
     def parse_header(self):
-        """Return list of strings making up the header
+        """Return list of strings making up the header.
 
         New line characters are removed.
 
@@ -138,7 +140,7 @@ class InsdcScanner(object):
         return header_lines
 
     def parse_features(self, skip=False):
-        """Return list of tuples for the features (if present)
+        """Return list of tuples for the features (if present).
 
         Each feature is returned as a tuple (key, location, qualifiers)
         where key and location are strings (e.g. "CDS" and
@@ -213,7 +215,10 @@ class InsdcScanner(object):
         return features
 
     def parse_feature(self, feature_key, lines):
-        r"""Expects a feature as a list of strings, returns a tuple (key, location, qualifiers)
+        r"""Parse a feature given as a list of strings into a tuple.
+
+        Expects a feature as a list of strings, returns a tuple (key, location,
+        qualifiers)
 
         For example given this GenBank feature::
 
@@ -295,6 +300,9 @@ class InsdcScanner(object):
                     i = line.find("=")
                     key = line[1:i]  # does not work if i==-1
                     value = line[i + 1:]  # we ignore 'value' if i==-1
+                    if i and value.startswith(' ') and value.lstrip().startswith('"'):
+                        warnings.warn("White space after equals in qualifier", BiopythonParserWarning)
+                        value = value.lstrip()
                     if i == -1:
                         # Qualifier with no key, e.g. /pseudo
                         key = line[1:]
@@ -335,7 +343,7 @@ class InsdcScanner(object):
                              % (feature_key, "\n".join(lines)))
 
     def parse_footer(self):
-        """Returns a tuple containing a list of any misc strings, and the sequence"""
+        """Return a tuple containing a list of any misc strings, and the sequence."""
         # This is a basic bit of code to scan and discard the sequence,
         # which was useful when developing the sub classes.
         if self.line in self.FEATURE_END_MARKERS:
@@ -358,7 +366,7 @@ class InsdcScanner(object):
         return [], ""  # Dummy values!
 
     def _feed_first_line(self, consumer, line):
-        """Handle the LOCUS/ID line, passing data to the comsumer
+        """Handle the LOCUS/ID line, passing data to the comsumer (PRIVATE).
 
         This should be implemented by the EMBL / GenBank specific subclass
 
@@ -367,7 +375,7 @@ class InsdcScanner(object):
         pass
 
     def _feed_header_lines(self, consumer, lines):
-        """Handle the header lines (list of strings), passing data to the comsumer
+        """Handle the header lines (list of strings), passing data to the comsumer (PRIVATE).
 
         This should be implemented by the EMBL / GenBank specific subclass
 
@@ -377,7 +385,7 @@ class InsdcScanner(object):
 
     @staticmethod
     def _feed_feature_table(consumer, feature_tuples):
-        """Handle the feature table (list of tuples), passing data to the comsumer
+        """Handle the feature table (list of tuples), passing data to the comsumer (PRIVATE).
 
         Used by the parse_records() and parse() methods.
         """
@@ -392,7 +400,7 @@ class InsdcScanner(object):
                     consumer.feature_qualifier(q_key, q_value.replace("\n", " "))
 
     def _feed_misc_lines(self, consumer, lines):
-        """Handle any lines between features and sequence (list of strings), passing data to the consumer
+        """Handle any lines between features and sequence (list of strings), passing data to the consumer (PRIVATE).
 
         This should be implemented by the EMBL / GenBank specific subclass
 
@@ -406,16 +414,15 @@ class InsdcScanner(object):
         This method is intended for use with the "old" code in Bio.GenBank
 
         Arguments:
-
-            - handle - A handle with the information to parse.
-            - consumer - The consumer that should be informed of events.
-            - do_features - Boolean, should the features be parsed?
-                          Skipping the features can be much faster.
+         - handle - A handle with the information to parse.
+         - consumer - The consumer that should be informed of events.
+         - do_features - Boolean, should the features be parsed?
+           Skipping the features can be much faster.
 
         Return values:
+         - true  - Passed a record
+         - false - Did not find a record
 
-            - true  - Passed a record
-            - false - Did not find a record
         """
         # Should work with both EMBL and GenBank files provided the
         # equivalent Bio.GenBank._FeatureConsumer methods are called...
@@ -453,7 +460,7 @@ class InsdcScanner(object):
         return True
 
     def parse(self, handle, do_features=True):
-        """Returns a SeqRecord (with SeqFeatures if do_features=True)
+        """Return a SeqRecord (with SeqFeatures if do_features=True).
 
         See also the method parse_records() for use on multi-record files.
         """
@@ -469,7 +476,7 @@ class InsdcScanner(object):
             return None
 
     def parse_records(self, handle, do_features=True):
-        """Returns a SeqRecord object iterator
+        """Parse records, return a SeqRecord object iterator.
 
         Each record (from the ID/LOCUS line to the // line) becomes a SeqRecord
 
@@ -493,13 +500,14 @@ class InsdcScanner(object):
     def parse_cds_features(self, handle,
                            alphabet=generic_protein,
                            tags2id=('protein_id', 'locus_tag', 'product')):
-        """Returns SeqRecord object iterator
+        """Parse CDS features, return SeqRecord object iterator.
 
         Each CDS feature becomes a SeqRecord.
 
-            - alphabet - Used for any sequence found in a translation field.
-            - tags2id  - Tupple of three strings, the feature keys to use
-                   for the record id, name and description,
+        Arguments:
+         - alphabet - Used for any sequence found in a translation field.
+         - tags2id  - Tupple of three strings, the feature keys to use
+           for the record id, name and description,
 
         This method is intended for use in Bio.SeqIO
         """
@@ -573,7 +581,7 @@ class InsdcScanner(object):
 
 
 class EmblScanner(InsdcScanner):
-    """For extracting chunks of information in EMBL files"""
+    """For extracting chunks of information in EMBL files."""
 
     RECORD_START = "ID   "
     HEADER_WIDTH = 5
@@ -587,7 +595,7 @@ class EmblScanner(InsdcScanner):
     EMBL_SPACER = " " * EMBL_INDENT
 
     def parse_footer(self):
-        """Returns a tuple containing a list of any misc strings, and the sequence"""
+        """Return a tuple containing a list of any misc strings, and the sequence."""
         assert self.line[:self.HEADER_WIDTH].rstrip() in self.SEQUENCE_HEADERS, \
             "Eh? '%s'" % self.line
 
@@ -617,8 +625,16 @@ class EmblScanner(InsdcScanner):
                 repr(self.line)
             # Remove tailing number now, remove spaces later
             linersplit = line.rsplit(None, 1)
-            if len(linersplit) > 1:
+            if len(linersplit) == 2 and linersplit[1].isdigit():
                 seq_lines.append(linersplit[0])
+            elif line.isdigit():
+                # Special case of final blank line with no bases
+                # just the sequence coordinate
+                pass
+            else:
+                warnings.warn("EMBL sequence line missing coordinates",
+                              BiopythonParserWarning)
+                seq_lines.append(line)
             line = self.handle.readline()
         self.line = line
         return misc_lines, "".join(seq_lines).replace(" ", "")
@@ -704,6 +720,7 @@ class EmblScanner(InsdcScanner):
            2. Topology and/or Molecule type (e.g. 'circular DNA' or 'DNA')
            3. Taxonomic division (e.g. 'PRO')
            4. Sequence length (e.g. '4639675 BP.')
+
         """
         consumer.locus(fields[0])  # Should we also call the accession consumer?
         consumer.residue_type(fields[2])
@@ -735,6 +752,7 @@ class EmblScanner(InsdcScanner):
            4. Data class (e.g. 'STD')
            5. Taxonomic division (e.g. 'PRO')
            6. Sequence length (e.g. '4639675 BP.')
+
         """
 
         consumer.locus(fields[0])
@@ -992,7 +1010,7 @@ class _ImgtScanner(EmblScanner):
         self._feed_seq_length(consumer, fields[5])
 
     def parse_features(self, skip=False):
-        """Return list of tuples for the features (if present)
+        """Return list of tuples for the features (if present).
 
         Each feature is returned as a tuple (key, location, qualifiers)
         where key and location are strings (e.g. "CDS" and
@@ -1074,7 +1092,7 @@ class _ImgtScanner(EmblScanner):
 
 
 class GenBankScanner(InsdcScanner):
-    """For extracting chunks of information in GenBank files"""
+    """For extracting chunks of information in GenBank files."""
 
     RECORD_START = "LOCUS       "
     HEADER_WIDTH = 12
@@ -1092,7 +1110,7 @@ class GenBankScanner(InsdcScanner):
     STRUCTURED_COMMENT_DELIM = " :: "
 
     def parse_footer(self):
-        """Returns a tuple containing a list of any misc strings, and the sequence"""
+        """Return a tuple containing a list of any misc strings, and the sequence."""
         assert self.line[:self.HEADER_WIDTH].rstrip() in self.SEQUENCE_HEADERS, \
             "Eh? '%s'" % self.line
 

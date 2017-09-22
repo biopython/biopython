@@ -15,7 +15,7 @@ _ATOM_FORMAT_STRING = "%s%5i %-4s%c%3s %c%4i%c   %8.3f%8.3f%8.3f%s%6.2f      %4s
 
 
 class Select(object):
-    """Select everything fo PDB output (for use as a bas class).
+    """Select everything for PDB output (for use as a base class).
 
     Default selection (everything) during writing - can be used as base class
     to implement selective output. This selects which entities will be written out.
@@ -51,13 +51,14 @@ class PDBIO(object):
         >>> io=PDBIO()
         >>> io.set_structure(s)
         >>> io.save("out.pdb")
+
     """
 
     def __init__(self, use_model_flag=0):
-        """Creat the PDBIO object.
+        """Create the PDBIO object.
 
-        @param use_model_flag: if 1, force use of the MODEL record in output.
-        @type use_model_flag: int
+        :param use_model_flag: if 1, force use of the MODEL record in output.
+        :type use_model_flag: int
         """
         self.use_model_flag = use_model_flag
 
@@ -151,11 +152,11 @@ class PDBIO(object):
         self.structure = structure
 
     def save(self, file, select=Select(), write_end=True, preserve_atom_numbering=False):
-        """@param file: output file
-        @type file: string or filehandle
+        """:param file: output file
+        :type file: string or filehandle
 
-        @param select: selects which entities will be written.
-        @type select: object
+        :param select: selects which entities will be written.
+        :type select: object
 
         Typically select is a subclass of L{Select}, it should
         have the following methods:

@@ -17,14 +17,13 @@ class StructureAlignment(object):
     """Class to align two structures based on an alignment of their sequences."""
 
     def __init__(self, fasta_align, m1, m2, si=0, sj=1):
-        """Initialise.
+        """Initialize.
 
         Attributes:
-
-        - fasta_align - Alignment object
-        - m1, m2 - two models
-        - si, sj - the sequences in the Alignment object that
-          correspond to the structures
+         - fasta_align - Alignment object
+         - m1, m2 - two models
+         - si, sj - the sequences in the Alignment object that
+           correspond to the structures
 
         """
         l = fasta_align.get_alignment_length()

@@ -8,7 +8,8 @@
 
 # Created: Wed Jun 21 10:28:14 2000
 # thomas@cbs.dtu.dk, http://www.cbs.dtu.dk/thomas
-# File: xbb_widget.py
+
+"""Widget code for graphical Xbbtools tool."""
 
 from __future__ import print_function
 

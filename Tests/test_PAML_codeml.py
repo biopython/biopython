@@ -97,13 +97,6 @@ class ModTest(unittest.TestCase):
         self.assertRaises((AttributeError, TypeError, OSError),
                           self.cml.run)
 
-    def testOutputFileValid(self):
-        self.cml.tree = self.tree_file
-        self.cml.alignment = self.align_file
-        self.cml.out_file = list()
-        self.assertRaises((AttributeError, ValueError, OSError),
-                          self.cml.run)
-
     def testOptionExists(self):
         self.assertRaises((AttributeError, KeyError),
                           self.cml.set_options, xxxx=1)

@@ -53,6 +53,7 @@ class DatabaseLoader(object):
             except KeyError:
                 db = server.new_database("test",
                 description="For testing GBrowse")
+
         """
         self.adaptor = adaptor
         self.dbid = dbid
@@ -139,8 +140,7 @@ class DatabaseLoader(object):
         """Get the taxon id for this record (PRIVATE).
 
         Arguments:
-
-        - record - a SeqRecord object
+         - record - a SeqRecord object
 
         This searches the taxon/taxon_name tables using the
         NCBI taxon ID, scientific name and common name to find
@@ -511,8 +511,7 @@ class DatabaseLoader(object):
         """Recursive method to get taxon ID from NCBI lineage (PRIVATE).
 
         Arguments:
-
-        - taxonomic_lineage - list of taxonomy dictionaries from Bio.Entrez
+         - taxonomic_lineage - list of taxonomy dictionaries from Bio.Entrez
 
         First dictionary in list is the taxonomy root, highest would be
         the species. Each dictionary includes:
@@ -585,8 +584,7 @@ class DatabaseLoader(object):
         """Fill the bioentry table with sequence information (PRIVATE).
 
         Arguments:
-
-        - record - SeqRecord object to add to the database.
+         - record - SeqRecord object to add to the database.
 
         """
         # get the pertinent info and insert it
@@ -680,9 +678,8 @@ class DatabaseLoader(object):
         """Record SeqRecord's sequence and alphabet in DB (PRIVATE).
 
         Arguments:
-
-        - record - a SeqRecord object with a seq property
-        - bioentry_id - corresponding database identifier
+         - record - a SeqRecord object with a seq property
+         - bioentry_id - corresponding database identifier
 
         """
         if record.seq is None:
@@ -716,8 +713,10 @@ class DatabaseLoader(object):
     def _load_comment(self, record, bioentry_id):
         """Record a SeqRecord's annotated comment in the database (PRIVATE).
 
-        record - a SeqRecord object with an annotated comment
-        bioentry_id - corresponding database identifier
+        Arguments:
+         - record - a SeqRecord object with an annotated comment
+         - bioentry_id - corresponding database identifier
+
         """
         comments = record.annotations.get('comment')
         if not comments:
@@ -742,9 +741,8 @@ class DatabaseLoader(object):
         taxonomy which are handled with their own tables.
 
         Arguments:
-
-        - record - a SeqRecord object with an annotations dictionary
-        - bioentry_id - corresponding database identifier
+         - record - a SeqRecord object with an annotations dictionary
+         - bioentry_id - corresponding database identifier
 
         """
         mono_sql = "INSERT INTO bioentry_qualifier_value" \
@@ -783,9 +781,8 @@ class DatabaseLoader(object):
         """Record SeqRecord's annotated references in the database (PRIVATE).
 
         Arguments:
-
-        - record - a SeqRecord object with annotated references
-        - bioentry_id - corresponding database identifier
+         - record - a SeqRecord object with annotated references
+         - bioentry_id - corresponding database identifier
 
         """
         refs = None
@@ -904,6 +901,7 @@ class DatabaseLoader(object):
             start = 1, end = 2, rank = 1
             start = 3, end = 4, rank = 2
             start = 5, end = 6, rank = 3
+
         """
         # TODO - Record an ontology for the locations (using location.term_id)
         # which for now as in BioPerl we leave defaulting to NULL.
@@ -1041,11 +1039,10 @@ class DatabaseLoader(object):
         """Add SeqFeature's DB cross-references to the database (PRIVATE).
 
         Arguments:
-
-        - dbxrefs - List, dbxref data from the source file in the
-          format <database>:<accession>
-        - seqfeature_id - Int, the identifier for the seqfeature in the
-          seqfeature table
+         - dbxrefs - List, dbxref data from the source file in the
+           format <database>:<accession>
+         - seqfeature_id - Int, the identifier for the seqfeature in the
+           seqfeature table
 
         Insert dbxref qualifier data for a seqfeature into the
         seqfeature_dbxref and, if required, dbxref tables.
@@ -1065,7 +1062,7 @@ class DatabaseLoader(object):
                 dbxref_data = value.replace(' ', '').replace('\n', '').split(':')
                 db = dbxref_data[0]
                 accessions = dbxref_data[1:]
-            except:
+            except Exception:
                 raise ValueError("Parsing of db_xref failed: '%s'" % value)
             # Loop over all the grabbed accessions, and attempt to fill the
             # table
@@ -1079,10 +1076,9 @@ class DatabaseLoader(object):
         """Get DB cross-reference for accession.
 
         Arguments:
-
-        - db - String, the name of the external database containing
-        the accession number
-        - accession - String, the accession of the dbxref data
+         - db - String, the name of the external database containing
+           the accession number
+         - accession - String, the accession of the dbxref data
 
         Finds and returns the dbxref_id for the passed data.  The method
         attempts to find an existing record first, and inserts the data
@@ -1146,7 +1142,7 @@ class DatabaseLoader(object):
                 db, accession = value.split(':', 1)
                 db = db.strip()
                 accession = accession.strip()
-            except:
+            except Exception:
                 raise ValueError(
                     "Parsing of dbxrefs list failed: '%s'" % value)
             # Get the dbxref_id value for the dbxref data

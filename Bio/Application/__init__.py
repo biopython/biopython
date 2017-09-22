@@ -72,12 +72,14 @@ class ApplicationError(_ProcessCalledError):
     """
 
     def __init__(self, returncode, cmd, stdout="", stderr=""):
+        """Initialize."""
         self.returncode = returncode
         self.cmd = cmd
         self.stdout = stdout
         self.stderr = stderr
 
     def __str__(self):
+        """Format the error as a string."""
         # get first line of any stderr message
         try:
             msg = self.stderr.lstrip().split("\n", 1)[0].rstrip()
@@ -91,12 +93,13 @@ class ApplicationError(_ProcessCalledError):
                    % (self.returncode, self.cmd)
 
     def __repr__(self):
+        """Represent the error as a string."""
         return "ApplicationError(%i, %s, %s, %s)" \
                % (self.returncode, self.cmd, self.stdout, self.stderr)
 
 
 class AbstractCommandline(object):
-    """Generic interface for constructing command line strings.
+    r"""Generic interface for constructing command line strings.
 
     This class shouldn't be called directly; it should be subclassed to
     provide an implementation for a specific application.
@@ -159,7 +162,7 @@ class AbstractCommandline(object):
     the full path to the binary as the first argument (cmd):
 
     >>> from Bio.Emboss.Applications import WaterCommandline
-    >>> water_cmd = WaterCommandline("C:\Program Files\EMBOSS\water.exe",
+    >>> water_cmd = WaterCommandline(r"C:\Program Files\EMBOSS\water.exe",
     ...                              gapopen=10, gapextend=0.5,
     ...                              asequence="asis:ACCCGGGCGCGGT",
     ...                              bsequence="asis:ACCCGAGCGCGGT",
@@ -271,6 +274,7 @@ class AbstractCommandline(object):
         """Make the commandline string with the currently set options.
 
         e.g.
+
         >>> from Bio.Emboss.Applications import WaterCommandline
         >>> cline = WaterCommandline(gapopen=10, gapextend=0.5)
         >>> cline.asequence = "asis:ACCCGGGCGCGGT"
@@ -293,6 +297,7 @@ class AbstractCommandline(object):
         """Return a representation of the command line object for debugging.
 
         e.g.
+
         >>> from Bio.Emboss.Applications import WaterCommandline
         >>> cline = WaterCommandline(gapopen=10, gapextend=0.5)
         >>> cline.asequence = "asis:ACCCGGGCGCGGT"
@@ -413,7 +418,7 @@ class AbstractCommandline(object):
 
     def __call__(self, stdin=None, stdout=True, stderr=True,
                  cwd=None, env=None):
-        """Executes the command, waits for it to finish, and returns output.
+        """Execute command, wait for it to finish, return (stdout, stderr).
 
         Runs the command line tool and waits for it to finish. If it returns
         a non-zero error level, an exception is raised. Otherwise two strings
@@ -542,34 +547,27 @@ class _Option(_AbstractParameter):
     take a value, use the _Switch object instead.
 
     Attributes:
-    - names -- a list of string names (typically two entries) by which
-    the parameter can be set via the legacy set_parameter method
-    (eg ["-a", "--append", "append"]). The first name in list is used
-    when building the command line. The last name in the list is a
-    "human readable" name describing the option in one word. This
-    must be a valid Python identifier as it is used as the property
-    name and as a keyword argument, and should therefore follow PEP8
-    naming.
-
-    - description -- a description of the option. This is used as
-    the property docstring.
-
-    - filename -- True if this argument is a filename and should be
-    automatically quoted if it contains spaces.
-
-    - checker_function -- a reference to a function that will determine
-    if a given value is valid for this parameter. This function can either
-    raise an error when given a bad value, or return a [0, 1] decision on
-    whether the value is correct.
-
-    - equate -- should an equals sign be inserted if a value is used?
-
-    - is_required -- a flag to indicate if the parameter must be set for
-    the program to be run.
-
-    - is_set -- if the parameter has been set
-
-    - value -- the value of a parameter
+     - names -- a list of string names (typically two entries) by which
+       the parameter can be set via the legacy set_parameter method
+       (eg ["-a", "--append", "append"]). The first name in list is used
+       when building the command line. The last name in the list is a
+       "human readable" name describing the option in one word. This
+       must be a valid Python identifier as it is used as the property
+       name and as a keyword argument, and should therefore follow PEP8
+       naming.
+     - description -- a description of the option. This is used as
+       the property docstring.
+     - filename -- True if this argument is a filename and should be
+       automatically quoted if it contains spaces.
+     - checker_function -- a reference to a function that will determine
+       if a given value is valid for this parameter. This function can either
+       raise an error when given a bad value, or return a [0, 1] decision on
+       whether the value is correct.
+     - equate -- should an equals sign be inserted if a value is used?
+     - is_required -- a flag to indicate if the parameter must be set for
+       the program to be run.
+     - is_set -- if the parameter has been set
+     - value -- the value of a parameter
 
     """
 
@@ -615,21 +613,21 @@ class _Switch(_AbstractParameter):
     take a value, they are either included in the command string
     or omitted.
 
-    - names -- a list of string names (typically two entries) by which
-    the parameter can be set via the legacy set_parameter method
-    (eg ["-a", "--append", "append"]). The first name in list is used
-    when building the command line. The last name in the list is a
-    "human readable" name describing the option in one word. This
-    must be a valid Python identifer as it is used as the property
-    name and as a keyword argument, and should therefore follow PEP8
-    naming.
-
-    - description -- a description of the option. This is used as
-    the property docstring.
-
-    - is_set -- if the parameter has been set
+    Attributes:
+     - names -- a list of string names (typically two entries) by which
+       the parameter can be set via the legacy set_parameter method
+       (eg ["-a", "--append", "append"]). The first name in list is used
+       when building the command line. The last name in the list is a
+       "human readable" name describing the option in one word. This
+       must be a valid Python identifer as it is used as the property
+       name and as a keyword argument, and should therefore follow PEP8
+       naming.
+     - description -- a description of the option. This is used as
+       the property docstring.
+     - is_set -- if the parameter has been set
 
     NOTE - There is no value attribute, see is_set instead,
+
     """
 
     def __init__(self, names, description):

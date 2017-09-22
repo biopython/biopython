@@ -14,7 +14,7 @@ See http://wbiomed.curtin.edu.au/genepop/ , the format is documented
 here: http://wbiomed.curtin.edu.au/genepop/help_input.html .
 
 Classes:
-FileRecord           Holds GenePop data.
+ - FileRecord           Holds GenePop data.
 
 Functions:
 
@@ -35,18 +35,13 @@ def read(fname):
 class FileRecord(object):
     """Holds information from a GenePop record.
 
-    Members:
-
+    Attributes:
     - marker_len         The marker length (2 or 3 digit code per allele).
-
     - comment_line       Comment line.
-
     - loci_list          List of loci names.
 
-    Functions:
-
+    Methods:
     - get_individual     Returns the next individual of the current population.
-
     - skip_population    Skips the current population.
 
     skip_population skips the individuals of the current population, returns
@@ -54,10 +49,9 @@ class FileRecord(object):
 
     get_individual returns an individual of the current population (or None
     if the list ended).
-    Each individual is a pair composed by individual
-    name and a list of alleles (2 per marker or 1 for haploid data).
 
-    Examples::
+    Each individual is a pair composed by individual name and a list of alleles
+    (2 per marker or 1 for haploid data). Examples::
 
         ('Ind1', [(1,2),    (3,3), (200,201)]
         ('Ind2', [(2,None), (3,3), (None,None)]
@@ -141,8 +135,10 @@ class FileRecord(object):
     def seek_position(self, pop, indiv):
         """Seeks a certain position in the file.
 
-        - pop - pop position (0 is first)
-        - indiv - individual in pop
+        Arguments:
+         - pop - pop position (0 is first)
+         - indiv - individual in pop
+
         """
         self._handle.seek(0)
         self.skip_header()
@@ -189,8 +185,10 @@ class FileRecord(object):
     def remove_population(self, pos, fname):
         """Removes a population (by position).
 
-        - pos - position
-        - fname - file to be created with population removed
+        Arguments:
+         - pos - position
+         - fname - file to be created with population removed
+
         """
         old_rec = read(self.fname)
         with open(fname, "w") as f:
@@ -230,8 +228,9 @@ class FileRecord(object):
     def remove_locus_by_position(self, pos, fname):
         """Removes a locus by position.
 
-        - pos - position
-        - fname - file to be created with locus removed
+        Arguments:
+         - pos - position
+         - fname - file to be created with locus removed
 
         """
         old_rec = read(self.fname)
@@ -270,8 +269,9 @@ class FileRecord(object):
     def remove_loci_by_position(self, positions, fname):
         """Removes a set of loci by position.
 
-        - positions - positions
-        - fname - file to be created with locus removed
+        Arguments:
+         - positions - positions
+         - fname - file to be created with locus removed
 
         """
         old_rec = read(self.fname)
@@ -315,8 +315,9 @@ class FileRecord(object):
     def remove_locus_by_name(self, name, fname):
         """Removes a locus by name.
 
-        - name - name
-        - fname - file to be created with locus removed
+        Arguments:
+         - name - name
+         - fname - file to be created with locus removed
 
         """
         for i in range(len(self.loci_list)):
@@ -329,8 +330,9 @@ class FileRecord(object):
     def remove_loci_by_name(self, names, fname):
         """Removes a loci list (by name).
 
-        - names - names
-        - fname - file to be created with loci removed
+        Arguments:
+         - names - names
+         - fname - file to be created with loci removed
 
         """
         positions = []

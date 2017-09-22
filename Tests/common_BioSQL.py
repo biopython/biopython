@@ -6,9 +6,11 @@ from __future__ import print_function
 
 import os
 import platform
-import unittest
+import sys
 import tempfile
 import time
+import unittest
+
 try:
     import configparser  # Python 3
 except ImportError:
@@ -182,7 +184,7 @@ def create_database():
         if os.path.exists(TESTDB):
             try:
                 os.remove(TESTDB)
-            except:
+            except Exception:
                 time.sleep(1)
                 try:
                     os.remove(TESTDB)
@@ -205,7 +207,7 @@ def create_database():
         server.load_database_sql(SQL_FILE)
         server.commit()
         server.close()
-    except:
+    except Exception:
         # Failed, but must close the handle...
         server.close()
         raise
@@ -321,9 +323,15 @@ class MultiReadTest(unittest.TestCase):
         keys = list(db)
         l = len(items)
         self.assertEqual(l, len(db))
-        self.assertEqual(l, len(list(db.items())))
         self.assertEqual(l, len(list(db)))
+        self.assertEqual(l, len(list(db.items())))
+        self.assertEqual(l, len(list(db.keys())))
         self.assertEqual(l, len(list(db.values())))
+        if sys.version_info[0] == 2:
+            # Check legacy methods for Python 2 as well:
+            self.assertEqual(l, len(list(db.iteritems())))
+            self.assertEqual(l, len(list(db.iterkeys())))
+            self.assertEqual(l, len(list(db.itervalues())))
         for (k1, r1), (k2, r2) in zip(zip(keys, items), db.items()):
             self.assertEqual(k1, k2)
             self.assertEqual(r1.id, r2.id)
@@ -466,6 +474,11 @@ class SeqInterfaceTest(unittest.TestCase):
             self.assertTrue(isinstance(feature, SeqFeature))
         # shouldn't cause any errors!
         self.assertTrue(isinstance(str(test_record), basestring))
+        # Confirm can delete annotations etc to test these properties
+        del test_record.annotations
+        del test_record.dbxrefs
+        del test_record.features
+        del test_record.seq
 
     def test_seq(self):
         """Make sure Seqs from BioSQL implement the right interface."""
@@ -478,6 +491,13 @@ class SeqInterfaceTest(unittest.TestCase):
         self.assertEqual(string_rep, str(test_seq))  # check __str__ too
         self.assertEqual(type(string_rep), type(""))
         self.assertEqual(len(test_seq), 880)
+        self.assertEqual(test_seq[879], "A")
+        self.assertEqual(test_seq[-1], "A")
+        self.assertEqual(test_seq[0], "A")
+        self.assertEqual(test_seq[-880], "A")
+        self.assertRaises(IndexError, test_seq.__getitem__, 880)
+        self.assertRaises(IndexError, test_seq.__getitem__, -881)
+        self.assertRaises(TypeError, test_seq.__getitem__, None)
 
     def test_convert(self):
         """Check can turn a DBSeq object into a Seq or MutableSeq."""

@@ -1274,7 +1274,7 @@ class Nexus(object):
                             plain_list.append(start)
             except NexusError:
                 raise
-            except:
+            except Exception:  # FIXME - this seems unwise
                 return None
         return plain_list
 
@@ -1290,6 +1290,7 @@ class Nexus(object):
             Plain numbers are translated in their taxon name, underscores and spaces are considered equal.
             Names are returned unchanged (if plain taxon identifiers), or the names in
             the corresponding taxon set is returned.
+
         """
         identifier = quotestrip(identifier)
         if not set_type:

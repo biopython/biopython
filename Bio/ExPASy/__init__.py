@@ -15,6 +15,7 @@ Functions:
  - get_sprot_raw     Interface to the get-sprot-raw CGI script.
  - sprot_search_ful  Interface to the sprot-search-ful CGI script.
  - sprot_search_de   Interface to the sprot-search-de CGI script.
+
 """
 
 # Importing these functions with leading underscore as not intended for reuse

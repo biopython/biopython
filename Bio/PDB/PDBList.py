@@ -111,7 +111,7 @@ class PDBList(object):
     @staticmethod
     def get_status_list(url):
         """Retrieves a list of pdb codes in the weekly pdb status file
-        from the given URL. Used by get_recent_files.
+        from the given URL. Used by get_recent_changes.
 
         Typical contents of the list files parsed by this method is now
         very simply one PDB name per line.
@@ -133,10 +133,12 @@ class PDBList(object):
         largest numerical name is used.
         Returns None if something goes wrong.
 
-        Contents of the data/status dir (20031013 would be used);
-        drwxrwxr-x   2 1002     sysadmin     512 Oct  6 18:28 20031006
-        drwxrwxr-x   2 1002     sysadmin     512 Oct 14 02:14 20031013
-        -rw-r--r--   1 1002     sysadmin    1327 Mar 12  2001 README
+        Contents of the data/status dir (20031013 would be used);:
+
+            drwxrwxr-x   2 1002     sysadmin     512 Oct  6 18:28 20031006
+            drwxrwxr-x   2 1002     sysadmin     512 Oct 14 02:14 20031013
+            -rw-r--r--   1 1002     sysadmin    1327 Mar 12  2001 README
+
         """
         path = self.pdb_server + '/pub/pdb/data/status/latest/'
 
@@ -147,8 +149,8 @@ class PDBList(object):
         return [added, modified, obsolete]
 
     def get_all_entries(self):
-        """Retrieves a big file containing all the
-        PDB entries and some annotation to them.
+        """Retrieves a big file containing all the PDB entries and some annotation.
+
         Returns a list of PDB codes in the index file.
         """
         url = self.pdb_server + '/pub/pdb/derived_data/index/entries.idx'
@@ -202,10 +204,10 @@ class PDBList(object):
 
         NOTE. The default download format has changed from PDB to PDBx/mmCif
 
-        @param pdb_code: 4-symbols structure Id from PDB (e.g. 3J92).
-        @type pdb_code: string
+        :param pdb_code: 4-symbols structure Id from PDB (e.g. 3J92).
+        :type pdb_code: string
 
-        @param file_format:
+        :param file_format:
             File format. Available options:
 
             * "mmCif" (default, PDBx/mmCif file),
@@ -214,12 +216,12 @@ class PDBList(object):
             * "mmtf" (highly compressed),
             * "bundle" (PDB formatted archive for large structure}
 
-        @type file_format: string
+        :type file_format: string
 
-        @param overwrite: if set to True, existing structure files will be overwritten. Default: False
-        @type overwrite: bool
+        :param overwrite: if set to True, existing structure files will be overwritten. Default: False
+        :type overwrite: bool
 
-        @param obsolete:
+        :param obsolete:
             Has a meaning only for obsolete structures. If True, download the obsolete structure
             to 'obsolete' folder, otherwise download won't be performed.
             This option doesn't work for mmtf format as obsoleted structures aren't stored in mmtf.
@@ -229,13 +231,13 @@ class PDBList(object):
             and you face the "structure doesn't exists" error.
             Default: False
 
-        @type obsolete: bool
+        :type obsolete: bool
 
-        @param pdir: put the file in this directory (default: create a PDB-style directory tree)
-        @type pdir: string
+        :param pdir: put the file in this directory (default: create a PDB-style directory tree)
+        :type pdir: string
 
-        @return: filename
-        @rtype: string
+        :return: filename
+        :rtype: string
         """
         file_format = self._print_default_format_warning(file_format)  # Deprecation warning
 
@@ -344,10 +346,10 @@ class PDBList(object):
         The PDB structure's file name is returned as a single string.
         If obsolete ``==`` True, the files will be saved in a special file tree.
 
-        @param pdb_codes: a list of 4-symbols structure Ids from PDB
-        @type pdb_codes: list of strings
+        :param pdb_codes: a list of 4-symbols structure Ids from PDB
+        :type pdb_codes: list of strings
 
-        @param file_format:
+        :param file_format:
             File format. Available options:
 
             * "mmCif" (default, PDBx/mmCif file),
@@ -356,23 +358,23 @@ class PDBList(object):
             * "mmtf" (highly compressed),
             * "bundle" (PDB formatted archive for large structure}
 
-        @param overwrite: if set to True, existing structure files will be overwritten. Default: False
-        @type overwrite: bool
+        :param overwrite: if set to True, existing structure files will be overwritten. Default: False
+        :type overwrite: bool
 
-        @param obsolete:
+        :param obsolete:
             Has a meaning only for obsolete structures.
             If True, download the obsolete structure
             to 'obsolete' folder, otherwise download won't be performed.
             This option doesn't work for mmtf format as obsoleted structures are not availbe as mmtf.
             (default: False)
 
-        @type obsolete: bool
+        :type obsolete: bool
 
-        @param pdir: put the file in this directory (default: create a PDB-style directory tree)
-        @type pdir: string
+        :param pdir: put the file in this directory (default: create a PDB-style directory tree)
+        :type pdir: string
 
-        @return: filenames
-        @rtype: string
+        :return: filenames
+        :rtype: string
         """
         file_format = self._print_default_format_warning(file_format)  # Deprecation warning
         for pdb_code in pdb_codes:
@@ -381,9 +383,9 @@ class PDBList(object):
     def download_entire_pdb(self, listfile=None, file_format=None):
         """Retrieve all PDB entries not present in the local PDB copy.
 
-        @param listfile: filename to which all PDB codes will be written (optional)
+        :param listfile: filename to which all PDB codes will be written (optional)
 
-        @param file_format:
+        :param file_format:
             File format. Available options:
 
             * "mmCif" (default, PDBx/mmCif file),
@@ -407,9 +409,9 @@ class PDBList(object):
         """Retrieve all obsolete PDB entries not present in the local obsolete
         PDB copy.
 
-        @param listfile: filename to which all PDB codes will be written (optional)
+        :param listfile: filename to which all PDB codes will be written (optional)
 
-        @param file_format: file format. Available options:
+        :param file_format: file format. Available options:
             "mmCif" (default, PDBx/mmCif file),
             "pdb" (format PDB),
             "xml" (PMDML/XML format),
@@ -427,9 +429,7 @@ class PDBList(object):
                 outfile.writelines((x + '\n' for x in entries))
 
     def get_seqres_file(self, savefile='pdb_seqres.txt'):
-        """Retrieves a (big) file containing all the sequences of PDB entries
-        and writes it to a file.
-        """
+        """Retrieves and save a (big) file containing all the sequences of PDB entries."""
         print("Retrieving sequence file (takes over 110 MB).")
         url = self.pdb_server + '/pub/pdb/derived_data/pdb_seqres.txt'
         _urlretrieve(url, savefile)
@@ -441,23 +441,24 @@ if __name__ == '__main__':
     (c) Kristian Rother 2003, Wiktoria Karwicka & Jacek Smietanski 2016
     Contributed to Biopython
 
-    Usage:
-    PDBList.py update <pdb_path> [options]   - write weekly PDB updates to
-                                               local pdb tree.
-    PDBList.py all    <pdb_path> [options]   - write all PDB entries to
-                                               local pdb tree.
-    PDBList.py obsol  <pdb_path> [options]   - write all obsolete PDB
-                                               entries to local pdb tree.
-    PDBList.py <PDB-ID> <pdb_path> [options] - retrieve single structure
-    PDBList.py (<PDB-ID1>,<PDB-ID2>,...) <pdb_path> [options] - retrieve a set
-                                               of structures
+    Usage::
+
+        PDBList.py update <pdb_path> [options]   - write weekly PDB updates to
+                                                   local pdb tree.
+        PDBList.py all    <pdb_path> [options]   - write all PDB entries to
+                                                   local pdb tree.
+        PDBList.py obsol  <pdb_path> [options]   - write all obsolete PDB
+                                                   entries to local pdb tree.
+        PDBList.py <PDB-ID> <pdb_path> [options] - retrieve single structure
+        PDBList.py (<PDB-ID1>,<PDB-ID2>,...) <pdb_path> [options] - retrieve a set
+                                                   of structures
 
     Options:
-       -d       A single directory will be used as <pdb_path>, not a tree.
-       -o       Overwrite existing structure files.
-       -pdb     Downloads structures in PDB format
-       -xml     Downloads structures in PDBML (XML) format
-       -mmtf    Downloads structures in mmtf format
+     -d       A single directory will be used as <pdb_path>, not a tree.
+     -o       Overwrite existing structure files.
+     -pdb     Downloads structures in PDB format
+     -xml     Downloads structures in PDBML (XML) format
+     -mmtf    Downloads structures in mmtf format
 
     Maximum one format can be specified simultaneously (if more selected, only
     the last will be considered). By default (no format specified) structures are

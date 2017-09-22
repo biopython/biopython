@@ -79,6 +79,7 @@ Notes about the diverses class of the restriction enzyme implementation::
                                     the list of suppliers is extracted from
                                     emboss_s.NNN
         ----------------------------------------------------------------------------
+
 """
 
 from __future__ import print_function
@@ -200,7 +201,7 @@ class FormattedSeq(object):
         return
 
     def to_linear(self):
-        """Make a new instnace of sequence as linear."""
+        """Make a new instance of sequence as linear."""
         new = self.__class__(self)
         new.linear = True
         return new
@@ -428,6 +429,7 @@ class RestrictionType(type):
         Override '>'. Sorting order:
             1. size of the recognition site.
             2. if equal size, alphabetical order of the names.
+
         """
         if not isinstance(other, RestrictionType):
             raise NotImplementedError
@@ -444,6 +446,7 @@ class RestrictionType(type):
         Override '<='. Sorting order:
             1. size of the recognition site.
             2. if equal size, alphabetical order of the names.
+
         """
         if not isinstance(other, RestrictionType):
             raise NotImplementedError
@@ -460,6 +463,7 @@ class RestrictionType(type):
         Override '<'. Sorting order:
             1. size of the recognition site.
             2. if equal size, alphabetical order of the names.
+
         """
         if not isinstance(other, RestrictionType):
             raise NotImplementedError
@@ -476,7 +480,7 @@ class AbstractCut(RestrictionType):
 
     All the methods are classmethod.
 
-    For internal use only. Not meant to be instantiate.
+    For internal use only. Not meant to be instantiated.
     """
 
     @classmethod
@@ -526,6 +530,7 @@ class AbstractCut(RestrictionType):
         True
         >>> SmaI.is_equischizomer(XmaI)
         False
+
         """
         return not cls != other
 
@@ -549,6 +554,7 @@ class AbstractCut(RestrictionType):
         True
         >>> SmaI.is_isoschizomer(XmaI)
         True
+
         """
         return (not cls != other) or cls >> other
 
@@ -643,7 +649,7 @@ class NoCut(AbstractCut):
 
     @classmethod
     def _modify(cls, location):
-        """Return a generator that moves the cutting position by 1.
+        """Return a generator that moves the cutting position by 1 (PRIVATE).
 
         For internal use only.
 
@@ -671,7 +677,7 @@ class NoCut(AbstractCut):
 
     @classmethod
     def _rev_modify(cls, location):
-        """Return a generator that moves the cutting position by 1.
+        """Return a generator that moves the cutting position by 1 (PRIVATE).
 
         For internal use only.
 
@@ -685,11 +691,12 @@ class NoCut(AbstractCut):
         """Return a list of the enzyme's characteristics as tuple.
 
         the tuple contains the attributes:
-            fst5 -> first 5' cut ((current strand) or None
-            fst3 -> first 3' cut (complementary strand) or None
-            scd5 -> second 5' cut (current strand) or None
-            scd5 -> second 3' cut (complementary strand) or None
-            site -> recognition site.
+         - fst5 -> first 5' cut ((current strand) or None
+         - fst3 -> first 3' cut (complementary strand) or None
+         - scd5 -> second 5' cut (current strand) or None
+         - scd5 -> second 3' cut (complementary strand) or None
+         - site -> recognition site.
+
         """
         return None, None, None, None, cls.site
 
@@ -720,7 +727,7 @@ class OneCut(AbstractCut):
 
     @classmethod
     def _modify(cls, location):
-        """Return a generator that moves the cutting position by 1.
+        """Return a generator that moves the cutting position by 1 (PRIVATE).
 
         For internal use only.
 
@@ -748,7 +755,7 @@ class OneCut(AbstractCut):
 
     @classmethod
     def _rev_modify(cls, location):
-        """Return a generator that moves the cutting position by 1.
+        """Return a generator that moves the cutting position by 1 (PRIVATE).
 
         For internal use only.
 
@@ -762,11 +769,12 @@ class OneCut(AbstractCut):
         """Return a list of the enzyme's characteristics as tuple.
 
         The tuple contains the attributes:
-            fst5 -> first 5' cut ((current strand) or None
-            fst3 -> first 3' cut (complementary strand) or None
-            scd5 -> second 5' cut (current strand) or None
-            scd5 -> second 3' cut (complementary strand) or None
-            site -> recognition site.
+         - fst5 -> first 5' cut ((current strand) or None
+         - fst3 -> first 3' cut (complementary strand) or None
+         - scd5 -> second 5' cut (current strand) or None
+         - scd5 -> second 3' cut (complementary strand) or None
+         - site -> recognition site.
+
         """
         return cls.fst5, cls.fst3, None, None, cls.site
 
@@ -797,7 +805,7 @@ class TwoCuts(AbstractCut):
 
     @classmethod
     def _modify(cls, location):
-        """Return a generator that moves the cutting position by 1.
+        """Return a generator that moves the cutting position by 1 (PRIVATE).
 
         For internal use only.
 
@@ -841,11 +849,12 @@ class TwoCuts(AbstractCut):
         """Return a list of the enzyme's characteristics as tuple.
 
         the tuple contains the attributes:
-            fst5 -> first 5' cut ((current strand) or None
-            fst3 -> first 3' cut (complementary strand) or None
-            scd5 -> second 5' cut (current strand) or None
-            scd5 -> second 3' cut (complementary strand) or None
-            site -> recognition site.
+         - fst5 -> first 5' cut ((current strand) or None
+         - fst3 -> first 3' cut (complementary strand) or None
+         - scd5 -> second 5' cut (current strand) or None
+         - scd5 -> second 3' cut (complementary strand) or None
+         - site -> recognition site.
+
         """
         return cls.fst5, cls.fst3, cls.scd5, cls.scd3, cls.site
 
@@ -894,7 +903,7 @@ class Palindromic(AbstractCut):
 
     @classmethod
     def _search(cls):
-        """Return a list of cutting sites of the enzyme in the sequence.
+        """Return a list of cutting sites of the enzyme in the sequence (PRIVATE).
 
         For internal use only.
 
@@ -923,24 +932,29 @@ class NonPalindromic(AbstractCut):
 
     @classmethod
     def _search(cls):
-        """Return a list of cutting sites of the enzyme in the sequence.
+        """Return a list of cutting sites of the enzyme in the sequence (PRIVATE).
 
         For internal use only.
 
         Implement the search method for non palindromic enzymes.
         """
-        iterator = cls.dna.finditer(cls.compsite, cls.size)
+        compsite_for, compsite_rev = cls.compsite.pattern.split('|')
+        iterator_for = cls.dna.finditer(compsite_for, cls.size)
+        iterator_rev = cls.dna.finditer(compsite_rev, cls.size)
         cls.results = []
         modif = cls._modify
         revmodif = cls._rev_modify
         s = str(cls)
         cls.on_minus = []
-        for start, group in iterator:
+
+        for start, group in iterator_for:
             if group(s):
                 cls.results += [r for r in modif(start)]
-            else:
-                cls.on_minus += [r for r in revmodif(start)]
-        cls.results += cls.on_minus
+        s += '_as'
+        for start, group in iterator_rev:
+            if group(s):
+                cls.results += [r for r in revmodif(start)]
+
         if cls.results:
             cls.results.sort()
             cls._drop()
@@ -984,10 +998,10 @@ class Unknown(AbstractCut):
 
         True if the enzyme produces blunt end.
 
-        See Also:
-            RE.is_3overhang()
-            RE.is_5overhang()
-            RE.is_unknown()
+        Related methods:
+         - RE.is_3overhang()
+         - RE.is_5overhang()
+         - RE.is_unknown()
 
         """
         return False
@@ -998,10 +1012,10 @@ class Unknown(AbstractCut):
 
         True if the enzyme produces 5' overhang sticky end.
 
-        See Also:
-            RE.is_3overhang()
-            RE.is_blunt()
-            RE.is_unknown()
+        Related methods:
+         - RE.is_3overhang()
+         - RE.is_blunt()
+         - RE.is_unknown()
 
         """
         return False
@@ -1012,10 +1026,10 @@ class Unknown(AbstractCut):
 
         True if the enzyme produces 3' overhang sticky end.
 
-        See Also:
-            RE.is_5overhang()
-            RE.is_blunt()
-            RE.is_unknown()
+        Related methods:
+         - RE.is_5overhang()
+         - RE.is_blunt()
+         - RE.is_unknown()
 
         """
         return False
@@ -1035,7 +1049,7 @@ class Unknown(AbstractCut):
 
     @classmethod
     def _mod1(cls, other):
-        """Test if other enzyme produces compatible ends for enzyme.
+        """Test if other enzyme produces compatible ends for enzyme (PRIVATE).
 
         For internal use only.
 
@@ -1110,10 +1124,10 @@ class Blunt(AbstractCut):
 
         True if the enzyme produces blunt end.
 
-        See Also:
-            RE.is_3overhang()
-            RE.is_5overhang()
-            RE.is_unknown()
+        Related methods:
+         - RE.is_3overhang()
+         - RE.is_5overhang()
+         - RE.is_unknown()
 
         """
         return True
@@ -1124,10 +1138,10 @@ class Blunt(AbstractCut):
 
         True if the enzyme produces 5' overhang sticky end.
 
-        See Also:
-            RE.is_3overhang()
-            RE.is_blunt()
-            RE.is_unknown()
+        Related methods:
+         - RE.is_3overhang()
+         - RE.is_blunt()
+         - RE.is_unknown()
 
         """
         return False
@@ -1138,10 +1152,10 @@ class Blunt(AbstractCut):
 
         True if the enzyme produces 3' overhang sticky end.
 
-        See Also:
-            RE.is_5overhang()
-            RE.is_blunt()
-            RE.is_unknown()
+        Related methods:
+         - RE.is_5overhang()
+         - RE.is_blunt()
+         - RE.is_unknown()
 
         """
         return False
@@ -1164,7 +1178,7 @@ class Blunt(AbstractCut):
 
     @staticmethod
     def _mod1(other):
-        """Test if other enzyme produces compatible ends for enzyme.
+        """Test if other enzyme produces compatible ends for enzyme (PRIVATE).
 
         For internal use only
 
@@ -1238,10 +1252,10 @@ class Ov5(AbstractCut):
 
         True if the enzyme produces blunt end.
 
-        See Also:
-            RE.is_3overhang()
-            RE.is_5overhang()
-            RE.is_unknown()
+        Related methods:
+         - RE.is_3overhang()
+         - RE.is_5overhang()
+         - RE.is_unknown()
 
         """
         return False
@@ -1252,10 +1266,10 @@ class Ov5(AbstractCut):
 
         True if the enzyme produces 5' overhang sticky end.
 
-        See Also:
-            RE.is_3overhang()
-            RE.is_blunt()
-            RE.is_unknown()
+        Related methods:
+         - RE.is_3overhang()
+         - RE.is_blunt()
+         - RE.is_unknown()
 
         """
         return True
@@ -1266,10 +1280,10 @@ class Ov5(AbstractCut):
 
         True if the enzyme produces 3' overhang sticky end.
 
-        See Also:
-            RE.is_5overhang()
-            RE.is_blunt()
-            RE.is_unknown()
+        Related methods:
+         - RE.is_5overhang()
+         - RE.is_blunt()
+         - RE.is_unknown()
 
         """
         return False
@@ -1293,7 +1307,7 @@ class Ov5(AbstractCut):
 
     @classmethod
     def _mod1(cls, other):
-        """Test if other enzyme produces compatible ends for enzyme.
+        """Test if other enzyme produces compatible ends for enzyme (PRIVATE).
 
         For internal use only.
 
@@ -1370,10 +1384,10 @@ class Ov3(AbstractCut):
 
         True if the enzyme produces blunt end.
 
-        See Also:
-            RE.is_3overhang()
-            RE.is_5overhang()
-            RE.is_unknown()
+        Related methods:
+         - RE.is_3overhang()
+         - RE.is_5overhang()
+         - RE.is_unknown()
 
         """
         return False
@@ -1384,10 +1398,10 @@ class Ov3(AbstractCut):
 
         True if the enzyme produces 5' overhang sticky end.
 
-        See Also:
-            RE.is_3overhang()
-            RE.is_blunt()
-            RE.is_unknown()
+        Related methods:
+         - RE.is_3overhang()
+         - RE.is_blunt()
+         - RE.is_unknown()
 
         """
         return False
@@ -1398,10 +1412,10 @@ class Ov3(AbstractCut):
 
         True if the enzyme produces 3' overhang sticky end.
 
-        See Also:
-            RE.is_5overhang()
-            RE.is_blunt()
-            RE.is_unknown()
+        Related methods:
+         - RE.is_5overhang()
+         - RE.is_blunt()
+         - RE.is_unknown()
 
         """
         return True
@@ -1425,7 +1439,7 @@ class Ov3(AbstractCut):
 
     @classmethod
     def _mod1(cls, other):
-        """Test if other enzyme produces compatible ends for enzyme.
+        """Test if other enzyme produces compatible ends for enzyme (PRIVATE).
 
         For internal use only.
 
@@ -1454,7 +1468,7 @@ class Defined(AbstractCut):
 
     @classmethod
     def _drop(cls):
-        """Remove cuts that are outsite of the sequence.
+        """Remove cuts that are outsite of the sequence (PRIVATE).
 
         For internal use only.
 
@@ -1473,7 +1487,7 @@ class Defined(AbstractCut):
         drop = itertools.dropwhile
         take = itertools.takewhile
         if cls.dna.is_linear():
-            cls.results = [x for x in drop(lambda x:x < 1, cls.results)]
+            cls.results = [x for x in drop(lambda x:x <= 1, cls.results)]
             cls.results = [x for x in take(lambda x:x <= length, cls.results)]
         else:
             for index, location in enumerate(cls.results):
@@ -1496,9 +1510,9 @@ class Defined(AbstractCut):
         i.e. the recognition site is not degenerated AND the enzyme cut inside
         the site.
 
-        See Also:
-            RE.is_ambiguous()
-            RE.is_unknown()
+        Related methods:
+         - RE.is_ambiguous()
+         - RE.is_unknown()
 
         """
         return True
@@ -1511,9 +1525,9 @@ class Defined(AbstractCut):
         i.e. the recognition site is degenerated AND/OR the enzyme cut outside
         the site.
 
-        See Also:
-            RE.is_defined()
-            RE.is_unknown()
+        Related methods:
+         - RE.is_defined()
+         - RE.is_unknown()
 
         """
         return False
@@ -1525,9 +1539,9 @@ class Defined(AbstractCut):
         True if the sequence is unknown,
         i.e. the recognition site has not been characterised yet.
 
-        See Also:
-            RE.is_defined()
-            RE.is_ambiguous()
+        Related methods:
+         - RE.is_defined()
+         - RE.is_ambiguous()
 
         """
         return False
@@ -1539,6 +1553,7 @@ class Defined(AbstractCut):
         Return a representation of the site with the cut on the (+) strand
         represented as '^' and the cut on the (-) strand as '_'.
         ie:
+
         >>> EcoRI.elucidate()   # 5' overhang
         'G^AATT_C'
         >>> KpnI.elucidate()    # 3' overhang
@@ -1548,6 +1563,7 @@ class Defined(AbstractCut):
         >>> SnaI.elucidate()    # NotDefined, cut profile unknown.
         '? GTATAC ?'
         >>>
+
         """
         f5 = cls.fst5
         f3 = cls.fst3
@@ -1572,7 +1588,7 @@ class Defined(AbstractCut):
 
     @classmethod
     def _mod2(cls, other):
-        """Test if other enzyme produces compatible ends for enzyme.
+        """Test if other enzyme produces compatible ends for enzyme (PRIVATE).
 
         For internal use only.
 
@@ -1605,7 +1621,7 @@ class Ambiguous(AbstractCut):
 
     @classmethod
     def _drop(cls):
-        """Remove cuts that are outsite of the sequence.
+        """Remove cuts that are outsite of the sequence (PRIVATE).
 
         For internal use only.
 
@@ -1616,7 +1632,7 @@ class Ambiguous(AbstractCut):
         drop = itertools.dropwhile
         take = itertools.takewhile
         if cls.dna.is_linear():
-            cls.results = [x for x in drop(lambda x: x < 1, cls.results)]
+            cls.results = [x for x in drop(lambda x: x <= 1, cls.results)]
             cls.results = [x for x in take(lambda x: x <= length, cls.results)]
         else:
             for index, location in enumerate(cls.results):
@@ -1639,9 +1655,9 @@ class Ambiguous(AbstractCut):
         i.e. the recognition site is not degenerated AND the enzyme cut inside
         the site.
 
-        See Also:
-            RE.is_ambiguous()
-            RE.is_unknown()
+        Related methods:
+         - RE.is_ambiguous()
+         - RE.is_unknown()
 
         """
         return False
@@ -1654,9 +1670,9 @@ class Ambiguous(AbstractCut):
         i.e. the recognition site is degenerated AND/OR the enzyme cut outside
         the site.
 
-        See Also:
-            RE.is_defined()
-            RE.is_unknown()
+        Related methods:
+         - RE.is_defined()
+         - RE.is_unknown()
 
         """
         return True
@@ -1668,18 +1684,18 @@ class Ambiguous(AbstractCut):
         True if the sequence is unknown,
         i.e. the recognition site has not been characterised yet.
 
-        See Also:
-            RE.is_defined()
-            RE.is_ambiguous()
+        Related methods:
+         - RE.is_defined()
+         - RE.is_ambiguous()
 
         """
         return False
 
     @classmethod
     def _mod2(cls, other):
-        """Test if other enzyme produces compatible ends for enzyme.
+        """Test if other enzyme produces compatible ends for enzyme (PRIVATE).
 
-        For internal use only
+        For internal use only.
 
         Test for the compatibility of restriction ending of RE and other.
         """
@@ -1710,6 +1726,7 @@ class Ambiguous(AbstractCut):
         Return a representation of the site with the cut on the (+) strand
         represented as '^' and the cut on the (-) strand as '_'.
         ie:
+
         >>> EcoRI.elucidate()   # 5' overhang
         'G^AATT_C'
         >>> KpnI.elucidate()    # 3' overhang
@@ -1719,6 +1736,7 @@ class Ambiguous(AbstractCut):
         >>> SnaI.elucidate()     # NotDefined, cut profile unknown.
         '? GTATAC ?'
         >>>
+
         """
         f5 = cls.fst5
         f3 = cls.fst3
@@ -1783,7 +1801,7 @@ class NotDefined(AbstractCut):
 
     @classmethod
     def _drop(cls):
-        """Remove cuts that are outsite of the sequence.
+        """Remove cuts that are outsite of the sequence (PRIVATE).
 
         For internal use only.
 
@@ -1814,9 +1832,9 @@ class NotDefined(AbstractCut):
         i.e. the recognition site is not degenerated AND the enzyme cut inside
         the site.
 
-        See Also:
-            RE.is_ambiguous()
-            RE.is_unknown()
+        Related methods:
+         - RE.is_ambiguous()
+         - RE.is_unknown()
 
         """
         return False
@@ -1829,9 +1847,9 @@ class NotDefined(AbstractCut):
         i.e. the recognition site is degenerated AND/OR the enzyme cut outside
         the site.
 
-        See Also:
-            RE.is_defined()
-            RE.is_unknown()
+        Related methods:
+         - RE.is_defined()
+         - RE.is_unknown()
 
         """
         return False
@@ -1843,16 +1861,16 @@ class NotDefined(AbstractCut):
         True if the sequence is unknown,
         i.e. the recognition site has not been characterised yet.
 
-        See Also:
-            RE.is_defined()
-            RE.is_ambiguous()
+        Related methods:
+         - RE.is_defined()
+         - RE.is_ambiguous()
 
         """
         return True
 
     @classmethod
     def _mod2(cls, other):
-        """Test if other enzyme produces compatible ends for enzyme.
+        """Test if other enzyme produces compatible ends for enzyme (PRIVATE).
 
         For internal use only.
 
@@ -1875,6 +1893,7 @@ class NotDefined(AbstractCut):
         Return a representation of the site with the cut on the (+) strand
         represented as '^' and the cut on the (-) strand as '_'.
         ie:
+
         >>> EcoRI.elucidate()   # 5' overhang
         'G^AATT_C'
         >>> KpnI.elucidate()    # 3' overhang
@@ -1884,6 +1903,7 @@ class NotDefined(AbstractCut):
         >>> SnaI.elucidate()     # NotDefined, cut profile unknown.
         '? GTATAC ?'
         >>>
+
         """
         return '? %s ?' % cls.site
 
@@ -2164,7 +2184,7 @@ class RestrictionBatch(set):
         return new
 
     def elements(self):
-        """List the enzymes of the RestrictionBatch as tuple.
+        """List the enzymes of the RestrictionBatch as list of strings.
 
         Give all the names of the enzymes in B sorted alphabetically.
         """
@@ -2335,7 +2355,7 @@ class Analysis(RestrictionBatch, PrintFormat):
     def change(self, **what):
         """Change parameters of print output.
 
-        A.change(**attribute_name) -> Change attribute of Analysis.
+        `A.change(**attribute_name)` -> Change attribute of Analysis.
 
         It is possible to change the width of the shell by setting
         self.ConsoleWidth to what you want.
@@ -2351,12 +2371,12 @@ class Analysis(RestrictionBatch, PrintFormat):
                 setattr(self, k, v)
                 self.Cmodulo = self.ConsoleWidth % self.NameWidth
                 self.PrefWidth = self.ConsoleWidth - self.Cmodulo
-            elif k is 'sequence':
+            elif k == 'sequence':
                 setattr(self, 'sequence', v)
                 self.search(self.sequence, self.linear)
-            elif k is 'rb':
+            elif k == 'rb':
                 self = Analysis.__init__(self, v, self.sequence, self.linear)
-            elif k is 'linear':
+            elif k == 'linear':
                 setattr(self, 'linear', v)
                 self.search(self.sequence, v)
             elif k in ('Indent', 'Maxsize'):
@@ -2611,7 +2631,7 @@ for TYPE, (bases, enzymes) in typedict.items():
 #
 #   AllEnzymes is a RestrictionBatch with all the enzymes from Rebase.
 #
-AllEnzymes = CommOnly
+AllEnzymes = RestrictionBatch(CommOnly)
 AllEnzymes.update(NonComm)
 #
 #   Now, place the enzymes in locals so they can be imported.

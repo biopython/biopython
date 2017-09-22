@@ -73,7 +73,7 @@ class CodemlTest(Common):
         self.cml = codeml.Codeml()
 
     def testCodemlBinary(self):
-        """codeml runs, generates correct output, and is the correct version."""
+        """Check codeml runs, generates correct output, and is the correct version."""
         ctl_file = os.path.join("PAML", "Control_files", "codeml", "codeml.ctl")
         self.cml.read_ctl_file(ctl_file)
         self.cml.alignment = os.path.join("PAML", "Alignments", "alignment.phylip")
@@ -94,7 +94,7 @@ class BasemlTest(Common):
         self.bml = baseml.Baseml()
 
     def testBasemlBinary(self):
-        """baseml runs, generates correct output, and is the correct version."""
+        """Check baseml runs, generates correct output, and is the correct version."""
         ctl_file = os.path.join("PAML", "Control_files", "baseml", "baseml.ctl")
         self.bml.read_ctl_file(ctl_file)
         self.bml.alignment = os.path.join("PAML", "Alignments", "alignment.phylip")
@@ -114,7 +114,7 @@ class Yn00Test(Common):
         self.yn = yn00.Yn00()
 
     def testYn00Binary(self):
-        """yn00 binary runs and generates correct output.
+        """Check yn00 binary runs and generates correct output.
 
         yn00 output does not specify the version number.
         """

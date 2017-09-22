@@ -739,7 +739,7 @@ print("Converted %i records" % count)
 \subsection{Indexing a FASTQ file}
 \label{sec:fastq-indexing}
 
-FASTQ files are often very large, with millions of reads in them. Due to the
+FASTQ files are usually very large, with millions of reads in them. Due to the
 sheer amount of data, you can't load all the records into memory at once.
 This is why the examples above (filtering and trimming) iterate over the file
 looking at just one \verb|SeqRecord| at a time.
@@ -766,6 +766,10 @@ Seq('GTCCCAGTATTCGGATTTGTCTGCCAAAACAATGAAATTGACACAGTTTACAAC...CCG', SingleLetter
 
 When testing this on a FASTQ file with seven million reads,
 indexing took about a minute, but record access was almost instant.
+
+The sister function \verb|Bio.SeqIO.index_db()| lets you save the index
+to an SQLite3 database file for near instantaneous reuse - see
+Section~\ref{sec:SeqIO-index} for more details.
 
 The example in Section~\ref{sec:SeqIO-sort} show how you can use the
 \verb|Bio.SeqIO.index()| function to sort a large FASTA file -- this

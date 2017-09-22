@@ -5,9 +5,8 @@
 
 from __future__ import print_function
 
-import os
 import os.path
-from ._paml import Paml, _relpath
+from ._paml import Paml
 from . import _parse_codeml
 
 
@@ -120,7 +119,7 @@ class Codeml(Paml):
                             for n in range(len(site_classes)):
                                 try:
                                     site_classes[n] = int(site_classes[n])
-                                except:
+                                except ValueError:
                                     raise TypeError(
                                         "Invalid site class: %s" % site_classes[n])
                             temp_options["NSsites"] = site_classes
@@ -130,12 +129,12 @@ class Codeml(Paml):
                             if "." in value:
                                 try:
                                     converted_value = float(value)
-                                except:
+                                except ValueError:
                                     converted_value = value
                             else:
                                 try:
                                     converted_value = int(value)
-                                except:
+                                except ValueError:
                                     converted_value = value
                             temp_options[option] = converted_value
         for option in self._options:
@@ -166,7 +165,7 @@ class Codeml(Paml):
         """
         Paml._set_rel_paths(self)
         if self.tree is not None:
-            self._rel_tree = _relpath(self.tree, self.working_dir)
+            self._rel_tree = os.path.relpath(self.tree, self.working_dir)
 
     def run(self, ctl_file=None, verbose=False, command="codeml", parse=True):
         """Run codeml using the current configuration and then parse the results.

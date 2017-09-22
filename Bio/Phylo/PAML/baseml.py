@@ -5,7 +5,7 @@
 
 import os
 import os.path
-from ._paml import Paml, _relpath
+from ._paml import Paml
 from . import _parse_baseml
 
 
@@ -128,12 +128,12 @@ class Baseml(Paml):
                             if "." in value or "e-" in value:
                                 try:
                                     converted_value = float(value)
-                                except:
+                                except ValueError:
                                     converted_value = value
                             else:
                                 try:
                                     converted_value = int(value)
-                                except:
+                                except ValueError:
                                     converted_value = value
                             temp_options[option] = converted_value
         for option in self._options:
@@ -152,7 +152,7 @@ class Baseml(Paml):
         """
         Paml._set_rel_paths(self)
         if self.tree is not None:
-            self._rel_tree = _relpath(self.tree, self.working_dir)
+            self._rel_tree = os.path.relpath(self.tree, self.working_dir)
 
     def run(self, ctl_file=None, verbose=False, command="baseml",
                 parse=True):

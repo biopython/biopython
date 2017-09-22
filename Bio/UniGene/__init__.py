@@ -76,6 +76,7 @@ Here is an overview of the flat file format that this parser deals with:
                          Possible values are mRNA, EST and HTC.
            TRACE=        The Trace ID of the EST sequence, as provided by
                          NCBI Trace Archive
+
 """
 
 
@@ -85,25 +86,25 @@ class SequenceLine(object):
     Initialize with the text part of the SEQUENCE line, or nothing.
 
     Attributes and descriptions (access as LOWER CASE):
+     - ACC=         GenBank/EMBL/DDBJ accession number of sequence
+     - NID=         Unique nucleotide sequence identifier (gi)
+     - PID=         Unique protein sequence identifier (used for non-ESTs)
+     - CLONE=       Clone identifier (used for ESTs only)
+     - END=         End (5'/3') of clone insert read (used for ESTs only)
+     - LID=         Library ID; see Hs.lib.info for library name and tissue
+     - MGC=         5' CDS-completeness indicator; if present,
+       the clone associated with this sequence
+       is believed CDS-complete. A value greater than 511
+       is the gi of the CDS-complete mRNA matched by the EST,
+       otherwise the value is an indicator of the reliability
+       of the test indicating CDS completeness;
+       higher values indicate more reliable CDS-completeness
+       predictions.
+     - SEQTYPE=     Description of the nucleotide sequence. Possible values
+       are mRNA, EST and HTC.
+     - TRACE=       The Trace ID of the EST sequence, as provided by NCBI
+       Trace Archive
 
-        - ACC=         GenBank/EMBL/DDBJ accession number of sequence
-        - NID=         Unique nucleotide sequence identifier (gi)
-        - PID=         Unique protein sequence identifier (used for non-ESTs)
-        - CLONE=       Clone identifier (used for ESTs only)
-        - END=         End (5'/3') of clone insert read (used for ESTs only)
-        - LID=         Library ID; see Hs.lib.info for library name and tissue
-        - MGC=         5' CDS-completeness indicator; if present,
-          the clone associated with this sequence
-          is believed CDS-complete. A value greater than 511
-          is the gi of the CDS-complete mRNA matched by the EST,
-          otherwise the value is an indicator of the reliability
-          of the test indicating CDS completeness;
-          higher values indicate more reliable CDS-completeness
-          predictions.
-        - SEQTYPE=     Description of the nucleotide sequence. Possible values
-          are mRNA, EST and HTC.
-        - TRACE=       The Trace ID of the EST sequence, as provided by NCBI
-          Trace Archive
     """
 
     def __init__(self, text=None):
@@ -224,6 +225,7 @@ class Record(object):
         self.sts          = []  # STS entries, array of STS entries
                                 # Type STSLine
         self.txmap        = []  # TXMAP entries, array of TXMap entries
+
     """
 
     def __init__(self):

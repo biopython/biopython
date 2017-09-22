@@ -15,26 +15,8 @@ class Structure(Entity):
         self.level = "S"
         Entity.__init__(self, id)
 
-    # Special methods
-
     def __repr__(self):
         return "<Structure id=%s>" % self.get_id()
-
-    # Private methods
-
-    def _sort(self, m1, m2):
-        """Sort models.
-
-        This sorting function sorts the Model instances in the Structure instance.
-        The sorting is done based on the model id, which is a simple int that
-        reflects the order of the models in the PDB file.
-
-        Arguments:
-        - m1, m2 - Model instances
-        """
-        return cmp(m1.get_id(), m2.get_id())
-
-    # Public
 
     def get_models(self):
         for m in self:

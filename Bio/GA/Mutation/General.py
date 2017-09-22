@@ -22,13 +22,12 @@ class SafeFitnessMutation(object):
         """Initialize to do safe mutations.
 
         Arguments:
+         - actual_mutation - A Mutation class which actually implements
+           mutation. functionality.
+         - accept_less - A probability to accept mutations which
+           generate lower fitness. This allows you to accept some
+           crossovers which reduce fitness, but not all of them.
 
-        - actual_mutation - A Mutation class which actually implements
-          mutation. functionality.
-
-        - accept_less - A probability to accept mutations which
-          generate lower fitness. This allows you to accept some
-          crossovers which reduce fitness, but not all of them.
         """
         self._mutation = actual_mutation
         self._accept_less_percent = accept_less

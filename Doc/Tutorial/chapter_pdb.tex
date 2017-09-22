@@ -50,6 +50,7 @@ The dictionary can also be created without creating a \texttt{Structure}
 object, ie. directly from the PDB file:
 
 \begin{verbatim}
+>>> from Bio.PDB import parse_pdb_header
 >>> with open(filename, 'r') as handle:
 ...     header_dict = parse_pdb_header(handle)
 ...
@@ -57,7 +58,7 @@ object, ie. directly from the PDB file:
 
 \subsection{Reading an mmCIF file}
 
-Similarly to the case the case of PDB files, first create an \texttt{MMCIFParser} object:
+Similarly to the case of PDB files, first create an \texttt{MMCIFParser} object:
 
 \begin{verbatim}
 >>> from Bio.PDB.MMCIFParser import MMCIFParser

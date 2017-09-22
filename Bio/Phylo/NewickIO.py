@@ -44,6 +44,7 @@ def parse(handle, **kwargs):
     """Iterate over the trees in a Newick file handle.
 
     :returns: generator of Bio.Phylo.Newick.Tree objects.
+
     """
     return Parser(handle).parse(**kwargs)
 
@@ -52,6 +53,7 @@ def write(trees, handle, plain=False, **kwargs):
     """Write a trees in Newick format to the given file handle.
 
     :returns: number of trees written.
+
     """
     return Writer(trees).write(handle, plain=plain, **kwargs)
 
@@ -90,10 +92,12 @@ class Parser(object):
     """
 
     def __init__(self, handle):
+        """Initialize file handle for the Newick Tree."""
         self.handle = handle
 
     @classmethod
     def from_string(cls, treetext):
+        """Instantiate the Newick Tree class from the given string."""
         handle = StringIO(treetext)
         return cls(handle)
 
@@ -242,6 +246,7 @@ class Writer(object):
     """Based on the writer in Bio.Nexus.Trees (str, to_string)."""
 
     def __init__(self, trees):
+        """Initialize parameter for Tree Writer object."""
         self.trees = trees
 
     def write(self, handle, **kwargs):

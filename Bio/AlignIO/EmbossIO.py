@@ -94,6 +94,7 @@ class EmbossIterator(AlignmentIterator):
         number_of_seqs = None
         ids = []
         seqs = []
+        header_dict = {}
 
         while line[0] == "#":
             # Read in the rest of this alignment header,
@@ -113,6 +114,16 @@ class EmbossIterator(AlignmentIterator):
                 assert len(ids) == number_of_seqs
             if key == "length":
                 length_of_seqs = int(parts[1].strip())
+
+            # Parse the rest of the header
+            if key == 'identity':
+                header_dict['identity'] = int(parts[1].strip().split('/')[0])
+            if key == 'similarity':
+                header_dict['similarity'] = int(parts[1].strip().split('/')[0])
+            if key == 'gaps':
+                header_dict['gaps'] = int(parts[1].strip().split('/')[0])
+            if key == 'score':
+                header_dict['score'] = float(parts[1].strip())
 
             # And read in another line...
             line = handle.readline()
@@ -222,4 +233,4 @@ class EmbossIterator(AlignmentIterator):
                                  "old version of EMBOSS.")
             records.append(SeqRecord(Seq(seq, self.alphabet),
                                      id=id, description=id))
-        return MultipleSeqAlignment(records, self.alphabet)
+        return MultipleSeqAlignment(records, self.alphabet, annotations=header_dict)

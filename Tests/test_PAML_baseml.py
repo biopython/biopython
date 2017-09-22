@@ -87,13 +87,6 @@ class ModTest(unittest.TestCase):
         self.assertRaises((AttributeError, TypeError, OSError),
                           self.bml.run)
 
-    def testOutputFileValid(self):
-        self.bml.tree = self.tree_file
-        self.bml.alignment = self.align_file
-        self.bml.out_file = list()
-        self.assertRaises((AttributeError, ValueError, OSError),
-                          self.bml.run)
-
     def testOptionExists(self):
         self.assertRaises((AttributeError, KeyError),
                           self.bml.set_options, xxxx=1)

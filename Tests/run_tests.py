@@ -8,18 +8,18 @@ This will find all modules whose name is "test_*.py" in the test
 directory, and run them.  Various command line options provide
 additional facilities.
 
-Command line options:
+Command line options::
 
---help        -- show usage info
---offline     -- skip tests which require internet access
--g;--generate -- write the output file for a test instead of comparing it.
-                 The name of the test to write the output for must be
-                 specified.
--v;--verbose  -- run tests with higher verbosity (does not affect our
-                 print-and-compare style unit tests).
-<test_name>   -- supply the name of one (or more) tests to be run.
-                 The .py file extension is optional.
-doctest       -- run the docstring tests.
+    --help        -- show usage info
+    --offline     -- skip tests which require internet access
+    -g;--generate -- write the output file for a test instead of comparing it.
+                     The name of the test to write the output for must be
+                     specified.
+    -v;--verbose  -- run tests with higher verbosity (does not affect our
+                     print-and-compare style unit tests).
+    <test_name>   -- supply the name of one (or more) tests to be run.
+                     The .py file extension is optional.
+    doctest       -- run the docstring tests.
 
 By default, all tests are run.
 """
@@ -102,6 +102,7 @@ DOCTEST_MODULES = [
     "Bio.Graphics.GenomeDiagram._Colors",
     "Bio.KEGG.Compound",
     "Bio.KEGG.Enzyme",
+    "Bio.KEGG.Gene",
     "Bio.KEGG.KGML.KGML_parser",
     "Bio.NMR.xpktools",
     "Bio.motifs",
@@ -292,9 +293,10 @@ class ComparisonTestCase(unittest.TestCase):
         """Initialize with the test to run.
 
         Arguments:
-        o name - The name of the test. The expected output should be
-          stored in the file output/name.
-        o output - The output that was generated when this test was run.
+            - name - The name of the test. The expected output should be
+              stored in the file output/name.
+            - output - The output that was generated when this test was run.
+
         """
         unittest.TestCase.__init__(self)
         self.name = name
@@ -501,7 +503,7 @@ class TestRunner(unittest.TextTestRunner):
             # Want to allow this, and abort the test
             # (see below for special case)
             raise err
-        except:
+        except:  # noqa: B901
             # This happens in Jython with java.lang.ClassFormatError:
             # Invalid method Code length ...
             sys.stderr.write("ERROR\n")

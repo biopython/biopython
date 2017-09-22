@@ -104,7 +104,7 @@ class GenBankTests(unittest.TestCase):
         self.assertEqual(rec.annotations["taxonomy"], [])
 
     def test_dblink(self):
-        """GenBank record with old DBLINK project entry."""
+        """Parse GenBank record with old DBLINK project entry."""
         record = SeqIO.read("GenBank/NC_005816.gb", "gb")
         self.assertEqual(record.dbxrefs, ["Project:58037"])
         gb = record.format("gb")
@@ -113,7 +113,7 @@ class GenBankTests(unittest.TestCase):
         self.assertIn("XX\nPR   Project:58037;\nXX\n", embl)
 
     def test_dblink_two(self):
-        """GenBank record with old and new DBLINK project entries."""
+        """Parse GenBank record with old and new DBLINK project entries."""
         record = SeqIO.read("GenBank/NP_416719.gbwithparts", "gb")
         self.assertEqual(record.dbxrefs,
                          ["Project:57779", "BioProject:PRJNA57779"])
@@ -126,7 +126,7 @@ KEYWORDS    """ in gb, gb)
         self.assertIn("XX\nPR   Project:PRJNA57779;\nXX\n", embl)
 
     def test_dbline_gb_embl(self):
-        """GenBank / EMBL paired records with PR project entry: GenBank"""
+        """Parse GenBank/EMBL paired records with PR project entry: GenBank"""
         record = SeqIO.read("GenBank/DS830848.gb", "gb")
         self.assertIn("BioProject:PRJNA16232", record.dbxrefs)
         gb = record.format("gb")
@@ -139,7 +139,7 @@ KEYWORDS    """ in gb, gb)
         self.assertIn("XX\nPR   Project:PRJNA16232;\nXX\n", embl)
 
     def test_dbline_embl_gb(self):
-        """GenBank / EMBL paired records with PR project entry: EMBL"""
+        """Parse GenBank/EMBL paired records with PR project entry: EMBL"""
         record = SeqIO.read("EMBL/DS830848.embl", "embl")
         # TODO: Should we map this to BioProject:PRJNA16232
         self.assertIn("Project:PRJNA16232", record.dbxrefs)

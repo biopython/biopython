@@ -8,8 +8,8 @@
 """Provide objects to represent biological sequences with alphabets.
 
 See also the Seq_ wiki and the chapter in our tutorial:
-    - `HTML Tutorial`_
-    - `PDF Tutorial`_
+ - `HTML Tutorial`_
+ - `PDF Tutorial`_
 
 .. _Seq: http://biopython.org/wiki/Seq
 .. _`HTML Tutorial`: http://biopython.org/DIST/docs/tutorial/Tutorial.html
@@ -38,8 +38,8 @@ def _maketrans(complement_mapping):
     """Make a python string translation table (PRIVATE).
 
     Arguments:
-        - complement_mapping - a dictionary such as ambiguous_dna_complement
-          and ambiguous_rna_complement from Data.IUPACData.
+     - complement_mapping - a dictionary such as ambiguous_dna_complement
+       and ambiguous_rna_complement from Data.IUPACData.
 
     Returns a translation table (a string of length 256) for use with the
     python string's translate method to use in a (reverse) complement.
@@ -87,9 +87,9 @@ class Seq(object):
         """Create a Seq object.
 
         Arguments:
-            - seq - Sequence, required (string)
-            - alphabet - Optional argument, an Alphabet object from
-              Bio.Alphabet
+         - seq - Sequence, required (string)
+         - alphabet - Optional argument, an Alphabet object from
+           Bio.Alphabet
 
         You will typically use Bio.SeqIO to read in sequences from files as
         SeqRecord objects, whose sequence will be exposed as a Seq object via
@@ -200,8 +200,8 @@ class Seq(object):
 
     def __ne__(self, other):
         """Implement the not-equal operand."""
-        # Seem to require this method for Python 2 but not needed on Python 3?
-        return not (self == other)
+        # Require this method for Python 2 but not needed on Python 3
+        return not self == other
 
     def __lt__(self, other):
         """Implement the less-than operand."""
@@ -392,15 +392,17 @@ class Seq(object):
         This behaves like the python string method of the same name,
         which does a non-overlapping count!
 
+        For an overlapping search use the newer count_overlap() method.
+
         Returns an integer, the number of occurrences of substring
         argument sub in the (sub)sequence given by [start:end].
         Optional arguments start and end are interpreted as in slice
         notation.
 
         Arguments:
-            - sub - a string or another Seq object to look for
-            - start - optional integer, slice start
-            - end - optional integer, slice end
+         - sub - a string or another Seq object to look for
+         - start - optional integer, slice start
+         - end - optional integer, slice end
 
         e.g.
 
@@ -424,11 +426,72 @@ class Seq(object):
         >>> print(Seq("AAAA").count("AA"))
         2
 
-        An overlapping search would give the answer as three!
+        An overlapping search, as implemented in .count_overlap(),
+        would give the answer as three!
         """
         # If it has one, check the alphabet:
         sub_str = self._get_seq_str_and_check_alphabet(sub)
         return str(self).count(sub_str, start, end)
+
+    def count_overlap(self, sub, start=0, end=sys.maxsize):
+        """Return an overlapping count.
+
+        For a non-overlapping search use the count() method.
+
+        Returns an integer, the number of occurrences of substring
+        argument sub in the (sub)sequence given by [start:end].
+        Optional arguments start and end are interpreted as in slice
+        notation.
+
+        Arguments:
+         - sub - a string or another Seq object to look for
+         - start - optional integer, slice start
+         - end - optional integer, slice end
+
+        e.g.
+
+        >>> from Bio.Seq import Seq
+        >>> print(Seq("AAAA").count_overlap("AA"))
+        3
+        >>> print(Seq("ATATATATA").count_overlap("ATA"))
+        4
+        >>> print(Seq("ATATATATA").count_overlap("ATA", 3, -1))
+        1
+
+        Where substrings do not overlap, should behave the same as
+        the count() method:
+
+        >>> from Bio.Seq import Seq
+        >>> my_seq = Seq("AAAATGA")
+        >>> print(my_seq.count_overlap("A"))
+        5
+        >>> my_seq.count_overlap("A") == my_seq.count("A")
+        True
+        >>> print(my_seq.count_overlap("ATG"))
+        1
+        >>> my_seq.count_overlap("ATG") == my_seq.count("ATG")
+        True
+        >>> print(my_seq.count_overlap(Seq("AT")))
+        1
+        >>> my_seq.count_overlap(Seq("AT")) == my_seq.count(Seq("AT"))
+        True
+        >>> print(my_seq.count_overlap("AT", 2, -1))
+        1
+        >>> my_seq.count_overlap("AT", 2, -1) == my_seq.count("AT", 2, -1)
+        True
+
+        HOWEVER, do not use this method for such cases because the
+        count() method is much for efficient.
+        """
+        sub_str = self._get_seq_str_and_check_alphabet(sub)
+        self_str = str(self)
+        overlap_count = 0
+        while True:
+            start = self_str.find(sub_str, start, end) + 1
+            if start != 0:
+                overlap_count += 1
+            else:
+                return overlap_count
 
     def __contains__(self, char):
         """Implement the 'in' keyword, like a python string.
@@ -470,9 +533,9 @@ class Seq(object):
         argument sub in the (sub)sequence given by [start:end].
 
         Arguments:
-            - sub - a string or another Seq object to look for
-            - start - optional integer, slice start
-            - end - optional integer, slice end
+         - sub - a string or another Seq object to look for
+         - start - optional integer, slice start
+         - end - optional integer, slice end
 
         Returns -1 if the subsequence is NOT found.
 
@@ -496,9 +559,9 @@ class Seq(object):
         substring argument sub in the (sub)sequence given by [start:end].
 
         Arguments:
-            - sub - a string or another Seq object to look for
-            - start - optional integer, slice start
-            - end - optional integer, slice end
+         - sub - a string or another Seq object to look for
+         - start - optional integer, slice start
+         - end - optional integer, slice end
 
         Returns -1 if the subsequence is NOT found.
 
@@ -904,26 +967,26 @@ class Seq(object):
         sequence raises an exception.
 
         Arguments:
-            - table - Which codon table to use?  This can be either a name
-              (string), an NCBI identifier (integer), or a CodonTable
-              object (useful for non-standard genetic codes).  This
-              defaults to the "Standard" table.
-            - stop_symbol - Single character string, what to use for
-              terminators.  This defaults to the asterisk, "*".
-            - to_stop - Boolean, defaults to False meaning do a full
-              translation continuing on past any stop codons (translated as the
-              specified stop_symbol).  If True, translation is terminated at
-              the first in frame stop codon (and the stop_symbol is not
-              appended to the returned protein sequence).
-            - cds - Boolean, indicates this is a complete CDS.  If True,
-              this checks the sequence starts with a valid alternative start
-              codon (which will be translated as methionine, M), that the
-              sequence length is a multiple of three, and that there is a
-              single in frame stop codon at the end (this will be excluded
-              from the protein sequence, regardless of the to_stop option).
-              If these tests fail, an exception is raised.
-            - gap - Single character string to denote symbol used for gaps.
-              It will try to guess the gap character from the alphabet.
+         - table - Which codon table to use?  This can be either a name
+           (string), an NCBI identifier (integer), or a CodonTable
+           object (useful for non-standard genetic codes).  This
+           defaults to the "Standard" table.
+         - stop_symbol - Single character string, what to use for
+           terminators.  This defaults to the asterisk, "*".
+         - to_stop - Boolean, defaults to False meaning do a full
+           translation continuing on past any stop codons (translated as the
+           specified stop_symbol).  If True, translation is terminated at
+           the first in frame stop codon (and the stop_symbol is not
+           appended to the returned protein sequence).
+         - cds - Boolean, indicates this is a complete CDS.  If True,
+           this checks the sequence starts with a valid alternative start
+           codon (which will be translated as methionine, M), that the
+           sequence length is a multiple of three, and that there is a
+           single in frame stop codon at the end (this will be excluded
+           from the protein sequence, regardless of the to_stop option).
+           If these tests fail, an exception is raised.
+         - gap - Single character string to denote symbol used for gaps.
+           It will try to guess the gap character from the alphabet.
 
         e.g. Using the standard table:
 
@@ -1325,15 +1388,17 @@ class UnknownSeq(Seq):
         This behaves like the python string (and Seq object) method of the
         same name, which does a non-overlapping count!
 
+        For an overlapping search use the newer count_overlap() method.
+
         Returns an integer, the number of occurrences of substring
         argument sub in the (sub)sequence given by [start:end].
         Optional arguments start and end are interpreted as in slice
         notation.
 
         Arguments:
-            - sub - a string or another Seq object to look for
-            - start - optional integer, slice start
-            - end - optional integer, slice end
+         - sub - a string or another Seq object to look for
+         - start - optional integer, slice start
+         - end - optional integer, slice end
 
         >>> "NNNN".count("N")
         4
@@ -1356,24 +1421,93 @@ class UnknownSeq(Seq):
         1
         """
         sub_str = self._get_seq_str_and_check_alphabet(sub)
-        if len(sub_str) == 1:
-            if str(sub_str) == self._character:
-                if start == 0 and end >= self._length:
-                    return self._length
-                else:
-                    # This could be done more cleverly...
-                    return str(self).count(sub_str, start, end)
-            else:
-                return 0
-        else:
-            if set(sub_str) == set(self._character):
-                if start == 0 and end >= self._length:
-                    return self._length // len(sub_str)
-                else:
-                    # This could be done more cleverly...
-                    return str(self).count(sub_str, start, end)
-            else:
-                return 0
+        len_self, len_sub_str = self._length, len(sub_str)
+        # Handling case where substring not in self
+        if set(sub_str) != set(self._character):
+            return 0
+        # Setting None to the default arguments
+        if start is None:
+            start = 0
+        if end is None:
+            end = sys.maxsize
+        # Truncating start and end to max of self._length and min of -self._length
+        start = max(min(start, len_self), -len_self)
+        end = max(min(end, len_self), -len_self)
+        # Convert start and ends to positive indexes
+        if start < 0:
+            start += len_self
+        if end < 0:
+            end += len_self
+        # Handle case where end <= start (no negative step argument here)
+        # and case where len_sub_str is larger than the search space
+        if end <= start or (end - start) < len_sub_str:
+            return 0
+        # 'Normal' calculation
+        return (end - start) // len_sub_str
+
+    def count_overlap(self, sub, start=0, end=sys.maxsize):
+        """Return an overlapping count.
+
+        For a non-overlapping search use the count() method.
+
+        Returns an integer, the number of occurrences of substring
+        argument sub in the (sub)sequence given by [start:end].
+        Optional arguments start and end are interpreted as in slice
+        notation.
+
+        Arguments:
+         - sub - a string or another Seq object to look for
+         - start - optional integer, slice start
+         - end - optional integer, slice end
+
+        e.g.
+
+        >>> from Bio.Seq import UnknownSeq
+        >>> UnknownSeq(4, character="N").count_overlap("NN")
+        3
+        >>> UnknownSeq(4, character="N").count_overlap("NNN")
+        2
+
+        Where substrings do not overlap, should behave the same as
+        the count() method:
+
+        >>> UnknownSeq(4, character="N").count_overlap("N")
+        4
+        >>> UnknownSeq(4, character="N").count_overlap("N") == UnknownSeq(4, character="N").count("N")
+        True
+        >>> UnknownSeq(4, character="N").count_overlap("A")
+        0
+        >>> UnknownSeq(4, character="N").count_overlap("A") == UnknownSeq(4, character="N").count("A")
+        True
+        >>> UnknownSeq(4, character="N").count_overlap("AA")
+        0
+        >>> UnknownSeq(4, character="N").count_overlap("AA") == UnknownSeq(4, character="N").count("AA")
+        True
+        """
+        sub_str = self._get_seq_str_and_check_alphabet(sub)
+        len_self, len_sub_str = self._length, len(sub_str)
+        # Handling case where substring not in self
+        if set(sub_str) != set(self._character):
+            return 0
+        # Setting None to the default arguments
+        if start is None:
+            start = 0
+        if end is None:
+            end = sys.maxsize
+        # Truncating start and end to max of self._length and min of -self._length
+        start = max(min(start, len_self), -len_self)
+        end = max(min(end, len_self), -len_self)
+        # Convert start and ends to positive indexes
+        if start < 0:
+            start += len_self
+        if end < 0:
+            end += len_self
+        # Handle case where end <= start (no negative step argument here)
+        # and case where len_sub_str is larger than the search space
+        if end <= start or (end - start) < len_sub_str:
+            return 0
+        # 'Normal' calculation
+        return end - start - len_sub_str + 1
 
     def complement(self):
         """Return the complement of an unknown nucleotide equals itself.
@@ -1816,15 +1950,17 @@ class MutableSeq(object):
         This behaves like the python string method of the same name,
         which does a non-overlapping count!
 
+        For an overlapping search use the newer count_overlap() method.
+
         Returns an integer, the number of occurrences of substring
         argument sub in the (sub)sequence given by [start:end].
         Optional arguments start and end are interpreted as in slice
         notation.
 
         Arguments:
-            - sub - a string or another Seq object to look for
-            - start - optional integer, slice start
-            - end - optional integer, slice end
+         - sub - a string or another Seq object to look for
+         - start - optional integer, slice start
+         - end - optional integer, slice end
 
         e.g.
 
@@ -1869,6 +2005,68 @@ class MutableSeq(object):
         else:
             # TODO - Can we do this more efficiently?
             return str(self).count(search, start, end)
+
+    def count_overlap(self, sub, start=0, end=sys.maxsize):
+        """Return an overlapping count.
+
+        For a non-overlapping search use the count() method.
+
+        Returns an integer, the number of occurrences of substring
+        argument sub in the (sub)sequence given by [start:end].
+        Optional arguments start and end are interpreted as in slice
+        notation.
+
+        Arguments:
+         - sub - a string or another Seq object to look for
+         - start - optional integer, slice start
+         - end - optional integer, slice end
+
+        e.g.
+
+        >>> from Bio.Seq import MutableSeq
+        >>> print(MutableSeq("AAAA").count_overlap("AA"))
+        3
+        >>> print(MutableSeq("ATATATATA").count_overlap("ATA"))
+        4
+        >>> print(MutableSeq("ATATATATA").count_overlap("ATA", 3, -1))
+        1
+
+        Where substrings do not overlap, should behave the same as
+        the count() method:
+
+        >>> from Bio.Seq import MutableSeq
+        >>> my_mseq = MutableSeq("AAAATGA")
+        >>> print(my_mseq.count_overlap("A"))
+        5
+        >>> my_mseq.count_overlap("A") == my_mseq.count("A")
+        True
+        >>> print(my_mseq.count_overlap("ATG"))
+        1
+        >>> my_mseq.count_overlap("ATG") == my_mseq.count("ATG")
+        True
+        >>> print(my_mseq.count_overlap(Seq("AT")))
+        1
+        >>> my_mseq.count_overlap(Seq("AT")) == my_mseq.count(Seq("AT"))
+        True
+        >>> print(my_mseq.count_overlap("AT", 2, -1))
+        1
+        >>> my_mseq.count_overlap("AT", 2, -1) == my_mseq.count("AT", 2, -1)
+        True
+
+        HOWEVER, do not use this method for such cases because the
+        count() method is much for efficient.
+        """
+        # The implementation is currently identical to that of
+        # Seq.count_overlap() apart from the definition of sub_str
+        sub_str = str(sub)
+        self_str = str(self)
+        overlap_count = 0
+        while True:
+            start = self_str.find(sub_str, start, end) + 1
+            if start != 0:
+                overlap_count += 1
+            else:
+                return overlap_count
 
     def index(self, item):
         """Return the position of a subsequence of a single letter."""
@@ -2027,23 +2225,23 @@ def _translate_str(sequence, table, stop_symbol="*", to_stop=False,
     """Translate nucleotide string into a protein string (PRIVATE).
 
     Arguments:
-        - sequence - a string
-        - table - a CodonTable object (NOT a table name or id number)
-        - stop_symbol - a single character string, what to use for terminators.
-        - to_stop - boolean, should translation terminate at the first
-          in frame stop codon?  If there is no in-frame stop codon
-          then translation continues to the end.
-        - pos_stop - a single character string for a possible stop codon
-          (e.g. TAN or NNN)
-        - cds - Boolean, indicates this is a complete CDS.  If True, this
-          checks the sequence starts with a valid alternative start
-          codon (which will be translated as methionine, M), that the
-          sequence length is a multiple of three, and that there is a
-          single in frame stop codon at the end (this will be excluded
-          from the protein sequence, regardless of the to_stop option).
-          If these tests fail, an exception is raised.
-        - gap - Single character string to denote symbol used for gaps.
-          Defaults to None.
+     - sequence - a string
+     - table - a CodonTable object (NOT a table name or id number)
+     - stop_symbol - a single character string, what to use for terminators.
+     - to_stop - boolean, should translation terminate at the first
+       in frame stop codon?  If there is no in-frame stop codon
+       then translation continues to the end.
+     - pos_stop - a single character string for a possible stop codon
+       (e.g. TAN or NNN)
+     - cds - Boolean, indicates this is a complete CDS.  If True, this
+       checks the sequence starts with a valid alternative start
+       codon (which will be translated as methionine, M), that the
+       sequence length is a multiple of three, and that there is a
+       single in frame stop codon at the end (this will be excluded
+       from the protein sequence, regardless of the to_stop option).
+       If these tests fail, an exception is raised.
+     - gap - Single character string to denote symbol used for gaps.
+       Defaults to None.
 
     Returns a string.
 
@@ -2154,27 +2352,27 @@ def translate(sequence, table="Standard", stop_symbol="*", to_stop=False,
     MutableSeq, returns a Seq object with a protein alphabet.
 
     Arguments:
-        - table - Which codon table to use?  This can be either a name
-          (string), an NCBI identifier (integer), or a CodonTable object
-          (useful for non-standard genetic codes).  Defaults to the "Standard"
-          table.
-        - stop_symbol - Single character string, what to use for any
-          terminators, defaults to the asterisk, "*".
-        - to_stop - Boolean, defaults to False meaning do a full
-          translation continuing on past any stop codons
-          (translated as the specified stop_symbol).  If
-          True, translation is terminated at the first in
-          frame stop codon (and the stop_symbol is not
-          appended to the returned protein sequence).
-        - cds - Boolean, indicates this is a complete CDS.  If True, this
-          checks the sequence starts with a valid alternative start
-          codon (which will be translated as methionine, M), that the
-          sequence length is a multiple of three, and that there is a
-          single in frame stop codon at the end (this will be excluded
-          from the protein sequence, regardless of the to_stop option).
-          If these tests fail, an exception is raised.
-        - gap - Single character string to denote symbol used for gaps.
-          Defaults to None.
+     - table - Which codon table to use?  This can be either a name
+       (string), an NCBI identifier (integer), or a CodonTable object
+       (useful for non-standard genetic codes).  Defaults to the "Standard"
+       table.
+     - stop_symbol - Single character string, what to use for any
+       terminators, defaults to the asterisk, "*".
+     - to_stop - Boolean, defaults to False meaning do a full
+       translation continuing on past any stop codons
+       (translated as the specified stop_symbol).  If
+       True, translation is terminated at the first in
+       frame stop codon (and the stop_symbol is not
+       appended to the returned protein sequence).
+     - cds - Boolean, indicates this is a complete CDS.  If True, this
+       checks the sequence starts with a valid alternative start
+       codon (which will be translated as methionine, M), that the
+       sequence length is a multiple of three, and that there is a
+       single in frame stop codon at the end (this will be excluded
+       from the protein sequence, regardless of the to_stop option).
+       If these tests fail, an exception is raised.
+     - gap - Single character string to denote symbol used for gaps.
+       Defaults to None.
 
     A simple string example using the default (standard) genetic code:
 

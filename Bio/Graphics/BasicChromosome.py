@@ -101,6 +101,7 @@ class Organism(_ChromosomeComponent):
     """
 
     def __init__(self, output_format='pdf'):
+        """Initialize."""
         _ChromosomeComponent.__init__(self)
 
         # customizable attributes
@@ -117,15 +118,14 @@ class Organism(_ChromosomeComponent):
         """Draw out the information for the Organism.
 
         Arguments:
+         - output_file -- The name of a file specifying where the
+           document should be saved, or a handle to be written to.
+           The output format is set when creating the Organism object.
+           Alternatively, output_file=None will return the drawing using
+           the low-level ReportLab objects (for further processing, such
+           as adding additional graphics, before writing).
+         - title -- The output title of the produced document.
 
-        - output_file -- The name of a file specifying where the
-        document should be saved, or a handle to be written to.
-        The output format is set when creating the Organism object.
-        Alternatively, output_file=None will return the drawing using
-        the low-level ReportLab objects (for further processing, such
-        as adding additional graphics, before writing).
-
-        - title -- The output title of the produced document.
         """
         width, height = self.page_size
         cur_drawing = Drawing(width, height)
@@ -190,26 +190,22 @@ class Chromosome(_ChromosomeComponent):
         """Initialize a Chromosome for drawing.
 
         Arguments:
-
-        - chromosome_name - The label for the chromosome.
+         - chromosome_name - The label for the chromosome.
 
         Attributes:
-        - start_x_position, end_x_position - The x positions on the page
-        where the chromosome should be drawn. This allows multiple
-        chromosomes to be drawn on a single page.
-
-        - start_y_position, end_y_position - The y positions on the page
-        where the chromosome should be contained.
+         - start_x_position, end_x_position - The x positions on the page
+           where the chromosome should be drawn. This allows multiple
+           chromosomes to be drawn on a single page.
+         - start_y_position, end_y_position - The y positions on the page
+           where the chromosome should be contained.
 
         Configuration Attributes:
-
-        - title_size - The size of the chromosome title.
-
-        - scale_num - A number of scale the drawing by. This is useful if
-        you want to draw multiple chromosomes of different sizes at the
-        same scale. If this is not set, then the chromosome drawing will
-        be scaled by the number of segements in the chromosome (so each
-        chromosome will be the exact same final size).
+         - title_size - The size of the chromosome title.
+         - scale_num - A number of scale the drawing by. This is useful if
+           you want to draw multiple chromosomes of different sizes at the
+           same scale. If this is not set, then the chromosome drawing will
+           be scaled by the number of segements in the chromosome (so each
+           chromosome will be the exact same final size).
 
         """
         _ChromosomeComponent.__init__(self)
@@ -374,28 +370,22 @@ class ChromosomeSegment(_ChromosomeComponent):
         """Initialize a ChromosomeSegment.
 
         Attributes:
-        - start_x_position, end_x_position - Defines the x range we have
-        to draw things in.
-
-        - start_y_position, end_y_position - Defines the y range we have
-        to draw things in.
+         - start_x_position, end_x_position - Defines the x range we have
+           to draw things in.
+         - start_y_position, end_y_position - Defines the y range we have
+           to draw things in.
 
         Configuration Attributes:
-
-        - scale - A scaling value for the component. By default this is
-        set at 1 (ie -- has the same scale as everything else). Higher
-        values give more size to the component, smaller values give less.
-
-        - fill_color - A color to fill in the segment with. Colors are
-        available in reportlab.lib.colors
-
-        - label - A label to place on the chromosome segment. This should
-        be a text string specifying what is to be included in the label.
-
-        - label_size - The size of the label.
-
-        - chr_percent - The percentage of area that the chromosome
-        segment takes up.
+         - scale - A scaling value for the component. By default this is
+           set at 1 (ie -- has the same scale as everything else). Higher
+           values give more size to the component, smaller values give less.
+         - fill_color - A color to fill in the segment with. Colors are
+           available in reportlab.lib.colors
+         - label - A label to place on the chromosome segment. This should
+           be a text string specifying what is to be included in the label.
+         - label_size - The size of the label.
+         - chr_percent - The percentage of area that the chromosome
+           segment takes up.
 
         """
         _ChromosomeComponent.__init__(self)
@@ -494,7 +484,7 @@ class ChromosomeSegment(_ChromosomeComponent):
 
 
 def _spring_layout(desired, minimum, maximum, gap=0):
-    """Function to try and layout label co-ordinates (or other floats, PRIVATE).
+    """Try to layout label co-ordinates (or other floats, PRIVATE).
 
     Originally written for the y-axis vertical positioning of labels on a
     chromosome diagram (where the minimum gap between y-axis co-ordinates is
@@ -602,10 +592,15 @@ def _place_labels(desired_etc, minimum, maximum, gap=0):
 
 
 class AnnotatedChromosomeSegment(ChromosomeSegment):
+    """Annotated chromosome segment.
+
+    This is like the ChromosomeSegment, but accepts a list of features.
+    """
+
     def __init__(self, bp_length, features,
                  default_feature_color=colors.blue,
                  name_qualifiers=('gene', 'label', 'name', 'locus_tag', 'product')):
-        """Like the ChromosomeSegment, but accepts a list of features.
+        """Initialize.
 
         The features can either be SeqFeature objects, or tuples of values:
         start (int), end (int), strand (+1, -1, O or None), label (string),
@@ -733,9 +728,9 @@ class TelomereSegment(ChromosomeSegment):
         customized in a TelomereSegments.
 
         Arguments:
+         - inverted -- Whether or not the telomere should be inverted
+           (ie. drawn on the bottom of a chromosome)
 
-        - inverted -- Whether or not the telomere should be inverted
-        (ie. drawn on the bottom of a chromosome)
         """
         ChromosomeSegment.__init__(self)
 
@@ -781,4 +776,10 @@ class SpacerSegment(ChromosomeSegment):
     """
 
     def draw(self, cur_diagram):
+        """Draw nothing to the current diagram (dummy method).
+
+        The segment spacer has no actual image in the diagram,
+        so this method therefore does nothing, but is defined
+        to match the expected API of the other segment objects.
+        """
         pass

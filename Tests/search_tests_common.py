@@ -31,7 +31,7 @@ class CheckRaw(unittest.TestCase):
     fmt = None  # define this in subclasses!
 
     def check_raw(self, filename, id, raw, **kwargs):
-        """Index filename using **kwargs, check get_raw(id)==raw."""
+        """Index filename using keyword arguments, check get_raw(id)==raw."""
         idx = SearchIO.index(filename, self.fmt, **kwargs)
         raw = _as_bytes(raw)
         # Anticipate cases where the raw string and/or file uses different

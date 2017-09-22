@@ -2,8 +2,11 @@
    :alt: Biopython on the Python Package Index (PyPI)
    :target: https://pypi.python.org/pypi/biopython
 .. image:: https://img.shields.io/travis/biopython/biopython/master.svg
-   :alt: Testing with TravisCI
+   :alt: Linux testing with TravisCI
    :target: https://travis-ci.org/biopython/biopython/branches
+.. image:: https://img.shields.io/appveyor/ci/biopython/biopython/master.svg
+   :alt: Windows testing with AppVeyor
+   :target: https://ci.appveyor.com/project/biopython/biopython/history
 .. image:: https://img.shields.io/codecov/c/github/biopython/biopython/master.svg
    :alt: TravisCI test coverage
    :target: https://codecov.io/github/biopython/biopython/
@@ -14,10 +17,9 @@
    :alt: Research software impact on Depsy
    :target: http://depsy.org/package/python/biopython
 
-.. image:: https://github.com/biopython/biopython/raw/master/Doc/images/biopython.jpg
+.. image:: https://github.com/biopython/biopython/raw/master/Doc/images/biopython_logo_m.png
    :alt: The Biopython Project
    :target: http://biopython.org
-   :width: 100%
 
 Biopython README file
 =====================
@@ -56,16 +58,18 @@ http://dx.doi.org/10.1093/bioinformatics/btp163 pmid:19304878
 For the impatient
 =================
 
-Windows users are currently recommended to use the installation packages provided
-on our website, http://biopython.org -- further instructions are given below.
-
 Python 2.7.9 onwards, and Python 3.4 onwards, include the package management
-system "pip" which should allow you to install Biopython with just::
+system "pip" which should allow you to install Biopython (and its dependency
+NumPy if needed) with just::
 
-    pip install numpy
     pip install biopython
 
-Otherwise you may have to build and install Biopython, which is described below.
+Since Biopython 1.70 we have provided pre-compiled binary wheel packages on
+PyPI for Linux, Mac OS X and Windows. This means pip install should be quick,
+and not require a compiler.
+
+As a developer or potential contributor, you may wish to download, build and
+install Biopython yourself. This is described below.
 
 
 Python Requirements
@@ -76,11 +80,13 @@ We currently recommend using Python 3.6 from http://www.python.org
 Biopython is currently supported and tested on the following Python
 implementations:
 
-- Python 2.7, 3.3, 3.4, 3.5, 3.6 -- see http://www.python.org
+- Python 2.7, 3.4, 3.5, 3.6 -- see http://www.python.org
 
-  This is the primary development platform for Biopython.
+  Python 3 is the primary development platform for Biopython. We will drop
+  support for Python 2.7 no later than 2020, in line with the end-of-life or
+  sunset date for Python 2.7 itself.
 
-- PyPy v5.7 and also PyPy3.5 v5.7 beta -- see http://www.pypy.org
+- PyPy v5.7 and also PyPy3.5 v5.8 beta -- see http://www.pypy.org
 
   Aside from ``Bio.trie`` (which does not compile as ``marshal.h`` is
   currently missing under PyPy), everything should work. Older versions
@@ -88,49 +94,56 @@ implementations:
 
 - Jython 2.7 -- see http://www.jython.org
 
-  We provide limited support for Jython, but aside from ``Bio.Restriction``,
-  modules with C code, or dependent on SQLite3 or NumPy, everything should
-  work. There are some known issues with test failures which have not yet
-  been resolved.
+  We have decided to deprecate support for Jython, but aside from
+  ``Bio.Restriction``, modules with C code, or dependent on SQLite3 or NumPy,
+  everything should work. There are some known issues with test failures
+  which have not yet been resolved.
 
-Please note that support for Python 3.3 is deprecated as of Biopython 1.67.
 Biopython 1.68 was our final release to support Python 2.6.
 
 
 Dependencies
 ============
 
-Depending on which parts of Biopython you plan to use, there are a number of
-other optional Python dependencies, which (other than NumPy) can be installed
-after Biopython.
+The following are required at compile time - unless you are using Jython
+(support for which is deprecated) or IronPython (which we do not officially
+support):
 
-- NumPy, see http://www.numpy.org (optional, but strongly recommended)
-  This package is only used in the computationally-oriented modules. It is
-  required for ``Bio.Cluster``, ``Bio.PDB`` and a few other modules.  If you
-  think you might need these modules, then please install NumPy first BEFORE
-  installing Biopython. The older Numeric library is no longer supported in
-  Biopython.
+- Appropriate C compiler for your version of Python, for example GCC on Linux,
+  MSVC on Windows. For Mac OS X, or as it is now branded, macOS, use Apple’s
+  command line tools, which can be installed with the terminal command::
+
+      xcode-select --install
+
+  This will offer to install Apple’s XCode development suite - you can, but it
+  is not needed and takes a lot of disk space.
+
+- NumPy, see http://www.numpy.org
+  This package is used in ``Bio.Cluster``, ``Bio.PDB`` and a few other modules.
+  We use the NumPy C API, which means it must be installed *before* compiling
+  Biopython's C code.
+
+
+Optional Dependencies
+=====================
+
+Depending on which parts of Biopython you plan to use, there are a number of
+other optional Python dependencies, which can be installed later if needed:
 
 - ReportLab, see http://www.reportlab.com/opensource/ (optional)
   This package is only used in ``Bio.Graphics``, so if you do not need this
-  functionality, you will not need to install this package.  You can install
-  it later if needed.
+  functionality, you will not need to install this package.
 
 - matplotlib, see http://matplotlib.org/ (optional)
-  ``Bio.Phylo`` uses this package to plot phylogenetic trees. As with
-  ReportLab, you can install this at any time to enable the plotting
-  functionality.
+  ``Bio.Phylo`` uses this package to plot phylogenetic trees.
 
 - networkx, see http://networkx.lanl.gov/ (optional) and
   pygraphviz or pydot, see http://networkx.lanl.gov/pygraphviz/ and
   http://code.google.com/p/pydot/ (optional)
   These packages are used for certain niche functions in ``Bio.Phylo``.
-  Again, they are only needed to enable these functions and can be installed
-  later if needed.
 
 - rdflib, see https://github.com/RDFLib/rdflib (optional)
-  This package is used in the CDAO parser under ``Bio.Phylo``, and can be
-  installed as needed.
+  This package is used in the CDAO parser under ``Bio.Phylo``.
 
 - psycopg2, see http://initd.org/psycopg/ (optional) or
   PyGreSQL (pgdb), see http://www.pygresql.org/ (optional)
@@ -151,27 +164,30 @@ In addition there are a number of useful third party tools you may wish to
 install such as standalone NCBI BLAST, EMBOSS or ClustalW.
 
 
-Installation
-============
+Installation From Source
+========================
 
-First, **make sure that Python is installed correctly**. Second, we
-recommend you install NumPy (see above). Then install Biopython.
+We recommend using the pre-compiled binary wheels available on PyPI using::
 
-Windows users should use the appropriate provided installation package
-from our website (each is specific to a different Python version).
+    pip install biopython
 
-Installation from source should be as simple as going to the Biopython
-source code directory, and typing::
+However, if you need to compile Biopython yourself, first **make sure that
+Python is installed correctly**. Second (except for Jython or IronPython),
+**make sure NumPy is installed**.
+
+Then either download and decompress our source code, or fetch it using git.
+Now change directory to the Biopython source code folder and run::
 
     python setup.py build
     python setup.py test
     sudo python setup.py install
 
-Substitute `python` with your specific version, for example `python3`,
-`jython` or `pypy`.
+Substitute ``python`` with your specific version, for example ``python3``,
+``jython`` or ``pypy``.
 
-If you need to do additional configuration, e.g. changing the base
-directory, please type ``python setup.py``, or see the documentation here:
+If you need to do additional configuration, e.g. changing the install
+directory prefix, please type ``python setup.py``, or see the documentation
+here:
 
 * HTML - http://biopython.org/DIST/docs/install/Installation.html
 * PDF - http://biopython.org/DIST/docs/install/Installation.pdf
@@ -278,7 +294,7 @@ Distribution Structure
 - ``DEPRECATED.rst`` -- Contains information about modules in Biopython that are
   removed or no longer recommended for use, and how to update code that uses
   those modules.
-- ``MANIFEST.in`` -- Tells distutils what files to distribute.
+- ``MANIFEST.in`` -- Configures which files to include in releases.
 - ``setup.py``    -- Installation file.
 - ``Bio/``        -- The main code base code.
 - ``BioSQL/``     -- Code for using Biopython with BioSQL databases.

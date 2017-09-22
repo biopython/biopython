@@ -8,9 +8,10 @@
 # as part of this package.
 #
 
-"""Update the Rebase emboss files.
+"""Update the Rebase EMBOSS files.
 
-These are used by Restriction to build the Restriction_Dictionary.py module.
+The Rebase EMBOSS files are used by `ranacompiler.py` to build the updated
+`Restriction_Dictionary.py` module for  `Bio.Restriction`.
 """
 
 from __future__ import print_function
@@ -52,7 +53,7 @@ class RebaseUpdate(FancyURLopener):
         print('\n Please wait, trying to connect to Rebase\n')
         try:
             self.open(name)
-        except:
+        except Exception:
             raise ConnectionError('Rebase')
         return
 

@@ -18,7 +18,7 @@ J Mol Biol. 2002 323(2):297-307.
 
 The definition files of the fragments can be obtained from:
 
-U{http://csb.stanford.edu/~rachel/fragments/}
+http://github.com/csblab/fragments/
 
 You need these files to use this module.
 
@@ -28,6 +28,7 @@ The library files can be found in directory 'fragment_data'.
     >>> model = structure[0]
     >>> fm = FragmentMapper(model, lsize=10, flength=5, dir="fragment_data")
     >>> fragment = fm[residue]
+
 """
 
 from __future__ import print_function
@@ -36,9 +37,7 @@ import numpy
 
 from Bio.SVDSuperimposer import SVDSuperimposer
 
-from Bio.PDB import Selection
 from Bio.PDB.PDBExceptions import PDBException
-from Bio.PDB.PDBParser import PDBParser
 from Bio.PDB.Polypeptide import PPBuilder
 
 
@@ -52,17 +51,17 @@ def _read_fragments(size, length, dir="."):
     """Read a fragment spec file (PRIVATE).
 
     Read a fragment spec file available from
-    http://csb.stanford.edu/rachel/fragments/
+    http://github.com/csblab/fragments/
     and return a list of Fragment objects.
 
-    @param size: number of fragments in the library
-    @type size: int
+    :param size: number of fragments in the library
+    :type size: int
 
-    @param length: length of the fragments
-    @type length: int
+    :param length: length of the fragments
+    :type length: int
 
-    @param dir: directory where the fragment spec files can be found
-    @type dir: string
+    :param dir: directory where the fragment spec files can be found
+    :type dir: string
     """
     filename = (dir + "/" + _FRAGMENT_FILE) % (size, length)
     with open(filename, "r") as fp:
@@ -94,11 +93,11 @@ class Fragment(object):
     def __init__(self, length, fid):
         """Initialize fragment object.
 
-        @param length: length of the fragment
-        @type length: int
+        :param length: length of the fragment
+        :type length: int
 
-        @param fid: id for the fragment
-        @type fid: int
+        :param fid: id for the fragment
+        :type fid: int
         """
         # nr of residues in fragment
         self.length = length
@@ -112,35 +111,35 @@ class Fragment(object):
     def get_resname_list(self):
         """Get residue list.
 
-        @return: the residue names
-        @rtype: [string, string,...]
+        :return: the residue names
+        :rtype: [string, string,...]
         """
         return self.resname_list
 
     def get_id(self):
         """Get identifier for the fragment.
 
-        @return: id for the fragment
-        @rtype: int
+        :return: id for the fragment
+        :rtype: int
         """
         return self.fid
 
     def get_coords(self):
         """Get the CA coordinates in the fragment.
 
-        @return: the CA coords in the fragment
-        @rtype: Numeric (Nx3) array
+        :return: the CA coords in the fragment
+        :rtype: Numeric (Nx3) array
         """
         return self.coords_ca
 
     def add_residue(self, resname, ca_coord):
         """Add a residue.
 
-        @param resname: residue name (eg. GLY).
-        @type resname: string
+        :param resname: residue name (eg. GLY).
+        :type resname: string
 
-        @param ca_coord: the c-alpha coorinates of the residues
-        @type ca_coord: Numeric array with length 3
+        :param ca_coord: the c-alpha coorinates of the residues
+        :type ca_coord: Numeric array with length 3
         """
         if self.counter >= self.length:
             raise PDBException("Fragment boundary exceeded.")
@@ -159,8 +158,8 @@ class Fragment(object):
 
             >>> rmsd=fragment1-fragment2
 
-        @return: rmsd between fragments
-        @rtype: float
+        :return: rmsd between fragments
+        :rtype: float
         """
         sup = SVDSuperimposer()
         sup.set(self.coords_ca, other.coords_ca)
@@ -179,11 +178,11 @@ class Fragment(object):
 def _make_fragment_list(pp, length):
     """Dice up a peptide in fragments of length "length".
 
-    @param pp: a list of residues (part of one peptide)
-    @type pp: [L{Residue}, L{Residue}, ...]
+    :param pp: a list of residues (part of one peptide)
+    :type pp: [L{Residue}, L{Residue}, ...]
 
-    @param length: fragment length
-    @type length: int
+    :param length: fragment length
+    :type length: int
     """
     frag_list = []
     for i in range(0, len(pp) - length + 1):
@@ -210,11 +209,11 @@ def _map_fragment_list(flist, reflist):
 
     Returns a list of reflist indices.
 
-    @param flist: list of protein fragments
-    @type flist: [L{Fragment}, L{Fragment}, ...]
+    :param flist: list of protein fragments
+    :type flist: [L{Fragment}, L{Fragment}, ...]
 
-    @param reflist: list of reference (ie. library) fragments
-    @type reflist: [L{Fragment}, L{Fragment}, ...]
+    :param reflist: list of reference (ie. library) fragments
+    :type reflist: [L{Fragment}, L{Fragment}, ...]
     """
     mapped = []
     for f in flist:
@@ -235,18 +234,18 @@ class FragmentMapper(object):
     def __init__(self, model, lsize=20, flength=5, fdir="."):
         """Create instance of FragmentMapper
 
-            @param model: the model that will be mapped
-            @type model: L{Model}
+        :param model: the model that will be mapped
+        :type model: L{Model}
 
-            @param lsize: number of fragments in the library
-            @type lsize: int
+        :param lsize: number of fragments in the library
+        :type lsize: int
 
-            @param flength: length of fragments in the library
-            @type flength: int
+        :param flength: length of fragments in the library
+        :type flength: int
 
-            @param fdir: directory where the definition files are
-            found (default=".")
-            @type fdir: string
+        :param fdir: directory where the definition files are
+                     found (default=".")
+        :type fdir: string
         """
         if flength == 5:
             self.edge = 2
@@ -261,8 +260,10 @@ class FragmentMapper(object):
         self.fd = self._map(self.model)
 
     def _map(self, model):
-        """@param model: the model that will be mapped
-        @type model: L{Model}
+        """Map (PRIVATE).
+
+        :param model: the model that will be mapped
+        :type model: L{Model}
         """
         ppb = PPBuilder()
         ppl = ppb.build_peptides(model)
@@ -295,41 +296,28 @@ class FragmentMapper(object):
         return fd
 
     def has_key(self, res):
-        """(Obsolete)
+        """Is this residue present? (DEPRECATED).
 
-        @type res: L{Residue}
+        :type res: L{Residue}
         """
         import warnings
         from Bio import BiopythonDeprecationWarning
         warnings.warn("has_key is deprecated; use 'res in object' instead", BiopythonDeprecationWarning)
-        return (res in self)
+        return res in self
 
     def __contains__(self, res):
         """True if the given residue is in any of the mapped fragments.
 
-        @type res: L{Residue}
+        :type res: L{Residue}
         """
-        return (res in self.fd)
+        return res in self.fd
 
     def __getitem__(self, res):
-        """@type res: L{Residue}
+        """Get an entry.
 
-          @return: fragment classification
-          @rtype: L{Fragment}
+        :type res: L{Residue}
+
+        :return: fragment classification
+        :rtype: L{Fragment}
         """
         return self.fd[res]
-
-
-if __name__ == "__main__":
-
-    import sys
-
-    p = PDBParser()
-    s = p.get_structure("X", sys.argv[1])
-    m = s[0]
-    fm = FragmentMapper(m, 10, 5, "levitt_data")
-
-    for r in Selection.unfold_entities(m, "R"):
-        print("%s:" % r)
-        if r in fm:
-            print(fm[r])

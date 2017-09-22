@@ -10,6 +10,7 @@ set of primers that can be used to visualize this.  More information can
 be found in the paper `Konieczny and Ausubel (1993)`_ (PMID 8106085).
 
 .. _`Konieczny and Ausubel (1993)`: http://dx.doi.org/10.1046/j.1365-313X.1993.04020403.x
+
 """
 
 
@@ -52,6 +53,7 @@ class CAPSMap(object):
      - alignment - The alignment that is mapped.
      - dcuts - A list of possible CAPS markers in the form of
        DifferentialCutsites.
+
     """
 
     def __init__(self, alignment, enzymes=None):
@@ -63,6 +65,7 @@ class CAPSMap(object):
         Optional:
          - enzymes - List of enzymes to be used to create the map.
            Defaults to an empty list.
+
         """
         if enzymes is None:
             enzymes = []

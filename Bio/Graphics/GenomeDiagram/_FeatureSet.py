@@ -40,6 +40,7 @@ class FeatureSet(object):
         Arguments:
          - set_id: Unique id for the set
          - name: String identifying the feature set
+
         """
         self.parent = parent
         self.id = id            # Unique id for the set

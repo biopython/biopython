@@ -36,13 +36,12 @@ class DiversitySelection(AbstractSelection):
         """Initialize a diversity selector.
 
         Arguments:
+         - internal_selector - A selection object that will be used to select
+           individuals based on fitness, perform crossover, mutation and repair.
+         - genome_generator - A function that, when called, will return a
+           genome to be used for a new organism. The genome returned must
+           be a MutableSeq() object.
 
-        - internal_selector - A selection object that will be used to select
-          individuals based on fitness, perform crossover, mutation and repair.
-
-        - genome_generator - A function that, when called, will return a
-          genome to be used for a new organism. The genome returned must
-          be a MutableSeq() object.
         """
         self._internal_selector = internal_selector
         self._genome_generator = genome_generator

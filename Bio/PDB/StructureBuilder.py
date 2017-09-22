@@ -50,7 +50,8 @@ class StructureBuilder(object):
         """Tracks line in the PDB file that is being parsed.
 
         Arguments:
-        - line_counter - int
+         - line_counter - int
+
         """
         self.line_counter = line_counter
 
@@ -58,7 +59,8 @@ class StructureBuilder(object):
         """Initiate a new Structure object with given id.
 
         Arguments:
-        - id - string
+         - id - string
+
         """
         self.structure = Structure(structure_id)
 
@@ -66,8 +68,9 @@ class StructureBuilder(object):
         """Initiate a new Model object with given id.
 
         Arguments:
-        - id - int
-        - serial_num - int
+         - id - int
+         - serial_num - int
+
         """
         self.model = Model(model_id, serial_num)
         self.structure.add(self.model)
@@ -76,7 +79,8 @@ class StructureBuilder(object):
         """Initiate a new Chain object with given id.
 
         Arguments:
-        - chain_id - string
+         - chain_id - string
+
         """
         if self.model.has_id(chain_id):
             self.chain = self.model[chain_id]
@@ -91,7 +95,8 @@ class StructureBuilder(object):
         """Flag a change in segid.
 
         Arguments:
-        - segid - string
+         - segid - string
+
         """
         self.segid = segid
 
@@ -99,12 +104,12 @@ class StructureBuilder(object):
         """Initiate a new Residue object.
 
         Arguments:
+         - resname - string, e.g. "ASN"
+         - field - hetero flag, "W" for waters, "H" for
+           hetero residues, otherwise blank.
+         - resseq - int, sequence identifier
+         - icode - string, insertion code
 
-            - resname - string, e.g. "ASN"
-            - field - hetero flag, "W" for waters, "H" for
-              hetero residues, otherwise blank.
-            - resseq - int, sequence identifier
-            - icode - string, insertion code
         """
         if field != " ":
             if field == "H":
@@ -168,13 +173,14 @@ class StructureBuilder(object):
         """Initiate a new Atom object.
 
         Arguments:
-        - name - string, atom name, e.g. CA, spaces should be stripped
-        - coord - Numeric array (Float0, size 3), atomic coordinates
-        - b_factor - float, B factor
-        - occupancy - float
-        - altloc - string, alternative location specifier
-        - fullname - string, atom name including spaces, e.g. " CA "
-        - element - string, upper case, e.g. "HG" for mercury
+         - name - string, atom name, e.g. CA, spaces should be stripped
+         - coord - Numeric array (Float0, size 3), atomic coordinates
+         - b_factor - float, B factor
+         - occupancy - float
+         - altloc - string, alternative location specifier
+         - fullname - string, atom name including spaces, e.g. " CA "
+         - element - string, upper case, e.g. "HG" for mercury
+
         """
         residue = self.residue
         # if residue is None, an exception was generated during

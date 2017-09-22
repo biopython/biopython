@@ -61,7 +61,7 @@ class DBSeq(Seq):
                                                      self.start + i,
                                                      self.start + i + 1)
         if not isinstance(index, slice):
-            raise ValueError("Unexpected index type")
+            raise TypeError("Unexpected index type")
 
         # Return the (sub)sequence as another DBSeq or Seq object
         # (see the Seq obect's __getitem__ method)
@@ -513,8 +513,8 @@ class DBSeqRecord(SeqRecord):
         """Create a DBSeqRecord object.
 
         Arguments:
-            - adaptor - A BioSQL.BioSeqDatabase.Adaptor object
-            - primary_id - An internal integer ID used by BioSQL
+         - adaptor - A BioSQL.BioSeqDatabase.Adaptor object
+         - primary_id - An internal integer ID used by BioSQL
 
         You wouldn't normally create a DBSeqRecord object yourself,
         this is done for you when using a BioSeqDatabase object

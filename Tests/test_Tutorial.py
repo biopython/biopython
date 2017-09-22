@@ -30,13 +30,18 @@
 #
 # %doctest examples lib:numpy lib:scipy
 #
-# Note if using lib:XXX you must include a relative path to the
-# working directory, just use . for the default path, e.g.
+# Additionally after the path, special keyword 'internet' is
+# used to flag online tests.
+#
+# Note if using lib:XXX or special value 'internet' you must
+# include a relative path to the working directory, just use '.'
+# for the default path, e.g.
 #
 # %doctest . lib:reportlab
 #
+# %doctest . internet
+#
 # TODO: Adding bin:XXX for checking binary XXX is on $PATH?
-# TODO: Adding way to specify the doctest needs the network?
 #
 # See also "Writing doctests in the Tutorial" in the Tutorial
 # itself.
@@ -51,12 +56,25 @@ import doctest
 import os
 import sys
 import warnings
-from Bio import BiopythonExperimentalWarning
+from Bio import BiopythonExperimentalWarning, MissingExternalDependencyError
+
+# This is the same mechanism used for run_tests.py --offline
+# to skip tests requiring the network.
+import requires_internet
+try:
+    requires_internet.check()
+    online = True
+except MissingExternalDependencyError:
+    online = False
+if "--offline" in sys.argv:
+    # Allow manual override via "python test_Tutorial.py --offline"
+    online = False
 
 warnings.simplefilter('ignore', BiopythonExperimentalWarning)
 
 if sys.version_info[0] >= 3:
     from lib2to3 import refactor
+    from lib2to3.pgen2.tokenize import TokenError
     fixers = refactor.get_fixers_from_package("lib2to3.fixes")
     fixers.remove("lib2to3.fixes.fix_print")  # Already using print function
     rt = refactor.RefactoringTool(fixers)
@@ -164,15 +182,20 @@ class TutorialDocTestHolder(object):
 
 
 def check_deps(dependencies):
+    """Check 'lib:XXX' and 'internet' dependencies are met."""
     missing = []
     for dep in dependencies:
-        assert dep.startswith("lib:"), dep
-        lib = dep[4:]
-        try:
-            tmp = __import__(lib)
-            del tmp
-        except ImportError:
-            missing.append(lib)
+        if dep == "internet":
+            if not online:
+                missing.append("internet")
+        else:
+            assert dep.startswith("lib:"), dep
+            lib = dep[4:]
+            try:
+                tmp = __import__(lib)
+                del tmp
+            except ImportError:
+                missing.append(lib)
     return missing
 
 
@@ -188,7 +211,10 @@ for latex in files:
 
         if sys.version_info[0] >= 3:
             example = ">>> from __future__ import print_function\n" + example
-            example = rt.refactor_docstring(example, name)
+            try:
+                example = rt.refactor_docstring(example, name)
+            except TokenError:
+                raise ValueError("Problem with %s:\n%s" % (name, example))
 
         def funct(n, d, f):
             global tutorial_base

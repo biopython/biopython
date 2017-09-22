@@ -26,7 +26,7 @@ from Bio import MissingPythonDependencyError
 try:
     # reportlab
     from reportlab.lib import colors
-except:
+except ImportError:
     raise MissingPythonDependencyError(
         "Install reportlab if you want to use Bio.Graphics.")
 

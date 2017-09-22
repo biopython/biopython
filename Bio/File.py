@@ -8,8 +8,7 @@
 """Code for more fancy file handles.
 
 Classes:
-
-    - UndoHandle     File object decorator with support for undo-like operations.
+ - UndoHandle     File object decorator with support for undo-like operations.
 
 Additional private classes used in Bio.SeqIO and Bio.SearchIO for indexing
 files are also defined under Bio.File but these are not intended for direct
@@ -53,11 +52,12 @@ def as_handle(handleish, mode='r', **kwargs):
     When given a string, returns a file handle open to handleish with provided
     mode which will be closed when the manager exits.
 
-    All other inputs are returned, and are *not* closed
+    All other inputs are returned, and are *not* closed.
 
-        - handleish  - Either a string or file handle
-        - mode       - Mode to open handleish (used only if handleish is a string)
-        - kwargs     - Further arguments to pass to open(...)
+    Arguments:
+     - handleish  - Either a string or file handle
+     - mode       - Mode to open handleish (used only if handleish is a string)
+     - kwargs     - Further arguments to pass to open(...)
 
     Example:
 
@@ -113,9 +113,8 @@ class UndoHandle(object):
     Saves lines in a LIFO fashion.
 
     Added methods:
-
-        - saveline    Save a line to be returned next time.
-        - peekline    Peek at the next line without consuming it.
+     - saveline    Save a line to be returned next time.
+     - peekline    Peek at the next line without consuming it.
 
     """
 

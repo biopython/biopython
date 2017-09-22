@@ -12,17 +12,15 @@ from Bio import motifs
 
 
 def read(handle):
-    """Parses the text output of the MEME program into a meme.Record object.
+    """Parse the text output of the MEME program into a meme.Record object.
 
     Example:
-
     >>> from Bio.motifs import meme
     >>> with open("meme.output.txt") as f:
     ...     record = meme.read(f)
     >>> for motif in record:
     ...     for instance in motif.instances:
     ...         print(instance.motif_name, instance.sequence_name, instance.strand, instance.pvalue)
-
     """
     record = Record()
     __read_version(record, handle)
@@ -31,7 +29,7 @@ def read(handle):
     __read_sequences(record, handle)
     __read_command(record, handle)
     for line in handle:
-        if line.startswith('MOTIF  1'):
+        if line.startswith('MOTIF '):
             break
     else:
         raise ValueError('Unexpected end of stream')
@@ -110,7 +108,7 @@ class Record(list):
     """
 
     def __init__(self):
-        """__init__ (self)"""
+        """Initialize."""
         self.version = ""
         self.datafile = ""
         self.command = ""
@@ -145,7 +143,9 @@ def __read_datafile(record, handle):
         if line.startswith('TRAINING SET'):
             break
     else:
-        raise ValueError("Unexpected end of stream: 'TRAINING SET' not found.")
+        raise ValueError(
+            "Unexpected end of stream: 'TRAINING SET' not found. This can happen with " +
+            "minimal MEME files (MEME databases) which are not supported yet.")
     try:
         line = next(handle)
     except StopIteration:
@@ -220,10 +220,15 @@ def __read_motif_statistics(line):
     #    MOTIF  1        width =  19  sites =   3  llr = 43  E-value = 6.9e-002
     # or like
     #    MOTIF  1 MEME    width =  19  sites =   3  llr = 43  E-value = 6.9e-002
+    # or in v 4.11.4 onwards
+    #    MOTIF ATTATAAAAAAA MEME-1	width =  12  sites =   5  llr = 43  E-value = 1.9e-003
     words = line.split()
     assert words[0] == 'MOTIF'
-    motif_number = int(words[1])
-    if words[2] == 'MEME':
+    if words[2][:5] == 'MEME-':
+        motif_number = int(words[2].split('-')[1])
+    else:
+        motif_number = int(words[1])
+    if words[2].startswith('MEME'):
         key_values = words[3:]
     else:
         key_values = words[2:]

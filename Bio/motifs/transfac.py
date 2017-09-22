@@ -76,21 +76,22 @@ class Record(list):
     The record inherits from a list containing the individual motifs.
 
     Attributes:
-
-    - version:   The version number, corresponding to the 'VV' field
-      in the TRANSFAC file;
+     - version - The version number, corresponding to the 'VV' field
+       in the TRANSFAC file;
 
     """
 
     def __init__(self):
+        """Initialize."""
         self.version = None
 
     def __str__(self):
+        """Turn the TRANSFAC matrix into a string."""
         return write(self)
 
 
 def read(handle):
-    """Record = read(handle)"""
+    """Parse a transfac format handle into a Record object."""
     annotations = {}
     references = []
     counts = None
