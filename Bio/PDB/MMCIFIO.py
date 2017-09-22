@@ -170,15 +170,14 @@ class MMCIFIO(object):
         for key, key_list in key_lists.items():
             # Pick a sample mmCIF value, which can be a list or a single value
             sample_val = self.dic[key + "." + key_list[0]]
-            val_type = type(sample_val)
             n_vals = len(sample_val)
             # Check the mmCIF dictionary has consistent list sizes
             for i in key_list:
                 val = self.dic[key + "." + i]
-                if type(val) != val_type or (val_type == list and len(val) != n_vals):
+                if (isinstance(sample_val, list) and (isinstance(val, str) or len(val) != n_vals)) or (isinstance(sample_val, str) and isinstance(val, list)):
                     raise ValueError("Inconsistent list sizes in mmCIF dictionary: " + key + "." + i)
             # If the value is a single value, write as key-value pairs
-            if val_type == str:
+            if isinstance(sample_val, str):
                 m = 0
                 # Find the maximum key length
                 for i in key_list:
@@ -187,7 +186,7 @@ class MMCIFIO(object):
                 for i in key_list:
                     out_file.write("{k: <{width}}".format(k=key + "." + i, width=len(key) + m + 4) + self._format_mmcif_col(self.dic[key + "." + i], len(self.dic[key + "." + i])) + "\n")
             # If the value is a list, write as keys then a value table
-            elif val_type == list:
+            elif isinstance(sample_val, list):
                 out_file.write("loop_\n")
                 col_widths = {}
                 # Write keys and find max widths for each set of values
@@ -209,7 +208,7 @@ class MMCIFIO(object):
                         out_file.write(self._format_mmcif_col(self.dic[key + "." + col][i], col_widths[col] + 1))
                     out_file.write("\n")
             else:
-                raise ValueError("Invalid type in mmCIF dictionary: " + str(val_type))
+                raise ValueError("Invalid type in mmCIF dictionary: " + str(type(sample_val)))
             out_file.write("#\n")
 
     def _format_mmcif_col(self, val, col_width):
