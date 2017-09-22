@@ -1,4 +1,5 @@
 """Write an mmCIF file.
+
 See https://www.iucr.org/resources/cif/spec/version1.1/cifsyntax for syntax.
 """
 
@@ -38,8 +39,7 @@ mmcif_order = {
 
 
 class MMCIFIO(object):
-    """Write a Structure object, a subset of a Structure object or a mmCIF
-    dictionary as a mmCIF file.
+    """Write a Structure object or a mmCIF dictionary as a mmCIF file.
 
     Example:
         >>> p=MMCIFParser()
@@ -54,7 +54,7 @@ class MMCIFIO(object):
         pass
 
     def set_structure(self, pdb_object):
-        # Check what the user is providing and build a structure appropriately
+        """Check what object the user is providing and build a structure."""
         # This is duplicated from the PDBIO class
         if pdb_object.level == "S":
             structure = pdb_object
@@ -94,10 +94,29 @@ class MMCIFIO(object):
         self.structure = structure
 
     def set_dict(self, dic):
-        # Set the mmCIF dictionary to be written out
+        """Set the mmCIF dictionary to be written out."""
         self.dic = dic
 
     def save(self, filepath, select=Select(), preserve_atom_numbering=False):
+        """:param filepath: output file
+        :type filepath: string or filehandle
+
+        :param select: selects which entities will be written.
+        :type select: object
+
+        Typically select is a subclass of L{Select}, it should
+        have the following methods:
+
+         - accept_model(model)
+         - accept_chain(chain)
+         - accept_residue(residue)
+         - accept_atom(atom)
+
+        These methods should return 1 if the entity is to be
+        written out, 0 otherwise.
+        """
+        # Similar to the PDBIO save method, we check if the filepath is a
+        # string for a filepath or an open file handle
         if isinstance(filepath, basestring):
             fp = open(filepath, "w")
             close_file = True

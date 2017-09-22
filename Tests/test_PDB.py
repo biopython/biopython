@@ -934,7 +934,7 @@ class WriteTest(unittest.TestCase):
             os.remove(filename)
 
     def test_mmcifio_write_residue(self):
-        """Write a single residue using MMCIFIO"""
+        """Write a single residue using MMCIFIO."""
         io = MMCIFIO()
         struct1 = self.structure
         residue1 = list(struct1.get_residues())[0]
