@@ -76,7 +76,7 @@ class MMCIFIO(object):
                         try:
                             parent_id = pdb_object.parent.id
                             sb.structure[0]['A'].id = parent_id
-                        except Exception:
+                        except AttributeError:
                             pass
                         sb.structure[0]['A'].add(pdb_object)
                     else:
@@ -85,7 +85,7 @@ class MMCIFIO(object):
                         try:
                             parent_id = pdb_object.parent.parent.id
                             sb.structure[0]['A'].id = parent_id
-                        except Exception:
+                        except AttributeError:
                             pass
                         sb.structure[0]['A'].child_list[0].add(pdb_object)
 
