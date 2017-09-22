@@ -248,6 +248,8 @@ class MMCIFIO(object):
                 if not select.accept_chain(chain):
                     continue
                 chain_id = chain.get_id()
+                if chain_id == " ":
+                    chain_id = "."
                 for residue in chain.get_unpacked_list():
                     if not select.accept_residue(residue):
                         continue
@@ -268,17 +270,18 @@ class MMCIFIO(object):
                             atom_dict["_atom_site.id"].append(str(atom_number))
                             if not preserve_atom_numbering:
                                 atom_number += 1
-                            if atom.element:
-                                atom_dict["_atom_site.type_symbol"].append(atom.element)
-                            else:
+                            element = atom.element.strip()
+                            if element == "":
                                 atom_dict["_atom_site.type_symbol"].append("?")
+                            else:
+                                atom_dict["_atom_site.type_symbol"].append(atom.element)
                             atom_dict["_atom_site.label_atom_id"].append(atom.get_name().strip())
                             altloc = atom.get_altloc()
                             if altloc == " ":
                                 atom_dict["_atom_site.label_alt_id"].append(".")
                             else:
                                 atom_dict["_atom_site.label_alt_id"].append(altloc)
-                            atom_dict["_atom_site.label_comp_id"].append(resname)
+                            atom_dict["_atom_site.label_comp_id"].append(resname.strip())
                             atom_dict["_atom_site.pdbx_PDB_ins_code"].append(icode)
                             coord = atom.get_coord()
                             atom_dict["_atom_site.Cartn_x"].append("%.3f" % coord[0])
