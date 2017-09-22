@@ -60,9 +60,11 @@ For the impatient
 
 Python 2.7.9 onwards, and Python 3.4 onwards, include the package management
 system "pip" which should allow you to install Biopython (and its dependency
-NumPy if needed) with just::
+NumPy if needed), upgrade or uninstall with just one terminal command::
 
     pip install biopython
+    pip install --upgrade biopython
+    pip uninstall biopython
 
 Since Biopython 1.70 we have provided pre-compiled binary wheel packages on
 PyPI for Linux, Mac OS X and Windows. This means pip install should be quick,
@@ -102,30 +104,12 @@ implementations:
 Biopython 1.68 was our final release to support Python 2.6.
 
 
-Dependencies
-============
-
-The following are required at compile time - unless you are using Jython
-(support for which is deprecated) or IronPython (which we do not officially
-support):
-
-- Appropriate C compiler for your version of Python, for example GCC on Linux,
-  MSVC on Windows. For Mac OS X, or as it is now branded, macOS, use Apple’s
-  command line tools, which can be installed with the terminal command::
-
-      xcode-select --install
-
-  This will offer to install Apple’s XCode development suite - you can, but it
-  is not needed and takes a lot of disk space.
-
-- NumPy, see http://www.numpy.org
-  This package is used in ``Bio.Cluster``, ``Bio.PDB`` and a few other modules.
-  We use the NumPy C API, which means it must be installed *before* compiling
-  Biopython's C code.
-
-
 Optional Dependencies
 =====================
+
+Biopython requires NumPy (see http://www.numpy.org) which will be installed
+automatically if you install Biopython with pip (see below for compiling
+Biopython yourself).
 
 Depending on which parts of Biopython you plan to use, there are a number of
 other optional Python dependencies, which can be installed later if needed:
@@ -157,7 +141,7 @@ other optional Python dependencies, which can be installed later if needed:
   This is an older alternative package used by ``BioSQL`` to access a MySQL
   database, but it is not available for Python 3 or PyPy.
 
-Note that some of these libraries are not available for Jython or PyPy,
+Note that some of these libraries are not available for PyPy or Jython,
 and not all are available for Python 3 yet either.
 
 In addition there are a number of useful third party tools you may wish to
@@ -171,9 +155,27 @@ We recommend using the pre-compiled binary wheels available on PyPI using::
 
     pip install biopython
 
-However, if you need to compile Biopython yourself, first **make sure that
-Python is installed correctly**. Second (except for Jython or IronPython),
-**make sure NumPy is installed**.
+However, if you need to compile Biopython yourself, the following are
+required at compile time - unless you are using Jython (support for which is
+deprecated).
+
+- Python including development header files like ``python.h``, which on Linux
+  are often not installed by default (trying looking for and installing a
+  package named ``python-dev`` or ``python-devel`` as well as the ``python``
+  pacakge).
+
+- Appropriate C compiler for your version of Python, for example GCC on Linux,
+  MSVC on Windows. For Mac OS X, or as it is now branded, macOS, use Apple’s
+  command line tools, which can be installed with the terminal command::
+
+      xcode-select --install
+
+  This will offer to install Apple’s XCode development suite - you can, but it
+  is not needed and takes a lot of disk space.
+
+- NumPy, see http://www.numpy.org - this package is used in ``Bio.Cluster``,
+  ``Bio.PDB`` and a few other modules. We use the NumPy C API, which means it
+  must be installed *before* compiling Biopython's C code.
 
 Then either download and decompress our source code, or fetch it using git.
 Now change directory to the Biopython source code folder and run::
@@ -183,7 +185,7 @@ Now change directory to the Biopython source code folder and run::
     sudo python setup.py install
 
 Substitute ``python`` with your specific version, for example ``python3``,
-``jython`` or ``pypy``.
+``pypy`` or ``jython``.
 
 If you need to do additional configuration, e.g. changing the install
 directory prefix, please type ``python setup.py``, or see the documentation
