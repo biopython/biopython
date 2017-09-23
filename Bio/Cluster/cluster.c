@@ -2824,6 +2824,7 @@ to 0. If kmedoids fails due to a memory allocation error, ifound is set to -1.
       free(errors);
       return;
     }
+    for (i = 0; i < nelements; i++) clusterid[i] = -1;
   }
 
   *error = DBL_MAX;
@@ -2832,7 +2833,7 @@ to 0. If kmedoids fails due to a memory allocation error, ifound is set to -1.
     int counter = 0;
     int period = 10;
 
-    if (npass!=0) randomassign (nclusters, nelements, tclusterid);
+    if (npass!=0) randomassign(nclusters, nelements, tclusterid);
     while(1)
     { double previous = total;
       total = 0.0;
@@ -2875,14 +2876,25 @@ to 0. If kmedoids fails due to a memory allocation error, ifound is set to -1.
         break; /* Identical solution found; break out of this loop */
     }
 
+    if (npass <= 1) {
+      *ifound = 1;
+      *error = total;
+      /* Replace by the centroid in each cluster. */
+      for (j = 0; j < nelements; j++) {
+        clusterid[j] = centroids[tclusterid[j]];
+      }
+      break;
+    }
+
     for (i = 0; i < nelements; i++)
     { if (clusterid[i]!=centroids[tclusterid[i]])
       { if (total < *error)
         { *ifound = 1;
           *error = total;
           /* Replace by the centroid in each cluster. */
-          for (j = 0; j < nelements; j++)
+          for (j = 0; j < nelements; j++) {
             clusterid[j] = centroids[tclusterid[j]];
+          }
         }
         break;
       }
