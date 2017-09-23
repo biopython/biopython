@@ -408,14 +408,14 @@ class Record(object):
         The distance matrix is returned as a list of 1D arrays containing the
         distance matrix between the gene expression data. The number of columns
         in each row is equal to the row number. Hence, the first row has zero
-        elements. An example of the return value is::
+        elements. An example of the return value is:
 
             matrix = [[],
                       array([1.]),
                       array([7., 3.]),
                       array([4., 2., 6.])]
 
-        This corresponds to the distance matrix::
+        This corresponds to the distance matrix:
 
             [0., 1., 7., 4.]
             [1., 0., 3., 2.]

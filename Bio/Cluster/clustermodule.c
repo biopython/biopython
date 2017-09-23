@@ -1003,7 +1003,7 @@ static PyObject*
 PyNode_repr(PyNode* self)
 { char string[64];
   sprintf(string, "(%d, %d): %g",
-                  self->node.left, self->node.right, self->node.distance);
+                 self->node.left, self->node.right, self->node.distance);
 #if PY_MAJOR_VERSION >= 3
   return PyUnicode_FromString(string);
 #else
@@ -1509,10 +1509,9 @@ static PyTypeObject PyTreeType = {
 
 /* version */
 static char version__doc__[] =
-"version()\n"
+"version() -> string\n"
 "\n"
-"This function returns the version number of the C Clustering Library\n"
-"as a string.\n";
+"Return the version number of the C Clustering Library as a string.\n";
 
 static PyObject*
 py_version(PyObject* self)
