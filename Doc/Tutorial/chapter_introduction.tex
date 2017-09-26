@@ -312,6 +312,24 @@ from __future__ import print_function
   \item \emph{Why doesn't} \verb|Bio.Fasta| \emph{work?} \\
   We deprecated the \verb|Bio.Fasta| module in Biopython 1.51 (August 2009) and removed it in Biopython 1.55 (August 2010). There is a brief example showing how to convert old code to use \verb|Bio.SeqIO| instead in the \href{https://github.com/biopython/biopython/blob/master/DEPRECATED.rst}{DEPRECATED.rst} file.
 
+  \item \emph{Why does Biopython start so many threads?} \\
+  Some parts of Biopython make use of \href{http://www.numpy.org}{NumPy}, which in turn makes use of a system-dependent BLAS (Basic Linear Algebra Subprograms) library. Some BLAS libraries automatically spawn one thread for each available CPU core. On systems where this is the case, simply importing NumPy (or any Biopython module relying on NumPy) will spawn several threads. The number of threads can be changed by setting an environment variable before NumPy is loaded: if your version of NumPy is linked to the Intel MKL, set \verb|MKL_NUM_THREADS| to the desired number; for OpenBLAS, set \verb|OMP_NUM_THREADS|; otherwise, consult the documentation for your BLAS library.
+
+  To do this in Python, you could put this at the beginning of your script before loading Biopython:
+  \begin{verbatim}
+  import os
+  try:
+    os.environ["OMP_NUM_THREADS"] = "1"
+    import numpy
+  finally:
+    del os.environ["OMP_NUM_THREADS"]
+  \end{verbatim}
+  Python caches modules once they are loaded, so this code must appear before NumPy is imported.
+
+  % Could be useful for Google to have the error text here.
+  If you see the error \verb|Error su: cannot set user id: Resource temporarily unavailable| when running multiple instances of Biopython on a Linux system with a limited number of allowed threads, this is a likely cause. On Linux, running \verb!ps --no-header -L -p $PID | wc -l! will give the number of threads used by the process with ID \verb|$PID|.
+
+
 \end{enumerate}
 
 \noindent For more general questions, the Python FAQ pages \url{http://www.python.org/doc/faq/} may be useful.
