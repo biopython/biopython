@@ -35,6 +35,9 @@ Bio/GenBank/* @peterjc
 Tests/test_GenBank*.py @peterjc
 Tests/test_EMBL*.py @peterjc
 
+Bio/motifs/* @mdehoon
+Tests/test_motifs*.py @mdehoon
+
 Bio/Phylo/* @etal
 Tests/test_Phylo*.py @etal
 
