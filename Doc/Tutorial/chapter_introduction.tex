@@ -319,10 +319,10 @@ from __future__ import print_function
   \begin{verbatim}
   import os
   try:
-    os.environ["OMP_NUM_THREADS"] = "1"
-    import numpy
+      os.environ["OMP_NUM_THREADS"] = "1"
+      import numpy
   finally:
-    del os.environ["OMP_NUM_THREADS"]
+      del os.environ["OMP_NUM_THREADS"]
   \end{verbatim}
   Python caches modules once they are loaded, so this code must appear before NumPy is imported.
 
