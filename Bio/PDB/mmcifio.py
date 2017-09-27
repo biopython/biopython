@@ -246,6 +246,17 @@ class MMCIFIO(object):
         else:
             return False
 
+    def _get_label_asym_id(self, entity_id):
+        # Convert a positive integer into a chain ID
+        # Goes A to Z, then AA to AZ, BA to BZ etc
+        div = entity_id
+        out = ""
+        while div > 0:
+            mod = (div - 1) % 26
+            out = chr(65 + mod) + out
+            div = int((div - mod) / 26)
+        return out
+
     def _save_structure(self, out_file, select, preserve_atom_numbering):
         atom_dict = defaultdict(list)
 
@@ -257,6 +268,9 @@ class MMCIFIO(object):
                 model_n = "1"
             else:
                 model_n = str(model.serial_num)
+            # This is used to write label_entity_id and label_asym_id and
+            # increments from 1, changing with each molecule
+            entity_id = 0
             if not preserve_atom_numbering:
                 atom_number = 1
             for chain in model.get_list():
@@ -268,6 +282,8 @@ class MMCIFIO(object):
                 residue_number = 1
                 if chain_id == " ":
                     chain_id = "."
+                prev_residue_type = ""
+                prev_resname = ""
                 for residue in chain.get_unpacked_list():
                     if not select.accept_residue(residue):
                         continue
@@ -283,6 +299,14 @@ class MMCIFIO(object):
                     if icode == " ":
                         icode = "?"
                     resname = residue.get_resname()
+                    # Check if the molecule changes within the chain
+                    # This will always increment for the first residue in a
+                    # chain due to the starting values above
+                    if residue_type != prev_residue_type or (residue_type == "HETATM" and resname != prev_resname):
+                        entity_id += 1
+                    prev_residue_type = residue_type
+                    prev_resname = resname
+                    label_asym_id = self._get_label_asym_id(entity_id)
                     for atom in residue.get_unpacked_list():
                         if select.accept_atom(atom):
                             atom_dict["_atom_site.group_PDB"].append(residue_type)
@@ -303,6 +327,8 @@ class MMCIFIO(object):
                             else:
                                 atom_dict["_atom_site.label_alt_id"].append(altloc)
                             atom_dict["_atom_site.label_comp_id"].append(resname.strip())
+                            atom_dict["_atom_site.label_asym_id"].append(label_asym_id)
+                            atom_dict["_atom_site.label_entity_id"].append(str(entity_id))
                             atom_dict["_atom_site.label_seq_id"].append(label_seq_id)
                             atom_dict["_atom_site.pdbx_PDB_ins_code"].append(icode)
                             coord = atom.get_coord()
