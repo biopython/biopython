@@ -274,11 +274,11 @@ class MMCIFIO(object):
                     hetfield, resseq, icode = residue.get_id()
                     if hetfield == " ":
                         residue_type = "ATOM"
-                        atom_dict["_atom_site.label_seq_id"].append(str(residue_number))
+                        label_seq_id = str(residue_number)
                         residue_number += 1
                     else:
-                        atom_dict["_atom_site.label_seq_id"].append(".")
                         residue_type = "HETATM"
+                        label_seq_id = "."
                     resseq = str(resseq)
                     if icode == " ":
                         icode = "?"
@@ -303,6 +303,7 @@ class MMCIFIO(object):
                             else:
                                 atom_dict["_atom_site.label_alt_id"].append(altloc)
                             atom_dict["_atom_site.label_comp_id"].append(resname.strip())
+                            atom_dict["_atom_site.label_seq_id"].append(label_seq_id)
                             atom_dict["_atom_site.pdbx_PDB_ins_code"].append(icode)
                             coord = atom.get_coord()
                             atom_dict["_atom_site.Cartn_x"].append("%.3f" % coord[0])
