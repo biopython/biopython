@@ -38,6 +38,9 @@ Tests/test_EMBL*.py @peterjc
 Bio/motifs/* @mdehoon
 Tests/test_motifs*.py @mdehoon
 
+Bio/PDB/* @joaorodrigues
+Tests/test_PDB*.py @joaorodrigues
+
 Bio/Phylo/* @etal
 Tests/test_Phylo*.py @etal
 
