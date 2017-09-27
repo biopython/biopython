@@ -1,6 +1,10 @@
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+# Copyright 2017 by Berenice Batut (berenice.batut@gmail.com). All rights reserved.
+# Revision copyright 2017 by Francesco Gastaldello. All rights reserved.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
 """Provide code to access the EBI Search API.
 
@@ -24,7 +28,7 @@ import requests
 import requires_internet
 requires_internet.check()
 
-baseUrl = 'http://www.ebi.ac.uk/ebisearch/ws/rest'
+base_url = 'http://www.ebi.ac.uk/ebisearch/ws/rest'
 sizeLimit = 100
 startLimit = 250000
 
@@ -32,11 +36,18 @@ startLimit = 250000
 def get_domain_details(domain):
     """Return a dictionary with the details of a given domain in EBI.
 
-    >>> get_domain_details("allebi")
+    Arguments:
+     - domain - domain id in EBI.
 
-    domain: domain id in EBI
+    Example:
+
+    >>> dom_dict = ebisearch.get_domain_details(domain="allebi")
+    >>> print(str(dom_dict['domains'][0])[:150])
+    >>> {u'description': u'Results from all the EBI resources', u'subdomains':
+        [{u'description': u'', u'subdomains': [{u'fieldInfos': [{u'description'
+        : u'Luce
     """
-    url = baseUrl + '/' + domain
+    url = base_url + '/' + domain
     r = requests.get(
         url,
         headers={"accept": "application/json"})
@@ -47,8 +58,9 @@ def get_domain_details(domain):
 def get_details_and_subdomains(domain, level, verbose=False):
     """Return the details (id and name) for the domain and its subdomains.
 
-    domain: domain id in EBI
-    verbose: Boolean to define the printing info
+    Arguments:
+     - domain - domain id in EBI.
+     - verbose - Boolean to define the printing info.
     """
     domain_details = {domain['id']: domain['name']}
     if verbose:
@@ -67,8 +79,9 @@ def get_domains(verbose=False):
     """Return the list of domains in EBI as a dictionary.
 
     The key being the domain id and the value the domain name.
+    Arguments:
 
-    verbose: boolean to define the printing info
+     - verbose - boolean to define the printing info.
     """
     allebi = get_domain_details("allebi")
     domain_details = {}
@@ -85,7 +98,9 @@ def print_domain_hierarchy():
 def check_domain(domain):
     """Check if a domain exist in EBI.
 
-    domain: id of a domain to check
+    Arguments:
+
+     - domain - id of a domain to check.
     """
     if domain not in get_domains(verbose=False):
         err_str = "The domain does not correspond to the id of a known domain"
@@ -98,11 +113,13 @@ def check_domain(domain):
 def get_number_of_results(domain, query):
     """Return the number of results for a query on a specific domain in EBI.
 
-    domain: domain id in EBI
-    query: query for EBI
+    Arguments:
+
+     - domain - domain id in EBI.
+     - query - query for EBI.
     """
     check_domain(domain)
-    url = baseUrl + '/' + domain + '?query=' + query + '&size=0'
+    url = base_url + '/' + domain + '?query=' + query + '&size=0'
     r = requests.get(
         url,
         headers={"accept": "application/json"})
@@ -113,7 +130,9 @@ def get_number_of_results(domain, query):
 def get_subdomain_fields(domain):
     """Return the fields of a domain and its subdomains.
 
-    domain: domain id in EBI
+    Arguments:
+
+     - domain - domain id in EBI.
     """
     fields = {
         "searchable": {},
@@ -143,8 +162,10 @@ def get_subdomain_fields(domain):
 def get_fields(domain, verbose=True):
     """Return the fields (for different type) of a specific domain in EBI.
 
-    domain: domain id in EBI
-    verbose: boolean to define the printing info
+    Arguments:
+
+     - domain - domain id in EBI.
+     - verbose - boolean to define the printing info.
     """
     check_domain(domain)
     domain_details = get_domain_details(domain)
@@ -174,10 +195,12 @@ def get_fields(domain, verbose=True):
 def get_specific_fields(domain, field_type, verbose=True):
     """Return the fields of a given type for a specific domain in EBI.
 
-    domain: domain id in EBI
-    field_type: type of field to extract (searchable, retrievable, sortable,
-    facet, topterms)
-    verbose: boolean to define the printing info
+    Arguments:
+
+     - domain - domain id in EBI.
+     - field_type - type of field to extract (searchable, retrievable, sortable,
+       facet, topterms)
+     - verbose - boolean to define the printing info.
     """
     field_types = [
         "searchable", "retrievable", "sortable", "facet", "topterms"]
@@ -197,8 +220,10 @@ def get_specific_fields(domain, field_type, verbose=True):
 def get_searchable_fields(domain, verbose=True):
     """Return the searchable fields for a specific domain in EBI.
 
-    domain: domain id in EBI
-    verbose: boolean to define the printing info
+    Arguments:
+
+     - domain - domain id in EBI.
+     - verbose - boolean to define the printing info.
     """
     return get_specific_fields(domain, "searchable", verbose)
 
@@ -206,8 +231,10 @@ def get_searchable_fields(domain, verbose=True):
 def get_retrievable_fields(domain, verbose=True):
     """Return the retrievable fields of a specific domain in EBI.
 
-    domain: domain id in EBI
-    verbose: boolean to define the printing info
+    Arguments:
+
+     - domain - domain id in EBI.
+     - verbose - boolean to define the printing info.
     """
     return get_specific_fields(domain, "retrievable", verbose)
 
@@ -215,8 +242,10 @@ def get_retrievable_fields(domain, verbose=True):
 def get_sortable_fields(domain, verbose=True):
     """Return the sortable fields of a specific domain in EBI.
 
-    domain: domain id in EBI
-    verbose: boolean to define the printing info
+    Arguments:
+
+     - domain - domain id in EBI.
+     - verbose - boolean to define the printing info.
     """
     return get_specific_fields(domain, "sortable", verbose)
 
@@ -224,8 +253,10 @@ def get_sortable_fields(domain, verbose=True):
 def get_facet_fields(domain, verbose=True):
     """Return the facet fields of a specific domain in EBI.
 
-    domain: domain id in EBI
-    verbose: boolean to define the printing info
+    Arguments:
+
+     - domain - domain id in EBI.
+     - verbose - boolean to define the printing info.
     """
     return get_specific_fields(domain, "facet", verbose)
 
@@ -233,8 +264,11 @@ def get_facet_fields(domain, verbose=True):
 def get_topterms_fields(domain, verbose=True):
     """Return the topterms fields of a specific domain in EBI.
 
-    domain: domain id in EBI
-    verbose: boolean to define the printing info
+    Arguments:
+
+     - domain - domain id in EBI.
+     - verbose - boolean to define the printing info.
+
     """
     return get_specific_fields(domain, "topterms", verbose)
 
@@ -242,7 +276,9 @@ def get_topterms_fields(domain, verbose=True):
 def check_order(order):
     """Check if an order is either ascending or descending.
 
-    order: order to check
+    Arguments:
+
+     - order - order to check.
     """
     if order != "ascending" and order != "descending":
         err_str = "Order value must be either 'ascending' or 'descending'"
@@ -252,8 +288,10 @@ def check_order(order):
 def check_retrievable_fields(fields, domain):
     """Check if the fields are retrievable for a domain.
 
-    field: field to check
-    domain: domain id in EBI (accessible with get_domains)
+    Arguments:
+
+     - field - field to check.
+     - domain - domain id in EBI (accessible with get_domains).
     """
     retrievable_fields = get_retrievable_fields(domain, verbose=False)
     for field in fields.split(","):
@@ -268,8 +306,10 @@ def check_retrievable_fields(fields, domain):
 def check_sortable_field(field, domain):
     """Check if a field is sortable for the domain.
 
-    field: field to check
-    domain: domain id in EBI (accessible with get_domains)
+    Arguments:
+
+     - field - field to check.
+     - domain - domain id in EBI (accessible with get_domains).
     """
     sortable_fields = get_sortable_fields(domain, verbose=False)
     if field not in sortable_fields:
@@ -283,8 +323,10 @@ def check_sortable_field(field, domain):
 def check_facet_field(field, domain):
     """Check if a field is facet for the domain.
 
-    field: field to check
-    domain: domain id in EBI (accessible with get_domains)
+    Arguments:
+
+     - field - field to check.
+     - domain - domain id in EBI (accessible with get_domains).
     """
     facet_fields = get_facet_fields(domain, verbose=False)
     if field not in facet_fields:
@@ -298,8 +340,10 @@ def check_facet_field(field, domain):
 def check_topterms_field(field, domain):
     """Check if a field is topterm for the domain.
 
-    field: field to check
-    domain: domain id in EBI (accessible with get_domains)
+    Arguments:
+
+     - field - field to check.
+     - domain - domain id in EBI (accessible with get_domains).
     """
     topterms_fields = get_topterms_fields(domain, verbose=False)
     if field not in topterms_fields:
@@ -313,8 +357,10 @@ def check_topterms_field(field, domain):
 def check_size(size):
     """Check that the size is lower than a given limit.
 
-    size: value to check
-    limit: threshold
+    Arguments:
+
+     - size - value to check.
+     - limit - threshold.
     """
     if size > sizeLimit:
         err_str = "Size (number of entries to retrieve) must be lower "
@@ -325,8 +371,10 @@ def check_size(size):
 def check_start(start):
     """Check that the start is lower than a given limit.
 
-    start: value to check
-    limit: threshold
+    Arguments:
+
+     - size - value to check.
+     - limit - threshold.
     """
     if start > startLimit:
         err_str = "Start (index of the first entry in the results) "
@@ -341,33 +389,35 @@ def get_domain_search_results(
 ):
     """Return the results for a query on a specific domain in EBI.
 
-    domain: domain id in EBI (accessible with get_domains)
-    query: query for EBI (the searchable fields can be accessed with
-    get_searchable_fields)
-    fields: fields to retrieve for the query (the fields can be accessed with
-    get_retrievable_fields), separated by comma
-    size: number of entries to retrieve
-    start: index of the first entry in the results
-    order: order to sort the results (ascending or descending), should come
-    along with "sortfield" and not allowed to use with "sort" parameters
-    sortfield: single field identifier to sort on (the fields can be accessed
-    with get_sortable_fields)
-    sort: comma separated values of sorting criteria with field_id:order
-    (e.g. boost:descending,length:descending), should not be used in
-    conjunction with any of 'sortfield' and 'order' parameters
-    fieldurl: boolean to indicate whether field links are included (the
-    returned links mean direct URLs to the data entries in original portals)
-    viewurl: boolean to indicate whether other view links (than fieldurl) on an
-    entry are included
-    facets: comma separated values of facet selections to apply on search
-    results with facet_id:facet_value (e.g. keywords:Glycolysis). The facet id
-    can be accessed with get_facet_fields
-    facetfields: comma separated values of field identifiers associated with
-    facets to retrieve
-    facetcount: number of facet values to retrieve
-    facetsdepth: number of level in the hierarchy to retrieve
+    Arguments:
+
+     - domain - domain id in EBI (accessible with get_domains)
+     - query - query for EBI (the searchable fields can be accessed with
+     - get_searchable_fields)
+     - fields - fields to retrieve for the query (the fields can be accessed with
+       get_retrievable_fields), separated by comma
+     - size - number of entries to retrieve
+     - start - index of the first entry in the results
+     - order - order to sort the results (ascending or descending), should come
+       along with "sortfield" and not allowed to use with "sort" parameters
+     - sortfield - single field identifier to sort on (the fields can be accessed
+       with get_sortable_fields)
+     - sort - comma separated values of sorting criteria with field_id:order
+       (e.g. boost:descending,length:descending), should not be used in
+       conjunction with any of 'sortfield' and 'order' parameters
+     - fieldurl - boolean to indicate whether field links are included (the
+       returned links mean direct URLs to the data entries in original portals)
+     - viewurl - boolean to indicate whether other view links (than fieldurl) on an
+       entry are included
+     - facets - comma separated values of facet selections to apply on search
+       results with facet_id:facet_value (e.g. keywords:Glycolysis). The facet id
+       can be accessed with get_facet_fields
+     - facetfields - comma separated values of field identifiers associated with
+       facets to retrieve
+     - facetcount - number of facet values to retrieve
+     - facetsdepth - number of level in the hierarchy to retrieve
     """
-    url = baseUrl + '/'
+    url = base_url + '/'
 
     check_domain(domain)
 
@@ -453,29 +503,31 @@ def get_all_domain_search_results(
 ):
     """Return the all the results for a query on a specific domain in EBI.
 
-    domain: domain id in EBI (accessible with get_domains)
-    query: query for EBI (the searchable fields can be accessed with
-    get_searchable_fields)
-    fields: fields to retrieve for the query (the fields can be accessed with
-    get_retrievable_fields), separated by comma
-    order: order to sort the results (ascending or descending), should come
-    along with "sortfield" and not allowed to use with "sort" parameters
-    sortfield: single field identifier to sort on (the fields can be accessed
-    with get_sortable_fields)
-    sort: comma separated values of sorting criteria with field_id:order
-    (e.g. boost:descending,length:descending), should not be used in
-    conjunction with any of 'sortfield' and 'order' parameters
-    fieldurl: boolean to indicate whether field links are included (the
-    returned links mean direct URLs to the data entries in original portals)
-    viewurl: boolean to indicate whether other view links (than fieldurl) on an
-    entry are included
-    facets: comma separated values of facet selections to apply on search
-    results with facet_id:facet_value (e.g. keywords:Glycolysis). The facet id
-    can be accessed with get_facet_fields
-    facetfields: comma separated values of field identifiers associated with
-    facets to retrieve
-    facetcount: number of facet values to retrieve
-    facetsdepth: number of level in the hierarchy to retrieve
+    Arguments:
+
+     - domain - domain id in EBI (accessible with get_domains)
+     - query - query for EBI (the searchable fields can be accessed with
+       get_searchable_fields)
+     - fields - fields to retrieve for the query (the fields can be accessed with
+       get_retrievable_fields), separated by comma
+     - order - order to sort the results (ascending or descending), should come
+       along with "sortfield" and not allowed to use with "sort" parameters
+     - sortfield - single field identifier to sort on (the fields can be accessed
+       with get_sortable_fields)
+     - sort - comma separated values of sorting criteria with field_id:order
+       (e.g. boost:descending,length:descending), should not be used in
+       conjunction with any of 'sortfield' and 'order' parameters
+     - fieldurl - boolean to indicate whether field links are included (the
+       returned links mean direct URLs to the data entries in original portals)
+     - viewurl - boolean to indicate whether other view links (than fieldurl) on an
+       entry are included
+     - facets - comma separated values of facet selections to apply on search
+       results with facet_id:facet_value (e.g. keywords:Glycolysis). The facet id
+       can be accessed with get_facet_fields
+     - facetfields - comma separated values of field identifiers associated with
+     - facets to retrieve
+     - facetcount - number of facet values to retrieve
+     - facetsdepth - number of level in the hierarchy to retrieve
     """
     result_nb = get_number_of_results(domain, query)
     quotient = int(result_nb / float(sizeLimit))
@@ -522,16 +574,18 @@ def get_all_domain_search_results(
 def get_entries(domain, entryids, fields, fieldurl=False, viewurl=False):
     """Return content of entries on a specific domain in EBI.
 
-    domain: domain id in EBI (accessible with get_domains)
-    entryids: comma seperated values of entry identifiers
-    fields: fields to retrieve for the query (the fields can be accessed with
-    get_retrievable_fields), separated by comma
-    fieldurl: boolean to indicate whether field links are included (the
-    returned links mean direct URLs to the data entries in original portals)
-    viewurl: boolean to indicate whether other view links (than fieldurl) on an
-    entry are included
+    Arguments:
+
+     - domain - domain id in EBI (accessible with get_domains)
+     - entryids - comma seperated values of entry identifiers
+     - fields - fields to retrieve for the query (the fields can be accessed with
+       get_retrievable_fields), separated by comma
+     - fieldurl - boolean to indicate whether field links are included (the
+       returned links mean direct URLs to the data entries in original portals)
+     - viewurl - boolean to indicate whether other view links (than fieldurl) on an
+       entry are included
     """
-    url = baseUrl + '/'
+    url = base_url + '/'
 
     check_domain(domain)
     url += domain
@@ -563,13 +617,15 @@ def get_field_topterms(
 ):
     """Return a list of top terms in a field of a specific domain in EBI.
 
-    domain: domain id in EBI (accessible with get_domains)
-    fieldid: field id (the fields can be accessed with get_topterms_fields)
-    size: number of entries to retieve
-    excludes: comma separated values of terms to be excluded
-    excludesets: comma separated values of stop-word sets to be excluded
+    Arguments:
+
+     - domain - domain id in EBI (accessible with get_domains)
+     - fieldid - field id (the fields can be accessed with get_topterms_fields)
+     - size - number of entries to retieve
+     - excludes - comma separated values of terms to be excluded
+     - excludesets - comma separated values of stop-word sets to be excluded
     """
-    url = baseUrl + '/'
+    url = base_url + '/'
 
     check_domain(domain)
     url += domain
@@ -588,12 +644,14 @@ def get_field_topterms(
 
 
 def get_number_of_morelikethis(domain, entryid):
-    """"Return the number of entries similar to an entry of a domain in EBI.
+    """Return the number of entries similar to an entry of a domain in EBI.
 
-    domain: domain id in EBI
-    entryid: entry id
+    Arguments:
+
+     - domain - domain id in EBI
+     - entryid - entry id
     """
-    url = baseUrl + '/'
+    url = base_url + '/'
 
     check_domain(domain)
     url += domain
@@ -614,27 +672,29 @@ def get_morelikethis(
 ):
     """Return a list of similar entries to an entry of a specific domain in EBI.
 
-    domain: domain id in EBI (accessible with get_domains)
-    entryid: entry id
-    size: number of entries to retieve
-    start: index of the first entry in the results
-    fields: field id (the fields can be accessed with get_topterms_fields)
-    fieldurl: boolean to indicate whether field links are included (the
-    returned links mean direct URLs to the data entries in original portals)
-    viewurl: boolean to indicate whether other view links (than fieldurl) on an
-    entry are included
-    mltfields: comma separated values of field identifiers to be used for
-    generating a query
-    mintermfreq: minimum term frequency (any terms whose frequency is below
-    this value will be ignore from a base entry)
-    mindocfreq: maximum document frequency (any terms which occur in at least
-    this number of entries will be ignored)
-    maxqueryterm: maximum number of query terms that will be included in any
-    generated query (max. 25)
-    excludes: comma separated values of terms to be excluded
-    excludesets: comma separated values of stop-word sets to be excluded
+    Arguments:
+
+     - domain - domain id in EBI (accessible with get_domains)
+     - entryid - entry id
+     - size - number of entries to retieve
+     - start - index of the first entry in the results
+     - fields - field id (the fields can be accessed with get_topterms_fields)
+     - fieldurl - boolean to indicate whether field links are included (the
+       returned links mean direct URLs to the data entries in original portals)
+     - viewurl - boolean to indicate whether other view links (than fieldurl) on an
+       entry are included
+     - mltfields - comma separated values of field identifiers to be used for
+       generating a query
+     - mintermfreq - minimum term frequency (any terms whose frequency is below
+       this value will be ignore from a base entry)
+     - mindocfreq - maximum document frequency (any terms which occur in at least
+       this number of entries will be ignored)
+     - maxqueryterm - maximum number of query terms that will be included in any
+       generated query (max. 25)
+     - excludes - comma separated values of terms to be excluded
+     - excludesets - comma separated values of stop-word sets to be excluded
     """
-    url = baseUrl + '/'
+    url = base_url + '/'
 
     check_domain(domain)
     url += domain
