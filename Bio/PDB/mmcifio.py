@@ -263,6 +263,9 @@ class MMCIFIO(object):
                 if not select.accept_chain(chain):
                     continue
                 chain_id = chain.get_id()
+                # This is used to write label_seq_id and increments from 1,
+                # remaining blank for hetero residues
+                residue_number = 1
                 if chain_id == " ":
                     chain_id = "."
                 for residue in chain.get_unpacked_list():
@@ -271,7 +274,10 @@ class MMCIFIO(object):
                     hetfield, resseq, icode = residue.get_id()
                     if hetfield == " ":
                         residue_type = "ATOM"
+                        atom_dict["_atom_site.label_seq_id"].append(str(residue_number))
+                        residue_number += 1
                     else:
+                        atom_dict["_atom_site.label_seq_id"].append(".")
                         residue_type = "HETATM"
                     resseq = str(resseq)
                     if icode == " ":
