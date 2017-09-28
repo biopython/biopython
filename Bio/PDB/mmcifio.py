@@ -248,12 +248,12 @@ class MMCIFIO(object):
 
     def _get_label_asym_id(self, entity_id):
         # Convert a positive integer into a chain ID
-        # Goes A to Z, then AA to AZ, BA to BZ etc
+        # Goes A to Z, then AA to ZA, AB to ZB etc
         div = entity_id
         out = ""
         while div > 0:
             mod = (div - 1) % 26
-            out = chr(65 + mod) + out
+            out += chr(65 + mod)
             div = int((div - mod) / 26)
         return out
 
