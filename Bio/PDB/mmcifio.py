@@ -317,15 +317,13 @@ class MMCIFIO(object):
                                 atom_number += 1
                             element = atom.element.strip()
                             if element == "":
-                                atom_dict["_atom_site.type_symbol"].append("?")
-                            else:
-                                atom_dict["_atom_site.type_symbol"].append(atom.element)
+                                element = "?"
+                            atom_dict["_atom_site.type_symbol"].append(element)
                             atom_dict["_atom_site.label_atom_id"].append(atom.get_name().strip())
                             altloc = atom.get_altloc()
                             if altloc == " ":
-                                atom_dict["_atom_site.label_alt_id"].append(".")
-                            else:
-                                atom_dict["_atom_site.label_alt_id"].append(altloc)
+                                altloc = "."
+                            atom_dict["_atom_site.label_alt_id"].append(altloc)
                             atom_dict["_atom_site.label_comp_id"].append(resname.strip())
                             atom_dict["_atom_site.label_asym_id"].append(label_asym_id)
                             atom_dict["_atom_site.label_entity_id"].append(str(entity_id))
