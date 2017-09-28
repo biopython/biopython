@@ -9,7 +9,7 @@
 """Tests for online functionality of EBI Search module."""
 
 import unittest
-import ebisearch
+from Bio.EBI import ebisearch
 
 
 class ebisearchTests(unittest.TestCase):
