@@ -221,7 +221,6 @@ class MMCIFIO(object):
         # and newline construct
         if self._requires_newline(val):
             return "\n;" + val + "\n;\n"
-        # Technically these should be case-insensitive
         elif self._requires_quote(val):
             # Choose quote character
             if "' " in val:
@@ -241,6 +240,7 @@ class MMCIFIO(object):
             return False
 
     def _requires_quote(self, val):
+        # Technically the words should be case-insensitive
         if " " in val or "'" in val or "\"" in val or val[0] in ["_", "#", "$", "[", "]", ";"] or val.startswith("data_") or val.startswith("save_") or val in ["loop_", "stop_", "global_"]:
             return True
         else:
@@ -277,11 +277,11 @@ class MMCIFIO(object):
                 if not select.accept_chain(chain):
                     continue
                 chain_id = chain.get_id()
+                if chain_id == " ":
+                    chain_id = "."
                 # This is used to write label_seq_id and increments from 1,
                 # remaining blank for hetero residues
                 residue_number = 1
-                if chain_id == " ":
-                    chain_id = "."
                 prev_residue_type = ""
                 prev_resname = ""
                 for residue in chain.get_unpacked_list():
