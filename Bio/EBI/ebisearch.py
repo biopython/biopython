@@ -23,14 +23,14 @@ for all.;Nucleic Acids Research, May 2, 2017; DOI: 10.1093/nar/gkx359
 
 """
 
-import requests
+from Bio._py3k import urlopen as _urlopen
+from Bio._py3k import Request
+import json
 
-import requires_internet
-requires_internet.check()
 
 base_url = 'http://www.ebi.ac.uk/ebisearch/ws/rest'
-sizeLimit = 100
-startLimit = 250000
+size_limit = 100
+start_limit = 250000
 
 
 def get_domain_details(domain):
@@ -48,11 +48,18 @@ def get_domain_details(domain):
         : u'Luce
     """
     url = base_url + '/' + domain
-    r = requests.get(
+    url = url.replace(" ", "%20")
+    req = Request(
         url,
         headers={"accept": "application/json"})
-    r.raise_for_status()
-    return r.json()
+    r = _urlopen(req)
+    if (r.getcode() == 400):
+        raise Exception("Wrong user input.")
+    if (r.getcode() == 404):
+        raise Exception("Wrong URL.")
+    if (r.getcode() == 500):
+        raise Exception("Server internal error.")
+    return json.loads(r.read())
 
 
 def get_details_and_subdomains(domain, level, verbose=False):
@@ -120,11 +127,19 @@ def get_number_of_results(domain, query):
     """
     check_domain(domain)
     url = base_url + '/' + domain + '?query=' + query + '&size=0'
-    r = requests.get(
+    url = url.replace(" ", "%20")
+    req = Request(
         url,
         headers={"accept": "application/json"})
-    r.raise_for_status()
-    return r.json()['hitCount']
+    r = _urlopen(req)
+    if (r.getcode() == 400):
+        raise Exception("Wrong user input.")
+    if (r.getcode() == 404):
+        raise Exception("Wrong URL.")
+    if (r.getcode() == 500):
+        raise Exception("Server internal error.")
+    d = json.loads(r.read())
+    return d['hitCount']
 
 
 def get_subdomain_fields(domain):
@@ -362,9 +377,9 @@ def check_size(size):
      - size - value to check.
      - limit - threshold.
     """
-    if size > sizeLimit:
+    if size > size_limit:
         err_str = "Size (number of entries to retrieve) must be lower "
-        err_str += "than %s" % (sizeLimit)
+        err_str += "than %s" % (size_limit)
         raise ValueError(err_str)
 
 
@@ -376,9 +391,9 @@ def check_start(start):
      - size - value to check.
      - limit - threshold.
     """
-    if start > startLimit:
+    if start > start_limit:
         err_str = "Start (index of the first entry in the results) "
-        err_str += "must be lower than %s" % (startLimit)
+        err_str += "must be lower than %s" % (start_limit)
         raise ValueError(err_str)
 
 
@@ -489,11 +504,19 @@ def get_domain_search_results(
     if facetsdepth is not None:
         url += '&facetsdepth=%s' % (facetsdepth)
 
-    r = requests.get(
+    url = url.replace(" ", "%20")
+    req = Request(
         url,
         headers={"accept": "application/json"})
-    r.raise_for_status()
-    return r.json()['entries']
+    r = _urlopen(req)
+    if (r.getcode() == 400):
+        raise Exception("Wrong user input.")
+    if (r.getcode() == 404):
+        raise Exception("Wrong URL.")
+    if (r.getcode() == 500):
+        raise Exception("Server internal error.")
+    d = json.loads(r.read())
+    return d['entries']
 
 
 def get_all_domain_search_results(
@@ -530,16 +553,16 @@ def get_all_domain_search_results(
      - facetsdepth - number of level in the hierarchy to retrieve
     """
     result_nb = get_number_of_results(domain, query)
-    quotient = int(result_nb / float(sizeLimit))
+    quotient = int(result_nb / float(size_limit))
     start = 0
     all_results = []
     for i in range(quotient):
-        start = sizeLimit * i
+        start = size_limit * i
         all_results.extend(get_domain_search_results(
             domain=domain,
             query=query,
             fields=fields,
-            size=sizeLimit,
+            size=size_limit,
             start=start,
             order=order,
             sortfield=sortfield,
@@ -551,7 +574,7 @@ def get_all_domain_search_results(
             facetcount=facetcount,
             facetsdepth=facetsdepth))
     if (result_nb % 100) > 0:
-        start = sizeLimit * quotient
+        start = size_limit * quotient
         remainder = result_nb - start
         all_results.extend(get_domain_search_results(
             domain=domain,
@@ -605,11 +628,19 @@ def get_entries(domain, entryids, fields, fieldurl=False, viewurl=False):
     else:
         url += '&viewurl=false'
 
-    r = requests.get(
+    url = url.replace(" ", "%20")
+    req = Request(
         url,
         headers={"accept": "application/json"})
-    r.raise_for_status()
-    return r.json()['entries']
+    r = _urlopen(req)
+    if (r.getcode() == 400):
+        raise Exception("Wrong user input.")
+    if (r.getcode() == 404):
+        raise Exception("Wrong URL.")
+    if (r.getcode() == 500):
+        raise Exception("Server internal error.")
+    d = json.loads(r.read())
+    return d['entries']
 
 
 def get_field_topterms(
@@ -658,11 +689,19 @@ def get_number_of_morelikethis(domain, entryid):
     url += '/entry/' + entryid
     url += '/morelikethis'
     url += '?size=0'
-    r = requests.get(
+    url = url.replace(" ", "%20")
+    req = Request(
         url,
         headers={"accept": "application/json"})
-    r.raise_for_status()
-    return r.json()['hitCount']
+    r = _urlopen(req)
+    if (r.getcode() == 400):
+        raise Exception("Wrong user input.")
+    if (r.getcode() == 404):
+        raise Exception("Wrong URL.")
+    if (r.getcode() == 500):
+        raise Exception("Server internal error.")
+    d = json.loads(r.read())
+    return d['hitCount']
 
 
 def get_morelikethis(
@@ -744,8 +783,16 @@ def get_morelikethis(
     if excludesets is not None:
         url += '&fields=%s' % (excludesets)
 
-    r = requests.get(
+    url = url.replace(" ", "%20")
+    req = Request(
         url,
         headers={"accept": "application/json"})
-    r.raise_for_status()
-    return r.json()['entries']
+    r = _urlopen(req)
+    if (r.getcode() == 400):
+        raise Exception("Wrong user input.")
+    if (r.getcode() == 404):
+        raise Exception("Wrong URL.")
+    if (r.getcode() == 500):
+        raise Exception("Server internal error.")
+    d = json.loads(r.read())
+    return d['entries']
