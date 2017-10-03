@@ -14,6 +14,7 @@ from Bio.EBI import ebisearch
 import requires_internet
 requires_internet.check()
 
+
 class ebisearchTests(unittest.TestCase):
     """Tests for EBI Search API."""
 

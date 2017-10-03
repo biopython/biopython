@@ -59,7 +59,7 @@ def get_domain_details(domain):
         raise Exception("Wrong URL.")
     if (r.getcode() == 500):
         raise Exception("Server internal error.")
-    return json.loads(r.read())
+    return json.loads(r.read().decode())
 
 
 def get_details_and_subdomains(domain, level, verbose=False):
@@ -138,7 +138,7 @@ def get_number_of_results(domain, query):
         raise Exception("Wrong URL.")
     if (r.getcode() == 500):
         raise Exception("Server internal error.")
-    d = json.loads(r.read())
+    d = json.loads(r.read().decode())
     return d['hitCount']
 
 
@@ -515,7 +515,7 @@ def get_domain_search_results(
         raise Exception("Wrong URL.")
     if (r.getcode() == 500):
         raise Exception("Server internal error.")
-    d = json.loads(r.read())
+    d = json.loads(r.read().decode())
     return d['entries']
 
 
@@ -639,7 +639,7 @@ def get_entries(domain, entryids, fields, fieldurl=False, viewurl=False):
         raise Exception("Wrong URL.")
     if (r.getcode() == 500):
         raise Exception("Server internal error.")
-    d = json.loads(r.read())
+    d = json.loads(r.read().decode())
     return d['entries']
 
 
@@ -700,7 +700,7 @@ def get_number_of_morelikethis(domain, entryid):
         raise Exception("Wrong URL.")
     if (r.getcode() == 500):
         raise Exception("Server internal error.")
-    d = json.loads(r.read())
+    d = json.loads(r.read().decode())
     return d['hitCount']
 
 
@@ -794,5 +794,5 @@ def get_morelikethis(
         raise Exception("Wrong URL.")
     if (r.getcode() == 500):
         raise Exception("Server internal error.")
-    d = json.loads(r.read())
+    d = json.loads(r.read().decode())
     return d['entries']
