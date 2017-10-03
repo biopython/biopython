@@ -42,7 +42,7 @@ Technical Introduction to BGZF
 
 The gzip file format allows multiple compressed blocks, each of which
 could be a stand alone gzip file. As an interesting bonus, this means
-you can use Unix "cat" to combined to gzip files into one by
+you can use Unix ``cat`` to combine two or more gzip files into one by
 concatenating them. Also, each block can have one of several compression
 levels (including uncompressed, which actually takes up a little bit
 more space due to the gzip header).
@@ -70,9 +70,9 @@ how big it is from this 'BC' header, and thus seek immediately to
 the second block, and so on.
 
 The BAM indexing scheme records read positions using a 64 bit
-'virtual offset', comprising coffset << 16 | uoffset, where coffset
+'virtual offset', comprising ``coffset << 16 | uoffset``, where ``coffset``
 is the file offset of the BGZF block containing the start of the read
-(unsigned integer using up to 64-16 = 48 bits), and uoffset is the
+(unsigned integer using up to 64-16 = 48 bits), and ``uoffset`` is the
 offset within the (decompressed) block (unsigned 16 bit integer).
 
 This limits you to BAM files where the last block starts by 2^48
@@ -80,7 +80,7 @@ bytes, or 256 petabytes, and the decompressed size of each block
 is at most 2^16 bytes, or 64kb. Note that this matches the BGZF
 'BC' field size which limits the compressed size of each block to
 2^16 bytes, allowing for BAM files to use BGZF with no gzip
-compression (useful for intermediate files in memory to reduced
+compression (useful for intermediate files in memory to reduce
 CPU load).
 
 

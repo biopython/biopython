@@ -8,7 +8,8 @@
 # Authors: Thomas Sicheritz-Ponten and Jan O. Andersson
 # thomas@cbs.dtu.dk, http://www.cbs.dtu.dk/thomas
 # Jan.O.Andersson@home.se
-# File: nextorf.py
+
+"""Find next open reading frame in sequence data."""
 
 from __future__ import print_function
 

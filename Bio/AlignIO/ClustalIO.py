@@ -49,6 +49,14 @@ class ClustalWriter(SequentialAlignmentWriter):
         if max_length <= 0:
             raise ValueError("Non-empty sequences are required")
 
+        if "clustal_consensus" in alignment.column_annotations:
+            star_info = alignment.column_annotations["clustal_consensus"]
+        elif hasattr(alignment, "_star_info"):
+            # This was originally stored by Bio.Clustalw as ._star_info
+            star_info = alignment._star_info
+        else:
+            star_info = None
+
         # keep displaying sequences until we reach the end
         while cur_char != max_length:
             # calculate the number of sequences to show, which will
@@ -70,10 +78,8 @@ class ClustalWriter(SequentialAlignmentWriter):
                 output += line + "\n"
 
             # now we need to print out the star info, if we've got it
-            # This was stored by Bio.Clustalw using a ._star_info property.
-            if hasattr(alignment, "_star_info") and alignment._star_info != '':
-                output += (" " * 36) + \
-                    alignment._star_info[cur_char:(cur_char + show_num)] + "\n"
+            if star_info:
+                output += (" " * 36) + star_info[cur_char:(cur_char + show_num)] + "\n"
 
             output += "\n"
             cur_char += show_num
@@ -284,5 +290,7 @@ class ClustalIterator(AlignmentIterator):
             assert len(consensus) == alignment_length, \
                 "Alignment length is %i, consensus length is %i, '%s'" \
                 % (alignment_length, len(consensus), consensus)
+            alignment.column_annotations["clustal_consensus"] = consensus
+            # For backward compatibility prior to .column_annotations:
             alignment._star_info = consensus
         return alignment

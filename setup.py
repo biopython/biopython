@@ -121,28 +121,6 @@ def is_ironpython():
     # TODO - Use platform as in Pypy test?
 
 
-def get_yes_or_no(question, default):
-    if default:
-        option_str = "(Y/n)"
-        default_str = 'y'
-    else:
-        option_str = "(y/N)"
-        default_str = 'n'
-
-    while True:
-        print("%s %s:" % (question, option_str))
-        if sys.version_info[0] == 3:
-            response = input().lower()
-        else:
-            response = raw_input().lower()
-        if not response:
-            response = default_str
-        if response[0] in ['y', 'n']:
-            break
-        print("Please answer y or n.")
-    return response[0] == 'y'
-
-
 # Make sure we have the right Python version.
 if sys.version_info[:2] < (2, 7):
     sys.stderr.write("Biopython requires Python 2.7, or Python 3.4 or later. "
@@ -166,31 +144,6 @@ def check_dependencies_once():
     return _CHECKED
 
 
-def is_automated():
-    """Check for installation with easy_install or pip.
-    """
-    is_automated = False
-    # easy_install: --dist-dir option passed
-    try:
-        dist_dir_i = sys.argv.index("--dist-dir")
-    except ValueError:
-        dist_dir_i = None
-    if dist_dir_i is not None:
-        dist_dir = sys.argv[dist_dir_i + 1]
-        if "egg-dist-tmp" in dist_dir:
-            is_automated = True
-    # pip -- calls from python directly with "-c"
-    if sys.argv in [["-c", "develop", "--no-deps"],
-                    ["--no-deps", "-c", "develop"],
-                    ["-c", "egg_info"]] \
-                    or "pip-egg-info" in sys.argv \
-                    or sys.argv[:3] == ["-c", "install", "--record"] \
-                    or sys.argv[:4] == ['-c', 'install', '--single-version-externally-managed',
-                                        '--record']:
-        is_automated = True
-    return is_automated
-
-
 def check_dependencies():
     """Return whether the installation should continue."""
     # There should be some way for the user to tell specify not to
@@ -204,29 +157,16 @@ def check_dependencies():
     # We only check for NumPy, as this is a compile time dependency
     if is_Numpy_installed():
         return True
-    if is_automated():
-        return True  # For automated builds go ahead with installed packages
     if is_jython():
         return True  # NumPy is not avaliable for Jython (for now)
     if is_ironpython():
         return True  # We're ignoring NumPy under IronPython (for now)
 
-    print("""
-Numerical Python (NumPy) is not installed.
+    sys.exit("""Missing required dependency NumPy (Numerical Python).
 
-This package is required for many Biopython features.  Please install
-it before you install Biopython. You can install Biopython anyway, but
-anything dependent on NumPy will not work. If you do this, and later
-install NumPy, you should then re-install Biopython.
-
-You can find NumPy at http://www.numpy.org
+Unless running under Jython or IronPython, we require NumPy be installed
+when compiling Biopython. See http://www.numpy.org for details.
 """)
-    # exit automatically if running as part of some script
-    # (e.g. PyPM, ActiveState's Python Package Manager)
-    if not sys.stdout.isatty():
-        sys.exit(-1)
-    # We can ask the user
-    return get_yes_or_no("Do you want to continue this installation?", False)
 
 
 class install_biopython(install):
@@ -234,23 +174,7 @@ class install_biopython(install):
 
     This will just run the normal install, and then print warning messages
     if packages are missing.
-
     """
-    # Adds support for the single-version-externally-managed flag
-    # which is present in setuptools but not distutils. pip requires it.
-    # In setuptools this forces installation the "old way" which we
-    # only support here, so we just make it a no-op.
-    user_options = install.user_options + [
-        ('single-version-externally-managed', None,
-            "used by system package builders to create 'flat' eggs"),
-    ]
-    boolean_options = install.boolean_options + [
-        'single-version-externally-managed',
-    ]
-
-    def initialize_options(self):
-        install.initialize_options(self)
-        self.single_version_externally_managed = None
 
     def run(self):
         if check_dependencies_once():
@@ -269,6 +193,8 @@ class build_py_biopython(build_py):
             self.packages.remove("Bio.Restriction")
         # Add software that requires Numpy to be installed.
         if is_Numpy_installed():
+            # Should be everything (i.e. C Python or PyPy)
+            # except Jython and IronPython
             self.packages.extend(NUMPY_PACKAGES)
         build_py.run(self)
 
@@ -325,6 +251,18 @@ def is_Numpy_installed():
     return bool(can_import("numpy"))
 
 
+# Using requirements.txt is preferred for an application
+# (and likely will pin specific version numbers), using
+# setup.py's install_requires is preferred for a library
+# (and should try not to be overly narrow with versions).
+REQUIRES = [
+    'numpy',
+]
+
+if is_jython() or is_ironpython():
+    REQUIRES.remove("numpy")
+
+
 # --- set up the packages we are going to install
 # standard biopython packages
 PACKAGES = [
@@ -357,6 +295,7 @@ PACKAGES = [
     'Bio.KEGG',
     'Bio.KEGG.Compound',
     'Bio.KEGG.Enzyme',
+    'Bio.KEGG.Gene',
     'Bio.KEGG.Map',
     'Bio.PDB.mmtf',
     'Bio.KEGG.KGML',
@@ -532,4 +471,5 @@ setup(name='biopython',
       package_data={
           'Bio.Entrez': ['DTDs/*.dtd', 'DTDs/*.ent', 'DTDs/*.mod'],
       },
+      install_requires=REQUIRES,
       )

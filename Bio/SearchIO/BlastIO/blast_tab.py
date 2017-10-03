@@ -210,7 +210,7 @@ class BlastTabParser(object):
     def __iter__(self):
         # stop iteration if file has no lines
         if not self.line:
-            raise StopIteration
+            return
         # determine which iterator to use
         elif self.has_comments:
             iterfunc = self._parse_commented_qresult

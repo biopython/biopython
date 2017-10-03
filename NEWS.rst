@@ -8,17 +8,77 @@ http://news.open-bio.org/news/category/obf-projects/biopython/
 
 The latest news is at the top of this file.
 
-
-(In progress, not yet released) Biopython 1.70
+(In progress, not yet released) Biopython 1.71
 ==============================================
+
+This release of Biopython supports Python 2.7, 3.4, 3.5 and 3.6.
+It has also been tested on PyPy v5.7, PyPy3.5 v5.8 beta, and Jython 2.7
+(although support for Jython is deprecated).
+
+Python 3 is the primary development platform for Biopython. We will drop
+support for Python 2.7 no later than 2020, in line with the end-of-life or
+sunset date for Python 2.7 itself.
+
+Encoding issues have been fixed in several parsers when reading data files
+with non-ASCII characters, like accented letters in people's names. This would
+raise ``UnicodeDecodeError: 'ascii' codec can't decode byte ...`` under some
+system locale settings.
+
+Bio.KEGG can now parse Gene files.
+
+The multiple-sequence-alignment object used by Bio.AlignIO etc now supports
+a per-column annotation dictionary, useful for richly annotated alignments
+in the Stockholm/PFAM format.
+
+The SeqRecord object now has a translate method, following the approach used
+for its existing reverse_complement method etc.
+
+The output of function ``format_alignment`` in ``Bio.pairwise2`` for displaying
+a pairwise sequence alignment as text now indicates gaps and mis-matches.
+
+In this release more of our code is now explicitly available under either our
+original "Biopython License Agreement", or the very similar but more commonly
+used "3-Clause BSD License".  See the ``LICENSE.rst`` file for more details.
+
+Additionally, a number of small bugs have been fixed with further additions to
+the test suite, and there has been further work to follow the Python PEP8,
+PEP257 and best practice standard coding style.
+
+Many thanks to the Biopython developers and community for making this release
+possible, especially the following contributors:
+
+- Ariel Aptekmann
+- Chris Rands
+- Christian Brueffer
+- Erik Cederstrand (first contribution)
+- Francesco Gastaldello
+- Joe Greener (first contribution)
+- João Rodrigues
+- Jun Aruga (first contribution)
+- Kai Blin
+- Kozo Nishida
+- Michiel de Hoon
+- Peter Cock
+- rht (first contribution)
+- Shuichiro MAKIGAKI (first contribution)
+- Spencer Bliven
+- Yasar L. Ahmed (first contribution)
+
+
+10 July 2017: Biopython 1.70
+============================
 
 This release of Biopython supports Python 2.7, 3.4, 3.5 and 3.6 (we have now
 dropped support for Python 3.3). It has also been tested on PyPy v5.7,
-PyPy3.5 v5.8 beta, and Jython 2.7 (although support for Jython is deprecated)..
+PyPy3.5 v5.8 beta, and Jython 2.7 (although support for Jython is deprecated).
 
 Biopython now has a new logo, contributed by Patrick Kunzmann. Drawing on our
 original logo and the current Python logo, this shows a yellow and blue snake
 forming a double helix.
+
+For installation Biopython now assumes ``setuptools`` is present, and takes
+advantage of this to declare we require NumPy at install time (except under
+Jython). This should help ensure ``pip install biopython`` works smoothly.
 
 Bio.AlignIO now supports Mauve's eXtended Multi-FastA (XMFA) file format
 under the format name "mauve" (contributed by Eric Rasche).
@@ -36,6 +96,8 @@ Bio.motifs was updated to support changes in MEME v4.11.4 output.
 
 The Bio.Seq sequence objects now have a ``.count_overlap()`` method to
 supplement the Python string like non-overlap based ``.count()`` method.
+
+The Bio.SeqFeature location objects can now be compared for equality.
 
 Bio.Phylo.draw_graphviz is now deprecated. We recommend using Bio.Phylo.draw
 instead, or another library or program if more advanced plotting functionality
@@ -57,6 +119,7 @@ possible, especially the following contributors:
 - Allis Tauri
 - Andrew Guy
 - Ariel Aptekmann (first contribution)
+- Ben Fulton
 - Bertrand Caron (first contribution)
 - Chris Rands
 - Connor T. Skennerton
@@ -70,13 +133,14 @@ possible, especially the following contributors:
 - John Kern (first contribution)
 - Jordan Willis (first contribution)
 - João Rodrigues
+- Kai Blin
 - Markus Piotrowski
 - Mateusz Korycinski (first contribution)
 - Maximilian Greil
 - Michiel de Hoon
 - morrme (first contribution)
 - Noam Kremen (first contribution)
-- Patrick Kunzmann
+- Patrick Kunzmann (first contribution)
 - Peter Cock
 - Rasmus Fonseca (first contribution)
 - Rodrigo Dorantes-Gilardi (first contribution)
@@ -534,12 +598,12 @@ Bio.PopGen.SimCoal now also supports fastsimcoal.
 SearchIO hmmer3-text, hmmer3-tab, and hmmer3-domtab now support output from
 hmmer3.1b1.
 
-The 'accession' of QueryResult and Hit objects created when using the
-'hmmer3-tab' format are now properly named as 'accession' (previously they
-were acc, deviating from the documentation).
+The ``accession`` of QueryResult and Hit objects created when using the
+'hmmer3-tab' format are now properly named as ``accession`` (previously they
+were ``acc``, deviating from the documentation).
 
-The `homology` key in the `aln_annotation` attribute of an HSP object in
-Bio.SearchIO has been renamed to `similarity`.
+The ``homology` key in the ``aln_annotation`` attribute of an HSP object in
+Bio.SearchIO has been renamed to ``similarity``.
 
 The Bio.SeqUtils masses and molecular_weight function have been updated.
 

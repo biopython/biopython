@@ -161,11 +161,11 @@ def one_to_three(s):
 def is_aa(residue, standard=False):
     """Return True if residue object/string is an amino acid.
 
-    @param residue: a L{Residue} object OR a three letter amino acid code
-    @type residue: L{Residue} or string
+    :param residue: a L{Residue} object OR a three letter amino acid code
+    :type residue: L{Residue} or string
 
-    @param standard: flag to check for the 20 AA (default false)
-    @type standard: boolean
+    :param standard: flag to check for the 20 AA (default false)
+    :type standard: boolean
 
     >>> is_aa('ALA')
     True
@@ -193,8 +193,8 @@ class Polypeptide(list):
     def get_ca_list(self):
         """Get list of C-alpha atoms in the polypeptide.
 
-        @return: the list of C-alpha atoms
-        @rtype: [L{Atom}, L{Atom}, ...]
+        :return: the list of C-alpha atoms
+        :rtype: [L{Atom}, L{Atom}, ...]
         """
         ca_list = []
         for res in self:
@@ -278,8 +278,8 @@ class Polypeptide(list):
     def get_sequence(self):
         """Return the AA sequence as a Seq object.
 
-        @return: polypeptide sequence
-        @rtype: L{Seq}
+        :return: polypeptide sequence
+        :rtype: L{Seq}
         """
         s = ""
         for res in self:
@@ -311,8 +311,8 @@ class _PPBuilder(object):
     def __init__(self, radius):
         """Initialize the base class.
 
-        @param radius: distance
-        @type radius: float
+        :param radius: distance
+        :type radius: float
         """
         self.radius = radius
 
@@ -334,11 +334,11 @@ class _PPBuilder(object):
     def build_peptides(self, entity, aa_only=1):
         """Build and return a list of Polypeptide objects.
 
-        @param entity: polypeptides are searched for in this object
-        @type entity: L{Structure}, L{Model} or L{Chain}
+        :param entity: polypeptides are searched for in this object
+        :type entity: L{Structure}, L{Model} or L{Chain}
 
-        @param aa_only: if 1, the residue needs to be a standard AA
-        @type aa_only: int
+        :param aa_only: if 1, the residue needs to be a standard AA
+        :type aa_only: int
         """
         is_connected = self._is_connected
         accept = self._accept

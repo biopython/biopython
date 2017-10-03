@@ -13,98 +13,13 @@ Algorithms and Applications" (Mark de Berg, Marc van Kreveld, Mark Overmars,
 Otfried Schwarzkopf). Author: Thomas Hamelryck.
 """
 
-from __future__ import print_function
-
-from numpy import sum, sqrt, array
-from numpy import random
-
+# from __future__ import print_function
+from numpy import array
 from Bio.KDTree import _CKDTree
 
 
-def _dist(p, q):
-    diff = p - q
-    return sqrt(sum(diff * diff))
-
-
-def _neighbor_test(nr_points, dim, bucket_size, radius):
-    """Test all fixed radius neighbor search.
-
-    Test all fixed radius neighbor search using the
-    KD tree C module.
-
-    Arguments:
-     - nr_points: number of points used in test
-     - dim: dimension of coords
-     - bucket_size: nr of points per tree node
-     - radius: radius of search (typically 0.05 or so)
-
-    Returns true if the test passes.
-    """
-    # KD tree search
-    kdt = _CKDTree.KDTree(dim, bucket_size)
-    coords = random.random((nr_points, dim))
-    kdt.set_data(coords)
-    neighbors = kdt.neighbor_search(radius)
-    r = [neighbor.radius for neighbor in neighbors]
-    if r is None:
-        l1 = 0
-    else:
-        l1 = len(r)
-    # now do a slow search to compare results
-    neighbors = kdt.neighbor_simple_search(radius)
-    r = [neighbor.radius for neighbor in neighbors]
-    if r is None:
-        l2 = 0
-    else:
-        l2 = len(r)
-    if l1 == l2:
-        # print("Passed.")
-        return True
-    else:
-        print("Not passed: %i != %i." % (l1, l2))
-        return False
-
-
-def _test(nr_points, dim, bucket_size, radius):
-    """Test neighbor search.
-
-    Test neighbor search using the KD tree C module.
-
-    Arguments:
-     - nr_points: number of points used in test
-     - dim: dimension of coords
-     - bucket_size: nr of points per tree node
-     - radius: radius of search (typically 0.05 or so)
-
-    Returns true if the test passes.
-    """
-    # kd tree search
-    kdt = _CKDTree.KDTree(dim, bucket_size)
-    coords = random.random((nr_points, dim))
-    center = coords[0]
-    kdt.set_data(coords)
-    kdt.search_center_radius(center, radius)
-    r = kdt.get_indices()
-    if r is None:
-        l1 = 0
-    else:
-        l1 = len(r)
-    l2 = 0
-    # now do a manual search to compare results
-    for i in range(0, nr_points):
-        p = coords[i]
-        if _dist(p, center) <= radius:
-            l2 = l2 + 1
-    if l1 == l2:
-        # print("Passed.")
-        return True
-    else:
-        print("Not passed: %i != %i." % (l1, l2))
-        return False
-
-
 class KDTree(object):
-    """KD tree implementation (C++, SWIG python wrapper)
+    """KD tree implementation in C++, SWIG python wrapper.
 
     The KD tree data structure can be used for all kinds of searches that
     involve N-dimensional vectors, e.g.  neighbor searches (find all points
@@ -136,6 +51,7 @@ class KDTree(object):
     """
 
     def __init__(self, dim, bucket_size=1):
+        """Initialize KDTree class."""
         self.dim = dim
         self.kdt = _CKDTree.KDTree(dim, bucket_size)
         self.built = 0
@@ -234,48 +150,3 @@ class KDTree(object):
         of neighbor pairs..
         """
         return [neighbor.radius for neighbor in self.neighbors]
-
-
-if __name__ == "__main__":
-
-    nr_points = 100000
-    dim = 3
-    bucket_size = 10
-    query_radius = 10
-
-    coords = 200 * random.random((nr_points, dim))
-
-    kdtree = KDTree(dim, bucket_size)
-
-    # enter coords
-    kdtree.set_coords(coords)
-
-    # Find all point pairs within radius
-
-    kdtree.all_search(query_radius)
-
-    # get indices & radii of points
-
-    # indices is a list of tuples. Each tuple contains the
-    # two indices of a point pair within query_radius of
-    # each other.
-    indices = kdtree.all_get_indices()
-    radii = kdtree.all_get_radii()
-
-    print("Found %i point pairs within radius %f." % (len(indices), query_radius))
-
-    # Do 10 individual queries
-
-    for i in range(0, 10):
-        # pick a random center
-        center = random.random(dim)
-
-        # search neighbors
-        kdtree.search(center, query_radius)
-
-        # get indices & radii of points
-        indices = kdtree.get_indices()
-        radii = kdtree.get_radii()
-
-        x, y, z = center
-        print("Found %i points in radius %f around center (%.2f, %.2f, %.2f)." % (len(indices), query_radius, x, y, z))

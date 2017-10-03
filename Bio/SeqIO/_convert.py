@@ -363,7 +363,7 @@ _converter = {
 
 
 def _handle_convert(in_handle, in_format, out_handle, out_format, alphabet=None):
-    """SeqIO conversion function (PRIVATE)."""
+    """Convert handles from one format to another (PRIVATE)."""
     try:
         f = _converter[(in_format, out_format)]
     except KeyError:

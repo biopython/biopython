@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+"""Script to help diagnose problems with BLAST parser."""
+
 # To do:
 # - Let user specify the parser class on the command line.
 # - Let user specify a sequence file to BLAST on the net.

@@ -9,68 +9,15 @@ designed with the application to gene expression data in mind. However,
 this module can also be used for cluster analysis of other types of data.
 
 Bio.Cluster and the underlying C Clustering Library is described in
-M. De Hoon et al. (2004) http://dx.doi.org/10.1093/bioinformatics/bth078
+M. de Hoon et al. (2004) http://dx.doi.org/10.1093/bioinformatics/bth078
 """
 
 import numpy
 
 from Bio.Cluster.cluster import version, kcluster, kmedoids, treecluster
-from Bio.Cluster.cluster import somcluster, median, mean, clusterdistance
+from Bio.Cluster.cluster import somcluster, clusterdistance
 from Bio.Cluster.cluster import clustercentroids, distancematrix, pca
 from Bio.Cluster.cluster import Node, Tree
-
-
-def _treesort(order, nodeorder, nodecounts, tree):
-    # Find the order of the nodes consistent with the hierarchical clustering
-    # tree, taking into account the preferred order of nodes.
-    nNodes = len(tree)
-    nElements = nNodes + 1
-    neworder = numpy.zeros(nElements)
-    clusterids = numpy.arange(nElements)
-    for i in range(nNodes):
-        i1 = tree[i].left
-        i2 = tree[i].right
-        if i1 < 0:
-            order1 = nodeorder[-i1 - 1]
-            count1 = nodecounts[-i1 - 1]
-        else:
-            order1 = order[i1]
-            count1 = 1
-        if i2 < 0:
-            order2 = nodeorder[-i2 - 1]
-            count2 = nodecounts[-i2 - 1]
-        else:
-            order2 = order[i2]
-            count2 = 1
-        # If order1 and order2 are equal, their order is determined
-        # by the order in which they were clustered
-        if i1 < i2:
-            if order1 < order2:
-                increase = count1
-            else:
-                increase = count2
-            for j in range(nElements):
-                clusterid = clusterids[j]
-                if clusterid == i1 and order1 >= order2:
-                    neworder[j] += increase
-                if clusterid == i2 and order1 < order2:
-                    neworder[j] += increase
-                if clusterid == i1 or clusterid == i2:
-                    clusterids[j] = -i - 1
-        else:
-            if order1 <= order2:
-                increase = count1
-            else:
-                increase = count2
-            for j in range(nElements):
-                clusterid = clusterids[j]
-                if clusterid == i1 and order1 > order2:
-                    neworder[j] += increase
-                if clusterid == i2 and order1 <= order2:
-                    neworder[j] += increase
-                if clusterid == i1 or clusterid == i2:
-                    clusterids[j] = -i - 1
-    return numpy.argsort(neworder)
 
 
 def _savetree(jobname, tree, order, transpose):
@@ -82,12 +29,10 @@ def _savetree(jobname, tree, order, transpose):
     else:
         extension = ".atr"
         keyword = "ARRY"
+    index = tree.sort(order)
     nnodes = len(tree)
     with open(jobname + extension, "w") as outputfile:
-        nodeindex = 0
         nodeID = [''] * nnodes
-        nodecounts = numpy.zeros(nnodes, int)
-        nodeorder = numpy.zeros(nnodes)
         nodedist = numpy.array([node.distance for node in tree])
         for nodeindex in range(nnodes):
             min1 = tree[nodeindex].left
@@ -97,31 +42,18 @@ def _savetree(jobname, tree, order, transpose):
             outputfile.write("\t")
             if min1 < 0:
                 index1 = -min1 - 1
-                order1 = nodeorder[index1]
-                counts1 = nodecounts[index1]
                 outputfile.write(nodeID[index1] + "\t")
                 nodedist[nodeindex] = max(nodedist[nodeindex], nodedist[index1])
             else:
-                order1 = order[min1]
-                counts1 = 1
                 outputfile.write("%s%dX\t" % (keyword, min1))
             if min2 < 0:
                 index2 = -min2 - 1
-                order2 = nodeorder[index2]
-                counts2 = nodecounts[index2]
                 outputfile.write(nodeID[index2] + "\t")
                 nodedist[nodeindex] = max(nodedist[nodeindex], nodedist[index2])
             else:
-                order2 = order[min2]
-                counts2 = 1
                 outputfile.write("%s%dX\t" % (keyword, min2))
             outputfile.write(str(1.0 - nodedist[nodeindex]))
             outputfile.write("\n")
-            counts = counts1 + counts2
-            nodecounts[nodeindex] = counts
-            nodeorder[nodeindex] = (counts1 * order1 + counts2 * order2) / counts
-    # Now set up order based on the tree structure
-    index = _treesort(order, nodeorder, nodecounts, tree)
     return index
 
 
@@ -311,7 +243,7 @@ class Record(object):
            repetitions of the EM algorithm, each time starting from a different
            random initial clustering. If initialid is given, the routine
            carries out the EM algorithm only once, starting from the given
-           initial clustering and without randomizing the  order in which items
+           initial clustering and without randomizing the order in which items
            are assigned to clusters (i.e., using the same order as in the data
            matrix). In that case, the k-means algorithm is fully deterministic.
 
@@ -476,14 +408,14 @@ class Record(object):
         The distance matrix is returned as a list of 1D arrays containing the
         distance matrix between the gene expression data. The number of columns
         in each row is equal to the row number. Hence, the first row has zero
-        elements. An example of the return value is::
+        elements. An example of the return value is:
 
             matrix = [[],
                       array([1.]),
                       array([7., 3.]),
                       array([4., 2., 6.])]
 
-        This corresponds to the distance matrix::
+        This corresponds to the distance matrix:
 
             [0., 1., 7., 4.]
             [1., 0., 3., 2.]

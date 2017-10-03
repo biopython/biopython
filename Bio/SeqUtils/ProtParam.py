@@ -15,6 +15,7 @@ Example::
     print(X.isoelectric_point())
     print(X.secondary_structure_fraction())
     print(X.protein_scale(ProtParamData.kd, 9, 0.4))
+    print(X.molar_extinction_coefficient())
 
 """
 
@@ -278,3 +279,14 @@ class ProteinAnalysis(object):
         sheet = sum(aa_percentages[r] for r in 'EMAL')
 
         return helix, turn, sheet
+
+    def molar_extinction_coefficient(self):
+        """Calculate the molar extinction coefficient.
+
+        Calculates the molar extinction coefficient assuming Cysteines- (reduced)
+        and Cystines-residues (Cys-Cys-bond)
+        """
+        num_aa = self.count_amino_acids()
+        mec_reduced = num_aa['W'] * 5500 + num_aa['Y'] * 1490
+        mec_cystines = mec_reduced + (num_aa['C'] // 2) * 125
+        return(mec_reduced, mec_cystines)

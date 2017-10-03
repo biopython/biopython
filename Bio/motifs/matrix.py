@@ -231,7 +231,7 @@ class GenericPositionMatrix(dict):
             nucleotides = sorted(self, key=get, reverse=True)
             counts = [self[c][i] for c in nucleotides]
             # Follow the Cavener rules:
-            if counts[0] >= sum(counts[1:]) and counts[0] >= 2 * counts[1]:
+            if counts[0] > sum(counts[1:]) and counts[0] > 2 * counts[1]:
                 key = nucleotides[0]
             elif 4 * sum(counts[:2]) > 3 * sum(counts):
                 key = "".join(sorted(nucleotides[:2]))

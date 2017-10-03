@@ -18,7 +18,7 @@ ignore =
     # D104	Missing docstring in public package
     # D105	Missing docstring in magic method
     # TODO: Fix some of these?
-    D100,D101,D102,D103,D105,
+    D101,D102,D103,D105,
     # ====================================
     # pydocstyle: D### - Whitespace Issues
     # ====================================

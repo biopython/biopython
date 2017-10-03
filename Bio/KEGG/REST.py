@@ -201,11 +201,12 @@ def kegg_get(dbentries, option=None):
 
 
 def kegg_conv(target_db, source_db, option=None):
-    """KEGG conv - convert KEGG identifiers to/from outside identifiers
+    """KEGG conv - convert KEGG identifiers to/from outside identifiers.
 
-    target_db - Target database
-    source_db_or_dbentries - source database or database entries
-    option - Can be "turtle" or "n-triple" (string).
+    Arguments:
+     - target_db - Target database
+     - source_db_or_dbentries - source database or database entries
+     - option - Can be "turtle" or "n-triple" (string).
     """
     # http://rest.kegg.jp/conv/<target_db>/<source_db>[/<option>]
     #

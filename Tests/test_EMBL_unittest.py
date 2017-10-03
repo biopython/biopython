@@ -32,9 +32,24 @@ class EMBLTests(unittest.TestCase):
         # the coordinates 1740 added to the sequence as four extra letters.
         with warnings.catch_warnings(record=True) as w:
             warnings.simplefilter("always")
-            rec = SeqIO.read(path.join('EMBL', 'embl_with_0_line.embl'), 'embl')
-            self.assertEqual(len(w), 0, "Unexpected parser warnings: " + "\n".join(str(warn.message) for warn in w))
+            rec = SeqIO.read('EMBL/embl_with_0_line.embl', 'embl')
+            self.assertEqual(len(w), 0, "Unexpected parser warnings: " +
+                             "\n".join(str(warn.message) for warn in w))
             self.assertEqual(len(rec), 1740)
+
+    def test_embl_no_coords(self):
+        """Test sequence lines without coordinates."""
+        # Biopython 1.68, 1.69 and 1.70 would ignore these lines
+        # giving an unknown sequence!
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter("always")
+            rec = SeqIO.read('EMBL/101ma_no_coords.embl', 'embl')
+            self.assertTrue(w, "Expected parser warningd")
+            self.assertEqual([str(_.message) for _ in w],
+                             ["EMBL sequence line missing coordinates"] * 3)
+            self.assertEqual(len(rec), 154)
+            self.assertEqual(rec.seq[:10], "MVLSEGEWQL")
+            self.assertEqual(rec.seq[-10:], "AKYKELGYQG")
 
 
 if __name__ == "__main__":

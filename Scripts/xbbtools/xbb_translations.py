@@ -8,7 +8,8 @@
 
 # Created: Wed Jun 21 15:53:22 2000
 # thomas@cbs.dtu.dk, http://www.cbs.dtu.dk/thomas
-# File: xbb_translations.py
+
+"""Translation code for graphical Xbbtools tool."""
 
 from __future__ import print_function
 

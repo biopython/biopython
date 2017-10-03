@@ -498,13 +498,19 @@ To display a hierarchical clustering solution with visualization programs such a
 \end{verbatim}
 This method takes no arguments, and returns \verb|None|.
 
+Before drawing the tree, you may also want to reorder the tree nodes. A hierarchical clustering solution of $n$ items can be drawn as $2^{n-1}$ different but equivalent dendrograms by switching the left and right subnode at each node. The \verb|tree.sort(order)| method visits each node in the hierarchical clustering tree and verifies if the average order value of the left subnode is less than or equal to the average order value of the right subnode. If not, the left and right subnodes are exchanged. Here, the order values of the items are given by the user. In the resulting dendrogram, items in the left-to-right order will tend to have increasing order values. The method will return the indices of the elements in the left-to-right order after sorting:
+\begin{verbatim}
+>>> indices = tree.sort(order)
+\end{verbatim}
+such that item \verb|indices[i]| will occur at position $i$ in the dendrogram.
+
 After hierarchical clustering, the items can be grouped into $k$ clusters based on the tree structure stored in the \verb|Tree| object by cutting the tree:
 \begin{verbatim}
 >>> clusterid = tree.cut(nclusters=1)
 \end{verbatim}
 where \verb|nclusters| (defaulting to \verb|1|) is the desired number of clusters $k$.
 This method ignores the top $k-1$ linking events in the tree structure, resulting in $k$ separated clusters of items. The number of clusters $k$ should be positive, and less than or equal to the number of items.
-This method returns an array \verb|clusterid| containing the number of the cluster to which each item is assigned.
+This method returns an array \verb|clusterid| containing the number of the cluster to which each item is assigned. Clusters are numbered $0$ to $k-1$ in their left-to-right order in the dendrogram.
 
 \subsection*{Performing hierarchical clustering}
 
@@ -689,12 +695,20 @@ For example, you can use
 >>> handle = gzip.open("mydatafile.txt.gz", "rt")
 \end{verbatim}
 to open a gzipped file, or
-% TODO: The urlopen example needs to be in text mode for Python 3..
 \begin{verbatim}
->>> import urllib # Python standard library
->>> handle = urllib.urlopen("http://somewhere.org/mydatafile.txt")
+>>> from urllib.request import urlopen # Python 3 only
+>>> from io import TextIOWrapper
+>>>
+>>> handle = TextIOWrapper(urlopen("https://raw.githubusercontent.com/biopython/biopython/master/Tests/Cluster/cyano.txt"))
 \end{verbatim}
 to open a file stored on the Internet before calling \verb|read|.
+
+Note for Python 2 this can be done by using:
+\begin{verbatim}
+>>> from urllib import urlopen # Python 2 only
+>>>
+>>> handle = urlopen("https://raw.githubusercontent.com/biopython/biopython/master/Tests/Cluster/cyano.txt")
+\end{verbatim}
 
 The \verb|read| command reads the tab-delimited text file \verb|mydatafile.txt| containing gene expression data in the format specified for Michael Eisen's Cluster/TreeView program. In this file format, rows represent genes and columns represent samples or observations. For a simple time course, a minimal input file would look like this:
 

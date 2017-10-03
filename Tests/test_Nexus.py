@@ -409,7 +409,7 @@ Root:  16
         self.assertEqual(output, expected)
         self.assertEqual(t3.is_compatible(t2, threshold=0.3), [])
 
-    def test_internal_node_labels(self):
+    def test_TreeTest2(self):
         """Handle text labels on internal nodes.
         """
         ts1b = "(Cephalotaxus:125.000000,(Taxus:100.000000,Torreya:100.000000)"\
@@ -420,7 +420,8 @@ Root:  16
                                                       ('TT1', 25.0, None, None),
                                                       ('Taxus', 100.0, None, None),
                                                       ('Torreya', 100.0, None, None)])
-
+        tree.prune('Torreya')
+        self.assertEqual(tree.all_ids(), [0, 1, 3])
         ts1c = "(Cephalotaxus:125.000000,(Taxus:100.000000,Torreya:100.000000)"\
                 "25.000000)90.000000;"
         tree = Trees.Tree(ts1c)
@@ -429,12 +430,105 @@ Root:  16
                                                       (None, 25.0, None, None),
                                                       ('Taxus', 100.0, None, None),
                                                       ('Torreya', 100.0, None, None)])
+        self.assertFalse(tree.has_support())
+        with self.assertRaises(Exception) as context:
+            tree.randomize()
+        self.assertTrue("Either numer of taxa or list of taxa must be specified." in str(context.exception))
+        tree_rand = Trees.Tree(ts1c)
+        tree_rand.randomize(ntax=4)
+        self.assertEqual(sorted(tree_rand.get_taxa()), ['taxon1', 'taxon2',
+                                                        'taxon3', 'taxon4'])
+        tree.branchlength2support()
+        tree.convert_absolute_support(2)
+        self.assertEqual(self._get_flat_nodes(tree), [(None, 0.0, 90.0, None),
+                                                      ('Cephalotaxus', 0.0, 62.5, None),
+                                                      (None, 0.0, 12.5, None),
+                                                      ('Taxus', 0.0, 50.0, None),
+                                                      ('Torreya', 0.0, 50.0, None)])
 
         ts2 = "(((t9:0.385832, (t8:0.445135,t4:0.41401)C:0.024032)B:0.041436,"\
           "t6:0.392496)A:0.0291131, t2:0.497673, ((t0:0.301171,"\
           "t7:0.482152)E:0.0268148, ((t5:0.0984167,t3:0.488578)G:0.0349662,"\
           "t1:0.130208)F:0.0318288)D:0.0273876);"
         tree = Trees.Tree(ts2)
+        tree.branchlength2support()
+        supports = []
+        for i in tree.all_ids():
+            node = tree.node(i)
+            data = node.get_data()
+            supports.append(data.support)
+        self.assertEqual(supports, [0.0, 0.0291131, 0.041436, 0.385832, 0.024032,
+                                    0.445135, 0.41401, 0.392496, 0.497673,
+                                    0.0273876, 0.0268148, 0.301171, 0.482152,
+                                    0.0318288, 0.0349662, 0.0984167, 0.488578,
+                                    0.130208])
+        ts3 = "(((B 9:0.385832, (C 8:0.445135, C4:0.41401)C:0.024032)B:0.041436,"\
+          "A 6:0.392496)A:0.0291131, t2:0.497673, ((E 0:0.301171,"\
+          "E 7:0.482152)E:0.0268148, ((G 5:0.0984167,G 3:0.488578)G:0.0349662,"\
+          "F 1:0.130208)F:0.0318288)D:0.0273876);"
+        self.assertFalse(tree.is_identical(Trees.Tree(ts3)))
+        tree = Trees.Tree(ts3)
+        self.assertTrue(tree.is_bifurcating())
+        self.assertTrue(tree.is_bifurcating(1))
+        self.assertEqual([tree.distance(0, n) for n in tree.all_ids()], [0.0,
+                                                                         0.0291131,
+                                                                         0.0705491,
+                                                                         0.4563811,
+                                                                         0.0945811,
+                                                                         0.5397161,
+                                                                         0.5085911,
+                                                                         0.4216091,
+                                                                         0.497673,
+                                                                         0.0273876,
+                                                                         0.0542024,
+                                                                         0.3553734,
+                                                                         0.5363544,
+                                                                         0.0592164,
+                                                                         0.09418259999999999,
+                                                                         0.1925993,
+                                                                         0.5827606,
+                                                                         0.1894244])
+
+        subtree = tree.set_subtree(10)
+        self.assertEqual(sorted(list(subtree)), ['E 0', 'E 7'])
+        tree.collapse_genera()
+        self.assertEqual(tree.all_ids(), [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 13, 14, 17])
+
+    def test_merge_with_support(self):
+        """Test merge_with_support and consensus method."""
+        ts1 = "(((B 9:0.385832, (C 8:0.445135, C 4:0.41401)C:0.024032)B:0.041436,"\
+          "A 6:0.392496)A:0.0291131, t2:0.497673, ((E 0:0.301171,"\
+          "E 7:0.482152)E:0.0268148, ((G 5:0.0984167,G 3:0.488578)G:0.0349662,"\
+          "F 1:0.130208)F:0.0318288)D:0.0273876);"
+
+        tbs1 = "(((B 9:0.385832, (C 8:0.445135, C 4:0.41401)C:0.024032)B:0.041436,"\
+                  "A 6:0.392496)A:0.0291131, t2:0.497673, ((G 5:0.0984167,"\
+                  "G 3:0.488578)E:0.0268148, ((E 0:0.301171, E 7:0.482152)G:0.0349662,"\
+                  "F 1:0.130208)F:0.0318288)D:0.0273876);"
+
+        tbs2 = "(((B 9:0.385832,A 6:0.392496 C:0.024032)B:0.041436, (C 8:0.445135,"\
+                  "C 4:0.41401))A:0.0291131, t2:0.497673, ((E 0:0.301171, E 7:0.482152)"\
+                  "E:0.0268148, ((G 5:0.0984167,G 3:0.488578)G:0.0349662,F 1:0.130208)"\
+                  "F:0.0318288)D:0.0273876);"
+
+        t1 = Trees.Tree(ts1)
+        tb1 = Trees.Tree(tbs1)
+        tb2 = Trees.Tree(tbs2)
+
+        t1.branchlength2support()
+        tb1.branchlength2support()
+        tb2.branchlength2support()
+
+        t1.merge_with_support(bstrees=[tb1, tb2], threshold=0.2)
+
+        supports = []
+        for i in t1.all_ids():
+            node = t1.node(i)
+            data = node.get_data()
+            supports.append(data.support)
+        self.assertTrue(supports, [0.0, 1.0, 0.04, 1.0, 0.5, 1.0, 1.0, 1.0,
+                                    1.0, 1.0, 0.5, 1.0, 1.0, 0.5, 1.0, 1.0, 1.0,
+                                    1.0])
 
     def test_large_newick(self):
         with open(os.path.join(self.testfile_dir, "int_node_labels.nwk")) as large_ex_handle:

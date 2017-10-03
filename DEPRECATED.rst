@@ -22,6 +22,11 @@ Python 2.6
 No longer supported as of Release 1.69, having triggered a warning with
 release 1.66 onwards.
 
+Python 2.7
+==========
+We will drop support for Python 2.7 no later than 2020, in line with the
+end-of-life or sunset date for Python 2.7 itself.
+
 Python 3.0, 3.1, 3.2
 ====================
 Never officially supported, these triggered a warning in Release 1.62
@@ -52,11 +57,6 @@ Bio.Phylo.CDAOIO.CDAOError
 ==========================
 This exception was deprecated as of Release 1.70, and is no longer used
 within Biopython.
-
-Bio.PDB.Dice
-============
-This was deprecated in Biopython 1.70, it was likely intended as an example
-script using PDBIO for selecting parts of a PDB file.
 
 Bio.DocSQL
 ==========
@@ -456,12 +456,13 @@ Bio.Sequencing & Bio.Medline
 ============================
 A revised API was added and the old one deprecated in Release 1.48,
 and removed in Biopython 1.52:
-Bio.Sequencing.Ace.RecordParser --> Bio.Sequencing.Ace.read(handle)
-Bio.Sequencing.Ace.Iterator --> Bio.Sequencing.Ace.parse(handle)
-Bio.Sequencing.Phd.RecordParser --> Bio.Sequencing.Phd.read(handle)
-Bio.Sequencing.Phd.Iterator --> Bio.Sequencing.Phd.parse(handle)
-Bio.Medline.RecordParser --> Bio.Medline.read(handle)
-Bio.Medline.Iterator --> Bio.Medline.parse(handle)
+
+* Bio.Sequencing.Ace.RecordParser --> Bio.Sequencing.Ace.read(handle)
+* Bio.Sequencing.Ace.Iterator --> Bio.Sequencing.Ace.parse(handle)
+* Bio.Sequencing.Phd.RecordParser --> Bio.Sequencing.Phd.read(handle)
+* Bio.Sequencing.Phd.Iterator --> Bio.Sequencing.Phd.parse(handle)
+* Bio.Medline.RecordParser --> Bio.Medline.read(handle)
+* Bio.Medline.Iterator --> Bio.Medline.parse(handle)
 
 Bio.Blast.NCBIWWW
 =================
