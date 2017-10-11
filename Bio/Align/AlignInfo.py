@@ -45,7 +45,7 @@ class SummaryInfo(object):
         self.ic_vector = []
 
     def dumb_consensus(self, threshold=.7, ambiguous="X",
-                       consensus_alpha=None, require_multiple=0):
+                       consensus_alpha=None, require_multiple=False):
         """Output a fast consensus sequence of the alignment.
 
         This doesn't do anything fancy at all. It will just go through the
@@ -119,7 +119,7 @@ class SummaryInfo(object):
         return Seq(consensus, consensus_alpha)
 
     def gap_consensus(self, threshold=.7, ambiguous="X",
-                      consensus_alpha=None, require_multiple=0):
+                      consensus_alpha=None, require_multiple=False):
         """Output a fast consensus sequence of the alignment, allowing gaps.
 
         Same as dumb_consensus(), but allows gap on the output.
@@ -180,7 +180,7 @@ class SummaryInfo(object):
         return Seq(consensus, consensus_alpha)
 
     def iupac_consensus(self, ambiguous="X", 
-                        consensus_alpha=None, require_multiple=0):
+                        consensus_alpha=None, require_multiple=False):
         """Output a fast consensus sequence of the DNA alignment.
 
         This doesn't do anything fancy at all. It will just go through the
@@ -253,7 +253,7 @@ class SummaryInfo(object):
         return Seq(consensus, consensus_alpha)
 
     def gap_iupac_consensus(selfself, ambiguous="X", 
-                        consensus_alpha=None, require_multiple=0):
+                        consensus_alpha=None, require_multiple=False):
         """Output a fast consensus sequence of the alignment, allowing gaps.
 
         Same as iupac_consensus(), but allows gap on the output.
