@@ -477,6 +477,7 @@ class SchemaMatchingTest(unittest.TestCase):
 class SchemaFactoryTest(unittest.TestCase):
     """Test the SchemaFactory for generating Schemas."""
     def __init__(self, method):
+        """Initialize."""
         unittest.TestCase.__init__(self, method)
 
         # a cached schema bank, so we don't have to load it multiple times

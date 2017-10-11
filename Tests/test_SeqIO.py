@@ -245,9 +245,11 @@ class ForwardOnlyHandle(object):
     """Mimic a network handle without seek and tell methods etc."""
 
     def __init__(self, handle):
+        """Initialize."""
         self._handle = handle
 
     def __iter__(self):
+        """Iterate."""
         return iter(self._handle)
 
     def read(self, length=None):

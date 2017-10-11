@@ -16,7 +16,10 @@ from Bio.Application import AbstractCommandline, _Argument
 
 
 class EchoApp(AbstractCommandline):
+    """Minimal command line wrapper for echo command."""
+
     def __init__(self, cmd="echo", **kwargs):
+        """Initialize wrapper for echo command."""
         self.parameters = [_Argument(["text"], "Text to echo")]
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
