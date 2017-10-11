@@ -184,11 +184,29 @@ class SummaryInfo(object):
         """Output a fast consensus sequence of the DNA alignment.
 
         This doesn't do anything fancy at all. It will just go through the
-        sequence residue by residue(ie. A or G or T or C for DNA) 
+        sequence residue by residue (ie. A or G or T or C for DNA) 
         in all sequences in the alignment. It will add IUPAC nucleotide 
-        ambiguity bases where appliciable. This does not account for number
-        of bases, if only 1 base differs in an alignment of 100, 
-        this will will call an ambiguity. A very conservative approach. 
+        ambiguity bases where applicable. This does not account for number
+        of bases (e.g., if only 1 base differs in an alignment of 100, 
+        this will will call an ambiguity). A very conservative approach.
+
+        iupac_consensus would output the following consensus 
+        given an alignment with these 4 sequences:
+        seq1 TATCGACCTCATCG
+        seq2 TAAGATTGCGATCG
+        seq3 TAAGATTGGTATCG
+        seq4 TAAGATTGATATCG
+        -------------------
+        con  TAWSRWYSNBATCG
+
+        dumb_consensus would have output the following consensus 
+        given an alignment with these 4 sequences: 
+        seq1 TATCGACCTCATCG
+        seq2 TAAGATTGCGATCG
+        seq3 TAAGATTGGTATCG
+        seq4 TAAGATTGATATCG
+        -------------------
+        con  TAAGATTGNNATCG
 
         Arguments:
          - ambiguous - The ambiguous character to be added when the threshold is
@@ -252,7 +270,7 @@ class SummaryInfo(object):
 
         return Seq(consensus, consensus_alpha)
 
-    def gap_iupac_consensus(selfself, ambiguous="X", 
+    def gap_iupac_consensus(self, ambiguous="X", 
                         consensus_alpha=None, require_multiple=False):
         """Output a fast consensus sequence of the alignment, allowing gaps.
 

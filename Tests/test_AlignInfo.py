@@ -8,7 +8,7 @@ import unittest
 
 from Bio.Alphabet import DNAAlphabet, generic_protein
 from Bio.Alphabet import HasStopCodon, Gapped
-from Bio.Alphabet.IUPAC import unambiguous_dna
+from Bio.Alphabet.IUPAC import unambiguous_dna, ambiguous_dna
 from Bio.Align import MultipleSeqAlignment
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
@@ -16,7 +16,6 @@ from Bio import AlignIO
 from Bio.SubsMat.FreqTable import FreqTable, FREQ
 from Bio.Align.AlignInfo import SummaryInfo
 import math
-
 
 class AlignInfoTests(unittest.TestCase):
     """Test basic usage."""
@@ -63,6 +62,23 @@ N  0.0 2.0 1.0 0.0
         ic = summary.information_content(e_freq_table=expected,
                                          chars_to_ignore=['-'])
         self.assertAlmostEqual(ic, 7.32029999423075, places=6)
+
+
+        filename = "GFF/multi_1.fna"
+        format = "fasta"
+        alignment = AlignIO.read(filename, format, alphabet=unambiguous_dna)
+        summary = SummaryInfo(alignment)
+
+        c = summary.iupac_consensus(ambiguous="N")
+        self.assertEqual(str(c), 'TAWSRWYSNBATCG')
+        self.assertNotEqual(c.alphabet, unambiguous_dna)
+        self.assertTrue(isinstance(c.alphabet, DNAAlphabet))
+
+        c = summary.gap_iupac_consensus(ambiguous="N")
+        self.assertEqual(str(c), 'TAWSRWYSNBATCG')
+        self.assertNotEqual(c.alphabet, unambiguous_dna)
+        self.assertTrue(isinstance(c.alphabet, DNAAlphabet))
+
 
     def test_proteins(self):
         alpha = HasStopCodon(Gapped(generic_protein, "-"), "*")
