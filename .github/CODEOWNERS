@@ -31,9 +31,15 @@ Tests/test_Cluster*.py @mdehoon
 Bio/codonalign/* @zruan
 Tests/test_codonalign*.py @zruan
 
+Bio/Entrez/* @mdehoon
+Tests/test_Entrez*.py @mdehoon
+
 Bio/GenBank/* @peterjc
 Tests/test_GenBank*.py @peterjc
 Tests/test_EMBL*.py @peterjc
+
+Bio/Graphics/GenomeDiagram/* @widdowquinn @peterjc
+Tests/test_GenomeDiagram*.py @widdowquinn @peterjc
 
 Bio/motifs/* @mdehoon
 Tests/test_motifs*.py @mdehoon
