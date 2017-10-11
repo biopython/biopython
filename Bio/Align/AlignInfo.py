@@ -188,7 +188,7 @@ class SummaryInfo(object):
         in all sequences in the alignment. It will add IUPAC nucleotide 
         ambiguity bases where appliciable. This does not account for number
         of bases, if only 1 base differs in an alignment of 100, 
-        This will will call an ambiguity. A very conservative approach. 
+        this will will call an ambiguity. A very conservative approach. 
 
         Arguments:
          - ambiguous - The ambiguous character to be added when the threshold is
@@ -237,11 +237,11 @@ class SummaryInfo(object):
 
             if require_multiple and num_atoms == 1:
                 consensus += ambiguous
-            elif (len(max_atoms) == 1):
+            elif len(max_atoms) == 1:
                 consensus += max_atoms[0].upper()
             else:
                 dna_string = ''.join(sorted(max_atoms)).upper()
-                if(len(max_atoms)==4):
+                if len(max_atoms)==4:
                     consensus += "N"
                 else:
                     consensus += inv_ambig[dna_string]
@@ -301,11 +301,11 @@ class SummaryInfo(object):
 
             if require_multiple and num_atoms == 1:
                 consensus += ambiguous
-            elif (len(max_atoms) == 1):
+            elif len(max_atoms) == 1:
                 consensus += max_atoms[0].upper()
             else:
                 dna_string = ''.join(sorted(max_atoms)).upper()
-                if(len(max_atoms)==4):
+                if len(max_atoms)==4:
                     consensus += "N"
                 else:
                     consensus += inv_ambig[dna_string]
