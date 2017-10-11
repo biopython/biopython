@@ -65,7 +65,7 @@ class SummaryInfo(object):
            not reached.
          - consensus_alpha - The alphabet to return for the consensus sequence.
            If this is None, then we will try to guess the alphabet.
-         - require_multiple - If set as 1, this will require that more than
+         - require_multiple - If true, this will require that more than
            1 sequence be part of an alignment to put it in the consensus (ie.
            not just 1 sequence and gaps).
 
@@ -195,7 +195,7 @@ class SummaryInfo(object):
            not reached.
          - consensus_alpha - The alphabet to return for the consensus sequence.
            If this is None, then we will try to guess the alphabet.
-         - require_multiple - If set as 1, this will require that more than
+         - require_multiple - If true, this will require that more than
            1 sequence be part of an alignment to put it in the consensus (ie.
            not just 1 sequence and gaps).
 
