@@ -321,9 +321,9 @@ class TwoPointTest(unittest.TestCase):
 
 
 class TestCrossover(object):
-    """Provide basic crossover functionality for testing SafeFitness.
-    """
+    """Provide basic crossover functionality for testing SafeFitness."""
     def __init__(self):
+        """Initialize."""
         # whether or not to produce new organisms with lower fitness
         # higher fitness, or the same organism
         self.type = "lower"

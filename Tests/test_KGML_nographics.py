@@ -21,6 +21,7 @@ class PathwayData(object):
     """Convenience structure for testing pathway data."""
     def __init__(self, infilename, outfilename, element_counts,
                  pathway_image, show_pathway_image=False):
+        """Initialize."""
         self.infilename = infilename
         self.outfilename = outfilename
         self.element_counts = element_counts
