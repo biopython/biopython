@@ -147,16 +147,17 @@ def draw_cut_corner_box(point1, point2, corner=0.5,
 
     boxheight = y2 - y1
     boxwidth = x2 - x1
-    corner = min(boxheight * 0.5, boxheight * 0.5 * corner)
+    x_corner = min(boxheight * 0.5 * corner, boxwidth * 0.5)
+    y_corner = min(boxheight * 0.5 * corner, boxheight * 0.5)
 
-    return Polygon([x1, y1 + corner,
-                    x1, y2 - corner,
-                    x1 + corner, y2,
-                    x2 - corner, y2,
-                    x2, y2 - corner,
-                    x2, y1 + corner,
-                    x2 - corner, y1,
-                    x1 + corner, y1],
+    return Polygon([x1, y1 + y_corner,
+                    x1, y2 - y_corner,
+                    x1 + x_corner, y2,
+                    x2 - x_corner, y2,
+                    x2, y2 - y_corner,
+                    x2, y1 + y_corner,
+                    x2 - x_corner, y1,
+                    x1 + x_corner, y1],
                    strokeColor=strokecolor,
                    strokeWidth=1,
                    strokeLineJoin=1,  # 1=round

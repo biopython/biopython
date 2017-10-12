@@ -127,6 +127,7 @@ class TestMutator(object):
     """Provide basic mutator ability."""
 
     def __init__(self):
+        """Initialize."""
         self.type = "lower"
 
     def mutate(self, org):

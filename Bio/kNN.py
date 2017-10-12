@@ -36,11 +36,10 @@ class kNN(object):
      - xs       List of the neighbors.
      - ys       List of the classes that the neighbors belong to.
      - k        Number of neighbors to look at.
-
     """
 
     def __init__(self):
-        """kNN()"""
+        """Initialize."""
         self.classes = set()
         self.xs = []
         self.ys = []
@@ -48,16 +47,15 @@ class kNN(object):
 
 
 def equal_weight(x, y):
-    """equal_weight(x, y) -> 1"""
+    """Return integer one (dummy method for equally weighting)."""
     # everything gets 1 vote
     return 1
 
 
 def train(xs, ys, k, typecode=None):
-    """train(xs, ys, k) -> kNN
+    """Train a k nearest neighbors classifier on a training set.
 
-    Train a k nearest neighbors classifier on a training set.  xs is a
-    list of observations and ys is a list of the class assignments.
+    xs is a list of observations and ys is a list of the class assignments.
     Thus, xs and ys should contain the same number of elements.  k is
     the number of neighbors that should be examined when doing the
     classification.
@@ -71,15 +69,17 @@ def train(xs, ys, k, typecode=None):
 
 
 def calculate(knn, x, weight_fn=equal_weight, distance_fn=None):
-    """calculate(knn, x[, weight_fn][, distance_fn]) -> weight dict
+    """Calculate the probability for each class.
 
-    Calculate the probability for each class.  knn is a kNN object.  x
-    is the observed data.  weight_fn is an optional function that
-    takes x and a training example, and returns a weight.  distance_fn
-    is an optional function that takes two points and returns the
-    distance between them.  If distance_fn is None (the default), the
-    Euclidean distance is used.  Returns a dictionary of the class to
-    the weight given to the class.
+    Arguments:
+     - x is the observed data.
+     - weight_fn is an optional function that takes x and a training
+       example, and returns a weight.
+     - distance_fn is an optional function that takes two points and
+       returns the distance between them.  If distance_fn is None (the
+       default), the Euclidean distance is used.
+
+    Returns a dictionary of the class to the weight given to the class.
     """
     x = numpy.asarray(x)
 
@@ -111,12 +111,12 @@ def calculate(knn, x, weight_fn=equal_weight, distance_fn=None):
 
 
 def classify(knn, x, weight_fn=equal_weight, distance_fn=None):
-    """classify(knn, x[, weight_fn][, distance_fn]) -> class
+    """Classify an observation into a class.
 
-    Classify an observation into a class.  If not specified, weight_fn will
-    give all neighbors equal weight.  distance_fn is an optional function
-    that takes two points and returns the distance between them.  If
-    distance_fn is None (the default), the Euclidean distance is used.
+    If not specified, weight_fn will give all neighbors equal weight.
+    distance_fn is an optional function that takes two points and returns
+    the distance between them.  If distance_fn is None (the default),
+    the Euclidean distance is used.
     """
     weights = calculate(
         knn, x, weight_fn=weight_fn, distance_fn=distance_fn)

@@ -24,7 +24,7 @@ def create(instances, alphabet=None):
 
 
 def parse(handle, format):
-    """Parses an output file of motif finding programs.
+    """Parse an output file from a motif finding program.
 
     Currently supported formats (case is ignored):
      - AlignAce:      AlignAce output file format
@@ -89,7 +89,7 @@ def parse(handle, format):
 
 
 def read(handle, format):
-    """Reads a motif from a handle using a specified file-format.
+    """Read a motif from a handle using the specified file-format.
 
     This supports the same formats as Bio.motifs.parse(), but
     only for files containing exactly one motif.  For example,
@@ -325,7 +325,7 @@ class Motif(object):
         return self.pwm.log_odds(self._background)
 
     def __str__(self, masked=False):
-        """String representation of a motif."""
+        """Return string representation of a motif."""
         text = ""
         if self.instances is not None:
             text += str(self.instances)
@@ -340,7 +340,7 @@ class Motif(object):
         return text
 
     def __len__(self):
-        """return the length of a motif
+        """Return the length of a motif.
 
         Please use this method (i.e. invoke len(m)) instead of referring to m.length directly.
         """
@@ -350,7 +350,7 @@ class Motif(object):
             return self.length
 
     def reverse_complement(self):
-        """Gives the reverse complement of the motif."""
+        """Return the reverse complement of the motif as a new motif."""
         alphabet = self.alphabet
         if self.instances is not None:
             instances = self.instances.reverse_complement()
@@ -368,12 +368,12 @@ class Motif(object):
 
     @property
     def consensus(self):
-        """Returns the consensus sequence."""
+        """Return the consensus sequence."""
         return self.counts.consensus
 
     @property
     def anticonsensus(self):
-        """Returns the least probable pattern to be generated from this motif."""
+        """Return the least probable pattern to be generated from this motif."""
         return self.counts.anticonsensus
 
     @property
@@ -390,7 +390,7 @@ class Motif(object):
         return self.counts.degenerate_consensus
 
     def weblogo(self, fname, format="PNG", version="2.8.2", **kwds):
-        """Uses the Berkeley weblogo service to download and save a weblogo of itself.
+        """Download and save a weblogo using the Berkeley weblogo service.
 
         Requires an internet connection.
 
@@ -497,7 +497,7 @@ class Motif(object):
             f.write(im)
 
     def format(self, format):
-        """Returns a string representation of the Motif in a given format
+        """Return a string representation of the Motif in the given format.
 
         Currently supported fromats:
          - pfm : JASPAR single Position Frequency Matrix
@@ -518,7 +518,7 @@ class Motif(object):
 
 
 def write(motifs, format):
-    """Returns a string representation of motifs in a given format
+    """Return a string representation of motifs in the given format.
 
     Currently supported formats (case is ignored):
      - pfm : JASPAR simple single Position Frequency Matrix

@@ -11,12 +11,15 @@ from Bio.Seq import Seq
 
 
 class Record(list):
+    """AlignACE record (subclass of Python list)."""
+
     def __init__(self):
+        """Initialize."""
         self.parameters = None
 
 
 def read(handle):
-    """read(handle)"""
+    """Parse an AlignACE format handle as a Record object."""
     record = Record()
     line = next(handle)
     record.version = line.strip()

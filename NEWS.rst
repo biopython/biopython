@@ -33,9 +33,21 @@ in the Stockholm/PFAM format.
 The SeqRecord object now has a translate method, following the approach used
 for its existing reverse_complement method etc.
 
+The output of function ``format_alignment`` in ``Bio.pairwise2`` for displaying
+a pairwise sequence alignment as text now indicates gaps and mis-matches.
+
+In this release more of our code is now explicitly available under either our
+original "Biopython License Agreement", or the very similar but more commonly
+used "3-Clause BSD License".  See the ``LICENSE.rst`` file for more details.
+
+Additionally, a number of small bugs have been fixed with further additions to
+the test suite, and there has been further work to follow the Python PEP8,
+PEP257 and best practice standard coding style.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+- Ariel Aptekmann
 - Chris Rands
 - Christian Brueffer
 - Erik Cederstrand (first contribution)
@@ -45,8 +57,12 @@ possible, especially the following contributors:
 - Jun Aruga (first contribution)
 - Kai Blin
 - Kozo Nishida
+- Michiel de Hoon
 - Peter Cock
 - rht (first contribution)
+- Shuichiro MAKIGAKI (first contribution)
+- Spencer Bliven
+- Yasar L. Ahmed (first contribution)
 
 
 10 July 2017: Biopython 1.70
@@ -582,12 +598,12 @@ Bio.PopGen.SimCoal now also supports fastsimcoal.
 SearchIO hmmer3-text, hmmer3-tab, and hmmer3-domtab now support output from
 hmmer3.1b1.
 
-The 'accession' of QueryResult and Hit objects created when using the
-'hmmer3-tab' format are now properly named as 'accession' (previously they
-were acc, deviating from the documentation).
+The ``accession`` of QueryResult and Hit objects created when using the
+'hmmer3-tab' format are now properly named as ``accession`` (previously they
+were ``acc``, deviating from the documentation).
 
-The `homology` key in the `aln_annotation` attribute of an HSP object in
-Bio.SearchIO has been renamed to `similarity`.
+The ``homology` key in the ``aln_annotation`` attribute of an HSP object in
+Bio.SearchIO has been renamed to ``similarity``.
 
 The Bio.SeqUtils masses and molecular_weight function have been updated.
 

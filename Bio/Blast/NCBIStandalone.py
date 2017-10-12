@@ -84,11 +84,12 @@ class _Scanner(object):
     """
 
     def feed(self, handle, consumer):
-        """S.feed(handle, consumer)
+        """Feed in a BLAST report for scanning.
 
-        Feed in a BLAST report for scanning.  handle is a file-like
-        object that contains the BLAST report.  consumer is a Consumer
-        object that will receive events as the report is scanned.
+        Arguments:
+         - handle is a file-like object that contains the BLAST report.
+         - consumer is a Consumer object that will receive events as the
+           report is scanned.
         """
         if isinstance(handle, File.UndoHandle):
             uhandle = handle
@@ -806,12 +807,12 @@ class BlastParser(AbstractParser):
     """Parses BLAST data into a Record.Blast object."""
 
     def __init__(self):
-        """__init__(self)"""
+        """Initialize."""
         self._scanner = _Scanner()
         self._consumer = _BlastConsumer()
 
     def parse(self, handle):
-        """parse(self, handle)"""
+        """Parse BLAST handle into a Record.Blast object."""
         self._scanner.feed(handle, self._consumer)
         return self._consumer.data
 
@@ -820,12 +821,12 @@ class PSIBlastParser(AbstractParser):
     """Parses BLAST data into a Record.PSIBlast object."""
 
     def __init__(self):
-        """__init__(self)"""
+        """Initialize."""
         self._scanner = _Scanner()
         self._consumer = _PSIBlastConsumer()
 
     def parse(self, handle):
-        """parse(self, handle)"""
+        """Parse BLAST handle into a Record.PSIBlast object."""
         self._scanner.feed(handle, self._consumer)
         return self._consumer.data
 
@@ -1612,12 +1613,13 @@ class Iterator(object):
     """
 
     def __init__(self, handle, parser=None):
-        """__init__(self, handle, parser=None)
+        """Initialize a new iterator.
 
-        Create a new iterator.  handle is a file-like object.  parser
-        is an optional Parser object to change the results into another form.
-        If set to None, then the raw contents of the file will be returned.
-
+        Arguments:
+         - handle is a file-like object.
+         - parser is an optional Parser object to change the results
+           into another form.  If set to None, then the raw contents
+           of the file will be returned.
         """
         try:
             handle.readline
@@ -1630,10 +1632,9 @@ class Iterator(object):
         self._header = []
 
     def __next__(self):
-        """next(self) -> object
+        """Return the next Blast record from the file.
 
-        Return the next Blast record from the file.  If no more records,
-        return None.
+        If no more records, return None.
         """
         lines = []
         query = False

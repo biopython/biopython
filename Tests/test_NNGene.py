@@ -36,8 +36,7 @@ VERBOSE = 0
 # --- Tests for Pattern
 
 class PatternIOTest(unittest.TestCase):
-    """Tests for reading and writing patterns to a file.
-    """
+    """Tests for reading and writing patterns to a file."""
     def setUp(self):
         self.alphabet = IUPAC.ambiguous_dna
         self.test_file = os.path.join("NeuralNetwork", "patternio.txt")
@@ -52,8 +51,7 @@ class PatternIOTest(unittest.TestCase):
             os.remove(self.test_file)
 
     def test_motif(self):
-        """Reading and writing motifs to a file
-        """
+        """Reading and writing motifs to a file."""
         # write to a file
         motifs = ["GAC", "AAA", "TTT", "GGG"]
         with open(self.test_file, "w") as output_handle:
@@ -81,8 +79,7 @@ class PatternIOTest(unittest.TestCase):
                          % (motifs, read_motifs))
 
     def test_schema(self):
-        """Reading and writing schemas to a file.
-        """
+        """Reading and writing schemas to a file."""
         schemas = ["GTR", "GAC"]
         # write out the schemas
         with open(self.test_file, "w") as output_handle:
@@ -111,8 +108,7 @@ class PatternIOTest(unittest.TestCase):
         input_handle.close()
 
     def test_signature(self):
-        """Reading and writing signatures to a file.
-        """
+        """Reading and writing signatures to a file."""
         signatures = [("GAC", "GAC"), ("AAA", "TTT")]
         with open(self.test_file, "w") as output_handle:
             self.pattern_io.write(signatures, output_handle)
@@ -126,8 +122,7 @@ class PatternIOTest(unittest.TestCase):
 
 
 class PatternRepositoryTest(unittest.TestCase):
-    """Tests for retrieving info from a repository of patterns.
-    """
+    """Tests for retrieving info from a repository of patterns."""
     def setUp(self):
         self.motifs = {"GATC": 30,
                        "GGGG": 10,
@@ -138,8 +133,7 @@ class PatternRepositoryTest(unittest.TestCase):
         self.repository = Pattern.PatternRepository(self.motifs)
 
     def test_get_all(self):
-        """Retrieve all patterns from a repository.
-        """
+        """Retrieve all patterns from a repository."""
         all_motifs = self.repository.get_all()
 
         self.assertEqual(all_motifs,
@@ -147,8 +141,7 @@ class PatternRepositoryTest(unittest.TestCase):
                          "Unexpected motifs returned %s" % all_motifs)
 
     def test_get_random(self):
-        """Retrieve random patterns from the repository.
-        """
+        """Retrieve random patterns from the repository."""
         for num_patterns in range(5):
             patterns = self.repository.get_random(num_patterns)
             self.assertEqual(len(patterns), num_patterns,
@@ -160,8 +153,7 @@ class PatternRepositoryTest(unittest.TestCase):
                                 "Got unexpected pattern %s" % pattern)
 
     def test_get_top_percentage(self):
-        """Retrieve the top percentge of patterns from the repository.
-        """
+        """Retrieve the top percentge of patterns from the repository."""
         for num_patterns, percentage in ((1, 0.2), (2, .4), (5, 1.0)):
             patterns = self.repository.get_top_percentage(percentage)
             self.assertEqual(len(patterns), num_patterns,
@@ -173,8 +165,7 @@ class PatternRepositoryTest(unittest.TestCase):
                                 "Got unexpected pattern %s" % pattern)
 
     def test_get_top(self):
-        """Retrieve a certain number of the top patterns.
-        """
+        """Retrieve a certain number of the top patterns."""
         for num_patterns in range(5):
             patterns = self.repository.get_top(num_patterns)
             self.assertEqual(len(patterns), num_patterns,
@@ -186,16 +177,14 @@ class PatternRepositoryTest(unittest.TestCase):
                                 "Got unexpected pattern %s" % pattern)
 
     def test_get_differing(self):
-        """Retrieve patterns from both sides of the list (top and bottom).
-        """
+        """Retrieve patterns from both sides of the list (top and bottom)."""
         patterns = self.repository.get_differing(2, 2)
         self.assertEqual(patterns,
                          ["GATC", "GGGG", "AAAA", "ATAT"],
                          "Got unexpected patterns %s" % patterns)
 
     def test_remove_polyA(self):
-        """Test the ability to remove A rich patterns from the repository.
-        """
+        """Test the ability to remove A rich patterns from the repository."""
         patterns = self.repository.get_all()
         self.assertEqual(len(patterns), 5,
                          "Unexpected starting: %s" % patterns)
@@ -210,8 +199,7 @@ class PatternRepositoryTest(unittest.TestCase):
                          "Unexpected patterns: %s" % patterns)
 
     def test_count(self):
-        """Retrieve counts for particular patterns in the repository.
-        """
+        """Retrieve counts for particular patterns in the repository."""
         num_times = self.repository.count("GGGG")
         self.assertEqual(num_times, 10,
                          "Did not count item in the respository: %s" % num_times)
@@ -224,8 +212,7 @@ class PatternRepositoryTest(unittest.TestCase):
 # --- Tests for motifs
 
 class MotifFinderTest(unittest.TestCase):
-    """Tests for finding motifs from sequences.
-    """
+    """Tests for finding motifs from sequences."""
     def setUp(self):
         test_file = os.path.join('NeuralNetwork', 'enolase.fasta')
         diff_file = os.path.join('NeuralNetwork', 'repeat.fasta')
@@ -256,8 +243,7 @@ class MotifFinderTest(unittest.TestCase):
         self.motif_finder = Motif.MotifFinder()
 
     def test_find(self):
-        """Find all motifs in a set of sequences.
-        """
+        """Find all motifs in a set of sequences."""
         motif_repository = self.motif_finder.find(self.test_records, 8)
         top_motif = motif_repository.get_top(1)
 
@@ -265,8 +251,7 @@ class MotifFinderTest(unittest.TestCase):
                          "Got unexpected motif %s" % top_motif[0])
 
     def test_find_differences(self):
-        """Find the difference in motif counts between two sets of sequences.
-        """
+        """Find the difference in motif counts between two sets of sequences."""
         motif_repository = \
                self.motif_finder.find_differences(self.test_records,
                                                   self.diff_records, 8)
@@ -280,8 +265,7 @@ class MotifFinderTest(unittest.TestCase):
 
 
 class MotifCoderTest(unittest.TestCase):
-    """Test the ability to encode sequences as a set of motifs.
-    """
+    """Test the ability to encode sequences as a set of motifs."""
     def setUp(self):
         motifs = ["GAG", "GAT", "GCC", "ATA"]
 
@@ -291,8 +275,7 @@ class MotifCoderTest(unittest.TestCase):
         self.coder = Motif.MotifCoder(motifs)
 
     def test_representation(self):
-        """Convert a sequence into its motif representation.
-        """
+        """Convert a sequence into its motif representation."""
         for match_string, expected in self.match_strings:
             seq_to_code = Seq(match_string, IUPAC.unambiguous_dna)
             matches = self.coder.representation(seq_to_code)
@@ -305,8 +288,7 @@ class MotifCoderTest(unittest.TestCase):
 # --- Tests for schemas
 
 class SchemaTest(unittest.TestCase):
-    """Matching ambiguous motifs with multiple ambiguity characters.
-    """
+    """Matching ambiguous motifs with multiple ambiguity characters."""
     def setUp(self):
         ambiguity_chars = {"G": "G",
                            "A": "A",
@@ -325,8 +307,7 @@ class SchemaTest(unittest.TestCase):
                            ("*A", ["GA", "TA"])]
 
     def test_find_matches(self):
-        """Find all matches in a sequence.
-        """
+        """Find all matches in a sequence."""
         for motif, expected in self.match_info:
             found_matches = self.motif_coder.find_matches(motif,
                                                           self.match_string)
@@ -335,8 +316,7 @@ class SchemaTest(unittest.TestCase):
                              % (expected, found_matches))
 
     def test_num_matches(self):
-        """Find how many matches are present in a sequence.
-        """
+        """Find how many matches are present in a sequence."""
         for motif, expected in self.match_info:
             num_matches = self.motif_coder.num_matches(motif,
                                                        self.match_string)
@@ -345,8 +325,7 @@ class SchemaTest(unittest.TestCase):
                              % (num_matches, len(expected)))
 
     def test_find_ambiguous(self):
-        """Find the positions of ambiguous items in a sequence.
-        """
+        """Find the positions of ambiguous items in a sequence."""
         ambig_info = (("GATC", []),
                       ("G***", [1, 2, 3]),
                       ("GART", [2]),
@@ -359,8 +338,7 @@ class SchemaTest(unittest.TestCase):
                              % (expected, found_positions, motif))
 
     def test_num_ambiguous(self):
-        """Find the number of ambiguous items in a sequence.
-        """
+        """Find the number of ambiguous items in a sequence."""
         ambig_info = (("GATC", 0),
                       ("G***", 3),
                       ("GART", 1),
@@ -373,8 +351,7 @@ class SchemaTest(unittest.TestCase):
                              % (expected, found_num, motif))
 
     def test_motif_cache(self):
-        """Make sure motif compiled regular expressions are cached properly.
-        """
+        """Make sure motif compiled regular expressions are cached properly."""
         test_motif = "GATC"
 
         self.motif_coder.find_matches(test_motif, "GATCGATC")
@@ -386,8 +363,7 @@ class SchemaTest(unittest.TestCase):
         self.motif_coder.find_matches(test_motif, "GATCGATC")
 
     def test_all_unambiguous(self):
-        """Return all unambiguous characters that can be in a motif.
-        """
+        """Return all unambiguous characters that can be in a motif."""
         found_unambig = self.motif_coder.all_unambiguous()
 
         expected = ["A", "C", "G", "T"]
@@ -396,8 +372,7 @@ class SchemaTest(unittest.TestCase):
 
 
 class SchemaFinderTest(unittest.TestCase):
-    """Test finding schemas from a set of sequences.
-    """
+    """Test finding schemas from a set of sequences."""
     def setUp(self):
         test_file = os.path.join('NeuralNetwork', 'enolase.fasta')
         diff_file = os.path.join('NeuralNetwork', 'repeat.fasta')
@@ -421,8 +396,7 @@ class SchemaFinderTest(unittest.TestCase):
                                           schema_finder=schema_ga)
 
     def test_find(self):
-        """Find schemas from sequence inputs.
-        """
+        """Find schemas from sequence inputs."""
         # this test takes too long
         if VERBOSE:
             repository = self.finder.find(self.test_records + self.diff_records)
@@ -432,8 +406,7 @@ class SchemaFinderTest(unittest.TestCase):
                             "Got too few schemas.")
 
     def test_find_differences(self):
-        """Find schemas that differentiate between two sets of sequences.
-        """
+        """Find schemas that differentiate between two sets of sequences."""
         # this test takes too long
         if VERBOSE:
             repository = self.finder.find_differences(self.test_records,
@@ -445,8 +418,7 @@ class SchemaFinderTest(unittest.TestCase):
 
 
 class SchemaCoderTest(unittest.TestCase):
-    """Test encoding sequences as a grouping of motifs.
-    """
+    """Test encoding sequences as a grouping of motifs."""
     def setUp(self):
         ambiguity_chars = {"G": "G",
                            "A": "A",
@@ -466,8 +438,7 @@ class SchemaCoderTest(unittest.TestCase):
                                             1])]
 
     def test_representation(self):
-        """Convert a string into a representation of motifs.
-        """
+        """Convert a string into a representation of motifs."""
         for match_string, expected in self.match_strings:
             match_seq = Seq(match_string, IUPAC.unambiguous_dna)
             found_rep = self.motif_coder.representation(match_seq)
@@ -504,9 +475,9 @@ class SchemaMatchingTest(unittest.TestCase):
 
 
 class SchemaFactoryTest(unittest.TestCase):
-    """Test the SchemaFactory for generating Schemas.
-    """
+    """Test the SchemaFactory for generating Schemas."""
     def __init__(self, method):
+        """Initialize."""
         unittest.TestCase.__init__(self, method)
 
         # a cached schema bank, so we don't have to load it multiple times
@@ -527,8 +498,7 @@ class SchemaFactoryTest(unittest.TestCase):
         self.schema = Schema.Schema(ambiguity_chars)
 
     def test_easy_from_motifs(self):
-        """Generating schema from a simple list of motifs.
-        """
+        """Generating schema from a simple list of motifs."""
         motifs = {"GATCGAA": 20,
                   "GATCGAT": 15,
                   "GATTGAC": 25,
@@ -543,8 +513,7 @@ class SchemaFactoryTest(unittest.TestCase):
                 print("%s: %s" % (schema, schema_bank.count(schema)))
 
     def test_hard_from_motifs(self):
-        """Generating schema from a real life set of motifs.
-        """
+        """Generating schema from a real life set of motifs."""
         schema_bank = self._load_schema_repository()
 
         if VERBOSE:
@@ -584,8 +553,7 @@ class SchemaFactoryTest(unittest.TestCase):
         return schema_bank
 
     def test_schema_representation(self):
-        """Convert sequences into schema representations.
-        """
+        """Convert sequences into schema representations."""
         # get a set of schemas we want to code the sequence in
         schema_bank = self._load_schema_repository()
         top_schemas = schema_bank.get_top(25)
@@ -603,8 +571,7 @@ class SchemaFactoryTest(unittest.TestCase):
 
 # --- Tests for Signatures
 class SignatureFinderTest(unittest.TestCase):
-    """Test the ability to find signatures in a set of sequences.
-    """
+    """Test the ability to find signatures in a set of sequences."""
     def setUp(self):
         test_file = os.path.join('NeuralNetwork', 'enolase.fasta')
 
@@ -619,8 +586,7 @@ class SignatureFinderTest(unittest.TestCase):
         self.sig_finder = Signature.SignatureFinder()
 
     def test_find(self):
-        """Find signatures from sequence inputs.
-        """
+        """Find signatures from sequence inputs."""
         repository = self.sig_finder.find(self.test_records, 6, 9)
         top_sig = repository.get_top(1)
 
@@ -628,8 +594,7 @@ class SignatureFinderTest(unittest.TestCase):
 
 
 class SignatureCoderTest(unittest.TestCase):
-    """Test the ability to encode sequences as a set of signatures.
-    """
+    """Test the ability to encode sequences as a set of signatures."""
     def setUp(self):
         signatures = [("GAC", "GAC"), ("AAA", "TTT"), ("CAA", "TTG")]
 
@@ -643,8 +608,7 @@ class SignatureCoderTest(unittest.TestCase):
                           ("GACAAAAAAAAAAGAC", [0.0, 0.0, 0.0])]
 
     def test_representation(self):
-        """Convert a sequence into its signature representation.
-        """
+        """Convert a sequence into its signature representation."""
         for seq_string, expected in self.test_seqs:
             test_seq = Seq(seq_string, IUPAC.unambiguous_dna)
             predicted = self.coder.representation(test_seq)

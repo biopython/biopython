@@ -162,6 +162,11 @@ class ProtParamTest(unittest.TestCase):
         "Test calculating gravy"
         self.assertAlmostEqual(self.analysis.gravy(), -0.5974, places=4)
 
+    def test_molar_extinction_coefficient(self):
+        "Test molar extinction coefficient"
+        self.assertAlmostEqual(self.analysis.molar_extinction_coefficient()[0], 17420, places=5)
+        self.assertAlmostEqual(self.analysis.molar_extinction_coefficient()[1], 17545, places=5)
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)

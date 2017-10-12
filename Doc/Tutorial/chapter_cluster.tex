@@ -498,13 +498,19 @@ To display a hierarchical clustering solution with visualization programs such a
 \end{verbatim}
 This method takes no arguments, and returns \verb|None|.
 
+Before drawing the tree, you may also want to reorder the tree nodes. A hierarchical clustering solution of $n$ items can be drawn as $2^{n-1}$ different but equivalent dendrograms by switching the left and right subnode at each node. The \verb|tree.sort(order)| method visits each node in the hierarchical clustering tree and verifies if the average order value of the left subnode is less than or equal to the average order value of the right subnode. If not, the left and right subnodes are exchanged. Here, the order values of the items are given by the user. In the resulting dendrogram, items in the left-to-right order will tend to have increasing order values. The method will return the indices of the elements in the left-to-right order after sorting:
+\begin{verbatim}
+>>> indices = tree.sort(order)
+\end{verbatim}
+such that item \verb|indices[i]| will occur at position $i$ in the dendrogram.
+
 After hierarchical clustering, the items can be grouped into $k$ clusters based on the tree structure stored in the \verb|Tree| object by cutting the tree:
 \begin{verbatim}
 >>> clusterid = tree.cut(nclusters=1)
 \end{verbatim}
 where \verb|nclusters| (defaulting to \verb|1|) is the desired number of clusters $k$.
 This method ignores the top $k-1$ linking events in the tree structure, resulting in $k$ separated clusters of items. The number of clusters $k$ should be positive, and less than or equal to the number of items.
-This method returns an array \verb|clusterid| containing the number of the cluster to which each item is assigned.
+This method returns an array \verb|clusterid| containing the number of the cluster to which each item is assigned. Clusters are numbered $0$ to $k-1$ in their left-to-right order in the dendrogram.
 
 \subsection*{Performing hierarchical clustering}
 
