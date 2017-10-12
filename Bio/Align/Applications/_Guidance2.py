@@ -36,7 +36,7 @@ class Guidance2Commandline(AbstractCommandline):
     >>> Guidance2_cline = Guidance2Commandline(seqFile, msaProgram, seqType, str(outDir), bootstraps=20, seqCutoff=0.63,\
                                     colCutoff=0.9, outOrder='as_input', dataset='HTR1A')
     >>>> print(Guidance2_cline)
-    perl guidance.pl --seqFile HTR1A.ffn --msaProgram CLUSTALW --seqType codon --outDir C://Users/rgilmore/HTR1A
+    perl guidance.pl --seqFile HTR1A.ffn --msaProgram CLUSTALW --seqType codon --outDir ~/Guidance2/data
     --bootstraps 20 --seqCutoff 0.63 --colCutoff 0.9 --outOrder as_input --dataset HTR1A
 
 
