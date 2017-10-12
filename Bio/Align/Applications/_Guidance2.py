@@ -55,7 +55,7 @@ class Guidance2Commandline(AbstractCommandline):
     Pac Symp Biocomput 13:15-24
     """
 
-    def __init__(self, cmd="perl guidance.pl", **kwargs):
+    def __init__(self, cmd="guidance", **kwargs):
         self.parameters = \
                 [
                     # Required Parameters
