@@ -5,9 +5,11 @@
 # Wrapper for Guidance2 by Rob Gilmore (2017).  http://guidance.tau.ac.il/ver2/
 # Used _ClustalOmega.py as template.
 #
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
+
 """Command line wrapper for the multiple alignment program, GUIDANCE2.
 It weights, filters or masks unreliably aligned positions in multiple sequence alignments.
 """
@@ -86,16 +88,16 @@ class Guidance2Commandline(AbstractCommandline):
                     _Option(['--genCode', 'genCode'],
                             "Genetic code identifier (only for codon sequences). Default=1 \
                                 1) Nuclear Standard\
-                                15) Nuclear Blepharisma\
-                                6) Nuclear Ciliate\
-                                10) Nuclear Euplotid\
                                 2) Mitochondria Vertebrate\
-                                5) Mitochondria Invertebrate\
                                 3) Mitochondria Yeast\
-                                13) Mitochondria Ascidian\
+                                4) Mitochondria Protozoan\
+                                5) Mitochondria Invertebrate\
+                                6) Nuclear Ciliate\
                                 9) Mitochondria Echinoderm\
-                                14) Mitochondria Flatworm\
-                                4) Mitochondria Protozoan",
+                                10) Nuclear Euplotid\
+                                13) Mitochondria Ascidian\
+                                14) Mitochondria Flatworm \
+                                15) Nuclear Blepharisma",
                             equate=False,
                             checker_function=lambda x: isinstance(x, int)),
                     _Option(['--outOrder', 'outOrder'],
