@@ -398,8 +398,13 @@ class TestRunner(unittest.TextTestRunner):
     testdir = os.path.abspath(os.path.dirname(file) or os.curdir)
 
     def __init__(self, tests=None, verbosity=0):
-        # if no tests were specified to run, we run them all
-        # including the doctests
+        """Initialise test runner.
+
+        If not tests are specified, we run them all,
+        including the doctests.
+
+        Defaults to running without any verbose logging.
+        """
         if tests is None:
             self.tests = []
         else:

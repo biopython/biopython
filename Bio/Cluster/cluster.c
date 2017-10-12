@@ -4,7 +4,7 @@
  * This library was written at the Laboratory of DNA Information Analysis,
  * Human Genome Center, Institute of Medical Science, University of Tokyo,
  * 4-6-1 Shirokanedai, Minato-ku, Tokyo 108-8639, Japan.
- * Contact: mdehoon 'AT' gsc.riken.jp
+ * Contact: michiel.dehoon 'AT' riken.jp
  *
  * Permission to use, copy, modify, and distribute this software and its
  * documentation with or without modifications and for any purpose and
@@ -2824,6 +2824,7 @@ to 0. If kmedoids fails due to a memory allocation error, ifound is set to -1.
       free(errors);
       return;
     }
+    for (i = 0; i < nelements; i++) clusterid[i] = -1;
   }
 
   *error = DBL_MAX;
@@ -2832,7 +2833,7 @@ to 0. If kmedoids fails due to a memory allocation error, ifound is set to -1.
     int counter = 0;
     int period = 10;
 
-    if (npass!=0) randomassign (nclusters, nelements, tclusterid);
+    if (npass!=0) randomassign(nclusters, nelements, tclusterid);
     while(1)
     { double previous = total;
       total = 0.0;
@@ -2875,14 +2876,25 @@ to 0. If kmedoids fails due to a memory allocation error, ifound is set to -1.
         break; /* Identical solution found; break out of this loop */
     }
 
+    if (npass <= 1) {
+      *ifound = 1;
+      *error = total;
+      /* Replace by the centroid in each cluster. */
+      for (j = 0; j < nelements; j++) {
+        clusterid[j] = centroids[tclusterid[j]];
+      }
+      break;
+    }
+
     for (i = 0; i < nelements; i++)
     { if (clusterid[i]!=centroids[tclusterid[i]])
       { if (total < *error)
         { *ifound = 1;
           *error = total;
           /* Replace by the centroid in each cluster. */
-          for (j = 0; j < nelements; j++)
+          for (j = 0; j < nelements; j++) {
             clusterid[j] = centroids[tclusterid[j]];
+          }
         }
         break;
       }
@@ -3123,7 +3135,7 @@ The number of elements that were clustered.
 
 tree           (input) Node[nelements-1]
 The clustering solution. Each node in the array describes one linking event,
-with tree[i].left and tree[i].right representig the elements that were joined.
+with tree[i].left and tree[i].right representing the elements that were joined.
 The original elements are numbered 0..nelements-1, nodes are numbered
 -1..-(nelements-1).
 
@@ -3131,48 +3143,57 @@ nclusters      (input) int
 The number of clusters to be formed.
 
 clusterid      (output) int[nelements]
-The number of the cluster to which each element was assigned. Space for this
-array should be allocated before calling the cuttree routine. If a memory
-error occured, all elements in clusterid are set to -1.
+The number of the cluster to which each element was assigned. Clusters are
+numbered 0..nclusters-1 in the left-to-right order in which they appear in the
+hierarchical clustering tree. Space for the clusterid array should be allocated
+before calling the cuttree routine. If a memory error occured, all elements in
+clusterid are set to -1.
 
 ========================================================================
 */
-{ int i, j, k;
-  int icluster = 0;
+{ int i = -nelements+1; /* top node */
+  int j;
+  int k = -1;
+  int previous = nelements;
   const int n = nelements-nclusters; /* number of nodes to join */
-  int* nodeid;
-  for (i = nelements-2; i >= n; i--)
-  { k = tree[i].left;
-    if (k>=0)
-    { clusterid[k] = icluster;
-      icluster++;
-    }
-    k = tree[i].right;
-    if (k>=0)
-    { clusterid[k] = icluster;
-      icluster++;
-    }
+  int* parents;
+  if (nclusters==1) {
+      for (i = 0; i < nelements; i++) clusterid[i] = 0;
+      return;
   }
-  nodeid = malloc(n*sizeof(int));
-  if(!nodeid)
+  parents = malloc((nelements-1)*sizeof(int));
+  if (!parents)
   { for (i = 0; i < nelements; i++) clusterid[i] = -1;
     return;
   }
-  for (i = 0; i < n; i++) nodeid[i] = -1;
-  for (i = n-1; i >= 0; i--)
-  { if(nodeid[i]<0)
-    { j = icluster;
-      nodeid[i] = j;
-      icluster++;
-    }
-    else j = nodeid[i];
-    k = tree[i].left;
-    if (k<0) nodeid[-k-1] = j; else clusterid[k] = j;
-    k = tree[i].right;
-    if (k<0) nodeid[-k-1] = j; else clusterid[k] = j;
+  while (1) {
+      if (i >= 0) {
+          clusterid[i] = k;
+          j = i;
+          i = previous;
+          previous = j;
+      }
+      else {
+          j = -i-1;
+          if (previous == tree[j].left) {
+              previous = i;
+              i = tree[j].right;
+              if (j >= n && (i >= 0 || -i-1 < n)) k++;
+          }
+          else if (previous == tree[j].right) {
+              previous = i;
+              i = parents[j];
+              if (i==nelements) break;
+          }
+          else {
+              parents[j] = previous;
+              previous = i;
+              i = tree[j].left;
+              if (j >= n && (i >= 0 || -i-1 < n)) k++;
+          }
+      }
   }
-  free(nodeid);
-  return;
+  free(parents);
 }
 
 /* ******************************************************************** */
@@ -3831,6 +3852,113 @@ If a memory error occurs, treecluster returns NULL.
   }
 
   return result;
+}
+
+/* ******************************************************************* */
+
+int sorttree(const int nnodes, Node* tree, const double order[], int indices[])
+/*
+Purpose
+=======
+
+The sorttree routine sorts the items in a hierarchical clustering solution
+based on their order values, while remaining consistent with the hierchical
+clustering solution.
+
+Arguments
+=========
+
+nnodes         (input) int
+The number of nodes in the hierarchical clustering tree.
+
+tree           (input) Node[nnodes]
+The hierarchical clustering tree describing the clustering solution.
+
+order          (input) double[nnodes+1]
+The preferred order of the items.
+
+indices          (output) int*
+The indices of each item after sorting, with item i appearing at indices[i]
+after sorting.
+
+Return value
+============
+
+If no errors occur, sorttree returns 1.
+If a memory error occurs, sorttree returns 0.
+
+========================================================================
+*/
+
+{ int i;
+  int index;
+  int i1, i2;
+  double order1, order2;
+  int counts1, counts2;
+  int* nodecounts = malloc(nnodes*sizeof(int));
+  if (!nodecounts) return 0;
+  if (order) {
+    double* nodeorder = malloc(nnodes*sizeof(double));
+    if (!nodeorder) {
+        free(nodecounts);
+        return 0;
+    }
+    for (i = 0; i < nnodes; i++)
+    { i1 = tree[i].left;
+      i2 = tree[i].right;
+      /* i1 and i2 are the elements that are to be joined */
+      if (i1 < 0)
+      { index = -i1-1;
+        order1 = nodeorder[index];
+        counts1 = nodecounts[index];
+      }
+      else
+      { order1 = order[i1];
+        counts1 = 1;
+      }
+      if (i2 < 0)
+      { index = -i2-1;
+        order2 = nodeorder[index];
+        counts2 = nodecounts[index];
+      }
+      else
+      { order2 = order[i2];
+        counts2 = 1;
+      }
+      if (order1 > order2) {
+        tree[i].left = i2;
+        tree[i].right = i1;
+      }
+      nodecounts[i] = counts1 + counts2;
+      nodeorder[i] = (counts1*order1 + counts2*order2) / (counts1 + counts2);
+    }
+    free(nodeorder);
+  }
+  else
+  { for (i = 0; i < nnodes; i++)
+    { i1 = tree[i].left;
+      i2 = tree[i].right;
+      /* i1 and i2 are the elements that are to be joined */
+      counts1 = (i1 < 0) ? nodecounts[-i1-1] : 1;
+      counts2 = (i2 < 0) ? nodecounts[-i2-1] : 1;
+      nodecounts[i] = counts1 + counts2;
+    }
+  }
+  i--;
+  nodecounts[i] = 0;
+  for ( ; i >= 0; i--)
+  { i1 = tree[i].left;
+    i2 = tree[i].right;
+    counts1 = (i1<0) ? nodecounts[-i1-1] : 1;
+    index = nodecounts[i];
+    if (i1 >= 0) indices[index] = i1;
+    else nodecounts[-i1-1] = index;
+    index += counts1;
+    if (i2 >= 0) indices[index] = i2;
+    else nodecounts[-i2-1] = index;
+  }
+  free(nodecounts);
+  return 1;
 }
 
 /* ******************************************************************* */

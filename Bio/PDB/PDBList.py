@@ -204,10 +204,10 @@ class PDBList(object):
 
         NOTE. The default download format has changed from PDB to PDBx/mmCif
 
-        @param pdb_code: 4-symbols structure Id from PDB (e.g. 3J92).
-        @type pdb_code: string
+        :param pdb_code: 4-symbols structure Id from PDB (e.g. 3J92).
+        :type pdb_code: string
 
-        @param file_format:
+        :param file_format:
             File format. Available options:
 
             * "mmCif" (default, PDBx/mmCif file),
@@ -216,12 +216,12 @@ class PDBList(object):
             * "mmtf" (highly compressed),
             * "bundle" (PDB formatted archive for large structure}
 
-        @type file_format: string
+        :type file_format: string
 
-        @param overwrite: if set to True, existing structure files will be overwritten. Default: False
-        @type overwrite: bool
+        :param overwrite: if set to True, existing structure files will be overwritten. Default: False
+        :type overwrite: bool
 
-        @param obsolete:
+        :param obsolete:
             Has a meaning only for obsolete structures. If True, download the obsolete structure
             to 'obsolete' folder, otherwise download won't be performed.
             This option doesn't work for mmtf format as obsoleted structures aren't stored in mmtf.
@@ -231,13 +231,13 @@ class PDBList(object):
             and you face the "structure doesn't exists" error.
             Default: False
 
-        @type obsolete: bool
+        :type obsolete: bool
 
-        @param pdir: put the file in this directory (default: create a PDB-style directory tree)
-        @type pdir: string
+        :param pdir: put the file in this directory (default: create a PDB-style directory tree)
+        :type pdir: string
 
-        @return: filename
-        @rtype: string
+        :return: filename
+        :rtype: string
         """
         file_format = self._print_default_format_warning(file_format)  # Deprecation warning
 
@@ -346,10 +346,10 @@ class PDBList(object):
         The PDB structure's file name is returned as a single string.
         If obsolete ``==`` True, the files will be saved in a special file tree.
 
-        @param pdb_codes: a list of 4-symbols structure Ids from PDB
-        @type pdb_codes: list of strings
+        :param pdb_codes: a list of 4-symbols structure Ids from PDB
+        :type pdb_codes: list of strings
 
-        @param file_format:
+        :param file_format:
             File format. Available options:
 
             * "mmCif" (default, PDBx/mmCif file),
@@ -358,23 +358,23 @@ class PDBList(object):
             * "mmtf" (highly compressed),
             * "bundle" (PDB formatted archive for large structure}
 
-        @param overwrite: if set to True, existing structure files will be overwritten. Default: False
-        @type overwrite: bool
+        :param overwrite: if set to True, existing structure files will be overwritten. Default: False
+        :type overwrite: bool
 
-        @param obsolete:
+        :param obsolete:
             Has a meaning only for obsolete structures.
             If True, download the obsolete structure
             to 'obsolete' folder, otherwise download won't be performed.
             This option doesn't work for mmtf format as obsoleted structures are not availbe as mmtf.
             (default: False)
 
-        @type obsolete: bool
+        :type obsolete: bool
 
-        @param pdir: put the file in this directory (default: create a PDB-style directory tree)
-        @type pdir: string
+        :param pdir: put the file in this directory (default: create a PDB-style directory tree)
+        :type pdir: string
 
-        @return: filenames
-        @rtype: string
+        :return: filenames
+        :rtype: string
         """
         file_format = self._print_default_format_warning(file_format)  # Deprecation warning
         for pdb_code in pdb_codes:
@@ -383,9 +383,9 @@ class PDBList(object):
     def download_entire_pdb(self, listfile=None, file_format=None):
         """Retrieve all PDB entries not present in the local PDB copy.
 
-        @param listfile: filename to which all PDB codes will be written (optional)
+        :param listfile: filename to which all PDB codes will be written (optional)
 
-        @param file_format:
+        :param file_format:
             File format. Available options:
 
             * "mmCif" (default, PDBx/mmCif file),
@@ -409,9 +409,9 @@ class PDBList(object):
         """Retrieve all obsolete PDB entries not present in the local obsolete
         PDB copy.
 
-        @param listfile: filename to which all PDB codes will be written (optional)
+        :param listfile: filename to which all PDB codes will be written (optional)
 
-        @param file_format: file format. Available options:
+        :param file_format: file format. Available options:
             "mmCif" (default, PDBx/mmCif file),
             "pdb" (format PDB),
             "xml" (PMDML/XML format),

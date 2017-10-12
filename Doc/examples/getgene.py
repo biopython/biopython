@@ -46,7 +46,11 @@ except ImportError:
 
 
 class DB_Index(object):
-    def __init__(self, open=1):
+    def __init__(self, open=True):
+        """Initialise.
+
+        Optional argument open controls if the index should be opened.
+        """
         if open:
             self.Open()
 

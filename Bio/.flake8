@@ -17,8 +17,9 @@ ignore =
     # D103	Missing docstring in public function
     # D104	Missing docstring in public package
     # D105	Missing docstring in magic method
+    # D107	Missing docstring in __init__
     # TODO: Fix some of these?
-    D100,D101,D102,D103,D104,D105,
+    D100,D101,D102,D103,D104,D105,D107
     # ====================================
     # pydocstyle: D2## - Whitespace Issues
     # ====================================
@@ -46,10 +47,7 @@ ignore =
     # ===========================================
     # D400	First line should end with a period
     # D401	First line should be in imperative mood
-    # D402	First line should not be the function’s "signature"
-    # D403	First word of the first line should be properly capitalized
-    # D412	No blank lines allowed between a section header and its content
-    D400,D401,D402,D403,
+    D400,D401,
     # ================================================
     # flake8-commas: C#### (in case installed locally)
     # ================================================

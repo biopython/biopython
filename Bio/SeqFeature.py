@@ -1504,7 +1504,7 @@ class UnknownPosition(AbstractPosition):
         return None
 
     @property
-    def extension(self):
+    def extension(self):  # noqa: D402
         """Legacy attribute to get extension (zero) as integer (OBSOLETE)."""
         return 0
 
@@ -1628,7 +1628,7 @@ class WithinPosition(int, AbstractPosition):
         return self._left
 
     @property
-    def extension(self):
+    def extension(self):  # noqa: D402
         """Legacy attribute to get extension (from left to right) as an integer (OBSOLETE)."""
         return self._right - self._left
 
@@ -1735,7 +1735,7 @@ class BetweenPosition(int, AbstractPosition):
         return self._left
 
     @property
-    def extension(self):
+    def extension(self):  # noqa: D402
         """Legacy attribute to get extension (from left to right) as an integer (OBSOLETE)."""
         return self._right - self._left
 
@@ -1799,7 +1799,7 @@ class BeforePosition(int, AbstractPosition):
         return int(self)
 
     @property
-    def extension(self):
+    def extension(self):  # noqa: D402
         """Legacy attribute to get extension (zero) as integer (OBSOLETE)."""
         return 0
 
@@ -1874,7 +1874,7 @@ class AfterPosition(int, AbstractPosition):
         return int(self)
 
     @property
-    def extension(self):
+    def extension(self):  # noqa: D402
         """Legacy attribute to get extension (zero) as integer (OBSOLETE)."""
         return 0
 

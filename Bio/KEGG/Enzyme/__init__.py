@@ -7,10 +7,10 @@
 """Code to work with the KEGG Enzyme database.
 
 Functions:
-parse - Returns an iterator giving Record objects.
+ - parse - Returns an iterator giving Record objects.
 
 Classes:
-Record               -- Holds the information from a KEGG Enzyme record.
+ - Record - Holds the information from a KEGG Enzyme record.
 """
 
 from __future__ import print_function
@@ -35,30 +35,28 @@ struct_wrap = lambda indent: [indent, "", ("  ", "", 1, 1)]
 class Record(object):
     """Holds info from a KEGG Enzyme record.
 
-    Members:
-    entry       The EC number (withou the 'EC ').
-    name        A list of the enzyme names.
-    classname   A list of the classification terms.
-    sysname     The systematic name of the enzyme.
-    reaction    A list of the reaction description strings.
-    substrate   A list of the substrates.
-    product     A list of the products.
-    inhibitor   A list of the inhibitors.
-    cofactor    A list of the cofactors.
-    effector    A list of the effectors.
-    comment     A list of the comment strings.
-    pathway     A list of 3-tuples: (database, id, pathway)
-    genes       A list of 2-tuples: (organism, list of gene ids)
-    disease     A list of 3-tuples: (database, id, disease)
-    structures  A list of 2-tuples: (database, list of struct ids)
-    dblinks     A list of 2-tuples: (database, list of db ids)
+    Attributes:
+     - entry       The EC number (withou the 'EC ').
+     - name        A list of the enzyme names.
+     - classname   A list of the classification terms.
+     - sysname     The systematic name of the enzyme.
+     - reaction    A list of the reaction description strings.
+     - substrate   A list of the substrates.
+     - product     A list of the products.
+     - inhibitor   A list of the inhibitors.
+     - cofactor    A list of the cofactors.
+     - effector    A list of the effectors.
+     - comment     A list of the comment strings.
+     - pathway     A list of 3-tuples: (database, id, pathway)
+     - genes       A list of 2-tuples: (organism, list of gene ids)
+     - disease     A list of 3-tuples: (database, id, disease)
+     - structures  A list of 2-tuples: (database, list of struct ids)
+     - dblinks     A list of 2-tuples: (database, list of db ids)
+
     """
 
     def __init__(self):
-        """__init___(self)
-
-        Create a new Record.
-        """
+        """Initialize a new Record."""
         self.entry = ""
         self.name = []
         self.classname = []
@@ -77,10 +75,7 @@ class Record(object):
         self.dblinks = []
 
     def __str__(self):
-        """__str__(self)
-
-        Returns a string representation of this Record.
-        """
+        """Return a string representation of this Record."""
         return self._entry() + \
                self._name() + \
                self._classname() + \
