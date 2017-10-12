@@ -30,15 +30,15 @@ class Guidance2Commandline(AbstractCommandline):
 
     >>> from Bio.Align.Applications import Guidance2Commandline
     >>> import os
-    >>> seqFile = "HTR1A.ffn"
+    >>> seqFile = "ADGRB1.ffn"
     >>> msaProgram = "CLUSTALW"
     >>> seqType = "codon"
     >>> outDir = Path(os.getcwd)
     >>> Guidance2_cline = Guidance2Commandline(seqFile, msaProgram, seqType, str(outDir), bootstraps=20, seqCutoff=0.63,\
-                                    colCutoff=0.9, outOrder='as_input', dataset='HTR1A')
+                                    colCutoff=0.9, outOrder='as_input', dataset='ADGRB1')
     >>>> print(Guidance2_cline)
     perl guidance.pl --seqFile HTR1A.ffn --msaProgram CLUSTALW --seqType codon --outDir ~/Guidance2/data
-    --bootstraps 20 --seqCutoff 0.63 --colCutoff 0.9 --outOrder as_input --dataset HTR1A
+    --bootstraps 20 --seqCutoff 0.63 --colCutoff 0.9 --outOrder as_input --dataset ADGRB1
 
 
     You would typically run the command line with Guidance2_cline() or via
