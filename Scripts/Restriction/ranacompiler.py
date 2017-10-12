@@ -861,12 +861,12 @@ class DictionaryBuilder(object):
         rg = ''
         if is_palindrom(dna):
             line.append(True)
-            rg = ''.join(['(?P<', name, '>', regex(site.upper()), ')'])
+            rg = ''.join(['(?=(?P<', name, '>', regex(site.upper()), '))'])
         else:
             line.append(False)
-            sense = ''.join(['(?P<', name, '>', regex(site.upper()), ')'])
-            antisense = ''.join(['(?P<', name, '_as>',
-                                 regex(dna.reverse_complement()), ')'])
+            sense = ''.join(['(?=(?P<', name, '>', regex(site.upper()), '))'])
+            antisense = ''.join(['(?=(?P<', name, '_as>',
+                                 regex(dna.reverse_complement()), '))'])
             rg = sense + '|' + antisense
         #
         #   exact frequency of the site. (ie freq(N) == 1, ...)
@@ -971,9 +971,9 @@ class DictionaryBuilder(object):
                     dna = Seq(enzymedict[other][0], generic_dna)
                     sense2 = regex(dna)
                     antisense2 = regex(dna.reverse_complement())
-                    sense = '(?P<' + other + '>' + sense1 + '|' + sense2 + ')'
-                    antisense = '(?P<' + other + '_as>' + antisense1 + '|' + \
-                                antisense2 + ')'
+                    sense = '(?=(?P<' + other + '>' + sense1 + ')|' + sense2 + ')'
+                    antisense = '(?=(?P<' + other + '_as>' + antisense1 + '|' + \
+                                antisense2 + '))'
                     reg = sense + '|' + antisense
                     line[1] = line[1] + '|' + enzymedict[other][0]
                     line[-1] = reg
