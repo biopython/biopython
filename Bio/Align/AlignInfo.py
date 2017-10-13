@@ -251,7 +251,6 @@ class SummaryInfo(object):
 
             max_atoms = []
 
-
             for atom in atom_dict:
                 max_atoms.append(atom)
                 # Generate a list of all bases at residue
@@ -314,7 +313,6 @@ class SummaryInfo(object):
                     num_atoms += 1
 
             max_atoms = []
-
 
             for atom in atom_dict:
                 max_atoms.append(atom)
