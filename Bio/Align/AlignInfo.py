@@ -19,8 +19,7 @@ from Bio import Alphabet
 from Bio.Alphabet import IUPAC
 from Bio.Seq import Seq
 from Bio.SubsMat import FreqTable
-from Bio import Data 
-from Bio.Data import IUPACData 
+from Bio.Data import IUPACData
 
 # Expected random distributions for 20-letter protein, and
 # for 4-letter nucleotide alphabets
@@ -179,18 +178,18 @@ class SummaryInfo(object):
 
         return Seq(consensus, consensus_alpha)
 
-    def iupac_consensus(self, ambiguous="X", 
+    def iupac_consensus(self, ambiguous="X",
                         consensus_alpha=None, require_multiple=False):
         """Output a fast consensus sequence of the DNA alignment.
 
         This doesn't do anything fancy at all. It will just go through the
-        sequence residue by residue (ie. A or G or T or C for DNA) 
-        in all sequences in the alignment. It will add IUPAC nucleotide 
+        sequence residue by residue (ie. A or G or T or C for DNA)
+        in all sequences in the alignment. It will add IUPAC nucleotide
         ambiguity bases where applicable. This does not account for number
-        of bases (e.g., if only 1 base differs in an alignment of 100, 
+        of bases (e.g., if only 1 base differs in an alignment of 100,
         this will will call an ambiguity). A very conservative approach.
 
-        For a test alignment with 4 sequences, 
+        For a test alignment with 4 sequences,
         iupac_consensus would output the following consensus:
 
         >>> from Bio import AlignIO
@@ -201,13 +200,13 @@ class SummaryInfo(object):
         TAAGATTGCGATCG test2
         TAAGATTGGTATCG test3
         TAAGATTGATATCG test4
-    
+
         >>> from Bio.Align import AlignInfo
         >>> summary_align = AlignInfo.SummaryInfo(alignment)
         >>> print(summary_align.iupac_consensus())
         TAWSRWYSNBATCG
-        
-        For the same test alignment with 4 sequences, 
+
+        For the same test alignment with 4 sequences,
         dumb_consensus would output the following consensus:
 
         >>> print(summary_align.dumb_consensus())
@@ -224,7 +223,7 @@ class SummaryInfo(object):
 
         """
         # Mike Lloyd, 11-OCT-2017: modified dumb_consensus to add iupac bases
-        
+
         inv_ambig = {v: k for k, v in IUPACData.ambiguous_dna_values.items()}
 
         consensus = ''
@@ -251,12 +250,12 @@ class SummaryInfo(object):
                         num_atoms = num_atoms + 1
 
             max_atoms = []
-            max_size = 0
+
 
             for atom in atom_dict:
                 max_atoms.append(atom)
-                #Generate a list of all bases at residue 
-                #no weighting/counting/threshold as in dumb_consensus
+                # Generate a list of all bases at residue
+                # no weighting/counting/threshold as in dumb_consensus
 
             if require_multiple and num_atoms == 1:
                 consensus += ambiguous
@@ -264,7 +263,7 @@ class SummaryInfo(object):
                 consensus += max_atoms[0].upper()
             else:
                 dna_string = ''.join(sorted(max_atoms)).upper()
-                if len(max_atoms)==4:
+                if len(max_atoms) == 4:
                     consensus += "N"
                 else:
                     consensus += inv_ambig[dna_string]
@@ -275,8 +274,8 @@ class SummaryInfo(object):
 
         return Seq(consensus, consensus_alpha)
 
-    def gap_iupac_consensus(self, ambiguous="X", 
-                        consensus_alpha=None, require_multiple=False):
+    def gap_iupac_consensus(self, ambiguous="X",
+                            consensus_alpha=None, require_multiple=False):
         """Output a fast consensus sequence of the alignment, allowing gaps.
 
         Same as iupac_consensus(), but allows gap on the output.
@@ -315,12 +314,12 @@ class SummaryInfo(object):
                     num_atoms += 1
 
             max_atoms = []
-            max_size = 0
+
 
             for atom in atom_dict:
                 max_atoms.append(atom)
-                #Generate a list of all bases at residue 
-                #no weighting/counting/threshold as in dumb_consensus
+                # Generate a list of all bases at residue
+                # no weighting/counting/threshold as in dumb_consensus
 
             if require_multiple and num_atoms == 1:
                 consensus += ambiguous
@@ -328,7 +327,7 @@ class SummaryInfo(object):
                 consensus += max_atoms[0].upper()
             else:
                 dna_string = ''.join(sorted(max_atoms)).upper()
-                if len(max_atoms)==4:
+                if len(max_atoms) == 4:
                     consensus += "N"
                 else:
                     consensus += inv_ambig[dna_string]
@@ -922,4 +921,3 @@ def print_info_content(summary_info, fout=None, rep_record=0):
 if __name__ == "__main__":
     from Bio._utils import run_doctest
     run_doctest()
-    
