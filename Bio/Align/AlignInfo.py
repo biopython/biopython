@@ -194,7 +194,7 @@ class SummaryInfo(object):
         iupac_consensus would output the following consensus:
 
         >>> from Bio import AlignIO
-        >>> alignment = AlignIO.read('../Tests/GFF/multi_1.fna', 'fasta')
+        >>> alignment = AlignIO.read('GFF/multi_1.fna', 'fasta')
         >>> print(alignment)
         SingleLetterAlphabet() alignment with 4 rows and 14 columns
         TATCGACCTCATCG test1
@@ -922,3 +922,4 @@ def print_info_content(summary_info, fout=None, rep_record=0):
 if __name__ == "__main__":
     from Bio._utils import run_doctest
     run_doctest()
+    
