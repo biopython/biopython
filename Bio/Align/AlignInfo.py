@@ -190,23 +190,28 @@ class SummaryInfo(object):
         of bases (e.g., if only 1 base differs in an alignment of 100, 
         this will will call an ambiguity). A very conservative approach.
 
-        iupac_consensus would output the following consensus 
-        given an alignment with these 4 sequences:
-        seq1 TATCGACCTCATCG
-        seq2 TAAGATTGCGATCG
-        seq3 TAAGATTGGTATCG
-        seq4 TAAGATTGATATCG
-        -------------------
-        con  TAWSRWYSNBATCG
+        For a test alignment with 4 sequences, 
+        iupac_consensus would output the following consensus:
 
-        dumb_consensus would have output the following consensus 
-        given an alignment with these 4 sequences: 
-        seq1 TATCGACCTCATCG
-        seq2 TAAGATTGCGATCG
-        seq3 TAAGATTGGTATCG
-        seq4 TAAGATTGATATCG
-        -------------------
-        con  TAAGATTGNNATCG
+        >>> from Bio import AlignIO
+        >>> alignment = AlignIO.read('../Tests/GFF/multi_1.fna', 'fasta')
+        >>> print(alignment)
+        SingleLetterAlphabet() alignment with 4 rows and 14 columns
+        TATCGACCTCATCG test1
+        TAAGATTGCGATCG test2
+        TAAGATTGGTATCG test3
+        TAAGATTGATATCG test4
+    
+        >>> from Bio.Align import AlignInfo
+        >>> summary_align = AlignInfo.SummaryInfo(alignment)
+        >>> print(summary_align.iupac_consensus())
+        TAWSRWYSNBATCG
+        
+        For the same test alignment with 4 sequences, 
+        dumb_consensus would output the following consensus:
+
+        >>> print(summary_align.dumb_consensus())
+        TAAGATTGXXATCG
 
         Arguments:
          - ambiguous - The ambiguous character to be added when the threshold is
@@ -912,3 +917,8 @@ def print_info_content(summary_info, fout=None, rep_record=0):
     rep_sequence = summary_info.alignment[rep_record].seq
     for pos, ic in enumerate(summary_info.ic_vector):
         fout.write("%d %s %.3f\n" % (pos, rep_sequence[pos], ic))
+
+
+if __name__ == "__main__":
+    from Bio._utils import run_doctest
+    run_doctest()
