@@ -16,6 +16,33 @@ class MafftCommandline(AbstractCommandline):
 
     http://align.bmr.kyushu-u.ac.jp/mafft/software/
 
+    Notes
+    -----
+
+    Last checked against version: MAFFT v6.717b (2009/12/03)
+
+    References
+    ----------
+
+    Katoh, Toh (BMC Bioinformatics 9:212, 2008) Improved accuracy of
+    multiple ncRNA alignment by incorporating structural information into
+    a MAFFT-based framework (describes RNA structural alignment methods)
+
+    Katoh, Toh (Briefings in Bioinformatics 9:286-298, 2008) Recent
+    developments in the MAFFT multiple sequence alignment program
+    (outlines version 6)
+
+    Katoh, Toh (Bioinformatics 23:372-374, 2007)  Errata PartTree: an
+    algorithm to build an approximate tree from a large number of
+    unaligned sequences (describes the PartTree algorithm)
+
+    Katoh, Kuma, Toh, Miyata (Nucleic Acids Res. 33:511-518, 2005) MAFFT
+    version 5: improvement in accuracy of multiple sequence alignment
+    (describes [ancestral versions of] the G-INS-i, L-INS-i and E-INS-i
+    strategies)
+
+    Katoh, Misawa, Kuma, Miyata (Nucleic Acids Res. 30:3059-3066, 2002)
+
     Examples
     --------
 
@@ -37,6 +64,7 @@ class MafftCommandline(AbstractCommandline):
 
     You would typically run the command line with mafft_cline() or via
     the Python subprocess module, as described in the Biopython tutorial.
+
     Note that MAFFT will write the alignment to stdout, which you may
     want to save to a file and then parse, e.g.::
 
@@ -54,29 +82,6 @@ class MafftCommandline(AbstractCommandline):
         from Bio import AlignIO
         align = AlignIO.read(StringIO(stdout), "fasta")
 
-    Citations
-    ---------
-
-    Katoh, Toh (BMC Bioinformatics 9:212, 2008) Improved accuracy of
-    multiple ncRNA alignment by incorporating structural information into
-    a MAFFT-based framework (describes RNA structural alignment methods)
-
-    Katoh, Toh (Briefings in Bioinformatics 9:286-298, 2008) Recent
-    developments in the MAFFT multiple sequence alignment program
-    (outlines version 6)
-
-    Katoh, Toh (Bioinformatics 23:372-374, 2007)  Errata PartTree: an
-    algorithm to build an approximate tree from a large number of
-    unaligned sequences (describes the PartTree algorithm)
-
-    Katoh, Kuma, Toh, Miyata (Nucleic Acids Res. 33:511-518, 2005) MAFFT
-    version 5: improvement in accuracy of multiple sequence alignment
-    (describes [ancestral versions of] the G-INS-i, L-INS-i and E-INS-i
-    strategies)
-
-    Katoh, Misawa, Kuma, Miyata (Nucleic Acids Res. 30:3059-3066, 2002)
-
-    Last checked against version: MAFFT v6.717b (2009/12/03)
     """
 
     def __init__(self, cmd="mafft", **kwargs):

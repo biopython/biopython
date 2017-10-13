@@ -18,6 +18,17 @@ class TCoffeeCommandline(AbstractCommandline):
     This wrapper implements a VERY limited number of options - if you
     would like to help improve it please get in touch.
 
+    Notes
+    -----
+
+    Last checked against: Version_6.92
+
+    References
+    ----------
+
+    T-Coffee: A novel method for multiple sequence alignments.
+    Notredame, Higgins, Heringa, JMB,302(205-217) 2000
+
     Examples
     --------
 
@@ -33,14 +44,6 @@ class TCoffeeCommandline(AbstractCommandline):
 
     You would typically run the command line with tcoffee_cline() or via
     the Python subprocess module, as described in the Biopython tutorial.
-
-    Citation
-    --------
-
-    T-Coffee: A novel method for multiple sequence alignments.
-    Notredame, Higgins, Heringa, JMB,302(205-217) 2000
-
-    Last checked against: Version_6.92
     """
 
     SEQ_TYPES = ["dna", "protein", "dna_protein"]

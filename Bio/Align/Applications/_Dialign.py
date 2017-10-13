@@ -15,6 +15,16 @@ class DialignCommandline(AbstractCommandline):
 
     http://bibiserv.techfak.uni-bielefeld.de/dialign/welcome.html
 
+    Notes
+    -----
+
+    Last checked against version: 2.2
+
+    References
+    ----------
+    B. Morgenstern (2004). DIALIGN: Multiple DNA and Protein Sequence
+    Alignment at BiBiServ. Nucleic Acids Research 32, W33-W36.
+
     Examples
     --------
 
@@ -29,14 +39,6 @@ class DialignCommandline(AbstractCommandline):
 
     You would typically run the command line with dialign_cline() or via
     the Python subprocess module, as described in the Biopython tutorial.
-
-    Citation
-    --------
-
-    B. Morgenstern (2004). DIALIGN: Multiple DNA and Protein Sequence
-    Alignment at BiBiServ. Nucleic Acids Research 32, W33-W36.
-
-    Last checked against version: 2.2
     """
 
     def __init__(self, cmd="dialign2-2", **kwargs):
