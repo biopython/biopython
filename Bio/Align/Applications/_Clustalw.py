@@ -15,6 +15,19 @@ class ClustalwCommandline(AbstractCommandline):
 
     http://www.clustal.org/
 
+    Notes
+    -----
+
+    Last checked against versions: 1.83 and 2.1
+
+    References
+    ----------
+
+    Larkin MA, Blackshields G, Brown NP, Chenna R, McGettigan PA,
+    McWilliam H, Valentin F, Wallace IM, Wilm A, Lopez R, Thompson JD,
+    Gibson TJ, Higgins DG. (2007). Clustal W and Clustal X version 2.0.
+    Bioinformatics, 23, 2947-2948.
+
     Examples
     --------
 
@@ -27,15 +40,6 @@ class ClustalwCommandline(AbstractCommandline):
     You would typically run the command line with clustalw_cline() or via
     the Python subprocess module, as described in the Biopython tutorial.
 
-    Citation
-    --------
-
-    Larkin MA, Blackshields G, Brown NP, Chenna R, McGettigan PA,
-    McWilliam H, Valentin F, Wallace IM, Wilm A, Lopez R, Thompson JD,
-    Gibson TJ, Higgins DG. (2007). Clustal W and Clustal X version 2.0.
-    Bioinformatics, 23, 2947-2948.
-
-    Last checked against versions: 1.83 and 2.1
     """
 
     # TODO - Should we default to cmd="clustalw2" now?
