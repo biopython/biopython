@@ -51,7 +51,8 @@ Other public methods of this module:
    correction is not an integral part of the Tm methods and must
    be called additionally.
 
-Examples:
+For example:
+
     >>> from Bio.SeqUtils import MeltingTemp as mt
     >>> from Bio.Seq import Seq
     >>> mystring = 'CGTTCCAAAGATGTGGGCATGAGCTTAC'
@@ -476,17 +477,18 @@ def salt_correction(Na=0, K=0, Tris=0, Mg=0, dNTPs=0, method=1, seq=None):
           Mg2+ is corrected for dNTPs binding (if present)
           (Owczarzy et al. (2008), Biochemistry 47: 5336-5353)
 
-    Examples:
-        >>> from Bio.SeqUtils import MeltingTemp as mt
-        >>> print('%0.2f' % mt.salt_correction(Na=50, method=1))
-        -21.60
-        >>> print('%0.2f' % mt.salt_correction(Na=50, method=2))
-        -21.85
-        >>> print('%0.2f' % mt.salt_correction(Na=100, Tris=20, method=2))
-        -16.45
-        >>> print('%0.2f' % mt.salt_correction(Na=100, Tris=20, Mg=1.5,
-        ...                                    method=2))
-        -10.99
+    Examples
+    --------
+
+    >>> from Bio.SeqUtils import MeltingTemp as mt
+    >>> print('%0.2f' % mt.salt_correction(Na=50, method=1))
+    -21.60
+    >>> print('%0.2f' % mt.salt_correction(Na=50, method=2))
+    -21.85
+    >>> print('%0.2f' % mt.salt_correction(Na=100, Tris=20, method=2))
+    -16.45
+    >>> print('%0.2f' % mt.salt_correction(Na=100, Tris=20, Mg=1.5, method=2))
+    -10.99
 
     """
     if method in (5, 6, 7) and not seq:
@@ -996,7 +998,8 @@ def Tm_staluc(s, dnac=50, saltc=50, rna=0):
     For DNA/DNA, see Allawi & SantaLucia (1997), Biochemistry 36: 10581-10594
     For RNA/RNA, see Xia et al (1998), Biochemistry 37: 14719-14735
 
-    Example:
+    Examples
+    --------
 
     >>> print("%0.2f" % Tm_staluc('CAGTCAGTACGTACGTGTACTGCCGTA'))
     59.87

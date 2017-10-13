@@ -85,8 +85,8 @@ class _BitString(str):
         new_clade.clades.extend(clade_terms)
 
 
-    Example
-    -------
+    Examples
+    --------
 
     >>> from Bio.Phylo.Consensus import _BitString
     >>> bitstr1 = _BitString('11111')

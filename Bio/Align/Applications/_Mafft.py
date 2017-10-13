@@ -16,7 +16,7 @@ class MafftCommandline(AbstractCommandline):
 
     http://align.bmr.kyushu-u.ac.jp/mafft/software/
 
-    Example:
+    Examples
     --------
 
     >>> from Bio.Align.Applications import MafftCommandline
@@ -54,8 +54,8 @@ class MafftCommandline(AbstractCommandline):
         from Bio import AlignIO
         align = AlignIO.read(StringIO(stdout), "fasta")
 
-    Citations:
-    ----------
+    Citations
+    ---------
 
     Katoh, Toh (BMC Bioinformatics 9:212, 2008) Improved accuracy of
     multiple ncRNA alignment by incorporating structural information into

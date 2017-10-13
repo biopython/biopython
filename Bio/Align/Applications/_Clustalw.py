@@ -15,7 +15,7 @@ class ClustalwCommandline(AbstractCommandline):
 
     http://www.clustal.org/
 
-    Example:
+    Examples
     --------
 
     >>> from Bio.Align.Applications import ClustalwCommandline
@@ -27,8 +27,8 @@ class ClustalwCommandline(AbstractCommandline):
     You would typically run the command line with clustalw_cline() or via
     the Python subprocess module, as described in the Biopython tutorial.
 
-    Citation:
-    ---------
+    Citation
+    --------
 
     Larkin MA, Blackshields G, Brown NP, Chenna R, McGettigan PA,
     McWilliam H, Valentin F, Wallace IM, Wilm A, Lopez R, Thompson JD,

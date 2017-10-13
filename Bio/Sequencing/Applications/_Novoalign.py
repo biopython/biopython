@@ -15,7 +15,8 @@ class NovoalignCommandline(AbstractCommandline):
 
     See www.novocraft.com - novoalign is a short read alignment program.
 
-    Example:
+    Examples
+    --------
 
     >>> from Bio.Sequencing.Applications import NovoalignCommandline
     >>> novoalign_cline = NovoalignCommandline(database='some_db',

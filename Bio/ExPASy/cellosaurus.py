@@ -16,7 +16,8 @@ Functions:
 Classes:
  - Record     Holds cell line data.
 
-Example:
+Examples
+--------
 
 >>> from Bio.ExPASy import Cellosaurus
 >>> handle = open("cellosaurus.txt")

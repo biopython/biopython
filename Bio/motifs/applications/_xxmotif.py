@@ -17,7 +17,8 @@ class XXmotifCommandline(AbstractCommandline):
 
     http://xxmotif.genzentrum.lmu.de/
 
-    Example:
+    Examples
+    --------
 
     >>> from Bio.motifs.applications import XXmotifCommandline
     >>> out_dir = "results"
@@ -29,7 +30,8 @@ class XXmotifCommandline(AbstractCommandline):
     You would typically run the command line with xxmotif_cline() or via
     the Python subprocess module, as described in the Biopython tutorial.
 
-    Citations:
+    Citations
+    ---------
 
     Luehr S, Hartmann H, and Söding J. The XXmotif web server for eXhaustive,
     weight matriX-based motif discovery in nucleotide sequences,
