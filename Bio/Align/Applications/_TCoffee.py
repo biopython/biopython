@@ -18,7 +18,7 @@ class TCoffeeCommandline(AbstractCommandline):
     This wrapper implements a VERY limited number of options - if you
     would like to help improve it please get in touch.
 
-    Example:
+    Examples
     --------
 
     To align a FASTA file (unaligned.fasta) with the output in ClustalW
@@ -34,8 +34,8 @@ class TCoffeeCommandline(AbstractCommandline):
     You would typically run the command line with tcoffee_cline() or via
     the Python subprocess module, as described in the Biopython tutorial.
 
-    Citation:
-    ---------
+    Citation
+    --------
 
     T-Coffee: A novel method for multiple sequence alignments.
     Notredame, Higgins, Heringa, JMB,302(205-217) 2000

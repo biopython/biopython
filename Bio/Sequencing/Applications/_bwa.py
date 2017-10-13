@@ -21,8 +21,8 @@ class BwaIndexCommandline(AbstractCommandline):
 
     See http://bio-bwa.sourceforge.net/bwa.shtml for details.
 
-    Example
-    -------
+    Examples
+    --------
 
     >>> from Bio.Sequencing.Applications import BwaIndexCommandline
     >>> reference_genome = "/path/to/reference_genome.fasta"
@@ -72,7 +72,8 @@ class BwaAlignCommandline(AbstractCommandline):
 
     See http://bio-bwa.sourceforge.net/bwa.shtml for details.
 
-    Example:
+    Examples
+    --------
 
     >>> from Bio.Sequencing.Applications import BwaAlignCommandline
     >>> reference_genome = "/path/to/reference_genome.fasta"
@@ -185,7 +186,8 @@ class BwaSamseCommandline(AbstractCommandline):
 
     See http://bio-bwa.sourceforge.net/bwa.shtml for details.
 
-    Example:
+    Examples
+    --------
 
     >>> from Bio.Sequencing.Applications import BwaSamseCommandline
     >>> reference_genome = "/path/to/reference_genome.fasta"
@@ -233,7 +235,8 @@ class BwaSampeCommandline(AbstractCommandline):
 
     See http://bio-bwa.sourceforge.net/bwa.shtml for details.
 
-    Example:
+    Examples
+    --------
 
     >>> from Bio.Sequencing.Applications import BwaSampeCommandline
     >>> reference_genome = "/path/to/reference_genome.fasta"
@@ -308,7 +311,8 @@ class BwaBwaswCommandline(AbstractCommandline):
 
     See http://bio-bwa.sourceforge.net/bwa.shtml for details.
 
-    Example:
+    Examples
+    --------
 
     >>> from Bio.Sequencing.Applications import BwaBwaswCommandline
     >>> reference_genome = "/path/to/reference_genome.fasta"

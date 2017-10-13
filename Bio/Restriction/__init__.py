@@ -9,7 +9,8 @@
 #
 """Restriction Digest Enzymes.
 
-Example:
+Examples
+--------
 
     >>> from Rana.fts import fts    #
     >>> from Rana.Vector import *   # Just a way to get a sequence.

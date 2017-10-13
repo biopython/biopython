@@ -91,19 +91,20 @@ def rotaxis2m(theta, vector):
     Calculate a left multiplying rotation matrix that rotates
     theta rad around vector.
 
-    Example:
-
-        >>> m=rotaxis(pi, Vector(1, 0, 0))
-        >>> rotated_vector=any_vector.left_multiply(m)
-
     :type theta: float
     :param theta: the rotation angle
-
 
     :type vector: L{Vector}
     :param vector: the rotation axis
 
     :return: The rotation matrix, a 3x3 Numeric array.
+
+    Examples
+    --------
+
+    >>> m = rotaxis(pi, Vector(1, 0, 0)) 
+    >>> rotated_vector = any_vector.left_multiply(m)
+
     """
     vector = vector.normalized()
     c = numpy.cos(theta)
@@ -132,14 +133,17 @@ rotaxis = rotaxis2m
 def refmat(p, q):
     """Return a (left multiplying) matrix that mirrors p onto q.
 
-    Example:
-        >>> mirror=refmat(p, q)
-        >>> qq=p.left_multiply(mirror)
-        >>> print(q)
-        >>> print(qq) # q and qq should be the same
-
     :type p,q: L{Vector}
     :return: The mirror operation, a 3x3 Numeric array.
+
+    Examples
+    --------
+
+    >>> mirror = refmat(p, q)
+    >>> qq = p.left_multiply(mirror)
+    >>> print(q)
+    >>> print(qq)  # q and qq should be the same
+
     """
     p = p.normalized()
     q = q.normalized()
@@ -157,11 +161,6 @@ def refmat(p, q):
 def rotmat(p, q):
     """Return a (left multiplying) matrix that rotates p onto q.
 
-    Example:
-        >>> r=rotmat(p, q)
-        >>> print(q)
-        >>> print(p.left_multiply(r))
-
     :param p: moving vector
     :type p: L{Vector}
 
@@ -170,6 +169,14 @@ def rotmat(p, q):
 
     :return: rotation matrix that rotates p onto q
     :rtype: 3x3 Numeric array
+
+    Examples
+    --------
+
+    >>> r = rotmat(p, q)
+    >>> print(q)
+    >>> print(p.left_multiply(r))
+
     """
     rot = numpy.dot(refmat(q, -p), refmat(p, -p))
     return rot

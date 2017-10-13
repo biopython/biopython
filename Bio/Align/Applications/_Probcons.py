@@ -15,7 +15,7 @@ class ProbconsCommandline(AbstractCommandline):
 
     http://probcons.stanford.edu/
 
-    Example:
+    Examples
     --------
 
     To align a FASTA file (unaligned.fasta) with the output in ClustalW
@@ -46,8 +46,8 @@ class ProbconsCommandline(AbstractCommandline):
         from Bio import AlignIO
         align = AlignIO.read(StringIO(stdout), "clustalw")
 
-    Citations:
-    ----------
+    Citations
+    ---------
 
     Do, C.B., Mahabhashyam, M.S.P., Brudno, M., and Batzoglou, S. 2005.
     PROBCONS: Probabilistic Consistency-based Multiple Sequence Alignment.

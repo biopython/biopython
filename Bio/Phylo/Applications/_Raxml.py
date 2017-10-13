@@ -20,7 +20,8 @@ class RaxmlCommandline(AbstractCommandline):
     The parameter 'parsimony_seed' (-p) must also be set for RAxML, but if you
     do not specify it, this wrapper will set the seed to 10000 for you.
 
-    Example:
+    Examples
+    --------
 
     >>> from Bio.Phylo.Applications import RaxmlCommandline
     >>> raxml_cline = RaxmlCommandline(sequences="Tests/Phylip/interlaced2.phy",
@@ -31,7 +32,8 @@ class RaxmlCommandline(AbstractCommandline):
     You would typically run the command line with raxml_cline() or via
     the Python subprocess module, as described in the Biopython tutorial.
 
-    Citation:
+    Citation
+    --------
 
     Stamatakis A.
     RAxML-VI-HPC: Maximum Likelihood-based Phylogenetic Analyses with

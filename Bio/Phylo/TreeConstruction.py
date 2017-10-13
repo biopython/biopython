@@ -39,8 +39,8 @@ class _Matrix(object):
         matrix : list
             nested list of numerical lists in lower triangular format
 
-    Example
-    -------
+    Examples
+    --------
 
     >>> from Bio.Phylo.TreeConstruction import _Matrix
     >>> names = ['Alpha', 'Beta', 'Gamma', 'Delta']
@@ -366,8 +366,8 @@ class DistanceCalculator(object):
             names for DNA sequences and `protein_matrices` for protein
             sequences.
 
-    Example
-    -------
+    Examples
+    --------
 
     >>> from Bio.Phylo.TreeConstruction import DistanceCalculator
     >>> from Bio import AlignIO
@@ -540,7 +540,7 @@ class DistanceTreeConstructor(TreeConstructor):
             The distance matrix calculator for multiple sequence alignment.
             It must be provided if `build_tree` will be called.
 
-    Example
+    Examples
     --------
 
     >>> from TreeConstruction import DistanceTreeConstructor
@@ -1064,8 +1064,8 @@ class ParsimonyTreeConstructor(TreeConstructor):
         starting_tree : Tree
             starting tree provided to the searcher.
 
-    Example
-    -------
+    Examples
+    --------
 
     >>> from Bio import AlignIO
     >>> from TreeConstruction import *

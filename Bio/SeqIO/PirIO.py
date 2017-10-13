@@ -122,7 +122,8 @@ def PirIterator(handle):
     Note that use of title2ids matches that of Bio.Fasta.SequenceParser
     but the defaults are slightly different.
 
-    Example:
+    Examples
+    --------
 
     >>> with open("NBRF/DMB_prot.pir") as handle:
     ...    for record in PirIterator(handle):

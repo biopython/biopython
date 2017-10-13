@@ -42,7 +42,7 @@ handle to the DSSP secondary structure and accessibility.
 **Note** that DSSP can only handle one model, and will only run
 calculations on the first model in the provided PDB file.
 
-Example:
+Examples
 --------
 
 >>> p = PDBParser()
@@ -153,11 +153,6 @@ def ss_to_index(ss):
 def dssp_dict_from_pdb_file(in_file, DSSP="dssp"):
     """Create a DSSP dictionary from a PDB file.
 
-    Example:
-    --------
-    >>> dssp_dict=dssp_dict_from_pdb_file("1fat.pdb")
-    >>> aa, ss, acc=dssp_dict[('A', 1)]
-
     Parameters
     ----------
     in_file : string
@@ -172,6 +167,12 @@ def dssp_dict_from_pdb_file(in_file, DSSP="dssp"):
         a dictionary that maps (chainid, resid) to
         amino acid type, secondary structure code and
         accessibility.
+
+    Examples
+    --------
+
+    >>> dssp_dict=dssp_dict_from_pdb_file("1fat.pdb")
+    >>> aa, ss, acc=dssp_dict[('A', 1)]
 
     """
     # Using universal newlines is important on Python 3, this
@@ -306,7 +307,7 @@ class DSSP(AbstractResiduePropertyMap):
 
     **Note** that DSSP can only handle one model.
 
-    Example:
+    Examples
     --------
 
     >>> p = PDBParser()

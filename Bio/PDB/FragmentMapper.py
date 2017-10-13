@@ -154,12 +154,13 @@ class Fragment(object):
     def __sub__(self, other):
         """Return rmsd between two fragments.
 
-        Example:
-
-            >>> rmsd=fragment1-fragment2
-
         :return: rmsd between fragments
         :rtype: float
+
+        Examples:
+
+        >>> rmsd = fragment1 - fragment2
+
         """
         sup = SVDSuperimposer()
         sup.set(self.coords_ca, other.coords_ca)

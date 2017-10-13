@@ -21,7 +21,7 @@ Mainly used by PrintFormat.PrintFormat
                    - MaxSize = 6  =>  99.999 bp
                    - MaxSize = 7  => 999.999 bp
 
-Example::
+Example output::
 
     <------------ ConsoleWidth --------------->
     <- NameWidth ->

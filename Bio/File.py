@@ -59,7 +59,7 @@ def as_handle(handleish, mode='r', **kwargs):
      - mode       - Mode to open handleish (used only if handleish is a string)
      - kwargs     - Further arguments to pass to open(...)
 
-    Example:
+    Examples:
 
     >>> with as_handle('seqs.fasta', 'w') as fp:
     ...     fp.write('>test\nACGT')
