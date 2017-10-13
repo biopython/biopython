@@ -16,7 +16,7 @@ class MSAProbsCommandline(AbstractCommandline):
 
     http://msaprobs.sourceforge.net
 
-    Example:
+    Examples
     --------
 
     >>> from Bio.Align.Applications import MSAProbsCommandline
@@ -29,8 +29,8 @@ class MSAProbsCommandline(AbstractCommandline):
     You would typically run the command line with cline() or via
     the Python subprocess module, as described in the Biopython tutorial.
 
-    Citation:
-    ---------
+    Citation
+    --------
 
     Yongchao Liu, Bertil Schmidt, Douglas L. Maskell: "MSAProbs: multiple
     sequence alignment based on pair hidden Markov models and partition

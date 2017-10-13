@@ -20,7 +20,7 @@ class ClustalOmegaCommandline(AbstractCommandline):
 
     http://www.clustal.org/omega
 
-    Example:
+    Examples
     --------
 
     >>> from Bio.Align.Applications import ClustalOmegaCommandline
@@ -34,8 +34,8 @@ class ClustalOmegaCommandline(AbstractCommandline):
     You would typically run the command line with clustalomega_cline() or via
     the Python subprocess module, as described in the Biopython tutorial.
 
-    Citation:
-    ---------
+    Citation
+    --------
 
     Sievers F, Wilm A, Dineen DG, Gibson TJ, Karplus K, Li W, Lopez R,
     McWilliam H, Remmert M, Söding J, Thompson JD, Higgins DG (2011).

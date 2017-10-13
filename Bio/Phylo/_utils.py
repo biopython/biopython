@@ -118,8 +118,8 @@ def draw_graphviz(tree, label_func=str, prog='twopi', args='',
             Options passed to the external graphviz program.  Normally not
             needed, but offered here for completeness.
 
-    Example
-    -------
+    Examples
+    --------
 
     >>> import pylab
     >>> from Bio import Phylo

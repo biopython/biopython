@@ -21,8 +21,8 @@ class SamtoolsViewCommandline(AbstractCommandline):
 
     See http://samtools.sourceforge.net/samtools.shtml for more details
 
-    Example
-    -------
+    Examples
+    --------
 
     >>> from Bio.Sequencing.Applications import SamtoolsViewCommandline
     >>> input_file = "/path/to/sam_or_bam_file"
@@ -117,7 +117,8 @@ class SamtoolsMpileupCommandline(AbstractCommandline):
 
     See http://samtools.sourceforge.net/samtools.shtml for more details
 
-    Example:
+    Examples
+    --------
 
     >>> from Bio.Sequencing.Applications import SamtoolsMpileupCommandline
     >>> input = ["/path/to/sam_or_bam_file"]
@@ -255,7 +256,8 @@ class SamtoolsReheaderCommandline(AbstractCommandline):
 
     See http://samtools.sourceforge.net/samtools.shtml for more details
 
-    Example:
+    Examples
+    --------
 
     >>> from Bio.Sequencing.Applications import SamtoolsReheaderCommandline
     >>> input_header = "/path/to/header_sam_file"
@@ -292,7 +294,8 @@ class SamtoolsCatCommandline(AbstractCommandline):
 
     See http://samtools.sourceforge.net/samtools.shtml for more details
 
-    Example:
+    Examples
+    --------
 
     >>> from Bio.Sequencing.Applications import SamtoolsCatCommandline
     >>> input_bam1 = "/path/to/input_bam1"
@@ -331,8 +334,8 @@ class SamtoolsVersion0xSortCommandline(AbstractCommandline):
 
     See http://samtools.sourceforge.net/samtools.shtml for more details
 
-    Example
-    -------
+    Examples
+    --------
 
     >>> from Bio.Sequencing.Applications import SamtoolsVersion0xSortCommandline
     >>> input_bam = "/path/to/input_bam"
@@ -374,8 +377,8 @@ class SamtoolsVersion1xSortCommandline(AbstractCommandline):
 
     See http://samtools.sourceforge.net/samtools.shtml for more details
 
-    Example
-    -------
+    Examples
+    --------
 
     >>> from Bio.Sequencing.Applications import SamtoolsVersion1xSortCommandline
     >>> input_bam = "/path/to/input_bam"
@@ -428,8 +431,8 @@ class SamtoolsMergeCommandline(AbstractCommandline):
 
     See http://samtools.sourceforge.net/samtools.shtml for more details
 
-    Example
-    -------
+    Examples
+    --------
 
     >>> from Bio.Sequencing.Applications import SamtoolsMergeCommandline
     >>> out_bam = "/path/to/out_bam"
@@ -484,7 +487,8 @@ class SamtoolsIndexCommandline(AbstractCommandline):
 
     See http://samtools.sourceforge.net/samtools.shtml for more details
 
-    Example:
+    Examples
+    --------
 
     >>> from Bio.Sequencing.Applications import SamtoolsIndexCommandline
     >>> input = "/path/to/aln_bam"
@@ -514,7 +518,8 @@ class SamtoolsIdxstatsCommandline(AbstractCommandline):
 
     See http://samtools.sourceforge.net/samtools.shtml for more details
 
-    Example:
+    Examples
+    --------
 
     >>> from Bio.Sequencing.Applications import SamtoolsIdxstatsCommandline
     >>> input = "/path/to/aln_bam"
@@ -544,8 +549,8 @@ class SamtoolsFaidxCommandline(AbstractCommandline):
 
     See http://samtools.sourceforge.net/samtools.shtml for more details
 
-    Example
-    -------
+    Examples
+    --------
 
     >>> from Bio.Sequencing.Applications import SamtoolsFaidxCommandline
     >>> reference = "/path/to/reference.fasta"
@@ -578,7 +583,8 @@ class SamtoolsFixmateCommandline(AbstractCommandline):
 
     See http://samtools.sourceforge.net/samtools.shtml for more details
 
-    Example:
+    Examples
+    --------
 
     >>> from Bio.Sequencing.Applications import SamtoolsFixmateCommandline
     >>> in_bam = "/path/to/in.nameSrt.bam"
@@ -616,7 +622,8 @@ class SamtoolsRmdupCommandline(AbstractCommandline):
 
     See http://samtools.sourceforge.net/samtools.shtml for more details
 
-    Example:
+    Examples
+    --------
 
     >>> from Bio.Sequencing.Applications import SamtoolsRmdupCommandline
     >>> input_sorted_bam = "/path/to/input.srt.bam"
@@ -661,7 +668,8 @@ class SamtoolsCalmdCommandline(AbstractCommandline):
 
     See http://samtools.sourceforge.net/samtools.shtml for more details
 
-    Example:
+    Examples
+    --------
 
     >>> from Bio.Sequencing.Applications import SamtoolsCalmdCommandline
     >>> input_bam = "/path/to/aln.bam"
@@ -726,7 +734,8 @@ class SamtoolsTargetcutCommandline(AbstractCommandline):
 
     See http://samtools.sourceforge.net/samtools.shtml for more details
 
-    Example:
+    Examples
+    --------
 
     >>> from Bio.Sequencing.Applications import SamtoolsTargetcutCommandline
     >>> input_bam = "/path/to/aln.bam"
@@ -774,7 +783,8 @@ class SamtoolsPhaseCommandline(AbstractCommandline):
 
     See http://samtools.sourceforge.net/samtools.shtml for more details
 
-    Example:
+    Examples
+    --------
 
     >>> from Bio.Sequencing.Applications import SamtoolsPhaseCommandline
     >>> input_bam = "/path/to/in.bam"

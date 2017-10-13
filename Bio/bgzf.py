@@ -118,8 +118,8 @@ However, what we recommend instead is to use the explicit namespace, e.g.
 Bio.bgzf
 
 
-Example
--------
+Examples
+--------
 
 This is an ordinary GenBank file compressed using BGZF, so it can
 be decompressed using gzip,

@@ -15,7 +15,7 @@ class PrankCommandline(AbstractCommandline):
 
     http://www.ebi.ac.uk/goldman-srv/prank/prank/
 
-    Example:
+    Examples
     --------
 
     To align a FASTA file (unaligned.fasta) with the output in aligned
@@ -34,8 +34,8 @@ class PrankCommandline(AbstractCommandline):
     You would typically run the command line with prank_cline() or via
     the Python subprocess module, as described in the Biopython tutorial.
 
-    Citations:
-    ----------
+    Citations
+    ---------
 
     Loytynoja, A. and Goldman, N. 2005. An algorithm for progressive
     multiple alignment of sequences with insertions. Proceedings of

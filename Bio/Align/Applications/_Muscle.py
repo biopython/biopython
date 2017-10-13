@@ -14,7 +14,7 @@ class MuscleCommandline(AbstractCommandline):
 
     http://www.drive5.com/muscle/
 
-    Example:
+    Examples
     --------
 
     >>> from Bio.Align.Applications import MuscleCommandline
@@ -28,8 +28,8 @@ class MuscleCommandline(AbstractCommandline):
     You would typically run the command line with muscle_cline() or via
     the Python subprocess module, as described in the Biopython tutorial.
 
-    Citations:
-    ----------
+    Citations
+    ---------
 
     Edgar, Robert C. (2004), MUSCLE: multiple sequence alignment with high
     accuracy and high throughput, Nucleic Acids Research 32(5), 1792-97.
