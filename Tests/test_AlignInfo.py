@@ -64,6 +64,8 @@ N  0.0 2.0 1.0 0.0
         self.assertAlmostEqual(ic, 7.32029999423075, places=6)
 
 
+    def test_iupac_consensus(self):
+
         filename = "GFF/multi_1.fna"
         format = "fasta"
         alignment = AlignIO.read(filename, format, alphabet=unambiguous_dna)
