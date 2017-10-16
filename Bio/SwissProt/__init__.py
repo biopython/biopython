@@ -113,7 +113,7 @@ class Record(object):
 class Reference(object):
     """Holds information from one reference in a SwissProt entry.
 
-    Attribues:
+    Attributes:
      - number      Number of reference in an entry.
      - evidence    Evidence code.  List of strings.
      - positions   Describes extent of work.  List of strings.
