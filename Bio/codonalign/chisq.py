@@ -45,13 +45,17 @@ def chisqprob(x, df):
 def _igamc(a, x):
     """Complemented incomplete Gamma integral.
 
-    SYNOPSIS:
+    Parameters
+    ----------
+    a: float
+    x: float
 
-    double a, x, y, igamc();
+    Returns
+    -------
+    float
 
-    y = igamc( a, x );
-
-    DESCRIPTION:
+    Notes
+    -----
 
     The function is defined by::
 
