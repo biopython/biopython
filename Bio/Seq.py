@@ -227,7 +227,14 @@ class Seq(object):
         return len(self._data)  # Seq API requirement
 
     def __getitem__(self, index):  # Seq API requirement
-        """Returns a subsequence of single letter, use my_seq[index]."""
+        """Get a subsequence from the Seq object.
+
+        >>> my_seq = Seq('ACTCGACGTCG')
+        >>> my_seq[5]
+        'A'
+        >>> my_seq[5:8]
+        Seq('ACG', Alphabet())
+        """
         # Note since Python 2.0, __getslice__ is deprecated
         # and __getitem__ is used instead.
         # See http://docs.python.org/ref/sequence-methods.html
@@ -1227,6 +1234,7 @@ class UnknownSeq(Seq):
         return self._character * self._length
 
     def __repr__(self):
+        """Returns length, alphabet and character of the unknown sequence."""
         return "UnknownSeq({0}, alphabet = {1!r}, character = {2!r})".format(
             self._length, self.alphabet, self._character)
 
@@ -1267,6 +1275,17 @@ class UnknownSeq(Seq):
         return Seq(str(self), self.alphabet) + other
 
     def __radd__(self, other):
+        """Adding a sequence on the left.
+
+        If adding a string to a UnknownSeq, the alphabet is preserved:
+
+        >>> from Bio.Seq import UnknownSeq
+        >>> from Bio.Alphabet import generic_protein
+        >>> "LV" + UnknownSeq(5, generic_protein)
+        UnknownSeq('LVXXXXX', ProteinAlphabet())
+
+        Adding two MutableSeq (like) objects is handled via the __add__ method.
+        """
         # If other is an UnknownSeq, then __add__ would be called.
         # Offload to the base class...
         return other + Seq(str(self), self.alphabet)
@@ -1585,6 +1604,7 @@ class MutableSeq(object):
     """
 
     def __init__(self, data, alphabet=Alphabet.generic_alphabet):
+        """Create an editable sequece object (with an alphabet)."""
         if sys.version_info[0] == 3:
             self.array_indicator = "u"
         else:
@@ -1693,9 +1713,18 @@ class MutableSeq(object):
         return str(self) <= str(other)
 
     def __len__(self):
+        """Returns the length of the sequence, use len(my_seq)."""
         return len(self.data)
 
     def __getitem__(self, index):
+        """Get a subsequence from the MutableSeq object.
+
+        >>> my_seq = MutableSeq('ACTCGACGTCG')
+        >>> my_seq[5]
+        'A'
+        >>> my_seq[5:8]
+        MutableSeq('ACG', Alphabet())
+        """
         # Note since Python 2.0, __getslice__ is deprecated
         # and __getitem__ is used instead.
         # See http://docs.python.org/ref/sequence-methods.html
@@ -1707,6 +1736,16 @@ class MutableSeq(object):
             return MutableSeq(self.data[index], self.alphabet)
 
     def __setitem__(self, index, value):
+        """Set a subsequence of the MutableSeq object.
+
+        >>> my_seq = MutableSeq('ACTCGACGTCG')
+        >>> my_seq[0] = 'T'
+        >>> my_seq
+        MutableSeq('ATTCGACGTCG', Alphabet())
+        >>> my_seq[9:11] = 'AAA'
+        >>> my_seq
+        MutableSeq('ATTCGACGTAAA', Alphabet())
+        """
         # Note since Python 2.0, __setslice__ is deprecated
         # and __setitem__ is used instead.
         # See http://docs.python.org/ref/sequence-methods.html
@@ -1724,6 +1763,16 @@ class MutableSeq(object):
                                                str(value))
 
     def __delitem__(self, index):
+        """Delete a subsequence of the MutableSeq object.
+
+        >>> my_seq = MutableSeq('ACTCGACGTCG')
+        >>> del my_seq[0]
+        >>> my_seq
+        MutableSeq('CTCGACGTCG', Alphabet())
+        >>> del my_seq[8:9]
+        >>> my_seq
+        MutableSeq('CTCGACGTG', Alphabet())
+        """
         # Note since Python 2.0, __delslice__ is deprecated
         # and __delitem__ is used instead.
         # See http://docs.python.org/ref/sequence-methods.html
@@ -1758,6 +1807,17 @@ class MutableSeq(object):
             raise TypeError
 
     def __radd__(self, other):
+        """Adding a sequence on the left.
+
+        If adding a string to a MutableSeq, the alphabet is preserved:
+
+        >>> from Bio.Seq import MutableSeq
+        >>> from Bio.Alphabet import generic_protein
+        >>> "LV" + MutableSeq("MELKI", generic_protein)
+        MutableSeq('LVMELKI', ProteinAlphabet())
+
+        Adding two MutableSeq (like) objects is handled via the __add__ method.
+        """
         if hasattr(other, "alphabet"):
             # other should be a Seq or a MutableSeq
             if not Alphabet._check_type_compatible([self.alphabet,
@@ -1780,17 +1840,65 @@ class MutableSeq(object):
             raise TypeError
 
     def append(self, c):
+        """Append a character to the MutableSeq object.
+
+        >>> my_seq = MutableSeq('ACTCGACGTCG')
+        >>> my_seq.append('A')
+        >>> my_seq
+        MutableSeq('ACTCGACGTCGA', Alphabet())
+
+        No return value.
+        """
         self.data.append(c)
 
     def insert(self, i, c):
+        """Insert a character into the MutableSeq object.
+
+        >>> my_seq = MutableSeq('ACTCGACGTCG')
+        >>> my_seq.insert(0,'A')
+        >>> my_seq
+        MutableSeq('AACTCGACGTCG', Alphabet())
+        >>> my_seq.insert(8,'G')
+        >>> my_seq
+        MutableSeq('AACTCGACGGTCG', Alphabet())
+
+        No return value.
+        """
         self.data.insert(i, c)
 
     def pop(self, i=(-1)):
+        """Pop the character from the end of the MutableSeq object.
+
+        >>> my_seq = MutableSeq('ACTCGACGTCG')
+        >>> my_seq.pop()
+        'G'
+        >>> my_seq
+        MutableSeq('ACTCGACGTC', Alphabet())
+        >>> my_seq.pop()
+        'C'
+        >>> my_seq
+        MutableSeq('ACTCGACGT', Alphabet())
+
+        Returns the last character of the sequence
+        """
         c = self.data[i]
         del self.data[i]
         return c
 
     def remove(self, item):
+        """Remove the first character of the MutableSeq object,
+        if it matches the provided character.
+
+        >>> my_seq = MutableSeq('ACTCGACGTCG')
+        >>> my_seq.remove('C')
+        >>> my_seq
+        MutableSeq('ATCGACGTCG', Alphabet())
+        >>> my_seq.remove('A')
+        >>> my_seq
+        MutableSeq('TCGACGTCG', Alphabet())
+
+        No return value.
+        """
         for i in range(len(self.data)):
             if self.data[i] == item:
                 del self.data[i]
@@ -1858,6 +1966,14 @@ class MutableSeq(object):
             return str(self).count(search, start, end)
 
     def index(self, item):
+        """Return the index of the first occurrence of the provided caracher.
+
+        >>> my_seq = MutableSeq('ACTCGACGTCG')
+        >>> my_seq.index('A')
+        0
+        >>> my_seq.index('T')
+        2
+        """
         for i in range(len(self.data)):
             if self.data[i] == item:
                 return i
@@ -1910,6 +2026,18 @@ class MutableSeq(object):
     # def sort(self, *args): self.data.sort(*args)
 
     def extend(self, other):
+        """Extend the MutableSeq object.
+
+        >>> my_seq = MutableSeq('ACTCGACGTCG')
+        >>> my_seq.extend('A')
+        >>> my_seq
+        MutableSeq('ACTCGACGTCGA', Alphabet())
+        >>> my_seq.extend('TTT')
+        >>> my_seq
+        MutableSeq('ACTCGACGTCGATTT', Alphabet())
+
+        No return value.
+        """
         if isinstance(other, MutableSeq):
             for c in other.data:
                 self.data.append(c)
