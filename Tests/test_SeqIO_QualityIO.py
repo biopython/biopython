@@ -777,6 +777,20 @@ class TestSFF(unittest.TestCase):
                 self.assertRaises(ValueError, SeqIO.write, record, h, "sff")
 
 
+class NonFastqTests(unittest.TestCase):
+
+    def check_wrong_format(self, filename):
+        for f in ("fastq", "fastq-sanger", "fastq-solexa", "fastq-illumina"):
+            generator = SeqIO.parse(filename, f)
+            self.assertRaises(ValueError, next, generator)
+
+    def test_fasta_as_fastq(self):
+        self.check_wrong_format("Fasta/elderberry.nu")
+
+    def test_sff_as_fastq(self):
+        self.check_wrong_format("Roche/greek.sff")
+
+
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)
