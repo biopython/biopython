@@ -41,6 +41,7 @@ class MuscleCommandline(AbstractCommandline):
     """
 
     def __init__(self, cmd="muscle", **kwargs):
+        """Initialize the class."""
         CLUSTERING_ALGORITHMS = ["upgma", "upgmb", "neighborjoining"]
         DISTANCE_MEASURES_ITER1 = ["kmer6_6", "kmer20_3", "kmer20_4",
                                    "kbit20_3", "kmer4_6"]

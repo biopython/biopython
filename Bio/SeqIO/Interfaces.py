@@ -146,6 +146,7 @@ class SequentialSequenceWriter(SequenceWriter):
     """
 
     def __init__(self, handle):
+        """Initialize the class."""
         self.handle = handle
         self._header_written = False
         self._record_written = False

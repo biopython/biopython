@@ -38,6 +38,7 @@ class Hmmer3TextParser(object):
     """Parser for the HMMER 3.0 text output."""
 
     def __init__(self, handle):
+        """Initialize the class."""
         self.handle = handle
         self.line = read_forward(self.handle)
         self._meta = self._parse_preamble()

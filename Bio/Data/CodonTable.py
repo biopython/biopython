@@ -60,6 +60,7 @@ class CodonTable(object):
                  protein_alphabet=protein_alphabet,
                  forward_table=forward_table, back_table=back_table,
                  start_codons=start_codons, stop_codons=stop_codons):
+        """Initialize the class."""
         self.nucleotide_alphabet = nucleotide_alphabet
         self.protein_alphabet = protein_alphabet
         self.forward_table = forward_table
@@ -142,6 +143,7 @@ class NCBICodonTable(CodonTable):
     protein_alphabet = IUPAC.protein
 
     def __init__(self, id, names, table, start_codons, stop_codons):
+        """Initialize the class."""
         self.id = id
         self.names = names
         self.forward_table = table
@@ -166,6 +168,7 @@ class AmbiguousCodonTable(CodonTable):
                  ambiguous_nucleotide_values,
                  ambiguous_protein_alphabet,
                  ambiguous_protein_values):
+        """Initialize the class."""
         CodonTable.__init__(self,
                             ambiguous_nucleotide_alphabet,
                             ambiguous_protein_alphabet,
@@ -294,6 +297,7 @@ assert list_ambiguous_codons(['TGA', 'TAA', 'TAG'],
 
 class AmbiguousForwardTable(object):
     def __init__(self, forward_table, ambiguous_nucleotide, ambiguous_protein):
+        """Initialize the class."""
         self.forward_table = forward_table
 
         self.ambiguous_nucleotide = ambiguous_nucleotide

@@ -1281,6 +1281,7 @@ class SequenceRelation(PhyloElement):
 
     def __init__(self, type, id_ref_0, id_ref_1,
                  distance=None, confidence=None):
+        """Initialize the class."""
         _check_str(type, self.ok_type.__contains__)
         self.distance = distance
         self.type = type
@@ -1341,6 +1342,7 @@ class Taxonomy(PhyloElement):
                  # Collections
                  common_names=None, synonyms=None, other=None,
                  ):
+        """Initialize the class."""
         _check_str(code, self.re_code.match)
         _check_str(rank, self.ok_rank.__contains__)
         self.id_source = id_source
@@ -1376,6 +1378,7 @@ class Uri(PhyloElement):
     """
 
     def __init__(self, value, desc=None, type=None):
+        """Initialize the class."""
         self.value = value
         self.desc = desc
         self.type = type
@@ -1383,4 +1386,6 @@ class Uri(PhyloElement):
     def __str__(self):
         if self.value:
             return self.value
+        """Initialize the class."""
+        """Initialize the class."""
         return repr(self)

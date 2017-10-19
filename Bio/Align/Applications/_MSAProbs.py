@@ -40,6 +40,7 @@ class MSAProbsCommandline(AbstractCommandline):
     """
 
     def __init__(self, cmd="msaprobs", **kwargs):
+        """Initialize the class."""
         # order of parameters is the same as in msaprobs -help
         self.parameters = \
             [

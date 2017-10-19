@@ -80,6 +80,7 @@ class MafftCommandline(AbstractCommandline):
     """
 
     def __init__(self, cmd="mafft", **kwargs):
+        """Initialize the class."""
         BLOSUM_MATRICES = ["30", "45", "62", "80"]
         self.parameters = \
             [

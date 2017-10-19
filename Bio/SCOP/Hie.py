@@ -27,6 +27,7 @@ class Record(object):
     """
 
     def __init__(self, line=None):
+        """Initialize the class."""
         self.sunid = ''
         self.parent = ''
         self.children = []

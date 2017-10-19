@@ -49,6 +49,7 @@ class PrankCommandline(AbstractCommandline):
     """
 
     def __init__(self, cmd="prank", **kwargs):
+        """Initialize the class."""
         OUTPUT_FORMAT_VALUES = list(range(1, 18))
         self.parameters = [
             # ################# input/output parameters: ##################

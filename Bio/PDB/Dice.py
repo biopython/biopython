@@ -23,6 +23,7 @@ class ChainSelector(object):
     """
 
     def __init__(self, chain_id, start, end, model_id=0):
+        """Initialize the class."""
         self.chain_id = chain_id
         self.start = start
         self.end = end

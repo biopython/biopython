@@ -34,6 +34,7 @@ class QCPSuperimposer(object):
     """
 
     def __init__(self):
+        """Initialize the class."""
         self._clear()
 
     # Private methods

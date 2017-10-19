@@ -150,6 +150,7 @@ class SeqMap(object):
     """
 
     def __init__(self, line=None):
+        """Initialize the class."""
         self.pdbid = ''
         self.pdb_datestamp = ''
         self.version = ''
@@ -301,6 +302,7 @@ class Res(object):
     """
 
     def __init__(self):
+        """Initialize the class."""
         self.chainid = ''
         self.resid = ''
         self.atom = ''

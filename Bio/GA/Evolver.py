@@ -22,6 +22,7 @@ class SteadyStateEvolver(object):
     """
 
     def __init__(self):
+        """Initialize the class."""
         raise NotImplementedError("Need to code this.")
 
 

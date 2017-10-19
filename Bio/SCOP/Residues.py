@@ -35,6 +35,7 @@ class Residues(object):
     """
 
     def __init__(self, str=None):
+        """Initialize the class."""
         self.pdbid = ''
         self.fragments = ()
         if str is not None:

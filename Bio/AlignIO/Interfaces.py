@@ -92,6 +92,7 @@ class AlignmentWriter(object):
     """
 
     def __init__(self, handle):
+        """Initialize the class."""
         self.handle = handle
 
     def write_file(self, alignments):
@@ -125,6 +126,7 @@ class SequentialAlignmentWriter(AlignmentWriter):
     """
 
     def __init__(self, handle):
+        """Initialize the class."""
         self.handle = handle
 
     def write_file(self, alignments):

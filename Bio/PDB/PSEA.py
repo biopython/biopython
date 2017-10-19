@@ -87,6 +87,7 @@ def annotate(m, ss_seq):
 
 class PSEA(object):
     def __init__(self, model, filename):
+        """Initialize the class."""
         ss_seq = psea(filename)
         ss_seq = psea2HEC(ss_seq)
         annotate(model, ss_seq)

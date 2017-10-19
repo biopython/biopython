@@ -3,6 +3,7 @@
 
 class fff_rec(object):
     def __init__(self, inrec=''):
+        """Initialize the class."""
         self.data = inrec
 
     def __repr__(self):

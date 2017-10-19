@@ -43,6 +43,7 @@ class Hetero(object):
     """
 
     def __init__(self, data):
+        """Initialize the class."""
         # Enforce string storage
         if not isinstance(data, str):
             raise CrystalError('Hetero data must be an alphameric string')
@@ -76,6 +77,7 @@ class Chain(object):
     """Class representing a sequence of Hetero elements."""
 
     def __init__(self, residues=''):
+        """Initialize the class."""
         self.data = []
         if isinstance(residues, str):
             residues = residues.replace('*', ' ')
@@ -222,6 +224,7 @@ class Crystal(object):
     """Represents a dictionary of labeled chains from the same structure."""
 
     def __init__(self, data=None):
+        """Initialize the class."""
         # Enforcestorage
         if not isinstance(data, dict):
             raise CrystalError('Crystal must be a dictionary')

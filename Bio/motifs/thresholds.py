@@ -15,6 +15,7 @@ class ScoreDistribution(object):
     """
 
     def __init__(self, motif=None, precision=10 ** 3, pssm=None, background=None):
+        """Initialize the class."""
         if pssm is None:
             self.min_score = min(0.0, motif.min_score())
             self.interval = max(0.0, motif.max_score()) - self.min_score

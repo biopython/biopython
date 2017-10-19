@@ -398,6 +398,7 @@ class NcbiblastpCommandline(_NcbiblastMain2SeqCommandline):
     """
 
     def __init__(self, cmd="blastp", **kwargs):
+        """Initialize the class."""
         self.parameters = [
             # General search options:
             _Option(["-task", "task"],
@@ -462,6 +463,7 @@ class NcbiblastnCommandline(_NcbiblastMain2SeqCommandline):
     """
 
     def __init__(self, cmd="blastn", **kwargs):
+        """Initialize the class."""
         self.parameters = [
             # Input query options:
             _Option(["-strand", "strand"],
@@ -579,6 +581,7 @@ class NcbiblastxCommandline(_NcbiblastMain2SeqCommandline):
     """
 
     def __init__(self, cmd="blastx", **kwargs):
+        """Initialize the class."""
         self.parameters = [
             # Input query options:
             _Option(["-task", "task"],
@@ -665,6 +668,7 @@ class NcbitblastnCommandline(_NcbiblastMain2SeqCommandline):
     """
 
     def __init__(self, cmd="tblastn", **kwargs):
+        """Initialize the class."""
         self.parameters = [
             # General search options:
             _Option(["-task", "task"],
@@ -749,6 +753,7 @@ class NcbitblastxCommandline(_NcbiblastMain2SeqCommandline):
     """
 
     def __init__(self, cmd="tblastx", **kwargs):
+        """Initialize the class."""
         self.parameters = [
             # Input query options:
             _Option(["-strand", "strand"],
@@ -808,6 +813,7 @@ class NcbipsiblastCommandline(_Ncbiblast2SeqCommandline):
     """
 
     def __init__(self, cmd="psiblast", **kwargs):
+        """Initialize the class."""
         self.parameters = [
             # General search options:
             _Option(["-matrix", "matrix"],
@@ -937,6 +943,7 @@ class NcbirpsblastCommandline(_NcbiblastCommandline):
     """
 
     def __init__(self, cmd="rpsblast", **kwargs):
+        """Initialize the class."""
         # TODO - remove the -word_size argument as per BLAST+ 2.2.30
         # (BLAST team say it should never have been included, since
         # the word size is set when building the domain database.)
@@ -1017,6 +1024,7 @@ class NcbirpstblastnCommandline(_NcbiblastCommandline):
     """
 
     def __init__(self, cmd="rpstblastn", **kwargs):
+        """Initialize the class."""
         # TODO - remove the -word_size argument as per BLAST+ 2.2.30
         # (BLAST team say it should never have been included, since
         # the word size is set when building the domain database.)
@@ -1094,6 +1102,7 @@ class NcbiblastformatterCommandline(_NcbibaseblastCommandline):
     """
 
     def __init__(self, cmd="blast_formatter", **kwargs):
+        """Initialize the class."""
         self.parameters = [
             # Input options
             _Option(["-rid", "rid"],
@@ -1136,6 +1145,7 @@ class NcbideltablastCommandline(_Ncbiblast2SeqCommandline):
     """
 
     def __init__(self, cmd="deltablast", **kwargs):
+        """Initialize the class."""
         self.parameters = [
             # General search options:
             _Option(["-matrix", "matrix"],

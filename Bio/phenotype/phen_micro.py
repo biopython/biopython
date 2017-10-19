@@ -133,6 +133,7 @@ class PlateRecord(object):
     """
 
     def __init__(self, plateid, wells=None):
+        """Initialize the class."""
         self.id = plateid
 
         if wells is None:
@@ -594,6 +595,7 @@ class WellRecord(object):
     """
 
     def __init__(self, wellid, plate=None, signals=None):
+        """Initialize the class."""
         if plate is None:
             self.plate = PlateRecord(None)
         else:
@@ -1112,6 +1114,7 @@ class JsonWriter(object):
     """Class to write PM Json format files."""
 
     def __init__(self, plates):
+        """Initialize the class."""
         self.plates = plates
 
     def write(self, handle):

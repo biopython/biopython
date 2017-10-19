@@ -20,6 +20,7 @@ class Hmmer3TabParser(object):
     """Parser for the HMMER table format."""
 
     def __init__(self, handle):
+        """Initialize the class."""
         self.handle = handle
         self.line = self.handle.readline()
 
@@ -223,6 +224,7 @@ class Hmmer3TabWriter(object):
     """Writer for hmmer3-tab output format."""
 
     def __init__(self, handle):
+        """Initialize the class."""
         self.handle = handle
 
     def write_file(self, qresults):
