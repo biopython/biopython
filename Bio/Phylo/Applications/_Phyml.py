@@ -30,6 +30,7 @@ class PhymlCommandline(AbstractCommandline):
     """
 
     def __init__(self, cmd='phyml', **kwargs):
+        """Initialize the class."""
         self.parameters = [
             _Option(['-i', '--input', 'input'],
                     "PHYLIP format input nucleotide or amino-acid sequence filenam.",

@@ -42,6 +42,7 @@ class RaxmlCommandline(AbstractCommandline):
     """
 
     def __init__(self, cmd='raxmlHPC', **kwargs):
+        """Initialize the class."""
         self.parameters = [
                 _Option(['-a', 'weight_filename'],
                         "Name of a column weight file to assign individual weights "

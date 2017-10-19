@@ -28,6 +28,7 @@ class FSSPAlign(MultipleSeqAlignment):
 
 class FSSPMultAlign(dict):
     def __init__(self):
+        """Initialize the class."""
         self.abs_res = []
         self.pdb_res = []
         self.data = {}

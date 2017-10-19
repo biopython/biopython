@@ -83,6 +83,7 @@ class Statistics(object):
     """Calculate statistics from an ALB report."""
 
     def __init__(self, filename, match, mismatch, gap, extension):
+        """Initialize the class."""
         self.matches = _fgrep_count('"SEQUENCE" %s' % match, filename)
         self.mismatches = _fgrep_count('"SEQUENCE" %s' % mismatch, filename)
         self.gaps = _fgrep_count('"INSERT" %s' % gap, filename)

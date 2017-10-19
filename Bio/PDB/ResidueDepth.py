@@ -523,7 +523,7 @@ class ResidueDepth(AbstractPropertyMap):
     """Calculate residue and CA depth for all residues."""
 
     def __init__(self, model, pdb_file=None):
-
+        """Initialize the class."""
         # Issue warning if pdb_file is given
         if pdb_file is not None:
             warnings.warn(("ResidueDepth no longer requires a pdb file."

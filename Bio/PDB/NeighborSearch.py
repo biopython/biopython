@@ -136,6 +136,7 @@ if __name__ == "__main__":
 
     class Atom(object):
         def __init__(self):
+            """Initialize the class."""
             self.coord = (100 * random(3))
 
         def get_coord(self):

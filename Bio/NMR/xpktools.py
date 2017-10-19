@@ -37,6 +37,7 @@ class XpkEntry(object):
     """
 
     def __init__(self, entry, headline):
+        """Initialize the class."""
         # Holds all fields from input line in a dictionary
         # keys are data labels from the .xpk header
         self.fields = {}
@@ -99,7 +100,7 @@ class Peaklist(object):
     """
 
     def __init__(self, infn):
-
+        """Initialize the class."""
         with open(infn, 'r') as infile:
 
             # Read in the header lines

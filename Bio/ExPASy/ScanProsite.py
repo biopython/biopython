@@ -20,6 +20,7 @@ class Record(list):
     """
 
     def __init__(self):
+        """Initialize the class."""
         self.n_match = None
         self.n_seq = None
         self.capped = None
@@ -72,6 +73,7 @@ def read(handle):
 class Parser(ExpatParser):
 
     def __init__(self):
+        """Initialize the class."""
         ExpatParser.__init__(self)
         self.firsttime = True
 
@@ -98,6 +100,7 @@ class ContentHandler(handler.ContentHandler):
                "level_tag")
 
     def __init__(self):
+        """Initialize the class."""
         self.element = []
 
     def startElement(self, name, attrs):

@@ -111,6 +111,7 @@ class Record(object):
     """
 
     def __init__(self):
+        """Initialize the class."""
         self.name = ''
         self.type = ''
         self.accession = ''

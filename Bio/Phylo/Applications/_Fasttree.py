@@ -53,6 +53,7 @@ class FastTreeCommandline(AbstractCommandline):
     """
 
     def __init__(self, cmd='fasttree', **kwargs):
+        """Initialize the class."""
         self.parameters = [
             _Switch(['-nt', 'nt'],
                     "By default FastTree expects protein alignments, use -nt for nucleotides",

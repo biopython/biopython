@@ -89,6 +89,7 @@ class Record(object):
     """
 
     def __init__(self, handle):
+        """Initialize the class."""
         self.handle = handle
         self.marker_len = 0
         self.comment_line = ""

@@ -33,6 +33,7 @@ class NodeData(object):
     """Store tree-relevant data associated with nodes (e.g. branches or otus)."""
 
     def __init__(self, taxon=None, branchlength=0.0, support=None, comment=None):
+        """Initialize the class."""
         self.taxon = taxon
         self.branchlength = branchlength
         self.support = support

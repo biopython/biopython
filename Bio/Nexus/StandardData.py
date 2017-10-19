@@ -24,6 +24,7 @@ class StandardData(object):
     """
 
     def __init__(self, data):
+        """Initialize the class."""
         self._data = []
         self._current_pos = 0
 

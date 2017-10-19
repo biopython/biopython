@@ -40,6 +40,7 @@ class DialignCommandline(AbstractCommandline):
     """
 
     def __init__(self, cmd="dialign2-2", **kwargs):
+        """Initialize the class."""
         self.program_name = cmd
         self.parameters = \
             [
