@@ -228,7 +228,7 @@ class Seq(object):
         return len(self._data)  # Seq API requirement
 
     def __getitem__(self, index):  # Seq API requirement
-        """ Return a subsequence of single letter, use my_seq[index].
+        """Return a subsequence of single letter, use my_seq[index].
 
         >>> my_seq = Seq('ACTCGACGTCG')
         >>> my_seq[5]
