@@ -56,6 +56,7 @@ class CodonSeq(Seq):
 
     def __init__(self, data='', alphabet=default_codon_alphabet,
                  gap_char="-", rf_table=None):
+        """Initialize the class."""
         # rf_table should be a tuple or list indicating the every
         # codon position along the sequence. For example:
         # sequence = 'AAATTTGGGCCAAATTT'

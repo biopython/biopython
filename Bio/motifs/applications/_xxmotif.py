@@ -43,6 +43,7 @@ class XXmotifCommandline(AbstractCommandline):
     """
 
     def __init__(self, cmd="XXmotif", **kwargs):
+        """Initialize the class."""
         # order of parameters is the same as in XXmotif --help
         _valid_alphabet = set("ACGTNX")
 

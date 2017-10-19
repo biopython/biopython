@@ -55,6 +55,7 @@ class Record(object):
     """
 
     def __init__(self):
+        """Initialize the class."""
         self.accession = ''
         self.prosite_refs = []
         self.text = ''
@@ -72,6 +73,7 @@ class Reference(object):
     """
 
     def __init__(self):
+        """Initialize the class."""
         self.number = ''
         self.authors = ''
         self.citation = ''

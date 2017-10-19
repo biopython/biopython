@@ -46,6 +46,7 @@ class TCoffeeCommandline(AbstractCommandline):
     SEQ_TYPES = ["dna", "protein", "dna_protein"]
 
     def __init__(self, cmd="t_coffee", **kwargs):
+        """Initialize the class."""
         self.parameters = [
             _Option(["-output", "output"],
                     """Specify the output type.

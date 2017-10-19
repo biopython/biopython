@@ -13,6 +13,7 @@ import sys
 
 class BlastTableEntry(object):
     def __init__(self, in_rec):
+        """Initialize the class."""
         bt_fields = in_rec.split()
         self.qid = bt_fields[0].split('|')
         self.sid = bt_fields[1].split('|')
@@ -28,6 +29,7 @@ class BlastTableEntry(object):
 
 class BlastTableRec(object):
     def __init__(self):
+        """Initialize the class."""
         self.program = None
         self.version = None
         self.date = None
@@ -49,6 +51,7 @@ reader_keywords = {'BLASTP': 'version',
 
 class BlastTableReader(object):
     def __init__(self, handle):
+        """Initialize the class."""
         self.handle = handle
         inline = self.handle.readline()
         # zip forward to start of record

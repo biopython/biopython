@@ -202,6 +202,7 @@ class BlastTabParser(object):
     """Parser for the BLAST tabular format."""
 
     def __init__(self, handle, comments=False, fields=_DEFAULT_FIELDS):
+        """Initialize the class."""
         self.handle = handle
         self.has_comments = comments
         self.fields = self._prep_fields(fields)
@@ -512,6 +513,7 @@ class BlastTabIndexer(SearchIndexer):
     _parser = BlastTabParser
 
     def __init__(self, filename, comments=False, fields=_DEFAULT_FIELDS):
+        """Initialize the class."""
         SearchIndexer.__init__(self, filename, comments=comments, fields=fields)
 
         # if the file doesn't have comments,
@@ -666,6 +668,7 @@ class BlastTabWriter(object):
     """Writer for blast-tab output format."""
 
     def __init__(self, handle, comments=False, fields=_DEFAULT_FIELDS):
+        """Initialize the class."""
         self.handle = handle
         self.has_comments = comments
         self.fields = fields

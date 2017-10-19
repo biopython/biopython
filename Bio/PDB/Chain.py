@@ -10,6 +10,7 @@ from Bio.PDB.Entity import Entity
 
 class Chain(Entity):
     def __init__(self, id):
+        """Initialize the class."""
         self.level = "C"
         Entity.__init__(self, id)
 

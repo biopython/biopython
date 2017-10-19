@@ -181,6 +181,7 @@ class InterleaveCrossover(GeneralPointCrossover):
     """
 
     def __init__(self, crossover_prob=0.1):
+        """Initialize the class."""
         GeneralPointCrossover.__init__(self, 0, crossover_prob)
 
     def _generate_locs(self, bound):

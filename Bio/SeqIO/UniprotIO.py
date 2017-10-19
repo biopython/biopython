@@ -88,6 +88,7 @@ class Parser(object):
     """
 
     def __init__(self, elem, alphabet=Alphabet.ProteinAlphabet(), return_raw_comments=False):
+        """Initialize the class."""
         self.entry = elem
         self.alphabet = alphabet
         self.return_raw_comments = return_raw_comments

@@ -31,6 +31,7 @@ class Record(object):
     """
 
     def __init__(self):
+        """Initialize the class."""
         self.entity_type = ''
         self.entity_id = ''
         self.entity_attributes = {}

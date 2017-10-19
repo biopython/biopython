@@ -57,6 +57,7 @@ class ProbconsCommandline(AbstractCommandline):
     """
 
     def __init__(self, cmd="probcons", **kwargs):
+        """Initialize the class."""
         self.parameters = \
             [
             # Note that some options cannot be assigned via properties using the

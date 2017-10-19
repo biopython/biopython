@@ -58,6 +58,7 @@ except ImportError:
 class GenericPositionMatrix(dict):
 
     def __init__(self, alphabet, values):
+        """Initialize the class."""
         self.length = None
         for letter in alphabet.letters:
             if self.length is None:
@@ -308,6 +309,7 @@ class FrequencyPositionMatrix(GenericPositionMatrix):
 class PositionWeightMatrix(GenericPositionMatrix):
 
     def __init__(self, alphabet, counts):
+        """Initialize the class."""
         GenericPositionMatrix.__init__(self, alphabet, counts)
         for i in range(self.length):
             total = sum(float(self[letter][i]) for letter in alphabet.letters)

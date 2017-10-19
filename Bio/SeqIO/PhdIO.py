@@ -96,6 +96,7 @@ class PhdWriter(SequentialSequenceWriter):
     """Class to write Phd format files"""
 
     def __init__(self, handle):
+        """Initialize the class."""
         SequentialSequenceWriter.__init__(self, handle)
 
     def write_record(self, record):

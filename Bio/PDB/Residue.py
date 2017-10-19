@@ -23,6 +23,7 @@ class Residue(Entity):
     """Represents a residue. A Residue object stores atoms."""
 
     def __init__(self, id, resname, segid):
+        """Initialize the class."""
         self.level = "R"
         self.disordered = 0
         self.resname = resname
@@ -159,6 +160,7 @@ class DisorderedResidue(DisorderedEntityWrapper):
     """
 
     def __init__(self, id):
+        """Initialize the class."""
         DisorderedEntityWrapper.__init__(self, id)
 
     def __repr__(self):

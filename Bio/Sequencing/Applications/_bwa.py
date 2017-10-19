@@ -36,6 +36,7 @@ class BwaIndexCommandline(AbstractCommandline):
     """
 
     def __init__(self, cmd="bwa", **kwargs):
+        """Initialize the class."""
         self.program_name = cmd
         self.parameters = [
             _StaticArgument("index"),
@@ -87,6 +88,7 @@ class BwaAlignCommandline(AbstractCommandline):
     """
 
     def __init__(self, cmd="bwa", **kwargs):
+        """Initialize the class."""
         self.program_name = cmd
         self.parameters = [
             _StaticArgument("aln"),
@@ -200,6 +202,7 @@ class BwaSamseCommandline(AbstractCommandline):
     """
 
     def __init__(self, cmd="bwa", **kwargs):
+        """Initialize the class."""
         self.program_name = cmd
         self.parameters = [
             _StaticArgument("samse"),
@@ -254,6 +257,7 @@ class BwaSampeCommandline(AbstractCommandline):
     # TODO - Should the read group have a raw tab in it, or \t?
 
     def __init__(self, cmd="bwa", **kwargs):
+        """Initialize the class."""
         self.program_name = cmd
         self.parameters = [
             _StaticArgument("sampe"),
@@ -318,6 +322,7 @@ class BwaBwaswCommandline(AbstractCommandline):
     """
 
     def __init__(self, cmd="bwa", **kwargs):
+        """Initialize the class."""
         self.program_name = cmd
         self.parameters = [
             _StaticArgument("bwasw"),

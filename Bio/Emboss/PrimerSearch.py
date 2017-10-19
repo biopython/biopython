@@ -14,6 +14,7 @@ class InputRecord(object):
     """
 
     def __init__(self):
+        """Initialize the class."""
         self.primer_info = []
 
     def __str__(self):
@@ -37,6 +38,7 @@ class OutputRecord(object):
     """
 
     def __init__(self):
+        """Initialize the class."""
         self.amplifiers = {}
 
 
@@ -44,6 +46,7 @@ class Amplifier(object):
     """Represent a single amplification from a primer."""
 
     def __init__(self):
+        """Initialize the class."""
         self.hit_info = ""
         self.length = 0
 

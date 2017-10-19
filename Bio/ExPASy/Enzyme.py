@@ -74,6 +74,7 @@ class Record(dict):
     """
 
     def __init__(self):
+        """Initialize the class."""
         dict.__init__(self)
         self["ID"] = ''
         self["DE"] = ''

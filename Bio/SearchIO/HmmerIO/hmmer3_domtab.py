@@ -193,6 +193,7 @@ class Hmmer3DomtabHmmhitWriter(object):
     hmm_as_hit = True
 
     def __init__(self, handle):
+        """Initialize the class."""
         self.handle = handle
 
     def write_file(self, qresults):

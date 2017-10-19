@@ -21,6 +21,7 @@ class Entity(object):
     """
 
     def __init__(self, id):
+        """Initialize the class."""
         self._id = id
         self.full_id = None
         self.parent = None
@@ -281,6 +282,7 @@ class DisorderedEntityWrapper(object):
     """
 
     def __init__(self, id):
+        """Initialize the class."""
         self.id = id
         self.child_dict = {}
         self.selected_child = None

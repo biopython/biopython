@@ -47,6 +47,7 @@ class ClustalOmegaCommandline(AbstractCommandline):
     """
 
     def __init__(self, cmd="clustalo", **kwargs):
+        """Initialize the class."""
         # order parameters in the same order as clustalo --help
         self.parameters = \
             [
