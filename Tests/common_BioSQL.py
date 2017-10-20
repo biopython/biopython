@@ -130,47 +130,61 @@ def check_config(dbdriver, dbtype, dbhost, dbuser, dbpasswd, testdb):
         raise MissingExternalDependencyError(message)
 
 
-def _do_db_create():
-    """Do the actual work of database creation.
+def _do_db_cleanup():
+    """Cleanup everything from TESTDB.
 
     Relevant for MySQL and PostgreSQL.
     """
     # first open a connection to create the database
     server = BioSeqDatabase.open_database(driver=DBDRIVER, host=DBHOST,
-                                          user=DBUSER, passwd=DBPASSWD)
+                                          user=DBUSER, passwd=DBPASSWD,
+                                          db=TESTDB)
 
-    if DBDRIVER == "pgdb":
+    if DBDRIVER == "psycopg2":
         # The pgdb postgres driver does not support autocommit, so here we
         # commit the current transaction so that 'drop database' query will
         # be outside a transaction block
         server.adaptor.cursor.execute("COMMIT")
+        # drop anything in the database
+        try:
+            # with Postgres, can get errors about database still being used.
+            # Wait briefly to be sure previous tests are done with it.
+            time.sleep(1)
+            # drop anything in the database
+            sql = r"DROP OWNED BY " + DBUSER
+            server.adaptor.cursor.execute(sql, ())
+        except (server.module.OperationalError,
+                server.module.Error,
+                server.module.DatabaseError) as e:  # the database doesn't exist
+            raise
+        except (server.module.IntegrityError,
+                server.module.ProgrammingError) as e:  # ditto--perhaps
+            if str(e).find('database "%s" does not exist' % TESTDB) == -1:
+                server.close()
+                raise
     else:
-        # Auto-commit: postgresql cannot drop database in a transaction
+        # Auto-commit
         try:
             server.adaptor.autocommit()
         except AttributeError:
             pass
+        # drop the database
+        try:
+            sql = r"DROP DATABASE " + TESTDB
+            server.adaptor.cursor.execute(sql, ())
+        except (server.module.OperationalError,
+                server.module.Error,
+                server.module.DatabaseError) as e:  # the database doesn't exist
+            pass
+        except (server.module.IntegrityError,
+                server.module.ProgrammingError) as e:  # ditto--perhaps
+            if str(e).find('database "%s" does not exist' % TESTDB) == -1:
+                server.close()
+                raise
+        # create a new database
+        sql = r"CREATE DATABASE " + TESTDB
+        server.adaptor.execute(sql, ())
 
-    # drop anything in the database
-    try:
-        # with Postgres, can get errors about database still being used and
-        # not able to be dropped. Wait briefly to be sure previous tests are
-        # done with it.
-        time.sleep(1)
-        sql = r"DROP DATABASE " + TESTDB
-        server.adaptor.cursor.execute(sql, ())
-    except (server.module.OperationalError,
-            server.module.Error,
-            server.module.DatabaseError) as e:  # the database doesn't exist
-        pass
-    except (server.module.IntegrityError,
-            server.module.ProgrammingError) as e:  # ditto--perhaps
-        if str(e).find('database "%s" does not exist' % TESTDB) == -1:
-            server.close()
-            raise
-    # create a new database
-    sql = r"CREATE DATABASE " + TESTDB
-    server.adaptor.execute(sql, ())
     server.close()
 
 
@@ -197,7 +211,7 @@ def create_database():
         # (which might be happening under Windows...)
         TESTDB = temp_db_filename()
     else:
-        _do_db_create()
+        _do_db_cleanup()
 
     # now open a connection to load the database
     server = BioSeqDatabase.open_database(driver=DBDRIVER,
