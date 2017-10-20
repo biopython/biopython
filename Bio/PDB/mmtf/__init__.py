@@ -1,3 +1,4 @@
+"""make files in this directory importable"""
 try:
     from mmtf import fetch, parse
 except ImportError:

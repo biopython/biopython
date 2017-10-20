@@ -1,1 +1,1 @@
-# This is a Python module.
+"""This is a Python module."""
