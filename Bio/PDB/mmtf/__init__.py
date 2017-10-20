@@ -1,4 +1,4 @@
-"""Support for importing mmtf-python into a Biopython data structure."""
+"""Support for loading 3D structures stored in MMTF files."""
 try:
     from mmtf import fetch, parse
 except ImportError:
