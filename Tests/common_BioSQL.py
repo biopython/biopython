@@ -234,8 +234,6 @@ def destroy_database():
     if DBDRIVER in ["sqlite3"]:
         if os.path.exists(TESTDB):
             os.remove(TESTDB)
-    else:
-        _do_db_cleanup()
 
 
 def load_database(gb_filename_or_handle):
