@@ -133,7 +133,7 @@ def check_config(dbdriver, dbtype, dbhost, dbuser, dbpasswd, testdb):
 def _do_db_cleanup():
     """Cleanup everything from TESTDB.
 
-    Relevant to PostgreSQL and MySQL.
+    Relevant for MySQL and PostgreSQL.
     """
     # first open a connection to create the database
     server = BioSeqDatabase.open_database(driver=DBDRIVER, host=DBHOST,
