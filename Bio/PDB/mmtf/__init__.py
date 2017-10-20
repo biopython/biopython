@@ -1,4 +1,4 @@
-"""make files in this directory importable"""
+"""Support for importing mmtf-python into a Biopython data structure."""
 try:
     from mmtf import fetch, parse
 except ImportError:
