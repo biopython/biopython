@@ -19,8 +19,15 @@ matrix:
 
 # Enable MySQL and PostgreSQL for BioSQL tests
 services:
-  - mysql
   - postgresql
+  - mysql
+
+before_build:
+  - SET PGUSER=postgres
+  - SET PGPASSWORD=Password12!
+  - SET PATH=C:\Program Files\PostgreSQL\9.6\bin\;%PATH%
+  - psql -U postgres -c "CREATE USER biosql_user WITH PASSWORD 'biosql_pass';"
+  - psql -U postgres -c "CREATE DATABASE biosql_test OWNER biosql_user;"
 
 build_script:
 # If there's a newer build queued for the same PR, cancel this one
