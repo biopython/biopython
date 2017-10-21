@@ -22,6 +22,6 @@ testdb=biosql_test
 [pg]
 # Covers DBDRIVER="psycopg2" etc
 dbhost=localhost
-dbuser=postgres
-dbpasswd=Password12!
+dbuser=biosql_user
+dbpasswd=biosql_pass
 testdb=biosql_test
