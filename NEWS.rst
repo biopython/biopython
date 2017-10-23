@@ -59,6 +59,7 @@ possible, especially the following contributors:
 - Kai Blin
 - Kozo Nishida
 - Michiel de Hoon
+- Nicolas Fontrodona (first contribution)
 - Peter Cock
 - rht (first contribution)
 - Shuichiro MAKIGAKI (first contribution)
