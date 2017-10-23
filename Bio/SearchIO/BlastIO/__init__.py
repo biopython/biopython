@@ -57,7 +57,7 @@ It provides the following attributes for each SearchIO object:
 |                +-------------------------+-----------------------------+
 |                | reference               | BlastOutput_reference       |
 |                +-------------------------+-----------------------------+
-|                | version                 | BlastOutput_version[1]      |
+|                | version                 | BlastOutput_version [1]_    |
 |                +-------------------------+-----------------------------+
 |                | description             | Iteration_query-def         |
 |                +-------------------------+-----------------------------+
@@ -275,7 +275,7 @@ blast-tab provides the following attributes for each SearchIO objects:
 |             +-------------------+--------------+
 |             | bitscore_raw      | score        |
 +-------------+-------------------+--------------+
-| HSPFragment | frames            | frames[2]    |
+| HSPFragment | frames            | frames [2]_  |
 | (also via   +-------------------+--------------+
 | HSP)        | aln_span          | length       |
 |             +-------------------+--------------+
