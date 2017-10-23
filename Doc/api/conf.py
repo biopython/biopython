@@ -94,6 +94,9 @@ autodoc_member_order = 'bysource'
 # https://github.com/sphinx-doc/sphinx/pull/4076
 autodoc_exclude_members = ['__dict__', '__weakref__', '__module__']
 
+# To avoid import errors.
+autodoc_mock_imports = ['MySQLdb']
+
 # -- Options for HTML output ----------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
