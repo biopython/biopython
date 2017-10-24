@@ -108,6 +108,7 @@ class DictionaryElement(dict):
 # under each key.
 class StructureElement(dict):
     def __init__(self, keys):
+        """Initialize the class."""
         dict.__init__(self)
         for key in keys:
             dict.__setitem__(self, key, [])
@@ -130,6 +131,7 @@ class StructureElement(dict):
 
 class NotXMLError(ValueError):
     def __init__(self, message):
+        """Initialize the class."""
         self.msg = message
 
     def __str__(self):
@@ -138,6 +140,7 @@ class NotXMLError(ValueError):
 
 class CorruptedXMLError(ValueError):
     def __init__(self, message):
+        """Initialize the class."""
         self.msg = message
 
     def __str__(self):
@@ -154,6 +157,7 @@ class ValidationError(ValueError):
     """
 
     def __init__(self, name):
+        """Initialize the class."""
         self.name = name
 
     def __str__(self):
@@ -195,6 +199,7 @@ class DataHandler(object):
     del Entrez
 
     def __init__(self, validate):
+        """Initialize the class."""
         self.stack = []
         self.errors = []
         self.integers = []

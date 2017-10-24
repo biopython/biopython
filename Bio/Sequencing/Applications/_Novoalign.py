@@ -40,7 +40,7 @@ class NovoalignCommandline(AbstractCommandline):
     """
 
     def __init__(self, cmd="novoalign", **kwargs):
-
+        """Initialize the class."""
         READ_FORMAT = ['FA', 'SLXFQ', 'STDFQ', 'ILMFQ', 'PRB', 'PRBnSEQ']
         REPORT_FORMAT = ['Native', 'Pairwise', 'SAM']
         REPEAT_METHOD = ['None', 'Random', 'All', 'Exhaustive', '0.99']

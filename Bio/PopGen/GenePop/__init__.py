@@ -124,6 +124,7 @@ class Record(object):
     """
 
     def __init__(self):
+        """Initialize the class."""
         self.marker_len = 0
         self.comment_line = ""
         self.loci_list = []

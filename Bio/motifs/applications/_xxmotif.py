@@ -36,13 +36,14 @@ class XXmotifCommandline(AbstractCommandline):
     Nucleic Acids Res. 40: W104-W109 (2012).
 
     Hartmann H, Guthoehrlein EW, Siebert M., Luehr S, and Söding J. P-value
-    based regulatory motif discovery using positional weight matrices
-    (to be published)
+    based regulatory motif discovery using positional weight matrices,
+    Genome Res. 23: 181–194 (2013)
 
     Last checked against version: 1.3
     """
 
     def __init__(self, cmd="XXmotif", **kwargs):
+        """Initialize the class."""
         # order of parameters is the same as in XXmotif --help
         _valid_alphabet = set("ACGTNX")
 

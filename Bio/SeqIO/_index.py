@@ -37,6 +37,7 @@ from Bio.File import _IndexedSeqFileProxy, _open_for_random_access
 
 class SeqFileRandomAccess(_IndexedSeqFileProxy):
     def __init__(self, filename, format, alphabet):
+        """Initialize the class."""
         self._handle = _open_for_random_access(filename)
         self._alphabet = alphabet
         self._format = format
@@ -76,6 +77,7 @@ class SffRandomAccess(SeqFileRandomAccess):
     """Random access to a Standard Flowgram Format (SFF) file."""
 
     def __init__(self, filename, format, alphabet):
+        """Initialize the class."""
         SeqFileRandomAccess.__init__(self, filename, format, alphabet)
         header_length, index_offset, index_length, number_of_reads, \
             self._flows_per_read, self._flow_chars, self._key_sequence \
@@ -167,6 +169,7 @@ class SffTrimedRandomAccess(SffRandomAccess):
 
 class SequentialSeqFileRandomAccess(SeqFileRandomAccess):
     def __init__(self, filename, format, alphabet):
+        """Initialize the class."""
         SeqFileRandomAccess.__init__(self, filename, format, alphabet)
         marker = {"ace": b"CO ",
                   "embl": b"ID ",
@@ -470,6 +473,7 @@ class IntelliGeneticsRandomAccess(SeqFileRandomAccess):
     """Random access to a IntelliGenetics file."""
 
     def __init__(self, filename, format, alphabet):
+        """Initialize the class."""
         SeqFileRandomAccess.__init__(self, filename, format, alphabet)
         self._marker_re = re.compile(b"^;")
 

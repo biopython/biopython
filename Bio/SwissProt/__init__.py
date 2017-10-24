@@ -79,6 +79,7 @@ class Record(object):
     """
 
     def __init__(self):
+        """Initialize the class."""
         self.entry_name = None
         self.data_class = None
         self.molecule_type = None
@@ -124,6 +125,7 @@ class Reference(object):
     """
 
     def __init__(self):
+        """Initialize the class."""
         self.number = None
         self.positions = []
         self.comments = []

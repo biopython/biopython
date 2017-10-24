@@ -681,7 +681,7 @@ class HSPFragment(_BaseHSP):
 
     def __init__(self, hit_id='<unknown id>', query_id='<unknown id>',
             hit=None, query=None, alphabet=single_letter_alphabet):
-
+        """Initialize the class."""
         self._alphabet = alphabet
         self.aln_annotation = {}
 

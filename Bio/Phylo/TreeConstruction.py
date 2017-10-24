@@ -306,6 +306,7 @@ class DistanceMatrix(_Matrix):
     """
 
     def __init__(self, names, matrix=None):
+        """Initialize the class."""
         _Matrix.__init__(self, names, matrix)
         self._set_zero_diagonal()
 
@@ -580,6 +581,7 @@ class DistanceTreeConstructor(TreeConstructor):
     methods = ['nj', 'upgma']
 
     def __init__(self, distance_calculator=None, method="nj"):
+        """Initialize the class."""
         if (distance_calculator is None or isinstance(distance_calculator, DistanceCalculator)):
             self.distance_calculator = distance_calculator
         else:
@@ -796,6 +798,7 @@ class NNITreeSearcher(TreeSearcher):
     """
 
     def __init__(self, scorer):
+        """Initialize the class."""
         if isinstance(scorer, Scorer):
             self.scorer = scorer
         else:
@@ -947,6 +950,7 @@ class ParsimonyScorer(Scorer):
     """
 
     def __init__(self, matrix=None):
+        """Initialize the class."""
         if not matrix or isinstance(matrix, _Matrix):
             self.matrix = matrix
         else:
@@ -1088,6 +1092,7 @@ class ParsimonyTreeConstructor(TreeConstructor):
     """
 
     def __init__(self, searcher, starting_tree=None):
+        """Initialize the class."""
         self.searcher = searcher
         self.starting_tree = starting_tree
 

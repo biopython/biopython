@@ -10,6 +10,7 @@ from __future__ import print_function
 
 class AbstractPropertyMap(object):
     def __init__(self, property_dict, property_keys, property_list):
+        """Initialize the class."""
         self.property_dict = property_dict
         self.property_keys = property_keys
         self.property_list = property_list
@@ -109,6 +110,7 @@ class AbstractPropertyMap(object):
 
 class AbstractResiduePropertyMap(AbstractPropertyMap):
     def __init__(self, property_dict, property_keys, property_list):
+        """Initialize the class."""
         AbstractPropertyMap.__init__(self, property_dict, property_keys,
                 property_list)
 
@@ -121,6 +123,7 @@ class AbstractResiduePropertyMap(AbstractPropertyMap):
 
 class AbstractAtomPropertyMap(AbstractPropertyMap):
     def __init__(self, property_dict, property_keys, property_list):
+        """Initialize the class."""
         AbstractPropertyMap.__init__(self, property_dict, property_keys,
                 property_list)
 

@@ -28,6 +28,7 @@ class Record(object):
     """Hold information from a PHD file."""
 
     def __init__(self):
+        """Initialize the class."""
         self.file_name = ''
         self.comments = {}
         for kw in CKEYWORDS:

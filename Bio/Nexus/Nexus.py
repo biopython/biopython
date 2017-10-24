@@ -58,6 +58,7 @@ class CharBuffer(object):
     """
 
     def __init__(self, string):
+        """Initialize the class."""
         if string:
             self.buffer = list(string)
         else:
@@ -174,6 +175,7 @@ class StepMatrix(object):
     """
 
     def __init__(self, symbols, gap):
+        """Initialize the class."""
         self.data = {}
         self.symbols = sorted(symbols)
         if gap:
@@ -532,6 +534,7 @@ class Commandline(object):
     """Represent a commandline as command and options."""
 
     def __init__(self, line, title):
+        """Initialize the class."""
         self.options = {}
         options = []
         self.command = None
@@ -569,6 +572,7 @@ class Block(object):
     """Represent a NEXUS block with block name and list of commandlines."""
 
     def __init__(self, title=None):
+        """Initialize the class."""
         self.title = title
         self.commandlines = []
 
@@ -576,6 +580,7 @@ class Block(object):
 class Nexus(object):
 
     def __init__(self, input=None):
+        """Initialize the class."""
         self.ntax = 0                   # number of taxa
         self.nchar = 0                  # number of characters
         self.unaltered_taxlabels = []   # taxlabels as the appear in the input file (incl. duplicates, etc.)

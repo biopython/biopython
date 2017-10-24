@@ -46,6 +46,7 @@ class Record(dict):
     """
 
     def __init__(self):
+        """Initialize the class."""
         dict.__init__(self)
         for keyword in ("DE", "SY", "GO", "HI", "WW"):
             self[keyword] = []

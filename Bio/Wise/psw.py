@@ -49,6 +49,7 @@ class AlignmentColumn(list):
             self.kind = column_unit.kind
 
     def __init__(self, column_unit):
+        """Initialize the class."""
         assert column_unit.unit == 0
         self.kind = column_unit.kind
         list.__init__(self, [column_unit.column, None])
@@ -68,6 +69,7 @@ class AlignmentColumn(list):
 
 class ColumnUnit(object):
     def __init__(self, unit, column, kind):
+        """Initialize the class."""
         self.unit = unit
         self.column = column
         self.kind = kind
@@ -154,4 +156,5 @@ def _test(*args, **keywds):
 if __name__ == "__main__":
     if __debug__:
         _test()
+        """Initialize the class."""
     main()

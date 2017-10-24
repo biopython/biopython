@@ -33,6 +33,7 @@ class SamtoolsViewCommandline(AbstractCommandline):
     """
 
     def __init__(self, cmd="samtools", **kwargs):
+        """Initialize the class."""
         self.program_name = cmd
         self.parameters = [
             _StaticArgument("view"),
@@ -127,6 +128,7 @@ class SamtoolsMpileupCommandline(AbstractCommandline):
     """
 
     def __init__(self, cmd="samtools", **kwargs):
+        """Initialize the class."""
         self.program_name = cmd
         self.parameters = [
             _StaticArgument("mpileup"),
@@ -267,6 +269,7 @@ class SamtoolsReheaderCommandline(AbstractCommandline):
     """
 
     def __init__(self, cmd="samtools", **kwargs):
+        """Initialize the class."""
         self.program_name = cmd
         self.parameters = [
             _StaticArgument("reheader"),
@@ -302,6 +305,7 @@ class SamtoolsCatCommandline(AbstractCommandline):
     """
 
     def __init__(self, cmd="samtools", **kwargs):
+        """Initialize the class."""
         self.program_name = cmd
         self.parameters = [
             _StaticArgument("cat"),
@@ -340,6 +344,7 @@ class SamtoolsVersion0xSortCommandline(AbstractCommandline):
     """
 
     def __init__(self, cmd="samtools", **kwargs):
+        """Initialize the class."""
         self.program_name = cmd
 
         # options for version samtools 0.0.19
@@ -383,6 +388,7 @@ class SamtoolsVersion1xSortCommandline(AbstractCommandline):
     """
 
     def __init__(self, cmd="samtools", **kwargs):
+        """Initialize the class."""
         self.program_name = cmd
 
         # options for version samtools 1.3.1
@@ -437,6 +443,7 @@ class SamtoolsMergeCommandline(AbstractCommandline):
     """
 
     def __init__(self, cmd="samtools", **kwargs):
+        """Initialize the class."""
         self.program_name = cmd
         self.parameters = [
             _StaticArgument("merge"),
@@ -488,6 +495,7 @@ class SamtoolsIndexCommandline(AbstractCommandline):
     """
 
     def __init__(self, cmd="samtools", **kwargs):
+        """Initialize the class."""
         self.program_name = cmd
         self.parameters = [
             _StaticArgument("index"),
@@ -517,6 +525,7 @@ class SamtoolsIdxstatsCommandline(AbstractCommandline):
     """
 
     def __init__(self, cmd="samtools", **kwargs):
+        """Initialize the class."""
         self.program_name = cmd
         self.parameters = [
             _StaticArgument("idxstats"),
@@ -547,6 +556,7 @@ class SamtoolsFaidxCommandline(AbstractCommandline):
     """
 
     def __init__(self, cmd="samtools", **kwargs):
+        """Initialize the class."""
         self.program_name = cmd
         self.parameters = [
             _StaticArgument("faidx"),
@@ -582,6 +592,7 @@ class SamtoolsFixmateCommandline(AbstractCommandline):
     """
 
     def __init__(self, cmd="samtools", **kwargs):
+        """Initialize the class."""
         self.program_name = cmd
         self.parameters = [
             _StaticArgument("fixmate"),
@@ -619,6 +630,7 @@ class SamtoolsRmdupCommandline(AbstractCommandline):
     """
 
     def __init__(self, cmd="samtools", **kwargs):
+        """Initialize the class."""
         self.program_name = cmd
         self.parameters = [
             _StaticArgument("rmdup"),
@@ -663,6 +675,7 @@ class SamtoolsCalmdCommandline(AbstractCommandline):
     """
 
     def __init__(self, cmd="samtools", **kwargs):
+        """Initialize the class."""
         self.program_name = cmd
         self.parameters = [
             _StaticArgument("calmd"),
@@ -724,6 +737,7 @@ class SamtoolsTargetcutCommandline(AbstractCommandline):
     """
 
     def __init__(self, cmd="samtools", **kwargs):
+        """Initialize the class."""
         self.program_name = cmd
         self.parameters = [
             _StaticArgument("targetcut"),
@@ -771,6 +785,7 @@ class SamtoolsPhaseCommandline(AbstractCommandline):
     """
 
     def __init__(self, cmd="samtools", **kwargs):
+        """Initialize the class."""
         self.program_name = cmd
         self.parameters = [
             _StaticArgument("phase"),

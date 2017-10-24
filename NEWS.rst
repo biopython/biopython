@@ -47,6 +47,7 @@ PEP257 and best practice standard coding style.
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+- Adhemar Zerlotini
 - Ariel Aptekmann
 - Chris Rands
 - Christian Brueffer
@@ -58,6 +59,7 @@ possible, especially the following contributors:
 - Kai Blin
 - Kozo Nishida
 - Michiel de Hoon
+- Nicolas Fontrodona (first contribution)
 - Peter Cock
 - rht (first contribution)
 - Shuichiro MAKIGAKI (first contribution)

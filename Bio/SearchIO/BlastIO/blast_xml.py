@@ -224,6 +224,7 @@ class BlastXmlParser(object):
     """Parser for the BLAST XML format"""
 
     def __init__(self, handle, use_raw_query_ids=False, use_raw_hit_ids=False):
+        """Initialize the class."""
         self.xml_iter = iter(ElementTree.iterparse(handle, events=('start', 'end')))
         self._use_raw_query_ids = use_raw_query_ids
         self._use_raw_hit_ids = use_raw_hit_ids
@@ -549,6 +550,7 @@ class BlastXmlIndexer(SearchIndexer):
     block_size = 16384
 
     def __init__(self, filename, **kwargs):
+        """Initialize the class."""
         SearchIndexer.__init__(self, filename)
         # TODO: better way to do this?
         iter_obj = self._parser(self._handle, **kwargs)
@@ -733,6 +735,7 @@ class BlastXmlWriter(object):
     """Stream-based BLAST+ XML Writer."""
 
     def __init__(self, handle, use_raw_query_ids=True, use_raw_hit_ids=True):
+        """Initialize the class."""
         self.xml = _BlastXmlGenerator(handle, 'utf-8')
         self._use_raw_query_ids = use_raw_query_ids
         self._use_raw_hit_ids = use_raw_hit_ids

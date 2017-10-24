@@ -48,6 +48,7 @@ class ProteinAnalysis(object):
     """
 
     def __init__(self, prot_sequence, monoisotopic=False):
+        """Initialize the class."""
         if prot_sequence.islower():
             self.sequence = Seq(prot_sequence.upper(), IUPAC.protein)
         else:

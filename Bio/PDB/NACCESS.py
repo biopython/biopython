@@ -127,6 +127,7 @@ class NACCESS(AbstractResiduePropertyMap):
 
     def __init__(self, model, pdb_file=None,
                  naccess_binary='naccess', tmp_directory='/tmp'):
+        """Initialize the class."""
         res_data, atm_data = run_naccess(model, pdb_file,
                                          naccess=naccess_binary,
                                          temp_path=tmp_directory)
@@ -157,6 +158,7 @@ class NACCESS_atomic(AbstractAtomPropertyMap):
 
     def __init__(self, model, pdb_file=None,
                  naccess_binary='naccess', tmp_directory='/tmp'):
+        """Initialize the class."""
         res_data, atm_data = run_naccess(model, pdb_file,
                                          naccess=naccess_binary,
                                          temp_path=tmp_directory)
@@ -192,4 +194,5 @@ if __name__ == "__main__":
 
     n = NACCESS(model, sys.argv[1])
     for e in n:
+        """Initialize the class."""
         print(e)

@@ -67,6 +67,7 @@ class Motif(motifs.Motif):
     """
 
     def __init__(self, alphabet=None, instances=None):
+        """Initialize the class."""
         motifs.Motif.__init__(self, alphabet, instances)
         self.evalue = 0.0
         self.num_occurrences = 0
@@ -77,6 +78,7 @@ class Instance(Seq.Seq):
     """A class describing the instances of a MEME motif, and the data thereof."""
 
     def __init__(self, *args, **kwds):
+        """Initialize the class."""
         Seq.Seq.__init__(self, *args, **kwds)
         self.sequence_name = ""
         self.start = 0

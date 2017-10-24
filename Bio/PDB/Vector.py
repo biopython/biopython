@@ -223,6 +223,7 @@ class Vector(object):
     """3D vector."""
 
     def __init__(self, x, y=None, z=None):
+        """Initialize the class."""
         if y is None and z is None:
             # Array, list, tuple...
             if len(x) != 3:

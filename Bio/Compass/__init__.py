@@ -98,6 +98,7 @@ class Record(object):
     """
 
     def __init__(self):
+        """Initialize the class."""
         self.query = ''
         self.hit = ''
         self.gap_threshold = 0

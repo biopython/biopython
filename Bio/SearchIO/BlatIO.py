@@ -383,6 +383,7 @@ class BlatPslParser(object):
     """Parser for the BLAT PSL format."""
 
     def __init__(self, handle, pslx=False):
+        """Initialize the class."""
         self.handle = handle
         self.line = self.handle.readline()
         self.pslx = pslx
@@ -522,6 +523,7 @@ class BlatPslIndexer(SearchIndexer):
     _parser = BlatPslParser
 
     def __init__(self, filename, pslx=False):
+        """Initialize the class."""
         SearchIndexer.__init__(self, filename, pslx=pslx)
 
     def __iter__(self):
@@ -594,6 +596,7 @@ class BlatPslWriter(object):
     """Writer for the blat-psl format."""
 
     def __init__(self, handle, header=False, pslx=False):
+        """Initialize the class."""
         self.handle = handle
         # flag for writing header or not
         self.header = header

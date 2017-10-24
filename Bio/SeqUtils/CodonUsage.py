@@ -62,6 +62,7 @@ class CodonAdaptationIndex(object):
     """
 
     def __init__(self):
+        """Initialize the class."""
         self.index = {}
         self.codon_count = {}
 

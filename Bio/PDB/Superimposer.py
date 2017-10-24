@@ -19,6 +19,7 @@ class Superimposer(object):
     """
 
     def __init__(self):
+        """Initialize the class."""
         self.rotran = None
         self.rms = None
 
