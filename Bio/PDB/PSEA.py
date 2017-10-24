@@ -99,13 +99,5 @@ class PSEA(object):
 
 
 if __name__ == "__main__":
-
-    import sys
-    from Bio.PDB import PDBParser
-
-    # Parse PDB file
-    p = PDBParser()
-    s = p.get_structure('X', sys.argv[1])
-
-    # Annotate structure with PSEA sceondary structure info
-    PSEA(s[0], sys.argv[1])
+    from Bio._utils import run_doctest
+    run_doctest(verbose=0)
