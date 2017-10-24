@@ -500,15 +500,15 @@ def _adjust_lines(lines):
     (except matrix command line)
     """
     formatted_lines = []
-    for l in lines:
+    for line in lines:
         # Convert line endings
-        l = l.replace('\r\n', '\n').replace('\r', '\n').strip()
-        if l.lower().startswith('matrix'):
-            formatted_lines.append(l)
+        line = line.replace('\r\n', '\n').replace('\r', '\n').strip()
+        if line.lower().startswith('matrix'):
+            formatted_lines.append(line)
         else:
-            l = l.replace('\n', ' ')
-            if l:
-                formatted_lines.append(l)
+            line = line.replace('\n', ' ')
+            if line:
+                formatted_lines.append(line)
     return formatted_lines
 
 
@@ -947,11 +947,11 @@ class Nexus(object):
         first_matrix_block = True
 
         # eliminate empty lines and leading/trailing whitespace
-        lines = [l.strip() for l in options.split('\n') if l.strip() != '']
+        lines = [_.strip() for _ in options.split('\n') if _.strip() != '']
         lineiter = iter(lines)
         while True:
             try:
-                l = next(lineiter)
+                line = next(lineiter)
             except StopIteration:
                 if taxcount < self.ntax:
                     raise NexusError('Not enough taxa in matrix.')
@@ -968,22 +968,22 @@ class Nexus(object):
                     taxcount = 1
                     first_matrix_block = False
             # get taxon name and sequence
-            linechars = CharBuffer(l)
+            linechars = CharBuffer(line)
             id = quotestrip(linechars.next_word())
-            l = linechars.rest().strip()
+            line = linechars.rest().strip()
             chars = ''
             if self.interleave:
                 # interleaved matrix
-                if l:
-                    chars = ''.join(l.split())
+                if line:
+                    chars = ''.join(line.split())
                 else:
                     chars = ''.join(next(lineiter).split())
             else:
                 # non-interleaved matrix
-                chars = ''.join(l.split())
+                chars = ''.join(line.split())
                 while len(chars) < self.nchar:
-                    l = next(lineiter)
-                    chars += ''.join(l.split())
+                    line = next(lineiter)
+                    chars += ''.join(line.split())
 
             # Reformat sequence for non-standard datatypes
             if self.datatype != 'standard':

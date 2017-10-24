@@ -1215,15 +1215,15 @@ def _likelihood_func(t, k, w, pi, codon_cnt, codon_lst, codon_table):
     from scipy.linalg import expm
     Q = _get_Q(pi, k, w, codon_lst, codon_table)
     P = expm(Q * t)
-    l = 0  # likelihood value
+    likelihood = 0
     for i, c1 in enumerate(codon_lst):
         for j, c2 in enumerate(codon_lst):
             if (c1, c2) in codon_cnt:
                 if P[i, j] * pi[c1] <= 0:
-                    l += codon_cnt[(c1, c2)] * 0
+                    likelihood += codon_cnt[(c1, c2)] * 0
                 else:
-                    l += codon_cnt[(c1, c2)] * log(pi[c1] * P[i, j])
-    return l
+                    likelihood += codon_cnt[(c1, c2)] * log(pi[c1] * P[i, j])
+    return likelihood
 
 
 if __name__ == "__main__":

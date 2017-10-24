@@ -92,11 +92,11 @@ def find_words(string, trie):
         # Look for a match.
         keys = match_all(string[start:], trie)
         for key in keys:
-            l = len(key)
+            length = len(key)
             # Make sure it ends at a boundary.
-            if start + l == len(string) or \
-               _boundary_re.match(string[start + l]):
-                results.append((key, start, start + l))
+            if start + length == len(string) or \
+               _boundary_re.match(string[start + length]):
+                results.append((key, start, start + length))
         # Move forward to the next boundary.
         m = _boundary_re.search(string, start)
         if m is None:

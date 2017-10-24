@@ -2188,8 +2188,7 @@ class RestrictionBatch(set):
 
         Give all the names of the enzymes in B sorted alphabetically.
         """
-        l = sorted(str(e) for e in self)
-        return l
+        return sorted(str(e) for e in self)
 
     def as_string(self):
         """List the names of the enzymes of the RestrictionBatch.
