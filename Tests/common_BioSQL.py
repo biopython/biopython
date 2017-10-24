@@ -321,17 +321,17 @@ class MultiReadTest(unittest.TestCase):
         db = self.db
         items = list(db.values())
         keys = list(db)
-        l = len(items)
-        self.assertEqual(l, len(db))
-        self.assertEqual(l, len(list(db)))
-        self.assertEqual(l, len(list(db.items())))
-        self.assertEqual(l, len(list(db.keys())))
-        self.assertEqual(l, len(list(db.values())))
+        length = len(items)
+        self.assertEqual(length, len(db))
+        self.assertEqual(length, len(list(db)))
+        self.assertEqual(length, len(list(db.items())))
+        self.assertEqual(length, len(list(db.keys())))
+        self.assertEqual(length, len(list(db.values())))
         if sys.version_info[0] == 2:
             # Check legacy methods for Python 2 as well:
-            self.assertEqual(l, len(list(db.iteritems())))
-            self.assertEqual(l, len(list(db.iterkeys())))
-            self.assertEqual(l, len(list(db.itervalues())))
+            self.assertEqual(length, len(list(db.iteritems())))
+            self.assertEqual(length, len(list(db.iterkeys())))
+            self.assertEqual(length, len(list(db.itervalues())))
         for (k1, r1), (k2, r2) in zip(zip(keys, items), db.items()):
             self.assertEqual(k1, k2)
             self.assertEqual(r1.id, r2.id)
@@ -399,11 +399,11 @@ class ReadTest(unittest.TestCase):
         db = self.db
         items = list(db.values())
         keys = list(db)
-        l = len(items)
-        self.assertEqual(l, len(db))
-        self.assertEqual(l, len(list(db.items())))
-        self.assertEqual(l, len(list(db)))
-        self.assertEqual(l, len(list(db.values())))
+        length = len(items)
+        self.assertEqual(length, len(db))
+        self.assertEqual(length, len(list(db.items())))
+        self.assertEqual(length, len(list(db)))
+        self.assertEqual(length, len(list(db.values())))
         for (k1, r1), (k2, r2) in zip(zip(keys, items), db.items()):
             self.assertEqual(k1, k2)
             self.assertEqual(r1.id, r2.id)
@@ -669,9 +669,9 @@ class DeleteTest(unittest.TestCase):
         db = self.db
         items = list(db.values())
         keys = list(db)
-        l = len(items)
+        length = len(items)
 
-        for seq_id in self.db.keys():
+        for seq_id in keys:
             sql = "SELECT seqfeature_id from seqfeature where bioentry_id = '%s'"
             # get the original number of seqfeatures associated with the bioentry
             seqfeatures = self.db.adaptor.execute_and_fetchall(sql % (seq_id))
@@ -685,6 +685,8 @@ class DeleteTest(unittest.TestCase):
                 rows_d = self.db.adaptor.execute_and_fetchall(sql % (seq_id))
                 # check to see that associated data is removed
                 self.assertEqual(len(rows_d), 0)
+
+        self.assertEqual(0, len(list(db.values())))
 
 
 class DupLoadTest(unittest.TestCase):
