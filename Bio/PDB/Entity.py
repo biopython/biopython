@@ -228,14 +228,14 @@ class Entity(object):
         """
         if self.full_id is None:
             entity_id = self.get_id()
-            l = [entity_id]
+            parts = [entity_id]
             parent = self.get_parent()
             while parent is not None:
                 entity_id = parent.get_id()
-                l.append(entity_id)
+                parts.append(entity_id)
                 parent = parent.get_parent()
-            l.reverse()
-            self.full_id = tuple(l)
+            parts.reverse()
+            self.full_id = tuple(parts)
         return self.full_id
 
     def transform(self, rot, tran):
