@@ -43,14 +43,14 @@ def _read_allele_freq_table(f):
     l = f.readline().rstrip()
     table = []
     while l != "":
-        line = [x for x in l.split(" ") if x != '']
+        parts = [x for x in l.split(" ") if x != '']
         try:
             table.append(
-                (line[0], [_gp_float(x) for x in line[1: -1]],
-                 _gp_int(line[-1])))
+                (parts[0], [_gp_float(x) for x in parts[1: -1]],
+                 _gp_int(parts[-1])))
         except ValueError:
             table.append(
-                (line[0], [None] * len(alleles), 0))
+                (parts[0], [None] * len(alleles), 0))
         l = f.readline().rstrip()
     return alleles, table
 
@@ -63,13 +63,13 @@ def _read_table(f, funs):
     l = f.readline().rstrip()
     while '===' not in l and '---' not in l and l != "":
         toks = [x for x in l.split(" ") if x != ""]
-        line = []
+        parts = []
         for i in range(len(toks)):
             try:
-                line.append(funs[i](toks[i]))
+                parts.append(funs[i](toks[i]))
             except ValueError:
-                line.append(toks[i])  # Could not cast
-        table.append(tuple(line))
+                parts.append(toks[i])  # Could not cast
+        table.append(tuple(parts))
         l = f.readline().rstrip()
     return table
 
