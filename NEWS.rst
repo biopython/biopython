@@ -65,6 +65,7 @@ possible, especially the following contributors:
 - Shuichiro MAKIGAKI (first contribution)
 - Spencer Bliven
 - Yasar L. Ahmed (first contribution)
+- Zaid Ur-Rehman (first contribution)
 
 
 10 July 2017: Biopython 1.70
