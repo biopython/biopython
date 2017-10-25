@@ -57,7 +57,7 @@ from Bio.Alphabet import generic_protein
 from Bio.Data import SCOPData
 from Bio.Seq import Seq
 from Bio.PDB.PDBExceptions import PDBException
-from Bio.PDB.Vector import calc_dihedral, calc_angle
+from Bio.PDB.vectors import calc_dihedral, calc_angle
 
 
 standard_aa_names = ["ALA", "CYS", "ASP", "GLU", "PHE", "GLY", "HIS", "ILE", "LYS",

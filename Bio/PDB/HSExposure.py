@@ -12,7 +12,7 @@ from math import pi
 
 from Bio.PDB.AbstractPropertyMap import AbstractPropertyMap
 from Bio.PDB.Polypeptide import CaPPBuilder, is_aa
-from Bio.PDB.Vector import rotaxis
+from Bio.PDB.vectors import rotaxis
 
 
 class _AbstractHSExposure(AbstractPropertyMap):

@@ -11,7 +11,7 @@ import copy
 
 from Bio.PDB.Entity import DisorderedEntityWrapper
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
-from Bio.PDB.Vector import Vector
+from Bio.PDB.vectors import Vector
 from Bio.Data import IUPACData
 
 
