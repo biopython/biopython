@@ -193,7 +193,6 @@ def nt_search(seq, subseq):
 
     pos = -1
     result = [pattern]
-    l = len(seq)
     while True:
         pos += 1
         s = seq[pos:]

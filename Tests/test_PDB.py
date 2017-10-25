@@ -1038,7 +1038,7 @@ class Atom_Element(unittest.TestCase):
                '2HB ', '2HD ', '2HD1', '2HD2', '2HE ', '2HE2', '2HG ', '2HG1',
                '2HG2', '2HH1', '2HH2', '2HZ ', '3H  ', '3HB ', '3HD1', '3HD2',
                '3HE ', '3HG1', '3HG2', '3HZ ', 'HE21'),
-            O=(' OH ',),
+            O=(' OH ',),  # noqa: E741
             C=(' CH2',),
             N=(' NH1', ' NH2'),
         )
