@@ -124,7 +124,6 @@ def PirIterator(handle):
 
     Examples
     --------
-
     >>> with open("NBRF/DMB_prot.pir") as handle:
     ...    for record in PirIterator(handle):
     ...        print("%s length %i" % (record.id, len(record)))

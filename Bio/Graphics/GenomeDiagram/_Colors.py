@@ -31,7 +31,6 @@ class ColorTranslator(object):
 
     Examples
     --------
-
     >>> from Bio.Graphics import GenomeDiagram
     >>> gdct=GenomeDiagram._Colors.ColorTranslator()
     >>> print(gdct.float1_color((0.5, 0.5, 0.5)))

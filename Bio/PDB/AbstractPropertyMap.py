@@ -29,7 +29,6 @@ class AbstractPropertyMap(object):
 
         Examples
         --------
-
         >>> if (chain_id, res_id) in apmap:
         ...     res, prop = apmap[(chain_id, res_id)]
         ...
@@ -74,7 +73,6 @@ class AbstractPropertyMap(object):
 
         Examples
         --------
-
         >>> if apmap.has_key((chain_id, res_id)):
         ...     res, prop = apmap[(chain_id, res_id)]
 
@@ -107,7 +105,6 @@ class AbstractPropertyMap(object):
 
         Examples
         --------
-
         >>> for (res, property) in iter(map):
         ...     print(res, property)
         ...

@@ -20,18 +20,15 @@ class TCoffeeCommandline(AbstractCommandline):
 
     Notes
     -----
-
     Last checked against: Version_6.92
 
     References
     ----------
-
     T-Coffee: A novel method for multiple sequence alignments.
     Notredame, Higgins, Heringa, JMB,302(205-217) 2000
 
     Examples
     --------
-
     To align a FASTA file (unaligned.fasta) with the output in ClustalW
     format (file aligned.aln), and otherwise default settings, use:
 
@@ -44,6 +41,7 @@ class TCoffeeCommandline(AbstractCommandline):
 
     You would typically run the command line with tcoffee_cline() or via
     the Python subprocess module, as described in the Biopython tutorial.
+
     """
 
     SEQ_TYPES = ["dna", "protein", "dna_protein"]

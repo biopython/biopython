@@ -3,8 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Classify protein backbone structure according to Kolodny et al's fragment
-libraries.
+"""Classify protein backbone structure with Kolodny et al's fragment libraries.
 
 It can be regarded as a form of objective secondary structure classification.
 Only fragments of length 5 or 7 are supported (ie. there is a 'central'
@@ -157,8 +156,8 @@ class Fragment(object):
         :return: rmsd between fragments
         :rtype: float
 
-        Examples:
-
+        Examples
+        --------
         >>> rmsd = fragment1 - fragment2
 
         """

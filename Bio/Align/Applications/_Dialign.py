@@ -17,7 +17,6 @@ class DialignCommandline(AbstractCommandline):
 
     Notes
     -----
-
     Last checked against version: 2.2
 
     References
@@ -27,7 +26,6 @@ class DialignCommandline(AbstractCommandline):
 
     Examples
     --------
-
     To align a FASTA file (unaligned.fasta) with the output files names
     aligned.* including a FASTA output file (aligned.fa), use:
 
@@ -39,6 +37,7 @@ class DialignCommandline(AbstractCommandline):
 
     You would typically run the command line with dialign_cline() or via
     the Python subprocess module, as described in the Biopython tutorial.
+
     """
 
     def __init__(self, cmd="dialign2-2", **kwargs):

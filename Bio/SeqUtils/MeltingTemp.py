@@ -479,7 +479,6 @@ def salt_correction(Na=0, K=0, Tris=0, Mg=0, dNTPs=0, method=1, seq=None):
 
     Examples
     --------
-
     >>> from Bio.SeqUtils import MeltingTemp as mt
     >>> print('%0.2f' % mt.salt_correction(Na=50, method=1))
     -21.60
@@ -1000,7 +999,6 @@ def Tm_staluc(s, dnac=50, saltc=50, rna=0):
 
     Examples
     --------
-
     >>> print("%0.2f" % Tm_staluc('CAGTCAGTACGTACGTGTACTGCCGTA'))
     59.87
     >>> print("%0.2f" % Tm_staluc('CAGTCAGTACGTACGTGTACTGCCGTA', rna=True))

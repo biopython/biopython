@@ -41,11 +41,11 @@ def parse(file, format, **kwargs):
 
     Examples
     --------
-
     >>> trees = parse('../../Tests/PhyloXML/apaf.xml', 'phyloxml')
     >>> for tree in trees:
     ...     print(tree.rooted)
     True
+
     """
     with File.as_handle(file, 'r') as fp:
         for tree in getattr(supported_formats[format], 'parse')(fp, **kwargs):
