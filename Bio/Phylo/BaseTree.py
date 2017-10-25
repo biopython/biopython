@@ -335,7 +335,6 @@ class TreeMixin(object):
 
         Examples
         --------
-
         >>> from Bio import Phylo
         >>> phx = Phylo.PhyloXMLIO.read('PhyloXML/phyloxml_examples.xml')
         >>> matches = phx.phylogenies[5].find_elements(code='OCTVU')
@@ -1192,7 +1191,6 @@ class BranchColor(object):
 
         Examples
         --------
-
         >>> bc = BranchColor(12, 200, 100)
         >>> bc.to_hex()
         '#0cc864'
@@ -1205,7 +1203,6 @@ class BranchColor(object):
 
         Examples
         --------
-
         >>> bc = BranchColor(255, 165, 0)
         >>> bc.to_rgb()
         (255, 165, 0)

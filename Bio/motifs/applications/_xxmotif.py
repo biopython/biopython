@@ -19,12 +19,10 @@ class XXmotifCommandline(AbstractCommandline):
 
     Notes
     -----
-
     Last checked against version: 1.3
 
     References
     ----------
-
     Luehr S, Hartmann H, and Söding J. The XXmotif web server for eXhaustive,
     weight matriX-based motif discovery in nucleotide sequences,
     Nucleic Acids Res. 40: W104-W109 (2012).
@@ -35,7 +33,6 @@ class XXmotifCommandline(AbstractCommandline):
 
     Examples
     --------
-
     >>> from Bio.motifs.applications import XXmotifCommandline
     >>> out_dir = "results"
     >>> in_file = "sequences.fasta"
@@ -45,6 +42,7 @@ class XXmotifCommandline(AbstractCommandline):
 
     You would typically run the command line with xxmotif_cline() or via
     the Python subprocess module, as described in the Biopython tutorial.
+
     """
 
     def __init__(self, cmd="XXmotif", **kwargs):

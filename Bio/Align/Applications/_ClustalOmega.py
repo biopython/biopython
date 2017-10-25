@@ -22,12 +22,10 @@ class ClustalOmegaCommandline(AbstractCommandline):
 
     Notes
     -----
-
     Last checked against version: 1.2.0
 
     References
     ----------
-
     Sievers F, Wilm A, Dineen DG, Gibson TJ, Karplus K, Li W, Lopez R,
     McWilliam H, Remmert M, Söding J, Thompson JD, Higgins DG (2011).
     Fast, scalable generation of high-quality protein multiple
@@ -36,7 +34,6 @@ class ClustalOmegaCommandline(AbstractCommandline):
 
     Examples
     --------
-
     >>> from Bio.Align.Applications import ClustalOmegaCommandline
     >>> in_file = "unaligned.fasta"
     >>> out_file = "aligned.fasta"
@@ -44,9 +41,9 @@ class ClustalOmegaCommandline(AbstractCommandline):
     >>> print(clustalomega_cline)
     clustalo -i unaligned.fasta -o aligned.fasta --auto -v
 
-
     You would typically run the command line with clustalomega_cline() or via
     the Python subprocess module, as described in the Biopython tutorial.
+
     """
 
     def __init__(self, cmd="clustalo", **kwargs):

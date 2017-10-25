@@ -18,12 +18,10 @@ class MafftCommandline(AbstractCommandline):
 
     Notes
     -----
-
     Last checked against version: MAFFT v6.717b (2009/12/03)
 
     References
     ----------
-
     Katoh, Toh (BMC Bioinformatics 9:212, 2008) Improved accuracy of
     multiple ncRNA alignment by incorporating structural information into
     a MAFFT-based framework (describes RNA structural alignment methods)
@@ -45,7 +43,6 @@ class MafftCommandline(AbstractCommandline):
 
     Examples
     --------
-
     >>> from Bio.Align.Applications import MafftCommandline
     >>> mafft_exe = "/opt/local/mafft"
     >>> in_file = "../Doc/examples/opuntia.fasta"

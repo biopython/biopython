@@ -23,7 +23,6 @@ class SamtoolsViewCommandline(AbstractCommandline):
 
     Examples
     --------
-
     >>> from Bio.Sequencing.Applications import SamtoolsViewCommandline
     >>> input_file = "/path/to/sam_or_bam_file"
     >>> samtools_view_cmd = SamtoolsViewCommandline(input_file=input_file)
@@ -119,7 +118,6 @@ class SamtoolsMpileupCommandline(AbstractCommandline):
 
     Examples
     --------
-
     >>> from Bio.Sequencing.Applications import SamtoolsMpileupCommandline
     >>> input = ["/path/to/sam_or_bam_file"]
     >>> samtools_mpileup_cmd = SamtoolsMpileupCommandline(input_file=input)
@@ -258,7 +256,6 @@ class SamtoolsReheaderCommandline(AbstractCommandline):
 
     Examples
     --------
-
     >>> from Bio.Sequencing.Applications import SamtoolsReheaderCommandline
     >>> input_header = "/path/to/header_sam_file"
     >>> input_bam = "/path/to/input_bam_file"
@@ -296,7 +293,6 @@ class SamtoolsCatCommandline(AbstractCommandline):
 
     Examples
     --------
-
     >>> from Bio.Sequencing.Applications import SamtoolsCatCommandline
     >>> input_bam1 = "/path/to/input_bam1"
     >>> input_bam2 = "/path/to/input_bam2"
@@ -336,7 +332,6 @@ class SamtoolsVersion0xSortCommandline(AbstractCommandline):
 
     Examples
     --------
-
     >>> from Bio.Sequencing.Applications import SamtoolsVersion0xSortCommandline
     >>> input_bam = "/path/to/input_bam"
     >>> out_prefix = "/path/to/out_prefix"
@@ -379,7 +374,6 @@ class SamtoolsVersion1xSortCommandline(AbstractCommandline):
 
     Examples
     --------
-
     >>> from Bio.Sequencing.Applications import SamtoolsVersion1xSortCommandline
     >>> input_bam = "/path/to/input_bam"
     >>> FREFIX = "/path/to/out_prefix"
@@ -433,7 +427,6 @@ class SamtoolsMergeCommandline(AbstractCommandline):
 
     Examples
     --------
-
     >>> from Bio.Sequencing.Applications import SamtoolsMergeCommandline
     >>> out_bam = "/path/to/out_bam"
     >>> in_bam = ["/path/to/input_bam1", "/path/to/input_bam2"]
@@ -489,7 +482,6 @@ class SamtoolsIndexCommandline(AbstractCommandline):
 
     Examples
     --------
-
     >>> from Bio.Sequencing.Applications import SamtoolsIndexCommandline
     >>> input = "/path/to/aln_bam"
     >>> samtools_index_cmd = SamtoolsIndexCommandline(input_bam=input)
@@ -520,7 +512,6 @@ class SamtoolsIdxstatsCommandline(AbstractCommandline):
 
     Examples
     --------
-
     >>> from Bio.Sequencing.Applications import SamtoolsIdxstatsCommandline
     >>> input = "/path/to/aln_bam"
     >>> samtools_idxstats_cmd = SamtoolsIdxstatsCommandline(input_bam=input)
@@ -551,7 +542,6 @@ class SamtoolsFaidxCommandline(AbstractCommandline):
 
     Examples
     --------
-
     >>> from Bio.Sequencing.Applications import SamtoolsFaidxCommandline
     >>> reference = "/path/to/reference.fasta"
     >>> samtools_faidx_cmd = SamtoolsFaidxCommandline(reference=reference)
@@ -585,7 +575,6 @@ class SamtoolsFixmateCommandline(AbstractCommandline):
 
     Examples
     --------
-
     >>> from Bio.Sequencing.Applications import SamtoolsFixmateCommandline
     >>> in_bam = "/path/to/in.nameSrt.bam"
     >>> out_bam = "/path/to/out.bam"
@@ -624,7 +613,6 @@ class SamtoolsRmdupCommandline(AbstractCommandline):
 
     Examples
     --------
-
     >>> from Bio.Sequencing.Applications import SamtoolsRmdupCommandline
     >>> input_sorted_bam = "/path/to/input.srt.bam"
     >>> out_bam = "/path/to/out.bam"
@@ -670,7 +658,6 @@ class SamtoolsCalmdCommandline(AbstractCommandline):
 
     Examples
     --------
-
     >>> from Bio.Sequencing.Applications import SamtoolsCalmdCommandline
     >>> input_bam = "/path/to/aln.bam"
     >>> reference_fasta = "/path/to/reference.fasta"
@@ -736,7 +723,6 @@ class SamtoolsTargetcutCommandline(AbstractCommandline):
 
     Examples
     --------
-
     >>> from Bio.Sequencing.Applications import SamtoolsTargetcutCommandline
     >>> input_bam = "/path/to/aln.bam"
     >>> samtools_targetcut_cmd = SamtoolsTargetcutCommandline(input_bam=input_bam)
@@ -785,7 +771,6 @@ class SamtoolsPhaseCommandline(AbstractCommandline):
 
     Examples
     --------
-
     >>> from Bio.Sequencing.Applications import SamtoolsPhaseCommandline
     >>> input_bam = "/path/to/in.bam"
     >>> samtools_phase_cmd = SamtoolsPhaseCommandline(input_bam=input_bam)

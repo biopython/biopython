@@ -193,7 +193,6 @@ class Atom(object):
 
         Examples
         --------
-
         >>> distance = atom1 - atom2
 
         """
@@ -340,7 +339,6 @@ class Atom(object):
 
         Examples
         --------
-
         >>> rotation=rotmat(pi, Vector(1, 0, 0))
         >>> translation=array((0, 0, 1), 'f')
         >>> atom.transform(rotation, translation)

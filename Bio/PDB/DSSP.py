@@ -35,7 +35,6 @@ The DSSP codes for secondary structure used here are:
 
 Usage
 -----
-
 The DSSP class can be used to run DSSP on a pdb file, and provides a
 handle to the DSSP secondary structure and accessibility.
 
@@ -44,7 +43,6 @@ calculations on the first model in the provided PDB file.
 
 Examples
 --------
-
 >>> p = PDBParser()
 >>> structure = p.get_structure("1MOT", "1mot.pdb")
 >>> model = structure[0]
@@ -170,7 +168,6 @@ def dssp_dict_from_pdb_file(in_file, DSSP="dssp"):
 
     Examples
     --------
-
     >>> dssp_dict=dssp_dict_from_pdb_file("1fat.pdb")
     >>> aa, ss, acc=dssp_dict[('A', 1)]
 
@@ -309,7 +306,6 @@ class DSSP(AbstractResiduePropertyMap):
 
     Examples
     --------
-
     >>> p = PDBParser()
     >>> structure = p.get_structure("1MOT", "1mot.pdb")
     >>> model = structure[0]
@@ -322,6 +318,7 @@ class DSSP(AbstractResiduePropertyMap):
     >>> dssp[a_key]
     (3, 'A', 'H', 0.7075471698113207, -61.2, -42.4,
      -2, -0.7, 4, -3.0, 1, -0.2, 5, -0.2)
+
     """
 
     def __init__(self, model, in_file, dssp="dssp", acc_array="Sander", file_type='PDB'):

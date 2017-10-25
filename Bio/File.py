@@ -59,8 +59,8 @@ def as_handle(handleish, mode='r', **kwargs):
      - mode       - Mode to open handleish (used only if handleish is a string)
      - kwargs     - Further arguments to pass to open(...)
 
-    Examples:
-
+    Examples
+    --------
     >>> with as_handle('seqs.fasta', 'w') as fp:
     ...     fp.write('>test\nACGT')
     >>> fp.closed
@@ -76,6 +76,7 @@ def as_handle(handleish, mode='r', **kwargs):
     Note that if the mode argument includes U (for universal new lines)
     this will be removed under Python 3 where is is redundant and has
     been deprecated (this happens automatically in text mode).
+
     """
     if isinstance(handleish, basestring):
         if sys.version_info[0] >= 3 and "U" in mode:

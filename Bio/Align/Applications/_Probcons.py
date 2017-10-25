@@ -17,19 +17,16 @@ class ProbconsCommandline(AbstractCommandline):
 
     Notes
     -----
-
     Last checked against version: 1.12
 
     References
     ----------
-
     Do, C.B., Mahabhashyam, M.S.P., Brudno, M., and Batzoglou, S. 2005.
     PROBCONS: Probabilistic Consistency-based Multiple Sequence Alignment.
     Genome Research 15: 330-340.
 
     Examples
     --------
-
     To align a FASTA file (unaligned.fasta) with the output in ClustalW
     format, and otherwise default settings, use:
 

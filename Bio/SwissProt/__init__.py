@@ -59,7 +59,6 @@ class Record(object):
 
     Examples
     --------
-
     >>> import Bio.SwissProt as sp
     >>> example_filename = "SwissProt/sp008"
     >>> with open(example_filename) as handle:

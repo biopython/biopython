@@ -16,7 +16,6 @@ def read(handle):
 
     Examples
     --------
-
     >>> from Bio.motifs import meme
     >>> with open("meme.output.txt") as f:
     ...     record = meme.read(f)

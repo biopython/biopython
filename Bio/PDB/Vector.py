@@ -101,8 +101,7 @@ def rotaxis2m(theta, vector):
 
     Examples
     --------
-
-    >>> m = rotaxis(pi, Vector(1, 0, 0)) 
+    >>> m = rotaxis(pi, Vector(1, 0, 0))
     >>> rotated_vector = any_vector.left_multiply(m)
 
     """
@@ -138,7 +137,6 @@ def refmat(p, q):
 
     Examples
     --------
-
     >>> mirror = refmat(p, q)
     >>> qq = p.left_multiply(mirror)
     >>> print(q)
@@ -172,7 +170,6 @@ def rotmat(p, q):
 
     Examples
     --------
-
     >>> r = rotmat(p, q)
     >>> print(q)
     >>> print(p.left_multiply(r))
