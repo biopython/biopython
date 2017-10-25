@@ -41,7 +41,6 @@ class _Matrix(object):
 
     Examples
     --------
-
     >>> from Bio.Phylo.TreeConstruction import _Matrix
     >>> names = ['Alpha', 'Beta', 'Gamma', 'Delta']
     >>> matrix = [[0], [1, 0], [2, 3, 0], [4, 5, 6, 0]]
@@ -368,7 +367,6 @@ class DistanceCalculator(object):
 
     Examples
     --------
-
     >>> from Bio.Phylo.TreeConstruction import DistanceCalculator
     >>> from Bio import AlignIO
     >>> aln = AlignIO.read(open('Tests/TreeConstruction/msa.phy'), 'phylip')
@@ -542,7 +540,6 @@ class DistanceTreeConstructor(TreeConstructor):
 
     Examples
     --------
-
     >>> from TreeConstruction import DistanceTreeConstructor
     >>> constructor = DistanceTreeConstructor()
 
@@ -1051,7 +1048,6 @@ class ParsimonyTreeConstructor(TreeConstructor):
 
     Examples
     --------
-
     >>> from Bio import AlignIO
     >>> from TreeConstruction import *
     >>> aln = AlignIO.read(open('Tests/TreeConstruction/msa.phy'), 'phylip')
@@ -1089,6 +1085,7 @@ class ParsimonyTreeConstructor(TreeConstructor):
                     Clade(branch_length=0.17523, name='Gamma')
                     Clade(branch_length=0.07477, name='Beta')
                 Clade(branch_length=0.29231, name='Alpha')
+
     """
 
     def __init__(self, searcher, starting_tree=None):

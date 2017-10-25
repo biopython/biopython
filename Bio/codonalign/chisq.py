@@ -56,7 +56,6 @@ def _igamc(a, x):
 
     Notes
     -----
-
     The function is defined by::
 
         igamc(a,x)   =   1 - igam(a,x)
@@ -73,6 +72,7 @@ def _igamc(a, x):
     The integral is evaluated by either a power series or
     continued fraction expansion, depending on the relative
     values of a and x.
+
     """
     # Compute  x**a * exp(-x) / Gamma(a)
     ax = math.exp(a * math.log(x) - x - math.lgamma(a))

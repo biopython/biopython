@@ -56,7 +56,6 @@ def TabIterator(handle, alphabet=single_letter_alphabet):
 
     Examples
     --------
-
     >>> with open("GenBank/NC_005816.tsv") as handle:
     ...     for record in TabIterator(handle):
     ...         print("%s length %i" % (record.id, len(record)))

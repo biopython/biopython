@@ -46,7 +46,6 @@ class PDBIO(object):
 
     Examples
     --------
-
     >>> p=PDBParser()
     >>> s=p.get_structure("1fat", "1fat.pdb")
     >>> io=PDBIO()

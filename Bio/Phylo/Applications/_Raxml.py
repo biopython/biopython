@@ -22,7 +22,6 @@ class RaxmlCommandline(AbstractCommandline):
 
     References
     ----------
-
     Stamatakis A.
     RAxML-VI-HPC: Maximum Likelihood-based Phylogenetic Analyses with
     Thousands of Taxa and Mixed Models.
@@ -32,7 +31,6 @@ class RaxmlCommandline(AbstractCommandline):
 
     Examples
     --------
-
     >>> from Bio.Phylo.Applications import RaxmlCommandline
     >>> raxml_cline = RaxmlCommandline(sequences="Tests/Phylip/interlaced2.phy",
     ...                                model="PROTCATWAG", name="interlaced2")
@@ -41,6 +39,7 @@ class RaxmlCommandline(AbstractCommandline):
 
     You would typically run the command line with raxml_cline() or via
     the Python subprocess module, as described in the Biopython tutorial.
+
     """
 
     def __init__(self, cmd='raxmlHPC', **kwargs):

@@ -18,19 +18,16 @@ class MSAProbsCommandline(AbstractCommandline):
 
     Notes
     -----
-
     Last checked against version: 0.9.7
 
     References
     ----------
-
     Yongchao Liu, Bertil Schmidt, Douglas L. Maskell: "MSAProbs: multiple
     sequence alignment based on pair hidden Markov models and partition
     function posterior probabilities". Bioinformatics, 2010, 26(16): 1958 -1964
 
     Examples
     --------
-
     >>> from Bio.Align.Applications import MSAProbsCommandline
     >>> in_file = "unaligned.fasta"
     >>> out_file = "aligned.cla"
@@ -40,6 +37,7 @@ class MSAProbsCommandline(AbstractCommandline):
 
     You would typically run the command line with cline() or via
     the Python subprocess module, as described in the Biopython tutorial.
+
     """
 
     def __init__(self, cmd="msaprobs", **kwargs):

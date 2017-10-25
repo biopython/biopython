@@ -17,12 +17,10 @@ class PrankCommandline(AbstractCommandline):
 
     Notes
     -----
-
     Last checked against version: 081202
 
     References
     ----------
-
     Loytynoja, A. and Goldman, N. 2005. An algorithm for progressive
     multiple alignment of sequences with insertions. Proceedings of
     the National Academy of Sciences, 102: 10557--10562.
@@ -33,7 +31,6 @@ class PrankCommandline(AbstractCommandline):
 
     Examples
     --------
-
     To align a FASTA file (unaligned.fasta) with the output in aligned
     FASTA format with the output filename starting with "aligned" (you
     can't pick the filename explicitly), no tree output and no XML output,
@@ -49,6 +46,7 @@ class PrankCommandline(AbstractCommandline):
 
     You would typically run the command line with prank_cline() or via
     the Python subprocess module, as described in the Biopython tutorial.
+
     """
 
     def __init__(self, cmd="prank", **kwargs):

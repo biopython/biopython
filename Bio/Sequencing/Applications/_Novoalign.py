@@ -17,7 +17,6 @@ class NovoalignCommandline(AbstractCommandline):
 
     Examples
     --------
-
     >>> from Bio.Sequencing.Applications import NovoalignCommandline
     >>> novoalign_cline = NovoalignCommandline(database='some_db',
     ...                                        readfile='some_seq.txt')
@@ -38,6 +37,7 @@ class NovoalignCommandline(AbstractCommandline):
     the Python subprocess module, as described in the Biopython tutorial.
 
     Last checked against version: 2.05.04
+
     """
 
     def __init__(self, cmd="novoalign", **kwargs):

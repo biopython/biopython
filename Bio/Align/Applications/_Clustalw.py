@@ -17,12 +17,10 @@ class ClustalwCommandline(AbstractCommandline):
 
     Notes
     -----
-
     Last checked against versions: 1.83 and 2.1
 
     References
     ----------
-
     Larkin MA, Blackshields G, Brown NP, Chenna R, McGettigan PA,
     McWilliam H, Valentin F, Wallace IM, Wilm A, Lopez R, Thompson JD,
     Gibson TJ, Higgins DG. (2007). Clustal W and Clustal X version 2.0.
@@ -30,7 +28,6 @@ class ClustalwCommandline(AbstractCommandline):
 
     Examples
     --------
-
     >>> from Bio.Align.Applications import ClustalwCommandline
     >>> in_file = "unaligned.fasta"
     >>> clustalw_cline = ClustalwCommandline("clustalw2", infile=in_file)
