@@ -34,7 +34,3 @@ warnings.warn("The module Bio.PDB.Vector has been deprecated in "
               "name collisions with the class Vector. For the "
               "class Vector, and vector functions like calc_angle, "
               "import from Bio.PDB instead.", BiopythonDeprecationWarning)
-
-__all__ = ('m2rotaxis', 'vector_to_axis', 'rotaxis2m',
-           'refmat', 'rotmat', 'calc_angle', 'calc_dihedral',
-           'Vector')
