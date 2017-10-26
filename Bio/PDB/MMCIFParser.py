@@ -68,6 +68,12 @@ class MMCIFParser(object):
     # Private methods
 
     def _build_structure(self, structure_id):
+
+        # two special chars as placeholders in the mmCIF format
+        # for item values that cannot be explicitly assigned
+        # see: pdbx/mmcif syntax web page
+        _unassigned = set(('.', '?'))
+
         mmcif_dict = self._mmcif_dict
         atom_id_list = mmcif_dict["_atom_site.label_atom_id"]
         residue_id_list = mmcif_dict["_atom_site.label_comp_id"]
@@ -134,11 +140,11 @@ class MMCIFParser(object):
             resname = residue_id_list[i]
             chainid = chain_id_list[i]
             altloc = alt_list[i]
-            if altloc == ".":
+            if altloc in _unassigned:
                 altloc = " "
             int_resseq = int(seq_id_list[i])
             icode = icode_list[i]
-            if icode == "?":
+            if icode in _unassigned:
                 icode = " "
             name = atom_id_list[i]
             # occupancy & B factor
@@ -188,7 +194,7 @@ class MMCIFParser(object):
                 structure_builder.init_residue(resname, hetatm_flag, int_resseq, icode)
 
             coord = numpy.array((x, y, z), 'f')
-            element = element_list[i] if element_list else None
+            element = element_list[i].upper() if element_list else None
             structure_builder.init_atom(name, coord, tempfactor, occupancy, altloc,
                 name, element=element)
             if aniso_flag == 1:
@@ -267,6 +273,11 @@ class FastMMCIFParser(object):
     # Private methods
 
     def _build_structure(self, structure_id, filehandle):
+
+        # two special chars as placeholders in the mmCIF format
+        # for item values that cannot be explicitly assigned
+        # see: pdbx/mmcif syntax web page
+        _unassigned = set(('.', '?'))
 
         # Read only _atom_site. and atom_site_anisotrop entries
         read_atom, read_aniso = False, False
@@ -371,11 +382,11 @@ class FastMMCIFParser(object):
             resname = residue_id_list[i]
             chainid = chain_id_list[i]
             altloc = alt_list[i]
-            if altloc == ".":
+            if altloc in _unassigned:
                 altloc = " "
             int_resseq = int(seq_id_list[i])
             icode = icode_list[i]
-            if icode == "?":
+            if icode in _unassigned:
                 icode = " "
             name = atom_id_list[i].strip('"')  # Remove occasional " from quoted atom names (e.g. xNA)
 
