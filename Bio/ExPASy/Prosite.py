@@ -7,7 +7,7 @@
 # as part of this package.
 """Parser for the prosite dat file from Prosite at ExPASy.
 
-See http://www.expasy.org/prosite/
+See https://www.expasy.org/prosite/
 
 Tested with:
  - Release 20.43, 10-Feb-2009
