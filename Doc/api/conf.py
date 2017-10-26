@@ -7,13 +7,10 @@ file controls running ``sphinx-build`` to turn these into
 human readable documentation.
 """
 
-# If extensions (or modules to document with autodoc) are in another directory,
-# add these directories to sys.path here. If the directory is relative to the
-# documentation root, use os.path.abspath to make it absolute, like shown here.
-#
-# import os
+import os
+import shutil
 # import sys
-# sys.path.insert(0, '...')
+import tempfile
 
 from Bio import __version__
 
@@ -206,3 +203,33 @@ epub_exclude_files = ['search.html']
 # -- Options for numpydoc -------------------------------------------------
 
 numpydoc_class_members_toctree = False
+
+# -- Magic to run sphinx-apidoc automatically -----------------------------
+
+# See https://github.com/rtfd/readthedocs.org/issues/1139
+# on which this is based.
+
+
+def run_apidoc(_):
+    """Call sphinx-apidoc on Bio and BioSQL modules."""
+    from sphinx.apidoc import main as apidoc_main
+    cur_dir = os.path.abspath(os.path.dirname(__file__))
+    # Can't see a better way than running apidoc twice, for Bio & BioSQL
+    # We don't care about the index.rst / conf.py (we have our own)
+    # or the Makefile / make.bat (effectively same) clashing,
+    # $ sphinx-apidoc -e -F -o /tmp/api/BioSQL BioSQL
+    # $ sphinx-apidoc -e -F -o /tmp/api/Bio Bio
+    tmp_path = tempfile.mkdtemp()
+    apidoc_main([None, '-e', '-F', '-o', tmp_path, '../../BioSQL'])
+    apidoc_main([None, '-e', '-F', '-o', tmp_path, '../../Bio'])
+    os.remove(os.path.join(tmp_path, 'index.rst'))  # Using our own
+    for filename in os.listdir(tmp_path):
+        if filename.endswith(".rst"):
+            shutil.move(os.path.join(tmp_path, filename),
+                        os.path.join(cur_dir, filename))
+    shutil.rmtree(tmp_path)
+
+
+def setup(app):
+    """Over-ride Sphinx setup to trigger sphinx-apidoc."""
+    app.connect('builder-inited', run_apidoc)
