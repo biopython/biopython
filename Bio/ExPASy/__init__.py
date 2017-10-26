@@ -93,7 +93,7 @@ def get_sprot_raw(id):
     """Get a text handle to a raw SwissProt entry at ExPASy.
 
     For an ID of XXX, fetches http://www.uniprot.org/uniprot/XXX.txt
-    (as per the http://www.expasy.ch/expasy_urls.html documentation).
+    (as per the http://www.expasy.org/expasy_urls.html documentation).
 
     >>> from Bio import ExPASy
     >>> from Bio import SwissProt
@@ -116,7 +116,7 @@ def get_sprot_raw(id):
 
 
 def sprot_search_ful(text, make_wild=None, swissprot=1, trembl=None,
-                     cgi='http://www.expasy.ch/cgi-bin/sprot-search-ful'):
+                     cgi='http://www.expasy.org/cgi-bin/sprot-search-ful'):
     """Search SwissProt by full text (BROKEN)."""
     variables = {'SEARCH': text}
     if make_wild:
@@ -132,7 +132,7 @@ def sprot_search_ful(text, make_wild=None, swissprot=1, trembl=None,
 
 
 def sprot_search_de(text, swissprot=1, trembl=None,
-                    cgi='http://www.expasy.ch/cgi-bin/sprot-search-de'):
+                    cgi='http://www.expasy.org/cgi-bin/sprot-search-de'):
     """Search SwissProt (BROKEN).
 
     Search by name, description, gene name, species, or organelle.
