@@ -31,6 +31,6 @@ from Bio import BiopythonDeprecationWarning
 
 warnings.warn("The module Bio.PDB.Vector has been deprecated in "
               "favor of new module Bio.PDB.vectors to solve a "
-              "name collisions with the class Vector. For the "
+              "name collision with the class Vector. For the "
               "class Vector, and vector functions like calc_angle, "
               "import from Bio.PDB instead.", BiopythonDeprecationWarning)
