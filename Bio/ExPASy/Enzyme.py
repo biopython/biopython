@@ -6,7 +6,7 @@
 
 """Parse the enzyme.dat file from Enzyme at ExPASy.
 
-See http://www.expasy.ch/enzyme/
+See http://www.expasy.org/enzyme/
 
 Tested with the release of 03-Mar-2009.
 
