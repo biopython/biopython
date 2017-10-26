@@ -27,12 +27,12 @@ class Record(list):
         self.warning = None
 
 
-def scan(seq="", mirror='http://www.expasy.org', output='xml', **keywords):
+def scan(seq="", mirror='https://www.expasy.org', output='xml', **keywords):
     """Execute a ScanProsite search.
 
     Arguments:
      - mirror:   The ScanProsite mirror to be used
-                 (default: http://www.expasy.org).
+                 (default: https://www.expasy.org).
      - seq:      The query sequence, or UniProtKB (Swiss-Prot,
                  TrEMBL) accession
      - output:   Format of the search results
@@ -40,7 +40,7 @@ def scan(seq="", mirror='http://www.expasy.org', output='xml', **keywords):
 
     Further search parameters can be passed as keywords; see the
     documentation for programmatic access to ScanProsite at
-    http://www.expasy.org/tools/scanprosite/ScanPrositeREST.html
+    https://www.expasy.org/tools/scanprosite/ScanPrositeREST.html
     for a description of such parameters.
 
     This function returns a handle to the search results returned by
