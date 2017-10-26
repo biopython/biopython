@@ -9,11 +9,10 @@
 # To disable testing against any specific back-end, set dbuser
 # to an empty string. There is no configuration entry needed
 # for sqlite3.
-#
-# Values match https://www.appveyor.com/docs/services-databases/
 
 [mysql]
 # Covers DBDRIVER="MySQLdb" and "mysql.connector" etc
+# Values match https://www.appveyor.com/docs/services-databases/
 dbhost=localhost
 dbuser=root
 dbpasswd=Password12!
@@ -21,6 +20,7 @@ testdb=biosql_test
 
 [pg]
 # Covers DBDRIVER="psycopg2" etc
+# The database and user bellow are created in .appveyor.yml
 dbhost=localhost
 dbuser=biosql_user
 dbpasswd=biosql_pass

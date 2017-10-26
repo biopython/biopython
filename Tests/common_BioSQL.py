@@ -98,7 +98,7 @@ def check_config(dbdriver, dbtype, dbhost, dbuser, dbpasswd, testdb):
         try:
             if DBDRIVER in ["MySQLdb"]:
                 import com.mysql.jdbc.Driver
-            elif DBDRIVER in ["psycopg2"]:
+            elif DBDRIVER in ["psycopg2", "pgdb"]:
                 import org.postgresql.Driver
         except ImportError:
             message = "Install the JDBC driver for %s to use BioSQL " % DBTYPE
@@ -136,7 +136,7 @@ def _do_db_cleanup():
     Relevant for MySQL and PostgreSQL.
     """
 
-    if DBDRIVER == "psycopg2":
+    if DBDRIVER in ["psycopg2", "pgdb"]:
         # first open a connection the database
         # notice that postgres doesn't have createdb privileges, so
         # the TESTDB must exist
