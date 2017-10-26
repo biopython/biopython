@@ -129,10 +129,11 @@ functions imported to the ``Bio.PDB`` namespace.
 
 As of Release 1.70, the module has been renamed ``Bio.PDB.vectors``, leaving
 ``Bio.PDB.Vector`` to unambiguously mean the class. This is in line with the
-PEP8 naming conventions.
+PEP8 naming conventions. A deprecated compatibility stub was left in place
+so that any imports via the old module name will work but raise a warning.
 
-We expect this to have no impact for the vast majority of users, unless you
-do something like ``from Bio.PDB.Vector import calc_dihedral`` in which case
+We expect this to have no impact for the majority of users, unless you do
+something like ``from Bio.PDB.Vector import calc_dihedral`` in which case
 use ``from Bio.PDB import calc_dihedral`` (which will work on older versions
 of Biopython as well).
 
