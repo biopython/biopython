@@ -1,6 +1,6 @@
-"""Depecated in favor of Bio.PDB.vectors to solve name collision.
+"""Deprecated in favor of Bio.PDB.vectors to solve name collision.
 
-Histoically the meaning of ``Bio.PDB.Vector`` has been ambiguous,
+Historically the meaning of ``Bio.PDB.Vector`` has been ambiguous,
 both a class ``Vector`` and the module which defines this class
 and related functions (``Bio/PDB/Vector.py``).
 
@@ -8,7 +8,7 @@ The module has been renamed to ``Bio.PDB.vectors`` (lower case
 in line with PEP8 guidelines).
 
 Please use the following style imports in order to work on both
-old and new versions of Biopthon:
+old and new versions of Biopython:
 
 >>> from Bio.PDB import calc_angle
 >>> from Bio.PDB import calc_dihedral
