@@ -23,9 +23,7 @@ help:
 	@echo "  pickle      to make pickle files"
 	@echo "  json        to make JSON files"
 	@echo "  htmlhelp    to make HTML files and an HTML help project"
-	@echo "  qthelp      to make HTML files and a qthelp project"
 	@echo "  applehelp   to make an Apple Help Book"
-	@echo "  devhelp     to make HTML files and a Devhelp project"
 	@echo "  epub        to make an epub"
 	@echo "  epub3       to make an epub3"
 	@echo "  latex       to make LaTeX files, you can set PAPER=a4 or PAPER=letter"
@@ -87,16 +85,6 @@ htmlhelp:
 	@echo "Build finished; now you can run HTML Help Workshop with the" \
 	      ".hhp project file in $(BUILDDIR)/htmlhelp."
 
-.PHONY: qthelp
-qthelp:
-	$(SPHINXBUILD) -b qthelp $(ALLSPHINXOPTS) $(BUILDDIR)/qthelp
-	@echo
-	@echo "Build finished; now you can run "qcollectiongenerator" with the" \
-	      ".qhcp project file in $(BUILDDIR)/qthelp, like this:"
-	@echo "# qcollectiongenerator $(BUILDDIR)/qthelp/Bio.qhcp"
-	@echo "To view the help file:"
-	@echo "# assistant -collectionFile $(BUILDDIR)/qthelp/Bio.qhc"
-
 .PHONY: applehelp
 applehelp:
 	$(SPHINXBUILD) -b applehelp $(ALLSPHINXOPTS) $(BUILDDIR)/applehelp
@@ -105,16 +93,6 @@ applehelp:
 	@echo "N.B. You won't be able to view it unless you put it in" \
 	      "~/Library/Documentation/Help or install it in your application" \
 	      "bundle."
-
-.PHONY: devhelp
-devhelp:
-	$(SPHINXBUILD) -b devhelp $(ALLSPHINXOPTS) $(BUILDDIR)/devhelp
-	@echo
-	@echo "Build finished."
-	@echo "To view the help file:"
-	@echo "# mkdir -p $$HOME/.local/share/devhelp/Bio"
-	@echo "# ln -s $(BUILDDIR)/devhelp $$HOME/.local/share/devhelp/Bio"
-	@echo "# devhelp"
 
 .PHONY: epub
 epub:
