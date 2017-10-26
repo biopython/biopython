@@ -5,7 +5,7 @@
 
 """Code to access resources at ExPASy over the WWW.
 
-See http://www.expasy.org/
+See https://www.expasy.org/
 
 
 Functions:
@@ -25,7 +25,7 @@ from Bio._py3k import _binary_to_string_handle
 
 
 def get_prodoc_entry(id,
-                     cgi='http://prosite.expasy.org/cgi-bin/prosite/get-prodoc-entry'):
+                     cgi='https://prosite.expasy.org/cgi-bin/prosite/get-prodoc-entry'):
     """Get a text handle to a PRODOC entry at ExPASy in HTML format.
 
     >>> from Bio import ExPASy
@@ -43,7 +43,7 @@ def get_prodoc_entry(id,
 
 
 def get_prosite_entry(id,
-                      cgi='http://prosite.expasy.org/cgi-bin/prosite/get-prosite-entry'):
+                      cgi='https://prosite.expasy.org/cgi-bin/prosite/get-prosite-entry'):
     """Get a text handle to a PROSITE entry at ExPASy in HTML format.
 
     >>> from Bio import ExPASy
@@ -85,7 +85,7 @@ def get_prosite_raw(id, cgi=None):
     urllib.error.HTTPError: HTTP Error 404: Not Found
 
     """
-    url = "http://prosite.expasy.org/%s.txt" % id
+    url = "https://prosite.expasy.org/%s.txt" % id
     return _binary_to_string_handle(_urlopen(url))
 
 
@@ -93,7 +93,7 @@ def get_sprot_raw(id):
     """Get a text handle to a raw SwissProt entry at ExPASy.
 
     For an ID of XXX, fetches http://www.uniprot.org/uniprot/XXX.txt
-    (as per the http://www.expasy.org/expasy_urls.html documentation).
+    (as per the https://www.expasy.org/expasy_urls.html documentation).
 
     >>> from Bio import ExPASy
     >>> from Bio import SwissProt
@@ -116,7 +116,7 @@ def get_sprot_raw(id):
 
 
 def sprot_search_ful(text, make_wild=None, swissprot=1, trembl=None,
-                     cgi='http://www.expasy.org/cgi-bin/sprot-search-ful'):
+                     cgi='https://www.expasy.org/cgi-bin/sprot-search-ful'):
     """Search SwissProt by full text (BROKEN)."""
     variables = {'SEARCH': text}
     if make_wild:
@@ -132,7 +132,7 @@ def sprot_search_ful(text, make_wild=None, swissprot=1, trembl=None,
 
 
 def sprot_search_de(text, swissprot=1, trembl=None,
-                    cgi='http://www.expasy.org/cgi-bin/sprot-search-de'):
+                    cgi='https://www.expasy.org/cgi-bin/sprot-search-de'):
     """Search SwissProt (BROKEN).
 
     Search by name, description, gene name, species, or organelle.

@@ -5,7 +5,7 @@
 
 """Code to work with the prosite.doc file from Prosite.
 
-See http://www.expasy.org/prosite/
+See https://www.expasy.org/prosite/
 
 Tested with:
  - Release 15.0, July 1998
