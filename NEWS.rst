@@ -55,6 +55,7 @@ possible, especially the following contributors:
 - Francesco Gastaldello
 - Joe Greener (first contribution)
 - João Rodrigues
+- Jeroen Van Goey
 - Jun Aruga (first contribution)
 - Kai Blin
 - Kozo Nishida
