@@ -219,14 +219,9 @@ class EntrezOnlineCase(unittest.TestCase):
         self.assertIn(URL_EMAIL, handle.url)
         self.assertIn("id=200079209", handle.url)
         result = handle.read()
-        expected_result = u'“field of injury”' # Use of Unicode double qoutation marks U+201C and U+201D
+        expected_result = u'“field of injury”'  # Use of Unicode double qoutation marks U+201C and U+201D
         self.assertEqual(result[342:359], expected_result)
         handle.close()
-
-
-
-
-
 
 # NCBI XML does not currently match the XSD file
 #    def test_fetch_xml_schemas(self):
