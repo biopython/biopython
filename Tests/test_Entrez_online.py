@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Copyright 2012 by Wibowo Arindrarto.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -218,7 +219,7 @@ class EntrezOnlineCase(unittest.TestCase):
         self.assertIn(URL_EMAIL, handle.url)
         self.assertIn("id=200079209", handle.url)
         result = handle.read()
-        expected_result = '“field of injury”' # Use of Unicode double qoutation marks U+201C and U+201D
+        expected_result = u'“field of injury”' # Use of Unicode double qoutation marks U+201C and U+201D
         self.assertEqual(result[342:359], expected_result)
         handle.close()
 
