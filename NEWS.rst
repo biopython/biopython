@@ -53,6 +53,7 @@ possible, especially the following contributors:
 - Christian Brueffer
 - Erik Cederstrand (first contribution)
 - Francesco Gastaldello
+- Jerven Bolleman (first contribution)
 - Joe Greener (first contribution)
 - João Rodrigues
 - Jun Aruga (first contribution)

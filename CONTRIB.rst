@@ -114,6 +114,7 @@ please open an issue on GitHub or mention it on the development mailing list.
 - Jeffrey Chang <jchang at domain smi.stanford.edu>
 - Jeffrey Finkelstein <jeffrey.finkelstein at domain gmail.com>
 - Jeroen Van Goey <https://github.com/BioGeek>
+- Jerven Bolleman <https://github.com/JervenBolleman>
 - Jimmy O'Donnell <https://github.com/jimmyodonnell>
 - Joanna & Dominik Kasprzak
 - Joao Rodrigues <anaryin at the domain gmail dot com>
