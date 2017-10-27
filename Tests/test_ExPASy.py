@@ -40,7 +40,7 @@ class ExPASyOnlineTests(unittest.TestCase):
         handle = ExPASy.get_prosite_entry('PS00001')
         html = handle.read()
         self.assertEqual(handle.url,
-                         'http://prosite.expasy.org/cgi-bin/prosite/get-prosite-entry?PS00001')
+                         'https://prosite.expasy.org/cgi-bin/prosite/get-prosite-entry?PS00001')
         handle.close()
         self.assertTrue('<title>PROSITE: PS00001</title>' in html)
 
@@ -48,7 +48,7 @@ class ExPASyOnlineTests(unittest.TestCase):
         handle = ExPASy.get_prodoc_entry('PDOC00001')
         html = handle.read()
         self.assertEqual(handle.url,
-                         'http://prosite.expasy.org/cgi-bin/prosite/get-prodoc-entry?PDOC00001')
+                         'https://prosite.expasy.org/cgi-bin/prosite/get-prodoc-entry?PDOC00001')
         handle.close()
         self.assertTrue('{PS00001; ASN_GLYCOSYLATION}' in html)
 

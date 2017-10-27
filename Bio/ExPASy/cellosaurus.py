@@ -5,7 +5,7 @@
 
 """Parser for the cellosaurus.txt file from ExPASy.
 
-See http://web.expasy.org/cellosaurus/
+See https://web.expasy.org/cellosaurus/
 
 Tested with the release of Version 18 (July 2016).
 
