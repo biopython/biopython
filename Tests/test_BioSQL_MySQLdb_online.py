@@ -3,7 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Run BioSQL tests using SQLite"""
+"""Run BioSQL tests using MySQL"""
 
 import unittest
 
