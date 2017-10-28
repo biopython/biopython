@@ -196,7 +196,7 @@ class MMCIFIO(object):
                     for val in self.dic[key + "." + i]:
                         l = len(val)
                         # If the value requires quoting it will add 2 characters
-                        if self._requires_quote(val):
+                        if self._requires_quote(val) and not self._requires_newline(val):
                             l += 2
                         if l > col_widths[i]:
                             col_widths[i] = l
@@ -249,6 +249,7 @@ class MMCIFIO(object):
     def _get_label_asym_id(self, entity_id):
         # Convert a positive integer into a chain ID
         # Goes A to Z, then AA to ZA, AB to ZB etc
+        # This is in line with existing mmCIF files
         div = entity_id
         out = ""
         while div > 0:
