@@ -30,6 +30,7 @@ from Bio.Data.SCOPData import protein_letters_3to1
 
 # IO of PDB files (including flexible selective output)
 from .PDBIO import PDBIO, Select
+from .mmcifio import MMCIFIO
 
 # Some methods to eg. get a list of Residues
 # from a list of Atoms.
