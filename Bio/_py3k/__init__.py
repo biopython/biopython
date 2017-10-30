@@ -100,11 +100,8 @@ if sys.version_info[0] >= 3:
     def _binary_to_string_handle(handle):
         """Treat a binary (bytes) handle like a text (unicode) handle."""
         try:
-<<<<<<< HEAD
-=======
             # If this is a network handle from urllib,
             # the HTTP headers may tell us the encoding.
->>>>>>> upstream/master
             encoding = handle.headers.get_content_charset()
         except AttributeError:
             encoding = locale.getpreferredencoding(False)
