@@ -55,6 +55,7 @@ class MMCIFIO(object):
     """
 
     def __init__(self):
+        """Initialise."""
         pass
 
     def set_structure(self, pdb_object):
@@ -198,12 +199,12 @@ class MMCIFIO(object):
                     out_file.write(key + "." + i + "\n")
                     col_widths[i] = 0
                     for val in self.dic[key + "." + i]:
-                        l = len(val)
+                        len_val = len(val)
                         # If the value requires quoting it will add 2 characters
                         if self._requires_quote(val) and not self._requires_newline(val):
-                            l += 2
-                        if l > col_widths[i]:
-                            col_widths[i] = l
+                            len_val += 2
+                        if len_val > col_widths[i]:
+                            col_widths[i] = len_val
                 # Technically the max of the sum of the column widths is 2048
 
                 # Write the values as rows
