@@ -171,6 +171,24 @@ If this is all too complicated for you, the \texttt{Dice} module contains
 a handy \texttt{extract} function that writes out all residues in
 a chain between a start and end residue.
 
+\subsection{Writing mmCIF files}
+
+A similar interface can be used to write structures to the mmCIF file format:
+
+\begin{verbatim}
+>>> io = MMCIFIO()
+>>> io.set_structure(s)
+>>> io.save('out.cif')
+\end{verbatim}
+The \texttt{Select} class can be used in a similar way to \texttt{PDBIO} above.
+mmCIF dictionaries can also be written:
+
+\begin{verbatim}
+>>> io = MMCIFIO()
+>>> io.set_dict(d)
+>>> io.save('out.cif')
+\end{verbatim}
+
 \section{Structure representation}
 
 The overall layout of a \texttt{Structure} object follows the so-called SMCRA
@@ -1221,4 +1239,3 @@ used by several LPCs (Large Pharmaceutical Companies :-).
 
 % Perhaps this section should be updated for other Biopython modules, and
 % moved to the Biopython FAQ above.
-
