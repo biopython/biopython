@@ -996,7 +996,7 @@ class WriteTest(unittest.TestCase):
             os.remove(filename)
 
     def test_mmcifio_multimodel(self):
-        """Write an multi-model, multi-chain mmCIF file."""
+        """Write a multi-model, multi-chain mmCIF file."""
         pdb_struct = self.parser.get_structure("1SSU_mod_pdb", self.mmcif_multimodel_pdb_file)
         mmcif_struct = self.mmcif_parser.get_structure("1SSU_mod_mmcif", self.mmcif_multimodel_mmcif_file)
         io = MMCIFIO()
