@@ -84,10 +84,13 @@ class PDBList(object):
     """
 
     def __init__(self, server='ftp://ftp.wwpdb.org', pdb=os.getcwd(),
-                 obsolete_pdb=None):
+                 obsolete_pdb=None, verbose=True):
         """Initialize the class with the default server or a custom one."""
         self.pdb_server = server  # remote pdb server
         self.local_pdb = pdb  # local pdb file tree
+
+        # enable or disable verbose
+        self._verbose=verbose
 
         # local file tree for obsolete pdb files
         if obsolete_pdb:
@@ -157,7 +160,8 @@ class PDBList(object):
         Returns a list of PDB codes in the index file.
         """
         url = self.pdb_server + '/pub/pdb/derived_data/index/entries.idx'
-        print("Retrieving index file. Takes about 27 MB.")
+        if self._verbose:
+            print("Retrieving index file. Takes about 27 MB.")
         with contextlib.closing(_urlopen(url)) as handle:
             all_entries = [_as_string(line[:4]) for line in handle.readlines()[2:]
                            if len(line) > 4]
@@ -280,11 +284,13 @@ class PDBList(object):
         # Skip download if the file already exists
         if not overwrite:
             if os.path.exists(final_file):
-                print("Structure exists: '%s' " % final_file)
+                if self._verbose:
+                    print("Structure exists: '%s' " % final_file)
                 return final_file
 
         # Retrieve the file
-        print("Downloading PDB structure '%s'..." % pdb_code)
+        if self._verbose:
+            print("Downloading PDB structure '%s'..." % pdb_code)
         try:
             _urlcleanup()
             _urlretrieve(url, filename)
@@ -339,9 +345,11 @@ class PDBList(object):
                 except Exception:
                     print("Could not move %s to obsolete folder" % old_file)
             elif os.path.isfile(new_file):
-                print("Obsolete file %s already moved" % old_file)
+                if self._verbose:
+                    print("Obsolete file %s already moved" % old_file)
             else:
-                print("Obsolete file %s is missing" % old_file)
+                if self._verbose:
+                    print("Obsolete file %s is missing" % old_file)
 
     def download_pdb_files(self, pdb_codes, obsolete=False, pdir=None, file_format=None, overwrite=False):
         """Fetch set of PDB structure files from the PDB server and stores them locally.
@@ -432,7 +440,8 @@ class PDBList(object):
 
     def get_seqres_file(self, savefile='pdb_seqres.txt'):
         """Retrieve and save a (big) file containing all the sequences of PDB entries."""
-        print("Retrieving sequence file (takes over 110 MB).")
+        if self._verbose:
+            print("Retrieving sequence file (takes over 110 MB).")
         url = self.pdb_server + '/pub/pdb/derived_data/pdb_seqres.txt'
         _urlretrieve(url, savefile)
 
