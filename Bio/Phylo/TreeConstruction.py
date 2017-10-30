@@ -39,9 +39,8 @@ class _Matrix(object):
         matrix : list
             nested list of numerical lists in lower triangular format
 
-    Example
-    -------
-
+    Examples
+    --------
     >>> from Bio.Phylo.TreeConstruction import _Matrix
     >>> names = ['Alpha', 'Beta', 'Gamma', 'Delta']
     >>> matrix = [[0], [1, 0], [2, 3, 0], [4, 5, 6, 0]]
@@ -366,9 +365,8 @@ class DistanceCalculator(object):
             names for DNA sequences and `protein_matrices` for protein
             sequences.
 
-    Example
-    -------
-
+    Examples
+    --------
     >>> from Bio.Phylo.TreeConstruction import DistanceCalculator
     >>> from Bio import AlignIO
     >>> aln = AlignIO.read(open('Tests/TreeConstruction/msa.phy'), 'phylip')
@@ -540,9 +538,8 @@ class DistanceTreeConstructor(TreeConstructor):
             The distance matrix calculator for multiple sequence alignment.
             It must be provided if `build_tree` will be called.
 
-    Example
+    Examples
     --------
-
     >>> from TreeConstruction import DistanceTreeConstructor
     >>> constructor = DistanceTreeConstructor()
 
@@ -1049,9 +1046,8 @@ class ParsimonyTreeConstructor(TreeConstructor):
         starting_tree : Tree
             starting tree provided to the searcher.
 
-    Example
-    -------
-
+    Examples
+    --------
     >>> from Bio import AlignIO
     >>> from TreeConstruction import *
     >>> aln = AlignIO.read(open('Tests/TreeConstruction/msa.phy'), 'phylip')
@@ -1089,6 +1085,7 @@ class ParsimonyTreeConstructor(TreeConstructor):
                     Clade(branch_length=0.17523, name='Gamma')
                     Clade(branch_length=0.07477, name='Beta')
                 Clade(branch_length=0.29231, name='Alpha')
+
     """
 
     def __init__(self, searcher, starting_tree=None):

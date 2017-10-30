@@ -1192,8 +1192,8 @@ class DiffseqCommandline(_EmbossCommandLine):
 class IepCommandline(_EmbossCommandLine):
     """Commandline for EMBOSS iep: calculated isoelectric point and charge.
 
-    Example:
-
+    Examples
+    --------
     >>> from Bio.Emboss.Applications import IepCommandline
     >>> iep_cline = IepCommandline(sequence="proteins.faa",
     ...                            outfile="proteins.txt")
@@ -1202,6 +1202,7 @@ class IepCommandline(_EmbossCommandLine):
 
     You would typically run the command line with iep_cline() or via the
     Python subprocess module, as described in the Biopython tutorial.
+
     """
 
     def __init__(self, cmd="iep", **kwargs):

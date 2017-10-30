@@ -14,9 +14,20 @@ class MuscleCommandline(AbstractCommandline):
 
     http://www.drive5.com/muscle/
 
-    Example:
-    --------
+    Notes
+    -----
+    Last checked against version: 3.7, briefly against 3.8
 
+    References
+    ----------
+    Edgar, Robert C. (2004), MUSCLE: multiple sequence alignment with high
+    accuracy and high throughput, Nucleic Acids Research 32(5), 1792-97.
+
+    Edgar, R.C. (2004) MUSCLE: a multiple sequence alignment method with
+    reduced time and space complexity. BMC Bioinformatics 5(1): 113.
+
+    Examples
+    --------
     >>> from Bio.Align.Applications import MuscleCommandline
     >>> muscle_exe = r"C:\Program Files\Aligments\muscle3.8.31_i86win32.exe"
     >>> in_file = r"C:\My Documents\unaligned.fasta"
@@ -28,16 +39,6 @@ class MuscleCommandline(AbstractCommandline):
     You would typically run the command line with muscle_cline() or via
     the Python subprocess module, as described in the Biopython tutorial.
 
-    Citations:
-    ----------
-
-    Edgar, Robert C. (2004), MUSCLE: multiple sequence alignment with high
-    accuracy and high throughput, Nucleic Acids Research 32(5), 1792-97.
-
-    Edgar, R.C. (2004) MUSCLE: a multiple sequence alignment method with
-    reduced time and space complexity. BMC Bioinformatics 5(1): 113.
-
-    Last checked against version: 3.7, briefly against 3.8
     """
 
     def __init__(self, cmd="muscle", **kwargs):

@@ -14,13 +14,15 @@ from Bio import motifs
 def read(handle):
     """Parse the text output of the MEME program into a meme.Record object.
 
-    Example:
+    Examples
+    --------
     >>> from Bio.motifs import meme
     >>> with open("meme.output.txt") as f:
     ...     record = meme.read(f)
     >>> for motif in record:
     ...     for instance in motif.instances:
     ...         print(instance.motif_name, instance.sequence_name, instance.strand, instance.pvalue)
+
     """
     record = Record()
     __read_version(record, handle)

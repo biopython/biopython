@@ -17,8 +17,22 @@ class XXmotifCommandline(AbstractCommandline):
 
     http://xxmotif.genzentrum.lmu.de/
 
-    Example:
+    Notes
+    -----
+    Last checked against version: 1.3
 
+    References
+    ----------
+    Luehr S, Hartmann H, and Söding J. The XXmotif web server for eXhaustive,
+    weight matriX-based motif discovery in nucleotide sequences,
+    Nucleic Acids Res. 40: W104-W109 (2012).
+
+    Hartmann H, Guthoehrlein EW, Siebert M., Luehr S, and Söding J. P-value
+    based regulatory motif discovery using positional weight matrices,
+    Genome Res. 23: 181–194 (2013)
+
+    Examples
+    --------
     >>> from Bio.motifs.applications import XXmotifCommandline
     >>> out_dir = "results"
     >>> in_file = "sequences.fasta"
@@ -29,17 +43,6 @@ class XXmotifCommandline(AbstractCommandline):
     You would typically run the command line with xxmotif_cline() or via
     the Python subprocess module, as described in the Biopython tutorial.
 
-    Citations:
-
-    Luehr S, Hartmann H, and Söding J. The XXmotif web server for eXhaustive,
-    weight matriX-based motif discovery in nucleotide sequences,
-    Nucleic Acids Res. 40: W104-W109 (2012).
-
-    Hartmann H, Guthoehrlein EW, Siebert M., Luehr S, and Söding J. P-value
-    based regulatory motif discovery using positional weight matrices,
-    Genome Res. 23: 181–194 (2013)
-
-    Last checked against version: 1.3
     """
 
     def __init__(self, cmd="XXmotif", **kwargs):

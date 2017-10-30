@@ -16,10 +16,8 @@ file format at http://samtools.sourceforge.net/SAM1.pdf
 Please read the text below about 'virtual offsets' before using BGZF
 files for random access.
 
-
 Aim of this module
 ------------------
-
 The Python gzip library can be used to read BGZF files, since for
 decompression they are just (specialised) gzip files. What this
 module aims to facilitate is random access to BGZF files (using the
@@ -36,10 +34,8 @@ FASTQ, GenBank, etc) or large MAF alignments.
 
 The Bio.SeqIO indexing functions use this module to support BGZF files.
 
-
 Technical Introduction to BGZF
 ------------------------------
-
 The gzip file format allows multiple compressed blocks, each of which
 could be a stand alone gzip file. As an interesting bonus, this means
 you can use Unix ``cat`` to combine two or more gzip files into one by
@@ -83,10 +79,8 @@ is at most 2^16 bytes, or 64kb. Note that this matches the BGZF
 compression (useful for intermediate files in memory to reduce
 CPU load).
 
-
 Warning about namespaces
 ------------------------
-
 It is considered a bad idea to use "from XXX import ``*``" in Python, because
 it pollutes the namespace. This is a real issue with Bio.bgzf (and the
 standard Python library gzip) because they contain a function called open
@@ -118,9 +112,8 @@ However, what we recommend instead is to use the explicit namespace, e.g.
 Bio.bgzf
 
 
-Example
--------
-
+Examples
+--------
 This is an ordinary GenBank file compressed using BGZF, so it can
 be decompressed using gzip,
 

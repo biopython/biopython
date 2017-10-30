@@ -21,9 +21,8 @@ class BwaIndexCommandline(AbstractCommandline):
 
     See http://bio-bwa.sourceforge.net/bwa.shtml for details.
 
-    Example
-    -------
-
+    Examples
+    --------
     >>> from Bio.Sequencing.Applications import BwaIndexCommandline
     >>> reference_genome = "/path/to/reference_genome.fasta"
     >>> index_cmd = BwaIndexCommandline(infile=reference_genome, algorithm="bwtsw")
@@ -72,8 +71,8 @@ class BwaAlignCommandline(AbstractCommandline):
 
     See http://bio-bwa.sourceforge.net/bwa.shtml for details.
 
-    Example:
-
+    Examples
+    --------
     >>> from Bio.Sequencing.Applications import BwaAlignCommandline
     >>> reference_genome = "/path/to/reference_genome.fasta"
     >>> read_file = "/path/to/read_1.fq"
@@ -85,6 +84,7 @@ class BwaAlignCommandline(AbstractCommandline):
 
     You would typically run the command line using align_cmd(stdout=output_sai_file)
     or via the Python subprocess module, as described in the Biopython tutorial.
+
     """
 
     def __init__(self, cmd="bwa", **kwargs):
@@ -185,8 +185,8 @@ class BwaSamseCommandline(AbstractCommandline):
 
     See http://bio-bwa.sourceforge.net/bwa.shtml for details.
 
-    Example:
-
+    Examples
+    --------
     >>> from Bio.Sequencing.Applications import BwaSamseCommandline
     >>> reference_genome = "/path/to/reference_genome.fasta"
     >>> read_file = "/path/to/read_1.fq"
@@ -199,6 +199,7 @@ class BwaSamseCommandline(AbstractCommandline):
 
     You would typically run the command line using samse_cmd(stdout=output_sam_file)
     or via the Python subprocess module, as described in the Biopython tutorial.
+
     """
 
     def __init__(self, cmd="bwa", **kwargs):
@@ -233,8 +234,8 @@ class BwaSampeCommandline(AbstractCommandline):
 
     See http://bio-bwa.sourceforge.net/bwa.shtml for details.
 
-    Example:
-
+    Examples
+    --------
     >>> from Bio.Sequencing.Applications import BwaSampeCommandline
     >>> reference_genome = "/path/to/reference_genome.fasta"
     >>> read_file1 = "/path/to/read_1.fq"
@@ -252,6 +253,7 @@ class BwaSampeCommandline(AbstractCommandline):
 
     You would typically run the command line using sampe_cmd(stdout=output_sam_file)
     or via the Python subprocess module, as described in the Biopython tutorial.
+
     """
 
     # TODO - Should the read group have a raw tab in it, or \t?
@@ -308,8 +310,8 @@ class BwaBwaswCommandline(AbstractCommandline):
 
     See http://bio-bwa.sourceforge.net/bwa.shtml for details.
 
-    Example:
-
+    Examples
+    --------
     >>> from Bio.Sequencing.Applications import BwaBwaswCommandline
     >>> reference_genome = "/path/to/reference_genome.fasta"
     >>> read_file = "/path/to/read_1.fq"
@@ -319,6 +321,7 @@ class BwaBwaswCommandline(AbstractCommandline):
 
     You would typically run the command line using bwasw_cmd() or via the
     Python subprocess module, as described in the Biopython tutorial.
+
     """
 
     def __init__(self, cmd="bwa", **kwargs):

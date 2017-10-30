@@ -57,8 +57,8 @@ class Record(object):
      - seqinfo           tuple of (length, molecular weight, CRC32 value)
      - sequence          The sequence.
 
-    Example:
-
+    Examples
+    --------
     >>> import Bio.SwissProt as sp
     >>> example_filename = "SwissProt/sp008"
     >>> with open(example_filename) as handle:
@@ -112,7 +112,7 @@ class Record(object):
 class Reference(object):
     """Holds information from one reference in a SwissProt entry.
 
-    Attribues:
+    Attributes:
      - number      Number of reference in an entry.
      - evidence    Evidence code.  List of strings.
      - positions   Describes extent of work.  List of strings.

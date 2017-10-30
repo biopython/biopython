@@ -15,9 +15,18 @@ class ProbconsCommandline(AbstractCommandline):
 
     http://probcons.stanford.edu/
 
-    Example:
-    --------
+    Notes
+    -----
+    Last checked against version: 1.12
 
+    References
+    ----------
+    Do, C.B., Mahabhashyam, M.S.P., Brudno, M., and Batzoglou, S. 2005.
+    PROBCONS: Probabilistic Consistency-based Multiple Sequence Alignment.
+    Genome Research 15: 330-340.
+
+    Examples
+    --------
     To align a FASTA file (unaligned.fasta) with the output in ClustalW
     format, and otherwise default settings, use:
 
@@ -29,6 +38,7 @@ class ProbconsCommandline(AbstractCommandline):
 
     You would typically run the command line with probcons_cline() or via
     the Python subprocess module, as described in the Biopython tutorial.
+
     Note that PROBCONS will write the alignment to stdout, which you may
     want to save to a file and then parse, e.g.::
 
@@ -46,14 +56,6 @@ class ProbconsCommandline(AbstractCommandline):
         from Bio import AlignIO
         align = AlignIO.read(StringIO(stdout), "clustalw")
 
-    Citations:
-    ----------
-
-    Do, C.B., Mahabhashyam, M.S.P., Brudno, M., and Batzoglou, S. 2005.
-    PROBCONS: Probabilistic Consistency-based Multiple Sequence Alignment.
-    Genome Research 15: 330-340.
-
-    Last checked against version: 1.12
     """
 
     def __init__(self, cmd="probcons", **kwargs):

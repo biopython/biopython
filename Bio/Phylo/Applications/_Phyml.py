@@ -14,8 +14,8 @@ class PhymlCommandline(AbstractCommandline):
 
     Homepage: http://www.atgc-montpellier.fr/phyml
 
-    Citations:
-
+    References
+    ----------
     Guindon S, Gascuel O.
     A simple, fast, and accurate algorithm to estimate large phylogenies by maximum
     likelihood.
