@@ -812,6 +812,8 @@ class WriteTest(unittest.TestCase):
             self.mmcif_parser = MMCIFParser()
             self.structure = self.parser.get_structure("example", "PDB/1A8O.pdb")
             self.mmcif_file = "PDB/1A8O.cif"
+            self.mmcif_multimodel_pdb_file = "PDB/1SSU_mod.pdb"
+            self.mmcif_multimodel_mmcif_file = "PDB/1SSU_mod.cif"
 
     def test_pdbio_write_structure(self):
         """Write a full structure using PDBIO."""
@@ -992,6 +994,24 @@ class WriteTest(unittest.TestCase):
                 self.assertEqual(d1[key], d2[key])
         finally:
             os.remove(filename)
+
+    def test_mmcifio_multimodel(self):
+        """Write an multi-model, multi-chain mmCIF file."""
+        pdb_struct = self.parser.get_structure("1SSU_mod_pdb", self.mmcif_multimodel_pdb_file)
+        mmcif_struct = self.mmcif_parser.get_structure("1SSU_mod_mmcif", self.mmcif_multimodel_mmcif_file)
+        io = MMCIFIO()
+        for struct in [pdb_struct, mmcif_struct]:
+            io.set_structure(struct)
+            filenumber, filename = tempfile.mkstemp()
+            os.close(filenumber)
+            try:
+                io.save(filename)
+                struct_in = self.mmcif_parser.get_structure("1SSU_mod_in", filename)
+                self.assertEqual(len(struct_in), 2)
+                self.assertEqual(len(struct_in[1]), 2)
+                self.assertEqual(round(struct_in[1]["B"][1]["N"].get_coord()[0], 3), 6.259)
+            finally:
+                os.remove(filename)
 
 
 class Exposure(unittest.TestCase):
