@@ -350,7 +350,7 @@ class Atom(object):
         """Return coordinates as Vector.
 
         :return: coordinates as 3D vector
-        :rtype: Vector
+        :rtype: Bio.PDB.Vector class
         """
         x, y, z = self.coord
         return Vector(x, y, z)
