@@ -331,7 +331,9 @@ class MMCIFIO(object):
                             atom_dict["_atom_site.label_alt_id"].append(altloc)
                             atom_dict["_atom_site.label_comp_id"].append(resname.strip())
                             atom_dict["_atom_site.label_asym_id"].append(label_asym_id)
-                            atom_dict["_atom_site.label_entity_id"].append(str(entity_id))
+                            # The entity ID should be the same for similar chains
+                            # However this is non-trivial to calculate so we write "?"
+                            atom_dict["_atom_site.label_entity_id"].append("?")
                             atom_dict["_atom_site.label_seq_id"].append(label_seq_id)
                             atom_dict["_atom_site.pdbx_PDB_ins_code"].append(icode)
                             coord = atom.get_coord()
