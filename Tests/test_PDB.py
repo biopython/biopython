@@ -1463,7 +1463,7 @@ class CopyTests(unittest.TestCase):
         self.assertFalse(self.a is aa)
         self.assertFalse(self.a.get_coord() is aa.get_coord())
 
-    def test_entitity_copy(self):
+    def test_entity_copy(self):
         """Make a copy of a residue."""
         for e in (self.s, self.m, self.c, self.r):
             ee = e.copy()
