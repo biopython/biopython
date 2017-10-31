@@ -890,7 +890,7 @@ class BioSeqDatabase(object):
         global _POSTGRES_RULES_PRESENT
         for cur_record in record_iterator:
             num_records += 1
-            # Hack to work arround BioSQL Bug 2839 - If using PostgreSQL and
+            # Hack to work around BioSQL Bug 2839 - If using PostgreSQL and
             # the RULES are present check for a duplicate record before loading
             if _POSTGRES_RULES_PRESENT:
                 # Recreate what the Loader's _load_bioentry_table will do:
