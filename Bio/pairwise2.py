@@ -777,7 +777,7 @@ def _recover_alignments(sequenceA, sequenceB, starts, score_matrix,
 
             # If trace is empty we have reached at least one border of the
             # matrix or the end of a local aligment. Just add the rest of
-            # the sequence(s) and fill with gaps if neccessary.
+            # the sequence(s) and fill with gaps if necessary.
             if not trace:
                 if col and col_gap:
                     dead_end = True
@@ -892,7 +892,7 @@ def _clean_alignments(alignments):
 
 def _finish_backtrace(sequenceA, sequenceB, ali_seqA, ali_seqB, row, col,
                       gap_char):
-    """Add remaining sequences and fill with gaps if neccessary (PRIVATE)."""
+    """Add remaining sequences and fill with gaps if necessary (PRIVATE)."""
     if row:
         ali_seqA += sequenceA[row - 1::-1]
     if col:
