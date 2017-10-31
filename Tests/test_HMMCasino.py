@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """Test out HMMs using the Occasionally Dishonest Casino.
 
-This uses the ocassionally dishonest casino example from Biological
+This uses the occasionally dishonest casino example from Biological
 Sequence Analysis by Durbin et al.
 
 In this example, we are dealing with a casino that has two types of
