@@ -89,7 +89,7 @@ class PlateRecord(object):
     >>> 'A01' in plate
     True
 
-    All the wells belonging to a "row" (identified by the first charachter of
+    All the wells belonging to a "row" (identified by the first character of
     the well id) in the plate can be obtained:
 
     >>> for well in plate.get_row('H'):
