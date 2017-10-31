@@ -14,6 +14,7 @@ scope of this file as they are already covered in test_Entrez.py.
 """
 import doctest
 import os
+import locale
 import sys
 import unittest
 
@@ -213,15 +214,24 @@ class EntrezOnlineCase(unittest.TestCase):
     def test_efetch_gds_utf8(self):
         """Test correct handling of encodings in Entrez.efetch"""
         # See issue #1402
-        handle = Entrez.efetch(db="gds", id='200079209')
-        self.assertTrue(handle.url.startswith(URL_HEAD + "efetch.fcgi?"), handle.url)
-        self.assertIn(URL_TOOL, handle.url)
-        self.assertIn(URL_EMAIL, handle.url)
-        self.assertIn("id=200079209", handle.url)
-        result = handle.read()
-        expected_result = u'“field of injury”'  # Use of Unicode double qoutation marks U+201C and U+201D
-        self.assertEqual(result[342:359], expected_result)
-        handle.close()
+        try:
+            oldloc = locale.setlocale(locale.LC_ALL)
+            locale.setlocale(locale.LC_ALL, 'C')
+        except locale.Error as err:
+            self.skipTest("Cannot set locale: {}".format(err))
+        try:
+            handle = Entrez.efetch(db="gds", id='200079209')
+            self.assertTrue(handle.url.startswith(URL_HEAD + "efetch.fcgi?"), handle.url)
+            self.assertIn(URL_TOOL, handle.url)
+            self.assertIn(URL_EMAIL, handle.url)
+            self.assertIn("id=200079209", handle.url)
+            result = handle.read()
+            expected_result = u'“field of injury”'  # Use of Unicode double qoutation marks U+201C and U+201D
+            self.assertEqual(result[342:359], expected_result)
+            handle.close()
+        finally:
+            locale.setlocale(locale.LC_ALL, oldloc)
+
 
 # NCBI XML does not currently match the XSD file
 #    def test_fetch_xml_schemas(self):
