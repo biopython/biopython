@@ -289,7 +289,7 @@ def search(db, query, offset=None, limit=None, format=None):
 
 
 def convert(data, in_format, out_format):
-    """Call TogoWS for file format convertion.
+    """Call TogoWS for file format conversion.
 
     Arguments:
      - data - string or handle containing input record(s)
