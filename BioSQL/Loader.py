@@ -1053,7 +1053,7 @@ class DatabaseLoader(object):
         """
         # NOTE - In older versions of Biopython, we would map the GenBank
         # db_xref "name", for example "GI" to "GeneIndex", and give a warning
-        # for any unknown terms.  This was a long term maintainance problem,
+        # for any unknown terms.  This was a long term maintenance problem,
         # and differed from BioPerl and BioJava's implementation.  See bug 2405
         for rank, value in enumerate(dbxrefs):
             # Split the DB:accession format string at colons.  We have to
