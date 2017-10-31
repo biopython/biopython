@@ -90,7 +90,7 @@ class PDBList(object):
         self.local_pdb = pdb  # local pdb file tree
 
         # enable or disable verbose
-        self._verbose=verbose
+        self._verbose = verbose
 
         # local file tree for obsolete pdb files
         if obsolete_pdb:
