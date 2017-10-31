@@ -58,7 +58,7 @@ class MutationHelper(object):
 
         percent_mutants = float(num_mutations) / float(self.num_trials)
         assert percent_mutants > expected_percent, \
-               "Did not recieve an acceptable number of mutations."
+               "Did not receive an acceptable number of mutations."
 
     def _never_mutate(self, mutator):
         """Test that a mutator does not cause unexpected mutations.
