@@ -354,7 +354,7 @@ def AbiIterator(handle, alphabet=None, trim=False):
         # handle empty file gracefully
         return
     if marker != b"ABIF":
-        raise IOError('File should start ABIF, not %r' % marker)
+        raise IOError('File should start with ABIF, not %r' % marker)
 
     # dirty hack for handling time information
     times = {'RUND1': '', 'RUND2': '', 'RUNT1': '', 'RUNT2': '', }
