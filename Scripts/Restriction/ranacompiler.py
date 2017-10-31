@@ -806,7 +806,7 @@ class DictionaryBuilder(object):
                 ovhgseq = site[fst3:] + (fst5 - size) * 'N'
             else:
                 #
-                #   should not happend
+                #   should not happen
                 #
                 raise ValueError('Error in #1')
         elif fst3 < 0 and size < fst5:
