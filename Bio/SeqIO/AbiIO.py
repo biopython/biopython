@@ -345,7 +345,7 @@ def AbiIterator(handle, alphabet=None, trim=False):
     # raise exception if handle mode is not 'rb'
     if hasattr(handle, 'mode'):
         if set('rb') != set(handle.mode.lower()):
-            raise ValueError("ABI files has to be opened in 'rb' mode.")
+            raise ValueError("ABI files have to be opened in 'rb' mode.")
 
     # check if input file is a valid Abi file
     handle.seek(0)
@@ -354,7 +354,7 @@ def AbiIterator(handle, alphabet=None, trim=False):
         # handle empty file gracefully
         return
     if marker != b"ABIF":
-        raise IOError('File should start ABIF, not %r' % marker)
+        raise IOError('File should start with ABIF, not %r' % marker)
 
     # dirty hack for handling time information
     times = {'RUND1': '', 'RUND2': '', 'RUNT1': '', 'RUNT2': '', }
