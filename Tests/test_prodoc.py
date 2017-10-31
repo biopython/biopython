@@ -897,7 +897,7 @@ class TestProdocParse(unittest.TestCase):
 Release 20.43 of 10-Feb-2009.
 
 PROSITE is developed by the Swiss Institute of Bioinformatics (SIB) under
-the responsability of Amos Bairoch and Nicolas Hulo.
+the responsibility of Amos Bairoch and Nicolas Hulo.
 
 This release was prepared by: Nicolas Hulo, Virginie Bulliard, Petra
 Langendijk-Genevaux and Christian Sigrist with the help of Edouard
