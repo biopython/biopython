@@ -25,7 +25,7 @@ else:
     maketrans = str.maketrans
 
 # This is just the standard table with less stop codons
-# (replaced with coding for O as an artifical example)
+# (replaced with coding for O as an artificial example)
 special_table = CodonTable(forward_table={
     'TTT': 'F', 'TTC': 'F', 'TTA': 'L', 'TTG': 'L',
     'TCT': 'S', 'TCC': 'S', 'TCA': 'S', 'TCG': 'S',
