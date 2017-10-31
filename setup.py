@@ -158,7 +158,7 @@ def check_dependencies():
     if is_Numpy_installed():
         return True
     if is_jython():
-        return True  # NumPy is not avaliable for Jython (for now)
+        return True  # NumPy is not available for Jython (for now)
     if is_ironpython():
         return True  # We're ignoring NumPy under IronPython (for now)
 
