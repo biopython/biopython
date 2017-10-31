@@ -220,7 +220,7 @@ class StringMethodTests(unittest.TestCase):
             self.assertEqual(Seq(testing_seq).count_overlap("GG", start, end), exp)
             self.assertEqual(MutableSeq(testing_seq).count_overlap("GG", start, end), exp)
 
-        # Testing Seq() and MutableSeq() with a more heterogenous sequenece
+        # Testing Seq() and MutableSeq() with a more heterogeneous sequenece
         self.assertEqual(Seq("GGGTGGTAGGG").count_overlap("GG"), 5)
         self.assertEqual(MutableSeq("GGGTGGTAGGG").count_overlap("GG"), 5)
         self.assertEqual(Seq("GGGTGGTAGGG").count_overlap("GG", 2, 8), 1)
@@ -301,7 +301,7 @@ class StringMethodTests(unittest.TestCase):
             self.assertEqual(Seq(testing_seq).count_overlap("NN", start, end), exp)
             self.assertEqual(MutableSeq(testing_seq).count_overlap("NN", start, end), exp)
 
-        # Testing Seq() and MutableSeq() with a more heterogenous sequenece
+        # Testing Seq() and MutableSeq() with a more heterogeneous sequenece
         self.assertEqual(Seq("GGGTGGTAGGG").count_overlap("NN"), 0)
         self.assertEqual(MutableSeq("GGGTGGTAGGG").count_overlap("NN"), 0)
         self.assertEqual(Seq("GGGTGGTAGGG").count_overlap("NN", 2, 8), 0)
