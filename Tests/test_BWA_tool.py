@@ -91,15 +91,20 @@ class BwaTestCase(unittest.TestCase):
         cmdline = BwaIndexCommandline(bwa_exe)
         cmdline.set_parameter("infile", self.reference_file)
         cmdline.set_parameter("algorithm", "bwtsw")
+        try:
+            stdout, stderr = cmdline()
+        except ApplicationError as err:
+            self.assertTrue(err.returncode == 0,
+                            "FASTA indexing failed:\n%s\nStdout:%s\nStderr:%s\n"
+                            % (cmdline, stdout, stderr))
+
+
         stdout, stderr = cmdline()
         for extension in self.reference_extensions:
             index_file = self.reference_file + "." + extension
             self.assertTrue(os.path.exists(index_file),
                             "Index File %s not found"
                             % (index_file))
-        self.assertTrue(stdout.startswith("[bwt_gen]"),
-                        "FASTA indexing failed:\n%s\nStdout:%s"
-                        % (cmdline, stdout))
 
     def do_aln(self, in_file, out_file):
         """Test for generating sai files given the reference and read file"""
@@ -107,11 +112,12 @@ class BwaTestCase(unittest.TestCase):
         cmdline.set_parameter("reference", self.reference_file)
         cmdline.read_file = in_file
         self.assertTrue(os.path.isfile(in_file))
-        stdout, stderr = cmdline(stdout=out_file)
-
-        self.assertTrue("fail to locate the index" not in stderr,
-                        "Error aligning sequence to reference:\n%s\nStderr:%s"
-                        % (cmdline, stderr))
+        try:
+            stdout, stderr = cmdline(stdout=out_file)
+        except ApplicationError as err:
+            self.assertTrue(err.returncode == 0,
+                            "Error aligning sequence to reference:\n%s\nStdout:%s\nStderr:%s\n"
+                            % (cmdline, stdout, stderr))
 
     def create_fasta_index(self):
         """Creates index for fasta file.
