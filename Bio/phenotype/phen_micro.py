@@ -89,7 +89,7 @@ class PlateRecord(object):
     >>> 'A01' in plate
     True
 
-    All the wells belonging to a "row" (identified by the first charachter of
+    All the wells belonging to a "row" (identified by the first character of
     the well id) in the plate can be obtained:
 
     >>> for well in plate.get_row('H'):
@@ -583,7 +583,7 @@ class WellRecord(object):
     >>> print(well.slope, well.model)
     (61.853516785566917, 'logistic')
 
-    If not sigmoid function is specified, the first one that is succesfully
+    If not sigmoid function is specified, the first one that is successfully
     fitted is used. The user can also specify a specific function.
 
     >>> well.fit('gompertz')
@@ -799,7 +799,7 @@ class WellRecord(object):
          - logistic
          - richards
 
-        The first function that is succesfuly fitted to the signals will
+        The first function that is successfully fitted to the signals will
         be used to extract the curve parameters and update ``.area`` and
         ``.model``. If no function can be fitted an exception is raised.
 

@@ -198,7 +198,7 @@ def dssp_dict_from_pdb_file(in_file, DSSP="dssp"):
 
 
 def make_dssp_dict(filename):
-    """DSSP dictionary mapping identifers to properties.
+    """DSSP dictionary mapping identifiers to properties.
 
     Return a DSSP dictionary that maps (chainid, resid) to
     aa, ss and accessibility, from a DSSP file.

@@ -337,7 +337,7 @@ class RestrictionType(type):
         return "%s" % cls.__name__
 
     def __len__(cls):
-        """Return lenght of recognition site of enzyme as int."""
+        """Return length of recognition site of enzyme as int."""
         return cls.size
 
     def __hash__(cls):

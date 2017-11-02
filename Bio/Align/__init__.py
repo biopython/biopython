@@ -445,7 +445,7 @@ class MultipleSeqAlignment(object):
               By default, all sequences have the same weight. (0.0 =>
               no weight, 1.0 => highest weight)
 
-        In general providing a SeqRecord and calling .append is prefered.
+        In general providing a SeqRecord and calling .append is preferred.
         """
         new_seq = Seq(sequence, self._alphabet)
 
