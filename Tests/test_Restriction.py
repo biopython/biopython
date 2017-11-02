@@ -202,8 +202,8 @@ class SimpleEnzyme(unittest.TestCase):
         self.assertEqual(EarI.search(seq), [3, 8])
 
     def test_overlapping_cut_sites(self):
-        """If the same enzyme recognizes 2+ overlapping patterns, make sure they are all returned"""
-        seq = Seq("CATGCACGCATGCATGCACGC")
+        """Check if overlapping recognition sites are properly handled."""
+        seq = Seq('CATGCACGCATGCATGCACGC')
         self.assertEqual(SphI.search(seq), [13, 17])
 
 
