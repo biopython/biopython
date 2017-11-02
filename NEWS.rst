@@ -43,6 +43,9 @@ written out and facilitates conversion between the PDB and mmCIF file formats.
 Bio.Emboss.Applications has been updated to fix a wrong parameter in fuzznuc
 wrapper and include a new wrapper for fuzzpro.
 
+The restriction enzyme list in Bio.Restriction has been updated to the
+November 2017 release of REBASE.
+
 In this release more of our code is now explicitly available under either our
 original "Biopython License Agreement", or the very similar but more commonly
 used "3-Clause BSD License".  See the ``LICENSE.rst`` file for more details.
@@ -68,6 +71,7 @@ possible, especially the following contributors:
 - Jun Aruga (first contribution)
 - Kai Blin
 - Kozo Nishida
+- Markus Piotrowski
 - Michiel de Hoon
 - Nicolas Fontrodona (first contribution)
 - Peter Cock
@@ -76,6 +80,7 @@ possible, especially the following contributors:
 - Shuichiro MAKIGAKI (first contribution)
 - Spencer Bliven
 - Stefans Mezulis
+- Steve Bond
 - Yasar L. Ahmed (first contribution)
 - Zaid Ur-Rehman (first contribution)
 
