@@ -50,7 +50,6 @@ import time
 import sys
 import shutil
 import optparse
-from functools import reduce
 
 from Bio.Seq import Seq
 from Bio.Alphabet import generic_dna
@@ -871,8 +870,9 @@ class DictionaryBuilder(object):
         #
         #   exact frequency of the site. (ie freq(N) == 1, ...)
         #
-        f = [4 / len(amb_dna[l]) for l in site.upper()]
-        freq = reduce(lambda x, y: x * y, f)
+        freq = 1
+        for base in site.upper():
+            freq *= 4.0 / len(amb_dna[base])
         line.append(freq)
         #
         #   append regex and ovhg1, they have not been appended before not to
@@ -971,9 +971,10 @@ class DictionaryBuilder(object):
                     dna = Seq(enzymedict[other][0], generic_dna)
                     sense2 = regex(dna)
                     antisense2 = regex(dna.reverse_complement())
-                    sense = '(?=(?P<' + other + '>' + sense1 + ')|' + sense2 + ')'
-                    antisense = '(?=(?P<' + other + '_as>' + antisense1 + '|' + \
-                                antisense2 + '))'
+                    sense = '(?=(?P<{}>{})|{})'.format(other, sense1, sense2)
+                    antisense = '(?=(?P<{}_as>{}|{}))'.format(other,
+                                                              antisense1,
+                                                              antisense2)
                     reg = sense + '|' + antisense
                     line[1] = line[1] + '|' + enzymedict[other][0]
                     line[-1] = reg
