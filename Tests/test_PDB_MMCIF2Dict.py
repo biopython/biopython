@@ -93,6 +93,21 @@ class MMCIF2dictTests(unittest.TestCase):
             mmcif_dict["_test_value"],
             "First line\n    Second line\nThird line")
 
+    def test_inline_comments(self):
+        """Comments may begin outside of column 1."""
+        mmcif_dict = MMCIF2Dict(io.StringIO(textwrap.dedent("""\
+            data_verbatim_test
+            _test_key_value foo # Ignore this comment
+            loop_
+            _test_loop
+            a b c d # Ignore this comment
+            e f g
+
+        """)))
+        self.assertEqual(mmcif_dict["_test_key_value"], "foo")
+        self.assertEqual(mmcif_dict["_test_loop"], list("abcdefg"))
+
+
 if __name__ == '__main__':
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)
