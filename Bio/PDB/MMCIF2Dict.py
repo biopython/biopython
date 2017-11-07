@@ -97,13 +97,16 @@ class MMCIF2Dict(dict):
             if line.startswith("#"):
                 continue
             elif line.startswith(";"):
-                token = line[1:].strip()
+                # The spec says that leading whitespace on each line must be
+                # preserved while trailing whitespace may be stripped.  The
+                # trailing newline must be stripped.
+                token_buffer = [line[1:].rstrip()]
                 for line in handle:
-                    line = line.strip()
+                    line = line.rstrip()
                     if line == ';':
                         break
-                    token += line
-                yield token
+                    token_buffer.append(line)
+                yield "\n".join(token_buffer)
             else:
                 for token in self._splitline(line.strip()):
                     yield token
