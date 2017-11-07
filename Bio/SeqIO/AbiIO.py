@@ -401,7 +401,7 @@ def AbiIterator(handle, alphabet=None, trim=False):
     annot['abif_raw'] = raw
 
     # fsa check
-    is_fsa_file = set(['SpNm1', 'LIMS1', 'CTID1']).issubset(raw)
+    is_fsa_file = set(['SpNm1', 'LIMS1']).issubset(raw)
 
     if is_fsa_file:
         try:
@@ -409,7 +409,7 @@ def AbiIterator(handle, alphabet=None, trim=False):
         except AttributeError:
             file_name = ""
         sample_id = raw['LIMS1']
-        description = raw['CTID1']
+        description = raw.get('CTID1', '<unknown description>')
         record = SeqRecord(Seq(''),
                            id=sample_id,
                            name=file_name,
