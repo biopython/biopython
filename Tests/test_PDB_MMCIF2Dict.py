@@ -81,7 +81,7 @@ class MMCIF2dictTests(unittest.TestCase):
         stripped. Whitespace may be stripped from the end of the line but not
         the beginning.
         """
-        mmcif_dict = MMCIF2Dict(io.StringIO(textwrap.dedent("""\
+        mmcif_dict = MMCIF2Dict(io.StringIO(textwrap.dedent(u"""\
             data_verbatim_test
             _test_value
             ;First line
@@ -95,7 +95,7 @@ class MMCIF2dictTests(unittest.TestCase):
 
     def test_inline_comments(self):
         """Comments may begin outside of column 1."""
-        mmcif_dict = MMCIF2Dict(io.StringIO(textwrap.dedent("""\
+        mmcif_dict = MMCIF2Dict(io.StringIO(textwrap.dedent(u"""\
             data_verbatim_test
             _test_key_value foo # Ignore this comment
             loop_
