@@ -71,6 +71,7 @@ possible, especially the following contributors:
 - Saket Choudhary
 - Shuichiro MAKIGAKI (first contribution)
 - Spencer Bliven
+- Stefans Mezulis
 - Yasar L. Ahmed (first contribution)
 - Zaid Ur-Rehman (first contribution)
 
