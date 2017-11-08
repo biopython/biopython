@@ -70,6 +70,7 @@ possible, especially the following contributors:
 - rht (first contribution)
 - Shuichiro MAKIGAKI (first contribution)
 - Spencer Bliven
+- Stefans Mezulis
 - Yasar L. Ahmed (first contribution)
 - Zaid Ur-Rehman (first contribution)
 
