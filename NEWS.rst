@@ -68,6 +68,7 @@ possible, especially the following contributors:
 - Nicolas Fontrodona (first contribution)
 - Peter Cock
 - rht (first contribution)
+- Saket Choudhary
 - Shuichiro MAKIGAKI (first contribution)
 - Spencer Bliven
 - Yasar L. Ahmed (first contribution)
