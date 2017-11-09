@@ -211,6 +211,42 @@ class FastaWriter(SequentialSequenceWriter):
             self.handle.write(data + "\n")
 
 
+class FastaNoWrapWriter(FastaWriter):
+    """Class to write Fasta format files without line wrapping."""
+    
+    def __init__(self, handle, record2title=None):
+        """Create a Fasta writer.
+
+        Arguments:
+         - handle - Handle to an output file, e.g. as returned
+           by open(filename, "w")
+         - record2title - Optional function to return the text to be
+           used for the title line of each record.  By default
+           a combination of the record.id and record.description
+           is used.  If the record.description starts with the
+           record.id, then just the record.description is used.
+
+        You can either use::
+
+            handle = open(filename, "w")
+            writer = FastaWriter(handle)
+            writer.write_file(myRecords)
+            handle.close()
+
+        Or, follow the sequential file writer system, for example::
+
+            handle = open(filename, "w")
+            writer = FastaWriter(handle)
+            writer.write_header() # does nothing for Fasta files
+            ...
+            Multiple writer.write_record() and/or writer.write_records() calls
+            ...
+            writer.write_footer() # does nothing for Fasta files
+            handle.close()
+
+        """
+        super(FastaNoWrapWriter, self).__init__(handle, wrap=None, record2title=record2title)
+
 if __name__ == "__main__":
     from Bio._utils import run_doctest
     run_doctest(verbose=0)
