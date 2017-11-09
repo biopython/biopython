@@ -428,6 +428,7 @@ _FormatToIterator = {"fasta": FastaIO.FastaIterator,
                      }
 
 _FormatToWriter = {"fasta": FastaIO.FastaWriter,
+                   "fasta-nowrap": FastaIO.FastaNoWrapWriter,
                    "gb": InsdcIO.GenBankWriter,
                    "genbank": InsdcIO.GenBankWriter,
                    "embl": InsdcIO.EmblWriter,
