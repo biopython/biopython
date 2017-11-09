@@ -213,7 +213,7 @@ class FastaWriter(SequentialSequenceWriter):
 
 class FastaNoWrapWriter(FastaWriter):
     """Class to write Fasta format files without line wrapping."""
-    
+
     def __init__(self, handle, record2title=None):
         """Create a Fasta writer.
 
@@ -246,6 +246,7 @@ class FastaNoWrapWriter(FastaWriter):
 
         """
         super(FastaNoWrapWriter, self).__init__(handle, wrap=None, record2title=record2title)
+
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest
