@@ -28,14 +28,18 @@ def parse(handle, format, strict=True):
     """Parse an output file from a motif finding program.
 
     Currently supported formats (case is ignored):
-     - AlignAce:      AlignAce output file format
-     - MEME:          MEME output file motif
-     - MINIMAL:       MINIMAL MEME output file motif
-     - MAST:          MAST output file motif
-     - TRANSFAC:      TRANSFAC database file format
-     - pfm:           JASPAR-style position-frequency matrix
-     - jaspar:        JASPAR-style multiple PFM format
-     - sites:         JASPAR-style sites file
+     - AlignAce:         AlignAce output file format
+     - ClusterBuster:    Cluster Buster position frequency matrix format
+     - XMS:              XMS matrix format
+     - MEME:             MEME output file motif
+     - MINIMAL:          MINIMAL MEME output file motif
+     - MAST:             MAST output file motif
+     - TRANSFAC:         TRANSFAC database file format
+     - pfm_four_columns: Generic position-frequency matrix format with four columns. (cisbp, homer, hocomoco, neph, tiffin)
+     - pfm_four_rows:    Generic position-frequency matrix format with four row. (scertf, yetfasco, hdpi, idmmpmm, flyfactor survey)
+     - pfm:              JASPAR-style position-frequency matrix
+     - jaspar:           JASPAR-style multiple PFM format
+     - sites:            JASPAR-style sites file
 
     As files in the pfm and sites formats contain only a single motif,
     it is easier to use Bio.motifs.read() instead of Bio.motifs.parse()
@@ -80,6 +84,18 @@ def parse(handle, format, strict=True):
     elif format == "minimal":
         from Bio.motifs import minimal
         record = minimal.read(handle)
+        return record
+    elif format == "clusterbuster":
+        from Bio.motifs import clusterbuster
+        record = clusterbuster.read(handle)
+        return record
+    elif format in ('pfm_four_columns', 'pfm_four_rows'):
+        from Bio.motifs import pfm
+        record = pfm.read(handle, format)
+        return record
+    elif format == "xms":
+        from Bio.motifs import xms
+        record = xms.read(handle)
         return record
     elif format == "mast":
         from Bio.motifs import mast
@@ -520,6 +536,7 @@ class Motif(object):
         """Return a string representation of the Motif in the given format.
 
         Currently supported fromats:
+         - clusterbuster: Cluster Buster position frequency matrix format
          - pfm : JASPAR single Position Frequency Matrix
          - jaspar : JASPAR multiple Position Frequency Matrix
          - transfac : TRANSFAC like files
@@ -533,6 +550,10 @@ class Motif(object):
             from Bio.motifs import transfac
             motifs = [self]
             return transfac.write(motifs)
+        elif format == "clusterbuster":
+            from Bio.motifs import clusterbuster
+            motifs = [self]
+            return clusterbuster.write(motifs)
         else:
             raise ValueError("Unknown format type %s" % format)
 
@@ -541,6 +562,7 @@ def write(motifs, format):
     """Return a string representation of motifs in the given format.
 
     Currently supported formats (case is ignored):
+     - clusterbuster: Cluster Buster position frequency matrix format
      - pfm : JASPAR simple single Position Frequency Matrix
      - jaspar : JASPAR multiple PFM format
      - transfac : TRANSFAC like files
@@ -553,6 +575,9 @@ def write(motifs, format):
     elif format == "transfac":
         from Bio.motifs import transfac
         return transfac.write(motifs)
+    elif format == "clusterbuster":
+        from Bio.motifs import clusterbuster
+        return clusterbuster.write(motifs)
     else:
         raise ValueError("Unknown format type %s" % format)
 

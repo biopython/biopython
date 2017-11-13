@@ -23,6 +23,7 @@ class MotifTestsBasic(unittest.TestCase):
     def setUp(self):
         self.PFMin = open("motifs/SRF.pfm")
         self.SITESin = open("motifs/Arnt.sites")
+        self.CLUSTERBUSTERin = open("motifs/clusterbuster.pfm")
         self.TFout = "motifs/tf.out"
         self.FAout = "motifs/fa.out"
         self.PFMout = "motifs/fa.out"
@@ -398,6 +399,20 @@ class MotifTestsBasic(unittest.TestCase):
         self.assertEqual(str(record[15].instances[20]), "AGCCTCCAGGTCGCATGG")
         self.assertEqual(record[15].mask, (1, 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1))
         self.assertAlmostEqual(record[15].score, 1.0395)
+
+    def test_clusterbuster_parsing_and_output(self):
+        """Test if Bio.motifs can parse and output Cluster Buster PFM files."""
+        record = motifs.parse(self.CLUSTERBUSTERin, "clusterbuster")
+        self.assertEqual(len(record), 3)
+        self.assertEqual(record[0].name, "MA0004.1")
+        self.assertEqual(record[1].name, "MA0006.1")
+        self.assertEqual(record[2].name, "MA0008.1")
+        self.assertEqual(record[0].degenerate_consensus, "CACGTG")
+        self.assertEqual(record[1].degenerate_consensus, "YGCGTG")
+        self.assertEqual(record[2].degenerate_consensus, "CAATTATT")
+
+        self.CLUSTERBUSTERin.seek(0)
+        self.assertEqual(motifs.write(record, "clusterbuster"), self.CLUSTERBUSTERin.read())
 
     def test_pfm_parsing(self):
         """Test if Bio.motifs can parse JASPAR-style pfm files."""
