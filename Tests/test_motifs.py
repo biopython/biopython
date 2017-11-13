@@ -412,7 +412,7 @@ class MotifTestsBasic(unittest.TestCase):
         self.assertEqual(record[2].degenerate_consensus, "CAATTATT")
 
         self.CLUSTERBUSTERin.seek(0)
-        self.assertEqual(motifs.write(record, "clusterbuster"), self.CLUSTERBUSTERin.read())
+        self.assertEqual(motifs.write(record, "clusterbuster").split(), self.CLUSTERBUSTERin.read().split())
 
     def test_pfm_parsing(self):
         """Test if Bio.motifs can parse JASPAR-style pfm files."""
