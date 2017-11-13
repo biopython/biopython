@@ -36,20 +36,20 @@ def read(handle):
         line = line.strip()
         if line:
             if line.startswith('>'):
-                motif_name = line[1:].strip()
-                nucleotide_counts = {'A': [], 'C': [], 'G': [], 'T': []}
-                motif_nbr += 1
 
                 if motif_nbr != 0:
                     motif = motifs.Motif(alphabet=IUPAC.unambiguous_dna, counts=nucleotide_counts)
                     motif.name = motif_name
                     record.append(motif)
+
+                motif_name = line[1:].strip()
+                nucleotide_counts = {'A': [], 'C': [], 'G': [], 'T': []}
+                motif_nbr += 1
             else:
                 if line.startswith('#'):
                     continue
 
                 matrix_columns = line.split()
-                print(matrix_columns)
 
                 if len(matrix_columns) == 4:
                     [nucleotide_counts[nucleotide].append(float(nucleotide_count))
