@@ -24,6 +24,7 @@ class MotifTestsBasic(unittest.TestCase):
         self.PFMin = open("motifs/SRF.pfm")
         self.SITESin = open("motifs/Arnt.sites")
         self.CLUSTERBUSTERin = open("motifs/clusterbuster.pfm")
+        self.XMSin = open("motifs/abdb.xms")
         self.TFout = "motifs/tf.out"
         self.FAout = "motifs/fa.out"
         self.PFMout = "motifs/fa.out"
@@ -413,6 +414,13 @@ class MotifTestsBasic(unittest.TestCase):
 
         self.CLUSTERBUSTERin.seek(0)
         self.assertEqual(motifs.write(record, "clusterbuster").split(), self.CLUSTERBUSTERin.read().split())
+
+    def test_xms_parsing(self):
+        """Test if Bio.motifs can parse and output xms PFM files."""
+        record = motifs.parse(self.XMSin, "xms")
+        self.assertEqual(len(record), 1)
+        self.assertEqual(record[0].name, "Abd-B")
+        self.assertEqual(record[0].length, 14)
 
     def test_pfm_parsing(self):
         """Test if Bio.motifs can parse JASPAR-style pfm files."""
