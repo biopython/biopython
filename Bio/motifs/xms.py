@@ -13,9 +13,6 @@ from xml.dom import minidom, Node
 import re
 
 
-__docformat__ = "restructuredtext en"
-
-
 class XMSScanner:
     """Class for scanning XMS XML file."""
 
