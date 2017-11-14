@@ -40,6 +40,9 @@ Bio.PDB now contains a writer for the mmCIF file format, which has been the
 standard PDB archive format since 2014. This allows structural objects to be
 written out and facilitates conversion between the PDB and mmCIF file formats.
 
+Bio.Emboss.Applications has been updated to fix a wrong parameter in fuzznuc
+wrapper and include a new wrapper for fuzzpro.
+
 In this release more of our code is now explicitly available under either our
 original "Biopython License Agreement", or the very similar but more commonly
 used "3-Clause BSD License".  See the ``LICENSE.rst`` file for more details.
