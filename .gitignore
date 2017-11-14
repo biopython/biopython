@@ -31,6 +31,9 @@ dist
 #Ignore all Jython class files (present if using Jython)
 *.class
 
+#Ignore any compiled C code
+*.so
+
 #Ignore the .tox directory from running tox locally
 .tox/
 
