@@ -9,9 +9,6 @@ from Bio import motifs
 from Bio.Alphabet import IUPAC
 
 
-__docformat__ = "restructuredtext en"
-
-
 class Record(list):
     """Class to store the information in a Cluster Buster matrix table.
 
