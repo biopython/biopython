@@ -279,7 +279,9 @@ possible, especially the following contributors:
 - Erik Cederstrand (first contribution)
 - Fei Qi (first contribution)
 - Francesco Gastaldello
+- Gert Hulselmans
 - James Jeffryes (first contribution)
+- Jared Andrews
 - Jerven Bolleman (first contribution)
 - Joe Greener (first contribution)
 - Joerg Schaarschmidt (first contribution)
