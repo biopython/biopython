@@ -127,7 +127,7 @@ please open an issue on GitHub or mention it on the development mailing list.
 - Jonathan Taylor <jonathan dot taylor at utoronto dot ca>
 - Jordan Willis <https://github.com/jwillis0720>
 - Jose Blanca <https://github.com/JoseBlanca>
-- Joshua Meyers <https://github.com/JoshuaMeyers> 
+- Joshua Meyers <https://github.com/JoshuaMeyers>
 - João D Ferreira <https://github.com/jdferreira>
 - Jun Aruga <https://github.com/junaruga>
 - Kai Blin <https://github.com/kblin>
@@ -190,6 +190,7 @@ please open an issue on GitHub or mention it on the development mailing list.
 - Sergei Lebedev <https://github.com/superbobry>
 - Seth Sims <seth.sims at gmail>
 - Shuichiro MAKIGAKI <https://github.com/shuichiro-makigaki>
+- Shyam Saladi <https://github.com/smsaladi>
 - Siong Kong <https://github.com/siongkong>
 - Sjoerd de Vries <sjoerd at domain nmr.chem.uu.nl>
 - Sourav Singh <https://github.com/souravsingh>
