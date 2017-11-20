@@ -1,4 +1,5 @@
 from Bio.PDB.StructureBuilder import StructureBuilder
+import numpy
 
 
 class StructureDecoder(object):
@@ -50,7 +51,7 @@ class StructureDecoder(object):
             alternative_location_id = " "
 
         # Atom_name is in twice - the full_name is with spaces
-        self.structure_bulder.init_atom(str(atom_name), [x, y, z],
+        self.structure_bulder.init_atom(str(atom_name), numpy.array((x, y, z), "f"),
                                         temperature_factor, occupancy,
                                         alternative_location_id, str(atom_name),
                                         serial_number=serial_number,
