@@ -16,47 +16,12 @@ class MafftCommandline(AbstractCommandline):
 
     http://align.bmr.kyushu-u.ac.jp/mafft/software/
 
-    Example:
-    --------
+    Notes
+    -----
+    Last checked against version: MAFFT v6.717b (2009/12/03)
 
-    >>> from Bio.Align.Applications import MafftCommandline
-    >>> mafft_exe = "/opt/local/mafft"
-    >>> in_file = "../Doc/examples/opuntia.fasta"
-    >>> mafft_cline = MafftCommandline(mafft_exe, input=in_file)
-    >>> print(mafft_cline)
-    /opt/local/mafft ../Doc/examples/opuntia.fasta
-
-    If the mafft binary is on the path (typically the case on a Unix style
-    operating system) then you don't need to supply the executable location:
-
-    >>> from Bio.Align.Applications import MafftCommandline
-    >>> in_file = "../Doc/examples/opuntia.fasta"
-    >>> mafft_cline = MafftCommandline(input=in_file)
-    >>> print(mafft_cline)
-    mafft ../Doc/examples/opuntia.fasta
-
-    You would typically run the command line with mafft_cline() or via
-    the Python subprocess module, as described in the Biopython tutorial.
-    Note that MAFFT will write the alignment to stdout, which you may
-    want to save to a file and then parse, e.g.::
-
-        stdout, stderr = mafft_cline()
-        with open("aligned.fasta", "w") as handle:
-            handle.write(stdout)
-        from Bio import AlignIO
-        align = AlignIO.read("aligned.fasta", "fasta")
-
-    Alternatively, to parse the output with AlignIO directly you can
-    use StringIO to turn the string into a handle::
-
-        stdout, stderr = mafft_cline()
-        from StringIO import StringIO
-        from Bio import AlignIO
-        align = AlignIO.read(StringIO(stdout), "fasta")
-
-    Citations:
+    References
     ----------
-
     Katoh, Toh (BMC Bioinformatics 9:212, 2008) Improved accuracy of
     multiple ncRNA alignment by incorporating structural information into
     a MAFFT-based framework (describes RNA structural alignment methods)
@@ -76,10 +41,48 @@ class MafftCommandline(AbstractCommandline):
 
     Katoh, Misawa, Kuma, Miyata (Nucleic Acids Res. 30:3059-3066, 2002)
 
-    Last checked against version: MAFFT v6.717b (2009/12/03)
+    Examples
+    --------
+    >>> from Bio.Align.Applications import MafftCommandline
+    >>> mafft_exe = "/opt/local/mafft"
+    >>> in_file = "../Doc/examples/opuntia.fasta"
+    >>> mafft_cline = MafftCommandline(mafft_exe, input=in_file)
+    >>> print(mafft_cline)
+    /opt/local/mafft ../Doc/examples/opuntia.fasta
+
+    If the mafft binary is on the path (typically the case on a Unix style
+    operating system) then you don't need to supply the executable location:
+
+    >>> from Bio.Align.Applications import MafftCommandline
+    >>> in_file = "../Doc/examples/opuntia.fasta"
+    >>> mafft_cline = MafftCommandline(input=in_file)
+    >>> print(mafft_cline)
+    mafft ../Doc/examples/opuntia.fasta
+
+    You would typically run the command line with mafft_cline() or via
+    the Python subprocess module, as described in the Biopython tutorial.
+
+    Note that MAFFT will write the alignment to stdout, which you may
+    want to save to a file and then parse, e.g.::
+
+        stdout, stderr = mafft_cline()
+        with open("aligned.fasta", "w") as handle:
+            handle.write(stdout)
+        from Bio import AlignIO
+        align = AlignIO.read("aligned.fasta", "fasta")
+
+    Alternatively, to parse the output with AlignIO directly you can
+    use StringIO to turn the string into a handle::
+
+        stdout, stderr = mafft_cline()
+        from StringIO import StringIO
+        from Bio import AlignIO
+        align = AlignIO.read(StringIO(stdout), "fasta")
+
     """
 
     def __init__(self, cmd="mafft", **kwargs):
+        """Initialize the class."""
         BLOSUM_MATRICES = ["30", "45", "62", "80"]
         self.parameters = \
             [

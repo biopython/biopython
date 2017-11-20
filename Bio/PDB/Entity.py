@@ -21,6 +21,7 @@ class Entity(object):
     """
 
     def __init__(self, id):
+        """Initialize the class."""
         self._id = id
         self.full_id = None
         self.parent = None
@@ -227,29 +228,31 @@ class Entity(object):
         """
         if self.full_id is None:
             entity_id = self.get_id()
-            l = [entity_id]
+            parts = [entity_id]
             parent = self.get_parent()
             while parent is not None:
                 entity_id = parent.get_id()
-                l.append(entity_id)
+                parts.append(entity_id)
                 parent = parent.get_parent()
-            l.reverse()
-            self.full_id = tuple(l)
+            parts.reverse()
+            self.full_id = tuple(parts)
         return self.full_id
 
     def transform(self, rot, tran):
         """Apply rotation and translation to the atomic coordinates.
-
-        Example:
-                >>> rotation=rotmat(pi, Vector(1, 0, 0))
-                >>> translation=array((0, 0, 1), 'f')
-                >>> entity.transform(rotation, translation)
 
         :param rot: A right multiplying rotation matrix
         :type rot: 3x3 Numeric array
 
         :param tran: the translation vector
         :type tran: size 3 Numeric array
+
+        Examples
+        --------
+        >>> rotation = rotmat(pi, Vector(1, 0, 0))
+        >>> translation = array((0, 0, 1), 'f')
+        >>> entity.transform(rotation, translation)
+
         """
         for o in self.get_list():
             o.transform(rot, tran)
@@ -281,6 +284,7 @@ class DisorderedEntityWrapper(object):
     """
 
     def __init__(self, id):
+        """Initialize the class."""
         self.id = id
         self.child_dict = {}
         self.selected_child = None

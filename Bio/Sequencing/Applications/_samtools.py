@@ -21,9 +21,8 @@ class SamtoolsViewCommandline(AbstractCommandline):
 
     See http://samtools.sourceforge.net/samtools.shtml for more details
 
-    Example
-    -------
-
+    Examples
+    --------
     >>> from Bio.Sequencing.Applications import SamtoolsViewCommandline
     >>> input_file = "/path/to/sam_or_bam_file"
     >>> samtools_view_cmd = SamtoolsViewCommandline(input_file=input_file)
@@ -33,6 +32,7 @@ class SamtoolsViewCommandline(AbstractCommandline):
     """
 
     def __init__(self, cmd="samtools", **kwargs):
+        """Initialize the class."""
         self.program_name = cmd
         self.parameters = [
             _StaticArgument("view"),
@@ -116,8 +116,8 @@ class SamtoolsMpileupCommandline(AbstractCommandline):
 
     See http://samtools.sourceforge.net/samtools.shtml for more details
 
-    Example:
-
+    Examples
+    --------
     >>> from Bio.Sequencing.Applications import SamtoolsMpileupCommandline
     >>> input = ["/path/to/sam_or_bam_file"]
     >>> samtools_mpileup_cmd = SamtoolsMpileupCommandline(input_file=input)
@@ -127,6 +127,7 @@ class SamtoolsMpileupCommandline(AbstractCommandline):
     """
 
     def __init__(self, cmd="samtools", **kwargs):
+        """Initialize the class."""
         self.program_name = cmd
         self.parameters = [
             _StaticArgument("mpileup"),
@@ -253,8 +254,8 @@ class SamtoolsReheaderCommandline(AbstractCommandline):
 
     See http://samtools.sourceforge.net/samtools.shtml for more details
 
-    Example:
-
+    Examples
+    --------
     >>> from Bio.Sequencing.Applications import SamtoolsReheaderCommandline
     >>> input_header = "/path/to/header_sam_file"
     >>> input_bam = "/path/to/input_bam_file"
@@ -267,6 +268,7 @@ class SamtoolsReheaderCommandline(AbstractCommandline):
     """
 
     def __init__(self, cmd="samtools", **kwargs):
+        """Initialize the class."""
         self.program_name = cmd
         self.parameters = [
             _StaticArgument("reheader"),
@@ -289,8 +291,8 @@ class SamtoolsCatCommandline(AbstractCommandline):
 
     See http://samtools.sourceforge.net/samtools.shtml for more details
 
-    Example:
-
+    Examples
+    --------
     >>> from Bio.Sequencing.Applications import SamtoolsCatCommandline
     >>> input_bam1 = "/path/to/input_bam1"
     >>> input_bam2 = "/path/to/input_bam2"
@@ -302,6 +304,7 @@ class SamtoolsCatCommandline(AbstractCommandline):
     """
 
     def __init__(self, cmd="samtools", **kwargs):
+        """Initialize the class."""
         self.program_name = cmd
         self.parameters = [
             _StaticArgument("cat"),
@@ -327,9 +330,8 @@ class SamtoolsVersion0xSortCommandline(AbstractCommandline):
 
     See http://samtools.sourceforge.net/samtools.shtml for more details
 
-    Example
-    -------
-
+    Examples
+    --------
     >>> from Bio.Sequencing.Applications import SamtoolsVersion0xSortCommandline
     >>> input_bam = "/path/to/input_bam"
     >>> out_prefix = "/path/to/out_prefix"
@@ -340,6 +342,7 @@ class SamtoolsVersion0xSortCommandline(AbstractCommandline):
     """
 
     def __init__(self, cmd="samtools", **kwargs):
+        """Initialize the class."""
         self.program_name = cmd
 
         # options for version samtools 0.0.19
@@ -369,9 +372,8 @@ class SamtoolsVersion1xSortCommandline(AbstractCommandline):
 
     See http://samtools.sourceforge.net/samtools.shtml for more details
 
-    Example
-    -------
-
+    Examples
+    --------
     >>> from Bio.Sequencing.Applications import SamtoolsVersion1xSortCommandline
     >>> input_bam = "/path/to/input_bam"
     >>> FREFIX = "/path/to/out_prefix"
@@ -383,6 +385,7 @@ class SamtoolsVersion1xSortCommandline(AbstractCommandline):
     """
 
     def __init__(self, cmd="samtools", **kwargs):
+        """Initialize the class."""
         self.program_name = cmd
 
         # options for version samtools 1.3.1
@@ -422,9 +425,8 @@ class SamtoolsMergeCommandline(AbstractCommandline):
 
     See http://samtools.sourceforge.net/samtools.shtml for more details
 
-    Example
-    -------
-
+    Examples
+    --------
     >>> from Bio.Sequencing.Applications import SamtoolsMergeCommandline
     >>> out_bam = "/path/to/out_bam"
     >>> in_bam = ["/path/to/input_bam1", "/path/to/input_bam2"]
@@ -437,6 +439,7 @@ class SamtoolsMergeCommandline(AbstractCommandline):
     """
 
     def __init__(self, cmd="samtools", **kwargs):
+        """Initialize the class."""
         self.program_name = cmd
         self.parameters = [
             _StaticArgument("merge"),
@@ -477,8 +480,8 @@ class SamtoolsIndexCommandline(AbstractCommandline):
 
     See http://samtools.sourceforge.net/samtools.shtml for more details
 
-    Example:
-
+    Examples
+    --------
     >>> from Bio.Sequencing.Applications import SamtoolsIndexCommandline
     >>> input = "/path/to/aln_bam"
     >>> samtools_index_cmd = SamtoolsIndexCommandline(input_bam=input)
@@ -488,6 +491,7 @@ class SamtoolsIndexCommandline(AbstractCommandline):
     """
 
     def __init__(self, cmd="samtools", **kwargs):
+        """Initialize the class."""
         self.program_name = cmd
         self.parameters = [
             _StaticArgument("index"),
@@ -506,8 +510,8 @@ class SamtoolsIdxstatsCommandline(AbstractCommandline):
 
     See http://samtools.sourceforge.net/samtools.shtml for more details
 
-    Example:
-
+    Examples
+    --------
     >>> from Bio.Sequencing.Applications import SamtoolsIdxstatsCommandline
     >>> input = "/path/to/aln_bam"
     >>> samtools_idxstats_cmd = SamtoolsIdxstatsCommandline(input_bam=input)
@@ -517,6 +521,7 @@ class SamtoolsIdxstatsCommandline(AbstractCommandline):
     """
 
     def __init__(self, cmd="samtools", **kwargs):
+        """Initialize the class."""
         self.program_name = cmd
         self.parameters = [
             _StaticArgument("idxstats"),
@@ -535,9 +540,8 @@ class SamtoolsFaidxCommandline(AbstractCommandline):
 
     See http://samtools.sourceforge.net/samtools.shtml for more details
 
-    Example
-    -------
-
+    Examples
+    --------
     >>> from Bio.Sequencing.Applications import SamtoolsFaidxCommandline
     >>> reference = "/path/to/reference.fasta"
     >>> samtools_faidx_cmd = SamtoolsFaidxCommandline(reference=reference)
@@ -547,6 +551,7 @@ class SamtoolsFaidxCommandline(AbstractCommandline):
     """
 
     def __init__(self, cmd="samtools", **kwargs):
+        """Initialize the class."""
         self.program_name = cmd
         self.parameters = [
             _StaticArgument("faidx"),
@@ -568,8 +573,8 @@ class SamtoolsFixmateCommandline(AbstractCommandline):
 
     See http://samtools.sourceforge.net/samtools.shtml for more details
 
-    Example:
-
+    Examples
+    --------
     >>> from Bio.Sequencing.Applications import SamtoolsFixmateCommandline
     >>> in_bam = "/path/to/in.nameSrt.bam"
     >>> out_bam = "/path/to/out.bam"
@@ -582,6 +587,7 @@ class SamtoolsFixmateCommandline(AbstractCommandline):
     """
 
     def __init__(self, cmd="samtools", **kwargs):
+        """Initialize the class."""
         self.program_name = cmd
         self.parameters = [
             _StaticArgument("fixmate"),
@@ -605,8 +611,8 @@ class SamtoolsRmdupCommandline(AbstractCommandline):
 
     See http://samtools.sourceforge.net/samtools.shtml for more details
 
-    Example:
-
+    Examples
+    --------
     >>> from Bio.Sequencing.Applications import SamtoolsRmdupCommandline
     >>> input_sorted_bam = "/path/to/input.srt.bam"
     >>> out_bam = "/path/to/out.bam"
@@ -619,6 +625,7 @@ class SamtoolsRmdupCommandline(AbstractCommandline):
     """
 
     def __init__(self, cmd="samtools", **kwargs):
+        """Initialize the class."""
         self.program_name = cmd
         self.parameters = [
             _StaticArgument("rmdup"),
@@ -649,8 +656,8 @@ class SamtoolsCalmdCommandline(AbstractCommandline):
 
     See http://samtools.sourceforge.net/samtools.shtml for more details
 
-    Example:
-
+    Examples
+    --------
     >>> from Bio.Sequencing.Applications import SamtoolsCalmdCommandline
     >>> input_bam = "/path/to/aln.bam"
     >>> reference_fasta = "/path/to/reference.fasta"
@@ -663,6 +670,7 @@ class SamtoolsCalmdCommandline(AbstractCommandline):
     """
 
     def __init__(self, cmd="samtools", **kwargs):
+        """Initialize the class."""
         self.program_name = cmd
         self.parameters = [
             _StaticArgument("calmd"),
@@ -713,8 +721,8 @@ class SamtoolsTargetcutCommandline(AbstractCommandline):
 
     See http://samtools.sourceforge.net/samtools.shtml for more details
 
-    Example:
-
+    Examples
+    --------
     >>> from Bio.Sequencing.Applications import SamtoolsTargetcutCommandline
     >>> input_bam = "/path/to/aln.bam"
     >>> samtools_targetcut_cmd = SamtoolsTargetcutCommandline(input_bam=input_bam)
@@ -724,6 +732,7 @@ class SamtoolsTargetcutCommandline(AbstractCommandline):
     """
 
     def __init__(self, cmd="samtools", **kwargs):
+        """Initialize the class."""
         self.program_name = cmd
         self.parameters = [
             _StaticArgument("targetcut"),
@@ -760,8 +769,8 @@ class SamtoolsPhaseCommandline(AbstractCommandline):
 
     See http://samtools.sourceforge.net/samtools.shtml for more details
 
-    Example:
-
+    Examples
+    --------
     >>> from Bio.Sequencing.Applications import SamtoolsPhaseCommandline
     >>> input_bam = "/path/to/in.bam"
     >>> samtools_phase_cmd = SamtoolsPhaseCommandline(input_bam=input_bam)
@@ -771,6 +780,7 @@ class SamtoolsPhaseCommandline(AbstractCommandline):
     """
 
     def __init__(self, cmd="samtools", **kwargs):
+        """Initialize the class."""
         self.program_name = cmd
         self.parameters = [
             _StaticArgument("phase"),

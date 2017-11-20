@@ -337,7 +337,7 @@ class RestrictionType(type):
         return "%s" % cls.__name__
 
     def __len__(cls):
-        """Return lenght of recognition site of enzyme as int."""
+        """Return length of recognition site of enzyme as int."""
         return cls.size
 
     def __hash__(cls):
@@ -938,22 +938,19 @@ class NonPalindromic(AbstractCut):
 
         Implement the search method for non palindromic enzymes.
         """
-        compsite_for, compsite_rev = cls.compsite.pattern.split('|')
-        iterator_for = cls.dna.finditer(compsite_for, cls.size)
-        iterator_rev = cls.dna.finditer(compsite_rev, cls.size)
+        iterator = cls.dna.finditer(cls.compsite, cls.size)
         cls.results = []
         modif = cls._modify
         revmodif = cls._rev_modify
         s = str(cls)
         cls.on_minus = []
 
-        for start, group in iterator_for:
+        for start, group in iterator:
             if group(s):
                 cls.results += [r for r in modif(start)]
-        s += '_as'
-        for start, group in iterator_rev:
-            if group(s):
-                cls.results += [r for r in revmodif(start)]
+            else:
+                cls.on_minus += [r for r in revmodif(start)]
+        cls.results += cls.on_minus
 
         if cls.results:
             cls.results.sort()
@@ -2188,8 +2185,7 @@ class RestrictionBatch(set):
 
         Give all the names of the enzymes in B sorted alphabetically.
         """
-        l = sorted(str(e) for e in self)
-        return l
+        return sorted(str(e) for e in self)
 
     def as_string(self):
         """List the names of the enzymes of the RestrictionBatch.

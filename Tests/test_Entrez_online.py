@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Copyright 2012 by Wibowo Arindrarto.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -13,6 +14,7 @@ scope of this file as they are already covered in test_Entrez.py.
 """
 import doctest
 import os
+import locale
 import sys
 import unittest
 
@@ -140,8 +142,10 @@ class EntrezOnlineCase(unittest.TestCase):
         self.assertTrue(1, len(taxon_record))
         self.assertIn('TaxId', taxon_record[0])
         self.assertTrue('3702', taxon_record[0]['TaxId'])
+        handle.close()
 
     def test_elink(self):
+        """Test Entrez.elink with multiple ids, both comma separated and as list"""
         # Commas: Link from protein to gene
         handle = Entrez.elink(db="gene", dbfrom="protein",
                               id="15718680,157427902,119703751")
@@ -163,6 +167,7 @@ class EntrezOnlineCase(unittest.TestCase):
         handle.close()
 
     def test_epost(self):
+        """Test Entrez.epost with multiple ids, both comma separated and as list"""
         handle = Entrez.epost("nuccore", id="186972394,160418")
         self.assertEqual(URL_HEAD + "epost.fcgi", handle.url)
         handle.close()
@@ -171,6 +176,7 @@ class EntrezOnlineCase(unittest.TestCase):
         handle.close()
 
     def test_egquery(self):
+        """Test Entrez.egquery which searches in all Entrez databases for a single text query"""
         handle = Entrez.egquery(term="biopython")
         record = Entrez.read(handle)
         handle.close()
@@ -183,6 +189,7 @@ class EntrezOnlineCase(unittest.TestCase):
         self.assertTrue(done)
 
     def test_espell(self):
+        """Test misspellings with Entrez.espell"""
         handle = Entrez.espell(term="biopythooon")
         record = Entrez.read(handle)
         handle.close()
@@ -191,6 +198,7 @@ class EntrezOnlineCase(unittest.TestCase):
         self.assertEqual(record["CorrectedQuery"], "biopython")
 
     def test_ecitmatch(self):
+        """Test Entrez.ecitmatch to search for a citation"""
         citation = {
             "journal_title": "proc natl acad sci u s a",
             "year": "1991", "volume": "88", "first_page": "3248",
@@ -201,6 +209,29 @@ class EntrezOnlineCase(unittest.TestCase):
         result = handle.read()
         expected_result = "proc natl acad sci u s a|1991|88|3248|mann bj|citation_1|2014248\n"
         self.assertEquals(result, expected_result)
+        handle.close()
+
+    def test_efetch_gds_utf8(self):
+        """Test correct handling of encodings in Entrez.efetch"""
+        # See issue #1402
+        try:
+            oldloc = locale.setlocale(locale.LC_ALL)
+            locale.setlocale(locale.LC_ALL, 'C')
+        except locale.Error as err:
+            self.skipTest("Cannot set locale: {}".format(err))
+        try:
+            handle = Entrez.efetch(db="gds", id='200079209')
+            self.assertTrue(handle.url.startswith(URL_HEAD + "efetch.fcgi?"), handle.url)
+            self.assertIn(URL_TOOL, handle.url)
+            self.assertIn(URL_EMAIL, handle.url)
+            self.assertIn("id=200079209", handle.url)
+            result = handle.read()
+            expected_result = u'“field of injury”'  # Use of Unicode double qoutation marks U+201C and U+201D
+            self.assertEqual(result[342:359], expected_result)
+            handle.close()
+        finally:
+            locale.setlocale(locale.LC_ALL, oldloc)
+
 
 # NCBI XML does not currently match the XSD file
 #    def test_fetch_xml_schemas(self):

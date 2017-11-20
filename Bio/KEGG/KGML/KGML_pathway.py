@@ -63,6 +63,7 @@ class Pathway(object):
     """
 
     def __init__(self):
+        """Initialize the class."""
         self._name = ''
         self.org = ''
         self._number = None
@@ -271,6 +272,7 @@ class Entry(object):
     """
 
     def __init__(self):
+        """Initialize the class."""
         self._id = None
         self._names = []
         self.type = ''
@@ -412,6 +414,7 @@ class Component(object):
     """
 
     def __init__(self, parent):
+        """Initialize the class."""
         self._id = None
         self._parent = parent
 
@@ -464,6 +467,7 @@ class Graphics(object):
     """
 
     def __init__(self, parent):
+        """Initialize the class."""
         self.name = ''
         self._x = None
         self._y = None
@@ -630,6 +634,7 @@ class Reaction(object):
     """
 
     def __init__(self):
+        """Initialize the class."""
         self._id = None
         self._names = []
         self.type = ''
@@ -753,6 +758,7 @@ class Relation(object):
     """
 
     def __init__(self):
+        """Initialize the class."""
         self._entry1 = None
         self._entry2 = None
         self.type = ''

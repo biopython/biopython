@@ -12,6 +12,15 @@ from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 
 from .hmmer3_tab import Hmmer3TabParser, Hmmer3TabIndexer
 
+__all__ = (
+    'Hmmer3DomtabHmmhitParser',
+    'Hmmer3DomtabHmmqueryParser',
+    'Hmmer3DomtabHmmhitIndexer',
+    'Hmmer3DomtabHmmqueryIndexer',
+    'Hmmer3DomtabHmmhitWriter',
+    'Hmmer3DomtabHmmqueryWriter',
+)
+
 
 class Hmmer3DomtabParser(Hmmer3TabParser):
     """Base hmmer3-domtab iterator."""
@@ -193,6 +202,7 @@ class Hmmer3DomtabHmmhitWriter(object):
     hmm_as_hit = True
 
     def __init__(self, handle):
+        """Initialize the class."""
         self.handle = handle
 
     def write_file(self, qresults):

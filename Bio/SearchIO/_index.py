@@ -22,6 +22,7 @@ class SearchIndexer(_IndexedSeqFileProxy):
     """
 
     def __init__(self, filename, **kwargs):
+        """Initialize the class."""
         self._handle = _open_for_random_access(filename)
         self._kwargs = kwargs
 

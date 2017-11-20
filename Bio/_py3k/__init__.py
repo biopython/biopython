@@ -94,11 +94,18 @@ if sys.version_info[0] >= 3:
         return isinstance(i, int)
 
     import io
+    import locale
 
     # Python 3.4 onwards, the standard library wrappers should work:
     def _binary_to_string_handle(handle):
         """Treat a binary (bytes) handle like a text (unicode) handle."""
-        wrapped = io.TextIOWrapper(io.BufferedReader(handle))
+        try:
+            # If this is a network handle from urllib,
+            # the HTTP headers may tell us the encoding.
+            encoding = handle.headers.get_content_charset()
+        except AttributeError:
+            encoding = locale.getpreferredencoding(False)
+        wrapped = io.TextIOWrapper(io.BufferedReader(handle), encoding=encoding)
         try:
             # If wrapping an online handle, this is nice to have:
             wrapped.url = handle.url

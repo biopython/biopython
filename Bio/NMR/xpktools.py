@@ -37,6 +37,7 @@ class XpkEntry(object):
     """
 
     def __init__(self, entry, headline):
+        """Initialize the class."""
         # Holds all fields from input line in a dictionary
         # keys are data labels from the .xpk header
         self.fields = {}
@@ -99,7 +100,7 @@ class Peaklist(object):
     """
 
     def __init__(self, infn):
-
+        """Initialize the class."""
         with open(infn, 'r') as infile:
 
             # Read in the header lines
@@ -114,7 +115,7 @@ class Peaklist(object):
             self.data = [line.split("\012")[0] for line in infile]
 
     def residue_dict(self, index):
-        """Return a dict of lines in "data" indexed by residue number or a nucleus.
+        """Return a dict of lines in \`data\` indexed by residue number or a nucleus.
 
         The nucleus should be given as the input argument in the same form as
         it appears in the xpk label line (H1, 15N for example)
@@ -274,7 +275,7 @@ def data_table(fn_list, datalabel, keyatom):
     # TODO - Clarify this docstring, add an example?
     outlist = []
 
-    [dict_list, label_line_list] = _read_dicts(fn_list, keyatom)
+    dict_list, label_line_list = _read_dicts(fn_list, keyatom)
 
     # Find global max and min residue numbers
     minr = dict_list[0]["minres"]

@@ -118,15 +118,15 @@ def draw_graphviz(tree, label_func=str, prog='twopi', args='',
             Options passed to the external graphviz program.  Normally not
             needed, but offered here for completeness.
 
-    Example
-    -------
-
+    Examples
+    --------
     >>> import pylab
     >>> from Bio import Phylo
     >>> tree = Phylo.read('ex/apaf.xml', 'phyloxml')
     >>> Phylo.draw_graphviz(tree)
     >>> pylab.show()
     >>> pylab.savefig('apaf.png')
+
     """
     # Deprecated in Biopython 1.70 (#1247)
     import warnings

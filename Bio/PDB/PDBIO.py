@@ -44,13 +44,13 @@ class Select(object):
 class PDBIO(object):
     """Write a Structure object (or a subset of a Structure object) as a PDB file.
 
-    Example:
-
-        >>> p=PDBParser()
-        >>> s=p.get_structure("1fat", "1fat.pdb")
-        >>> io=PDBIO()
-        >>> io.set_structure(s)
-        >>> io.save("out.pdb")
+    Examples
+    --------
+    >>> p=PDBParser()
+    >>> s=p.get_structure("1fat", "1fat.pdb")
+    >>> io=PDBIO()
+    >>> io.set_structure(s)
+    >>> io.save("out.pdb")
 
     """
 

@@ -333,9 +333,8 @@ class TreeMixin(object):
                 search, 'postorder' is DFS with child nodes preceding parents,
                 and 'level' is breadth-first search.
 
-        Example
-        -------
-
+        Examples
+        --------
         >>> from Bio import Phylo
         >>> phx = Phylo.PhyloXMLIO.read('PhyloXML/phyloxml_examples.xml')
         >>> matches = phx.phylogenies[5].find_elements(code='OCTVU')
@@ -1190,11 +1189,11 @@ class BranchColor(object):
         The returned string is suitable for use in HTML/CSS, as a color
         parameter in matplotlib, and perhaps other situations.
 
-        Example:
-
-            >>> bc = BranchColor(12, 200, 100)
-            >>> bc.to_hex()
-            '#0cc864'
+        Examples
+        --------
+        >>> bc = BranchColor(12, 200, 100)
+        >>> bc.to_hex()
+        '#0cc864'
 
         """
         return "#%02x%02x%02x" % (self.red, self.green, self.blue)
@@ -1202,11 +1201,11 @@ class BranchColor(object):
     def to_rgb(self):
         """Return a tuple of RGB values (0 to 255) representing this color.
 
-        Example:
-
-            >>> bc = BranchColor(255, 165, 0)
-            >>> bc.to_rgb()
-            (255, 165, 0)
+        Examples
+        --------
+        >>> bc = BranchColor(255, 165, 0)
+        >>> bc.to_rgb()
+        (255, 165, 0)
 
         """
         return (self.red, self.green, self.blue)
