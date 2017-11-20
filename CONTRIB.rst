@@ -15,6 +15,7 @@ please open an issue on GitHub or mention it on the development mailing list.
 - Aaron Rosenfeld <https://github.com/arosenfeld>
 - Adam Kurkiewicz <adam@kurkiewicz.pl>
 - Adam Novak <https://github.com/AdamNovak>
+- Adhemar Zerlotini <https://github.com/azneto>
 - Adil Iqbal <https://github.com/Adil-Iqbal>
 - Adrian Altenhoff <https://github.com/alpae>
 - Alan Medlar <https://github.com/ajm>
@@ -84,6 +85,7 @@ please open an issue on GitHub or mention it on the development mailing list.
 - Eric Talevich <https://github.com/etal>
 - Erick Matsen <surname at fhcrc dot org>
 - Erik Cederstrand <https://github.com/ecederstrand>
+- Fei Qi <https://github.com/qifei9>
 - Foen Peng <https://github.com/foenpeng>
 - Francesco Gastaldello <https://github.com/Gasta88>
 - Francisco Pina-Martins <https://github.com/StuntsPT>
@@ -113,6 +115,7 @@ please open an issue on GitHub or mention it on the development mailing list.
 - Jeffrey Chang <jchang at domain smi.stanford.edu>
 - Jeffrey Finkelstein <jeffrey.finkelstein at domain gmail.com>
 - Jeroen Van Goey <https://github.com/BioGeek>
+- Jerven Bolleman <https://github.com/JervenBolleman>
 - Jimmy O'Donnell <https://github.com/jimmyodonnell>
 - Joanna & Dominik Kasprzak
 - Joao Rodrigues <anaryin at the domain gmail dot com>
@@ -124,7 +127,7 @@ please open an issue on GitHub or mention it on the development mailing list.
 - Jonathan Taylor <jonathan dot taylor at utoronto dot ca>
 - Jordan Willis <https://github.com/jwillis0720>
 - Jose Blanca <https://github.com/JoseBlanca>
-- Joshua Meyers <https://github.com/JoshuaMeyers> 
+- Joshua Meyers <https://github.com/JoshuaMeyers>
 - João D Ferreira <https://github.com/jdferreira>
 - Jun Aruga <https://github.com/junaruga>
 - Kai Blin <https://github.com/kblin>
@@ -154,6 +157,7 @@ please open an issue on GitHub or mention it on the development mailing list.
 - Matt Shirley <https://github.com/mdshw5>
 - Matteo Sticco <https://github.com/sticken88/>
 - Maximilian Greil <https://github.com/MaxGreil>
+- Maximilian Peters <maximili.peters at mail.huji.ac.il>
 - Melissa Gymrek <https://github.com/mgymrek>
 - Michael Hoffman <https://github.com/michaelmhoffman>
 - Michal Kurowski <michal at domain genesilico.pl>
@@ -165,6 +169,7 @@ please open an issue on GitHub or mention it on the development mailing list.
 - Nader Morshed <https://github.com/naderm>
 - Nate Sutton <https://github.com/nmsutton>
 - Nathan J. Edwards <nje5 at edu domain georgetown>
+- Nicolas Fontrodona <https://github.com/NFontrodona>
 - Nigel Delaney <https://github.com/evolvedmicrobe/>
 - Noam Kremen <https://github.com/noamkremen>
 - Olivier Morelle <https://github.com/Oli4>
@@ -186,6 +191,7 @@ please open an issue on GitHub or mention it on the development mailing list.
 - Sergei Lebedev <https://github.com/superbobry>
 - Seth Sims <seth.sims at gmail>
 - Shuichiro MAKIGAKI <https://github.com/shuichiro-makigaki>
+- Shyam Saladi <https://github.com/smsaladi>
 - Siong Kong <https://github.com/siongkong>
 - Sjoerd de Vries <sjoerd at domain nmr.chem.uu.nl>
 - Sourav Singh <https://github.com/souravsingh>
@@ -218,4 +224,5 @@ please open an issue on GitHub or mention it on the development mailing list.
 - Yasar L. Ahmed <https://github.com/pyahmed>
 - Yu Huang <krocea at domain yahoo.com.cn>
 - Yves Bastide <ybastide at domain irisa.fr>
+- Zaid Ur-Rehman <https://github.com/zaidurrehman>
 - Zheng Ruan <https://github.com/zruan>

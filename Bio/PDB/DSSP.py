@@ -35,16 +35,14 @@ The DSSP codes for secondary structure used here are:
 
 Usage
 -----
-
 The DSSP class can be used to run DSSP on a pdb file, and provides a
 handle to the DSSP secondary structure and accessibility.
 
 **Note** that DSSP can only handle one model, and will only run
 calculations on the first model in the provided PDB file.
 
-Example:
+Examples
 --------
-
 >>> p = PDBParser()
 >>> structure = p.get_structure("1MOT", "1mot.pdb")
 >>> model = structure[0]
@@ -153,11 +151,6 @@ def ss_to_index(ss):
 def dssp_dict_from_pdb_file(in_file, DSSP="dssp"):
     """Create a DSSP dictionary from a PDB file.
 
-    Example:
-    --------
-    >>> dssp_dict=dssp_dict_from_pdb_file("1fat.pdb")
-    >>> aa, ss, acc=dssp_dict[('A', 1)]
-
     Parameters
     ----------
     in_file : string
@@ -172,6 +165,11 @@ def dssp_dict_from_pdb_file(in_file, DSSP="dssp"):
         a dictionary that maps (chainid, resid) to
         amino acid type, secondary structure code and
         accessibility.
+
+    Examples
+    --------
+    >>> dssp_dict=dssp_dict_from_pdb_file("1fat.pdb")
+    >>> aa, ss, acc=dssp_dict[('A', 1)]
 
     """
     # Using universal newlines is important on Python 3, this
@@ -200,7 +198,7 @@ def dssp_dict_from_pdb_file(in_file, DSSP="dssp"):
 
 
 def make_dssp_dict(filename):
-    """DSSP dictionary mapping identifers to properties.
+    """DSSP dictionary mapping identifiers to properties.
 
     Return a DSSP dictionary that maps (chainid, resid) to
     aa, ss and accessibility, from a DSSP file.
@@ -306,9 +304,8 @@ class DSSP(AbstractResiduePropertyMap):
 
     **Note** that DSSP can only handle one model.
 
-    Example:
+    Examples
     --------
-
     >>> p = PDBParser()
     >>> structure = p.get_structure("1MOT", "1mot.pdb")
     >>> model = structure[0]
@@ -321,6 +318,7 @@ class DSSP(AbstractResiduePropertyMap):
     >>> dssp[a_key]
     (3, 'A', 'H', 0.7075471698113207, -61.2, -42.4,
      -2, -0.7, 4, -3.0, 1, -0.2, 5, -0.2)
+
     """
 
     def __init__(self, model, in_file, dssp="dssp", acc_array="Sander", file_type='PDB'):

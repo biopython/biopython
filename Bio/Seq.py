@@ -228,7 +228,12 @@ class Seq(object):
         return len(self._data)  # Seq API requirement
 
     def __getitem__(self, index):  # Seq API requirement
-        """Return a subsequence of single letter, use my_seq[index]."""
+        """Return a subsequence of single letter, use my_seq[index].
+
+        >>> my_seq = Seq('ACTCGACGTCG')
+        >>> my_seq[5]
+        'A'
+        """
         # Note since Python 2.0, __getslice__ is deprecated
         # and __getitem__ is used instead.
         # See http://docs.python.org/ref/sequence-methods.html
@@ -1835,7 +1840,12 @@ class MutableSeq(object):
         return len(self.data)
 
     def __getitem__(self, index):
-        """Return a subsequence of single letter, use my_seq[index]."""
+        """Return a subsequence of single letter, use my_seq[index].
+
+        >>> my_seq = MutableSeq('ACTCGACGTCG')
+        >>> my_seq[5]
+        'A'
+        """
         # Note since Python 2.0, __getslice__ is deprecated
         # and __getitem__ is used instead.
         # See http://docs.python.org/ref/sequence-methods.html
@@ -1847,7 +1857,13 @@ class MutableSeq(object):
             return MutableSeq(self.data[index], self.alphabet)
 
     def __setitem__(self, index, value):
-        """Set a subsequence of single letter via value parameter."""
+        """Set a subsequence of single letter via value parameter.
+
+        >>> my_seq = MutableSeq('ACTCGACGTCG')
+        >>> my_seq[0] = 'T'
+        >>> my_seq
+        MutableSeq('TCTCGACGTCG', Alphabet())
+        """
         # Note since Python 2.0, __setslice__ is deprecated
         # and __setitem__ is used instead.
         # See http://docs.python.org/ref/sequence-methods.html
@@ -1865,7 +1881,13 @@ class MutableSeq(object):
                                                str(value))
 
     def __delitem__(self, index):
-        """Delete a subsequence of single letter."""
+        """Delete a subsequence of single letter.
+
+        >>> my_seq = MutableSeq('ACTCGACGTCG')
+        >>> del my_seq[0]
+        >>> my_seq
+        MutableSeq('CTCGACGTCG', Alphabet())
+        """
         # Note since Python 2.0, __delslice__ is deprecated
         # and __delitem__ is used instead.
         # See http://docs.python.org/ref/sequence-methods.html
@@ -1900,7 +1922,13 @@ class MutableSeq(object):
             raise TypeError
 
     def __radd__(self, other):
-        """Add a sequence on the left."""
+        """Add a sequence on the left.
+
+        >>> from Bio.Seq import MutableSeq
+        >>> from Bio.Alphabet import generic_protein
+        >>> "LV" + MutableSeq("MELKI", generic_protein)
+        MutableSeq('LVMELKI', ProteinAlphabet())
+        """
         if hasattr(other, "alphabet"):
             # other should be a Seq or a MutableSeq
             if not Alphabet._check_type_compatible([self.alphabet,
@@ -1923,21 +1951,64 @@ class MutableSeq(object):
             raise TypeError
 
     def append(self, c):
-        """Add a subsequence to the mutable sequence object."""
+        """Add a subsequence to the mutable sequence object.
+
+        >>> my_seq = MutableSeq('ACTCGACGTCG')
+        >>> my_seq.append('A')
+        >>> my_seq
+        MutableSeq('ACTCGACGTCGA', Alphabet())
+
+        No return value.
+        """
         self.data.append(c)
 
     def insert(self, i, c):
-        """Add a subsequence to the mutable sequence object at a given index."""
+        """Add a subsequence to the mutable sequence object at a given index.
+
+        >>> my_seq = MutableSeq('ACTCGACGTCG')
+        >>> my_seq.insert(0,'A')
+        >>> my_seq
+        MutableSeq('AACTCGACGTCG', Alphabet())
+        >>> my_seq.insert(8,'G')
+        >>> my_seq
+        MutableSeq('AACTCGACGGTCG', Alphabet())
+
+        No return value.
+        """
         self.data.insert(i, c)
 
     def pop(self, i=(-1)):
-        """Remove a subsequence of a single letter at given index."""
+        """Remove a subsequence of a single letter at given index.
+
+        >>> my_seq = MutableSeq('ACTCGACGTCG')
+        >>> my_seq.pop()
+        'G'
+        >>> my_seq
+        MutableSeq('ACTCGACGTC', Alphabet())
+        >>> my_seq.pop()
+        'C'
+        >>> my_seq
+        MutableSeq('ACTCGACGT', Alphabet())
+
+        Returns the last character of the sequence
+        """
         c = self.data[i]
         del self.data[i]
         return c
 
     def remove(self, item):
-        """Remove a subsequence of a single letter from mutable sequence."""
+        """Remove a subsequence of a single letter from mutable sequence.
+
+        >>> my_seq = MutableSeq('ACTCGACGTCG')
+        >>> my_seq.remove('C')
+        >>> my_seq
+        MutableSeq('ATCGACGTCG', Alphabet())
+        >>> my_seq.remove('A')
+        >>> my_seq
+        MutableSeq('TCGACGTCG', Alphabet())
+
+        No return value.
+        """
         for i in range(len(self.data)):
             if self.data[i] == item:
                 del self.data[i]
@@ -2069,7 +2140,15 @@ class MutableSeq(object):
                 return overlap_count
 
     def index(self, item):
-        """Return the position of a subsequence of a single letter."""
+        """Return the position of a subsequence of the first occurrence of
+        a single letter.
+
+        >>> my_seq = MutableSeq('ACTCGACGTCG')
+        >>> my_seq.index('A')
+        0
+        >>> my_seq.index('T')
+        2
+        """
         for i in range(len(self.data)):
             if self.data[i] == item:
                 return i
@@ -2122,7 +2201,18 @@ class MutableSeq(object):
     # def sort(self, *args): self.data.sort(*args)
 
     def extend(self, other):
-        """Add a sequence to the original mutable sequence object."""
+        """Add a sequence to the original mutable sequence object.
+
+        >>> my_seq = MutableSeq('ACTCGACGTCG')
+        >>> my_seq.extend('A')
+        >>> my_seq
+        MutableSeq('ACTCGACGTCGA', Alphabet())
+        >>> my_seq.extend('TTT')
+        >>> my_seq
+        MutableSeq('ACTCGACGTCGATTT', Alphabet())
+
+        No return value.
+        """
         if isinstance(other, MutableSeq):
             for c in other.data:
                 self.data.append(c)

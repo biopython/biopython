@@ -36,33 +36,54 @@ for its existing reverse_complement method etc.
 The output of function ``format_alignment`` in ``Bio.pairwise2`` for displaying
 a pairwise sequence alignment as text now indicates gaps and mis-matches.
 
+Bio.PDB now contains a writer for the mmCIF file format, which has been the
+standard PDB archive format since 2014. This allows structural objects to be
+written out and facilitates conversion between the PDB and mmCIF file formats.
+
+Bio.Emboss.Applications has been updated to fix a wrong parameter in fuzznuc
+wrapper and include a new wrapper for fuzzpro.
+
+The restriction enzyme list in Bio.Restriction has been updated to the
+November 2017 release of REBASE.
+
 In this release more of our code is now explicitly available under either our
 original "Biopython License Agreement", or the very similar but more commonly
 used "3-Clause BSD License".  See the ``LICENSE.rst`` file for more details.
 
-Additionally, a number of small bugs have been fixed with further additions to
-the test suite, and there has been further work to follow the Python PEP8,
-PEP257 and best practice standard coding style.
+Additionally, a number of small bugs and typos have been fixed with further
+additions to the test suite, and there has been further work to follow the
+Python PEP8, PEP257 and best practice standard coding style.
 
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+- Adhemar Zerlotini
 - Ariel Aptekmann
 - Chris Rands
 - Christian Brueffer
 - Erik Cederstrand (first contribution)
+- Fei Qi (first contribution)
 - Francesco Gastaldello
+- Jerven Bolleman (first contribution)
 - Joe Greener (first contribution)
 - João Rodrigues
+- Jeroen Van Goey
 - Jun Aruga (first contribution)
 - Kai Blin
 - Kozo Nishida
+- Markus Piotrowski
 - Michiel de Hoon
+- Nicolas Fontrodona (first contribution)
 - Peter Cock
 - rht (first contribution)
+- Saket Choudhary
 - Shuichiro MAKIGAKI (first contribution)
+- Shyam Saladi (first contribution)
 - Spencer Bliven
+- Stefans Mezulis
+- Steve Bond
 - Yasar L. Ahmed (first contribution)
+- Zaid Ur-Rehman (first contribution)
 
 
 10 July 2017: Biopython 1.70

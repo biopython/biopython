@@ -19,8 +19,9 @@ from ._Track import Track
 from ._FeatureSet import FeatureSet
 from ._GraphSet import GraphSet
 from ._CrossLink import CrossLink
+from ._Colors import ColorTranslator
+from ._Feature import Feature
+from ._Graph import GraphData
 
-# Not (currently) made public,
-# from ._Colors import ColorTranslator
-# from ._Feature import Feature
-# from ._Graph import GraphData
+__all__ = ('Diagram', 'Track', 'FeatureSet', 'Feature', 'GraphSet',
+           'GraphData', 'CrossLink', 'ColorTranslator')

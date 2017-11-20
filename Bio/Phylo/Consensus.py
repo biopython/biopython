@@ -84,10 +84,8 @@ class _BitString(str):
         new_clade = BaseTree.Clade()
         new_clade.clades.extend(clade_terms)
 
-
-    Example
-    -------
-
+    Examples
+    --------
     >>> from Bio.Phylo.Consensus import _BitString
     >>> bitstr1 = _BitString('11111')
     >>> bitstr2 = _BitString('11100')
@@ -116,6 +114,7 @@ class _BitString(str):
     True
     >>> bitstr2.iscompatible(bitstr3)
     False
+
     """
 
     def __new__(cls, strdata):

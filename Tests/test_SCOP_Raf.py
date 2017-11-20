@@ -43,18 +43,18 @@ class RafTests(unittest.TestCase):
         r2 = Raf.SeqMap(self.rafLine2)
         r3 = Raf.SeqMap(self.rafLine3)
 
-        l = len(r2.res) + len(r3.res)
+        length = len(r2.res) + len(r3.res)
         r2 += r3
-        self.assertEqual(len(r2.res), l)
+        self.assertEqual(len(r2.res), length)
 
         r2.extend(r2)
-        self.assertEqual(len(r2.res), l * 2)
+        self.assertEqual(len(r2.res), length * 2)
 
         r4 = r2 + r2
-        self.assertEqual(len(r4.res), l * 4)
+        self.assertEqual(len(r4.res), length * 4)
 
         r4.append(Raf.Res())
-        self.assertEqual(len(r4.res), (l * 4) + 1)
+        self.assertEqual(len(r4.res), (length * 4) + 1)
 
     def testSeqMapSlice(self):
         r = Raf.SeqMap(self.rafLine)

@@ -101,6 +101,9 @@ before_install:
   - tar -jxvf genepop-4.5.1-0.tar.bz2
   - popd
   - cp Tests/biosql.ini.sample Tests/biosql.ini
+  - psql -c "create database biosql_test;" -U postgres
+  - psql -c "create user biosql_user with encrypted password 'biosql_pass';" -U postgres
+  - psql -c "grant all privileges on database biosql_test to biosql_user;" -U postgres
 
 
 # This is minimal and used under all stages

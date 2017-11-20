@@ -108,6 +108,7 @@ class SequenceLine(object):
     """
 
     def __init__(self, text=None):
+        """Initialize the class."""
         self.acc = ''
         self.nid = ''
         self.lid = ''
@@ -151,6 +152,7 @@ class ProtsimLine(object):
     """
 
     def __init__(self, text=None):
+        """Initialize the class."""
         self.org = ''
         self.protgi = ''
         self.protid = ''
@@ -183,6 +185,7 @@ class STSLine(object):
     """
 
     def __init__(self, text=None):
+        """Initialize the class."""
         self.acc = ''
         self.unists = ''
         if text is not None:
@@ -229,6 +232,7 @@ class Record(object):
     """
 
     def __init__(self):
+        """Initialize the class."""
         self.ID = ''  # ID line
         self.species = ''  # Hs, Bt, etc.
         self.title = ''  # TITLE line

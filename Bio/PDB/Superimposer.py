@@ -19,6 +19,7 @@ class Superimposer(object):
     """
 
     def __init__(self):
+        """Initialize the class."""
         self.rotran = None
         self.rms = None
 
@@ -32,10 +33,10 @@ class Superimposer(object):
         """
         if not len(fixed) == len(moving):
             raise PDBException("Fixed and moving atom lists differ in size")
-        l = len(fixed)
-        fixed_coord = numpy.zeros((l, 3))
-        moving_coord = numpy.zeros((l, 3))
-        for i in range(0, len(fixed)):
+        length = len(fixed)
+        fixed_coord = numpy.zeros((length, 3))
+        moving_coord = numpy.zeros((length, 3))
+        for i in range(0, length):
             fixed_coord[i] = fixed[i].get_coord()
             moving_coord[i] = moving[i].get_coord()
         sup = SVDSuperimposer()

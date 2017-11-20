@@ -36,7 +36,7 @@ class CodonAlignment(MultipleSeqAlignment):
     """
 
     def __init__(self, records='', name=None, alphabet=default_codon_alphabet):
-
+        """Initialize the class."""
         MultipleSeqAlignment.__init__(self, records, alphabet=alphabet)
 
         # check the type of the alignment to be nucleotide

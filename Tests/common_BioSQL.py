@@ -98,7 +98,7 @@ def check_config(dbdriver, dbtype, dbhost, dbuser, dbpasswd, testdb):
         try:
             if DBDRIVER in ["MySQLdb"]:
                 import com.mysql.jdbc.Driver
-            elif DBDRIVER in ["psycopg2"]:
+            elif DBDRIVER in ["psycopg2", "pgdb"]:
                 import org.postgresql.Driver
         except ImportError:
             message = "Install the JDBC driver for %s to use BioSQL " % DBTYPE
@@ -130,48 +130,58 @@ def check_config(dbdriver, dbtype, dbhost, dbuser, dbpasswd, testdb):
         raise MissingExternalDependencyError(message)
 
 
-def _do_db_create():
-    """Do the actual work of database creation.
+def _do_db_cleanup():
+    """Cleanup everything from TESTDB.
 
     Relevant for MySQL and PostgreSQL.
     """
-    # first open a connection to create the database
-    server = BioSeqDatabase.open_database(driver=DBDRIVER, host=DBHOST,
-                                          user=DBUSER, passwd=DBPASSWD)
 
-    if DBDRIVER == "pgdb":
+    if DBDRIVER in ["psycopg2", "pgdb"]:
+        # first open a connection the database
+        # notice that postgres doesn't have createdb privileges, so
+        # the TESTDB must exist
+        server = BioSeqDatabase.open_database(driver=DBDRIVER, host=DBHOST,
+                                              user=DBUSER, passwd=DBPASSWD,
+                                              db=TESTDB)
+
         # The pgdb postgres driver does not support autocommit, so here we
         # commit the current transaction so that 'drop database' query will
         # be outside a transaction block
         server.adaptor.cursor.execute("COMMIT")
+        # drop anything in the database
+        # with Postgres, can get errors about database still being used.
+        # Wait briefly to be sure previous tests are done with it.
+        time.sleep(1)
+        # drop anything in the database
+        sql = r"DROP OWNED BY " + DBUSER
+        server.adaptor.cursor.execute(sql, ())
+        server.close()
     else:
-        # Auto-commit: postgresql cannot drop database in a transaction
+        # first open a connection to create the database
+        server = BioSeqDatabase.open_database(driver=DBDRIVER, host=DBHOST,
+                                              user=DBUSER, passwd=DBPASSWD)
+        # Auto-commit
         try:
             server.adaptor.autocommit()
         except AttributeError:
             pass
-
-    # drop anything in the database
-    try:
-        # with Postgres, can get errors about database still being used and
-        # not able to be dropped. Wait briefly to be sure previous tests are
-        # done with it.
-        time.sleep(1)
-        sql = r"DROP DATABASE " + TESTDB
-        server.adaptor.cursor.execute(sql, ())
-    except (server.module.OperationalError,
-            server.module.Error,
-            server.module.DatabaseError) as e:  # the database doesn't exist
-        pass
-    except (server.module.IntegrityError,
-            server.module.ProgrammingError) as e:  # ditto--perhaps
-        if str(e).find('database "%s" does not exist' % TESTDB) == -1:
-            server.close()
-            raise
-    # create a new database
-    sql = r"CREATE DATABASE " + TESTDB
-    server.adaptor.execute(sql, ())
-    server.close()
+        # drop the database
+        try:
+            sql = r"DROP DATABASE " + TESTDB
+            server.adaptor.cursor.execute(sql, ())
+        except (server.module.OperationalError,
+                server.module.Error,
+                server.module.DatabaseError) as e:  # the database doesn't exist
+            pass
+        except (server.module.IntegrityError,
+                server.module.ProgrammingError) as e:  # ditto--perhaps
+            if str(e).find('database "%s" does not exist' % TESTDB) == -1:
+                server.close()
+                raise
+        # create a new database
+        sql = r"CREATE DATABASE " + TESTDB
+        server.adaptor.execute(sql, ())
+        server.close()
 
 
 def create_database():
@@ -197,7 +207,7 @@ def create_database():
         # (which might be happening under Windows...)
         TESTDB = temp_db_filename()
     else:
-        _do_db_create()
+        _do_db_cleanup()
 
     # now open a connection to load the database
     server = BioSeqDatabase.open_database(driver=DBDRIVER,
@@ -321,17 +331,17 @@ class MultiReadTest(unittest.TestCase):
         db = self.db
         items = list(db.values())
         keys = list(db)
-        l = len(items)
-        self.assertEqual(l, len(db))
-        self.assertEqual(l, len(list(db)))
-        self.assertEqual(l, len(list(db.items())))
-        self.assertEqual(l, len(list(db.keys())))
-        self.assertEqual(l, len(list(db.values())))
+        length = len(items)
+        self.assertEqual(length, len(db))
+        self.assertEqual(length, len(list(db)))
+        self.assertEqual(length, len(list(db.items())))
+        self.assertEqual(length, len(list(db.keys())))
+        self.assertEqual(length, len(list(db.values())))
         if sys.version_info[0] == 2:
             # Check legacy methods for Python 2 as well:
-            self.assertEqual(l, len(list(db.iteritems())))
-            self.assertEqual(l, len(list(db.iterkeys())))
-            self.assertEqual(l, len(list(db.itervalues())))
+            self.assertEqual(length, len(list(db.iteritems())))
+            self.assertEqual(length, len(list(db.iterkeys())))
+            self.assertEqual(length, len(list(db.itervalues())))
         for (k1, r1), (k2, r2) in zip(zip(keys, items), db.items()):
             self.assertEqual(k1, k2)
             self.assertEqual(r1.id, r2.id)
@@ -399,11 +409,11 @@ class ReadTest(unittest.TestCase):
         db = self.db
         items = list(db.values())
         keys = list(db)
-        l = len(items)
-        self.assertEqual(l, len(db))
-        self.assertEqual(l, len(list(db.items())))
-        self.assertEqual(l, len(list(db)))
-        self.assertEqual(l, len(list(db.values())))
+        length = len(items)
+        self.assertEqual(length, len(db))
+        self.assertEqual(length, len(list(db.items())))
+        self.assertEqual(length, len(list(db)))
+        self.assertEqual(length, len(list(db.values())))
         for (k1, r1), (k2, r2) in zip(zip(keys, items), db.items()):
             self.assertEqual(k1, k2)
             self.assertEqual(r1.id, r2.id)
@@ -669,9 +679,9 @@ class DeleteTest(unittest.TestCase):
         db = self.db
         items = list(db.values())
         keys = list(db)
-        l = len(items)
+        length = len(items)
 
-        for seq_id in self.db.keys():
+        for seq_id in keys:
             sql = "SELECT seqfeature_id from seqfeature where bioentry_id = '%s'"
             # get the original number of seqfeatures associated with the bioentry
             seqfeatures = self.db.adaptor.execute_and_fetchall(sql % (seq_id))
@@ -685,6 +695,8 @@ class DeleteTest(unittest.TestCase):
                 rows_d = self.db.adaptor.execute_and_fetchall(sql % (seq_id))
                 # check to see that associated data is removed
                 self.assertEqual(len(rows_d), 0)
+
+        self.assertEqual(0, len(list(db.values())))
 
 
 class DupLoadTest(unittest.TestCase):

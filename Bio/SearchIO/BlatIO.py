@@ -137,7 +137,7 @@ BlatIO provides the following attribute-column mapping:
 |                | query_start_all         | qStarts, start coordinate of each |
 |                |                         | query fragment                    |
 |                +-------------------------+-----------------------------------+
-|                | len [1]                 | block count, the number of blocks |
+|                | len [*]_                | block count, the number of blocks |
 |                |                         | in the alignment                  |
 +----------------+-------------------------+-----------------------------------+
 | HSPFragment    | hit                     | hit sequence, if present          |
@@ -175,7 +175,7 @@ Finally, the default HSP and HSPFragment properties are also provided. See the
 HSP and HSPFragment documentation for more details on these properties.
 
 
-.. [1] You can obtain the number of blocks / fragments in the HSP by invoking
+.. [*] You can obtain the number of blocks / fragments in the HSP by invoking
    ``len`` on the HSP
 
 """
@@ -383,6 +383,7 @@ class BlatPslParser(object):
     """Parser for the BLAT PSL format."""
 
     def __init__(self, handle, pslx=False):
+        """Initialize the class."""
         self.handle = handle
         self.line = self.handle.readline()
         self.pslx = pslx
@@ -522,6 +523,7 @@ class BlatPslIndexer(SearchIndexer):
     _parser = BlatPslParser
 
     def __init__(self, filename, pslx=False):
+        """Initialize the class."""
         SearchIndexer.__init__(self, filename, pslx=pslx)
 
     def __iter__(self):
@@ -594,6 +596,7 @@ class BlatPslWriter(object):
     """Writer for the blat-psl format."""
 
     def __init__(self, handle, header=False, pslx=False):
+        """Initialize the class."""
         self.handle = handle
         # flag for writing header or not
         self.header = header

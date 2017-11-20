@@ -8,7 +8,7 @@
 from Bio.Restriction import Analysis, Restriction, RestrictionBatch
 from Bio.Restriction import CommOnly, NonComm, AllEnzymes
 from Bio.Restriction import (Acc65I, Asp718I, BamHI, EcoRI, EcoRV, KpnI, SmaI,
-                             MluCI, McrI, NdeI, BsmBI, AanI, EarI, SnaI)
+                             MluCI, McrI, NdeI, BsmBI, AanI, EarI, SnaI, SphI)
 from Bio.Restriction import FormattedSeq
 from Bio.Seq import Seq, MutableSeq
 from Bio.Alphabet.IUPAC import IUPACAmbiguousDNA
@@ -200,6 +200,11 @@ class SimpleEnzyme(unittest.TestCase):
         """Check if recognition sites on both strands are properly handled."""
         seq = Seq('CTCTTCGAAGAG')
         self.assertEqual(EarI.search(seq), [3, 8])
+
+    def test_overlapping_cut_sites(self):
+        """Check if overlapping recognition sites are properly handled."""
+        seq = Seq('CATGCACGCATGCATGCACGC')
+        self.assertEqual(SphI.search(seq), [13, 17])
 
 
 class EnzymeComparison(unittest.TestCase):

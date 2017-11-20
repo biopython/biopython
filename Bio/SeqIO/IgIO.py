@@ -33,8 +33,8 @@ def IgIterator(handle, alphabet=single_letter_alphabet):
     new line characters in the SeqRecord's annotations dictionary under the
     key 'comment'.
 
-    Example:
-
+    Examples
+    --------
     >>> with open("IntelliGenetics/TAT_mase_nuc.txt") as handle:
     ...     for record in IgIterator(handle):
     ...         print("%s length %i" % (record.id, len(record)))

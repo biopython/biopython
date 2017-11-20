@@ -29,6 +29,7 @@ class StructureBuilder(object):
     """
 
     def __init__(self):
+        """Initialize the class."""
         self.line_counter = 0
         self.header = {}
 

@@ -188,11 +188,13 @@ class Atom(object):
     def __sub__(self, other):
         """Calculate distance between two atoms.
 
-        Example:
-            >>> distance=atom1-atom2
-
         :param other: the other atom
         :type other: L{Atom}
+
+        Examples
+        --------
+        >>> distance = atom1 - atom2
+
         """
         diff = self.coord - other.coord
         return numpy.sqrt(numpy.dot(diff, diff))
@@ -329,17 +331,18 @@ class Atom(object):
     def transform(self, rot, tran):
         """Apply rotation and translation to the atomic coordinates.
 
-        Example:
-
-            >>> rotation=rotmat(pi, Vector(1, 0, 0))
-            >>> translation=array((0, 0, 1), 'f')
-            >>> atom.transform(rotation, translation)
-
         :param rot: A right multiplying rotation matrix
         :type rot: 3x3 Numeric array
 
         :param tran: the translation vector
         :type tran: size 3 Numeric array
+
+        Examples
+        --------
+        >>> rotation=rotmat(pi, Vector(1, 0, 0))
+        >>> translation=array((0, 0, 1), 'f')
+        >>> atom.transform(rotation, translation)
+
         """
         self.coord = numpy.dot(self.coord, rot) + tran
 

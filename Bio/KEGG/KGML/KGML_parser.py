@@ -106,6 +106,7 @@ class KGMLParser(object):
     """
 
     def __init__(self, elem):
+        """Initialize the class."""
         self.entry = elem
 
     def parse(self):

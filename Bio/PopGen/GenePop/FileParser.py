@@ -60,6 +60,7 @@ class FileRecord(object):
     """
 
     def __init__(self, fname):
+        """Initialize the class."""
         self.comment_line = ""
         self.loci_list = []
         self.fname = fname

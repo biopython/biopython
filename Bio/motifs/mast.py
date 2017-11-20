@@ -32,6 +32,7 @@ class Record(list):
     """
 
     def __init__(self):
+        """Initialize the class."""
         self.sequences = []
         self.version = ""
         self.database = ""

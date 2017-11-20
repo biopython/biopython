@@ -30,6 +30,7 @@ class Record(object):
     """
 
     def __init__(self, line=None):
+        """Initialize the class."""
         self.sunid = ''
         self.nodetype = ''
         self.sccs = ''

@@ -13,6 +13,7 @@ class TrainingExample(object):
     """Hold inputs and outputs of a training example."""
 
     def __init__(self, inputs, outputs, name=""):
+        """Initialize the class."""
         self.name = name
         self.inputs = inputs
         self.outputs = outputs
