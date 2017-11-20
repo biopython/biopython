@@ -244,5 +244,5 @@ class LineDistribution(object):
         pass
 
     def draw(self, cur_drawing, start_x, start_y, end_x, end_y):
-        """Draw a line distrubution into the current drawing."""
+        """Draw a line distribution into the current drawing."""
         pass

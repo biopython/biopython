@@ -157,6 +157,7 @@ class Primer3Commandline(_EmbossCommandLine):
     """
 
     def __init__(self, cmd="eprimer3", **kwargs):
+        """Initialize the class."""
         self.parameters = [
             _Option(["-sequence", "sequence"],
                     "Sequence to choose primers from.",
@@ -462,6 +463,7 @@ class PrimerSearchCommandline(_EmbossCommandLine):
     """Commandline object for the primersearch program from EMBOSS."""
 
     def __init__(self, cmd="primersearch", **kwargs):
+        """Initialize the class."""
         self.parameters = [
             _Option(["-seqall", "-sequences", "sequences", "seqall"],
                     "Sequence to look for the primer pairs in.",
@@ -495,6 +497,7 @@ class FDNADistCommandline(_EmbossCommandLine):
     """
 
     def __init__(self, cmd="fdnadist", **kwargs):
+        """Initialize the class."""
         self.parameters = [
             _Option(["-sequence", "sequence"],
                     "seq file to use (phylip)",
@@ -537,6 +540,7 @@ class FTreeDistCommandline(_EmbossCommandLine):
     """
 
     def __init__(self, cmd="ftreedist", **kwargs):
+        """Initialize the class."""
         self.parameters = [
             _Option(["-intreefile", "intreefile"],
                     "tree file to score (phylip)",
@@ -564,6 +568,7 @@ class FNeighborCommandline(_EmbossCommandLine):
     """
 
     def __init__(self, cmd="fneighbor", **kwargs):
+        """Initialize the class."""
         self.parameters = [
             _Option(["-datafile", "datafile"],
                     "dist file to use (phylip)",
@@ -599,6 +604,7 @@ class FSeqBootCommandline(_EmbossCommandLine):
     """
 
     def __init__(self, cmd="fseqboot", **kwargs):
+        """Initialize the class."""
         self.parameters = [
             _Option(["-sequence", "sequence"],
                     "seq file to sample (phylip)",
@@ -643,6 +649,7 @@ class FDNAParsCommandline(_EmbossCommandLine):
     """
 
     def __init__(self, cmd="fdnapars", **kwargs):
+        """Initialize the class."""
         self.parameters = [
             _Option(["-sequence", "sequence"],
                     "seq file to use (phylip)",
@@ -691,6 +698,7 @@ class FProtParsCommandline(_EmbossCommandLine):
     """
 
     def __init__(self, cmd="fprotpars", **kwargs):
+        """Initialize the class."""
         self.parameters = [
             _Option(["-sequence", "sequence"],
                     "seq file to use (phylip)",
@@ -732,6 +740,7 @@ class FProtDistCommandline(_EmbossCommandLine):
     """
 
     def __init__(self, cmd="fprotdist", **kwargs):
+        """Initialize the class."""
         self.parameters = [
             _Option(["-sequence", "sequence"],
                     "seq file to use (phylip)",
@@ -775,6 +784,7 @@ class FConsenseCommandline(_EmbossCommandLine):
     """
 
     def __init__(self, cmd="fconsense", **kwargs):
+        """Initialize the class."""
         self.parameters = [
             _Option(["-intreefile", "intreefile"],
                     "file with phylip trees to make consensus from",
@@ -800,6 +810,7 @@ class WaterCommandline(_EmbossCommandLine):
     """Commandline object for the water program from EMBOSS."""
 
     def __init__(self, cmd="water", **kwargs):
+        """Initialize the class."""
         self.parameters = [
             _Option(["-asequence", "asequence"],
                     "First sequence to align",
@@ -838,6 +849,7 @@ class NeedleCommandline(_EmbossCommandLine):
     """Commandline object for the needle program from EMBOSS."""
 
     def __init__(self, cmd="needle", **kwargs):
+        """Initialize the class."""
         self.parameters = [
             _Option(["-asequence", "asequence"],
                     "First sequence to align",
@@ -883,6 +895,7 @@ class NeedleallCommandline(_EmbossCommandLine):
     """Commandline object for the needleall program from EMBOSS."""
 
     def __init__(self, cmd="needleall", **kwargs):
+        """Initialize the class."""
         self.parameters = [
             _Option(["-asequence", "asequence"],
                     "First sequence to align",
@@ -932,6 +945,7 @@ class StretcherCommandline(_EmbossCommandLine):
     """Commandline object for the stretcher program from EMBOSS."""
 
     def __init__(self, cmd="stretcher", **kwargs):
+        """Initialize the class."""
         self.parameters = [
             _Option(["-asequence", "asequence"],
                     "First sequence to align",
@@ -966,6 +980,7 @@ class FuzznucCommandline(_EmbossCommandLine):
     """Commandline object for the fuzznuc program from EMBOSS."""
 
     def __init__(self, cmd="fuzznuc", **kwargs):
+        """Initialize the class."""
         self.parameters = [
             _Option(["-sequence", "sequence"],
                     "Sequence database USA",
@@ -973,11 +988,30 @@ class FuzznucCommandline(_EmbossCommandLine):
             _Option(["-pattern", "pattern"],
                     "Search pattern, using standard IUPAC one-letter codes",
                     is_required=True),
-            _Option(["-mismatch", "mismatch"],
-                    "Number of mismatches",
-                    is_required=True),
+            _Option(["-pmismatch", "pmismatch"],
+                    "Number of mismatches"),
             _Option(["-complement", "complement"],
                     "Search complementary strand"),
+            _Option(["-rformat", "rformat"],
+                    "Specify the report format to output in."),
+            ]
+        _EmbossCommandLine.__init__(self, cmd, **kwargs)
+
+
+class FuzzproCommandline(_EmbossCommandLine):
+    """Commandline object for the fuzzpro program from EMBOSS."""
+
+    def __init__(self, cmd="fuzzpro", **kwargs):
+        """Initialize the class."""
+        self.parameters = [
+            _Option(["-sequence", "sequence"],
+                    "Sequence database USA",
+                    is_required=True),
+            _Option(["-pattern", "pattern"],
+                    "Search pattern, using standard IUPAC one-letter codes",
+                    is_required=True),
+            _Option(["-pmismatch", "pmismatch"],
+                    "Number of mismatches"),
             _Option(["-rformat", "rformat"],
                     "Specify the report format to output in."),
             ]
@@ -988,6 +1022,7 @@ class Est2GenomeCommandline(_EmbossCommandLine):
     """Commandline object for the est2genome program from EMBOSS."""
 
     def __init__(self, cmd="est2genome", **kwargs):
+        """Initialize the class."""
         self.parameters = [
             _Option(["-est", "est"],
                     "EST sequence(s)",
@@ -1036,6 +1071,7 @@ class ETandemCommandline(_EmbossCommandLine):
     """Commandline object for the etandem program from EMBOSS."""
 
     def __init__(self, cmd="etandem", **kwargs):
+        """Initialize the class."""
         self.parameters = [
             _Option(["-sequence", "sequence"],
                     "Sequence",
@@ -1063,6 +1099,7 @@ class EInvertedCommandline(_EmbossCommandLine):
     """Commandline object for the einverted program from EMBOSS."""
 
     def __init__(self, cmd="einverted", **kwargs):
+        """Initialize the class."""
         self.parameters = [
             _Option(["-sequence", "sequence"],
                     "Sequence",
@@ -1091,6 +1128,7 @@ class PalindromeCommandline(_EmbossCommandLine):
     """Commandline object for the palindrome program from EMBOSS."""
 
     def __init__(self, cmd="palindrome", **kwargs):
+        """Initialize the class."""
         self.parameters = [
             _Option(["-sequence", "sequence"],
                     "Sequence",
@@ -1119,6 +1157,7 @@ class TranalignCommandline(_EmbossCommandLine):
     """Commandline object for the tranalign program from EMBOSS."""
 
     def __init__(self, cmd="tranalign", **kwargs):
+        """Initialize the class."""
         self.parameters = [
             _Option(["-asequence", "asequence"],
                     "Nucleotide sequences to be aligned.",
@@ -1142,6 +1181,7 @@ class DiffseqCommandline(_EmbossCommandLine):
     """Commandline object for the diffseq program from EMBOSS."""
 
     def __init__(self, cmd="diffseq", **kwargs):
+        """Initialize the class."""
         self.parameters = [
             _Option(["-asequence", "asequence"],
                     "First sequence to compare",
@@ -1171,8 +1211,8 @@ class DiffseqCommandline(_EmbossCommandLine):
 class IepCommandline(_EmbossCommandLine):
     """Commandline for EMBOSS iep: calculated isoelectric point and charge.
 
-    Example:
-
+    Examples
+    --------
     >>> from Bio.Emboss.Applications import IepCommandline
     >>> iep_cline = IepCommandline(sequence="proteins.faa",
     ...                            outfile="proteins.txt")
@@ -1181,9 +1221,11 @@ class IepCommandline(_EmbossCommandLine):
 
     You would typically run the command line with iep_cline() or via the
     Python subprocess module, as described in the Biopython tutorial.
+
     """
 
     def __init__(self, cmd="iep", **kwargs):
+        """Initialize the class."""
         self.parameters = [
             _Option(["-sequence", "sequence"],
                     "Protein sequence(s) filename",
@@ -1230,6 +1272,7 @@ class SeqretCommandline(_EmbossMinimalCommandLine):
     """
 
     def __init__(self, cmd="seqret", **kwargs):
+        """Initialize the class."""
         self.parameters = [
             _Option(["-sequence", "sequence"],
                     "Input sequence(s) filename",
@@ -1271,6 +1314,7 @@ class SeqmatchallCommandline(_EmbossCommandLine):
     """
 
     def __init__(self, cmd="seqmatchall", **kwargs):
+        """Initialize the class."""
         self.parameters = [
             _Option(["-sequence", "sequence"],
                     "Readable set of sequences",

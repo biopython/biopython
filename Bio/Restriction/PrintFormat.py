@@ -286,11 +286,11 @@ class PrintFormat(object):
         cur_len = 1
         new_sect = []
         for name, sites in iterator:
-            l = len(sites)
-            if l > cur_len:
+            length = len(sites)
+            if length > cur_len:
                 title += "\n\nenzymes which cut %i times :\n\n" % cur_len
                 title = self.__next_section(new_sect, title)
-                new_sect, cur_len = [(name, sites)], l
+                new_sect, cur_len = [(name, sites)], length
                 continue
             new_sect.append((name, sites))
         title += "\n\nenzymes which cut %i times :\n\n" % cur_len
@@ -330,12 +330,12 @@ class PrintFormat(object):
         x, counter, length = 0, 0, len(self.sequence)
         for x in range(60, length, 60):
             counter = x - 60
-            l = []
-            cutloc[counter] = l
+            loc = []
+            cutloc[counter] = loc
             remaining = []
             for key in mapping:
                 if key <= x:
-                    l.append(key)
+                    loc.append(key)
                 else:
                     remaining.append(key)
             mapping = remaining
@@ -354,9 +354,9 @@ class PrintFormat(object):
                 if key == base:
                     for n in enzymemap[key]:
                         s = ' '.join((s, n))
-                    l = line[0:59]
-                    lineo = Join((l, str(key), s, '\n'))
-                    line2 = Join((l, a, '\n'))
+                    chunk = line[0:59]
+                    lineo = Join((chunk, str(key), s, '\n'))
+                    line2 = Join((chunk, a, '\n'))
                     linetot = Join((lineo, line2))
                     map = Join((map, linetot))
                     break
@@ -380,9 +380,9 @@ class PrintFormat(object):
             if key == length:
                 for n in enzymemap[key]:
                     s = Join((s, ' ', n))
-                l = line[0:(length - 1)]
-                lineo = Join((l, str(key), s, '\n'))
-                line2 = Join((l, a, '\n'))
+                chunk = line[0:(length - 1)]
+                lineo = Join((chunk, str(key), s, '\n'))
+                line2 = Join((chunk, a, '\n'))
                 linetot = Join((lineo, line2))
                 map = Join((map, linetot))
                 break
@@ -428,15 +428,15 @@ class PrintFormat(object):
         several, Join = '', ''.join
         for name, sites in sorted(ls):
             stringsite = ''
-            l = Join((', '.join(str(site) for site in sites), '.'))
-            if len(l) > linesize:
+            output = Join((', '.join(str(site) for site in sites), '.'))
+            if len(output) > linesize:
                 #
                 #   cut where appropriate and add the indentation
                 #
-                l = [x.group() for x in re.finditer(pat, l)]
-                stringsite = indentation.join(l)
+                output = [x.group() for x in re.finditer(pat, output)]
+                stringsite = indentation.join(output)
             else:
-                stringsite = l
+                stringsite = output
             into = Join((into,
                          str(name).ljust(self.NameWidth), ' :  ', stringsite, '\n'))
         return into

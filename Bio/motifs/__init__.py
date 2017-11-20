@@ -147,6 +147,7 @@ class Instances(list):
     """A class representing instances of sequence motifs."""
 
     def __init__(self, instances=None, alphabet=None):
+        """Initialize the class."""
         from Bio.Alphabet import IUPAC
         from Bio.Seq import Seq
         if instances is None:
@@ -218,6 +219,7 @@ class Motif(object):
     """A class representing sequence motifs."""
 
     def __init__(self, alphabet=None, instances=None, counts=None):
+        """Initialize the class."""
         from . import matrix
         from Bio.Alphabet import IUPAC
         self.name = ""
@@ -402,7 +404,7 @@ class Motif(object):
         for more information::
 
             'stack_width' : 'medium',
-            'stack_per_line' : '40',
+            'stacks_per_line' : '40',
             'alphabet' : 'alphabet_dna',
             'ignore_lower_case' : True,
             'unit_name' : "bits",
@@ -453,7 +455,7 @@ class Motif(object):
         values = {'sequences': frequencies,
                   'format': format.lower(),
                   'stack_width': 'medium',
-                  'stack_per_line': '40',
+                  'stacks_per_line': '40',
                   'alphabet': alpha,
                   'ignore_lower_case': True,
                   'unit_name': "bits",

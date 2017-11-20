@@ -394,7 +394,7 @@ class TogoSearch(unittest.TestCase):
     def test_pubmed_search_porin(self):
         """Bio.TogoWS.search_iter("pubmed", "human porin") etc
 
-        Count was 357 at time of writing, this was choosen to
+        Count was 357 at time of writing, this was chosen to
         be larger than the default chunk size for iteration,
         but still not too big to download the full list.
         """

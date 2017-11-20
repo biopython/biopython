@@ -10,6 +10,7 @@ from __future__ import print_function
 
 class AbstractPropertyMap(object):
     def __init__(self, property_dict, property_keys, property_list):
+        """Initialize the class."""
         self.property_dict = property_dict
         self.property_keys = property_keys
         self.property_list = property_list
@@ -20,15 +21,18 @@ class AbstractPropertyMap(object):
     def __contains__(self, id):
         """True if the mapping has a property for this residue.
 
-        Example:
-            >>> if (chain_id, res_id) in apmap:
-            ...     res, prop = apmap[(chain_id, res_id)]
-
         :param chain_id: chain id
         :type chain_id: char
 
         :param res_id: residue id
         :type res_id: char
+
+        Examples
+        --------
+        >>> if (chain_id, res_id) in apmap:
+        ...     res, prop = apmap[(chain_id, res_id)]
+        ...
+
         """
         translated_id = self._translate_id(id)
         return translated_id in self.property_dict
@@ -59,23 +63,25 @@ class AbstractPropertyMap(object):
     def has_key(self, id):
         """True if the mapping has a property for this residue.
 
-        (Obsolete; use "id in mapping" instead.)
-
-        Example:
-
-            >>> if apmap.has_key((chain_id, res_id)):
-            ...     res, prop = apmap[(chain_id, res_id)]
-
-        Is equivalent to:
-
-            >>> if (chain_id, res_id) in apmap:
-            ...     res, prop = apmap[(chain_id, res_id)]
-
         :param chain_id: chain id
         :type chain_id: char
 
         :param res_id: residue id
         :type res_id: char
+
+        (Obsolete; use "id in mapping" instead.)
+
+        Examples
+        --------
+        >>> if apmap.has_key((chain_id, res_id)):
+        ...     res, prop = apmap[(chain_id, res_id)]
+
+        Is equivalent to:
+
+        >>> if (chain_id, res_id) in apmap:
+        ...     res, prop = apmap[(chain_id, res_id)]
+        ...
+
         """
         import warnings
         from Bio import BiopythonDeprecationWarning
@@ -95,13 +101,14 @@ class AbstractPropertyMap(object):
 
         Handy alternative to the dictionary-like access.
 
-        Example:
-
-            >>> for (res, property) in iter(map):
-            ...     print(res, property)
-            ...
-
         :return: iterator
+
+        Examples
+        --------
+        >>> for (res, property) in iter(map):
+        ...     print(res, property)
+        ...
+
         """
         for i in range(0, len(self.property_list)):
             yield self.property_list[i]
@@ -109,6 +116,7 @@ class AbstractPropertyMap(object):
 
 class AbstractResiduePropertyMap(AbstractPropertyMap):
     def __init__(self, property_dict, property_keys, property_list):
+        """Initialize the class."""
         AbstractPropertyMap.__init__(self, property_dict, property_keys,
                 property_list)
 
@@ -121,6 +129,7 @@ class AbstractResiduePropertyMap(AbstractPropertyMap):
 
 class AbstractAtomPropertyMap(AbstractPropertyMap):
     def __init__(self, property_dict, property_keys, property_list):
+        """Initialize the class."""
         AbstractPropertyMap.__init__(self, property_dict, property_keys,
                 property_list)
 

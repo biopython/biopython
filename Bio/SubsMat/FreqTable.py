@@ -64,6 +64,7 @@ class FreqTable(dict):
         return s
 
     def __init__(self, in_dict, dict_type, alphabet=None):
+        """Initialize the class."""
         self.alphabet = alphabet
         if dict_type == COUNT:
             self.count = in_dict

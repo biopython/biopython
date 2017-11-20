@@ -34,7 +34,8 @@ except ImportError:
 from Bio import BiopythonWarning
 from Bio.Seq import Seq
 from Bio.Alphabet import generic_protein
-from Bio.PDB import PDBParser, PPBuilder, CaPPBuilder, PDBIO, Select
+from Bio.PDB import PDBParser, PPBuilder, CaPPBuilder, PDBIO, Select, MMCIFParser, MMCIFIO
+from Bio.PDB.MMCIF2Dict import MMCIF2Dict
 from Bio.PDB import HSExposureCA, HSExposureCB, ExposureCN
 from Bio.PDB.PDBExceptions import PDBConstructionException, PDBConstructionWarning
 from Bio.PDB import rotmat, Vector, refmat, calc_angle, calc_dihedral, rotaxis, m2rotaxis
@@ -808,7 +809,11 @@ class WriteTest(unittest.TestCase):
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", PDBConstructionWarning)
             self.parser = PDBParser(PERMISSIVE=1)
+            self.mmcif_parser = MMCIFParser()
             self.structure = self.parser.get_structure("example", "PDB/1A8O.pdb")
+            self.mmcif_file = "PDB/1A8O.cif"
+            self.mmcif_multimodel_pdb_file = "PDB/1SSU_mod.pdb"
+            self.mmcif_multimodel_mmcif_file = "PDB/1SSU_mod.cif"
 
     def test_pdbio_write_structure(self):
         """Write a full structure using PDBIO."""
@@ -912,6 +917,101 @@ class WriteTest(unittest.TestCase):
             self.assertEqual(atoms['N'].get_occupancy(), None)
         finally:
             os.remove(filename)
+
+    def test_mmcifio_write_structure(self):
+        """Write a full structure using MMCIFIO."""
+        io = MMCIFIO()
+        struct1 = self.structure
+        # Write full model to temp file
+        io.set_structure(struct1)
+        filenumber, filename = tempfile.mkstemp()
+        os.close(filenumber)
+        try:
+            io.save(filename)
+            struct2 = self.mmcif_parser.get_structure("1a8o", filename)
+            nresidues = len(list(struct2.get_residues()))
+            self.assertEqual(len(struct2), 1)
+            self.assertEqual(nresidues, 158)
+        finally:
+            os.remove(filename)
+
+    def test_mmcifio_write_residue(self):
+        """Write a single residue using MMCIFIO."""
+        io = MMCIFIO()
+        struct1 = self.structure
+        residue1 = list(struct1.get_residues())[0]
+        # Write full model to temp file
+        io.set_structure(residue1)
+        filenumber, filename = tempfile.mkstemp()
+        os.close(filenumber)
+        try:
+            io.save(filename)
+            struct2 = self.mmcif_parser.get_structure("1a8o", filename)
+            nresidues = len(list(struct2.get_residues()))
+            self.assertEqual(nresidues, 1)
+        finally:
+            os.remove(filename)
+
+    def test_mmcifio_select(self):
+        """Write a selection of the structure using a Select subclass."""
+        # Selection class to filter all alpha carbons
+        class CAonly(Select):
+            """Accepts only CA residues."""
+
+            def accept_atom(self, atom):
+                if atom.name == "CA" and atom.element == "C":
+                    return 1
+
+        io = MMCIFIO()
+        struct1 = self.structure
+        # Write to temp file
+        io.set_structure(struct1)
+        filenumber, filename = tempfile.mkstemp()
+        os.close(filenumber)
+        try:
+            io.save(filename, CAonly())
+            struct2 = self.mmcif_parser.get_structure("1a8o", filename)
+            nresidues = len(list(struct2.get_residues()))
+            self.assertEqual(nresidues, 70)
+        finally:
+            os.remove(filename)
+
+    def test_mmcifio_write_dict(self):
+        """Write an mmCIF dictionary out, read it in and compare them."""
+        d1 = MMCIF2Dict(self.mmcif_file)
+        io = MMCIFIO()
+        # Write to temp file
+        io.set_dict(d1)
+        filenumber, filename = tempfile.mkstemp()
+        os.close(filenumber)
+        try:
+            io.save(filename)
+            d2 = MMCIF2Dict(filename)
+            k1 = sorted(d1.keys())
+            k2 = sorted(d2.keys())
+            self.assertEqual(k1, k2)
+            for key in k1:
+                self.assertEqual(d1[key], d2[key])
+        finally:
+            os.remove(filename)
+
+    def test_mmcifio_multimodel(self):
+        """Write a multi-model, multi-chain mmCIF file."""
+        pdb_struct = self.parser.get_structure("1SSU_mod_pdb", self.mmcif_multimodel_pdb_file)
+        mmcif_struct = self.mmcif_parser.get_structure("1SSU_mod_mmcif", self.mmcif_multimodel_mmcif_file)
+        io = MMCIFIO()
+        for struct in [pdb_struct, mmcif_struct]:
+            io.set_structure(struct)
+            filenumber, filename = tempfile.mkstemp()
+            os.close(filenumber)
+            try:
+                io.save(filename)
+                struct_in = self.mmcif_parser.get_structure("1SSU_mod_in", filename)
+                self.assertEqual(len(struct_in), 2)
+                self.assertEqual(len(struct_in[1]), 2)
+                self.assertEqual(round(float(struct_in[1]["B"][1]["N"].get_coord()[0]), 3), 6.259)
+            finally:
+                os.remove(filename)
 
 
 class Exposure(unittest.TestCase):
@@ -1038,7 +1138,7 @@ class Atom_Element(unittest.TestCase):
                '2HB ', '2HD ', '2HD1', '2HD2', '2HE ', '2HE2', '2HG ', '2HG1',
                '2HG2', '2HH1', '2HH2', '2HZ ', '3H  ', '3HB ', '3HD1', '3HD2',
                '3HE ', '3HG1', '3HG2', '3HZ ', 'HE21'),
-            O=(' OH ',),
+            O=(' OH ',),  # noqa: E741
             C=(' CH2',),
             N=(' NH1', ' NH2'),
         )
@@ -1363,7 +1463,7 @@ class CopyTests(unittest.TestCase):
         self.assertFalse(self.a is aa)
         self.assertFalse(self.a.get_coord() is aa.get_coord())
 
-    def test_entitity_copy(self):
+    def test_entity_copy(self):
         """Make a copy of a residue."""
         for e in (self.s, self.m, self.c, self.r):
             ee = e.copy()

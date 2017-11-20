@@ -36,6 +36,7 @@ class Hmmer2TextParser(object):
     """Iterator for the HMMER 2.0 text output."""
 
     def __init__(self, handle):
+        """Initialize the class."""
         self.handle = handle
         self.buf = []
         self._meta = self.parse_preamble()

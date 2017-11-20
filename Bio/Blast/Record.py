@@ -44,6 +44,7 @@ class Header(object):
     """
 
     def __init__(self):
+        """Initialize the class."""
         self.application = ''
         self.version = ''
         self.date = ''
@@ -69,6 +70,7 @@ class Description(object):
     """
 
     def __init__(self):
+        """Initialize the class."""
         self.title = ''
         self.score = None
         self.bits = None
@@ -92,6 +94,7 @@ class Alignment(object):
     """
 
     def __init__(self):
+        """Initialize the class."""
         self.title = ''
         self.hit_id = ''
         self.hit_def = ''
@@ -154,6 +157,7 @@ class HSP(object):
     """
 
     def __init__(self):
+        """Initialize the class."""
         self.score = None
         self.bits = None
         self.expect = None
@@ -214,6 +218,7 @@ class MultipleAlignment(object):
     """
 
     def __init__(self):
+        """Initialize the class."""
         self.alignment = []
 
     def to_generic(self, alphabet):
@@ -264,6 +269,7 @@ class Round(object):
     """
 
     def __init__(self):
+        """Initialize the class."""
         self.number = None
         self.reused_seqs = []
         self.new_seqs = []
@@ -286,6 +292,7 @@ class DatabaseReport(object):
     """
 
     def __init__(self):
+        """Initialize the class."""
         self.database_name = []
         self.posted_date = []
         self.num_letters_in_database = []
@@ -330,6 +337,7 @@ class Parameters(object):
     """
 
     def __init__(self):
+        """Initialize the class."""
         self.matrix = ''
         self.gap_penalties = (None, None)
         self.sc_match = None
@@ -373,6 +381,7 @@ class Blast(Header, DatabaseReport, Parameters):
     """
 
     def __init__(self):
+        """Initialize the class."""
         Header.__init__(self)
         DatabaseReport.__init__(self)
         Parameters.__init__(self)
@@ -392,6 +401,7 @@ class PSIBlast(Header, DatabaseReport, Parameters):
     """
 
     def __init__(self):
+        """Initialize the class."""
         Header.__init__(self)
         DatabaseReport.__init__(self)
         Parameters.__init__(self)

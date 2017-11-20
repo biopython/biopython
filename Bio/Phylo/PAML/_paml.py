@@ -21,6 +21,7 @@ class Paml(object):
 
     def __init__(self, alignment=None, working_dir=None,
                  out_file=None):
+        """Initialize the class."""
         if working_dir is None:
             self.working_dir = os.getcwd()
         else:

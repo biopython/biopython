@@ -851,10 +851,10 @@ class SeqRecord(object):
                            features=self.features[:],
                            dbxrefs=self.dbxrefs[:])
         # Will take all the features and all the db cross refs,
-        l = len(self)
+        length = len(self)
         for f in other.features:
-            answer.features.append(f._shift(l))
-        del l
+            answer.features.append(f._shift(length))
+        del length
         for ref in other.dbxrefs:
             if ref not in answer.dbxrefs:
                 answer.dbxrefs.append(ref)
@@ -1138,8 +1138,8 @@ class SeqRecord(object):
             answer.features = features
         elif features:
             # Copy the old features, adjusting location and string
-            l = len(answer)
-            answer.features = [f._flip(l) for f in self.features]
+            length = len(answer)
+            answer.features = [f._flip(length) for f in self.features]
             # The old list should have been sorted by start location,
             # reversing it will leave it sorted by what is now the end position,
             # so we need to resort in case of overlapping features.

@@ -14,13 +14,15 @@ from Bio import motifs
 def read(handle):
     """Parse the text output of the MEME program into a meme.Record object.
 
-    Example:
+    Examples
+    --------
     >>> from Bio.motifs import meme
     >>> with open("meme.output.txt") as f:
     ...     record = meme.read(f)
     >>> for motif in record:
     ...     for instance in motif.instances:
     ...         print(instance.motif_name, instance.sequence_name, instance.strand, instance.pvalue)
+
     """
     record = Record()
     __read_version(record, handle)
@@ -67,6 +69,7 @@ class Motif(motifs.Motif):
     """
 
     def __init__(self, alphabet=None, instances=None):
+        """Initialize the class."""
         motifs.Motif.__init__(self, alphabet, instances)
         self.evalue = 0.0
         self.num_occurrences = 0
@@ -77,6 +80,7 @@ class Instance(Seq.Seq):
     """A class describing the instances of a MEME motif, and the data thereof."""
 
     def __init__(self, *args, **kwds):
+        """Initialize the class."""
         Seq.Seq.__init__(self, *args, **kwds)
         self.sequence_name = ""
         self.start = 0
@@ -174,6 +178,8 @@ def __read_alphabet(record, handle):
     line = line.replace('ALPHABET= ', '')
     if line == 'ACGT':
         al = IUPAC.unambiguous_dna
+    elif line == 'ACGU':
+        al = IUPAC.unambiguous_rna
     else:
         al = IUPAC.protein
     record.alphabet = al

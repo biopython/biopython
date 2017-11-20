@@ -15,9 +15,22 @@ class PrankCommandline(AbstractCommandline):
 
     http://www.ebi.ac.uk/goldman-srv/prank/prank/
 
-    Example:
-    --------
+    Notes
+    -----
+    Last checked against version: 081202
 
+    References
+    ----------
+    Loytynoja, A. and Goldman, N. 2005. An algorithm for progressive
+    multiple alignment of sequences with insertions. Proceedings of
+    the National Academy of Sciences, 102: 10557--10562.
+
+    Loytynoja, A. and Goldman, N. 2008. Phylogeny-aware gap placement
+    prevents errors in sequence alignment and evolutionary analysis.
+    Science, 320: 1632.
+
+    Examples
+    --------
     To align a FASTA file (unaligned.fasta) with the output in aligned
     FASTA format with the output filename starting with "aligned" (you
     can't pick the filename explicitly), no tree output and no XML output,
@@ -34,21 +47,10 @@ class PrankCommandline(AbstractCommandline):
     You would typically run the command line with prank_cline() or via
     the Python subprocess module, as described in the Biopython tutorial.
 
-    Citations:
-    ----------
-
-    Loytynoja, A. and Goldman, N. 2005. An algorithm for progressive
-    multiple alignment of sequences with insertions. Proceedings of
-    the National Academy of Sciences, 102: 10557--10562.
-
-    Loytynoja, A. and Goldman, N. 2008. Phylogeny-aware gap placement
-    prevents errors in sequence alignment and evolutionary analysis.
-    Science, 320: 1632.
-
-    Last checked against version: 081202
     """
 
     def __init__(self, cmd="prank", **kwargs):
+        """Initialize the class."""
         OUTPUT_FORMAT_VALUES = list(range(1, 18))
         self.parameters = [
             # ################# input/output parameters: ##################

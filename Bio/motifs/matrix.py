@@ -58,6 +58,7 @@ except ImportError:
 class GenericPositionMatrix(dict):
 
     def __init__(self, alphabet, values):
+        """Initialize the class."""
         self.length = None
         for letter in alphabet.letters:
             if self.length is None:
@@ -266,8 +267,12 @@ class GenericPositionMatrix(dict):
 
     def reverse_complement(self):
         values = {}
-        values["A"] = self["T"][::-1]
-        values["T"] = self["A"][::-1]
+        if isinstance(self.alphabet, Alphabet.RNAAlphabet):
+            values["A"] = self["U"][::-1]
+            values["U"] = self["A"][::-1]
+        else:
+            values["A"] = self["T"][::-1]
+            values["T"] = self["A"][::-1]
         values["G"] = self["C"][::-1]
         values["C"] = self["G"][::-1]
         alphabet = self.alphabet
@@ -308,6 +313,7 @@ class FrequencyPositionMatrix(GenericPositionMatrix):
 class PositionWeightMatrix(GenericPositionMatrix):
 
     def __init__(self, alphabet, counts):
+        """Initialize the class."""
         GenericPositionMatrix.__init__(self, alphabet, counts)
         for i in range(self.length):
             total = sum(float(self[letter][i]) for letter in alphabet.letters)

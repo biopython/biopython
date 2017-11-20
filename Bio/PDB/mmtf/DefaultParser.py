@@ -1,10 +1,12 @@
 from Bio.PDB.StructureBuilder import StructureBuilder
+import numpy
 
 
 class StructureDecoder(object):
     """Class to pass the data from mmtf-python into a Biopython data structure."""
 
     def __init__(self):
+        """Initialize the class."""
         self.this_type = ""
 
     def init_structure(self, total_num_bonds, total_num_atoms,
@@ -49,7 +51,7 @@ class StructureDecoder(object):
             alternative_location_id = " "
 
         # Atom_name is in twice - the full_name is with spaces
-        self.structure_bulder.init_atom(str(atom_name), [x, y, z],
+        self.structure_bulder.init_atom(str(atom_name), numpy.array((x, y, z), "f"),
                                         temperature_factor, occupancy,
                                         alternative_location_id, str(atom_name),
                                         serial_number=serial_number,

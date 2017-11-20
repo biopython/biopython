@@ -266,6 +266,7 @@ class FastaM10Parser(object):
     """Parser for Bill Pearson's FASTA suite's -m 10 output."""
 
     def __init__(self, handle, __parse_hit_table=False):
+        """Initialize the class."""
         self.handle = UndoHandle(handle)
         self._preamble = self._parse_preamble()
 
@@ -517,6 +518,7 @@ class FastaM10Indexer(SearchIndexer):
     _parser = FastaM10Parser
 
     def __init__(self, filename):
+        """Initialize the class."""
         SearchIndexer.__init__(self, filename)
         self._handle = UndoHandle(self._handle)
 

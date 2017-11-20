@@ -33,6 +33,7 @@ class Record(object):
     """
 
     def __init__(self):
+        """Initialize the class."""
         self.comments = ""
         self.primers = []
 
@@ -66,6 +67,7 @@ class Primers(object):
     """
 
     def __init__(self):
+        """Initialize the class."""
         self.size = 0
         self.forward_seq = ""
         self.forward_start = 0

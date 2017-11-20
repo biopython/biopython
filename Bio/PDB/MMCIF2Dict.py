@@ -75,6 +75,8 @@ class MMCIF2Dict(dict):
                     yield line[start_i:i]
             elif c in self.quote_chars:
                 if not quote_open_char:
+                    if in_token:
+                        raise ValueError("Opening quote in middle of word: " + line)
                     quote_open_char = c
                     in_token = True
                     start_i = i + 1
@@ -82,6 +84,8 @@ class MMCIF2Dict(dict):
                     quote_open_char = None
                     in_token = False
                     yield line[start_i:i]
+            elif c == "#" and not quote_open_char:
+                return
             elif not in_token:
                 in_token = True
                 start_i = i
@@ -95,13 +99,16 @@ class MMCIF2Dict(dict):
             if line.startswith("#"):
                 continue
             elif line.startswith(";"):
-                token = line[1:].strip()
+                # The spec says that leading whitespace on each line must be
+                # preserved while trailing whitespace may be stripped.  The
+                # trailing newline must be stripped.
+                token_buffer = [line[1:].rstrip()]
                 for line in handle:
-                    line = line.strip()
+                    line = line.rstrip()
                     if line == ';':
                         break
-                    token += line
-                yield token
+                    token_buffer.append(line)
+                yield "\n".join(token_buffer)
             else:
                 for token in self._splitline(line.strip()):
                     yield token

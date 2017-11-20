@@ -3,7 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 #
-# NOTE - This file has been split in two as a work arround for Jython JVM limits.
+# NOTE - This file has been split in two as a workaround for Jython JVM limits.
 
 import os
 import unittest

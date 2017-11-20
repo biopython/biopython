@@ -6,7 +6,7 @@
 
 """Parse the enzyme.dat file from Enzyme at ExPASy.
 
-See http://www.expasy.ch/enzyme/
+See https://www.expasy.org/enzyme/
 
 Tested with the release of 03-Mar-2009.
 
@@ -74,6 +74,7 @@ class Record(dict):
     """
 
     def __init__(self):
+        """Initialize the class."""
         dict.__init__(self)
         self["ID"] = ''
         self["DE"] = ''

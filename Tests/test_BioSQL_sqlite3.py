@@ -24,10 +24,6 @@ TESTDB = temp_db_filename()
 # This will abort if driver not installed etc:
 check_config(DBDRIVER, DBTYPE, DBHOST, DBUSER, DBPASSWD, TESTDB)
 
-# Some of the unit tests don't create their own database,
-# so just in case there is no database already:
-TESTDB = create_database()
-
 
 if False:
     # This is how I generated test file Tests/BioSQL/cor6_6.db

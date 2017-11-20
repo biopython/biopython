@@ -385,6 +385,7 @@ class CaPPBuilder(_PPBuilder):
     """Use CA--CA distance to find polypeptides."""
 
     def __init__(self, radius=4.3):
+        """Initialize the class."""
         _PPBuilder.__init__(self, radius)
 
     def _is_connected(self, prev_res, next_res):
@@ -413,6 +414,7 @@ class PPBuilder(_PPBuilder):
     """Use C--N distance to find polypeptides."""
 
     def __init__(self, radius=1.8):
+        """Initialize the class."""
         _PPBuilder.__init__(self, radius)
 
     def _is_connected(self, prev_res, next_res):

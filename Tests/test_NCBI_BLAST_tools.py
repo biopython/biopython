@@ -30,7 +30,7 @@ if sys.platform == "win32":
     # and by default installs to C:\Program Files\NCBI\BLAST-2.2.22+\bin
     # To keep things simple, assume BLAST+ is on the path on Windows.
     #
-    # On Windows the environment variable name isn't case senstive,
+    # On Windows the environment variable name isn't case sensitive,
     # but must split on ";" not ":"
     likely_dirs = os.environ.get("PATH", "").split(";")
 else:
