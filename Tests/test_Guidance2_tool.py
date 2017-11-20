@@ -9,11 +9,12 @@ from Bio import MissingExternalDependencyError
 
 import sys
 import os
+import shutil
 import unittest
 from Bio import SeqIO
 from Bio import AlignIO
 from Bio._py3k import getoutput
-from Bio.Align.Applications import ClustalOmegaCommandline
+from Bio.Align.Applications import Guidance2Commandline
 from Bio.Application import ApplicationError
 
 #################################################################
@@ -23,7 +24,7 @@ os.environ['LANG'] = 'C'
 
 guidance_exe = None
 if sys.platform == "win32":
-    raise MissingExternalDependencyError("Testing with MAFFT not implemented on Windows yet")
+    raise MissingExternalDependencyError("Testing with Guidance2 not implemented on Windows yet")
 
 try:
     output = getoutput("guidance")
@@ -51,28 +52,40 @@ class Guidance2TestCase(unittest.TestCase):
         self.output = {"outDir": "Guidance2/Output"}
 
     def tearDown(self):
+        outDir = self.output["outDir"]
+        for item in os.listdir(outDir):
+            if "Results" in item:
+                continue
+            else:
+                item_path = os.path.join(outDir, item)
+                if os.path.isdir(item_path):
+                    shutil.rmtree(item_path)
+                if os.path.isfile(item_path):
+                    os.remove(item_path)
 
-    def standard_test_procedure(self, cline):
+    def standard_test_procedure(self, cline=Guidance2Commandline):
         """Standard testing procedure used by all tests."""
 
-        input_records = SeqIO.to_dict(SeqIO.parse(cline.infile, "fasta"))
-        self.assertEqual(str(eval(repr(cline))), str(cline))
-        output, error = cline()
-        self.assertTrue(not output or output.strip().startswith("CLUSTAL"))
+        output_path = cline.outDir
 
-        # Test if ClustalOmega executed successfully.
-        self.assertTrue(error.strip() == "" or
-                        error.startswith("WARNING: Sequence type is DNA.") or
-                        error.startswith("WARNING: DNA alignment is still experimental."))
-
-        # Check the output...
-        align = AlignIO.read(cline.outfile, "clustal")
-        output_records = SeqIO.to_dict(SeqIO.parse(cline.outfile, "clustal"))
-        self.assertEqual(len(set(input_records.keys())), len(set(output_records.keys())))
-        for record in align:
-            self.assertEqual(str(record.seq), str(output_records[record.id].seq))
-
-        # TODO - Try and parse this with Bio.Nexus?
-        if cline.guidetree_out:
-            self.assertTrue(os.path.isfile(cline.guidetree_out))
+        # input_records = SeqIO.to_dict(SeqIO.parse(cline.seqFile, "fasta"))
+        # self.assertEqual(str(eval(repr(cline))), str(cline))
+        # output, error = cline()
+        # self.assertTrue(not output or output.strip().startswith("CLUSTAL"))
+        #
+        # # Test if ClustalOmega executed successfully.
+        # self.assertTrue(error.strip() == "" or
+        #                 error.startswith("WARNING: Sequence type is DNA.") or
+        #                 error.startswith("WARNING: DNA alignment is still experimental."))
+        #
+        # # Check the output...
+        # align = AlignIO.read(cline.outfile, "clustal")
+        # output_records = SeqIO.to_dict(SeqIO.parse(cline.outfile, "clustal"))
+        # self.assertEqual(len(set(input_records.keys())), len(set(output_records.keys())))
+        # for record in align:
+        #     self.assertEqual(str(record.seq), str(output_records[record.id].seq))
+        #
+        # # TODO - Try and parse this with Bio.Nexus?
+        # if cline.guidetree_out:
+        #     self.assertTrue(os.path.isfile(cline.guidetree_out))
 
