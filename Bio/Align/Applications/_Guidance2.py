@@ -58,6 +58,7 @@ class Guidance2Commandline(AbstractCommandline):
 
     You would typically run the command line with Guidance2_cline() or via
     the Python subprocess module, as described in the Biopython tutorial.
+
     """
 
     def __init__(self, cmd="guidance", **kwargs):
@@ -109,7 +110,8 @@ class Guidance2Commandline(AbstractCommandline):
                     _Option(['--outOrder', 'outOrder'],
                             "[aligned|as_input] default=aligned",
                             equate=False,
-                            checker_function=lambda x: x in ['aligned', 'as_input']),
+                            checker_function=lambda x: x in ['aligned',
+                                                             'as_input']),
                     _Option(['--msaFile', 'msaFile'],
                             "Input alignment file - not recommended",
                             filename=True, equate=False,
