@@ -1,4 +1,3 @@
-
 # Copyright 2017 by Rob Gilmore and Shaurita Hutchins. All rights reserved.
 # Based on ClustalOmega wrapper copyright 2011 by Andreas Wilm.
 #
@@ -20,7 +19,6 @@ from Bio import SeqIO
 from Bio import AlignIO
 from Bio._py3k import getoutput
 from Bio.Align.Applications import Guidance2Commandline
-from Bio.Application import ApplicationError
 
 #################################################################
 
