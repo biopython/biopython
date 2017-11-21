@@ -21,7 +21,7 @@ from Bio.Application import _Option, AbstractCommandline
 
 
 class Guidance2Commandline(AbstractCommandline):
-    u"""Command line wrapper for GUIDANCE2.
+    """Command line wrapper for GUIDANCE2.
 
     http://guidance.tau.ac.il/ver2/
 
