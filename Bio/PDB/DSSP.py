@@ -12,11 +12,11 @@ The following Accessible surface area (ASA) values can be used, defaulting
 to the Sander and Rost values:
 
     Miller
-        Miller et al. 1987 http://dx.doi.org/10.1016/0022-2836(87)90038-6
+        Miller et al. 1987 https://doi.org/10.1016/0022-2836(87)90038-6
     Sander
-        Sander and Rost 1994 http://dx.doi.org/10.1002/prot.340200303
+        Sander and Rost 1994 https://doi.org/10.1002/prot.340200303
     Wilke
-        Tien et al. 2013 http://dx.doi.org/10.1371/journal.pone.0080635
+        Tien et al. 2013 https://doi.org/10.1371/journal.pone.0080635
 
 The DSSP codes for secondary structure used here are:
 
@@ -105,9 +105,9 @@ _dssp_cys = re.compile('[a-z]')
 # Used for relative accessibility
 
 residue_max_acc = {
-    # Miller max acc: Miller et al. 1987 http://dx.doi.org/10.1016/0022-2836(87)90038-6
-    # Wilke: Tien et al. 2013 http://dx.doi.org/10.1371/journal.pone.0080635
-    # Sander: Sander & Rost 1994 http://dx.doi.org/10.1002/prot.340200303
+    # Miller max acc: Miller et al. 1987 https://doi.org/10.1016/0022-2836(87)90038-6
+    # Wilke: Tien et al. 2013 https://doi.org/10.1371/journal.pone.0080635
+    # Sander: Sander & Rost 1994 https://doi.org/10.1002/prot.340200303
     'Miller': {
         'ALA': 113.0, 'ARG': 241.0, 'ASN': 158.0, 'ASP': 151.0,
         'CYS': 140.0, 'GLN': 189.0, 'GLU': 183.0, 'GLY': 85.0,
