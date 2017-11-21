@@ -37,7 +37,7 @@ class FastTreeCommandline(AbstractCommandline):
     ----------
     Price, M.N., Dehal, P.S., and Arkin, A.P. (2010) FastTree 2 -- Approximately
     Maximum-Likelihood Trees for Large Alignments. PLoS ONE, 5(3):e9490.
-    doi:10.1371/journal.pone.0009490.
+    https://doi.org/10.1371/journal.pone.0009490.
 
     Examples
     --------
