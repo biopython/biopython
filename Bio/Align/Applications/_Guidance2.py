@@ -24,10 +24,25 @@ class Guidance2Commandline(AbstractCommandline):
     """Command line wrapper for GUIDANCE2.
 
     http://guidance.tau.ac.il/ver2/
+    
+    Notes
+    -----
+    Last checked against version: 1.2.0
+    
+    References
+    ---------
+    Sela, I., Ashkenazy, H., Katoh, K. and Pupko, T. (2015)
+    GUIDANCE2: accurate detection of unreliable alignment regions 
+    accounting for the uncertainty of multiple parameters.
+    Nucleic Acids Research, 2015 Jul 1; 43 (Web Server issue): W7-W14.;
+    doi: 10.1093/nar/gkq443
 
-    Example:
+    Landan, G., and D. Graur. (2008).  Local reliability measures from 
+    sets of co-optimal multiple sequence alignments.  Pac Symp Biocomput 
+    13:15-24
+
+    Examples
     --------
-
     >>> from Bio.Align.Applications import Guidance2Commandline
     >>> import os
     >>> seqFile = "ADGRB1.ffn"
@@ -40,19 +55,9 @@ class Guidance2Commandline(AbstractCommandline):
     perl guidance.pl --seqFile HTR1A.ffn --msaProgram CLUSTALW --seqType codon --outDir ~/Guidance2/data
     --bootstraps 20 --seqCutoff 0.63 --colCutoff 0.9 --outOrder as_input --dataset ADGRB1
 
-
     You would typically run the command line with Guidance2_cline() or via
     the Python subprocess module, as described in the Biopython tutorial.
-
-    Citation:
-    ---------
-    Sela, I., Ashkenazy, H., Katoh, K. and Pupko, T. (2015)
-    GUIDANCE2: accurate detection of unreliable alignment regions accounting for the uncertainty of multiple parameters.
-    Nucleic Acids Research, 2015 Jul 1; 43 (Web Server issue): W7-W14.; doi: 10.1093/nar/gkq443
-
-    Landan, G., and D. Graur. (2008).
-    Local reliability measures from sets of co-optimal multiple sequence alignments.
-    Pac Symp Biocomput 13:15-24
+    
     """
 
     def __init__(self, cmd="guidance", **kwargs):
