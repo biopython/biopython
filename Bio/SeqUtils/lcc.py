@@ -131,7 +131,7 @@ def lcc_simp(seq):
 
     Reference:
     Andrzej K Konopka (2005) Sequence Complexity and Composition
-    DOI: 10.1038/npg.els.0005260
+    https://doi.org/10.1038/npg.els.0005260
     """
     wsize = len(seq)
     try:
