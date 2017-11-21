@@ -64,15 +64,7 @@ class Guidance2TestCase(unittest.TestCase):
 
     def tearDown(self):
         outDir = self.output["outDir"]
-        for item in os.listdir(outDir):
-            if "Results" in item:
-                continue
-            else:
-                item_path = os.path.join(outDir, item)
-                if os.path.isdir(item_path):
-                    shutil.rmtree(item_path)
-                if os.path.isfile(item_path):
-                    os.remove(item_path)
+        shutil.rmtree(outDir)
 
     def standard_test_procedure(self, cline=Guidance2Commandline):
         """Standard testing procedure used by all tests."""
