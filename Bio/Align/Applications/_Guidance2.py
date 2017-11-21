@@ -56,6 +56,7 @@ class Guidance2Commandline(AbstractCommandline):
     """
 
     def __init__(self, cmd="guidance", **kwargs):
+        """Initialize the class."""
         self.parameters = \
                 [
                     # Required Parameters
