@@ -24,6 +24,7 @@ class Guidance2Commandline(AbstractCommandline):
     """Command line wrapper for GUIDANCE2.
 
     http://guidance.tau.ac.il/ver2/
+    https://github.com/grabear/guidance
 
     Notes
     -----
