@@ -90,11 +90,6 @@ class Guidance2TestCase(unittest.TestCase):
         self.assertTrue(not _out or _out.strip().startswith("................."))
         input_records = SeqIO.to_dict(SeqIO.parse(cline.seqFile, "fasta"))
 
-        # # Test if ClustalOmega executed successfully.
-        # self.assertTrue(error.strip() == "" or
-        #                 error.startswith("WARNING: Sequence type is DNA.") or
-        #                 error.startswith("WARNING: DNA alignment is still experimental."))
-
         # Check the output...
         align = AlignIO.read(self.output["outALIGN"], "clustal")
         output_records = SeqIO.to_dict(SeqIO.parse(self.output["outFASTA"], "clustal"))
