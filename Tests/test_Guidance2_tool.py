@@ -42,10 +42,6 @@ if not guidance_exe:
 
 
 class Guidance2TestCase(unittest.TestCase):
-    """
-    --seqFile ADGRB1.ffn --msaProgram CLUSTALW --seqType codon --outDir ~/Guidance2/data
-        --bootstraps 20 --seqCutoff 0.63 --colCutoff 0.9 --outOrder as_input --dataset ADGRB1
-    """
 
     def setUp(self):
         self.na_input = {
@@ -117,4 +113,3 @@ class Guidance2TestNormalConditions(Guidance2TestCase):
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)
-
