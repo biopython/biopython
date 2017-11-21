@@ -1,9 +1,13 @@
-# Copyright 2008-2011 by Peter Cock.  All rights reserved.
-# Revisions copyright 2012 by Christian Brueffer.  All rights reserved.
+
+# Copyright 2017 by Rob Gilmore and Shaurita Hutchins. All rights reserved.
+# Based on ClustalOmega wrapper copyright 2011 by Andreas Wilm.
 #
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+# Wrapper for Guidance2 by Rob Gilmore (2017).  http://guidance.tau.ac.il/ver2/
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
 from Bio import MissingExternalDependencyError
 
