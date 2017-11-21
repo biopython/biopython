@@ -132,7 +132,7 @@ def seguid(seq):
 
     For more information about SEGUID, see:
     http://bioinformatics.anl.gov/seguid/
-    DOI: 10.1002/pmic.200600032
+    https://doi.org/10.1002/pmic.200600032
     """
     import hashlib
     import base64

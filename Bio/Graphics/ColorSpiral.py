@@ -11,7 +11,7 @@ and returning the output in RGB colour space, suitable for use with ReportLab
 and other graphics packages.
 
 This approach to colour choice was inspired by Bang Wong's Points of View
-article: Color Coding, in Nature Methods _7_ 573 (doi:10.1038/nmeth0810-573).
+article: Color Coding, in Nature Methods _7_ 573 (https://doi.org/10.1038/nmeth0810-573).
 
 The module also provides helper functions that return a list for colours, or
 a dictionary of colours (if passed an iterable containing the names of
