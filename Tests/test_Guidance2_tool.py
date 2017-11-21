@@ -48,11 +48,21 @@ class Guidance2TestCase(unittest.TestCase):
     """
 
     def setUp(self):
-        self.input = {"NA_seqFile": "Guidance2/Seqs/HTR1A.ffn",
-                      "AA_seqFile": "Guidance2/Seqs/HTR1A.faa"}
-        self.output = {"outDir": "Guidance2/Output",
-                       "outFASTA": "Guidance2/Output/Seqs.Orig.fas",
-                       "outALIGN": "Guidance2/Output/HTR1A.CLUSTALW.aln.orig"}
+        self.na_input = {
+            "seqFile": "Guidance2/Seqs/HTR1A.ffn",
+            "seqType": "nuc",
+            "outDir": "Guidance2/Output"
+                      }
+        self.aa_input = {
+            "seqFile": "Guidance2/Seqs/HTR1A.faa",
+            "seqType": "aa",
+            "outDir": "Guidance2/Output"
+        }
+        self.output = {
+            "outDir": "Guidance2/Output",
+            "outFASTA": "Guidance2/Output/Seqs.Orig.fas",
+            "outALIGN": "Guidance2/Output/HTR1A.CLUSTALW.aln.orig"
+        }
 
     def tearDown(self):
         outDir = self.output["outDir"]
@@ -92,4 +102,19 @@ class Guidance2TestCase(unittest.TestCase):
         for record in align:
             self.assertEqual(str(record.seq), str(output_records[record.id].seq))
 
+
+class Guidance2TestNormalConditions(Guidance2TestCase):
+
+    def test_nucleic_acid_fasta(self):
+        cline = Guidance2Commandline(msaProgram="CLUSTALW", **self.na_input)
+        self.standard_test_procedure(cline)
+
+    def test_amino_acid_fasta(self):
+        cline = Guidance2Commandline(msaProgram="CLUSTALW", **self.aa_input)
+        self.standard_test_procedure(cline)
+
+
+if __name__ == "__main__":
+    runner = unittest.TextTestRunner(verbosity=2)
+    unittest.main(testRunner=runner)
 
