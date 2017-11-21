@@ -11,6 +11,7 @@ import sys
 import os
 import shutil
 import unittest
+import subprocess
 from Bio import SeqIO
 from Bio import AlignIO
 from Bio._py3k import getoutput
@@ -47,9 +48,11 @@ class Guidance2TestCase(unittest.TestCase):
     """
 
     def setUp(self):
-        self.input = {"NA_seqFile": "Guidance2/Seqs/ADGRB1.ffn",
-                      "AA_seqFile": "Guidance2/Seqs/ADGRB1.faa"}
-        self.output = {"outDir": "Guidance2/Output"}
+        self.input = {"NA_seqFile": "Guidance2/Seqs/HTR1A.ffn",
+                      "AA_seqFile": "Guidance2/Seqs/HTR1A.faa"}
+        self.output = {"outDir": "Guidance2/Output",
+                       "outFASTA": "Guidance2/Output/Seqs.Orig.fas",
+                       "outALIGN": "Guidance2/Output/HTR1A.CLUSTALW.aln.orig"}
 
     def tearDown(self):
         outDir = self.output["outDir"]
@@ -68,24 +71,25 @@ class Guidance2TestCase(unittest.TestCase):
 
         output_path = cline.outDir
 
-        # input_records = SeqIO.to_dict(SeqIO.parse(cline.seqFile, "fasta"))
-        # self.assertEqual(str(eval(repr(cline))), str(cline))
-        # output, error = cline()
-        # self.assertTrue(not output or output.strip().startswith("CLUSTAL"))
-        #
+        self.assertEqual(str(eval(repr(cline))), str(cline))
+        guidance2 = subprocess.Popen([str(cline)], stderr=subprocess.PIPE,
+                                     stdout=subprocess.PIPE, shell=True,
+                                     encoding='utf-8')
+        _error = guidance2.stderr.readlines()
+        _out = guidance2.stdout.readlines()
+        self.assertTrue(not _out or _out.strip().startswith("................."))
+        input_records = SeqIO.to_dict(SeqIO.parse(cline.seqFile, "fasta"))
+
         # # Test if ClustalOmega executed successfully.
         # self.assertTrue(error.strip() == "" or
         #                 error.startswith("WARNING: Sequence type is DNA.") or
         #                 error.startswith("WARNING: DNA alignment is still experimental."))
-        #
-        # # Check the output...
-        # align = AlignIO.read(cline.outfile, "clustal")
-        # output_records = SeqIO.to_dict(SeqIO.parse(cline.outfile, "clustal"))
-        # self.assertEqual(len(set(input_records.keys())), len(set(output_records.keys())))
-        # for record in align:
-        #     self.assertEqual(str(record.seq), str(output_records[record.id].seq))
-        #
-        # # TODO - Try and parse this with Bio.Nexus?
-        # if cline.guidetree_out:
-        #     self.assertTrue(os.path.isfile(cline.guidetree_out))
+
+        # Check the output...
+        align = AlignIO.read(self.output["outALIGN"], "clustal")
+        output_records = SeqIO.to_dict(SeqIO.parse(self.output["outFASTA"], "clustal"))
+        self.assertEqual(len(set(input_records.keys())), len(set(output_records.keys())))
+        for record in align:
+            self.assertEqual(str(record.seq), str(output_records[record.id].seq))
+
 
