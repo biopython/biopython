@@ -4,14 +4,11 @@
 # as part of this package.
 
 """Testing online code for fetching NCBI qblast.
-
 Uses Bio.Blast.NCBIWWW.qblast() to run some online blast queries, get XML
 blast results back, and then checks Bio.Blast.NCBIXML.parse() can read them.
-
 Goals:
- - Make sure that all retrieval is working as expected.
- - Make sure we can parse the latest XML format being used by the NCBI.
-
+    - Make sure that all retrieval is working as expected.
+    - Make sure we can parse the latest XML format being used by the NCBI.
 """
 from __future__ import print_function
 import unittest
@@ -38,9 +35,10 @@ requires_internet.check()
 # - Entrez filter string (or None)
 # - list of hit identifiers expected to be found (or None if expect 0)
 
+print("Checking Bio.Blast.NCBIWWW.qblast() with various queries")
+
 
 class TestQblast(unittest.TestCase):
-    """Checking Bio.Blast.NCBIWWW.qblast() with various queries."""
 
     def test_blastp_nr_actin(self):
         # Simple protein blast filtered for rat only, using protein
@@ -74,10 +72,19 @@ class TestQblast(unittest.TestCase):
 
     def run_qblast(self, program, database, query, e_value, entrez_filter, expected_hits):
         try:
-            handle = NCBIWWW.qblast(program, database, query,
-                                    alignments=10, descriptions=10,
-                                    hitlist_size=10, entrez_query=entrez_filter,
-                                    expect=e_value)
+            if program == "blastn":
+                # Check the megablast parameter is accepted
+                handle = NCBIWWW.qblast(program, database, query,
+                                        alignments=10, descriptions=10,
+                                        hitlist_size=10,
+                                        entrez_query=entrez_filter,
+                                        expect=e_value, megablast="FALSE")
+            else:
+                handle = NCBIWWW.qblast(program, database, query,
+                                        alignments=10, descriptions=10,
+                                        hitlist_size=10,
+                                        entrez_query=entrez_filter,
+                                        expect=e_value)
         except HTTPError:
             # e.g. a proxy error
             raise MissingExternalDependencyError("internet connection failed")
@@ -147,4 +154,4 @@ class TestQblast(unittest.TestCase):
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
-    unittest.main(testRunner=runner)
+unittest.main(testRunner=runner)
