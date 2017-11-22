@@ -498,13 +498,19 @@ To display a hierarchical clustering solution with visualization programs such a
 \end{verbatim}
 This method takes no arguments, and returns \verb|None|.
 
+Before drawing the tree, you may also want to reorder the tree nodes. A hierarchical clustering solution of $n$ items can be drawn as $2^{n-1}$ different but equivalent dendrograms by switching the left and right subnode at each node. The \verb|tree.sort(order)| method visits each node in the hierarchical clustering tree and verifies if the average order value of the left subnode is less than or equal to the average order value of the right subnode. If not, the left and right subnodes are exchanged. Here, the order values of the items are given by the user. In the resulting dendrogram, items in the left-to-right order will tend to have increasing order values. The method will return the indices of the elements in the left-to-right order after sorting:
+\begin{verbatim}
+>>> indices = tree.sort(order)
+\end{verbatim}
+such that item \verb|indices[i]| will occur at position $i$ in the dendrogram.
+
 After hierarchical clustering, the items can be grouped into $k$ clusters based on the tree structure stored in the \verb|Tree| object by cutting the tree:
 \begin{verbatim}
 >>> clusterid = tree.cut(nclusters=1)
 \end{verbatim}
 where \verb|nclusters| (defaulting to \verb|1|) is the desired number of clusters $k$.
 This method ignores the top $k-1$ linking events in the tree structure, resulting in $k$ separated clusters of items. The number of clusters $k$ should be positive, and less than or equal to the number of items.
-This method returns an array \verb|clusterid| containing the number of the cluster to which each item is assigned.
+This method returns an array \verb|clusterid| containing the number of the cluster to which each item is assigned. Clusters are numbered $0$ to $k-1$ in their left-to-right order in the dendrogram.
 
 \subsection*{Performing hierarchical clustering}
 
@@ -689,12 +695,20 @@ For example, you can use
 >>> handle = gzip.open("mydatafile.txt.gz", "rt")
 \end{verbatim}
 to open a gzipped file, or
-% TODO: The urlopen example needs to be in text mode for Python 3..
 \begin{verbatim}
->>> import urllib # Python standard library
->>> handle = urllib.urlopen("http://somewhere.org/mydatafile.txt")
+>>> from urllib.request import urlopen # Python 3 only
+>>> from io import TextIOWrapper
+>>>
+>>> handle = TextIOWrapper(urlopen("https://raw.githubusercontent.com/biopython/biopython/master/Tests/Cluster/cyano.txt"))
 \end{verbatim}
 to open a file stored on the Internet before calling \verb|read|.
+
+Note for Python 2 this can be done by using:
+\begin{verbatim}
+>>> from urllib import urlopen # Python 2 only
+>>>
+>>> handle = urlopen("https://raw.githubusercontent.com/biopython/biopython/master/Tests/Cluster/cyano.txt")
+\end{verbatim}
 
 The \verb|read| command reads the tab-delimited text file \verb|mydatafile.txt| containing gene expression data in the format specified for Michael Eisen's Cluster/TreeView program. In this file format, rows represent genes and columns represent samples or observations. For a simple time course, a minimal input file would look like this:
 
@@ -931,8 +945,11 @@ This argument describes the (column-wise) clustering result for the experimental
 This method writes the text file \verb|jobname.cdt|, \verb|jobname.gtr|, \verb|jobname.atr|, \verb|jobname*.kgg|, and/or \verb|jobname*.kag| for subsequent reading by the Java TreeView program. If \verb|geneclusters| and \verb|expclusters| are both \verb|None|, this method only writes the text file \verb|jobname.cdt|; this file can subsequently be read into a new \verb|Record| object.
 \section{Example calculation}
 
-This is an example of a hierarchical clustering calculation, using single linkage clustering for genes and maximum linkage clustering for experimental conditions. As the Euclidean distance is being used for gene clustering, it is necessary to scale the node distances \verb|genetree| such that they are all between zero and one. This is needed for the Java TreeView code to display the tree diagram correctly. To cluster the experimental conditions, the uncentered correlation is being used. No scaling is needed in this case, as the distances in \verb|exptree| are already between zero and two. The example data \verb|cyano.txt| can be found in the \verb|data| subdirectory.
+This is an example of a hierarchical clustering calculation, using single linkage clustering for genes and maximum linkage clustering for experimental conditions. As the Euclidean distance is being used for gene clustering, it is necessary to scale the node distances \verb|genetree| such that they are all between zero and one. This is needed for the Java TreeView code to display the tree diagram correctly. To cluster the experimental conditions, the uncentered correlation is being used. No scaling is needed in this case, as the distances in \verb|exptree| are already between zero and two.
 
+The example data \verb|cyano.txt| can be found in Biopython's \verb|Tests/Cluster| subdirectory and is from the paper \cite[Hihara \textit{et al.}, 2001]{hihara2001}.
+
+%TODO, Windows: doctest ../Tests/Cluster lib:numpy
 \begin{verbatim}
 >>> from Bio import Cluster
 >>> with open("cyano.txt") as handle:
@@ -948,6 +965,7 @@ This will create the files \verb|cyano_result.cdt|, \verb|cyano_result.gtr|, and
 
 Similarly, we can save a $k$-means clustering solution:
 
+%TODO, Windows: doctest ../Tests/Cluster lib:numpy
 \begin{verbatim}
 >>> from Bio import Cluster
 >>> with open("cyano.txt") as handle:
@@ -971,4 +989,9 @@ returns the mean of the 1D array \verb|data|.
 \verb|version()|
 returns the version number of the underlying C Clustering Library as a string.
 
-
+%TODO, Windows: doctest . lib:numpy
+\begin{verbatim}
+>>> from Bio import Cluster
+>>> print(Cluster.version())
+1.50
+\end{verbatim}

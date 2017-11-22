@@ -2,19 +2,17 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""This module provides classes to work with Phenotype Microarray data.
+"""Classes to work with Phenotype Microarray data.
 
 More information on the single plates can be found here: http://www.biolog.com/
 
 Classes:
-
  - PlateRecord - Object that contain time course data on each well of the
    plate, as well as metadata (if any).
  - WellRecord - Object that contains the time course data of a single well
  - JsonWriter - Writer of PlateRecord objects in JSON format.
 
 Functions:
-
  - JsonIterator -  Incremental PM JSON parser, this is an iterator that returns
    PlateRecord objects.
  - CsvIterator - Incremental PM CSV parser, this is an iterator that returns
@@ -91,7 +89,7 @@ class PlateRecord(object):
     >>> 'A01' in plate
     True
 
-    All the wells belonging to a "row" (identified by the first charachter of
+    All the wells belonging to a "row" (identified by the first character of
     the well id) in the plate can be obtained:
 
     >>> for well in plate.get_row('H'):
@@ -135,6 +133,7 @@ class PlateRecord(object):
     """
 
     def __init__(self, plateid, wells=None):
+        """Initialize the class."""
         self.id = plateid
 
         if wells is None:
@@ -584,7 +583,7 @@ class WellRecord(object):
     >>> print(well.slope, well.model)
     (61.853516785566917, 'logistic')
 
-    If not sigmoid function is specified, the first one that is succesfully
+    If not sigmoid function is specified, the first one that is successfully
     fitted is used. The user can also specify a specific function.
 
     >>> well.fit('gompertz')
@@ -596,6 +595,7 @@ class WellRecord(object):
     """
 
     def __init__(self, wellid, plate=None, signals=None):
+        """Initialize the class."""
         if plate is None:
             self.plate = PlateRecord(None)
         else:
@@ -625,9 +625,7 @@ class WellRecord(object):
             self._signals = signals
 
     def _interpolate(self, time):
-        """Private method to get a linear interpolation of the signals
-        at certain time points.
-        """
+        """Linear interpolation of the signals at certain time points (PRIVATE)."""
         times = sorted(self._signals.keys())
 
         return np.interp(time,
@@ -636,8 +634,7 @@ class WellRecord(object):
                          left=np.nan, right=np.nan)
 
     def __setitem__(self, time, signal):
-        """Assign a signal at a certain time point.
-        """
+        """Assign a signal at a certain time point."""
         try:
             time = float(time)
         except ValueError:
@@ -650,8 +647,7 @@ class WellRecord(object):
         self._signals[time] = signal
 
     def __getitem__(self, time):
-        """Returns a subset of signals or a single signal.
-        """
+        """Returns a subset of signals or a single signal."""
         if isinstance(time, slice):
             # Fix the missing values in the slice
             if time.start is None:
@@ -799,11 +795,11 @@ class WellRecord(object):
         calculated.
 
         By default the following fitting functions will be used in order:
-        * gompertz
-        * logistic
-        * richards
+         - gompertz
+         - logistic
+         - richards
 
-        The first function that is succesfuly fitted to the signals will
+        The first function that is successfully fitted to the signals will
         be used to extract the curve parameters and update ``.area`` and
         ``.model``. If no function can be fitted an exception is raised.
 
@@ -857,7 +853,9 @@ def JsonIterator(handle):
     """Generator function to iterate over PM json records (as PlateRecord
     objects).
 
-    handle - input file
+    Arguments:
+     - handle - input file
+
     """
     try:
         data = json.load(handle)
@@ -935,7 +933,9 @@ def CsvIterator(handle):
     """Generator function to iterate over PM csv records (as PlateRecord
     objects).
 
-    handle - input file
+    Arguments:
+     - handle - input file
+
     """
     plate = None
     data = False
@@ -1114,6 +1114,7 @@ class JsonWriter(object):
     """Class to write PM Json format files."""
 
     def __init__(self, plates):
+        """Initialize the class."""
         self.plates = plates
 
     def write(self, handle):

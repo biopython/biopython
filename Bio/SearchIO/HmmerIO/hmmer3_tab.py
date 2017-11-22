@@ -20,6 +20,7 @@ class Hmmer3TabParser(object):
     """Parser for the HMMER table format."""
 
     def __init__(self, handle):
+        """Initialize the class."""
         self.handle = handle
         self.line = self.handle.readline()
 
@@ -89,7 +90,7 @@ class Hmmer3TabParser(object):
         cur, prev = None, None
         # container for Hit objects, used to create QueryResult
         hit_list = []
-
+        cur_qid = None
         while True:
             # store previous line's parsed values for all lines after the first
             if cur is not None:
@@ -146,7 +147,6 @@ class Hmmer3TabParser(object):
 
 
 class Hmmer3TabIndexer(SearchIndexer):
-
     """Indexer class for HMMER table output."""
 
     _parser = Hmmer3TabParser
@@ -221,10 +221,10 @@ class Hmmer3TabIndexer(SearchIndexer):
 
 
 class Hmmer3TabWriter(object):
-
     """Writer for hmmer3-tab output format."""
 
     def __init__(self, handle):
+        """Initialize the class."""
         self.handle = handle
 
     def write_file(self, qresults):

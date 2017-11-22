@@ -4,16 +4,18 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 import unittest
+import warnings
 
 from Bio import pairwise2
 from Bio.SubsMat.MatrixInfo import blosum62
+from Bio import BiopythonWarning
 
 
 class TestPairwiseErrorConditions(unittest.TestCase):
-    """Test several error conditions"""
+    """Test several error conditions."""
 
     def test_function_name(self):
-        """Test for wrong function names"""
+        """Test for wrong function names."""
         # Function name pattern must be globalXX or localXX
         self.assertRaises(AttributeError, lambda: pairwise2.align.globalxxx)
         self.assertRaises(AttributeError, lambda: pairwise2.align.localxxx)
@@ -23,7 +25,7 @@ class TestPairwiseErrorConditions(unittest.TestCase):
         self.assertRaises(AttributeError, lambda: pairwise2.align.globalxa)
 
     def test_function_parameters(self):
-        """Test for number of parameteres"""
+        """Test for number of parameters."""
         # globalxx takes two parameters
         self.assertRaises(TypeError, pairwise2.align.globalxx, 'A')
         # matrix_only is no keyword argument
@@ -47,6 +49,18 @@ class TestPairwiseErrorConditions(unittest.TestCase):
         self.assertRaises(ValueError, pairwise2.align.globalxs, 'A', 'C',
                           -1, -5)
 
+    def test_warnings(self):
+        """Test for warnings."""
+        with warnings.catch_warnings(record=True) as w:
+            # Cause all warnings to always be triggered.
+            warnings.simplefilter('always')
+            # Trigger a warning.
+            pairwise2.align.localxx('GA', 'CGA', penalize_end_gaps=True)
+            # Verify some things
+            self.assertEqual(len(w), 1)
+            self.assertEqual(w[-1].category, BiopythonWarning)
+            self.assertIn('should not', str(w[-1].message))
+
 
 class TestPairwiseGlobal(unittest.TestCase):
 
@@ -58,7 +72,7 @@ class TestPairwiseGlobal(unittest.TestCase):
         alignment = pairwise2.format_alignment(seq1, seq2, score, begin, end)
         self.assertEqual(alignment, """\
 GAACT
-|||||
+| | |
 G-A-T
   Score=3
 """)
@@ -66,13 +80,13 @@ G-A-T
         alignment = pairwise2.format_alignment(seq1, seq2, score, begin, end)
         self.assertEqual(alignment, """\
 GAACT
-|||||
+||  |
 GA--T
   Score=3
 """)
 
     def test_globalxx_simple2(self):
-        """Do the same test with sequence order reversed"""
+        """Do the same test with sequence order reversed."""
         aligns = pairwise2.align.globalxx("GAT", "GAACT")
         self.assertEqual(len(aligns), 2)
         aligns.sort()
@@ -80,7 +94,7 @@ GA--T
         alignment = pairwise2.format_alignment(seq1, seq2, score, begin, end)
         self.assertEqual(alignment, """\
 G-A-T
-|||||
+| | |
 GAACT
   Score=3
 """)
@@ -88,10 +102,21 @@ GAACT
         alignment = pairwise2.format_alignment(seq1, seq2, score, begin, end)
         self.assertEqual(alignment, """\
 GA--T
-|||||
+||  |
 GAACT
   Score=3
 """)
+
+    def test_list_input(self):
+        """Do a global aligment with sequences supplied as lists."""
+        aligns = pairwise2.align.globalxx(['Gly', 'Ala', 'Thr'],
+                                          ['Gly', 'Ala', 'Ala', 'Cys', 'Thr'],
+                                          gap_char=['---'])
+        aligns.sort()
+        seq1, seq2, score, begin, end = aligns[0]
+        self.assertEqual(score, 3)
+        self.assertEqual(seq1, ['Gly', '---', 'Ala', '---', 'Thr'])
+        self.assertEqual(seq2, ['Gly', 'Ala', 'Ala', 'Cys', 'Thr'])
 
 
 class TestPairwiseLocal(unittest.TestCase):
@@ -102,7 +127,7 @@ class TestPairwiseLocal(unittest.TestCase):
         alignment = pairwise2.format_alignment(seq1, seq2, score, begin, end)
         self.assertEqual(alignment, """\
 -AxBx
- |||
+ | |
 zA-Bz
   Score=1.9
 """)
@@ -110,13 +135,13 @@ zA-Bz
         alignment = pairwise2.format_alignment(seq1, seq2, score, begin, end)
         self.assertEqual(alignment, """\
 -AxBx
- ||||
+ | |.
 zA-Bz
   Score=1.9
 """)
 
     def test_localms(self):
-        """Two different local alignments"""
+        """Two different local alignments."""
         aligns = sorted(pairwise2.align.localms("xxxABCDxxx", "zzzABzzCDz", 1,
                                                 -0.5, -3, -1))
         alignment = pairwise2.format_alignment(*aligns[0])
@@ -143,20 +168,20 @@ zzzABzzCDz
                                              blosum62, -4, -4)
         for a in alignments:
             self.assertEqual(pairwise2.format_alignment(*a),
-                             "VKAHGKKV\n |||\nFQAHCAGV\n  Score=13\n")
+                             "VKAHGKKV\n .||\nFQAHCAGV\n  Score=13\n")
 
 
 class TestScoreOnly(unittest.TestCase):
-    """Test paramater ``score_only``"""
+    """Test paramater ``score_only``."""
 
     def test_score_only_global(self):
-        """Test ``score_only`` in a global alignment"""
+        """Test ``score_only`` in a global alignment."""
         aligns1 = pairwise2.align.globalxx("GAACT", "GAT")
         aligns2 = pairwise2.align.globalxx("GAACT", "GAT", score_only=True)
         self.assertEqual(aligns1[0][2], aligns2)
 
     def test_score_only_local(self):
-        """Test ``score_only`` in a local alignment"""
+        """Test ``score_only`` in a local alignment."""
         aligns1 = pairwise2.align.localms("xxxABCDxxx", "zzzABzzCDz", 1, -0.5,
                                           -3, -1)
         aligns2 = pairwise2.align.localms("xxxABCDxxx", "zzzABzzCDz", 1, -0.5,
@@ -174,7 +199,7 @@ class TestPairwiseOpenPenalty(unittest.TestCase):
         alignment = pairwise2.format_alignment(seq1, seq2, score, begin, end)
         self.assertEqual(alignment, """\
 AA
-||
+ |
 -A
   Score=1.9
 """)
@@ -182,10 +207,10 @@ AA
         alignment = pairwise2.format_alignment(seq1, seq2, score, begin, end)
         self.assertEqual(alignment, """\
 AA
-||
+| 
 A-
   Score=1.9
-""")
+""")  # noqa: W291
 
     def test_match_score_open_penalty2(self):
         aligns = pairwise2.align.globalms("GAA", "GA", 1.5, 0, -0.1, 0)
@@ -195,7 +220,7 @@ A-
         alignment = pairwise2.format_alignment(seq1, seq2, score, begin, end)
         self.assertEqual(alignment, """\
 GAA
-|||
+| |
 G-A
   Score=2.9
 """)
@@ -203,10 +228,10 @@ G-A
         alignment = pairwise2.format_alignment(seq1, seq2, score, begin, end)
         self.assertEqual(alignment, """\
 GAA
-|||
+|| 
 GA-
   Score=2.9
-""")
+""")  # noqa: W291
 
     def test_match_score_open_penalty3(self):
         aligns = pairwise2.align.globalxs("GAACT", "GAT", -0.1, 0)
@@ -215,7 +240,7 @@ GA-
         alignment = pairwise2.format_alignment(seq1, seq2, score, begin, end)
         self.assertEqual(alignment, """\
 GAACT
-|||||
+||  |
 GA--T
   Score=2.9
 """)
@@ -227,10 +252,10 @@ GA--T
         alignment = pairwise2.format_alignment(seq1, seq2, score, begin, end)
         self.assertEqual(alignment, """\
 GC-T-
-|||||
+|  | 
 G-ATA
   Score=1.7
-""")
+""")  # noqa: W291
 
 
 class TestPairwiseExtendPenalty(unittest.TestCase):
@@ -242,7 +267,7 @@ class TestPairwiseExtendPenalty(unittest.TestCase):
         alignment = pairwise2.format_alignment(seq1, seq2, score, begin, end)
         self.assertEqual(alignment, """\
 GACT
-||||
+|  |
 G--T
   Score=1.3
 """)
@@ -255,7 +280,7 @@ G--T
         alignment = pairwise2.format_alignment(seq1, seq2, score, begin, end)
         self.assertEqual(alignment, """\
 GACT
-||||
+|  |
 G--T
   Score=0.3
 """)
@@ -271,7 +296,7 @@ class TestPairwisePenalizeExtendWhenOpening(unittest.TestCase):
         alignment = pairwise2.format_alignment(seq1, seq2, score, begin, end)
         self.assertEqual(alignment, """\
 GACT
-||||
+|  |
 G--T
   Score=-1.2
 """)
@@ -288,7 +313,7 @@ class TestPairwisePenalizeEndgaps(unittest.TestCase):
         alignment = pairwise2.format_alignment(seq1, seq2, score, begin, end)
         self.assertEqual(alignment, """\
 GACT
-||||
+  .|
 --GT
   Score=1
 """)
@@ -296,7 +321,7 @@ GACT
         alignment = pairwise2.format_alignment(seq1, seq2, score, begin, end)
         self.assertEqual(alignment, """\
 GACT
-||||
+|  |
 G--T
   Score=1
 """)
@@ -304,13 +329,13 @@ G--T
         alignment = pairwise2.format_alignment(seq1, seq2, score, begin, end)
         self.assertEqual(alignment, """\
 GACT
-||||
+|.  
 GT--
   Score=1
-""")
+""")  # noqa: W291
 
     def test_penalize_end_gaps2(self):
-        """Do the same, but use the generic method (with the same resutlt)"""
+        """Do the same, but use the generic method (with the same result)."""
         aligns = pairwise2.align.globalxs("GACT", "GT", -0.8, -0.2,
                                           penalize_end_gaps=0,
                                           force_generic=True)
@@ -320,7 +345,7 @@ GT--
         alignment = pairwise2.format_alignment(seq1, seq2, score, begin, end)
         self.assertEqual(alignment, """\
 GACT
-||||
+  .|
 --GT
   Score=1
 """)
@@ -328,7 +353,7 @@ GACT
         alignment = pairwise2.format_alignment(seq1, seq2, score, begin, end)
         self.assertEqual(alignment, """\
 GACT
-||||
+|  |
 G--T
   Score=1
 """)
@@ -336,10 +361,10 @@ G--T
         alignment = pairwise2.format_alignment(seq1, seq2, score, begin, end)
         self.assertEqual(alignment, """\
 GACT
-||||
+|.  
 GT--
   Score=1
-""")
+""")  # noqa: W291
 
 
 class TestPairwiseSeparateGapPenalties(unittest.TestCase):
@@ -352,7 +377,7 @@ class TestPairwiseSeparateGapPenalties(unittest.TestCase):
         alignment = pairwise2.format_alignment(seq1, seq2, score, begin, end)
         self.assertEqual(alignment, """\
 G-AT
-||||
+| .|
 GTCT
   Score=1.7
 """)
@@ -360,7 +385,7 @@ GTCT
         alignment = pairwise2.format_alignment(seq1, seq2, score, begin, end)
         self.assertEqual(alignment, """\
 GA-T
-||||
+|. |
 GTCT
   Score=1.7
 """)
@@ -372,10 +397,10 @@ GTCT
         alignment = pairwise2.format_alignment(seq1, seq2, score, begin, end)
         self.assertEqual(alignment, """\
 GAT--
-|||
+| |
 G-TCT
   Score=1.8
-""")
+""")  # noqa: W291
 
 
 class TestPairwiseSeparateGapPenaltiesWithExtension(unittest.TestCase):
@@ -389,7 +414,7 @@ class TestPairwiseSeparateGapPenaltiesWithExtension(unittest.TestCase):
         alignment = pairwise2.format_alignment(seq1, seq2, score, begin, end)
         self.assertEqual(alignment, """\
 ['G', '-', 'A', 'A', 'T']
-|||||
+| ..|
 ['G', 'T', 'C', 'C', 'T']
   Score=1.9
 """)
@@ -397,7 +422,7 @@ class TestPairwiseSeparateGapPenaltiesWithExtension(unittest.TestCase):
         alignment = pairwise2.format_alignment(seq1, seq2, score, begin, end)
         self.assertEqual(alignment, """\
 ['G', 'A', '-', 'A', 'T']
-|||||
+|. .|
 ['G', 'T', 'C', 'C', 'T']
   Score=1.9
 """)
@@ -405,7 +430,7 @@ class TestPairwiseSeparateGapPenaltiesWithExtension(unittest.TestCase):
         alignment = pairwise2.format_alignment(seq1, seq2, score, begin, end)
         self.assertEqual(alignment, """\
 ['G', 'A', 'A', '-', 'T']
-|||||
+|.. |
 ['G', 'T', 'C', 'C', 'T']
   Score=1.9
 """)
@@ -428,7 +453,7 @@ class TestPairwiseMatchDictionary(unittest.TestCase):
         alignment = pairwise2.format_alignment(seq1, seq2, score, begin, end)
         self.assertEqual(alignment, """\
 ATAT
-||||
+|| |
 AT-T
   Score=3
 """)
@@ -436,7 +461,7 @@ AT-T
         alignment = pairwise2.format_alignment(seq1, seq2, score, begin, end)
         self.assertEqual(alignment, """\
 ATAT
-|||
+||.
 ATT-
   Score=3
 """)
@@ -448,7 +473,7 @@ ATT-
         alignment = pairwise2.format_alignment(seq1, seq2, score, begin, end)
         self.assertEqual(alignment, """\
 ATAT
-|||
+||.
 ATT-
   Score=3
 """)
@@ -460,7 +485,7 @@ ATT-
         alignment = pairwise2.format_alignment(seq1, seq2, score, begin, end)
         self.assertEqual(alignment, """\
 ATT-
-|||
+||.
 ATAT
   Score=3
 """)
@@ -508,10 +533,10 @@ abcce
         alignment = pairwise2.format_alignment(seq1, seq2, score, begin, end)
         self.assertEqual(alignment, """\
 abcde
-|||||
+  |  
 --c--
   Score=0.2
-""")
+""")  # noqa: W291
 
 
 class TestPersiteGapPenalties(unittest.TestCase):
@@ -527,12 +552,11 @@ class TestPersiteGapPenalties(unittest.TestCase):
 
         def no_gaps(x, y):
             """Very expensive to open a gap in seq1."""
-
             x = 0  # fool QuantifiedCode, x is not used here
             return -2000 - y
 
         def specific_gaps(x, y):
-            """Very expensive to open a gap in seq2
+            """Very expensive to open a gap in seq2.
 
             ...unless it is in one of the allowed positions:
             """
@@ -545,10 +569,10 @@ class TestPersiteGapPenalties(unittest.TestCase):
         formatted = pairwise2.format_alignment(*alignments[0])
         self.assertEqual(formatted, """\
 AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
-||||||||||||||||||||||||||||||||||||
+  |||||||||||          |||||||||||  
 --AABBBAAAACC----------CCAAAABBBAA--
   Score=2
-""")
+""")  # noqa: W291
 
     def test_gap_here_only_2(self):
         """Force a bad alignment.
@@ -566,7 +590,7 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
             return -2000 - y
 
         def specific_gaps(x, y):
-            """Very expensive to open a gap in seq2
+            """Very expensive to open a gap in seq2.
 
             ...unless it is in one of the allowed positions:
             """
@@ -579,10 +603,10 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
         formatted = pairwise2.format_alignment(*alignments[0])
         self.assertEqual(formatted, """\
 AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
-||||||||||||||||||||||||||||||||||||
+  |||          ......|||||||||||||  
 --AAB----------BBAAAACCCCAAAABBBAA--
   Score=-10
-""")
+""")  # noqa: W291
 
 
 class TestOtherFunctions(unittest.TestCase):

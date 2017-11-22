@@ -11,7 +11,7 @@ and returning the output in RGB colour space, suitable for use with ReportLab
 and other graphics packages.
 
 This approach to colour choice was inspired by Bang Wong's Points of View
-article: Color Coding, in Nature Methods _7_ 573 (doi:10.1038/nmeth0810-573).
+article: Color Coding, in Nature Methods _7_ 573 (https://doi.org/10.1038/nmeth0810-573).
 
 The module also provides helper functions that return a list for colours, or
 a dictionary of colours (if passed an iterable containing the names of
@@ -47,12 +47,12 @@ class ColorSpiral(object):
     V-space, to aid in distinguishing consecutive colour points on the
     path.
     """
+
     def __init__(self, a=1, b=0.33, v_init=0.85, v_final=0.5,
                  jitter=0.05):
-        """Initialise a logarithmic spiral path through HSV colour space
+        """Initialize a logarithmic spiral path through HSV colour space.
 
         Arguments:
-
          - a - Parameter a for the spiral, controls the initial spiral
            direction. a > 0
          - b - parameter b for the spiral, controls the rate at which the
@@ -65,8 +65,9 @@ class ColorSpiral(object):
            selected colour. The amount of jitter will be selected
            from a uniform random distribution [-jitter, jitter],
            and V will be maintained in [0,1].
+
         """
-        # Initialise attributes
+        # Initialize attributes
         self.a = a
         self.b = b
         self.v_init = v_init
@@ -80,9 +81,9 @@ class ColorSpiral(object):
         evenly-spaced points along the defined spiral in HSV space.
 
         Arguments:
-
          - k - the number of points to return
          - offset - how far along the spiral path to start.
+
         """
         # We use the offset to skip a number of similar colours near to HSV axis
         assert offset > 0 and offset < 1, "offset must be in (0,1)"
@@ -161,27 +162,27 @@ class ColorSpiral(object):
 # Convenience functions for those who don't want to bother with a
 # ColorSpiral object
 def get_colors(k, **kwargs):
-    """Returns k colours selected by the ColorSpiral object, as a generator.
+    """Return k colours selected by the ColorSpiral object, as a generator.
 
     Arguments:
-
      - k - the number of colours to return
      - kwargs - pass-through arguments to the ColorSpiral object
+
     """
     cs = ColorSpiral(**kwargs)
     return cs.get_colors(k)
 
 
 def get_color_dict(l, **kwargs):
-    """Returns a dictionary of colours using the provided values as keys.
+    """Return a dictionary of colours using the provided values as keys.
 
     Returns a dictionary, keyed by the members of iterable l, with a
     colour assigned to each member.
 
     Arguments:
-
      - l - an iterable representing classes to be coloured
      - kwargs - pass-through arguments to the ColorSpiral object
+
     """
     cs = ColorSpiral(**kwargs)
     colors = cs.get_colors(len(l))

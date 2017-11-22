@@ -3,20 +3,20 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""Test for graphics things that don't really deserve there own test module.
+"""Test for graphics things that don't really deserve there own test module."""
 
-XXX Right now this test occasionally fails with a trace like:
+# TODO: Right now this test occasionally fails with a trace like:
+#
+# File "/usr/local/lib/python2.1/site-packages/reportlab/graphics/
+# charts/lineplots.py", line 182, in calcPositions
+#     datum = self.data[rowNo][colNo] # x,y value
+# IndexError: list index out of range
+#
+# This appears to be a problem with reportlab, so I'm not worrying about
+# it right now, unless it starts to happen with real data! If anyone
+# can figure out the data that causes it so I can avoid it, that'd be much
+# appreciated.
 
-File "/usr/local/lib/python2.1/site-packages/reportlab/graphics/
-charts/lineplots.py", line 182, in calcPositions
-    datum = self.data[rowNo][colNo] # x,y value
-IndexError: list index out of range
-
-This appears to be a problem with reportlab, so I'm not worrying about
-it right now, unless it starts to happen with real data! If anyone
-can figure out the data that causes it so I can avoid it, that'd be much
-appreciated.
-"""
 # standard library
 import os
 import random
@@ -27,7 +27,7 @@ try:
     # Skip the test if reportlab is not installed
     import reportlab as r
     del r
-except:
+except ImportError:
     raise MissingExternalDependencyError(
         "Install reportlab if you want to use Bio.Graphics.")
 

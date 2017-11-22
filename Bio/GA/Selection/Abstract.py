@@ -3,8 +3,7 @@
 # as part of this package.
 #
 
-"""Base selection class from which all Selectors should derive.
-"""
+"""Base selection class from which all Selectors should derive."""
 
 
 class AbstractSelection(object):
@@ -16,21 +15,20 @@ class AbstractSelection(object):
 
     This class should not be used directly, but rather should be subclassed.
     """
+
     def __init__(self, mutator, crossover, repairer=None):
         """Initialize a selector.
 
         Arguments:
+         - mutator - A Mutation object which will perform mutation
+           on an individual.
+         - crossover - A Crossover object which will take two
+           individuals and produce two new individuals which may
+           have had crossover occur.
+         - repairer - A class which can do repair on rearranged genomes
+           to eliminate infeasible individuals. If set at None, so repair
+           will be done.
 
-        o mutator -- A Mutation object which will perform mutation
-        on an individual.
-
-        o crossover -- A Crossover object which will take two
-        individuals and produce two new individuals which may
-        have had crossover occur.
-
-        o repairer -- A class which can do repair on rearranged genomes
-        to eliminate infeasible individuals. If set at None, so repair
-        will be done.
         """
         self._mutator = mutator
         self._crossover = crossover

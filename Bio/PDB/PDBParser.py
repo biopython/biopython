@@ -45,11 +45,14 @@ class PDBParser(object):
            constructing the SMCRA data structure are fatal. If true (DEFAULT),
            the exceptions are caught, but some residues or atoms will be missing.
            THESE EXCEPTIONS ARE DUE TO PROBLEMS IN THE PDB FILE!.
+         - get_header - unused argument kept for historical compatibilty.
          - structure_builder - an optional user implemented StructureBuilder class.
          - QUIET - Evaluated as a Boolean. If true, warnings issued in constructing
            the SMCRA data will be suppressed. If false (DEFAULT), they will be shown.
            These warnings might be indicative of problems in the PDB file!
+
         """
+        # get_header is not used but is left in for API compatibility
         if structure_builder is not None:
             self.structure_builder = structure_builder
         else:
@@ -68,6 +71,7 @@ class PDBParser(object):
         Arguments:
          - id - string, the id that will be used for the structure
          - file - name of the PDB file OR an open filehandle
+
         """
         with warnings.catch_warnings():
             if self.QUIET:
@@ -288,28 +292,3 @@ class PDBParser(object):
         else:
             # exceptions are fatal - raise again with new message (including line nr)
             raise PDBConstructionException(message)
-
-
-if __name__ == "__main__":
-
-    import sys
-
-    p = PDBParser(PERMISSIVE=True)
-
-    filename = sys.argv[1]
-    s = p.get_structure("scr", filename)
-
-    for m in s:
-        p = m.get_parent()
-        assert(p is s)
-        for c in m:
-            p = c.get_parent()
-            assert(p is m)
-            for r in c:
-                print(r)
-                p = r.get_parent()
-                assert(p is c)
-                for a in r:
-                    p = a.get_parent()
-                    if p is not r:
-                        print("%s %s" % (p, r))

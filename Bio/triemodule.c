@@ -1,3 +1,20 @@
+/* Copyright 2002-2004 by Jeff Chang.  All rights reserved.
+ * Revisions copyright 2008-2013 by Michiel de Hoon.  All rights reserved.
+ * Revisions copyright 2014 by Peter Cock.  All rights reserved.
+ * Revisions copyright 2007 by Noam Kremen.  All rights reserved. 
+ *
+ * This file is part of the Biopython distribution and governed by your
+ * choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+ * Please see the LICENSE file that should have been included as part of this
+ * package.
+ *
+ * triemodule.c
+ *
+ * Implements the Bio.trie module providing a trie data structure.
+ *
+ * Used by findtrie.py
+ */
+
 #include <Python.h>
 #include <marshal.h>
 #include "trie.h"

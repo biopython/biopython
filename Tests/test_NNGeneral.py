@@ -8,9 +8,13 @@ libraries.
 import random
 import unittest
 
-# local stuff
-from Bio.NeuralNetwork.Training import TrainingExample, ExampleManager
-from Bio.NeuralNetwork.StopTraining import ValidationIncreaseStop
+import warnings
+from Bio import BiopythonDeprecationWarning
+with warnings.catch_warnings():
+    warnings.simplefilter('ignore', BiopythonDeprecationWarning)
+    # local stuff
+    from Bio.NeuralNetwork.Training import TrainingExample, ExampleManager
+    from Bio.NeuralNetwork.StopTraining import ValidationIncreaseStop
 
 
 class StopTrainingTest(unittest.TestCase):
@@ -91,6 +95,7 @@ class ExampleManagerTest(unittest.TestCase):
         manager.add_examples(self.examples)
         assert len(manager.validation_examples) == self.num_examples, \
                "Did not partition correctly to validation_examples."
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)

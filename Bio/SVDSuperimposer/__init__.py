@@ -94,7 +94,9 @@ class SVDSuperimposer(object):
     0.00
 
     """
+
     def __init__(self):
+        """Initialize the class."""
         self._clear()
 
     # Private methods
@@ -111,8 +113,7 @@ class SVDSuperimposer(object):
     def _rms(self, coords1, coords2):
         """Return rms deviations between coords1 and coords2."""
         diff = coords1 - coords2
-        l = coords1.shape[0]
-        return sqrt(sum(sum(diff * diff)) / l)
+        return sqrt(sum(sum(diff * diff)) / coords1.shape[0])
 
     # Public methods
 

@@ -8,7 +8,8 @@
 
 # Created: Tue Sep  4 09:05:16 2001
 # thomas@cbs.dtu.dk, http://www.cbs.dtu.dk/thomas
-# File: xbb_help.py
+
+"""Help code for graphical Xbbtools tool."""
 
 try:  # Python 2
     import Tkinter as tk
@@ -52,7 +53,7 @@ as part of this package.\n
         t.insert(tk.END, 'thomas@biopython.org\n\n', 'blue')
         t.insert(tk.END, '* Goto Field\n', 'bold')
         t.insert(tk.END, '\tinserting one position moves cursor to position\n')
-        t.insert(tk.END, "\tinserting two positions, seperated by ':' ")
+        t.insert(tk.END, "\tinserting two positions, separated by ':' ")
         t.insert(tk.END, 'highlights', 'highlight')
         t.insert(tk.END, ' selected range\n')
         t.insert(tk.END, '\n')

@@ -98,6 +98,7 @@ class Record(object):
     """
 
     def __init__(self):
+        """Initialize the class."""
         self.query = ''
         self.hit = ''
         self.gap_threshold = 0
@@ -128,6 +129,7 @@ class Record(object):
         return len(s)
 
 # Everything below is private
+
 
 __regex = {"names": re.compile("Ali1:\s+(\S+)\s+Ali2:\s+(\S+)\s+"),
            "threshold": re.compile("Threshold of effective gap content in columns: (\S+)"),

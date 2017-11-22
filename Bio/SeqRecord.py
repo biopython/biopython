@@ -94,22 +94,22 @@ class SeqRecord(object):
     """A SeqRecord object holds a sequence and information about it.
 
     Main attributes:
-        - id          - Identifier such as a locus tag (string)
-        - seq         - The sequence itself (Seq object or similar)
+     - id          - Identifier such as a locus tag (string)
+     - seq         - The sequence itself (Seq object or similar)
 
     Additional attributes:
-        - name        - Sequence name, e.g. gene name (string)
-        - description - Additional text (string)
-        - dbxrefs     - List of database cross references (list of strings)
-        - features    - Any (sub)features defined (list of SeqFeature objects)
-        - annotations - Further information about the whole sequence (dictionary).
-          Most entries are strings, or lists of strings.
-        - letter_annotations - Per letter/symbol annotation (restricted
-          dictionary). This holds Python sequences (lists, strings
-          or tuples) whose length matches that of the sequence.
-          A typical use would be to hold a list of integers
-          representing sequencing quality scores, or a string
-          representing the secondary structure.
+     - name        - Sequence name, e.g. gene name (string)
+     - description - Additional text (string)
+     - dbxrefs     - List of database cross references (list of strings)
+     - features    - Any (sub)features defined (list of SeqFeature objects)
+     - annotations - Further information about the whole sequence (dictionary).
+       Most entries are strings, or lists of strings.
+     - letter_annotations - Per letter/symbol annotation (restricted
+       dictionary). This holds Python sequences (lists, strings
+       or tuples) whose length matches that of the sequence.
+       A typical use would be to hold a list of integers
+       representing sequencing quality scores, or a string
+       representing the secondary structure.
 
     You will typically use Bio.SeqIO to read in sequences from files as
     SeqRecord objects.  However, you may want to create your own SeqRecord
@@ -158,16 +158,16 @@ class SeqRecord(object):
         """Create a SeqRecord.
 
         Arguments:
-            - seq         - Sequence, required (Seq, MutableSeq or UnknownSeq)
-            - id          - Sequence identifier, recommended (string)
-            - name        - Sequence name, optional (string)
-            - description - Sequence description, optional (string)
-            - dbxrefs     - Database cross references, optional (list of strings)
-            - features    - Any (sub)features, optional (list of SeqFeature objects)
-            - annotations - Dictionary of annotations for the whole sequence
-            - letter_annotations - Dictionary of per-letter-annotations, values
-              should be strings, list or tuples of the same
-              length as the full sequence.
+         - seq         - Sequence, required (Seq, MutableSeq or UnknownSeq)
+         - id          - Sequence identifier, recommended (string)
+         - name        - Sequence name, optional (string)
+         - description - Sequence description, optional (string)
+         - dbxrefs     - Database cross references, optional (list of strings)
+         - features    - Any (sub)features, optional (list of SeqFeature objects)
+         - annotations - Dictionary of annotations for the whole sequence
+         - letter_annotations - Dictionary of per-letter-annotations, values
+           should be strings, list or tuples of the same length as the full
+           sequence.
 
         You will typically use Bio.SeqIO to read in sequences from files as
         SeqRecord objects.  However, you may want to create your own SeqRecord
@@ -218,7 +218,7 @@ class SeqRecord(object):
                 try:
                     self._per_letter_annotations = \
                         _RestrictedDict(length=len(seq))
-                except:
+                except TypeError:
                     raise TypeError("seq argument should be a Seq object or similar")
         else:
             # This will be handled via the property set function, which will
@@ -851,10 +851,10 @@ class SeqRecord(object):
                            features=self.features[:],
                            dbxrefs=self.dbxrefs[:])
         # Will take all the features and all the db cross refs,
-        l = len(self)
+        length = len(self)
         for f in other.features:
-            answer.features.append(f._shift(l))
-        del l
+            answer.features.append(f._shift(length))
+        del length
         for ref in other.dbxrefs:
             if ref not in answer.dbxrefs:
                 answer.dbxrefs.append(ref)
@@ -1138,8 +1138,8 @@ class SeqRecord(object):
             answer.features = features
         elif features:
             # Copy the old features, adjusting location and string
-            l = len(answer)
-            answer.features = [f._flip(l) for f in self.features]
+            length = len(answer)
+            answer.features = [f._flip(length) for f in self.features]
             # The old list should have been sorted by start location,
             # reversing it will leave it sorted by what is now the end position,
             # so we need to resort in case of overlapping features.
@@ -1157,6 +1157,98 @@ class SeqRecord(object):
             # Copy the old per letter annotations, reversing them
             for key, value in self.letter_annotations.items():
                 answer._per_letter_annotations[key] = value[::-1]
+        return answer
+
+    def translate(self,
+                  # Seq translation arguments:
+                  table="Standard", stop_symbol="*", to_stop=False,
+                  cds=False, gap=None,
+                  # SeqRecord annotation arguments:
+                  id=False, name=False, description=False,
+                  features=False, annotations=False,
+                  letter_annotations=False, dbxrefs=False):
+        """Returns new SeqRecord with translated sequence.
+
+        This calls the record's .seq.translate() method (which describes
+        the translation related arguments, like table for the genetic code),
+
+        By default the new record does NOT preserve the sequence identifier,
+        name, description, general annotation or database cross-references -
+        these are unlikely to apply to the translated sequence.
+
+        You can specify the returned record's id, name and description as
+        strings, or True to keep that of the parent, or False for a default.
+
+        You can specify the returned record's features with a list of
+        SeqFeature objects, or False (default) to omit them.
+
+        You can also specify both the returned record's annotations and
+        letter_annotations as dictionaries, True to keep that of the parent
+        (annotations only), or False (default) to omit them.
+
+        e.g. Loading a FASTA gene and translating it,
+
+        >>> from Bio import SeqIO
+        >>> gene_record = SeqIO.read("Fasta/sweetpea.nu", "fasta")
+        >>> print(gene_record.format("fasta"))
+        >gi|3176602|gb|U78617.1|LOU78617 Lathyrus odoratus phytochrome A (PHYA) gene, partial cds
+        CAGGCTGCGCGGTTTCTATTTATGAAGAACAAGGTCCGTATGATAGTTGATTGTCATGCA
+        AAACATGTGAAGGTTCTTCAAGACGAAAAACTCCCATTTGATTTGACTCTGTGCGGTTCG
+        ACCTTAAGAGCTCCACATAGTTGCCATTTGCAGTACATGGCTAACATGGATTCAATTGCT
+        TCATTGGTTATGGCAGTGGTCGTCAATGACAGCGATGAAGATGGAGATAGCCGTGACGCA
+        GTTCTACCACAAAAGAAAAAGAGACTTTGGGGTTTGGTAGTTTGTCATAACACTACTCCG
+        AGGTTTGTT
+        <BLANKLINE>
+
+        And now translating the record, specifying the new ID and description:
+
+        >>> protein_record = gene_record.translate(table=11,
+        ...                                        id="phya",
+        ...                                        description="translation")
+        >>> print(protein_record.format("fasta"))
+        >phya translation
+        QAARFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMANMDSIA
+        SLVMAVVVNDSDEDGDSRDAVLPQKKKRLWGLVVCHNTTPRFV
+        <BLANKLINE>
+
+        """
+        answer = SeqRecord(self.seq.translate(table=table,
+                                              stop_symbol=stop_symbol,
+                                              to_stop=to_stop,
+                                              cds=cds,
+                                              gap=gap))
+        if isinstance(id, basestring):
+            answer.id = id
+        elif id:
+            answer.id = self.id
+        if isinstance(name, basestring):
+            answer.name = name
+        elif name:
+            answer.name = self.name
+        if isinstance(description, basestring):
+            answer.description = description
+        elif description:
+            answer.description = self.description
+        if isinstance(dbxrefs, list):
+            answer.dbxrefs = dbxrefs
+        elif dbxrefs:
+            # Copy the old dbxrefs
+            answer.dbxrefs = self.dbxrefs[:]
+        if isinstance(features, list):
+            answer.features = features
+        elif features:
+            # Does not make sense to copy old features as locations wrong
+            raise TypeError("Unexpected features argument %r" % features)
+        if isinstance(annotations, dict):
+            answer.annotations = annotations
+        elif annotations:
+            # Copy the old annotations
+            answer.annotations = self.annotations.copy()
+        if isinstance(letter_annotations, dict):
+            answer.letter_annotations = letter_annotations
+        elif letter_annotations:
+            # Does not make sense to copy these as length now wrong
+            raise TypeError("Unexpected letter_annotations argument %r" % letter_annotations)
         return answer
 
 

@@ -4,8 +4,7 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""Test for the Uniprot parser on Uniprot XML files.
-"""
+"""Test for the Uniprot parser on Uniprot XML files."""
 import os
 import unittest
 
@@ -245,6 +244,44 @@ class TestUniprot(unittest.TestCase):
         self.assertEqual(seq_record.annotations["comment_toxicdose"],
                 ['LD(50) is 50 ug/kg in mouse by intracerebroventricular '
                 'injection and 600 ng/g in Blatella germanica.'])
+
+    def test_sp016(self):
+        "Parsing SwissProt file sp016"
+        filename = 'sp016'
+        # test the record parser
+
+        datafile = os.path.join('SwissProt', filename)
+
+        test_handle = open(datafile)
+        seq_record = SeqIO.read(test_handle, "swiss")
+        test_handle.close()
+
+        self.assertTrue(isinstance(seq_record, SeqRecord))
+
+        # test ProteinExistence (the numerical value describing the evidence for the existence of the protein)
+        self.assertEqual(seq_record.annotations['protein_existence'], 1)
+        # test Sequence version
+        self.assertEqual(seq_record.annotations['sequence_version'], 1)
+        # test Entry version
+        self.assertEqual(seq_record.annotations['entry_version'], 93)
+
+    def test_sp002(self):
+        "Parsing SwissProt file sp002"
+        filename = 'sp002'
+        # test the record parser
+
+        datafile = os.path.join('SwissProt', filename)
+
+        test_handle = open(datafile)
+        seq_record = SeqIO.read(test_handle, "swiss")
+        test_handle.close()
+
+        self.assertTrue(isinstance(seq_record, SeqRecord))
+
+        # test Sequence version
+        self.assertEqual(seq_record.annotations['sequence_version'], 34)
+        # test Entry version
+        self.assertEqual(seq_record.annotations['entry_version'], 36)
 
     def compare_txt_xml(self, old, new):
         self.assertEqual(old.id, new.id)

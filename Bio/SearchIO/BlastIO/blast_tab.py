@@ -199,10 +199,10 @@ def _augment_blast_hsp(hsp, attr):
 
 
 class BlastTabParser(object):
-
     """Parser for the BLAST tabular format."""
 
     def __init__(self, handle, comments=False, fields=_DEFAULT_FIELDS):
+        """Initialize the class."""
         self.handle = handle
         self.has_comments = comments
         self.fields = self._prep_fields(fields)
@@ -211,7 +211,7 @@ class BlastTabParser(object):
     def __iter__(self):
         # stop iteration if file has no lines
         if not self.line:
-            raise StopIteration
+            return
         # determine which iterator to use
         elif self.has_comments:
             iterfunc = self._parse_commented_qresult
@@ -306,7 +306,8 @@ class BlastTabParser(object):
 
     def _parse_fields_line(self):
         """Returns a list of column short names from the 'Fields'
-        comment line."""
+        comment line.
+        """
         raw_field_str = self.line[len('# Fields: '):]
         long_fields = raw_field_str.split(', ')
         fields = [_LONG_SHORT_MAP[long_name] for long_name in long_fields]
@@ -472,7 +473,8 @@ class BlastTabParser(object):
 
     def _get_frag_frame(self, frag, seq_type, parsedict):
         """Returns `HSPFragment` frame given the object, its sequence type,
-        and its parsed dictionary values."""
+        and its parsed dictionary values.
+        """
         assert seq_type in ('query', 'hit')
         frame = getattr(frag, '%s_frame' % seq_type, None)
         if frame is not None:
@@ -486,7 +488,8 @@ class BlastTabParser(object):
 
     def _get_frag_strand(self, frag, seq_type, parsedict):
         """Returns `HSPFragment` strand given the object, its sequence type,
-        and its parsed dictionary values."""
+        and its parsed dictionary values.
+        """
         # NOTE: this will never set the strands as 0 for protein
         # queries / hits, since we can't detect the blast flavors
         # from the columns alone.
@@ -505,12 +508,12 @@ class BlastTabParser(object):
 
 
 class BlastTabIndexer(SearchIndexer):
-
     """Indexer class for BLAST+ tab output."""
 
     _parser = BlastTabParser
 
     def __init__(self, filename, comments=False, fields=_DEFAULT_FIELDS):
+        """Initialize the class."""
         SearchIndexer.__init__(self, filename, comments=comments, fields=fields)
 
         # if the file doesn't have comments,
@@ -662,10 +665,10 @@ class BlastTabIndexer(SearchIndexer):
 
 
 class BlastTabWriter(object):
-
     """Writer for blast-tab output format."""
 
     def __init__(self, handle, comments=False, fields=_DEFAULT_FIELDS):
+        """Initialize the class."""
         self.handle = handle
         self.has_comments = comments
         self.fields = fields

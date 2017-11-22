@@ -95,6 +95,7 @@ frequency table. The function returns the log-odds matrix.
 
 Methods for subtraction, addition and multiplication of matrices:
 -----------------------------------------------------------------
+
 * Generation of an expected frequency table from an observed frequency
   matrix.
 * Calculation of linear correlation coefficient between two matrices.
@@ -106,6 +107,7 @@ Methods for subtraction, addition and multiplication of matrices:
 * Jensen-Shannon distance between the distributions from which the
   matrices are derived. This is a distance function based on the
   distribution's entropies.
+
 """
 
 
@@ -133,12 +135,15 @@ EPSILON = 0.00000000000001
 
 
 class SeqMat(dict):
-    """A Generic sequence matrix class
+    """A Generic sequence matrix class.
+
     The key is a 2-tuple containing the letter indices of the matrix. Those
     should be sorted in the tuple (low, high). Because each matrix is dealt
-    with as a half-matrix."""
+    with as a half-matrix.
+    """
 
     def _alphabet_from_matrix(self):
+        """Set alphabet letters from the matrix entries (PRIVATE)."""
         ab_dict = {}
         s = ''
         for i in self:
@@ -149,17 +154,20 @@ class SeqMat(dict):
         self.alphabet.letters = s
 
     def __init__(self, data=None, alphabet=None, mat_name='', build_later=0):
-        # User may supply:
-        # data: matrix itself
-        # mat_name: its name. See below.
-        # alphabet: an instance of Bio.Alphabet, or a subclass. If not
-        # supplied, constructor builds its own from that matrix.
-        # build_later: skip the matrix size assertion. User will build the
-        # matrix after creating the instance. Constructor builds a half matrix
-        # filled with zeroes.
+        """Initialize.
 
+        User may supply:
+
+        - data: matrix itself
+        - mat_name: its name. See below.
+        - alphabet: an instance of Bio.Alphabet, or a subclass. If not
+          supplied, constructor builds its own from that matrix.
+        - build_later: skip the matrix size assertion. User will build the
+          matrix after creating the instance. Constructor builds a half matrix
+          filled with zeroes.
+
+        """
         assert isinstance(mat_name, str)
-
         # "data" may be:
         # 1) None --> then self.data is an empty dictionary
         # 2) type({}) --> then self takes the items in data
@@ -198,15 +206,14 @@ class SeqMat(dict):
         self.relative_entropy = 0
 
     def _correct_matrix(self):
+        """Sort key tuples (PRIVATE)."""
         for key in self:
             if key[0] > key[1]:
                 self[(key[1], key[0])] = self[key]
                 del self[key]
 
     def _full_to_half(self):
-        """
-        Convert a full-matrix to a half-matrix
-        """
+        """Convert a full-matrix to a half-matrix."""
         # For instance: two entries ('A','C'):13 and ('C','A'):20 will be summed
         # into ('A','C'): 33 and the index ('C','A') will be deleted
         # alphabet.letters:('A','A') and ('C','C') will remain the same.
@@ -222,11 +229,13 @@ class SeqMat(dict):
                     del self[i, j]
 
     def _init_zero(self):
+        """Initialize the ab_list values to zero (PRIVATE)."""
         for i in self.ab_list:
             for j in self.ab_list[:self.ab_list.index(i) + 1]:
                 self[j, i] = 0.
 
     def make_entropy(self):
+        """Calculate and set the entropy attribute."""
         self.entropy = 0
         for i in self:
             if self[i] > EPSILON:
@@ -234,6 +243,7 @@ class SeqMat(dict):
         self.entropy = -self.entropy
 
     def sum(self):
+        """Return sum of the results."""
         result = {}
         for letter in self.alphabet.letters:
             result[letter] = 0.0
@@ -248,6 +258,7 @@ class SeqMat(dict):
 
     def print_full_mat(self, f=None, format="%4d", topformat="%4s",
                 alphabet=None, factor=1, non_sym=None):
+        """Print the full matrix to the file handle f or stdout."""
         f = f or sys.stdout
         # create a temporary dictionary, which holds the full matrix for
         # printing
@@ -339,21 +350,25 @@ class SeqMat(dict):
         return output
 
     def __sub__(self, other):
-        """ returns a number which is the subtraction product of the two matrices"""
+        """Return integer subtraction product of the two matrices."""
         mat_diff = 0
         for i in self:
             mat_diff += (self[i] - other[i])
         return mat_diff
 
     def __mul__(self, other):
-        """ returns a matrix for which each entry is the multiplication product of the
-        two matrices passed"""
+        """Matrix multiplication.
+
+        Returns a matrix for which each entry is the multiplication product of
+        the two matrices passed.
+        """
         new_mat = copy.copy(self)
         for i in self:
             new_mat[i] *= other[i]
         return new_mat
 
     def __add__(self, other):
+        """Matrix addition."""
         new_mat = copy.copy(self)
         for i in self:
             new_mat[i] += other[i]
@@ -361,23 +376,22 @@ class SeqMat(dict):
 
 
 class AcceptedReplacementsMatrix(SeqMat):
-    """Accepted replacements matrix"""
+    """Accepted replacements matrix."""
 
 
 class ObservedFrequencyMatrix(SeqMat):
-    """Observed frequency matrix"""
+    """Observed frequency matrix."""
 
 
 class ExpectedFrequencyMatrix(SeqMat):
-    """Expected frequency matrix"""
+    """Expected frequency matrix."""
 
 
 class SubstitutionMatrix(SeqMat):
-    """Substitution matrix"""
+    """Substitution matrix."""
 
     def calculate_relative_entropy(self, obs_freq_mat):
-        """Calculate and return the relative entropy with respect to an
-        observed frequency matrix"""
+        """Calculate and return relative entropy w.r.t. observed frequency matrix."""
         relative_entropy = 0.
         for key, value in self.items():
             if value > EPSILON:
@@ -387,11 +401,10 @@ class SubstitutionMatrix(SeqMat):
 
 
 class LogOddsMatrix(SeqMat):
-    """Log odds matrix"""
+    """Log odds matrix."""
 
     def calculate_relative_entropy(self, obs_freq_mat):
-        """Calculate and return the relative entropy with respect to an
-        observed frequency matrix"""
+        """Calculate and return relative entropy w.r.t. observed frequency matrix."""
         relative_entropy = 0.
         for key, value in self.items():
             relative_entropy += obs_freq_mat[key] * value / log(2)
@@ -399,9 +412,9 @@ class LogOddsMatrix(SeqMat):
 
 
 def _build_obs_freq_mat(acc_rep_mat):
-    """
-    build_obs_freq_mat(acc_rep_mat):
-    Build the observed frequency matrix, from an accepted replacements matrix
+    """Build observed frequency matrix (PRIVATE).
+
+    Build the observed frequency matrix. from an accepted replacements matrix.
     The acc_rep_mat matrix should be generated by the user.
     """
     # Note: acc_rep_mat should already be a half_matrix!!
@@ -414,6 +427,7 @@ def _build_obs_freq_mat(acc_rep_mat):
 
 
 def _exp_freq_table_from_obs_freq(obs_freq_mat):
+    """Build expected frequence table from observed frequences (PRIVATE)."""
     exp_freq_table = {}
     for i in obs_freq_mat.alphabet.letters:
         exp_freq_table[i] = 0.
@@ -427,7 +441,8 @@ def _exp_freq_table_from_obs_freq(obs_freq_mat):
 
 
 def _build_exp_freq_mat(exp_freq_table):
-    """Build an expected frequency matrix
+    """Build an expected frequency matrix (PRIVATE).
+
     exp_freq_table: should be a FreqTable instance
     """
     exp_freq_mat = ExpectedFrequencyMatrix(alphabet=exp_freq_table.alphabet,
@@ -444,7 +459,7 @@ def _build_exp_freq_mat(exp_freq_table):
 # Build the substitution matrix
 #
 def _build_subs_mat(obs_freq_mat, exp_freq_mat):
-    """ Build the substitution matrix """
+    """Build the substitution matrix OPRIVATE)."""
     if obs_freq_mat.ab_list != exp_freq_mat.ab_list:
         raise ValueError("Alphabet mismatch in passed matrices")
     subs_mat = SubstitutionMatrix(obs_freq_mat)
@@ -457,14 +472,15 @@ def _build_subs_mat(obs_freq_mat, exp_freq_mat):
 # Build a log-odds matrix
 #
 def _build_log_odds_mat(subs_mat, logbase=2, factor=10.0, round_digit=0, keep_nd=0):
-    """_build_log_odds_mat(subs_mat,logbase=10,factor=10.0,round_digit=1):
-    Build a log-odds matrix
-    logbase=2: base of logarithm used to build (default 2)
-    factor=10.: a factor by which each matrix entry is multiplied
-    round_digit: roundoff place after decimal point
-    keep_nd: if true, keeps the -999 value for non-determined values (for which there
-    are no substitutions in the frequency substitutions matrix). If false, plants the
-    minimum log-odds value of the matrix in entries containing -999
+    """Build a log-odds matrix (PRIVATE).
+
+    - logbase=2: base of logarithm used to build (default 2)
+    - factor=10.: a factor by which each matrix entry is multiplied
+    - round_digit: roundoff place after decimal point
+    - keep_nd: if true, keeps the -999 value for non-determined values (for which
+      there are no substitutions in the frequency substitutions matrix). If false,
+      plants the minimum log-odds value of the matrix in entries containing -999.
+
     """
     lo_mat = LogOddsMatrix(subs_mat)
     for key, value in subs_mat.items():
@@ -488,6 +504,7 @@ def _build_log_odds_mat(subs_mat, logbase=2, factor=10.0, round_digit=0, keep_nd
 #
 def make_log_odds_matrix(acc_rep_mat, exp_freq_table=None, logbase=2,
                          factor=1., round_digit=9, keep_nd=0):
+    """Make log-odds matrix."""
     obs_freq_mat = _build_obs_freq_mat(acc_rep_mat)
     if not exp_freq_table:
         exp_freq_table = _exp_freq_table_from_obs_freq(obs_freq_mat)
@@ -498,6 +515,7 @@ def make_log_odds_matrix(acc_rep_mat, exp_freq_table=None, logbase=2,
 
 
 def observed_frequency_to_substitution_matrix(obs_freq_mat):
+    """Convert observed frequency table into substitution matrix."""
     exp_freq_table = _exp_freq_table_from_obs_freq(obs_freq_mat)
     exp_freq_mat = _build_exp_freq_mat(exp_freq_table)
     subs_mat = _build_subs_mat(obs_freq_mat, exp_freq_mat)
@@ -505,6 +523,7 @@ def observed_frequency_to_substitution_matrix(obs_freq_mat):
 
 
 def read_text_matrix(data_file):
+    """Read a matrix from a text file."""
     matrix = {}
     tmp = data_file.read().split("\n")
     table = []
@@ -542,12 +561,14 @@ def read_text_matrix(data_file):
     ret_mat = SeqMat(matrix)
     return ret_mat
 
+
 diagNO = 1
 diagONLY = 2
 diagALL = 3
 
 
 def two_mat_relative_entropy(mat_1, mat_2, logbase=2, diag=diagALL):
+    """Return relative entropy of two matrices."""
     rel_ent = 0.
     key_list_1 = sorted(mat_1)
     key_list_2 = sorted(mat_2)
@@ -583,8 +604,8 @@ def two_mat_relative_entropy(mat_1, mat_2, logbase=2, diag=diagALL):
     return rel_ent
 
 
-# Gives the linear correlation coefficient between two matrices
 def two_mat_correlation(mat_1, mat_2):
+    """Return linear correlation coefficient between two matrices."""
     try:
         import numpy
     except ImportError:
@@ -601,9 +622,8 @@ def two_mat_correlation(mat_1, mat_2):
     return correlation
 
 
-# Jensen-Shannon Distance
-# Need to input observed frequency matrices
 def two_mat_DJS(mat_1, mat_2, pi_1=0.5, pi_2=0.5):
+    """Return Jensen-Shannon Distance between two observed frequence matrices."""
     assert mat_1.ab_list == mat_2.ab_list
     assert pi_1 > 0 and pi_2 > 0 and pi_1 < 1 and pi_2 < 1
     assert not (pi_1 + pi_2 - 1.0 > EPSILON)
@@ -617,6 +637,7 @@ def two_mat_DJS(mat_1, mat_2, pi_1=0.5, pi_2=0.5):
     # print(mat_1.entropy, mat_2.entropy)
     dJS = sum_mat.entropy - pi_1 * mat_1.entropy - pi_2 * mat_2.entropy
     return dJS
+
 
 """
 This isn't working yet. Boo hoo!

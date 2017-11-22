@@ -9,7 +9,7 @@ You are expected to use this module via the Bio.SeqIO functions.
 
 SeqXML is a lightweight XML format which is supposed be an alternative for
 FASTA files. For more Information see http://www.seqXML.org and Schmitt et al
-(2011), http://dx.doi.org/10.1093/bib/bbr025
+(2011), https://doi.org/10.1093/bib/bbr025
 """
 
 from __future__ import print_function
@@ -102,7 +102,8 @@ class XMLRecordIterator(object):
 class SeqXmlIterator(XMLRecordIterator):
     """Breaks seqXML file into SeqRecords.
 
-    Assumes valid seqXML please validate beforehand."""
+    Assumes valid seqXML please validate beforehand.
+    """
 
     def __init__(self, handle):
         """Create the object."""

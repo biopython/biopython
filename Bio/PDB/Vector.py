@@ -11,13 +11,28 @@ import numpy
 
 
 def m2rotaxis(m):
-    """Return angles, axis pair that corresponds to rotation matrix m."""
-    # Angle always between 0 and pi
-    # Sense of rotation is defined by axis orientation
-    t = 0.5 * (numpy.trace(m) - 1)
-    t = max(-1, t)
-    t = min(1, t)
-    angle = numpy.arccos(t)
+    """Return angles, axis pair that corresponds to rotation matrix m.
+
+    The case where `m` is the identity matrix corresponds to a singularity where any
+    rotation axis is valid. In that case, `Vector([1,0,0])`, is returned.
+    """
+    eps = 1e-5
+
+    # Check for singularities a la http://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToAngle/
+    if abs(m[0, 1] - m[1, 0]) < eps and abs(m[0, 2] - m[2, 0]) < eps and abs(m[1, 2] - m[2, 1]) < eps:
+        # Singularity encountered. Check if its 0 or 180 deg
+        if abs(m[0, 1] + m[1, 0]) < eps and abs(m[0, 2] + m[2, 0]) < eps and abs(m[1, 2] + m[2, 1]) < eps and abs(m[0, 0] + m[1, 1] + m[2, 2] - 3) < eps:
+            angle = 0
+        else:
+            angle = numpy.pi
+    else:
+        # Angle always between 0 and pi
+        # Sense of rotation is defined by axis orientation
+        t = 0.5 * (numpy.trace(m) - 1)
+        t = max(-1, t)
+        t = min(1, t)
+        angle = numpy.arccos(t)
+
     if angle < 1e-15:
         # Angle is 0
         return 0.0, Vector(1, 0, 0)
@@ -58,11 +73,11 @@ def vector_to_axis(line, point):
     the closest point on a line (ie. the perpendicular
     projection of the point on the line).
 
-    @type line: L{Vector}
-    @param line: vector defining a line
+    :type line: L{Vector}
+    :param line: vector defining a line
 
-    @type point: L{Vector}
-    @param point: vector defining the point
+    :type point: L{Vector}
+    :param point: vector defining the point
     """
     line = line.normalized()
     np = point.norm()
@@ -76,22 +91,21 @@ def rotaxis2m(theta, vector):
     Calculate a left multiplying rotation matrix that rotates
     theta rad around vector.
 
-    Example:
+    :type theta: float
+    :param theta: the rotation angle
 
-        >>> m=rotaxis(pi, Vector(1, 0, 0))
-        >>> rotated_vector=any_vector.left_multiply(m)
+    :type vector: L{Vector}
+    :param vector: the rotation axis
 
-    @type theta: float
-    @param theta: the rotation angle
+    :return: The rotation matrix, a 3x3 Numeric array.
 
+    Examples
+    --------
+    >>> m = rotaxis(pi, Vector(1, 0, 0))
+    >>> rotated_vector = any_vector.left_multiply(m)
 
-    @type vector: L{Vector}
-    @param vector: the rotation axis
-
-    @return: The rotation matrix, a 3x3 Numeric array.
     """
-    vector = vector.copy()
-    vector.normalize()
+    vector = vector.normalized()
     c = numpy.cos(theta)
     s = numpy.sin(theta)
     t = 1 - c
@@ -118,17 +132,19 @@ rotaxis = rotaxis2m
 def refmat(p, q):
     """Return a (left multiplying) matrix that mirrors p onto q.
 
-    Example:
-        >>> mirror=refmat(p, q)
-        >>> qq=p.left_multiply(mirror)
-        >>> print(q)
-        >>> print(qq) # q and qq should be the same
+    :type p,q: L{Vector}
+    :return: The mirror operation, a 3x3 Numeric array.
 
-    @type p,q: L{Vector}
-    @return: The mirror operation, a 3x3 Numeric array.
+    Examples
+    --------
+    >>> mirror = refmat(p, q)
+    >>> qq = p.left_multiply(mirror)
+    >>> print(q)
+    >>> print(qq)  # q and qq should be the same
+
     """
-    p.normalize()
-    q.normalize()
+    p = p.normalized()
+    q = q.normalized()
     if (p - q).norm() < 1e-5:
         return numpy.identity(3)
     pq = p - q
@@ -141,22 +157,23 @@ def refmat(p, q):
 
 
 def rotmat(p, q):
-    """
-    Return a (left multiplying) matrix that rotates p onto q.
+    """Return a (left multiplying) matrix that rotates p onto q.
 
-    Example:
-        >>> r=rotmat(p, q)
-        >>> print(q)
-        >>> print(p.left_multiply(r))
+    :param p: moving vector
+    :type p: L{Vector}
 
-    @param p: moving vector
-    @type p: L{Vector}
+    :param q: fixed vector
+    :type q: L{Vector}
 
-    @param q: fixed vector
-    @type q: L{Vector}
+    :return: rotation matrix that rotates p onto q
+    :rtype: 3x3 Numeric array
 
-    @return: rotation matrix that rotates p onto q
-    @rtype: 3x3 Numeric array
+    Examples
+    --------
+    >>> r = rotmat(p, q)
+    >>> print(q)
+    >>> print(p.left_multiply(r))
+
     """
     rot = numpy.dot(refmat(q, -p), refmat(p, -p))
     return rot
@@ -168,11 +185,11 @@ def calc_angle(v1, v2, v3):
     Calculate the angle between 3 vectors
     representing 3 connected points.
 
-    @param v1, v2, v3: the tree points that define the angle
-    @type v1, v2, v3: L{Vector}
+    :param v1, v2, v3: the tree points that define the angle
+    :type v1, v2, v3: L{Vector}
 
-    @return: angle
-    @rtype: float
+    :return: angle
+    :rtype: float
     """
     v1 = v1 - v2
     v3 = v3 - v2
@@ -186,8 +203,8 @@ def calc_dihedral(v1, v2, v3, v4):
     representing 4 connected points. The angle is in
     ]-pi, pi].
 
-    @param v1, v2, v3, v4: the four points that define the dihedral angle
-    @type v1, v2, v3, v4: L{Vector}
+    :param v1, v2, v3, v4: the four points that define the dihedral angle
+    :type v1, v2, v3, v4: L{Vector}
     """
     ab = v1 - v2
     cb = v3 - v2
@@ -210,6 +227,7 @@ class Vector(object):
     """3D vector."""
 
     def __init__(self, x, y=None, z=None):
+        """Initialize the class."""
         if y is None and z is None:
             # Array, list, tuple...
             if len(x) != 3:
@@ -274,7 +292,7 @@ class Vector(object):
         self._ar[i] = value
 
     def __contains__(self, i):
-        return (i in self._ar)
+        return i in self._ar
 
     def norm(self):
         """Return vector norm."""
@@ -285,11 +303,19 @@ class Vector(object):
         return abs(sum(self._ar * self._ar))
 
     def normalize(self):
-        """Normalize the Vector."""
-        self._ar = self._ar / self.norm()
+        """Normalize the Vector object.
+
+        Changes the state of `self` and doesn't return a value. If you need to chain function
+        calls or create a new object use the `normalized` method.
+        """
+        if self.norm():
+            self._ar = self._ar / self.norm()
 
     def normalized(self):
-        """Return a normalized copy of the Vector."""
+        """Return a normalized copy of the Vector.
+
+        To avoid allocating new objects use the `normalize` method.
+        """
         v = self.copy()
         v.normalize()
         return v

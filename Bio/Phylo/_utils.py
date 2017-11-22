@@ -118,16 +118,22 @@ def draw_graphviz(tree, label_func=str, prog='twopi', args='',
             Options passed to the external graphviz program.  Normally not
             needed, but offered here for completeness.
 
-    Example
-    -------
-
+    Examples
+    --------
     >>> import pylab
     >>> from Bio import Phylo
     >>> tree = Phylo.read('ex/apaf.xml', 'phyloxml')
     >>> Phylo.draw_graphviz(tree)
     >>> pylab.show()
     >>> pylab.savefig('apaf.png')
+
     """
+    # Deprecated in Biopython 1.70 (#1247)
+    import warnings
+    from Bio import BiopythonDeprecationWarning
+    warnings.warn("draw_graphviz is deprecated; use Bio.Phylo.draw instead",
+                  BiopythonDeprecationWarning)
+
     try:
         import networkx
     except ImportError:
@@ -149,7 +155,13 @@ def draw_graphviz(tree, label_func=str, prog='twopi', args='',
         int_labels = Gi.node_labels
 
     try:
-        posi = networkx.graphviz_layout(Gi, prog, args=args)
+        if hasattr(networkx, 'graphviz_layout'):
+            # networkx versions before 1.11 (#1247)
+            graphviz_layout = networkx.graphviz_layout
+        else:
+            # networkx version 1.11
+            graphviz_layout = networkx.drawing.nx_agraph.graphviz_layout
+        posi = graphviz_layout(Gi, prog, args=args)
     except ImportError:
         raise MissingPythonDependencyError(
             "Install PyGraphviz or pydot if you want to use draw_graphviz.")
@@ -206,6 +218,7 @@ def draw_ascii(tree, file=None, column_width=80):
             standard output)
         column_width : int
             Total number of text columns used by the drawing.
+
     """
     if file is None:
         file = sys.stdout
@@ -325,6 +338,7 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True,
             A function or a dictionary specifying the color of the tip label.
             If the tip label can't be found in the dict or label_colors is
             None, the label will be shown in black.
+
     """
     try:
         import matplotlib.pyplot as plt

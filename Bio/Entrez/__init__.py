@@ -130,7 +130,7 @@ def epost(db, **keywds):
 
 
 def efetch(db, **keywords):
-    """Fetches Entrez results which are returned as a handle.
+    """Fetch Entrez results which are returned as a handle.
 
     EFetch retrieves records in the requested format from a list of one or
     more UIs or from user's environment.
@@ -181,7 +181,7 @@ def efetch(db, **keywords):
 
 
 def esearch(db, term, **keywds):
-    """ESearch runs an Entrez search and returns a handle to the results.
+    """Run an Entrez search and return a handle to the results.
 
     ESearch searches and retrieves primary IDs (for use in EFetch, ELink
     and ESummary) and term translations, and optionally retains results
@@ -217,7 +217,7 @@ def esearch(db, term, **keywds):
 
 
 def elink(**keywds):
-    """ELink checks for linked external articles and returns a handle.
+    """Check for linked external articles and return a handle.
 
     ELink checks for the existence of an external or Related Articles link
     from a list of one or more primary IDs;  retrieves IDs and relevancy
@@ -256,7 +256,7 @@ def elink(**keywds):
 
 
 def einfo(**keywds):
-    """EInfo returns a summary of the Entez databases as a results handle.
+    """Return a summary of the Entez databases as a results handle.
 
     EInfo provides field names, index term counts, last update, and
     available links for each Entrez database.
@@ -284,7 +284,7 @@ def einfo(**keywds):
 
 
 def esummary(**keywds):
-    """ESummary retrieves document summaries as a results handle.
+    """Rtrieve document summaries as a results handle.
 
     ESummary retrieves document summaries from a list of primary IDs or
     from the user's environment.
@@ -317,7 +317,7 @@ def esummary(**keywds):
 
 
 def egquery(**keywds):
-    """EGQuery provides Entrez database counts for a global search.
+    """Provide Entrez database counts for a global search.
 
     EGQuery provides Entrez database counts in XML for a single search
     using Global Query.
@@ -351,7 +351,7 @@ def egquery(**keywds):
 
 
 def espell(**keywds):
-    """ESpell retrieves spelling suggestions, returned in a results handle.
+    """Retrieve spelling suggestions as a results handle.
 
     ESpell retrieves spelling suggestions, if available.
 
@@ -399,9 +399,10 @@ def _update_ecitmatch_variables(keywds):
 
 
 def ecitmatch(**keywds):
-    """ECitMatch retrieves PMIDs-Citation linking
+    """Retrieve PMIDs for input citation strings, returned as a handle.
 
-    ECitMatch retrieves PubMed IDs (PMIDs) that correspond to a set of input citation strings.
+    ECitMatch retrieves PubMed IDs (PMIDs) that correspond to a set of input
+    citation strings.
 
     See the online documentation for an explanation of the parameters:
     http://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.ECitMatch
@@ -429,7 +430,7 @@ def ecitmatch(**keywds):
 
 
 def read(handle, validate=True):
-    """Parses an XML file from the NCBI Entrez Utilities into python objects.
+    """Parse an XML file from the NCBI Entrez Utilities into python objects.
 
     This function parses an XML file created by NCBI's Entrez Utilities,
     returning a multilevel data structure of Python lists and dictionaries.
@@ -455,7 +456,7 @@ def read(handle, validate=True):
 
 
 def parse(handle, validate=True):
-    """Parses an XML file from the NCBI Entrez Utilities into python objects.
+    """Parse an XML file from the NCBI Entrez Utilities into python objects.
 
     This function parses an XML file created by NCBI's Entrez Utilities,
     returning a multilevel data structure of Python lists and dictionaries.
@@ -487,7 +488,7 @@ def parse(handle, validate=True):
 
 
 def _open(cgi, params=None, post=None, ecitmatch=False):
-    """Helper function to build the URL and open a handle to it (PRIVATE).
+    """Build the URL and open a handle to it (PRIVATE).
 
     Open a handle to Entrez.  cgi is the URL for the cgi script to access.
     params is a dictionary with the options to pass to it.  Does some
@@ -529,6 +530,8 @@ def _open(cgi, params=None, post=None, ecitmatch=False):
         raise exception
 
     return _binary_to_string_handle(handle)
+
+
 _open.previous = 0
 
 

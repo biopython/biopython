@@ -29,7 +29,7 @@ from Bio import Alphabet
 
 # This is a generator function!
 def NexusIterator(handle, seq_count=None):
-    """Returns SeqRecord objects from a Nexus file.
+    """Return SeqRecord objects from a Nexus file.
 
     Thus uses the Bio.Nexus module to do the hard work.
 
@@ -42,7 +42,7 @@ def NexusIterator(handle, seq_count=None):
     n = Nexus.Nexus(handle)
     if not n.matrix:
         # No alignment found
-        raise StopIteration
+        return
 
     # Bio.Nexus deals with duplicated names by adding a '.copy' suffix.
     # The original names and the modified names are kept in these two lists:
@@ -70,13 +70,14 @@ class NexusWriter(AlignmentWriter):
     You are expected to call this class via the Bio.AlignIO.write() or
     Bio.SeqIO.write() functions.
     """
+
     def write_file(self, alignments):
         """Use this to write an entire file containing the given alignments.
 
         Arguments:
-
          - alignments - A list or iterator returning MultipleSeqAlignment objects.
            This should hold ONE and only one alignment.
+
         """
         align_iter = iter(alignments)  # Could have been a list
         try:
@@ -121,9 +122,10 @@ class NexusWriter(AlignmentWriter):
         n.write_nexus_data(self.handle, interleave=(columns > 1000))
 
     def _classify_alphabet_for_nexus(self, alphabet):
-        """Returns 'protein', 'dna', 'rna' based on the alphabet (PRIVATE).
+        """Return 'protein', 'dna', or 'rna' based on the alphabet (PRIVATE).
 
-        Raises an exception if this is not possible."""
+        Raises an exception if this is not possible.
+        """
         # Get the base alphabet (underneath any Gapped or StopCodon encoding)
         a = Alphabet._get_base_alphabet(alphabet)
 
@@ -139,6 +141,7 @@ class NexusWriter(AlignmentWriter):
             # Must be something like NucleotideAlphabet or
             # just the generic Alphabet (default for fasta files)
             raise ValueError("Need a DNA, RNA or Protein alphabet")
+
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest

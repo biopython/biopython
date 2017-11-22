@@ -2,8 +2,7 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""Command line wrapper for the multiple alignment program DIALIGN2-2.
-"""
+"""Command line wrapper for the multiple alignment program DIALIGN2-2."""
 
 from __future__ import print_function
 
@@ -16,9 +15,17 @@ class DialignCommandline(AbstractCommandline):
 
     http://bibiserv.techfak.uni-bielefeld.de/dialign/welcome.html
 
-    Example:
-    --------
+    Notes
+    -----
+    Last checked against version: 2.2
 
+    References
+    ----------
+    B. Morgenstern (2004). DIALIGN: Multiple DNA and Protein Sequence
+    Alignment at BiBiServ. Nucleic Acids Research 32, W33-W36.
+
+    Examples
+    --------
     To align a FASTA file (unaligned.fasta) with the output files names
     aligned.* including a FASTA output file (aligned.fa), use:
 
@@ -31,15 +38,10 @@ class DialignCommandline(AbstractCommandline):
     You would typically run the command line with dialign_cline() or via
     the Python subprocess module, as described in the Biopython tutorial.
 
-    Citation:
-    ---------
-
-    B. Morgenstern (2004). DIALIGN: Multiple DNA and Protein Sequence
-    Alignment at BiBiServ. Nucleic Acids Research 32, W33-W36.
-
-    Last checked against version: 2.2
     """
+
     def __init__(self, cmd="dialign2-2", **kwargs):
+        """Initialize the class."""
         self.program_name = cmd
         self.parameters = \
             [

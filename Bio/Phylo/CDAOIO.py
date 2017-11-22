@@ -21,23 +21,28 @@ them to a file.
 
 from Bio._py3k import StringIO
 
+from Bio import MissingPythonDependencyError
+
 from Bio.Phylo import CDAO
 from ._cdao_owl import cdao_elements, cdao_namespaces, resolve_uri
 import os
 
 
 class CDAOError(Exception):
-    """Exception raised when CDAO object construction cannot continue."""
+    """Exception raised when CDAO object construction cannot continue (DEPRECATED)."""
+
     pass
+
 
 try:
     import rdflib
     rdfver = rdflib.__version__
     if rdfver[0] in ["1", "2"] or (rdfver in ["3.0.0", "3.1.0", "3.2.0"]):
-        raise CDAOError(
+        raise MissingPythonDependencyError(
             'Support for CDAO tree format requires RDFlib v3.2.1 or later.')
 except ImportError:
-    raise CDAOError('Support for CDAO tree format requires RDFlib.')
+    raise MissingPythonDependencyError(
+        'Support for CDAO tree format requires RDFlib.')
 
 RDF_NAMESPACES = {
     'owl': 'http://www.w3.org/2002/07/owl#',
@@ -50,10 +55,12 @@ ZEROES = 8
 
 
 def qUri(x):
+    """Resolve URI for librdf."""
     return resolve_uri(x, namespaces=RDF_NAMESPACES)
 
 
 def format_label(x):
+    """Format label for librdf."""
     return x.replace('_', ' ')
 
 
@@ -64,6 +71,7 @@ def parse(handle, **kwargs):
     """Iterate over the trees in a CDAO file handle.
 
     :returns: generator of Bio.Phylo.CDAO.Tree objects.
+
     """
     return Parser(handle).parse(**kwargs)
 
@@ -72,6 +80,7 @@ def write(trees, handle, plain=False, **kwargs):
     """Write a trees in CDAO format to the given file handle.
 
     :returns: number of trees written.
+
     """
     return Writer(trees).write(handle, plain=plain, **kwargs)
 
@@ -83,6 +92,7 @@ class Parser(object):
     """Parse a CDAO tree given a file handle."""
 
     def __init__(self, handle=None):
+        """Initialize CDAO tree parser."""
         self.handle = handle
         self.graph = None
         self.node_info = None
@@ -91,6 +101,7 @@ class Parser(object):
 
     @classmethod
     def from_string(cls, treetext):
+        """Instantiate the class from the given string."""
         handle = StringIO(treetext)
         return cls(handle)
 
@@ -122,7 +133,7 @@ class Parser(object):
         return self.parse_graph(graph, context=context)
 
     def parse_graph(self, graph=None, context=None):
-        """Generator that yields CDAO.Tree instances from an RDF model."""
+        """Iterate over RDF model yielding CDAO.Tree instances."""
         if graph is None:
             graph = self.graph
 
@@ -135,7 +146,7 @@ class Parser(object):
             yield CDAO.Tree(root=clade, rooted=self.rooted)
 
     def new_clade(self, node):
-        """Returns a CDAO.Clade object for a given named node."""
+        """Return a CDAO.Clade object for a given named node."""
         result = self.node_info[node]
 
         kwargs = {}
@@ -151,7 +162,7 @@ class Parser(object):
         return clade
 
     def get_node_info(self, graph, context=None):
-        """Creates a dictionary containing information about all nodes in the tree."""
+        """Create a dictionary containing information about all nodes in the tree."""
         self.node_info = {}
         self.obj_info = {}
         self.children = {}
@@ -243,9 +254,11 @@ class Parser(object):
 
 class Writer(object):
     """Based on the writer in Bio.Nexus.Trees (str, to_string)."""
+
     prefixes = RDF_NAMESPACES
 
     def __init__(self, trees):
+        """Initialize parameters for writing a CDAO tree."""
         self.trees = trees
 
         self.node_counter = 0
@@ -281,6 +294,7 @@ class Writer(object):
                 self.add_stmt_to_handle(handle, stmt)
 
     def add_stmt_to_handle(self, handle, stmt):
+        """Add URI prefix to handle."""
         # apply URI prefixes
         stmt_strings = []
         for n, part in enumerate(stmt):
@@ -307,7 +321,7 @@ class Writer(object):
         handle.write('%s .\n' % ' '.join(stmt_strings))
 
     def process_clade(self, clade, parent=None, root=False):
-        """recursively generate triples describing a tree of clades"""
+        """Recursively generate triples describing a tree of clades."""
         self.node_counter += 1
         clade.uri = 'node%s' % str(self.node_counter).zfill(ZEROES)
         if parent:

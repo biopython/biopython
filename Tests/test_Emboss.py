@@ -293,7 +293,7 @@ class SeqRetSeqIOTests(unittest.TestCase):
         self.check_EMBOSS_to_SeqIO(filename, old_format, skip_formats)
 
     def test_abi(self):
-        """SeqIO agrees with EMBOSS' Abi to FASTQ conversion."""
+        """Check SeqIO agrees with EMBOSS' Abi to FASTQ conversion."""
         # This lets use check the id, sequence, and quality scores
         for filename in ["Abi/3730.ab1", "Abi/empty.ab1"]:
             old = SeqIO.read(filename, "abi")
@@ -313,19 +313,19 @@ class SeqRetSeqIOTests(unittest.TestCase):
                 self.assertEqual(old.letter_annotations, new.letter_annotations)
 
     def test_genbank(self):
-        """SeqIO & EMBOSS reading each other's conversions of a GenBank file."""
+        """Check SeqIO & EMBOSS reading each other's conversions of a GenBank file."""
         self.check_SeqIO_with_EMBOSS("GenBank/cor6_6.gb", "genbank")
 
     def test_genbank2(self):
-        """SeqIO & EMBOSS reading each other's conversions of another GenBank file."""
+        """Check SeqIO & EMBOSS reading each other's conversions of another GenBank file."""
         self.check_SeqIO_with_EMBOSS("GenBank/NC_000932.gb", "genbank")
 
     def test_embl(self):
-        """SeqIO & EMBOSS reading each other's conversions of an EMBL file."""
+        """Check SeqIO & EMBOSS reading each other's conversions of an EMBL file."""
         self.check_SeqIO_with_EMBOSS("EMBL/U87107.embl", "embl")
 
     def test_ig(self):
-        """SeqIO & EMBOSS reading each other's conversions of an ig file."""
+        """Check SeqIO & EMBOSS reading each other's conversions of an ig file."""
         # NOTE - EMBOSS considers "genbank" to be for nucleotides only,
         # and will turn "X" into "N" for GenBank output.
         self.check_SeqIO_to_EMBOSS("IntelliGenetics/VIF_mase-pro.txt", "ig",
@@ -337,7 +337,7 @@ class SeqRetSeqIOTests(unittest.TestCase):
         # EMBOSS seems to ignore them.
 
     def test_pir(self):
-        """SeqIO & EMBOSS reading each other's conversions of a PIR file."""
+        """Check SeqIO & EMBOSS reading each other's conversions of a PIR file."""
         # Skip genbank here, EMBOSS mangles the LOCUS line:
         self.check_SeqIO_with_EMBOSS("NBRF/clustalw.pir", "pir",
                                skip_formats=["genbank"])
@@ -347,7 +347,7 @@ class SeqRetSeqIOTests(unittest.TestCase):
                                skip_formats=["embl", "genbank"])
 
     def test_clustalw(self):
-        """SeqIO & EMBOSS reading each other's conversions of a Clustalw file."""
+        """Check SeqIO & EMBOSS reading each other's conversions of a Clustalw file."""
         self.check_SeqIO_with_EMBOSS("Clustalw/hedgehog.aln", "clustal",
                                    skip_formats=["embl", "genbank"])
         self.check_SeqIO_with_EMBOSS("Clustalw/opuntia.aln", "clustal",
@@ -424,7 +424,7 @@ class SeqRetAlignIOTests(unittest.TestCase):
         self.check_EMBOSS_to_AlignIO(filename, old_format, skip_formats)
 
     def test_align_clustalw(self):
-        """AlignIO & EMBOSS reading each other's conversions of a ClustalW file."""
+        """Check AlignIO & EMBOSS reading each other's conversions of a ClustalW file."""
         self.check_AlignIO_with_EMBOSS("Clustalw/hedgehog.aln", "clustal")
         self.check_AlignIO_with_EMBOSS("Clustalw/opuntia.aln", "clustal")
         self.check_AlignIO_with_EMBOSS("Clustalw/odd_consensus.aln", "clustal",
@@ -433,7 +433,7 @@ class SeqRetAlignIOTests(unittest.TestCase):
         self.check_AlignIO_with_EMBOSS("Clustalw/promals3d.aln", "clustal")
 
     def test_clustalw(self):
-        """AlignIO & EMBOSS reading each other's conversions of a PHYLIP file."""
+        """Check AlignIO & EMBOSS reading each other's conversions of a PHYLIP file."""
         self.check_AlignIO_with_EMBOSS("Phylip/horses.phy", "phylip")
         self.check_AlignIO_with_EMBOSS("Phylip/hennigian.phy", "phylip")
         self.check_AlignIO_with_EMBOSS("Phylip/reference_dna.phy", "phylip")
@@ -491,7 +491,7 @@ class PairwiseAlignmentTests(unittest.TestCase):
             return stdout
 
     def test_water_file(self):
-        """water with the asis trick, output to a file."""
+        """Run water with the asis trick, output to a file."""
         # Setup, try a mixture of keyword arguments and later additions:
         cline = WaterCommandline(cmd=exes["water"],
                                  gapopen="10", gapextend="0.5")
@@ -512,7 +512,7 @@ class PairwiseAlignmentTests(unittest.TestCase):
         os.remove(cline.outfile)
 
     def test_water_piped(self):
-        """water with asis trick, output piped to stdout."""
+        """Run water with asis trick, output piped to stdout."""
         cline = WaterCommandline(cmd=exes["water"],
                                  asequence="asis:ACCCGGGCGCGGT",
                                  bsequence="asis:ACCCGAGCGCGGT",
@@ -544,7 +544,7 @@ class PairwiseAlignmentTests(unittest.TestCase):
         child.stderr.close()
 
     def test_needle_file(self):
-        """needle with the asis trick, output to a file."""
+        """Run needle with the asis trick, output to a file."""
         # Setup,
         cline = NeedleCommandline(cmd=exes["needle"])
         cline.set_parameter("-asequence", "asis:ACCCGGGCGCGGT")
@@ -572,7 +572,7 @@ class PairwiseAlignmentTests(unittest.TestCase):
         os.remove(filename)
 
     def test_needle_piped(self):
-        """needle with asis trick, output piped to stdout."""
+        """Run needle with asis trick, output piped to stdout."""
         cline = NeedleCommandline(cmd=exes["needle"],
                                  asequence="asis:ACCCGGGCGCGGT",
                                  bsequence="asis:ACCCGAGCGCGGT",
@@ -604,7 +604,7 @@ class PairwiseAlignmentTests(unittest.TestCase):
         child.stderr.close()
 
     def test_water_file2(self):
-        """water with the asis trick and nucleotide FASTA file, output to a file."""
+        """Run water with the asis trick and nucleotide FASTA file, output to a file."""
         # Setup,
         query = "ACACACTCACACACACTTGGTCAGAGATGCTGTGCTTCTTGGAAGCAAGGNCTCAAAGGCAAGGTGCACGCAGAGGGACGTTTGAGTCTGGGATGAAGCATGTNCGTATTATTTATATGATGGAATTTCACGTTTTTATG"
         out_file = "Emboss/temp_test2.water"
@@ -630,7 +630,7 @@ class PairwiseAlignmentTests(unittest.TestCase):
         os.remove(out_file)
 
     def test_water_file3(self):
-        """water with the asis trick and GenBank file, output to a file."""
+        """Run water with the asis trick and GenBank file, output to a file."""
         # Setup,
         query = "TGTTGTAATGTTTTAATGTTTCTTCTCCCTTTAGATGTACTACGTTTGGA"
         out_file = "Emboss/temp_test3.water"
@@ -657,7 +657,7 @@ class PairwiseAlignmentTests(unittest.TestCase):
         os.remove(out_file)
 
     def test_water_file4(self):
-        """water with the asis trick and SwissProt file, output to a file."""
+        """Run water with the asis trick and SwissProt file, output to a file."""
         # Setup,
         query = "DVCTGKALCDPVTQNIKTYPVKIENLRVMI"
         out_file = "Emboss/temp_test4.water"
@@ -686,7 +686,7 @@ class PairwiseAlignmentTests(unittest.TestCase):
         os.remove(out_file)
 
     def test_needle_piped2(self):
-        """needle with asis trick, and nucleotide FASTA file, output piped to stdout."""
+        """Run needle with asis trick, and nucleotide FASTA file, output piped to stdout."""
         # TODO - Support needle in Bio.Emboss.Applications
         # (ideally with the -auto and -filter arguments)
         # Setup,
@@ -716,7 +716,7 @@ class PairwiseAlignmentTests(unittest.TestCase):
         child.stderr.close()
 
     def test_water_needs_output(self):
-        """water without output file or stdout/filter should give error."""
+        """Run water without output file or stdout/filter should give error."""
         cline = WaterCommandline(cmd=exes["water"],
                                  asequence="asis:ACCCGGGCGCGGT",
                                  bsequence="asis:ACCCGAGCGCGGT",
@@ -730,7 +730,7 @@ class PairwiseAlignmentTests(unittest.TestCase):
         self.assertRaises(ValueError, str, cline)
 
     def test_needle_needs_output(self):
-        """needle without output file or stdout/filter should give error."""
+        """Run needle without output file or stdout/filter should give error."""
         cline = NeedleCommandline(cmd=exes["needle"],
                                  asequence="asis:ACCCGGGCGCGGT",
                                  bsequence="asis:ACCCGAGCGCGGT",
@@ -744,7 +744,7 @@ class PairwiseAlignmentTests(unittest.TestCase):
         self.assertRaises(ValueError, str, cline)
 
     def test_seqtmatchall_piped(self):
-        """seqmatchall with pair output piped to stdout."""
+        """Run seqmatchall with pair output piped to stdout."""
         cline = SeqmatchallCommandline(cmd=exes["seqmatchall"],
                                        sequence="Fasta/f002",
                                        aformat="pair", wordsize=9,
@@ -856,7 +856,7 @@ class TranslationTests(unittest.TestCase):
         clean_up()
 
     def test_simple(self):
-        """transeq vs Bio.Seq for simple translations (including alt tables)."""
+        """Run transeq vs Bio.Seq for simple translations (including alt tables)."""
 
         examples = [Seq("ACGTGACTGACGTAGCATGCCACTAGG"),
                     # Unamibguous TA? codons:
@@ -893,7 +893,8 @@ class TranslationTests(unittest.TestCase):
     def check(self, sequence):
         """Compare our translation to EMBOSS's using all tables.
 
-        Takes a Seq object (and a filename containing it)."""
+        Takes a Seq object (and a filename containing it).
+        """
         translation = emboss_translate(sequence)
         self.assertTrue(check_translation(sequence, translation))
 
@@ -915,15 +916,15 @@ class TranslationTests(unittest.TestCase):
     #    self.translate_all_codons(ambiguous_dna_letters)
 
     def test_all_unambig_dna_codons(self):
-        """transeq vs Bio.Seq on unambiguous DNA codons (inc. alt tables)."""
+        """Run transeq vs Bio.Seq on unambiguous DNA codons (inc. alt tables)."""
         self.translate_all_codons("ATCGatcg")
 
     def test_all_unambig_rna_codons(self):
-        """transeq vs Bio.Seq on unambiguous RNA codons (inc. alt tables)."""
+        """Run transeq vs Bio.Seq on unambiguous RNA codons (inc. alt tables)."""
         self.translate_all_codons("AUCGaucg")
 
     def test_mixed_unambig_rna_codons(self):
-        """transeq vs Bio.Seq on unambiguous DNA/RNA codons (inc. alt tables)."""
+        """Run transeq vs Bio.Seq on unambiguous DNA/RNA codons (inc. alt tables)."""
         self.translate_all_codons("ATUCGatucg")
 
 
@@ -935,6 +936,7 @@ def clean_up():
                 os.remove(filename)
             except Exception:  # TODO - Which exceptions?
                 pass
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)

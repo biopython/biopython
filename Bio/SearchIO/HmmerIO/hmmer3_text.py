@@ -35,10 +35,10 @@ _HRE_ID_LINE = re.compile(r'^(\s+\S+\s+[0-9-]+ )(.+?)(\s+[0-9-]+)')
 
 
 class Hmmer3TextParser(object):
-
     """Parser for the HMMER 3.0 text output."""
 
     def __init__(self, handle):
+        """Initialize the class."""
         self.handle = handle
         self.line = read_forward(self.handle)
         self._meta = self._parse_preamble()
@@ -398,7 +398,6 @@ class Hmmer3TextParser(object):
 
 
 class Hmmer3TextIndexer(_BaseHmmerTextIndexer):
-
     """Indexer class for HMMER plain text output."""
 
     _parser = Hmmer3TextParser
@@ -426,6 +425,7 @@ class Hmmer3TextIndexer(_BaseHmmerTextIndexer):
                 start_offset = end_offset
             elif not line:
                 break
+
 
 # if not used as a module, run the doctest
 if __name__ == "__main__":

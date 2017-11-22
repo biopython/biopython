@@ -5,15 +5,18 @@ This is a list of people who have made contributions to Biopython.
 
 People are listed alphabetically, as verfied with Unix sort::
 
-    $ grep "^- " CONTRIB.rst | LC_ALL=C sort -u -c
+    $ grep "^- " CONTRIB.rst | LC_ALL=C sort -u -c -f
 
-This is certainly not comprehensive, and if you've been overlooked
-(sorry!), please mention it on the development mailing list.
+This is certainly not comprehensive, and if you've been overlooked (sorry!),
+please open an issue on GitHub or mention it on the development mailing list.
 
 - Aaron Gallagher <habnabit at gmail>
+- Aaron Kitzmiller <https://github.com/aaronk>
 - Aaron Rosenfeld <https://github.com/arosenfeld>
 - Adam Kurkiewicz <adam@kurkiewicz.pl>
 - Adam Novak <https://github.com/AdamNovak>
+- Adhemar Zerlotini <https://github.com/azneto>
+- Adil Iqbal <https://github.com/Adil-Iqbal>
 - Adrian Altenhoff <https://github.com/alpae>
 - Alan Medlar <https://github.com/ajm>
 - Alessio Papini <first dot last at unifi dot it>
@@ -30,6 +33,7 @@ This is certainly not comprehensive, and if you've been overlooked
 - Anthony Bradley <https://github.com/abradle>
 - Antony Lee <https://github.com/anntzer>
 - Anuj Sharma <https://github.com/xulesc>
+- Ariel Aptekmann <https://github.com/aralap>
 - Barbara Mühlemann <https://github.com/bamueh>
 - Bart de Koning <bratdaking gmail>
 - Bartek Wilczynski <bartek at domain rezolwenta.eu.org>
@@ -38,6 +42,7 @@ This is certainly not comprehensive, and if you've been overlooked
 - Ben Morris <https://github.com/bendmorris>
 - Ben Woodcroft <https://github.com/wwood>
 - Bernhard Thiel <https://github.com/Bernhard10>
+- Bertrand Caron <https://github.com/bertrand-caron>
 - Bertrand Frottier <bertrand.frottier at domain free.fr>
 - Bertrand Néron <https://github.com/bneron>
 - Bill Barnard <bill at domain barnard-engineering.com>
@@ -56,6 +61,7 @@ This is certainly not comprehensive, and if you've been overlooked
 - Cheng Soon Ong <chengsoon.ong at tuebingen.mpg.de>
 - Chris Lasher <chris.lasher at gmail.com>
 - Chris Mitchell <https://github.com/chrismit>
+- Chris Rands <https://github.com/chris-rands>
 - Chris Warth <https://github.com/cswarth>
 - Christiam Camacho <https://github.com/christiam>
 - Christian Brueffer <christian at domain brueffer.de>
@@ -78,11 +84,15 @@ This is certainly not comprehensive, and if you've been overlooked
 - Eric Rasche <https://github.com/erasche>
 - Eric Talevich <https://github.com/etal>
 - Erick Matsen <surname at fhcrc dot org>
+- Erik Cederstrand <https://github.com/ecederstrand>
+- Fei Qi <https://github.com/qifei9>
 - Foen Peng <https://github.com/foenpeng>
 - Francesco Gastaldello <https://github.com/Gasta88>
 - Francisco Pina-Martins <https://github.com/StuntsPT>
 - Franco Caramia <https://github.com/fcaramia>
 - Frank Kauff <fkauff at domain duke.edu>
+- François Coste <https://github.com/francoiscoste>
+- Frederic Sapet <https://github.com/FredericBGA>
 - Frederic Sohm <fsms at domain users.sourceforge.net>
 - Frederik Gwinner
 - Fábio Madeira <https://github.com/biomadeira>
@@ -99,20 +109,27 @@ This is certainly not comprehensive, and if you've been overlooked
 - Jacek Śmietański <https://github.com/dadoskawina>
 - Jack Twilley <https://github.com/mathuin>
 - James Casbon <j.a.casbon at domain qmul.ac.uk>
+- Jared Andrews <https://github.com/j-andrews7>
 - Jason A. Hackney <jhackney at domain stanford.edu>
 - Jeff Hussmann <first dot last at gmail dot com>
 - Jeffrey Chang <jchang at domain smi.stanford.edu>
 - Jeffrey Finkelstein <jeffrey.finkelstein at domain gmail.com>
 - Jeroen Van Goey <https://github.com/BioGeek>
+- Jerven Bolleman <https://github.com/JervenBolleman>
+- Jimmy O'Donnell <https://github.com/jimmyodonnell>
 - Joanna & Dominik Kasprzak
 - Joao Rodrigues <anaryin at the domain gmail dot com>
 - Joe Cora <https://github.com/JoeCora>
+- Joe Greener <https://github.com/jgreener64>
 - Johann Visagie <wjv at domain cityip.co.za>
 - John Bradley <https://github.com/johnbradley>
 - John Kern <https://github.com/kern3020>
+- Jonathan Taylor <jonathan dot taylor at utoronto dot ca>
+- Jordan Willis <https://github.com/jwillis0720>
 - Jose Blanca <https://github.com/JoseBlanca>
-- Joshua Meyers <https://github.com/JoshuaMeyers> 
+- Joshua Meyers <https://github.com/JoshuaMeyers>
 - João D Ferreira <https://github.com/jdferreira>
+- Jun Aruga <https://github.com/junaruga>
 - Kai Blin <https://github.com/kblin>
 - Kamil Slowikowski <k no dot slowikowski at gmail dot com>
 - Katharine Lindner <katel at domain worldpath.net>
@@ -140,33 +157,42 @@ This is certainly not comprehensive, and if you've been overlooked
 - Matt Shirley <https://github.com/mdshw5>
 - Matteo Sticco <https://github.com/sticken88/>
 - Maximilian Greil <https://github.com/MaxGreil>
+- Maximilian Peters <maximili.peters at mail.huji.ac.il>
 - Melissa Gymrek <https://github.com/mgymrek>
-- Michael Hoffman <hoffman+biopython at domain ebi.ac.uk>
+- Michael Hoffman <https://github.com/michaelmhoffman>
 - Michal Kurowski <michal at domain genesilico.pl>
 - Michał J. Gajda <https://github.com/mgajda>
 - Michiel de Hoon <mdehoon at domain c2b2.columbia.edu>
 - Mike Poidinger <Michael.Poidinger at domain eBioinformatics.com>
 - Milind Luthra <https://github.com/milindl>
+- morrme <https://github.com/morrme>
 - Nader Morshed <https://github.com/naderm>
 - Nate Sutton <https://github.com/nmsutton>
 - Nathan J. Edwards <nje5 at edu domain georgetown>
+- Nicolas Fontrodona <https://github.com/NFontrodona>
 - Nigel Delaney <https://github.com/evolvedmicrobe/>
 - Noam Kremen <https://github.com/noamkremen>
 - Olivier Morelle <https://github.com/Oli4>
 - Oscar G. Garcia <https://github.com/oscarmaestre>
 - Owen Solberg <https://github.com/odoublewen>
+- Patrick Kunzmann <https://github.com/padix-key>
 - Paul T. Bathen
 - Peter Bienstman <Peter.Bienstman at domain rug.ac.be>
 - Peter Cock <https://github.com/peterjc>
 - Peter Slickers <piet at domain clondiag.com>
 - Phillip Garland <pgarland at gmail>
+- Rasmus Fonseca <https://github.com/RasmusFonseca>
+- rht <https://github.com/rht>
 - Richard Neher <https://github.com/rneher>
+- Rodrigo Dorantes-Gilardi <https://github.com/rodogi>
 - Sacha Laurent <https://github.com/Cashalow>
 - Saket Choudhary <https://github.com/saketkc>
 - Sebastian Bassi <https://about.me/bassi>
 - Sergei Lebedev <https://github.com/superbobry>
 - Seth Sims <seth.sims at gmail>
-- Siong Kong
+- Shuichiro MAKIGAKI <https://github.com/shuichiro-makigaki>
+- Shyam Saladi <https://github.com/smsaladi>
+- Siong Kong <https://github.com/siongkong>
 - Sjoerd de Vries <sjoerd at domain nmr.chem.uu.nl>
 - Sourav Singh <https://github.com/souravsingh>
 - Spencer Bliven <https://github.com/sbliven>
@@ -176,6 +202,7 @@ This is certainly not comprehensive, and if you've been overlooked
 - Sunhwan Jo <https://github.com/sunhwan>
 - Tarcisio Fedrizzi <https://github.com/hcraT>
 - Tarjei Mikkelsen <tarjei at domain genome.wi.mit.edu>
+- Ted Cybulski <https://github.com/tcyb>
 - Terry Jones <https://github.com/terrycojones>
 - Thomas Hamelryck <thamelry at domain binf.ku.dk>
 - Thomas Holder <https://github.com/speleo3>
@@ -194,5 +221,8 @@ This is certainly not comprehensive, and if you've been overlooked
 - Xiaoyu Zhuo <https://github.com/xzhuo>
 - Yair Benita <Y.Benita at domain pharm.uu.nl>
 - Yanbo Ye <https://github.com/lijax>
+- Yasar L. Ahmed <https://github.com/pyahmed>
 - Yu Huang <krocea at domain yahoo.com.cn>
 - Yves Bastide <ybastide at domain irisa.fr>
+- Zaid Ur-Rehman <https://github.com/zaidurrehman>
+- Zheng Ruan <https://github.com/zruan>

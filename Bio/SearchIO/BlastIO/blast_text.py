@@ -24,10 +24,10 @@ __all__ = ('BlastTextParser', )
 
 
 class BlastTextParser(object):
-
     """Parser for the BLAST text format."""
 
     def __init__(self, handle):
+        """Initialize the class."""
         self.handle = handle
         blast_parser = NCBIStandalone.BlastParser()
         self.blast_iter = NCBIStandalone.Iterator(handle, blast_parser)

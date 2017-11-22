@@ -24,17 +24,16 @@ def create(instances, alphabet=None):
 
 
 def parse(handle, format):
-    """Parses an output file of motif finding programs.
+    """Parse an output file from a motif finding program.
 
     Currently supported formats (case is ignored):
-
-        - AlignAce:      AlignAce output file format
-        - MEME:          MEME output file motif
-        - MAST:          MAST output file motif
-        - TRANSFAC:      TRANSFAC database file format
-        - pfm:           JASPAR-style position-frequency matrix
-        - jaspar:        JASPAR-style multiple PFM format
-        - sites:         JASPAR-style sites file
+     - AlignAce:      AlignAce output file format
+     - MEME:          MEME output file motif
+     - MAST:          MAST output file motif
+     - TRANSFAC:      TRANSFAC database file format
+     - pfm:           JASPAR-style position-frequency matrix
+     - jaspar:        JASPAR-style multiple PFM format
+     - sites:         JASPAR-style sites file
 
     As files in the pfm and sites formats contain only a single motif,
     it is easier to use Bio.motifs.read() instead of Bio.motifs.parse()
@@ -90,7 +89,7 @@ def parse(handle, format):
 
 
 def read(handle, format):
-    """Reads a motif from a handle using a specified file-format.
+    """Read a motif from a handle using the specified file-format.
 
     This supports the same formats as Bio.motifs.parse(), but
     only for files containing exactly one motif.  For example,
@@ -145,10 +144,10 @@ def read(handle, format):
 
 
 class Instances(list):
-    """
-    A class representing instances of sequence motifs.
-    """
+    """A class representing instances of sequence motifs."""
+
     def __init__(self, instances=None, alphabet=None):
+        """Initialize the class."""
         from Bio.Alphabet import IUPAC
         from Bio.Seq import Seq
         if instances is None:
@@ -196,8 +195,10 @@ class Instances(list):
         return counts
 
     def search(self, sequence):
-        """
-        a generator function, returning found positions of motif instances in a given sequence
+        """Find positions of motifs in a given sequence.
+
+        This is a generator function, returning found positions of motif
+        instances in a given sequence.
         """
         for pos in range(0, len(sequence) - self.length + 1):
             for instance in self:
@@ -215,10 +216,10 @@ class Instances(list):
 
 
 class Motif(object):
-    """
-    A class representing sequence motifs.
-    """
+    """A class representing sequence motifs."""
+
     def __init__(self, alphabet=None, instances=None, counts=None):
+        """Initialize the class."""
         from . import matrix
         from Bio.Alphabet import IUPAC
         self.name = ""
@@ -326,8 +327,7 @@ class Motif(object):
         return self.pwm.log_odds(self._background)
 
     def __str__(self, masked=False):
-        """ string representation of a motif.
-        """
+        """Return string representation of a motif."""
         text = ""
         if self.instances is not None:
             text += str(self.instances)
@@ -342,7 +342,7 @@ class Motif(object):
         return text
 
     def __len__(self):
-        """return the length of a motif
+        """Return the length of a motif.
 
         Please use this method (i.e. invoke len(m)) instead of referring to m.length directly.
         """
@@ -352,7 +352,7 @@ class Motif(object):
             return self.length
 
     def reverse_complement(self):
-        """Gives the reverse complement of the motif."""
+        """Return the reverse complement of the motif as a new motif."""
         alphabet = self.alphabet
         if self.instances is not None:
             instances = self.instances.reverse_complement()
@@ -370,12 +370,12 @@ class Motif(object):
 
     @property
     def consensus(self):
-        """Returns the consensus sequence."""
+        """Return the consensus sequence."""
         return self.counts.consensus
 
     @property
     def anticonsensus(self):
-        """Returns the least probable pattern to be generated from this motif."""
+        """Return the least probable pattern to be generated from this motif."""
         return self.counts.anticonsensus
 
     @property
@@ -392,7 +392,7 @@ class Motif(object):
         return self.counts.degenerate_consensus
 
     def weblogo(self, fname, format="PNG", version="2.8.2", **kwds):
-        """Uses the Berkeley weblogo service to download and save a weblogo of itself.
+        """Download and save a weblogo using the Berkeley weblogo service.
 
         Requires an internet connection.
 
@@ -404,7 +404,7 @@ class Motif(object):
         for more information::
 
             'stack_width' : 'medium',
-            'stack_per_line' : '40',
+            'stacks_per_line' : '40',
             'alphabet' : 'alphabet_dna',
             'ignore_lower_case' : True,
             'unit_name' : "bits",
@@ -455,7 +455,7 @@ class Motif(object):
         values = {'sequences': frequencies,
                   'format': format.lower(),
                   'stack_width': 'medium',
-                  'stack_per_line': '40',
+                  'stacks_per_line': '40',
                   'alphabet': alpha,
                   'ignore_lower_case': True,
                   'unit_name': "bits",
@@ -499,12 +499,13 @@ class Motif(object):
             f.write(im)
 
     def format(self, format):
-        """Returns a string representation of the Motif in a given format
+        """Return a string representation of the Motif in the given format.
 
         Currently supported fromats:
          - pfm : JASPAR single Position Frequency Matrix
          - jaspar : JASPAR multiple Position Frequency Matrix
          - transfac : TRANSFAC like files
+
         """
         if format in ('pfm', 'jaspar'):
             from Bio.motifs import jaspar
@@ -519,12 +520,13 @@ class Motif(object):
 
 
 def write(motifs, format):
-    """Returns a string representation of motifs in a given format
+    """Return a string representation of motifs in the given format.
 
     Currently supported formats (case is ignored):
      - pfm : JASPAR simple single Position Frequency Matrix
      - jaspar : JASPAR multiple PFM format
      - transfac : TRANSFAC like files
+
     """
     format = format.lower()
     if format in ("pfm", "jaspar"):

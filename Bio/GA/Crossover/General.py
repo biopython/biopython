@@ -23,25 +23,24 @@ class SafeFitnessCrossover(object):
     organisms do not have less fitness. This is useful for cases where
     crossovers can
     """
+
     def __init__(self, actual_crossover, accept_less=0.0):
         """Initialize to do safe crossovers.
 
         Arguments:
+         - actual_crossover - A Crossover class which actually implements
+           crossover functionality.
+         - accept_less - A probability to accept crossovers which
+           generate less fitness. This allows you to accept some
+           crossovers which reduce fitness, but not all of them.
 
-        o actual_crossover - A Crossover class which actually implements
-        crossover functionality.
-
-        o accept_less - A probability to accept crossovers which
-        generate less fitness. This allows you to accept some
-        crossovers which reduce fitness, but not all of them.
         """
         self._crossover = actual_crossover
         self._accept_less_percent = accept_less
         self._accept_less_rand = random.Random()
 
     def do_crossover(self, org_1, org_2):
-        """Perform a safe crossover between the two organism.
-        """
+        """Perform a safe crossover between the two organism."""
         new_org_1, new_org_2 = self._crossover.do_crossover(org_1, org_2)
 
         return_orgs = []

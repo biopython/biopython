@@ -19,7 +19,6 @@ from .hsp import HSP
 
 
 class Hit(_BaseSearchObject):
-
     """Class representing a single database hit of a search result.
 
     Hit objects are the second-level container in the SearchIO module. They
@@ -105,7 +104,7 @@ class Hit(_BaseSearchObject):
     _NON_STICKY_ATTRS = ('_items', )
 
     def __init__(self, hsps=(), id=None, query_id=None):
-        """Initializes a Hit object.
+        """Initialize a Hit object.
 
         :param hsps: HSP objects contained in the Hit object
         :type hsps: iterable yielding HSP
@@ -241,7 +240,7 @@ class Hit(_BaseSearchObject):
 
     # hsp properties #
     def _validate_hsp(self, hsp):
-        """Validates an HSP object.
+        """Validate an HSP object (PRIVATE).
 
         Valid HSP objects have the same hit_id as the Hit object ID and the
         same query_id as the Hit object's query_id.
@@ -295,22 +294,22 @@ class Hit(_BaseSearchObject):
 
     @property
     def id_all(self):
-        """Alternative ID(s) of the Hit"""
+        """Alternative ID(s) of the Hit."""
         return [self.id] + self._id_alt
 
     @property
     def description_all(self):
-        """Alternative descriptions of the Hit"""
+        """Alternative descriptions of the Hit."""
         return [self.description] + self._description_alt
 
     @property
     def fragments(self):
-        """HSPFragment objects contained in the Hit"""
+        """Access the HSPFragment objects contained in the Hit."""
         return [frag for frag in chain(*self._items)]
 
     # public methods #
     def append(self, hsp):
-        """Adds a HSP object to the end of Hit.
+        """Add a HSP object to the end of Hit.
 
         Parameters
         hsp -- HSP object to append.
@@ -324,8 +323,7 @@ class Hit(_BaseSearchObject):
         self._items.append(hsp)
 
     def filter(self, func=None):
-        """Creates a new Hit object whose HSP objects pass the filter
-        function.
+        """Create new Hit object whose HSP objects pass the filter function.
 
         :param func: function for filtering
         :type func: callable, accepts HSP, returns bool
@@ -362,7 +360,7 @@ class Hit(_BaseSearchObject):
             return obj
 
     def index(self, hsp):
-        """Returns the index of a given HSP object, zero-based.
+        """Return the index of a given HSP object, zero-based.
 
         :param hsp: object to look up
         :type hsp: HSP
@@ -371,7 +369,7 @@ class Hit(_BaseSearchObject):
         return self._items.index(hsp)
 
     def map(self, func=None):
-        """Creates a new Hit object, mapping the given function to its HSPs.
+        """Create new Hit object, mapping the given function to its HSPs.
 
         :param func: function for mapping
         :type func: callable, accepts HSP, returns HSP
@@ -390,7 +388,7 @@ class Hit(_BaseSearchObject):
             return obj
 
     def pop(self, index=-1):
-        """Removes and returns the HSP object at the specified index.
+        """Remove and returns the HSP object at the specified index.
 
         :param index: index of HSP object to pop
         :type index: int
@@ -399,7 +397,7 @@ class Hit(_BaseSearchObject):
         return self._items.pop(index)
 
     def sort(self, key=None, reverse=False, in_place=True):
-        """Sorts the HSP objects.
+        """Sort the HSP objects.
 
         :param key: sorting function
         :type key: callable, accepts HSP, returns key for sorting

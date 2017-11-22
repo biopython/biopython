@@ -58,6 +58,7 @@ except ImportError:
 class GenericPositionMatrix(dict):
 
     def __init__(self, alphabet, values):
+        """Initialize the class."""
         self.length = None
         for letter in alphabet.letters:
             if self.length is None:
@@ -231,7 +232,7 @@ class GenericPositionMatrix(dict):
             nucleotides = sorted(self, key=get, reverse=True)
             counts = [self[c][i] for c in nucleotides]
             # Follow the Cavener rules:
-            if counts[0] >= sum(counts[1:]) and counts[0] >= 2 * counts[1]:
+            if counts[0] > sum(counts[1:]) and counts[0] > 2 * counts[1]:
                 key = nucleotides[0]
             elif 4 * sum(counts[:2]) > 3 * sum(counts):
                 key = "".join(sorted(nucleotides[:2]))
@@ -266,8 +267,12 @@ class GenericPositionMatrix(dict):
 
     def reverse_complement(self):
         values = {}
-        values["A"] = self["T"][::-1]
-        values["T"] = self["A"][::-1]
+        if isinstance(self.alphabet, Alphabet.RNAAlphabet):
+            values["A"] = self["U"][::-1]
+            values["U"] = self["A"][::-1]
+        else:
+            values["A"] = self["T"][::-1]
+            values["T"] = self["A"][::-1]
         values["G"] = self["C"][::-1]
         values["C"] = self["G"][::-1]
         alphabet = self.alphabet
@@ -308,6 +313,7 @@ class FrequencyPositionMatrix(GenericPositionMatrix):
 class PositionWeightMatrix(GenericPositionMatrix):
 
     def __init__(self, alphabet, counts):
+        """Initialize the class."""
         GenericPositionMatrix.__init__(self, alphabet, counts)
         for i in range(self.length):
             total = sum(float(self[letter][i]) for letter in alphabet.letters)
@@ -366,12 +372,12 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
         """Returns the PWM score for a given sequence for all positions.
 
         Notes:
-
          - the sequence can only be a DNA sequence
          - the search is performed only on one strand
          - if the sequence and the motif have the same length, a single
            number is returned
          - otherwise, the result is a one-dimensional list or numpy array
+
         """
         # TODO - Code itself tolerates ambiguous bases (as NaN).
         if not isinstance(self.alphabet, IUPAC.IUPACUnambiguousDNA):
@@ -539,7 +545,7 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
         return numerator / denominator
 
     def distribution(self, background=None, precision=10 ** 3):
-        """calculate the distribution of the scores at the given precision."""
+        """Calculate the distribution of the scores at the given precision."""
         from .thresholds import ScoreDistribution
         if background is None:
             background = dict.fromkeys(self._letters, 1.0)

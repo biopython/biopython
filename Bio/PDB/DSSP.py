@@ -12,11 +12,11 @@ The following Accessible surface area (ASA) values can be used, defaulting
 to the Sander and Rost values:
 
     Miller
-        Miller et al. 1987 http://dx.doi.org/10.1016/0022-2836(87)90038-6
+        Miller et al. 1987 https://doi.org/10.1016/0022-2836(87)90038-6
     Sander
-        Sander and Rost 1994 http://dx.doi.org/10.1002/prot.340200303
+        Sander and Rost 1994 https://doi.org/10.1002/prot.340200303
     Wilke
-        Tien et al. 2013 http://dx.doi.org/10.1371/journal.pone.0080635
+        Tien et al. 2013 https://doi.org/10.1371/journal.pone.0080635
 
 The DSSP codes for secondary structure used here are:
 
@@ -35,16 +35,14 @@ The DSSP codes for secondary structure used here are:
 
 Usage
 -----
-
 The DSSP class can be used to run DSSP on a pdb file, and provides a
 handle to the DSSP secondary structure and accessibility.
 
 **Note** that DSSP can only handle one model, and will only run
 calculations on the first model in the provided PDB file.
 
-Example:
+Examples
 --------
-
 >>> p = PDBParser()
 >>> structure = p.get_structure("1MOT", "1mot.pdb")
 >>> model = structure[0]
@@ -95,12 +93,10 @@ from Bio._py3k import StringIO
 import subprocess
 import warnings
 
-from Bio.Data import SCOPData
-
 from Bio.PDB.AbstractPropertyMap import AbstractResiduePropertyMap
 from Bio.PDB.PDBExceptions import PDBException
 from Bio.PDB.PDBParser import PDBParser
-
+from Bio.PDB.Polypeptide import three_to_one
 
 # Match C in DSSP
 _dssp_cys = re.compile('[a-z]')
@@ -109,9 +105,9 @@ _dssp_cys = re.compile('[a-z]')
 # Used for relative accessibility
 
 residue_max_acc = {
-    # Miller max acc: Miller et al. 1987 http://dx.doi.org/10.1016/0022-2836(87)90038-6
-    # Wilke: Tien et al. 2013 http://dx.doi.org/10.1371/journal.pone.0080635
-    # Sander: Sander & Rost 1994 http://dx.doi.org/10.1002/prot.340200303
+    # Miller max acc: Miller et al. 1987 https://doi.org/10.1016/0022-2836(87)90038-6
+    # Wilke: Tien et al. 2013 https://doi.org/10.1371/journal.pone.0080635
+    # Sander: Sander & Rost 1994 https://doi.org/10.1002/prot.340200303
     'Miller': {
         'ALA': 113.0, 'ARG': 241.0, 'ASN': 158.0, 'ASP': 151.0,
         'CYS': 140.0, 'GLN': 189.0, 'GLU': 183.0, 'GLY': 85.0,
@@ -155,11 +151,6 @@ def ss_to_index(ss):
 def dssp_dict_from_pdb_file(in_file, DSSP="dssp"):
     """Create a DSSP dictionary from a PDB file.
 
-    Example:
-    --------
-    >>> dssp_dict=dssp_dict_from_pdb_file("1fat.pdb")
-    >>> aa, ss, acc=dssp_dict[('A', 1)]
-
     Parameters
     ----------
     in_file : string
@@ -174,6 +165,12 @@ def dssp_dict_from_pdb_file(in_file, DSSP="dssp"):
         a dictionary that maps (chainid, resid) to
         amino acid type, secondary structure code and
         accessibility.
+
+    Examples
+    --------
+    >>> dssp_dict=dssp_dict_from_pdb_file("1fat.pdb")
+    >>> aa, ss, acc=dssp_dict[('A', 1)]
+
     """
     # Using universal newlines is important on Python 3, this
     # gives unicode handles rather than bytes handles.
@@ -183,7 +180,7 @@ def dssp_dict_from_pdb_file(in_file, DSSP="dssp"):
     try:
         p = subprocess.Popen([DSSP, in_file], universal_newlines=True,
                              stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    except FileNotFoundError:
+    except OSError:  # TODO: Use FileNotFoundError once drop Python 2
         if DSSP == "mkdssp":
             raise
         p = subprocess.Popen(["mkdssp", in_file], universal_newlines=True,
@@ -201,7 +198,7 @@ def dssp_dict_from_pdb_file(in_file, DSSP="dssp"):
 
 
 def make_dssp_dict(filename):
-    """DSSP dictionary mapping identifers to properties.
+    """DSSP dictionary mapping identifiers to properties.
 
     Return a DSSP dictionary that maps (chainid, resid) to
     aa, ss and accessibility, from a DSSP file.
@@ -210,6 +207,7 @@ def make_dssp_dict(filename):
     ----------
     filename : string
         the DSSP output file
+
     """
     with open(filename, "r") as handle:
         return _make_dssp_dict(handle)
@@ -227,6 +225,7 @@ def _make_dssp_dict(handle):
     ----------
     handle : file
         the open DSSP output file handle
+
     """
     dssp = {}
     start = 0
@@ -305,9 +304,8 @@ class DSSP(AbstractResiduePropertyMap):
 
     **Note** that DSSP can only handle one model.
 
-    Example:
+    Examples
     --------
-
     >>> p = PDBParser()
     >>> structure = p.get_structure("1MOT", "1mot.pdb")
     >>> model = structure[0]
@@ -320,6 +318,7 @@ class DSSP(AbstractResiduePropertyMap):
     >>> dssp[a_key]
     (3, 'A', 'H', 0.7075471698113207, -61.2, -42.4,
      -2, -0.7, 4, -3.0, 1, -0.2, 5, -0.2)
+
     """
 
     def __init__(self, model, in_file, dssp="dssp", acc_array="Sander", file_type='PDB'):
@@ -339,6 +338,7 @@ class DSSP(AbstractResiduePropertyMap):
             Sander/Wilke/Miller. Defaults to Sander.
         file_type: string
             File type switch, either PDB or DSSP with PDB as default.
+
         """
         self.residue_max_acc = residue_max_acc[acc_array]
 
@@ -352,7 +352,7 @@ class DSSP(AbstractResiduePropertyMap):
             # (Debian distribution of DSSP includes a symlink for 'dssp' argument)
             try:
                 dssp_dict, dssp_keys = dssp_dict_from_pdb_file(in_file, dssp)
-            except FileNotFoundError:
+            except OSError:  # TODO: Use FileNotFoundError once drop Python 2
                 if dssp == 'dssp':
                     dssp = 'mkdssp'
                 elif dssp == 'mkdssp':
@@ -395,7 +395,7 @@ class DSSP(AbstractResiduePropertyMap):
                 else:
                     raise KeyError(res_id)
 
-            # For disordered residues of point mutations, BioPython uses the
+            # For disordered residues of point mutations, Biopython uses the
             # last one as default, But DSSP takes the first one (alternative
             # location is blank, A or 1). See 1h9h chain E resi 22.
             # Here we select the res in which all atoms have altloc blank, A or
@@ -471,7 +471,10 @@ class DSSP(AbstractResiduePropertyMap):
             # Verify if AA in DSSP == AA in Structure
             # Something went wrong if this is not true!
             # NB: DSSP uses X often
-            resname = SCOPData.protein_letters_3to1.get(resname, 'X')
+            try:
+                resname = three_to_one(resname)
+            except KeyError:
+                resname = 'X'
             if resname == "C":
                 # DSSP renames C in C-bridges to a,b,c,d,...
                 # - we rename it back to 'C'

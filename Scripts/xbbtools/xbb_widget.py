@@ -8,7 +8,8 @@
 
 # Created: Wed Jun 21 10:28:14 2000
 # thomas@cbs.dtu.dk, http://www.cbs.dtu.dk/thomas
-# File: xbb_widget.py
+
+"""Widget code for graphical Xbbtools tool."""
 
 from __future__ import print_function
 
@@ -209,15 +210,15 @@ class xbb_widget(object):
             b_id.pack(side='top', pady=5, padx=10)
             self.buttons[text] = b_id
 
-        f = ttk.Frame(self.button_frame)
-        l = ttk.Label(f, text='Goto:')
-        l.pack(side='left')
-        l.bind('<Button-1>', self.goto)
+        frame = ttk.Frame(self.button_frame)
+        label = ttk.Label(frame, text='Goto:')
+        label.pack(side='left')
+        label.bind('<Button-1>', self.goto)
 
-        self.goto_entry = ttk.Entry(f, width=5)
+        self.goto_entry = ttk.Entry(frame, width=5)
         self.goto_entry.pack(side='right', pady=5, padx=4)
         self.goto_entry.bind('<Return>', self.goto)
-        f.pack(side='bottom')
+        frame.pack(side='bottom')
 
     def create_seqfield(self, parent):
         self.sequence_id = tk.Text(parent, wrap='char', width=self.seqwidth)

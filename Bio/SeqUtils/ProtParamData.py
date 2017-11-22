@@ -1,14 +1,16 @@
-"""This module contains indices to be used with ProtParam."""
+"""Indices to be used with ProtParam."""
 
 
 # Kyte & Doolittle index of hydrophobicity
+# J. Mol. Biol. 157:105-132(1982).
 kd = {'A': 1.8, 'R': -4.5, 'N': -3.5, 'D': -3.5, 'C': 2.5,
       'Q': -3.5, 'E': -3.5, 'G': -0.4, 'H': -3.2, 'I': 4.5,
       'L': 3.8, 'K': -3.9, 'M': 1.9, 'F': 2.8, 'P': -1.6,
       'S': -0.8, 'T': -0.7, 'W': -0.9, 'Y': -1.3, 'V': 4.2}
 
 # Flexibility
-# Normalized flexibility parameters (B-values), average (Vihinen et al., 1994)
+# Normalized flexibility parameters (B-values), average
+# Vihinen M., Torkkila E., Riikonen P. Proteins. 19(2):141-9(1994).
 Flex = {'A': 0.984, 'C': 0.906, 'E': 1.094, 'D': 1.068,
         'G': 1.031, 'F': 0.915, 'I': 0.927, 'H': 0.950,
         'K': 1.102, 'M': 0.952, 'L': 0.935, 'N': 1.048,
@@ -24,6 +26,7 @@ hw = {'A': -0.5, 'R': 3.0, 'N': 0.2, 'D': 3.0, 'C': -1.0,
       'S': 0.3, 'T': -0.4, 'W': -3.4, 'Y': -2.3, 'V': -1.5}
 
 # Surface accessibility
+# Vergoten G & Theophanides T, Biomolecular Structure and Dynamics, pg.138 (1997).
 # 1 Emini Surface fractional probability
 em = {'A': 0.815, 'R': 1.475, 'N': 1.296, 'D': 1.283, 'C': 0.394,
       'Q': 1.348, 'E': 1.445, 'G': 0.714, 'H': 1.180, 'I': 0.603,
@@ -38,8 +41,8 @@ ja = {'A': 0.28, 'R': -1.14, 'N': -0.55, 'D': -0.52, 'C': 0.97,
 
 
 # A two dimensional dictionary for calculating the instability index.
-# Guruprasad K., Reddy B.V.B., Pandit M.W.    Protein Engineering 4:155-161(1990).
-# It is based on dipeptide values therefore the vale for the dipeptide DG is DIWV['D']['G'].
+# Guruprasad K., Reddy B.V.B., Pandit M.W. Protein Engineering 4:155-161(1990).
+# It is based on dipeptide values; therefore, the value for the dipeptide DG is DIWV['D']['G'].
 DIWV = {'A': {'A': 1.0, 'C': 44.94, 'E': 1.0, 'D': -7.49,
               'G': 1.0, 'F': 1.0, 'I': 1.0, 'H': -7.49,
               'K': 1.0, 'M': 1.0, 'L': 1.0, 'N': 1.0,

@@ -2,8 +2,7 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""Tools to manipulate data from nmrview .xpk peaklist files.
-"""
+"""Tools to manipulate data from nmrview .xpk peaklist files."""
 
 from __future__ import print_function
 
@@ -36,7 +35,9 @@ class XpkEntry(object):
         self.field["entrynum"] returns the line number (1st field of line)
 
     """
+
     def __init__(self, entry, headline):
+        """Initialize the class."""
         # Holds all fields from input line in a dictionary
         # keys are data labels from the .xpk header
         self.fields = {}
@@ -85,7 +86,6 @@ class Peaklist(object):
 
     Examples
     --------
-
     >>> from Bio.NMR.xpktools import Peaklist
     >>> peaklist = Peaklist('../Doc/examples/nmr/noed.xpk')
     >>> peaklist.firstline
@@ -98,8 +98,9 @@ class Peaklist(object):
     ' H1.L  H1.P  H1.W  H1.B  H1.E  H1.J  15N2.L  15N2.P  15N2.W  15N2.B  15N2.E  15N2.J  N15.L  N15.P  N15.W  N15.B  N15.E  N15.J  vol  int  stat '
 
     """
-    def __init__(self, infn):
 
+    def __init__(self, infn):
+        """Initialize the class."""
         with open(infn, 'r') as infile:
 
             # Read in the header lines
@@ -131,7 +132,6 @@ class Peaklist(object):
 
         Examples
         --------
-
         >>> from Bio.NMR.xpktools import Peaklist
         >>> peaklist = Peaklist('../Doc/examples/nmr/noed.xpk')
         >>> residue_d = peaklist.residue_dict('H1')
@@ -218,6 +218,7 @@ def _find_start_entry(line, n):
     -------
     starting character : str
         The starting character for entry `n`.
+
     """
     # This function is used by replace_entry
 
@@ -274,7 +275,7 @@ def data_table(fn_list, datalabel, keyatom):
     # TODO - Clarify this docstring, add an example?
     outlist = []
 
-    [dict_list, label_line_list] = _read_dicts(fn_list, keyatom)
+    dict_list, label_line_list = _read_dicts(fn_list, keyatom)
 
     # Find global max and min residue numbers
     minr = dict_list[0]["minres"]

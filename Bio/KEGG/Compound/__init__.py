@@ -7,10 +7,10 @@
 """Code to work with the KEGG Ligand/Compound database.
 
 Functions:
-parse - Returns an iterator giving Record objects.
+ - parse - Returns an iterator giving Record objects.
 
 Classes:
-Record - A representation of a KEGG Ligand/Compound.
+ - Record - A representation of a KEGG Ligand/Compound.
 """
 
 # other Biopython stuff
@@ -31,22 +31,20 @@ struct_wrap = lambda indent: [indent, "", ("  ", "", 1, 1)]
 class Record(object):
     """Holds info from a KEGG Ligand/Compound record.
 
-    Members:
-    entry       The entry identifier.
-    name        A list of the compund names.
-    formula     The chemical formula for the compound
-    mass        The molecular weight for the compound
-    pathway     A list of 3-tuples: (database, id, pathway)
-    enzyme      A list of 2-tuples: (enzyme id, role)
-    structures  A list of 2-tuples: (database, list of struct ids)
-    dblinks     A list of 2-tuples: (database, list of link ids)
+    Attributes:
+     - entry       The entry identifier.
+     - name        A list of the compund names.
+     - formula     The chemical formula for the compound
+     - mass        The molecular weight for the compound
+     - pathway     A list of 3-tuples: ('PATH', pathway id, pathway)
+     - enzyme      A list of the EC numbers.
+     - structures  A list of 2-tuples: (database, list of struct ids)
+     - dblinks     A list of 2-tuples: (database, list of link ids)
 
     """
-    def __init__(self):
-        """__init___(self)
 
-        Create a new Record.
-        """
+    def __init__(self):
+        """Initialize as new record."""
         self.entry = ""
         self.name = []
         self.formula = ""
@@ -57,10 +55,7 @@ class Record(object):
         self.dblinks = []
 
     def __str__(self):
-        """__str__(self)
-
-        Returns a string representation of this Record.
-        """
+        """Return a string representation of this Record."""
         return self._entry() + \
                self._name() + \
                self._formula() + \
@@ -91,21 +86,15 @@ class Record(object):
     def _pathway(self):
         s = []
         for entry in self.pathway:
-            s.append(entry[0] + ": " + entry[1] + "  " + entry[2])
+            s.append(entry[0] + "  " + entry[1])
         return _write_kegg("PATHWAY",
                            [_wrap_kegg(l, wrap_rule=id_wrap(16))
                             for l in s])
 
     def _enzyme(self):
-        s = ""
-        for entry in self.enzyme:
-            if entry[1]:
-                t = entry[0] + " (" + entry[1] + ")"
-            else:
-                t = entry[0]
-            s = s + t.ljust(16)
         return _write_kegg("ENZYME",
-                            [_wrap_kegg(s, wrap_rule=id_wrap(0))])
+                           [_wrap_kegg(l, wrap_rule=name_wrap)
+                            for l in self.enzyme])
 
     def _structures(self):
         s = []
@@ -140,7 +129,7 @@ def parse(handle):
     C00099 beta-Alanine
     C00294 Inosine
     C00298 Trypsin
-    C00348 Undecaprenyl phosphate
+    C00348 all-trans-Undecaprenyl phosphate
     C00349 2-Methyl-3-oxopropanoate
     C01386 NH2Mec
 
@@ -164,23 +153,12 @@ def parse(handle):
             while data:
                 column = data[:16]
                 data = data[16:]
-                if '(' in column:
-                    entry = column.split()
-                    enzyme = (entry[0], entry[1][1:-1])
-                else:
-                    enzyme = (column.strip(), "")
+                enzyme = column.strip()
                 record.enzyme.append(enzyme)
         elif keyword == "PATHWAY     ":
-            if data[:5] == 'PATH:':
-                path, map, name = data.split(None, 2)
-                pathway = (path[:-1], map, name)
-                record.pathway.append(pathway)
-            else:
-                pathway = record.pathway[-1]
-                path, map, name = pathway
-                name = name + " " + data
-                pathway = path, map, name
-                record.pathway[-1] = pathway
+            map, name = data.split("  ")
+            pathway = ('PATH', map, name)
+            record.pathway.append(pathway)
         elif keyword == "FORMULA     ":
             record.formula = data
         elif keyword == "MASS        ":

@@ -188,26 +188,46 @@ _RE_ID_DESC_PAIRS_PATTERN = re.compile(" +>")
 _RE_ID_DESC_PATTERN = re.compile(" +")
 
 
-def _extract_ids_and_descs(concat_str):
-    # Given a string space-separate string of IDs and descriptions,
-    # return a list of tuples, each tuple containing an ID and
-    # a description string (which may be empty)
+def _extract_ids_and_descs(raw_id, raw_desc):
+    """Extract IDs, descriptions, and raw ID from raw values (PRIVATE).
+
+    Given values of the `Hit_id` and `Hit_def` elements, this function returns
+    a tuple of three elements: all IDs, all descriptions, and the
+    BLAST-generated ID. The BLAST-generated ID is set to `None` if no
+    BLAST-generated IDs are present.
+
+    """
+    ids = []
+    descs = []
+
+    blast_gen_id = raw_id
+    if raw_id.startswith('gnl|BL_ORD_ID|'):
+        id_desc_line = raw_desc
+    else:
+        id_desc_line = raw_id + ' ' + raw_desc
 
     # create a list of lists, each list containing an ID and description
     # or just an ID, if description is not present
     id_desc_pairs = [re.split(_RE_ID_DESC_PATTERN, x, 1)
-                     for x in re.split(_RE_ID_DESC_PAIRS_PATTERN, concat_str)]
+                     for x in re.split(_RE_ID_DESC_PAIRS_PATTERN, id_desc_line)]
     # make sure empty descriptions are added as empty strings
     # also, we return lists for compatibility reasons between Py2 and Py3
     add_descs = lambda x: x if len(x) == 2 else x + [""]
-    return [pair for pair in map(add_descs, id_desc_pairs)]
+    for pair in (add_descs(p) for p in id_desc_pairs):
+        ids.append(pair[0])
+        descs.append(pair[1])
+
+    return (ids, descs, blast_gen_id)
 
 
 class BlastXmlParser(object):
     """Parser for the BLAST XML format"""
 
-    def __init__(self, handle):
+    def __init__(self, handle, use_raw_query_ids=False, use_raw_hit_ids=False):
+        """Initialize the class."""
         self.xml_iter = iter(ElementTree.iterparse(handle, events=('start', 'end')))
+        self._use_raw_query_ids = use_raw_query_ids
+        self._use_raw_hit_ids = use_raw_hit_ids
         self._meta, self._fallback = self._parse_preamble()
 
     def __iter__(self):
@@ -290,20 +310,19 @@ class BlastXmlParser(object):
                 if query_len is None:
                     query_len = self._fallback['len']
 
+                blast_query_id = query_id
                 # handle blast searches against databases with Blast's IDs
                 # 'Query_' marks the beginning of a BLAST+-generated ID,
                 # 'lcl|' marks the beginning of a BLAST legacy-generated ID
-                if query_id.startswith('Query_') or query_id.startswith('lcl|'):
+                if not self._use_raw_query_ids and \
+                        (query_id.startswith('Query_') or query_id.startswith('lcl|')):
                     # store the Blast-generated query ID
-                    blast_query_id = query_id
                     id_desc = query_desc.split(' ', 1)
                     query_id = id_desc[0]
                     try:
                         query_desc = id_desc[1]
                     except IndexError:
                         query_desc = ''
-                else:
-                    blast_query_id = ''
 
                 hit_list, key_list = [], []
                 for hit in self._parse_hit(qresult_elem.find('Iteration_hits'),
@@ -311,18 +330,18 @@ class BlastXmlParser(object):
                     if hit:
                         # need to keep track of hit IDs, since there could be duplicates,
                         if hit.id in key_list:
-                            warnings.warn("Adding hit with BLAST-generated ID "
-                                    "%r since hit ID %r is already present "
-                                    "in query %r. Your BLAST database may contain "
+                            warnings.warn("Renaming hit ID %r to a BLAST-generated ID "
+                                    "%r since the ID was already matched "
+                                    "by your query %r. Your BLAST database may contain "
                                     "duplicate entries." %
-                                    (hit._blast_id, hit.id, query_id), BiopythonParserWarning)
+                                    (hit.id, hit.blast_id, query_id), BiopythonParserWarning)
                             # fallback to Blast-generated IDs, if the ID is already present
                             # and restore the desc, too
                             hit.description = '%s %s' % (hit.id, hit.description)
-                            hit.id = hit._blast_id
+                            hit.id = hit.blast_id
                             # and change the hit_id of the HSPs contained
                             for hsp in hit:
-                                hsp.hit_id = hit._blast_id
+                                hsp.hit_id = hit.blast_id
                         else:
                             key_list.append(hit.id)
 
@@ -332,7 +351,7 @@ class BlastXmlParser(object):
                 qresult = QueryResult(hit_list, query_id)
                 qresult.description = query_desc
                 qresult.seq_len = int(query_len)
-                qresult._blast_id = blast_query_id
+                qresult.blast_id = blast_query_id
                 for key, value in self._meta.items():
                     setattr(qresult, key, value)
 
@@ -390,25 +409,17 @@ class BlastXmlParser(object):
 
         for hit_elem in root_hit_elem:
 
-            # create empty hit object
-            hit_id = hit_elem.findtext('Hit_id')
-            hit_desc = hit_elem.findtext('Hit_def')
-            # handle blast searches against databases with Blast's IDs
-            if hit_id.startswith('gnl|BL_ORD_ID|'):
-                blast_hit_id = hit_id
-                id_desc = hit_desc.split(' ', 1)
-                hit_id = id_desc[0]
-                try:
-                    hit_desc = id_desc[1]
-                except IndexError:
-                    hit_desc = ''
+            # BLAST sometimes mangles the sequence IDs and descriptions, so we need
+            # to extract the actual values.
+            raw_hit_id = hit_elem.findtext('Hit_id')
+            raw_hit_desc = hit_elem.findtext('Hit_def')
+            if not self._use_raw_hit_ids:
+                ids, descs, blast_hit_id = _extract_ids_and_descs(raw_hit_id, raw_hit_desc)
             else:
-                blast_hit_id = ''
+                ids, descs, blast_hit_id = [raw_hit_id], [raw_hit_desc], raw_hit_id
 
-            # combine primary ID and defline first before splitting
-            full_id_desc = hit_id + ' ' + hit_desc
-            id_descs = _extract_ids_and_descs(full_id_desc)
-            hit_id, hit_desc = id_descs[0]
+            hit_id, alt_hit_ids = ids[0], ids[1:]
+            hit_desc, alt_hit_descs = descs[0], descs[1:]
 
             hsps = [hsp for hsp in
                     self._parse_hsp(hit_elem.find('Hit_hsps'),
@@ -416,10 +427,9 @@ class BlastXmlParser(object):
 
             hit = Hit(hsps)
             hit.description = hit_desc
-            hit._id_alt = [x[0] for x in id_descs[1:]]
-            hit._description_alt = [x[1] for x in id_descs[1:]]
-            # blast_hit_id is only set if the hit ID is Blast-generated
-            hit._blast_id = blast_hit_id
+            hit._id_alt = alt_hit_ids
+            hit._description_alt = alt_hit_descs
+            hit.blast_id = blast_hit_id
 
             for key, val_info in _ELEM_HIT.items():
                 value = hit_elem.findtext(key)
@@ -539,10 +549,11 @@ class BlastXmlIndexer(SearchIndexer):
     qend_mark = _as_bytes('</Iteration>')
     block_size = 16384
 
-    def __init__(self, filename):
+    def __init__(self, filename, **kwargs):
+        """Initialize the class."""
         SearchIndexer.__init__(self, filename)
         # TODO: better way to do this?
-        iter_obj = self._parser(self._handle)
+        iter_obj = self._parser(self._handle, **kwargs)
         self._meta, self._fallback = iter_obj._meta, iter_obj._fallback
 
     def __iter__(self):
@@ -723,8 +734,11 @@ class _BlastXmlGenerator(XMLGenerator):
 class BlastXmlWriter(object):
     """Stream-based BLAST+ XML Writer."""
 
-    def __init__(self, handle):
+    def __init__(self, handle, use_raw_query_ids=True, use_raw_hit_ids=True):
+        """Initialize the class."""
         self.xml = _BlastXmlGenerator(handle, 'utf-8')
+        self._use_raw_query_ids = use_raw_query_ids
+        self._use_raw_hit_ids = use_raw_hit_ids
 
     def write_file(self, qresults):
         """Writes the XML contents to the output handle."""
@@ -796,9 +810,9 @@ class BlastXmlWriter(object):
                 if elem == 'BlastOutput_version':
                     content = '%s %s' % (qresult.program.upper(),
                             qresult.version)
-                elif qresult._blast_id:
+                elif qresult.blast_id:
                     if elem == 'BlastOutput_query-ID':
-                        content = qresult._blast_id
+                        content = qresult.blast_id
                     elif elem == 'BlastOutput_query-def':
                         content = ' '.join([qresult.id,
                             qresult.description]).strip()
@@ -819,14 +833,17 @@ class BlastXmlWriter(object):
             xml.startParent('Iteration')
             xml.simpleElement('Iteration_iter-num', str(num + 1))
             opt_dict = {}
-            # use custom Iteration_query-ID and Iteration_query-def mapping
-            # if the query has a BLAST-generated ID
-            if qresult._blast_id:
-                opt_dict = {
-                    'Iteration_query-ID': qresult._blast_id,
-                    'Iteration_query-def': ' '.join([qresult.id,
-                            qresult.description]).strip(),
-                }
+            if self._use_raw_query_ids:
+                query_id = qresult.blast_id
+                query_desc = qresult.id + ' ' + qresult.description
+            else:
+                query_id = qresult.id
+                query_desc = qresult.description
+
+            opt_dict = {
+                'Iteration_query-ID': query_id,
+                'Iteration_query-def': query_desc,
+            }
             self._write_elem_block('Iteration_', 'qresult', qresult, opt_dict)
             # the Iteration_hits tag only has children if there are hits
             if qresult:
@@ -856,11 +873,22 @@ class BlastXmlWriter(object):
             # use custom hit_id and hit_def mapping if the hit has a
             # BLAST-generated ID
             opt_dict = {}
-            if hit._blast_id:
-                opt_dict = {
-                    'Hit_id': hit._blast_id,
-                    'Hit_def': ' '.join([hit.id, hit.description]).strip(),
-                }
+
+            if self._use_raw_hit_ids:
+                hit_id = hit.blast_id
+                hit_desc = ' >'.join(
+                    ['{} {}'.format(x, y)
+                     for x, y in zip(hit.id_all, hit.description_all)])
+            else:
+                hit_id = hit.id
+                hit_desc = hit.description + ' >'.join(
+                    ['{} {}'.format(x, y)
+                     for x, y in zip(hit.id_all[1:], hit.description_all[1:])])
+
+            opt_dict = {
+                'Hit_id': hit_id,
+                'Hit_def': hit_desc,
+            }
             self._write_elem_block('Hit_', 'hit', hit, opt_dict)
             xml.startParent('Hit_hsps')
             self._write_hsps(hit.hsps)

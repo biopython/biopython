@@ -15,8 +15,8 @@ class NovoalignCommandline(AbstractCommandline):
 
     See www.novocraft.com - novoalign is a short read alignment program.
 
-    Example:
-
+    Examples
+    --------
     >>> from Bio.Sequencing.Applications import NovoalignCommandline
     >>> novoalign_cline = NovoalignCommandline(database='some_db',
     ...                                        readfile='some_seq.txt')
@@ -37,9 +37,11 @@ class NovoalignCommandline(AbstractCommandline):
     the Python subprocess module, as described in the Biopython tutorial.
 
     Last checked against version: 2.05.04
-    """
-    def __init__(self, cmd="novoalign", **kwargs):
 
+    """
+
+    def __init__(self, cmd="novoalign", **kwargs):
+        """Initialize the class."""
         READ_FORMAT = ['FA', 'SLXFQ', 'STDFQ', 'ILMFQ', 'PRB', 'PRBnSEQ']
         REPORT_FORMAT = ['Native', 'Pairwise', 'SAM']
         REPEAT_METHOD = ['None', 'Random', 'All', 'Exhaustive', '0.99']

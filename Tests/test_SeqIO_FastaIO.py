@@ -70,6 +70,7 @@ def read_title_and_seq(filename):
 
 class TitleFunctions(unittest.TestCase):
     """Cunning unit test where methods are added at run time."""
+
     def simple_check(self, filename, alphabet):
         """Basic test for parsing single record FASTA files."""
         title, seq = read_title_and_seq(filename)  # crude parser

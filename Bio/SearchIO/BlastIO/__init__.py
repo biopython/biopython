@@ -57,7 +57,7 @@ It provides the following attributes for each SearchIO object:
 |                +-------------------------+-----------------------------+
 |                | reference               | BlastOutput_reference       |
 |                +-------------------------+-----------------------------+
-|                | version                 | BlastOutput_version[1]      |
+|                | version                 | BlastOutput_version [*]_    |
 |                +-------------------------+-----------------------------+
 |                | description             | Iteration_query-def         |
 |                +-------------------------+-----------------------------+
@@ -156,10 +156,18 @@ The blast-xml parser is aware of these modifications and will attempt to extract
 the true sequence IDs out of the descriptions. So when accessing QueryResult or
 Hit objects, you will use the non-BLAST-generated IDs.
 
-Conversely, the blast-xml writer will try to concatenate the true sequence IDs
-with their descriptions and use the BLAST-generated IDs. This enables you to
-write BLAST XML files using SearchIO as if they were written by a real BLAST
-program.
+This behavior on the query IDs can be disabled using the 'use_raw_query_ids'
+parameter while the behavior on the hit IDs can be disabled using the
+'use_raw_hit_ids' parameter. Both are boolean values that can be supplied
+to SearchIO.read or SearchIO.parse, with the default values set to 'False'.
+
+In any case, the raw BLAST IDs can always be accessed using the query or hit
+object's 'blast_id' attribute.
+
+The blast-xml write function also accepts 'use_raw_query_ids' and
+'use_raw_hit_ids' parameters. However, note that the default values for the
+writer are set to 'True'. This is because the writer is meant to mimic native
+BLAST result as much as possible.
 
 
 blast-tab
@@ -169,14 +177,14 @@ The default format for blast-tab support is the variant without comments (-m 6
 flag). Commented BLAST tabular files may be parsed, indexed, or written using
 the keyword argument 'comments' set to True:
 
-    # blast-tab defaults to parsing uncommented files
+    >>> # blast-tab defaults to parsing uncommented files
     >>> from Bio import SearchIO
     >>> uncommented = 'Blast/tab_2226_tblastn_004.txt'
     >>> qresult = SearchIO.read(uncommented, 'blast-tab')
     >>> qresult
     QueryResult(id='gi|11464971:4-101', 5 hits)
 
-    # set the keyword argument to parse commented files
+    >>> # set the keyword argument to parse commented files
     >>> commented = 'Blast/tab_2226_tblastn_008.txt'
     >>> qresult = SearchIO.read(commented, 'blast-tab', comments=True)
     >>> qresult
@@ -192,14 +200,14 @@ the column follow BLAST's naming. For example, 'qseqid' is the column for the
 query sequence ID. These names may be passed either as a Python list or as a
 space-separated strings.
 
-    # pass the custom column names as a Python list
+    >>> # pass the custom column names as a Python list
     >>> fname = 'Blast/tab_2226_tblastn_009.txt'
     >>> custom_fields = ['qseqid', 'sseqid']
     >>> qresult = next(SearchIO.parse(fname, 'blast-tab', fields=custom_fields))
     >>> qresult
     QueryResult(id='gi|16080617|ref|NP_391444.1|', 3 hits)
 
-    # pass the custom column names as a space-separated string
+    >>> # pass the custom column names as a space-separated string
     >>> fname = 'Blast/tab_2226_tblastn_009.txt'
     >>> custom_fields = 'qseqid sseqid'
     >>> qresult = next(SearchIO.parse(fname, 'blast-tab', fields=custom_fields))
@@ -267,7 +275,7 @@ blast-tab provides the following attributes for each SearchIO objects:
 |             +-------------------+--------------+
 |             | bitscore_raw      | score        |
 +-------------+-------------------+--------------+
-| HSPFragment | frames            | frames[2]    |
+| HSPFragment | frames            | frames [*]_  |
 | (also via   +-------------------+--------------+
 | HSP)        | aln_span          | length       |
 |             +-------------------+--------------+
@@ -391,9 +399,9 @@ The blast-text parser provides the following object attributes:
 +-----------------+-------------------------+----------------------------------+
 
 
-.. [1] may be modified
+.. [*] may be modified
 
-.. [2] When 'frames' is present, both ``query_frame`` and ``hit_frame`` will be
+.. [*] When 'frames' is present, both ``query_frame`` and ``hit_frame`` will be
    present as well. It is recommended that you use these instead of 'frames' directly.
 
 """

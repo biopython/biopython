@@ -78,7 +78,6 @@ from Bio.Align import MultipleSeqAlignment
 from .Interfaces import AlignmentIterator
 from .Interfaces import SequentialAlignmentWriter
 
-__docformat__ = "restructuredtext en"
 
 XMFA_HEADER_REGEX = re.compile("> (?P<id>\d+):(?P<start>\d+)-(?P<end>\d+) (?P<strand>[+-]) (?P<name>.*)")
 XMFA_HEADER_REGEX_BIOPYTHON = re.compile("> (?P<id>\d+):(?P<start>\d+)-(?P<end>\d+) (?P<strand>[+-]) (?P<name>[^#]*) # (?P<realname>.*)")
@@ -86,7 +85,7 @@ ID_LINE_FMT = "> {seq_name}:{start}-{end} {strand} {file} # {ugly_hack}\n"
 
 
 def _identifier_split(identifier):
-    """Returns (name, start, end) string tuple from an identifier"""
+    """Return (name, start, end) string tuple from an identifier (PRIVATE)."""
     id, loc, strand = identifier.split(':')
     start, end = map(int, loc.split('-'))
     start -= 1
@@ -97,6 +96,7 @@ class MauveWriter(SequentialAlignmentWriter):
     """Mauve/XMFA alignment writer."""
 
     def __init__(self, *args, **kwargs):
+        """Initialize."""
         super(MauveWriter, self).__init__(*args, **kwargs)
         self._wrote_header = False
         self._wrote_first = False
@@ -135,7 +135,7 @@ class MauveWriter(SequentialAlignmentWriter):
         self.handle.write('=\n')
 
     def _write_record(self, record, record_idx=0):
-        """Write a single SeqRecord to the file"""
+        """Write a single SeqRecord to the file."""
         if self._length_of_sequences != len(record.seq):
             raise ValueError("Sequences must all be the same length")
 
@@ -203,6 +203,7 @@ class MauveIterator(AlignmentIterator):
     _ids = []  # for caching IDs between __next__ calls
 
     def __next__(self):
+        """Parse the next alignment from the handle."""
         handle = self.handle
         line = handle.readline()
 

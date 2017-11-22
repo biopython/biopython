@@ -16,6 +16,8 @@ from Bio.Seq import Seq
 
 
 class MotifTestsBasic(unittest.TestCase):
+    """Basic motif tests."""
+
     def setUp(self):
         self.PFMin = open("motifs/SRF.pfm")
         self.SITESin = open("motifs/Arnt.sites")
@@ -35,8 +37,7 @@ class MotifTestsBasic(unittest.TestCase):
             os.remove(self.FAout)
 
     def test_alignace_parsing(self):
-        """Test if Bio.motifs can parse AlignAce output files.
-        """
+        """Test if Bio.motifs can parse AlignAce output files."""
         handle = open("motifs/alignace.out")
         record = motifs.parse(handle, "AlignAce")
         handle.close()
@@ -397,20 +398,17 @@ class MotifTestsBasic(unittest.TestCase):
         self.assertAlmostEqual(record[15].score, 1.0395)
 
     def test_pfm_parsing(self):
-        """Test if Bio.motifs can parse JASPAR-style pfm files.
-        """
+        """Test if Bio.motifs can parse JASPAR-style pfm files."""
         m = motifs.read(self.PFMin, "pfm")
         self.assertEqual(m.length, 12)
 
     def test_sites_parsing(self):
-        """Test if Bio.motifs can parse JASPAR-style sites files.
-        """
+        """Test if Bio.motifs can parse JASPAR-style sites files."""
         m = motifs.read(self.SITESin, "sites")
         self.assertEqual(m.length, 6)
 
     def test_TFoutput(self):
-        """Ensure that we can write proper TransFac output files.
-        """
+        """Ensure that we can write proper TransFac output files."""
         output_handle = open(self.TFout, "w")
         output_handle.write(self.m.format("transfac"))
         output_handle.close()
@@ -448,8 +446,7 @@ XX
 class TestMEME(unittest.TestCase):
 
     def test_meme_parser_1(self):
-        """Test if Bio.motifs can parse MEME output files (first test)
-        """
+        """Parsing motifs/meme.out file."""
         handle = open("motifs/meme.out")
         record = motifs.parse(handle, 'meme')
         self.assertEqual(record.version, '3.5.7')
@@ -558,8 +555,7 @@ class TestMEME(unittest.TestCase):
         handle.close()
 
     def test_meme_parser_2(self):
-        """Test if Bio.motifs can parse MEME output files (second test)
-        """
+        """Parse motifs/meme.dna.oops.txt file."""
         handle = open("motifs/meme.dna.oops.txt")
         record = motifs.parse(handle, 'meme')
         self.assertEqual(record.version, '3.0')
@@ -676,8 +672,7 @@ class TestMEME(unittest.TestCase):
         handle.close()
 
     def test_meme_parser_3(self):
-        """Test if Bio.motifs can parse MEME output files (third test)
-        """
+        """Parse motifs/meme.protein.oops.txt file."""
         handle = open("motifs/meme.protein.oops.txt")
         record = motifs.parse(handle, 'meme')
         self.assertEqual(record.version, '3.0')
@@ -1066,8 +1061,7 @@ class TestMEME(unittest.TestCase):
         handle.close()
 
     def test_meme_parser_4(self):
-        """Test if Bio.motifs can parse MEME output files (fourth test)
-        """
+        """Parse motifs/meme.protein.tcm.txt file."""
         handle = open("motifs/meme.protein.tcm.txt")
         record = motifs.parse(handle, 'meme')
         self.assertEqual(record.version, '3.0')
@@ -1367,12 +1361,238 @@ class TestMEME(unittest.TestCase):
         self.assertEqual(str(motif.instances[20]), "IDRKGIYQWLISLK")
         handle.close()
 
+    def test_meme_parser_4_11_4(self):
+        """Parse motifs/meme_v_4_11_4.txt file."""
+        handle = open("motifs/meme_v_4_11_4.txt")
+        record = motifs.parse(handle, 'meme')
+        self.assertEqual(record.version, '4.11.4')
+        self.assertEqual(record.datafile, 'example.fasta')
+        self.assertEqual(record.alphabet, IUPAC.unambiguous_dna)
+        self.assertEqual(len(record.sequences), 10)
+        self.assertEqual(record.sequences[0], 'SEQ1;')
+        self.assertEqual(record.sequences[1], 'SEQ2;')
+        self.assertEqual(record.sequences[2], 'SEQ3;')
+        self.assertEqual(record.sequences[3], 'SEQ4;')
+        self.assertEqual(record.sequences[4], 'SEQ5;')
+        self.assertEqual(record.sequences[5], 'SEQ6;')
+        self.assertEqual(record.sequences[6], 'SEQ7;')
+        self.assertEqual(record.sequences[7], 'SEQ8;')
+        self.assertEqual(record.sequences[8], 'SEQ9;')
+        self.assertEqual(record.sequences[9], 'SEQ10;')
+        self.assertEqual(record.command, 'meme -dna example.fasta')
+        self.assertEqual(len(record), 1)
+        motif = record[0]
+        self.assertEqual(motif.name, "Motif CTCAATCGTA")
+        self.assertEqual(record["Motif CTCAATCGTA"], motif)
+        self.assertEqual(motif.num_occurrences, 10)
+        self.assertAlmostEqual(motif.evalue, 1.1e-22)
+        self.assertEqual(motif.alphabet, IUPAC.unambiguous_dna)
+        self.assertEqual(len(motif.instances), 10)
+        self.assertAlmostEqual(motif.instances[0].pvalue, 1.96e-06)
+        self.assertAlmostEqual(motif.instances[1].pvalue, 1.96e-06)
+        self.assertAlmostEqual(motif.instances[2].pvalue, 1.96e-06)
+        self.assertAlmostEqual(motif.instances[3].pvalue, 1.96e-06)
+        self.assertAlmostEqual(motif.instances[4].pvalue, 1.96e-06)
+        self.assertAlmostEqual(motif.instances[5].pvalue, 1.96e-06)
+        self.assertAlmostEqual(motif.instances[6].pvalue, 1.96e-06)
+        self.assertAlmostEqual(motif.instances[7].pvalue, 1.96e-06)
+        self.assertAlmostEqual(motif.instances[8].pvalue, 1.96e-06)
+        self.assertAlmostEqual(motif.instances[9].pvalue, 1.96e-06)
+        self.assertEqual(motif.instances[0].sequence_name, 'SEQ10;')
+        self.assertEqual(motif.instances[1].sequence_name, 'SEQ9;')
+        self.assertEqual(motif.instances[2].sequence_name, 'SEQ8;')
+        self.assertEqual(motif.instances[3].sequence_name, 'SEQ7;')
+        self.assertEqual(motif.instances[4].sequence_name, 'SEQ6;')
+        self.assertEqual(motif.instances[5].sequence_name, 'SEQ5;')
+        self.assertEqual(motif.instances[6].sequence_name, 'SEQ4;')
+        self.assertEqual(motif.instances[7].sequence_name, 'SEQ3;')
+        self.assertEqual(motif.instances[8].sequence_name, 'SEQ2;')
+        self.assertEqual(motif.instances[9].sequence_name, 'SEQ1;')
+        self.assertEqual(motif.instances[0].start, 1)
+        self.assertEqual(motif.instances[1].start, 1)
+        self.assertEqual(motif.instances[2].start, 1)
+        self.assertEqual(motif.instances[3].start, 1)
+        self.assertEqual(motif.instances[4].start, 1)
+        self.assertEqual(motif.instances[5].start, 1)
+        self.assertEqual(motif.instances[6].start, 1)
+        self.assertEqual(motif.instances[7].start, 1)
+        self.assertEqual(motif.instances[8].start, 1)
+        self.assertEqual(motif.instances[9].start, 1)
+        self.assertEqual(motif.instances[0].strand, '+')
+        self.assertEqual(motif.instances[1].strand, '+')
+        self.assertEqual(motif.instances[2].strand, '+')
+        self.assertEqual(motif.instances[3].strand, '+')
+        self.assertEqual(motif.instances[4].strand, '+')
+        self.assertEqual(motif.instances[5].strand, '+')
+        self.assertEqual(motif.instances[6].strand, '+')
+        self.assertEqual(motif.instances[7].strand, '+')
+        self.assertEqual(motif.instances[8].strand, '+')
+        self.assertEqual(motif.instances[9].strand, '+')
+        self.assertEqual(motif.instances[0].length, 10)
+        self.assertEqual(motif.instances[1].length, 10)
+        self.assertEqual(motif.instances[2].length, 10)
+        self.assertEqual(motif.instances[3].length, 10)
+        self.assertEqual(motif.instances[4].length, 10)
+        self.assertEqual(motif.instances[5].length, 10)
+        self.assertEqual(motif.instances[6].length, 10)
+        self.assertEqual(motif.instances[7].length, 10)
+        self.assertEqual(motif.instances[8].length, 10)
+        self.assertEqual(motif.instances[9].length, 10)
+        self.assertEqual(motif.instances[0].motif_name, 'Motif CTCAATCGTA')
+        self.assertEqual(motif.instances[1].motif_name, 'Motif CTCAATCGTA')
+        self.assertEqual(motif.instances[2].motif_name, 'Motif CTCAATCGTA')
+        self.assertEqual(motif.instances[3].motif_name, 'Motif CTCAATCGTA')
+        self.assertEqual(motif.instances[4].motif_name, 'Motif CTCAATCGTA')
+        self.assertEqual(motif.instances[5].motif_name, 'Motif CTCAATCGTA')
+        self.assertEqual(motif.instances[6].motif_name, 'Motif CTCAATCGTA')
+        self.assertEqual(motif.instances[7].motif_name, 'Motif CTCAATCGTA')
+        self.assertEqual(motif.instances[8].motif_name, 'Motif CTCAATCGTA')
+        self.assertEqual(motif.instances[9].motif_name, 'Motif CTCAATCGTA')
+        self.assertEqual(motif.instances[0].alphabet, IUPAC.unambiguous_dna)
+        self.assertEqual(motif.instances[1].alphabet, IUPAC.unambiguous_dna)
+        self.assertEqual(motif.instances[2].alphabet, IUPAC.unambiguous_dna)
+        self.assertEqual(motif.instances[3].alphabet, IUPAC.unambiguous_dna)
+        self.assertEqual(motif.instances[4].alphabet, IUPAC.unambiguous_dna)
+        self.assertEqual(motif.instances[5].alphabet, IUPAC.unambiguous_dna)
+        self.assertEqual(motif.instances[6].alphabet, IUPAC.unambiguous_dna)
+        self.assertEqual(motif.instances[7].alphabet, IUPAC.unambiguous_dna)
+        self.assertEqual(motif.instances[8].alphabet, IUPAC.unambiguous_dna)
+        self.assertEqual(motif.instances[9].alphabet, IUPAC.unambiguous_dna)
+        self.assertEqual(str(motif.instances[0]), "CTCAATCGTA")
+        self.assertEqual(str(motif.instances[1]), "CTCAATCGTA")
+        self.assertEqual(str(motif.instances[2]), "CTCAATCGTA")
+        self.assertEqual(str(motif.instances[3]), "CTCAATCGTA")
+        self.assertEqual(str(motif.instances[4]), "CTCAATCGTA")
+        self.assertEqual(str(motif.instances[5]), "CTCAATCGTA")
+        self.assertEqual(str(motif.instances[6]), "CTCAATCGTA")
+        self.assertEqual(str(motif.instances[7]), "CTCAATCGTA")
+        self.assertEqual(str(motif.instances[8]), "CTCAATCGTA")
+        self.assertEqual(str(motif.instances[9]), "CTCAATCGTA")
+        handle.close()
+
+    def test_meme_parser_rna(self):
+        """Test if Bio.motifs can parse MEME output files using RNA."""
+        handle = open("motifs/meme.rna.oops.txt")
+        record = motifs.parse(handle, 'meme')
+        self.assertEqual(record.version, '4.11.0')
+        self.assertEqual(record.datafile, 'rna_samples.fa')
+        self.assertEqual(record.alphabet, IUPAC.unambiguous_rna)
+        self.assertEqual(len(record.sequences), 7)
+        self.assertEqual(record.sequences[0], 'ce1cg')
+        self.assertEqual(record.sequences[1], 'ara')
+        self.assertEqual(record.sequences[2], 'bglr1')
+        self.assertEqual(record.sequences[3], 'crp')
+        self.assertEqual(record.sequences[4], 'cya')
+        self.assertEqual(record.sequences[5], 'deop2')
+        self.assertEqual(record.sequences[6], 'gale')
+        self.assertEqual(record.command, 'meme rna_samples.fa -nmotifs 2 -rna -mod oops')
+        self.assertEqual(len(record), 2)
+        motif = record[0]
+        self.assertEqual(motif.name, "Motif 1")
+        self.assertEqual(record["Motif 1"], motif)
+        self.assertEqual(motif.num_occurrences, 7)
+        self.assertAlmostEqual(motif.evalue, 0.0072)
+        self.assertEqual(motif.alphabet, IUPAC.unambiguous_rna)
+        self.assertEqual(len(motif.instances), 7)
+        self.assertAlmostEqual(motif.instances[0].pvalue, 1.37e-09)
+        self.assertAlmostEqual(motif.instances[1].pvalue, 3.90e-08)
+        self.assertAlmostEqual(motif.instances[2].pvalue, 1.66e-07)
+        self.assertAlmostEqual(motif.instances[3].pvalue, 2.14e-07)
+        self.assertAlmostEqual(motif.instances[4].pvalue, 6.30e-07)
+        self.assertAlmostEqual(motif.instances[5].pvalue, 6.75e-07)
+        self.assertAlmostEqual(motif.instances[6].pvalue, 7.76e-07)
+        self.assertEqual(motif.instances[0].sequence_name, 'ara')
+        self.assertEqual(motif.instances[1].sequence_name, 'gale')
+        self.assertEqual(motif.instances[2].sequence_name, 'deop2')
+        self.assertEqual(motif.instances[3].sequence_name, 'crp')
+        self.assertEqual(motif.instances[4].sequence_name, 'bglr1')
+        self.assertEqual(motif.instances[5].sequence_name, 'ce1cg')
+        self.assertEqual(motif.instances[6].sequence_name, 'cya')
+        self.assertEqual(motif.instances[0].strand, '+')
+        self.assertEqual(motif.instances[1].strand, '+')
+        self.assertEqual(motif.instances[2].strand, '+')
+        self.assertEqual(motif.instances[3].strand, '+')
+        self.assertEqual(motif.instances[4].strand, '+')
+        self.assertEqual(motif.instances[5].strand, '+')
+        self.assertEqual(motif.instances[6].strand, '+')
+        self.assertEqual(motif.instances[0].length, 19)
+        self.assertEqual(motif.instances[1].length, 19)
+        self.assertEqual(motif.instances[2].length, 19)
+        self.assertEqual(motif.instances[3].length, 19)
+        self.assertEqual(motif.instances[4].length, 19)
+        self.assertEqual(motif.instances[5].length, 19)
+        self.assertEqual(motif.instances[6].length, 19)
+        self.assertEqual(motif.instances[0].start, 58)
+        self.assertEqual(motif.instances[1].start, 45)
+        self.assertEqual(motif.instances[2].start, 10)
+        self.assertEqual(motif.instances[3].start, 66)
+        self.assertEqual(motif.instances[4].start, 79)
+        self.assertEqual(motif.instances[5].start, 64)
+        self.assertEqual(motif.instances[6].start, 79)
+        self.assertEqual(str(motif.instances[0]), "UUUGCACGGCGUCACACUU")
+        self.assertEqual(str(motif.instances[1]), "UUUAUUCCAUGUCACACUU")
+        self.assertEqual(str(motif.instances[2]), "UUUGAACCAGAUCGCAUUA")
+        self.assertEqual(str(motif.instances[3]), "UGCAAAGGACGUCACAUUA")
+        self.assertEqual(str(motif.instances[4]), "UGUGAGCAUGGUCAUAUUU")
+        self.assertEqual(str(motif.instances[5]), "UUUGAUCGUUUUCACAAAA")
+        self.assertEqual(str(motif.instances[6]), "UUUUUUCGUCGUGAAACUA")
+        motif = record[1]
+        self.assertEqual(motif.name, "Motif 2")
+        self.assertEqual(record["Motif 2"], motif)
+        self.assertEqual(motif.num_occurrences, 7)
+        self.assertAlmostEqual(motif.evalue, 760)
+        self.assertEqual(motif.alphabet, IUPAC.unambiguous_rna)
+        self.assertEqual(len(motif.instances), 7)
+        self.assertAlmostEqual(motif.instances[0].pvalue, 7.14e-06)
+        self.assertAlmostEqual(motif.instances[1].pvalue, 2.50e-05)
+        self.assertAlmostEqual(motif.instances[2].pvalue, 3.26e-05)
+        self.assertAlmostEqual(motif.instances[3].pvalue, 1.10e-04)
+        self.assertAlmostEqual(motif.instances[4].pvalue, 1.73e-04)
+        self.assertAlmostEqual(motif.instances[5].pvalue, 3.33e-04)
+        self.assertAlmostEqual(motif.instances[6].pvalue, 8.67e-04)
+        self.assertEqual(motif.instances[0].sequence_name, 'crp')
+        self.assertEqual(motif.instances[1].sequence_name, 'gale')
+        self.assertEqual(motif.instances[2].sequence_name, 'ara')
+        self.assertEqual(motif.instances[3].sequence_name, 'deop2')
+        self.assertEqual(motif.instances[4].sequence_name, 'cya')
+        self.assertEqual(motif.instances[5].sequence_name, 'ce1cg')
+        self.assertEqual(motif.instances[6].sequence_name, 'bglr1')
+        self.assertEqual(motif.instances[0].strand, '+')
+        self.assertEqual(motif.instances[1].strand, '+')
+        self.assertEqual(motif.instances[2].strand, '+')
+        self.assertEqual(motif.instances[3].strand, '+')
+        self.assertEqual(motif.instances[4].strand, '+')
+        self.assertEqual(motif.instances[5].strand, '+')
+        self.assertEqual(motif.instances[6].strand, '+')
+        self.assertEqual(motif.instances[0].length, 9)
+        self.assertEqual(motif.instances[1].length, 9)
+        self.assertEqual(motif.instances[2].length, 9)
+        self.assertEqual(motif.instances[3].length, 9)
+        self.assertEqual(motif.instances[4].length, 9)
+        self.assertEqual(motif.instances[5].length, 9)
+        self.assertEqual(motif.instances[6].length, 9)
+        self.assertEqual(motif.instances[0].start, 13)
+        self.assertEqual(motif.instances[1].start, 75)
+        self.assertEqual(motif.instances[2].start, 78)
+        self.assertEqual(motif.instances[3].start, 31)
+        self.assertEqual(motif.instances[4].start, 1)
+        self.assertEqual(motif.instances[5].start, 44)
+        self.assertEqual(motif.instances[6].start, 27)
+        self.assertEqual(str(motif.instances[0]), "GCUAUGCUA")
+        self.assertEqual(str(motif.instances[1]), "GUUAUGCUA")
+        self.assertEqual(str(motif.instances[2]), "GCUAUGCCA")
+        self.assertEqual(str(motif.instances[3]), "GUGAUGCAA")
+        self.assertEqual(str(motif.instances[4]), "ACGGUGCUA")
+        self.assertEqual(str(motif.instances[5]), "GUGGUGUGA")
+        self.assertEqual(str(motif.instances[6]), "GAUUUGUUA")
+        handle.close()
+
 
 class TestMAST(unittest.TestCase):
+    """MAST format tests."""
 
     def test_mast_parser_1(self):
-        """Test if Bio.motifs can parse MAST output files (first test)
-        """
+        """Parse motifs/mast.dna.oops.txt file."""
         handle = open("motifs/mast.dna.oops.txt")
         record = motifs.parse(handle, "MAST")
         self.assertEqual(record.version, "3.0")
@@ -1405,8 +1625,7 @@ class TestMAST(unittest.TestCase):
         handle.close()
 
     def test_mast_parser_2(self):
-        """Test if Bio.motifs can parse MAST output files (second test)
-        """
+        """Parse motifs/mast.protein.oops.txt file."""
         handle = open("motifs/mast.protein.oops.txt")
         record = motifs.parse(handle, "MAST")
         self.assertEqual(record.version, "3.0")
@@ -1491,8 +1710,7 @@ class TestMAST(unittest.TestCase):
         handle.close()
 
     def test_mast_parser_3(self):
-        """Test if Bio.motifs can parse MAST output files (third test)
-        """
+        """Parse motifs/mast.protein.tcm.txt file."""
         handle = open("motifs/mast.protein.tcm.txt")
         record = motifs.parse(handle, "MAST")
         self.assertEqual(record.version, "3.0")
@@ -1522,10 +1740,10 @@ class TestMAST(unittest.TestCase):
 
 
 class TestTransfac(unittest.TestCase):
+    """Transface format tests."""
 
     def test_transfac_parser(self):
-        """Test if Bio.motifs can parse TRANSFAC files
-        """
+        """Parse motifs/transfac.dat file."""
         handle = open("motifs/transfac.dat")
         record = motifs.parse(handle, 'TRANSFAC')
         motif = record[0]
@@ -1630,7 +1848,10 @@ class TestTransfac(unittest.TestCase):
 
 
 class MotifTestPWM(unittest.TestCase):
+    """PWM motif tests."""
+
     def setUp(self):
+        """Define motif and sequence for tests."""
         handle = open("motifs/SRF.pfm")
         self.m = motifs.read(handle, "pfm")
         handle.close()

@@ -3,8 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Testing Bio.TogoWS online code.
-"""
+"""Testing Bio.TogoWS online code."""
 
 from __future__ import print_function
 
@@ -395,7 +394,7 @@ class TogoSearch(unittest.TestCase):
     def test_pubmed_search_porin(self):
         """Bio.TogoWS.search_iter("pubmed", "human porin") etc
 
-        Count was 357 at time of writing, this was choosen to
+        Count was 357 at time of writing, this was chosen to
         be larger than the default chunk size for iteration,
         but still not too big to download the full list.
         """
@@ -472,6 +471,7 @@ class TogoConvert(unittest.TestCase):
 #        with open(filename) as handle:
 #            new = SeqIO.read(TogoWS.convert(handle, "genbank", "embl"), "embl")
 #        self.assertEqual(str(old.seq), str(new.seq))
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)

@@ -44,7 +44,7 @@ please read this open access publication::
     P.J.A.Cock (Biopython), C.J.Fields (BioPerl), N.Goto (BioRuby),
     M.L.Heuer (BioJava) and P.M. Rice (EMBOSS).
     Nucleic Acids Research 2010 38(6):1767-1771
-    http://dx.doi.org/10.1093/nar/gkp1137
+    https://doi.org/10.1093/nar/gkp1137
 
 The good news is that Roche 454 sequencers can output files in the QUAL format,
 and sensibly they use PHREP style scores like Sanger.  Converting a pair of
@@ -536,6 +536,7 @@ def _get_phred_quality(record):
                          "letter_annotations of SeqRecord (id=%s)."
                          % record.id)
 
+
 # Only map 0 to 93, we need to give a warning on truncating at 93
 _phred_to_sanger_quality_str = dict((qp, chr(min(126, qp + SANGER_SCORE_OFFSET)))
                                     for qp in range(0, 93 + 1))
@@ -655,6 +656,7 @@ def _get_sanger_quality_str(record):
     return "".join(chr(min(126, int(round(phred_quality_from_solexa(qs))) + SANGER_SCORE_OFFSET))
                    for qs in qualities)
 
+
 # Only map 0 to 62, we need to give a warning on truncating at 62
 assert 62 + SOLEXA_SCORE_OFFSET == 126
 _phred_to_illumina_quality_str = dict((qp, chr(qp + SOLEXA_SCORE_OFFSET))
@@ -722,6 +724,7 @@ def _get_illumina_quality_str(record):
     # This will apply the truncation at 62, giving max ASCII 126
     return "".join(chr(min(126, int(round(phred_quality_from_solexa(qs))) + SOLEXA_SCORE_OFFSET))
                    for qs in qualities)
+
 
 # Only map 0 to 62, we need to give a warning on truncating at 62
 assert 62 + SOLEXA_SCORE_OFFSET == 126
@@ -889,15 +892,11 @@ def FastqGeneralIterator(handle):
     # so we'll save a property look up each time:
     handle_readline = handle.readline
 
-    # Skip any text before the first record (e.g. blank lines, comments?)
-    while True:
-        line = handle_readline()
-        if not line:
-            return  # Premature end of file, or just empty?
-        if line[0] == "@":
-            break
-        if isinstance(line[0], int):
-            raise ValueError("Is this handle in binary mode not text mode?")
+    line = handle_readline()
+    if not line:
+        return  # Premature end of file, or just empty?
+    if isinstance(line[0], int):
+        raise ValueError("Is this handle in binary mode not text mode?")
 
     while line:
         if line[0] != "@":
@@ -957,14 +956,14 @@ def FastqGeneralIterator(handle):
 def FastqPhredIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
     """Generator function to iterate over FASTQ records (as SeqRecord objects).
 
-        - handle - input file
-        - alphabet - optional alphabet
-        - title2ids - A function that, when given the title line from the FASTQ
-          file (without the beginning >), will return the id, name and
-          description (in that order) for the record as a tuple of
-          strings.  If this is not given, then the entire title line
-          will be used as the description, and the first word as the
-          id and name.
+    Arguments:
+     - handle - input file
+     - alphabet - optional alphabet
+     - title2ids - A function that, when given the title line from the FASTQ
+       file (without the beginning >), will return the id, name and
+       description (in that order) for the record as a tuple of strings.
+       If this is not given, then the entire title line will be used as
+       the description, and the first word as the id and name.
 
     Note that use of title2ids matches that of Bio.SeqIO.FastaIO.
 
@@ -1417,6 +1416,7 @@ class FastqPhredWriter(SequentialSequenceWriter):
     >>> import os
     >>> os.remove("Quality/temp.fastq")
     """
+
     assert SANGER_SCORE_OFFSET == ord("!")
 
     def write_record(self, record):
@@ -1469,21 +1469,22 @@ class QualPhredWriter(SequentialSequenceWriter):
     >>> import os
     >>> os.remove("Quality/temp.qual")
     """
+
     def __init__(self, handle, wrap=60, record2title=None):
         """Create a QUAL writer.
 
         Arguments:
          - handle - Handle to an output file, e.g. as returned
-                    by open(filename, "w")
+           by open(filename, "w")
          - wrap   - Optional line length used to wrap sequence lines.
-                    Defaults to wrapping the sequence at 60 characters
-                    Use zero (or None) for no wrapping, giving a single
-                    long line for the sequence.
+           Defaults to wrapping the sequence at 60 characters. Use
+           zero (or None) for no wrapping, giving a single long line
+           for the sequence.
          - record2title - Optional function to return the text to be
-                    used for the title line of each record.  By default
-                    a combination of the record.id and record.description
-                    is used.  If the record.description starts with the
-                    record.id, then just the record.description is used.
+           used for the title line of each record.  By default a
+           combination of the record.id and record.description is
+           used.  If the record.description starts with the record.id,
+           then just the record.description is used.
 
         The record2title argument is present for consistency with the
         Bio.SeqIO.FastaIO writer class.
@@ -1606,6 +1607,7 @@ class FastqSolexaWriter(SequentialSequenceWriter):
     >>> import os
     >>> os.remove("Quality/temp.fastq")
     """
+
     def write_record(self, record):
         """Write a single FASTQ record to the file."""
         assert self._header_written
@@ -1662,6 +1664,7 @@ class FastqIlluminaWriter(SequentialSequenceWriter):
     encoded as ASCII 126, the tilde. If your quality scores are truncated to fit, a
     warning is issued.
     """
+
     def write_record(self, record):
         """Write a single FASTQ record to the file."""
         assert self._header_written

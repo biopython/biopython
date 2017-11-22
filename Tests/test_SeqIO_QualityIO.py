@@ -135,6 +135,7 @@ def compare_records(old_list, new_list, truncate_qual=None):
 
 class TestFastqErrors(unittest.TestCase):
     """Test reject invalid FASTQ files."""
+
     def check_fails(self, filename, good_count, formats=None, raw=True):
         if not formats:
             formats = ["fastq-sanger", "fastq-solexa", "fastq-illumina"]
@@ -276,6 +277,7 @@ class TestReferenceSffConversions(unittest.TestCase):
 
 class TestReferenceFastqConversions(unittest.TestCase):
     """Tests where we have reference output."""
+
     def simple_check(self, base_name, in_variant):
         for out_variant in ["sanger", "solexa", "illumina"]:
             in_filename = "Quality/%s_original_%s.fastq" \
@@ -325,6 +327,7 @@ for base_name, variant in tests:
 
 class TestQual(unittest.TestCase):
     """Tests with QUAL files."""
+
     def test_paired(self):
         """Check FASTQ parsing matches FASTA+QUAL parsing"""
         with open("Quality/example.fasta") as f:
@@ -371,7 +374,7 @@ class TestQual(unittest.TestCase):
 >1117_10_1017_F3
 33 33 -1 -1 -1 27 -1 -1 17 16 -1 28 24 11 -1 6 -1 -1 -1 29 -1 8 29 24 -1 -1 8 8 -1 20 -1 13 -1 -1 8 13 -1 28 10 24 -1 10 -1 -1 -1 4 -1 -1 7 6 
 >1117_11_136_F3
-16 22 -1 -1 -1 33 -1 -1 30 27 -1 27 28 32 -1 29 -1 -1 -1 27 -1 18 9 6 -1 -1 23 16 -1 26 -1 5 7 -1 22 7 -1 18 14 8 -1 8 -1 -1 -1 11 -1 -1 4 24"""  # noqa for pep8 W291 trailing whitespace
+16 22 -1 -1 -1 33 -1 -1 30 27 -1 27 28 32 -1 29 -1 -1 -1 27 -1 18 9 6 -1 -1 23 16 -1 26 -1 5 7 -1 22 7 -1 18 14 8 -1 8 -1 -1 -1 11 -1 -1 4 24"""  # noqa : W291
         h = StringIO(data)
         h2 = StringIO()
         with warnings.catch_warnings():
@@ -398,6 +401,7 @@ BB!!!<!!21!=9,!'!!!>!)>9!!))!5!.!!).!=+9!+!!!%!!('
 
 class TestReadWrite(unittest.TestCase):
     """Test can read and write back files."""
+
     def test_fastq_2000(self):
         """Read and write back simple example with upper case 2000bp read"""
         data = "@%s\n%s\n+\n%s\n" \
@@ -455,6 +459,7 @@ class TestReadWrite(unittest.TestCase):
 
 class TestWriteRead(unittest.TestCase):
     """Test can write and read back files."""
+
     def test_generated(self):
         """Write and read back odd SeqRecord objects"""
         record1 = SeqRecord(Seq("ACGT" * 500, generic_dna), id="Test", description="Long " * 500,
@@ -609,6 +614,8 @@ class TestWriteRead(unittest.TestCase):
 
 
 class MappingTests(unittest.TestCase):
+    """Quality mapping tests."""
+
     def test_solexa_quality_from_phred(self):
         """Mapping check for function solexa_quality_from_phred"""
         self.assertEqual(-5, round(QualityIO.solexa_quality_from_phred(0)))
@@ -721,6 +728,7 @@ class MappingTests(unittest.TestCase):
 
 class TestSFF(unittest.TestCase):
     """Test SFF specific details."""
+
     def test_overlapping_clip(self):
         with open("Roche/greek.sff", "rb") as handle:
             record = next(SeqIO.parse(handle, "sff"))
@@ -767,6 +775,20 @@ class TestSFF(unittest.TestCase):
             record.annotations[clip] = -1
             with BytesIO() as h:
                 self.assertRaises(ValueError, SeqIO.write, record, h, "sff")
+
+
+class NonFastqTests(unittest.TestCase):
+
+    def check_wrong_format(self, filename):
+        for f in ("fastq", "fastq-sanger", "fastq-solexa", "fastq-illumina"):
+            generator = SeqIO.parse(filename, f)
+            self.assertRaises(ValueError, next, generator)
+
+    def test_fasta_as_fastq(self):
+        self.check_wrong_format("Fasta/elderberry.nu")
+
+    def test_sff_as_fastq(self):
+        self.check_wrong_format("Roche/greek.sff")
 
 
 if __name__ == "__main__":

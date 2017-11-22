@@ -44,6 +44,7 @@ equiv_title = re.compile('## +EQUIVALENCES')
 
 class FSSPHeader(object):
     def __init__(self):
+        """Initialize the class."""
         self.database = None
         self.pdbid = ''
         self.header = ''
@@ -69,6 +70,7 @@ class FSSPHeader(object):
 
 class PosAlign(object):
     def __init__(self, inStr):
+        """Initialize the class."""
         inStr = inStr.strip()
         if len(inStr) != 1 and len(inStr) != 2:
             raise ValueError('PosAlign: length not 2 chars' + inStr)
@@ -96,8 +98,10 @@ class PosAlign(object):
 
 
 class FSSPSumRec(object):
-    """ Contains info from an FSSP summary record"""
+    """Contains info from an FSSP summary record"""
+
     def __init__(self, in_str):
+        """Initialize the class."""
         self.raw = in_str
         in_rec = in_str.strip().split()
         # print(in_rec)
@@ -137,6 +141,7 @@ class FSSPSumRec(object):
 
 class FSSPAlignRec(object):
     def __init__(self, in_fff_rec):
+        """Initialize the class."""
         # print(in_fff_rec)
         self.abs_res_num = int(in_fff_rec[fssp_rec.align.abs_res_num])
         self.pdb_res_num = in_fff_rec[fssp_rec.align.pdb_res_num].strip()
@@ -166,6 +171,7 @@ class FSSPAlignRec(object):
 
 class FSSPAlignDict(dict):
     def __init__(self):
+        """Initialize the class."""
         # The following two dictionaries are pointers to records in self
         # The first dictionary is a "pdb_residue_number: self_key"
         # The second dictionary is a "absolute_residue_number: self_key"

@@ -1,5 +1,5 @@
 # Copyright 2000 by Jeffrey Chang, Brad Chapman.  All rights reserved.
-# Copyright 2006-2016 by Peter Cock.  All rights reserved.
+# Copyright 2006-2017 by Peter Cock.  All rights reserved.
 #
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -27,18 +27,16 @@ The following internal classes are not intended for direct use and may
 be deprecated in a future release.
 
 Classes:
-
-    - Iterator              Iterate through a file of GenBank entries
-    - ErrorFeatureParser    Catch errors caused during parsing.
-    - FeatureParser         Parse GenBank data in SeqRecord and SeqFeature objects.
-    - RecordParser          Parse GenBank data into a Record object.
+ - Iterator              Iterate through a file of GenBank entries
+ - ErrorFeatureParser    Catch errors caused during parsing.
+ - FeatureParser         Parse GenBank data in SeqRecord and SeqFeature objects.
+ - RecordParser          Parse GenBank data into a Record object.
 
 Exceptions:
-
-    - ParserFailureError    Exception indicating a failure in the parser (ie.
-      scanner or consumer)
-    - LocationParserError   Exception indicating a problem with the spark based
-      location parser.
+ - ParserFailureError    Exception indicating a failure in the parser (ie.
+   scanner or consumer)
+ - LocationParserError   Exception indicating a problem with the spark based
+   location parser.
 
 """
 from __future__ import print_function
@@ -241,7 +239,7 @@ def _pos(pos_str, offset=0):
 
 
 def _loc(loc_str, expected_seq_length, strand):
-    """FeatureLocation from non-compound non-complement location (PRIVATE).
+    """Make FeatureLocation from non-compound non-complement location (PRIVATE).
 
     Simple examples,
 
@@ -381,14 +379,15 @@ class Iterator(object):
     Please use Bio.SeqIO.parse(..., format="gb") or Bio.GenBank.parse(...)
     for SeqRecord and GenBank specific Record objects respectively instead.
     """
+
     def __init__(self, handle, parser=None):
         """Initialize the iterator.
 
         Arguments:
+         - handle - A handle with GenBank entries to iterate through.
+         - parser - An optional parser to pass the entries through before
+           returning them. If None, then the raw entry will be returned.
 
-            - handle - A handle with GenBank entries to iterate through.
-            - parser - An optional parser to pass the entries through before
-              returning them. If None, then the raw entry will be returned.
         """
         self.handle = handle
         self._parser = parser
@@ -419,18 +418,19 @@ class Iterator(object):
             return self.__next__()
 
     def __iter__(self):
+        """Iterate over the records."""
         return iter(self.__next__, None)
 
 
 class ParserFailureError(Exception):
-    """Failure caused by some kind of problem in the parser.
-    """
+    """Failure caused by some kind of problem in the parser."""
+
     pass
 
 
 class LocationParserError(Exception):
-    """Could not Properly parse out a location from a GenBank file.
-    """
+    """Could not Properly parse out a location from a GenBank file."""
+
     pass
 
 
@@ -442,30 +442,30 @@ class FeatureParser(object):
 
     Please use Bio.SeqIO.parse(...) or Bio.SeqIO.read(...) instead.
     """
+
     def __init__(self, debug_level=0, use_fuzziness=1,
                  feature_cleaner=FeatureValueCleaner()):
         """Initialize a GenBank parser and Feature consumer.
 
         Arguments:
+         - debug_level - An optional argument that species the amount of
+           debugging information the parser should spit out. By default we have
+           no debugging info (the fastest way to do things), but if you want
+           you can set this as high as two and see exactly where a parse fails.
+         - use_fuzziness - Specify whether or not to use fuzzy representations.
+           The default is 1 (use fuzziness).
+         - feature_cleaner - A class which will be used to clean out the
+           values of features. This class must implement the function
+           clean_value. GenBank.utils has a "standard" cleaner class, which
+           is used by default.
 
-            - debug_level - An optional argument that species the amount of
-              debugging information the parser should spit out. By default we have
-              no debugging info (the fastest way to do things), but if you want
-              you can set this as high as two and see exactly where a parse fails.
-            - use_fuzziness - Specify whether or not to use fuzzy representations.
-              The default is 1 (use fuzziness).
-            - feature_cleaner - A class which will be used to clean out the
-              values of features. This class must implement the function
-              clean_value. GenBank.utils has a "standard" cleaner class, which
-              is used by default.
         """
         self._scanner = GenBankScanner(debug_level)
         self.use_fuzziness = use_fuzziness
         self._cleaner = feature_cleaner
 
     def parse(self, handle):
-        """Parse the specified handle.
-        """
+        """Parse the specified handle."""
         _consumer = _FeatureConsumer(self.use_fuzziness,
                                      self._cleaner)
         self._scanner.feed(handle, _consumer)
@@ -481,21 +481,21 @@ class RecordParser(object):
     Please use the Bio.GenBank.parse(...) or Bio.GenBank.read(...) functions
     instead.
     """
+
     def __init__(self, debug_level=0):
         """Initialize the parser.
 
         Arguments:
+         - debug_level - An optional argument that species the amount of
+           debugging information the parser should spit out. By default we have
+           no debugging info (the fastest way to do things), but if you want
+           you can set this as high as two and see exactly where a parse fails.
 
-            - debug_level - An optional argument that species the amount of
-              debugging information the parser should spit out. By default we have
-              no debugging info (the fastest way to do things), but if you want
-              you can set this as high as two and see exactly where a parse fails.
         """
         self._scanner = GenBankScanner(debug_level)
 
     def parse(self, handle):
-        """Parse the specified handle into a GenBank record.
-        """
+        """Parse the specified handle into a GenBank record."""
         _consumer = _RecordConsumer()
 
         self._scanner.feed(handle, _consumer)
@@ -508,6 +508,7 @@ class _BaseGenBankConsumer(object):
     This just helps to eliminate some duplication in things that most
     GenBank consumers want to do.
     """
+
     # Special keys in GenBank records that we should remove spaces from
     # For instance, \translation keys have values which are proteins and
     # should have spaces and newlines removed from them. This class
@@ -525,8 +526,7 @@ class _BaseGenBankConsumer(object):
 
     @staticmethod
     def _split_keywords(keyword_string):
-        """Split a string of keywords into a nice clean list.
-        """
+        """Split a string of keywords into a nice clean list."""
         # process the keywords into a python list
         if keyword_string == "" or keyword_string == ".":
             keywords = ""
@@ -540,8 +540,7 @@ class _BaseGenBankConsumer(object):
 
     @staticmethod
     def _split_accessions(accession_string):
-        """Split a string of accession numbers into a list.
-        """
+        """Split a string of accession numbers into a list."""
         # first replace all line feeds with spaces
         # Also, EMBL style accessions are split with ';'
         accession = accession_string.replace("\n", " ").replace(";", " ")
@@ -550,8 +549,7 @@ class _BaseGenBankConsumer(object):
 
     @staticmethod
     def _split_taxonomy(taxonomy_string):
-        """Split a string with taxonomy info into a list.
-        """
+        """Split a string with taxonomy info into a list."""
         if not taxonomy_string or taxonomy_string == ".":
             # Missing data, no taxonomy
             return []
@@ -585,8 +583,7 @@ class _BaseGenBankConsumer(object):
 
     @staticmethod
     def _remove_newlines(text):
-        """Remove any newlines in the passed text, returning the new string.
-        """
+        """Remove any newlines in the passed text, returning the new string."""
         # get rid of newlines in the qualifier value
         newlines = ["\n", "\r"]
         for ws in newlines:
@@ -596,15 +593,13 @@ class _BaseGenBankConsumer(object):
 
     @staticmethod
     def _normalize_spaces(text):
-        """Replace multiple spaces in the passed text with single spaces.
-        """
+        """Replace multiple spaces in the passed text with single spaces."""
         # get rid of excessive spaces
         return ' '.join(x for x in text.split(" ") if x)
 
     @staticmethod
     def _remove_spaces(text):
-        """Remove all spaces from the passed text.
-        """
+        """Remove all spaces from the passed text."""
         return text.replace(" ", "")
 
     @staticmethod
@@ -631,12 +626,13 @@ class _FeatureConsumer(_BaseGenBankConsumer):
     """Create a SeqRecord object with Features to return (PRIVATE).
 
     Attributes:
-
      - use_fuzziness - specify whether or not to parse with fuzziness in
        feature locations.
      - feature_cleaner - a class that will be used to provide specialized
        cleaning-up of feature values.
+
     """
+
     def __init__(self, use_fuzziness, feature_cleaner=None):
         from Bio.SeqRecord import SeqRecord
         _BaseGenBankConsumer.__init__(self)
@@ -654,8 +650,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         self._expected_size = None
 
     def locus(self, locus_name):
-        """Set the locus name is set as the name of the Sequence.
-        """
+        """Set the locus name is set as the name of the Sequence."""
         self.data.name = locus_name
 
     def size(self, content):
@@ -671,15 +666,15 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         """
         self._seq_type = type.strip()
 
-    def topology(self, topology):
-        """Record the topology (linear or circular as strings)."""
+    def topology(self, topology):  # noqa: D402
+        """Validate and record sequence topology (linear or circular as strings)."""
         if topology:
             if topology not in ['linear', 'circular']:
                 raise ParserFailureError("Unexpected topology %r should be linear or circular" % topology)
             self.data.annotations['topology'] = topology
 
     def molecule_type(self, mol_type):
-        """Record the molecule type (for round-trip etc)."""
+        """Validate and record the molecule type (for round-trip etc)."""
         if mol_type:
             if "circular" in mol_type or 'linear' in mol_type:
                 raise ParserFailureError("Molecule type %r should not include topology" % mol_type)
@@ -692,8 +687,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         self.data.annotations['date'] = submit_date
 
     def definition(self, definition):
-        """Set the definition as the description of the sequence.
-        """
+        """Set the definition as the description of the sequence."""
         if self.data.description:
             # Append to any existing description
             # e.g. EMBL files with two DE lines.
@@ -855,8 +849,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         self.data.annotations['organism'] = content
 
     def taxonomy(self, content):
-        """Records (another line of) the taxonomy lineage.
-        """
+        """Record (another line of) the taxonomy lineage."""
         lineage = self._split_taxonomy(content)
         try:
             self.data.annotations['taxonomy'].extend(lineage)
@@ -864,8 +857,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             self.data.annotations['taxonomy'] = lineage
 
     def reference_num(self, content):
-        """Signal the beginning of a new reference object.
-        """
+        """Signal the beginning of a new reference object."""
         # if we have a current reference that hasn't been added to
         # the list of references, add it.
         if self._cur_reference is not None:
@@ -916,7 +908,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         self._cur_reference.location = all_locations
 
     def _split_reference_locations(self, location_string):
-        """Get reference locations out of a string of reference information
+        """Get reference locations out of a string of reference information.
 
         The passed string should be of the form::
 
@@ -990,13 +982,11 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         self.data.annotations['structured_comment'] = content
 
     def features_line(self, content):
-        """Get ready for the feature table when we reach the FEATURE line.
-        """
+        """Get ready for the feature table when we reach the FEATURE line."""
         self.start_feature_table()
 
     def start_feature_table(self):
-        """Indicate we've got to the start of the feature table.
-        """
+        """Indicate we've got to the start of the feature table."""
         # make sure we've added on our last reference object
         if self._cur_reference is not None:
             self.data.annotations['references'].append(self._cur_reference)
@@ -1224,8 +1214,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         self._seq_data.append(content.upper())
 
     def record_end(self, content):
-        """Clean up when we've finished the record.
-        """
+        """Clean up when we've finished the record."""
         from Bio import Alphabet
         from Bio.Alphabet import IUPAC
         from Bio.Seq import Seq, UnknownSeq
@@ -1290,8 +1279,8 @@ class _FeatureConsumer(_BaseGenBankConsumer):
 
 
 class _RecordConsumer(_BaseGenBankConsumer):
-    """Create a GenBank Record object from scanner generated information (PRIVATE).
-    """
+    """Create a GenBank Record object from scanner generated information (PRIVATE)."""
+
     def __init__(self):
         _BaseGenBankConsumer.__init__(self)
         from . import Record
@@ -1374,8 +1363,7 @@ class _RecordConsumer(_BaseGenBankConsumer):
         self.data.taxonomy = self._split_taxonomy(content)
 
     def reference_num(self, content):
-        """Grab the reference number and signal the start of a new reference.
-        """
+        """Grab the reference number and signal the start of a new reference."""
         # check if we have a reference to add
         if self._cur_reference is not None:
             self.data.references.append(self._cur_reference)
@@ -1421,27 +1409,24 @@ class _RecordConsumer(_BaseGenBankConsumer):
         self.data.structured_comment = content
 
     def primary_ref_line(self, content):
-        """Data for the PRIMARY line"""
+        """Save reference data for the PRIMARY line."""
         self.data.primary.append(content)
 
     def primary(self, content):
         pass
 
     def features_line(self, content):
-        """Get ready for the feature table when we reach the FEATURE line.
-        """
+        """Get ready for the feature table when we reach the FEATURE line."""
         self.start_feature_table()
 
     def start_feature_table(self):
-        """Signal the start of the feature table.
-        """
+        """Signal the start of the feature table."""
         # we need to add on the last reference
         if self._cur_reference is not None:
             self.data.references.append(self._cur_reference)
 
     def feature_key(self, content):
-        """Grab the key of the feature and signal the start of a new feature.
-        """
+        """Grab the key of the feature and signal the start of a new feature."""
         # first add on feature information if we've got any
         self._add_feature()
 
@@ -1450,7 +1435,7 @@ class _RecordConsumer(_BaseGenBankConsumer):
         self._cur_feature.key = content
 
     def _add_feature(self):
-        """Utility function to add a feature to the Record.
+        """Add a feature to the record, with relevant checks (PRIVATE).
 
         This does all of the appropriate checking to make sure we haven't
         left any info behind, and that we are only adding info if it
@@ -1474,7 +1459,7 @@ class _RecordConsumer(_BaseGenBankConsumer):
             self.feature_qualifier_description(value)
 
     def feature_qualifier_name(self, content_list):
-        """Deal with qualifier names
+        """Deal with qualifier names.
 
         We receive a list of keys, since you can have valueless keys such as
         /pseudo which would be passed in with the next key (since no other
@@ -1511,8 +1496,7 @@ class _RecordConsumer(_BaseGenBankConsumer):
         self.data.origin = content
 
     def contig_location(self, content):
-        """Signal that we have contig information to add to the record.
-        """
+        """Signal that we have contig information to add to the record."""
         self.data.contig = self._clean_location(content)
 
     def sequence(self, content):
@@ -1527,8 +1511,7 @@ class _RecordConsumer(_BaseGenBankConsumer):
         self._seq_data.append(content.upper())
 
     def record_end(self, content):
-        """Signal the end of the record and do any necessary clean-up.
-        """
+        """Signal the end of the record and do any necessary clean-up."""
         # add together all of the sequence parts to create the
         # final sequence string
         self.data.sequence = "".join(self._seq_data)

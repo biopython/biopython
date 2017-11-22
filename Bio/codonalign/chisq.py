@@ -45,14 +45,17 @@ def chisqprob(x, df):
 def _igamc(a, x):
     """Complemented incomplete Gamma integral.
 
-    SYNOPSIS:
+    Parameters
+    ----------
+    a: float
+    x: float
 
-    double a, x, y, igamc();
+    Returns
+    -------
+    float
 
-    y = igamc( a, x );
-
-    DESCRIPTION:
-
+    Notes
+    -----
     The function is defined by::
 
         igamc(a,x)   =   1 - igam(a,x)
@@ -69,6 +72,7 @@ def _igamc(a, x):
     The integral is evaluated by either a power series or
     continued fraction expansion, depending on the relative
     values of a and x.
+
     """
     # Compute  x**a * exp(-x) / Gamma(a)
     ax = math.exp(a * math.log(x) - x - math.lgamma(a))
@@ -118,6 +122,7 @@ def _igam(a, x):
          x  e     >   ----------
                   -     -
                 k=0   | (a+k+1)
+
     """
     # Compute  x**a * exp(-x) / Gamma(a)
     ax = math.exp(a * math.log(x) - x - math.lgamma(a))

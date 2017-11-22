@@ -51,7 +51,7 @@ Other public methods of this module:
    correction is not an integral part of the Tm methods and must
    be called additionally.
 
-Examples:
+For example:
 
     >>> from Bio.SeqUtils import MeltingTemp as mt
     >>> from Bio.Seq import Seq
@@ -477,18 +477,17 @@ def salt_correction(Na=0, K=0, Tris=0, Mg=0, dNTPs=0, method=1, seq=None):
           Mg2+ is corrected for dNTPs binding (if present)
           (Owczarzy et al. (2008), Biochemistry 47: 5336-5353)
 
-    Examples:
-
-        >>> from Bio.SeqUtils import MeltingTemp as mt
-        >>> print('%0.2f' % mt.salt_correction(Na=50, method=1))
-        -21.60
-        >>> print('%0.2f' % mt.salt_correction(Na=50, method=2))
-        -21.85
-        >>> print('%0.2f' % mt.salt_correction(Na=100, Tris=20, method=2))
-        -16.45
-        >>> print('%0.2f' % mt.salt_correction(Na=100, Tris=20, Mg=1.5,
-        ...                                    method=2))
-        -10.99
+    Examples
+    --------
+    >>> from Bio.SeqUtils import MeltingTemp as mt
+    >>> print('%0.2f' % mt.salt_correction(Na=50, method=1))
+    -21.60
+    >>> print('%0.2f' % mt.salt_correction(Na=50, method=2))
+    -21.85
+    >>> print('%0.2f' % mt.salt_correction(Na=100, Tris=20, method=2))
+    -16.45
+    >>> print('%0.2f' % mt.salt_correction(Na=100, Tris=20, Mg=1.5, method=2))
+    -10.99
 
     """
     if method in (5, 6, 7) and not seq:
@@ -579,7 +578,6 @@ def chem_correction(melting_temp, DMSO=0, fmd=0, DMSOfactor=0.75,
      - GC: GC content in percent.
 
     Examples:
-
         >>> from Bio.SeqUtils import MeltingTemp as mt
         >>> mt.chem_correction(70)
         70
@@ -622,7 +620,6 @@ def Tm_Wallace(seq, check=True, strict=True):
     Non-DNA characters (e.g., E, F, J, !, 1, etc) are ignored by this method.
 
     Examples:
-
         >>> from Bio.SeqUtils import MeltingTemp as mt
         >>> mt.Tm_Wallace('ACGTTGCAATGCCGTA')
         48.0
@@ -1000,8 +997,8 @@ def Tm_staluc(s, dnac=50, saltc=50, rna=0):
     For DNA/DNA, see Allawi & SantaLucia (1997), Biochemistry 36: 10581-10594
     For RNA/RNA, see Xia et al (1998), Biochemistry 37: 14719-14735
 
-    Example:
-
+    Examples
+    --------
     >>> print("%0.2f" % Tm_staluc('CAGTCAGTACGTACGTGTACTGCCGTA'))
     59.87
     >>> print("%0.2f" % Tm_staluc('CAGTCAGTACGTACGTGTACTGCCGTA', rna=True))

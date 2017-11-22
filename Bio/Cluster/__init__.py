@@ -2,63 +2,22 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 #
+"""Cluster Analysis.
+
+The Bio.Cluster provides commonly used clustering algorithms and was
+designed with the application to gene expression data in mind. However,
+this module can also be used for cluster analysis of other types of data.
+
+Bio.Cluster and the underlying C Clustering Library is described in
+M. de Hoon et al. (2004) https://doi.org/10.1093/bioinformatics/bth078
+"""
 
 import numpy
 
-from Bio.Cluster.cluster import *  # noqa - lots coming from C code
-
-
-def _treesort(order, nodeorder, nodecounts, tree):
-    # Find the order of the nodes consistent with the hierarchical clustering
-    # tree, taking into account the preferred order of nodes.
-    nNodes = len(tree)
-    nElements = nNodes + 1
-    neworder = numpy.zeros(nElements)
-    clusterids = numpy.arange(nElements)
-    for i in range(nNodes):
-        i1 = tree[i].left
-        i2 = tree[i].right
-        if i1 < 0:
-            order1 = nodeorder[-i1 - 1]
-            count1 = nodecounts[-i1 - 1]
-        else:
-            order1 = order[i1]
-            count1 = 1
-        if i2 < 0:
-            order2 = nodeorder[-i2 - 1]
-            count2 = nodecounts[-i2 - 1]
-        else:
-            order2 = order[i2]
-            count2 = 1
-        # If order1 and order2 are equal, their order is determined
-        # by the order in which they were clustered
-        if i1 < i2:
-            if order1 < order2:
-                increase = count1
-            else:
-                increase = count2
-            for j in range(nElements):
-                clusterid = clusterids[j]
-                if clusterid == i1 and order1 >= order2:
-                    neworder[j] += increase
-                if clusterid == i2 and order1 < order2:
-                    neworder[j] += increase
-                if clusterid == i1 or clusterid == i2:
-                    clusterids[j] = -i - 1
-        else:
-            if order1 <= order2:
-                increase = count1
-            else:
-                increase = count2
-            for j in range(nElements):
-                clusterid = clusterids[j]
-                if clusterid == i1 and order1 > order2:
-                    neworder[j] += increase
-                if clusterid == i2 and order1 <= order2:
-                    neworder[j] += increase
-                if clusterid == i1 or clusterid == i2:
-                    clusterids[j] = -i - 1
-    return numpy.argsort(neworder)
+from Bio.Cluster.cluster import version, kcluster, kmedoids, treecluster
+from Bio.Cluster.cluster import somcluster, clusterdistance
+from Bio.Cluster.cluster import clustercentroids, distancematrix, pca
+from Bio.Cluster.cluster import Node, Tree
 
 
 def _savetree(jobname, tree, order, transpose):
@@ -70,12 +29,10 @@ def _savetree(jobname, tree, order, transpose):
     else:
         extension = ".atr"
         keyword = "ARRY"
+    index = tree.sort(order)
     nnodes = len(tree)
     with open(jobname + extension, "w") as outputfile:
-        nodeindex = 0
         nodeID = [''] * nnodes
-        nodecounts = numpy.zeros(nnodes, int)
-        nodeorder = numpy.zeros(nnodes)
         nodedist = numpy.array([node.distance for node in tree])
         for nodeindex in range(nnodes):
             min1 = tree[nodeindex].left
@@ -85,62 +42,50 @@ def _savetree(jobname, tree, order, transpose):
             outputfile.write("\t")
             if min1 < 0:
                 index1 = -min1 - 1
-                order1 = nodeorder[index1]
-                counts1 = nodecounts[index1]
                 outputfile.write(nodeID[index1] + "\t")
                 nodedist[nodeindex] = max(nodedist[nodeindex], nodedist[index1])
             else:
-                order1 = order[min1]
-                counts1 = 1
                 outputfile.write("%s%dX\t" % (keyword, min1))
             if min2 < 0:
                 index2 = -min2 - 1
-                order2 = nodeorder[index2]
-                counts2 = nodecounts[index2]
                 outputfile.write(nodeID[index2] + "\t")
                 nodedist[nodeindex] = max(nodedist[nodeindex], nodedist[index2])
             else:
-                order2 = order[min2]
-                counts2 = 1
                 outputfile.write("%s%dX\t" % (keyword, min2))
             outputfile.write(str(1.0 - nodedist[nodeindex]))
             outputfile.write("\n")
-            counts = counts1 + counts2
-            nodecounts[nodeindex] = counts
-            nodeorder[nodeindex] = (counts1 * order1 + counts2 * order2) / counts
-    # Now set up order based on the tree structure
-    index = _treesort(order, nodeorder, nodecounts, tree)
     return index
 
 
 class Record(object):
     """Store gene expression data.
 
-A Record stores the gene expression data and related information contained
-in a data file following the file format defined for Michael Eisen's
-Cluster/TreeView program. A Record has the following members:
+    A Record stores the gene expression data and related information contained
+    in a data file following the file format defined for Michael Eisen's
+    Cluster/TreeView program.
 
-  - data:     a matrix containing the gene expression data
-  - mask:     a matrix containing only 1's and 0's, denoting which values
-    are present (1) or missing (0). If all elements of mask are
-    one (no missing data), then mask is set to None.
-  - geneid:   a list containing a unique identifier for each gene
-    (e.g., ORF name)
-  - genename: a list containing an additional description for each gene
-    (e.g., gene name)
-  - gweight:  the weight to be used for each gene when calculating the
-    distance
-  - gorder:   an array of real numbers indicating the preferred order of the
-    genes in the output file
-  - expid:    a list containing a unique identifier for each experimental
-    condition
-  - eweight:  the weight to be used for each experimental condition when
-    calculating the distance
-  - eorder:   an array of real numbers indication the preferred order in the
-    output file of the experimental conditions
-  - uniqid:   the string that was used instead of UNIQID in the input file.
+    Attributes:
+     - data:     a matrix containing the gene expression data
+     - mask:     a matrix containing only 1's and 0's, denoting which values
+       are present (1) or missing (0). If all elements of mask are
+       one (no missing data), then mask is set to None.
+     - geneid:   a list containing a unique identifier for each gene
+       (e.g., ORF name)
+     - genename: a list containing an additional description for each gene
+       (e.g., gene name)
+     - gweight:  the weight to be used for each gene when calculating the
+       distance
+     - gorder:   an array of real numbers indicating the preferred order of the
+       genes in the output file
+     - expid:    a list containing a unique identifier for each experimental
+       condition
+     - eweight:  the weight to be used for each experimental condition when
+       calculating the distance
+     - eorder:   an array of real numbers indication the preferred order in the
+       output file of the experimental conditions
+     - uniqid:   the string that was used instead of UNIQID in the input file.
 
-"""
+    """
 
     def __init__(self, handle=None):
         """Read gene expression data from the file handle and return a Record.
@@ -231,33 +176,33 @@ Cluster/TreeView program. A Record has the following members:
     def treecluster(self, transpose=0, method='m', dist='e'):
         """Apply hierarchical clustering and return a Tree object.
 
-The pairwise single, complete, centroid, and average linkage hierarchical
-clustering methods are available.
+        The pairwise single, complete, centroid, and average linkage
+        hierarchical clustering methods are available.
 
-- transpose: if equal to 0, genes (rows) are clustered;
-  if equal to 1, microarrays (columns) are clustered.
-- dist     : specifies the distance function to be used:
+        Arguments:
+         - transpose: if equal to 0, genes (rows) are clustered;
+           if equal to 1, microarrays (columns) are clustered.
+         - dist     : specifies the distance function to be used:
 
-  - dist=='e': Euclidean distance
-  - dist=='b': City Block distance
-  - dist=='c': Pearson correlation
-  - dist=='a': absolute value of the correlation
-  - dist=='u': uncentered correlation
-  - dist=='x': absolute uncentered correlation
-  - dist=='s': Spearman's rank correlation
-  - dist=='k': Kendall's tau
+           - dist=='e': Euclidean distance
+           - dist=='b': City Block distance
+           - dist=='c': Pearson correlation
+           - dist=='a': absolute value of the correlation
+           - dist=='u': uncentered correlation
+           - dist=='x': absolute uncentered correlation
+           - dist=='s': Spearman's rank correlation
+           - dist=='k': Kendall's tau
 
-- method   : specifies which linkage method is used:
+         - method   : specifies which linkage method is used:
 
-  - method=='s': Single pairwise linkage
-  - method=='m': Complete (maximum) pairwise linkage (default)
-  - method=='c': Centroid linkage
-  - method=='a': Average pairwise linkage
+           - method=='s': Single pairwise linkage
+           - method=='m': Complete (maximum) pairwise linkage (default)
+           - method=='c': Centroid linkage
+           - method=='a': Average pairwise linkage
 
-See the description of the Tree class for more information about the Tree
-object returned by this method.
-
-"""
+        See the description of the Tree class for more information about
+        the Tree object returned by this method.
+        """
         if transpose == 0:
             weight = self.eweight
         else:
@@ -269,47 +214,48 @@ object returned by this method.
                  initialid=None):
         """Apply k-means or k-median clustering.
 
-This method returns a tuple (clusterid, error, nfound).
+        This method returns a tuple (clusterid, error, nfound).
 
-  - nclusters: number of clusters (the 'k' in k-means)
-  - transpose: if equal to 0, genes (rows) are clustered;
-    if equal to 1, microarrays (columns) are clustered.
-  - npass    : number of times the k-means clustering algorithm is
-    performed, each time with a different (random) initial
-    condition.
-  - method   : specifies how the center of a cluster is found:
-    method=='a': arithmetic mean
-    method=='m': median
-  - dist     : specifies the distance function to be used:
+        Arguments:
+         - nclusters: number of clusters (the 'k' in k-means)
+         - transpose: if equal to 0, genes (rows) are clustered;
+           if equal to 1, microarrays (columns) are clustered.
+         - npass    : number of times the k-means clustering algorithm is
+           performed, each time with a different (random) initial condition.
+         - method   : specifies how the center of a cluster is found:
 
-    - dist=='e': Euclidean distance
-    - dist=='b': City Block distance
-    - dist=='c': Pearson correlation
-    - dist=='a': absolute value of the correlation
-    - dist=='u': uncentered correlation
-    - dist=='x': absolute uncentered correlation
-    - dist=='s': Spearman's rank correlation
-    - dist=='k': Kendall's tau
+           - method=='a': arithmetic mean
+           - method=='m': median
 
-  - initialid: the initial clustering from which the algorithm should start.
-    If initialid is None, the routine carries out npass
-    repetitions of the EM algorithm, each time starting from a
-    different random initial clustering. If initialid is given,
-    the routine carries out the EM algorithm only once, starting
-    from the given initial clustering and without randomizing the
-    order in which items are assigned to clusters (i.e., using
-    the same order as in the data matrix). In that case, the
-    k-means algorithm is fully deterministic.
+         - dist     : specifies the distance function to be used:
 
-Return values:
-  - clusterid: array containing the number of the cluster to which each
-    gene/microarray was assigned in the best k-means clustering
-    solution that was found in the npass runs;
-  - error:     the within-cluster sum of distances for the returned k-means
-    clustering solution;
-  - nfound:    the number of times this solution was found.
+             - dist=='e': Euclidean distance
+             - dist=='b': City Block distance
+             - dist=='c': Pearson correlation
+             - dist=='a': absolute value of the correlation
+             - dist=='u': uncentered correlation
+             - dist=='x': absolute uncentered correlation
+             - dist=='s': Spearman's rank correlation
+             - dist=='k': Kendall's tau
 
-"""
+         - initialid: the initial clustering from which the algorithm should
+           start. If initialid is None, the routine carries out npass
+           repetitions of the EM algorithm, each time starting from a different
+           random initial clustering. If initialid is given, the routine
+           carries out the EM algorithm only once, starting from the given
+           initial clustering and without randomizing the order in which items
+           are assigned to clusters (i.e., using the same order as in the data
+           matrix). In that case, the k-means algorithm is fully deterministic.
+
+        Return values:
+         - clusterid: array containing the number of the cluster to which each
+           gene/microarray was assigned in the best k-means clustering
+           solution that was found in the npass runs;
+         - error:     the within-cluster sum of distances for the returned
+           k-means clustering solution;
+         - nfound:    the number of times this solution was found.
+
+        """
         if transpose == 0:
             weight = self.eweight
         else:
@@ -321,41 +267,40 @@ Return values:
                    niter=1, dist='e'):
         """Calculate a self-organizing map on a rectangular grid.
 
-The somcluster method returns a tuple (clusterid, celldata).
+        The somcluster method returns a tuple (clusterid, celldata).
 
-  - transpose: if equal to 0, genes (rows) are clustered;
-    if equal to 1, microarrays (columns) are clustered.
-  - nxgrid   : the horizontal dimension of the rectangular SOM map
-  - nygrid   : the vertical dimension of the rectangular SOM map
-  - inittau  : the initial value of tau (the neighborbood function)
-  - niter    : the number of iterations
-  - dist     : specifies the distance function to be used:
+        Arguments:
+         - transpose: if equal to 0, genes (rows) are clustered;
+           if equal to 1, microarrays (columns) are clustered.
+         - nxgrid   : the horizontal dimension of the rectangular SOM map
+         - nygrid   : the vertical dimension of the rectangular SOM map
+         - inittau  : the initial value of tau (the neighborbood function)
+         - niter    : the number of iterations
+         - dist     : specifies the distance function to be used:
 
-    - dist=='e': Euclidean distance
-    - dist=='b': City Block distance
-    - dist=='c': Pearson correlation
-    - dist=='a': absolute value of the correlation
-    - dist=='u': uncentered correlation
-    - dist=='x': absolute uncentered correlation
-    - dist=='s': Spearman's rank correlation
-    - dist=='k': Kendall's tau
+           - dist=='e': Euclidean distance
+           - dist=='b': City Block distance
+           - dist=='c': Pearson correlation
+           - dist=='a': absolute value of the correlation
+           - dist=='u': uncentered correlation
+           - dist=='x': absolute uncentered correlation
+           - dist=='s': Spearman's rank correlation
+           - dist=='k': Kendall's tau
 
-Return values:
+        Return values:
+         - clusterid: array with two columns, while the number of rows is equal
+           to the number of genes or the number of microarrays depending on
+           whether genes or microarrays are being clustered. Each row in
+           the array contains the x and y coordinates of the cell in the
+           rectangular SOM grid to which the gene or microarray was assigned.
+         - celldata:  an array with dimensions (nxgrid, nygrid, number of
+           microarrays) if genes are being clustered, or (nxgrid, nygrid,
+           number of genes) if microarrays are being clustered. Each element
+           [ix][iy] of this array is a 1D vector containing the gene
+           expression data for the centroid of the cluster in the SOM grid
+           cell with coordinates (ix, iy).
 
-    - clusterid: array with two columns, while the number of rows is equal to
-      the number of genes or the number of microarrays depending on
-      whether genes or microarrays are being clustered. Each row in
-      the array contains the x and y coordinates of the cell in the
-      rectangular SOM grid to which the gene or microarray was
-      assigned.
-    - celldata:  an array with dimensions (nxgrid, nygrid, number of
-      microarrays) if genes are being clustered, or (nxgrid,
-      nygrid, number of genes) if microarrays are being clustered.
-      Each element [ix][iy] of this array is a 1D vector containing
-      the gene expression data for the centroid of the cluster in
-      the SOM grid cell with coordinates (ix, iy).
-
-"""
+        """
         if transpose == 0:
             weight = self.eweight
         else:
@@ -366,29 +311,30 @@ Return values:
     def clustercentroids(self, clusterid=None, method='a', transpose=0):
         """Calculate the cluster centroids and return a tuple (cdata, cmask).
 
-The centroid is defined as either the mean or the median over all elements
-for each dimension.
+        The centroid is defined as either the mean or the median over all
+        elements for each dimension.
 
-  - data     : nrows x ncolumns array containing the expression data
-  - mask     : nrows x ncolumns array of integers, showing which data are
-    missing. If mask[i][j]==0, then data[i][j] is missing.
-  - transpose: if equal to 0, gene (row) clusters are considered;
-    if equal to 1, microarray (column) clusters are considered.
-  - clusterid: array containing the cluster number for each gene or
-    microarray. The cluster number should be non-negative.
-  - method   : specifies how the centroid is calculated:
-    method=='a': arithmetic mean over each dimension. (default)
-    method=='m': median over each dimension.
+        Arguments:
+         - data     : nrows x ncolumns array containing the expression data
+         - mask     : nrows x ncolumns array of integers, showing which data
+           are missing. If mask[i][j]==0, then data[i][j] is missing.
+         - transpose: if equal to 0, gene (row) clusters are considered;
+           if equal to 1, microarray (column) clusters are considered.
+         - clusterid: array containing the cluster number for each gene or
+           microarray. The cluster number should be non-negative.
+         - method   : specifies how the centroid is calculated:
 
-Return values:
-  - cdata    : 2D array containing the cluster centroids. If transpose==0,
-    then the dimensions of cdata are nclusters x ncolumns. If
-    transpose==1, then the dimensions of cdata are
-    nrows x nclusters.
-  - cmask    : 2D array of integers describing which elements in cdata,
-    if any, are missing.
+           - method=='a': arithmetic mean over each dimension. (default)
+           - method=='m': median over each dimension.
 
-"""
+        Return values:
+         - cdata    : 2D array containing the cluster centroids. If transpose==0,
+           then the dimensions of cdata are nclusters x ncolumns. If
+           transpose==1, then the dimensions of cdata are nrows x nclusters.
+         - cmask    : 2D array of integers describing which elements in cdata,
+           if any, are missing.
+
+        """
         return clustercentroids(self.data, self.mask, clusterid, method,
                                 transpose)
 
@@ -396,42 +342,42 @@ Return values:
                         transpose=0):
         """Calculate the distance between two clusters.
 
-  - index1   : 1D array identifying which genes/microarrays belong to the
-    first cluster. If the cluster contains only one gene, then
-    index1 can also be written as a single integer.
-  - index2   : 1D array identifying which genes/microarrays belong to the
-    second cluster. If the cluster contains only one gene, then
-    index2 can also be written as a single integer.
-  - transpose: if equal to 0, genes (rows) are clustered;
-    if equal to 1, microarrays (columns) are clustered.
-  - dist     : specifies the distance function to be used:
+        Arguments:
+         - index1   : 1D array identifying which genes/microarrays belong to the
+           first cluster. If the cluster contains only one gene, then
+           index1 can also be written as a single integer.
+         - index2   : 1D array identifying which genes/microarrays belong to the
+           second cluster. If the cluster contains only one gene, then
+           index2 can also be written as a single integer.
+         - transpose: if equal to 0, genes (rows) are clustered;
+           if equal to 1, microarrays (columns) are clustered.
+         - dist     : specifies the distance function to be used:
 
-    - dist=='e': Euclidean distance
-    - dist=='b': City Block distance
-    - dist=='c': Pearson correlation
-    - dist=='a': absolute value of the correlation
-    - dist=='u': uncentered correlation
-    - dist=='x': absolute uncentered correlation
-    - dist=='s': Spearman's rank correlation
-    - dist=='k': Kendall's tau
+           - dist=='e': Euclidean distance
+           - dist=='b': City Block distance
+           - dist=='c': Pearson correlation
+           - dist=='a': absolute value of the correlation
+           - dist=='u': uncentered correlation
+           - dist=='x': absolute uncentered correlation
+           - dist=='s': Spearman's rank correlation
+           - dist=='k': Kendall's tau
 
-  - method   : specifies how the distance between two clusters is defined:
+         - method   : specifies how the distance between two clusters is defined:
 
-    - method=='a': the distance between the arithmetic means of the
-      two clusters
-    - method=='m': the distance between the medians of the two
-      clusters
-    - method=='s': the smallest pairwise distance between members
-      of the two clusters
-    - method=='x': the largest pairwise distance between members of
-      the two clusters
-    - method=='v': average of the pairwise distances between
-      members of the clusters
+           - method=='a': the distance between the arithmetic means of the
+             two clusters
+           - method=='m': the distance between the medians of the two clusters
+           - method=='s': the smallest pairwise distance between members of
+             the two clusters
+           - method=='x': the largest pairwise distance between members of
+             the two clusters
+           - method=='v': average of the pairwise distances between members
+             of the clusters
 
-  - transpose: if equal to 0: clusters of genes (rows) are considered;
-    if equal to 1: clusters of microarrays (columns) are considered.
+         - transpose: if equal to 0: clusters of genes (rows) are considered;
+           if equal to 1: clusters of microarrays (columns) are considered.
 
-"""
+        """
         if transpose == 0:
             weight = self.eweight
         else:
@@ -440,41 +386,43 @@ Return values:
                                index1, index2, method, dist, transpose)
 
     def distancematrix(self, transpose=0, dist='e'):
-        """Calculate the distance matrix and return it as a list of arrays
+        """Calculate the distance matrix and return it as a list of arrays.
 
-  - transpose: if equal to 0: calculate the distances between genes (rows);
-    if equal to 1: calculate the distances beteeen microarrays
-    (columns).
-  - dist     : specifies the distance function to be used:
+        Arguments:
+         - transpose: if equal to 0: calculate the distances between genes
+           (rows); if equal to 1: calculate the distances beteeen microarrays
+           (columns).
+         - dist     : specifies the distance function to be used:
 
-    - dist=='e': Euclidean distance
-    - dist=='b': City Block distance
-    - dist=='c': Pearson correlation
-    - dist=='a': absolute value of the correlation
-    - dist=='u': uncentered correlation
-    - dist=='x': absolute uncentered correlation
-    - dist=='s': Spearman's rank correlation
-    - dist=='k': Kendall's tau
+           - dist=='e': Euclidean distance
+           - dist=='b': City Block distance
+           - dist=='c': Pearson correlation
+           - dist=='a': absolute value of the correlation
+           - dist=='u': uncentered correlation
+           - dist=='x': absolute uncentered correlation
+           - dist=='s': Spearman's rank correlation
+           - dist=='k': Kendall's tau
 
-Return value:
-The distance matrix is returned as a list of 1D arrays containing the
-distance matrix between the gene expression data. The number of columns
-in each row is equal to the row number. Hence, the first row has zero
-elements. An example of the return value is::
+        Return value:
 
-  matrix = [[],
-            array([1.]),
-            array([7., 3.]),
-            array([4., 2., 6.])]
+        The distance matrix is returned as a list of 1D arrays containing the
+        distance matrix between the gene expression data. The number of columns
+        in each row is equal to the row number. Hence, the first row has zero
+        elements. An example of the return value is::
 
-This corresponds to the distance matrix::
+            matrix = [[],
+                      array([1.]),
+                      array([7., 3.]),
+                      array([4., 2., 6.])]
 
-  [0., 1., 7., 4.]
-  [1., 0., 3., 2.]
-  [7., 3., 0., 6.]
-  [4., 2., 6., 0.]
+        This corresponds to the distance matrix::
 
-"""
+            [0., 1., 7., 4.]
+            [1., 0., 3., 2.]
+            [7., 3., 0., 6.]
+            [4., 2., 6., 0.]
+
+        """
         if transpose == 0:
             weight = self.eweight
         else:
@@ -484,30 +432,26 @@ This corresponds to the distance matrix::
     def save(self, jobname, geneclusters=None, expclusters=None):
         """Save the clustering results.
 
-The saved files follow the convention for the Java TreeView program,
-which can therefore be used to view the clustering result.
+        The saved files follow the convention for the Java TreeView program,
+        which can therefore be used to view the clustering result.
 
-Arguments:
+        Arguments:
+         - jobname:   The base name of the files to be saved. The filenames
+           are jobname.cdt, jobname.gtr, and jobname.atr for hierarchical
+           clustering, and jobname-K*.cdt, jobname-K*.kgg, jobname-K*.kag
+           for k-means clustering results.
+         - geneclusters=None:  For hierarchical clustering results,
+           geneclusters is a Tree object as returned by the treecluster
+           method. For k-means clustering results, geneclusters is a vector
+           containing ngenes integers, describing to which cluster a given
+           gene belongs. This vector can be calculated by kcluster.
+         - expclusters=None:  For hierarchical clustering results, expclusters
+           is a Tree object as returned by the treecluster method. For k-means
+           clustering results, expclusters is a vector containing nexps
+           integers, describing to which cluster a given experimental
+           condition belongs. This vector can be calculated by kcluster.
 
-  - jobname:   The base name of the files to be saved. The filenames are
-    jobname.cdt, jobname.gtr, and jobname.atr for
-    hierarchical clustering, and jobname-K*.cdt,
-    jobname-K*.kgg, jobname-K*.kag for k-means clustering
-    results.
-  - geneclusters=None:  For hierarchical clustering results, geneclusters
-    is a Tree object as returned by the treecluster method.
-    For k-means clustering results, geneclusters is a vector
-    containing ngenes integers, describing to which cluster a
-    given gene belongs. This vector can be calculated by
-    kcluster.
-  - expclusters=None:  For hierarchical clustering results, expclusters
-    is a Tree object as returned by the treecluster method.
-    For k-means clustering results, expclusters is a vector
-    containing nexps integers, describing to which cluster a
-    given experimental condition belongs. This vector can be
-    calculated by kcluster.
-
-"""
+        """
         (ngenes, nexps) = numpy.shape(self.data)
         if self.gorder is None:
             gorder = numpy.arange(ngenes)

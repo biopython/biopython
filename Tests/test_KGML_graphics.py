@@ -48,14 +48,13 @@ except ImportError:
 from Bio.KEGG.KGML.KGML_parser import read
 from Bio.Graphics.KGML_vis import KGMLCanvas
 
-__docformat__ = "restructuredtext en"
-
 
 # The PathwayData class is also imported by the online test module in
 # test_KGML_graphics_online.py
 class PathwayData(object):
-    """Convenience structure for testing pathway data"""
+    """Convenience structure for testing pathway data."""
     def __init__(self, name, element_counts, show_pathway_image=False):
+        """Initialize."""
         self.infilename = os.path.join("KEGG", "ko%s.xml" % name)
         self.outfilename = os.path.join("KEGG", "ko%s.kgml" % name)
         self.element_counts = element_counts
@@ -65,7 +64,7 @@ class PathwayData(object):
 
 
 class KGMLPathwayTest(unittest.TestCase):
-    """Import XML file and write KGML
+    """Import XML file and write KGML.
 
     Import the ko01100 metabolic map from a local .xml KGML file,
     and write valid KGML output for each.

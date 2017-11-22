@@ -1,2 +1,14 @@
 [flake8]
+doctests = True
 max-line-length = 90
+ignore =
+    # =======================
+    # flake: E###, F###, W###
+    # =======================
+    # pycodestyle v2.3.1 default ignore is E121,E123,E126,E226,E24,E704,W503
+    # flake8 v3.3.0 default ignore is      E121,E123,E126,E226,E24,E704,W503,W504
+    E122,E123,E126,E127,E128,E501,E731,F401,F812,F841,
+    # =====================================
+    # pydocstyle: D### - Missing Docstrings
+    # =====================================
+    D100,D101,D102,D103

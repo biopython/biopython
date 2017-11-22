@@ -64,18 +64,20 @@ def fill_and_border(base_color, alpha=0.5):
 
 
 def apply_to_window(sequence, window_size, function, step=None):
-    """Returns a list of (position, value) tuples for fragments of the passed
+    """Apply function to windows of the given sequence.
+
+    Returns a list of (position, value) tuples for fragments of the passed
     sequence of length window_size (stepped by step), calculated by the passed
     function.  Returned positions are the midpoint of each window.
 
     Arguments:
-        - sequence      - Bio.Seq.Seq object.
-        - window_size   - an integer describing the length of sequence to consider.
-        - step          - an integer describing the step to take between windows
-          (default = window_size//2).
 
-        - function      - Method or function that accepts a Bio.Seq.Seq object
-          as its sole argument and returns a single value.
+    - sequence - Bio.Seq.Seq object.
+    - window_size - an integer describing the length of sequence to consider.
+    - step - an integer describing the step to take between windows
+      (default = window_size//2).
+    - function - Method or function that accepts a Bio.Seq.Seq object
+      as its sole argument and returns a single value.
 
     apply_to_window(sequence, window_size, function) -> [(int, float),(int, float),...]
     """
@@ -348,7 +350,8 @@ class LabelTest(unittest.TestCase):
 class SigilsTest(unittest.TestCase):
     """Check the different feature sigils.
 
-    These figures are intended to be used in the Tutorial..."""
+    These figures are intended to be used in the Tutorial...
+    """
     def setUp(self):
         self.gdd = Diagram('Test Diagram', circular=False,
                            y=0.01, yt=0.01, yb=0.01,
@@ -463,50 +466,95 @@ class SigilsTest(unittest.TestCase):
         self.assertEqual(len(self.gdd.tracks), 4)
         self.finish("GD_sigil_arrows")
 
-    def test_small_arrow_heads(self):
-        """Feature arrow sigil heads within bounding box."""
+    def short_sigils(self, glyph):
+        """Draw sigils on top of grey box backgrounds."""
+        # The blue boxes are only relevant for the BIGARROW
         # Add a track of features, bigger height to emphasise any sigil errors
         self.gdt_features = self.gdd.new_track(1, greytrack=True, height=3)
         # We'll just use one feature set for these features,
         self.gds_features = self.gdt_features.new_set()
-        # Green arrows just have small heads (meaning if there is a mitre
-        # it will escape the bounding box).  Red arrows are small triangles.
+        # For the ARROW and BIGARROW sigils:
+        # - Green arrows just have small heads (meaning if there is a mitre
+        #   it will escape the bounding box).
+        # - Red arrows should be small triangles (so short no shaft shown)
+
+        # Forward strand:
+        feature = SeqFeature(FeatureLocation(15, 30), strand=-1)
+        self.gds_features.add_feature(feature, color="blue")
         feature = SeqFeature(FeatureLocation(15, 30), strand=+1)
         self.gds_features.add_feature(feature, color="grey")
-        self.gds_features.add_feature(feature, name="Forward", sigil="ARROW",
+        self.gds_features.add_feature(feature, name="Forward", sigil=glyph,
                                       arrowhead_length=0.05)
+
+        feature = SeqFeature(FeatureLocation(55, 60), strand=-1)
+        self.gds_features.add_feature(feature, color="blue")
         feature = SeqFeature(FeatureLocation(55, 60), strand=+1)
         self.gds_features.add_feature(feature, color="grey")
-        self.gds_features.add_feature(feature, name="Forward", sigil="ARROW",
+        self.gds_features.add_feature(feature, name="Forward", sigil=glyph,
                                       arrowhead_length=1000, color="red")
+
+        feature = SeqFeature(FeatureLocation(75, 125), strand=-1)
+        self.gds_features.add_feature(feature, color="blue")
         feature = SeqFeature(FeatureLocation(75, 125), strand=+1)
         self.gds_features.add_feature(feature, color="grey")
-        self.gds_features.add_feature(feature, name="Forward", sigil="ARROW",
+        self.gds_features.add_feature(feature, name="Forward", sigil=glyph,
                                       arrowhead_length=0.05)
+
+        # Strandless:
         feature = SeqFeature(FeatureLocation(140, 155), strand=None)
         self.gds_features.add_feature(feature, color="grey")
-        self.gds_features.add_feature(feature, name="Strandless", sigil="ARROW",
+        self.gds_features.add_feature(feature, name="Strandless", sigil=glyph,
                                       arrowhead_length=0.05)
+
         feature = SeqFeature(FeatureLocation(180, 185), strand=None)
         self.gds_features.add_feature(feature, color="grey")
-        self.gds_features.add_feature(feature, name="Strandless", sigil="ARROW",
+        self.gds_features.add_feature(feature, name="Strandless", sigil=glyph,
                                       arrowhead_length=1000, color="red")
+
         feature = SeqFeature(FeatureLocation(200, 250), strand=None)
         self.gds_features.add_feature(feature, color="grey")
-        self.gds_features.add_feature(feature, name="Strandless", sigil="ARROW",
+        self.gds_features.add_feature(feature, name="Strandless", sigil=glyph,
                                       arrowhead_length=0.05)
+
+        # Reverse strand:
+        feature = SeqFeature(FeatureLocation(265, 280), strand=+1)
+        self.gds_features.add_feature(feature, color="blue")
         feature = SeqFeature(FeatureLocation(265, 280), strand=-1)
-        self.gds_features.add_feature(feature, name="Reverse", sigil="ARROW",
+        self.gds_features.add_feature(feature, color="grey")
+        self.gds_features.add_feature(feature, name="Reverse", sigil=glyph,
                                       arrowhead_length=0.05)
+
+        feature = SeqFeature(FeatureLocation(305, 310), strand=+1)
+        self.gds_features.add_feature(feature, color="blue")
         feature = SeqFeature(FeatureLocation(305, 310), strand=-1)
         self.gds_features.add_feature(feature, color="grey")
-        self.gds_features.add_feature(feature, name="Reverse", sigil="ARROW",
+        self.gds_features.add_feature(feature, name="Reverse", sigil=glyph,
                                       arrowhead_length=1000, color="red")
+
+        feature = SeqFeature(FeatureLocation(325, 375), strand=+1)
+        self.gds_features.add_feature(feature, color="blue")
         feature = SeqFeature(FeatureLocation(325, 375), strand=-1)
         self.gds_features.add_feature(feature, color="grey")
-        self.gds_features.add_feature(feature, name="Reverse", sigil="ARROW",
+        self.gds_features.add_feature(feature, name="Reverse", sigil=glyph,
                                       arrowhead_length=0.05)
-        self.finish("GD_sigil_arrows_small")
+
+        self.finish("GD_sigil_short_%s" % glyph)
+
+    def test_short_arrow(self):
+        """Feature arrow sigil heads within bounding box."""
+        self.short_sigils("ARROW")
+
+    def test_short_bigarrow(self):
+        """Feature big-arrow sigil heads within bounding box."""
+        self.short_sigils("BIGARROW")
+
+    def test_short_jaggy(self):
+        """Feature arrow sigil heads within bounding box."""
+        self.short_sigils("JAGGY")
+
+    def test_short_octo(self):
+        """Feature big-arrow sigil heads within bounding box."""
+        self.short_sigils("OCTO")
 
     def long_sigils(self, glyph):
         """Check feature sigils within bounding box."""
@@ -655,7 +703,7 @@ class DiagramTest(unittest.TestCase):
                 pass
 
     def test_partial_diagram(self):
-        """construct and draw SVG and PDF for just part of a SeqRecord."""
+        """Construct and draw SVG and PDF for just part of a SeqRecord."""
         genbank_entry = self.record
         start = 6500
         end = 8750
@@ -1020,6 +1068,7 @@ class DiagramTest(unittest.TestCase):
                  start=3000, end=6300)
         output_filename = os.path.join('Graphics', 'GD_by_obj_frag_linear.pdf')
         gdd.write(output_filename, 'PDF')
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)

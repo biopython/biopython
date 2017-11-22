@@ -98,6 +98,7 @@ if sqlite3:
         >>> len(d)
         54
         """
+
         def setUp(self):
             os.chdir(CUR_DIR)
 
@@ -178,6 +179,7 @@ if sqlite3:
 
     class NewIndexTest(unittest.TestCase):
         """Check paths etc in newly built index."""
+
         def setUp(self):
             os.chdir(CUR_DIR)
 
@@ -295,6 +297,7 @@ if sqlite3:
 
 class IndexDictTests(unittest.TestCase):
     """Cunning unit test where methods are added at run time."""
+
     def setUp(self):
         os.chdir(CUR_DIR)
         h, self.index_tmp = tempfile.mkstemp("_idx.tmp")
@@ -514,16 +517,19 @@ class IndexDictTests(unittest.TestCase):
                 warnings.simplefilter('ignore', BiopythonParserWarning)
                 rec_dict = SeqIO.index(filename, format, alphabet,
                                        key_function=lambda x: x.lower())
-                rec_dict_db = SeqIO.index_db(":memory:", filename, format, alphabet,
-                                             key_function=lambda x: x.lower())
+                if sqlite3:
+                    rec_dict_db = SeqIO.index_db(":memory:", filename, format, alphabet,
+                                                 key_function=lambda x: x.lower())
         else:
             rec_dict = SeqIO.index(filename, format, alphabet,
                                    key_function=lambda x: x.lower())
-            rec_dict_db = SeqIO.index_db(":memory:", filename, format, alphabet,
-                                         key_function=lambda x: x.lower())
+            if sqlite3:
+                rec_dict_db = SeqIO.index_db(":memory:", filename, format, alphabet,
+                                             key_function=lambda x: x.lower())
 
         self.assertEqual(set(id_list), set(rec_dict))
-        self.assertEqual(set(id_list), set(rec_dict_db))
+        if sqlite3:
+            self.assertEqual(set(id_list), set(rec_dict_db))
         self.assertEqual(len(id_list), len(rec_dict))
         for key in id_list:
             self.assertIn(key, rec_dict)
@@ -535,11 +541,12 @@ class IndexDictTests(unittest.TestCase):
             self.assertTrue(raw.strip())
             self.assertIn(raw, raw_file)
 
-            raw_db = rec_dict_db.get_raw(key)
-            # Via index using format-specific get_raw which scans the file,
-            # Via index_db in general using raw length found when indexing.
-            self.assertEqual(raw, raw_db,
-                             "index and index_db .get_raw() different for %s" % format)
+            if sqlite3:
+                raw_db = rec_dict_db.get_raw(key)
+                # Via index using format-specific get_raw which scans the file,
+                # Via index_db in general using raw length found when indexing.
+                self.assertEqual(raw, raw_db,
+                                 "index and index_db .get_raw() different for %s" % format)
 
             rec1 = rec_dict[key]
             # Following isn't very elegant, but it lets me test the
@@ -585,20 +592,21 @@ class IndexDictTests(unittest.TestCase):
 
     if sqlite3:
         def test_duplicates_index_db(self):
-            """Index file with duplicate identifers with Bio.SeqIO.index_db()"""
+            """Index file with duplicate identifiers with Bio.SeqIO.index_db()"""
             self.assertRaises(ValueError, SeqIO.index_db, ":memory:",
                               ["Fasta/dups.fasta"], "fasta")
 
     def test_duplicates_index(self):
-        """Index file with duplicate identifers with Bio.SeqIO.index()"""
+        """Index file with duplicate identifiers with Bio.SeqIO.index()"""
         self.assertRaises(ValueError, SeqIO.index, "Fasta/dups.fasta", "fasta")
 
     def test_duplicates_to_dict(self):
-        """Index file with duplicate identifers with Bio.SeqIO.to_dict()"""
+        """Index file with duplicate identifiers with Bio.SeqIO.to_dict()"""
         handle = open("Fasta/dups.fasta", _universal_read_mode)
         iterator = SeqIO.parse(handle, "fasta")
         self.assertRaises(ValueError, SeqIO.to_dict, iterator)
         handle.close()
+
 
 tests = [
     ("Ace/contig1.ace", "ace", generic_dna),
@@ -629,6 +637,8 @@ tests = [
     ("GenBank/NC_005816.fna", "fasta", generic_dna),
     ("GenBank/NC_005816.gb", "gb", None),
     ("GenBank/cor6_6.gb", "genbank", None),
+    ("GenBank/empty_accession.gbk", "gb", None),
+    ("GenBank/empty_version.gbk", "gb", None),
     ("IntelliGenetics/vpu_nucaligned.txt", "ig", generic_nucleotide),
     ("IntelliGenetics/TAT_mase_nuc.txt", "ig", None),
     ("IntelliGenetics/VIF_mase-pro.txt", "ig", generic_protein),

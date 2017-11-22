@@ -18,6 +18,7 @@ except ImportError:
         "Install NumPy if you want to use PDB formats with SeqIO.")
 
 from Bio import SeqIO
+from Bio import BiopythonWarning
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
 
 
@@ -95,6 +96,7 @@ class TestPdbAtom(unittest.TestCase):
                          'KALGPGATLEEMMTACQG')
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", PDBConstructionWarning)
+            warnings.simplefilter("ignore", BiopythonWarning)
             chain = SeqIO.read('PDB/a_structure.pdb', 'pdb-atom')
         self.assertEqual(chain.id, '????:A')
         self.assertEqual(chain.annotations['chain'], 'A')
@@ -102,10 +104,9 @@ class TestPdbAtom(unittest.TestCase):
 
     def test_atom_noheader(self):
         """Parse a PDB with no HEADER line."""
-
         with warnings.catch_warnings():
             warnings.simplefilter('ignore', PDBConstructionWarning)
-            warnings.simplefilter('ignore', UserWarning)
+            warnings.simplefilter("ignore", BiopythonWarning)
             chains = list(SeqIO.parse('PDB/1LCD.pdb', 'pdb-atom'))
 
         self.assertEqual(len(chains), 1)

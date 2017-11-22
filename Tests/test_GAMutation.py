@@ -9,10 +9,14 @@ from Bio.Seq import MutableSeq
 from Bio.Alphabet import SingleLetterAlphabet
 
 # local stuff
-from Bio.GA.Organism import Organism
-from Bio.GA.Mutation.General import SafeFitnessMutation
-from Bio.GA.Mutation.Simple import ConversionMutation
-from Bio.GA.Mutation.Simple import SinglePositionMutation
+import warnings
+from Bio import BiopythonDeprecationWarning
+with warnings.catch_warnings():
+    warnings.simplefilter('ignore', BiopythonDeprecationWarning)
+    from Bio.GA.Organism import Organism
+    from Bio.GA.Mutation.General import SafeFitnessMutation
+    from Bio.GA.Mutation.Simple import ConversionMutation
+    from Bio.GA.Mutation.Simple import SinglePositionMutation
 
 
 class TestAlphabet(SingleLetterAlphabet):
@@ -54,7 +58,7 @@ class MutationHelper(object):
 
         percent_mutants = float(num_mutations) / float(self.num_trials)
         assert percent_mutants > expected_percent, \
-               "Did not recieve an acceptable number of mutations."
+               "Did not receive an acceptable number of mutations."
 
     def _never_mutate(self, mutator):
         """Test that a mutator does not cause unexpected mutations.
@@ -123,6 +127,7 @@ class TestMutator(object):
     """Provide basic mutator ability."""
 
     def __init__(self):
+        """Initialize."""
         self.type = "lower"
 
     def mutate(self, org):
@@ -194,6 +199,7 @@ class SafeFitnessTest(unittest.TestCase):
         new_org = mutator.mutate(self.org)
         assert (new_org.fitness > self.org.fitness), \
                 "Did not get new organism under higher fitness conditions."
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)

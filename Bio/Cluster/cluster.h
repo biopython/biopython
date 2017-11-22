@@ -5,7 +5,7 @@
  * This library was written at the Laboratory of DNA Information Analysis,
  * Human Genome Center, Institute of Medical Science, University of Tokyo,
  * 4-6-1 Shirokanedai, Minato-ku, Tokyo 108-8639, Japan.
- * Contact: mdehoon 'AT' gsc.riken.jp
+ * Contact: michiel.dehoon 'AT' riken.jp
  *
  * Permission to use, copy, modify, and distribute this software and its
  * documentation with or without modifications and for any purpose and
@@ -38,7 +38,7 @@
 #  include <windows.h>
 #endif
 
-#define CLUSTERVERSION "1.50"
+#define CLUSTERVERSION "1.54"
 
 /* Chapter 2 */
 double clusterdistance (int nrows, int ncolumns, double** data, int** mask,
@@ -73,6 +73,7 @@ typedef struct {int left; int right; double distance;} Node;
 
 Node* treecluster (int nrows, int ncolumns, double** data, int** mask,
   double weight[], int transpose, char dist, char method, double** distmatrix);
+int sorttree(const int nnodes, Node* tree, const double order[], int indices[]);
 void cuttree (int nelements, Node* tree, int nclusters, int clusterid[]);
 
 /* Chapter 5 */

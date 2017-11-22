@@ -3,24 +3,24 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""
-This module provides code to work with the cellosaurus.txt file from
-http://web.expasy.org/cellosaurus/
+"""Parser for the cellosaurus.txt file from ExPASy.
 
-Tested with the release of Version 18 (July 2016)
+See https://web.expasy.org/cellosaurus/
+
+Tested with the release of Version 18 (July 2016).
 
 Functions:
-
-    - read       Reads a file containing one cell line entry
-    - parse      Reads a file containing multiple cell line entries
+ - read       Reads a file containing one cell line entry
+ - parse      Reads a file containing multiple cell line entries
 
 Classes:
+ - Record     Holds cell line data.
 
-    - Record     Holds cell line data.
-
-from Bio.ExPASy import Cellosaurus
-handle = open("cellosaurus.txt")
-records = Cellosaurus.parse(handle)
+Examples
+--------
+>>> from Bio.ExPASy import Cellosaurus
+>>> handle = open("cellosaurus.txt")
+>>> records = Cellosaurus.parse(handle)
 
 """
 
@@ -31,7 +31,9 @@ def parse(handle):
     This function is for parsing cell line files containing multiple
     records.
 
-    handle   - handle to the file.
+    Arguments:
+     - handle   - handle to the file.
+
     """
     while True:
         record = __read(handle)
@@ -46,7 +48,9 @@ def read(handle):
     This function is for parsing cell line files containing
     exactly one record.
 
-    handle   - handle to the file.
+    Arguments:
+     - handle   - handle to the file.
+
     """
     record = __read(handle)
     # We should have reached the end of the record by now
@@ -57,10 +61,10 @@ def read(handle):
 
 
 class Record(dict):
-    """
-    Holds information from an ExPASy Cellosaurus record as a Python dictionary.
+    """Holds information from an ExPASy Cellosaurus record as a Python dictionary.
 
     Each record contains the following keys:
+
      ---------  ---------------------------     ----------------------
      Line code  Content                         Occurrence in an entry
      ---------  ---------------------------     ----------------------
@@ -84,6 +88,7 @@ class Record(dict):
     """
 
     def __init__(self):
+        """Initialize the class."""
         dict.__init__(self)
         self["ID"] = ''
         self["AC"] = ''

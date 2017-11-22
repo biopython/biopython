@@ -46,7 +46,11 @@ except ImportError:
 
 
 class DB_Index(object):
-    def __init__(self, open=1):
+    def __init__(self, open=True):
+        """Initialise.
+
+        Optional argument open controls if the index should be opened.
+        """
         if open:
             self.Open()
 
@@ -77,7 +81,7 @@ class DB_Index(object):
                         db[id] = value
                         db[acc] = value
                         id, acc, start, stop = None, None, None, None
-                    except:
+                    except Exception:
                         print("AARRGGGG %d %d %s %s" %
                               (start, stop, type(start), type(stop)))
                         print("%s %s" % (id, acc))
@@ -98,7 +102,7 @@ class DB_Index(object):
     def Get(self, id):
         try:
             values = self.db[id]
-        except:
+        except Exception:
             return None
         start, stop = [int(x) for x in values.split()]
         self.fid.seek(start)
@@ -306,7 +310,7 @@ if __name__ == '__main__':
         try:
             db = sys.argv[1]
             ids = sys.argv[2:]
-        except:
+        except Exception:
             usage(exit=1)
 
     dbfile = os.path.join(pyphy_home, db + '.indexed')

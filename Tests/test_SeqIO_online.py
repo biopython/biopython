@@ -10,8 +10,9 @@ Uses Bio.SeqIO to parse files downloaded with Bio.GenBank, Bio.WWW.NCBI,
 Bio.ExPASy etc.
 
 Goals:
-    Make sure that all retrieval is working as expected.
-    May catch some format changes early too.
+    - Make sure that all retrieval is working as expected.
+    - May catch some format changes early too.
+
 """
 import unittest
 
@@ -36,6 +37,7 @@ Entrez.email = "biopython-dev@biopython.org"
 
 class ExPASyTests(unittest.TestCase):
     """Tests for Bio.ExPASy module."""
+
     def test_get_sprot_raw(self):
         """Bio.ExPASy.get_sprot_raw("O23729")"""
         identifier = "O23729"
@@ -72,6 +74,7 @@ class EntrezTests(unittest.TestCase):
                          "%s got %s, %s" % (entry, record.name, record.id))
             self.assertEqual(len(record), length)
             self.assertEqual(seguid(record.seq), checksum)
+
 
 for database, formats, entry, length, checksum in [
         ("nuccore", ["fasta", "gb"], "X52960", 248,

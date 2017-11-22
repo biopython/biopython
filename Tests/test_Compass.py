@@ -105,6 +105,7 @@ class CompassTest(unittest.TestCase):
         self.assertEqual("LKERKL", com_record.hit_aln[-6:])
         handle.close()
 
+
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

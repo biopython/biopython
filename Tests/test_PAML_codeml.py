@@ -97,13 +97,6 @@ class ModTest(unittest.TestCase):
         self.assertRaises((AttributeError, TypeError, OSError),
                           self.cml.run)
 
-    def testOutputFileValid(self):
-        self.cml.tree = self.tree_file
-        self.cml.alignment = self.align_file
-        self.cml.out_file = list()
-        self.assertRaises((AttributeError, ValueError, OSError),
-                          self.cml.run)
-
     def testOptionExists(self):
         self.assertRaises((AttributeError, KeyError),
                           self.cml.set_options, xxxx=1)
@@ -545,8 +538,10 @@ class ModTest(unittest.TestCase):
             self.assertEqual(len(distances), 2, version_msg)
 
     def testTreeParseVersatility(self):
-        """Test finding trees in the results, in response to bug #453, where
-        trees like (A, (B, C)); weren't being caught"""
+        """Test finding trees in the results.
+
+        In response to bug #453, where trees like (A, (B, C)); weren't being caught.
+        """
         res_file = os.path.join(self.results_dir, "codeml",
                                 "tree_regexp_versatility.out")
         results = codeml.read(res_file)

@@ -8,7 +8,8 @@
 
 # Created: Wed Jun 21 15:53:22 2000
 # thomas@cbs.dtu.dk, http://www.cbs.dtu.dk/thomas
-# File: xbb_translations.py
+
+"""Translation code for graphical Xbbtools tool."""
 
 from __future__ import print_function
 
@@ -85,7 +86,7 @@ class xbb_translations(object):
         return res
 
     def gc(self, seq):
-        """Returns a float between 0 and 100."""
+        """Return a float between 0 and 100."""
         return GC(seq)
 
     def gcframe(self, seq, translation_table=1, direction='both'):

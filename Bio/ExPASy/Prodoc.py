@@ -5,14 +5,13 @@
 
 """Code to work with the prosite.doc file from Prosite.
 
-See http://www.expasy.ch/prosite/
+See https://www.expasy.org/prosite/
 
 Tested with:
-Release 15.0, July 1998
-Release 16.0, July 1999
-Release 20.22, 13 November 2007
-Release 20.43, 10 February 2009
-
+ - Release 15.0, July 1998
+ - Release 16.0, July 1999
+ - Release 20.22, 13 November 2007
+ - Release 20.43, 10 February 2009
 
 Functions:
  - read               Read a Prodoc file containing exactly one Prodoc entry.
@@ -21,6 +20,7 @@ Functions:
 Classes:
  - Record             Holds Prodoc data.
  - Reference          Holds data from a Prodoc reference.
+
 """
 
 
@@ -46,14 +46,16 @@ def parse(handle):
 class Record(object):
     """Holds information from a Prodoc record.
 
-    Members:
-    accession      Accession number of the record.
-    prosite_refs   List of tuples (prosite accession, prosite name).
-    text           Free format text.
-    references     List of reference objects.
+    Attributes:
+     - accession      Accession number of the record.
+     - prosite_refs   List of tuples (prosite accession, prosite name).
+     - text           Free format text.
+     - references     List of reference objects.
 
     """
+
     def __init__(self):
+        """Initialize the class."""
         self.accession = ''
         self.prosite_refs = []
         self.text = ''
@@ -63,13 +65,15 @@ class Record(object):
 class Reference(object):
     """Holds information from a Prodoc citation.
 
-    Members:
+    Attributes:
      - number     Number of the reference. (string)
      - authors    Names of the authors.
      - citation   Describes the citation.
 
     """
+
     def __init__(self):
+        """Initialize the class."""
         self.number = ''
         self.authors = ''
         self.citation = ''

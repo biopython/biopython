@@ -78,7 +78,7 @@ def annotate(m, ss_seq):
         if is_aa(res):
             residues.append(res)
     L = len(residues)
-    if not (L == len(ss_seq)):
+    if not L == len(ss_seq):
         raise ValueError("Length mismatch %i %i" % (L, len(ss_seq)))
     for i in range(0, L):
         residues[i].xtra["SS_PSEA"] = ss_seq[i]
@@ -87,15 +87,14 @@ def annotate(m, ss_seq):
 
 class PSEA(object):
     def __init__(self, model, filename):
+        """Initialize the class."""
         ss_seq = psea(filename)
         ss_seq = psea2HEC(ss_seq)
         annotate(model, ss_seq)
         self.ss_seq = ss_seq
 
     def get_seq(self):
-        """
-        Return secondary structure string.
-        """
+        """Return secondary structure string."""
         return self.ss_seq
 
 

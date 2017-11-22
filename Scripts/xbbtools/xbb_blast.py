@@ -8,7 +8,8 @@
 
 # Created: Thu Jul 13 14:07:25 2000
 # thomas@cbs.dtu.dk, http://www.cbs.dtu.dk/thomas
-# File: xbb_blast.py
+
+"""BLAST code for graphical Xbbtools tool."""
 
 from __future__ import print_function
 
@@ -174,7 +175,7 @@ class BlastIt(object):
             self.ok.config(state='disabled')
 
     def _Run(self):
-        """Setup options for Blast commandline (PRIVATE)."""
+        """Initialise options for Blast commandline (PRIVATE)."""
         command_options = self.option.get()
         options = ''
         if len(command_options.strip()):

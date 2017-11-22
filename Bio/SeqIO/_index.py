@@ -37,6 +37,7 @@ from Bio.File import _IndexedSeqFileProxy, _open_for_random_access
 
 class SeqFileRandomAccess(_IndexedSeqFileProxy):
     def __init__(self, filename, format, alphabet):
+        """Initialize the class."""
         self._handle = _open_for_random_access(filename)
         self._alphabet = alphabet
         self._format = format
@@ -74,7 +75,9 @@ class SeqFileRandomAccess(_IndexedSeqFileProxy):
 # number of flows.
 class SffRandomAccess(SeqFileRandomAccess):
     """Random access to a Standard Flowgram Format (SFF) file."""
+
     def __init__(self, filename, format, alphabet):
+        """Initialize the class."""
         SeqFileRandomAccess.__init__(self, filename, format, alphabet)
         header_length, index_offset, index_length, number_of_reads, \
             self._flows_per_read, self._flow_chars, self._key_sequence \
@@ -166,6 +169,7 @@ class SffTrimedRandomAccess(SffRandomAccess):
 
 class SequentialSeqFileRandomAccess(SeqFileRandomAccess):
     def __init__(self, filename, format, alphabet):
+        """Initialize the class."""
         SeqFileRandomAccess.__init__(self, filename, format, alphabet)
         marker = {"ace": b"CO ",
                   "embl": b"ID ",
@@ -234,6 +238,7 @@ class SequentialSeqFileRandomAccess(SeqFileRandomAccess):
 
 class GenBankRandomAccess(SequentialSeqFileRandomAccess):
     """Indexed dictionary like access to a GenBank file."""
+
     def __iter__(self):
         handle = self._handle
         handle.seek(0)
@@ -250,31 +255,46 @@ class GenBankRandomAccess(SequentialSeqFileRandomAccess):
         while marker_re.match(line):
             # We cannot assume the record.id is the first word after LOCUS,
             # normally the first entry on the VERSION or ACCESSION line is used.
-            key = None
+            # However if both missing, GenBank parser falls back on LOCUS entry.
+            try:
+                key = line[5:].split(None, 1)[0]
+            except ValueError:
+                # Warning?
+                # No content in LOCUS line
+                key = None
             length = len(line)
             while True:
                 end_offset = handle.tell()
                 line = handle.readline()
                 if marker_re.match(line) or not line:
                     if not key:
-                        raise ValueError(
-                            "Did not find ACCESSION/VERSION lines")
+                        raise ValueError("Did not find usable ACCESSION/VERSION/LOCUS lines")
                     yield _bytes_to_string(key), start_offset, length
                     start_offset = end_offset
                     break
                 elif line.startswith(accession_marker):
-                    key = line.rstrip().split()[1]
+                    try:
+                        key = line.rstrip().split()[1]
+                    except IndexError:
+                        # No content in ACCESSION line
+                        pass
                 elif line.startswith(version_marker):
-                    version_id = line.rstrip().split()[1]
-                    if version_id.count(b".") == 1 and version_id.split(b".")[1].isdigit():
-                        # This should mimic the GenBank parser...
-                        key = version_id
+                    try:
+                        version_id = line.rstrip().split()[1]
+                        if version_id.count(b".") == 1 and version_id.split(b".")[1].isdigit():
+                            # This should mimic the GenBank parser...
+                            key = version_id
+                    except IndexError:
+                        # No content in VERSION line
+                        pass
+
                 length += len(line)
         assert not line, repr(line)
 
 
 class EmblRandomAccess(SequentialSeqFileRandomAccess):
     """Indexed dictionary like access to an EMBL file."""
+
     def __iter__(self):
         handle = self._handle
         handle.seek(0)
@@ -335,6 +355,7 @@ class EmblRandomAccess(SequentialSeqFileRandomAccess):
 
 class SwissRandomAccess(SequentialSeqFileRandomAccess):
     """Random access to a SwissProt file."""
+
     def __iter__(self):
         handle = self._handle
         handle.seek(0)
@@ -367,6 +388,7 @@ class SwissRandomAccess(SequentialSeqFileRandomAccess):
 
 class UniprotRandomAccess(SequentialSeqFileRandomAccess):
     """Random access to a UniProt XML file."""
+
     def __iter__(self):
         handle = self._handle
         handle.seek(0)
@@ -449,7 +471,9 @@ class UniprotRandomAccess(SequentialSeqFileRandomAccess):
 
 class IntelliGeneticsRandomAccess(SeqFileRandomAccess):
     """Random access to a IntelliGenetics file."""
+
     def __init__(self, filename, format, alphabet):
+        """Initialize the class."""
         SeqFileRandomAccess.__init__(self, filename, format, alphabet)
         self._marker_re = re.compile(b"^;")
 
@@ -501,6 +525,7 @@ class IntelliGeneticsRandomAccess(SeqFileRandomAccess):
 
 class TabRandomAccess(SeqFileRandomAccess):
     """Random access to a simple tabbed file."""
+
     def __iter__(self):
         handle = self._handle
         handle.seek(0)
@@ -538,6 +563,7 @@ class FastqRandomAccess(SeqFileRandomAccess):
     With FASTQ the records all start with a "@" line, but so can quality lines.
     Note this will cope with line-wrapped FASTQ files.
     """
+
     def __iter__(self):
         handle = self._handle
         handle.seek(0)

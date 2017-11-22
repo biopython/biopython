@@ -18,6 +18,7 @@ from Bio.Phylo import Newick
 
 class NewickError(Exception):
     """Exception raised when Newick object construction cannot continue."""
+
     pass
 
 
@@ -43,6 +44,7 @@ def parse(handle, **kwargs):
     """Iterate over the trees in a Newick file handle.
 
     :returns: generator of Bio.Phylo.Newick.Tree objects.
+
     """
     return Parser(handle).parse(**kwargs)
 
@@ -51,6 +53,7 @@ def write(trees, handle, plain=False, **kwargs):
     """Write a trees in Newick format to the given file handle.
 
     :returns: number of trees written.
+
     """
     return Writer(trees).write(handle, plain=plain, **kwargs)
 
@@ -89,10 +92,12 @@ class Parser(object):
     """
 
     def __init__(self, handle):
+        """Initialize file handle for the Newick Tree."""
         self.handle = handle
 
     @classmethod
     def from_string(cls, treetext):
+        """Instantiate the Newick Tree class from the given string."""
         handle = StringIO(treetext)
         return cls(handle)
 
@@ -208,7 +213,8 @@ class Parser(object):
 
     def new_clade(self, parent=None):
         """Returns a new Newick.Clade, optionally with a temporary reference
-        to its parent clade."""
+        to its parent clade.
+        """
         clade = Newick.Clade()
         if parent:
             clade.parent = parent
@@ -216,7 +222,8 @@ class Parser(object):
 
     def process_clade(self, clade):
         """Final processing of a parsed clade. Removes the node's parent and
-        returns it."""
+        returns it.
+        """
         if ((clade.name) and not
                 (self.values_are_confidence or self.comments_are_confidence) and
                 (clade.confidence is None) and
@@ -239,6 +246,7 @@ class Writer(object):
     """Based on the writer in Bio.Nexus.Trees (str, to_string)."""
 
     def __init__(self, trees):
+        """Initialize parameter for Tree Writer object."""
         self.trees = trees
 
     def write(self, handle, **kwargs):

@@ -43,8 +43,6 @@ from Bio.Graphics.KGML_vis import KGMLCanvas
 # test_KGML_graphics module
 from test_KGML_graphics import PathwayData
 
-__docformat__ = "restructuredtext en"
-
 
 class KGMLPathwayOnlineTest(unittest.TestCase):
     """Import XML file and write KGML - online tests.

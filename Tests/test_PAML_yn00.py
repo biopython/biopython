@@ -64,12 +64,6 @@ class ModTest(unittest.TestCase):
         self.assertRaises((AttributeError, TypeError, OSError),
             self.yn00.run)
 
-    def testOutputFileValid(self):
-        self.yn00.alignment = self.align_file
-        self.yn00.out_file = list()
-        self.assertRaises((AttributeError, ValueError, OSError),
-            self.yn00.run)
-
     def testOptionExists(self):
         self.assertRaises((AttributeError, KeyError),
                           self.yn00.set_options, xxxx=1)
@@ -152,6 +146,7 @@ class ModTest(unittest.TestCase):
             self.assertEqual(set([len(v) for v in results.values()]), set([6]))
             # ...each of which has five measures.
             self.assertEqual(set([len(v) for taxa in results.values() for v in taxa.values()]), set([5]))
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)

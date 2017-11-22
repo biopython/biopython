@@ -53,6 +53,7 @@ class LowQualityBlastError(Exception):
     search. This error should be raised for the BLAST reports produced
     in this case.
     """
+
     pass
 
 
@@ -68,6 +69,7 @@ class ShortQueryBlastError(Exception):
 
     This exception is raised when that condition is detected.
     """
+
     pass
 
 
@@ -78,13 +80,16 @@ class _Scanner(object):
 
     Methods:
      - feed     Feed data into the scanner.
-    """
-    def feed(self, handle, consumer):
-        """S.feed(handle, consumer)
 
-        Feed in a BLAST report for scanning.  handle is a file-like
-        object that contains the BLAST report.  consumer is a Consumer
-        object that will receive events as the report is scanned.
+    """
+
+    def feed(self, handle, consumer):
+        """Feed in a BLAST report for scanning.
+
+        Arguments:
+         - handle is a file-like object that contains the BLAST report.
+         - consumer is a Consumer object that will receive events as the
+           report is scanned.
         """
         if isinstance(handle, File.UndoHandle):
             uhandle = handle
@@ -361,13 +366,13 @@ class _Scanner(object):
                                  start='Sequences not found'):
             # Read the descriptions and the following blank lines.
             read_and_call_while(uhandle, consumer.noevent, blank=1)
-            l = safe_peekline(uhandle)
+            line = safe_peekline(uhandle)
             # Brad -- added check for QUERY. On some PSI-BLAST outputs
             # there will be a 'Sequences not found' line followed by no
             # descriptions. Check for this case since the first thing you'll
             # get is a blank line and then 'QUERY'
-            if not l.startswith('CONVERGED') and l[0] != '>' \
-                    and not l.startswith('QUERY'):
+            if not line.startswith('CONVERGED') and line[0] != '>' \
+                    and not line.startswith('QUERY'):
                 read_and_call_until(uhandle, consumer.description, blank=1)
                 read_and_call_while(uhandle, consumer.noevent, blank=1)
 
@@ -799,31 +804,29 @@ class _Scanner(object):
 
 
 class BlastParser(AbstractParser):
-    """Parses BLAST data into a Record.Blast object.
+    """Parses BLAST data into a Record.Blast object."""
 
-    """
     def __init__(self):
-        """__init__(self)"""
+        """Initialize."""
         self._scanner = _Scanner()
         self._consumer = _BlastConsumer()
 
     def parse(self, handle):
-        """parse(self, handle)"""
+        """Parse BLAST handle into a Record.Blast object."""
         self._scanner.feed(handle, self._consumer)
         return self._consumer.data
 
 
 class PSIBlastParser(AbstractParser):
-    """Parses BLAST data into a Record.PSIBlast object.
+    """Parses BLAST data into a Record.PSIBlast object."""
 
-    """
     def __init__(self):
-        """__init__(self)"""
+        """Initialize."""
         self._scanner = _Scanner()
         self._consumer = _PSIBlastConsumer()
 
     def parse(self, handle):
-        """parse(self, handle)"""
+        """Parse BLAST handle into a Record.PSIBlast object."""
         self._scanner.feed(handle, self._consumer)
         return self._consumer.data
 
@@ -1608,13 +1611,15 @@ class Iterator(object):
     next   Return the next record from the stream, or None.
 
     """
+
     def __init__(self, handle, parser=None):
-        """__init__(self, handle, parser=None)
+        """Initialize a new iterator.
 
-        Create a new iterator.  handle is a file-like object.  parser
-        is an optional Parser object to change the results into another form.
-        If set to None, then the raw contents of the file will be returned.
-
+        Arguments:
+         - handle is a file-like object.
+         - parser is an optional Parser object to change the results
+           into another form.  If set to None, then the raw contents
+           of the file will be returned.
         """
         try:
             handle.readline
@@ -1627,11 +1632,9 @@ class Iterator(object):
         self._header = []
 
     def __next__(self):
-        """next(self) -> object
+        """Return the next Blast record from the file.
 
-        Return the next Blast record from the file.  If no more records,
-        return None.
-
+        If no more records, return None.
         """
         lines = []
         query = False
@@ -1772,7 +1775,7 @@ class BlastErrorParser(AbstractParser):
     that may actually indicate problems during BLAST parsing.
 
     Current BLAST problems this detects are:
-    o LowQualityBlastError - When BLASTing really low quality sequences
+    - LowQualityBlastError - When BLASTing really low quality sequences
     (ie. some GenBank entries which are just short stretches of a single
     nucleotide), BLAST will report an error with the sequence and be
     unable to search with this. This will lead to a badly formatted
@@ -1780,11 +1783,12 @@ class BlastErrorParser(AbstractParser):
     ValueError to a LowQualityBlastError and attempt to provide useful
     information.
     """
+
     def __init__(self, bad_report_handle=None):
         """Initialize a parser that tries to catch BlastErrors.
 
         Arguments:
-        o bad_report_handle - An optional argument specifying a handle
+        - bad_report_handle - An optional argument specifying a handle
         where bad reports should be sent. This would allow you to save
         all of the bad reports to a file, for instance. If no handle
         is specified, the bad reports will not be saved.
@@ -1796,8 +1800,7 @@ class BlastErrorParser(AbstractParser):
         self._consumer = _BlastErrorConsumer()
 
     def parse(self, handle):
-        """Parse a handle, attempting to diagnose errors.
-        """
+        """Parse a handle, attempting to diagnose errors."""
         results = handle.read()
 
         try:
@@ -1821,8 +1824,8 @@ class BlastErrorParser(AbstractParser):
         """Attempt to diagnose an error in the passed handle.
 
         Arguments:
-        o handle - The handle potentially containing the error
-        o data_record - The data record partially created by the consumer.
+        - handle - The handle potentially containing the error
+        - data_record - The data record partially created by the consumer.
         """
         line = handle.readline()
 

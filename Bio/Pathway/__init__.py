@@ -28,6 +28,7 @@ graph theoretic and numeric analysis.
 
 Note: This module should be regarded as a prototype only. API changes are likely.
       Comments and feature requests are most welcome.
+
 """
 
 from functools import reduce
@@ -39,14 +40,14 @@ class Reaction(object):
     """Abstraction for a biochemical transformation.
 
     This class represents a (potentially reversible) biochemical
-    transformation of the type:
+    transformation of the type::
 
       a S1 + b S2 + ... --> c P1 + d P2 + ...
 
-    where
-        - a, b, c, d ... are positive numeric stochiometric coefficients,
-        - S1, S2, ... are substrates
-        - P1, P2, ... are products
+    where:
+     - a, b, c, d ... are positive numeric stochiometric coefficients,
+     - S1, S2, ... are substrates
+     - P1, P2, ... are products
 
     A Reaction should be viewed as the net result of one or more individual
     reaction steps, where each step is potentially facilitated by a different
@@ -54,17 +55,15 @@ class Reaction(object):
     the future.
 
     Attributes:
-
-        - reactants   -- dict of involved species to their stochiometric coefficients:
-          reactants[S] = stochiometric constant for S
-        - catalysts   -- list/tuple of tuples of catalysts required for this reaction
-        - reversible  -- true iff reaction is reversible
-        - data        -- reference to arbitrary additional data
+     - reactants   -- dict of involved species to their stochiometric coefficients:
+       reactants[S] = stochiometric constant for S
+     - catalysts   -- list/tuple of tuples of catalysts required for this reaction
+     - reversible  -- true iff reaction is reversible
+     - data        -- reference to arbitrary additional data
 
     Invariants:
-
-        - for all S in reactants: reactants[S] != 0
-        - for all C in catalysts: catalysts[C] != 0
+     - for all S in reactants: reactants[S] != 0
+     - for all C in catalysts: catalysts[C] != 0
 
     """
 
@@ -157,8 +156,8 @@ class System(object):
     collection of reactions without explicitly defined links.
 
     Attributes:
+     - None
 
-    None
     """
 
     def __init__(self, reactions=()):
@@ -199,13 +198,13 @@ class System(object):
     def stochiometry(self):
         """Computes the stoichiometry matrix for self.
 
-        Returns (species, reactions, stoch) where
+        Returns (species, reactions, stoch) where:
+         - species    = ordered list of species in this system
+         - reactions  = ordered list of reactions in this system
+         - stoch      = 2D array where stoch[i][j] is coef of the
+           jth species in the ith reaction, as defined
+           by species and reactions above
 
-            - species    = ordered list of species in this system
-            - reactions  = ordered list of reactions in this system
-            - stoch      = 2D array where stoch[i][j] is coef of the
-              jth species in the ith reaction, as defined
-              by species and reactions above
         """
         # Note: This an inefficient and ugly temporary implementation.
         #       To be practical, stochiometric matrices should probably
@@ -230,8 +229,8 @@ class Interaction(object):
     be implemented and extended by more specific abstractions.
 
     Attributes:
+     - data      -- reference to arbitrary additional data
 
-        - data      -- reference to arbitrary additional data
     """
 
     def __init_(self, data):
@@ -259,8 +258,8 @@ class Network(object):
     object.
 
     Attributes:
+     - None
 
-    None
     """
 
     def __init__(self, species=()):

@@ -24,36 +24,37 @@ def _is_numeric(x):
 
 
 class FastTreeCommandline(AbstractCommandline):
-    """Command-line wrapper for FastTree.
+    r"""Command-line wrapper for FastTree.
+
+    Only the ``input`` and ``out`` parameters are mandatory.
+
+    From the terminal command line use ``fasttree.exe -help`` or ``fasttree.exe -expert``
+    for more explanation of usage options.
 
     Homepage: http://www.microbesonline.org/fasttree/
 
-    Citations:
-
+    References
+    ----------
     Price, M.N., Dehal, P.S., and Arkin, A.P. (2010) FastTree 2 -- Approximately
     Maximum-Likelihood Trees for Large Alignments. PLoS ONE, 5(3):e9490.
-    doi:10.1371/journal.pone.0009490.
+    https://doi.org/10.1371/journal.pone.0009490.
 
-    Example usage:
-
+    Examples
+    --------
     >>> import _Fasttree
     >>> fasttree_exe = r"C:\FasttreeWin32\fasttree.exe"
-    >>> cmd = _Fasttree.FastTreeCommandline(fasttree_exe, input=r'C:\Input\ExampleAlignment.fsa', out='C:\Output\ExampleTree.tree')
+    >>> cmd = _Fasttree.FastTreeCommandline(fasttree_exe,
+    ...                                     input=r'C:\Input\ExampleAlignment.fsa',
+    ...                                     out=r'C:\Output\ExampleTree.tree')
     >>> print(cmd)
     >>> out, err = cmd()
     >>> print(out)
     >>> print(err)
 
-    Usage advice:
-    the only parameters needed are (fasttree_exe, input='<InputFile>' out='<OutputFile>')
-
-    parameters that use values are added this way: (fasttree_exe, parameter=value, input='<InputFile>' out='<OutputFile>')
-    parameters that don't use values are added this way: (fasttree_exe, parameter=True, input='<InputFile>' out='<OutputFile>')
-
-    from the command line use 'fasttree.exe -help' or 'fasttree.exe -expert' for more explanation of usage options
     """
 
     def __init__(self, cmd='fasttree', **kwargs):
+        """Initialize the class."""
         self.parameters = [
             _Switch(['-nt', 'nt'],
                     "By default FastTree expects protein alignments, use -nt for nucleotides",

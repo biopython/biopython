@@ -8,7 +8,8 @@
 # Authors: Thomas Sicheritz-Ponten and Jan O. Andersson
 # thomas@cbs.dtu.dk, http://www.cbs.dtu.dk/thomas
 # Jan.O.Andersson@home.se
-# File: nextorf.py
+
+"""Find next open reading frame in sequence data."""
 
 from __future__ import print_function
 
@@ -98,12 +99,12 @@ class NextOrf(object):
         return round(gc * 100.0 / (d['A'] + d['T'] + gc), 1)
 
     def Gc2(self, seq):
-        l = len(seq)
+        length = len(seq)
         d = {}
         for nt in ['A', 'T', 'G', 'C']:
             d[nt] = [0, 0, 0]
 
-        for i in range(0, l, 3):
+        for i in range(0, length, 3):
             codon = seq[i:i + 3]
             if len(codon) < 3:
                 codon += '  '
@@ -119,7 +120,7 @@ class NextOrf(object):
             try:
                 n = d['G'][i] + d['C'][i] + d['T'][i] + d['A'][i]
                 gc[i] = (d['G'][i] + d['C'][i]) * 100.0 / n
-            except:
+            except KeyError:
                 gc[i] = 0
 
             gcall = gcall + d['G'][i] + d['C'][i]

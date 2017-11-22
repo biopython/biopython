@@ -3,8 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Parsing AlignACE output files
-"""
+"""Parsing AlignACE output files."""
 
 from Bio.motifs import Motif, Instances
 from Bio.Alphabet import IUPAC
@@ -12,17 +11,22 @@ from Bio.Seq import Seq
 
 
 class Record(list):
+    """AlignACE record (subclass of Python list)."""
+
     def __init__(self):
+        """Initialize."""
         self.parameters = None
 
 
 def read(handle):
-    """read(handle)"""
+    """Parse an AlignACE format handle as a Record object."""
     record = Record()
     line = next(handle)
     record.version = line.strip()
     line = next(handle)
     record.command = line.strip()
+    mask = None
+    number = None
     for line in handle:
         line = line.strip()
         if line == "":

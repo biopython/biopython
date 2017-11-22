@@ -10,7 +10,7 @@ of freely available Python tools for computational molecular biology.
 http://biopython.org
 """
 
-__version__ = "1.70.dev0"
+__version__ = "1.71.dev0"
 
 
 class MissingExternalDependencyError(Exception):
@@ -19,6 +19,7 @@ class MissingExternalDependencyError(Exception):
     Used for things like missing command line tools. Important for our unit
     tests to allow skipping tests with missing external dependencies.
     """
+
     pass
 
 
@@ -30,6 +31,7 @@ class MissingPythonDependencyError(MissingExternalDependencyError, ImportError):
     python dependencies, while also allowing the exception to be caught as an
     ImportError.
     """
+
     pass
 
 
@@ -45,6 +47,7 @@ class BiopythonWarning(Warning):
 
     Consult the warnings module documentation for more details.
     """
+
     pass
 
 
@@ -61,6 +64,7 @@ class BiopythonParserWarning(BiopythonWarning):
 
     Consult the warnings module documentation for more details.
     """
+
     pass
 
 
@@ -80,6 +84,7 @@ class BiopythonDeprecationWarning(BiopythonWarning):
     of Biopython. To avoid removal of this code, please contact the Biopython
     developers by sending an email to biopython-dev@biopython.org.
     """
+
     pass
 
 
@@ -94,12 +99,13 @@ class BiopythonExperimentalWarning(BiopythonWarning):
     a subsequent release of Biopython. Such code should NOT be used for
     production/stable code. It should only be used if:
 
-        - You are running the latest release of Biopython, or ideally the
-          latest code from our repository.
-        - You are subscribed to the biopython-dev mailing list to provide
-          feedback on this code, and to be alerted of changes to it.
+    - You are running the latest release of Biopython, or ideally the
+      latest code from our repository.
+    - You are subscribed to the biopython-dev mailing list to provide
+      feedback on this code, and to be alerted of changes to it.
 
     If all goes well, experimental code would be promoted to stable in
     a subsequent release, and this warning removed from it.
     """
+
     pass

@@ -6,7 +6,7 @@
 #
 # author: Kristian Rother
 #
-# license: same as BioPython, read LICENSE.TXT from current BioPython release.
+# license: same as Biopython, read LICENSE.TXT from current Biopython release.
 #
 # last modified: 9.2.2004
 #
@@ -65,7 +65,7 @@ def _get_references(inl):
 
 # bring dates to format: 1909-01-08
 def _format_date(pdb_date):
-    """Converts dates from DD-Mon-YY to YYYY-MM-DD format."""
+    """Convert dates from DD-Mon-YY to YYYY-MM-DD format."""
     date = ""
     year = int(pdb_date[7:])
     if year < 50:
@@ -93,13 +93,13 @@ def _chop_end_misc(line):
 
 
 def _nice_case(line):
-    """Makes A Lowercase String With Capitals."""
-    l = line.lower()
+    """Make A Lowercase String With Capitals."""
+    line_lower = line.lower()
     s = ""
     i = 0
     nextCap = 1
-    while i < len(l):
-        c = l[i]
+    while i < len(line_lower):
+        c = line_lower[i]
         if c >= 'a' and c <= 'z' and nextCap:
             c = c.upper()
             nextCap = 0
@@ -112,8 +112,7 @@ def _nice_case(line):
 
 
 def parse_pdb_header(infile):
-    """
-    Returns the header lines of a pdb file as a dictionary.
+    """Return the header lines of a pdb file as a dictionary.
 
     Dictionary keys are: head, deposition_date, release_date, structure_method,
     resolution, structure_reference, journal_reference, author and
@@ -146,7 +145,6 @@ def _parse_pdb_header_list(header):
     dict['structure_reference'] = _get_references(header)
     dict['journal_reference'] = _get_journal(header)
     comp_molid = "1"
-    src_molid = "1"
     last_comp_key = "misc"
     last_src_key = "misc"
 
@@ -245,7 +243,7 @@ def _parse_pdb_header_list(header):
                 r = re.sub("\s+ANGSTROM.*", "", r)
                 try:
                     dict['resolution'] = float(r)
-                except:
+                except ValueError:
                     # print('nonstandard resolution %r' % r)
                     dict['resolution'] = None
         else:
@@ -255,17 +253,3 @@ def _parse_pdb_header_list(header):
         if dict['resolution'] > 0.0:
             dict['structure_method'] = 'x-ray diffraction'
     return dict
-
-if __name__ == '__main__':
-    # Reads a PDB file passed as argument, parses its header, extracts
-    # some data and returns it as a dictionary.
-    import sys
-    filename = sys.argv[1]
-    with open(filename, 'r') as handle:
-        data_dict = parse_pdb_header(handle)
-
-    # print the dictionary
-    for k, y in data_dict.items():
-        print("-" * 40)
-        print(k)
-        print(y)

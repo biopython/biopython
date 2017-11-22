@@ -40,7 +40,8 @@ def get_processor(format, mapping):
 
 def singleitem(attr=None, doc=''):
     """Returns a property that fetches the given attribute from
-    the first item in a SearchIO container object."""
+    the first item in a SearchIO container object.
+    """
     def getter(self):
         if len(self._items) > 1:
             raise ValueError("More than one HSPFragment objects "
@@ -53,7 +54,8 @@ def singleitem(attr=None, doc=''):
 
 def allitems(attr=None, doc=''):
     """Returns a property that fetches the given attributes from
-    all items in a SearchIO container object."""
+    all items in a SearchIO container object.
+    """
     def getter(self):
         if attr is None:
             return self._items

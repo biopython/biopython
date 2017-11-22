@@ -16,10 +16,8 @@ file format at http://samtools.sourceforge.net/SAM1.pdf
 Please read the text below about 'virtual offsets' before using BGZF
 files for random access.
 
-
 Aim of this module
 ------------------
-
 The Python gzip library can be used to read BGZF files, since for
 decompression they are just (specialised) gzip files. What this
 module aims to facilitate is random access to BGZF files (using the
@@ -36,13 +34,11 @@ FASTQ, GenBank, etc) or large MAF alignments.
 
 The Bio.SeqIO indexing functions use this module to support BGZF files.
 
-
 Technical Introduction to BGZF
 ------------------------------
-
 The gzip file format allows multiple compressed blocks, each of which
 could be a stand alone gzip file. As an interesting bonus, this means
-you can use Unix "cat" to combined to gzip files into one by
+you can use Unix ``cat`` to combine two or more gzip files into one by
 concatenating them. Also, each block can have one of several compression
 levels (including uncompressed, which actually takes up a little bit
 more space due to the gzip header).
@@ -70,9 +66,9 @@ how big it is from this 'BC' header, and thus seek immediately to
 the second block, and so on.
 
 The BAM indexing scheme records read positions using a 64 bit
-'virtual offset', comprising coffset << 16 | uoffset, where coffset
+'virtual offset', comprising ``coffset << 16 | uoffset``, where ``coffset``
 is the file offset of the BGZF block containing the start of the read
-(unsigned integer using up to 64-16 = 48 bits), and uoffset is the
+(unsigned integer using up to 64-16 = 48 bits), and ``uoffset`` is the
 offset within the (decompressed) block (unsigned 16 bit integer).
 
 This limits you to BAM files where the last block starts by 2^48
@@ -80,13 +76,11 @@ bytes, or 256 petabytes, and the decompressed size of each block
 is at most 2^16 bytes, or 64kb. Note that this matches the BGZF
 'BC' field size which limits the compressed size of each block to
 2^16 bytes, allowing for BAM files to use BGZF with no gzip
-compression (useful for intermediate files in memory to reduced
+compression (useful for intermediate files in memory to reduce
 CPU load).
-
 
 Warning about namespaces
 ------------------------
-
 It is considered a bad idea to use "from XXX import ``*``" in Python, because
 it pollutes the namespace. This is a real issue with Bio.bgzf (and the
 standard Python library gzip) because they contain a function called open
@@ -118,9 +112,8 @@ However, what we recommend instead is to use the explicit namespace, e.g.
 Bio.bgzf
 
 
-Example
--------
-
+Examples
+--------
 This is an ordinary GenBank file compressed using BGZF, so it can
 be decompressed using gzip,
 
@@ -404,7 +397,7 @@ def BgzfBlocks(handle):
 
 
 def _load_bgzf_block(handle, text_mode=False):
-    """Internal function to load the next BGZF function (PRIVATE)."""
+    """Load the next BGZF block of compressed data (PRIVATE)."""
     magic = handle.read(4)
     if not magic:
         # End of file
@@ -521,6 +514,7 @@ class BgzfReader(object):
     """
 
     def __init__(self, filename=None, mode="r", fileobj=None, max_cache=100):
+        """Initialize the class."""
         # TODO - Assuming we can seek, check for 28 bytes EOF empty block
         # and if missing warn about possible truncation (as in samtools)?
         if max_cache < 1:
@@ -587,7 +581,7 @@ class BgzfReader(object):
         self._buffers[self._block_start_offset] = self._buffer, block_size
 
     def tell(self):
-        """Returns a 64-bit unsigned BGZF virtual offset."""
+        """Return a 64-bit unsigned BGZF virtual offset."""
         if 0 < self._within_block_offset and \
                 self._within_block_offset == len(self._buffer):
             # Special case where we're right at the end of a (non empty) block.
@@ -626,6 +620,7 @@ class BgzfReader(object):
         return virtual_offset
 
     def read(self, size=-1):
+        """Read method for the BGZF module."""
         if size < 0:
             raise NotImplementedError("Don't be greedy, that could be massive!")
         elif size == 0:
@@ -656,6 +651,7 @@ class BgzfReader(object):
                 return data
 
     def readline(self):
+        """Read a single line for the BGZF file."""
         i = self._buffer.find(self._newline, self._within_block_offset)
         # Three cases to consider,
         if i == -1:
@@ -682,6 +678,7 @@ class BgzfReader(object):
             return data
 
     def __next__(self):
+        """Return the next line."""
         line = self.readline()
         if not line:
             raise StopIteration
@@ -693,33 +690,42 @@ class BgzfReader(object):
             return self.__next__()
 
     def __iter__(self):
+        """Iterate over the lines in the BGZF file."""
         return self
 
     def close(self):
+        """Close BGZF file."""
         self._handle.close()
         self._buffer = None
         self._block_start_offset = None
         self._buffers = None
 
     def seekable(self):
+        """Return True indicating the BGZF supports random access."""
         return True
 
     def isatty(self):
+        """Return True if connected to a TTY device."""
         return False
 
     def fileno(self):
+        """Return integer file descriptor."""
         return self._handle.fileno()
 
     def __enter__(self):
+        """Open a file operable with WITH statement."""
         return self
 
     def __exit__(self, type, value, traceback):
+        """Close a file with WITH statement."""
         self.close()
 
 
 class BgzfWriter(object):
+    """Define a BGZFWriter object."""
 
     def __init__(self, filename=None, mode="w", fileobj=None, compresslevel=6):
+        """Initilize the class."""
         if fileobj:
             assert filename is None
             handle = fileobj
@@ -736,6 +742,7 @@ class BgzfWriter(object):
         self.compresslevel = compresslevel
 
     def _write_block(self, block):
+        """Write provided data to file as a single BGZF compressed block (PRIVATE)."""
         # print("Saving %i bytes" % len(block))
         start_offset = self._handle.tell()
         assert len(block) <= 65536
@@ -771,6 +778,7 @@ class BgzfWriter(object):
         self._handle.write(data)
 
     def write(self, data):
+        """Write method for the class."""
         # TODO - Check bytes vs unicode
         data = _as_bytes(data)
         # block_size = 2**16 = 65536
@@ -787,6 +795,7 @@ class BgzfWriter(object):
                 self._buffer = self._buffer[65536:]
 
     def flush(self):
+        """Flush data explicitally."""
         while len(self._buffer) >= 65536:
             self._write_block(self._buffer[:65535])
             self._buffer = self._buffer[65535:]
@@ -809,23 +818,28 @@ class BgzfWriter(object):
         self._handle.close()
 
     def tell(self):
-        """Returns a BGZF 64-bit virtual offset."""
+        """Return a BGZF 64-bit virtual offset."""
         return make_virtual_offset(self._handle.tell(), len(self._buffer))
 
     def seekable(self):
+        """Return True indicating the BGZF supports random access."""
         # Not seekable, but we do support tell...
         return False
 
     def isatty(self):
+        """Return True if connected to a TTY device."""
         return False
 
     def fileno(self):
+        """Return integer file descriptor."""
         return self._handle.fileno()
 
     def __enter__(self):
+        """Open a file operable with WITH statement."""
         return self
 
     def __exit__(self, type, value, traceback):
+        """Close a file with WITH statement."""
         self.close()
 
 

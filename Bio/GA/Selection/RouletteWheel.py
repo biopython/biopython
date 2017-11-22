@@ -24,21 +24,20 @@ class RouletteWheelSelection(AbstractSelection):
     from the population, and performs mutation and crossover on
     the selected individuals.
     """
+
     def __init__(self, mutator, crossover, repairer=None):
         """Initialize the selector.
 
         Arguments:
+            - mutator - A Mutation object which will perform mutation
+              on an individual.
+            - crossover - A Crossover object which will take two
+              individuals and produce two new individuals which may
+              have had crossover occur.
+            - repairer - A class which can do repair on rearranged genomes
+              to eliminate infeasible individuals. If set at None, so repair
+              will be done.
 
-        o mutator -- A Mutation object which will perform mutation
-        on an individual.
-
-        o crossover -- A Crossover object which will take two
-        individuals and produce two new individuals which may
-        have had crossover occur.
-
-        o repairer -- A class which can do repair on rearranged genomes
-        to eliminate infeasible individuals. If set at None, so repair
-        will be done.
         """
         AbstractSelection.__init__(self, mutator, crossover, repairer)
 
@@ -46,10 +45,10 @@ class RouletteWheelSelection(AbstractSelection):
         """Perform selection on the population based using a Roulette model.
 
         Arguments:
+            - population - A population of organisms on which we will perform
+              selection. The individuals are assumed to have fitness values which
+              are due to their current genome.
 
-        o population -- A population of organisms on which we will perform
-        selection. The individuals are assumed to have fitness values which
-        are due to their current genome.
         """
         # set up the current probabilities for selecting organisms
         # from the population
@@ -93,20 +92,21 @@ class RouletteWheelSelection(AbstractSelection):
         This creates a fitness proportional 'wheel' that will be used for
         selecting based on random numbers.
 
-        Returns:
+        Return value:
 
-        o A dictionary where the keys are the 'high' value that an
+        A dictionary where the keys are the 'high' value that an
         individual will be selected. The low value is determined by
         the previous key in a sorted list of keys. For instance, if we
-        have a sorted list of keys like:
+        have a sorted list of keys like::
 
-        [.1, .3, .7, 1]
+            [.1, .3, .7, 1]
 
         Then the individual whose key is .1 will be selected if a number
         between 0 and .1 is chosen, the individual whose key is .3 will
         be selected if the number is between .1 and .3, and so on.
 
         The values of the dictionary are the organism instances.
+
         """
         # first sum up the total fitness in the population
         total_fitness = 0

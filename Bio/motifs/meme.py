@@ -12,10 +12,10 @@ from Bio import motifs
 
 
 def read(handle):
-    """Parses the text output of the MEME program into a meme.Record object.
+    """Parse the text output of the MEME program into a meme.Record object.
 
-    Example:
-
+    Examples
+    --------
     >>> from Bio.motifs import meme
     >>> with open("meme.output.txt") as f:
     ...     record = meme.read(f)
@@ -31,7 +31,7 @@ def read(handle):
     __read_sequences(record, handle)
     __read_command(record, handle)
     for line in handle:
-        if line.startswith('MOTIF  1'):
+        if line.startswith('MOTIF '):
             break
     else:
         raise ValueError('Unexpected end of stream')
@@ -67,7 +67,9 @@ class Motif(motifs.Motif):
     This includes the motif name, the evalue for a motif, and its number
     of occurrences.
     """
+
     def __init__(self, alphabet=None, instances=None):
+        """Initialize the class."""
         motifs.Motif.__init__(self, alphabet, instances)
         self.evalue = 0.0
         self.num_occurrences = 0
@@ -75,9 +77,10 @@ class Motif(motifs.Motif):
 
 
 class Instance(Seq.Seq):
-    """A class describing the instances of a MEME motif, and the data thereof.
-    """
+    """A class describing the instances of a MEME motif, and the data thereof."""
+
     def __init__(self, *args, **kwds):
+        """Initialize the class."""
         Seq.Seq.__init__(self, *args, **kwds)
         self.sequence_name = ""
         self.start = 0
@@ -109,7 +112,7 @@ class Record(list):
     """
 
     def __init__(self):
-        """__init__ (self)"""
+        """Initialize."""
         self.version = ""
         self.datafile = ""
         self.command = ""
@@ -144,7 +147,9 @@ def __read_datafile(record, handle):
         if line.startswith('TRAINING SET'):
             break
     else:
-        raise ValueError("Unexpected end of stream: 'TRAINING SET' not found.")
+        raise ValueError(
+            "Unexpected end of stream: 'TRAINING SET' not found. This can happen with " +
+            "minimal MEME files (MEME databases) which are not supported yet.")
     try:
         line = next(handle)
     except StopIteration:
@@ -173,6 +178,8 @@ def __read_alphabet(record, handle):
     line = line.replace('ALPHABET= ', '')
     if line == 'ACGT':
         al = IUPAC.unambiguous_dna
+    elif line == 'ACGU':
+        al = IUPAC.unambiguous_rna
     else:
         al = IUPAC.protein
     record.alphabet = al
@@ -219,10 +226,15 @@ def __read_motif_statistics(line):
     #    MOTIF  1        width =  19  sites =   3  llr = 43  E-value = 6.9e-002
     # or like
     #    MOTIF  1 MEME    width =  19  sites =   3  llr = 43  E-value = 6.9e-002
+    # or in v 4.11.4 onwards
+    #    MOTIF ATTATAAAAAAA MEME-1	width =  12  sites =   5  llr = 43  E-value = 1.9e-003
     words = line.split()
     assert words[0] == 'MOTIF'
-    motif_number = int(words[1])
-    if words[2] == 'MEME':
+    if words[2][:5] == 'MEME-':
+        motif_number = int(words[2].split('-')[1])
+    else:
+        motif_number = int(words[1])
+    if words[2].startswith('MEME'):
         key_values = words[3:]
     else:
         key_values = words[2:]

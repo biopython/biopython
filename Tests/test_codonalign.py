@@ -14,7 +14,7 @@ from Bio import SeqIO
 from Bio import AlignIO
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.Alphabet import IUPAC
+from Bio.Alphabet import IUPAC, Gapped
 from Bio.Align import MultipleSeqAlignment
 from Bio.Data import CodonTable
 
@@ -85,8 +85,9 @@ class TestBuildAndIO(unittest.TestCase):
                     warnings.simplefilter('ignore')
                     caln = codonalign.build(prot, nucl, alphabet=codonalign.default_codon_alphabet)
             elif i[1] == 'index':
+                # Deliberately using a fancy protein alphabet for testing:
                 nucl = SeqIO.index(i[0][0], 'fasta', alphabet=IUPAC.IUPACUnambiguousDNA())
-                prot = AlignIO.read(i[0][1], 'clustal', alphabet=IUPAC.protein)
+                prot = AlignIO.read(i[0][1], 'clustal', alphabet=Gapped(IUPAC.ExtendedIUPACProtein()))
                 with warnings.catch_warnings():
                     warnings.simplefilter('ignore')
                     caln = codonalign.build(prot, nucl, alphabet=codonalign.default_codon_alphabet, max_score=20)
@@ -198,6 +199,36 @@ class Test_dn_ds(unittest.TestCase):
         except ImportError:
             # TODO - Show a warning?
             pass
+
+    def test_dn_ds_matrix(self):
+        # NG86 method with default codon table
+        dn_correct = [0, 0.02090783050583131, 0, 0.6115239249238438, 0.6102203266798018, 0, 0.6140350835631757, 0.6040168621204747, 0.041180350405913294, 0, 0.6141532531400524, 0.6018263135601294, 0.06701051445629494, 0.061470360954086874, 0, 0.6187088340904762, 0.6068687248870475, 0.07386903034833081, 0.07357890927918581, 0.05179847072570129, 0]
+        ds_correct = [0, 0.01783718763890243, 0, 2.9382055377913687, 3.0375115405379267, 0, 2.008913071877126, 2.0182088023715616, 0.5638033197005285, 0, 2.771425931736778, 2.7353083173058295, 0.6374483799734671, 0.723542095485497, 0, -1, -1, 0.953865978141643, 1.182154857347706, 0.843182957978177, 0]
+        dn, ds = self.aln.get_dn_ds_matrix()
+        dn_list = []
+        for i in dn.matrix:
+            dn_list.extend(i)
+        for dn_cal, dn_corr in zip(dn_list, dn_correct):
+            self.assertAlmostEqual(round(dn_cal, 4), round(dn_corr, 4), places=4)
+        ds_list = []
+        for i in ds.matrix:
+            ds_list.extend(i)
+        for ds_cal, ds_corr in zip(ds_list, ds_correct):
+            self.assertAlmostEqual(round(ds_cal, 4), round(ds_corr, 4), places=4)
+        # YN00 method with user specified codon table
+        dn_correct = [0, 0.019701773284646867, 0, 0.6109649819852769, 0.6099903856901369, 0, 0.6114499930666559, 0.6028068208599121, 0.045158286242251426, 0, 0.6151835071687592, 0.6053227393422296, 0.07034397741651377, 0.06956967795096626, 0, 0.6103850655769698, 0.5988716898831496, 0.07905930042150053, 0.08203052937107111, 0.05659346894088538, 0]
+        ds_correct = [0, 0.01881718550096053, 0, 1.814457265482046, 1.8417575124882066, 0, 1.5627041719628896, 1.563930819079887, 0.4748890153032888, 0, 1.6754828466084355, 1.6531212012501901, 0.5130923627791538, 0.5599667707191436, 0, 2.0796114236540943, 2.1452591651827304, 0.7243066372971764, 0.8536617406770075, 0.6509203399899367, 0]
+        dn, ds = self.aln.get_dn_ds_matrix(method="LWL85", codon_table=CodonTable.unambiguous_dna_by_id[3])
+        dn_list = []
+        for i in dn.matrix:
+            dn_list.extend(i)
+        for dn_cal, dn_corr in zip(dn_list, dn_correct):
+            self.assertAlmostEqual(round(dn_cal, 4), round(dn_corr, 4), places=4)
+        ds_list = []
+        for i in ds.matrix:
+            ds_list.extend(i)
+        for ds_cal, ds_corr in zip(ds_list, ds_correct):
+            self.assertAlmostEqual(round(ds_cal, 4), round(ds_corr, 4), places=4)
 
 
 from run_tests import is_numpy

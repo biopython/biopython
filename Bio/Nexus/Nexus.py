@@ -56,7 +56,9 @@ class CharBuffer(object):
 
     This class is not intended for public use (any more).
     """
+
     def __init__(self, string):
+        """Initialize the class."""
         if string:
             self.buffer = list(string)
         else:
@@ -76,6 +78,7 @@ class CharBuffer(object):
             return None
 
     def __next__(self):
+        """Iterates over NEXUS characters in the file."""
         if self.buffer:
             return self.buffer.pop(0)
         else:
@@ -87,6 +90,7 @@ class CharBuffer(object):
             return self.__next__()
 
     def next_nonwhitespace(self):
+        """Checks for next non whitespace character in NEXUS file."""
         while True:
             p = next(self)
             if p is None:
@@ -96,10 +100,15 @@ class CharBuffer(object):
         return None
 
     def skip_whitespace(self):
+        """Skips whitespace characters in NEXUS file."""
         while self.buffer[0] in WHITESPACE:
             self.buffer = self.buffer[1:]
 
     def next_until(self, target):
+        """Keeps iterating the NEXUS file until it reaches a target character.
+
+        Returns the word found in the NEXUS file.
+        """
         for t in target:
             try:
                 pos = self.buffer.index(t)
@@ -113,6 +122,7 @@ class CharBuffer(object):
             return None
 
     def peek_word(self, word):
+        """Returns a word stored in the buffer."""
         return ''.join(self.buffer[:len(word)]) == word
 
     def next_word(self):
@@ -163,7 +173,9 @@ class StepMatrix(object):
 
     See Wheeler (1990), Cladistics 6:269-275.
     """
+
     def __init__(self, symbols, gap):
+        """Initialize the class."""
         self.data = {}
         self.symbols = sorted(symbols)
         if gap:
@@ -173,6 +185,7 @@ class StepMatrix(object):
                 self.set(x, y, 0)
 
     def set(self, x, y, value):
+        """Swaps the value."""
         if x > y:
             x, y = y, x
         self.data[x + y] = value
@@ -199,6 +212,7 @@ class StepMatrix(object):
         return self
 
     def smprint(self, name='your_name_here'):
+        """Prints a stepmatrix."""
         matrix = 'usertype %s stepmatrix=%d\n' % (name, len(self.symbols))
         matrix += '        %s\n' % '        '.join(self.symbols)
         for x in self.symbols:
@@ -380,10 +394,10 @@ def combine(matrices):
         for t in m_only:
             combined.matrix[t] = Seq(combined.missing * combined.nchar,
                                      combined.alphabet) + \
-                                Seq(str(m.matrix[t])
-                                    .replace(m.gap, combined.gap)
-                                    .replace(m.missing, combined.missing),
-                                    combined.alphabet)
+                Seq(str(m.matrix[t])
+                    .replace(m.gap, combined.gap)
+                    .replace(m.missing, combined.missing),
+                    combined.alphabet)
         combined.taxlabels.extend(m_only)    # new taxon list
         for cn, cs in m.charsets.items():  # adjust character sets for new matrix
             combined.charsets['%s.%s' % (n, cn)] = [x + combined.nchar for x in cs]
@@ -486,15 +500,15 @@ def _adjust_lines(lines):
     (except matrix command line)
     """
     formatted_lines = []
-    for l in lines:
+    for line in lines:
         # Convert line endings
-        l = l.replace('\r\n', '\n').replace('\r', '\n').strip()
-        if l.lower().startswith('matrix'):
-            formatted_lines.append(l)
+        line = line.replace('\r\n', '\n').replace('\r', '\n').strip()
+        if line.lower().startswith('matrix'):
+            formatted_lines.append(line)
         else:
-            l = l.replace('\n', ' ')
-            if l:
-                formatted_lines.append(l)
+            line = line.replace('\n', ' ')
+            if line:
+                formatted_lines.append(line)
     return formatted_lines
 
 
@@ -520,6 +534,7 @@ class Commandline(object):
     """Represent a commandline as command and options."""
 
     def __init__(self, line, title):
+        """Initialize the class."""
         self.options = {}
         options = []
         self.command = None
@@ -555,7 +570,9 @@ class Commandline(object):
 
 class Block(object):
     """Represent a NEXUS block with block name and list of commandlines."""
+
     def __init__(self, title=None):
+        """Initialize the class."""
         self.title = title
         self.commandlines = []
 
@@ -563,6 +580,7 @@ class Block(object):
 class Nexus(object):
 
     def __init__(self, input=None):
+        """Initialize the class."""
         self.ntax = 0                   # number of taxa
         self.nchar = 0                  # number of characters
         self.unaltered_taxlabels = []   # taxlabels as the appear in the input file (incl. duplicates, etc.)
@@ -836,6 +854,7 @@ class Nexus(object):
         return nextaxa.get(nexid)
 
     def _charlabels(self, options):
+        """Get labels for characters."""
         self.charlabels = {}
         opts = CharBuffer(options)
         while True:
@@ -920,6 +939,7 @@ class Nexus(object):
         pass
 
     def _matrix(self, options):
+        """Creates a matrix for NEXUS object (PRIVATE)."""
         if not self.ntax or not self.nchar:
             raise NexusError('Dimensions must be specified before matrix!')
         self.matrix = {}
@@ -927,11 +947,11 @@ class Nexus(object):
         first_matrix_block = True
 
         # eliminate empty lines and leading/trailing whitespace
-        lines = [l.strip() for l in options.split('\n') if l.strip() != '']
+        lines = [_.strip() for _ in options.split('\n') if _.strip() != '']
         lineiter = iter(lines)
         while True:
             try:
-                l = next(lineiter)
+                line = next(lineiter)
             except StopIteration:
                 if taxcount < self.ntax:
                     raise NexusError('Not enough taxa in matrix.')
@@ -948,22 +968,22 @@ class Nexus(object):
                     taxcount = 1
                     first_matrix_block = False
             # get taxon name and sequence
-            linechars = CharBuffer(l)
+            linechars = CharBuffer(line)
             id = quotestrip(linechars.next_word())
-            l = linechars.rest().strip()
+            line = linechars.rest().strip()
             chars = ''
             if self.interleave:
                 # interleaved matrix
-                if l:
-                    chars = ''.join(l.split())
+                if line:
+                    chars = ''.join(line.split())
                 else:
                     chars = ''.join(next(lineiter).split())
             else:
                 # non-interleaved matrix
-                chars = ''.join(l.split())
+                chars = ''.join(line.split())
                 while len(chars) < self.nchar:
-                    l = next(lineiter)
-                    chars += ''.join(l.split())
+                    line = next(lineiter)
+                    chars += ''.join(line.split())
 
             # Reformat sequence for non-standard datatypes
             if self.datatype != 'standard':
@@ -1028,6 +1048,7 @@ class Nexus(object):
             "Please Report this as a bug, and send in data file."
 
     def _translate(self, options):
+        """Translates a Nexus file (PRIVATE)."""
         self.translate = {}
         opts = CharBuffer(options)
         while True:
@@ -1090,6 +1111,7 @@ class Nexus(object):
         self.trees.append(tree)
 
     def _apply_block_structure(self, title, lines):
+        """Applies Block structure to the NEXUS file (PRIVATE)."""
         block = Block('')
         block.title = title
         for line in lines:
@@ -1097,14 +1119,17 @@ class Nexus(object):
         self.structured.append(block)
 
     def _taxset(self, options):
+        """Creates unique taxset (PRIVATE)."""
         name, taxa = self._get_indices(options, set_type=TAXSET)
         self.taxsets[name] = _make_unique(taxa)
 
     def _charset(self, options):
+        """Creates unique character set (PRIVATE)."""
         name, sites = self._get_indices(options, set_type=CHARSET)
         self.charsets[name] = _make_unique(sites)
 
     def _taxpartition(self, options):
+        """Collects taxpartition from a NEXUS file (PRIVATE)."""
         taxpartition = {}
         quotelevel = False
         opts = CharBuffer(options)
@@ -1148,6 +1173,7 @@ class Nexus(object):
         pass
 
     def _charpartition(self, options):
+        """Collects character partition from NEXUS file (PRIVATE)."""
         charpartition = {}
         quotelevel = False
         opts = CharBuffer(options)
@@ -1253,7 +1279,7 @@ class Nexus(object):
                             plain_list.append(start)
             except NexusError:
                 raise
-            except:
+            except Exception:  # FIXME - this seems unwise
                 return None
         return plain_list
 
@@ -1269,6 +1295,7 @@ class Nexus(object):
             Plain numbers are translated in their taxon name, underscores and spaces are considered equal.
             Names are returned unchanged (if plain taxon identifiers), or the names in
             the corresponding taxon set is returned.
+
         """
         identifier = quotestrip(identifier)
         if not set_type:
@@ -1555,9 +1582,9 @@ class Nexus(object):
                     newpartition[sn] = nsp
             if newpartition:
                 setsb.append('taxpartition %s = %s' % (safename(n),
-                             ', '.join('%s: %s' % (safename(sn),
-                                                   ' '.join(safename(x) for x in newpartition[sn]))
-                                       for sn in names if sn in newpartition)))
+                                                       ', '.join('%s: %s' % (safename(sn),
+                                                                             ' '.join(safename(x) for x in newpartition[sn]))
+                                                                 for sn in names if sn in newpartition)))
         # add 'end' and return everything
         setsb.append('end;\n')
         if len(setsb) == 2:  # begin and end only
@@ -1583,7 +1610,8 @@ class Nexus(object):
         """Writes matrix into a PHYLIP file.
 
         Note that this writes a relaxed PHYLIP format file, where the names
-        are not truncated, nor checked for invalid characters."""
+        are not truncated, nor checked for invalid characters.
+        """
         if not filename:
             if '.' in self.filename and self.filename.split('.')[-1].lower() in ['paup', 'nexus', 'nex', 'dat']:
                 filename = '.'.join(self.filename.split('.')[:-1]) + '.phy'
@@ -1754,7 +1782,8 @@ class Nexus(object):
         """
         def _adjust(set, x, d, leftgreedy=False):
             """Adjusts character sets if gaps are inserted, taking care of
-            new gaps within a coherent character set."""
+            new gaps within a coherent character set.
+            """
             # if 3 gaps are inserted at pos. 9 in a set that looks like 1 2 3  8 9 10 11 13 14 15
             # then the adjusted set will be 1 2 3  8 9 10 11 12 13 14 15 16 17 18
             # but inserting into position 8 it will stay like 1 2 3 11 12 13 14 15 16 17 18

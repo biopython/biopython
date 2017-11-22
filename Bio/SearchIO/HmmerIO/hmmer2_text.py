@@ -36,6 +36,7 @@ class Hmmer2TextParser(object):
     """Iterator for the HMMER 2.0 text output."""
 
     def __init__(self, handle):
+        """Initialize the class."""
         self.handle = handle
         self.buf = []
         self._meta = self.parse_preamble()
@@ -107,7 +108,7 @@ class Hmmer2TextParser(object):
         """Parse a HMMER2 query block."""
         while self.read_next():
             if not self.line.startswith('Query'):
-                raise StopIteration()
+                return
             _, id_ = self.parse_key_value()
             self.qresult = QueryResult(id=id_)
 
@@ -301,7 +302,6 @@ class Hmmer2TextParser(object):
 
 
 class Hmmer2TextIndexer(_BaseHmmerTextIndexer):
-
     """Indexer for hmmer2-text format."""
 
     _parser = Hmmer2TextParser
@@ -341,6 +341,7 @@ class Hmmer2TextIndexer(_BaseHmmerTextIndexer):
                 break
 
             line = read_forward(handle)
+
 
 # if not used as a module, run the doctest
 if __name__ == "__main__":

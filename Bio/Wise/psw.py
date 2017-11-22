@@ -3,7 +3,8 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 #
-"""
+"""Run and process output from the Wise2 package tool psw.
+
 Bio.Wise contains modules for running and processing the output of
 some of the models in the Wise2 package by Ewan Birney available from:
 ftp://ftp.ebi.ac.uk/pub/software/unix/wise2/
@@ -48,6 +49,7 @@ class AlignmentColumn(list):
             self.kind = column_unit.kind
 
     def __init__(self, column_unit):
+        """Initialize the class."""
         assert column_unit.unit == 0
         self.kind = column_unit.kind
         list.__init__(self, [column_unit.column, None])
@@ -67,6 +69,7 @@ class AlignmentColumn(list):
 
 class ColumnUnit(object):
     def __init__(self, unit, column, kind):
+        """Initialize the class."""
         self.unit = unit
         self.column = column
         self.kind = kind
@@ -76,11 +79,13 @@ class ColumnUnit(object):
 
     __repr__ = __str__
 
+
 _re_unit = re.compile(r"^Unit +([01])- \[ *(-?\d+)- *(-?\d+)\] \[(\w+)\]$")
 
 
 def parse_line(line):
-    """
+    """Parse a line from psw.
+
     >>> print(parse_line("Column 0:"))
     None
     >>> parse_line("Unit  0- [  -1-   0] [SEQUENCE]")
@@ -147,7 +152,9 @@ def _test(*args, **keywds):
     import doctest
     doctest.testmod(sys.modules[__name__], *args, **keywds)
 
+
 if __name__ == "__main__":
     if __debug__:
         _test()
+        """Initialize the class."""
     main()

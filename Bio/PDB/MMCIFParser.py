@@ -3,7 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""mmCIF parsers"""
+"""mmCIF parsers."""
 
 from __future__ import print_function
 
@@ -35,6 +35,7 @@ class MMCIFParser(object):
          - QUIET - Evaluated as a Boolean. If true, warnings issued in constructing
            the SMCRA data will be suppressed. If false (DEFAULT), they will be shown.
            These warnings might be indicative of problems in the mmCIF file!
+
         """
         if structure_builder is not None:
             self._structure_builder = structure_builder
@@ -54,6 +55,7 @@ class MMCIFParser(object):
         Arguments:
          - structure_id - string, the id that will be used for the structure
          - filename - name of the mmCIF file OR an open filehandle
+
         """
         with warnings.catch_warnings():
             if self.QUIET:
@@ -66,6 +68,12 @@ class MMCIFParser(object):
     # Private methods
 
     def _build_structure(self, structure_id):
+
+        # two special chars as placeholders in the mmCIF format
+        # for item values that cannot be explicitly assigned
+        # see: pdbx/mmcif syntax web page
+        _unassigned = set(('.', '?'))
+
         mmcif_dict = self._mmcif_dict
         atom_id_list = mmcif_dict["_atom_site.label_atom_id"]
         residue_id_list = mmcif_dict["_atom_site.label_comp_id"]
@@ -73,7 +81,6 @@ class MMCIFParser(object):
             element_list = mmcif_dict["_atom_site.type_symbol"]
         except KeyError:
             element_list = None
-        seq_id_list = mmcif_dict["_atom_site.label_seq_id"]
         chain_id_list = mmcif_dict["_atom_site.auth_asym_id"]
         x_list = [float(x) for x in mmcif_dict["_atom_site.Cartn_x"]]
         y_list = [float(x) for x in mmcif_dict["_atom_site.Cartn_y"]]
@@ -132,11 +139,11 @@ class MMCIFParser(object):
             resname = residue_id_list[i]
             chainid = chain_id_list[i]
             altloc = alt_list[i]
-            if altloc == ".":
+            if altloc in _unassigned:
                 altloc = " "
             int_resseq = int(seq_id_list[i])
             icode = icode_list[i]
-            if icode == "?":
+            if icode in _unassigned:
                 icode = " "
             name = atom_id_list[i]
             # occupancy & B factor
@@ -150,7 +157,10 @@ class MMCIFParser(object):
                 raise PDBConstructionException("Invalid or missing occupancy")
             fieldname = fieldname_list[i]
             if fieldname == "HETATM":
-                hetatm_flag = "H"
+                if resname == "HOH" or resname == "WAT":
+                    hetatm_flag = "W"
+                else:
+                    hetatm_flag = "H"
             else:
                 hetatm_flag = " "
 
@@ -183,7 +193,7 @@ class MMCIFParser(object):
                 structure_builder.init_residue(resname, hetatm_flag, int_resseq, icode)
 
             coord = numpy.array((x, y, z), 'f')
-            element = element_list[i] if element_list else None
+            element = element_list[i].upper() if element_list else None
             structure_builder.init_atom(name, coord, tempfactor, occupancy, altloc,
                 name, element=element)
             if aniso_flag == 1:
@@ -230,6 +240,7 @@ class FastMMCIFParser(object):
          - QUIET - Evaluated as a Boolean. If true, warnings issued in constructing
            the SMCRA data will be suppressed. If false (DEFAULT), they will be shown.
            These warnings might be indicative of problems in the mmCIF file!
+
         """
         if structure_builder is not None:
             self._structure_builder = structure_builder
@@ -248,6 +259,7 @@ class FastMMCIFParser(object):
         Arguments:
          - structure_id - string, the id that will be used for the structure
          - filename - name of the mmCIF file OR an open filehandle
+
         """
         with warnings.catch_warnings():
             if self.QUIET:
@@ -260,6 +272,11 @@ class FastMMCIFParser(object):
     # Private methods
 
     def _build_structure(self, structure_id, filehandle):
+
+        # two special chars as placeholders in the mmCIF format
+        # for item values that cannot be explicitly assigned
+        # see: pdbx/mmcif syntax web page
+        _unassigned = set(('.', '?'))
 
         # Read only _atom_site. and atom_site_anisotrop entries
         read_atom, read_aniso = False, False
@@ -299,7 +316,6 @@ class FastMMCIFParser(object):
         except KeyError:
             element_list = None
 
-        seq_id_list = mmcif_dict["_atom_site.label_seq_id"]
         chain_id_list = mmcif_dict["_atom_site.auth_asym_id"]
 
         x_list = [float(x) for x in mmcif_dict["_atom_site.Cartn_x"]]
@@ -364,11 +380,11 @@ class FastMMCIFParser(object):
             resname = residue_id_list[i]
             chainid = chain_id_list[i]
             altloc = alt_list[i]
-            if altloc == ".":
+            if altloc in _unassigned:
                 altloc = " "
             int_resseq = int(seq_id_list[i])
             icode = icode_list[i]
-            if icode == "?":
+            if icode in _unassigned:
                 icode = " "
             name = atom_id_list[i].strip('"')  # Remove occasional " from quoted atom names (e.g. xNA)
 
@@ -427,21 +443,3 @@ class FastMMCIFParser(object):
                 mapped_anisou = [float(x) for x in u]
                 anisou_array = numpy.array(mapped_anisou, 'f')
                 structure_builder.set_anisou(anisou_array)
-
-if __name__ == "__main__":
-    import sys
-
-    if len(sys.argv) != 2:
-        print("Usage: python MMCIFparser.py filename")
-        raise SystemExit
-    filename = sys.argv[1]
-
-    p = MMCIFParser()
-
-    structure = p.get_structure("test", filename)
-
-    for model in structure.get_list():
-        print(model)
-        for chain in model.get_list():
-            print(chain)
-            print("Found %d residues." % len(chain.get_list()))

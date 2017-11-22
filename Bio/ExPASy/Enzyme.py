@@ -4,21 +4,18 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""
-This module provides code to work with the enzyme.dat file from
-Enzyme.
-http://www.expasy.ch/enzyme/
+"""Parse the enzyme.dat file from Enzyme at ExPASy.
+
+See https://www.expasy.org/enzyme/
 
 Tested with the release of 03-Mar-2009.
 
 Functions:
-
-    - read       Reads a file containing one ENZYME entry
-    - parse      Reads a file containing multiple ENZYME entries
+ - read       Reads a file containing one ENZYME entry
+ - parse      Reads a file containing multiple ENZYME entries
 
 Classes:
-
-    - Record     Holds ENZYME data.
+ - Record     Holds ENZYME data.
 
 """
 
@@ -29,7 +26,9 @@ def parse(handle):
     This function is for parsing ENZYME files containing multiple
     records.
 
-    handle   - handle to the file.
+    Arguments:
+     - handle   - handle to the file.
+
     """
     while True:
         record = __read(handle)
@@ -44,7 +43,9 @@ def read(handle):
     This function is for parsing ENZYME files containing
     exactly one record.
 
-    handle   - handle to the file.
+    Arguments:
+     - handle   - handle to the file.
+
     """
     record = __read(handle)
     # We should have reached the end of the record by now
@@ -55,10 +56,10 @@ def read(handle):
 
 
 class Record(dict):
-    """\
-Holds information from an ExPASy ENZYME record as a Python dictionary.
+    """Holds information from an ExPASy ENZYME record as a Python dictionary.
 
-Each record contains the following keys:
+    Each record contains the following keys:
+
     - ID: EC number
     - DE: Recommended name
     - AN: Alternative names (if any)
@@ -69,9 +70,11 @@ Each record contains the following keys:
     - DR: Pointers to the Swiss-Prot protein sequence entrie(s)
       that correspond to the enzyme (if any)
     - CC: Comments
-"""
+
+    """
 
     def __init__(self):
+        """Initialize the class."""
         dict.__init__(self)
         self["ID"] = ''
         self["DE"] = ''
@@ -94,15 +97,15 @@ Each record contains the following keys:
             return "%s ( )" % (self.__class__.__name__)
 
     def __str__(self):
-        output = "ID: " + self["ID"]
-        output += " DE: " + self["DE"]
-        output += " AN: " + repr(self["AN"])
-        output += " CA: '" + self["CA"] + "'"
-        output += " CF: " + self["CF"]
-        output += " CC: " + repr(self["CC"])
-        output += " PR: " + repr(self["PR"])
-        output += " DR: %d Records" % len(self["DR"])
-        return output
+        output = ["ID: " + self["ID"],
+                  "DE: " + self["DE"],
+                  "AN: " + repr(self["AN"]),
+                  "CA: '" + self["CA"] + "'",
+                  "CF: " + self["CF"],
+                  "CC: " + repr(self["CC"]),
+                  "PR: " + repr(self["PR"]),
+                  "DR: %d Records" % len(self["DR"])]
+        return "\n".join(output)
 
 # Everything below is private
 

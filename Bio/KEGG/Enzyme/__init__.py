@@ -7,10 +7,10 @@
 """Code to work with the KEGG Enzyme database.
 
 Functions:
-parse - Returns an iterator giving Record objects.
+ - parse - Returns an iterator giving Record objects.
 
 Classes:
-Record               -- Holds the information from a KEGG Enzyme record.
+ - Record - Holds the information from a KEGG Enzyme record.
 """
 
 from __future__ import print_function
@@ -35,29 +35,28 @@ struct_wrap = lambda indent: [indent, "", ("  ", "", 1, 1)]
 class Record(object):
     """Holds info from a KEGG Enzyme record.
 
-    Members:
-    entry       The EC number (withou the 'EC ').
-    name        A list of the enzyme names.
-    classname   A list of the classification terms.
-    sysname     The systematic name of the enzyme.
-    reaction    A list of the reaction description strings.
-    substrate   A list of the substrates.
-    product     A list of the products.
-    inhibitor   A list of the inhibitors.
-    cofactor    A list of the cofactors.
-    effector    A list of the effectors.
-    comment     A list of the comment strings.
-    pathway     A list of 3-tuples: (database, id, pathway)
-    genes       A list of 2-tuples: (organism, list of gene ids)
-    disease     A list of 3-tuples: (database, id, disease)
-    structures  A list of 2-tuples: (database, list of struct ids)
-    dblinks     A list of 2-tuples: (database, list of db ids)
-    """
-    def __init__(self):
-        """__init___(self)
+    Attributes:
+     - entry       The EC number (withou the 'EC ').
+     - name        A list of the enzyme names.
+     - classname   A list of the classification terms.
+     - sysname     The systematic name of the enzyme.
+     - reaction    A list of the reaction description strings.
+     - substrate   A list of the substrates.
+     - product     A list of the products.
+     - inhibitor   A list of the inhibitors.
+     - cofactor    A list of the cofactors.
+     - effector    A list of the effectors.
+     - comment     A list of the comment strings.
+     - pathway     A list of 3-tuples: (database, id, pathway)
+     - genes       A list of 2-tuples: (organism, list of gene ids)
+     - disease     A list of 3-tuples: (database, id, disease)
+     - structures  A list of 2-tuples: (database, list of struct ids)
+     - dblinks     A list of 2-tuples: (database, list of db ids)
 
-        Create a new Record.
-        """
+    """
+
+    def __init__(self):
+        """Initialize a new Record."""
         self.entry = ""
         self.name = []
         self.classname = []
@@ -76,10 +75,7 @@ class Record(object):
         self.dblinks = []
 
     def __str__(self):
-        """__str__(self)
-
-        Returns a string representation of this Record.
-        """
+        """Return a string representation of this Record."""
         return self._entry() + \
                self._name() + \
                self._classname() + \
@@ -205,14 +201,14 @@ def parse(handle):
     ...     for record in parse(handle):
     ...         print("%s %s" % (record.entry, record.name[0]))
     ...
-    1.1.1.1 Alcohol dehydrogenase
-    1.1.1.62 Estradiol 17beta-dehydrogenase
-    1.1.1.68 Transferred to EC 1.7.99.5
-    1.6.5.3 NADH dehydrogenase (ubiquinone)
-    1.14.13.28 3,9-Dihydroxypterocarpan 6a-monooxygenase
-    2.4.1.68 Glycoprotein 6-alpha-L-fucosyltransferase
-    3.1.1.6 Acetylesterase
-    2.7.2.1 Acetate kinase
+    1.1.1.1 alcohol dehydrogenase
+    1.1.1.62 17beta-estradiol 17-dehydrogenase
+    1.1.1.68 Transferred to 1.5.1.20
+    1.6.5.3 NADH:ubiquinone reductase (H+-translocating)
+    1.14.13.28 3,9-dihydroxypterocarpan 6a-monooxygenase
+    2.4.1.68 glycoprotein 6-alpha-L-fucosyltransferase
+    3.1.1.6 acetylesterase
+    2.7.2.1 acetate kinase
 
     """
     record = Record()
@@ -260,7 +256,7 @@ def parse(handle):
         elif keyword == "EFFECTOR    ":
             record.effector.append(data.strip(";"))
         elif keyword == "GENES       ":
-            if data[3:5] == ': ':
+            if data[3:5] == ': ' or data[4:6] == ': ':
                 key, values = data.split(":", 1)
                 values = [value.split("(")[0] for value in values.split()]
                 row = (key, values)

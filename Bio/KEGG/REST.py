@@ -22,9 +22,9 @@ requirements are reasonably clear). To avoid risking overloading the service,
 Biopython will only allow three calls per second.
 
 References:
-
 Kanehisa, M. and Goto, S.; KEGG: Kyoto Encyclopedia of Genes and Genomes.
 Nucleic Acids Res. 28, 29-34 (2000).
+
 """
 
 from Bio._py3k import urlopen as _urlopen
@@ -201,11 +201,12 @@ def kegg_get(dbentries, option=None):
 
 
 def kegg_conv(target_db, source_db, option=None):
-    """KEGG conv - convert KEGG identifiers to/from outside identifiers
+    """KEGG conv - convert KEGG identifiers to/from outside identifiers.
 
-    target_db - Target database
-    source_db_or_dbentries - source database or database entries
-    option - Can be "turtle" or "n-triple" (string).
+    Arguments:
+     - target_db - Target database
+     - source_db_or_dbentries - source database or database entries
+     - option - Can be "turtle" or "n-triple" (string).
     """
     # http://rest.kegg.jp/conv/<target_db>/<source_db>[/<option>]
     #

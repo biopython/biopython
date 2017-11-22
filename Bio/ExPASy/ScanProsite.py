@@ -20,18 +20,19 @@ class Record(list):
     """
 
     def __init__(self):
+        """Initialize the class."""
         self.n_match = None
         self.n_seq = None
         self.capped = None
         self.warning = None
 
 
-def scan(seq="", mirror='http://www.expasy.org', output='xml', **keywords):
+def scan(seq="", mirror='https://www.expasy.org', output='xml', **keywords):
     """Execute a ScanProsite search.
 
     Arguments:
      - mirror:   The ScanProsite mirror to be used
-                 (default: http://www.expasy.org).
+                 (default: https://www.expasy.org).
      - seq:      The query sequence, or UniProtKB (Swiss-Prot,
                  TrEMBL) accession
      - output:   Format of the search results
@@ -39,7 +40,7 @@ def scan(seq="", mirror='http://www.expasy.org', output='xml', **keywords):
 
     Further search parameters can be passed as keywords; see the
     documentation for programmatic access to ScanProsite at
-    http://www.expasy.org/tools/scanprosite/ScanPrositeREST.html
+    https://www.expasy.org/tools/scanprosite/ScanPrositeREST.html
     for a description of such parameters.
 
     This function returns a handle to the search results returned by
@@ -58,7 +59,7 @@ def scan(seq="", mirror='http://www.expasy.org', output='xml', **keywords):
 
 
 def read(handle):
-    """Parse search results returned by ScanProsite into a Python object"""
+    """Parse search results returned by ScanProsite into a Python object."""
     content_handler = ContentHandler()
     saxparser = Parser()
     saxparser.setContentHandler(content_handler)
@@ -72,6 +73,7 @@ def read(handle):
 class Parser(ExpatParser):
 
     def __init__(self):
+        """Initialize the class."""
         ExpatParser.__init__(self)
         self.firsttime = True
 
@@ -98,6 +100,7 @@ class ContentHandler(handler.ContentHandler):
                "level_tag")
 
     def __init__(self):
+        """Initialize the class."""
         self.element = []
 
     def startElement(self, name, attrs):

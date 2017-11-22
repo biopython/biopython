@@ -32,6 +32,7 @@ class Record(list):
     """
 
     def __init__(self):
+        """Initialize the class."""
         self.sequences = []
         self.version = ""
         self.database = ""
@@ -48,7 +49,7 @@ class Record(list):
 
 
 def read(handle):
-    """read(handle)"""
+    """Parse a MEME format handle as a Record object."""
     record = Record()
     __read_version(record, handle)
     __read_database_and_motifs(record, handle)
@@ -134,6 +135,7 @@ def __read_section_ii(record, handle):
     line = next(handle)
     if not line.startswith('---'):
         raise ValueError("Line does not start with '---':\n%s" % line)
+    sequence = None
     for line in handle:
         if not line.strip():
             break

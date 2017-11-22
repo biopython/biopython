@@ -1024,12 +1024,15 @@ class SffWriter(SequenceWriter):
     """SFF file writer."""
 
     def __init__(self, handle, index=True, xml=None):
-        """Creates the writer object.
+        """Initialize an SFF writer object.
 
-            - handle - Output handle, ideally in binary write mode.
-            - index - Boolean argument, should we try and write an index?
-            - xml - Optional string argument, xml manifest to be recorded in the index
-              block (see function ReadRocheXmlManifest for reading this data).
+        Arguments:
+         - handle - Output handle, ideally in binary write mode.
+         - index - Boolean argument, should we try and write an index?
+         - xml - Optional string argument, xml manifest to be recorded
+           in the index block (see function ReadRocheXmlManifest for
+           reading this data).
+
         """
         _check_mode(handle)
         self.handle = handle
@@ -1311,5 +1314,4 @@ class SffWriter(SequenceWriter):
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest
-
     run_doctest(verbose=0)

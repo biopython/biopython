@@ -67,8 +67,7 @@ class Primer3ParseTest(unittest.TestCase):
         self.assertEqual(primer_info.primers[4].reverse_gc, 40.91)
 
     def test_in_depth_single_parse(self):
-        """Make sure we get info right from a single primer find.
-        """
+        """Make sure we get info right from a single primer find."""
         file = self.test_files[1]
         h = open(file, "r")
         primer_info = Primer3.read(h)
@@ -85,7 +84,7 @@ class Primer3ParseTest(unittest.TestCase):
         self.assertEqual(primer_info.primers[3].forward_start, 253)
 
     def test_internal_oligo_single_parse(self):
-        ''' Make sure we can parse an internal oligo file correctly '''
+        """Make sure we can parse an internal oligo file correctly."""
         # these files are generated when designing hybridization probes.
         file = self.test_files[4]
         h = open(file, "r")
@@ -103,7 +102,7 @@ class Primer3ParseTest(unittest.TestCase):
         self.assertEqual(primer_info.primers[4].internal_gc, 35.00)
 
     def test_mutli_record_fwd(self):
-        """Test parsing multiple primer sets (NirK forward)"""
+        """Test parsing multiple primer sets (NirK forward)."""
         h = open(os.path.join("Emboss", "NirK.primer3"))
         targets = list(Primer3.parse(h))
         h.close()
@@ -241,6 +240,7 @@ class PrimerSearchInputTest(unittest.TestCase):
         self.assertEqual(output,
                          "Test GATC CATG\n"
                          "Test2 AATA TTAT\n")
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)

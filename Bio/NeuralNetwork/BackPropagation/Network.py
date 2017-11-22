@@ -25,15 +25,14 @@ class BasicNetwork(object):
 
     This deals with a Neural Network containing three layers:
 
-    o Input Layer
+    - Input Layer
+    - Hidden Layer
+    - Output Layer
 
-    o Hidden Layer
-
-    o Output Layer
     """
+
     def __init__(self, input_layer, hidden_layer, output_layer):
-        """Initialize the network with the three layers.
-        """
+        """Initialize the network with the three layers."""
         self._input = input_layer
         self._hidden = hidden_layer
         self._output = output_layer
@@ -43,25 +42,21 @@ class BasicNetwork(object):
         """Train the neural network to recognize particular examples.
 
         Arguments:
+         - training_examples -- A list of TrainingExample classes that will
+           be used to train the network.
+         - validation_examples -- A list of TrainingExample classes that
+           are used to validate the network as it is trained. These examples
+           are not used to train so the provide an independent method of
+           checking how the training is doing. Normally, when the error
+           from these examples starts to rise, then it's time to stop
+           training.
+         - stopping_criteria -- A function, that when passed the number of
+           iterations, the training error, and the validation error, will
+           determine when to stop learning.
+         - learning_rate -- The learning rate of the neural network.
+         - momentum -- The momentum of the NN, which describes how much
+           of the prevoious weight change to use.
 
-        o training_examples -- A list of TrainingExample classes that will
-        be used to train the network.
-
-        o validation_examples -- A list of TrainingExample classes that
-        are used to validate the network as it is trained. These examples
-        are not used to train so the provide an independent method of
-        checking how the training is doing. Normally, when the error
-        from these examples starts to rise, then it's time to stop
-        training.
-
-        o stopping_criteria -- A function, that when passed the number of
-        iterations, the training error, and the validation error, will
-        determine when to stop learning.
-
-        o learning_rate -- The learning rate of the neural network.
-
-        o momentum -- The momentum of the NN, which describes how much
-        of the prevoious weight change to use.
         """
         num_iterations = 0
         while True:

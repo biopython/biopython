@@ -8,8 +8,11 @@
 # as part of this package.
 #
 
-"""Update the Rebase emboss files used by Restriction to build the
-Restriction_Dictionary.py module."""
+"""Update the Rebase EMBOSS files.
+
+The Rebase EMBOSS files are used by `ranacompiler.py` to build the updated
+`Restriction_Dictionary.py` module for  `Bio.Restriction`.
+"""
 
 from __future__ import print_function
 
@@ -20,10 +23,10 @@ import optparse
 
 
 try:
-    from urllib import FancyURLopener
+    from urllib import FancyURLopener, urlcleanup
 except ImportError:
     # Python 3
-    from urllib.request import FancyURLopener
+    from urllib.request import FancyURLopener, urlcleanup
 
 from Bio.Restriction.RanaConfig import ftp_proxy, ftp_Rebase, Rebase_name
 from Bio.Restriction.RanaConfig import ftp_emb_e, ftp_emb_s, ftp_emb_r
@@ -50,7 +53,7 @@ class RebaseUpdate(FancyURLopener):
         print('\n Please wait, trying to connect to Rebase\n')
         try:
             self.open(name)
-        except:
+        except Exception:
             raise ConnectionError('Rebase')
         return
 
@@ -61,7 +64,21 @@ class RebaseUpdate(FancyURLopener):
             # filename = os.path.join(Rebase, fn)
             filename = os.path.join(os.getcwd(), fn)
             print('to %s' % filename)
-            self.retrieve(file, filename)
+            try:
+                self.retrieve(file, filename)
+                # The following line is a workaround for an urllib bug in
+                # Python 2.7.11 - 2.7.xx (?). It does not seem to work on
+                # Python 3.xx. Try to remove the line in new Python versions.
+                urlcleanup()
+            except IOError as e:
+                print(e)
+                print('This error is probably due to a non-solved ftp bug in '
+                      'recent Python versions. Please download the emboss '
+                      'files manually from http://rebase.neb.com/rebase/'
+                      'rebase.f37.html and then run ranacompiler.py. Find '
+                      'more details in the Restriction manual.')
+                self.close()
+                return
         self.close()
         return
 

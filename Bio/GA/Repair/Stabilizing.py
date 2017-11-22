@@ -23,27 +23,26 @@ class AmbiguousRepair(object):
     best fitness is someting like '*******'. This repair protects against
     that by changing ambiguous characters into some non-ambiguous gene.
     """
+
     def __init__(self, ambig_finder, num_ambiguous):
         """Initialize the repair class.
 
         Arguments:
+         - ambig_finder - A class implementing the function find_ambiguous
+           which will return a list of all ambiguous positions in a sequence.
+           It also must have the function all_unambiguous, which will return
+           all allowed unambiguous letters.
+         - num_ambiguous - The minimum number of ambiguous items that are
+           allowed in a genome. If there are more than this present, repair
+           will be performed.
 
-        o ambig_finder - A class implementing the function find_ambiguous
-        which will return a list of all ambiguous positions in a sequence.
-        It also must have the function all_unambiguous, which will return
-        all allowed unambiguous letters.
-
-        o num_ambiguous - The minimum number of ambiguous items that are
-        allowed in a genome. If there are more than this present, repair
-        will be performed.
         """
         self._ambig_finder = ambig_finder
         self._num_ambiguous = num_ambiguous
         self._alphabet_letters = ambig_finder.all_unambiguous()
 
     def repair(self, organism):
-        """Perform a repair to remove excess ambiguous genes.
-        """
+        """Perform a repair to remove excess ambiguous genes."""
         new_org = organism.copy()
 
         # start getting rid of ambiguous items

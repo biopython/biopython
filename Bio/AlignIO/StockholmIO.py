@@ -70,7 +70,16 @@ strings, with one character for each letter in the associated sequence:
     -----------------<<<<<<<<-----<<.<<-------->>.>>----------.<<<<<--------->>>>>.-->>>>>>>>---------------
 
 Any general annotation for each row is recorded in the SeqRecord's annotations
-dictionary.  You can output this alignment in many different file formats
+dictionary.  Any per-column annotation for the entire alignment in in the
+alignment's column annotations dictionary, such as the secondary structure
+consensus in this example:
+
+    >>> sorted(align.column_annotations.keys())
+    ['secondary_structure']
+    >>> align.column_annotations["secondary_structure"]
+    '.................<<<<<<<<...<<<<<<<........>>>>>>>........<<<<<<<.......>>>>>>>..>>>>>>>>...............'
+
+You can output this alignment in many different file formats
 using Bio.AlignIO.write(), or the MultipleSeqAlignment object's format method:
 
     >>> print(align.format("fasta"))
@@ -96,6 +105,7 @@ Stockholm file:
     #=GS AE007476.1 AC AE007476.1
     #=GS AE007476.1 DE AE007476.1
     #=GR AE007476.1 SS -----------------<<<<<<<<-----<<.<<-------->>.>>----------.<<<<<--------->>>>>.-->>>>>>>>---------------
+    #=GC SS_cons .................<<<<<<<<...<<<<<<<........>>>>>>>........<<<<<<<.......>>>>>>>..>>>>>>>>...............
     //
     <BLANKLINE>
 
@@ -130,6 +140,33 @@ secondary structure string here, are also sliced:
     AUCGUUUUAC
     >>> print(sub_record.letter_annotations['secondary_structure'])
     -------<<<
+
+Likewise with the alignment object, as long as you are not dropping any rows,
+slicing specific columns of an alignment will slice any per-column-annotations:
+
+    >>> align.column_annotations["secondary_structure"]
+    '.................<<<<<<<<...<<<<<<<........>>>>>>>........<<<<<<<.......>>>>>>>..>>>>>>>>...............'
+    >>> part_align = align[:,10:20]
+    >>> part_align.column_annotations["secondary_structure"]
+    '.......<<<'
+
+You can also see this in the Stockholm output of this partial-alignment:
+
+    >>> print(part_align.format("stockholm"))
+    # STOCKHOLM 1.0
+    #=GF SQ 2
+    AP001509.1 UCAACACUCU
+    #=GS AP001509.1 AC AP001509.1
+    #=GS AP001509.1 DE AP001509.1
+    #=GR AP001509.1 SS -------<<<
+    AE007476.1 AUCGUUUUAC
+    #=GS AE007476.1 AC AE007476.1
+    #=GS AE007476.1 DE AE007476.1
+    #=GR AE007476.1 SS -------<<<
+    #=GC SS_cons .......<<<
+    //
+    <BLANKLINE>
+
 """
 from __future__ import print_function
 
@@ -153,6 +190,9 @@ class StockholmWriter(SequentialAlignmentWriter):
                        "ligand_binding": "LI",
                        "active_site": "AS",
                        "intron": "IN"}
+    # These GC mappings are in addition to *_cons in GR mapping:
+    pfam_gc_mapping = {"reference_annotation": "RF",
+                       "model_mask": "MM"}
     # Following dictionary deliberately does not cover AC, DE or DR
     pfam_gs_mapping = {"organism": "OS",
                        "organism_classification": "OC",
@@ -170,9 +210,6 @@ class StockholmWriter(SequentialAlignmentWriter):
         self._length_of_sequences = alignment.get_alignment_length()
         self._ids_written = []
 
-        # NOTE - For now, the alignment object does not hold any per column
-        # or per alignment annotation - only per sequence.
-
         if count == 0:
             raise ValueError("Must have at least one sequence")
         if self._length_of_sequences == 0:
@@ -182,10 +219,21 @@ class StockholmWriter(SequentialAlignmentWriter):
         self.handle.write("#=GF SQ %i\n" % count)
         for record in alignment:
             self._write_record(record)
+        # This shouldn't be None... but just in case,
+        if alignment.column_annotations:
+            for k, v in sorted(alignment.column_annotations.items()):
+                if k in self.pfam_gc_mapping:
+                    self.handle.write("#=GC %s %s\n" % (self.pfam_gc_mapping[k], v))
+                elif k in self.pfam_gr_mapping:
+                    self.handle.write("#=GC %s %s\n" % (self.pfam_gr_mapping[k] + "_cons", v))
+                else:
+                    # It doesn't follow the PFAM standards, but should we record
+                    # this data anyway?
+                    pass
         self.handle.write("//\n")
 
     def _write_record(self, record):
-        """Write a single SeqRecord to the file"""
+        """Write a single SeqRecord to the file."""
         if self._length_of_sequences != len(record.seq):
             raise ValueError("Sequences must all be the same length")
 
@@ -312,6 +360,9 @@ class StockholmIterator(AlignmentIterator):
                        "LI": "ligand_binding",
                        "AS": "active_site",
                        "IN": "intron"}
+    # These GC mappings are in addition to *_cons in GR mapping:
+    pfam_gc_mapping = {"RF": "reference_annotation",
+                       "MM": "model_mask"}
     # Following dictionary deliberately does not cover AC, DE or DR
     pfam_gs_mapping = {"OS": "organism",
                        "OC": "organism_classification",
@@ -320,6 +371,7 @@ class StockholmIterator(AlignmentIterator):
     _header = None  # for caching lines between __next__ calls
 
     def __next__(self):
+        """Parse the next alignment from the handle."""
         handle = self.handle
 
         if self._header is None:
@@ -346,6 +398,7 @@ class StockholmIterator(AlignmentIterator):
         gs = {}
         gr = {}
         gf = {}
+        gc = {}
         passed_end_alignment = False
         while True:
             line = handle.readline()
@@ -392,7 +445,11 @@ class StockholmIterator(AlignmentIterator):
                 elif line[:5] == '#=GC ':
                     # Generic per-Column annotation, exactly 1 char per column
                     # Format: "#=GC <feature> <exactly 1 char per column>"
-                    pass
+                    feature, text = line[5:].strip().split(None, 2)
+                    if feature not in gc:
+                        gc[feature] = ""
+                    gc[feature] += text.strip()  # append to any previous entry
+                    # Might be interleaved blocks, so can't check length yet
                 elif line[:5] == '#=GS ':
                     # Generic per-Sequence annotation, free text
                     # Format: "#=GS <seqname> <feature> <free text>"
@@ -416,9 +473,7 @@ class StockholmIterator(AlignmentIterator):
                     if feature not in gr[seq_id]:
                         gr[seq_id][feature] = ""
                     gr[seq_id][feature] += text.strip()  # append to any previous entry
-                    # TODO - Should we check the length matches the alignment length?
-                    #       For iterlaced sequences the GR data can be split over
-                    #       multiple lines
+                    # Might be interleaved blocks, so can't check length yet
             # Next line...
 
         assert len(seqs) <= len(ids)
@@ -458,7 +513,20 @@ class StockholmIterator(AlignmentIterator):
 
                 self._populate_meta_data(seq_id, record)
                 records.append(record)
+            for k, v in gc.items():
+                if len(v) != alignment_length:
+                    raise ValueError("%s length %i, expected %i"
+                                     % (k, len(v), alignment_length))
             alignment = MultipleSeqAlignment(records, self.alphabet)
+
+            for k, v in sorted(gc.items()):
+                if k in self.pfam_gc_mapping:
+                    alignment.column_annotations[self.pfam_gc_mapping[k]] = v
+                elif k.endswith("_cons") and k[:-5] in self.pfam_gr_mapping:
+                    alignment.column_annotations[self.pfam_gr_mapping[k[:-5]]] = v
+                else:
+                    # Ignore it?
+                    alignment.column_annotations["GC:" + k] = v
 
             # TODO - Introduce an annotated alignment class?
             # For now, store the annotation a new private property:
@@ -469,7 +537,7 @@ class StockholmIterator(AlignmentIterator):
             raise StopIteration
 
     def _identifier_split(self, identifier):
-        """Returns (name, start, end) string tuple from an identier."""
+        """Return (name, start, end) string tuple from an identier."""
         if '/' in identifier:
             name, start_end = identifier.rsplit("/", 1)
             if start_end.count("-") == 1:
@@ -482,7 +550,7 @@ class StockholmIterator(AlignmentIterator):
         return identifier, None, None
 
     def _get_meta_data(self, identifier, meta_dict):
-        """Takes an itentifier and returns dict of all meta-data matching it.
+        """Take an itentifier and returns dict of all meta-data matching it.
 
         For example, given "Q9PN73_CAMJE/149-220" will return all matches to
         this or "Q9PN73_CAMJE" which the identifier without its /start-end
@@ -499,7 +567,8 @@ class StockholmIterator(AlignmentIterator):
             #=GS Q9PN73_CAMJE OS Campylobacter jejuni
             #=GS Q9PN73_CAMJE OC Bacteria
 
-        This function will return an empty dictionary if no data is found."""
+        This function will return an empty dictionary if no data is found.
+        """
         name, start, end = self._identifier_split(identifier)
         if name == identifier:
             identifier_keys = [identifier]
@@ -515,9 +584,10 @@ class StockholmIterator(AlignmentIterator):
         return answer
 
     def _populate_meta_data(self, identifier, record):
-        """Adds meta-date to a SecRecord's annotations dictionary.
+        """Add meta-date to a SecRecord's annotations dictionary.
 
-        This function applies the PFAM conventions."""
+        This function applies the PFAM conventions.
+        """
         seq_data = self._get_meta_data(identifier, self.seq_annotation)
         for feature in seq_data:
             # Note this dictionary contains lists!

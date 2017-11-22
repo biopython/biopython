@@ -22,7 +22,6 @@ from .hit import Hit
 
 
 class QueryResult(_BaseSearchObject):
-
     """Class representing search results from a single query.
 
     QueryResult is the container object that stores all search hits from a
@@ -185,9 +184,8 @@ class QueryResult(_BaseSearchObject):
     # from this one
     _NON_STICKY_ATTRS = ('_items', '__alt_hit_ids', )
 
-    def __init__(self, hits=(), id=None,
-            hit_key_function=lambda hit: hit.id):
-        """Initializes a QueryResult object.
+    def __init__(self, hits=(), id=None, hit_key_function=None):
+        """Initialize a QueryResult object.
 
         :param id: query sequence ID
         :type id: string
@@ -199,7 +197,7 @@ class QueryResult(_BaseSearchObject):
         """
         # default values
         self._id = id
-        self._hit_key_function = hit_key_function
+        self._hit_key_function = hit_key_function or _hit_key_func
         self._items = OrderedDict()
         self._description = None
         self.__alt_hit_ids = {}
@@ -234,17 +232,17 @@ class QueryResult(_BaseSearchObject):
             return self._items.items()
 
         def iterhits(self):
-            """Returns an iterator over the Hit objects."""
+            """Return an iterator over the Hit objects."""
             for hit in self._items.itervalues():
                 yield hit
 
         def iterhit_keys(self):
-            """Returns an iterator over the ID of the Hit objects."""
+            """Return an iterator over the ID of the Hit objects."""
             for hit_id in self._items:
                 yield hit_id
 
         def iteritems(self):
-            """Returns an iterator yielding tuples of Hit ID and Hit objects."""
+            """Return an iterator yielding tuples of Hit ID and Hit objects."""
             for item in self._items.iteritems():
                 yield item
 
@@ -269,17 +267,17 @@ class QueryResult(_BaseSearchObject):
             return list(self._items.items())
 
         def iterhits(self):
-            """Returns an iterator over the Hit objects."""
+            """Return an iterator over the Hit objects."""
             for hit in self._items.values():
                 yield hit
 
         def iterhit_keys(self):
-            """Returns an iterator over the ID of the Hit objects."""
+            """Return an iterator over the ID of the Hit objects."""
             for hit_id in self._items:
                 yield hit_id
 
         def iteritems(self):
-            """Returns an iterator yielding tuples of Hit ID and Hit objects."""
+            """Return an iterator yielding tuples of Hit ID and Hit objects."""
             for item in self._items.items():
                 yield item
 
@@ -436,7 +434,7 @@ class QueryResult(_BaseSearchObject):
                 del self.__alt_hit_ids[key]
                 deleted = True
             if not deleted:
-                raise KeyError('%r'.format(key))
+                raise KeyError(repr(key))
         return
 
     # properties #
@@ -446,19 +444,20 @@ class QueryResult(_BaseSearchObject):
 
     @property
     def hsps(self):
-        """HSP objects contained in the QueryResult."""
+        """Access the HSP objects contained in the QueryResult."""
         return [hsp for hsp in chain(*self.hits)]
 
     @property
     def fragments(self):
-        """HSPFragment objects contained in the QueryResult."""
+        """Access the HSPFragment objects contained in the QueryResult."""
         return [frag for frag in chain(*self.hsps)]
 
     # public methods #
     def absorb(self, hit):
-        """Adds a Hit object to the end of QueryResult. If the QueryResult
-        already has a Hit with the same ID, append the new Hit's HSPs into
-        the existing Hit.
+        """Add a Hit object to the end of QueryResult.
+
+        If the QueryResult already has a Hit with the same ID, append the new
+        Hit's HSPs into the existing Hit.
 
         :param hit: object to absorb
         :type hit: Hit
@@ -478,7 +477,7 @@ class QueryResult(_BaseSearchObject):
                 self[hit.id].append(hsp)
 
     def append(self, hit):
-        """Adds a Hit object to the end of QueryResult.
+        """Add a Hit object to the end of QueryResult.
 
         :param hit: object to append
         :type hit: Hit
@@ -501,8 +500,7 @@ class QueryResult(_BaseSearchObject):
                     "this QueryResult." % hit_key)
 
     def hit_filter(self, func=None):
-        """Creates a new QueryResult object whose Hit objects pass the filter
-        function.
+        """Create new QueryResult object whose Hit objects pass the filter function.
 
         :param func: filter function
         :type func: callable, accepts Hit, returns bool
@@ -548,8 +546,7 @@ class QueryResult(_BaseSearchObject):
         return obj
 
     def hit_map(self, func=None):
-        """Creates a new QueryResult object, mapping the given function to its
-        Hits.
+        """Create new QueryResult object, mapping the given function to its Hits.
 
         :param func: map function
         :type func: callable, accepts Hit, returns Hit
@@ -604,14 +601,12 @@ class QueryResult(_BaseSearchObject):
         return obj
 
     def hsp_filter(self, func=None):
-        """Creates a new QueryResult object whose HSP objects pass the filter
-        function.
+        """Create new QueryResult object whose HSP objects pass the filter function.
 
         ``hsp_filter`` is the same as ``hit_filter``, except that it filters
         directly on each HSP object in every Hit. If the filtering removes
         all HSP objects in a given Hit, the entire Hit will be discarded. This
         will result in the QueryResult having less Hit after filtering.
-
         """
         hits = [x for x in (hit.filter(func) for hit in self.hits) if x]
         obj = self.__class__(hits, self.id, self._hit_key_function)
@@ -619,12 +614,10 @@ class QueryResult(_BaseSearchObject):
         return obj
 
     def hsp_map(self, func=None):
-        """Creates a new QueryResult object, mapping the given function to its
-        HSPs.
+        """Create new QueryResult object, mapping the given function to its HSPs.
 
         ``hsp_map`` is the same as ``hit_map``, except that it applies the given
         function to all HSP objects in every Hit, instead of the Hit objects.
-
         """
         hits = [x for x in (hit.map(func) for hit in list(self.hits)[:]) if x]
         obj = self.__class__(hits, self.id, self._hit_key_function)
@@ -637,7 +630,7 @@ class QueryResult(_BaseSearchObject):
     __marker = object()
 
     def pop(self, hit_key=-1, default=__marker):
-        """Removes the specified hit key and return the Hit object.
+        """Remove the specified hit key and return the Hit object.
 
         :param hit_key: key of the Hit object to return
         :type hit_key: int or string
@@ -701,7 +694,7 @@ class QueryResult(_BaseSearchObject):
         return default
 
     def index(self, hit_key):
-        """Returns the index of a given hit key, zero-based.
+        """Return the index of a given hit key, zero-based.
 
         :param hit_key: hit ID
         :type hit_key: string
@@ -726,7 +719,7 @@ class QueryResult(_BaseSearchObject):
 
     def sort(self, key=None, reverse=False, in_place=True):
         # no cmp argument to make sort more Python 3-like
-        """Sorts the Hit objects.
+        """Sort the Hit objects.
 
         :param key: sorting function
         :type key: callable, accepts Hit, returns key for sorting
@@ -762,6 +755,14 @@ class QueryResult(_BaseSearchObject):
             obj = self.__class__(sorted_hits, self.id, self._hit_key_function)
             self._transfer_attrs(obj)
             return obj
+
+
+def _hit_key_func(hit):
+    """Map hit to its identifier (PRIVATE).
+
+    Default hit key function for QueryResult.__init__ use.
+    """
+    return hit.id
 
 
 # if not used as a module, run the doctest

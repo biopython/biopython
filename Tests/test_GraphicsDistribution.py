@@ -18,7 +18,7 @@ from Bio import MissingExternalDependencyError
 try:
     import reportlab as r
     del r
-except:
+except ImportError:
     raise MissingExternalDependencyError(
         "Install reportlab if you want to use Bio.Graphics.")
 
@@ -79,6 +79,7 @@ class BarChartTest(unittest.TestCase):
             dist_page.distributions.append(distribution)
 
         dist_page.draw(self.multi_page, "Test Multi Bar Chart")
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)

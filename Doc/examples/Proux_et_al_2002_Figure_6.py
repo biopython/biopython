@@ -3,14 +3,14 @@
 # as part of this package.
 #
 
-"""GenomeDiagram script to mimic Proux et al 2002 Figure 6
+"""GenomeDiagram script to mimic Proux et al 2002 Figure 6.
 
 You can use the Entrez module to download the 3 required GenBank files
 
 This is an extended version of the example in the Biopython Tutorial
 which produces a GenomeDiagram figure close to Proux et al 2002 Figure 6.
 
-See http://dx.doi.org/10.1128/JB.184.21.6026-6036.2002
+See https://doi.org/10.1128/JB.184.21.6026-6036.2002
 """
 from reportlab.lib import colors
 from reportlab.lib.colors import red, grey, orange, green, brown
@@ -46,8 +46,8 @@ A_colors = [red] * 5 + [grey] * 7 + [orange] * 2 + [grey] * 2 + [orange] \
 B_colors = [red] * 6 + [grey] * 8 + [orange] * 2 + [grey] + [orange] \
     + [grey] * 21 + [green] * 5 + [grey] + [brown] * 4 + [blue] * 3 \
     + [lightblue] * 3 + [grey] * 5 + [purple] * 2
-C_colors = [grey] * 30 + [green] * 5 + [brown] * 4 + [blue] * 2 \
-    + [grey, blue] + [lightblue] * 2 + [grey] * 5
+C_colors = [grey] * 33 + [green] * 5 + [brown] * 4 + [blue] * 2 \
+    + [grey, blue] + [lightblue] * 2 + [grey] * 8
 
 # Here we hard code a list of cross-links with percentage identity scores, based
 # on a manual inspection of the target image (there could be mistakes here).

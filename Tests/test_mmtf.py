@@ -1,3 +1,10 @@
+# Copyright 2016 by Anthony Bradley.  All rights reserved.
+# Revisions copyright 2017 by Peter Cock.  All rights reserved.
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
+
 import unittest
 import warnings
 from Bio.PDB.mmtf import MMTFParser
@@ -26,6 +33,8 @@ class ParseMMTF(unittest.TestCase):
                                    mmcif_atom.full_id)  # (structure id, model id, chain id, residue id, atom id)
             self.assertEqual(mmtf_atom.id, mmcif_atom.name)  # id of atom is the atom name (e.g. "CA")
             # self.assertEqual(mmtf_atom.serial_number,mmcif_atom.serial_number) # mmCIF serial number is none
+            self.assertEqual(mmtf_atom - mmtf_atom, 0)
+            self.assertEqual(mmtf_atom - mmcif_atom, 0)
 
     def check_residues(self):
         """Check all residues in self.mmcif_res and self.mmtf_res are equivalent"""
@@ -37,8 +46,8 @@ class ParseMMTF(unittest.TestCase):
             self.assertEqual(mmtf_r.disordered, mmcif_r.disordered)
             self.assertEqual(mmtf_r.resname, mmcif_r.resname)
             self.assertEqual(mmtf_r.segid, mmcif_r.segid)
-            self.mmcif_atoms = [x for x in mmcif_r.get_atom()]
-            self.mmtf_atoms = [x for x in mmtf_r.get_atom()]
+            self.mmcif_atoms = [x for x in mmcif_r.get_atoms()]
+            self.mmtf_atoms = [x for x in mmtf_r.get_atoms()]
             self.check_atoms()
 
     def check_mmtf_vs_cif(self, mmtf_filename, cif_filename):

@@ -36,7 +36,7 @@ warnings.warn("Bio.DocSQL is now deprecated will be removed in a "
 
 try:
     import MySQLdb
-except:
+except ImportError:
     raise MissingPythonDependencyError("Install MySQLdb if you want to use "
                                        "Bio.DocSQL.")
 
@@ -55,6 +55,7 @@ def _check_is_public(name):
 
 class QueryRow(list):
     def __init__(self, cursor):
+        """Initialize the class."""
         try:
             row = cursor.fetchone()
             super(QueryRow, self).__init__(row)
@@ -90,9 +91,8 @@ class QueryRow(list):
 
 
 class Query(object):
-    """
-    SHOW TABLES
-    """
+    """SHOW TABLES."""
+
     MSG_FAILURE = "Failure"
     MSG_SUCCESS = "Success"
     message = "not executed"
@@ -102,6 +102,7 @@ class Query(object):
     row_class = QueryRow
 
     def __init__(self, *args, **keywds):
+        """Initialize the class."""
         try:
             self.connection = keywds['connection']
         except KeyError:
@@ -130,12 +131,14 @@ class Query(object):
 
 class QueryGeneric(Query):
     def __init__(self, statement, *args, **keywds):
+        """Initialize the class."""
         Query.__init__(self, *args, **keywds)
         self.statement = statement,
 
 
 class IterationCursor(object):
     def __init__(self, query, connection=connection):
+        """Initialize the class."""
         if connection is None:
             raise TypeError("database connection is None")
         self.cursor = connection.cursor()
@@ -158,6 +161,7 @@ class QuerySingle(Query, QueryRow):
     ignore_warnings = 0
 
     def __init__(self, *args, **keywds):
+        """Initialize the class."""
         message = self.MSG_FAILURE
         Query.__init__(self, *args, **keywds)
         try:
@@ -174,6 +178,7 @@ class QuerySingle(Query, QueryRow):
 
 class QueryAll(list, Query):
     def __init__(self, *args, **keywds):
+        """Initialize the class."""
         Query.__init__(self, *args, **keywds)
         list.__init__(self, [self.process_row(r) for r in self.cursor().fetchall()])
 
@@ -188,6 +193,7 @@ class QueryAllFirstItem(QueryAll):
 
 class Create(QuerySingle):
     def __init__(self, *args, **keywds):
+        """Initialize the class."""
         try:
             QuerySingle.__init__(self, *args, **keywds)
         except StopIteration:
@@ -202,6 +208,7 @@ class Insert(Create):
     MSG_INTEGRITY_ERROR = "Couldn't insert: %s. "
 
     def __init__(self, *args, **keywds):
+        """Initialize the class."""
         try:
             Create.__init__(self, *args, **keywds)
         except MySQLdb.IntegrityError as error_data:
@@ -226,6 +233,7 @@ class Insert(Create):
 def _test(*args, **keywds):
     import doctest
     doctest.testmod(sys.modules[__name__], *args, **keywds)
+
 
 if __name__ == "__main__":
     if __debug__:

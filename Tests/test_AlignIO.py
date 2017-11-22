@@ -93,6 +93,10 @@ def alignment_summary(alignment, index="  ", vertical_threshold=5):
         for record in alignment:
             answer.append("%s%s %s" % (
                 index, str_summary(str(record.seq)), record.id))
+        for key, value in alignment.column_annotations.items():
+            if isinstance(value, str):
+                answer.append("%s%s %s" %
+                              (index, str_summary(str(value)), key))
     else:
         # Show each sequence row vertically
         for i in range(min(5, alignment_len)):
@@ -210,10 +214,7 @@ def simple_alignment_comparison(alignments, alignments2, format):
 
 # Check Phylip files reject duplicate identifiers.
 def check_phylip_reject_duplicate():
-    """
-    Ensure that attempting to write sequences with duplicate IDs after
-    truncation fails for Phylip format.
-    """
+    """Writing post-truncation duplicated IDs should fail for PHYLIP."""
     handle = StringIO()
     sequences = [SeqRecord(Seq('AAAA'), id='longsequencename1'),
                  SeqRecord(Seq('AAAA'), id='longsequencename2'),

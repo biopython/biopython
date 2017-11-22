@@ -97,9 +97,9 @@ class BwaTestCase(unittest.TestCase):
             self.assertTrue(os.path.exists(index_file),
                             "Index File %s not found"
                             % (index_file))
-        self.assertTrue(stdout.startswith("[bwt_gen]"),
-                        "FASTA indexing failed:\n%s\nStdout:%s"
-                        % (cmdline, stdout))
+        self.assertTrue('Finished constructing BWT' in str(stdout) + str(stderr),
+                        "FASTA indexing failed:\n%s\nStdout:%s\nStderr:%s\n"
+                        % (cmdline, stdout, stderr))
 
     def do_aln(self, in_file, out_file):
         """Test for generating sai files given the reference and read file"""
@@ -108,13 +108,12 @@ class BwaTestCase(unittest.TestCase):
         cmdline.read_file = in_file
         self.assertTrue(os.path.isfile(in_file))
         stdout, stderr = cmdline(stdout=out_file)
-
-        self.assertTrue("fail to locate the index" not in stderr,
-                        "Error aligning sequence to reference:\n%s\nStderr:%s"
-                        % (cmdline, stderr))
+        self.assertTrue("fail to locate the index" not in str(stderr) + str(stdout),
+                        "Error aligning sequence to reference:\n%s\nStdout:%s\nStderr:%s\n"
+                        % (cmdline, stdout, stderr))
 
     def create_fasta_index(self):
-        """Creates index for fasta file.
+        """Test for generating index for fasta file.
 
         BWA requires an indexed fasta for each alignment operation.
         This should be called to create an index before any alignment
@@ -128,7 +127,7 @@ class BwaTestCase(unittest.TestCase):
     if not skip_aln_tests:
 
         def test_samse(self):
-            """Test for single end sequencing """
+            """Test for single end sequencing."""
             self.create_fasta_index()
             self.do_aln(self.infile1, self.saifile1)
             cmdline = BwaSamseCommandline(bwa_exe)
@@ -144,7 +143,7 @@ class BwaTestCase(unittest.TestCase):
                             % (cmdline, headline))
 
         def test_sampe(self):
-            """Test for generating samfile by paired end sequencing"""
+            """Test for generating samfile by paired end sequencing."""
             self.create_fasta_index()
 
             # Generate sai files from paired end data

@@ -8,7 +8,8 @@
 
 # Created: Sat Dec  2 16:02:17 2000
 # thomas@cbs.dtu.dk, http://www.cbs.dtu.dk/thomas
-# File: xbb_blastbg.py
+
+"""BLAST code for graphical Xbbtools tool."""
 
 from __future__ import print_function
 
@@ -97,7 +98,7 @@ class BlastDisplayer(object):
                 txt = fid.read()
                 self.tid.insert('end', txt)
                 self.tid.update()
-            except:
+            except Exception:
                 # text widget is detroyed, we assume the search
                 # has been cancelled
                 pass

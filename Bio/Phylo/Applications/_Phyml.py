@@ -14,8 +14,8 @@ class PhymlCommandline(AbstractCommandline):
 
     Homepage: http://www.atgc-montpellier.fr/phyml
 
-    Citations:
-
+    References
+    ----------
     Guindon S, Gascuel O.
     A simple, fast, and accurate algorithm to estimate large phylogenies by maximum
     likelihood.
@@ -30,6 +30,7 @@ class PhymlCommandline(AbstractCommandline):
     """
 
     def __init__(self, cmd='phyml', **kwargs):
+        """Initialize the class."""
         self.parameters = [
             _Option(['-i', '--input', 'input'],
                     "PHYLIP format input nucleotide or amino-acid sequence filenam.",

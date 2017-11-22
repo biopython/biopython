@@ -1925,13 +1925,13 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(659, hsp.hit_end)
         self.assertEqual('TTTTTTTCCTCCTCC', str(hsp.hit.seq))
         self.assertEqual(-1, hsp.query_strand)
-        # first qresult, eigth hit
+        # first qresult, eighth hit
         hit = qresult[7]
         self.assertEqual('gi|332211538|ref|XM_003254827.1|', hit.id)
         self.assertEqual('PREDICTED: Nomascus leucogenys hemoglobin subunit gamma-1-like, transcript variant 1 (LOC100582529), mRNA', hit.description)
         self.assertEqual(713, hit.seq_len)
         self.assertEqual(1, len(hit))
-        # first qresult, eigth hit, first hsp
+        # first qresult, eighth hit, first hsp
         hsp = qresult[7].hsps[0]
         self.assertEqual(57, hsp.initn_score)
         self.assertEqual(57, hsp.init1_score)
@@ -2568,13 +2568,13 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(835, hsp.hit_end)
         self.assertEqual('VASGRTNQSIMVQWQPPP-----ETEHNGV--LRGYILRYRLAGLPGEYQQRNITSPEVNYCLVTDL', str(hsp.hit.seq))
         self.assertEqual(0, hsp.query_strand)
-        # first qresult, eigth hit
+        # first qresult, eighth hit
         hit = qresult[7]
         self.assertEqual('gi|332864595|ref|XP_518946.3|', hit.id)
         self.assertEqual('PREDICTED: protein sidekick-1 [Pan troglodytes]', hit.description)
         self.assertEqual(2213, hit.seq_len)
         self.assertEqual(2, len(hit))
-        # first qresult, eigth hit, first hsp
+        # first qresult, eighth hit, first hsp
         hsp = qresult[7].hsps[0]
         self.assertEqual(68, hsp.initn_score)
         self.assertEqual(45, hsp.init1_score)
@@ -2593,7 +2593,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(740, hsp.hit_end)
         self.assertEqual('LASPNSS--HSHAVVLSWVRP---FDGNS-----PILY-YIVELSENNSPWKVHLSNVGPEMTGITVSGLTPARTYQ', str(hsp.hit.seq))
         self.assertEqual(0, hsp.query_strand)
-        # first qresult, eigth hit, second hsp
+        # first qresult, eighth hit, second hsp
         hsp = qresult[7].hsps[1]
         self.assertEqual(87, hsp.initn_score)
         self.assertEqual(51, hsp.init1_score)

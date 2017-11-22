@@ -65,11 +65,11 @@ class PrintFormat(object):
     linesize = PrefWidth - NameWidth
 
     def __init__(self):
-        """PrintFormat() -> new PrintFormat Instance"""
+        """Initialise."""
         pass
 
     def print_as(self, what='list'):
-        """PF.print_as([what='list']) -> print the results as specified.
+        """Print the results as specified.
 
         Valid format are:
             'list'      -> alphabetical order
@@ -88,7 +88,7 @@ class PrintFormat(object):
         return
 
     def format_output(self, dct, title='', s1=''):
-        """PF.print_that(dct, [title[, s1]]) -> string nicely formatted.
+        """Summarise results as a nicely formatted string.
 
         Arguments:
          - dct is a dictionary as returned by a RestrictionBatch.search()
@@ -98,7 +98,8 @@ class PrintFormat(object):
            those without sites.
          - s1 must be a formatted string as well.
 
-        The format of print_that is a list."""
+        The format of print_that is a list.
+        """
         if not dct:
             dct = self.results
         ls, nc = [], []
@@ -110,7 +111,7 @@ class PrintFormat(object):
         return self.make_format(ls, title, nc, s1)
 
     def print_that(self, dct, title='', s1=''):
-        """PF.print_that(dct, [title[, s1]]) -> string nicely formatted.
+        """Print the output of the format_output method (OBSOLETE).
 
         Arguments:
          - dct is a dictionary as returned by a RestrictionBatch.search()
@@ -121,12 +122,13 @@ class PrintFormat(object):
          - s1 must be a formatted string as well.
 
         This method prints the output of A.format_output() and it is here
-        for backwards compatibility."""
-        print(format_output(dct, title, s1))
+        for backwards compatibility.
+        """
+        print(self.format_output(dct, title, s1))
         return
 
     def make_format(self, cut=(), title='', nc=(), s1=''):
-        """PF.make_format(cut, nc, title, s) -> string
+        """Virtual method used for formatting results.
 
         Virtual method.
         Here to be pointed to one of the _make_* methods.
@@ -137,9 +139,9 @@ class PrintFormat(object):
 # _make_* methods to be used with the virtual method make_format
 
     def _make_list(self, ls, title, nc, s1):
-        """PF._make_number(ls,title, nc,s1) -> string.
+        """Summarise a list of positions by enzyme (PRIVATE).
 
-        return a string of form::
+        Return a string of form::
 
             title.
 
@@ -155,9 +157,9 @@ class PrintFormat(object):
         return self._make_list_only(ls, title) + self._make_nocut_only(nc, s1)
 
     def _make_map(self, ls, title, nc, s1):
-        """PF._make_number(ls,title, nc,s1) -> string.
+        """Summarise mapping information as a string (PRIVATE).
 
-        return a string of form::
+        Return a string of form::
 
             | title.
             |
@@ -176,7 +178,7 @@ class PrintFormat(object):
         return self._make_map_only(ls, title) + self._make_nocut_only(nc, s1)
 
     def _make_number(self, ls, title, nc, s1):
-        """PF._make_number(ls,title, nc,s1) -> string.
+        """Format cutting position information as a string (PRIVATE).
 
         Returns a string in the form::
 
@@ -200,9 +202,9 @@ class PrintFormat(object):
         return self._make_number_only(ls, title) + self._make_nocut_only(nc, s1)
 
     def _make_nocut(self, ls, title, nc, s1):
-        """PF._make_nocut(ls,title, nc,s1) -> string.
+        """Summarise non-cutting enzymes (PRIVATE).
 
-        return a formatted string of the non cutting enzymes.
+        Return a formatted string of the non cutting enzymes.
 
         ls is a list of cutting enzymes -> will not be used.
         Here for compatibility with make_format.
@@ -215,9 +217,9 @@ class PrintFormat(object):
         return title + self._make_nocut_only(nc, s1)
 
     def _make_nocut_only(self, nc, s1, ls=(), title=''):
-        """PF._make_nocut_only(nc, s1) -> string.
+        """Summarise non-cutting enzymes (PRIVATE).
 
-        return a formatted string of the non cutting enzymes.
+        Return a formatted string of the non cutting enzymes.
 
         Arguments:
          - nc is a tuple or list of non cutting enzymes.
@@ -237,9 +239,9 @@ class PrintFormat(object):
         return stringsite
 
     def _make_list_only(self, ls, title, nc=(), s1=''):
-        """PF._make_list_only(ls, title) -> string.
+        """Summarise list of positions per enzyme (PRIVATE).
 
-        return a string of form::
+        Return a string of form::
 
             title.
 
@@ -257,9 +259,9 @@ class PrintFormat(object):
         return self.__next_section(ls, title)
 
     def _make_number_only(self, ls, title, nc=(), s1=''):
-        """PF._make_number_only(ls, title) -> string.
+        """Summarise number of cuts as a string (PRIVATE).
 
-        return a string of form::
+        Return a string of form::
 
             title.
 
@@ -279,26 +281,25 @@ class PrintFormat(object):
         """
         if not ls:
             return title
-        # TODO: Use key to sort!
-        ls.sort(lambda x, y: cmp(len(x[1]), len(y[1])))
+        ls.sort(key=lambda x: len(x[1]))
         iterator = iter(ls)
         cur_len = 1
         new_sect = []
         for name, sites in iterator:
-            l = len(sites)
-            if l > cur_len:
+            length = len(sites)
+            if length > cur_len:
                 title += "\n\nenzymes which cut %i times :\n\n" % cur_len
                 title = self.__next_section(new_sect, title)
-                new_sect, cur_len = [(name, sites)], l
+                new_sect, cur_len = [(name, sites)], length
                 continue
             new_sect.append((name, sites))
         title += "\n\nenzymes which cut %i times :\n\n" % cur_len
         return self.__next_section(new_sect, title)
 
     def _make_map_only(self, ls, title, nc=(), s1=''):
-        """PF._make_map_only(ls, title) -> string.
+        """Make string describing cutting map (PRIVATE).
 
-        return a string of form::
+        Return a string of form::
 
             | title.
             |
@@ -329,12 +330,12 @@ class PrintFormat(object):
         x, counter, length = 0, 0, len(self.sequence)
         for x in range(60, length, 60):
             counter = x - 60
-            l = []
-            cutloc[counter] = l
+            loc = []
+            cutloc[counter] = loc
             remaining = []
             for key in mapping:
                 if key <= x:
-                    l.append(key)
+                    loc.append(key)
                 else:
                     remaining.append(key)
             mapping = remaining
@@ -353,9 +354,9 @@ class PrintFormat(object):
                 if key == base:
                     for n in enzymemap[key]:
                         s = ' '.join((s, n))
-                    l = line[0:59]
-                    lineo = Join((l, str(key), s, '\n'))
-                    line2 = Join((l, a, '\n'))
+                    chunk = line[0:59]
+                    lineo = Join((chunk, str(key), s, '\n'))
+                    line2 = Join((chunk, a, '\n'))
                     linetot = Join((lineo, line2))
                     map = Join((map, linetot))
                     break
@@ -379,9 +380,9 @@ class PrintFormat(object):
             if key == length:
                 for n in enzymemap[key]:
                     s = Join((s, ' ', n))
-                l = line[0:(length - 1)]
-                lineo = Join((l, str(key), s, '\n'))
-                line2 = Join((l, a, '\n'))
+                chunk = line[0:(length - 1)]
+                lineo = Join((chunk, str(key), s, '\n'))
+                line2 = Join((chunk, a, '\n'))
                 linetot = Join((lineo, line2))
                 map = Join((map, linetot))
                 break
@@ -406,7 +407,7 @@ class PrintFormat(object):
 # private method to do lists:
 
     def __next_section(self, ls, into):
-        """FP.__next_section(ls, into) -> string.
+        """Next section (PRIVATE).
 
         Arguments:
          - ls is a tuple/list of tuple (string, [int, int]).
@@ -427,15 +428,15 @@ class PrintFormat(object):
         several, Join = '', ''.join
         for name, sites in sorted(ls):
             stringsite = ''
-            l = Join((', '.join(str(site) for site in sites), '.'))
-            if len(l) > linesize:
+            output = Join((', '.join(str(site) for site in sites), '.'))
+            if len(output) > linesize:
                 #
                 #   cut where appropriate and add the indentation
                 #
-                l = [x.group() for x in re.finditer(pat, l)]
-                stringsite = indentation.join(l)
+                output = [x.group() for x in re.finditer(pat, output)]
+                stringsite = indentation.join(output)
             else:
-                stringsite = l
+                stringsite = output
             into = Join((into,
                          str(name).ljust(self.NameWidth), ' :  ', stringsite, '\n'))
         return into

@@ -12,17 +12,17 @@ First we create a \texttt{PDBParser} object:
 
 \begin{verbatim}
 >>> from Bio.PDB.PDBParser import PDBParser
->>> p = PDBParser(PERMISSIVE=1)
+>>> parser = PDBParser(PERMISSIVE=1)
 \end{verbatim}
 
 The {\tt PERMISSIVE} flag indicates that a number of common problems (see \ref{problem structures}) associated with PDB files will be ignored (but note that some atoms and/or residues will be missing). If the flag is not present a {\tt PDBConstructionException} will be generated if any problems are detected during the parse operation.
 
-The Structure object is then produced by letting the \texttt{PDBParser} object parse a PDB file (the PDB file in this case is called 'pdb1fat.ent', '1fat' is a user defined name for the structure):
+The Structure object is then produced by letting the \texttt{PDBParser} object parse a PDB file (the PDB file in this case is called \verb|pdb1fat.ent|, \verb|1fat| is a user defined name for the structure):
 
 \begin{verbatim}
 >>> structure_id = "1fat"
 >>> filename = "pdb1fat.ent"
->>> s = p.get_structure(structure_id, filename)
+>>> structure = parser.get_structure(structure_id, filename)
 \end{verbatim}
 
 You can extract the header and trailer (simple lists of strings) of the PDB
@@ -50,6 +50,7 @@ The dictionary can also be created without creating a \texttt{Structure}
 object, ie. directly from the PDB file:
 
 \begin{verbatim}
+>>> from Bio.PDB import parse_pdb_header
 >>> with open(filename, 'r') as handle:
 ...     header_dict = parse_pdb_header(handle)
 ...
@@ -57,7 +58,7 @@ object, ie. directly from the PDB file:
 
 \subsection{Reading an mmCIF file}
 
-Similarly to the case the case of PDB files, first create an \texttt{MMCIFParser} object:
+Similarly to the case of PDB files, first create an \texttt{MMCIFParser} object:
 
 \begin{verbatim}
 >>> from Bio.PDB.MMCIFParser import MMCIFParser
@@ -169,6 +170,24 @@ out glycine residues:
 If this is all too complicated for you, the \texttt{Dice} module contains
 a handy \texttt{extract} function that writes out all residues in
 a chain between a start and end residue.
+
+\subsection{Writing mmCIF files}
+
+A similar interface can be used to write structures to the mmCIF file format:
+
+\begin{verbatim}
+>>> io = MMCIFIO()
+>>> io.set_structure(s)
+>>> io.save('out.cif')
+\end{verbatim}
+The \texttt{Select} class can be used in a similar way to \texttt{PDBIO} above.
+mmCIF dictionaries read using \texttt{MMCIF2Dict} can also be written:
+
+\begin{verbatim}
+>>> io = MMCIFIO()
+>>> io.set_dict(d)
+>>> io.save('out.cif')
+\end{verbatim}
 
 \section{Structure representation}
 
@@ -1220,4 +1239,3 @@ used by several LPCs (Large Pharmaceutical Companies :-).
 
 % Perhaps this section should be updated for other Biopython modules, and
 % moved to the Biopython FAQ above.
-

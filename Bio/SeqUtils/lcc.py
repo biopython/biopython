@@ -19,7 +19,8 @@ def lcc_mult(seq, wsize):
 
     The result is the same as applying lcc_simp multiple times, but this
     version is optimized for speed. The optimization works by using the
-    value of previous window as a base to compute the next one."""
+    value of previous window as a base to compute the next one.
+    """
     l2 = math.log(2)
     tamseq = len(seq)
     try:
@@ -130,7 +131,7 @@ def lcc_simp(seq):
 
     Reference:
     Andrzej K Konopka (2005) Sequence Complexity and Composition
-    DOI: 10.1038/npg.els.0005260
+    https://doi.org/10.1038/npg.els.0005260
     """
     wsize = len(seq)
     try:

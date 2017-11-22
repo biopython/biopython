@@ -5,17 +5,16 @@
 
 import os
 import os.path
-from ._paml import Paml, _relpath
+from ._paml import Paml
 from . import _parse_baseml
 
 
 class BasemlError(EnvironmentError):
-    """BASEML has failed. Run with verbose = True to view BASEML's error
-    message"""
+    """BASEML failed. Run with verbose=True to view BASEML's error message."""
 
 
 class Baseml(Paml):
-    """This class implements an interface to BASEML, part of the PAML package."""
+    """An interface to BASEML, part of the PAML package."""
 
     def __init__(self, alignment=None, tree=None, working_dir=None,
                 out_file=None):
@@ -92,8 +91,7 @@ class Baseml(Paml):
                     ctl_handle.write("%s = %s\n" % (option[0], option[1]))
 
     def read_ctl_file(self, ctl_file):
-        """Parse a control file and load the options into the Baseml instance.
-        """
+        """Parse a control file and load the options into the Baseml instance."""
         temp_options = {}
         if not os.path.isfile(ctl_file):
             raise IOError("File not found: %r" % ctl_file)
@@ -130,12 +128,12 @@ class Baseml(Paml):
                             if "." in value or "e-" in value:
                                 try:
                                     converted_value = float(value)
-                                except:
+                                except ValueError:
                                     converted_value = value
                             else:
                                 try:
                                     converted_value = int(value)
-                                except:
+                                except ValueError:
                                     converted_value = value
                             temp_options[option] = converted_value
         for option in self._options:
@@ -154,7 +152,7 @@ class Baseml(Paml):
         """
         Paml._set_rel_paths(self)
         if self.tree is not None:
-            self._rel_tree = _relpath(self.tree, self.working_dir)
+            self._rel_tree = os.path.relpath(self.tree, self.working_dir)
 
     def run(self, ctl_file=None, verbose=False, command="baseml",
                 parse=True):

@@ -1,13 +1,11 @@
 #!/usr/bin/env python
-"""Small script to test timing of getting records from a BioSQL database.
-"""
+"""Test timing of getting records from a BioSQL database."""
 from __future__ import print_function
 
 import time
 # set up the connection
 from BioSQL import BioSeqDatabase
 
-__docformat__ = "restructuredtext en"
 
 server = BioSeqDatabase.open_database(host="192.168.0.192", user="root",
                                       passwd="", db="test_biosql")

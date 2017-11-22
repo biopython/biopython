@@ -55,6 +55,8 @@ In conclusion, be sensible with your usage levels.  If you plan to download lots
 \section{EInfo: Obtaining information about the Entrez databases}
 \label{sec:entrez-einfo}
 EInfo provides field index term counts, last update, and available links for each of NCBI's databases. In addition, you can use EInfo to obtain a list of all database names accessible through the Entrez utilities:
+%Run this as a doctest in current directory, requires internet access!
+%doctest . internet
 \begin{verbatim}
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com"     # Always tell NCBI who you are
@@ -112,17 +114,20 @@ The variable \verb+result+ now contains a list of databases in XML format:
 \end{verbatim}
 
 Since this is a fairly simple XML file, we could extract the information it contains simply by string searching. Using \verb+Bio.Entrez+'s parser instead, we can directly parse this XML file into a Python object:
+%doctest . internet
 \begin{verbatim}
 >>> from Bio import Entrez
 >>> handle = Entrez.einfo()
 >>> record = Entrez.read(handle)
 \end{verbatim}
 Now \verb+record+ is a dictionary with exactly one key:
+%Not continuing doctest due as only Python 2 will show a u'string' prefix...
 \begin{verbatim}
 >>> record.keys()
-[u'DbList']
+['DbList']
 \end{verbatim}
 The values stored in this key is the list of database names shown in the XML above:
+%Line-wrapping for display so not using for doctest
 \begin{verbatim}
 >>> record["DbList"]
 ['pubmed', 'protein', 'nucleotide', 'nuccore', 'nucgss', 'nucest',
@@ -134,11 +139,15 @@ The values stored in this key is the list of database names shown in the XML abo
 \end{verbatim}
 
 For each of these databases, we can use EInfo again to obtain more information:
+%cont-doctest
 \begin{verbatim}
 >>> handle = Entrez.einfo(db="pubmed")
 >>> record = Entrez.read(handle)
 >>> record["DbInfo"]["Description"]
 'PubMed bibliographic record'
+\end{verbatim}
+%These are too changable to use in doctest
+\begin{verbatim}
 >>> record["DbInfo"]["Count"]
 '17989604'
 >>> record["DbInfo"]["LastUpdate"]
@@ -147,9 +156,11 @@ For each of these databases, we can use EInfo again to obtain more information:
 Try \verb+record["DbInfo"].keys()+ for other information stored in this record.
 One of the most useful is a list of possible search fields for use with ESearch:
 
+%Output is truncated so can't easily use in doctest
 \begin{verbatim}
 >>> for field in record["DbInfo"]["FieldList"]:
 ...     print("%(Name)s, %(FullName)s, %(Description)s" % field)
+...
 ALL, All Fields, All terms from all searchable fields
 UID, UID, Unique number assigned to publication
 FILT, Filter, Limits the records
@@ -172,21 +183,28 @@ familiar with a particular database.
 \section{ESearch: Searching the Entrez databases}
 \label{sec:entrez-esearch}
 To search any of these databases, we use \verb+Bio.Entrez.esearch()+. For example, let's search in PubMed for publications related to Biopython:
+%doctest . internet
 \begin{verbatim}
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com"     # Always tell NCBI who you are
 >>> handle = Entrez.esearch(db="pubmed", term="biopython")
 >>> record = Entrez.read(handle)
->>> record["IdList"]
-['19304878', '18606172', '16403221', '16377612', '14871861', '14630660', '12230038']
+>>> "19304878" in record["IdList"]
+True
 \end{verbatim}
-In this output, you see seven PubMed IDs (including 19304878 which is the PMID for the Biopython application note), which can be retrieved by EFetch (see section \ref{sec:efetch}).
+%truncted for display, so not in doctest
+\begin{verbatim}
+>>> print(record["IdList"])
+['28011774', '24929426', '24497503', '24267035', '24194598', ..., '14871861']
+\end{verbatim}
+In this output, you see lots of PubMed IDs (including 19304878 which is the PMID for the Biopython application note), which can be retrieved by EFetch (see section \ref{sec:efetch}).
 
 You can also use ESearch to search GenBank. Here we'll do a quick
 search for the \emph{matK} gene in \emph{Cypripedioideae} orchids
 (see Section~\ref{sec:entrez-einfo} about EInfo for one way to
 find out which fields you can search in each Entrez database):
 
+% Search results too changable for use in doctest
 \begin{verbatim}
 >>> handle = Entrez.esearch(db="nucleotide", term="Cypripedioideae[Orgn] AND matK[Gene]", idtype="acc")
 >>> record = Entrez.read(handle)
@@ -250,6 +268,7 @@ Let's look at a simple example to see how EPost works -- uploading some PubMed i
 \end{verbatim}
 \noindent The returned XML includes two important strings, \verb|QueryKey| and \verb|WebEnv| which together define your history session.
 You would extract these values for use with another Entrez call such as EFetch:
+%doctest . internet
 \begin{verbatim}
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com"     # Always tell NCBI who you are
@@ -262,6 +281,7 @@ You would extract these values for use with another Entrez call such as EFetch:
 
 \section{ESummary: Retrieving summaries from primary IDs}
 ESummary retrieves document summaries from a list of primary IDs (see the  \href{http://www.ncbi.nlm.nih.gov/entrez/query/static/esummary\_help.html}{ESummary help page} for more information). In Biopython, ESummary is available as \verb+Bio.Entrez.esummary()+. Using the search result above, we can for example find out more about the journal with ID 30367:
+%doctest . internet
 \begin{verbatim}
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com"     # Always tell NCBI who you are
@@ -284,13 +304,12 @@ For most of their databases, the NCBI support several different file formats. Re
 
 One common usage is downloading sequences in the FASTA or GenBank/GenPept plain text formats (which can then be parsed with \verb|Bio.SeqIO|, see Sections~\ref{sec:SeqIO_GenBank_Online} and~\ref{sec:efetch}). From the \emph{Cypripedioideae} example above, we can download GenBank record EU490707 using \verb+Bio.Entrez.efetch+:
 
+%doctest . internet
 \begin{verbatim}
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com"     # Always tell NCBI who you are
 >>> handle = Entrez.efetch(db="nucleotide", id="EU490707", rettype="gb", retmode="text")
 >>> print(handle.read())
-
-
 LOCUS       EU490707                1302 bp    DNA     linear   PLN 26-JUL-2016
 DEFINITION  Selenipedium aequinoctiale maturase K (matK) gene, partial cds;
             chloroplast.
@@ -361,7 +380,8 @@ ORIGIN
      1201 tcgtgtgcta gaactttggc acggaaacat aaaagtacag tacgcacttt tatgcgaaga
      1261 ttaggttcgg gattattaga agaattcttt atggaagaag aa
 //
-
+<BLANKLINE>
+<BLANKLINE>
 \end{verbatim}
 
 Please be aware that as of October 2016 GI identifiers are discontinued in favour of accession numbers. You can still fetch sequences based on their GI, but new sequences are no longer given this identifier. You should instead refer to them by the ``Accession number'' as done in the example.
@@ -371,24 +391,29 @@ The arguments \verb+rettype="gb"+ and \verb+retmode="text"+ let us download this
 Note that until Easter 2009, the Entrez EFetch API let you use ``genbank'' as the
 return type, however the NCBI now insist on using the official return types of
 ``gb'' or ``gbwithparts'' (or ``gp'' for proteins) as described on online.
-Also not that until Feb 2012, the Entrez EFetch API would default to returning
+Also note that until Feb 2012, the Entrez EFetch API would default to returning
 plain text files, but now defaults to XML.
 
 Alternatively, you could for example use \verb+rettype="fasta"+ to get the Fasta-format; see the \href{http://www.ncbi.nlm.nih.gov/entrez/query/static/efetchseq\_help.html}{EFetch Sequences Help page} for other options. Remember -- the available formats depend on which database you are downloading from - see the main \href{http://eutils.ncbi.nlm.nih.gov/entrez/query/static/efetch\_help.html}{EFetch Help page}.
 
 If you fetch the record in one of the formats accepted by \verb+Bio.SeqIO+ (see Chapter~\ref{chapter:Bio.SeqIO}), you could directly parse it into a \verb+SeqRecord+:
 
+%doctest . internet
 \begin{verbatim}
->>> from Bio import Entrez, SeqIO
+>>> from Bio import Entrez
+>>> from Bio import SeqIO
 >>> handle = Entrez.efetch(db="nucleotide", id="EU490707", rettype="gb", retmode="text")
 >>> record = SeqIO.read(handle, "genbank")
 >>> handle.close()
->>> print(record)
-ID: EU490707.1
-Name: EU490707
-Description: Selenipedium aequinoctiale maturase K (matK) gene, partial cds; chloroplast.
-Number of features: 3
-...
+>>> print(record.id)
+EU490707.1
+>>> print(record.name)
+EU490707
+>>> print(record.description)
+Selenipedium aequinoctiale maturase K (matK) gene, partial cds; chloroplast
+>>> print(len(record.features))
+3
+>>> print(repr(record.seq))
 Seq('ATTTTTTACGAACCTGTGGAAATTTTTGGTTATGACAATAAATCTAGTTTAGTA...GAA', IUPACAmbiguousDNA())
 \end{verbatim}
 
@@ -416,6 +441,7 @@ print(record)
 
 To get the output in XML format, which you can parse using the \verb+Bio.Entrez.read()+ function, use \verb+retmode="xml"+:
 
+%doctest . internet
 \begin{verbatim}
 >>> from Bio import Entrez
 >>> handle = Entrez.efetch(db="nucleotide", id="EU490707", retmode="xml")
@@ -439,6 +465,7 @@ and other cool stuff.
 
 Let's use ELink to find articles related to the Biopython application note published in \textit{Bioinformatics} in 2009. The PubMed ID of this article is 19304878:
 
+%doctest . internet
 \begin{verbatim}
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com"
@@ -448,6 +475,7 @@ Let's use ELink to find articles related to the Biopython application note publi
 
 The \verb+record+ variable consists of a Python list, one for each database in which we searched. Since we specified only one PubMed ID to search for, \verb+record+ contains only one item. This item is a dictionary containing information about our search term, as well as all the related items that were found:
 
+%cont-doctest
 \begin{verbatim}
 >>> record[0]["DbFrom"]
 'pubmed'
@@ -457,32 +485,39 @@ The \verb+record+ variable consists of a Python list, one for each database in w
 
 The \verb+"LinkSetDb"+ key contains the search results, stored as a list consisting of one item for each target database. In our search results, we only find hits in the PubMed database (although sub-divided into categories):
 
+%cont-doctest
 \begin{verbatim}
 >>> len(record[0]["LinkSetDb"])
-5
+8
+\end{verbatim}
+\noindent The exact numbers should increase over time:
+\begin{verbatim}
 >>> for linksetdb in record[0]["LinkSetDb"]:
 ...     print(linksetdb["DbTo"], linksetdb["LinkName"], len(linksetdb["Link"]))
 ...
-pubmed pubmed_pubmed 110
+pubmed pubmed_pubmed 162
+pubmed pubmed_pubmed_alsoviewed 3
+pubmed pubmed_pubmed_citedin 430
 pubmed pubmed_pubmed_combined 6
 pubmed pubmed_pubmed_five 6
-pubmed pubmed_pubmed_reviews 5
-pubmed pubmed_pubmed_reviews_five 5
+pubmed pubmed_pubmed_refs 17
+pubmed pubmed_pubmed_reviews 7
+pubmed pubmed_pubmed_reviews_five 6
 \end{verbatim}
 
-The actual search results are stored as under the \verb+"Link"+ key. In total, 110 items were found under
-standard search.
+The actual search results are stored as under the \verb+"Link"+ key.
+
 Let's now at the first search result:
 \begin{verbatim}
 >>> record[0]["LinkSetDb"][0]["Link"][0]
-{u'Id': '19304878'}
+{'Id': '19304878'}
 \end{verbatim}
 
 \noindent This is the article we searched for, which doesn't help us much, so let's look at the second search result:
 
 \begin{verbatim}
 >>> record[0]["LinkSetDb"][0]["Link"][1]
-{u'Id': '14630660'}
+{'Id': '14630660'}
 \end{verbatim}
 
 \noindent This paper, with PubMed ID 14630660, is about the Biopython PDB parser.
@@ -529,9 +564,10 @@ See the \href{http://www.ncbi.nlm.nih.gov/entrez/query/static/egquery\_help.html
 \section{ESpell: Obtaining spelling suggestions}
 ESpell retrieves spelling suggestions. In this example, we use \verb+Bio.Entrez.espell()+ to obtain the correct spelling of Biopython:
 
+%doctest . internet
 \begin{verbatim}
 >>> from Bio import Entrez
->>> Entrez.email = "A.N.Other@example.com"     # Always tell NCBI who you are
+>>> Entrez.email = "A.N.Other@example.com"      # Always tell NCBI who you are
 >>> handle = Entrez.espell(term="biopythooon")
 >>> record = Entrez.read(handle)
 >>> record["Query"]
@@ -560,7 +596,6 @@ The XML file \verb+Homo_sapiens.xml+ consists of a list of Entrez gene records, 
 >>> from Bio import Entrez
 >>> handle = open("Homo_sapiens.xml")
 >>> records = Entrez.parse(handle)
-
 >>> for record in records:
 ...     status = record['Entrezgene_track-info']['Gene-track']['Gene-track_status']
 ...     if status.attributes['value']=='discontinued':
@@ -568,6 +603,7 @@ The XML file \verb+Homo_sapiens.xml+ consists of a list of Entrez gene records, 
 ...     geneid = record['Entrezgene_track-info']['Gene-track']['Gene-track_geneid']
 ...     genename = record['Entrezgene_gene']['Gene-ref']['Gene-ref_locus']
 ...     print(geneid, genename)
+...
 \end{verbatim}
 
 This will print:
@@ -685,6 +721,7 @@ Optionally, you can instruct the parser to skip such tags instead of raising a V
 >>> from Bio import Entrez
 >>> handle = open("einfo3.xml")
 >>> record = Entrez.read(handle, validate=False)
+>>> handle.close()
 \end{verbatim}
 Of course, the information contained in the XML tags that are not in the DTD are not present in the record returned by \verb|Entrez.read|.
 
@@ -836,15 +873,19 @@ The following code fragment shows how to parse the example GEO file
 
 You can search the ``gds'' database (GEO datasets) with ESearch:
 
+%doctest . internet
 \begin{verbatim}
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com" # Always tell NCBI who you are
 >>> handle = Entrez.esearch(db="gds", term="GSE16")
 >>> record = Entrez.read(handle)
+>>> handle.close()
 >>> record["Count"]
-2
+'27'
+\end{verbatim}
+\begin{verbatim}
 >>> record["IdList"]
-['200000016', '100000028']
+['200000016', '100000028', ...]
 \end{verbatim}
 
 From the Entrez website, UID ``200000016'' is GDS16 while the other hit
@@ -981,32 +1022,36 @@ In this example, we will query PubMed for all articles having to do with orchids
 \end{verbatim}
 
 Now we use the \verb+Bio.Entrez.efetch+ function to download the PubMed IDs of these 463 articles:
+%doctest . internet
 \begin{verbatim}
+>>> from Bio import Entrez
 >>> handle = Entrez.esearch(db="pubmed", term="orchid", retmax=463)
 >>> record = Entrez.read(handle)
+>>> handle.close()
 >>> idlist = record["IdList"]
->>> print(idlist)
 \end{verbatim}
-
 
 This returns a Python list containing all of the PubMed IDs of articles related to orchids:
 \begin{verbatim}
+>>> print(idlist)
 ['18680603', '18665331', '18661158', '18627489', '18627452', '18612381',
 '18594007', '18591784', '18589523', '18579475', '18575811', '18575690',
 ...
 \end{verbatim}
 
 Now that we've got them, we obviously want to get the corresponding Medline records and extract the information from them. Here, we'll download the Medline records in the Medline flat-file format, and use the \verb+Bio.Medline+ module to parse them:
+%cont-doctest
 \begin{verbatim}
 >>> from Bio import Medline
 >>> handle = Entrez.efetch(db="pubmed", id=idlist, rettype="medline",
-                           retmode="text")
+...                        retmode="text")
 >>> records = Medline.parse(handle)
 \end{verbatim}
 
 NOTE - We've just done a separate search and fetch here, the NCBI much prefer you to take advantage of their history support in this situation.  See Section~\ref{sec:entrez-webenv}.
 
 Keep in mind that \verb+records+ is an iterator, so you can iterate through the records only once. If you want to save the records, you can convert them to a list:
+%cont-doctest
 \begin{verbatim}
 >>> records = list(records)
 \end{verbatim}
@@ -1019,6 +1064,7 @@ Let's now iterate over the records to print out some information about each reco
 ...     print("authors:", record.get("AU", "?"))
 ...     print("source:", record.get("SO", "?"))
 ...     print("")
+...
 \end{verbatim}
 
 The output for this looks like:
@@ -1034,12 +1080,12 @@ source: J Comp Physiol [A] 2000 Jun;186(6):567-74
 Especially interesting to note is the list of authors, which is returned as a standard Python list. This makes it easy to manipulate and search using standard Python tools. For instance, we could loop through a whole bunch of entries searching for a particular author with code like the following:
 \begin{verbatim}
 >>> search_author = "Waits T"
-
 >>> for record in records:
 ...     if not "AU" in record:
 ...         continue
 ...     if search_author in record["AU"]:
 ...         print("Author %s found: %s" % (search_author, record["SO"]))
+...
 \end{verbatim}
 
 Hopefully this section gave you an idea of the power and flexibility of the Entrez and Medline interfaces and how they can be used together.
@@ -1058,27 +1104,33 @@ First, we use EGQuery to find out the number of results we will get before actua
 >>> for row in record["eGQueryResult"]:
 ...     if row["DbName"]=="nuccore":
 ...         print(row["Count"])
-814
+4457
 \end{verbatim}
 
-So, we expect to find 814 Entrez Nucleotide records (this is the number I obtained in 2008; it is likely to increase in the future). If you find some ridiculously high number of hits, you may want to reconsider if you really want to download all of them, which is our next step:
+So, we expect to find 4457 Entrez Nucleotide records (this increased from 814 records in 2008; it is likely to continue to increase in the future). If you find some ridiculously high number of hits, you may want to reconsider if you really want to download all of them, which is our next step. 
+Let's use the \verb+retmax+ argument to restrict the maximum number of records retrieved to the number available in 2008:
+
+%doctest . internet
 \begin{verbatim}
 >>> from Bio import Entrez
 >>> handle = Entrez.esearch(db="nucleotide", term="Cypripedioideae", retmax=814, idtype="acc")
 >>> record = Entrez.read(handle)
+>>> handle.close()
 \end{verbatim}
 
 Here, \verb+record+ is a Python dictionary containing the search results and some auxiliary information. Just for information, let's look at what is stored in this dictionary:
 \begin{verbatim}
 >>> print(record.keys())
-[u'Count', u'RetMax', u'IdList', u'TranslationSet', u'RetStart', u'QueryTranslation']
+['Count', 'RetMax', 'IdList', 'TranslationSet', 'RetStart', 'QueryTranslation']
 \end{verbatim}
 First, let's check how many results were found:
 \begin{verbatim}
 >>> print(record["Count"])
-'814'
+'4457'
 \end{verbatim}
-which is the number we expected. The 814 results are stored in \verb+record['IdList']+:
+You might have expected this to be 814, the maximum number of records we asked to retrieve. 
+However, \verb+Count+ represents the total number of records available for that search, not how many were retrieved.
+The retrieved records are stored in \verb+record['IdList']+, which should contain the total number we asked for:
 \begin{verbatim}
 >>> len(record["IdList"])
 814
@@ -1106,12 +1158,12 @@ KX265015.1, KX265014.1, KX265013.1, KX265012.1, KX265011.1]
 Each of these records corresponds to one GenBank record.
 \begin{verbatim}
 >>> print(records[0].keys())
-[u'GBSeq_moltype', u'GBSeq_source', u'GBSeq_sequence',
- u'GBSeq_primary-accession', u'GBSeq_definition', u'GBSeq_accession-version',
- u'GBSeq_topology', u'GBSeq_length', u'GBSeq_feature-table',
- u'GBSeq_create-date', u'GBSeq_other-seqids', u'GBSeq_division',
- u'GBSeq_taxonomy', u'GBSeq_references', u'GBSeq_update-date',
- u'GBSeq_organism', u'GBSeq_locus', u'GBSeq_strandedness']
+['GBSeq_moltype', 'GBSeq_source', 'GBSeq_sequence',
+ 'GBSeq_primary-accession', 'GBSeq_definition', 'GBSeq_accession-version',
+ 'GBSeq_topology', 'GBSeq_length', 'GBSeq_feature-table',
+ 'GBSeq_create-date', 'GBSeq_other-seqids', 'GBSeq_division',
+ 'GBSeq_taxonomy', 'GBSeq_references', 'GBSeq_update-date',
+ 'GBSeq_organism', 'GBSeq_locus', 'GBSeq_strandedness']
 
 >>> print(records[0]["GBSeq_primary-accession"])
 DQ110336
@@ -1219,6 +1271,7 @@ Finally, if plan to repeat your analysis, rather than downloading the files from
 \subsection{Finding the lineage of an organism}
 
 Staying with a plant example, let's now find the lineage of the Cypripedioideae orchid family. First, we search the Taxonomy database for Cypripedioideae, which yields exactly one NCBI taxonomy identifier:
+%doctest . internet
 \begin{verbatim}
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com"     # Always tell NCBI who you are
@@ -1230,6 +1283,7 @@ Staying with a plant example, let's now find the lineage of the Cypripedioideae 
 '158330'
 \end{verbatim}
 Now, we use \verb+efetch+ to download this entry in the Taxonomy database, and then parse it:
+%cont-doctest
 \begin{verbatim}
 >>> handle = Entrez.efetch(db="Taxonomy", id="158330", retmode="xml")
 >>> records = Entrez.read(handle)
@@ -1237,9 +1291,9 @@ Now, we use \verb+efetch+ to download this entry in the Taxonomy database, and t
 Again, this record stores lots of information:
 \begin{verbatim}
 >>> records[0].keys()
-[u'Lineage', u'Division', u'ParentTaxId', u'PubDate', u'LineageEx',
- u'CreateDate', u'TaxId', u'Rank', u'GeneticCode', u'ScientificName',
- u'MitoGeneticCode', u'UpdateDate']
+['Lineage', 'Division', 'ParentTaxId', 'PubDate', 'LineageEx',
+ 'CreateDate', 'TaxId', 'Rank', 'GeneticCode', 'ScientificName',
+ 'MitoGeneticCode', 'UpdateDate']
 \end{verbatim}
 We can get the lineage directly from this record:
 \begin{verbatim}
@@ -1279,25 +1333,31 @@ results - which the NCBI can anticipate and cache.
 To do this, call \verb|Bio.Entrez.esearch()| as normal, but with the
 additional argument of \verb|usehistory="y"|,
 
+%doctest . internet
 \begin{verbatim}
 >>> from Bio import Entrez
 >>> Entrez.email = "history.user@example.com"
 >>> search_handle = Entrez.esearch(db="nucleotide",term="Opuntia[orgn] and rpl16",
-                                   usehistory="y", idtype="acc")
+...                                usehistory="y", idtype="acc")
 >>> search_results = Entrez.read(search_handle)
 >>> search_handle.close()
 \end{verbatim}
 
-\noindent When you get the XML output back, it will still include the usual search results:
+\noindent When you get the XML output back, it will still include the usual search results.
 
+%cont-doctest
 \begin{verbatim}
 >>> acc_list = search_results["IdList"]
 >>> count = int(search_results["Count"])
->>> assert count == len(acc_list)
+>>> count == len(acc_list)
+True
 \end{verbatim}
+
+\noindent (Remember from Section~\ref{subsec:entrez_example_genbank} that the number of records retrieved will not necessarily be the same as the \verb+Count+, especially if the argument \verb+retmax+ is used.)
 
 \noindent However, you also get given two additional pieces of information, the {\tt WebEnv} session cookie, and the {\tt QueryKey}:
 
+%cont-doctest
 \begin{verbatim}
 >>> webenv = search_results["WebEnv"]
 >>> query_key = search_results["QueryKey"]

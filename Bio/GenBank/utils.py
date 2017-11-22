@@ -3,8 +3,7 @@
 # as part of this package.
 #
 
-"""Useful utilities for helping in parsing GenBank files.
-"""
+"""Useful utilities for helping in parsing GenBank files."""
 
 
 class FeatureValueCleaner(object):
@@ -28,11 +27,11 @@ class FeatureValueCleaner(object):
     (as in translations), or combining things with spaces (as might be
     the case with /notes).
     """
+
     keys_to_process = ["translation"]
 
     def __init__(self, to_process=keys_to_process):
-        """Initialize with the keys we should deal with.
-        """
+        """Initialize with the keys we should deal with."""
         self._to_process = to_process
 
     def clean_value(self, key_name, value):
@@ -51,7 +50,6 @@ class FeatureValueCleaner(object):
         return value
 
     def _clean_translation(self, value):
-        """Concatenate a translation value to one long protein string.
-        """
+        """Concatenate a translation value to one long protein string."""
         translation_parts = value.split()
         return "".join(translation_parts)
