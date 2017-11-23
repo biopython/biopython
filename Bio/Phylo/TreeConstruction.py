@@ -84,8 +84,10 @@ class _Matrix(object):
     """
 
     def __init__(self, names, matrix=None):
-        """Initialize matrix by a list of names and a list of
-        lower triangular matrix data.
+        """Initialize matrix.
+
+        Arguments are a list of names, and optionally a list of lower
+        triangular matrix data (zero matrix used by default).
         """
         # check names
         if isinstance(names, list) and all(isinstance(s, str) for s in names):

@@ -343,7 +343,9 @@ def parse_model(lines, results):
 
 
 def parse_siteclass_proportions(line_floats):
-    """For models which have multiple site classes, find the proportion of the
+    """Find proportion of alignment assigned to each class.
+
+    For models which have multiple site classes, find the proportion of the
     alignment assigned to each class.
     """
     site_classes = {}
@@ -354,7 +356,9 @@ def parse_siteclass_proportions(line_floats):
 
 
 def parse_siteclass_omegas(line, site_classes):
-    """For models which have multiple site classes, find the omega estimated
+    """Find omega estimate for each class.
+
+    For models which have multiple site classes, find the omega estimated
     for each class.
     """
     # The omega results are tabular with strictly 9 characters per column
