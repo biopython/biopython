@@ -81,7 +81,7 @@ Here is an overview of the flat file format that this parser deals with:
 
 
 class SequenceLine(object):
-    """Store the information for one SEQUENCE line from a Unigene file
+    """Store the information for one SEQUENCE line from a Unigene file.
 
     Initialize with the text part of the SEQUENCE line, or nothing.
 
@@ -139,7 +139,7 @@ class SequenceLine(object):
 
 
 class ProtsimLine(object):
-    """Store the information for one PROTSIM line from a Unigene file
+    """Store the information for one PROTSIM line from a Unigene file.
 
     Initialize with the text part of the PROTSIM line, or nothing.
 
@@ -174,7 +174,7 @@ class ProtsimLine(object):
 
 
 class STSLine(object):
-    """Store the information for one STS line from a Unigene file
+    """Store the information for one STS line from a Unigene file.
 
     Initialize with the text part of the STS line, or nothing.
 
@@ -204,7 +204,7 @@ class STSLine(object):
 
 
 class Record(object):
-    """Store a Unigene record
+    """Store a Unigene record.
 
     Here is what is stored::
 

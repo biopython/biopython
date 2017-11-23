@@ -221,7 +221,7 @@ def _extract_ids_and_descs(raw_id, raw_desc):
 
 
 class BlastXmlParser(object):
-    """Parser for the BLAST XML format"""
+    """Parser for the BLAST XML format."""
 
     def __init__(self, handle, use_raw_query_ids=False, use_raw_hit_ids=False):
         """Initialize the class."""

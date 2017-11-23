@@ -93,7 +93,7 @@ def PhdIterator(handle):
 
 
 class PhdWriter(SequentialSequenceWriter):
-    """Class to write Phd format files"""
+    """Class to write Phd format files."""
 
     def __init__(self, handle):
         """Initialize the class."""

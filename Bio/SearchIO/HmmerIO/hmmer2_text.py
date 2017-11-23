@@ -49,7 +49,7 @@ class Hmmer2TextParser(object):
             yield qresult
 
     def read_next(self, rstrip=True):
-        """Return the next non-empty line, trailing whitespace removed"""
+        """Return the next non-empty line, trailing whitespace removed."""
         if len(self.buf) > 0:
             return self.buf.pop()
         self.line = self.handle.readline()
@@ -61,11 +61,11 @@ class Hmmer2TextParser(object):
         return self.line
 
     def push_back(self, line):
-        """Un-read a line that should not be parsed yet"""
+        """Un-read a line that should not be parsed yet."""
         self.buf.append(line)
 
     def parse_key_value(self):
-        """Parse key-value pair separated by colon (:)"""
+        """Parse key-value pair separated by colon."""
         key, value = self.line.split(':', 1)
         return key.strip(), value.strip()
 

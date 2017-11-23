@@ -16,7 +16,7 @@ from Bio.PDB.Selection import unfold_entities, entity_levels, uniqueify
 
 
 class NeighborSearch(object):
-    """Class for neighbor searching,
+    """Class for neighbor searching.
 
     This class can be used for two related purposes:
 
