@@ -38,7 +38,7 @@ class Guidance2Commandline(AbstractCommandline):
     GUIDANCE2: accurate detection of unreliable alignment regions
     accounting for the uncertainty of multiple parameters.
     Nucleic Acids Research, 2015 Jul 1; 43 (Web Server issue): W7-W14.;
-    doi: https://doi.org/10.1093/nar/gkq443
+    https://doi.org/10.1093/nar/gkq443
 
     Landan, G., and D. Graur. (2008).  Local reliability measures from
     sets of co-optimal multiple sequence alignments.  Pac Symp Biocomput
