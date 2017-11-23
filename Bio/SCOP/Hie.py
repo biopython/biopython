@@ -3,17 +3,21 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+"""Handle the SCOP HIErarchy files.
 
-"""Handle the SCOP HIErarchy files, which describe the SCOP hierarchy in
-terms of SCOP unique identifiers (sunid).
+The SCOP Hierarchy files describe the SCOP hierarchy in terms of SCOP
+unique identifiers (sunid).
 
-The file format is described in the scop
-"release notes.":http://scop.berkeley.edu/release-notes-1.55.html
-The latest HIE file can be found
-"elsewhere at SCOP.":http://scop.mrc-lmb.cam.ac.uk/scop/parse/
+The file format is described in the SCOP `release notes
+<http://scop.berkeley.edu/release-notes-1.55.html>`_.
 
-"Release 1.55":http://scop.berkeley.edu/parse/dir.hie.scop.txt_1.55 (July 2001)
+The latest HIE file can be found `elsewhere at SCOP
+<http://scop.mrc-lmb.cam.ac.uk/scop/parse/>`_.
+
+`Release 1.55 <http://scop.berkeley.edu/parse/dir.hie.scop.txt_1.55>`_
+(July 2001).
 """
+# TODO - Update the above URLs
 
 
 class Record(object):

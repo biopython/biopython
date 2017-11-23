@@ -2,7 +2,9 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""Implementation of frequency (count) matrices, position-weight matrices,
+"""Support for various forms of sequence motif matrices.
+
+Implementation of frequency (count) matrices, position-weight matrices,
 and position-specific scoring matrices.
 """
 

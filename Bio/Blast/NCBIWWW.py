@@ -39,8 +39,7 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
            format_entrez_query=None, format_object=None, format_type='XML',
            ncbi_gi=None, results_file=None, show_overview=None, megablast=None,
            ):
-    """Do a BLAST search using the QBLAST server at NCBI or a cloud service
-    provider.
+    """BLAST search using NCBI's QBLAST server or a cloud service provider.
 
     Supports all parameters of the qblast API for Put and Get.
 
