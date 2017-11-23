@@ -2,7 +2,7 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""Growth curves fitting and parameters extraction for phenotype data
+"""Growth curves fitting and parameters extraction for phenotype data.
 
 This module provides functions to perform sigmoid functions fitting to
 Phenotype Microarray data. This module depends on scipy curve_fit function.
@@ -30,7 +30,7 @@ except ImportError:
 
 
 def logistic(x, A, u, d, v, y0):
-    """Logistic growth model
+    """Logistic growth model.
 
     Proposed in Zwietering et al., 1990 (PMID: 16348228)
     """
@@ -39,7 +39,7 @@ def logistic(x, A, u, d, v, y0):
 
 
 def gompertz(x, A, u, d, v, y0):
-    """Gompertz growth model
+    """Gompertz growth model.
 
     Proposed in Zwietering et al., 1990 (PMID: 16348228)
     """
@@ -48,7 +48,7 @@ def gompertz(x, A, u, d, v, y0):
 
 
 def richards(x, A, u, d, v, y0):
-    """Richards growth model (equivalent to Stannard)
+    """Richards growth model (equivalent to Stannard).
 
     Proposed in Zwietering et al., 1990 (PMID: 16348228)
     """
@@ -131,5 +131,5 @@ def fit(function, x, y):
 
 
 def get_area(y, x):
-    """Get the area under the curve"""
+    """Get the area under the curve."""
     return trapz(y=y, x=x)

@@ -3,7 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Code to parse the keywlist.txt file from SwissProt/UniProt
+"""Code to parse the keywlist.txt file from SwissProt/UniProt.
 
 See:
  - http://www.expasy.ch/sprot/sprot-top.html

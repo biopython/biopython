@@ -102,7 +102,11 @@ class PDBList(object):
 
     @staticmethod
     def _print_default_format_warning(file_format):
-        """Temporary warning (similar to a deprecation warning) that files are being downloaded in mmCIF"""
+        """Print a warning to stdout.
+
+        Temporary warning (similar to a deprecation warning) that files
+        are being downloaded in mmCIF.
+        """
         if file_format is None:
             sys.stderr.write("WARNING: The default download format has changed from PDB to PDBx/mmCif\n")
             return "mmCif"

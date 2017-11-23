@@ -3,7 +3,7 @@
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Classes and methods for tree construction"""
+"""Classes and methods for tree construction."""
 
 import itertools
 import copy
@@ -19,7 +19,7 @@ def _is_numeric(x):
 
 
 class _Matrix(object):
-    """Base class for distance matrix or scoring matrix
+    """Base class for distance matrix or scoring matrix.
 
     Accepts a list of names and a lower triangular matrix.::
 
@@ -240,7 +240,7 @@ class _Matrix(object):
             raise TypeError("Invalid index type.")
 
     def __delitem__(self, item):
-        """Delete related distances by the index or name"""
+        """Delete related distances by the index or name."""
         index = None
         if isinstance(item, int):
             index = item
@@ -283,7 +283,7 @@ class _Matrix(object):
             raise TypeError("Invalid name type.")
 
     def __len__(self):
-        """Matrix length"""
+        """Matrix length."""
         return len(self.names)
 
     def __repr__(self):
@@ -292,7 +292,7 @@ class _Matrix(object):
             % tuple(map(repr, (self.names, self.matrix)))
 
     def __str__(self):
-        """Get a lower triangular matrix string"""
+        """Get a lower triangular matrix string."""
         matrix_string = '\n'.join(
             [self.names[i] + "\t" + "\t".join([str(n) for n in self.matrix[i]])
              for i in range(0, len(self))])
@@ -316,7 +316,7 @@ class DistanceMatrix(_Matrix):
         self._set_zero_diagonal()
 
     def _set_zero_diagonal(self):
-        """Set all diagonal elements to zero"""
+        """Set all diagonal elements to zero (PRIVATE)."""
         for i in range(0, len(self)):
             self.matrix[i][i] = 0
 
@@ -353,7 +353,7 @@ _DistanceMatrix = DistanceMatrix
 
 
 class DistanceCalculator(object):
-    """Class to calculate the distance matrix from a DNA or Protein
+    """Class to calculate the distance matrix from a DNA or Protein.
 
     Multiple Sequence Alignment(MSA) and the given name of the
     substitution model.
@@ -494,7 +494,7 @@ class DistanceCalculator(object):
         return 1 - (score * 1.0 / max_score)
 
     def get_distance(self, msa):
-        """Return a DistanceMatrix for MSA object
+        """Return a DistanceMatrix for MSA object.
 
         :Parameters:
             msa : MultipleSeqAlignment
@@ -511,7 +511,7 @@ class DistanceCalculator(object):
         return dm
 
     def _build_protein_matrix(self, subsmat):
-        """Convert matrix from SubsMat format to _Matrix object"""
+        """Convert matrix from SubsMat format to _Matrix object (PRIVATE)."""
         protein_matrix = _Matrix(self.protein_alphabet)
         for k, v in subsmat.items():
             aa1, aa2 = k
@@ -683,7 +683,7 @@ class DistanceTreeConstructor(TreeConstructor):
         return BaseTree.Tree(inner_clade)
 
     def nj(self, distance_matrix):
-        """Construct and return an Neighbor Joining tree.
+        """Construct and return a Neighbor Joining tree.
 
         :Parameters:
             distance_matrix : DistanceMatrix
@@ -780,7 +780,7 @@ class DistanceTreeConstructor(TreeConstructor):
 
 
 class Scorer(object):
-    """Base class for all tree scoring methods"""
+    """Base class for all tree scoring methods."""
 
     def get_score(self, tree, alignment):
         """Caller to get the score of a tree for the given alignment.
@@ -791,7 +791,7 @@ class Scorer(object):
 
 
 class TreeSearcher(object):
-    """Base class for all tree searching methods"""
+    """Base class for all tree searching methods."""
 
     def search(self, starting_tree, alignment):
         """Caller to search the best tree with a starting tree.
@@ -971,7 +971,7 @@ class ParsimonyScorer(Scorer):
             raise TypeError("Must provide a _Matrix object.")
 
     def get_score(self, tree, alignment):
-        """Calculate parsimony score using the Fitch algorithm
+        """Calculate parsimony score using the Fitch algorithm.
 
         Calculate and return the parsimony score given a tree and the
         MSA using either the Fitch algorithm (without a penalty matrix)

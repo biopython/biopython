@@ -22,7 +22,7 @@ except ImportError:
 
 
 class SVDSuperimposer(object):
-    """Class to run SVD alignment,
+    """Class to run SVD alignment.
 
     SVDSuperimposer finds the best rotation and translation to put
     two point sets on top of each other (minimizing the RMSD). This is

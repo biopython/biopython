@@ -216,7 +216,7 @@ class DataHandler(object):
         self.is_schema = False
 
     def read(self, handle):
-        """Set up the parser and let it parse the XML results"""
+        """Set up the parser and let it parse the XML results."""
         # HACK: remove Bio._py3k handle conversion, since the Entrez XML parser
         # expects binary data
         if handle.__class__.__name__ == 'EvilHandleHack':

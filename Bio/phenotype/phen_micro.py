@@ -156,12 +156,12 @@ class PlateRecord(object):
         self._update()
 
     def _update(self):
-        """Update the rows and columns string identifiers."""
+        """Update the rows and columns string identifiers (PRIVATE)."""
         self._rows = sorted(set(x[0] for x in self._wells))
         self._columns = sorted(set(x[1:] for x in self._wells))
 
     def _is_well(self, obj):
-        """Check if the given object is a WellRecord object
+        """Check if the given object is a WellRecord object (PRIVATE).
 
         Used both for the class constructor and the __setitem__ method
         """
@@ -351,7 +351,7 @@ class PlateRecord(object):
         return False
 
     def __len__(self):
-        """Returns the number of wells in this plate"""
+        """Returns the number of wells in this plate."""
         return len(self._wells)
 
     def __eq__(self, other):
@@ -364,12 +364,12 @@ class PlateRecord(object):
         return not self.__eq__(other)
 
     def __add__(self, plate):
-        """Add another PlateRecord object
+        """Add another PlateRecord object.
 
         The wells in both plates must be the same
 
         A new PlateRecord object is returned, having the same id as the
-        left operand
+        left operand.
         """
         if not isinstance(plate, PlateRecord):
             raise TypeError('Expecting a PlateRecord object')
@@ -387,12 +387,12 @@ class PlateRecord(object):
         return newp
 
     def __sub__(self, plate):
-        """Subtract another PlateRecord object
+        """Subtract another PlateRecord object.
 
         The wells in both plates must be the same
 
         A new PlateRecord object is returned, having the same id as the
-        left operand
+        left operand.
         """
         if not isinstance(plate, PlateRecord):
             raise TypeError('Expecting a PlateRecord object')
@@ -410,7 +410,7 @@ class PlateRecord(object):
         return newp
 
     def get_row(self, row):
-        """Get all the wells of a given row
+        """Get all the wells of a given row.
 
         A row is identified with a letter (e.g. 'A')
         """
@@ -427,7 +427,7 @@ class PlateRecord(object):
             yield self._wells[w]
 
     def get_column(self, column):
-        """Get all the wells of a given column
+        """Get all the wells of a given column.
 
         A column is identified with a number (e.g. '6')
         """
@@ -443,7 +443,7 @@ class PlateRecord(object):
             yield self._wells[w]
 
     def subtract_control(self, control='A01', wells=None):
-        """Subtract a 'control' well from the other plates wells
+        """Subtract a 'control' well from the other plates wells.
 
         By default the control is subtracted to all wells, unless
         a list of well ID is provided
@@ -745,7 +745,7 @@ class WellRecord(object):
     def __str__(self):
         """A human readable summary of the record (string).
 
-        The python built in function str works by calling the object's ___str__
+        The python built-in function str works by calling the object's ___str__
         method.  e.g.
 
         >>> from Bio import phenotype
@@ -775,15 +775,15 @@ class WellRecord(object):
         return "\n".join(lines)
 
     def get_raw(self):
-        """Get a list of time/signal pairs"""
+        """Get a list of time/signal pairs."""
         return [(t, self._signals[t]) for t in sorted(self._signals.keys())]
 
     def get_times(self):
-        """Get a list of the recorded time points"""
+        """Get a list of the recorded time points."""
         return sorted(self._signals.keys())
 
     def get_signals(self):
-        """Get a list of the recorded signals (ordered by collection time)"""
+        """Get a list of the recorded signals (ordered by collection time)."""
         return [self._signals[t] for t in sorted(self._signals.keys())]
 
     def fit(self, function=("gompertz", "logistic", "richards")):

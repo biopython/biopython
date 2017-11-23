@@ -125,7 +125,7 @@ class MultiGraph(object):
                 del self._label_map[label]
 
     def remove_edge(self, parent, child, label):
-        """Removes edge. -- NOT IMPLEMENTED"""
+        """Removes edge (NOT IMPLEMENTED)."""
         # hm , this is a multigraph - how should this be implemented?
         raise NotImplementedError("remove_edge is not yet implemented")
 
