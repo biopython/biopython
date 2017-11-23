@@ -61,8 +61,10 @@ def mult_align(sum_dict, align_dict):
 
 
 def filter(sum_dict, align_dict, filter_attribute, low_bound, high_bound):
-    """Filters a passed summary section and alignment section according to a numeric
-    attribute in the summary section. Returns new summary and alignment sections.
+    """Filters a passed summary section and alignment section.
+
+    Filters according to a numeric attribute in the summary section.
+    Returns new summary and alignment sections.
     """
     new_sum_dict = FSSP.FSSPSumDict()
     new_align_dict = copy.deepcopy(align_dict)
@@ -83,7 +85,9 @@ def filter(sum_dict, align_dict, filter_attribute, low_bound, high_bound):
 
 
 def name_filter(sum_dict, align_dict, name_list):
-    """Accepts a list of names. Returns a new Summary block and Alignment block which
+    """Filter summary and alignment blocks for given names only.
+
+    Accepts a list of names. Returns a new Summary block and Alignment block which
     contain the info only for those names passed.
     """
     new_sum_dict = FSSP.FSSPSumDict()

@@ -283,17 +283,17 @@ def get_start_end(sequence, skiplist=('-', '?')):
 
 
 def _sort_keys_by_values(p):
-    """Returns a sorted list of keys of p sorted by values of p."""
+    """Return a sorted list of keys of p sorted by values of p (PRIVATE)."""
     return sorted((pn for pn in p if p[pn]), key=lambda pn: p[pn])
 
 
 def _make_unique(l):
-    """Check that all values in list are unique and return a pruned and sorted list."""
+    """Check all values in list are unique and return a pruned and sorted list (PRIVATE)."""
     return sorted(set(l))
 
 
 def _unique_label(previous_labels, label):
-    """Returns a unique name if label is already in previous_labels."""
+    """Return a unique name if label is already in previous_labels (PRIVATE)."""
     while label in previous_labels:
         label_split = label.split('.')
         if label_split[-1].startswith('copy'):
@@ -308,12 +308,14 @@ def _unique_label(previous_labels, label):
 
 
 def _seqmatrix2strmatrix(matrix):
-    """Converts a Seq-object matrix to a plain sequence-string matrix."""
+    """Convert a Seq-object matrix to a plain sequence-string matrix (PRIVATE)."""
     return dict((t, str(matrix[t])) for t in matrix)
 
 
 def _compact4nexus(orig_list):
-    """Transform [1 2 3 5 6 7 8 12 15 18 20] (baseindex 0, used in the Nexus class)
+    """Compact lists for Nexus output (PRIVATE).
+
+    Transform [1 2 3 5 6 7 8 12 15 18 20] (baseindex 0, used in the Nexus class)
     into '2-4 6-9 13-19\\3 21' (baseindex 1, used in programs like Paup or MrBayes.).
     """
     if not orig_list:
@@ -1781,8 +1783,9 @@ class Nexus(object):
         pos=nchar: last position
         """
         def _adjust(set, x, d, leftgreedy=False):
-            """Adjusts character sets if gaps are inserted, taking care of
-            new gaps within a coherent character set.
+            """Adjust character sets if gaps are inserted (PRIVATE).
+
+            Takes care of new gaps within a coherent character set.
             """
             # if 3 gaps are inserted at pos. 9 in a set that looks like 1 2 3  8 9 10 11 13 14 15
             # then the adjusted set will be 1 2 3  8 9 10 11 12 13 14 15 16 17 18

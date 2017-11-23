@@ -3,8 +3,9 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""A parser for the NCBI blastpgp version 2.2.5 output format. Currently only supports
-the '-m 9' option, (table w/ annotations).
+"""A parser for the NCBI blastpgp version 2.2.5 output format.
+
+Currently only supports the '-m 9' option, (table w/ annotations).
 Returns a BlastTableRec instance
 """
 

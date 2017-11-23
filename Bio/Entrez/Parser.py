@@ -589,7 +589,9 @@ class DataHandler(object):
             handle.close()
 
     def externalEntityRefHandler(self, context, base, systemId, publicId):
-        """The purpose of this function is to load the DTD locally, instead
+        """Handle external entiry reference in order to cache DTD locally.
+
+        The purpose of this function is to load the DTD locally, instead
         of downloading it from the URL specified in the XML. Using the local
         DTD results in much faster parsing. If the DTD is not found locally,
         we try to download it. If new DTDs become available from NCBI,

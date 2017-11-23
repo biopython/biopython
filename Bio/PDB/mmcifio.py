@@ -103,7 +103,9 @@ class MMCIFIO(object):
         self.dic = dic
 
     def save(self, filepath, select=Select(), preserve_atom_numbering=False):
-        """:param filepath: output file
+        """Save the structure to a file.
+
+        :param filepath: output file
         :type filepath: string or filehandle
 
         :param select: selects which entities will be written.
