@@ -156,8 +156,7 @@ class Codeml(Paml):
                 print("%s = %s" % (option[0], option[1]))
 
     def _set_rel_paths(self):
-        """Convert all file/directory locations to paths relative to the current
-        working directory.
+        """Make all file/directory paths relative to the PWD (PRIVATE).
 
         CODEML requires that all paths specified in the control file be
         relative to the directory from which it is called rather than
