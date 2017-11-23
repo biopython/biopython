@@ -114,7 +114,7 @@ class JASPAR5(object):
         return "%s\@%s:%s" % (self.user, self.host, self.name)
 
     def fetch_motif_by_id(self, id):
-        """Fetch a single JASPAR motif from the DB by it's JASPAR matrix ID
+        """Fetch a single JASPAR motif from the DB by it's JASPAR matrix ID.
 
         Example id 'MA0001.1'.
 
@@ -422,7 +422,7 @@ class JASPAR5(object):
         return motif
 
     def _fetch_counts_matrix(self, int_id):
-        """Fetch the counts matrix from the JASPAR DB by the internal ID
+        """Fetch the counts matrix from the JASPAR DB by the internal ID.
 
         Returns a Bio.motifs.matrix.GenericPositionMatrix
         """

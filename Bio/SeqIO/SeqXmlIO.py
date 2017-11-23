@@ -198,7 +198,7 @@ class SeqXmlIterator(XMLRecordIterator):
             record.description = node.firstChild.data
 
     def _attr_DBRef(self, attr_dict, record):
-        """Parse a database cross reference"""
+        """Parse a database cross reference (PRIVATE)."""
         if "source" not in attr_dict or "id" not in attr_dict:
             raise ValueError("Invalid DB cross reference.")
 

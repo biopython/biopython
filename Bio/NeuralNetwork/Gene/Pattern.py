@@ -118,7 +118,7 @@ class PatternRepository(object):
     """
 
     def __init__(self, pattern_info):
-        """Initialize a repository with patterns,
+        """Initialize a repository with patterns.
 
         Arguments:
          - pattern_info - A representation of all of the patterns found in
@@ -183,7 +183,7 @@ class PatternRepository(object):
         return all_patterns[:num_to_return]
 
     def get_top(self, num_patterns):
-        """Return the specified number of most frequently occurring patterns
+        """Return the specified number of most frequently occurring patterns.
 
         Arguments:
          - num_patterns - The number of patterns to return.

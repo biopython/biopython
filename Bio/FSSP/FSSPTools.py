@@ -35,7 +35,7 @@ class FSSPMultAlign(dict):
 
 
 def mult_align(sum_dict, align_dict):
-    """Returns a biopython multiple alignment instance (MultipleSeqAlignment)"""
+    """Return multiple alignment instance (MultipleSeqAlignment)."""
     mult_align_dict = {}
     for j in align_dict.abs(1).pos_align_dict:
         mult_align_dict[j] = ''

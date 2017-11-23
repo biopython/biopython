@@ -569,7 +569,7 @@ class GenBankWriter(_InsdcWriter):
         return division
 
     def _get_topology(self, record):
-        """Set the topology to 'circular', 'linear' if defined"""
+        """Set the topology to 'circular', 'linear' if defined (PRIVATE)."""
         max_topology_len = len("circular")
 
         topology = self._get_annotation_str(record, "topology", default="")

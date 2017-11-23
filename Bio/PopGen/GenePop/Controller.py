@@ -706,7 +706,7 @@ class GenePopController(object):
 
     # 6.1 Less genotype frequencies
     def calc_fst_all(self, fname):
-        """Executes GenePop and gets Fst/Fis/Fit (all populations)
+        """Executes GenePop and gets Fst/Fis/Fit (all populations).
 
         Parameters:
          - fname - file name

@@ -99,7 +99,7 @@ class ProteinAnalysis(object):
         return self.amino_acids_percent
 
     def molecular_weight(self):
-        """Calculate MW from Protein sequence"""
+        """Calculate MW from Protein sequence."""
         return molecular_weight(self.sequence, monoisotopic=self.monoisotopic)
 
     def aromaticity(self):
