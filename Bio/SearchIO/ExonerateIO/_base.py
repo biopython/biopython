@@ -106,8 +106,9 @@ def _get_fragments_phase(frags):
 
 
 def _adjust_aa_seq(fraglist):
-    """Transforms three-letter amino acid codes into one-letters in the
-    given HSPFragments.
+    """Transform fragment's 3-letter amino acid codes to one-letter (PRIVATE).
+
+    Argument fraglist should be a list of HSPFragments objects.
     """
     custom_map = {'***': '*', '<->': '-'}
     hsp_hstart = fraglist[0].hit_start

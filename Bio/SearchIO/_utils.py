@@ -39,7 +39,9 @@ def get_processor(format, mapping):
 
 
 def singleitem(attr=None, doc=''):
-    """Returns a property that fetches the given attribute from
+    """Property for fetching attribute from first entry of container.
+
+    Returns a property that fetches the given attribute from
     the first item in a SearchIO container object.
     """
     def getter(self):
@@ -53,7 +55,9 @@ def singleitem(attr=None, doc=''):
 
 
 def allitems(attr=None, doc=''):
-    """Returns a property that fetches the given attributes from
+    """Property for fetching attribute from all entries of container.
+
+    Returns a property that fetches the given attributes from
     all items in a SearchIO container object.
     """
     def getter(self):
