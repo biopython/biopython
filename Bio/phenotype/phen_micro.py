@@ -525,11 +525,10 @@ class PlateRecord(object):
 
 
 class WellRecord(object):
-    """WellRecord object stores all the time course signals of a phenotype
-    Microarray well.
+    """WellRecord stores all time course signals of a phenotype Microarray well.
 
-    The single time points and signals can be
-    accessed iterating on the WellRecord or using lists indeces or slices:
+    The single time points and signals can be accessed iterating on the
+    WellRecord or using lists indeces or slices:
 
     >>> from Bio import phenotype
     >>> plate = phenotype.read("plate.csv", "pm-csv")
@@ -690,7 +689,7 @@ class WellRecord(object):
         return not self.__eq__(other)
 
     def __add__(self, well):
-        """Add another WellRecord object
+        """Add another WellRecord object.
 
         A new WellRecord object is returned, having the same id as the
         left operand
@@ -709,7 +708,7 @@ class WellRecord(object):
         return neww
 
     def __sub__(self, well):
-        """Subtract another WellRecord object
+        """Subtract another WellRecord object.
 
         A new WellRecord object is returned, having the same id as the
         left operand
@@ -728,7 +727,7 @@ class WellRecord(object):
         return neww
 
     def __len__(self):
-        """Returns the number of time points sampled"""
+        """Returns the number of time points sampled."""
         return len(self._signals)
 
     def __repr__(self):
@@ -850,8 +849,7 @@ class WellRecord(object):
 
 
 def JsonIterator(handle):
-    """Generator function to iterate over PM json records (as PlateRecord
-    objects).
+    """Iterate over PM json records as PlateRecord objects.
 
     Arguments:
      - handle - input file
@@ -930,8 +928,7 @@ def JsonIterator(handle):
 
 
 def CsvIterator(handle):
-    """Generator function to iterate over PM csv records (as PlateRecord
-    objects).
+    """Iterate over PM csv records as PlateRecord objects.
 
     Arguments:
      - handle - input file

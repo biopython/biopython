@@ -152,7 +152,9 @@ class PDBIO(object):
         self.structure = structure
 
     def save(self, file, select=Select(), write_end=True, preserve_atom_numbering=False):
-        """:param file: output file
+        """Save structure to a file.
+
+        :param file: output file
         :type file: string or filehandle
 
         :param select: selects which entities will be written.

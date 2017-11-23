@@ -110,11 +110,10 @@ class PDBList(object):
 
     @staticmethod
     def get_status_list(url):
-        """Retrieves a list of pdb codes in the weekly pdb status file
-        from the given URL. Used by get_recent_changes.
+        """Retrieves a list of pdb codes in the weekly pdb status file from given URL.
 
-        Typical contents of the list files parsed by this method is now
-        very simply one PDB name per line.
+        Used by get_recent_changes. Typical contents of the list files parsed
+        by this method is now very simply - one PDB name per line.
         """
         with contextlib.closing(_urlopen(url)) as handle:
             answer = []
@@ -406,8 +405,7 @@ class PDBList(object):
                 outfile.writelines((x + '\n' for x in entries))
 
     def download_obsolete_entries(self, listfile=None, file_format=None):
-        """Retrieve all obsolete PDB entries not present in the local obsolete
-        PDB copy.
+        """Retrieve all obsolete PDB entries not present in local obsolete PDB copy.
 
         :param listfile: filename to which all PDB codes will be written (optional)
 
