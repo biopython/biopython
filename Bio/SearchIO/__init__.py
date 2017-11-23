@@ -264,9 +264,9 @@ _WRITER_MAP = {
 
 
 def parse(handle, format=None, **kwargs):
-    """Turns a search output file into a generator that yields QueryResult
-    objects.
+    """Iterate over search tool output file as QueryResult objects.
 
+    Arguments:
      - handle - Handle to the file, or the filename as a string.
      - format - Lower case string denoting one of the supported formats.
      - kwargs - Format-specific keyword arguments.
