@@ -104,6 +104,7 @@ DOCTEST_MODULES = [
     "Bio.KEGG.Enzyme",
     "Bio.KEGG.Gene",
     "Bio.KEGG.KGML.KGML_parser",
+    "Bio.Nexus.Nexus",
     "Bio.NMR.xpktools",
     "Bio.motifs",
     "Bio.motifs.applications._xxmotif",
