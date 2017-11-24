@@ -25,13 +25,6 @@ ignore =
     # D211	No blank lines allowed before class docstring
     # We ignore D203 deliberately in favour of passing D211,
     D203,
-    # ================================
-    # pydocstyle: D3## - Quotes Issues
-    # ================================
-    # D300	Use """triple double quotes"""
-    # D301	Use r""" if any backslashes in a docstring
-    # TODO: Fix this?:
-    D301,
     # ===========================================
     # pydocstyle: D4## - Docstring Content Issues
     # ===========================================
