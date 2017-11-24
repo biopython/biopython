@@ -313,7 +313,13 @@ def _seqmatrix2strmatrix(matrix):
 
 
 def _compact4nexus(orig_list):
-    """Compact lists for Nexus output (PRIVATE).
+    r"""Compact lists for Nexus output (PRIVATE).
+
+    Example
+    -------
+
+    >>> _compact4nexus([1, 2, 3, 5, 6, 7, 8, 12, 15, 18, 20])
+    '2-4 6-9 13-19\\3 21'
 
     Transform [1 2 3 5 6 7 8 12 15 18 20] (baseindex 0, used in the Nexus class)
     into '2-4 6-9 13-19\\3 21' (baseindex 1, used in programs like Paup or MrBayes.).
@@ -1907,3 +1913,8 @@ else:
         # nexus file under normal circumstances)
         commandlines = _adjust_lines(decommented.split(chr(7)))
         return commandlines
+
+
+if __name__ == "__main__":
+    from Bio._utils import run_doctest
+    run_doctest()
