@@ -259,10 +259,9 @@ class SamtoolsReheaderCommandline(AbstractCommandline):
     >>> from Bio.Sequencing.Applications import SamtoolsReheaderCommandline
     >>> input_header = "/path/to/header_sam_file"
     >>> input_bam = "/path/to/input_bam_file"
-    >>> samtools_reheader_cmd = SamtoolsReheaderCommandline(\
-                                    input_header=input_header,\
-                                    input_bam=input_bam)
-    >>> print(samtools_reheader_cmd)
+    >>> reheader_cmd = SamtoolsReheaderCommandline(input_header=input_header,
+    ...                                            input_bam=input_bam)
+    >>> print(reheader_cmd)
     samtools reheader /path/to/header_sam_file /path/to/input_bam_file
 
     """
@@ -430,10 +429,9 @@ class SamtoolsMergeCommandline(AbstractCommandline):
     >>> from Bio.Sequencing.Applications import SamtoolsMergeCommandline
     >>> out_bam = "/path/to/out_bam"
     >>> in_bam = ["/path/to/input_bam1", "/path/to/input_bam2"]
-    >>> samtools_merge_cmd = SamtoolsMergeCommandline(\
-                                                      out_bam=out_bam,\
-                                                      input_bam=in_bam)
-    >>> print(samtools_merge_cmd)
+    >>> merge_cmd = SamtoolsMergeCommandline(out_bam=out_bam,
+    ...                                               input_bam=in_bam)
+    >>> print(merge_cmd)
     samtools merge /path/to/out_bam /path/to/input_bam1 /path/to/input_bam2
 
     """
@@ -578,10 +576,9 @@ class SamtoolsFixmateCommandline(AbstractCommandline):
     >>> from Bio.Sequencing.Applications import SamtoolsFixmateCommandline
     >>> in_bam = "/path/to/in.nameSrt.bam"
     >>> out_bam = "/path/to/out.bam"
-    >>> samtools_fixmate_cmd = SamtoolsFixmateCommandline(\
-                                                          input_bam=in_bam,\
-                                                          out_bam=out_bam)
-    >>> print(samtools_fixmate_cmd)
+    >>> fixmate_cmd = SamtoolsFixmateCommandline(input_bam=in_bam,
+    ...                                          out_bam=out_bam)
+    >>> print(fixmate_cmd)
     samtools fixmate /path/to/in.nameSrt.bam /path/to/out.bam
 
     """
@@ -616,10 +613,9 @@ class SamtoolsRmdupCommandline(AbstractCommandline):
     >>> from Bio.Sequencing.Applications import SamtoolsRmdupCommandline
     >>> input_sorted_bam = "/path/to/input.srt.bam"
     >>> out_bam = "/path/to/out.bam"
-    >>> samtools_rmdup_cmd = SamtoolsRmdupCommandline(\
-                                                      input_bam=input_sorted_bam,\
-                                                      out_bam=out_bam)
-    >>> print(samtools_rmdup_cmd)
+    >>> rmdup_cmd = SamtoolsRmdupCommandline(input_bam=input_sorted_bam,
+    ...                                      out_bam=out_bam)
+    >>> print(rmdup_cmd)
     samtools rmdup /path/to/input.srt.bam /path/to/out.bam
 
     """
@@ -661,10 +657,9 @@ class SamtoolsCalmdCommandline(AbstractCommandline):
     >>> from Bio.Sequencing.Applications import SamtoolsCalmdCommandline
     >>> input_bam = "/path/to/aln.bam"
     >>> reference_fasta = "/path/to/reference.fasta"
-    >>> samtools_calmd_cmd = SamtoolsCalmdCommandline(\
-                                                      input_bam=input_bam,\
-                                                      reference=reference_fasta)
-    >>> print(samtools_calmd_cmd)
+    >>> calmd_cmd = SamtoolsCalmdCommandline(input_bam=input_bam,
+    ...                                      reference=reference_fasta)
+    >>> print(calmd_cmd)
     samtools calmd /path/to/aln.bam /path/to/reference.fasta
 
     """
