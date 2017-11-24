@@ -435,7 +435,7 @@ def combine(matrices):
 
 
 def _kill_comments_and_break_lines(text):
-    """Delete []-delimited comments out of a file and break into lines separated by ';'.
+    r"""Delete []-delimited comments out of a file and break into lines separated by ';'.
 
     stripped_text=_kill_comments_and_break_lines(text):
     Nested and multiline comments are allowed. [ and ] symbols within single
@@ -1207,7 +1207,7 @@ class Nexus(object):
         self.charpartitions[name] = charpartition
 
     def _get_indices(self, options, set_type=CHARSET, separator='='):
-        """Parse the taxset/charset specification (PRIVATE).
+        r"""Parse the taxset/charset specification (PRIVATE).
 
         e.g. '1 2   3 - 5 dog cat   10 - 20 \\ 3'
         --> [0,1,2,3,4,'dog','cat',9,12,15,18]
@@ -1244,7 +1244,7 @@ class Nexus(object):
         return name
 
     def _parse_list(self, options_buffer, set_type):
-        """Parse a NEXUS list (PRIVATE).
+        r"""Parse a NEXUS list (PRIVATE).
 
         e.g. [1, 2, 4-8\\2, dog, cat] --> [1,2,4,6,8,17,21],
         (assuming dog is taxon no. 17 and cat is taxon no. 21).
