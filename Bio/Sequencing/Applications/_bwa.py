@@ -77,7 +77,6 @@ class BwaAlignCommandline(AbstractCommandline):
     >>> reference_genome = "/path/to/reference_genome.fasta"
     >>> read_file = "/path/to/read_1.fq"
     >>> output_sai_file = "/path/to/read_1.sai"
-    >>> read_group="@RG\tID:foo\tSM:bar"
     >>> align_cmd = BwaAlignCommandline(reference=reference_genome, read_file=read_file)
     >>> print(align_cmd)
     bwa aln /path/to/reference_genome.fasta /path/to/read_1.fq
