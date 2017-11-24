@@ -35,9 +35,8 @@ ignore =
     # ===========================================
     # pydocstyle: D4## - Docstring Content Issues
     # ===========================================
-    # D400     First line should end with a period
-    # D401     First line should be in imperative mood
-    D400,D401,
+    # D401	First line should be in imperative mood
+    D401,
     # ================================================
     # flake8-commas: C#### (in case installed locally)
     # ================================================
