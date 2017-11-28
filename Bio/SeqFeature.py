@@ -228,7 +228,7 @@ class SeqFeature(object):
             return None
 
     def _set_location_operator(self, value):
-        """Set function for the location operator property."""
+        """Set function for the location operator property (PRIVATE)."""
         if value:
             if isinstance(self.location, CompoundLocation):
                 self.location.operator = value
