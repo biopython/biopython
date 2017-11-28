@@ -102,7 +102,7 @@ class PDBList(object):
 
     @staticmethod
     def _print_default_format_warning(file_format):
-        """Print a warning to stdout.
+        """Print a warning to stdout (PRIVATE).
 
         Temporary warning (similar to a deprecation warning) that files
         are being downloaded in mmCIF.
@@ -114,7 +114,7 @@ class PDBList(object):
 
     @staticmethod
     def get_status_list(url):
-        """Retrieves a list of pdb codes in the weekly pdb status file from given URL.
+        """Retrieve a list of pdb codes in the weekly pdb status file from given URL.
 
         Used by get_recent_changes. Typical contents of the list files parsed
         by this method is now very simply - one PDB name per line.
@@ -128,7 +128,7 @@ class PDBList(object):
         return answer
 
     def get_recent_changes(self):
-        """Returns three lists of the newest weekly files (added,mod,obsolete).
+        """Return three lists of the newest weekly files (added,mod,obsolete).
 
         Reads the directories with changed entries from the PDB server and
         returns a tuple of three URL's to the files of new, modified and
@@ -152,7 +152,7 @@ class PDBList(object):
         return [added, modified, obsolete]
 
     def get_all_entries(self):
-        """Retrieves a big file containing all the PDB entries and some annotation.
+        """Retrieve the big file containing all the PDB entries and some annotation.
 
         Returns a list of PDB codes in the index file.
         """
@@ -164,7 +164,7 @@ class PDBList(object):
         return all_entries
 
     def get_all_obsolete(self):
-        """Returns a list of all obsolete entries ever in the PDB.
+        """Return a list of all obsolete entries ever in the PDB.
 
         Returns a list of all obsolete pdb codes that have ever been
         in the PDB.
@@ -431,7 +431,7 @@ class PDBList(object):
                 outfile.writelines((x + '\n' for x in entries))
 
     def get_seqres_file(self, savefile='pdb_seqres.txt'):
-        """Retrieves and save a (big) file containing all the sequences of PDB entries."""
+        """Retrieve and save a (big) file containing all the sequences of PDB entries."""
         print("Retrieving sequence file (takes over 110 MB).")
         url = self.pdb_server + '/pub/pdb/derived_data/pdb_seqres.txt'
         _urlretrieve(url, savefile)
