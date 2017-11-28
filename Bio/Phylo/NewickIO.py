@@ -219,7 +219,7 @@ class Parser(object):
         return clade
 
     def process_clade(self, clade):
-        """Final processing of parsed clade. Removes node's parent and return it."""
+        """Final processing of parsed clade. Remove node's parent and return it."""
         if ((clade.name) and not
                 (self.values_are_confidence or self.comments_are_confidence) and
                 (clade.confidence is None) and
