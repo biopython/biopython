@@ -430,7 +430,7 @@ class SamtoolsMergeCommandline(AbstractCommandline):
     >>> out_bam = "/path/to/out_bam"
     >>> in_bam = ["/path/to/input_bam1", "/path/to/input_bam2"]
     >>> merge_cmd = SamtoolsMergeCommandline(out_bam=out_bam,
-    ...                                               input_bam=in_bam)
+    ...                                      input_bam=in_bam)
     >>> print(merge_cmd)
     samtools merge /path/to/out_bam /path/to/input_bam1 /path/to/input_bam2
 
