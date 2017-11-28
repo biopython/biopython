@@ -197,7 +197,7 @@ def _codons2re(codons):
 
 
 def _get_aa_regex(codon_table, stop='*', unknown='X'):
-    """Set up the regular expression of a given CodonTable.
+    """Set up the regular expression of a given CodonTable (PRIVATE).
 
     >>> from Bio.Data.CodonTable import generic_by_id
     >>> p = generic_by_id[1]

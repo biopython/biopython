@@ -213,7 +213,7 @@ class SeqMat(dict):
                 del self[key]
 
     def _full_to_half(self):
-        """Convert a full-matrix to a half-matrix."""
+        """Convert a full-matrix to a half-matrix (PRIVATE)."""
         # For instance: two entries ('A','C'):13 and ('C','A'):20 will be summed
         # into ('A','C'): 33 and the index ('C','A') will be deleted
         # alphabet.letters:('A','A') and ('C','C') will remain the same.
@@ -459,7 +459,7 @@ def _build_exp_freq_mat(exp_freq_table):
 # Build the substitution matrix
 #
 def _build_subs_mat(obs_freq_mat, exp_freq_mat):
-    """Build the substitution matrix OPRIVATE)."""
+    """Build the substitution matrix (PRIVATE)."""
     if obs_freq_mat.ab_list != exp_freq_mat.ab_list:
         raise ValueError("Alphabet mismatch in passed matrices")
     subs_mat = SubstitutionMatrix(obs_freq_mat)
