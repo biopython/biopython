@@ -106,7 +106,7 @@ def _get_fragments_phase(frags):
 
 
 def _adjust_aa_seq(fraglist):
-    """Transform fragment's 3-letter amino acid codes to one-letter (PRIVATE).
+    """Transform 3-letter AA codes of input fragments to one-letter codes (PRIVATE).
 
     Argument fraglist should be a list of HSPFragments objects.
     """
