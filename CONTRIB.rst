@@ -225,5 +225,6 @@ please open an issue on GitHub or mention it on the development mailing list.
 - Yasar L. Ahmed <https://github.com/pyahmed>
 - Yu Huang <krocea at domain yahoo.com.cn>
 - Yves Bastide <ybastide at domain irisa.fr>
+- Zachary Sailer <https://github.com/Zsailer>
 - Zaid Ur-Rehman <https://github.com/zaidurrehman>
 - Zheng Ruan <https://github.com/zruan>
