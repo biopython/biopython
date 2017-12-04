@@ -123,7 +123,7 @@ class NexusWriter(AlignmentWriter):
 
         # Note: MrBayes may choke on large alignments if not interleaved
         if interleave is None:
-            interleave = False if columns <= 1000 else True
+            interleave = (columns > 1000)
         n.write_nexus_data(self.handle, interleave=interleave)
 
     def _classify_alphabet_for_nexus(self, alphabet):
