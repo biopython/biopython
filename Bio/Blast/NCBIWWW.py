@@ -27,7 +27,7 @@ NCBI_BLAST_URL = "https://blast.ncbi.nlm.nih.gov/Blast.cgi"
 def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
            auto_format=None, composition_based_statistics=None,
            db_genetic_code=None, endpoints=None, entrez_query='(none)',
-           expect=10.0, filter=None, gapcosts=None, genetic_code=None,
+           expect=10.0, filter="F", gapcosts=None, genetic_code=None,
            hitlist_size=50, i_thresh=None, layout=None, lcase_mask=None,
            matrix_name=None, nucl_penalty=None, nucl_reward=None,
            other_advanced=None, perc_ident=None, phi_pattern=None,
@@ -37,7 +37,7 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
            alignments=500, alignment_view=None, descriptions=500,
            entrez_links_new_window=None, expect_low=None, expect_high=None,
            format_entrez_query=None, format_object=None, format_type='XML',
-           ncbi_gi=None, results_file=None, show_overview=None, megablast=None,
+           ncbi_gi=None, results_file=None, show_overview=None, num_threads=None,
            ):
     """BLAST search using NCBI's QBLAST server or a cloud service provider.
 
@@ -52,35 +52,48 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
 
     Some useful parameters:
 
-     - program        blastn, blastp, blastx, tblastn, or tblastx (lower case)
+     - program        blastn, megablast, blastp, blastx, tblastn, or tblastx (lower case)
      - database       Which database to search against (e.g. "nr").
      - sequence       The sequence to search.
      - ncbi_gi        TRUE/FALSE whether to give 'gi' identifier.
-     - descriptions   Number of descriptions to show.  Def 500.
+     - descriptions   Number of descriptions to show (applies to HTML and Text).  Def 500.
      - alignments     Number of alignments to show.  Def 500.
      - expect         An expect value cutoff.  Def 10.0.
-     - matrix_name    Specify an alt. matrix (PAM30, PAM70, BLOSUM80, BLOSUM45).
-     - filter         "none" turns off filtering.  Default no filtering
-     - format_type    "HTML", "Text", "ASN.1", or "XML".  Def. "XML".
-     - entrez_query   Entrez query to limit Blast search
-     - hitlist_size   Number of hits to return. Default 50
-     - megablast      TRUE/FALSE whether to use MEga BLAST algorithm (blastn only)
+     - matrix         Specify an alt. One of "BLOSUM45", "BLOSUM50", "BLOSUM62", "BLOSUM80", "BLOSUM90",
+                      "PAM250", "PAM30" or "PAM70".
+     - filter         "F" turns off filtering. "T" or "L" to enable. Prepend "m" for mask at
+                      lookup (e.g., mL). Def "F".
+     - format_type    "HTML", "Text", "XML", "XML2", "JSON2", or "Tabular".  Def "XML".
+     - entrez_query   Entrez query to limit Blast search.
+     - hitlist_size   Number of hits to return. Default 50.
      - service        plain, psi, phi, rpsblast, megablast (lower case)
+     - num_threads    Number of virtual CPUs to use. Def 1. Supported ONLY on the cloud.
 
     This function does no checking of the validity of the parameters
     and passes the values to the server as is.  More help is available at:
-    http://www.ncbi.nlm.nih.gov/BLAST/Doc/urlapi.html
+    https://ncbi.github.io/blast-cloud/dev/api.html
 
     """
     import time
 
-    assert program in ['blastn', 'blastp', 'blastx', 'tblastn', 'tblastx']
+    assert program in ['blastn', 'megablast', 'blastp', 'blastx', 'tblastn', 'tblastx']
+    if url_base == NCBI_BLAST_URL:
+        assert num_threads is None
 
     # Format the "Put" command, which sends search requests to qblast.
     # Parameters taken from http://www.ncbi.nlm.nih.gov/BLAST/Doc/node5.html on 9 July 2007
     # Additional parameters are taken from http://www.ncbi.nlm.nih.gov/BLAST/Doc/node9.html on 8 Oct 2010
     # To perform a PSI-BLAST or PHI-BLAST search the service ("Put" and "Get" commands) must be specified
     # (e.g. psi_blast = NCBIWWW.qblast("blastp", "refseq_protein", input_sequence, service="psi"))
+    # ---------
+    # Updates on 12 Apr 2017:
+    # The webpages aforementioned are not valid any more. Parameters were taken from
+    # https://ncbi.github.io/blast-cloud/dev/api.html
+    # Additional parameters may still work, but no detailed documentation was found on NCBI website.
+    # Simple perl code is available provided by NCBI (https://blast.ncbi.nlm.nih.gov/docs/web_blast.pl).
+    # Note that ONLY https is supported at the NCBI server after 30 Sep 2016.
+    # Note that do NOT overload the NCBI servers.
+
     parameters = [
         ('AUTO_FORMAT', auto_format),
         ('COMPOSITION_BASED_STATISTICS', composition_based_statistics),
@@ -96,8 +109,8 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
         ('I_THRESH', i_thresh),
         ('LAYOUT', layout),
         ('LCASE_MASK', lcase_mask),
-        ('MEGABLAST', megablast),
-        ('MATRIX_NAME', matrix_name),
+        # ('MEGABLAST', megablast),
+        ('MATRIX', matrix_name),
         ('NUCL_PENALTY', nucl_penalty),
         ('NUCL_REWARD', nucl_reward),
         ('OTHER_ADVANCED', other_advanced),
@@ -116,6 +129,7 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
         ('THRESHOLD', threshold),
         ('UNGAPPED_ALIGNMENT', ungapped_alignment),
         ('WORD_SIZE', word_size),
+        ('NUM_THEADS', num_threads),
         ('CMD', 'Put'),
         ]
     query = [x for x in parameters if x[1] is not None]
@@ -132,6 +146,9 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
 
     # Format the "Get" command, which gets the formatted results from qblast
     # Parameters taken from http://www.ncbi.nlm.nih.gov/BLAST/Doc/node6.html on 9 July 2007
+    # The above webpage is not valid any more on 12 Apr 2017.
+    # Parameters taken from https://ncbi.github.io/blast-cloud/dev/api.html on 12 Apr 2017
+
     rid, rtoe = _parse_qblast_ref_page(handle)
     parameters = [
         ('ALIGNMENTS', alignments),

@@ -4,10 +4,8 @@
 # as part of this package.
 
 """Testing online code for fetching NCBI qblast.
-
 Uses Bio.Blast.NCBIWWW.qblast() to run some online blast queries, get XML
 blast results back, and then checks Bio.Blast.NCBIXML.parse() can read them.
-
 Goals:
     - Make sure that all retrieval is working as expected.
     - Make sure we can parse the latest XML format being used by the NCBI.
@@ -157,4 +155,4 @@ class TestQblast(unittest.TestCase):
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
-    unittest.main(testRunner=runner)
+unittest.main(testRunner=runner)
