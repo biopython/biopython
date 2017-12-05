@@ -110,11 +110,9 @@ def check_domain(domain):
      - domain - id of a domain to check.
     """
     if domain not in get_domains(verbose=False):
-        err_str = "The domain does not correspond to the id of a known domain"
-        err_str += " in EBI. "
-        err_str += "The list of EBI domains and their id can be "
-        err_str += "accessed with get_domains"
-        raise ValueError(err_str)
+        raise ValueError("""The domain does not correspond to the id of a known 
+                         domain in EBI. The list of EBI domains and their id 
+                         can be accessed with get_domains().""")
 
 
 def get_number_of_results(domain, query):
