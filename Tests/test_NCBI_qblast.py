@@ -123,7 +123,6 @@ class TestQblast(unittest.TestCase):
                             megablast='on',
                         ), ['XM_635681.1', 'XM_008496783.1'])
 
-
     def run_qblast(self, program, database, query, e_value, entrez_filter, additional_args, expected_hits):
         try:
             if program == "blastn":
