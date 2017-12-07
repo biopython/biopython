@@ -48,15 +48,16 @@ class TestQblast(unittest.TestCase):
         # GI:160837788 aka NP_075631.2
         # the actin related protein 2/3 complex, subunit 1B [Mus musculus]
         self.run_qblast("blastp", "nr", "NP_075631.2", 0.001,
-                        "rat [ORGN]", ['9506405', '13592137', '37589612', '149064087', '56912225'])
+                        "rat [ORGN]", dict(megablast='FALSE'), ['9506405', '13592137', '37589612', '149064087', '56912225'])
 
     def test_pcr_primers(self):
         # This next example finds PCR primer matches in Chimpanzees, e.g. BRCA1:
         self.run_qblast("blastn", "nr", "GTACCTTGATTTCGTATTC" + ("N" * 30) + "GACTCTACTACCTTTACCC",
-                        10, "pan [ORGN]", ["XM_009432096.2", "XM_009432102.2", "XM_009432101.2",
-                                           "XM_016930487.1", "XM_009432104.2", "XM_009432099.2",
-                                           "XR_001710553.1", "XM_016930485.1", "XM_009432089.2",
-                                           "XM_016930484.1"])
+                        10, "pan [ORGN]", dict(megablast='FALSE'),
+                        ["XM_009432096.2", "XM_009432102.2", "XM_009432101.2",
+                         "XM_016930487.1", "XM_009432104.2", "XM_009432099.2",
+                         "XR_001710553.1", "XM_016930485.1", "XM_009432089.2",
+                         "XM_016930484.1"])
 
     def test_orchid_est(self):
         # Try an orchid EST (nucleotide) sequence against NR using BLASTX
@@ -71,9 +72,59 @@ class TestQblast(unittest.TestCase):
                         AGCCATGGATTTCTCAGAAGAAAATGATTATACTTCTTAATCAGGCAACTGATATTATCAATTTATGGCA
                         GCAGAGTGGTGGCTCCTTGTCCCAGCAGCAGTAATTACTTTTTTTTCTCTTTTTGTTTCCAAATTAAGAA
                         ACATTAGTATCATATGGCTATTTGCTCAATTGCAGATTTCTTTCTTTTGTGAATG""",
-                        0.0000001, None, ["21554275", "18409071", "296087288", "566183510"])
+                        0.0000001, None, dict(megablast='FALSE'),
+                        ["21554275", "18409071", "296087288", "566183510"])
 
-    def run_qblast(self, program, database, query, e_value, entrez_filter, expected_hits):
+    def test_discomegablast(self):
+        self.run_qblast("blastn", "nr",
+                        """>some sequence
+                        ATGAAGATCTTCCAGATCCAGTGCAGCAGCTTCAAGGAGAGCAGGTGGCAGAAGAGCAAGTGCGACAACT
+                        GCCTGAAGTTCCACATCGACATCAACAACAACAGCAAGACCAGCAACACCGACACCGACTTCGACGCCAA
+                        CACCAACATCAACAGCAACATCAACAGCAACATCAACAGCAACATCAACATCAACAACAGCGGCAACAAC
+                        AACAAGAACAGCAACAACATCGAGATCACCGAGAACATCGACAACAAGGCCAAGATCATCAACAAGCACA
+                        TCAAGACCATCACCAACAGCAAGCCCATCCCCATCCCCATCCCCACCCCCACCCCCATCAGCATCAAGGA
+                        GAAGGAGAAGGAGAAGGAGAAGGAGAAGGAGAAGGAGAAGGAGAAGGAGAAGGAGAAGGAGAAGGAGATG
+                        AAGAGCACCATCAACCTGAGGAGCGAGGACACCACCAGCAACAAGAGCACCATCGTGTTCACCGAGTGCC
+                        TGGAGTACAAGGGCCACCAGTGGAGGCCCAACATCTGCGTGACCTGCTTCAGCCCCAAGAACAAGCACAA
+                        GAACGTGCTGCCCGAGACCAGCACCCCCCTGATCAGCCAGAGCAGCCAGACCAGCACCATCACCCCCAGC
+                        AGCAGCAGCACCAGCACCAGCACCAGCAGCATCAGCACCCACAAGACCGCCAACAACAAGACCGTGATCA
+                        CCTACATCAGCAGCACCACCACCACCACCACCACCAGCAGCAGCAGCAGCAGCCCCCCCAGCAGCAGCAT
+                        CGCCGGCATCACCAACCCCACCAGCAGGAGCAGCAGCCCCATCCTGAAGAGCGTGCCCCCCAGCGCCTAC
+                        AGCAACGTGGTGATCCCCATCAACAACATCAACAACAGCAACAGCAACAGCAGCAGCGGCGGCGGCAACA
+                        ACAACAACAAGAGCATCAGCACCCCCAGCAGCCCCATCATCAGCAGGCCCATCACCAACAAGATCAACAA
+                        CAACAACAACAACAACCAGCCCCAGCTGCACTACAACCAGCCCCAGAGCAGCAGCGTGAGCACCACCAGC
+                        AGCCCCATCATCAGGCCCGTGCTGAGGAGGCAGTTCCAGAGCTTCCCCAGCAACCCCAAGATCAGCAAGG
+                        CCATCCTGGAGCAGTGCAACATCATCAACAACAACAGCAACAGCAACAACAGCAACAACAAGGACCCCGT
+                        GATCCTGTGCAAGTACACCATCGAGAGCCAGCCCAAGAGCAACATCAGCGTGCTGAAGCCCACCCTGGTG
+                        GAGTTCATCAACCAGCCCGACAGCAAGGACGACGAGAGCAGCGTGAAGAGCCCCCCCCTGCCCGTGGAGA
+                        GCCAGCCCATCTTCAACAGCAAGCAGAGCGCCACCATGGACGGCATCACCACCCACAAGAGCGTGAGCAT
+                        CACCATCAGCACCAGCACCAGCCCCAGCAGCACCACCACCACCACCAGCACCACCACCAGCATCATCGCC
+                        GAGGAGCCCAGCAGCCCCATCCTGCCCACCGCCAGCCCCAGCAGCAGCAGCAGCAGCATCATCACCACCG
+                        CCACCGCCAGCACCATCCCCATGAGCCCCAGCCTGCCCAGCATCCCCTTCCACGAGTTCGAGACCATGGA
+                        GAGCAGCACCACCACCACCCTGCTGAGCGAGAACAACGGCGGCGGCGGCGGCAGCAGCTGCAACGACAAC
+                        AGCAGGAGGAACAGCCTGAACATCCTGCCCCTGAGGCTGAAGAGCTTCAGCTTCAGCGCCCCCCAGAGCG
+                        ACAGCATGATCGAGCAGCCCGAGGACGACCCCTTCTTCGACTTCGAGGACCTGAGCGACGACGACGACAG
+                        CAACGACAACGACGACGAGGAGCTGAAGGAGATCAACGGCGAGAAGATCATCCAGCAGAACGACCTGACC
+                        CCCACCACCACCATCACCAGCACCACCACCATCCTGCAGAGCCCCACCCTGGAGAAGACCCTGAGCACCA
+                        CCACCACCACCACCATCCCCAGCCCCAGCACCAACAGCAGGAGCATCTGCAACACCCTGATGGACAGCAC
+                        CGACAGCATCAACAACACCAACACCAACACCAACACCAACACCAACACCAACACCAACACCAACACCAAC
+                        ACCAACACCAACACCAACACCAACGCCAACATCAACAACAAGGTGAGCACCACCACCACCACCACCACCA
+                        CCAAGAGGAGGAGCCTGAAGATGGACCAGTTCAAGGAGAAGGAGGACGAGTGGGACCAGGGCGTGGACCT
+                        GACCAGCTTCCTGAAGAGGAAGCCCACCCTGCAGAGGGACTTCAGCTACTGCAACAACAAGGTGATGGAG
+                        ATCAGCAGCGTGAAGGAGGAGGCCAAGAGGCTGCACGGCGGCACCGGCTACATCCACCAGTTCGCCTTCG
+                        AGGCCTTCAAGGACATCCTGGAGGCCAAGCAGACCCAGATCAACAGGGCCTTCTGCAGCCAGAAGATCGA
+                        CGCCCCCGACTGCGAGATGCTGATCAACGAGATCAACACCGCCAAGAAGCTGCTGGAGGACCTGCTGGAG
+                        CTGAACAGCAACAGCAGCGGCAGCGGCAACAACAGCAACGACAACAGCGGCAGCAGCAGCCCCAGCAGCA
+                        GCAAGACCAACACCCTGAACCAGCAGAGCATCTGCATCAAGAGCGAGATCCAACGATACGTTGAAATTCG
+                        CTTGTGTGCCACTGGTAAATCCACCCCCCCTAAGCCTCTAATAGGGAGACCTTAG""",
+                        0.0000001, None, dict(
+                            template_type=0,
+                            template_length=18,
+                            megablast='on',
+                        ), ['XM_635681.1', 'XM_008496783.1'])
+
+
+    def run_qblast(self, program, database, query, e_value, entrez_filter, additional_args, expected_hits):
         try:
             if program == "blastn":
                 # Check the megablast parameter is accepted
@@ -81,13 +132,15 @@ class TestQblast(unittest.TestCase):
                                         alignments=10, descriptions=10,
                                         hitlist_size=10,
                                         entrez_query=entrez_filter,
-                                        expect=e_value, megablast="FALSE")
+                                        expect=e_value,
+                                        **additional_args)
             else:
                 handle = NCBIWWW.qblast(program, database, query,
                                         alignments=10, descriptions=10,
                                         hitlist_size=10,
                                         entrez_query=entrez_filter,
-                                        expect=e_value)
+                                        expect=e_value,
+                                        **additional_args)
         except HTTPError:
             # e.g. a proxy error
             raise MissingExternalDependencyError("internet connection failed")
