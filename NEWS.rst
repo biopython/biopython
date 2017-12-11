@@ -71,6 +71,7 @@ possible, especially the following contributors:
 - Jun Aruga (first contribution)
 - Kai Blin
 - Kozo Nishida
+- Lewis A. Marshall (first contribution)
 - Markus Piotrowski
 - Michiel de Hoon
 - Nicolas Fontrodona (first contribution)

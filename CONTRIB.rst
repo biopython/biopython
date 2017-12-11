@@ -147,6 +147,7 @@ please open an issue on GitHub or mention it on the development mailing list.
 - Lenna Peterson <ark first-name at gmail dot com>
 - Leonhard Heizinger <https://github.com/he-leon>
 - Leszek Pryszcz <https://github.com/lpryszcz>
+- Lewis A. Marshall <https://github.com/lewisamarshall>
 - Lucas Sinclair <https://github.com/xapple>
 - Marc Colosimo <mcolosimo at domain mitre.org>
 - Marcin Magnus <https://github.com/mmagnus>
