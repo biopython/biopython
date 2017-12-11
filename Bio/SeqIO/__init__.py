@@ -401,7 +401,7 @@ from . import UniprotIO
 # Most alignment file formats will be handled via Bio.AlignIO
 
 _FormatToIterator = {"fasta": FastaIO.FastaIterator,
-                     "fasta-2line": FastaIO.FastaIterator,
+                     "fasta-2line": FastaIO.FastaTwoLineIterator,
                      "gb": InsdcIO.GenBankIterator,
                      "genbank": InsdcIO.GenBankIterator,
                      "genbank-cds": InsdcIO.GenBankCdsFeatureIterator,
