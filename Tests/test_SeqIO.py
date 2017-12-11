@@ -432,7 +432,7 @@ def check_simple_write_read(records, indent=" "):
             elif format in ["stockholm", "maf"]:
                 assert r1.id.replace(" ", "_") == r2.id, \
                     "'%s' vs '%s'" % (r1.id, r2.id)
-            elif format in ["fasta", "fasta-nowrap"]:
+            elif format in ["fasta", "fasta-2line"]:
                 assert r1.id.split()[0] == r2.id
             else:
                 assert r1.id == r2.id, \
