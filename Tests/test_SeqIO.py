@@ -37,11 +37,23 @@ dna_alphas = [Alphabet.generic_dna]
 rna_alphas = [Alphabet.generic_rna]
 nucleotide_alphas = [Alphabet.generic_nucleotide,
                      Alphabet.Gapped(Alphabet.generic_nucleotide)]
-no_alpha_formats = ["fasta", "clustal", "phylip", "phylip-relaxed",
-                    "phylip-sequential", "tab", "ig",
-                    "stockholm", "emboss", "fastq", "fastq-solexa",
-                    "fastq-illumina", "qual"]
-possible_unknown_seq_formats = ["qual", "genbank", "gb", "embl", "imgt"]
+no_alpha_formats = set([
+    'clustal',
+    'emboss',
+    'fasta', 'fasta-2line',
+    'fastq', 'fastq-illumina', 'fastq-solexa',
+    'ig',
+    'phylip', 'phylip-relaxed', 'phylip-sequential',
+    'qual',
+    'stockholm',
+    'tab',
+])
+possible_unknown_seq_formats = set([
+    "embl",
+    "genbank", "gb",
+    "imgt",
+    "qual",
+])
 
 # List of formats including alignment only file formats we can read AND write.
 # The list is initially hard coded to preserve the original order of the unit
@@ -80,6 +92,8 @@ test_files = [
     ("fasta", False, 'Fasta/lavender.nu', 1),
     # Following protein examples are also used in test_SeqIO_FastaIO.py
     ("fasta", False, 'Fasta/aster.pro', 1),
+    ("fasta", False, 'Fasta/aster_no_wrap.pro', 1),
+    ("fasta-2line", False, 'Fasta/aster_no_wrap.pro', 1),
     ("fasta", False, 'Fasta/loveliesbleeding.pro', 1),
     ("fasta", False, 'Fasta/rose.pro', 1),
     ("fasta", False, 'Fasta/rosemary.pro', 1),
