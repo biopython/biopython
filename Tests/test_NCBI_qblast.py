@@ -48,12 +48,13 @@ class TestQblast(unittest.TestCase):
         # GI:160837788 aka NP_075631.2
         # the actin related protein 2/3 complex, subunit 1B [Mus musculus]
         self.run_qblast("blastp", "nr", "NP_075631.2", 0.001,
-                        "rat [ORGN]", dict(megablast='FALSE'), ['9506405', '13592137', '37589612', '149064087', '56912225'])
+                        "rat [ORGN]", {'megablast': 'FALSE'},
+                        ['9506405', '13592137', '37589612', '149064087', '56912225'])
 
     def test_pcr_primers(self):
         # This next example finds PCR primer matches in Chimpanzees, e.g. BRCA1:
         self.run_qblast("blastn", "nr", "GTACCTTGATTTCGTATTC" + ("N" * 30) + "GACTCTACTACCTTTACCC",
-                        10, "pan [ORGN]", dict(megablast='FALSE'),
+                        10, "pan [ORGN]", {'megablast': 'FALSE'},
                         ["XM_009432096.2", "XM_009432102.2", "XM_009432101.2",
                          "XM_016930487.1", "XM_009432104.2", "XM_009432099.2",
                          "XR_001710553.1", "XM_016930485.1", "XM_009432089.2",
@@ -72,7 +73,7 @@ class TestQblast(unittest.TestCase):
                         AGCCATGGATTTCTCAGAAGAAAATGATTATACTTCTTAATCAGGCAACTGATATTATCAATTTATGGCA
                         GCAGAGTGGTGGCTCCTTGTCCCAGCAGCAGTAATTACTTTTTTTTCTCTTTTTGTTTCCAAATTAAGAA
                         ACATTAGTATCATATGGCTATTTGCTCAATTGCAGATTTCTTTCTTTTGTGAATG""",
-                        0.0000001, None, dict(megablast='FALSE'),
+                        0.0000001, None, {'megablast': 'FALSE'},
                         ["21554275", "18409071", "296087288", "566183510"])
 
     def test_discomegablast(self):
@@ -117,11 +118,11 @@ class TestQblast(unittest.TestCase):
                         CTGAACAGCAACAGCAGCGGCAGCGGCAACAACAGCAACGACAACAGCGGCAGCAGCAGCCCCAGCAGCA
                         GCAAGACCAACACCCTGAACCAGCAGAGCATCTGCATCAAGAGCGAGATCCAACGATACGTTGAAATTCG
                         CTTGTGTGCCACTGGTAAATCCACCCCCCCTAAGCCTCTAATAGGGAGACCTTAG""",
-                        0.0000001, None, dict(
-                            template_type=0,
-                            template_length=18,
-                            megablast='on',
-                        ), ['XM_635681.1', 'XM_008496783.1'])
+                        0.0000001, None, {
+                            'template_type': 0,
+                            'template_length': 18,
+                            'megablast': 'on',
+                        }, ['XM_635681.1', 'XM_008496783.1'])
 
     def run_qblast(self, program, database, query, e_value, entrez_filter, additional_args, expected_hits):
         try:
