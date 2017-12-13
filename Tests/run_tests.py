@@ -138,6 +138,7 @@ DOCTEST_MODULES = [
     "Bio.SeqUtils",
     "Bio.SeqUtils.CheckSum",
     "Bio.SeqUtils.MeltingTemp",
+    "Bio.SeqUtils.ProtParam",
     "Bio.Sequencing.Applications._Novoalign",
     "Bio.Sequencing.Applications._bwa",
     "Bio.Sequencing.Applications._samtools",
