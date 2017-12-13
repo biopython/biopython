@@ -114,18 +114,20 @@ Some examples:
       Score=3
     <BLANKLINE>
 
-- Same thing as before, but with a local alignment.
+- Same thing as before, but with a local alignment. Note that
+  ``format_alignment`` will only show the aligned parts of the sequences,
+  together with the starting positions.
 
     >>> for a in pairwise2.align.localxx("ACCGT", "ACG"):
     ...     print(format_alignment(*a))
-    ACCGT
-    | ||
-    A-CG-
+    1 ACCG
+      | ||
+    1 A-CG
       Score=3
     <BLANKLINE>
-    ACCGT
-    || |
-    AC-G-
+    1 ACCG
+      || |
+    1 AC-G
       Score=3
     <BLANKLINE>
 
@@ -213,7 +215,7 @@ Some examples:
 
 To see a description of the parameters for a function, please look at
 the docstring for the function via the help function, e.g.
-type ``help(pairwise2.align.localds``) at the Python prompt.
+type ``help(pairwise2.align.localds)`` at the Python prompt.
 
 """  # noqa: W291
 from __future__ import print_function
@@ -245,7 +247,7 @@ class align(object):
     type ``help(pairwise2)``).
     To see a description of the parameters for a function, please
     look at the docstring for the function, e.g. type
-    ``help(pairwise2.align.localds``) at the Python prompt.
+    ``help(pairwise2.align.localds)`` at the Python prompt.
     """
 
     class alignment_function(object):
@@ -1077,29 +1079,59 @@ def print_matrix(matrix):
 def format_alignment(align1, align2, score, begin, end):
     """Format the alignment prettily into a string.
 
+    IMPORTANT: Gap symbol must be "-" (or ['-'] for lists)!
+
     Since Biopython 1.71 identical matches are shown with a pipe
     character, mismatches as a dot, and gaps as a space.
 
-    Note that spaces are also used at the start/end of a local
-    alignment.
-
     Prior releases just used the pipe character to indicate the
     aligned region (matches, mismatches and gaps).
+
+    Also, in local alignments, if the alignment does not include
+    the whole sequences, now only the aligned part is shown,
+    together with the start positions of the aligned subsequences.
+    The start positions are 1-based; so start position n is the
+    n-th base/amino acid in the *un-aligned* sequence.
+
+    NOTE: This is different to the alignment's begin/end values,
+    which give the Python indices (0-based) of the bases/amino acids
+    in the *aligned* sequences.
     """
-    s = []
-    s.append("%s\n" % align1)
-    s.append(" " * begin)
+    start1 = start2 = ''
+    start_m = begin  # Begin of match line (how many spaces to include)
+    # Is this a local alignment?
+    if begin != 0 or end != len(align1):
+        # Calculate the actual start positions in the un-aligned sequences
+        # This will only work if the gap symbol is '-' or ['-']!
+        start1 = str(len(align1[:begin]) - align1[:begin].count('-') + 1) + ' '
+        start2 = str(len(align2[:begin]) - align2[:begin].count('-') + 1) + ' '
+        start_m = max(len(start1), len(start2))
+
+    if isinstance(align1, list):
+        # List elements will be separated by spaces, since they can be
+        # of different lengths
+        align1 = [a + ' ' for a in align1]
+        align2 = [a + ' ' for a in align2]
+
+    s1_line = ["{:>{width}}".format(start1, width=start_m)]  # seq1 line
+    m_line = [" " * start_m]  # match line
+    s2_line = ["{:>{width}}".format(start2, width=start_m)]  # seq2 line
+
     for a, b in zip(align1[begin:end], align2[begin:end]):
+        # Since list elements can be of different length, we center them,
+        # using the maximum length of the two compared elements as width
+        m_len = max(len(a), len(b))
+        s1_line.append("{:^{width}}".format(a, width=m_len))
+        s2_line.append("{:^{width}}".format(b, width=m_len))
         if a == b:
-            s.append("|")  # match
-        elif a == "-" or b == "-":
-            s.append(" ")  # gap
+            m_line.append("{:^{width}}".format('|', width=m_len))  # match
+        elif a.strip() == "-" or b.strip() == "-":
+            m_line.append("{:^{width}}".format(' ', width=m_len))  # gap
         else:
-            s.append(".")  # mismatch
-    s.append("\n")
-    s.append("%s\n" % align2)
-    s.append("  Score=%g\n" % score)
-    return ''.join(s)
+            m_line.append("{:^{width}}".format('.', width=m_len))  # mismatch
+
+    s2_line.append("\n  Score=%g\n" % score)
+    return '\n'.join([''.join(s1_line), ''.join(m_line), ''.join(s2_line)])
 
 
 # Try and load C implementations of functions. If I can't,
