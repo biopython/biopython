@@ -705,7 +705,7 @@ def Tm_GC(seq, check=True, strict=True, valueset=7, userset=None, Na=50, K=0,
 
     """
     if saltcorr == 5:
-        raise ValueError('salt-correction method 5 not applicable' +
+        raise ValueError('salt-correction method 5 not applicable '
                          'to Tm_GC')
     seq = str(seq)
     if check:
@@ -716,8 +716,8 @@ def Tm_GC(seq, check=True, strict=True, valueset=7, userset=None, Na=50, K=0,
         sum(map(seq.count, ('B', 'V'))) * 66.67 / len(seq) + \
         sum(map(seq.count, ('D', 'H'))) * 33.33 / len(seq)
     if strict and tmp:
-        raise ValueError('ambiguous bases B, D, H, K, M, N, R, V, Y not ' +
-                         'allowed when strict=True')
+        raise ValueError('ambiguous bases B, D, H, K, M, N, R, V, Y not '
+                         'allowed when \'strict=True\'')
     else:
         percent_gc += tmp
     if userset:
@@ -984,7 +984,7 @@ def Tm_NN(seq, check=True, strict=True, c_seq=None, shift=0, nn_table=DNA_NN3,
 
 
 def Tm_staluc(s, dnac=50, saltc=50, rna=0):
-    """Returns DNA/DNA Tm using nearest neighbor thermodynamics (OBSOLETE).
+    """Return DNA/DNA Tm using nearest neighbor thermodynamics (OBSOLETE).
 
     This method may be depreceated in the future. Use Tm_NN instead. Tm_NN
     with default values gives the same result as Tm_staluc.

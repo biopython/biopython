@@ -28,7 +28,7 @@ from Bio.Data import IUPACData
 
 
 def GC(seq):
-    """Calculates G+C content, returns the percentage (float between 0 and 100).
+    """Calculate G+C content, return percentage (as float between 0 and 100).
 
     Copes mixed case sequences, and with the ambiguous nucleotide S (G or C)
     when counting the G and C content.  The percentage is calculated against
@@ -48,7 +48,7 @@ def GC(seq):
 
 
 def GC123(seq):
-    """Calculates total G+C content plus first, second and third positions.
+    """Calculate G+C content: total, for first, second and third positions.
 
     Returns a tuple of four floats (percentages between 0 and 100) for the
     entire sequence, and the three codon positions.  e.g.
@@ -90,7 +90,7 @@ def GC123(seq):
 
 
 def GC_skew(seq, window=100):
-    """Calculates GC skew (G-C)/(G+C) for multiple windows along the sequence.
+    """Calculate GC skew (G-C)/(G+C) for multiple windows along the sequence.
 
     Returns a list of ratios (floats), controlled by the length of the sequence
     and the size of the window.
@@ -113,9 +113,8 @@ def GC_skew(seq, window=100):
     return values
 
 
-def xGC_skew(seq, window=1000, zoom=100,
-                         r=300, px=100, py=100):
-    """Calculates and plots normal and accumulated GC skew (GRAPHICS !!!)."""
+def xGC_skew(seq, window=1000, zoom=100, r=300, px=100, py=100):
+    """Calculate and plot normal and accumulated GC skew (GRAPHICS !!!)."""
     try:
         import Tkinter as tkinter  # Python 2
     except ImportError:
@@ -139,7 +138,8 @@ def xGC_skew(seq, window=1000, zoom=100,
     x1, x2, y1, y2 = X0 - r, X0 + r, Y0 - r, Y0 + r
 
     ty = Y0
-    canvas.create_text(X0, ty, text='%s...%s (%d nt)' % (seq[:7], seq[-7:], len(seq)))
+    canvas.create_text(X0, ty, text='%s...%s (%d nt)' % (seq[:7],
+                                                         seq[-7:], len(seq)))
     ty += 20
     canvas.create_text(X0, ty, text='GC %3.2f%%' % (GC(seq)))
     ty += 20
@@ -178,10 +178,10 @@ def xGC_skew(seq, window=1000, zoom=100,
 
 
 def nt_search(seq, subseq):
-    """Search for a DNA subseq in sequence.
+    """Search for a DNA subseq in sequence, return list of [subseq, positions].
 
-    use ambiguous values (like N = A or T or C or G, R = A or G etc.)
-    searches only on forward strand
+    Use ambiguous values (like N = A or T or C or G, R = A or G etc.),
+    searches only on forward strand.
     """
     pattern = ''
     for nt in subseq:
@@ -203,27 +203,25 @@ def nt_search(seq, subseq):
         result.append(pos)
     return result
 
-# }}}
 
 ######################################
 # Protein
 ######################
-# {{{
 
 
 def seq3(seq, custom_map=None, undef_code='Xaa'):
-    """Turn a one letter code protein sequence into one with three letter codes.
+    """Convert protein sequence from one-letter to three-letter code.
 
     The single required input argument 'seq' should be a protein sequence using
-    single letter codes, either as a python string or as a Seq or MutableSeq
+    single letter codes, either as a Python string or as a Seq or MutableSeq
     object.
 
     This function returns the amino acid sequence as a string using the three
     letter amino acid codes. Output follows the IUPAC standard (including
     ambiguous characters B for "Asx", J for "Xle" and X for "Xaa", and also U
-    for "Sel" and O for "Pyl") plus "Ter" for a terminator given as an asterisk.
-    Any unknown character (including possible gap characters), is changed into
-    'Xaa' by default.
+    for "Sel" and O for "Pyl") plus "Ter" for a terminator given as an
+    asterisk. Any unknown character (including possible gap characters),
+    is changed into 'Xaa' by default.
 
     e.g.
 
@@ -262,10 +260,10 @@ def seq3(seq, custom_map=None, undef_code='Xaa'):
 
 
 def seq1(seq, custom_map=None, undef_code='X'):
-    """Turns a three-letter code protein sequence into one with single letter codes.
+    """Convert protein sequence from three-letter to one-letter code.
 
     The single required input argument 'seq' should be a protein sequence
-    using three-letter codes, either as a python string or as a Seq or
+    using three-letter codes, either as a Python string or as a Seq or
     MutableSeq object.
 
     This function returns the amino acid sequence as a string using the one
@@ -277,21 +275,21 @@ def seq1(seq, custom_map=None, undef_code='X'):
 
     e.g.
 
-    >>> from Bio.SeqUtils import seq3
+    >>> from Bio.SeqUtils import seq1
     >>> seq1("MetAlaIleValMetGlyArgTrpLysGlyAlaArgTer")
     'MAIVMGRWKGAR*'
 
     The input is case insensitive, e.g.
 
-    >>> from Bio.SeqUtils import seq3
+    >>> from Bio.SeqUtils import seq1
     >>> seq1("METalaIlEValMetGLYArgtRplysGlyAlaARGTer")
     'MAIVMGRWKGAR*'
 
     You can set a custom translation of the codon termination code using the
     dictionary "custom_map" argument (defaulting to {'Ter': '*'}), e.g.
 
-    >>> seq1("MetAlaIleValMetGlyArgTrpLysGlyAlaArg***", custom_map={"***": "*"})
-    'MAIVMGRWKGAR*'
+    >>> seq1("MetAlaIleValMetGlyArgTrpLysGlyAla***", custom_map={"***": "*"})
+    'MAIVMGRWKGA*'
 
     You can also set a custom translation for non-amino acid characters, such
     as '-', using the "undef_code" argument, e.g.
@@ -317,26 +315,23 @@ def seq1(seq, custom_map=None, undef_code='X'):
     return ''.join(onecode.get(aa.upper(), undef_code) for aa in seqlist)
 
 
-# }}}
-
 ######################################
 # Mixed ???
 ######################
-# {{{
 
 
 def molecular_weight(seq, seq_type=None, double_stranded=False, circular=False,
                      monoisotopic=False):
-    """Calculates the molecular weight of a DNA, RNA or protein sequence.
+    """Calculate the molecular mass of DNA, RNA or protein sequences as float.
 
     Only unambiguous letters are allowed. Nucleotide sequences are assumed to
     have a 5' phosphate.
 
     Arguments:
      - seq: String or Biopython sequence object.
-     - seq_type: The default (None) is to take the alphabet from the seq argument,
-       or assume DNA if the seq argument is a string. Override this with
-       a string 'DNA', 'RNA', or 'protein'.
+     - seq_type: The default (None) is to take the alphabet from the seq
+       argument, or assume DNA if the seq argument is a string. Override this
+       with a string 'DNA', 'RNA', or 'protein'.
      - double_stranded: Calculate the mass for the double stranded molecule?
      - circular: Is the molecule circular (has no ends)?
      - monoisotopic: Use the monoisotopic mass tables?
@@ -399,16 +394,16 @@ def molecular_weight(seq, seq_type=None, double_stranded=False, circular=False,
             seq = Seq(seq1(str(seq)), alphabet=Alphabet.ProteinAlphabet())
         elif not isinstance(base_alphabet, Alphabet.Alphabet):
             raise TypeError("%s is not a valid alphabet for mass calculations"
-                             % base_alphabet)
+                            % base_alphabet)
         else:
-            tmp_type = "DNA"  # backward compatibity
+            tmp_type = 'DNA'  # backward compatibity
         if seq_type and tmp_type and tmp_type != seq_type:
             raise ValueError("seq_type=%r contradicts %s from seq alphabet"
                              % (seq_type, tmp_type))
         seq_type = tmp_type
     elif isinstance(seq, str):
         if seq_type is None:
-            seq_type = "DNA"  # backward compatibity
+            seq_type = 'DNA'  # backward compatibity
     else:
         raise TypeError("Expected a string or Seq object, not seq=%r" % seq)
 
@@ -458,9 +453,9 @@ def molecular_weight(seq, seq_type=None, double_stranded=False, circular=False,
 
 
 def six_frame_translations(seq, genetic_code=1):
-    """Formatted string showing the 6 frame translations and GC content.
+    """Return pretty string showing the 6 frame translations and GC content.
 
-    nice looking 6 frame translation with GC content - code from xbbtools
+    Nice looking 6 frame translation with GC content - code from xbbtools
     similar to DNA Striders six-frame translation
 
     >>> from Bio.SeqUtils import six_frame_translations
@@ -490,7 +485,8 @@ def six_frame_translations(seq, genetic_code=1):
     for i in range(0, 3):
         fragment_length = 3 * ((length - i) // 3)
         frames[i + 1] = translate(seq[i:i + fragment_length], genetic_code)
-        frames[-(i + 1)] = translate(anti[i:i + fragment_length], genetic_code)[::-1]
+        frames[-(i + 1)] = translate(anti[i:i + fragment_length],
+                                     genetic_code)[::-1]
 
     # create header
     if length > 20:
@@ -501,7 +497,8 @@ def six_frame_translations(seq, genetic_code=1):
     for nt in ['a', 't', 'g', 'c']:
         header += '%s:%d ' % (nt, seq.count(nt.upper()))
 
-    header += '\nSequence: %s, %d nt, %0.2f %%GC\n\n\n' % (short.lower(), length, GC(seq))
+    header += '\nSequence: %s, %d nt, %0.2f %%GC\n\n\n' % (short.lower(),
+                                                           length, GC(seq))
     res = header
 
     for i in range(0, length, 60):
@@ -520,8 +517,6 @@ def six_frame_translations(seq, genetic_code=1):
         res += ' ' + '  '.join(frames[-1][p:p + 20]) + '\n'
         res += '  ' + '  '.join(frames[-3][p:p + 20]) + '\n\n'
     return res
-
-# }}}
 
 
 if __name__ == "__main__":
