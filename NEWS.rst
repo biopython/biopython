@@ -50,6 +50,11 @@ In this release more of our code is now explicitly available under either our
 original "Biopython License Agreement", or the very similar but more commonly
 used "3-Clause BSD License".  See the ``LICENSE.rst`` file for more details.
 
+IO functions such as SeqIO.read now support objects conforming to
+`PEP 519 <https://www.python.org/dev/peps/pep-0519/>`_, allowing users to pass
+``pathlib.Path`` objects to these functions in addition to strings and open
+file handles.
+
 Additionally, a number of small bugs and typos have been fixed with further
 additions to the test suite, and there has been further work to follow the
 Python PEP8, PEP257 and best practice standard coding style.
