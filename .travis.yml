@@ -20,13 +20,6 @@ matrix:
   include:
     - stage: basics
       python: 2.7
-      env: TOXENV=api
-      addons:
-        apt:
-          packages:
-      before_install: echo "Going to build API docs"
-    - stage: basics
-      python: 2.7
       env: TOXENV=style
       addons:
         apt:
@@ -45,6 +38,13 @@ matrix:
         apt:
           packages:
       before_install: echo "Going to run basic checks"
+    - stage: test
+      python: 2.7
+      env: TOXENV=api
+      addons:
+        apt:
+          packages:
+      before_install: echo "Going to build API docs"
     - stage: test
       python: 2.7
       env: TOXENV=py27-cover
