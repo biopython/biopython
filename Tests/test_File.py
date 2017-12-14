@@ -120,7 +120,7 @@ class AsHandleTestCase(unittest.TestCase):
     def test_stringio(self):
         s = StringIO()
         with File.as_handle(s) as handle:
-            self.assertEqual(s, handle)
+            self.assertIs(s, handle)
 
 
 if __name__ == "__main__":
