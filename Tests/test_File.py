@@ -6,13 +6,13 @@
 from __future__ import print_function
 
 import os.path
-import unittest
 import shutil
-from Bio._py3k import StringIO
+import sys
 import tempfile
+import unittest
 
 from Bio import File
-
+from Bio._py3k import StringIO
 
 data = """This
 is
@@ -92,12 +92,27 @@ class AsHandleTestCase(unittest.TestCase):
                     "Exiting as_handle given a file-like object should not "
                     "close the file")
 
-    def test_path(self):
-        "Test as_handle with a path argument"
+    def test_string_path(self):
+        "Test as_handle with a string path argument"
         p = self._path('test_file.fasta')
         mode = 'wb'
         with File.as_handle(p, mode=mode) as handle:
             self.assertEqual(p, handle.name)
+            self.assertEqual(mode, handle.mode)
+            self.assertFalse(handle.closed)
+        self.assertTrue(handle.closed)
+
+    @unittest.skipIf(
+        sys.version_info < (3, 6),
+        'Passing Path objects to File.as_handle requires Python >= 3.6',
+    )
+    def test_path_object(self):
+        "Test as_handle with a pathlib.Path object"
+        from pathlib import Path
+        p = Path(self._path('test_file.fasta'))
+        mode = 'wb'
+        with File.as_handle(p, mode=mode) as handle:
+            self.assertEqual(str(p.absolute()), handle.name)
             self.assertEqual(mode, handle.mode)
             self.assertFalse(handle.closed)
         self.assertTrue(handle.closed)
