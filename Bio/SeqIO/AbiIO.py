@@ -10,7 +10,7 @@ ABI is the format used by Applied Biosystem's sequencing machines to store
 sequencing results.
 
 For more details on the format specification, visit:
-http://www.appliedbiosystem.com/support/software_community/ABIF_File_Format.pdf
+http://www6.appliedbiosystems.com/support/software_community/ABIF_File_Format.pdf
 
 """
 
@@ -491,7 +491,7 @@ def _abi_trim(seq_record):
 
     More about the trimming algorithm:
     http://www.phrap.org/phredphrap/phred.html
-    http://www.clcbio.com/manual/genomics/Quality_abif_trimming.html
+    http://resources.qiagenbioinformatics.com/manuals/clcgenomicsworkbench/650/Quality_trimming.html
     """
     start = False   # flag for starting position of trimmed sequence
     segment = 20    # minimum sequence length
