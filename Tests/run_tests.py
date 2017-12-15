@@ -90,6 +90,7 @@ DOCTEST_MODULES = [
     "Bio.AlignIO",
     "Bio.AlignIO.StockholmIO",
     "Bio.Alphabet",
+    "Bio.Alphabet.Reduced",
     "Bio.Application",
     "Bio.bgzf",
     "Bio.codonalign",

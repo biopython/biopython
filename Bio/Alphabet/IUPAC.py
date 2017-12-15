@@ -14,9 +14,10 @@ from Bio.Data import IUPACData
 # #################### Protein
 
 # From the IUPAC definition at:
-#   http://www.chem.qmw.ac.uk/iupac/AminoAcid/A2021.html#AA21
+# http://www.chem.qmw.ac.uk/iupac/AminoAcid/A2021.html#AA21
 
-assert IUPACData.extended_protein_letters == IUPACData.extended_protein_letters.upper()
+assert (IUPACData.extended_protein_letters ==
+        IUPACData.extended_protein_letters.upper())
 
 
 class ExtendedIUPACProtein(Alphabet.ProteinAlphabet):
@@ -44,7 +45,10 @@ assert IUPACData.protein_letters == IUPACData.protein_letters.upper()
 
 
 class IUPACProtein(ExtendedIUPACProtein):
-    """Uppercase IUPAC protein single letter alphabet of the 20 standard amino acids."""
+    """IUPAC protein alphabet of the 20 standard amino acids.
+
+    Uppercase and single letter.
+    """
 
     letters = IUPACData.protein_letters
 
@@ -55,7 +59,7 @@ protein = IUPACProtein()
 
 
 # The next two are the IUPAC definitions, from:
-#   http://www.chem.qmw.ac.uk/iubmb/misc/naseq.html
+# http://www.chem.qmw.ac.uk/iubmb/misc/naseq.html
 class IUPACAmbiguousDNA(Alphabet.DNAAlphabet):
     """Uppercase IUPAC ambiguous DNA."""
 
