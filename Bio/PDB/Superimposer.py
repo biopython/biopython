@@ -14,9 +14,7 @@ from Bio.PDB.PDBExceptions import PDBException
 
 
 class Superimposer(object):
-    """Rotate/translate one set of atoms on top of another,
-    thereby minimizing the RMSD.
-    """
+    """Rotate/translate one set of atoms on top of another to minimize RMSD."""
 
     def __init__(self):
         """Initialize the class."""
@@ -24,7 +22,9 @@ class Superimposer(object):
         self.rms = None
 
     def set_atoms(self, fixed, moving):
-        """Put (translate/rotate) the atoms in fixed on the atoms in
+        """Prepare translation/rotation to minimize RMSD between atoms.
+
+        Put (translate/rotate) the atoms in fixed on the atoms in
         moving, in such a way that the RMSD is minimized.
 
         :param fixed: list of (fixed) atoms

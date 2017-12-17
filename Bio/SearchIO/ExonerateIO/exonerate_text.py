@@ -77,7 +77,9 @@ def _get_block_coords(parsed_seq, row_dict, has_ner=False):
 
 
 def _get_inter_coords(coords, strand=1):
-    """From the given pairs of coordinates, returns a list of pairs
+    """Return list of pairs covering intervening ranges (PRIVATE).
+
+    From the given pairs of coordinates, returns a list of pairs
     covering the intervening ranges.
     """
     # adapted from Python's itertools guide
@@ -188,9 +190,7 @@ def _get_blocks(rows, coords, idx):
 
 
 def _get_scodon_moves(tmp_seq_blocks):
-    """Returns a dictionary of split codon locations relative to each
-    fragment's end.
-    """
+    """Dictionary of split codon locations relative to each fragment end (PRIVATE)."""
     scodon_moves = {'query': [], 'hit': []}
     for seq_type in scodon_moves:
         scoords = []
@@ -290,9 +290,7 @@ def _comp_coords(hsp, seq_type, inter_lens):
 
 
 def _comp_split_codons(hsp, seq_type, scodon_moves):
-    """Computes the positions of split codons and puts the values in the given
-    HSP dictionary.
-    """
+    """Compute positions of split codons, store in given HSP dictionary (PRIVATE)."""
     scodons = []
     for idx in range(len(scodon_moves[seq_type])):
         pair = scodon_moves[seq_type][idx]

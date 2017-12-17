@@ -377,7 +377,7 @@ def _forward(N, T, lp_initial, lp_transition, lp_emission, outputs):
 
 
 def _backward(N, T, lp_transition, lp_emission, outputs):
-    """Implement backward algorithm."""
+    """Implement backward algorithm (PRIVATE)."""
     matrix = numpy.zeros((N, T + 1))
     for t in range(T - 1, -1, -1):
         k = outputs[t]

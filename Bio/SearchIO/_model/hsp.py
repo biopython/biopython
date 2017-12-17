@@ -792,7 +792,7 @@ class HSPFragment(_BaseHSP):
 
     # sequence properties #
     def _set_seq(self, seq, seq_type):
-        """Checks the given sequence for attribute setting
+        """Checks the given sequence for attribute setting.
 
         :param seq: sequence to check
         :type seq: string or SeqRecord

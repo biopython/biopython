@@ -283,17 +283,17 @@ def get_start_end(sequence, skiplist=('-', '?')):
 
 
 def _sort_keys_by_values(p):
-    """Returns a sorted list of keys of p sorted by values of p."""
+    """Return a sorted list of keys of p sorted by values of p (PRIVATE)."""
     return sorted((pn for pn in p if p[pn]), key=lambda pn: p[pn])
 
 
 def _make_unique(l):
-    """Check that all values in list are unique and return a pruned and sorted list."""
+    """Check all values in list are unique and return a pruned and sorted list (PRIVATE)."""
     return sorted(set(l))
 
 
 def _unique_label(previous_labels, label):
-    """Returns a unique name if label is already in previous_labels."""
+    """Return a unique name if label is already in previous_labels (PRIVATE)."""
     while label in previous_labels:
         label_split = label.split('.')
         if label_split[-1].startswith('copy'):
@@ -308,12 +308,20 @@ def _unique_label(previous_labels, label):
 
 
 def _seqmatrix2strmatrix(matrix):
-    """Converts a Seq-object matrix to a plain sequence-string matrix."""
+    """Convert a Seq-object matrix to a plain sequence-string matrix (PRIVATE)."""
     return dict((t, str(matrix[t])) for t in matrix)
 
 
 def _compact4nexus(orig_list):
-    """Transform [1 2 3 5 6 7 8 12 15 18 20] (baseindex 0, used in the Nexus class)
+    r"""Compact lists for Nexus output (PRIVATE).
+
+    Example
+    -------
+
+    >>> _compact4nexus([1, 2, 3, 5, 6, 7, 8, 12, 15, 18, 20])
+    '2-4 6-9 13-19\\3 21'
+
+    Transform [1 2 3 5 6 7 8 12 15 18 20] (baseindex 0, used in the Nexus class)
     into '2-4 6-9 13-19\\3 21' (baseindex 1, used in programs like Paup or MrBayes.).
     """
     if not orig_list:
@@ -427,7 +435,7 @@ def combine(matrices):
 
 
 def _kill_comments_and_break_lines(text):
-    """Delete []-delimited comments out of a file and break into lines separated by ';'.
+    r"""Delete []-delimited comments out of a file and break into lines separated by ';'.
 
     stripped_text=_kill_comments_and_break_lines(text):
     Nested and multiline comments are allowed. [ and ] symbols within single
@@ -1199,7 +1207,7 @@ class Nexus(object):
         self.charpartitions[name] = charpartition
 
     def _get_indices(self, options, set_type=CHARSET, separator='='):
-        """Parse the taxset/charset specification (PRIVATE).
+        r"""Parse the taxset/charset specification (PRIVATE).
 
         e.g. '1 2   3 - 5 dog cat   10 - 20 \\ 3'
         --> [0,1,2,3,4,'dog','cat',9,12,15,18]
@@ -1236,7 +1244,7 @@ class Nexus(object):
         return name
 
     def _parse_list(self, options_buffer, set_type):
-        """Parse a NEXUS list (PRIVATE).
+        r"""Parse a NEXUS list (PRIVATE).
 
         e.g. [1, 2, 4-8\\2, dog, cat] --> [1,2,4,6,8,17,21],
         (assuming dog is taxon no. 17 and cat is taxon no. 21).
@@ -1781,8 +1789,9 @@ class Nexus(object):
         pos=nchar: last position
         """
         def _adjust(set, x, d, leftgreedy=False):
-            """Adjusts character sets if gaps are inserted, taking care of
-            new gaps within a coherent character set.
+            """Adjust character sets if gaps are inserted (PRIVATE).
+
+            Takes care of new gaps within a coherent character set.
             """
             # if 3 gaps are inserted at pos. 9 in a set that looks like 1 2 3  8 9 10 11 13 14 15
             # then the adjusted set will be 1 2 3  8 9 10 11 12 13 14 15 16 17 18
@@ -1904,3 +1913,8 @@ else:
         # nexus file under normal circumstances)
         commandlines = _adjust_lines(decommented.split(chr(7)))
         return commandlines
+
+
+if __name__ == "__main__":
+    from Bio._utils import run_doctest
+    run_doctest()

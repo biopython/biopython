@@ -307,7 +307,7 @@ def cal_dn_ds(codon_seq1, codon_seq2, method="NG86",
     .. _`Nei and Gojobori (1986)`: http://www.ncbi.nlm.nih.gov/pubmed/3444411
     .. _`Li et al. (1985)`: http://www.ncbi.nlm.nih.gov/pubmed/3916709
     .. _`Goldman and Yang (1994)`: http://mbe.oxfordjournals.org/content/11/5/725
-    .. _`Yang and Nielsen (2000)`: http://dx.doi.org/10.1093/oxfordjournals.molbev.a026236
+    .. _`Yang and Nielsen (2000)`: https://doi.org/10.1093/oxfordjournals.molbev.a026236
 
     Arguments:
      - codon_seq1 - CodonSeq or or SeqRecord that contains a CodonSeq
@@ -832,8 +832,8 @@ def _count_site_YN00(codon_lst1, codon_lst2, pi, k,
     and base frequencies in each category. The function is equivalent to
     the ``CountSites()`` function in ``yn00.c`` of PAML.
 
-    .. _`Ina (1995)`: http://dx.doi.org/10.1007/BF00167113
-    .. _`Yang and Nielsen (2000)`: http://dx.doi.org/10.1093/oxfordjournals.molbev.a026236
+    .. _`Ina (1995)`: https://doi.org/10.1007/BF00167113
+    .. _`Yang and Nielsen (2000)`: https://doi.org/10.1093/oxfordjournals.molbev.a026236
 
     """
     if len(codon_lst1) != len(codon_lst2):

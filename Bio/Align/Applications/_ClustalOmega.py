@@ -30,7 +30,7 @@ class ClustalOmegaCommandline(AbstractCommandline):
     McWilliam H, Remmert M, Söding J, Thompson JD, Higgins DG (2011).
     Fast, scalable generation of high-quality protein multiple
     sequence alignments using Clustal Omega.
-    Molecular Systems Biology 7:539 doi:10.1038/msb.2011.75
+    Molecular Systems Biology 7:539 https://doi.org/10.1038/msb.2011.75
 
     Examples
     --------

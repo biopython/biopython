@@ -77,7 +77,6 @@ class BwaAlignCommandline(AbstractCommandline):
     >>> reference_genome = "/path/to/reference_genome.fasta"
     >>> read_file = "/path/to/read_1.fq"
     >>> output_sai_file = "/path/to/read_1.sai"
-    >>> read_group="@RG\tID:foo\tSM:bar"
     >>> align_cmd = BwaAlignCommandline(reference=reference_genome, read_file=read_file)
     >>> print(align_cmd)
     bwa aln /path/to/reference_genome.fasta /path/to/read_1.fq
@@ -225,7 +224,7 @@ class BwaSamseCommandline(AbstractCommandline):
 
 
 class BwaSampeCommandline(AbstractCommandline):
-    """Command line wrapper for Burrows Wheeler Aligner (BWA) sampe.
+    r"""Command line wrapper for Burrows Wheeler Aligner (BWA) sampe.
 
     Generate alignments in the SAM format given paired-end reads.
     Equivalent to::
@@ -243,13 +242,13 @@ class BwaSampeCommandline(AbstractCommandline):
     >>> sai_file1 = "/path/to/read_1.sai"
     >>> sai_file2 = "/path/to/read_2.sai"
     >>> output_sam_file = "/path/to/output.sam"
-    >>> read_group = "@RG\tID:foo\tSM:bar"
+    >>> read_group = r"@RG\tID:foo\tSM:bar"  # BWA will turn backslash-t into tab
     >>> sampe_cmd = BwaSampeCommandline(reference=reference_genome,
     ...                                 sai_file1=sai_file1, sai_file2=sai_file2,
     ...                                 read_file1=read_file1, read_file2=read_file2,
     ...                                 r=read_group)
     >>> print(sampe_cmd)
-    bwa sampe /path/to/reference_genome.fasta /path/to/read_1.sai /path/to/read_2.sai /path/to/read_1.fq /path/to/read_2.fq -r @RG       ID:foo  SM:bar
+    bwa sampe /path/to/reference_genome.fasta /path/to/read_1.sai /path/to/read_2.sai /path/to/read_1.fq /path/to/read_2.fq -r @RG\tID:foo\tSM:bar
 
     You would typically run the command line using sampe_cmd(stdout=output_sam_file)
     or via the Python subprocess module, as described in the Biopython tutorial.

@@ -9,7 +9,7 @@ import math
 
 
 def lcc_mult(seq, wsize):
-    """Local Composition Complexity (LCC) values over sliding window.
+    """Calculate Local Composition Complexity (LCC) values over sliding window.
 
     Returns a list of floats, the LCC values for a sliding window over
     the sequence.
@@ -122,7 +122,7 @@ def lcc_mult(seq, wsize):
 
 
 def lcc_simp(seq):
-    """Local Composition Complexity (LCC) for a sequence.
+    """Calculate Local Composition Complexity (LCC) for a sequence.
 
     seq - an unambiguous DNA sequence (a string or Seq object)
 
@@ -131,7 +131,7 @@ def lcc_simp(seq):
 
     Reference:
     Andrzej K Konopka (2005) Sequence Complexity and Composition
-    DOI: 10.1038/npg.els.0005260
+    https://doi.org/10.1038/npg.els.0005260
     """
     wsize = len(seq)
     try:

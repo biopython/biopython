@@ -3,6 +3,9 @@
 # as part of this package.
 #
 
+"""Methods for codon usage calculations."""
+
+
 from __future__ import print_function
 
 import math
@@ -10,19 +13,20 @@ from .CodonUsageIndices import SharpEcoliIndex
 from Bio import SeqIO  # To parse a FASTA file
 
 
-CodonsDict = {'TTT': 0, 'TTC': 0, 'TTA': 0, 'TTG': 0, 'CTT': 0,
-'CTC': 0, 'CTA': 0, 'CTG': 0, 'ATT': 0, 'ATC': 0,
-'ATA': 0, 'ATG': 0, 'GTT': 0, 'GTC': 0, 'GTA': 0,
-'GTG': 0, 'TAT': 0, 'TAC': 0, 'TAA': 0, 'TAG': 0,
-'CAT': 0, 'CAC': 0, 'CAA': 0, 'CAG': 0, 'AAT': 0,
-'AAC': 0, 'AAA': 0, 'AAG': 0, 'GAT': 0, 'GAC': 0,
-'GAA': 0, 'GAG': 0, 'TCT': 0, 'TCC': 0, 'TCA': 0,
-'TCG': 0, 'CCT': 0, 'CCC': 0, 'CCA': 0, 'CCG': 0,
-'ACT': 0, 'ACC': 0, 'ACA': 0, 'ACG': 0, 'GCT': 0,
-'GCC': 0, 'GCA': 0, 'GCG': 0, 'TGT': 0, 'TGC': 0,
-'TGA': 0, 'TGG': 0, 'CGT': 0, 'CGC': 0, 'CGA': 0,
-'CGG': 0, 'AGT': 0, 'AGC': 0, 'AGA': 0, 'AGG': 0,
-'GGT': 0, 'GGC': 0, 'GGA': 0, 'GGG': 0}
+CodonsDict = {
+    'TTT': 0, 'TTC': 0, 'TTA': 0, 'TTG': 0, 'CTT': 0,
+    'CTC': 0, 'CTA': 0, 'CTG': 0, 'ATT': 0, 'ATC': 0,
+    'ATA': 0, 'ATG': 0, 'GTT': 0, 'GTC': 0, 'GTA': 0,
+    'GTG': 0, 'TAT': 0, 'TAC': 0, 'TAA': 0, 'TAG': 0,
+    'CAT': 0, 'CAC': 0, 'CAA': 0, 'CAG': 0, 'AAT': 0,
+    'AAC': 0, 'AAA': 0, 'AAG': 0, 'GAT': 0, 'GAC': 0,
+    'GAA': 0, 'GAG': 0, 'TCT': 0, 'TCC': 0, 'TCA': 0,
+    'TCG': 0, 'CCT': 0, 'CCC': 0, 'CCA': 0, 'CCG': 0,
+    'ACT': 0, 'ACC': 0, 'ACA': 0, 'ACG': 0, 'GCT': 0,
+    'GCC': 0, 'GCA': 0, 'GCG': 0, 'TGT': 0, 'TGC': 0,
+    'TGA': 0, 'TGG': 0, 'CGT': 0, 'CGC': 0, 'CGA': 0,
+    'CGG': 0, 'AGT': 0, 'AGC': 0, 'AGA': 0, 'AGG': 0,
+    'GGT': 0, 'GGC': 0, 'GGA': 0, 'GGG': 0}
 
 
 # this dictionary shows which codons encode the same AA
@@ -47,8 +51,7 @@ SynonymousCodons = {
     'TRP': ['TGG'],
     'VAL': ['GTA', 'GTC', 'GTG', 'GTT'],
     'GLU': ['GAG', 'GAA'],
-    'TYR': ['TAT', 'TAC']
-}
+    'TYR': ['TAT', 'TAC']}
 
 
 class CodonAdaptationIndex(object):
@@ -68,7 +71,7 @@ class CodonAdaptationIndex(object):
 
     # use this method with predefined CAI index
     def set_cai_index(self, index):
-        """Sets up an index to be used when calculating CAI for a gene.
+        """Set up an index to be used when calculating CAI for a gene.
 
         Just pass a dictionary similar to the SharpEcoliIndex in the
         CodonUsageIndices module.
@@ -81,10 +84,13 @@ class CodonAdaptationIndex(object):
         Takes a location of a Fasta file containing CDS sequences
         (which must all have a whole number of codons) and generates a codon
         usage index.
+
+        RCSU values
         """
         # first make sure we're not overwriting an existing index:
         if self.index != {} or self.codon_count != {}:
-            raise ValueError("an index has already been set or a codon count has been done. cannot overwrite either.")
+            raise ValueError("an index has already been set or a codon count "
+                             "has been done. Cannot overwrite either.")
 
         # count codon occurrences in the file.
         self._count_codons(fasta_file)
@@ -93,7 +99,9 @@ class CodonAdaptationIndex(object):
         # synonymous codons were used all together.
         for aa in SynonymousCodons:
             total = 0.0
-            rcsu = []  # RCSU values are CodonCount/((1/num of synonymous codons) * sum of all synonymous codons)
+            # RCSU values are CodonCount/((1/num of synonymous codons) * sum of
+            # all synonymous codons)
+            rcsu = []
             codons = SynonymousCodons[aa]
 
             for codon in codons:
@@ -112,12 +120,13 @@ class CodonAdaptationIndex(object):
     def cai_for_gene(self, dna_sequence):
         """Calculate the CAI (float) for the provided DNA sequence (string).
 
-        This method uses the Index (either the one you set or the one you generated)
-        and returns the CAI for the DNA sequence.
+        This method uses the Index (either the one you set or the one you
+        generated) and returns the CAI for the DNA sequence.
         """
         cai_value, cai_length = 0, 0
 
-        # if no index is set or generated, the default SharpEcoliIndex will be used.
+        # if no index is set or generated, the default SharpEcoliIndex will
+        # be used.
         if self.index == {}:
             self.set_cai_index(SharpEcoliIndex)
 
@@ -127,11 +136,14 @@ class CodonAdaptationIndex(object):
         for i in range(0, len(dna_sequence), 3):
             codon = dna_sequence[i:i + 3]
             if codon in self.index:
-                if codon not in ['ATG', 'TGG']:  # these two codons are always one, exclude them
+                # these two codons are always one, exclude them:
+                if codon not in ['ATG', 'TGG']:
                     cai_value += math.log(self.index[codon])
                     cai_length += 1
-            elif codon not in ['TGA', 'TAA', 'TAG']:  # some indices may not include stop codons
-                raise TypeError("illegal codon in sequence: %s.\n%s" % (codon, self.index))
+            # some indices may not include stop codons:
+            elif codon not in ['TGA', 'TAA', 'TAG']:
+                raise TypeError("illegal codon in sequence: %s.\n%s"
+                                % (codon, self.index))
 
         return math.exp(cai_value / (cai_length - 1.0))
 
@@ -153,10 +165,13 @@ class CodonAdaptationIndex(object):
                     if codon in self.codon_count:
                         self.codon_count[codon] += 1
                     else:
-                        raise TypeError("illegal codon %s in gene: %s" % (codon, cur_record.id))
+                        raise TypeError("illegal codon %s in gene: %s"
+                                        % (codon, cur_record.id))
 
-    # this just gives the index when the objects is printed.
     def print_index(self):
-        """Prints out the index used."""
+        """Print out the index used.
+
+        This just gives the index when the objects is printed.
+        """
         for i in sorted(self.index):
             print("%s\t%.3f" % (i, self.index[i]))

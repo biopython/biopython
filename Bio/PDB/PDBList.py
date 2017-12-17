@@ -84,10 +84,13 @@ class PDBList(object):
     """
 
     def __init__(self, server='ftp://ftp.wwpdb.org', pdb=os.getcwd(),
-                 obsolete_pdb=None):
+                 obsolete_pdb=None, verbose=True):
         """Initialize the class with the default server or a custom one."""
         self.pdb_server = server  # remote pdb server
         self.local_pdb = pdb  # local pdb file tree
+
+        # enable or disable verbose
+        self._verbose = verbose
 
         # local file tree for obsolete pdb files
         if obsolete_pdb:
@@ -102,7 +105,11 @@ class PDBList(object):
 
     @staticmethod
     def _print_default_format_warning(file_format):
-        """Temporary warning (similar to a deprecation warning) that files are being downloaded in mmCIF"""
+        """Print a warning to stdout (PRIVATE).
+
+        Temporary warning (similar to a deprecation warning) that files
+        are being downloaded in mmCIF.
+        """
         if file_format is None:
             sys.stderr.write("WARNING: The default download format has changed from PDB to PDBx/mmCif\n")
             return "mmCif"
@@ -110,11 +117,10 @@ class PDBList(object):
 
     @staticmethod
     def get_status_list(url):
-        """Retrieves a list of pdb codes in the weekly pdb status file
-        from the given URL. Used by get_recent_changes.
+        """Retrieve a list of pdb codes in the weekly pdb status file from given URL.
 
-        Typical contents of the list files parsed by this method is now
-        very simply one PDB name per line.
+        Used by get_recent_changes. Typical contents of the list files parsed
+        by this method is now very simply - one PDB name per line.
         """
         with contextlib.closing(_urlopen(url)) as handle:
             answer = []
@@ -125,7 +131,7 @@ class PDBList(object):
         return answer
 
     def get_recent_changes(self):
-        """Returns three lists of the newest weekly files (added,mod,obsolete).
+        """Return three lists of the newest weekly files (added,mod,obsolete).
 
         Reads the directories with changed entries from the PDB server and
         returns a tuple of three URL's to the files of new, modified and
@@ -149,19 +155,20 @@ class PDBList(object):
         return [added, modified, obsolete]
 
     def get_all_entries(self):
-        """Retrieves a big file containing all the PDB entries and some annotation.
+        """Retrieve the big file containing all the PDB entries and some annotation.
 
         Returns a list of PDB codes in the index file.
         """
         url = self.pdb_server + '/pub/pdb/derived_data/index/entries.idx'
-        print("Retrieving index file. Takes about 27 MB.")
+        if self._verbose:
+            print("Retrieving index file. Takes about 27 MB.")
         with contextlib.closing(_urlopen(url)) as handle:
             all_entries = [_as_string(line[:4]) for line in handle.readlines()[2:]
                            if len(line) > 4]
         return all_entries
 
     def get_all_obsolete(self):
-        """Returns a list of all obsolete entries ever in the PDB.
+        """Return a list of all obsolete entries ever in the PDB.
 
         Returns a list of all obsolete pdb codes that have ever been
         in the PDB.
@@ -277,11 +284,13 @@ class PDBList(object):
         # Skip download if the file already exists
         if not overwrite:
             if os.path.exists(final_file):
-                print("Structure exists: '%s' " % final_file)
+                if self._verbose:
+                    print("Structure exists: '%s' " % final_file)
                 return final_file
 
         # Retrieve the file
-        print("Downloading PDB structure '%s'..." % pdb_code)
+        if self._verbose:
+            print("Downloading PDB structure '%s'..." % pdb_code)
         try:
             _urlcleanup()
             _urlretrieve(url, filename)
@@ -336,9 +345,11 @@ class PDBList(object):
                 except Exception:
                     print("Could not move %s to obsolete folder" % old_file)
             elif os.path.isfile(new_file):
-                print("Obsolete file %s already moved" % old_file)
+                if self._verbose:
+                    print("Obsolete file %s already moved" % old_file)
             else:
-                print("Obsolete file %s is missing" % old_file)
+                if self._verbose:
+                    print("Obsolete file %s is missing" % old_file)
 
     def download_pdb_files(self, pdb_codes, obsolete=False, pdir=None, file_format=None, overwrite=False):
         """Fetch set of PDB structure files from the PDB server and stores them locally.
@@ -406,8 +417,7 @@ class PDBList(object):
                 outfile.writelines((x + '\n' for x in entries))
 
     def download_obsolete_entries(self, listfile=None, file_format=None):
-        """Retrieve all obsolete PDB entries not present in the local obsolete
-        PDB copy.
+        """Retrieve all obsolete PDB entries not present in local obsolete PDB copy.
 
         :param listfile: filename to which all PDB codes will be written (optional)
 
@@ -429,8 +439,9 @@ class PDBList(object):
                 outfile.writelines((x + '\n' for x in entries))
 
     def get_seqres_file(self, savefile='pdb_seqres.txt'):
-        """Retrieves and save a (big) file containing all the sequences of PDB entries."""
-        print("Retrieving sequence file (takes over 110 MB).")
+        """Retrieve and save a (big) file containing all the sequences of PDB entries."""
+        if self._verbose:
+            print("Retrieving sequence file (takes over 110 MB).")
         url = self.pdb_server + '/pub/pdb/derived_data/pdb_seqres.txt'
         _urlretrieve(url, savefile)
 

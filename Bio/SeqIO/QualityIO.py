@@ -44,7 +44,7 @@ please read this open access publication::
     P.J.A.Cock (Biopython), C.J.Fields (BioPerl), N.Goto (BioRuby),
     M.L.Heuer (BioJava) and P.M. Rice (EMBOSS).
     Nucleic Acids Research 2010 38(6):1767-1771
-    http://dx.doi.org/10.1093/nar/gkp1137
+    https://doi.org/10.1093/nar/gkp1137
 
 The good news is that Roche 454 sequencers can output files in the QUAL format,
 and sensibly they use PHREP style scores like Sanger.  Converting a pair of

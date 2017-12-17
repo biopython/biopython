@@ -38,9 +38,9 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
            entrez_links_new_window=None, expect_low=None, expect_high=None,
            format_entrez_query=None, format_object=None, format_type='XML',
            ncbi_gi=None, results_file=None, show_overview=None, megablast=None,
+           template_type=None, template_length=None,
            ):
-    """Do a BLAST search using the QBLAST server at NCBI or a cloud service
-    provider.
+    """BLAST search using NCBI's QBLAST server or a cloud service provider.
 
     Supports all parameters of the qblast API for Put and Get.
 
@@ -114,6 +114,8 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
         # ('RESULTS_FILE',...), - Can we use this parameter?
         ('SEARCHSP_EFF', searchsp_eff),
         ('SERVICE', service),
+        ('TEMPLATE_TYPE', template_type),
+        ('TEMPLATE_LENGTH', template_length),
         ('THRESHOLD', threshold),
         ('UNGAPPED_ALIGNMENT', ungapped_alignment),
         ('WORD_SIZE', word_size),

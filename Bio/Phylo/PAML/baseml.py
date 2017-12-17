@@ -143,8 +143,7 @@ class Baseml(Paml):
                 self._options[option] = None
 
     def _set_rel_paths(self):
-        """Convert all file/directory locations to paths relative to the current
-        working directory.
+        """Make file/directory paths relative to the PWD (PRIVATE).
 
         BASEML requires that all paths specified in the control file be
         relative to the directory from which it is called rather than

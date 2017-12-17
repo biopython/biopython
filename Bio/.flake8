@@ -21,31 +21,15 @@ ignore =
     # ====================================
     # pydocstyle: D2## - Whitespace Issues
     # ====================================
-    # D200	One-line docstring should fit on one line with quotes
-    # D202	No blank lines allowed after function docstring
     # D203	1 blank line required before class docstring
-    # D204	1 blank line required after class docstring
-    # D205	1 blank line required between summary line and description
-    # D207	Docstring is under-indented
-    # D208	Docstring is over-indented
-    # D210	No whitespaces allowed surrounding docstring text
-    # TODO: Fix these:
-    D205,
-    # We ignore	D203 deliberately in favour of passing D211,
+    # D211	No blank lines allowed before class docstring
+    # We ignore D203 deliberately in favour of passing D211,
     D203,
-    # ================================
-    # pydocstyle: D3## - Quotes Issues
-    # ================================
-    # D300	Use """triple double quotes"""
-    # D301	Use r""" if any backslashes in a docstring
-    # TODO: Fix this?:
-    D301,
     # ===========================================
     # pydocstyle: D4## - Docstring Content Issues
     # ===========================================
-    # D400	First line should end with a period
     # D401	First line should be in imperative mood
-    D400,D401,
+    D401,
     # ================================================
     # flake8-commas: C#### (in case installed locally)
     # ================================================

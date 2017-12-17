@@ -10,7 +10,7 @@ See Also
 Official specification:
    http://phyloxml.org/
 Journal article:
-    Han and Zmasek (2009), doi:10.1186/1471-2105-10-356
+    Han and Zmasek (2009), https://doi.org/10.1186/1471-2105-10-356
 
 """
 

@@ -14,7 +14,7 @@ from . import xpktools
 
 
 def predictNOE(peaklist, originNuc, detectedNuc, originResNum, toResNum):
-    """Predict the i->j NOE position based on self peak (diagonal) assignments
+    """Predict the i->j NOE position based on self peak (diagonal) assignments.
 
     Parameters
     ----------

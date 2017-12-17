@@ -11,7 +11,7 @@ import copy
 
 from Bio.PDB.Entity import DisorderedEntityWrapper
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
-from Bio.PDB.Vector import Vector
+from Bio.PDB.vectors import Vector
 from Bio.Data import IUPACData
 
 
@@ -350,7 +350,7 @@ class Atom(object):
         """Return coordinates as Vector.
 
         :return: coordinates as 3D vector
-        :rtype: Vector
+        :rtype: Bio.PDB.Vector class
         """
         x, y, z = self.coord
         return Vector(x, y, z)

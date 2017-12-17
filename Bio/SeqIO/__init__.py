@@ -269,7 +269,8 @@ File Formats
 When specifying the file format, use lowercase strings.  The same format
 names are also used in Bio.AlignIO and include the following:
 
-    - abif    - Applied Biosystem's sequencing trace format
+    - abi     - Applied Biosystem's sequencing trace format
+    - abi-trim - Same as "abi" but with quality trimming with Mott's algorithm
     - ace     - Reads the contig sequences from an ACE assembly file.
     - embl    - The EMBL flat file format. Uses Bio.GenBank internally.
     - fasta   - The generic sequence file format where each record starts with

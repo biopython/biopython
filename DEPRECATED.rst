@@ -121,6 +121,22 @@ no longer work, e.g. you can no longer do this:
 >>> from Bio.SVDSuperimposer.SVDSuperimposer import SVDSuperimposer
 >>> super_imposer = SVDSuperimposer()
 
+Bio.PDB.Vector (the module)
+===========================
+Due to a long standing name shadowing problem, ``Bio.PDB.Vector`` was
+both a class and a module, which defined the class and various other
+functions imported to the ``Bio.PDB`` namespace.
+
+As of Release 1.70, the module has been renamed ``Bio.PDB.vectors``, leaving
+``Bio.PDB.Vector`` to unambiguously mean the class. This is in line with the
+PEP8 naming conventions. A deprecated compatibility stub was left in place
+so that any imports via the old module name will work but raise a warning.
+
+We expect this to have no impact for the majority of users, unless you do
+something like ``from Bio.PDB.Vector import calc_dihedral`` in which case
+use ``from Bio.PDB import calc_dihedral`` (which will work on older versions
+of Biopython as well).
+
 Bio.PDB.mmCIF
 =============
 This was removed in Release 1.62, when MMCIF2Dict was updated to use shlex

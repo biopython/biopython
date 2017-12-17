@@ -3,20 +3,42 @@
 
 """Simple protein analysis.
 
-Example::
+Example:
 
-    X = ProteinAnalysis("MAEGEITTFTALTEKFNLPPGNYKKPKLLYCSNGGHFLRILPDGTVDGTRDRSDQHIQLQLSAESVGEVYIKSTETGQYLAMDTSGLLYGSQTPSEECLFLERLEENHYNTYTSKKHAEKNWFVGLKKNGSCKRGPRTHYGQKAILFLPLPV")
-    print(X.count_amino_acids())
-    print(X.get_amino_acids_percent())
-    print(X.molecular_weight())
-    print(X.aromaticity())
-    print(X.instability_index())
-    print(X.flexibility())
-    print(X.isoelectric_point())
-    print(X.secondary_structure_fraction())
-    print(X.protein_scale(ProtParamData.kd, 9, 0.4))
-    print(X.molar_extinction_coefficient())
+    >>> from Bio.SeqUtils.ProtParam import ProteinAnalysis
+    >>> X = ProteinAnalysis("MAEGEITTFTALTEKFNLPPGNYKKPKLLYCSNGGHFLRILPDGTVDGT"
+    ...                     "RDRSDQHIQLQLSAESVGEVYIKSTETGQYLAMDTSGLLYGSQTPSEEC"
+    ...                     "LFLERLEENHYNTYTSKKHAEKNWFVGLKKNGSCKRGPRTHYGQKAILF"
+    ...                     "LPLPV")
+    >>> print(X.count_amino_acids()['A'])
+    6
+    >>> print(X.count_amino_acids()['E'])
+    12
+    >>> print("%0.2f" % X.get_amino_acids_percent()['A'])
+    0.04
+    >>> print("%0.2f" % X.get_amino_acids_percent()['L'])
+    0.12
+    >>> print("%0.2f" % X.molecular_weight())
+    17103.16
+    >>> print("%0.2f" % X.aromaticity())
+    0.10
+    >>> print("%0.2f" % X.instability_index())
+    41.98
+    >>> print("%0.2f" % X.isoelectric_point())
+    7.72
+    >>> sec_struc = X.secondary_structure_fraction()  # [helix, turn, sheet]
+    >>> print("%0.2f" % sec_struc[0])  # helix
+    0.28
+    >>> epsilon_prot = X.molar_extinction_coefficient()  # [reduced, oxidized]
+    >>> print(epsilon_prot[0])  # with reduced cysteines
+    17420
+    >>> print(epsilon_prot[1])  # with disulfid bridges
+    17545
 
+    Other public methods are:
+     - gravy
+     - protein_scale
+     - flexibility
 """
 
 from __future__ import print_function
@@ -59,7 +81,7 @@ class ProteinAnalysis(object):
         self.monoisotopic = monoisotopic
 
     def count_amino_acids(self):
-        """Count standard amino acids, returns a dict.
+        """Count standard amino acids, return a dict.
 
         Counts the number times each amino acid is in the protein
         sequence. Returns a dictionary {AminoAcid:Number}.
@@ -99,7 +121,7 @@ class ProteinAnalysis(object):
         return self.amino_acids_percent
 
     def molecular_weight(self):
-        """Calculate MW from Protein sequence"""
+        """Calculate MW from Protein sequence."""
         return molecular_weight(self.sequence, monoisotopic=self.monoisotopic)
 
     def aromaticity(self):
@@ -138,8 +160,9 @@ class ProteinAnalysis(object):
     def flexibility(self):
         """Calculate the flexibility according to Vihinen, 1994.
 
-        No argument to change window size because parameters are specific for a
-        window=9. The parameters used are optimized for determining the flexibility.
+        No argument to change window size because parameters are specific for
+        a window=9. The parameters used are optimized for determining the
+        flexibility.
         """
         flexibilities = ProtParamData.Flex
         window_size = 9
@@ -153,7 +176,8 @@ class ProteinAnalysis(object):
             for j in range(window_size // 2):
                 front = subsequence[j]
                 back = subsequence[window_size - j - 1]
-                score += (flexibilities[front] + flexibilities[back]) * weights[j]
+                score += (flexibilities[front] +
+                          flexibilities[back]) * weights[j]
 
             middle = subsequence[window_size // 2 + 1]
             score += flexibilities[middle]
@@ -169,10 +193,12 @@ class ProteinAnalysis(object):
         return total_gravy / self.length
 
     def _weight_list(self, window, edge):
-        """Makes a list of relative weight of the
-        window edges compared to the window center. The weights are linear.
-        it actually generates half a list. For a window of size 9 and edge 0.4
-        you get a list of [0.4, 0.55, 0.7, 0.85].
+        """Make list of relative weight of window edges (PRIVATE).
+
+        The relative weight of window edges are compared to the window
+        center. The weights are linear. It actually generates half a list.
+        For a window of size 9 and edge 0.4 you get a list of
+        [0.4, 0.55, 0.7, 0.85].
         """
         unit = 2 * (1.0 - edge) / (window - 1)
         weights = [0.0] * (window // 2)
@@ -185,39 +211,41 @@ class ProteinAnalysis(object):
     def protein_scale(self, param_dict, window, edge=1.0):
         """Compute a profile by any amino acid scale.
 
-        An amino acid scale is defined by a numerical value assigned to each type of
-        amino acid. The most frequently used scales are the hydrophobicity or
-        hydrophilicity scales and the secondary structure conformational parameters
-        scales, but many other scales exist which are based on different chemical and
-        physical properties of the amino acids.  You can set several parameters that
-        control the computation  of a scale profile, such as the window size and the
-        window edge relative weight value.
+        An amino acid scale is defined by a numerical value assigned to each
+        type of amino acid. The most frequently used scales are the
+        hydrophobicity or hydrophilicity scales and the secondary structure
+        conformational parameters scales, but many other scales exist which
+        are based on different chemical and physical properties of the
+        amino acids.  You can set several parameters that control the
+        computation of a scale profile, such as the window size and the window
+        edge relative weight value.
 
-        WindowSize: The window size is the length
-        of the interval to use for the profile computation. For a window size n, we
-        use the i-(n-1)/2 neighboring residues on each side to compute
-        the score for residue i. The score for residue i is the sum of the scaled values
-        for these amino acids, optionally weighted according to their position in the
+        WindowSize: The window size is the length of the interval to use for
+        the profile computation. For a window size n, we use the i-(n-1)/2
+        neighboring residues on each side to compute the score for residue i.
+        The score for residue i is the sum of the scaled values for these
+        amino acids, optionally weighted according to their position in the
         window.
 
         Edge: The central amino acid of the window always has a weight of 1.
-        By default, the amino acids at the remaining window positions have the same
-        weight, but you can make the residue at the center of the window  have a
-        larger weight than the others by setting the edge value for the  residues at
-        the beginning and end of the interval to a value between 0 and 1. For
-        instance, for Edge=0.4 and a window size of 5 the weights will be: 0.4, 0.7,
-        1.0, 0.7, 0.4.
+        By default, the amino acids at the remaining window positions have the
+        same weight, but you can make the residue at the center of the window
+        have a larger weight than the others by setting the edge value for the
+        residues at the beginning and end of the interval to a value between
+        0 and 1. For instance, for Edge=0.4 and a window size of 5 the weights
+        will be: 0.4, 0.7, 1.0, 0.7, 0.4.
 
-        The method returns a list of values which can be plotted to
-        view the change along a protein sequence.  Many scales exist. Just add your
+        The method returns a list of values which can be plotted to view the
+        change along a protein sequence.  Many scales exist. Just add your
         favorites to the ProtParamData modules.
 
-        Similar to expasy's ProtScale: http://www.expasy.org/cgi-bin/protscale.pl
+        Similar to expasy's ProtScale:
+        http://www.expasy.org/cgi-bin/protscale.pl
         """
         # generate the weights
-        #   _weight_list returns only one tail. If the list should be [0.4,0.7,1.0,0.7,0.4]
-        #   what you actually get from _weights_list is [0.4,0.7]. The correct calculation is done
-        #   in the loop.
+        #   _weight_list returns only one tail. If the list should be
+        #   [0.4,0.7,1.0,0.7,0.4] what you actually get from _weights_list
+        #   is [0.4,0.7]. The correct calculation is done in the loop.
         weights = self._weight_list(window, edge)
         scores = []
 
@@ -231,21 +259,25 @@ class ProteinAnalysis(object):
 
             for j in range(window // 2):
                 # walk from the outside of the Window towards the middle.
-                # Iddo: try/except clauses added to avoid raising an exception on a non-standard amino acid
+                # Iddo: try/except clauses added to avoid raising an exception
+                # on a non-standard amino acid
                 try:
                     front = param_dict[subsequence[j]]
                     back = param_dict[subsequence[window - j - 1]]
                     score += weights[j] * front + weights[j] * back
                 except KeyError:
-                    sys.stderr.write('warning: %s or %s is not a standard amino acid.\n' %
-                             (subsequence[j], subsequence[window - j - 1]))
+                    sys.stderr.write('warning: %s or %s is not a standard '
+                                     'amino acid.\n'
+                                     % (subsequence[j],
+                                        subsequence[window - j - 1]))
 
             # Now add the middle value, which always has a weight of 1.
             middle = subsequence[window // 2]
             if middle in param_dict:
                 score += param_dict[middle]
             else:
-                sys.stderr.write('warning: %s  is not a standard amino acid.\n' % (middle))
+                sys.stderr.write('warning: %s  is not a standard amino acid.\n'
+                                 % middle)
 
             scores.append(score / sum_of_weights)
 
@@ -284,10 +316,15 @@ class ProteinAnalysis(object):
     def molar_extinction_coefficient(self):
         """Calculate the molar extinction coefficient.
 
-        Calculates the molar extinction coefficient assuming Cysteines- (reduced)
-        and Cystines-residues (Cys-Cys-bond)
+        Calculates the molar extinction coefficient assuming cysteines
+        (reduced) and cystines residues (Cys-Cys-bond)
         """
         num_aa = self.count_amino_acids()
         mec_reduced = num_aa['W'] * 5500 + num_aa['Y'] * 1490
         mec_cystines = mec_reduced + (num_aa['C'] // 2) * 125
         return(mec_reduced, mec_cystines)
+
+
+if __name__ == "__main__":
+    from Bio._utils import run_doctest
+    run_doctest()

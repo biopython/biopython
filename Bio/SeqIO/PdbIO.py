@@ -119,7 +119,7 @@ def PdbSeqresIterator(handle):
 
 
 def PdbAtomIterator(handle):
-    """Returns SeqRecord objects for each chain in a PDB file
+    """Returns SeqRecord objects for each chain in a PDB file.
 
     The sequences are derived from the 3D structure (ATOM records), not the
     SEQRES lines in the PDB file header.

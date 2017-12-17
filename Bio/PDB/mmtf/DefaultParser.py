@@ -93,7 +93,7 @@ class StructureDecoder(object):
     def set_group_info(self, group_name, group_number, insertion_code,
                        group_type, atom_count, bond_count, single_letter_code,
                        sequence_index, secondary_structure_type):
-        """Set the information for a group
+        """Set the information for a group.
 
         :param group_name: the name of this group, e.g. LYS
         :param group_number: the residue number of this group
